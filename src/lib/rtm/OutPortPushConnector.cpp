@@ -88,6 +88,8 @@ namespace RTC
     RTC_TRACE(("write()"));
 #ifdef ORB_IS_ORBEXPRESS
     RTC_PARANOID(("data size = %d bytes", data.size_written()));
+#elif defined(ORB_IS_TAO)
+	RTC_PARANOID(("data size = %d bytes", data.cdr.length()));
 #else
     RTC_PARANOID(("data size = %d bytes", data.bufSize()));
 #endif

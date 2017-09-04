@@ -85,10 +85,33 @@ BOOL WINAPI DllMain (HINSTANCE hinstDll, DWORD fdwReason, LPVOID lpvReserved);
 namespace RTC
 {
   typedef coil::Properties Properties;
-#ifdef ORB_IS_ORBEXPRESS
-  typedef CORBA::Stream cdrMemoryStream;
-#endif
+
 };
+
+#ifdef ORB_IS_ORBEXPRESS
+typedef CORBA::Stream cdrMemoryStream;
+#elif defined(ORB_IS_TAO)
+class cdrMemoryStream
+{
+public:
+	cdrMemoryStream() 
+	{ 
+	};
+	cdrMemoryStream(const cdrMemoryStream& rhs)
+	{
+		cdr.write_char_array(rhs.cdr.buffer(), rhs.cdr.length());
+	};
+	
+	cdrMemoryStream& operator= (const cdrMemoryStream& rhs)
+	{
+		cdr.write_char_array(rhs.cdr.buffer(), rhs.cdr.length());
+		return *this;
+	};
+	
+	TAO_OutputCDR cdr;
+};
+//typedef TAO_OutputCDR cdrMemoryStream;
+#endif
 
 //#endif // COMPAT_OPENRTM_0_4
 

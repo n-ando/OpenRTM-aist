@@ -182,6 +182,8 @@ namespace RTC
       {
 #ifdef ORB_IS_ORBEXPRESS
         CORBA::ULong len((CORBA::ULong)cdr.size_written());
+#elif defined(ORB_IS_TAO)
+	CORBA::ULong len((CORBA::ULong)cdr.cdr.length());
 #else
         CORBA::ULong len((CORBA::ULong)cdr.bufSize());
 #endif
@@ -195,6 +197,9 @@ namespace RTC
         data->length(len);
 #ifdef ORB_IS_ORBEXPRESS
         cdr.read_array_1(data->get_buffer(), len);
+#elif defined(ORB_IS_TAO)
+	TAO_InputCDR cdr_tmp = cdr.cdr;
+	cdr_tmp.read_octet_array(&((*data)[0]), len);
 #else
         cdr.get_octet_array(&((*data)[0]), len);
 #endif

@@ -160,6 +160,8 @@ namespace RTC
         cdrMemoryStream cdr;
 #ifdef ORB_IS_ORBEXPRESS
         cdr.write_array_1(data.get_buffer(), data.length());
+#elif defined(ORB_IS_TAO)
+        cdr.cdr.write_octet_array(data.get_buffer(), data.length());
 #else
         cdr.put_octet_array(&(data[0]), data.length());
 #endif
@@ -178,6 +180,10 @@ namespace RTC
     cdr.is_little_endian(endian_type);
     cdr.write_array_1(data.get_buffer(), data.length());
     RTC_PARANOID(("converted CDR data size: %d", cdr.size_written()));
+#elif defined(ORB_IS_TAO)
+    //cdr.setByteSwapFlag(endian_type);
+    cdr.cdr.write_octet_array(data.get_buffer(), data.length());
+    RTC_PARANOID(("converted CDR data size: %d", cdr.cdr.length()));
 #else
     cdr.setByteSwapFlag(endian_type);
     cdr.put_octet_array(&(data[0]), data.length());

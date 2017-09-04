@@ -21,7 +21,11 @@
 
 
 #include <windows.h>
+#ifdef WITH_ACE
+#include <WinSock2.h>
+#else
 #include <winsock.h>
+#endif
 //#include <winsock2.h>
 //#pragma comment(lib, "WS2_32.LIB")
 #include <time.h>

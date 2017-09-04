@@ -1,3 +1,8 @@
+#ifdef TAO_IDL
+#include <tao/orb.idl>
+#endif
+
+
 module SimpleService {
 typedef sequence<string> EchoList;
 typedef sequence<float> ValueList;

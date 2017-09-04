@@ -50,7 +50,7 @@ namespace CORBA_IORUtil
    *
    * @endif
    */
-#ifndef ORB_IS_ORBEXPRESS
+#if not defined(ORB_IS_ORBEXPRESS) && not defined(ORB_IS_TAO)
   bool toIOR(const char* iorstr, IOP::IOR& ior);
 #endif
 
@@ -63,7 +63,7 @@ namespace CORBA_IORUtil
    *
    * @endif
    */
-#ifndef ORB_IS_ORBEXPRESS
+#if not defined(ORB_IS_ORBEXPRESS) && not defined(ORB_IS_TAO)S
   bool toString(IOP::IOR& ior, std::string& iorstr);
 #endif
   

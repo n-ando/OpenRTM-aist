@@ -838,6 +838,7 @@ namespace RTM
    */
   bool ManagerServant::createINSManager()
   {
+#ifndef ORB_IS_TAO
     try
       {
         //Ppreparing INS POA
@@ -881,6 +882,9 @@ namespace RTM
       {
         return false;
       }
+#else
+		m_objref = _this();
+#endif
     return true;
   }
 

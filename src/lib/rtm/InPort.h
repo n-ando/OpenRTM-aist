@@ -442,6 +442,8 @@ namespace RTC
           RTC_DEBUG(("data read succeeded"));
 #ifdef ORB_IS_ORBEXPRESS
           cdr >> m_value;
+#elif defined(ORB_IS_TAO)
+          TAO_InputCDR(cdr.cdr) >> m_value;
 #else
           m_value <<= cdr;
 #endif

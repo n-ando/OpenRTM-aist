@@ -110,6 +110,7 @@ skel_cpp = """// -*- C++ -*-
 #  include "[include_dir][basename]-skelimpl.c"
 #elif defined ORB_IS_ORBEXPRESS
 #  include "[include_dir][basename].cc"
+#  include "[include_dir][basename]_c.cc"
 #else
 #  error "NO ORB defined"
 #endif

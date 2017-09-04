@@ -58,6 +58,9 @@ elseif(WIN32)
 	set (COIL_OS_WIN32 ON)
 endif()
 
+#if(CORBA MATCHES "TAO")
+#	set (WITH_ACE ON)
+#endif()
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config_coil_cmake.h.in ${PROJECT_BINARY_DIR}/config_coil.h)
 
@@ -169,6 +172,7 @@ else(VXWORKS)
 	elseif(WIN32)
 		set_source_files_properties(${DEF_FILE_NAME} PROPERTIES GENERATED 1)
 		add_dependencies(${COIL_PROJECT_NAME} ${COIL_PROJECT_NAME}_TGT)
+		add_dependencies(${COIL_PROJECT_NAME} ${COIL_PROJECT_NAME}_static)
 		install(TARGETS ${COIL_PROJECT_NAME} RUNTIME DESTINATION bin)
 	endif()
 endif(VXWORKS)

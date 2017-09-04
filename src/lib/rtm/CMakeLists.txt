@@ -88,7 +88,9 @@ elseif(CORBA MATCHES "omniORB")
 	else()
 		set (RTM_OMNIORB_42 ON)
 	endif()
-		set (ORB_IS_OMNIORB ON)
+	set (ORB_IS_OMNIORB ON)
+elseif(CORBA MATCHES "TAO")
+	set (ORB_IS_TAO ON)
 endif()
 
 
@@ -351,9 +353,9 @@ if(WIN32)
 	add_dependencies(${RTM_PROJECT_NAME}_TGT ${RTM_PROJECT_NAME}_static)
 	set(rtm_srcs ${rtm_srcs} ${CMAKE_CURRENT_BINARY_DIR}/${DEF_FILE_NAME})
 
-	#get_property(rtcskel_location TARGET RTCSkel PROPERTY LOCATION)
-	#add_custom_command(OUTPUT RTCSkel.def
-	#	COMMAND python ${MAKE_DEF_COMMAND} ${rtcskel_location} RTCSkel ${RTM_SHORT_VERSION} RTCSkel.def
+	#get_property(rtcskel_location TARGET ${RTCSKEL_PROJECT_NAME} PROPERTY LOCATION)
+	#add_custom_command(OUTPUT ${RTCSKEL_PROJECT_NAME}.def
+	#	COMMAND python ${MAKE_DEF_COMMAND} ${rtcskel_location} ${RTCSKEL_PROJECT_NAME} ${RTM_SHORT_VERSION} ${RTCSKEL_PROJECT_NAME}.def
 	#	WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
 	#)
 
@@ -380,6 +382,7 @@ else(VXWORKS)
 	elseif(WIN32)
 		set_source_files_properties(${DEF_FILE_NAME} PROPERTIES GENERATED 1)
 		add_dependencies(${RTM_PROJECT_NAME} ${RTM_PROJECT_NAME}_TGT)
+		add_dependencies(${RTM_PROJECT_NAME} ${RTM_PROJECT_NAME}_static)
 		install(TARGETS ${RTM_PROJECT_NAME} RUNTIME DESTINATION bin)
 	endif()
 endif(VXWORKS)

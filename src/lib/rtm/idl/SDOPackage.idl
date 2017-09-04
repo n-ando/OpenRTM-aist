@@ -34,7 +34,7 @@
 #include <orb.idl>
 #endif
 #ifdef TAO_IDL
-#include <orb.idl>
+#include <tao/orb.idl>
 #endif
 #ifdef USE_MONITORING
 #include <CosNotifyComm.idl>

@@ -336,6 +336,8 @@ namespace RTC
       DataType data;
 #ifdef ORB_IS_ORBEXPRESS
       cdrMemoryStream cdr(cdrdata);
+#elif defined(ORB_IS_TAO)
+	  cdrMemoryStream cdr(cdrdata);
 #else
       cdrMemoryStream cdr(cdrdata.bufPtr(), cdrdata.bufSize());
 #endif
@@ -357,6 +359,8 @@ namespace RTC
           cdr.is_little_endian(false);
         }
        cdr >> data;
+#elif defined(ORB_IS_TAO)
+	  cdr.cdr << data;
 #else
       if (endian[0] == "little")
         {

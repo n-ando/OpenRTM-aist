@@ -32,7 +32,7 @@ namespace CORBA_IORUtil
   typedef _CORBA_Unbounded_Sequence_String StringUSequence;
 #endif
 
-#if not defined(ORB_IS_RTORB) && not defined(ORB_IS_ORBEXPRESS)
+#if not defined(ORB_IS_RTORB) && not defined(ORB_IS_ORBEXPRESS) && not defined(ORB_IS_TAO)
   // prototype of static functions 
   static void print_key(std::stringstream& s, OctetUSequence& key);
   
@@ -53,7 +53,7 @@ namespace CORBA_IORUtil
    * @brief Convert from IOR string to IOR structure
    * @endif
    */
-#ifndef ORB_IS_ORBEXPRESS
+#if not defined(ORB_IS_ORBEXPRESS) && not defined(ORB_IS_TAO)
   bool toIOR(const char* iorstr, IOP::IOR& ior)
   {
 #ifndef ORB_IS_RTORB
@@ -121,7 +121,7 @@ namespace CORBA_IORUtil
    * @brief Convert from IOR structure to IOR string 
    * @endif
    */
-#ifndef ORB_IS_ORBEXPRESS
+#if not defined(ORB_IS_ORBEXPRESS) && not defined(ORB_IS_TAO)
   bool toString(IOP::IOR& ior, std::string& iorstr)
   {
 #ifndef ORB_IS_RTORB
@@ -185,7 +185,7 @@ namespace CORBA_IORUtil
    */
   bool replaceEndpoint(std::string& iorstr, const std::string& endpoint)
   {
-#if not defined(ORB_IS_RTORB) && not defined(ORB_IS_ORBEXPRESS)
+#if not defined(ORB_IS_RTORB) && not defined(ORB_IS_ORBEXPRESS) && not defined(ORB_IS_TAO)
     try
       {
         IOP::IOR ior;
@@ -231,7 +231,7 @@ namespace CORBA_IORUtil
   std::string formatIORinfo(const char* iorstr)
   {
     std::stringstream retstr;
-#if not defined(ORB_IS_RTORB) && not defined(ORB_IS_ORBEXPRESS)
+#if not defined(ORB_IS_RTORB) && not defined(ORB_IS_ORBEXPRESS) && not defined(ORB_IS_TAO)
     IOP::IOR ior;
     toIOR(iorstr, ior);
 
@@ -293,7 +293,7 @@ namespace CORBA_IORUtil
   }
 
 
-#if not defined(ORB_IS_RTORB) && not defined(ORB_IS_ORBEXPRESS)
+#if not defined(ORB_IS_RTORB) && not defined(ORB_IS_ORBEXPRESS) && not defined(ORB_IS_TAO)
   //------------------------------------------------------------
   // static functions
 

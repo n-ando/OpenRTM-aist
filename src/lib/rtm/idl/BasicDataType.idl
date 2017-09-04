@@ -18,6 +18,10 @@
 
 #ifndef BasicDataType_idl
 #define BasicDataType_idl
+#ifdef TAO_IDL
+#include <tao/orb.idl>
+#endif
+
 
 module RTC {
   //------------------------------------------------------------

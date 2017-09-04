@@ -21,6 +21,10 @@
 #ifndef DataInPort_idl
 #define DataInPort_idl
 
+#ifdef TAO_IDL
+#include <tao/orb.idl>
+#endif
+
 module OpenRTM
 {
   enum PortStatus

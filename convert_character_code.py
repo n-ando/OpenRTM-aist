@@ -22,7 +22,8 @@ if __name__ == '__main__':
                "src/lib/coil/common",
                os.path.join("src/lib/coil", target, "coil"),
                "examples/*",
-               "utils/*"]
+               "utils/*",
+               "src/ext/*/*"]
   
   #path_list = [os.path.join("src/lib/coil", target, "coil")]
   for p in path_list:
@@ -34,12 +35,16 @@ if __name__ == '__main__':
         with open(n, mode='rb') as f:
           encoding = chardet.detect(f.read())["encoding"]
         str_list = []
-        with codecs.open(n, "r", encoding) as f:
-          for row in f:
-            str_list.append(row)
-        with codecs.open(n, "w", code) as f:
-          for row in str_list:
-            f.write(row)
+        if encoding != code:
+          try:
+            with codecs.open(n, "r", encoding) as f:
+              for row in f:
+                str_list.append(row)
+            with codecs.open(n, "w", code) as f:
+              for row in str_list:
+                f.write(row)
+          except:
+            pass
         
         
           

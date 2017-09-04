@@ -18,7 +18,7 @@
  */
 
 #ifdef WIN32
-#define ACE_HAS_WINSOCK2 0
+//#define ACE_HAS_WINSOCK2 0
 #endif //WIN32
 
 #include <assert.h>

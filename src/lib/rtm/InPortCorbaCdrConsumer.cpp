@@ -77,6 +77,10 @@ namespace RTC
     *static_cast<CORBA::Octet*>(to) = data_tmp.read_octet();
     ::OpenRTM::CdrData tmp(data_tmp.size_written(), data_tmp.size_written(),
                            to, 0);
+#elif defined(ORB_IS_TAO)
+	char *c = const_cast<char*>(data.cdr.buffer());
+	::OpenRTM::CdrData tmp(data.cdr.length(), data.cdr.length(),
+		reinterpret_cast<CORBA::Octet*>(c), 0);
 #else
     ::OpenRTM::CdrData tmp(data.bufSize(), data.bufSize(),
                            static_cast<CORBA::Octet*>(data.bufPtr()), 0);

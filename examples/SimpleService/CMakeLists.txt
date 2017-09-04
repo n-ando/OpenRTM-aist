@@ -17,7 +17,7 @@ set(${idl_name}_STUB ${CMAKE_CURRENT_BINARY_DIR}/${idl_name}Stub.cpp ${CMAKE_CUR
 
 add_custom_command(
 		OUTPUT ${idl_name}Skel.cpp ${idl_name}Stub.cpp
-		COMMAND ${IDL_COMPILE_COMMAND} ${IDLCOMMAND_FLAGS} -I${CMAKE_CURRENT_SOURCE_DIR} -I${CMAKE_SOURCE_DIR}/rtm/idl ${CMAKE_CURRENT_SOURCE_DIR}/${idl_name}.idl
+		COMMAND ${IDL_COMPILE_COMMAND} ${IDLCOMMAND_FLAGS} -I${CMAKE_CURRENT_SOURCE_DIR} -I${CMAKE_SOURCE_DIR}/src/lib/rtm/idl ${CMAKE_CURRENT_SOURCE_DIR}/${idl_name}.idl
 		COMMAND python ${SKELWRAPPER_COMMAND} --include-dir="" --skel-suffix=Skel --stub-suffix=Stub --idl-file=${idl_name}.idl
 		WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
 )
