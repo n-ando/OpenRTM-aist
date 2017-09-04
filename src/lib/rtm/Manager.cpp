@@ -1205,6 +1205,13 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     RTC_TRACE(("Manager::thePOA()"));
     return m_pPOA.in();
   }
+#ifdef ORB_IS_OMNIORB
+  PortableServer::POA_ptr Manager::theShortCutPOA()
+  {
+    RTC_TRACE(("Manager::theShortCutPOA()"));
+    return m_pShortCutPOA.in();
+  }
+#endif
   /*!
    * @if jp
    * @brief Manager が持つ RootPOA のポインタを取得する (所有権複製)
@@ -1217,6 +1224,13 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     RTC_TRACE(("Manager::getPOA()"));
     return PortableServer::POA::_duplicate(m_pPOA);
   }
+#ifdef ORB_IS_OMNIORB
+  PortableServer::POA_ptr Manager::getShortCutPOA()
+  {
+    RTC_TRACE(("Manager::getPOA()"));
+    return PortableServer::POA::_duplicate(m_pShortCutPOA);
+  }
+#endif
   
   /*!
    * @if jp
@@ -1540,6 +1554,16 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 	  }
 	// Get the POAManager
 	m_pPOAManager = m_pPOA->the_POAManager();
+#ifdef ORB_IS_OMNIORB
+#ifdef RTM_OMNIORB_42
+	CORBA::PolicyList pl;
+	pl.length(1);
+	pl[0] = omniPolicy::create_local_shortcut_policy(omniPolicy::LOCAL_CALLS_SHORTCUT);
+	m_pShortCutPOA = m_pPOA->create_POA("shortcut", m_pPOAManager, pl);
+#else
+	m_pShortCutPOA = m_pPOA;
+#endif
+#endif
 
 #ifdef ORB_IS_OMNIORB
         const char* conf = "corba.alternate_iiop_addresses";

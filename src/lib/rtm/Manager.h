@@ -1015,6 +1015,9 @@ namespace RTC
      */
 
     PortableServer::POA_ptr thePOA();
+#ifdef ORB_IS_OMNIORB
+    PortableServer::POA_ptr theShortCutPOA();
+#endif
     /*!
      * @if jp
      * @brief Manager が持つ RootPOA のポインタを取得する (所有権複製)
@@ -1052,6 +1055,9 @@ namespace RTC
      * @endif
      */
     PortableServer::POA_ptr getPOA();
+#ifdef ORB_IS_OMNIORB
+    PortableServer::POA_ptr getShortCutPOA();
+#endif
 
     /*!
      * @if jp
@@ -1805,6 +1811,9 @@ namespace RTC
      * @endif
      */
     PortableServer::POA_var m_pPOA;
+#ifdef ORB_IS_OMNIORB
+    PortableServer::POA_var m_pShortCutPOA;
+#endif
     
     /*!
      * @if jp

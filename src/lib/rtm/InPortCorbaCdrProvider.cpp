@@ -39,6 +39,10 @@ namespace RTC
     setInterfaceType("corba_cdr");
     
     // ConnectorProfile setting
+
+#ifdef ORB_IS_OMNIORB
+    ::RTC::Manager::instance().theShortCutPOA()->activate_object(this);
+#endif
     m_objref = this->_this();
     
     // set InPort's reference
@@ -64,8 +68,13 @@ namespace RTC
     try
       {
         PortableServer::ObjectId_var oid;
+#ifdef ORB_IS_OMNIORB
+        oid = ::RTC::Manager::instance().theShortCutPOA()->servant_to_id(this);
+        ::RTC::Manager::instance().theShortCutPOA()->deactivate_object(oid);
+#else
         oid = _default_POA()->servant_to_id(this);
         _default_POA()->deactivate_object(oid);
+#endif
       }
     catch (PortableServer::POA::ServantNotActive &e)
       {
