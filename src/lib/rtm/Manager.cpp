@@ -1555,14 +1555,16 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 	// Get the POAManager
 	m_pPOAManager = m_pPOA->the_POAManager();
 #ifdef ORB_IS_OMNIORB
-#ifdef RTM_OMNIORB_42
 	CORBA::PolicyList pl;
 	pl.length(1);
+#ifdef RTM_OMNIORB_42
 	pl[0] = omniPolicy::create_local_shortcut_policy(omniPolicy::LOCAL_CALLS_SHORTCUT);
-	m_pShortCutPOA = m_pPOA->create_POA("shortcut", m_pPOAManager, pl);
 #else
-	m_pShortCutPOA = m_pPOA;
+	CORBA::Any v;
+	v <<= omniPolicy::LOCAL_CALLS_SHORTCUT;
+	pl[0] = m_pORB->create_policy(omniPolicy::LOCAL_SHORTCUT_POLICY_TYPE, v);
 #endif
+	m_pShortCutPOA = m_pPOA->create_POA("shortcut", m_pPOAManager, pl);
 #endif
 
 #ifdef ORB_IS_OMNIORB
