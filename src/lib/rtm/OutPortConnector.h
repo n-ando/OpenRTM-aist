@@ -255,9 +255,9 @@ namespace RTC
       m_cdr.is_little_endian(isLittleEndian());
       m_cdr << data;
 #elif defined(ORB_IS_TAO)
-	  //m_cdr.cdr.;
-	  RTC_TRACE(("connector endian: %s", isLittleEndian() ? "little" : "big"));
-	  m_cdr.cdr << data;
+      m_cdr.cdr.reset();
+      RTC_TRACE(("connector endian: %s", isLittleEndian() ? "little" : "big"));
+      m_cdr.cdr << data;
 #else
       m_cdr.rewindPtrs();
 

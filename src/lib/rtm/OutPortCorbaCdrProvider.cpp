@@ -198,8 +198,7 @@ namespace RTC
 #ifdef ORB_IS_ORBEXPRESS
         cdr.read_array_1(data->get_buffer(), len);
 #elif defined(ORB_IS_TAO)
-	TAO_InputCDR cdr_tmp = cdr.cdr;
-	cdr_tmp.read_octet_array(&((*data)[0]), len);
+	TAO_InputCDR(cdr.cdr).read_octet_array(&((*data)[0]), len);
 #else
         cdr.get_octet_array(&((*data)[0]), len);
 #endif

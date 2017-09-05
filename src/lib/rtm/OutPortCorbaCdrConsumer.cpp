@@ -109,7 +109,7 @@ namespace RTC
 #ifdef ORB_IS_ORBEXPRESS
             data.write_array_1(cdr_data->get_buffer(), (CORBA::ULong)cdr_data->length());
 #elif defined(ORB_IS_TAO)
-			data.cdr.write_octet_array(cdr_data->get_buffer(), (CORBA::ULong)cdr_data->length());
+            data.cdr.write_octet_array(cdr_data->get_buffer(), (CORBA::ULong)cdr_data->length());
 #else
             data.put_octet_array(&(cdr_data[0]), (int)cdr_data->length());
 #endif
