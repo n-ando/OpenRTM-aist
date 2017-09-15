@@ -17,7 +17,7 @@ clean-local:
 	rm -f coil_config.props
 	rm -f build.bat
 
-sln: OpenRTM-aist_vc9.sln OpenRTM-aist_vc10.sln OpenRTM-aist_vc11.sln OpenRTM-aist_vc12.sln OpenRTM-aist_vc14.sln OpenRTM-aist_vc15.sln
+sln: OpenRTM-aist_vc9.sln OpenRTM-aist_vc10.sln OpenRTM-aist_vc11.sln OpenRTM-aist_vc12.sln OpenRTM-aist_vc14.sln OpenRTM-aist_vc141.sln
 
 OpenRTM-aist_vc9.sln:
 	$(top_srcdir)/build/slntool.py     \
