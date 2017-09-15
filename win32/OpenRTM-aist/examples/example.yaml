@@ -125,4 +125,22 @@ Examples:
       Name: ExtConsoleOutComp.exe
       Source: ..\\examples\\ExtTrigger\\ConsoleOutComp\\Release\\ExtConsoleOutComp.exe
       Shortcut: true
+    - Id: AnalyzerComp.exe
+      ShortName: Anly.exe
+      Name: AnalyzerComp.exe
+      Source: ..\\examples\\Analyzer\\AnalyzerComp\\Release\\AnalyzerComp.exe
+      Shortcut: true
+    - Id: Analyzer_testComp.exe
+      ShortName: Anlytest.exe
+      Name: Analyzer_testComp.exe
+      Source: ..\\examples\\Analyzer\\Analyzer_testComp\\Release\\Analyzer_testComp.exe
+      Shortcut: true
+    - Id: Analyzer.dll
+      ShortName: Anly.dll
+      Name: Analyzer.dll
+      Source: ..\\examples\\Analyzer\\Analyzer\\Release\\Analyzer.dll
+    - Id: Analyzer_test.dll
+      ShortName: Anlytest.dll
+      Name: Analyzer_test.dll
+      Source: ..\\examples\\Analyzer\\Analyzer_test\\Release\\Analyzer_test.dll
 

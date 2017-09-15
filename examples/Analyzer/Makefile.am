@@ -80,7 +80,7 @@ lst:
 #------------------------------------------------------------
 # Visual Studio Project
 #------------------------------------------------------------
-win32_builddir=$(top_builddir)/win32/OpenRTM-aist/examples/SimpleIO
+win32_builddir=$(top_builddir)/win32/OpenRTM-aist/examples/Analyzer
 
 vcproj: vc9proj vcxproj
 

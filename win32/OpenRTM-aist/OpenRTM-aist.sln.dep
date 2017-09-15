@@ -36,3 +36,7 @@ ExtConsoleInComp: libcoil libRTCSkel libRTC
 ExtConsoleOut: libcoil libRTCSkel libRTC
 ExtConsoleOutComp: libcoil libRTCSkel libRTC
 ExtConnectorComp: libcoil libRTCSkel libRTC
+Analyzer: libcoil libRTCSkel libRTC
+AnalyzerComp: libcoil libRTCSkel libRTC
+Analyzer_test: libcoil libRTCSkel libRTC
+Analyzer_testComp: libcoil libRTCSkel libRTC

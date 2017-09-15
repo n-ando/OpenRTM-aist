@@ -1701,6 +1701,7 @@ AC_OUTPUT([Makefile
 	win32/OpenRTM-aist/docs/Makefile
 	win32/OpenRTM-aist/build/Makefile
 	win32/OpenRTM-aist/examples/Makefile
+	win32/OpenRTM-aist/examples/Analyzer/Makefile
 	win32/OpenRTM-aist/examples/Composite/Makefile
 	win32/OpenRTM-aist/examples/ConfigSample/Makefile
 	win32/OpenRTM-aist/examples/ExtTrigger/Makefile
