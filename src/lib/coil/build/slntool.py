@@ -26,9 +26,9 @@ vcversions = {"VC8": {"sln": "9.00", "vc": "2005"},
               "VC9": {"sln": "10.00", "vc": "2008"},
               "VC10": {"sln": "11.00", "vc": "2010"},
               "VC11": {"sln": "12.00", "vc": "2012"},
-              "VC12": {"sln": "13.00", "vc": "2013"},
-              "VC14": {"sln": "14.00", "vc": "2015"},
-              "VC15": {"sln": "15.00", "vc": "2017"},
+              "VC12": {"sln": "12.00", "vc": "2013"},
+              "VC14": {"sln": "12.00", "vc": "14"},
+              "VC141": {"sln": "12.00", "vc": "15"},
               }
 sln_template = """Microsoft Visual Studio Solution File, Format Version %s
 # Visual Studio %s
@@ -83,7 +83,7 @@ Usage:
   slntool.py --dep dep_file [--outfile outfile] vcproj_files...
 
 Options:
-    --vcversion: Visual C++'s version [VC8|VC9|VC10|VC11|VC12|VC14|VC15]
+    --vcversion: Visual C++'s version [VC8|VC9|VC10|VC11|VC12|VC14|VC141]
     --dep: dependency file
     --out or --output: output file name
 
@@ -119,7 +119,7 @@ def get_projinfo(fname,vcversion="VC8"):
               "VC11": {"guid":'^.*?<ProjectGuid>{(.*)}</ProjectGuid>',"name":'^.*<ProjectName>(.*)</ProjectName>'},
               "VC12": {"guid":'^.*?<ProjectGuid>{(.*)}</ProjectGuid>',"name":'^.*<ProjectName>(.*)</ProjectName>'},
               "VC14": {"guid":'^.*?<ProjectGuid>{(.*)}</ProjectGuid>',"name":'^.*<ProjectName>(.*)</ProjectName>'},
-              "VC15": {"guid":'^.*?<ProjectGuid>{(.*)}</ProjectGuid>',"name":'^.*<ProjectName>(.*)</ProjectName>'},
+              "VC141": {"guid":'^.*?<ProjectGuid>{(.*)}</ProjectGuid>',"name":'^.*<ProjectName>(.*)</ProjectName>'},
              }
     re_guid = re.compile(regexs[vcversion]["guid"])
     re_name = re.compile(regexs[vcversion]["name"])
