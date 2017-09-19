@@ -406,7 +406,7 @@ namespace RTC
       }
 
     { // pre-connection
-      RTC_TRACE(("Connection pre-creation: %s",
+      RTC_TRACE(("Connection pre-connection: %s",
                  m_config["manager.components.preconnect"].c_str()));
       std::vector<std::string> connectors;
       connectors = coil::split(m_config["manager.components.preconnect"], ",");
@@ -414,7 +414,14 @@ namespace RTC
         {
           // ConsoleIn.out:Console.in(dataflow_type=push,....)
           coil::vstring conn_prop = coil::split(connectors[i], "(");
-          coil::replaceString(conn_prop[1], ")", "");
+          if (conn_prop.size() == 1)
+            {
+              conn_prop.   // default connector profile value
+                push_back("dataflow_type=push&interface_type=corba_cdr");
+            } // after this conn_prop.size() >= 2
+          std::size_t pos = conn_prop[1].find_last_of(")");
+          if (pos != std::string::npos) { conn_prop[1].erase(pos); }
+
           coil::vstring comp_ports;
           comp_ports = coil::split(conn_prop[0], ":");
           if (comp_ports.size() != 2)
