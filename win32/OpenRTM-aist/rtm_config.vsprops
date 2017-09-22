@@ -18,6 +18,10 @@
 		Value="%OMNI_ROOT%"
 	/>
 	<UserMacro
+		Name="omni_version"
+		Value="%OMNI_VERSION%"
+	/>
+	<UserMacro
 		Name="omni_dllver"
 		Value="%OMNI_DLLVER%"
 	/>

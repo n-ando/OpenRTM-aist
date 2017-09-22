@@ -71,10 +71,12 @@ set(OPENRTM_VERSION_MINOR [openrtm_version_minor])
 set(OPENRTM_VERSION_PATCH [openrtm_version_patch])
 set(OPENRTM_SHORT_VERSION [openrtm_short_version])
 
-string(REPLACE "\\\\" "/" OMNIORB_DIR "$ENV{OMNI_ROOT}")
 string(REPLACE "\\\\" "/" OPENRTM_DIR "$ENV{RTM_ROOT}")
-string(REGEX REPLACE "/$" "" OMNIORB_DIR "${OMNIORB_DIR}")
 string(REGEX REPLACE "/$" "" OPENRTM_DIR "${OPENRTM_DIR}")
+
+# omniORB version
+set(OMNIORB_VERSION [omniorb_version])
+set(OMNIORB_DIR "${OPENRTM_DIR}/omniORB/${OMNIORB_VERSION}_${RTM_VC_VER}")
 
 # omniORB options
 set(OMNIORB_CFLAGS [omniorb_cflags])
@@ -230,6 +232,7 @@ if __name__ == '__main__':
     dict["omniorb_ldflags"] = ""
     dict["omniorb_library_dirs"] = dict["omni_libdir"]
     dict["omniorb_libraries"] = omni_libs
+    dict["omniorb_version"] = str(dict["omni_version"])
 
     dict["openrtm_cflags"] = rtm_cflags
     dict["openrtm_include_dirs"] = str(dict["rtm_includes"])

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup Label="UserMacros">
+    <omni_version>$(OMNI_VERSION)</omni_version>
     <omni_dllver>$(OMNI_DLLVER)</omni_dllver>
     <omnithread_dllver>$(OMNITHREAD_DLLVER)</omnithread_dllver>
     <rtm_dllver>$(RTM_DLLVER)</rtm_dllver>
@@ -41,6 +42,9 @@
   <ItemGroup>
     <BuildMacro Include="omni_root">
       <Value>$(omni_root)</Value>
+    </BuildMacro>
+    <BuildMacro Include="omni_version">
+      <Value>$(omni_version)</Value>
     </BuildMacro>
     <BuildMacro Include="omni_dllver">
       <Value>$(omni_dllver)</Value>
