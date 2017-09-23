@@ -1691,6 +1691,7 @@ AC_OUTPUT([Makefile
 	examples/SimpleService/Makefile
 	examples/ExtTrigger/Makefile
 	examples/Templates/Makefile
+	examples/Throughput/Makefile
 	examples/tests/Makefile
 	docs/Makefile
 	win32/Makefile

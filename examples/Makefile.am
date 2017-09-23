@@ -8,10 +8,10 @@
 
 AUTOMAKE_OPTIONS = 1.4
 
-SUBDIRS = Analyzer Composite ConfigSample SimpleIO SeqIO SimpleService ExtTrigger Templates @UNITTEST@
+SUBDIRS = Analyzer Composite ConfigSample SimpleIO SeqIO SimpleService ExtTrigger Templates Throughput @UNITTEST@
 
 EXTRA_DIST =               \
 	rtc.vcproj.yaml    \
 	rtcdll.vcproj.yaml
 
-DIST_SUBDIRS = Analyzer Composite ConfigSample SimpleIO SeqIO SimpleService ExtTrigger AutoTest Templates tests
+DIST_SUBDIRS = Analyzer Composite ConfigSample SimpleIO SeqIO SimpleService ExtTrigger AutoTest Templates Throughput tests
