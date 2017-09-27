@@ -27,12 +27,7 @@
 #include <rtm/RTC.h>
 #include <rtm/ConnectorBase.h>
 
-#ifdef ORB_IS_ORBEXPRESS
-class CORBA::Stream;
-typedef CORBA::Stream cdrMemoryStream;
-#else
 class cdrMemoryStream;
-#endif
 
 namespace RTC
 {
@@ -352,13 +347,13 @@ namespace RTC
 #ifdef ORB_IS_ORBEXPRESS
       if (endian[0] == "little")
         {
-          cdr.is_little_endian(true);
+          cdr.cdr.is_little_endian(true);
         }
       else if (endian[0] == "big")
         {
-          cdr.is_little_endian(false);
+          cdr.cdr.is_little_endian(false);
         }
-       cdr >> data;
+       cdr.cdr >> data;
 #elif defined(ORB_IS_TAO)
        TAO_InputCDR(cdr.cdr) >> data;
 #else

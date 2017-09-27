@@ -52,6 +52,7 @@
 #endif
 #endif
 
+
 #ifdef RTM_OS_LINUX
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE
@@ -1548,12 +1549,21 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 	char** argv = coil::toArgv(args);
 	int argc(args.size());
 	
+#ifdef ORB_IS_ORBEXPRESS
+	CORBA::ORB::spawn_flags(VX_SPE_TASK | VX_STDIO);
+	CORBA::ORB::stack_size(20000);
+	m_pORB = CORBA::ORB_init(argc, argv, "");
+	CORBA::Object_var obj =
+          m_pORB->resolve_initial_references((char*)"RootPOA");
+	m_pPOA = PortableServer::POA::_narrow(obj);
+#else
 	// ORB initialization
 	m_pORB = CORBA::ORB_init(argc, argv);
 	// Get the RootPOA
 	CORBA::Object_var obj =
           m_pORB->resolve_initial_references((char*)"RootPOA");
 	m_pPOA = PortableServer::POA::_narrow(obj);
+#endif
 	if (CORBA::is_nil(m_pPOA))
 	  {
 	    RTC_ERROR(("Could not resolve RootPOA."));

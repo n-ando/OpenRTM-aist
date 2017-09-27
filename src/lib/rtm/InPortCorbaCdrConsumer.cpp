@@ -72,11 +72,17 @@ namespace RTC
 
 #ifndef ORB_IS_RTORB
 #ifdef ORB_IS_ORBEXPRESS
-    CORBA::Octet* to;
-    cdrMemoryStream data_tmp = data;
-    *static_cast<CORBA::Octet*>(to) = data_tmp.read_octet();
-    ::OpenRTM::CdrData tmp(data_tmp.size_written(), data_tmp.size_written(),
-                           to, 0);
+    cdrMemoryStream tmp_data;
+    tmp_data = data;
+    ::OpenRTM::CdrData tmp;
+    CORBA::ULong len = tmp_data.cdr.size_written();
+    tmp.length(len);
+    tmp_data.cdr.read_array_1((void*)tmp.get_buffer(), len);
+    //CORBA::Octet* to;
+    //cdrMemoryStream data_tmp = data;
+    //*static_cast<CORBA::Octet*>(to) = data_tmp.read_octet();
+    //::OpenRTM::CdrData tmp(data_tmp.size_written(), data_tmp.size_written(),
+    //                       to, 0);
 #elif defined(ORB_IS_TAO)
 	char *c = const_cast<char*>(data.cdr.buffer());
 	::OpenRTM::CdrData tmp(data.cdr.length(), data.cdr.length(),

@@ -159,7 +159,7 @@ namespace RTC
       {
         cdrMemoryStream cdr;
 #ifdef ORB_IS_ORBEXPRESS
-        cdr.write_array_1(data.get_buffer(), data.length());
+        cdr.cdr.write_array_1(data.get_buffer(), data.length());
 #elif defined(ORB_IS_TAO)
         cdr.cdr.write_octet_array(data.get_buffer(), data.length());
 #else

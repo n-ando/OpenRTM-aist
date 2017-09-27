@@ -36,6 +36,10 @@
 #include <rtm/SystemLogger.h>
 #include <rtm/ManagerActionListener.h>
 
+#ifdef ORB_IS_ORBEXPRESS
+#include <RTPortableServer.h>
+#endif
+
 namespace RTM
 {
   class ManagerServant;

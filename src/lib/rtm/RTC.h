@@ -89,7 +89,23 @@ namespace RTC
 };
 
 #ifdef ORB_IS_ORBEXPRESS
-typedef CORBA::Stream cdrMemoryStream;
+class cdrMemoryStream
+{
+public:
+  cdrMemoryStream()
+  {
+  };
+  cdrMemoryStream(const cdrMemoryStream &rhs)
+  {
+    cdr.copy(rhs.cdr);
+  };
+  cdrMemoryStream& operator= (const cdrMemoryStream &rhs)
+  {
+    cdr.copy(rhs.cdr);
+    return *this;
+  };
+  CORBA::Stream cdr;
+};
 #elif defined(ORB_IS_TAO)
 class cdrMemoryStream
 {

@@ -249,11 +249,11 @@ namespace RTC
         }
       // normal case
 #ifdef ORB_IS_ORBEXPRESS
-      m_cdr.rewind();
+      m_cdr.cdr.rewind();
 
       RTC_TRACE(("connector endian: %s", isLittleEndian() ? "little":"big"));
-      m_cdr.is_little_endian(isLittleEndian());
-      m_cdr << data;
+      m_cdr.cdr.is_little_endian(isLittleEndian());
+      m_cdr.cdr << data;
 #elif defined(ORB_IS_TAO)
       m_cdr.cdr.reset();
       RTC_TRACE(("connector endian: %s", isLittleEndian() ? "little" : "big"));

@@ -36,12 +36,7 @@ namespace SDOPackage
 };
 #endif // ORB_IS_RTORB
 
-#ifdef ORB_IS_ORBEXPRESS
-class CORBA::Stream;
-typedef CORBA::Stream cdrMemoryStream;
-#else
 class cdrMemoryStream;
-#endif
 
 namespace RTC
 {
