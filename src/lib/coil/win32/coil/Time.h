@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file Time_win32.h
  * @brief Time functions
@@ -42,13 +42,13 @@ struct timezone {
 
   /*!
    * @if jp
-   * @brief w’è‚³‚ê‚½•bŠÔ‚Íˆ—‚ğ‹x~‚·‚é
+   * @brief æŒ‡å®šã•ã‚ŒãŸç§’é–“ã¯å‡¦ç†ã‚’ä¼‘æ­¢ã™ã‚‹
    *
-   * w’è‚³‚ê‚½•bŠÔ‚Íˆ—‚ğ‹x~‚·‚éB
+   * æŒ‡å®šã•ã‚ŒãŸç§’é–“ã¯å‡¦ç†ã‚’ä¼‘æ­¢ã™ã‚‹ã€‚
    *
-   * @param seconds •b”
+   * @param seconds ç§’æ•°
    *
-   * @return 0: ¬Œ÷
+   * @return 0: æˆåŠŸ
    *
    * @else
    * @brief Stop a processing at specified second time
@@ -72,13 +72,13 @@ struct timezone {
 
   /*!
    * @if jp
-   * @brief w’è‚³‚ê‚½•bŠÔ‚Íˆ—‚ğ‹x~‚·‚é
+   * @brief æŒ‡å®šã•ã‚ŒãŸç§’é–“ã¯å‡¦ç†ã‚’ä¼‘æ­¢ã™ã‚‹
    *
-   * w’è‚³‚ê‚½•bŠÔ‚Íˆ—‚ğ‹x~‚·‚éB
+   * æŒ‡å®šã•ã‚ŒãŸç§’é–“ã¯å‡¦ç†ã‚’ä¼‘æ­¢ã™ã‚‹ã€‚
    *
-   * @param interval TimeValueƒIƒuƒWƒFƒNƒg
+   * @param interval TimeValueã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
    *
-   * @return 0: ¬Œ÷, != 0: ¸”s
+   * @return 0: æˆåŠŸ, != 0: å¤±æ•—
    *
    * @else
    * @brief Stop a processing at specified second time
@@ -147,13 +147,13 @@ struct timezone {
 
   /*!
    * @if jp
-   * @brief w’è‚³‚ê‚½ƒ}ƒCƒNƒ•bŠÔ‚Íˆ—‚ğ‹x~‚·‚é
+   * @brief æŒ‡å®šã•ã‚ŒãŸãƒã‚¤ã‚¯ãƒ­ç§’é–“ã¯å‡¦ç†ã‚’ä¼‘æ­¢ã™ã‚‹
    *
-   * w’è‚³‚ê‚½ƒ}ƒCƒNƒ•bŠÔ‚Íˆ—‚ğ‹x~‚·‚éB
+   * æŒ‡å®šã•ã‚ŒãŸãƒã‚¤ã‚¯ãƒ­ç§’é–“ã¯å‡¦ç†ã‚’ä¼‘æ­¢ã™ã‚‹ã€‚
    *
-   * @param usec ƒ}ƒCƒNƒ•b”
+   * @param usec ãƒã‚¤ã‚¯ãƒ­ç§’æ•°
    *
-   * @return 0: ¬Œ÷, != 0: ¸”s
+   * @return 0: æˆåŠŸ, != 0: å¤±æ•—
    *
    * @else
    * @brief Stop a processing at specified micro second time
@@ -215,14 +215,14 @@ struct timezone {
 
   /*!
    * @if jp
-   * @brief ‚Æƒ^ƒCƒ€ƒ][ƒ“‚ğæ“¾‚·‚é
+   * @brief æ™‚åˆ»ã¨ã‚¿ã‚¤ãƒ ã‚¾ãƒ¼ãƒ³ã‚’å–å¾—ã™ã‚‹
    *
-   * ‚Æƒ^ƒCƒ€ƒ][ƒ“‚ğæ“¾‚·‚éB
+   * æ™‚åˆ»ã¨ã‚¿ã‚¤ãƒ ã‚¾ãƒ¼ãƒ³ã‚’å–å¾—ã™ã‚‹ã€‚
    *
-   * @param tv \‘¢‘Ì
-   * @param tz ƒ^ƒCƒ€ƒ][ƒ“\‘¢‘Ì
+   * @param tv æ™‚åˆ»æ§‹é€ ä½“
+   * @param tz ã‚¿ã‚¤ãƒ ã‚¾ãƒ¼ãƒ³æ§‹é€ ä½“
    *
-   * @return 0: ¬Œ÷
+   * @return 0: æˆåŠŸ
    *
    * @else
    * @brief Get the time and timezone
@@ -238,45 +238,60 @@ struct timezone {
    */
   inline int gettimeofday(struct timeval *tv, struct timezone *tz)
   {
-	  FILETIME        ftime;
-	  LARGE_INTEGER   lint;
-	  __int64         val64;
-	  static int      tzflag;
-	  if (tv != NULL)
+	  LARGE_INTEGER frequency;
+	  BOOL ret = QueryPerformanceFrequency(&frequency);
+
+	  if (ret == 0)
 	  {
-		  ::GetSystemTimeAsFileTime(&ftime);
-		  lint.LowPart  = ftime.dwLowDateTime;
-		  lint.HighPart = ftime.dwHighDateTime;
-		  val64 = lint.QuadPart;
-		  val64 = val64 - EPOCHFILETIME;
-		  val64 = val64 / 10;
-		  tv->tv_sec  = (long)(val64 / 1000000);
-		  tv->tv_usec = (long)(val64 % 1000000);
-	  }
-	  if (tz)
-	  {
-		  if (!tzflag)
+		  FILETIME        ftime;
+		  LARGE_INTEGER   lint;
+		  __int64         val64;
+		  static int      tzflag;
+		  if (tv != NULL)
 		  {
-			  ::_tzset();
-			  ++tzflag;
+			  ::GetSystemTimeAsFileTime(&ftime);
+			  lint.LowPart = ftime.dwLowDateTime;
+			  lint.HighPart = ftime.dwHighDateTime;
+			  val64 = lint.QuadPart;
+			  val64 = val64 - EPOCHFILETIME;
+			  val64 = val64 / 10;
+			  tv->tv_sec = (long)(val64 / 1000000);
+			  tv->tv_usec = (long)(val64 % 1000000);
 		  }
-		  long tzone = 0;
-		  ::_get_timezone(&tzone);
-		  tz->tz_minuteswest = tzone / 60;
-		  int dlight = 0;
-		  ::_get_daylight(&dlight);
-		  tz->tz_dsttime = dlight;
+		  if (tz)
+		  {
+			  if (!tzflag)
+			  {
+				  ::_tzset();
+				  ++tzflag;
+			  }
+			  long tzone = 0;
+			  ::_get_timezone(&tzone);
+			  tz->tz_minuteswest = tzone / 60;
+			  int dlight = 0;
+			  ::_get_daylight(&dlight);
+			  tz->tz_dsttime = dlight;
+		  }
+	  }
+	  else
+	  {
+		  LARGE_INTEGER current;
+		  QueryPerformanceCounter(&current);
+		  LONGLONG current_time = (current.QuadPart*1000000) / frequency.QuadPart;
+		  tv->tv_sec = (long)(current_time / 1000000);
+		  tv->tv_usec = (long)(current_time % 1000000);
+
 	  }
 	  return 0;
   }
 
   /*!
    * @if jp
-   * @brief ‚ğæ“¾‚·‚é
+   * @brief æ™‚åˆ»ã‚’å–å¾—ã™ã‚‹
    *
-   * ‚ğæ“¾‚·‚éB
+   * æ™‚åˆ»ã‚’å–å¾—ã™ã‚‹ã€‚
    *
-   * @return TimeValueƒIƒuƒWƒFƒNƒg
+   * @return TimeValueã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
    *
    * @else
    * @brief Get the time
@@ -296,14 +311,14 @@ struct timezone {
 
   /*!
    * @if jp
-   * @brief ‚Æƒ^ƒCƒ€ƒ][ƒ“‚ğİ’è‚·‚é
+   * @brief æ™‚åˆ»ã¨ã‚¿ã‚¤ãƒ ã‚¾ãƒ¼ãƒ³ã‚’è¨­å®šã™ã‚‹
    *
-   * ‚Æƒ^ƒCƒ€ƒ][ƒ“‚ğİ’è‚·‚éB
+   * æ™‚åˆ»ã¨ã‚¿ã‚¤ãƒ ã‚¾ãƒ¼ãƒ³ã‚’è¨­å®šã™ã‚‹ã€‚
    *
-   * @param tv \‘¢‘Ì
-   * @param tz ƒ^ƒCƒ€ƒ][ƒ“\‘¢‘Ì
+   * @param tv æ™‚åˆ»æ§‹é€ ä½“
+   * @param tz ã‚¿ã‚¤ãƒ ã‚¾ãƒ¼ãƒ³æ§‹é€ ä½“
    *
-   * @return 0: ¬Œ÷
+   * @return 0: æˆåŠŸ
    *
    * @else
    * @brief Set the time and timezone

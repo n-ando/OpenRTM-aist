@@ -1,0 +1,1 @@
+.\ThroughputComp.exe -f rtc_octet_sameproc.conf

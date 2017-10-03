@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file  Throughput.h
  * @brief Clock Throughput Component

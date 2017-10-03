@@ -1,0 +1,1 @@
+.\ThroughputComp.exe -f rtc_octet_twoproc_1.conf -o "corba.nameservers:%1"

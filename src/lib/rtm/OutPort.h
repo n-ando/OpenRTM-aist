@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file OutPort.h
  * @brief OutPort class
@@ -37,13 +37,13 @@
 
 /*!
  * @if jp
- * @brief �ǡ����˥����ॹ����פ򥻥åȤ���
+ * @brief データにタイムスタンプをセットする
  *
- * �ǡ����ݡ��ȤΥǡ������Ф��ƥ����ॹ����פ򥻥åȤ��롣�ǡ����ݡ���
- * �Υǡ����Ϲ�¤�ΤΥ��С��Ȥ��� tm.sec, tm.nsec �����ɬ�פ����롣
+ * データポートのデータに対してタイムスタンプをセットする。データポート
+ * のデータは構造体のメンバーとして tm.sec, tm.nsec を持つ必要がある。
  *
- * @param data �����ॹ����פ򥻥åȤ���ǡ������¹Ը�¹Ի��Υ����ॹ
- *             ����פ����åȤ����
+ * @param data タイムスタンプをセットするデータ。実行後実行時のタイムス
+ *             タンプがセットされる
  *
  * @else
  * @brief Setting timestamp to data
@@ -72,21 +72,21 @@ namespace RTC
    *
    * @class OutPort
    *
-   * @brief OutPort �ƥ�ץ졼�ȥ��饹
+   * @brief OutPort テンプレートクラス
    * 
-   * OutPort �ƥ�ץ졼�ȥ��饹���ƥ�ץ졼�Ȥΰ����Ȥ��ơ�OutPort��
-   * �����ǡ����� DataType ��Ȥ롣
+   * OutPort テンプレートクラス、テンプレートの引数として、OutPortが
+   * 扱うデータ型 DataType をとる。
    *
    *
-   * OnWrite�ϥ�����Хå� (����ߤ˵������륤�٥�Ȥˤ�ꥳ���뤵���)
+   * OnWrite系コールバック (書込みに起因するイベントによりコールされる)
    *
    * - void OnWrite<DataType>::operator()(const DataType): 
-   *     OutPort::write() ��ƤӽФ��񤭹��ߤ�Ԥ��ݤ˥����뤵��롣
+   *     OutPort::write() を呼び出し書き込みを行う際にコールされる。
    *
    * - DataType OnWriteConvert<DataType>::operator()(const DataType): 
-   *     OutPort::write() ��ƤӽФ����ǡ�����Хåե��˽񤭹������˸ƤФ�
-   *     �ǡ������Ѵ���Ԥ���operator()()������ͤ����ꥢ�饤������Хåե���
-   *     �񤭹��ޤ�롣
+   *     OutPort::write() を呼び出し、データをバッファに書き込む前に呼ばれ
+   *     データの変換を行う。operator()()の戻り値がシリアライズされバッファに
+   *     書き込まれる。
    *
    * @since 0.2.0
    *
@@ -110,13 +110,13 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief ���󥹥ȥ饯��
+     * @brief コンストラクタ
      *
-     * ���󥹥ȥ饯��
+     * コンストラクタ
      *
-     * @param name �ݡ���̾
-     * @param value ���Υݡ��Ȥ˥Х���ɤ����ǡ����ѿ�
-     * @param length �Хåե�Ĺ(�ǥե������:8)
+     * @param name ポート名
+     * @param value このポートにバインドされるデータ変数
+     * @param length バッファ長(デフォルト値:8)
      *
      * @else
      *
@@ -149,9 +149,9 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief �ǥ��ȥ饯��
+     * @brief デストラクタ
      * 
-     * �ǥ��ȥ饯��
+     * デストラクタ
      * 
      * @else
      *
@@ -168,22 +168,22 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief �ǡ����񤭹���
+     * @brief データ書き込み
      *
-     * �ݡ��Ȥإǡ�����񤭹��ࡣ
+     * ポートへデータを書き込む。
      *
-     * - ������Хå��ե��󥯥� OnWrite �����åȤ���Ƥ����硢
-     *   OutPort ���ݻ�����Хåե��˽񤭹������� OnWrite ���ƤФ�롣
-     * - OutPort ���ݻ�����Хåե��������С��ե����򸡽ФǤ���Хåե��Ǥ��ꡢ
-     *   ���ġ��񤭹���ݤ˥Хåե��������С��ե����򸡽Ф�����硢
-     *   ������Хå��ե��󥯥� OnOverflow ���ƤФ�롣
-     * - ������Хå��ե��󥯥� OnWriteConvert �����åȤ���Ƥ����硢
-     *   �Хåե��񤭹��߻��ˡ� OnWriteConvert �� operator() ������ͤ�
-     *   �Хåե��˽񤭹��ޤ�롣
+     * - コールバックファンクタ OnWrite がセットされている場合、
+     *   OutPort が保持するバッファに書き込む前に OnWrite が呼ばれる。
+     * - OutPort が保持するバッファがオーバーフローを検出できるバッファであり、
+     *   かつ、書き込む際にバッファがオーバーフローを検出した場合、
+     *   コールバックファンクタ OnOverflow が呼ばれる。
+     * - コールバックファンクタ OnWriteConvert がセットされている場合、
+     *   バッファ書き込み時に、 OnWriteConvert の operator() の戻り値が
+     *   バッファに書き込まれる。
      *
-     * @param value �񤭹����оݥǡ���
+     * @param value 書き込み対象データ
      *
-     * @return �񤭹��߽������(�񤭹�������:true���񤭹��߼���:false)
+     * @return 書き込み処理結果(書き込み成功:true、書き込み失敗:false)
      *
      * @else
      *
@@ -217,7 +217,7 @@ namespace RTC
         }
       {
         Guard guard(m_profile_mutex);
-        m_profile.properties[m_propValueIndex].value <<= value;
+        //m_profile.properties[m_propValueIndex].value <<= value;
       }
 
       bool result(true);
@@ -269,12 +269,12 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief �ǡ����񤭹���
+     * @brief データ書き込み
      *
-     * �ݡ��Ȥإǡ�����񤭹��ࡣ
-     * �Х���ɤ��줿�ѿ������ꤵ�줿�ͤ�ݡ��Ȥ˽񤭹��ࡣ
+     * ポートへデータを書き込む。
+     * バインドされた変数に設定された値をポートに書き込む。
      *
-     * @return �񤭹��߽������(�񤭹�������:true���񤭹��߼���:false)
+     * @return 書き込み処理結果(書き込み成功:true、書き込み失敗:false)
      *
      * @else
      *
@@ -295,14 +295,14 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief �ǡ����񤭹���
+     * @brief データ書き込み
      *
-     * �ݡ��Ȥإǡ�����񤭹��ࡣ
-     * ���ꤵ�줿�ͤ�ݡ��Ȥ˽񤭹��ࡣ
+     * ポートへデータを書き込む。
+     * 設定された値をポートに書き込む。
      *
-     * @param value �񤭹����оݥǡ���
+     * @param value 書き込み対象データ
      *
-     * @return �񤭹��߽������(�񤭹�������:true���񤭹��߼���:false)
+     * @return 書き込み処理結果(書き込み成功:true、書き込み失敗:false)
      *
      * @else
      *
@@ -325,17 +325,17 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief ����Υ��ͥ����ؤν񤭹��ߥ��ơ�����������
+     * @brief 特定のコネクタへの書き込みステータスを得る
      *
-     * OutPort ����³���Ȥ� Connector �ȸƤФ�벾�ۥǡ�������ͥ���
-     * �ġ�write() �ؿ��Ϥ���� Connector ���Ф��ƥǡ�����񤭹��ब��
-     * �� Connector �Ͻ񤭹��ߤ��Ȥ˥��ơ��������֤���write() �ؿ��Ǥϡ�
-     * ���٤Ƥ� Connector �����ｪλ�����Ȥ��Τ� true ���֤�������ʳ�
-     * �Ǥ� false ���ֵѤ��롣���δؿ��� write() �� false �ξ�祹�ơ�
-     * ������Ĵ�٤�Τ˻��Ѥ��뤳�Ȥ��Ǥ��롣
+     * OutPort は接続ごとに Connector と呼ばれる仮想データチャネルを持
+     * つ。write() 関数はこれら Connector に対してデータを書き込むが、
+     * 各 Connector は書き込みごとにステータスを返す。write() 関数では、
+     * すべての Connector が正常終了したときのみ true を返し、それ以外
+     * では false を返却する。この関数は write() が false の場合ステー
+     * タスを調べるのに使用することができる。
      * 
-     * @param index Connector �� index
-     * @return ���ơ�����
+     * @param index Connector の index
+     * @return ステータス
      *
      * @else
      *
@@ -361,16 +361,16 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief ����Υ��ͥ����ؤν񤭹��ߥ��ơ������ꥹ�Ȥ�����
+     * @brief 特定のコネクタへの書き込みステータスリストを得る
      *
-     * OutPort ����³���Ȥ� Connector �ȸƤФ�벾�ۥǡ�������ͥ���
-     * �ġ�write() �ؿ��Ϥ���� Connector ���Ф��ƥǡ�����񤭹��ब��
-     * �� Connector �Ͻ񤭹��ߤ��Ȥ˥��ơ��������֤���write() �ؿ��Ǥϡ�
-     * ���٤Ƥ� Connector �����ｪλ�����Ȥ��Τ� true ���֤�������ʳ�
-     * �Ǥ� false ���ֵѤ��롣���δؿ��� write() �� false �ξ�祹�ơ�
-     * ������Ĵ�٤�Τ˻��Ѥ��뤳�Ȥ��Ǥ��롣
+     * OutPort は接続ごとに Connector と呼ばれる仮想データチャネルを持
+     * つ。write() 関数はこれら Connector に対してデータを書き込むが、
+     * 各 Connector は書き込みごとにステータスを返す。write() 関数では、
+     * すべての Connector が正常終了したときのみ true を返し、それ以外
+     * では false を返却する。この関数は write() が false の場合ステー
+     * タスを調べるのに使用することができる。
      * 
-     * @return ���ơ������ꥹ��
+     * @return ステータスリスト
      *
      * @else
      *
@@ -396,16 +396,16 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief OnWrite ������Хå�������
+     * @brief OnWrite コールバックの設定
      *
-     * write() �ƤӽФ����ˡ��ƥ��ͥ������Ф��ƥǡ�����񤭹���ľ���˸�
-     * �Ф�� OnWrite ������Хå��ե��󥯥������ꤹ�롣���δؿ��ˤ��
-     * ���ꤵ�줿�ե��󥯥����֥������Ȥν�ͭ���ϡ��ƤӽФ�¦�����ġ���
-     * ������ const �ơ����Υե��󥯥����֥������Ȥβ�����Ǥ�ϸƤӽФ�¦�ˤ��롣
-     * �ե��󥯥����������������ˤϰ����� 0 ���Ϥ����Ȥǡ�������
-     * �Хå���̵���Ȥʤ롣
+     * write() 呼び出し時に、各コネクタに対してデータを書き込む直前に呼
+     * ばれる OnWrite コールバックファンクタを設定する。この関数により
+     * 設定されたファンクタオブジェクトの所有権は、呼び出し側が持つ。し
+     * たがっ const て、このファンクタオブジェクトの解体責任は呼び出し側にある。
+     * ファンクタの設定を解除する場合には引数に 0 を渡すことで、コール
+     * バックが無効となる。
      *
-     * @param on_write OnWrite ������Хå��ե��󥯥�
+     * @param on_write OnWrite コールバックファンクタ
      *
      * @else
      *
@@ -430,21 +430,21 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief OnWriteConvert ������Хå�������
+     * @brief OnWriteConvert コールバックの設定
      *
-     * write() �ƤӽФ����ˡ��ƥ��ͥ������Ф��ƥǡ�����񤭹���ľ���˸�
-     * �Ф졢�ǡ����Ѵ���Ԥ� OnWriteConvert ������Хå��ե��󥯥�����
-     * �ꤹ�롣������ľ��ǽ񤭹��ޤ줿�ǡ�����Ϳ����졢����ͤ˼ºݤ�
-     * ���ͥ����ޤ��ϥХåե��˽񤭹��ޤ��ǡ������֤��ե��󥯥�������
-     * ���롣���δؿ��ˤ�����ꤵ�줿�ե��󥯥����֥������Ȥν�ͭ���ϡ�
-     * �ƤӽФ�¦�����ġ��������� const �ơ����Υե��󥯥����֥�������
-     * �β�����Ǥ�ϸƤӽФ�¦�ˤ��롣�ե��󥯥����������������ˤ�
-     * ������ 0 ���Ϥ����Ȥǡ�������Хå���̵���Ȥʤ롣 �ǡ����񤭹���
-     * ���˸ƤФ�� OnWriteConvert ������Хå��ե��󥯥������ꤹ�롣��
-     * �Υ�����Хå��ؿ��ν�����̤��񤭹��ޤ�롣���Τ���񤭹��ߥǡ�
-     * ���Υե��륿��󥰤���ǽ�Ȥʤ롣
+     * write() 呼び出し時に、各コネクタに対してデータを書き込み直前に呼
+     * ばれ、データ変換を行う OnWriteConvert コールバックファンクタを設
+     * 定する。引数に直近で書き込まれたデータが与えられ、戻り値に実際に
+     * コネクタまたはバッファに書き込まれるデータを返すファンクタを設定
+     * する。この関数により設定されたファンクタオブジェクトの所有権は、
+     * 呼び出し側が持つ。したがっ const て、このファンクタオブジェクト
+     * の解体責任は呼び出し側にある。ファンクタの設定を解除する場合には
+     * 引数に 0 を渡すことで、コールバックが無効となる。 データ書き込み
+     * 時に呼ばれる OnWriteConvert コールバックファンクタを設定する。こ
+     * のコールバック関数の処理結果が書き込まれる。このため書き込みデー
+     * タのフィルタリングが可能となる。
      *
-     * @param on_wconvert OnWriteConvert ������Хå��ե��󥯥�
+     * @param on_wconvert OnWriteConvert コールバックファンクタ
      *
      * @else
      *
@@ -472,7 +472,7 @@ namespace RTC
     std::string m_typename;
     /*!
      * @if jp
-     * @brief �Х���ɤ���� T �����ѿ��ؤλ���
+     * @brief バインドされる T 型の変数への参照
      * @else
      * @brief The reference to type-T variable that is bound.
      * @endif
@@ -481,7 +481,7 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief OnWrite ������Хå��ե��󥯥��ؤΥݥ���
+     * @brief OnWrite コールバックファンクタへのポインタ
      * @else
      * @brief Pointer to OnWrite callback functor
      * @endif
@@ -490,7 +490,7 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief OnWriteConvert ������Хå��ե��󥯥��ؤΥݥ���
+     * @brief OnWriteConvert コールバックファンクタへのポインタ
      * @else
      * @brief Pointer to OnWriteConvert callback functor
      * @endif

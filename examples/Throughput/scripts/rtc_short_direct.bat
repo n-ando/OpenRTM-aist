@@ -1,0 +1,1 @@
+.\ThroughputComp.exe -f rtc_short_direct.conf

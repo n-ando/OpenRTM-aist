@@ -8,5 +8,6 @@ add_subdirectory(SimpleService)
 add_subdirectory(ConfigSample)
 add_subdirectory(Composite)
 add_subdirectory(Analyzer)
+add_subdirectory(Throughput)
 
 #add_subdirectory(FileTest)

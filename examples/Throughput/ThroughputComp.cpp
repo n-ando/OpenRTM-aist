@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file ThroughputComp.cpp
  * @brief Standalone component
