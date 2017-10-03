@@ -29,7 +29,7 @@
 #include <coil/TimeValue.h>
 
 #include <rtm/RTObjectStateMachine.h>
-#include <rtm/RTPreemptEC.h>
+#include <RTPreemptEC.h>
 
 #define MAX_SAFE_STACK (8*1024)
 #define NSEC_PER_SEC 1000000000
@@ -596,9 +596,9 @@ namespace RTC_exp
   void RTPreemptEC::
   setPolicy(coil::Properties& prop)
   {
-    RTC_TRACE(("setPriority()"));
+    RTC_TRACE(("setPolicy()"));
     std::string policy;
-    getProperty(prop, "priority", policy);
+    getProperty(prop, "policy", policy);
     if (!policy.empty())
       {
         coil::normalize(policy);
