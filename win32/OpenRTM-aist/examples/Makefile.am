@@ -4,7 +4,7 @@
 ##
 ## $Id$
 ##---------------------------------------------------------------------------
-SUBDIRS = Analyzer Composite ConfigSample ExtTrigger LTTSample SimpleIO SeqIO SimpleService USBCamera .
+SUBDIRS = Analyzer Composite ConfigSample ExtTrigger LTTSample SimpleIO SeqIO SimpleService Throughput USBCamera .
 
 clean-local:
 	rm -f *~

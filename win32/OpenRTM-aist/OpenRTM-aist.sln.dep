@@ -40,3 +40,5 @@ Analyzer: libcoil libRTCSkel libRTC
 AnalyzerComp: libcoil libRTCSkel libRTC
 Analyzer_test: libcoil libRTCSkel libRTC
 Analyzer_testComp: libcoil libRTCSkel libRTC
+Throughput: libcoil libRTCSkel libRTC
+ThroughputComp: libcoil libRTCSkel libRTC

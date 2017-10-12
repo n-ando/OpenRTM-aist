@@ -143,4 +143,14 @@ Examples:
       ShortName: Anlytest.dll
       Name: Analyzer_test.dll
       Source: ..\\examples\\Analyzer\\Analyzer_test\\Release\\Analyzer_test.dll
+    - Id: ThroughputComp.exe
+      ShortName: Through.exe
+      Name: ThroughputComp.exe
+      Source: ..\\examples\\Throughput\\ThroughputComp\\Release\\ThroughputComp.exe
+      Shortcut: true
+    - Id: Throughputdll
+      ShortName: Through .dll
+      Name: Throughput.dll
+      Source: ..\\examples\\Throughput\\Throughput\\Release\\Throughput.dll
+      Source: ..\\examples\\Analyzer\\Analyzer\\Release\\Throughput.dll
 
