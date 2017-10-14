@@ -280,6 +280,7 @@ class Throughput
   void writeData();
   void setDataSize(CORBA::ULong size);
   CORBA::ULong getDataSize();
+  CORBA::ULong getInPortConnectorSize();
   void receiveData(const RTC::Time &tm, const CORBA::ULong seq_length);
   void setConnectorProfile(const RTC::ConnectorInfo& info);
 

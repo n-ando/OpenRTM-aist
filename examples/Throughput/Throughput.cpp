@@ -214,8 +214,15 @@ RTC::ReturnCode_t Throughput::onDeactivated(RTC::UniqueId ec_id)
 
   m_sendcount = 0;
   m_logmulcnt = 0;
-  coil::Async* async(coil::AsyncInvoker(this, std::mem_fun(&Throughput::exit)));
-  async->invoke();
+
+
+  
+
+  if (getInPortConnectorSize() == 0)
+  {
+	  coil::Async* async(coil::AsyncInvoker(this, std::mem_fun(&Throughput::exit)));
+	  async->invoke();
+  }
   return RTC::RTC_OK;
 }
 
@@ -502,6 +509,33 @@ void Throughput::setConnectorProfile(const RTC::ConnectorInfo &info)
   m_fs << std::endl;
   m_record.resize(m_maxsample);
 
+}
+
+CORBA::ULong Throughput::getInPortConnectorSize()
+{
+	CORBA::ULong count = 0;
+	std::string datatype = coil::normalize(m_datatype);
+	if (datatype == "octet")
+	{
+		count = m_inOctetIn.get_connector_profiles()->length();
+	}
+	else if (datatype == "short")
+	{
+		count = m_inShortIn.get_connector_profiles()->length();
+	}
+	else if (datatype == "long")
+	{
+		count = m_inLongIn.get_connector_profiles()->length();
+	}
+	else if (datatype == "float")
+	{
+		count = m_inFloatIn.get_connector_profiles()->length();
+	}
+	else if (datatype == "double")
+	{
+		count = m_inDoubleIn.get_connector_profiles()->length();
+	}
+	return count;
 }
 
 
