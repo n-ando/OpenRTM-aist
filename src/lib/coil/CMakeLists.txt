@@ -94,6 +94,7 @@ set(coil_headers
 	${COIL_OS_DIR}/coil/Time.h
 	${COIL_OS_DIR}/coil/UUID.h
 	${COIL_OS_DIR}/coil/atomic.h
+	${COIL_OS_DIR}/coil/SharedMemory.h
 	${PROJECT_BINARY_DIR}/config_coil.h
 )
 
@@ -117,9 +118,11 @@ set(coil_srcs
 	${COIL_OS_DIR}/coil/Task.cpp
 	${COIL_OS_DIR}/coil/Time.cpp
 	${COIL_OS_DIR}/coil/UUID.cpp
+	${COIL_OS_DIR}/coil/SharedMemory.cpp
 	${coil_headers}
 
 )
+
 
 
 if(WIN32)

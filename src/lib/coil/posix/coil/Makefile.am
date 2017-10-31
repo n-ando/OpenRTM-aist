@@ -19,7 +19,8 @@ COIL_PLATFORM_SRC =    \
 	Signal.cpp     \
 	Task.cpp       \
 	Time.cpp       \
-	UUID.cpp
+	UUID.cpp       \
+	SharedMemory.cpp
 
 # posix API dependent headers
 COIL_PLATFORM_H   =    \

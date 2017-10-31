@@ -315,12 +315,27 @@ set(rtm_srcs
 )
 
 if(VXWORKS)
+	set(rtm_headers ${rtm_headers} VxWorksRTExecutionContext.h)
 	set(rtm_srcs ${rtm_srcs} VxWorksRTExecutionContext.cpp)
 	if(RTP)
 	else(RTP)
+		set(rtm_headers ${rtm_headers} VxWorksInterruptExecutionContext.h)
 		set(rtm_srcs ${rtm_srcs} VxWorksInterruptExecutionContext.cpp)
 	endif(RTP)
 endif(VXWORKS)
+
+set(rtm_headers ${rtm_headers} InPortSHMConsumer.h)
+set(rtm_srcs ${rtm_srcs} InPortSHMConsumer.cpp)
+set(rtm_headers ${rtm_headers} InPortSHMProvider.h)
+set(rtm_srcs ${rtm_srcs} InPortSHMProvider.cpp)
+set(rtm_headers ${rtm_headers} OutPortSHMConsumer.h)
+set(rtm_srcs ${rtm_srcs} OutPortSHMConsumer.cpp)
+set(rtm_headers ${rtm_headers} OutPortSHMProvider.h)
+set(rtm_srcs ${rtm_srcs} OutPortSHMProvider.cpp)
+set(rtm_headers ${rtm_headers} SharedMemoryPort.h)
+set(rtm_srcs ${rtm_srcs} SharedMemoryPort.cpp)
+
+
 
 #message(STATUS ${ALL_IDL_SRCS})
 
