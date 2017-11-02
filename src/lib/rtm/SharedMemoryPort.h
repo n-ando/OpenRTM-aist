@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file SharedMemoryPort.h
  * @brief Shared Memory Port class
@@ -30,12 +30,12 @@ namespace RTC
   /*!
    * @if jp
    * @class SharedMemoryPort
-   * @brief SharedMemory ƒNƒ‰ƒX
+   * @brief SharedMemory ã‚¯ãƒ©ã‚¹
    *
    * SharedMemoryPort 
    *
-   * ‹¤—Lƒƒ‚ƒŠ‘€ìƒNƒ‰ƒX
-   * CORBA‚É‚æ‚é’ÊM‚É‚æ‚èAmmap‚Ì‰Šú‰»AI—¹‚È‚Ç‚ªƒŠƒ‚[ƒg‚É‘€ì‚Å‚«‚é
+   * å…±æœ‰ãƒ¡ãƒ¢ãƒªæ“ä½œã‚¯ãƒ©ã‚¹
+   * CORBAã«ã‚ˆã‚‹é€šä¿¡ã«ã‚ˆã‚Šã€mmapã®åˆæœŸåŒ–ã€çµ‚äº†ãªã©ãŒãƒªãƒ¢ãƒ¼ãƒˆã«æ“ä½œã§ãã‚‹
    *
    * @since 1.2.0
    *
@@ -56,9 +56,9 @@ namespace RTC
   public:
     /*!
      * @if jp
-     * @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+     * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
      *
-     * ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+     * ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
      *
      *
      * @else
@@ -74,9 +74,9 @@ namespace RTC
 	  SharedMemoryPort();
     /*!
      * @if jp
-     * @brief ƒfƒXƒgƒ‰ƒNƒ^
+     * @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
      *
-     * ƒfƒXƒgƒ‰ƒNƒ^
+     * ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
      *
      * @else
      * @brief Destructor
@@ -88,13 +88,13 @@ namespace RTC
 	  virtual ~SharedMemoryPort();
     /*!
      * @if jp
-     * @brief •¶š—ñ‚Åw’è‚µ‚½ƒf[ƒ^ƒTƒCƒY‚ğ”’l‚É•ÏŠ·‚·‚é
-	 * 1M ¨ 1048576
-	 * 1k ¨ 1024
-	 * 100 ¨ 100
+     * @brief æ–‡å­—åˆ—ã§æŒ‡å®šã—ãŸãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’æ•°å€¤ã«å¤‰æ›ã™ã‚‹
+	 * 1M â†’ 1048576
+	 * 1k â†’ 1024
+	 * 100 â†’ 100
      *
-     * @param size_str ƒf[ƒ^ƒTƒCƒY(•¶š—ñ)
-     * @return ƒf[ƒ^ƒTƒCƒY(”’l)
+     * @param size_str ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚º(æ–‡å­—åˆ—)
+     * @return ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚º(æ•°å€¤)
      *
      *
      *
@@ -109,10 +109,10 @@ namespace RTC
     virtual int string_to_MemorySize(std::string size_str);
      /*!
      * @if jp
-     * @brief ‹¤—Lƒƒ‚ƒŠ‚Ì‰Šú‰»
-	 * windows‚Å‚Íƒy[ƒWƒ“ƒOƒtƒ@ƒCƒ‹ã‚É—Ìˆæ‚ğŠm•Û‚·‚é
-	 * Linux‚Å‚Í/dev/shmˆÈ‰º‚Éƒtƒ@ƒCƒ‹‚ğì¬‚·‚é
-	 * ì¬‚µ‚½ƒtƒ@ƒCƒ‹‚Ì“à—e‚ğ‰¼‘zƒAƒhƒŒƒX‚Éƒ}ƒbƒsƒ“ƒO‚·‚é
+     * @brief å…±æœ‰ãƒ¡ãƒ¢ãƒªã®åˆæœŸåŒ–
+	 * windowsã§ã¯ãƒšãƒ¼ã‚¸ãƒ³ã‚°ãƒ•ã‚¡ã‚¤ãƒ«ä¸Šã«é ˜åŸŸã‚’ç¢ºä¿ã™ã‚‹
+	 * Linuxã§ã¯/dev/shmä»¥ä¸‹ã«ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ä½œæˆã™ã‚‹
+	 * ä½œæˆã—ãŸãƒ•ã‚¡ã‚¤ãƒ«ã®å†…å®¹ã‚’ä»®æƒ³ã‚¢ãƒ‰ãƒ¬ã‚¹ã«ãƒãƒƒãƒ”ãƒ³ã‚°ã™ã‚‹
      *
      *
      *
@@ -128,10 +128,10 @@ namespace RTC
     	throw (CORBA::SystemException);
      /*!
      * @if jp
-     * @brief ‹¤—Lƒƒ‚ƒŠ‚Ìƒ}ƒbƒsƒ“ƒO‚ğs‚¤
+     * @brief å…±æœ‰ãƒ¡ãƒ¢ãƒªã®ãƒãƒƒãƒ”ãƒ³ã‚°ã‚’è¡Œã†
      *
-     * @param memory_size ‹¤—Lƒƒ‚ƒŠ‚ÌƒTƒCƒY
-     * @param shm_address ‹óŠÔ–¼
+     * @param memory_size å…±æœ‰ãƒ¡ãƒ¢ãƒªã®ã‚µã‚¤ã‚º
+     * @param shm_address ç©ºé–“å
      *
      *
      *
@@ -147,8 +147,8 @@ namespace RTC
     	throw (CORBA::SystemException);
      /*!
      * @if jp
-     * @brief ƒ}ƒbƒsƒ“ƒO‚µ‚½‹¤—Lƒƒ‚ƒŠ‚ğƒAƒ“ƒ}ƒbƒv‚·‚é
-     * @param unlink Linux‚Å/dev/shmˆÈ‰º‚Éì¬‚µ‚½ƒtƒ@ƒCƒ‹‚ğíœ‚·‚éê‡‚ÉTrue‚É‚·‚é
+     * @brief ãƒãƒƒãƒ”ãƒ³ã‚°ã—ãŸå…±æœ‰ãƒ¡ãƒ¢ãƒªã‚’ã‚¢ãƒ³ãƒãƒƒãƒ—ã™ã‚‹
+     * @param unlink Linuxã§/dev/shmä»¥ä¸‹ã«ä½œæˆã—ãŸãƒ•ã‚¡ã‚¤ãƒ«ã‚’å‰Šé™¤ã™ã‚‹å ´åˆã«Trueã«ã™ã‚‹
      *
      *
      * @else
@@ -162,11 +162,11 @@ namespace RTC
     	throw (CORBA::SystemException);
      /*!
      * @if jp
-     * @brief ƒf[ƒ^‚ğ‘‚«‚Ş
-	 * æ“ª8byte‚Éƒf[ƒ^ƒTƒCƒY‚ğ‘‚«‚İA‚»‚ÌŒã‚ë‚Éƒf[ƒ^‚ğ‘‚«‚Ş
-	 * İ’è‚µ‚½ƒf[ƒ^ƒTƒCƒY‚ª‹¤—Lƒƒ‚ƒŠ‚ÌƒTƒCƒY‚ğã‰ñ‚Á‚½ê‡A‹¤—Lƒƒ‚ƒŠ‚Ì‰Šú‰»‚ğs‚¤
+     * @brief ãƒ‡ãƒ¼ã‚¿ã‚’æ›¸ãè¾¼ã‚€
+	 * å…ˆé ­8byteã«ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’æ›¸ãè¾¼ã¿ã€ãã®å¾Œã‚ã«ãƒ‡ãƒ¼ã‚¿ã‚’æ›¸ãè¾¼ã‚€
+	 * è¨­å®šã—ãŸãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºãŒå…±æœ‰ãƒ¡ãƒ¢ãƒªã®ã‚µã‚¤ã‚ºã‚’ä¸Šå›ã£ãŸå ´åˆã€å…±æœ‰ãƒ¡ãƒ¢ãƒªã®åˆæœŸåŒ–ã‚’è¡Œã†
 	 *
-     * @param data ‘‚«‚Şƒf[ƒ^
+     * @param data æ›¸ãè¾¼ã‚€ãƒ‡ãƒ¼ã‚¿
      *
      *
      *
@@ -180,8 +180,8 @@ namespace RTC
     virtual void write(const cdrMemoryStream& data);
      /*!
      * @if jp
-     * @brief ƒf[ƒ^‚ğ“Ç‚İ‚Ş
-     * @return ƒf[ƒ^
+     * @brief ãƒ‡ãƒ¼ã‚¿ã‚’èª­ã¿è¾¼ã‚€
+     * @return ãƒ‡ãƒ¼ã‚¿
      *
      *
      *
@@ -195,10 +195,10 @@ namespace RTC
     virtual void read(cdrMemoryStream& data);
      /*!
      * @if jp
-     * @brief ’ÊMæ‚ÌCORBAƒCƒ“ƒ^[ƒtƒF[ƒX‚ğ“o˜^‚·‚é
-	 * “o˜^‚·‚é–‚É‚æ‚è‹¤—Lƒƒ‚ƒŠ‚Ì‰Šú‰»‚µ‚½‚Æ‚«‚ÉA’ÊMæ‚Å‚àƒ}ƒbƒsƒ“ƒO‚ğ‚â‚è’¼‚·‚±‚Æ‚ª‚Å‚«‚é
+     * @brief é€šä¿¡å…ˆã®CORBAã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹ã‚’ç™»éŒ²ã™ã‚‹
+	 * ç™»éŒ²ã™ã‚‹äº‹ã«ã‚ˆã‚Šå…±æœ‰ãƒ¡ãƒ¢ãƒªã®åˆæœŸåŒ–ã—ãŸã¨ãã«ã€é€šä¿¡å…ˆã§ã‚‚ãƒãƒƒãƒ”ãƒ³ã‚°ã‚’ã‚„ã‚Šç›´ã™ã“ã¨ãŒã§ãã‚‹
 	 *
-     * @param sm SharedMemory‚ÌƒIƒuƒWƒFƒNƒgƒŠƒtƒ@ƒŒƒ“ƒX
+     * @param sm SharedMemoryã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒªãƒ•ã‚¡ãƒ¬ãƒ³ã‚¹
      *
      *
      *
@@ -213,9 +213,9 @@ namespace RTC
     	throw (CORBA::SystemException);
      /*!
      * @if jp
-     * @brief ƒGƒ“ƒfƒBƒAƒ“‚ğİ’è‚·‚é
+     * @brief ã‚¨ãƒ³ãƒ‡ã‚£ã‚¢ãƒ³ã‚’è¨­å®šã™ã‚‹
 	 *
-     * @param endian ƒGƒ“ƒfƒBƒAƒ“
+     * @param endian ã‚¨ãƒ³ãƒ‡ã‚£ã‚¢ãƒ³
 	 *
      *
      *
@@ -230,7 +230,7 @@ namespace RTC
     	throw (CORBA::SystemException);
      /*!
      * @if jp
-     * @brief ƒf[ƒ^‚Ì‘—M‚ğ’m‚ç‚¹‚é
+     * @brief ãƒ‡ãƒ¼ã‚¿ã®é€ä¿¡ã‚’çŸ¥ã‚‰ã›ã‚‹
 	 *
      * @return 
      *
@@ -247,7 +247,7 @@ namespace RTC
       throw (CORBA::SystemException);
      /*!
      * @if jp
-     * @brief ƒf[ƒ^‚Ì‘—M‚ğ—v‹‚·‚é
+     * @brief ãƒ‡ãƒ¼ã‚¿ã®é€ä¿¡ã‚’è¦æ±‚ã™ã‚‹
 	 *
      * @return 
      *
