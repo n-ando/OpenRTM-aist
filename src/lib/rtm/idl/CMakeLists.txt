@@ -57,6 +57,7 @@ set(idls
 	OpenRTM
 	RTC
 	SDOPackage
+	SharedMemory
 	)
 
 
