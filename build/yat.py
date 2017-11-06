@@ -827,7 +827,7 @@ key3 does not exists.
             print("-" * 60)
             print("Example:", i)
             print("-" * 60)
-            print("Template:\n"
+            print("Template:\n")
             print(template[i])
             print("-" * 60)
             print("Dictionary:\n")
