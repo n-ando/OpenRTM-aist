@@ -247,7 +247,7 @@ class test_gen:
         text=t.generate(data)
         f.write(text)
         f.close()
-        print "\"", fname, "\"" " was generated."
+        print("\"", fname, "\"" " was generated.")
         return
 
     def gen_all(self):
@@ -271,7 +271,7 @@ class_name = sys.argv[1]
 try:
     os.mkdir(class_name, 0755)
 except:
-    print "Directory \"" + class_name + "\" already exists."
+    print("Directory \"" + class_name + "\" already exists.")
     sys.exit(1)
 
 data = test_dict(class_name)

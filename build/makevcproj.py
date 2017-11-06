@@ -21,9 +21,9 @@ import uuid
 import yaml
 
 def print_usage():
-    print """usage:
+    print("""usage:
 %s -i [input_file] -d [dictionary] -o [output_file]
-"""
+""")
 
 
 def load_dict(filename):
@@ -45,7 +45,7 @@ def main():
     try:
         opts, args = getopt.getopt(sys.argv[1:], "i:o:d:", [])
     except:
-        print "Error: Invalid option.", getopt.GetoptError
+        print("Error: Invalid option.", getopt.GetoptError)
         print_usage()
         sys.exit(-1)
         return

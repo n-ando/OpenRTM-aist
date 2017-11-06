@@ -927,7 +927,7 @@ Configurations:
 
 
 def usage():
-    print """Usage:
+    print("""Usage:
   vcprojtool.py cmd options
 commands:
   vcproj: Generate vcproj
@@ -942,7 +942,7 @@ examples:
                      --resource *.txt
   vcprojtool.py yaml --type [exe|dll|nmake|lib] --output
   vcprojtool.py flist --out --source|--header|--resource *
-"""
+""")
 rtcdll_yaml = rtcdll_yaml + get_after_config(rtcdll_yaml)
 
 import sys
@@ -1026,7 +1026,7 @@ class VCProject:
         return vcxproj_template % (conf_type[type], self.PreBuildEventtool_element(type), self.CLtool_element(type), self.Libtool_element(type), self.PreLinkEventtool_element(type), self.Linktool_element(type), self.PostBuildEventtool_element(type))
 
     def escape_cmdline(self, dict):
-        if not dict.has_key("Configurations"): return
+        if not "Configurations" in dict: return
     
         def escape_cmd(text):
             text = text.replace("\"", "&quot;")
@@ -1039,8 +1039,8 @@ class VCProject:
                 if isinstance(conf[tool], ListType):
                     for keyval in conf[tool]:
                         if isinstance(keyval, DictType) \
-                                and keyval.has_key("Key") \
-                                and keyval.has_key("Value") \
+                                and "Key" in keyval \
+                                and "Value" in keyval \
                                 and keyval["Key"] == "Command":
                             keyval["Value"] = escape_cmd(keyval["Value"])
 
@@ -1084,20 +1084,20 @@ class YamlConfig:
     def generate(self):
         text = ""
         loaded = ""
-        if self.flist.has_key("yaml") and len(self.flist["yaml"]) > 0:
+        if "yaml" in self.flist and len(self.flist["yaml"]) > 0:
             loaded = self.load_yamls(self.flist["yaml"])
 
         if loaded.find("ProjectType:") < 0: # No toplevel config
-            if self.yaml_template.has_key(self.type):
+            if self.type in self.yaml_template:
                 text = self.yaml_template[self.type]
                 text += loaded
             else:
-                print "type should be specified."
+                print("type should be specified.")
                 usage()
         else:
             text = loaded
 
-        print self.flist
+        print(self.flist)
 
         text += FileList(self.flist).generate()
 
@@ -1227,11 +1227,11 @@ def parse_args(argv):
             if i < argc: type = argv[i]
             else: raise InvalidOption(opt + " needs value")
             type = type.upper()
-            if not conf_type.has_key(type):
+            if not type in conf_type:
                 raise InvalidOption("unknown type: "
                                     + type + "\n" +
                                     "    --type should be [exe|dll|nmake|lib]")
-        elif opt[:2] == "--" and flist.has_key(opt[2:]):
+        elif opt[:2] == "--" and opt[2:] in flist:
             lname = opt[2:]
             i += 1
             if not i < argc: raise InvalidOption(opt + " need value") 
@@ -1257,7 +1257,7 @@ def main(argv):
     try:
         res = parse_args(argv)
     except VCProjException, e:
-        print "\n" + e.msg + "\n"
+        print("\n" + e.msg + "\n")
         usage()
         sys.exit(-1)
 
@@ -1290,12 +1290,12 @@ def main(argv):
 # tests
 #------------------------------------------------------------
 def test_filelist():
-    print FileList({"source": ["hoge.cpp", "hage.cpp", "fuga.cpp"],
+    print(FileList({"source": ["hoge.cpp", "hage.cpp", "fuga.cpp"],
                     "header": ["hoge.h", "hage.h", "fuga.h"],
-                    "resource": []}).generate()
+                    "resource": []}).generate())
 
 def test_yamlconfig():
-    print YamlConfig("EXE", "10.00", "Test", "0.9.1",
+    print(YamlConfig("EXE", "10.00", "Test", "0.9.1",
                      {"source":
                           ["hoge.cpp",
                            "hage.cpp",
@@ -1303,10 +1303,10 @@ def test_yamlconfig():
                       "header":
                           ["hoge.h", "hage.h", "fuga.h"],
                       "resource":
-                          []}).generate()
+                          []}).generate())
 
 def test_vcproj():
-    print VCProject("EXE", YamlConfig("EXE", "10.00", "Test", "1.0.0",
+    print(VCProject("EXE", YamlConfig("EXE", "10.00", "Test", "1.0.0",
                                       {"source":
                                            ["hoge.cpp",
                                             "hage.cpp",
@@ -1316,7 +1316,7 @@ def test_vcproj():
                                        "resource":
                                           [],
                                        "yaml":
-                                           []}).generate()).generate()
+                                           []}).generate()).generate())
 
 #------------------------------------------------------------
 # entry point

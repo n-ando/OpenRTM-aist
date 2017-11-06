@@ -156,12 +156,12 @@ def process_lib(libs, type):
 if __name__ == '__main__':
     import os
     if len(sys.argv) < 2:
-        print "please specify vsprops file"
+        print("please specify vsprops file")
         sys.exit(1)
 
     fname = sys.argv[1]
     if fname.split(".")[-1] != "vsprops":
-        print "please specify vsprops file"
+        print("please specify vsprops file")
         sys.exit(1)
 
     f = file(sys.argv[1], "r")
