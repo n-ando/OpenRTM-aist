@@ -204,7 +204,7 @@ namespace coil
     {
       m_func(m_obj);
       {
-        Guard<Mutex> guard(m_mutex);
+        coil::Guard<Mutex> guard(m_mutex);
         m_finished = true;
       }
       
@@ -273,7 +273,7 @@ namespace coil
      */
     virtual bool finished()
     {
-      Guard<Mutex> guard(m_mutex);
+      coil::Guard<Mutex> guard(m_mutex);
       return m_finished;
     }
   private:
