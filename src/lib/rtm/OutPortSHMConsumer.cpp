@@ -132,8 +132,13 @@ namespace RTC
 				m_shmem.read(data);
 
 				RTC_DEBUG(("get() successful"));
-
+#ifdef ORB_IS_ORBEXPRESS
+				RTC_PARANOID(("CDR data length: %d", data.cdr.size_written()));
+#elif defined(ORB_IS_TAO)
+				RTC_PARANOID(("CDR data length: %d", data.cdr.length()));
+#else
 				RTC_PARANOID(("CDR data length: %d", data.bufSize()));
+#endif
 
 				onReceived(data);
 				onBufferWrite(data);

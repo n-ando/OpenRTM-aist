@@ -355,7 +355,8 @@ namespace RTC
         }
        cdr.cdr >> data;
 #elif defined(ORB_IS_TAO)
-       TAO_InputCDR(cdr.cdr) >> data;
+       TAO_InputCDR tao_cdr = TAO_InputCDR(cdr.cdr);
+       tao_cdr >> data;
 #else
       if (endian[0] == "little")
         {

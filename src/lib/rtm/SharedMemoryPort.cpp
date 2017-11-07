@@ -250,7 +250,13 @@ namespace RTC
   */
 	void SharedMemoryPort::write(const cdrMemoryStream& data)
   {
+#ifdef ORB_IS_ORBEXPRESS
+	  CORBA::ULongLong data_size = (CORBA::ULongLong)data.cdr.size_written();
+#elif defined(ORB_IS_TAO)
+	  CORBA::ULongLong data_size = (CORBA::ULongLong)data.cdr.length();
+#else
 	  CORBA::ULongLong data_size = (CORBA::ULongLong)data.bufSize();
+#endif
 	  if (data_size + sizeof(CORBA::ULongLong) > m_shmem.get_size())
 	  {
 		  int memory_size = (int)data_size + (int)sizeof(CORBA::ULongLong);
@@ -286,7 +292,7 @@ namespace RTC
 #ifdef ORB_IS_ORBEXPRESS
 		  m_shmem.write(const_cast<char*>(data.get_buffer()), sizeof(CORBA::ULongLong), data.cdr.size_written());
 #elif defined(ORB_IS_TAO)
-		  m_shmem.write((char*)data.buffer(), sizeof(CORBA::ULongLong), data.cdr.length());
+		  m_shmem.write((char*)data.cdr.buffer(), sizeof(CORBA::ULongLong), data.cdr.length());
 #else
 		 
 		  m_shmem.write((char*)data.bufPtr(), sizeof(CORBA::ULongLong), data.bufSize());
@@ -321,11 +327,12 @@ namespace RTC
 #ifdef ORB_IS_ORBEXPRESS
 		  data.is_little_endian(m_endian);
 		  data_size_cdr.is_little_endian(m_endian);
-		  data_size_cdr.write_array_1(data_size_str[0], sizeof(CORBA::ULongLong));
+		  data_size_cdr.write_array_1((CORBA::Octet *)&(m_shmem.get_data()[0]), sizeof(CORBA::ULongLong));
 		  data_size_cdr.cdr >> data_size;
 #elif defined(ORB_IS_TAO)
-		  data_size_cdr.write_octet_array(data_size_str[0], sizeof(CORBA::ULongLong));
-		  TAO_InputCDR(data_size_cdr.cdr) >> data_size;
+		  data_size_cdr.cdr.write_octet_array((CORBA::Octet *)&(m_shmem.get_data()[0]), sizeof(CORBA::ULongLong));
+		  TAO_InputCDR tao_cdr = TAO_InputCDR(data_size_cdr.cdr);
+		  tao_cdr >> data_size;
 #else
 		  data.setByteSwapFlag(m_endian);
 		  data_size_cdr.setByteSwapFlag(m_endian);
@@ -343,7 +350,13 @@ namespace RTC
 			 
 			  data.put_octet_array(&(shm_data[0]), (int)data_size);
 		  }*/
+#ifdef ORB_IS_ORBEXPRESS
+		  data.cdr.write_array_1((CORBA::Octet *)&(m_shmem.get_data()[sizeof(CORBA::ULongLong)]), (int)data_size);
+#elif defined(ORB_IS_TAO)
+		  data.cdr.write_octet_array((CORBA::Octet *)&(m_shmem.get_data()[sizeof(CORBA::ULongLong)]), (int)data_size);
+#else
 		  data.put_octet_array((CORBA::Octet *)&(m_shmem.get_data()[sizeof(CORBA::ULongLong)]), (int)data_size);
+#endif
 		  //delete shm_data;
 	  }
 

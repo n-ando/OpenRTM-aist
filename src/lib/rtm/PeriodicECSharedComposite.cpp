@@ -130,7 +130,11 @@ namespace SDOPackage
     for (::CORBA::ULong i(0), len(sdo_list.length()); i < len; ++i)
       {
 #ifndef ORB_IS_RTORB
+#ifdef ORB_IS_TAO
+        const SDO_var sdo  = sdo_list[i].in();
+#else
         const SDO_var sdo  = sdo_list[i];
+#endif
         ::OpenRTM::DataFlowComponent_var dfc;
 	if (!sdoToDFC(sdo.in(), dfc.out())) { continue; }
 #else // ORB_IS_RTORB

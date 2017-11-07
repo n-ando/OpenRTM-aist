@@ -443,7 +443,8 @@ namespace RTC
 #ifdef ORB_IS_ORBEXPRESS
           cdr.cdr >> m_value;
 #elif defined(ORB_IS_TAO)
-          TAO_InputCDR(cdr.cdr) >> m_value;
+          TAO_InputCDR tao_cdr = TAO_InputCDR(cdr.cdr);
+          tao_cdr >> m_value;
 #else
           m_value <<= cdr;
 #endif
