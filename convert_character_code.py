@@ -34,8 +34,12 @@ if __name__ == '__main__':
       for n in filelist:
         with open(n, mode='rb') as f:
           encoding = chardet.detect(f.read())["encoding"]
+        if encoding is None:
+          encoding = "utf_8_sig"
+        elif encoding.lower() == "utf-8":
+          encoding = "utf_8_sig"
         str_list = []
-        if encoding != code:
+        if encoding.lower() != code.lower():
           try:
             with codecs.open(n, "r", encoding) as f:
               for row in f:
