@@ -40,7 +40,7 @@ namespace coil
         return true;
       }
     return false;
-#elif defined(VXWORKS_66) && !defined(__RTP__)
+#elif defined(VXWORKS_66)
     timespec tv;
     tv.tv_sec = clocktime.sec();
     tv.tv_nsec = clocktime.usec()*1000;

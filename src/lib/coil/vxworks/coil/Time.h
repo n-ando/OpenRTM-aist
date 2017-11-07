@@ -298,7 +298,7 @@ namespace coil
    */
 #if defined(__powerpc__) && !defined(__RTP__)
   int settimeofday(UINT32 s, UINT32 ns);
-#elif defined(VXWORKS_66) && !defined(__RTP__)
+#elif defined(VXWORKS_66)
   inline int settimeofday(struct timespec *tv)
   {
     return ::clock_settime(CLOCK_REALTIME, tv);
