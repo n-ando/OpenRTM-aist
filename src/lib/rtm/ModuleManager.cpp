@@ -535,7 +535,7 @@ namespace RTC
                                         const coil::vstring& modules,
                                         vProperties& modprops)
   {
-#if not defined(VXWORKS_69) && not defined(VXWORKS_66)
+#if !defined(VXWORKS_69) && !defined(VXWORKS_66)
     std::string l = "manager.modules." + lang;
     coil::Properties& lprop(Manager::instance().getConfig().getNode(l));
     std::vector<coil::Properties> prop;
