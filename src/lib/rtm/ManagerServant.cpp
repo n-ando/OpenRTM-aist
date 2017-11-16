@@ -171,7 +171,11 @@ namespace RTM
     for (int i(0), len(prof.size()); i < len; ++i)
       {
         RTC_VERBOSE_STR((prof[i]));
+#ifndef ORB_IS_TAO
         NVUtil::copyFromProperties(cprof[(CORBA::Long)i].properties, prof[i]);
+#else
+        NVUtil::copyFromProperties(cprof.inout()[(CORBA::Long)i].properties, prof[i]);
+#endif
       }
 
     if (0)
@@ -225,7 +229,11 @@ namespace RTM
     for (int i(0), len(prof.size()); i < len; ++i)
       {
         RTC_VERBOSE_STR((prof[i]));
+#ifndef ORB_IS_TAO
         NVUtil::copyFromProperties(cprof[(CORBA::Long)i].properties, prof[i]);
+#else
+        NVUtil::copyFromProperties(cprof.inout()[(CORBA::Long)i].properties, prof[i]);
+#endif
       }
 
     if (0)
@@ -279,7 +287,11 @@ namespace RTM
     for (int i(0), len(prof.size()); i < len; ++i)
       {
         RTC_VERBOSE_STR((prof[i]));
+#ifndef ORB_IS_TAO
         NVUtil::copyFromProperties(cprof[(CORBA::Long)i].properties, prof[i]);
+#else
+        NVUtil::copyFromProperties(cprof.inout()[(CORBA::Long)i].properties, prof[i]);
+#endif
       }
 
     if (0)
@@ -424,7 +436,11 @@ namespace RTM
     crtcs->length((CORBA::Long)rtcs.size());
     for (int i(0), len(rtcs.size()); i < len; ++i)
       {
+#ifndef ORB_IS_TAO
         crtcs[(CORBA::Long)i] = RTC::RTObject::_duplicate(rtcs[i]->getObjRef());
+#else
+        crtcs.inout()[(CORBA::Long)i] = RTC::RTObject::_duplicate(rtcs[i]->getObjRef());
+#endif
       }
 
     // get slaves' component references
@@ -474,7 +490,11 @@ namespace RTM
     for (int i(0), len(rtcs.size()); i < len; ++i)
       {
         ::RTC::ComponentProfile_var prof = rtcs[i]->get_component_profile();
+#ifndef ORB_IS_TAO
         cprofs[(CORBA::Long)i] = prof;
+#else
+        cprofs.inout()[(CORBA::Long)i] = prof;
+#endif
       }
 
     // copy slaves' component profiles
