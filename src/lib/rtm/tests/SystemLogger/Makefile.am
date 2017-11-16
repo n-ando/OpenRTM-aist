@@ -110,8 +110,9 @@ SystemLoggerTests_LDADD   = \
          -lcppunit                                 \
          -lomniORB4                                \
          -lomnithread                              \
-	-lcoil                                    \
-         -luuid
+	 -lcoil                                    \
+         -luuid                                    \
+         -lrt
 
 
 

@@ -94,7 +94,7 @@ nodist_SdoConfigurationTests_SOURCES = \
 	SdoConfigurationTests.cpp
 
 SdoConfigurationTests_LDFLAGS = -L$(libdir) $(AM_LDFLAGS)
-SdoConfigurationTests_LDADD   = -lcppunit -lcoil -luuid -lgcov
+SdoConfigurationTests_LDADD   = -lcppunit -lcoil -luuid -lgcov -lrt
 
 EXTRA_DIST =                  \
 	SdoConfigurationTests.cpp

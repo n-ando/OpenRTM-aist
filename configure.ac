@@ -156,7 +156,7 @@ case $system in
 [Linux*)]
 	AC_DEFINE([RTM_OS_LINUX], [TRUE], [OS is Linux])
 	AC_DEFINE([_REENTRANT], [TRUE], [Multi Thread Support])
-	LDFLAGS="-luuid -ldl -export-dynamic $LDFLAGS"
+	LDFLAGS="-luuid -lrt -ldl -export-dynamic $LDFLAGS"
 	os="linux"
 	;;	
 [HP-UX*)]
@@ -190,7 +190,7 @@ case $system in
 	os="cygwin"
 	CPPFLAGS="-DCygwin $CPPFLAGS"
 	CXXFLAGS="-DCygwin $CXXFLAGS"
-	LDFLAGS="-no-undefined -luuid -ldl -export-dynamic $LDFLAGS"
+	LDFLAGS="-no-undefined -luuid -lrt -ldl -export-dynamic $LDFLAGS"
 	;;
 *)
 	echo "Unkonown system"

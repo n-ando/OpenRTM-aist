@@ -115,7 +115,8 @@ DummyLib_la_LIBADD   =                            \
 	-lomnithread                              \
 	-lomniDynamic4                            \
 	-lcoil                                    \
-	-luuid
+	-luuid                                    \
+	-lrt
 
 
 noinst_PROGRAMS = ManagerServantTests
@@ -133,6 +134,7 @@ ManagerServantTests_LDADD   =                      \
          -lomniDynamic4                            \
          -lcoil                                    \
          -luuid                                    \
+         -lrt                                      \
 	$(top_builddir)/src/lib/rtm/tests/ManagerServant/DummyLib.la
 
 TEST_SRC = $(ManagerServantTests_SOURCES)
@@ -156,6 +158,7 @@ DummyModule1_la_LIBADD  = \
          -lomniDynamic4                            \
          -lcoil                                    \
          -luuid                                    \
+         -lrt                                      \
 	$(top_builddir)/src/lib/rtm/tests/ManagerServant/DummyLib.la
 
 nodist_DummyModule2_la_SOURCES = DummyModule2.h \
@@ -169,6 +172,7 @@ DummyModule2_la_LIBADD  = \
 	-lomniDynamic4                            \
 	-lcoil                                    \
 	-luuid                                    \
+	-lrt                                      \
 	$(top_builddir)/src/lib/rtm/tests/ManagerServant/DummyLib.la
 
 

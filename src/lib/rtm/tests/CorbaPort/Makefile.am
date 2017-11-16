@@ -123,7 +123,7 @@ nodist_CorbaPortTests_SOURCES =                  \
 	CorbaPortTests.cpp
 
 CorbaPortTests_LDFLAGS = -L$(libdir) $(AM_LDFLAGS)
-CorbaPortTests_LDADD   = -lcppunit -lcoil -luuid -lgcov
+CorbaPortTests_LDADD   = -lcppunit -lcoil -luuid -lgcov -lrt
 
 EXTRA_DIST =           \
 	$(IDL_SOURCES)     \

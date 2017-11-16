@@ -106,7 +106,7 @@ nodist_FactoryTests_SOURCES = \
 	FactoryTests.cpp
 
 FactoryTests_LDFLAGS = -L$(libdir) $(AM_LDFLAGS)
-FactoryTests_LDADD   = -lcppunit -lcoil -luuid -lgcov
+FactoryTests_LDADD   = -lcppunit -lcoil -luuid -lgcov -lrt
 
 EXTRA_DIST = \
 	FactoryTests.cpp

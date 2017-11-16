@@ -105,7 +105,7 @@ nodist_NamingManagerTests_SOURCES = \
 	NamingManagerTests.cpp
 
 NamingManagerTests_LDFLAGS = -L$(libdir) $(AM_LDFLAGS)
-NamingManagerTests_LDADD   = -lcppunit -lcoil -luuid -lgcov
+NamingManagerTests_LDADD   = -lcppunit -lcoil -luuid -lgcov -lrt
 
 EXTRA_DIST = \
 	NamingManagerTests.cpp

@@ -104,7 +104,8 @@ DummyLib_la_LIBADD   =                            \
 	-lomnithread                              \
 	-lomniDynamic4                            \
 	-lcoil                                    \
-	-luuid
+	-luuid                                    \
+	-lrt
 
 #
 #
@@ -122,8 +123,9 @@ ManagerTests_LDADD   = \
          -lomniORB4                                \
          -lomnithread                              \
          -lomniDynamic4                            \
-	-lcoil                                    \
+	 -lcoil                                    \
          -luuid                                    \
+	 -lrt                                      \
 	$(top_builddir)/src/lib/rtm/tests/Manager/DummyLib.la
 
 
@@ -148,6 +150,7 @@ DummyModule_la_LIBADD  = \
 	-lomniDynamic4                            \
 	-lcoil                                    \
 	-luuid                                    \
+	-lrt                                      \
 	$(top_builddir)/src/lib/rtm/tests/Manager/DummyLib.la
 
 nodist_DummyModule2_la_SOURCES = DummyModule2.h \
@@ -161,6 +164,7 @@ DummyModule2_la_LIBADD  = \
 	-lomniDynamic4                            \
 	-lcoil                                    \
 	-luuid                                    \
+	-lrt                                      \
 	$(top_builddir)/src/lib/rtm/tests/Manager/DummyLib.la
 
 bin_PROGRAMS = rtcprof

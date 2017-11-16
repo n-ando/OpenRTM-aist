@@ -62,7 +62,7 @@ nodist_CORBA_IORUtilTests_SOURCES =                 \
 	CORBA_IORUtilTests.cpp
 
 CORBA_IORUtilTests_LDFLAGS = -L$(libdir) $(AM_LDFLAGS)
-CORBA_IORUtilTests_LDADD   = -lcppunit -lcoil -luuid -lgcov
+CORBA_IORUtilTests_LDADD   = -lcppunit -lcoil -luuid -lgcov -lrt
 
 # Extra sources included distribution
 EXTRA_DIST =               \

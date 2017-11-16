@@ -39,7 +39,7 @@ nodist_PeriodicECSharedCompositeTests_SOURCES = \
 	PeriodicECSharedCompositeTests.cpp
 
 PeriodicECSharedCompositeTests_LDFLAGS = -L$(libdir) $(AM_LDFLAGS)
-PeriodicECSharedCompositeTests_LDADD   = -lcppunit -lRTC -lcoil -luuid -lgcov
+PeriodicECSharedCompositeTests_LDADD   = -lcppunit -lRTC -lcoil -luuid -lgcov -lrt
 
 EXTRA_DIST = \
 	PeriodicECSharedCompositeTests.cpp

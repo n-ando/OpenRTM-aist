@@ -63,7 +63,7 @@ nodist_ConnectorListenerTests_SOURCES =                 \
 	ConnectorListenerTests.cpp
 
 ConnectorListenerTests_LDFLAGS = -L$(libdir) $(AM_LDFLAGS)
-ConnectorListenerTests_LDADD   = -lcppunit -lcoil -luuid -lgcov
+ConnectorListenerTests_LDADD   = -lcppunit -lcoil -luuid -lgcov -lrt
 
 # Extra sources included distribution
 EXTRA_DIST =               \
