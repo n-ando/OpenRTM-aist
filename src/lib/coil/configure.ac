@@ -126,7 +126,7 @@ case $system in
 	AC_DEFINE([COIL_OS_LINUX], [TRUE], [OS is Linux])
 	AC_DEFINE([_REENTRANT], [TRUE], [Multi Thread Support])
 	AC_DEFINE([COIL_PLATFORM], [POSIX], [Platform is POSIX])
-	LDFLAGS="$LDFLAGS -luuid -ldl"
+	LDFLAGS="$LDFLAGS -luuid -lrt -ldl"
 	COIL_PLATFORM=posix
 	;;	
 [HP-UX*)]
@@ -165,7 +165,7 @@ case $system in
 	COIL_PLATFORM=posix
 	CPPFLAGS="-DCygwin $CPPFLAGS"
 	CXXFLAGS="-DCygwin $CXXFLAGS"
-	LDFLAGS="-no-undefined $LDFLAGS -luuid -ldl"
+	LDFLAGS="-no-undefined $LDFLAGS -luuid -lrt -ldl"
 	;;	
 *)
 	echo "Unkonown system"
