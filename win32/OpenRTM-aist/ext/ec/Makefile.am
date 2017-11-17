@@ -4,7 +4,7 @@
 ##
 ## $Id$
 ##---------------------------------------------------------------------------
-SUBDIRS = logical_time .
+SUBDIRS = artlinux logical_time rtpreempt .
 
 clean-local:
 	rm -f *~
