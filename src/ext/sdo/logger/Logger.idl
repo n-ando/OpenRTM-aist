@@ -79,15 +79,15 @@ module OpenRTM
    */
   enum LogLevel
   {
-    SILENT,
-    ERROR,
-    WARN,
-    INFO,
-    NORMAL,
-    DEBUG,
-    TRACE,
-    VERBOSE,
-    PARANOID
+    RTC_SILENT,
+    RTC_ERROR,
+    RTC_WARN,
+    RTC_INFO,
+    RTC_NORMAL,
+    RTC_DEBUG,
+    RTC_TRACE,
+    RTC_VERBOSE,
+    RTC_PARANOID
   };
 
   /*!
