@@ -33,8 +33,7 @@ namespace RTC
    */
   OutPortSHMProvider::OutPortSHMProvider(void)
    : m_buffer(0),
-     m_memory_size(0),
-     m_endian(true)
+     m_memory_size(0)
   {
     // PortProfile setting
     setInterfaceType("shared_memory");
