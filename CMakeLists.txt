@@ -155,17 +155,31 @@ elseif(CORBA MATCHES "omniORB")
 		endif()
 		set(ORB_LIBRARIES omniDynamic4 omniORB4 omnithread)
 	elseif(UNIX)
-		SET (ORB_C_FLAGS_LIST
-			-D__x86__
-		)
+		if("${CMAKE_SYSTEM_PROCESSOR}" STREQUAL "ARM")
+			SET (ORB_C_FLAGS_LIST
+				-D__arm__
+			)
+		else()
+			SET (ORB_C_FLAGS_LIST
+				-D__x86__
+			)
+		endif()
 		set(ORB_LINK_DIR ${ORB_ROOT}/lib)
 		set(ORB_LIBRARIES omniDynamic4 omniORB4 omnithread)
 	elseif(MSVC)
-		SET (ORB_C_FLAGS_LIST
-			-D__WIN32__
-			-D__x86__
-		)
-		set(ORB_LINK_DIR ${ORB_ROOT}/lib/x86_win32)
+		if("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "ARM")
+			SET (ORB_C_FLAGS_LIST
+				-D__WIN32__
+				-D__arm__
+			)
+			set(ORB_LINK_DIR ${ORB_ROOT}/lib/ARM_win32)
+		else()
+			SET (ORB_C_FLAGS_LIST
+				-D__WIN32__
+				-D__x86__
+			)
+			set(ORB_LINK_DIR ${ORB_ROOT}/lib/x86_win32)
+		endif()
 		set(ORB_LIBRARIES optimized;omniDynamic${OMNI_VERSION}${OMNI_MINOR}_rt;optimized;omniORB${OMNI_VERSION}${OMNI_MINOR}_rt;omnithread${OMNITHREAD_VERSION}_rt;debug;omniDynamic${OMNI_VERSION}${OMNI_MINOR}_rtd;debug;omniORB${OMNI_VERSION}${OMNI_MINOR}_rtd;debug;omnithread${OMNITHREAD_VERSION}_rtd)
 	endif(VXWORKS)
 
@@ -184,7 +198,7 @@ elseif(CORBA MATCHES "TAO")
 			SET(ORB_C_FLAGS_LIST -D__x86__)
 		endif()
 		SET(ORB_C_FLAGS_LIST ${ORB_C_FLAGS_LIST} -DACE_VXWORKS=0x690 -DACE_HAS_PTHREADS -DACE_HAS_AIO_CALLS -DACE_LACKS_ISBLANK)
-message(STATUS ${ORB_ROOT}/lib)
+
 		set(ORB_LINK_DIR ${ORB_ROOT}/lib)
 		set(ORB_LIBRARIES   TAO_AnyTypeCode TAO_PortableServer TAO_Svc_Utils TAO_CosNaming   TAO_AnyTypeCode TAO_DynamicInterface TAO_PI TAO_Utils TAO_PortableServer TAO_DiffServPolicy TAO_DynamicInterface  TAO ACE)
 		set(ORB_INCLUDE_DIR ${ORB_ROOT} ${ORB_ROOT}/TAO ${ORB_ROOT}/TAO/orbsvcs)

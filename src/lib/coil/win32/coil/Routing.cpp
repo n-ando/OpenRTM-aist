@@ -17,6 +17,18 @@
  *
  */
 
+
+#ifdef __arm__
+#include <coil/Routing.h>
+namespace coil
+{
+  bool dest_to_endpoint(std::string dest_addr, std::string& endpoint)
+  {
+    return false;
+  }
+};
+#else
+
 #ifndef NTDDI_VERSION
 #define NTDDI_VERSION 0x05000000
 #define WINVER _WIN32_WINNT
@@ -31,6 +43,10 @@
 #include <winsock2.h>
 #include <ws2tcpip.h>
 #include <iphlpapi.h>
+
+
+
+
 
 #pragma comment(lib, "iphlpapi.lib")
 #pragma comment(lib, "ws2_32.lib")
@@ -125,3 +141,5 @@ namespace coil
   
   
 }; // namespace coil
+
+#endif
