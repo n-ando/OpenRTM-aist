@@ -26,7 +26,7 @@
 #include <coil/ClockManager.h>
 
 #include <rtm/ExecutionContextBase.h>
-#include <LogicalTimeTriggeredECSkel.h>
+#include "LogicalTimeTriggeredECSkel.h"
 
 #ifdef WIN32
 #pragma warning( disable : 4290 )
