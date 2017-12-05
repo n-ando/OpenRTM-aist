@@ -87,6 +87,37 @@ Example components and sources of OpenRTM-aist.
 %install
 export DONT_STRIP=1
 %{__make} DESTDIR=%{buildroot} install
+%define ext_dir $RPM_BUILD_ROOT%{rtm_includedir}/rtm/ext
+mkdir -p %{ext_dir}/ec/artlinux
+cp %{_topdir}/../../src/ext/ec/artlinux/*.h %{ext_dir}/ec/artlinux
+cp %{_topdir}/../../src/ext/ec/artlinux/rtc.conf* %{ext_dir}/ec/artlinux
+mkdir -p %{ext_dir}/ec/logical_time/idl
+cp %{_topdir}/../../src/ext/ec/logical_time/*.h %{ext_dir}/ec/logical_time
+cp %{_topdir}/../../src/ext/ec/logical_time/*.idl %{ext_dir}/ec/logical_time
+cp %{_topdir}/../../src/ext/ec/logical_time/*ECS*.cpp %{ext_dir}/ec/logical_time
+cp %{_topdir}/../../src/ext/ec/logical_time/idl/*.hh %{ext_dir}/ec/logical_time/idl
+cp %{_topdir}/../../src/ext/ec/logical_time/idl/*.idl %{ext_dir}/ec/logical_time/idl
+cp %{_topdir}/../../src/ext/ec/logical_time/idl/*.cc %{ext_dir}/ec/logical_time/idl
+mkdir -p %{ext_dir}/ec/rtpreempt
+cp %{_topdir}/../../src/ext/ec/rtpreempt/*.h %{ext_dir}/ec/rtpreempt
+cp %{_topdir}/../../src/ext/ec/rtpreempt/rtc.conf* %{ext_dir}/ec/rtpreempt
+mkdir -p %{ext_dir}/local_service/nameservice_file
+cp %{_topdir}/../../src/ext/local_service/nameservice_file/*.h %{ext_dir}/local_service/nameservice_file
+mkdir -p %{ext_dir}/logger/fluentbit_stream
+cp %{_topdir}/../../src/ext/logger/fluentbit_stream/*.h %{ext_dir}/logger/fluentbit_stream
+cp %{_topdir}/../../src/ext/logger/fluentbit_stream/*.conf %{ext_dir}/logger/fluentbit_stream
+mkdir -p %{ext_dir}/sdo/logger
+cp %{_topdir}/../../src/ext/sdo/logger/*.h* %{ext_dir}/sdo/logger
+cp %{_topdir}/../../src/ext/sdo/logger/*.idl %{ext_dir}/sdo/logger
+cp %{_topdir}/../../src/ext/sdo/logger/*.cc %{ext_dir}/sdo/logger
+cp %{_topdir}/../../src/ext/sdo/logger/*S*.cpp %{ext_dir}/sdo/logger
+mkdir -p %{ext_dir}/sdo/observer/idl
+cp %{_topdir}/../../src/ext/sdo/observer/*.h %{ext_dir}/sdo/observer
+cp %{_topdir}/../../src/ext/sdo/observer/*.idl %{ext_dir}/sdo/observer
+cp %{_topdir}/../../src/ext/sdo/observer/*S*.cpp %{ext_dir}/sdo/observer
+cp %{_topdir}/../../src/ext/sdo/observer/idl/*.hh %{ext_dir}/sdo/observer/idl
+cp %{_topdir}/../../src/ext/sdo/observer/idl/*.idl %{ext_dir}/sdo/observer/idl
+cp %{_topdir}/../../src/ext/sdo/observer/idl/*.cc %{ext_dir}/sdo/observer/idl
 
 #------------------------------------------------------------
 # clean section
