@@ -102,6 +102,21 @@ namespace RTC_exp
 
     /*!
      * @if jp
+     * @brief ExecutionContextの初期化を行う
+     *
+     * ExecutionContextの初期化処理
+     *
+     * @else
+     * @brief Initialize the ExecutionContext
+     *
+     * This operation initialize the ExecutionContext
+     *
+     * @endif
+     */
+    virtual  void init(coil::Properties& props);
+
+    /*!
+     * @if jp
      * @brief ExecutionContext用アクティビティスレッドを生成する
      *
      * Executioncontext 用の内部アクティビティスレッドを生成し起動する。
@@ -571,6 +586,18 @@ namespace RTC_exp
       throw (CORBA::SystemException);
 
   protected:
+    template <class T>
+    void getProperty(coil::Properties& prop, const char* key, T& value)
+    {
+      if (prop.findNode(key) != 0)
+        {
+          T tmp;
+          if (coil::stringTo(tmp, prop[key].c_str()))
+            {
+              value = tmp;
+            }
+        }
+    }
     /*!
      * @brief onStarted() template function
      */
@@ -579,6 +606,18 @@ namespace RTC_exp
      * @brief onStopping() template function
      */
     virtual RTC::ReturnCode_t onStopping();
+    // template virtual functions adding/removing component
+    /*!
+     * @brief onAddedComponent() template function
+     */
+     virtual RTC::ReturnCode_t
+     onAddedComponent(RTC::LightweightRTObject_ptr rtobj);
+    /*!
+     * @brief onRemovedComponent() template function
+     */
+    virtual RTC::ReturnCode_t
+    onRemovedComponent(RTC::LightweightRTObject_ptr rtobj);
+
     /*!
      * @brief onWaitingActivated() template function
      */
@@ -609,6 +648,11 @@ namespace RTC_exp
      */
     virtual RTC::ReturnCode_t 
     onReset(RTC_impl::RTObjectStateMachine* comp, long int count);
+
+    /*!
+     * @brief setting CPU affinity from given properties
+     */
+    virtual void setCpuAffinity(coil::Properties& props);
 
     bool threadRunning()
     {
@@ -668,6 +712,11 @@ namespace RTC_exp
      * @endif
      */
     bool m_nowait;
+
+    /*!
+     * @brief CPU affinity mask list
+     */
+    std::vector<int> m_cpu;
 
   }; // class PeriodicExecutionContext
 }; // namespace RTC

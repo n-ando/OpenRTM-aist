@@ -30,3 +30,8 @@ FileNameservice: libcoil libRTC
 LogicalTimeTriggeredEC: libcoil libRTC
 LTTSample: libcoil libRTC
 LTTSampleComp: libcoil libRTC
+ExtConsoleIn: libcoil libRTC
+ExtConsoleInComp: libcoil libRTC
+ExtConsoleOut: libcoil libRTC
+ExtConsoleOutComp: libcoil libRTC
+ExtConnectorComp: libcoil libRTC

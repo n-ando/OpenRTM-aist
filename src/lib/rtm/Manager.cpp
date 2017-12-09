@@ -16,6 +16,7 @@
  *
  */
 
+
 #include <rtm/Manager.h>
 #include <rtm/ManagerConfig.h>
 #include <rtm/ModuleManager.h>
@@ -41,6 +42,13 @@
 #include <rtm/SdoServiceConsumerBase.h>
 #include <rtm/LocalServiceAdmin.h>
 #include <rtm/SystemLogger.h>
+
+#ifdef RTM_OS_LINUX
+#ifndef _GNU_SOURCE
+#define _GNU_SOURCE
+#endif // _GNU_SOURCE
+#include <pthread.h>
+#endif // RTM_OS_LINUX
 
 #if defined(minor)
 #undef minor
@@ -819,6 +827,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
       "exec_cxt.activation_timeout",
       "exec_cxt.deactivation_timeout",
       "exec_cxt.reset_timeout",
+      "exec_cxt.cpu_affinity",
       "logger.enable",
       "logger.log_level",
       "naming.enable",
@@ -1217,13 +1226,13 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     if (coil::toBool(m_config["timer.enable"], "YES", "NO", true))
       {
         coil::TimeValue tm(0, 100000);
-				std::string tick(m_config["timer.tick"]);
-				if (!tick.empty())
-					{
-						tm = atof(tick.c_str());
-						m_timer = new coil::Timer(tm);
-						m_timer->start();
-					}
+        std::string tick(m_config["timer.tick"]);
+        if (!tick.empty())
+          {
+            tm = atof(tick.c_str());
+            m_timer = new coil::Timer(tm);
+            m_timer->start();
+          }
       }
 
     if (coil::toBool(m_config["manager.shutdown_auto"], "YES", "NO", true) &&
@@ -1732,6 +1741,12 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     PeriodicExecutionContextInit(this);
     ExtTrigExecutionContextInit(this);
     OpenHRPExecutionContextInit(this);
+
+    // initialize CPU affinity
+#ifdef RTM_OS_LINUX
+    initCpuAffinity();
+#endif // RTM_OS_LINUX
+
     return true;
   }
 
@@ -1750,6 +1765,52 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     return true;
   }
 
+  void Manager::initCpuAffinity()
+  {
+    RTC_TRACE(("initCpuAffinity()"));
+#ifdef RTM_OS_LINUX
+    if (m_config.findNode("manager.cpu_affinity") == 0) { return; }
+
+    std::string& affinity(m_config["manager.cpu_affinity"]);
+    RTC_DEBUG(("CPU affinity property: %s", affinity.c_str()));
+
+    coil::vstring tmp = coil::split(affinity, ",", true);
+
+    pid_t pid = getpid();
+    cpu_set_t cpu_set; CPU_ZERO(&cpu_set);
+
+    for (size_t i(0); i < tmp.size(); ++i)
+      {
+        int num;
+        if (coil::stringTo(num, tmp[i].c_str()))
+          {
+            CPU_SET(num, &cpu_set);
+            RTC_DEBUG(("CPU affinity mask set to %d", num));
+          }
+      }
+
+    int result = sched_setaffinity(pid, sizeof(cpu_set_t), &cpu_set);
+    if (result != 0)
+      {
+        RTC_ERROR(("pthread_getaffinity_np():"
+                   "CPU affinity mask setting failed"));
+      }
+    CPU_ZERO(&cpu_set);
+    result = sched_getaffinity(pid, sizeof(cpu_set_t), &cpu_set);
+    if (result != 0)
+      {
+        RTC_ERROR(("pthread_getaffinity_np(): returned error."));
+      }
+    for (size_t j(0); j < CPU_SETSIZE; ++j)
+      {
+        if (CPU_ISSET(j, &cpu_set))
+          {
+            RTC_DEBUG(("Current CPU affinity mask is %d.", j));
+          }
+      }
+#endif // RTM_OS_LINUX
+  }
+  
   /*!
    * @if jp
    * @brief Timer の初期化

@@ -401,14 +401,14 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ExecutionContextの処理を進める
+     * @brief ExecutionContextの初期化を行う
      *
-     * ExecutionContextの処理を１周期分進める。
+     * ExecutionContextの初期化処理
      *
      * @else
-     * @brief Proceed with tick of ExecutionContext
+     * @brief Initialize the ExecutionContext
      *
-     * Proceed with tick of ExecutionContext for one period.
+     * This operation initialize the ExecutionContext
      *
      * @endif
      */

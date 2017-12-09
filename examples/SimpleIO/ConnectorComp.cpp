@@ -223,7 +223,7 @@ int main (int argc, char** argv)
 
   // connect ports
   ConnectorProfile prof;
-  prof.connector_id = (char*)"";
+  prof.connector_id = CORBA::string_dup("");
   prof.name = CORBA::string_dup("connector0");
   prof.ports.length(2);
   prof.ports[0] = pin[(CORBA::ULong)0];

@@ -62,7 +62,8 @@ void usage()
 int main (int argc, char** argv)
 {
   int _argc(0);
-  char** _argv(0);
+  char** _argv;
+  _argv = 0;
 
   std::string subs_type;
   std::string period;
@@ -154,7 +155,7 @@ int main (int argc, char** argv)
 
   // connect ports
   ConnectorProfile prof;
-  prof.connector_id = "";
+  prof.connector_id = CORBA::string_dup("");
   prof.name = CORBA::string_dup("connector0");
   prof.ports.length(2);
   prof.ports[0] = pin[(CORBA::ULong)0];

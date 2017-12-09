@@ -208,7 +208,7 @@ namespace RTC
             return new SDOPackage::ServiceProfile(m_providers[i]->getProfile());
           }
       }
-    throw new SDOPackage::InvalidParameter();
+    throw SDOPackage::InvalidParameter();
     return new SDOPackage::ServiceProfile();
   }
 
