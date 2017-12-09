@@ -1,0 +1,10 @@
+///#include </home/irie/Work/OpenRTM-aist/src/lib/rtm/idl/SDOPackage.idl>
+#include "../../idl/SDOPackage.idl"
+
+module TEST
+{
+  interface IncrementCount : SDOPackage::SDOService
+  {
+    void increment_count();
+  };
+};
