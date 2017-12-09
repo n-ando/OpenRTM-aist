@@ -21,6 +21,7 @@
 #include <rtm/SdoConfiguration.h>
 #include <rtm/CORBA_SeqUtil.h>
 #include <rtm/Manager.h>
+#include <rtm/DefaultConfiguration.h>
 #include <coil/stringutil.h>
 #include <iostream>
 #include <typeinfo>
@@ -2733,6 +2734,76 @@ namespace RTC
         RTC_DEBUG(("EC (%s) created.", ec_type.c_str()));
 
         ec->init(ec_args[i]);
+        m_eclist.push_back(ec);
+        ec->bindComponent(this);
+      }
+
+
+    if (m_eclist.empty())
+      {
+        coil::Properties default_prop;
+        default_prop.setDefaults(default_config);
+        RTC::ExecutionContextBase* ec = NULL;
+
+        std::string& ec_type(default_prop["exec_cxt.periodic.type"]);
+        if (std::find(avail_ec.begin(), avail_ec.end(), ec_type)
+                == avail_ec.end())
+        {
+            RTC_WARN(("EC %s is not available.", ec_type.c_str()));
+            RTC_DEBUG(("Available ECs: %s",
+                       coil::flatten(avail_ec).c_str()));
+            return RTC::RTC_ERROR;
+        }
+        ec = RTC::ExecutionContextFactory::instance().
+          createObject(ec_type.c_str());
+        if (ec == NULL)
+          {
+            RTC_ERROR(("EC (%s) creation failed.",
+                       ec_type.c_str()));
+            RTC_DEBUG(("Available EC list: %s",
+                       coil::flatten(avail_ec).c_str()));
+            return RTC::RTC_ERROR;
+          }
+
+        coil::Properties default_opts;
+        coil::Properties* prop = default_prop.findNode("exec_cxt.periodic");
+
+        if (prop == NULL)
+          {
+            RTC_WARN(("No default EC options found."));
+            return RTC::RTC_ERROR;
+          }
+
+        default_opts << *prop;
+        const char* inherited_opts[] =
+          {
+            "sync_transition",
+            "sync_activation",
+            "sync_deactivation",
+            "sync_reset",
+            "transition_timeout",
+            "activation_timeout",
+            "deactivation_timeout",
+            "reset_timeout",
+            ""
+          };
+
+        coil::Properties* p = default_prop.findNode("exec_cxt");
+        if (p == NULL)
+          {
+            RTC_WARN(("No exec_cxt option found."));
+            return RTC::RTC_ERROR;
+          }
+        RTC_DEBUG(("Copying inherited EC options."));
+        for (size_t i(0); inherited_opts[i][0] != '\0'; ++i)
+          {
+            if ((*p).findNode(inherited_opts[i]) != NULL)
+              {
+                RTC_PARANOID(("Option %s exists.", inherited_opts[i]));
+                default_opts[inherited_opts[i]] = (*p)[inherited_opts[i]];
+              }
+          }
+        ec->init(default_opts);
         m_eclist.push_back(ec);
         ec->bindComponent(this);
       }

@@ -109,7 +109,7 @@ namespace RTC_impl
   RTC::ReturnCode_t ExecutionContextProfile::setRate(double rate)
   {
     RTC_TRACE(("setRate(%f)", rate));
-    if (rate < 0.0) { return RTC::BAD_PARAMETER; }
+    if (rate <= 0.0) { return RTC::BAD_PARAMETER; }
 
     Guard guard(m_profileMutex);
     m_profile.rate = rate;
@@ -120,7 +120,7 @@ namespace RTC_impl
   RTC::ReturnCode_t ExecutionContextProfile::setPeriod(double period)
   {
     RTC_TRACE(("setPeriod(%f [sec])", period));
-    if (period < 0.0) { return RTC::BAD_PARAMETER; }
+    if (period <= 0.0) { return RTC::BAD_PARAMETER; }
 
     Guard guard(m_profileMutex);
     m_profile.rate = 1.0 / period;
@@ -131,7 +131,7 @@ namespace RTC_impl
   RTC::ReturnCode_t ExecutionContextProfile::setPeriod(coil::TimeValue period)
   {
     RTC_TRACE(("setPeriod(%f [sec])", (double)period));
-    if ((double)period < 0.0) { return RTC::BAD_PARAMETER; }
+    if ((double)period <= 0.0) { return RTC::BAD_PARAMETER; }
 
     Guard guard(m_profileMutex);
     m_profile.rate = 1.0 / (double)period;

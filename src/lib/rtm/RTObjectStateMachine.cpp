@@ -385,25 +385,26 @@ namespace RTC_impl
     return;
   }
 
-  void RTObjectStateMachine::onRateChanged(void)
+  RTC::ReturnCode_t RTObjectStateMachine::onRateChanged(void)
   {
     // call Servant
     if (m_rtobjPtr != NULL)
       {
-        if (m_rtobjPtr->on_rate_changed(m_id) != RTC::RTC_OK)
+        RTC::ReturnCode_t ret = m_rtobjPtr->on_rate_changed(m_id);
+        if (ret != RTC::RTC_OK)
           {
             m_sm.goTo(RTC::ERROR_STATE);
           }
-        return;
+        return ret;
       }
     // call Object reference
-    if (!m_dfc) { return; }
-    if (m_dfcVar->on_rate_changed(m_id) != RTC::RTC_OK)
+    if (!m_dfc) { return RTC::RTC_ERROR; }
+    RTC::ReturnCode_t ret = m_dfcVar->on_rate_changed(m_id);
+    if (ret != RTC::RTC_OK)
       {
         m_sm.goTo(RTC::ERROR_STATE);
-        return;
       }
-    return;
+    return ret;
   }
 
   // FsmParticipantAction

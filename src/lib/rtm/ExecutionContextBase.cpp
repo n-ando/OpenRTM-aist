@@ -228,6 +228,12 @@ namespace RTC
         RTC_ERROR(("Setting execution rate failed. %f", rate));
         return ret;
       }
+    ret = m_worker.rateChanged();
+    if (ret != RTC::RTC_OK)
+      {
+        RTC_ERROR(("Invoking on_rate_changed() for each RTC failed."));
+        return ret;
+      }
     ret = onSetRate(rate);
     if (ret != RTC::RTC_OK)
       {

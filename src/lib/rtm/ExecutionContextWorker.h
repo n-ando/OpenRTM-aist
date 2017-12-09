@@ -37,7 +37,7 @@
 namespace RTC
 {
   class RTObject_impl;
-};  
+};
 namespace RTC_impl
 {
   class RTObjectStateMachine;
@@ -248,6 +248,35 @@ namespace RTC_impl
      * @endif
      */
     RTC::ReturnCode_t stop(void);
+
+    /*!
+     * @if jp
+     * @brief ExecutionContext の実行周期が変更された
+     *
+     * ExecutionContext の実行周期が変更された場合のコールバックを呼び
+     * 出す。ECの実装クラスの set_rate() オペレーションが呼び出された場
+     * 合、ExecutionContextProfile::setRate() が呼び出され、プロファイ
+     * ルの周期値が更新されるとともに、この関数が呼ばれ、
+     * RTObjectStateMachine::onRateChagned() が呼び出される。
+     *
+     * @return ReturnCode_t 型のリターンコード
+     *
+     * @else
+     *
+     * @brief Execution rate of ExecutionContext chnaged
+     *
+     * A call back for execution rate chang when ExecutionContext's
+     * execution rate. If set_rate() operation is called,
+     * ExecutionContextProfile::setRate() will be called, execution
+     * rate in the profile will be updated, and
+     * RTObjectStateMachine::onRateChagned() will be called with this
+     * member function.
+     *
+     * @return The return code of ReturnCode_t type
+     *
+     * @endif
+     */
+    RTC::ReturnCode_t rateChanged();
 
     /*!
      * @if jp

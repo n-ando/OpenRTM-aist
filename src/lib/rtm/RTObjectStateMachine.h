@@ -72,7 +72,7 @@ namespace RTC_impl
     // RTC::DataflowComponentAction
     void onExecute(const ExecContextStates& st);
     void onStateUpdate(const ExecContextStates& st);
-    void onRateChanged(void);
+    RTC::ReturnCode_t onRateChanged(void);
 
     // FsmParticipantAction
     void onAction(const ExecContextStates& st);

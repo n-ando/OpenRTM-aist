@@ -25,9 +25,13 @@ IDLReference-en:
 #DevelopersGuide.pdf:
 #	make -f Makefile.docs DevelopersGuide.pdf
 
+doxygen_classref.conf:
+	sed -e 's/__VERSION__/$(VERSION)/g' doxygen_classref.conf.in > doxygen_classref.conf
+
 docdir = $(rtm_docdir)
 
 EXTRA_DIST = \
+	doxygen_classref.conf \
 	ClassReference \
 	ClassReference-en \
 	IDLReference \
@@ -98,6 +102,7 @@ clean-local:
 maintainer-clean:
 	rm -rf \
 	Makefile \
+	doxygen_classref.conf \
 	ClassReference \
 	ClassReference-en \
 	IDLReference \

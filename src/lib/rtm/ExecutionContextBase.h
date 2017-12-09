@@ -345,8 +345,15 @@ namespace RTC
    *  }
    * </pre>
    *
-   * ExecutionContextの基底クラス。
-   *
+   * [ExecutionContextBase]
+   * <>
+   *  |
+   *  +--(1 1) [ExecutionContextWorker ] : EC の worker
+   *  |         <>
+   *  |          +--(1 0..) [RTObjectStateMachine] : StateMachine
+   *  |
+   *  +--(1 1) [ExecutionContextProfile] : EC Profileの管理
+   * 
    * @since 0.4.0
    *
    * @else
