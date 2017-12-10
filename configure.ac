@@ -156,7 +156,7 @@ case $system in
 [Linux*)]
 	AC_DEFINE([RTM_OS_LINUX], [TRUE], [OS is Linux])
 	AC_DEFINE([_REENTRANT], [TRUE], [Multi Thread Support])
-	LDFLAGS="-luuid -ldl -export-dynamic $LDFLAGS"
+	LDFLAGS="-luuid -lrt -ldl -export-dynamic $LDFLAGS"
 	os="linux"
 	;;	
 [HP-UX*)]
@@ -190,7 +190,7 @@ case $system in
 	os="cygwin"
 	CPPFLAGS="-DCygwin $CPPFLAGS"
 	CXXFLAGS="-DCygwin $CXXFLAGS"
-	LDFLAGS="-no-undefined -luuid -ldl -export-dynamic $LDFLAGS"
+	LDFLAGS="-no-undefined -luuid -lrt -ldl -export-dynamic $LDFLAGS"
 	;;
 *)
 	echo "Unkonown system"
@@ -1667,6 +1667,7 @@ AC_OUTPUT([Makefile
 	src/ext/ec/logical_time/Makefile
 	src/ext/ec/logical_time/example/Makefile
 	src/ext/sdo/Makefile
+	src/ext/sdo/logger/Makefile
 	src/ext/sdo/observer/Makefile
 	src/ext/local_service/Makefile
 	src/ext/local_service/nameservice_file/Makefile
@@ -1712,11 +1713,16 @@ AC_OUTPUT([Makefile
 	win32/OpenRTM-aist/examples/Throughput/Makefile
 	win32/OpenRTM-aist/examples/USBCamera/Makefile
 	win32/OpenRTM-aist/ext/Makefile
+	win32/OpenRTM-aist/ext/ec/artlinux/Makefile
 	win32/OpenRTM-aist/ext/ec/Makefile
 	win32/OpenRTM-aist/ext/ec/logical_time/Makefile
+	win32/OpenRTM-aist/ext/ec/rtpreempt/Makefile
 	win32/OpenRTM-aist/ext/local_service/Makefile
 	win32/OpenRTM-aist/ext/local_service/nameservice_file/Makefile
+	win32/OpenRTM-aist/ext/logger/Makefile
+	win32/OpenRTM-aist/ext/logger/fluentbit_stream/Makefile
 	win32/OpenRTM-aist/ext/sdo/Makefile
+	win32/OpenRTM-aist/ext/sdo/logger/Makefile
 	win32/OpenRTM-aist/ext/sdo/observer/Makefile
 	win32/OpenRTM-aist/utils/Makefile
 	win32/OpenRTM-aist/utils/rtc-template/Makefile

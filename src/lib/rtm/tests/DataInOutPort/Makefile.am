@@ -119,7 +119,7 @@ nodist_DataInOutPortTests_SOURCES =                 \
 	DataInOutPortTests.cpp
 
 DataInOutPortTests_LDFLAGS = -L$(libdir) $(AM_LDFLAGS)
-DataInOutPortTests_LDADD   = -lcppunit -lcoil -luuid -lgcov
+DataInOutPortTests_LDADD   = -lcppunit -lcoil -luuid -lgcov -lrt
 
 # Extra sources included distribution
 EXTRA_DIST =               \

@@ -70,7 +70,7 @@ def main(argv):
         sys.exit(1)
 
     cmd = "DUMPBIN.EXE /SYMBOLS %s" % libfile
-    print cmd
+    print(cmd)
     dumped = os.popen(cmd)
 
     definitions = {}
@@ -94,13 +94,13 @@ def main(argv):
 
             definitions[symbol] = None
 
-    symbols = definitions.keys()
+    symbols = list(definitions.keys())
     symbols.sort()
 
-    print "Output %d symbols." % len(symbols)
+    print("Output %d symbols." % len(symbols))
 
     out = open(deffile, "w")
-    if string.lower(binname[4:]) == ".exe":
+    if binname[4:].lower() == ".exe":
         out.write("NAME %s\n" % binname)
     else:
         out.write("LIBRARY %s\n" % binname)

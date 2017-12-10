@@ -165,9 +165,9 @@ class src_gen:
             return
         t = yat.Template(temp_txt)
         text = t.generate(data)
-	fd.write(text)
+        fd.write(text)
         fd.close()
-        print "\"" + fname + "\"" " was generated."
+        print("\"" + fname + "\"" " was generated.")
         return
 
     def gen_all(self):

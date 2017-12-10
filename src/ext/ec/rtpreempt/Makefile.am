@@ -24,5 +24,7 @@ RTPreemptEC_la_LIBADD  = \
 	$(top_builddir)/src/lib/rtm/libRTC.la \
 	$(top_builddir)/src/lib/coil/lib/libcoil.la 
 
+EXTRA_DIST = rtc.conf.sample
+
 clean-local:
 	rm -rf *~ *.o *.so

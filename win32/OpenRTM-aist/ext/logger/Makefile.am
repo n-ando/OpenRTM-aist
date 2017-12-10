@@ -7,6 +7,7 @@
 
 AUTOMAKE_OPTIONS = 1.4
 
-SUBDIRS = logger observer
+SUBDIRS = fluentbit_stream
 
-
+clean-local:
+		rm -f *~ Makefile.in

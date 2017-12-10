@@ -112,7 +112,7 @@ nodist_ExtTrigExecutionContextTests_SOURCES = \
 	ExtTrigExecutionContextTests.cpp
 
 ExtTrigExecutionContextTests_LDFLAGS = -L$(libdir) $(AM_LDFLAGS)
-ExtTrigExecutionContextTests_LDADD   = -lcppunit -lcoil -luuid -lgcov
+ExtTrigExecutionContextTests_LDADD   = -lcppunit -lcoil -luuid -lgcov -lrt
 
 EXTRA_DIST = \
 	ExtTrigExecutionContextTests.cpp

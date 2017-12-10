@@ -10,9 +10,14 @@ AUTOMAKE_OPTIONS = 1.4
 AM_CPPFLAGS= \
 	-I$(top_srcdir)/src/ext/logger/fluentbit_stream/fluent-bit/include \
 	-I$(top_srcdir)/src/ext/logger/fluentbit_stream/fluent-bit/lib/monkey/include \
-	-I$(top_srcdir)/src/ext/logger/fluentbit_stream/fluent-bit/lib/mbedtls-2.4.2/include \
-	-I$(top_srcdir)/src/ext/logger/fluentbit_stream/fluent-bit/lib/msgpack-c-0b7cabd/include \
+	-I$(top_srcdir)/src/ext/logger/fluentbit_stream/fluent-bit/lib/mbedtls-2.5.1/include \
+	-I$(top_srcdir)/src/ext/logger/fluentbit_stream/fluent-bit/lib/msgpack-2.1.3/include \
 	-I$(top_srcdir)/src/ext/logger/fluentbit_stream/fluent-bit/lib/flb_libco \
+	-I$(top_srcdir)/src/ext/logger/fluentbit_stream/fluent-bit/lib/jemalloc/include \
+	-I$(top_srcdir)/src/ext/logger/fluentbit_stream/fluent-bit/lib/jsmn \
+	-I$(top_srcdir)/src/ext/logger/fluentbit_stream/fluent-bit/lib/onigmo \
+	-I$(top_srcdir)/src/ext/logger/fluentbit_stream/fluent-bit/lib/sha1 \
+	-I$(top_srcdir)/src/ext/logger/fluentbit_stream/fluent-bit/lib/sqlite-amalgamation-3200000 \
 	-I$(top_srcdir)/src/lib \
 	-I$(top_srcdir)/src/lib/coil/include \
 	-I$(top_srcdir)/src/lib/rtm/idl
@@ -61,6 +66,7 @@ FluentBit_la_LIBADD   = \
 	$(top_builddir)/src/lib/rtm/libRTC.la \
 	$(top_builddir)/src/lib/coil/lib/libcoil.la
 
+EXTRA_DIST = fluentbit.conf
 
 clean-local:
 	rm -rf *~ *.o *.so

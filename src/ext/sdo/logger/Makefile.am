@@ -42,11 +42,15 @@ IDL_SOURCES = Logger.idl
 
 LOGGER_DIST_SRC   = LoggerConsumer.cpp
 LOGGER_NODIST_SRC = $(IDL_SOURCES:.idl=Stub.cpp)
+LOGGER_NOWIN_SRC  = $(IDL_SOURCES:.idl=Stub.cpp)
 LOGGER_SRC        = $(LOGGER_DIST_SRC) $(LOGGER_NODIST_SRC)
+LOGGER_WIN_SRC    = $(LOGGER_DIST_SRC) $(LOGGER_NOWIN_SRC)
 
 LOGGER_DIST_H     = $(LOGGER_DIST_SRC:.cpp=.h)
 LOGGER_NODIST_H   = $(LOGGER_NODIST_SRC:.cpp=.h)
+LOGGER_NOWIN_H    = $(LOGGER_NOWIN_SRC:.cpp=.h)
 LOGGER_H          = $(LOGGER_DIST_H) $(LOGGER_NODIST_H)
+LOGGER_WIN_H      = $(LOGGER_DIST_H) $(LOGGER_NOWIN_H)
 
 #------------------------------------------------------------
 # Object list
@@ -89,7 +93,41 @@ lst:
 	echo $(ALL_SRC) > src.lst
 	echo $(EXTRA_DIST) > other.lst
 
-dist-hook: lst
+#------------------------------------------------------------
+# Visual Studio Project
+#------------------------------------------------------------
+win32_builddir=$(top_builddir)/win32/OpenRTM-aist/ext/sdo/logger
+PROJNAME=LoggerConsumer
+
+vcproj: vc9proj vcxproj
+
+vc9proj:
+	$(top_builddir)/build/vcprojtool.py vcproj              \
+		--type DLL                                      \
+	        --vcversion "9.00"                              \
+	        --projectname "$(PROJNAME)"                     \
+	        --version $(RTM_VERSION)                        \
+	        --out $(win32_builddir)/$(PROJNAME)Dll_vc9.vcproj  \
+	        --yaml $(top_builddir)/examples/rtcdll.vcproj.yaml \
+	        --source $(LOGGER_WIN_SRC)                        \
+	        --header $(LOGGER_WIN_H)
+	qkc -O- -sm $(win32_builddir)/$(PROJNAME)Dll_vc9.vcproj
+
+vcxproj:
+	for ver in $(VC_VERSION); do \
+                $(top_builddir)/build/vcxprojtool.py vcxproj              \
+	                --type DLL                                        \
+                        --vcversion "$${ver}.00"                               \
+                        --projectname "$(PROJNAME)"                       \
+                        --version $(RTM_VERSION)                          \
+                        --out $(win32_builddir)/$(PROJNAME)Dll_vc$${ver}.vcxproj \
+                        --yaml $(top_builddir)/examples/rtcdll.vcproj.yaml  \
+                        --source $(LOGGER_WIN_SRC)                          \
+			--header $(LOGGER_WIN_H) ; \
+		qkc -O- -sm $(win32_builddir)/$(PROJNAME)Dll_vc$${ver}.vcxproj ; \
+        done
+
+dist-hook: lst vcproj
 
 
 clean_objs:

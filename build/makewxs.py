@@ -101,14 +101,14 @@ class file_list:
         return self.comp + '%04d' % (self.count)
         
     def sn_num(self, name):
-        if self.shortnames.has_key(name):
+        if name in self.shortnames:
             self.shortnames[name] += 1
         else:
             self.shortnames[name] = 0
         return "%03d" % (self.shortnames[name])
 
     def se_num(self, ext):
-        if self.shortext.has_key(ext):
+        if ext in self.shortext:
             self.shortext[ext] += 1
         else:
             self.shortext[ext] = 0
@@ -158,14 +158,14 @@ class make_wxs:
 
 
 def usage():
-    print """makewxs.py cmd options
+    print("""makewxs.py cmd options
 commands:
   flist: make file list to be included wxs file
   wxs  : make wxs file from a input template file and yaml files 
 examples:
   makewxs.py flist -c ComponentName -p Path -o OutputFilename file_names...
   makewxs.py wxs -o Output.wxs -i InputTempalte input_yaml_files...
-"""
+""")
 
 
 def main(argv):

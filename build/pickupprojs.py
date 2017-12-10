@@ -38,4 +38,4 @@ for l in lines:
     if name != "" and guid != "":
         break
 
-print name + "GUID:", guid
+print(name + "GUID:", guid)

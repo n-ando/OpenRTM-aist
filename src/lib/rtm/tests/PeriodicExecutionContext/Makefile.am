@@ -95,7 +95,7 @@ nodist_PeriodicExecutionContextTests_SOURCES = \
 	PeriodicExecutionContextTests.cpp
 
 PeriodicExecutionContextTests_LDFLAGS = -L$(libdir) $(AM_LDFLAGS)
-PeriodicExecutionContextTests_LDADD   = -lcppunit -lcoil -luuid -lgcov
+PeriodicExecutionContextTests_LDADD   = -lcppunit -lcoil -luuid -lgcov -lrt
 
 EXTRA_DIST = \
 	PeriodicExecutionContextTests.cpp

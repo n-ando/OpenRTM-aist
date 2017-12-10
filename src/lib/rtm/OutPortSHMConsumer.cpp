@@ -30,6 +30,7 @@ namespace RTC
    * @endif
    */
   OutPortSHMConsumer::OutPortSHMConsumer()
+  : m_listeners(NULL)
   {
     rtclog.setName("OutPortSHMConsumer");
 	
@@ -290,8 +291,6 @@ namespace RTC
         return UNKNOWN_ERROR;
       }
 
-    onSenderError();
-    return UNKNOWN_ERROR;
   }
 
 

@@ -262,17 +262,17 @@ class wrapper_gen:
             newtext = re.sub(" \@date.*?\n", "", text)
             oldtext2 = re.sub(" \@date.*?\n", "", oldtext)
             if newtext == oldtext2:
-                print "\"", fname, \
-                    "\" already exists and it will be same as new one."
-                print "File is not need to be generated."
+                print("\"", fname, \
+                    "\" already exists and it will be same as new one.")
+                print ("File is not need to be generated.")
                 return
             else:
-                print "\"", fname, "\" already exists but contents are not same"
+                print("\"", fname, "\" already exists but contents are not same")
 
         f = file(fname, "w")
         f.write(text)
         f.close()
-        print "\"", fname, "\"" " was generated."
+        print("\"", fname, "\"" " was generated.")
         return
 
     def gen_all(self):

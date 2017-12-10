@@ -1,0 +1,32 @@
+// -*- IDL -*-
+/*!
+ * @file SharedMemory.idl
+ * @brief Shared Memory TransPort interface definition
+ * @date $Date: 2016-02-25  $
+ * @author Nobuhiko Miyamoto
+ *
+ *
+ */
+
+#ifndef SharedMemory_idl
+#define SharedMemory_idl
+
+
+#include "DataPort.idl"
+
+module OpenRTM
+{
+
+
+  interface PortSharedMemory
+  {
+    void open_memory(in unsigned long long memory_size, in string shm_address);
+    void create_memory(in unsigned long long memory_size, in string shm_address);
+    void close_memory(in boolean unlink);
+    void setInterface(in PortSharedMemory sm);
+    void setEndian(in boolean endian);
+    PortStatus put();
+    PortStatus get();
+  };
+};
+#endif

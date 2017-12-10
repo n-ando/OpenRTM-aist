@@ -303,10 +303,10 @@ update_source_list () {
       exit 0
     else
       echo $openrtm_repo >> /etc/apt/sources.list
-　　　# 公開鍵登録
-      apt-key adv --keyserver keys.gnupg.net --recv-keys 4BCE106E087AFAC0
     fi
   fi
+  # 公開鍵登録
+  apt-key adv --keyserver keys.gnupg.net --recv-keys 4BCE106E087AFAC0
 }
 
 #----------------------------------------

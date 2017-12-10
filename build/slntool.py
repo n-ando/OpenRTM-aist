@@ -78,7 +78,7 @@ Configurations:
 
 
 def usage():
-    print """
+    print("""
 Usage:
   slntool.py --dep dep_file [--outfile outfile] vcproj_files...
 
@@ -107,7 +107,7 @@ App: Lib1 Lib2
 Lib2: Lib1
 -------------
 
-"""
+""")
 
 
 def get_projinfo(fname,vcversion="VC8"):
@@ -170,7 +170,7 @@ def parse_args(argv):
             i += 1
             if i < argc: vcversion = argv[i]
             else: raise InvalidOption(opt + " needs value")
-            if not vcversions.has_key(vcversion):
+            if not vcversion in vcversions:
                 allowedvers = vcversions.keys().__repr__()
                 raise InvalidOption("allowed vcversions are " + allowedvers)
         else:
@@ -189,7 +189,7 @@ def get_slnyaml(depfile, projfiles, vcversion="VC8"):
 """
     for f in projfiles:
         pj = get_projinfo(f, vcversion)
-        if depdict.has_key(pj["Name"]):
+        if pj["Name"] in depdict:
             pj["Depend"] = depdict[pj["Name"]]
         projs.append(pj)
     def depsort(d0, d1):
@@ -198,8 +198,8 @@ def get_slnyaml(depfile, projfiles, vcversion="VC8"):
         d0 == d1: return  0 
         d0  > d1: return  1 
         """
-        d0_depends = d0.has_key("Depend")
-        d1_depends = d1.has_key("Depend")
+        d0_depends = "Depend" in d0
+        d1_depends = "Depend" in d1
         if not d0_depends and not d1_depends:
             # both d0, d1 has no dependency 
             return 0
@@ -213,8 +213,8 @@ def get_slnyaml(depfile, projfiles, vcversion="VC8"):
             return 1 
 
         # d0 and d1 has dependency
-        d0_in_dep = depdict.has_key(d0["Name"])
-        d1_in_dep = depdict.has_key(d1["Name"])
+        d0_in_dep = d0["Name"] in depdict
+        d1_in_dep = d1["Name"] in depdict
         if not d0_in_dep and not d1_in_dep:
             return 0
         if not d0_in_dep and d1_in_dep:
@@ -249,7 +249,7 @@ def get_slnyaml(depfile, projfiles, vcversion="VC8"):
     GUID: &%s %s
     Depend:
 """ % (pj["Name"], pj["FileName"], pj["Name"], pj["GUID"])
-        if pj.has_key("Depend"):
+        if "Depend" in pj:
             for dep in pj["Depend"]:
                 dep = """      - *%s
 """ % (dep)
@@ -285,7 +285,7 @@ def main(argv):
     try:
         res = parse_args(argv)
     except SlnToolException, e:
-        print "\n" + e.msg + "\n"
+        print("\n" + e.msg + "\n")
         usage()
         sys.exit(-1)
 
@@ -308,13 +308,13 @@ def main(argv):
 #------------------------------------------------------------
 def test_getprojinfo():
     for f in sys.argv[1:]:
-        print get_projinfo(f)
+        print(get_projinfo(f))
 
 def test_getdep():
-    print get_dependencies(sys.argv[1])
+    print(get_dependencies(sys.argv[1]))
 
 def test_getslnyaml():
-    print gen_solution(get_slnyaml("dep.yaml", sys.argv[1:]))
+    print(gen_solution(get_slnyaml("dep.yaml", sys.argv[1:])))
 
 #------------------------------------------------------------
 # entry point

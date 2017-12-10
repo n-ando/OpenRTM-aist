@@ -29,7 +29,7 @@ namespace coil
 };
 
 // Why RtORB does not allow forward declaration?
-#ifndef ORB_IS_RTORB
+#if !defined ORB_IS_RTORB && !defined ORB_IS_ORBEXPRESS
 namespace SDOPackage
 {
   class NVList;

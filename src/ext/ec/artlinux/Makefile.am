@@ -25,5 +25,7 @@ ArtExecutionContext_la_LDFLAGS = -module -shared
 ArtExecutionContext_la_FLAGS   = -L$(top_builddir)/src/lib/rtm/.lib
 ArtExecutionContext_la_LIBADD  = $(top_builddir)/src/lib/rtm/libRTC.la $(ARTLIB)
 
+EXTRA_DIST = rtc.conf.sample
+
 clean-local:
 	rm -rf *~ *.o *.so

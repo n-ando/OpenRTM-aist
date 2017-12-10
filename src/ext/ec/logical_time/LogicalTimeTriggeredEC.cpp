@@ -23,7 +23,7 @@
 
 #include <rtm/ECFactory.h>
 #include <rtm/RTObjectStateMachine.h>
-#include <LogicalTimeTriggeredEC.h>
+#include "LogicalTimeTriggeredEC.h"
 
 namespace RTC
 {

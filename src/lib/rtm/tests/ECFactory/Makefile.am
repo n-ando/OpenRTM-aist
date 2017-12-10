@@ -92,7 +92,7 @@ nodist_ECFactoryTests_SOURCES =     \
 
 #ECFactoryTests_LDFLAGS = -L$(libdir) $(AM_LDFLAGS)
 ECFactoryTests_LDFLAGS = -L$(libdir) $(AM_LDFLAGS)
-ECFactoryTests_LDADD   = -lcppunit -lcoil -luuid -lgcov
+ECFactoryTests_LDADD   = -lcppunit -lcoil -luuid -lgcov -lrt
 
 EXTRA_DIST = \
 	ECFactoryTests.cpp

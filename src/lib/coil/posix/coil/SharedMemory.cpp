@@ -83,6 +83,7 @@ namespace coil
     std::swap(this->m_shm_address, tmp.m_shm_address);
     std::swap(this->m_shm, tmp.m_shm);
     std::swap(this->m_fd, tmp.m_fd);
+    std::swap(this->m_file_create, tmp.m_file_create);
 
     return *this;
   }

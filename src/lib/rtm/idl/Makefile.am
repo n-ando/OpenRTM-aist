@@ -27,7 +27,8 @@ IDL_SOURCES =             \
 	BasicDataType.idl     \
 	DataPort.idl          \
 	ExtendedDataTypes.idl \
-	InterfaceDataTypes.idl
+	InterfaceDataTypes.idl\
+	SharedMemory.idl
 endif
 
 SKEL_H   = $(IDL_SOURCES:.idl=Skel.h)
@@ -80,7 +81,8 @@ DUMMY_SKELS =                   \
         BasicDataTypeSkel.h     \
         DataPortSkel.h          \
         ExtendedDataTypesSkel.h \
-        InterfaceDataTypesSkel.h
+        InterfaceDataTypesSkel.h\
+        SharedMemorySkel.h
 ORB_SRC = $(RTORB_SRC)
 endif
 
@@ -146,6 +148,7 @@ OpenRTM-aist.idl:
 	echo '#include "Manager.idl"' >> OpenRTM-aist.idl
 	echo '#include "DataPort.idl"' >> OpenRTM-aist.idl
 	echo '#include "InterfaceDataTypes.idl"' >> OpenRTM-aist.idl
+	echo '#include "SharedMemory.idl"' >> OpenRTM-aist.idl
 
 idl-stamp: $(IDL_SOURCES)
 	@touch idl-stamp

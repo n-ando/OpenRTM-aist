@@ -113,7 +113,7 @@ nodist_CorbaNamingTests_SOURCES = \
 	CorbaNamingTests.cpp
 
 CorbaNamingTests_LDFLAGS = -L$(libdir) -L$(top_builddir)/src/lib/coil/lib
-CorbaNamingTests_LDADD   = -lcppunit -lcoil -luuid -lgcov
+CorbaNamingTests_LDADD   = -lcppunit -lcoil -luuid -lgcov -lrt
 
 EXTRA_DIST = \
 	CorbaNamingTests.cpp

@@ -50,8 +50,8 @@ $(ALL_SRC): idl-stamp
 IDL_SOURCES = LogicalTimeTriggeredEC.idl
 
 OBSERVER_DIST_SRC   = LogicalTimeTriggeredEC.cpp
-OBSERVER_NODIST_SRC = $(IDL_SOURCES:.idl=Stub.cpp) $(IDL_SOURCES:.idl=Skel.cpp)
-OBSERVER_NDWIN_SRC  = $(IDL_SOURCES:.idl=Stub.cpp) $(IDL_SOURCES:.idl=Skel.cpp)
+OBSERVER_NODIST_SRC = $(IDL_SOURCES:.idl=Skel.cpp)
+OBSERVER_NDWIN_SRC  = $(IDL_SOURCES:.idl=Skel.cpp)
 OBSERVER_SRC        = $(OBSERVER_DIST_SRC) $(OBSERVER_NODIST_SRC)
 OBSERVER_WIN_SRC    = $(OBSERVER_DIST_SRC) $(OBSERVER_NDWIN_SRC)
 
@@ -73,9 +73,8 @@ OBSERVER_OBJ=$(OBSERVER_DIST_SRC:.cpp=.o)
 socompdir = $(rtm_ecdir)
 
 # Loadable Module
-noinst_LTLIBRARIES = libLogicalTimeTriggeredECSkel.la libLogicalTimeTriggeredECStub.la 
+noinst_LTLIBRARIES = libLogicalTimeTriggeredECSkel.la 
 nodist_libLogicalTimeTriggeredECSkel_la_SOURCES = $(IDL_SOURCES:.idl=Skel.cpp)
-nodist_libLogicalTimeTriggeredECStub_la_SOURCES = $(IDL_SOURCES:.idl=Stub.cpp)
 
 socomp_LTLIBRARIES = LogicalTimeTriggeredEC.la
 
@@ -84,7 +83,7 @@ dist_LogicalTimeTriggeredEC_la_SOURCES = \
 LogicalTimeTriggeredEC_la_LDFLAGS = -module
 LogicalTimeTriggeredEC_la_DEPENDENCIES = libLogicalTimeTriggeredECSkel.la
 LogicalTimeTriggeredEC_la_LIBADD  =                 \
-	libLogicalTimeTriggeredECStub.la            \
+	libLogicalTimeTriggeredECSkel.la            \
 	$(top_builddir)/src/lib/rtm/libRTC.la       \
 	$(top_builddir)/src/lib/coil/lib/libcoil.la
 

@@ -307,10 +307,16 @@ update_source_list () {
       exit 0
     else
       echo $openrtm_repo >> /etc/apt/sources.list
-　　　# 公開鍵登録
-      #apt-key adv --keyserver keys.gnupg.net --recv-keys 4BCE106E087AFAC0
     fi
   fi
+
+  if test "x$FORCE_YES" = "xtrue" ; then
+    apt-get install --assume-yes --allow-unauthenticated dirmngr
+  else
+    apt-get install dirmngr
+  fi
+  # 公開鍵登録
+  apt-key adv --keyserver keys.gnupg.net --recv-keys 4BCE106E087AFAC0
 }
 
 #----------------------------------------

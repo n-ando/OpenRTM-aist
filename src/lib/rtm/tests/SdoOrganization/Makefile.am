@@ -43,7 +43,7 @@ nodist_SdoOrganizationTests_SOURCES =              \
 #	(top_builddir)/src/lib/rtm/SdoOrganization.cpp    
 
 SdoOrganizationTests_LDFLAGS = -L$(libdir) $(AM_LDFLAGS)
-SdoOrganizationTests_LDADD   = -lcppunit -lRTC -lcoil -luuid -lgcov
+SdoOrganizationTests_LDADD   = -lcppunit -lRTC -lcoil -luuid -lgcov -lrt
 
 EXTRA_DIST =                 \
 	SdoOrganizationTests.cpp

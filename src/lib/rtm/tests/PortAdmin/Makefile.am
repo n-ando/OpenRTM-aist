@@ -104,7 +104,7 @@ nodist_PortAdminTests_SOURCES =           \
 	PortAdminTests.cpp
 
 PortAdminTests_LDFLAGS = -L$(libdir) $(AM_LDFLAGS)
-PortAdminTests_LDADD   = -lcppunit -lcoil -luuid -lgcov
+PortAdminTests_LDADD   = -lcppunit -lcoil -luuid -lgcov -lrt
 
 EXTRA_DIST =           \
 	PortAdminTests.cpp

@@ -33,7 +33,8 @@ namespace RTC
    * @endif
    */
   InPortSHMProvider::InPortSHMProvider(void)
-   : m_buffer(0) 
+   : m_buffer(0),
+     m_connector(NULL)
   {
     // PortProfile setting
     setInterfaceType("shared_memory");
@@ -205,8 +206,7 @@ namespace RTC
         return ::OpenRTM::UNKNOWN_ERROR;
       }
 
-    onReceiverError(data);
-    return ::OpenRTM::UNKNOWN_ERROR;
+
   }
 
 };     // namespace RTC

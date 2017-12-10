@@ -743,8 +743,11 @@ namespace RTC
       {
         RTC_DEBUG(("dataflow_type pull is supported"));
         appendProperty("dataport.dataflow_type", "pull");
-        appendProperty("dataport.interface_type",
-                       coil::flatten(provider_types).c_str());
+        for (coil::vstring::iterator itr = provider_types.begin(); itr != provider_types.end(); ++itr)
+        {
+            appendProperty("dataport.interface_type",
+                        (*itr).c_str());
+        }
       }
 
     m_providerTypes = provider_types;
@@ -792,8 +795,11 @@ namespace RTC
       {
         RTC_PARANOID(("dataflow_type push is supported"));
         appendProperty("dataport.dataflow_type", "push");
-        appendProperty("dataport.interface_type",
-                       coil::flatten(consumer_types).c_str());
+        for (coil::vstring::iterator itr = consumer_types.begin(); itr != consumer_types.end(); ++itr)
+        {
+            appendProperty("dataport.interface_type",
+                        (*itr).c_str());
+        }
       }
     
     m_consumerTypes = consumer_types;

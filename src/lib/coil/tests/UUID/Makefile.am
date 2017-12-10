@@ -32,7 +32,7 @@ UUIDTests_COMMON_SOURCES = ../TestRunner.cpp \
 UUIDTests_SOURCES = $(UUIDTests_COMMON_SOURCES) \
                     $(top_srcdir)/posix/coil/UUID.cpp
 UUIDTests_LDFLAGS = -L$(libdir)
-UUIDTests_LDADD   = -lcppunit -luuid
+UUIDTests_LDADD   = -lcppunit -luuid -lrt
 
 TEST_SRC = $(UUIDTests_COMMON_SOURCES) \
            $(top_srcdir)/win32/coil/UUID.cpp

@@ -108,7 +108,8 @@ DummyLib_la_LIBADD   =                            \
 	-lomnithread                              \
 	-lomniDynamic4                            \
 	-lcoil                                    \
-	-luuid
+	-luuid                                    \
+	-lrt
 
 noinst_PROGRAMS = ModuleManagerTests
 
@@ -127,6 +128,7 @@ ModuleManagerTests_LDADD   =                       \
          -lomniDynamic4                            \
          -lcoil                                    \
          -luuid                                    \
+         -lrt                                      \
 	$(top_builddir)/src/lib/rtm/tests/ModuleManager/DummyLib.la
 
 TEST_SRC = $(ModuleManagerTests_SOURCES)
@@ -148,6 +150,7 @@ DummyModule1_la_LIBADD  = \
          -lomniDynamic4                            \
          -lcoil                                    \
          -luuid                                    \
+         -lrt                                      \
 	$(top_builddir)/src/lib/rtm/tests/ModuleManager/DummyLib.la
 
 bin_PROGRAMS = rtcprof
