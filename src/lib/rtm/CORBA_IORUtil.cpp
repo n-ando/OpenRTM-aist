@@ -111,7 +111,7 @@ namespace CORBA_IORUtil
     return false;
 #endif // ORB_IS_RTORB
   }
-
+#endif // ORB_IS_ORBEXPRESS
   /*!
    * @if jp
    * @brief IOR構造体をIOR文字列へ変換する
@@ -172,7 +172,7 @@ namespace CORBA_IORUtil
     return false;
 #endif // ORB_IS_RTORB
   }
-
+#endif // ORB_IS_ORBEXPRESS
   /*!
    * @if jp
    * @brief IOR内のエンドポイントを置換する

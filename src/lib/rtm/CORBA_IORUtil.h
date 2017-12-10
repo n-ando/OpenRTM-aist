@@ -48,7 +48,7 @@ namespace CORBA_IORUtil
    */
 #if !defined(ORB_IS_ORBEXPRESS) && !defined(ORB_IS_TAO)
   bool toIOR(const char* iorstr, IOP::IOR& ior);
-
+#endif // !defined(ORB_IS_ORBEXPRESS) && !defined(ORB_IS_TAO)
   /*!
    * @if jp
    * @brief IOR構造体をIOR文字列へ変換する
@@ -60,7 +60,7 @@ namespace CORBA_IORUtil
    */
 #if !defined(ORB_IS_ORBEXPRESS) && !defined(ORB_IS_TAO)
   bool toString(IOP::IOR& ior, std::string& iorstr);
-  
+#endif // !defined(ORB_IS_ORBEXPRESS) && !defined(ORB_IS_TAO)
   /*!
    * @if jp
    * @brief IOR内のエンドポイントを置換する

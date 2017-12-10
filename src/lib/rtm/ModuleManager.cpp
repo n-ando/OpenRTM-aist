@@ -574,5 +574,6 @@ namespace RTC
         p["module_file_path"] = modules[i].c_str();
         modprops.push_back(p);
       }
+#endif // VXWORKS_69, VXWORKS_66
   }
 }; // namespace RTC
