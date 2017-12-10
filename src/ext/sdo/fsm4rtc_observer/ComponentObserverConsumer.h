@@ -26,6 +26,7 @@
 #include <rtm/SdoServiceConsumerBase.h>
 #include <rtm/CorbaConsumer.h>
 #include <rtm/ComponentActionListener.h>
+#include <rtm/FsmActionListener.h>
 #include <rtm/idl/SDOPackageStub.h>
 #include "ComponentObserverStub.h"
 
@@ -625,8 +626,14 @@ namespace RTC
       FSMAction(ComponentObserverConsumer& coc)
         : m_coc(coc) {}
       // Action callback functions here
+      void updateFsmStatus(const char* state)
+      {
+        std::cout << "ComponentObserver::updateFsmStatus(" << state << ")" << std::endl; 
+        m_coc.updateStatus(RTC::FSM_STATUS, state);
+      }
       
       // Listener object's pointer holder
+      PreFsmActionListener* fsmActionListener;
 
     private:
       ComponentObserverConsumer& m_coc;

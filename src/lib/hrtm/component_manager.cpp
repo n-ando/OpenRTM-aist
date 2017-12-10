@@ -56,6 +56,7 @@ namespace hrtm
   }
   ComponentManager& ComponentManager::instance(int argc, char** argv)
   {
+   
     // DCL for singleton
     if (!manager)
       {
@@ -63,6 +64,8 @@ namespace hrtm
         if (!manager)
           {
             manager = new ComponentManager();
+            RTC::Manager::manager = manager;
+            printf("init ComponentManager: %x\n", manager);
             manager->initManager(argc, argv);
             manager->initLogger();
             manager->initORB();

@@ -27,13 +27,12 @@ namespace hrtm
   }
   RTC::ReturnCode_t DataFlowComponent::initialize(hrtm::ComponentManager* mgr)
   {
-    std::cout << "########## initialize()" << std::endl;
     return RTC::RTC_OK;
   }
 
   void DataFlowComponent::updateFsmStatus(RTC::StatusKind status_kind,
                                           const char* state)
   {
-    std::cout << "State: " << state << std::endl;
+    onFsmStateChanged(state);
   }
 }; // namespace hrtm

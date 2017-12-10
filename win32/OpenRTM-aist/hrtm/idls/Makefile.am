@@ -11,9 +11,7 @@ clean-local:
 	rm -f *.sln *.suo *.ncb *.user *.vcproj *.vcxproj *.def
 
 src:
-	cp -p $(top_srcdir)/src/lib/hrtm/idls/*.cpp .
 	cp -p $(top_srcdir)/src/lib/hrtm/idls/*.h .
-	qkc -O- -ms *.cpp
 	qkc -O- -ms *.h
 
 dist-hook: src
