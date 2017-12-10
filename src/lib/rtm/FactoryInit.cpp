@@ -37,6 +37,10 @@
 #include <rtm/OutPortCorbaCdrProvider.h>
 #include <rtm/InPortDirectProvider.h>
 #include <rtm/InPortDirectConsumer.h>
+#include <rtm/InPortSHMProvider.h>
+#include <rtm/InPortSHMConsumer.h>
+#include <rtm/OutPortSHMProvider.h>
+#include <rtm/OutPortSHMConsumer.h>
 
 // RTC name numbering policy
 #include <rtm/NumberingPolicy.h>
@@ -64,6 +68,10 @@ void FactoryInit()
     OutPortCorbaCdrProviderInit();
     InPortDirectProviderInit();
     InPortDirectConsumerInit();
+    InPortSHMProviderInit();
+    InPortSHMConsumerInit();
+    OutPortSHMProviderInit();
+    OutPortSHMConsumerInit();
 
     // Naming Policy
     ProcessUniquePolicyInit();

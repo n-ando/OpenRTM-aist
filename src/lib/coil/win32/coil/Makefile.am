@@ -15,7 +15,8 @@ COIL_PLATFORM_SRC =    \
 	Signal.cpp     \
 	Task.cpp       \
 	Time.cpp       \
-	UUID.cpp
+	UUID.cpp       \
+	SharedMemory.cpp
 
 # Win32 API dependent headers
 COIL_PLATFORM_H =      \

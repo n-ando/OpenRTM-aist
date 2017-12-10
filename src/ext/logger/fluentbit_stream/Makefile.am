@@ -34,7 +34,7 @@ fluent-bit-clone:
 	else                              \
 		rm -rf fluent-bit;            \
 		echo "fluent-bit cloneing";   \
-		git clone --depth 1 https://github.com/fluent/fluent-bit.git; \
+		git clone --depth 1 -b v0.12.5 https://github.com/fluent/fluent-bit.git; \
 	fi; 
 
 fluent-bit-build: fluent-bit-clone

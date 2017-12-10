@@ -596,9 +596,9 @@ namespace RTC_exp
   void RTPreemptEC::
   setPolicy(coil::Properties& prop)
   {
-    RTC_TRACE(("setPriority()"));
+    RTC_TRACE(("setPolicy()"));
     std::string policy;
-    getProperty(prop, "priority", policy);
+    getProperty(prop, "policy", policy);
     if (!policy.empty())
       {
         coil::normalize(policy);
