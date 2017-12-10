@@ -1,13 +1,9 @@
 #!/bin/sh
 #
-# @file pkg_install_ubuntu.sh
-# @brief OpenRTM-aist dependent packages install script for Ubuntu
+# @file pkg_install_raspbian.sh
+# @brief OpenRTM-aist dependent packages install script for Debian
 # @author Noriaki Ando <n-ando@aist.go.jp>
-#         Shinji Kurihara
-#         Tetsuo Ando
-#         Harumi Miyamoto
-#         Seisho Irie
-#         Nobu   Kawauchi
+#         Nobu Kawauchi
 #
 
 #---------------------------------------
@@ -20,15 +16,14 @@ usage()
 
     $(basename ${0}) [-l all/c++] [-r/-d/-s/-c] [-u]
     $(basename ${0}) [-l python/java] [-r/-d/-c] [-u]
-    $(basename ${0}) [-l openrtp/rtshell] [-d] [-u]                           
 
   Example:
     $(basename ${0})  [= $(basename ${0}) -l c++ -d]
-    $(basename ${0}) -l all -d  [= -l c++ -l python -l java -l openrtp -l rtshell -d]
+    $(basename ${0}) -l all -d  [= -l c++ -l python -l java -d]
     $(basename ${0}) -l c++ -l python -c --yes
 
   Options:
-    -l <argument>  language or tool [c++/python/java/openrtp/rtshell]
+    -l <argument>  language or tool [c++/python/java]
     -r             install robot component runtime
     -d             install robot component developer [default]
     -s             install tool_packages for build source packages
@@ -42,24 +37,22 @@ EOF
 #---------------------------------------
 # パッケージリスト
 #---------------------------------------
-ace="libace libace-dev"
-openrtm04="openrtm-aist=0.4.2-1 openrtm-aist-doc=0.4.2-1 openrtm-aist-dev=0.4.2-1 openrtm-aist-example=0.4.2-1 python-yaml"
-
 default_reposerver="openrtm.org"
 reposervers="openrtm.org"
 reposerver=""
 
 #--------------------------------------- C++
-res=`grep 14.04 /etc/lsb-release`
+res=`grep wheezy /etc/os-release`
 if test ! "x$res" = "x" ; then
-  # 14.04
+  # wheezy
   autotools="autoconf libtool"
 else
   autotools="autoconf libtool libtool-bin"
 fi
-base_tools="bc iputils-ping net-tools"
+base_tools="bc iputils-ping net-tools zip"
 cxx_devel="gcc g++ make python-yaml"
-cmake_tools="cmake doxygen graphviz nkf"
+#cmake_tools="cmake doxygen graphviz nkf"
+cmake_tools="cmake doxygen"
 build_tools="subversion git"
 deb_pkg="uuid-dev libboost-filesystem-dev"
 pkg_tools="build-essential debhelper devscripts"
@@ -77,7 +70,7 @@ u_src_pkgs="$omni_runtime $omni_devel"
 dev_pkgs="$runtime_pkgs $src_pkgs $openrtm_devel"
 u_dev_pkgs="$u_runtime_pkgs $omni_devel $openrtm_devel"
 
-core_pkgs="$src_pkgs $autotools $build_tools $pkg_tools"
+core_pkgs="$src_pkgs $build_tools $pkg_tools"
 u_core_pkgs="$u_src_pkgs"
 
 #--------------------------------------- Python
@@ -111,8 +104,6 @@ u_java_dev_pkgs="$omni_runtime $openrtm_j_runtime $openrtm_j_devel"
 java_core_pkgs="$omni_runtime $java_devel $cmake_tools $base_tools $build_tools $java_build $pkg_tools"
 u_java_core_pkgs="$omni_runtime"
 
-#--------------------------------------- OpenRTP
-openrtp_pkgs="openrtp"
 
 #---------------------------------------
 # Script options, argument analysis
@@ -138,8 +129,6 @@ check_arg()
     c++ ) arg_cxx=true ;;
     python ) arg_python=true ;;
     java ) arg_java=true ;;
-    openrtp ) arg_openrtp=true ;;
-    rtshell ) arg_rtshell=true ;;
     *) arg_err=-1 ;;
   esac
 }
@@ -236,6 +225,30 @@ fi
 
 }
 
+#---------------------------------------
+# コードネーム取得
+#---------------------------------------
+check_codename () {
+  cnames="wheezy jessie"
+  for c in $cnames; do
+    if test -f "/etc/apt/sources.list"; then
+      res=`grep $c /etc/apt/sources.list`
+    else
+      echo $msg1
+      exit
+    fi
+    if test ! "x$res" = "x" ; then
+      code_name=$c
+    fi
+  done
+  if test ! "x$code_name" = "x"; then
+    echo $msg2 $code_name
+  else
+    echo $msg3
+    exit
+  fi
+}
+
 #----------------------------------------
 # 近いリポジトリサーバを探す
 #----------------------------------------
@@ -265,26 +278,7 @@ check_reposerver()
 # リポジトリサーバ
 #---------------------------------------
 create_srclist () {
-  codename=`sed -n /DISTRIB_CODENAME=/p /etc/lsb-release`
-  cnames=`echo "$codename" | sed 's/DISTRIB_CODENAME=//'`
-  for c in $cnames; do
-    if test -f "/etc/apt/sources.list"; then
-      res=`grep $c /etc/apt/sources.list`
-    else
-      echo $msg1
-      exit
-    fi
-    if test ! "x$res" = "x" ; then
-      code_name=$c
-    fi
-  done
-  if test ! "x$code_name" = "x"; then
-    echo $msg2 $code_name
-  else
-    echo $msg3
-    exit
-  fi
-  openrtm_repo="deb http://$reposerver/pub/Linux/ubuntu/ $code_name main"
+  openrtm_repo="deb http://$reposerver/pub/Linux/raspbian/ $code_name main"
 }
 
 #---------------------------------------
@@ -304,7 +298,7 @@ update_source_list () {
     else
       echo $openrtm_repo >> /etc/apt/sources.list
 　　　# 公開鍵登録
-      apt-key adv --keyserver keys.gnupg.net --recv-keys 4BCE106E087AFAC0
+      #apt-key adv --keyserver keys.gnupg.net --recv-keys 4BCE106E087AFAC0
     fi
   fi
 }
@@ -423,17 +417,6 @@ install_branch()
       install_packages $java_dev_pkgs
     fi
   fi
-
-  if test "x$arg_openrtp" = "xtrue" ; then
-    select_opt_rtp="[openrtp] install"
-    install_packages $openrtp_pkgs
-  fi
-
-  if test "x$arg_rtshell" = "xtrue" ; then
-    select_opt_shl="[rtshell] install"
-    install_packages python-pip
-    rtshell_ret=`pip install rtshell`
-  fi
 }
 
 #---------------------------------------
@@ -482,16 +465,6 @@ uninstall_branch()
       uninstall_packages `reverse $u_java_dev_pkgs`
     fi
   fi
-
-  if test "x$arg_openrtp" = "xtrue" ; then
-    select_opt_rtp="[openrtp] uninstall"
-    uninstall_packages $openrtp_pkgs
-  fi
-
-  if test "x$arg_rtshell" = "xtrue" ; then
-    select_opt_shl="[rtshell] uninstall"
-    rtshell_ret=`pip uninstall -y rtshell`
-  fi
 }
 
 #---------------------------------------
@@ -515,12 +488,6 @@ EOF
   if test ! "x$select_opt_j" = "x" ; then
     echo $select_opt_j
   fi
-  if test ! "x$select_opt_rtp" = "x" ; then
-    echo $select_opt_rtp
-  fi
-  if test ! "x$select_opt_shl" = "x" ; then
-    echo $select_opt_shl
-  fi
 }
 
 #---------------------------------------
@@ -543,11 +510,6 @@ EOF
   for p in $*; do
     echo $p
   done
-  if test "x$arg_rtshell" = "xtrue" && test "x$OPT_FLG" = "xtrue"; then
-    if test "x$rtshell_ret" != "x"; then
-      echo "rtshell" 
-    fi
-  fi
 }
 
 #---------------------------------------
@@ -569,11 +531,6 @@ EOF
   for p in $*; do
     echo $p
   done
-  if test "x$arg_rtshell" = "xtrue" && test "x$OPT_FLG" = "xfalse"; then
-    if test "x$rtshell_ret" != "x"; then
-      echo "rtshell" 
-    fi
-  fi
 }
 
 #---------------------------------------
@@ -584,7 +541,9 @@ get_opt $@
 
 check_lang
 check_root
-check_reposerver
+#check_reposerver
+reposerver=$default_reposerver
+check_codename
 create_srclist
 update_source_list
 apt-get autoclean
@@ -594,8 +553,6 @@ if test "x$arg_all" = "xtrue" ; then
   arg_cxx=true
   arg_python=true
   arg_java=true
-  arg_openrtp=true
-  arg_rtshell=true
 
   if test "x$OPT_RT" != "xtrue" && 
      test "x$OPT_DEV" != "xtrue" &&
