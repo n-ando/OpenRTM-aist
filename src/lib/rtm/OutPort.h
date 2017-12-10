@@ -144,6 +144,11 @@ namespace RTC
         m_propValueIndex = NVUtil::find_index(m_profile.properties,
                                               "dataport.data_value");
       }
+      this->addConnectorDataListener(ON_BUFFER_WRITE,
+                                     new Timestamp<DataType>("on_write"));
+      this->addConnectorDataListener(ON_SEND,
+                                     new Timestamp<DataType>("on_send"));
+
     }
     
     /*!

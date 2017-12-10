@@ -36,6 +36,7 @@
 #include <rtm/CdrBufferBase.h>
 #include <rtm/PortCallback.h>
 #include <rtm/InPortConnector.h>
+#include <rtm/Timestamp.h>
 
 namespace RTC
 {
@@ -157,6 +158,10 @@ namespace RTC
         m_OnRead(NULL),  m_OnReadConvert(NULL),
         m_status(1), m_directNewData(false)
     {
+      this->addConnectorDataListener(ON_RECEIVED,
+                                     new Timestamp<DataType>("on_received"));
+      this->addConnectorDataListener(ON_BUFFER_READ,
+                                     new Timestamp<DataType>("on_read"));
     }
     
     /*!

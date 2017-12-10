@@ -177,6 +177,7 @@ rtmheader_HEADERS = \
 	SdoServiceConsumerBase.h \
 	StateMachine.h 		 \
 	Typename.h               \
+	Timestamp.h			\
 	LocalServiceBase.h	 \
 	LogstreamBase.h      \
 	ListenerHolder.h         \

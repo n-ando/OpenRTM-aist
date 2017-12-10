@@ -83,7 +83,7 @@ namespace RTC
    * @endif
    */
   ConnectorBase::ReturnCode
-  OutPortPushConnector::write(const cdrMemoryStream& data)
+  OutPortPushConnector::write(cdrMemoryStream& data)
   {
     RTC_TRACE(("write()"));
 #ifdef ORB_IS_ORBEXPRESS

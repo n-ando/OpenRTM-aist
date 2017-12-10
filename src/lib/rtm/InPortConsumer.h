@@ -144,7 +144,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode put(const cdrMemoryStream& data) = 0;
+    virtual ReturnCode put(cdrMemoryStream& data) = 0;
 
     /*!
      * @if jp

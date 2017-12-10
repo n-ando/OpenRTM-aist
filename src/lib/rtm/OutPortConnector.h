@@ -159,7 +159,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode write(const cdrMemoryStream& data) = 0;
+    virtual ReturnCode write(cdrMemoryStream& data) = 0;
 
     /*!
      * @if jp
@@ -226,7 +226,7 @@ namespace RTC
                 connectorData_[ON_RECEIVER_FULL].notify(m_profile, data);
               m_inPortListeners->
                 connectorData_[ON_RECEIVER_FULL].notify(m_profile, data);
-              RTC_PARANOID(("ONBUFFER_OVERWRITE(InPort,OutPort), "
+              RTC_PARANOID(("ON_BUFFER_OVERWRITE(InPort,OutPort), "
                             "ON_RECEIVER_FULL(InPort,OutPort) "
                             "callback called in direct mode."));
             }
@@ -283,7 +283,7 @@ namespace RTC
      * @if jp
      * @brief ロガーストリーム
      * @else
-     * @brief Logger stream
+     * @brief Logger streamf
      * @endif
      */
     Logger rtclog;

@@ -49,7 +49,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ÀßÄê½é´ü²½
+   * @brief ÀßÄEé´E½
    * @else
    * @brief Initializing configuration
    * @endif
@@ -66,7 +66,8 @@ namespace RTC
    * @brief Write data into the buffer
    * @endif
    */
-  InPortConsumer::ReturnCode InPortCorbaCdrConsumer::put(const cdrMemoryStream& data)
+  InPortConsumer::ReturnCode InPortCorbaCdrConsumer::
+  put(cdrMemoryStream& data)
   {
     RTC_PARANOID(("put()"));
 
@@ -114,8 +115,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief InterfaceProfile¾ğÊó¤ò¸ø³«¤¹¤ë
-   * @else
+   * @brief InterfaceProfile¾ğÊó¤ò¸ø³«¤¹¤E   * @else
    * @brief Publish InterfaceProfile information
    * @endif
    */
@@ -149,8 +149,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ¥Ç¡¼¥¿Á÷¿®ÄÌÃÎ¤«¤é¤ÎÅĞÏ¿²ò½ü
-   * @else
+   * @brief ¥Ç¡¼¥¿Á÷¿®ÄÌÃÎ¤«¤é¤ÎÅĞÏ¿²ò½E   * @else
    * @brief Unsubscribe the data send notification
    * @endif
    */
@@ -169,8 +168,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief IORÊ¸»úÎó¤«¤é¥ª¥Ö¥¸¥§¥¯¥È»²¾È¤ò¼èÆÀ¤¹¤ë
-   * @else
+   * @brief IORÊ¸»úÎó¤«¤é¥ª¥Ö¥¸¥§¥¯¥È»²¾È¤ò¼èÆÀ¤¹¤E   * @else
    * @brief Getting object reference fromn IOR string
    * @endif
    */
@@ -214,8 +212,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief Any¤«¤éÄ¾ÀÜ¥ª¥Ö¥¸¥§¥¯¥È»²¾È¤ò¼èÆÀ¤¹¤ë
-   * @else
+   * @brief Any¤«¤éÄ¾ÀÜ¥ª¥Ö¥¸¥§¥¯¥È»²¾È¤ò¼èÆÀ¤¹¤E   * @else
    * @brief Getting object reference fromn Any directry
    * @endif
    */
@@ -259,7 +256,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ÀÜÂ³²ò½ü(IORÈÇ)
+   * @brief ÀÜÂ³²ò½EIORÈÇ)
    * @else
    * @brief ubsubscribing (IOR version)
    * @endif
@@ -298,7 +295,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ÀÜÂ³²ò½ü(Object referenceÈÇ)
+   * @brief ÀÜÂ³²ò½EObject referenceÈÇ)
    * @else
    * @brief ubsubscribing (Object reference version)
    * @endif
@@ -330,7 +327,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ¥ê¥¿¡¼¥ó¥³¡¼¥ÉÊÑ´¹
+   * @brief ¥E¿¡¼¥ó¥³¡¼¥ÉÊÑ´¹
    * @else
    * @brief Return codes conversion
    * @endif
@@ -368,8 +365,7 @@ extern "C"
 { 
   /*!
    * @if jp
-   * @brief ¥â¥¸¥å¡¼¥ë½é´ü²½´Ø¿ô
-   * @else
+   * @brief ¥â¥¸¥å¡¼¥Eé´E½´Ø¿E   * @else
    * @brief Module initialization
    * @endif
    */

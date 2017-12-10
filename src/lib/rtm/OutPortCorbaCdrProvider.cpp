@@ -220,7 +220,7 @@ namespace RTC
    */
   ::OpenRTM::PortStatus
   OutPortCorbaCdrProvider::convertReturn(BufferStatus::Enum status,
-                                        const cdrMemoryStream& data)
+                                         cdrMemoryStream& data)
   {
     switch(status)
       {
