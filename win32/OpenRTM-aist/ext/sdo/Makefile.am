@@ -4,8 +4,7 @@
 ##
 ## $Id: Makefile.am 1680 2010-01-17 15:12:59Z n-ando $
 ##---------------------------------------------------------------------------
-SUBDIRS = observer logger .
-
+SUBDIRS = logger extended_fsm fsm4rtc_observer observer .
 clean-local:
 	rm -f *~
 

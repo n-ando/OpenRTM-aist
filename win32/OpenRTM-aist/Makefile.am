@@ -4,8 +4,7 @@
 ##
 ## $Id$
 ##---------------------------------------------------------------------------
-SUBDIRS = bin etc cmake build docs examples ext utils coil rtm .
-
+SUBDIRS = bin etc cmake build docs examples ext utils coil rtm hrtm installer .
 
 clean-local:
 	rm -f *~ *.sln *.yaml *.ncb *.suo *.user
