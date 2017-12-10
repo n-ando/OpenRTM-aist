@@ -20,6 +20,8 @@
     <rtm_path>$(rtm_bin);$(omni_bin)</rtm_path>
     <rtm_libd>RTC$(rtm_dllver)d.lib;$(coil_libd);$(omni_libd);advapi32.lib;ws2_32.lib;mswsock.lib;$(user_libd)</rtm_libd>
     <rtm_lib>RTC$(rtm_dllver).lib;$(coil_lib);$(omni_lib);advapi32.lib;ws2_32.lib;mswsock.lib;$(user_lib)</rtm_lib>
+    <rtm_ext_libd>$(rtm_ext_libd)</rtm_ext_libd>
+    <rtm_ext_lib>$(rtm_ext_lib)</rtm_ext_lib>
     <rtm_idlc>omniidl</rtm_idlc>
     <rtm_idlflags>-bcxx -Wba -nf -I $(SolutionDir)\rtm\idl</rtm_idlflags>
   </PropertyGroup>
@@ -93,6 +95,12 @@
     </BuildMacro>
     <BuildMacro Include="rtm_lib">
       <Value>$(rtm_lib)</Value>
+    </BuildMacro>
+    <BuildMacro Include="rtm_ext_libd">
+      <Value>$(rtm_ext_libd)</Value>
+    </BuildMacro>
+    <BuildMacro Include="rtm_ext_lib">
+      <Value>$(rtm_ext_lib)</Value>
     </BuildMacro>
     <BuildMacro Include="rtm_idlc">
       <Value>$(rtm_idlc)</Value>
