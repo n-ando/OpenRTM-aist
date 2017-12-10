@@ -154,18 +154,7 @@ lst:
 #------------------------------------------------------------
 win32_builddir=$(top_builddir)/win32/OpenRTM-aist/
 
-vcproj: vc8proj vc9proj  vc10proj
-
-vc8proj: libRTCSkel.vcproj.yaml
-	$(top_builddir)/build/vcprojtool.py vcproj \
-		--type LIB \
-		--vcversion "8.00" \
-		--version $(RTM_VERSION) \
-		--out $(win32_builddir)/rtm/idl/libRTCSkel_vc8.vcproj \
-		--yaml libRTCSkel.vcproj.yaml \
-		--source $(SKEL_CPP) \
-		--header $(SKEL_H)
-	qkc -O- -sm $(win32_builddir)/rtm/idl/libRTCSkel_vc8.vcproj
+vcproj: vc9proj  vc10proj
 
 vc9proj: libRTCSkel.vcproj.yaml
 	$(top_builddir)/build/vcprojtool.py vcproj \
@@ -189,17 +178,8 @@ vc10proj: libRTCSkel.vcproj.yaml
 		--header $(SKEL_H)
 	qkc -O- -sm $(win32_builddir)/rtm/idl/libRTCSkel_vc10.vcproj
 
-#------------------------------------------------------------
-# for wxs file
-#------------------------------------------------------------
-wxs:
-	$(top_srcdir)/build/makewxs.py flist \
-		-c IDLs \
-		-o $(win32_builddir)installer/idls.yaml \
-		-p ..\\rtm\\idl \
-		$(IDL_SOURCES) $(ALL_SRC)
 
-dist-hook: lst vcproj wxs
+dist-hook: lst vcproj
 
 # Cleanup
 clean-local:

@@ -57,19 +57,7 @@ clean-local:
 #------------------------------------------------------------
 win32_builddir = .
 
-vcproj: TimeValue_vc8.vcproj TimeValue_vc9.vcproj TimeValue_vc10.vcproj
-
-TimeValue_vc8.vcproj:
-	$(top_builddir)/build/vcprojtool.py vcproj \
-		--projectname TimeValueTest \
-		--type EXE \
-		--vcversion "8.00" \
-		--version $(COIL_VERSION) \
-		--out $(win32_builddir)/TimeValue_vc8.vcproj \
-		--yaml ../coil_test.vcproj.yaml \
-		--source $(TEST_SRC)
-#		--header $(TEST_H)
-	qkc -O- -sm $(win32_builddir)/TimeValue_vc8.vcproj
+vcproj: TimeValue_vc9.vcproj TimeValue_vc10.vcproj
 
 TimeValue_vc9.vcproj:
 	$(top_builddir)/build/vcprojtool.py vcproj \

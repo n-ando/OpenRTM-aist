@@ -138,49 +138,7 @@ lst:
 #------------------------------------------------------------
 win32_builddir=$(top_builddir)/win32/OpenRTM-aist/examples/AutoTest
 
-vcproj: vc8proj vc9proj vc10proj vc11proj vc12proj vc14proj
-
-vc8proj: 
-	$(top_builddir)/build/vcprojtool.py vcproj                   \
-		--type EXE                                           \
-		--vcversion "8.00"                                   \
-		--projectname "AutoTestInComp"                \
-		--version $(RTM_VERSION)                             \
-		--out $(win32_builddir)/AutoTestIn_vc8.vcproj \
-		--yaml ../rtc.vcproj.yaml                            \
-		--source $(PROVIDER_COMP_SRC)                        \
-		--header $(PROVIDER_H)
-	qkc -O- -sm $(win32_builddir)/AutoTestIn_vc8.vcproj
-	$(top_builddir)/build/vcprojtool.py vcproj                      \
-		--type DLL                                              \
-		--vcversion "8.00"                                      \
-		--projectname "AutoTestIn"                       \
-		--version $(RTM_VERSION)                                \
-		--out $(win32_builddir)/AutoTestInDll_vc8.vcproj \
-		--yaml ../rtcdll.vcproj.yaml                            \
-		--source $(PROVIDER_SRC)                                \
-		--header $(PROVIDER_H)
-	qkc -O- -sm $(win32_builddir)/AutoTestInDll_vc8.vcproj
-	$(top_builddir)/build/vcprojtool.py vcproj                   \
-		--type EXE                                           \
-		--vcversion "8.00"                                   \
-		--projectname "AutoTestOutComp"                \
-		--version $(RTM_VERSION)                             \
-		--out $(win32_builddir)/AutoTestOut_vc8.vcproj \
-		--yaml ../rtc.vcproj.yaml                            \
-		--source $(CONSUMER_COMP_SRC)                        \
-		--header $(CONSUMER_H)
-	qkc -O- -sm $(win32_builddir)/AutoTestOut_vc8.vcproj
-	$(top_builddir)/build/vcprojtool.py vcproj                      \
-		--type DLL                                              \
-		--vcversion "8.00"                                      \
-		--projectname "AutoTestOut"                       \
-		--version $(RTM_VERSION)                                \
-		--out $(win32_builddir)/AutoTestOutDll_vc8.vcproj \
-		--yaml ../rtcdll.vcproj.yaml                            \
-		--source $(CONSUMER_COMP_SRC)                           \
-		--header $(CONSUMER_H)
-	qkc -O- -sm $(win32_builddir)/AutoTestOutDll_vc8.vcproj
+vcproj: vc9proj vcxproj
 
 vc9proj: 
 	$(top_builddir)/build/vcprojtool.py vcproj                   \
@@ -224,173 +182,49 @@ vc9proj:
 		--header $(CONSUMER_H)
 	qkc -O- -sm $(win32_builddir)/AutoTestOutDll_vc9.vcproj
 
-vc10proj: 
-	$(top_builddir)/build/vcxprojtool.py vcxproj                   \
-		--type EXE                                           \
-		--vcversion "10.00"                                   \
-		--projectname "AutoTestInComp"                \
-		--version $(RTM_VERSION)                             \
-		--out $(win32_builddir)/AutoTestIn_vc10.vcxproj \
-		--yaml ../rtc.vcproj.yaml                            \
-		--source $(PROVIDER_COMP_SRC)                        \
-		--header $(PROVIDER_H)
-	qkc -O- -sm $(win32_builddir)/AutoTestIn_vc10.vcxproj
-	$(top_builddir)/build/vcxprojtool.py vcxproj                      \
-		--type DLL                                              \
-		--vcversion "10.00"                                      \
-		--projectname "AutoTestIn"                       \
-		--version $(RTM_VERSION)                                \
-		--out $(win32_builddir)/AutoTestInDll_vc10.vcxproj \
-		--yaml ../rtcdll.vcproj.yaml                            \
-		--source $(PROVIDER_SRC)                                \
-		--header $(PROVIDER_H)
-	qkc -O- -sm $(win32_builddir)/AutoTestInDll_vc10.vcxproj
-	$(top_builddir)/build/vcxprojtool.py vcxproj                   \
-		--type EXE                                           \
-		--vcversion "10.00"                                   \
-		--projectname "AutoTestOutComp"                \
-		--version $(RTM_VERSION)                             \
-		--out $(win32_builddir)/AutoTestOut_vc10.vcxproj \
-		--yaml ../rtc.vcproj.yaml                            \
-		--source $(CONSUMER_COMP_SRC)                        \
-		--header $(CONSUMER_H)
-	qkc -O- -sm $(win32_builddir)/AutoTestOut_vc10.vcxproj
-	$(top_builddir)/build/vcxprojtool.py vcxproj                      \
-		--type DLL                                              \
-		--vcversion "10.00"                                      \
-		--projectname "AutoTestOut"                       \
-		--version $(RTM_VERSION)                                \
-		--out $(win32_builddir)/AutoTestOutDll_vc10.vcxproj \
-		--yaml ../rtcdll.vcproj.yaml                            \
-		--source $(CONSUMER_COMP_SRC)                           \
-		--header $(CONSUMER_H)
-	qkc -O- -sm $(win32_builddir)/AutoTestOutDll_vc10.vcxproj
-
-vc11proj: 
-	$(top_builddir)/build/vcxprojtool.py vcxproj                   \
-		--type EXE                                           \
-		--vcversion "11.00"                                   \
-		--projectname "AutoTestInComp"                \
-		--version $(RTM_VERSION)                             \
-		--out $(win32_builddir)/AutoTestIn_vc11.vcxproj \
-		--yaml ../rtc.vcproj.yaml                            \
-		--source $(PROVIDER_COMP_SRC)                        \
-		--header $(PROVIDER_H)
-	qkc -O- -sm $(win32_builddir)/AutoTestIn_vc11.vcxproj
-	$(top_builddir)/build/vcxprojtool.py vcxproj                      \
-		--type DLL                                              \
-		--vcversion "11.00"                                      \
-		--projectname "AutoTestIn"                       \
-		--version $(RTM_VERSION)                                \
-		--out $(win32_builddir)/AutoTestInDll_vc11.vcxproj \
-		--yaml ../rtcdll.vcproj.yaml                            \
-		--source $(PROVIDER_SRC)                                \
-		--header $(PROVIDER_H)
-	qkc -O- -sm $(win32_builddir)/AutoTestInDll_vc11.vcxproj
-	$(top_builddir)/build/vcxprojtool.py vcxproj                   \
-		--type EXE                                           \
-		--vcversion "11.00"                                   \
-		--projectname "AutoTestOutComp"                \
-		--version $(RTM_VERSION)                             \
-		--out $(win32_builddir)/AutoTestOut_vc11.vcxproj \
-		--yaml ../rtc.vcproj.yaml                            \
-		--source $(CONSUMER_COMP_SRC)                        \
-		--header $(CONSUMER_H)
-	qkc -O- -sm $(win32_builddir)/AutoTestOut_vc11.vcxproj
-	$(top_builddir)/build/vcxprojtool.py vcxproj                      \
-		--type DLL                                              \
-		--vcversion "11.00"                                      \
-		--projectname "AutoTestOut"                       \
-		--version $(RTM_VERSION)                                \
-		--out $(win32_builddir)/AutoTestOutDll_vc11.vcxproj \
-		--yaml ../rtcdll.vcproj.yaml                            \
-		--source $(CONSUMER_COMP_SRC)                           \
-		--header $(CONSUMER_H)
-	qkc -O- -sm $(win32_builddir)/AutoTestOutDll_vc11.vcxproj
-
-vc12proj: 
-	$(top_builddir)/build/vcxprojtool.py vcxproj                   \
-		--type EXE                                           \
-		--vcversion "12.00"                                   \
-		--projectname "AutoTestInComp"                \
-		--version $(RTM_VERSION)                             \
-		--out $(win32_builddir)/AutoTestIn_vc12.vcxproj \
-		--yaml ../rtc.vcproj.yaml                            \
-		--source $(PROVIDER_COMP_SRC)                        \
-		--header $(PROVIDER_H)
-	qkc -O- -sm $(win32_builddir)/AutoTestIn_vc12.vcxproj
-	$(top_builddir)/build/vcxprojtool.py vcxproj                      \
-		--type DLL                                              \
-		--vcversion "12.00"                                      \
-		--projectname "AutoTestIn"                       \
-		--version $(RTM_VERSION)                                \
-		--out $(win32_builddir)/AutoTestInDll_vc12.vcxproj \
-		--yaml ../rtcdll.vcproj.yaml                            \
-		--source $(PROVIDER_SRC)                                \
-		--header $(PROVIDER_H)
-	qkc -O- -sm $(win32_builddir)/AutoTestInDll_vc12.vcxproj
-	$(top_builddir)/build/vcxprojtool.py vcxproj                   \
-		--type EXE                                           \
-		--vcversion "12.00"                                   \
-		--projectname "AutoTestOutComp"                \
-		--version $(RTM_VERSION)                             \
-		--out $(win32_builddir)/AutoTestOut_vc12.vcxproj \
-		--yaml ../rtc.vcproj.yaml                            \
-		--source $(CONSUMER_COMP_SRC)                        \
-		--header $(CONSUMER_H)
-	qkc -O- -sm $(win32_builddir)/AutoTestOut_vc12.vcxproj
-	$(top_builddir)/build/vcxprojtool.py vcxproj                      \
-		--type DLL                                              \
-		--vcversion "12.00"                                      \
-		--projectname "AutoTestOut"                       \
-		--version $(RTM_VERSION)                                \
-		--out $(win32_builddir)/AutoTestOutDll_vc12.vcxproj \
-		--yaml ../rtcdll.vcproj.yaml                            \
-		--source $(CONSUMER_COMP_SRC)                           \
-		--header $(CONSUMER_H)
-	qkc -O- -sm $(win32_builddir)/AutoTestOutDll_vc12.vcxproj
-
-vc14proj: 
-	$(top_builddir)/build/vcxprojtool.py vcxproj                   \
-		--type EXE                                           \
-		--vcversion "14.00"                                   \
-		--projectname "AutoTestInComp"                \
-		--version $(RTM_VERSION)                             \
-		--out $(win32_builddir)/AutoTestIn_vc14.vcxproj \
-		--yaml ../rtc.vcproj.yaml                            \
-		--source $(PROVIDER_COMP_SRC)                        \
-		--header $(PROVIDER_H)
-	qkc -O- -sm $(win32_builddir)/AutoTestIn_vc14.vcxproj
-	$(top_builddir)/build/vcxprojtool.py vcxproj                      \
-		--type DLL                                              \
-		--vcversion "14.00"                                      \
-		--projectname "AutoTestIn"                       \
-		--version $(RTM_VERSION)                                \
-		--out $(win32_builddir)/AutoTestInDll_vc14.vcxproj \
-		--yaml ../rtcdll.vcproj.yaml                            \
-		--source $(PROVIDER_SRC)                                \
-		--header $(PROVIDER_H)
-	qkc -O- -sm $(win32_builddir)/AutoTestInDll_vc14.vcxproj
-	$(top_builddir)/build/vcxprojtool.py vcxproj                   \
-		--type EXE                                           \
-		--vcversion "14.00"                                   \
-		--projectname "AutoTestOutComp"                \
-		--version $(RTM_VERSION)                             \
-		--out $(win32_builddir)/AutoTestOut_vc14.vcxproj \
-		--yaml ../rtc.vcproj.yaml                            \
-		--source $(CONSUMER_COMP_SRC)                        \
-		--header $(CONSUMER_H)
-	qkc -O- -sm $(win32_builddir)/AutoTestOut_vc14.vcxproj
-	$(top_builddir)/build/vcxprojtool.py vcxproj                      \
-		--type DLL                                              \
-		--vcversion "14.00"                                      \
-		--projectname "AutoTestOut"                       \
-		--version $(RTM_VERSION)                                \
-		--out $(win32_builddir)/AutoTestOutDll_vc14.vcxproj \
-		--yaml ../rtcdll.vcproj.yaml                            \
-		--source $(CONSUMER_COMP_SRC)                           \
-		--header $(CONSUMER_H)
-	qkc -O- -sm $(win32_builddir)/AutoTestOutDll_vc14.vcxproj
+vcxproj:
+	for ver in $(VC_VERSION); do \
+		$(top_builddir)/build/vcxprojtool.py vcxproj                   \
+			--type EXE                                           \
+			--vcversion "$${ver}.00"                                   \
+			--projectname "AutoTestInComp"                \
+			--version $(RTM_VERSION)                             \
+			--out $(win32_builddir)/AutoTestIn_vc$${ver}.vcxproj \
+			--yaml ../rtc.vcproj.yaml                            \
+			--source $(PROVIDER_COMP_SRC)                        \
+			--header $(PROVIDER_H) ; \
+		qkc -O- -sm $(win32_builddir)/AutoTestIn_vc$${ver}.vcxproj ; \
+		$(top_builddir)/build/vcxprojtool.py vcxproj                      \
+			--type DLL                                              \
+			--vcversion "$${ver}.00"                                      \
+			--projectname "AutoTestIn"                       \
+			--version $(RTM_VERSION)                                \
+			--out $(win32_builddir)/AutoTestInDll_vc$${ver}.vcxproj \
+			--yaml ../rtcdll.vcproj.yaml                            \
+			--source $(PROVIDER_SRC)                                \
+			--header $(PROVIDER_H) ; \
+		qkc -O- -sm $(win32_builddir)/AutoTestInDll_vc$${ver}.vcxproj ; \
+		$(top_builddir)/build/vcxprojtool.py vcxproj                   \
+			--type EXE                                           \
+			--vcversion "$${ver}.00"                                   \
+			--projectname "AutoTestOutComp"                \
+			--version $(RTM_VERSION)                             \
+			--out $(win32_builddir)/AutoTestOut_vc$${ver}.vcxproj \
+			--yaml ../rtc.vcproj.yaml                            \
+			--source $(CONSUMER_COMP_SRC)                        \
+			--header $(CONSUMER_H) ; \
+		qkc -O- -sm $(win32_builddir)/AutoTestOut_vc$${ver}.vcxproj ; \
+		$(top_builddir)/build/vcxprojtool.py vcxproj                      \
+			--type DLL                                              \
+			--vcversion "$${ver}.00"                                      \
+			--projectname "AutoTestOut"                       \
+			--version $(RTM_VERSION)                                \
+			--out $(win32_builddir)/AutoTestOutDll_vc$${ver}.vcxproj \
+			--yaml ../rtcdll.vcproj.yaml                            \
+			--source $(CONSUMER_COMP_SRC)                           \
+			--header $(CONSUMER_H) ; \
+		qkc -O- -sm $(win32_builddir)/AutoTestOutDll_vc$${ver}.vcxproj ; \
+	done
 	
 dist-hook:
 

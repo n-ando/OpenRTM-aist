@@ -219,18 +219,7 @@ lst:
 #------------------------------------------------------------
 win32_builddir=$(top_builddir)/win32/OpenRTM-aist/
 
-vcproj: vc8proj vc9proj vc10proj vc11proj vc12proj vc14proj
-
-vc8proj: libRTCSkel.vcproj.yaml
-	$(top_builddir)/build/vcprojtool.py vcproj \
-		--type LIB \
-		--vcversion "8.00" \
-		--version $(RTM_VERSION) \
-		--out $(win32_builddir)/rtm/idl/libRTCSkel_vc8.vcproj \
-		--yaml libRTCSkel.vcproj.yaml \
-		--source $(SKEL_CPP) \
-		--header $(SKEL_H)
-	qkc -O- -sm $(win32_builddir)/rtm/idl/libRTCSkel_vc8.vcproj
+vcproj: vc9proj vcxproj
 
 vc9proj: libRTCSkel.vcproj.yaml
 	$(top_builddir)/build/vcprojtool.py vcproj \
@@ -243,59 +232,20 @@ vc9proj: libRTCSkel.vcproj.yaml
 		--header $(SKEL_H)
 	qkc -O- -sm $(win32_builddir)/rtm/idl/libRTCSkel_vc9.vcproj
 
-vc10proj: libRTCSkel.vcproj.yaml
-	$(top_builddir)/build/vcxprojtool.py vcxproj \
-		--type LIB \
-		--vcversion "10.00" \
-		--version $(RTM_VERSION) \
-		--out $(win32_builddir)/rtm/idl/libRTCSkel_vc10.vcxproj \
-		--yaml libRTCSkel.vcproj.yaml \
-		--source $(SKEL_CPP) \
-		--header $(SKEL_H)
-	qkc -O- -sm $(win32_builddir)/rtm/idl/libRTCSkel_vc10.vcxproj
-
-vc11proj: libRTCSkel.vcproj.yaml
-	$(top_builddir)/build/vcxprojtool.py vcxproj \
-		--type LIB \
-		--vcversion "11.00" \
-		--version $(RTM_VERSION) \
-		--out $(win32_builddir)/rtm/idl/libRTCSkel_vc11.vcxproj \
-		--yaml libRTCSkel.vcproj.yaml \
-		--source $(SKEL_CPP) \
-		--header $(SKEL_H)
-	qkc -O- -sm $(win32_builddir)/rtm/idl/libRTCSkel_vc11.vcxproj
-
-vc12proj: libRTCSkel.vcproj.yaml
-	$(top_builddir)/build/vcxprojtool.py vcxproj \
-		--type LIB \
-		--vcversion "12.00" \
-		--version $(RTM_VERSION) \
-		--out $(win32_builddir)/rtm/idl/libRTCSkel_vc12.vcxproj \
-		--yaml libRTCSkel.vcproj.yaml \
-		--source $(SKEL_CPP) \
-		--header $(SKEL_H)
-	qkc -O- -sm $(win32_builddir)/rtm/idl/libRTCSkel_vc12.vcxproj
-vc14proj: libRTCSkel.vcproj.yaml
+vcxproj: libRTCSkel.vcproj.yaml
+	for ver in $(VC_VERSION); do \
 		$(top_builddir)/build/vcxprojtool.py vcxproj \
 			--type LIB \
-			--vcversion "14.00" \
+			--vcversion "$${ver}.00" \
 			--version $(RTM_VERSION) \
-			--out $(win32_builddir)/rtm/idl/libRTCSkel_vc14.vcxproj \
+			--out $(win32_builddir)/rtm/idl/libRTCSkel_vc$${ver}.vcxproj \
 			--yaml libRTCSkel.vcproj.yaml \
 			--source $(SKEL_CPP) \
-			--header $(SKEL_H)
-	qkc -O- -sm $(win32_builddir)/rtm/idl/libRTCSkel_vc14.vcxproj
-#------------------------------------------------------------
-# for wxs file
-#------------------------------------------------------------
-wxs:
-	$(top_srcdir)/build/makewxs.py flist \
-		-c IDLs \
-		-o $(win32_builddir)installer/idls.yaml \
-		-p ..\\rtm\\idl \
-		$(IDL_SOURCES) $(ALL_SRC)
+			--header $(SKEL_H) ; \
+		qkc -O- -sm $(win32_builddir)/rtm/idl/libRTCSkel_vc$${ver}.vcxproj ; \
+	done
 
-dist-hook: lst vcproj wxs
+dist-hook: lst vcproj
 
 # Cleanup
 clean-local:

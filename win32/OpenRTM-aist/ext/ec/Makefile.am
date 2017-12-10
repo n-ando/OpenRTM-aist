@@ -6,13 +6,10 @@
 ##---------------------------------------------------------------------------
 SUBDIRS = logical_time .
 
-wxs:
-	cp -p logical_time.yaml ../../installer
-
 clean-local:
 	rm -f *~
 
-dist-hook: clean-local wxs
+dist-hook: clean-local
 
 EXTRA_DIST = logical_time.yaml
 

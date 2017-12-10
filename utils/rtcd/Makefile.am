@@ -29,18 +29,7 @@ lst:
 #------------------------------------------------------------
 win32_builddir = $(top_builddir)/win32/OpenRTM-aist/
 
-vcproj: vc8proj vc9proj vc10proj vc11proj vc12proj vc14proj
-
-vc8proj: rtcd.yaml
-	$(top_builddir)/build/vcprojtool.py vcproj             \
-		--type RTCEXE                                      \
-		--vcversion "8.00"                                 \
-		--projectname "rtcd"                               \
-		--version $(RTM_VERSION)                           \
-		--out $(win32_builddir)/utils/rtcd/rtcd_vc8.vcproj \
-		--yaml rtcd.yaml                                   \
-		--source $(rtcd_SOURCES)
-#	qkc -O- -sm $(win32_builddir)/rtm/libRTC_vc8.vcproj
+vcproj: vc9proj vcxproj
 
 vc9proj: rtcd.yaml
 	$(top_builddir)/build/vcprojtool.py vcproj             \
@@ -51,59 +40,20 @@ vc9proj: rtcd.yaml
 		--out $(win32_builddir)/utils/rtcd/rtcd_vc9.vcproj \
 		--yaml rtcd.yaml                                   \
 		--source $(rtcd_SOURCES)
-#	qkc -O- -sm $(win32_builddir)/rtm/rtcd_vc9.vcproj
 
-vc10proj: rtcd.yaml
-	$(top_builddir)/build/vcxprojtool.py vcxproj             \
-		--type RTCEXE                                        \
-		--vcversion "10.00"                                  \
-		--projectname "rtcd"                                 \
-		--version $(RTM_VERSION)                             \
-		--out $(win32_builddir)/utils/rtcd/rtcd_vc10.vcxproj \
-		--yaml rtcd.yaml                                     \
-		--source $(rtcd_SOURCES)
+vcxproj: rtcd.yaml
+	for ver in $(VC_VERSION); do \
+		$(top_builddir)/build/vcxprojtool.py vcxproj             \
+			--type RTCEXE                                        \
+			--vcversion "$${ver}.00"                                  \
+			--projectname "rtcd"                                 \
+			--version $(RTM_VERSION)                             \
+			--out $(win32_builddir)/utils/rtcd/rtcd_vc$${ver}.vcxproj \
+			--yaml rtcd.yaml                                     \
+			--source $(rtcd_SOURCES) ; \
+	done
 
-vc11proj: rtcd.yaml
-	$(top_builddir)/build/vcxprojtool.py vcxproj             \
-		--type RTCEXE                                        \
-		--vcversion "11.00"                                  \
-		--projectname "rtcd"                                 \
-		--version $(RTM_VERSION)                             \
-		--out $(win32_builddir)/utils/rtcd/rtcd_vc11.vcxproj \
-		--yaml rtcd.yaml                                     \
-		--source $(rtcd_SOURCES)
-
-vc12proj: rtcd.yaml
-	$(top_builddir)/build/vcxprojtool.py vcxproj             \
-		--type RTCEXE                                        \
-		--vcversion "12.00"                                  \
-		--projectname "rtcd"                                 \
-		--version $(RTM_VERSION)                             \
-		--out $(win32_builddir)/utils/rtcd/rtcd_vc12.vcxproj \
-		--yaml rtcd.yaml                                     \
-		--source $(rtcd_SOURCES)
-		
-vc14proj: rtcd.yaml
-	$(top_builddir)/build/vcxprojtool.py vcxproj             \
-		--type RTCEXE                                        \
-		--vcversion "14.00"                                  \
-		--projectname "rtcd"                                 \
-		--version $(RTM_VERSION)                             \
-		--out $(win32_builddir)/utils/rtcd/rtcd_vc14.vcxproj \
-		--yaml rtcd.yaml                                     \
-		--source $(rtcd_SOURCES)
-				
-#------------------------------------------------------------
-# for wxs file
-#------------------------------------------------------------
-wxs:
-	$(top_srcdir)/build/makewxs.py flist \
-		-c Rtcd \
-		-o $(win32_builddir)installer/rtcd.yaml \
-		-p ..\\bin \
-		$(bin_PROGRAMS).exe
-
-dist-hook: lst vcproj wxs
+dist-hook: lst vcproj
 
 clean-local:
 	rm -rf rtcd

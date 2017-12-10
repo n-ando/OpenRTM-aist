@@ -6,12 +6,9 @@
 ##---------------------------------------------------------------------------
 SUBDIRS = observer .
 
-wxs:
-	cp -p sdo.yaml ../../installer/
-
 clean-local:
 	rm -f *~
 
-dist-hook: clean-local wxs
+dist-hook: clean-local
 
 EXTRA_DIST = sdo.yaml

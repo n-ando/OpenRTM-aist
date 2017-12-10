@@ -1712,8 +1712,6 @@ AC_OUTPUT([Makefile
 	win32/OpenRTM-aist/rtm/ext/Makefile
 	win32/OpenRTM-aist/rtm/idl/Makefile
 	win32/OpenRTM-aist/rtm/idl/device_interfaces/Makefile
-	win32/OpenRTM-aist/installer/Makefile
-	win32/OpenRTM-aist/installer/Bitmaps/Makefile
 	])
 
 

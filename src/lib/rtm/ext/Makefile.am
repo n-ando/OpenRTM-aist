@@ -182,7 +182,7 @@ lst:
 #------------------------------------------------------------
 win32_builddir=$(top_builddir)/win32/OpenRTM-aist/
 
-vcproj: vc9proj vc10proj vc11proj vc12proj vc14proj
+vcproj: vc9proj vcxproj
 
 vc9proj: librtmManipulator.vcproj.yaml librtmCamera.vcproj.yaml
 	$(top_builddir)/build/vcprojtool.py vcproj \
@@ -204,98 +204,29 @@ vc9proj: librtmManipulator.vcproj.yaml librtmCamera.vcproj.yaml
 		--header $(CAMERASKEL_H)
 	qkc -O- -sm $(win32_builddir)/rtm/ext/librtmCamera_vc9.vcproj
 
-vc10proj: librtmManipulator.vcproj.yaml librtmCamera.vcproj.yaml
-	$(top_builddir)/build/vcxprojtool.py vcxproj \
-		--type DLL \
-		--vcversion "10.00" \
-		--version $(RTM_VERSION) \
-		--out $(win32_builddir)/rtm/ext/librtmManipulator_vc10.vcxproj \
-		--yaml librtmManipulator.vcproj.yaml \
-		--source $(MANIPULATORSKEL_CPP) \
-		--header $(MANIPULATORSKEL_H)
-	qkc -O- -sm $(win32_builddir)/rtm/ext/librtmManipulator_vc10.vcxproj
-	$(top_builddir)/build/vcxprojtool.py vcxproj \
-		--type DLL \
-		--vcversion "10.00" \
-		--version $(RTM_VERSION) \
-		--out $(win32_builddir)/rtm/ext/librtmCamera_vc10.vcxproj \
-		--yaml librtmCamera.vcproj.yaml \
-		--source $(CAMERASKEL_CPP) \
-		--header $(CAMERASKEL_H)
-	qkc -O- -sm $(win32_builddir)/rtm/ext/librtmCamera_vc10.vcxproj
+vcxproj: librtmManipulator.vcproj.yaml librtmCamera.vcproj.yaml
+	for ver in $(VC_VERSION); do \
+		$(top_builddir)/build/vcxprojtool.py vcxproj \
+			--type DLL \
+			--vcversion "$${ver}.00" \
+			--version $(RTM_VERSION) \
+			--out $(win32_builddir)/rtm/ext/librtmManipulator_vc$${ver}.vcxproj \
+			--yaml librtmManipulator.vcproj.yaml \
+			--source $(MANIPULATORSKEL_CPP) \
+			--header $(MANIPULATORSKEL_H) ; \
+		qkc -O- -sm $(win32_builddir)/rtm/ext/librtmManipulator_vc$${ver}.vcxproj ; \
+		$(top_builddir)/build/vcxprojtool.py vcxproj \
+			--type DLL \
+			--vcversion "$${ver}.00" \
+			--version $(RTM_VERSION) \
+			--out $(win32_builddir)/rtm/ext/librtmCamera_vc$${ver}.vcxproj \
+			--yaml librtmCamera.vcproj.yaml \
+			--source $(CAMERASKEL_CPP) \
+			--header $(CAMERASKEL_H) ; \
+		qkc -O- -sm $(win32_builddir)/rtm/ext/librtmCamera_vc$${ver}.vcxproj ; \
+	done
 
-vc11proj: librtmManipulator.vcproj.yaml librtmCamera.vcproj.yaml
-	$(top_builddir)/build/vcxprojtool.py vcxproj \
-		--type DLL \
-		--vcversion "11.00" \
-		--version $(RTM_VERSION) \
-		--out $(win32_builddir)/rtm/ext/librtmManipulator_vc11.vcxproj \
-		--yaml librtmManipulator.vcproj.yaml \
-		--source $(MANIPULATORSKEL_CPP) \
-		--header $(MANIPULATORSKEL_H)
-	qkc -O- -sm $(win32_builddir)/rtm/ext/librtmManipulator_vc11.vcxproj
-	$(top_builddir)/build/vcxprojtool.py vcxproj \
-		--type DLL \
-		--vcversion "11.00" \
-		--version $(RTM_VERSION) \
-		--out $(win32_builddir)/rtm/ext/librtmCamera_vc11.vcxproj \
-		--yaml librtmCamera.vcproj.yaml \
-		--source $(CAMERASKEL_CPP) \
-		--header $(CAMERASKEL_H)
-	qkc -O- -sm $(win32_builddir)/rtm/ext/librtmCamera_vc11.vcxproj
-
-vc12proj: librtmManipulator.vcproj.yaml librtmCamera.vcproj.yaml
-	$(top_builddir)/build/vcxprojtool.py vcxproj \
-		--type DLL \
-		--vcversion "12.00" \
-		--version $(RTM_VERSION) \
-		--out $(win32_builddir)/rtm/ext/librtmManipulator_vc12.vcxproj \
-		--yaml librtmManipulator.vcproj.yaml \
-		--source $(MANIPULATORSKEL_CPP) \
-		--header $(MANIPULATORSKEL_H)
-	qkc -O- -sm $(win32_builddir)/rtm/ext/librtmManipulator_vc12.vcxproj
-	$(top_builddir)/build/vcxprojtool.py vcxproj \
-		--type DLL \
-		--vcversion "12.00" \
-		--version $(RTM_VERSION) \
-		--out $(win32_builddir)/rtm/ext/librtmCamera_vc12.vcxproj \
-		--yaml librtmCamera.vcproj.yaml \
-		--source $(CAMERASKEL_CPP) \
-		--header $(CAMERASKEL_H)
-	qkc -O- -sm $(win32_builddir)/rtm/ext/librtmCamera_vc12.vcxproj
-
-vc14proj: librtmManipulator.vcproj.yaml librtmCamera.vcproj.yaml
-	$(top_builddir)/build/vcxprojtool.py vcxproj \
-		--type DLL \
-		--vcversion "14.00" \
-		--version $(RTM_VERSION) \
-		--out $(win32_builddir)/rtm/ext/librtmManipulator_vc14.vcxproj \
-		--yaml librtmManipulator.vcproj.yaml \
-		--source $(MANIPULATORSKEL_CPP) \
-		--header $(MANIPULATORSKEL_H)
-	qkc -O- -sm $(win32_builddir)/rtm/ext/librtmManipulator_vc14.vcxproj
-	$(top_builddir)/build/vcxprojtool.py vcxproj \
-		--type DLL \
-		--vcversion "14.00" \
-		--version $(RTM_VERSION) \
-		--out $(win32_builddir)/rtm/ext/librtmCamera_vc14.vcxproj \
-		--yaml librtmCamera.vcproj.yaml \
-		--source $(CAMERASKEL_CPP) \
-		--header $(CAMERASKEL_H)
-	qkc -O- -sm $(win32_builddir)/rtm/ext/librtmCamera_vc14.vcxproj
-
-
-#------------------------------------------------------------
-# for wxs file
-#------------------------------------------------------------
-wxs:
-	$(top_srcdir)/build/makewxs.py flist \
-		-c IDLs \
-		-o $(win32_builddir)installer/idls.yaml \
-		-p ..\\rtm\\idl \
-		$(IDL_SOURCES) $(ALL_SRC)
-
-dist-hook: lst vcproj wxs
+dist-hook: lst vcproj
 
 # Cleanup
 clean-local:

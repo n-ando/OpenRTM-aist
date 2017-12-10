@@ -59,29 +59,7 @@ lst:
 #------------------------------------------------------------
 win32_builddir=$(top_builddir)/win32/OpenRTM-aist/examples/LTTSample
 
-vcproj: vc8proj vc9proj vc10proj
-
-vc8proj: 
-	$(top_builddir)/build/vcprojtool.py vcproj       \
-		--type EXE                                   \
-		--vcversion "8.00"                           \
-		--projectname "LTTSampleComp"                \
-		--version $(RTM_VERSION)                     \
-		--out $(win32_builddir)/LTTSample_vc8.vcproj \
-		--yaml $(top_builddir)/examples/rtc.vcproj.yaml                    \
-		--source LTTSample.cpp LTTSampleComp.cpp LogicalTimeTriggeredECStub.cpp  \
-		--header LTTSample.h LogicalTimeTriggeredECStub.h
-	qkc -O- -sm $(win32_builddir)/LTTSample_vc8.vcproj
-	$(top_builddir)/build/vcprojtool.py vcproj          \
-		--type DLL                                      \
-		--vcversion "8.00"                              \
-		--projectname "LTTSample"                       \
-		--version $(RTM_VERSION)                        \
-		--out $(win32_builddir)/LTTSampleDll_vc8.vcproj \
-		--yaml $(top_builddir)/examples/rtcdll.vcproj.yaml                    \
-		--source LTTSample.cpp                          \
-		--header LTTSample.h
-	qkc -O- -sm $(win32_builddir)/LTTSampleDll_vc8.vcproj
+vcproj: vc9proj vc10proj
 
 vc9proj:
 	$(top_builddir)/build/vcprojtool.py vcproj       \

@@ -87,20 +87,7 @@ clean-local:
 #------------------------------------------------------------
 win32_builddir = .
 
-vcproj: ExecutionContextProxy_vc8.vcproj ExecutionContextProxy_vc9.vcproj ExecutionContextProxy_vc10.vcproj
-
-
-ExecutionContextProxy_vc8.vcproj:
-	$(top_builddir)/build/vcprojtool.py vcproj \
-		--projectname ExecutionContextProxyTest \
-		--type EXE \
-		--vcversion "8.00" \
-		--version $(COIL_VERSION) \
-		--out $(win32_builddir)/ExecutionContextProxy_vc8.vcproj \
-		--yaml ../coil_test.vcproj.yaml \
-		--source $(TEST_SRC)
-#		--header $(TEST_H)
-	qkc -O- -sm $(win32_builddir)/ExecutionContextProxy_vc8.vcproj
+vcproj: ExecutionContextProxy_vc9.vcproj ExecutionContextProxy_vc10.vcproj
 
 ExecutionContextProxy_vc9.vcproj:
 	$(top_builddir)/build/vcprojtool.py vcproj \

@@ -4,7 +4,7 @@
 ##
 ## $Id$
 ##---------------------------------------------------------------------------
-SUBDIRS = bin etc cmake build docs examples ext utils coil rtm installer .
+SUBDIRS = bin etc cmake build docs examples ext utils coil rtm .
 
 
 clean-local:
@@ -17,15 +17,7 @@ clean-local:
 	rm -f coil_config.props
 	rm -f build.bat
 
-sln: OpenRTM-aist_vc8.sln OpenRTM-aist_vc9.sln OpenRTM-aist_vc10.sln OpenRTM-aist_vc11.sln OpenRTM-aist_vc12.sln OpenRTM-aist_vc14.sln
-
-OpenRTM-aist_vc8.sln: OpenRTM-aist.sln.dep
-	$(top_srcdir)/build/slntool.py     \
-		--vcversion VC8            \
-		--dep OpenRTM-aist.sln.dep \
-		--out OpenRTM-aist_vc8.sln \
-		`find ./ -name '*_vc8.vcproj' \! -name 'USB*.vcproj' \! -name 'LTT*.vcproj' \! -name 'LogicalTime*.vcproj' \! -name 'FileName*.vcproj'`
-	qkc -O- -ms OpenRTM-aist_vc8.sln
+sln: OpenRTM-aist_vc9.sln OpenRTM-aist_vc10.sln OpenRTM-aist_vc11.sln OpenRTM-aist_vc12.sln OpenRTM-aist_vc14.sln
 
 OpenRTM-aist_vc9.sln:
 	$(top_srcdir)/build/slntool.py     \
@@ -103,9 +95,6 @@ dist-hook: clean-local sln vsprops build.bat
 
 EXTRA_DIST =                      \
 	OpenRTM-aist.sln.dep          \
-	autobuild_vc8.bat             \
-	autobuild_vc9.bat             \
-	autobuild_vc10.bat            \
 	coil_distbuild.vsprops        \
 	coil_config.vsprops           \
 	rtm_distbuild.vsprops         \
