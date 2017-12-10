@@ -17,7 +17,7 @@ clean-local:
 	rm -f coil_config.props
 	rm -f build.bat
 
-sln: OpenRTM-aist_vc9.sln OpenRTM-aist_vc10.sln OpenRTM-aist_vc11.sln OpenRTM-aist_vc12.sln OpenRTM-aist_vc14.sln OpenRTM-aist_vc15.sln
+sln: OpenRTM-aist_vc9.sln OpenRTM-aist_vc10.sln OpenRTM-aist_vc11.sln OpenRTM-aist_vc12.sln OpenRTM-aist_vc14.sln OpenRTM-aist_vc141.sln
 
 OpenRTM-aist_vc9.sln:
 	$(top_srcdir)/build/slntool.py     \
@@ -59,13 +59,13 @@ OpenRTM-aist_vc14.sln:
 		`find ./ -name '*_vc14.vcxproj' \! -name 'USB*.vcxproj' \! -name 'LTT*.vcxproj' \! -name 'LogicalTime*.vcxproj' \! -name 'FileName*.vcxproj'`
 	qkc -O- -ms OpenRTM-aist_vc14.sln
 
-OpenRTM-aist_vc15.sln:
+OpenRTM-aist_vc141.sln:
 	$(top_srcdir)/build/slntool.py      \
-		--vcversion VC15            \
+		--vcversion VC141            \
 		--dep OpenRTM-aist.sln.dep  \
-		--out OpenRTM-aist_vc15.sln \
-		`find ./ -name '*_vc15.vcxproj' \! -name 'USB*.vcxproj' \! -name 'LTT*.vcxproj' \! -name 'LogicalTime*.vcxproj' \! -name 'FileName*.vcxproj'`
-	qkc -O- -ms OpenRTM-aist_vc15.sln
+		--out OpenRTM-aist_vc141.sln \
+		`find ./ -name '*_vc141.vcxproj' \! -name 'USB*.vcxproj' \! -name 'LTT*.vcxproj' \! -name 'LogicalTime*.vcxproj' \! -name 'FileName*.vcxproj'`
+	qkc -O- -ms OpenRTM-aist_vc141.sln
 
 vsprops:  coil_distbuild.vsprops coil_config.vsprops coil_distbuild.props coil_config.props
 

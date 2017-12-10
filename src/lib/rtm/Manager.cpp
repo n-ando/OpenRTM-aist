@@ -399,7 +399,7 @@ namespace RTC
       }
 
     { // pre-connection
-      RTC_TRACE(("Connection pre-creation: %s",
+      RTC_TRACE(("Connection pre-connection: %s",
                  m_config["manager.components.preconnect"].c_str()));
       std::vector<std::string> connectors;
       connectors = coil::split(m_config["manager.components.preconnect"], ",");
@@ -407,7 +407,14 @@ namespace RTC
         {
           // ConsoleIn.out:Console.in(dataflow_type=push,....)
           coil::vstring conn_prop = coil::split(connectors[i], "(");
-          coil::replaceString(conn_prop[1], ")", "");
+          if (conn_prop.size() == 1)
+            {
+              conn_prop.   // default connector profile value
+                push_back("dataflow_type=push&interface_type=corba_cdr");
+            } // after this conn_prop.size() >= 2
+          std::size_t pos = conn_prop[1].find_last_of(")");
+          if (pos != std::string::npos) { conn_prop[1].erase(pos); }
+
           coil::vstring comp_ports;
           comp_ports = coil::split(conn_prop[0], ":");
           if (comp_ports.size() != 2)
@@ -1195,6 +1202,13 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     RTC_TRACE(("Manager::thePOA()"));
     return m_pPOA.in();
   }
+#ifdef ORB_IS_OMNIORB
+  PortableServer::POA_ptr Manager::theShortCutPOA()
+  {
+    RTC_TRACE(("Manager::theShortCutPOA()"));
+    return m_pShortCutPOA.in();
+  }
+#endif
   /*!
    * @if jp
    * @brief Manager が持つ RootPOA のポインタを取得する (所有権複製)
@@ -1207,6 +1221,13 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     RTC_TRACE(("Manager::getPOA()"));
     return PortableServer::POA::_duplicate(m_pPOA);
   }
+#ifdef ORB_IS_OMNIORB
+  PortableServer::POA_ptr Manager::getShortCutPOA()
+  {
+    RTC_TRACE(("Manager::getPOA()"));
+    return PortableServer::POA::_duplicate(m_pShortCutPOA);
+  }
+#endif
   
   /*!
    * @if jp
@@ -1530,6 +1551,18 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 	  }
 	// Get the POAManager
 	m_pPOAManager = m_pPOA->the_POAManager();
+#ifdef ORB_IS_OMNIORB
+	CORBA::PolicyList pl;
+	pl.length(1);
+#ifdef RTM_OMNIORB_42
+	pl[0] = omniPolicy::create_local_shortcut_policy(omniPolicy::LOCAL_CALLS_SHORTCUT);
+#else
+	CORBA::Any v;
+	v <<= omniPolicy::LOCAL_CALLS_SHORTCUT;
+	pl[0] = m_pORB->create_policy(omniPolicy::LOCAL_SHORTCUT_POLICY_TYPE, v);
+#endif
+	m_pShortCutPOA = m_pPOA->create_POA("shortcut", m_pPOAManager, pl);
+#endif
 
 #ifdef ORB_IS_OMNIORB
         const char* conf = "corba.alternate_iiop_addresses";
