@@ -5,9 +5,7 @@
  * @date $Date: 2005-05-12 09:06:18 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
- * Copyright (C) 2003-2005
- *     Task-intelligence Research Group,
- *     Intelligent Systems Research Institute,
+ * Copyright (C) 2003-2017
  *     National Institute of
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
@@ -45,6 +43,69 @@ module RTM
   interface Manager;
   typedef sequence<Manager> ManagerList;
 
+  /*!
+   * @if jp
+   * @interface Manager
+   *
+   * RTコンポーネントのライフサイクルの管理などを行うManagerへの外部イ
+   * ンターフェース。主たる機能としては、以下のものがある。
+   *
+   * - RTCのローダブルモジュールの操作
+   *  - モジュールのロード
+   *  - モジュールのアンロード
+   *  - ロード可能なモジュール一覧の取得
+   *  - ロード済みモジュール一覧の取得
+   *  - ロード済みモジュールのプロファイル一覧の取得
+   * - RTCに関する操作
+   *  - コンポーネントの生成
+   *  - コンポーネントの削除
+   *  - インスタンス化済みのRTC一覧の取得
+   *  - インスタンス化済みのRTCのプロファイル一覧の取得
+   *  - 名前によるコンポーネントの取得
+   * - マネージャに関する操作
+   *  - マネージャのプロファイル情報の取得
+   *  - マネージャのコンフィギュレーション情報の取得
+   *  - マネージャのコンフィギュレーション情報の設定
+   *  - マネージャがマスターかどうか
+   *  - マスターマネージャの取得
+   *  - マスターマネージャの追加
+   *  - マスターマネージャの削除
+   *  - スレーブマネージャの取得
+   *  - スレーブマネージャの追加
+   *  - スレーブマネージャの削除
+   *  - サービスの取得
+   * - プロセス操作
+   *  - フォーク
+   *  - シャットダウン
+   *  - リスタート
+   *
+   * マネージャには、同一ノード内で原則1つしか存在しないマスターマネー
+   * ジャと、マスターマネージャの管理下に0個以上存在するスレーブマネー
+   * ジャが存在する。
+   *
+   * マスターマネージャは通常、デーモン・サービスなどとして常駐し、ノー
+   * ドのOS稼働中は原則として常に動作し続ける。また、マスターマネージャ
+   * は自身の内部にRTCを生成・ホストせず、RTCの生成はスレーブマネージャ
+   * に依頼する。依頼するスレーブマネージャは、すでに起動しているもので
+   * も、マスターマネージャが新規に起動してもよい。どちらの方法でRTCを
+   * 生成するかは、create_component() の引数にて指定する。なお、スレー
+   * ブマネージャは通常、1つ以上のRTCをホストする。デフォルトの設定では、
+   * RTCをホストしていないスレーブマネージャは自動終了する。
+   * 設定項目：
+   * - manager.shutdown_on_nortcs: YES
+   * - manager.shutdown_auto: YES
+   *
+   * <pre>
+   *           1       0..*         1       1..*
+   * [ master ]<>----------[ slave ]<>----------[ RTC ]
+   *
+   * </pre>
+   *
+   * @else
+   * @interface
+   *
+   * @endif
+   */
   interface Manager
   {
     // module 関連
@@ -53,7 +114,10 @@ module RTM
      * @brief モジュールをロードする
      *
      * 当該マネージャに指定されたモジュールをロードし、指定された初期化
-     * 関数で初期化を行う。
+     * 関数で初期化を行う。任意の共有オブジェクトファイル (.so, .dll)
+     * をロード可能であり、コンポーネントの共有オブジェクトファイルに限
+     * らない。通常、RTCの生成時は自動的にロードパス上を共有オブジェク
+     * トファイルを探索するため、この操作を呼び出す必要はない。
      *
      * @param pathname モジュールへのパス
      * @param initfunc モジュールの初期化関数
@@ -63,7 +127,12 @@ module RTM
      * @brief Loading a module
      *
      * This operation loads a specified loadable module、and perform
-     * initialization with the specified function.
+     * initialization with the specified function. Any kind of shared
+     * objects (.so, .dll) not only RT-Component's shared object can
+     * be loadable. Usually, you do not need to call this operation to
+     * create RT-Components, because RTC creation operation
+     * automatically search RTC's loadable module in the specified
+     * load path.
      *
      * @param pathname A path to a loading module.
      * @param initfunc Module initialization function.
@@ -77,7 +146,13 @@ module RTM
      * @if jp
      * @brief モジュールをアンロードする
      *
-     * 当該マネージャに指定されたモジュールをアンロードする。
+     * 当該マネージャに指定されたモジュールをアンロードする。現在のとこ
+     * ろ、OpenRTM-aistのモジュールロード機能は、ロードされたモジュール
+     * により生成されたオブジェクトのリファレンスカウント管理等は行われ
+     * ていないので、安易にモジュールをアンロードすると、メモリアクセス
+     * 違反を引き起こす恐れがある。ただ、多くの動的ライブラリのアンロー
+     * ドの実装では、実際にメモリ上からアンロードされないケースが多く、
+     * したがってこのオペレーションは呼び出すことを推奨しない。
      *
      * @param pathname モジュールへのパス
      * @return リターンコード
@@ -85,7 +160,13 @@ module RTM
      * @else
      * @brief Unloading a module
      *
-     * This operation unloads a specified loadable module.
+     * This operation unloads a specified loadable module. Currently
+     * since OpenRTM-aist's module load function does not manage
+     * object reference count which is created from the loaded shared
+     * object, unloading might cause segmentation fault. However, most
+     * of unload function implementation actually does not unload
+     * shared object from memory space, and it is not recommended to
+     * call this operation in actual use.
      *
      * @param pathname A path to a loading module.
      * @return The return code.
@@ -98,16 +179,111 @@ module RTM
      * @if jp
      * @brief ロード可能なモジュールのプロファイルを取得する
      *
-     * ロード可能なモジュールのプロファイルを取得する。
+     * ロード可能なモジュールのプロファイルを取得する。ロード可能なRTコ
+     * ンポーネントのモジュールのプロファイルは、あらかじめ設定されたモ
+     * ジュールロードパスに対して、プロファイル取得コマンドを別プロセス
+     * で実行することで取得する。プロファイル取得対象となる言語の種類は、
      *
-     * @return モジュールプロファイル
+     * - manager.supported_language: C++, Python, Java
+     *
+     * で設定されている。ここで指定された言語に対して、以下のプロパティ
+     * で言語毎のモジュールロードパス、プロファイル取得コマンド、モジュー
+     * ル拡張子が指定される。
+     *
+     * - manager.modules.<言語>.load_paths: ./ (モジュールロードパス)
+     * - manager.modules.<言語>.profile_cmd: rtcprof等コマンド名
+     * - manager.modules.<言語>.suffixes: モジュール拡張子
+     *
+     * 例えば、C++ 言語の場合は、以下のプロパティがデフォルトで設定されている。
+     *
+     * - manager.modules.C++.load_paths: ./ (モジュールロードパス)
+     * - manager.modules.C++.profile_cmd: rtcprof
+     * - manager.modules.C++.suffixes: so (Linuxの場合), dll (Windowsの場合)
+     *
+     * マスターマネージャは、上記で設定されたすべての言語 (Windowsでは
+     * すべてのVCのバージョンも含む) のモジュールロードパスがあらかじめ
+     * 設定されている必要がある。 この作業は、このオペレーションが呼び
+     * 出されたマネージャ (通常はマスターマネージャ) 上でのみ実行され、
+     * 配下にあるスレーブマネージャ等に再帰的に呼び出されることはない。
+     *
+     * @return モジュールプロファイル。なお、モジュールプロファイルは以
+     *         下のような内容を持つKey-Value形式のリストで返される。
+     * <pre>
+     * implementation_id: ConfigSample
+     * type_name: ConfigSample
+     * description: Configuration example component
+     * version: 1.0
+     * vendor: Noriaki Ando, AIST
+     * category: example
+     * activity_type: DataFlowComponent
+     * max_instance: 10
+     * language: C++
+     * lang_type: compile
+     * conf.default.int_param0: 0
+     * conf.default.int_param1: 1
+     * conf.default.double_param0: 0.11
+     * conf.default.double_param1: 9.9
+     * conf.default.str_param0: hoge
+     * conf.default.str_param1: dara
+     * conf.default.vector_param0: 0.0,1.0,2.0,3.0,4.0
+     * </pre>
      *
      * @else
      * @brief Getting loadable module profiles
      *
-     * This operation returns loadable module profiles.
+     * This operation returns loadable module profiles.  Loadable
+     * profiles of RT-Components can be obtained by executing profile
+     * obtain commands (ex. rtcprof) into the module load paths that
+     * is specified in the properties. The target kinds of language to
+     * be obtained component profiles are specified the following
+     * property.
      *
-     * @return A module profile list.
+     * - manager.supported_language: C++, Python, Java
+     *
+     * For each those languages, module load paths, profile obtain
+     * command and module suffixes are specified in following
+     * properties.
+     *
+     * - manager.modules.<lang>.load_paths: ./ (load paths)
+     * - manager.modules.<lang>.profile_cmd: rtcprof command name
+     * - manager.modules.<lang>.suffixes: module extentions
+     *
+     * For example, the following properties are specified in default
+     * for C++ language.
+     *
+     * - manager.modules.C++.load_paths: ./ (module load pathds)
+     * - manager.modules.C++.profile_cmd: rtcprof
+     * - manager.modules.C++.suffixes: so (for Linux), dll (for Windows)
+     *
+     * The master manager need to be configured module load paths for
+     * all languages (and for all versions of VC in case of Windows)
+     * specified above. This process is performed in only a manager
+     * (master manager in general) in which this operation is called,
+     * and it is not recursively called to slave managers which are
+     * managed by this manager.
+     *
+     * @return A module profile list. The module profiles list
+     *         includes zero or more the following Key-Value format
+     *         RTC profile.
+     * <pre>
+     * implementation_id: ConfigSample
+     * type_name: ConfigSample
+     * description: Configuration example component
+     * version: 1.0
+     * vendor: Noriaki Ando, AIST
+     * category: example
+     * activity_type: DataFlowComponent
+     * max_instance: 10
+     * language: C++
+     * lang_type: compile
+     * conf.default.int_param0: 0
+     * conf.default.int_param1: 1
+     * conf.default.double_param0: 0.11
+     * conf.default.double_param1: 9.9
+     * conf.default.str_param0: hoge
+     * conf.default.str_param1: dara
+     * conf.default.vector_param0: 0.0,1.0,2.0,3.0,4.0
+     * </pre>
      *
      * @endig
      */
@@ -117,7 +293,10 @@ module RTM
      * @if jp
      * @brief ロード済みのモジュールのプロファイルを取得する
      *
-     * ロード済みのモジュールのプロファイルを取得する。
+     * ロード済みのモジュールのプロファイルを取得する。このオペレーショ
+     * ンでは、スレーブマネージャに対しても同じオペレーションが再帰的に
+     * 呼び出され、配下にあるすべてのマネージャがロードしているすべての
+     * モジュールのプロファイルを返す。
      *
      * @return モジュールプロファイル
      *
@@ -138,7 +317,10 @@ module RTM
      * @brief コンポーネントファクトリのプロファイルを取得する
      *
      * ロード済みのモジュールのうち、RTコンポーネントのモジュールが持つ
-     * ファクトリのプロファイルのリストを取得する。
+     * ファクトリのプロファイルのリストを取得する。このオペレーションで
+     * は、スレーブマネージャに対しても同じオペレーションが再帰的に呼び
+     * 出され、配下にあるすべてのマネージャが保有するRTコンポーネントの
+     * プロファイルを返す。
      *
      * @return コンポーネントファクトリのプロファイルリスト
      *
@@ -158,7 +340,74 @@ module RTM
      * @if jp
      * @brief コンポーネントを生成する
      *
-     * 引数に指定されたコンポーネントを生成する。
+     * 引数に指定されたコンポーネントを生成する。マスターマネージャに対
+     * してこのオペレーションが呼び出された場合には、スレーブマネージャ
+     * に対してコンポーネントの生成を依頼する。依頼対象となるスレーブマ
+     * ネージャは、create_component() の引数内パラメータ manager_name
+     * により指定されたマネージャが配下にある場合は、そのマネージャに対
+     * して、create_component() を呼び出すことで生成、manager_name で指
+     * 定されたマネージャがない場合は、新規にスレーブマネージャを起動し
+     * てからコンポーネントを生成する。
+     *
+     * - manager_nameで指定されたスレーブが存在する場合
+     * <pre>
+     *                             (maanger_name = servo)
+     * [ app ]          [ master ]        [ slave ]         [ RTC ]
+     *    |  create_comp()  |                 |                .
+     *    |---------------->|                 |                .
+     *    | manager_name =  |--, search       |                .
+     *    |           servo |  | slaves       |                .
+     *    |                 |<-'              |                .
+     *    |                 |  create_comp()  |                .
+     *    |                 |---------------->|                .
+     *    |                 |                 |--,             .
+     *    |                 |                 |  |createComp() .
+     *    |                 |                 |<-'             .
+     *    |                 |                 |.....create...> .
+     *    |                 |                 |                |
+     *    |                 |                 |                |
+     * </pre>
+     *
+     * - manager_nameで指定されたスレーブが存在しない場合
+     * <pre>
+     * [ app ]          [ master ]        [ slave ]         [ RTC ]
+     *    |  create_comp()  |                 .                .
+     *    |---------------->|                 .                .
+     *    | manager_name =  |--, search       .                .
+     *    |      controller |  | slaves       .                .
+     *    |                 |<-'              .                .
+     *    |                 |  launch proc    .                .
+     *    |                 |---------------->|                .
+     *    |                 |  create_comp()  |                .
+     *    |                 |---------------->|                .
+     *    |                 |                 |--,             .
+     *    |                 |                 |  |createComp() .
+     *    |                 |                 |<-'             .
+     *    |                 |                 |.....create...> .
+     *    |                 |                 |                |
+     *    |                 |                 |                |
+     * </pre>
+     *
+     * 指定パラメータ
+     * - manager_name: コンポーネントを起動するスレーブマネージャ名
+     *   - 名前指定: <manager_name>
+     *   - アドレス指定: <hostname>:<port>
+     * - language: 起動対象のコンポーネントの実装言語
+     *
+     * @param module_name 生成対象RTコンポーネントIDおよびコンフィギュ
+     *                    レーション引数。フォーマットは大きく分けて
+     *                    "id" と "configuration" 部分が存在する。
+     *
+     * comp_args:     [id]?[configuration]
+     *                id は必須、configurationはオプション
+     * id:            RTC:[vendor]:[category]:[implementation_id]:[version]
+     *                RTC は固定かつ必須
+     *                vendor, category, version はオプション
+     *                implementation_id は必須
+     *                オプションを省略する場合でも ":" は省略不可
+     * configuration: [key0]=[value0]&[key1]=[value1]&[key2]=[value2].....
+     *                RTCが持つPropertiesの値をすべて上書きすることができる。
+     *                key=value の形式で記述し、"&" で区切る
      *
      * @return 生成されたRTコンポーネント
      *
@@ -178,7 +427,11 @@ module RTM
      * @if jp
      * @brief コンポーネントを削除する
      *
-     * 引数に指定されたコンポーネントを削除する。
+     * 引数に指定されたコンポーネントを削除する。マスターマネージャに対
+     * してこのオペレーションが呼び出された場合、配下のスレーブコンポー
+     * ネント上の当該コンポーネントを削除する。ただし、通常は対象コンポー
+     * ネントに対して exit() オペレーションを呼び出すことで RTC を終了
+     * させる方法を推奨する。
      *
      * @return リターンコード
      *
@@ -198,7 +451,11 @@ module RTM
      * @if jp
      * @brief 起動中のコンポーネントのリストを取得する
      *
-     * 現在当該マネージャ上で起動中のコンポーネントのリストを返す。
+     * 現在当該マネージャ上で起動中のコンポーネントのリストを返す。マス
+     * ターマネージャに対してこのオペレーションが呼び出された場合、配下
+     * のスレーブコンポーネント上で実行中のRTCのリストを収集して返す。
+     * スレーブマネージャに対して呼び出された場合には、自身が管理する起
+     * 動中のRTCのリストのみを返す。
      *
      * @return RTコンポーネントのリスト
      *
@@ -218,7 +475,11 @@ module RTM
      * @brief 起動中のコンポーネントプロファイルのリストを取得する
      *
      * 現在当該マネージャ上で起動中のコンポーネントのプロファイルのリス
-     * トを返す。
+     * トを返す。マスターマネージャに対してこのオペレーションが呼び出さ
+     * れた場合、配下のスレーブコンポーネント上で実行中のRTCのプロファ
+     * イルリストを収集して返す。スレーブマネージャに対して呼び出された
+     * 場合には、自身が管理する起動中のRTCのプロファイルリストのみを返
+     * す。
      *
      * @return RTコンポーネントプロファイルのリスト
      *
@@ -233,6 +494,27 @@ module RTM
      * @endig
      */
     RTC::ComponentProfileList get_component_profiles();
+
+    /*!
+     * @if jp
+     * @brief 指定名のRTCオブジェクトリファレンスを取得
+     *
+     * 
+     *
+     * @param name RTC名
+     * @return RTCリスト
+     *
+     * @else
+     * @brief 
+     *
+     *
+     * 
+     * @param name name
+     * @return list of RTC
+     *
+     * @endig
+     */
+    RTC::RTCList get_components_by_name(in string name);
 
     // manager 基本
     /*!
@@ -323,7 +605,10 @@ module RTM
      *
      * このマネージャがスレーブマネージャの場合、マスターとなっているマ
      * ネージャのリストを返す。このマネージャがマスターの場合、空のリス
-     * トが返る。
+     * トが返る。原則としてスレーブマネージャは1つのマスターマネージャ
+     * の配下となるが、実装上はマスターマネージャは唯一となるような制約
+     * はなく、add_master_manager() オペレーションにより複数のマスター
+     * マネージャを登録することが可能である。
      *
      * @return マスターマネージャのリスト
      *
@@ -346,6 +631,46 @@ module RTM
      *
      * このマネージャのマスタとしてマネージャを一つ追加する。
      *
+     * マスターマネージャとスレーブマネージャの関係は、以下の図のように、
+     * 一つのノード (node: 1つの独立したコンピュータでありホスト) に対
+     * して、1つのマスター (master) マネージャが対応する。1つのマスター
+     * マネージャの下には0個以上のスレーブ (slave) マネージャが存在し、
+     * RTCは1つのスレーブマネージャに属する。なお、スレーブマネージャは
+     * 通常、1つ以上のRTCをホストする。デフォルトの設定では、RTCをホス
+     * トしていないスレーブマネージャは自動終了する。
+     *
+     * <pre>
+     *          1      1            1    0..*          1    1..*
+     * [ node ]<>--------[ master ]<>--------[ slave ]<>--------[ RTC ]
+     *
+     * </pre>
+     *
+     * マスターとスレーブの関係は、add/remove_master_manager(),
+     * add_remove_slave_manager() オペレーションによって構成される。こ
+     * れらのオペレーションは原則として、すべてスレーブマネージャからア
+     * クションを開始する。マスターマネージャは原則として、
+     * corbaloc://localhost:2810/manager によりオブジェクト参照を取得で
+     * きる一方、スレーブマネージャの参照を知る一般的方法はない。スレー
+     * ブマネージャは、起動時にローカルのマスターマネージャを探して、内
+     * 部的にこのオペレーションを呼び出し、マスターマネージャを追加する
+     * とともに、マスターマネージャに対して、add_slabe_manager() を呼び
+     * 出して、マスターマネージャに対して、スレーブマネージャが配下に入っ
+     * たことを知らせる。
+     *
+     * <pre>
+     *       [ master ]                  [ slave ]
+     *           |                           |
+     *           |                           |--, find master
+     *           |                           |  | by corbaloc:
+     *           |                           |<-'
+     *           |                           |
+     *           |                           |--,
+     *           |                           |  | add_master_manager()
+     *           | add_slave_manager(own_ref)|<-'
+     *           |<--------------------------|
+     *           |                           |
+     * </pre>
+     *
      * @param mgr マスターマネージャ
      * @return ReturnCode_t
      *
@@ -366,6 +691,24 @@ module RTM
      * @brief マスターマネージャの削除
      *
      * このマネージャが保持するマスタのうち、指定されたものを削除する。
+     * 通常このオペレーションは、スレーブマネージャが終了する際に、自身
+     * に対して呼び出される。また、スレーブマネージャ自身がマスターマネー
+     * ジャの配下から外れることを remove_slave_manager() により、マスター
+     * マネージャに対して通知する。
+     *
+     * <pre>
+     * [ master ]                      [ slave ]
+     *     |                               |
+     *     |                               |--, shutdown
+     *     |                               |  | slave manager
+     *     |                               |<-'
+     *     |                               |
+     *     |                               |--,
+     *     |                               |  | remove_master_manager()
+     *     | remove_slave_manager(own_ref) |<-'
+     *     |<------------------------------|
+     *     |                               |
+     * </pre>
      *
      * @param mgr マスターマネージャ
      * @return ReturnCode_t
@@ -404,11 +747,31 @@ module RTM
      * @endig
      */
     ManagerList get_slave_managers();
+
     /*!
      * @if jp
      * @brief スレーブマネージャの追加
      *
-     * このマネージャのマスタとしてマネージャを一つ追加する。
+     * このマネージャのマスタとしてマネージャを一つ追加する。通常、スレー
+     * ブマネージャは、起動時にローカルのマスターマネージャを探して、内
+     * 部的に、add_master_manager() を呼び出し、マスターマネージャを追
+     * 加するとともに、マスターマネージャに対して、この
+     * add_slave_manager() を呼び出して、マスターマネージャに対して、ス
+     * レーブマネージャが配下に入ったことを知らせる。
+     *
+     * <pre>
+     *       [ master ]                  [ slave ]
+     *           |                           |
+     *           |                           |--, find master
+     *           |                           |  | by corbaloc:
+     *           |                           |<-'
+     *           |                           |
+     *           |                           |--,
+     *           |                           |  | add_master_manager()
+     *           | add_slave_manager(own_ref)|<-'
+     *           |<--------------------------|
+     *           |                           |
+     * </pre>
      *
      * @param mgr スレーブマネージャ
      * @return ReturnCode_t
@@ -417,7 +780,7 @@ module RTM
      * @brief Getting a slave manager
      *
      * This operation add a slave manager to this manager.
-     *  
+     * 
      * @param mgr A slave manager
      * @return ReturnCode_t
      *
@@ -430,6 +793,25 @@ module RTM
      * @brief スレーブマネージャの削除
      *
      * このマネージャが保持するマスタのうち、指定されたものを削除する。
+     * 通常このオペレーションは、スレーブマネージャが終了する際に、自身
+     * に対して remove_master_manager() を呼び出した後、スレーブマネー
+     * ジャ自身がマスターマネージャの配下から外れることを知らせるための、
+     * この remove_slave_manager() をマスターマネージャに対して呼ぶこと
+     * で通知する。
+     *
+     * <pre>
+     * [ master ]                      [ slave ]
+     *     |                               |
+     *     |                               |--, shutdown
+     *     |                               |  | slave manager
+     *     |                               |<-'
+     *     |                               |
+     *     |                               |--,
+     *     |                               |  | remove_master_manager()
+     *     | remove_slave_manager(own_ref) |<-'
+     *     |<------------------------------|
+     *     |                               |
+     * </pre>
      *
      * @param mgr スレーブマネージャ
      * @return ReturnCode_t
@@ -438,44 +820,78 @@ module RTM
      * @brief Removing a slave manager
      *
      * This operation removes a slave manager from this manager.
-     * 
+     *
      * @param mgr A slave manager
-     * @return ReturnCode_t 
+     * @return ReturnCode_t
      *
      * @endig
      */
     RTC::ReturnCode_t remove_slave_manager(in Manager mgr);
 
-    RTC::ReturnCode_t fork();
-    RTC::ReturnCode_t shutdown();
-    RTC::ReturnCode_t restart();
-
-
-     /*!
+    // プロセス操作関係
+    /*!
      * @if jp
-     * @brief 指定名のRTCオブジェクトリファレンスを取得
+     * @brief マネージャプロセスをforkする
      *
-     * 
-     *
-     * @param name RTC名
-     * @return RTCリスト
+     * @return Return Code
      *
      * @else
-     * @brief 
+     * @brief fork the manager process
      *
-     *
-     * 
-     * @param name name
-     * @return list of RTC
+     * @return Return Code
      *
      * @endig
      */
-    RTC::RTCList get_components_by_name(in string name);
+    RTC::ReturnCode_t fork();
 
+    /*!
+     * @if jp
+     * @brief マネージャプロセスをshutdownする
+     *
+     * @return Return Code
+     *
+     * @else
+     * @brief shutdown the manager process
+     *
+     * @return Return Code
+     *
+     * @endig
+     */
+    RTC::ReturnCode_t shutdown();
+
+    /*!
+     * @if jp
+     * @brief マネージャプロセスを再起動する
+     *
+     * @return Return Code
+     *
+     * @else
+     * @brief restart maanger process
+     *
+     * @return Return Code
+     *
+     * @endig
+     */
+    RTC::ReturnCode_t restart();
+
+    /*!
+     * @if jp
+     * @brief サービスのオブジェクト参照を取得する
+     *
+     * 仕様未確定
+     *
+     * @return Return Code
+     *
+     * @else
+     * @brief obtaining the object reference of a service
+     *
+     * @return Return Code
+     *
+     * @endig
+     */
     Object get_service(in string name);
     //    ServiceProfileList get_service_profiles();
   };
-  
 }; // end of namespace RTM
 
 #endif // __MANAGER_IDL__

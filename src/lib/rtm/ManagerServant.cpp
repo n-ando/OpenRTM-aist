@@ -859,7 +859,7 @@ namespace RTM
 #endif // ORB_IS_RTORB
 
         // Object activation
-        RTC_DEBUG(("Activating manager with id(%s)", config["manager.name"]));
+        RTC_DEBUG(("Activating manager with id(%s)", config["manager.name"].c_str()));
         poa->activate_object_with_id(id.in(), this);
         CORBA::Object_var mgrobj = poa->id_to_reference(id);
 
@@ -1031,7 +1031,7 @@ namespace RTM
     // detect languange
     std::string lang = param["language"];
     if (lang.empty()) { lang = "C++"; }
-    RTC_INFO(("Specified manager's language: %s", lang));
+    RTC_INFO(("Specified manager's language: %s", lang.c_str()));
 
     RTM::Manager_var mgrobj = findManagerByName(mgrstr);
     if (CORBA::is_nil(mgrobj))
@@ -1136,7 +1136,7 @@ namespace RTM
     // detect languange
     std::string lang = param["language"];
     if (lang.empty()) { lang = "C++"; }
-    RTC_INFO(("Specified manager's language: %s", lang));
+    RTC_INFO(("Specified manager's language: %s", lang.c_str()));
 
     // find manager
     RTM::Manager_var mgrobj = findManager(mgrstr);
