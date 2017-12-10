@@ -68,6 +68,7 @@ MGR_SRC =                            \
 	NumberingPolicy.cpp          \
 	ManagerServant.cpp           \
 	SystemLogger.cpp             \
+	LogstreamFile.cpp               \
 	LocalServiceAdmin.cpp        \
 	ManagerActionListener.cpp
 
@@ -168,6 +169,7 @@ rtmheader_HEADERS = \
 	StateMachine.h 		 \
 	Typename.h               \
 	LocalServiceBase.h	 \
+	LogstreamBase.h      \
 	ListenerHolder.h         \
 	config_rtc.h
 

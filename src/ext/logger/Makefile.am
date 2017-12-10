@@ -7,4 +7,4 @@
 
 AUTOMAKE_OPTIONS = 1.4
 
-SUBDIRS = nameservice_file
+SUBDIRS = fluentbit_stream

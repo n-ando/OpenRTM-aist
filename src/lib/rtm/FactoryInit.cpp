@@ -5,7 +5,7 @@
  * @date $Date: 2008-03-06 06:58:40 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
- * Copyright (C) 2009
+ * Copyright (C) 2009-2017
  *     Task-intelligence Research Group,
  *     Intelligent Systems Research Institute,
  *     National Institute of
@@ -15,6 +15,9 @@
  * $Id: Manager.cpp 1296 2009-04-27 08:43:24Z n-ando $
  *
  */
+
+// Logstream
+#include <rtm/LogstreamFile.h>
 
 // Buffers
 #include <rtm/CdrRingBuffer.h>
@@ -37,6 +40,9 @@
 
 void FactoryInit()
 {
+    // Logstream
+    LogstreamFileInit();
+
     // Buffers
     CdrRingBufferInit();
 

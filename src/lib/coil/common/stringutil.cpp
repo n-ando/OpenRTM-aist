@@ -502,6 +502,59 @@ namespace coil
   
   /*!
    * @if jp
+   * @brief URLパラメータをmapstringに分解して返す
+   *
+   * URLパラメータ表現 something?key0=value0&key1=value1.... のうち
+   * '?' 以降の部分を分解して、std::map<std::string, std::string> 形式
+   * に変換する。与えられた文字列を左からサーチし、'?' より右側の部分に
+   * ついて解析を行う。'&'で分割し、左から '=' を検索し、最初の '=' の
+   * 右辺と左辺をそれぞれ、key と value として map に格納する。
+   *
+   * @param str 分解対象文字列
+   * @return mapstring 型の key/valueデータ
+   *
+   * @else
+   * @brief Investigate whether the given string is URL or not
+   *
+   * URL parameter description such as
+   * something?key0=value0&key1=value1.... is analyzed. Right hand
+   * side string of '?' character is decomposed and it is converted
+   * into std::map<std::string, std::string> type.The following string
+   * are devided by '&' and then '=' character is
+   * searched. Right-hand-side value and left-hand-side value of '='
+   * are stored as key and value in the map.
+   *
+   * @param str The target string for decomposed
+   *
+   * @return decomposed key-values in map
+   *
+   * @endif
+   */
+  coil::mapstring urlparam2map(const std::string& str)
+  {
+    std::string::size_type qpos = str.find('?');
+    if (qpos == std::string::npos) { qpos = 0; }
+    else { ++qpos; }
+    coil::vstring tmp = coil::split(str.substr(qpos), "&");
+
+    std::map<std::string, std::string> retmap;
+    for (size_t i(0); i < tmp.size(); ++i)
+      {
+        std::string::size_type pos = tmp[i].find("=");
+        if (pos != std::string::npos)
+          {
+            retmap[tmp[i].substr(0, pos)] = tmp[i].substr(pos + 1);
+          }
+        else
+          {
+            retmap[tmp[i]] = std::string("");
+          }
+      }
+    return retmap;
+  }
+
+  /*!
+   * @if jp
    * @brief リスト内の文字列を検索する Functor
    * @else
    * @brief Functor to find string in a list

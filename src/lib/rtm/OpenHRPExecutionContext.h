@@ -487,7 +487,18 @@ namespace RTC
      */
     virtual RTC::ExecutionContextProfile* get_profile(void)
       throw (CORBA::SystemException);
-
+  protected:
+	// template virtual functions adding/removing component	
+	/*!
+	* @brief onAddedComponent() template function
+	*/
+	virtual RTC::ReturnCode_t
+		onAddedComponent(RTC::LightweightRTObject_ptr rtobj);
+	/*!
+	* @brief onRemovedComponent() template function
+	*/
+	virtual RTC::ReturnCode_t
+		onRemovedComponent(RTC::LightweightRTObject_ptr rtobj);
   private:
     /*!
      * @if jp

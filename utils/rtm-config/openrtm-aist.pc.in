@@ -10,7 +10,7 @@ libdir=@libdir@
 includedir=@includedir@
 
 rtm_cxx=@CXX@
-rtm_cflags=@CXXFLAGS@ -I@prefix@/include -I@coil_includedir@ -I@rtm_includedir@ -I@rtm_idldir@
+rtm_cflags=-I@prefix@/include -I@coil_includedir@ -I@rtm_includedir@ -I@rtm_idldir@
 rtm_libs=@LDFLAGS@ -L@libdir@ @LIBS@ -lRTC -lcoil
 rtm_version=@RTM_VERSION@
 rtm_orb=@ORB@

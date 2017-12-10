@@ -31,10 +31,10 @@ namespace RTC
    * @endif
    */
   void ConfigBase::setCallback(ConfigAdmin* cadmin, CallbackFunc cbf)
-    {
-      m_admin = cadmin;
-      m_callback = cbf;
-    }
+  {
+    m_admin = cadmin;
+    m_callback = cbf;
+  }
 
   /*!
    * @if jp

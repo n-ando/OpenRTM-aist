@@ -127,18 +127,19 @@ export DONT_STRIP=1
 # doc package file list
 %files doc
 %defattr(-,root,root,-)
-%{rtm_datadir}/doc/*
+%{rtm_datadir}/doc/c++/*
+%{rtm_datadir}/doc/idl/*
 
 
 #------------------------------------------------------------
 # example package file list
 %files example
 %defattr(-,root,root,-)
-%attr(755,root,root) %{rtm_datadir}/example/*Comp*
-%{rtm_datadir}/example/*.conf
-%{rtm_datadir}/example/src/*
-%{rtm_datadir}/example/rtc/*
-%{rtm_datadir}/example/templates/*
+%attr(755,root,root) %{rtm_datadir}/components/c++/examples/*Comp*
+%{rtm_datadir}/components/c++/examples/*.conf
+%{rtm_datadir}/components/c++/examples/src/*
+%{rtm_datadir}/components/c++/examples/rtc/*
+%{rtm_datadir}/components/c++/examples/templates/*
 
 
 #------------------------------------------------------------

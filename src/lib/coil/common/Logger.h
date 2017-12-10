@@ -226,7 +226,7 @@ namespace coil
     virtual std::streamsize xsputn(const char_type* s, std::streamsize n)
     {
       stream_sputn();
-      for (int i(0), len(m_streams.size()); i < len; ++i)
+      for (size_t i(0), len(m_streams.size()); i < len; ++i)
         {
           Guard gaurd(m_streams[i].mutex_);
           m_streams[i].stream_->sputn(s, n);
@@ -251,20 +251,20 @@ namespace coil
      */
     virtual std::streamsize stream_sputn()
     {
-      int bytes_to_write;
+      size_t bytes_to_write;
       bytes_to_write = this->pptr() - this->gptr();
       if (bytes_to_write > 0)
         {
-          for (int i(0), len(m_streams.size()); i < len; ++i)
+          for (size_t i(0), len(m_streams.size()); i < len; ++i)
             {
               Guard gaurd(m_streams[i].mutex_);
               m_streams[i].stream_->sputn(this->gptr(), bytes_to_write);
             }
-          this->gbump(bytes_to_write);
+          this->gbump(static_cast<int>(bytes_to_write));
           if (this->gptr() >= this->pptr())
             {
-              this->pbump(this->pbase() - this->pptr());
-              this->gbump(this->pbase() - this->gptr());
+              this->pbump(static_cast<int>(this->pbase() - this->pptr()));
+              this->gbump(static_cast<int>(this->pbase() - this->gptr()));
             }
         }
       return bytes_to_write;
@@ -293,7 +293,7 @@ namespace coil
     virtual std::streamsize stream_sputn(const char_type* s, std::streamsize n)
     {
       
-      for (int i(0), len(m_streams.size()); i < len; ++i)
+      for (size_t i(0), len(m_streams.size()); i < len; ++i)
         {
           Guard gaurd(m_streams[i].mutex_);
           m_streams[i].stream_->sputn(s, n);
@@ -343,15 +343,15 @@ namespace coil
               this->pbump(1);
             }
           // Number of characters to write to file
-          int bytes_to_write = this->pptr() - this->gptr();
+          size_t bytes_to_write = this->pptr() - this->gptr();
           // Overflow doesn't fail if nothing is to be written
           if (bytes_to_write > 0)
             {
               if (stream_sputn(this->gptr(), bytes_to_write) != bytes_to_write)
                 return traits_type::eof();
               // Reset next pointer to point to pbase on success
-              this->pbump(this->pbase() - this->pptr());
-              this->gbump(this->pbase() - this->gptr());
+              this->pbump(static_cast<int>(this->pbase() - this->pptr()));
+              this->gbump(static_cast<int>(this->pbase() - this->gptr()));
             }
         }
       // Write extra character to file if not EOF
@@ -394,7 +394,7 @@ namespace coil
           if (this->pptr() > this->epptr() || this->pptr() < this->pbase())
             return -1;
 
-          int bytes_to_write;
+          size_t bytes_to_write;
           bytes_to_write = this->pptr() - this->gptr();
           if (bytes_to_write > 0)
             {
@@ -402,11 +402,11 @@ namespace coil
                 {
                   return -1;
                 }
-              this->gbump(bytes_to_write);
+              this->gbump(static_cast<int>(bytes_to_write));
               if (this->gptr() >= this->pptr())
                 {
-                  this->pbump(this->pbase() - this->pptr());
-                  this->gbump(this->pbase() - this->gptr());
+                  this->pbump(static_cast<int>(this->pbase() - this->pptr()));
+                  this->gbump(static_cast<int>(this->pbase() - this->gptr()));
                 }
             }
         }
