@@ -4887,7 +4887,7 @@ namespace RTC
 
 
 
-  protected:
+    //  protected:
     /*!
      * @if jp
      *
@@ -5049,11 +5049,54 @@ namespace RTC
       m_actionListeners.ecaction_[EC_DETACHED].notify(ec_id);
     }
 
-    inline void onFsmStateChanged(const char* state)
+    /*!
+     * FSM related listeners
+     */
+    inline void preOnFsmInit(const char* state)
+    {
+      m_fsmActionListeners.preaction_[PRE_ON_INIT].notify(state);
+    }
+    inline void preOnFsmEntry(const char* state)
+    {
+      m_fsmActionListeners.preaction_[PRE_ON_ENTRY].notify(state);
+    }
+    inline void preOnFsmDo(const char* state)
+    {
+      m_fsmActionListeners.preaction_[PRE_ON_DO].notify(state);
+    }
+    inline void preOnFsmExit(const char* state)
+    {
+      m_fsmActionListeners.preaction_[PRE_ON_EXIT].notify(state);
+    }
+    inline void preOnFsmStateChange(const char* state)
     {
       m_fsmActionListeners.preaction_[PRE_ON_STATE_CHANGE].notify(state);
     }
+    /*!
+     * FSM related listeners
+     */
+    inline void postOnFsmInit(const char* state, ReturnCode_t ret)
+    {
+      m_fsmActionListeners.postaction_[POST_ON_INIT].notify(state, ret);
+    }
+    inline void postOnFsmEntry(const char* state, ReturnCode_t ret)
+    {
+      m_fsmActionListeners.postaction_[POST_ON_ENTRY].notify(state, ret);
+    }
+    inline void postOnFsmDo(const char* state, ReturnCode_t ret)
+    {
+      m_fsmActionListeners.postaction_[POST_ON_DO].notify(state, ret);
+    }
+    inline void postOnFsmExit(const char* state, ReturnCode_t ret)
+    {
+      m_fsmActionListeners.postaction_[POST_ON_EXIT].notify(state, ret);
+    }
+    inline void postOnFsmStateChange(const char* state, ReturnCode_t ret)
+    {
+      m_fsmActionListeners.postaction_[POST_ON_STATE_CHANGE].notify(state, ret);
+    }
 
+    
     ReturnCode_t getInheritedECOptions(coil::Properties& default_opts);
 
     /*!

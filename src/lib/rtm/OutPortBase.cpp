@@ -96,6 +96,9 @@ namespace RTC
     coil::eraseBlank(pubs);
     RTC_DEBUG(("available subscription_type: %s",  pubs.c_str()));
     addProperty("dataport.subscription_type", pubs.c_str());
+    // FSM4RTC formal/16-04-01 p.25
+    // In the FSM4RTC specification, publisher type is defined as "io_mode"
+    addProperty("dataport.io_mode", pubs.c_str());
 
   };
   
