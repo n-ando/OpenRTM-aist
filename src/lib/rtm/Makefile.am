@@ -89,7 +89,8 @@ COMP_SRC =                           \
 	SdoConfiguration.cpp         \
 	SdoServiceAdmin.cpp          \
 	SdoOrganization.cpp          \
-	PeriodicECSharedComposite.cpp
+	PeriodicECSharedComposite.cpp\
+	SimulatorExecutionContext.cpp 
 
 PORT_SRC =                           \
 	InPortConnector.cpp          \

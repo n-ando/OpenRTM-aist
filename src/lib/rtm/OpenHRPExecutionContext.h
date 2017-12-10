@@ -488,17 +488,21 @@ namespace RTC
     virtual RTC::ExecutionContextProfile* get_profile(void)
       throw (CORBA::SystemException);
   protected:
-	// template virtual functions adding/removing component	
-	/*!
-	* @brief onAddedComponent() template function
-	*/
-	virtual RTC::ReturnCode_t
+    // template virtual functions adding/removing component	
+    /*!
+    * @brief onAddedComponent() template function
+    */
+    virtual RTC::ReturnCode_t
 		onAddedComponent(RTC::LightweightRTObject_ptr rtobj);
-	/*!
-	* @brief onRemovedComponent() template function
-	*/
-	virtual RTC::ReturnCode_t
+    /*!
+    * @brief onRemovedComponent() template function
+    */
+    virtual RTC::ReturnCode_t
 		onRemovedComponent(RTC::LightweightRTObject_ptr rtobj);
+    /*!
+     * @brief Mutex to gurad tick() reenter.
+     */
+    coil::Mutex m_tickmutex;
   private:
     /*!
      * @if jp
@@ -513,10 +517,7 @@ namespace RTC
      * @brief A counter for log message in worker
      */
     unsigned int m_count;
-    /*!
-     * @brief Mutex to gurad tick() reenter.
-     */
-    coil::Mutex m_tickmutex;
+
   };  // class OpenHRPExecutionContext
 };  // namespace RTC
 
