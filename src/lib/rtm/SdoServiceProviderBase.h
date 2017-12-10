@@ -55,7 +55,7 @@ namespace RTC
    *    ビスのためのコンフィギュレーションオプションが coil::Propertyに
    *    より渡される。
    * -# インスタンス化されたSDOサービスプロバイダは
-   *    SDO::get_get_sdo_service() により外部からアクセスされる。このと
+   *    SDO::get_sdo_service() により外部からアクセスされる。このと
    *    き、サービスを指定するIDはIFR IDと同じである。このときのアタッ
    *    チシーケンスは以下の通り。
    * -# RTCがfinalizeされ解体されると同時にSDOサービスプロバイダも解体
@@ -101,7 +101,7 @@ namespace RTC
    * イル名の basename + "Init" にしておく。以下に、クラス名、ファイル
    * 名、エントリポイント関数名の推奨例を示す。
    *
-   * - 実装クラス名: MySdoServiceConusmer 
+   * - 実装クラス名: MySdoServiceProvider 
    * - ファイル名: MySdoServiceProvider.h. MySdoServiceProvider.cpp
    * - 共有オブジェクト名: MySdoServiceProvider.so (or DLL)
    * - エントリポイント関数名: MySdoServiceProviderInit()
@@ -149,16 +149,31 @@ namespace RTC
      * @if jp
      * @brief コンシューマクラスの初期化関数
      *
-     * このオブジェクトの初期化を行う。外部からSDOサービスが
-     * ServiceProfile とともにアタッチされると、SDOコンシューマがインス
-     * タンス化され、その直後に SDO サービスがアタッチされた RTC と与え
-     * られた ServiceProfile を引数としてこの関数が呼ばれる。
+     * 初期化関数。与えられた RTObject および ServiceProfile から、当該
+     * オブジェクトを初期化します。このサービスが
+     * ''sdo.service.provider.enabled_services'' で有効化されていれば、
+     * この関数は対応するRTCがインスタンス化された直後に呼び出されます。
      *
-     * 関数内では、ServiceProfile 内の SDO サービスリファレンスを
-     * CorbaProvider クラス等を利用しオブジェクト内に保持するとともに、
-     * properties から設定内容を読み込みサービス固有の設定等を行う。与
-     * えられたサービスのオブジェクトリファレンスが不正、あるいは
-     * properties の内容が不正、等の場合は戻り値に false を返す。
+     * ServiceProfile には以下の情報が入った状態で呼び出されます。
+     *
+     * - ServiceProfile.id: 当該サービスのIFR型
+     * - ServiceProfile.interface_type: 当該サービスのIFR型
+     * - ServiceProfile.service: 当該サービスのオブジェクト参照
+     * - ServiceProfile.properties: rtc.conf や <component>.conf 等で与
+     *                   えられたSDOサービス固有のオプションが渡される。
+     *                   confファイル内で
+     *                   は、''<pragma>.<module_name>.<interface_name>''
+     *                   というプリフィックスをつけたオプションとして与
+     *                   えることができ、properties 内には、このプリ
+     *                   フィックスを除いたオプションがkey:value形式で
+     *                   含まれている。
+     *
+     * 関数内では、主に properties から設定内容を読み込みサービス固有の
+     * 設定等を行います。与えられた ServiceProfileの内容が不正、あるい
+     * はその他の理由で当該サービスをインスタンス化しない場合は false
+     * を返します。その場合、finalize() が呼び出されその後オブジェクト
+     * は削除されます。それ以外の場合は true を返すと、サービスオブジェ
+     * クトは RTC 内に保持されます。
      *
      * @param rtobj このオブジェクトがインスタンス化された RTC
      * @param profile 外部から与えられた SDO ServiceProfile

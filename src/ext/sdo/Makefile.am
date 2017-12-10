@@ -7,6 +7,5 @@
 
 AUTOMAKE_OPTIONS = 1.4
 
-SUBDIRS = logger observer
-
+SUBDIRS = logger observer fsm4rtc_observer extended_fsm
 
