@@ -156,6 +156,7 @@ rtmheader_HEADERS = \
 	ExecutionContextBase.h 	 \
 	InPort.h 		 \
 	InPortConsumer.h 	 \
+	NumberingPolicyBase.h \
 	ObjectManager.h 	 \
 	OutPort.h 		 \
 	OutPortConsumer.h 	 \

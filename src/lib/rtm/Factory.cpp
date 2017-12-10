@@ -79,7 +79,7 @@ namespace RTC
   FactoryCXX::FactoryCXX(const coil::Properties& profile,
 			 RtcNewFunc new_func,
 			 RtcDeleteFunc delete_func,
-			 NumberingPolicy* policy)
+                         RTM::NumberingPolicyBase* policy)
     : FactoryBase(profile),
       m_New(new_func),
       m_Delete(delete_func),

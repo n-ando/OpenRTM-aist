@@ -17,6 +17,8 @@
  *
  */
 #include <coil/Process.h>
+#include <coil/Properties.h>
+#include <coil/stringutil.h>
 #include <rtm/Manager.h>
 #include <rtm/ManagerServant.h>
 #include <rtm/NVUtil.h>
@@ -38,19 +40,19 @@ namespace RTM
   {
     rtclog.setName("ManagerServant");
     coil::Properties config(m_mgr.getConfig());    
-    
+
+    if (!createINSManager())
+      {
+        RTC_WARN(("Manager CORBA servant creation failed."));
+        return;
+      }
+    RTC_INFO(("Named manager reference (INS) was successfully created."));
+
     if (coil::toBool(config["manager.is_master"], "YES", "NO", true))
       { // this is master manager
         RTC_TRACE(("This manager is master."));
-
-        if (!createINSManager())
-          {
-            RTC_WARN(("Manager CORBA servant creation failed."));
-            return;
-            
-          }
         m_isMaster = true;
-        RTC_WARN(("Manager CORBA servant was successfully created."));
+        RTC_INFO(("Master manager servant was successfully created."));
         return;
       }
     else
@@ -62,16 +64,16 @@ namespace RTM
             owner = findManager(config["corba.master_manager"].c_str());
             if (CORBA::is_nil(owner))
               {
-                RTC_INFO(("Master manager not found"));
+                RTC_WARN(("Master manager not found"));
                 return;
               }
-            if (!createINSManager())
-              {
-                RTC_WARN(("Manager CORBA servant creation failed."));
-                return;
-              }
+            RTC_INFO(("Master manager found: %s",
+                      config["corba.master_manager"].c_str()));
+            RTC_INFO(("Adding this manager to this manager."))
             add_master_manager(owner);
+            RTC_INFO(("Register this manager to master manager."))
             owner->add_slave_manager(m_objref.in());
+            RTC_INFO(("Slave manager servant was successfully created."));
             return;
           }
         catch (...)
@@ -322,101 +324,56 @@ namespace RTM
   RTC::RTObject_ptr ManagerServant::create_component(const char* module_name)
   {
     RTC_TRACE(("create_component(%s)", module_name));
-    
-    std::string arg(module_name);
-    std::string::size_type pos0(arg.find("&manager="));
-    std::string::size_type pos1(arg.find("?manager="));
-
-    if (pos0 == std::string::npos && pos1 == std::string::npos)
+    RTC_TRACE(("This manager is master: %s", m_isMaster ? "YES" : "NO"));
+    std::string create_arg(module_name);
+    if (create_arg.empty()) // invalid arg
       {
-        if (false) //is_master())
+        return RTC::RTObject::_nil();
+      }
+
+    RTC::RTObject_var rtobj;
+    // create component by address
+    rtobj = createComponentByAddress(create_arg);
+    if (!CORBA::is_nil(rtobj)) { return rtobj._retn(); }
+
+    // create component by manager's name
+    rtobj = createComponentByManagerName(create_arg);
+    if (!CORBA::is_nil(rtobj)) { return rtobj._retn(); }
+
+    // === Master ===
+    // The aster manager never hosts RT-Components and it request to
+    // create to slave components.
+    if (m_isMaster)
+      {
+        Guard guard(m_slaveMutex);
+        for (size_t i(0); i < m_slaves.length(); ++i)
           {
-            RTC_ERROR(("Master manager cannot create component: %s",
-                       module_name));
-            return RTC::RTObject::_nil();
+            try
+              {
+                RTC::RTObject_var rtobj;
+                rtobj = m_slaves[i]->create_component(create_arg.c_str());
+                RTC_DEBUG(("Component created %s",  create_arg.c_str()));
+                if (!CORBA::is_nil(rtobj)) { return rtobj._retn(); }
+              }
+            catch (CORBA::SystemException& e)
+              {
+                RTC_DEBUG(("Exception was caught while creating component."));
+              }
           }
-        // create on this manager
-        RTC::RTObject_impl* rtc = m_mgr.createComponent(module_name);
-        if (rtc == NULL)
-          {
-            return RTC::RTObject::_nil();
-          }
+        return RTC::RTObject::_nil();
+      }
+
+    // === Slave ===
+    // create component on the manager    
+    RTC_DEBUG(("Creating component on this manager"));
+    RTC_DEBUG(("arg: %s", create_arg.c_str()));
+    RTC::RTObject_impl* rtc = m_mgr.createComponent(create_arg.c_str());
+    if (rtc != NULL)
+      {
         return RTC::RTObject::_duplicate(rtc->getObjRef());
       }
-    // create other manager
 
-    // extract manager's location
-    std::string::size_type pos;
-    pos = (pos0 != std::string::npos) ? pos0 : pos1;
-    
-    std::string::size_type endpos;
-    endpos = arg.find('&', pos + 1);
-    std::string mgrstr(arg.substr(pos + 1, endpos - 1 - pos));
-    RTC_VERBOSE(("Manager arg: %s", mgrstr.c_str()));
-    coil::vstring mgrvstr(coil::split(mgrstr, ":"));
-    if (mgrvstr.size() != 2)
-      {
-        RTC_WARN(("Invalid manager name: %s", mgrstr.c_str()));
-        return RTC::RTObject::_nil();
-      }
-    std::string::size_type eqpos(mgrstr.find("="));
-    if (eqpos == std::string::npos)
-      {
-        RTC_WARN(("Invalid argument: %s", module_name));
-        return RTC::RTObject::_nil();
-      }
-    mgrstr.erase(0, eqpos + 1);
-    RTC_DEBUG(("Manager is %s", mgrstr.c_str()))
-
-    // find manager
-    RTM::Manager_var mgrobj = findManager(mgrstr.c_str());
-    if (CORBA::is_nil(mgrobj))
-      {
-        std::string cmd("rtcd -p ");
-        cmd += mgrvstr[1]; // port number
-
-        RTC_DEBUG(("Invoking command: %s.", cmd.c_str()));
-        int ret(coil::launch_shell(cmd.c_str()));
-        if (ret == -1)
-          {
-            RTC_DEBUG(("%s: failed", cmd.c_str()));
-            return RTC::RTObject::_nil();
-          }
-
-        // find manager
-        coil::usleep(10000);
-        int count(0);
-        while (CORBA::is_nil(mgrobj))
-          {
-            mgrobj = findManager(mgrstr.c_str());
-            ++count;
-            if (count > 1000) { break; }
-            coil::usleep(10000);
-          }
-      }
-
-    if (CORBA::is_nil(mgrobj))
-      {
-        RTC_WARN(("Manager cannot be found."));
-        return RTC::RTObject::_nil();
-      }
-    
-    // create component on the manager    
-    arg.erase(pos + 1, endpos - pos);
-    RTC_DEBUG(("Creating component on %s",  mgrstr.c_str()));
-    RTC_DEBUG(("arg: %s", arg.c_str()));
-    try
-      {
-        RTC::RTObject_var rtobj;
-        rtobj = mgrobj->create_component(arg.c_str());
-        RTC_DEBUG(("Component created %s",  arg.c_str()));
-        return rtobj._retn();
-      }
-    catch (CORBA::SystemException& e)
-      {
-        RTC_DEBUG(("Exception was caught while creating component."));
-        return RTC::RTObject::_nil();
-      }
+    // no RTObject created.
     return RTC::RTObject::_nil();
   }
   
@@ -471,6 +428,7 @@ namespace RTM
       }
 
     // get slaves' component references
+    Guard guard(m_slaveMutex);
     RTC_DEBUG(("%d slave managers exists.", m_slaves.length()));
     for (int i(0), len(m_slaves.length()); i < len; ++i)
       {
@@ -746,37 +704,134 @@ namespace RTM
     return RTC::RTC_OK;
   }
   
-  
-  
+  /*!
+   * @if jp
+   * @brief プロセスのコピーを生成する
+   * @else
+   * @brief The copy of the process is generated.
+   * @endif
+   */
   RTC::ReturnCode_t ManagerServant::fork()
   {
     //    m_mgr.fork();
+    
     return ::RTC::RTC_OK;
   }
-  
+
+  /*!
+   * @if jp
+   * @brief shutdownする
+   * @else
+   * @brief This method shutdowns RTC.
+   * @endif
+   */
   RTC::ReturnCode_t ManagerServant::shutdown()
   {
     m_mgr.terminate();
     return ::RTC::RTC_OK;
   }
-  
+
+  /*!
+   * @if jp
+   * @brief 再起動する。
+   * @else
+   * @brief This method restarts RTC.
+   * @endif
+   */
   RTC::ReturnCode_t ManagerServant::restart()
   {
     //    m_mgr.restart();
     return ::RTC::RTC_OK;
   }
-  
+
+  /*!
+   * @if jp
+   * @brief 指定名のRTCオブジェクトリファレンスを取得
+   * @else
+   * @brief Obtain specific RTObject reference by name
+   * @endig
+   */
+  RTC::RTCList* ManagerServant::get_components_by_name(const char* name)
+  {
+    RTC_TRACE(("get_components_by_name()"));
+    ::RTC::RTCList_var crtcs = new ::RTC::RTCList();
+
+    // check argument
+    std::string tmp(name);
+    coil::eraseHeadBlank(tmp);
+    if (tmp.empty()) { return crtcs._retn(); }
+
+    std::vector<RTC::RTObject_impl*> rtcs = m_mgr.getComponents();
+    coil::vstring rtc_name = coil::split(tmp, "/");
+    for (size_t i(0); i < rtcs.size(); ++i)
+      {
+        // name = ConsoleIn0, instancename = ConsoleIn0
+        if (rtc_name.size() == 1 &&
+            rtc_name[0] == rtcs[i]->getInstanceName())
+          {
+            RTC::RTObject_var rtcref =
+              RTC::RTObject::_duplicate(rtcs[i]->getObjRef());
+#ifndef ORB_IS_RTORB
+            CORBA_SeqUtil::push_back(crtcs.inout(), rtcref.in());
+#else // ORB_IS_RTORB
+            CORBA_SeqUtil::push_back(crtcs, rtcref);
+#endif // ORB_IS_RTORB
+            continue;
+          }
+        if (rtc_name.size() < 2) { continue; } // size != 0
+
+        // name = */ConsoleIn0 instancename = ConsoleIn0   OR
+        // naem = sample/ConsoleIn0 category = sample && instance == ConsoleIn0
+        if ((rtc_name[0] == "*" &&
+             rtc_name[1] == rtcs[i]->getInstanceName()) ||
+            (rtc_name[0] == rtcs[i]->getCategory() &&
+             rtc_name[1] == rtcs[i]->getInstanceName()))
+          {
+            RTC::RTObject_var rtcref =
+              RTC::RTObject::_duplicate(rtcs[i]->getObjRef());
+#ifndef ORB_IS_RTORB
+            CORBA_SeqUtil::push_back(crtcs.inout(), rtcref.in());
+#else // ORB_IS_RTORB
+            CORBA_SeqUtil::push_back(crtcs, rtcref);
+#endif // ORB_IS_RTORB
+          }
+      }
+    return crtcs._retn();
+  }
+
+  /*!
+   * @if jp
+   * @brief RTCのリファレンスを取得する。
+   * @else
+   * @brief Get the reference of RTC.
+   * @endif
+   */
   CORBA::Object_ptr ManagerServant::get_service(const char* name)
   {
     return ::CORBA::Object::_nil();
   }
-  
+
+  //======================================================================
+  // Local functions
+  /*!
+   * @if jp
+   * @brief Managerのリファレンスを取得する。
+   * @else
+   * @brief Get the reference of Manager. 
+   * @endif
+   */  
   RTM::Manager_ptr ManagerServant::getObjRef() const
   {
     return m_objref;
   }
 
-
+  /*!
+   * @if jp
+   * @brief INSManagerの生成
+   * @else
+   * @brief Generate INSManager. 
+   * @endif
+   */
   bool ManagerServant::createINSManager()
   {
     try
@@ -793,7 +848,9 @@ namespace RTM
 
         // Create readable object ID
         coil::Properties config(m_mgr.getConfig());
-        PortableServer::ObjectId_var id; 
+        PortableServer::ObjectId_var id;
+        RTC_DEBUG(("Creating named manager: %s",
+                   config["manager.name"].c_str()));
 #ifndef ORB_IS_RTORB
         id = PortableServer::string_to_ObjectId(config["manager.name"].c_str());
 #else // ORB_IS_RTORB
@@ -802,6 +859,7 @@ namespace RTM
 #endif // ORB_IS_RTORB
 
         // Object activation
+        RTC_DEBUG(("Activating manager with id(%s)", config["manager.name"]));
         poa->activate_object_with_id(id.in(), this);
         CORBA::Object_var mgrobj = poa->id_to_reference(id);
 
@@ -822,11 +880,16 @@ namespace RTM
     return true;
   }
 
-
-
-  RTM::Manager_ptr ManagerServant::findManager(const char* host_port)
+  /*!
+   * @if jp
+   * @brief Managerのリファレンスを検索する。
+   * @else
+   * @brief Find the reference of Manager. 
+   * @endif
+   */
+  RTM::Manager_ptr ManagerServant::findManager(const std::string& host_port)
   {
-    RTC_TRACE(("findManager(host_port = %s)", host_port));
+    RTC_TRACE(("findManager(host_port = %s)", host_port.c_str()));
     try
       {
         coil::Properties config(m_mgr.getConfig());
@@ -875,6 +938,272 @@ namespace RTM
     return RTM::Manager::_nil();
   }
 
-  
+  /*!
+   * @if jp
+   * @brief 指定名のマネージャを取得
+   * @else
+   * @brief Obtain Manager's reference by name
+   * @endif
+   */
+  RTM::Manager_ptr ManagerServant::findManagerByName(const std::string mgr_name)
+  {
+    RTC_TRACE(("findManagerByName(%s)", mgr_name.c_str()));
 
+    coil::Properties prop = m_mgr.getConfig();
+    if (mgr_name == prop["manager.instance_name"])
+      {
+        return RTM::Manager::_duplicate(getObjRef());
+      }
+    if (m_isMaster)
+      {
+        Guard guard(m_slaveMutex);
+        return findManagerFromList(mgr_name, m_slaves);
+      }
+    Guard guard(m_masterMutex);
+    return findManagerFromList(mgr_name, m_masters);
+  }
+  
+  /*!
+   * @if jp
+   * @brief マネージャのリストから指定名を持つマネージャを取得
+   * @else
+   * @brief Obtain Manager's reference by name
+   * @endif
+   */
+  RTM::Manager_ptr ManagerServant::findManagerFromList(const std::string name,
+                                                       RTM::ManagerList& mlist)
+  {
+    for (CORBA::ULong i(0); i < mlist.length(); ++i)
+      {
+        try
+          {
+            if (CORBA::is_nil(mlist[i])) { continue; }
+            RTM::NVList_var nvlist = mlist[i]->get_configuration();
+            if (NVUtil::isStringValue(nvlist.in(),
+                                      "manager.instance_name",
+                                      name.c_str()))
+              {
+                return RTM::Manager::_duplicate(mlist[i]); // end condition
+              }
+            RTM::ManagerList_var slist = mlist[i]->get_slave_managers();
+            if (slist->length() == 0) { continue; }
+            RTM::Manager_var mgr = findManagerFromList(name, slist.inout());
+            if (CORBA::is_nil(mgr)) { continue; }
+            return mgr._retn(); // backtrack
+          }
+        catch (...)
+          {
+            RTC_ERROR(("A slave manager thrown exception."));
+            mlist[i] = RTM::Manager::_nil();
+            CORBA_SeqUtil::erase(mlist, i);
+            --i; // list length is shortened
+            RTC_ERROR(("This slave manager is removed from slave list."));
+          }
+      }
+    return RTM::Manager::_nil();
+  }
+
+  /*!
+   * @if jp
+   * @brief 指定のマネージャでRTCを起動する
+   * @else
+   * @brief Launch RTC on specified manager
+   * @endif
+   */
+  RTC::RTObject_ptr
+  ManagerServant::createComponentByManagerName(const std::string create_arg)
+  {
+    RTC_TRACE(("createComponentByManagerName(%s)",create_arg.c_str()));
+    coil::mapstring param = coil::urlparam2map(create_arg);
+    for (coil::mapstring::iterator it(param.begin()); it != param.end(); ++it)
+      {
+        RTC_DEBUG(("create_arg[%s] = %s",
+                   it->first.c_str(), it->second.c_str()));
+      }
+
+    std::string mgrstr = param["manager_name"];
+    if (mgrstr.empty())
+      {
+        RTC_WARN(("No manager_name found: %s", mgrstr.c_str()));
+        return RTC::RTObject::_nil();
+      }
+
+    // detect languange
+    std::string lang = param["language"];
+    if (lang.empty()) { lang = "C++"; }
+    RTC_INFO(("Specified manager's language: %s", lang));
+
+    RTM::Manager_var mgrobj = findManagerByName(mgrstr);
+    if (CORBA::is_nil(mgrobj))
+      {
+        RTC_INFO(("Manager: %s not found.", mgrstr.c_str()));
+        RTC_INFO(("Creating new manager named %s", mgrstr.c_str()));
+
+        std::string rtcd_cmd_key("manager.modules.");
+        rtcd_cmd_key += lang + "manager_cmd";
+        coil::Properties& prop = m_mgr.getConfig();
+        std::string rtcd_cmd = prop[rtcd_cmd_key];
+
+        if (rtcd_cmd.empty())
+          {
+            RTC_WARN(("rtcd command name not found. Default rtcd is used"));
+            rtcd_cmd = "rtcd";
+          }
+        rtcd_cmd += " -o manager.is_master:NO";
+        rtcd_cmd += " -o manager.corba_servant:YES";
+        rtcd_cmd += " -o corba.master_manager:" + prop["corba.master_manager"];
+        rtcd_cmd += " -o manager.name:" + prop["manger.name"];
+        rtcd_cmd += " -o manager.instance_name:" + mgrstr;
+
+        RTC_DEBUG(("Invoking command: %s.", rtcd_cmd.c_str()));
+        int ret(coil::launch_shell(rtcd_cmd.c_str()));
+        if (ret == -1)
+          {
+            RTC_DEBUG(("%s: failed", rtcd_cmd.c_str()));
+            return RTC::RTObject::_nil();
+          }
+        coil::sleep(0.01);
+        for (size_t i(0); i < 1000; ++i)
+          {
+            RTC_DEBUG(("Detecting new slave manager (%s).", mgrstr.c_str()))
+            mgrobj = findManagerByName(mgrstr);
+            if (!CORBA::is_nil(mgrobj))
+              {
+                RTC_INFO(("New slave manager (%s) launched.", mgrstr.c_str()));
+                break;
+              }
+            RTC_DEBUG(("Waiting for slave manager started."));
+            coil::sleep(0.01);
+          }
+
+        if (CORBA::is_nil(mgrobj))
+          {
+            RTC_ERROR(("Launch failed: manager (%s)", mgrstr.c_str()));
+            return RTC::RTObject::_nil();
+          }
+        RTC_DEBUG(("Creating component on %s",  mgrstr.c_str()));
+        RTC_DEBUG(("arg: %s", create_arg.c_str()));
+        try
+          {
+            return mgrobj->create_component(create_arg.c_str());
+          }
+        catch (CORBA::SystemException& e)
+          {
+            RTC_ERROR(("Exception was caught while creating component."));
+            return RTC::RTObject::_nil();
+          }
+        catch (...)
+          {
+            RTC_ERROR(("Unknown non-CORBA exception cought."));
+            return RTC::RTObject::_nil();
+          }
+      }
+    return RTC::RTObject::_nil();
+  }
+  
+  /*
+   * @if jp
+   * @brief 指定アドレスのマネージャでRTCを起動する
+   * @else
+   * @brief Launch a RTC on the specified IP/Port address manager
+   * @endif
+   */
+  RTC::RTObject_ptr
+  ManagerServant::createComponentByAddress(const std::string create_arg)
+  {
+    RTC_TRACE(("createComponentByAddress(%s)",create_arg.c_str()));
+    coil::mapstring param = coil::urlparam2map(create_arg);
+    for (coil::mapstring::iterator it(param.begin()); it != param.end(); ++it)
+      {
+        RTC_DEBUG(("create_arg[%s] = %s",
+                   it->first.c_str(), it->second.c_str()));
+      }
+
+    std::string mgrstr = param["manager_name"];
+    if (mgrstr.empty())
+      {
+        RTC_WARN(("No manager_name found: %s", mgrstr.c_str()));
+        return RTC::RTObject::_nil();
+      }
+    
+    coil::vstring mgrvstr = coil::split(mgrstr, ":", true);
+    if (mgrvstr.size() != 2)
+      {
+        RTC_WARN(("Invalid manager name: %s", mgrstr.c_str()));
+        return RTC::RTObject::_nil();
+      }
+
+    // detect languange
+    std::string lang = param["language"];
+    if (lang.empty()) { lang = "C++"; }
+    RTC_INFO(("Specified manager's language: %s", lang));
+
+    // find manager
+    RTM::Manager_var mgrobj = findManager(mgrstr);
+
+    if (CORBA::is_nil(mgrobj))
+      {
+        RTC_INFO(("Manager: %s not found.", mgrstr.c_str()));
+        RTC_INFO(("Creating new manager named %s", mgrstr.c_str()));
+
+        std::string rtcd_cmd_key("manager.modules.");
+        rtcd_cmd_key += lang + "manager_cmd";
+        coil::Properties& prop = m_mgr.getConfig();
+        std::string rtcd_cmd = prop[rtcd_cmd_key];
+
+        if (rtcd_cmd.empty())
+          {
+            RTC_WARN(("rtcd command name not found. Default rtcd is used."));
+            rtcd_cmd = "rtcd";
+          }
+        rtcd_cmd += " -o corba.master_manager:" + mgrstr;
+        rtcd_cmd += " -d ";
+
+        RTC_DEBUG(("Invoking command: %s.", rtcd_cmd.c_str()));
+        int ret(coil::launch_shell(rtcd_cmd.c_str()));
+        if (ret == -1)
+          {
+            RTC_DEBUG(("%s: failed", rtcd_cmd.c_str()));
+            return RTC::RTObject::_nil();
+          }
+
+        coil::sleep(0.01);
+        for (size_t i(0); i < 1000; ++i)
+          {
+            RTC_DEBUG(("Detecting new slave manager (%s).", mgrstr.c_str()))
+            mgrobj = findManagerByName(mgrstr);
+            if (!CORBA::is_nil(mgrobj))
+              {
+                RTC_INFO(("New slave manager (%s) launched.", mgrstr.c_str()));
+                break;
+              }
+            RTC_DEBUG(("Waiting for slave manager started."));
+            coil::sleep(0.01);
+          }
+
+        if (CORBA::is_nil(mgrobj))
+          {
+            RTC_ERROR(("Launch failed: manager (%s)", mgrstr.c_str()));
+            return RTC::RTObject::_nil();
+          }
+
+        RTC_DEBUG(("Creating component on %s",  mgrstr.c_str()));
+        RTC_DEBUG(("arg: %s", create_arg.c_str()));
+        try
+          {
+            return mgrobj->create_component(create_arg.c_str());
+          }
+        catch (CORBA::SystemException& e)
+          {
+            RTC_ERROR(("Exception was caught while creating component."));
+            return RTC::RTObject::_nil();
+          }
+        catch (...)
+          {
+            RTC_ERROR(("Unknown non-CORBA exception cought."));
+            return RTC::RTObject::_nil();
+          }
+      }
+    return RTC::RTObject::_nil();
+  }
 };

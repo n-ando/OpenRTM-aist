@@ -396,7 +396,7 @@ namespace RTC
      * @endif
      */
     void runManager(bool no_block = false);
-    
+
     //============================================================
     // Module management
     //============================================================
@@ -409,6 +409,11 @@ namespace RTC
      *
      * @param fname   モジュールファイル名
      * @param initfunc 初期化関数名
+     * @return 終了コード
+     *         RTC::RTC_OK 正常終了
+     *         RTC::RTC_ERROR ロード失敗・不明なエラー
+     *         RTC::PRECONDITION_NOT_MET 設定にり許可されない操作
+     *         RTC::BAD_PARAMETER 不正なパラメータ
      * 
      * @else
      *
@@ -419,10 +424,15 @@ namespace RTC
      *
      * @param fname    The module file name
      * @param initfunc The initialize function name
+     * @return Return code
+     *         RTC::RTC_OK Normal return
+     *         RTC::RTC_ERROR Load failed, or unknown error
+     *         RTC::PRECONDITION_NOT_MET Not allowed operation by conf
+     *         RTC::BAD_PARAMETER Invalid parameter
      *
      * @endif
      */  
-    void load(const char* fname, const char* initfunc);
+    ReturnCode_t load(const std::string& fname, const std::string& initfunc);
     
     /*!
      * @if jp
@@ -1381,6 +1391,18 @@ namespace RTC
      * @endif
      */
     void shutdownNaming();
+
+    /*!
+     * @if jp
+     * @brief NamingManagerを取得する
+     *
+     * @else
+     *
+     * @brief Getting NamingManager
+     *
+     * @endif
+     */
+     NamingManager& getNamingManager();
     
     //============================================================
     // Component management
@@ -1621,6 +1643,18 @@ namespace RTC
      * @endif
      */
     bool initManagerServant();
+
+    /*!
+     * @if jp
+     * @brief ManagerServantを取得する
+     *
+     * @else
+     *
+     * @brief Getting ManagerServant
+     *
+     * @endif
+     */
+    RTM::ManagerServant& getManagerServant();
 
     /*!
      * @if jp

@@ -43,6 +43,7 @@
 #include <rtm/LocalServiceAdmin.h>
 #include <rtm/SystemLogger.h>
 #include <rtm/LogstreamBase.h>
+#include <rtm/NumberingPolicyBase.h>
 
 #ifdef RTM_OS_LINUX
 #ifndef _GNU_SOURCE
@@ -542,10 +543,12 @@ namespace RTC
    * @brief Load module
    * @endif
    */
-  void Manager::load(const char* fname, const char* initfunc)
+  ReturnCode_t Manager::load(const std::string& fname,
+                             const std::string& initfunc)
   {
     RTC_TRACE(("Manager::load(fname = %s, initfunc = %s)",
-               fname, initfunc));
+               fname.c_str(), initfunc.c_str()));
+
     std::string file_name(fname);
     std::string init_func(initfunc);
     m_listeners.module_.preLoad(file_name, init_func);
@@ -553,18 +556,42 @@ namespace RTC
       {
         if (init_func.empty())
           {
-            coil::vstring mod(coil::split(fname, "."));
+            coil::vstring mod(coil::split(file_name, "."));
             init_func = mod[0] + "Init";
           }
         std::string path(m_module->load(file_name, init_func));
         RTC_DEBUG(("module path: %s", path.c_str()));
         m_listeners.module_.postLoad(path, init_func);
       }
+    catch(RTC::ModuleManager::NotAllowedOperation& e)
+      {
+        RTC_ERROR(("Operation not allowed: %s",
+                   e.reason.c_str()));
+        return RTC::PRECONDITION_NOT_MET;
+      }
+    catch(RTC::ModuleManager::NotFound& e)
+      {
+        RTC_ERROR(("Not found: %s",
+                   e.name.c_str()));
+        return RTC::RTC_ERROR;
+      }
+    catch(RTC::ModuleManager::InvalidArguments& e)
+      {
+        RTC_ERROR(("Invalid argument: %s",
+                   e.reason.c_str()));
+        return RTC::BAD_PARAMETER;
+      }
+    catch(RTC::ModuleManager::Error& e)
+      {
+        RTC_ERROR(("Error: %s", e.reason.c_str()));
+        return RTC::RTC_ERROR;
+      }
     catch (...)
       {
-        RTC_ERROR(("module load error."));
+        RTC_ERROR(("Unknown error."));
+        return RTC::RTC_ERROR;
       }
-    return;
+    return RTC::RTC_OK;
   }
   
   /*!
@@ -635,25 +662,37 @@ std::vector<coil::Properties> Manager::getLoadableModules()
    * @endif
    */
   bool Manager::registerFactory(coil::Properties& profile,
-				RtcNewFunc new_func,
-				RtcDeleteFunc delete_func)
+                                RtcNewFunc new_func,
+                                RtcDeleteFunc delete_func)
   {
     RTC_TRACE(("Manager::registerFactory(%s)", profile["type_name"].c_str()));
+
+    std::string policy_name =
+      m_config.getProperty("manager.components.naming_policy", "default");
+    RTM::NumberingPolicyBase* policy =
+      RTM::NumberingPolicyFactory::instance().createObject(policy_name);
     FactoryBase* factory;
-    factory = new FactoryCXX(profile, new_func, delete_func);
+    if (policy == NULL)
+      {
+        factory = new FactoryCXX(profile, new_func, delete_func);
+      }
+    else
+      {
+        factory = new FactoryCXX(profile, new_func, delete_func, policy);
+      }
     try
-      {    
-	bool ret = m_factory.registerObject(factory);
-	if (!ret) {
-	  delete factory;
-	  return false;
-	}
-	return true;
+      {
+        bool ret = m_factory.registerObject(factory);
+        if (!ret) {
+          delete factory;
+          return false;
+        }
+        return true;
       }
     catch (...)
       {
-	delete factory;
-	return false;
+        delete factory;
+        return false;
       }
   }
   
@@ -1791,7 +1830,19 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     m_namingManager->unbindAll();
     delete m_namingManager;
   }
-  
+
+  /*!
+   * @if jp
+   * @brief NamingManagerを取得する
+   * @else
+   * @brief Getting NamingManager
+   * @endif
+   */
+  NamingManager& Manager::getNamingManager()
+  {
+    return *m_namingManager;
+  }
+
   //============================================================
   // Naming initialization and finalization
   //============================================================
@@ -1937,7 +1988,19 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 
     return true;
   }
-  
+
+  /*!
+   * @if jp
+   * @brief ManagerServantを取得する
+   * @else
+   * @brief Getting ManagerServant
+   * @endif
+   */
+  RTM::ManagerServant& Manager::getManagerServant()
+  {
+    return *m_mgrservant;
+  }
+
   bool Manager::initLocalService()
   {
     RTC_TRACE(("Manager::initLocalService()"));

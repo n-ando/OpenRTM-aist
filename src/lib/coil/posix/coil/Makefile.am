@@ -10,6 +10,7 @@ DEFAULT_INCLUDES=
 
 # posix API dependent sources
 COIL_PLATFORM_SRC =    \
+	Affinity.cpp   \
 	Condition.cpp  \
 	DynamicLib.cpp \
 	Mutex.cpp      \
