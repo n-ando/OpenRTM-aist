@@ -33,12 +33,16 @@ namespace RTC
   /*!
    * @if jp
    * @class ConnectorListenerStatus mixin class
-   * @brief ConnectorListenerStatus mixin ¥¯¥é¥¹
+   * @brief ConnectorListenerStatus mixin ƒNƒ‰ƒX
    *
-   * ¤³¤Î¥¯¥é¥¹¤Ï¡¢enumÄEÁ¤µ¤E¿¥E¿¡¼¥ó¥³¡¼¥É¤ò¡¢ConnectorListener´Ø
-   * Ï¢¤Î¥µ¥Ö¥¯¥é¥¹¤Ç¶¦ÄÌÍøÍÑ¤¹¤E¿¤á¤Î mixin ¥¯¥é¥¹¤Ç¤¢¤E£¤³¤Î¥E¿¡¼
-   * ¥ó¥³¡¼¥É¤ò»ÈÍÑ¤¹¤E¯¥é¥¹¤Ç¤Ï¡¢ConnectorListenerStatus ¥¯¥é¥¹¤E   * public ·Ñ¾µ¤·¡¢²¼¤Ëdefine ¤·¤Æ¤¢¤ECONNLISTENER_STATUS_ENUM ¤ò¥¯¥E   * ¥¹Æâ¤Ëµ­½Ò¤¹¤E³¤È¤ÇÍøÍÑ²ÄÇ½¤È¤Ê¤E£¤³¤EË¤è¤ê¡¢enum ¤E   * ReturnCode ·¿¤È¤·¤Æ typedef ¤·¡¢°Ê¸EReturnCode ¤òÍøÍÑ¤Ç¤­¤Eè¤¦¤Ë
-   * ¤¹¤EÈ¤È¤â¤Ë¡¢Ì¾Á°¶õ´Ö¤Ë enum ÄEÁ¤µ¤E¿³Æ¼±ÊÌ»Ò¤òÅö³º¥¯¥é¥¹Ì¾Á°¶E   * ´ÖÆâ¤ËÆ³Æş¤¹¤E£
+   * ‚±‚ÌƒNƒ‰ƒX‚ÍAenum’è‹`‚³‚ê‚½ƒŠƒ^[ƒ“ƒR[ƒh‚ğAConnectorListenerŠÖ
+   * ˜A‚ÌƒTƒuƒNƒ‰ƒX‚Å‹¤’Ê—˜—p‚·‚é‚½‚ß‚Ì mixin ƒNƒ‰ƒX‚Å‚ ‚éB‚±‚ÌƒŠƒ^[
+   * ƒ“ƒR[ƒh‚ğg—p‚·‚éƒNƒ‰ƒX‚Å‚ÍAConnectorListenerStatus ƒNƒ‰ƒX‚ğ
+   * public Œp³‚µA‰º‚Édefine ‚µ‚Ä‚ ‚é CONNLISTENER_STATUS_ENUM ‚ğƒNƒ‰
+   * ƒX“à‚É‹Lq‚·‚é‚±‚Æ‚Å—˜—p‰Â”\‚Æ‚È‚éB‚±‚ê‚É‚æ‚èAenum ‚ğ
+   * ReturnCode Œ^‚Æ‚µ‚Ä typedef ‚µAˆÈŒã ReturnCode ‚ğ—˜—p‚Å‚«‚é‚æ‚¤‚É
+   * ‚·‚é‚Æ‚Æ‚à‚ÉA–¼‘O‹óŠÔ‚É enum ’è‹`‚³‚ê‚½Še¯•Êq‚ğ“–ŠYƒNƒ‰ƒX–¼‘O‹ó
+   * ŠÔ“à‚É“±“ü‚·‚éB
    *
    * @else
    * @class DataPortStatus mixin class
@@ -73,12 +77,13 @@ namespace RTC
   /*!
    * @if jp
    *
-
-  /*!
-   * @if jp
-   * ¤¤¤Æ¡¢¥¯¥é¥¹ÀEÀ¤ÎÀèÆ¬¤Ë¤ª¤¤¤Æ DATAPORTSTATUS_ENUM ¤òµ­ºÜ¤¹¤EÀ¤±¤Ç¡¢
-   * DataPortStatus ¤ÇÀEÀ¤µ¤EÆ¤¤¤Eenum ¥á¥ó¥Ğ¤¬Ì¾Á°²ò·è±é»»»Ò¤Ê¤·¤Ë¥¢
-   * ¥¯¥»¥¹²ÄÇ½¤Ë¤Ê¤E£
+   * @brief ::RTC::ConnDataPortStatus “±“ü
+   *
+   * ::RTC::DataPortStatus ‚ÅéŒ¾‚³‚ê‚Ä‚¢‚é Enum ‚Ì‚·‚×‚Ä‚Ìƒƒ“ƒo‚ğƒl[ƒ€
+   * ƒXƒy[ƒX‚É“±“ü‚·‚é‚½‚ß‚Ìƒ}ƒNƒBDataPortStatus ‚ğ—˜—p‚·‚éƒNƒ‰ƒX‚É‚¨
+   * ‚¢‚ÄAƒNƒ‰ƒXéŒ¾‚Ìæ“ª‚É‚¨‚¢‚Ä DATAPORTSTATUS_ENUM ‚ğ‹LÚ‚·‚é‚¾‚¯‚ÅA
+   * DataPortStatus ‚ÅéŒ¾‚³‚ê‚Ä‚¢‚é enum ƒƒ“ƒo‚ª–¼‘O‰ğŒˆ‰‰Zq‚È‚µ‚ÉƒA
+   * ƒNƒZƒX‰Â”\‚É‚È‚éB
    *
    * @else
    *
@@ -101,23 +106,18 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ConnectorDataListener ¤Î¥¿¥¤¥×
+   * @brief ConnectorDataListener ‚Ìƒ^ƒCƒv
    *
-   * - ON_BUFFER_WRITE:          ¥Ğ¥Ã¥Õ¥¡½ñ¤­¹ş¤ß»ş
-   * - ON_BUFFER_FULL:           ¥Ğ¥Ã¥Õ¥¡¥Õ¥Eş
-   * - ON_BUFFER_WRITE_TIMEOUT:  ¥Ğ¥Ã¥Õ¥¡½ñ¤­¹ş¤ß¥¿¥¤¥à¥¢¥¦¥È»ş
-   * @brief ConnectorDataListener ¤Î¥¿¥¤¥×
-   *
-   * - ON_BUFFER_WRITE:          ¥Ğ¥Ã¥Õ¥¡½ñ¤­¹ş¤ß»ş
-   * - ON_BUFFER_FULL:           ¥Ğ¥Ã¥Õ¥¡¥Õ¥Eş
-   * - ON_BUFFER_WRITE_TIMEOUT:  ¥Ğ¥Ã¥Õ¥¡½ñ¤­¹ş¤ß¥¿¥¤¥à¥¢¥¦¥È»ş
-   * - ON_BUFFER_OVERWRITE:      ¥Ğ¥Ã¥Õ¥¡¾å½ñ¤­»ş
-   * - ON_BUFFER_READ:           ¥Ğ¥Ã¥Õ¥¡ÆÉ¤ß½Ğ¤·»ş
-   * - ON_SEND:                  InProt¤Ø¤ÎÁ÷¿®»ş
-   * - ON_RECEIVED:              InProt¤Ø¤ÎÁ÷¿®´°Î»»ş
-   * - ON_RECEIVER_FULL:         InProtÂ¦¥Ğ¥Ã¥Õ¥¡¥Õ¥Eş
-   * - ON_RECEIVER_TIMEOUT:      InProtÂ¦¥Ğ¥Ã¥Õ¥¡¥¿¥¤¥à¥¢¥¦¥È»ş
-   * - ON_RECEIVER_ERROR:        InProtÂ¦¥¨¥é¡¼»ş
+   * - ON_BUFFER_WRITE:          ƒoƒbƒtƒ@‘‚«‚İ
+   * - ON_BUFFER_FULL:           ƒoƒbƒtƒ@ƒtƒ‹
+   * - ON_BUFFER_WRITE_TIMEOUT:  ƒoƒbƒtƒ@‘‚«‚İƒ^ƒCƒ€ƒAƒEƒg
+   * - ON_BUFFER_OVERWRITE:      ƒoƒbƒtƒ@ã‘‚«
+   * - ON_BUFFER_READ:           ƒoƒbƒtƒ@“Ç‚İo‚µ
+   * - ON_SEND:                  InProt‚Ö‚Ì‘—M
+   * - ON_RECEIVED:              InProt‚Ö‚Ì‘—MŠ®—¹
+   * - ON_RECEIVER_FULL:         InProt‘¤ƒoƒbƒtƒ@ƒtƒ‹
+   * - ON_RECEIVER_TIMEOUT:      InProt‘¤ƒoƒbƒtƒ@ƒ^ƒCƒ€ƒAƒEƒg
+   * - ON_RECEIVER_ERROR:        InProt‘¤ƒGƒ‰[
    *
    * @else
    * @brief The types of ConnectorDataListener
@@ -137,36 +137,45 @@ namespace RTC
    */
   enum ConnectorDataListenerType
     {
+      ON_BUFFER_WRITE = 0,
+      ON_BUFFER_FULL,
+      ON_BUFFER_WRITE_TIMEOUT,
+      ON_BUFFER_OVERWRITE,
+      ON_BUFFER_READ,
       ON_SEND,
       ON_RECEIVED,
       ON_RECEIVER_FULL,
       ON_RECEIVER_TIMEOUT,
       ON_RECEIVER_ERROR,
       CONNECTOR_DATA_LISTENER_NUM
-      ON_RECEIVED,
-
-  /*!
-      ON_RECEIVER_ERROR,
-      CONNECTOR_DATA_LISTENER_NUM
     };
 
   /*!
    * @if jp
-   * @class ConnectorDataListener ¥¯¥é¥¹
-   * @brief ConnectorDataListener ¥¯¥é¥¹
+   * @class ConnectorDataListener ƒNƒ‰ƒX
+   * @brief ConnectorDataListener ƒNƒ‰ƒX
    *
-   * ¥Ç¡¼¥¿¥İ¡¼¥È¤Î Connector ¤Ë¤ª¤¤¤ÆÈ¯À¸¤¹¤EÆ¼E¤¥Ù¥ó¥È¤ËÂĞ¤¹¤E³¡¼
-   * ¥EĞ¥Ã¥¯¤ò¼Â¸½¤¹¤EE¹¥Ê¥¯¥é¥¹¤Î´ğÄE¯¥é¥¹¡£
+   * ƒf[ƒ^ƒ|[ƒg‚Ì Connector ‚É‚¨‚¢‚Ä”­¶‚·‚éŠeíƒCƒxƒ“ƒg‚É‘Î‚·‚éƒR[
+   * ƒ‹ƒoƒbƒN‚ğÀŒ»‚·‚éƒŠƒXƒiƒNƒ‰ƒX‚ÌŠî’êƒNƒ‰ƒXB
    *
-   * ¥³¥¢¥úÁ¸¥Ã¥¯¤¬OutPort¤ËÂĞ¤·¤Æ¥Ç¡¼¥¿½ñ¤­¹ş¤ß¡¢InPortÂ¦¤Ç¥Ç¡¼¥¿¤¬¼E   * ÆÀ¤µ¤EEŞ¤Ç¤Î´Ö¤ÇÈ¯À¸¤¹¤EÆ¼E¤¥Ù¥ó¥È¤ò¥Õ¥Ã¥¯¤¹¤E³¡¼¥EĞ¥Ã¥¯¤òÀß
-   * Äê¤¹¤E³¤È¤¬¤Ç¤­¤E£¤Ê¤ª¡¢¥E¹¥Ê¡¼¥¯¥é¥¹¤Ï2¼EàÂ¸ºß¤·¡¢¥Ğ¥Ã¥Õ¥¡¥Õ
-   * ¥EäÁ÷¿®»ş¤Î¥³¡¼¥EĞ¥Ã¥¯¤Ç¡¢¤½¤Î»şÅÀ¤ÇÍ­¸ú¤Ê¥Ç¡¼¥¿¤ò¥Õ¥¡¥ó¥¯¥¿¤Î°E   * ¿ô¤È¤·¤Æ¼õ¤±¼è¤EConnectorDataListener ¤Ç¤¢¤ê¡¢¤â¤¦°Eı¤Ï¥Ç¡¼¥¿¥¨
-   * ¥ó¥×¥Æ¥£¤ä¥Ğ¥Ã¥Õ¥¡ÆÉ¤ß¹ş¤ß»ş¤Î¥¿¥¤¥à¥¢¥¦¥È¤Ê¤É¥Ç¡¼¥¿¤¬¼èÆÀ¤Ç¤­¤Ê¤¤
-   * ¾Eç¤Ê¤É¤Ë¥³¡¼¥Eµ¤EEÕ¥¡¥ó¥¯¥¿¤Î°ú¿ô¤Ë²¿¤â¤È¤é¤Ê¤é¤¤
-   * ConnecotorListener ¤¬¤¢¤E£
+   * ƒRƒAƒƒWƒbƒN‚ªOutPort‚É‘Î‚µ‚Äƒf[ƒ^‘‚«‚İAInPort‘¤‚Åƒf[ƒ^‚ªæ
+   * “¾‚³‚ê‚é‚Ü‚Å‚ÌŠÔ‚Å”­¶‚·‚éŠeíƒCƒxƒ“ƒg‚ğƒtƒbƒN‚·‚éƒR[ƒ‹ƒoƒbƒN‚ğİ
+   * ’è‚·‚é‚±‚Æ‚ª‚Å‚«‚éB‚È‚¨AƒŠƒXƒi[ƒNƒ‰ƒX‚Í2í—Ş‘¶İ‚µAƒoƒbƒtƒ@ƒt
+   * ƒ‹‚â‘—M‚ÌƒR[ƒ‹ƒoƒbƒN‚ÅA‚»‚Ì“_‚Å—LŒø‚Èƒf[ƒ^‚ğƒtƒ@ƒ“ƒNƒ^‚Ìˆø
+   * ”‚Æ‚µ‚Äó‚¯æ‚é ConnectorDataListener ‚Å‚ ‚èA‚à‚¤ˆê•û‚Íƒf[ƒ^ƒG
+   * ƒ“ƒvƒeƒB‚âƒoƒbƒtƒ@“Ç‚İ‚İ‚Ìƒ^ƒCƒ€ƒAƒEƒg‚È‚Çƒf[ƒ^‚ªæ“¾‚Å‚«‚È‚¢
+   * ê‡‚È‚Ç‚ÉƒR[ƒ‹‚³‚ê‚éƒtƒ@ƒ“ƒNƒ^‚Ìˆø”‚É‰½‚à‚Æ‚ç‚È‚ç‚¢
+   * ConnecotorListener ‚ª‚ ‚éB
    *
-   * ¥Ç¡¼¥¿¥İ¡¼¥È¤Ë¤Ï¡¢ÀÜÂ³»ş¤Ë¥Ç¡¼¥¿¤ÎÁ÷¼õ¿®ÊıË¡¤Ë¤Ä¤¤¤Æ¥Ç¡¼¥¿¥Õ¥ú½¼·¿¡¢
-   * ¥µ¥Ö¥¹¥¯¥E×¥·¥ç¥ó·¿Åù¤òÀßÄê¤¹¤E³¤È¤¬¤Ç¤­¤E£
+   * ConnectorDataListener ƒNƒ‰ƒX‚É‚æ‚Á‚Äƒf[ƒ^‚ªŠÖ˜A‚·‚é“®ì‚ğƒtƒbƒN‚µ
+   * ‚½‚¢ê‡AˆÈ‰º‚Ì—á‚Ì‚æ‚¤‚ÉA‚±‚ÌƒNƒ‰ƒX‚ğŒp³‚µAƒRƒlƒNƒ^‚Ìî•ñ‚Æƒf[
+   * ƒ^‚ğˆø”‚Éæ‚éˆÈ‰º‚Ì‚æ‚¤‚ÈƒR[ƒ‹ƒoƒbƒNƒIƒuƒWƒFƒNƒg‚ğ’è‹`‚µAƒf[ƒ^
+   * ƒ|[ƒg‚Ì“KØ‚ÈƒR[ƒ‹ƒoƒbƒNİ’èŠÖ”‚©‚çƒR[ƒ‹ƒoƒbƒNƒIƒuƒWƒFƒNƒg‚ğƒZƒb
+   * ƒg‚·‚é•K—v‚ª‚ ‚éB‚È‚¨AData Listener ‚É‚ÍAƒf[ƒ^‚Æ‚µ‚Äƒ}[ƒVƒƒƒŠ
+   * ƒ“ƒOŒã‚Ìƒf[ƒ^‚ğˆø”‚Éæ‚é ConnectorDataListener ‚ÆAƒf[ƒ^‚ğ“Á’è
+   * ‚ÌŒ^‚ÉƒAƒ“ƒ}[ƒVƒƒƒ‹‚µ‚½Œã‚Ì’l‚ğˆø”‚Éæ‚éA
+   * ConnectorDataListenerT ‚ª‚ ‚éBˆÈ‰º‚Ì—á‚ÍAConnectorDataListenerT
+   * ‚Ì’è‹`—á‚Å‚ ‚éB
    *
    * <pre>
    * class MyDataListener
@@ -176,7 +185,7 @@ namespace RTC
    *   MyDataListener(const char* name) : m_name(name) {}
    *   virtual ~MyDataListener() {}
    *   virtual ReturnCode operator()(ConnectorInfo& info, TimedLong& data)
-   * -  Push·¿: Subscription Type¤Ë¤è¤ê¤µ¤é¤Ë¥¤¥Ù¥ó¥È¤Î¼Eà¤¬Ê¬¤«¤EE£
+   *   {
    *     std::cout << "Data Listener: " << m_name       << std::endl;
    *     std::cout << "Data:          " << data.data    << std::endl;
    *     std::cout << "Profile::name: " << info.name    << std::endl;
@@ -188,8 +197,8 @@ namespace RTC
    * };
    * </pre>
    *
-   * ¤³¤Î¤è¤¦¤Ë¤·¤ÆÄEÁ¤µ¤E¿¥E¹¥Ê¥¯¥é¥¹¤Ï¡¢°Ê²¼¤Î¤è¤¦¤Ë¥Ç¡¼¥¿¥İ¡¼¥È¤Ë
-   * ÂĞ¤·¤Æ¡¢°Ê²¼¤Î¤è¤¦¤Ë¥»¥Ã¥È¤µ¤EE£
+   * ‚±‚Ì‚æ‚¤‚É‚µ‚Ä’è‹`‚³‚ê‚½ƒŠƒXƒiƒNƒ‰ƒX‚ÍAˆÈ‰º‚Ì‚æ‚¤‚Éƒf[ƒ^ƒ|[ƒg‚É
+   * ‘Î‚µ‚ÄAˆÈ‰º‚Ì‚æ‚¤‚ÉƒZƒbƒg‚³‚ê‚éB
    *
    * <pre>
    * RTC::ReturnCode_t ConsoleIn::onInitialize()
@@ -200,30 +209,23 @@ namespace RTC
    *    :
    * </pre>
    *
-   * ÂE°ú¿ô¤Î "ON_BUFFER_WRITE" ¤Ï¡¢¥³¡¼¥EĞ¥Ã¥¯¤ò¥Õ¥Ã¥¯¤¹¤Eİ¥¤¥ó¥È¤Ç
-   * ¤¢¤ê¡¢°Ê²¼¤ËÎóµó¤¹¤EÍ¤ò¼è¤E³¤È¤¬²ÄÇ½¤Ç¤¢¤E£¥Ç¡¼¥¿¥İ¡¼¥È¤Ë¤Ï¡¢ÀÜ
-   * Â³»ş¤Ë¥Ç¡¼¥¿¤ÎÁ÷¼õ¿®ÊıË¡¤Ë¤Ä¤¤¤Æ¡¢¥¤¥ó¥¿¡¼¥Õ¥§¡¼¥¹·¿¡¢¥Ç¡¼¥¿¥Õ¥ú½¼
-   * ·¿¡¢¥µ¥Ö¥¹¥¯¥E×¥·¥ç¥ó·¿Åù¤òÀßÄê¤¹¤E³¤È¤¬¤Ç¤­¤E¬¡¢¤³¤Eé¤ÎÀßÄê¤Ë
-   * ¤è¤EÕ¥Ã¥¯¤µ¤EEİ¥¤¥ó¥È¤Ï°Û¤Ê¤E£°Ê²¼¤Ë¡¢¥¤¥ó¥¿¡¼¥Õ¥§¡¼¥¹¤¬CORBA
-   * CDR·¿¤Î¾Eç¤Î¥³¡¼¥EĞ¥Ã¥¯°E÷¤ò¼¨¤¹¡£
+   * ‘æ1ˆø”‚Ì "ON_BUFFER_WRITE" ‚ÍAƒR[ƒ‹ƒoƒbƒN‚ğƒtƒbƒN‚·‚éƒ|ƒCƒ“ƒg‚Å
+   * ‚ ‚èAˆÈ‰º‚É—ñ‹“‚·‚é’l‚ğæ‚é‚±‚Æ‚ª‰Â”\‚Å‚ ‚éBƒf[ƒ^ƒ|[ƒg‚É‚ÍAÚ
+   * ‘±‚Éƒf[ƒ^‚Ì‘—óM•û–@‚É‚Â‚¢‚ÄAƒCƒ“ƒ^[ƒtƒF[ƒXŒ^Aƒf[ƒ^ƒtƒ[
+   * Œ^AƒTƒuƒXƒNƒŠƒvƒVƒ‡ƒ“Œ^“™‚ğİ’è‚·‚é‚±‚Æ‚ª‚Å‚«‚é‚ªA‚±‚ê‚ç‚Ìİ’è‚É
+   * ‚æ‚èƒtƒbƒN‚³‚ê‚éƒ|ƒCƒ“ƒg‚ÍˆÙ‚È‚éBˆÈ‰º‚ÉAƒCƒ“ƒ^[ƒtƒF[ƒX‚ªCORBA
+   * CDRŒ^‚Ìê‡‚ÌƒR[ƒ‹ƒoƒbƒNˆê——‚ğ¦‚·B
    *
    * OutPort:
-   * -  Push·¿: Subscription Type¤Ë¤è¤ê¤µ¤é¤Ë¥¤¥Ù¥ó¥È¤Î¼Eà¤¬Ê¬¤«¤EE£
-   *   - Flush: Flush·¿¤Ë¤Ï¥Ğ¥Ã¥Õ¥¡¤¬¤Ê¤¤¤¿¤EON_BUFFER ·Ï¤Î¥¤¥Ù¥ó¥È¤ÏÈ¯À¸¤·¤Ê¤¤
+   * -  PushŒ^: Subscription Type‚É‚æ‚è‚³‚ç‚ÉƒCƒxƒ“ƒg‚Ìí—Ş‚ª•ª‚©‚ê‚éB
+   *   - Flush: FlushŒ^‚É‚Íƒoƒbƒtƒ@‚ª‚È‚¢‚½‚ß ON_BUFFER Œn‚ÌƒCƒxƒ“ƒg‚Í”­¶‚µ‚È‚¢
    *     - ON_SEND
    *     - ON_RECEIVED
    *     - ON_RECEIVER_FULL
    *     - ON_RECEIVER_TIMEOUT
    *     - ON_RECEIVER_ERROR
    *     .
-   *   - Flush: Flush·¿¤Ë¤Ï¥Ğ¥Ã¥Õ¥¡¤¬¤Ê¤¤¤¿¤EON_BUFFER ·Ï¤Î¥¤¥Ù¥ó¥È¤ÏÈ¯À¸¤·¤Ê¤¤
-   *     - ON_SEND
-   *     - ON_RECEIVED
-   *     - ON_RECEIVER_FULL
-   *     - ON_RECEIVER_TIMEOUT
-   *     - ON_RECEIVER_ERROR
-   *     - ON_CONNECT
-   *     - ON_DISCONNECT
+   *   - NewŒ^
    *     - ON_BUFFER_WRITE
    *     - ON_BUFFER_FULL
    *     - ON_BUFFER_WRITE_TIMEOUT
@@ -234,8 +236,8 @@ namespace RTC
    *     - ON_RECEIVER_FULL
    *     - ON_RECEIVER_TIMEOUT
    *     - ON_RECEIVER_ERROR
-   *     - ON_SENDER_ERROR
-   *     - ON_CONNECT
+   *     .
+   *   - PeriodicŒ^
    *     - ON_BUFFER_WRITE
    *     - ON_BUFFER_FULL
    *     - ON_BUFFER_WRITE_TIMEOUT
@@ -245,42 +247,49 @@ namespace RTC
    *     - ON_RECEIVER_FULL
    *     - ON_RECEIVER_TIMEOUT
    *     - ON_RECEIVER_ERROR
-   *     - ON_BUFFER_EMPTY
-   *     - ON_SENDER_EMPTY
-   * - Pull·¿
+   *     .
+   *   .
+   * - PullŒ^
+   *   - ON_BUFFER_WRITE
+   *   - ON_BUFFER_FULL
+   *   - ON_BUFFER_WRITE_TIMEOUT
+   *   - ON_BUFFER_OVERWRITE
    *   - ON_BUFFER_READ
    *   - ON_SEND
+   *   .
+   * InPort:
+   * - PushŒ^:
    *     - ON_BUFFER_WRITE
    *     - ON_BUFFER_FULL
    *     - ON_BUFFER_WRITE_TIMEOUT
    *     - ON_BUFFER_WRITE_OVERWRITE
-   *   - ON_BUFFER_EMPTY
-   *   - ON_BUFFER_READ_TIMEOUT
-   *     - ON_RECEIVED
-   *     - ON_BUFFER_WRITE
-   *     - ON_BUFFER_FULL
-   *     - ON_BUFFER_WRITE_TIMEOUT
-   *     - ON_BUFFER_WRITE_OVERWRITE
+   *     - ON_BUFFER_READ
+   *     - ON_BUFFER_READ_TIMEOUT
    *     - ON_RECEIVED
    *     - ON_RECEIVER_FULL
-   *
-   * @else
    *     - ON_RECEIVER_TIMEOUT
    *     - ON_RECEIVER_ERROR
-   *     - ON_CONNECT
-   *     - ON_DISCONNECT
-   *     - ON_CONNECT
-   *     - ON_DISCONNECT
+   *     .
+   * - PullŒ^
+   *     - ON_BUFFER_READ
    *
+   * @else
    * @class ConnectorDataListener class
    * @brief ConnectorDataListener class
    *
    * This class is abstract base class for listener classes that
-   * provides callbacks for various events in the data port's
+   * realize callbacks for various events in the data port's
    * connectors.
+   *
+   * Callbacks can be hooked to the various kind of events which occur
+   * throgh OutPort side data write action to InPort side data-read
+   * action.  Two types listener classes exist. One is
+   * ConnectorDataListener which receives valid data-port's data value
+   * at that time such as buffer-full event, data-send event, and so
+   * on. Other is ConnectorListener which does not receive any data
    * such as buffer-empty event, buffer-read-timeout event and so on.
-   * @endif
-   */
+   *
+   * If you want to hook actions which related data-port's data by
    * ConnectorDataListener, a class which inherits this class should
    * be defined, and the functor should receive a connector
    * information and a data value as arguments. And then, the defined
@@ -396,20 +405,14 @@ namespace RTC
     USE_CONNLISTENER_STATUS;
     /*!
      * @if jp
-  class ConnectorDataListener
-  {
-  public:
-     * ConnectorDataListenerType ¤òÊ¸»úÎó¤ËÊÑ´¹¤¹¤E     *
-    /*!
-     * @if jp
-     * @return Ê¸»úÎóÊÑ´¹·EÌ
      *
-     * @brief ConnectorDataListenerType ¤òÊ¸»úÎó¤ËÊÑ´¹
+     * @brief ConnectorDataListenerType ‚ğ•¶š—ñ‚É•ÏŠ·
      *
-     * ConnectorDataListenerType ¤òÊ¸»úÎó¤ËÊÑ´¹¤¹¤E     *
-     * @param type ÊÑ´¹ÂĞ¾İ ConnectorDataListenerType
+     * ConnectorDataListenerType ‚ğ•¶š—ñ‚É•ÏŠ·‚·‚é
      *
-     * @return Ê¸»úÎóÊÑ´¹·EÌ
+     * @param type •ÏŠ·‘ÎÛ ConnectorDataListenerType
+     *
+     * @return •¶š—ñ•ÏŠ·Œ‹‰Ê
      *
      * @else
      *
@@ -445,7 +448,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ¥Ç¥¹¥È¥é¥¯¥¿
+     * @brief ƒfƒXƒgƒ‰ƒNƒ^
      * @else
      * @brief Destructor
      * @endif
@@ -455,10 +458,10 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief ²¾ÁÛ¥³¡¼¥EĞ¥Ã¥¯¥á¥½¥Ã¥É
+     * @brief ‰¼‘zƒR[ƒ‹ƒoƒbƒNƒƒ\ƒbƒh
      *
-     * ¥Ç¡¼¥¿¥İ¡¼¥È¤Î Connector ¤Ë¤ª¤¤¤ÆÈ¯À¸¤¹¤EÆ¼E¤¥Ù¥ó¥È¤ËÂĞ¤¹¤E³¡¼
-     * ¥EĞ¥Ã¥¯¥á¥½¥Ã¥É
+     * ƒf[ƒ^ƒ|[ƒg‚Ì Connector ‚É‚¨‚¢‚Ä”­¶‚·‚éŠeíƒCƒxƒ“ƒg‚É‘Î‚·‚éƒR[
+     * ƒ‹ƒoƒbƒNƒƒ\ƒbƒh
      *
      * @else
      *
@@ -468,22 +471,21 @@ namespace RTC
      *
      * @endif
      */
-    virtual void operator()(const ConnectorInfo& info,
+	virtual ReturnCode operator()(const ConnectorInfo& info,
                             const cdrMemoryStream& data) = 0;
-   * ¥EĞ¥Ã¥¯¤ò¼Â¸½¤¹¤EE¹¥Ê¥¯¥é¥¹¤Î´ğÄE¯¥é¥¹¡£
-   * 
+  };
 
   /*!
    * @if jp
-   * @class ConnectorDataListenerT ¥¯¥é¥¹
-   * @brief ConnectorDataListenerT ¥¯¥é¥¹
+   * @class ConnectorDataListenerT ƒNƒ‰ƒX
+   * @brief ConnectorDataListenerT ƒNƒ‰ƒX
    *
-   * ¥Ç¡¼¥¿¥İ¡¼¥È¤Î Connector ¤Ë¤ª¤¤¤ÆÈ¯À¸¤¹¤EÆ¼E¤¥Ù¥ó¥È¤ËÂĞ¤¹¤E³¡¼
-   * ¥EĞ¥Ã¥¯¤ò¼Â¸½¤¹¤EE¹¥Ê¥¯¥é¥¹¤Î´ğÄE¯¥é¥¹¡£
+   * ƒf[ƒ^ƒ|[ƒg‚Ì Connector ‚É‚¨‚¢‚Ä”­¶‚·‚éŠeíƒCƒxƒ“ƒg‚É‘Î‚·‚éƒR[
+   * ƒ‹ƒoƒbƒN‚ğÀŒ»‚·‚éƒŠƒXƒiƒNƒ‰ƒX‚ÌŠî’êƒNƒ‰ƒXB
    * 
-   * ¤³¤Î¥¯¥é¥¹¤Ï¡¢operator()() ¤ÎÂE°ú¿ô¤Ë cdrMemoryStream ·¿¤Ç¤Ï¤Ê¤¯¡¢
-   * ¼Âºİ¤Ë¥Ç¡¼¥¿¥İ¡¼¥È¤Ç»ÈÍÑ¤µ¤EEÑ¿ô·¿¤ò¥Æ¥ó¥×¥E¼¥È°ú¿ô¤È¤·¤Æ
-   * ÅÏ¤¹¤³¤È¤¬¤Ç¤­¤E£
+   * ‚±‚ÌƒNƒ‰ƒX‚ÍAoperator()() ‚Ì‘æ2ˆø”‚É cdrMemoryStream Œ^‚Å‚Í‚È‚­A
+   * ÀÛ‚Éƒf[ƒ^ƒ|[ƒg‚Åg—p‚³‚ê‚é•Ï”Œ^‚ğƒeƒ“ƒvƒŒ[ƒgˆø”‚Æ‚µ‚Ä
+   * “n‚·‚±‚Æ‚ª‚Å‚«‚éB
    *
    * @else
    * @class ConnectorDataListenerT class
@@ -498,7 +500,7 @@ namespace RTC
    * of cdrMemoryStream.
    *
    * @endif
-   */
+   */ 
   template <class DataType>
   class ConnectorDataListenerT
     : public ConnectorDataListener
@@ -506,7 +508,7 @@ namespace RTC
   public:
     /*!
      * @if jp
-     * @brief ¥Ç¥¹¥È¥é¥¯¥¿
+     * @brief ƒfƒXƒgƒ‰ƒNƒ^
      * @else
      * @brief Destructor
      * @endif
@@ -516,13 +518,13 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief ¥³¡¼¥EĞ¥Ã¥¯¥á¥½¥Ã¥É
+     * @brief ƒR[ƒ‹ƒoƒbƒNƒƒ\ƒbƒh
      *
-     * ¥Ç¡¼¥¿¤ò¥Ç¡¼¥¿¥İ¡¼¥È¤Ç»ÈÍÑ¤µ¤EEÑ¿ô·¿¤ËÊÑ´¹¤·¤Æ ConnectorDataListenerT
-     * ¤Î¥³¡¼¥EĞ¥Ã¥¯¥á¥½¥Ã¥É¤ò¸Æ¤Ó½Ğ¤¹¡£
+     * ƒf[ƒ^‚ğƒf[ƒ^ƒ|[ƒg‚Åg—p‚³‚ê‚é•Ï”Œ^‚É•ÏŠ·‚µ‚Ä ConnectorDataListenerT
+     * ‚ÌƒR[ƒ‹ƒoƒbƒNƒƒ\ƒbƒh‚ğŒÄ‚Ño‚·B
      *
      * @param info ConnectorInfo 
-     * @param cdrdata cdrMemoryStream·¿¤Î¥Ç¡¼¥¿
+     * @param cdrdata cdrMemoryStreamŒ^‚Ìƒf[ƒ^
      *
      * @else
      *
@@ -536,8 +538,8 @@ namespace RTC
      *
      * @endif
      */
-    virtual void operator()(const ConnectorInfo& info,
-                            const cdrMemoryStream& cdrdata)
+	virtual ReturnCode operator()(const ConnectorInfo& info,
+                                  const cdrMemoryStream& cdrdata)
     {
       DataType data;
 #ifdef ORB_IS_ORBEXPRESS
@@ -578,21 +580,22 @@ namespace RTC
         }
       data <<= cdr;
 #endif
-
-
-
-
-
-      this->operator()(info, data);
+	  ReturnCode ret = this->operator()(info, data);
+	  if (ret == DATA_CHANGED || ret == BOTH_CHANGED)
+	  {
+		  cdrdata.rewindPtrs();
+		  data >>= cdrdata;
+	  }
+	  return ret;
     }
 
     /*!
      * @if jp
      *
-     * @brief ²¾ÁÛ¥³¡¼¥EĞ¥Ã¥¯¥á¥½¥Ã¥É
+     * @brief ‰¼‘zƒR[ƒ‹ƒoƒbƒNƒƒ\ƒbƒh
      *
-     * ¥Ç¡¼¥¿¥İ¡¼¥È¤Î Connector ¤Ë¤ª¤¤¤ÆÈ¯À¸¤¹¤EÆ¼E¤¥Ù¥ó¥È¤ËÂĞ¤¹¤E³¡¼
-     * ¥EĞ¥Ã¥¯¥á¥½¥Ã¥É
+     * ƒf[ƒ^ƒ|[ƒg‚Ì Connector ‚É‚¨‚¢‚Ä”­¶‚·‚éŠeíƒCƒxƒ“ƒg‚É‘Î‚·‚éƒR[
+     * ƒ‹ƒoƒbƒNƒƒ\ƒbƒh
      *
      * @else
      *
@@ -603,19 +606,21 @@ namespace RTC
      *
      * @endif
      */
-    virtual void operator()(const ConnectorInfo& info,
-                            const DataType& data) = 0;
+	virtual ReturnCode operator()(const ConnectorInfo& info,
+                                 const DataType& data) = 0;
+  };
                             
-   * - ON_SENDER_ERROR:       OutPortÂ¦¥¨¥é¡¼»ş
-   * - ON_CONNECT:            ÀÜÂ³³ÎÎ©»ş
   /*!
    * @if jp
-   * @brief ConnectorListener ¤Î¥¿¥¤¥×
+   * @brief ConnectorListener ‚Ìƒ^ƒCƒv
    *  
-   * - ON_BUFFER_EMPTY:       ¥Ğ¥Ã¥Õ¥¡¤¬¶õ¤Î¾EE   * - ON_BUFFER_READTIMEOUT: ¥Ğ¥Ã¥Õ¥¡¤¬¶õ¤Ç¥¿¥¤¥à¥¢¥¦¥È¤·¤¿¾EE   * - ON_SENDER_EMPTY:       OutPortÂ¦¥Ğ¥Ã¥Õ¥¡¤¬¶E   * - ON_SENDER_TIMEOUT:     OutPortÂ¦¥¿¥¤¥à¥¢¥¦¥È»ş
-   * - ON_SENDER_ERROR:       OutPortÂ¦¥¨¥é¡¼»ş
-   * - ON_CONNECT:            ÀÜÂ³³ÎÎ©»ş
-   * - ON_DISCONNECT:         ÀÜÂ³ÀÚÃÇ»ş
+   * - ON_BUFFER_EMPTY:       ƒoƒbƒtƒ@‚ª‹ó‚Ìê‡
+   * - ON_BUFFER_READTIMEOUT: ƒoƒbƒtƒ@‚ª‹ó‚Åƒ^ƒCƒ€ƒAƒEƒg‚µ‚½ê‡
+   * - ON_SENDER_EMPTY:       OutPort‘¤ƒoƒbƒtƒ@‚ª‹ó
+   * - ON_SENDER_TIMEOUT:     OutPort‘¤ƒ^ƒCƒ€ƒAƒEƒg
+   * - ON_SENDER_ERROR:       OutPort‘¤ƒGƒ‰[
+   * - ON_CONNECT:            Ú‘±Šm—§
+   * - ON_DISCONNECT:         Ú‘±Ø’f
    *
    * @else
    * @brief The types of ConnectorListener
@@ -640,42 +645,51 @@ namespace RTC
       ON_CONNECT,
       ON_DISCONNECT,
       CONNECTOR_LISTENER_NUM
-   * ¥Ç¡¼¥¿¥İ¡¼¥È¤Î Connector ¤Ë¤ª¤¤¤ÆÈ¯À¸¤¹¤EÆ¼E¤¥Ù¥ó¥È¤ËÂĞ¤¹¤E³¡¼
-   * ¥EĞ¥Ã¥¯¤ò¼Â¸½¤¹¤EE¹¥Ê¥¯¥é¥¹¤Î´ğÄE¯¥é¥¹¡£
-   *
+    };
+
+  /*!
    * @if jp
-   * @class ConnectorListener ¥¯¥é¥¹
-   * @brief ConnectorListener ¥¯¥é¥¹
+   * @class ConnectorListener ƒNƒ‰ƒX
+   * @brief ConnectorListener ƒNƒ‰ƒX
    *
-   * ¥Ç¡¼¥¿¥İ¡¼¥È¤Î Connector ¤Ë¤ª¤¤¤ÆÈ¯À¸¤¹¤EÆ¼E¤¥Ù¥ó¥È¤ËÂĞ¤¹¤E³¡¼
-   * ¥EĞ¥Ã¥¯¤ò¼Â¸½¤¹¤EE¹¥Ê¥¯¥é¥¹¤Î´ğÄE¯¥é¥¹¡£
+   * ƒf[ƒ^ƒ|[ƒg‚Ì Connector ‚É‚¨‚¢‚Ä”­¶‚·‚éŠeíƒCƒxƒ“ƒg‚É‘Î‚·‚éƒR[
+   * ƒ‹ƒoƒbƒN‚ğÀŒ»‚·‚éƒŠƒXƒiƒNƒ‰ƒX‚ÌŠî’êƒNƒ‰ƒXB
    *
-   * ¥³¥¢¥úÁ¸¥Ã¥¯¤¬OutPort¤ËÂĞ¤·¤Æ¥Ç¡¼¥¿½ñ¤­¹ş¤ß¡¢InPortÂ¦¤Ç¥Ç¡¼¥¿¤¬¼E   * ÆÀ¤µ¤EEŞ¤Ç¤Î´Ö¤ÇÈ¯À¸¤¹¤EÆ¼E¤¥Ù¥ó¥È¤ò¥Õ¥Ã¥¯¤¹¤E³¡¼¥EĞ¥Ã¥¯¤òÀß
-   * Äê¤¹¤E³¤È¤¬¤Ç¤­¤E£¤Ê¤ª¡¢¥E¹¥Ê¡¼¥¯¥é¥¹¤Ï2¼EàÂ¸ºß¤·¡¢¥Ğ¥Ã¥Õ¥¡¥Õ
-   * ¥EäÁ÷¿®»ş¤Î¥³¡¼¥EĞ¥Ã¥¯¤Ç¡¢¤½¤Î»şÅÀ¤ÇÍ­¸ú¤Ê¥Ç¡¼¥¿¤ò¥Õ¥¡¥ó¥¯¥¿¤Î°E   * ¿ô¤È¤·¤Æ¼õ¤±¼è¤EConnectorDataListener ¤Ç¤¢¤ê¡¢¤â¤¦°Eı¤Ï¥Ç¡¼¥¿¥¨
-   * ¥ó¥×¥Æ¥£¤ä¥Ğ¥Ã¥Õ¥¡ÆÉ¤ß¹ş¤ß»ş¤Î¥¿¥¤¥à¥¢¥¦¥È¤Ê¤É¥Ç¡¼¥¿¤¬¼èÆÀ¤Ç¤­¤Ê¤¤
-   * ¾Eç¤Ê¤É¤Ë¥³¡¼¥Eµ¤EEÕ¥¡¥ó¥¯¥¿¤Î°ú¿ô¤Ë²¿¤â¤È¤é¤Ê¤é¤¤
-   * ConnecotorListener ¤¬¤¢¤E£
+   * ƒRƒAƒƒWƒbƒN‚ªOutPort‚É‘Î‚µ‚Äƒf[ƒ^‘‚«‚İAInPort‘¤‚Åƒf[ƒ^‚ªæ
+   * “¾‚³‚ê‚é‚Ü‚Å‚ÌŠÔ‚Å”­¶‚·‚éŠeíƒCƒxƒ“ƒg‚ğƒtƒbƒN‚·‚éƒR[ƒ‹ƒoƒbƒN‚ğİ
+   * ’è‚·‚é‚±‚Æ‚ª‚Å‚«‚éB‚È‚¨AƒŠƒXƒi[ƒNƒ‰ƒX‚Í2í—Ş‘¶İ‚µAƒoƒbƒtƒ@ƒt
+   * ƒ‹‚â‘—M‚ÌƒR[ƒ‹ƒoƒbƒN‚ÅA‚»‚Ì“_‚Å—LŒø‚Èƒf[ƒ^‚ğƒtƒ@ƒ“ƒNƒ^‚Ìˆø
+   * ”‚Æ‚µ‚Äó‚¯æ‚é ConnectorDataListener ‚Å‚ ‚èA‚à‚¤ˆê•û‚Íƒf[ƒ^ƒG
+   * ƒ“ƒvƒeƒB‚âƒoƒbƒtƒ@“Ç‚İ‚İ‚Ìƒ^ƒCƒ€ƒAƒEƒg‚È‚Çƒf[ƒ^‚ªæ“¾‚Å‚«‚È‚¢
+   * ê‡‚È‚Ç‚ÉƒR[ƒ‹‚³‚ê‚éƒtƒ@ƒ“ƒNƒ^‚Ìˆø”‚É‰½‚à‚Æ‚ç‚È‚ç‚¢
+   * ConnecotorListener ‚ª‚ ‚éB
    *
-   * ¥Ç¡¼¥¿¥İ¡¼¥È¤Ë¤Ï¡¢ÀÜÂ³»ş¤Ë¥Ç¡¼¥¿¤ÎÁ÷¼õ¿®ÊıË¡¤Ë¤Ä¤¤¤Æ¥Ç¡¼¥¿¥Õ¥ú½¼·¿¡¢
-   * ¥µ¥Ö¥¹¥¯¥E×¥·¥ç¥ó·¿Åù¤òÀßÄê¤¹¤E³¤È¤¬¤Ç¤­¤E£
-   * ConnectorDaataListener/ConnectorListener ¤Ï¶¦¤Ë¤Ë¡¢ÍÍ¡¹¤Ê¥¤¥Ù¥ó¥È
-   * ¤ËÂĞ¤¹¤E³¡¼¥EĞ¥Ã¥¯¤òÀßÄê¤¹¤E³¤È¤¬¤Ç¤­¤E¬¡¢¤³¤Eé¥Ç¡¼¥¿¥Õ¥ú½¼·¿
-   * ¤ª¤è¤Ó¥µ¥Ö¥¹¥¯¥E×¥·¥ç¥ó·¿¤ÎÀßÄê¤Ë±ş¤¸¤Æ¡¢ÍøÍÑ¤Ç¤­¤Eâ¤Î¡¢¤Ç¤­¤Ê¤¤
-   * ¤â¤Î¡¢¤Ş¤¿¸Æ¤Ó½Ğ¤µ¤EE¿¥¤¥ß¥ó¥°¤¬°Û¤Ê¤E£°Ê²¼¤Ë¡¢¥¤¥ó¥¿¡¼¥Õ¥§¡¼¥¹
-   * ¤¬CORBA CDR·¿¤Î¾Eç¤Î¥³¡¼¥EĞ¥Ã¥¯°E÷¤ò¼¨¤¹¡£
+   * ConnectorListener ƒNƒ‰ƒX‚É‚æ‚Á‚ÄŠÖ˜A‚·‚é“®ì‚ğƒtƒbƒN‚µ‚½‚¢ê‡AˆÈ
+   * ‰º‚Ì—á‚Ì‚æ‚¤‚ÉA‚±‚ÌƒNƒ‰ƒX‚ğŒp³‚µAƒRƒlƒNƒ^‚Ìî•ñ‚ğˆø”‚Éæ‚éˆÈ‰º
+   * ‚Ì‚æ‚¤‚ÈƒR[ƒ‹ƒoƒbƒNƒIƒuƒWƒFƒNƒg‚ğ’è‹`‚µAƒf[ƒ^ƒ|[ƒg‚Ì“KØ‚ÈƒR[
+   * ƒ‹ƒoƒbƒNİ’èŠÖ”‚©‚çƒR[ƒ‹ƒoƒbƒNƒIƒuƒWƒFƒNƒg‚ğƒZƒbƒg‚·‚é•K—v‚ª‚ ‚éB
    *
+   * <pre>
+   * class MyListener
+   *   : public ConnectorListener
+   * {
+   * public:
+   *   MyListener(const char* name) : m_name(name) {}
+   *   virtual ~MyListener() {}
+   *   virtual ReturnCode operator()(ConnectorInfo& info)
+   *   {
+   *     std::cout << "Data Listener: " << m_name       << std::endl;
    *     std::cout << "Profile::name: " << info.name    << std::endl;
    *     std::cout << "Profile::id:   " << info.id      << std::endl;
    *     std::cout << "Profile::properties: "           << std::endl;
    *     std::cout << info.properties;
-   *     - ON_RECEIVER_ERROR
+   *   };
    *   std::string m_name;
    * };
    * </pre>
    *
-   * ¤³¤Î¤è¤¦¤Ë¤·¤ÆÄEÁ¤µ¤E¿¥E¹¥Ê¥¯¥é¥¹¤Ï¡¢°Ê²¼¤Î¤è¤¦¤Ë¥Ç¡¼¥¿¥İ¡¼¥È¤Ë
-   * ÂĞ¤·¤Æ¡¢°Ê²¼¤Î¤è¤¦¤Ë¥»¥Ã¥È¤µ¤EE£
+   * ‚±‚Ì‚æ‚¤‚É‚µ‚Ä’è‹`‚³‚ê‚½ƒŠƒXƒiƒNƒ‰ƒX‚ÍAˆÈ‰º‚Ì‚æ‚¤‚Éƒf[ƒ^ƒ|[ƒg‚É
+   * ‘Î‚µ‚ÄAˆÈ‰º‚Ì‚æ‚¤‚ÉƒZƒbƒg‚³‚ê‚éB
    *
    * <pre>
    * RTC::ReturnCode_t ConsoleIn::onInitialize()
@@ -686,24 +700,24 @@ namespace RTC
    *    :
    * </pre>
    *
-   * ÂE°ú¿ô¤Î "ON_BUFFER_EMPTY" ¤Ï¡¢¥³¡¼¥EĞ¥Ã¥¯¤ò¥Õ¥Ã¥¯¤¹¤Eİ¥¤¥ó¥È¤Ç
-   * ¤¢¤ê¡¢°Ê²¼¤ËÎóµó¤¹¤EÍ¤ò¼è¤E³¤È¤¬²ÄÇ½¤Ç¤¢¤E£¥Ç¡¼¥¿¥İ¡¼¥È¤Ë¤Ï¡¢ÀÜ
-   * Â³»ş¤Ë¥Ç¡¼¥¿¤ÎÁ÷¼õ¿®ÊıË¡¤Ë¤Ä¤¤¤Æ¡¢¥¤¥ó¥¿¡¼¥Õ¥§¡¼¥¹·¿¡¢¥Ç¡¼¥¿¥Õ¥ú½¼
-   * ·¿¡¢¥µ¥Ö¥¹¥¯¥E×¥·¥ç¥ó·¿Åù¤òÀßÄê¤¹¤E³¤È¤¬¤Ç¤­¤E¬¡¢¤³¤Eé¤ÎÀßÄê¤Ë
-   * ¤è¤EÕ¥Ã¥¯¤µ¤EEİ¥¤¥ó¥È¤Ï°Û¤Ê¤E£°Ê²¼¤Ë¡¢¥¤¥ó¥¿¡¼¥Õ¥§¡¼¥¹¤¬CORBA
-   * CDR·¿¤Î¾Eç¤Î¥³¡¼¥EĞ¥Ã¥¯°E÷¤ò¼¨¤¹¡£
+   * ‘æ1ˆø”‚Ì "ON_BUFFER_EMPTY" ‚ÍAƒR[ƒ‹ƒoƒbƒN‚ğƒtƒbƒN‚·‚éƒ|ƒCƒ“ƒg‚Å
+   * ‚ ‚èAˆÈ‰º‚É—ñ‹“‚·‚é’l‚ğæ‚é‚±‚Æ‚ª‰Â”\‚Å‚ ‚éBƒf[ƒ^ƒ|[ƒg‚É‚ÍAÚ
+   * ‘±‚Éƒf[ƒ^‚Ì‘—óM•û–@‚É‚Â‚¢‚ÄAƒCƒ“ƒ^[ƒtƒF[ƒXŒ^Aƒf[ƒ^ƒtƒ[
+   * Œ^AƒTƒuƒXƒNƒŠƒvƒVƒ‡ƒ“Œ^“™‚ğİ’è‚·‚é‚±‚Æ‚ª‚Å‚«‚é‚ªA‚±‚ê‚ç‚Ìİ’è‚É
+   * ‚æ‚èƒtƒbƒN‚³‚ê‚éƒ|ƒCƒ“ƒg‚ÍˆÙ‚È‚éBˆÈ‰º‚ÉAƒCƒ“ƒ^[ƒtƒF[ƒX‚ªCORBA
+   * CDRŒ^‚Ìê‡‚ÌƒR[ƒ‹ƒoƒbƒNˆê——‚ğ¦‚·B
    *
    * OutPort:
-   * -  Push·¿: Subscription Type¤Ë¤è¤ê¤µ¤é¤Ë¥¤¥Ù¥ó¥È¤Î¼Eà¤¬Ê¬¤«¤EE£
-   *   - Flush: Flush·¿¤Ë¤Ï¥Ğ¥Ã¥Õ¥¡¤¬¤Ê¤¤¤¿¤EON_BUFFER ·Ï¤Î¥¤¥Ù¥ó¥È¤ÏÈ¯À¸¤·¤Ê¤¤
+   * -  PushŒ^: Subscription Type‚É‚æ‚è‚³‚ç‚ÉƒCƒxƒ“ƒg‚Ìí—Ş‚ª•ª‚©‚ê‚éB
+   *   - Flush: FlushŒ^‚É‚Íƒoƒbƒtƒ@‚ª‚È‚¢‚½‚ß ON_BUFFER Œn‚ÌƒCƒxƒ“ƒg‚Í”­¶‚µ‚È‚¢
    *     - ON_CONNECT
    *     - ON_DISCONNECT
    *     .
-   *   - New·¿
+   *   - NewŒ^
    *     - ON_CONNECT
    *     - ON_DISCONNECT
    *     .
-   *   - Periodic·¿
+   *   - PeriodicŒ^
    *     - ON_BUFFER_EMPTY
    *     - ON_BUFFER_READ_TIMEOUT
    *     - ON_SENDER_EMPTY
@@ -711,50 +725,50 @@ namespace RTC
    *     - ON_CONNECT
    *     - ON_DISCONNECT
    *     .
-   *     - ON_BUFFER_READ
-   *     - ON_SEND
-   *     - ON_RECEIVED
-   *     - ON_RECEIVER_FULL
-   *     - ON_SEND
-   *     - ON_RECEIVED
-   *     - ON_RECEIVER_FULL
-   *     - ON_RECEIVER_TIMEOUT
-   *   - ON_BUFFER_READ
    *   .
-   *   - ON_SEND
+   * - PullŒ^
    *   - ON_BUFFER_EMPTY
    *   - ON_BUFFER_READ_TIMEOUT
    *   - ON_SENDER_EMPTY
    *   - ON_SENDER_TIMEOUT
    *   - ON_SENDER_ERROR
    *   - ON_CONNECT
+   *   - ON_DISCONNECT
+   *   .
    * InPort:
-   * - Push·¿:
-   *     - ON_BUFFER_WRITE
-   *     - ON_BUFFER_FULL
-   *     - ON_BUFFER_WRITE_TIMEOUT
-   *     - ON_BUFFER_WRITE_OVERWRITE
-   *     - ON_RECEIVED
+   * - PushŒ^:
+   *     - ON_BUFFER_EMPTY
+   *     - ON_BUFFER_READ_TIMEOUT
+   *     - ON_CONNECT
+   *     - ON_DISCONNECT
+   *     .
+   * - PullŒ^
+   *     - ON_CONNECT
+   *     - ON_DISCONNECT
    *
-   *     - ON_RECEIVER_TIMEOUT
-   *     - ON_RECEIVER_ERROR
-   * connectors.
-   *
+   * @else
    * @class ConnectorListener class
    * @brief ConnectorListener class
    *
    * This class is abstract base class for listener classes that
-   * provides callbacks for various events in the data port's
+   * realize callbacks for various events in the data port's
    * connectors.
    *
-   * @endif
-   */
-  class ConnectorListener
-  {
-  public:
+   * Callbacks can be hooked to the various kind of events which occur
+   * throgh OutPort side data write action to InPort side data-read
+   * action. Two types listener classes exist. One is
+   * ConnectorDataListener which receives valid data-port's data value
+   * at that time such as buffer-full event, data-send event, and so
+   * on. Other is ConnectorListener which does not receive any data
+   * such as buffer-empty event, buffer-read-timeout event and so on.
+   *
+   * If you want to hook related actions by
+   * ConnectorListener, a class which inherits this class should
+   * be defined, and the functor should receive a connector
+   * information as an argument. And then, the defined
    * class must be set to data-port object through its member
-     * @if jp
-     *
+   * function, as follows.
+   *
    * <pre>
    * class MyListener
    *   : public ConnectorListener
@@ -842,19 +856,13 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief ConnectorListenerType ¤òÊ¸»úÎó¤ËÊÑ´¹
+     * @brief ConnectorListenerType ‚ğ•¶š—ñ‚É•ÏŠ·
      *
-     * ConnectorListenerType ¤òÊ¸»úÎó¤ËÊÑ´¹¤¹¤E     *
-     * @param type ÊÑ´¹ÂĞ¾İ ConnectorListenerType
+     * ConnectorListenerType ‚ğ•¶š—ñ‚É•ÏŠ·‚·‚é
      *
-     * @brief ConnectorListenerType ¤òÊ¸»úÎó¤ËÊÑ´¹
+     * @param type •ÏŠ·‘ÎÛ ConnectorListenerType
      *
-     * ConnectorListenerType ¤òÊ¸»úÎó¤ËÊÑ´¹¤¹¤E     *
-     *
-     * @param type ÊÑ´¹ÂĞ¾İ ConnectorListenerType
-     *
-     * Convert ConnectorListenerType into the string.
-     * @return Ê¸»úÎóÊÑ´¹·EÌ
+     * @return •¶š—ñ•ÏŠ·Œ‹‰Ê
      *
      * @else
      *
@@ -887,7 +895,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ¥Ç¥¹¥È¥é¥¯¥¿
+     * @brief ƒfƒXƒgƒ‰ƒNƒ^
      * @else
      * @brief Destructor
      * @endif
@@ -897,10 +905,10 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief ²¾ÁÛ¥³¡¼¥EĞ¥Ã¥¯¥á¥½¥Ã¥É
+     * @brief ‰¼‘zƒR[ƒ‹ƒoƒbƒNƒƒ\ƒbƒh
      *
-     * ¥Ç¡¼¥¿¥İ¡¼¥È¤Î Connector ¤Ë¤ª¤¤¤ÆÈ¯À¸¤¹¤EÆ¼E¤¥Ù¥ó¥È¤ËÂĞ¤¹¤E³¡¼
-     * ¥EĞ¥Ã¥¯¥á¥½¥Ã¥É
+     * ƒf[ƒ^ƒ|[ƒg‚Ì Connector ‚É‚¨‚¢‚Ä”­¶‚·‚éŠeíƒCƒxƒ“ƒg‚É‘Î‚·‚éƒR[
+     * ƒ‹ƒoƒbƒNƒƒ\ƒbƒh
      *
      * @else
      *
@@ -911,16 +919,16 @@ namespace RTC
      *
      * @endif
      */
-    virtual void operator()(const ConnectorInfo& info) = 0;
+	virtual ReturnCode operator()(const ConnectorInfo& info) = 0;
   };
 
 
   /*!
    * @if jp
    * @class ConnectorDataListenerHolder
-   * @brief ConnectorDataListener ¥Û¥EÀ¥¯¥é¥¹
+   * @brief ConnectorDataListener ƒzƒ‹ƒ_ƒNƒ‰ƒX
    *
-   *
+   * •¡”‚Ì ConnectorDataListener ‚ğ•Û‚µŠÇ—‚·‚éƒNƒ‰ƒXB
    *
    * @else
    * @class ConnectorDataListenerHolder
@@ -931,23 +939,23 @@ namespace RTC
    * @endif
    */
   class ConnectorDataListenerHolder
+    : public ConnectorListenerStatus
   {
     typedef std::pair<ConnectorDataListener*, bool> Entry;
     typedef coil::Guard<coil::Mutex> Guard;
   public:
+    USE_CONNLISTENER_STATUS;
     /*!
      * @if jp
-     * @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+     * @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
      * @else
      * @brief Constructor
-     * @brief ¥Ç¥¹¥È¥é¥¯¥¿
      * @endif
      */
     ConnectorDataListenerHolder();
     /*!
-    virtual ~ConnectorDataListenerHolder();
      * @if jp
-     * @brief ¥Ç¥¹¥È¥é¥¯¥¿
+     * @brief ƒfƒXƒgƒ‰ƒNƒ^
      * @else
      * @brief Destructor
      * @endif
@@ -957,13 +965,13 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief ¥E¹¥Ê¡¼¤ÎÄÉ²Ã
+     * @brief ƒŠƒXƒi[‚Ì’Ç‰Á
      *
-     * ¥E¹¥Ê¡¼¤òÄÉ²Ã¤¹¤E£
+     * ƒŠƒXƒi[‚ğ’Ç‰Á‚·‚éB
      *
-     * @param listener ÄÉ²Ã¤¹¤EE¹¥Ê
-     * @param autoclean true:¥Ç¥¹¥È¥é¥¯¥¿¤ÇºEE¹¤E
-     *                  false:¥Ç¥¹¥È¥é¥¯¥¿¤ÇºEE·¤Ê¤¤
+     * @param listener ’Ç‰Á‚·‚éƒŠƒXƒi
+     * @param autoclean true:ƒfƒXƒgƒ‰ƒNƒ^‚Åíœ‚·‚é,
+     *                  false:ƒfƒXƒgƒ‰ƒNƒ^‚Åíœ‚µ‚È‚¢
      * @else
      *
      * @brief Add the listener.
@@ -980,10 +988,11 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief ¥E¹¥Ê¡¼¤ÎºEE     *
-     * ¥E¹¥Ê¤òºEE¹¤E£
+     * @brief ƒŠƒXƒi[‚Ìíœ
      *
-     * @param listener ºEE¹¤EE¹¥Ê
+     * ƒŠƒXƒi‚ğíœ‚·‚éB
+     *
+     * @param listener íœ‚·‚éƒŠƒXƒi
      * @else
      *
      * @brief Remove the listener. 
@@ -998,10 +1007,12 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief ¥E¹¥Ê¡¼¤Î¿ô¤òÆÀ¤E     *
-     * ¸½ºßÅĞÏ¿¤µ¤EÆ¤¤¤EE¹¥Ê¡¼¿ô¤òÆÀ¤E£
+     * @brief ƒŠƒXƒi[‚Ì”‚ğ“¾‚é
      *
-     * @return listener¿E     * @else
+     * Œ»İ“o˜^‚³‚ê‚Ä‚¢‚éƒŠƒXƒi[”‚ğ“¾‚éB
+     *
+     * @return listener”
+     * @else
      *
      * @brief Getting number of listeners.
      *
@@ -1015,11 +1026,12 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief ¥E¹¥Ê¡¼¤ØÄÌÃÎ¤¹¤E     *
-     * ÅĞÏ¿¤µ¤EÆ¤¤¤EE¹¥Ê¤Î¥³¡¼¥EĞ¥Ã¥¯¥á¥½¥Ã¥É¤ò¸Æ¤Ó½Ğ¤¹¡£
+     * @brief ƒŠƒXƒi[‚Ö’Ê’m‚·‚é
+     *
+     * “o˜^‚³‚ê‚Ä‚¢‚éƒŠƒXƒi‚ÌƒR[ƒ‹ƒoƒbƒNƒƒ\ƒbƒh‚ğŒÄ‚Ño‚·B
      *
      * @param info ConnectorInfo
-     * @param cdrdata ¥Ç¡¼¥¿
+     * @param cdrdata ƒf[ƒ^
      * @else
      *
      * @brief Notify listeners. 
@@ -1030,21 +1042,21 @@ namespace RTC
      * @param cdrdata Data
      * @endif
      */
-    void notify(const ConnectorInfo& info,
+	ReturnCode notify(const ConnectorInfo& info,
                 const cdrMemoryStream& cdrdata);
 
     /*!
      * @if jp
      *
-     * @brief ¥E¹¥Ê¡¼¤ØÄÌÃÎ¤¹¤E¥Ç¡¼¥¿·¿»ØÄEÇ)
+     * @brief ƒŠƒXƒi[‚Ö’Ê’m‚·‚é(ƒf[ƒ^Œ^w’è”Å)
      *
-     * ÅĞÏ¿¤µ¤EÆ¤¤¤EE¹¥Ê¤Î¥³¡¼¥EĞ¥Ã¥¯¥á¥½¥Ã¥É¤ò¸Æ¤Ó½Ğ¤¹¡£
-     * COnnectorDataListenerT ·¿¤Î¥³¡¼¥EĞ¥Ã¥¯¤Î¤ß¥³¡¼¥Eµ¤EE£
+     * “o˜^‚³‚ê‚Ä‚¢‚éƒŠƒXƒi‚ÌƒR[ƒ‹ƒoƒbƒNƒƒ\ƒbƒh‚ğŒÄ‚Ño‚·B
+     * ConnectorDataListenerT Œ^‚ÌƒR[ƒ‹ƒoƒbƒN‚Ì‚İƒR[ƒ‹‚³‚ê‚éB
      *
      * @param info ConnectorInfo
-     * @param typeddata ¥Ç¡¼¥¿¡Ê¥Ç¡¼¥¿·¿»ØÄê¤¢¤ê¡Ë
-     * @param info ConnectorInfo
-     * @param typeddata Data
+     * @param typeddata ƒf[ƒ^iƒf[ƒ^Œ^w’è‚ ‚èj
+     * @else
+     *
      * @brief Notify listeners. (Typed data version)
      *
      * This calls the Callback method of the registered listener.
@@ -1052,12 +1064,13 @@ namespace RTC
      *
      * @param info ConnectorInfo
      * @param typeddata Data
-      for (int i(0), len(m_listeners.size()); i < len; ++i)
+     * @endif
      */
     template <class DataType>
-    void notify(const ConnectorInfo& info, const DataType& typeddata)
+	ReturnCode notify(const ConnectorInfo& info, const DataType& typeddata)
     {
-      Guard guard(m_mutex);
+	  Guard guard(m_mutex);
+	  ReturnCode ret(NO_CHANGE);
       for (int i(0), len(m_listeners.size()); i < len; ++i)
         {
           ConnectorDataListenerT<DataType>* listener(0);
@@ -1069,8 +1082,8 @@ namespace RTC
             }
         }
       return ret;
+    }
 
-  private:
   private:
     std::vector<Entry> m_listeners;
     coil::Mutex m_mutex;
@@ -1080,16 +1093,9 @@ namespace RTC
   /*!
    * @if jp
    * @class ConnectorListenerHolder 
-   * @brief ConnectorListener ¥Û¥EÀ¥¯¥é¥¹
+   * @brief ConnectorListener ƒzƒ‹ƒ_ƒNƒ‰ƒX
    *
-   * Ê£¿ô¤Î ConnectorListener ¤òÊİ»ı¤·´ÉÍı¤¹¤E¯¥é¥¹¡£
-   *
-   * @else
-   * @class ConnectorListenerHolder
-   * @brief ConnectorListener holder class
-   *
-   * This class manages one ore more instances of ConnectorListener class.
-   * Ê£¿ô¤Î ConnectorListener ¤òÊİ»ı¤·´ÉÍı¤¹¤E¯¥é¥¹¡£
+   * •¡”‚Ì ConnectorListener ‚ğ•Û‚µŠÇ—‚·‚éƒNƒ‰ƒXB
    *
    * @else
    * @class ConnectorListenerHolder
@@ -1100,25 +1106,25 @@ namespace RTC
    * @endif
    */
   class ConnectorListenerHolder
+	  : public ConnectorListenerStatus
   {
     typedef std::pair<ConnectorListener*, bool> Entry;
     typedef coil::Guard<coil::Mutex> Guard;
   public:
+    USE_CONNLISTENER_STATUS;
     /*!
      * @if jp
-     * @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+     * @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
      * @else
      * @brief Constructor
      * @endif
      */
     ConnectorListenerHolder();
     
-     * @endif
     /*!
      * @if jp
-     * @brief ¥Ç¥¹¥È¥é¥¯¥¿
+     * @brief ƒfƒXƒgƒ‰ƒNƒ^
      * @else
-     * @if jp
      * @brief Destructor
      * @endif
      */
@@ -1127,13 +1133,13 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief ¥E¹¥Ê¡¼¤ÎÄÉ²Ã
+     * @brief ƒŠƒXƒi[‚Ì’Ç‰Á
      *
-     * ¥E¹¥Ê¡¼¤òÄÉ²Ã¤¹¤E£
+     * ƒŠƒXƒi[‚ğ’Ç‰Á‚·‚éB
      *
-     * @param listener ÄÉ²Ã¤¹¤EE¹¥Ê
-     * @param autoclean true:¥Ç¥¹¥È¥é¥¯¥¿¤ÇºEE¹¤E
-     *                  false:¥Ç¥¹¥È¥é¥¯¥¿¤ÇºEE·¤Ê¤¤
+     * @param listener ’Ç‰Á‚·‚éƒŠƒXƒi
+     * @param autoclean true:ƒfƒXƒgƒ‰ƒNƒ^‚Åíœ‚·‚é,
+     *                  false:ƒfƒXƒgƒ‰ƒNƒ^‚Åíœ‚µ‚È‚¢
      * @else
      *
      * @brief Add the listener.
@@ -1150,10 +1156,11 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief ¥E¹¥Ê¡¼¤ÎºEE     *
-     * ¥E¹¥Ê¤òºEE¹¤E£
+     * @brief ƒŠƒXƒi[‚Ìíœ
      *
-     * @param listener ºEE¹¤EE¹¥Ê
+     * ƒŠƒXƒi‚ğíœ‚·‚éB
+     *
+     * @param listener íœ‚·‚éƒŠƒXƒi
      * @else
      *
      * @brief Remove the listener. 
@@ -1168,10 +1175,12 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief ¥E¹¥Ê¡¼¤Î¿ô¤òÆÀ¤E     *
-     * ¸½ºßÅĞÏ¿¤µ¤EÆ¤¤¤EE¹¥Ê¡¼¿ô¤òÆÀ¤E£
+     * @brief ƒŠƒXƒi[‚Ì”‚ğ“¾‚é
      *
-     * @return listener¿E     * @else
+     * Œ»İ“o˜^‚³‚ê‚Ä‚¢‚éƒŠƒXƒi[”‚ğ“¾‚éB
+     *
+     * @return listener”
+     * @else
      *
      * @brief Getting number of listeners.
      *
@@ -1185,8 +1194,9 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief ¥E¹¥Ê¡¼¤ØÄÌÃÎ¤¹¤E     *
-     * ÅĞÏ¿¤µ¤EÆ¤¤¤EE¹¥Ê¤Î¥³¡¼¥EĞ¥Ã¥¯¥á¥½¥Ã¥É¤ò¸Æ¤Ó½Ğ¤¹¡£
+     * @brief ƒŠƒXƒi[‚Ö’Ê’m‚·‚é
+     *
+     * “o˜^‚³‚ê‚Ä‚¢‚éƒŠƒXƒi‚ÌƒR[ƒ‹ƒoƒbƒNƒƒ\ƒbƒh‚ğŒÄ‚Ño‚·B
      *
      * @param info ConnectorInfo
      * @else
@@ -1195,10 +1205,10 @@ namespace RTC
      *
      * This calls the Callback method of the registered listener. 
      *
-     * @param info ConnectorInfo
+     * @param info ConnectonotifyrInfo
      * @endif
      */
-    void notify(const ConnectorInfo& info);
+	ReturnCode notify(const ConnectorInfo& info);
       
   private:
     std::vector<Entry> m_listeners;
@@ -1208,14 +1218,14 @@ namespace RTC
   /*!
    * @if jp
    * @class ConnectorListeners
-   * @brief ConnectorListeners ¥¯¥é¥¹
+   * @brief ConnectorListeners ƒNƒ‰ƒX
    *
    *
    * @else
    * @class ConnectorListeners
    * @brief ConnectorListeners class
    *
-     * @if jp
+   *
    * @endif
    */
   class ConnectorListeners
@@ -1223,7 +1233,8 @@ namespace RTC
   public:
     /*!
      * @if jp
-     * @brief ConnectorDataListenerType¥E¹¥ÊÇÛÎE     * ConnectorDataListenerType¥E¹¥Ê¤ò³ÊÇ¼
+     * @brief ConnectorDataListenerTypeƒŠƒXƒi”z—ñ
+     * ConnectorDataListenerTypeƒŠƒXƒi‚ğŠi”[
      * @else
      * @brief ConnectorDataListenerType listener array
      * The ConnectorDataListenerType listener is stored.
@@ -1232,8 +1243,15 @@ namespace RTC
     ConnectorDataListenerHolder connectorData_[CONNECTOR_DATA_LISTENER_NUM];
     /*!
      * @if jp
-     * @brief ConnectorListenerType¥E¹¥ÊÇÛÎE     * ConnectorListenerType¥E¹¥Ê¤ò³ÊÇ¼
+     * @brief ConnectorListenerTypeƒŠƒXƒi”z—ñ
+     * ConnectorListenerTypeƒŠƒXƒi‚ğŠi”[
      * @else
      * @brief ConnectorListenerType listener array
      * The ConnectorListenerType listener is stored. 
      * @endif
+     */
+    ConnectorListenerHolder connector_[CONNECTOR_LISTENER_NUM];
+  };
+};
+
+#endif // RTC_CONNECTORLISTENER_H

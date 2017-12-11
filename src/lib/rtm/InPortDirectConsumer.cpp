@@ -49,7 +49,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ÀßÄEé´E½
+   * @brief ÀßÄê½é´ü²½
    * @else
    * @brief Initializing configuration
    * @endif
@@ -67,7 +67,7 @@ namespace RTC
    * @endif
    */
   InPortConsumer::ReturnCode InPortDirectConsumer::
-  put(cdrMemoryStream& data)
+	  put(const cdrMemoryStream& data)
   {
     RTC_PARANOID(("put(): never called."));
     return UNKNOWN_ERROR;
@@ -75,7 +75,8 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief InterfaceProfile¾ğÊó¤ò¸ø³«¤¹¤E   * @else
+   * @brief InterfaceProfile¾ğÊó¤ò¸ø³«¤¹¤ë
+   * @else
    * @brief Publish InterfaceProfile information
    * @endif
    */
@@ -101,7 +102,8 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ¥Ç¡¼¥¿Á÷¿®ÄÌÃÎ¤«¤é¤ÎÅĞÏ¿²ò½E   * @else
+   * @brief ¥Ç¡¼¥¿Á÷¿®ÄÌÃÎ¤«¤é¤ÎÅĞÏ¿²ò½ü
+   * @else
    * @brief Unsubscribe the data send notification
    * @endif
    */
@@ -116,7 +118,8 @@ extern "C"
 {
   /*!
    * @if jp
-   * @brief ¥â¥¸¥å¡¼¥Eé´E½´Ø¿E   * @else
+   * @brief ¥â¥¸¥å¡¼¥ë½é´ü²½´Ø¿ô
+   * @else
    * @brief Module initialization
    * @endif
    */

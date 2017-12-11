@@ -247,9 +247,19 @@ set(rtm_headers
 	SdoServiceProviderBase.h
 	StateMachine.h
 	Typename.h
+	FsmActionListener.h
+	EventPort.h
+	Macho.h
+	StaticFSM.h
+	InPortSHMConsumer.h
+	InPortSHMProvider.h
+	OutPortSHMConsumer.h
+	OutPortSHMProvider.h
+	SharedMemoryPort.h
 	${PROJECT_BINARY_DIR}/config_rtc.h
 	${PROJECT_BINARY_DIR}/version.h
 )
+
 
 set(rtm_srcs
 	ConfigAdmin.cpp
@@ -311,6 +321,13 @@ set(rtm_srcs
 	InPortConnector.cpp
 	OutPortConnector.cpp
 	NumberingPolicy.cpp
+	FsmActionListener.cpp
+	Macho.cpp
+	InPortSHMConsumer.cpp
+	InPortSHMProvider.cpp
+	OutPortSHMConsumer.cpp
+	OutPortSHMProvider.cpp
+	SharedMemoryPort.cpp
 	${rtm_headers}
 )
 
@@ -324,16 +341,8 @@ if(VXWORKS)
 	endif(RTP)
 endif(VXWORKS)
 
-set(rtm_headers ${rtm_headers} InPortSHMConsumer.h)
-set(rtm_srcs ${rtm_srcs} InPortSHMConsumer.cpp)
-set(rtm_headers ${rtm_headers} InPortSHMProvider.h)
-set(rtm_srcs ${rtm_srcs} InPortSHMProvider.cpp)
-set(rtm_headers ${rtm_headers} OutPortSHMConsumer.h)
-set(rtm_srcs ${rtm_srcs} OutPortSHMConsumer.cpp)
-set(rtm_headers ${rtm_headers} OutPortSHMProvider.h)
-set(rtm_srcs ${rtm_srcs} OutPortSHMProvider.cpp)
-set(rtm_headers ${rtm_headers} SharedMemoryPort.h)
-set(rtm_srcs ${rtm_srcs} SharedMemoryPort.cpp)
+
+
 
 
 

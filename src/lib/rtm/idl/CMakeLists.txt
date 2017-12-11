@@ -58,6 +58,7 @@ set(idls
 	RTC
 	SDOPackage
 	SharedMemory
+	ExtendedFsmService
 	)
 
 

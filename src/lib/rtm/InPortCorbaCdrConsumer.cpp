@@ -49,7 +49,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ÀßÄEé´E½
+   * @brief ÀßÄê½é´ü²½
    * @else
    * @brief Initializing configuration
    * @endif
@@ -67,7 +67,7 @@ namespace RTC
    * @endif
    */
   InPortConsumer::ReturnCode InPortCorbaCdrConsumer::
-  put(cdrMemoryStream& data)
+	  put(const cdrMemoryStream& data)
   {
     RTC_PARANOID(("put()"));
 
@@ -115,7 +115,8 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief InterfaceProfile¾ğÊó¤ò¸ø³«¤¹¤E   * @else
+   * @brief InterfaceProfile¾ğÊó¤ò¸ø³«¤¹¤ë
+   * @else
    * @brief Publish InterfaceProfile information
    * @endif
    */
@@ -149,7 +150,8 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ¥Ç¡¼¥¿Á÷¿®ÄÌÃÎ¤«¤é¤ÎÅĞÏ¿²ò½E   * @else
+   * @brief ¥Ç¡¼¥¿Á÷¿®ÄÌÃÎ¤«¤é¤ÎÅĞÏ¿²ò½ü
+   * @else
    * @brief Unsubscribe the data send notification
    * @endif
    */
@@ -168,7 +170,8 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief IORÊ¸»úÎó¤«¤é¥ª¥Ö¥¸¥§¥¯¥È»²¾È¤ò¼èÆÀ¤¹¤E   * @else
+   * @brief IORÊ¸»úÎó¤«¤é¥ª¥Ö¥¸¥§¥¯¥È»²¾È¤ò¼èÆÀ¤¹¤ë
+   * @else
    * @brief Getting object reference fromn IOR string
    * @endif
    */
@@ -212,7 +215,8 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief Any¤«¤éÄ¾ÀÜ¥ª¥Ö¥¸¥§¥¯¥È»²¾È¤ò¼èÆÀ¤¹¤E   * @else
+   * @brief Any¤«¤éÄ¾ÀÜ¥ª¥Ö¥¸¥§¥¯¥È»²¾È¤ò¼èÆÀ¤¹¤ë
+   * @else
    * @brief Getting object reference fromn Any directry
    * @endif
    */
@@ -256,7 +260,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ÀÜÂ³²ò½EIORÈÇ)
+   * @brief ÀÜÂ³²ò½ü(IORÈÇ)
    * @else
    * @brief ubsubscribing (IOR version)
    * @endif
@@ -295,7 +299,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ÀÜÂ³²ò½EObject referenceÈÇ)
+   * @brief ÀÜÂ³²ò½ü(Object referenceÈÇ)
    * @else
    * @brief ubsubscribing (Object reference version)
    * @endif
@@ -327,7 +331,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ¥E¿¡¼¥ó¥³¡¼¥ÉÊÑ´¹
+   * @brief ¥ê¥¿¡¼¥ó¥³¡¼¥ÉÊÑ´¹
    * @else
    * @brief Return codes conversion
    * @endif
@@ -365,7 +369,8 @@ extern "C"
 { 
   /*!
    * @if jp
-   * @brief ¥â¥¸¥å¡¼¥Eé´E½´Ø¿E   * @else
+   * @brief ¥â¥¸¥å¡¼¥ë½é´ü²½´Ø¿ô
+   * @else
    * @brief Module initialization
    * @endif
    */
