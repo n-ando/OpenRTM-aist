@@ -42,10 +42,9 @@ set(srcs LoggerConsumer.cpp LoggerConsumer.h ${${idl_name}_STUB})
 
 
 if(VXWORKS AND NOT RTP)
-	set(standalone_srcs ${standalone_srcs} ${CMAKE_SOURCE_DIR}/src/lib/rtm/DataFlowComponentBase.cpp)
 	set(libs ${RTCSKEL_PROJECT_NAME})
 
-	add_executable(${target})
+	add_executable(${target} ${srcs})
 	target_link_libraries(${target} ${libs})
 	add_dependencies(${target} ${RTM_PROJECT_NAME})
 	add_dependencies(${target} ${idl_name}_TGT)
