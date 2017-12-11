@@ -48,7 +48,8 @@ namespace CORBA_IORUtil
 
   /*!
    * @if jp
-   * @brief IOR ŽÊŽ¸Ž»”Ð†¦ƒªORŽ¹Ž½ŽÂŽ¤ŽÂŽÎŽ¤ŽØŽÊŽÑŽ´Ž¹Ž¤Ž¹Ž¤¡¦   * @else
+   * @brief IOR •¶Žš—ñ‚ðIOR\‘¢‘Ì‚Ö•ÏŠ·‚·‚é
+   * @else
    * @brief Convert from IOR string to IOR structure
    * @endif
    */
@@ -115,7 +116,8 @@ namespace CORBA_IORUtil
 
   /*!
    * @if jp
-   * @brief IORŽ¹Ž½ŽÂŽ¤ŽÂŽÎŽ¤ƒªORŽÊŽ¸Ž»”Ð†¦ŽØŽÊŽÑŽ´Ž¹Ž¤Ž¹Ž¤¡¦   * @else
+   * @brief IOR\‘¢‘Ì‚ðIOR•¶Žš—ñ‚Ö•ÏŠ·‚·‚é
+   * @else
    * @brief Convert from IOR structure to IOR string 
    * @endif
    */
@@ -176,7 +178,8 @@ namespace CORBA_IORUtil
 
   /*!
    * @if jp
-   * @brief IORŽÆä¦ŽÎŽ¥Ž¨Ž¥†§ŽÉŽ¥ŽÝŽ¥Ž¤Ž¥†§ŽÈŽ¤„ÅŽÖŽ´Ž¹Ž¤Ž¹Ž¤¡¦   * @else
+   * @brief IOR“à‚ÌƒGƒ“ƒhƒ|ƒCƒ“ƒg‚ð’uŠ·‚·‚é
+   * @else
    * @brief Replace endpoint address in IOR entry
    * @endif
    */
@@ -220,7 +223,7 @@ namespace CORBA_IORUtil
 
   /*!
    * @if jp
-   * @brief IORŽÊŽ¸Ž»”Ð†¦Ž«Ž¤òÀ€Ì†¦„Å¡¦ŽÐŽ¤Ž·Ž¥ŽÕŽ¥Ž©Ž¡Ž¼Ž¥ŽÞŽ¥ŽÃŽ¥ŽÈŽºŽÑŽ¤ŽßŽ¤ŽÎŽÊŽ¸Ž»”Ð†¦ŽÈŽ¤Ž·Ž¤ŽÆŽÊŽÖŽ¤Ž¹
+   * @brief IOR•¶Žš—ñ‚©‚çî•ñ‚ð’Šo‚µƒtƒH[ƒ}ƒbƒgÏ‚Ý‚Ì•¶Žš—ñ‚Æ‚µ‚Ä•Ô‚·
    * @else
    * @brief Extracts information from IOR string and returns formatted string
    * @endif

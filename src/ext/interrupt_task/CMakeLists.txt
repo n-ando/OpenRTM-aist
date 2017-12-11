@@ -6,6 +6,6 @@ set(target interrupt_task)
 
 project (${target})
 
-add_executable(${target}.cpp)
+add_executable(${target} ${target}.cpp)
 
 set_target_properties(${target} PROPERTIES SUFFIX ".out")
