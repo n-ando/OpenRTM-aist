@@ -162,7 +162,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode write(const cdrMemoryStream& data);
+    virtual ReturnCode write(cdrMemoryStream& data);
 
     /*!
      * @if jp

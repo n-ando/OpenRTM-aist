@@ -35,8 +35,7 @@ namespace RTC
    */
   PublisherFlush::PublisherFlush()
     : rtclog("PublisherFlush"),
-      m_consumer(0), m_listeners(0), m_active(false),
-      m_retcode(PORT_OK)
+      m_consumer(0), m_listeners(0), m_retcode(PORT_OK), m_active(false)
   {
   }
 
@@ -133,7 +132,7 @@ namespace RTC
    * @brief Write data 
    * @endif
    */
-  PublisherBase::ReturnCode PublisherFlush::write(const cdrMemoryStream& data,
+  PublisherBase::ReturnCode PublisherFlush::write(cdrMemoryStream& data,
                                                   unsigned long sec,
                                                   unsigned long usec)
   {

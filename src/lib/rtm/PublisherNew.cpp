@@ -162,7 +162,7 @@ namespace RTC
    * @brief Write data 
    * @endif
    */
-  PublisherBase::ReturnCode PublisherNew::write(const cdrMemoryStream& data,
+  PublisherBase::ReturnCode PublisherNew::write(cdrMemoryStream& data,
                                                 unsigned long sec,
                                                 unsigned long usec)
   {
@@ -423,7 +423,7 @@ namespace RTC
       {
         m_buffer->advanceRptr(postskip);
         
-        const cdrMemoryStream& cdr(m_buffer->get());
+        cdrMemoryStream& cdr(m_buffer->get());
         onBufferRead(cdr);
         
         onSend(cdr);
@@ -491,7 +491,7 @@ namespace RTC
    */
   PublisherBase::ReturnCode
   PublisherNew::convertReturn(BufferStatus::Enum status,
-                              const cdrMemoryStream& data)
+                              cdrMemoryStream& data)
   {
     /*
      * BufferStatus -> DataPortStatus
@@ -539,7 +539,7 @@ namespace RTC
    */
   PublisherNew::ReturnCode
   PublisherNew::invokeListener(DataPortStatus::Enum status,
-                               const cdrMemoryStream& data)
+                               cdrMemoryStream& data)
   {
     // ret:
     // PORT_OK, PORT_ERROR, SEND_FULL, SEND_TIMEOUT, CONNECTION_LOST,

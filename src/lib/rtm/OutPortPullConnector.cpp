@@ -76,7 +76,7 @@ namespace RTC
    * @endif
    */
   ConnectorBase::ReturnCode
-  OutPortPullConnector::write(const cdrMemoryStream& data)
+  OutPortPullConnector::write(cdrMemoryStream& data)
   {
     m_buffer->write(data);
     return PORT_OK;

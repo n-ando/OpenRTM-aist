@@ -5,10 +5,8 @@
  * @date $Date$
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
- * Copyright (C) 2009
+ * Copyright (C) 2009-2017
  *     Noriaki Ando
- *     Task-intelligence Research Group,
- *     Intelligent Systems Research Institute,
  *     National Institute of
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
@@ -32,6 +30,79 @@ class cdrMemoryStream;
 namespace RTC
 {
   class ConnectorInfo;
+  /*!
+   * @if jp
+   * @class ConnectorListenerStatus mixin class
+   * @brief ConnectorListenerStatus mixin クラス
+   *
+   * このクラスは、enum定義されたリターンコードを、ConnectorListener関
+   * 連のサブクラスで共通利用するための mixin クラスである。このリター
+   * ンコードを使用するクラスでは、ConnectorListenerStatus クラスを
+   * public 継承し、下にdefine してある CONNLISTENER_STATUS_ENUM をクラ
+   * ス内に記述することで利用可能となる。これにより、enum を
+   * ReturnCode 型として typedef し、以後 ReturnCode を利用できるように
+   * するとともに、名前空間に enum 定義された各識別子を当該クラス名前空
+   * 間内に導入する。
+   *
+   * @else
+   * @class DataPortStatus mixin class
+   * @brief DataPortStatus mixin class
+   *
+   * This is a mixin class to provide enumed return codes that are
+   * commonly utilised in connector listener related sub-classes. To
+   * use this class, sub-class should inherit this class as a public
+   * super class, and declare CONNLISTENERSTATUS_ENUM defined
+   * below. Consequently, ReturnCode type that is typedefed by this
+   * macro can be used in the sub-class, and enumed identifiers are
+   * imported to the class's namespace.
+   *
+   * @endif
+   */
+  class ConnectorListenerStatus
+  {
+  public:
+    enum Enum
+      {
+        NO_CHANGE    = 0,
+        INFO_CHANGED = 1 << 0,
+        DATA_CHANGED = 1 << 1,
+        BOTH_CHANGED = INFO_CHANGED | DATA_CHANGED
+      };
+  };
+  ConnectorListenerStatus::Enum operator|(ConnectorListenerStatus::Enum L,
+                                          ConnectorListenerStatus::Enum R);
+  ConnectorListenerStatus::Enum operator&(ConnectorListenerStatus::Enum L,
+                                          ConnectorListenerStatus::Enum R);
+
+  /*!
+   * @if jp
+   *
+   * @brief ::RTC::ConnDataPortStatus 導入
+   *
+   * ::RTC::DataPortStatus で宣言されている Enum のすべてのメンバをネーム
+   * スペースに導入するためのマクロ。DataPortStatus を利用するクラスにお
+   * いて、クラス宣言の先頭において DATAPORTSTATUS_ENUM を記載するだけで、
+   * DataPortStatus で宣言されている enum メンバが名前解決演算子なしにア
+   * クセス可能になる。
+   *
+   * @else
+   *
+   * @brief Importing ::RTC::DataPortStatus macro
+   *
+   * This macro imports all the member of enum declared in
+   * ::RTC::DataPortStatus into the current namespace.  Inserting at the
+   * head of class declaration, classes which utilize DataPortStatus can
+   * access Enum members of DataPortStatus without using namespace
+   * resolve operator.
+   *
+   * @endif
+   */
+#define USE_CONNLISTENER_STATUS                             \
+  typedef ::RTC::ConnectorListenerStatus::Enum ReturnCode;  \
+  using ::RTC::ConnectorListenerStatus::NO_CHANGE;          \
+  using ::RTC::ConnectorListenerStatus::INFO_CHANGED;       \
+  using ::RTC::ConnectorListenerStatus::DATA_CHANGED;       \
+  using ::RTC::ConnectorListenerStatus::BOTH_CHANGED;
 
   /*!
    * @if jp
@@ -50,7 +121,7 @@ namespace RTC
    *
    * @else
    * @brief The types of ConnectorDataListener
-   * 
+   *
    * - ON_BUFFER_WRITE:          At the time of buffer write
    * - ON_BUFFER_FULL:           At the time of buffer full
    * - ON_BUFFER_WRITE_TIMEOUT:  At the time of buffer write timeout
@@ -66,15 +137,15 @@ namespace RTC
    */
   enum ConnectorDataListenerType
     {
-      ON_BUFFER_WRITE = 0, 
-      ON_BUFFER_FULL, 
-      ON_BUFFER_WRITE_TIMEOUT, 
-      ON_BUFFER_OVERWRITE, 
-      ON_BUFFER_READ, 
-      ON_SEND, 
+      ON_BUFFER_WRITE = 0,
+      ON_BUFFER_FULL,
+      ON_BUFFER_WRITE_TIMEOUT,
+      ON_BUFFER_OVERWRITE,
+      ON_BUFFER_READ,
+      ON_SEND,
       ON_RECEIVED,
-      ON_RECEIVER_FULL, 
-      ON_RECEIVER_TIMEOUT, 
+      ON_RECEIVER_FULL,
+      ON_RECEIVER_TIMEOUT,
       ON_RECEIVER_ERROR,
       CONNECTOR_DATA_LISTENER_NUM
     };
@@ -96,13 +167,54 @@ namespace RTC
    * 場合などにコールされるファンクタの引数に何もとらならい
    * ConnecotorListener がある。
    *
-   * データポートには、接続時にデータの送受信方法についてデータフロー型、
-   * サブスクリプション型等を設定することができる。
-   * ConnectorDaataListener/ConnectorListener はともに、様々なイベント
-   * に対するコールバックを設定することができるが、これらデータフロー型
-   * およびサブスクリプション型の設定に応じて、利用可能なもの利用不可能
-   * なものや、呼び出されるタイミングが異なる。
-   * 以下に、インターフェースがCORBA CDR型の場合のコールバック一覧を示す。
+   * ConnectorDataListener クラスによってデータが関連する動作をフックし
+   * たい場合、以下の例のように、このクラスを継承し、コネクタの情報とデー
+   * タを引数に取る以下のようなコールバックオブジェクトを定義し、データ
+   * ポートの適切なコールバック設定関数からコールバックオブジェクトをセッ
+   * トする必要がある。なお、Data Listener には、データとしてマーシャリ
+   * ング後のデータを引数に取る ConnectorDataListener と、データを特定
+   * の型にアンマーシャルした後の値を引数に取る、
+   * ConnectorDataListenerT がある。以下の例は、ConnectorDataListenerT
+   * の定義例である。
+   *
+   * <pre>
+   * class MyDataListener
+   *   : public ConnectorDataListenerT<RTC::TimedLong>
+   * {
+   * public:
+   *   MyDataListener(const char* name) : m_name(name) {}
+   *   virtual ~MyDataListener() {}
+   *   virtual ReturnCode operator()(ConnectorInfo& info, TimedLong& data)
+   *   {
+   *     std::cout << "Data Listener: " << m_name       << std::endl;
+   *     std::cout << "Data:          " << data.data    << std::endl;
+   *     std::cout << "Profile::name: " << info.name    << std::endl;
+   *     std::cout << "Profile::id:   " << info.id      << std::endl;
+   *     std::cout << "Profile::properties: "           << std::endl;
+   *     std::cout << info.properties;
+   *   };
+   *   std::string m_name;
+   * };
+   * </pre>
+   *
+   * このようにして定義されたリスナクラスは、以下のようにデータポートに
+   * 対して、以下のようにセットされる。
+   *
+   * <pre>
+   * RTC::ReturnCode_t ConsoleIn::onInitialize()
+   * {
+   *     m_outOut.
+   *         addConnectorDataListener(ON_BUFFER_WRITE,
+   *                                  new MyDataListener("ON_BUFFER_WRITE"));
+   *    :
+   * </pre>
+   *
+   * 第1引数の "ON_BUFFER_WRITE" は、コールバックをフックするポイントで
+   * あり、以下に列挙する値を取ることが可能である。データポートには、接
+   * 続時にデータの送受信方法について、インターフェース型、データフロー
+   * 型、サブスクリプション型等を設定することができるが、これらの設定に
+   * よりフックされるポイントは異なる。以下に、インターフェースがCORBA
+   * CDR型の場合のコールバック一覧を示す。
    *
    * OutPort:
    * -  Push型: Subscription Typeによりさらにイベントの種類が分かれる。
@@ -112,8 +224,6 @@ namespace RTC
    *     - ON_RECEIVER_FULL
    *     - ON_RECEIVER_TIMEOUT
    *     - ON_RECEIVER_ERROR
-   *     - ON_CONNECT
-   *     - ON_DISCONNECT
    *     .
    *   - New型
    *     - ON_BUFFER_WRITE
@@ -126,9 +236,6 @@ namespace RTC
    *     - ON_RECEIVER_FULL
    *     - ON_RECEIVER_TIMEOUT
    *     - ON_RECEIVER_ERROR
-   *     - ON_SENDER_ERROR
-   *     - ON_CONNECT
-   *     - ON_DISCONNECT
    *     .
    *   - Periodic型
    *     - ON_BUFFER_WRITE
@@ -140,54 +247,162 @@ namespace RTC
    *     - ON_RECEIVER_FULL
    *     - ON_RECEIVER_TIMEOUT
    *     - ON_RECEIVER_ERROR
-   *     - ON_BUFFER_EMPTY
-   *     - ON_SENDER_EMPTY
-   *     - ON_SENDER_ERROR
-   *     - ON_CONNECT
-   *     - ON_DISCONNECT
    *     .
    *   .
    * - Pull型
+   *   - ON_BUFFER_WRITE
+   *   - ON_BUFFER_FULL
+   *   - ON_BUFFER_WRITE_TIMEOUT
+   *   - ON_BUFFER_OVERWRITE
    *   - ON_BUFFER_READ
    *   - ON_SEND
-   *   - ON_BUFFER_EMPTY
-   *   - ON_BUFFER_READ_TIMEOUT
-   *   - ON_SENDER_EMPTY
-   *   - ON_SENDER_TIMEOUT
-   *   - ON_SENDER_ERROR
-   *   - ON_CONNECT
-   *   - ON_DISCONNECT
-   *
+   *   .
    * InPort:
    * - Push型:
    *     - ON_BUFFER_WRITE
    *     - ON_BUFFER_FULL
    *     - ON_BUFFER_WRITE_TIMEOUT
    *     - ON_BUFFER_WRITE_OVERWRITE
+   *     - ON_BUFFER_READ
+   *     - ON_BUFFER_READ_TIMEOUT
    *     - ON_RECEIVED
    *     - ON_RECEIVER_FULL
    *     - ON_RECEIVER_TIMEOUT
    *     - ON_RECEIVER_ERROR
-   *     - ON_CONNECT
-   *     - ON_DISCONNECT
    *     .
    * - Pull型
-   *     - ON_CONNECT
-   *     - ON_DISCONNECT
+   *     - ON_BUFFER_READ
    *
    * @else
    * @class ConnectorDataListener class
    * @brief ConnectorDataListener class
    *
    * This class is abstract base class for listener classes that
-   * provides callbacks for various events in the data port's
+   * realize callbacks for various events in the data port's
    * connectors.
+   *
+   * Callbacks can be hooked to the various kind of events which occur
+   * throgh OutPort side data write action to InPort side data-read
+   * action.  Two types listener classes exist. One is
+   * ConnectorDataListener which receives valid data-port's data value
+   * at that time such as buffer-full event, data-send event, and so
+   * on. Other is ConnectorListener which does not receive any data
+   * such as buffer-empty event, buffer-read-timeout event and so on.
+   *
+   * If you want to hook actions which related data-port's data by
+   * ConnectorDataListener, a class which inherits this class should
+   * be defined, and the functor should receive a connector
+   * information and a data value as arguments. And then, the defined
+   * class must be set to data-port object through its member
+   * function, as follows.  Two types of ConnectorDataListeners are
+   * available. One is "ConnectorDataListener" which receives
+   * marshalled data as data value, the other is
+   * "ConnectorDataListenerT" which receives unmarshalled data as data
+   * value. The following example is the use of ConnectorDataListenerT.
+   *
+   * <pre>
+   * class MyDataListener
+   *   : public ConnectorDataListenerT<RTC::TimedLong>
+   * {
+   * public:
+   *   MyDataListener(const char* name) : m_name(name) {}
+   *   virtual ~MyDataListener() {}
+   *   virtual ReturnCode operator()(ConnectorInfo& info, TimedLong& data)
+   *   {
+   *     std::cout << "Data Listener: " << m_name       << std::endl;
+   *     std::cout << "Data:          " << data.data    << std::endl;
+   *     std::cout << "Profile::name: " << info.name    << std::endl;
+   *     std::cout << "Profile::id:   " << info.id      << std::endl;
+   *     std::cout << "Profile::properties: "           << std::endl;
+   *     std::cout << info.properties;
+   *   };
+   *   std::string m_name;
+   * };
+   * </pre>
+   *
+   * The listener class defained as above can be attached to a
+   * data-port as follows.
+   *
+   * <pre>
+   * RTC::ReturnCode_t ConsoleIn::onInitialize()
+   * {
+   *     m_outOut.
+   *         addConnectorDataListener(ON_BUFFER_WRITE,
+   *                                  new MyDataListener("ON_BUFFER_WRITE"));
+   *    :
+   * </pre>
+   *
+   * The first argument "ON_BUFFER_WRITE" specifies hook point of
+   * callback, and the following values are available. Data-port can
+   * be specified some properties such as interface-type,
+   * dataflow-type, subscription type and so on. Available hook points
+   * vary by the those settings. The following hook points are
+   * available when interface type is CORBA CDR type.
+   *
+   * OutPort:
+   * -  Push type: Available hook event varies by subscription type.
+   *   - Flush: No ON_BUFFER* events since flush-type has no buffer.
+   *     - ON_SEND
+   *     - ON_RECEIVED
+   *     - ON_RECEIVER_FULL
+   *     - ON_RECEIVER_TIMEOUT
+   *     - ON_RECEIVER_ERROR
+   *     .
+   *   - New type:
+   *     - ON_BUFFER_WRITE
+   *     - ON_BUFFER_FULL
+   *     - ON_BUFFER_WRITE_TIMEOUT
+   *     - ON_BUFFER_OVERWRITE
+   *     - ON_BUFFER_READ
+   *     - ON_SEND
+   *     - ON_RECEIVED
+   *     - ON_RECEIVER_FULL
+   *     - ON_RECEIVER_TIMEOUT
+   *     - ON_RECEIVER_ERROR
+   *     .
+   *   - Periodic type:
+   *     - ON_BUFFER_WRITE
+   *     - ON_BUFFER_FULL
+   *     - ON_BUFFER_WRITE_TIMEOUT
+   *     - ON_BUFFER_READ
+   *     - ON_SEND
+   *     - ON_RECEIVED
+   *     - ON_RECEIVER_FULL
+   *     - ON_RECEIVER_TIMEOUT
+   *     - ON_RECEIVER_ERROR
+   *     .
+   *   .
+   * - Pull type:
+   *   - ON_BUFFER_WRITE
+   *   - ON_BUFFER_FULL
+   *   - ON_BUFFER_WRITE_TIMEOUT
+   *   - ON_BUFFER_OVERWRITE
+   *   - ON_BUFFER_READ
+   *   - ON_SEND
+   *   .
+   * InPort:
+   * - Push type:
+   *     - ON_BUFFER_WRITE
+   *     - ON_BUFFER_FULL
+   *     - ON_BUFFER_WRITE_TIMEOUT
+   *     - ON_BUFFER_WRITE_OVERWRITE
+   *     - ON_BUFFER_READ
+   *     - ON_BUFFER_READ_TIMEOUT
+   *     - ON_RECEIVED
+   *     - ON_RECEIVER_FULL
+   *     - ON_RECEIVER_TIMEOUT
+   *     - ON_RECEIVER_ERROR
+   *     .
+   * - Pull type
+   *     - ON_BUFFER_READ
    *
    * @endif
    */
   class ConnectorDataListener
+    : public ConnectorListenerStatus
   {
   public:
+    USE_CONNLISTENER_STATUS;
     /*!
      * @if jp
      *
@@ -256,8 +471,8 @@ namespace RTC
      *
      * @endif
      */
-    virtual void operator()(const ConnectorInfo& info,
-                            const cdrMemoryStream& data) = 0;
+    virtual ReturnCode operator()(ConnectorInfo& info,
+                            cdrMemoryStream& data) = 0;
   };
 
   /*!
@@ -323,12 +538,12 @@ namespace RTC
      *
      * @endif
      */
-    virtual void operator()(const ConnectorInfo& info,
-                            const cdrMemoryStream& cdrdata)
+    virtual ReturnCode operator()(ConnectorInfo& info,
+                                  cdrMemoryStream& cdrdata)
     {
       DataType data;
       cdrMemoryStream cdr(cdrdata.bufPtr(), cdrdata.bufSize());
-      
+
       // endian type check
       std::string endian_type;
       endian_type = info.properties.getProperty("serializer.cdr.endian",
@@ -344,7 +559,13 @@ namespace RTC
           cdr.setByteSwapFlag(false);
         }
       data <<= cdr;
-      this->operator()(info, data);
+      ReturnCode ret = this->operator()(info, data);
+      if (ret == DATA_CHANGED || ret == BOTH_CHANGED)
+        {
+          cdrdata.rewindPtrs();
+          data >>= cdrdata;
+        }
+      return ret;
     }
 
     /*!
@@ -364,9 +585,8 @@ namespace RTC
      *
      * @endif
      */
-    virtual void operator()(const ConnectorInfo& info,
-                            const DataType& data) = 0;
-                            
+    virtual ReturnCode operator()(ConnectorInfo& info,
+                                  DataType& data) = 0;
   };
 
 
@@ -399,9 +619,9 @@ namespace RTC
     {
       ON_BUFFER_EMPTY = 0,
       ON_BUFFER_READ_TIMEOUT,
-      ON_SENDER_EMPTY, 
-      ON_SENDER_TIMEOUT, 
-      ON_SENDER_ERROR, 
+      ON_SENDER_EMPTY,
+      ON_SENDER_TIMEOUT,
+      ON_SENDER_ERROR,
       ON_CONNECT,
       ON_DISCONNECT,
       CONNECTOR_LISTENER_NUM
@@ -424,51 +644,62 @@ namespace RTC
    * 場合などにコールされるファンクタの引数に何もとらならい
    * ConnecotorListener がある。
    *
-   * データポートには、接続時にデータの送受信方法についてデータフロー型、
-   * サブスクリプション型等を設定することができる。
-   * ConnectorDaataListener/ConnectorListener は共にに、様々なイベント
-   * に対するコールバックを設定することができるが、これらデータフロー型
-   * およびサブスクリプション型の設定に応じて、利用できるもの、できない
-   * もの、また呼び出されるタイミングが異なる。以下に、インターフェース
-   * がCORBA CDR型の場合のコールバック一覧を示す。
+   * ConnectorListener クラスによって関連する動作をフックしたい場合、以
+   * 下の例のように、このクラスを継承し、コネクタの情報を引数に取る以下
+   * のようなコールバックオブジェクトを定義し、データポートの適切なコー
+   * ルバック設定関数からコールバックオブジェクトをセットする必要がある。
+   *
+   * <pre>
+   * class MyListener
+   *   : public ConnectorListener
+   * {
+   * public:
+   *   MyListener(const char* name) : m_name(name) {}
+   *   virtual ~MyListener() {}
+   *   virtual ReturnCode operator()(ConnectorInfo& info)
+   *   {
+   *     std::cout << "Data Listener: " << m_name       << std::endl;
+   *     std::cout << "Profile::name: " << info.name    << std::endl;
+   *     std::cout << "Profile::id:   " << info.id      << std::endl;
+   *     std::cout << "Profile::properties: "           << std::endl;
+   *     std::cout << info.properties;
+   *   };
+   *   std::string m_name;
+   * };
+   * </pre>
+   *
+   * このようにして定義されたリスナクラスは、以下のようにデータポートに
+   * 対して、以下のようにセットされる。
+   *
+   * <pre>
+   * RTC::ReturnCode_t ConsoleIn::onInitialize()
+   * {
+   *     m_outOut.
+   *         addConnectorListener(ON_BUFFER_EMPTY,
+   *                              new MyListener("ON_BUFFER_EMPTY"));
+   *    :
+   * </pre>
+   *
+   * 第1引数の "ON_BUFFER_EMPTY" は、コールバックをフックするポイントで
+   * あり、以下に列挙する値を取ることが可能である。データポートには、接
+   * 続時にデータの送受信方法について、インターフェース型、データフロー
+   * 型、サブスクリプション型等を設定することができるが、これらの設定に
+   * よりフックされるポイントは異なる。以下に、インターフェースがCORBA
+   * CDR型の場合のコールバック一覧を示す。
    *
    * OutPort:
    * -  Push型: Subscription Typeによりさらにイベントの種類が分かれる。
    *   - Flush: Flush型にはバッファがないため ON_BUFFER 系のイベントは発生しない
-   *     - ON_SEND
-   *     - ON_RECEIVED
-   *     - ON_RECEIVER_FULL
-   *     - ON_RECEIVER_TIMEOUT
-   *     - ON_RECEIVER_ERROR
    *     - ON_CONNECT
    *     - ON_DISCONNECT
    *     .
    *   - New型
-   *     - ON_BUFFER_WRITE
-   *     - ON_BUFFER_FULL
-   *     - ON_BUFFER_WRITE_TIMEOUT
-   *     - ON_BUFFER_OVERWRITE
-   *     - ON_BUFFER_READ
-   *     - ON_SEND
-   *     - ON_RECEIVED
-   *     - ON_RECEIVER_FULL
-   *     - ON_RECEIVER_TIMEOUT
-   *     - ON_RECEIVER_ERROR
-   *     - ON_SENDER_ERROR
    *     - ON_CONNECT
    *     - ON_DISCONNECT
    *     .
    *   - Periodic型
-   *     - ON_BUFFER_WRITE
-   *     - ON_BUFFER_FULL
-   *     - ON_BUFFER_WRITE_TIMEOUT
-   *     - ON_BUFFER_READ
-   *     - ON_SEND
-   *     - ON_RECEIVED
-   *     - ON_RECEIVER_FULL
-   *     - ON_RECEIVER_TIMEOUT
-   *     - ON_RECEIVER_ERROR
    *     - ON_BUFFER_EMPTY
+   *     - ON_BUFFER_READ_TIMEOUT
    *     - ON_SENDER_EMPTY
    *     - ON_SENDER_ERROR
    *     - ON_CONNECT
@@ -476,8 +707,6 @@ namespace RTC
    *     .
    *   .
    * - Pull型
-   *   - ON_BUFFER_READ
-   *   - ON_SEND
    *   - ON_BUFFER_EMPTY
    *   - ON_BUFFER_READ_TIMEOUT
    *   - ON_SENDER_EMPTY
@@ -485,17 +714,11 @@ namespace RTC
    *   - ON_SENDER_ERROR
    *   - ON_CONNECT
    *   - ON_DISCONNECT
-   *
+   *   .
    * InPort:
    * - Push型:
-   *     - ON_BUFFER_WRITE
-   *     - ON_BUFFER_FULL
-   *     - ON_BUFFER_WRITE_TIMEOUT
-   *     - ON_BUFFER_WRITE_OVERWRITE
-   *     - ON_RECEIVED
-   *     - ON_RECEIVER_FULL
-   *     - ON_RECEIVER_TIMEOUT
-   *     - ON_RECEIVER_ERROR
+   *     - ON_BUFFER_EMPTY
+   *     - ON_BUFFER_READ_TIMEOUT
    *     - ON_CONNECT
    *     - ON_DISCONNECT
    *     .
@@ -508,14 +731,108 @@ namespace RTC
    * @brief ConnectorListener class
    *
    * This class is abstract base class for listener classes that
-   * provides callbacks for various events in the data port's
+   * realize callbacks for various events in the data port's
    * connectors.
+   *
+   * Callbacks can be hooked to the various kind of events which occur
+   * throgh OutPort side data write action to InPort side data-read
+   * action. Two types listener classes exist. One is
+   * ConnectorDataListener which receives valid data-port's data value
+   * at that time such as buffer-full event, data-send event, and so
+   * on. Other is ConnectorListener which does not receive any data
+   * such as buffer-empty event, buffer-read-timeout event and so on.
+   *
+   * If you want to hook related actions by
+   * ConnectorListener, a class which inherits this class should
+   * be defined, and the functor should receive a connector
+   * information as an argument. And then, the defined
+   * class must be set to data-port object through its member
+   * function, as follows.
+   *
+   * <pre>
+   * class MyListener
+   *   : public ConnectorListener
+   * {
+   * public:
+   *   MyListener(const char* name) : m_name(name) {}
+   *   virtual ~MyListener() {}
+   *   virtual ReturnCode operator()(ConnectorInfo& info)
+   *   {
+   *     std::cout << "Data Listener: " << m_name       << std::endl;
+   *     std::cout << "Profile::name: " << info.name    << std::endl;
+   *     std::cout << "Profile::id:   " << info.id      << std::endl;
+   *     std::cout << "Profile::properties: "           << std::endl;
+   *     std::cout << info.properties;
+   *   };
+   *   std::string m_name;
+   * };
+   * </pre>
+   *
+   * The listener class defained as above can be attached to a
+   * data-port as follows.
+   *
+   * <pre>
+   * RTC::ReturnCode_t ConsoleIn::onInitialize()
+   * {
+   *     m_outOut.
+   *         addConnectorListener(ON_BUFFER_EMPTY,
+   *                              new MyDataListener("ON_BUFFER_EMPTY"));
+   *    :
+   * </pre>
+   *
+   * The first argument "ON_BUFFER_EMPTY" specifies hook point of
+   * callback, and the following values are available. Data-port can
+   * be specified some properties such as interface-type,
+   * dataflow-type, subscription type and so on. Available hook points
+   * vary by the those settings. The following hook points are
+   * available when interface type is CORBA CDR type.
+   *
+   * OutPort:
+   * -  Push type: Available hook event varies by subscription type.
+   *   - Flush: No ON_BUFFER* events since flush-type has no buffer.
+   *     - ON_CONNECT
+   *     - ON_DISCONNECT
+   *     .
+   *   - New type:
+   *     - ON_CONNECT
+   *     - ON_DISCONNECT
+   *     .
+   *   - Periodic type:
+   *     - ON_BUFFER_EMPTY
+   *     - ON_BUFFER_READ_TIMEOUT
+   *     - ON_SENDER_EMPTY
+   *     - ON_SENDER_ERROR
+   *     - ON_CONNECT
+   *     - ON_DISCONNECT
+   *     .
+   *   .
+   * - Pull type:
+   *   - ON_BUFFER_EMPTY
+   *   - ON_BUFFER_READ_TIMEOUT
+   *   - ON_SENDER_EMPTY
+   *   - ON_SENDER_TIMEOUT
+   *   - ON_SENDER_ERROR
+   *   - ON_CONNECT
+   *   - ON_DISCONNECT
+   *   .
+   * InPort:
+   * - Push type:
+   *     - ON_BUFFER_EMPTY
+   *     - ON_BUFFER_READ_TIMEOUT
+   *     - ON_CONNECT
+   *     - ON_DISCONNECT
+   *     .
+   * - Pull type:
+   *     - ON_CONNECT
+   *     - ON_DISCONNECT
    *
    * @endif
    */
   class ConnectorListener
+    : public ConnectorListenerStatus
   {
   public:
+    USE_CONNLISTENER_STATUS;
     /*!
      * @if jp
      *
@@ -582,7 +899,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual void operator()(const ConnectorInfo& info) = 0;
+    virtual ReturnCode operator()(ConnectorInfo& info) = 0;
   };
 
 
@@ -602,10 +919,12 @@ namespace RTC
    * @endif
    */
   class ConnectorDataListenerHolder
+    : public ConnectorListenerStatus
   {
     typedef std::pair<ConnectorDataListener*, bool> Entry;
     typedef coil::Guard<coil::Mutex> Guard;
   public:
+    USE_CONNLISTENER_STATUS;
     /*!
      * @if jp
      * @brief コンストラクタ
@@ -703,8 +1022,8 @@ namespace RTC
      * @param cdrdata Data
      * @endif
      */
-    void notify(const ConnectorInfo& info,
-                const cdrMemoryStream& cdrdata);
+    ReturnCode notify(ConnectorInfo& info,
+                      cdrMemoryStream& cdrdata);
 
     /*!
      * @if jp
@@ -712,7 +1031,7 @@ namespace RTC
      * @brief リスナーへ通知する(データ型指定版)
      *
      * 登録されているリスナのコールバックメソッドを呼び出す。
-     * COnnectorDataListenerT 型のコールバックのみコールされる。
+     * ConnectorDataListenerT 型のコールバックのみコールされる。
      *
      * @param info ConnectorInfo
      * @param typeddata データ（データ型指定あり）
@@ -728,9 +1047,10 @@ namespace RTC
      * @endif
      */
     template <class DataType>
-    void notify(const ConnectorInfo& info, const DataType& typeddata)
+    ReturnCode notify(ConnectorInfo& info, DataType& typeddata)
     {
       Guard guard(m_mutex);
+      ReturnCode ret(NO_CHANGE);
       for (int i(0), len(m_listeners.size()); i < len; ++i)
         {
           ConnectorDataListenerT<DataType>* listener(0);
@@ -738,9 +1058,16 @@ namespace RTC
           dynamic_cast<ConnectorDataListenerT<DataType>*>(m_listeners[i].first);
           if (listener != 0)
             {
-              listener->operator()(info, typeddata);
+              ret = ret | listener->operator()(info, typeddata);
+            }
+          else
+            {
+              cdrMemoryStream cdr;
+              typeddata >>= cdr;
+              ret = ret | m_listeners[i].first->operator()(info, cdr);
             }
         }
+      return ret;
     }
 
   private:
@@ -765,10 +1092,12 @@ namespace RTC
    * @endif
    */
   class ConnectorListenerHolder
+    : public ConnectorListenerStatus
   {
     typedef std::pair<ConnectorListener*, bool> Entry;
     typedef coil::Guard<coil::Mutex> Guard;
   public:
+    USE_CONNLISTENER_STATUS;
     /*!
      * @if jp
      * @brief コンストラクタ
@@ -865,7 +1194,7 @@ namespace RTC
      * @param info ConnectorInfo
      * @endif
      */
-    void notify(const ConnectorInfo& info);
+    ReturnCode notify(ConnectorInfo& info);
       
   private:
     std::vector<Entry> m_listeners;

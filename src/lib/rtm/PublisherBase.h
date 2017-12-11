@@ -253,7 +253,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode write(const cdrMemoryStream& data,
+    virtual ReturnCode write(cdrMemoryStream& data,
                              unsigned long sec,
                              unsigned long usec) = 0;
 

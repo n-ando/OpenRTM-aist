@@ -271,6 +271,24 @@ namespace RTC
      * @endif
      */
     void onDisconnect();
+    
+    inline void onBufferRead(cdrMemoryStream& data)
+    {
+      m_listeners.
+        connectorData_[ON_BUFFER_READ].notify(m_profile, data);
+
+    }
+    void onBufferEmpty(cdrMemoryStream& data)
+    {
+      m_listeners.
+        connectorData_[ON_BUFFER_EMPTY].notify(m_profile, data);
+
+    }
+    void onBufferReadTimeout(cdrMemoryStream& data)
+    {
+      m_listeners.
+        connectorData_[ON_BUFFER_READ_TIMEOUT].notify(m_profile, data);
+    }
 
   private:
     /*!
