@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file ManagerServant.cpp
  * @brief RTComponent manager servant implementation class
@@ -121,7 +121,8 @@ namespace RTM
   
   /*!
    * @if jp
-   * @brief ¥â¥¸¥å¡¼¥Eò¥ú½¼¥É¤¹¤E   * @else
+   * @brief ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ã‚’ãƒ­ãƒ¼ãƒ‰ã™ã‚‹
+   * @else
    * @brief Loading a module
    * @endig
    */
@@ -137,7 +138,8 @@ namespace RTM
   
   /*!
    * @if jp
-   * @brief ¥â¥¸¥å¡¼¥Eò¥¢¥ó¥ú½¼¥É¤¹¤E   * @else
+   * @brief ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ã‚’ã‚¢ãƒ³ãƒ­ãƒ¼ãƒ‰ã™ã‚‹
+   * @else
    * @brief Unloading a module
    * @endig
    */  
@@ -152,7 +154,8 @@ namespace RTM
   
   /*!
    * @if jp
-   * @brief ¥ú½¼¥É²ÄÇ½¤Ê¥â¥¸¥å¡¼¥EÎ¥×¥úÁÕ¥¡¥¤¥Eò¼èÆÀ¤¹¤E   * @else
+   * @brief ãƒ­ãƒ¼ãƒ‰å¯èƒ½ãªãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ã®ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«ã‚’å–å¾—ã™ã‚‹
+   * @else
    * @brief Getting loadable module profiles
    * @endig
    */
@@ -209,7 +212,8 @@ namespace RTM
   
   /*!
    * @if jp
-   * @brief ¥ú½¼¥ÉºÑ¤ß¤Î¥â¥¸¥å¡¼¥EÎ¥×¥úÁÕ¥¡¥¤¥Eò¼èÆÀ¤¹¤E   * @else
+   * @brief ãƒ­ãƒ¼ãƒ‰æ¸ˆã¿ã®ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ã®ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«ã‚’å–å¾—ã™ã‚‹
+   * @else
    * @brief Getting loaded module profiles
    * @endig
    */
@@ -266,7 +270,8 @@ namespace RTM
   
   /*!
    * @if jp
-   * @brief ¥³¥ó¥İ¡¼¥Í¥ó¥È¥Õ¥¡¥¯¥È¥ê¤Î¥×¥úÁÕ¥¡¥¤¥Eò¼èÆÀ¤¹¤E   * @else
+   * @brief ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆãƒ•ã‚¡ã‚¯ãƒˆãƒªã®ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«ã‚’å–å¾—ã™ã‚‹
+   * @else
    * @brief Getting component factory profiles
    * @endig
    */
@@ -323,7 +328,8 @@ namespace RTM
   
   /*!
    * @if jp
-   * @brief ¥³¥ó¥İ¡¼¥Í¥ó¥È¤òÀ¸À®¤¹¤E   * @else
+   * @brief ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã‚’ç”Ÿæˆã™ã‚‹
+   * @else
    * @brief Creating an RT-Component
    * @endig
    */
@@ -385,7 +391,8 @@ namespace RTM
   
   /*!
    * @if jp
-   * @brief ¥³¥ó¥İ¡¼¥Í¥ó¥È¤òºEE¹¤E   * @else
+   * @brief ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã‚’å‰Šé™¤ã™ã‚‹
+   * @else
    * @brief Deleting an RT-Component
    * @endig
    */
@@ -413,7 +420,8 @@ namespace RTM
   
   /*!
    * @if jp
-   * @brief µ¯Æ°Ãæ¤Î¥³¥ó¥İ¡¼¥Í¥ó¥È¤Î¥E¹¥È¤ò¼èÆÀ¤¹¤E   * @else
+   * @brief èµ·å‹•ä¸­ã®ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã®ãƒªã‚¹ãƒˆã‚’å–å¾—ã™ã‚‹
+   * @else
    * @brief Getting RT-Component list running on this manager
    * @endig
    */
@@ -466,10 +474,11 @@ namespace RTM
   
   /*!
    * @if jp
-   * @brief µ¯Æ°Ãæ¤Î¥³¥ó¥İ¡¼¥Í¥ó¥È¥×¥úÁÕ¥¡¥¤¥EÎ¥E¹¥È¤ò¼èÆÀ¤¹¤E   * @else
+   * @brief èµ·å‹•ä¸­ã®ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒªã‚¹ãƒˆã‚’å–å¾—ã™ã‚‹
+   * @else
    * @brief Getting RT-Component's profile list running on this manager
    * @endig
-   */  
+   */ 
   RTC::ComponentProfileList* ManagerServant::get_component_profiles()
   {
     RTC_TRACE(("get_component_profiles()"));
@@ -517,10 +526,11 @@ namespace RTM
     return cprofs._retn();
   }
   
-  // manager ´ğËÜ
+  // manager åŸºæœ¬
   /*!
    * @if jp
-   * @brief ¥Ş¥Í¡¼¥¸¥ã¤Î¥×¥úÁÕ¥¡¥¤¥Eò¼èÆÀ¤¹¤E   * @else
+   * @brief ãƒãƒãƒ¼ã‚¸ãƒ£ã®ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«ã‚’å–å¾—ã™ã‚‹
+   * @else
    * @brief Getting this manager's profile.
    * @endig
    */
@@ -535,7 +545,8 @@ namespace RTM
   
   /*!
    * @if jp
-   * @brief ¥Ş¥Í¡¼¥¸¥ã¤Î¥³¥ó¥Õ¥£¥®¥å¥E¼¥·¥ç¥ó¤ò¼èÆÀ¤¹¤E   * @else
+   * @brief ãƒãƒãƒ¼ã‚¸ãƒ£ã®ã‚³ãƒ³ãƒ•ã‚£ã‚®ãƒ¥ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ã‚’å–å¾—ã™ã‚‹
+   * @else
    * @brief Getting this manager's configuration.
    * @endig
    */
@@ -556,7 +567,8 @@ namespace RTM
   
   /*!
    * @if jp
-   * @brief ¥Ş¥Í¡¼¥¸¥ã¤Î¥³¥ó¥Õ¥£¥®¥å¥E¼¥·¥ç¥ó¤òÀßÄê¤¹¤E   * @else
+   * @brief ãƒãƒãƒ¼ã‚¸ãƒ£ã®ã‚³ãƒ³ãƒ•ã‚£ã‚®ãƒ¥ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ã‚’è¨­å®šã™ã‚‹
+   * @else
    * @brief Setting manager's configuration
    * @endig
    */
@@ -569,7 +581,7 @@ namespace RTM
   }
   /*!
    * @if jp
-   * @brief ¥Ş¥Í¡¼¥¸¥ã¤¬¥Ş¥¹¥¿¡¼¤«¤É¤¦¤«
+   * @brief ãƒãƒãƒ¼ã‚¸ãƒ£ãŒãƒã‚¹ã‚¿ãƒ¼ã‹ã©ã†ã‹
    * @else
    * @brief Whether this manager is master or not
    * @endig
@@ -582,7 +594,7 @@ namespace RTM
   
   /*!
    * @if jp
-   * @brief ¥Ş¥¹¥¿¡¼¥Ş¥Í¡¼¥¸¥ã¤Î¼èÆÀ
+   * @brief ãƒã‚¹ã‚¿ãƒ¼ãƒãƒãƒ¼ã‚¸ãƒ£ã®å–å¾—
    * @else
    * @brief Getting master managers
    * @endig
@@ -596,7 +608,7 @@ namespace RTM
   
   /*!
    * @if jp
-   * @brief ¥Ş¥¹¥¿¡¼¥Ş¥Í¡¼¥¸¥ã¤ÎÄÉ²Ã
+   * @brief ãƒã‚¹ã‚¿ãƒ¼ãƒãƒãƒ¼ã‚¸ãƒ£ã®è¿½åŠ 
    * @else
    * @brief Getting a master manager
    * @endig
@@ -621,7 +633,8 @@ namespace RTM
   
   /*!
    * @if jp
-   * @brief ¥Ş¥¹¥¿¡¼¥Ş¥Í¡¼¥¸¥ã¤ÎºEE   * @else
+   * @brief ãƒã‚¹ã‚¿ãƒ¼ãƒãƒãƒ¼ã‚¸ãƒ£ã®å‰Šé™¤
+   * @else
    * @brief Removing a master manager
    * @endig
    */
@@ -647,7 +660,7 @@ namespace RTM
   
   /*!
    * @if jp
-   * @brief ¥¹¥E¼¥Ö¥Ş¥Í¡¼¥¸¥ã¤Î¼èÆÀ
+   * @brief ã‚¹ãƒ¬ãƒ¼ãƒ–ãƒãƒãƒ¼ã‚¸ãƒ£ã®å–å¾—
    * @else
    * @brief Getting slave managers
    * @endig
@@ -662,7 +675,7 @@ namespace RTM
 
   /*!
    * @if jp
-   * @brief ¥¹¥E¼¥Ö¥Ş¥Í¡¼¥¸¥ã¤ÎÄÉ²Ã
+   * @brief ã‚¹ãƒ¬ãƒ¼ãƒ–ãƒãƒãƒ¼ã‚¸ãƒ£ã®è¿½åŠ 
    * @else
    * @brief Getting a slave manager
    * @endig
@@ -688,7 +701,8 @@ namespace RTM
   
   /*!
    * @if jp
-   * @brief ¥¹¥E¼¥Ö¥Ş¥Í¡¼¥¸¥ã¤ÎºEE   * @else
+   * @brief ã‚¹ãƒ¬ãƒ¼ãƒ–ãƒãƒãƒ¼ã‚¸ãƒ£ã®å‰Šé™¤
+   * @else
    * @brief Removing a slave manager
    * @endig
    */
@@ -712,7 +726,8 @@ namespace RTM
   
   /*!
    * @if jp
-   * @brief ¥×¥úÁ»¥¹¤Î¥³¥Ô¡¼¤òÀ¸À®¤¹¤E   * @else
+   * @brief ãƒ—ãƒ­ã‚»ã‚¹ã®ã‚³ãƒ”ãƒ¼ã‚’ç”Ÿæˆã™ã‚‹
+   * @else
    * @brief The copy of the process is generated.
    * @endif
    */
@@ -725,7 +740,8 @@ namespace RTM
 
   /*!
    * @if jp
-   * @brief shutdown¤¹¤E   * @else
+   * @brief shutdownã™ã‚‹
+   * @else
    * @brief This method shutdowns RTC.
    * @endif
    */
@@ -737,7 +753,7 @@ namespace RTM
 
   /*!
    * @if jp
-   * @brief ºÆµ¯Æ°¤¹¤E£
+   * @brief å†èµ·å‹•ã™ã‚‹ã€‚
    * @else
    * @brief This method restarts RTC.
    * @endif
@@ -750,7 +766,7 @@ namespace RTM
 
   /*!
    * @if jp
-   * @brief »ØÄE¾¤ÎRTC¥ª¥Ö¥¸¥§¥¯¥È¥EÕ¥¡¥Eó¥¹¤ò¼èÆÀ
+   * @brief æŒ‡å®šåã®RTCã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒªãƒ•ã‚¡ãƒ¬ãƒ³ã‚¹ã‚’å–å¾—
    * @else
    * @brief Obtain specific RTObject reference by name
    * @endig
@@ -805,7 +821,7 @@ namespace RTM
 
   /*!
    * @if jp
-   * @brief RTC¤Î¥EÕ¥¡¥Eó¥¹¤ò¼èÆÀ¤¹¤E£
+   * @brief RTCã®ãƒªãƒ•ã‚¡ãƒ¬ãƒ³ã‚¹ã‚’å–å¾—ã™ã‚‹ã€‚
    * @else
    * @brief Get the reference of RTC.
    * @endif
@@ -819,11 +835,11 @@ namespace RTM
   // Local functions
   /*!
    * @if jp
-   * @brief Manager¤Î¥EÕ¥¡¥Eó¥¹¤ò¼èÆÀ¤¹¤E£
+   * @brief Managerã®ãƒªãƒ•ã‚¡ãƒ¬ãƒ³ã‚¹ã‚’å–å¾—ã™ã‚‹ã€‚
    * @else
    * @brief Get the reference of Manager. 
    * @endif
-   */  
+   */ 
   RTM::Manager_ptr ManagerServant::getObjRef() const
   {
 #ifdef ORB_IS_ORBEXPRESS
@@ -835,7 +851,7 @@ namespace RTM
 
   /*!
    * @if jp
-   * @brief INSManager¤ÎÀ¸À®
+   * @brief INSManagerã®ç”Ÿæˆ
    * @else
    * @brief Generate INSManager. 
    * @endif
@@ -894,7 +910,7 @@ namespace RTM
 
   /*!
    * @if jp
-   * @brief Manager¤Î¥EÕ¥¡¥Eó¥¹¤ò¸¡º÷¤¹¤E£
+   * @brief Managerã®ãƒªãƒ•ã‚¡ãƒ¬ãƒ³ã‚¹ã‚’æ¤œç´¢ã™ã‚‹ã€‚
    * @else
    * @brief Find the reference of Manager. 
    * @endif
@@ -956,7 +972,7 @@ namespace RTM
 
   /*!
    * @if jp
-   * @brief »ØÄE¾¤Î¥Ş¥Í¡¼¥¸¥ã¤ò¼èÆÀ
+   * @brief æŒ‡å®šåã®ãƒãƒãƒ¼ã‚¸ãƒ£ã‚’å–å¾—
    * @else
    * @brief Obtain Manager's reference by name
    * @endif
@@ -981,7 +997,7 @@ namespace RTM
   
   /*!
    * @if jp
-   * @brief ¥Ş¥Í¡¼¥¸¥ã¤Î¥E¹¥È¤«¤é»ØÄE¾¤ò»ı¤Ä¥Ş¥Í¡¼¥¸¥ã¤ò¼èÆÀ
+   * @brief ãƒãƒãƒ¼ã‚¸ãƒ£ã®ãƒªã‚¹ãƒˆã‹ã‚‰æŒ‡å®šåã‚’æŒã¤ãƒãƒãƒ¼ã‚¸ãƒ£ã‚’å–å¾—
    * @else
    * @brief Obtain Manager's reference by name
    * @endif
@@ -1021,7 +1037,8 @@ namespace RTM
 
   /*!
    * @if jp
-   * @brief »ØÄê¤Î¥Ş¥Í¡¼¥¸¥ã¤ÇRTC¤òµ¯Æ°¤¹¤E   * @else
+   * @brief æŒ‡å®šã®ãƒãƒãƒ¼ã‚¸ãƒ£ã§RTCã‚’èµ·å‹•ã™ã‚‹
+   * @else
    * @brief Launch RTC on specified manager
    * @endif
    */
@@ -1118,7 +1135,8 @@ namespace RTM
   
   /*
    * @if jp
-   * @brief »ØÄE¢¥É¥E¹¤Î¥Ş¥Í¡¼¥¸¥ã¤ÇRTC¤òµ¯Æ°¤¹¤E   * @else
+   * @brief æŒ‡å®šã‚¢ãƒ‰ãƒ¬ã‚¹ã®ãƒãƒãƒ¼ã‚¸ãƒ£ã§RTCã‚’èµ·å‹•ã™ã‚‹
+   * @else
    * @brief Launch a RTC on the specified IP/Port address manager
    * @endif
    */
