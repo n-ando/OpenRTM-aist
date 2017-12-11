@@ -1,14 +1,14 @@
 // -*- C++ -*-
 /*!
- * @file  ConsoleOut.h
- * @brief Console output component
- * @date  $Date: 2008-02-29 04:55:03 $
+ * @file  Inputbutton.h
+ * @brief Console input component
+ * @date  $Date: 2008-02-29 04:55:01 $
  *
- * $Id$
+ * $Id: Inputbutton.h 2412 2014-02-06 03:19:47Z n-ando $
  */
 
-#ifndef CONSOLEOUT_H
-#define CONSOLEOUT_H
+#ifndef INPUTBUTTON_H
+#define INPUTBUTTON_H
 
 #include <rtm/idl/BasicDataTypeSkel.h>
 #include <rtm/Manager.h>
@@ -31,6 +31,7 @@
 
 using namespace RTC;
 
+
 class DataListener
   : public ConnectorDataListenerT<RTC::TimedLong>
 {
@@ -46,7 +47,7 @@ public:
                                 TimedLong& data)
   {
     std::cout << "------------------------------"   << std::endl;
-    std::cout << "Data Listener: " << m_name << "(OutPort)"  << std::endl;
+    std::cout << "Data Listener: " << m_name       << std::endl;
     std::cout << "Profile::name: " << info.name    << std::endl;
     std::cout << "Profile::id:   " << info.id      << std::endl;
 //    std::cout << "Profile::properties: "            << std::endl;
@@ -58,6 +59,7 @@ public:
   };
   std::string m_name;
 };
+
 
 class ConnListener
   : public ConnectorListener
@@ -86,12 +88,12 @@ public:
 };
 
 
-class ConsoleOut
+class Inputbutton
   : public RTC::DataFlowComponentBase
 {
  public:
-  ConsoleOut(RTC::Manager* manager);
-  ~ConsoleOut();
+  Inputbutton(RTC::Manager* manager);
+  ~Inputbutton();
 
   // The initialize action (on CREATED->ALIVE transition)
   // formaer rtc_init_entry() 
@@ -145,14 +147,24 @@ class ConsoleOut
  protected:
   // DataInPort declaration
   // <rtc-template block="inport_declare">
-  TimedLong m_in;
-  InPort<TimedLong> m_inIn;
   
   // </rtc-template>
 
 
   // DataOutPort declaration
   // <rtc-template block="outport_declare">
+  TimedLong m_open;
+  OutPort<TimedLong> m_openOut;
+  TimedLong m_close;
+  OutPort<TimedLong> m_closeOut;
+  TimedLong m_minute;
+  OutPort<TimedLong> m_minuteOut;
+  TimedLong m_start;
+  OutPort<TimedLong> m_startOut;
+  TimedLong m_stop;
+  OutPort<TimedLong> m_stopOut;
+  TimedLong m_tick;
+  OutPort<TimedLong> m_tickOut;
   
   // </rtc-template>
 
@@ -178,8 +190,7 @@ class ConsoleOut
 
 extern "C"
 {
-  DLL_EXPORT void ConsoleOutInit(RTC::Manager* manager);
+  DLL_EXPORT void InputbuttonInit(RTC::Manager* manager);
 };
 
-#endif // CONSOLEOUT_H
-
+#endif // INPUTBUTTON_H

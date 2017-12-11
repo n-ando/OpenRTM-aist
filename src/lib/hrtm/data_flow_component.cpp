@@ -33,6 +33,6 @@ namespace hrtm
   void DataFlowComponent::updateFsmStatus(RTC::StatusKind status_kind,
                                           const char* state)
   {
-    onFsmStateChanged(state);
+    postOnFsmStateChange(state, RTC::RTC_OK);
   }
 }; // namespace hrtm

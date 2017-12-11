@@ -53,6 +53,8 @@ namespace stringutil
     CPPUNIT_TEST(test_toBool);
     CPPUNIT_TEST(test_isAbsolutePath);
     CPPUNIT_TEST(test_isURL);
+    CPPUNIT_TEST(test_isIPv4);
+    CPPUNIT_TEST(test_isIPv6);
     CPPUNIT_TEST(test_otos);
     CPPUNIT_TEST(test_stringTo);
     CPPUNIT_TEST(test_stringToBool);
@@ -135,6 +137,76 @@ namespace stringutil
     }
     void test_isURL()
     {
+    }
+    void test_isIPv4()
+    {
+      std::string addr;
+      addr = "255.250.255.255"; // OK
+      CPPUNIT_ASSERT_EQUAL(coil::isIPv4(addr), true);
+      addr = "0.0.0.0"; // OK
+      CPPUNIT_ASSERT_EQUAL(coil::isIPv4(addr), true);
+      addr = "192.168.0.1"; // OK
+      CPPUNIT_ASSERT_EQUAL(coil::isIPv4(addr), true);
+      addr = "192.168.100.0"; // OK
+      CPPUNIT_ASSERT_EQUAL(coil::isIPv4(addr), true);
+
+      addr = "255.250.255"; // NG
+      CPPUNIT_ASSERT_EQUAL(coil::isIPv4(addr), false);
+      addr = "255,250.255.0"; // NG
+      CPPUNIT_ASSERT_EQUAL(coil::isIPv4(addr), false);
+      addr = "192.168.0.256"; // NG
+      CPPUNIT_ASSERT_EQUAL(coil::isIPv4(addr), false);
+      addr = "ff.ff.ff.ff"; // NG
+      CPPUNIT_ASSERT_EQUAL(coil::isIPv4(addr), false);
+      addr = "xx.yy.zz.00"; // NG
+      CPPUNIT_ASSERT_EQUAL(coil::isIPv4(addr), false);
+
+      addr = "255.250.255.255:92183"; // OK
+      CPPUNIT_ASSERT_EQUAL(coil::isIPv4(addr), true);
+      addr = "0.0.0.0:97763"; // OK
+      CPPUNIT_ASSERT_EQUAL(coil::isIPv4(addr), true);
+      addr = "192.168.0.1:98657"; // OK
+      CPPUNIT_ASSERT_EQUAL(coil::isIPv4(addr), true);
+      addr = "192.168.100.0:4689"; // OK
+      CPPUNIT_ASSERT_EQUAL(coil::isIPv4(addr), true);
+
+      addr = "255.250.255:8686"; // NG
+      CPPUNIT_ASSERT_EQUAL(coil::isIPv4(addr), false);
+      addr = "255,250.255.0:86545"; // NG
+      CPPUNIT_ASSERT_EQUAL(coil::isIPv4(addr), false);
+      addr = "1293:192.168.0.1"; // NG
+      CPPUNIT_ASSERT_EQUAL(coil::isIPv4(addr), false);
+      addr = "ff.ff.ff.ff.ff:9763"; // NG
+      CPPUNIT_ASSERT_EQUAL(coil::isIPv4(addr), false);
+      addr = "xx.yy.zz.00:98767"; // NG
+      CPPUNIT_ASSERT_EQUAL(coil::isIPv4(addr), false);
+    }
+    void test_isIPv6()
+    {
+      std::string addr;
+      addr = "fe80:0:0:0:21c:42ff:fe87:d3d4"; // OK
+      CPPUNIT_ASSERT_EQUAL(coil::isIPv6(addr), true);
+      addr = "::1"; // OK
+      CPPUNIT_ASSERT_EQUAL(coil::isIPv6(addr), true);
+      addr = "fe80::21c:42ff:fe87:d3d4"; // OK
+      CPPUNIT_ASSERT_EQUAL(coil::isIPv6(addr), true);
+
+      addr = "fe80::21c:42ff:fe87:1ffff"; // NG
+      CPPUNIT_ASSERT_EQUAL(coil::isIPv6(addr), false);
+      addr = "ffe80::21c:42ff:fe87:d3d4"; // NG
+      CPPUNIT_ASSERT_EQUAL(coil::isIPv6(addr), false);
+
+      addr = "[fe80:0:0:0:21c:42ff:fe87:d3d4]"; // OK
+      CPPUNIT_ASSERT_EQUAL(coil::isIPv6(addr), true);
+      addr = "[::1]:9679"; // OK
+      CPPUNIT_ASSERT_EQUAL(coil::isIPv6(addr), true);
+      addr = "[fe80::21c:42ff:fe87:d3d4]:7657"; // OK
+      CPPUNIT_ASSERT_EQUAL(coil::isIPv6(addr), true);
+
+      addr = "[ffe80::21c:42ff:fe87:d3d4]:5678"; // NG
+      CPPUNIT_ASSERT_EQUAL(coil::isIPv6(addr), false);
+      addr = "fe80::21c:42ff:fe87:d3d4]:87654"; // NG
+      CPPUNIT_ASSERT_EQUAL(coil::isIPv6(addr), false);
     }
     void test_otos()
     {

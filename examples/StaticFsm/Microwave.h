@@ -1,14 +1,14 @@
 // -*- C++ -*-
 /*!
- * @file  ConsoleOut.h
- * @brief Console output component
- * @date  $Date: 2008-02-29 04:55:03 $
+ * @file  Microwave.h
+ * @brief Microwave oven FSM example component
+ * @date  $Date$
  *
  * $Id$
  */
 
-#ifndef CONSOLEOUT_H
-#define CONSOLEOUT_H
+#ifndef MICROWAVE_H
+#define MICROWAVE_H
 
 #include <rtm/idl/BasicDataTypeSkel.h>
 #include <rtm/Manager.h>
@@ -16,9 +16,12 @@
 #include <rtm/CorbaPort.h>
 #include <rtm/DataInPort.h>
 #include <rtm/DataOutPort.h>
+#include <rtm/EventPort.h>
 #include <rtm/ConnectorListener.h>
+#pragma GCC diagnostic ignored "-Wunused-but-set-variable"
 
-#include <iostream>
+#include "MicrowaveFsm.h"
+
 // Service implementation headers
 // <rtc-template block="service_impl_h">
 
@@ -31,67 +34,12 @@
 
 using namespace RTC;
 
-class DataListener
-  : public ConnectorDataListenerT<RTC::TimedLong>
-{
-  USE_CONNLISTENER_STATUS;
-public:
-  DataListener(const char* name) : m_name(name) {}
-  virtual ~DataListener()
-  {
-    std::cout << "dtor of " << m_name << std::endl;
-  }
-
-  virtual ReturnCode operator()(ConnectorInfo& info,
-                                TimedLong& data)
-  {
-    std::cout << "------------------------------"   << std::endl;
-    std::cout << "Data Listener: " << m_name << "(OutPort)"  << std::endl;
-    std::cout << "Profile::name: " << info.name    << std::endl;
-    std::cout << "Profile::id:   " << info.id      << std::endl;
-//    std::cout << "Profile::properties: "            << std::endl;
-//    std::cout << info.properties;
-//    std::cout                                       << std::endl;
-    std::cout << "Data:          " << data.data    << std::endl;
-    std::cout << "------------------------------"   << std::endl;
-    return NO_CHANGE;
-  };
-  std::string m_name;
-};
-
-class ConnListener
-  : public ConnectorListener
-{
-  USE_CONNLISTENER_STATUS;
-public:
-  ConnListener(const char* name) : m_name(name) {}
-  virtual ~ConnListener()
-  {
-    std::cout << "dtor of " << m_name << std::endl;
-  }
-
-  virtual ReturnCode operator()(ConnectorInfo& info)
-  {
-    std::cout << "------------------------------"   << std::endl;
-    std::cout << "Connector Listener: " << m_name       << std::endl;
-    std::cout << "Profile::name:      " << info.name    << std::endl;
-    std::cout << "Profile::id:        " << info.id      << std::endl;
-    std::cout << "Profile::properties: "            << std::endl;
-    std::cout << info.properties;
-    std::cout                                       << std::endl;
-    std::cout << "------------------------------"   << std::endl;
-    return NO_CHANGE;
-  };
-  std::string m_name;
-};
-
-
-class ConsoleOut
+class Microwave
   : public RTC::DataFlowComponentBase
 {
  public:
-  ConsoleOut(RTC::Manager* manager);
-  ~ConsoleOut();
+  Microwave(RTC::Manager* manager);
+  ~Microwave();
 
   // The initialize action (on CREATED->ALIVE transition)
   // formaer rtc_init_entry() 
@@ -141,15 +89,11 @@ class ConsoleOut
   // no corresponding operation exists in OpenRTm-aist-0.2.0
   // virtual RTC::ReturnCode_t onRateChanged(RTC::UniqueId ec_id);
 
-
  protected:
   // DataInPort declaration
   // <rtc-template block="inport_declare">
-  TimedLong m_in;
-  InPort<TimedLong> m_inIn;
   
   // </rtc-template>
-
 
   // DataOutPort declaration
   // <rtc-template block="outport_declare">
@@ -171,15 +115,25 @@ class ConsoleOut
   
   // </rtc-template>
 
+  // State machine declaration
+  // <rtc-template block="consumer_declare">
+
+  RTC::Machine<MicrowaveFsm::Top> m_fsm;
+  // </rtc-template>
+
+  // EventPort declaration
+  // <rtc-template block="event_declare">
+  
+  EventInPort< Macho::Machine<MicrowaveFsm::Top> > m_eventIn;
+  // </rtc-template>
+
  private:
 
 };
 
-
 extern "C"
 {
-  DLL_EXPORT void ConsoleOutInit(RTC::Manager* manager);
+  DLL_EXPORT void MicrowaveInit(RTC::Manager* manager);
 };
 
-#endif // CONSOLEOUT_H
-
+#endif // MICROWAVE_H

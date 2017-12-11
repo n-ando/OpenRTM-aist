@@ -179,35 +179,35 @@ namespace RTC
         coil::toUpper(observed[i]);
         if (observed[i] == "COMPONENT_PROFILE")
           {
-            flags[RTC::COMPONENT_PROFILE] = 1;
+            flags[RTC::COMPONENT_PROFILE] = true;
           }
         else if (observed[i] == "RTC_STATUS")
           {
-            flags[RTC::RTC_STATUS] = 1;
+            flags[RTC::RTC_STATUS] = true;
           }
         else if (observed[i] == "EC_STATUS")
           {
-            flags[RTC::EC_STATUS] = 1;
+            flags[RTC::EC_STATUS] = true;
           }
         else if (observed[i] == "PORT_PROFILE")
           {
-            flags[RTC::PORT_PROFILE] = 1;
+            flags[RTC::PORT_PROFILE] = true;
           }
         else if (observed[i] == "CONFIGURATION")
           {
-            flags[RTC::CONFIGURATION] = 1;
+            flags[RTC::CONFIGURATION] = true;
           }
         else if (observed[i] == "FSM_PROFILE")
           {
-            flags[RTC::FSM_PROFILE] = 1;
+            flags[RTC::FSM_PROFILE] = true;
           }
         else if (observed[i] == "FSM_STATUS")
           {
-            flags[RTC::FSM_STATUS] = 1;
+            flags[RTC::FSM_STATUS] = true;
           }
         else if (observed[i] == "FSM_STRUCTURE")
           {
-            flags[RTC::FSM_STRUCTURE] = 1;
+            flags[RTC::FSM_STRUCTURE] = true;
           }
         else if (observed[i] == "ALL")
           {
@@ -763,10 +763,47 @@ namespace RTC
    */
   void ComponentObserverConsumer::setFSMStructureListeners()
   {
-    m_fsmaction.fsmActionListener = 
+    m_fsmaction.preOnFsmInitListener =
+      m_rtobj->addPreFsmActionListener(PRE_ON_INIT,
+                                       m_fsmaction,
+                                       &FSMAction::preInit);
+    m_fsmaction.preOnFsmEntryListener =
+      m_rtobj->addPreFsmActionListener(PRE_ON_ENTRY,
+                                       m_fsmaction,
+                                       &FSMAction::preEntry);
+    m_fsmaction.preOnFsmDoListener =
+      m_rtobj->addPreFsmActionListener(PRE_ON_DO,
+                                       m_fsmaction,
+                                       &FSMAction::preDo);
+    m_fsmaction.preOnFsmExitListener =
+      m_rtobj->addPreFsmActionListener(PRE_ON_EXIT,
+                                       m_fsmaction,
+                                       &FSMAction::preExit);
+    m_fsmaction.preOnFsmStateChangeListener =
       m_rtobj->addPreFsmActionListener(PRE_ON_STATE_CHANGE,
                                        m_fsmaction,
-                                       &FSMAction::updateFsmStatus);
+                                       &FSMAction::preStateChange);
+
+    m_fsmaction.postOnFsmInitListener =
+      m_rtobj->addPostFsmActionListener(POST_ON_INIT,
+                                       m_fsmaction,
+                                       &FSMAction::postInit);
+    m_fsmaction.postOnFsmEntryListener =
+      m_rtobj->addPostFsmActionListener(POST_ON_ENTRY,
+                                       m_fsmaction,
+                                       &FSMAction::postEntry);
+    m_fsmaction.postOnFsmDoListener =
+      m_rtobj->addPostFsmActionListener(POST_ON_DO,
+                                       m_fsmaction,
+                                       &FSMAction::postDo);
+    m_fsmaction.postOnFsmExitListener =
+      m_rtobj->addPostFsmActionListener(POST_ON_EXIT,
+                                        m_fsmaction,
+                                        &FSMAction::postExit);
+    m_fsmaction.postOnFsmStateChangeListener =
+      m_rtobj->addPostFsmActionListener(POST_ON_EXIT,
+                                        m_fsmaction,
+                                        &FSMAction::postStateChange);
   }
 
   /*!
@@ -778,6 +815,36 @@ namespace RTC
    */
   void ComponentObserverConsumer::unsetFSMStructureListeners()
   {
+      m_rtobj->
+        removePreFsmActionListener(PRE_ON_INIT,
+                                   m_fsmaction.preOnFsmInitListener);
+      m_rtobj->
+        removePreFsmActionListener(PRE_ON_ENTRY,
+                                   m_fsmaction.preOnFsmEntryListener);
+      m_rtobj->
+        removePreFsmActionListener(PRE_ON_DO,
+                                   m_fsmaction.preOnFsmDoListener);
+      m_rtobj->
+        removePreFsmActionListener(PRE_ON_EXIT,
+                                   m_fsmaction.preOnFsmExitListener);
+      m_rtobj->
+        removePreFsmActionListener(PRE_ON_STATE_CHANGE,
+                                   m_fsmaction.preOnFsmStateChangeListener);
+      m_rtobj->
+        removePostFsmActionListener(POST_ON_INIT,
+                                    m_fsmaction.postOnFsmInitListener);
+      m_rtobj->
+        removePostFsmActionListener(POST_ON_ENTRY,
+                                    m_fsmaction.postOnFsmEntryListener);
+      m_rtobj->
+        removePostFsmActionListener(POST_ON_DO,
+                                    m_fsmaction.postOnFsmDoListener);
+      m_rtobj->
+        removePostFsmActionListener(POST_ON_EXIT,
+                                    m_fsmaction.postOnFsmExitListener);
+      m_rtobj->
+        removePostFsmActionListener(POST_ON_EXIT,
+                                    m_fsmaction.postOnFsmStateChangeListener);
   }
 
   //============================================================
@@ -859,8 +926,6 @@ namespace RTC
         m_configMsg.activateConfigSetListener = NULL;
       }
   }
-  
-  
 }; // namespace RTC
 
 extern "C"

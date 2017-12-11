@@ -1,14 +1,14 @@
 // -*- C++ -*-
 /*!
- * @file  ConsoleOut.h
- * @brief Console output component
- * @date  $Date: 2008-02-29 04:55:03 $
+ * @file  Display.h
+ * @brief Display oven FSM example component
+ * @date  $Date$
  *
  * $Id$
  */
 
-#ifndef CONSOLEOUT_H
-#define CONSOLEOUT_H
+#ifndef DISPLAY_H
+#define DISPLAY_H
 
 #include <rtm/idl/BasicDataTypeSkel.h>
 #include <rtm/Manager.h>
@@ -17,8 +17,11 @@
 #include <rtm/DataInPort.h>
 #include <rtm/DataOutPort.h>
 #include <rtm/ConnectorListener.h>
+#include <rtm/Macho.h>
+#pragma GCC diagnostic ignored "-Wunused-but-set-variable"
 
 #include <iostream>
+
 // Service implementation headers
 // <rtc-template block="service_impl_h">
 
@@ -30,6 +33,8 @@
 // </rtc-template>
 
 using namespace RTC;
+class Display;
+
 
 class DataListener
   : public ConnectorDataListenerT<RTC::TimedLong>
@@ -46,7 +51,7 @@ public:
                                 TimedLong& data)
   {
     std::cout << "------------------------------"   << std::endl;
-    std::cout << "Data Listener: " << m_name << "(OutPort)"  << std::endl;
+    std::cout << "Data Listener: " << m_name       << std::endl;
     std::cout << "Profile::name: " << info.name    << std::endl;
     std::cout << "Profile::id:   " << info.id      << std::endl;
 //    std::cout << "Profile::properties: "            << std::endl;
@@ -58,6 +63,7 @@ public:
   };
   std::string m_name;
 };
+
 
 class ConnListener
   : public ConnectorListener
@@ -86,12 +92,12 @@ public:
 };
 
 
-class ConsoleOut
+class Display
   : public RTC::DataFlowComponentBase
 {
  public:
-  ConsoleOut(RTC::Manager* manager);
-  ~ConsoleOut();
+  Display(RTC::Manager* manager);
+  ~Display();
 
   // The initialize action (on CREATED->ALIVE transition)
   // formaer rtc_init_entry() 
@@ -141,7 +147,7 @@ class ConsoleOut
   // no corresponding operation exists in OpenRTm-aist-0.2.0
   // virtual RTC::ReturnCode_t onRateChanged(RTC::UniqueId ec_id);
 
-
+  CORBA::Long getInPortValue() { return m_in.data; }
  protected:
   // DataInPort declaration
   // <rtc-template block="inport_declare">
@@ -175,11 +181,9 @@ class ConsoleOut
 
 };
 
-
 extern "C"
 {
-  DLL_EXPORT void ConsoleOutInit(RTC::Manager* manager);
+  DLL_EXPORT void DisplayInit(RTC::Manager* manager);
 };
 
-#endif // CONSOLEOUT_H
-
+#endif // DISPLAY_H

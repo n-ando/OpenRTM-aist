@@ -331,7 +331,6 @@ void _MachineBase::rattleOn() {
 
 			// Perform entry actions on next state's parents (which exactly depends on previous state).
 			myCurrentState->entry(*previous);
-            std::cout << "### State ### " << myCurrentState->name() << std::endl;
 			// State transition complete.
 			// Clear 'pending' information just now so that setState would assert in exits and entries, but not in init.
 			myPendingState = 0;
