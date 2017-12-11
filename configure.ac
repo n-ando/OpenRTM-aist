@@ -1695,10 +1695,12 @@ AC_OUTPUT([Makefile
 	examples/SeqIO/Makefile
 	examples/SimpleService/Makefile
 	examples/ExtTrigger/Makefile
+	examples/MultiInPort/Makefile
 	examples/Templates/Makefile
 	examples/Throughput/Makefile
 	examples/tests/Makefile
 	examples/Fsm/Makefile
+	examples/StaticFsm/Makefile
 	docs/Makefile
 	win32/Makefile
 	win32/OpenRTM-aist/Makefile

@@ -10,7 +10,7 @@ AUTOMAKE_OPTIONS = 1.4
 SUBDIRS = . device_interfaces
 
 IDLC = @IDLC@
-IDLFLAGS = @IDL_FLAGS@
+IDLFLAGS = @IDL_FLAGS@ -I.
 LIBS = @LIBS@
 AM_CPPFLAGS=-I$(top_srcdir)/src/lib -I$(top_srcdir)/src/lib/rtm
 AM_LDFLAGS=-L$(top_builddir)/src/lib/rtm -L$(top_builddir)/src/lib/rtm/idl
@@ -27,6 +27,7 @@ IDL_SOURCES =             \
 	BasicDataType.idl     \
 	DataPort.idl          \
 	ExtendedDataTypes.idl \
+	ExtendedFsmService.idl\
 	InterfaceDataTypes.idl\
 	SharedMemory.idl
 endif
@@ -81,6 +82,7 @@ DUMMY_SKELS =                   \
         BasicDataTypeSkel.h     \
         DataPortSkel.h          \
         ExtendedDataTypesSkel.h \
+        ExtendedFsmServiceSkel.h\
         InterfaceDataTypesSkel.h\
         SharedMemorySkel.h
 ORB_SRC = $(RTORB_SRC)
@@ -142,6 +144,7 @@ OpenRTM-aist.idl:
 	echo '// This IDL file is for only RtORB' > OpenRTM-aist.idl
 	echo '#include "BasicDataType.idl"' >> OpenRTM-aist.idl
 	echo '#include "ExtendedDataTypes.idl"' >> OpenRTM-aist.idl
+	echo '#include "ExtendedFsmService.idl"' >> OpenRTM-aist.idl
 	echo '#include "RTC.idl"' >> OpenRTM-aist.idl
 	echo '#include "OpenRTM.idl"' >> OpenRTM-aist.idl
 	echo '#pragma ""' >> OpenRTM-aist.idl

@@ -26,7 +26,7 @@
 #include <rtm/SdoServiceProviderBase.h>
 #include <rtm/ComponentActionListener.h>
 #include <rtm/idl/SDOPackageStub.h>
-#include "ExtendedFsmServiceSkel.h"
+#include <rtm/idl/ExtendedFsmServiceSkel.h>
 
 namespace RTC
 {

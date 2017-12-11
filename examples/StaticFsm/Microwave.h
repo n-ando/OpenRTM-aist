@@ -17,8 +17,6 @@
 #include <rtm/DataInPort.h>
 #include <rtm/DataOutPort.h>
 #include <rtm/EventPort.h>
-#include <rtm/ConnectorListener.h>
-#pragma GCC diagnostic ignored "-Wunused-but-set-variable"
 
 #include "MicrowaveFsm.h"
 
@@ -124,7 +122,7 @@ class Microwave
   // EventPort declaration
   // <rtc-template block="event_declare">
   
-  EventInPort< Macho::Machine<MicrowaveFsm::Top> > m_eventIn;
+  EventInPort< RTC::Machine<MicrowaveFsm::Top> > m_eventIn;
   // </rtc-template>
 
  private:

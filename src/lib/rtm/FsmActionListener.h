@@ -26,12 +26,10 @@
 #include <rtm/RTC.h>
 #include <rtm/idl/RTCSkel.h>
 #include <rtm/ConnectorBase.h>
+#include <rtm/idl/ExtendedFsmServiceStub.h>
 
 namespace RTC
 {
-  struct FsmStructure
-  {
-  };
   /*!
    * @if jp
    *
