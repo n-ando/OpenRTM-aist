@@ -1764,7 +1764,24 @@ namespace RTC
     std::string formatString(const char* naming_format,
 			     coil::Properties& prop);
 
+    /*!
+     * @if jp
+     * @brief corba.endpoints にエンドポイント情報を設定する
+     * @else
+     * @brief Setting endpoint info from corba.endpoints
+     * @endif
+     */
+    void setEndpointProperty(CORBA::Object_ptr objref);
 
+    /*!
+     * @if jp
+     * @brief corba.endpoint_property からオプション情報を取得する
+     * @else
+     * @brief Getting option info from corba.endpoint_property
+     * @endif
+     */
+    void endpointPropertySwitch(const std::string& ipver,
+                                bool& ip, std::vector<int>& ip_list);
     
     //============================================================
     // protected 変数

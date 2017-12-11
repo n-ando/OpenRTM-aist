@@ -79,5 +79,11 @@ namespace CORBA_IORUtil
    */
   std::string formatIORinfo(const char* iorstr);
 
+  std::vector<IIOP::Address> getEndpoints(IOP::IOR& ior);
+
+  void extractAddrs(IOP::MultipleComponentProfile& components,
+                    std::vector<IIOP::Address>& addr);
+
+
 }; // namespace CORBA_IORUtil
 #endif // CORBA_IORUTIL_H
