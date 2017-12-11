@@ -32,18 +32,21 @@ namespace RTC
    * @endif
    */
   OutPortSHMProvider::OutPortSHMProvider(void)
-   : m_buffer(0),
-     m_memory_size(0)
+    : rtclog("OutPortSHMProvider"),
+      m_memorySize(0),
+      m_connector(0),
+      m_buffer(0),
+      m_listeners(0)
   {
     // PortProfile setting
     setInterfaceType("shared_memory");
-    
+
     // ConnectorProfile setting
 #ifdef ORB_IS_OMNIORB
     ::RTC::Manager::instance().theShortCutPOA()->activate_object(this);
 #endif
     m_objref = this->_this();
-    
+
     // set outPort's reference
     CORBA::ORB_var orb = ::RTC::Manager::instance().getORB();
     CORBA::String_var ior = orb->object_to_string(m_objref.in());
@@ -63,9 +66,9 @@ namespace RTC
     coil::UUID_Generator uugen;
     uugen.init();
     std::auto_ptr<coil::UUID> uuid(uugen.generateUUID(2, 0x01));
-    m_shm_address = uuid->to_string();
+    m_shmAddress = uuid->to_string();
   }
-  
+
   /*!
    * @if jp
    * @brief デストラクタ
@@ -77,7 +80,7 @@ namespace RTC
   {
 
   }
-  
+
   /*!
    * @if jp
    * @brief 設定初期化
@@ -87,29 +90,28 @@ namespace RTC
    */
   void OutPortSHMProvider::init(coil::Properties& prop)
   {
-	std::string ds = prop["shem_default_size"];
-	m_memory_size = string_to_MemorySize(ds);
+    std::string ds = prop["shem_default_size"];
+    m_memorySize = string_to_MemorySize(ds);
 
-	if (prop.hasKey("serializer") == NULL)
-	{
-		m_endian = true;
-		return;
-	}
+    if (prop.hasKey("serializer") == NULL)
+     {
+       m_endian = true;
+       return;
+     }
 
-	
-	std::string endian_type(prop.getProperty("serializer.cdr.endian", ""));
-	coil::normalize(endian_type);
-	std::vector<std::string> endian(coil::split(endian_type, ","));
-	if (endian.empty()) { return; }
-	if (endian[0] == "little")
-	{
-		m_endian = true;
-	}
-	else if (endian[0] == "big")
-	{
-		m_endian = false;
-		return;
-	}
+    std::string endian_type(prop.getProperty("serializer.cdr.endian", ""));
+    coil::normalize(endian_type);
+    std::vector<std::string> endian(coil::split(endian_type, ","));
+    if (endian.empty()) { return; }
+    if (endian[0] == "little")
+      {
+        m_endian = true;
+      }
+    else if (endian[0] == "big")
+      {
+        m_endian = false;
+        return;
+      }
   }
 
   /*!
@@ -128,7 +130,7 @@ namespace RTC
    * @if jp
    * @brief リスナを設定する。
    * @else
-   * @brief Set the listener. 
+   * @brief Set the listener.
    * @endif
    */
   void OutPortSHMProvider::setListener(ConnectorInfo& info,
@@ -157,13 +159,11 @@ namespace RTC
    * @brief [CORBA interface] Get data from the buffer
    * @endif
    */
-  ::OpenRTM::PortStatus
-  OutPortSHMProvider::get()
+  ::OpenRTM::PortStatus OutPortSHMProvider::get()
     throw (CORBA::SystemException)
   {
     RTC_PARANOID(("OutPortSHMProvider::get()"));
     // at least the output "data" area should be allocated
-
 
     if (m_buffer == 0)
       {
@@ -178,19 +178,20 @@ namespace RTC
 #ifdef ORB_IS_ORBEXPRESS
         CORBA::ULong len((CORBA::ULong)cdr.cdr.size_written());
 #elif defined(ORB_IS_TAO)
-	CORBA::ULong len((CORBA::ULong)cdr.cdr.length());
+        CORBA::ULong len((CORBA::ULong)cdr.cdr.length());
 #else
         CORBA::ULong len((CORBA::ULong)cdr.bufSize());
 #endif
         RTC_PARANOID(("converted CDR data size: %d", len));
-	if (len == (CORBA::ULong)0) {
-	  RTC_ERROR(("buffer is empty."));
-	  return ::OpenRTM::BUFFER_EMPTY;
-	}
-	bool endian_type = m_connector->isLittleEndian();
-	setEndian(endian_type);
-	create_memory(m_memory_size, m_shm_address.c_str());
-	write(cdr);
+        if (len == (CORBA::ULong)0)
+          {
+            RTC_ERROR(("buffer is empty."));
+            return ::OpenRTM::BUFFER_EMPTY;
+          }
+        bool endian_type = m_connector->isLittleEndian();
+        setEndian(endian_type);
+        create_memory(m_memorySize, m_shmAddress.c_str());
+        write(cdr);
       }
 
     return convertReturn(ret, cdr);
@@ -205,7 +206,7 @@ namespace RTC
    */
   ::OpenRTM::PortStatus
   OutPortSHMProvider::convertReturn(BufferStatus::Enum status,
-                                        const cdrMemoryStream& data)
+                                    cdrMemoryStream& data)
   {
     switch(status)
       {
@@ -214,40 +215,32 @@ namespace RTC
         onSend(data);
         return ::OpenRTM::PORT_OK;
         break;
-
       case BufferStatus::BUFFER_ERROR:
         onSenderError();
         return ::OpenRTM::PORT_ERROR;
         break;
-
       case BufferStatus::BUFFER_FULL:
         // never come here
         return ::OpenRTM::BUFFER_FULL;
         break;
-
       case BufferStatus::BUFFER_EMPTY:
         onBufferEmpty();
         onSenderEmpty();
         return ::OpenRTM::BUFFER_EMPTY;
         break;
-
       case BufferStatus::PRECONDITION_NOT_MET:
         onSenderError();
         return ::OpenRTM::PORT_ERROR;
         break;
-
       case BufferStatus::TIMEOUT:
         onBufferReadTimeout();
         onSenderTimeout();
         return ::OpenRTM::BUFFER_TIMEOUT;
         break;
-
       default:
         return ::OpenRTM::UNKNOWN_ERROR;
       }
-
   }
-
 };     // namespace RTC
 
 extern "C"

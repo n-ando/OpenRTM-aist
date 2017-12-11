@@ -53,10 +53,10 @@ namespace RTC
    * @endif
    */
   class InPortSHMConsumer
-	  : public InPortConsumer,
-	  public CorbaConsumer< ::OpenRTM::PortSharedMemory >
+    : public InPortConsumer,
+      public CorbaConsumer< ::OpenRTM::PortSharedMemory >
   {
-	typedef coil::Guard<coil::Mutex> Guard;
+    typedef coil::Guard<coil::Mutex> Guard;
   public:
     DATAPORTSTATUS_ENUM
     /*!
@@ -97,8 +97,8 @@ namespace RTC
      * @if jp
      * @brief 設定初期化
      *
-     * 
-     * 
+     *
+     *
      * @param prop 設定情報
      *
      * @else
@@ -117,8 +117,8 @@ namespace RTC
      * @brief 接続先へのデータ送信
      *
      * 接続先のポートへデータを送信するための純粋仮想関数。
-     * 
-     * 
+     *
+     *
      *
      * @param data 送信するデータ
      * @return リターンコード
@@ -126,48 +126,50 @@ namespace RTC
      * @else
      * @brief Send data to the destination port
      *
-     * 
+     *
      *
      * @endif
      */
-    virtual InPortConsumer::ReturnCode put(const cdrMemoryStream& data);
+    virtual InPortConsumer::ReturnCode put(cdrMemoryStream& data);
     /*!
      * @if jp
-     * @brief 
-     * 
-     * 
+     * @brief
      *
-     * @param obj 
-     * @return 
+     *
+     *
+     * @param obj
+     * @return
      *
      * @else
-     * @brief 
+     * @brief
      *
-     * 
+     *
      *
      * @endif
      */
     virtual bool setObject(CORBA::Object_ptr obj);
-	virtual void publishInterfaceProfile(SDOPackage::NVList& properties);
-	virtual bool subscribeInterface(const SDOPackage::NVList& properties);
-	virtual void unsubscribeInterface(const SDOPackage::NVList& properties);
-  
-private:
-	bool subscribeFromIor(const SDOPackage::NVList& properties);
-	bool subscribeFromRef(const SDOPackage::NVList& properties);
-	bool unsubscribeFromIor(const SDOPackage::NVList& properties);
-	bool unsubscribeFromRef(const SDOPackage::NVList& properties);
+    virtual void publishInterfaceProfile(SDOPackage::NVList& properties);
+    virtual bool subscribeInterface(const SDOPackage::NVList& properties);
+    virtual void unsubscribeInterface(const SDOPackage::NVList& properties);
 
-protected:
-	InPortConsumer::ReturnCode convertReturnCode(OpenRTM::PortStatus ret);
+  private:
+    bool subscribeFromIor(const SDOPackage::NVList& properties);
+    bool subscribeFromRef(const SDOPackage::NVList& properties);
+    bool unsubscribeFromIor(const SDOPackage::NVList& properties);
+    bool unsubscribeFromRef(const SDOPackage::NVList& properties);
 
-	mutable Logger rtclog;
-	coil::Properties m_properties;
-	coil::Mutex m_mutex;
-	std::string m_shm_address;
-	SharedMemoryPort m_shmem;
-	int m_memory_size;
-	bool m_endian;
+  protected:
+    InPortConsumer::ReturnCode convertReturnCode(OpenRTM::PortStatus ret);
+
+  private:
+    coil::Mutex m_mutex;
+    mutable Logger rtclog;
+    coil::Properties m_properties;
+
+    int m_memorySize;
+    std::string m_shmAddress;
+    SharedMemoryPort m_shmem;
+    bool m_endian;
   };
 };     // namespace RTC
 

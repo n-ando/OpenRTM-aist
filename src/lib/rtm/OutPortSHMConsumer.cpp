@@ -30,12 +30,12 @@ namespace RTC
    * @endif
    */
   OutPortSHMConsumer::OutPortSHMConsumer()
-  : m_listeners(NULL)
+    : rtclog("OutPortSHMConsumer"),
+      m_buffer(NULL),
+      m_listeners(NULL)
   {
-    rtclog.setName("OutPortSHMConsumer");
-	
   }
-    
+
   /*!
    * @if jp
    * @brief デストラクタ
@@ -46,13 +46,13 @@ namespace RTC
   OutPortSHMConsumer::~OutPortSHMConsumer()
   {
     try
-    {
+      {
         _ptr()->close_memory(true);
-    }
+      }
     catch(...)
-    {
-    }
-  } 
+      {
+      }
+  }
 
   /*!
    * @if jp
@@ -63,8 +63,7 @@ namespace RTC
    */
   void OutPortSHMConsumer::init(coil::Properties& prop)
   {
-	RTC_TRACE(("OutPortSHMConsumer::init()"));
-	
+    RTC_TRACE(("OutPortSHMConsumer::init()"));
   }
 
   /*!
@@ -98,12 +97,12 @@ namespace RTC
   bool OutPortSHMConsumer::setObject(CORBA::Object_ptr obj)
   {
     RTC_PARANOID(("setObject()"));
-	if (CorbaConsumer< ::OpenRTM::PortSharedMemory >::setObject(obj))
-	{
-		//::OpenRTM::PortSharedMemory_var sm = m_shmem.getObjRef();
-		_ptr()->setInterface(m_shmem._this());
-		return true;
-	}
+    if (CorbaConsumer< ::OpenRTM::PortSharedMemory >::setObject(obj))
+      {
+        //::OpenRTM::PortSharedMemory_var sm = m_shmem.getObjRef();
+        _ptr()->setInterface(m_shmem._this());
+        return true;
+      }
 
 
     return false;
@@ -123,35 +122,30 @@ namespace RTC
 
     try
       {
-          
-            Guard guard(m_mutex);
-            
+        Guard guard(m_mutex);
 
-            ::OpenRTM::PortStatus ret(_ptr()->get());
-			if (ret == ::OpenRTM::PORT_OK)
-			{
-				m_shmem.read(data);
+        ::OpenRTM::PortStatus ret(_ptr()->get());
+        if (ret == ::OpenRTM::PORT_OK)
+          {
+            m_shmem.read(data);
 
-				RTC_DEBUG(("get() successful"));
+            RTC_DEBUG(("get() successful"));
+            RTC_PARANOID(("CDR data length: %d", data.bufSize()));
 
-				RTC_PARANOID(("CDR data length: %d", data.bufSize()));
+            onReceived(data);
+            onBufferWrite(data);
 
-				onReceived(data);
-				onBufferWrite(data);
-
-				if (m_buffer->full())
-				{
-					RTC_INFO(("InPort buffer is full."));
-					onBufferFull(data);
-					onReceiverFull(data);
-				}
-				m_buffer->put(data);
-				m_buffer->advanceWptr();
-				m_buffer->advanceRptr();
-
-				return PORT_OK;
-			}
-          
+            if (m_buffer->full())
+              {
+                RTC_INFO(("InPort buffer is full."));
+                onBufferFull(data);
+                onReceiverFull(data);
+              }
+            m_buffer->put(data);
+            m_buffer->advanceWptr();
+            m_buffer->advanceRptr();
+            return PORT_OK;
+          }
         return convertReturn(ret, data);
       }
     catch (...)
@@ -162,7 +156,7 @@ namespace RTC
     RTC_ERROR(("OutPortSHMConsumer::get(): Never comes here."));
     return UNKNOWN_ERROR;
   }
-    
+
   /*!
    * @if jp
    * @brief データ受信通知への登録
@@ -182,7 +176,7 @@ namespace RTC
         RTC_DEBUG(("dataport.corba_cdr.outport_ior not found."));
         return false;
       }
-    
+
     if (NVUtil::isString(properties,
                          "dataport.corba_cdr.outport_ior"))
       {
@@ -203,10 +197,10 @@ namespace RTC
           }
         return ret;
       }
-    
+
     return false;
   }
-  
+
   /*!
    * @if jp
    * @brief データ受信通知からの登録解除
@@ -226,7 +220,7 @@ namespace RTC
         RTC_DEBUG(("dataport.corba_cdr.outport_ior not found."));
         return;
       }
-    
+
     const char* ior;
     if (properties[index].value >>= ior)
       {
@@ -260,40 +254,31 @@ namespace RTC
         // never comes here
         return PORT_OK;
         break;
-        
       case ::OpenRTM::PORT_ERROR:
         onSenderError();
         return PORT_ERROR;
         break;
-
       case ::OpenRTM::BUFFER_FULL:
         // never comes here
         return BUFFER_FULL;
         break;
-
       case ::OpenRTM::BUFFER_EMPTY:
         onSenderEmpty();
         return BUFFER_EMPTY;
         break;
-
       case ::OpenRTM::BUFFER_TIMEOUT:
         onSenderTimeout();
         return BUFFER_TIMEOUT;
         break;
-
       case ::OpenRTM::UNKNOWN_ERROR:
         onSenderError();
         return UNKNOWN_ERROR;
         break;
-
       default:
         onSenderError();
         return UNKNOWN_ERROR;
       }
-
   }
-
-
 };     // namespace RTC
 
 extern "C"

@@ -188,63 +188,66 @@ namespace RTC
 
     ::OpenRTM::PortStatus
     convertReturn(BufferStatus::Enum status,
-                  const cdrMemoryStream& data);
+                  cdrMemoryStream& data);
 
     
-    inline void onBufferWrite(const cdrMemoryStream& data)
+    inline void onBufferWrite(cdrMemoryStream& data)
     {
       m_listeners->
         connectorData_[ON_BUFFER_WRITE].notify(m_profile, data);
     }
 
-    inline void onBufferFull(const cdrMemoryStream& data)
+    inline void onBufferFull(cdrMemoryStream& data)
     {
       m_listeners->
         connectorData_[ON_BUFFER_FULL].notify(m_profile, data);
     }
 
-    inline void onBufferWriteTimeout(const cdrMemoryStream& data)
+    inline void onBufferWriteTimeout(cdrMemoryStream& data)
     {
       m_listeners->
         connectorData_[ON_BUFFER_WRITE_TIMEOUT].notify(m_profile, data);
     }
 
-    inline void onBufferWriteOverwrite(const cdrMemoryStream& data)
+    inline void onBufferWriteOverwrite(cdrMemoryStream& data)
     {
       m_listeners->
         connectorData_[ON_BUFFER_OVERWRITE].notify(m_profile, data);
     }
 
-    inline void onReceived(const cdrMemoryStream& data)
+    inline void onReceived(cdrMemoryStream& data)
     {
       m_listeners->
         connectorData_[ON_RECEIVED].notify(m_profile, data);
     }
 
-    inline void onReceiverFull(const cdrMemoryStream& data)
+    inline void onReceiverFull(cdrMemoryStream& data)
     {
       m_listeners->
         connectorData_[ON_RECEIVER_FULL].notify(m_profile, data);
     }
 
-    inline void onReceiverTimeout(const cdrMemoryStream& data)
+    inline void onReceiverTimeout(cdrMemoryStream& data)
     {
       m_listeners->
         connectorData_[ON_RECEIVER_TIMEOUT].notify(m_profile, data);
     }
 
-    inline void onReceiverError(const cdrMemoryStream& data)
+    inline void onReceiverError(cdrMemoryStream& data)
     {
       m_listeners->
         connectorData_[ON_RECEIVER_ERROR].notify(m_profile, data);
     }
 
   private:
+    mutable Logger rtclog;
+
+    InPortConnector* m_connector;
     CdrBufferBase* m_buffer;
-	::OpenRTM::PortSharedMemory_var  m_objref;
     ConnectorListeners* m_listeners;
     ConnectorInfo m_profile;
-    InPortConnector* m_connector;
+
+    ::OpenRTM::PortSharedMemory_var  m_objref;
 
   };  // class InPortCorCdrbaProvider
 };    // namespace RTC

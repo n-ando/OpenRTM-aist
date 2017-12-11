@@ -36,7 +36,7 @@ namespace RTC
    * @class OutPortSHMProvider
    * @brief OutPortSHMProvider クラス
    *
-   * OutPortProvider 
+   * OutPortProvider
    *
    * 通信手段に 共有メモリ を利用した出力ポートプロバイダの実装クラス。
    *
@@ -46,7 +46,7 @@ namespace RTC
    * @class OutPortSHMProvider
    * @brief OutPortSHMProvider class
    *
-   * 
+   *
    *
    * @since 1.2.0
    *
@@ -197,7 +197,7 @@ namespace RTC
      * @endif
      */
     ::OpenRTM::PortStatus convertReturn(BufferStatus::Enum status,
-                                        const cdrMemoryStream& data);
+                                        cdrMemoryStream& data);
 
 
     /*!
@@ -209,7 +209,7 @@ namespace RTC
      * @param data cdrMemoryStream
      * @endif
      */
-    inline void onBufferRead(const cdrMemoryStream& data)
+    inline void onBufferRead(cdrMemoryStream& data)
     {
       m_listeners->
         connectorData_[ON_BUFFER_READ].notify(m_profile, data);
@@ -224,7 +224,7 @@ namespace RTC
      * @param data cdrMemoryStream
      * @endif
      */
-    inline void onSend(const cdrMemoryStream& data)
+    inline void onSend(cdrMemoryStream& data)
     {
       m_listeners->
         connectorData_[ON_SEND].notify(m_profile, data);
@@ -294,15 +294,18 @@ namespace RTC
       m_listeners->
         connector_[ON_SENDER_ERROR].notify(m_profile);
     }
-    
+
   private:
+    mutable Logger rtclog;
+    int m_memorySize;
+    std::string m_shmAddress;
+
+    OutPortConnector* m_connector;
     CdrBufferBase* m_buffer;
-    ::OpenRTM::PortSharedMemory_var m_objref;
     ConnectorListeners* m_listeners;
     ConnectorInfo m_profile;
-    OutPortConnector* m_connector;
-    std::string m_shm_address;
-    int m_memory_size;
+
+    ::OpenRTM::PortSharedMemory_var m_objref;
   };  // class OutPortCorbaCdrProvider
 };     // namespace RTC
 

@@ -47,7 +47,8 @@ namespace CORBA_IORUtil
 
   /*!
    * @if jp
-   * @brief IOR Ê¸»úÎó¤òIOR¹½Â¤ÂÎ¤ØÊÑ´¹¤¹¤E   * @else
+   * @brief IOR Ê¸»úÎó¤òIOR¹½Â¤ÂÎ¤ØÊÑ´¹¤¹¤ë
+   * @else
    * @brief Convert from IOR string to IOR structure
    * @endif
    */
@@ -113,7 +114,8 @@ namespace CORBA_IORUtil
 #endif // ORB_IS_ORBEXPRESS
   /*!
    * @if jp
-   * @brief IOR¹½Â¤ÂÎ¤òIORÊ¸»úÎó¤ØÊÑ´¹¤¹¤E   * @else
+   * @brief IOR¹½Â¤ÂÎ¤òIORÊ¸»úÎó¤ØÊÑ´¹¤¹¤ë
+   * @else
    * @brief Convert from IOR structure to IOR string 
    * @endif
    */
@@ -173,7 +175,8 @@ namespace CORBA_IORUtil
 #endif // ORB_IS_ORBEXPRESS
   /*!
    * @if jp
-   * @brief IORÆâ¤Î¥¨¥ó¥É¥İ¥¤¥ó¥È¤òÃÖ´¹¤¹¤E   * @else
+   * @brief IORÆâ¤Î¥¨¥ó¥É¥İ¥¤¥ó¥È¤òÃÖ´¹¤¹¤ë
+   * @else
    * @brief Replace endpoint address in IOR entry
    * @endif
    */
@@ -217,7 +220,7 @@ namespace CORBA_IORUtil
 
   /*!
    * @if jp
-   * @brief IORÊ¸»úÎó¤«¤é¾ğÊó¤òÃEĞ¤·¥Õ¥©¡¼¥Ş¥Ã¥ÈºÑ¤ß¤ÎÊ¸»úÎó¤È¤·¤ÆÊÖ¤¹
+   * @brief IORÊ¸»úÎó¤«¤é¾ğÊó¤òÃê½Ğ¤·¥Õ¥©¡¼¥Ş¥Ã¥ÈºÑ¤ß¤ÎÊ¸»úÎó¤È¤·¤ÆÊÖ¤¹
    * @else
    * @brief Extracts information from IOR string and returns formatted string
    * @endif
@@ -252,23 +255,23 @@ namespace CORBA_IORUtil
                    << (int) pBody.version.minor << " ";
             retstr << (const char*) pBody.address.host 
                    << " " << pBody.address.port << std::endl;
-            
+
             print_omni_key(retstr, pBody.object_key);
             print_key(retstr, pBody.object_key);
             print_tagged_components(retstr, pBody.components);
-            
             retstr << std::endl;
           }
+        else if (ior.profiles[count].tag == IOP::TAG_MULTIPLE_COMPONENTS)
           {
-            
             retstr << "Multiple Component Profile ";
             IIOP::ProfileBody pBody;
+            IIOP::unmarshalMultiComponentProfile(ior.profiles[count],
                                                  pBody.components);
             print_tagged_components(retstr, pBody.components);
-            
             retstr << std::endl;
-            
+          }
         else
+          {
             retstr << "Unrecognised profile tag: 0x"
                    << std::hex
                    << (unsigned)(ior.profiles[count].tag)
@@ -281,7 +284,6 @@ namespace CORBA_IORUtil
 #endif // ORB_IS_RTORB
     return retstr.str();
   }
-
 
   std::vector<IIOP::Address> getEndpoints(IOP::IOR& ior)
   {

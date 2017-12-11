@@ -32,7 +32,7 @@ namespace RTC
    * @class OutPortSHMConsumer
    * @brief OutPortSHMConsumer クラス
    *
-   * OutPortConsumer 
+   * OutPortConsumer
    *
    * 通信手段に 共有メモリ を利用した出力ポートプロバイダーの実装クラス。
    *
@@ -42,7 +42,7 @@ namespace RTC
    * @class OutPortSHMConsumer
    * @brief OutPortSHMConsumer class
    *
-   * 
+   *
    *
    * @since 0.4.0
    *
@@ -84,21 +84,17 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~OutPortSHMConsumer(); 
+    virtual ~OutPortSHMConsumer();
 
     /*!
      * @if jp
      * @brief 設定初期化
      *
-     * 
-     * 
      * @param prop 設定情報
      *
      * @else
      *
      * @brief Initializing configuration
-     *
-     * 
      *
      * @param prop Configuration information
      *
@@ -110,15 +106,11 @@ namespace RTC
      * @if jp
      * @brief バッファをセットする
      *
-     * 
-     *
      * @param buffer OutPortProviderがデータを取り出すバッファへのポインタ
      *
      * @else
      * @brief Setting outside buffer's pointer
      *
-     * 
-     * 
      * @param buffer A pointer to a data buffer to be used by OutPortProvider
      *
      * @endif
@@ -129,15 +121,11 @@ namespace RTC
      * @if jp
      * @brief リスナを設定する。
      *
-     * 
-     *
      * @param info 接続情報
      * @param listeners リスナオブジェクト
      *
      * @else
-     * @brief Set the listener. 
-     *
-     * 
+     * @brief Set the listener.
      *
      * @param info Connector information
      * @param listeners Listener objects
@@ -193,7 +181,7 @@ namespace RTC
      * @endif
      */
     virtual bool subscribeInterface(const SDOPackage::NVList& properties);
-    
+
     /*!
      * @if jp
      * @brief データ受信通知からの登録解除
@@ -213,7 +201,7 @@ namespace RTC
      */
     virtual void unsubscribeInterface(const SDOPackage::NVList& properties);
     virtual bool setObject(CORBA::Object_ptr obj);
-    
+
   private:
     /*!
      * @if jp
@@ -227,14 +215,14 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ON_BUFFER_WRITE のリスナへ通知する。 
+     * @brief ON_BUFFER_WRITE のリスナへ通知する。
      * @param data cdrMemoryStream
      * @else
      * @brief Notify an ON_BUFFER_WRITE event to listeners
      * @param data cdrMemoryStream
      * @endif
      */
-    inline void onBufferWrite(const cdrMemoryStream& data)
+    inline void onBufferWrite(cdrMemoryStream& data)
     {
       m_listeners->
         connectorData_[ON_BUFFER_WRITE].notify(m_profile, data);
@@ -242,14 +230,14 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ON_BUFFER_FULL のリスナへ通知する。 
+     * @brief ON_BUFFER_FULL のリスナへ通知する。
      * @param data cdrMemoryStream
      * @else
      * @brief Notify an ON_BUFFER_FULL event to listeners
      * @param data cdrMemoryStream
      * @endif
      */
-    inline void onBufferFull(const cdrMemoryStream& data)
+    inline void onBufferFull(cdrMemoryStream& data)
     {
       m_listeners->
         connectorData_[ON_BUFFER_FULL].notify(m_profile, data);
@@ -257,14 +245,14 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ON_RECEIVED のリスナへ通知する。 
+     * @brief ON_RECEIVED のリスナへ通知する。
      * @param data cdrMemoryStream
      * @else
      * @brief Notify an ON_RECEIVED event to listeners
      * @param data cdrMemoryStream
      * @endif
      */
-    inline void onReceived(const cdrMemoryStream& data)
+    inline void onReceived(cdrMemoryStream& data)
     {
       m_listeners->
         connectorData_[ON_RECEIVED].notify(m_profile, data);
@@ -272,14 +260,14 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ON_RECEIVER_FULL のリスナへ通知する。 
+     * @brief ON_RECEIVER_FULL のリスナへ通知する。
      * @param data cdrMemoryStream
      * @else
      * @brief Notify an ON_RECEIVER_FULL event to listeners
      * @param data cdrMemoryStream
      * @endif
      */
-    inline void onReceiverFull(const cdrMemoryStream& data)
+    inline void onReceiverFull(cdrMemoryStream& data)
     {
       m_listeners->
         connectorData_[ON_RECEIVER_FULL].notify(m_profile, data);
@@ -287,7 +275,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ON_SENDER_EMPTYのリスナへ通知する。 
+     * @brief ON_SENDER_EMPTYのリスナへ通知する。
      * @else
      * @brief Notify an ON_SENDER_EMPTY event to listeners
      * @endif
@@ -300,7 +288,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ON_SENDER_TIMEOUT のリスナへ通知する。 
+     * @brief ON_SENDER_TIMEOUT のリスナへ通知する。
      * @else
      * @brief Notify an ON_SENDER_TIMEOUT event to listeners
      * @endif
@@ -313,7 +301,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ON_SENDER_ERRORのリスナへ通知する。 
+     * @brief ON_SENDER_ERRORのリスナへ通知する。
      * @else
      * @Brief Notify an ON_SENDER_ERROR event to listeners
      * @endif
@@ -325,17 +313,14 @@ namespace RTC
     }
 protected:
     //    RTC::OutPortCdr_var m_outport;
-    mutable Logger rtclog;
-    coil::Properties m_properties;
     coil::Mutex m_mutex;
-    std::string m_shm_address;
-    SharedMemoryPort m_shmem;
-    int m_memory_size;
-    bool m_endian;
+    mutable Logger rtclog;
 
-	CdrBufferBase* m_buffer;
-	ConnectorListeners* m_listeners;
-	ConnectorInfo m_profile;
+    SharedMemoryPort m_shmem;
+
+    CdrBufferBase* m_buffer;
+    ConnectorListeners* m_listeners;
+    ConnectorInfo m_profile;
   };
 };     // namespace RTC
 
