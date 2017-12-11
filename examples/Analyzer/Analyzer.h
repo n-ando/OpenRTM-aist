@@ -335,6 +335,7 @@ class Analyzer
 class DataListener
 	: public ConnectorDataListenerT<RTC::TimedOctetSeq>
 {
+	USE_CONNLISTENER_STATUS;
 public:
 	DataListener(Analyzer *comp);
 	virtual ~DataListener();

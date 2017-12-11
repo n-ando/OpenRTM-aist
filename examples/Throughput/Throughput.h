@@ -431,6 +431,7 @@ template <class DataType>
 class DataListener
   : public ConnectorDataListenerT<DataType>
 {
+  USE_CONNLISTENER_STATUS;
 public:
   DataListener(Throughput *comp) : m_comp(comp)  {};
   virtual ~DataListener() {};
@@ -446,6 +447,7 @@ public:
 class ConnListener
   : public ConnectorListener
 {
+  USE_CONNLISTENER_STATUS;
 public:
   ConnListener(Throughput *comp) : m_comp(comp) {}
   virtual ~ConnListener() {}
