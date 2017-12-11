@@ -10,4 +10,4 @@ add_subdirectory(Composite)
 add_subdirectory(Analyzer)
 add_subdirectory(Throughput)
 
-#add_subdirectory(FileTest)
+add_subdirectory(StaticFsm)
