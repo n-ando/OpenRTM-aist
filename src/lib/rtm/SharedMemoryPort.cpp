@@ -248,7 +248,7 @@ namespace RTC
   *
   * @endif
   */
-	void SharedMemoryPort::write(const cdrMemoryStream& data)
+  void SharedMemoryPort::write(cdrMemoryStream& data)
   {
 #ifdef ORB_IS_ORBEXPRESS
 	  CORBA::ULongLong data_size = (CORBA::ULongLong)data.cdr.size_written();

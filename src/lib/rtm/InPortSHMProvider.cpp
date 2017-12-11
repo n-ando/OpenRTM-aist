@@ -166,7 +166,7 @@ namespace RTC
    */
   ::OpenRTM::PortStatus
   InPortSHMProvider::convertReturn(BufferStatus::Enum status,
-                                        const cdrMemoryStream& data)
+                                        cdrMemoryStream& data)
   {
     switch(status)
       {

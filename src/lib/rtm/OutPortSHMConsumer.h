@@ -223,7 +223,7 @@ namespace RTC
      * @endif
      */
     OutPortConsumer::ReturnCode convertReturn(::OpenRTM::PortStatus status,
-                                              const cdrMemoryStream& data);
+                                              cdrMemoryStream& data);
 
     /*!
      * @if jp
@@ -234,7 +234,7 @@ namespace RTC
      * @param data cdrMemoryStream
      * @endif
      */
-    inline void onBufferWrite(const cdrMemoryStream& data)
+    inline void onBufferWrite(cdrMemoryStream& data)
     {
       m_listeners->
         connectorData_[ON_BUFFER_WRITE].notify(m_profile, data);
@@ -249,7 +249,7 @@ namespace RTC
      * @param data cdrMemoryStream
      * @endif
      */
-    inline void onBufferFull(const cdrMemoryStream& data)
+    inline void onBufferFull(cdrMemoryStream& data)
     {
       m_listeners->
         connectorData_[ON_BUFFER_FULL].notify(m_profile, data);
@@ -264,7 +264,7 @@ namespace RTC
      * @param data cdrMemoryStream
      * @endif
      */
-    inline void onReceived(const cdrMemoryStream& data)
+    inline void onReceived(cdrMemoryStream& data)
     {
       m_listeners->
         connectorData_[ON_RECEIVED].notify(m_profile, data);
@@ -279,7 +279,7 @@ namespace RTC
      * @param data cdrMemoryStream
      * @endif
      */
-    inline void onReceiverFull(const cdrMemoryStream& data)
+    inline void onReceiverFull(cdrMemoryStream& data)
     {
       m_listeners->
         connectorData_[ON_RECEIVER_FULL].notify(m_profile, data);

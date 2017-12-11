@@ -177,7 +177,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual void write(const cdrMemoryStream& data);
+    virtual void write(cdrMemoryStream& data);
      /*!
      * @if jp
      * @brief データを読み込む

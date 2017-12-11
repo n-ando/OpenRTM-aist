@@ -130,7 +130,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual InPortConsumer::ReturnCode put(const cdrMemoryStream& data);
+    virtual InPortConsumer::ReturnCode put(cdrMemoryStream& data);
     /*!
      * @if jp
      * @brief 

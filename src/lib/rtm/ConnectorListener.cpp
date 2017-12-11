@@ -111,8 +111,8 @@ namespace RTC
   }
     
   ConnectorDataListenerHolder::ReturnCode
-	  ConnectorDataListenerHolder::notify(const ConnectorInfo& info,
-                                                 const cdrMemoryStream& cdrdata)
+	  ConnectorDataListenerHolder::notify(ConnectorInfo& info,
+                                                 cdrMemoryStream& cdrdata)
   {
     Guard guard(m_mutex);
     ConnectorListenerHolder::ReturnCode ret(NO_CHANGE);
@@ -183,7 +183,7 @@ namespace RTC
   }
 
   ConnectorListenerHolder::ReturnCode
-	  ConnectorListenerHolder::notify(const ConnectorInfo& info)
+	  ConnectorListenerHolder::notify(ConnectorInfo& info)
   {
     Guard guard(m_mutex);
     ConnectorListenerHolder::ReturnCode ret;

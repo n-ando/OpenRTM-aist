@@ -318,7 +318,7 @@ namespace RTC
       return false;
     }
 
-    virtual void write(const DataType& data)
+    virtual void write(DataType& data)
     {
       Guard guard(m_valueMutex);
       m_value = data;

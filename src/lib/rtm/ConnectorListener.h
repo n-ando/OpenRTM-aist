@@ -471,8 +471,8 @@ namespace RTC
      *
      * @endif
      */
-	virtual ReturnCode operator()(const ConnectorInfo& info,
-                            const cdrMemoryStream& data) = 0;
+	virtual ReturnCode operator()(ConnectorInfo& info,
+                            cdrMemoryStream& data) = 0;
   };
 
   /*!
@@ -538,8 +538,8 @@ namespace RTC
      *
      * @endif
      */
-	virtual ReturnCode operator()(const ConnectorInfo& info,
-                                  const cdrMemoryStream& cdrdata)
+	virtual ReturnCode operator()(ConnectorInfo& info,
+                                  cdrMemoryStream& cdrdata)
     {
       DataType data;
 #ifdef ORB_IS_ORBEXPRESS
@@ -583,8 +583,18 @@ namespace RTC
 	  ReturnCode ret = this->operator()(info, data);
 	  if (ret == DATA_CHANGED || ret == BOTH_CHANGED)
 	  {
+
+#ifdef ORB_IS_ORBEXPRESS
+		  cdrdata.cdr.rewind();
+		  cdrdata.cdr >> data;
+#elif defined(ORB_IS_TAO)
+		  cdrdata.cdr.reset();
+		  TAO_InputCDR tao_cdr = TAO_InputCDR(cdrdata.cdr);
+		  tao_cdr >> data;
+#else
 		  cdrdata.rewindPtrs();
 		  data >>= cdrdata;
+#endif
 	  }
 	  return ret;
     }
@@ -606,8 +616,8 @@ namespace RTC
      *
      * @endif
      */
-	virtual ReturnCode operator()(const ConnectorInfo& info,
-                                 const DataType& data) = 0;
+	virtual ReturnCode operator()(ConnectorInfo& info,
+                                 DataType& data) = 0;
   };
                             
   /*!
@@ -919,7 +929,7 @@ namespace RTC
      *
      * @endif
      */
-	virtual ReturnCode operator()(const ConnectorInfo& info) = 0;
+	virtual ReturnCode operator()(ConnectorInfo& info) = 0;
   };
 
 
@@ -1042,8 +1052,8 @@ namespace RTC
      * @param cdrdata Data
      * @endif
      */
-	ReturnCode notify(const ConnectorInfo& info,
-                const cdrMemoryStream& cdrdata);
+	ReturnCode notify(ConnectorInfo& info,
+                cdrMemoryStream& cdrdata);
 
     /*!
      * @if jp
@@ -1067,10 +1077,10 @@ namespace RTC
      * @endif
      */
     template <class DataType>
-	ReturnCode notify(const ConnectorInfo& info, const DataType& typeddata)
+	ReturnCode notify(ConnectorInfo& info, DataType& typeddata)
     {
-	  Guard guard(m_mutex);
-	  ReturnCode ret(NO_CHANGE);
+      Guard guard(m_mutex);
+      ReturnCode ret(NO_CHANGE);
       for (int i(0), len(m_listeners.size()); i < len; ++i)
         {
           ConnectorDataListenerT<DataType>* listener(0);
@@ -1078,10 +1088,23 @@ namespace RTC
           dynamic_cast<ConnectorDataListenerT<DataType>*>(m_listeners[i].first);
           if (listener != 0)
             {
-              listener->operator()(info, typeddata);
+              ret = ret | listener->operator()(info, typeddata);
+            }
+          else
+            {
+              cdrMemoryStream cdr;
+#ifdef ORB_IS_ORBEXPRESS
+			  cdr.cdr >> typeddata;
+#elif defined(ORB_IS_TAO)
+			  TAO_InputCDR tao_cdr = TAO_InputCDR(cdr.cdr);
+			  tao_cdr >> typeddata;
+#else
+              typeddata >>= cdr;
+#endif
+              ret = ret | m_listeners[i].first->operator()(info, cdr);
             }
         }
-      return ret;
+	  return ret;
     }
 
   private:
@@ -1208,7 +1231,7 @@ namespace RTC
      * @param info ConnectonotifyrInfo
      * @endif
      */
-	ReturnCode notify(const ConnectorInfo& info);
+	ReturnCode notify(ConnectorInfo& info);
       
   private:
     std::vector<Entry> m_listeners;

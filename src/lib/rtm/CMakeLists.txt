@@ -256,6 +256,7 @@ set(rtm_headers
 	OutPortSHMConsumer.h
 	OutPortSHMProvider.h
 	SharedMemoryPort.h
+	Timestamp.h
 	${PROJECT_BINARY_DIR}/config_rtc.h
 	${PROJECT_BINARY_DIR}/version.h
 )
