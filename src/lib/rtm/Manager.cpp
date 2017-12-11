@@ -873,7 +873,9 @@ std::vector<coil::Properties> Manager::getLoadableModules()
       "os.version",
       "os.arch",
       "os.hostname",
-      "corba.endpoint",
+      "corba.endpoints",
+      "corba.endpoints_ipv4",
+      "corba.endpoints_ipv6",
       "corba.id",
       "exec_cxt.periodic.type",
       "exec_cxt.periodic.rate",
@@ -898,6 +900,20 @@ std::vector<coil::Properties> Manager::getLoadableModules()
       ""
     };
 
+    RTObject_impl* comp;
+    comp = factory->create(this);
+    if (comp == NULL)
+      {
+        RTC_ERROR(("RTC creation failed: %s",
+                   comp_id["implementation_id"].c_str()));
+        return NULL;
+      }
+
+    if (m_config.getProperty("corba.endpoints_ipv4") == "")
+      {
+        setEndpointProperty(comp->getObjRef());
+      }
+
     for (int i(0); inherit_prop[i][0] != '\0'; ++i)
       {
         const char* key(inherit_prop[i]);
@@ -906,15 +922,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
             prop[key] = m_config[key];
           }
       }
-      
-    RTObject_impl* comp;
-    comp = factory->create(this);
-    if (comp == NULL)
-      {
-	RTC_ERROR(("RTC creation failed: %s",
-                   comp_id["implementation_id"].c_str()));
-	return NULL;
-      }
+
     RTC_TRACE(("RTC created: %s", comp_id["implementation_id"].c_str()));
     m_listeners.rtclifecycle_.postCreate(comp);
     prop << comp_prop;
@@ -1999,7 +2007,6 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     return true;
   }
 
-
   bool Manager::initManagerServant()
   {
     RTC_TRACE(("Manager::initManagerServant()"));
@@ -2008,6 +2015,10 @@ std::vector<coil::Properties> Manager::getLoadableModules()
         return true;
       }
     m_mgrservant = new ::RTM::ManagerServant();
+    if (m_config.getProperty("corba.endpoints_ipv4") == "")
+      {
+        setEndpointProperty(m_mgrservant->getObjRef());
+      }
     coil::Properties& prop(m_config.getNode("manager"));
     std::vector<std::string> names(coil::split(prop["naming_formats"], ","));
 
@@ -2025,10 +2036,10 @@ std::vector<coil::Properties> Manager::getLoadableModules()
       {
         otherref.close();
         std::ofstream reffile(m_config["manager.refstring_path"].c_str());
-	RTM::Manager_var mgr_v(RTM::Manager::
+        RTM::Manager_var mgr_v(RTM::Manager::
                                _duplicate(m_mgrservant->getObjRef()));
         CORBA::String_var str_var = m_pORB->object_to_string(mgr_v);
-	reffile << str_var;
+        reffile << str_var;
         reffile.close();
       }
     else
@@ -2457,5 +2468,114 @@ std::vector<coil::Properties> Manager::getLoadableModules()
       }
     return str;
   }
-  
+
+  /*!
+   * @if jp
+   * @brief corba.endpoints にエンドポイント情報を設定する
+   * @else
+   * @brief Setting endpoint info from corba.endpoints
+   * @endif
+   */
+  void Manager::setEndpointProperty(CORBA::Object_ptr objref)
+  {
+    RTC_TRACE(("sedEndpointProperty()"));
+    if (CORBA::is_nil(objref))
+      {
+        RTC_WARN(("Object reference is nil."));
+        return;
+      }
+
+    bool ipv4, ipv6;
+    std::vector<int> ipv4_list, ipv6_list;
+    endpointPropertySwitch("ipv4", ipv4, ipv4_list);
+    endpointPropertySwitch("ipv6", ipv6, ipv6_list);
+
+    CORBA::String_var iorstr = theORB()->object_to_string(objref);
+    IOP::IOR ior;
+    CORBA_IORUtil::toIOR(iorstr, ior);
+    std::vector<IIOP::Address> endpoints;
+    endpoints = CORBA_IORUtil::getEndpoints(ior);
+
+    coil::vstring epstr, epstr_ipv4, epstr_ipv6;
+    size_t ipv4_count(0), ipv6_count(0);
+
+    coil::vstring addrs;
+    for (size_t i(0); i < endpoints.size(); ++i)
+      {
+        std::string addr(endpoints[i].host);
+        if (ipv4 && coil::isIPv4(addr))
+          {
+            std::string tmp(addr + ":" + coil::otos(endpoints[i].port));
+            if (ipv4_list.size() == 0 ||
+                std::find(ipv4_list.begin(), ipv4_list.end(), ipv4_count)
+                != ipv4_list.end())
+              {
+                epstr.push_back(tmp);
+                epstr_ipv4.push_back(tmp);
+              }
+            ipv4_count += 1;
+          }
+        if (ipv6 && coil::isIPv6(addr))
+          {
+            std::string tmp("[" + addr + "]:" + coil::otos(endpoints[i].port));
+            if (ipv6_list.size() == 0 ||
+                std::find(ipv6_list.begin(), ipv6_list.end(), ipv6_count)
+                != ipv6_list.end())
+              {
+                epstr.push_back(tmp);
+                epstr_ipv6.push_back(tmp);
+              }
+            ipv6_count += 1;
+          }
+      }
+    m_config.setProperty("corba.endpoints", coil::flatten(epstr));
+    m_config.setProperty("corba.endpoints_ipv4", coil::flatten(epstr_ipv4));
+    m_config.setProperty("corba.endpoints_ipv6", coil::flatten(epstr_ipv6));
+  }
+
+  /*!
+   * @if jp
+   * @brief corba.endpoint_property からオプション情報を取得する
+   * @else
+   * @brief Getting option info from corba.endpoint_property
+   * @endif
+   */
+  void Manager::endpointPropertySwitch(const std::string& ipver,
+                                       bool& ip, std::vector<int>& ip_list)
+  {
+    ip = false; ip_list.resize(0);
+
+    std::string ep_prop;
+    ep_prop = m_config.getProperty("corba.endpoint_property", "ipv4");
+    coil::toLower(ep_prop);
+
+    std::string::size_type pos = ep_prop.find(ipver);
+    if (pos == std::string::npos) { return; }
+
+    ip = true;
+    pos += ipver.size();
+    if (pos >= ep_prop.size() || ep_prop[pos] != '(') { return; }
+    std::string::size_type par_begin, par_end;
+    par_begin = pos;
+    ++pos;
+    while (pos < ep_prop.size())
+      {
+        if (ep_prop[pos] == ')') { break; }
+        ++pos;
+      }
+    par_end = pos;
+
+    std::string list_num(ep_prop.substr(par_begin + 1, par_end - 1));
+    coil::vstring nums = coil::split(list_num, ",");
+    for (size_t i(0); i < nums.size(); ++i)
+      {
+        int n;
+        if (coil::stringTo(n, nums[i].c_str()))
+          {
+            ip_list.push_back(n);
+          }
+      }
+    return;
+  }
+
 };

@@ -121,8 +121,7 @@ namespace RTM
   
   /*!
    * @if jp
-   * @brief •‚•∏•Â°º•Î§Ú•Ì°º•…§π§Î
-   * @else
+   * @brief •‚•∏•Â°º•ÅEÚ•˙Ωº•…§π§ÅE   * @else
    * @brief Loading a module
    * @endig
    */
@@ -138,8 +137,7 @@ namespace RTM
   
   /*!
    * @if jp
-   * @brief •‚•∏•Â°º•Î§Ú•¢•Û•Ì°º•…§π§Î
-   * @else
+   * @brief •‚•∏•Â°º•ÅEÚ•¢•Û•˙Ωº•…§π§ÅE   * @else
    * @brief Unloading a module
    * @endig
    */  
@@ -154,8 +152,7 @@ namespace RTM
   
   /*!
    * @if jp
-   * @brief •Ì°º•…≤ƒ«Ω§ •‚•∏•Â°º•Î§Œ•◊•Ì•’•°•§•Î§ÚºË∆¿§π§Î
-   * @else
+   * @brief •˙Ωº•…≤ƒ«Ω§ •‚•∏•Â°º•ÅEŒ•◊•˙¡’•°•§•ÅEÚºË∆¿§π§ÅE   * @else
    * @brief Getting loadable module profiles
    * @endig
    */
@@ -212,8 +209,7 @@ namespace RTM
   
   /*!
    * @if jp
-   * @brief •Ì°º•…∫—§ﬂ§Œ•‚•∏•Â°º•Î§Œ•◊•Ì•’•°•§•Î§ÚºË∆¿§π§Î
-   * @else
+   * @brief •˙Ωº•…∫—§ﬂ§Œ•‚•∏•Â°º•ÅEŒ•◊•˙¡’•°•§•ÅEÚºË∆¿§π§ÅE   * @else
    * @brief Getting loaded module profiles
    * @endig
    */
@@ -270,8 +266,7 @@ namespace RTM
   
   /*!
    * @if jp
-   * @brief •≥•Û•›°º•Õ•Û•»•’•°•Ø•»•Í§Œ•◊•Ì•’•°•§•Î§ÚºË∆¿§π§Î
-   * @else
+   * @brief •≥•Û•›°º•Õ•Û•»•’•°•Ø•»•Í§Œ•◊•˙¡’•°•§•ÅEÚºË∆¿§π§ÅE   * @else
    * @brief Getting component factory profiles
    * @endig
    */
@@ -328,8 +323,7 @@ namespace RTM
   
   /*!
    * @if jp
-   * @brief •≥•Û•›°º•Õ•Û•»§Ú¿∏¿Æ§π§Î
-   * @else
+   * @brief •≥•Û•›°º•Õ•Û•»§Ú¿∏¿Æ§π§ÅE   * @else
    * @brief Creating an RT-Component
    * @endig
    */
@@ -391,8 +385,7 @@ namespace RTM
   
   /*!
    * @if jp
-   * @brief •≥•Û•›°º•Õ•Û•»§Ú∫ÔΩ¸§π§Î
-   * @else
+   * @brief •≥•Û•›°º•Õ•Û•»§Ú∫ÅEÅEπ§ÅE   * @else
    * @brief Deleting an RT-Component
    * @endig
    */
@@ -420,8 +413,7 @@ namespace RTM
   
   /*!
    * @if jp
-   * @brief µØ∆∞√Ê§Œ•≥•Û•›°º•Õ•Û•»§Œ•Í•π•»§ÚºË∆¿§π§Î
-   * @else
+   * @brief µØ∆∞√Ê§Œ•≥•Û•›°º•Õ•Û•»§Œ•ÅEπ•»§ÚºË∆¿§π§ÅE   * @else
    * @brief Getting RT-Component list running on this manager
    * @endig
    */
@@ -474,8 +466,7 @@ namespace RTM
   
   /*!
    * @if jp
-   * @brief µØ∆∞√Ê§Œ•≥•Û•›°º•Õ•Û•»•◊•Ì•’•°•§•Î§Œ•Í•π•»§ÚºË∆¿§π§Î
-   * @else
+   * @brief µØ∆∞√Ê§Œ•≥•Û•›°º•Õ•Û•»•◊•˙¡’•°•§•ÅEŒ•ÅEπ•»§ÚºË∆¿§π§ÅE   * @else
    * @brief Getting RT-Component's profile list running on this manager
    * @endig
    */  
@@ -529,8 +520,7 @@ namespace RTM
   // manager ¥À‹
   /*!
    * @if jp
-   * @brief •ﬁ•Õ°º•∏•„§Œ•◊•Ì•’•°•§•Î§ÚºË∆¿§π§Î
-   * @else
+   * @brief •ﬁ•Õ°º•∏•„§Œ•◊•˙¡’•°•§•ÅEÚºË∆¿§π§ÅE   * @else
    * @brief Getting this manager's profile.
    * @endig
    */
@@ -545,8 +535,7 @@ namespace RTM
   
   /*!
    * @if jp
-   * @brief •ﬁ•Õ°º•∏•„§Œ•≥•Û•’•£•Æ•Â•Ï°º•∑•Á•Û§ÚºË∆¿§π§Î
-   * @else
+   * @brief •ﬁ•Õ°º•∏•„§Œ•≥•Û•’•£•Æ•Â•ÅEº•∑•Á•Û§ÚºË∆¿§π§ÅE   * @else
    * @brief Getting this manager's configuration.
    * @endig
    */
@@ -567,8 +556,7 @@ namespace RTM
   
   /*!
    * @if jp
-   * @brief •ﬁ•Õ°º•∏•„§Œ•≥•Û•’•£•Æ•Â•Ï°º•∑•Á•Û§Ú¿ﬂƒÍ§π§Î
-   * @else
+   * @brief •ﬁ•Õ°º•∏•„§Œ•≥•Û•’•£•Æ•Â•ÅEº•∑•Á•Û§Ú¿ﬂƒÍ§π§ÅE   * @else
    * @brief Setting manager's configuration
    * @endig
    */
@@ -633,8 +621,7 @@ namespace RTM
   
   /*!
    * @if jp
-   * @brief •ﬁ•π•ø°º•ﬁ•Õ°º•∏•„§Œ∫ÔΩ¸
-   * @else
+   * @brief •ﬁ•π•ø°º•ﬁ•Õ°º•∏•„§Œ∫ÅEÅE   * @else
    * @brief Removing a master manager
    * @endig
    */
@@ -660,7 +647,7 @@ namespace RTM
   
   /*!
    * @if jp
-   * @brief •π•Ï°º•÷•ﬁ•Õ°º•∏•„§ŒºË∆¿
+   * @brief •π•ÅEº•÷•ﬁ•Õ°º•∏•„§ŒºË∆¿
    * @else
    * @brief Getting slave managers
    * @endig
@@ -675,7 +662,7 @@ namespace RTM
 
   /*!
    * @if jp
-   * @brief •π•Ï°º•÷•ﬁ•Õ°º•∏•„§Œƒ…≤√
+   * @brief •π•ÅEº•÷•ﬁ•Õ°º•∏•„§Œƒ…≤√
    * @else
    * @brief Getting a slave manager
    * @endig
@@ -701,8 +688,7 @@ namespace RTM
   
   /*!
    * @if jp
-   * @brief •π•Ï°º•÷•ﬁ•Õ°º•∏•„§Œ∫ÔΩ¸
-   * @else
+   * @brief •π•ÅEº•÷•ﬁ•Õ°º•∏•„§Œ∫ÅEÅE   * @else
    * @brief Removing a slave manager
    * @endig
    */
@@ -726,8 +712,7 @@ namespace RTM
   
   /*!
    * @if jp
-   * @brief •◊•Ì•ª•π§Œ•≥•‘°º§Ú¿∏¿Æ§π§Î
-   * @else
+   * @brief •◊•˙¡ª•π§Œ•≥•‘°º§Ú¿∏¿Æ§π§ÅE   * @else
    * @brief The copy of the process is generated.
    * @endif
    */
@@ -740,8 +725,7 @@ namespace RTM
 
   /*!
    * @if jp
-   * @brief shutdown§π§Î
-   * @else
+   * @brief shutdown§π§ÅE   * @else
    * @brief This method shutdowns RTC.
    * @endif
    */
@@ -753,7 +737,7 @@ namespace RTM
 
   /*!
    * @if jp
-   * @brief ∫∆µØ∆∞§π§Î°£
+   * @brief ∫∆µØ∆∞§π§ÅE£
    * @else
    * @brief This method restarts RTC.
    * @endif
@@ -766,7 +750,7 @@ namespace RTM
 
   /*!
    * @if jp
-   * @brief ªÿƒÍÃæ§ŒRTC•™•÷•∏•ß•Ø•»•Í•’•°•Ï•Û•π§ÚºË∆¿
+   * @brief ªÿƒÅEæ§ŒRTC•™•÷•∏•ß•Ø•»•ÅE’•°•ÅEÛ•π§ÚºË∆¿
    * @else
    * @brief Obtain specific RTObject reference by name
    * @endig
@@ -821,7 +805,7 @@ namespace RTM
 
   /*!
    * @if jp
-   * @brief RTC§Œ•Í•’•°•Ï•Û•π§ÚºË∆¿§π§Î°£
+   * @brief RTC§Œ•ÅE’•°•ÅEÛ•π§ÚºË∆¿§π§ÅE£
    * @else
    * @brief Get the reference of RTC.
    * @endif
@@ -835,7 +819,7 @@ namespace RTM
   // Local functions
   /*!
    * @if jp
-   * @brief Manager§Œ•Í•’•°•Ï•Û•π§ÚºË∆¿§π§Î°£
+   * @brief Manager§Œ•ÅE’•°•ÅEÛ•π§ÚºË∆¿§π§ÅE£
    * @else
    * @brief Get the reference of Manager. 
    * @endif
@@ -910,7 +894,7 @@ namespace RTM
 
   /*!
    * @if jp
-   * @brief Manager§Œ•Í•’•°•Ï•Û•π§Ú∏°∫˜§π§Î°£
+   * @brief Manager§Œ•ÅE’•°•ÅEÛ•π§Ú∏°∫˜§π§ÅE£
    * @else
    * @brief Find the reference of Manager. 
    * @endif
@@ -972,7 +956,7 @@ namespace RTM
 
   /*!
    * @if jp
-   * @brief ªÿƒÍÃæ§Œ•ﬁ•Õ°º•∏•„§ÚºË∆¿
+   * @brief ªÿƒÅEæ§Œ•ﬁ•Õ°º•∏•„§ÚºË∆¿
    * @else
    * @brief Obtain Manager's reference by name
    * @endif
@@ -997,7 +981,7 @@ namespace RTM
   
   /*!
    * @if jp
-   * @brief •ﬁ•Õ°º•∏•„§Œ•Í•π•»§´§ÈªÿƒÍÃæ§Úª˝§ƒ•ﬁ•Õ°º•∏•„§ÚºË∆¿
+   * @brief •ﬁ•Õ°º•∏•„§Œ•ÅEπ•»§´§ÈªÿƒÅEæ§Úª˝§ƒ•ﬁ•Õ°º•∏•„§ÚºË∆¿
    * @else
    * @brief Obtain Manager's reference by name
    * @endif
@@ -1037,8 +1021,7 @@ namespace RTM
 
   /*!
    * @if jp
-   * @brief ªÿƒÍ§Œ•ﬁ•Õ°º•∏•„§«RTC§ÚµØ∆∞§π§Î
-   * @else
+   * @brief ªÿƒÍ§Œ•ﬁ•Õ°º•∏•„§«RTC§ÚµØ∆∞§π§ÅE   * @else
    * @brief Launch RTC on specified manager
    * @endif
    */
@@ -1135,8 +1118,7 @@ namespace RTM
   
   /*
    * @if jp
-   * @brief ªÿƒÍ•¢•…•Ï•π§Œ•ﬁ•Õ°º•∏•„§«RTC§ÚµØ∆∞§π§Î
-   * @else
+   * @brief ªÿƒÅE¢•…•ÅEπ§Œ•ﬁ•Õ°º•∏•„§«RTC§ÚµØ∆∞§π§ÅE   * @else
    * @brief Launch a RTC on the specified IP/Port address manager
    * @endif
    */
