@@ -35,6 +35,7 @@ extern bool g_Listener_dump_enabled;
 class DataListener
   : public ConnectorDataListenerT<RTC::TimedLong>
 {
+  USE_CONNLISTENER_STATUS;
 public:
   DataListener(const char* name) : m_name(name) {}
   virtual ~DataListener()
@@ -46,8 +47,8 @@ public:
       }
   }
 
-  virtual void operator()(const ConnectorInfo& info,
-                          const TimedLong& data)
+  virtual ReturnCode operator()(ConnectorInfo& info,
+                                TimedLong& data)
   {
     // Connector Listener Dump check
     if(g_Listener_dump_enabled)
@@ -62,6 +63,7 @@ public:
         std::cout << "Data:          " << data.data    << std::endl;
         std::cout << "------------------------------"   << std::endl;
       }
+    return NO_CHANGE;
   }
   std::string m_name;
 };
@@ -70,6 +72,7 @@ public:
 class ConnListener
   : public ConnectorListener
 {
+  USE_CONNLISTENER_STATUS;
 public:
   ConnListener(const char* name) : m_name(name) {}
   virtual ~ConnListener()
@@ -81,7 +84,7 @@ public:
       }
   }
 
-  virtual void operator()(const ConnectorInfo& info)
+  virtual ReturnCode operator()(ConnectorInfo& info)
   {
     // Connector Listener Dump check
     if(g_Listener_dump_enabled)
@@ -95,6 +98,7 @@ public:
         std::cout                                       << std::endl;
         std::cout << "------------------------------"   << std::endl;
       }
+    return NO_CHANGE;
   };
   std::string m_name;
 };
