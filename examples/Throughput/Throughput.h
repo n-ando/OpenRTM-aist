@@ -434,10 +434,11 @@ class DataListener
 public:
   DataListener(Throughput *comp) : m_comp(comp)  {};
   virtual ~DataListener() {};
-  virtual void operator()(const ConnectorInfo& info,
-                          const DataType& data)
+  virtual ReturnCode operator()(ConnectorInfo& info,
+                          DataType& data)
   {
     m_comp->receiveData(data.tm, data.data.length());
+	return NO_CHANGE;
   }
   Throughput* m_comp;
 };
@@ -448,7 +449,7 @@ class ConnListener
 public:
   ConnListener(Throughput *comp) : m_comp(comp) {}
   virtual ~ConnListener() {}
-  virtual void operator()(const ConnectorInfo& info)
+  virtual ReturnCode operator()(ConnectorInfo& info)
   {
 // Connector Listener: ON_CONNECT
 // Profile::name:      ConsoleIn0.out_ConsoleOut0.in
@@ -477,6 +478,7 @@ public:
     std::cout                                       << std::endl;
     std::cout << "------------------------------"   << std::endl;
     m_comp->setConnectorProfile(info);
+	return NO_CHANGE;
   };
   Throughput* m_comp;
 };

@@ -241,7 +241,8 @@ namespace RTC
             if (m_onWriteConvert != NULL)
               {
                 RTC_DEBUG(("m_connectors.OnWriteConvert called"));
-                ret = m_connectors[i]->write(((*m_onWriteConvert)(value)));
+                DataType conv_value = ((*m_onWriteConvert)(value));
+                ret = m_connectors[i]->write(conv_value);
               }
             else
               {

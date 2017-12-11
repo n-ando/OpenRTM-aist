@@ -339,10 +339,11 @@ public:
 	DataListener(Analyzer *comp);
 	virtual ~DataListener();
 
-	virtual void operator()(const ConnectorInfo& info,
-		const TimedOctetSeq& data)
+	virtual ReturnCode operator()(ConnectorInfo& info,
+		TimedOctetSeq& data)
 	{
 		m_comp->writeData(data);
+		return NO_CHANGE;
 	}
 	Analyzer *m_comp;
 
