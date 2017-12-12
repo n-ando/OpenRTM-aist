@@ -35,6 +35,8 @@
 #include <sysLib.h>
 
 
+
+
 /*
 #ifdef __RTP__
 #include <taskLib.h>
@@ -71,13 +73,20 @@ namespace coil
   inline unsigned int sleep(unsigned int seconds)
   {
     int tps = sysClkRateGet();
-    if(taskDelay(seconds*tps+1) == OK)
+    if(seconds > 0)
     {
-        return 0;
+      if(taskDelay(seconds*tps+1) == OK)
+      {
+          return 0;
+      }
+      else
+      {
+          return -1;
+      }
     }
     else
     {
-        return -1;
+          return 0;
     }
 /*
 #ifdef __RTP__
@@ -120,14 +129,24 @@ namespace coil
   inline int sleep(TimeValue interval)
   {
     int tps = sysClkRateGet();
-
-    if(taskDelay(interval.sec()*tps + (interval.usec()*tps)/1000000l + 1) == OK)
+//std::cout << interval.sec() << "\t" << interval.usec() << std::endl;
+//std::cout << interval.sec()*tps + (interval.usec()*tps)/1000000l + 1 << std::endl;
+    if(interval.sec() > 0 || interval.usec() > 0)
     {
-        return 0;
+//taskDelay(tps);
+//std::cout << interval.usec() << "\t" << (interval.usec()*tps)/1000000l << "\t" << tps << std::endl;
+      if(taskDelay(interval.sec()*tps + (interval.usec()*tps)/1000000l + 1) == OK)
+      {
+          return 0;
+      }
+      else
+      {
+          return -1;
+      }
     }
     else
     {
-        return -1;
+      return 0;
     }
 /*
 #ifdef __RTP__
@@ -172,14 +191,21 @@ namespace coil
    */
   inline int usleep(unsigned int usec)
   {
-    int tps = sysClkRateGet();
-    if(taskDelay(usec*tps/1000000l + 1) == OK)
+    if(usec > 0)
     {
-        return 0;
+      int tps = sysClkRateGet();
+      if(taskDelay(usec*tps/1000000l + 1) == OK)
+      {
+          return 0;
+      }
+      else
+      {
+          return -1;
+      }
     }
     else
     {
-        return -1;
+      return 0;
     }
 /*
 #ifdef __RTP__
@@ -298,7 +324,7 @@ namespace coil
    */
 #if defined(__powerpc__) && !defined(__RTP__)
   int settimeofday(UINT32 s, UINT32 ns);
-#elif defined(VXWORKS_66)
+#elif defined(VXWORKS_66) && !defined(__RTP__)
   inline int settimeofday(struct timespec *tv)
   {
     return ::clock_settime(CLOCK_REALTIME, tv);
