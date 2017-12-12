@@ -12,7 +12,23 @@
 #include <string>
 #include "Microwave.h"
 
-
+#if defined(RTM_OS_VXWORKS) && not defined(__RTP__)
+int microwave_main()
+{
+  RTC::Manager* manager = &RTC::Manager::instance();
+  RTC::RtcBase* comp;
+  MicrowaveInit(manager);
+  comp = manager->createComponent("Microwave");
+  if(comp)
+  {
+    return 0;
+  }
+  else
+  {
+    return 1;
+  }
+}
+#else
 void MyModuleInit(RTC::Manager* manager)
 {
   MicrowaveInit(manager);

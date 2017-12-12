@@ -12,7 +12,23 @@
 #include <string>
 #include "Display.h"
 
-
+#if defined(RTM_OS_VXWORKS) && not defined(__RTP__)
+int display_main()
+{
+  RTC::Manager* manager = &RTC::Manager::instance();
+  RTC::RtcBase* comp;
+  DisplayInit(manager);
+  comp = manager->createComponent("Display");
+  if(comp)
+  {
+    return 0;
+  }
+  else
+  {
+    return 1;
+  }
+}
+#else
 void MyModuleInit(RTC::Manager* manager)
 {
   DisplayInit(manager);
@@ -75,6 +91,7 @@ void MyModuleInit(RTC::Manager* manager)
   return;
 }
 
+
 int main (int argc, char** argv)
 {
   RTC::Manager* manager;
@@ -96,3 +113,4 @@ int main (int argc, char** argv)
 
   return 0;
 }
+#endif

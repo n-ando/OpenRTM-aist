@@ -119,7 +119,7 @@ set(srcs Microwave.cpp Microwave.h MicrowaveFsm.cpp MicrowaveFsm.h)
 set(standalone_srcs MicrowaveComp.cpp ${srcs})
 
 if(VXWORKS AND NOT RTP)
-	set(standalone_srcs ${standalone_srcs} ${CMAKE_SOURCE_DIR}/src/lib/rtm/DataFlowComponentBase.cpp)
+	set(standalone_srcs ${standalone_srcs} ${CMAKE_SOURCE_DIR}/src/lib/rtm/DataFlowComponentBase.cpp ${CMAKE_SOURCE_DIR}/src/lib/rtm/Macho.cpp)
 	set(libs ${RTCSKEL_PROJECT_NAME})
 
 	add_executable(${target} ${standalone_srcs})
