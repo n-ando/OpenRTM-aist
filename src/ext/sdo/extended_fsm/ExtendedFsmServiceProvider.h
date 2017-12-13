@@ -61,7 +61,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ‰Šú‰»
+     * @brief ½é´ü²½
      * @else
      * @brief Initialization
      * @endif
@@ -71,7 +71,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief Ä‰Šú‰»
+     * @brief ºÆ½é´ü²½
      * @else
      * @brief Re-initialization
      * @endif
@@ -80,7 +80,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ServiceProfile ‚ğæ“¾‚·‚é
+     * @brief ServiceProfile ¤ò¼èÆÀ¤¹¤ë
      * @else
      * @brief getting ServiceProfile
      * @endif
@@ -89,7 +89,7 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief I—¹ˆ—
+     * @brief ½ªÎ»½èÍı
      * @else
      * @brief Finalization
      * @endif
@@ -106,12 +106,12 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief FSM‚ÌŒ»İ‚Ìó‘Ô‚ğæ“¾
+     * @brief FSM¤Î¸½ºß¤Î¾õÂÖ¤ò¼èÆÀ
      *
-     * ‚±‚ÌƒIƒyƒŒ[ƒVƒ‡ƒ“‚ÍFSMƒRƒ“ƒ|[ƒlƒ“ƒg‚ÌFSM‚ÌŒ»İ‚Ìó‘Ô‚ğ•Ô‚·B
+     * ¤³¤Î¥ª¥Ú¥ì¡¼¥·¥ç¥ó¤ÏFSM¥³¥ó¥İ¡¼¥Í¥ó¥È¤ÎFSM¤Î¸½ºß¤Î¾õÂÖ¤òÊÖ¤¹¡£
      * (FSM4RTC spec. p.20)
      *
-     * @return Œ»İ‚Ìó‘Ô‚ğ•\‚·•¶š—ñ
+     * @return ¸½ºß¤Î¾õÂÖ¤òÉ½¤¹Ê¸»úÎó
      *
      * @else
      * @brief Get Current FSM State
@@ -126,18 +126,18 @@ namespace RTC
     virtual char* get_current_state();
     /*!
      * @if jp
-     * @brief FSM‚Ì\‘¢‚ğİ’è‚·‚é
+     * @brief FSM¤Î¹½Â¤¤òÀßÄê¤¹¤ë
      *
-     * ‚±‚ÌƒIƒyƒŒ[ƒVƒ‡ƒ“‚Í‘ÎÛ‚ÌƒRƒ“ƒ|[ƒlƒ“ƒg‚É‘Î‚µ‚ÄAFSM‚Ì\‘¢‚ğ•Û
-     * ‚·‚é FsmStruccture ‚ğİ’è‚·‚éB‘ÎÛƒRƒ“ƒ|[ƒlƒ“ƒg‚Í
-     * fsm_structure ‚É—^‚¦‚ç‚ê‚½’l‚ğŠî‚Éó‘Ô‘JˆÚƒ‹[ƒ‹“™‚ÌFSM\‘¢‚ğÄ
-     * İ’è‚·‚éB‚±‚ÌƒIƒyƒŒ[ƒVƒ‡ƒ“‚ª–¢À‘•‚Ìê‡‚ÍAUNSUPPORTED ‚ğ•Ô‚·B
+     * ¤³¤Î¥ª¥Ú¥ì¡¼¥·¥ç¥ó¤ÏÂĞ¾İ¤Î¥³¥ó¥İ¡¼¥Í¥ó¥È¤ËÂĞ¤·¤Æ¡¢FSM¤Î¹½Â¤¤òÊİ
+     * »ı¤¹¤ë FsmStruccture ¤òÀßÄê¤¹¤ë¡£ÂĞ¾İ¥³¥ó¥İ¡¼¥Í¥ó¥È¤Ï
+     * fsm_structure ¤ËÍ¿¤¨¤é¤ì¤¿ÃÍ¤ò´ğ¤Ë¾õÂÖÁ«°Ü¥ë¡¼¥ëÅù¤ÎFSM¹½Â¤¤òºÆ
+     * ÀßÄê¤¹¤ë¡£¤³¤Î¥ª¥Ú¥ì¡¼¥·¥ç¥ó¤¬Ì¤¼ÂÁõ¤Î¾ì¹ç¤Ï¡¢UNSUPPORTED ¤òÊÖ¤¹¡£
      *
-     * @param fsm_structure FSM‚Ì\‘¢‚ğ•\‚·FsmStructure\‘¢‘ÌB
-     * @return RTC_OK ³íI—¹
-     *         RTC_ERROR ‚»‚Ì‘¼‚ÌƒGƒ‰[
-     *         BAD_PARAMETER •s³‚Èƒpƒ‰ƒ[ƒ^
-     *         UNSUPPORTED –¢ƒTƒ|[ƒg
+     * @param fsm_structure FSM¤Î¹½Â¤¤òÉ½¤¹FsmStructure¹½Â¤ÂÎ¡£
+     * @return RTC_OK Àµ¾ï½ªÎ»
+     *         RTC_ERROR ¤½¤ÎÂ¾¤Î¥¨¥é¡¼
+     *         BAD_PARAMETER ÉÔÀµ¤Ê¥Ñ¥é¥á¡¼¥¿
+     *         UNSUPPORTED Ì¤¥µ¥İ¡¼¥È
      *
      * @else
      * @brief Set FSM Structure
@@ -161,22 +161,22 @@ namespace RTC
     set_fsm_structure(const ::RTC::FsmStructure& fsm_structure);
     /*!
      * @if jp
-     * @brief FSM‚Ì\‘¢‚ğæ“¾‚·‚é
+     * @brief FSM¤Î¹½Â¤¤ò¼èÆÀ¤¹¤ë
      *
-     * ‚±‚ÌƒIƒyƒŒ[ƒVƒ‡ƒ“‚Í‘ÎÛ‚ÌƒRƒ“ƒ|[ƒlƒ“ƒg‚É‘Î‚µ‚ÄAŒ»İ•Û‚µ‚Ä‚¢
-     * ‚éFSM‚Ì\‘¢‚ğæ“¾‚·‚éBExtendedFsmService \‘¢‘Ì‚ÍƒtƒB[ƒ‹ƒh
-     * name (FSM‚Ì–¼Ì), structure (FSM‚Ì\‘¢) AEventProfile ‚È‚Ç‚ğ•Ô
-     * ‚·Bstructure ‚ÌƒtƒH[ƒ}ƒbƒg‚ÍAƒtƒB[ƒ‹ƒh properties “à‚ÉŠi”[‚³
-     * ‚ê‚½ƒL[ "fsm_structure.format" ‚Éw’è‚³‚ê‚éB‚±‚ÌƒIƒyƒŒ[ƒVƒ‡ƒ“
-     * ‚ª–¢À‘•‚Ìê‡‚ÍAUNSUPPORTED ‚ğ•Ô‚·B
+     * ¤³¤Î¥ª¥Ú¥ì¡¼¥·¥ç¥ó¤ÏÂĞ¾İ¤Î¥³¥ó¥İ¡¼¥Í¥ó¥È¤ËÂĞ¤·¤Æ¡¢¸½ºßÊİ»ı¤·¤Æ¤¤
+     * ¤ëFSM¤Î¹½Â¤¤ò¼èÆÀ¤¹¤ë¡£ExtendedFsmService ¹½Â¤ÂÎ¤Ï¥Õ¥£¡¼¥ë¥É
+     * name (FSM¤ÎÌ¾¾Î), structure (FSM¤Î¹½Â¤) ¡¢EventProfile ¤Ê¤É¤òÊÖ
+     * ¤¹¡£structure ¤Î¥Õ¥©¡¼¥Ş¥Ã¥È¤Ï¡¢¥Õ¥£¡¼¥ë¥É properties Æâ¤Ë³ÊÇ¼¤µ
+     * ¤ì¤¿¥­¡¼ "fsm_structure.format" ¤Ë»ØÄê¤µ¤ì¤ë¡£¤³¤Î¥ª¥Ú¥ì¡¼¥·¥ç¥ó
+     * ¤¬Ì¤¼ÂÁõ¤Î¾ì¹ç¤Ï¡¢UNSUPPORTED ¤òÊÖ¤¹¡£
      *
      * ref: SCXML https://www.w3.org/TR/scxml/
      *
-     * @param fsm_structure FSM‚Ì\‘¢‚ğ•\‚·FsmStructure\‘¢‘ÌB
-     * @return RTC_OK ³íI—¹
-     *         RTC_ERROR ‚»‚Ì‘¼‚ÌƒGƒ‰[
-     *         BAD_PARAMETER •s³‚Èƒpƒ‰ƒ[ƒ^
-     *         UNSUPPORTED –¢ƒTƒ|[ƒg
+     * @param fsm_structure FSM¤Î¹½Â¤¤òÉ½¤¹FsmStructure¹½Â¤ÂÎ¡£
+     * @return RTC_OK Àµ¾ï½ªÎ»
+     *         RTC_ERROR ¤½¤ÎÂ¾¤Î¥¨¥é¡¼
+     *         BAD_PARAMETER ÉÔÀµ¤Ê¥Ñ¥é¥á¡¼¥¿
+     *         UNSUPPORTED Ì¤¥µ¥İ¡¼¥È
      *
      * @else
      * @brief Set FSM Structure
@@ -204,7 +204,7 @@ namespace RTC
   protected:
     /*!
      * @if jp
-     * @brief RTObject‚Ö‚ÌƒŠƒXƒiÚ‘±ˆ—
+     * @brief RTObject¤Ø¤Î¥ê¥¹¥ÊÀÜÂ³½èÍı
      * @else
      * @brief Connectiong listeners to RTObject
      * @endif
@@ -213,7 +213,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief FSMó‘Ô‘JˆÚ
+     * @brief FSM¾õÂÖÁ«°Ü
      * @else
      * @brief FSM status change
      * @endif
@@ -222,7 +222,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ƒn[ƒgƒr[ƒg‚ğ‰ğœ‚·‚é
+     * @brief ¥Ï¡¼¥È¥Ó¡¼¥È¤ò²ò½ü¤¹¤ë
      * @else
      * @brief Unsetting heartbeat
      * @endif
@@ -233,7 +233,7 @@ namespace RTC
     // FSM status related functions
     /*!
      * @if jp
-     * @brief FSMó‘Ô•Ï‰»ƒŠƒXƒi‚Ìİ’èˆ—
+     * @brief FSM¾õÂÖÊÑ²½¥ê¥¹¥Ê¤ÎÀßÄê½èÍı
      * @else
      * @brief Setting FSM status listeners
      * @endif
@@ -242,7 +242,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief FSMó‘Ô•Ï‰»ƒŠƒXƒi‚Ì‰ğœˆ—
+     * @brief FSM¾õÂÖÊÑ²½¥ê¥¹¥Ê¤Î²ò½ü½èÍı
      * @else
      * @brief Unsetting FSM status listeners
      * @endif
@@ -253,7 +253,7 @@ namespace RTC
     // FsmProfile related functions
     /*!
      * @if jp
-     * @brief FsmProfileó‘Ô•Ï‰»ƒŠƒXƒi‚Ìİ’è
+     * @brief FsmProfile¾õÂÖÊÑ²½¥ê¥¹¥Ê¤ÎÀßÄê
      * @else
      * @brief Setting FsmProfile listener
      * @endif
@@ -262,7 +262,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief FsmProfileó‘Ô•Ï‰»ƒŠƒXƒi‚Ì‰ğœ
+     * @brief FsmProfile¾õÂÖÊÑ²½¥ê¥¹¥Ê¤Î²ò½ü
      * @else
      * @brief Unsetting FsmProfile listener
      * @endif
@@ -273,7 +273,7 @@ namespace RTC
     // FsmStructure related functions
     /*!
      * @if jp
-     * @brief FsmStructureó‘Ô•Ï‰»ƒŠƒXƒi‚Ìİ’è
+     * @brief FsmStructure¾õÂÖÊÑ²½¥ê¥¹¥Ê¤ÎÀßÄê
      * @else
      * @brief Setting FsmStructure listener
      * @endif
@@ -282,7 +282,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief FsmStructureó‘Ô•Ï‰»ƒŠƒXƒi‚Ì‰ğœ
+     * @brief FsmStructure¾õÂÖÊÑ²½¥ê¥¹¥Ê¤Î²ò½ü
      * @else
      * @brief Unsetting FsmStructure listener
      * @endif

@@ -61,7 +61,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ‰Šú‰»
+     * @brief ½é´ü²½
      * @else
      * @brief Initialization
      * @endif
@@ -71,7 +71,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief Ä‰Šú‰»
+     * @brief ºÆ½é´ü²½
      * @else
      * @brief Re-initialization
      * @endif
@@ -80,7 +80,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ServiceProfile ‚ğæ“¾‚·‚é
+     * @brief ServiceProfile ¤ò¼èÆÀ¤¹¤ë
      * @else
      * @brief getting ServiceProfile
      * @endif
@@ -89,7 +89,7 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief I—¹ˆ—
+     * @brief ½ªÎ»½èÍı
      * @else
      * @brief Finalization
      * @endif
