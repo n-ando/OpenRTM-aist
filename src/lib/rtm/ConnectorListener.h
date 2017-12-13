@@ -33,16 +33,16 @@ namespace RTC
   /*!
    * @if jp
    * @class ConnectorListenerStatus mixin class
-   * @brief ConnectorListenerStatus mixin 僋儔僗
+   * @brief ConnectorListenerStatus mixin クラス
    *
-   * 偙偺僋儔僗偼丄enum掕媊偝傟偨儕僞乕儞僐乕僪傪丄ConnectorListener娭
-   * 楢偺僒僽僋儔僗偱嫟捠棙梡偡傞偨傔偺 mixin 僋儔僗偱偁傞丅偙偺儕僞乕
-   * 儞僐乕僪傪巊梡偡傞僋儔僗偱偼丄ConnectorListenerStatus 僋儔僗傪
-   * public 宲彸偟丄壓偵define 偟偰偁傞 CONNLISTENER_STATUS_ENUM 傪僋儔
-   * 僗撪偵婰弎偡傞偙偲偱棙梡壜擻偲側傞丅偙傟偵傛傝丄enum 傪
-   * ReturnCode 宆偲偟偰 typedef 偟丄埲屻 ReturnCode 傪棙梡偱偒傞傛偆偵
-   * 偡傞偲偲傕偵丄柤慜嬻娫偵 enum 掕媊偝傟偨奺幆暿巕傪摉奩僋儔僗柤慜嬻
-   * 娫撪偵摫擖偡傞丅
+   * このクラスは、enum年盗されたリタ〖ンコ〖ドを、ConnectorListener簇
+   * 息のサブクラスで鼎奶网脱するための mixin クラスである。このリタ〖
+   * ンコ〖ドを蝗脱するクラスでは、ConnectorListenerStatus クラスを
+   * public 费镜し、布にdefine してある CONNLISTENER_STATUS_ENUM をクラ
+   * ス柒に淡揭することで网脱材墙となる。これにより、enum を
+   * ReturnCode 房として typedef し、笆稿 ReturnCode を网脱できるように
+   * するとともに、叹涟鄂粗に enum 年盗された称急侍灰を碰澈クラス叹涟鄂
+   * 粗柒に瞥掐する。
    *
    * @else
    * @class DataPortStatus mixin class
@@ -77,13 +77,13 @@ namespace RTC
   /*!
    * @if jp
    *
-   * @brief ::RTC::ConnDataPortStatus 摫擖
+   * @brief ::RTC::ConnDataPortStatus 瞥掐
    *
-   * ::RTC::DataPortStatus 偱愰尵偝傟偰偄傞 Enum 偺偡傋偰偺儊儞僶傪僱乕儉
-   * 僗儁乕僗偵摫擖偡傞偨傔偺儅僋儘丅DataPortStatus 傪棙梡偡傞僋儔僗偵偍
-   * 偄偰丄僋儔僗愰尵偺愭摢偵偍偄偰 DATAPORTSTATUS_ENUM 傪婰嵹偡傞偩偗偱丄
-   * DataPortStatus 偱愰尵偝傟偰偄傞 enum 儊儞僶偑柤慜夝寛墘嶼巕側偟偵傾
-   * 僋僙僗壜擻偵側傞丅
+   * ::RTC::DataPortStatus で离咐されている Enum のすべてのメンバをネ〖ム
+   * スペ〖スに瞥掐するためのマクロ。DataPortStatus を网脱するクラスにお
+   * いて、クラス离咐の黎片において DATAPORTSTATUS_ENUM を淡很するだけで、
+   * DataPortStatus で离咐されている enum メンバが叹涟豺疯遍换灰なしにア
+   * クセス材墙になる。
    *
    * @else
    *
@@ -106,18 +106,18 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ConnectorDataListener 偺僞僀僾
+   * @brief ConnectorDataListener のタイプ
    *
-   * - ON_BUFFER_WRITE:          僶僢僼傽彂偒崬傒帪
-   * - ON_BUFFER_FULL:           僶僢僼傽僼儖帪
-   * - ON_BUFFER_WRITE_TIMEOUT:  僶僢僼傽彂偒崬傒僞僀儉傾僂僩帪
-   * - ON_BUFFER_OVERWRITE:      僶僢僼傽忋彂偒帪
-   * - ON_BUFFER_READ:           僶僢僼傽撉傒弌偟帪
-   * - ON_SEND:                  InProt傊偺憲怣帪
-   * - ON_RECEIVED:              InProt傊偺憲怣姰椆帪
-   * - ON_RECEIVER_FULL:         InProt懁僶僢僼傽僼儖帪
-   * - ON_RECEIVER_TIMEOUT:      InProt懁僶僢僼傽僞僀儉傾僂僩帪
-   * - ON_RECEIVER_ERROR:        InProt懁僄儔乕帪
+   * - ON_BUFFER_WRITE:          バッファ今き哈み箕
+   * - ON_BUFFER_FULL:           バッファフル箕
+   * - ON_BUFFER_WRITE_TIMEOUT:  バッファ今き哈みタイムアウト箕
+   * - ON_BUFFER_OVERWRITE:      バッファ惧今き箕
+   * - ON_BUFFER_READ:           バッファ粕み叫し箕
+   * - ON_SEND:                  InProtへの流慨箕
+   * - ON_RECEIVED:              InProtへの流慨窗位箕
+   * - ON_RECEIVER_FULL:         InProt娄バッファフル箕
+   * - ON_RECEIVER_TIMEOUT:      InProt娄バッファタイムアウト箕
+   * - ON_RECEIVER_ERROR:        InProt娄エラ〖箕
    *
    * @else
    * @brief The types of ConnectorDataListener
@@ -152,30 +152,30 @@ namespace RTC
 
   /*!
    * @if jp
-   * @class ConnectorDataListener 僋儔僗
-   * @brief ConnectorDataListener 僋儔僗
+   * @class ConnectorDataListener クラス
+   * @brief ConnectorDataListener クラス
    *
-   * 僨乕僞億乕僩偺 Connector 偵偍偄偰敪惗偡傞奺庬僀儀儞僩偵懳偡傞僐乕
-   * 儖僶僢僋傪幚尰偡傞儕僗僫僋儔僗偺婎掙僋儔僗丅
+   * デ〖タポ〖トの Connector において券栏する称硷イベントに滦するコ〖
+   * ルバックを悸附するリスナクラスの答撵クラス。
    *
-   * 僐傾儘僕僢僋偑OutPort偵懳偟偰僨乕僞彂偒崬傒丄InPort懁偱僨乕僞偑庢
-   * 摼偝傟傞傑偱偺娫偱敪惗偡傞奺庬僀儀儞僩傪僼僢僋偡傞僐乕儖僶僢僋傪愝
-   * 掕偡傞偙偲偑偱偒傞丅側偍丄儕僗僫乕僋儔僗偼2庬椶懚嵼偟丄僶僢僼傽僼
-   * 儖傗憲怣帪偺僐乕儖僶僢僋偱丄偦偺帪揰偱桳岠側僨乕僞傪僼傽儞僋僞偺堷
-   * 悢偲偟偰庴偗庢傞 ConnectorDataListener 偱偁傝丄傕偆堦曽偼僨乕僞僄
-   * 儞僾僥傿傗僶僢僼傽撉傒崬傒帪偺僞僀儉傾僂僩側偳僨乕僞偑庢摼偱偒側偄
-   * 応崌側偳偵僐乕儖偝傟傞僼傽儞僋僞偺堷悢偵壗傕偲傜側傜偄
-   * ConnecotorListener 偑偁傞丅
+   * コアロジックがOutPortに滦してデ〖タ今き哈み、InPort娄でデ〖タが艰
+   * 评されるまでの粗で券栏する称硷イベントをフックするコ〖ルバックを肋
+   * 年することができる。なお、リスナ〖クラスは2硷梧赂哼し、バッファフ
+   * ルや流慨箕のコ〖ルバックで、その箕爬で铜跟なデ〖タをファンクタの苞
+   * 眶として减け艰る ConnectorDataListener であり、もう办数はデ〖タエ
+   * ンプティやバッファ粕み哈み箕のタイムアウトなどデ〖タが艰评できない
+   * 眷圭などにコ〖ルされるファンクタの苞眶に部もとらならい
+   * ConnecotorListener がある。
    *
-   * ConnectorDataListener 僋儔僗偵傛偭偰僨乕僞偑娭楢偡傞摦嶌傪僼僢僋偟
-   * 偨偄応崌丄埲壓偺椺偺傛偆偵丄偙偺僋儔僗傪宲彸偟丄僐僱僋僞偺忣曬偲僨乕
-   * 僞傪堷悢偵庢傞埲壓偺傛偆側僐乕儖僶僢僋僆僽僕僃僋僩傪掕媊偟丄僨乕僞
-   * 億乕僩偺揔愗側僐乕儖僶僢僋愝掕娭悢偐傜僐乕儖僶僢僋僆僽僕僃僋僩傪僙僢
-   * 僩偡傞昁梫偑偁傞丅側偍丄Data Listener 偵偼丄僨乕僞偲偟偰儅乕僔儍儕
-   * 儞僌屻偺僨乕僞傪堷悢偵庢傞 ConnectorDataListener 偲丄僨乕僞傪摿掕
-   * 偺宆偵傾儞儅乕僔儍儖偟偨屻偺抣傪堷悢偵庢傞丄
-   * ConnectorDataListenerT 偑偁傞丅埲壓偺椺偼丄ConnectorDataListenerT
-   * 偺掕媊椺偱偁傞丅
+   * ConnectorDataListener クラスによってデ〖タが簇息する瓢侯をフックし
+   * たい眷圭、笆布の毋のように、このクラスを费镜し、コネクタの攫鼠とデ〖
+   * タを苞眶に艰る笆布のようなコ〖ルバックオブジェクトを年盗し、デ〖タ
+   * ポ〖トの努磊なコ〖ルバック肋年簇眶からコ〖ルバックオブジェクトをセッ
+   * トする涩妥がある。なお、Data Listener には、デ〖タとしてマ〖シャリ
+   * ング稿のデ〖タを苞眶に艰る ConnectorDataListener と、デ〖タを泼年
+   * の房にアンマ〖シャルした稿の猛を苞眶に艰る、
+   * ConnectorDataListenerT がある。笆布の毋は、ConnectorDataListenerT
+   * の年盗毋である。
    *
    * <pre>
    * class MyDataListener
@@ -197,8 +197,8 @@ namespace RTC
    * };
    * </pre>
    *
-   * 偙偺傛偆偵偟偰掕媊偝傟偨儕僗僫僋儔僗偼丄埲壓偺傛偆偵僨乕僞億乕僩偵
-   * 懳偟偰丄埲壓偺傛偆偵僙僢僩偝傟傞丅
+   * このようにして年盗されたリスナクラスは、笆布のようにデ〖タポ〖トに
+   * 滦して、笆布のようにセットされる。
    *
    * <pre>
    * RTC::ReturnCode_t ConsoleIn::onInitialize()
@@ -209,23 +209,23 @@ namespace RTC
    *    :
    * </pre>
    *
-   * 戞1堷悢偺 "ON_BUFFER_WRITE" 偼丄僐乕儖僶僢僋傪僼僢僋偡傞億僀儞僩偱
-   * 偁傝丄埲壓偵楍嫇偡傞抣傪庢傞偙偲偑壜擻偱偁傞丅僨乕僞億乕僩偵偼丄愙
-   * 懕帪偵僨乕僞偺憲庴怣曽朄偵偮偄偰丄僀儞僞乕僼僃乕僗宆丄僨乕僞僼儘乕
-   * 宆丄僒僽僗僋儕僾僔儑儞宆摍傪愝掕偡傞偙偲偑偱偒傞偑丄偙傟傜偺愝掕偵
-   * 傛傝僼僢僋偝傟傞億僀儞僩偼堎側傞丅埲壓偵丄僀儞僞乕僼僃乕僗偑CORBA
-   * CDR宆偺応崌偺僐乕儖僶僢僋堦棗傪帵偡丅
+   * 妈1苞眶の "ON_BUFFER_WRITE" は、コ〖ルバックをフックするポイントで
+   * あり、笆布に误刁する猛を艰ることが材墙である。デ〖タポ〖トには、儡
+   * 鲁箕にデ〖タの流减慨数恕について、インタ〖フェ〖ス房、デ〖タフロ〖
+   * 房、サブスクリプション房霹を肋年することができるが、これらの肋年に
+   * よりフックされるポイントは佰なる。笆布に、インタ〖フェ〖スがCORBA
+   * CDR房の眷圭のコ〖ルバック办枉を绩す。
    *
    * OutPort:
-   * -  Push宆: Subscription Type偵傛傝偝傜偵僀儀儞僩偺庬椶偑暘偐傟傞丅
-   *   - Flush: Flush宆偵偼僶僢僼傽偑側偄偨傔 ON_BUFFER 宯偺僀儀儞僩偼敪惗偟側偄
+   * -  Push房: Subscription Typeによりさらにイベントの硷梧が尸かれる。
+   *   - Flush: Flush房にはバッファがないため ON_BUFFER 废のイベントは券栏しない
    *     - ON_SEND
    *     - ON_RECEIVED
    *     - ON_RECEIVER_FULL
    *     - ON_RECEIVER_TIMEOUT
    *     - ON_RECEIVER_ERROR
    *     .
-   *   - New宆
+   *   - New房
    *     - ON_BUFFER_WRITE
    *     - ON_BUFFER_FULL
    *     - ON_BUFFER_WRITE_TIMEOUT
@@ -237,7 +237,7 @@ namespace RTC
    *     - ON_RECEIVER_TIMEOUT
    *     - ON_RECEIVER_ERROR
    *     .
-   *   - Periodic宆
+   *   - Periodic房
    *     - ON_BUFFER_WRITE
    *     - ON_BUFFER_FULL
    *     - ON_BUFFER_WRITE_TIMEOUT
@@ -249,7 +249,7 @@ namespace RTC
    *     - ON_RECEIVER_ERROR
    *     .
    *   .
-   * - Pull宆
+   * - Pull房
    *   - ON_BUFFER_WRITE
    *   - ON_BUFFER_FULL
    *   - ON_BUFFER_WRITE_TIMEOUT
@@ -258,7 +258,7 @@ namespace RTC
    *   - ON_SEND
    *   .
    * InPort:
-   * - Push宆:
+   * - Push房:
    *     - ON_BUFFER_WRITE
    *     - ON_BUFFER_FULL
    *     - ON_BUFFER_WRITE_TIMEOUT
@@ -270,7 +270,7 @@ namespace RTC
    *     - ON_RECEIVER_TIMEOUT
    *     - ON_RECEIVER_ERROR
    *     .
-   * - Pull宆
+   * - Pull房
    *     - ON_BUFFER_READ
    *
    * @else
@@ -406,13 +406,13 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief ConnectorDataListenerType 傪暥帤楍偵曄姺
+     * @brief ConnectorDataListenerType を矢机误に恃垂
      *
-     * ConnectorDataListenerType 傪暥帤楍偵曄姺偡傞
+     * ConnectorDataListenerType を矢机误に恃垂する
      *
-     * @param type 曄姺懳徾 ConnectorDataListenerType
+     * @param type 恃垂滦据 ConnectorDataListenerType
      *
-     * @return 暥帤楍曄姺寢壥
+     * @return 矢机误恃垂冯蔡
      *
      * @else
      *
@@ -448,7 +448,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief 僨僗僩儔僋僞
+     * @brief デストラクタ
      * @else
      * @brief Destructor
      * @endif
@@ -458,10 +458,10 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief 壖憐僐乕儖僶僢僋儊僜僢僪
+     * @brief 簿鳞コ〖ルバックメソッド
      *
-     * 僨乕僞億乕僩偺 Connector 偵偍偄偰敪惗偡傞奺庬僀儀儞僩偵懳偡傞僐乕
-     * 儖僶僢僋儊僜僢僪
+     * デ〖タポ〖トの Connector において券栏する称硷イベントに滦するコ〖
+     * ルバックメソッド
      *
      * @else
      *
@@ -477,15 +477,15 @@ namespace RTC
 
   /*!
    * @if jp
-   * @class ConnectorDataListenerT 僋儔僗
-   * @brief ConnectorDataListenerT 僋儔僗
+   * @class ConnectorDataListenerT クラス
+   * @brief ConnectorDataListenerT クラス
    *
-   * 僨乕僞億乕僩偺 Connector 偵偍偄偰敪惗偡傞奺庬僀儀儞僩偵懳偡傞僐乕
-   * 儖僶僢僋傪幚尰偡傞儕僗僫僋儔僗偺婎掙僋儔僗丅
+   * デ〖タポ〖トの Connector において券栏する称硷イベントに滦するコ〖
+   * ルバックを悸附するリスナクラスの答撵クラス。
    * 
-   * 偙偺僋儔僗偼丄operator()() 偺戞2堷悢偵 cdrMemoryStream 宆偱偼側偔丄
-   * 幚嵺偵僨乕僞億乕僩偱巊梡偝傟傞曄悢宆傪僥儞僾儗乕僩堷悢偲偟偰
-   * 搉偡偙偲偑偱偒傞丅
+   * このクラスは、operator()() の妈2苞眶に cdrMemoryStream 房ではなく、
+   * 悸狠にデ〖タポ〖トで蝗脱される恃眶房をテンプレ〖ト苞眶として
+   * 畔すことができる。
    *
    * @else
    * @class ConnectorDataListenerT class
@@ -508,7 +508,7 @@ namespace RTC
   public:
     /*!
      * @if jp
-     * @brief 僨僗僩儔僋僞
+     * @brief デストラクタ
      * @else
      * @brief Destructor
      * @endif
@@ -518,13 +518,13 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief 僐乕儖僶僢僋儊僜僢僪
+     * @brief コ〖ルバックメソッド
      *
-     * 僨乕僞傪僨乕僞億乕僩偱巊梡偝傟傞曄悢宆偵曄姺偟偰 ConnectorDataListenerT
-     * 偺僐乕儖僶僢僋儊僜僢僪傪屇傃弌偡丅
+     * デ〖タをデ〖タポ〖トで蝗脱される恃眶房に恃垂して ConnectorDataListenerT
+     * のコ〖ルバックメソッドを钙び叫す。
      *
      * @param info ConnectorInfo 
-     * @param cdrdata cdrMemoryStream宆偺僨乕僞
+     * @param cdrdata cdrMemoryStream房のデ〖タ
      *
      * @else
      *
@@ -602,10 +602,10 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief 壖憐僐乕儖僶僢僋儊僜僢僪
+     * @brief 簿鳞コ〖ルバックメソッド
      *
-     * 僨乕僞億乕僩偺 Connector 偵偍偄偰敪惗偡傞奺庬僀儀儞僩偵懳偡傞僐乕
-     * 儖僶僢僋儊僜僢僪
+     * デ〖タポ〖トの Connector において券栏する称硷イベントに滦するコ〖
+     * ルバックメソッド
      *
      * @else
      *
@@ -622,15 +622,15 @@ namespace RTC
                             
   /*!
    * @if jp
-   * @brief ConnectorListener 偺僞僀僾
+   * @brief ConnectorListener のタイプ
    *  
-   * - ON_BUFFER_EMPTY:       僶僢僼傽偑嬻偺応崌
-   * - ON_BUFFER_READTIMEOUT: 僶僢僼傽偑嬻偱僞僀儉傾僂僩偟偨応崌
-   * - ON_SENDER_EMPTY:       OutPort懁僶僢僼傽偑嬻
-   * - ON_SENDER_TIMEOUT:     OutPort懁僞僀儉傾僂僩帪
-   * - ON_SENDER_ERROR:       OutPort懁僄儔乕帪
-   * - ON_CONNECT:            愙懕妋棫帪
-   * - ON_DISCONNECT:         愙懕愗抐帪
+   * - ON_BUFFER_EMPTY:       バッファが鄂の眷圭
+   * - ON_BUFFER_READTIMEOUT: バッファが鄂でタイムアウトした眷圭
+   * - ON_SENDER_EMPTY:       OutPort娄バッファが鄂
+   * - ON_SENDER_TIMEOUT:     OutPort娄タイムアウト箕
+   * - ON_SENDER_ERROR:       OutPort娄エラ〖箕
+   * - ON_CONNECT:            儡鲁澄惟箕
+   * - ON_DISCONNECT:         儡鲁磊们箕
    *
    * @else
    * @brief The types of ConnectorListener
@@ -659,25 +659,25 @@ namespace RTC
 
   /*!
    * @if jp
-   * @class ConnectorListener 僋儔僗
-   * @brief ConnectorListener 僋儔僗
+   * @class ConnectorListener クラス
+   * @brief ConnectorListener クラス
    *
-   * 僨乕僞億乕僩偺 Connector 偵偍偄偰敪惗偡傞奺庬僀儀儞僩偵懳偡傞僐乕
-   * 儖僶僢僋傪幚尰偡傞儕僗僫僋儔僗偺婎掙僋儔僗丅
+   * デ〖タポ〖トの Connector において券栏する称硷イベントに滦するコ〖
+   * ルバックを悸附するリスナクラスの答撵クラス。
    *
-   * 僐傾儘僕僢僋偑OutPort偵懳偟偰僨乕僞彂偒崬傒丄InPort懁偱僨乕僞偑庢
-   * 摼偝傟傞傑偱偺娫偱敪惗偡傞奺庬僀儀儞僩傪僼僢僋偡傞僐乕儖僶僢僋傪愝
-   * 掕偡傞偙偲偑偱偒傞丅側偍丄儕僗僫乕僋儔僗偼2庬椶懚嵼偟丄僶僢僼傽僼
-   * 儖傗憲怣帪偺僐乕儖僶僢僋偱丄偦偺帪揰偱桳岠側僨乕僞傪僼傽儞僋僞偺堷
-   * 悢偲偟偰庴偗庢傞 ConnectorDataListener 偱偁傝丄傕偆堦曽偼僨乕僞僄
-   * 儞僾僥傿傗僶僢僼傽撉傒崬傒帪偺僞僀儉傾僂僩側偳僨乕僞偑庢摼偱偒側偄
-   * 応崌側偳偵僐乕儖偝傟傞僼傽儞僋僞偺堷悢偵壗傕偲傜側傜偄
-   * ConnecotorListener 偑偁傞丅
+   * コアロジックがOutPortに滦してデ〖タ今き哈み、InPort娄でデ〖タが艰
+   * 评されるまでの粗で券栏する称硷イベントをフックするコ〖ルバックを肋
+   * 年することができる。なお、リスナ〖クラスは2硷梧赂哼し、バッファフ
+   * ルや流慨箕のコ〖ルバックで、その箕爬で铜跟なデ〖タをファンクタの苞
+   * 眶として减け艰る ConnectorDataListener であり、もう办数はデ〖タエ
+   * ンプティやバッファ粕み哈み箕のタイムアウトなどデ〖タが艰评できない
+   * 眷圭などにコ〖ルされるファンクタの苞眶に部もとらならい
+   * ConnecotorListener がある。
    *
-   * ConnectorListener 僋儔僗偵傛偭偰娭楢偡傞摦嶌傪僼僢僋偟偨偄応崌丄埲
-   * 壓偺椺偺傛偆偵丄偙偺僋儔僗傪宲彸偟丄僐僱僋僞偺忣曬傪堷悢偵庢傞埲壓
-   * 偺傛偆側僐乕儖僶僢僋僆僽僕僃僋僩傪掕媊偟丄僨乕僞億乕僩偺揔愗側僐乕
-   * 儖僶僢僋愝掕娭悢偐傜僐乕儖僶僢僋僆僽僕僃僋僩傪僙僢僩偡傞昁梫偑偁傞丅
+   * ConnectorListener クラスによって簇息する瓢侯をフックしたい眷圭、笆
+   * 布の毋のように、このクラスを费镜し、コネクタの攫鼠を苞眶に艰る笆布
+   * のようなコ〖ルバックオブジェクトを年盗し、デ〖タポ〖トの努磊なコ〖
+   * ルバック肋年簇眶からコ〖ルバックオブジェクトをセットする涩妥がある。
    *
    * <pre>
    * class MyListener
@@ -698,8 +698,8 @@ namespace RTC
    * };
    * </pre>
    *
-   * 偙偺傛偆偵偟偰掕媊偝傟偨儕僗僫僋儔僗偼丄埲壓偺傛偆偵僨乕僞億乕僩偵
-   * 懳偟偰丄埲壓偺傛偆偵僙僢僩偝傟傞丅
+   * このようにして年盗されたリスナクラスは、笆布のようにデ〖タポ〖トに
+   * 滦して、笆布のようにセットされる。
    *
    * <pre>
    * RTC::ReturnCode_t ConsoleIn::onInitialize()
@@ -710,24 +710,24 @@ namespace RTC
    *    :
    * </pre>
    *
-   * 戞1堷悢偺 "ON_BUFFER_EMPTY" 偼丄僐乕儖僶僢僋傪僼僢僋偡傞億僀儞僩偱
-   * 偁傝丄埲壓偵楍嫇偡傞抣傪庢傞偙偲偑壜擻偱偁傞丅僨乕僞億乕僩偵偼丄愙
-   * 懕帪偵僨乕僞偺憲庴怣曽朄偵偮偄偰丄僀儞僞乕僼僃乕僗宆丄僨乕僞僼儘乕
-   * 宆丄僒僽僗僋儕僾僔儑儞宆摍傪愝掕偡傞偙偲偑偱偒傞偑丄偙傟傜偺愝掕偵
-   * 傛傝僼僢僋偝傟傞億僀儞僩偼堎側傞丅埲壓偵丄僀儞僞乕僼僃乕僗偑CORBA
-   * CDR宆偺応崌偺僐乕儖僶僢僋堦棗傪帵偡丅
+   * 妈1苞眶の "ON_BUFFER_EMPTY" は、コ〖ルバックをフックするポイントで
+   * あり、笆布に误刁する猛を艰ることが材墙である。デ〖タポ〖トには、儡
+   * 鲁箕にデ〖タの流减慨数恕について、インタ〖フェ〖ス房、デ〖タフロ〖
+   * 房、サブスクリプション房霹を肋年することができるが、これらの肋年に
+   * よりフックされるポイントは佰なる。笆布に、インタ〖フェ〖スがCORBA
+   * CDR房の眷圭のコ〖ルバック办枉を绩す。
    *
    * OutPort:
-   * -  Push宆: Subscription Type偵傛傝偝傜偵僀儀儞僩偺庬椶偑暘偐傟傞丅
-   *   - Flush: Flush宆偵偼僶僢僼傽偑側偄偨傔 ON_BUFFER 宯偺僀儀儞僩偼敪惗偟側偄
+   * -  Push房: Subscription Typeによりさらにイベントの硷梧が尸かれる。
+   *   - Flush: Flush房にはバッファがないため ON_BUFFER 废のイベントは券栏しない
    *     - ON_CONNECT
    *     - ON_DISCONNECT
    *     .
-   *   - New宆
+   *   - New房
    *     - ON_CONNECT
    *     - ON_DISCONNECT
    *     .
-   *   - Periodic宆
+   *   - Periodic房
    *     - ON_BUFFER_EMPTY
    *     - ON_BUFFER_READ_TIMEOUT
    *     - ON_SENDER_EMPTY
@@ -736,7 +736,7 @@ namespace RTC
    *     - ON_DISCONNECT
    *     .
    *   .
-   * - Pull宆
+   * - Pull房
    *   - ON_BUFFER_EMPTY
    *   - ON_BUFFER_READ_TIMEOUT
    *   - ON_SENDER_EMPTY
@@ -746,13 +746,13 @@ namespace RTC
    *   - ON_DISCONNECT
    *   .
    * InPort:
-   * - Push宆:
+   * - Push房:
    *     - ON_BUFFER_EMPTY
    *     - ON_BUFFER_READ_TIMEOUT
    *     - ON_CONNECT
    *     - ON_DISCONNECT
    *     .
-   * - Pull宆
+   * - Pull房
    *     - ON_CONNECT
    *     - ON_DISCONNECT
    *
@@ -866,13 +866,13 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief ConnectorListenerType 傪暥帤楍偵曄姺
+     * @brief ConnectorListenerType を矢机误に恃垂
      *
-     * ConnectorListenerType 傪暥帤楍偵曄姺偡傞
+     * ConnectorListenerType を矢机误に恃垂する
      *
-     * @param type 曄姺懳徾 ConnectorListenerType
+     * @param type 恃垂滦据 ConnectorListenerType
      *
-     * @return 暥帤楍曄姺寢壥
+     * @return 矢机误恃垂冯蔡
      *
      * @else
      *
@@ -905,7 +905,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief 僨僗僩儔僋僞
+     * @brief デストラクタ
      * @else
      * @brief Destructor
      * @endif
@@ -915,10 +915,10 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief 壖憐僐乕儖僶僢僋儊僜僢僪
+     * @brief 簿鳞コ〖ルバックメソッド
      *
-     * 僨乕僞億乕僩偺 Connector 偵偍偄偰敪惗偡傞奺庬僀儀儞僩偵懳偡傞僐乕
-     * 儖僶僢僋儊僜僢僪
+     * デ〖タポ〖トの Connector において券栏する称硷イベントに滦するコ〖
+     * ルバックメソッド
      *
      * @else
      *
@@ -936,9 +936,9 @@ namespace RTC
   /*!
    * @if jp
    * @class ConnectorDataListenerHolder
-   * @brief ConnectorDataListener 儂儖僟僋儔僗
+   * @brief ConnectorDataListener ホルダクラス
    *
-   * 暋悢偺 ConnectorDataListener 傪曐帩偟娗棟偡傞僋儔僗丅
+   * 剩眶の ConnectorDataListener を瘦积し瓷妄するクラス。
    *
    * @else
    * @class ConnectorDataListenerHolder
@@ -957,7 +957,7 @@ namespace RTC
     USE_CONNLISTENER_STATUS;
     /*!
      * @if jp
-     * @brief 僐儞僗僩儔僋僞
+     * @brief コンストラクタ
      * @else
      * @brief Constructor
      * @endif
@@ -965,7 +965,7 @@ namespace RTC
     ConnectorDataListenerHolder();
     /*!
      * @if jp
-     * @brief 僨僗僩儔僋僞
+     * @brief デストラクタ
      * @else
      * @brief Destructor
      * @endif
@@ -975,13 +975,13 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief 儕僗僫乕偺捛壛
+     * @brief リスナ〖の纳裁
      *
-     * 儕僗僫乕傪捛壛偡傞丅
+     * リスナ〖を纳裁する。
      *
-     * @param listener 捛壛偡傞儕僗僫
-     * @param autoclean true:僨僗僩儔僋僞偱嶍彍偡傞,
-     *                  false:僨僗僩儔僋僞偱嶍彍偟側偄
+     * @param listener 纳裁するリスナ
+     * @param autoclean true:デストラクタで猴近する,
+     *                  false:デストラクタで猴近しない
      * @else
      *
      * @brief Add the listener.
@@ -998,11 +998,11 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief 儕僗僫乕偺嶍彍
+     * @brief リスナ〖の猴近
      *
-     * 儕僗僫傪嶍彍偡傞丅
+     * リスナを猴近する。
      *
-     * @param listener 嶍彍偡傞儕僗僫
+     * @param listener 猴近するリスナ
      * @else
      *
      * @brief Remove the listener. 
@@ -1017,11 +1017,11 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief 儕僗僫乕偺悢傪摼傞
+     * @brief リスナ〖の眶を评る
      *
-     * 尰嵼搊榐偝傟偰偄傞儕僗僫乕悢傪摼傞丅
+     * 附哼判峡されているリスナ〖眶を评る。
      *
-     * @return listener悢
+     * @return listener眶
      * @else
      *
      * @brief Getting number of listeners.
@@ -1036,12 +1036,12 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief 儕僗僫乕傊捠抦偡傞
+     * @brief リスナ〖へ奶梦する
      *
-     * 搊榐偝傟偰偄傞儕僗僫偺僐乕儖僶僢僋儊僜僢僪傪屇傃弌偡丅
+     * 判峡されているリスナのコ〖ルバックメソッドを钙び叫す。
      *
      * @param info ConnectorInfo
-     * @param cdrdata 僨乕僞
+     * @param cdrdata デ〖タ
      * @else
      *
      * @brief Notify listeners. 
@@ -1058,13 +1058,13 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief 儕僗僫乕傊捠抦偡傞(僨乕僞宆巜掕斉)
+     * @brief リスナ〖へ奶梦する(デ〖タ房回年惹)
      *
-     * 搊榐偝傟偰偄傞儕僗僫偺僐乕儖僶僢僋儊僜僢僪傪屇傃弌偡丅
-     * ConnectorDataListenerT 宆偺僐乕儖僶僢僋偺傒僐乕儖偝傟傞丅
+     * 判峡されているリスナのコ〖ルバックメソッドを钙び叫す。
+     * ConnectorDataListenerT 房のコ〖ルバックのみコ〖ルされる。
      *
      * @param info ConnectorInfo
-     * @param typeddata 僨乕僞乮僨乕僞宆巜掕偁傝乯
+     * @param typeddata デ〖タ∈デ〖タ房回年あり∷
      * @else
      *
      * @brief Notify listeners. (Typed data version)
@@ -1116,9 +1116,9 @@ namespace RTC
   /*!
    * @if jp
    * @class ConnectorListenerHolder 
-   * @brief ConnectorListener 儂儖僟僋儔僗
+   * @brief ConnectorListener ホルダクラス
    *
-   * 暋悢偺 ConnectorListener 傪曐帩偟娗棟偡傞僋儔僗丅
+   * 剩眶の ConnectorListener を瘦积し瓷妄するクラス。
    *
    * @else
    * @class ConnectorListenerHolder
@@ -1137,7 +1137,7 @@ namespace RTC
     USE_CONNLISTENER_STATUS;
     /*!
      * @if jp
-     * @brief 僐儞僗僩儔僋僞
+     * @brief コンストラクタ
      * @else
      * @brief Constructor
      * @endif
@@ -1146,7 +1146,7 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief 僨僗僩儔僋僞
+     * @brief デストラクタ
      * @else
      * @brief Destructor
      * @endif
@@ -1156,13 +1156,13 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief 儕僗僫乕偺捛壛
+     * @brief リスナ〖の纳裁
      *
-     * 儕僗僫乕傪捛壛偡傞丅
+     * リスナ〖を纳裁する。
      *
-     * @param listener 捛壛偡傞儕僗僫
-     * @param autoclean true:僨僗僩儔僋僞偱嶍彍偡傞,
-     *                  false:僨僗僩儔僋僞偱嶍彍偟側偄
+     * @param listener 纳裁するリスナ
+     * @param autoclean true:デストラクタで猴近する,
+     *                  false:デストラクタで猴近しない
      * @else
      *
      * @brief Add the listener.
@@ -1179,11 +1179,11 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief 儕僗僫乕偺嶍彍
+     * @brief リスナ〖の猴近
      *
-     * 儕僗僫傪嶍彍偡傞丅
+     * リスナを猴近する。
      *
-     * @param listener 嶍彍偡傞儕僗僫
+     * @param listener 猴近するリスナ
      * @else
      *
      * @brief Remove the listener. 
@@ -1198,11 +1198,11 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief 儕僗僫乕偺悢傪摼傞
+     * @brief リスナ〖の眶を评る
      *
-     * 尰嵼搊榐偝傟偰偄傞儕僗僫乕悢傪摼傞丅
+     * 附哼判峡されているリスナ〖眶を评る。
      *
-     * @return listener悢
+     * @return listener眶
      * @else
      *
      * @brief Getting number of listeners.
@@ -1217,9 +1217,9 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief 儕僗僫乕傊捠抦偡傞
+     * @brief リスナ〖へ奶梦する
      *
-     * 搊榐偝傟偰偄傞儕僗僫偺僐乕儖僶僢僋儊僜僢僪傪屇傃弌偡丅
+     * 判峡されているリスナのコ〖ルバックメソッドを钙び叫す。
      *
      * @param info ConnectorInfo
      * @else
@@ -1241,7 +1241,7 @@ namespace RTC
   /*!
    * @if jp
    * @class ConnectorListeners
-   * @brief ConnectorListeners 僋儔僗
+   * @brief ConnectorListeners クラス
    *
    *
    * @else
@@ -1256,8 +1256,8 @@ namespace RTC
   public:
     /*!
      * @if jp
-     * @brief ConnectorDataListenerType儕僗僫攝楍
-     * ConnectorDataListenerType儕僗僫傪奿擺
+     * @brief ConnectorDataListenerTypeリスナ芹误
+     * ConnectorDataListenerTypeリスナを呈羌
      * @else
      * @brief ConnectorDataListenerType listener array
      * The ConnectorDataListenerType listener is stored.
@@ -1266,8 +1266,8 @@ namespace RTC
     ConnectorDataListenerHolder connectorData_[CONNECTOR_DATA_LISTENER_NUM];
     /*!
      * @if jp
-     * @brief ConnectorListenerType儕僗僫攝楍
-     * ConnectorListenerType儕僗僫傪奿擺
+     * @brief ConnectorListenerTypeリスナ芹误
+     * ConnectorListenerTypeリスナを呈羌
      * @else
      * @brief ConnectorListenerType listener array
      * The ConnectorListenerType listener is stored. 

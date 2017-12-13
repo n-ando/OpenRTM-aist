@@ -35,6 +35,8 @@ namespace RTC
    * @class ConnectorInfo クラス
    * @brief ConnectorInfo クラス
    *
+   * @else
+   *
    * @class ConnectorInfo class
    * @brief ConnectorInfo class
    *
