@@ -137,19 +137,7 @@ vc14proj: libHRTM.vcproj.yaml
 		--header $(hrtmheader_HEADERS)
 	qkc -O- -sm $(win32_builddir)/hrtm/libHRTM_vc14.vcxproj
 
-#------------------------------------------------------------
-# for wxs file
-#------------------------------------------------------------
-wxs:
-	$(top_srcdir)/build/makewxs.py flist \
-		-c Headers \
-		-o $(win32_builddir)installer/headers.yaml \
-		-p ..\\hrtm \
-		*.h version.txt
-
-
-
-dist-hook: lst vcproj wxs
+dist-hook: lst vcproj
 
 clean-local:
 	rm -f *~ Makefile.old *core
