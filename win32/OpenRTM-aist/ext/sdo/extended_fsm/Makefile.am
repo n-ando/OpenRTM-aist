@@ -15,6 +15,5 @@ src:
 	cp -p $(top_srcdir)/src/ext/sdo/extended_fsm/*.h .
 	qkc -O- -ms *.cpp
 	qkc -O- -ms *.h
-	qkc -O- -ms *.idl
 
 dist-hook: src
