@@ -24,6 +24,7 @@
 #include <rtm/NamingManager.h>
 #include <rtm/RTC.h>
 #include <rtm/PeriodicExecutionContext.h>
+#include <rtm/SimulatorExecutionContext.h>
 #include <rtm/ExtTrigExecutionContext.h>
 #include <rtm/OpenHRPExecutionContext.h>
 #include <rtm/PeriodicECSharedComposite.h>
@@ -1920,6 +1921,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     PeriodicExecutionContextInit(this);
     ExtTrigExecutionContextInit(this);
     OpenHRPExecutionContextInit(this);
+    SimulatorExecutionContextInit(this);
 #ifdef RTM_OS_VXWORKS
     VxWorksRTExecutionContextInit(this);
 #ifndef __RTP__
