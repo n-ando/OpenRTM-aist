@@ -294,7 +294,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual DataType operator()(const DataType& value) = 0;
+    virtual DataType& operator()(DataType& value) = 0;
   };
   
 
@@ -427,7 +427,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual DataType operator()(const DataType& value) = 0;
+    virtual DataType& operator()(DataType& value) = 0;
   };
   
 

@@ -209,7 +209,7 @@ namespace RTC
      * @endif
      */
     template <class DataType>
-    ReturnCode write(const DataType& data)
+    ReturnCode write(DataType& data)
     {
       if (m_directInPort != NULL)
         {
