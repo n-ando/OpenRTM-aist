@@ -18,6 +18,7 @@
  */
 
 #include <rtm/ConnectorListener.h>
+#include <stdint.h>
 
 namespace RTC
 {
