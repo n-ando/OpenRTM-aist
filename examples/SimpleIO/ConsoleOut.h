@@ -35,6 +35,7 @@ using namespace RTC;
 class DataListener
   : public ConnectorDataListenerT<RTC::TimedLong>
 {
+  USE_CONNLISTENER_STATUS;
 public:
   DataListener(const char* name) : m_name(name) {}
   virtual ~DataListener()
@@ -42,8 +43,8 @@ public:
     std::cout << "dtor of " << m_name << std::endl;
   }
 
-  virtual void operator()(const ConnectorInfo& info,
-                          const TimedLong& data)
+  virtual ReturnCode operator()(ConnectorInfo& info,
+                                TimedLong& data)
   {
     std::cout << "------------------------------"   << std::endl;
     std::cout << "Data Listener: " << m_name       << std::endl;
@@ -54,6 +55,7 @@ public:
 //    std::cout                                       << std::endl;
     std::cout << "Data:          " << data.data    << std::endl;
     std::cout << "------------------------------"   << std::endl;
+    return NO_CHANGE;
   };
   std::string m_name;
 };
@@ -62,6 +64,7 @@ public:
 class ConnListener
   : public ConnectorListener
 {
+  USE_CONNLISTENER_STATUS;
 public:
   ConnListener(const char* name) : m_name(name) {}
   virtual ~ConnListener()
@@ -69,7 +72,7 @@ public:
     std::cout << "dtor of " << m_name << std::endl;
   }
 
-  virtual void operator()(const ConnectorInfo& info)
+  virtual ReturnCode operator()(ConnectorInfo& info)
   {
     std::cout << "------------------------------"   << std::endl;
     std::cout << "Connector Listener: " << m_name       << std::endl;
@@ -79,6 +82,7 @@ public:
     std::cout << info.properties;
     std::cout                                       << std::endl;
     std::cout << "------------------------------"   << std::endl;
+    return NO_CHANGE;
   };
   std::string m_name;
 };
