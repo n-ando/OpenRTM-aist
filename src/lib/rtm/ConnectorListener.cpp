@@ -21,18 +21,6 @@
 
 namespace RTC
 {
-  ConnectorListenerStatus::Enum operator|(ConnectorListenerStatus::Enum L,
-                                          ConnectorListenerStatus::Enum R)
-  {
-    return static_cast<ConnectorListenerStatus::Enum>(static_cast<uint64_t>(L) |
-                                                      static_cast<uint64_t>(R));
-  }
-  ConnectorListenerStatus::Enum operator&(ConnectorListenerStatus::Enum L,
-                                          ConnectorListenerStatus::Enum R)
-  {
-    return static_cast<ConnectorListenerStatus::Enum>(static_cast<uint64_t>(L) &
-                                                      static_cast<uint64_t>(R));
-  }
   /*!
    * @if jp
    * @class ConnectorDataListener епеще╣
@@ -110,17 +98,14 @@ namespace RTC
     return m_listeners.size();
   }
     
-  ConnectorDataListenerHolder::ReturnCode
-  ConnectorDataListenerHolder::notify(ConnectorInfo& info,
-                                                 cdrMemoryStream& cdrdata)
+  void ConnectorDataListenerHolder::notify(const ConnectorInfo& info,
+                                           const cdrMemoryStream& cdrdata)
   {
     Guard guard(m_mutex);
-    ConnectorListenerHolder::ReturnCode ret(NO_CHANGE);
     for (int i(0), len(m_listeners.size()); i < len; ++i)
       {
-        ret = ret | m_listeners[i].first->operator()(info, cdrdata);
+        m_listeners[i].first->operator()(info, cdrdata);
       }
-    return ret;
   }
 
 
@@ -134,8 +119,8 @@ namespace RTC
   ConnectorListenerHolder::ConnectorListenerHolder()
   {
   }
-
-
+    
+  
   ConnectorListenerHolder::~ConnectorListenerHolder()
   {
     Guard guard(m_mutex);
@@ -174,24 +159,22 @@ namespace RTC
             return;
           }
       }
+    
   }
-
+  
   size_t ConnectorListenerHolder::size()
   {
     Guard guard(m_mutex);
     return m_listeners.size();
   }
-
-  ConnectorListenerHolder::ReturnCode
-  ConnectorListenerHolder::notify(ConnectorInfo& info)
+  
+  void ConnectorListenerHolder::notify(const ConnectorInfo& info)
   {
     Guard guard(m_mutex);
-    ConnectorListenerHolder::ReturnCode ret;
     for (int i(0), len(m_listeners.size()); i < len; ++i)
       {
-        ret = ret | m_listeners[i].first->operator()(info);
+        m_listeners[i].first->operator()(info);
       }
-    return ret;
   }
 };
 
