@@ -613,6 +613,8 @@ namespace RTC
 #define RTC_VERBOSE_STR(str)
 #define RTC_PARANOID(fmt)
 #define RTC_PARANOID_STR(str)
+#define RTC_FATAL(fmt)
+#define RTC_FATAL_STR(str)
 #endif
   
 }; // namespace RTC
