@@ -770,6 +770,11 @@ std::vector<coil::Properties> Manager::getLoadableModules()
       "naming.enable",
       "naming.type",
       "naming.formats",
+      "sdo.service.provider.available_services",
+      "sdo.service.consumer.available_services",
+      "sdo.service.provider.enabled_services",
+      "sdo.service.consumer.enabled_services",
+      "manager.instance_name",
       ""
     };
       
