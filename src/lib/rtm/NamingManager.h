@@ -109,8 +109,8 @@ namespace RTC
      *
      * @endif
      */
-    virtual void bindObject(const char* name, const RTObject_impl* rtobj) = 0;
     virtual void bindObject(const char* name, const PortBase* port) = 0;
+    virtual void bindObject(const char* name, const RTObject_impl* rtobj) = 0;
 
     /*!
      * @if jp
@@ -130,6 +130,8 @@ namespace RTC
      *
      * @endif
      */
+
+
     virtual void bindObject(const char* name,
                             const RTM::ManagerServant* mgr) = 0;
     
@@ -168,6 +170,24 @@ namespace RTC
      * @endif
      */
     virtual bool isAlive() = 0;
+	/*!
+	* @if jp
+	*
+	* @brief rtcloc形式でRTCのオブジェクトリファレンスを取得する
+	*
+	* @param name RTC名
+	* @return RTCのオブジェクトリファレンスのリスト
+	*
+	* @else
+	*
+	* @brief
+	*
+	* @param name
+	* @return
+	*
+	* @endif
+	*/
+	virtual RTC::RTCList string_to_component(std::string name) = 0;
   };
   
   /*!
@@ -345,6 +365,45 @@ namespace RTC
      * @endif
      */
     virtual bool isAlive();
+	/*!
+	 * @if jp
+	 *
+	 * @brief ネーミングサービスからRTCをインスタンス名から検索し、
+	 *        一致するRTCのリストを取得する
+	 *
+	 * @param context 現在検索中のコンテキスト
+	 * @param name RTCのインスタンス名
+	 * @param rtcs RTCのリスト
+	 *
+	 * @else
+	 *
+	 * @brief 
+	 *
+	 * @param context
+	 * @param name 
+	 * @param rtcs 
+	 *
+	 * @endif
+	 */
+	void getComponentByName(CosNaming::NamingContext_ptr context, std::string name, RTC::RTCList& rtcs);
+	/*!
+	* @if jp
+	*
+	* @brief rtcname形式でRTCのオブジェクトリファレンスを取得する
+	*
+	* @param name RTC名
+	* @return RTCのオブジェクトリファレンスのリスト
+	*
+	* @else
+	*
+	* @brief 
+	*
+	* @param name 
+	* @return 
+	*
+	* @endif
+	*/
+	virtual RTC::RTCList string_to_component(std::string name);
     CorbaNaming& getCorbaNaming() { return m_cosnaming; }
 
   private:
@@ -352,6 +411,193 @@ namespace RTC
     CorbaNaming m_cosnaming;
     std::string m_endpoint;
     bool m_replaceEndpoint;
+    //    std::map<std::string, RTObject_impl*> m_names;
+  };
+
+
+
+  /*!
+   * @if jp
+   *
+   * @class NamingOnManager
+   * @brief Manager 用 NamingServer 管理クラス
+   *
+   * @since 1.2.0
+   *
+   * @else
+   *
+   * @class NamingOnManager
+   * @brief 
+   *
+   *
+   * @since 1.2.0
+   *
+   * @endif
+   */
+  class NamingOnManager
+    : public virtual NamingBase
+  {
+  public:
+    /*!
+     * @if jp
+     *
+     * @brief コンストラクタ
+     *
+     *
+     * @param orb ORB
+     * @param mgr マネージャ
+     *
+     * @else
+     *
+     * @brief Constructor
+     *
+     * 
+     *
+     * @param orb ORB
+     * @param mgr
+     *
+     * @endif
+     */
+	 NamingOnManager(CORBA::ORB_ptr orb, Manager* mgr);
+    
+    /*!
+     * @if jp
+     *
+     * @brief デストラクタ
+     *
+     * @else
+     *
+     * @brief Destructor
+     *
+     * @endif
+     */
+	 virtual ~NamingOnManager(void){};
+    
+    /*!
+     * @if jp
+     *
+     * @brief 指定した CORBA オブジェクトのNamingServiceへバインド
+     * 
+     * 指定した CORBA オブジェクトを指定した名称で CORBA NamingService へ
+     * バインドする。
+     * 
+     * @param name バインド時の名称
+     * @param rtobj バインド対象オブジェクト
+     *
+     * @else
+     *
+     * @brief Bind the specified CORBA objects to NamingService
+     * 
+     * Bind the specified CORBA objects to CORBA NamingService
+     * by specified names.
+     * 
+     * @param name Names at the binding
+     * @param rtobj The target objects for the binding
+     *
+     * @endif
+     */
+    virtual void bindObject(const char* name, const RTObject_impl* rtobj);
+    virtual void bindObject(const char* name, const PortBase* port);
+
+    /*!
+     * @if jp
+     *
+     * @brief 
+     *
+     * @param name バインド時の名称
+     * @param rtobj バインド対象ManagerServant
+     *
+     * @else
+     *
+     * @brief Bind the specified ManagerServants to NamingService
+     *
+     * @param name Names at the binding
+     * @param mgr The target ManagerServants for the binding
+     *
+     * @endif
+     */
+    virtual void bindObject(const char* name, const RTM::ManagerServant* mgr);
+
+    /*!
+     * @if jp
+     *
+     * @brief 
+     * 
+     * 
+     * 
+     * @param name アンバインド対象オブジェクト
+     *
+     * @else
+     *
+     * @brief Unbind the specified CORBA objects from NamingService
+     * 
+     * Unbind the specified CORBA objects from CORBA NamingService.
+     * 
+     * @param name The target objects for the unbinding
+     *
+     * @endif
+     */
+    virtual void unbindObject(const char* name);
+
+    /*!
+     * @if jp
+     *
+     * @brief 
+     * 
+     * @return true:生存している, false:生存していない
+     *
+     * @else
+     *
+     * @brief Check if the name service is alive
+     * 
+     * @return true: alive, false:non not alive
+     *
+     * @endif
+     */
+    virtual bool isAlive();
+	/*!
+	* @if jp
+	*
+	* @brief rtcname形式でRTCのオブジェクトリファレンスを取得する
+	*
+	* @param name rtcloc形式でのRTC名
+	* rtcloc://localhost:2809/example/ConsoleIn
+	* @return RTCのオブジェクトリファレンスのリスト
+	*
+	* @else
+	*
+	* @brief 
+	*
+	* @param name 
+	* @return 
+	*
+	* @endif
+	*/
+	RTC::RTCList string_to_component(std::string name);
+	/*!
+	* @if jp
+	*
+	* @brief 指定ホスト名、ポート名でManagerのオブジェクトリファレンスを取得
+	*
+	* @param name ホスト名、ポート名
+	* 
+	* @return Managerのオブジェクトリファレンス
+	*
+	* @else
+	*
+	* @brief
+	*
+	* @param name
+	* @return
+	*
+	* @endif
+	*/
+	RTM::Manager_ptr getManager(std::string name);
+
+  private:
+    Logger rtclog;
+	CORBA::ORB_ptr m_orb;
+	Manager* m_mgr;
     //    std::map<std::string, RTObject_impl*> m_names;
   };
   
@@ -464,8 +710,8 @@ namespace RTC
      *
      * @endif
      */
-    void bindObject(const char* name, const RTObject_impl* rtobj);
     void bindObject(const char* name, const PortBase* port);
+    void bindObject(const char* name, const RTObject_impl* rtobj);
 
     /*!
      * @if jp
@@ -569,6 +815,30 @@ namespace RTC
      */
     std::vector<RTObject_impl*> getObjects();
     std::vector<NamingService*>& getNameServices() { return m_names; }
+
+	/*!
+	* @if jp
+	*
+	* @brief rtcloc形式でRTCのオブジェクトリファレンスを取得
+	*
+	*
+	*
+	* @param name rtcloc形式でのRTC名
+	* rtcloc://localhost:2809/example/ConsoleIn
+	* @return RTCのオブジェクトリファレンスのリスト
+	*
+	* @else
+	*
+	* @brief
+	* registerMgrName
+	* @param name
+	*
+	* @return
+	*
+	*
+	* @endif
+	*/
+	RTCList string_to_component(std::string name);
     
   protected:
     /*!
@@ -753,6 +1023,8 @@ namespace RTC
      * @endif
      */
     void retryConnection(NamingService* ns);
+
+
 
   protected:
     // Name Servers' method/name and object
