@@ -689,6 +689,21 @@ namespace RTM
      */
     RTC::RTObject_ptr
     createComponentByAddress(const std::string module_name);
+	/*
+	* @if jp
+	* @brief マスターマネージャの有無を確認してリストを更新する
+	*
+	*
+	*
+	* @else
+	* @brief 
+	*
+	*
+	* @endif
+	*/
+	void updateMasterManager();
+	std::string getParameterByModulename(const std::string param_name, std::string &module_name);
+	bool isProcessIDManager(std::string mgrname);
 
   private:
     typedef coil::Guard<coil::Mutex> Guard;
@@ -775,6 +790,7 @@ namespace RTM
     {
       RTM::Manager_var m_mgr;
     public:
+
       is_equiv(RTM::Manager_ptr mgr)
         : m_mgr(RTM::Manager::_duplicate(mgr)) {}
       bool operator()(RTM::Manager_ptr mgr)
@@ -783,6 +799,30 @@ namespace RTM
       }
     };
 
+
+
+  };
+
+  class CompParam
+  {
+  public:
+	  CompParam(std::string module_name);
+	  static const unsigned int prof_list_size = 6;
+	  static const char* prof_list[prof_list_size];
+	  std::string vendor();
+	  std::string category();
+	  std::string impl_id();
+	  std::string language();
+	  std::string version();
+  private:
+	  std::string m_type;
+	  std::string m_vendor;
+	  std::string m_category;
+	  std::string m_impl_id;
+	  std::string m_language;
+	  std::string m_version;
+
+	  
   };
 }; // namespace RTM
 #endif // RTM_MANAGERSERVANT_H
