@@ -1142,17 +1142,6 @@ namespace RTC
      * @endif
      */
     RTM::ManagerServant& getManagerServant();
-    /*!
-     * @if jp
-     * @brief ManagerServantを取得する
-     *
-     * @else
-     *
-     * @brief Getting ManagerServant
-     *
-     * @endif
-     */
-    RTM::ManagerServant& getManagerServant();
 
     /*!
      * @if jp

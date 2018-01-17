@@ -2537,7 +2537,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     return;
   }
 
-};
+
 
 
   /*!
