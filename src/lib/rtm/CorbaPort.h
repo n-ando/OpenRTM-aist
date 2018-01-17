@@ -1226,18 +1226,22 @@ namespace RTC
           m_ior()
       {  
 #ifndef ORB_IS_RTORB
-        PortableServer::POA_var poa = ::RTC::Manager::instance().getPOA();
-        m_oid = poa->servant_to_id(m_servant);
+#ifdef ORB_IS_OMNIORB
+        m_poa = ::RTC::Manager::instance().theShortCutPOA();
+#else
+        m_poa = ::RTC::Manager::instance().getPOA();
+#endif
+        m_oid = m_poa->servant_to_id(m_servant);
         try
           {
-            poa->activate_object_with_id(m_oid, m_servant);
+            m_poa->activate_object_with_id(m_oid, m_servant);
           }
         catch(...)
           {
             ;
           }
         CORBA::Object_var obj;
-        obj = poa->id_to_reference(m_oid);
+        obj = m_poa->id_to_reference(m_oid);
         CORBA::ORB_var orb = Manager::instance().getORB();
         CORBA::String_var ior_var = orb->object_to_string(obj);
         m_ior = ior_var;
@@ -1267,8 +1271,7 @@ namespace RTC
       {
         try
           {
-            ::RTC::Manager::instance().
-              thePOA()->activate_object_with_id(m_oid, m_servant);
+            m_poa->activate_object_with_id(m_oid, m_servant);
           }
         catch(const ::PortableServer::POA::ServantAlreadyActive &)
           {
@@ -1283,7 +1286,7 @@ namespace RTC
       {
         try
           {
-            ::RTC::Manager::instance().thePOA()->deactivate_object(m_oid);
+            m_poa->deactivate_object(m_oid);
           }
         catch(...)
           {
@@ -1296,6 +1299,7 @@ namespace RTC
       PortableServer::RefCountServantBase* m_servant;
       PortableServer::ObjectId_var m_oid;
       std::string m_ior;
+      PortableServer::POA_var m_poa;
     };
 
     /*!
