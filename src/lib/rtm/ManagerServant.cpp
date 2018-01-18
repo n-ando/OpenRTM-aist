@@ -858,13 +858,16 @@ namespace RTM
    */
   bool ManagerServant::createINSManager()
   {
-#ifndef ORB_IS_TAO
     try
       {
         //Ppreparing INS POA
         CORBA::Object_var obj;
 #ifndef ORB_IS_RTORB
+#ifndef ORB_IS_TAO
         obj = m_mgr.theORB()->resolve_initial_references("omniINSPOA");
+#else
+        obj = m_mgr.theORB()->resolve_initial_references("RootPOA");
+#endif
 #else // ROB_IS_RTORB
         obj = m_mgr.theORB()->resolve_initial_references((char*)"omniINSPOA");
 #endif // ORB_IS_RTORB
@@ -902,9 +905,6 @@ namespace RTM
       {
         return false;
       }
-#else
-		m_objref = _this();
-#endif
     return true;
   }
 
