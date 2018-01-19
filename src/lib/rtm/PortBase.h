@@ -1908,7 +1908,14 @@ namespace RTC
     {
       NVUtil::appendStringValue(m_profile.properties, key, value);
     }
-    
+    /*!
+     * @if jp
+     * @brief プロパティ
+     * @else
+     * @brief Properties
+     * @endif
+     */
+    coil::Properties m_properties;
   protected:
     /*!
      * @if jp

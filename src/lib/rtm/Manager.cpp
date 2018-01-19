@@ -777,6 +777,9 @@ std::vector<coil::Properties> Manager::getLoadableModules()
       "manager.instance_name",
       ""
     };
+
+    coil::Properties &_prop = prop.getNode("port");
+    _prop << m_config.getNode("port");
       
     RTObject_impl* comp;
     comp = factory->create(this);

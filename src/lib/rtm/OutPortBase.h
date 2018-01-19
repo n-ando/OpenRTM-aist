@@ -1018,6 +1018,9 @@ namespace RTC
                                       coil::Properties& prop,
                                       OutPortProvider* provider);
 
+    virtual ReturnCode_t notify_connect(ConnectorProfile& connector_profile)
+		throw (CORBA::SystemException);
+
   protected:
     /*!
      * @if jp
@@ -1028,14 +1031,7 @@ namespace RTC
      */
     InPortBase* getLocalInPort(const ConnectorInfo& profile);
     
-    /*!
-     * @if jp
-     * @brief プロパティ
-     * @else
-     * @brief Properties
-     * @endif
-     */
-    coil::Properties m_properties;
+
     /*!
      * @if jp
      * @brief 接続リスト
