@@ -258,7 +258,7 @@ rtm_libdir=""
 rtm_version="1.0.0"
 rtm_orb="omniORB"
 rtm_idlc="omniidl"
-rtm_idlflags="-bcxx -Wba -nf"
+rtm_idlflags="-bcxx -Wba -nf -Wbshortcut"
 
 usage()
 {

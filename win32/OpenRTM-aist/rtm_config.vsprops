@@ -109,7 +109,7 @@
 	/>
 	<UserMacro
 		Name="rtm_idlflags"
-		Value="-bcxx -Wba -nf -I&quot;$(SolutionDir)\rtm\idl&quot;"
+		Value="-bcxx -Wba -nf -Wbshortcut -I&quot;$(SolutionDir)\rtm\idl&quot;"
 	/>
 	<!-- coil macros -->
 	<UserMacro

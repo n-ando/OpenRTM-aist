@@ -492,7 +492,7 @@ Configurations:
         Value: |
           set PATH=$(rtm_path);%PYTHON_ROOT%\\\\;%PATH%
           for %%x in (*.idl) do makewrapper.py %%x
-          for %%x in (*.idl) do omniidl -bcxx -Wba -nf %%x
+          for %%x in (*.idl) do omniidl -bcxx -Wba -nf -Wbshortcut %%x
 #    VCCustomBuildTool:
 #    VCXMLDataGeneratorTool:
 #    VCWebServiceProxyGeneratorTool:
@@ -544,7 +544,7 @@ Configurations:
         Value: |
           set PATH=$(rtm_path);%PYTHON_ROOT%\\\\;%PATH%
           for %%x in (*.idl) do makewrapper.py %%x
-          for %%x in (*.idl) do omniidl -bcxx -Wba -nf %%x
+          for %%x in (*.idl) do omniidl -bcxx -Wba -nf -Wbshortcut %%x
 #    VCCustomBuildTool:
 #    VCXMLDataGeneratorTool:
 #    VCWebServiceProxyGeneratorTool:
