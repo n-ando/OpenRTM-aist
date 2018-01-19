@@ -2545,7 +2545,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   * @brief 起動時にrtc.confで指定したポートを接続する
   *
   * 例:
-  * manager.components.preconnect: RTC0.port0:RTC0.port1(interface_type=corba_cdr&dataflow_type=pull&~),~
+  * manager.components.preconnect: RTC0.port0^RTC0.port1(interface_type=corba_cdr&dataflow_type=pull&~),~
   *
   *
   * @else
@@ -2584,14 +2584,17 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 		  if (pos != std::string::npos) { conn_prop[1].erase(pos); }
 
 		  coil::vstring comp_ports;
-		  comp_ports = coil::split(conn_prop[0], ":");
+		  comp_ports = coil::split(conn_prop[0], "^");
 		  if (comp_ports.size() != 2)
 		  {
 			  RTC_ERROR(("Invalid format for pre-connection."));
-			  RTC_ERROR(("Format must be Comp0.port0:Comp1.port1"));
+			  RTC_ERROR(("Format must be Comp0.port0^Comp1.port1"));
 			  continue;
 		  }
-		  std::string comp0_name = coil::split(comp_ports[0], ".")[0];
+		  coil::vstring tmp = coil::split(comp_ports[0], ".");
+		  tmp.pop_back();
+		  std::string comp0_name = coil::flatten(tmp, ".");
+		  
 		  std::string port0_name = comp_ports[0];
 		  RTObject_impl* comp0 = NULL;
 		  RTC::RTObject_ptr comp0_ref = NULL;
@@ -2621,7 +2624,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 
 		  }
 
-		  RTC::PortService_var port0_var;// = OpenRTM_aist.CORBA_RTCUtil.get_port_by_name(comp0_ref, port0_name);
+		  RTC::PortService_var port0_var = CORBA_RTCUtil::get_port_by_name(comp0_ref, port0_name);
 
 		  if (CORBA::is_nil(port0_var))
 		  {
@@ -2629,7 +2632,9 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 			  continue;
 		  }
 
-		  std::string comp1_name = coil::split(comp_ports[1], ".")[0];
+		  tmp = coil::split(comp_ports[1], ".");
+		  tmp.pop_back();
+		  std::string comp1_name = coil::flatten(tmp, ".");
 		  std::string port1_name = comp_ports[1];
 		  RTObject_impl* comp1 = NULL;
 		  RTC::RTObject_ptr comp1_ref = NULL;
@@ -2660,7 +2665,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 
 		  }
 
-		  RTC::PortService_var port1_var;// = OpenRTM_aist.CORBA_RTCUtil.get_port_by_name(comp0_ref, port0_name);
+		  RTC::PortService_var port1_var = CORBA_RTCUtil::get_port_by_name(comp1_ref, port1_name);
 
 		  if (CORBA::is_nil(port1_var))
 		  {
@@ -2685,8 +2690,8 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 
 		  }
 
-
-		  //if (RTC::RTC_OK != CORBA_RTCUtil.connect(connectors[i], prop, port0_var, port1_var))
+		  
+		  if (RTC::RTC_OK != CORBA_RTCUtil::connect(connectors[i], prop, port0_var, port1_var))
 		  {
 			  RTC_ERROR(("Connection error: %s", connectors[i]));
 		  }
@@ -2741,7 +2746,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 				  
 			  }
 			  
-			  RTC::ReturnCode_t ret;// = CORBA_RTCUtil::activate(comp_ref);
+			  RTC::ReturnCode_t ret = CORBA_RTCUtil::activate(comp_ref);
 			  if (ret != RTC::RTC_OK)
 			  {
 				  RTC_ERROR(("%s activation filed.", comps[i]));
