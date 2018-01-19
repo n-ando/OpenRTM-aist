@@ -112,8 +112,8 @@ static const char* default_config[] =
     "manager.modules.Java.load_paths",       "./",
     "manager.modules.search_auto",       "YES",
     "manager.local_service.enabled_services","ALL",
-    "sdo.service.provider.enabled_service",  "ALL",
-    "sdo.service.consumer.enabled_service",  "ALL",
+    "sdo.service.provider.enabled_services",  "ALL",
+    "sdo.service.consumer.enabled_services",  "ALL",
     ""
   };
 
