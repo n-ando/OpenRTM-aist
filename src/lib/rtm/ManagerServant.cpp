@@ -862,12 +862,9 @@ namespace RTM
       {
         //Ppreparing INS POA
         CORBA::Object_var obj;
-#ifndef ORB_IS_RTORB
 #ifndef ORB_IS_TAO
-        obj = m_mgr.theORB()->resolve_initial_references("omniINSPOA");
-#else
-        obj = m_mgr.theORB()->resolve_initial_references("RootPOA");
-#endif
+#ifndef ORB_IS_RTORB
+		obj = m_mgr.theORB()->resolve_initial_references("omniINSPOA");
 #else // ROB_IS_RTORB
         obj = m_mgr.theORB()->resolve_initial_references((char*)"omniINSPOA");
 #endif // ORB_IS_RTORB
@@ -900,6 +897,30 @@ namespace RTM
         std::string iorstr((const char*)ior);
         RTC_DEBUG(("Manager's IOR information:\n %s",
                    CORBA_IORUtil::formatIORinfo(iorstr.c_str()).c_str()));
+#else
+		obj = m_mgr.theORB()->resolve_initial_references("IORTable");
+		IORTable::Table_var adapter = IORTable::Table::_narrow(obj.in());
+
+		// Create readable object ID
+		coil::Properties config(m_mgr.getConfig());
+
+		RTC_DEBUG(("Creating named manager: %s",
+			config["manager.name"].c_str()));
+
+
+		// Object activation
+		RTC_DEBUG(("Activating manager with id(%s)", config["manager.name"].c_str()));
+		CORBA::String_var ior = m_mgr.theORB()->object_to_string(_this());
+		adapter->bind("udpprovider", ior.in());
+
+		// Set m_objref 
+		m_objref = _this();
+
+
+		std::string iorstr((const char*)ior);
+		RTC_DEBUG(("Manager's IOR information:\n %s",
+			CORBA_IORUtil::formatIORinfo(iorstr.c_str()).c_str()));
+#endif
       }
     catch (...)
       {
