@@ -62,6 +62,10 @@ set(idls
 	)
 
 
+if(CORBA MATCHES "TAO")
+	set(idls ${idls} DataPortUDP)
+endif()
+
 foreach(idl ${idls})
 	idl_compile(${idl})
 endforeach(idl)

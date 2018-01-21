@@ -332,6 +332,15 @@ set(rtm_srcs
 	${rtm_headers}
 )
 
+if(CORBA MATCHES "TAO")
+	set(rtm_srcs ${rtm_srcs} 
+		InPortCorbaCdrUDPConsumer.cpp
+		InPortCorbaCdrUDPConsumer.h
+		InPortCorbaCdrUDPProvider.cpp
+		InPortCorbaCdrUDPProvider.h
+	 )
+endif()
+
 if(VXWORKS)
 	set(rtm_headers ${rtm_headers} VxWorksRTExecutionContext.h)
 	set(rtm_srcs ${rtm_srcs} VxWorksRTExecutionContext.cpp)

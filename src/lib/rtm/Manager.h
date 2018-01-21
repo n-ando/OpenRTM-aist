@@ -30,6 +30,11 @@
 #include <coil/Guard.h>
 #include <coil/Task.h>
 
+#ifdef ORB_IS_TAO
+#include <tao/Strategies/advanced_resource.h>
+#include <tao/IORTable/IORTable.h>
+#endif
+
 #include <rtm/Factory.h>
 #include <rtm/ECFactory.h>
 #include <rtm/ObjectManager.h>

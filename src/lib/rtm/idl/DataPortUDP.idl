@@ -1,0 +1,39 @@
+// -*- IDL -*-
+/*!
+ * @file DataPortUDP.idl
+ * @brief DataPort interface definition
+ * @date $Date: 2018-01-15 15:40:14 $
+ * @author Nobuhiko Miyamoto <n-miyamoto@aist.go.jp>
+ *
+ * Copyright (C) 2018
+ *     Nobuhiko Miyamoto
+ *     Robot Innovation Research Center,
+ *     National Institute of
+ *         Advanced Industrial Science and Technology (AIST), Japan
+ *
+ *     All rights reserved.
+ *
+ *
+ */
+
+#ifndef DataInPortUDP_idl
+#define DataInPortUDP_idl
+
+#ifdef TAO_IDL
+#include <tao/orb.idl>
+#endif
+
+#include "DataPort.idl"
+
+
+#pragma prefix "openrtm.aist.go.jp"
+
+module OpenRTM
+{
+
+  interface InPortCdrUDP
+  {
+    oneway void put(in CdrData data);
+  };
+};
+#endif
