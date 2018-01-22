@@ -9,3 +9,7 @@ if(VXWORKS)
 		add_subdirectory(interrupt_task)
 	endif(RTP)
 endif(VXWORKS)
+
+if(SSL_ENABLE)
+	add_subdirectory(ssl)
+endif(SSL_ENABLE)
