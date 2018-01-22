@@ -539,7 +539,7 @@ namespace CORBA_RTCUtil
     for (unsigned int i = 0; i < ports.length(); i++)
       {
         RTC::PortProfile* pp = ports[i]->get_port_profile();
-        std::string s = pp->name;
+        std::string s(static_cast<char*>(pp->name));
         names.push_back(s);
       }
     return names;
@@ -572,7 +572,7 @@ namespace CORBA_RTCUtil
 
         if (prop["port.port_type"] == "DataInPort")
           {
-            std::string s = pp->name;
+            std::string s(static_cast<char*>(pp->name));
             names.push_back(s);
           }
       }
@@ -606,7 +606,7 @@ namespace CORBA_RTCUtil
 
         if (prop["port.port_type"] == "DataOutPort")
           {
-            std::string s = pp->name;
+            std::string s(static_cast<char*>(pp->name));
             names.push_back(s);
           }
       }
@@ -642,7 +642,7 @@ namespace CORBA_RTCUtil
 
         if (prop["port.port_type"] == "CorbaPort")
           {
-            std::string s = pp->name;
+            std::string s(static_cast<char*>(pp->name));
             names.push_back(s);
           }
       }
@@ -1286,7 +1286,7 @@ namespace CORBA_RTCUtil
   {
     SDOPackage::Configuration_ptr conf = rtc->get_configuration();
     SDOPackage::ConfigurationSet* confset = conf->get_active_configuration_set();
-    return confset->id;
+    return static_cast<char*>(confset->id);
   }
   /*!
    * @if jp
