@@ -1947,29 +1947,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
           }
       }
 
-    std::ifstream otherref(m_config["manager.refstring_path"].c_str());
-    if (otherref.fail() != 0)
-      {
-        otherref.close();
-        std::ofstream reffile(m_config["manager.refstring_path"].c_str());
-        RTM::Manager_var mgr_v(RTM::Manager::
-                               _duplicate(m_mgrservant->getObjRef()));
-        CORBA::String_var str_var = m_pORB->object_to_string(mgr_v);
-        reffile << str_var;
-        reffile.close();
-      }
-    else
-      {
-        std::string refstring;
-        otherref >> refstring;
-        otherref.close();
 
-        CORBA::Object_var obj = m_pORB->string_to_object(refstring.c_str());
-        RTM::Manager_var mgr = RTM::Manager::_narrow(obj);
-        //        if (CORBA::is_nil(mgr)) return false;
-        //        mgr->set_child(m_mgrservant->getObjRef());
-        //        m_mgrservant->set_owner(mgr);
-      }
 
 	if (coil::toBool(m_config["corba.update_master_manager.enable"], "YES", "NO", true)
 		&& !coil::toBool(m_config["manager.is_master"], "YES", "NO", false))
