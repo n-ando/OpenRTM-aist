@@ -26,7 +26,11 @@ typedef unsigned __int32 uint32_t;
 typedef __int64 int64_t;
 typedef unsigned __int64 uint64_t;
 #else
+#if __cplusplus <= 199711L
+#include <stdint.h>
+#else
 #include <cstdint>
+#endif
 #endif
 
 namespace RTC
@@ -196,7 +200,7 @@ namespace RTC
   ConnectorListenerHolder::notify(ConnectorInfo& info)
   {
     Guard guard(m_mutex);
-    ConnectorListenerHolder::ReturnCode ret;
+    ConnectorListenerHolder::ReturnCode ret(NO_CHANGE);
     for (int i(0), len(m_listeners.size()); i < len; ++i)
       {
         ret = ret | m_listeners[i].first->operator()(info);

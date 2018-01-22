@@ -22,6 +22,7 @@
 #include <coil/UUID.h>
 #include <rtm/PortBase.h>
 #include <rtm/PortCallback.h>
+#include <rtm/CORBA_RTCUtil.h>
 
 namespace RTC
 {

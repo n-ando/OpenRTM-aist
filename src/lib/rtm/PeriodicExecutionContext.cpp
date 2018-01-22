@@ -140,7 +140,8 @@ namespace RTC_exp
 #ifdef RTM_OS_LINUX
 	std::sort(ret_cpu.begin(), ret_cpu.end());
 	std::sort(m_cpu.begin(), m_cpu.end());
-	if (result && ret_cpu.size() == ret_cpu.size() && std::equal(ret_cpu.cbegin(), ret_cpu.cend(), m_cpu.cbegin()))
+	if (   result && ret_cpu.size() == ret_cpu.size()
+        && std::equal(ret_cpu.begin(), ret_cpu.end(), m_cpu.begin()))
 	{
 
 	}
