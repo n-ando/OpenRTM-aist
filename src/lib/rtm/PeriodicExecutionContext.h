@@ -25,6 +25,7 @@
 #include <coil/Task.h>
 #include <coil/Mutex.h>
 #include <coil/Condition.h>
+#include <coil/Affinity.h>
 
 #include <rtm/ExecutionContextBase.h>
 
@@ -716,7 +717,7 @@ namespace RTC_exp
     /*!
      * @brief CPU affinity mask list
      */
-    std::vector<int> m_cpu;
+    coil::CpuMask m_cpu;
 
   }; // class PeriodicExecutionContext
 }; // namespace RTC

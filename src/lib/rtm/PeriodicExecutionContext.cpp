@@ -21,6 +21,7 @@
 #ifdef RTM_OS_LINUX
 #define _GNU_SOURCE
 #include <pthread.h>
+#include <algorithm>
 #endif // RTM_OS_LINUX
 #include <coil/Time.h>
 #include <coil/TimeValue.h>
@@ -123,38 +124,31 @@ namespace RTC_exp
     RTC_TRACE(("svc()"));
     int count(0);
 
-#ifdef RTM_OS_LINUX
-    pthread_t tid(pthread_self());
-    cpu_set_t cpu_set;
-    CPU_ZERO(&cpu_set);
+    bool result = coil::setThreadCpuAffinity(m_cpu);
 
-    for (size_t i(0); i < m_cpu.size(); ++i)
+    if (!result)
       {
-        RTC_DEBUG(("CPU affinity mask set to %d", m_cpu[i]));
-        CPU_SET(m_cpu[i], &cpu_set);
-      }
-
-    int result = pthread_setaffinity_np(tid, sizeof(cpu_set_t), &cpu_set);
-    if (result != 0)
-      {
-        RTC_ERROR(("pthread_getaffinity_np():"
+        RTC_ERROR(("setThreadCpuAffinity():"
                    "CPU affinity mask setting failed"));
-      }
-    CPU_ZERO(&cpu_set);
-    tid = pthread_self();
-    result = pthread_getaffinity_np(tid, sizeof(cpu_set_t), &cpu_set);
-    if (result != 0)
-      {
-        RTC_ERROR(("pthread_getaffinity_np(): returned error."));
-      }
-    for (size_t j(0); j < CPU_SETSIZE; ++j)
-      {
-        if (CPU_ISSET(j, &cpu_set))
-          {
-            RTC_DEBUG(("Current CPU affinity mask is %d.", j));
-          }
-      }
-#endif // RTM_OS_LINUX
+      };
+	
+	coil::CpuMask ret_cpu;
+	result = coil::getThreadCpuAffinity(ret_cpu);
+
+	
+
+#ifdef RTM_OS_LINUX
+	std::sort(ret_cpu.begin(), ret_cpu.end());
+	std::sort(m_cpu.begin(), m_cpu.end());
+	if (result && ret_cpu.size() == ret_cpu.size() && std::equal(ret_cpu.cbegin(), ret_cpu.cend(), m_cpu.cbegin()))
+	{
+
+	}
+	else
+	{
+		RTC_ERROR(("pthread_getaffinity_np(): returned error."));
+	}
+#endif
 
     do
       {
