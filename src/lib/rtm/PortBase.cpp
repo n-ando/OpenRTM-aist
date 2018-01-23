@@ -241,7 +241,7 @@ namespace RTC
 
 	if (!coil::toBool(prop.getProperty("dataport.allow_dup_connection"), "YES", "NO", default_value))
 	{
-		for (int i = 0; i < connector_profile.ports.length(); i++)
+		for (unsigned int i = 0; i < connector_profile.ports.length(); i++)
 		{
 			if (!getPortRef()->_is_equivalent(connector_profile.ports[i]))
 			{

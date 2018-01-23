@@ -34,6 +34,7 @@
 #include <rtm/CdrBufferBase.h>
 #include <rtm/PortCallback.h>
 #include <rtm/OutPortConnector.h>
+#include <rtm/Timestamp.h>
 
 /*!
  * @if jp

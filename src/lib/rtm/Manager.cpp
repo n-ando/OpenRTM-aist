@@ -2585,7 +2585,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
             comp0 = getComponent(comp0_name.c_str());
             if (comp0 == NULL)
               {
-                RTC_ERROR(("%s not found.", comp0_name));
+                RTC_ERROR(("%s not found.", comp0_name.c_str()));
                 continue;
               }
             comp0_ref = comp0->getObjRef();
@@ -2595,7 +2595,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
             RTC::RTCList rtcs = m_namingManager->string_to_component(comp0_name);
             if (rtcs.length() == 0)
               {
-                RTC_ERROR(("%s not found.", comp0_name));
+                RTC_ERROR(("%s not found.", comp0_name.c_str()));
                 continue;
               }
             comp0_ref = rtcs[0];
@@ -2607,7 +2607,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 
 		  if (CORBA::is_nil(port0_var))
 		  {
-			  RTC_DEBUG(("port %s found: " ,comp_ports[0]));
+			  RTC_DEBUG(("port %s found: " ,comp_ports[0].c_str()));
 			  continue;
 		  }
 
@@ -2624,7 +2624,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 			  comp1 = getComponent(comp1_name.c_str());
 			  if (comp1 == NULL)
 			  {
-				  RTC_ERROR(("%s not found.", comp1_name));
+				  RTC_ERROR(("%s not found.", comp1_name.c_str()));
 				  continue;
 			  }
 			  comp1_ref = comp1->getObjRef();
@@ -2634,7 +2634,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 			  RTC::RTCList rtcs = m_namingManager->string_to_component(comp1_name);
 			  if (rtcs.length() == 0)
 			  {
-				  RTC_ERROR(("%s not found.", comp1_name));
+				  RTC_ERROR(("%s not found.", comp1_name.c_str()));
 				  continue;
 			  }
 			  comp1_ref = rtcs[0];
@@ -2648,7 +2648,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 
 		  if (CORBA::is_nil(port1_var))
 		  {
-			  RTC_DEBUG(("port %s found: ", comp_ports[1]));
+			  RTC_DEBUG(("port %s found: ", comp_ports[1].c_str()));
 			  continue;
 		  }
 
@@ -2672,7 +2672,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 		  
 		  if (RTC::RTC_OK != CORBA_RTCUtil::connect(connectors[i], prop, port0_var, port1_var))
 		  {
-			  RTC_ERROR(("Connection error: %s", connectors[i]));
+			  RTC_ERROR(("Connection error: %s", connectors[i].c_str()));
 		  }
 	  }
   }
@@ -2718,7 +2718,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 				  RTC::RTCList rtcs = m_namingManager->string_to_component(comps[i]);
 				  if (rtcs.length() == 0)
 				  {
-					  RTC_ERROR(("%s not found.", comps[i]));
+					  RTC_ERROR(("%s not found.", comps[i].c_str()));
 					  continue;
 				  }
 				  comp_ref = rtcs[0];
@@ -2728,11 +2728,11 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 			  RTC::ReturnCode_t ret = CORBA_RTCUtil::activate(comp_ref);
 			  if (ret != RTC::RTC_OK)
 			  {
-				  RTC_ERROR(("%s activation filed.", comps[i]));
+				  RTC_ERROR(("%s activation filed.", comps[i].c_str()));
 			  }
 			  else
 			  {
-				  RTC_INFO(("%s activated.", comps[i]));
+				  RTC_INFO(("%s activated.", comps[i].c_str()));
 			  }
 		  }
 		  

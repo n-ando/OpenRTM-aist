@@ -18,7 +18,7 @@
  */
 
 #include <rtm/InPortConnector.h>
-#include <rtm/OutPort.h>
+#include <rtm/OutPortBase.h>
 
 namespace RTC
 {

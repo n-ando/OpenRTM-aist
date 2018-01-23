@@ -512,7 +512,7 @@ namespace RTC
 		  CORBA::Object_ptr  mobj = m_orb->string_to_object(mgrloc.c_str());
 		  RTM::Manager_ptr mgr = RTM::Manager::_narrow(mobj);
 
-		  RTC_DEBUG(("corbaloc: %s", mgrloc));
+		  RTC_DEBUG(("corbaloc: %s", mgrloc.c_str()));
 
 		  return mgr;
 	  }
