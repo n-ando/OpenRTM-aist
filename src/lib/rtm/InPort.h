@@ -325,52 +325,6 @@ namespace RTC
       m_directNewData = true;
     }
 
-
-
-	bool getDirectData(InPortConnector *con, DataType &data)
-	{
-		OutPortBase *directOutPort = con->getOutPort();
-		ConnectorListeners& listeners = con->getListeners();
-		ConnectorListeners* outPortListeners = con->getOutportListeners();
-		ConnectorInfo& profile = con->profile();
-
-		if (directOutPort == NULL)
-		{
-			return false;
-		}
-		OutPort<DataType>* outport;
-		outport = static_cast<OutPort<DataType>*>(directOutPort);
-
-
-		if (outport->isEmpty())
-		{
-			listeners.
-				connector_[ON_BUFFER_EMPTY].notify(profile);
-			outPortListeners->
-				connector_[ON_SENDER_EMPTY].notify(profile);
-			RTC_PARANOID(("ON_BUFFER_EMPTY(InPort,OutPort), "
-				"ON_SENDER_EMPTY(InPort,OutPort) "
-				"callback called in direct mode."));
-		}
-		outport->read(data);
-		outPortListeners->connectorData_[ON_BUFFER_READ].notify(profile, data);
-		RTC_TRACE(("ON_BUFFER_READ(OutPort), "));
-		RTC_TRACE(("callback called in direct mode."));
-		outPortListeners->connectorData_[ON_SEND].notify(profile, data);
-		RTC_TRACE(("ON_SEND(OutPort), "));
-		RTC_TRACE(("callback called in direct mode."));
-		listeners.connectorData_[ON_RECEIVED].notify(profile, data);
-		RTC_TRACE(("ON_RECEIVED(InPort), "));
-		RTC_TRACE(("callback called in direct mode."));
-		listeners.connectorData_[ON_SEND].notify(profile, data);
-		RTC_TRACE(("ON_BUFFER_WRITE(InPort), "));
-		RTC_TRACE(("callback called in direct mode."));
-
-
-		return true;
-
-	};
-
     /*!
      * @if jp
      *
@@ -484,7 +438,7 @@ namespace RTC
         
       }
 
-	  if (!getDirectData(m_connectors[0], m_value))
+	  if (!m_connectors[0]->getDirectData(m_value))
 	  {
 		  {
 			  Guard guard(m_connectorsMutex);

@@ -59,7 +59,7 @@ namespace RTC
    *
    * @endif
    */
-  ConnectorInfo& OutPortConnector::profile()
+  const ConnectorInfo& OutPortConnector::profile()
   {
     RTC_TRACE(("profile()"));
     return m_profile;
@@ -176,18 +176,5 @@ namespace RTC
 	  m_directInPort = directInPort;
 	  m_inPortListeners = &(m_directInPort->getListeners());
 	  return true;
-  }
-
-  InPortBase* OutPortConnector::getInPort()
-  {
-	  return m_directInPort;
-  }
-  ConnectorListeners& OutPortConnector::getListeners()
-  {
-	  return m_listeners;
-  }
-  ConnectorListeners* OutPortConnector::getInportListeners()
-  {
-	  return m_inPortListeners;
   }
 }; // namespace RTC

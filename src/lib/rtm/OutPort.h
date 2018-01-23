@@ -166,55 +166,6 @@ namespace RTC
     virtual ~OutPort(void)
     {
     }
-
-	ReturnCode write(OutPortConnector *con, DataType& data)
-	{
-		InPortBase* directInPort = con->getInPort();
-		ConnectorListeners &listeners = con->getListeners();
-		ConnectorListeners *inPortListeners = con->getInportListeners();
-		ConnectorInfo& profile = con->profile();
-
-		if (directInPort != NULL)
-		{
-			InPort<DataType>* inport;
-			inport = static_cast<InPort<DataType>*>(directInPort);
-			if (inport->isNew())
-			{
-				// ON_BUFFER_OVERWRITE(In,Out), ON_RECEIVER_FULL(In,Out) callback
-				listeners.
-					connectorData_[ON_BUFFER_OVERWRITE].notify(profile, data);
-				inPortListeners->
-					connectorData_[ON_BUFFER_OVERWRITE].notify(profile, data);
-				listeners.
-					connectorData_[ON_RECEIVER_FULL].notify(profile, data);
-				inPortListeners->
-					connectorData_[ON_RECEIVER_FULL].notify(profile, data);
-				RTC_PARANOID(("ON_BUFFER_OVERWRITE(InPort,OutPort), "
-					"ON_RECEIVER_FULL(InPort,OutPort) "
-					"callback called in direct mode."));
-			}
-			// ON_BUFFER_WRITE(In,Out) callback
-			listeners.
-				connectorData_[ON_BUFFER_WRITE].notify(profile, data);
-			inPortListeners->
-				connectorData_[ON_BUFFER_WRITE].notify(profile, data);
-			RTC_PARANOID(("ON_BUFFER_WRITE(InPort,OutPort), "
-				"callback called in direct mode."));
-			inport->write(data); // write to InPort variable!!
-			// ON_RECEIVED(In,Out) callback
-			listeners.
-				connectorData_[ON_RECEIVED].notify(profile, data);
-			inPortListeners->
-				connectorData_[ON_RECEIVED].notify(profile, data);
-			RTC_PARANOID(("ON_RECEIVED(InPort,OutPort), "
-				"callback called in direct mode."));
-			return PORT_OK;
-		}
-		else
-		{
-			return con->write(data);
-		}
-	}
     
     /*!
      * @if jp
@@ -287,12 +238,12 @@ namespace RTC
 				if (m_onWriteConvert != NULL)
 				{
 					RTC_DEBUG(("m_connectors.OnWriteConvert called"));
-					ret = write(m_connectors[i], ((*m_onWriteConvert)(value)));
+					ret = m_connectors[i]->write(((*m_onWriteConvert)(value)));
 				}
 				else
 				{
 					RTC_DEBUG(("m_connectors.write called"));
-					ret = write(m_connectors[i], value);
+					ret = m_connectors[i]->write(value);
 				}
 			}
 			else
