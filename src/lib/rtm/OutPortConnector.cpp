@@ -59,7 +59,7 @@ namespace RTC
    *
    * @endif
    */
-  const ConnectorInfo& OutPortConnector::profile()
+  ConnectorInfo& OutPortConnector::profile()
   {
     RTC_TRACE(("profile()"));
     return m_profile;
@@ -145,7 +145,7 @@ namespace RTC
   *
   * @endif
   */
-  void OutPortConnector::setDirectMode()
+  void OutPortConnector::setPullDirectMode()
   {
 	  m_directMode = true;
   }
@@ -162,7 +162,7 @@ namespace RTC
   *
   * @endif
   */
-  bool OutPortConnector::directMode()
+  bool OutPortConnector::pullDirectMode()
   {
 	  return m_directMode;
   }
@@ -176,5 +176,18 @@ namespace RTC
 	  m_directInPort = directInPort;
 	  m_inPortListeners = &(m_directInPort->getListeners());
 	  return true;
+  }
+
+  InPortBase* OutPortConnector::getInPort()
+  {
+	  return m_directInPort;
+  }
+  ConnectorListeners& OutPortConnector::getListeners()
+  {
+	  return m_listeners;
+  }
+  ConnectorListeners* OutPortConnector::getInportListeners()
+  {
+	  return m_inPortListeners;
   }
 }; // namespace RTC

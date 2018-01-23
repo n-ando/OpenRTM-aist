@@ -429,7 +429,7 @@ namespace RTC
 					 
 					  rtc_list = (*mgr->get_components_by_name(rtc_name.c_str()));
 					  RTM::ManagerList* slaves = mgr->get_slave_managers();
-					  for (int i = 0; i < slaves->length(); i++)
+					  for (unsigned int i = 0; i < slaves->length(); i++)
 					  {
 						  
 						  try

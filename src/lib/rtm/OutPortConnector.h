@@ -85,7 +85,7 @@ namespace RTC
      *
      * @endif
      */
-    const ConnectorInfo& profile();
+    ConnectorInfo& profile();
 
     /*!
      * @if jp
@@ -212,42 +212,7 @@ namespace RTC
     template <class DataType>
     ReturnCode write(DataType& data)
     {
-      if (m_directInPort != NULL)
-        {
-          InPort<DataType>* inport;
-          inport = static_cast<InPort<DataType>*>(m_directInPort);
-          if (inport->isNew())
-            {
-              // ON_BUFFER_OVERWRITE(In,Out), ON_RECEIVER_FULL(In,Out) callback
-              m_listeners.
-                connectorData_[ON_BUFFER_OVERWRITE].notify(m_profile, data);
-              m_inPortListeners->
-                connectorData_[ON_BUFFER_OVERWRITE].notify(m_profile, data);
-              m_listeners.
-                connectorData_[ON_RECEIVER_FULL].notify(m_profile, data);
-              m_inPortListeners->
-                connectorData_[ON_RECEIVER_FULL].notify(m_profile, data);
-              RTC_PARANOID(("ON_BUFFER_OVERWRITE(InPort,OutPort), "
-                            "ON_RECEIVER_FULL(InPort,OutPort) "
-                            "callback called in direct mode."));
-            }
-          // ON_BUFFER_WRITE(In,Out) callback
-          m_listeners.
-            connectorData_[ON_BUFFER_WRITE].notify(m_profile, data);
-          m_inPortListeners->
-            connectorData_[ON_BUFFER_WRITE].notify(m_profile, data);
-          RTC_PARANOID(("ON_BUFFER_WRITE(InPort,OutPort), "
-                            "callback called in direct mode."));
-          inport->write(data); // write to InPort variable!!
-          // ON_RECEIVED(In,Out) callback
-          m_listeners.
-            connectorData_[ON_RECEIVED].notify(m_profile, data);
-          m_inPortListeners->
-            connectorData_[ON_RECEIVED].notify(m_profile, data);
-          RTC_PARANOID(("ON_RECEIVED(InPort,OutPort), "
-                        "callback called in direct mode."));
-          return PORT_OK;
-        }
+ 
       // normal case
       m_cdr.rewindPtrs();
       RTC_TRACE(("connector endian: %s", isLittleEndian() ? "little":"big"));
@@ -268,7 +233,7 @@ namespace RTC
 	*
 	* @endif
 	*/
-	virtual void setDirectMode();
+	virtual void setPullDirectMode();
 	/*!
 	* @if jp
 	* @brief ダイレクト接続モードかの判定
@@ -281,7 +246,11 @@ namespace RTC
 	*
 	* @endif
 	*/
-	virtual bool directMode();
+	virtual bool pullDirectMode();
+	virtual InPortBase* getInPort();
+	virtual ConnectorListeners& getListeners();
+	virtual ConnectorListeners* getInportListeners();
+
   protected:
     /*!
      * @if jp

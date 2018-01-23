@@ -1052,7 +1052,7 @@ namespace RTC
 
 		if (coil::normalize(prop["interface_type"]) == "direct")
 		{
-			connector->setDirectMode();
+			connector->setPullDirectMode();
 		}
 
         m_connectors.push_back(connector);
