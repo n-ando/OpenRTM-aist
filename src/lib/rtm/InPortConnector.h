@@ -23,11 +23,12 @@
 #include <rtm/ConnectorListener.h>
 #include <rtm/ConnectorBase.h>
 #include <rtm/DirectOutPortBase.h>
+#include <rtm/PortBase.h>
 
 
 namespace RTC
 {
-	class OutPortBase;
+  class OutPortBase;
   /*!
    * @if jp
    * @class InPortConnector
@@ -351,7 +352,7 @@ namespace RTC
 	* @brief OutProt pointer to the peer in the same process
 	* @endif
 	*/
-	OutPortBase* m_directOutPort;
+	PortBase* m_directOutPort;
 
   };
 }; // namespace RTC
