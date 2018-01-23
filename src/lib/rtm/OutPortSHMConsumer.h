@@ -211,7 +211,7 @@ namespace RTC
      * @endif
      */
     OutPortConsumer::ReturnCode convertReturn(::OpenRTM::PortStatus status,
-                                              const cdrMemoryStream& data);
+                                              cdrMemoryStream& data);
 
     /*!
      * @if jp

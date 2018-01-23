@@ -248,7 +248,7 @@ namespace RTC
   *
   * @endif
   */
-	void SharedMemoryPort::write(const cdrMemoryStream& data)
+	void SharedMemoryPort::write(cdrMemoryStream& data)
   {
 	  CORBA::ULongLong data_size = (CORBA::ULongLong)data.bufSize();
 	  if (data_size + sizeof(CORBA::ULongLong) > m_shmem.get_size())
