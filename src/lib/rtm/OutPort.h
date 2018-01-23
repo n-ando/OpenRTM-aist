@@ -247,6 +247,17 @@ namespace RTC
 			}
 			else
 			{
+				Guard guard(m_valueMutex);
+				if (m_onWriteConvert != NULL)
+				{
+					RTC_DEBUG(("m_connectors.OnWriteConvert called"));
+					m_directValue = ((*m_onWriteConvert)(value));
+				}
+				else
+				{
+					m_directValue = value;
+				}
+				m_directNewData = true;
 				ret = PORT_OK;
 			}
             m_status[i] = ret;
@@ -296,7 +307,6 @@ namespace RTC
      */
     bool write()
     {
-		Guard guard(m_valueMutex);
       return write(m_value);
     }
     
@@ -496,18 +506,11 @@ namespace RTC
 	{
 		Guard guard(m_valueMutex);
 		m_directNewData = false;
-		if (m_onWriteConvert != NULL)
-		{
-			data = (*m_onWriteConvert)(m_value);
-		}
-		else
-		{
-			data = m_value;
-		}
+		data = m_directValue;
 	}
 	bool isEmpty()
 	{
-		return false;
+		return !m_directNewData;
 	}
     
   private:
@@ -547,6 +550,7 @@ namespace RTC
 
 	coil::Mutex m_valueMutex;
 	bool m_directNewData;
+	DataType m_directValue;
   };
 }; // namespace RTC
 
