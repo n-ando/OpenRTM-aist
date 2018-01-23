@@ -754,4 +754,61 @@ namespace coil
     return std::string(str);
   }
 
+
+  /*!
+  * @if jp
+  * @brief 文字列中の環境変数を置き換える
+  *
+  *
+  *
+  * 文字列中に${}で囲まれた文字列がある場合に、環境変数と置き換える
+  * 例：${RTM_ROOT}\bin -> C:\Program Files (x86)\OpenRTM-aist\1.1.2\
+  *
+  * @param str 置き換え前の文字列
+  * @return 置き換え後の文字列
+  *
+  * @else
+  * @brief
+  *
+  * @param str
+  * @return
+  *
+  * @return
+  *
+  * @endif
+  */
+  std::string replaceEnv(std::string str)
+  {
+	  vstring tmp = split(str, "${");
+	  if (tmp.size() < 2)
+	  {
+		  return str;
+	  }
+	  vstring ret;
+	  for (vstring::iterator itr = tmp.begin(); itr != tmp.end(); ++itr)
+	  {
+		  vstring tmp2 = split((*itr), "}");
+		  if (tmp2.size() == 2)
+		  {
+			  char s[100];
+			  strcpy(s, coil::getenv(tmp2[0].c_str()));
+			  ret.push_back(std::string(s));
+			  ret.push_back(tmp2[1]);
+		  }
+		  else
+		  {
+			  ret.push_back((*itr));
+		  }
+		  
+	  }
+
+
+	  std::string ret_str = "";
+	  for (vstring::iterator itr = ret.begin(); itr != ret.end(); ++itr)
+	  {
+		  ret_str = ret_str + (*itr);
+	  }
+	  return ret_str;
+  }
+
 }; // namespace coil
