@@ -32,6 +32,7 @@
 #include <rtm/SystemLogger.h>
 #include <rtm/PortConnectListener.h>
 #include <iostream>
+#include <rtm/DirectPortBase.h>
 
 #ifdef WIN32
 #pragma warning( disable : 4290 )
@@ -1272,6 +1273,20 @@ namespace RTC
      */
     void setPortConnectListenerHolder(PortConnectListeners* portconnListeners);
 
+	/*!
+	* @if jp
+	* @brief direct通信用ポートオブジェクト取得
+	*
+	* @return ポートのポインタ
+	*
+	* @else
+	* @brief 
+	*
+	* @return
+	*
+	* @endif
+	*/
+	virtual DirectPortBase* getDirectPort();
     //============================================================
     // protected operations
     //============================================================
@@ -2216,6 +2231,8 @@ namespace RTC
      * @endif
      */
     PortConnectListeners* m_portconnListeners;
+
+	DirectPortBase *m_directport;
 
     //============================================================
     // Functor

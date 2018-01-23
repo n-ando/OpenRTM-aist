@@ -22,6 +22,7 @@
 
 #include <rtm/ConnectorListener.h>
 #include <rtm/ConnectorBase.h>
+#include <rtm/DirectOutPortBase.h>
 
 
 namespace RTC
@@ -261,8 +262,8 @@ namespace RTC
 		{
 			return false;
 		}
-		OutPort<DataType>* outport;
-		outport = static_cast<OutPort<DataType>*>(m_directOutPort);
+		DirectOutPortBase<DataType>* outport;
+		outport = static_cast<DirectOutPortBase<DataType>*>(m_directOutPort->getDirectPort());
 		
 		
 		if (outport->isEmpty())

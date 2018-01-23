@@ -23,6 +23,7 @@
 #include <rtm/SystemLogger.h>
 #include <rtm/ConnectorBase.h>
 #include <rtm/ConnectorListener.h>
+#include <rtm/DirectInPortBase.h>
 
 
 
@@ -214,8 +215,8 @@ namespace RTC
     {
       if (m_directInPort != NULL)
         {
-          InPort<DataType>* inport;
-          inport = static_cast<InPort<DataType>*>(m_directInPort);
+			DirectInPortBase<DataType>* inport = static_cast<DirectInPortBase<DataType>*>(m_directInPort->getDirectPort());
+			
           if (inport->isNew())
             {
               // ON_BUFFER_OVERWRITE(In,Out), ON_RECEIVER_FULL(In,Out) callback

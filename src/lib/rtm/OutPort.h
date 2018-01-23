@@ -35,6 +35,7 @@
 #include <rtm/PortCallback.h>
 #include <rtm/OutPortConnector.h>
 #include <rtm/Timestamp.h>
+#include <rtm/DirectOutPortBase.h>
 
 /*!
  * @if jp
@@ -105,7 +106,7 @@ namespace RTC
    */
   template <class DataType>
   class OutPort
-    : public OutPortBase
+	  : public OutPortBase, DirectOutPortBase<DataType>
   {
 	  typedef coil::Guard<coil::Mutex> Guard;
   public:
@@ -138,13 +139,15 @@ namespace RTC
 #else
       : OutPortBase(name, ::CORBA_Util::toRepositoryId<DataType>()),
 #endif
-	  m_value(value), m_onWrite(0), m_onWriteConvert(0), m_directNewData(false)
+	  DirectOutPortBase<DataType>(value),
+	  m_value(value), m_onWrite(0), m_onWriteConvert(0)
     {
 
       this->addConnectorDataListener(ON_BUFFER_WRITE,
                                      new Timestamp<DataType>("on_write"));
       this->addConnectorDataListener(ON_SEND,
                                      new Timestamp<DataType>("on_send"));
+	  m_directport = this;
 
     }
     
@@ -503,15 +506,19 @@ namespace RTC
 	*
 	* @endif
 	*/
-	void read(DataType& data)
+	virtual void read(DataType& data)
 	{
 		Guard guard(m_valueMutex);
 		m_directNewData = false;
 		data = m_directValue;
 	}
-	bool isEmpty()
+	virtual bool isEmpty()
 	{
 		return !m_directNewData;
+	}
+	virtual bool isNew()
+	{
+		return m_directNewData;
 	}
     
   private:
@@ -549,9 +556,7 @@ namespace RTC
 
     CORBA::Long m_propValueIndex;
 
-	coil::Mutex m_valueMutex;
-	bool m_directNewData;
-	DataType m_directValue;
+
   };
 }; // namespace RTC
 
