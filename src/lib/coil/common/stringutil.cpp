@@ -27,6 +27,7 @@
 #include <string.h>
 #include <cctype>
 #include <cstdio>
+#include <coil/OS.h>
 
 #ifdef __QNX__
 using std::toupper;
