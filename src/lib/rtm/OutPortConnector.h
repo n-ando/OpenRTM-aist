@@ -22,12 +22,13 @@
 
 #include <rtm/SystemLogger.h>
 #include <rtm/ConnectorBase.h>
-#include <rtm/InPortBase.h>
-#include <rtm/InPort.h>
+#include <rtm/ConnectorListener.h>
+
 
 
 namespace RTC
 {
+	class InPortBase;
   /*!
    * @if jp
    * @class OutPortConnector
@@ -255,16 +256,32 @@ namespace RTC
       return write(m_cdr);
     }
 
-    bool setInPort(InPortBase* directInPort)
-    {
-      if (directInPort == NULL)
-        {
-          return false;
-        }
-      m_directInPort = directInPort;
-      m_inPortListeners = &(m_directInPort->getListeners());
-      return true;
-    }
+	bool setInPort(InPortBase* directInPort);
+	/*!
+	* @if jp
+	* @brief ダイレクト接続モードに設定
+	*
+	*
+	* @else
+	* @brief
+	*
+	*
+	* @endif
+	*/
+	virtual void setDirectMode();
+	/*!
+	* @if jp
+	* @brief ダイレクト接続モードかの判定
+	*
+	* @return True：ダイレクト接続モード,false：それ以外
+	*
+	* @else
+	* @brief
+	*
+	*
+	* @endif
+	*/
+	virtual bool directMode();
   protected:
     /*!
      * @if jp
@@ -325,6 +342,8 @@ namespace RTC
      * @endif
      */
     ConnectorListeners* m_inPortListeners;
+
+	bool m_directMode;
 
   };
 }; // namespace RTC

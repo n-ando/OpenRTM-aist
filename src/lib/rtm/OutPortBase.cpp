@@ -29,6 +29,8 @@
 #include <rtm/OutPortBase.h>
 #include <rtm/PublisherBase.h>
 
+#include <rtm/InPortBase.h>
+
 namespace RTC
 {
   /*!
@@ -1047,6 +1049,12 @@ namespace RTC
           }
         RTC_TRACE(("OutPortPullConnector created"));
 
+
+		if (coil::normalize(prop["interface_type"]) == "direct")
+		{
+			connector->setDirectMode();
+		}
+
         m_connectors.push_back(connector);
         RTC_PARANOID(("connector pushback done: size = %d", m_connectors.size()));
         return connector;
@@ -1128,6 +1136,11 @@ namespace RTC
 
 
 	  return PortBase::notify_connect(connector_profile);
+  }
+
+  ConnectorListeners& OutPortBase::getListeners()
+  {
+	  return m_listeners;
   }
 
 }; // end of namespace RTM

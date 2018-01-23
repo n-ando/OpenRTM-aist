@@ -18,6 +18,7 @@
  */
 
 #include <rtm/OutPortConnector.h>
+#include <rtm/InPortBase.h>
 
 namespace RTC
 {
@@ -31,7 +32,7 @@ namespace RTC
   OutPortConnector::OutPortConnector(ConnectorInfo& info,
                                      ConnectorListeners& listeners)
     : rtclog("OutPortConnector"), m_profile(info), m_littleEndian(true),
-      m_directInPort(NULL), m_listeners(listeners)
+	m_directInPort(NULL), m_listeners(listeners), m_directMode(false)
   {
   }
 
@@ -133,4 +134,47 @@ namespace RTC
     return m_littleEndian;
   }
 
+  /*!
+  * @if jp
+  * @brief ダイレクト接続モードに設定
+  *
+  *
+  * @else
+  * @brief
+  *
+  *
+  * @endif
+  */
+  void OutPortConnector::setDirectMode()
+  {
+	  m_directMode = true;
+  }
+
+  /*!
+  * @if jp
+  * @brief ダイレクト接続モードかの判定
+  *
+  * @return True：ダイレクト接続モード,false：それ以外
+  *
+  * @else
+  * @brief
+  *
+  *
+  * @endif
+  */
+  bool OutPortConnector::directMode()
+  {
+	  return m_directMode;
+  }
+
+  bool OutPortConnector::setInPort(InPortBase* directInPort)
+  {
+	  if (directInPort == NULL)
+	  {
+		  return false;
+	  }
+	  m_directInPort = directInPort;
+	  m_inPortListeners = &(m_directInPort->getListeners());
+	  return true;
+  }
 }; // namespace RTC

@@ -435,35 +435,47 @@ namespace RTC
             return false;
           }
 
-        // In single-buffer mode, all connectors share the same buffer. This
-        // means that we only need to read from the first connector to get data
-        // received by any connector.
-        ret = m_connectors[0]->read(cdr);
-        m_status[0] = ret;
+        
       }
-      if (ret == PORT_OK)
-        {
-          Guard guard(m_valueMutex);
-          RTC_DEBUG(("data read succeeded"));
-          m_value <<= cdr;
-          if (m_OnReadConvert != 0) 
-            {
-              m_value = (*m_OnReadConvert)(m_value);
-              RTC_DEBUG(("OnReadConvert called"));
-              return true;
-            }
-          return true;
-        }
-      else if (ret == BUFFER_EMPTY)
-        {
-          RTC_WARN(("buffer empty"));
-          return false;
-        }
-      else if (ret == BUFFER_TIMEOUT)
-        {
-          RTC_WARN(("buffer read timeout"));
-          return false;
-        }
+
+	  if (!m_connectors[0]->getDirectData(m_value))
+	  {
+		  {
+			  Guard guard(m_connectorsMutex);
+			  // In single-buffer mode, all connectors share the same buffer. This
+			  // means that we only need to read from the first connector to get data
+			  // received by any connector.
+			  ret = m_connectors[0]->read(cdr);
+		  }
+		  m_status[0] = ret;
+		  if (ret == PORT_OK)
+		  {
+			  Guard guard(m_valueMutex);
+			  RTC_DEBUG(("data read succeeded"));
+			  m_value <<= cdr;
+			  if (m_OnReadConvert != 0)
+			  {
+				  m_value = (*m_OnReadConvert)(m_value);
+				  RTC_DEBUG(("OnReadConvert called"));
+				  return true;
+			  }
+			  return true;
+		  }
+		  else if (ret == BUFFER_EMPTY)
+		  {
+			  RTC_WARN(("buffer empty"));
+			  return false;
+		  }
+		  else if (ret == BUFFER_TIMEOUT)
+		  {
+			  RTC_WARN(("buffer read timeout"));
+			  return false;
+		  }
+	  }
+	  else
+	  {
+		  return true;
+	  }
       RTC_ERROR(("unknown retern value from buffer.read()"));
       return false;
     }

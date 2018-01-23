@@ -106,6 +106,7 @@ namespace RTC
   class OutPort
     : public OutPortBase
   {
+	  typedef coil::Guard<coil::Mutex> Guard;
   public:
     /*!
      * @if jp
@@ -136,7 +137,7 @@ namespace RTC
 #else
       : OutPortBase(name, ::CORBA_Util::toRepositoryId<DataType>()),
 #endif
-        m_value(value), m_onWrite(0), m_onWriteConvert(0)
+	  m_value(value), m_onWrite(0), m_onWriteConvert(0), m_directNewData(false)
     {
 
       this->addConnectorDataListener(ON_BUFFER_WRITE,
@@ -216,6 +217,7 @@ namespace RTC
           RTC_TRACE(("OnWrite called"));
         }
 
+
       bool result(true);
       std::vector<const char *> disconnect_ids;
       {
@@ -228,18 +230,27 @@ namespace RTC
 
         for (size_t i(0), len(conn_size); i < len; ++i)
           {
+
             ReturnCode ret;
-            if (m_onWriteConvert != NULL)
-              {
-                RTC_DEBUG(("m_connectors.OnWriteConvert called"));
-                ret = m_connectors[i]->write(((*m_onWriteConvert)(value)));
-              }
-            else
-              {
-                RTC_DEBUG(("m_connectors.write called"));
-                ret = m_connectors[i]->write(value);
-              }
+			if (!m_connectors[i]->directMode())
+			{
+				if (m_onWriteConvert != NULL)
+				{
+					RTC_DEBUG(("m_connectors.OnWriteConvert called"));
+					ret = m_connectors[i]->write(((*m_onWriteConvert)(value)));
+				}
+				else
+				{
+					RTC_DEBUG(("m_connectors.write called"));
+					ret = m_connectors[i]->write(value);
+				}
+			}
+			else
+			{
+				ret = PORT_OK;
+			}
             m_status[i] = ret;
+
             if (ret == PORT_OK) { continue; }
       
             result = false;
@@ -285,6 +296,7 @@ namespace RTC
      */
     bool write()
     {
+		Guard guard(m_valueMutex);
       return write(m_value);
     }
     
@@ -463,6 +475,40 @@ namespace RTC
     {
       m_onWriteConvert = on_wconvert;
     }
+
+
+	/*!
+	* @if jp
+	*
+	* @brief データをダイレクトに読み込む
+	*
+	* @param data 読み込むデータ
+	*
+	* @else
+	*
+	* @brief 
+	*
+	* @param data
+	*
+	* @endif
+	*/
+	void read(DataType& data)
+	{
+		Guard guard(m_valueMutex);
+		m_directNewData = false;
+		if (m_onWriteConvert != NULL)
+		{
+			data = (*m_onWriteConvert)(m_value);
+		}
+		else
+		{
+			data = m_value;
+		}
+	}
+	bool isEmpty()
+	{
+		return false;
+	}
     
   private:
     std::string m_typename;
@@ -498,6 +544,9 @@ namespace RTC
     DataPortStatusList m_status;
 
     CORBA::Long m_propValueIndex;
+
+	coil::Mutex m_valueMutex;
+	bool m_directNewData;
   };
 }; // namespace RTC
 

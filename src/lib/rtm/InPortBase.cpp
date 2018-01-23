@@ -1015,6 +1015,25 @@ namespace RTC
 
         // endian type set
         connector->setEndian(m_littleEndian);
+
+
+		if (coil::normalize(prop["interface_type"]) == "direct")
+		{
+			OutPortBase* outport = getLocalOutPort(profile);
+			if (outport == NULL)
+			{
+				RTC_DEBUG(("interface_type is direct, "
+					"but a peer InPort servant could not be obtained."));
+				delete connector;
+				return 0;
+			}
+			
+
+			connector->setOutPort(outport);
+
+			
+		}
+
         m_connectors.push_back(connector);
         RTC_PARANOID(("connector push backed: %d", m_connectors.size()));
         return connector;
@@ -1031,6 +1050,43 @@ namespace RTC
   ConnectorListeners& InPortBase::getListeners()
   {
    return m_listeners; 
+  }
+
+  /*!
+  * @if jp
+  * @brief ローカルのピアOutPortを取得
+  * @else
+  * @brief Getting local peer OutPort if available
+  * @endif
+  */
+  OutPortBase*
+	  InPortBase::getLocalOutPort(const ConnectorInfo& profile)
+  {
+	  RTC_DEBUG(("Trying direct port connection."));
+	  CORBA::ORB_var orb = ::RTC::Manager::instance().getORB();
+	  RTC_DEBUG(("Current connector profile: name=%s, id=%s",
+		  profile.name.c_str(), profile.id.c_str()));
+	  // finding peer port object
+	  for (size_t i = 0; i < profile.ports.size(); ++i)
+	  {
+		  CORBA::Object_var obj;
+		  obj = orb->string_to_object(profile.ports[i].c_str());
+		  if (getPortRef()->_is_equivalent(obj)) { continue; }
+		  RTC_DEBUG(("Peer port found: %s.", profile.ports[i].c_str()));
+		  try
+		  {
+			  PortableServer::POA_var poa = ::RTC::Manager::instance().getPOA();
+			  OutPortBase* outport = dynamic_cast<OutPortBase*>
+				  (poa->reference_to_servant(obj));
+			  RTC_DEBUG(("OutPortBase servant pointer is obtained."));
+			  return outport;
+		  }
+		  catch (...)
+		  {
+			  RTC_DEBUG(("Peer port might be a remote port"));
+		  }
+	  }
+	  return NULL;
   }
 
   ReturnCode_t InPortBase::notify_connect(ConnectorProfile& connector_profile)
