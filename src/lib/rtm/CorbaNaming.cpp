@@ -35,7 +35,7 @@ namespace RTC
    * @endif
    */
   CorbaNaming::CorbaNaming(CORBA::ORB_ptr orb)
-    : m_varORB(orb), m_nameServer(""),
+    : m_ptrORB(orb), m_nameServer(""),
       m_rootContext(CosNaming::NamingContextExt::_nil()),
       m_blLength(100)
   {
@@ -49,7 +49,7 @@ namespace RTC
    * @endif
    */
   CorbaNaming::CorbaNaming(CORBA::ORB_ptr orb, const char* name_server)
-    : m_varORB(orb), m_nameServer(name_server),
+    : m_ptrORB(orb), m_nameServer(name_server),
       m_rootContext(CosNaming::NamingContextExt::_nil()),
       m_blLength(100)
   {
@@ -57,7 +57,7 @@ namespace RTC
     m_nameServer = "corbaloc::" + m_nameServer + "/NameService";
     try
       {
-        obj = m_varORB->string_to_object(m_nameServer.c_str());
+        obj = m_ptrORB->string_to_object(m_nameServer.c_str());
         m_rootContext = CosNaming::NamingContextExt::_narrow(obj);
         if (CORBA::is_nil(m_rootContext)) throw std::bad_alloc();
       }
@@ -79,7 +79,7 @@ namespace RTC
     m_nameServer = name_server;
     m_nameServer = "corbaloc::" + m_nameServer + "/NameService";
     CORBA::Object_var obj;
-    obj = m_varORB->string_to_object(m_nameServer.c_str());
+    obj = m_ptrORB->string_to_object(m_nameServer.c_str());
     m_rootContext = CosNaming::NamingContextExt::_narrow(obj);
     if (CORBA::is_nil(m_rootContext)) throw std::bad_alloc();
   }

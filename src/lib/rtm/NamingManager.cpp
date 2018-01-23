@@ -284,7 +284,7 @@ namespace RTC
 					  }
 					  else
 					  {
-						  CORBA::ORB_ptr orb = Manager::instance().getORB();
+						  CORBA::ORB_var orb = Manager::instance().getORB();
 						  
 						  cns = RTC::CorbaNaming(orb, host.c_str());
 					  }

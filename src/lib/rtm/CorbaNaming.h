@@ -1681,7 +1681,7 @@ namespace RTC
      * @brief ORB
      * @endif
      */
-    CORBA::ORB_var m_varORB;
+    CORBA::ORB_ptr m_ptrORB;
     
     /*!
      * @if jp
