@@ -121,10 +121,12 @@ PORT_SRC =                           \
 	InPortCorbaCdrConsumer.cpp   \
 	InPortDirectProvider.cpp     \
 	InPortDirectConsumer.cpp     \
-	InPortSHMConsumer.cpp     \
-	InPortSHMProvider.cpp     \
-	OutPortSHMConsumer.cpp     \
-	OutPortSHMProvider.cpp     \
+	InPortSHMConsumer.cpp        \
+	InPortSHMProvider.cpp        \
+	OutPortSHMConsumer.cpp       \
+	OutPortSHMProvider.cpp       \
+	OutPortDirectConsumer.cpp    \
+	OutPortDirectProvider.cpp    \
 	SharedMemoryPort.cpp
 
 
