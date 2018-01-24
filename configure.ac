@@ -134,7 +134,56 @@ AC_ARG_ENABLE(artlinux,       [  --with-artlinux                 With ART-Linux]
 AC_ARG_ENABLE(sockdataport,   [  --with-sockdataport             With Socket DataPort])
 AC_ARG_ENABLE(unittest,       [  --enable-test                   Enable UnitTest With CppUnit])
 
+#============================================================
+# Linking observer ext module options
+#
+#------------------------------------------------------------
+# Component Observer SDO module
+AC_ARG_ENABLE(observer,       [  --enable-observer               Turn on observer module linked in libRTC [[default=yes]]],
+[\
+case "${enableval}" in
+ yes) enable_observer=yes ;;
+ no)  enable_observer=no ;;
+ *)   AC_MSG_ERROR(bad value for --enable-observer) ;;
+esac],
+enable_observer=yes)
+AM_CONDITIONAL(ENABLE_OBSERVER, test x"${enable_observer}" = xyes)
+if test x"${enable_observer}" = xyes ; then
+   AC_DEFINE([ENABLE_OBSERVER], [TRUE], [Component Observer embedded.])
+fi
+#------------------------------------------------------------
 
+#------------------------------------------------------------
+# Fluent-bit logger module
+AC_ARG_ENABLE(fluentd,       [  --enable-fluentd                 Turn on fluentd logger module linked in libRTC [[default=yes]]],
+[\
+case "${enableval}" in
+ yes) enable_fluentd=yes ;;
+ no)  enable_fluentd=no ;;
+ *)   AC_MSG_ERROR(bad value for --enable-fluentd) ;;
+esac],
+enable_fluentd=yes)
+AM_CONDITIONAL(ENABLE_FLUENTD, test x"${enable_fluentd}" = xyes)
+if test x"${enable_fluentd}" = xyes ; then
+   AC_DEFINE([ENABLE_FLUENTD], [TRUE], [Fluentd logger embedded.])
+fi
+#------------------------------------------------------------
+
+#------------------------------------------------------------
+# SSL transport module
+AC_ARG_ENABLE(ssl,           [  --enable-ssl                      Turn on SSL transport module linked in libRTC [[default=yes]]],
+[\
+case "${enableval}" in
+ yes) enable_ssl=yes ;;
+ no)  enable_ssl=no ;;
+ *)   AC_MSG_ERROR(bad value for --enable-ssl) ;;
+esac],
+enable_ssl=yes)
+AM_CONDITIONAL(ENABLE_SSL, test x"${enable_ssl}" = xyes)
+if test x"${enable_ssl}" = xyes ; then
+   AC_DEFINE([ENABLE_SSL], [TRUE], [SSL transport embedded.])
+fi
+#------------------------------------------------------------
 
 
 dnl ------------------------------------------------------------
