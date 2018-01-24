@@ -62,8 +62,7 @@ namespace RTC
      *
      * @endif
      */
-	DirectOutPortBase(DataType& value):
-	m_directNewData(false), m_directValue(value)
+	DirectOutPortBase(DataType& value)
 	{
 	}
 	/*!
@@ -111,7 +110,7 @@ namespace RTC
 	*/
 	virtual bool isNew()
 	{
-		return !m_directNewData;
+		return false;
 	}
 	/*!
 	* @if jp
@@ -128,13 +127,10 @@ namespace RTC
 	*/
 	virtual bool isEmpty()
 	{
-		return !m_directNewData;
+		return true;
 	}
     
   protected:
-	coil::Mutex m_valueMutex;
-	bool m_directNewData;
-	DataType m_directValue;
   };
 }; // namespace RTC
 

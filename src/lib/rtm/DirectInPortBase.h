@@ -20,6 +20,7 @@
 
 
 #include <coil/Mutex.h>
+#include <rtm/DirectPortBase.h>
 
 
 
@@ -60,8 +61,7 @@ namespace RTC
 	  *
 	  * @endif
 	  */
-    DirectInPortBase(DataType& value):
-        m_directNewData(false), m_value(value)
+    DirectInPortBase(DataType& value)
     {
     }
     
@@ -107,7 +107,7 @@ namespace RTC
      */
     virtual bool isNew()
     {
-      return m_directNewData;
+		return false;
     }
 
     /*!
@@ -135,7 +135,7 @@ namespace RTC
      */
     virtual bool isEmpty()
     {
-      return !m_directNewData;
+		return true;
     }
 
 	/*!
@@ -158,25 +158,7 @@ namespace RTC
 
   protected:
     
-    /*!
-     * @if jp
-     * @brief バインドされる T 型の変数への参照
-     * @else
-     * @brief The reference to type-T value bound this OutPort
-     * @endif
-     */
-    DataType& m_value;
-    mutable coil::Mutex m_valueMutex;
-    
 
-    /*!
-     * @if jp
-     * @brief ダイレクトデータ転送フラグ
-     * @else
-     * @brief A flag for direct data transfer
-     * @endif
-     */
-    bool m_directNewData;
   };
 }; // End of namesepace RTM
 

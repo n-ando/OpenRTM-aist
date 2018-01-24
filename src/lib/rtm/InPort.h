@@ -158,9 +158,9 @@ namespace RTC
       :	InPortBase(name, ::CORBA_Util::toRepositoryId<DataType>()),
 #endif
 	  DirectInPortBase<DataType>(value),
-        m_name(name), 
+        m_name(name), m_value(value),
         m_OnRead(NULL),  m_OnReadConvert(NULL),
-        m_status(1)
+        m_status(1), m_directNewData(false)
     {
       this->addConnectorDataListener(ON_RECEIVED,
                                      new Timestamp<DataType>("on_received"));
@@ -704,6 +704,26 @@ namespace RTC
      * @endif
      */
     DataPortStatusList m_status;
+
+    /*!
+     * @if jp
+     * @brief バインドされる T 型の変数への参照
+     * @else
+     * @brief The reference to type-T value bound this OutPort
+     * @endif
+     */
+    DataType& m_value;
+    mutable coil::Mutex m_valueMutex;
+    
+
+    /*!
+     * @if jp
+     * @brief ダイレクトデータ転送フラグ
+     * @else
+     * @brief A flag for direct data transfer
+     * @endif
+     */
+    bool m_directNewData;
 
 
   };

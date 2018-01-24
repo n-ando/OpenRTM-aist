@@ -140,7 +140,8 @@ namespace RTC
       : OutPortBase(name, ::CORBA_Util::toRepositoryId<DataType>()),
 #endif
 	  DirectOutPortBase<DataType>(value),
-	  m_value(value), m_onWrite(0), m_onWriteConvert(0)
+	  m_value(value), m_onWrite(0), m_onWriteConvert(0),
+	  m_directNewData(false), m_directValue(value)
     {
 
       this->addConnectorDataListener(ON_BUFFER_WRITE,
@@ -555,6 +556,10 @@ namespace RTC
     DataPortStatusList m_status;
 
     CORBA::Long m_propValueIndex;
+
+    coil::Mutex m_valueMutex;
+    bool m_directNewData;
+    DataType m_directValue;
 
 
   };
