@@ -70,6 +70,23 @@ OBSERVER_OBJ=$(OBSERVER_DIST_SRC:.cpp=.o)
 # Targets directories
 socompdir = $(rtm_sdodir)
 
+#------------------------------
+# Static link library for linked in libRTC.so
+if ENABLE_OBSERVER
+noinst_LTLIBRARIES = \
+	libComponentObserverStub.la \
+	libComponentObserverConsumer.la
+nodist_libComponentObserverStub_la_SOURCES =  $(IDL_SOURCES:.idl=Stub.cpp)
+
+nodist_libComponentObserverConsumer_la_SOURCES = \
+	$(OBSERVER_DIST_SRC) $(OBSERVER_DIST_H)
+nodist_libComponentObserverConsumer_la_LDFLAGS = -module
+nodist_libComponentObserverConsumer_la_DEPENDENCIES = \
+	libComponentObserverStub.la
+nodist_libComponentObserverConsumer_la_LIBADD  =      \
+	libComponentObserverStub.la
+else
+#------------------------------
 # Loadable Module
 noinst_LTLIBRARIES = libComponentObserverStub.la
 nodist_libComponentObserverStub_la_SOURCES =  $(IDL_SOURCES:.idl=Stub.cpp)
@@ -81,9 +98,11 @@ dist_ComponentObserverConsumer_la_SOURCES = \
 ComponentObserverConsumer_la_LDFLAGS = -module
 ComponentObserverConsumer_la_DEPENDENCIES = libComponentObserverStub.la
 ComponentObserverConsumer_la_LIBADD  =                \
-	libComponentObserverStub.la                   \
+	libComponentObserverStub.la                   
 	$(top_builddir)/src/lib/rtm/libRTC.la         \
 	$(top_builddir)/src/lib/coil/lib/libcoil.la
+endif
+#------------------------------
 
 #------------------------------------------------------------
 # Extra distributed files
