@@ -49,6 +49,10 @@
 #include <rtm/NamingServiceNumberingPolicy.h>
 #include <rtm/NodeNumberingPolicy.h>
 
+#ifdef ENABLE_OBSERVER
+#include <ext/sdo/observer/ComponentObserverConsumer.h>
+#endif
+
 void FactoryInit()
 {
     // Logstream
@@ -83,4 +87,9 @@ void FactoryInit()
     ProcessUniquePolicyInit();
 	NamingServiceNumberingPolicyInit();
 	NodeNumberingPolicyInit();
+
+    // SDO services
+#ifdef ENABLE_OBSERVER
+    ComponentObserverConsumerInit();
+#endif
 }
