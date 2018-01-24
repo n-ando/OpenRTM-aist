@@ -41,6 +41,10 @@
 #include <rtm/InPortSHMConsumer.h>
 #include <rtm/OutPortSHMProvider.h>
 #include <rtm/OutPortSHMConsumer.h>
+#ifdef ORB_IS_TAO
+#include <rtm/InPortCorbaCdrUDPProvider.h>
+#include <rtm/InPortCorbaCdrUDPConsumer.h>
+#endif
 
 // RTC name numbering policy
 #include <rtm/NumberingPolicy.h>
@@ -72,6 +76,10 @@ void FactoryInit()
     InPortSHMConsumerInit();
     OutPortSHMProviderInit();
     OutPortSHMConsumerInit();
+#ifdef ORB_IS_TAO
+    InPortCorbaCdrUDPProviderInit();
+    InPortCorbaCdrUDPConsumerInit();
+#endif
 
     // Naming Policy
     ProcessUniquePolicyInit();

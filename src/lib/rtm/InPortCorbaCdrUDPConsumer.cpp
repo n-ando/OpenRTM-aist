@@ -20,6 +20,13 @@
 #include <rtm/InPortCorbaCdrUDPConsumer.h>
 #include <rtm/CORBA_IORUtil.h>
 
+#ifdef ORB_IS_TAO
+#include <tao/Endpoint.h>
+#include <tao/Profile.h>
+#include <tao/Stub.h>
+#endif
+
+
 namespace RTC
 {
   /*!
@@ -201,9 +208,31 @@ namespace RTC
     
     CORBA::ORB_var orb = ::RTC::Manager::instance().getORB();
 
+
     CORBA::Object_var obj = orb->string_to_object(ior);
+	
+
+#ifdef ORB_IS_TAO
+	TAO_Stub *stub = obj->_stubobj();
 
 
+	TAO_MProfile profiles = stub->base_profiles();
+	
+	while (profiles.profile_count() > 1)
+	{
+		if (profiles.get_profile(0)->tag() != TAO_TAG_DIOP_PROFILE)
+		{
+			profiles.remove_profile(profiles.get_profile(0));
+		}
+		else
+		{
+			break;
+		}
+	}
+	
+	TAO_Profile* profile = stub->profile_in_use();
+	stub->base_profiles(profiles);
+#endif
     
     if (CORBA::is_nil(obj))
       {
