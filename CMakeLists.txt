@@ -31,6 +31,8 @@ if(NOT ORB_ROOT)
 	endif()
 endif()
 
+set(SSL_ENABLE ${SSL_ENABLE} CACHE BOOL "set SSL_ENABLE")
+
 
 if(CORBA MATCHES "ORBexpress")
 	if(NOT IDL_COMPILE_COMMAND)
@@ -166,6 +168,9 @@ elseif(CORBA MATCHES "omniORB")
 		endif()
 		set(ORB_LINK_DIR ${ORB_ROOT}/lib)
 		set(ORB_LIBRARIES omniDynamic4 omniORB4 omnithread)
+		if(SSL_ENABLE)
+			set(ORBSSL_LIBRARIES omnisslTP4)
+		endif(SSL_ENABLE)
 	elseif(MSVC)
 		if("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "ARM")
 			SET (ORB_C_FLAGS_LIST
@@ -181,6 +186,9 @@ elseif(CORBA MATCHES "omniORB")
 			set(ORB_LINK_DIR ${ORB_ROOT}/lib/x86_win32)
 		endif()
 		set(ORB_LIBRARIES optimized;omniDynamic${OMNI_VERSION}${OMNI_MINOR}_rt;optimized;omniORB${OMNI_VERSION}${OMNI_MINOR}_rt;omnithread${OMNITHREAD_VERSION}_rt;debug;omniDynamic${OMNI_VERSION}${OMNI_MINOR}_rtd;debug;omniORB${OMNI_VERSION}${OMNI_MINOR}_rtd;debug;omnithread${OMNITHREAD_VERSION}_rtd)
+		if(SSL_ENABLE)
+			set(ORBSSL_LIBRARIES optimized;omnisslTP${OMNI_VERSION}${OMNI_MINOR}_rt;debug;omnisslTP${OMNI_VERSION}${OMNI_MINOR}_rtd)
+		endif(SSL_ENABLE)
 	endif(VXWORKS)
 
 	set(ORB_INCLUDE_DIR ${ORB_ROOT}/include)
