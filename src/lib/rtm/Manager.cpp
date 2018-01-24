@@ -387,10 +387,7 @@ namespace RTC
 
 
 
-    if (m_initProc != NULL)
-      {
-        m_initProc(this);
-      }
+
 
 	invokeInitProc();
 	initPreCreation();
