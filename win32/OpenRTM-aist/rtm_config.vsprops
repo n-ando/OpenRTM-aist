@@ -14,6 +14,10 @@
 		AdditionalLibraryDirectories="$(omni_libdir);$(rtm_libdir)"
 	/>
 	<UserMacro
+		Name="ss;_root"
+		Value="%SSL_ROOT%"
+	/>
+	<UserMacro
 		Name="omni_root"
 		Value="%OMNI_ROOT%"
 	/>

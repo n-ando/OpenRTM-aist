@@ -28,7 +28,7 @@ namespace RTC
 	/*!
 	* @if jp
 	* @class DirectPortBase
-	* @brief direct接続用Port基底クラス
+	* @brief directﾀﾜﾂｳﾍﾑPortｴ�･ｯ･鬣ｹ
 	*
 	*
 	* @since 1.2.0
@@ -48,7 +48,7 @@ namespace RTC
   public:
 	  /*!
 	  * @if jp
-	  * @brief コンストラクタ
+	  * @brief ･ｳ･ｹ･ﾈ･鬣ｯ･ｿ
 	  *
 	  *
 	  * @else
@@ -61,7 +61,7 @@ namespace RTC
     
 	/*!
 	* @if jp
-	* @brief デストラクタ
+	* @brief ･ﾇ･ｹ･ﾈ･鬣ｯ･ｿ
 	*
 	*
 	* @else

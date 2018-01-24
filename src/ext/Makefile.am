@@ -7,6 +7,6 @@
 
 AUTOMAKE_OPTIONS = 1.4
 
-SUBDIRS = local_service ec sdo 
-DIST_SUBDIRS = local_service ec sdo logger
+SUBDIRS = local_service ec sdo ssl
+DIST_SUBDIRS = local_service ec sdo logger ssl
 
