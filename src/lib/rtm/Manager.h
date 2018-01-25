@@ -1665,7 +1665,7 @@ namespace RTC
 	 * @brief 起動時にrtc.confで指定したポートを接続する
 	 *
 	 * 例:
-	 * manager.components.preconnect: RTC0.port0:RTC0.port1(interface_type=corba_cdr&dataflow_type=pull&~),~
+	 * manager.components.preconnect: RTC0.port0?RTC0.port1&interface_type=corba_cdr&dataflow_type=pull&~,~
 	 *
 	 *
 	 * @else
