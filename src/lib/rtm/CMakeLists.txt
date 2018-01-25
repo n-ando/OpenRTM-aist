@@ -257,6 +257,7 @@ set(rtm_headers
 	OutPortSHMProvider.h
 	SharedMemoryPort.h
 	Timestamp.h
+	SimulatorExecutionContext.h
 	${PROJECT_BINARY_DIR}/config_rtc.h
 	${PROJECT_BINARY_DIR}/version.h
 )
@@ -329,6 +330,7 @@ set(rtm_srcs
 	OutPortSHMConsumer.cpp
 	OutPortSHMProvider.cpp
 	SharedMemoryPort.cpp
+	SimulatorExecutionContext.cpp
 	${rtm_headers}
 )
 

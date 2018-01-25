@@ -2480,6 +2480,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
    */
   void Manager::setEndpointProperty(CORBA::Object_ptr objref)
   {
+#if !defined(ORB_IS_ORBEXPRESS) && !defined(ORB_IS_TAO)
     RTC_TRACE(("sedEndpointProperty()"));
     if (CORBA::is_nil(objref))
       {
@@ -2533,6 +2534,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     m_config.setProperty("corba.endpoints", coil::flatten(epstr));
     m_config.setProperty("corba.endpoints_ipv4", coil::flatten(epstr_ipv4));
     m_config.setProperty("corba.endpoints_ipv6", coil::flatten(epstr_ipv6));
+#endif
   }
 
   /*!

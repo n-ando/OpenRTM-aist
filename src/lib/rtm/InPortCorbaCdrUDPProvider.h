@@ -259,7 +259,7 @@ namespace RTC
      * @param data cdrMemoryStream
      * @endif
      */
-    inline void onBufferWrite(const cdrMemoryStream& data)
+    inline void onBufferWrite(cdrMemoryStream& data)
     {
       m_listeners->
         connectorData_[ON_BUFFER_WRITE].notify(m_profile, data);
@@ -274,7 +274,7 @@ namespace RTC
      * @param data cdrMemoryStream
      * @endif
      */
-    inline void onBufferFull(const cdrMemoryStream& data)
+    inline void onBufferFull(cdrMemoryStream& data)
     {
       m_listeners->
         connectorData_[ON_BUFFER_FULL].notify(m_profile, data);
@@ -289,7 +289,7 @@ namespace RTC
      * @param data cdrMemoryStream
      * @endif
      */
-    inline void onBufferWriteTimeout(const cdrMemoryStream& data)
+    inline void onBufferWriteTimeout(cdrMemoryStream& data)
     {
       m_listeners->
         connectorData_[ON_BUFFER_WRITE_TIMEOUT].notify(m_profile, data);
@@ -304,7 +304,7 @@ namespace RTC
      * @param data cdrMemoryStream
      * @endif
      */
-    inline void onBufferWriteOverwrite(const cdrMemoryStream& data)
+    inline void onBufferWriteOverwrite(cdrMemoryStream& data)
     {
       m_listeners->
         connectorData_[ON_BUFFER_OVERWRITE].notify(m_profile, data);
@@ -319,7 +319,7 @@ namespace RTC
      * @param data cdrMemoryStream
      * @endif
      */
-    inline void onReceived(const cdrMemoryStream& data)
+    inline void onReceived(cdrMemoryStream& data)
     {
       m_listeners->
         connectorData_[ON_RECEIVED].notify(m_profile, data);
@@ -334,7 +334,7 @@ namespace RTC
      * @param data cdrMemoryStream
      * @endif
      */
-    inline void onReceiverFull(const cdrMemoryStream& data)
+    inline void onReceiverFull(cdrMemoryStream& data)
     {
       m_listeners->
         connectorData_[ON_RECEIVER_FULL].notify(m_profile, data);
@@ -347,7 +347,7 @@ namespace RTC
      * @brief Notify an ON_RECEIVER_TIMEOUT event to listeners
      * @endif
      */
-    inline void onReceiverTimeout(const cdrMemoryStream& data)
+    inline void onReceiverTimeout(cdrMemoryStream& data)
     {
       m_listeners->
         connectorData_[ON_RECEIVER_TIMEOUT].notify(m_profile, data);
@@ -360,7 +360,7 @@ namespace RTC
      * @Brief Notify an ON_RECEIVER_ERROR event to listeners
      * @endif
      */
-    inline void onReceiverError(const cdrMemoryStream& data)
+    inline void onReceiverError(cdrMemoryStream& data)
     {
       m_listeners->
         connectorData_[ON_RECEIVER_ERROR].notify(m_profile, data);

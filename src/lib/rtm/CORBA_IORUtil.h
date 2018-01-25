@@ -84,12 +84,13 @@ namespace CORBA_IORUtil
    * @endif
    */
   std::string formatIORinfo(const char* iorstr);
-
+#if !defined(ORB_IS_ORBEXPRESS) && !defined(ORB_IS_TAO)
   std::vector<IIOP::Address> getEndpoints(IOP::IOR& ior);
+
 
   void extractAddrs(IOP::MultipleComponentProfile& components,
                     std::vector<IIOP::Address>& addr);
-
+#endif
 
 }; // namespace CORBA_IORUtil
 #endif // CORBA_IORUTIL_H

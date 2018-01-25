@@ -1094,10 +1094,10 @@ namespace RTC
             {
               cdrMemoryStream cdr;
 #ifdef ORB_IS_ORBEXPRESS
-			  cdr.cdr >> typeddata;
+			  cdr.cdr << typeddata;
 #elif defined(ORB_IS_TAO)
-			  TAO_InputCDR tao_cdr = TAO_InputCDR(cdr.cdr);
-			  tao_cdr >> typeddata;
+			  //TAO_InputCDR tao_cdr = TAO_InputCDR(cdr.cdr);
+			  cdr.cdr << typeddata;
 #else
               typeddata >>= cdr;
 #endif

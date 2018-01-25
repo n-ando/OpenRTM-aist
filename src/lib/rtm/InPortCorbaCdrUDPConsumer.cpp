@@ -73,7 +73,7 @@ namespace RTC
    * @brief Write data into the buffer
    * @endif
    */
-  InPortConsumer::ReturnCode InPortCorbaCdrUDPConsumer::put(const cdrMemoryStream& data)
+  InPortConsumer::ReturnCode InPortCorbaCdrUDPConsumer::put(cdrMemoryStream& data)
   {
     RTC_PARANOID(("put()"));
 

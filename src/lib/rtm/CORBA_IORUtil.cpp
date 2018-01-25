@@ -48,7 +48,7 @@ namespace CORBA_IORUtil
 
   /*!
    * @if jp
-   * @brief IOR •¶š—ñ‚ğIOR\‘¢‘Ì‚Ö•ÏŠ·‚·‚é
+   * @brief IOR Ê¸»úÎó¤òIOR¹½Â¤ÂÎ¤ØÊÑ´¹¤¹¤ë
    * @else
    * @brief Convert from IOR string to IOR structure
    * @endif
@@ -116,7 +116,7 @@ namespace CORBA_IORUtil
 
   /*!
    * @if jp
-   * @brief IOR\‘¢‘Ì‚ğIOR•¶š—ñ‚Ö•ÏŠ·‚·‚é
+   * @brief IOR¹½Â¤ÂÎ¤òIORÊ¸»úÎó¤ØÊÑ´¹¤¹¤ë
    * @else
    * @brief Convert from IOR structure to IOR string 
    * @endif
@@ -178,7 +178,7 @@ namespace CORBA_IORUtil
 
   /*!
    * @if jp
-   * @brief IOR“à‚ÌƒGƒ“ƒhƒ|ƒCƒ“ƒg‚ğ’uŠ·‚·‚é
+   * @brief IORÆâ¤Î¥¨¥ó¥É¥İ¥¤¥ó¥È¤òÃÖ´¹¤¹¤ë
    * @else
    * @brief Replace endpoint address in IOR entry
    * @endif
@@ -223,7 +223,7 @@ namespace CORBA_IORUtil
 
   /*!
    * @if jp
-   * @brief IOR•¶š—ñ‚©‚çî•ñ‚ğ’Šo‚µƒtƒH[ƒ}ƒbƒgÏ‚İ‚Ì•¶š—ñ‚Æ‚µ‚Ä•Ô‚·
+   * @brief IORÊ¸»úÎó¤«¤é¾ğÊó¤òÃê½Ğ¤·¥Õ¥©¡¼¥Ş¥Ã¥ÈºÑ¤ß¤ÎÊ¸»úÎó¤È¤·¤ÆÊÖ¤¹
    * @else
    * @brief Extracts information from IOR string and returns formatted string
    * @endif
@@ -355,7 +355,7 @@ namespace CORBA_IORUtil
 #ifndef ORB_IS_RTORB
   //------------------------------------------------------------
   // static functions
-
+#if !defined(ORB_IS_RTORB) && !defined(ORB_IS_ORBEXPRESS) && !defined(ORB_IS_TAO)
   static void print_key(std::stringstream& sstr, OctetUSequence& key)
   {
     // Output key as text
@@ -412,7 +412,7 @@ namespace CORBA_IORUtil
       }
     print_key(sstr, id);
   }
-  
+
   static int get_poa_info(OctetUSequence& key, StringUSequence& poas_out,
                           int& transient_out, OctetUSequence& id_out)
   {
@@ -459,6 +459,7 @@ namespace CORBA_IORUtil
 
     return 1;
   }
+#endif
 
   static void print_tagged_components(std::stringstream& sstr,
                                       IOP::MultipleComponentProfile& components)
