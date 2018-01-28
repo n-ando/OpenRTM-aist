@@ -30,6 +30,7 @@
 #ifdef ORB_IS_TAO
 #include <tao/corba.h>
 #include <orbsvcs/CosNamingC.h>
+#include <rtm/idl/DataPortSkel.h>
 #endif
 
 #ifdef ORB_IS_RTORB
@@ -110,20 +111,54 @@ public:
 class cdrMemoryStream
 {
 public:
-	cdrMemoryStream() 
+	cdrMemoryStream()
 	{ 
 	};
 	cdrMemoryStream(const cdrMemoryStream& rhs)
 	{
-		cdr.write_char_array(rhs.cdr.buffer(), rhs.cdr.length());
+		for (const ACE_Message_Block *i = rhs.cdr.begin(); i != 0; i = i->cont())
+		{
+			cdr.write_octet_array_mb(i);
+		}
 	};
 	
 	cdrMemoryStream& operator= (const cdrMemoryStream& rhs)
 	{
-		cdr.write_char_array(rhs.cdr.buffer(), rhs.cdr.length());
+		for (const ACE_Message_Block *i = rhs.cdr.begin(); i != 0; i = i->cont())
+		{
+			cdr.write_octet_array_mb(i);
+		}
 		return *this;
 	};
 	
+	void encodeCDRData(::OpenRTM::CdrData *data)
+	{
+		data->length(cdr.total_length());
+		CORBA::Octet *buf = data->get_buffer();
+		for (const ACE_Message_Block *i = cdr.begin(); i != 0; i = i->cont())
+		{
+			const size_t len = i->length();
+			ACE_OS::memcpy(buf, i->rd_ptr(), len);
+			buf += len;
+		}
+	}
+
+	void encodeCDRData(::OpenRTM::CdrData &data)
+	{
+		encodeCDRData(&data);
+	}
+
+	
+	void decodeCDRData(const ::OpenRTM::CdrData *data)
+	{
+		cdr.write_octet_array(data->get_buffer(), data->length());
+	}
+
+	void decodeCDRData(const ::OpenRTM::CdrData &data)
+	{
+		decodeCDRData(&data);
+	}
+
 	TAO_OutputCDR cdr;
 };
 //typedef TAO_OutputCDR cdrMemoryStream;

@@ -136,7 +136,7 @@ namespace RTC
 #ifdef ORB_IS_ORBEXPRESS
 				RTC_PARANOID(("CDR data length: %d", data.cdr.size_written()));
 #elif defined(ORB_IS_TAO)
-				RTC_PARANOID(("CDR data length: %d", data.cdr.length()));
+				RTC_PARANOID(("CDR data length: %d", data.cdr.total_length()));
 #else
 				RTC_PARANOID(("CDR data length: %d", data.bufSize()));
 #endif

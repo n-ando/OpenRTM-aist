@@ -253,7 +253,7 @@ namespace RTC
 #ifdef ORB_IS_ORBEXPRESS
 	  CORBA::ULongLong data_size = (CORBA::ULongLong)data.cdr.size_written();
 #elif defined(ORB_IS_TAO)
-	  CORBA::ULongLong data_size = (CORBA::ULongLong)data.cdr.length();
+	  CORBA::ULongLong data_size = (CORBA::ULongLong)data.cdr.total_length();
 #else
 	  CORBA::ULongLong data_size = (CORBA::ULongLong)data.bufSize();
 #endif
@@ -292,7 +292,7 @@ namespace RTC
 #ifdef ORB_IS_ORBEXPRESS
 		  m_shmem.write(const_cast<char*>(data.get_buffer()), sizeof(CORBA::ULongLong), data.cdr.size_written());
 #elif defined(ORB_IS_TAO)
-		  m_shmem.write((char*)data.cdr.buffer(), sizeof(CORBA::ULongLong), data.cdr.length());
+		  m_shmem.write((char*)data.cdr.buffer(), sizeof(CORBA::ULongLong), data.cdr.total_length());
 #else
 		 
 		  m_shmem.write((char*)data.bufPtr(), sizeof(CORBA::ULongLong), data.bufSize());

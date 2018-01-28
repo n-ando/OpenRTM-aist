@@ -183,7 +183,7 @@ namespace RTC
 #ifdef ORB_IS_ORBEXPRESS
         CORBA::ULong len((CORBA::ULong)cdr.cdr.size_written());
 #elif defined(ORB_IS_TAO)
-	CORBA::ULong len((CORBA::ULong)cdr.cdr.length());
+	CORBA::ULong len((CORBA::ULong)cdr.cdr.total_length());
 #else
         CORBA::ULong len((CORBA::ULong)cdr.bufSize());
 #endif

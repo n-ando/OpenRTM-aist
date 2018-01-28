@@ -219,7 +219,7 @@ elseif(CORBA MATCHES "TAO")
 		set(ORB_LINK_DIR ${ORB_ROOT}/lib)
 		set(ORB_LIBRARIES optimized;ACE;optimized;TAO;optimized;TAO_AnyTypeCode;optimized;TAO_PortableServer;optimized;TAO_Svc_Utils;optimized;TAO_CosNaming;optimized;TAO_IORTable;optimized;TAO_CodecFactory;optimized;TAO_PI;optimized;TAO_Utils;optimized;TAO_Strategies;debug;ACEd;debug;TAOd;debug;TAO_AnyTypeCoded;debug;TAO_PortableServerd;debug;TAO_Svc_Utilsd;debug;TAO_CosNamingd;debug;TAO_IORTabled;debug;TAO_CodecFactoryd;debug;TAO_PId;debug;TAO_Utilsd;debug;TAO_Strategiesd;iphlpapi)
 		set(ORB_INCLUDE_DIR ${ORB_ROOT} ${ORB_ROOT}/TAO ${ORB_ROOT}/TAO/orbsvcs)
-		SET(ORB_C_FLAGS_LIST ${ORB_C_FLAGS_LIST} -D_WINSOCKAPI_ -DWITH_ACE -DACE_LACKS_CDR_ALIGNMENT)
+		SET(ORB_C_FLAGS_LIST ${ORB_C_FLAGS_LIST} -D_WINSOCKAPI_ -DWITH_ACE)
 	endif()
 	
 	ADD_DEFINITIONS(${ORB_C_FLAGS_LIST})
