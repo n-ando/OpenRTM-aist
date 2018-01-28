@@ -367,6 +367,15 @@ namespace RTC
     }
 
   private:
+	  /*!
+	  * @if jp
+	  * @brief リターンコード変換
+	  * @else
+	  * @brief Return codes conversion
+	  * @endif
+	  */
+	  void convertReturn(BufferStatus::Enum status, cdrMemoryStream& data);
+
     CdrBufferBase* m_buffer;
     ::OpenRTM::InPortCdrUDP_var m_objref;
     ConnectorListeners* m_listeners;

@@ -192,9 +192,53 @@ namespace RTC
 
 
     onReceived(cdr);
-    m_buffer->write(cdr);
+	BufferStatus::Enum ret = m_buffer->write(cdr);
 
-    
+	convertReturn(ret, cdr);
+  }
+
+  /*!
+  * @if jp
+  * @brief リターンコード変換
+  * @else
+  * @brief Return codes conversion
+  * @endif
+  */
+  void
+	  InPortCorbaCdrUDPProvider::convertReturn(BufferStatus::Enum status,
+		  cdrMemoryStream& data)
+  {
+	  switch (status)
+	  {
+	  case BufferStatus::BUFFER_OK:
+		  onBufferWrite(data);
+		  break;
+
+	  case BufferStatus::BUFFER_ERROR:
+		  onReceiverError(data);
+		  break;
+
+	  case BufferStatus::BUFFER_FULL:
+		  onBufferFull(data);
+		  onReceiverFull(data);
+		  break;
+
+	  case BufferStatus::BUFFER_EMPTY:
+		  // never come here
+		  break;
+
+	  case BufferStatus::PRECONDITION_NOT_MET:
+		  onReceiverError(data);
+		  break;
+
+	  case BufferStatus::TIMEOUT:
+		  onBufferWriteTimeout(data);
+		  onReceiverTimeout(data);
+		  break;
+
+	  }
+
+	  onReceiverError(data);
   }
 
 
