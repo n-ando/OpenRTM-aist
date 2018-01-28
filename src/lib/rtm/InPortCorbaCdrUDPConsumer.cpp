@@ -109,10 +109,7 @@ namespace RTC
       {
         // return code conversion
         // (IDL)OpenRTM::DataPort::ReturnCode_t -> DataPortStatus
-		coil::TimeValue ts = coil::gettimeofday();
 		_ptr()->put(tmp);
-		coil::TimeValue te = coil::gettimeofday();
-		std::cout << (double)(te - ts) << std::endl;
         return PORT_OK;
       }
     catch (...)
