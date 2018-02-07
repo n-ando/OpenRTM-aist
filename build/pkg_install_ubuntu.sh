@@ -9,7 +9,16 @@
 #         Seisho Irie
 #         Nobu   Kawauchi
 #
+# Global variables
+# 
+# - OPT_RUNTIME  : installing runtime packages
+# - OPT_DEVEL    : installing developers' staff
+# - OPT_SRCPKG   : installing tools for make source package
+# - OPT_COREDEVEL: installing tools for core developers
+# = OPT_UNINST   : uninstallation
+#
 
+#
 #---------------------------------------
 # usage
 #---------------------------------------
@@ -119,11 +128,11 @@ openrtp_pkgs="openrtp"
 #---------------------------------------
 init_param()
 {
-OPT_RT=false
-OPT_DEV=false
-OPT_SRC=false
-OPT_CORE=false
-OPT_FLG=true
+OPT_RUNTIME=false
+OPT_DEVEL=false
+OPT_SRCPKG=false
+OPT_COREDEVEL=false
+OPT_UNINST=true
 install_pkgs=""
 uninstall_pkgs=""
 }
@@ -149,7 +158,7 @@ get_opt()
   # オプション指定が無い場合のデフォルト設定
   if [ $# -eq 0 ] ; then
     arg_cxx=true
-    OPT_DEV=true
+    OPT_DEVEL=true
   fi
   arg_num=$#
  
@@ -178,11 +187,11 @@ get_opt()
                 exit
               fi
               shift ;;
-        -r )  OPT_RT=true ;;
-        -d )  OPT_DEV=true ;;
-        -s )  OPT_SRC=true ;;
-        -c )  OPT_CORE=true ;;
-        -u )  OPT_FLG=false ;;
+        -r )  OPT_RUNTIME=true ;;
+        -d )  OPT_DEVEL=true ;;
+        -s )  OPT_SRCPKG=true ;;
+        -c )  OPT_COREDEVEL=true ;;
+        -u )  OPT_UNINST=false ;;
         -- ) shift ; break ;;                 
         * )
           echo "Internal Error" 1>&2
@@ -193,7 +202,7 @@ get_opt()
 
   # オプション指定が -u のみの場合
   if [ $arg_num -eq 1 ] ; then
-    if test "x$OPT_FLG" = "xfalse" ; then 
+    if test "x$OPT_UNINST" = "xfalse" ; then 
       arg_cxx=true
     fi
   fi
@@ -326,6 +335,8 @@ check_root () {
 # パッケージインストール関数
 #----------------------------------------
 install_packages () {
+    echo $*
+    exit 0
   for p in $*; do
     echo $msg9 $p
     echo $install_pkgs | grep $p > /dev/null 2>&1
@@ -383,13 +394,13 @@ uninstall_packages () {
 install_branch()
 {
   if test "x$arg_cxx" = "xtrue" ; then
-    if test "x$OPT_CORE" = "xtrue" ; then
+    if test "x$OPT_COREDEVEL" = "xtrue" ; then
       select_opt_c="[c++] install tool_packages for core developer"
       install_packages $core_pkgs
-    elif test "x$OPT_SRC" = "xtrue" ; then
+    elif test "x$OPT_SRCPKG" = "xtrue" ; then
       select_opt_c="[c++] install tool_packages for source packages"
       install_packages $src_pkgs
-    elif test "x$OPT_RT" = "xtrue" ; then
+    elif test "x$OPT_RUNTIME" = "xtrue" ; then
       select_opt_c="[c++] install robot component runtime"
       install_packages $runtime_pkgs
     else
@@ -399,10 +410,10 @@ install_branch()
   fi
 
   if test "x$arg_python" = "xtrue" ; then
-    if test "x$OPT_CORE" = "xtrue" ; then
+    if test "x$OPT_COREDEVEL" = "xtrue" ; then
       select_opt_p="[python] install tool_packages for core developer"
       install_packages $python_core_pkgs
-    elif test "x$OPT_RT" = "xtrue" ; then
+    elif test "x$OPT_RUNTIME" = "xtrue" ; then
       select_opt_p="[python] install robot component runtime"
       install_packages $python_runtime_pkgs
     else
@@ -412,10 +423,10 @@ install_branch()
   fi
 
   if test "x$arg_java" = "xtrue" ; then
-    if test "x$OPT_CORE" = "xtrue" ; then
+    if test "x$OPT_COREDEVEL" = "xtrue" ; then
       select_opt_j="[java] install tool_packages for core developer"
       install_packages $java_core_pkgs
-    elif test "x$OPT_RT" = "xtrue" ; then
+    elif test "x$OPT_RUNTIME" = "xtrue" ; then
       select_opt_j="[java] install robot component runtime"
       install_packages $java_runtime_pkgs
     else
@@ -442,13 +453,13 @@ install_branch()
 uninstall_branch()
 {
   if test "x$arg_cxx" = "xtrue" ; then
-    if test "x$OPT_CORE" = "xtrue" ; then
+    if test "x$OPT_COREDEVEL" = "xtrue" ; then
       select_opt_c="[c++] uninstall tool_packages for core developer"
       uninstall_packages `reverse $u_core_pkgs`
-    elif test "x$OPT_SRC" = "xtrue" ; then
+    elif test "x$OPT_SRCPKG" = "xtrue" ; then
       select_opt_c="[c++] uninstall tool_packages for source packages"
       uninstall_packages `reverse $u_src_pkgs`
-    elif test "x$OPT_RT" = "xtrue" ; then
+    elif test "x$OPT_RUNTIME" = "xtrue" ; then
       select_opt_c="[c++] uninstall robot component runtime"
       uninstall_packages `reverse $u_runtime_pkgs`
     else
@@ -458,10 +469,10 @@ uninstall_branch()
   fi
 
   if test "x$arg_python" = "xtrue" ; then
-    if test "x$OPT_CORE" = "xtrue" ; then
+    if test "x$OPT_COREDEVEL" = "xtrue" ; then
       select_opt_p="[python] uninstall tool_packages for core developer"
       uninstall_packages `reverse $u_python_core_pkgs`
-    elif test "x$OPT_RT" = "xtrue" ; then
+    elif test "x$OPT_RUNTIME" = "xtrue" ; then
       select_opt_p="[python] uninstall robot component runtime"
       uninstall_packages `reverse $u_python_runtime_pkgs`
     else
@@ -471,10 +482,10 @@ uninstall_branch()
   fi
 
   if test "x$arg_java" = "xtrue" ; then
-    if test "x$OPT_CORE" = "xtrue" ; then
+    if test "x$OPT_COREDEVEL" = "xtrue" ; then
       select_opt_j="[java] uninstall tool_packages for core developer"
       uninstall_packages `reverse $u_java_core_pkgs`
-    elif test "x$OPT_RT" = "xtrue" ; then
+    elif test "x$OPT_RUNTIME" = "xtrue" ; then
       select_opt_j="[java] uninstall robot component runtime"
       uninstall_packages `reverse $u_java_runtime_pkgs`
     else
@@ -535,7 +546,7 @@ install_result()
  Install package is ...
 =============================================
 EOF
-  if [ $# -eq 0 ] && test "x$OPT_FLG" = "xfalse"; then
+  if [ $# -eq 0 ] && test "x$OPT_UNINST" = "xfalse"; then
     echo "There is no installation package."
     return
   fi
@@ -543,7 +554,7 @@ EOF
   for p in $*; do
     echo $p
   done
-  if test "x$arg_rtshell" = "xtrue" && test "x$OPT_FLG" = "xtrue"; then
+  if test "x$arg_rtshell" = "xtrue" && test "x$OPT_UNINST" = "xtrue"; then
     if test "x$rtshell_ret" != "x"; then
       echo "rtshell" 
     fi
@@ -561,7 +572,7 @@ uninstall_result()
  Uninstall package is ...
 =============================================
 EOF
-  if [ $# -eq 0 ] && test "x$OPT_FLG" = "xtrue"; then
+  if [ $# -eq 0 ] && test "x$OPT_UNINST" = "xtrue"; then
     echo "There is no uninstall package."
     return
   fi
@@ -569,7 +580,7 @@ EOF
   for p in $*; do
     echo $p
   done
-  if test "x$arg_rtshell" = "xtrue" && test "x$OPT_FLG" = "xfalse"; then
+  if test "x$arg_rtshell" = "xtrue" && test "x$OPT_UNINST" = "xfalse"; then
     if test "x$rtshell_ret" != "x"; then
       echo "rtshell" 
     fi
@@ -597,16 +608,16 @@ if test "x$arg_all" = "xtrue" ; then
   arg_openrtp=true
   arg_rtshell=true
 
-  if test "x$OPT_RT" != "xtrue" && 
-     test "x$OPT_DEV" != "xtrue" &&
-     test "x$OPT_SRC" != "xtrue" && 
-     test "x$OPT_CORE" != "xtrue" ; then
+  if test "x$OPT_RUNTIME" != "xtrue" && 
+     test "x$OPT_DEVEL" != "xtrue" &&
+     test "x$OPT_SRCPKG" != "xtrue" && 
+     test "x$OPT_COREDEVEL" != "xtrue" ; then
     # set default option
-    OPT_DEV=true
+    OPT_DEVEL=true
   fi
 fi
 
-if test "x$OPT_FLG" = "xtrue" ; then
+if test "x$OPT_UNINST" = "xtrue" ; then
   install_branch
 else
   uninstall_branch
