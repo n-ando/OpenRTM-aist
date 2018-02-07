@@ -91,7 +91,7 @@ clean_objs:
 	rm -f $(OBJS)
 
 
-clean-local: clean_objs clean_skelstub
+clean-local: clean_objs
 	rm -f *.bak *.rpo *.sym lib*.*_pure_*
 	rm -f *.lst *core *~ *loT *.log
 	rm -f Makefile.old 
