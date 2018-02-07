@@ -184,6 +184,9 @@ rtmheader_HEADERS = \
 	DataOutPort.h 		 \
 	DataPortStatus.h 	 \
 	DefaultConfiguration.h 	 \
+	DirectInPortBase.h 	 \
+	DirectOutPortBase.h 	 \
+	DirectPortBase.h 	 \
 	ExecutionContextBase.h 	 \
 	InPort.h 		 \
 	InPortConsumer.h 	 \
