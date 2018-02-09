@@ -676,7 +676,15 @@ namespace RTC
      */
     std::string m_name;
     
-
+    /*!
+     * @if jp
+     * @brief バインドされる T 型の変数への参照
+     * @else
+     * @brief The reference to type-T value bound this OutPort
+     * @endif
+     */
+    DataType& m_value;
+    mutable coil::Mutex m_valueMutex;
     
     /*!
      * @if jp
@@ -707,24 +715,12 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief バインドされる T 型の変数への参照
-     * @else
-     * @brief The reference to type-T value bound this OutPort
-     * @endif
-     */
-    DataType& m_value;
-    mutable coil::Mutex m_valueMutex;
-    
-
-    /*!
-     * @if jp
      * @brief ダイレクトデータ転送フラグ
      * @else
      * @brief A flag for direct data transfer
      * @endif
      */
     bool m_directNewData;
-
 
   };
 }; // End of namesepace RTM
