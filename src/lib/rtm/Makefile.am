@@ -142,6 +142,7 @@ libRTC_la_SOURCES = \
 #------------------------------
 # Component observer embedded
 if ENABLE_OBSERVER
+FactoryInit.cpp: ComponentObserverConsumer.h ComponentObserverSkel.h 
 OBSERVER_LA = \
 	libComponentObserverStub.la \
 	libComponentObserverConsumer.la
@@ -154,6 +155,11 @@ libComponentObserverStub.la:
 	(cd $(top_builddir)/src/ext/sdo/observer ; make)
 libComponentObserverConsumer.la: libComponentObserverStub.la
 	(cd $(top_builddir)/src/ext/sdo/observer ; make)
+ComponentObserverConsumer.h: ComponentObserverSkel.h
+ComponentObserverSkel.h:
+	(cd $(top_builddir)/src/ext/sdo/observer ; make)
+
+
 #------------------------------
 
 libRTC_la_LIBADD = \
@@ -168,7 +174,6 @@ libRTC_la_LDFLAGS =                   \
 	-L$(top_builddir)/src/lib/rtm/idl \
 	-release $(PACKAGE_VERSION)       \
 	$(OBSERVER_LDFLAGS)
-
 
 rtmheaderdir = $(rtm_includedir)/rtm
 
