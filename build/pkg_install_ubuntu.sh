@@ -335,8 +335,8 @@ check_root () {
 # パッケージインストール関数
 #----------------------------------------
 install_packages () {
-    echo $*
-    exit 0
+#    echo $*
+#    exit 0
   for p in $*; do
     echo $msg9 $p
     echo $install_pkgs | grep $p > /dev/null 2>&1
