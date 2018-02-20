@@ -55,7 +55,6 @@ UTIL_SRC =                \
 	NVUtil.cpp        \
 	RTCUtil.cpp       \
 	DefaultPeriodicTask.cpp \
-	CORBA_RTCUtil.h   \
 	CORBA_RTCUtil.cpp
 
 MGR_SRC =                            \
