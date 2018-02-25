@@ -166,7 +166,18 @@ namespace RTC
               std::string::size_type pos(optarg.find(":"));
               if (pos != std::string::npos)
                 {
-                  m_argprop[optarg.substr(0, pos)] = optarg.substr(pos + 1);
+                  std::string key = optarg.substr(0, pos);
+                  std::string value = optarg.substr(pos + 1);
+
+                  key = coil::unescape(key);
+                  coil::eraseHeadBlank(key);
+                  coil::eraseTailBlank(key);
+
+                  value = coil::unescape(value);
+                  coil::eraseHeadBlank(value);
+                  coil::eraseTailBlank(value);
+
+                  m_argprop[key] = value;
                 }
             }
 	    break;
