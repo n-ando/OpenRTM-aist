@@ -169,6 +169,18 @@ get_opt()
     usage
     exit
   fi
+  # 引数1個の場合
+  if [ $arg_num -eq 1 ] ; then
+    # オプション指定が -r/-s/-c のみの場合
+    if test "x$1" = "x-r" ||
+       test "x$1" = "x-s" ||
+       test "x$1" = "x-c" || 
+       test "x$1" = "x--yes" ; then 
+      echo "[ERROR] Invalid option '$1'. '-l' option is required."
+      usage
+      exit
+    fi
+  fi
   eval set -- $OPT
 
   while true
