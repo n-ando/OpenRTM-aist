@@ -404,6 +404,14 @@ namespace RTC
     if (m_created) { return RTC::PRECONDITION_NOT_MET; }
     if (m_exiting) { return RTC::RTC_OK; }
 
+
+    SDOPackage::OrganizationList* organizations = get_organizations();
+    CORBA::ULong len = organizations->length();
+
+    for (CORBA::ULong i = 0; i < len; i++)
+      {
+        (*organizations)[i]->remove_member(getInstanceName());
+      }
     // deactivate myself on owned EC
     CORBA_SeqUtil::for_each(m_ecMine,
 			    deactivate_comps(m_objref));
