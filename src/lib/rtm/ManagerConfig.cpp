@@ -24,6 +24,7 @@
 #include <coil/OS.h>
 #include <coil/stringutil.h>
 #include <rtm/DefaultConfiguration.h>
+#include <stdlib.h>
 
 #ifdef __QNX__
 using std::sprintf;
@@ -34,12 +35,12 @@ namespace RTC
   
   // The list of default configuration file path.
 #ifdef RTM_OS_WIN32
-	const char* ManagerConfig::config_file_path[] = 
-	{
-		"./rtc.conf",
-		"${RTM_ROOT}bin/${RTM_VC_VERSION}/rtc.conf",
-		NULL
-	};
+  const char* ManagerConfig::config_file_path[] = 
+    {
+      "./rtc.conf",
+      "${RTM_ROOT}bin/${RTM_VC_VERSION}/rtc.conf",
+      NULL
+    };
 #else
   const char* ManagerConfig::config_file_path[] = 
     {
@@ -115,16 +116,16 @@ namespace RTC
     prop.setDefaults(default_config);
     if (findConfigFile())
       {
-	std::ifstream f(m_configFile.c_str());
-	if (f.is_open())
-	  {
-	    prop.load(f);
-	    f.close();
-	  }
+        std::ifstream f(m_configFile.c_str());
+        if (f.is_open())
+          {
+            prop.load(f);
+            f.close();
+          }
       }
     setSystemInformation(prop);
     if (m_isMaster) { prop["manager.is_master"] = "YES"; }
-
+    
     // Properties from arguments are marged finally
     prop << m_argprop;
     prop["config_file"] = m_configFile;
@@ -146,21 +147,24 @@ namespace RTC
     
     while ((opt = get_opts()) > 0)
       {
-	switch (opt)
-	  {
+        switch (opt)
+          {
           case 'a':
             {
               m_argprop["manager.corba_servant"] = "NO";
             }
             break;
-	    // Specify configuration file not default
-	  case 'f':
-	    m_configFile = get_opts.optarg;
-	    break;
-	  case 'l':
-	    //	    m_configFile = get_opts.optarg;
-	    break;
-	  case 'o':
+            // Specify configuration file not default
+          case 'f':
+            if (!fileExist(get_opts.optarg))
+              {
+                std::cerr << "Configuration file: " << m_configFile;
+                std::cerr << " not found." << std::endl;
+                abort();
+              }
+            m_configFile = get_opts.optarg;
+            break;
+          case 'o':
             {
               std::string optarg(get_opts.optarg);
               std::string::size_type pos(optarg.find(":"));
@@ -180,7 +184,7 @@ namespace RTC
                   m_argprop[key] = value;
                 }
             }
-	    break;
+            break;
           case 'p': // ORB's port number
             {
               int portnum;
@@ -191,12 +195,12 @@ namespace RTC
                 }
             }
             break;
-	  case 'd':
+          case 'd':
             m_isMaster = true;
-	    break;
-	  default:
-	    break;
-	  }
+            break;
+          default:
+            break;
+          }
       }
     return;
   }
@@ -213,34 +217,37 @@ namespace RTC
     // Check existance of configuration file given command arg
     if (m_configFile != "") 
       {
-	if (fileExist(m_configFile))
-	  {
-	    return true;
-	  }
+        if (fileExist(m_configFile))
+          {
+            return true;
+          }
+        std::cerr << "Configuration file: " << m_configFile;
+        std::cerr << " not found." << std::endl;
       }
-    
     // Search rtc configuration file from environment variable
     char* env = getenv(config_file_env);
     if (env != NULL)
       {
-	if (fileExist(env))
-	  {
-	    m_configFile = env;
-	    return true;
-	  }
+        if (fileExist(env))
+          {
+            m_configFile = env;
+            return true;
+          }
+        std::cerr << "Configuration file: " << m_configFile;
+        std::cerr << " not found." << std::endl;
       }
     // Search rtc configuration file from default search path
     int i = 0;
     while (config_file_path[i] != NULL)
       {
-		  std::string cpath = coil::replaceEnv(config_file_path[i]);
+        std::string cpath = coil::replaceEnv(config_file_path[i]);
 
-		  if (fileExist(cpath))
-		  {
-			  m_configFile = cpath;
-			  return true;
-		  }
-		++i;
+        if (fileExist(cpath))
+          {
+            m_configFile = cpath;
+            return true;
+          }
+        ++i;
       }
     return false;
   }
@@ -260,7 +267,7 @@ namespace RTC
     coil::utsname  sysinfo;
     if (coil::uname(&sysinfo) != 0)
       {
-	return;
+        return;
       }
     
     //
@@ -294,13 +301,13 @@ namespace RTC
     // fial() 0: ok, !0: fail
     if (infile.fail() != 0) 
       {
-	infile.close();
-	return false;
+        infile.close();
+        return false;
       }
     else
       {
-	infile.close();
-	return true;
+        infile.close();
+        return true;
       }
     return false;
   }
