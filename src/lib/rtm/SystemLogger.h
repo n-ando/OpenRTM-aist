@@ -425,7 +425,7 @@ namespace RTC
    * @brief エラーログ出力マクロ。
    *
    * エラーレベルのログ出力マクロ。<BR>ログレベルが
-   * ERROR, WARN, INFO, NORMAL, DEBUG, TRACE, VERBOSE, PARANOID
+   * FATAL, ERROR, WARN, INFO, DEBUG, TRACE, VERBOSE, PARANOID
    * の場合にログ出力される。
    *
    * @else
@@ -433,7 +433,7 @@ namespace RTC
    * @brief Error log output macro
    *
    * This is a log output macro of the error level.
-   * If log levels are ERROR, WARN, INFO, NORMAL, DEBUG, TRACE,
+   * If log levels are FATAL, ERROR, WARN, INFO, NORMAL, DEBUG, TRACE,
    * VERBOSE or PARANOID, message will be output to log.
    *
    * @endif
@@ -447,7 +447,7 @@ namespace RTC
    * @brief エラーログ出力マクロ。
    *
    * エラーレベルのログ出力マクロ。<BR>ログレベルが
-   * ERROR, WARN, INFO, NORMAL, DEBUG, TRACE, VERBOSE, PARANOID
+   * ERROR, WARN, INFO, DEBUG, TRACE, VERBOSE, PARANOID
    * の場合にログ出力される。
    *
    * @else
@@ -455,8 +455,8 @@ namespace RTC
    * @brief Error log output macro
    *
    * This is a log output macro of the error level.
-   * If log levels are ERROR, WARN, INFO, NORMAL, DEBUG, TRACE,
-   * VERBOSE or PARANOID, message will be output to log.
+   * If log levels are ERROR, WARN, INFO, DEBUG, TRACE,
+   * VERBOSE and PARANOID, message will be output to log.
    *
    * @endif
    */
@@ -469,7 +469,7 @@ namespace RTC
    * @brief ワーニングログ出力マクロ。
    *
    * ワーニングレベルのログ出力マクロ。<BR>ログレベルが
-   * ( WARN, INFO, NORMAL, DEBUG, TRACE, VERBOSE, PARANOID )
+   * ( WARN, INFO, DEBUG, TRACE, VERBOSE, PARANOID )
    * の場合にログ出力される。
    *
    * @else
@@ -477,7 +477,7 @@ namespace RTC
    * @brief Warning log output macro
    *
    * If log levels are
-   * ( WARN, INFO, NORMAL, DEBUG, TRACE, VERBOSE, PARANOID ),
+   * ( WARN, INFO, DEBUG, TRACE, VERBOSE, PARANOID ),
    * message will be output to log.
    *
    * @endif
@@ -491,7 +491,7 @@ namespace RTC
    * @brief インフォログ出力マクロ。
    *
    * インフォレベルのログ出力マクロ。<BR>ログレベルが
-   * ( INFO, NORMAL, DEBUG, TRACE, VERBOSE, PARANOID )
+   * ( INFO, DEBUG, TRACE, VERBOSE, PARANOID )
    * の場合にログ出力される。
    *
    * @else
@@ -499,7 +499,7 @@ namespace RTC
    * @brief Information level log output macro
    *
    *  If log levels are
-   * ( INFO, NORMAL, DEBUG, TRACE, VERBOSE, PARANOID ),
+   * ( INFO, DEBUG, TRACE, VERBOSE, PARANOID ),
    * message will be output to log.
    *
    * @endif
@@ -597,12 +597,12 @@ namespace RTC
 #define RTC_PARANOID_STR(str) RTC_LOG_STR(::RTC::Logger::RTL_PARANOID, str)
   
 #else
+#define RTC_FATAL(fmt)
+#define RTC_FATAL_STR(str)
 #define RTC_ERROR(fmt)
 #define RTC_ERROR_STR(str)
 #define RTC_WARN(fmt)
 #define RTC_WARN_STR(str)
-#define RTC_NORMAL(fmt)
-#define RTC_NORMAL_STR(str)
 #define RTC_INFO(fmt)
 #define RTC_INFO_STR(str)
 #define RTC_DEBUG(fmt)
