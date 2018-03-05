@@ -318,6 +318,7 @@ namespace RTC
      * を返す。
      * 
      * @param  n 書込みポインタ + n の位置のポインタ 
+     * @param  unlock_enable trueの場合にバッファエンプティのブロックを解除する
      * @return BUFFER_OK:            正常終了
      *         PRECONDITION_NOT_MET: n > writable()
      * 
@@ -331,8 +332,14 @@ namespace RTC
      * 
      * @endif
      */ 
-    virtual ReturnCode advanceWptr(long int n = 1)
+    virtual ReturnCode advanceWptr(long int n = 1, bool unlock_enable = true)
     {
+      bool empty_ = false;
+      if(unlock_enable && n > 0)
+        {
+          Guard fguard(m_empty.mutex);
+          empty_ = empty();
+        }
       // n > 0 :
       //     n satisfies n <= writable elements
       //                 n <= m_length - m_fillcout
@@ -350,6 +357,16 @@ namespace RTC
       m_wpos = (m_wpos + n + m_length) % m_length;
       m_fillcount += n;
       m_wcount += n;
+
+      if(unlock_enable)
+        {
+          if(empty_)
+            {
+              Guard fguard(m_empty.mutex);
+              m_empty.cond.signal();
+            }
+        }
+
       return ::RTC::BufferStatus::BUFFER_OK;
     }
     /*!
@@ -447,7 +464,7 @@ namespace RTC
 
           if (overwrite && !timedwrite)       // "overwrite" mode
             {
-              advanceRptr();
+              advanceRptr(1,false);
             }
           else if (!overwrite && !timedwrite) // "do_nothing" mode
             {
@@ -475,19 +492,9 @@ namespace RTC
     
       put(value);
 
-	  {
-		Guard eguard(m_empty.mutex);
-		if (empty())
-		  {
-			// Guard eguard(m_empty.mutex);
-			advanceWptr(1);
-			m_empty.cond.signal();
-		  }
-		else
-		  {
-			advanceWptr(1);
-		  }
-	  }
+      advanceWptr(1);
+
+
       return ::RTC::BufferStatus::BUFFER_OK;
     }
     
@@ -578,6 +585,7 @@ namespace RTC
      * 現在の読み出し位置のポインタを n 個進める。
      * 
      * @param  n 読み出しポインタ + n の位置のポインタ 
+     * @param  unlock_enable trueの場合にバッファフルのブロックを解除する
      * @return BUFFER_OK: 正常終了
      *         BUFFER_ERROR: 異常終了
      * 
@@ -591,8 +599,14 @@ namespace RTC
      * 
      * @endif
      */ 
-    virtual ReturnCode advanceRptr(long int n = 1)
+    virtual ReturnCode advanceRptr(long int n = 1, bool unlock_enable = true)
     {
+      bool full_ = false;
+      if(unlock_enable && n > 0)
+        {
+          Guard fguard(m_full.mutex);
+          full_ = full();
+        }
       // n > 0 :
       //     n satisfies n <= readable elements
       //                 n <= m_fillcout 
@@ -608,6 +622,16 @@ namespace RTC
 
       m_rpos = (m_rpos + n + m_length) % m_length;
       m_fillcount -= n;
+
+      if(unlock_enable)
+        {
+          if(full_)
+            {
+              Guard fguard(m_full.mutex);
+              m_full.cond.signal();
+            }
+        }
+
       return ::RTC::BufferStatus::BUFFER_OK;
     }
     
@@ -761,19 +785,8 @@ namespace RTC
       
       get(value);
 
-	  {
-		Guard fguard(m_full.mutex);
-		if (full())
-		  {
-			// Guard fguard(m_full.mutex);
-			advanceRptr(1);
-			m_full.cond.signal();
-		  }
-		else
-		  {
-			advanceRptr(1);
-		  }
-	  }
+      advanceRptr(1);
+
       return ::RTC::BufferStatus::BUFFER_OK;
     }
     

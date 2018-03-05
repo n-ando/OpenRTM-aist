@@ -254,7 +254,7 @@ namespace RTC
      * 
      * @endif
      */ 
-    virtual ReturnCode advanceWptr(long int n = 1) = 0;
+    virtual ReturnCode advanceWptr(long int n = 1, bool unlock_enable = true) = 0;
 
     /*!
      * @if jp
@@ -400,7 +400,7 @@ namespace RTC
      * 
      * @endif
      */ 
-    virtual ReturnCode advanceRptr(long int n = 1) = 0;
+    virtual ReturnCode advanceRptr(long int n = 1, bool unlock_enable = true) = 0;
 
     /*!
      * @if jp
