@@ -80,7 +80,7 @@ vcxproj:
                         --version $(RTM_VERSION)                          \
                         --out $(win32_builddir)/$(PROJNAME)Dll_vc$${ver}.vcxproj \
                         --yaml $(top_builddir)/examples/rtcdll.vcproj.yaml  \
-                        --source $(SSL_WIN_SRC) ;                         \
+                        --source $(SSL_WIN_SRC) ;
 		qkc -O- -sm $(win32_builddir)/$(PROJNAME)Dll_vc$${ver}.vcxproj ; \
         done
 
