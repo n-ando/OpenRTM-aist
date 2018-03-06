@@ -239,7 +239,7 @@ vc9proj: libRTC.vcproj.yaml
 		--out $(win32_builddir)/rtm/libRTC_vc9.vcproj \
 		--yaml libRTC.vcproj.yaml \
 		--source $(RTC_SRC) ../ext/sdo/observer/ComponentObserverConsumer.cpp \
-		--header $(rtmheader_HEADERS) ../ext/sdo/observer/ComponentObserverConsumer.h ; \
+		--header $(rtmheader_HEADERS) ../ext/sdo/observer/ComponentObserverConsumer.h ; 
 	qkc -O- -sm $(win32_builddir)/rtm/libRTC_vc9.vcproj
 
 vcxproj: libRTC.vcproj.yaml
@@ -251,7 +251,7 @@ vcxproj: libRTC.vcproj.yaml
 			--out $(win32_builddir)/rtm/libRTC_vc$${ver}.vcxproj \
 			--yaml libRTC.vcproj.yaml \
 			--source $(RTC_SRC) ../ext/sdo/observer/ComponentObserverConsumer.cpp \
-			--header $(rtmheader_HEADERS) ../ext/sdo/observer/ComponentObserverConsumer.h ; \
+			--header $(rtmheader_HEADERS) ../ext/sdo/observer/ComponentObserverConsumer.h ; 
 		qkc -O- -sm $(win32_builddir)/rtm/libRTC_vc$${ver}.vcxproj ; \
 	done
 
