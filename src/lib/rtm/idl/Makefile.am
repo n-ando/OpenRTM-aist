@@ -231,8 +231,8 @@ vc9proj: libRTCSkel.vcproj.yaml
 		--version $(RTM_VERSION) \
 		--out $(win32_builddir)/rtm/idl/libRTCSkel_vc9.vcproj \
 		--yaml libRTCSkel.vcproj.yaml \
-		--source $(SKEL_CPP) \
-		--header $(SKEL_H)
+		--source $(SKEL_CPP) ComponentObserverSkel.cpp \
+		--header $(SKEL_H) ComponentObserverSkel.h ; \
 	qkc -O- -sm $(win32_builddir)/rtm/idl/libRTCSkel_vc9.vcproj
 
 vcxproj: libRTCSkel.vcproj.yaml
@@ -243,9 +243,9 @@ vcxproj: libRTCSkel.vcproj.yaml
 			--version $(RTM_VERSION) \
 			--out $(win32_builddir)/rtm/idl/libRTCSkel_vc$${ver}.vcxproj \
 			--yaml libRTCSkel.vcproj.yaml \
-			--source $(SKEL_CPP) \
-			--header $(SKEL_H) ; \
-		qkc -O- -sm $(win32_builddir)/rtm/idl/libRTCSkel_vc$${ver}.vcxproj ; \
+			--source $(SKEL_CPP) ComponentObserverSkel.cpp \
+			--header $(SKEL_H) ComponentObserverSkel.h ; \
+		qkc -O- -sm $(win32_builddir)/rtm/idl/libRTCSkel_vc$${ver}.vcxproj ;
 	done
 
 dist-hook: lst vcproj
