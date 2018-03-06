@@ -68,7 +68,7 @@ vc9proj:
 	        --version $(RTM_VERSION)                        \
 	        --out $(win32_builddir)/$(PROJNAME)Dll_vc9.vcproj  \
 	        --yaml $(top_builddir)/examples/rtcdll.vcproj.yaml \
-	        --source $(SSL_WIN_SRC) ;                       \
+	        --source $(SSL_WIN_SRC)
 	qkc -O- -sm $(win32_builddir)/$(PROJNAME)Dll_vc9.vcproj
 
 vcxproj:
