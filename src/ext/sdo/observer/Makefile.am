@@ -118,42 +118,6 @@ lst:
 	echo $(ALL_SRC) > src.lst
 	echo $(EXTRA_DIST) > other.lst
 
-#------------------------------------------------------------
-# Visual Studio Project
-#------------------------------------------------------------
-win32_builddir=$(top_builddir)/win32/OpenRTM-aist/ext/sdo/observer
-PROJNAME=ComponentObserverConsumer
-
-vcproj: vc9proj vcxproj
-
-vc9proj:
-	$(top_builddir)/build/vcprojtool.py vcproj              \
-		--type DLL                                      \
-		--vcversion "9.00"                              \
-		--projectname "$(PROJNAME)"                     \
-		--version $(RTM_VERSION)                        \
-		--out $(win32_builddir)/$(PROJNAME)Dll_vc9.vcproj  \
-		--yaml $(top_builddir)/examples/rtcdll.vcproj.yaml \
-		--source $(OBSERVER_WIN_SRC)                        \
-		--header $(OBSERVER_WIN_H)
-	qkc -O- -sm $(win32_builddir)/$(PROJNAME)Dll_vc9.vcproj
-
-vcxproj:
-	for ver in $(VC_VERSION); do \
-		$(top_builddir)/build/vcxprojtool.py vcxproj              \
-			--type DLL                                        \
-			--vcversion "$${ver}.00"                               \
-			--projectname "$(PROJNAME)"                       \
-			--version $(RTM_VERSION)                          \
-			--out $(win32_builddir)/$(PROJNAME)Dll_vc$${ver}.vcxproj \
-			--yaml $(top_builddir)/examples/rtcdll.vcproj.yaml  \
-			--source $(OBSERVER_WIN_SRC)                          \
-			--header $(OBSERVER_WIN_H) ; \
-		qkc -O- -sm $(win32_builddir)/$(PROJNAME)Dll_vc$${ver}.vcxproj ; \
-	done
-
-dist-hook: lst vcproj
-
 
 clean_objs:
 	rm -f $(OBJS)
