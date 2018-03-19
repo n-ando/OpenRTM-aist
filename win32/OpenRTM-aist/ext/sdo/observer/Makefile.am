@@ -11,8 +11,8 @@ clean-local:
 	rm -rf ComponentObserverConsumer
 
 src:
-	cp -p $(top_srcdir)/src/ext/sdo/observer/*.cpp .
-	cp -p $(top_srcdir)/src/ext/sdo/observer/*.h .
+	cp -p $(top_srcdir)/src/ext/sdo/observer/ComponentObserverConsumer.cpp .
+	cp -p $(top_srcdir)/src/ext/sdo/observer/ComponentObserverConsumer.h .
 	cp -p $(top_srcdir)/src/ext/sdo/observer/*.idl .
 	qkc -O- -ms *.cpp
 	qkc -O- -ms *.h
