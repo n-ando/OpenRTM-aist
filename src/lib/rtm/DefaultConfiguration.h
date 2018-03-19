@@ -100,15 +100,15 @@ static const char* default_config[] =
     "manager.modules.C++.suffixes",          "so",
 #endif                                       
 #endif                                       
-    "manager.modules.C++.load_paths",        "./",
+    "manager.modules.C++.load_paths",        "",
     "manager.modules.Python.manager_cmd",    "rtcd_python",
     "manager.modules.Python.profile_cmd",    "rtcprof_python",
     "manager.modules.Python.suffixes",       "py",
-    "manager.modules.Python.load_paths",     "./",
+    "manager.modules.Python.load_paths",     "",
     "manager.modules.Java.manager_cmd",      "rtcd_java",
     "manager.modules.Java.profile_cmd",      "rtcprof_java",
     "manager.modules.Java.suffixes",         "class",
-    "manager.modules.Java.load_paths",       "./",
+    "manager.modules.Java.load_paths",       "",
     "manager.modules.search_auto",       "YES",
     "manager.local_service.enabled_services","ALL",
     "sdo.service.provider.enabled_services",  "ALL",
