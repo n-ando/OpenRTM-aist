@@ -72,11 +72,11 @@
 	/>
 	<UserMacro
 		Name="omni_lib"
-		Value="omniORB$(omni_dllver)_rt.lib omniDynamic$(omni_dllver)_rt.lib omnithread$(omnithread_dllver)_rt.lib"
+		Value="omniORB$(omni_dllver)_rt.lib omniDynamic$(omni_dllver)_rt.lib omnithread$(omnithread_dllver)_rt.lib omnisslTP$(omnissl_dllver)_rt.lib"
 	/>
 	<UserMacro
 		Name="omni_libd"
-		Value="omniORB$(omni_dllver)_rtd.lib omniDynamic$(omni_dllver)_rtd.lib omnithread$(omnithread_dllver)_rtd.lib"
+		Value="omniORB$(omni_dllver)_rtd.lib omniDynamic$(omni_dllver)_rtd.lib omnithread$(omnithread_dllver)_rtd.lib omnisslTP$(omnissl_dllver)_rtd.lib"
 	/>
 	<!-- OpenSSL macros -->
 	<UserMacro
