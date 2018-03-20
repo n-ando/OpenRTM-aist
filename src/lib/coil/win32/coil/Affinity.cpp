@@ -36,7 +36,7 @@ namespace coil
 	  DWORD cpu_num = listToCUPNUM(cpu_mask);
     DWORD processMask, systemMask = 0;
     HANDLE h = GetCurrentProcess();
-	BOOL success = GetProcessAffinityMask(h, &processMask, &systemMask);
+	BOOL success = GetProcessAffinityMask(h, (PDWORD_PTR)&processMask, (PDWORD_PTR)&systemMask);
 	if (success)
     {
 		for (int i = 0; i < 32; i++)
