@@ -89,11 +89,11 @@
 	/>
 	<UserMacro
 		Name="ssl_lib"
-		Value="libssl.lib;libcrypto.lib"
+		Value="libssl.lib libcrypto.lib"
 	/>
 	<UserMacro
 		Name="ssl_libd"
-		Value="libssl.lib;libcrypto.lib"
+		Value="libssl.lib libcrypto.lib"
 	/>
 	<!-- OpenRTM-aist macros -->
 	<UserMacro
