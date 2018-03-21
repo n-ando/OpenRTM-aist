@@ -24,6 +24,10 @@ fi
 if test "x$ARCH" = "x" ; then
     export ARCH=x86
 fi
+if test "x$SSL_VERSION" = "x" ; then
+    export SSL_VERSION=1.1.0
+fi
+
 
 export PATH=/cygdrive/c/cygwin64/bin:$PATH
 echo `pwd`
@@ -61,10 +65,14 @@ check_env()
     else
         PY_VERSION=`echo ${PYTHON_DIR} | sed 's/.*ython\([0-9][0-9]\).*/\1/'`
     fi
-    base_url="http://openrtm.org/pub/omniORB/win32/omniORB-${OMNI_VERSION}/"
+    base_url="https://openrtm.org/pub/omniORB/win32/omniORB-${OMNI_VERSION}/"
 
     OMNIORB_ZIP=omniORB-${OMNI_VERSION}-${WIN_ARCH}-vc${VC_VERSION}-py${PY_VERSION}.zip
     OMNIORB_URL=${base_url}/${OMNIORB_ZIP}
+
+    base_ssl_url="https://openrtm.org/pub/OpenSSL/${SSL_VERSION}"
+    OPENSSL_ZIP=openssl-${SSL_VERSION}e-${WIN_ARCH}-vc${VC_VERSION}.zip
+    OPENSSL_URL=${base_ssl_url}/${OPENSSL_ZIP}
 }
 
 unpack_omnibin()
@@ -85,9 +93,25 @@ rename_omnidir()
     omnidir=`find ./ -maxdepth 1 -name 'omniORB*' -type d`
     mv ${omnidir} omniORB
 }
+
+unpack_openssl()
+{
+    if test ! -f $OPENSSL_ZIP ; then
+        wget $OPENSSL_URL
+    fi
+    unzip $OPENSSL_ZIP
+}
+rename_ssldir()
+{
+    mv _OpenSSL OpenSSL
+}
+
+
 check_env
 unpack_omnibin
 rename_omnidir
+unpack_openssl
+rename_ssldir
 
 # end of ecript
 #==============================
