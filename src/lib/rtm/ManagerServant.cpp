@@ -1148,31 +1148,28 @@ namespace RTM
     RTC_TRACE(("createComponentByManagerName(%s)",create_arg.c_str()));
     coil::mapstring param = coil::urlparam2map(create_arg);
 
-	
-	
-
     for (coil::mapstring::iterator it(param.begin()); it != param.end(); ++it)
       {
         RTC_DEBUG(("create_arg[%s] = %s",
                    it->first.c_str(), it->second.c_str()));
       }
-	
-	
+
     std::string mgrstr = param["manager_name"];
-	
     if (mgrstr.empty())
       {
         RTC_WARN(("No manager_name found: %s", mgrstr.c_str()));
         return RTC::RTObject::_nil();
       }
-	
-	
+
+    CompParam comp_param(create_arg);
+
     // detect languange
-    std::string lang = param["language"];
+    //std::string lang = param["language"];
+    std::string lang = comp_param.language();
     if (lang.empty()) { lang = "C++"; }
-	
+
     RTC_INFO(("Specified manager's language: %s", lang.c_str()));
-	
+
     RTM::Manager_var mgrobj = findManagerByName(mgrstr);
     if (CORBA::is_nil(mgrobj))
       {
@@ -1180,7 +1177,7 @@ namespace RTM
         RTC_INFO(("Creating new manager named %s", mgrstr.c_str()));
 
         std::string rtcd_cmd_key("manager.modules.");
-        rtcd_cmd_key += lang + "manager_cmd";
+        rtcd_cmd_key += lang + ".manager_cmd";
         coil::Properties& prop = m_mgr.getConfig();
         std::string rtcd_cmd = prop[rtcd_cmd_key];
 
@@ -1195,34 +1192,32 @@ namespace RTM
         rtcd_cmd += " -o manager.name:" + prop["manger.name"];
         rtcd_cmd += " -o manager.instance_name:" + mgrstr;
 
-
-		coil::vstring slaves_names;
-		if (mgrstr == "manager_%p")
-		{
-			Guard gurad(m_slaveMutex);
-			
-			for (CORBA::ULong i(0); i < m_slaves.length(); ++i)
-			{
-				try
-				{
-					RTM::NVList_var nvlist = m_slaves[i]->get_configuration();
-					coil::Properties prop;
-					NVUtil::copyToProperties(prop, nvlist);
-					std::string name = prop["manager.instance_name"];
-
-					if (isProcessIDManager(name))
-					{
-						slaves_names.push_back(name);
-					}
-				}
-				catch (...)
-				{
-					RTC_ERROR(("A slave manager thrown exception."));
-					CORBA_SeqUtil::erase(m_slaves, i);
-					RTC_ERROR(("This slave manager is removed from slave list."));
-				}
-			}
-		}
+        coil::vstring slaves_names;
+        if (mgrstr == "manager_%p")
+          {
+            Guard gurad(m_slaveMutex);
+                        
+            for (CORBA::ULong i(0); i < m_slaves.length(); ++i)
+              {
+                try
+                  {
+                    RTM::NVList_var nvlist = m_slaves[i]->get_configuration();
+                    coil::Properties prop;
+                    NVUtil::copyToProperties(prop, nvlist);
+                    std::string name = prop["manager.instance_name"];
+                    if (isProcessIDManager(name))
+                      {
+                        slaves_names.push_back(name);
+                      }
+                  }
+                catch (...)
+                  {
+                     RTC_ERROR(("A slave manager thrown exception."));
+                     CORBA_SeqUtil::erase(m_slaves, i);
+                     RTC_ERROR(("This slave manager is removed from slave list."));
+                   }
+               }
+          }
 
 
 
@@ -1236,64 +1231,62 @@ namespace RTM
         
         for (size_t i(0); i < 1000; ++i)
           {
-			  coil::sleep(coil::TimeValue(0.01));
-			  RTC_DEBUG(("Detecting new slave manager (%s).", mgrstr.c_str()));
-			  if (mgrstr == "manager_%p")
-			  {
-				  Guard gurad(m_slaveMutex);
-				  
-				  for (CORBA::ULong j(0); j < m_slaves.length(); ++j)
-				  {
-					  RTM::NVList_var nvlist = m_slaves[j]->get_configuration();
-					  coil::Properties prop; 
-					  NVUtil::copyToProperties(prop, nvlist);
-					  std::string name = prop["manager.instance_name"];
-					  
-					  if (isProcessIDManager(name))
-					  {
-						  if (std::count(slaves_names.begin(), slaves_names.end(), name) == 0)
-						  {
-							  mgrobj = m_slaves[j];
-						  }
-					  }
-				  }
-			  }
-			  else
-			  {
-				  mgrobj = findManagerByName(mgrstr);
-			  }
-			  if (!CORBA::is_nil(mgrobj))
-			  {
-				  RTC_INFO(("New slave manager (%s) launched.", mgrstr.c_str()));
-				  break;
-			  }
+            coil::sleep(coil::TimeValue(0.01));
+            RTC_DEBUG(("Detecting new slave manager (%s).", mgrstr.c_str()));
+            if (mgrstr == "manager_%p")
+              {
+                Guard gurad(m_slaveMutex);
+                for (CORBA::ULong j(0); j < m_slaves.length(); ++j)
+                  {
+                    RTM::NVList_var nvlist = m_slaves[j]->get_configuration();
+                    coil::Properties prop; 
+                    NVUtil::copyToProperties(prop, nvlist);
+                    std::string name = prop["manager.instance_name"];
+
+                    if (isProcessIDManager(name))
+                      {
+                        if (std::count(slaves_names.begin(), slaves_names.end(), name) == 0)
+                          {
+                            mgrobj = m_slaves[j];
+                          }
+                      }
+                  }
+              }
+            else
+              {
+                mgrobj = findManagerByName(mgrstr);
+              }
+            if (!CORBA::is_nil(mgrobj))
+              {
+                RTC_INFO(("New slave manager (%s) launched.", mgrstr.c_str()));
+                break;
+              }
             RTC_DEBUG(("Waiting for slave manager started."));
             coil::sleep(0.01);
           }
-
-        if (CORBA::is_nil(mgrobj))
-          {
-            RTC_ERROR(("Launch failed: manager (%s)", mgrstr.c_str()));
-            return RTC::RTObject::_nil();
-          }
-		std::string create_arg_str(create_arg);
-		getParameterByModulename("manager_name", create_arg_str);
-        RTC_DEBUG(("Creating component on %s",  mgrstr.c_str()));
-        RTC_DEBUG(("arg: %s", create_arg_str.c_str()));
-        try
-          {
-			  return mgrobj->create_component(create_arg_str.c_str());
-          }
-        catch (CORBA::SystemException& e)
-          {
-            RTC_ERROR(("Exception was caught while creating component."));
-            return RTC::RTObject::_nil();
-          }
-        catch (...)
-          {
-            RTC_ERROR(("Unknown non-CORBA exception cought."));
-            return RTC::RTObject::_nil();
-          }
+      }
+    if (CORBA::is_nil(mgrobj))
+      {
+        RTC_ERROR(("Launch failed: manager (%s)", mgrstr.c_str()));
+        return RTC::RTObject::_nil();
+      }
+    std::string create_arg_str(create_arg);
+    getParameterByModulename("manager_name", create_arg_str);
+    RTC_DEBUG(("Creating component on %s",  mgrstr.c_str()));
+    RTC_DEBUG(("arg: %s", create_arg_str.c_str()));
+    try
+      {
+        return mgrobj->create_component(create_arg_str.c_str());
+      }
+    catch (CORBA::SystemException& e)
+      {
+        RTC_ERROR(("Exception was caught while creating component."));
+        return RTC::RTObject::_nil();
+      }
+    catch (...)
+      {
+        RTC_ERROR(("Unknown non-CORBA exception cought."));
+        return RTC::RTObject::_nil();
       }
     return RTC::RTObject::_nil();
   }
