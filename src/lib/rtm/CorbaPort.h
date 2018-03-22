@@ -1228,6 +1228,7 @@ namespace RTC
 #ifndef ORB_IS_RTORB
 #ifdef ORB_IS_OMNIORB
         m_poa = ::RTC::Manager::instance().theShortCutPOA();
+        m_poa->activate_object(m_servant);
 #else
         m_poa = ::RTC::Manager::instance().getPOA();
 #endif
