@@ -88,6 +88,7 @@ static const char* default_config[] =
     "manager.components.naming_policy",      "process_unique",
     "manager.command",                       "rtcd",
     "manager.nameservers",                     "default",
+    "manager.language",                      "C++",
     "manager.supported_languages",           "C++, Python, Java",
     "manager.modules.C++.manager_cmd",       "rtcd",
     "manager.modules.C++.profile_cmd",       "rtcprof",

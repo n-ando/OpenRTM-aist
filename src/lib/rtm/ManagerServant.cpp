@@ -1164,7 +1164,6 @@ namespace RTM
     CompParam comp_param(create_arg);
 
     // detect languange
-    //std::string lang = param["language"];
     std::string lang = comp_param.language();
     if (lang.empty()) { lang = "C++"; }
 
@@ -1323,8 +1322,10 @@ namespace RTM
         return RTC::RTObject::_nil();
       }
 
+    CompParam comp_param(create_arg);
+
     // detect languange
-    std::string lang = param["language"];
+    std::string lang = comp_param.language();
     if (lang.empty()) { lang = "C++"; }
     RTC_INFO(("Specified manager's language: %s", lang.c_str()));
 
