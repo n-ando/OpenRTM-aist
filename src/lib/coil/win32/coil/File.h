@@ -20,6 +20,7 @@
 #define COIL_FILE_H
 
 #include <windows.h>
+#include <fstream>
 #include <coil/config_coil.h>
 #include <coil/stringutil.h>
 
@@ -444,6 +445,133 @@ namespace coil
     coil::closedir(dir_ptr);
 
     return flist;
+  }
+
+  /*!
+  * @if jp
+  *
+  * @brief 指定ファイル名を指定ディレクトリから探査する
+  *
+  * @param dir ディレクトリパス
+  * @param filename ディレクトリパス
+  * @param filelist ファイル一覧
+  *
+  *
+  * @else
+  *
+  * @brief 
+  * 
+  * @param dir 
+  * @param filename 
+  * @param filelist 
+  *
+  * @endif
+  */
+  inline void findFile(std::string dir, std::string filename, coil::vstring &filelist)
+  {
+	{
+		HANDLE hFind;
+		WIN32_FIND_DATA win32fd;
+		std::string dir_fff = dir + "\\*";
+		hFind = FindFirstFile(dir_fff.c_str(), &win32fd);
+
+		if (hFind == INVALID_HANDLE_VALUE) {
+			return;
+		}
+		do {
+			if (win32fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
+				std::string filename = win32fd.cFileName;
+				if (filename != "." && filename != "..")
+				{
+					std::string next_dir = dir + "\\" + win32fd.cFileName;
+					findFile(next_dir, filename, filelist);
+				}
+			}
+			else {
+			}
+		} while (FindNextFile(hFind, &win32fd));
+	}
+
+	  {
+		  std::string file_fff = dir + "\\" + filename;
+		  std::ifstream ifs(file_fff);
+		  
+		  if (ifs.is_open())
+		  {
+			  filelist.push_back(file_fff);
+		  }
+		  
+	  }
+  }
+
+
+
+  /*!
+  * @if jp
+  *
+  * @brief ファイル一覧を指定ディレクトリから探査する
+  *
+  * @param dir ディレクトリパス
+  * @param ext 拡張子
+  * @param filelist ファイル一覧
+  *
+  *
+  * @else
+  *
+  * @brief
+  *
+  * @param dir
+  * @param ext
+  * @param filelist
+  *
+  * @endif
+  */
+  inline void getFileList(std::string dir, std::string ext, coil::vstring &filelist)
+  {
+	{
+		HANDLE hFind;
+		WIN32_FIND_DATA win32fd;
+		std::string dir_fff = dir + "\\*";
+		hFind = FindFirstFile(dir_fff.c_str(), &win32fd);
+
+		if (hFind == INVALID_HANDLE_VALUE) {
+			return;
+		}
+		do {
+			if (win32fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
+				std::string filename = win32fd.cFileName;
+				//std::cout << win32fd.cFileName << std::endl;
+				if (filename != "." && filename != "..")
+				{
+					std::string next_dir = dir + "\\" + win32fd.cFileName;
+					getFileList(next_dir, ext, filelist);
+				}
+			}
+			else {
+			}
+		} while (FindNextFile(hFind, &win32fd));
+	}
+
+	  {
+		  HANDLE hFind;
+		  WIN32_FIND_DATA win32fd;
+		  std::string file_fff = dir + "\\*." + ext;
+		  hFind = FindFirstFile(file_fff.c_str(), &win32fd);
+		  if (hFind == INVALID_HANDLE_VALUE) {
+			  return;
+		  }
+		  do {
+			  if (win32fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
+
+			  }
+			  else {
+				  std::string ret = dir + "\\" + win32fd.cFileName;
+				  filelist.push_back(ret);
+			  }
+		  } while (FindNextFile(hFind, &win32fd));
+	  }
+
+
   }
 
 
