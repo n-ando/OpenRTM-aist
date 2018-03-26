@@ -24,6 +24,10 @@
 #include <dirent.h>
 #include <libgen.h>
 
+#include <string.h>
+#include <sys/stat.h>
+
+
 #include <coil/config_coil.h>
 #include <coil/stringutil.h>
 
@@ -188,6 +192,110 @@ namespace coil
     ::closedir(dir_ptr);
 
     return flist;
+  }
+
+
+  /*!
+  * @if jp
+  *
+  * @brief 指定ファイル名を指定ディレクトリから探査する
+  *
+  * @param dir ディレクトリパス
+  * @param filename ディレクトリパス
+  * @param filelist ファイル一覧
+  *
+  *
+  * @else
+  *
+  * @brief 
+  * 
+  * @param dir 
+  * @param filename 
+  * @param filelist 
+  *
+  * @endif
+  */
+  inline void findFile(std::string dir, std::string filename, coil::vstring &filelist)
+  {
+	struct dirent **namelist=NULL;
+	int files = scandir(dir.c_str(), &namelist, NULL, NULL);
+
+	for (int i=0; i<files; i++) {
+		std::string dname = namelist[i]->d_name;
+		if( dname != "." && dname != ".." ){
+
+			std::string fullpath = dir + "/" + dname;
+
+			struct stat stat_buf;
+			if(stat(fullpath.c_str(), &stat_buf) == 0){
+				if ((stat_buf.st_mode & S_IFMT) == S_IFDIR){
+					findFile(fullpath, filename, filelist);
+				}
+				else
+				{
+					if(dname == filename)
+					{
+						filelist.push_back(fullpath);
+					}
+				}
+			}
+		
+			
+		}
+	}
+  }
+
+
+  /*!
+  * @if jp
+  *
+  * @brief ファイル一覧を指定ディレクトリから探査する
+  *
+  * @param dir ディレクトリパス
+  * @param ext 拡張子
+  * @param filelist ファイル一覧
+  *
+  *
+  * @else
+  *
+  * @brief
+  *
+  * @param dir
+  * @param ext
+  * @param filelist
+  *
+  * @endif
+  */
+  inline void getFileList(std::string dir, std::string ext, coil::vstring &filelist)
+  {
+	struct dirent **namelist=NULL;
+	int files = scandir(dir.c_str(), &namelist, NULL, NULL);
+
+	for (int i=0; i<files; i++) {
+		std::string dname = namelist[i]->d_name;
+		if( dname != "." && dname != ".." ){
+
+			std::string fullpath = dir + "/" + dname;
+
+			struct stat stat_buf;
+			if(stat(fullpath.c_str(), &stat_buf) == 0){
+				if ((stat_buf.st_mode & S_IFMT) == S_IFDIR){
+					getFileList(fullpath, ext, filelist);
+				}
+				else
+				{
+					coil::vstring filesp = coil::split(dname, ".");
+					if(filesp.back() == ext)
+					{
+						filelist.push_back(fullpath);
+					}
+				}
+			}
+		
+			
+		}
+	}
+	
   }
 };
 
