@@ -258,6 +258,15 @@ set(rtm_headers
 	SharedMemoryPort.h
 	Timestamp.h
 	SimulatorExecutionContext.h
+	DirectInPortBase.h
+	DirectOutPortBase.h
+	DirectPortBase.h
+	NumberingPolicyBase.h
+	NamingServiceNumberingPolicy.h
+	NodeNumberingPolicy.h
+	OutPortDirectConsumer.h
+	OutPortDirectProvider.h
+	CORBA_RTCUtil.h
 	${PROJECT_BINARY_DIR}/config_rtc.h
 	${PROJECT_BINARY_DIR}/version.h
 )
@@ -331,6 +340,12 @@ set(rtm_srcs
 	OutPortSHMProvider.cpp
 	SharedMemoryPort.cpp
 	SimulatorExecutionContext.cpp
+	NumberingPolicyBase.cpp
+	NamingServiceNumberingPolicy.cpp
+	NodeNumberingPolicy.cpp
+	OutPortDirectConsumer.cpp
+	OutPortDirectProvider.cpp
+	CORBA_RTCUtil.cpp
 	${rtm_headers}
 )
 

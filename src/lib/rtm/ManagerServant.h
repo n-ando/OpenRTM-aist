@@ -702,6 +702,8 @@ namespace RTM
 	* @endif
 	*/
 	void updateMasterManager();
+	std::string getParameterByModulename(const std::string param_name, std::string &module_name);
+	bool isProcessIDManager(std::string mgrname);
 
   private:
     typedef coil::Guard<coil::Mutex> Guard;

@@ -95,6 +95,7 @@ set(coil_headers
 	${COIL_OS_DIR}/coil/UUID.h
 	${COIL_OS_DIR}/coil/atomic.h
 	${COIL_OS_DIR}/coil/SharedMemory.h
+	${COIL_OS_DIR}/coil/Affinity.h
 	${PROJECT_BINARY_DIR}/config_coil.h
 )
 
@@ -119,6 +120,7 @@ set(coil_srcs
 	${COIL_OS_DIR}/coil/Time.cpp
 	${COIL_OS_DIR}/coil/UUID.cpp
 	${COIL_OS_DIR}/coil/SharedMemory.cpp
+	${COIL_OS_DIR}/coil/Affinity.cpp
 	${coil_headers}
 
 )
@@ -151,8 +153,6 @@ if(WIN32)
 #	set(coil_srcs ${coil_srcs} ${CMAKE_CURRENT_BINARY_DIR}/${COIL_PROJECT_NAME}.def)
 	
 else(WIN32)
-	set(coil_srcs ${coil_srcs} ${COIL_OS_DIR}/coil/Affinity.cpp)
-	set(coil_headers ${coil_headers} ${COIL_OS_DIR}/coil/Affinity.h)
 endif()
 
 

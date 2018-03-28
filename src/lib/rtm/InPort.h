@@ -93,7 +93,7 @@ namespace RTC
    */
   template <class DataType>
   class InPort
-    : public InPortBase
+	  : public InPortBase, DirectInPortBase<DataType>
   {
   public:
     DATAPORTSTATUS_ENUM
