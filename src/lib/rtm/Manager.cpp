@@ -398,6 +398,7 @@ namespace RTC
         m_initProc(this);
       }
 
+	invokeInitProc();
 	initPreCreation();
 	initPreConnection();
 	initPreActivation();
@@ -874,6 +875,9 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 	m_namingManager->bindObject(names[i].c_str(), comp);
       }
     m_listeners.naming_.postBind(comp, names);
+
+	publishPorts(comp);
+	subscribePorts(comp);
 
 
 	try
@@ -2812,5 +2816,202 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 		  this->createComponent(comp[i].c_str());
 	  }
   }
+
+
+
+
+
+  /*!
+  * @if jp
+  * @brief
+  *
+  *
+  *
+  * @else
+  * @brief
+  *
+  *
+  * @endif
+  */
+  void Manager::invokeInitProc()
+  {
+	  if (m_initProc != NULL)
+	  {
+		  m_initProc(this);
+	  }
+  }
+
+  void Manager::publishPorts(RTObject_impl* comp)
+  {
+	  PortServiceList_var ports = comp->get_ports();
+	  for (size_t i(0); i < ports->length(); ++i)
+	  {
+		  PortProfile_var prof = ports[i]->get_port_profile();
+		  coil::Properties prop;
+		  NVUtil::copyToProperties(prop, prof->properties);
+		  if ((prop.hasKey("publish_topic") == 0 ||
+			  prop["publish_topic"] == "") &&
+			  (prop.hasKey("subscribe_topic") == 0 ||
+			  prop["subscribe_topic"] == "") &&
+			  (prop.hasKey("rendezvous_point") == 0 ||
+			  prop["rendezvous_point"] == "")) {
+			  continue;
+		  }
+
+		  std::string name;
+		  if (prop["port.port_type"] == "DataOutPort")
+		  {
+			  name = "dataports.port_cxt/";
+			  name += prop["publish_topic"] + ".topic_cxt/";
+			  name += prof->name; name += ".outport";
+		  }
+		  else if (prop["port.port_type"] == "DataInPort")
+		  {
+			  name = "dataports.port_cxt/";
+			  name += prop["subscribe_topic"] + ".topic_cxt/";
+			  name += prof->name; name += ".inport";
+		  }
+		  else if (prop["port.port_type"] == "CorbaPort")
+		  {
+			  name = "svcports.port_cxt/";
+			  name += prop["rendezvous_point"] + ".svc_cxt/";
+			  name += prof->name; name += ".svc";
+		  }
+		  else
+		  {
+			  RTC_WARN(("Unknown port type: %s", prop["port.port_type"].c_str()));
+			  continue;
+		  }
+		  PortBase* port;
+		  port = dynamic_cast<PortBase*>(m_pPOA->reference_to_servant(ports[i]));
+		  m_namingManager->bindObject(name.c_str(), port);
+	  }
+  }
+  void Manager::subscribePorts(RTObject_impl* comp)
+  {
+	  PortServiceList_var ports = comp->get_ports();
+	  for (size_t i(0); i < ports->length(); ++i)
+	  {
+		  PortProfile_var prof = ports[i]->get_port_profile();
+		  coil::Properties prop;
+		  NVUtil::copyToProperties(prop, prof->properties);
+		  std::cout << prop;
+		  if ((prop.hasKey("publish_topic") == 0 ||
+			  prop["publish_topic"] == "") &&
+			  (prop.hasKey("subscribe_topic") == 0 ||
+			  prop["subscribe_topic"] == "") &&
+			  (prop.hasKey("rendezvous_point") == 0 ||
+			  prop["rendezvous_point"] == "")) {
+			  continue;
+		  }
+
+		  std::string name;
+		  PortServiceList_var nsports;
+		  if (prop["port.port_type"] == "DataOutPort")
+		  {
+			  name = "dataports.port_cxt/";
+			  name += prop["publish_topic"] + ".topic_cxt";
+			  nsports = getPortsOnNameServers(name, "inport");
+			  connectDataPorts(ports[i], nsports);
+		  }
+		  else if (prop["port.port_type"] == "DataInPort")
+		  {
+			  name = "dataports.port_cxt/";
+			  name += prop["subscribe_topic"] + ".topic_cxt";
+			  nsports = getPortsOnNameServers(name, "outport");
+			  connectDataPorts(ports[i], nsports);
+		  }
+		  else if (prop["port.port_type"] == "CorbaPort")
+		  {
+			  name = "svcports.port_cxt/";
+			  name += prop["rendezvous_point"] + ".svc_cxt";
+			  nsports = getPortsOnNameServers(name, "svc");
+			  connectServicePorts(ports[i], nsports);
+		  }
+	  }
+  }
+
+  PortServiceList_var Manager::getPortsOnNameServers(std::string nsname,
+	  std::string kind)
+  {
+	  PortServiceList_var ports = new PortServiceList();
+	  std::vector<RTC::NamingService*>& ns(m_namingManager->getNameServices());
+	  for (size_t i(0); i < ns.size(); ++i)
+	  {
+		  NamingOnCorba* noc = dynamic_cast<NamingOnCorba*>(ns[i]->ns);
+		  if (noc == 0) { continue; }
+		  CorbaNaming& cns(noc->getCorbaNaming());
+		  CosNaming::BindingList_var bl = new CosNaming::BindingList();
+		  cns.listByKind(nsname.c_str(), kind.c_str(), bl);
+
+		  for (CORBA::ULong j(0); j < bl->length(); ++j)
+		  {
+			  if (bl[j].binding_type != CosNaming::nobject) { continue; }
+			  std::string tmp(cns.toString(bl[j].binding_name));
+			  std::string nspath;
+			  nspath = "/" + nsname + "/" + tmp;
+			  // ### TODO: All escape characteres should be removed. ###
+			  coil::replaceString(nspath, "\\", "");
+			  CORBA::Object_var obj = cns.resolveStr(nspath.c_str());
+			  RTC::PortService_var portsvc = RTC::PortService::_narrow(obj);
+			  if (CORBA::is_nil(portsvc)) { continue; }
+			  try { PortProfile_var p = portsvc->get_port_profile(); }
+			  catch (...) { continue; } // the port must be zombie
+			  CORBA::ULong len(ports->length());
+			  ports->length(len + 1);
+			  ports[len] = portsvc;
+		  }
+	  }
+	  return ports._retn();
+  }
+
+  void Manager::connectDataPorts(PortService_ptr port,
+	  PortServiceList_var& target_ports)
+  {
+	  for (CORBA::ULong i(0); i < target_ports->length(); ++i)
+	  {
+		  if (port->_is_equivalent(target_ports[i])) { continue; }
+		  if (CORBA_RTCUtil::already_connected(port, target_ports[i]))
+		  {
+			  continue;
+		  }
+		  std::string con_name;
+		  PortProfile_var p0 = port->get_port_profile();
+		  PortProfile_var p1 = target_ports[i]->get_port_profile();
+		  con_name += p0->name;
+		  con_name += ":";
+		  con_name += p1->name;
+		  coil::Properties prop;
+		  if (RTC::RTC_OK !=
+			  CORBA_RTCUtil::connect(con_name, prop, port, target_ports[i]))
+		  {
+			  RTC_ERROR(("Connection error in topic connection."));
+		  }
+	  }
+  }
+
+    void Manager::connectServicePorts(PortService_ptr port,
+                                    PortServiceList_var& target_ports)
+  {
+    for (CORBA::ULong i(0); i < target_ports->length(); ++i)
+      {
+        if (port->_is_equivalent(target_ports[i])) { continue; }
+        if (CORBA_RTCUtil::already_connected(port, target_ports[i]))
+          { continue; }
+        std::string con_name;
+        PortProfile_var p0 = port->get_port_profile();
+        PortProfile_var p1 = target_ports[i]->get_port_profile();
+        con_name += p0->name;
+        con_name += ":";
+        con_name += p1->name;
+        coil::Properties prop;
+        if (RTC::RTC_OK !=
+            CORBA_RTCUtil::connect(con_name, prop, port, target_ports[i]))
+          {
+            RTC_ERROR(("Connection error in topic connection."));
+          }
+      }
+  }
+  
 
 };
