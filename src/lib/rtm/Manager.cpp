@@ -40,6 +40,7 @@
 #include <coil/OS.h>
 #include <rtm/FactoryInit.h>
 #include <rtm/CORBA_IORUtil.h>
+#include <rtm/CORBA_RTCUtil.h>
 #include <rtm/SdoServiceConsumerBase.h>
 #include <rtm/LocalServiceAdmin.h>
 #include <rtm/SystemLogger.h>
