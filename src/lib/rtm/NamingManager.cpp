@@ -51,6 +51,7 @@ namespace RTC
     coil::vstring host_port(coil::split(names, ":"));
     if (coil::dest_to_endpoint(host_port[0], m_endpoint))
       {
+
         RTC_INFO(("Endpoint for the CORBA naming service (%s) is %s.",
                   host_port[0].c_str(),
                   m_endpoint.c_str()));
@@ -179,6 +180,350 @@ namespace RTC
     RTC_TRACE(("isAlive()"));
     return m_cosnaming.isAlive();
   }
+
+  /*!
+   * @if jp
+   *
+   * @brief ネーミングサービスからRTCをインスタンス名から検索し、
+   *        一致するRTCのリストを取得する
+   *
+   * @param context 現在検索中のコンテキスト
+   * @param name RTCのインスタンス名
+   * @param rtcs RTCのリスト
+   *
+   * @else
+   *
+   * @brief
+   *
+   * @param context
+   * @param name
+   * @param rtcs
+   *
+   * @endif
+   */
+  void NamingOnCorba::getComponentByName(CosNaming::NamingContext_ptr context, std::string name, RTC::RTCList& rtcs)
+  {
+
+	  CORBA::ULong length = 500;
+	  CosNaming::BindingList_var bl;
+	  CosNaming::BindingIterator_var bi;
+	  context->list(length, bl, bi);
+
+	  CORBA::ULong len(bl->length());
+	  for (CORBA::ULong i = 0; i < len; ++i)
+	  {
+		  if (bl[i].binding_type == CosNaming::ncontext)
+		  {
+			  CosNaming::NamingContext_ptr next_context = CosNaming::NamingContext::
+				  _narrow(context->resolve(bl[i].binding_name));
+			  getComponentByName(next_context, name, rtcs);
+		  }
+		  else if (bl[i].binding_type == CosNaming::nobject)
+		  {
+			  if (std::string(bl[i].binding_name[0].id) == name && std::string(bl[i].binding_name[0].kind) == "rtc")
+			  {
+				  try
+				  {
+					  //RTC::CorbaConsumer<RTC::RTObject> cc;
+					  //cc.setObject(context->resolve(bl[i].binding_name));
+					  RTC::RTObject_ptr obj = RTC::RTObject::_narrow(context->resolve(bl[i].binding_name));
+					  if (!obj->_non_existent())
+					  {
+						  CORBA_SeqUtil::push_back(rtcs, obj);
+					  }
+				  }
+				  catch (...)
+				  {
+					  //RTC_ERROR((""));
+				  }
+			  }
+		  }
+	  }
+  }
+  /*!
+   * @if jp
+   *
+   * @brief ネーミングサービスからRTCをインスタンス名から検索し、
+   *        一致するRTCのリストを取得する
+   *
+   * @param context 現在検索中のコンテキスト
+   * @param name RTCのインスタンス名
+   * @param rtcs RTCのリスト
+   *
+   * @else
+   *
+   * @brief
+   *
+   * @param context
+   * @param name
+   * @param rtcs
+   *
+   * @endif
+   */
+  RTC::RTCList NamingOnCorba::string_to_component(std::string name)
+  {
+	  RTC::RTCList rtc_list;
+
+	  coil::vstring tmp = coil::split(name, "://");
+	  if (tmp.size() > 1)
+	  {
+		  if (tmp[0] == "rtcname")
+		  {
+			  std::string url = tmp[1];
+			  coil::vstring r = coil::split(url, "/");
+			  if (r.size() > 1)
+			  {
+				  std::string host = r[0];
+				  std::string rtc_name = url.substr(host.size()+1, url.size() - host.size());
+				  try
+				  {
+					  RTC::CorbaNaming *cns = NULL;
+					  if (host == "*")
+					  {
+						  cns = &m_cosnaming;
+					  }
+					  else
+					  {
+						  CORBA::ORB_var orb = Manager::instance().getORB();
+						  cns = new RTC::CorbaNaming(orb, host.c_str());
+					  }
+					  coil::vstring names = coil::split(rtc_name, "/");
+
+					  if (names.size() == 2 && names[0] == "*")
+					  {
+						  CosNaming::NamingContext_ptr root_cxt = cns->getRootContext();
+						  getComponentByName(root_cxt, names[1], rtc_list);
+						  return rtc_list;
+					  }
+					  else
+					  {
+						  rtc_name += ".rtc";
+						  CORBA::Object_ptr obj = cns->resolveStr(rtc_name.c_str());
+						  if (CORBA::is_nil(obj))
+						  {
+							  return rtc_list;
+						  }
+						  CORBA_SeqUtil::push_back(rtc_list, RTC::RTObject::_narrow(obj));
+						  return rtc_list;
+					  }
+					  if (cns != &m_cosnaming)
+					  {
+						  delete cns;
+					  }
+				  }
+				  catch (...)
+				  {
+					  return rtc_list;
+				  }
+			  }
+		  }
+	  }
+	  return rtc_list;
+  }
+
+
+
+  /*!
+  * @if jp
+  * @brief コンストラクタ
+  * @else
+  * @brief Constructor
+  * @endif
+  */
+  NamingOnManager::NamingOnManager(CORBA::ORB_ptr orb, Manager* mgr)
+	  : m_orb(orb), m_mgr(mgr)
+  {
+  }
+  /*!
+  * @if jp
+  * @brief 指定した CORBA オブジェクトのNamingServiceへバインド
+  * @else
+  * @brief Bind the specified CORBA objects to NamingService
+  * @endif
+  */
+  void NamingOnManager::bindObject(const char* name,
+	  const RTObject_impl* rtobj)
+  {
+	  RTC_TRACE(("bindObject(name = %s, rtobj)", name));
+	  return;
+  }
+
+  void NamingOnManager::bindObject(const char* name,
+	  const PortBase* port)
+  {
+	  RTC_TRACE(("bindObject(name = %s, rtobj)", name));
+	  return;
+  }
+
+  void NamingOnManager::bindObject(const char* name,
+	  const RTM::ManagerServant* mgr)
+  {
+	  RTC_TRACE(("bindObject(name = %s, mgr)", name));
+	  return;
+  }
+
+  /*!
+  * @if jp
+  * @brief 指定した CORBA オブジェクトをNamingServiceからアンバインド
+  * @else
+  * @brief Unbind the specified CORBA object from NamingService
+  * @endif
+  */
+  void NamingOnManager::unbindObject(const char* name)
+  {
+	  RTC_TRACE(("unbindObject(name  = %s)", name));
+	  return;
+  }
+
+  bool NamingOnManager::isAlive()
+  {
+	  RTC_TRACE(("isAlive()"));
+	  return true;
+  }
+
+  /*!
+   * @if jp
+   *
+   * @brief rtcname形式でRTCのオブジェクトリファレンスを取得する
+   *
+   * @param name rtcloc形式でのRTC名
+   * rtcloc://localhost:2809/example/ConsoleIn
+   * @return RTCのオブジェクトリファレンスのリスト
+   *
+   * @else
+   *
+   * @brief
+   *
+   * @param name
+   * @return
+   *
+   * @endif
+   */
+  RTC::RTCList NamingOnManager::string_to_component(std::string name)
+  {
+	  RTC::RTCList rtc_list;
+	  coil::vstring tmp = coil::split(name, "://");
+	  if (tmp.size() > 1)
+	  {
+		  if (tmp[0] == "rtcloc")
+		  {
+			  std::string url = tmp[1];
+			  coil::vstring r = coil::split(url, "/");
+
+			  if (r.size() > 1)
+			  {
+				  std::string host = r[0];
+				  std::string rtc_name = url.substr(host.size()+1, url.size() - host.size());
+
+				  RTM::Manager_ptr mgr = getManager(host);
+				  
+				  if (!CORBA::is_nil(mgr))
+				  {
+					 
+					  rtc_list = (*mgr->get_components_by_name(rtc_name.c_str()));
+					  RTM::ManagerList* slaves = mgr->get_slave_managers();
+					  for (int i = 0; i < slaves->length(); i++)
+					  {
+						  
+						  try
+						  {
+							  RTC::RTCList slave_rtcs = (*(*slaves)[i]->get_components_by_name(rtc_name.c_str()));
+							  CORBA_SeqUtil::push_back_list(rtc_list, slave_rtcs);
+						  }
+						  catch (...)
+						  {
+							  //RTC_DEBUG((""));
+							  mgr->remove_slave_manager((*slaves)[i]);
+						  }
+					  }
+				  }
+				  return rtc_list;
+			  }
+		  }
+	  }
+	  return rtc_list;
+  }
+
+
+  /*!
+   * @if jp
+   *
+   * @brief 指定ホスト名、ポート名でManagerのオブジェクトリファレンスを取得
+   *
+   * @param name ホスト名、ポート名
+   *
+   * @return Managerのオブジェクトリファレンス
+   *
+   * @else
+   *
+   * @brief
+   *
+   * @param name
+   * @return
+   *
+   * @endif
+   */
+  RTM::Manager_ptr NamingOnManager::getManager(std::string name)
+  {
+	  
+	  if (name == "*")
+	  {
+		  RTM::Manager_ptr mgr;
+		  RTM::ManagerServant& mgr_sev = m_mgr->getManagerServant();
+		  if (mgr_sev.is_master())
+		  {
+			  mgr = mgr_sev.getObjRef();
+
+		  }
+		  else
+		  {
+			  RTM::ManagerList* masters = mgr_sev.get_master_managers();
+			  
+			  if (masters->length() > 0)
+			  {
+				  mgr = (*masters)[0];
+			  }
+			  else
+			  {
+				  mgr = mgr_sev.getObjRef();
+			  }
+		  }
+		  return mgr;
+	  }
+
+
+
+
+	  try
+	  {
+		  std::string mgrloc = "corbaloc:iiop:";
+		  coil::Properties prop = m_mgr->getConfig();
+		  std::string manager_name = prop.getProperty("manager.name");
+		  mgrloc += name;
+		  mgrloc += "/" + manager_name;
+
+		  CORBA::Object_ptr  mobj = m_orb->string_to_object(mgrloc.c_str());
+		  RTM::Manager_ptr mgr = RTM::Manager::_narrow(mobj);
+
+		  RTC_DEBUG(("corbaloc: %s", mgrloc));
+
+		  return mgr;
+	  }
+	  catch (CORBA::SystemException& ex)
+	  {
+		  
+	  }
+	  catch (...)
+	  {
+		  RTC_ERROR(("Unknown exception cought."));
+
+	  }
+	  return RTM::Manager::_nil();
+
+	
+  }
+
+
 
   
   //============================================================
@@ -449,6 +794,7 @@ namespace RTC
     RTC_TRACE(("createNamingObj(method = %s, nameserver = %s",
                method, name_server));
     std::string m(method);
+
     if (m == "corba")
       {
         try
@@ -468,6 +814,13 @@ namespace RTC
             return NULL;
           }
       }
+	else if (m == "manager")
+	{
+		NamingBase* name;
+		CORBA::ORB_var orb = m_manager->getORB();
+		name = new NamingOnManager(orb.in(), m_manager);
+		return name;
+	}
     return NULL;
   }
   
@@ -613,5 +966,43 @@ namespace RTC
             ns->ns = 0;
           } 
       }
+  }
+   /*!
+   * @if jp
+   *
+   * @brief rtcloc形式でRTCのオブジェクトリファレンスを取得
+   *
+   *
+   *
+   * @param name rtcloc形式でのRTC名
+   * rtcloc://localhost:2809/example/ConsoleIn
+   * @return RTCのオブジェクトリファレンスのリスト
+   *
+   * @else
+   *
+   * @brief
+   * registerMgrName
+   * @param name
+   *
+   * @return
+   *
+   *
+   * @endif
+   */
+  RTCList NamingManager::string_to_component(std::string name)
+  {
+	  
+	  for (std::vector<NamingService*>::iterator itr = m_names.begin(); itr != m_names.end(); ++itr) {
+		  if ((*itr)->ns != 0)
+		  {
+			  RTCList comps = (*itr)->ns->string_to_component(name);
+			  if (comps.length() > 0)
+			  {
+				  return comps;
+			  }
+		  }
+	  }
+	  
+	  return RTCList();
   }
 }; // namespace RTC

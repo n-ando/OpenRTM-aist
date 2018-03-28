@@ -48,6 +48,8 @@
 
 // RTC name numbering policy
 #include <rtm/NumberingPolicy.h>
+#include <rtm/NamingServiceNumberingPolicy.h>
+#include <rtm/NodeNumberingPolicy.h>
 
 void FactoryInit()
 {
@@ -83,6 +85,6 @@ void FactoryInit()
 
     // Naming Policy
     ProcessUniquePolicyInit();
-    //    NodeUniquePolicyInit();
-    //    NamingServiceUniquePolicyInit();
+	NamingServiceNumberingPolicyInit();
+	NodeNumberingPolicyInit();
 }

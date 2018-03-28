@@ -30,7 +30,7 @@ namespace RTM
   /*!
    * @if jp
    *
-   * @class DefaultNumberingPolicy
+   * @class ProcessUniquePolicy
    * @brief オブジェクト生成時ネーミング・ポリシー(命名規則)管理用クラス
    *
    * オブジェクトを生成する際のネーミング・ポリシー(命名規則)を管理するための
@@ -40,7 +40,7 @@ namespace RTM
    *
    * @else
    *
-   * @class DefaultNumberingPolicy
+   * @class ProcessUniquePolicy
    * @brief Class for naming policy management when creating objects
    *
    * This is a class to manage the naming policy when creating objects.
