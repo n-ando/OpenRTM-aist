@@ -374,9 +374,16 @@ namespace RTC
 	  {
 	    return f;
 	  }
+	coil::vstring ret;
+	coil::findFile((*it), file_name, ret);
+	if (!ret.empty())
+	  {
+		return ret.front();
+	  }
+
 	++it;
       }
-    
+
     return std::string("");
   }
   
@@ -479,8 +486,10 @@ namespace RTC
         coil::vstring flist;
         for (size_t s(0); s < suffixes.size(); ++s)
           {
-            std::string glob("*."); glob += suffixes[s];
-            coil::vstring tmp = coil::filelist(path.c_str(), glob.c_str());
+            //std::string glob("*."); glob += suffixes[s];
+            //coil::vstring tmp = coil::filelist(path.c_str(), glob.c_str());
+            coil::vstring tmp;
+            coil::getFileList(path, suffixes[s], tmp);
             RTC_DEBUG(("File list (path:%s, ext:%s): %s", path.c_str(),
                        suffixes[s].c_str(), coil::flatten(tmp).c_str()));
             flist.insert(flist.end(), tmp.begin(), tmp.end());
@@ -489,9 +498,11 @@ namespace RTC
         // reformat file path and remove cached files
         for (size_t j(0); j < flist.size(); ++j)
           {
-            if (*(path.end() - 1) != '/') { path += "/"; }
-            std::string fpath(path + flist[j]);
-            addNewFile(fpath, modules);
+            //if (*(path.end() - 1) != '/') { path += "/"; }
+            //std::string fpath(path + flist[j]);
+            //addNewFile(fpath, modules);
+            coil::replaceString(flist[j], "\\", "/");
+            addNewFile(flist[j], modules);
           }
       }
   }

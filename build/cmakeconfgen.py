@@ -192,6 +192,7 @@ if __name__ == '__main__':
             "OMNI_SHORTVER",
             "OMNITHREAD_DLLVER",
             "OMNITHREAD_VERSION",
+            "OMNISSL_DLLVER",
             ]
         for env_str in envs:
             env_var = "%" + env_str + "%"

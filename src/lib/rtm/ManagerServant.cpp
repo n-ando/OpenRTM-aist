@@ -1207,8 +1207,11 @@ namespace RTM
         return RTC::RTObject::_nil();
       }
 
+
+    CompParam comp_param(create_arg);
+
     // detect languange
-    std::string lang = param["language"];
+    std::string lang = comp_param.language();
     if (lang.empty()) { lang = "C++"; }
     RTC_INFO(("Specified manager's language: %s", lang.c_str()));
 
@@ -1219,7 +1222,7 @@ namespace RTM
         RTC_INFO(("Creating new manager named %s", mgrstr.c_str()));
 
         std::string rtcd_cmd_key("manager.modules.");
-        rtcd_cmd_key += lang + "manager_cmd";
+        rtcd_cmd_key += lang + ".manager_cmd";
         coil::Properties& prop = m_mgr.getConfig();
         std::string rtcd_cmd = prop[rtcd_cmd_key];
 
@@ -1307,29 +1310,29 @@ namespace RTM
           }
       }
 
-      if (CORBA::is_nil(mgrobj))
-        {
-            RTC_ERROR(("Launch failed: manager (%s)", mgrstr.c_str()));
-            return RTC::RTObject::_nil();
-        }
-      std::string create_arg_str(create_arg);
-      getParameterByModulename("manager_name", create_arg_str);
-      RTC_DEBUG(("Creating component on %s",  mgrstr.c_str()));
-      RTC_DEBUG(("arg: %s", create_arg_str.c_str()));
-      try
-        {
-            return mgrobj->create_component(create_arg_str.c_str());
-        }
-      catch (CORBA::SystemException& e)
-        {
-            RTC_ERROR(("Exception was caught while creating component."));
-            return RTC::RTObject::_nil();
-        }
-      catch (...)
-        {
-            RTC_ERROR(("Unknown non-CORBA exception cought."));
-            return RTC::RTObject::_nil();
-        }
+    if (CORBA::is_nil(mgrobj))
+      {
+        RTC_ERROR(("Launch failed: manager (%s)", mgrstr.c_str()));
+        return RTC::RTObject::_nil();
+      }
+    std::string create_arg_str(create_arg);
+    getParameterByModulename("manager_name", create_arg_str);
+    RTC_DEBUG(("Creating component on %s",  mgrstr.c_str()));
+    RTC_DEBUG(("arg: %s", create_arg_str.c_str()));
+    try
+      {
+        return mgrobj->create_component(create_arg_str.c_str());
+      }
+    catch (CORBA::SystemException& e)
+      {
+        RTC_ERROR(("Exception was caught while creating component."));
+        return RTC::RTObject::_nil();
+      }
+    catch (...)
+      {
+        RTC_ERROR(("Unknown non-CORBA exception cought."));
+        return RTC::RTObject::_nil();
+      }
       
     return RTC::RTObject::_nil();
   }
@@ -1366,8 +1369,10 @@ namespace RTM
         return RTC::RTObject::_nil();
       }
 
+
+    CompParam comp_param(create_arg);
     // detect languange
-    std::string lang = param["language"];
+    std::string lang = comp_param.language();
     if (lang.empty()) { lang = "C++"; }
     RTC_INFO(("Specified manager's language: %s", lang.c_str()));
 

@@ -31,6 +31,8 @@ namespace coil
    */
   int launch_shell(std::string command)
   {
+    std::string cmd = "cmd.exe /c ";
+    command = cmd + command;
 #ifdef UNICODE
 	// std::string -> LPTSTR
     std::wstring wcommand = string2wstring(command);
