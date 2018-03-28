@@ -779,6 +779,11 @@ std::vector<coil::Properties> Manager::getLoadableModules()
       "naming.enable",
       "naming.type",
       "naming.formats",
+      "sdo.service.provider.available_services",
+      "sdo.service.consumer.available_services",
+      "sdo.service.provider.enabled_services",
+      "sdo.service.consumer.enabled_services",
+      "manager.instance_name",
       ""
     };
 
@@ -866,6 +871,30 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 	m_namingManager->bindObject(names[i].c_str(), comp);
       }
     m_listeners.naming_.postBind(comp, names);
+
+
+	try
+	{
+		CORBA::Object_ptr obj = theORB()->resolve_initial_references("omniINSPOA");
+		PortableServer::POA_ptr poa = PortableServer::POA::_narrow(obj);
+		poa->the_POAManager()->activate();
+
+		std::string id_str = comp->getCategory();
+		id_str = id_str + "/" + comp->getInstanceName();
+
+		PortableServer::ObjectId_var id;
+#ifndef ORB_IS_RTORB
+		id = PortableServer::string_to_ObjectId(id_str.c_str());
+#else // ORB_IS_RTORB
+		id = PortableServer::
+			string_to_ObjectId((char *)id_str.c_str());
+#endif // ORB_IS_RTORB
+
+		poa->activate_object_with_id(id.in(), comp);
+	}
+	catch (...)
+	{
+	}
 
     return true;
   }

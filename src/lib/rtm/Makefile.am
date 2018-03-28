@@ -66,6 +66,8 @@ MGR_SRC =                        \
 	ModuleManager.cpp            \
 	NamingManager.cpp            \
 	NumberingPolicy.cpp          \
+	NodeNumberingPolicy.cpp          \
+	NamingServiceNumberingPolicy.cpp          \
 	ManagerServant.cpp           \
 	SystemLogger.cpp             \
 	LogstreamFile.cpp               \
@@ -165,7 +167,9 @@ rtmheader_HEADERS = \
 	EventPort.h				 \
 	InPort.h 		 \
 	InPortConsumer.h 	 \
-	NumberingPolicyBase.h \
+	NumberingPolicyBase.h    \
+	NamingServiceNumberingPolicy.h    \
+	NodeNumberingPolicy.h    \
 	ObjectManager.h 	 \
 	OutPort.h 		 \
 	OutPortConsumer.h 	 \
@@ -179,7 +183,7 @@ rtmheader_HEADERS = \
 	StateMachine.h 		 \
 	StaticFSM.h			\
 	Typename.h               \
-	Timestamp.h			\
+	Timestamp.h		 \
 	LocalServiceBase.h	 \
 	LogstreamBase.h      \
 	ListenerHolder.h         \
