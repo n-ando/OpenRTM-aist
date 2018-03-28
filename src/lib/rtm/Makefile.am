@@ -10,7 +10,7 @@ AUTOMAKE_OPTIONS = 1.4
 ARTLIB = @ARTLIB@
 SUBDIRS = idl . ext @UNITTEST@
 
-AM_CPPFLAGS=-I$(top_srcdir)/src/lib -I$(top_srcdir)/src/lib/coil/include -I$(top_srcdir)/src/lib/rtm -I$(top_srcdir)/src/lib/rtm/idl
+AM_CPPFLAGS=-I$(top_srcdir)/src -I$(top_srcdir)/src/lib -I$(top_srcdir)/src/lib/coil/include -I$(top_srcdir)/src/lib/rtm -I$(top_srcdir)/src/lib/rtm/idl
 AM_LDFLAGS=-L$(top_builddir) -L$(top_builddir)/src/lib/rtm -L$(top_builddir)/src/lib/rtm/idl -L$(top_builddir)/src/lib/coil/lib
 
 # version.h would be generated from configure before lib build process.
@@ -141,16 +141,35 @@ libRTC_la_SOURCES = \
 	version.txt \
 	$(UTIL_SRC) $(MGR_SRC) $(COMP_SRC) $(PORT_SRC)
 
+#------------------------------
+# Component observer embedded
+if ENABLE_OBSERVER
+OBSERVER_LA = \
+	libComponentObserverStub.la \
+	libComponentObserverConsumer.la
+OBSERVER_LIB = \
+	$(top_builddir)/src/ext/sdo/observer/libComponentObserverStub.la \
+	$(top_builddir)/src/ext/sdo/observer/libComponentObserverConsumer.la
+OBSERVER_LDFLAGS = -L$(top_builddir)/src/ext/sdo/observer
+endif
+libComponentObserverStub.la:
+	(cd $(top_builddir)/src/ext/sdo/observer ; make)
+libComponentObserverConsumer.la: libComponentObserverStub.la
+	(cd $(top_builddir)/src/ext/sdo/observer ; make)
+#------------------------------
 
 libRTC_la_LIBADD = \
 	$(top_builddir)/src/lib/coil/lib/libcoil.la \
-	$(top_builddir)/src/lib/rtm/idl/libRTCSkel.la
+	$(top_builddir)/src/lib/rtm/idl/libRTCSkel.la \
+	$(OBSERVER_LIB)
 
-# $(top_builddir)/rtm/idl/libRTCStub.la $(ARTLIB)
-libRTC_la_LDFLAGS =                 \
-	-no-undefined               \
-	-L$(top_builddir)/src/lib/rtm/idl   \
-	-release $(PACKAGE_VERSION)
+libRTC_la_DEPENDENCIES = \
+	$(OBSERVER_LA)
+libRTC_la_LDFLAGS =                   \
+	-no-undefined                     \
+	-L$(top_builddir)/src/lib/rtm/idl \
+	-release $(PACKAGE_VERSION)       \
+	$(OBSERVER_LDFLAGS)
 
 
 rtmheaderdir = $(rtm_includedir)/rtm
