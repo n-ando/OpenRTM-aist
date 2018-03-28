@@ -3,15 +3,15 @@
 #  @brief OpenRTM-aist name server launcher
 #  @date $Date: 2005-05-12 09:06:19 $
 #  @author Noriaki Ando <n-ando@aist.go.jp>
-# 
-#  Copyright (C) 2003-2011
+#
+#  Copyright (C) 2003-2018
 #      Intelligent Systems Research Institute,
 #      National Institute of
 #          Advanced Industrial Science and Technology (AIST), Japan
 #      All rights reserved.
-# 
+#
 #  $Id$
-# 
+#
 
 pname=`basename $cosnames`
 hostname=`hostname`
@@ -20,12 +20,49 @@ DEBUG=""
 
 usage()
 {
-	cat<<EOF
-Usage: rtm-naming port_number
+    cat<<EOF
+
+  Usage:
+    $(basename $0) [-p port_number] [-f] [-w password] [h]
+
+  Example:
+    $(basename $0) -p 8888 -f
+      Force running naming service on port 8888
+
+  Options:
+    -p         Port number of naming service. (default 2809)
+    -f         Force kill current running naming service.
+    -w         Current user's passoword to restart naming service.
+    -h         Print this help.
+
 EOF
 }
 
+get_opt()
+{
+    # Global variables
+    FORCEKILL=""
+    PASSWORD=""
+    PORT=2809
+    if test $# -eq 0 ; then
+        PORT=2809
+    fi
 
+    while getopts p:fw:h OPT
+    do
+        case $OPT in
+            p) PORT=$OPTARG
+                ;;
+            f) FORCEKILL="YES"
+                ;;
+            w) PASSWORD=$OPTARG
+                ;;
+            h) usage
+                exit 1
+                ;;
+        esac
+    done
+}
 #
 # debug <text>
 #
@@ -36,7 +73,7 @@ EOF
 debug()
 {
     if test "x$DEBUG" != "x"; then
-	echo $*
+        echo $*
     fi
 }
 
@@ -58,12 +95,12 @@ get_pid_of_nsport()
     _netstat=`netstat -tanp 2> /dev/null | grep $_port | awk '{if($7!="-"){print $7;}}'`
     debug "A possible process that is using $port port:" $_netstat
     if test "x$_netstat" = "x"; then
-	debug "No process using port number ${_port} on the system."
-	return 1
+        debug "No process using port number ${_port} on the system."
+        return 1
     fi
     if test "x$_netstat" = "x"; then
-	debug "Process information could not be identified."
-	return 1
+        debug "Process information could not be identified."
+        return 1
     fi
 
     _pid=`echo $_netstat | awk 'BEGIN{FS="/";}{print $1;}'`
@@ -161,7 +198,7 @@ check_cosname()
 #
 stop_existing_ns()
 {
-    get_pid_of_nsport $port
+    get_pid_of_nsport $PORT
     if test $? -eq 0; then
 	debug "The Process information using the port could be obtained."
         # If "port" is used by other program -> abort
@@ -189,34 +226,43 @@ stop_existing_ns()
 
     # omniNames is not started by init script
     if test $? -ne 0; then
-	debug "$pname might not be started from init script."
-	if test "x$pid_of_nsport" != "x" ; then
-	    echo "$pname (pid: $pid_of_nsport) is running"
-	    read -p "Kill anyway and start $pname again? (y/N)" killns
-	    if test "x$killns" = "xy" -o  "x$killns" = "xY"; then
-		pkill -f $pname
-		echo "$pname (pid: $pid_of_nsport) are killed"
-		return 0
-	    fi
-	    echo "Aborting"
-	    exit 1
-	fi
-	echo "No running $pname found. The process using the port $port "
-	echo "cannot be estimated. Arboting"
-	exit 1
-    fi
+        debug "$pname might not be started from init script."
+        if test "x$pid_of_nsport" != "x" ; then
+            echo "$pname (pid: $pid_of_nsport) is running"
 
+            # Restart naming service
+            if test "x$FORCEKILL" = "x" ; then
+                read -p "Kill anyway and start $pname again? (y/N)" killns
+                if test "x$killns" != "xy" -o  "x$killns" != "xY"; then
+                    echo "Aborting"
+                    exit 1
+                fi
+            fi
+            pkill -f $pname
+            echo "$pname (pid: $pid_of_nsport) are killed"
+            return 0
+        fi
+        echo "No running $pname found. The process using the port $PORT "
+        echo "cannot be estimated. Arboting"
+        exit 1
+    fi
     # omniNames is started by init script
     echo "omniNames might be started $init_script."
-    echo "Stop it (password for sudo is required.)"
-    read -p "and start omniNames by rtm-naming? (y/N)" startns
 
-    if test "x$startns" != "xy" -a "x$startns" != "xY" ; then
-	echo "Aborted."
-	exit 1
+    if test "x$FORCEKILL" = "x" ; then
+        echo "Stop it (password for sudo is required.)"
+        read -p "and start omniNames by rtm-naming? (y/N)" startns
+        if test "x$startns" != "xy" -a "x$startns" != "xY" ; then
+            echo "Aborted."
+            exit 1
+        fi
     fi
     echo "Stopping omniNames by $init_script."
-    sudo $init_script stop
+    if test "x$PASSWORD" = "x" ; then
+       sudo $init_script stop
+    else
+        echo $PASSWORD | sudo -S $init_script stop
+    fi
     return 0
 }
 
@@ -231,11 +277,11 @@ stop_existing_ns()
 #
 start_omninames()
 {
-    echo 'Starting omniORB omniNames: '$hostname':'$port
+    echo 'Starting omniORB omniNames: '$hostname':'$PORT
     rm -f ./omninames-$hostname.log
     rm -f ./omninames-$hostname.bak
     rm -f ./omninames-$hostname.dat
-    $cosnames -start $port -logdir $currdir &
+    $cosnames -start $PORT -logdir $currdir &
     ret=$!
     sleep 1
     debug "return code of omniNames:" $ret
@@ -279,8 +325,8 @@ start_taonames()
 	echo "TAO Naming_Service not found. Aborting."
 	exit 1
     fi
-    echo 'Starting TAO Naming_Service: '$hostname':'$port
-    $cosnames -m 0 -ORBListenEndpoints iiop://:$port &
+    echo 'Starting TAO Naming_Service: '$hostname':'$PORT
+    $cosnames -m 0 -ORBListenEndpoints iiop://:$PORT &
     ret=$!
     sleep 1
     debug "return code of TAO Naming_Service:" $ret
@@ -315,11 +361,7 @@ taonames()
 #------------------------------------------------------------
 # main
 #------------------------------------------------------------
-if test $# -gt 0; then
-    port=$1
-else
-    port=2809
-fi
+get_opt $@
 
 case $orb in
 	omniORB)

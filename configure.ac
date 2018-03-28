@@ -1054,8 +1054,8 @@ if test "x$have_omniorb" = "xyes" ; then
 	CPPFLAGS="-I$omniORB4_CORBA_h_dir $CPPFLAGS"
 	CXXFLAGS="-I$omniORB4_CORBA_h_dir $CXXFLAGS"
 	LDFLAGS="-L$omniorb_lib_dir $LDFLAGS"
-	LIBS="$LIBS -lomniORB4 -lomnithread -lomniDynamic4"
-	LDSOLIBS="$LDSOLIBS -lomniORB4 -lomnithread -lomniDynamic4"
+	LIBS="$LIBS -lomniORB4 -lomnithread -lomniDynamic4 -lomnisslTP4"
+	LDSOLIBS="$LDSOLIBS -lomniORB4 -lomnithread -lomniDynamic4 -lomnisslTP4"
 	AC_DEFINE([ORB_IS_OMNIORB], [TRUE], [ORB is omniORB])
 fi
 

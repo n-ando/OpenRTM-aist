@@ -70,6 +70,23 @@ OBSERVER_OBJ=$(OBSERVER_DIST_SRC:.cpp=.o)
 # Targets directories
 socompdir = $(rtm_sdodir)
 
+#------------------------------
+# Static link library for linked in libRTC.so
+if ENABLE_OBSERVER
+noinst_LTLIBRARIES =            \
+	libComponentObserverStub.la \
+	libComponentObserverConsumer.la
+nodist_libComponentObserverStub_la_SOURCES =  $(IDL_SOURCES:.idl=Stub.cpp)
+
+nodist_libComponentObserverConsumer_la_SOURCES = \
+	$(OBSERVER_DIST_SRC) $(OBSERVER_DIST_H)
+nodist_libComponentObserverConsumer_la_LDFLAGS = -module
+nodist_libComponentObserverConsumer_la_DEPENDENCIES = \
+	libComponentObserverStub.la
+nodist_libComponentObserverConsumer_la_LIBADD  =      \
+	libComponentObserverStub.la
+else
+#------------------------------
 # Loadable Module
 noinst_LTLIBRARIES = libComponentObserverStub.la
 nodist_libComponentObserverStub_la_SOURCES =  $(IDL_SOURCES:.idl=Stub.cpp)
@@ -80,10 +97,12 @@ dist_ComponentObserverConsumer_la_SOURCES = \
 	$(OBSERVER_DIST_SRC) $(OBSERVER_DIST_H)
 ComponentObserverConsumer_la_LDFLAGS = -module
 ComponentObserverConsumer_la_DEPENDENCIES = libComponentObserverStub.la
-ComponentObserverConsumer_la_LIBADD  =                \
+ComponentObserverConsumer_la_LIBADD  =            \
 	libComponentObserverStub.la                   \
 	$(top_builddir)/src/lib/rtm/libRTC.la         \
 	$(top_builddir)/src/lib/coil/lib/libcoil.la
+endif
+#------------------------------
 
 #------------------------------------------------------------
 # Extra distributed files
@@ -98,42 +117,6 @@ ALL_SRC = $(OBSERVER_SRC)
 lst:
 	echo $(ALL_SRC) > src.lst
 	echo $(EXTRA_DIST) > other.lst
-
-#------------------------------------------------------------
-# Visual Studio Project
-#------------------------------------------------------------
-win32_builddir=$(top_builddir)/win32/OpenRTM-aist/ext/sdo/observer
-PROJNAME=ComponentObserverConsumer
-
-vcproj: vc9proj vcxproj
-
-vc9proj:
-	$(top_builddir)/build/vcprojtool.py vcproj              \
-		--type DLL                                      \
-		--vcversion "9.00"                              \
-		--projectname "$(PROJNAME)"                     \
-		--version $(RTM_VERSION)                        \
-		--out $(win32_builddir)/$(PROJNAME)Dll_vc9.vcproj  \
-		--yaml $(top_builddir)/examples/rtcdll.vcproj.yaml \
-		--source $(OBSERVER_WIN_SRC)                        \
-		--header $(OBSERVER_WIN_H)
-	qkc -O- -sm $(win32_builddir)/$(PROJNAME)Dll_vc9.vcproj
-
-vcxproj:
-	for ver in $(VC_VERSION); do \
-		$(top_builddir)/build/vcxprojtool.py vcxproj              \
-			--type DLL                                        \
-			--vcversion "$${ver}.00"                               \
-			--projectname "$(PROJNAME)"                       \
-			--version $(RTM_VERSION)                          \
-			--out $(win32_builddir)/$(PROJNAME)Dll_vc$${ver}.vcxproj \
-			--yaml $(top_builddir)/examples/rtcdll.vcproj.yaml  \
-			--source $(OBSERVER_WIN_SRC)                          \
-			--header $(OBSERVER_WIN_H) ; \
-		qkc -O- -sm $(win32_builddir)/$(PROJNAME)Dll_vc$${ver}.vcxproj ; \
-	done
-
-dist-hook: lst vcproj
 
 
 clean_objs:

@@ -55,7 +55,6 @@ UTIL_SRC =            \
 	NVUtil.cpp        \
 	RTCUtil.cpp       \
 	DefaultPeriodicTask.cpp \
-	CORBA_RTCUtil.h   \
 	CORBA_RTCUtil.cpp
 
 MGR_SRC =                        \
@@ -144,6 +143,7 @@ libRTC_la_SOURCES = \
 #------------------------------
 # Component observer embedded
 if ENABLE_OBSERVER
+FactoryInit.cpp: ComponentObserverConsumer.h ComponentObserverSkel.h 
 OBSERVER_LA = \
 	libComponentObserverStub.la \
 	libComponentObserverConsumer.la
@@ -156,6 +156,11 @@ libComponentObserverStub.la:
 	(cd $(top_builddir)/src/ext/sdo/observer ; make)
 libComponentObserverConsumer.la: libComponentObserverStub.la
 	(cd $(top_builddir)/src/ext/sdo/observer ; make)
+ComponentObserverConsumer.h: ComponentObserverSkel.h
+ComponentObserverSkel.h:
+	(cd $(top_builddir)/src/ext/sdo/observer ; make)
+
+
 #------------------------------
 
 libRTC_la_LIBADD = \
@@ -171,7 +176,6 @@ libRTC_la_LDFLAGS =                   \
 	-release $(PACKAGE_VERSION)       \
 	$(OBSERVER_LDFLAGS)
 
-
 rtmheaderdir = $(rtm_includedir)/rtm
 
 rtmheader_HEADERS = \
@@ -186,6 +190,9 @@ rtmheader_HEADERS = \
 	DataOutPort.h 		 \
 	DataPortStatus.h 	 \
 	DefaultConfiguration.h 	 \
+	DirectInPortBase.h 	 \
+	DirectOutPortBase.h 	 \
+	DirectPortBase.h 	 \
 	ExecutionContextBase.h 	 \
 	EventPort.h				 \
 	InPort.h 		 \
