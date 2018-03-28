@@ -25,7 +25,7 @@
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
-				CommandLine="REM @echo off&#x0D;&#x0A;set PATH=$(rtm_path);%PYTHON_ROOT%\;%PATH%&#x0D;&#x0A;echo %PATH%&#x0D;&#x0A;for %%x in (*.idl) do omniidl -bcxx -Wba -nf %%x&#x0D;&#x0A;for %%x in (*.idl) do rtm-skelwrapper.py --include-dir=&quot;&quot; --skel-suffix=Skel --stub-suffix=Stub --idl-file=%%x&#x0D;&#x0A;&#x0D;&#x0A;"
+				CommandLine="REM @echo off&#x0D;&#x0A;set PATH=$(rtm_path);%PYTHON_ROOT%\;%PATH%&#x0D;&#x0A;echo %PATH%&#x0D;&#x0A;for %%x in (*.idl) do omniidl -bcxx -Wba -nf -Wbshortcut %%x&#x0D;&#x0A;for %%x in (*.idl) do rtm-skelwrapper.py --include-dir=&quot;&quot; --skel-suffix=Skel --stub-suffix=Stub --idl-file=%%x&#x0D;&#x0A;&#x0D;&#x0A;"
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
@@ -106,7 +106,7 @@
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
-				CommandLine="REM @echo off&#x0D;&#x0A;set PATH=$(rtm_path);%PYTHON_ROOT%\;%PATH%&#x0D;&#x0A;echo %PATH%&#x0D;&#x0A;for %%x in (*.idl) do omniidl -bcxx -Wba -nf %%x&#x0D;&#x0A;for %%x in (*.idl) do rtm-skelwrapper.py --include-dir=&quot;&quot; --skel-suffix=Skel --stub-suffix=Stub --idl-file=%%x&#x0D;&#x0A;&#x0D;&#x0A;"
+				CommandLine="REM @echo off&#x0D;&#x0A;set PATH=$(rtm_path);%PYTHON_ROOT%\;%PATH%&#x0D;&#x0A;echo %PATH%&#x0D;&#x0A;for %%x in (*.idl) do omniidl -bcxx -Wba -nf -Wbshortcut %%x&#x0D;&#x0A;for %%x in (*.idl) do rtm-skelwrapper.py --include-dir=&quot;&quot; --skel-suffix=Skel --stub-suffix=Stub --idl-file=%%x&#x0D;&#x0A;&#x0D;&#x0A;"
 			/>
 			<Tool
 				Name="VCCustomBuildTool"

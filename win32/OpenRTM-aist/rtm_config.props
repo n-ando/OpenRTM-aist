@@ -24,7 +24,7 @@
     <rtm_ext_libd>$(rtm_ext_libd)</rtm_ext_libd>
     <rtm_ext_lib>$(rtm_ext_lib)</rtm_ext_lib>
     <rtm_idlc>omniidl</rtm_idlc>
-    <rtm_idlflags>-bcxx -Wba -nf -I $(SolutionDir)\rtm\idl</rtm_idlflags>
+    <rtm_idlflags>-bcxx -Wba -nf -Wbshortcut -I $(SolutionDir)\rtm\idl</rtm_idlflags>
   </PropertyGroup>
   <PropertyGroup>
     <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>

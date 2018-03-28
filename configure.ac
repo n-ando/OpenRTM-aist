@@ -1043,7 +1043,7 @@ if test "x$have_omniorb" = "xyes" ; then
 	PATH_NORM($omniidl)
 	omniidl=$n_path
 	IDLC=$omniidl
-	IDL_FLAGS="-bcxx -Wba -nf -Wbuse_quotes"
+	IDL_FLAGS="-bcxx -Wba -nf -Wbuse_quotes -Wbshortcut"
 
 	dnl omniNames
 	PATH_NORM($omniNames)

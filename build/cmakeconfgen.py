@@ -249,7 +249,7 @@ if __name__ == '__main__':
     dict["openrtm_idl_wrapper"] = "rtm-skelwrapper.py"
     dict["openrtm_idl_wrapper_flags"] = '--include-dir="";--skel-suffix=Skel;--stub-suffix=Stub'
     dict["openrtm_idlc"] = "omniidl"
-    dict["openrtm_idlflags"] =  "-bcxx;-Wba;-nf;-I${OPENRTM_DIR}/rtm/idl"
+    dict["openrtm_idlflags"] =  "-bcxx;-Wba;-nf;-Wbshortcut;-I${OPENRTM_DIR}/rtm/idl"
 
     t = yat.Template(template)
     f = file("OpenRTMConfig.cmake", "w")
