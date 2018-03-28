@@ -867,6 +867,30 @@ namespace coil
    * @endif
    */
   std::string sprintf(char const * __restrict fmt, ...);
+
+  /*!
+  * @if jp
+  * @brief 文字列中の環境変数を置き換える
+  *
+  *
+  *
+  * 文字列中に${}で囲まれた文字列がある場合に、環境変数と置き換える
+  * 例：${RTM_ROOT}\bin -> C:\Program Files (x86)\OpenRTM-aist\1.1.2\
+  *
+  * @param str 置き換え前の文字列
+  * @return 置き換え後の文字列
+  *
+  * @else
+  * @brief
+  *
+  * @param str 
+  * @return 
+  *
+  * @return
+  *
+  * @endif
+  */
+  std::string replaceEnv(std::string str);
   
 }; // namepsace coil
 #endif // COIL_STRINGUTIL_H
