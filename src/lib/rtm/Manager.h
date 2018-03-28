@@ -1136,6 +1136,48 @@ namespace RTC
      * @endif
      */
     PortableServer::POAManager_ptr getPOAManager();
+
+    /*!
+     * @if jp
+     * @brief ManagerServantを取得する
+     *
+     * @else
+     *
+     * @brief Getting ManagerServant
+     *
+     * @endif
+     */
+    RTM::ManagerServant& getManagerServant();
+
+    /*!
+     * @if jp
+     * @brief LocalService の初期化
+     *
+     * @return Timer 初期化処理実行結果(初期化成功:true、初期化失敗:false)
+     *
+     * @else
+     * @brief LocalService initialization
+     *
+     * @return Timer Initialization result (Successful:true, Failed:false)
+     *
+     * @endif
+     */
+    bool initLocalService();
+    /*!
+     * @if jp
+     * @brief NamingManagerを取得する
+     *
+     * @return NamingManager
+     *
+     * @else
+     *
+     * @brief Getting NamingManager
+     *
+     * @return NamingManager
+     *
+     * @endif
+     */
+    NamingManager* getNaming();
     
     //============================================================
     // Protected functions
@@ -1406,7 +1448,7 @@ namespace RTC
      * @endif
      */
     void shutdownNaming();
-
+    
     /*!
      * @if jp
      * @brief NamingManagerを取得する
@@ -1622,6 +1664,51 @@ namespace RTC
     bool initFactories();
 
     void initCpuAffinity();
+	/*!
+	 * @if jp
+	 * @brief 起動時にrtc.confで指定したポートを接続する
+	 *
+	 * 例:
+	 * manager.components.preconnect: RTC0.port0?RTC0.port1&interface_type=corba_cdr&dataflow_type=pull&~,~
+	 *
+	 *
+	 * @else
+	 * @brief 
+	 *
+	 *
+	 * @endif
+	 */
+	void initPreConnection();
+	/*!
+	 * @if jp
+	 * @brief 起動時にrtc.confで指定したRTCをアクティベーションする
+	 *
+	 * 例:
+	 * manager.components.preactivation: RTC1,RTC2~
+	 *
+	 *
+	 * @else
+	 * @brief
+	 *
+	 *
+	 * @endif
+	 */
+	void initPreActivation();
+	/*!
+	 * @if jp
+	 * @brief 起動時にrtc.confで指定したRTCを生成する
+	 *
+	 * 例:
+	 * manager.components.precreate RTC1,RTC2~
+	 *
+	 *
+	 * @else
+	 * @brief
+	 *
+	 *
+	 * @endif
+	 */
+	void initPreCreation();
     
     /*!
      * @if jp
@@ -1659,32 +1746,7 @@ namespace RTC
      */
     bool initManagerServant();
 
-    /*!
-     * @if jp
-     * @brief ManagerServantを取得する
-     *
-     * @else
-     *
-     * @brief Getting ManagerServant
-     *
-     * @endif
-     */
-    RTM::ManagerServant& getManagerServant();
 
-    /*!
-     * @if jp
-     * @brief LocalService の初期化
-     *
-     * @return Timer 初期化処理実行結果(初期化成功:true、初期化失敗:false)
-     *
-     * @else
-     * @brief LocalService initialization
-     *
-     * @return Timer Initialization result (Successful:true, Failed:false)
-     *
-     * @endif
-     */
-    bool initLocalService();
 
     /*!
      * @if jp

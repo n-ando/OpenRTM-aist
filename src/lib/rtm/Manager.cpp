@@ -398,129 +398,10 @@ namespace RTC
         m_initProc(this);
       }
 
-    RTC_TRACE(("Components pre-creation: %s",
-               m_config["manager.components.precreate"].c_str()));
-    std::vector<std::string> comp;
-    comp = coil::split(m_config["manager.components.precreate"], ",");
-    for (int i(0), len(comp.size()); i < len; ++i)
-      {
-        this->createComponent(comp[i].c_str());
-      }
+	initPreCreation();
+	initPreConnection();
+	initPreActivation();
 
-    { // pre-connection
-      RTC_TRACE(("Connection pre-connection: %s",
-                 m_config["manager.components.preconnect"].c_str()));
-      std::vector<std::string> connectors;
-      connectors = coil::split(m_config["manager.components.preconnect"], ",");
-      for (int i(0), len(connectors.size()); i < len; ++i)
-        {
-          // ConsoleIn.out:Console.in(dataflow_type=push,....)
-          coil::vstring conn_prop = coil::split(connectors[i], "(");
-          if (conn_prop.size() == 1)
-            {
-              conn_prop.   // default connector profile value
-                push_back("dataflow_type=push&interface_type=corba_cdr");
-            } // after this conn_prop.size() >= 2
-          std::size_t pos = conn_prop[1].find_last_of(")");
-          if (pos != std::string::npos) { conn_prop[1].erase(pos); }
-
-          coil::vstring comp_ports;
-          comp_ports = coil::split(conn_prop[0], ":");
-          if (comp_ports.size() != 2)
-            {
-              RTC_ERROR(("Invalid format for pre-connection."));
-              RTC_ERROR(("Format must be Comp0.port0:Comp1.port1"));
-              continue;
-            }
-          std::string comp0_name = coil::split(comp_ports[0], ".")[0];
-          std::string comp1_name = coil::split(comp_ports[1], ".")[0];
-          RTObject_impl* comp0 = getComponent(comp0_name.c_str());
-          RTObject_impl* comp1 = getComponent(comp1_name.c_str());
-          if (comp0 == NULL)
-            { RTC_ERROR(("%s not found.", comp0_name.c_str())); continue; }
-          if (comp1 == NULL)
-            { RTC_ERROR(("%s not found.", comp1_name.c_str())); continue; }
-          std::string port0 = comp_ports[0];
-          std::string port1 = comp_ports[1];
-          
-          PortServiceList_var ports0 = comp0->get_ports();
-          PortServiceList_var ports1 = comp1->get_ports();
-          RTC_DEBUG(("%s has %d ports.", comp0_name.c_str(), ports0->length()));
-          RTC_DEBUG(("%s has %d ports.", comp1_name.c_str(), ports1->length()));
-          
-          PortService_var port0_var;
-          for (size_t p(0); p < ports0->length(); ++p)
-            {
-              PortProfile_var pp = ports0[p]->get_port_profile();
-              std::string s(CORBA::string_dup(pp->name));
-              if (comp_ports[0] == s)
-                {
-                  RTC_DEBUG(("port %s found: ", comp_ports[0].c_str()));
-                  port0_var = ports0[p];
-                }
-            }
-          PortService_var port1_var;
-          for (size_t p(0); p < ports1->length(); ++p)
-            {
-              PortProfile_var pp = ports1[p]->get_port_profile();
-              std::string s(CORBA::string_dup(pp->name));
-              if (port1 == s)
-                {
-                  RTC_DEBUG(("port %s found: ", comp_ports[1].c_str()));
-                  port1_var = ports1[p];
-                }
-            }
-          if (CORBA::is_nil(port0_var))
-            {
-              RTC_ERROR(("port0 %s is nil obj", comp_ports[0].c_str()));
-              continue;
-            }
-          if (CORBA::is_nil(port1_var))
-            {
-              RTC_ERROR(("port1 %s is nil obj", comp_ports[1].c_str()));
-              continue;
-            }
-          ConnectorProfile conn_prof;
-          std::string prof_name;
-          conn_prof.name = CORBA::string_dup(connectors[i].c_str());
-          conn_prof.connector_id = CORBA::string_dup("");
-          conn_prof.ports.length(2);
-          conn_prof.ports[0] = port0_var;
-          conn_prof.ports[1] = port1_var;
-          coil::Properties prop;
-          prop["dataport.dataflow_type"] = "push";
-          prop["dataport.interface_type"] = "corba_cdr";
-          coil::vstring opt_props = coil::split(conn_prop[1], "&");
-          for (size_t o(0); o < opt_props.size(); ++o)
-            {
-              coil::vstring temp = coil::split(opt_props[o], "=");
-              prop["dataport." + temp[0]] = temp[1];
-            }
-          NVUtil::copyFromProperties(conn_prof.properties, prop);
-          if (RTC::RTC_OK != port0_var->connect(conn_prof))
-            {
-              RTC_ERROR(("Connection error: %s",
-                         connectors[i].c_str()));
-            }
-        }
-    } // end of pre-connection
-
-    { // pre-activation
-      RTC_TRACE(("Components pre-activation: %s",
-                 m_config["manager.components.preactivation"].c_str()));
-      std::vector<std::string> comps;
-      comps = coil::split(m_config["manager.components.preactivation"],
-                               ",");
-      for (int i(0), len(comps.size()); i < len; ++i)
-        {
-          RTObject_impl* comp = getComponent(comps[i].c_str());
-          if (comp == NULL)
-            { RTC_ERROR(("%s not found.", comps[i].c_str())); continue; }
-
-          ExecutionContextList_var ecs = comp->get_owned_contexts();
-          ecs[CORBA::ULong(0)]->activate_component(comp->getObjRef());
-        }
-    } // end of pre-activation
     return true;
   }
   
@@ -1347,6 +1228,32 @@ std::vector<coil::Properties> Manager::getLoadableModules()
         }
     }
 
+
+	{
+		coil::vstring lmpm_ = coil::split(m_config["manager.preload.modules"], ",");
+		for (coil::vstring::iterator itr = lmpm_.begin(); itr != lmpm_.end(); ++itr)
+		{
+			std::string mpm_ = (*itr);
+			coil::eraseBothEndsBlank(mpm_);
+			if (mpm_.empty())
+			{
+				continue;
+			}
+			std::string basename_ = coil::split(mpm_, ".").front() + "Init";
+			try
+			{
+				m_module->load(mpm_, basename_);
+			}
+			catch (...)
+			{
+				//RTC_ERROR((""));
+			}
+		}
+
+	}
+	m_config["manager.instance_name"] = formatString(m_config["manager.instance_name"].c_str(), m_config);
+
+
   }
   
   /*!
@@ -2033,29 +1940,28 @@ std::vector<coil::Properties> Manager::getLoadableModules()
           }
       }
 
-    std::ifstream otherref(m_config["manager.refstring_path"].c_str());
-    if (otherref.fail() != 0)
-      {
-        otherref.close();
-        std::ofstream reffile(m_config["manager.refstring_path"].c_str());
-        RTM::Manager_var mgr_v(RTM::Manager::
-                               _duplicate(m_mgrservant->getObjRef()));
-        CORBA::String_var str_var = m_pORB->object_to_string(mgr_v);
-        reffile << str_var;
-        reffile.close();
-      }
-    else
-      {
-        std::string refstring;
-        otherref >> refstring;
-        otherref.close();
+	if (coil::toBool(m_config["corba.update_master_manager.enable"], "YES", "NO", true)
+		&& !coil::toBool(m_config["manager.is_master"], "YES", "NO", false))
+	{
+		coil::TimeValue tm(10, 0);
+		if (m_config.findNode("corba.update_master_manager.interval") != NULL)
+		{
+			float duration = 10;
+			
+			coil::stringTo<float>(duration, m_config["corba.update_master_manager.interval"].c_str());
+			if (duration > 0)
+			{
+				tm = coil::TimeValue(duration);
+			}
+			if (m_timer)
+			{
+				m_timer->registerListenerObj(m_mgrservant, &RTM::ManagerServant::updateMasterManager, tm);
+			}
 
-        CORBA::Object_var obj = m_pORB->string_to_object(refstring.c_str());
-        RTM::Manager_var mgr = RTM::Manager::_narrow(obj);
-        //        if (CORBA::is_nil(mgr)) return false;
-        //        mgr->set_child(m_mgrservant->getObjRef());
-        //        m_mgrservant->set_owner(mgr);
-      }
+			
+		}
+
+	}
 
     return true;
   }
@@ -2069,7 +1975,28 @@ std::vector<coil::Properties> Manager::getLoadableModules()
    */
   RTM::ManagerServant& Manager::getManagerServant()
   {
+	  RTC_TRACE(("Manager.getManagerServant()"));
     return *m_mgrservant;
+  }
+
+  /*!
+  * @if jp
+  * @brief NamingManagerを取得する
+  *
+  * @return NamingManager
+  *
+  * @else
+  *
+  * @brief Getting NamingManager
+  *
+  ** @return NamingManager
+  *
+  * @endif
+  */
+  NamingManager* Manager::getNaming()
+  {
+	  RTC_TRACE(("Manager.getNaming()"));
+	  return m_namingManager;
   }
 
   bool Manager::initLocalService()
@@ -2192,35 +2119,36 @@ std::vector<coil::Properties> Manager::getLoadableModules()
         RTC_ERROR(("Invalid arguments. Two or more '?' in arg : %s", comp_arg));
         return false;
       }
+
+	//RTM::CompParam::prof_list
+
     if (id_and_conf[0].find(":") == std::string::npos)
       {
-        id_and_conf[0].insert(0, "RTC:::");
-        id_and_conf[0] += ":";
+		  std::string id = RTM::CompParam::prof_list[0];
+		  id = id + ":::";
+
+		  id_and_conf[0].insert(0, id);
+        id_and_conf[0] += "::";
       }
     std::vector<std::string> id(coil::split(id_and_conf[0], ":"));
 
     // id should be devided into 1 or 5 elements
     // RTC:[vendor]:[category]:impl_id:[version] => 5
-    if (id.size() != 5) 
+	if (id.size() != RTM::CompParam::prof_list_size)
       {
         RTC_ERROR(("Invalid RTC id format.: %s", id_and_conf[0].c_str()));
         return false;
       }
 
-    const char* prof[] =
-      {
-        "RTC", "vendor", "category", "implementation_id", "version"
-      };
-
-    if (id[0] != prof[0])
+	if (id[0] != RTM::CompParam::prof_list[0])
       {
         RTC_ERROR(("Invalid id type: %s", id[0].c_str()));
         return false;
       }
-    for (int i(1); i < 5; ++i)
+	for (size_t i(1); i < RTM::CompParam::prof_list_size; ++i)
       {
-        comp_id[prof[i]] = id[i];
-        RTC_TRACE(("RTC basic propfile %s: %s", prof[i], id[i].c_str()));
+		  comp_id[RTM::CompParam::prof_list[i]] = id[i];
+		  RTC_TRACE(("RTC basic propfile %s: %s", RTM::CompParam::prof_list[i], id[i].c_str()));
       }
 
     if (id_and_conf.size() == 2)
@@ -2580,6 +2508,277 @@ std::vector<coil::Properties> Manager::getLoadableModules()
           }
       }
     return;
+  }
+
+
+
+
+  /*!
+  * @if jp
+  * @brief 起動時にrtc.confで指定したポートを接続する
+  *
+  * 例:
+  * manager.components.preconnect: RTC0.port0?RTC0.port1&interface_type=corba_cdr&dataflow_type=pull&~,~
+  *
+  *
+  * @else
+  * @brief
+  *
+  *
+  * @endif
+  */
+  void Manager::initPreConnection()
+  {
+	  RTC_TRACE(("Connection pre-connection: %s",
+		  m_config["manager.components.preconnect"].c_str()));
+	  std::vector<std::string> connectors;
+	  connectors = coil::split(m_config["manager.components.preconnect"], ",");
+	  for (int i(0), len(connectors.size()); i < len; ++i)
+	  {
+		  
+		  coil::eraseBothEndsBlank(connectors[i]);
+		  if (connectors[i].empty())
+		  {
+			  continue;
+		  }
+
+		  std::string port0_str = coil::split(connectors[i], "?")[0];
+		  coil::mapstring param = coil::urlparam2map(connectors[i]);
+
+		  coil::vstring ports;
+		  coil::mapstring configs;
+
+		  for (coil::mapstring::iterator param_itr = param.begin(); param_itr != param.end(); ++param_itr) {
+			  if (param_itr->first == "port")
+			  {
+				  ports.push_back(param_itr->second);
+				  continue;
+			  }
+			  std::string tmp = param_itr->first;
+			  coil::replaceString(tmp, "port", "");
+			  int val = 0;
+			  if (coil::stringTo<int>(val, tmp.c_str()))
+			  {
+				  ports.push_back(param_itr->second);
+				  continue;
+			  }
+			  configs[param_itr->first] = param_itr->second;
+		  }
+
+
+
+		  if (ports.size() == 0)
+		  {
+			  RTC_ERROR(("Invalid format for pre-connection."));
+			  RTC_ERROR(("Format must be Comp0.port0?port=Comp1.port1"));
+			  continue;
+		  }
+
+		  if (configs.count("dataflow_type") == 0)
+		  {
+			  configs["dataflow_type"] = "push";
+		  }
+		  if (configs.count("interface_type") == 0)
+		  {
+			  configs["interface_type"] = "corba_cdr";
+		  }
+
+
+		  coil::vstring tmp = coil::split(port0_str, ".");
+		  tmp.pop_back();
+		  std::string comp0_name = coil::flatten(tmp, ".");
+		  
+		  std::string port0_name = port0_str;
+		  RTObject_impl* comp0 = NULL;
+		  RTC::RTObject_ptr comp0_ref = NULL;
+
+		  if (comp0_name.find("://") == std::string::npos)
+		  {
+			  comp0 = getComponent(comp0_name.c_str());
+			  if (comp0 == NULL)
+			  {
+				  RTC_ERROR(("%s not found.", comp0_name.c_str()));
+				  continue;
+			  }
+			  comp0_ref = comp0->getObjRef();
+		  }
+		  else
+		  {
+			  RTC::RTCList rtcs = m_namingManager->string_to_component(comp0_name);
+			  if (rtcs.length() == 0)
+			  {
+				  RTC_ERROR(("%s not found.", comp0_name.c_str()));
+				  continue;
+			  }
+			  comp0_ref = rtcs[0];
+			  coil::vstring tmp_port0_name = coil::split(port0_str, "/");
+			  port0_name = tmp_port0_name.back();
+
+
+		  }
+
+		  RTC::PortService_var port0_var = CORBA_RTCUtil::get_port_by_name(comp0_ref, port0_name);
+
+		  if (CORBA::is_nil(port0_var))
+		  {
+			  RTC_DEBUG(("port %s found: ", port0_str.c_str()));
+			  continue;
+		  }
+
+		  for (coil::vstring::iterator port_itr = ports.begin(); port_itr != ports.end(); ++port_itr)
+		  {
+
+			  std::string port_str = (*port_itr);
+
+			  tmp = coil::split(port_str, ".");
+			  tmp.pop_back();
+			  std::string comp_name = coil::flatten(tmp, ".");
+			  std::string port_name = port_str;
+			  RTObject_impl* comp = NULL;
+			  RTC::RTObject_ptr comp_ref = NULL;
+
+
+			  if (comp_name.find("://") == std::string::npos)
+			  {
+				  comp = getComponent(comp_name.c_str());
+				  if (comp == NULL)
+				  {
+					  RTC_ERROR(("%s not found.", comp_name.c_str()));
+					  continue;
+				  }
+				  comp_ref = comp->getObjRef();
+			  }
+			  else
+			  {
+				  RTC::RTCList rtcs = m_namingManager->string_to_component(comp_name);
+				  if (rtcs.length() == 0)
+				  {
+					  RTC_ERROR(("%s not found.", comp_name.c_str()));
+					  continue;
+				  }
+				  comp_ref = rtcs[0];
+				  coil::vstring tmp_port_name = coil::split(port_str, "/");
+				  port_name = tmp_port_name.back();
+
+
+			  }
+
+			  RTC::PortService_var port_var = CORBA_RTCUtil::get_port_by_name(comp_ref, port_name);
+
+			  if (CORBA::is_nil(port_var))
+			  {
+				  RTC_DEBUG(("port %s found: ", port_str.c_str()));
+				  continue;
+			  }
+
+			  coil::Properties prop;
+
+			  for (coil::mapstring::iterator config_itr = configs.begin(); config_itr != configs.end(); ++config_itr) {
+				  std::string key = config_itr->first;
+				  std::string value = config_itr->second;
+				  coil::eraseBothEndsBlank(key);
+				  coil::eraseBothEndsBlank(value);
+
+				  prop["dataport." + key] = value;
+			  }
+
+
+
+			  if (RTC::RTC_OK != CORBA_RTCUtil::connect(connectors[i], prop, port0_var, port_var))
+			  {
+				  RTC_ERROR(("Connection error: %s", connectors[i].c_str()));
+			  }
+		  }
+	  }
+  }
+
+  /*!
+  * @if jp
+  * @brief 起動時にrtc.confで指定したRTCをアクティベーションする
+  *
+  * 例:
+  * manager.components.preactivation: RTC1,RTC2~
+  *
+  *
+  * @else
+  * @brief
+  *
+  *
+  * @endif
+  */
+  void Manager::initPreActivation()
+  {
+	  RTC_TRACE(("Components pre-activation: %s",
+		  m_config["manager.components.preactivation"].c_str()));
+	  std::vector<std::string> comps;
+	  comps = coil::split(m_config["manager.components.preactivation"],
+		  ",");
+	  for (int i(0), len(comps.size()); i < len; ++i)
+	  {
+		  coil::eraseBothEndsBlank(comps[i]);
+		  if (!comps[i].empty())
+		  {
+			  RTC::RTObject_ptr comp_ref;
+			  if (comps[i].find("://") == std::string::npos)
+			  {
+				  RTObject_impl* comp = getComponent(comps[i].c_str());
+				  if (comp == NULL)
+				  {
+					  RTC_ERROR(("%s not found.", comps[i].c_str())); continue;
+				  }
+				  comp_ref = comp->getObjRef();
+			  }
+			  else
+			  {
+				  RTC::RTCList rtcs = m_namingManager->string_to_component(comps[i]);
+				  if (rtcs.length() == 0)
+				  {
+					  RTC_ERROR(("%s not found.", comps[i].c_str()));
+					  continue;
+				  }
+				  comp_ref = rtcs[0];
+				  
+			  }
+			  
+			  RTC::ReturnCode_t ret = CORBA_RTCUtil::activate(comp_ref);
+			  if (ret != RTC::RTC_OK)
+			  {
+				  RTC_ERROR(("%s activation filed.", comps[i].c_str()));
+			  }
+			  else
+			  {
+				  RTC_INFO(("%s activated.", comps[i].c_str()));
+			  }
+		  }
+		  
+
+	  }
+  }
+
+  /*!
+  * @if jp
+  * @brief 起動時にrtc.confで指定したRTCを生成する
+  *
+  * 例:
+  * manager.components.precreate RTC1,RTC2~
+  *
+  *
+  * @else
+  * @brief
+  *
+  *
+  * @endif
+  */
+  void Manager::initPreCreation()
+  {
+	  RTC_TRACE(("Components pre-creation: %s",
+		  m_config["manager.components.precreate"].c_str()));
+	  std::vector<std::string> comp;
+	  comp = coil::split(m_config["manager.components.precreate"], ",");
+	  for (int i(0), len(comp.size()); i < len; ++i)
+	  {
+		  this->createComponent(comp[i].c_str());
+	  }
   }
 
 };
