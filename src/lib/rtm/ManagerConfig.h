@@ -37,6 +37,7 @@ namespace RTC
    * プロパティ情報を設定する。
    *
    * 各設定の優先度は以下のとおりである。
+   * - UNIX/Linux
    * <OL>
    * <LI>コマンドラインオプション "-f"
    * <LI>環境変数 "RTC_MANAGER_CONFIG"
@@ -47,9 +48,13 @@ namespace RTC
    * <LI>デフォルト設定ファイル "/usr/local/etc/rtc/rtc.conf"
    * <LI>埋め込みコンフィギュレーション値
    *</OL>
-   * ただし、コマンドラインオプション "-d" が指定された場合は、
-   * (たとえ -f で設定ファイルを指定しても)埋め込みコンフィギュレーション値
-   * が使用される。
+   * - Windows
+   * <OL>
+   * <LI>コマンドラインオプション "-f"
+   * <LI>環境変数 "RTC_MANAGER_CONFIG"
+   * <LI>デフォルト設定ファイル "./rtc.conf"
+   * <LI>デフォルト設定ファイル "%RTM_ROOT%/%RTM_VC_VERSION%/rtc.conf"
+   * </OL>
    *
    * @since 0.4.0
    *
@@ -58,12 +63,13 @@ namespace RTC
    * @class ManagerConfig
    * @brief Manager configuration class
    *
-   * Modify Manager's configuration. 
+   * Modify Manager's configuration.
    * This class receives the command line arguments and will be instantiated.
    * Set property information of Manager with the configuration file specified
    * by the command line argument or the environment variable etc.
    *
    * The priorities of each configuration are as follows:
+   * - UNIX/Linux
    * <OL>
    * <LI>Command option "-f"
    * <LI>Environment variable "RTC_MANAGER_CONFIG"
@@ -74,8 +80,13 @@ namespace RTC
    * <LI>Default configuration file "/usr/local/etc/rtc/rtc.conf"
    * <LI>Embedded configuration value
    *</OL>
-   * If the command option "-d" is specified (even if specify configuration file
-   * by "-f" option), the embedded configuration values will be used.
+   * - Windows
+   * <OL>
+   * <LI>Command option "-f"
+   * <LI>Environment variable "RTC_MANAGER_CONFIG"
+   * <LI>Default configuration file "./rtc.conf"
+   * <LI>Default configuration file "%RTM_ROOT%/%RTM_VC_VERSION%/rtc.conf"
+   * </OL>
    *
    * @since 0.4.0
    *
@@ -167,10 +178,11 @@ namespace RTC
      * コマンドライン引数に応じて初期化を実行する。コマンドラインオプションは
      * 以下のものが使用可能である。
      *
-     *  - -f file   : コンフィギュレーションファイルを指定する。
-     *  - -l module : ロードするモジュールを指定する。(未実装)
-     *  - -o options: その他オプションを指定する。(未実装)
-     *  - -d        : デフォルトのコンフィギュレーションを使う。(未実装)
+     * - -a              : マネージャサービスOFF
+     * - -f <file name>  : 設定ファイルの指定
+     * - -o <option>     ; オプション指定
+     * - -p <port number>: ポート番号指定
+     * - -d              : マスターマネージャ指定
      *
      * @param argc コマンドライン引数の数
      * @param argv コマンドライン引数
@@ -182,10 +194,11 @@ namespace RTC
      * Initialize with command line options. The following command options
      * are available.
      *
-     * - -f file   : Specify the configuration file.
-     * - -l module : Specify modules to be loaded. (Not implemented)
-     * - -o options: Specify other options. (Not implemented)
-     * - -d        : Use default static configuration. (Not implemented)
+     * - -a              : Disable manager service
+     * - -f <file name>  : Specify a configuration file
+     * - -o <option>     ; Specify options
+     * - -p <port number>: Specify a port number
+     * - -d              : Run as the master manager
      *
      * @param argc Number of command line arguments
      * @param argv The command line arguments

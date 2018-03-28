@@ -404,6 +404,14 @@ namespace RTC
     if (m_created) { return RTC::PRECONDITION_NOT_MET; }
     if (m_exiting) { return RTC::RTC_OK; }
 
+
+    SDOPackage::OrganizationList* organizations = get_organizations();
+    CORBA::ULong len = organizations->length();
+
+    for (CORBA::ULong i = 0; i < len; i++)
+      {
+        (*organizations)[i]->remove_member(getInstanceName());
+      }
     // deactivate myself on owned EC
     CORBA_SeqUtil::for_each(m_ecMine,
 			    deactivate_comps(m_objref));
@@ -2651,6 +2659,20 @@ namespace RTC
         oid2 = m_pPOA->servant_to_id(this);
         m_pPOA->deactivate_object(oid1);
         m_pPOA->deactivate_object(oid2);
+
+
+#ifndef ORB_IS_RTORB
+        CORBA::Object_ptr obj = m_pORB->resolve_initial_references("omniINSPOA");
+#else // ROB_IS_RTORB
+        CORBA::Object_ptr obj = m_pORB->resolve_initial_references((char*)"omniINSPOA");
+#endif // ORB_IS_RTORB
+        PortableServer::POA_ptr poa = PortableServer::POA::_narrow(obj);
+
+        PortableServer::ObjectId_var oid3;
+        oid3 = poa->servant_to_id(this);
+
+
+        poa->deactivate_object(oid3.in());
       }
     catch (PortableServer::POA::ServantNotActive &e)
       {
