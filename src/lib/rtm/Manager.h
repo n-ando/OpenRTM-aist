@@ -1709,6 +1709,96 @@ namespace RTC
 	 * @endif
 	 */
 	void initPreCreation();
+	/*!
+	* @if jp
+	* @brief 
+	*
+	*
+	*
+	* @else
+	* @brief
+	*
+	*
+	* @endif
+	*/
+	void invokeInitProc();
+	/*!
+	* @if jp
+	* @brief
+	* @param comp
+	*
+	*
+	*
+	* @else
+	* @brief
+	* @param comp
+	*
+	*
+	* @endif
+	*/
+	void publishPorts(RTObject_impl* comp);
+	/*!
+	* @if jp
+	* @brief
+	* @param comp
+	*
+	*
+	*
+	* @else
+	* @brief
+	* @param comp
+	*
+	*
+	* @endif
+	*/
+	void subscribePorts(RTObject_impl* comp);
+	/*!
+	* @if jp
+	* @brief
+	* @param comp
+	*
+	*
+	*
+	* @else
+	* @brief
+	* @param comp
+	*
+	*
+	* @endif
+	*/
+	PortServiceList_var getPortsOnNameServers(std::string nsname, std::string kind);
+	/*!
+	* @if jp
+	* @brief
+	* @param port
+	* @param target_ports
+	*
+	*
+	* @else
+	* @brief
+	* @param port
+	* @param target_ports
+	*
+	*
+	* @endif
+	*/
+	void connectDataPorts(PortService_ptr port, PortServiceList_var& target_ports);
+	/*!
+	* @if jp
+	* @brief
+	* @param port
+	* @param target_ports
+	*
+	*
+	* @else
+	* @brief
+	* @param port
+	* @param target_ports
+	*
+	*
+	* @endif
+	*/
+	void connectServicePorts(PortService_ptr port, PortServiceList_var& target_ports);
     
     /*!
      * @if jp
