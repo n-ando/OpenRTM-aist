@@ -1100,4 +1100,37 @@ namespace RTC
     return NULL;
   }
 
+  ReturnCode_t OutPortBase::notify_connect(ConnectorProfile& connector_profile)
+	  throw (CORBA::SystemException)
+  {
+	  Properties prop;
+	  NVUtil::copyToProperties(prop, connector_profile.properties);
+
+	  Properties node = prop.getNode("dataport.outport");
+
+	  Properties portprop(m_properties);
+
+	  node << portprop;
+
+	  
+
+	  NVUtil::copyFromProperties(connector_profile.properties, prop);
+
+	  std::string _str = node["fan_out"];
+	  unsigned int value = 100;
+
+	  coil::stringTo<unsigned int>(value, _str.c_str());
+
+	  if (value <= m_connectors.size())
+	  {
+		  return RTC::PRECONDITION_NOT_MET;
+	  }
+	  
+	  
+
+
+
+	  return PortBase::notify_connect(connector_profile);
+  }
+
 }; // end of namespace RTM

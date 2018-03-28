@@ -622,6 +622,8 @@ namespace RTC
      * @endif
      */
     virtual ConnectorListeners& getListeners();
+    virtual ReturnCode_t notify_connect(ConnectorProfile& connector_profile)
+		throw (CORBA::SystemException);
 
   protected:
 
@@ -843,14 +845,6 @@ namespace RTC
      * @endif
      */
     CdrBufferBase* m_thebuffer;
-    /*!
-     * @if jp
-     * @brief プロパティ
-     * @else
-     * @brief Properties
-     * @endif
-     */
-    coil::Properties m_properties;
     /*!
      * @if jp
      * @brief 利用可能provider

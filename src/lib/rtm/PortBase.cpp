@@ -239,6 +239,30 @@ namespace RTC
   {
     RTC_TRACE(("notify_connect()"));
     Guard guard(m_connectorsMutex);
+
+
+
+	Properties prop;
+	NVUtil::copyToProperties(prop, connector_profile.properties);
+	bool default_value = coil::toBool(m_properties["allow_dup_connection"], "YES", "NO", false);
+
+	if (!coil::toBool(prop.getProperty("dataport.allow_dup_connection"), "YES", "NO", default_value))
+	{
+		for (int i = 0; i < connector_profile.ports.length(); i++)
+		{
+			if (!getPortRef()->_is_equivalent(connector_profile.ports[i]))
+			{
+				bool ret = CORBA_RTCUtil::already_connected(connector_profile.ports[i], m_objref);
+				if(ret)
+				{
+					return RTC::PRECONDITION_NOT_MET;
+				}
+			}
+		}
+	}
+
+
+
     ReturnCode_t retval[] = {RTC::RTC_OK, RTC::RTC_OK, RTC::RTC_OK};
 
     onNotifyConnect(getName(), connector_profile);
