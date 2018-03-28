@@ -16,7 +16,8 @@ COIL_PLATFORM_SRC =    \
 	Task.cpp       \
 	Time.cpp       \
 	UUID.cpp       \
-	SharedMemory.cpp
+	SharedMemory.cpp \
+	Affinity.cpp
 
 # Win32 API dependent headers
 COIL_PLATFORM_H =      \
