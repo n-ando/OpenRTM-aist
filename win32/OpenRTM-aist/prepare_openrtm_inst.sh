@@ -127,8 +127,6 @@ copy_runtime_files()
     cp OpenRTM_bin_dir.wxsctrl   $RUNTIME_DIR/bin/
 
     cp $OPENRTM_DIR/etc/rtc.conf.sample $RUNTIME_DIR/etc/
-
-    cp $OPENRTM_DIR/components/ComponentObserverConsumer.dll $RUNTIME_DIR/ext/sdo
 }
 
 copy_devel_files()
@@ -161,7 +159,6 @@ copy_example_files()
     ORG_EX=$OPENRTM_DIR/examples/
     DST_EX=$EXAMPLE_DIR/examples/C++
     cp $OPENRTM_DIR/components/*.dll  $EXAMPLE_DIR/examples/C++
-    rm -f $EXAMPLEL_DIR/examples/C++/ComponentObserverConsumer.dll
     cp $OPENRTM_DIR/components/*.exe  $EXAMPLE_DIR/examples/C++
 
     cp $ORG_EX/SimpleIO/rtc.conf              $DST_EX/

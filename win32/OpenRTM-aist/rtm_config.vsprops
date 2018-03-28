@@ -14,7 +14,7 @@
 		AdditionalLibraryDirectories="$(omni_libdir);$(rtm_libdir)"
 	/>
 	<UserMacro
-		Name="ss;_root"
+		Name="ssl_root"
 		Value="%SSL_ROOT%"
 	/>
 	<UserMacro
@@ -32,6 +32,10 @@
 	<UserMacro
 		Name="omnithread_dllver"
 		Value="%OMNITHREAD_DLLVER%"
+	/>
+	<UserMacro
+		Name="omnissl_dllver"
+		Value="%OMNISSL_DLLVER%"
 	/>
 	<UserMacro
 		Name="rtm_root"

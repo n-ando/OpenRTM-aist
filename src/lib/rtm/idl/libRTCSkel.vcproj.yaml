@@ -24,6 +24,7 @@ Configurations:
           makewrapper.py ExtendedDataTypes.idl
           makewrapper.py InterfaceDataTypes.idl
           makewrapper.py SharedMemory.idl
+          makewrapper.py ../../ext/sdo/observer/ComponentObserver.idl
           omniidl -bcxx -Wba -nf -Wbshortcut BasicDataType.idl
           omniidl -bcxx -Wba -nf -Wbshortcut DataPort.idl
           omniidl -bcxx -Wba -nf -Wbshortcut Manager.idl
@@ -33,6 +34,7 @@ Configurations:
           omniidl -bcxx -Wba -nf -Wbshortcut ExtendedDataTypes.idl
           omniidl -bcxx -Wba -nf -Wbshortcut InterfaceDataTypes.idl
           omniidl -bcxx -Wba -nf -Wbshortcut SharedMemory.idl
+          omniidl -bcxx -Wba -nf -Wbshortcut -I. ../../ext/sdo/observer/ComponentObserver.idl
     VCCLCompilerTool:
       - Key: Optimization
         Value: "0"
@@ -79,6 +81,7 @@ Configurations:
           makewrapper.py ExtendedDataTypes.idl
           makewrapper.py InterfaceDataTypes.idl
           makewrapper.py SharedMemory.idl
+          makewrapper.py ../../ext/sdo/observer/ComponentObserver.idl
           omniidl -bcxx -Wba -nf -Wbshortcut BasicDataType.idl
           omniidl -bcxx -Wba -nf -Wbshortcut DataPort.idl
           omniidl -bcxx -Wba -nf -Wbshortcut Manager.idl
@@ -88,6 +91,7 @@ Configurations:
           omniidl -bcxx -Wba -nf -Wbshortcut ExtendedDataTypes.idl
           omniidl -bcxx -Wba -nf -Wbshortcut InterfaceDataTypes.idl
           omniidl -bcxx -Wba -nf -Wbshortcut SharedMemory.idl
+          omniidl -bcxx -Wba -nf -Wbshortcut -I. ../../ext/sdo/observer/ComponentObserver.idl
     VC10_VCCLCompilerTool:
       - Key: Optimization
         Value: "Disabled"
@@ -132,6 +136,7 @@ Configurations:
           makewrapper.py ExtendedDataTypes.idl
           makewrapper.py InterfaceDataTypes.idl
           makewrapper.py SharedMemory.idl
+          makewrapper.py ../../ext/sdo/observer/ComponentObserver.idl
           omniidl -bcxx -Wba -nf -Wbshortcut BasicDataType.idl
           omniidl -bcxx -Wba -nf -Wbshortcut DataPort.idl
           omniidl -bcxx -Wba -nf -Wbshortcut Manager.idl
@@ -141,6 +146,7 @@ Configurations:
           omniidl -bcxx -Wba -nf -Wbshortcut ExtendedDataTypes.idl
           omniidl -bcxx -Wba -nf -Wbshortcut InterfaceDataTypes.idl
           omniidl -bcxx -Wba -nf -Wbshortcut SharedMemory.idl
+          omniidl -bcxx -Wba -nf -Wbshortcut -I. ../../ext/sdo/observer/ComponentObserver.idl
     VCCLCompilerTool:
       - Key: Optimization
         Value: "0"
@@ -187,6 +193,7 @@ Configurations:
           makewrapper.py ExtendedDataTypes.idl
           makewrapper.py InterfaceDataTypes.idl
           makewrapper.py SharedMemory.idl
+          makewrapper.py ../../ext/sdo/observer/ComponentObserver.idl
           omniidl -bcxx -Wba -nf -Wbshortcut BasicDataType.idl
           omniidl -bcxx -Wba -nf -Wbshortcut DataPort.idl
           omniidl -bcxx -Wba -nf -Wbshortcut Manager.idl
@@ -196,6 +203,7 @@ Configurations:
           omniidl -bcxx -Wba -nf -Wbshortcut ExtendedDataTypes.idl
           omniidl -bcxx -Wba -nf -Wbshortcut InterfaceDataTypes.idl
           omniidl -bcxx -Wba -nf -Wbshortcut SharedMemory.idl
+          omniidl -bcxx -Wba -nf -Wbshortcut -I. ../../ext/sdo/observer/ComponentObserver.idl
     VC10_VCCLCompilerTool:
       - Key: Optimization
         Value: "Disabled"
@@ -241,6 +249,7 @@ Configurations:
           makewrapper.py ExtendedDataTypes.idl
           makewrapper.py InterfaceDataTypes.idl
           makewrapper.py SharedMemory.idl
+          makewrapper.py ../../ext/sdo/observer/ComponentObserver.idl
           omniidl -bcxx -Wba -nf -Wbshortcut BasicDataType.idl
           omniidl -bcxx -Wba -nf -Wbshortcut DataPort.idl
           omniidl -bcxx -Wba -nf -Wbshortcut Manager.idl
@@ -250,6 +259,7 @@ Configurations:
           omniidl -bcxx -Wba -nf -Wbshortcut ExtendedDataTypes.idl
           omniidl -bcxx -Wba -nf -Wbshortcut InterfaceDataTypes.idl
           omniidl -bcxx -Wba -nf -Wbshortcut SharedMemory.idl
+          omniidl -bcxx -Wba -nf -Wbshortcut -I. ../../ext/sdo/observer/ComponentObserver.idl
     VCCLCompilerTool:
       - Key: PreprocessorDefinitions
         Value: "WIN32;NDEBUG;_LIB;__WIN32__;__NT__;__OSVERSION__=4;__x86__;_WIN32_WINNT=0x0400;_CRT_SECURE_NO_DEPRECATE"
@@ -290,6 +300,7 @@ Configurations:
           makewrapper.py ExtendedDataTypes.idl
           makewrapper.py InterfaceDataTypes.idl
           makewrapper.py SharedMemory.idl
+          makewrapper.py ../../ext/sdo/observer/ComponentObserver.idl
           omniidl -bcxx -Wba -nf -Wbshortcut BasicDataType.idl
           omniidl -bcxx -Wba -nf -Wbshortcut DataPort.idl
           omniidl -bcxx -Wba -nf -Wbshortcut Manager.idl
@@ -299,6 +310,7 @@ Configurations:
           omniidl -bcxx -Wba -nf -Wbshortcut ExtendedDataTypes.idl
           omniidl -bcxx -Wba -nf -Wbshortcut InterfaceDataTypes.idl
           omniidl -bcxx -Wba -nf -Wbshortcut SharedMemory.idl
+          omniidl -bcxx -Wba -nf -Wbshortcut -I. ../../ext/sdo/observer/ComponentObserver.idl
     VC10_VCCLCompilerTool:
       - Key: PreprocessorDefinitions
         Value: "WIN32;NDEBUG;_LIB;__WIN32__;__NT__;__OSVERSION__=4;__x86__;_WIN32_WINNT=0x0400;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)"
@@ -338,6 +350,7 @@ Configurations:
           makewrapper.py ExtendedDataTypes.idl
           makewrapper.py InterfaceDataTypes.idl
           makewrapper.py SharedMemory.idl
+          makewrapper.py ../../ext/sdo/observer/ComponentObserver.idl
           omniidl -bcxx -Wba -nf -Wbshortcut BasicDataType.idl
           omniidl -bcxx -Wba -nf -Wbshortcut DataPort.idl
           omniidl -bcxx -Wba -nf -Wbshortcut Manager.idl
@@ -347,6 +360,7 @@ Configurations:
           omniidl -bcxx -Wba -nf -Wbshortcut ExtendedDataTypes.idl
           omniidl -bcxx -Wba -nf -Wbshortcut InterfaceDataTypes.idl
           omniidl -bcxx -Wba -nf -Wbshortcut SharedMemory.idl
+          omniidl -bcxx -Wba -nf -Wbshortcut -I. ../../ext/sdo/observer/ComponentObserver.idl
     VCCLCompilerTool:
       - Key: PreprocessorDefinitions
         Value: "WIN32;NDEBUG;_LIB;__WIN32__;__NT__;__OSVERSION__=4;__x86__;_WIN32_WINNT=0x0400;_CRT_SECURE_NO_DEPRECATE"
@@ -387,6 +401,7 @@ Configurations:
           makewrapper.py ExtendedDataTypes.idl
           makewrapper.py InterfaceDataTypes.idl
           makewrapper.py SharedMemory.idl
+          makewrapper.py ../../ext/sdo/observer/ComponentObserver.idl
           omniidl -bcxx -Wba -nf -Wbshortcut BasicDataType.idl
           omniidl -bcxx -Wba -nf -Wbshortcut DataPort.idl
           omniidl -bcxx -Wba -nf -Wbshortcut Manager.idl
@@ -396,6 +411,7 @@ Configurations:
           omniidl -bcxx -Wba -nf -Wbshortcut ExtendedDataTypes.idl
           omniidl -bcxx -Wba -nf -Wbshortcut InterfaceDataTypes.idl
           omniidl -bcxx -Wba -nf -Wbshortcut SharedMemory.idl
+          omniidl -bcxx -Wba -nf -Wbshortcut -I. ../../ext/sdo/observer/ComponentObserver.idl
     VC10_VCCLCompilerTool:
       - Key: PreprocessorDefinitions
         Value: "WIN32;NDEBUG;_LIB;__WIN32__;__NT__;__OSVERSION__=4;__x86__;_WIN32_WINNT=0x0400;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)"

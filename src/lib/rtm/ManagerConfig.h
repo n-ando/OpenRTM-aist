@@ -263,10 +263,11 @@ namespace RTC
      *
      * @brief コマンド引数をパースする
      *
-     * - -f file   : コンフィギュレーションファイルを指定する。
-     * - -l module : ロードするモジュールを指定する。(未実装)
-     * - -o options: その他オプションを指定する。(未実装)
-     * - -d        : デフォルトのコンフィギュレーションを使う。(未実装)
+     * - -a              : マネージャサービスOFF
+     * - -f <file name>  : 設定ファイルの指定
+     * - -o <option>     ; オプション指定
+     * - -p <port number>: ポート番号指定
+     * - -d              : マスターマネージャ指定
      *
      * @param argc コマンドライン引数の数
      * @param argv コマンドライン引数
@@ -275,10 +276,11 @@ namespace RTC
      *
      * @brief Parse the command arguments
      *
-     *  - -f file   : Specify the configuration file.
-     *  - -l module : Specify modules to be loaded. (Not implemented)
-     *  - -o options: Other options. (Not implemented)
-     *  - -d        : Use default static configuration. (Not implemented)
+     * - -a              : Disable manager service
+     * - -f <file name>  : Specify a configuration file
+     * - -o <option>     ; Specify options
+     * - -p <port number>: Specify a port number
+     * - -d              : Run as the master manager
      *
      * @param argc Number of command line arguments
      * @param argv The command line arguments

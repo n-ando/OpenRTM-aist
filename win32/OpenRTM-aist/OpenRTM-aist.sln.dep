@@ -5,7 +5,7 @@ librtmManipulator: libcoil libRTCSkel
 libRTC: libcoil libRTCSkel
 rtcd: libcoil libRTCSkel libRTC
 rtcprof: libcoil libRTCSkel libRTC
-ComponentObserverConsumer: libcoil libRTCSkel libRTC
+SSLTransport: libcoil libRTCSkel libRTC
 ConfigSampleComp: libcoil libRTCSkel libRTC
 ConfigSample: libcoil libRTCSkel libRTC
 ConsoleInComp: libcoil libRTCSkel libRTC
