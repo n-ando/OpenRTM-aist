@@ -37,6 +37,8 @@
 #include <rtm/OutPortCorbaCdrProvider.h>
 #include <rtm/InPortDirectProvider.h>
 #include <rtm/InPortDirectConsumer.h>
+#include <rtm/OutPortDirectProvider.h>
+#include <rtm/OutPortDirectConsumer.h>
 #include <rtm/InPortSHMProvider.h>
 #include <rtm/InPortSHMConsumer.h>
 #include <rtm/OutPortSHMProvider.h>
@@ -74,6 +76,8 @@ void FactoryInit()
     OutPortCorbaCdrProviderInit();
     InPortDirectProviderInit();
     InPortDirectConsumerInit();
+	OutPortDirectProviderInit();
+	OutPortDirectConsumerInit();
     InPortSHMProviderInit();
     InPortSHMConsumerInit();
     OutPortSHMProviderInit();

@@ -284,7 +284,7 @@ namespace RTC
 					  }
 					  else
 					  {
-						  CORBA::ORB_ptr orb = Manager::instance().getORB();
+						  CORBA::ORB_var orb = Manager::instance().getORB();
 						  
 						  cns = RTC::CorbaNaming(orb, host.c_str());
 					  }
@@ -429,7 +429,7 @@ namespace RTC
 					 
 					  rtc_list = (*mgr->get_components_by_name(rtc_name.c_str()));
 					  RTM::ManagerList* slaves = mgr->get_slave_managers();
-					  for (int i = 0; i < slaves->length(); i++)
+					  for (unsigned int i = 0; i < slaves->length(); i++)
 					  {
 						  
 						  try
@@ -512,7 +512,7 @@ namespace RTC
 		  CORBA::Object_ptr  mobj = m_orb->string_to_object(mgrloc.c_str());
 		  RTM::Manager_ptr mgr = RTM::Manager::_narrow(mobj);
 
-		  RTC_DEBUG(("corbaloc: %s", mgrloc));
+		  RTC_DEBUG(("corbaloc: %s", mgrloc.c_str()));
 
 		  return mgr;
 	  }

@@ -37,6 +37,9 @@
 #include <rtm/PortCallback.h>
 #include <rtm/InPortConnector.h>
 #include <rtm/Timestamp.h>
+#include <rtm/DirectInPortBase.h>
+
+
 
 namespace RTC
 {
@@ -154,6 +157,7 @@ namespace RTC
 #else
       :	InPortBase(name, ::CORBA_Util::toRepositoryId<DataType>()),
 #endif
+	  DirectInPortBase<DataType>(value),
         m_name(name), m_value(value),
         m_OnRead(NULL),  m_OnReadConvert(NULL),
         m_status(1), m_directNewData(false)
@@ -162,6 +166,7 @@ namespace RTC
                                      new Timestamp<DataType>("on_received"));
       this->addConnectorDataListener(ON_BUFFER_READ,
                                      new Timestamp<DataType>("on_read"));
+	  m_directport = this;
     }
     
     /*!
@@ -435,42 +440,47 @@ namespace RTC
             return false;
           }
 
-        // In single-buffer mode, all connectors share the same buffer. This
-        // means that we only need to read from the first connector to get data
-        // received by any connector.
-        ret = m_connectors[0]->read(cdr);
-        m_status[0] = ret;
+        
       }
-      if (ret == PORT_OK)
-        {
-          Guard guard(m_valueMutex);
-          RTC_DEBUG(("data read succeeded"));
-#ifdef ORB_IS_ORBEXPRESS
-          cdr.cdr >> m_value;
-#elif defined(ORB_IS_TAO)
-          TAO_InputCDR tao_cdr = TAO_InputCDR(cdr.cdr);
-          tao_cdr >> m_value;
-#else
-          m_value <<= cdr;
-#endif
-          if (m_OnReadConvert != 0) 
-            {
-              m_value = (*m_OnReadConvert)(m_value);
-              RTC_DEBUG(("OnReadConvert called"));
-              return true;
-            }
-          return true;
-        }
-      else if (ret == BUFFER_EMPTY)
-        {
-          RTC_WARN(("buffer empty"));
-          return false;
-        }
-      else if (ret == BUFFER_TIMEOUT)
-        {
-          RTC_WARN(("buffer read timeout"));
-          return false;
-        }
+
+	  if (!m_connectors[0]->getDirectData(m_value))
+	  {
+		  {
+			  Guard guard(m_connectorsMutex);
+			  // In single-buffer mode, all connectors share the same buffer. This
+			  // means that we only need to read from the first connector to get data
+			  // received by any connector.
+			  ret = m_connectors[0]->read(cdr);
+		  }
+		  m_status[0] = ret;
+		  if (ret == PORT_OK)
+		  {
+			  Guard guard(m_valueMutex);
+			  RTC_DEBUG(("data read succeeded"));
+			  m_value <<= cdr;
+			  if (m_OnReadConvert != 0)
+			  {
+				  m_value = (*m_OnReadConvert)(m_value);
+				  RTC_DEBUG(("OnReadConvert called"));
+				  return true;
+			  }
+			  return true;
+		  }
+		  else if (ret == BUFFER_EMPTY)
+		  {
+			  RTC_WARN(("buffer empty"));
+			  return false;
+		  }
+		  else if (ret == BUFFER_TIMEOUT)
+		  {
+			  RTC_WARN(("buffer read timeout"));
+			  return false;
+		  }
+	  }
+	  else
+	  {
+		  return true;
+	  }
       RTC_ERROR(("unknown retern value from buffer.read()"));
       return false;
     }

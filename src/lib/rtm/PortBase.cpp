@@ -46,7 +46,8 @@ namespace RTC
       m_onUnsubscribeInterfaces(0),
       m_onDisconnected(0),
       m_onConnectionLost(0),
-      m_portconnListeners(NULL)
+      m_portconnListeners(NULL),
+	  m_directport(NULL)
   {
     m_objref = this->_this();
     // Now Port name is <instance_name>.<port_name>. r1648
@@ -249,7 +250,7 @@ namespace RTC
 
 	if (!coil::toBool(prop.getProperty("dataport.allow_dup_connection"), "YES", "NO", default_value))
 	{
-		for (int i = 0; i < connector_profile.ports.length(); i++)
+		for (unsigned int i = 0; i < connector_profile.ports.length(); i++)
 		{
 			if (!getPortRef()->_is_equivalent(connector_profile.ports[i]))
 			{
@@ -1000,6 +1001,28 @@ namespace RTC
           }
       }
     return true;
+  }
+
+
+
+
+
+  /*!
+  * @if jp
+  * @brief direct通信用ポートオブジェクト取得
+  *
+  * @return ポートのポインタ
+  *
+  * @else
+  * @brief
+  *
+  * @return
+  *
+  * @endif
+  */
+  DirectPortBase* PortBase::getDirectPort()
+  {
+	  return m_directport;
   }
 
 }; // namespace RTC

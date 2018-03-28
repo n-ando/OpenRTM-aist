@@ -24,6 +24,7 @@
 #include <rtm/DataPortStatus.h>
 #include <rtm/CdrBufferBase.h>
 #include <rtm/ConnectorListener.h>
+#include <rtm/OutPortBase.h>
 
 #ifdef WIN32
 #pragma warning( push ) 
@@ -821,6 +822,14 @@ namespace RTC
     createConnector(const ConnectorProfile& cprof, coil::Properties& prop,
                     OutPortConsumer* consumer);
   protected:
+	  /*!
+	  * @if jp
+	  * @brief ローカルのピアOutPortを取得
+	  * @else
+	  * @brief Getting local peer OutPort if available
+	  * @endif
+	  */
+	  OutPortBase* getLocalOutPort(const ConnectorInfo& profile);
     /*!
      * @if jp
      * @brief バッファモード

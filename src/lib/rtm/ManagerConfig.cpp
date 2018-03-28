@@ -33,6 +33,14 @@ namespace RTC
 {
   
   // The list of default configuration file path.
+#ifdef RTM_OS_WIN32
+	const char* ManagerConfig::config_file_path[] = 
+	{
+		"./rtc.conf",
+		"${RTM_ROOT}bin/${RTM_VC_VERSION}/rtc.conf",
+		NULL
+	};
+#else
   const char* ManagerConfig::config_file_path[] = 
     {
       "./rtc.conf",
@@ -42,6 +50,7 @@ namespace RTC
       "/usr/local/etc/rtc/rtc.conf",
       NULL
     };
+#endif
   
   // Environment value to specify configuration file
   const char* ManagerConfig::config_file_env = "RTC_MANAGER_CONFIG";
@@ -213,12 +222,14 @@ namespace RTC
     int i = 0;
     while (config_file_path[i] != NULL)
       {
-	if (fileExist(config_file_path[i]))
-	  {
-	    m_configFile = config_file_path[i];
-	    return true;
-	  }
-	++i;
+		  std::string cpath = coil::replaceEnv(config_file_path[i]);
+
+		  if (fileExist(cpath))
+		  {
+			  m_configFile = cpath;
+			  return true;
+		  }
+		++i;
       }
     return false;
   }

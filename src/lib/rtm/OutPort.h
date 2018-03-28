@@ -34,6 +34,8 @@
 #include <rtm/CdrBufferBase.h>
 #include <rtm/PortCallback.h>
 #include <rtm/OutPortConnector.h>
+#include <rtm/Timestamp.h>
+#include <rtm/DirectOutPortBase.h>
 
 /*!
  * @if jp
@@ -104,8 +106,9 @@ namespace RTC
    */
   template <class DataType>
   class OutPort
-    : public OutPortBase
+	  : public OutPortBase, DirectOutPortBase<DataType>
   {
+	  typedef coil::Guard<coil::Mutex> Guard;
   public:
     /*!
      * @if jp
@@ -136,13 +139,17 @@ namespace RTC
 #else
       : OutPortBase(name, ::CORBA_Util::toRepositoryId<DataType>()),
 #endif
-        m_value(value), m_onWrite(0), m_onWriteConvert(0)
+	  DirectOutPortBase<DataType>(value),
+	  m_value(value), m_onWrite(0), m_onWriteConvert(0),
+	  m_directNewData(false), m_directValue(value)
     {
 
       this->addConnectorDataListener(ON_BUFFER_WRITE,
                                      new Timestamp<DataType>("on_write"));
       this->addConnectorDataListener(ON_SEND,
                                      new Timestamp<DataType>("on_send"));
+
+	  m_directport = this;
 
     }
     
@@ -229,19 +236,38 @@ namespace RTC
 
         for (size_t i(0), len(conn_size); i < len; ++i)
           {
+
             ReturnCode ret;
-            if (m_onWriteConvert != NULL)
-              {
-                RTC_DEBUG(("m_connectors.OnWriteConvert called"));
-                DataType conv_value = ((*m_onWriteConvert)(value));
-                ret = m_connectors[i]->write(conv_value);
-              }
-            else
-              {
-                RTC_DEBUG(("m_connectors.write called"));
-                ret = m_connectors[i]->write(value);
-              }
+			if (!m_connectors[i]->pullDirectMode())
+			{
+				if (m_onWriteConvert != NULL)
+				{
+					RTC_DEBUG(("m_connectors.OnWriteConvert called"));
+					ret = m_connectors[i]->write(((*m_onWriteConvert)(value)));
+				}
+				else
+				{
+					RTC_DEBUG(("m_connectors.write called"));
+					ret = m_connectors[i]->write(value);
+				}
+			}
+			else
+			{
+				Guard guard(m_valueMutex);
+				if (m_onWriteConvert != NULL)
+				{
+					RTC_DEBUG(("m_connectors.OnWriteConvert called"));
+					m_directValue = ((*m_onWriteConvert)(value));
+				}
+				else
+				{
+					m_directValue = value;
+				}
+				m_directNewData = true;
+				ret = PORT_OK;
+			}
             m_status[i] = ret;
+
             if (ret == PORT_OK) { continue; }
       
             result = false;
@@ -465,6 +491,36 @@ namespace RTC
     {
       m_onWriteConvert = on_wconvert;
     }
+
+	/*!
+	* @if jp
+	*
+	* @brief データをダイレクトに読み込む
+	*
+	* @param data 読み込むデータ
+	*
+	* @else
+	*
+	* @brief 
+	*
+	* @param data
+	*
+	* @endif
+	*/
+	virtual void read(DataType& data)
+	{
+		Guard guard(m_valueMutex);
+		m_directNewData = false;
+		data = m_directValue;
+	}
+	virtual bool isEmpty()
+	{
+		return !m_directNewData;
+	}
+	virtual bool isNew()
+	{
+		return m_directNewData;
+	}
     
   private:
     std::string m_typename;

@@ -18,6 +18,7 @@
  */
 
 #include <rtm/InPortConnector.h>
+#include <rtm/OutPortBase.h>
 
 namespace RTC
 {
@@ -32,7 +33,7 @@ namespace RTC
                                    ConnectorListeners& listeners,
                                    CdrBufferBase* buffer)
     : rtclog("InPortConnector"), m_profile(info),
-      m_listeners(listeners), m_buffer(buffer), m_littleEndian(true)
+	m_listeners(listeners), m_buffer(buffer), m_littleEndian(true), m_directOutPort(NULL), m_outPortListeners(NULL)
   {
   }
 
@@ -152,5 +153,20 @@ namespace RTC
   {
     return m_littleEndian;
   }
+
+  bool InPortConnector::setOutPort(OutPortBase* directOutPort)
+  {
+	  {
+		  if (directOutPort == NULL)
+		  {
+			  return false;
+		  }
+		  m_directOutPort = directOutPort;
+		  
+		  m_outPortListeners = &(m_directOutPort->getListeners());
+		  m_directOutPort->getListeners();
+		  return true;
+	  }
+  };
 
 }; // namespace RTC

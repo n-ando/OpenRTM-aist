@@ -22,9 +22,12 @@
 
 #include <rtm/ConnectorListener.h>
 #include <rtm/ConnectorBase.h>
+#include <rtm/DirectOutPortBase.h>
+
 
 namespace RTC
 {
+	class OutPortBase;
   /*!
    * @if jp
    * @class InPortConnector
@@ -232,6 +235,66 @@ namespace RTC
      */
     virtual bool isLittleEndian();
 
+
+	/*!
+	* @if jp
+	* @brief データをダイレクトに書き込むためのOutPortのサーバントを設定する
+	*
+	* @param directOutPort OutPortのサーバント
+	*
+	* @return True: 設定に成功 False: 既に設定済みのため失敗
+	*
+	* @else
+	* @brief 
+	*
+	* @param directOutPort
+	*
+	* @return true: little endian, false: big endian
+	*
+	* @endif
+	*/
+	bool setOutPort(OutPortBase* directOutPort);
+
+	template <typename DataType>
+	bool getDirectData(DataType &data)
+	{
+		if (m_directOutPort == NULL)
+		{
+			return false;
+		}
+		DirectOutPortBase<DataType>* outport;
+		outport = static_cast<DirectOutPortBase<DataType>*>(m_directOutPort->getDirectPort());
+		
+		
+		if (outport->isEmpty())
+		{
+			m_listeners.
+				connector_[ON_BUFFER_EMPTY].notify(m_profile);
+			m_outPortListeners->
+				connector_[ON_SENDER_EMPTY].notify(m_profile);
+			RTC_PARANOID(("ON_BUFFER_EMPTY(InPort,OutPort), "
+				"ON_SENDER_EMPTY(InPort,OutPort) "
+				"callback called in direct mode."));
+		}
+		outport->read(data);
+		m_outPortListeners->connectorData_[ON_BUFFER_READ].notify(m_profile, data);
+		RTC_TRACE(("ON_BUFFER_READ(OutPort), "));
+		RTC_TRACE(("callback called in direct mode."));
+		m_outPortListeners->connectorData_[ON_SEND].notify(m_profile, data);
+		RTC_TRACE(("ON_SEND(OutPort), "));
+		RTC_TRACE(("callback called in direct mode."));
+		m_listeners.connectorData_[ON_RECEIVED].notify(m_profile, data);
+		RTC_TRACE(("ON_RECEIVED(InPort), "));
+		RTC_TRACE(("callback called in direct mode."));
+		m_listeners.connectorData_[ON_SEND].notify(m_profile, data);
+		RTC_TRACE(("ON_BUFFER_WRITE(InPort), "));
+		RTC_TRACE(("callback called in direct mode."));
+		
+
+		return true;
+
+	};
+
   protected:
     /*!
      * @if jp
@@ -281,6 +344,14 @@ namespace RTC
      * @endif
      */
     ConnectorListeners* m_outPortListeners;
+	/*!
+	* @if jp
+	* @brief 同一プロセス上のピアOutPortのポインタ
+	* @else
+	* @brief OutProt pointer to the peer in the same process
+	* @endif
+	*/
+	OutPortBase* m_directOutPort;
 
   };
 }; // namespace RTC
