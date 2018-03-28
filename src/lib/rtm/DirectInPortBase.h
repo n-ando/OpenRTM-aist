@@ -1,4 +1,4 @@
-ï»¿// -*- C++ -*-
+// -*- C++ -*-
 /*!
  * @file DirectInPortBase.h
  * @brief DirectInPortBase class
@@ -20,6 +20,7 @@
 
 
 #include <coil/Mutex.h>
+#include <rtm/DirectPortBase.h>
 
 
 
@@ -28,7 +29,7 @@ namespace RTC
 	/*!
 	* @if jp
 	* @class DirectInPortBase
-	* @brief directæ¥ç¶šç”¨InPortåŸºåº•ã‚¯ãƒ©ã‚¹
+	* @brief directÀÜÂ³ÍÑInPort´ğÄì¥¯¥é¥¹
 	*
 	*
 	* @since 1.2.0
@@ -49,7 +50,7 @@ namespace RTC
   public:
 	  /*!
 	  * @if jp
-	  * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	  * @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
 	  *
 	  * @param value
 	  *
@@ -60,14 +61,13 @@ namespace RTC
 	  *
 	  * @endif
 	  */
-    DirectInPortBase(DataType& value):
-        m_directNewData(false), m_value(value)
+    DirectInPortBase(DataType& value)
     {
     }
     
 	/*!
 	* @if jp
-	* @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	* @brief ¥Ç¥¹¥È¥é¥¯¥¿
 	*
 	*
 	* @else
@@ -84,14 +84,14 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief æœ€æ–°ãƒ‡ãƒ¼ã‚¿ãŒå­˜åœ¨ã™ã‚‹ã‹ç¢ºèªã™ã‚‹
+     * @brief ºÇ¿·¥Ç¡¼¥¿¤¬Â¸ºß¤¹¤ë¤«³ÎÇ§¤¹¤ë
      * 
-     * InPortã«æœªèª­ã®æœ€æ–°ãƒ‡ãƒ¼ã‚¿ãŒåˆ°ç€ã—ã¦ã„ã‚‹ã‹ã‚’boolå€¤ã§è¿”ã™ã€‚
-     * InPortãŒæœªæ¥ç¶šã®å ´åˆã€ãŠã‚ˆã³æ¥ç¶šã‚³ãƒã‚¯ã‚¿ã®ãƒãƒƒãƒ•ã‚¡ãŒEmpty
-     * ã®å ´åˆã«ã¯falseã‚’è¿”ã™ã€‚
+     * InPort¤ËÌ¤ÆÉ¤ÎºÇ¿·¥Ç¡¼¥¿¤¬ÅşÃå¤·¤Æ¤¤¤ë¤«¤òboolÃÍ¤ÇÊÖ¤¹¡£
+     * InPort¤¬Ì¤ÀÜÂ³¤Î¾ì¹ç¡¢¤ª¤è¤ÓÀÜÂ³¥³¥Í¥¯¥¿¤Î¥Ğ¥Ã¥Õ¥¡¤¬Empty
+     * ¤Î¾ì¹ç¤Ë¤Ïfalse¤òÊÖ¤¹¡£
      *
-     * @return true æœªèª­ã®æœ€æ–°ãƒ‡ãƒ¼ã‚¿ãŒå­˜åœ¨ã™ã‚‹
-     *         false æœªæ¥ç¶šã¾ãŸã¯ãƒãƒƒãƒ•ã‚¡ã«ãƒ‡ãƒ¼ã‚¿ãŒå­˜åœ¨ã—ãªã„ã€‚
+     * @return true Ì¤ÆÉ¤ÎºÇ¿·¥Ç¡¼¥¿¤¬Â¸ºß¤¹¤ë
+     *         false Ì¤ÀÜÂ³¤Ş¤¿¤Ï¥Ğ¥Ã¥Õ¥¡¤Ë¥Ç¡¼¥¿¤¬Â¸ºß¤·¤Ê¤¤¡£
      * 
      * @else
      *
@@ -101,25 +101,25 @@ namespace RTC
      *
      * @return Newest data check result
      *         ( true:Newest data. Data has not been readout yet.
-     *          false:Past dataï¼Data has already been readout.)
+     *          false:Past data¡¥Data has already been readout.)
      * 
      * @endif
      */
     virtual bool isNew()
     {
-      return m_directNewData;
+		return false;
     }
 
     /*!
      * @if jp
      *
-     * @brief ãƒãƒƒãƒ•ã‚¡ãŒç©ºã‹ã©ã†ã‹ç¢ºèªã™ã‚‹
+     * @brief ¥Ğ¥Ã¥Õ¥¡¤¬¶õ¤«¤É¤¦¤«³ÎÇ§¤¹¤ë
      * 
-     * InPortã®ãƒãƒƒãƒ•ã‚¡ãŒç©ºã‹ã©ã†ã‹ã‚’ bool å€¤ã§è¿”ã™ã€‚
-     * ç©ºã®å ´åˆã¯ true, æœªèª­ãƒ‡ãƒ¼ã‚¿ãŒã‚ã‚‹å ´åˆã¯ false ã‚’è¿”ã™ã€‚
+     * InPort¤Î¥Ğ¥Ã¥Õ¥¡¤¬¶õ¤«¤É¤¦¤«¤ò bool ÃÍ¤ÇÊÖ¤¹¡£
+     * ¶õ¤Î¾ì¹ç¤Ï true, Ì¤ÆÉ¥Ç¡¼¥¿¤¬¤¢¤ë¾ì¹ç¤Ï false ¤òÊÖ¤¹¡£
      *
-     * @return true  ãƒãƒƒãƒ•ã‚¡ã¯ç©º
-     *         false ãƒãƒƒãƒ•ã‚¡ã«æœªèª­ãƒ‡ãƒ¼ã‚¿ãŒã‚ã‚‹
+     * @return true  ¥Ğ¥Ã¥Õ¥¡¤Ï¶õ
+     *         false ¥Ğ¥Ã¥Õ¥¡¤ËÌ¤ÆÉ¥Ç¡¼¥¿¤¬¤¢¤ë
      * 
      * @else
      *
@@ -129,20 +129,20 @@ namespace RTC
      *
      * @return Newest data check result
      *         ( true:Newest data. Data has not been readout yet.
-     *          false:Past dataï¼Data has already been readout.)
+     *          false:Past data¡¥Data has already been readout.)
      * 
      * @endif
      */
     virtual bool isEmpty()
     {
-      return !m_directNewData;
+		return true;
     }
 
 	/*!
 	* @if jp
-	* @brief ãƒ‡ãƒ¼ã‚¿ã®æ›¸ãè¾¼ã¿
+	* @brief ¥Ç¡¼¥¿¤Î½ñ¤­¹ş¤ß
 	*
-	* @param data ãƒ‡ãƒ¼ã‚¿
+	* @param data ¥Ç¡¼¥¿
 	*
 	* @else
 	* @brief
@@ -158,25 +158,7 @@ namespace RTC
 
   protected:
     
-    /*!
-     * @if jp
-     * @brief ãƒã‚¤ãƒ³ãƒ‰ã•ã‚Œã‚‹ T å‹ã®å¤‰æ•°ã¸ã®å‚ç…§
-     * @else
-     * @brief The reference to type-T value bound this OutPort
-     * @endif
-     */
-    DataType& m_value;
-    mutable coil::Mutex m_valueMutex;
-    
 
-    /*!
-     * @if jp
-     * @brief ãƒ€ã‚¤ãƒ¬ã‚¯ãƒˆãƒ‡ãƒ¼ã‚¿è»¢é€ãƒ•ãƒ©ã‚°
-     * @else
-     * @brief A flag for direct data transfer
-     * @endif
-     */
-    bool m_directNewData;
   };
 }; // End of namesepace RTM
 

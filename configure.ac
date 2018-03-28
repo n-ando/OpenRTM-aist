@@ -1522,6 +1522,7 @@ rtm_loggerdir=$rtm_libdir"/logger"
 rtm_rtmdir=$rtm_libdir"/rtm"
 rtm_svcdir=$rtm_libdir"/svc"
 rtm_sdodir=$rtm_libdir"/sdo"
+rtm_ssldir=$rtm_libdir"/ssl"
 rtm_cxx_docdir=$rtm_datadir"/doc/c++"
 rtm_idl_docdir=$rtm_datadir"/doc/idl"
 rtm_exampledir=$rtm_datadir"/components/c++/examples"
@@ -1537,6 +1538,7 @@ AC_SUBST(rtm_loggerdir)
 AC_SUBST(rtm_rtmdir)
 AC_SUBST(rtm_svcdir)
 AC_SUBST(rtm_sdodir)
+AC_SUBST(rtm_ssldir)
 AC_SUBST(rtm_cxx_docdir)
 AC_SUBST(rtm_idl_docdir)
 AC_SUBST(rtm_exampledir)
@@ -1677,6 +1679,7 @@ AC_OUTPUT([Makefile
 	src/ext/local_service/nameservice_file/Makefile
 	src/ext/logger/Makefile
 	src/ext/logger/fluentbit_stream/Makefile
+	src/ext/ssl/Makefile
 	utils/Makefile
 	utils/rtm-config/Makefile
 	utils/cmake/Makefile
@@ -1732,6 +1735,7 @@ AC_OUTPUT([Makefile
 	win32/OpenRTM-aist/ext/sdo/Makefile
 	win32/OpenRTM-aist/ext/sdo/logger/Makefile
 	win32/OpenRTM-aist/ext/sdo/observer/Makefile
+	win32/OpenRTM-aist/ext/ssl/Makefile
 	win32/OpenRTM-aist/ext/sdo/fsm4rtc_observer/Makefile
 	win32/OpenRTM-aist/ext/sdo/extended_fsm/Makefile
 	win32/OpenRTM-aist/utils/Makefile

@@ -163,8 +163,7 @@ namespace RTC
 		  }
 		  m_directOutPort = directOutPort;
 		  
-		  m_outPortListeners = &(m_directOutPort->getListeners());
-		  m_directOutPort->getListeners();
+		  m_outPortListeners = &(directOutPort->getListeners());
 		  return true;
 	  }
   };

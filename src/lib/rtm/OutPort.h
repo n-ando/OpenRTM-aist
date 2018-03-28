@@ -556,6 +556,10 @@ namespace RTC
     DataPortStatusList m_status;
 
     CORBA::Long m_propValueIndex;
+
+    coil::Mutex m_valueMutex;
+    bool m_directNewData;
+    DataType m_directValue;
   };
 }; // namespace RTC
 

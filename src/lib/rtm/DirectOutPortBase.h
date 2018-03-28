@@ -29,7 +29,7 @@ namespace RTC
   /*!
    * @if jp
    * @class DirectOutPortBase
-   * @brief directÚ‘±—pOutPortŠî’êƒNƒ‰ƒX
+   * @brief directÀÜÂ³ÍÑOutPort´ğÄì¥¯¥é¥¹
    *
    *
    * @since 1.2.0
@@ -51,7 +51,7 @@ namespace RTC
   public:
 	/*!
      * @if jp
-     * @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+     * @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
      *
      * @param value
      *
@@ -62,13 +62,12 @@ namespace RTC
      *
      * @endif
      */
-	DirectOutPortBase(DataType& value):
-	m_directNewData(false), m_directValue(value)
+	DirectOutPortBase(DataType& value)
 	{
 	}
 	/*!
 	* @if jp
-	* @brief ƒfƒXƒgƒ‰ƒNƒ^
+	* @brief ¥Ç¥¹¥È¥é¥¯¥¿
 	*
 	*
 	* @else
@@ -82,9 +81,9 @@ namespace RTC
 	}
 	/*!
 	* @if jp
-	* @brief ƒf[ƒ^‚Ìæ“¾
+	* @brief ¥Ç¡¼¥¿¤Î¼èÆÀ
 	* 
-	* @param data ƒf[ƒ^‚ğŠi”[‚·‚é•Ï”
+	* @param data ¥Ç¡¼¥¿¤ò³ÊÇ¼¤¹¤ëÊÑ¿ô
 	*
 	* @else
 	* @brief 
@@ -98,9 +97,9 @@ namespace RTC
 	}
 	/*!
 	* @if jp
-	* @brief V‹Kƒf[ƒ^‚Ì‘¶İŠm”F
+	* @brief ¿·µ¬¥Ç¡¼¥¿¤ÎÂ¸ºß³ÎÇ§
 	*
-	* @return trueFV‹Kƒf[ƒ^‚ ‚è
+	* @return true¡§¿·µ¬¥Ç¡¼¥¿¤¢¤ê
 	*
 	* @else
 	* @brief
@@ -111,13 +110,13 @@ namespace RTC
 	*/
 	virtual bool isNew()
 	{
-		return !m_directNewData;
+		return false;
 	}
 	/*!
 	* @if jp
-	* @brief V‹Kƒf[ƒ^‚ª–³‚¢‚±‚Æ‚ğŠm”F
+	* @brief ¿·µ¬¥Ç¡¼¥¿¤¬Ìµ¤¤¤³¤È¤ò³ÎÇ§
 	*
-	* @return trueFV‹Kƒf[ƒ^‚È‚µ
+	* @return true¡§¿·µ¬¥Ç¡¼¥¿¤Ê¤·
 	*
 	* @else
 	* @brief
@@ -128,13 +127,10 @@ namespace RTC
 	*/
 	virtual bool isEmpty()
 	{
-		return !m_directNewData;
+		return true;
 	}
     
   protected:
-	coil::Mutex m_valueMutex;
-	bool m_directNewData;
-	DataType m_directValue;
   };
 }; // namespace RTC
 

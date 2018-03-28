@@ -38,7 +38,7 @@ namespace coil
       {
         if (CPU_ISSET(i, &cpu_set))
           {
-            cpu_mask.push_back((unsigned int)i);
+            cpu_mask.push_back((unsigned int)i+1);
           }
       }
     return true;
@@ -88,7 +88,7 @@ namespace coil
       {
         if (CPU_ISSET(i, &cpu_set))
           {
-            cpu_mask.push_back((unsigned int)i);
+            cpu_mask.push_back((unsigned int)i+1);
           }
       }
     return true;

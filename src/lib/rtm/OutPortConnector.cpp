@@ -174,7 +174,7 @@ namespace RTC
 		  return false;
 	  }
 	  m_directInPort = directInPort;
-	  m_inPortListeners = &(m_directInPort->getListeners());
+	  m_inPortListeners = &(directInPort->getListeners());
 	  return true;
   }
 }; // namespace RTC
