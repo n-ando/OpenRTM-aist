@@ -45,7 +45,6 @@ static const char* default_config[] =
     "manager.name",                          "manager",
     "manager.naming_formats",                "%h.host_cxt/%n.mgr",
     "manager.pid",                           "",
-    "manager.refstring_path",                "/var/log/rtcmanager.ref",
     "os.name",                               "",
     "os.release",                            "",
     "os.version",                            "",
