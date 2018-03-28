@@ -138,12 +138,7 @@ namespace RTC
 #endif
         m_value(value), m_onWrite(0), m_onWriteConvert(0)
     {
-      addProperty("dataport.data_value", CORBA::Short(0));
-      {
-        Guard guard(m_profile_mutex);
-        m_propValueIndex = NVUtil::find_index(m_profile.properties,
-                                              "dataport.data_value");
-      }
+
       this->addConnectorDataListener(ON_BUFFER_WRITE,
                                      new Timestamp<DataType>("on_write"));
       this->addConnectorDataListener(ON_SEND,
@@ -220,10 +215,7 @@ namespace RTC
           (*m_onWrite)(value);
           RTC_TRACE(("OnWrite called"));
         }
-      {
-        Guard guard(m_profile_mutex);
-        //m_profile.properties[m_propValueIndex].value <<= value;
-      }
+
 
       bool result(true);
       std::vector<const char *> disconnect_ids;
