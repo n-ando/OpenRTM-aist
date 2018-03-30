@@ -1191,6 +1191,7 @@ namespace RTM
         rtcd_cmd += " -o manager.name:" + prop["manger.name"];
         rtcd_cmd += " -o manager.instance_name:" + mgrstr;
         rtcd_cmd += " -o shutdown_auto:NO";
+        rtcd_cmd += " -o manager.auto_shutdown_duration:50";
 
         coil::vstring slaves_names;
         if (mgrstr == "manager_%p")
