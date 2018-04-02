@@ -66,8 +66,7 @@ namespace coil
   public:
     Winsock() {
       WSADATA wsaData;
-      int iResult;
-      iResult = WSAStartup(MAKEWORD(2, 2), &wsaData);
+      WSAStartup(MAKEWORD(2, 2), &wsaData);
     }
     virtual ~Winsock()
     {

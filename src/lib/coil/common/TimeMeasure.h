@@ -62,10 +62,6 @@ namespace coil
      */
     struct Statistics
     {
-      double max_interval;
-      double min_interval;
-      double mean_interval;
-      double std_deviation;
     };
 
     /*!

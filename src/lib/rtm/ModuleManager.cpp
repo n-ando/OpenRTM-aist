@@ -547,7 +547,6 @@ namespace RTC
 #if !defined(VXWORKS_69) && !defined(VXWORKS_66)
     std::string l = "manager.modules." + lang;
     coil::Properties& lprop(Manager::instance().getConfig().getNode(l));
-    std::vector<coil::Properties> prop;
 
     for (size_t i(0), len(modules.size()); i < len; ++i)
       {

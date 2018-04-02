@@ -78,7 +78,6 @@ namespace coil
                     "ip route get ");
     const char* match_str = "dev ";
     const char* delimiter = " ";
-    size_t ifname_pos(2);
     cmd += dest_addr;
     cmd += " 2> /dev/null";
 #endif // COIL_OS_IS_LINUX    
