@@ -53,4 +53,4 @@ namespace coil
   typedef ACE_Get_Opt GetOpt;
 };  // namespace coil
 
-#endif // COIL_OS_H
+#endif  // COIL_OS_H

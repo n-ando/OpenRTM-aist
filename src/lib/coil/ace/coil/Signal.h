@@ -34,4 +34,4 @@ namespace coil
   typedef ACE_Sig_Action SignalAction;
   typedef void (*SignalHandler)(int);
 };
-#endif // COIL_SIGNAL_H
+#endif  // COIL_SIGNAL_H

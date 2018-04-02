@@ -1565,5 +1565,5 @@ namespace RTC
     ConfigurationListeners m_listeners;
 
   };
-}; // namespace RTC
-#endif // RTC_CONFIGADMIN_H
+};  // namespace RTC
+#endif  // RTC_CONFIGADMIN_H

@@ -188,5 +188,5 @@ namespace RTC_Utils
    * @endif
    */
   bool isMultiModeObject(CORBA::Object_ptr obj);
-}; // namespace RTC_Utils
-#endif // RTCUtil_h
+};  // namespace RTC_Utils
+#endif  // RTCUtil_h

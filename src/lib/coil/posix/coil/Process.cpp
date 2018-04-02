@@ -46,11 +46,11 @@ namespace coil
 
     pid_t pid;
     if ((pid = fork()) < 0 )
-      { // fork failed
+      {  // fork failed
         return -1;
       }
 
-    if (pid == 0) // I'm child process
+    if (pid == 0)  // I'm child process
       {
         //        signal(SIGCHLD, SIG_IGN);
         //        signal(SIGALRM, SIG_IGN);
@@ -82,5 +82,5 @@ namespace coil
   }
 
 
-}; // namespace coil
-#endif // COIL_PROCESS_H
+};  // namespace coil
+#endif  // COIL_PROCESS_H

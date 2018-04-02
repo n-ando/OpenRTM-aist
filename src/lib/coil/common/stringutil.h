@@ -28,7 +28,7 @@
 #include <errno.h>
 #include <cstdlib>
 
-#if defined (_MSC_VER) && (_MSC_VER <=1500) // VC2008(VC9.0) or before
+#if defined (_MSC_VER) && (_MSC_VER <=1500)  // VC2008(VC9.0) or before
 #elif defined(VXWORKS_66) && !defined(__RTP__)
 #else
 #include <stdint.h>
@@ -893,4 +893,4 @@ namespace coil
   std::string replaceEnv(std::string str);
   
 }; // namepsace coil
-#endif // COIL_STRINGUTIL_H
+#endif  // COIL_STRINGUTIL_H

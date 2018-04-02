@@ -355,6 +355,6 @@ namespace RTC
 	PortBase* m_directOutPort;
 
   };
-}; // namespace RTC
+};  // namespace RTC
 
-#endif // RTC_INPORTCONNECTOR_H
+#endif  // RTC_INPORTCONNECTOR_H

@@ -23,7 +23,7 @@
 #pragma warning( disable : 4290 )
 #pragma warning( disable : 4311 )
 #pragma warning( disable : 4312 )
-#endif // WIN32
+#endif  // WIN32
 
 #include <coil/stringutil.h>
 #include <rtm/NVUtil.h>
@@ -35,7 +35,7 @@
 
 #ifdef WIN32
 #pragma warning( pop )
-#endif // WIN32
+#endif  // WIN32
 
 namespace NVUtil
 {
@@ -108,9 +108,9 @@ namespace NVUtil
    */
 #ifndef ORB_IS_RTORB
   void copyFromProperties(SDOPackage::NVList& nv, const coil::Properties& prop)
-#else // ORB_IS_RTORB
+#else  // ORB_IS_RTORB
     void copyFromProperties(SDOPackage_NVList& nv, const coil::Properties& prop)
-#endif // ORB_IS_RTORB
+#endif  // ORB_IS_RTORB
   {
     std::vector<std::string> keys;
     keys = prop.propertyNames();
@@ -122,9 +122,9 @@ namespace NVUtil
 // Why RtORB does not copy string to Properties.
 #ifndef ORB_IS_RTORB
         nv[i].name = CORBA::string_dup(keys[i].c_str());
-#else // ORB_IS_RTORB
+#else  // ORB_IS_RTORB
         nv[i].name = reinterpret_cast<char *>(keys[i].c_str());
-#endif // ORB_IS_RTORB
+#endif  // ORB_IS_RTORB
         nv[i].value <<= prop[keys[i]].c_str();
       }
   }
@@ -314,10 +314,10 @@ namespace NVUtil
 #ifndef ORB_IS_RTORB
   bool appendStringValue(SDOPackage::NVList& nv, const char* name,
                          const char* value)
-#else // ORB_IS_RTORB
+#else  // ORB_IS_RTORB
   bool appendStringValue(SDOPackage_NVList& nv, const char* name,
                          const char* value)
-#endif // ORB_IS_RTORB
+#endif  // ORB_IS_RTORB
   {
     //    if (!isString(nv, name)) return false;
 

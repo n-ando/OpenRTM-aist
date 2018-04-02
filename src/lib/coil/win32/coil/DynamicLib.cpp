@@ -103,7 +103,7 @@ namespace coil
    * @if jp
    * @brief 動的リンクライブラリのロード
    * @else
-   * @brief Load of the Dynamic link library 
+   * @brief Load of the Dynamic link library
    * @endif
    */
   int DynamicLib::open(const char* dll_name,
@@ -124,7 +124,7 @@ namespace coil
    * @if jp
    * @brief 動的リンクライブラリのアンロード
    * @else
-   * @brief Unload of the Dynamic link library 
+   * @brief Unload of the Dynamic link library
    * @endif
    */
   int DynamicLib::close(void)
@@ -168,7 +168,7 @@ namespace coil
 
     /* Because it is a normal termination when the error code is 0, */
     /* return NULL. */
-    if (dwcode == 0) 
+    if (dwcode == 0)
       {
         return NULL;
       }

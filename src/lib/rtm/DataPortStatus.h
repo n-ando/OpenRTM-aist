@@ -246,4 +246,4 @@ namespace RTC
   using ::RTC::DataPortStatus::CONNECTION_LOST;         \
   using ::RTC::DataPortStatus::UNKNOWN_ERROR;
 
-#endif // RTC_DATAPORTSTATUS_H
+#endif  // RTC_DATAPORTSTATUS_H

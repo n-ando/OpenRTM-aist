@@ -246,4 +246,4 @@ private:
   CallbackFunc m_cbf;
 };
 
-#endif // Listener_h
+#endif  // Listener_h

@@ -59,7 +59,7 @@ namespace coil
    */
   void TimeMeasure::tick()
   {
-    m_begin = gettimeofday(); // [TimeValue]
+    m_begin = gettimeofday();  // [TimeValue]
   }
 
   /*!
@@ -173,4 +173,4 @@ namespace coil
     return s;
   }
 
-}; // namespace coil
+};  // namespace coil

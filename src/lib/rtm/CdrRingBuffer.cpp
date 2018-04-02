@@ -24,7 +24,7 @@
 
 namespace RTC
 {
-};     // namespace RTC
+};  // namespace RTC
 
 extern "C"
 {
@@ -36,4 +36,4 @@ extern "C"
                  coil::Destructor<RTC::CdrBufferBase, RTC::CdrRingBuffer>);
   }
 };
-#endif // InPortConsumer_h
+#endif  // InPortConsumer_h

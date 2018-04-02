@@ -563,6 +563,6 @@ namespace RTC
     bool m_directNewData;
     DataType m_directValue;
   };
-}; // namespace RTC
+};  // namespace RTC
 
-#endif // RTC_OUTPORT_H
+#endif  // RTC_OUTPORT_H

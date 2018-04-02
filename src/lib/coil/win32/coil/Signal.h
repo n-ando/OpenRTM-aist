@@ -122,4 +122,4 @@ namespace coil
 
   };
 };  // namespace coil
-#endif // COIL_SIGNAL_H
+#endif  // COIL_SIGNAL_H

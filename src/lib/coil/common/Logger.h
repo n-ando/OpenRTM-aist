@@ -930,4 +930,4 @@ namespace coil
   typedef log_stream<char> LogStream;
 
 };  // namespace coil
-#endif // LOGGER_H
+#endif  // LOGGER_H

@@ -68,12 +68,12 @@ namespace coil
   TimeValue TimeValue::operator-(TimeValue& tm)
   {
     TimeValue res;
-    if (m_sec >= tm.m_sec) // +
+    if (m_sec >= tm.m_sec)  // +
       {
         if (m_usec >= tm.m_usec) /* 繰り下がり無し */
           {
-            res.m_sec  = m_sec  - tm.m_sec;  // -
-            res.m_usec = m_usec - tm.m_usec; // +
+            res.m_sec  = m_sec  - tm.m_sec;   // -
+            res.m_usec = m_usec - tm.m_usec;  // +
           }
         else /* m_usec < tm.m_usec 繰り下がり有り */
           {
@@ -81,11 +81,11 @@ namespace coil
             res.m_usec = (m_usec + 1000000) - tm.m_usec;
           }
       }
-    else // m_sec < tm.m_sec // -
+    else  // m_sec < tm.m_sec // -
       {
           if (tm.m_usec >= m_usec) /* 繰り下がり無し */
             {
-              res.m_sec  = - (tm.m_sec  - m_sec); // +
+              res.m_sec  = - (tm.m_sec  - m_sec);   // +
               res.m_usec = - (tm.m_usec - m_usec);  // +
             }
           else /* tm.m_usec < m_usec 繰り下がり有り */

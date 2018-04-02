@@ -565,8 +565,8 @@ namespace coil
   {
     while (!leaf.empty())
       {
-        if (leaf.back() != NULL) // recursive delete
-          delete leaf.back();    // back() returns always new
+        if (leaf.back() != NULL)  // recursive delete
+          delete leaf.back();     // back() returns always new
       }
   }
 
@@ -608,7 +608,7 @@ namespace coil
       {
         if ((str[i] == ':' || str[i] == '=') && !coil::isEscaped(str, i))
           {
-            key   = str.substr(0, i); // substr(0, i) returns 0...(i-1) chars.
+            key   = str.substr(0, i);  // substr(0, i) returns 0...(i-1) chars.
             coil::eraseHeadBlank(key);
             coil::eraseTailBlank(key);
             value = str.substr(i + 1);
@@ -625,7 +625,7 @@ namespace coil
       {
         if ((str[i] == ' ') && !coil::isEscaped(str, i))
           {
-            key   = str.substr(0, i); // substr(0, i) returns 0...(i-1) chars.
+            key   = str.substr(0, i);  // substr(0, i) returns 0...(i-1) chars.
             coil::eraseHeadBlank(key);
             coil::eraseTailBlank(key);
             value = str.substr(i + 1);
@@ -689,7 +689,7 @@ namespace coil
         return NULL;
       }
 
-    if (index < keys.size() - 1) // node
+    if (index < keys.size() - 1)  // node
       {
         return next->_getNode(keys, ++index, next);
       }
@@ -843,4 +843,4 @@ namespace coil
   {
     return rhs._dump(lhs, rhs, 0);
   }
-}; // namespace coil
+};  // namespace coil

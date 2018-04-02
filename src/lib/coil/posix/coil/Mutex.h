@@ -162,4 +162,4 @@ namespace coil
     Mutex& operator=(const Mutex &);
   };
 };  // namespace coil
-#endif // COIL_MUTEX_H
+#endif  // COIL_MUTEX_H

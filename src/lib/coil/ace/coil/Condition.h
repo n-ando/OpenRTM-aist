@@ -85,4 +85,4 @@ namespace coil
     Mutex& m_mutex;
   };
 };  // namespace coil
-#endif // COIL_CONDITION_H
+#endif  // COIL_CONDITION_H

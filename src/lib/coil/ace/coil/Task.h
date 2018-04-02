@@ -34,4 +34,4 @@ namespace coil
   typedef ACE_Task<ACE_MT_SYNCH> Task;
 };
 
-#endif // COIL_TASK_H
+#endif  // COIL_TASK_H

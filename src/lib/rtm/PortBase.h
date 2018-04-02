@@ -1969,9 +1969,9 @@ namespace RTC
      */
 #ifndef ORB_IS_RTORB
     bool checkPorts(::RTC::PortServiceList& ports);
-#else // ORB_IS_RTORB
+#else  // ORB_IS_RTORB
     bool checkPorts(RTC_PortServiceList& ports);
-#endif // ORB_IS_RTORB
+#endif  // ORB_IS_RTORB
 
 
     inline void onNotifyConnect(const char* portname,
@@ -2305,4 +2305,4 @@ namespace RTC
 #pragma warning( default : 4290 )
 #endif
 
-#endif // RTC_PORTBASE_H
+#endif  // RTC_PORTBASE_H

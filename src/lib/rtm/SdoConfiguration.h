@@ -1183,10 +1183,10 @@ namespace SDOPackage
       const std::string m_id;
     };
   };  // class Configuration_impl
-}; // namespace SDOPackage
+};  // namespace SDOPackage
 
 #ifdef WIN32
 #pragma warning( default : 4290 )
 #endif
 
-#endif // RTC_SDOCONFIGURATION_H
+#endif  // RTC_SDOCONFIGURATION_H

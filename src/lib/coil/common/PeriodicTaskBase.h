@@ -511,6 +511,6 @@ namespace coil
     virtual coil::TimeMeasure::Statistics getPeriodStat() = 0;
 
   };
-}; // namespace coil
+};  // namespace coil
 
-#endif // COIL_PERIODICTASKBASE_H
+#endif  // COIL_PERIODICTASKBASE_H

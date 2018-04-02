@@ -808,5 +808,5 @@ namespace RTC
     DataType m_data;
     long int m_length;
   };
-}; // namespace RTC
-#endif // BufferBase_h
+};  // namespace RTC
+#endif  // BufferBase_h

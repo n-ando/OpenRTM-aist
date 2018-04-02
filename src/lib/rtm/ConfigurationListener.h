@@ -745,6 +745,6 @@ namespace RTC
   };
 
 
-}; // namespace RTC
+};  // namespace RTC
 
-#endif // RTC_CONFIGURATIONLISTENER_H
+#endif  // RTC_CONFIGURATIONLISTENER_H

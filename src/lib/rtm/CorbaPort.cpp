@@ -238,7 +238,7 @@ namespace RTC
           connector_profile.properties[len1 + i] = properties[i];
         }
     }
-#else // ORB_IS_RTORB
+#else  // ORB_IS_RTORB
     CORBA_SeqUtil::push_back_list(connector_profile.properties, properties);
 #endif
 
@@ -262,7 +262,7 @@ namespace RTC
     const NVList& nv(connector_profile.properties);
     RTC_DEBUG_STR((NVUtil::toString(nv)));
 
-    bool strict(false); // default is "best_effort"
+    bool strict(false);  // default is "best_effort"
     CORBA::Long index(NVUtil::find_index(nv, "port.connection.strictness"));
     if (index >=  0)
       {

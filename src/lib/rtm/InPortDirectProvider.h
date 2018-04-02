@@ -371,5 +371,5 @@ extern "C"
 #pragma warning( default : 4290 )
 #endif
 
-#endif // RTC_INPORTDIRECTPROVIDER_H
+#endif  // RTC_INPORTDIRECTPROVIDER_H
 

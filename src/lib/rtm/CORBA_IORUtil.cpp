@@ -44,7 +44,7 @@ namespace CORBA_IORUtil
 
   static void print_tagged_components(std::stringstream& sstr,
                                       IOP::MultipleComponentProfile& comps);
-#endif // ORB_IS_RTORB
+#endif  // ORB_IS_RTORB
 
 
   /*!
@@ -132,10 +132,10 @@ namespace CORBA_IORUtil
     ior.type_id = IOP::IOR::unmarshaltype_id(buf);
     ior.profiles <<= buf;
     return true;
-#else // ORB_IS_RTORB
+#else  // ORB_IS_RTORB
     // RtORB does not supports this function
     return false;
-#endif // ORB_IS_RTORB
+#endif  // ORB_IS_RTORB
   }
 #endif //ORB_IS_ORBEXPRESS
 
@@ -194,10 +194,10 @@ namespace CORBA_IORUtil
     iorstr = result;
     delete[] result;
     return true;
-#else // ORB_IS_RTORB
+#else  // ORB_IS_RTORB
     // RtORB does not this function.
     return false;
-#endif // ORB_IS_RTORB
+#endif  // ORB_IS_RTORB
   }
 #endif //ORB_IS_ORBEXPRESS
 
@@ -242,7 +242,7 @@ namespace CORBA_IORUtil
       {
         return false;
       }
-#endif // ORB_IS_RTORB
+#endif  // ORB_IS_RTORB
     return false;
   }
 
@@ -349,9 +349,9 @@ namespace CORBA_IORUtil
                      << std::dec << std::endl;
           }
       }
-#else // ORB_IS_RTORB
+#else  // ORB_IS_RTORB
     retstr << "RtORB does't support formatIORinfo() function." << std::endl;
-#endif // ORB_IS_RTORB
+#endif  // ORB_IS_RTORB
     return addr;
   }
 
@@ -529,8 +529,8 @@ namespace CORBA_IORUtil
             sstr << "       Broken component" << std::endl;
           }
       }
-#endif // defined(RTM_OMNIORB_40) || defined(RTM_OMNIORB_41)
+#endif  // defined(RTM_OMNIORB_40) || defined(RTM_OMNIORB_41)
   }
-#endif // ORB_IS_RTORB
+#endif  // ORB_IS_RTORB
 };
 

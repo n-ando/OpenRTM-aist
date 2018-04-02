@@ -93,11 +93,11 @@ namespace RTC
       }
     else
       {
-#endif // ORB_IS_OMNIORB
+#endif  // ORB_IS_OMNIORB
         m_cosnaming.rebindByString(name, rtobj->getObjRef(), true);
 #ifdef ORB_IS_OMNIORB
       }
-#endif // ORB_IS_OMNIORB
+#endif  // ORB_IS_OMNIORB
   }
 
   void NamingOnCorba::bindObject(const char* name,
@@ -124,11 +124,11 @@ namespace RTC
       }
     else
       {
-#endif // ORB_IS_OMNIORB
+#endif  // ORB_IS_OMNIORB
         m_cosnaming.rebindByString(name, port->getPortRef(), true);
 #ifdef ORB_IS_OMNIORB
       }
-#endif // ORB_IS_OMNIORB
+#endif  // ORB_IS_OMNIORB
   }
 
   void NamingOnCorba::bindObject(const char* name,
@@ -155,11 +155,11 @@ namespace RTC
       }
     else
       {
-#endif // ORB_IS_OMNIORB
+#endif  // ORB_IS_OMNIORB
         m_cosnaming.rebindByString(name, mgr->getObjRef(), true);
 #ifdef ORB_IS_OMNIORB
       }
-#endif // ORB_IS_OMNIORB
+#endif  // ORB_IS_OMNIORB
   }
 
   /*!
@@ -671,7 +671,7 @@ namespace RTC
                              "YES", "NO", false));
     for (int i(0), len(m_names.size()); i < len; ++i)
       {
-        if (m_names[i]->ns == 0) // if ns==NULL
+        if (m_names[i]->ns == 0)  // if ns==NULL
           {
             RTC_DEBUG(("Retrying connection to %s/%s",
                        m_names[i]->method.c_str(),
@@ -947,12 +947,12 @@ namespace RTC
       {
         nsobj = createNamingObj(ns->method.c_str(),
                                 ns->nsname.c_str());
-        if (nsobj != 0) // if succeed
+        if (nsobj != 0)  // if succeed
           {
             RTC_INFO(("Connected to a name server: %s/%s",
                       ns->method.c_str(), ns->nsname.c_str()));
             ns->ns = nsobj;
-            bindCompsTo(nsobj); // rebind all comps to new NS
+            bindCompsTo(nsobj);  // rebind all comps to new NS
             return;
           }
         else

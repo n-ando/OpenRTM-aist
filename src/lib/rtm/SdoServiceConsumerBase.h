@@ -249,6 +249,6 @@ namespace RTC
   EXTERN template class DLL_PLUGIN
                      ::coil::GlobalFactory< ::RTC::SdoServiceConsumerBase >;
 #endif
-}; // namespace RTC
+};  // namespace RTC
 
-#endif // RTC_SDOSERVICECONSUMERBASE_H
+#endif  // RTC_SDOSERVICECONSUMERBASE_H

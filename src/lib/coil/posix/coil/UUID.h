@@ -74,4 +74,4 @@ namespace coil
 };  // namespace coil
 #endif
 
-#endif // COIL_UUID_H
+#endif  // COIL_UUID_H

@@ -196,4 +196,4 @@ namespace coil
     M& m_mutex;
   };
 };  // namespace coil
-#endif // COIL_CONDITION_H
+#endif  // COIL_CONDITION_H

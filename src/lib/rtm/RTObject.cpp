@@ -520,7 +520,7 @@ namespace RTC
     execlist = new ExecutionContextList();
 
     CORBA_SeqUtil::for_each(m_ecMine, ec_copy(execlist));
-#else // ORB_IS_RTORB
+#else  // ORB_IS_RTORB
     ExecutionContextList_var execlist;
     execlist = new ExecutionContextList();
 
@@ -536,7 +536,7 @@ namespace RTC
             ++j;
           }
       }
-#endif // ORB_IS_RTORB
+#endif  // ORB_IS_RTORB
     return execlist._retn();
   }
 
@@ -731,7 +731,7 @@ namespace RTC
         profile->category      =
           CORBA::string_dup(m_properties["category"].c_str());
         profile->port_profiles = m_portAdmin.getPortProfileList();
-#else // ORB_IS_RTORB
+#else  // ORB_IS_RTORB
         profile->instance_name =
                reinterpret_cast<char *>(m_properties["instance_name"].c_str());
         profile->type_name     =
@@ -746,7 +746,7 @@ namespace RTC
                reinterpret_cast<char *>(m_properties["category"].c_str());
         PortProfileList ppl    = m_portAdmin.getPortProfileList();
         profile->port_profiles = ppl._retn();
-#endif // ORB_IS_RTORB
+#endif  // ORB_IS_RTORB
         NVUtil::copyFromProperties(profile->properties, m_properties);
         return profile._retn();
       }
@@ -1350,11 +1350,11 @@ namespace RTC
         SDOPackage::Configuration_ptr config;
         config = m_pSdoConfig;
         return config;
-#else // ORB_IS_RTORB
+#else  // ORB_IS_RTORB
         SDOPackage::Configuration_var config;
         config = m_pSdoConfig;
         return config._retn();
-#endif // ORB_IS_RTORB
+#endif  // ORB_IS_RTORB
       }
     catch (...)
       {
@@ -1479,10 +1479,10 @@ namespace RTC
     m_properties["instance_name"] = instance_name;
 #ifndef ORB_IS_RTORB
     m_profile.instance_name = m_properties["instance_name"].c_str();
-#else // ORB_IS_RTORB
+#else  // ORB_IS_RTORB
     m_profile.instance_name =
             reinterpret_cast<char *>(m_properties["instance_name"].c_str());
-#endif // ORB_IS_RTORB
+#endif  // ORB_IS_RTORB
   }
 
   /*!
@@ -1546,7 +1546,7 @@ namespace RTC
     m_profile.version       = m_properties["version"].c_str();
     m_profile.vendor        = m_properties["vendor"].c_str();
     m_profile.category      = m_properties["category"].c_str();
-#else // ORB_IS_RTORB
+#else  // ORB_IS_RTORB
     m_profile.instance_name =
             reinterpret_cast<char*>(m_properties["instance_name"].c_str());
     m_profile.type_name     =
@@ -1559,7 +1559,7 @@ namespace RTC
             reinterpret_cast<char*>(m_properties["vendor"].c_str());
     m_profile.category      =
             reinterpret_cast<char*>(m_properties["category"].c_str());
-#endif //ORB_IS_RTORB
+#endif  // ORB_IS_RTORB
   }
 
   /*!

@@ -587,4 +587,4 @@ namespace coil
 
 };  // namespace coil
 
-#endif // COIL_ASYNC_H
+#endif  // COIL_ASYNC_H

@@ -777,10 +777,10 @@ namespace RTC
     vProperties m_modprofs;
 
   };   // class ModuleManager
-};     // namespace RTC
+};  // namespace RTC
 
 #ifdef WIN32
 #pragma warning( default : 4290 )
 #endif
 
-#endif // RTC_MODULEMANAGER_H
+#endif  // RTC_MODULEMANAGER_H

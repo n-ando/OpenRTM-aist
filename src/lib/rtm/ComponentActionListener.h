@@ -1076,6 +1076,6 @@ namespace RTC
   };
 
 
-}; // namespace RTC
+};  // namespace RTC
 
-#endif // RTC_COMPONENTACTIONLISTENER_H
+#endif  // RTC_COMPONENTACTIONLISTENER_H

@@ -167,4 +167,4 @@ namespace coil
   };
 };  // namespace coil
 
-#endif // COIL_NONCOPYABLE_H
+#endif  // COIL_NONCOPYABLE_H

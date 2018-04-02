@@ -299,7 +299,7 @@ namespace RTC
     mutable Logger rtclog;
     coil::Properties m_properties;
   };
-};     // namespace RTC
+};  // namespace RTC
 
 extern "C"
 {
@@ -319,5 +319,5 @@ extern "C"
   void InPortCorbaCdrConsumerInit(void);
 };
 
-#endif // RTC_INPORTCORBACDRCONSUMER_H
+#endif  // RTC_INPORTCORBACDRCONSUMER_H
 

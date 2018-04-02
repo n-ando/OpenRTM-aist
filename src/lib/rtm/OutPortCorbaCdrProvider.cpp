@@ -51,11 +51,11 @@ namespace RTC
     CORBA_SeqUtil::
       push_back(m_properties,
                 NVUtil::newNV("dataport.corba_cdr.outport_ior", ior));
-#else // ORB_IS_RTORB
+#else  // ORB_IS_RTORB
     CORBA_SeqUtil::
       push_back(m_properties,
                 NVUtil::newNV("dataport.corba_cdr.outport_ior", ior.in()));
-#endif // ORB_IS_RTORB
+#endif  // ORB_IS_RTORB
     CORBA_SeqUtil::
       push_back(m_properties,
                 NVUtil::newNV("dataport.corba_cdr.outport_ref", m_objref));
@@ -205,7 +205,7 @@ namespace RTC
 #else
         data->length(len);
         cdr.get_octet_array(reinterpret_cast<char *>(&((*data)[0]), static_cast<int>(len)));
-#endif // ORB_IS_RTORB
+#endif  // ORB_IS_RTORB
       }
 
     return convertReturn(ret, cdr);
@@ -265,7 +265,7 @@ namespace RTC
     return ::OpenRTM::UNKNOWN_ERROR;
   }
 
-};     // namespace RTC
+};  // namespace RTC
 
 extern "C"
 {

@@ -288,4 +288,4 @@ namespace coil
 
 };  // namespace coil
 
-#endif // DynamicLib_h
+#endif  // DynamicLib_h

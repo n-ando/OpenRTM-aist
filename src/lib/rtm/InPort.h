@@ -720,4 +720,4 @@ namespace RTC
   };
 };  // namespace RTC
 
-#endif // RTC_INPORT_H
+#endif  // RTC_INPORT_H

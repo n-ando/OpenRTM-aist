@@ -22,7 +22,7 @@
 namespace coil
 {
 
-#define TIMEVALUE_ONE_SECOND_IN_USECS 1000000 // 1 [sec] = 1000000 [usec]
+#define TIMEVALUE_ONE_SECOND_IN_USECS 1000000  // 1 [sec] = 1000000 [usec]
 
   /*!
    * @if jp
@@ -273,4 +273,4 @@ namespace coil
   };
 };  // namespace coil
 
-#endif // COIL_TIMEVALUE_H
+#endif  // COIL_TIMEVALUE_H

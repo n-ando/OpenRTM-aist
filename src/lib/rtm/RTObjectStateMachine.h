@@ -98,7 +98,7 @@ namespace RTC_impl
     void setFsmParticipantAction(const RTC::LightweightRTObject_ptr comp);
     void setMultiModeComponentAction(const RTC::LightweightRTObject_ptr comp);
 
-  private: // member variables
+  private:  // member variables
     RTC::Logger rtclog;
     // ExecutionContext id
     RTC::ExecutionContextHandle_t m_id;
@@ -129,4 +129,4 @@ namespace RTC_impl
 #pragma warning( default : 4290 )
 #endif
 
-#endif // RTC_RTOBJECTSTATEMACHINE_H
+#endif  // RTC_RTOBJECTSTATEMACHINE_H

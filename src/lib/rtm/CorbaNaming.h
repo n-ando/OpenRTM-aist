@@ -1703,11 +1703,11 @@ namespace RTC
   private:
     CORBA::ULong m_blLength;
 
-  }; // class CorbaNaming
-}; // namespace RTC
+  };  // class CorbaNaming
+};  // namespace RTC
 
 #ifdef WIN32
 #pragma warning( default : 4290 )
 #endif
 
-#endif // end of RTC_CORBANAMING_H
+#endif  // end of RTC_CORBANAMING_H

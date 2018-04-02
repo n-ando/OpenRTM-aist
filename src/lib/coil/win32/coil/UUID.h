@@ -90,7 +90,7 @@ namespace coil
   private:
     uuid_t m_uuid;
     char* m_uuidstr;
-  }; // class UUID
+  };  // class UUID
 
 
   //------------------------------------------------------------
@@ -159,7 +159,7 @@ namespace coil
      * @endif
      */
     coil::UUID* generateUUID(int n, int h);
-  }; // class UUID_Generator
+  };  // class UUID_Generator
 };  // namespace coil
 
-#endif // COIL_UUID_H
+#endif  // COIL_UUID_H

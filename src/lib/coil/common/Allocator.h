@@ -155,4 +155,4 @@ namespace coil
 
   };
 };  // namespace coil
-#endif // COIL_ALLOCATOR_H
+#endif  // COIL_ALLOCATOR_H

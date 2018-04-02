@@ -276,4 +276,4 @@ namespace RTM
   };
 };  // namespace RTM
 
-#endif // RTC_LOCALSERVICEADMIN_H
+#endif  // RTC_LOCALSERVICEADMIN_H

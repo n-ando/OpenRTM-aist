@@ -112,7 +112,7 @@ namespace RTC
                      m_worker.ticked_ ? "true" : "false"));
           while (!m_worker.ticked_)
             {
-              m_worker.cond_.wait(); // wait for tick
+              m_worker.cond_.wait();  // wait for tick
               RTC_DEBUG(("Thread was woken up."));
             }
           if (!m_worker.ticked_) { continue; }
@@ -127,7 +127,7 @@ namespace RTC
           m_worker.ticked_ = false;
         }
         coil::TimeValue period(getPeriod());
-        if (1) //count > 1000)
+        if (1)  // count > 1000)
           {
             RTC_PARANOID(("Period:    %f [s]", static_cast<double>(period)));
             RTC_PARANOID(("Execution: %f [s]", static_cast<double>(t1 - t0)));
@@ -139,7 +139,7 @@ namespace RTC
             if (1 /*count > 1000*/) { RTC_PARANOID(("sleeping...")); }
             coil::sleep((coil::TimeValue)(period - (t1 - t0)));
           }
-        if (1) //count > 1000)
+        if (1)  // count > 1000)
           {
             coil::TimeValue t3(coil::gettimeofday());
             RTC_PARANOID(("Slept:       %f [s]", static_cast<double>(t3 - t2)));

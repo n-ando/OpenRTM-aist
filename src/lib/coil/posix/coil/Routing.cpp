@@ -18,9 +18,9 @@
  */
 
 #include <stdio.h>
-#include <netdb.h>      // gethostbyname
-#include <arpa/inet.h>  // inet_ntoa
-#include <netinet/in.h> // sockaddr_in
+#include <netdb.h>       // gethostbyname
+#include <arpa/inet.h>   // inet_ntoa
+#include <netinet/in.h>  // sockaddr_in
 #include <sys/wait.h>
 
 #include <coil/Routing.h>
@@ -74,7 +74,7 @@ namespace coil
     size_t ifname_pos(1);
     cmd += dest_addr;
     cmd += " 2> /dev/null";
-#endif // COIL_OS_IS_FREEBSD || COIL_OS_DARWIN || COIL_OS_CYGWIN || COIL_OS_QNX
+#endif  // COIL_OS_IS_FREEBSD || COIL_OS_DARWIN || COIL_OS_CYGWIN || COIL_OS_QNX
 #if defined(COIL_OS_LINUX)
     std::string cmd("PATH=/bin:/sbin:/usr/bin:/usr/sbin "
                     "ip route get ");
@@ -82,7 +82,7 @@ namespace coil
     const char* delimiter = " ";
     cmd += dest_addr;
     cmd += " 2> /dev/null";
-#endif // COIL_OS_IS_LINUX
+#endif  // COIL_OS_IS_LINUX
 
     FILE* fp;
     if ((fp = popen(cmd.c_str(), "r")) == NULL)
@@ -111,7 +111,7 @@ namespace coil
             wait(NULL);
             return true;
           }
-#endif // COIL_OS_FREEBSD || COIL_OS_DARWIN || COIL_OS_CYGWIN || COIL_OS_QNX
+#endif  // COIL_OS_FREEBSD || COIL_OS_DARWIN || COIL_OS_CYGWIN || COIL_OS_QNX
 #if defined(COIL_OS_LINUX)
         for (int i(0); i < vs.size(); ++i)
           {
@@ -122,7 +122,7 @@ namespace coil
                 return true;
               }
           }
-#endif // COIL_OS_LINUX
+#endif  // COIL_OS_LINUX
       } while (!feof(fp));
     pclose(fp);
     wait(NULL);
@@ -172,4 +172,4 @@ namespace coil
     return false;
   }
 
-}; // namespace coil
+};  // namespace coil

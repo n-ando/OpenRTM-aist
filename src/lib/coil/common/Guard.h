@@ -91,4 +91,4 @@ namespace coil
     M& m_mutex;
   };
 };  // namespace coil
-#endif // COIL_GUARD_H
+#endif  // COIL_GUARD_H

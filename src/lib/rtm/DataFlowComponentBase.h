@@ -126,5 +126,5 @@ namespace RTC
     //    PeriodicExecutionContext* m_pec;
     //    ExecutionContextService_var m_ecref;
   };
-}; // namespace RTC
-#endif // RTC_DATAFLOWCOMPONENTBASE_H
+};  // namespace RTC
+#endif  // RTC_DATAFLOWCOMPONENTBASE_H

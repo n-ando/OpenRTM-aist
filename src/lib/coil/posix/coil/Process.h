@@ -60,5 +60,5 @@ namespace coil
 
   int daemon(int nochdir, int noclose);
 
-}; // namespace coil
-#endif // COIL_PROCESS_H
+};  // namespace coil
+#endif  // COIL_PROCESS_H

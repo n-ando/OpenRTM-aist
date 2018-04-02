@@ -42,7 +42,7 @@ namespace coil
     // std::string -> LPTSTR
     LPTSTR lpcommand = new TCHAR[command.size() + 1];
     _tcscpy(lpcommand, command.c_str());
-#endif // UNICODE
+#endif  // UNICODE
 
     STARTUPINFO si;
     ZeroMemory( &si, sizeof(si) );
@@ -68,5 +68,5 @@ namespace coil
     // not implemented
     return 0;
   }
-}; // namespace coil
+};  // namespace coil
 

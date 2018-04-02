@@ -973,6 +973,6 @@ namespace RTM
     NamingActionListenerHolder naming_;
     LocalServiceActionListenerHolder localservice_;
   };
-}; // namespace RTM
+};  // namespace RTM
 
-#endif // RTC_MANAGERACTIONLISTENER_H
+#endif  // RTC_MANAGERACTIONLISTENER_H

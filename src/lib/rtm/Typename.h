@@ -247,7 +247,7 @@ namespace CORBA_Util
     return typecode<true, T>::id();
   }
 
-}; // namespace CORBA_Util
+};  // namespace CORBA_Util
 
 template <class T>
 const char* toTypename()
@@ -257,4 +257,4 @@ const char* toTypename()
   return CORBA_Util::typecode<CORBA_Util::is_corba_object<T>::value, T>::name();
 }
 
-#endif // RTC_TYPENAME_H
+#endif  // RTC_TYPENAME_H
