@@ -145,7 +145,7 @@ namespace NVUtil
           {
             const char* name(nv[i].name);
             prop[name] = value;
-          };
+          }
       }
   }
 

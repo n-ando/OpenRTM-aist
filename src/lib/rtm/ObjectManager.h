@@ -169,7 +169,7 @@ public:
         m_objects._obj.erase(it);
         return obj;
       }
-    return NULL;;
+    return NULL;
   }
 
   /*!

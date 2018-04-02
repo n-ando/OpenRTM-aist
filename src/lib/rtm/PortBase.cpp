@@ -415,7 +415,7 @@ namespace RTC
           }
         catch (...)
           {
-            RTC_WARN(("Unknown exception caught."));;
+            RTC_WARN(("Unknown exception caught."));
             continue;
           }
       }

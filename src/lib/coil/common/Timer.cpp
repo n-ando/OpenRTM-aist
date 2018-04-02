@@ -71,7 +71,7 @@ namespace coil
    */
   int Timer::svc(void)
   {
-    TimeValue t_curr, t_pre, tm;;
+    TimeValue t_curr, t_pre, tm;
     while (m_running)
       {
         invoke();
