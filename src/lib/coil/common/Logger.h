@@ -20,11 +20,12 @@
 #ifndef LOGGER_H
 #define LOGGER_H
 
-#include <limits.h>
-#include <iostream>
 #include <fstream>
-#include <vector>
+#include <iostream>
+#include <limits.h>
 #include <string>
+#include <utility>
+#include <vector>
 
 #include <coil/Mutex.h>
 #include <coil/Guard.h>
@@ -825,7 +826,7 @@ namespace coil
      *
      * @endif
      */
-    ~log_stream(){};
+    ~log_stream() {}
 
     /*!
      * @if jp

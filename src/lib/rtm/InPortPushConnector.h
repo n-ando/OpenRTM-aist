@@ -214,7 +214,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual void activate(){}; // do nothing
+    virtual void activate() {} // do nothing
 
     /*!
      * @if jp
@@ -230,7 +230,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual void deactivate(){}; // do nothing
+    virtual void deactivate() {} // do nothing
 
   protected:
     /*!

@@ -159,7 +159,7 @@ namespace coil
      *
      * @endif
      */
-    Singleton(){};
+    Singleton() {}
 
     /*!
      * @if jp
@@ -176,7 +176,7 @@ namespace coil
      *
      * @endif
      */
-    ~Singleton(){};
+    ~Singleton() {}
 
   private:
     Singleton(const Singleton& x);

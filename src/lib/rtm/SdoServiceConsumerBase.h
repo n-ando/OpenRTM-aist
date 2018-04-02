@@ -144,7 +144,7 @@ namespace RTC
      * @brief virtual destructor
      * @endif
      */
-    virtual ~SdoServiceConsumerBase() {};
+    virtual ~SdoServiceConsumerBase() {}
 
     /*!
      * @if jp

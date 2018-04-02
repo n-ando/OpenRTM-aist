@@ -39,7 +39,7 @@ namespace coil
     : public ACE_Utils::UUID_Generator
   {
   public:
-    UUID_Generator() : ACE_Utils::UUID_Generator() {};
+    UUID_Generator() : ACE_Utils::UUID_Generator() {}
 #ifndef ACE_5_6_1_OR_EARLIER  
     coil::UUID*
     generateUUID(ACE_UINT16 version = 0x0001, u_char variant = 0x80)

@@ -199,7 +199,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~ConfigBase(void){};
+    virtual ~ConfigBase(void) {}
 
     // typedef of ConfigAdmin's member function
     typedef void (ConfigAdmin::*CallbackFunc)(const char*, const char*);
@@ -1545,7 +1545,7 @@ namespace RTC
     struct find_conf
     {
       std::string m_name;
-      explicit find_conf(const char* name) : m_name(name) {};
+      explicit find_conf(const char* name) : m_name(name) {}
       bool operator()(ConfigBase* conf)
       {
         if (conf == 0) { return false; }

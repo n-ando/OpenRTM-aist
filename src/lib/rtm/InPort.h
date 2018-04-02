@@ -184,7 +184,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~InPort(void){};
+    virtual ~InPort(void) {}
 
     /*!
      * @if jp

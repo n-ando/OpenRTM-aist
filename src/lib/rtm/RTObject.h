@@ -18,6 +18,8 @@
 #ifndef RTC_RTOBJECT_H
 #define RTC_RTOBJECT_H
 
+#include <string>
+#include <vector>
 // CORBA header include
 #include <coil/Properties.h>
 
@@ -2578,8 +2580,8 @@ namespace RTC
      * @endif
      */
     bool addInPort(const char* name, InPortBase& inport);
-    const std::vector<InPortBase*>& getInPorts() const {return m_inports;};
-    const std::vector<OutPortBase*>& getOutPorts() const {return m_outports;};
+    const std::vector<InPortBase*>& getInPorts() const {return m_inports;}
+    const std::vector<OutPortBase*>& getOutPorts() const {return m_outports;}
     /*!
      * @if jp
      *
@@ -5185,7 +5187,7 @@ namespace RTC
      */
     struct svc_name
     {
-      explicit svc_name (const char* id) : m_id(id) {};
+      explicit svc_name (const char* id) : m_id(id) {}
       bool operator()(const SDOPackage::ServiceProfile& prof)
       {
         return m_id == std::string(prof.id);
@@ -5469,7 +5471,7 @@ namespace RTC
      */
     struct nv_name
     {
-      explicit nv_name(const char* name) : m_name(name) {};
+      explicit nv_name(const char* name) : m_name(name) {}
       bool operator()(const SDOPackage::NameValue& nv)
       {
         return m_name == std::string(nv.name);

@@ -92,7 +92,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~InPortConsumer(void){};
+    virtual ~InPortConsumer(void) {}
 
     /*!
      * @if jp

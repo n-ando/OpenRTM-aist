@@ -71,7 +71,7 @@ public:
    *
    * @endif
    */
-  ObjectManager(){};
+  ObjectManager() {}
 
   /*!
    * @if jp
@@ -88,7 +88,7 @@ public:
    *
    * @endif
    */
-  ~ObjectManager(void){};
+  ~ObjectManager(void) {}
 
   /*!
    * @if jp

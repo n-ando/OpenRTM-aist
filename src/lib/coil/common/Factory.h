@@ -20,10 +20,12 @@
 #ifndef COIL_FACTORY_H
 #define COIL_FACTORY_H
 
+#include <functional>
 #include <assert.h>
+#include <algorithm>
+#include <functional>
 #include <string>
 #include <map>
-#include <algorithm>
 #include <vector>
 #include <coil/Singleton.h>
 
@@ -521,7 +523,7 @@ namespace coil
     class FactoryEntry
     {
     public:
-      explicit FactoryEntry()
+      FactoryEntry()
       {
       }
 

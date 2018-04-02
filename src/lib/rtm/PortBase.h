@@ -2246,7 +2246,7 @@ namespace RTC
      */
     struct find_conn_id
     {
-      explicit find_conn_id(const char* id) : m_id(id) {};
+      explicit find_conn_id(const char* id) : m_id(id) {}
       bool operator()(const ConnectorProfile& cprof)
       {
         return m_id == std::string(cprof.connector_id);
@@ -2263,7 +2263,7 @@ namespace RTC
      */
     struct find_port_ref
     {
-      explicit find_port_ref(PortService_ptr port_ref) : m_port(port_ref) {};
+      explicit find_port_ref(PortService_ptr port_ref) : m_port(port_ref) {}
 #ifdef ORB_IS_ORBEXPRESS
       bool operator()(PortService_var port_ref)
       {

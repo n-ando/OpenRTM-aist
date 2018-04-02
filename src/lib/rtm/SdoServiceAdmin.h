@@ -19,6 +19,7 @@
 #ifndef RTC_SDOSERVICEADMIN_H
 #define RTC_SDOSERVICEADMIN_H
 
+#include <string>
 #include <coil/Mutex.h>
 #include <coil/Factory.h>
 

@@ -18,6 +18,7 @@
 #ifndef RTC_CONNECTORLISTENER_H
 #define RTC_CONNECTORLISTENER_H
 
+#include <string>
 #include <vector>
 #include <utility>
 #include <coil/Mutex.h>

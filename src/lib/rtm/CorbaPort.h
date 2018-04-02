@@ -20,10 +20,12 @@
 #ifndef RTC_CORBAPORT_H
 #define RTC_CORBAPORT_H
 
+#include <list>
+#include <string>
+#include <vector>
 #include <rtm/PortBase.h>
 #include <rtm/CorbaConsumer.h>
 #include <rtm/NVUtil.h>
-#include <list>
 
 /*!
  * @if jp

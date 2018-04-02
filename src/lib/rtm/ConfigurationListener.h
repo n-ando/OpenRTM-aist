@@ -19,6 +19,7 @@
 #ifndef RTC_CONFIGURATIONLISTENER_H
 #define RTC_CONFIGURATIONLISTENER_H
 
+#include <utility>
 #include <vector>
 #include <coil/Properties.h>
 #include <coil/Mutex.h>

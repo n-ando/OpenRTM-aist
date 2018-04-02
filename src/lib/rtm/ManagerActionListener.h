@@ -19,6 +19,7 @@
 #ifndef RTM_MANAGERACTIONLISTENER_H
 #define RTM_MANAGERACTIONLISTENER_H
 
+#include <string>
 #include <vector>
 #include <utility>
 #include <coil/Mutex.h>

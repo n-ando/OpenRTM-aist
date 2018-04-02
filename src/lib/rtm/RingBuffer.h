@@ -20,6 +20,7 @@
 #ifndef RTC_RINGBUFFER_H
 #define RTC_RINGBUFFER_H
 
+#include <string>
 #include <vector>
 #include <algorithm>
 #include <iostream>

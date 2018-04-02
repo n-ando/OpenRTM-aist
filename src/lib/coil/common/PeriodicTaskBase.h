@@ -209,7 +209,7 @@ namespace coil
      *
      * @endif
      */
-    virtual ~PeriodicTaskBase(){};
+    virtual ~PeriodicTaskBase() {}
 
     /*!
      * @if jp

@@ -81,7 +81,7 @@ namespace CORBA_IORUtil
     p += 4;
 
     cdrMemoryStream buf((CORBA::ULong)size, 0);
-    for (int i(0); i < (int)size; ++i)
+    for (int i(0); i < static_cast<int>(size); ++i)
       {
         CORBA::Octet v;
         // upper digit
@@ -166,7 +166,7 @@ namespace CORBA_IORUtil
     result[2] = 'R';
     result[3] = ':';
 
-    for (int i(0); i < (int)s; ++i)
+    for (int i(0); i < static_cast<int>(s); ++i)
       {
         int j = 4 + i * 2;
         int v = (data[i] & 0xf0);
@@ -278,9 +278,9 @@ namespace CORBA_IORUtil
             IIOP::ProfileBody pBody;
             IIOP::unmarshalProfile(ior.profiles[count], pBody);
             
-            retstr << "IIOP " << (int) pBody.version.major << "."
-                   << (int) pBody.version.minor << " ";
-            retstr << (const char*) pBody.address.host 
+            retstr << "IIOP " << static_cast<int>(pBody.version.major) << "."
+                   << static_cast<int>(pBody.version.minor) << " ";
+            retstr << (const char*) pBody.address.host
                    << " " << pBody.address.port << std::endl;
             
             print_omni_key(retstr, pBody.object_key);
@@ -386,9 +386,9 @@ namespace CORBA_IORUtil
     sstr << "       Object Key: \"";
     for (unsigned int j = 0; j < key.length(); ++j)
       {
-        if ( (char) key[j] >= ' ' && (char) key[j] <= '~')
+        if ( static_cast<char>(key[j]) >= ' ' && static_cast<char>(key[j]) <= '~')
           {
-            sstr << (char) key[j];
+            sstr << static_cast<char>(key[j]);
           }
         else
           {
@@ -404,15 +404,15 @@ namespace CORBA_IORUtil
         int v = (key[j] & 0xf0) >> 4;
         if (v < 10)
           {
-            sstr << (char)('0' + v);
+            sstr << static_cast<char>('0' + v);
           }
         else
           {
-            sstr << (char)('a' + (v - 10));
+            sstr << static_cast<char>('a' + (v - 10));
           }
         v = key[j] & 0xf;
-        if (v < 10) { sstr << (char)('0' + v); }
-        else        { sstr << (char)('a' + (v - 10)); }
+        if (v < 10) { sstr << static_cast<char>('0' + v); }
+        else        { sstr << static_cast<char>('a' + (v - 10)); }
       }
     sstr << "  (" << key.length() << " bytes)" << std::endl;
   }
