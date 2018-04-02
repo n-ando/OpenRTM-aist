@@ -100,22 +100,22 @@ namespace RTC
   {
     try
       {
-	RTObject_impl* rtobj(m_New(mgr));
-	if (rtobj == 0) return NULL;
-	
-	++m_Number;
-	rtobj->setProperties(this->profile());
-	
-	// create instance_name
-	std::string instance_name(rtobj->getTypeName());
-	instance_name.append(m_policy->onCreate(rtobj));
-	rtobj->setInstanceName(instance_name.c_str());
-	
-	return rtobj;
+        RTObject_impl* rtobj(m_New(mgr));
+        if (rtobj == 0) return NULL;
+        
+        ++m_Number;
+        rtobj->setProperties(this->profile());
+        
+        // create instance_name
+        std::string instance_name(rtobj->getTypeName());
+        instance_name.append(m_policy->onCreate(rtobj));
+        rtobj->setInstanceName(instance_name.c_str());
+        
+        return rtobj;
       }
     catch (...)
       {
-	return NULL;
+        return NULL;
       }
   }
   

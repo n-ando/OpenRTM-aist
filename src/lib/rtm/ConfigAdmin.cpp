@@ -72,7 +72,7 @@ namespace RTC
   {
     for (int i(0), len(m_params.size()); i < len; ++i)
       {
-	if (m_params[i] != NULL) { delete m_params[i]; }
+        if (m_params[i] != NULL) { delete m_params[i]; }
       }
     m_params.clear();
   }
@@ -88,7 +88,7 @@ namespace RTC
   {
     std::vector<ConfigBase*>::iterator it;
     it = std::find_if(m_params.begin(), m_params.end(),
-		      find_conf(param_name));
+                      find_conf(param_name));
     if (it == m_params.end())
       {
         return false;
@@ -125,8 +125,8 @@ namespace RTC
     m_changedParam.clear();
     if (m_changed && m_active)
       {
-	update(m_activeId.c_str());
-	m_changed = false;
+        update(m_activeId.c_str());
+        m_changed = false;
       }
     return;
   }
@@ -148,7 +148,7 @@ namespace RTC
     
     for (int i(0), len(m_params.size()); i < len; ++i)
       {
-	if (prop.hasKey(m_params[i]->name) != NULL)
+        if (prop.hasKey(m_params[i]->name) != NULL)
           {
             // m_changedParam is updated here
             m_params[i]->update(prop[m_params[i]->name].c_str());
@@ -175,11 +175,11 @@ namespace RTC
     
     std::vector<ConfigBase*>::iterator it;
     it = std::find_if(m_params.begin(), m_params.end(),
-		      find_conf(config_param));
+                      find_conf(config_param));
     if (it != m_params.end())
       {
-	(*it)->update(m_configsets[key].c_str());
-	return;
+        (*it)->update(m_configsets[key].c_str());
+        return;
       }
   }
 
@@ -195,10 +195,10 @@ namespace RTC
   {
     std::vector<ConfigBase*>::iterator it;
     it = std::find_if(m_params.begin(), m_params.end(),
-		      find_conf(param_name));
+                      find_conf(param_name));
     if (it != m_params.end())
       {
-	return true;
+        return true;
       }
     return false;
   }

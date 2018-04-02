@@ -98,8 +98,8 @@ namespace RTC
     RTC_TRACE(("set_rate(%f)", rate));
     if (rate > 0.0)
       {
-	m_profile.rate = rate;
-	return RTC::RTC_OK;
+        m_profile.rate = rate;
+        return RTC::RTC_OK;
       }
     return RTC::BAD_PARAMETER;
   }
@@ -192,9 +192,9 @@ namespace RTC
     RTC_TRACE(("add_component()"));
     if (!CORBA::is_nil(comp))
       {
-	CORBA_SeqUtil::push_back(m_profile.participants,
-				 RTC::RTObject::_narrow(comp));
-	return RTC::RTC_OK;
+        CORBA_SeqUtil::push_back(m_profile.participants,
+                                 RTC::RTObject::_narrow(comp));
+        return RTC::RTC_OK;
       }
     return RTC::BAD_PARAMETER;
   }
@@ -206,15 +206,15 @@ namespace RTC
    * @else
    * @brief Remove the component from component list
    * @endif
-   */	
+   */
   ReturnCode_t
   ExecutionContextBase::remove_component(LightweightRTObject_ptr comp)
   {
     RTC_TRACE(("remove_component()"));
     CORBA::ULong index;
     index = CORBA_SeqUtil::find(m_profile.participants,
-		find_objref<RTObject_ptr>(RTC::RTObject::_narrow(comp)));
-				
+                find_objref<RTObject_ptr>(RTC::RTObject::_narrow(comp)));
+
     if (index < 0) return RTC::BAD_PARAMETER;
     CORBA_SeqUtil::erase(m_profile.participants, index);
     return RTC::RTC_OK;

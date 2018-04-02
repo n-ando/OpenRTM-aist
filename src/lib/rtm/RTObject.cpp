@@ -88,7 +88,7 @@ namespace RTC
    * @endif
    */
   RTObject_impl::RTObject_impl(CORBA::ORB_ptr orb,
-			       PortableServer::POA_ptr poa)
+                               PortableServer::POA_ptr poa)
     : m_pManager(NULL),
       m_pORB(CORBA::ORB::_duplicate(orb)),
       m_pPOA(PortableServer::POA::_duplicate(poa)),
@@ -414,10 +414,10 @@ namespace RTC
       }
     // deactivate myself on owned EC
     CORBA_SeqUtil::for_each(m_ecMine,
-			    deactivate_comps(m_objref));
+                            deactivate_comps(m_objref));
     // deactivate myself on other EC
     CORBA_SeqUtil::for_each(m_ecOther,
-			    deactivate_comps(m_objref));
+                            deactivate_comps(m_objref));
 
     // owned EC will be finalised later in finalizeContext().
 
@@ -606,7 +606,7 @@ namespace RTC
     ecs = ExecutionContextService::_narrow(exec_context);
     if (CORBA::is_nil(ecs))
       {
-	return -1;
+        return -1;
       }
     
     // if m_ecOther has nil element, insert attached ec to there.
@@ -642,7 +642,7 @@ namespace RTC
     ecs = ExecutionContextService::_narrow(exec_context);
     if (CORBA::is_nil(ecs))
       {
-	return -1;
+        return -1;
       }
     
     // if m_ecMine has nil element, insert attached ec to there.
@@ -684,13 +684,13 @@ namespace RTC
     if ((CORBA::ULong)ec_id < ECOTHER_OFFSET || 
         (CORBA::ULong)(ec_id - ECOTHER_OFFSET) > len)
       {
-	return RTC::BAD_PARAMETER;
+        return RTC::BAD_PARAMETER;
       }
     ::CORBA::ULong index(ec_id - ECOTHER_OFFSET);
 
     if (CORBA::is_nil(m_ecOther[index]))
       {
-	return RTC::BAD_PARAMETER;
+        return RTC::BAD_PARAMETER;
       }
     
     m_ecOther[index] = ::RTC::ExecutionContextService::_nil();
@@ -715,8 +715,8 @@ namespace RTC
     RTC_TRACE(("get_component_profile()"));
     try
       {
-	ComponentProfile_var profile
-	  = new ComponentProfile();
+        ComponentProfile_var profile
+          = new ComponentProfile();
 #ifndef ORB_IS_RTORB
         profile->instance_name = 
           CORBA::string_dup(m_properties["instance_name"].c_str());
@@ -742,11 +742,11 @@ namespace RTC
         profile->port_profiles = ppl._retn();
 #endif // ORB_IS_RTORB
         NVUtil::copyFromProperties(profile->properties, m_properties);
-	return profile._retn();
+        return profile._retn();
       }
     catch (...)
       {
-	; // This operation throws no exception.
+        ; // This operation throws no exception.
       }
     assert(false);
     return 0;
@@ -765,11 +765,11 @@ namespace RTC
     RTC_TRACE(("get_ports()"));
     try
       {
-	return m_portAdmin.getPortServiceList();
+        return m_portAdmin.getPortServiceList();
       }
     catch (...)
       {
-	; // This operation throws no exception.
+        ; // This operation throws no exception.
       }
     assert(false);
     return 0;
@@ -849,11 +849,11 @@ namespace RTC
     try
       {
         preOnFinalize(0);
-	ret = onFinalize();
+        ret = onFinalize();
       }
     catch (...)
       {
-	ret = RTC::RTC_ERROR;
+        ret = RTC::RTC_ERROR;
       }
     postOnFinalize(0, ret);
     return ret;
@@ -874,11 +874,11 @@ namespace RTC
     try
       {
         preOnStartup(ec_id);
-	ret = onStartup(ec_id);
+        ret = onStartup(ec_id);
       }
     catch (...)
       {
-	ret = RTC::RTC_ERROR;
+        ret = RTC::RTC_ERROR;
       }
     postOnStartup(ec_id, ret);
     return ret;
@@ -956,7 +956,7 @@ namespace RTC
       }
     catch (...)
       {
-	ret = RTC::RTC_ERROR;
+        ret = RTC::RTC_ERROR;
       }
     postOnDeactivated(ec_id, ret);
     return ret;
@@ -977,11 +977,11 @@ namespace RTC
     try
       {
         preOnAborting(ec_id);
-	ret = onAborting(ec_id);
+        ret = onAborting(ec_id);
       }
     catch (...)
       {
-	ret = RTC::RTC_ERROR;
+        ret = RTC::RTC_ERROR;
       }
     postOnAborting(ec_id, ret);
     return ret;
@@ -1002,11 +1002,11 @@ namespace RTC
     try
       {
         preOnError(ec_id);
-	ret = onError(ec_id);
+        ret = onError(ec_id);
       }
     catch (...)
       {
-	ret = RTC::RTC_ERROR;
+        ret = RTC::RTC_ERROR;
       }
     m_configsets.update();
     postOnError(ec_id, ret);
@@ -1028,11 +1028,11 @@ namespace RTC
     try
       {
         preOnReset(ec_id);
-	ret = onReset(ec_id);
+        ret = onReset(ec_id);
       }
     catch (...)
       {
-	ret = RTC::RTC_ERROR;
+        ret = RTC::RTC_ERROR;
       }
     postOnReset(ec_id, ret);
     return ret;
@@ -1054,13 +1054,13 @@ namespace RTC
     try
       {
         preOnExecute(ec_id);
-	if (m_readAll) {readAll(); }
-	ret = onExecute(ec_id);
-	if (m_writeAll) { writeAll();}
+        if (m_readAll) {readAll(); }
+        ret = onExecute(ec_id);
+        if (m_writeAll) { writeAll();}
       }
     catch (...)
       {
-	ret = RTC::RTC_ERROR;
+        ret = RTC::RTC_ERROR;
       }
     postOnExecute(ec_id, ret);
     return ret;
@@ -1082,12 +1082,12 @@ namespace RTC
     try
       {
         preOnStateUpdate(ec_id);
-	ret = onStateUpdate(ec_id);
-	m_configsets.update();
+        ret = onStateUpdate(ec_id);
+        m_configsets.update();
       }
     catch (...)
       {
-	ret = RTC::RTC_ERROR;
+        ret = RTC::RTC_ERROR;
       }
     postOnStateUpdate(ec_id, ret);
     return ret;
@@ -1108,11 +1108,11 @@ namespace RTC
     try
       {
         preOnRateChanged(ec_id);
-	ret = onRateChanged(ec_id);
+        ret = onRateChanged(ec_id);
       }
     catch (...)
       {
-	ret = RTC::RTC_ERROR;
+        ret = RTC::RTC_ERROR;
       }
     postOnRateChanged(ec_id, ret);
     return ret;
@@ -1135,13 +1135,13 @@ namespace RTC
     RTC_TRACE(("get_owned_organizations()"));
     try
       {
-	SDOPackage::OrganizationList_var org_list;
-	org_list = new SDOPackage::OrganizationList(m_sdoOwnedOrganizations);
-	return org_list._retn();
+        SDOPackage::OrganizationList_var org_list;
+        org_list = new SDOPackage::OrganizationList(m_sdoOwnedOrganizations);
+        return org_list._retn();
       }
     catch (...)
       {
-	throw SDOPackage::NotAvailable();
+        throw SDOPackage::NotAvailable();
       }
     return new SDOPackage::OrganizationList();
   }
@@ -1156,18 +1156,18 @@ namespace RTC
    */
   char* RTObject_impl::get_sdo_id()
     throw (CORBA::SystemException, 
-	   SDOPackage::NotAvailable, SDOPackage::InternalError)
+           SDOPackage::NotAvailable, SDOPackage::InternalError)
   {
     RTC_TRACE(("get_sdo_id()"));
     try
       {
-	CORBA::String_var sdo_id;
-	sdo_id = CORBA::string_dup(m_profile.instance_name);
-	return sdo_id._retn();
+        CORBA::String_var sdo_id;
+        sdo_id = CORBA::string_dup(m_profile.instance_name);
+        return sdo_id._retn();
       }
     catch (...)
       {
-	throw SDOPackage::InternalError("get_sdo_id()");
+        throw SDOPackage::InternalError("get_sdo_id()");
       }
   }
   
@@ -1180,18 +1180,18 @@ namespace RTC
    */
   char* RTObject_impl::get_sdo_type()
     throw (CORBA::SystemException, 
-	   SDOPackage::NotAvailable, SDOPackage::InternalError)
+           SDOPackage::NotAvailable, SDOPackage::InternalError)
   {
     RTC_TRACE(("get_sdo_type()"));
     CORBA::String_var sdo_type;
     try
       {
-	sdo_type = CORBA::string_dup(m_profile.description);
-	return sdo_type._retn();
+        sdo_type = CORBA::string_dup(m_profile.description);
+        return sdo_type._retn();
       }
     catch (...)
       {
-	throw SDOPackage::InternalError("get_sdo_type()");
+        throw SDOPackage::InternalError("get_sdo_type()");
       }
     sdo_type = "";
     return sdo_type._retn();
@@ -1206,19 +1206,19 @@ namespace RTC
    */
   SDOPackage::DeviceProfile* RTObject_impl::get_device_profile()
     throw (CORBA::SystemException, 
-	   SDOPackage::NotAvailable, SDOPackage::InternalError)
+           SDOPackage::NotAvailable, SDOPackage::InternalError)
   {
     RTC_TRACE(("get_device_profile()"));
     try
       {
-	SDOPackage::DeviceProfile_var dprofile;
-	dprofile =
+        SDOPackage::DeviceProfile_var dprofile;
+        dprofile =
           new SDOPackage::DeviceProfile(m_pSdoConfigImpl->getDeviceProfile());
-	return dprofile._retn();
+        return dprofile._retn();
       }
     catch (...)
       {
-	throw SDOPackage::InternalError("get_device_profile()");
+        throw SDOPackage::InternalError("get_device_profile()");
       }
     return new SDOPackage::DeviceProfile();
   }
@@ -1235,20 +1235,20 @@ namespace RTC
    */
   SDOPackage::ServiceProfileList* RTObject_impl::get_service_profiles()
     throw (CORBA::SystemException, 
-	   SDOPackage::NotAvailable, SDOPackage::InternalError)
+           SDOPackage::NotAvailable, SDOPackage::InternalError)
   {
     RTC_TRACE(("get_service_profiles()"));
 
     SDOPackage::ServiceProfileList_var sprofiles;
     try
       {
-	sprofiles = m_sdoservice.getServiceProviderProfiles();
+        sprofiles = m_sdoservice.getServiceProviderProfiles();
         RTC_DEBUG(("SDO ServiceProfiles[%d]", sprofiles->length()));
       }
     catch (...)
       {
         RTC_ERROR(("Unknown exception cought in get_service_profiles()."));
-	throw SDOPackage::InternalError("get_service_profiles()");
+        throw SDOPackage::InternalError("get_service_profiles()");
       }
     return sprofiles._retn();
   }
@@ -1263,8 +1263,8 @@ namespace RTC
   SDOPackage::ServiceProfile*
   RTObject_impl::get_service_profile(const char* id)
     throw (CORBA::SystemException, 
-	   SDOPackage::InvalidParameter, SDOPackage::NotAvailable,
-	   SDOPackage::InternalError)
+           SDOPackage::InvalidParameter, SDOPackage::NotAvailable,
+           SDOPackage::InternalError)
   {
     if (!id)
       {
@@ -1276,7 +1276,7 @@ namespace RTC
     SDOPackage::ServiceProfile_var prof;
     try
       {
-	prof = m_sdoservice.getServiceProviderProfile(id);
+        prof = m_sdoservice.getServiceProviderProfile(id);
       }
     catch (SDOPackage::InvalidParameter &e)
       {
@@ -1286,7 +1286,7 @@ namespace RTC
     catch (...)
       {
         RTC_ERROR(("Unknown exception cought in get_service_profile(%s).", id));
-	throw SDOPackage::InternalError("get_service_profile()");
+        throw SDOPackage::InternalError("get_service_profile()");
       }
     return prof._retn();
   }
@@ -1300,8 +1300,8 @@ namespace RTC
    */
   SDOPackage::SDOService_ptr RTObject_impl::get_sdo_service(const char* id)
     throw (CORBA::SystemException, 
-	   SDOPackage::InvalidParameter, SDOPackage::NotAvailable,
-	   SDOPackage::InternalError)
+           SDOPackage::InvalidParameter, SDOPackage::NotAvailable,
+           SDOPackage::InternalError)
   {
     RTC_TRACE(("get_sdo_service(%s))", id));
     if (!id)
@@ -1312,7 +1312,7 @@ namespace RTC
     SDOPackage::SDOService_var sdo;
     try
       {
-	sdo = m_sdoservice.getServiceProvider(id);
+        sdo = m_sdoservice.getServiceProvider(id);
       }
     catch (SDOPackage::InvalidParameter &e)
       {
@@ -1320,7 +1320,7 @@ namespace RTC
       }
     catch (...)
       {
-	throw SDOPackage::InternalError("get_service()");
+        throw SDOPackage::InternalError("get_service()");
       }
     return sdo;
   }
@@ -1334,8 +1334,8 @@ namespace RTC
    */
   SDOPackage::Configuration_ptr RTObject_impl::get_configuration()
     throw (CORBA::SystemException, 
-	   SDOPackage::InterfaceNotImplemented, SDOPackage::NotAvailable,
-	   SDOPackage::InternalError)
+           SDOPackage::InterfaceNotImplemented, SDOPackage::NotAvailable,
+           SDOPackage::InternalError)
   {
     RTC_TRACE(("get_configuration()"));
     if (m_pSdoConfig == NULL)
@@ -1343,18 +1343,18 @@ namespace RTC
     try
       {
 #ifdef ORB_IS_RTORB
-	SDOPackage::Configuration_ptr config;
-	config = m_pSdoConfig;
-	return config;
+        SDOPackage::Configuration_ptr config;
+        config = m_pSdoConfig;
+        return config;
 #else // ORB_IS_RTORB
-	SDOPackage::Configuration_var config;
-	config = m_pSdoConfig;
-	return config._retn();
+        SDOPackage::Configuration_var config;
+        config = m_pSdoConfig;
+        return config._retn();
 #endif // ORB_IS_RTORB
       }
     catch (...)
       {
-	SDOPackage::InternalError("get_configuration()");
+        SDOPackage::InternalError("get_configuration()");
       }
     return SDOPackage::Configuration::_nil();
   }
@@ -1368,8 +1368,8 @@ namespace RTC
    */
   SDOPackage::Monitoring_ptr RTObject_impl::get_monitoring()
     throw (CORBA::SystemException, 
-	   SDOPackage::InterfaceNotImplemented, SDOPackage::NotAvailable,
-	   SDOPackage::InternalError)
+           SDOPackage::InterfaceNotImplemented, SDOPackage::NotAvailable,
+           SDOPackage::InternalError)
   {
     RTC_TRACE(("get_monitoring()"));
     throw SDOPackage::InterfaceNotImplemented();
@@ -1385,19 +1385,19 @@ namespace RTC
    */
   SDOPackage::OrganizationList* RTObject_impl::get_organizations()
     throw (CORBA::SystemException, 
-	   SDOPackage::NotAvailable, SDOPackage::InternalError)
+           SDOPackage::NotAvailable, SDOPackage::InternalError)
   {
     RTC_TRACE(("get_organizations()"));
     m_sdoOrganizations = m_pSdoConfigImpl->getOrganizations();
     try
       {
-	SDOPackage::OrganizationList_var org;
-	org = new SDOPackage::OrganizationList(m_sdoOrganizations);
-	return org._retn();
+        SDOPackage::OrganizationList_var org;
+        org = new SDOPackage::OrganizationList(m_sdoOrganizations);
+        return org._retn();
       }
     catch (...)
       {
-	throw SDOPackage::InternalError("get_organizations()");
+        throw SDOPackage::InternalError("get_organizations()");
       }
     return new SDOPackage::OrganizationList(0);
   }
@@ -1411,18 +1411,18 @@ namespace RTC
    */
   SDOPackage::NVList* RTObject_impl::get_status_list()
     throw (CORBA::SystemException, 
-	   SDOPackage::NotAvailable, SDOPackage::InternalError)
+           SDOPackage::NotAvailable, SDOPackage::InternalError)
   {
     RTC_TRACE(("get_status_list()"));
     try
       {
-	NVList_var status;
-	status = new NVList(m_sdoStatus);
-	return status._retn();
+        NVList_var status;
+        status = new NVList(m_sdoStatus);
+        return status._retn();
       }
     catch (...)
       {
-	SDOPackage::InternalError("get_status_list()");
+        SDOPackage::InternalError("get_status_list()");
       }
     return new SDOPackage::NVList(0);
   }
@@ -1436,8 +1436,8 @@ namespace RTC
    */
   CORBA::Any* RTObject_impl::get_status(const char* name)
     throw (CORBA::SystemException, 
-	   SDOPackage::InvalidParameter, SDOPackage::NotAvailable,
-	   SDOPackage::InternalError)
+           SDOPackage::InvalidParameter, SDOPackage::NotAvailable,
+           SDOPackage::InternalError)
   {
     RTC_TRACE(("get_status(%s)", name));
     CORBA::Long index;
@@ -1446,13 +1446,13 @@ namespace RTC
       throw SDOPackage::InvalidParameter("get_status(): Not found");
     try
       {
-	CORBA::Any_var status;
-	status = new CORBA::Any(m_sdoStatus[index].value);
-	return status._retn();
+        CORBA::Any_var status;
+        status = new CORBA::Any(m_sdoStatus[index].value);
+        return status._retn();
       }
     catch (...)
       {
-	throw SDOPackage::InternalError("get_status()");
+        throw SDOPackage::InternalError("get_status()");
       }
     return new CORBA::Any();
   }
@@ -1682,7 +1682,7 @@ namespace RTC
    * @endif
    */
   bool RTObject_impl::addOutPort(const char* name,
-				 OutPortBase& outport)
+                                 OutPortBase& outport)
   {
     RTC_TRACE(("addOutPort(%s)", name));
     
@@ -1705,7 +1705,7 @@ namespace RTC
   }
   
   void RTObject_impl::registerOutPort(const char* name,
-				      OutPortBase& outport)
+                                      OutPortBase& outport)
   {
     RTC_TRACE(("registerOutPort(%s)", name));
 
@@ -1731,15 +1731,15 @@ namespace RTC
 
     if (ret)
       {
-	while (it != m_inports.end())
-	  {
-	    if ( (*it) == &inport )
-	      {
-		m_inports.erase(it);
-		return true;
-	      }
-	    ++it;
-	  }
+        while (it != m_inports.end())
+          {
+            if ( (*it) == &inport )
+              {
+                m_inports.erase(it);
+                return true;
+              }
+            ++it;
+          }
       }
 
     return false;
@@ -1760,16 +1760,16 @@ namespace RTC
 
     if (ret)
       {
-	std::vector<OutPortBase*>::iterator it = m_outports.begin();
-	while (it != m_outports.end())
-	  {
-	    if ( (*it) == &outport )
-	      {
-		m_outports.erase(it);
-		return true;
-	      }
-	    ++it;
-	  }
+        std::vector<OutPortBase*>::iterator it = m_outports.begin();
+        while (it != m_outports.end())
+          {
+            if ( (*it) == &outport )
+              {
+                m_outports.erase(it);
+                return true;
+              }
+            ++it;
+          }
       }
 
     return false;
@@ -2022,14 +2022,14 @@ namespace RTC
     while( it != it_end )
       {
 
-	if (!((*it)->read()))
-	  {
-	    RTC_DEBUG(("The error occurred in readAll()."));
-	    ret = false;
-	    if (!m_readAllCompletion)
-	      return false;
-	  }
-	++it;
+        if (!((*it)->read()))
+          {
+            RTC_DEBUG(("The error occurred in readAll()."));
+            ret = false;
+            if (!m_readAllCompletion)
+              return false;
+          }
+        ++it;
       }
 
     return ret;
@@ -2054,14 +2054,14 @@ namespace RTC
 
     while( it != it_end )
       {
-	if (!((*it)->write()))
-	  {
-	    RTC_DEBUG(("The error occurred in writeAll()."));
-	    ret = false;
-	    if (!m_writeAllCompletion)
-	      return false;
-	  }
-	++it;
+        if (!((*it)->write()))
+          {
+            RTC_DEBUG(("The error occurred in writeAll()."));
+            ret = false;
+            if (!m_writeAllCompletion)
+              return false;
+          }
+        ++it;
       }
     return ret;
   }
@@ -2185,7 +2185,7 @@ namespace RTC
             // never throws exception
             RTC_ERROR(("Unknown exception caught."));
           }
-	RTC::ExecutionContextFactory::instance().deleteObject(m_eclist[i]);
+        RTC::ExecutionContextFactory::instance().deleteObject(m_eclist[i]);
       }
     if (!m_eclist.empty())
       {

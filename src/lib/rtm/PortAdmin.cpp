@@ -254,7 +254,7 @@ namespace RTC
   {
     if (!addPort(port))
       {
-	RTC_ERROR(("registerPort(PortBase&) failed."));
+        RTC_ERROR(("registerPort(PortBase&) failed."));
       }
   }
   
@@ -262,7 +262,7 @@ namespace RTC
   {
     if (!addPort(port))
       {
-	RTC_ERROR(("registerPort(PortService_ptr) failed."));
+        RTC_ERROR(("registerPort(PortService_ptr) failed."));
       }
   }
   
@@ -277,21 +277,21 @@ namespace RTC
   {
     try
       {
-	port.disconnect_all();
-	// port.shutdown();
-	
-	const char* tmp(port.getProfile().name);
-	CORBA_SeqUtil::erase_if(m_portRefs, find_port_name(tmp));
-	
+        port.disconnect_all();
+        // port.shutdown();
+        
+        const char* tmp(port.getProfile().name);
+        CORBA_SeqUtil::erase_if(m_portRefs, find_port_name(tmp));
+        
         PortableServer::ObjectId_var oid = m_pPOA->servant_to_id(&port);
-	m_pPOA->deactivate_object(oid);
-	port.setPortRef(RTC::PortService::_nil());
-	
-	return m_portServants.unregisterObject(tmp) == NULL ? false : true;
+        m_pPOA->deactivate_object(oid);
+        port.setPortRef(RTC::PortService::_nil());
+        
+        return m_portServants.unregisterObject(tmp) == NULL ? false : true;
       }
     catch (...)
       {
-	return false;
+        return false;
       }
   }
 
@@ -299,12 +299,12 @@ namespace RTC
   {
     try
       {
-	CORBA_SeqUtil::erase_if(m_portRefs, find_port(port));
-	return true;
+        CORBA_SeqUtil::erase_if(m_portRefs, find_port(port));
+        return true;
       }
     catch (...)
       {
-	return false;
+        return false;
       }
   }
 
@@ -312,14 +312,14 @@ namespace RTC
   {
     if (!removePort(port))
       {
-	RTC_ERROR(("deletePort(PortBase&) failed."));
+        RTC_ERROR(("deletePort(PortBase&) failed."));
       }
   }
   void PortAdmin::deletePort(PortService_ptr port)
   {
     if (!removePort(port))
       {
-	RTC_ERROR(("deletePort(PortService_ptr) failed."));
+        RTC_ERROR(("deletePort(PortService_ptr) failed."));
       }
   }
 

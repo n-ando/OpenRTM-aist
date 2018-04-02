@@ -213,11 +213,11 @@ namespace RTC
     // 終了待ち合わせ
     if (m_runner != NULL)
       {
-	m_runner->wait();
+        m_runner->wait();
       }
     else
       {
-	join();
+        join();
       }
     m_listeners.manager_.postShutdown();
     shutdownLogger();
@@ -239,10 +239,10 @@ namespace RTC
     }
     while (1)
       {
-	{
-	  Guard guard(m_terminate.mutex);
-	  if (m_terminate.waiting > 1) break;
-	}
+        {
+          Guard guard(m_terminate.mutex);
+          if (m_terminate.waiting > 1) break;
+        }
         coil::usleep(100000);
       }
   }
@@ -283,7 +283,7 @@ namespace RTC
     catch (...)
       {
         RTC_ERROR(("POA Manager activatatin failed."));
-	return false;
+        return false;
       }
 
     std::vector<std::string> lsvc;
@@ -291,49 +291,49 @@ namespace RTC
 
     for (int i(0), len(lsvc.size()); i < len; ++i)
       {
-	size_t begin_pos(lsvc[i].find_first_of('('));
-	size_t end_pos(lsvc[i].find_first_of(')'));
-	std::string filename, initfunc;
-	if (begin_pos != std::string::npos && end_pos != std::string::npos &&
-	    begin_pos < end_pos)
-	  {
-	    initfunc = lsvc[i].substr(begin_pos + 1, end_pos - (begin_pos + 1));
-	    filename = lsvc[i].substr(0, begin_pos);
-	    coil::eraseBothEndsBlank(initfunc);
-	    coil::eraseBothEndsBlank(filename);
-	  }
-	else
-	  {
-	    initfunc = coil::split(lsvc[i], ".").operator[](0) + "Init";
-	    filename = lsvc[i];
-	  }
-	if (filename.find_first_of('.') == std::string::npos)
-	  {
-	    if (m_config.findNode("manager.modules.C++.suffixes") != 0)
-	      {
-		filename += "." + m_config["manager.modules.C++.suffixes"];
-	      }
-	  }
-	try
-	  {
-	    m_module->load(filename, initfunc);
-	  }
-	catch (ModuleManager::Error& e)
-	  {
-	    RTC_ERROR(("Module load error: %s", e.reason.c_str()));
-	  }
-	catch (ModuleManager::SymbolNotFound& e)
-	  {
-	    RTC_ERROR(("Symbol not found: %s", e.name.c_str()));
-	  }
-	catch (ModuleManager::ModuleNotFound& e)
-	  {
-	    RTC_ERROR(("Module not found: %s", e.name.c_str()));
-	  }
-	catch (...)
-	  {
-	    RTC_ERROR(("Unknown Exception"));
-	  }
+        size_t begin_pos(lsvc[i].find_first_of('('));
+        size_t end_pos(lsvc[i].find_first_of(')'));
+        std::string filename, initfunc;
+        if (begin_pos != std::string::npos && end_pos != std::string::npos &&
+            begin_pos < end_pos)
+          {
+            initfunc = lsvc[i].substr(begin_pos + 1, end_pos - (begin_pos + 1));
+            filename = lsvc[i].substr(0, begin_pos);
+            coil::eraseBothEndsBlank(initfunc);
+            coil::eraseBothEndsBlank(filename);
+          }
+        else
+          {
+            initfunc = coil::split(lsvc[i], ".").operator[](0) + "Init";
+            filename = lsvc[i];
+          }
+        if (filename.find_first_of('.') == std::string::npos)
+          {
+            if (m_config.findNode("manager.modules.C++.suffixes") != 0)
+              {
+                filename += "." + m_config["manager.modules.C++.suffixes"];
+              }
+          }
+        try
+          {
+            m_module->load(filename, initfunc);
+          }
+        catch (ModuleManager::Error& e)
+          {
+            RTC_ERROR(("Module load error: %s", e.reason.c_str()));
+          }
+        catch (ModuleManager::SymbolNotFound& e)
+          {
+            RTC_ERROR(("Symbol not found: %s", e.name.c_str()));
+          }
+        catch (ModuleManager::ModuleNotFound& e)
+          {
+            RTC_ERROR(("Module not found: %s", e.name.c_str()));
+          }
+        catch (...)
+          {
+            RTC_ERROR(("Unknown Exception"));
+          }
       }
 
     initLocalService();
@@ -343,50 +343,50 @@ namespace RTC
 
     for (int i(0), len(mods.size()); i < len; ++i)
       {
-	size_t begin_pos(mods[i].find_first_of('('));
-	size_t end_pos(mods[i].find_first_of(')'));
-	std::string filename, initfunc;
-	if (begin_pos != std::string::npos && end_pos != std::string::npos &&
-	    begin_pos < end_pos)
-	  {
-	    initfunc = mods[i].substr(begin_pos + 1, end_pos - (begin_pos + 1));
-	    filename = mods[i].substr(0, begin_pos);
-	    coil::eraseBothEndsBlank(initfunc);
-	    coil::eraseBothEndsBlank(filename);
-	  }
-	else
-	  {
-	    initfunc = coil::split(mods[i], ".").operator[](0) + "Init";
-	    filename = mods[i];
-	  }
-	if (filename.find_first_of('.') == std::string::npos)
-	  {
-	    std::cout <<  m_config["manager.modules.C++.suffixes"] << std::endl;
-	    if (m_config.findNode("manager.modules.C++.suffixes") != 0)
-	      {
-		filename += "." + m_config["manager.modules.C++.suffixes"];
-	      }
-	  }
-	try
-	  {
-	    m_module->load(filename, initfunc);
-	  }
-	catch (ModuleManager::Error& e)
-	  {
-	    RTC_ERROR(("Module load error: %s", e.reason.c_str()));
-	  }
-	catch (ModuleManager::SymbolNotFound& e)
-	  {
-	    RTC_ERROR(("Symbol not found: %s", e.name.c_str()));
-	  }
-	catch (ModuleManager::ModuleNotFound& e)
-	  {
-	    RTC_ERROR(("Module not found: %s", e.name.c_str()));
-	  }
-	catch (...)
-	  {
-	    RTC_ERROR(("Unknown Exception"));
-	  }
+        size_t begin_pos(mods[i].find_first_of('('));
+        size_t end_pos(mods[i].find_first_of(')'));
+        std::string filename, initfunc;
+        if (begin_pos != std::string::npos && end_pos != std::string::npos &&
+            begin_pos < end_pos)
+          {
+            initfunc = mods[i].substr(begin_pos + 1, end_pos - (begin_pos + 1));
+            filename = mods[i].substr(0, begin_pos);
+            coil::eraseBothEndsBlank(initfunc);
+            coil::eraseBothEndsBlank(filename);
+          }
+        else
+          {
+            initfunc = coil::split(mods[i], ".").operator[](0) + "Init";
+            filename = mods[i];
+          }
+        if (filename.find_first_of('.') == std::string::npos)
+          {
+            std::cout <<  m_config["manager.modules.C++.suffixes"] << std::endl;
+            if (m_config.findNode("manager.modules.C++.suffixes") != 0)
+              {
+                filename += "." + m_config["manager.modules.C++.suffixes"];
+              }
+          }
+        try
+          {
+            m_module->load(filename, initfunc);
+          }
+        catch (ModuleManager::Error& e)
+          {
+            RTC_ERROR(("Module load error: %s", e.reason.c_str()));
+          }
+        catch (ModuleManager::SymbolNotFound& e)
+          {
+            RTC_ERROR(("Symbol not found: %s", e.name.c_str()));
+          }
+        catch (ModuleManager::ModuleNotFound& e)
+          {
+            RTC_ERROR(("Module not found: %s", e.name.c_str()));
+          }
+        catch (...)
+          {
+            RTC_ERROR(("Unknown Exception"));
+          }
       }
 
     m_config["sdo.service.consumer.available_services"]
@@ -415,16 +415,16 @@ namespace RTC
   {
     if (no_block)
       {
-	RTC_TRACE(("Manager::runManager(): non-blocking mode"));
-	m_runner = new OrbRunner(m_pORB);
-	m_runner->open(0);
+        RTC_TRACE(("Manager::runManager(): non-blocking mode"));
+        m_runner = new OrbRunner(m_pORB);
+        m_runner->open(0);
       }
     else
       {
-	RTC_TRACE(("Manager::runManager(): blocking mode"));
-	m_pORB->run();
-	RTC_TRACE(("Manager::runManager(): ORB was terminated"));
-	join();
+        RTC_TRACE(("Manager::runManager(): blocking mode"));
+        m_pORB->run();
+        RTC_TRACE(("Manager::runManager(): ORB was terminated"));
+        join();
       }
     return;
   }
@@ -611,22 +611,22 @@ std::vector<coil::Properties> Manager::getLoadableModules()
    * @endif
    */
   bool Manager::registerECFactory(const char* name,
-				  ECNewFunc new_func,
-				  ECDeleteFunc delete_func)
+                                  ECNewFunc new_func,
+                                  ECDeleteFunc delete_func)
   {
     RTC_TRACE(("Manager::registerECFactory(%s)", name));
     try
       {    
-	ECFactoryBase* factory;
-	factory = new ECFactoryCXX(name, new_func, delete_func);
-	if(m_ecfactory.registerObject(factory))
+        ECFactoryBase* factory;
+        factory = new ECFactoryCXX(name, new_func, delete_func);
+        if(m_ecfactory.registerObject(factory))
           {
             return true;
           }
       }
     catch (...)
       {
-	return false;
+        return false;
       }
     return false;
   }
@@ -676,7 +676,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
         coil::vstring exported_ports;
         exported_ports = coil::split(comp_prop["exported_ports"], ",");
 
-				std::string exported_ports_str("");
+        std::string exported_ports_str("");
         for (size_t i(0), len(exported_ports.size()); i < len; ++i)
           {
             coil::vstring keyval(coil::split(exported_ports[i], "."));
@@ -688,13 +688,13 @@ std::vector<coil::Properties> Manager::getLoadableModules()
               {
                 exported_ports_str += exported_ports[i];
               }
-	    
+            
             if (i != exported_ports.size() - 1)
               {
                 exported_ports_str += ",";
               }
           }
-				
+                                
         comp_prop["exported_ports"] = exported_ports_str;
         comp_prop["conf.default.exported_ports"] = exported_ports_str;
  
@@ -869,8 +869,8 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     m_listeners.naming_.preBind(comp, names);
     for (int i(0), len(names.size()); i < len; ++i)
       {
-	RTC_TRACE(("Bind name: %s", names[i].c_str()));
-	m_namingManager->bindObject(names[i].c_str(), comp);
+        RTC_TRACE(("Bind name: %s", names[i].c_str()));
+        m_namingManager->bindObject(names[i].c_str(), comp);
       }
     m_listeners.naming_.postBind(comp, names);
 
@@ -922,8 +922,8 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     m_listeners.naming_.preUnbind(comp, names);
     for (int i(0), len(names.size()); i < len; ++i)
       {
-	RTC_TRACE(("Unbind name: %s", names[i].c_str()));
-	m_namingManager->unbindObject(names[i].c_str());
+        RTC_TRACE(("Unbind name: %s", names[i].c_str()));
+        m_namingManager->unbindObject(names[i].c_str());
       }
     m_listeners.naming_.postUnbind(comp, names);
 
@@ -935,7 +935,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   {
     RTC_TRACE(("Manager::createContext()"));
     RTC_TRACE(("ExecutionContext type: %s", 
-	       m_config.getProperty("exec_cxt.periodic.type").c_str()));
+               m_config.getProperty("exec_cxt.periodic.type").c_str()));
 
     std::string ec_id;
     coil::Properties ec_prop;
@@ -973,13 +973,13 @@ std::vector<coil::Properties> Manager::getLoadableModules()
       {
         RTC_DEBUG(("Factory not found: %s",
                    comp_id["implementation_id"].c_str()));
-	return;
+        return;
       }
     else
       {
         RTC_DEBUG(("Factory found: %s",
                    comp_id["implementation_id"].c_str()));
-	factory->destroy(comp);
+        factory->destroy(comp);
       } 
     
     if (coil::toBool(m_config["manager.shutdown_on_nortcs"],
@@ -1563,8 +1563,8 @@ std::vector<coil::Properties> Manager::getLoadableModules()
       }
     catch (...)
       {
-	RTC_ERROR(("Exception: Caught unknown exception in initORB()." ));
-	return false;
+        RTC_ERROR(("Exception: Caught unknown exception in initORB()." ));
+        return false;
       }
     return true;
   }
@@ -1640,7 +1640,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
         RTC_DEBUG(("Endpoint is : %s", endpoint.c_str()));
         if (endpoint.find(":") == std::string::npos) { endpoint += ":"; }
 
-	if (corba == "omniORB")
+        if (corba == "omniORB")
           {
             coil::normalize(endpoint);
             if (coil::normalize(endpoint) == "all:")
@@ -1660,11 +1660,11 @@ std::vector<coil::Properties> Manager::getLoadableModules()
                 opt += " -ORBendPoint giop:tcp:" + endpoint;
               }
           }
-	else if (corba == "TAO")
+        else if (corba == "TAO")
           {
             opt += "-ORBEndPoint iiop://" + endpoint;
           }
-	else if (corba == "MICO")
+        else if (corba == "MICO")
           {
             opt += "-ORBIIOPAddr inet:" + endpoint;
           }
@@ -1690,9 +1690,9 @@ std::vector<coil::Properties> Manager::getLoadableModules()
       {
       while (m_pORB->work_pending())
         {
-	  RTC_PARANOID(("Pending work still exists."));
-	  if (m_pORB->work_pending())
-	    m_pORB->perform_work();
+          RTC_PARANOID(("Pending work still exists."));
+          if (m_pORB->work_pending())
+            m_pORB->perform_work();
         }
         RTC_DEBUG(("No pending works of ORB. Shutting down POA and ORB."));
       }
@@ -1703,49 +1703,49 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     
     if (!CORBA::is_nil(m_pPOA))
       {
-	try
-	  {
-	    if (!CORBA::is_nil(m_pPOAManager))
-	      m_pPOAManager->deactivate(false, true);
-	    RTC_DEBUG(("POA Manager was deactivated."));
-	    m_pPOA->destroy(false, true);
-	    m_pPOA = PortableServer::POA::_nil();
-	    RTC_DEBUG(("POA was destroid."));
-	  }
-	catch (CORBA::SystemException& ex)
-	  {
-	    RTC_ERROR(("Exception cought during root POA destruction"));
+        try
+          {
+            if (!CORBA::is_nil(m_pPOAManager))
+              m_pPOAManager->deactivate(false, true);
+            RTC_DEBUG(("POA Manager was deactivated."));
+            m_pPOA->destroy(false, true);
+            m_pPOA = PortableServer::POA::_nil();
+            RTC_DEBUG(("POA was destroid."));
+          }
+        catch (CORBA::SystemException& ex)
+          {
+            RTC_ERROR(("Exception cought during root POA destruction"));
 #ifndef ORB_IS_RTORB
-	    RTC_ERROR(("CORBA::SystemException(minor=%d)", ex.minor()));
+            RTC_ERROR(("CORBA::SystemException(minor=%d)", ex.minor()));
 #endif // ORB_IS_RTORB
-	  }
-	catch (...)
-	  {
-	    RTC_ERROR(("Caught unknown exception during POA destruction."));
-	  }
+          }
+        catch (...)
+          {
+            RTC_ERROR(("Caught unknown exception during POA destruction."));
+          }
       }
     
     if (!CORBA::is_nil(m_pORB))
       {
-	try
-	  {
-	    m_pORB->shutdown(true);
-	    RTC_DEBUG(("ORB was shutdown."));
+        try
+          {
+            m_pORB->shutdown(true);
+            RTC_DEBUG(("ORB was shutdown."));
             //m_pORB->destroy();
-	    RTC_DEBUG(("ORB was destroied."));
-	    m_pORB = CORBA::ORB::_nil();
-	  }
-	catch (CORBA::SystemException& ex)
-	  {
-	    RTC_ERROR(("Exception caught during ORB shutdown"));
+            RTC_DEBUG(("ORB was destroied."));
+            m_pORB = CORBA::ORB::_nil();
+          }
+        catch (CORBA::SystemException& ex)
+          {
+            RTC_ERROR(("Exception caught during ORB shutdown"));
 #ifndef ORB_IS_RTORB
             RTC_ERROR(("CORBA::SystemException(minodor=%d)", ex.minor()));
 #endif // ORB_IS_RTORB
-	  }
-	catch (...)
-	  {
-	    RTC_ERROR(("Caught unknown exception during ORB shutdown."));
-	  }
+          }
+        catch (...)
+          {
+            RTC_ERROR(("Caught unknown exception during ORB shutdown."));
+          }
       }
   }
   
@@ -1776,33 +1776,33 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     
     for (int i(0), len_i(meth.size()); i < len_i; ++i)
       {
-	std::vector<std::string> names;
-	names = coil::split(m_config[meth[i] + ".nameservers"], ",");
-	
-	
-	for (int j(0), len_j(names.size()); j < len_j; ++j)
-	  {
-	    RTC_TRACE(("Register Naming Server: %s/%s",		\
-		       meth[i].c_str(), names[j].c_str()));	
-	    m_namingManager->registerNameServer(meth[i].c_str(),
-						names[j].c_str());
-	  }
+        std::vector<std::string> names;
+        names = coil::split(m_config[meth[i] + ".nameservers"], ",");
+        
+        
+        for (int j(0), len_j(names.size()); j < len_j; ++j)
+          {
+            RTC_TRACE(("Register Naming Server: %s/%s",                \
+                       meth[i].c_str(), names[j].c_str()));        
+            m_namingManager->registerNameServer(meth[i].c_str(),
+                                                names[j].c_str());
+          }
       }
     
     // NamingManager Timer update initialization
     if (coil::toBool(m_config["naming.update.enable"], "YES", "NO", true))
       {
         coil::TimeValue tm(10, 0); // default interval = 10sec for safty
-	std::string intr(m_config["naming.update.interval"]);
-	if (!intr.empty())
-	  {
-	    tm = atof(intr.c_str());
-	  }
-	if (m_timer != NULL)
-	  {
-	    m_timer->registerListenerObj(m_namingManager, 
-					 &NamingManager::update, tm);
-	  }
+        std::string intr(m_config["naming.update.interval"]);
+        if (!intr.empty())
+          {
+            tm = atof(intr.c_str());
+          }
+        if (m_timer != NULL)
+          {
+            m_timer->registerListenerObj(m_namingManager, 
+                                         &NamingManager::update, tm);
+          }
       }
     return true;
   }
@@ -2066,37 +2066,37 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     comps = m_namingManager->getObjects();
     for (int i(0), len(comps.size()); i < len; ++i)
       {
-	try
-	  {
-	    comps[i]->exit();
-	    coil::Properties p(comps[i]->getInstanceName());
-	    p << comps[i]->getProperties();
+        try
+          {
+            comps[i]->exit();
+            coil::Properties p(comps[i]->getInstanceName());
+            p << comps[i]->getProperties();
             rtclog.lock();
-	    rtclog.level(::RTC::Logger::RTL_PARANOID) << p;
+            rtclog.level(::RTC::Logger::RTL_PARANOID) << p;
             rtclog.unlock();
-	  }
-	catch (...)
-	  {
-	    ;
-	  }
+          }
+        catch (...)
+          {
+            ;
+          }
       }
     for (CORBA::ULong i(0), len(m_ecs.size()); i < len; ++i)
       {
-	try{
-      PortableServer::RefCountServantBase* servant;
-      servant = dynamic_cast<PortableServer::RefCountServantBase*>(m_ecs[i]);
-      if (servant == NULL)
-        {
-          RTC_ERROR(("Invalid dynamic cast. EC->RefCountServantBase failed."));
-          return;
+        try{
+          PortableServer::RefCountServantBase* servant;
+          servant = dynamic_cast<PortableServer::RefCountServantBase*>(m_ecs[i]);
+          if (servant == NULL)
+            {
+              RTC_ERROR(("Invalid dynamic cast. EC->RefCountServantBase failed."));
+              return;
+            }
+          PortableServer::ObjectId_var oid = m_pPOA->servant_to_id(servant);
+          m_pPOA->deactivate_object(oid);
         }
-      PortableServer::ObjectId_var oid = m_pPOA->servant_to_id(servant);
-	  m_pPOA->deactivate_object(oid);
-	}
-	catch (...)
-	  {
-	    ;
-	  }
+        catch (...)
+          {
+            ;
+          }
       }
     return;
   }
@@ -2341,18 +2341,18 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   {
     if (file_name == NULL)
       {
-	RTC_ERROR(("Invalid configuration file name."));
-	return false;
+        RTC_ERROR(("Invalid configuration file name."));
+        return false;
       }
     if (file_name[0] != '\0')
       {
-	std::ifstream conff(file_name);
-	if (!conff.fail())
-	  {
-	    prop.load(conff);
-	    conff.close();
-	    return true;
-	  }
+        std::ifstream conff(file_name);
+        if (!conff.fail())
+          {
+            prop.load(conff);
+            conff.close();
+            return true;
+          }
       }
     return false;
   }
@@ -2365,7 +2365,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
    * @endif
    */
   std::string Manager::formatString(const char* naming_format,
-				    coil::Properties& prop)
+                                    coil::Properties& prop)
   {
     std::string name(naming_format), str("");
     std::string::iterator it, it_end;
@@ -2375,60 +2375,60 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     it_end = name.end();
     for ( ; it != it_end; ++it)
       {
-	char c(*it);
-	if (c == '%')
-	  {
-	    ++count;
-	    if (!(count % 2)) str.push_back((*it));
-	  }
-	else if (c == '$')
-	  {
-	    count = 0;
-	    ++it;
-	    if (*it == '{' || *it == '(')
-	      {
-		++it;
-		std::string env;
-		for ( ; it != it_end && (*it) != '}' && (*it) != ')'; ++it)
-		  {
-		    env += *it;
-		  }
-		char* envval = coil::getenv(env.c_str());
-		if (envval != NULL) str += envval;
-	      }
-	    else
-	      {
-		str.push_back(c);
-	      }
-	  }
-	else
-	  {
-	    if (count > 0 && (count % 2))
-	      {
-		count = 0;
-		if      (c == 'n')  str += prop["instance_name"];
-		else if (c == 't')  str += prop["type_name"];
-		else if (c == 'm')  str += prop["type_name"];
-		else if (c == 'v')  str += prop["version"];
-		else if (c == 'V')  str += prop["vendor"];
-		else if (c == 'c')  str += prop["category"];
-		else if (c == 'i')  str += prop["implementation_id"];
-		else if (c == 'N')
-		  {
-		    size_t n = prop["implementation_id"].size();
-		    str += prop["instance_name"].substr(n);
-		  }
-		else if (c == 'h')  str += m_config["os.hostname"];
-		else if (c == 'M')  str += m_config["manager.name"];
-		else if (c == 'p')  str += m_config["manager.pid"];
-		else str.push_back(c);
-	      }
-	    else
-	      {
-		count = 0;
-		str.push_back(c);
-	      }
-	  }
+        char c(*it);
+        if (c == '%')
+          {
+            ++count;
+            if (!(count % 2)) str.push_back((*it));
+          }
+        else if (c == '$')
+          {
+            count = 0;
+            ++it;
+            if (*it == '{' || *it == '(')
+              {
+                ++it;
+                std::string env;
+                for ( ; it != it_end && (*it) != '}' && (*it) != ')'; ++it)
+                  {
+                    env += *it;
+                  }
+                char* envval = coil::getenv(env.c_str());
+                if (envval != NULL) str += envval;
+              }
+            else
+              {
+                str.push_back(c);
+              }
+          }
+        else
+          {
+            if (count > 0 && (count % 2))
+              {
+                count = 0;
+                if      (c == 'n')  str += prop["instance_name"];
+                else if (c == 't')  str += prop["type_name"];
+                else if (c == 'm')  str += prop["type_name"];
+                else if (c == 'v')  str += prop["version"];
+                else if (c == 'V')  str += prop["vendor"];
+                else if (c == 'c')  str += prop["category"];
+                else if (c == 'i')  str += prop["implementation_id"];
+                else if (c == 'N')
+                  {
+                    size_t n = prop["implementation_id"].size();
+                    str += prop["instance_name"].substr(n);
+                  }
+                else if (c == 'h')  str += m_config["os.hostname"];
+                else if (c == 'M')  str += m_config["manager.name"];
+                else if (c == 'p')  str += m_config["manager.pid"];
+                else str.push_back(c);
+              }
+            else
+              {
+                count = 0;
+                str.push_back(c);
+              }
+          }
       }
     return str;
   }

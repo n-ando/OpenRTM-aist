@@ -189,10 +189,10 @@ namespace RTC
 #endif
         RTC_PARANOID(("converted CDR data size: %d", len));
 
-	if (len == (CORBA::ULong)0) {
-	  RTC_ERROR(("buffer is empty."));
-	  return ::OpenRTM::BUFFER_EMPTY;
-	}
+        if (len == (CORBA::ULong)0) {
+          RTC_ERROR(("buffer is empty."));
+          return ::OpenRTM::BUFFER_EMPTY;
+        }
 #ifndef ORB_IS_RTORB
         data->length(len);
 #ifdef ORB_IS_ORBEXPRESS

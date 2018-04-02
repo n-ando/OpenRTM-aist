@@ -78,10 +78,10 @@ namespace RTC
     RTC_TRACE(("publishInterface()"));
     RTC_DEBUG_STR((NVUtil::toString(prop)));
     if (!NVUtil::isStringValue(prop,
-			       "dataport.interface_type",
-			       m_interfaceType.c_str()))
+                               "dataport.interface_type",
+                               m_interfaceType.c_str()))
       {
-	return false;
+        return false;
       }
     
     NVUtil::append(prop, m_properties);
