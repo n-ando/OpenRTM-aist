@@ -115,14 +115,14 @@ namespace RTC
       }
     catch (NotFound& e)
       {
-        force ? bindRecursive(m_rootContext, name, obj) : throw e;
+        force ? bindRecursive(m_rootContext, name, obj) : throw;
       }
     catch (CannotProceed& e)
       {
 #ifndef ORB_IS_RTORB
-        force ? bindRecursive(e.cxt, e.rest_of_name, obj) : throw e;
+        force ? bindRecursive(e.cxt, e.rest_of_name, obj) : throw;
 #else // ORB_IS_RTORB
-        force ? bindRecursive(e.cxt(), e.rest_of_name(), obj) : throw e;
+        force ? bindRecursive(e.cxt(), e.rest_of_name(), obj) : throw;
 #endif // ORB_IS_RTORB
       }
   }
@@ -193,14 +193,14 @@ namespace RTC
       }
     catch (NotFound& e)
       {
-        force ? rebindRecursive(m_rootContext, name, obj) : throw e;
+        force ? rebindRecursive(m_rootContext, name, obj) : throw;
       }
     catch (CannotProceed& e)
       {
 #ifndef ORB_IS_RTORB
-        force ? rebindRecursive(e.cxt, e.rest_of_name, obj) : throw e;
+        force ? rebindRecursive(e.cxt, e.rest_of_name, obj) : throw;
 #else // ORB_IS_RTORB
-        force ? rebindRecursive(e.cxt(), e.rest_of_name(), obj) : throw e;
+        force ? rebindRecursive(e.cxt(), e.rest_of_name(), obj) : throw;
 #endif // ORB_IS_RTORB
       }
   }
@@ -440,15 +440,15 @@ namespace RTC
       }
     catch (NotFound& e)
       {
-        force ? bindRecursive(m_rootContext, name, newContext()) : throw e;
+        force ? bindRecursive(m_rootContext, name, newContext()) : throw;
       }
     catch (CannotProceed& e)
       {
 #ifndef ORB_IS_RTORB
-        force ? bindRecursive(e.cxt, e.rest_of_name, newContext()) : throw e;
+        force ? bindRecursive(e.cxt, e.rest_of_name, newContext()) : throw;
 #else // ORB_IS_RTORB
         force ? 
-          bindRecursive(e.cxt(), e.rest_of_name(), newContext()) : throw e;
+          bindRecursive(e.cxt(), e.rest_of_name(), newContext()) : throw;
 #endif // ORB_IS_RTORB
       }
     return CosNaming::NamingContext::_nil();

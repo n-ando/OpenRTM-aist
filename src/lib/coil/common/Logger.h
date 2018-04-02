@@ -442,7 +442,7 @@ namespace coil
       }
 
       Stream(const Stream& x)
-        : stream_(x.stream_)
+        : stream_(x.stream_), cleanup_(false)
       {
       }
 
