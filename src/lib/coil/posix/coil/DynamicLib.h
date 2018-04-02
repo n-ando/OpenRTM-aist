@@ -48,7 +48,6 @@ namespace coil
   class DynamicLib
   {
   public:
-
     /*!
      * @if jp
      *

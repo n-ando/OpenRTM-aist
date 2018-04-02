@@ -298,7 +298,7 @@ namespace RTC
         m_buffer->advanceRptr();
 
       }
-    return PORT_OK;
+     return PORT_OK;
    }
 
   /*!

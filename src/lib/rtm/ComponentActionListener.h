@@ -1069,7 +1069,7 @@ namespace RTC
      * The ExecutionContextActionType listener is stored.
      * @endif
      */
-   ExecutionContextActionListenerHolder
+    ExecutionContextActionListenerHolder
     ecaction_[EC_ACTION_LISTENER_NUM];
   };
 

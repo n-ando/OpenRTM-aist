@@ -224,7 +224,6 @@ namespace RTC
     virtual void setConnector(InPortConnector* connector);
 
   private:
-
     /*!
      * @if jp
      * @brief ON_BUFFER_WRITE のリスナへ通知する。

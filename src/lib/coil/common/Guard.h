@@ -41,7 +41,6 @@ namespace coil
   class Guard
   {
   public:
-
     /*!
      * @if jp
      *

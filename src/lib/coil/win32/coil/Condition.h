@@ -83,7 +83,6 @@ namespace coil
   class Condition
   {
   public:
-
     /*!
      * @if jp
      *
@@ -220,7 +219,6 @@ namespace coil
     }
 
   private:
-
     /*!
      * @if jp
      *

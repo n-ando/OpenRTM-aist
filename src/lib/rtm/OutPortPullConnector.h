@@ -256,7 +256,6 @@ namespace RTC
     void onDisconnect();
 
   protected:
-
     /*!
      * @if jp
      * @brief OutPortProvider へのポインタ

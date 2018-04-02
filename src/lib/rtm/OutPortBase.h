@@ -462,7 +462,7 @@ namespace RTC
      *
      * @endif
      */
-   OutPortConnector* getConnectorByName(const char* name);
+    OutPortConnector* getConnectorByName(const char* name);
 
     /*!
      * @if jp

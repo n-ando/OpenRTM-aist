@@ -124,7 +124,7 @@ namespace coil
      *
      * @endif
      */
-    Properties(const char* key = "", const char* value = "");
+    explicit Properties(const char* key = "", const char* value = "");
 
     /*!
      * @if jp
@@ -207,7 +207,7 @@ namespace coil
      *
      * @endif
      */
-    Properties(const char* defaults[], long num = LONG_MAX);
+    explicit Properties(const char* defaults[], long num = LONG_MAX);
 
     /*!
      * @if jp
