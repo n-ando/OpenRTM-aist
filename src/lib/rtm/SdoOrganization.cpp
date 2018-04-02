@@ -37,7 +37,7 @@ namespace SDOPackage
   {
     m_varOwner = sdo.in();
 
-    coil::UUID_Generator uugen;
+    coil::UUID_Generator uugen = coil::UUID_Generato();
     uugen.init();
     std::auto_ptr<coil::UUID> uuid(uugen.generateUUID(2, 0x01));
     m_pId = uuid->to_string();

@@ -232,7 +232,7 @@ namespace RTC
         return false;
       }
 
-    CORBA::Object_var obj;
+    CORBA::Object_var obj = CORBA::Object::_nil();
 #ifdef ORB_IS_ORBEXPRESS
    if (!(properties[index].value >>= obj))
 #else
@@ -277,7 +277,7 @@ namespace RTC
         return false;
       }
 
-    const char* ior;
+    const char* ior = NULL;
     if (!(properties[index].value >>= ior))
       {
         RTC_ERROR(("prop[inport_ior] is not string"));
@@ -312,7 +312,7 @@ namespace RTC
                                "dataport.corba_cdr.inport_ref");
     if (index < 0) { return false; }
 
-    CORBA::Object_var obj;
+    CORBA::Object_var obj = CORBA::Object::_nil();
 #ifdef ORB_IS_ORBEXPRESS
     if (!(properties[index].value >>= obj)) 
 #else

@@ -142,7 +142,7 @@ namespace RTM
    */
   RTM::LocalServiceProfileList LocalServiceAdmin::getServiceProfiles()
   {
-    RTM::LocalServiceProfileList profs;
+    RTM::LocalServiceProfileList profs(0);
     for (size_t i(0); i < m_services.size(); ++i)
       {
         profs.push_back(m_services[i]->getProfile());
