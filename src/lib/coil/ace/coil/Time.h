@@ -32,7 +32,6 @@
 #pragma warning( default : 4244 ) 
 #pragma warning( default : 4312 ) 
 #endif
-#include <coil/TimeValue.h>
 
 namespace coil
 {

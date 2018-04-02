@@ -34,8 +34,9 @@
 
 namespace coil
 {
-  #define EPOCHFILETIME (116444736000000000i64)
-  struct timezone {
+#define EPOCHFILETIME (116444736000000000i64)
+  struct timezone
+  {
     int tz_minuteswest;
     int tz_dsttime;
   };

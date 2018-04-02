@@ -17,6 +17,7 @@
  *
  */
 #ifndef COIL_ATOMIC_H
+#define COIL_ATOMIC_H
 
 #ifdef COIL_HAS_ATOMIC_OP
 

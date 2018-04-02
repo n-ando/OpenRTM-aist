@@ -16,7 +16,8 @@
  * $Id$
  *
  */
-
+#ifndef RTM_DEFAULTCONFIGURATION_H
+#define RTM_DEFAULTCONFIGURATION_H
 #include "rtm/version.h"
 #include "rtm/config_rtc.h"
 /*!
@@ -116,4 +117,4 @@ static const char* default_config[] =
     "sdo.service.consumer.enabled_services",  "ALL",
     ""
   };
-
+#endif //RTM_DEFAULTCONFIGURATION_H
