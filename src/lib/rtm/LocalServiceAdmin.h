@@ -231,7 +231,7 @@ namespace RTM
      *
      * @endif
      */
-    bool removeLocalService(const std::string name);
+    bool removeLocalService(const std::string& name);
     
   private:
     /*!

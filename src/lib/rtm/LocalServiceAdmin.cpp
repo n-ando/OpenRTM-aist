@@ -218,7 +218,7 @@ namespace RTM
    * @brief Remove a LocalService
    * @endif
    */
-  bool LocalServiceAdmin::removeLocalService(const std::string name)
+  bool LocalServiceAdmin::removeLocalService(const std::string& name)
   {
     RTC_TRACE(("removeLocalService(%d)", name.c_str()));
     Guard gurad(m_services_mutex);

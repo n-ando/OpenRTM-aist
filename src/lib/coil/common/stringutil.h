@@ -210,7 +210,7 @@ namespace coil
    *
    * @endif
    */
-  std::string escape(const std::string str);
+  std::string escape(const std::string& str);
   
   /*!
    * @if jp
@@ -248,7 +248,7 @@ namespace coil
    *
    * @endif
    */
-  std::string unescape(const std::string str);
+  std::string unescape(const std::string& str);
 
   /*!
    * @if jp
@@ -380,8 +380,8 @@ namespace coil
    *
    * @endif
    */
-  unsigned int replaceString(std::string& str, const std::string from,
-                             const std::string to);
+  unsigned int replaceString(std::string& str, const std::string& from,
+                             const std::string& to);
   
   /*!
    * @if jp
@@ -754,7 +754,7 @@ namespace coil
    * @endif
    */
   template <class T>
-  bool hexToPtr(T*& ptr, const std::string str)
+  bool hexToPtr(T*& ptr, const std::string& str)
   {
 #if defined(VXWORKS_66) && !defined(__RTP__)
     return false;
