@@ -83,13 +83,13 @@ namespace RTC
     RTC_DEBUG(("Exec rate   : %f [Hz]", getRate()));
     RTC_DEBUG(("Activation  : Sync = %s, Timeout = %f",
                m_syncActivation ? "YES" : "NO",
-               <double>m_activationTimeout));
+               static_cast<double>(m_activationTimeout)));
     RTC_DEBUG(("Deactivation: Sync = %s, Timeout = %f",
                m_syncDeactivation ? "YES" : "NO",
-               <double>m_deactivationTimeout));
+               static_cast<double>(m_deactivationTimeout)));
     RTC_DEBUG(("Reset       : Sync = %s, Timeout = %f",
                m_syncReset ? "YES" : "NO",
-               <double>m_resetTimeout));
+               static_cast<double>(m_resetTimeout)));
     // Setting given Properties to EC's profile::properties
     setProperties(props);
   }
@@ -376,9 +376,9 @@ namespace RTC
         return ret;
       }
     long int cycle =
-      (long int)(<double>m_activationTimeout / <double>getPeriod());
+      static_cast<long int>(static_cast<double>(m_activationTimeout) / static_cast<double>(getPeriod()));
     RTC_DEBUG(("Timeout is %f [s] (%f [s] in %d times)",
-               <double>m_activationTimeout, getRate(), cycle));
+               static_cast<double>(m_activationTimeout), getRate(), cycle));
     // Wating INACTIVE -> ACTIVE
     coil::TimeValue starttime(coil::gettimeofday());
     while (rtobj->isCurrentState(RTC::INACTIVE_STATE))
@@ -392,7 +392,7 @@ namespace RTC
         coil::sleep(getPeriod());
         coil::TimeValue delta(coil::gettimeofday() - starttime);
         RTC_DEBUG(("Waiting to be ACTIVE state. %f [s] slept (%d/%d)",
-                   <double>delta, count, cycle));
+                   static_cast<double>(delta), count, cycle));
         ++count;
         if (delta > m_activationTimeout || count > cycle)
           {
@@ -464,9 +464,9 @@ namespace RTC
         return ret;
       }
     long int cycle =
-      (long int)(<double>m_deactivationTimeout / <double>getPeriod());
+      static_cast<long int>(static_cast<double>(m_deactivationTimeout) / static_cast<double>(getPeriod()));
     RTC_DEBUG(("Timeout is %f [s] (%f [s] in %d times)",
-               <double>m_deactivationTimeout, getRate(), cycle));
+               static_cast<double>(m_deactivationTimeout), getRate(), cycle));
     // Wating ACTIVE -> INACTIVE
     coil::TimeValue starttime(coil::gettimeofday());
     while (rtobj->isCurrentState(RTC::ACTIVE_STATE))
@@ -480,7 +480,7 @@ namespace RTC
         coil::sleep(getPeriod());
         coil::TimeValue delta(coil::gettimeofday() - starttime);
         RTC_DEBUG(("Waiting to be INACTIVE state. Sleeping %f [s] (%d/%d)",
-                   <double>delta, count, cycle));
+               static_cast<double>(delta), count, cycle));
         ++count;
         if (delta > m_deactivationTimeout || count > cycle)
           {
@@ -551,9 +551,9 @@ namespace RTC
         return ret;
       }
     long int cycle =
-      (long int)(<double>m_resetTimeout / <double>getPeriod());
+      static_cast<long int>(static_cast<double>(m_resetTimeout) / static_cast<double>(getPeriod()));
     RTC_DEBUG(("Timeout is %f [s] (%f [s] in %d times)",
-               <double>m_resetTimeout, getRate(), cycle));
+               static_cast<double>(m_resetTimeout), getRate(), cycle));
     // Wating ERROR -> INACTIVE
     coil::TimeValue starttime(coil::gettimeofday());
     while (rtobj->isCurrentState(RTC::ERROR_STATE))
@@ -567,7 +567,7 @@ namespace RTC
         coil::sleep(getPeriod());
         coil::TimeValue delta(coil::gettimeofday() - starttime);
         RTC_DEBUG(("Waiting to be INACTIVE state. Sleeping %f [s] (%d/%d)",
-                   <double>delta, count, cycle));
+                   static_cast<double>(delta), count, cycle));
         ++count;
         if (delta > m_resetTimeout || count > cycle)
           {
