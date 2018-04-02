@@ -20,10 +20,6 @@
 #ifndef RTC_INPORT_H
 #define RTC_INPORT_H
 
-#include <string>
-#include <vector>
-#include <iostream>
-
 #include <coil/TimeValue.h>
 #include <coil/Time.h>
 #include <coil/OS.h>

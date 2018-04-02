@@ -20,7 +20,6 @@
 #ifndef RTC_INPORTBASE_H
 #define RTC_INPORTBASE_H
 
-#include <vector>
 #include <rtm/PortBase.h>
 #include <rtm/DataPortStatus.h>
 #include <rtm/CdrBufferBase.h>

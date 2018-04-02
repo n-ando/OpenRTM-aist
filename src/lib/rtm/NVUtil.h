@@ -20,10 +20,11 @@
 #ifndef NVUTIL_NVUTIL_H
 #define NVUTIL_NVUTIL_H
 
-#include <string>
-#include <iostream>
 #include <coil/Properties.h>
 #include <rtm/idl/SDOPackageSkel.h>
+
+#include <string>
+#include <iostream>
 
 /*!
  * @if jp

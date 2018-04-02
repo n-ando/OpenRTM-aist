@@ -17,9 +17,6 @@
  *
  */
 
-#include <algorithm>
-#include <iterator>
-
 #include <rtm/CORBA_SeqUtil.h>
 #include <rtm/NVUtil.h>
 #include <rtm/InPortBase.h>
@@ -28,6 +25,9 @@
 #include <rtm/OutPortConsumer.h>
 #include <rtm/InPortPushConnector.h>
 #include <rtm/InPortPullConnector.h>
+
+#include <algorithm>
+#include <iterator>
 
 namespace RTC
 {

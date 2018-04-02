@@ -20,8 +20,6 @@
 #ifndef RTC_SDOCONFIGURATION_H
 #define RTC_SDOCONFIGURATION_H
 
-#include <string>
-
 // CORBA header include
 #include <rtm/RTC.h>
 #include <coil/Mutex.h>
@@ -32,6 +30,8 @@
 #include <rtm/ConfigAdmin.h>
 #include <rtm/SystemLogger.h>
 #include <rtm/SdoServiceAdmin.h>
+
+#include <string>
 
 // SdoConfiguration with SeqEx 159120
 // SdoConfiguration with SeqUtil 114504 114224

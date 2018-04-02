@@ -22,8 +22,6 @@
 
 #include <rtm/RTC.h>
 
-#include <string>
-#include <vector>
 #include <coil/Guard.h>
 #include <coil/Mutex.h>
 #include <rtm/idl/RTCSkel.h>
@@ -31,6 +29,7 @@
 #include <rtm/NVUtil.h>
 #include <rtm/SystemLogger.h>
 #include <rtm/PortConnectListener.h>
+
 #include <iostream>
 #include <rtm/DirectPortBase.h>
 

@@ -20,15 +20,15 @@
 #ifndef LOGGER_H
 #define LOGGER_H
 
+#include <coil/Mutex.h>
+#include <coil/Guard.h>
+
 #include <fstream>
 #include <iostream>
 #include <limits.h>
 #include <string>
 #include <utility>
 #include <vector>
-
-#include <coil/Mutex.h>
-#include <coil/Guard.h>
 
 #ifndef LINE_MAX
 #define LINE_MAX  1024

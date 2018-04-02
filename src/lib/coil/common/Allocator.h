@@ -20,9 +20,10 @@
 #ifndef COIL_ALLOCATOR_H
 #define COIL_ALLOCATOR_H
 
+#include <coil/Singleton.h>
+
 #include <stddef.h>
 #include <new>
-#include <coil/Singleton.h>
 
 namespace coil
 {

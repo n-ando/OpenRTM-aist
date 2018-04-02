@@ -19,13 +19,15 @@
 #ifndef RTC_COMPONENTACTIONLISTENER_H
 #define RTC_COMPONENTACTIONLISTENER_H
 
-#include <vector>
-#include <utility>
 #include <coil/Mutex.h>
 #include <coil/Guard.h>
+
 #include <rtm/RTC.h>
 #include <rtm/idl/RTCSkel.h>
 #include <rtm/ConnectorBase.h>
+
+#include <vector>
+#include <utility>
 
 namespace RTC
 {

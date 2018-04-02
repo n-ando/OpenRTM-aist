@@ -19,11 +19,14 @@
 #ifndef COIL_FILE_H
 #define COIL_FILE_H
 
-#include <cstring>
+#include <coil/config_coil.h>
+#include <coil/stringutil.h>
+
 #include <dirent.h>
 #include <libgen.h>
-#include <string>
 #include <sys/types.h>
+#include <string>
+#include <cstring>
 
 #include <string.h>
 #include <sys/stat.h>

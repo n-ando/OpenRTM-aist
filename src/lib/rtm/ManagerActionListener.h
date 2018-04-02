@@ -19,14 +19,15 @@
 #ifndef RTM_MANAGERACTIONLISTENER_H
 #define RTM_MANAGERACTIONLISTENER_H
 
-#include <string>
-#include <vector>
-#include <utility>
 #include <coil/Mutex.h>
 #include <coil/Guard.h>
 #include <coil/Properties.h>
 #include <coil/stringutil.h>
 #include <rtm/ListenerHolder.h>
+
+#include <string>
+#include <vector>
+#include <utility>
 
 // forward decl
 namespace RTC

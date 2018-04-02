@@ -19,9 +19,9 @@
 #ifndef COIL_DYNAMICLIB_H
 #define COIL_DYNAMICLIB_H
 
+#include <coil/config_coil.h>
 #include <dlfcn.h>
 #include <string>
-#include <coil/config_coil.h>
 
 #define COIL_DEFAULT_DYNLIB_MODE RTLD_LAZY
 

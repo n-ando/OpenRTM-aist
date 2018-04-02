@@ -19,11 +19,12 @@
 #ifndef RTM_UTIL_LISTENERHOLDER_H
 #define RTM_UTIL_LISTENERHOLDER_H
 
-#include <vector>
-#include <utility>
 #include <coil/Mutex.h>
 #include <coil/Guard.h>
 #include <coil/NonCopyable.h>
+
+#include <vector>
+#include <utility>
 
 namespace RTM
 {

@@ -20,9 +20,6 @@
 #ifndef RTC_OUTPORTBASE_H
 #define RTC_OUTPORTBASE_H
 
-#include <vector>
-#include <string>
-
 #include <coil/Properties.h>
 #include <coil/stringutil.h>
 

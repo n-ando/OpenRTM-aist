@@ -19,8 +19,6 @@
 #ifndef RTC_NAMINGMANAGER_H
 #define RTC_NAMINGMANAGER_H
 
-#include <string>
-#include <vector>
 #include <rtm/RTC.h>
 
 #include <coil/Task.h>
@@ -30,6 +28,9 @@
 #include <rtm/RTObject.h>
 #include <rtm/SystemLogger.h>
 #include <rtm/ManagerServant.h>
+
+#include <string>
+#include <vector>
 
 namespace RTC
 {

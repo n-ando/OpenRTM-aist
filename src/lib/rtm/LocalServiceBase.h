@@ -19,13 +19,13 @@
 #ifndef RTM_LOCALSERVICEBASE_H
 #define RTM_LOCALSERVICEBASE_H
 
-#include <string>
-#include <vector>
-
 #include <coil/Mutex.h>
 #include <coil/Factory.h>
 #include <coil/Timer.h>
 #include <coil/Properties.h>
+
+#include <string>
+#include <vector>
 
 namespace RTM
 {

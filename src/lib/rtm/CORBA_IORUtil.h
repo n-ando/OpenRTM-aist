@@ -18,11 +18,12 @@
 #ifndef CORBA_IORUTIL_H
 #define CORBA_IORUTIL_H
 
-#include <string>
 #include <rtm/RTC.h>
 #ifdef ORB_IS_ORBEXPRESS
 #include <IOP.h>
 #endif
+
+#include <string>
 
 /*!
  * @if jp

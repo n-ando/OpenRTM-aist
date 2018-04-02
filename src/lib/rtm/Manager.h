@@ -22,10 +22,6 @@
 
 #include <rtm/RTC.h>
 
-#include <iostream>
-#include <string>
-#include <vector>
-
 #include <coil/Mutex.h>
 #include <coil/Guard.h>
 #include <coil/Task.h>

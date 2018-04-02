@@ -19,10 +19,11 @@
 #ifndef COIL_DYNAMICLIB_H
 #define COIL_DYNAMICLIB_H
 
+#include <coil/config_coil.h>
+
 #include <windows.h>
 #include <iostream>
 #include <string>
-#include <coil/config_coil.h>
 
 #define COIL_DEFAULT_DYNLIB_MODE LOAD_WITH_ALTERED_SEARCH_PATH
 

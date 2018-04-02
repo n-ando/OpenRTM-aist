@@ -20,8 +20,6 @@
 #ifndef RTC_INPORTPROVIDER_H
 #define RTC_INPORTPROVIDER_H
 
-#include <string>
-
 #include <coil/Factory.h>
 
 #include <rtm/BufferBase.h>
@@ -29,6 +27,8 @@
 #include <rtm/SystemLogger.h>
 #include <rtm/DataPortStatus.h>
 #include <rtm/InPortConnector.h>
+
+#include <string>
 
 namespace RTC
 {

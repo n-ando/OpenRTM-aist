@@ -20,10 +20,6 @@
 #ifndef RTC_MODULEMANAGER_H
 #define RTC_MODULEMANAGER_H
 
-// STL includes
-#include <string>
-#include <vector>
-#include <map>
 
 // ACE includes
 #include <coil/DynamicLib.h>
@@ -33,6 +29,10 @@
 #include <coil/Properties.h>
 #include <rtm/ObjectManager.h>
 
+// STL includes
+#include <string>
+#include <vector>
+#include <map>
 
 #define CONFIG_EXT    "manager.modules.config_ext"
 #define CONFIG_PATH   "manager.modules.config_path"

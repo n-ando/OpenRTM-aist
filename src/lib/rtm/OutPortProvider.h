@@ -20,14 +20,14 @@
 #ifndef RTC_OUTPORTPROVIDER_H
 #define RTC_OUTPORTPROVIDER_H
 
-#include <string>
-
 #include <coil/Factory.h>
 #include <rtm/BufferBase.h>
 #include <rtm/NVUtil.h>
 #include <rtm/SystemLogger.h>
 #include <rtm/DataPortStatus.h>
 #include <rtm/OutPortConnector.h>
+
+#include <string>
 
 namespace RTC
 {

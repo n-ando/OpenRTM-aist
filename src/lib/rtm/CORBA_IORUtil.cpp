@@ -15,9 +15,10 @@
  *
  */
 
+#include <rtm/CORBA_IORUtil.h>
+
 #include <iostream>
 #include <sstream>
-#include <rtm/CORBA_IORUtil.h>
 
 #define POA_NAME_SEP            '\xff'
 #define TRANSIENT_SUFFIX_SEP    '\xfe'

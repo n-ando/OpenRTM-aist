@@ -19,11 +19,11 @@
 #ifndef COIL_OS_H
 #define COIL_OS_H
 
-#include <string>
 #include <sys/utsname.h>
 #include <sys/types.h>
 #include <unistd.h>
 #include <stdlib.h>
+#include <string>
 
 extern "C"
 {

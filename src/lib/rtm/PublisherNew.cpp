@@ -17,9 +17,6 @@
  *
  */
 
-#include <iostream>
-#include <assert.h>
-
 #include <coil/Properties.h>
 #include <coil/stringutil.h>
 
@@ -29,6 +26,9 @@
 #include <rtm/PeriodicTaskFactory.h>
 #include <rtm/idl/DataPortSkel.h>
 #include <rtm/ConnectorListener.h>
+
+#include <iostream>
+#include <assert.h>
 
 namespace RTC
 {

@@ -20,10 +20,6 @@
 #ifndef RTC_OUTPORT_H
 #define RTC_OUTPORT_H
 
-#include <functional>
-#include <string>
-#include <vector>
-
 #include <coil/TimeValue.h>
 #include <coil/Time.h>
 #include <coil/TimeMeasure.h>
@@ -37,6 +33,11 @@
 #include <rtm/OutPortConnector.h>
 #include <rtm/Timestamp.h>
 #include <rtm/DirectOutPortBase.h>
+
+#include <functional>
+#include <string>
+#include <vector>
+
 
 /*!
  * @if jp

@@ -20,7 +20,6 @@
 #define RTC_PORTPROFILEHELPER_H
 
 
-#include <string>
 // RTC header include
 #include <rtm/RTC.h>
 #include <rtm/Util.h>
@@ -31,6 +30,7 @@
 // CORBA header include
 #include <rtm/idl/RTCSkel.h>
 
+#include <string>
 
 
 

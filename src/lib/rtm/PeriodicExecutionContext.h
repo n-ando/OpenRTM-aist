@@ -19,15 +19,15 @@
 #ifndef RTC_PERIODICEXECUTIONCONTEXT2_H
 #define RTC_PERIODICEXECUTIONCONTEXT2_H
 
-#include <vector>
-#include <iostream>
-
 #include <coil/Task.h>
 #include <coil/Mutex.h>
 #include <coil/Condition.h>
 #include <coil/Affinity.h>
 
 #include <rtm/ExecutionContextBase.h>
+
+#include <vector>
+#include <iostream>
 
 #define NUM_OF_LIFECYCLESTATE 4
 

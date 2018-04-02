@@ -19,16 +19,16 @@
 #ifndef RTC_SYSTEMLOGGER_H
 #define RTC_SYSTEMLOGGER_H
 
-#include <string>
 #include <rtm/config_rtc.h>
 
-// COIL
 #include <coil/Time.h>
 #include <coil/ClockManager.h>
 #include <coil/Logger.h>
 #include <coil/Mutex.h>
 #include <coil/Guard.h>
 #include <coil/stringutil.h>
+
+#include <string>
 
 namespace RTC
 {

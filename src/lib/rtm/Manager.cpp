@@ -30,8 +30,6 @@
 #include <rtm/PeriodicECSharedComposite.h>
 #include <rtm/RTCUtil.h>
 #include <rtm/ManagerServant.h>
-#include <fstream>
-#include <iostream>
 #include <coil/Properties.h>
 #include <coil/stringutil.h>
 #include <coil/Signal.h>
@@ -61,6 +59,9 @@
 #endif // _GNU_SOURCE
 #include <pthread.h>
 #endif // RTM_OS_LINUX
+
+#include <fstream>
+#include <iostream>
 
 #if defined(minor)
 #undef minor

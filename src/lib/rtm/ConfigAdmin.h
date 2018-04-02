@@ -19,12 +19,13 @@
 #ifndef RTC_CONFIGADMIN_H
 #define RTC_CONFIGADMIN_H
 
-#include <string>
-#include <vector>
-#include <iostream>
 #include <coil/Properties.h>
 #include <coil/stringutil.h>
 #include <rtm/ConfigurationListener.h>
+
+#include <string>
+#include <vector>
+#include <iostream>
 
 /*!
  * @if jp

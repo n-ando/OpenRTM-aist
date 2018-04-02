@@ -19,11 +19,7 @@
 
 #ifndef RTC_RINGBUFFER_H
 #define RTC_RINGBUFFER_H
-
-#include <string>
 #include <vector>
-#include <algorithm>
-#include <iostream>
 
 #include <coil/TimeValue.h>
 #include <coil/Mutex.h>
@@ -33,6 +29,10 @@
 
 #include <rtm/BufferBase.h>
 #include <rtm/BufferStatus.h>
+
+#include <algorithm>
+#include <iostream>
+#include <string>
 
 #define RINGBUFFER_DEFAULT_LENGTH 8
 /*!

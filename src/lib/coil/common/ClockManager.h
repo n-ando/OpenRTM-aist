@@ -19,11 +19,12 @@
 #ifndef COIL_CLOCKMANAGER_H
 #define COIL_CLOCKMANAGER_H
 
-#include <string>
 #include <coil/Singleton.h>
 #include <coil/TimeValue.h>
 #include <coil/Mutex.h>
 #include <coil/Guard.h>
+
+#include <string>
 
 namespace coil
 {

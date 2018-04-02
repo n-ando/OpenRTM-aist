@@ -19,12 +19,13 @@
 #ifndef RTC_PORTCONNECTLISTENER_H
 #define RTC_PORTCONNECTLISTENER_H
 
-#include <vector>
-#include <utility>
 #include <coil/Mutex.h>
 #include <coil/Guard.h>
 #include <rtm/RTC.h>
 #include <rtm/idl/RTCSkel.h>
+
+#include <vector>
+#include <utility>
 
 namespace RTC
 {
