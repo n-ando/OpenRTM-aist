@@ -218,7 +218,8 @@ namespace SDOPackage
         removeParticipantFromEC(member);
         removeOrganizationFromTarget(member);
         startOwnedEC(member);
-        ::SDOPackage::Organization_impl::remove_member(member.profile_->instance_name); 
+        ::SDOPackage::Organization_impl::
+                      remove_member(member.profile_->instance_name); 
         ++it;
      }
     m_rtcMembers.clear();
@@ -527,10 +528,10 @@ namespace SDOPackage
   void PeriodicECOrganization::updateDelegatedPorts()
   {
     std::vector<std::string>& oldPorts(m_expPorts);
-    std::sort(oldPorts.begin(),oldPorts.end());
+    std::sort(oldPorts.begin(), oldPorts.end());
     std::vector<std::string>
       newPorts(coil::split(m_rtobj->getProperties()["conf.default.exported_ports"], ","));
-    std::sort(newPorts.begin(),newPorts.end());
+    std::sort(newPorts.begin(), newPorts.end());
 
     std::vector<std::string> removedPorts; // oldPorts - interPorts
     std::vector<std::string> createdPorts;   // newPorts - interPorts
@@ -563,7 +564,7 @@ namespace SDOPackage
 bool stringToStrVec(std::vector<std::string>& v, const char* is)
 {
   std::string s(is);
-  v = coil::split(s ,",");
+  v = coil::split(s , ",");
   return true;
 }
 
@@ -574,7 +575,7 @@ namespace RTC
   {
   public:
     explicit setCallback(::SDOPackage::PeriodicECOrganization* org) : m_org(org) {}
-    virtual ~setCallback(){};
+    virtual ~setCallback(){}
     virtual void operator()(const coil::Properties& config_set)
     {
       m_org->updateDelegatedPorts();
@@ -589,7 +590,7 @@ namespace RTC
   {
   public:
     explicit addCallback(::SDOPackage::PeriodicECOrganization* org) : m_org(org) {}
-    virtual ~addCallback(){};
+    virtual ~addCallback(){}
     virtual void operator()(const coil::Properties& config_set)
     {
       m_org->updateDelegatedPorts();
@@ -612,7 +613,8 @@ namespace RTC
     m_objref = RTC::RTObject::_duplicate(m_ref);
     m_org = new SDOPackage::PeriodicECOrganization(this);
     ::CORBA_SeqUtil::push_back(m_sdoOwnedOrganizations,
-                               ::SDOPackage::Organization::_duplicate(m_org->getObjRef()));
+                               ::SDOPackage::Organization::
+                               _duplicate(m_org->getObjRef()));
     bindParameter("members", m_members, "", stringToStrVec);
 
     m_configsets.setOnSetConfigurationSet(new setCallback(m_org));
@@ -723,7 +725,8 @@ namespace RTC
    * @brief Callback function to deactivate
    * @endif
    */
-  ReturnCode_t PeriodicECSharedComposite::onDeactivated(RTC::UniqueId exec_handle)
+  ReturnCode_t PeriodicECSharedComposite::
+               onDeactivated(RTC::UniqueId exec_handle)
   {
     RTC_TRACE(("onDeactivated(%d)", exec_handle));
     ::RTC::ExecutionContextList_var ecs(get_owned_contexts());

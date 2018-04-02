@@ -272,7 +272,7 @@ namespace RTC
     
     try
       {
-        if(CORBA::is_nil(this->thePOAManager()))
+        if (CORBA::is_nil(this->thePOAManager()))
         {
           RTC_ERROR(("Could not get POA manager."));
           return false;
@@ -1682,7 +1682,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   void Manager::shutdownORB()
   {
     RTC_TRACE(("Manager::shutdownORB()"));
-    if(CORBA::is_nil(m_pORB))
+    if (CORBA::is_nil(m_pORB))
       {
         return;
       }
@@ -2082,7 +2082,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
       }
     for (CORBA::ULong i(0), len(m_ecs.size()); i < len; ++i)
       {
-        try{
+        try {
           PortableServer::RefCountServantBase* servant;
           servant = dynamic_cast<PortableServer::RefCountServantBase*>(m_ecs[i]);
           if (servant == NULL)
@@ -2216,7 +2216,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
         RTC_ERROR(("Empty ExecutionContext's name"));
         return false;
       }
-    ec_id =id_and_conf[0];
+    ec_id = id_and_conf[0];
     
     if (id_and_conf.size() == 2)
       {

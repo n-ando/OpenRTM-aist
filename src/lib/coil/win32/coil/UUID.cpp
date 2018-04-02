@@ -69,7 +69,7 @@ namespace coil
    */
   const char* UUID::to_string()
   {
-    if(::UuidToStringA(&m_uuid, (RPC_CSTR*)&m_uuidstr)
+    if (::UuidToStringA(&m_uuid, (RPC_CSTR*)&m_uuidstr)
        != RPC_S_OK)
       {
         return 0;

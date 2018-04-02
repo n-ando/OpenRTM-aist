@@ -55,7 +55,7 @@ namespace RTC
    * @class ConnectorDataListener class
    * @endif
    */
-  ConnectorDataListener::~ConnectorDataListener(){}
+  ConnectorDataListener::~ConnectorDataListener() {}
 
   /*!
    * @if jp
@@ -64,7 +64,7 @@ namespace RTC
    * @class ConnectorListener class
    * @endif
    */
-  ConnectorListener::~ConnectorListener(){}
+  ConnectorListener::~ConnectorListener() {}
 
   /*!
    * @if jp

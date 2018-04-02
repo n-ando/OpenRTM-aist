@@ -90,7 +90,8 @@ namespace RTC_impl
       }
   }
 
-//  RTObjectStateMachine::RTObjectStateMachine(const RTObjectStateMachine& other)
+//  RTObjectStateMachine::
+//  RTObjectStateMachine(const RTObjectStateMachine& other)
 //    : m_id(other.m_id),
 //      m_rtobj(RTC::LightweightRTObject::_duplicate(other.m_rtobj)),
 //      m_sm(other.m_sm),

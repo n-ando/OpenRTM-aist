@@ -112,7 +112,7 @@ namespace coil
      */
     inline void lock()
     {
-      ::WaitForSingleObject(mutex_,INFINITE);
+      ::WaitForSingleObject(mutex_, INFINITE);
     }
 
     /*!
@@ -133,8 +133,8 @@ namespace coil
     inline bool trylock()
     {
       unsigned long dwret;
-      dwret = ::WaitForSingleObject(mutex_,0);
-      switch(dwret)
+      dwret = ::WaitForSingleObject(mutex_, 0);
+      switch (dwret)
         {
         case WAIT_ABANDONED:
           return true;

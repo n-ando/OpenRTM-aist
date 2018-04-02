@@ -2093,7 +2093,8 @@ namespace RTC
       std::string m_name;
     };
     
-    typedef ObjectManager<std::string, RTObject_impl, InstanceName> ComponentManager;
+    typedef ObjectManager<std::string, RTObject_impl, 
+                          InstanceName> ComponentManager;
 
     /*!
      * @if jp

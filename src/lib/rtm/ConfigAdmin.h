@@ -398,7 +398,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~Config(void){}
+    virtual ~Config(void) {}
     
     /*!
      * @if jp

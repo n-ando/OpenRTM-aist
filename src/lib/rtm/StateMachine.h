@@ -785,7 +785,7 @@ namespace RTC_Utils
           if (state.curr != state.next)
             {
               state.curr = state.next;
-              if(m_entry[state.curr] != NULL)
+              if (m_entry[state.curr] != NULL)
                 (m_listener->*m_entry[state.curr])(state);
               update_curr(state.curr);
             }
@@ -821,7 +821,7 @@ namespace RTC_Utils
       if (state.curr != state.next)
         {
           state.curr = state.next;
-          if(m_entry[state.curr] != NULL)
+          if (m_entry[state.curr] != NULL)
             {
               (m_listener->*m_entry[state.curr])(state);
             }

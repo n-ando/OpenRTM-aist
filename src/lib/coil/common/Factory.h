@@ -606,7 +606,7 @@ namespace coil
      *
      * @endif
      */
-    GlobalFactory(){}
+    GlobalFactory() {}
 
     /*!
      * @if jp
@@ -623,7 +623,7 @@ namespace coil
      *
      * @endif
      */
-    ~GlobalFactory(){}
+    ~GlobalFactory() {}
 
     friend class Singleton<GlobalFactory>;
   };

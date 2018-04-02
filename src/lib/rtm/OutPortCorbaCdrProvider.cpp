@@ -222,7 +222,7 @@ namespace RTC
   OutPortCorbaCdrProvider::convertReturn(BufferStatus::Enum status,
                                          cdrMemoryStream& data)
   {
-    switch(status)
+    switch (status)
       {
       case BufferStatus::BUFFER_OK:
         onBufferRead(data);

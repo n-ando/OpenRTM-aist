@@ -39,7 +39,7 @@ namespace SDOPackage
 
     coil::UUID_Generator uugen;
     uugen.init();
-    std::auto_ptr<coil::UUID> uuid(uugen.generateUUID(2,0x01));
+    std::auto_ptr<coil::UUID> uuid(uugen.generateUUID(2, 0x01));
     m_pId = uuid->to_string();
 #ifdef WIN32
     uuid->~UUID();
@@ -54,7 +54,7 @@ namespace SDOPackage
   {
     coil::UUID_Generator uugen;
     uugen.init();
-    std::auto_ptr<coil::UUID> uuid(uugen.generateUUID(2,0x01));
+    std::auto_ptr<coil::UUID> uuid(uugen.generateUUID(2, 0x01));
     m_pId = uuid->to_string();
 #ifdef WIN32
     uuid->~UUID();
@@ -189,7 +189,7 @@ namespace SDOPackage
       }
     
     CORBA::Long index;
-    index = CORBA_SeqUtil::find(m_orgProperty.properties,nv_name(name));
+    index = CORBA_SeqUtil::find(m_orgProperty.properties, nv_name(name));
     if (index < 0)
       {
         NameValue nv;
@@ -221,7 +221,7 @@ namespace SDOPackage
       throw InvalidParameter("remove_organization_property(): Enpty name.");
     
     CORBA::Long index;
-    index = CORBA_SeqUtil::find(m_orgProperty.properties,nv_name(name));
+    index = CORBA_SeqUtil::find(m_orgProperty.properties, nv_name(name));
     if (index < 0)
       throw InvalidParameter("remove_organization_property(): Not found.");
     

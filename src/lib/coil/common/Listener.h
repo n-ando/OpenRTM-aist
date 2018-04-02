@@ -56,7 +56,7 @@ public:
    *
    * @endif
    */
-  virtual ~ListenerBase(){}
+  virtual ~ListenerBase() {}
   
   /*!
    * @if jp
@@ -222,7 +222,7 @@ public:
    *
    * @endif
    */
-  virtual ~ListenerFunc(){}
+  virtual ~ListenerFunc() {}
   
   /*!
    * @if jp

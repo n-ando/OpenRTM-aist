@@ -43,7 +43,7 @@ namespace coil
     signal(SIGCHLD, SIG_IGN);
 
     pid_t pid;
-    if((pid = fork()) < 0 )
+    if ((pid = fork()) < 0 )
       { // fork failed
         return -1; 
       }

@@ -50,7 +50,7 @@ namespace RTC
    * @class PortConnectListener class
    * @endif
    */
-  PortConnectListener::~PortConnectListener(){}
+  PortConnectListener::~PortConnectListener() {}
 
   /*!
    * @if jp
@@ -84,7 +84,7 @@ namespace RTC
    * @class PortConnectRetListener class
    * @endif
    */
-  PortConnectRetListener::~PortConnectRetListener(){}
+  PortConnectRetListener::~PortConnectRetListener() {}
 
   //============================================================
   /*!
