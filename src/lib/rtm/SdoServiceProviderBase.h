@@ -63,7 +63,7 @@ namespace RTC
    *    されるので、ここでリソースの解放など終了処理を行う。
    *
    * <pre>
-   * 
+   *
    *   [RTC]      [SDO service]               [Other]
    *     |              :                        |
    *     | instantiate  :                        |
@@ -125,7 +125,7 @@ namespace RTC
    *   }
    * };
    * </pre>
-   * 
+   *
    * @else
    *
    * @endif
@@ -217,7 +217,7 @@ namespace RTC
      * で保持される。SDO Service 管理フレームワークは管理上このオブジェ
      * クトに対応する ServiceProfile を必要とするので、この関数では保持
      * されている ServiceProfile を返す。
-     * 
+     *
      * @return このオブジェクトが保持している ServiceProfile
      *
      * @else
@@ -260,9 +260,9 @@ namespace RTC
      * @brief Explicit instantiation of class template
      * @endif
      */
-  EXTERN template class DLL_PLUGIN 
+  EXTERN template class DLL_PLUGIN
                      ::coil::GlobalFactory< ::RTC::SdoServiceProviderBase >;
-#endif  
+#endif
 }; // namespace RTC
 
 #endif // RTC_SDOSERVICEPROVIDERBASE_H

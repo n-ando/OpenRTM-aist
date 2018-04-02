@@ -429,18 +429,18 @@ namespace RTC
     static const char* toString(ConnectorDataListenerType type)
     {
       if (type < CONNECTOR_DATA_LISTENER_NUM)
-        { 
+        {
           static const char* typeString[] =
           {
             "ON_BUFFER_WRITE",
             "ON_BUFFER_FULL",
             "ON_BUFFER_WRITE_TIMEOUT",
             "ON_BUFFER_OVERWRITE",
-            "ON_BUFFER_READ", 
-            "ON_SEND", 
+            "ON_BUFFER_READ",
+            "ON_SEND",
             "ON_RECEIVED",
-            "ON_RECEIVER_FULL", 
-            "ON_RECEIVER_TIMEOUT", 
+            "ON_RECEIVER_FULL",
+            "ON_RECEIVER_TIMEOUT",
             "ON_RECEIVER_ERROR",
             "CONNECTOR_DATA_LISTENER_NUM"
           };
@@ -470,7 +470,7 @@ namespace RTC
      *
      * @brief Virtual Callback method
      *
-     * This is a the Callback method to various events generated in Connector. 
+     * This is a the Callback method to various events generated in Connector.
      *
      * @endif
      */
@@ -485,7 +485,7 @@ namespace RTC
    *
    * データポートの Connector において発生する各種イベントに対するコー
    * ルバックを実現するリスナクラスの基底クラス。
-   * 
+   *
    * このクラスは、operator()() の第2引数に cdrMemoryStream 型ではなく、
    * 実際にデータポートで使用される変数型をテンプレート引数として
    * 渡すことができる。
@@ -526,17 +526,17 @@ namespace RTC
      * データをデータポートで使用される変数型に変換して ConnectorDataListenerT
      * のコールバックメソッドを呼び出す。
      *
-     * @param info ConnectorInfo 
+     * @param info ConnectorInfo
      * @param cdrdata cdrMemoryStream型のデータ
      *
      * @else
      *
      * @brief Callback method
      *
-     * This method invokes the callback method of ConnectorDataListenerT. 
+     * This method invokes the callback method of ConnectorDataListenerT.
      * Data is converted into the variable type used in DataPort.
      *
-     * @param info ConnectorInfo 
+     * @param info ConnectorInfo
      * @param cdrdata Data of cdrMemoryStream type
      *
      * @endif
@@ -614,7 +614,7 @@ namespace RTC
      *
      * @brief Virtual Callback method
      *
-     * This method invokes the callback method of ConnectorDataListenerT. 
+     * This method invokes the callback method of ConnectorDataListenerT.
      * Data is converted into the variable type used in DataPort.
      *
      * @endif
@@ -622,11 +622,11 @@ namespace RTC
 	virtual ReturnCode operator()(ConnectorInfo& info,
                                  DataType& data) = 0;
   };
-                            
+
   /*!
    * @if jp
    * @brief ConnectorListener のタイプ
-   *  
+   *
    * - ON_BUFFER_EMPTY:       バッファが空の場合
    * - ON_BUFFER_READTIMEOUT: バッファが空でタイムアウトした場合
    * - ON_SENDER_EMPTY:       OutPort側バッファが空
@@ -637,7 +637,7 @@ namespace RTC
    *
    * @else
    * @brief The types of ConnectorListener
-   * 
+   *
    * - ON_BUFFER_EMPTY:       At the time of buffer empty
    * - ON_BUFFER_READTIMEOUT: At the time of buffer read timeout
    * - ON_BUFFER_EMPTY:       At the time of empty of OutPort
@@ -652,9 +652,9 @@ namespace RTC
     {
       ON_BUFFER_EMPTY = 0,
       ON_BUFFER_READ_TIMEOUT,
-      ON_SENDER_EMPTY, 
-      ON_SENDER_TIMEOUT, 
-      ON_SENDER_ERROR, 
+      ON_SENDER_EMPTY,
+      ON_SENDER_TIMEOUT,
+      ON_SENDER_ERROR,
       ON_CONNECT,
       ON_DISCONNECT,
       CONNECTOR_LISTENER_NUM
@@ -890,16 +890,16 @@ namespace RTC
      * @endif
      */
     static const char* toString(ConnectorListenerType type)
-    { 
-      if (type < CONNECTOR_LISTENER_NUM) 
-        { 
+    {
+      if (type < CONNECTOR_LISTENER_NUM)
+        {
           static const char* typeStr[] =
           {
             "ON_BUFFER_EMPTY",
             "ON_BUFFER_READ_TIMEOUT",
-            "ON_SENDER_EMPTY", 
-            "ON_SENDER_TIMEOUT", 
-            "ON_SENDER_ERROR", 
+            "ON_SENDER_EMPTY",
+            "ON_SENDER_TIMEOUT",
+            "ON_SENDER_ERROR",
             "ON_CONNECT",
             "ON_DISCONNECT",
             "CONNECTOR_LISTENER_NUM"
@@ -930,7 +930,7 @@ namespace RTC
      *
      * @brief Virtual Callback method
      *
-     * This method invokes the callback method of ConnectorDataListenerT. 
+     * This method invokes the callback method of ConnectorDataListenerT.
      * Data is converted into the variable type used in DataPort.
      *
      * @endif
@@ -977,7 +977,7 @@ namespace RTC
      * @endif
      */
     virtual ~ConnectorDataListenerHolder();
-    
+
     /*!
      * @if jp
      *
@@ -992,15 +992,15 @@ namespace RTC
      *
      * @brief Add the listener.
      *
-     * This method adds the listener. 
+     * This method adds the listener.
      *
      * @param listener Added listener
      * @param autoclean true:The listener is deleted at the destructor.,
-     *                  false:The listener is not deleted at the destructor. 
+     *                  false:The listener is not deleted at the destructor.
      * @endif
      */
     void addListener(ConnectorDataListener* listener, bool autoclean);
-    
+
     /*!
      * @if jp
      *
@@ -1011,15 +1011,15 @@ namespace RTC
      * @param listener 削除するリスナ
      * @else
      *
-     * @brief Remove the listener. 
+     * @brief Remove the listener.
      *
-     * This method removes the listener. 
+     * This method removes the listener.
      *
      * @param listener Removed listener
      * @endif
      */
     void removeListener(ConnectorDataListener* listener);
-    
+
     /*!
      * @if jp
      *
@@ -1050,9 +1050,9 @@ namespace RTC
      * @param cdrdata データ
      * @else
      *
-     * @brief Notify listeners. 
+     * @brief Notify listeners.
      *
-     * This calls the Callback method of the registered listener. 
+     * This calls the Callback method of the registered listener.
      *
      * @param info ConnectorInfo
      * @param cdrdata Data
@@ -1121,7 +1121,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @class ConnectorListenerHolder 
+   * @class ConnectorListenerHolder
    * @brief ConnectorListener ホルダクラス
    *
    * 複数の ConnectorListener を保持し管理するクラス。
@@ -1149,7 +1149,7 @@ namespace RTC
      * @endif
      */
     ConnectorListenerHolder();
-    
+
     /*!
      * @if jp
      * @brief デストラクタ
@@ -1158,7 +1158,7 @@ namespace RTC
      * @endif
      */
     virtual ~ConnectorListenerHolder();
-    
+
     /*!
      * @if jp
      *
@@ -1173,15 +1173,15 @@ namespace RTC
      *
      * @brief Add the listener.
      *
-     * This method adds the listener. 
+     * This method adds the listener.
      *
      * @param listener Added listener
      * @param autoclean true:The listener is deleted at the destructor.,
-     *                  false:The listener is not deleted at the destructor. 
+     *                  false:The listener is not deleted at the destructor.
      * @endif
      */
     void addListener(ConnectorListener* listener, bool autoclean);
-    
+
     /*!
      * @if jp
      *
@@ -1192,9 +1192,9 @@ namespace RTC
      * @param listener 削除するリスナ
      * @else
      *
-     * @brief Remove the listener. 
+     * @brief Remove the listener.
      *
-     * This method removes the listener. 
+     * This method removes the listener.
      *
      * @param listener Removed listener
      * @endif
@@ -1230,20 +1230,20 @@ namespace RTC
      * @param info ConnectorInfo
      * @else
      *
-     * @brief Notify listeners. 
+     * @brief Notify listeners.
      *
-     * This calls the Callback method of the registered listener. 
+     * This calls the Callback method of the registered listener.
      *
      * @param info ConnectonotifyrInfo
      * @endif
      */
 	ReturnCode notify(ConnectorInfo& info);
-      
+
   private:
     std::vector<Entry> m_listeners;
     coil::Mutex m_mutex;
   };
-  
+
   /*!
    * @if jp
    * @class ConnectorListeners
@@ -1276,7 +1276,7 @@ namespace RTC
      * ConnectorListenerTypeリスナを格納
      * @else
      * @brief ConnectorListenerType listener array
-     * The ConnectorListenerType listener is stored. 
+     * The ConnectorListenerType listener is stored.
      * @endif
      */
     ConnectorListenerHolder connector_[CONNECTOR_LISTENER_NUM];

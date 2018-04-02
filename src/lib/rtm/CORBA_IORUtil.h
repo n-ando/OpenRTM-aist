@@ -59,7 +59,7 @@ namespace CORBA_IORUtil
    * @brief IOR構造体をIOR文字列へ変換する
    *
    * @else
-   * @brief Convert from IOR structure to IOR string 
+   * @brief Convert from IOR structure to IOR string
    *
    * @endif
    */

@@ -178,7 +178,7 @@ namespace RTC
      * normal return, CONNECTION_LOST, BUFFER_FULL, BUFFER_ERROR,
      * PORT_ERROR, BUFFER_TIMEOUT and PRECONDITION_NO_MET will be
      * returned as error codes.
-     *  
+     *
      * @return PORT_OK              Normal return
      *         CONNECTION_LOST      Connectin lost
      *         BUFFER_FULL          Buffer full

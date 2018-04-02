@@ -50,7 +50,7 @@ namespace RTC
    *
    * @else
    * @brief The types of ConnectorDataListener
-   * 
+   *
    * @endif
    */
 
@@ -145,8 +145,8 @@ namespace RTC
      */
     static const char* toString(PreComponentActionListenerType type)
     {
-      if (type < PRE_COMPONENT_ACTION_LISTENER_NUM) 
-        { 
+      if (type < PRE_COMPONENT_ACTION_LISTENER_NUM)
+        {
       static const char* typeString[] =
         {
           "PRE_ON_INITIALIZE",
@@ -163,7 +163,7 @@ namespace RTC
           "PRE_ON_RATE_CHANGED",
           "PRE_COMPONENT_ACTION_LISTENER_NUM"
         };
-                return typeString[type]; 
+                return typeString[type];
         }
       return "";
     }
@@ -216,7 +216,7 @@ namespace RTC
    *
    * @else
    * @brief The types of ConnectorDataListener
-   * 
+   *
    * @endif
    */
   enum PostComponentActionListenerType
@@ -372,7 +372,7 @@ namespace RTC
    *
    * @else
    * @brief The types of PortActionListener
-   * 
+   *
    * @endif
    */
 
@@ -432,7 +432,7 @@ namespace RTC
     static const char* toString(PortActionListenerType type)
     {
       if (type < PORT_ACTION_LISTENER_NUM)
-        { 
+        {
       static const char* typeString[] =
         {
           "ADD_PORT",
@@ -482,7 +482,7 @@ namespace RTC
    *
    * @else
    * @brief The types of ExecutionContextActionListener
-   * 
+   *
    * @endif
    */
 
@@ -542,7 +542,7 @@ namespace RTC
     static const char* toString(ExecutionContextActionListenerType type)
     {
       if (type < EC_ACTION_LISTENER_NUM)
-        { 
+        {
       static const char* typeString[] =
         {
           "ATTACH_EC",
@@ -586,7 +586,7 @@ namespace RTC
   //============================================================
   /*!
    * @if jp
-   * @class PreComponentActionListenerHolder 
+   * @class PreComponentActionListenerHolder
    * @brief PreComponentActionListener ホルダクラス
    *
    * 複数の PreComponentActionListener を保持し管理するクラス。
@@ -613,7 +613,7 @@ namespace RTC
      * @endif
      */
     PreComponentActionListenerHolder();
-    
+
     /*!
      * @if jp
      * @brief デストラクタ
@@ -622,7 +622,7 @@ namespace RTC
      * @endif
      */
     virtual ~PreComponentActionListenerHolder();
-    
+
     /*!
      * @if jp
      *
@@ -637,15 +637,15 @@ namespace RTC
      *
      * @brief Add the listener.
      *
-     * This method adds the listener. 
+     * This method adds the listener.
      *
      * @param listener Added listener
      * @param autoclean true:The listener is deleted at the destructor.,
-     *                  false:The listener is not deleted at the destructor. 
+     *                  false:The listener is not deleted at the destructor.
      * @endif
      */
     void addListener(PreComponentActionListener* listener, bool autoclean);
-    
+
     /*!
      * @if jp
      *
@@ -656,9 +656,9 @@ namespace RTC
      * @param listener 削除するリスナ
      * @else
      *
-     * @brief Remove the listener. 
+     * @brief Remove the listener.
      *
-     * This method removes the listener. 
+     * This method removes the listener.
      *
      * @param listener Removed listener
      * @endif
@@ -675,15 +675,15 @@ namespace RTC
      * @param info ConnectorInfo
      * @else
      *
-     * @brief Notify listeners. 
+     * @brief Notify listeners.
      *
-     * This calls the Callback method of the registered listener. 
+     * This calls the Callback method of the registered listener.
      *
      * @param info ConnectorInfo
      * @endif
      */
     void notify(UniqueId ec_id);
-      
+
   private:
     std::vector<Entry> m_listeners;
     coil::Mutex m_mutex;
@@ -727,7 +727,7 @@ namespace RTC
      * @endif
      */
     virtual ~PostComponentActionListenerHolder();
-    
+
     /*!
      * @if jp
      *
@@ -742,15 +742,15 @@ namespace RTC
      *
      * @brief Add the listener.
      *
-     * This method adds the listener. 
+     * This method adds the listener.
      *
      * @param listener Added listener
      * @param autoclean true:The listener is deleted at the destructor.,
-     *                  false:The listener is not deleted at the destructor. 
+     *                  false:The listener is not deleted at the destructor.
      * @endif
      */
     void addListener(PostComponentActionListener* listener, bool autoclean);
-    
+
     /*!
      * @if jp
      *
@@ -761,15 +761,15 @@ namespace RTC
      * @param listener 削除するリスナ
      * @else
      *
-     * @brief Remove the listener. 
+     * @brief Remove the listener.
      *
-     * This method removes the listener. 
+     * This method removes the listener.
      *
      * @param listener Removed listener
      * @endif
      */
     void removeListener(PostComponentActionListener* listener);
-    
+
     /*!
      * @if jp
      *
@@ -781,16 +781,16 @@ namespace RTC
      * @param cdrdata データ
      * @else
      *
-     * @brief Notify listeners. 
+     * @brief Notify listeners.
      *
-     * This calls the Callback method of the registered listener. 
+     * This calls the Callback method of the registered listener.
      *
      * @param info ConnectorInfo
      * @param cdrdata Data
      * @endif
      */
     void notify(UniqueId ec_id, ReturnCode_t ret);
-    
+
   private:
     std::vector<Entry> m_listeners;
     coil::Mutex m_mutex;
@@ -835,7 +835,7 @@ namespace RTC
      * @endif
      */
     virtual ~PortActionListenerHolder();
-    
+
     /*!
      * @if jp
      *
@@ -850,15 +850,15 @@ namespace RTC
      *
      * @brief Add the listener.
      *
-     * This method adds the listener. 
+     * This method adds the listener.
      *
      * @param listener Added listener
      * @param autoclean true:The listener is deleted at the destructor.,
-     *                  false:The listener is not deleted at the destructor. 
+     *                  false:The listener is not deleted at the destructor.
      * @endif
      */
     void addListener(PortActionListener* listener, bool autoclean);
-    
+
     /*!
      * @if jp
      *
@@ -869,15 +869,15 @@ namespace RTC
      * @param listener 削除するリスナ
      * @else
      *
-     * @brief Remove the listener. 
+     * @brief Remove the listener.
      *
-     * This method removes the listener. 
+     * This method removes the listener.
      *
      * @param listener Removed listener
      * @endif
      */
     void removeListener(PortActionListener* listener);
-    
+
     /*!
      * @if jp
      *
@@ -889,16 +889,16 @@ namespace RTC
      * @param cdrdata データ
      * @else
      *
-     * @brief Notify listeners. 
+     * @brief Notify listeners.
      *
-     * This calls the Callback method of the registered listener. 
+     * This calls the Callback method of the registered listener.
      *
      * @param info ConnectorInfo
      * @param cdrdata Data
      * @endif
      */
     void notify(const RTC::PortProfile& pprofile);
-    
+
   private:
     std::vector<Entry> m_listeners;
     coil::Mutex m_mutex;
@@ -941,7 +941,7 @@ namespace RTC
      * @endif
      */
     virtual ~ExecutionContextActionListenerHolder();
-    
+
     /*!
      * @if jp
      *
@@ -956,15 +956,15 @@ namespace RTC
      *
      * @brief Add the listener.
      *
-     * This method adds the listener. 
+     * This method adds the listener.
      *
      * @param listener Added listener
      * @param autoclean true:The listener is deleted at the destructor.,
-     *                  false:The listener is not deleted at the destructor. 
+     *                  false:The listener is not deleted at the destructor.
      * @endif
      */
     void addListener(ExecutionContextActionListener* listener, bool autoclean);
-    
+
     /*!
      * @if jp
      *
@@ -975,15 +975,15 @@ namespace RTC
      * @param listener 削除するリスナ
      * @else
      *
-     * @brief Remove the listener. 
+     * @brief Remove the listener.
      *
-     * This method removes the listener. 
+     * This method removes the listener.
      *
      * @param listener Removed listener
      * @endif
      */
     void removeListener(ExecutionContextActionListener* listener);
-    
+
     /*!
      * @if jp
      *
@@ -995,16 +995,16 @@ namespace RTC
      * @param cdrdata データ
      * @else
      *
-     * @brief Notify listeners. 
+     * @brief Notify listeners.
      *
-     * This calls the Callback method of the registered listener. 
+     * This calls the Callback method of the registered listener.
      *
      * @param info ConnectorInfo
      * @param cdrdata Data
      * @endif
      */
     void notify(UniqueId ec_id);
-    
+
   private:
     std::vector<Entry> m_listeners;
     coil::Mutex m_mutex;
@@ -1033,10 +1033,10 @@ namespace RTC
      * PreComponentActionListenerTypeリスナを格納
      * @else
      * @brief PreComponentActionListenerType listener array
-     * The PreComponentActionListenerType listener is stored. 
+     * The PreComponentActionListenerType listener is stored.
      * @endif
      */
-    PreComponentActionListenerHolder 
+    PreComponentActionListenerHolder
     preaction_[PRE_COMPONENT_ACTION_LISTENER_NUM];
     /*!
      * @if jp
@@ -1047,7 +1047,7 @@ namespace RTC
      * The PostComponentActionType listener is stored.
      * @endif
      */
-    PostComponentActionListenerHolder 
+    PostComponentActionListenerHolder
     postaction_[POST_COMPONENT_ACTION_LISTENER_NUM];
     /*!
      * @if jp

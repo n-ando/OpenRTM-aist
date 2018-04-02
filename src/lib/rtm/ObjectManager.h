@@ -60,66 +60,66 @@ public:
    * @if jp
    *
    * @brief コンストラクタ
-   * 
+   *
    * コンストラクタ
-   * 
+   *
    * @else
    *
    * @brief Constructor
-   * 
+   *
    * Constructor
-   * 
+   *
    * @endif
    */
   ObjectManager(){};
-  
+
   /*!
    * @if jp
    *
    * @brief デストラクタ
-   * 
+   *
    * デストラクタ
-   * 
+   *
    * @else
    *
    * @brief Destructor
-   * 
+   *
    * Destructor
-   * 
+   *
    * @endif
    */
   ~ObjectManager(void){};
-  
+
   /*!
    * @if jp
    *
    * @brief 指定したオブジェクトを登録する
-   * 
+   *
    * 指定したオブジェクトを登録する。
    * 同一オブジェクトが登録済みの場合は、何も行わない。
    *
    * @param obj 登録対象オブジェクト
    *
    * @return 登録処理結果(オブジェクトを登録した場合にtrue)
-   * 
+   *
    * @else
    *
    * @brief Register the specified object
-   * 
+   *
    * Register the object that was specified.
    * If the same object is already registered, this does not anything.
    *
    * @param obj The target object for the registration
    *
    * @return Registration result (True if object was registerd)
-   * 
+   *
    * @endif
    */
   bool registerObject(Object* obj)
   {
     ObjectVectorItr it;
     Guard guard(m_objects._mutex);
-    
+
     it = std::find_if(m_objects._obj.begin(), m_objects._obj.end(),
                       Predicate(obj));
     if (it == m_objects._obj.end())
@@ -129,25 +129,25 @@ public:
       }
     return false;
   }
-  
+
   /*!
    * @if jp
    *
    * @brief 指定したオブジェクトを登録解除する
-   * 
+   *
    * 指定したオブジェクトの登録を解除し、取得する。
    * 指定したオブジェクトが登録されていない場合にはNULLを返す。
    *
    * @param id 登録解除対象オブジェクトのID
    *
    * @return 登録解除されたオブジェクト
-   * 
+   *
    * @else
    *
    * @brief Unregister the specified object
-   * 
+   *
    * Unregister the object that was specified and get it.
-   * This operation returns NULL if the specified object is not 
+   * This operation returns NULL if the specified object is not
    * registered.
    *
    * @param id ID of the target object for the unregistration
@@ -159,7 +159,7 @@ public:
   {
     ObjectVectorItr it;
     Guard guard(m_objects._mutex);
-    
+
     it = std::find_if(m_objects._obj.begin(), m_objects._obj.end(),
                       Predicate(id));
     if (it != m_objects._obj.end())
@@ -170,12 +170,12 @@ public:
       }
     return NULL;;
   }
-  
+
   /*!
    * @if jp
    *
    * @brief オブジェクトを検索する
-   * 
+   *
    * 登録されているオブジェクトの中から指定した条件に合致するオブジェクトを検索
    * して取得する。
    * 指定した条件に合致するオブジェクトが登録されていない場合にはNULLを返す。
@@ -183,11 +183,11 @@ public:
    * @param id 検索対象オブジェクトのID
    *
    * @return オブジェクトの検索結果
-   * 
+   *
    * @else
    *
    * @brief Find the object
-   * 
+   *
    * Find the object that matches the specified condition among the registered
    * objects and get it.
    * This operation returns NULL if the object that does matches the specified
@@ -196,7 +196,7 @@ public:
    * @param id ID of the target object for finding
    *
    * @return Result of finding object
-   * 
+   *
    * @endif
    */
   Object* find(const Identifier& id) const
@@ -211,24 +211,24 @@ public:
       }
     return NULL;
   }
-  
+
   /*!
    * @if jp
    *
    * @brief 登録されているオブジェクトのリストを取得する
-   * 
+   *
    * 登録されているオブジェクトのリストを取得する。
    *
    * @return 登録されているオブジェクト・リスト
-   * 
+   *
    * @else
    *
    * @brief Get a list of obejects that are registerd
-   * 
+   *
    * Get a list of objects that are registerd.
    *
    * @return List of registerd objects.
-   * 
+   *
    * @endif
    */
   std::vector<Object*> getObjects() const
@@ -236,7 +236,7 @@ public:
     Guard guard(m_objects._mutex);
     return m_objects._obj;
   }
-  
+
   /*!
    * @if jp
    * @brief オブジェクト検索用ファンクタ
@@ -250,7 +250,7 @@ public:
     Guard guard(m_objects._mutex);
     return std::for_each(m_objects._obj.begin(), m_objects._obj.end(), p);
   }
-  
+
   /*!
    * @if jp
    * @brief オブジェクト検索用ファンクタ
@@ -264,7 +264,7 @@ public:
     Guard guard(m_objects._mutex);
     return std::for_each(m_objects._obj.begin(), m_objects._obj.end(), p);
   }
-  
+
 protected:
   /*!
    * @if jp

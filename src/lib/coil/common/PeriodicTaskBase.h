@@ -76,7 +76,7 @@ namespace coil
      */
     virtual int operator()() = 0;
   };
-  
+
   /*!
    * @if jp
    *

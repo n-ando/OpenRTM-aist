@@ -64,7 +64,7 @@ namespace RTC
    *     SDOサービスコンシューマが RTC から削除される。
    *
    * <pre>
-   * 
+   *
    *   [RTC] [SDO consumer] [Configuration]  [SDO service]    [Other]
    *     |          :             |                 |            |
    *     |          :         get_configuration()   |            |
@@ -104,7 +104,7 @@ namespace RTC
    * イル名の basename + "Init" にしておく。以下に、クラス名、ファイル
    * 名、エントリポイント関数名の推奨例を示す。
    *
-   * - 実装クラス名: MySdoServiceConusmer 
+   * - 実装クラス名: MySdoServiceConusmer
    * - ファイル名: MySdoServiceConsumer.h. MySdoServiceConsumer.cpp
    * - 共有オブジェクト名: MySdoServiceConsumer.so (or DLL)
    * - エントリポイント関数名: MySdoServiceConsumerInit()
@@ -128,7 +128,7 @@ namespace RTC
    *   }
    * };
    * </pre>
-   * 
+   *
    * @else
    *
    * @endif
@@ -203,7 +203,7 @@ namespace RTC
      * で保持される。SDO Service 管理フレームワークは管理上このオブジェ
      * クトに対応する ServiceProfile を必要とするので、この関数では保持
      * されている ServiceProfile を返す。
-     * 
+     *
      * @return このオブジェクトが保持している ServiceProfile
      *
      * @else
@@ -246,9 +246,9 @@ namespace RTC
      * @brief Explicit instantiation of class template
      * @endif
      */
-  EXTERN template class DLL_PLUGIN 
+  EXTERN template class DLL_PLUGIN
                      ::coil::GlobalFactory< ::RTC::SdoServiceConsumerBase >;
-#endif  
+#endif
 }; // namespace RTC
 
 #endif // RTC_SDOSERVICECONSUMERBASE_H

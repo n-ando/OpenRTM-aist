@@ -67,7 +67,7 @@ namespace coil
   {
   public:
     UUID_Generator();
-    
+
     void init();
     UUID* generateUUID(int n, int h);
   };

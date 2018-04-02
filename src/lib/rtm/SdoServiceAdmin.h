@@ -54,7 +54,7 @@ namespace RTC
    *
    * - SDO::get_service_profiles ()
    * - SDO::get_service_profile (in UniqueIdentifier id)
-   * - SDO::get_sdo_service (in UniqueIdentifier id) 
+   * - SDO::get_sdo_service (in UniqueIdentifier id)
    *
    * のいずれかのオペレーションにより、ServiceProfile または SDO
    * Service の参照を取得し、機能を利用するためのオペレーションを呼び出
@@ -113,7 +113,7 @@ namespace RTC
    *
    * - SDO::get_service_profiles ()
    * - SDO::get_service_profile (in UniqueIdentifier id)
-   * - SDO::get_sdo_service (in UniqueIdentifier id) 
+   * - SDO::get_sdo_service (in UniqueIdentifier id)
    *
    * Since references of services in other SDOs/RTCs or applications
    * could be released anytime, service providers cannot know where
@@ -152,18 +152,18 @@ namespace RTC
      * @if jp
      *
      * @brief コンストラクタ
-     * 
+     *
      * コンストラクタ
      *
-     * @param 
-     * 
+     * @param
+     *
      * @else
      *
      * @brief Constructor
-     * 
+     *
      * Constructor
      *
-     * @param 
+     * @param
      *
      * @endif
      */
@@ -173,9 +173,9 @@ namespace RTC
      * @if jp
      *
      * @brief 仮想デストラクタ
-     * 
+     *
      * 仮想デストラクタ。
-     * 
+     *
      * @else
      *
      * @brief Virtual destractor
@@ -185,12 +185,12 @@ namespace RTC
      * @endif
      */
     virtual ~SdoServiceAdmin();
-    
+
     /*!
      * @if jp
      *
      * @brief SDO Service Provider の ServiceProfileList を取得する
-     * 
+     *
      * @else
      *
      * @brief Get ServiceProfileList of SDO Service Provider
@@ -211,7 +211,7 @@ namespace RTC
      *
      * @param id SDO Service provider の IFR ID
      * @return 指定された id を持つ ServiceProfile
-     * 
+     *
      * @else
      *
      * @brief Get ServiceProfile of an SDO Service Provider
@@ -240,7 +240,7 @@ namespace RTC
      *
      * @param id SDO Service provider の IFR ID
      * @return 指定された id を持つ SDO Service のオブジェクトリファレンス
-     * 
+     *
      * @else
      *
      * @brief Get ServiceProfile of an SDO Service
@@ -280,7 +280,7 @@ namespace RTC
      * @if jp
      *
      * @brief Service Consumer を追加する
-     * 
+     *
      * @else
      *
      * @brief Add Service Consumer
@@ -288,12 +288,12 @@ namespace RTC
      * @endif
      */
     bool addSdoServiceConsumer(const SDOPackage::ServiceProfile& sProfile);
-    
+
     /*!
      * @if jp
      *
      * @brief Service Consumer を削除する
-     * 
+     *
      * @else
      *
      * @brief Remove Service Consumer
@@ -301,13 +301,13 @@ namespace RTC
      * @endif
      */
     bool removeSdoServiceConsumer(const char* id);
-    
+
 protected:
     /*!
      * @if jp
      *
      * @brief 許可されたサービス型かどうか調べる
-     * 
+     *
      * @else
      *
      * @brief If it is enabled service type
@@ -320,7 +320,7 @@ protected:
      * @if jp
      *
      * @brief 存在するサービス型かどうか調べる
-     * 
+     *
      * @else
      *
      * @brief If it is existing service type
@@ -330,7 +330,7 @@ protected:
     bool isExistingConsumerType(const SDOPackage::ServiceProfile& sProfile);
 
     const std::string getUUID() const;
-    
+
     std::string ifrToKey(std::string& ifr);
 
 
@@ -338,7 +338,7 @@ protected:
     RTC::RTObject_impl& m_rtobj;
     coil::vstring m_consumerTypes;
     bool m_allConsumerEnabled;
-    
+
     /*!
      * @if jp
      * @brief Lock 付き SDO ServiceProfileList
@@ -348,7 +348,7 @@ protected:
      */
     std::vector<SdoServiceProviderBase*> m_providers;
     coil::Mutex m_provider_mutex;
-    
+
     /*!
      * @if jp
      * @brief Lock 付き SDO ServiceProfileList

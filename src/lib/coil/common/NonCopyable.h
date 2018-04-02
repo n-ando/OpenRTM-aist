@@ -27,7 +27,7 @@ namespace coil
    * @if jp
    * @class NonCopyable
    * @brief コピー禁止ミックスイン
-   * 
+   *
    * 対象クラスのオブジェクトのコピーを禁止する。コピーを禁止したいクラ
    * スでは、NonCopyableをprivate継承することでオブジェクトのコピーを禁
    * 止することができる。
@@ -95,7 +95,7 @@ namespace coil
    * @if jp
    * @class NonCopyableCRTP
    * @brief コピー禁止ミックスイン(CRTP版)
-   * 
+   *
    * 対象クラスのオブジェクトのコピーを禁止する。コピーを禁止したいクラ
    * スでは、NonCopyableをprivate継承することでオブジェクトのコピーを禁
    * 止することができる。このCRTP (Curiously Recursive Template
@@ -161,7 +161,7 @@ namespace coil
      * @endif
      */
     ~NonCopyableCRTP() {}
-  private: 
+  private:
     NonCopyableCRTP(const NonCopyableCRTP &);
     T & operator=(const T &);
   };

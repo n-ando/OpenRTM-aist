@@ -51,7 +51,7 @@ namespace coil
    * task.resume(); // 周期実行を再開
    *
    * task.finalize(); // タスクを終了させる
-   * 
+   *
    * @else
    * @class PeriodicTask
    * @brief PeriodicTask class
@@ -80,7 +80,7 @@ namespace coil
      * @endif
      */
     PeriodicTask();
-    
+
     /*!
      * @if jp
      *
@@ -97,7 +97,7 @@ namespace coil
      * @endif
      */
     virtual ~PeriodicTask();
-    
+
     /*!
      * @if jp
      * @brief タスク実行を開始する
@@ -258,7 +258,7 @@ namespace coil
      * @endif
      */
     virtual void executionMeasure(bool value);
-    
+
     /*!
      * @if jp
      * @brief タスク関数実行時間計測周期
@@ -267,7 +267,7 @@ namespace coil
      * @endif
      */
     virtual void executionMeasureCount(int n);
-    
+
     /*!
      * @if jp
      * @brief タスク周期時間計測を有効にするか
@@ -276,7 +276,7 @@ namespace coil
      * @endif
      */
     virtual void periodicMeasure(bool value);
-    
+
     /*!
      * @if jp
      * @brief タスク周期時間計測周期
@@ -285,7 +285,7 @@ namespace coil
      * @endif
      */
     virtual void periodicMeasureCount(int n);
-    
+
     /*!
      * @if jp
      * @brief タスク関数実行時間計測結果を取得
@@ -294,7 +294,7 @@ namespace coil
      * @endif
      */
     virtual TimeMeasure::Statistics getExecStat();
-    
+
     /*!
      * @if jp
      * @brief タスク周期時間計測結果を取得
@@ -303,7 +303,7 @@ namespace coil
      * @endif
      */
     virtual TimeMeasure::Statistics getPeriodStat();
-    
+
   protected:
     /*!
      * @if jp
@@ -427,7 +427,7 @@ namespace coil
      * @endif
      */
     suspend_t m_suspend;
-      
+
     /*!
      * @if jp
      * @brief タスク実行時間計測管理用構造体

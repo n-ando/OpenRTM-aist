@@ -59,7 +59,7 @@ namespace RTC
      * brief DataPortStatus リターンコード
      *
      * データポート関連のクラスで共通のリターンコード
-     *  
+     *
      * - PORT_OK:              正常終了
      * - PORT_ERROR:           異常終了
      * - BUFFER_ERROR:         バッファエラー
@@ -87,7 +87,7 @@ namespace RTC
      *
      *  b) Activity と OutPort の Buffer/Connector 間で発生するリターンコード
      *     PORT_OK, PORT_ERROR, BUFFER_ERROR, BUFFER_FULL, BUFFER_TIMEOUT,
-     *     UNKNOWN_ERROR, 
+     *     UNKNOWN_ERROR,
      *
      * (2) Pull型
      *  a) Activity と InPort の間で発生するリターンコード
@@ -129,7 +129,7 @@ namespace RTC
      *     UNKNOWN_ERROR
      *  b) The return codes between Activity and Buffer/Connector of OutPort
      *     PORT_OK, PORT_ERROR, BUFFER_ERROR, BUFFER_FULL, BUFFER_TIMEOUT,
-     *     UNKNOWN_ERROR, 
+     *     UNKNOWN_ERROR,
      *
      * (2) Pull Type
      *  a) The return codes between Activity and InPort
@@ -202,7 +202,7 @@ namespace RTC
       return str[status];
     }
   };
-  
+
   typedef std::vector<DataPortStatus::Enum> DataPortStatusList;
 
 };
@@ -211,7 +211,7 @@ namespace RTC
  * @if jp
  *
  * @brief ::RTC::DataPortStatus 導入
- * 
+ *
  * ::RTC::DataPortStatus で宣言されている Enum のすべてのメンバをネーム
  * スペースに導入するためのマクロ。DataPortStatus を利用するクラスにお
  * いて、クラス宣言の先頭において DATAPORTSTATUS_ENUM を記載するだけで、

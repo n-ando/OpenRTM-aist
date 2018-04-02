@@ -130,7 +130,7 @@ namespace RTC
    * @if jp
    * @class ConfigBase
    * @brief ConfigBase 抽象クラス
-   * 
+   *
    * 各種コンフィギュレーション情報を保持するための抽象クラス。具象コン
    * フィギュレーションクラスは、以下の純粋仮想関数の実装を提供しなけれ
    * ばならない。
@@ -144,7 +144,7 @@ namespace RTC
    * @class ConfigBase
    * @brief ConfigBase abstract class
    *
-   * This is the abstract interface class to hold various configuration 
+   * This is the abstract interface class to hold various configuration
    * information.
    * Concrete configuration classes must implement the following pure virtual
    * functions.
@@ -162,12 +162,12 @@ namespace RTC
      * @if jp
      *
      * @brief コンストラクタ
-     * 
+     *
      * コンストラクタ
      *
      * @param name_ コンフィギュレーション名
      * @param def_val 文字列形式のデフォルト値
-     * 
+     *
      * @else
      *
      * @brief Constructer
@@ -183,12 +183,12 @@ namespace RTC
       : name(name_), default_value(def_val),
         string_value(""), m_admin(NULL), m_callback(NULL)
     {}
-    
+
     /*!
      * @if jp
      *
      * @brief 仮想デストラクタ
-     * 
+     *
      * 仮想デストラクタ。
      *
      * @else
@@ -208,7 +208,7 @@ namespace RTC
      * @if jp
      *
      * @brief コールバックのセット
-     * 
+     *
      * 変数変更時にコールされるコールバック関数をセットする.
      *
      * @else
@@ -226,7 +226,7 @@ namespace RTC
      * @if jp
      *
      * @brief 変数変更を知らせるオブザーバ関数
-     * 
+     *
      * 変数変更を知らせるオブザーバ関数.
      *
      * @else
@@ -238,24 +238,24 @@ namespace RTC
      * @endif
      */
     void notifyUpdate(const char* key, const char* val);
-    
+
     /*!
      * @if jp
      *
      * @brief コンフィギュレーションパラメータ値更新用純粋仮想関数
-     * 
+     *
      * コンフィギュレーション設定値でコンフィギュレーションパラメータを
      * 更新するための純粋仮想関数。
      *
      * @param val パラメータ値の文字列表現
      *
      * @return 設定結果
-     * 
+     *
      * @else
      *
      * @brief Pure virtual function to update configuration parameter values
-     * 
-     * Pure virtual function to update configuration parameter 
+     *
+     * Pure virtual function to update configuration parameter
      * by the configuration value.
      *
      * @param val The parameter values converted into character string format
@@ -274,7 +274,7 @@ namespace RTC
      * @endif
      */
     const char* name;
-    
+
     /*!
      * @if jp
      * @brief  文字列形式のデフォルト値
@@ -310,7 +310,7 @@ namespace RTC
      */
     CallbackFunc m_callback;
   };
-  
+
   //============================================================
   // Config template class
   //============================================================
@@ -318,7 +318,7 @@ namespace RTC
    * @if jp
    * @class Config
    * @brief Config クラス
-   * 
+   *
    * コンフィギュレーションパラメータの情報を保持するクラス。
    * \<VarType\>としてコンフィギュレーションのデータ型を指定する。
    * \<TransFunc\>として設定されたデータ型を文字列に変換する変換関数を
@@ -332,14 +332,14 @@ namespace RTC
    * @else
    * @class Config
    * @brief Config class
-   * 
+   *
    * Class to hold the configuration parameter information.
    * Specify the data type of the configuration as \<VarType\>
    * Specify transformation function to convert data type set as \<TransFunc\>
    * into string format.
    *
    * @param VarType Cariable to hold configuration parameter
-   * @param TransFunc Transformation function to transform the stored data 
+   * @param TransFunc Transformation function to transform the stored data
    * type into string format.
    *
    * @since 0.4.0
@@ -356,18 +356,18 @@ namespace RTC
      * @if jp
      *
      * @brief コンストラクタ
-     * 
+     *
      * コンストラクタ
      *
      * @param name コンフィギュレーションパラメータ名
      * @param var コンフィギュレーションパラメータ格納用変数
      * @param def_val 文字列形式のデフォルト値
      * @param trans 文字列形式変換関数
-     * 
+     *
      * @else
      *
      * @brief Constructor
-     * 
+     *
      * Constructor
      *
      * @param name Configuration parameter name
@@ -382,39 +382,39 @@ namespace RTC
       : ConfigBase(name, def_val), m_var(var), m_trans(trans)
     {
     }
-    
+
     /*!
      * @if jp
      *
      * @brief 仮想デストラクタ
-     * 
+     *
      * 仮想デストラクタ。
      *
      * @else
      *
      * @brief Virtual Destructor
-     * 
+     *
      * Virtual Destructor.
      *
      * @endif
      */
     virtual ~Config(void) {}
-    
+
     /*!
      * @if jp
      *
      * @brief バインドパラメータ値を更新
-     * 
+     *
      * コンフィギュレーション設定値でコンフィギュレーションパラメータを更新する
      *
      * @param val パラメータ値の文字列表現
      *
      * @return 更新処理結果(更新成功:true，更新失敗:false)
-     * 
+     *
      * @else
      *
      * @brief Update a bind parameter value
-     * 
+     *
      * Update configuration paramater by the configuration value.
      *
      * @param val The parameter values converted into character string format
@@ -437,7 +437,7 @@ namespace RTC
       notifyUpdate(name, val);
       return false;
     }
-    
+
   protected:
     /*!
      * @if jp
@@ -447,18 +447,18 @@ namespace RTC
      * @endif
      */
     VarType& m_var;
-    
+
     /*!
      * @if jp
      * @brief  コンフィギュレーションパラメータ型文字列変換関数
      * @else
-     * @brief  Transformation function to convert configuration parameter type 
+     * @brief  Transformation function to convert configuration parameter type
      *         into string format.
      * @endif
      */
     TransFunc m_trans;
   };
-  
+
   //============================================================
   // ConfigAdmin class
   //============================================================
@@ -466,7 +466,7 @@ namespace RTC
    * @if jp
    * @class ConfigAdmin
    * @brief ConfigAdmin クラス
-   * 
+   *
    * 各種コンフィギュレーション情報を管理するクラス。
    * 用語を以下のように定義する。
    *
@@ -535,7 +535,7 @@ namespace RTC
    * @else
    * @class ConfigAdmin
    * @brief ConfigAdmin class
-   * 
+   *
    * Class to manage various configuration information.
    * Now terms for this class are defined as follows.
    *
@@ -614,15 +614,15 @@ namespace RTC
      * @if jp
      *
      * @brief コンストラクタ
-     * 
+     *
      * コンストラクタ
      *
      * @param prop 設定対象プロパティ名
-     * 
+     *
      * @else
      *
      * @brief Constructor
-     * 
+     *
      * Constructor
      *
      * @param prop The target property name for setup
@@ -630,29 +630,29 @@ namespace RTC
      * @endif
      */
     explicit ConfigAdmin(coil::Properties& prop);
-    
+
     /*!
      * @if jp
      *
      * @brief 仮想デストラクタ
-     * 
+     *
      * 仮想デストラクタ。
      *
      * @else
      *
      * @brief Virtual Destructor
-     * 
+     *
      * Virtual Destructor
      *
      * @endif
      */
     ~ConfigAdmin(void);
-    
+
     /*!
      * @if jp
      *
      * @brief コンフィギュレーションパラメータの設定
-     * 
+     *
      * コンフィギュレーションパラメータと変数をバインドする
      * 指定した名称のコンフィギュレーションパラメータが既に存在する場合は
      * falseを返す。
@@ -666,13 +666,13 @@ namespace RTC
      * @param trans コンフィギュレーションパラメータ文字列変換用関数
      *
      * @return 設定結果(設定成功:true，設定失敗:false)
-     * 
+     *
      * @else
      *
      * @brief Setup for configuration parameters
-     * 
+     *
      * Bind configuration parameter to its variable.
-     * Return false, if configuration parameter of specified name has already 
+     * Return false, if configuration parameter of specified name has already
      * existed.
      * Specify the data type of the configuration as \<VarType\>.
      * After calling this function, configuration variable would be
@@ -681,7 +681,7 @@ namespace RTC
      * @param param_name Configuration parameter name
      * @param var Configuration parameter variable
      * @param def_val Default value of configuration parameter
-     * @param trans Function to transform configuration parameter type into 
+     * @param trans Function to transform configuration parameter type into
      *        string format
      *
      * @return Setup result (Successful:true, Failed:false)
@@ -708,18 +708,18 @@ namespace RTC
      * @if jp
      *
      * @brief コンフィギュレーションパラメータの解除
-     * 
+     *
      * コンフィギュレーションパラメータと変数のバインドを解除する。
      * 指定した名称のコンフィギュレーションパラメータが存在しない場合は
      * falseを返す。
      *
      * @param param_name コンフィギュレーションパラメータ名
      * @return 設定結果(設定成功:true，設定失敗:false)
-     * 
+     *
      * @else
      *
      * @brief Unbinding configuration parameters
-     * 
+     *
      * Unbind configuration parameter from its variable. It returns
      * false, if configuration parameter of specified name has already
      * existed.
@@ -730,13 +730,13 @@ namespace RTC
      * @endif
      */
     bool unbindParameter(const char* param_name);
-        
+
     /*!
      * @if jp
      *
      * @brief コンフィギュレーションパラメータの更新
      *        (アクティブコンフィギュレーションセット)
-     * 
+     *
      * コンフィギュレーションセットが更新されている場合に、現在アクティ
      * ブになっているコンフィギュレーションに設定した値で、コンフィギュ
      * レーションパラメータの値を更新する。この処理での更新は、アクティ
@@ -748,7 +748,7 @@ namespace RTC
      *
      * @brief Update the values of configuration parameters
      *        (Active configuration set)
-     * 
+     *
      * When configuration set is updated, update the configuration
      * parameter value to the value that is set to the current active
      * configuration.  This update will be executed, only when an
@@ -763,7 +763,7 @@ namespace RTC
      * @if jp
      *
      * @brief コンフィギュレーションパラメータの更新(ID指定)
-     * 
+     *
      * コンフィギュレーション変数の値を、指定したIDを持つコンフィギュレー
      * ションセットの値で更新する。これにより、アクティブなコンフィギュ
      * レーションセットは変更されない。したがって、アクティブコンフィギュ
@@ -774,11 +774,11 @@ namespace RTC
      * せずに終了する。
      *
      * @param config_set 設定対象のコンフィギュレーションセットID
-     * 
+     *
      * @else
      *
      * @brief Update configuration parameter (By ID)
-     * 
+     *
      * This operation updates configuration variables by the
      * configuration-set with specified ID. This operation does not
      * change current active configuration-set. Since this operation
@@ -794,12 +794,12 @@ namespace RTC
      * @endif
      */
     void update(const char* config_set);
-    
+
     /*!
      * @if jp
      *
      * @brief コンフィギュレーションパラメータの更新(名称指定)
-     * 
+     *
      * 特定のコンフィギュレーション変数の値を、指定したIDを持つコンフィ
      * ギュレーションセットの値で更新する。これにより、アクティブなコン
      * フィギュレーションセットは変更されない。したがって、アクティブコ
@@ -811,11 +811,11 @@ namespace RTC
      *
      * @param config_set コンフィギュレーションID
      * @param config_param コンフィギュレーションパラメータ名
-     * 
+     *
      * @else
      *
      * @brief Update the values of configuration parameters (By name)
-     * 
+     *
      * This operation updates a configuration variable by the
      * specified configuration parameter in the
      * configuration-set. This operation does not change current
@@ -833,12 +833,12 @@ namespace RTC
      * @endif
      */
     void update(const char* config_set, const char* config_param);
-    
+
     /*!
      * @if jp
      *
      * @brief コンフィギュレーションパラメータの存在確認
-     * 
+     *
      * 指定した名称を持つコンフィギュレーションパラメータ変数が存在する
      * か確認する。ここで存在確認を行うパラメータ変数とは、
      * bindParameter() によって登録される、変数を持つパラメータである。
@@ -850,23 +850,23 @@ namespace RTC
      * @else
      *
      * @brief Check the existence of configuration parameters
-     * 
+     *
      * Check the existence of configuration parameters of specified name.
      *
      * @param name Configuration parameter name
      *
-     * @return Result of existance confirmation 
+     * @return Result of existance confirmation
      *         (Parameters exist:true, else:false)
      *
      * @endif
      */
     bool isExist(const char* name);
-    
+
     /*!
      * @if jp
      *
      * @brief コンフィギュレーションパラメータの変更確認
-     * 
+     *
      * コンフィギュレーションパラメータが変更されたか確認する。
      *
      * @return 変更確認結果(変更あり:true、変更なし:false)
@@ -874,7 +874,7 @@ namespace RTC
      * @else
      *
      * @brief Confirm to change configuration parameters
-     * 
+     *
      * Confirm that configuration parameters have changed.
      *
      * @return Result of change confirmation
@@ -888,7 +888,7 @@ namespace RTC
      * @if jp
      *
      * @brief 変更されたパラメータのリスト
-     * 
+     *
      * コンフィギュレーションパラメータのうち変更されたもののリストを返す。
      *
      * @return 変更されたパラメータ名リスト
@@ -896,7 +896,7 @@ namespace RTC
      * @else
      *
      * @brief Changed parameters list
-     * 
+     *
      * This operation returns parameter list which are changed.
      *
      * @return Changed parameters list
@@ -904,12 +904,12 @@ namespace RTC
      * @endif
      */
     coil::vstring& changedParameters() { return m_changedParam; }
-    
+
     /*!
      * @if jp
      *
      * @brief アクティブ・コンフィギュレーションセットIDの取得
-     * 
+     *
      * 現在アクティブなコンフィギュレーションセットのIDを取得する。
      *
      * @return アクティブ・コンフィギュレーションセットID
@@ -917,7 +917,7 @@ namespace RTC
      * @else
      *
      * @brief Get ID of active configuration set
-     * 
+     *
      * Get ID of the current active configuration set.
      *
      * @return The active configuration set ID
@@ -925,12 +925,12 @@ namespace RTC
      * @endif
      */
     const char* getActiveId(void) {return m_activeId.c_str();}
-    
+
     /*!
      * @if jp
      *
      * @brief コンフィギュレーションセットの存在確認
-     * 
+     *
      * 指定したコンフィギュレーションセットが存在するか確認する。
      *
      * @param config_id 確認対象コンフィギュレーションセットID
@@ -940,12 +940,12 @@ namespace RTC
      * @else
      *
      * @brief Check the existence of configuration set
-     * 
+     *
      * Check the existence of specified configuration set.
      *
      * @param config_id ID of target configuration set for confirmation
      *
-     * @return Result of existence confirmation 
+     * @return Result of existence confirmation
      *         (Specified ConfigSet exists:true, else:false)
      *
      * @endif
@@ -954,12 +954,12 @@ namespace RTC
     {
       return (m_configsets.hasKey(config_id) == NULL) ? false : true;
     }
-    
+
     /*!
      * @if jp
      *
      * @brief コンフィギュレーションセットのアクティブ化確認
-     * 
+     *
      * コンフィギュレーションセットがアクティブ化されているか確認する。
      *
      * @return 状態確認結果(アクティブ状態:true、非アクティブ状態:false)
@@ -967,7 +967,7 @@ namespace RTC
      * @else
      *
      * @brief Confirm to activate configuration set
-     * 
+     *
      * Confirm that configuration set has been activated.
      *
      * @return Result of state confirmation
@@ -982,12 +982,12 @@ namespace RTC
     //    const std::vector<Properties*>* getConfigurationParameterValues();
     //    const Properties* getConfigurationParameterValue(const char* name);
     //    bool setConfigurationParameter(const char* name, const char* value);
-    
+
     /*!
      * @if jp
      *
      * @brief 全コンフィギュレーションセットの取得
-     * 
+     *
      * 設定されている全コンフィギュレーションセットを取得する。
      *
      * @return 全コンフィギュレーションセット
@@ -995,7 +995,7 @@ namespace RTC
      * @else
      *
      * @brief Get all configuration sets
-     * 
+     *
      * Get all specified configuration sets
      *
      * @return All configuration sets
@@ -1003,12 +1003,12 @@ namespace RTC
      * @endif
      */
     const std::vector<coil::Properties*>& getConfigurationSets(void);
-    
+
     /*!
      * @if jp
      *
      * @brief 指定したIDのコンフィギュレーションセットの取得
-     * 
+     *
      * IDで指定したコンフィギュレーションセットを取得する。
      * 指定したコンフィギュレーションセットが存在しない場合は、
      * 空のコンフィギュレーションセットを返す。
@@ -1020,7 +1020,7 @@ namespace RTC
      * @else
      *
      * @brief Get a configuration set by specified ID
-     * 
+     *
      * Get a configuration set that was specified by ID
      * Return empty configuration set, if a configuration set of
      * specified ID doesn't exist.
@@ -1032,12 +1032,12 @@ namespace RTC
      * @endif
      */
     const coil::Properties& getConfigurationSet(const char* config_id);
-    
+
     /*!
      * @if jp
      *
      * @brief 指定したプロパティのコンフィギュレーションセットへの追加
-     * 
+     *
      * 指定したプロパティをIDで指定したコンフィギュレーションセットへ追加する。
      * 指定したIDと一致するコンフィギュレーションセットが存在しない場合は、
      * false を返す。
@@ -1050,9 +1050,9 @@ namespace RTC
      * @else
      *
      * @brief Add to configuration set from specified property
-     * 
+     *
      * Add specified property to configuration set that was specified by ID.
-     * Return false if configuration set, that matches specified ID, 
+     * Return false if configuration set, that matches specified ID,
      * doesn't exist.
      *
      * @param config_id ID of the target configuration set for add
@@ -1063,12 +1063,12 @@ namespace RTC
      * @endif
      */
     bool setConfigurationSetValues(const coil::Properties& configuration_set);
-    
+
     /*!
      * @if jp
      *
      * @brief アクティブ・コンフィギュレーションセットを取得
-     * 
+     *
      * 現在アクティブとなっているコンフィギュレーションセットを取得する。
      * アクティブとなっているコンフィギュレーションセットが存在しない場合は、
      * 空のコンフィギュレーションセット を返す。
@@ -1078,9 +1078,9 @@ namespace RTC
      * @else
      *
      * @brief Get the active configuration set
-     * 
+     *
      * Get the current active configuration set.
-     * Return empty configuration set, if an active configuration set 
+     * Return empty configuration set, if an active configuration set
      * doesn't exist.
      *
      * @return The active configuration set
@@ -1088,12 +1088,12 @@ namespace RTC
      * @endif
      */
     const coil::Properties& getActiveConfigurationSet(void);
-    
+
     /*!
      * @if jp
      *
      * @brief コンフィギュレーションセットに設定値を追加
-     * 
+     *
      * コンフィギュレーションセットに設定値を追加する。
      *
      * @param configuration_set 追加するプロパティ
@@ -1103,7 +1103,7 @@ namespace RTC
      * @else
      *
      * @brief Add the configuration value to configuration set
-     * 
+     *
      * Add the configuration value to configuration set
      *
      * @param configuration_set Property to add
@@ -1113,12 +1113,12 @@ namespace RTC
      * @endif
      */
     bool addConfigurationSet(const coil::Properties& configuration_set);
-    
+
     /*!
      * @if jp
      *
      * @brief コンフィギュレーションセットの削除
-     * 
+     *
      * 指定したIDのコンフィギュレーションセットを削除する。
      *
      * 指定したIDのコンフィギュレーションセットが存在しない場合は、
@@ -1142,7 +1142,7 @@ namespace RTC
      * @else
      *
      * @brief Remove the configuration set
-     * 
+     *
      * Remove the configuration set of specified ID Return empty
      * configuration set, if a configuration set of specified ID
      * doesn't exist.
@@ -1169,12 +1169,12 @@ namespace RTC
      * @endif
      */
     bool removeConfigurationSet(const char* config_id);
-    
+
     /*!
      * @if jp
      *
      * @brief コンフィギュレーションセットのアクティブ化
-     * 
+     *
      * 指定したIDのコンフィギュレーションセットをアクティブ化する。
      * 指定したIDのコンフィギュレーションセットが存在しない場合は、
      * falseを返す。
@@ -1186,7 +1186,7 @@ namespace RTC
      * @else
      *
      * @brief Activate the configuration set
-     * 
+     *
      * Activate the configuration set of specified ID
      * Return empty configuration set, if a configuration set of
      * specified ID doesn't exist.
@@ -1203,9 +1203,9 @@ namespace RTC
     // obsolete functions
     //
     void setOnUpdate(OnUpdateCallback* cb);
-    
+
     void setOnUpdateParam(OnUpdateParamCallback* cb);
-    
+
     void setOnSetConfigurationSet(OnSetConfigurationSetCallback* cb);
 
     void setOnAddConfigurationSet(OnAddConfigurationAddCallback* cb);
@@ -1231,11 +1231,11 @@ namespace RTC
      *
      * @param listener ConfigurationParamListener 型のリスナオブジェクト。
      * @param autoclean リスナオブジェクトを自動で削除するかどうかのフラグ
-     * 
+     *
      * @else
      *
-     * @brief Adding ConfigurationParamListener 
-     * 
+     * @brief Adding ConfigurationParamListener
+     *
      * This function adds a listener object which is called when
      * update(const char* config_set, const char* config_param) is
      * called. In the type argument, currently only
@@ -1263,11 +1263,11 @@ namespace RTC
      * @param type ConfigurationParamListenerType型の値。
      *             ON_UPDATE_CONFIG_PARAM がある。
      * @param listener 与えたリスナオブジェクトへのポインタ
-     * 
+     *
      * @else
      *
-     * @brief Removing ConfigurationParamListener 
-     * 
+     * @brief Removing ConfigurationParamListener
+     *
      * This function removes a listener object which is added by
      * addConfigurationParamListener() function.
      *
@@ -1279,7 +1279,7 @@ namespace RTC
      */
     void removeConfigurationParamListener(ConfigurationParamListenerType type,
                                           ConfigurationParamListener* listener);
-    
+
     /*!
      * @if jp
      *
@@ -1297,11 +1297,11 @@ namespace RTC
      * @param type ConfigurationSetListenerType型の値。
      * @param listener ConfigurationSetListener 型のリスナオブジェクト。
      * @param autoclean リスナオブジェクトを自動で削除するかどうかのフラグ
-     * 
+     *
      * @else
      *
-     * @brief Adding ConfigurationSetListener 
-     * 
+     * @brief Adding ConfigurationSetListener
+     *
      * This function add a listener object which is called when
      * ConfigurationSet is updated. Available events are the followings.
      *
@@ -1324,11 +1324,11 @@ namespace RTC
      *
      * @param type ConfigurationSetListenerType型の値。
      * @param listener 与えたリスナオブジェクトへのポインタ
-     * 
+     *
      * @else
      *
-     * @brief Removing ConfigurationSetListener 
-     * 
+     * @brief Removing ConfigurationSetListener
+     *
      * This function removes a listener object which is added by
      * addConfigurationSetListener() function.
      *
@@ -1339,7 +1339,7 @@ namespace RTC
      */
     void removeConfigurationSetListener(ConfigurationSetListenerType type,
                                         ConfigurationSetListener* listener);
-    
+
     /*!
      * @if jp
      *
@@ -1356,11 +1356,11 @@ namespace RTC
      * @param type ConfigurationSetNameListenerType型の値。
      * @param listener ConfigurationSetNameListener 型のリスナオブジェクト。
      * @param autoclean リスナオブジェクトを自動で削除するかどうかのフラグ
-     * 
+     *
      * @else
      *
-     * @brief Adding ConfigurationSetNameListener 
-     * 
+     * @brief Adding ConfigurationSetNameListener
+     *
      * This function add a listener object which is called when
      * ConfigurationSetName is updated. Available events are the followings.
      *
@@ -1374,7 +1374,7 @@ namespace RTC
      *
      * @endif
      */
-    void 
+    void
     addConfigurationSetNameListener(ConfigurationSetNameListenerType type,
                                     ConfigurationSetNameListener* listener,
                                     bool autoclean = true);
@@ -1390,11 +1390,11 @@ namespace RTC
      * @param type ConfigurationSetNameListenerType型の値。
      *             ON_UPDATE_CONFIG_PARAM がある。
      * @param listener 与えたリスナオブジェクトへのポインタ
-     * 
+     *
      * @else
      *
-     * @brief Removing ConfigurationSetNameListener 
-     * 
+     * @brief Removing ConfigurationSetNameListener
+     *
      * This function removes a listener object which is added by
      * addConfigurationSetNameListener() function.
      *
@@ -1408,7 +1408,7 @@ namespace RTC
     void
     removeConfigurationSetNameListener(ConfigurationSetNameListenerType type,
                                        ConfigurationSetNameListener* listener);
-    
+
   protected:
     /*!
      * @if jp
@@ -1421,10 +1421,10 @@ namespace RTC
      *
      * @else
      *
-     * @brief When the configuration parameter is updated, it is called. 
+     * @brief When the configuration parameter is updated, it is called.
      *
      * Call the set callback object.
-     * 
+     *
      * @param config_set The target configuration set's ID to setup
      *
      * @endif
@@ -1443,10 +1443,10 @@ namespace RTC
      *
      * @else
      *
-     * @brief When the configuration parameter is updated, it is called. 
+     * @brief When the configuration parameter is updated, it is called.
      *
      * Call the set callback object.
-     * 
+     *
      * @param config_set configuration-set ID.
      * @param config_param configuration parameter name.
      *
@@ -1468,7 +1468,7 @@ namespace RTC
      * @brief Called when the property is added to the configuration set
      *
      * Call the set callback object.
-     * 
+     *
      * @param configuration_set property
      *
      * @endif
@@ -1489,7 +1489,7 @@ namespace RTC
      * @brief Called when a set value is added to the configuration set
      *
      * Call the set callback object.
-     * 
+     *
      * @param configuration_set property
      *
      * @endif
@@ -1510,7 +1510,7 @@ namespace RTC
      * @brief Called when the configuration set has been deleted
      *
      * Call the set callback object.
-     * 
+     *
      * @param config_id property
      *
      * @endif
@@ -1531,17 +1531,17 @@ namespace RTC
      * @brief Called when the configuration set is made active
      *
      * Call the set callback object.
-     * 
+     *
      * @param config_id property
      *
      * @endif
      */
     void onActivateSet(const char* config_id);
-    
+
   private:
     ConfigAdmin(const ConfigAdmin& ca);
     ConfigAdmin& operator=(const ConfigAdmin& ca);
-    
+
     struct find_conf
     {
       std::string m_name;
@@ -1552,7 +1552,7 @@ namespace RTC
         return (m_name == conf->name);
       }
     };
-    
+
     coil::Properties& m_configsets;
     coil::Properties  m_emptyconf;
     std::vector<ConfigBase*> m_params;

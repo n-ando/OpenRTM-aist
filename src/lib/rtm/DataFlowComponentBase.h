@@ -65,7 +65,7 @@ namespace RTC
    *
    * @endif
    */
-  
+
   class DataFlowComponentBase
     : public RTObject_impl
   {
@@ -88,7 +88,7 @@ namespace RTC
      * @endif
      */
     explicit DataFlowComponentBase(Manager* manager);
-    
+
     /*!
      * @if jp
      * @brief デストラクタ
@@ -103,7 +103,7 @@ namespace RTC
      * @endif
      */
     virtual ~DataFlowComponentBase(void);
-    
+
     /*!
      * @if jp
      * @brief 初期化
@@ -120,7 +120,7 @@ namespace RTC
      * @endif
      */
     void init();
-    
+
   private:
     //    OpenRTM::DataFlowComponent_var m_ref;
     //    PeriodicExecutionContext* m_pec;

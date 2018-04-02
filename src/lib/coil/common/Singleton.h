@@ -55,7 +55,7 @@ namespace coil
    * public:
    * private:
    *   A(){}
-   * 
+   *
    *   friend class coil::Singelton<A>;
    * };
    *
@@ -93,7 +93,7 @@ namespace coil
    * public:
    * private:
    *   A(){}
-   * 
+   *
    *   friend class coil::Singelton<A>;
    * };
    *
@@ -205,7 +205,7 @@ namespace coil
   template <class SingletonClass>
   typename Singleton<SingletonClass>::SingletonClassPtr
   Singleton<SingletonClass>::m_instance;
-  
+
   template <class SingletonClass>
   typename Singleton<SingletonClass>::Mutex
   Singleton<SingletonClass>::m_mutex;

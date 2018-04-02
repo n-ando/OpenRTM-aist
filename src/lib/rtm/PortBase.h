@@ -118,7 +118,7 @@ namespace RTC
    * <p>
    * In these operations, as for get_port_profile(), get_connector_profiles(),
    * get_connector_profile(), connect(), disconnect() and disconnect_all(),
-   * since their behaviors especially need not to be change in subclass, 
+   * since their behaviors especially need not to be change in subclass,
    * overriding is not recommended.
    * <p>
    * As for notify_connect() and notify_disconnect(), you may have to modify
@@ -131,7 +131,7 @@ namespace RTC
    * @since 0.4.0
    *
    * @endif
-   */  
+   */
   class PortBase
     : public virtual POA_RTC::PortService,
       public virtual PortableServer::RefCountServantBase
@@ -154,7 +154,7 @@ namespace RTC
      *
      * The constructor of the ProtBase class is given the name of this Port
      * and initialized. At the same time, the PortBase activates itself
-     * as CORBA object and stores its object reference to the PortProfile's 
+     * as CORBA object and stores its object reference to the PortProfile's
      * port_ref member.
      * Characters except "." can be used for the name of the port.
      *
@@ -163,7 +163,7 @@ namespace RTC
      * @endif
      */
     explicit PortBase(const char* name = "");
-    
+
     /*!
      * @if jp
      *
@@ -182,7 +182,7 @@ namespace RTC
      * @endif
      */
     virtual ~PortBase(void);
-    
+
     /*!
      * @if jp
      *
@@ -219,12 +219,12 @@ namespace RTC
      * PortProfile struct has the following members:
      *
      * - name              [string type] The name of the Port.
-     * - interfaces        [PortInterfaceProfileList type] The sequence of 
+     * - interfaces        [PortInterfaceProfileList type] The sequence of
      *                     PortInterfaceProfile owned by the Port
      * - port_ref          [Port Object type] The object reference of the Port.
-     * - connector_profile [ConnectorProfileList type] The sequence of 
+     * - connector_profile [ConnectorProfileList type] The sequence of
      *                     ConnectorProfile owned by the Port.
-     * - owner             [RTObject Object type] The object reference of 
+     * - owner             [RTObject Object type] The object reference of
      *                     RTObject that is owner of the Port.
      * - properties        [NVList type] The other properties.
      *
@@ -236,7 +236,7 @@ namespace RTC
      */
     virtual PortProfile* get_port_profile()
       throw (CORBA::SystemException);
-    
+
     /*!
      * @if jp
      *
@@ -244,7 +244,7 @@ namespace RTC
      *
      * この関数は、オブジェクト内部に保持されている PortProfile の
      * const 参照を返す const 関数である。
-     * 
+     *
      * @post この関数を呼び出すことにより内部状態が変更されることはない。
      *
      * @return PortProfile
@@ -263,7 +263,7 @@ namespace RTC
      * @endif
      */
     const PortProfile& getPortProfile() const;
-    
+
     /*!
      * @if jp
      *
@@ -318,7 +318,7 @@ namespace RTC
      */
     virtual ConnectorProfileList* get_connector_profiles()
       throw (CORBA::SystemException);
-    
+
     /*!
      * @if jp
      *
@@ -360,7 +360,7 @@ namespace RTC
      */
     virtual ConnectorProfile* get_connector_profile(const char* connector_id)
       throw (CORBA::SystemException);
-    
+
     /*!
      * @if jp
      *
@@ -369,7 +369,7 @@ namespace RTC
      * 与えられた ConnectoionProfile の情報に基づき、Port間の接続を確立
      * する。この関数は主にアプリケーションプログラムやツールから呼び出
      * すことを前提としている。
-     * 
+     *
      * @pre アプリケーションプログラムは、コンポーネント間の複数の
      * Port を接続するために、適切な値をセットした ConnectorProfile を
      * connect() の引数として与えて呼び出さなければならない。
@@ -381,7 +381,7 @@ namespace RTC
      *
      * @pre ConnectorProfile::name は接続につける名前で CORBA::string
      * 型に格納できる任意の文字列である必要がある。
-     * 
+     *
      * @pre ConnectorProfile::connector_id はすべての接続に対して一意な
      * ID (通常はUUID) が格納される。UUIDの設定は connect() 関数内で行
      * われるので、呼び出し側は空文字を設定する。既存の接続と同じUUIDを
@@ -425,13 +425,13 @@ namespace RTC
      * RTC_OK を返す。この時点で接続は完了する。RTC_OK以外
      * の場合は、この接続IDに対してdisconnect()を呼び出し接続を解除し、
      * notify_connect() が返したエラーリターンコードをそのまま返す。
-     * 
+     *
      * @post connect() の引数として渡した ConnectorProfile には、
      * ConnectorProfile::connector_id および、途中のポートが
      * publishInterfaces() で公開したポートインターフェースの各種情報が
      * 格納されている。connect() および途中の notify_connect() が
      * ConnectorProfile::{name, ports} を変更することはない。
-     *  
+     *
      * @param connector_profile ConnectorProfile
      * @return ReturnCode_t 型のリターンコード
      *
@@ -454,7 +454,7 @@ namespace RTC
      *
      * @pre ConnectorProfile::name that is connection identifier shall
      * be any valid CORBA::string.
-     * 
+     *
      *
      * @pre ConnectorProfile::connector_id shall be set unique
      * identifier (usually UUID is used) for all connections. Since
@@ -520,7 +520,7 @@ namespace RTC
      */
     virtual ReturnCode_t connect(ConnectorProfile& connector_profile)
       throw (CORBA::SystemException);
-    
+
     /*!
      * @if jp
      *
@@ -638,7 +638,7 @@ namespace RTC
      */
     virtual ReturnCode_t notify_connect(ConnectorProfile& connector_profile)
       throw (CORBA::SystemException);
-    
+
     /*!
      * @if jp
      *
@@ -666,7 +666,7 @@ namespace RTC
      * び出しを試す。notify_disconnect() の呼び出しに一つでも成功すれば、
      * notify_disconnect() の返却値をそのまま返し、一つも成功しなかった
      * 場合には RTC_ERROR エラーを返す。
-     * 
+     *
      * @param connector_id ConnectorProfile の ID
      * @return ReturnCode_t 型のリターンコード
      *
@@ -706,7 +706,7 @@ namespace RTC
      */
     virtual ReturnCode_t disconnect(const char* connector_id)
       throw (CORBA::SystemException);
-    
+
     /*!
      * @if jp
      *
@@ -746,7 +746,7 @@ namespace RTC
      * @post なお、ConnectorProfile::ports のリストの最初 Port の
      * notify_disconnet() が終了した時点では、すべての関連する Port の
      * notify_disconnect() の呼び出しが完了する。
-     * 
+     *
      * @param connector_id ConnectorProfile の ID
      * @return ReturnCode_t 型のリターンコード
      *
@@ -797,7 +797,7 @@ namespace RTC
      */
     virtual ReturnCode_t notify_disconnect(const char* connector_id)
       throw (CORBA::SystemException);
-    
+
     /*!
      * @if jp
      *
@@ -819,7 +819,7 @@ namespace RTC
      */
     virtual ReturnCode_t disconnect_all()
       throw (CORBA::SystemException);
-    
+
     //============================================================
     // Local operations
     //============================================================
@@ -917,7 +917,7 @@ namespace RTC
      * @endif
      */
     const PortProfile& getProfile() const;
-    
+
     /*!
      * @if jp
      *
@@ -940,7 +940,7 @@ namespace RTC
      * @endif
      */
     void setPortRef(PortService_ptr port_ref);
-    
+
     /*!
      * @if jp
      *
@@ -963,7 +963,7 @@ namespace RTC
      * @endif
      */
     PortService_ptr getPortRef() const;
-    
+
     /*!
      * @if jp
      *
@@ -1018,7 +1018,7 @@ namespace RTC
      *
      * Since the ownership of the callback functor object is owned by
      * the caller, it has the responsibility of object destruction.
-     * 
+     *
      * The callback functor is called after calling
      * publishInterfaces() that is virtual member function of the
      * PortBase class with an argument of ConnectorProfile type that
@@ -1064,7 +1064,7 @@ namespace RTC
      *
      * Since the ownership of the callback functor object is owned by
      * the caller, it has the responsibility of object destruction.
-     * 
+     *
      * The callback functor is called before calling
      * subscribeInterfaces() that is virtual member function of the
      * PortBase class with an argument of ConnectorProfile type that
@@ -1095,7 +1095,7 @@ namespace RTC
      * notify_connect() の終了直前に、接続処理が正常終了する際に限って
      * 呼び出されるコールバックである。接続処理の過程でエラーが発生した
      * 場合には呼び出されない。
-     * 
+     *
      * このコールバックファンクタは notify_connect() が out パラメータ
      * として返すのと同じ引数 ConnectorProfile とともに呼び出されるので、
      * この接続において公開されたすべてのインターフェース情報を得ること
@@ -1114,7 +1114,7 @@ namespace RTC
      *
      * Since the ownership of the callback functor object is owned by
      * the caller, it has the responsibility of object destruction.
-     * 
+     *
      * The callback functor is called only when notify_connect()
      * function successfully returns. In case of error, the functor
      * will not be called.
@@ -1164,7 +1164,7 @@ namespace RTC
      *
      * Since the ownership of the callback functor object is owned by
      * the caller, it has the responsibility of object destruction.
-     * 
+     *
      * The callback functor is called before calling
      * unsubscribeInterfaces() that is virtual member function of the
      * PortBase class with an argument of ConnectorProfile type that
@@ -1193,7 +1193,7 @@ namespace RTC
      *
      * このコールバックファンクタは、ポートの接続解除実行関数である
      * notify_disconnect() の終了直前に、呼び出されるコールバックである。
-     * 
+     *
      * このコールバックファンクタは接続に対応する ConnectorProfile とと
      * もに呼び出される。この ConnectorProfile はこのファンクタ呼出し後
      * に破棄されるので、変更がほかに影響を与えることはない。
@@ -1210,7 +1210,7 @@ namespace RTC
      *
      * Since the ownership of the callback functor object is owned by
      * the caller, it has the responsibility of object destruction.
-     * 
+     *
      * The callback functor is called just before notify_disconnect()
      * that is disconnection execution function returns.
      *
@@ -1243,7 +1243,7 @@ namespace RTC
      * @brief Setting callback called on connection lost
      *
      * This operation sets a functor that is called when connection
-     * of this port does lost. 
+     * of this port does lost.
      *
      * @param on_connection_lost a pointer to ConnectionCallback's subclasses
      *
@@ -1265,7 +1265,7 @@ namespace RTC
      * @brief Setting PortConnectListener holder
      *
      * This operation sets a functor that is called when connection
-     * of this port does lost. 
+     * of this port does lost.
      *
      * @param on_connection_lost a pointer to ConnectionCallback's subclasses
      *
@@ -1335,7 +1335,7 @@ namespace RTC
      * - publishInterfaces()
      * - connectNext()
      * - subscribeInterfaces()
-     * - updateConnectorProfile() 
+     * - updateConnectorProfile()
      *
      * In the concrete Port, this method should be overridden. This method
      * processes the given ConnectorProfile argument and if the given parameter
@@ -1359,7 +1359,7 @@ namespace RTC
      */
     virtual ReturnCode_t
     publishInterfaces(ConnectorProfile& connector_profile) = 0;
-    
+
     /*!
      * @if jp
      *
@@ -1377,7 +1377,7 @@ namespace RTC
      *
      * @brief Call notify_connect() of the next Port
      *
-     * This operation calls the notify_connect() of the next Port's 
+     * This operation calls the notify_connect() of the next Port's
      * that stored in ConnectorProfile's port_ref sequence.
      *
      * @param connector_profile The connection profile information
@@ -1387,7 +1387,7 @@ namespace RTC
      * @endif
      */
     virtual ReturnCode_t connectNext(ConnectorProfile& connector_profile);
-    
+
     /*!
      * @if jp
      *
@@ -1405,7 +1405,7 @@ namespace RTC
      *
      * @brief Call notify_disconnect() of the next Port
      *
-     * This operation calls the notify_disconnect() of the next Port's 
+     * This operation calls the notify_disconnect() of the next Port's
      * that stored in ConnectorProfile's port_ref sequence.
      *
      * @param connector_profile The connection profile information
@@ -1415,7 +1415,7 @@ namespace RTC
      * @endif
      */
     virtual ReturnCode_t disconnectNext(ConnectorProfile& connector_profile);
-    
+
     /*! @if jp
      *
      * @brief Interface 情報を公開する
@@ -1481,7 +1481,7 @@ namespace RTC
      */
     virtual ReturnCode_t
     subscribeInterfaces(const ConnectorProfile& connector_profile) = 0;
-    
+
     /*! @if jp
      *
      * @brief Interface の接続を解除する
@@ -1509,7 +1509,7 @@ namespace RTC
      * in order to disconnect.
      * - disconnectNext()
      * - unsubscribeInterfaces()
-     * - eraseConnectorProfile() 
+     * - eraseConnectorProfile()
      *  <br>
      * In the concrete Port, this method should be overridden. This method
      * processes the given ConnectorProfile argument and disconnect interface
@@ -1538,7 +1538,7 @@ namespace RTC
      * @endif
      */
     virtual void setConnectionLimit(int limit_value);
-    
+
     /*!
      * @if jp
      * @brief Interface情報を公開する
@@ -1581,7 +1581,7 @@ namespace RTC
      * @brief Check whether connector_id of ConnectorProfile is empty
      *
      * Check whether connector_id of specified ConnectorProfile is empty.
-     * 
+     *
      * @param connector_profile Target ConnectorProfile for the check
      *
      * @return If the given ConnectorProfile's connector_id is empty string,
@@ -1590,7 +1590,7 @@ namespace RTC
      * @endif
      */
     bool isEmptyId(const ConnectorProfile& connector_profile) const;
-    
+
     /*!
      * @if jp
      *
@@ -1611,7 +1611,7 @@ namespace RTC
      * @endif
      */
     const std::string getUUID() const;
-    
+
     /*!
      * @if jp
      *
@@ -1632,7 +1632,7 @@ namespace RTC
      * @endif
      */
     void setUUID(ConnectorProfile& connector_profile) const;
-    
+
     /*!
      * @if jp
      *
@@ -1649,7 +1649,7 @@ namespace RTC
      *
      * @brief Check whether the given id exists in stored ConnectorProfiles
      *
-     * This operation returns boolean whether the given id exists in 
+     * This operation returns boolean whether the given id exists in
      * the Port's ConnectorProfiles.
      *
      * @param id connector_id to be find in Port's ConnectorProfiles
@@ -1659,7 +1659,7 @@ namespace RTC
      * @endif
      */
     bool isExistingConnId(const char* id);
-    
+
     /*!
      * @if jp
      *
@@ -1690,7 +1690,7 @@ namespace RTC
      * @endif
      */
     ConnectorProfile findConnProfile(const char* id);
-    
+
     /*!
      * @if jp
      *
@@ -1720,7 +1720,7 @@ namespace RTC
      * @endif
      */
     CORBA::Long findConnProfileIndex(const char* id);
-    
+
     /*!
      * @if jp
      *
@@ -1749,7 +1749,7 @@ namespace RTC
      * @endif
      */
     void updateConnectorProfile(const ConnectorProfile& connector_profile);
-    
+
     /*!
      * @if jp
      *
@@ -1780,7 +1780,7 @@ namespace RTC
      * @endif
      */
     bool eraseConnectorProfile(const char* id);
-    
+
     /*!
      * @if jp
      *
@@ -1832,7 +1832,7 @@ namespace RTC
      */
     bool appendInterface(const char* name, const char* type_name,
                          PortInterfacePolarity pol);
-    
+
     /*!
      * @if jp
      *
@@ -1863,7 +1863,7 @@ namespace RTC
      * @endif
      */
     bool deleteInterface(const char* name, PortInterfacePolarity pol);
-    
+
     /*!
      * @if jp
      *
@@ -1942,7 +1942,7 @@ namespace RTC
      *
      * @else
      *
-     * @brief Disconnect ports that doesn't exist. 
+     * @brief Disconnect ports that doesn't exist.
      *
      * This function detects dead-port, and if dead ports are found in
      * the connection list, disconnects them.
@@ -2090,7 +2090,7 @@ namespace RTC
      * @endif
      */
     PortProfile m_profile;
-    
+
     /*!
      * @if jp
      * @brief Port の オブジェクト参照
@@ -2127,7 +2127,7 @@ namespace RTC
      * @endif
      */
     int m_connectionLimit;
-    
+
     /*!
      * @if jp
      * @brief Callback functor オブジェクト
@@ -2137,7 +2137,7 @@ namespace RTC
      * @else
      * @brief Callback functor objects
      *
-     * This is callback objedct that is called when the interface is opened 
+     * This is callback objedct that is called when the interface is opened
      * to the public.
      *
      * @endif
@@ -2166,8 +2166,8 @@ namespace RTC
      * @else
      * @brief Callback functor objects
      *
-     * This is a callback object that is called 
-     * when the connection is completed. 
+     * This is a callback object that is called
+     * when the connection is completed.
      *
      * @endif
      */
@@ -2181,7 +2181,7 @@ namespace RTC
      * @else
      * @brief Callback functor objects
      *
-     * This is a callback object that is called when the interface is released. 
+     * This is a callback object that is called when the interface is released.
      *
      * @endif
      */
@@ -2195,7 +2195,7 @@ namespace RTC
      * @else
      * @brief Callback functor objects
      *
-     * This is a callback object that is called in connected release. 
+     * This is a callback object that is called in connected release.
      *
      * @endif
      */
@@ -2210,8 +2210,8 @@ namespace RTC
      * @else
      * @brief Callback functor objects
      *
-     * This is a callback object called when the connection of the port does 
-     * lost. 
+     * This is a callback object called when the connection of the port does
+     * lost.
      *
      * @endif
      */
@@ -2253,7 +2253,7 @@ namespace RTC
       }
       std::string m_id;
     };  // struct find_conn_id
-    
+
     /*!
      * @if jp
      * @brief コンストラクタ引数 port_ref と同じオブジェクト参照を探す Functor
@@ -2277,7 +2277,7 @@ namespace RTC
 #endif
       PortService_ptr m_port;
     };  // struct find_port_ref
-    
+
     /*!
      * @if jp
      * @brief name と polarity から interface を探す Functor
@@ -2290,7 +2290,7 @@ namespace RTC
       find_interface(const char* name, PortInterfacePolarity pol)
         : m_name(name), m_pol(pol)
       {}
-      
+
       bool operator()(const PortInterfaceProfile& prof)
       {
         CORBA::String_var name(CORBA::string_dup(prof.instance_name));

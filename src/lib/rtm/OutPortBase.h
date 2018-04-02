@@ -51,7 +51,7 @@ namespace RTC
    * @class OutPortBase
    *
    * @brief OutPort 基底クラス
-   * 
+   *
    * OutPort の基底クラス。
    *
    *
@@ -166,7 +166,7 @@ namespace RTC
    *
    *
    *
-   *   
+   *
    * OutPort 側の connect() では以下のシーケンスで処理が行われる。
    *
    * 1. OutPort に関連する connector 情報の生成およびセット
@@ -189,7 +189,7 @@ namespace RTC
    *    OutPort側の初期化処理を行う。
    *
    * - [dataport.interface_type]
-   *  - CORBA_Any の場合: 
+   *  - CORBA_Any の場合:
    *    InPortAny を通してデータ交換される。
    *    ConnectorProfile::properties["dataport.corba_any.inport_ref"]に
    *    InPortAny のオブジェクトリファレンスをセットする。
@@ -260,7 +260,7 @@ namespace RTC
      * @endif
      */
     OutPortBase(const char* name, const char* data_type);
-    
+
     /*!
      * @if jp
      * @brief デストラクタ
@@ -278,7 +278,7 @@ namespace RTC
      * @endif
      */
     virtual ~OutPortBase(void);
-    
+
     /*!
      * @if jp
      * @brief プロパティの初期化
@@ -514,7 +514,7 @@ namespace RTC
     bool getConnectorProfileByName(const char* name,
                                    ConnectorInfo& prof);
 
-    
+
     /*!
      * @if jp
      *
@@ -637,7 +637,7 @@ namespace RTC
      * @brief ConnectorDataListener リスナを削除する
      *
      * 設定した各種リスナを削除する。
-     * 
+     *
      * @param listener_type リスナタイプ
      * @param listener リスナオブジェクトへのポインタ
      *
@@ -645,7 +645,7 @@ namespace RTC
      * @brief Removing BufferDataListener type listener
      *
      * This operation removes a specified listener.
-     *     
+     *
      * @param listener_type A listener type
      * @param listener A pointer to a listener object
      *
@@ -653,7 +653,7 @@ namespace RTC
      */
     void removeConnectorDataListener(ConnectorDataListenerType listener_type,
                                      ConnectorDataListener* listener);
-    
+
 
     /*!
      * @if jp
@@ -693,7 +693,7 @@ namespace RTC
      * Listeners should have the following function operator().
      *
      * ConnectorListener::operator()(const ConnectorProfile&)
-     *  
+     *
      * The ownership of the given listener object is transferred to
      * this OutPort object in default.  The given listener object will
      * be destroied automatically in the OutPort's dtor or if the
@@ -716,7 +716,7 @@ namespace RTC
      * @brief ConnectorDataListener リスナを削除する
      *
      * 設定した各種リスナを削除する。
-     * 
+     *
      * @param listener_type リスナタイプ
      * @param listener リスナオブジェクトへのポインタ
      *
@@ -724,7 +724,7 @@ namespace RTC
      * @brief Removing BufferDataListener type listener
      *
      * This operation removes a specified listener.
-     *     
+     *
      * @param listener_type A listener type
      * @param listener A pointer to a listener object
      *
@@ -760,7 +760,7 @@ namespace RTC
      * 与えられた ConnectoionProfile の情報に基づき、Port間の接続を確立
      * する。この関数は主にアプリケーションプログラムやツールから呼び出
      * すことを前提としている。
-     * 
+     *
      * @param connector_profile ConnectorProfile
      * @return ReturnCode_t 型のリターンコード
      *
@@ -852,7 +852,7 @@ namespace RTC
      * - publishInterfaces()
      * - connectNext()
      * - subscribeInterfaces()
-     * - updateConnectorProfile() 
+     * - updateConnectorProfile()
      *
      * This operation should create the new connection for the new
      * connector_id, and should update the connection for the existing
@@ -866,7 +866,7 @@ namespace RTC
      */
     virtual ReturnCode_t
     publishInterfaces(ConnectorProfile& connector_profile);
-    
+
     /*! @if jp
      *
      * @brief Interface に接続する
@@ -907,7 +907,7 @@ namespace RTC
      */
     virtual ReturnCode_t
     subscribeInterfaces(const ConnectorProfile& connector_profile);
-    
+
     /*!
      * @if jp
      *
@@ -932,9 +932,9 @@ namespace RTC
      * In the notify_disconnect(), the following methods would be called.
      * - disconnectNext()
      * - unsubscribeInterfaces()
-     * - eraseConnectorProfile() 
+     * - eraseConnectorProfile()
      *
-     * @param connector_profile The profile information associated with 
+     * @param connector_profile The profile information associated with
      *                          the connection
      *
      * @endif
@@ -1015,7 +1015,7 @@ namespace RTC
      */
     InPortConsumer* createConsumer(const ConnectorProfile& cprof,
                                    coil::Properties& prop);
-    
+
     /*!
      * @if jp
      * @brief OutPortPushConnector の生成
@@ -1080,7 +1080,7 @@ namespace RTC
     coil::vstring m_consumerTypes;
     /*!
      * @if jp
-     * @brief 接続エンディアン 
+     * @brief 接続エンディアン
      * @else
      * @brief Connected Endian
      * @endif
@@ -1094,7 +1094,7 @@ namespace RTC
      * @endif
      */
     ConnectorListeners m_listeners;
-   
+
     /*!
      * @if jp
      * @brief provider を削除するための Functor

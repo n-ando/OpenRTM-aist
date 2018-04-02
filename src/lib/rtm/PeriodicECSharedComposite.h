@@ -104,21 +104,21 @@ namespace SDOPackage
 
     /*!
      * @if jp
-     * 
+     *
      * @brief [CORBA interface] Organizationメンバーを追加する
      *
      * Organization が保持するメンバーリストに与えられたSDOListを追加する。
-     * 
+     *
      * @param sdo_list 追加される SDO メンバーのリスト
      * @return 追加が成功したかどうかがboolで返される
      *
      * @else
-     * 
+     *
      * @brief [CORBA interface] Add Organization member
      *
-     * This operation adds the given SDOList to the existing organization's 
+     * This operation adds the given SDOList to the existing organization's
      * member list
-     * 
+     *
      * @param sdo_list SDO member list to be added
      * @return boolean will returned if the operation succeed
      *
@@ -130,22 +130,22 @@ namespace SDOPackage
 
     /*!
      * @if jp
-     * 
+     *
      * @brief [CORBA interface] Organizationメンバーをセットする
      *
      * Organization が保持するメンバーリストを削除し、与えられた
      * SDOListを新規にセットする。
-     * 
+     *
      * @param sdo_list 新規にセットされる SDO メンバーのリスト
      * @return 追加が成功したかどうかがboolで返される
      *
      * @else
-     * 
+     *
      * @brief [CORBA interface] Set Organization member
      *
      * This operation removes existing member list and sets the given
      * SDOList to the existing organization's member list
-     * 
+     *
      * @param sdo_list SDO member list to be set
      * @return boolean will returned if the operation succeed
      *
@@ -157,20 +157,20 @@ namespace SDOPackage
 
     /*!
      * @if jp
-     * 
+     *
      * @brief [CORBA interface] Organizationメンバーを削除する
      *
      * Organization が保持するメンバーリスト内の特定のSDOを削除する。
-     * 
+     *
      * @param id 削除される SDO の ID
      * @return 追加が成功したかどうかがboolで返される
      *
      * @else
-     * 
+     *
      * @brief [CORBA interface] Remove a member of Organization
      *
      * This operation removes a SDO from existing member list by specified ID.
-     * 
+     *
      * @param id The ID of the SDO to be removed
      * @return boolean will returned if the operation succeed
      *
@@ -230,7 +230,7 @@ namespace SDOPackage
      * @if jp
      * @brief DFC に Organization オブジェクトを与える
      * @else
-     * @brief Set Organization object to target DFC 
+     * @brief Set Organization object to target DFC
      * @endif
      */
     void addOrganizationToTarget(Member& member);
@@ -239,7 +239,7 @@ namespace SDOPackage
      * @if jp
      * @brief Organization オブジェクトを DFCから削除する
      * @else
-     * @brief Remove Organization object from a target DFC 
+     * @brief Remove Organization object from a target DFC
      * @endif
      */
     void removeOrganizationFromTarget(Member& member);
@@ -284,7 +284,7 @@ namespace SDOPackage
      * @if jp
      * @brief PortsListを更新する
      * @else
-     * @brief PortsList is updated. 
+     * @brief PortsList is updated.
      * @endif
      */
     void updateExportedPortsList(void);
@@ -404,12 +404,12 @@ namespace SDOPackage
      * @endif
      */
     PortList m_expPorts;
-    
+
     /*!
      * @if jp
      * @brief PortListを標準出力する。
      * @else
-     * @brief Output PortList to StandardOutput. 
+     * @brief Output PortList to StandardOutput.
      * @endif
      */
     void print(PortList p)
@@ -485,7 +485,7 @@ namespace RTC
      * @endif
      */
     explicit PeriodicECSharedComposite(Manager* manager);
-    
+
     /*!
      * @if jp
      * @brief デストラクタ
@@ -500,7 +500,7 @@ namespace RTC
      * @endif
      */
     virtual ~PeriodicECSharedComposite(void);
-    
+
     /*!
      * @if jp
      * @brief 初期化
@@ -521,31 +521,31 @@ namespace RTC
      * @if jp
      *
      * @brief 活性化処理用コールバック関数
-     * 
+     *
      * ComponentAction::on_activated が呼ばれた際に実行されるコールバック
      * 関数。<BR>
      * 本関数は無条件に RTC::RTC_OK を返すようにダミー実装されているので、
      * 各コンポーネントの実際の活性化処理は、本関数をオーバーライドして実装する
      * 必要がある。
-     * 
+     *
      * @param exec_handle 参加している ExecutionContext の ID
      *
      * @return ReturnCode_t 型のリターンコード
-     * 
+     *
      * @else
      *
      * @brief Callback function to activate
-     * 
+     *
      * This is a callback function that is executed when
      * ComponentAction::on_activated was invoked.<BR>
      * As for actual activation of each component, since this function is
      * dummy-implemented to return RTC::RTC_OK unconditionally, you need to
      * implement this function by overriding it.
-     * 
+     *
      * @param exec_handle ID of the participant ExecutionContext
      *
      * @return The return code of ReturnCode_t type
-     * 
+     *
      * @endif
      */
     virtual ReturnCode_t onActivated(RTC::UniqueId exec_handle);
@@ -553,31 +553,31 @@ namespace RTC
      * @if jp
      *
      * @brief 非活性化処理用コールバック関数
-     * 
+     *
      * ComponentAction::on_deactivated が呼ばれた際に実行されるコールバック
      * 関数。<BR>
      * 本関数は無条件に RTC::RTC_OK を返すようにダミー実装されているので、
      * 各コンポーネントの実際の非活性化処理は、本関数をオーバーライドして実装する
      * 必要がある。
-     * 
+     *
      * @param exec_handle 参加している ExecutionContext の ID
      *
      * @return ReturnCode_t 型のリターンコード
-     * 
+     *
      * @else
      *
      * @brief Callback function to deactivate
-     * 
+     *
      * This is a callback function that is executed when
      * ComponentAction::on_deactivated was invoked.<BR>
      * As for actual deactivation of each component, since this function is
      * dummy-implemented to return RTC::RTC_OK unconditionally, you need to
      * implement this function by overriding it.
-     * 
+     *
      * @param exec_handle ID of the participant ExecutionContext
      *
      * @return The return code of ReturnCode_t type
-     * 
+     *
      * @endif
      */
     virtual ReturnCode_t onDeactivated(RTC::UniqueId exec_handle);
@@ -586,30 +586,30 @@ namespace RTC
      * @if jp
      *
      * @brief リセット処理用コールバック関数
-     * 
+     *
      * ComponentAction::on_reset が呼ばれた際に実行されるコールバック関数。<BR>
      * 本関数は無条件に RTC::RTC_OK を返すようにダミー実装されているので、
      * 各コンポーネントの実際のリセット処理は、本関数をオーバーライドして実装する
      * 必要がある。
-     * 
+     *
      * @param exec_handle 参加している ExecutionContext の ID
      *
      * @return ReturnCode_t 型のリターンコード
-     * 
+     *
      * @else
      *
      * @brief Callback function to reset
-     * 
+     *
      * This is a callback function that is executed when
      * ComponentAction::on_reset was invoked.<BR>
      * As for actual reset of each component, since this function is
      * dummy-implemented to return RTC::RTC_OK unconditionally, you need to
      * implement this function by overriding it.
-     * 
+     *
      * @param exec_handle ID of the participant ExecutionContext
      *
      * @return The return code of ReturnCode_t type
-     * 
+     *
      * @endif
      */
     virtual ReturnCode_t onReset(RTC::UniqueId exec_handle);
@@ -638,7 +638,7 @@ namespace RTC
      * @endif
      */
     virtual ReturnCode_t onFinalize(void);
-    
+
   protected:
     /*!
      * @if jp

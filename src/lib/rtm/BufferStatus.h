@@ -135,7 +135,7 @@ namespace RTC
  * @if jp
  *
  * @brief ::RTC::BufferStatus 導入
- * 
+ *
  * ::RTC::BufferStatus で宣言されている Enum のすべてのメンバをネーム
  * スペースに導入するためのマクロ。BufferStatus を利用するクラスにお
  * いて、クラス宣言の先頭において DATAPORTSTATUS_ENUM を記載するだけで、

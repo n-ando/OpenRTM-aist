@@ -25,7 +25,7 @@
 
 namespace coil
 {
-  
+
   /*!
    * @if jp
    *
@@ -40,7 +40,7 @@ namespace coil
    * @class TimeMeasure
    * @brief TimeMeasure class
    *
-   * This class is used for getting statistics of code execution time. 
+   * This class is used for getting statistics of code execution time.
    * Using get_stat you can get maximum, minimum, mean and standard
    * deviation time for code execution.
    *

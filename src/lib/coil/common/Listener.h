@@ -57,7 +57,7 @@ public:
    * @endif
    */
   virtual ~ListenerBase() {}
-  
+
   /*!
    * @if jp
    * @brief コールバック処理
@@ -122,7 +122,7 @@ public:
     : m_obj(obj), m_cbf(cbf)
   {
   }
-  
+
   /*!
    * @if jp
    * @brief デストラクタ
@@ -139,7 +139,7 @@ public:
   virtual ~ListenerObject()
   {
   }
-  
+
   /*!
    * @if jp
    * @brief コールバック用処理
@@ -157,7 +157,7 @@ public:
   {
     (m_obj->*m_cbf)();
   }
-  
+
 private:
   ListenerClass* m_obj;
   CallbackFunc m_cbf;
@@ -208,7 +208,7 @@ public:
     : m_cbf(cbf)
   {
   }
-  
+
   /*!
    * @if jp
    * @brief デストラクタ
@@ -223,7 +223,7 @@ public:
    * @endif
    */
   virtual ~ListenerFunc() {}
-  
+
   /*!
    * @if jp
    * @brief コールバック処理
@@ -241,7 +241,7 @@ public:
   {
     (*m_cbf)();
   }
-  
+
 private:
   CallbackFunc m_cbf;
 };

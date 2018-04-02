@@ -21,8 +21,8 @@
 
 #include <string>
 #include <sys/utsname.h>
-#include <sys/types.h> 
-#include <unistd.h> 
+#include <sys/types.h>
+#include <unistd.h>
 #include <stdlib.h>
 
 extern "C"
@@ -177,7 +177,7 @@ namespace coil
      * @endif
      */
     GetOpt(int argc, char* const argv[], const char* opt, int flag)
-      : optarg(::optarg), optind(1), opterr(1), optopt(0), 
+      : optarg(::optarg), optind(1), opterr(1), optopt(0),
         m_argc(argc), m_argv(argv), m_opt(opt), m_flag(flag)
     {
       ::optind = 1;
@@ -272,7 +272,7 @@ namespace coil
     const char* m_opt;
     int m_flag;
   };
-    
+
 };
 
 #endif // COIL_OS_H

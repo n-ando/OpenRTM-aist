@@ -50,7 +50,7 @@ namespace RTC
    *
    * This is a Publisher class of Flush type.
    * This class sends unsend data that has been stored in the buffer.
-   * This executes Consumer that waits for the data send timing in the same 
+   * This executes Consumer that waits for the data send timing in the same
    * thread as its send side.
    *
    * @endif
@@ -78,7 +78,7 @@ namespace RTC
      * @endif
      */
     PublisherFlush();
-    
+
     /*!
      * @if jp
      * @brief デストラクタ
@@ -101,7 +101,7 @@ namespace RTC
      * このクラスのオブジェクトを使用するのに先立ち、必ずこの関数を呼び
      * 出す必要がある。ただし、この PublisherFlush は現状で初期化するパ
      * ラメータを持たない。
-     *    
+     *
      * @param property 本Publisherの駆動制御情報を設定したPropertyオブジェクト
      * @return ReturnCode PORT_OK 正常終了
      *                    INVALID_ARGS Properties が不正な値を含む
@@ -150,7 +150,7 @@ namespace RTC
     /*!
      * @if jp
      * @brief バッファのセット
-     * 
+     *
      * PublisherFlushでは、バッファを使用しないため、いかなる場合も
      * PORT_OK を返す。
      *
@@ -186,7 +186,7 @@ namespace RTC
      * @return PORT_OK      正常終了
      *         INVALID_ARGS 不正な引数
      * @else
-     * @brief Set the listener. 
+     * @brief Set the listener.
      *
      * This function sets ConnectorListeners listener object to the
      * Publisher. By setting ConnectorListeners containing various
@@ -223,9 +223,9 @@ namespace RTC
      * が返される。
      *
      * これら以外のエラーの場合、PORT_ERROR が返される。
-     * 
      *
-     * @param data 書き込むデータ 
+     *
+     * @param data 書き込むデータ
      * @param sec タイムアウト時間
      * @param nsec タイムアウト時間
      *
@@ -238,7 +238,7 @@ namespace RTC
      *         CONNECTION_LOST     接続が切断されたことを検知した。
      *
      * @else
-     * @brief Write data 
+     * @brief Write data
      *
      * This function writes data into the consumer associated with
      * this Publisher. If this function is called without initializing
@@ -272,7 +272,7 @@ namespace RTC
      * @if jp
      *
      * @brief アクティブ化確認
-     * 
+     *
      * Publisher はデータポートと同期して activate/deactivate される。
      * activate() / deactivate() 関数によって、アクティブ状態と非アクティ
      * ブ状態が切り替わる。この関数により、現在アクティブ状態か、非アク
@@ -283,7 +283,7 @@ namespace RTC
      * @else
      *
      * @brief If publisher is active state
-     * 
+     *
      * A Publisher can be activated/deactivated synchronized with the
      * data port.  The active state and the non-active state are made
      * transition by the "activate()" and the "deactivate()" functions
@@ -354,7 +354,7 @@ namespace RTC
   protected:
     /*!
      * @if jp
-     * @brief ON_SENDのリスナへ通知する。 
+     * @brief ON_SENDのリスナへ通知する。
      * @param data cdrMemoryStream
      * @else
      * @brief Notify an ON_SEND event to listners
@@ -369,7 +369,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ON_RECEIVEDのリスナへ通知する。 
+     * @brief ON_RECEIVEDのリスナへ通知する。
      * @param data cdrMemoryStream
      * @else
      * @brief Notify an ON_RECEIVED event to listeners
@@ -384,7 +384,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ON_RECEIVER_FULLのリスナへ通知する。 
+     * @brief ON_RECEIVER_FULLのリスナへ通知する。
      * @param data cdrMemoryStream
      * @else
      * @brief Notify an ON_RECEIVER_FULL event to listeners
@@ -399,7 +399,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ON_RECEIVER_TIMEOUTのリスナへ通知する。 
+     * @brief ON_RECEIVER_TIMEOUTのリスナへ通知する。
      * @param data cdrMemoryStream
      * @else
      * @brief Notify an ON_RECEIVER_TIMEOUT event to listeners
@@ -414,7 +414,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ON_RECEIVER_ERRORのリスナへ通知する。 
+     * @brief ON_RECEIVER_ERRORのリスナへ通知する。
      * @param data cdrMemoryStream
      * @else
      * @brief Notify an ON_RECEIVER_ERROR event to listeners
@@ -426,7 +426,7 @@ namespace RTC
       m_listeners->
         connectorData_[ON_RECEIVER_ERROR].notify(m_profile, data);
     }
-    
+
   private:
     Logger rtclog;
     InPortConsumer* m_consumer;

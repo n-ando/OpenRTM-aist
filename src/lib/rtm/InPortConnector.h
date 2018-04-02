@@ -309,7 +309,7 @@ namespace RTC
      * @if jp
      * @brief ConnectorInfo
      * @else
-     * @brief ConnectorInfo 
+     * @brief ConnectorInfo
      * @endif
      */
     ConnectorInfo m_profile;
@@ -331,7 +331,7 @@ namespace RTC
     CdrBufferBase* m_buffer;
     /*!
      * @if jp
-     * @brief 接続エンディアン 
+     * @brief 接続エンディアン
      * @else
      * @brief Connected Endian
      * @endif

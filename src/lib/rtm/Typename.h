@@ -36,7 +36,7 @@ namespace CORBA_Util
   {
     typedef void type;
   };
-  
+
   /*!
    * @brief has nil impl: void case
    */
@@ -45,7 +45,7 @@ namespace CORBA_Util
   {
     static const bool value = false;
   };
-  
+
   /*!
    * @brief has nil impl: valid case
    *
@@ -57,42 +57,42 @@ namespace CORBA_Util
   {
     static const bool value = true;
   };
-  
+
   /*!
    * @brief has nil traits class template
    *
    * T has _nil() static function -> value = true
    * T has no _nil() static function -> value = false
-   * 
+   *
    */
   template <class T>
   struct has_nil : has_nil_impl<T>
   {
   };
-  
+
   /*!
    * @brief is corba object traits class
    *
    * T is CORBA object     -> value = true
    * T is not CORBA object -> value = false
-   * 
+   *
    */
   template <typename T>
   struct is_corba_object
   {
     static const bool value = has_nil<T>::value;
   };
-  
+
   /*!
    * @brief typecode class template
    *
    * typecode class provides typecode object from type not instance
    * By using this class, you can get repository id and name in inline code.
-   * 
+   *
    */
   template <bool cond, class T>
   class typecode;
-  
+
   template <class T>
   class typecode<true, T>
   {
@@ -114,7 +114,7 @@ namespace CORBA_Util
       return any_var.type()->name();
     }
   };
-  
+
   template <class T>
   class typecode<false, T>
   {
@@ -134,8 +134,8 @@ namespace CORBA_Util
       return any_var.type()->name();
     }
   };
-  
-  
+
+
   /*!
    * @if jp
    * @brief CORBA型のタイプ名を文字列で取得する
@@ -143,7 +143,7 @@ namespace CORBA_Util
    * CORBA IDLによって定義されたクラスまたは構造体などの型名を取得する。
    * テンプレート引数には、タイプコードが生成される型を与えることができる。
    *
-   * <pre> 
+   * <pre>
    * std::cout << toTypename<RTC::TimedFloat>() << std::endl;
    * std::cout << toTypename<RTC::RTObject>() << std::endl;
    * </pre>
@@ -153,7 +153,7 @@ namespace CORBA_Util
    * RTObject
    * </pre>
    * となる。
-   * 
+   *
    * @else
    * @brief Getting CORBA defined type as characters
    *
@@ -161,7 +161,7 @@ namespace CORBA_Util
    * defined CORBA IDL. The template parameter can be a type which has
    * type code.
    *
-   * <pre> 
+   * <pre>
    * std::cout << toTypename<RTC::TimedFloat>() << std::endl;
    * std::cout << toTypename<RTC::RTObject>() << std::endl;
    * </pre>
@@ -178,19 +178,19 @@ namespace CORBA_Util
   {
     return typecode<is_corba_object<T>::value, T>::name();
   }
-  
+
   template <class T>
   const char* toTypenameOfStruct()
   {
     return typecode<false, T>::name();
   }
-  
+
   template <class T>
   const char* toTypenameOfObject()
   {
     return typecode<true, T>::name();
   }
-  
+
   /*!
    * @if jp
    * @brief CORBA型のリポジトリIDを文字列で取得する
@@ -198,7 +198,7 @@ namespace CORBA_Util
    * CORBA IDLによって定義されたクラスまたは構造体などのリポジトリIDを取得する。
    * テンプレート引数には、タイプコードが生成される型を与えることができる。
    *
-   * <pre> 
+   * <pre>
    * std::cout << toRepositoryId<RTC::TimedFloat>() << std::endl;
    * std::cout << toRepositoryId<RTC::RTObject>() << std::endl;
    * </pre>
@@ -208,7 +208,7 @@ namespace CORBA_Util
    * IDL:omg.org/RTC/RTObject:1.0
    * </pre>
    * となる。
-   * 
+   *
    * @else
    * @brief Getting CORBA defined type as characters
    *
@@ -216,7 +216,7 @@ namespace CORBA_Util
    * defined CORBA IDL. The template parameter can be a type which has
    * type code.
    *
-   * <pre> 
+   * <pre>
    * std::cout << toRepositoryId<RTC::TimedFloat>() << std::endl;
    * std::cout << toRepositoryId<RTC::RTObject>() << std::endl;
    * </pre>
@@ -245,7 +245,7 @@ namespace CORBA_Util
   {
     return typecode<true, T>::id();
   }
-  
+
 }; // namespace CORBA_Util
 
 template <class T>

@@ -53,7 +53,7 @@ namespace RTC
    * このサブクラスのオブジェクトは InPort に属し、pull 型のデータスト
    * リームを実現する。InPort に対して新しいインターフェースを実装する
    * 場合には、このクラスを継承し、以下の関数を実装する必要がある。
-   * 
+   *
    * - init()
    * - setBuffer()
    * - setListener()
@@ -77,10 +77,10 @@ namespace RTC
    * - 第1引数: プロバイダの名前, "corba_cdr" など
    * - 第2引数: ファクトリ関数 coil::Creator<B, T>
    * - 第3引数: 削除関数 coil::Destructor<B, T>
-   * 
+   *
    * を与えて呼び出す必要がある。以下は、ファクトリへの登録と、それを初
    * 期化関数とした例である。
-   * 
+   *
    * <pre>
    * extern "C"
    * {
@@ -173,7 +173,7 @@ namespace RTC
   {
   public:
     DATAPORTSTATUS_ENUM
-    
+
     /*!
      * @if jp
      *
@@ -199,7 +199,7 @@ namespace RTC
      * 数は、OutPortProvider生成直後および、接続時にそれぞれ呼ばれる可
      * 能性がある。したがって、この関数は複数回呼ばれることを想定して記
      * 述されるべきである。
-     * 
+     *
      * @param prop 設定情報
      *
      * @else
@@ -239,7 +239,7 @@ namespace RTC
      * overwritten by the given pointer to a buffer.  Since
      * OutPortProvider does not assume ownership of the buffer
      * pointer, destructor of the buffer should be done by user.
-     * 
+     *
      * @param buffer A pointer to a data buffer to be used by OutPortProvider
      *
      * @endif
@@ -261,7 +261,7 @@ namespace RTC
      * @param listeners リスナオブジェクト
      *
      * @else
-     * @brief Set the listener. 
+     * @brief Set the listener.
      *
      * OutPort provides callback functionality that calls specific
      * listener objects according to the events in the data publishing
@@ -333,7 +333,7 @@ namespace RTC
      * @endif
      */
     virtual bool subscribeInterface(const SDOPackage::NVList& properties) = 0;
-    
+
     /*!
      * @if jp
      *
@@ -385,7 +385,7 @@ namespace RTC
       }
       const SDOPackage::NVList& m_prop;
     };
-    
+
     /*!
      * @if jp
      * @brief Interface接続解除用Functor

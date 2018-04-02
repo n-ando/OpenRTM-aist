@@ -168,7 +168,7 @@ namespace RTC
      * properly, this function will return PORT_OK return code. Except
      * normal return, BUFFER_EMPTY, TIMEOUT, PRECONDITION_NOT_MET and
      * PORT_ERROR will be returned as error codes.
-     *  
+     *
      * @return PORT_OK              Normal return
      *         BUFFER_EMPTY         Buffer empty
      *         TIMEOUT              Timeout

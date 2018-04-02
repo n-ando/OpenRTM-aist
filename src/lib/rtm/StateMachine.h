@@ -30,7 +30,7 @@ namespace RTC_Utils
    * @if jp
    * @class StateHolder
    * @brief 状態保持用クラス
-   * 
+   *
    * 状態を保持するためのホルダークラス。
    * 現在の状態と、１つ前の状態、遷移予定の状態を保持する。
    *
@@ -41,7 +41,7 @@ namespace RTC_Utils
    * @else
    * @class StateHolder
    * @brief State holder class
-   * 
+   *
    * This is a holder class to hold states.
    * Hold current state, the previous state and the
    * state to be expected to transfer.
@@ -59,7 +59,7 @@ namespace RTC_Utils
     State prev;
     State next;
   };
-  
+
   /*!
    * @if jp
    *
@@ -73,33 +73,33 @@ namespace RTC_Utils
    * 状態は3状態 INACTIVE, ACTIVE, ERROR があり、各状態でのEntryやExit動作を
    * 定義したいとすると、以下のように実現される。
    * <pre>
-   * class ActiveObject 
-   * {  
-   * public: 
-   *   enum MyState { INACTIVE, ACTIVE, ERROR }; 
-   *   typedef States<MyState> MyStates; 
-   *  
-   *   ActiveObject() 
-   *     : m_sm(3) 
-   *   { 
-   *     m_sm.setNOP(&ActiveObject::nullAction); 
-   *     m_sm.setListener(this); 
-   *  
-   *     m_sm.setExitAction(INACTIVE, &ActiveObject::inactiveExit); 
-   *       : 
-   *     m_sm.setPostDoAction(ERROR, &ActiveObject::errorPostDo); 
-   *     m_sm.setTransitionAction(&ActiveObject:transition); 
-   *   }; 
-   *  
-   *   bool nullAction(MyStates st) {}; 
-   *   bool inactiveExit(MyStates st) {}; 
-   *     : 
-   *   bool errorPostDo(MyStates st) {}; 
-   *   bool transition(MyStates st) {}; 
-   *  
-   * private: 
-   *   StateMachine<MyState, bool, ActiveObject> m_sm; 
-   * }; 
+   * class ActiveObject
+   * {
+   * public:
+   *   enum MyState { INACTIVE, ACTIVE, ERROR };
+   *   typedef States<MyState> MyStates;
+   *
+   *   ActiveObject()
+   *     : m_sm(3)
+   *   {
+   *     m_sm.setNOP(&ActiveObject::nullAction);
+   *     m_sm.setListener(this);
+   *
+   *     m_sm.setExitAction(INACTIVE, &ActiveObject::inactiveExit);
+   *       :
+   *     m_sm.setPostDoAction(ERROR, &ActiveObject::errorPostDo);
+   *     m_sm.setTransitionAction(&ActiveObject:transition);
+   *   };
+   *
+   *   bool nullAction(MyStates st) {};
+   *   bool inactiveExit(MyStates st) {};
+   *     :
+   *   bool errorPostDo(MyStates st) {};
+   *   bool transition(MyStates st) {};
+   *
+   * private:
+   *   StateMachine<MyState, bool, ActiveObject> m_sm;
+   * };
    * </pre>
    * 状態を持たせたいクラスは以下の条件を満たすように実装しなければならない。
    * <ol>
@@ -131,7 +131,7 @@ namespace RTC_Utils
    * 5つのアクションが定義することができる。
    * Transition action はあらゆる状態間遷移で呼び出されるアクションで、
    * その振る舞いはユーザが定義しなければならない。
-   * 
+   *
    * このクラスは以下のようなタイミングで各アクションが実行される。
    *
    * <ul>
@@ -162,41 +162,41 @@ namespace RTC_Utils
    *
    * StateMachine class is a class to realize a state machine.
    *
-   * Example: ActiveObject assumes to be an active object that has 
+   * Example: ActiveObject assumes to be an active object that has
    * the state machine.
-   * There are three states such as INACTIVE, ACTIVE and ERROR state, 
+   * There are three states such as INACTIVE, ACTIVE and ERROR state,
    * and if you want to define Entry or Exit action, this class will realize
    * as follows:
    * <pre>
-   * class ActiveObject 
-   * {  
-   * public: 
-   *   enum MyState { INACTIVE, ACTIVE, ERROR }; 
-   *   typedef States<MyState> MyStates; 
-   *  
-   *   ActiveObject() 
-   *     : m_sm(3) 
-   *   { 
-   *     m_sm.setNOP(&ActiveObject::nullAction); 
-   *     m_sm.setListener(this); 
-   *  
-   *     m_sm.setExitAction(INACTIVE, &ActiveObject::inactiveExit); 
-   *       : 
-   *     m_sm.setPostDoAction(ERROR, &ActiveObject::errorPostDo); 
-   *     m_sm.setTransitionAction(&ActiveObject:transition); 
-   *   }; 
-   *  
-   *   bool nullAction(MyStates st) {}; 
-   *   bool inactiveExit(MyStates st) {}; 
-   *     : 
-   *   bool errorPostDo(MyStates st) {}; 
-   *   bool transition(MyStates st) {}; 
-   *  
-   * private: 
-   *   StateMachine<MyState, bool, ActiveObject> m_sm; 
-   * }; 
+   * class ActiveObject
+   * {
+   * public:
+   *   enum MyState { INACTIVE, ACTIVE, ERROR };
+   *   typedef States<MyState> MyStates;
+   *
+   *   ActiveObject()
+   *     : m_sm(3)
+   *   {
+   *     m_sm.setNOP(&ActiveObject::nullAction);
+   *     m_sm.setListener(this);
+   *
+   *     m_sm.setExitAction(INACTIVE, &ActiveObject::inactiveExit);
+   *       :
+   *     m_sm.setPostDoAction(ERROR, &ActiveObject::errorPostDo);
+   *     m_sm.setTransitionAction(&ActiveObject:transition);
+   *   };
+   *
+   *   bool nullAction(MyStates st) {};
+   *   bool inactiveExit(MyStates st) {};
+   *     :
+   *   bool errorPostDo(MyStates st) {};
+   *   bool transition(MyStates st) {};
+   *
+   * private:
+   *   StateMachine<MyState, bool, ActiveObject> m_sm;
+   * };
    * </pre>
-   * If you want to give a class to some states, you must implement the class to 
+   * If you want to give a class to some states, you must implement the class to
    * satisfy the following conditions:
    * <ol>
    * <li> You must define states by enum.
@@ -206,9 +206,9 @@ namespace RTC_Utils
    * <li> You must set the following action functions as a function of
    *      (Return _function_name_(States))
    * <ol>
-   *  <li> You must define a function that does not do anything and give with 
+   *  <li> You must define a function that does not do anything and give with
    *       setNOP.
-   *  <li> You must set actions to each state 
+   *  <li> You must set actions to each state
    *       by set(Entry|PreDo|Do|PostDo|Exit)Action.
    *  <li> You should set actions at the state transition by setTransitionAction().
    * </ol>
@@ -216,7 +216,7 @@ namespace RTC_Utils
    *  as current state, next state and previous state.
    * <li> You should change states by goTo() and check the state by isIn(state).
    * <li> goTo() is a function that sets next state forcibly, therefore,
-   *      to determine the next state, you must get current state and 
+   *      to determine the next state, you must get current state and
    *      implement that logic.
    * </ol>
    *
@@ -230,7 +230,7 @@ namespace RTC_Utils
    * </ul>
    * Transition action is an action invoked at the transition between any states,
    * and you must define its behavior.
-   * 
+   *
    * This class executes each action according to the following timing.
    *
    * <ul>
@@ -258,7 +258,7 @@ namespace RTC_Utils
    */
   template <class State,
             class Listener,
-            class States = StateHolder<State>, 
+            class States = StateHolder<State>,
             class Callback = void (Listener::*)(const States& states)
             >
   class StateMachine
@@ -359,7 +359,7 @@ namespace RTC_Utils
       setNullFunc(m_postdo, call_back);
       m_transit = call_back;
     }
-    
+
     /*!
      * @if jp
      * @brief Listener オブジェクトを登録する
@@ -382,7 +382,7 @@ namespace RTC_Utils
       assert(listener != NULL);
       m_listener = listener;
     }
-    
+
     /*!
      * @if jp
      * @brief Entry action 関数を登録する
@@ -420,7 +420,7 @@ namespace RTC_Utils
         }
       return true;
     }
-    
+
     /*!
      * @if jp
      * @brief PreDo action 関数を登録する
@@ -457,7 +457,7 @@ namespace RTC_Utils
         }
       return true;
     }
-    
+
     /*!
      * @if jp
      * @brief Do action 関数を登録する
@@ -494,7 +494,7 @@ namespace RTC_Utils
         }
       return true;
     }
-    
+
     /*!
      * @if jp
      * @brief PostDo action 関数を登録する
@@ -531,7 +531,7 @@ namespace RTC_Utils
         }
       return true;
     }
-    
+
     /*!
      * @if jp
      * @brief Exit action 関数を登録する
@@ -568,7 +568,7 @@ namespace RTC_Utils
         }
       return true;
     }
-    
+
     /*!
      * @if jp
      * @brief State transition action 関数を登録する
@@ -583,7 +583,7 @@ namespace RTC_Utils
      * @else
      * @brief Set state transition action function
      *
-     * Set callback function for State transition action that is executed 
+     * Set callback function for State transition action that is executed
      * when transiting to the state.
      *
      * @param call_back Callback function for State transition
@@ -597,7 +597,7 @@ namespace RTC_Utils
       m_transit = call_back;
       return true;
     }
-    
+
     /*!
      * @if jp
      * @brief 初期状態をセットする
@@ -621,7 +621,7 @@ namespace RTC_Utils
       m_states.prev = states.prev;
       m_states.next = states.next;
     }
-    
+
     /*!
      * @if jp
      * @brief 状態を取得する
@@ -647,7 +647,7 @@ namespace RTC_Utils
       Guard guard(m_mutex);
       return m_states;
     }
-    
+
     /*!
      * @if jp
      * @brief 現在の状態を取得する
@@ -670,7 +670,7 @@ namespace RTC_Utils
       Guard guard(m_mutex);
       return m_states.curr;
     }
-    
+
     /*!
      * @if jp
      * @brief 現在状態を確認
@@ -697,7 +697,7 @@ namespace RTC_Utils
       Guard guard(m_mutex);
       return m_states.curr == state ? true : false;
     }
-    
+
     /*!
      * @if jp
      * @brief 状態を遷移
@@ -734,7 +734,7 @@ namespace RTC_Utils
         }
     }
 
-    
+
     /*!
      * @if jp
      * @brief 駆動関数

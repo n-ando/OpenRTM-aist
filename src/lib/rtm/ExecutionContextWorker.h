@@ -253,7 +253,7 @@ namespace RTC_impl
 
     RTC::ReturnCode_t stopThread(void);
 
-    
+
     /*!
      * @if jp
      * @brief ExecutionContext の実行周期が変更された
@@ -528,7 +528,7 @@ namespace RTC_impl
      * execution context.
      * The removed RTC will receive a call to
      * LightweightRTComponent::detach_context.
-     * BAD_PARAMETER will be returned, if the given RT-Component is not 
+     * BAD_PARAMETER will be returned, if the given RT-Component is not
      * participating in the participant list.
      *
      * @param comp The target RT-Component for delete

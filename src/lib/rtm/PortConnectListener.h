@@ -39,7 +39,7 @@ namespace RTC
    *
    * @else
    * @brief The types of ConnectorDataListener
-   * 
+   *
    * - ON_NOTIFY_CONNECT:         right after entering into notify_connect()
    * - ON_NOTIFY_DISCONNECT:      right after entering into notify_disconnect()
    * - ON_UNSUBSCRIBE_INTERFACES: unsubscribing IF in notify_disconnect()
@@ -149,7 +149,7 @@ namespace RTC
    *
    * @else
    * @brief The types of PortConnectRetListenerType
-   * 
+   *
    * - ON_CONNECT_NEXTPORT:     after cascade-call in notify_connect()
    * - ON_SUBSCRIBE_INTERFACES: after IF subscribing in notify_connect()
    * - ON_CONNECTED:            completed nofity_connect() connection process
@@ -259,7 +259,7 @@ namespace RTC
   //============================================================
   /*!
    * @if jp
-   * @class PortConnectListenerHolder 
+   * @class PortConnectListenerHolder
    * @brief PortConnectListener ホルダクラス
    *
    * 複数の PortConnectListener を保持し管理するクラス。
@@ -286,7 +286,7 @@ namespace RTC
      * @endif
      */
     PortConnectListenerHolder();
-    
+
     /*!
      * @if jp
      * @brief デストラクタ
@@ -295,7 +295,7 @@ namespace RTC
      * @endif
      */
     virtual ~PortConnectListenerHolder();
-    
+
     /*!
      * @if jp
      *
@@ -310,15 +310,15 @@ namespace RTC
      *
      * @brief Add the listener.
      *
-     * This method adds the listener. 
+     * This method adds the listener.
      *
      * @param listener Added listener
      * @param autoclean true:The listener is deleted at the destructor.,
-     *                  false:The listener is not deleted at the destructor. 
+     *                  false:The listener is not deleted at the destructor.
      * @endif
      */
     void addListener(PortConnectListener* listener, bool autoclean);
-    
+
     /*!
      * @if jp
      *
@@ -329,9 +329,9 @@ namespace RTC
      * @param listener 削除するリスナ
      * @else
      *
-     * @brief Remove the listener. 
+     * @brief Remove the listener.
      *
-     * This method removes the listener. 
+     * This method removes the listener.
      *
      * @param listener Removed listener
      * @endif
@@ -348,15 +348,15 @@ namespace RTC
      * @param info ConnectorInfo
      * @else
      *
-     * @brief Notify listeners. 
+     * @brief Notify listeners.
      *
-     * This calls the Callback method of the registered listener. 
+     * This calls the Callback method of the registered listener.
      *
      * @param info ConnectorInfo
      * @endif
      */
     void notify(const char* portname, RTC::ConnectorProfile& profile);
-      
+
   private:
     std::vector<Entry> m_listeners;
     coil::Mutex m_mutex;
@@ -401,7 +401,7 @@ namespace RTC
      * @endif
      */
     virtual ~PortConnectRetListenerHolder();
-    
+
     /*!
      * @if jp
      *
@@ -416,15 +416,15 @@ namespace RTC
      *
      * @brief Add the listener.
      *
-     * This method adds the listener. 
+     * This method adds the listener.
      *
      * @param listener Added listener
      * @param autoclean true:The listener is deleted at the destructor.,
-     *                  false:The listener is not deleted at the destructor. 
+     *                  false:The listener is not deleted at the destructor.
      * @endif
      */
     void addListener(PortConnectRetListener* listener, bool autoclean);
-    
+
     /*!
      * @if jp
      *
@@ -435,15 +435,15 @@ namespace RTC
      * @param listener 削除するリスナ
      * @else
      *
-     * @brief Remove the listener. 
+     * @brief Remove the listener.
      *
-     * This method removes the listener. 
+     * This method removes the listener.
      *
      * @param listener Removed listener
      * @endif
      */
     void removeListener(PortConnectRetListener* listener);
-    
+
     /*!
      * @if jp
      *
@@ -455,9 +455,9 @@ namespace RTC
      * @param cdrdata データ
      * @else
      *
-     * @brief Notify listeners. 
+     * @brief Notify listeners.
      *
-     * This calls the Callback method of the registered listener. 
+     * This calls the Callback method of the registered listener.
      *
      * @param info ConnectorInfo
      * @param cdrdata Data
@@ -465,7 +465,7 @@ namespace RTC
      */
     void notify(const char* portname, RTC::ConnectorProfile& profile,
                 ReturnCode_t ret);
-    
+
   private:
     std::vector<Entry> m_listeners;
     coil::Mutex m_mutex;
@@ -493,10 +493,10 @@ namespace RTC
      * PortConnectListenerType リスナを格納
      * @else
      * @brief PortConnectListenerType listener array
-     * The PortConnectListenerType listener is stored. 
+     * The PortConnectListenerType listener is stored.
      * @endif
      */
-    PortConnectListenerHolder 
+    PortConnectListenerHolder
     portconnect_[PORT_CONNECT_LISTENER_NUM];
     /*!
      * @if jp
@@ -507,7 +507,7 @@ namespace RTC
      * The PortConnectRetType listener is stored.
      * @endif
      */
-    PortConnectRetListenerHolder 
+    PortConnectRetListenerHolder
     portconnret_[PORT_CONNECT_RET_LISTENER_NUM];
   };
 

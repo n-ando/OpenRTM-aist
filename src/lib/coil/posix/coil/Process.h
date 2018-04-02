@@ -48,7 +48,7 @@ namespace coil
    * environment variable PATH of command search path. 0 will be
    * returned if launching process is successful, and -1 will be
    * returned if it is failed.
-   * 
+   *
    * @param command full path string to a command to be executed.
    * @return 0: successful, -1: failed
    *

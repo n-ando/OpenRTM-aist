@@ -62,7 +62,7 @@ namespace util
    *   // コールバック関数1: 関数呼び出し演算子によるコールバック関数
    *   // いわゆるファンクタのようにコールバック関数を定義する例。
    *   virtual void operator()(std::string strarg) = 0; // 純粋仮想関数
-   *   
+   *
    *   // コールバックの関数シグニチャが多様である場合、このように単な
    *   // るメンバ関数として定義することも可能。
    *   virtual void onEvent0(const char* arg0) = 0;
@@ -117,7 +117,7 @@ namespace util
    * たがって、リスナオブジェクトへアクセスする場合にはfirstを使用する。
    * マルチスレッド環境で利用することが想定される場合は、Guard
    * guard(m_mutex) によるロックを忘れずに行うこと。
-   * 
+   *
    * @section ListenerHolder実装クラスの利用
    * 実装されたMyListenerHolderImplは一例として以下のように利用する。
    *
@@ -128,7 +128,7 @@ namespace util
    * // 登録、自動クリーンモードで登録、
    * // オブジェクトの削除はHolderクラスに任せる
    * m_holder.addListener(new MyListener0(), true); // MyListener0の
-   * 
+   *
    * // コールバックを呼び出す
    * m_holder.operator()(strarg);
    * m_holder.onEvent0("HogeHoge);
@@ -154,7 +154,7 @@ namespace util
      * @if jp
      * @brief ListenerHolderクラスコンストラクタ
      * @else
-     * @brief ListenerHolder class ctor 
+     * @brief ListenerHolder class ctor
      * @endif
      */
     ListenerHolder()
@@ -165,14 +165,14 @@ namespace util
      * @if jp
      * @brief ListenerHolderデストラクタ
      * @else
-     * @brief ListenerHolder class dtor 
+     * @brief ListenerHolder class dtor
      * @endif
      */
     virtual ~ListenerHolder()
     {
       Guard guard(m_mutex);
       EntryIterator it(m_listeners.begin());
-      
+
       for (; it != m_listeners.end(); ++it)
         {
           if ((*it).second)
@@ -182,7 +182,7 @@ namespace util
           m_listeners.erase(it);
         }
     }
-  
+
     /*!
      * @if jp
      * @brief リスナを追加する
@@ -196,7 +196,7 @@ namespace util
       Guard guard(m_mutex);
       m_listeners.push_back(Entry(listener, autoclean));
     }
-    
+
     /*!
      * @if jp
      * @brief リスナを削除する
@@ -208,7 +208,7 @@ namespace util
     {
       Guard guard(m_mutex);
       EntryIterator it(m_listeners.begin());
-      
+
       for (; it != m_listeners.end(); ++it)
         {
           if ((*it).first == listener)

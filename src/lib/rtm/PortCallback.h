@@ -206,7 +206,7 @@ namespace RTC
      * @endif
      */
     virtual ~OnWrite(void) {}
-    
+
     /*!
      * @if jp
      *
@@ -229,7 +229,7 @@ namespace RTC
      */
     virtual void operator()(const DataType& value) = 0;
   };
-  
+
 
   /*!
    * @if jp
@@ -271,7 +271,7 @@ namespace RTC
      * @endif
      */
     virtual ~OnWriteConvert(void) {}
-    
+
     /*!
      * @if jp
      *
@@ -296,7 +296,7 @@ namespace RTC
      */
     virtual DataType operator()(const DataType& value) = 0;
   };
-  
+
 
   /*!
    * @if jp
@@ -338,7 +338,7 @@ namespace RTC
      * @endif
      */
     virtual ~OnRead(void) {}
-    
+
     /*!
      * @if jp
      *
@@ -357,7 +357,7 @@ namespace RTC
      */
     virtual void operator()() = 0;
   };
-  
+
   /*!
    * @if jp
    * @class OnReadConvert
@@ -400,7 +400,7 @@ namespace RTC
      * @endif
      */
     virtual ~OnReadConvert(void) {}
-    
+
     /*!
      * @if jp
      *
@@ -429,7 +429,7 @@ namespace RTC
      */
     virtual DataType operator()(const DataType& value) = 0;
   };
-  
+
 
 };
 #endif // RTC_PORTCALLBACK_H
