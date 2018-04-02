@@ -172,4 +172,5 @@ extern "C"
   void DLL_EXPORT ProcessUniquePolicyInit();
 };
 
+}; // namespace RTM
 #endif  // RTC_NUMBERINGPOLICY_H

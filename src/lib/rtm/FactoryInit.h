@@ -17,5 +17,9 @@
  */
 #ifndef RTM_FACTORYINIT_H
 #define RTM_FACTORYINIT_H
-void FactoryInit();
+
+namespace RTM
+{
+  void FactoryInit();
+}; // namespace RTM
 #endif  // RTM_FACTORYINIT_H

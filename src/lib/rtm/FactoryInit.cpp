@@ -101,3 +101,4 @@ void FactoryInit()
     ComponentObserverConsumerInit();
 #endif
 }
+}; // namespace RTM
