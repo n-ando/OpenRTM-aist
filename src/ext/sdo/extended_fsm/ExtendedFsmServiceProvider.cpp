@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file ExtendedFsmServiceProvider.h
  * @brief Component observer SDO service consumer implementation
@@ -82,7 +82,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ½é´ü²½
+   * @brief åˆæœŸåŒ–
    * @else
    * @brief Initialization
    * @endif
@@ -100,7 +100,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ºÆ½é´ü²½
+   * @brief å†åˆæœŸåŒ–
    * @else
    * @brief Re-initialization
    * @endif
@@ -116,7 +116,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ServiceProfile ¤ò¼èÆÀ¤¹¤ë
+   * @brief ServiceProfile ã‚’å–å¾—ã™ã‚‹
    * @else
    * @brief getting ServiceProfile
    * @endif
@@ -129,7 +129,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ½ªÎ»½èÍı
+   * @brief çµ‚äº†å‡¦ç†
    * @else
    * @brief Finalization
    * @endif
@@ -148,7 +148,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief FSM¤Î¸½ºß¤Î¾õÂÖ¤ò¼èÆÀ
+   * @brief FSMã®ç¾åœ¨ã®çŠ¶æ…‹ã‚’å–å¾—
    * @else
    * @brief Get Current FSM State
    * @endif
@@ -160,7 +160,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief FSM¤Î¹½Â¤¤òÀßÄê¤¹¤ë
+   * @brief FSMã®æ§‹é€ ã‚’è¨­å®šã™ã‚‹
    * @else
    * @brief Set FSM Structure
    * @endif
@@ -175,7 +175,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief FSM¤Î¹½Â¤¤ò¼èÆÀ¤¹¤ë
+   * @brief FSMã®æ§‹é€ ã‚’å–å¾—ã™ã‚‹
    * @else
    * @brief Set FSM Structure
    * @endif
@@ -193,7 +193,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief RTObject¤Ø¤Î¥ê¥¹¥ÊÀÜÂ³½èÍı
+   * @brief RTObjectã¸ã®ãƒªã‚¹ãƒŠæ¥ç¶šå‡¦ç†
    * @else
    * @brief Connectiong listeners to RTObject
    * @endif
@@ -207,7 +207,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ¥Ï¡¼¥È¥Ó¡¼¥È¤ò¥ª¥Ö¥¶¡¼¥Ğ¤ËÅÁ¤¨¤ë
+   * @brief ãƒãƒ¼ãƒˆãƒ“ãƒ¼ãƒˆã‚’ã‚ªãƒ–ã‚¶ãƒ¼ãƒã«ä¼ãˆã‚‹
    * @else
    * @brief Sending a heartbeart signal to observer
    * @endif
@@ -219,7 +219,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ¥Ï¡¼¥È¥Ó¡¼¥È¤ò¥ª¥Ö¥¶¡¼¥Ğ¤ËÅÁ¤¨¤ë
+   * @brief ãƒãƒ¼ãƒˆãƒ“ãƒ¼ãƒˆã‚’ã‚ªãƒ–ã‚¶ãƒ¼ãƒã«ä¼ãˆã‚‹
    * @else
    * @brief Sending a heartbeart signal to observer
    * @endif
@@ -233,7 +233,7 @@ namespace RTC
   // FSM status related functions
   /*!
    * @if jp
-   * @brief RTC¾õÂÖÊÑ²½¥ê¥¹¥Ê¤ÎÀßÄê½èÍı
+   * @brief RTCçŠ¶æ…‹å¤‰åŒ–ãƒªã‚¹ãƒŠã®è¨­å®šå‡¦ç†
    * @else
    * @brief Setting RTC status listeners
    * @endif
@@ -245,7 +245,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief RTC¾õÂÖÊÑ²½¥ê¥¹¥Ê¤Î²ò½ü½èÍı
+   * @brief RTCçŠ¶æ…‹å¤‰åŒ–ãƒªã‚¹ãƒŠã®è§£é™¤å‡¦ç†
    * @else
    * @brief Unsetting RTC status listeners
    * @endif
@@ -259,7 +259,7 @@ namespace RTC
   // FsmProfile related functions
   /*!
    * @if jp
-   * @brief FsmProfile¾õÂÖÊÑ²½¥ê¥¹¥Ê¤ÎÀßÄê
+   * @brief FsmProfileçŠ¶æ…‹å¤‰åŒ–ãƒªã‚¹ãƒŠã®è¨­å®š
    * @else
    * @brief Setting FsmProfile listener
    * @endif
@@ -270,7 +270,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief FsmProfile¾õÂÖÊÑ²½¥ê¥¹¥Ê¤Î²ò½ü
+   * @brief FsmProfileçŠ¶æ…‹å¤‰åŒ–ãƒªã‚¹ãƒŠã®è§£é™¤
    * @else
    * @brief Unsetting FsmProfile listener
    * @endif
@@ -283,7 +283,7 @@ namespace RTC
   // FsmStructure related functions
   /*!
    * @if jp
-   * @brief FsmStructure¾õÂÖÊÑ²½¥ê¥¹¥Ê¤ÎÀßÄê
+   * @brief FsmStructureçŠ¶æ…‹å¤‰åŒ–ãƒªã‚¹ãƒŠã®è¨­å®š
    * @else
    * @brief Setting FsmStructure listener
    * @endif
@@ -294,7 +294,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief FsmStructure¾õÂÖÊÑ²½¥ê¥¹¥Ê¤Î²ò½ü
+   * @brief FsmStructureçŠ¶æ…‹å¤‰åŒ–ãƒªã‚¹ãƒŠã®è§£é™¤
    * @else
    * @brief Unsetting FsmStructure listener
    * @endif

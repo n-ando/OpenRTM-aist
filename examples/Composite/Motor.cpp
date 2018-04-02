@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file  Motor.cpp * @brief Motor component * $Date$ 
  *

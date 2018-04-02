@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file  Process.h
  * @brief coil process management functions
@@ -30,15 +30,15 @@ namespace coil
 
   /*!
    * @if jp
-   * @brief ƒvƒƒZƒX‚ð‹N“®‚·‚é
+   * @brief ãƒ—ãƒ­ã‚»ã‚¹ã‚’èµ·å‹•ã™ã‚‹
    *
-   * ƒvƒƒZƒX‚ð‹N“®‚·‚éBˆø”‚É‚Í‹N“®‚·‚éƒtƒ@ƒCƒ‹–¼‚ð—^‚¦‚éBŽÀsƒtƒ@ƒC
-   * ƒ‹‚ÍŠÂ‹«•Ï” PATH ‚ÉÝ’è‚³‚ê‚½ƒRƒ}ƒ“ƒhƒT[ƒ`ƒpƒX“à‚©‚çŒŸõ‚³‚êAŒ©
-   * ‚Â‚©‚ê‚ÎƒRƒ}ƒ“ƒh‚ª‹N“®‚³‚ê‚éBƒvƒƒZƒX‚Ì‹N“®‚ª¬Œ÷‚·‚ê‚Î 0AŽ¸”s‚·
-   * ‚ê‚Î -1 ‚ð•Ô‚·B
+   * ãƒ—ãƒ­ã‚»ã‚¹ã‚’èµ·å‹•ã™ã‚‹ã€‚å¼•æ•°ã«ã¯èµ·å‹•ã™ã‚‹ãƒ•ã‚¡ã‚¤ãƒ«åã‚’ä¸Žãˆã‚‹ã€‚å®Ÿè¡Œãƒ•ã‚¡ã‚¤
+   * ãƒ«ã¯ç’°å¢ƒå¤‰æ•° PATH ã«è¨­å®šã•ã‚ŒãŸã‚³ãƒžãƒ³ãƒ‰ã‚µãƒ¼ãƒãƒ‘ã‚¹å†…ã‹ã‚‰æ¤œç´¢ã•ã‚Œã€è¦‹
+   * ã¤ã‹ã‚Œã°ã‚³ãƒžãƒ³ãƒ‰ãŒèµ·å‹•ã•ã‚Œã‚‹ã€‚ãƒ—ãƒ­ã‚»ã‚¹ã®èµ·å‹•ãŒæˆåŠŸã™ã‚Œã° 0ã€å¤±æ•—ã™
+   * ã‚Œã° -1 ã‚’è¿”ã™ã€‚
    *
-   * @param command ‹N“®‚·‚éŽÀsƒtƒ@ƒCƒ‹‚Ìƒtƒ‹ƒpƒX
-   * @return 0: ¬Œ÷, -1: Ž¸”s
+   * @param command èµ·å‹•ã™ã‚‹å®Ÿè¡Œãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒ•ãƒ«ãƒ‘ã‚¹
+   * @return 0: æˆåŠŸ, -1: å¤±æ•—
    *
    * @else
    * @brief Launching a process

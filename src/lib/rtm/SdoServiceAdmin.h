@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file SdoServiceAdmin.h
  * @brief SDO service administration class
@@ -35,55 +35,55 @@ namespace RTC
    * @if jp
    *
    * @class SDO service administration class
-   * @brief SDO service �������饹
+   * @brief SDO service 管理クラス
    *
-   * ���Υ��饹�ϡ�SDO Service ��������뤿��Υ��饹�Ǥ��롣SDO
-   * Service �� OMG SDO Specification �ˤ������������Ƥ��롢SDO������
-   * �ε�ǽ�Τ�����󶡤ޤ��׵᤹�륵���ӥ��ΰ�ĤǤ��롣�ܺ٤ϻ��ͤˤ�
-   * �����������Ƥ��ʤ������ܥ��饹�Ǥϰʲ��Τ褦�˿����񤦥����ӥ���
-   * �����ΤȤ���������������뤿��Υ��饹���ܥ��饹�Ǥ��롣
+   * このクラスは、SDO Service を管理するためのクラスである。SDO
+   * Service は OMG SDO Specification において定義されている、SDOが特定
+   * の機能のために提供また要求するサービスの一つである。詳細は仕様にお
+   * いて定義されていないが、本クラスでは以下のように振る舞うサービスで
+   * あるものとし、これらを管理するためのクラスが本クラスである。
    *
-   * SDO Service �ˤ����Ƥϡ�SDO/RTC�˽�ͭ���졢�����Υ����ӥ�����
-   * �����Τ� SDO Service Provider��¾��SDO/RTC�䥢�ץꥱ���������
-   * �����륵���ӥ����֥������Ȥλ��Ȥ������ꡢ�����ε�ǽ�����Ѥ���
-   * ��Τ�SDO Service Consumer �ȸƤ֡�
+   * SDO Service においては、SDO/RTCに所有され、ある種のサービスを提供
+   * するものを SDO Service Provider、他のSDO/RTCやアプリケーションが提
+   * 供するサービスオブジェクトの参照を受け取り、それらの機能を利用する
+   * ものを、SDO Service Consumer と呼ぶ。
    *
-   * SDO Service Provider ��¾�Υ��ץꥱ������󤫤�ƤФ졢SDO/RTC����
-   * �ε�ǽ�˥����������뤿����Ѥ����롣¾��SDO/RTC�ޤ��ϥ��ץꥱ��
-   * �����ϡ�
+   * SDO Service Provider は他のアプリケーションから呼ばれ、SDO/RTC内部
+   * の機能にアクセスするために用いられる。他のSDO/RTCまたはアプリケー
+   * ションは、
    *
    * - SDO::get_service_profiles ()
    * - SDO::get_service_profile (in UniqueIdentifier id)
    * - SDO::get_sdo_service (in UniqueIdentifier id) 
    *
-   * �Τ����줫�Υ��ڥ졼�����ˤ�ꡢServiceProfile �ޤ��� SDO
-   * Service �λ��Ȥ����������ǽ�����Ѥ��뤿��Υ��ڥ졼������Ƥӽ�
-   * ����¾��SDO/RTC�ޤ��ϥ��ץꥱ��������Ǥλ��Ȥ��˴���Ǥ�դΥ���
-   * �ߥ󥰤ǹԤ�졢�����ӥ���¦�Ǥϡ��ɤ�����ɤ�������Ȥ���Ƥ���
-   * �����Τ뤳�ȤϤǤ��ʤ��������ǡ�SDO/RTC¦�⡢Ǥ�դΥ����ߥ󥰤ǥ���
-   * �ӥ����󶡤���ߤ��뤳�Ȥ�Ǥ��뤿�ᡢ�����ӥ�������¦�Ǥϡ���ˤ�
-   * �����ӥ������ѤǤ���Ȥϸ¤�ʤ���ΤȤ��ƥ����ӥ����ڥ졼������
-   * �ƤӽФ�ɬ�פ����롣
+   * のいずれかのオペレーションにより、ServiceProfile または SDO
+   * Service の参照を取得し、機能を利用するためのオペレーションを呼び出
+   * す。他のSDO/RTCまたはアプリケーション上での参照の破棄は任意のタイ
+   * ミングで行われ、サービス提供側では、どこからどれだけ参照されている
+   * かは知ることはできない。一方で、SDO/RTC側も、任意のタイミングでサー
+   * ビスの提供を停止することもできるため、サービスの利用側では、常にい
+   * サービスが利用できるとは限らないものとしてサービスオペレーションを
+   * 呼び出す必要がある。
    *
-   * ������SDO Service Consumer ������SDO/RTC�ʳ���SDO/RTC�ޤ��ϥ��ץ�
-   * ��������󤬥����ӥ��μ��Τ����������SDO/RTC�˥��֥������Ȼ��Ȥ�
-   * �ޤ�ץ��ե������Ϳ���뤳�Ȥǡ�SDO/RTC¦���饵���ӥ����ڥ졼����
-   * �󤬸ƤФ쳰����SDO/RTC�ޤ��ϥ��ץꥱ��������󶡤��뵡ǽ������
-   * �Ǥ��롣�ޤ������֥�����Ū�ʥ��֥������Ȥ�Ϳ���뤳�Ȥǡ�SDO/RTC¦
-   * ����Υ�����Хå���¸����뤿��ˤ����Ѥ��뤳�Ȥ��Ǥ��롣���󥷥塼
-   * �ޤϡ��ץ��Х����ȤϰۤʤꡢSDO Configuration���󥿡��ե���������
-   * �ɲá�������Ԥ��롣��Ϣ���륪�ڥ졼�����ϰʲ��ΤȤ���Ǥ��롣
+   * 一方、SDO Service Consumer は当該SDO/RTC以外のSDO/RTCまたはアプリ
+   * ケーションがサービスの実体を持ち、当該SDO/RTCにオブジェクト参照を
+   * 含むプロファイルを与えることで、SDO/RTC側からサービスオペレーショ
+   * ンが呼ばれ外部のSDO/RTCまたはアプリケーションが提供する機能を利用
+   * できる。また、オブザーバ的なオブジェクトを与えることで、SDO/RTC側
+   * からのコールバックを実現するためにも利用することができる。コンシュー
+   * マは、プロバイダとは異なり、SDO Configurationインターフェースから
+   * 追加、削除が行われる。関連するオペレーションは以下のとおりである。
    *
    * - Configuration::add_service_profile (in ServiceProfile sProfile)
    * - Configuration::remove_service_profile (in UniqueIdentifier id)
    *
-   * ������SDO/RTC�ޤ��ϥ��ץꥱ�������ϡ����Ȥ�����SDO Servcie
-   * Provider �λ��Ȥ�ID�����interface type���ץ��ѥƥ��ȤȤ��
-   * ServcieProfile �˥��åȤ��������ǡ�add_service_profile() �ΰ�����
-   * ����Ϳ���뤳�Ȥǡ�����SDO/RTC�˥����ӥ���Ϳ���롣���κݡ�ID��UUID
-   * �ʤɰ�դ�ID�Ǥʤ���Фʤ�ʤ����ޤ����������ݤˤ�ID�ˤ���оݤ�
-   * ����ServiceProfile��õ�����뤿�ᡢ�����ӥ���¦�ǤϺ�����ޤ�ID��
-   * �ݻ����Ƥ����ʤ���Фʤ�ʤ���
+   * 外部のSDO/RTCまたはアプリケーションは、自身が持つSDO Servcie
+   * Provider の参照をIDおよびinterface type、プロパティとともに
+   * ServcieProfile にセットしたうえで、add_service_profile() の引数と
+   * して与えることで、当該SDO/RTCにサービスを与える。この際、IDはUUID
+   * など一意なIDでなければならない。また、削除する際にはIDにより対象と
+   * するServiceProfileを探索するため、サービス提供側では削除時までIDを
+   * 保持しておかなければならない。
    *
    *
    * @since 1.1.0
@@ -151,9 +151,9 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief ���󥹥ȥ饯��
+     * @brief コンストラクタ
      * 
-     * ���󥹥ȥ饯��
+     * コンストラクタ
      *
      * @param 
      * 
@@ -172,9 +172,9 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief ���ۥǥ��ȥ饯��
+     * @brief 仮想デストラクタ
      * 
-     * ���ۥǥ��ȥ饯����
+     * 仮想デストラクタ。
      * 
      * @else
      *
@@ -189,7 +189,7 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief SDO Service Provider �� ServiceProfileList ���������
+     * @brief SDO Service Provider の ServiceProfileList を取得する
      * 
      * @else
      *
@@ -202,15 +202,15 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief SDO Service Provider �� ServiceProfile ���������
+     * @brief SDO Service Provider の ServiceProfile を取得する
      *
-     * id �ǻ��ꤵ�줿IFR ID�����SDO Service Provider ��
-     * ServiceProfile ��������롣id �� NULL �ݥ��󥿤ξ�硢���ꤵ�줿
-     * id �˳�������ServiceProfile ��¸�ߤ��ʤ���硢InvalidParameter
-     * �㳰�����Ф���롣
+     * id で指定されたIFR IDを持つSDO Service Provider の
+     * ServiceProfile を取得する。id が NULL ポインタの場合、指定された
+     * id に該当するServiceProfile が存在しない場合、InvalidParameter
+     * 例外が送出される。
      *
-     * @param id SDO Service provider �� IFR ID
-     * @return ���ꤵ�줿 id ����� ServiceProfile
+     * @param id SDO Service provider の IFR ID
+     * @return 指定された id を持つ ServiceProfile
      * 
      * @else
      *
@@ -231,15 +231,15 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief SDO Service Provider �� Service ���������
+     * @brief SDO Service Provider の Service を取得する
      *
-     * id �ǻ��ꤵ�줿IFR ID�����SDO Service �Υ��֥������ȥ�ե����
-     * �� ��������롣id �� NULL �ݥ��󥿤ξ�硢���ꤵ�줿 id �˳�����
-     * ��ServiceProfile ��¸�ߤ��ʤ���硢InvalidParameter �㳰�����Ф�
-     * ��롣
+     * id で指定されたIFR IDを持つSDO Service のオブジェクトリファレン
+     * ス を取得する。id が NULL ポインタの場合、指定された id に該当す
+     * るServiceProfile が存在しない場合、InvalidParameter 例外が送出さ
+     * れる。
      *
-     * @param id SDO Service provider �� IFR ID
-     * @return ���ꤵ�줿 id ����� SDO Service �Υ��֥������ȥ�ե����
+     * @param id SDO Service provider の IFR ID
+     * @return 指定された id を持つ SDO Service のオブジェクトリファレンス
      * 
      * @else
      *
@@ -259,7 +259,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief SDO service provider �򥻥åȤ���
+     * @brief SDO service provider をセットする
      * @else
      * @brief Set a SDO service provider
      * @endif
@@ -269,7 +269,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief SDO service provider ��������
+     * @brief SDO service provider を削除する
      * @else
      * @brief Remove a SDO service provider
      * @endif
@@ -279,7 +279,7 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief Service Consumer ���ɲä���
+     * @brief Service Consumer を追加する
      * 
      * @else
      *
@@ -292,7 +292,7 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief Service Consumer ��������
+     * @brief Service Consumer を削除する
      * 
      * @else
      *
@@ -306,7 +306,7 @@ protected:
     /*!
      * @if jp
      *
-     * @brief ���Ĥ��줿�����ӥ������ɤ���Ĵ�٤�
+     * @brief 許可されたサービス型かどうか調べる
      * 
      * @else
      *
@@ -319,7 +319,7 @@ protected:
     /*!
      * @if jp
      *
-     * @brief ¸�ߤ��륵���ӥ������ɤ���Ĵ�٤�
+     * @brief 存在するサービス型かどうか調べる
      * 
      * @else
      *
@@ -341,7 +341,7 @@ protected:
     
     /*!
      * @if jp
-     * @brief Lock �դ� SDO ServiceProfileList
+     * @brief Lock 付き SDO ServiceProfileList
      * @else
      * @brief SDO ServiceProfileList with mutex lock
      * @endif
@@ -351,7 +351,7 @@ protected:
     
     /*!
      * @if jp
-     * @brief Lock �դ� SDO ServiceProfileList
+     * @brief Lock 付き SDO ServiceProfileList
      * @else
      * @brief SDO ServiceProfileList with mutex lock
      * @endif

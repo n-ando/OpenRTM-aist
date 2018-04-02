@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file  Microwave.cpp
  * @brief Microwave oven FSM sample component

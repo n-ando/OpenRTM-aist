@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file NumberingPolicy.cpp
  * @brief Object numbering policy class

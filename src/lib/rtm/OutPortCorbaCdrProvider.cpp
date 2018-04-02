@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file  OutPortCorbaCdrProvider.cpp
  * @brief OutPortCorbaCdrProvider class
@@ -27,7 +27,7 @@ namespace RTC
 {
   /*!
    * @if jp
-   * @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+   * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
    * @else
    * @brief Constructor
    * @endif
@@ -63,7 +63,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ¥Ç¥¹¥È¥é¥¯¥¿
+   * @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
    * @else
    * @brief Destructor
    * @endif
@@ -107,7 +107,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ÀßÄê½é´ü²½
+   * @brief è¨­å®šåˆæœŸåŒ–
    * @else
    * @brief Initializing configuration
    * @endif
@@ -118,7 +118,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ¥Ğ¥Ã¥Õ¥¡¤ò¥»¥Ã¥È¤¹¤ë
+   * @brief ãƒãƒƒãƒ•ã‚¡ã‚’ã‚»ãƒƒãƒˆã™ã‚‹
    * @else
    * @brief Setting outside buffer's pointer
    * @endif
@@ -130,7 +130,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ¥ê¥¹¥Ê¤òÀßÄê¤¹¤ë¡£
+   * @brief ãƒªã‚¹ãƒŠã‚’è¨­å®šã™ã‚‹ã€‚
    * @else
    * @brief Set the listener. 
    * @endif
@@ -144,7 +144,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ¥³¥Í¥¯¥¿¤ò¥»¥Ã¥È¤¹¤ë
+   * @brief ã‚³ãƒã‚¯ã‚¿ã‚’ã‚»ãƒƒãƒˆã™ã‚‹
    * @else
    * @brief Setting outside connector's pointer
    * @endif
@@ -156,7 +156,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief [CORBA interface] ¥Ğ¥Ã¥Õ¥¡¤«¤é¥Ç¡¼¥¿¤ò¼èÆÀ¤¹¤ë
+   * @brief [CORBA interface] ãƒãƒƒãƒ•ã‚¡ã‹ã‚‰ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾—ã™ã‚‹
    * @else
    * @brief [CORBA interface] Get data from the buffer
    * @endif
@@ -213,7 +213,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ¥ê¥¿¡¼¥ó¥³¡¼¥ÉÊÑ´¹
+   * @brief ãƒªã‚¿ãƒ¼ãƒ³ã‚³ãƒ¼ãƒ‰å¤‰æ›
    * @else
    * @brief Return codes conversion
    * @endif
@@ -271,7 +271,7 @@ extern "C"
 {
   /*!
    * @if jp
-   * @brief ¥â¥¸¥å¡¼¥ë½é´ü²½´Ø¿ô
+   * @brief ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«åˆæœŸåŒ–é–¢æ•°
    * @else
    * @brief Module initialization
    * @endif

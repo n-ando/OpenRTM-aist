@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file LocalServiceBase.h
  * @brief Local service provider base class and its factory
@@ -34,7 +34,7 @@ namespace RTM
   
   /*!
    * @if jp
-   * @brief LocalService�Υץ��ե�����ǡ���
+   * @brief LocalServiceのプロファイルデータ
    * @else
    * @brief Profile data structure of LocalService
    * @endif
@@ -44,7 +44,7 @@ namespace RTM
   public:
     /*!
      * @if jp
-     * @brief LocalService�Υ����ӥ�̾
+     * @brief LocalServiceのサービス名
      * @else
      * @brief The name of LocalService
      * @endif
@@ -52,7 +52,7 @@ namespace RTM
     std::string name;
     /*!
      * @if jp
-     * @brief LocalService�θ�ͭID
+     * @brief LocalServiceの固有ID
      * @else
      * @brief The unique ID of LocalService
      * @endif
@@ -60,7 +60,7 @@ namespace RTM
     std::string uuid;
     /*!
      * @if jp
-     * @brief LocalService�Υץ��ѥƥ�
+     * @brief LocalServiceのプロパティ
      * @else
      * @brief Properties of LocalService
      * @endif
@@ -68,7 +68,7 @@ namespace RTM
     coil::Properties properties;
     /*!
      * @if jp
-     * @brief LocalService�Υݥ���
+     * @brief LocalServiceのポインタ
      * @else
      * @brief The pointer to LocalService
      * @endif
@@ -78,7 +78,7 @@ namespace RTM
   
   /*!
    * @if jp
-   * @brief LocalService�Υꥹ��
+   * @brief LocalServiceのリスト
    * @else
    * @brief List of LocalServiceProfile
    * @endif
@@ -88,82 +88,82 @@ namespace RTM
   /*!
    * @if jp
    *
-   * @brief LocalService�����쥯�饹
+   * @brief LocalService　基底クラス
    *
-   * Local Service �Ȥ� RT-Middleware�Υޥ͡�����ǡ������ǳƼ掠����
-   * �����󶡤��뤿��λ��ȤߤǤ��롣Local Service�ˤϤ����Ĥ��Υ桼��
-   * ���������ͤ����롣
+   * Local Service とは RT-Middlewareのマネージャデーモン内で各種サービ
+   * スを提供するための仕組みである。Local Serviceにはいくつかのユース
+   * ケースが考えられる。
    *
-   * 1. RTC�����������å����Ф��ƥ����ӥ����󶡤��롣����ݡ��ͥ�Ȥγ�
-   * ȯ�Ԥϡ�����������Фơ�Local Service�Υ��󥹥��󥹤ؤλ��Ȥ���
-   * �ơ����Υ����ӥ������Ѥ��뤳�Ȥ��Ǥ��롣
+   * 1. RTCの内部ロジックに対してサービスを提供する。コンポーネントの開
+   * 発者は、一定の艇順を経て、Local Serviceのインスタンスへの参照を得
+   * て、このサービスを利用することができる。
    *
-   * 2. �ޥ͡��������˵�ǽ���ɲä��뤿��Υ����ӥ������Ȥ��ϡ�RTC��̾��
-   * ����Ͽ����CORBA�͡��ॵ���ӥ�������ˡ������ʥǥ��쥯�ȥꥵ����
-   * ����֥����ɥ��㥹�Ȥˤ��̾�����ε�ǽ�ʤɤ򿷤��ʵ�ǽ��ޥ͡�����
-   * ���ɲä��뤿������Ѥ��뤳�Ȥ��Ǥ��롣�ޥ͡�����ˤϡ��͡��ʥ�������
-   * ����Ф���եå����Ѱդ���Ƥ��ꡢ��������Ѥ��뤳�Ȥǡ��ޥ͡�����
-   * ���͡��ʥ��٥�Ȥ��Ф��ƥ��������򵯤������Ȥ��Ǥ��롣
+   * 2. マネージャ等に機能を追加するためのサービス。たとえは、RTCの名前
+   * を登録するCORBAネームサービスの代わりに、新たなディレクトリサービ
+   * スやブロードキャストによる名前通知機能などを新たな機能をマネージャ
+   * に追加するために利用することができる。マネージャには、様々なアクショ
+   * ンに対するフックが用意されており、これを利用することで、マネージャ
+   * の様々なイベントに対してアクションを起こすことができる。
    *
-   * 3. �ޥ͡�����ϼ��ȤΥ����ӥ��ʳ����ղ�Ū�˳������Ф��ƥ����ӥ���
-   * �󶡤��뵡ǽ��ͭ���롣��������CORBA��ͳ�ǡ���������ε�ǽ�����Ȥ�
-   * �ХǥХ�����꥽�����Υޥͥ����ȵ�ǽ���Ф��ƥ�������������ˡ����
-   * �����롣�����ӥ��Υ��󥹥��󥹲���ˡ��ޥ͡�������Ф��ơ��ޥ͡�����
-   * �����ӥ��Ȥ�����Ͽ���뤳�Ȥǡ���������Υ�������������դ��뤳�Ȥ�
-   * �Ǥ���褦�ˤʤ롣
+   * 3. マネージャは自身のサービス以外に付加的に外部に対してサービスを
+   * 提供する機能を有する。外部からCORBA経由で、ローカルの機能、たとえ
+   * ばデバイスやリソースのマネジメント機能に対してアクセスする方法を提
+   * 供する。サービスのインスタンス化後に、マネージャに対して、マネージャ
+   * サービスとして登録することで、外部からのアクセスを受け付けることが
+   * できるようになる。
    *
-   * Local Service �ϥ⥸�塼��Ȥ��ƥ����ɤ��졢�̾�ͣ��Υ��󥹥���
-   * ����������롣���ʤ����LocalService �ϥ��󥰥�ȥ�Ȥ��Ƽ�������
-   * �롣���󥹥��󥹲����줿�����ӥ��ϥ����ӥ��ꥹ�Ȥ���Ͽ���졢RTC��
-   * �����̾����UUID�ˤ�äƥ��󥹥��󥹤λ��Ȥ����ꤹ�뤳�Ȥ��Ǥ��롣
+   * Local Service はモジュールとしてロードされ、通常唯一のインスタンス
+   * が生成される。すなわち、LocalService はシングルトンとして実装され
+   * る。インスタンス化されたサービスはサービスリストに登録され、RTC等
+   * からは名前やUUIDによってインスタンスの参照を入手することができる。
    *
-   * ���Υ��֥������ȤΥ饤�ե�������ϰʲ����̤ꡣ
+   * このオブジェクトのライフサイクルは以下の通り。
    *
-   * -# ���֥������Ȥ��̾��ͭ���֥������� (so, DLL) �Ȥ��ƥ���ѥ��롦
-   *    ��󥯤���롣
-   * -# �ޥ͡�������Ф��ƥ����ɤ����ȥ⥸�塼�������ؿ��ˤ�ꥪ��
-   *    �������ȥե����ȥ꤬��LocalServiceFactory ���Ф�����Ͽ����롣
-   *    ��Ͽ�Υ����ˤ�UUID��̾�������Ѥ��졢����ˤ�ꥵ���ӥ������̤�
-   *    ��롣
-   * -# rtc.conf���Υ���ե�����졼��������ˤ�ꡢͭ�������뤳�Ȥ�
-   *    ���ꤵ��Ƥ��륵���ӥ�����ץ��Х����ϡ�RTC�ε�ư��Ʊ���˥���
-   *    ���󥹲�����롣
-   * -# ���󥹥��󥹲��塢������ؿ� init() ���ƤФ�롣�����ˤ���������
-   *    �ӥ��Τ���Υ���ե�����졼����󥪥ץ���� coil::Property��
-   *    ����Ϥ���롣
-   * -# �ޥ͡����㥵���ӥ����ڥ졼����� reinit ���ƤФ��ȡ����٤Ƥ�
-   *     Local Service �� reinit ���ƤӽФ��졢�������줿����ե�����졼
-   *     ���������ɤ߹��ޤ�롣
-   * -# �ޥ͡�������λ��ˤϡ����٤Ƥ� Local Service �� finalize���Ƥ�
-   *       �Ф��졢���Τ����Τǡ������ǥ꥽�����β����ʤɽ�λ�������
-   *       ����
+   * -# オブジェクトは通常、共有オブジェクト (so, DLL) としてコンパイル・
+   *    リンクされる。
+   * -# マネージャに対してロードされるとモジュール初期化関数によりオブ
+   *    ジェクトファクトリが、LocalServiceFactory に対して登録される。
+   *    登録のキーにはUUIDと名前が利用され、これによりサービスが区別さ
+   *    れる。
+   * -# rtc.conf等のコンフィギュレーション指定により、有効化することが
+   *    指定されているサービスインプロバイダは、RTCの起動と同時にインス
+   *    タンス化される。
+   * -# インスタンス化後、初期化関数 init() が呼ばれる。引数には当該サー
+   *    ビスのためのコンフィギュレーションオプションが coil::Propertyに
+   *    より渡される。
+   * -# マネージャサービスオペレーション reinit が呼ばれると、すべての
+   *     Local Service お reinit が呼び出され、更新されたコンフィギュレー
+   *     ション情報が読み込まれる。
+   * -# マネージャ解体時には、すべての Local Service の finalizeが呼び
+   *       出され、解体されるので、ここでリソースの解放など終了処理を行
+   *       う。
    *
-   * ���Υ��饹�μ����������äƤϡ����ʤ��Ȥ�ʲ��ν�貾�۴ؿ��������
-   * ��ɬ�פ����롣
+   * このクラスの実装に当たっては、少なくとも以下の純粋仮想関数を実装す
+   * る必要がある。
    *
-   * - init(): ������ؿ���Ϳ����줿 RTObject ����� ServiceProfile ��
-   *   �顢�������֥������Ȥ��������롣
-   * - reinit(): �ƽ�����ؿ���ServiceProfile ��������󹹿��Τ���Ʊ��
-   *   ID�ǸƤӽФ���뤳�Ȥ�ͭ�뤬�����κݤˤ��δؿ���������
-   *   ServiceProfile �ȤȤ�˸ƤӽФ���롣�ؿ���Ǥϡ�������ѹ��ʤ�
-   *   �ƽ����������������롣
-   * - getProfile(): ���ꤵ�줿�ץ��ե�������֤��ؿ���
-   * - finalize(): ��λ���������󥷥塼�ޤ��ǥ��å������ݤ˸ƤӽФ���
-   *   ��ؿ����ؿ���ǤϽ�λ������������롣
+   * - init(): 初期化関数。与えられた RTObject および ServiceProfile か
+   *   ら、当該オブジェクトを初期化する。
+   * - reinit(): 再初期化関数。ServiceProfile は設定情報更新のため同一
+   *   IDで呼び出されることが有るが、その際にこの関数が新たな
+   *   ServiceProfile とともに呼び出される。関数内では、設定の変更など
+   *   再初期化処理を実装する。
+   * - getProfile(): 設定されたプロファイルを返す関数。
+   * - finalize(): 終了処理。コンシューマがデタッチされる際に呼び出され
+   *   る関数。関数内では終了処理を実装する。
    *
-   * LocalService ���̾ﶦͭ���֥������ȤȤ��ƥ���ѥ��롦���
-   * ����롣��ͭ���֥������ȤΥ���ȥ�ݥ���Ȥ��̾拾��ѥ��뤵�줿�ե�
-   * ����̾�� basename + "Init" �ˤ��Ƥ������ʲ��ˡ����饹̾���ե�����
-   * ̾������ȥ�ݥ���ȴؿ�̾�ο侩��򼨤���
+   * LocalService は通常共有オブジェクトとしてコンパイル・リンク
+   * される。共有オブジェクトのエントリポイントは通常コンパイルされたファ
+   * イル名の basename + "Init" にしておく。以下に、クラス名、ファイル
+   * 名、エントリポイント関数名の推奨例を示す。
    *
-   * - �������饹̾: MyLocalService
-   * - �ե�����̾: MyLocalService.h. MyLocalService.cpp
-   * - ��ͭ���֥�������̾: MyLocalService.so (or DLL)
-   * - ����ȥ�ݥ���ȴؿ�̾: MyLocalServiceInit()
+   * - 実装クラス名: MyLocalService
+   * - ファイル名: MyLocalService.h. MyLocalService.cpp
+   * - 共有オブジェクト名: MyLocalService.so (or DLL)
+   * - エントリポイント関数名: MyLocalServiceInit()
    *
-   * ����ȥ�ݥ���ȴؿ����̾�ʲ��Τ褦�ˡ�LocalServiceFactory
-   * ���������󥷥塼�ޤΥե����ȥ� (�Ȳ��Υե��󥯥�) ����Ͽ����ʲ���
-   * �褦�ʴؿ��ˤʤ롣
+   * エントリポイント関数は通常以下のように、LocalServiceFactory
+   * に当該コンシューマのファクトリ (と解体ファンクタ) を登録する以下の
+   * ような関数になる。
    *
    * <pre>
    * extern "C"
@@ -191,7 +191,7 @@ namespace RTM
   public:
     /*!
      * @if jp
-     * @brief ���ۥǥ��ȥ饯��
+     * @brief 仮想デストラクタ
      * @else
      * @brief virtual destructor
      * @endif
@@ -202,13 +202,13 @@ namespace RTM
     
     /*!
      * @if jp
-     * @brief LocalService���饹�ν�����ؿ�
+     * @brief LocalServiceクラスの初期化関数
      *
-     * ���Υ��֥������Ȥν������Ԥ���LocalService ����������硢��
-     * ��������������ϡ�����init()�ؿ��ˤ��Ϳ�����롣
+     * このオブジェクトの初期化を行う。LocalService を実装する場合、外
+     * 部からの設定情報は、このinit()関数により与えられる。
      *
-     * @param profile ��������Ϳ����줿 LocalServiceProfile
-     * @return Ϳ����줿 LocalServiceProfile �������ξ�� false
+     * @param profile 外部から与えられた LocalServiceProfile
+     * @return 与えられた LocalServiceProfile が不正の場合 false
      *
      * @else
      * @brief Initialization function of the LocalService class
@@ -219,12 +219,12 @@ namespace RTM
     init(const coil::Properties& props) = 0;
     /*!
      * @if jp
-     * @brief LocalService���饹�κƽ�����ؿ�
+     * @brief LocalServiceクラスの再初期化関数
      *
-     * TODO: �ɥ�����Ⱥ���
+     * TODO: ドキュメント作成
      *
-     * @param profile ������Ϳ����줿 LocalServiceProfile
-     * @return ������ LocalServiceProfile ��Ϳ����줿���� false
+     * @param profile 新たに与えられた LocalServiceProfile
+     * @return 不正な LocalServiceProfile が与えられた場合は false
      *
      * @else
      * @brief Reinitialization function of the LocalService class
@@ -238,13 +238,13 @@ namespace RTM
     
     /*!
      * @if jp
-     * @brief LocalServiceProfile ���֤�
+     * @brief LocalServiceProfile を返す
      *
-     * init()/reinit()��Ϳ����줿 LocalServiceProfile ���̾索�֥�����
-     * ������ݻ�����롣���δؿ��Ǥ��ݻ�����Ƥ��� ServiceProfile ����
-     * ����
+     * init()/reinit()で与えられた LocalServiceProfile は通常オブジェク
+     * ト内で保持される。この関数では保持されている ServiceProfile を返
+     * す。
      *
-     * @return ���Υ��֥������Ȥ��ݻ����Ƥ��� LocalServiceProfile
+     * @return このオブジェクトが保持している LocalServiceProfile
      *
      * @else
      * @brief Getting LocalServiceProfile
@@ -258,10 +258,10 @@ namespace RTM
     
     /*!
      * @if jp
-     * @brief ��λ����
+     * @brief 終了処理
      *
-     * LocalService ����λ����ݤ˸ƤӽФ���뽪λ�����Ѵؿ�����������
-     * �������Ȥ��ݻ�����꥽�������������ʤɤν�����Ԥ���
+     * LocalService が終了する際に呼び出される終了処理用関数。当該オブ
+     * ジェクトが保持するリソースを解放するなどの処理を行う。
      *
      * @else
      * @brief Finalization
@@ -276,7 +276,7 @@ namespace RTM
   
   /*!
    * @if jp
-   * @brief LocalServiceFactory �� typedef
+   * @brief LocalServiceFactory の typedef
    * @else
    * @brief typedef of sdoServiceProviderFactory
    * @endif
@@ -286,7 +286,7 @@ namespace RTM
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
   /*!
    * @if jp
-   * @brief ���饹�ƥ�ץ졼�Ȥ�����Ū���󥹥��󥹲�
+   * @brief クラステンプレートの明示的インスタンス化
    * @else
    * @brief Explicit instantiation of class template
    * @endif

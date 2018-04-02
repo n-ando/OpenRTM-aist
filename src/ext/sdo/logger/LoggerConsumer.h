@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file LoggerConsumer.h
  * @brief Component observer SDO service consumer implementation
@@ -61,7 +61,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ½é´ü²½
+     * @brief åˆæœŸåŒ–
      * @else
      * @brief Initialization
      * @endif
@@ -71,7 +71,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ºÆ½é´ü²½
+     * @brief å†åˆæœŸåŒ–
      * @else
      * @brief Re-initialization
      * @endif
@@ -80,7 +80,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ServiceProfile ¤ò¼èÆÀ¤¹¤ë
+     * @brief ServiceProfile ã‚’å–å¾—ã™ã‚‹
      * @else
      * @brief getting ServiceProfile
      * @endif
@@ -89,7 +89,7 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief ½ªÎ»½èÍı
+     * @brief çµ‚äº†å‡¦ç†
      * @else
      * @brief Finalization
      * @endif

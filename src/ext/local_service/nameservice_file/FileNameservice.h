@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file FileNameservice.h
  * @brief FileNameservice 
@@ -33,8 +33,8 @@ namespace RTM
   {
     /*!
      * @if jp
-     * @class FileNameservice ¥¯¥é¥¹
-     * @brief FileNameservice ¥¯¥é¥¹
+     * @class FileNameservice ã‚¯ãƒ©ã‚¹
+     * @brief FileNameservice ã‚¯ãƒ©ã‚¹
      * @else
      * @class FileNameservice class
      * @brief FileNameservice class
@@ -64,11 +64,11 @@ namespace RTM
       
       /*!
        * @if jp
-       * @brief ½é´ü²½´Ø¿ô
+       * @brief åˆæœŸåŒ–é–¢æ•°
        *
        * TODO: Documentation
        *
-       * @param profile ³°Éô¤«¤éÍ¿¤¨¤é¤ì¤¿ property
+       * @param profile å¤–éƒ¨ã‹ã‚‰ä¸ãˆã‚‰ã‚ŒãŸ property
        * @return 
        *
        * @else
@@ -83,11 +83,11 @@ namespace RTM
       
       /*!
        * @if jp
-       * @brief ºÆ½é´ü²½´Ø¿ô
+       * @brief å†åˆæœŸåŒ–é–¢æ•°
        *
        * TODO: Documentation
        *
-       * @param profile ³°Éô¤«¤éÍ¿¤¨¤é¤ì¤¿ property
+       * @param profile å¤–éƒ¨ã‹ã‚‰ä¸ãˆã‚‰ã‚ŒãŸ property
        * @return 
        *
        * @else
@@ -102,11 +102,11 @@ namespace RTM
       
       /*!
        * @if jp
-       * @brief LocalServiceProfile ¤ò¼èÆÀ¤¹¤ë
+       * @brief LocalServiceProfile ã‚’å–å¾—ã™ã‚‹
        *
        * TODO: Documentation
        *
-       * @return ¤³¤Î¥ª¥Ö¥¸¥§¥¯¥È¤¬Êİ»ı¤·¤Æ¤¤¤ë LocalServiceProfile
+       * @return ã“ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒä¿æŒã—ã¦ã„ã‚‹ LocalServiceProfile
        *
        * @else
        * @brief Getting LocalServiceProfile
@@ -121,7 +121,7 @@ namespace RTM
       
       /*!
        * @if jp
-       * @brief ½ªÎ»´Ø¿ô
+       * @brief çµ‚äº†é–¢æ•°
        *
        * TODO: Documentation
        *
@@ -136,7 +136,7 @@ namespace RTM
       
       /*!
        * @if jp
-       * @brief Ì¾Á°ÅĞÏ¿»ş¤Ë¸Æ¤Ğ¤ì¤ë¥³¡¼¥ë¥Ğ¥Ã¥¯
+       * @brief åå‰ç™»éŒ²æ™‚ã«å‘¼ã°ã‚Œã‚‹ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯
        *
        * TODO: Documentation
        *
@@ -152,7 +152,7 @@ namespace RTM
       
       /*!
        * @if jp
-       * @brief Ì¾Á°ÅĞÏ¿²ò½ü¤Ë¸Æ¤Ğ¤ì¤ë¥³¡¼¥ë¥Ğ¥Ã¥¯
+       * @brief åå‰ç™»éŒ²è§£é™¤ã«å‘¼ã°ã‚Œã‚‹ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯
        *
        * TODO: Documentation
        *
@@ -169,7 +169,7 @@ namespace RTM
     protected:
       /*!
        * @if jp
-       * @brief ¥Ç¥£¥ì¥¯¥È¥êºîÀ®
+       * @brief ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªä½œæˆ
        * TODO: Documentation
        * @else
        * @brief Creating directories
@@ -180,7 +180,7 @@ namespace RTM
       
       /*!
        * @if jp
-       * @brief ¥Õ¥¡¥¤¥ëÌ¾¼èÆÀ
+       * @brief ãƒ•ã‚¡ã‚¤ãƒ«åå–å¾—
        * TODO: Documentation
        * @else
        * @brief Getting file name
@@ -191,7 +191,7 @@ namespace RTM
       
       /*!
        * @if jp
-       * @brief Á´¥Õ¥¡¥¤¥ëºï½ü
+       * @brief å…¨ãƒ•ã‚¡ã‚¤ãƒ«å‰Šé™¤
        * TODO: Documentation
        * @else
        * @brief Deleting all files
@@ -202,7 +202,7 @@ namespace RTM
       
       /*!
        * @if jp
-       * @brief ¥×¥í¥Ñ¥Æ¥£¤Î½èÍı
+       * @brief ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã®å‡¦ç†
        * TODO: Documentation
        * @else
        * @brief Processing properties
@@ -232,7 +232,7 @@ namespace RTM
     public:
       /*!
        * @if jp
-       * @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+       * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
        * @else
        * @brief Constructor
        * @endif
@@ -241,7 +241,7 @@ namespace RTM
 
       /*!
        * @if jp
-       * @brief ¥Ç¥¹¥È¥é¥¯¥¿
+       * @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
        * @else
        * @brief Destructor
        * @endif
@@ -250,7 +250,7 @@ namespace RTM
 
       /*!
        * @if jp
-       * @brief preBind ¥³¡¼¥ë¥Ğ¥Ã¥¯´Ø¿ô
+       * @brief preBind ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
        * TODO: Documentation
        * @else
        * @brief preBind callback function
@@ -261,7 +261,7 @@ namespace RTM
                            coil::vstring& name);
       /*!
        * @if jp
-       * @brief postBind ¥³¡¼¥ë¥Ğ¥Ã¥¯´Ø¿ô
+       * @brief postBind ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
        * TODO: Documentation
        * @else
        * @brief postBind callback function
@@ -273,7 +273,7 @@ namespace RTM
       
       /*!
        * @if jp
-       * @brief preUnbind ¥³¡¼¥ë¥Ğ¥Ã¥¯´Ø¿ô
+       * @brief preUnbind ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
        * TODO: Documentation
        * @else
        * @brief preUnbind callback function
@@ -285,7 +285,7 @@ namespace RTM
       
       /*!
        * @if jp
-       * @brief postUnbind ¥³¡¼¥ë¥Ğ¥Ã¥¯´Ø¿ô
+       * @brief postUnbind ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
        * TODO: Documentation
        * @else
        * @brief postUnbind callback function
@@ -305,9 +305,9 @@ extern "C"
 {
   /*!
    * @if jp
-   * @brief ¥â¥¸¥å¡¼¥ë½é´ü²½´Ø¿ô
+   * @brief ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«åˆæœŸåŒ–é–¢æ•°
    *
-   * FileNameservice¤ò¥Õ¥¡¥¯¥È¥ê¤ËÅĞÏ¿¤¹¤ë½é´ü²½´Ø¿ô¡£
+   * FileNameserviceã‚’ãƒ•ã‚¡ã‚¯ãƒˆãƒªã«ç™»éŒ²ã™ã‚‹åˆæœŸåŒ–é–¢æ•°ã€‚
    *
    * @else
    * @brief Module initialization

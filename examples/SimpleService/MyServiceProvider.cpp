@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file  MyServiceProvider.cpp
  * @brief MyService Provider Sample component

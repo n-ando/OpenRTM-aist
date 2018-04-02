@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file ComponentObserverConsumer.h
  * @brief Component observer SDO service consumer implementation
@@ -35,86 +35,86 @@ namespace RTC
 
   /*!
    * @if jp
-   * @class ComponentObserverConsumer ¥¯¥é¥¹
-   * @brief ComponentObserver ¥â¥¸¥å¡¼¥ë
+   * @class ComponentObserverConsumer ã‚¯ãƒ©ã‚¹
+   * @brief ComponentObserver ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«
    *
-   * ¥³¥ó¥İ¡¼¥Í¥ó¥È¤Î³Æ¼ï¾õÂÖ¤òComponentObserver¥µ¡¼¥Ó¥¹¤ËÂĞ¤·¤Æ¥³¡¼¥ë
-   * ¥Ğ¥Ã¥¯¤¹¤ë¤¿¤á¤Î¥¯¥é¥¹¡£¥Ä¡¼¥ëÅù¡¢¥³¥ó¥İ¡¼¥Í¥ó¥È¤Î¾õÂÖÊÑ²½¤òÃÎ¤ê¤¿
-   * ¤¤¥¨¥ó¥Æ¥£¥Æ¥£¤¬¥µ¡¼¥Ó¥¹¥×¥í¥Ğ¥¤¥À¤òÅö³º¥³¥ó¥İ¡¼¥Í¥ó¥È¤ËÂĞ¤·¤Æ¥»¥Ã
-   * ¥È¤¹¤ë¤È¡¢ÂĞ±ş¤¹¤ëËÜ¥³¥ó¥·¥å¡¼¥Ş¤¬¥¢¥¿¥Ã¥Á¤µ¤ì¡¢¥³¥ó¥İ¡¼¥Í¥ó¥È¤Î¾õ
-   * ÂÖÊÑ²½¤Ë±ş¤¸¤Æ¡¢update_status() ¥ª¥Ú¥ì¡¼¥·¥ç¥ó¤òSTATUS_KIND ¤È¥Ò¥ó
-   * ¥È¤ò°ú¿ô¤Ë¸Æ¤Ó½Ğ¤¹¡£ËÜµ¡Ç½¤Ï¡¢OMG ¤Î FSM4RTC»ÅÍÍ
-   * (formal/16-04-01) 7.2.4.2 ComponentObserver Interface ¤Ëµ­½Ò¤µ¤ì¤Æ
-   * ¤¤¤ë¡£
+   * ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã®å„ç¨®çŠ¶æ…‹ã‚’ComponentObserverã‚µãƒ¼ãƒ“ã‚¹ã«å¯¾ã—ã¦ã‚³ãƒ¼ãƒ«
+   * ãƒãƒƒã‚¯ã™ã‚‹ãŸã‚ã®ã‚¯ãƒ©ã‚¹ã€‚ãƒ„ãƒ¼ãƒ«ç­‰ã€ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã®çŠ¶æ…‹å¤‰åŒ–ã‚’çŸ¥ã‚ŠãŸ
+   * ã„ã‚¨ãƒ³ãƒ†ã‚£ãƒ†ã‚£ãŒã‚µãƒ¼ãƒ“ã‚¹ãƒ—ãƒ­ãƒã‚¤ãƒ€ã‚’å½“è©²ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã«å¯¾ã—ã¦ã‚»ãƒƒ
+   * ãƒˆã™ã‚‹ã¨ã€å¯¾å¿œã™ã‚‹æœ¬ã‚³ãƒ³ã‚·ãƒ¥ãƒ¼ãƒãŒã‚¢ã‚¿ãƒƒãƒã•ã‚Œã€ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã®çŠ¶
+   * æ…‹å¤‰åŒ–ã«å¿œã˜ã¦ã€update_status() ã‚ªãƒšãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ã‚’STATUS_KIND ã¨ãƒ’ãƒ³
+   * ãƒˆã‚’å¼•æ•°ã«å‘¼ã³å‡ºã™ã€‚æœ¬æ©Ÿèƒ½ã¯ã€OMG ã® FSM4RTCä»•æ§˜
+   * (formal/16-04-01) 7.2.4.2 ComponentObserver Interface ã«è¨˜è¿°ã•ã‚Œã¦
+   * ã„ã‚‹ã€‚
    *
-   * STATUS_KIND ¤Ë¤Ï°Ê²¼¤Î¼ïÎà¤¬¤¢¤ë¡£
+   * STATUS_KIND ã«ã¯ä»¥ä¸‹ã®ç¨®é¡ãŒã‚ã‚‹ã€‚
    *
-   * - COMPONENT_PROFILE: ¥³¥ó¥İ¡¼¥Í¥ó¥È¤Î¥×¥í¥Õ¥¡¥¤¥ë¾ğÊó¤¬ÊÑ²½
-   * - RTC_STATUS       : ¥³¥ó¥İ¡¼¥Í¥ó¥È¤Î¾õÂÖ (Init, Alive) ¤¬ÊÑ²½
-   * - EC_STATUS        : EC¤Î¾õÂÖ (Inavtive, Active, Error) ¤¬ÊÑ²½
-   * - PORT_PROFILE     : ¥İ¡¼¥È¤Î¥×¥í¥Õ¥¡¥¤¥ë¤¬ÊÑ²½
-   * - CONFIGURATION    : ¥³¥ó¥Õ¥£¥®¥å¥ì¡¼¥·¥ç¥ó¤¬ÊÑ²½
-   * - RTC_HEARTBEAT    : RTC¤ÎÀ¸Â¸³ÎÇ§¤Î¥Ï¡¼¥È¥Ó¡¼¥É
-   * - EC_HEARTBEAT     : EC¤ÎÀ¸Â¸³ÎÇ§¤Î¥Ï¡¼¥È¥Ó¡¼¥È
-   * - FSM_PROFILE      : FSM¤Î¥×¥í¥Õ¥¡¥¤¥ë¤¬ÊÑ²½
-   * - FSM_STATUS       : FSM¤Î¾õÂÖ¤¬ÊÑ²½
-   * - FSM_STRUCTURE    : FSM¤Î¹½Â¤¤¬ÊÑ²½
-   * - USER_DEFINED     : ¥æ¡¼¥¶ÄêµÁ
+   * - COMPONENT_PROFILE: ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã®ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«æƒ…å ±ãŒå¤‰åŒ–
+   * - RTC_STATUS       : ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã®çŠ¶æ…‹ (Init, Alive) ãŒå¤‰åŒ–
+   * - EC_STATUS        : ECã®çŠ¶æ…‹ (Inavtive, Active, Error) ãŒå¤‰åŒ–
+   * - PORT_PROFILE     : ãƒãƒ¼ãƒˆã®ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«ãŒå¤‰åŒ–
+   * - CONFIGURATION    : ã‚³ãƒ³ãƒ•ã‚£ã‚®ãƒ¥ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ãŒå¤‰åŒ–
+   * - RTC_HEARTBEAT    : RTCã®ç”Ÿå­˜ç¢ºèªã®ãƒãƒ¼ãƒˆãƒ“ãƒ¼ãƒ‰
+   * - EC_HEARTBEAT     : ECã®ç”Ÿå­˜ç¢ºèªã®ãƒãƒ¼ãƒˆãƒ“ãƒ¼ãƒˆ
+   * - FSM_PROFILE      : FSMã®ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«ãŒå¤‰åŒ–
+   * - FSM_STATUS       : FSMã®çŠ¶æ…‹ãŒå¤‰åŒ–
+   * - FSM_STRUCTURE    : FSMã®æ§‹é€ ãŒå¤‰åŒ–
+   * - USER_DEFINED     : ãƒ¦ãƒ¼ã‚¶å®šç¾©
    *
    * \subsection COMPONENT_PROFILE COMPONENT_PROFILE
-   * ¥³¥ó¥İ¡¼¥Í¥ó¥È¤Î¥×¥í¥Õ¥¡¥¤¥ë¾ğÊó¤¬ÊÑ²½¤·¤¿ºİ¤Ë¤³¤Î¥¿¥°Ì¾(enumÃÍ)¤ò
-   * Âè1°ú¿ô¤Ë¤·¤Æ update_status() ¥ª¥Ú¥ì¡¼¥·¥ç¥ó¤¬¸Æ¤Ó½Ğ¤µ¤ì¤ë¡£(Ì¤¼ÂÁõ)
+   * ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã®ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«æƒ…å ±ãŒå¤‰åŒ–ã—ãŸéš›ã«ã“ã®ã‚¿ã‚°å(enumå€¤)ã‚’
+   * ç¬¬1å¼•æ•°ã«ã—ã¦ update_status() ã‚ªãƒšãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ãŒå‘¼ã³å‡ºã•ã‚Œã‚‹ã€‚(æœªå®Ÿè£…)
    *
    * \subsection RTC_STATUS RTC_STATUS
    *
-   * ¥³¥ó¥İ¡¼¥Í¥ó¥È¤Î¾õÂÖ (Init, Alive) ¤¬ÊÑ²½¤·¤¿ºİ¤Ë¤³¤Î¥¿¥°Ì¾
-   * (enumÃÍ)¤òÂè1°ú¿ô¤Ë¤·¤Æ update_status() ¥ª¥Ú¥ì¡¼¥·¥ç¥ó¤¬¸Æ¤Ó½Ğ¤µ¤ì
-   * ¤ë¡£¸·Ì©¤Ë¤ÏEC¤Î¾õÂÖ¤Ç¤¢¤ë¤¬¡¢Inavtive, Active, Error, Finalize ¤Î
-   * 4¤Ä¤Î¾õÂÖ¤ËÊÑ²½¤·¤¿¤³¤È¤ò¸¡ÃÎ¤¹¤ë¤³¤È¤¬¤Ç¤­¤ë¡£°Ê²¼¤Î¾õÂÖÊÑ²½»ş¤Ë¡¢
-   * ¤½¤ì¤¾¤ì¥Ò¥ó¥È¤È¤·¤Æ°Ê²¼¤ÎÊ¸»úÎó¤È¤È¤â¤Ë¥³¡¼¥ë¥Ğ¥Ã¥¯¤µ¤ì¤ë¡£
+   * ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã®çŠ¶æ…‹ (Init, Alive) ãŒå¤‰åŒ–ã—ãŸéš›ã«ã“ã®ã‚¿ã‚°å
+   * (enumå€¤)ã‚’ç¬¬1å¼•æ•°ã«ã—ã¦ update_status() ã‚ªãƒšãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ãŒå‘¼ã³å‡ºã•ã‚Œ
+   * ã‚‹ã€‚å³å¯†ã«ã¯ECã®çŠ¶æ…‹ã§ã‚ã‚‹ãŒã€Inavtive, Active, Error, Finalize ã®
+   * 4ã¤ã®çŠ¶æ…‹ã«å¤‰åŒ–ã—ãŸã“ã¨ã‚’æ¤œçŸ¥ã™ã‚‹ã“ã¨ãŒã§ãã‚‹ã€‚ä»¥ä¸‹ã®çŠ¶æ…‹å¤‰åŒ–æ™‚ã«ã€
+   * ãã‚Œãã‚Œãƒ’ãƒ³ãƒˆã¨ã—ã¦ä»¥ä¸‹ã®æ–‡å­—åˆ—ã¨ã¨ã‚‚ã«ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ã•ã‚Œã‚‹ã€‚
    *
-   * - onActivated ¸Æ¤Ó½Ğ¤·À®¸ù»ş:   ACTIVE: <EC id>
-   * - onDeactivated ¸Æ¤Ó½Ğ¤·À®¸ù»ş: INACTIVE: <EC id>
-   * - onReset ¸Æ¤Ó½Ğ¤·À®¸ù»ş:       INACTIVE: <EC id>
-   * - onAborting ¸Æ¤Ó½Ğ¤·À®¸ù»ş:    ERROR: <EC id>
-   * - onFinalize ¸Æ¤Ó½Ğ¤·À®¸ù»ş:    FINALIZE: <EC id>
+   * - onActivated å‘¼ã³å‡ºã—æˆåŠŸæ™‚:   ACTIVE: <EC id>
+   * - onDeactivated å‘¼ã³å‡ºã—æˆåŠŸæ™‚: INACTIVE: <EC id>
+   * - onReset å‘¼ã³å‡ºã—æˆåŠŸæ™‚:       INACTIVE: <EC id>
+   * - onAborting å‘¼ã³å‡ºã—æˆåŠŸæ™‚:    ERROR: <EC id>
+   * - onFinalize å‘¼ã³å‡ºã—æˆåŠŸæ™‚:    FINALIZE: <EC id>
    *
    * \subsection EC_STATUS EC_STATUS
    *
-   * EC¤Î¾õÂÖ (Inavtive, Active, Error) ¤¬ÊÑ²½¤·¤¿ºİ¤Ë¤³¤Î¥¿¥°Ì¾(enumÃÍ)¤ò
-   * Âè1°ú¿ô¤Ë¤·¤Æ update_status() ¥ª¥Ú¥ì¡¼¥·¥ç¥ó¤¬¸Æ¤Ó½Ğ¤µ¤ì¤ë¡£
+   * ECã®çŠ¶æ…‹ (Inavtive, Active, Error) ãŒå¤‰åŒ–ã—ãŸéš›ã«ã“ã®ã‚¿ã‚°å(enumå€¤)ã‚’
+   * ç¬¬1å¼•æ•°ã«ã—ã¦ update_status() ã‚ªãƒšãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ãŒå‘¼ã³å‡ºã•ã‚Œã‚‹ã€‚
    *
    * \subsection PORT_PROFILE PORT_PROFILE
-   * ¥İ¡¼¥È¤Î¥×¥í¥Õ¥¡¥¤¥ë¤¬ÊÑ²½¤·¤¿ºİ¤Ë¤³¤Î¥¿¥°Ì¾(enumÃÍ)¤ò
-   * Âè1°ú¿ô¤Ë¤·¤Æ update_status() ¥ª¥Ú¥ì¡¼¥·¥ç¥ó¤¬¸Æ¤Ó½Ğ¤µ¤ì¤ë¡£
+   * ãƒãƒ¼ãƒˆã®ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«ãŒå¤‰åŒ–ã—ãŸéš›ã«ã“ã®ã‚¿ã‚°å(enumå€¤)ã‚’
+   * ç¬¬1å¼•æ•°ã«ã—ã¦ update_status() ã‚ªãƒšãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ãŒå‘¼ã³å‡ºã•ã‚Œã‚‹ã€‚
    *
    * \subsection CONFIGURATION CONFIGURATION
-   * ¥³¥ó¥Õ¥£¥®¥å¥ì¡¼¥·¥ç¥ó¤¬ÊÑ²½¤·¤¿ºİ¤Ë¤³¤Î¥¿¥°Ì¾(enumÃÍ)¤ò
-   * Âè1°ú¿ô¤Ë¤·¤Æ update_status() ¥ª¥Ú¥ì¡¼¥·¥ç¥ó¤¬¸Æ¤Ó½Ğ¤µ¤ì¤ë¡£
+   * ã‚³ãƒ³ãƒ•ã‚£ã‚®ãƒ¥ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ãŒå¤‰åŒ–ã—ãŸéš›ã«ã“ã®ã‚¿ã‚°å(enumå€¤)ã‚’
+   * ç¬¬1å¼•æ•°ã«ã—ã¦ update_status() ã‚ªãƒšãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ãŒå‘¼ã³å‡ºã•ã‚Œã‚‹ã€‚
    *
    * \subsection RTC_HEARTBEAT RTC_HEARTBEAT
-   * RTC¤ÎÀ¸Â¸³ÎÇ§¤Î¥Ï¡¼¥È¥Ó¡¼¥É¤·¤¿ºİ¤Ë¤³¤Î¥¿¥°Ì¾(enumÃÍ)¤ò
-   * Âè1°ú¿ô¤Ë¤·¤Æ update_status() ¥ª¥Ú¥ì¡¼¥·¥ç¥ó¤¬¸Æ¤Ó½Ğ¤µ¤ì¤ë¡£
+   * RTCã®ç”Ÿå­˜ç¢ºèªã®ãƒãƒ¼ãƒˆãƒ“ãƒ¼ãƒ‰ã—ãŸéš›ã«ã“ã®ã‚¿ã‚°å(enumå€¤)ã‚’
+   * ç¬¬1å¼•æ•°ã«ã—ã¦ update_status() ã‚ªãƒšãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ãŒå‘¼ã³å‡ºã•ã‚Œã‚‹ã€‚
    *
    * \subsection EC_HEARTBEAT EC_HEARTBEAT
-   * EC¤ÎÀ¸Â¸³ÎÇ§¤Î¥Ï¡¼¥È¥Ó¡¼¥È¤·¤¿ºİ¤Ë¤³¤Î¥¿¥°Ì¾(enumÃÍ)¤ò
-   * Âè1°ú¿ô¤Ë¤·¤Æ update_status() ¥ª¥Ú¥ì¡¼¥·¥ç¥ó¤¬¸Æ¤Ó½Ğ¤µ¤ì¤ë¡£
+   * ECã®ç”Ÿå­˜ç¢ºèªã®ãƒãƒ¼ãƒˆãƒ“ãƒ¼ãƒˆã—ãŸéš›ã«ã“ã®ã‚¿ã‚°å(enumå€¤)ã‚’
+   * ç¬¬1å¼•æ•°ã«ã—ã¦ update_status() ã‚ªãƒšãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ãŒå‘¼ã³å‡ºã•ã‚Œã‚‹ã€‚
    *
    * \subsection FSM_PROFILE FSM_PROFILE
-   * FSM¤Î¥×¥í¥Õ¥¡¥¤¥ë¤¬ÊÑ²½¤·¤¿ºİ¤Ë¤³¤Î¥¿¥°Ì¾(enumÃÍ)¤ò
-   * Âè1°ú¿ô¤Ë¤·¤Æ update_status() ¥ª¥Ú¥ì¡¼¥·¥ç¥ó¤¬¸Æ¤Ó½Ğ¤µ¤ì¤ë¡£
+   * FSMã®ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«ãŒå¤‰åŒ–ã—ãŸéš›ã«ã“ã®ã‚¿ã‚°å(enumå€¤)ã‚’
+   * ç¬¬1å¼•æ•°ã«ã—ã¦ update_status() ã‚ªãƒšãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ãŒå‘¼ã³å‡ºã•ã‚Œã‚‹ã€‚
    *
    * \subsection FSM_STATUS FSM_STATUS
-   * FSM¤Î¾õÂÖ¤¬ÊÑ²½¤·¤¿ºİ¤Ë¤³¤Î¥¿¥°Ì¾(enumÃÍ)¤ò
-   * Âè1°ú¿ô¤Ë¤·¤Æ update_status() ¥ª¥Ú¥ì¡¼¥·¥ç¥ó¤¬¸Æ¤Ó½Ğ¤µ¤ì¤ë¡£
+   * FSMã®çŠ¶æ…‹ãŒå¤‰åŒ–ã—ãŸéš›ã«ã“ã®ã‚¿ã‚°å(enumå€¤)ã‚’
+   * ç¬¬1å¼•æ•°ã«ã—ã¦ update_status() ã‚ªãƒšãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ãŒå‘¼ã³å‡ºã•ã‚Œã‚‹ã€‚
    *
    * \subsection FSM_STRUCTURE FSM_STRUCTURE
-   * FSM¤Î¹½Â¤¤¬ÊÑ²½¤·¤¿ºİ¤Ë¤³¤Î¥¿¥°Ì¾(enumÃÍ)¤ò
-   * Âè1°ú¿ô¤Ë¤·¤Æ update_status() ¥ª¥Ú¥ì¡¼¥·¥ç¥ó¤¬¸Æ¤Ó½Ğ¤µ¤ì¤ë¡£
+   * FSMã®æ§‹é€ ãŒå¤‰åŒ–ã—ãŸéš›ã«ã“ã®ã‚¿ã‚°å(enumå€¤)ã‚’
+   * ç¬¬1å¼•æ•°ã«ã—ã¦ update_status() ã‚ªãƒšãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ãŒå‘¼ã³å‡ºã•ã‚Œã‚‹ã€‚
    *
    * \subsection USER_DEFINED USER_DEFINED
-   * ¥æ¡¼¥¶ÄêµÁ¤·¤¿ºİ¤Ë¤³¤Î¥¿¥°Ì¾(enumÃÍ)¤ò
-   * Âè1°ú¿ô¤Ë¤·¤Æ update_status() ¥ª¥Ú¥ì¡¼¥·¥ç¥ó¤¬¸Æ¤Ó½Ğ¤µ¤ì¤ë¡£
+   * ãƒ¦ãƒ¼ã‚¶å®šç¾©ã—ãŸéš›ã«ã“ã®ã‚¿ã‚°å(enumå€¤)ã‚’
+   * ç¬¬1å¼•æ•°ã«ã—ã¦ update_status() ã‚ªãƒšãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ãŒå‘¼ã³å‡ºã•ã‚Œã‚‹ã€‚
    *
    *
    *
@@ -145,7 +145,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ½é´ü²½
+     * @brief åˆæœŸåŒ–
      * @else
      * @brief Initialization
      * @endif
@@ -155,7 +155,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ºÆ½é´ü²½
+     * @brief å†åˆæœŸåŒ–
      * @else
      * @brief Re-initialization
      * @endif
@@ -164,7 +164,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ServiceProfile ¤ò¼èÆÀ¤¹¤ë
+     * @brief ServiceProfile ã‚’å–å¾—ã™ã‚‹
      * @else
      * @brief getting ServiceProfile
      * @endif
@@ -173,7 +173,7 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief ½ªÎ»½èÍı
+     * @brief çµ‚äº†å‡¦ç†
      * @else
      * @brief Finalization
      * @endif
@@ -183,7 +183,7 @@ namespace RTC
   protected:
     /*!
      * @if jp
-     * @brief ¥ê¥â¡¼¥È¥ª¥Ö¥¸¥§¥¯¥È¥³¡¼¥ë
+     * @brief ãƒªãƒ¢ãƒ¼ãƒˆã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚³ãƒ¼ãƒ«
      * @else
      * @brief Calling remote object
      * @endif
@@ -202,7 +202,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief Kind¤òÊ¸»úÎó¤ØÊÑ´¹¤¹¤ë
+     * @brief Kindã‚’æ–‡å­—åˆ—ã¸å¤‰æ›ã™ã‚‹
      * @else
      * @brief Converting kind to string
      * @endif
@@ -228,7 +228,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief RTObject¤Ø¤Î¥ê¥¹¥ÊÀÜÂ³½èÍı
+     * @brief RTObjectã¸ã®ãƒªã‚¹ãƒŠæ¥ç¶šå‡¦ç†
      * @else
      * @brief Connectiong listeners to RTObject
      * @endif
@@ -237,7 +237,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ¥ê¥¹¥ÊÀÜÂ³¡¦ÀÚÃÇ¥¹¥¤¥Ã¥Á¥ó¥°½èÍı
+     * @brief ãƒªã‚¹ãƒŠæ¥ç¶šãƒ»åˆ‡æ–­ã‚¹ã‚¤ãƒƒãƒãƒ³ã‚°å‡¦ç†
      * @else
      * @brief Switching listeners connecting/disconnecting
      * @endif
@@ -250,7 +250,7 @@ namespace RTC
     // Heartbeat related functions
     /*!
      * @if jp
-     * @brief ¥Ï¡¼¥È¥Ó¡¼¥È¤ò¥ª¥Ö¥¶¡¼¥Ğ¤ËÅÁ¤¨¤ë
+     * @brief ãƒãƒ¼ãƒˆãƒ“ãƒ¼ãƒˆã‚’ã‚ªãƒ–ã‚¶ãƒ¼ãƒã«ä¼ãˆã‚‹
      * @else
      * @brief Sending a heartbeart signal to observer
      * @endif
@@ -259,7 +259,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ¥Ï¡¼¥È¥Ó¡¼¥È¤òÀßÄê¤¹¤ë
+     * @brief ãƒãƒ¼ãƒˆãƒ“ãƒ¼ãƒˆã‚’è¨­å®šã™ã‚‹
      * @else
      * @brief Setting heartbeat
      * @endif
@@ -268,7 +268,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ¥Ï¡¼¥È¥Ó¡¼¥È¤ò²ò½ü¤¹¤ë
+     * @brief ãƒãƒ¼ãƒˆãƒ“ãƒ¼ãƒˆã‚’è§£é™¤ã™ã‚‹
      * @else
      * @brief Unsetting heartbeat
      * @endif
@@ -277,7 +277,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ¥Ï¡¼¥È¥Ó¡¼¥È¤ò¥ª¥Ö¥¶¡¼¥Ğ¤ËÅÁ¤¨¤ë
+     * @brief ãƒãƒ¼ãƒˆãƒ“ãƒ¼ãƒˆã‚’ã‚ªãƒ–ã‚¶ãƒ¼ãƒã«ä¼ãˆã‚‹
      * @else
      * @brief Sending a heartbeart signal to observer
      * @endif
@@ -286,7 +286,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ¥Ï¡¼¥È¥Ó¡¼¥È¤òÀßÄê¤¹¤ë
+     * @brief ãƒãƒ¼ãƒˆãƒ“ãƒ¼ãƒˆã‚’è¨­å®šã™ã‚‹
      * @else
      * @brief Setting heartbeat
      * @endif
@@ -295,7 +295,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ¥Ï¡¼¥È¥Ó¡¼¥È¤ò²ò½ü¤¹¤ë
+     * @brief ãƒãƒ¼ãƒˆãƒ“ãƒ¼ãƒˆã‚’è§£é™¤ã™ã‚‹
      * @else
      * @brief Unsetting heartbeat
      * @endif
@@ -306,7 +306,7 @@ namespace RTC
     // Component status related functions
     /*!
      * @if jp
-     * @brief RTC¾õÂÖÊÑ²½¥ê¥¹¥Ê¤ÎÀßÄê½èÍı
+     * @brief RTCçŠ¶æ…‹å¤‰åŒ–ãƒªã‚¹ãƒŠã®è¨­å®šå‡¦ç†
      * @else
      * @brief Setting RTC status listeners
      * @endif
@@ -315,7 +315,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief RTC¾õÂÖÊÑ²½¥ê¥¹¥Ê¤Î²ò½ü½èÍı
+     * @brief RTCçŠ¶æ…‹å¤‰åŒ–ãƒªã‚¹ãƒŠã®è§£é™¤å‡¦ç†
      * @else
      * @brief Unsetting RTC status listeners
      * @endif
@@ -326,7 +326,7 @@ namespace RTC
     // FSM status related functions
     /*!
      * @if jp
-     * @brief FSM¾õÂÖÊÑ²½¥ê¥¹¥Ê¤ÎÀßÄê½èÍı
+     * @brief FSMçŠ¶æ…‹å¤‰åŒ–ãƒªã‚¹ãƒŠã®è¨­å®šå‡¦ç†
      * @else
      * @brief Setting FSM status listeners
      * @endif
@@ -335,7 +335,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief FSM¾õÂÖÊÑ²½¥ê¥¹¥Ê¤Î²ò½ü½èÍı
+     * @brief FSMçŠ¶æ…‹å¤‰åŒ–ãƒªã‚¹ãƒŠã®è§£é™¤å‡¦ç†
      * @else
      * @brief Unsetting FSM status listeners
      * @endif
@@ -346,7 +346,7 @@ namespace RTC
     // Port profile related functions
     /*!
      * @if jp
-     * @brief Port¥×¥í¥Õ¥¡¥¤¥ëÊÑ²½¥ê¥¹¥Ê¤ÎÀßÄê½èÍı
+     * @brief Portãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«å¤‰åŒ–ãƒªã‚¹ãƒŠã®è¨­å®šå‡¦ç†
      * @else
      * @brief Setting port profile listener
      * @endif
@@ -355,7 +355,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief Port¥×¥í¥Õ¥¡¥¤¥ëÊÑ²½¥ê¥¹¥Ê¤Î²ò½ü½èÍı
+     * @brief Portãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«å¤‰åŒ–ãƒªã‚¹ãƒŠã®è§£é™¤å‡¦ç†
      * @else
      * @brief Unsetting port profile listener
      * @endif
@@ -367,7 +367,7 @@ namespace RTC
     // EC profile related functions
     /*!
      * @if jp
-     * @brief EC¤Î¾õÂÖÊÑ²½¥ê¥¹¥Ê¤ÎÀßÄê
+     * @brief ECã®çŠ¶æ…‹å¤‰åŒ–ãƒªã‚¹ãƒŠã®è¨­å®š
      * @else
      * @brief Setting EC status listener
      * @endif
@@ -376,7 +376,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief EC¤Î¾õÂÖÊÑ²½¥ê¥¹¥Ê¤Î²ò½ü
+     * @brief ECã®çŠ¶æ…‹å¤‰åŒ–ãƒªã‚¹ãƒŠã®è§£é™¤
      * @else
      * @brief Unsetting EC status listener
      * @endif
@@ -388,7 +388,7 @@ namespace RTC
     // ComponentProfile related functions
     /*!
      * @if jp
-     * @brief ComponentProfile¾õÂÖÊÑ²½¥ê¥¹¥Ê¤ÎÀßÄê
+     * @brief ComponentProfileçŠ¶æ…‹å¤‰åŒ–ãƒªã‚¹ãƒŠã®è¨­å®š
      * @else
      * @brief Setting ComponentProfile listener
      * @endif
@@ -397,7 +397,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ComponentProfile¾õÂÖÊÑ²½¥ê¥¹¥Ê¤Î²ò½ü
+     * @brief ComponentProfileçŠ¶æ…‹å¤‰åŒ–ãƒªã‚¹ãƒŠã®è§£é™¤
      * @else
      * @brief Unsetting ComponentProfile listener
      * @endif
@@ -408,7 +408,7 @@ namespace RTC
     // FsmProfile related functions
     /*!
      * @if jp
-     * @brief FsmProfile¾õÂÖÊÑ²½¥ê¥¹¥Ê¤ÎÀßÄê
+     * @brief FsmProfileçŠ¶æ…‹å¤‰åŒ–ãƒªã‚¹ãƒŠã®è¨­å®š
      * @else
      * @brief Setting FsmProfile listener
      * @endif
@@ -417,7 +417,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief FsmProfile¾õÂÖÊÑ²½¥ê¥¹¥Ê¤Î²ò½ü
+     * @brief FsmProfileçŠ¶æ…‹å¤‰åŒ–ãƒªã‚¹ãƒŠã®è§£é™¤
      * @else
      * @brief Unsetting FsmProfile listener
      * @endif
@@ -428,7 +428,7 @@ namespace RTC
     // FsmStructure related functions
     /*!
      * @if jp
-     * @brief FsmStructure¾õÂÖÊÑ²½¥ê¥¹¥Ê¤ÎÀßÄê
+     * @brief FsmStructureçŠ¶æ…‹å¤‰åŒ–ãƒªã‚¹ãƒŠã®è¨­å®š
      * @else
      * @brief Setting FsmStructure listener
      * @endif
@@ -437,7 +437,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief FsmStructure¾õÂÖÊÑ²½¥ê¥¹¥Ê¤Î²ò½ü
+     * @brief FsmStructureçŠ¶æ…‹å¤‰åŒ–ãƒªã‚¹ãƒŠã®è§£é™¤
      * @else
      * @brief Unsetting FsmStructure listener
      * @endif
@@ -449,7 +449,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief Configuration¾õÂÖÊÑ²½¥ê¥¹¥Ê¤ÎÀßÄê
+     * @brief ConfigurationçŠ¶æ…‹å¤‰åŒ–ãƒªã‚¹ãƒŠã®è¨­å®š
      * @else
      * @brief Setting Configuration listener
      * @endif
@@ -458,7 +458,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief Configuration¾õÂÖÊÑ²½¥ê¥¹¥Ê¤Î²ò½ü
+     * @brief ConfigurationçŠ¶æ…‹å¤‰åŒ–ãƒªã‚¹ãƒŠã®è§£é™¤
      * @else
      * @brief Unsetting Configurationlistener
      * @endif
@@ -805,7 +805,7 @@ namespace RTC
     bool m_ecHeartbeat;
     ListenerId m_ecHblistenerid;
 
-    // ¤³¤Î¥¿¥¤¥Ş¡¼¤Ï¤¤¤º¤ì¥°¥í¡¼¥Ğ¥ë¤Ê¥¿¥¤¥Ş¤Ë¤ª¤­¤«¤¨¤ë
+    // ã“ã®ã‚¿ã‚¤ãƒãƒ¼ã¯ã„ãšã‚Œã‚°ãƒ­ãƒ¼ãƒãƒ«ãªã‚¿ã‚¤ãƒã«ãŠãã‹ãˆã‚‹
     coil::Timer m_timer;
 
   };

@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file DataPortStatus.h
  * @brief DataPortStatus class
@@ -27,15 +27,15 @@ namespace RTC
   /*!
    * @if jp
    * @class DataPortStatus mixin class
-   * @brief DataPortStatus mixin ���饹
+   * @brief DataPortStatus mixin クラス
    *
-   * ���Υ��饹�ϡ�enum������줿�꥿���󥳡��ɤ򡢥ǡ����ݡ��ȴ�Ϣ�Υ�
-   * �֥��饹�Ƕ������Ѥ��뤿��� mixin ���饹�Ǥ��롣���Υ꥿���󥳡�
-   * �ɤ���Ѥ��륯�饹�Ǥϡ�DataPortStatus ���饹��public �Ѿ���������
-   * define ���Ƥ���DATAPORTSTATUS_ENUM �򥯥饹��˵��Ҥ��뤳�Ȥ�����
-   * ��ǽ�Ȥʤ롣����ˤ�ꡢenum �� ReturnCode_t ���Ȥ��� typedef ����
-   * �ʸ�ReturnCode_t �����ѤǤ���褦�ˤ���ȤȤ�ˡ�̾�����֤� enum
-   * ������줿�Ƽ��̻Ҥ��������饹̾���������Ƴ�����롣
+   * このクラスは、enum定義されたリターンコードを、データポート関連のサ
+   * ブクラスで共通利用するための mixin クラスである。このリターンコー
+   * ドを使用するクラスでは、DataPortStatus クラスをpublic 継承し、下に
+   * define してあるDATAPORTSTATUS_ENUM をクラス内に記述することで利用
+   * 可能となる。これにより、enum を ReturnCode_t 型として typedef し、
+   * 以後ReturnCode_t を利用できるようにするとともに、名前空間に enum
+   * 定義された各識別子を当該クラス名前空間内に導入する。
    *
    * @else
    * @class DataPortStatus mixin class
@@ -56,45 +56,45 @@ namespace RTC
   public:
     /*!
      * @if jp
-     * brief DataPortStatus �꥿���󥳡���
+     * brief DataPortStatus リターンコード
      *
-     * �ǡ����ݡ��ȴ�Ϣ�Υ��饹�Ƕ��̤Υ꥿���󥳡���
+     * データポート関連のクラスで共通のリターンコード
      *  
-     * - PORT_OK:              ���ｪλ
-     * - PORT_ERROR:           �۾ｪλ
-     * - BUFFER_ERROR:         �Хåե����顼
-     * - BUFFER_FULL:          �Хåե��ե�
-     * - BUFFER_EMPTY:         �Хåե�����ץƥ�
-     * - BUFFER_TIMEOUT:       �Хåե������ॢ����
-     * - SEND_FULL:            �ǡ��������ä������¦���Хåե��ե����
-     * - SEND_TIMEOUT:         �ǡ��������ä������¦�������ॢ���Ȥ���
-     * - RECV_EMPTY:           �ǡ�����������褦�Ȥ������ǡ�����������
-     * - RECV_TIMEOUT:         �ǡ�����������褦�Ȥ����������द�Ȥ���
-     * - INVALID_ARGS:         �����ʰ���
-     * - PRECONDITION_NOT_MET: ���������������Ƥ��ʤ�
-     * - CONNECTION_LOST:      ��³�����Ǥ��줿
-     * - UNKNOWN_ERROR:        �����ʥ��顼
+     * - PORT_OK:              正常終了
+     * - PORT_ERROR:           異常終了
+     * - BUFFER_ERROR:         バッファエラー
+     * - BUFFER_FULL:          バッファフル
+     * - BUFFER_EMPTY:         バッファエンプティ
+     * - BUFFER_TIMEOUT:       バッファタイムアウト
+     * - SEND_FULL:            データを送ったが相手側がバッファフル状態
+     * - SEND_TIMEOUT:         データを送ったが相手側がタイムアウトした
+     * - RECV_EMPTY:           データを受信しようとしたがデータが空状態
+     * - RECV_TIMEOUT:         データを受信しようとしたがタイムうとした
+     * - INVALID_ARGS:         不正な引数
+     * - PRECONDITION_NOT_MET: 事前条件を満たしていない
+     * - CONNECTION_LOST:      接続が切断された
+     * - UNKNOWN_ERROR:        不明なエラー
      *
-     * �ǡ����ݡ��ȤΥǡ�����ϩ��Υ��顼ȯ���Ľ꤫��ƤӽФ�¦�إ��顼
-     * ����������뤿��ˤ��Υ��顼�����ɤ���Ѥ��롣��ˡ�����ϩ��Υ�
-     * �顼��������Υ��顼�ʤɤ��ͤ����뤬������ʬ�γ��̤�ȯ�����륨
-     * �顼��ʲ�����󤹤롣
+     * データポートのデータ経路上のエラー発生個所から呼び出し側へエラー
+     * 情報を伝えるためにこのエラーコードを使用する。主に、伝送路上のエ
+     * ラー、伝送先のエラーなどが考えられるが、各部分の界面で発生するエ
+     * ラーを以下に列挙する。
      *
-     * (1) Push��
-     *  a) InPortConsumer �� Publisher/Activity �֤�ȯ������꥿���󥳡���
+     * (1) Push型
+     *  a) InPortConsumer と Publisher/Activity 間で発生するリターンコード
      *     PORT_OK, PORT_ERROR, SEND_FULL, SEND_TIMEOUT, CONNECTION_LOST,
      *     UNKNOWN_ERROR
      *
-     *  b) Activity �� OutPort �� Buffer/Connector �֤�ȯ������꥿���󥳡���
+     *  b) Activity と OutPort の Buffer/Connector 間で発生するリターンコード
      *     PORT_OK, PORT_ERROR, BUFFER_ERROR, BUFFER_FULL, BUFFER_TIMEOUT,
      *     UNKNOWN_ERROR, 
      *
-     * (2) Pull��
-     *  a) Activity �� InPort �δ֤�ȯ������꥿���󥳡���
+     * (2) Pull型
+     *  a) Activity と InPort の間で発生するリターンコード
      *     PORT_OK, PORT_ERROR, RECV_EMPTY, RECV_TIMEOUT, CONNETION_LOST,
      *     UNKNOWN_ERROR
      *
-     * �ƴؿ����֤��꥿���󥳡��ɤϴؿ����ȤΥ�ե���󥹤򻲾ȤΤ��ȡ�
+     * 各関数が返すリターンコードは関数ごとのリファレンスを参照のこと。
      *
      * @else
      * @brief DataPortStatus return codes
@@ -161,13 +161,13 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief DataPortStatus �꥿���󥳡��ɤ�ʸ������Ѵ�
+     * @brief DataPortStatus リターンコードを文字列に変換
      *
-     * DataPortStatus �꥿���󥳡��ɤ�ʸ������Ѵ�����
+     * DataPortStatus リターンコードを文字列に変換する
      *
-     * @param status �Ѵ��о� DataPortStatus �꥿���󥳡���
+     * @param status 変換対象 DataPortStatus リターンコード
      *
-     * @return ʸ�����Ѵ����
+     * @return 文字列変換結果
      *
      * @else
      *
@@ -210,13 +210,13 @@ namespace RTC
 /*!
  * @if jp
  *
- * @brief ::RTC::DataPortStatus Ƴ��
+ * @brief ::RTC::DataPortStatus 導入
  * 
- * ::RTC::DataPortStatus ���������Ƥ��� Enum �Τ��٤ƤΥ��Ф�͡���
- * ���ڡ�����Ƴ�����뤿��Υޥ�����DataPortStatus �����Ѥ��륯�饹�ˤ�
- * ���ơ����饹�������Ƭ�ˤ����� DATAPORTSTATUS_ENUM �򵭺ܤ�������ǡ�
- * DataPortStatus ���������Ƥ��� enum ���Ф�̾�����黻�Ҥʤ��˥�
- * ��������ǽ�ˤʤ롣
+ * ::RTC::DataPortStatus で宣言されている Enum のすべてのメンバをネーム
+ * スペースに導入するためのマクロ。DataPortStatus を利用するクラスにお
+ * いて、クラス宣言の先頭において DATAPORTSTATUS_ENUM を記載するだけで、
+ * DataPortStatus で宣言されている enum メンバが名前解決演算子なしにア
+ * クセス可能になる。
  *
  * @else
  *

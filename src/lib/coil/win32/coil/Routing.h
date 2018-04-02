@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file  Routing.h
  * @brief Network routing information handling functions
@@ -26,17 +26,17 @@ namespace coil
 {
   /*!
    * @if jp
-   * @brief ˆ¶æƒAƒhƒŒƒX‚©‚ç—˜—p‚³‚ê‚éƒGƒ“ƒhƒ|ƒCƒ“ƒgƒAƒhƒŒƒX‚ð“¾‚é
+   * @brief å®›å…ˆã‚¢ãƒ‰ãƒ¬ã‚¹ã‹ã‚‰åˆ©ç”¨ã•ã‚Œã‚‹ã‚¨ãƒ³ãƒ‰ãƒã‚¤ãƒ³ãƒˆã‚¢ãƒ‰ãƒ¬ã‚¹ã‚’å¾—ã‚‹
    * 
-   * ˆ¶æƒAƒhƒŒƒX‚ð—^‚¦‚é‚ÆA‚»‚ÌÛ‚É—˜—p‚³‚ê‚éƒGƒ“ƒhƒ|ƒCƒ“ƒg‚ÌƒAƒhƒŒƒX
-   * ‚ª•Ô‚³‚ê‚éBˆ¶æƒAƒhƒŒƒX dest_addr ‚É‚ÍAIPƒAƒhƒŒƒX‚Ü‚½‚ÍFQDNƒzƒX
-   * ƒg–¼‚ð—^‚¦‚é‚±‚Æ‚ª‚Å‚«‚éBˆ¶æƒAƒhƒŒƒX‚ª“ž
-   * ’B‰Â”\‚Å‚ ‚èA—˜—p‚·‚éƒGƒ“ƒhƒ|ƒCƒ“ƒg‚ª“¾‚ç‚ê‚½ê‡ trueAˆ¶æƒAƒh
-   * ƒŒƒX‚É“ž’B‚Å‚«‚È‚¢ê‡‚Í false ‚ª•Ô‚³‚ê‚éB
+   * å®›å…ˆã‚¢ãƒ‰ãƒ¬ã‚¹ã‚’ä¸Žãˆã‚‹ã¨ã€ãã®éš›ã«åˆ©ç”¨ã•ã‚Œã‚‹ã‚¨ãƒ³ãƒ‰ãƒã‚¤ãƒ³ãƒˆã®ã‚¢ãƒ‰ãƒ¬ã‚¹
+   * ãŒè¿”ã•ã‚Œã‚‹ã€‚å®›å…ˆã‚¢ãƒ‰ãƒ¬ã‚¹ dest_addr ã«ã¯ã€IPã‚¢ãƒ‰ãƒ¬ã‚¹ã¾ãŸã¯FQDNãƒ›ã‚¹
+   * ãƒˆåã‚’ä¸Žãˆã‚‹ã“ã¨ãŒã§ãã‚‹ã€‚å®›å…ˆã‚¢ãƒ‰ãƒ¬ã‚¹ãŒåˆ°
+   * é”å¯èƒ½ã§ã‚ã‚Šã€åˆ©ç”¨ã™ã‚‹ã‚¨ãƒ³ãƒ‰ãƒã‚¤ãƒ³ãƒˆãŒå¾—ã‚‰ã‚ŒãŸå ´åˆ trueã€å®›å…ˆã‚¢ãƒ‰
+   * ãƒ¬ã‚¹ã«åˆ°é”ã§ããªã„å ´åˆã¯ false ãŒè¿”ã•ã‚Œã‚‹ã€‚
    *
-   * @param dest_addr ˆ¶æƒAƒhƒŒƒX‚Ü‚½‚ÍƒzƒXƒg–¼
-   * @param dest_if ˆ¶æ‚Æ’ÊM‚ðs‚¤Û‚ÉŽg—p‚³‚ê‚éƒCƒ“ƒ^[ƒtƒF[ƒX–¼
-   * @return ¬Œ÷ true, Ž¸”s false
+   * @param dest_addr å®›å…ˆã‚¢ãƒ‰ãƒ¬ã‚¹ã¾ãŸã¯ãƒ›ã‚¹ãƒˆå
+   * @param dest_if å®›å…ˆã¨é€šä¿¡ã‚’è¡Œã†éš›ã«ä½¿ç”¨ã•ã‚Œã‚‹ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹å
+   * @return æˆåŠŸ true, å¤±æ•— false
    * 
    * @else
    * @brief Getting network interface name from destination address

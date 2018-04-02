@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file  Signal_win32.cpp
  * @brief SignalAction class
@@ -25,7 +25,7 @@ namespace coil
 {
   /*!
    * @if jp
-   * @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+   * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
    * @else
    * @brief Constructor
    * @endif
@@ -37,11 +37,11 @@ namespace coil
 
   /*!
    * @if jp
-   * @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
-   * @param handle ƒVƒOƒiƒ‹ƒnƒ“ƒhƒ‰
-   * @param signum ƒVƒOƒiƒ‹”Ô†
-   * @param mask ƒVƒOƒiƒ‹ƒ}ƒXƒN
-   * @param flags ƒtƒ‰ƒO
+   * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+   * @param handle ã‚·ã‚°ãƒŠãƒ«ãƒãƒ³ãƒ‰ãƒ©
+   * @param signum ã‚·ã‚°ãƒŠãƒ«ç•ªå·
+   * @param mask ã‚·ã‚°ãƒŠãƒ«ãƒã‚¹ã‚¯
+   * @param flags ãƒ•ãƒ©ã‚°
    * @else
    * @brief Constructor
    * @param handle Signal handler.
@@ -59,7 +59,7 @@ namespace coil
 
   /*!
    * @if jp
-   * @brief ƒfƒXƒgƒ‰ƒNƒ^
+   * @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
    * @else
    * @brief Destructor
    * @endif

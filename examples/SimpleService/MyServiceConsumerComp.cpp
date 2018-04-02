@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file MyServiceConsumerComp.cpp
  * @brief Standalone component

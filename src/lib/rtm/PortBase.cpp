@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file PortBase.cpp
  * @brief RTC's Port base class
@@ -31,7 +31,7 @@ namespace RTC
   //============================================================
   /*!
    * @if jp
-   * @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+   * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
    * @else
    * @brief Constructor
    * @endif
@@ -65,7 +65,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ¥Ç¥¹¥È¥é¥¯¥¿
+   * @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
    * @else
    * @brief Destructor
    * @endif
@@ -102,7 +102,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief [CORBA interface] PortProfile¤ò¼èÆÀ¤¹¤ë
+   * @brief [CORBA interface] PortProfileã‚’å–å¾—ã™ã‚‹
    * @else
    * @brief [CORBA interface] Get the PortProfile of the Port
    * @endif
@@ -121,7 +121,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief [Local interface] PortProfile ¤ò¼èÆÀ¤¹¤ë¡£
+   * @brief [Local interface] PortProfile ã‚’å–å¾—ã™ã‚‹ã€‚
    * @else
    * @brief Get the PortProfile of the Port
    * @endif
@@ -135,7 +135,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief [CORBA interface] ConnectorProfileList¤ò¼èÆÀ¤¹¤ë
+   * @brief [CORBA interface] ConnectorProfileListã‚’å–å¾—ã™ã‚‹
    * @else
    * @brief [CORBA interface] Get the ConnectorProfileList of the Port
    * @endif
@@ -155,7 +155,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief [CORBA interface] ConnectorProfile ¤ò¼èÆÀ¤¹¤ë
+   * @brief [CORBA interface] ConnectorProfile ã‚’å–å¾—ã™ã‚‹
    * @else
    * @brief [CORBA interface] Get the ConnectorProfile
    * @endif
@@ -183,7 +183,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief [CORBA interface] Port ¤ÎÀÜÂ³¤ò¹Ô¤¦
+   * @brief [CORBA interface] Port ã®æ¥ç¶šã‚’è¡Œã†
    * @else
    * @brief [CORBA interface] Connect the Port
    * @endif
@@ -231,7 +231,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief [CORBA interface] Port ¤ÎÀÜÂ³ÄÌÃÎ¤ò¹Ô¤¦
+   * @brief [CORBA interface] Port ã®æ¥ç¶šé€šçŸ¥ã‚’è¡Œã†
    * @else
    * @brief [CORBA interface] Notify the Ports connection
    * @endif
@@ -341,7 +341,7 @@ namespace RTC
  
   /*!
    * @if jp
-   * @brief Interface¾ğÊó¤ò¸ø³«¤¹¤ë
+   * @brief Interfaceæƒ…å ±ã‚’å…¬é–‹ã™ã‚‹
    * @else
    * @brief Publish interface information
    * @endif
@@ -365,7 +365,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief [CORBA interface] Port ¤ÎÀÜÂ³¤ò²ò½ü¤¹¤ë
+   * @brief [CORBA interface] Port ã®æ¥ç¶šã‚’è§£é™¤ã™ã‚‹
    * @else
    * @brief [CORBA interface] Disconnect the Port
    * @endif
@@ -426,7 +426,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief [CORBA interface] Port ¤ÎÀÜÂ³²ò½üÄÌÃÎ¤ò¹Ô¤¦
+   * @brief [CORBA interface] Port ã®æ¥ç¶šè§£é™¤é€šçŸ¥ã‚’è¡Œã†
    * @else
    * @brief [CORBA interface] Notify the Ports disconnection
    * @endif
@@ -484,7 +484,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief [CORBA interface] Port ¤ÎÁ´ÀÜÂ³¤ò²ò½ü¤¹¤ë
+   * @brief [CORBA interface] Port ã®å…¨æ¥ç¶šã‚’è§£é™¤ã™ã‚‹
    * @else
    * @brief [CORBA interface] Disconnect the All Ports
    * @endif
@@ -518,7 +518,7 @@ namespace RTC
   //============================================================
   /*!
    * @if jp
-   * @brief Port ¤ÎÌ¾Á°¤òÀßÄê¤¹¤ë
+   * @brief Port ã®åå‰ã‚’è¨­å®šã™ã‚‹
    * @else
    * @brief Set the name of this Port
    * @endif
@@ -533,7 +533,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief Port ¤ÎÌ¾Á°¤ò¼èÆÀ¤¹¤ë
+   * @brief Port ã®åå‰ã‚’å–å¾—ã™ã‚‹
    * @else
    * @brief Get the name of this Port
    * @return The name of this Port.
@@ -547,7 +547,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief PortProfile¤ò¼èÆÀ¤¹¤ë
+   * @brief PortProfileã‚’å–å¾—ã™ã‚‹
    * @else
    * @brief Get the PortProfile of the Port
    * @endif
@@ -561,7 +561,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief Port ¤Î¥ª¥Ö¥¸¥§¥¯¥È»²¾È¤òÀßÄê¤¹¤ë
+   * @brief Port ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå‚ç…§ã‚’è¨­å®šã™ã‚‹
    * @else
    * @brief Set the object reference of the Port
    * @endif
@@ -575,7 +575,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief Port ¤Î¥ª¥Ö¥¸¥§¥¯¥È»²¾È¤ò¼èÆÀ¤¹¤ë
+   * @brief Port ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå‚ç…§ã‚’å–å¾—ã™ã‚‹
    * @else
    * @brief Get the object reference of the Port
    * @endif
@@ -593,7 +593,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief Port ¤Î owner ¤Î RTObject ¤ò»ØÄê¤¹¤ë
+   * @brief Port ã® owner ã® RTObject ã‚’æŒ‡å®šã™ã‚‹
    * @else
    * @brief Set the owner RTObject of the Port
    * @endif
@@ -617,7 +617,7 @@ namespace RTC
     }
   }
 
-  // OnConnect·Ï¥³¡¼¥ë¥Ğ¥Ã¥¯ (ÀÜÂ³¤Ëµ¯°ø¤¹¤ë¥¤¥Ù¥ó¥È¤Ë¤è¤ê¥³¡¼¥ë¤µ¤ì¤ë)
+  // OnConnectç³»ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ (æ¥ç¶šã«èµ·å› ã™ã‚‹ã‚¤ãƒ™ãƒ³ãƒˆã«ã‚ˆã‚Šã‚³ãƒ¼ãƒ«ã•ã‚Œã‚‹)
   void PortBase::setOnPublishInterfaces(ConnectionCallback* on_publish)
   {
     m_onPublishInterfaces = on_publish;
@@ -660,7 +660,7 @@ namespace RTC
   //============================================================
   /*!
    * @if jp
-   * @brief ¼¡¤Î Port ¤ËÂĞ¤·¤Æ notify_connect() ¤ò¥³¡¼¥ë¤¹¤ë
+   * @brief æ¬¡ã® Port ã«å¯¾ã—ã¦ notify_connect() ã‚’ã‚³ãƒ¼ãƒ«ã™ã‚‹
    * @else
    * @brief Call notify_connect() for the next Port
    * @endif
@@ -684,7 +684,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ¼¡¤Î Port ¤ËÂĞ¤·¤Æ notify_disconnect() ¤ò¥³¡¼¥ë¤¹¤ë
+   * @brief æ¬¡ã® Port ã«å¯¾ã—ã¦ notify_disconnect() ã‚’ã‚³ãƒ¼ãƒ«ã™ã‚‹
    * @else
    * @brief Call notify_disconnect() for the next Port
    * @endif
@@ -738,7 +738,7 @@ namespace RTC
   }
   /*!
    * @if jp
-   * @brief ÀÜÂ³¤ÎºÇÂç¿ô¤òÀßÄê¤¹¤ë¡£
+   * @brief æ¥ç¶šã®æœ€å¤§æ•°ã‚’è¨­å®šã™ã‚‹ã€‚
    * @else
    * @brief Set the maximum number of connections
    * @endif
@@ -753,7 +753,7 @@ namespace RTC
   //============================================================
   /*!
    * @if jp
-   * @brief ConnectorProfile ¤Î connector_id ¥Õ¥£¡¼¥ë¥É¤¬¶õ¤«¤É¤¦¤«È½Äê
+   * @brief ConnectorProfile ã® connector_id ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ãŒç©ºã‹ã©ã†ã‹åˆ¤å®š
    * @else
    * @brief Check whether connector_id of ConnectorProfile is empty
    * @endif
@@ -766,7 +766,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief UUID¤òÀ¸À®¤¹¤ë
+   * @brief UUIDã‚’ç”Ÿæˆã™ã‚‹
    * @else
    * @brief Generate the UUID
    * @endif
@@ -782,7 +782,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief UUID¤òÀ¸À®¤· ConnectorProfile ¤Ë¥»¥Ã¥È¤¹¤ë
+   * @brief UUIDã‚’ç”Ÿæˆã— ConnectorProfile ã«ã‚»ãƒƒãƒˆã™ã‚‹
    * @else
    * @brief Generate the UUID and set it to the ConnectorProfile
    * @endif
@@ -795,7 +795,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief id ¤¬´ûÂ¸¤Î ConnectorProfile ¤Î¤â¤Î¤«¤É¤¦¤«È½Äê¤¹¤ë
+   * @brief id ãŒæ—¢å­˜ã® ConnectorProfile ã®ã‚‚ã®ã‹ã©ã†ã‹åˆ¤å®šã™ã‚‹
    * @else
    * @brief Check whether the given id exists in stored ConnectorProfiles
    * @endif
@@ -808,7 +808,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief id ¤ò»ı¤Ä ConnectorProfile ¤òÃµ¤¹
+   * @brief id ã‚’æŒã¤ ConnectorProfile ã‚’æ¢ã™
    * @else
    * @brief Find ConnectorProfile with id
    * @endif
@@ -823,7 +823,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief id ¤ò»ı¤Ä ConnectorProfile ¤òÃµ¤¹
+   * @brief id ã‚’æŒã¤ ConnectorProfile ã‚’æ¢ã™
    * @else
    * @brief Find ConnectorProfile with id
    * @endif
@@ -836,7 +836,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ConnectorProfile ¤ÎÄÉ²Ã¤â¤·¤¯¤Ï¹¹¿·
+   * @brief ConnectorProfile ã®è¿½åŠ ã‚‚ã—ãã¯æ›´æ–°
    * @else
    * @brief Append or update the ConnectorProfile list
    * @endif
@@ -861,7 +861,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ConnectorProfile ¤òºï½ü¤¹¤ë
+   * @brief ConnectorProfile ã‚’å‰Šé™¤ã™ã‚‹
    * @else
    * @brief Delete the ConnectorProfile
    * @endif
@@ -879,7 +879,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief PortInterfaceProfile ¤Ë ¥¤¥ó¥¿¡¼¥Õ¥§¡¼¥¹¤òÅĞÏ¿¤¹¤ë
+   * @brief PortInterfaceProfile ã« ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹ã‚’ç™»éŒ²ã™ã‚‹
    * @else
    * @brief Append an interface to the PortInterfaceProfile
    * @endif
@@ -905,7 +905,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief PortInterfaceProfile ¤«¤é¥¤¥ó¥¿¡¼¥Õ¥§¡¼¥¹ÅĞÏ¿¤òºï½ü¤¹¤ë
+   * @brief PortInterfaceProfile ã‹ã‚‰ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹ç™»éŒ²ã‚’å‰Šé™¤ã™ã‚‹
    * @else
    * @brief Delete the interface registration from the PortInterfaceProfile
    * @endif
@@ -924,7 +924,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief Â¸ºß¤·¤Ê¤¤¥İ¡¼¥È¤òdisconnect¤¹¤ë¡£
+   * @brief å­˜åœ¨ã—ãªã„ãƒãƒ¼ãƒˆã‚’disconnectã™ã‚‹ã€‚
    * @else
    * @brief Disconnect ports that doesn't exist. 
    * @endif
@@ -974,7 +974,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ¥İ¡¼¥È¤ÎÂ¸ºß¤ò³ÎÇ§¤¹¤ë¡£
+   * @brief ãƒãƒ¼ãƒˆã®å­˜åœ¨ã‚’ç¢ºèªã™ã‚‹ã€‚
    * @else
    * @brief Existence of ports
    * @endif
@@ -1009,9 +1009,9 @@ namespace RTC
 
   /*!
   * @if jp
-  * @brief directÄÌ¿®ÍÑ¥İ¡¼¥È¥ª¥Ö¥¸¥§¥¯¥È¼èÆÀ
+  * @brief directé€šä¿¡ç”¨ãƒãƒ¼ãƒˆã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå–å¾—
   *
-  * @return ¥İ¡¼¥È¤Î¥İ¥¤¥ó¥¿
+  * @return ãƒãƒ¼ãƒˆã®ãƒã‚¤ãƒ³ã‚¿
   *
   * @else
   * @brief

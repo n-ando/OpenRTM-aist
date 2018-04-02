@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file InputbuttonComp.cpp
  * @brief Standalone component

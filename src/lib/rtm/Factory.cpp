@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file Factory.h
  * @brief RT component manager class
@@ -24,7 +24,7 @@ namespace RTC
 {
   /*!
    * @if jp
-   * @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+   * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
    * @else
    * @brief Constructor
    * @endif
@@ -36,7 +36,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ¥Ç¥¹¥È¥é¥¯¥¿
+   * @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
    * @else
    * @brief Destructor
    * @endif
@@ -47,7 +47,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ¥³¥ó¥İ¡¼¥Í¥ó¥È¥×¥í¥Õ¥¡¥¤¥ë¤Î¼èÆÀ
+   * @brief ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«ã®å–å¾—
    * @else
    * @brief Get the component profile
    * @endif
@@ -59,7 +59,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ¸½ºß¤Î¥¤¥ó¥¹¥¿¥ó¥¹¿ô¤Î¼èÆÀ
+   * @brief ç¾åœ¨ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹æ•°ã®å–å¾—
    * @else
    * @brief Get the number of current instances
    * @endif
@@ -71,7 +71,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+   * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
    * @else
    * @brief Constructor
    * @endif
@@ -91,7 +91,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ¥³¥ó¥İ¡¼¥Í¥ó¥È¤ÎÀ¸À®
+   * @brief ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã®ç”Ÿæˆ
    * @else
    * @brief Create RT-Components
    * @endif
@@ -121,7 +121,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ¥³¥ó¥İ¡¼¥Í¥ó¥È¤ÎÇË´ş
+   * @brief ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã®ç ´æ£„
    * @else
    * @brief Destroy RT-Components
    * @endif

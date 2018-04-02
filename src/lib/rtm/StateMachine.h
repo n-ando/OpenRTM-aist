@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file StateMachine.h
  * @brief State machine template class
@@ -29,12 +29,12 @@ namespace RTC_Utils
   /*!
    * @if jp
    * @class StateHolder
-   * @brief ¾õÂÖÊİ»ıÍÑ¥¯¥é¥¹
+   * @brief çŠ¶æ…‹ä¿æŒç”¨ã‚¯ãƒ©ã‚¹
    * 
-   * ¾õÂÖ¤òÊİ»ı¤¹¤ë¤¿¤á¤Î¥Û¥ë¥À¡¼¥¯¥é¥¹¡£
-   * ¸½ºß¤Î¾õÂÖ¤È¡¢£±¤ÄÁ°¤Î¾õÂÖ¡¢Á«°ÜÍ½Äê¤Î¾õÂÖ¤òÊİ»ı¤¹¤ë¡£
+   * çŠ¶æ…‹ã‚’ä¿æŒã™ã‚‹ãŸã‚ã®ãƒ›ãƒ«ãƒ€ãƒ¼ã‚¯ãƒ©ã‚¹ã€‚
+   * ç¾åœ¨ã®çŠ¶æ…‹ã¨ã€ï¼‘ã¤å‰ã®çŠ¶æ…‹ã€é·ç§»äºˆå®šã®çŠ¶æ…‹ã‚’ä¿æŒã™ã‚‹ã€‚
    *
-   * @param State Êİ»ı¤¹¤ë¾õÂÖ¤Î·¿
+   * @param State ä¿æŒã™ã‚‹çŠ¶æ…‹ã®å‹
    *
    * @since 0.4.0
    *
@@ -65,13 +65,13 @@ namespace RTC_Utils
    *
    * @class StateMachine
    *
-   * @brief ¾õÂÖ¥Ş¥·¥ó¥¯¥é¥¹
+   * @brief çŠ¶æ…‹ãƒã‚·ãƒ³ã‚¯ãƒ©ã‚¹
    *
-   * StateMachine ¥¯¥é¥¹¤Ï¾õÂÖ¥Ş¥·¥ó¤ò¼Â¸½¤¹¤ë¥¯¥é¥¹¤Ç¤¢¤ë¡£
+   * StateMachine ã‚¯ãƒ©ã‚¹ã¯çŠ¶æ…‹ãƒã‚·ãƒ³ã‚’å®Ÿç¾ã™ã‚‹ã‚¯ãƒ©ã‚¹ã§ã‚ã‚‹ã€‚
    *
-   * Îã: ActiveObject¤Ï¾õÂÖ¥Ş¥·¥ó¤ò»ı¤Ä¥¢¥¯¥Æ¥£¥Ö¥ª¥Ö¥¸¥§¥¯¥È¤Ç¤¢¤ë¤È¤¹¤ë¡£
-   * ¾õÂÖ¤Ï3¾õÂÖ INACTIVE, ACTIVE, ERROR ¤¬¤¢¤ê¡¢³Æ¾õÂÖ¤Ç¤ÎEntry¤äExitÆ°ºî¤ò
-   * ÄêµÁ¤·¤¿¤¤¤È¤¹¤ë¤È¡¢°Ê²¼¤Î¤è¤¦¤Ë¼Â¸½¤µ¤ì¤ë¡£
+   * ä¾‹: ActiveObjectã¯çŠ¶æ…‹ãƒã‚·ãƒ³ã‚’æŒã¤ã‚¢ã‚¯ãƒ†ã‚£ãƒ–ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã§ã‚ã‚‹ã¨ã™ã‚‹ã€‚
+   * çŠ¶æ…‹ã¯3çŠ¶æ…‹ INACTIVE, ACTIVE, ERROR ãŒã‚ã‚Šã€å„çŠ¶æ…‹ã§ã®Entryã‚„Exitå‹•ä½œã‚’
+   * å®šç¾©ã—ãŸã„ã¨ã™ã‚‹ã¨ã€ä»¥ä¸‹ã®ã‚ˆã†ã«å®Ÿç¾ã•ã‚Œã‚‹ã€‚
    * <pre>
    * class ActiveObject 
    * {  
@@ -101,26 +101,26 @@ namespace RTC_Utils
    *   StateMachine<MyState, bool, ActiveObject> m_sm; 
    * }; 
    * </pre>
-   * ¾õÂÖ¤ò»ı¤¿¤»¤¿¤¤¥¯¥é¥¹¤Ï°Ê²¼¤Î¾ò·ï¤òËş¤¿¤¹¤è¤¦¤Ë¼ÂÁõ¤·¤Ê¤±¤ì¤Ğ¤Ê¤é¤Ê¤¤¡£
+   * çŠ¶æ…‹ã‚’æŒãŸã›ãŸã„ã‚¯ãƒ©ã‚¹ã¯ä»¥ä¸‹ã®æ¡ä»¶ã‚’æº€ãŸã™ã‚ˆã†ã«å®Ÿè£…ã—ãªã‘ã‚Œã°ãªã‚‰ãªã„ã€‚
    * <ol>
-   * <li> enum ¤Ç¾õÂÖ¤òÄêµÁ
-   * <li> StateMachine ¤Î¥Æ¥ó¥×¥ì¡¼¥È°ú¿ô¤Ï¡¢<br>
-   *   <¾õÂÖ¤Î·¿(MyState), ¥ê¥¹¥Ê¡¼¥ª¥Ö¥¸¥§¥¯¥È, ¾õÂÖ¥Û¥ë¥À¡¼¡¤¥³¡¼¥ë¥Ğ¥Ã¥¯´Ø¿ô>
-   * <li> StateMachine ¤Î¥³¥ó¥¹¥È¥é¥¯¥¿°ú¿ô¤Ï¾õÂÖ¤Î¿ô
-   * <li> °Ê²¼¤Î¥¢¥¯¥·¥ç¥ó´Ø¿ô¤ò(Return _function_name_(States)) ¤Î´Ø¿ô¤È¤·¤ÆÀßÄê
+   * <li> enum ã§çŠ¶æ…‹ã‚’å®šç¾©
+   * <li> StateMachine ã®ãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆå¼•æ•°ã¯ã€<br>
+   *   <çŠ¶æ…‹ã®å‹(MyState), ãƒªã‚¹ãƒŠãƒ¼ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ, çŠ¶æ…‹ãƒ›ãƒ«ãƒ€ãƒ¼ï¼Œã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°>
+   * <li> StateMachine ã®ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿å¼•æ•°ã¯çŠ¶æ…‹ã®æ•°
+   * <li> ä»¥ä¸‹ã®ã‚¢ã‚¯ã‚·ãƒ§ãƒ³é–¢æ•°ã‚’(Return _function_name_(States)) ã®é–¢æ•°ã¨ã—ã¦è¨­å®š
    * <ol>
-   *  <li> ²¿¤â¤·¤Ê¤¤´Ø¿ô¤òÉ¬¤ºÄêµÁ¤·¡¢setNOP ¤ÇÍ¿¤¨¤Ê¤±¤ì¤Ğ¤Ê¤é¤Ê¤¤
-   *  <li> ³Æ¾õÂÖËè¤Ë, set(Entry|PreDo|Do|PostDo|Exit)Action ¤Ç¥¢¥¯¥·¥ç¥ó¤òÀßÄê
-   *  <li> ¾õÂÖÁ«°Ü»ş¤Î¥¢¥¯¥·¥ç¥ó¤ò setTransitionAction() ¤ÇÀßÄê¡£
+   *  <li> ä½•ã‚‚ã—ãªã„é–¢æ•°ã‚’å¿…ãšå®šç¾©ã—ã€setNOP ã§ä¸ãˆãªã‘ã‚Œã°ãªã‚‰ãªã„
+   *  <li> å„çŠ¶æ…‹æ¯ã«, set(Entry|PreDo|Do|PostDo|Exit)Action ã§ã‚¢ã‚¯ã‚·ãƒ§ãƒ³ã‚’è¨­å®š
+   *  <li> çŠ¶æ…‹é·ç§»æ™‚ã®ã‚¢ã‚¯ã‚·ãƒ§ãƒ³ã‚’ setTransitionAction() ã§è¨­å®šã€‚
    * </ol>
-   * <li> Á«°Ü»ş¤Î¥¢¥¯¥·¥ç¥ó¤Ï¡¢Í¿¤¨¤é¤ì¤¿¸½ºß¾õÂÖ¡¢¼¡¾õÂÖ¡¢Á°¾õÂÖ¤ò¸µ¤Ë¡¢
-   *   ¥æ¡¼¥¶¤¬¼ÂÁõ¤·¤Ê¤±¤ì¤Ğ¤Ê¤é¤Ê¤¤¡£
-   * <li> ¾õÂÖ¤ÎÊÑ¹¹¤Ï goTo() ¤Ç¡¢¾õÂÖ¤Î¥Á¥§¥Ã¥¯¤Ï isIn(state) ¤Ç¹Ô¤¦¡£
-   * <li> goTo()¤Ï¼¡¾õÂÖ¤ò¶¯À©Åª¤Ë¥»¥Ã¥È¤¹¤ë´Ø¿ô¤Ç¤¢¤ê¡¢Á«°Ü¤Î²ÄÈİ¤Ï¡¢
-   *   ¥æ¡¼¥¶¤¬¸½ºß¾õÂÖ¤ò¼èÆÀ¤·È½ÃÇ¤¹¤ë¥í¥¸¥Ã¥¯¤ò¼ÂÁõ¤·¤Ê¤±¤ì¤Ğ¤Ê¤é¤Ê¤¤¡£
+   * <li> é·ç§»æ™‚ã®ã‚¢ã‚¯ã‚·ãƒ§ãƒ³ã¯ã€ä¸ãˆã‚‰ã‚ŒãŸç¾åœ¨çŠ¶æ…‹ã€æ¬¡çŠ¶æ…‹ã€å‰çŠ¶æ…‹ã‚’å…ƒã«ã€
+   *   ãƒ¦ãƒ¼ã‚¶ãŒå®Ÿè£…ã—ãªã‘ã‚Œã°ãªã‚‰ãªã„ã€‚
+   * <li> çŠ¶æ…‹ã®å¤‰æ›´ã¯ goTo() ã§ã€çŠ¶æ…‹ã®ãƒã‚§ãƒƒã‚¯ã¯ isIn(state) ã§è¡Œã†ã€‚
+   * <li> goTo()ã¯æ¬¡çŠ¶æ…‹ã‚’å¼·åˆ¶çš„ã«ã‚»ãƒƒãƒˆã™ã‚‹é–¢æ•°ã§ã‚ã‚Šã€é·ç§»ã®å¯å¦ã¯ã€
+   *   ãƒ¦ãƒ¼ã‚¶ãŒç¾åœ¨çŠ¶æ…‹ã‚’å–å¾—ã—åˆ¤æ–­ã™ã‚‹ãƒ­ã‚¸ãƒƒã‚¯ã‚’å®Ÿè£…ã—ãªã‘ã‚Œã°ãªã‚‰ãªã„ã€‚
    * </ol>
    *
-   * ¤³¤Î¥¯¥é¥¹¤Ï¡¢°ì¤Ä¤Î¾õÂÖ¤ËÂĞ¤·¤Æ¡¢
+   * ã“ã®ã‚¯ãƒ©ã‚¹ã¯ã€ä¸€ã¤ã®çŠ¶æ…‹ã«å¯¾ã—ã¦ã€
    * <ul>
    * <li> Entry action
    * <li> PreDo action
@@ -128,29 +128,29 @@ namespace RTC_Utils
    * <li> PostDo action
    * <li> Exit action
    * </ul>
-   * 5¤Ä¤Î¥¢¥¯¥·¥ç¥ó¤¬ÄêµÁ¤¹¤ë¤³¤È¤¬¤Ç¤­¤ë¡£
-   * Transition action ¤Ï¤¢¤é¤æ¤ë¾õÂÖ´ÖÁ«°Ü¤Ç¸Æ¤Ó½Ğ¤µ¤ì¤ë¥¢¥¯¥·¥ç¥ó¤Ç¡¢
-   * ¤½¤Î¿¶¤ëÉñ¤¤¤Ï¥æ¡¼¥¶¤¬ÄêµÁ¤·¤Ê¤±¤ì¤Ğ¤Ê¤é¤Ê¤¤¡£
+   * 5ã¤ã®ã‚¢ã‚¯ã‚·ãƒ§ãƒ³ãŒå®šç¾©ã™ã‚‹ã“ã¨ãŒã§ãã‚‹ã€‚
+   * Transition action ã¯ã‚ã‚‰ã‚†ã‚‹çŠ¶æ…‹é–“é·ç§»ã§å‘¼ã³å‡ºã•ã‚Œã‚‹ã‚¢ã‚¯ã‚·ãƒ§ãƒ³ã§ã€
+   * ãã®æŒ¯ã‚‹èˆã„ã¯ãƒ¦ãƒ¼ã‚¶ãŒå®šç¾©ã—ãªã‘ã‚Œã°ãªã‚‰ãªã„ã€‚
    * 
-   * ¤³¤Î¥¯¥é¥¹¤Ï°Ê²¼¤Î¤è¤¦¤Ê¥¿¥¤¥ß¥ó¥°¤Ç³Æ¥¢¥¯¥·¥ç¥ó¤¬¼Â¹Ô¤µ¤ì¤ë¡£
+   * ã“ã®ã‚¯ãƒ©ã‚¹ã¯ä»¥ä¸‹ã®ã‚ˆã†ãªã‚¿ã‚¤ãƒŸãƒ³ã‚°ã§å„ã‚¢ã‚¯ã‚·ãƒ§ãƒ³ãŒå®Ÿè¡Œã•ã‚Œã‚‹ã€‚
    *
    * <ul>
-   * <li> ¾õÂÖ¤¬ÊÑ¹¹¤µ¤ì(A->B)¾õÂÖ¤¬Á«°Ü¤¹¤ë¾ì¹ç <br>
-   * (A:Exit)->|(¾õÂÖ¹¹¿·:A->B)->(B:Entry)->(B:PreDo)->(B:Do)->(B:PostDo)
+   * <li> çŠ¶æ…‹ãŒå¤‰æ›´ã•ã‚Œ(A->B)çŠ¶æ…‹ãŒé·ç§»ã™ã‚‹å ´åˆ <br>
+   * (A:Exit)->|(çŠ¶æ…‹æ›´æ–°:A->B)->(B:Entry)->(B:PreDo)->(B:Do)->(B:PostDo)
    *
-   * <li> ¾õÂÖ¤¬ÊÑ¹¹¤µ¤ì¤º¡¢B¾õÂÖ¤ò°İ»ı¤¹¤ë¾ì¹ç (|¤Ï¥¹¥Æ¥Ã¥×¤Î¶èÀÚ¤ê¤òÉ½¤¹)<br>
+   * <li> çŠ¶æ…‹ãŒå¤‰æ›´ã•ã‚Œãšã€BçŠ¶æ…‹ã‚’ç¶­æŒã™ã‚‹å ´åˆ (|ã¯ã‚¹ãƒ†ãƒƒãƒ—ã®åŒºåˆ‡ã‚Šã‚’è¡¨ã™)<br>
    * (B(n-1):PostDo)->|(B(n):PreDo)->(B(n):Do)->(B(n):PostDo)->|(B(n+1):PreDo)<br>
-   * PreDo, Do, PostDo ¤¬·«¤êÊÖ¤·¼Â¹Ô¤µ¤ì¤ë¡£
+   * PreDo, Do, PostDo ãŒç¹°ã‚Šè¿”ã—å®Ÿè¡Œã•ã‚Œã‚‹ã€‚
    *
-   * <li> ¼«¸ÊÁ«°Ü¤¹¤ë¾ì¹ç <br>
+   * <li> è‡ªå·±é·ç§»ã™ã‚‹å ´åˆ <br>
    * (B(n-1):PostDo)->(B(n-1):Exit)->|(B(n):Entry)->(B(n):PreDo) <br>
-   * °ìÃ¶ Exit ¤¬¸Æ¤Ğ¤ì¤¿¸å¡¢Entry ¤¬¼Â¹Ô¤µ¤ì¡¢°Ê¹ß¤ÏÁ°¹à¤ÈÆ±¤¸Æ°ºî¤ò¤¹¤ë¡£
+   * ä¸€æ—¦ Exit ãŒå‘¼ã°ã‚ŒãŸå¾Œã€Entry ãŒå®Ÿè¡Œã•ã‚Œã€ä»¥é™ã¯å‰é …ã¨åŒã˜å‹•ä½œã‚’ã™ã‚‹ã€‚
    * </ul>
    *
-   * @param State ¾õÂÖ¤Î·¿
-   * @param Listener ¥¢¥¯¥·¥ç¥óÍÑ¥ê¥¹¥Ê¡¼¥ª¥Ö¥¸¥§¥¯¥È
-   * @param States ¾õÂÖ¥Û¥ë¥À¡¼
-   * @param Callback ¥¢¥¯¥·¥ç¥óÍÑ¥³¡¼¥ë¥Ğ¥Ã¥¯´Ø¿ô
+   * @param State çŠ¶æ…‹ã®å‹
+   * @param Listener ã‚¢ã‚¯ã‚·ãƒ§ãƒ³ç”¨ãƒªã‚¹ãƒŠãƒ¼ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+   * @param States çŠ¶æ…‹ãƒ›ãƒ«ãƒ€ãƒ¼
+   * @param Callback ã‚¢ã‚¯ã‚·ãƒ§ãƒ³ç”¨ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
    *
    * @since 0.4.0
    *
@@ -201,7 +201,7 @@ namespace RTC_Utils
    * <ol>
    * <li> You must define states by enum.
    * <li> Template arguments of StateMachine must be
-   *   <type of state(MyState), listener object, state holder¡¤callback function>
+   *   <type of state(MyState), listener object, state holderï¼Œcallback function>
    * <li> Constructor arguments of StateMachine must be the number of the states.
    * <li> You must set the following action functions as a function of
    *      (Return _function_name_(States))
@@ -268,11 +268,11 @@ namespace RTC_Utils
   public:
     /*!
      * @if jp
-     * @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+     * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
      *
-     * ¥³¥ó¥¹¥È¥é¥¯¥¿
+     * ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
      *
-     * @param num_of_state ¥¹¥Æ¡¼¥È¥Ş¥·¥óÃæ¤Î¾õÂÖ¿ô
+     * @param num_of_state ã‚¹ãƒ†ãƒ¼ãƒˆãƒã‚·ãƒ³ä¸­ã®çŠ¶æ…‹æ•°
      *
      * @else
      * @brief Constructor
@@ -335,11 +335,11 @@ namespace RTC_Utils
     }
     /*!
      * @if jp
-     * @brief NOP´Ø¿ô¤òÅĞÏ¿¤¹¤ë
+     * @brief NOPé–¢æ•°ã‚’ç™»éŒ²ã™ã‚‹
      *
-     * NOP´Ø¿ô(²¿¤â¤·¤Ê¤¤´Ø¿ô)¤òÅĞÏ¿¤¹¤ë¡£
+     * NOPé–¢æ•°(ä½•ã‚‚ã—ãªã„é–¢æ•°)ã‚’ç™»éŒ²ã™ã‚‹ã€‚
      *
-     * @param call_back ¥³¡¼¥ë¥Ğ¥Ã¥¯´Ø¿ô
+     * @param call_back ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
      *
      * @else
      * @brief Set NOP function
@@ -362,11 +362,11 @@ namespace RTC_Utils
     
     /*!
      * @if jp
-     * @brief Listener ¥ª¥Ö¥¸¥§¥¯¥È¤òÅĞÏ¿¤¹¤ë
+     * @brief Listener ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ç™»éŒ²ã™ã‚‹
      *
-     * ³Æ¼ï¥¢¥¯¥·¥ç¥ó¼Â¹Ô»ş¤Ë¸Æ¤Ó½Ğ¤µ¤ì¤ë Listener ¥ª¥Ö¥¸¥§¥¯¥È¤òÅĞÏ¿¤¹¤ë¡£
+     * å„ç¨®ã‚¢ã‚¯ã‚·ãƒ§ãƒ³å®Ÿè¡Œæ™‚ã«å‘¼ã³å‡ºã•ã‚Œã‚‹ Listener ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ç™»éŒ²ã™ã‚‹ã€‚
      *
-     * @param listener Listener ¥ª¥Ö¥¸¥§¥¯¥È
+     * @param listener Listener ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
      *
      * @else
      * @brief Set Listener Object
@@ -385,14 +385,14 @@ namespace RTC_Utils
     
     /*!
      * @if jp
-     * @brief Entry action ´Ø¿ô¤òÅĞÏ¿¤¹¤ë
+     * @brief Entry action é–¢æ•°ã‚’ç™»éŒ²ã™ã‚‹
      *
-     * ³Æ¾õÂÖ¤ËÆş¤Ã¤¿ºİ¤Ë¼Â¹Ô¤µ¤ì¤ë Entry action ÍÑ¥³¡¼¥ë¥Ğ¥Ã¥¯´Ø¿ô¤òÅĞÏ¿¤¹¤ë¡£
+     * å„çŠ¶æ…‹ã«å…¥ã£ãŸéš›ã«å®Ÿè¡Œã•ã‚Œã‚‹ Entry action ç”¨ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°ã‚’ç™»éŒ²ã™ã‚‹ã€‚
      *
-     * @param state ÅĞÏ¿ÂĞ¾İ¾õÂÖ
-     * @param call_back Entry action ÍÑ¥³¡¼¥ë¥Ğ¥Ã¥¯´Ø¿ô
+     * @param state ç™»éŒ²å¯¾è±¡çŠ¶æ…‹
+     * @param call_back Entry action ç”¨ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
      *
-     * @return ¥¢¥¯¥·¥ç¥ó¼Â¹Ô·ë²Ì
+     * @return ã‚¢ã‚¯ã‚·ãƒ§ãƒ³å®Ÿè¡Œçµæœ
      *
      * @else
      * @brief Set Entry action function
@@ -423,14 +423,14 @@ namespace RTC_Utils
     
     /*!
      * @if jp
-     * @brief PreDo action ´Ø¿ô¤òÅĞÏ¿¤¹¤ë
+     * @brief PreDo action é–¢æ•°ã‚’ç™»éŒ²ã™ã‚‹
      *
-     * ³Æ¾õÂÖÆâ¤Ç¼Â¹Ô¤µ¤ì¤ë PreDo action ÍÑ¥³¡¼¥ë¥Ğ¥Ã¥¯´Ø¿ô¤òÅĞÏ¿¤¹¤ë¡£
+     * å„çŠ¶æ…‹å†…ã§å®Ÿè¡Œã•ã‚Œã‚‹ PreDo action ç”¨ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°ã‚’ç™»éŒ²ã™ã‚‹ã€‚
      *
-     * @param state ÅĞÏ¿ÂĞ¾İ¾õÂÖ
-     * @param call_back PreDo action ÍÑ¥³¡¼¥ë¥Ğ¥Ã¥¯´Ø¿ô
+     * @param state ç™»éŒ²å¯¾è±¡çŠ¶æ…‹
+     * @param call_back PreDo action ç”¨ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
      *
-     * @return ¥¢¥¯¥·¥ç¥ó¼Â¹Ô·ë²Ì
+     * @return ã‚¢ã‚¯ã‚·ãƒ§ãƒ³å®Ÿè¡Œçµæœ
      *
      * @else
      * @brief Set PreDo action function
@@ -460,14 +460,14 @@ namespace RTC_Utils
     
     /*!
      * @if jp
-     * @brief Do action ´Ø¿ô¤òÅĞÏ¿¤¹¤ë
+     * @brief Do action é–¢æ•°ã‚’ç™»éŒ²ã™ã‚‹
      *
-     * ³Æ¾õÂÖÆâ¤Ç¼Â¹Ô¤µ¤ì¤ë Do action ÍÑ¥³¡¼¥ë¥Ğ¥Ã¥¯´Ø¿ô¤òÅĞÏ¿¤¹¤ë¡£
+     * å„çŠ¶æ…‹å†…ã§å®Ÿè¡Œã•ã‚Œã‚‹ Do action ç”¨ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°ã‚’ç™»éŒ²ã™ã‚‹ã€‚
      *
-     * @param state ÅĞÏ¿ÂĞ¾İ¾õÂÖ
-     * @param call_back Do action ÍÑ¥³¡¼¥ë¥Ğ¥Ã¥¯´Ø¿ô
+     * @param state ç™»éŒ²å¯¾è±¡çŠ¶æ…‹
+     * @param call_back Do action ç”¨ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
      *
-     * @return ¥¢¥¯¥·¥ç¥ó¼Â¹Ô·ë²Ì
+     * @return ã‚¢ã‚¯ã‚·ãƒ§ãƒ³å®Ÿè¡Œçµæœ
      *
      * @else
      * @brief Set Do action function
@@ -497,14 +497,14 @@ namespace RTC_Utils
     
     /*!
      * @if jp
-     * @brief PostDo action ´Ø¿ô¤òÅĞÏ¿¤¹¤ë
+     * @brief PostDo action é–¢æ•°ã‚’ç™»éŒ²ã™ã‚‹
      *
-     * ³Æ¾õÂÖÆâ¤Ç¼Â¹Ô¤µ¤ì¤ë PostDo action ÍÑ¥³¡¼¥ë¥Ğ¥Ã¥¯´Ø¿ô¤òÅĞÏ¿¤¹¤ë¡£
+     * å„çŠ¶æ…‹å†…ã§å®Ÿè¡Œã•ã‚Œã‚‹ PostDo action ç”¨ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°ã‚’ç™»éŒ²ã™ã‚‹ã€‚
      *
-     * @param state ÅĞÏ¿ÂĞ¾İ¾õÂÖ
-     * @param call_back PostDo action ÍÑ¥³¡¼¥ë¥Ğ¥Ã¥¯´Ø¿ô
+     * @param state ç™»éŒ²å¯¾è±¡çŠ¶æ…‹
+     * @param call_back PostDo action ç”¨ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
      *
-     * @return ¥¢¥¯¥·¥ç¥ó¼Â¹Ô·ë²Ì
+     * @return ã‚¢ã‚¯ã‚·ãƒ§ãƒ³å®Ÿè¡Œçµæœ
      *
      * @else
      * @brief Set PostDo action function
@@ -534,14 +534,14 @@ namespace RTC_Utils
     
     /*!
      * @if jp
-     * @brief Exit action ´Ø¿ô¤òÅĞÏ¿¤¹¤ë
+     * @brief Exit action é–¢æ•°ã‚’ç™»éŒ²ã™ã‚‹
      *
-     * ³Æ¾õÂÖÆâ¤Ç¼Â¹Ô¤µ¤ì¤ë Exit action ÍÑ¥³¡¼¥ë¥Ğ¥Ã¥¯´Ø¿ô¤òÅĞÏ¿¤¹¤ë¡£
+     * å„çŠ¶æ…‹å†…ã§å®Ÿè¡Œã•ã‚Œã‚‹ Exit action ç”¨ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°ã‚’ç™»éŒ²ã™ã‚‹ã€‚
      *
-     * @param state ÅĞÏ¿ÂĞ¾İ¾õÂÖ
-     * @param call_back Exit action ÍÑ¥³¡¼¥ë¥Ğ¥Ã¥¯´Ø¿ô
+     * @param state ç™»éŒ²å¯¾è±¡çŠ¶æ…‹
+     * @param call_back Exit action ç”¨ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
      *
-     * @return ¥¢¥¯¥·¥ç¥ó¼Â¹Ô·ë²Ì
+     * @return ã‚¢ã‚¯ã‚·ãƒ§ãƒ³å®Ÿè¡Œçµæœ
      *
      * @else
      * @brief Set Exit action function
@@ -571,14 +571,14 @@ namespace RTC_Utils
     
     /*!
      * @if jp
-     * @brief State transition action ´Ø¿ô¤òÅĞÏ¿¤¹¤ë
+     * @brief State transition action é–¢æ•°ã‚’ç™»éŒ²ã™ã‚‹
      *
-     * ¾õÂÖÁ«°Ü»ş¤Ë¼Â¹Ô¤µ¤ì¤ë State transition action ÍÑ¥³¡¼¥ë¥Ğ¥Ã¥¯´Ø¿ô¤ò
-     * ÅĞÏ¿¤¹¤ë¡£
+     * çŠ¶æ…‹é·ç§»æ™‚ã«å®Ÿè¡Œã•ã‚Œã‚‹ State transition action ç”¨ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°ã‚’
+     * ç™»éŒ²ã™ã‚‹ã€‚
      *
-     * @param call_back State transition ÍÑ¥³¡¼¥ë¥Ğ¥Ã¥¯´Ø¿ô
+     * @param call_back State transition ç”¨ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
      *
-     * @return ¥¢¥¯¥·¥ç¥ó¼Â¹Ô·ë²Ì
+     * @return ã‚¢ã‚¯ã‚·ãƒ§ãƒ³å®Ÿè¡Œçµæœ
      *
      * @else
      * @brief Set state transition action function
@@ -600,11 +600,11 @@ namespace RTC_Utils
     
     /*!
      * @if jp
-     * @brief ½é´ü¾õÂÖ¤ò¥»¥Ã¥È¤¹¤ë
+     * @brief åˆæœŸçŠ¶æ…‹ã‚’ã‚»ãƒƒãƒˆã™ã‚‹
      *
-     * ¥¹¥Æ¡¼¥È¥Ş¥·¥ó¤Î½é´ü¾õÂÖ¤òÀßÄê¤¹¤ë¡£
+     * ã‚¹ãƒ†ãƒ¼ãƒˆãƒã‚·ãƒ³ã®åˆæœŸçŠ¶æ…‹ã‚’è¨­å®šã™ã‚‹ã€‚
      *
-     * @param states ½é´ü¾õÂÖ
+     * @param states åˆæœŸçŠ¶æ…‹
      *
      * @else
      * @brief Set the initial state
@@ -624,12 +624,12 @@ namespace RTC_Utils
     
     /*!
      * @if jp
-     * @brief ¾õÂÖ¤ò¼èÆÀ¤¹¤ë
+     * @brief çŠ¶æ…‹ã‚’å–å¾—ã™ã‚‹
      *
-     * ¾õÂÖ¾ğÊó¤ò¼èÆÀ¤¹¤ë¡£
-     * ¸½ºß¤Î¾õÂÖ¡¢£±¤ÄÁ°¤Î¾õÂÖ¡¢Á«°ÜÍ½Äê¤Î¾õÂÖ¤ò¼èÆÀ¤¹¤ë¤³¤È¤¬¤Ç¤­¤ë¡£
+     * çŠ¶æ…‹æƒ…å ±ã‚’å–å¾—ã™ã‚‹ã€‚
+     * ç¾åœ¨ã®çŠ¶æ…‹ã€ï¼‘ã¤å‰ã®çŠ¶æ…‹ã€é·ç§»äºˆå®šã®çŠ¶æ…‹ã‚’å–å¾—ã™ã‚‹ã“ã¨ãŒã§ãã‚‹ã€‚
      *
-     * @return ¾õÂÖ¾ğÊó
+     * @return çŠ¶æ…‹æƒ…å ±
      *
      * @else
      * @brief Get states
@@ -650,11 +650,11 @@ namespace RTC_Utils
     
     /*!
      * @if jp
-     * @brief ¸½ºß¤Î¾õÂÖ¤ò¼èÆÀ¤¹¤ë
+     * @brief ç¾åœ¨ã®çŠ¶æ…‹ã‚’å–å¾—ã™ã‚‹
      *
-     * ¸½ºß¤Î¾õÂÖ¤ò¼èÆÀ¤¹¤ë¡£
+     * ç¾åœ¨ã®çŠ¶æ…‹ã‚’å–å¾—ã™ã‚‹ã€‚
      *
-     * @return ¸½ºß¤Î¾õÂÖ
+     * @return ç¾åœ¨ã®çŠ¶æ…‹
      *
      * @else
      * @brief Get current state
@@ -673,13 +673,13 @@ namespace RTC_Utils
     
     /*!
      * @if jp
-     * @brief ¸½ºß¾õÂÖ¤ò³ÎÇ§
+     * @brief ç¾åœ¨çŠ¶æ…‹ã‚’ç¢ºèª
      *
-     * ¸½ºß¤Î¾õÂÖ¤¬¡¢°ú¿ô¤Ç»ØÄê¤·¤¿¾õÂÖ¤È°ìÃ×¤¹¤ë¤«³ÎÇ§¤¹¤ë¡£
+     * ç¾åœ¨ã®çŠ¶æ…‹ãŒã€å¼•æ•°ã§æŒ‡å®šã—ãŸçŠ¶æ…‹ã¨ä¸€è‡´ã™ã‚‹ã‹ç¢ºèªã™ã‚‹ã€‚
      *
-     * @param state ³ÎÇ§ÂĞ¾İ¾õÂÖ
+     * @param state ç¢ºèªå¯¾è±¡çŠ¶æ…‹
      *
-     * @return ¾õÂÖ³ÎÇ§·ë²Ì
+     * @return çŠ¶æ…‹ç¢ºèªçµæœ
      *
      * @else
      * @brief Check current state
@@ -700,15 +700,15 @@ namespace RTC_Utils
     
     /*!
      * @if jp
-     * @brief ¾õÂÖ¤òÁ«°Ü
+     * @brief çŠ¶æ…‹ã‚’é·ç§»
      *
-     * »ØÄê¤·¤¿¾õÂÖ¤Ë¾õÂÖ¤òÁ«°Ü¤¹¤ë¡£
-     * ËÜ´Ø¿ô¤Ï¼¡¾õÂÖ¤ò¶¯À©Åª¤Ë¥»¥Ã¥È¤¹¤ë´Ø¿ô¤Ç¤¢¤ë¡£
-     * ¤³¤Î¤¿¤á¡¢Á«°Ü¤Î²ÄÈİ¤Ï¡¢¥æ¡¼¥¶¤¬¸½ºß¾õÂÖ¤ò¼èÆÀ¤·È½ÃÇ¤¹¤ë¥í¥¸¥Ã¥¯¤ò
-     * ¼ÂÁõ¤·¤Ê¤±¤ì¤Ğ¤Ê¤é¤Ê¤¤¡£
-     * Á«°ÜÀè¤¬¸½ºß¤Î¾õÂÖ¤ÈÆ±¤¸¾ì¹ç¤Ë¤Ï¡¢¼«¸ÊÁ«°Ü¥Õ¥é¥°¤ò¥»¥Ã¥È¤¹¤ë¡£
+     * æŒ‡å®šã—ãŸçŠ¶æ…‹ã«çŠ¶æ…‹ã‚’é·ç§»ã™ã‚‹ã€‚
+     * æœ¬é–¢æ•°ã¯æ¬¡çŠ¶æ…‹ã‚’å¼·åˆ¶çš„ã«ã‚»ãƒƒãƒˆã™ã‚‹é–¢æ•°ã§ã‚ã‚‹ã€‚
+     * ã“ã®ãŸã‚ã€é·ç§»ã®å¯å¦ã¯ã€ãƒ¦ãƒ¼ã‚¶ãŒç¾åœ¨çŠ¶æ…‹ã‚’å–å¾—ã—åˆ¤æ–­ã™ã‚‹ãƒ­ã‚¸ãƒƒã‚¯ã‚’
+     * å®Ÿè£…ã—ãªã‘ã‚Œã°ãªã‚‰ãªã„ã€‚
+     * é·ç§»å…ˆãŒç¾åœ¨ã®çŠ¶æ…‹ã¨åŒã˜å ´åˆã«ã¯ã€è‡ªå·±é·ç§»ãƒ•ãƒ©ã‚°ã‚’ã‚»ãƒƒãƒˆã™ã‚‹ã€‚
      *
-     * @param state Á«°ÜÀè¾õÂÖ
+     * @param state é·ç§»å…ˆçŠ¶æ…‹
      *
      * @else
      * @brief Transit State
@@ -737,10 +737,10 @@ namespace RTC_Utils
     
     /*!
      * @if jp
-     * @brief ¶îÆ°´Ø¿ô
+     * @brief é§†å‹•é–¢æ•°
      *
-     * ¥¹¥Æ¡¼¥È¥Ş¥·¥ó¤Î¶îÆ°´Ø¿ô¡£
-     * ¼Âºİ¤Î¾õÂÖÁ«°Ü¤ª¤è¤Ó¾õÂÖÁ«°ÜÈ¯À¸»ş¤Î³Æ¥¢¥¯¥·¥ç¥ó¤Î¸Æ¤Ó¤À¤·¤ò¼Â¹Ô¤¹¤ë¡£
+     * ã‚¹ãƒ†ãƒ¼ãƒˆãƒã‚·ãƒ³ã®é§†å‹•é–¢æ•°ã€‚
+     * å®Ÿéš›ã®çŠ¶æ…‹é·ç§»ãŠã‚ˆã³çŠ¶æ…‹é·ç§»ç™ºç”Ÿæ™‚ã®å„ã‚¢ã‚¯ã‚·ãƒ§ãƒ³ã®å‘¼ã³ã ã—ã‚’å®Ÿè¡Œã™ã‚‹ã€‚
      *
      * @else
      * @brief Worker function
@@ -852,12 +852,12 @@ namespace RTC_Utils
   protected:
     /*!
      * @if jp
-     * @brief NOP´Ø¿ô¤òÀßÄê
+     * @brief NOPé–¢æ•°ã‚’è¨­å®š
      *
-     * NOP´Ø¿ô(²¿¤â¤·¤Ê¤¤´Ø¿ô)¤òÅĞÏ¿¤¹¤ë¡£
+     * NOPé–¢æ•°(ä½•ã‚‚ã—ãªã„é–¢æ•°)ã‚’ç™»éŒ²ã™ã‚‹ã€‚
      *
-     * @param s ¥³¡¼¥ë¥Ğ¥Ã¥¯´Ø¿ôÀßÄêÀè
-     * @param nullfunc ¥³¡¼¥ë¥Ğ¥Ã¥¯´Ø¿ô(NOP´Ø¿ô)
+     * @param s ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°è¨­å®šå…ˆ
+     * @param nullfunc ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°(NOPé–¢æ•°)
      *
      * @else
      * @brief Set NOP function
@@ -881,7 +881,7 @@ namespace RTC_Utils
 
     /*!
      * @if jp
-     * @brief ¾õÂÖ¿ô
+     * @brief çŠ¶æ…‹æ•°
      * @else
      * @brief Number of state
      * @endif
@@ -890,7 +890,7 @@ namespace RTC_Utils
 
     /*!
      * @if jp
-     * @brief ¥³¡¼¥ë¥Ğ¥Ã¥¯´Ø¿ôÍÑ¥ê¥¹¥Ê¡¼
+     * @brief ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°ç”¨ãƒªã‚¹ãƒŠãƒ¼
      * @else
      * @brief Callback function for listener
      * @endif
@@ -899,7 +899,7 @@ namespace RTC_Utils
 
     /*!
      * @if jp
-     * @brief Entry action ÍÑ¥³¡¼¥ë¥Ğ¥Ã¥¯´Ø¿ô
+     * @brief Entry action ç”¨ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
      * @else
      * @brief Callback function for Entry action
      * @endif
@@ -908,7 +908,7 @@ namespace RTC_Utils
 
     /*!
      * @if jp
-     * @brief PreDo action ÍÑ¥³¡¼¥ë¥Ğ¥Ã¥¯´Ø¿ô
+     * @brief PreDo action ç”¨ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
      * @else
      * @brief Callback function for PreDo action
      * @endif
@@ -917,7 +917,7 @@ namespace RTC_Utils
 
     /*!
      * @if jp
-     * @brief Do action ÍÑ¥³¡¼¥ë¥Ğ¥Ã¥¯´Ø¿ô
+     * @brief Do action ç”¨ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
      * @else
      * @brief Callback function for Do action
      * @endif
@@ -926,7 +926,7 @@ namespace RTC_Utils
 
     /*!
      * @if jp
-     * @brief PostDo action ÍÑ¥³¡¼¥ë¥Ğ¥Ã¥¯´Ø¿ô
+     * @brief PostDo action ç”¨ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
      * @else
      * @brief Callback function for PostDo action
      * @endif
@@ -935,7 +935,7 @@ namespace RTC_Utils
 
     /*!
      * @if jp
-     * @brief Exit action ÍÑ¥³¡¼¥ë¥Ğ¥Ã¥¯´Ø¿ô
+     * @brief Exit action ç”¨ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
      * @else
      * @brief Callback function for Exit action
      * @endif
@@ -944,7 +944,7 @@ namespace RTC_Utils
 
     /*!
      * @if jp
-     * @brief State transition action ÍÑ¥³¡¼¥ë¥Ğ¥Ã¥¯´Ø¿ô
+     * @brief State transition action ç”¨ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
      * @else
      * @brief Callback function for State transition action
      * @endif
@@ -953,7 +953,7 @@ namespace RTC_Utils
 
     /*!
      * @if jp
-     * @brief ¸½ºß¤Î¾õÂÖ¾ğÊó
+     * @brief ç¾åœ¨ã®çŠ¶æ…‹æƒ…å ±
      * @else
      * @brief Current state information
      * @endif

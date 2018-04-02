@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file DynamicLib.cpp
  * @brief DynamicLib class
@@ -23,7 +23,7 @@ namespace coil
 {
   /*!
    * @if jp
-   * @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+   * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
    * @else
    * @brief Constructor
    * @endif
@@ -35,7 +35,7 @@ namespace coil
 
   /*!
    * @if jp
-   * @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+   * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
    * @else
    * @brief Constructor
    * @endif
@@ -54,7 +54,7 @@ namespace coil
 
   /*!
    * @if jp
-   * @brief ƒfƒXƒgƒ‰ƒNƒ^
+   * @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
    * @else
    * @brief Destructor
    * @endif
@@ -66,7 +66,7 @@ namespace coil
 
   /*!
    * @if jp
-   * @brief ƒRƒs[ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+   * @brief ã‚³ãƒ”ãƒ¼ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
    * @else
    * @brief Copy Constructor
    * @endif
@@ -82,7 +82,7 @@ namespace coil
 
   /*!
    * @if jp
-   * @brief ‘ã“ü‰‰Zq
+   * @brief ä»£å…¥æ¼”ç®—å­
    * @else
    * @brief Assignment operator
    * @endif
@@ -99,7 +99,7 @@ namespace coil
 
   /*!
    * @if jp
-   * @brief “®“IƒŠƒ“ƒNƒ‰ƒCƒuƒ‰ƒŠ‚Ìƒ[ƒh
+   * @brief å‹•çš„ãƒªãƒ³ã‚¯ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã®ãƒ­ãƒ¼ãƒ‰
    * @else
    * @brief Load of the Dynamic link library 
    * @endif
@@ -120,7 +120,7 @@ namespace coil
 
   /*!
    * @if jp
-   * @brief “®“IƒŠƒ“ƒNƒ‰ƒCƒuƒ‰ƒŠ‚ÌƒAƒ“ƒ[ƒh
+   * @brief å‹•çš„ãƒªãƒ³ã‚¯ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã®ã‚¢ãƒ³ãƒ­ãƒ¼ãƒ‰
    * @else
    * @brief Unload of the Dynamic link library 
    * @endif
@@ -135,7 +135,7 @@ namespace coil
 
   /*!
    * @if jp
-   * @brief ƒVƒ“ƒ{ƒ‹‚ªƒ[ƒh‚³‚ê‚½ƒƒ‚ƒŠƒAƒhƒŒƒX‚ğ•Ô‚·
+   * @brief ã‚·ãƒ³ãƒœãƒ«ãŒãƒ­ãƒ¼ãƒ‰ã•ã‚ŒãŸãƒ¡ãƒ¢ãƒªã‚¢ãƒ‰ãƒ¬ã‚¹ã‚’è¿”ã™
    * @else
    * @brief Return an address of the memory where a symbol was loaded
    * @endif
@@ -148,7 +148,7 @@ namespace coil
 
   /*!
    * @if jp
-   * @brief ƒGƒ‰[‚É‚Â‚¢‚Ä‚Ìà–¾ƒƒbƒZ[ƒW‚ğ•Ô‚·
+   * @brief ã‚¨ãƒ©ãƒ¼ã«ã¤ã„ã¦ã®èª¬æ˜ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’è¿”ã™
    * @else
    * @brief Return the explanation message about the error
    * @endif

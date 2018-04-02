@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file Timevalue.h
  * @brief Timevalue class
@@ -28,7 +28,7 @@ namespace coil
    * @if jp
    *
    * @class TimeValue
-   * @brief TimeValue ���饹
+   * @brief TimeValue クラス
    *
    * @else
    *
@@ -43,13 +43,13 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief ���󥹥ȥ饯��
+     * @brief コンストラクタ
      * 
-     * ���󥹥ȥ饯��
-     * ���ꤵ�줿�á��ޥ������äǽ�������롣
+     * コンストラクタ
+     * 指定された秒，マイクロ秒で初期化する。
      *
-     * @param sec ��(�ǥե������:����)
-     * @param usec �ޥ�������(�ǥե������:����)
+     * @param sec 秒(デフォルト値:ゼロ)
+     * @param usec マイクロ秒(デフォルト値:ゼロ)
      * 
      * @else
      *
@@ -68,12 +68,12 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief ���󥹥ȥ饯��
+     * @brief コンストラクタ
      * 
-     * ���󥹥ȥ饯��
-     * ���ꤵ�줿�á��ޥ������äǽ�������롣
+     * コンストラクタ
+     * 指定された秒，マイクロ秒で初期化する。
      *
-     * @param timeval (�� * 1000000 + �ޥ�������)
+     * @param timeval (秒 * 1000000 + マイクロ秒)
      * 
      * @else
      *
@@ -91,11 +91,11 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief ��ñ�̤��ͤ��������
+     * @brief 秒単位の値を取得する
      * 
-     * ��ñ�̤��ͤ��������
+     * 秒単位の値を取得する
      *
-     * @return ��
+     * @return 値
      *
      * @else
      *
@@ -112,11 +112,11 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief �ޥ�������ñ�̤��ͤ��������
+     * @brief マイクロ秒単位の値を取得する
      * 
-     * �ޥ�������ñ�̤��ͤ��������
+     * マイクロ秒単位の値を取得する
      *
-     * @return ��
+     * @return 値
      *
      * @else
      *
@@ -133,13 +133,13 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief ���ָ���
+     * @brief 時間減算
      * 
-     * ���ꤵ�줿���֤��������Ϳ����줿���֤򸺻����롣
+     * 設定された時間から引数で与えられた時間を減算する。
      *
-     * @param tm ��������
+     * @param tm 減算時間
      * 
-     * @return �������
+     * @return 減算結果
      * 
      * @else
      *
@@ -159,13 +159,13 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief ���ֲû�
+     * @brief 時間加算
      * 
-     * ���ꤵ�줿���֤˰�����Ϳ����줿���֤�û����롣
+     * 設定された時間に引数で与えられた時間を加算する。
      *
-     * @param tm �û�����
+     * @param tm 加算時間
      * 
-     * @return �û����
+     * @return 加算結果
      * 
      * @else
      *
@@ -184,13 +184,13 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief double�������ַ��Ѵ�
+     * @brief double型→時間型変換
      * 
-     * ������Ϳ����줿double������ַ����Ѵ����롣
+     * 引数で与えられたdouble型を時間型に変換する。
      *
-     * @param time �Ѵ�����
+     * @param time 変換元値
      * 
-     * @return �Ѵ����
+     * @return 変換結果
      * 
      * @else
      *
@@ -209,11 +209,11 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief ���ַ���double���Ѵ�
+     * @brief 時間型→double型変換
      * 
-     * �ݻ����Ƥ������Ƥ�double�����Ѵ����롣
+     * 保持している内容をdouble型に変換する。
      *
-     * @return double���Ѵ����
+     * @return double型変換結果
      * 
      * @else
      *
@@ -230,11 +230,11 @@ namespace coil
     /*!
      * @if jp
      * 
-     * @brief ���Ƚ��
+     * @brief 符号判定
      * 
-     * �ݻ����Ƥ������Ƥ�����Ƚ�ꤹ�롣
+     * 保持している内容の符号を判定する。
      * 
-     * @return ���ʤ��1����ʤ��-1��0�ʤ��0
+     * @return 正ならば1を、負ならば-1を、0ならば0
      * 
      * @else
      *  
@@ -253,9 +253,9 @@ namespace coil
     /*!
      * @if jp
      * 
-     * @brief ������
+     * @brief 正規化
      * 
-     * �ͤ�ɽ����������������������롣
+     * 値の表現を正準形式に正規化する。
      * 
      * @else
      * 

@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file rtcprof.cpp
  * @brief RT-Component profile dump command

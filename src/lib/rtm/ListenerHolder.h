@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file ListnerHolder.h
  * @brief Listener holder class
@@ -31,40 +31,40 @@ namespace util
 {
   /*!
    * @if jp
-   * @class Listener �ۥ�������饹
+   * @class Listener ホルダークラス
    *
-   * ���Υ��饹�ϡ��ꥹ�ʥ��饹��ñ����ݻ���������Ԥ��ꥹ�ʥۥ������
-   * ���Ǥ��롣���Υ��饹�����Ѥ��뤿��ˤϡ��ƥ�ץ졼�Ȥ��裱��������
-   * ����ꥹ�ʥ��饹 (Listener���饹) ����ӡ�����ListenerHolder���饹
-   * �ƥ�ץ졼�Ȥ�Ѿ����ơ��ºݤ˥ꥹ�ʤθƤӽФ���Ԥ�
-   * ListenerHolder�������饹���������ɬ�פ����롣
+   * このクラスは、リスナクラスの単純な保持、管理を行うリスナホルダクラ
+   * スである。このクラスを利用するためには、テンプレートの第１引数に当
+   * たるリスナクラス (Listenerクラス) および、このListenerHolderクラス
+   * テンプレートを継承して、実際にリスナの呼び出しを行う
+   * ListenerHolder実装クラスを実装する必要がある。
    *
-   * ���Υ��饹�ϡ�����åɥ����֤�¸����뤿�ᡢ�ꥹ�ʤ��ɲäȺ���ˤ�
-   * ���Ƥϥߥ塼�ƥå����ˤ����å���ԤäƤ��롣�����˥���åɥ�����
-   * �ʥꥹ�ʴ�����¸����뤿��ˤϥꥹ�ʤΥ�����Хå��򥳡��뤹��ݤ�
-   * ��ߥ塼�ƥå�����ˤ����å���Ԥ�ɬ�פ����롣
+   * このクラスは、スレッドセーブを実現するため、リスナの追加と削除につ
+   * いてはミューテックスによるロックを行っている。完全にスレッドセーフ
+   * なリスナ管理を実現するためにはリスナのコールバックをコールする際に
+   * もミューテックするによるロックを行う必要がある。
    *
-   * @section Listener���饹�����
+   * @section Listenerクラスの定義
    *
-   * ���٥��ȯ�����˥�����Хå��������дؿ�����Ĵ��쥯�饹�����
-   * ���롣������Хå��Τ���Υ��дؿ��ϡ�Ǥ�դ�����͡���������Ĥ�
-   * �Τ�����Ǥ����̾�δؿ��Ǥ��äƤ�褤����operator()�ʤɤΥե���
-   * ���Ȥ���������Ƥ�褤���ºݤˤϴ��쥯�饹�ˤƤ����δؿ����貾
-   * �۴ؿ��Ȥ�������������Υ��饹��Ѿ����ơ��ºݤΥꥹ�ʥ��饹�����
-   * ���뤳�Ȥˤʤ롣�ޤ����ҤȤĤΥꥹ�ʥ��饹��ʣ���˥�����Хå��ؿ�
-   * ��������Ƥ�褤���ºݤˤϡ������Υ�����Хå��ؿ���ºݤ˸Ƥӽ�
-   * ����ˡ�˴ؤ��Ƥϡ�����ListenerHolder�������饹�ˤƾܤ���������뤳
-   * �Ȥˤʤ롣
+   * イベント発生時にコールバックされるメンバ関数を持つ基底クラスを定義
+   * する。コールバックのためのメンバ関数は、任意の戻り値、引数を持つも
+   * のが定義でき、通常の関数であってもよいし、operator()などのファンク
+   * タとして定義してもよい。実際には基底クラスにてこれらの関数を純粋仮
+   * 想関数として定義し、このクラスを継承して、実際のリスナクラスを実装
+   * することになる。また、ひとつのリスナクラスに複数にコールバック関数
+   * を定義してもよい。実際には、これらのコールバック関数を実際に呼び出
+   * す方法に関しては、次のListenerHolder実装クラスにて詳しく定義するこ
+   * とになる。
    * <pre>
    * class MyListenerBase
    * {
    * public:
-   *   // ������Хå��ؿ�1: �ؿ��ƤӽФ��黻�Ҥˤ�륳����Хå��ؿ�
-   *   // ������ե��󥯥��Τ褦�˥�����Хå��ؿ�����������㡣
-   *   virtual void operator()(std::string strarg) = 0; // ��貾�۴ؿ�
+   *   // コールバック関数1: 関数呼び出し演算子によるコールバック関数
+   *   // いわゆるファンクタのようにコールバック関数を定義する例。
+   *   virtual void operator()(std::string strarg) = 0; // 純粋仮想関数
    *   
-   *   // ������Хå��δؿ������˥��㤬¿�ͤǤ����硢���Τ褦��ñ��
-   *   // ����дؿ��Ȥ���������뤳�Ȥ��ǽ��
+   *   // コールバックの関数シグニチャが多様である場合、このように単な
+   *   // るメンバ関数として定義することも可能。
    *   virtual void onEvent0(const char* arg0) = 0;
    *   virtual void onEvent1(int arg0) = 0;
    *   virtual void onEvent2(double arg0) = 0;
@@ -72,25 +72,25 @@ namespace util
    * };
    * </pre>
    *
-   * @section ListenerHolder�������饹
+   * @section ListenerHolder実装クラス
    *
-   * ListenerHolder�������饹�Ϥ���LsitenerHolder���饹�ƥ�ץ졼�Ȥ��
-   * �����ơ����������� MyListenerBase ���饹���ɲäȺ���ʤɴ������
-   * �������ļºݤ˥�����Хå��ؿ���ƤӽФ���ʬ��������뤳�Ȥˤʤ롣
-   * �ºݤ˥�����Хå���ƤӽФ���ʬ�Ǥϡ��ؿ������˥��㤬¿��¿�ͤǤ���
-   * ���ꡢ�ҤȤĤΥꥹ�ʥ��饹��ʣ���Υ�����Хå��ؿ�����ľ�礬����
-   * ���ᡢ���̤Υꥹ�ʥ��饹���б����뤿�ᡢ���θƤӽФ���ʬ��ɬ�פȤ�
-   * �롣ListenerHolder�������饹�ϡ�MyListenerBase���饹��Ʊ�������˥���
-   * ����ĥ��дؿ��������ؿ������Ǥϡ�ListenerHolder���饹�����ġ�
-   * m_listeners, m_mutex �Τ������ĤΥ����ѿ������Ѥ��ơ���Ͽ����
-   * ���ꥹ�ʥ��֥������ȤΥ����ѿ���ƤӽФ���
+   * ListenerHolder実装クラスはこのLsitenerHolderクラステンプレートを継
+   * 承して、上で定義した MyListenerBase クラスの追加と削除など管理を行
+   * い、かつ実際にコールバック関数を呼び出す部分を実装することになる。
+   * 実際にコールバックを呼び出す部分では、関数シグニチャが多種多様であっ
+   * たり、ひとつのリスナクラスが複数のコールバック関数を持つ場合がある
+   * ため、個別のリスナクラスに対応するため、この呼び出し部分が必要とな
+   * る。ListenerHolder実装クラスは、MyListenerBaseクラスと同じシグニチャ
+   * を持つメンバ関数をもち、関数内部では、ListenerHolderクラスが持つ、
+   * m_listeners, m_mutex のこれら二つのメンバ変数を利用して、登録され
+   * たリスナオブジェクトのメンバ変数を呼び出す。
    *
    * <pre>
    * class MyListenerHolderImpl
    *  : public ::RTM::util::ListenerHolder<MyListenerBase>
    * {
    * public:
-   *   // �ؿ��ƤӽФ��黻�ҤΥ�����Хå��ؿ��ξ��
+   *   // 関数呼び出し演算子のコールバック関数の場合
    *   virtual void operator()(std::string strarg)
    *   {
    *     Gurad gurad(m_mutex);
@@ -111,25 +111,25 @@ namespace util
    * };
    * </pre>
    *
-   * �ꥹ�ʥ��֥������ȤؤΥݥ��󥿤��Ǽ���Ƥ���Entry���֥������Ȥ�
-   * std::pair<ListenerClass, bool> �Ȥ����������Ƥ��ꡢfirst��
-   * Listener���֥������ȤؤΥݥ��󥿡�second����ư����ե饰�Ǥ��롣��
-   * �����äơ��ꥹ�ʥ��֥������Ȥإ�������������ˤ�first����Ѥ��롣
-   * �ޥ������åɴĶ������Ѥ��뤳�Ȥ����ꤵ�����ϡ�Guard
-   * guard(m_mutex) �ˤ����å���˺�줺�˹Ԥ����ȡ�
+   * リスナオブジェクトへのポインタを格納しているEntryオブジェクトは
+   * std::pair<ListenerClass, bool> として定義されており、firstが
+   * Listenerオブジェクトへのポインタ、secondが自動削除フラグである。し
+   * たがって、リスナオブジェクトへアクセスする場合にはfirstを使用する。
+   * マルチスレッド環境で利用することが想定される場合は、Guard
+   * guard(m_mutex) によるロックを忘れずに行うこと。
    * 
-   * @section ListenerHolder�������饹������
-   * �������줿MyListenerHolderImpl�ϰ���Ȥ��ưʲ��Τ褦�����Ѥ��롣
+   * @section ListenerHolder実装クラスの利用
+   * 実装されたMyListenerHolderImplは一例として以下のように利用する。
    *
    * <pre>
-   * // ���Ȥ��Х��饹���ФȤ������
+   * // たとえばクラスメンバとして宣言
    * MyListenerHolderImpl m_holder;
    *
-   * // ��Ͽ����ư���꡼��⡼�ɤ���Ͽ��
-   * // ���֥������Ȥκ����Holder���饹��Ǥ����
-   * m_holder.addListener(new MyListener0(), true); // MyListener0��
+   * // 登録、自動クリーンモードで登録、
+   * // オブジェクトの削除はHolderクラスに任せる
+   * m_holder.addListener(new MyListener0(), true); // MyListener0の
    * 
-   * // ������Хå���ƤӽФ�
+   * // コールバックを呼び出す
    * m_holder.operator()(strarg);
    * m_holder.onEvent0("HogeHoge);
    * </pre>
@@ -152,7 +152,7 @@ namespace util
 
     /*!
      * @if jp
-     * @brief ListenerHolder���饹���󥹥ȥ饯��
+     * @brief ListenerHolderクラスコンストラクタ
      * @else
      * @brief ListenerHolder class ctor 
      * @endif
@@ -163,7 +163,7 @@ namespace util
 
     /*!
      * @if jp
-     * @brief ListenerHolder�ǥ��ȥ饯��
+     * @brief ListenerHolderデストラクタ
      * @else
      * @brief ListenerHolder class dtor 
      * @endif
@@ -185,7 +185,7 @@ namespace util
   
     /*!
      * @if jp
-     * @brief �ꥹ�ʤ��ɲä���
+     * @brief リスナを追加する
      * @else
      * @brief add listener object
      * @endif
@@ -199,7 +199,7 @@ namespace util
     
     /*!
      * @if jp
-     * @brief �ꥹ�ʤ�������
+     * @brief リスナを削除する
      * @else
      * @brief remove listener object
      * @endif
@@ -235,7 +235,7 @@ namespace util
 
     /*!
      * @if jp
-     * @brief �ꥹ�ʤΥꥹ��
+     * @brief リスナのリスト
      * @else
      * @brief List of listener object
      * @endif

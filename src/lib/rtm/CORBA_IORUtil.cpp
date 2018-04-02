@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file CORBA_IORUtil.h
  * @brief CORBA IOR manipulation utility functions
@@ -48,7 +48,7 @@ namespace CORBA_IORUtil
 
   /*!
    * @if jp
-   * @brief IOR Ê¸»úÎó¤òIOR¹½Â¤ÂÎ¤ØÊÑ´¹¤¹¤ë
+   * @brief IOR æ–‡å­—åˆ—ã‚’IORæ§‹é€ ä½“ã¸å¤‰æ›ã™ã‚‹
    * @else
    * @brief Convert from IOR string to IOR structure
    * @endif
@@ -116,7 +116,7 @@ namespace CORBA_IORUtil
 
   /*!
    * @if jp
-   * @brief IOR¹½Â¤ÂÎ¤òIORÊ¸»úÎó¤ØÊÑ´¹¤¹¤ë
+   * @brief IORæ§‹é€ ä½“ã‚’IORæ–‡å­—åˆ—ã¸å¤‰æ›ã™ã‚‹
    * @else
    * @brief Convert from IOR structure to IOR string 
    * @endif
@@ -178,7 +178,7 @@ namespace CORBA_IORUtil
 
   /*!
    * @if jp
-   * @brief IORÆâ¤Î¥¨¥ó¥É¥İ¥¤¥ó¥È¤òÃÖ´¹¤¹¤ë
+   * @brief IORå†…ã®ã‚¨ãƒ³ãƒ‰ãƒã‚¤ãƒ³ãƒˆã‚’ç½®æ›ã™ã‚‹
    * @else
    * @brief Replace endpoint address in IOR entry
    * @endif
@@ -223,7 +223,7 @@ namespace CORBA_IORUtil
 
   /*!
    * @if jp
-   * @brief IORÊ¸»úÎó¤«¤é¾ğÊó¤òÃê½Ğ¤·¥Õ¥©¡¼¥Ş¥Ã¥ÈºÑ¤ß¤ÎÊ¸»úÎó¤È¤·¤ÆÊÖ¤¹
+   * @brief IORæ–‡å­—åˆ—ã‹ã‚‰æƒ…å ±ã‚’æŠ½å‡ºã—ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆæ¸ˆã¿ã®æ–‡å­—åˆ—ã¨ã—ã¦è¿”ã™
    * @else
    * @brief Extracts information from IOR string and returns formatted string
    * @endif

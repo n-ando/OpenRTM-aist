@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file PeriodicTask.h
  * @brief PeriodicTask class
@@ -37,20 +37,20 @@ namespace coil
   /*!
    * @if jp
    * @class PeriodicTask
-   * @brief ¼ş´ü¥¿¥¹¥¯¥¹¥ì¥Ã¥É¼Â¹Ô¥¯¥é¥¹
+   * @brief å‘¨æœŸã‚¿ã‚¹ã‚¯ã‚¹ãƒ¬ãƒƒãƒ‰å®Ÿè¡Œã‚¯ãƒ©ã‚¹
    *
-   * ÆÃÄê¤Î´Ø¿ô¤ò¼ş´ü¼Â¹Ô¤¹¤ë¤¿¤á¤Î¥¹¥ì¥Ã¥É¥ª¥Ö¥¸¥§¥¯¥È¤ò¼Â¸½¤¹¤ë¡£
-   * »ÈÍÑ¼ê½ç¤Ï°Ê²¼¤ÎÄÌ¤ê¡£
+   * ç‰¹å®šã®é–¢æ•°ã‚’å‘¨æœŸå®Ÿè¡Œã™ã‚‹ãŸã‚ã®ã‚¹ãƒ¬ãƒƒãƒ‰ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’å®Ÿç¾ã™ã‚‹ã€‚
+   * ä½¿ç”¨æ‰‹é †ã¯ä»¥ä¸‹ã®é€šã‚Šã€‚
    *
-   * task; // ¥¤¥ó¥¹¥¿¥ó¥¹À¸À®
-   * task.setTask(TaskFuncBase(obj, mem_func)); // ¼Â¹Ô¤¹¤ë´Ø¿ô¤òÍ¿¤¨¤ë
-   * task.activate(); // ¥¹¥ì¥Ã¥É¤ò¥¹¥¿¡¼¥È¤µ¤»¤ë
+   * task; // ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ç”Ÿæˆ
+   * task.setTask(TaskFuncBase(obj, mem_func)); // å®Ÿè¡Œã™ã‚‹é–¢æ•°ã‚’ä¸ãˆã‚‹
+   * task.activate(); // ã‚¹ãƒ¬ãƒƒãƒ‰ã‚’ã‚¹ã‚¿ãƒ¼ãƒˆã•ã›ã‚‹
    *
-   * task.suspend(); // ¼ş´ü¼Â¹Ô¤ò»ß¤á¤ë
-   * task.signal(); // 1¼ş´ü¤À¤±¼Â¹Ô
-   * task.resume(); // ¼ş´ü¼Â¹Ô¤òºÆ³«
+   * task.suspend(); // å‘¨æœŸå®Ÿè¡Œã‚’æ­¢ã‚ã‚‹
+   * task.signal(); // 1å‘¨æœŸã ã‘å®Ÿè¡Œ
+   * task.resume(); // å‘¨æœŸå®Ÿè¡Œã‚’å†é–‹
    *
-   * task.finalize(); // ¥¿¥¹¥¯¤ò½ªÎ»¤µ¤»¤ë
+   * task.finalize(); // ã‚¿ã‚¹ã‚¯ã‚’çµ‚äº†ã•ã›ã‚‹
    * 
    * @else
    * @class PeriodicTask
@@ -67,9 +67,9 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+     * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
      *
-     * ¥³¥ó¥¹¥È¥é¥¯¥¿
+     * ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
      *
      * @else
      *
@@ -84,9 +84,9 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief ¥Ç¥¹¥È¥é¥¯¥¿
+     * @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
      *
-     * ¥Ç¥¹¥È¥é¥¯¥¿¡£
+     * ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã€‚
      *
      * @else
      *
@@ -100,13 +100,13 @@ namespace coil
     
     /*!
      * @if jp
-     * @brief ¥¿¥¹¥¯¼Â¹Ô¤ò³«»Ï¤¹¤ë
+     * @brief ã‚¿ã‚¹ã‚¯å®Ÿè¡Œã‚’é–‹å§‹ã™ã‚‹
      *
-     * ¥¿¥¹¥¯¤Î¼Â¹Ô¤ò³«»Ï¤¹¤ë¤¿¤á¤Ë¥¹¥ì¥Ã¥É¤ò¥¹¥¿¡¼¥È¤µ¤»¤ë¡£  ¥¿¥¹¥¯¤¬
-     * Àµ¾ï¤Ë³«»Ï¤µ¤ì¤¿¾ì¹ç¤Ï true ¤¬ÊÖ¤ê¡¢¤¹¤Ç¤Ë¥¿¥¹¥¯¤¬³«»ÏºÑ¤ß¡¢¤Ş¤¿
-     * ¤Ï¼Â¹Ô¤¹¤ë¥¿¥¹¥¯¤¬ÀßÄê¤µ¤ì¤Æ¤¤¤Ê¤±¤ì¤Ğ false ¤òÊÖ¤¹¡£
+     * ã‚¿ã‚¹ã‚¯ã®å®Ÿè¡Œã‚’é–‹å§‹ã™ã‚‹ãŸã‚ã«ã‚¹ãƒ¬ãƒƒãƒ‰ã‚’ã‚¹ã‚¿ãƒ¼ãƒˆã•ã›ã‚‹ã€‚  ã‚¿ã‚¹ã‚¯ãŒ
+     * æ­£å¸¸ã«é–‹å§‹ã•ã‚ŒãŸå ´åˆã¯ true ãŒè¿”ã‚Šã€ã™ã§ã«ã‚¿ã‚¹ã‚¯ãŒé–‹å§‹æ¸ˆã¿ã€ã¾ãŸ
+     * ã¯å®Ÿè¡Œã™ã‚‹ã‚¿ã‚¹ã‚¯ãŒè¨­å®šã•ã‚Œã¦ã„ãªã‘ã‚Œã° false ã‚’è¿”ã™ã€‚
      *
-     * @return true: Àµ¾ï³«»Ï¡¢false: ¥¹¥ì¥Ã¥ÉºÑ¤ß¤«¥¿¥¹¥¯¤¬Ì¤ÀßÄê¤Ç¤¢¤ë¡£
+     * @return true: æ­£å¸¸é–‹å§‹ã€false: ã‚¹ãƒ¬ãƒƒãƒ‰æ¸ˆã¿ã‹ã‚¿ã‚¹ã‚¯ãŒæœªè¨­å®šã§ã‚ã‚‹ã€‚
      *
      * @else
      * @brief Starting the task
@@ -124,9 +124,9 @@ namespace coil
 
     /*!
      * @if jp
-     * @brief ¥¿¥¹¥¯¼Â¹Ô¤ò½ªÎ»¤¹¤ë
+     * @brief ã‚¿ã‚¹ã‚¯å®Ÿè¡Œã‚’çµ‚äº†ã™ã‚‹
      *
-     * ¼Â¹ÔÃæ¤Î¥¿¥¹¥¯¤ò½ªÎ»¤¹¤ë¡£
+     * å®Ÿè¡Œä¸­ã®ã‚¿ã‚¹ã‚¯ã‚’çµ‚äº†ã™ã‚‹ã€‚
      *
      * @else
      * @brief Finalizing the task
@@ -139,9 +139,9 @@ namespace coil
 
     /*!
      * @if jp
-     * @brief ¥¿¥¹¥¯¼Â¹Ô¤òÃæÃÇ¤¹¤ë
+     * @brief ã‚¿ã‚¹ã‚¯å®Ÿè¡Œã‚’ä¸­æ–­ã™ã‚‹
      *
-     * ¼Â¹ÔÃæ¤Î¥¿¥¹¥¯¤òÃæÃÇ¤¹¤ë¡£
+     * å®Ÿè¡Œä¸­ã®ã‚¿ã‚¹ã‚¯ã‚’ä¸­æ–­ã™ã‚‹ã€‚
      *
      * @else
      * @brief Suspending the task
@@ -154,9 +154,9 @@ namespace coil
 
     /*!
      * @if jp
-     * @brief ÃæÃÇ¤µ¤ì¤Æ¤¤¤ë¥¿¥¹¥¯¤òºÆ³«¤¹¤ë
+     * @brief ä¸­æ–­ã•ã‚Œã¦ã„ã‚‹ã‚¿ã‚¹ã‚¯ã‚’å†é–‹ã™ã‚‹
      *
-     * ÃæÃÇ¤µ¤ì¤Æ¤¤¤ë¥¿¥¹¥¯¤òºÆ³«¤¹¤ë
+     * ä¸­æ–­ã•ã‚Œã¦ã„ã‚‹ã‚¿ã‚¹ã‚¯ã‚’å†é–‹ã™ã‚‹
      *
      * @else
      * @brief Resuming the suspended task
@@ -169,9 +169,9 @@ namespace coil
 
     /*!
      * @if jp
-     * @brief ÃæÃÇ¤µ¤ì¤Æ¤¤¤ë¥¿¥¹¥¯¤ò1¼ş´ü¤À¤±¼Â¹Ô¤¹¤ë
+     * @brief ä¸­æ–­ã•ã‚Œã¦ã„ã‚‹ã‚¿ã‚¹ã‚¯ã‚’1å‘¨æœŸã ã‘å®Ÿè¡Œã™ã‚‹
      *
-     * ÃæÃÇ¤µ¤ì¤Æ¤¤¤ë¥¿¥¹¥¯¤ò1¼ş´ü¤À¤±¼Â¹Ô¤¹¤ë
+     * ä¸­æ–­ã•ã‚Œã¦ã„ã‚‹ã‚¿ã‚¹ã‚¯ã‚’1å‘¨æœŸã ã‘å®Ÿè¡Œã™ã‚‹
      *
      * @else
      * @brief Executing the suspended task one tick
@@ -184,9 +184,9 @@ namespace coil
 
     /*!
      * @if jp
-     * @brief ¥¿¥¹¥¯¼Â¹Ô´Ø¿ô¤ò¥»¥Ã¥È¤¹¤ë
+     * @brief ã‚¿ã‚¹ã‚¯å®Ÿè¡Œé–¢æ•°ã‚’ã‚»ãƒƒãƒˆã™ã‚‹
      *
-     * @param func int (*)() ·¿¤Î´Ø¿ô¥İ¥¤¥ó¥¿
+     * @param func int (*)() å‹ã®é–¢æ•°ãƒã‚¤ãƒ³ã‚¿
      *
      * @else
      * @brief Setting task execution function
@@ -199,11 +199,11 @@ namespace coil
 
     /*!
      * @if jp
-     * @brief ¥¿¥¹¥¯¼Â¹Ô´Ø¿ô¤ò¥»¥Ã¥È¤¹¤ë
+     * @brief ã‚¿ã‚¹ã‚¯å®Ÿè¡Œé–¢æ•°ã‚’ã‚»ãƒƒãƒˆã™ã‚‹
      *
-     * @param func int (*)() ·¿¤Î´Ø¿ô¥İ¥¤¥ó¥¿
+     * @param func int (*)() å‹ã®é–¢æ•°ãƒã‚¤ãƒ³ã‚¿
      *
-     * @return true: À®¸ù, false: ¼ºÇÔ
+     * @return true: æˆåŠŸ, false: å¤±æ•—
      *
      * @else
      * @brief Setting task execution function
@@ -222,9 +222,9 @@ namespace coil
 
     /*!
      * @if jp
-     * @brief ¥¿¥¹¥¯¼Â¹Ô¼ş´ü¤ò¥»¥Ã¥È¤¹¤ë
+     * @brief ã‚¿ã‚¹ã‚¯å®Ÿè¡Œå‘¨æœŸã‚’ã‚»ãƒƒãƒˆã™ã‚‹
      *
-     * @param period ¼Â¹Ô¼ş´ü [sec]
+     * @param period å®Ÿè¡Œå‘¨æœŸ [sec]
      *
      * @else
      * @brief Setting task execution period
@@ -237,9 +237,9 @@ namespace coil
 
     /*!
      * @if jp
-     * @brief ¥¿¥¹¥¯¼Â¹Ô¼ş´ü¤ò¥»¥Ã¥È¤¹¤ë
+     * @brief ã‚¿ã‚¹ã‚¯å®Ÿè¡Œå‘¨æœŸã‚’ã‚»ãƒƒãƒˆã™ã‚‹
      *
-     * @param period ¼Â¹Ô¼ş´ü
+     * @param period å®Ÿè¡Œå‘¨æœŸ
      *
      * @else
      * @brief Setting task execution period
@@ -252,7 +252,7 @@ namespace coil
 
     /*!
      * @if jp
-     * @brief ¥¿¥¹¥¯´Ø¿ô¼Â¹Ô»ş´Ö·×Â¬¤òÍ­¸ú¤Ë¤¹¤ë¤«
+     * @brief ã‚¿ã‚¹ã‚¯é–¢æ•°å®Ÿè¡Œæ™‚é–“è¨ˆæ¸¬ã‚’æœ‰åŠ¹ã«ã™ã‚‹ã‹
      * @else
      * @brief Validate a Task execute time measurement
      * @endif
@@ -261,7 +261,7 @@ namespace coil
     
     /*!
      * @if jp
-     * @brief ¥¿¥¹¥¯´Ø¿ô¼Â¹Ô»ş´Ö·×Â¬¼ş´ü
+     * @brief ã‚¿ã‚¹ã‚¯é–¢æ•°å®Ÿè¡Œæ™‚é–“è¨ˆæ¸¬å‘¨æœŸ
      * @else
      * @brief Task execute time measurement period
      * @endif
@@ -270,7 +270,7 @@ namespace coil
     
     /*!
      * @if jp
-     * @brief ¥¿¥¹¥¯¼ş´ü»ş´Ö·×Â¬¤òÍ­¸ú¤Ë¤¹¤ë¤«
+     * @brief ã‚¿ã‚¹ã‚¯å‘¨æœŸæ™‚é–“è¨ˆæ¸¬ã‚’æœ‰åŠ¹ã«ã™ã‚‹ã‹
      * @else
      * @brief Validate a Task period time measurement
      * @endif
@@ -279,7 +279,7 @@ namespace coil
     
     /*!
      * @if jp
-     * @brief ¥¿¥¹¥¯¼ş´ü»ş´Ö·×Â¬¼ş´ü
+     * @brief ã‚¿ã‚¹ã‚¯å‘¨æœŸæ™‚é–“è¨ˆæ¸¬å‘¨æœŸ
      * @else
      * @brief Task period time measurement count
      * @endif
@@ -288,7 +288,7 @@ namespace coil
     
     /*!
      * @if jp
-     * @brief ¥¿¥¹¥¯´Ø¿ô¼Â¹Ô»ş´Ö·×Â¬·ë²Ì¤ò¼èÆÀ
+     * @brief ã‚¿ã‚¹ã‚¯é–¢æ•°å®Ÿè¡Œæ™‚é–“è¨ˆæ¸¬çµæœã‚’å–å¾—
      * @else
      * @brief Get a result in task execute time measurement
      * @endif
@@ -297,7 +297,7 @@ namespace coil
     
     /*!
      * @if jp
-     * @brief ¥¿¥¹¥¯¼ş´ü»ş´Ö·×Â¬·ë²Ì¤ò¼èÆÀ
+     * @brief ã‚¿ã‚¹ã‚¯å‘¨æœŸæ™‚é–“è¨ˆæ¸¬çµæœã‚’å–å¾—
      * @else
      * @brief Get a result in task period time measurement
      * @endif
@@ -307,7 +307,7 @@ namespace coil
   protected:
     /*!
      * @if jp
-     * @brief PeriodicTask ÍÑ¤Î¥¹¥ì¥Ã¥É¼Â¹Ô
+     * @brief PeriodicTask ç”¨ã®ã‚¹ãƒ¬ãƒƒãƒ‰å®Ÿè¡Œ
      * @else
      * @brief Thread execution for PeriodicTask
      * @endif
@@ -316,7 +316,7 @@ namespace coil
 
     /*!
      * @if jp
-     * @brief ¥¹¥ì¥Ã¥ÉµÙ»ß
+     * @brief ã‚¹ãƒ¬ãƒƒãƒ‰ä¼‘æ­¢
      * @else
      * @brief Thread sleep
      * @endif
@@ -325,7 +325,7 @@ namespace coil
 
     /*!
      * @if jp
-     * @brief ¼Â¹Ô¾õÂÖ¹¹¿·
+     * @brief å®Ÿè¡ŒçŠ¶æ…‹æ›´æ–°
      * @else
      * @brief Update for execute state
      * @endif
@@ -334,7 +334,7 @@ namespace coil
 
     /*!
      * @if jp
-     * @brief ¼ş´ü¾õÂÖ¹¹¿·
+     * @brief å‘¨æœŸçŠ¶æ…‹æ›´æ–°
      * @else
      * @brief Update for period state
      * @endif
@@ -344,7 +344,7 @@ namespace coil
   protected:
     /*!
      * @if jp
-     * @brief ¥¿¥¹¥¯¼Â¹Ô¼ş´ü
+     * @brief ã‚¿ã‚¹ã‚¯å®Ÿè¡Œå‘¨æœŸ
      * @else
      * @brief Task execution period
      * @endif
@@ -353,7 +353,7 @@ namespace coil
 
     /*!
      * @if jp
-     * @brief ¥¹¥ì¥Ã¥ÉµÙ»ß¥Õ¥é¥°
+     * @brief ã‚¹ãƒ¬ãƒƒãƒ‰ä¼‘æ­¢ãƒ•ãƒ©ã‚°
      * @else
      * @brief Thread sleep flag
      * @endif
@@ -362,7 +362,7 @@ namespace coil
 
     /*!
      * @if jp
-     * @brief ¥¿¥¹¥¯¼Â¹Ô´Ø¿ô
+     * @brief ã‚¿ã‚¹ã‚¯å®Ÿè¡Œé–¢æ•°
      * @else
      * @brief Task execution function
      * @endif
@@ -371,7 +371,7 @@ namespace coil
 
     /*!
      * @if jp
-     * @brief ¥¿¥¹¥¯¼Â¹Ô´Ø¿ôºï½ü¥Õ¥é¥°
+     * @brief ã‚¿ã‚¹ã‚¯å®Ÿè¡Œé–¢æ•°å‰Šé™¤ãƒ•ãƒ©ã‚°
      * @else
      * @brief Task execution function delete flag
      * @endif
@@ -381,7 +381,7 @@ namespace coil
     /*!
      * @if jp
      * @class alive_t
-     * @brief alive_t ¥¯¥é¥¹
+     * @brief alive_t ã‚¯ãƒ©ã‚¹
      * @else
      * @class alive_t
      * @brief alive_t class
@@ -397,7 +397,7 @@ namespace coil
 
     /*!
      * @if jp
-     * @brief ¥¿¥¹¥¯À¸Â¸¥Õ¥é¥°
+     * @brief ã‚¿ã‚¹ã‚¯ç”Ÿå­˜ãƒ•ãƒ©ã‚°
      * @else
      * @brief Task alive flag
      * @endif
@@ -406,7 +406,7 @@ namespace coil
 
     /*!
      * @if jp
-     * @brief ¥¿¥¹¥¯ÃæÃÇ´ÉÍıÍÑ¹½Â¤ÂÎ
+     * @brief ã‚¿ã‚¹ã‚¯ä¸­æ–­ç®¡ç†ç”¨æ§‹é€ ä½“
      * @else
      * @brief Structure for task suspend management
      * @endif
@@ -421,7 +421,7 @@ namespace coil
 
     /*!
      * @if jp
-     * @brief ¥¿¥¹¥¯ÃæÃÇ¾ğÊó
+     * @brief ã‚¿ã‚¹ã‚¯ä¸­æ–­æƒ…å ±
      * @else
      * @brief Task suspend infomation
      * @endif
@@ -430,7 +430,7 @@ namespace coil
       
     /*!
      * @if jp
-     * @brief ¥¿¥¹¥¯¼Â¹Ô»ş´Ö·×Â¬´ÉÍıÍÑ¹½Â¤ÂÎ
+     * @brief ã‚¿ã‚¹ã‚¯å®Ÿè¡Œæ™‚é–“è¨ˆæ¸¬ç®¡ç†ç”¨æ§‹é€ ä½“
      * @else
      * @brief Structure for task execution time measurement management
      * @endif
@@ -443,7 +443,7 @@ namespace coil
 
     /*!
      * @if jp
-     * @brief ¥¿¥¹¥¯¼Â¹Ô»ş´Ö·×Â¬¥Õ¥é¥°
+     * @brief ã‚¿ã‚¹ã‚¯å®Ÿè¡Œæ™‚é–“è¨ˆæ¸¬ãƒ•ãƒ©ã‚°
      * @else
      * @brief Task execution time measurement flag
      * @endif
@@ -452,7 +452,7 @@ namespace coil
 
     /*!
      * @if jp
-     * @brief ¥¿¥¹¥¯¼Â¹Ô»ş´Ö·×Â¬²ó¿ô
+     * @brief ã‚¿ã‚¹ã‚¯å®Ÿè¡Œæ™‚é–“è¨ˆæ¸¬å›æ•°
      * @else
      * @brief Task execution time measurement count
      * @endif
@@ -461,7 +461,7 @@ namespace coil
 
     /*!
      * @if jp
-     * @brief ¥¿¥¹¥¯¼Â¹Ô»ş´Ö·×Â¬¼ş´ü
+     * @brief ã‚¿ã‚¹ã‚¯å®Ÿè¡Œæ™‚é–“è¨ˆæ¸¬å‘¨æœŸ
      * @else
      * @brief Task execution time measurement max count
      * @endif
@@ -470,7 +470,7 @@ namespace coil
 
     /*!
      * @if jp
-     * @brief ¥¿¥¹¥¯¼Â¹Ô»ş´Ö·×Â¬Åı·×
+     * @brief ã‚¿ã‚¹ã‚¯å®Ÿè¡Œæ™‚é–“è¨ˆæ¸¬çµ±è¨ˆ
      * @else
      * @brief Task execution time measurement statistics
      * @endif
@@ -479,7 +479,7 @@ namespace coil
 
     /*!
      * @if jp
-     * @brief ¥¿¥¹¥¯¼Â¹Ô»ş´Ö·×Â¬¾ğÊó
+     * @brief ã‚¿ã‚¹ã‚¯å®Ÿè¡Œæ™‚é–“è¨ˆæ¸¬æƒ…å ±
      * @else
      * @brief Task execution time  measurement infomation
      * @endif
@@ -488,7 +488,7 @@ namespace coil
 
     /*!
      * @if jp
-     * @brief ¥¿¥¹¥¯¼ş´ü»ş´Ö·×Â¬¥Õ¥é¥°
+     * @brief ã‚¿ã‚¹ã‚¯å‘¨æœŸæ™‚é–“è¨ˆæ¸¬ãƒ•ãƒ©ã‚°
      * @else
      * @brief Task periodic time measurement flag
      * @endif
@@ -497,7 +497,7 @@ namespace coil
 
     /*!
      * @if jp
-     * @brief ¥¿¥¹¥¯¼ş´ü»ş´Ö·×Â¬²ó¿ô
+     * @brief ã‚¿ã‚¹ã‚¯å‘¨æœŸæ™‚é–“è¨ˆæ¸¬å›æ•°
      * @else
      * @brief Task periodic time measurement count
      * @endif
@@ -506,7 +506,7 @@ namespace coil
 
     /*!
      * @if jp
-     * @brief ¥¿¥¹¥¯¼ş´ü»ş´Ö·×Â¬ºÇÂç¿ô
+     * @brief ã‚¿ã‚¹ã‚¯å‘¨æœŸæ™‚é–“è¨ˆæ¸¬æœ€å¤§æ•°
      * @else
      * @brief Task periodic time measurement max count
      * @endif
@@ -515,7 +515,7 @@ namespace coil
 
     /*!
      * @if jp
-     * @brief ¥¿¥¹¥¯¼ş´ü»ş´Ö·×Â¬Åı·×
+     * @brief ã‚¿ã‚¹ã‚¯å‘¨æœŸæ™‚é–“è¨ˆæ¸¬çµ±è¨ˆ
      * @else
      * @brief Task periodic time measurement statistics
      * @endif
@@ -524,7 +524,7 @@ namespace coil
 
     /*!
      * @if jp
-     * @brief ¥¿¥¹¥¯¼ş´ü»ş´Ö·×Â¬¾ğÊó
+     * @brief ã‚¿ã‚¹ã‚¯å‘¨æœŸæ™‚é–“è¨ˆæ¸¬æƒ…å ±
      * @else
      * @brief Task periodic time  measurement infomation
      * @endif

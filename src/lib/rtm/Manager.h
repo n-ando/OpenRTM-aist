@@ -1,4 +1,4 @@
-/// -*- C++ -*-
+ï»¿/// -*- C++ -*-
 /*!
  * @file Manager.h
  * @brief RTComponent manager class
@@ -70,9 +70,9 @@ namespace RTC
   /*!
    * @if jp
    * @class Manager
-   * @brief Manager ¥¯¥é¥¹
+   * @brief Manager ã‚¯ãƒ©ã‚¹
    *
-   * ¥³¥ó¥İ¡¼¥Í¥ó¥È¤Ê¤É³Æ¼ï¤Î¾ğÊó´ÉÍı¤ò¹Ô¤¦¥Ş¥Í¡¼¥¸¥ã¥¯¥é¥¹¡£
+   * ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆãªã©å„ç¨®ã®æƒ…å ±ç®¡ç†ã‚’è¡Œã†ãƒãƒãƒ¼ã‚¸ãƒ£ã‚¯ãƒ©ã‚¹ã€‚
    *
    * @since 0.2.0
    *
@@ -94,9 +94,9 @@ namespace RTC
   protected:
     /*!
      * @if jp
-     * @brief Protected ¥³¥ó¥¹¥È¥é¥¯¥¿
+     * @brief Protected ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
      *
-     * Protected ¥³¥ó¥¹¥È¥é¥¯¥¿
+     * Protected ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
      *
      * @else
      * @brief Protected Constructor
@@ -109,11 +109,11 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief Protected ¥³¥Ô¡¼¥³¥ó¥¹¥È¥é¥¯¥¿
+     * @brief Protected ã‚³ãƒ”ãƒ¼ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
      *
-     * Protected ¥³¥Ô¡¼¥³¥ó¥¹¥È¥é¥¯¥¿
+     * Protected ã‚³ãƒ”ãƒ¼ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
      *
-     * @param manager ¥³¥Ô¡¼¸µ¥Ş¥Í¡¼¥¸¥ã¥ª¥Ö¥¸¥§¥¯¥È
+     * @param manager ã‚³ãƒ”ãƒ¼å…ƒãƒãƒãƒ¼ã‚¸ãƒ£ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
      *
      * @else
      * @brief Protected Copy Constructor
@@ -130,28 +130,28 @@ namespace RTC
   public:
     /*!
      * @if jp
-     * @brief ¥Ş¥Í¡¼¥¸¥ã¤Î½é´ü²½
+     * @brief ãƒãƒãƒ¼ã‚¸ãƒ£ã®åˆæœŸåŒ–
      *
-     * ¥Ş¥Í¡¼¥¸¥ã¤ò½é´ü²½¤¹¤ë static ¥á¥ó¥Ğ´Ø¿ô¡£
-     * ¥Ş¥Í¡¼¥¸¥ã¤ò¥³¥Ş¥ó¥É¥é¥¤¥ó°ú¿ô¤òÍ¿¤¨¤Æ½é´ü²½¤¹¤ë¡£
-     * ¥Ş¥Í¡¼¥¸¥ã¤ò»ÈÍÑ¤¹¤ë¾ì¹ç¤Ï¡¢É¬¤º¤³¤Î½é´ü²½¥á¥ó¥Ğ´Ø¿ô init() ¤ò
-     * ¸Æ¤Ğ¤Ê¤±¤ì¤Ğ¤Ê¤é¤Ê¤¤¡£
-     * ¥Ş¥Í¡¼¥¸¥ã¤Î¥¤¥ó¥¹¥¿¥ó¥¹¤ò¼èÆÀ¤¹¤ëÊıË¡¤È¤·¤Æ¡¢init(), instance() ¤Î
-     * 2¤Ä¤Î static ¥á¥ó¥Ğ´Ø¿ô¤¬ÍÑ°Õ¤µ¤ì¤Æ¤¤¤ë¤¬¡¢½é´ü²½¤Ïinit()¤Ç¤·¤«
-     * ¹Ô¤ï¤ì¤Ê¤¤¤¿¤á¡¢Manager ¤ÎÀ¸Â¸´ü´Ö¤Î°ìÈÖºÇ½é¤Ë¤Ïinit()¤ò¸Æ¤ÖÉ¬Í×¤¬¤¢¤ë¡£
+     * ãƒãƒãƒ¼ã‚¸ãƒ£ã‚’åˆæœŸåŒ–ã™ã‚‹ static ãƒ¡ãƒ³ãƒé–¢æ•°ã€‚
+     * ãƒãƒãƒ¼ã‚¸ãƒ£ã‚’ã‚³ãƒãƒ³ãƒ‰ãƒ©ã‚¤ãƒ³å¼•æ•°ã‚’ä¸ãˆã¦åˆæœŸåŒ–ã™ã‚‹ã€‚
+     * ãƒãƒãƒ¼ã‚¸ãƒ£ã‚’ä½¿ç”¨ã™ã‚‹å ´åˆã¯ã€å¿…ãšã“ã®åˆæœŸåŒ–ãƒ¡ãƒ³ãƒé–¢æ•° init() ã‚’
+     * å‘¼ã°ãªã‘ã‚Œã°ãªã‚‰ãªã„ã€‚
+     * ãƒãƒãƒ¼ã‚¸ãƒ£ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’å–å¾—ã™ã‚‹æ–¹æ³•ã¨ã—ã¦ã€init(), instance() ã®
+     * 2ã¤ã® static ãƒ¡ãƒ³ãƒé–¢æ•°ãŒç”¨æ„ã•ã‚Œã¦ã„ã‚‹ãŒã€åˆæœŸåŒ–ã¯init()ã§ã—ã‹
+     * è¡Œã‚ã‚Œãªã„ãŸã‚ã€Manager ã®ç”Ÿå­˜æœŸé–“ã®ä¸€ç•ªæœ€åˆã«ã¯init()ã‚’å‘¼ã¶å¿…è¦ãŒã‚ã‚‹ã€‚
      *
-     * ¢¨¥Ş¥Í¡¼¥¸¥ã¤Î½é´ü²½½èÍı
-     * - initManager: °ú¿ô½èÍı¡¢config¥Õ¥¡¥¤¥ë¤ÎÆÉ¤ß¹ş¤ß¡¢¥µ¥Ö¥·¥¹¥Æ¥à½é´ü²½
-     * - initLogger: Logger½é´ü²½
-     * - initORB: ORB ½é´ü²½
-     * - initNaming: NamingService ½é´ü²½
-     * - initExecutionContext: ExecutionContext factory ½é´ü²½
-     * - initTimer: Timer ½é´ü²½
+     * â€»ãƒãƒãƒ¼ã‚¸ãƒ£ã®åˆæœŸåŒ–å‡¦ç†
+     * - initManager: å¼•æ•°å‡¦ç†ã€configãƒ•ã‚¡ã‚¤ãƒ«ã®èª­ã¿è¾¼ã¿ã€ã‚µãƒ–ã‚·ã‚¹ãƒ†ãƒ åˆæœŸåŒ–
+     * - initLogger: LoggeråˆæœŸåŒ–
+     * - initORB: ORB åˆæœŸåŒ–
+     * - initNaming: NamingService åˆæœŸåŒ–
+     * - initExecutionContext: ExecutionContext factory åˆæœŸåŒ–
+     * - initTimer: Timer åˆæœŸåŒ–
      *
-     * @param argc ¥³¥Ş¥ó¥É¥é¥¤¥ó°ú¿ô¤Î¿ô
-     * @param argv ¥³¥Ş¥ó¥É¥é¥¤¥ó°ú¿ô
+     * @param argc ã‚³ãƒãƒ³ãƒ‰ãƒ©ã‚¤ãƒ³å¼•æ•°ã®æ•°
+     * @param argv ã‚³ãƒãƒ³ãƒ‰ãƒ©ã‚¤ãƒ³å¼•æ•°
      * 
-     * @return Manager ¤ÎÍ£°ì¤Î¥¤¥ó¥¹¥¿¥ó¥¹¤Î»²¾È
+     * @return Manager ã®å”¯ä¸€ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã®å‚ç…§
      *
      * @else
      * @brief Initialize manager
@@ -184,13 +184,13 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief ¥Ş¥Í¡¼¥¸¥ã¤Î¥¤¥ó¥¹¥¿¥ó¥¹¤Î¼èÆÀ
+     * @brief ãƒãƒãƒ¼ã‚¸ãƒ£ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã®å–å¾—
      *
-     * ¥Ş¥Í¡¼¥¸¥ã¤Î¥¤¥ó¥¹¥¿¥ó¥¹¤ò¼èÆÀ¤¹¤ë static ¥á¥ó¥Ğ´Ø¿ô¡£
-     * ¤³¤Î´Ø¿ô¤ò¸Æ¤ÖÁ°¤Ë¡¢É¬¤º¤³¤Î½é´ü²½¥á¥ó¥Ğ´Ø¿ô init() ¤¬¸Æ¤Ğ¤ì¤Æ¤¤¤ë
-     * É¬Í×¤¬¤¢¤ë¡£
+     * ãƒãƒãƒ¼ã‚¸ãƒ£ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’å–å¾—ã™ã‚‹ static ãƒ¡ãƒ³ãƒé–¢æ•°ã€‚
+     * ã“ã®é–¢æ•°ã‚’å‘¼ã¶å‰ã«ã€å¿…ãšã“ã®åˆæœŸåŒ–ãƒ¡ãƒ³ãƒé–¢æ•° init() ãŒå‘¼ã°ã‚Œã¦ã„ã‚‹
+     * å¿…è¦ãŒã‚ã‚‹ã€‚
      *
-     * @return Manager ¤ÎÍ£°ì¤Î¥¤¥ó¥¹¥¿¥ó¥¹¤Î»²¾È
+     * @return Manager ã®å”¯ä¸€ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã®å‚ç…§
      * 
      * @else
      *
@@ -212,9 +212,9 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief ¥Ş¥Í¡¼¥¸¥ã½ªÎ»½èÍı
+     * @brief ãƒãƒãƒ¼ã‚¸ãƒ£çµ‚äº†å‡¦ç†
      *
-     * ¥Ş¥Í¡¼¥¸¥ã¤Î½ªÎ»½èÍı¤ò¼Â¹Ô¤¹¤ë¡£
+     * ãƒãƒãƒ¼ã‚¸ãƒ£ã®çµ‚äº†å‡¦ç†ã‚’å®Ÿè¡Œã™ã‚‹ã€‚
      *
      * @else
      * @brief Terminate manager
@@ -227,10 +227,10 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief ¥Ş¥Í¡¼¥¸¥ã¡¦¥·¥ã¥Ã¥È¥À¥¦¥ó
+     * @brief ãƒãƒãƒ¼ã‚¸ãƒ£ãƒ»ã‚·ãƒ£ãƒƒãƒˆãƒ€ã‚¦ãƒ³
      *
-     * ¥Ş¥Í¡¼¥¸¥ã¤Î½ªÎ»½èÍı¤ò¼Â¹Ô¤¹¤ë¡£
-     * ORB½ªÎ»¸å¡¢Æ±´ü¤ò¼è¤Ã¤Æ½ªÎ»¤¹¤ë¡£
+     * ãƒãƒãƒ¼ã‚¸ãƒ£ã®çµ‚äº†å‡¦ç†ã‚’å®Ÿè¡Œã™ã‚‹ã€‚
+     * ORBçµ‚äº†å¾Œã€åŒæœŸã‚’å–ã£ã¦çµ‚äº†ã™ã‚‹ã€‚
      *
      * @else
      * @brief Shutdown Manager
@@ -244,9 +244,9 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief ¥Ş¥Í¡¼¥¸¥ã½ªÎ»½èÍı¤ÎÂÔ¤Á¹ç¤ï¤»
+     * @brief ãƒãƒãƒ¼ã‚¸ãƒ£çµ‚äº†å‡¦ç†ã®å¾…ã¡åˆã‚ã›
      *
-     * Æ±´ü¤ò¼è¤ë¤¿¤á¡¢¥Ş¥Í¡¼¥¸¥ã½ªÎ»½èÍı¤ÎÂÔ¤Á¹ç¤ï¤»¤ò¹Ô¤¦¡£
+     * åŒæœŸã‚’å–ã‚‹ãŸã‚ã€ãƒãƒãƒ¼ã‚¸ãƒ£çµ‚äº†å‡¦ç†ã®å¾…ã¡åˆã‚ã›ã‚’è¡Œã†ã€‚
      *
      * @else
      * @brief Wait for Manager's termination
@@ -259,11 +259,11 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief ¥í¥°¥Ğ¥Ã¥Õ¥¡¤Î¼èÆÀ
+     * @brief ãƒ­ã‚°ãƒãƒƒãƒ•ã‚¡ã®å–å¾—
      *
-     * ¥Ş¥Í¡¼¥¸¥ã¤ËÀßÄê¤·¤¿¥í¥°¥Ğ¥Ã¥Õ¥¡¤ò¼èÆÀ¤¹¤ë¡£
+     * ãƒãƒãƒ¼ã‚¸ãƒ£ã«è¨­å®šã—ãŸãƒ­ã‚°ãƒãƒƒãƒ•ã‚¡ã‚’å–å¾—ã™ã‚‹ã€‚
      *
-     * @return ¥Ş¥Í¡¼¥¸¥ã¤ËÀßÄê¤·¤¿¥í¥°¥Ğ¥Ã¥Õ¥¡
+     * @return ãƒãƒãƒ¼ã‚¸ãƒ£ã«è¨­å®šã—ãŸãƒ­ã‚°ãƒãƒƒãƒ•ã‚¡
      *
      * @else
      * @brief Get the log buffer
@@ -278,11 +278,11 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ¥³¥ó¥Õ¥£¥°¥ì¡¼¥·¥ç¥ó¤Î¥í¥°¥ì¥Ù¥ë¤Î¼èÆÀ
+     * @brief ã‚³ãƒ³ãƒ•ã‚£ã‚°ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ã®ãƒ­ã‚°ãƒ¬ãƒ™ãƒ«ã®å–å¾—
      *
-     * ¥³¥ó¥Õ¥£¥°¥ì¡¼¥·¥ç¥ó¤Î¥í¥°¥ì¥Ù¥ë¤ò¼èÆÀ¤¹¤ë¡£
+     * ã‚³ãƒ³ãƒ•ã‚£ã‚°ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ã®ãƒ­ã‚°ãƒ¬ãƒ™ãƒ«ã‚’å–å¾—ã™ã‚‹ã€‚
      *
-     * @return ¥³¥ó¥Õ¥£¥®¥å¥ì¡¼¥·¥ç¥ó¤Î¥í¥°¥ì¥Ù¥ë
+     * @return ã‚³ãƒ³ãƒ•ã‚£ã‚®ãƒ¥ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ã®ãƒ­ã‚°ãƒ¬ãƒ™ãƒ«
      *
      * @else
      * @brief Get the log level of the configuration.
@@ -297,11 +297,11 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief ¥Ş¥Í¡¼¥¸¥ã¥³¥ó¥Õ¥£¥®¥å¥ì¡¼¥·¥ç¥ó¤Î¼èÆÀ
+     * @brief ãƒãƒãƒ¼ã‚¸ãƒ£ã‚³ãƒ³ãƒ•ã‚£ã‚®ãƒ¥ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ã®å–å¾—
      *
-     * ¥Ş¥Í¡¼¥¸¥ã¤ËÀßÄê¤·¤¿¥³¥ó¥Õ¥£¥®¥å¥ì¡¼¥·¥ç¥ó¤ò¼èÆÀ¤¹¤ë¡£
+     * ãƒãƒãƒ¼ã‚¸ãƒ£ã«è¨­å®šã—ãŸã‚³ãƒ³ãƒ•ã‚£ã‚®ãƒ¥ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ã‚’å–å¾—ã™ã‚‹ã€‚
      *
-     * @return ¥Ş¥Í¡¼¥¸¥ã¤Î¥³¥ó¥Õ¥£¥®¥å¥ì¡¼¥·¥ç¥ó
+     * @return ãƒãƒãƒ¼ã‚¸ãƒ£ã®ã‚³ãƒ³ãƒ•ã‚£ã‚®ãƒ¥ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³
      *
      * @else
      * @brief Get the manager configuration
@@ -317,13 +317,13 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief ½é´ü²½¥×¥í¥·¡¼¥¸¥ã¤Î¥»¥Ã¥È
+     * @brief åˆæœŸåŒ–ãƒ—ãƒ­ã‚·ãƒ¼ã‚¸ãƒ£ã®ã‚»ãƒƒãƒˆ
      *
-     * ¤³¤Î¥ª¥Ú¥ì¡¼¥·¥ç¥ó¤Ï¥æ¡¼¥¶¤¬¹Ô¤¦¥â¥¸¥å¡¼¥ëÅù¤Î½é´ü²½¥×¥í¥·¡¼¥¸¥ã
-     * ¤òÀßÄê¤¹¤ë¡£¤³¤³¤ÇÀßÄê¤µ¤ì¤¿¥×¥í¥·¡¼¥¸¥ã¤Ï¡¢¥Ş¥Í¡¼¥¸¥ã¤¬½é´ü²½¤µ¤ì¡¢
-     * ¥¢¥¯¥Æ¥£¥Ö²½¤µ¤ì¤¿¸å¡¢Å¬ÀÚ¤Ê¥¿¥¤¥ß¥ó¥°¤Ç¼Â¹Ô¤µ¤ì¤ë¡£
+     * ã“ã®ã‚ªãƒšãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ã¯ãƒ¦ãƒ¼ã‚¶ãŒè¡Œã†ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ç­‰ã®åˆæœŸåŒ–ãƒ—ãƒ­ã‚·ãƒ¼ã‚¸ãƒ£
+     * ã‚’è¨­å®šã™ã‚‹ã€‚ã“ã“ã§è¨­å®šã•ã‚ŒãŸãƒ—ãƒ­ã‚·ãƒ¼ã‚¸ãƒ£ã¯ã€ãƒãƒãƒ¼ã‚¸ãƒ£ãŒåˆæœŸåŒ–ã•ã‚Œã€
+     * ã‚¢ã‚¯ãƒ†ã‚£ãƒ–åŒ–ã•ã‚ŒãŸå¾Œã€é©åˆ‡ãªã‚¿ã‚¤ãƒŸãƒ³ã‚°ã§å®Ÿè¡Œã•ã‚Œã‚‹ã€‚
      *
-     * @param proc ½é´ü²½¥×¥í¥·¡¼¥¸¥ã¤Î´Ø¿ô¥İ¥¤¥ó¥¿
+     * @param proc åˆæœŸåŒ–ãƒ—ãƒ­ã‚·ãƒ¼ã‚¸ãƒ£ã®é–¢æ•°ãƒã‚¤ãƒ³ã‚¿
      *
      * @else
      *
@@ -343,18 +343,18 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief Manager¤Î¥¢¥¯¥Æ¥£¥Ö²½
+     * @brief Managerã®ã‚¢ã‚¯ãƒ†ã‚£ãƒ–åŒ–
      *
-     * ¤³¤Î¥ª¥Ú¥ì¡¼¥·¥ç¥ó¤Ï°Ê²¼¤Î½èÍı¤ò¹Ô¤¦
-     * - CORBA POAManager ¤Î¥¢¥¯¥Æ¥£¥Ö²½
-     * - ¥Ş¥Í¡¼¥¸¥ãCORBA¥ª¥Ö¥¸¥§¥¯¥È¤Î¥¢¥¯¥Æ¥£¥Ö²½
-     * - Manager ¤Î¥ª¥Ö¥¸¥§¥¯¥È»²¾È¤ÎÅĞÏ¿
+     * ã“ã®ã‚ªãƒšãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ã¯ä»¥ä¸‹ã®å‡¦ç†ã‚’è¡Œã†
+     * - CORBA POAManager ã®ã‚¢ã‚¯ãƒ†ã‚£ãƒ–åŒ–
+     * - ãƒãƒãƒ¼ã‚¸ãƒ£CORBAã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ã‚¢ã‚¯ãƒ†ã‚£ãƒ–åŒ–
+     * - Manager ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå‚ç…§ã®ç™»éŒ²
      *
-     * ¤³¤Î¥ª¥Ú¥ì¡¼¥·¥ç¥ó¤Ï¡¢¥Ş¥Í¡¼¥¸¥ã¤Î½é´ü²½¸å¡¢runManager()
-     * ¤ÎÁ°¤Ë¸Æ¤ÖÉ¬Í×¤¬¤¢¤ë¡£
+     * ã“ã®ã‚ªãƒšãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ã¯ã€ãƒãƒãƒ¼ã‚¸ãƒ£ã®åˆæœŸåŒ–å¾Œã€runManager()
+     * ã®å‰ã«å‘¼ã¶å¿…è¦ãŒã‚ã‚‹ã€‚
      *
      *
-     * @return ½èÍı·ë²Ì(¥¢¥¯¥Æ¥£¥Ö²½À®¸ù:true¡¢¼ºÇÔ:false)
+     * @return å‡¦ç†çµæœ(ã‚¢ã‚¯ãƒ†ã‚£ãƒ–åŒ–æˆåŠŸ:trueã€å¤±æ•—:false)
      *
      * @else
      *
@@ -377,16 +377,16 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief Manager¤Î¼Â¹Ô
+     * @brief Managerã®å®Ÿè¡Œ
      *
-     * ¤³¤Î¥ª¥Ú¥ì¡¼¥·¥ç¥ó¤Ï¥Ş¥Í¡¼¥¸¥ã¤Î¥á¥¤¥ó¥ë¡¼¥×¤ò¼Â¹Ô¤¹¤ë¡£
-     * ¤³¤Î¥á¥¤¥ó¥ë¡¼¥×Æâ¤Ç¤Ï¡¢CORBA ORB¤Î¥¤¥Ù¥ó¥È¥ë¡¼¥×Åù¤¬
-     * ½èÍı¤µ¤ì¤ë¡£¥Ç¥Õ¥©¥ë¥È¤Ç¤Ï¡¢¤³¤Î¥ª¥Ú¥ì¡¼¥·¥ç¥ó¤Ï¥Ö¥í¥Ã¥¯¤·¡¢
-     * Manager::destroy() ¤¬¸Æ¤Ğ¤ì¤ë¤Ş¤Ç½èÍı¤òÌá¤µ¤Ê¤¤¡£
-     * °ú¿ô no_block ¤¬ true ¤ËÀßÄê¤µ¤ì¤Æ¤¤¤ë¾ì¹ç¤Ï¡¢ÆâÉô¤Ç¥¤¥Ù¥ó¥È¥ë¡¼¥×
-     * ¤ò½èÍı¤¹¤ë¥¹¥ì¥Ã¥É¤òµ¯Æ°¤·¡¢¥Ö¥í¥Ã¥¯¤»¤º¤Ë½èÍı¤òÌá¤¹¡£
+     * ã“ã®ã‚ªãƒšãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ã¯ãƒãƒãƒ¼ã‚¸ãƒ£ã®ãƒ¡ã‚¤ãƒ³ãƒ«ãƒ¼ãƒ—ã‚’å®Ÿè¡Œã™ã‚‹ã€‚
+     * ã“ã®ãƒ¡ã‚¤ãƒ³ãƒ«ãƒ¼ãƒ—å†…ã§ã¯ã€CORBA ORBã®ã‚¤ãƒ™ãƒ³ãƒˆãƒ«ãƒ¼ãƒ—ç­‰ãŒ
+     * å‡¦ç†ã•ã‚Œã‚‹ã€‚ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã§ã¯ã€ã“ã®ã‚ªãƒšãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ã¯ãƒ–ãƒ­ãƒƒã‚¯ã—ã€
+     * Manager::destroy() ãŒå‘¼ã°ã‚Œã‚‹ã¾ã§å‡¦ç†ã‚’æˆ»ã•ãªã„ã€‚
+     * å¼•æ•° no_block ãŒ true ã«è¨­å®šã•ã‚Œã¦ã„ã‚‹å ´åˆã¯ã€å†…éƒ¨ã§ã‚¤ãƒ™ãƒ³ãƒˆãƒ«ãƒ¼ãƒ—
+     * ã‚’å‡¦ç†ã™ã‚‹ã‚¹ãƒ¬ãƒƒãƒ‰ã‚’èµ·å‹•ã—ã€ãƒ–ãƒ­ãƒƒã‚¯ã›ãšã«å‡¦ç†ã‚’æˆ»ã™ã€‚
      *
-     * @param no_block false: ¥Ö¥í¥Ã¥­¥ó¥°¥â¡¼¥É, true: ¥Î¥ó¥Ö¥í¥Ã¥­¥ó¥°¥â¡¼¥É
+     * @param no_block false: ãƒ–ãƒ­ãƒƒã‚­ãƒ³ã‚°ãƒ¢ãƒ¼ãƒ‰, true: ãƒãƒ³ãƒ–ãƒ­ãƒƒã‚­ãƒ³ã‚°ãƒ¢ãƒ¼ãƒ‰
      *
      * @else
      *
@@ -411,18 +411,18 @@ namespace RTC
     //============================================================
     /*!
      * @if jp
-     * @brief [CORBA interface] ¥â¥¸¥å¡¼¥ë¤Î¥í¡¼¥É
+     * @brief [CORBA interface] ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ã®ãƒ­ãƒ¼ãƒ‰
      *
-     * »ØÄê¤·¤¿¥³¥ó¥İ¡¼¥Í¥ó¥È¤Î¥â¥¸¥å¡¼¥ë¤ò¥í¡¼¥É¤¹¤ë¤È¤È¤â¤Ë¡¢
-     * »ØÄê¤·¤¿½é´ü²½´Ø¿ô¤ò¼Â¹Ô¤¹¤ë¡£
+     * æŒ‡å®šã—ãŸã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã®ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ã‚’ãƒ­ãƒ¼ãƒ‰ã™ã‚‹ã¨ã¨ã‚‚ã«ã€
+     * æŒ‡å®šã—ãŸåˆæœŸåŒ–é–¢æ•°ã‚’å®Ÿè¡Œã™ã‚‹ã€‚
      *
-     * @param fname   ¥â¥¸¥å¡¼¥ë¥Õ¥¡¥¤¥ëÌ¾
-     * @param initfunc ½é´ü²½´Ø¿ôÌ¾
-     * @return ½ªÎ»¥³¡¼¥É
-     *         RTC::RTC_OK Àµ¾ï½ªÎ»
-     *         RTC::RTC_ERROR ¥í¡¼¥É¼ºÇÔ¡¦ÉÔÌÀ¤Ê¥¨¥é¡¼
-     *         RTC::PRECONDITION_NOT_MET ÀßÄê¤Ë¤êµö²Ä¤µ¤ì¤Ê¤¤Áàºî
-     *         RTC::BAD_PARAMETER ÉÔÀµ¤Ê¥Ñ¥é¥á¡¼¥¿
+     * @param fname   ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ãƒ•ã‚¡ã‚¤ãƒ«å
+     * @param initfunc åˆæœŸåŒ–é–¢æ•°å
+     * @return çµ‚äº†ã‚³ãƒ¼ãƒ‰
+     *         RTC::RTC_OK æ­£å¸¸çµ‚äº†
+     *         RTC::RTC_ERROR ãƒ­ãƒ¼ãƒ‰å¤±æ•—ãƒ»ä¸æ˜ãªã‚¨ãƒ©ãƒ¼
+     *         RTC::PRECONDITION_NOT_MET è¨­å®šã«ã‚Šè¨±å¯ã•ã‚Œãªã„æ“ä½œ
+     *         RTC::BAD_PARAMETER ä¸æ­£ãªãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿
      * 
      * @else
      *
@@ -446,11 +446,11 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief ¥â¥¸¥å¡¼¥ë¤Î¥¢¥ó¥í¡¼¥É
+     * @brief ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ã®ã‚¢ãƒ³ãƒ­ãƒ¼ãƒ‰
      *
-     * ¥â¥¸¥å¡¼¥ë¤ò¥¢¥ó¥í¡¼¥É¤¹¤ë
+     * ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ã‚’ã‚¢ãƒ³ãƒ­ãƒ¼ãƒ‰ã™ã‚‹
      *
-     * @param fname ¥â¥¸¥å¡¼¥ë¤Î¥Õ¥¡¥¤¥ëÌ¾
+     * @param fname ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ã®ãƒ•ã‚¡ã‚¤ãƒ«å
      * 
      * @else
      *
@@ -467,9 +467,9 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief Á´¥â¥¸¥å¡¼¥ë¤Î¥¢¥ó¥í¡¼¥É
+     * @brief å…¨ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ã®ã‚¢ãƒ³ãƒ­ãƒ¼ãƒ‰
      *
-     * ¥â¥¸¥å¡¼¥ë¤ò¤¹¤Ù¤Æ¥¢¥ó¥í¡¼¥É¤¹¤ë
+     * ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ã‚’ã™ã¹ã¦ã‚¢ãƒ³ãƒ­ãƒ¼ãƒ‰ã™ã‚‹
      *
      * @else
      *
@@ -483,11 +483,11 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief ¥í¡¼¥ÉºÑ¤ß¤Î¥â¥¸¥å¡¼¥ë¥ê¥¹¥È¤ò¼èÆÀ¤¹¤ë
+     * @brief ãƒ­ãƒ¼ãƒ‰æ¸ˆã¿ã®ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ãƒªã‚¹ãƒˆã‚’å–å¾—ã™ã‚‹
      *
-     * ¸½ºß¥Ş¥Í¡¼¥¸¥ã¤Ë¥í¡¼¥É¤µ¤ì¤Æ¤¤¤ë¥â¥¸¥å¡¼¥ë¤Î¥ê¥¹¥È¤ò¼èÆÀ¤¹¤ë¡£
+     * ç¾åœ¨ãƒãƒãƒ¼ã‚¸ãƒ£ã«ãƒ­ãƒ¼ãƒ‰ã•ã‚Œã¦ã„ã‚‹ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ã®ãƒªã‚¹ãƒˆã‚’å–å¾—ã™ã‚‹ã€‚
      *
-     * @return ¥í¡¼¥ÉºÑ¤ß¥â¥¸¥å¡¼¥ë¥ê¥¹¥È
+     * @return ãƒ­ãƒ¼ãƒ‰æ¸ˆã¿ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ãƒªã‚¹ãƒˆ
      *
      * @else
      * @brief Get a list of loaded modules
@@ -502,12 +502,12 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief ¥í¡¼¥É²ÄÇ½¤Ê¥â¥¸¥å¡¼¥ë¥ê¥¹¥È¤ò¼èÆÀ¤¹¤ë
+     * @brief ãƒ­ãƒ¼ãƒ‰å¯èƒ½ãªãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ãƒªã‚¹ãƒˆã‚’å–å¾—ã™ã‚‹
      *
-     * ¥í¡¼¥É²ÄÇ½¥â¥¸¥å¡¼¥ë¤Î¥ê¥¹¥È¤ò¼èÆÀ¤¹¤ë¡£
-     * (¸½ºß¤ÏModuleManagerÂ¦¤ÇÌ¤¼ÂÁõ)
+     * ãƒ­ãƒ¼ãƒ‰å¯èƒ½ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ã®ãƒªã‚¹ãƒˆã‚’å–å¾—ã™ã‚‹ã€‚
+     * (ç¾åœ¨ã¯ModuleManagerå´ã§æœªå®Ÿè£…)
      *
-     * @return ¥í¡¼¥É²ÄÇ½¥â¥¸¥å¡¼¥ë¡¡¥ê¥¹¥È
+     * @return ãƒ­ãƒ¼ãƒ‰å¯èƒ½ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ã€€ãƒªã‚¹ãƒˆ
      *
      * @else
      * @brief Get a list of loadable modules
@@ -526,16 +526,16 @@ namespace RTC
     //============================================================
     /*!
      * @if jp
-     * @brief RT¥³¥ó¥İ¡¼¥Í¥ó¥ÈÍÑ¥Õ¥¡¥¯¥È¥ê¤òÅĞÏ¿¤¹¤ë
+     * @brief RTã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆç”¨ãƒ•ã‚¡ã‚¯ãƒˆãƒªã‚’ç™»éŒ²ã™ã‚‹
      *
-     * RT¥³¥ó¥İ¡¼¥Í¥ó¥È¤Î¥¤¥ó¥¹¥¿¥ó¥¹¤òÀ¸À®¤¹¤ë¤¿¤á¤Î
-     * Factory¤òÅĞÏ¿¤¹¤ë¡£
+     * RTã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’ç”Ÿæˆã™ã‚‹ãŸã‚ã®
+     * Factoryã‚’ç™»éŒ²ã™ã‚‹ã€‚
      *
-     * @param profile RT¥³¥ó¥İ¡¼¥Í¥ó¥È ¥×¥í¥Õ¥¡¥¤¥ë
-     * @param new_func RT¥³¥ó¥İ¡¼¥Í¥ó¥ÈÀ¸À®ÍÑ´Ø¿ô
-     * @param delete_func RT¥³¥ó¥İ¡¼¥Í¥ó¥ÈÇË´şÍÑ´Ø¿ô
+     * @param profile RTã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆ ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«
+     * @param new_func RTã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆç”Ÿæˆç”¨é–¢æ•°
+     * @param delete_func RTã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆç ´æ£„ç”¨é–¢æ•°
      *
-     * @return ÅĞÏ¿½èÍı·ë²Ì(ÅĞÏ¿À®¸ù:true¡¢¼ºÇÔ:false)
+     * @return ç™»éŒ²å‡¦ç†çµæœ(ç™»éŒ²æˆåŠŸ:trueã€å¤±æ•—:false)
      *
      * @else
      * @brief Register RT-Component Factory
@@ -556,11 +556,11 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ¥Õ¥¡¥¯¥È¥ê¤Î¥×¥í¥Õ¥¡¥¤¥ë¤ò¼èÆÀ
+     * @brief ãƒ•ã‚¡ã‚¯ãƒˆãƒªã®ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«ã‚’å–å¾—
      *
-     * ¥Õ¥¡¥¯¥È¥ê¤Î¥×¥í¥Õ¥¡¥¤¥ë¤ò¼èÆÀ¤¹¤ë¡£
+     * ãƒ•ã‚¡ã‚¯ãƒˆãƒªã®ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«ã‚’å–å¾—ã™ã‚‹ã€‚
      *
-     * @return ¥Õ¥¡¥¯¥È¥ê¤Î¥×¥í¥Õ¥¡¥¤¥ë
+     * @return ãƒ•ã‚¡ã‚¯ãƒˆãƒªã®ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«
      *
      * @else
      * @brief Get profiles of factories. 
@@ -575,16 +575,16 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ExecutionContextÍÑ¥Õ¥¡¥¯¥È¥ê¤òÅĞÏ¿¤¹¤ë
+     * @brief ExecutionContextç”¨ãƒ•ã‚¡ã‚¯ãƒˆãƒªã‚’ç™»éŒ²ã™ã‚‹
      *
-     * ExecutionContext¤Î¥¤¥ó¥¹¥¿¥ó¥¹¤òÀ¸À®¤¹¤ë¤¿¤á¤Î
-     * Factory¤òÅĞÏ¿¤¹¤ë¡£
+     * ExecutionContextã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’ç”Ÿæˆã™ã‚‹ãŸã‚ã®
+     * Factoryã‚’ç™»éŒ²ã™ã‚‹ã€‚
      *
-     * @param name À¸À®ÂĞ¾İExecutionContextÌ¾¾Î
-     * @param new_func ExecutionContextÀ¸À®ÍÑ´Ø¿ô
-     * @param delete_func ExecutionContextÇË´şÍÑ´Ø¿ô
+     * @param name ç”Ÿæˆå¯¾è±¡ExecutionContextåç§°
+     * @param new_func ExecutionContextç”Ÿæˆç”¨é–¢æ•°
+     * @param delete_func ExecutionContextç ´æ£„ç”¨é–¢æ•°
      *
-     * @return ÅĞÏ¿½èÍı·ë²Ì(ÅĞÏ¿À®¸ù:true¡¢¼ºÇÔ:false)
+     * @return ç™»éŒ²å‡¦ç†çµæœ(ç™»éŒ²æˆåŠŸ:trueã€å¤±æ•—:false)
      *
      * @else
      * @brief Register ExecutionContext Factory
@@ -605,11 +605,11 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief ¥Õ¥¡¥¯¥È¥êÁ´¥ê¥¹¥È¤ò¼èÆÀ¤¹¤ë
+     * @brief ãƒ•ã‚¡ã‚¯ãƒˆãƒªå…¨ãƒªã‚¹ãƒˆã‚’å–å¾—ã™ã‚‹
      *
-     * ÅĞÏ¿¤µ¤ì¤Æ¤¤¤ë¥Õ¥¡¥¯¥È¥ê¤ÎÁ´¥ê¥¹¥È¤ò¼èÆÀ¤¹¤ë¡£
+     * ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹ãƒ•ã‚¡ã‚¯ãƒˆãƒªã®å…¨ãƒªã‚¹ãƒˆã‚’å–å¾—ã™ã‚‹ã€‚
      *
-     * @return ÅĞÏ¿¥Õ¥¡¥¯¥È¥ê ¥ê¥¹¥È
+     * @return ç™»éŒ²ãƒ•ã‚¡ã‚¯ãƒˆãƒª ãƒªã‚¹ãƒˆ
      *
      * @else
      * @brief Get the list of all Factories
@@ -627,45 +627,45 @@ namespace RTC
     //============================================================
     /*!
      * @if jp
-     * @brief RT¥³¥ó¥İ¡¼¥Í¥ó¥È¤òÀ¸À®¤¹¤ë
+     * @brief RTã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã‚’ç”Ÿæˆã™ã‚‹
      *
-     * »ØÄê¤·¤¿RT¥³¥ó¥İ¡¼¥Í¥ó¥È¤Î¥¤¥ó¥¹¥¿¥ó¥¹¤òÅĞÏ¿¤µ¤ì¤¿Factory·ĞÍ³
-     * ¤ÇÀ¸À®¤¹¤ë¡£
+     * æŒ‡å®šã—ãŸRTã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’ç™»éŒ²ã•ã‚ŒãŸFactoryçµŒç”±
+     * ã§ç”Ÿæˆã™ã‚‹ã€‚
      *
-     * À¸À®¤µ¤ì¤ë¥³¥ó¥İ¡¼¥Í¥ó¥È¤Î³Æ¼ï¥×¥í¥Õ¥¡¥¤¥ë¤Ï°Ê²¼¤ÎÍ¥Àè½ç°Ì¤Ç
-     * ÀßÄê¤µ¤ì¤ë¡£
+     * ç”Ÿæˆã•ã‚Œã‚‹ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã®å„ç¨®ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«ã¯ä»¥ä¸‹ã®å„ªå…ˆé †ä½ã§
+     * è¨­å®šã•ã‚Œã‚‹ã€‚
      *
-     * -# createComponent() ¤Î°ú¿ô¤ÇÍ¿¤¨¤é¤ì¤¿¥×¥í¥Õ¥¡¥¤¥ë
-     * -# rtc.conf¤Ç»ØÄê¤µ¤ì¤¿³°Éô¥Õ¥¡¥¤¥ë¤ÇÍ¿¤¨¤é¤ì¤¿¥×¥í¥Õ¥¡¥¤¥ë
+     * -# createComponent() ã®å¼•æ•°ã§ä¸ãˆã‚‰ã‚ŒãŸãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«
+     * -# rtc.confã§æŒ‡å®šã•ã‚ŒãŸå¤–éƒ¨ãƒ•ã‚¡ã‚¤ãƒ«ã§ä¸ãˆã‚‰ã‚ŒãŸãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«
      * --# category.instance_name.config_file
      * --# category.component_type.config_file
-     * -# ¥³¡¼¥É¤ËËä¤á¹ş¤Ş¤ì¤¿¥×¥í¥Õ¥¡¥¤¥ë 
+     * -# ã‚³ãƒ¼ãƒ‰ã«åŸ‹ã‚è¾¼ã¾ã‚ŒãŸãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ« 
      *
-     * ¥¤¥ó¥¹¥¿¥ó¥¹À¸À®¤¬À®¸ù¤·¤¿¾ì¹ç¡¢Ê»¤»¤Æ°Ê²¼¤Î½èÍı¤ò¼Â¹Ô¤¹¤ë¡£
-     *  - ³°Éô¥Õ¥¡¥¤¥ë¤ÇÀßÄê¤·¤¿¥³¥ó¥Õ¥£¥®¥å¥ì¡¼¥·¥ç¥ó¾ğÊó¤ÎÆÉ¤ß¹ş¤ß¡¤ÀßÄê
-     *  - ExecutionContext¤Î¥Ğ¥¤¥ó¥É¡¤Æ°ºî³«»Ï
-     *  - ¥Í¡¼¥ß¥ó¥°¥µ¡¼¥Ó¥¹¤Ø¤ÎÅĞÏ¿
+     * ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ç”ŸæˆãŒæˆåŠŸã—ãŸå ´åˆã€ä½µã›ã¦ä»¥ä¸‹ã®å‡¦ç†ã‚’å®Ÿè¡Œã™ã‚‹ã€‚
+     *  - å¤–éƒ¨ãƒ•ã‚¡ã‚¤ãƒ«ã§è¨­å®šã—ãŸã‚³ãƒ³ãƒ•ã‚£ã‚®ãƒ¥ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³æƒ…å ±ã®èª­ã¿è¾¼ã¿ï¼Œè¨­å®š
+     *  - ExecutionContextã®ãƒã‚¤ãƒ³ãƒ‰ï¼Œå‹•ä½œé–‹å§‹
+     *  - ãƒãƒ¼ãƒŸãƒ³ã‚°ã‚µãƒ¼ãƒ“ã‚¹ã¸ã®ç™»éŒ²
      *
-     * @param comp_args À¸À®ÂĞ¾İRT¥³¥ó¥İ¡¼¥Í¥ó¥ÈID¤ª¤è¤Ó¥³¥ó¥Õ¥£¥®¥å¥ì¡¼
-     * ¥·¥ç¥ó°ú¿ô¡£¥Õ¥©¡¼¥Ş¥Ã¥È¤ÏÂç¤­¤¯Ê¬¤±¤Æ "id" ¤È "configuration" 
-     * ÉôÊ¬¤¬Â¸ºß¤¹¤ë¡£
+     * @param comp_args ç”Ÿæˆå¯¾è±¡RTã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆIDãŠã‚ˆã³ã‚³ãƒ³ãƒ•ã‚£ã‚®ãƒ¥ãƒ¬ãƒ¼
+     * ã‚·ãƒ§ãƒ³å¼•æ•°ã€‚ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆã¯å¤§ããåˆ†ã‘ã¦ "id" ã¨ "configuration" 
+     * éƒ¨åˆ†ãŒå­˜åœ¨ã™ã‚‹ã€‚
      *
      * comp_args:     [id]?[configuration]
-     *                id ¤ÏÉ¬¿Ü¡¢configuration¤Ï¥ª¥×¥·¥ç¥ó
+     *                id ã¯å¿…é ˆã€configurationã¯ã‚ªãƒ—ã‚·ãƒ§ãƒ³
      * id:            RTC:[vendor]:[category]:[implementation_id]:[version]
-     *                RTC ¤Ï¸ÇÄê¤«¤ÄÉ¬¿Ü
-     *                vendor, category, version ¤Ï¥ª¥×¥·¥ç¥ó
-     *                implementation_id ¤ÏÉ¬¿Ü
-     *                ¥ª¥×¥·¥ç¥ó¤ò¾ÊÎ¬¤¹¤ë¾ì¹ç¤Ç¤â ":" ¤Ï¾ÊÎ¬ÉÔ²Ä
+     *                RTC ã¯å›ºå®šã‹ã¤å¿…é ˆ
+     *                vendor, category, version ã¯ã‚ªãƒ—ã‚·ãƒ§ãƒ³
+     *                implementation_id ã¯å¿…é ˆ
+     *                ã‚ªãƒ—ã‚·ãƒ§ãƒ³ã‚’çœç•¥ã™ã‚‹å ´åˆã§ã‚‚ ":" ã¯çœç•¥ä¸å¯
      * configuration: [key0]=[value0]&[key1]=[value1]&[key2]=[value2].....
-     *                RTC¤¬»ı¤ÄProperties¤ÎÃÍ¤ò¤¹¤Ù¤Æ¾å½ñ¤­¤¹¤ë¤³¤È¤¬¤Ç¤­¤ë¡£
-     *                key=value ¤Î·Á¼°¤Çµ­½Ò¤·¡¢"&" ¤Ç¶èÀÚ¤ë
+     *                RTCãŒæŒã¤Propertiesã®å€¤ã‚’ã™ã¹ã¦ä¸Šæ›¸ãã™ã‚‹ã“ã¨ãŒã§ãã‚‹ã€‚
+     *                key=value ã®å½¢å¼ã§è¨˜è¿°ã—ã€"&" ã§åŒºåˆ‡ã‚‹
      *
-     * Îã¤¨¤Ğ¡¢
+     * ä¾‹ãˆã°ã€
      * RTC:jp.go.aist:example:ConfigSample:1.0?conf.default.str_param0=munya
      * RTC::example:ConfigSample:?conf.default.int_param0=100
      *
-     * @return À¸À®¤·¤¿RT¥³¥ó¥İ¡¼¥Í¥ó¥È¤Î¥¤¥ó¥¹¥¿¥ó¥¹
+     * @return ç”Ÿæˆã—ãŸRTã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
      *
      * @else
      * @brief Create RT-Components
@@ -686,9 +686,9 @@ namespace RTC
     RTObject_impl* createComponent(const char* comp_args);
     /*!
      * @if jp
-     * @brief Context¤òÀ¸À®¤¹¤ë
+     * @brief Contextã‚’ç”Ÿæˆã™ã‚‹
      *
-     * @return À¸À®¤·¤¿Conetext¤Î¥¤¥ó¥¹¥¿¥ó¥¹
+     * @return ç”Ÿæˆã—ãŸConetextã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
      *
      * @else
      * @brief Create Context
@@ -701,12 +701,12 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief RT¥³¥ó¥İ¡¼¥Í¥ó¥È¤ÎÅĞÏ¿²ò½ü
+     * @brief RTã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã®ç™»éŒ²è§£é™¤
      *
-     * »ØÄê¤·¤¿RT¥³¥ó¥İ¡¼¥Í¥ó¥È¤Î¥¤¥ó¥¹¥¿¥ó¥¹¤ò¥Í¡¼¥ß¥ó¥°¥µ¡¼¥Ó¥¹¤«¤é
-     * ÅĞÏ¿²ò½ü¤¹¤ë¡£
+     * æŒ‡å®šã—ãŸRTã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’ãƒãƒ¼ãƒŸãƒ³ã‚°ã‚µãƒ¼ãƒ“ã‚¹ã‹ã‚‰
+     * ç™»éŒ²è§£é™¤ã™ã‚‹ã€‚
      *
-     * @param comp ÅĞÏ¿²ò½üÂĞ¾İRT¥³¥ó¥İ¡¼¥Í¥ó¥È
+     * @param comp ç™»éŒ²è§£é™¤å¯¾è±¡RTã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆ
      *
      * @else
      * @brief Unregister RT-Components
@@ -721,9 +721,9 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief RT¥³¥ó¥İ¡¼¥Í¥ó¥È¤Îºï½ü¤¹¤ë
+     * @brief RTã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã®å‰Šé™¤ã™ã‚‹
      *
-     * notifyFinalized()¤Ë¤è¤Ã¤ÆÅĞÏ¿¤µ¤ì¤¿RT¥³¥ó¥İ¡¼¥Í¥ó¥È¤òºï½ü¤¹¤ë¡£
+     * notifyFinalized()ã«ã‚ˆã£ã¦ç™»éŒ²ã•ã‚ŒãŸRTã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã‚’å‰Šé™¤ã™ã‚‹ã€‚
      *
      * @else
      * @brief This method deletes RT-Components. 
@@ -736,12 +736,12 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief RT¥³¥ó¥İ¡¼¥Í¥ó¥È¤Îºï½ü¤¹¤ë
+     * @brief RTã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã®å‰Šé™¤ã™ã‚‹
      *
-     * ºï½ü¤¹¤ëRT¥³¥ó¥İ¡¼¥Í¥ó¥È¤òÅĞÏ¿¤¹¤ë¡£
-     * ÅĞÏ¿¤µ¤ì¤¿RT¥³¥ó¥İ¡¼¥Í¥ó¥È¤Ï cleanupComponents() ¤Çºï½ü¤µ¤ì¤ë¡£
+     * å‰Šé™¤ã™ã‚‹RTã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã‚’ç™»éŒ²ã™ã‚‹ã€‚
+     * ç™»éŒ²ã•ã‚ŒãŸRTã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã¯ cleanupComponents() ã§å‰Šé™¤ã•ã‚Œã‚‹ã€‚
      *
-     * @param ºï½ü¤¹¤ëRT¥³¥ó¥İ¡¼¥Í¥ó¥È
+     * @param å‰Šé™¤ã™ã‚‹RTã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆ
      *
      * @else
      * @brief This method deletes RT-Components. 
@@ -756,14 +756,14 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief RT¥³¥ó¥İ¡¼¥Í¥ó¥È¤òÄ¾ÀÜ Manager ¤ËÅĞÏ¿¤¹¤ë
+     * @brief RTã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã‚’ç›´æ¥ Manager ã«ç™»éŒ²ã™ã‚‹
      *
-     * »ØÄê¤·¤¿RT¥³¥ó¥İ¡¼¥Í¥ó¥È¤Î¥¤¥ó¥¹¥¿¥ó¥¹¤ò
-     * ¥Õ¥¡¥¯¥È¥ê·ĞÍ³¤Ç¤Ï¤Ê¤¯Ä¾ÀÜ¥Ş¥Í¡¼¥¸¥ã¤ËÅĞÏ¿¤¹¤ë¡£
+     * æŒ‡å®šã—ãŸRTã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’
+     * ãƒ•ã‚¡ã‚¯ãƒˆãƒªçµŒç”±ã§ã¯ãªãç›´æ¥ãƒãƒãƒ¼ã‚¸ãƒ£ã«ç™»éŒ²ã™ã‚‹ã€‚
      *
-     * @param comp ÅĞÏ¿ÂĞ¾İRT¥³¥ó¥İ¡¼¥Í¥ó¥È¤Î¥¤¥ó¥¹¥¿¥ó¥¹
+     * @param comp ç™»éŒ²å¯¾è±¡RTã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
      *
-     * @return ÅĞÏ¿½èÍı·ë²Ì(ÅĞÏ¿À®¸ù:true¡¢¼ºÇÔ:false)
+     * @return ç™»éŒ²å‡¦ç†çµæœ(ç™»éŒ²æˆåŠŸ:trueã€å¤±æ•—:false)
      *
      * @else
      * @brief Register RT-Component directly without Factory
@@ -781,13 +781,13 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief RT¥³¥ó¥İ¡¼¥Í¥ó¥È¤ÎÅĞÏ¿¤ò²ò½ü¤¹¤ë
+     * @brief RTã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã®ç™»éŒ²ã‚’è§£é™¤ã™ã‚‹
      *
-     * »ØÄê¤·¤¿RT¥³¥ó¥İ¡¼¥Í¥ó¥È¤ÎÅĞÏ¿¤ò²ò½ü¤¹¤ë¡£
+     * æŒ‡å®šã—ãŸRTã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã®ç™»éŒ²ã‚’è§£é™¤ã™ã‚‹ã€‚
      *
-     * @param comp ÅĞÏ¿²ò½üÂĞ¾İRT¥³¥ó¥İ¡¼¥Í¥ó¥È¤Î¥¤¥ó¥¹¥¿¥ó¥¹
+     * @param comp ç™»éŒ²è§£é™¤å¯¾è±¡RTã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
      *
-     * @return ÅĞÏ¿²ò½ü½èÍı·ë²Ì(²ò½üÀ®¸ù:true¡¢²ò½ü¼ºÇÔ:false)
+     * @return ç™»éŒ²è§£é™¤å‡¦ç†çµæœ(è§£é™¤æˆåŠŸ:trueã€è§£é™¤å¤±æ•—:false)
      *
      * @else
      * @brief Unregister RT-Components
@@ -805,13 +805,13 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief Manager ¤ËÅĞÏ¿¤µ¤ì¤Æ¤¤¤ëRT¥³¥ó¥İ¡¼¥Í¥ó¥È¤òºï½ü¤¹¤ë
+     * @brief Manager ã«ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹RTã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã‚’å‰Šé™¤ã™ã‚‹
      *
-     * ¥Ş¥Í¡¼¥¸¥ã¤ËÅĞÏ¿¤µ¤ì¤Æ¤¤¤ëRT¥³¥ó¥İ¡¼¥Í¥ó¥È¤òºï½ü¤¹¤ë¡£
-     * »ØÄê¤µ¤ì¤¿RT¥³¥ó¥İ¡¼¥Í¥ó¥È¤ò¥Í¡¼¥ß¥ó¥°¥µ¡¼¥Ó¥¹¤«¤éºï½ü¤·¡¢
-     * RT¥³¥ó¥İ¡¼¥Í¥ó¥È¼«ÂÎ¤ò½ªÎ»¤µ¤»¤ë¤È¤È¤â¤Ë¡¢¥¤¥ó¥¹¥¿¥ó¥¹¤ò²òÊü¤¹¤ë¡£
+     * ãƒãƒãƒ¼ã‚¸ãƒ£ã«ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹RTã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã‚’å‰Šé™¤ã™ã‚‹ã€‚
+     * æŒ‡å®šã•ã‚ŒãŸRTã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã‚’ãƒãƒ¼ãƒŸãƒ³ã‚°ã‚µãƒ¼ãƒ“ã‚¹ã‹ã‚‰å‰Šé™¤ã—ã€
+     * RTã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆè‡ªä½“ã‚’çµ‚äº†ã•ã›ã‚‹ã¨ã¨ã‚‚ã«ã€ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’è§£æ”¾ã™ã‚‹ã€‚
      *
-     * @param comp ºï½üÂĞ¾İRT¥³¥ó¥İ¡¼¥Í¥ó¥È¤Î¥¤¥ó¥¹¥¿¥ó¥¹
+     * @param comp å‰Šé™¤å¯¾è±¡RTã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
      *
      * @else
      * @brief Unregister RT-Components that have been registered to Manager
@@ -828,13 +828,13 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief Manager ¤ËÅĞÏ¿¤µ¤ì¤Æ¤¤¤ëRT¥³¥ó¥İ¡¼¥Í¥ó¥È¤òºï½ü¤¹¤ë
+     * @brief Manager ã«ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹RTã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã‚’å‰Šé™¤ã™ã‚‹
      *
-     * ¥Ş¥Í¡¼¥¸¥ã¤ËÅĞÏ¿¤µ¤ì¤Æ¤¤¤ëRT¥³¥ó¥İ¡¼¥Í¥ó¥È¤òºï½ü¤¹¤ë¡£
-     * »ØÄê¤µ¤ì¤¿RT¥³¥ó¥İ¡¼¥Í¥ó¥È¤ò¥Í¡¼¥ß¥ó¥°¥µ¡¼¥Ó¥¹¤«¤éºï½ü¤·¡¢
-     * RT¥³¥ó¥İ¡¼¥Í¥ó¥È¼«ÂÎ¤ò½ªÎ»¤µ¤»¤ë¤È¤È¤â¤Ë¡¢¥¤¥ó¥¹¥¿¥ó¥¹¤ò²òÊü¤¹¤ë¡£
+     * ãƒãƒãƒ¼ã‚¸ãƒ£ã«ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹RTã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã‚’å‰Šé™¤ã™ã‚‹ã€‚
+     * æŒ‡å®šã•ã‚ŒãŸRTã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã‚’ãƒãƒ¼ãƒŸãƒ³ã‚°ã‚µãƒ¼ãƒ“ã‚¹ã‹ã‚‰å‰Šé™¤ã—ã€
+     * RTã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆè‡ªä½“ã‚’çµ‚äº†ã•ã›ã‚‹ã¨ã¨ã‚‚ã«ã€ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’è§£æ”¾ã™ã‚‹ã€‚
      *
-     * @param instance_name ºï½üÂĞ¾İRT¥³¥ó¥İ¡¼¥Í¥ó¥È¤Î¥¤¥ó¥¹¥¿¥ó¥¹Ì¾
+     * @param instance_name å‰Šé™¤å¯¾è±¡RTã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹å
      *
      * @else
      * @brief Unregister RT-Components that have been registered to Manager
@@ -853,14 +853,14 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief Manager ¤ËÅĞÏ¿¤µ¤ì¤Æ¤¤¤ëRT¥³¥ó¥İ¡¼¥Í¥ó¥È¤ò¸¡º÷¤¹¤ë
+     * @brief Manager ã«ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹RTã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã‚’æ¤œç´¢ã™ã‚‹
      *
-     * Manager ¤ËÅĞÏ¿¤µ¤ì¤Æ¤¤¤ëRT¥³¥ó¥İ¡¼¥Í¥ó¥È¤ò»ØÄê¤·¤¿Ì¾¾Î¤Ç¸¡º÷¤·¡¢
-     * ¹çÃ×¤¹¤ë¥³¥ó¥İ¡¼¥Í¥ó¥È¤ò¼èÆÀ¤¹¤ë¡£
+     * Manager ã«ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹RTã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã‚’æŒ‡å®šã—ãŸåç§°ã§æ¤œç´¢ã—ã€
+     * åˆè‡´ã™ã‚‹ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã‚’å–å¾—ã™ã‚‹ã€‚
      *
-     * @param instance_name ¸¡º÷ÂĞ¾İRT¥³¥ó¥İ¡¼¥Í¥ó¥È¤ÎÌ¾¾Î
+     * @param instance_name æ¤œç´¢å¯¾è±¡RTã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã®åç§°
      *
-     * @return Ì¾¾Î¤¬°ìÃ×¤¹¤ëRT¥³¥ó¥İ¡¼¥Í¥ó¥È¤Î¥¤¥ó¥¹¥¿¥ó¥¹
+     * @return åç§°ãŒä¸€è‡´ã™ã‚‹RTã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
      *
      * @else
      * @brief Get RT-Component's pointer
@@ -878,11 +878,11 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief Manager ¤ËÅĞÏ¿¤µ¤ì¤Æ¤¤¤ëÁ´RT¥³¥ó¥İ¡¼¥Í¥ó¥È¤ò¼èÆÀ¤¹¤ë
+     * @brief Manager ã«ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹å…¨RTã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã‚’å–å¾—ã™ã‚‹
      *
-     * Manager ¤ËÅĞÏ¿¤µ¤ì¤Æ¤¤¤ëRT¥³¥ó¥İ¡¼¥Í¥ó¥È¤ÎÁ´¥¤¥ó¥¹¥¿¥ó¥¹¤ò¼èÆÀ¤¹¤ë¡£
+     * Manager ã«ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹RTã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã®å…¨ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’å–å¾—ã™ã‚‹ã€‚
      *
-     * @return Á´RT¥³¥ó¥İ¡¼¥Í¥ó¥È¤Î¥¤¥ó¥¹¥¿¥ó¥¹¥ê¥¹¥È
+     * @return å…¨RTã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ãƒªã‚¹ãƒˆ
      *
      * @else
      * @brief Get all RT-Components registered in the Manager
@@ -928,19 +928,19 @@ namespace RTC
 
     
     //============================================================
-    // CORBA ´ØÏ¢
+    // CORBA é–¢é€£
     //============================================================
     /*!
      * @if jp
-     * @brief ORB ¤Î¥İ¥¤¥ó¥¿¤ò¼èÆÀ¤¹¤ë (½êÍ­¸¢Êİ»ı)
+     * @brief ORB ã®ãƒã‚¤ãƒ³ã‚¿ã‚’å–å¾—ã™ã‚‹ (æ‰€æœ‰æ¨©ä¿æŒ)
      *
-     * Manager ¤ËÀßÄê¤µ¤ì¤¿ ORB ¤Î¥İ¥¤¥ó¥¿¤ò¼èÆÀ¤¹¤ë¡£½êÍ­¸¢¤ÏÊİ»ı¤µ¤ì
-     * ¤¿¤Ş¤Ş¤Ç¤¢¤ë¡£_var·¿¤Ç¼õ¤±¤ë¾ì¹ç¤Ï getORB() ¤òÍÑ¤¤¤ë¤³¤È¡£¤³¤Î´Ø
-     * ¿ô¤Ï°Ê²¼¤Î¤è¤¦¤ËORB¤Î¥ª¥Ú¥ì¡¼¥·¥ç¥ó¤òÄ¾ÀÜ¸Æ¤Ö¾ì¹ç¤ËÍøÍÑ¤¹¤ë¡£
+     * Manager ã«è¨­å®šã•ã‚ŒãŸ ORB ã®ãƒã‚¤ãƒ³ã‚¿ã‚’å–å¾—ã™ã‚‹ã€‚æ‰€æœ‰æ¨©ã¯ä¿æŒã•ã‚Œ
+     * ãŸã¾ã¾ã§ã‚ã‚‹ã€‚_varå‹ã§å—ã‘ã‚‹å ´åˆã¯ getORB() ã‚’ç”¨ã„ã‚‹ã“ã¨ã€‚ã“ã®é–¢
+     * æ•°ã¯ä»¥ä¸‹ã®ã‚ˆã†ã«ORBã®ã‚ªãƒšãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ã‚’ç›´æ¥å‘¼ã¶å ´åˆã«åˆ©ç”¨ã™ã‚‹ã€‚
      *
      * Manager::instance().theORB()->string_to_object(<IOR string>);
      *
-     * @return ORB ¥ª¥Ö¥¸¥§¥¯¥È
+     * @return ORB ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
      *
      * @else
      * @brief Get the pointer to ORB (ownership retained)
@@ -960,20 +960,20 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ORB ¤Î¥İ¥¤¥ó¥¿¤ò¼èÆÀ¤¹¤ë (½êÍ­¸¢Ê£À½)
+     * @brief ORB ã®ãƒã‚¤ãƒ³ã‚¿ã‚’å–å¾—ã™ã‚‹ (æ‰€æœ‰æ¨©è¤‡è£½)
      *
-     * Manager ¤ËÀßÄê¤µ¤ì¤¿ ORB ¤Î¥İ¥¤¥ó¥¿¤ò¼èÆÀ¤¹¤ë¡£½êÍ­¸¢¤Ï¥³¥Ô¡¼¤µ
-     * ¤ì¡Ê¥ê¥Õ¥¡¥ì¥ó¥¹¥«¥¦¥ó¥È¤¬1Áı²Ã¤¹¤ë¡£¡Ë¡¢¼õ¤±¼è¤Ã¤¿Â¦¤Ç¤â½êÍ­¸¢
-     * ¤ò³ÍÆÀ¤¹¤ë¡£¤·¤¿¤¬¤Ã¤Æ¡¢»ÈÍÑ¸å¤Ë¤Ï¥ê¥Õ¥¡¥ì¥ó¥¹¤ò²òÊü¤¹¤ëÉ¬Í×¤¬¤¢
-     * ¤ë¡£ÄÌ¾ï¤Ï°Ê²¼¤Î¤è¤¦¤ËÌá¤êÃÍ¤ò _var ·¿ÊÑ¿ô¤Ç¼õ¤±¼è¤ê¡¢¼«Æ°Åª¤Ë²ò
-     * Êü¤µ¤»¤ëÊıË¡¤¬¿ä¾©¤µ¤ì¤ë¡£
+     * Manager ã«è¨­å®šã•ã‚ŒãŸ ORB ã®ãƒã‚¤ãƒ³ã‚¿ã‚’å–å¾—ã™ã‚‹ã€‚æ‰€æœ‰æ¨©ã¯ã‚³ãƒ”ãƒ¼ã•
+     * ã‚Œï¼ˆãƒªãƒ•ã‚¡ãƒ¬ãƒ³ã‚¹ã‚«ã‚¦ãƒ³ãƒˆãŒ1å¢—åŠ ã™ã‚‹ã€‚ï¼‰ã€å—ã‘å–ã£ãŸå´ã§ã‚‚æ‰€æœ‰æ¨©
+     * ã‚’ç²å¾—ã™ã‚‹ã€‚ã—ãŸãŒã£ã¦ã€ä½¿ç”¨å¾Œã«ã¯ãƒªãƒ•ã‚¡ãƒ¬ãƒ³ã‚¹ã‚’è§£æ”¾ã™ã‚‹å¿…è¦ãŒã‚
+     * ã‚‹ã€‚é€šå¸¸ã¯ä»¥ä¸‹ã®ã‚ˆã†ã«æˆ»ã‚Šå€¤ã‚’ _var å‹å¤‰æ•°ã§å—ã‘å–ã‚Šã€è‡ªå‹•çš„ã«è§£
+     * æ”¾ã•ã›ã‚‹æ–¹æ³•ãŒæ¨å¥¨ã•ã‚Œã‚‹ã€‚
      *
      * {
      *   CORBA::ORB_var orb = Manager::instance().getORB();
      *   orb->string_to_object(<IOR string>);
      * } // ORB's reference in orb is released here.
      *
-     * @return ORB ¥ª¥Ö¥¸¥§¥¯¥È
+     * @return ORB ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
      *
      * @else
      * @brief Get the pointer to ORB (ownership duplicated)
@@ -998,15 +998,15 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief Manager ¤¬»ı¤Ä RootPOA ¤Î¥İ¥¤¥ó¥¿¤ò¼èÆÀ¤¹¤ë (½êÍ­¸¢Êİ»ı)
+     * @brief Manager ãŒæŒã¤ RootPOA ã®ãƒã‚¤ãƒ³ã‚¿ã‚’å–å¾—ã™ã‚‹ (æ‰€æœ‰æ¨©ä¿æŒ)
      *
-     * Manager ¤ËÀßÄê¤µ¤ì¤¿ RootPOA ¤Ø¤Î¥İ¥¤¥ó¥¿¤ò¼èÆÀ¤¹¤ë¡£½êÍ­¸¢¤ÏÊİ»ı¤µ¤ì
-     * ¤¿¤Ş¤Ş¤Ç¤¢¤ë¡£_var·¿¤Ç¼õ¤±¤ë¾ì¹ç¤Ï getPOA() ¤òÍÑ¤¤¤ë¤³¤È¡£¤³¤Î´Ø
-     * ¿ô¤Ï°Ê²¼¤Î¤è¤¦¤ËPOA¤Î¥ª¥Ú¥ì¡¼¥·¥ç¥ó¤òÄ¾ÀÜ¸Æ¤Ö¾ì¹ç¤ËÍøÍÑ¤¹¤ë¡£
+     * Manager ã«è¨­å®šã•ã‚ŒãŸ RootPOA ã¸ã®ãƒã‚¤ãƒ³ã‚¿ã‚’å–å¾—ã™ã‚‹ã€‚æ‰€æœ‰æ¨©ã¯ä¿æŒã•ã‚Œ
+     * ãŸã¾ã¾ã§ã‚ã‚‹ã€‚_varå‹ã§å—ã‘ã‚‹å ´åˆã¯ getPOA() ã‚’ç”¨ã„ã‚‹ã“ã¨ã€‚ã“ã®é–¢
+     * æ•°ã¯ä»¥ä¸‹ã®ã‚ˆã†ã«POAã®ã‚ªãƒšãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ã‚’ç›´æ¥å‘¼ã¶å ´åˆã«åˆ©ç”¨ã™ã‚‹ã€‚
      *
      * Manager::instance().getPOA()->servant_to_id(m_servant);
      *
-     * @return RootPOA¥ª¥Ö¥¸¥§¥¯¥È
+     * @return RootPOAã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
      *
      * @else
      * @brief Get a pointer to RootPOA held by Manager
@@ -1029,20 +1029,20 @@ namespace RTC
 #endif
     /*!
      * @if jp
-     * @brief Manager ¤¬»ı¤Ä RootPOA ¤Î¥İ¥¤¥ó¥¿¤ò¼èÆÀ¤¹¤ë (½êÍ­¸¢Ê£À½)
+     * @brief Manager ãŒæŒã¤ RootPOA ã®ãƒã‚¤ãƒ³ã‚¿ã‚’å–å¾—ã™ã‚‹ (æ‰€æœ‰æ¨©è¤‡è£½)
      *
-     * Manager ¤ËÀßÄê¤µ¤ì¤¿ RootPOA ¤Ø¤Î¥İ¥¤¥ó¥¿¤ò¼èÆÀ¤¹¤ë¡£½êÍ­¸¢¤Ï¥³
-     * ¥Ô¡¼¤µ¤ì¡Ê¥ê¥Õ¥¡¥ì¥ó¥¹¥«¥¦¥ó¥È¤¬1Áı²Ã¤¹¤ë¡£¡Ë¡¢¼õ¤±¼è¤Ã¤¿Â¦¤Ç¤â
-     * ½êÍ­¸¢¤ò³ÍÆÀ¤¹¤ë¡£¤·¤¿¤¬¤Ã¤Æ¡¢»ÈÍÑ¸å¤Ë¤Ï¥ê¥Õ¥¡¥ì¥ó¥¹¤ò²òÊü¤¹¤ëÉ¬
-     * Í×¤¬¤¢¤ë¡£ÄÌ¾ï¤Ï°Ê²¼¤Î¤è¤¦¤ËÌá¤êÃÍ¤ò _var ·¿ÊÑ¿ô¤Ç¼õ¤±¼è¤ê¡¢¼«Æ°
-     * Åª¤Ë²òÊü¤µ¤»¤ëÊıË¡¤¬¿ä¾©¤µ¤ì¤ë¡£
+     * Manager ã«è¨­å®šã•ã‚ŒãŸ RootPOA ã¸ã®ãƒã‚¤ãƒ³ã‚¿ã‚’å–å¾—ã™ã‚‹ã€‚æ‰€æœ‰æ¨©ã¯ã‚³
+     * ãƒ”ãƒ¼ã•ã‚Œï¼ˆãƒªãƒ•ã‚¡ãƒ¬ãƒ³ã‚¹ã‚«ã‚¦ãƒ³ãƒˆãŒ1å¢—åŠ ã™ã‚‹ã€‚ï¼‰ã€å—ã‘å–ã£ãŸå´ã§ã‚‚
+     * æ‰€æœ‰æ¨©ã‚’ç²å¾—ã™ã‚‹ã€‚ã—ãŸãŒã£ã¦ã€ä½¿ç”¨å¾Œã«ã¯ãƒªãƒ•ã‚¡ãƒ¬ãƒ³ã‚¹ã‚’è§£æ”¾ã™ã‚‹å¿…
+     * è¦ãŒã‚ã‚‹ã€‚é€šå¸¸ã¯ä»¥ä¸‹ã®ã‚ˆã†ã«æˆ»ã‚Šå€¤ã‚’ _var å‹å¤‰æ•°ã§å—ã‘å–ã‚Šã€è‡ªå‹•
+     * çš„ã«è§£æ”¾ã•ã›ã‚‹æ–¹æ³•ãŒæ¨å¥¨ã•ã‚Œã‚‹ã€‚
      *
      * {
      *   PortableServer::POA_var poa = Manager::instance().getPOA();;
      *   poa->servant_to_id(m_servant);
      * } // POA's reference in orb is released here.
      *
-     * @return RootPOA¥ª¥Ö¥¸¥§¥¯¥È
+     * @return RootPOAã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
      *
      * @else
      * @brief Get a pointer to RootPOA held by Manager
@@ -1070,15 +1070,15 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief Manager ¤¬»ı¤Ä POAManager ¤ò¼èÆÀ¤¹¤ë (½êÍ­¸¢Êİ»ı)
+     * @brief Manager ãŒæŒã¤ POAManager ã‚’å–å¾—ã™ã‚‹ (æ‰€æœ‰æ¨©ä¿æŒ)
      *
-     * Manager ¤ËÀßÄê¤µ¤ì¤¿ POAMAnager ¤ò¼èÆÀ¤¹¤ë¡£½êÍ­¸¢¤ÏÊİ»ı¤µ¤ì
-     * ¤¿¤Ş¤Ş¤Ç¤¢¤ë¡£_var·¿¤Ç¼õ¤±¤ë¾ì¹ç¤Ï getORB() ¤òÍÑ¤¤¤ë¤³¤È¡£¤³¤Î´Ø
-     * ¿ô¤Ï°Ê²¼¤Î¤è¤¦¤ËORB¤Î¥ª¥Ú¥ì¡¼¥·¥ç¥ó¤òÄ¾ÀÜ¸Æ¤Ö¾ì¹ç¤ËÍøÍÑ¤¹¤ë¡£
+     * Manager ã«è¨­å®šã•ã‚ŒãŸ POAMAnager ã‚’å–å¾—ã™ã‚‹ã€‚æ‰€æœ‰æ¨©ã¯ä¿æŒã•ã‚Œ
+     * ãŸã¾ã¾ã§ã‚ã‚‹ã€‚_varå‹ã§å—ã‘ã‚‹å ´åˆã¯ getORB() ã‚’ç”¨ã„ã‚‹ã“ã¨ã€‚ã“ã®é–¢
+     * æ•°ã¯ä»¥ä¸‹ã®ã‚ˆã†ã«ORBã®ã‚ªãƒšãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ã‚’ç›´æ¥å‘¼ã¶å ´åˆã«åˆ©ç”¨ã™ã‚‹ã€‚
      *
      * Manager::instance().thePOAManager()->activate();
      *
-     * @return POA¥Ş¥Í¡¼¥¸¥ã
+     * @return POAãƒãƒãƒ¼ã‚¸ãƒ£
      *
      * @else
      * @brief Get POAManager that Manager has (ownership retained)
@@ -1098,13 +1098,13 @@ namespace RTC
     PortableServer::POAManager_ptr thePOAManager();
     /*!
      * @if jp
-     * @brief Manager ¤¬»ı¤Ä POAManager ¤ò¼èÆÀ¤¹¤ë (½êÍ­¸¢Ê£À½)
+     * @brief Manager ãŒæŒã¤ POAManager ã‚’å–å¾—ã™ã‚‹ (æ‰€æœ‰æ¨©è¤‡è£½)
      *
-     * Manager ¤ËÀßÄê¤µ¤ì¤¿ POAMAnager ¤ò¼èÆÀ¤¹¤ë¡£½êÍ­¸¢¤Ï¥³¥Ô¡¼¤µ
-     * ¤ì¡Ê¥ê¥Õ¥¡¥ì¥ó¥¹¥«¥¦¥ó¥È¤¬1Áı²Ã¤¹¤ë¡£¡Ë¡¢¼õ¤±¼è¤Ã¤¿Â¦¤Ç¤â½êÍ­¸¢
-     * ¤ò³ÍÆÀ¤¹¤ë¡£¤·¤¿¤¬¤Ã¤Æ¡¢»ÈÍÑ¸å¤Ë¤Ï¥ê¥Õ¥¡¥ì¥ó¥¹¤ò²òÊü¤¹¤ëÉ¬Í×¤¬¤¢
-     * ¤ë¡£ÄÌ¾ï¤Ï°Ê²¼¤Î¤è¤¦¤ËÌá¤êÃÍ¤ò _var ·¿ÊÑ¿ô¤Ç¼õ¤±¼è¤ê¡¢¼«Æ°Åª¤Ë²ò
-     * Êü¤µ¤»¤ëÊıË¡¤¬¿ä¾©¤µ¤ì¤ë¡£
+     * Manager ã«è¨­å®šã•ã‚ŒãŸ POAMAnager ã‚’å–å¾—ã™ã‚‹ã€‚æ‰€æœ‰æ¨©ã¯ã‚³ãƒ”ãƒ¼ã•
+     * ã‚Œï¼ˆãƒªãƒ•ã‚¡ãƒ¬ãƒ³ã‚¹ã‚«ã‚¦ãƒ³ãƒˆãŒ1å¢—åŠ ã™ã‚‹ã€‚ï¼‰ã€å—ã‘å–ã£ãŸå´ã§ã‚‚æ‰€æœ‰æ¨©
+     * ã‚’ç²å¾—ã™ã‚‹ã€‚ã—ãŸãŒã£ã¦ã€ä½¿ç”¨å¾Œã«ã¯ãƒªãƒ•ã‚¡ãƒ¬ãƒ³ã‚¹ã‚’è§£æ”¾ã™ã‚‹å¿…è¦ãŒã‚
+     * ã‚‹ã€‚é€šå¸¸ã¯ä»¥ä¸‹ã®ã‚ˆã†ã«æˆ»ã‚Šå€¤ã‚’ _var å‹å¤‰æ•°ã§å—ã‘å–ã‚Šã€è‡ªå‹•çš„ã«è§£
+     * æ”¾ã•ã›ã‚‹æ–¹æ³•ãŒæ¨å¥¨ã•ã‚Œã‚‹ã€‚
      *
      * {
      *   PortableServer::POAManager_var poam;
@@ -1113,7 +1113,7 @@ namespace RTC
      * } // POAManager's reference in orb is released here.
      *
      *
-     * @return POA¥Ş¥Í¡¼¥¸¥ã
+     * @return POAãƒãƒãƒ¼ã‚¸ãƒ£
      *
      * @else
      * @brief Get POAManager that Manager has (ownership duplicated)
@@ -1139,7 +1139,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ManagerServant¤ò¼èÆÀ¤¹¤ë
+     * @brief ManagerServantã‚’å–å¾—ã™ã‚‹
      *
      * @else
      *
@@ -1151,9 +1151,9 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief LocalService ¤Î½é´ü²½
+     * @brief LocalService ã®åˆæœŸåŒ–
      *
-     * @return Timer ½é´ü²½½èÍı¼Â¹Ô·ë²Ì(½é´ü²½À®¸ù:true¡¢½é´ü²½¼ºÇÔ:false)
+     * @return Timer åˆæœŸåŒ–å‡¦ç†å®Ÿè¡Œçµæœ(åˆæœŸåŒ–æˆåŠŸ:trueã€åˆæœŸåŒ–å¤±æ•—:false)
      *
      * @else
      * @brief LocalService initialization
@@ -1165,7 +1165,7 @@ namespace RTC
     bool initLocalService();
     /*!
      * @if jp
-     * @brief NamingManager¤ò¼èÆÀ¤¹¤ë
+     * @brief NamingManagerã‚’å–å¾—ã™ã‚‹
      *
      * @return NamingManager
      *
@@ -1189,16 +1189,16 @@ namespace RTC
     //============================================================
     /*!
      * @if jp
-     * @brief Manager ¤ÎÆâÉô½é´ü²½½èÍı
+     * @brief Manager ã®å†…éƒ¨åˆæœŸåŒ–å‡¦ç†
      * 
-     * Manager ¤ÎÆâÉô½é´ü²½½èÍı¤ò¼Â¹Ô¤¹¤ë¡£
-     *  - Manager ¥³¥ó¥Õ¥£¥®¥å¥ì¡¼¥·¥ç¥ó¤ÎÀßÄê
-     *  - ¥í¥°½ĞÎÏ¥Õ¥¡¥¤¥ë¤ÎÀßÄê
-     *  - ½ªÎ»½èÍıÍÑ¥¹¥ì¥Ã¥É¤ÎÀ¸À®
-     *  - ¥¿¥¤¥ŞÍÑ¥¹¥ì¥Ã¥É¤ÎÀ¸À®(¥¿¥¤¥Ş»ÈÍÑ»ş)
+     * Manager ã®å†…éƒ¨åˆæœŸåŒ–å‡¦ç†ã‚’å®Ÿè¡Œã™ã‚‹ã€‚
+     *  - Manager ã‚³ãƒ³ãƒ•ã‚£ã‚®ãƒ¥ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ã®è¨­å®š
+     *  - ãƒ­ã‚°å‡ºåŠ›ãƒ•ã‚¡ã‚¤ãƒ«ã®è¨­å®š
+     *  - çµ‚äº†å‡¦ç†ç”¨ã‚¹ãƒ¬ãƒƒãƒ‰ã®ç”Ÿæˆ
+     *  - ã‚¿ã‚¤ãƒç”¨ã‚¹ãƒ¬ãƒƒãƒ‰ã®ç”Ÿæˆ(ã‚¿ã‚¤ãƒä½¿ç”¨æ™‚)
      *
-     * @param argc ¥³¥Ş¥ó¥É¥é¥¤¥ó°ú¿ô¤Î¿ô
-     * @param argv ¥³¥Ş¥ó¥É¥é¥¤¥ó°ú¿ô
+     * @param argc ã‚³ãƒãƒ³ãƒ‰ãƒ©ã‚¤ãƒ³å¼•æ•°ã®æ•°
+     * @param argv ã‚³ãƒãƒ³ãƒ‰ãƒ©ã‚¤ãƒ³å¼•æ•°
      * 
      * @else
      * @brief Manager internal initialization
@@ -1218,10 +1218,10 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief Manager ¤Î½ªÎ»½èÍı
+     * @brief Manager ã®çµ‚äº†å‡¦ç†
      *
-     * Manager ¤ò½ªÎ»¤¹¤ë
-     * (¤¿¤À¤·¡¤¸½ºß¤ÏÌ¤¼ÂÁõ)
+     * Manager ã‚’çµ‚äº†ã™ã‚‹
+     * (ãŸã ã—ï¼Œç¾åœ¨ã¯æœªå®Ÿè£…)
      *
      * @else
      * @brief Shutdown Manager
@@ -1235,10 +1235,10 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief Manager ¤Î½ªÎ»½èÍı
+     * @brief Manager ã®çµ‚äº†å‡¦ç†
      *
-     * configuration ¤Î "manager.shutdown_on_nortcs" YES ¤Ç¡¢
-     * ¥³¥ó¥İ¡¼¥Í¥ó¥È¤¬ÅĞÏ¿¤µ¤ì¤Æ¤¤¤Ê¤¤¾ì¹ç Manager ¤ò½ªÎ»¤¹¤ë¡£
+     * configuration ã® "manager.shutdown_on_nortcs" YES ã§ã€
+     * ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆãŒç™»éŒ²ã•ã‚Œã¦ã„ãªã„å ´åˆ Manager ã‚’çµ‚äº†ã™ã‚‹ã€‚
      *
      * @else
      * @brief Shutdown Manager
@@ -1259,13 +1259,13 @@ namespace RTC
     void initLogstreamOthers();
     /*!
      * @if jp
-     * @brief System logger ¤Î½é´ü²½
+     * @brief System logger ã®åˆæœŸåŒ–
      *
-     * System logger ¤Î½é´ü²½¤ò¼Â¹Ô¤¹¤ë¡£
-     * ¥³¥ó¥Õ¥£¥®¥å¥ì¡¼¥·¥ç¥ó¥Õ¥¡¥¤¥ë¤ËÀßÄê¤µ¤ì¤¿¾ğÊó¤Ë´ğ¤Å¤­¡¢
-     * ¥í¥¬¡¼¤Î½é´ü²½¡¤ÀßÄê¤ò¼Â¹Ô¤¹¤ë¡£
+     * System logger ã®åˆæœŸåŒ–ã‚’å®Ÿè¡Œã™ã‚‹ã€‚
+     * ã‚³ãƒ³ãƒ•ã‚£ã‚®ãƒ¥ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ãƒ•ã‚¡ã‚¤ãƒ«ã«è¨­å®šã•ã‚ŒãŸæƒ…å ±ã«åŸºã¥ãã€
+     * ãƒ­ã‚¬ãƒ¼ã®åˆæœŸåŒ–ï¼Œè¨­å®šã‚’å®Ÿè¡Œã™ã‚‹ã€‚
      *
-     * @return ½é´ü²½¼Â¹Ô·ë²Ì(½é´ü²½À®¸ù:true¡¢½é´ü²½¼ºÇÔ:false)
+     * @return åˆæœŸåŒ–å®Ÿè¡Œçµæœ(åˆæœŸåŒ–æˆåŠŸ:trueã€åˆæœŸåŒ–å¤±æ•—:false)
      *
      * @else
      * @brief System logger initialization
@@ -1282,11 +1282,11 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief System Logger ¤Î½ªÎ»½èÍı
+     * @brief System Logger ã®çµ‚äº†å‡¦ç†
      *
-     * System Logger¤Î½ªÎ»½èÍı¤ò¼Â¹Ô¤¹¤ë¡£
-     * ¥Ğ¥Ã¥Õ¥¡Æâ¤ËÊİ»ı¤µ¤ì¤Æ¤¤¤ë¥í¥°¾ğÊó¤¬Â¸ºß¤¹¤ë¾ì¹ç¤Ë¤Ï¡¢
-     * ¶¯À©Åª¤Ë¥í¥°¥Õ¥¡¥¤¥ë¤Ë½ĞÎÏ¤·¡¢¥í¥°¥Õ¥¡¥¤¥ë¤òÊÄ¤¸¤ë¡£
+     * System Loggerã®çµ‚äº†å‡¦ç†ã‚’å®Ÿè¡Œã™ã‚‹ã€‚
+     * ãƒãƒƒãƒ•ã‚¡å†…ã«ä¿æŒã•ã‚Œã¦ã„ã‚‹ãƒ­ã‚°æƒ…å ±ãŒå­˜åœ¨ã™ã‚‹å ´åˆã«ã¯ã€
+     * å¼·åˆ¶çš„ã«ãƒ­ã‚°ãƒ•ã‚¡ã‚¤ãƒ«ã«å‡ºåŠ›ã—ã€ãƒ­ã‚°ãƒ•ã‚¡ã‚¤ãƒ«ã‚’é–‰ã˜ã‚‹ã€‚
      *
      * @else
      * @brief System Logger finalization
@@ -1304,11 +1304,11 @@ namespace RTC
     //============================================================
     /*!
      * @if jp
-     * @brief CORBA ORB ¤Î½é´ü²½½èÍı
+     * @brief CORBA ORB ã®åˆæœŸåŒ–å‡¦ç†
      *
-     * °ú¿ô¤Ë¤è¤êÍ¿¤¨¤é¤ì¤¿ÀßÄê¤ò¸µ¤ËORB¤ò½é´ü²½¤¹¤ë¡£
+     * å¼•æ•°ã«ã‚ˆã‚Šä¸ãˆã‚‰ã‚ŒãŸè¨­å®šã‚’å…ƒã«ORBã‚’åˆæœŸåŒ–ã™ã‚‹ã€‚
      *
-     * @return ORB ½é´ü²½½èÍı·ë²Ì(½é´ü²½À®¸ù:true¡¢½é´ü²½¼ºÇÔ:false)
+     * @return ORB åˆæœŸåŒ–å‡¦ç†çµæœ(åˆæœŸåŒ–æˆåŠŸ:trueã€åˆæœŸåŒ–å¤±æ•—:false)
      *
      * @else
      * @brief CORBA ORB initialization
@@ -1323,12 +1323,12 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief ORB ¤Î¥³¥Ş¥ó¥É¥é¥¤¥ó¥ª¥×¥·¥ç¥óºîÀ®
+     * @brief ORB ã®ã‚³ãƒãƒ³ãƒ‰ãƒ©ã‚¤ãƒ³ã‚ªãƒ—ã‚·ãƒ§ãƒ³ä½œæˆ
      *
-     * ¥³¥ó¥Õ¥£¥®¥å¥ì¡¼¥·¥ç¥ó¾ğÊó¤ËÀßÄê¤µ¤ì¤¿ÆâÍÆ¤«¤é
-     * ORB ¤Îµ¯Æ°»ş¥ª¥×¥·¥ç¥ó¤òºîÀ®¤¹¤ë¡£
+     * ã‚³ãƒ³ãƒ•ã‚£ã‚®ãƒ¥ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³æƒ…å ±ã«è¨­å®šã•ã‚ŒãŸå†…å®¹ã‹ã‚‰
+     * ORB ã®èµ·å‹•æ™‚ã‚ªãƒ—ã‚·ãƒ§ãƒ³ã‚’ä½œæˆã™ã‚‹ã€‚
      *
-     * @return ORB µ¯Æ°»ş¥ª¥×¥·¥ç¥ó
+     * @return ORB èµ·å‹•æ™‚ã‚ªãƒ—ã‚·ãƒ§ãƒ³
      *
      * @else
      * @brief Create ORB command options
@@ -1344,11 +1344,11 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ¥¨¥ó¥É¥İ¥¤¥ó¥È¤ÎÀ¸À®
+     * @brief ã‚¨ãƒ³ãƒ‰ãƒã‚¤ãƒ³ãƒˆã®ç”Ÿæˆ
      *
-     * ¥³¥ó¥Õ¥£¥°¥ì¡¼¥·¥ç¥ó¤«¤é¥¨¥ó¥É¥İ¥¤¥ó¥È¤òÀ¸À®¤¹¤ë¡£
+     * ã‚³ãƒ³ãƒ•ã‚£ã‚°ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ã‹ã‚‰ã‚¨ãƒ³ãƒ‰ãƒã‚¤ãƒ³ãƒˆã‚’ç”Ÿæˆã™ã‚‹ã€‚
      *
-     * @param endpoints ¥¨¥ó¥É¥İ¥¤¥ó¥È¥ê¥¹¥È
+     * @param endpoints ã‚¨ãƒ³ãƒ‰ãƒã‚¤ãƒ³ãƒˆãƒªã‚¹ãƒˆ
      *
      * @else
      * @brief Create Endpoints
@@ -1363,9 +1363,9 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief ORB ¤Î Endpoint ¤Î¥³¥Ş¥ó¥É¥é¥¤¥ó¥ª¥×¥·¥ç¥óºîÀ®
-     * @param opt ¥³¥Ş¥ó¥É¥é¥¤¥ó¥ª¥×¥·¥ç¥ó
-     * @param endpoint ¥¨¥ó¥É¥İ¥¤¥ó¥È¥ê¥¹¥È
+     * @brief ORB ã® Endpoint ã®ã‚³ãƒãƒ³ãƒ‰ãƒ©ã‚¤ãƒ³ã‚ªãƒ—ã‚·ãƒ§ãƒ³ä½œæˆ
+     * @param opt ã‚³ãƒãƒ³ãƒ‰ãƒ©ã‚¤ãƒ³ã‚ªãƒ—ã‚·ãƒ§ãƒ³
+     * @param endpoint ã‚¨ãƒ³ãƒ‰ãƒã‚¤ãƒ³ãƒˆãƒªã‚¹ãƒˆ
      *
      * @else
      * @brief Create a command optional line of Endpoint of ORB.
@@ -1378,12 +1378,12 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ORB ¤Î½ªÎ»½èÍı
+     * @brief ORB ã®çµ‚äº†å‡¦ç†
      *
-     * ORB ¤Î½ªÎ»½èÍı¤ò¼Â¹Ô¤¹¤ë¡£
-     * ¼Â¹ÔÂÔ¤Á¤Î½èÍı¤¬Â¸ºß¤¹¤ë¾ì¹ç¤Ë¤Ï¡¢¤½¤Î½èÍı¤¬½ªÎ»¤¹¤ë¤Ş¤ÇÂÔ¤Ä¡£
-     * ¼Âºİ¤Î½ªÎ»½èÍı¤Ç¤Ï¡¢POA Manager¤òÈó³èÀ­²½¤·¡¢ ORB ¤Î¥·¥ã¥Ã¥È¥À¥¦¥ó¤ò¼Â¹Ô
-     * ¤¹¤ë¡£
+     * ORB ã®çµ‚äº†å‡¦ç†ã‚’å®Ÿè¡Œã™ã‚‹ã€‚
+     * å®Ÿè¡Œå¾…ã¡ã®å‡¦ç†ãŒå­˜åœ¨ã™ã‚‹å ´åˆã«ã¯ã€ãã®å‡¦ç†ãŒçµ‚äº†ã™ã‚‹ã¾ã§å¾…ã¤ã€‚
+     * å®Ÿéš›ã®çµ‚äº†å‡¦ç†ã§ã¯ã€POA Managerã‚’éæ´»æ€§åŒ–ã—ã€ ORB ã®ã‚·ãƒ£ãƒƒãƒˆãƒ€ã‚¦ãƒ³ã‚’å®Ÿè¡Œ
+     * ã™ã‚‹ã€‚
      *
      * @else
      * @brief ORB finalization
@@ -1401,18 +1401,18 @@ namespace RTC
     //============================================================
     /*!
      * @if jp
-     * @brief NamingManager ¤Î½é´ü²½
+     * @brief NamingManager ã®åˆæœŸåŒ–
      *
-     * NamingManager ¤Î½é´ü²½½èÍı¤ò¼Â¹Ô¤¹¤ë¡£
-     * ¤¿¤À¤·¡¢NamingManager ¤ò»ÈÍÑ¤·¤Ê¤¤¤è¤¦¤Ë¥×¥í¥Ñ¥Æ¥£¾ğÊó¤ËÀßÄê¤µ¤ì¤Æ¤¤¤ë
-     * ¾ì¹ç¤Ë¤Ï²¿¤â¤·¤Ê¤¤¡£
-     * NamingManager ¤ò»ÈÍÑ¤¹¤ë¾ì¹ç¡¢¥×¥í¥Ñ¥Æ¥£¾ğÊó¤ËÀßÄê¤µ¤ì¤Æ¤¤¤ë
-     * ¥Ç¥Õ¥©¥ë¥È NamingServer ¤òÅĞÏ¿¤¹¤ë¡£
-     * ¤Ş¤¿¡¢Äê´üÅª¤Ë¾ğÊó¤ò¹¹¿·¤¹¤ë¤è¤¦¤ËÀßÄê¤µ¤ì¤Æ¤¤¤ë¾ì¹ç¤Ë¤Ï¡¢»ØÄê¤µ¤ì¤¿¼ş´ü
-     * ¤Ç¼«Æ°¹¹¿·¤ò¹Ô¤¦¤¿¤á¤Î¥¿¥¤¥Ş¤òµ¯Æ°¤¹¤ë¤È¤È¤â¤Ë¡¢¹¹¿·ÍÑ¥á¥½¥Ã¥É¤ò¥¿¥¤¥Ş¤Ë
-     * ÅĞÏ¿¤¹¤ë¡£
+     * NamingManager ã®åˆæœŸåŒ–å‡¦ç†ã‚’å®Ÿè¡Œã™ã‚‹ã€‚
+     * ãŸã ã—ã€NamingManager ã‚’ä½¿ç”¨ã—ãªã„ã‚ˆã†ã«ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£æƒ…å ±ã«è¨­å®šã•ã‚Œã¦ã„ã‚‹
+     * å ´åˆã«ã¯ä½•ã‚‚ã—ãªã„ã€‚
+     * NamingManager ã‚’ä½¿ç”¨ã™ã‚‹å ´åˆã€ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£æƒ…å ±ã«è¨­å®šã•ã‚Œã¦ã„ã‚‹
+     * ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆ NamingServer ã‚’ç™»éŒ²ã™ã‚‹ã€‚
+     * ã¾ãŸã€å®šæœŸçš„ã«æƒ…å ±ã‚’æ›´æ–°ã™ã‚‹ã‚ˆã†ã«è¨­å®šã•ã‚Œã¦ã„ã‚‹å ´åˆã«ã¯ã€æŒ‡å®šã•ã‚ŒãŸå‘¨æœŸ
+     * ã§è‡ªå‹•æ›´æ–°ã‚’è¡Œã†ãŸã‚ã®ã‚¿ã‚¤ãƒã‚’èµ·å‹•ã™ã‚‹ã¨ã¨ã‚‚ã«ã€æ›´æ–°ç”¨ãƒ¡ã‚½ãƒƒãƒ‰ã‚’ã‚¿ã‚¤ãƒã«
+     * ç™»éŒ²ã™ã‚‹ã€‚
      *
-     * @return ½é´ü²½½èÍı·ë²Ì(½é´ü²½À®¸ù:true¡¢½é´ü²½¼ºÇÔ:false)
+     * @return åˆæœŸåŒ–å‡¦ç†çµæœ(åˆæœŸåŒ–æˆåŠŸ:trueã€åˆæœŸåŒ–å¤±æ•—:false)
      *
      * @else
      * @brief NamingManager initialization
@@ -1434,10 +1434,10 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief NamingManager ¤Î½ªÎ»½èÍı
+     * @brief NamingManager ã®çµ‚äº†å‡¦ç†
      *
-     * NamingManager ¤ò½ªÎ»¤¹¤ë¡£
-     * ÅĞÏ¿¤µ¤ì¤Æ¤¤¤ëÁ´Í×ÁÇ¤ò¥¢¥ó¥Ğ¥¤¥ó¥É¤·¡¢½ªÎ»¤¹¤ë¡£
+     * NamingManager ã‚’çµ‚äº†ã™ã‚‹ã€‚
+     * ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹å…¨è¦ç´ ã‚’ã‚¢ãƒ³ãƒã‚¤ãƒ³ãƒ‰ã—ã€çµ‚äº†ã™ã‚‹ã€‚
      *
      * @else
      * @brief NamingManager finalization
@@ -1451,7 +1451,7 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief NamingManager¤ò¼èÆÀ¤¹¤ë
+     * @brief NamingManagerã‚’å–å¾—ã™ã‚‹
      *
      * @else
      *
@@ -1466,10 +1466,10 @@ namespace RTC
     //============================================================
     /*!
      * @if jp
-     * @brief NamingManager ¤ËÅĞÏ¿¤µ¤ì¤Æ¤¤¤ë RT¥³¥ó¥İ¡¼¥Í¥ó¥È¤Î½ªÎ»½èÍı
+     * @brief NamingManager ã«ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹ RTã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã®çµ‚äº†å‡¦ç†
      *
-     * NamingManager ¤ËÅĞÏ¿¤µ¤ì¤Æ¤¤¤ëRT¥³¥ó¥İ¡¼¥Í¥ó¥È¤Î¥ê¥¹¥È¤ò¼èÆÀ¤·¡¢
-     * Á´¥³¥ó¥İ¡¼¥Í¥ó¥È¤ò½ªÎ»¤¹¤ë¡£
+     * NamingManager ã«ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹RTã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã®ãƒªã‚¹ãƒˆã‚’å–å¾—ã—ã€
+     * å…¨ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã‚’çµ‚äº†ã™ã‚‹ã€‚
      *
      * @else
      * @brief NamingManager finalization
@@ -1484,29 +1484,29 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief °ú¿ôÊ¸»úÎó¤«¤é¥³¥ó¥İ¡¼¥Í¥ó¥È·¿Ì¾¡¦¥×¥í¥Ñ¥Æ¥£¤òÃê½Ğ¤¹¤ë
+     * @brief å¼•æ•°æ–‡å­—åˆ—ã‹ã‚‰ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆå‹åãƒ»ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã‚’æŠ½å‡ºã™ã‚‹
      *
-     * Ê¸»úÎó¤«¤é¥³¥ó¥İ¡¼¥Í¥ó¥È·¿¤È¥³¥ó¥İ¡¼¥Í¥ó¥È¤Î¥×¥í¥Ñ¥Æ¥£¤òÃê½Ğ¤¹¤ë¡£
-     * Í¿¤¨¤é¤ì¤ëÊ¸»úÎó¤Î¥Õ¥©¡¼¥Ş¥Ã¥È¤Ï RTC ¤Î ID ¤È¥³¥ó¥Õ¥£¥®¥å¥ì¡¼¥·¥ç
-     * ¥ó¤«¤é¤Ê¤ë
+     * æ–‡å­—åˆ—ã‹ã‚‰ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆå‹ã¨ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã®ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã‚’æŠ½å‡ºã™ã‚‹ã€‚
+     * ä¸ãˆã‚‰ã‚Œã‚‹æ–‡å­—åˆ—ã®ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆã¯ RTC ã® ID ã¨ã‚³ãƒ³ãƒ•ã‚£ã‚®ãƒ¥ãƒ¬ãƒ¼ã‚·ãƒ§
+     * ãƒ³ã‹ã‚‰ãªã‚‹
      *
      * [RTC type]?[key(0)]=[val(0)]&[key(1)]=[val(1)]&...&[key(n)]=[val(n)]
      * 
-     * ¤Ç¤¢¤ë¡£¤Ê¤ª¡¢RTC type ¤Ï implementation_id ¤Î¤ß¡¢¤â¤·¤¯¤Ï¡¢²¼µ­
-     * ¤Î RTC ID ·Á¼°
+     * ã§ã‚ã‚‹ã€‚ãªãŠã€RTC type ã¯ implementation_id ã®ã¿ã€ã‚‚ã—ãã¯ã€ä¸‹è¨˜
+     * ã® RTC ID å½¢å¼
      *
      * RTC:[vendor]:[category]:[impl_id]:[version]
      *
-     * ¤ò¼õ¤±ÉÕ¤±¤ë¡£Ìá¤êÃÍ¤Ç¤¢¤ë¡¢comp_id ¤Ï¡¢
-     * "vendor", "category", "implementation_id", "version" ¤Î¥­¡¼¤ò»ı¤Ä
-     * Properties ·¿¤Î¥ª¥Ö¥¸¥§¥¯¥È¤È¤·¤ÆÊÖ¤µ¤ì¤ë¡£
-     * comp_conf ¤Ë¤Ï "?" °Ê²¼¤Ëµ­½Ò¤µ¤ì¤ë¥³¥ó¥İ¡¼¥Í¥ó¥È¤ËÍ¿¤¨¤ë¥×¥í¥Ñ¥Æ¥£
-     * ¤¬ Properties ·¿¤Î¥ª¥Ö¥¸¥§¥¯¥È¤È¤·¤ÆÊÖ¤µ¤ì¤ë¡£
+     * ã‚’å—ã‘ä»˜ã‘ã‚‹ã€‚æˆ»ã‚Šå€¤ã§ã‚ã‚‹ã€comp_id ã¯ã€
+     * "vendor", "category", "implementation_id", "version" ã®ã‚­ãƒ¼ã‚’æŒã¤
+     * Properties å‹ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã¨ã—ã¦è¿”ã•ã‚Œã‚‹ã€‚
+     * comp_conf ã«ã¯ "?" ä»¥ä¸‹ã«è¨˜è¿°ã•ã‚Œã‚‹ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã«ä¸ãˆã‚‹ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£
+     * ãŒ Properties å‹ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã¨ã—ã¦è¿”ã•ã‚Œã‚‹ã€‚
      * 
-     * @return comp_arg ¤Ë¥³¥ó¥İ¡¼¥Í¥ó¥È·¿¤¬´Ş¤Ş¤ì¤Æ¤¤¤Ê¤¤¾ì¹çfalse
-     * @param comp_arg  ½èÍı¤¹¤Ù¤­Ê¸»úÎó
-     * @param comp_id Ãê½Ğ¤µ¤ì¤¿¥³¥ó¥İ¡¼¥Í¥ó¥È¤Î·¿Ì¾
-     * @param comp_conf Ãê½Ğ¤µ¤ì¤¿¥³¥ó¥İ¡¼¥Í¥ó¥È¤Î¥×¥í¥Ñ¥Æ¥£
+     * @return comp_arg ã«ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆå‹ãŒå«ã¾ã‚Œã¦ã„ãªã„å ´åˆfalse
+     * @param comp_arg  å‡¦ç†ã™ã¹ãæ–‡å­—åˆ—
+     * @param comp_id æŠ½å‡ºã•ã‚ŒãŸã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã®å‹å
+     * @param comp_conf æŠ½å‡ºã•ã‚ŒãŸã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã®ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£
      *
      * @else
      * @brief Extracting component type/properties from the given string
@@ -1534,23 +1534,23 @@ namespace RTC
                            coil::Properties& comp_conf);
     /*!
      * @if jp
-     * @brief °ú¿ôÊ¸»úÎó¤«¤éExecutionContextÌ¾¡¦¥×¥í¥Ñ¥Æ¥£¤òÃê½Ğ¤¹¤ë
+     * @brief å¼•æ•°æ–‡å­—åˆ—ã‹ã‚‰ExecutionContextåãƒ»ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã‚’æŠ½å‡ºã™ã‚‹
      *
-     * Ê¸»úÎó¤«¤éExecutionContextÌ¾¤È¥×¥í¥Ñ¥Æ¥£¤òÃê½Ğ¤¹¤ë¡£
-     * Í¿¤¨¤é¤ì¤ëÊ¸»úÎó¤Î¥Õ¥©¡¼¥Ş¥Ã¥È¤Ï RTC ¤Î ID ¤È¥³¥ó¥Õ¥£¥®¥å¥ì¡¼¥·¥ç
-     * ¥ó¤«¤é¤Ê¤ë
+     * æ–‡å­—åˆ—ã‹ã‚‰ExecutionContextåã¨ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã‚’æŠ½å‡ºã™ã‚‹ã€‚
+     * ä¸ãˆã‚‰ã‚Œã‚‹æ–‡å­—åˆ—ã®ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆã¯ RTC ã® ID ã¨ã‚³ãƒ³ãƒ•ã‚£ã‚®ãƒ¥ãƒ¬ãƒ¼ã‚·ãƒ§
+     * ãƒ³ã‹ã‚‰ãªã‚‹
      *
-     * [ExecutionContextÌ¾]?[key(0)]=[val(0)]&[key(1)]=[val(1)]&...&[key(n)]=[val(n)]
+     * [ExecutionContextå]?[key(0)]=[val(0)]&[key(1)]=[val(1)]&...&[key(n)]=[val(n)]
      * 
-     * ¤Ç¤¢¤ë¡£
+     * ã§ã‚ã‚‹ã€‚
      *
-     * ec_conf ¤Ë¤Ï "?" °Ê²¼¤Ëµ­½Ò¤µ¤ì¤ë¥³¥ó¥İ¡¼¥Í¥ó¥È¤ËÍ¿¤¨¤ë¥×¥í¥Ñ¥Æ¥£
-     * ¤¬ Properties ·¿¤Î¥ª¥Ö¥¸¥§¥¯¥È¤È¤·¤ÆÊÖ¤µ¤ì¤ë¡£
+     * ec_conf ã«ã¯ "?" ä»¥ä¸‹ã«è¨˜è¿°ã•ã‚Œã‚‹ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã«ä¸ãˆã‚‹ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£
+     * ãŒ Properties å‹ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã¨ã—ã¦è¿”ã•ã‚Œã‚‹ã€‚
      * 
-     * @return ec_args ¤ËExecutionContextÌ¾¤¬´Ş¤Ş¤ì¤Æ¤¤¤Ê¤¤¾ì¹çfalse
-     * @param ec_args  ½èÍı¤¹¤Ù¤­Ê¸»úÎó
-     * @param ec_id Ãê½Ğ¤µ¤ì¤¿ExecutionContextÌ¾
-     * @param ec_conf Ãê½Ğ¤µ¤ì¤¿ExecutionContext¤Î¥×¥í¥Ñ¥Æ¥£
+     * @return ec_args ã«ExecutionContextåãŒå«ã¾ã‚Œã¦ã„ãªã„å ´åˆfalse
+     * @param ec_args  å‡¦ç†ã™ã¹ãæ–‡å­—åˆ—
+     * @param ec_id æŠ½å‡ºã•ã‚ŒãŸExecutionContextå
+     * @param ec_conf æŠ½å‡ºã•ã‚ŒãŸExecutionContextã®ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£
      *
      * @else
      * @brief Extracting ExecutionContext's name/properties from the given 
@@ -1578,13 +1578,13 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief RT¥³¥ó¥İ¡¼¥Í¥ó¥È¤Î¥³¥ó¥Õ¥£¥®¥å¥ì¡¼¥·¥ç¥ó½èÍı
+     * @brief RTã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã®ã‚³ãƒ³ãƒ•ã‚£ã‚®ãƒ¥ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³å‡¦ç†
      *
-     * RT¥³¥ó¥İ¡¼¥Í¥ó¥È¤Î·¿¤ª¤è¤Ó¥¤¥ó¥¹¥¿¥ó¥¹Ëè¤Ëµ­ºÜ¤µ¤ì¤¿¥×¥í¥Ñ¥Æ¥£¥Õ¥¡¥¤¥ë¤Î
-     * ¾ğÊó¤òÆÉ¤ß¹ş¤ß¡¢¥³¥ó¥İ¡¼¥Í¥ó¥È¤ËÀßÄê¤¹¤ë¡£
-     * ¤Ş¤¿¡¢³Æ¥³¥ó¥İ¡¼¥Í¥ó¥È¤Î NamingService ÅĞÏ¿»ş¤ÎÌ¾¾Î¤ò¼èÆÀ¤·¡¢ÀßÄê¤¹¤ë¡£
+     * RTã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã®å‹ãŠã‚ˆã³ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹æ¯ã«è¨˜è¼‰ã•ã‚ŒãŸãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ãƒ•ã‚¡ã‚¤ãƒ«ã®
+     * æƒ…å ±ã‚’èª­ã¿è¾¼ã¿ã€ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã«è¨­å®šã™ã‚‹ã€‚
+     * ã¾ãŸã€å„ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã® NamingService ç™»éŒ²æ™‚ã®åç§°ã‚’å–å¾—ã—ã€è¨­å®šã™ã‚‹ã€‚
      *
-     * @param comp ¥³¥ó¥Õ¥£¥®¥å¥ì¡¼¥·¥ç¥óÂĞ¾İRT¥³¥ó¥İ¡¼¥Í¥ó¥È
+     * @param comp ã‚³ãƒ³ãƒ•ã‚£ã‚®ãƒ¥ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³å¯¾è±¡RTã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆ
      *
      * @else
      * @brief Configure RT-Component
@@ -1602,13 +1602,13 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief ExecutionContextManager ¤Î½é´ü²½
+     * @brief ExecutionContextManager ã®åˆæœŸåŒ–
      *
-     * »ÈÍÑ¤¹¤ë³Æ ExecutionContext ¤Î½é´ü²½½èÍı¤ò¼Â¹Ô¤·¡¢³Æ ExecutionContext 
-     * À¸À®ÍÑ Factory ¤ò ExecutionContextManager ¤ËÅĞÏ¿¤¹¤ë¡£
+     * ä½¿ç”¨ã™ã‚‹å„ ExecutionContext ã®åˆæœŸåŒ–å‡¦ç†ã‚’å®Ÿè¡Œã—ã€å„ ExecutionContext 
+     * ç”Ÿæˆç”¨ Factory ã‚’ ExecutionContextManager ã«ç™»éŒ²ã™ã‚‹ã€‚
      *
-     * @return ExecutionContextManager ½é´ü²½½èÍı¼Â¹Ô·ë²Ì
-     *         (½é´ü²½À®¸ù:true¡¢½é´ü²½¼ºÇÔ:false)
+     * @return ExecutionContextManager åˆæœŸåŒ–å‡¦ç†å®Ÿè¡Œçµæœ
+     *         (åˆæœŸåŒ–æˆåŠŸ:trueã€åˆæœŸåŒ–å¤±æ•—:false)
      *
      * @else
      * @brief ExecutionContextManager initialization
@@ -1625,10 +1625,10 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief PeriodicECSharedComposite ¤Î½é´ü²½
+     * @brief PeriodicECSharedComposite ã®åˆæœŸåŒ–
      *
-     * @return PeriodicECSharedComposite ½é´ü²½½èÍı¼Â¹Ô·ë²Ì
-     *         (½é´ü²½À®¸ù:true¡¢½é´ü²½¼ºÇÔ:false)
+     * @return PeriodicECSharedComposite åˆæœŸåŒ–å‡¦ç†å®Ÿè¡Œçµæœ
+     *         (åˆæœŸåŒ–æˆåŠŸ:trueã€åˆæœŸåŒ–å¤±æ•—:false)
      *
      * @else
      * @brief PeriodicECSharedComposite initialization
@@ -1642,13 +1642,13 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ¥Õ¥¡¥¯¥È¥ê¤Î½é´ü²½
+     * @brief ãƒ•ã‚¡ã‚¯ãƒˆãƒªã®åˆæœŸåŒ–
      *
-     * ¥Ğ¥Ã¥Õ¥¡¡¢¥¹¥ì¥Ã¥É¡¢¥Ñ¥Ö¥ê¥Ã¥·¥ã¡¢¥×¥í¥Ğ¥¤¥À¡¢¥³¥ó¥·¥å¡¼¥Ş¤Î
-     * ¥Õ¥¡¥¯¥È¥ê¤ò½é´ü²½¤¹¤ë¡£
+     * ãƒãƒƒãƒ•ã‚¡ã€ã‚¹ãƒ¬ãƒƒãƒ‰ã€ãƒ‘ãƒ–ãƒªãƒƒã‚·ãƒ£ã€ãƒ—ãƒ­ãƒã‚¤ãƒ€ã€ã‚³ãƒ³ã‚·ãƒ¥ãƒ¼ãƒã®
+     * ãƒ•ã‚¡ã‚¯ãƒˆãƒªã‚’åˆæœŸåŒ–ã™ã‚‹ã€‚
      *
-     * @return ¥Õ¥¡¥¯¥È¥ê½é´ü²½½èÍı¼Â¹Ô·ë²Ì
-     *         (½é´ü²½À®¸ù:true¡¢½é´ü²½¼ºÇÔ:false)
+     * @return ãƒ•ã‚¡ã‚¯ãƒˆãƒªåˆæœŸåŒ–å‡¦ç†å®Ÿè¡Œçµæœ
+     *         (åˆæœŸåŒ–æˆåŠŸ:trueã€åˆæœŸåŒ–å¤±æ•—:false)
      *
      * @else
      * @brief Factories initialization
@@ -1666,9 +1666,9 @@ namespace RTC
     void initCpuAffinity();
 	/*!
 	 * @if jp
-	 * @brief µ¯Æ°»ş¤Ërtc.conf¤Ç»ØÄê¤·¤¿¥İ¡¼¥È¤òÀÜÂ³¤¹¤ë
+	 * @brief èµ·å‹•æ™‚ã«rtc.confã§æŒ‡å®šã—ãŸãƒãƒ¼ãƒˆã‚’æ¥ç¶šã™ã‚‹
 	 *
-	 * Îã:
+	 * ä¾‹:
 	 * manager.components.preconnect: RTC0.port0?RTC0.port1&interface_type=corba_cdr&dataflow_type=pull&~,~
 	 *
 	 *
@@ -1681,9 +1681,9 @@ namespace RTC
 	void initPreConnection();
 	/*!
 	 * @if jp
-	 * @brief µ¯Æ°»ş¤Ërtc.conf¤Ç»ØÄê¤·¤¿RTC¤ò¥¢¥¯¥Æ¥£¥Ù¡¼¥·¥ç¥ó¤¹¤ë
+	 * @brief èµ·å‹•æ™‚ã«rtc.confã§æŒ‡å®šã—ãŸRTCã‚’ã‚¢ã‚¯ãƒ†ã‚£ãƒ™ãƒ¼ã‚·ãƒ§ãƒ³ã™ã‚‹
 	 *
-	 * Îã:
+	 * ä¾‹:
 	 * manager.components.preactivation: RTC1,RTC2~
 	 *
 	 *
@@ -1696,9 +1696,9 @@ namespace RTC
 	void initPreActivation();
 	/*!
 	 * @if jp
-	 * @brief µ¯Æ°»ş¤Ërtc.conf¤Ç»ØÄê¤·¤¿RTC¤òÀ¸À®¤¹¤ë
+	 * @brief èµ·å‹•æ™‚ã«rtc.confã§æŒ‡å®šã—ãŸRTCã‚’ç”Ÿæˆã™ã‚‹
 	 *
-	 * Îã:
+	 * ä¾‹:
 	 * manager.components.precreate RTC1,RTC2~
 	 *
 	 *
@@ -1802,12 +1802,12 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief Timer ¤Î½é´ü²½
+     * @brief Timer ã®åˆæœŸåŒ–
      *
-     * »ÈÍÑ¤¹¤ë³Æ Timer ¤Î½é´ü²½½èÍı¤ò¼Â¹Ô¤¹¤ë¡£
-     * (¸½¾õ¤Î¼ÂÁõ¤Ç¤Ï²¿¤â¤·¤Ê¤¤)
+     * ä½¿ç”¨ã™ã‚‹å„ Timer ã®åˆæœŸåŒ–å‡¦ç†ã‚’å®Ÿè¡Œã™ã‚‹ã€‚
+     * (ç¾çŠ¶ã®å®Ÿè£…ã§ã¯ä½•ã‚‚ã—ãªã„)
      *
-     * @return Timer ½é´ü²½½èÍı¼Â¹Ô·ë²Ì(½é´ü²½À®¸ù:true¡¢½é´ü²½¼ºÇÔ:false)
+     * @return Timer åˆæœŸåŒ–å‡¦ç†å®Ÿè¡Œçµæœ(åˆæœŸåŒ–æˆåŠŸ:trueã€åˆæœŸåŒ–å¤±æ•—:false)
      *
      * @else
      * @brief Timer initialization
@@ -1823,9 +1823,9 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ManagerServant ¤Î½é´ü²½
+     * @brief ManagerServant ã®åˆæœŸåŒ–
      *
-     * @return Timer ½é´ü²½½èÍı¼Â¹Ô·ë²Ì(½é´ü²½À®¸ù:true¡¢½é´ü²½¼ºÇÔ:false)
+     * @return Timer åˆæœŸåŒ–å‡¦ç†å®Ÿè¡Œçµæœ(åˆæœŸåŒ–æˆåŠŸ:trueã€åˆæœŸåŒ–å¤±æ•—:false)
      *
      * @else
      * @brief ManagerServant initialization
@@ -1840,7 +1840,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ManagerServant ¤Ø¤Î¥İ¥¤¥ó¥¿
+     * @brief ManagerServant ã¸ã®ãƒã‚¤ãƒ³ã‚¿
      * @else
      * @brief The pointer to the ManagerServant
      * @endif
@@ -1849,15 +1849,15 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ¥×¥í¥Ñ¥Æ¥£¾ğÊó¤Î¥Ş¡¼¥¸
+     * @brief ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£æƒ…å ±ã®ãƒãƒ¼ã‚¸
      *
-     * »ØÄê¤µ¤ì¤¿¥Õ¥¡¥¤¥ëÆâ¤ËÀßÄê¤µ¤ì¤Æ¤¤¤ë¥×¥í¥Ñ¥Æ¥£¾ğÊó¤ò¥í¡¼¥É¤·¡¢
-     * ´ûÂ¸¤ÎÀßÄêºÑ¤ß¥×¥í¥Ñ¥Æ¥£¤È¥Ş¡¼¥¸¤¹¤ë¡£
+     * æŒ‡å®šã•ã‚ŒãŸãƒ•ã‚¡ã‚¤ãƒ«å†…ã«è¨­å®šã•ã‚Œã¦ã„ã‚‹ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£æƒ…å ±ã‚’ãƒ­ãƒ¼ãƒ‰ã—ã€
+     * æ—¢å­˜ã®è¨­å®šæ¸ˆã¿ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã¨ãƒãƒ¼ã‚¸ã™ã‚‹ã€‚
      *
-     * @param prop ¥Ş¡¼¥¸ÂĞ¾İ¥×¥í¥Ñ¥Æ¥£
-     * @param file_name ¥×¥í¥Ñ¥Æ¥£¾ğÊó¤¬µ­½Ò¤µ¤ì¤Æ¤¤¤ë¥Õ¥¡¥¤¥ëÌ¾
+     * @param prop ãƒãƒ¼ã‚¸å¯¾è±¡ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£
+     * @param file_name ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£æƒ…å ±ãŒè¨˜è¿°ã•ã‚Œã¦ã„ã‚‹ãƒ•ã‚¡ã‚¤ãƒ«å
      *
-     * @return ¥Ş¡¼¥¸½èÍı¼Â¹Ô·ë²Ì(¥Ş¡¼¥¸À®¸ù:true¡¢¥Ş¡¼¥¸¼ºÇÔ:false)
+     * @return ãƒãƒ¼ã‚¸å‡¦ç†å®Ÿè¡Œçµæœ(ãƒãƒ¼ã‚¸æˆåŠŸ:trueã€ãƒãƒ¼ã‚¸å¤±æ•—:false)
      *
      * @else
      * @brief Merge property information
@@ -1876,26 +1876,26 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief NamingServer ¤ËÅĞÏ¿¤¹¤ëºİ¤ÎÅĞÏ¿¾ğÊó¤òÁÈ¤ßÎ©¤Æ¤ë
+     * @brief NamingServer ã«ç™»éŒ²ã™ã‚‹éš›ã®ç™»éŒ²æƒ…å ±ã‚’çµ„ã¿ç«‹ã¦ã‚‹
      *
-     * »ØÄê¤µ¤ì¤¿½ñ¼°¤È¥×¥í¥Ñ¥Æ¥£¾ğÊó¤ò´ğ¤Ë NameServer ¤ËÅĞÏ¿¤¹¤ëºİ¤Î¾ğÊó¤ò
-     * ÁÈ¤ßÎ©¤Æ¤ë¡£
-     * ³Æ½ñ¼°»ØÄêÍÑÊ¸»ú¤Î°ÕÌ£¤Ï°Ê²¼¤Î¤È¤ª¤ê
-     * - % : ¥³¥ó¥Æ¥­¥¹¥È¤Î¶èÀÚ¤ê
-     * - n : ¥¤¥ó¥¹¥¿¥ó¥¹Ì¾¾Î
-     * - t : ·¿Ì¾
-     * - m : ·¿Ì¾
-     * - v : ¥Ğ¡¼¥¸¥ç¥ó
-     * - V : ¥Ù¥ó¥À¡¼
-     * - c : ¥«¥Æ¥´¥ê
-     * - h : ¥Û¥¹¥ÈÌ¾
-     * - M : ¥Ş¥Í¡¼¥¸¥ãÌ¾
-     * - p : ¥×¥í¥»¥¹ID
+     * æŒ‡å®šã•ã‚ŒãŸæ›¸å¼ã¨ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£æƒ…å ±ã‚’åŸºã« NameServer ã«ç™»éŒ²ã™ã‚‹éš›ã®æƒ…å ±ã‚’
+     * çµ„ã¿ç«‹ã¦ã‚‹ã€‚
+     * å„æ›¸å¼æŒ‡å®šç”¨æ–‡å­—ã®æ„å‘³ã¯ä»¥ä¸‹ã®ã¨ãŠã‚Š
+     * - % : ã‚³ãƒ³ãƒ†ã‚­ã‚¹ãƒˆã®åŒºåˆ‡ã‚Š
+     * - n : ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹åç§°
+     * - t : å‹å
+     * - m : å‹å
+     * - v : ãƒãƒ¼ã‚¸ãƒ§ãƒ³
+     * - V : ãƒ™ãƒ³ãƒ€ãƒ¼
+     * - c : ã‚«ãƒ†ã‚´ãƒª
+     * - h : ãƒ›ã‚¹ãƒˆå
+     * - M : ãƒãƒãƒ¼ã‚¸ãƒ£å
+     * - p : ãƒ—ãƒ­ã‚»ã‚¹ID
      *
-     * @param naming_format NamingService ÅĞÏ¿¾ğÊó½ñ¼°»ØÄê
-     * @param prop »ÈÍÑ¤¹¤ë¥×¥í¥Ñ¥Æ¥£¾ğÊó
+     * @param naming_format NamingService ç™»éŒ²æƒ…å ±æ›¸å¼æŒ‡å®š
+     * @param prop ä½¿ç”¨ã™ã‚‹ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£æƒ…å ±
      *
-     * @return »ØÄê½ñ¼°ÊÑ´¹·ë²Ì
+     * @return æŒ‡å®šæ›¸å¼å¤‰æ›çµæœ
      *
      * @else
      * @brief Construct registration information when registering to 
@@ -1927,7 +1927,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief corba.endpoints ¤Ë¥¨¥ó¥É¥İ¥¤¥ó¥È¾ğÊó¤òÀßÄê¤¹¤ë
+     * @brief corba.endpoints ã«ã‚¨ãƒ³ãƒ‰ãƒã‚¤ãƒ³ãƒˆæƒ…å ±ã‚’è¨­å®šã™ã‚‹
      * @else
      * @brief Setting endpoint info from corba.endpoints
      * @endif
@@ -1936,7 +1936,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief corba.endpoint_property ¤«¤é¥ª¥×¥·¥ç¥ó¾ğÊó¤ò¼èÆÀ¤¹¤ë
+     * @brief corba.endpoint_property ã‹ã‚‰ã‚ªãƒ—ã‚·ãƒ§ãƒ³æƒ…å ±ã‚’å–å¾—ã™ã‚‹
      * @else
      * @brief Getting option info from corba.endpoint_property
      * @endif
@@ -1945,7 +1945,7 @@ namespace RTC
                                 bool& ip, std::vector<int>& ip_list);
     
     //============================================================
-    // protected ÊÑ¿ô
+    // protected å¤‰æ•°
     //============================================================
     
     //------------------------------------------------------------
@@ -1953,7 +1953,7 @@ namespace RTC
     //------------------------------------------------------------
     /*!
      * @if jp
-     * @brief Í£°ì¤Î Manager ¤Ø¤Î¥İ¥¤¥ó¥¿
+     * @brief å”¯ä¸€ã® Manager ã¸ã®ãƒã‚¤ãƒ³ã‚¿
      * @else
      * @brief The pointer to the Manager
      * @endif
@@ -1962,7 +1962,7 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief Í£°ì¤Î Manager ¤Ø¤Î¥İ¥¤¥ó¥¿¤ËÂĞ¤¹¤ë mutex
+     * @brief å”¯ä¸€ã® Manager ã¸ã®ãƒã‚¤ãƒ³ã‚¿ã«å¯¾ã™ã‚‹ mutex
      * @else
      * @brief The mutex of the pointer to the Manager 
      * @endif
@@ -1974,7 +1974,7 @@ namespace RTC
     //------------------------------------------------------------
     /*!
      * @if jp
-     * @brief ORB ¤Ø¤Î¥İ¥¤¥ó¥¿
+     * @brief ORB ã¸ã®ãƒã‚¤ãƒ³ã‚¿
      * @else
      * @brief The pointer to the ORB
      * @endif
@@ -1983,7 +1983,7 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief POA ¤Ø¤Î¥İ¥¤¥ó¥¿
+     * @brief POA ã¸ã®ãƒã‚¤ãƒ³ã‚¿
      * @else
      * @brief The pointer to the POA
      * @endif
@@ -1995,7 +1995,7 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief POAManager ¤Ø¤Î¥İ¥¤¥ó¥¿
+     * @brief POAManager ã¸ã®ãƒã‚¤ãƒ³ã‚¿
      * @else
      * @brief The pointer to the POAManager
      * @endif
@@ -2007,7 +2007,7 @@ namespace RTC
     //------------------------------------------------------------
     /*!
      * @if jp
-     * @brief ¥æ¡¼¥¶½é´ü²½´Ø¿ô¤Ø¤Î¥İ¥¤¥ó¥¿
+     * @brief ãƒ¦ãƒ¼ã‚¶åˆæœŸåŒ–é–¢æ•°ã¸ã®ãƒã‚¤ãƒ³ã‚¿
      * @else
      * @brief User's initialization function's pointer
      * @endif
@@ -2016,7 +2016,7 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief Manager ¤Î configuration ¤ò³ÊÇ¼¤¹¤ë Properties
+     * @brief Manager ã® configuration ã‚’æ ¼ç´ã™ã‚‹ Properties
      * @else
      * @brief Managaer's configuration Properties
      * @endif
@@ -2025,7 +2025,7 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief ModuleManager ¤Ø¤Î¥İ¥¤¥ó¥¿
+     * @brief ModuleManager ã¸ã®ãƒã‚¤ãƒ³ã‚¿
      * @else
      * @brief The pointer to the ModuleManager
      * @endif
@@ -2034,7 +2034,7 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief NamingManager ¤Ø¤Î¥İ¥¤¥ó¥¿
+     * @brief NamingManager ã¸ã®ãƒã‚¤ãƒ³ã‚¿
      * @else
      * @brief The pointer to the NamingManager
      * @endif
@@ -2055,7 +2055,7 @@ namespace RTC
     //------------------------------------------------------------
     /*!
      * @if jp
-     * @brief ¥í¥¬¡¼¥Ğ¥Ã¥Õ¥¡
+     * @brief ãƒ­ã‚¬ãƒ¼ãƒãƒƒãƒ•ã‚¡
      * @else
      * @brief Logger buffer
      * @endif
@@ -2064,7 +2064,7 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief ¥í¥¬¡¼¥¹¥È¥ê¡¼¥à
+     * @brief ãƒ­ã‚¬ãƒ¼ã‚¹ãƒˆãƒªãƒ¼ãƒ 
      * @else
      * @brief Logger stream
      * @endif
@@ -2073,7 +2073,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ¥í¥°½ĞÎÏ¥Õ¥¡¥¤¥ë
+     * @brief ãƒ­ã‚°å‡ºåŠ›ãƒ•ã‚¡ã‚¤ãƒ«
      * @else
      * @brief Files for log output
      * @endif
@@ -2081,9 +2081,9 @@ namespace RTC
     std::vector<std::filebuf*> m_logfiles;
     
     //============================================================
-    // ¥³¥ó¥İ¡¼¥Í¥ó¥È¥Ş¥Í¡¼¥¸¥ã
+    // ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆãƒãƒãƒ¼ã‚¸ãƒ£
     //============================================================
-    // ObjectManager ¤ØÅÏ¤¹½Ò¸ì¥¯¥é¥¹
+    // ObjectManager ã¸æ¸¡ã™è¿°èªã‚¯ãƒ©ã‚¹
     struct InstanceName
     {
       InstanceName(RTObject_impl* comp);
@@ -2097,7 +2097,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ¥³¥ó¥İ¡¼¥Í¥ó¥È¥Ş¥Í¡¼¥¸¥ã
+     * @brief ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆãƒãƒãƒ¼ã‚¸ãƒ£
      * @else
      * @brief ComponentManager
      * @endif
@@ -2105,9 +2105,9 @@ namespace RTC
     ComponentManager m_compManager;
     
     //============================================================
-    // ¥³¥ó¥İ¡¼¥Í¥ó¥È¥Õ¥¡¥¯¥È¥ê
+    // ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆãƒ•ã‚¡ã‚¯ãƒˆãƒª
     //============================================================
-    // ¥³¥ó¥İ¡¼¥Í¥ó¥È¥Õ¥¡¥¯¥È¥ê¤ØÅÏ¤¹½Ò¸ì¥¯¥é¥¹
+    // ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆãƒ•ã‚¡ã‚¯ãƒˆãƒªã¸æ¸¡ã™è¿°èªã‚¯ãƒ©ã‚¹
     class FactoryPredicate
     {
     public:
@@ -2180,7 +2180,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ¥³¥ó¥İ¡¼¥Í¥ó¥È¥Õ¥¡¥¯¥È¥ê
+     * @brief ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆãƒ•ã‚¡ã‚¯ãƒˆãƒª
      * @else
      * @brief ComponentFactory
      * @endif
@@ -2198,9 +2198,9 @@ namespace RTC
     FactoryManager m_factory;
     
     //============================================================
-    // ExecutionContext¥Õ¥¡¥¯¥È¥ê
+    // ExecutionContextãƒ•ã‚¡ã‚¯ãƒˆãƒª
     //============================================================
-    // EC¥Õ¥¡¥¯¥È¥ê¤ØÅÏ¤¹½Ò¸ì¥¯¥é¥¹
+    // ECãƒ•ã‚¡ã‚¯ãƒˆãƒªã¸æ¸¡ã™è¿°èªã‚¯ãƒ©ã‚¹
     struct ECFactoryPredicate
     {
       ECFactoryPredicate(const char* name) : m_name(name){};
@@ -2218,7 +2218,7 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief ExecutionContext ¥Ş¥Í¡¼¥¸¥ã
+     * @brief ExecutionContext ãƒãƒãƒ¼ã‚¸ãƒ£
      * @else
      * @brief ExecutionContext Manager
      * @endif
@@ -2227,14 +2227,14 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief ExecutionContext ¥ê¥¹¥È
+     * @brief ExecutionContext ãƒªã‚¹ãƒˆ
      * @else
      * @brief ExecutionContext list
      * @endif
      */
     std::vector<ExecutionContextBase*> m_ecs;
     
-    // ¥Õ¥¡¥¯¥È¥êÌ¾¤ò¥ê¥¹¥È¥¢¥Ã¥×¤¹¤ë¤¿¤á¤Î¥Õ¥¡¥ó¥¯¥¿
+    // ãƒ•ã‚¡ã‚¯ãƒˆãƒªåã‚’ãƒªã‚¹ãƒˆã‚¢ãƒƒãƒ—ã™ã‚‹ãŸã‚ã®ãƒ•ã‚¡ãƒ³ã‚¯ã‚¿
     struct ModuleFactories
     {
       void operator()(FactoryBase* f)
@@ -2250,9 +2250,9 @@ namespace RTC
     /*!
      * @if jp
      * @class OrbRunner
-     * @brief OrbRunner ¥¯¥é¥¹
+     * @brief OrbRunner ã‚¯ãƒ©ã‚¹
      *
-     * ORB ¼Â¹ÔÍÑ¥Ø¥ë¥Ñ¡¼¥¯¥é¥¹¡£
+     * ORB å®Ÿè¡Œç”¨ãƒ˜ãƒ«ãƒ‘ãƒ¼ã‚¯ãƒ©ã‚¹ã€‚
      *
      * @since 0.4.0
      *
@@ -2272,9 +2272,9 @@ namespace RTC
     public:
       /*!
        * @if jp
-       * @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+       * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
        *
-       * ¥³¥ó¥¹¥È¥é¥¯¥¿
+       * ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
        *
        * @else
        * @brief Constructor
@@ -2290,13 +2290,13 @@ namespace RTC
       
       /*!
        * @if jp
-       * @brief ORB ³èÀ­²½½èÍı
+       * @brief ORB æ´»æ€§åŒ–å‡¦ç†
        *
-       * ORB ³èÀ­²½½èÍı
+       * ORB æ´»æ€§åŒ–å‡¦ç†
        *
-       * @param args ³èÀ­²½»ş°ú¿ô
+       * @param args æ´»æ€§åŒ–æ™‚å¼•æ•°
        *
-       * @return ³èÀ­²½·ë²Ì
+       * @return æ´»æ€§åŒ–çµæœ
        *
        * @else
        * @brief ORB activation processing
@@ -2317,11 +2317,11 @@ namespace RTC
       
       /*!
        * @if jp
-       * @brief ORB ³«»Ï½èÍı
+       * @brief ORB é–‹å§‹å‡¦ç†
        *
-       * ORB ³«»Ï½èÍı
+       * ORB é–‹å§‹å‡¦ç†
        *
-       * @return ³«»Ï½èÍı·ë²Ì
+       * @return é–‹å§‹å‡¦ç†çµæœ
        *
        * @else
        * @brief ORB start processing
@@ -2341,13 +2341,13 @@ namespace RTC
       
       /*!
        * @if jp
-       * @brief ORB ½ªÎ»½èÍı
+       * @brief ORB çµ‚äº†å‡¦ç†
        *
-       * ORB ½ªÎ»½èÍı
+       * ORB çµ‚äº†å‡¦ç†
        *
-       * @param flags ½ªÎ»½èÍı¥Õ¥é¥°
+       * @param flags çµ‚äº†å‡¦ç†ãƒ•ãƒ©ã‚°
        *
-       * @return ½ªÎ»½èÍı·ë²Ì
+       * @return çµ‚äº†å‡¦ç†çµæœ
        *
        * @else
        * @brief ORB close processing
@@ -2369,7 +2369,7 @@ namespace RTC
     };
     /*!
      * @if jp
-     * @brief ORB ¥Ø¥ë¥Ñ¡¼¥¯¥é¥¹¤Ø¤Î¥İ¥¤¥ó¥¿
+     * @brief ORB ãƒ˜ãƒ«ãƒ‘ãƒ¼ã‚¯ãƒ©ã‚¹ã¸ã®ãƒã‚¤ãƒ³ã‚¿
      * @else
      * @brief The pointer to ORB helper class
      * @endif
@@ -2382,9 +2382,9 @@ namespace RTC
     /*!
      * @if jp
      * @class Terminator
-     * @brief Terminator ¥¯¥é¥¹
+     * @brief Terminator ã‚¯ãƒ©ã‚¹
      *
-     * ORB ½ªÎ»ÍÑ¥Ø¥ë¥Ñ¡¼¥¯¥é¥¹¡£
+     * ORB çµ‚äº†ç”¨ãƒ˜ãƒ«ãƒ‘ãƒ¼ã‚¯ãƒ©ã‚¹ã€‚
      *
      * @since 0.4.0
      *
@@ -2404,11 +2404,11 @@ namespace RTC
     public:
       /*!
        * @if jp
-       * @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+       * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
        *
-       * ¥³¥ó¥¹¥È¥é¥¯¥¿
+       * ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
        *
-       * @param manager ¥Ş¥Í¡¼¥¸¥ã¡¦¥ª¥Ö¥¸¥§¥¯¥È
+       * @param manager ãƒãƒãƒ¼ã‚¸ãƒ£ãƒ»ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
        *
        * @else
        * @brief Constructor
@@ -2423,9 +2423,9 @@ namespace RTC
       
       /*!
        * @if jp
-       * @brief ½ªÎ»½èÍı
+       * @brief çµ‚äº†å‡¦ç†
        *
-       * ORB¡¤¥Ş¥Í¡¼¥¸¥ã½ªÎ»½èÍı¤ò³«»Ï¤¹¤ë¡£
+       * ORBï¼Œãƒãƒãƒ¼ã‚¸ãƒ£çµ‚äº†å‡¦ç†ã‚’é–‹å§‹ã™ã‚‹ã€‚
        *
        * @else
        * @brief Termination processing
@@ -2441,13 +2441,13 @@ namespace RTC
       
       /*!
        * @if jp
-       * @brief ½ªÎ»½èÍı³èÀ­²½½èÍı
+       * @brief çµ‚äº†å‡¦ç†æ´»æ€§åŒ–å‡¦ç†
        *
-       * ½ªÎ»½èÍı³èÀ­²½½èÍı
+       * çµ‚äº†å‡¦ç†æ´»æ€§åŒ–å‡¦ç†
        *
-       * @param args ³èÀ­²½»ş°ú¿ô
+       * @param args æ´»æ€§åŒ–æ™‚å¼•æ•°
        *
-       * @return ³èÀ­²½·ë²Ì
+       * @return æ´»æ€§åŒ–çµæœ
        *
        * @else
        * @brief Termination processing activation
@@ -2468,11 +2468,11 @@ namespace RTC
       
       /*!
        * @if jp
-       * @brief ORB¡¤¥Ş¥Í¡¼¥¸¥ã½ªÎ»½èÍı
+       * @brief ORBï¼Œãƒãƒãƒ¼ã‚¸ãƒ£çµ‚äº†å‡¦ç†
        *
-       * ORB¡¤¥Ş¥Í¡¼¥¸¥ã½ªÎ»½èÍı
+       * ORBï¼Œãƒãƒãƒ¼ã‚¸ãƒ£çµ‚äº†å‡¦ç†
        *
-       * @return ½ªÎ»½èÍı·ë²Ì
+       * @return çµ‚äº†å‡¦ç†çµæœ
        *
        * @else
        * @brief ORB and manager's termination processing
@@ -2493,7 +2493,7 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief ORB ½ªÎ»ÍÑ¥Ø¥ë¥Ñ¡¼¥¯¥é¥¹¤Ø¤Î¥İ¥¤¥ó¥¿
+     * @brief ORB çµ‚äº†ç”¨ãƒ˜ãƒ«ãƒ‘ãƒ¼ã‚¯ãƒ©ã‚¹ã¸ã®ãƒã‚¤ãƒ³ã‚¿
      * @else
      * @brief The pointer to ORB termination helper class.
      * @endif
@@ -2507,9 +2507,9 @@ namespace RTC
     };
     /*!
      * @if jp
-     * @brief ¥Ş¥Í¡¼¥¸¥ã½ªÎ»½èÍıÍÑÆ±´ü¥Õ¥é¥°
+     * @brief ãƒãƒãƒ¼ã‚¸ãƒ£çµ‚äº†å‡¦ç†ç”¨åŒæœŸãƒ•ãƒ©ã‚°
      *
-     * ¥Ş¥Í¡¼¥¸¥ã½ªÎ»¤ÎÂÔ¤Á¹ç¤»½èÍı¤ÇÆ±´ü¤ò¼è¤ë¤¿¤á¤Î¥Õ¥é¥°¡£
+     * ãƒãƒãƒ¼ã‚¸ãƒ£çµ‚äº†ã®å¾…ã¡åˆã›å‡¦ç†ã§åŒæœŸã‚’å–ã‚‹ãŸã‚ã®ãƒ•ãƒ©ã‚°ã€‚
      *
      * @else
      * @brief Synchronous flag for manager termination

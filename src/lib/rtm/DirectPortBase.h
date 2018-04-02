@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file DirectPortBase.h
  * @brief DirectPortBase class
@@ -28,7 +28,7 @@ namespace RTC
 	/*!
 	* @if jp
 	* @class DirectPortBase
-	* @brief directÀÜÂ³ÍÑPort´ðÄì¥¯¥é¥¹
+	* @brief directæŽ¥ç¶šç”¨PortåŸºåº•ã‚¯ãƒ©ã‚¹
 	*
 	*
 	* @since 1.2.0
@@ -48,7 +48,7 @@ namespace RTC
   public:
 	  /*!
 	  * @if jp
-	  * @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+	  * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 	  *
 	  *
 	  * @else
@@ -61,7 +61,7 @@ namespace RTC
     
 	/*!
 	* @if jp
-	* @brief ¥Ç¥¹¥È¥é¥¯¥¿
+	* @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 	*
 	*
 	* @else

@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file LogstreamFile.h
  * @brief File logger stream class
@@ -31,10 +31,10 @@ namespace RTC
    *
    * @class PublisherBase
    *
-   * @brief Publisher ´ğÄì¥¯¥é¥¹
+   * @brief Publisher åŸºåº•ã‚¯ãƒ©ã‚¹
    * 
-   * ¥Ç¡¼¥¿Á÷½Ğ¥¿¥¤¥ß¥ó¥°¤ò´ÉÍı¤·¤ÆÁ÷½Ğ¤ò¶îÆ°¤¹¤ëPublisher* ¤Î´ğÄì¥¯¥é¥¹¡£
-   * ³Æ¼ï Publisher ¤Ï¤³¤Î¥¯¥é¥¹¤ò·Ñ¾µ¤·¤Æ¾ÜºÙ¤ò¼ÂÁõ¤¹¤ë¡£
+   * ãƒ‡ãƒ¼ã‚¿é€å‡ºã‚¿ã‚¤ãƒŸãƒ³ã‚°ã‚’ç®¡ç†ã—ã¦é€å‡ºã‚’é§†å‹•ã™ã‚‹Publisher* ã®åŸºåº•ã‚¯ãƒ©ã‚¹ã€‚
+   * å„ç¨® Publisher ã¯ã“ã®ã‚¯ãƒ©ã‚¹ã‚’ç¶™æ‰¿ã—ã¦è©³ç´°ã‚’å®Ÿè£…ã™ã‚‹ã€‚
    *
    * @since 0.4.0
    *
@@ -57,7 +57,7 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+     * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
      *
      * @else
      *
@@ -70,7 +70,7 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief ¥Ç¥¹¥È¥é¥¯¥¿
+     * @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
      *
      * @else
      *
@@ -82,12 +82,12 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ÀßÄê½é´ü²½
+     * @brief è¨­å®šåˆæœŸåŒ–
      *
-     * Logstream¥¯¥é¥¹¤Î³Æ¼ïÀßÄê¤ò¹Ô¤¦¡£¼ÂÁõ¥¯¥é¥¹¤Ç¤Ï¡¢Í¿¤¨¤é¤ì¤¿
-     * Properties¤«¤éÉ¬Í×¤Ê¾ğÊó¤ò¼èÆÀ¤·¤Æ³Æ¼ïÀßÄê¤ò¹Ô¤¦¡£
+     * Logstreamã‚¯ãƒ©ã‚¹ã®å„ç¨®è¨­å®šã‚’è¡Œã†ã€‚å®Ÿè£…ã‚¯ãƒ©ã‚¹ã§ã¯ã€ä¸ãˆã‚‰ã‚ŒãŸ
+     * Propertiesã‹ã‚‰å¿…è¦ãªæƒ…å ±ã‚’å–å¾—ã—ã¦å„ç¨®è¨­å®šã‚’è¡Œã†ã€‚
      *
-     * @param prop ÀßÄê¾ğÊó
+     * @param prop è¨­å®šæƒ…å ±
      *
      * @else
      *
@@ -105,11 +105,11 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief basic_strembuf ¤Ø¤Î¥İ¥¤¥ó¥¿¤òÊÖ¤¹
+     * @brief basic_strembuf ã¸ã®ãƒã‚¤ãƒ³ã‚¿ã‚’è¿”ã™
      *
-     * Logger¤Ç»ÈÍÑ¤¹¤ë basic_streambuf ¤Ø¤Î¥İ¥¤¥ó¥¿¤òÊÖ¤¹¡£
+     * Loggerã§ä½¿ç”¨ã™ã‚‹ basic_streambuf ã¸ã®ãƒã‚¤ãƒ³ã‚¿ã‚’è¿”ã™ã€‚
      *
-     * @return basic_streambuf (coil::LogStreambuf) ¤Ø¤Î¥İ¥¤¥ó¥¿
+     * @return basic_streambuf (coil::LogStreambuf) ã¸ã®ãƒã‚¤ãƒ³ã‚¿
      *
      * @else
      *

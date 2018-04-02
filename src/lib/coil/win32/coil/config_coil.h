@@ -1,4 +1,4 @@
-/* config_coil.h.  Generated from config_coil.h.in by configure.  */
+﻿/* config_coil.h.  Generated from config_coil.h.in by configure.  */
 /* config_coil.h.in.  Generated from configure.ac by autoheader.  */
 
 /* ACE version 5.6.1 or earlier */

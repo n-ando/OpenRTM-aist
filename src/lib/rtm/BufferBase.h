@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  *
  * @file BufferBase.h
@@ -28,7 +28,7 @@
  * @if jp
  * @namespace RTC
  *
- * @brief RT����ݡ��ͥ��
+ * @brief RTコンポーネント
  *
  * @else
  *
@@ -43,34 +43,34 @@ namespace RTC
   /*!
    * @if jp
    * @class BufferBase
-   * @brief BufferBase ��ݥ��饹
+   * @brief BufferBase 抽象クラス
    * 
-   * ��ΥХåե��Τ������ݥ��󥿡��ե��������饹��
-   * ��ݥХåե����饹�ϡ��ʲ��ν�貾�۴ؿ��μ������󶡤��ʤ���Фʤ�ʤ���
-   * \<DataType\>�Ȥ��ƥХåե�����ݻ�����ǡ���������ꤹ�롣
+   * 種々のバッファのための抽象インターフェースクラス。
+   * 具象バッファクラスは、以下の純粋仮想関数の実装を提供しなければならない。
+   * \<DataType\>としてバッファ内で保持するデータ型を指定する。
    *
-   * public���󥿡��ե������Ȥ��ưʲ��Τ�Τ��󶡤��롣
-   * - length(): �Хåե���Ĺ�����֤�
-   * - length(n): �Хåե�Ĺ��n�˥��åȤ���
-   * - reset(): �Хåե��Υݥ��󥿤�ꥻ�åȤ���
+   * publicインターフェースとして以下のものを提供する。
+   * - length(): バッファの長さを返す
+   * - length(n): バッファ長をnにセットする
+   * - reset(): バッファのポインタをリセットする
    *
-   * ����ߴ�Ϣ
-   * - wptr(n=0): ���ߤν񤭹����оݤ����Ǥ�n����Υݥ��󥿤��֤���
-   * - advanceWptr(n=1): ����ߥݥ��󥿤�n�ʤ�롣
-   * - put(): ���ߤν񤭹��߰��֤˽񤭹��ࡢ�ݥ��󥿤Ͽʤ�ʤ���
-   * - write(): �Хåե��˽񤭹��ࡣ�ݥ��󥿤�1�Ĥ����ࡣ
-   * - writable(): ����߲�ǽ�����ǿ����֤���
-   * - full(): �Хåե����ե���֡�
+   * 書込み関連
+   * - wptr(n=0): 現在の書き込み対象の要素のn個先のポインタを返す。
+   * - advanceWptr(n=1): 書込みポインタをn進める。
+   * - put(): 現在の書き込み位置に書き込む、ポインタは進めない。
+   * - write(): バッファに書き込む。ポインタは1つすすむ。
+   * - writable(): 書込み可能な要素数を返す。
+   * - full(): バッファがフル状態。
    *
-   * �ɤ߽Ф���Ϣ
-   * - rptr(n=0): ���ߤ��ɤ߽Ф��оݤ�n����Υݥ��󥿤��֤���
-   * - advanceRptr(n=1): �ɤ߽Ф��ݥ��󥿤�n�ʤ�롣
-   * - get(): ���ߤ��ɤ߽Ф����֤����ɤࡣ�ݥ��󥿤Ͽʤ�ʤ���
-   * - read(): �Хåե������ɤ߽Ф����ݥ��󥿤�1�Ĥ����ࡣ
-   * - readable(): �ɤ߽Ф���ǽ���ǿ����֤���
-   * - empty(): �Хåե��������֡�
+   * 読み出し関連
+   * - rptr(n=0): 現在の読み出し対象のn個先のポインタを返す。
+   * - advanceRptr(n=1): 読み出しポインタをn進める。
+   * - get(): 現在の読み出し位置から読む。ポインタは進めない。
+   * - read(): バッファから読み出す。ポインタは1つすすむ。
+   * - readable(): 読み出し可能要素数を返す。
+   * - empty(): バッファが空状態。
    *
-   * @param DataType �Хåե��˳�Ǽ����ǡ�����
+   * @param DataType バッファに格納するデータ型
    *
    * @since 0.4.0
    *
@@ -110,7 +110,7 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief ���ۥǥ��ȥ饯��
+     * @brief 仮想デストラクタ
      * 
      * @else
      *
@@ -125,7 +125,7 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief �Хåե�������
+     * @brief バッファの設定
      *
      * @else
      *
@@ -138,11 +138,11 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief �Хåե���Ĺ�����������
+     * @brief バッファの長さを取得する
      * 
-     * �Хåե�Ĺ��������뤿��ν�貾�۴ؿ�
+     * バッファ長を取得するための純粋仮想関数
      * 
-     * @return �Хåե�Ĺ
+     * @return バッファ長
      * 
      * @else
      *
@@ -159,13 +159,13 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief �Хåե���Ĺ���򥻥åȤ���
+     * @brief バッファの長さをセットする
      * 
-     * �Хåե�Ĺ�����ꤹ�롣�����ԲĤʾ���NOT_SUPPORTED���֤롣
+     * バッファ長を設定する。設定不可な場合はNOT_SUPPORTEDが返る。
      * 
-     * @return BUFFER_OK: ���ｪλ
-     *         NOT_SUPPORTED: �Хåե�Ĺ�ѹ��Բ�
-     *         BUFFER_ERROR: �۾ｪλ
+     * @return BUFFER_OK: 正常終了
+     *         NOT_SUPPORTED: バッファ長変更不可
+     *         BUFFER_ERROR: 異常終了
      * 
      * @else
      *
@@ -185,13 +185,13 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief �Хåե��ξ��֤�ꥻ�åȤ���
+     * @brief バッファの状態をリセットする
      * 
-     * �Хåե����ɤ߽Ф��ݥ��󥿤Ƚ񤭹��ߥݥ��󥿤ΰ��֤�ꥻ�åȤ��롣
+     * バッファの読み出しポインタと書き込みポインタの位置をリセットする。
      * 
-     * @return BUFFER_OK: ���ｪλ
-     *         NOT_SUPPORTED: �ꥻ�å��Բ�ǽ
-     *         BUFFER_ERROR: �۾ｪλ
+     * @return BUFFER_OK: 正常終了
+     *         NOT_SUPPORTED: リセット不可能
+     *         BUFFER_ERROR: 異常終了
      * 
      * @else
      *
@@ -212,12 +212,12 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief �Хåե��θ��ߤν�������ǤΥݥ���
+     * @brief バッファの現在の書込み要素のポインタ
      * 
-     * �Хåե��θ��ߤν�������ǤΥݥ��󥿤ޤ��ϡ�n����Υݥ��󥿤��֤�
+     * バッファの現在の書込み要素のポインタまたは、n個先のポインタを返す
      * 
-     * @param  n ����ߥݥ��� + n �ΰ��֤Υݥ��� 
-     * @return ����߰��֤Υݥ���
+     * @param  n 書込みポインタ + n の位置のポインタ 
+     * @return 書込み位置のポインタ
      * 
      * @else
      *
@@ -235,13 +235,13 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief ����ߥݥ��󥿤�ʤ��
+     * @brief 書込みポインタを進める
      * 
-     * ���ߤν񤭹��߰��֤Υݥ��󥿤� n �Ŀʤ�롣
+     * 現在の書き込み位置のポインタを n 個進める。
      * 
-     * @param  n ����ߥݥ��� + n �ΰ��֤Υݥ��� 
-     * @return BUFFER_OK: ���ｪλ
-     *         BUFFER_ERROR: �۾ｪλ
+     * @param  n 書込みポインタ + n の位置のポインタ 
+     * @return BUFFER_OK: 正常終了
+     *         BUFFER_ERROR: 異常終了
      * 
      * @else
      *
@@ -259,14 +259,14 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief �Хåե��˥ǡ�����񤭹���
+     * @brief バッファにデータを書き込む
      * 
-     * �Хåե��˥ǡ�����񤭹��ࡣ�񤭹��ߥݥ��󥿤ΰ��֤��ѹ�����ʤ���
+     * バッファにデータを書き込む。書き込みポインタの位置は変更されない。
      * 
-     * @param value �񤭹����оݥǡ���
+     * @param value 書き込み対象データ
      *
-     * @return BUFFER_OK: ���ｪλ
-     *         BUFFER_ERROR: �۾ｪλ
+     * @return BUFFER_OK: 正常終了
+     *         BUFFER_ERROR: 異常終了
      * 
      * @else
      *
@@ -286,14 +286,14 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief �Хåե��˥ǡ�����񤭹���
+     * @brief バッファにデータを書き込む
      * 
-     * �Хåե��˥ǡ�����񤭹��ࡣ�񤭹��ߥݥ��󥿤ΰ��֤�1�Ĥ����ࡣ
+     * バッファにデータを書き込む。書き込みポインタの位置は1つすすむ。
      * 
-     * @param value �񤭹����оݥǡ���
+     * @param value 書き込み対象データ
      *
-     * @return BUFFER_OK: ���ｪλ
-     *         BUFFER_ERROR: �۾ｪλ
+     * @return BUFFER_OK: 正常終了
+     *         BUFFER_ERROR: 異常終了
      * 
      * @else
      *
@@ -314,11 +314,11 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief �Хåե��˽���߲�ǽ�����ǿ�
+     * @brief バッファに書込み可能な要素数
      * 
-     * �Хåե��˽���߲�ǽ�����ǿ����֤���
+     * バッファに書込み可能な要素数を返す。
      * 
-     * @return �񤭹��߲�ǽ�����ǿ�
+     * @return 書き込み可能な要素数
      *
      * 
      * @else
@@ -337,11 +337,11 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief �Хåե�full�����å�
+     * @brief バッファfullチェック
      * 
-     * �Хåե�full�����å��ѽ�貾�۴ؿ�
+     * バッファfullチェック用純粋仮想関数
      *
-     * @return full�����å����(true:�Хåե�full��false:�Хåե���������)
+     * @return fullチェック結果(true:バッファfull，false:バッファ空きあり)
      * 
      * @else
      *
@@ -359,12 +359,12 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief �Хåե��θ��ߤ��ɤ߽Ф����ǤΥݥ���
+     * @brief バッファの現在の読み出し要素のポインタ
      * 
-     * �Хåե��θ��ߤ��ɤ߽Ф����ǤΥݥ��󥿤ޤ��ϡ�n����Υݥ��󥿤��֤�
+     * バッファの現在の読み出し要素のポインタまたは、n個先のポインタを返す
      * 
-     * @param  n �ɤ߽Ф��ݥ��� + n �ΰ��֤Υݥ��� 
-     * @return �ɤ߽Ф����֤Υݥ���
+     * @param  n 読み出しポインタ + n の位置のポインタ 
+     * @return 読み出し位置のポインタ
      * 
      * @else
      *
@@ -381,13 +381,13 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief �ɤ߽Ф��ݥ��󥿤�ʤ��
+     * @brief 読み出しポインタを進める
      * 
-     * ���ߤ��ɤ߽Ф����֤Υݥ��󥿤� n �Ŀʤ�롣
+     * 現在の読み出し位置のポインタを n 個進める。
      * 
-     * @param  n �ɤ߽Ф��ݥ��� + n �ΰ��֤Υݥ��� 
-     * @return BUFFER_OK: ���ｪλ
-     *         BUFFER_ERROR: �۾ｪλ
+     * @param  n 読み出しポインタ + n の位置のポインタ 
+     * @return BUFFER_OK: 正常終了
+     *         BUFFER_ERROR: 異常終了
      * 
      * @else
      *
@@ -405,14 +405,14 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief �Хåե�����ǡ������ɤ߽Ф�
+     * @brief バッファからデータを読み出す
      * 
-     * �Хåե�����ǡ������ɤߤ������ɤ߽Ф��ݥ��󥿤ΰ��֤��ѹ�����ʤ���
+     * バッファからデータを読みだす。読み出しポインタの位置は変更されない。
      * 
-     * @param value �ɤ߽Ф��ǡ���
+     * @param value 読み出しデータ
      *
-     * @return BUFFER_OK: ���ｪλ
-     *         BUFFER_ERROR: �۾ｪλ
+     * @return BUFFER_OK: 正常終了
+     *         BUFFER_ERROR: 異常終了
      * 
      * @else
      *
@@ -432,11 +432,11 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief �Хåե�����ǡ������ɤ߽Ф�
+     * @brief バッファからデータを読み出す
      * 
-     * �Хåե�����ǡ������ɤߤ������ɤ߽Ф��ݥ��󥿤ΰ��֤��ѹ�����ʤ���
+     * バッファからデータを読みだす。読み出しポインタの位置は変更されない。
      * 
-     * @return �ɤ߽Ф��ǡ���
+     * @return 読み出しデータ
      * 
      * @else
      *
@@ -453,13 +453,13 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief �Хåե�����ǡ������ɤ߽Ф�
+     * @brief バッファからデータを読み出す
      * 
-     * �Хåե�����ǡ������ɤ߽Ф�����ν�貾�۴ؿ�
+     * バッファからデータを読み出すための純粋仮想関数
      * 
-     * @param value �ɤ߽Ф��ǡ���
+     * @param value 読み出しデータ
      *
-     * @return �ǡ����ɤ߽Ф����(true:�ɤ߽Ф�������false:�ɤ߽Ф�����)
+     * @return データ読み出し結果(true:読み出し成功，false:読み出し失敗)
      * 
      * @else
      *
@@ -479,11 +479,11 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief �Хåե������ɤ߽Ф���ǽ�����ǿ�
+     * @brief バッファから読み出し可能な要素数
      * 
-     * �Хåե������ɤ߽Ф���ǽ�����ǿ����֤���
+     * バッファから読み出し可能な要素数を返す。
      * 
-     * @return �ɤ߽Ф���ǽ�����ǿ�
+     * @return 読み出し可能な要素数
      *
      * 
      * @else
@@ -502,11 +502,11 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief �Хåե�empty�����å�
+     * @brief バッファemptyチェック
      * 
-     * �Хåե�empty�����å��ѽ�貾�۴ؿ�
+     * バッファemptyチェック用純粋仮想関数
      *
-     * @return empty�����å����(true:�Хåե�empty��false:�Хåե��ǡ�������)
+     * @return emptyチェック結果(true:バッファempty，false:バッファデータあり)
      * 
      * @else
      *
@@ -525,12 +525,12 @@ namespace RTC
   /*!
    * @if jp
    * @class NullBuffer
-   * @brief ���ߡ��Хåե��������饹
+   * @brief ダミーバッファ実装クラス
    * 
-   * �Хåե�Ĺ��������Υ��ߡ��Хåե��������饹��
-   * \<DataType\>�Ȥ��ƥХåե�����ݻ�����ǡ���������ꤹ�롣
+   * バッファ長が１固定のダミーバッファ実装クラス。
+   * \<DataType\>としてバッファ内で保持するデータ型を指定する。
    *
-   * @param DataType �Хåե��˳�Ǽ����ǡ�����
+   * @param DataType バッファに格納するデータ型
    *
    * @since 0.4.0
    *
@@ -556,12 +556,12 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief ���󥹥ȥ饯��
+     * @brief コンストラクタ
      * 
-     * ���󥹥ȥ饯��
-     * �Хåե�Ĺ��1(����)�ǽ�������롣
+     * コンストラクタ
+     * バッファ長を1(固定)で初期化する。
      *
-     * @param size �Хåե�Ĺ(������̵��)
+     * @param size バッファ長(ただし無効)
      * 
      * @else
      *
@@ -582,9 +582,9 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief �ǥ��ȥ饯��
+     * @brief デストラクタ
      * 
-     * �ǥ��ȥ饯����
+     * デストラクタ。
      *
      * @else
      *
@@ -601,11 +601,11 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief �Хåե�Ĺ(1����)���������
+     * @brief バッファ長(1固定)を取得する
      * 
-     * �Хåե�Ĺ��������롣(���1���֤���)
+     * バッファ長を取得する。(常に1を返す。)
      * 
-     * @return �Хåե�Ĺ(1����)
+     * @return バッファ長(1固定)
      * 
      * @else
      *
@@ -625,13 +625,13 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief �Хåե��˥ǡ�����񤭹���
+     * @brief バッファにデータを書き込む
      * 
-     * ������Ϳ����줿�ǡ�����Хåե��˽񤭹��ࡣ
+     * 引数で与えられたデータをバッファに書き込む。
      * 
-     * @param value �񤭹����оݥǡ���
+     * @param value 書き込み対象データ
      *
-     * @return �ǡ����񤭹��߷��(true:�񤭹���������false:�񤭹��߼���)
+     * @return データ書き込み結果(true:書き込み成功，false:書き込み失敗)
      * 
      * @else
      *
@@ -654,13 +654,13 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief �Хåե�����ǡ������ɤ߽Ф�
+     * @brief バッファからデータを読み出す
      * 
-     * �Хåե��˳�Ǽ���줿�ǡ������ɤ߽Ф���
+     * バッファに格納されたデータを読み出す。
      * 
-     * @param value �ɤ߽Ф����ǡ���
+     * @param value 読み出したデータ
      *
-     * @return �ǡ����ɤ߽Ф����(true:�ɤ߽Ф�������false:�ɤ߽Ф�����)
+     * @return データ読み出し結果(true:読み出し成功，false:読み出し失敗)
      * 
      * @else
      *
@@ -683,11 +683,11 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief �Хåե�full�����å�
+     * @brief バッファfullチェック
      * 
-     * �Хåե�full������å����롣(���false���֤���)
+     * バッファfullをチェックする。(常にfalseを返す。)
      *
-     * @return full�����å����(���false)
+     * @return fullチェック結果(常にfalse)
      * 
      * @else
      *
@@ -707,11 +707,11 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief �Хåե�empty�����å�
+     * @brief バッファemptyチェック
      * 
-     * �Хåե�empty������å����롣(���false���֤���)
+     * バッファemptyをチェックする。(常にfalseを返す。)
      *
-     * @return empty�����å����(���false)
+     * @return emptyチェック結果(常にfalse)
      * 
      * @else
      *
@@ -732,11 +732,11 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief �Хåե��˥ǡ������Ǽ
+     * @brief バッファにデータを格納
      * 
-     * ������Ϳ����줿�ǡ�����Хåե��˳�Ǽ���롣
+     * 引数で与えられたデータをバッファに格納する。
      * 
-     * @param data �оݥǡ���
+     * @param data 対象データ
      * 
      * @else
      *
@@ -756,11 +756,11 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief �Хåե�����ǡ������������
+     * @brief バッファからデータを取得する
      * 
-     * �Хåե��˳�Ǽ���줿�ǡ�����������롣
+     * バッファに格納されたデータを取得する。
      *
-     * @return �����ǡ���
+     * @return 取得データ
      * 
      * @else
      *
@@ -780,13 +780,13 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief ���˽񤭹���Хåե��ؤλ��Ȥ��������
+     * @brief 次に書き込むバッファへの参照を取得する
      * 
-     * �񤭹��ߥХåե��ؤλ��Ȥ�������롣
-     * �ܥХåե������ǤϥХåե�Ĺ�ϸ���ǣ��Ǥ��뤿�ᡤ
-     * ���Ʊ�����֤ؤλ��Ȥ��֤���
+     * 書き込みバッファへの参照を取得する。
+     * 本バッファ実装ではバッファ長は固定で１であるため，
+     * 常に同じ位置への参照を返す。
      *
-     * @return ���ν񤭹����оݥХåե��ؤλ���(����)
+     * @return 次の書き込み対象バッファへの参照(固定)
      * 
      * @else
      *

@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file ConfigSampleComp.cpp
  * @brief Standalone component

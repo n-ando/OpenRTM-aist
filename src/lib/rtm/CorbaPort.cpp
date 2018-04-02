@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file  CorbaPort.h
  * @brief CorbaPort class
@@ -28,7 +28,7 @@ namespace RTC
 {
   /*!
    * @if jp
-   * @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+   * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
    * @else
    * @brief Constructor
    * @endif
@@ -41,7 +41,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ²¾ÁÛ¥Ç¥¹¥È¥é¥¯¥¿
+   * @brief ä»®æƒ³ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
    * @else
    * @brief Virtual destructor
    * @endif
@@ -52,7 +52,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ¥×¥í¥Ñ¥Æ¥£¤Î½é´ü²½
+   * @brief ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã®åˆæœŸåŒ–
    * @else
    * @brief Initializing properties
    * @endif
@@ -83,7 +83,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief Provider ¤òÅĞÏ¿¤¹¤ë
+   * @brief Provider ã‚’ç™»éŒ²ã™ã‚‹
    * @else
    * @brief Register the provider
    * @endif
@@ -118,7 +118,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief Consumer ¤òÅĞÏ¿¤¹¤ë
+   * @brief Consumer ã‚’ç™»éŒ²ã™ã‚‹
    * @else
    * @brief Register the consumer
    * @endif
@@ -148,7 +148,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief Port ¤ÎÁ´¤Æ¤Î¥¤¥ó¥¿¡¼¥Õ¥§¡¼¥¹¤ò activates ¤¹¤ë
+   * @brief Port ã®å…¨ã¦ã®ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹ã‚’ activates ã™ã‚‹
    * @else
    * @brief Activate all Port interfaces
    * @endif
@@ -165,7 +165,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief Á´¤Æ¤Î Port ¤Î¥¤¥ó¥¿¡¼¥Õ¥§¡¼¥¹¤ò deactivates ¤¹¤ë
+   * @brief å…¨ã¦ã® Port ã®ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹ã‚’ deactivates ã™ã‚‹
    * @else
    * @brief Deactivate all Port interfaces
    * @endif
@@ -185,7 +185,7 @@ namespace RTC
   //============================================================
   /*!
    * @if jp
-   * @brief Interface ¾ğÊó¤ò¸ø³«¤¹¤ë
+   * @brief Interface æƒ…å ±ã‚’å…¬é–‹ã™ã‚‹
    * @else
    * @brief Publish interface information
    * @endif
@@ -249,7 +249,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief Interface ¤ËÀÜÂ³¤¹¤ë
+   * @brief Interface ã«æ¥ç¶šã™ã‚‹
    * @else
    * @brief Subscribe to interfaces
    * @endif
@@ -305,7 +305,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief Interface ¤Ø¤ÎÀÜÂ³¤ò²ò½ü¤¹¤ë
+   * @brief Interface ã¸ã®æ¥ç¶šã‚’è§£é™¤ã™ã‚‹
    * @else
    * @brief Unsubscribe interfaces
    * @endif
@@ -339,7 +339,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief Consumer ¤Ë¹çÃ×¤¹¤ë Provider ¤ò NVList ¤ÎÃæ¤«¤é¸«¤Ä¤±¤ë
+   * @brief Consumer ã«åˆè‡´ã™ã‚‹ Provider ã‚’ NVList ã®ä¸­ã‹ã‚‰è¦‹ã¤ã‘ã‚‹
    * @else
    * @brief Find out a provider corresponding to the consumer from NVList
    * @endif
@@ -380,7 +380,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief Consumer ¤Ë¹çÃ×¤¹¤ë Provider ¤ò NVList ¤ÎÃæ¤«¤é¸«¤Ä¤±¤ë
+   * @brief Consumer ã«åˆè‡´ã™ã‚‹ Provider ã‚’ NVList ã®ä¸­ã‹ã‚‰è¦‹ã¤ã‘ã‚‹
    * @else
    * @brief Find out a provider corresponding to the consumer from NVList
    * @endif
@@ -408,7 +408,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief Consumer ¤Ë IOR ¤ò¥»¥Ã¥È¤¹¤ë
+   * @brief Consumer ã« IOR ã‚’ã‚»ãƒƒãƒˆã™ã‚‹
    * @else
    * @brief Setting IOR to Consumer
    * @endif
@@ -436,7 +436,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief Consumer ¤Î¥ª¥Ö¥¸¥§¥¯¥È¤ò¥ê¥ê¡¼¥¹¤¹¤ë
+   * @brief Consumer ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ãƒªãƒªãƒ¼ã‚¹ã™ã‚‹
    * @else
    * @brief Releasing Consumer Object
    * @endif

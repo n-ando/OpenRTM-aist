@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file PeriodicTask.cpp
  * @brief PeriodicTask class
@@ -24,7 +24,7 @@ namespace coil
 {
   /*!
    * @if jp
-   * @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+   * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
    * @else
    * @brief Constructor
    * @endif
@@ -40,7 +40,7 @@ namespace coil
   
   /*!
    * @if jp
-   * @brief ¥Ç¥¹¥È¥é¥¯¥¿
+   * @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
    * @else
    * @brief Destructor
    * @endif
@@ -57,7 +57,7 @@ namespace coil
 
   /*!
    * @if jp
-   * @brief ¥¿¥¹¥¯¼Â¹Ô¤ò³«»Ï¤¹¤ë
+   * @brief ã‚¿ã‚¹ã‚¯å®Ÿè¡Œã‚’é–‹å§‹ã™ã‚‹
    * @else
    * @brief Starting the task
    * @endif
@@ -74,7 +74,7 @@ namespace coil
 
   /*!
    * @if jp
-   * @brief ¥¿¥¹¥¯¼Â¹Ô¤ò½ªÎ»¤¹¤ë
+   * @brief ã‚¿ã‚¹ã‚¯å®Ÿè¡Œã‚’çµ‚äº†ã™ã‚‹
    * @else
    * @brief Finalizing the task
    * @endif
@@ -91,7 +91,7 @@ namespace coil
 
   /*!
    * @if jp
-   * @brief ¥¿¥¹¥¯¼Â¹Ô¤òÃæÃÇ¤¹¤ë
+   * @brief ã‚¿ã‚¹ã‚¯å®Ÿè¡Œã‚’ä¸­æ–­ã™ã‚‹
    * @else
    * @brief Suspending the task
    * @endif
@@ -105,7 +105,7 @@ namespace coil
 
   /*!
    * @if jp
-   * @brief ÃæÃÇ¤µ¤ì¤Æ¤¤¤ë¥¿¥¹¥¯¤òºÆ³«¤¹¤ë
+   * @brief ä¸­æ–­ã•ã‚Œã¦ã„ã‚‹ã‚¿ã‚¹ã‚¯ã‚’å†é–‹ã™ã‚‹
    * @else
    * @brief Resuming the suspended task
    * @endif
@@ -123,7 +123,7 @@ namespace coil
 
   /*!
    * @if jp
-   * @brief ÃæÃÇ¤µ¤ì¤Æ¤¤¤ë¥¿¥¹¥¯¤ò1¼ş´ü¤À¤±¼Â¹Ô¤¹¤ë
+   * @brief ä¸­æ–­ã•ã‚Œã¦ã„ã‚‹ã‚¿ã‚¹ã‚¯ã‚’1å‘¨æœŸã ã‘å®Ÿè¡Œã™ã‚‹
    * @else
    * @brief Executing the suspended task one tick
    * @endif
@@ -136,7 +136,7 @@ namespace coil
 
   /*!
    * @if jp
-   * @brief ¥¿¥¹¥¯¼Â¹Ô´Ø¿ô¤ò¥»¥Ã¥È¤¹¤ë
+   * @brief ã‚¿ã‚¹ã‚¯å®Ÿè¡Œé–¢æ•°ã‚’ã‚»ãƒƒãƒˆã™ã‚‹
    * @else
    * @brief Setting task execution function
    * @endif
@@ -151,7 +151,7 @@ namespace coil
   
   /*!
    * @if jp
-   * @brief ¥¿¥¹¥¯¼Â¹Ô¼ş´ü¤ò¥»¥Ã¥È¤¹¤ë
+   * @brief ã‚¿ã‚¹ã‚¯å®Ÿè¡Œå‘¨æœŸã‚’ã‚»ãƒƒãƒˆã™ã‚‹
    * @else
    * @brief Setting task execution period
    * @endif
@@ -171,7 +171,7 @@ namespace coil
 
   /*!
    * @if jp
-   * @brief ¥¿¥¹¥¯¼Â¹Ô¼ş´ü¤ò¥»¥Ã¥È¤¹¤ë
+   * @brief ã‚¿ã‚¹ã‚¯å®Ÿè¡Œå‘¨æœŸã‚’ã‚»ãƒƒãƒˆã™ã‚‹
    * @else
    * @brief Setting task execution period
    * @endif
@@ -191,7 +191,7 @@ namespace coil
 
   /*!
    * @if jp
-   * @brief ¥¿¥¹¥¯´Ø¿ô¼Â¹Ô»ş´Ö·×Â¬¤òÍ­¸ú¤Ë¤¹¤ë¤«
+   * @brief ã‚¿ã‚¹ã‚¯é–¢æ•°å®Ÿè¡Œæ™‚é–“è¨ˆæ¸¬ã‚’æœ‰åŠ¹ã«ã™ã‚‹ã‹
    * @else
    * @brief Validate a Task execute time measurement
    * @endif
@@ -203,7 +203,7 @@ namespace coil
 
   /*!
    * @if jp
-   * @brief ¥¿¥¹¥¯´Ø¿ô¼Â¹Ô»ş´Ö·×Â¬¼ş´ü
+   * @brief ã‚¿ã‚¹ã‚¯é–¢æ•°å®Ÿè¡Œæ™‚é–“è¨ˆæ¸¬å‘¨æœŸ
    * @else
    * @brief Task execute time measurement period
    * @endif
@@ -215,7 +215,7 @@ namespace coil
 
   /*!
    * @if jp
-   * @brief ¥¿¥¹¥¯¼ş´ü»ş´Ö·×Â¬¤òÍ­¸ú¤Ë¤¹¤ë¤«
+   * @brief ã‚¿ã‚¹ã‚¯å‘¨æœŸæ™‚é–“è¨ˆæ¸¬ã‚’æœ‰åŠ¹ã«ã™ã‚‹ã‹
    * @else
    * @brief Validate a Task period time measurement
    * @endif
@@ -227,7 +227,7 @@ namespace coil
 
   /*!
    * @if jp
-   * @brief ¥¿¥¹¥¯¼ş´ü»ş´Ö·×Â¬¼ş´ü
+   * @brief ã‚¿ã‚¹ã‚¯å‘¨æœŸæ™‚é–“è¨ˆæ¸¬å‘¨æœŸ
    * @else
    * @brief Task period time measurement count
    * @endif
@@ -239,7 +239,7 @@ namespace coil
 
   /*!
    * @if jp
-   * @brief ¥¿¥¹¥¯´Ø¿ô¼Â¹Ô»ş´Ö·×Â¬·ë²Ì¤ò¼èÆÀ
+   * @brief ã‚¿ã‚¹ã‚¯é–¢æ•°å®Ÿè¡Œæ™‚é–“è¨ˆæ¸¬çµæœã‚’å–å¾—
    * @else
    * @brief Get a result in task execute time measurement
    * @endif
@@ -252,7 +252,7 @@ namespace coil
 
   /*!
    * @if jp
-   * @brief ¥¿¥¹¥¯¼ş´ü»ş´Ö·×Â¬·ë²Ì¤ò¼èÆÀ
+   * @brief ã‚¿ã‚¹ã‚¯å‘¨æœŸæ™‚é–“è¨ˆæ¸¬çµæœã‚’å–å¾—
    * @else
    * @brief Get a result in task period time measurement
    * @endif
@@ -268,7 +268,7 @@ namespace coil
   //----------------------------------------------------------------------
   /*!
    * @if jp
-   * @brief PeriodicTask ÍÑ¤Î¥¹¥ì¥Ã¥É¼Â¹Ô
+   * @brief PeriodicTask ç”¨ã®ã‚¹ãƒ¬ãƒƒãƒ‰å®Ÿè¡Œ
    * @else
    * @brief Thread execution for PeriodicTask
    * @endif
@@ -311,7 +311,7 @@ namespace coil
 
   /*!
    * @if jp
-   * @brief ¥¹¥ì¥Ã¥ÉµÙ»ß
+   * @brief ã‚¹ãƒ¬ãƒƒãƒ‰ä¼‘æ­¢
    * @else
    * @brief Thread sleep
    * @endif
@@ -327,7 +327,7 @@ namespace coil
 
   /*!
    * @if jp
-   * @brief ¼Â¹Ô¾õÂÖ¹¹¿·
+   * @brief å®Ÿè¡ŒçŠ¶æ…‹æ›´æ–°
    * @else
    * @brief Update for execute state
    * @endif
@@ -345,7 +345,7 @@ namespace coil
 
   /*!
    * @if jp
-   * @brief ¼ş´ü¾õÂÖ¹¹¿·
+   * @brief å‘¨æœŸçŠ¶æ…‹æ›´æ–°
    * @else
    * @brief Update for period state
    * @endif

@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file ComponentActionListener.cpp
  * @brief Component action listener class
@@ -24,7 +24,7 @@ namespace RTC
   //============================================================
   /*!
    * @if jp
-   * @class PostComponentActionListener ¥¯¥é¥¹
+   * @class PostComponentActionListener ã‚¯ãƒ©ã‚¹
    * @else
    * @class PostComponentActionListener class
    * @endif
@@ -33,7 +33,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @class PreComponentActionListener ¥¯¥é¥¹
+   * @class PreComponentActionListener ã‚¯ãƒ©ã‚¹
    * @else
    * @class PreComponentActionListener class
    * @endif
@@ -42,7 +42,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @class PortActionListener ¥¯¥é¥¹
+   * @class PortActionListener ã‚¯ãƒ©ã‚¹
    * @else
    * @class PortActionListener class
    * @endif
@@ -51,7 +51,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @class ExecutionContextActionListener ¥¯¥é¥¹
+   * @class ExecutionContextActionListener ã‚¯ãƒ©ã‚¹
    * @else
    * @class ExecutionContextActionListener class
    * @endif
@@ -65,7 +65,7 @@ namespace RTC
   //============================================================
   /*!
    * @if jp
-   * @class PreComponentActionListener ¥Û¥ë¥À¥¯¥é¥¹
+   * @class PreComponentActionListener ãƒ›ãƒ«ãƒ€ã‚¯ãƒ©ã‚¹
    * @else
    * @class PreComponentActionListener holder class
    * @endif
@@ -131,7 +131,7 @@ namespace RTC
   //============================================================
   /*!
    * @if jp
-   * @class PostComponentActionListener ¥Û¥ë¥À¥¯¥é¥¹
+   * @class PostComponentActionListener ãƒ›ãƒ«ãƒ€ã‚¯ãƒ©ã‚¹
    * @else
    * @class PostComponentActionListener holder class
    * @endif
@@ -196,7 +196,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @class PortActionListener ¥Û¥ë¥À¥¯¥é¥¹
+   * @class PortActionListener ãƒ›ãƒ«ãƒ€ã‚¯ãƒ©ã‚¹
    * @else
    * @class PortActionListener holder class
    * @endif
@@ -261,7 +261,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @class ExecutionContextActionListener ¥Û¥ë¥À¥¯¥é¥¹
+   * @class ExecutionContextActionListener ãƒ›ãƒ«ãƒ€ã‚¯ãƒ©ã‚¹
    * @else
    * @class ExecutionContextActionListener holder class
    * @endif

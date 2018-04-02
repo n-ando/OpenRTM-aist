@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file RTObjectStateMachine.h
  * @brief ExecutionContext's state machine worker class

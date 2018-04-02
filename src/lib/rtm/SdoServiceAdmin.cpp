@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file SdoServiceAdmin.cpp
  * @brief SDO service administration class
@@ -32,7 +32,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief  ServiceProfileÍÑfunctor
+   * @brief  ServiceProfileç”¨functor
    * @else
    * @brief  Functor for ServiceProfile
    * @endif
@@ -51,7 +51,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+   * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
    * @else
    * @brief Constructor
    * @endif
@@ -152,7 +152,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ²¾ÁÛ¥Ç¥¹¥È¥é¥¯¥¿
+   * @brief ä»®æƒ³ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
    * @else
    * @brief Virtual destractor
    * @endif
@@ -176,7 +176,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief SDO Service Provider ¤Î ServiceProfileList ¤ò¼èÆÀ¤¹¤ë
+   * @brief SDO Service Provider ã® ServiceProfileList ã‚’å–å¾—ã™ã‚‹
    * @else
    * @brief Get ServiceProfileList of SDO Service Provider
    * @endif
@@ -196,7 +196,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief SDO Service Provider ¤Î ServiceProfile ¤ò¼èÆÀ¤¹¤ë
+   * @brief SDO Service Provider ã® ServiceProfile ã‚’å–å¾—ã™ã‚‹
    * @else
    * @brief Get ServiceProfile of an SDO Service Provider
    * @endif
@@ -219,7 +219,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief SDO Service Provider ¤Î Service ¤ò¼èÆÀ¤¹¤ë
+   * @brief SDO Service Provider ã® Service ã‚’å–å¾—ã™ã‚‹
    * @else
    * @brief Get ServiceProfile of an SDO Service
    * @endif
@@ -235,7 +235,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief SDO service provider ¤ò¥»¥Ã¥È¤¹¤ë
+   * @brief SDO service provider ã‚’ã‚»ãƒƒãƒˆã™ã‚‹
    * @else
    * @brief Set a SDO service provider
    * @endif
@@ -265,7 +265,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief SDO service provider ¤òºï½ü¤¹¤ë
+   * @brief SDO service provider ã‚’å‰Šé™¤ã™ã‚‹
    * @else
    * @brief Remove a SDO service provider
    * @endif
@@ -298,7 +298,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief Service Consumer ¤òÄÉ²Ã¤¹¤ë
+   * @brief Service Consumer ã‚’è¿½åŠ ã™ã‚‹
    * @else
    * @brief Add Service Consumer
    * @endif
@@ -376,7 +376,7 @@ namespace RTC
     
   /*!
    * @if jp
-   * @brief Service Consumer ¤òºï½ü¤¹¤ë
+   * @brief Service Consumer ã‚’å‰Šé™¤ã™ã‚‹
    * @else
    * @brief Remove Service Consumer
    * @endif
@@ -418,7 +418,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief µö²Ä¤µ¤ì¤¿¥µ¡¼¥Ó¥¹·¿¤«¤É¤¦¤«Ä´¤Ù¤ë
+   * @brief è¨±å¯ã•ã‚ŒãŸã‚µãƒ¼ãƒ“ã‚¹å‹ã‹ã©ã†ã‹èª¿ã¹ã‚‹
    * @else
    * @brief If it is enabled service type
    * @endif
@@ -445,7 +445,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief Â¸ºß¤¹¤ë¥µ¡¼¥Ó¥¹·¿¤«¤É¤¦¤«Ä´¤Ù¤ë
+   * @brief å­˜åœ¨ã™ã‚‹ã‚µãƒ¼ãƒ“ã‚¹å‹ã‹ã©ã†ã‹èª¿ã¹ã‚‹
    * @else
    * @brief If it is existing service type
    * @endif

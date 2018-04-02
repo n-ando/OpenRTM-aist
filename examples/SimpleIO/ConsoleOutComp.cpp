@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file ConsoleOutComp.cpp
  * @brief Standalone component

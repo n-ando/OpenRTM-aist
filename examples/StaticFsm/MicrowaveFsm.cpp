@@ -1,4 +1,4 @@
-// A simple simulation of an microwave oven:
+﻿// A simple simulation of an microwave oven:
 // Timer can be programmed in minutes, last mode will be resumed if opened.
 //
 // Compile like this:

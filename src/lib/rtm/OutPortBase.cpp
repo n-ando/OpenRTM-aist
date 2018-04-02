@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file OutPortBase.cpp
  * @brief Output porty base class
@@ -35,7 +35,7 @@ namespace RTC
 {
   /*!
    * @if jp
-   * @brief Provider ¤òºï½ü¤¹¤ë¤¿¤á¤Î Functor
+   * @brief Provider ã‚’å‰Šé™¤ã™ã‚‹ãŸã‚ã® Functor
    * @else
    * @brief Functor to delete Providers
    * @endif
@@ -55,7 +55,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief Connector ¤òºï½ü¤¹¤ë¤¿¤á¤Î Functor
+   * @brief Connector ã‚’å‰Šé™¤ã™ã‚‹ãŸã‚ã® Functor
    * @else
    * @brief Functor to delete Connectors
    * @endif
@@ -74,7 +74,7 @@ namespace RTC
 
   /*!------------------------------------------------------------
    * @if jp
-   * @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+   * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
    * @else
    * @brief Constructor
    * @endif
@@ -106,7 +106,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ¥Ç¥¹¥È¥é¥¯¥¿
+   * @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
    * @else
    * @brief Destructor
    * @endif
@@ -114,7 +114,7 @@ namespace RTC
   OutPortBase::~OutPortBase(void)
   {
     RTC_TRACE(("~OutPortBase()"));
-    // connector ¤Î¥¯¥ê¡¼¥ó¥Ê¥Ã¥×
+    // connector ã®ã‚¯ãƒªãƒ¼ãƒ³ãƒŠãƒƒãƒ—
     std::for_each(m_connectors.begin(),
                   m_connectors.end(),
                   connector_cleanup());
@@ -122,7 +122,7 @@ namespace RTC
              
   /*!
    * @if jp
-   * @brief ¥×¥í¥Ñ¥Æ¥£¤Î½é´ü²½
+   * @brief ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã®åˆæœŸåŒ–
    * @else
    * @brief Initializing properties
    * @endif
@@ -158,7 +158,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ¥×¥í¥Ñ¥Æ¥£¤ò¼èÆÀ¤¹¤ë
+   * @brief ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã‚’å–å¾—ã™ã‚‹
    * @else
    * @brief Get properties
    * @endif
@@ -171,7 +171,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief Connector ¤ò¼èÆÀ
+   * @brief Connector ã‚’å–å¾—
    * @else
    * @brief Connector list
    * @endif
@@ -184,7 +184,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ConnectorProfile ¤ò¼èÆÀ
+   * @brief ConnectorProfile ã‚’å–å¾—
    * @else
    * @brief ConnectorProfile list
    * @endif
@@ -202,7 +202,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ConnectorId ¤ò¼èÆÀ
+   * @brief ConnectorId ã‚’å–å¾—
    * @else
    * @brief ConnectorId list
    * @endif
@@ -220,7 +220,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief Connector¤ÎÌ¾Á°¤ò¼èÆÀ
+   * @brief Connectorã®åå‰ã‚’å–å¾—
    * @else
    * @brief Connector name list
    * @endif
@@ -238,7 +238,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief Connector¤òID¤Ç¼èÆÀ
+   * @brief Connectorã‚’IDã§å–å¾—
    * @else
    * @brief Getting Connector by ID
    * @endif
@@ -261,7 +261,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief Connector¤òÌ¾Á°¤Ç¼èÆÀ
+   * @brief Connectorã‚’åå‰ã§å–å¾—
    * @else
    * @brief Getting ConnectorProfile by name
    * @endif
@@ -284,7 +284,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ConnectorProfile¤òID¤Ç¼èÆÀ
+   * @brief ConnectorProfileã‚’IDã§å–å¾—
    * @else
    * @brief Getting ConnectorProfile by name
    * @endif
@@ -304,7 +304,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ConnectorProfile¤òÌ¾Á°¤Ç¼èÆÀ
+   * @brief ConnectorProfileã‚’åå‰ã§å–å¾—
    * @else
    * @brief Getting ConnectorProfile by name
    * @endif
@@ -324,7 +324,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief OutPort¤ò activates ¤¹¤ë
+   * @brief OutPortã‚’ activates ã™ã‚‹
    * @else
    * @brief Activate all Port interfaces
    * @endif
@@ -341,7 +341,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief Á´¤Æ¤Î Port ¤Î¥¤¥ó¥¿¡¼¥Õ¥§¡¼¥¹¤ò deactivates ¤¹¤ë
+   * @brief å…¨ã¦ã® Port ã®ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹ã‚’ deactivates ã™ã‚‹
    * @else
    * @brief Deactivate all Port interfaces
    * @endif
@@ -359,9 +359,9 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ConnectorDataListener ¥ê¥¹¥Ê¤òÄÉ²Ã¤¹¤ë
+   * @brief ConnectorDataListener ãƒªã‚¹ãƒŠã‚’è¿½åŠ ã™ã‚‹
    *
-   * ¥Ğ¥Ã¥Õ¥¡½ñ¤­¹ş¤ß¤Ş¤¿¤ÏÆÉ¤ß½Ğ¤·¥¤¥Ù¥ó¥È¤Ë´ØÏ¢¤¹¤ë³Æ¼ï¥ê¥¹¥Ê¤òÀßÄê¤¹¤ë¡£
+   * ãƒãƒƒãƒ•ã‚¡æ›¸ãè¾¼ã¿ã¾ãŸã¯èª­ã¿å‡ºã—ã‚¤ãƒ™ãƒ³ãƒˆã«é–¢é€£ã™ã‚‹å„ç¨®ãƒªã‚¹ãƒŠã‚’è¨­å®šã™ã‚‹ã€‚
    *
    * @else
    * @brief Adding BufferDataListener type listener
@@ -386,7 +386,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ConnectorDataListener ¥ê¥¹¥Ê¤òºï½ü¤¹¤ë
+   * @brief ConnectorDataListener ãƒªã‚¹ãƒŠã‚’å‰Šé™¤ã™ã‚‹
    *
    * @else
    * @brief Removing ConnectorDataListener type listener
@@ -410,7 +410,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ConnectorListener ¥ê¥¹¥Ê¤òÄÉ²Ã¤¹¤ë
+   * @brief ConnectorListener ãƒªã‚¹ãƒŠã‚’è¿½åŠ ã™ã‚‹
    *
    * @else
    * @brief Adding ConnectorListener type listener
@@ -434,7 +434,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ConnectorListener ¥ê¥¹¥Ê¤òºï½ü¤¹¤ë
+   * @brief ConnectorListener ãƒªã‚¹ãƒŠã‚’å‰Šé™¤ã™ã‚‹
    *
    * @else
    * @brief Removing ConnectorListener type listener
@@ -457,7 +457,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief endian ÀßÄê¤¬little¤«Èİ¤«ÊÖ¤¹
+   * @brief endian è¨­å®šãŒlittleã‹å¦ã‹è¿”ã™
    * @else
    * @brief return it whether endian setting is little
    * @endif
@@ -469,7 +469,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief [CORBA interface] Port ¤ÎÀÜÂ³¤ò¹Ô¤¦
+   * @brief [CORBA interface] Port ã®æ¥ç¶šã‚’è¡Œã†
    * @else
    * @brief [CORBA interface] Connect the Port
    * @endif
@@ -498,7 +498,7 @@ namespace RTC
   //======================================================================
   /*!
    * @if jp
-   * @brief OutPort¤ÎÀßÄê¤ò¹Ô¤¦
+   * @brief OutPortã®è¨­å®šã‚’è¡Œã†
    * @else
    * @brief Configureing outport
    * @endif
@@ -511,7 +511,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief Interface¾ğÊó¤ò¸ø³«¤¹¤ë
+   * @brief Interfaceæƒ…å ±ã‚’å…¬é–‹ã™ã‚‹
    * @else
    * @brief Publish interface information
    * @endif
@@ -544,10 +544,10 @@ namespace RTC
     RTC_PARANOID_STR((prop));
 
     /*
-     * ¤³¤³¤Ç, ConnectorProfile ¤«¤é¤Î properties ¤¬¥Ş¡¼¥¸¤µ¤ì¤¿¤¿¤á¡¢
-     * prop["dataflow_type"]: ¥Ç¡¼¥¿¥Õ¥í¡¼¥¿¥¤¥×
-     * prop["interface_type"]: ¥¤¥ó¥¿¡¼¥Õ¥§¡¼¥¹¥¿¥¤¥×
-     * ¤Ê¤É¤¬¥¢¥¯¥»¥¹²ÄÇ½¤Ë¤Ê¤ë¡£
+     * ã“ã“ã§, ConnectorProfile ã‹ã‚‰ã® properties ãŒãƒãƒ¼ã‚¸ã•ã‚ŒãŸãŸã‚ã€
+     * prop["dataflow_type"]: ãƒ‡ãƒ¼ã‚¿ãƒ•ãƒ­ãƒ¼ã‚¿ã‚¤ãƒ—
+     * prop["interface_type"]: ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹ã‚¿ã‚¤ãƒ—
+     * ãªã©ãŒã‚¢ã‚¯ã‚»ã‚¹å¯èƒ½ã«ãªã‚‹ã€‚
      */
     std::string dflow_type(prop["dataflow_type"]);
     coil::normalize(dflow_type);
@@ -588,7 +588,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief Interface¾ğÊó¤ò¼èÆÀ¤¹¤ë
+   * @brief Interfaceæƒ…å ±ã‚’å–å¾—ã™ã‚‹
    * @else
    * @brief Subscribe interface
    * @endif
@@ -623,10 +623,10 @@ namespace RTC
     RTC_TRACE(("endian: %s", m_littleEndian ? "little":"big"));
 
     /*
-     * ¤³¤³¤Ç, ConnectorProfile ¤«¤é¤Î properties ¤¬¥Ş¡¼¥¸¤µ¤ì¤¿¤¿¤á¡¢
-     * prop["dataflow_type"]: ¥Ç¡¼¥¿¥Õ¥í¡¼¥¿¥¤¥×
-     * prop["interface_type"]: ¥¤¥ó¥¿¡¼¥Õ¥§¡¼¥¹¥¿¥¤¥×
-     * ¤Ê¤É¤¬¥¢¥¯¥»¥¹²ÄÇ½¤Ë¤Ê¤ë¡£
+     * ã“ã“ã§, ConnectorProfile ã‹ã‚‰ã® properties ãŒãƒãƒ¼ã‚¸ã•ã‚ŒãŸãŸã‚ã€
+     * prop["dataflow_type"]: ãƒ‡ãƒ¼ã‚¿ãƒ•ãƒ­ãƒ¼ã‚¿ã‚¤ãƒ—
+     * prop["interface_type"]: ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹ã‚¿ã‚¤ãƒ—
+     * ãªã©ãŒã‚¢ã‚¯ã‚»ã‚¹å¯èƒ½ã«ãªã‚‹ã€‚
      */
     std::string& dflow_type(prop["dataflow_type"]);
     coil::normalize(dflow_type);
@@ -675,7 +675,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ÅĞÏ¿¤µ¤ì¤Æ¤¤¤ëInterface¾ğÊó¤ò²ò½ü¤¹¤ë
+   * @brief ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹Interfaceæƒ…å ±ã‚’è§£é™¤ã™ã‚‹
    * @else
    * @brief Unsubscribe interface
    * @endif
@@ -708,7 +708,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief OutPort provider ¤Î½é´ü²½
+   * @brief OutPort provider ã®åˆæœŸåŒ–
    * @else
    * @brief OutPort provider initialization
    * @endif
@@ -760,7 +760,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief InPort consumer ¤Î½é´ü²½
+   * @brief InPort consumer ã®åˆæœŸåŒ–
    * @else
    * @brief InPort consumer initialization
    * @endif
@@ -812,7 +812,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ¥·¥ê¥¢¥é¥¤¥¶¤Î¥¨¥ó¥Ç¥£¥¢¥ó¤ò¥Á¥§¥Ã¥¯¤¹¤ë
+   * @brief ã‚·ãƒªã‚¢ãƒ©ã‚¤ã‚¶ã®ã‚¨ãƒ³ãƒ‡ã‚£ã‚¢ãƒ³ã‚’ãƒã‚§ãƒƒã‚¯ã™ã‚‹
    * @else
    * @brief Checking endian flag of serializer
    * @endif
@@ -849,7 +849,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief OutPort provider ¤ÎÀ¸À®
+   * @brief OutPort provider ã®ç”Ÿæˆ
    * @else
    * @brief OutPort provider creation
    * @endif
@@ -903,7 +903,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief InPort consumer ¤ÎÀ¸À®
+   * @brief InPort consumer ã®ç”Ÿæˆ
    * @else
    * @brief InPort consumer creation
    * @endif
@@ -947,7 +947,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief OutPortPushConnector ¤ÎÀ¸À®
+   * @brief OutPortPushConnector ã®ç”Ÿæˆ
    * @else
    * @brief OutPortPushConnector creation
    * @endif
@@ -1016,7 +1016,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief OutPortPullConnector ¤ÎÀ¸À®
+   * @brief OutPortPullConnector ã®ç”Ÿæˆ
    * @else
    * @brief OutPortPullConnector creation
    * @endif
@@ -1073,7 +1073,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ¥í¡¼¥«¥ë¤Î¥Ô¥¢InPort¤ò¼èÆÀ
+   * @brief ãƒ­ãƒ¼ã‚«ãƒ«ã®ãƒ”ã‚¢InPortã‚’å–å¾—
    * @else
    * @brief Getting local peer InPort if available
    * @endif

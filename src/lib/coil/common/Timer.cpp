@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file Timer.cpp
  * @brief Timer class
@@ -23,7 +23,7 @@ namespace coil
 {
   /*!
    * @if jp
-   * @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+   * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
    * @else
    * @brief Constructor
    * @endif
@@ -35,7 +35,7 @@ namespace coil
   
   /*!
    * @if jp
-   * @brief ¥Ç¥¹¥È¥é¥¯¥¿
+   * @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
    * @else
    * @brief Destructor
    * @endif
@@ -48,7 +48,7 @@ namespace coil
   
   /*!
    * @if jp
-   * @brief Timer ÍÑ¥¹¥ì¥Ã¥ÉÀ¸À®
+   * @brief Timer ç”¨ã‚¹ãƒ¬ãƒƒãƒ‰ç”Ÿæˆ
    * @else
    * @brief Generate thread for Timer
    * @endif
@@ -61,7 +61,7 @@ namespace coil
   
   /*!
    * @if jp
-   * @brief Timer ÍÑ¥¹¥ì¥Ã¥É¼Â¹Ô´Ø¿ô
+   * @brief Timer ç”¨ã‚¹ãƒ¬ãƒƒãƒ‰å®Ÿè¡Œé–¢æ•°
    * @else
    * @brief Thread execution function for Timer
    * @endif
@@ -82,7 +82,7 @@ namespace coil
   //============================================================
   /*!
    * @if jp
-   * @brief Timer ¥¿¥¹¥¯³«»Ï
+   * @brief Timer ã‚¿ã‚¹ã‚¯é–‹å§‹
    * @else
    * @brief Start Timer task
    * @endif
@@ -99,7 +99,7 @@ namespace coil
   
   /*!
    * @if jp
-   * @brief Timer ¥¿¥¹¥¯Ää»ß
+   * @brief Timer ã‚¿ã‚¹ã‚¯åœæ­¢
    * @else
    * @brief Stop Timer tast
    * @endif
@@ -112,7 +112,7 @@ namespace coil
   
   /*!
    * @if jp
-   * @brief Timer ¥¿¥¹¥¯¼Â¹Ô
+   * @brief Timer ã‚¿ã‚¹ã‚¯å®Ÿè¡Œ
    * @else
    * @brief Invoke Timer task
    * @endif
@@ -133,7 +133,7 @@ namespace coil
   
   /*!
    * @if jp
-   * @brief ¥ê¥¹¥Ê¡¼ÅĞÏ¿
+   * @brief ãƒªã‚¹ãƒŠãƒ¼ç™»éŒ²
    * @else
    * @brief Register listener
    * @endif
@@ -157,7 +157,7 @@ namespace coil
   
   /*!
    * @if jp
-   * @brief ¥ê¥¹¥Ê¡¼ÅĞÏ¿²ò½ü
+   * @brief ãƒªã‚¹ãƒŠãƒ¼ç™»éŒ²è§£é™¤
    * @else
    * @brief Unregister listener
    * @endif

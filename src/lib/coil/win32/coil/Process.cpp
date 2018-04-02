@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file  Process.cpp
  * @brief coil process management functions
@@ -24,7 +24,7 @@ namespace coil
 
   /*!
    * @if jp
-   * @brief ƒvƒƒZƒX‚ğ‹N“®‚·‚é
+   * @brief ãƒ—ãƒ­ã‚»ã‚¹ã‚’èµ·å‹•ã™ã‚‹
    * @else
    * @brief Launching a process
    * @endif

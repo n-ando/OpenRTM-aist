@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file EventInPort.h
  * @brief EventInPort template class
@@ -106,26 +106,26 @@ namespace RTC
    *
    * @class EventInPort
    *
-   * @brief EventInPort �ƥ�ץ졼�ȥ��饹
+   * @brief EventInPort テンプレートクラス
    * 
-   * EventInPort �μ����Ǥ��� EventInPort<T> �Υƥ�ץ졼�ȥ��饹��
-   * <T> ��BasicDataType.idl �ˤ��������Ƥ��뷿�ǡ����ФȤ���
-   * Time ���� tm , ����� T���� data ����Ĺ�¤�ΤǤʤ��ƤϤʤ�ʤ���
-   * EventInPort �������˥�󥰥Хåե�����������������������줿�ǡ�����缡
-   * ���Υ�󥰥Хåե��˳�Ǽ���롣��󥰥Хåե��Υ������ϥǥե���Ȥ�64��
-   * �ʤäƤ��뤬�����󥹥ȥ饯�������ˤ�ꥵ��������ꤹ�뤳�Ȥ��Ǥ��롣
-   * �ǡ����ϥե饰�ˤ�ä�̤�ɡ����ɾ��֤��������졢isNew(), write(), read(),
-   * isFull(), isEmpty() ���Υ᥽�åɤˤ��ϥ�ɥ�󥰤��뤳�Ȥ��Ǥ��롣
+   * EventInPort の実装である EventInPort<T> のテンプレートクラス。
+   * <T> はBasicDataType.idl にて定義されている型で、メンバとして
+   * Time 型の tm , および T型の data を持つ構造体でなくてはならない。
+   * EventInPort は内部にリングバッファを持ち、外部から送信されたデータを順次
+   * このリングバッファに格納する。リングバッファのサイズはデフォルトで64と
+   * なっているが、コンストラクタ引数によりサイズを指定することができる。
+   * データはフラグによって未読、既読状態が管理され、isNew(), write(), read(),
+   * isFull(), isEmpty() 等のメソッドによりハンドリングすることができる。
    *   
-   * OnRead�ϥ�����Хå� (�ɤ߽Ф��˵������륤�٥�Ȥˤ�ꥳ���뤵���)
+   * OnRead系コールバック (読み出しに起因するイベントによりコールされる)
    *
    * - void OnRead::operator(): 
-   *     EventInPort::read() ��ƤӽФ��ɤ߽Ф���Ԥ��ݤ˥����뤵��롣
+   *     EventInPort::read() を呼び出し読み出しを行う際にコールされる。
    *
    * - DataType OnReadConvert::operator(DataType): 
-   *     EventInPort::read() ��ƤӽФ����ǡ�����Хåե������ɤߤ����ݤ˸ƤФ�
-   *     �ǡ������Ѵ���Ԥ��������ˤϥХåե������ɤ߽Ф��줿�ͤ�Ϳ����졢
-   *     �Ѵ���Υǡ���������ͤȤ����֤��������ͤ�read()���֤��ͤȤʤ롣
+   *     EventInPort::read() を呼び出し、データをバッファから読みだす際に呼ばれ
+   *     データの変換を行う。引数にはバッファから読み出された値が与えられ、
+   *     変換後のデータを戻り値として返す。この値がread()の返す値となる。
    *
    * @since 0.2.0
    *
@@ -158,24 +158,24 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief ���󥹥ȥ饯��
+     * @brief コンストラクタ
      *
-     * ���󥹥ȥ饯����
-     * �ѥ�᡼���Ȥ���Ϳ������ T �����ѿ��˥Х���ɤ���롣
+     * コンストラクタ。
+     * パラメータとして与えられる T 型の変数にバインドされる。
      *
-     * @param name EventInPort ̾��EventInPortBase:name() �ˤ�껲�Ȥ���롣
-     * @param value ���� EventInPort �˥Х���ɤ���� T �����ѿ�
-     * @param bufsize EventInPort �����Υ�󥰥Хåե��ΥХåե�Ĺ(�ǥե������:64)
-     * @param read_block �ɹ��֥��å��ե饰��
-     *        �ǡ����ɹ�����̤�ɥǡ������ʤ���硢���Υǡ��������ޤǥ֥��å�����
-     *        ���ɤ���������(�ǥե������:false)
-     * @param write_block ����֥��å��ե饰��
-     *        �ǡ���������˥Хåե����ե�Ǥ��ä���硢�Хåե��˶������Ǥ���
-     *        �ޤǥ֥��å����뤫�ɤ���������(�ǥե������:false)
-     * @param read_timeout �ɹ��֥��å�����ꤷ�Ƥ��ʤ����Ρ��ǡ����ɼ西����
-     *        �����Ȼ���(�ߥ���)(�ǥե������:0)
-     * @param write_timeout ����֥��å�����ꤷ�Ƥ��ʤ����Ρ��ǡ������������
-     *        �����Ȼ���(�ߥ���)(�ǥե������:0)
+     * @param name EventInPort 名。EventInPortBase:name() により参照される。
+     * @param value この EventInPort にバインドされる T 型の変数
+     * @param bufsize EventInPort 内部のリングバッファのバッファ長(デフォルト値:64)
+     * @param read_block 読込ブロックフラグ。
+     *        データ読込時に未読データがない場合、次のデータ受信までブロックする
+     *        かどうかを設定(デフォルト値:false)
+     * @param write_block 書込ブロックフラグ。
+     *        データ書込時にバッファがフルであった場合、バッファに空きができる
+     *        までブロックするかどうかを設定(デフォルト値:false)
+     * @param read_timeout 読込ブロックを指定していない場合の、データ読取タイム
+     *        アウト時間(ミリ秒)(デフォルト値:0)
+     * @param write_timeout 書込ブロックを指定していない場合の、データ書込タイム
+     *        アウト時間(ミリ秒)(デフォルト値:0)
      *
      * @else
      *
@@ -218,9 +218,9 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief �ǥ��ȥ饯��
+     * @brief デストラクタ
      *
-     * �ǥ��ȥ饯����
+     * デストラクタ。
      *
      * @else
      *
@@ -235,11 +235,11 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief �ݡ���̾�Τ�������롣
+     * @brief ポート名称を取得する。
      *
-     * �ݡ���̾�Τ�������롣
+     * ポート名称を取得する。
      *
-     * @return �ݡ���̾��
+     * @return ポート名称
      *
      * @else
      *
@@ -276,7 +276,7 @@ namespace RTC
   private:
     /*!
      * @if jp
-     * @brief �ݡ���̾
+     * @brief ポート名
      * @else
      * @berif Port's name
      * @endif

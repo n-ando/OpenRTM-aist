@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file InPortPullConnector.cpp
  * @brief InPortPull type connector class
@@ -25,7 +25,7 @@ namespace RTC
 {
   /*!
    * @if jp
-   * @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+   * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
    * @else
    * @brief Constructor
    * @endif
@@ -55,7 +55,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ¥Ç¥¹¥È¥é¥¯¥¿
+   * @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
    * @else
    * @brief Destructor
    * @endif
@@ -68,7 +68,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief read ´Ø¿ô
+   * @brief read é–¢æ•°
    * @else
    * @brief Destructor
    * @endif
@@ -86,7 +86,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ÀÜÂ³²ò½ü´Ø¿ô
+   * @brief æ¥ç¶šè§£é™¤é–¢æ•°
    * @else
    * @brief Disconnect connection
    * @endif
@@ -107,7 +107,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief Buffer¤ÎÀ¸À®
+   * @brief Bufferã®ç”Ÿæˆ
    * @else
    * @brief create buffer
    * @endif
@@ -122,7 +122,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ÀÜÂ³³ÎÎ©»ş¤Ë¥³¡¼¥ë¥Ğ¥Ã¥¯¤ò¸Æ¤Ö
+   * @brief æ¥ç¶šç¢ºç«‹æ™‚ã«ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ã‚’å‘¼ã¶
    * @else
    * @brief Invoke callback when connection is established
    * @endif
@@ -134,7 +134,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ÀÜÂ³ÀÚÃÇ»ş¤Ë¥³¡¼¥ë¥Ğ¥Ã¥¯¤ò¸Æ¤Ö
+   * @brief æ¥ç¶šåˆ‡æ–­æ™‚ã«ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ã‚’å‘¼ã¶
    * @else
    * @brief Invoke callback when connection is destroied
    * @endif

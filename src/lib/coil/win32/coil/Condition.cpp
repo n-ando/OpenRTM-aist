@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file  MutexPosix.h
  * @brief RT-Middleware Service interface

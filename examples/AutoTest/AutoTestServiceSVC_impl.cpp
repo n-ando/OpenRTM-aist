@@ -1,4 +1,4 @@
-// -*-C++-*-
+﻿// -*-C++-*-
 /*!
  * @file  AutoTestServiceSVC_impl.cpp
  * @brief Service implementation code of AutoTestService.idl

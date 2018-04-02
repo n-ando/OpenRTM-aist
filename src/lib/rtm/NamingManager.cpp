@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file NamingManager.h
  * @brief naming Service helper class
@@ -32,7 +32,7 @@ namespace RTC
 {
   /*!
    * @if jp
-   * @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+   * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
    * @else
    * @brief Constructor
    * @endif
@@ -64,7 +64,7 @@ namespace RTC
   }
   /*!
    * @if jp
-   * @brief »ØÄê¤·¤¿ CORBA ¥ª¥Ö¥¸¥§¥¯¥È¤ÎNamingService¤Ø¥Ğ¥¤¥ó¥É
+   * @brief æŒ‡å®šã—ãŸ CORBA ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®NamingServiceã¸ãƒã‚¤ãƒ³ãƒ‰
    * @else
    * @brief Bind the specified CORBA objects to NamingService
    * @endif
@@ -164,7 +164,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief »ØÄê¤·¤¿ CORBA ¥ª¥Ö¥¸¥§¥¯¥È¤òNamingService¤«¤é¥¢¥ó¥Ğ¥¤¥ó¥É
+   * @brief æŒ‡å®šã—ãŸ CORBA ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’NamingServiceã‹ã‚‰ã‚¢ãƒ³ãƒã‚¤ãƒ³ãƒ‰
    * @else
    * @brief Unbind the specified CORBA object from NamingService
    * @endif
@@ -184,12 +184,12 @@ namespace RTC
   /*!
    * @if jp
    *
-   * @brief ¥Í¡¼¥ß¥ó¥°¥µ¡¼¥Ó¥¹¤«¤éRTC¤ò¥¤¥ó¥¹¥¿¥ó¥¹Ì¾¤«¤é¸¡º÷¤·¡¢
-   *        °ìÃ×¤¹¤ëRTC¤Î¥ê¥¹¥È¤ò¼èÆÀ¤¹¤ë
+   * @brief ãƒãƒ¼ãƒŸãƒ³ã‚°ã‚µãƒ¼ãƒ“ã‚¹ã‹ã‚‰RTCã‚’ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹åã‹ã‚‰æ¤œç´¢ã—ã€
+   *        ä¸€è‡´ã™ã‚‹RTCã®ãƒªã‚¹ãƒˆã‚’å–å¾—ã™ã‚‹
    *
-   * @param context ¸½ºß¸¡º÷Ãæ¤Î¥³¥ó¥Æ¥­¥¹¥È
-   * @param name RTC¤Î¥¤¥ó¥¹¥¿¥ó¥¹Ì¾
-   * @param rtcs RTC¤Î¥ê¥¹¥È
+   * @param context ç¾åœ¨æ¤œç´¢ä¸­ã®ã‚³ãƒ³ãƒ†ã‚­ã‚¹ãƒˆ
+   * @param name RTCã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹å
+   * @param rtcs RTCã®ãƒªã‚¹ãƒˆ
    *
    * @else
    *
@@ -243,12 +243,12 @@ namespace RTC
   /*!
    * @if jp
    *
-   * @brief ¥Í¡¼¥ß¥ó¥°¥µ¡¼¥Ó¥¹¤«¤éRTC¤ò¥¤¥ó¥¹¥¿¥ó¥¹Ì¾¤«¤é¸¡º÷¤·¡¢
-   *        °ìÃ×¤¹¤ëRTC¤Î¥ê¥¹¥È¤ò¼èÆÀ¤¹¤ë
+   * @brief ãƒãƒ¼ãƒŸãƒ³ã‚°ã‚µãƒ¼ãƒ“ã‚¹ã‹ã‚‰RTCã‚’ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹åã‹ã‚‰æ¤œç´¢ã—ã€
+   *        ä¸€è‡´ã™ã‚‹RTCã®ãƒªã‚¹ãƒˆã‚’å–å¾—ã™ã‚‹
    *
-   * @param context ¸½ºß¸¡º÷Ãæ¤Î¥³¥ó¥Æ¥­¥¹¥È
-   * @param name RTC¤Î¥¤¥ó¥¹¥¿¥ó¥¹Ì¾
-   * @param rtcs RTC¤Î¥ê¥¹¥È
+   * @param context ç¾åœ¨æ¤œç´¢ä¸­ã®ã‚³ãƒ³ãƒ†ã‚­ã‚¹ãƒˆ
+   * @param name RTCã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹å
+   * @param rtcs RTCã®ãƒªã‚¹ãƒˆ
    *
    * @else
    *
@@ -332,7 +332,7 @@ namespace RTC
 
   /*!
   * @if jp
-  * @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+  * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   * @else
   * @brief Constructor
   * @endif
@@ -343,7 +343,7 @@ namespace RTC
   }
   /*!
   * @if jp
-  * @brief »ØÄê¤·¤¿ CORBA ¥ª¥Ö¥¸¥§¥¯¥È¤ÎNamingService¤Ø¥Ğ¥¤¥ó¥É
+  * @brief æŒ‡å®šã—ãŸ CORBA ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®NamingServiceã¸ãƒã‚¤ãƒ³ãƒ‰
   * @else
   * @brief Bind the specified CORBA objects to NamingService
   * @endif
@@ -371,7 +371,7 @@ namespace RTC
 
   /*!
   * @if jp
-  * @brief »ØÄê¤·¤¿ CORBA ¥ª¥Ö¥¸¥§¥¯¥È¤òNamingService¤«¤é¥¢¥ó¥Ğ¥¤¥ó¥É
+  * @brief æŒ‡å®šã—ãŸ CORBA ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’NamingServiceã‹ã‚‰ã‚¢ãƒ³ãƒã‚¤ãƒ³ãƒ‰
   * @else
   * @brief Unbind the specified CORBA object from NamingService
   * @endif
@@ -391,11 +391,11 @@ namespace RTC
   /*!
    * @if jp
    *
-   * @brief rtcname·Á¼°¤ÇRTC¤Î¥ª¥Ö¥¸¥§¥¯¥È¥ê¥Õ¥¡¥ì¥ó¥¹¤ò¼èÆÀ¤¹¤ë
+   * @brief rtcnameå½¢å¼ã§RTCã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒªãƒ•ã‚¡ãƒ¬ãƒ³ã‚¹ã‚’å–å¾—ã™ã‚‹
    *
-   * @param name rtcloc·Á¼°¤Ç¤ÎRTCÌ¾
+   * @param name rtclocå½¢å¼ã§ã®RTCå
    * rtcloc://localhost:2809/example/ConsoleIn
-   * @return RTC¤Î¥ª¥Ö¥¸¥§¥¯¥È¥ê¥Õ¥¡¥ì¥ó¥¹¤Î¥ê¥¹¥È
+   * @return RTCã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒªãƒ•ã‚¡ãƒ¬ãƒ³ã‚¹ã®ãƒªã‚¹ãƒˆ
    *
    * @else
    *
@@ -455,11 +455,11 @@ namespace RTC
   /*!
    * @if jp
    *
-   * @brief »ØÄê¥Û¥¹¥ÈÌ¾¡¢¥İ¡¼¥ÈÌ¾¤ÇManager¤Î¥ª¥Ö¥¸¥§¥¯¥È¥ê¥Õ¥¡¥ì¥ó¥¹¤ò¼èÆÀ
+   * @brief æŒ‡å®šãƒ›ã‚¹ãƒˆåã€ãƒãƒ¼ãƒˆåã§Managerã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒªãƒ•ã‚¡ãƒ¬ãƒ³ã‚¹ã‚’å–å¾—
    *
-   * @param name ¥Û¥¹¥ÈÌ¾¡¢¥İ¡¼¥ÈÌ¾
+   * @param name ãƒ›ã‚¹ãƒˆåã€ãƒãƒ¼ãƒˆå
    *
-   * @return Manager¤Î¥ª¥Ö¥¸¥§¥¯¥È¥ê¥Õ¥¡¥ì¥ó¥¹
+   * @return Managerã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒªãƒ•ã‚¡ãƒ¬ãƒ³ã‚¹
    *
    * @else
    *
@@ -538,7 +538,7 @@ namespace RTC
   //============================================================
   /*!
    * @if jp
-   * @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+   * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
    * @else
    * @brief Constructor
    * @endif
@@ -550,7 +550,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ¥Ç¥¹¥È¥é¥¯¥¿
+   * @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
    * @else
    * @brief Destructor
    * @endif
@@ -561,7 +561,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief NameServer ¤ÎÅĞÏ¿
+   * @brief NameServer ã®ç™»éŒ²
    * @else
    * @brief Register the NameServer
    * @endif
@@ -580,7 +580,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief »ØÄê¤·¤¿¥ª¥Ö¥¸¥§¥¯¥È¤ÎNamingService¤Ø¥Ğ¥¤¥ó¥É
+   * @brief æŒ‡å®šã—ãŸã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®NamingServiceã¸ãƒã‚¤ãƒ³ãƒ‰
    * @else
    * @brief Bind the specified objects to NamingService
    * @endif
@@ -657,7 +657,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief NamingServer ¤Î¾ğÊó¤Î¹¹¿·
+   * @brief NamingServer ã®æƒ…å ±ã®æ›´æ–°
    * @else
    * @brief Update information of NamingServer
    * @endif
@@ -706,7 +706,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief »ØÄê¤·¤¿¥ª¥Ö¥¸¥§¥¯¥È¤òNamingService¤«¤é¥¢¥ó¥Ğ¥¤¥ó¥É
+   * @brief æŒ‡å®šã—ãŸã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’NamingServiceã‹ã‚‰ã‚¢ãƒ³ãƒã‚¤ãƒ³ãƒ‰
    * @else
    * @brief Unbind the specified object from NamingService
    * @endif
@@ -729,7 +729,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief Á´¤Æ¤Î¥ª¥Ö¥¸¥§¥¯¥È¤òNamingService¤«¤é¥¢¥ó¥Ğ¥¤¥ó¥É
+   * @brief å…¨ã¦ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’NamingServiceã‹ã‚‰ã‚¢ãƒ³ãƒã‚¤ãƒ³ãƒ‰
    * @else
    * @brief Unbind all objects from NamingService
    * @endif
@@ -768,7 +768,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ¥Ğ¥¤¥ó¥É¤µ¤ì¤Æ¤¤¤ëÁ´¤Æ¤Î¥ª¥Ö¥¸¥§¥¯¥È¤ò¼èÆÀ
+   * @brief ãƒã‚¤ãƒ³ãƒ‰ã•ã‚Œã¦ã„ã‚‹å…¨ã¦ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’å–å¾—
    * @else
    * @brief Get all bound objects
    * @endif
@@ -790,7 +790,7 @@ namespace RTC
   //============================================================
   /*!
    * @if jp
-   * @brief NameServer ´ÉÍıÍÑ¥ª¥Ö¥¸¥§¥¯¥È¤ÎÀ¸À®
+   * @brief NameServer ç®¡ç†ç”¨ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ç”Ÿæˆ
    * @else
    * @brief Create objects for NameServer management
    * @endif
@@ -833,7 +833,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ÀßÄêºÑ¤ß¥³¥ó¥İ¡¼¥Í¥ó¥È¤ò NameServer ¤ËÅĞÏ¿
+   * @brief è¨­å®šæ¸ˆã¿ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã‚’ NameServer ã«ç™»éŒ²
    * @else
    * @brief Register the configured component to NameServer
    * @endif
@@ -848,7 +848,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief NameServer ¤ËÅĞÏ¿¤¹¤ë¥³¥ó¥İ¡¼¥Í¥ó¥È¤ÎÀßÄê
+   * @brief NameServer ã«ç™»éŒ²ã™ã‚‹ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã®è¨­å®š
    * @else
    * @brief Configure the components that will be registered to NameServer
    * @endif
@@ -869,7 +869,7 @@ namespace RTC
   }
   /*!
    * @if jp
-   * @brief NameServer ¤ËÅĞÏ¿¤¹¤ë¥³¥ó¥İ¡¼¥Í¥ó¥È¤ÎÀßÄê
+   * @brief NameServer ã«ç™»éŒ²ã™ã‚‹ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã®è¨­å®š
    * @else
    * @brief Configure the components that will be registered to NameServer
    * @endif
@@ -905,7 +905,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief NameServer ¤ËÅĞÏ¿¤¹¤ë¥³¥ó¥İ¡¼¥Í¥ó¥È¤ÎÀßÄê²ò½ü
+   * @brief NameServer ã«ç™»éŒ²ã™ã‚‹ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã®è¨­å®šè§£é™¤
    * @else
    * @brief Unregister the components that will be registered to NameServer
    * @endif
@@ -977,13 +977,13 @@ namespace RTC
    /*!
    * @if jp
    *
-   * @brief rtcloc·Á¼°¤ÇRTC¤Î¥ª¥Ö¥¸¥§¥¯¥È¥ê¥Õ¥¡¥ì¥ó¥¹¤ò¼èÆÀ
+   * @brief rtclocå½¢å¼ã§RTCã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒªãƒ•ã‚¡ãƒ¬ãƒ³ã‚¹ã‚’å–å¾—
    *
    *
    *
-   * @param name rtcloc·Á¼°¤Ç¤ÎRTCÌ¾
+   * @param name rtclocå½¢å¼ã§ã®RTCå
    * rtcloc://localhost:2809/example/ConsoleIn
-   * @return RTC¤Î¥ª¥Ö¥¸¥§¥¯¥È¥ê¥Õ¥¡¥ì¥ó¥¹¤Î¥ê¥¹¥È
+   * @return RTCã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒªãƒ•ã‚¡ãƒ¬ãƒ³ã‚¹ã®ãƒªã‚¹ãƒˆ
    *
    * @else
    *

@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file Logger.h
  * @brief log_streambuf and log_stream class
@@ -41,7 +41,7 @@ namespace coil
    * @if jp
    *
    * @class log_streambuf
-   * @brief log_streambuf �ƥ�ץ졼�ȥ��饹
+   * @brief log_streambuf テンプレートクラス
    *
    * @else
    *
@@ -64,9 +64,9 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief ���󥹥ȥ饯��
+     * @brief コンストラクタ
      *
-     * ���󥹥ȥ饯��
+     * コンストラクタ
      *
      * @else
      *
@@ -88,9 +88,9 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief �ǥ��ȥ饯��
+     * @brief デストラクタ
      *
-     * �ǥ��ȥ饯����
+     * デストラクタ。
      *
      * @else
      *
@@ -107,16 +107,16 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief ���ȥ꡼����ɲä���
+     * @brief ストリームを追加する
      *
-     * log_streambuf �˼ºݤν�����Ǥ��륹�ȥ꡼����ɲä��롣
-     * �������ɲä��줿���ȥ꡼��β�����Ǥ�ϥ桼���ˤ��ꡢ
-     * log_streambuf ���λ��ˤϲ��Τ���뤳�ȤϤʤ���
-     * �ޤ��ɲä���Ƥ��륹�ȥ꡼��� log_streambuf �β�������
-     * ���Τ��ƤϤʤ�ʤ������ȥ꡼��β��Τ� log_streambuf �β��θ�ˡ�
-     * �桼�������Τ��ʤ���Фʤ�ʤ���
+     * log_streambuf に実際の出力先であるストリームを追加する。
+     * ここで追加されたストリームの解体責任はユーザにあり、
+     * log_streambuf 解体時には解体されることはない。
+     * また追加されているストリームを log_streambuf の解体前に
+     * 解体してはならない。ストリームの解体は log_streambuf の解体後に、
+     * ユーザが解体しなければならない。
      *
-     * @param stream std::basic_streambuf ���Υ��ȥ꡼��ؤΥݥ���
+     * @param stream std::basic_streambuf 型のストリームへのポインタ
      *
      * @else
      *
@@ -141,12 +141,12 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief ���ȥ꡼���������
+     * @brief ストリームを削除する
      *
-     * log_streambuf ���������Ǥ��륹�ȥ꡼��������롣
-     * �����Ǻ�����줿���ȥ꡼��β�����Ǥ�ϥ桼���ˤ��롣
+     * log_streambuf から出力先であるストリームを削除する。
+     * ここで削除されたストリームの解体責任はユーザにある。
      *
-     * @param stream std::basic_streambuf ���Υ��ȥ꡼��ؤΥݥ���
+     * @param stream std::basic_streambuf 型のストリームへのポインタ
      *
      * @else
      *
@@ -177,11 +177,11 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief ���ȥ꡼��Хåե�����
+     * @brief ストリームバッファ取得
      *
-     * ���ȥ꡼��Хåե����֤���
+     * ストリームバッファを返す。
      *
-     * @return streambuf_type �ꥹ��
+     * @return streambuf_type リスト
      *
      * @else
      *
@@ -207,11 +207,11 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief basic_streambuf::xsputn �Υ����С��饤��
+     * @brief basic_streambuf::xsputn のオーバーライド
      *
-     * @param s ����ʸ����ؤΥݥ���
-     * @param n ����ʸ����
-     * @return ����ʸ����Υ�����
+     * @param s 入力文字列へのポインタ
+     * @param n 入力文字数
+     * @return 入力文字列のサイズ
      *
      * @else
      *
@@ -237,9 +237,9 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief ���ȥ꡼��ؽ��Ϥ��롣
+     * @brief ストリームへ出力する。
      *
-     * @return ���Ϥ���ʸ���� 
+     * @return 出力した文字数 
      *
      * @else
      *
@@ -273,11 +273,11 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief ���ȥ꡼��ؽ��Ϥ��롣
+     * @brief ストリームへ出力する。
      *
-     * @param s ����ʸ����ؤΥݥ���
-     * @param n ����ʸ����
-     * @return ����ʸ����Υ�����
+     * @param s 入力文字列へのポインタ
+     * @param n 入力文字数
+     * @return 入力文字列のサイズ
      *
      * @else
      *
@@ -304,10 +304,10 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief basic_streambuf::overflow �Υ����С��饤��
+     * @brief basic_streambuf::overflow のオーバーライド
      *
-     * @param c ����ʸ��
-     * @return �ֵ���
+     * @param c 入力文字
+     * @return 返却値
      *
      * @else
      *
@@ -374,9 +374,9 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief basic_streambuf::sync �Υ����С��饤��
+     * @brief basic_streambuf::sync のオーバーライド
      *
-     * @return �ֵ���
+     * @return 返却値
      *
      * @else
      *
@@ -422,7 +422,7 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief ���ȥ꡼������ѹ�¤��
+     * @brief ストリーム管理用構造体
      *
      * @else
      *
@@ -474,11 +474,11 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief ���ԡ����󥹥ȥ饯��
+     * @brief コピーコンストラクタ
      *
-     * ���ԡ����󥹥ȥ饯��
+     * コピーコンストラクタ
      *
-     * @param x log_streambuf ���֥�������
+     * @param x log_streambuf オブジェクト
      *
      * @else
      *
@@ -495,13 +495,13 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief �����黻��
+     * @brief 代入演算子
      *
-     * log_streambuf���֥������Ȥ򥳥ԡ����롣
+     * log_streambufオブジェクトをコピーする。
      *
-     * @param x log_streambuf ���֥�������
+     * @param x log_streambuf オブジェクト
      *
-     * @return �������
+     * @return 代入結果
      *
      * @else
      *
@@ -527,7 +527,7 @@ namespace coil
    * @if jp
    *
    * @class log_stream
-   * @brief log_stream �ƥ�ץ졼�ȥ��饹
+   * @brief log_stream テンプレートクラス
    *
    * @else
    *
@@ -552,14 +552,14 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief ���󥹥ȥ饯��
+     * @brief コンストラクタ
      *
-     * ���󥹥ȥ饯��
+     * コンストラクタ
      *
-     * @param streambuf basic_streambuf �����֥�������
-     * @param levelmin ������٥�κǾ���
-     * @param levelmax ������٥�κ�����
-     * @param �ǥե���ȤΥ�����٥�
+     * @param streambuf basic_streambuf 型オブジェクト
+     * @param levelmin ログレベルの最小値
+     * @param levelmax ログレベルの最大値
+     * @param デフォルトのログレベル
      *
      * @else
      *
@@ -585,10 +585,10 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief ��å������Υإå��ɲôؿ�
+     * @brief メッセージのヘッダ追加関数
      *
-     * ���֥��饹�ˤ����Ƥ��δؿ��򥪡��С��饤�ɤ���
-     * ������å�������Ŭ���ʻ���ʤɤΥإå����ɲä��롣
+     * サブクラスにおいてこの関数をオーバーライドし、
+     * ログメッセージに適当な時刻などのヘッダを追加する。
      *
      * @else
      *
@@ -608,11 +608,11 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief ������٥�����
+     * @brief ログレベル設定
      *
-     * ������٥�����ꤹ�롣
+     * ログレベルを設定する。
      *
-     * @param level ������٥�
+     * @param level ログレベル
      *
      * @else
      *
@@ -637,11 +637,11 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief ������٥����
+     * @brief ログレベル取得
      *
-     * ������٥��������롣
+     * ログレベルを取得する。
      *
-     * @return ������٥�
+     * @return ログレベル
      *
      * @else
      *
@@ -661,9 +661,9 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief ���å��⡼������
+     * @brief ロックモード設定
      *
-     * ���å��⡼�ɤ�ͭ���ˤ��롣
+     * ロックモードを有効にする。
      *
      * @else
      *
@@ -681,9 +681,9 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief ���å��⡼�ɲ��
+     * @brief ロックモード解除
      *
-     * ���å��⡼�ɤ�̵���ˤ��롣
+     * ロックモードを無効にする。
      *
      * @else
      *
@@ -701,17 +701,17 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief �������ȥ꡼��μ���
+     * @brief ログストリームの取得
      *
-     * ���ꤵ�줿������٥��Ƚ�Ǥ����������ȥ꡼���������롣
-     * ���ꤵ�줿������٥뤬���ꤵ��Ƥ��������٥�ʲ��ξ��ˤϡ��ܥ��饹��
-     * �֤���
-     * ���ꤵ�줿������٥뤬���ꤵ��Ƥ��������٥��Ķ���Ƥ�����ˤϡ�
-     * ���ߡ��������饹���֤���
+     * 指定されたログレベルを判断し、ログストリームを取得する。
+     * 指定されたログレベルが設定されているログレベル以下の場合には、本クラスを
+     * 返す。
+     * 指定されたログレベルが設定されているログレベルを超えている場合には、
+     * ダミーログクラスを返す。
      *
-     * @param level ���������٥�
+     * @param level 指定ログレベル
      *
-     * @return �оݥ������ȥ꡼��
+     * @return 対象ログストリーム
      *
      * @else
      *
@@ -745,13 +745,13 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief ������٥�ͭ�������å�
+     * @brief ログレベル有効チェック
      *
-     * ���ꤵ�줿������٥뤬ͭ���ϰϤ������å�����ͭ����̵�����֤���
+     * 指定されたログレベルが有効範囲かチェックし、有効・無効を返す。
      *
-     * @param level ������٥�
+     * @param level ログレベル
      *
-     * @return true: ͭ��, false: ̵��
+     * @return true: 有効, false: 無効
      *
      * @else
      *
@@ -774,8 +774,8 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief �������å�����
-     * ���å��⡼�ɤ����ꤵ��Ƥ����硢�����Υ��å���������롣
+     * @brief ログロック取得
+     * ロックモードが設定されている場合、ログのロックを取得する。
      *
      * @else
      *
@@ -792,8 +792,8 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief �������å�����
-     * ���å��⡼�ɤ����ꤵ��Ƥ�����ˡ������Υ��å���������롣
+     * @brief ログロック解放
+     * ロックモードが設定されている場合に、ログのロックを解放する。
      *
      * @else
      *
@@ -813,9 +813,9 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief �ǥ��ȥ饯��
+     * @brief デストラクタ
      *
-     * �ǥ��ȥ饯����
+     * デストラクタ。
      *
      * @else
      *
@@ -830,9 +830,9 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief �ǥե���ȥ��󥹥ȥ饯��
+     * @brief デフォルトコンストラクタ
      *
-     * �ǥե���ȥ��󥹥ȥ饯��
+     * デフォルトコンストラクタ
      *
      * @else
      *
@@ -847,11 +847,11 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief ���ԡ����󥹥ȥ饯��
+     * @brief コピーコンストラクタ
      *
-     * ���ԡ����󥹥ȥ饯��
+     * コピーコンストラクタ
      *
-     * @param x log_stream ���֥�������
+     * @param x log_stream オブジェクト
      *
      * @else
      *
@@ -868,13 +868,13 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief �����黻��
+     * @brief 代入演算子
      *
-     * log_stream���֥������Ȥ򥳥ԡ����롣
+     * log_streamオブジェクトをコピーする。
      *
-     * @param x log_stream���֥�������
+     * @param x log_streamオブジェクト
      *
-     * @return �������
+     * @return 代入結果
      *
      * @else
      *
@@ -896,7 +896,7 @@ namespace coil
 
     /*!
      * @if jp
-     * @brief ���ߡ����ȥ꡼��
+     * @brief ダミーストリーム
      * @else
      * @brief Dummy log
      * @endif
@@ -906,7 +906,7 @@ namespace coil
 
     /*!
      * @if jp
-     * @brief ���å�ͭ���⡼��
+     * @brief ロック有効モード
      * @else
      * @brief Lock enable mode
      * @endif
@@ -915,7 +915,7 @@ namespace coil
 
     /*!
      * @if jp
-     * @brief ��¾���楪�֥�������
+     * @brief 排他制御オブジェクト
      * @else
      * @brief Mutual exclusion object
      * @endif

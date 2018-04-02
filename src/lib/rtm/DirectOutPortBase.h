@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file DirectOutPortBase.h
  * @brief DirectOutPortBase class
@@ -29,7 +29,7 @@ namespace RTC
   /*!
    * @if jp
    * @class DirectOutPortBase
-   * @brief directÀÜÂ³ÍÑOutPort´ğÄì¥¯¥é¥¹
+   * @brief directæ¥ç¶šç”¨OutPortåŸºåº•ã‚¯ãƒ©ã‚¹
    *
    *
    * @since 1.2.0
@@ -51,7 +51,7 @@ namespace RTC
   public:
 	/*!
      * @if jp
-     * @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+     * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
      *
      * @param value
      *
@@ -67,7 +67,7 @@ namespace RTC
 	}
 	/*!
 	* @if jp
-	* @brief ¥Ç¥¹¥È¥é¥¯¥¿
+	* @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 	*
 	*
 	* @else
@@ -81,9 +81,9 @@ namespace RTC
 	}
 	/*!
 	* @if jp
-	* @brief ¥Ç¡¼¥¿¤Î¼èÆÀ
+	* @brief ãƒ‡ãƒ¼ã‚¿ã®å–å¾—
 	* 
-	* @param data ¥Ç¡¼¥¿¤ò³ÊÇ¼¤¹¤ëÊÑ¿ô
+	* @param data ãƒ‡ãƒ¼ã‚¿ã‚’æ ¼ç´ã™ã‚‹å¤‰æ•°
 	*
 	* @else
 	* @brief 
@@ -97,9 +97,9 @@ namespace RTC
 	}
 	/*!
 	* @if jp
-	* @brief ¿·µ¬¥Ç¡¼¥¿¤ÎÂ¸ºß³ÎÇ§
+	* @brief æ–°è¦ãƒ‡ãƒ¼ã‚¿ã®å­˜åœ¨ç¢ºèª
 	*
-	* @return true¡§¿·µ¬¥Ç¡¼¥¿¤¢¤ê
+	* @return trueï¼šæ–°è¦ãƒ‡ãƒ¼ã‚¿ã‚ã‚Š
 	*
 	* @else
 	* @brief
@@ -114,9 +114,9 @@ namespace RTC
 	}
 	/*!
 	* @if jp
-	* @brief ¿·µ¬¥Ç¡¼¥¿¤¬Ìµ¤¤¤³¤È¤ò³ÎÇ§
+	* @brief æ–°è¦ãƒ‡ãƒ¼ã‚¿ãŒç„¡ã„ã“ã¨ã‚’ç¢ºèª
 	*
-	* @return true¡§¿·µ¬¥Ç¡¼¥¿¤Ê¤·
+	* @return trueï¼šæ–°è¦ãƒ‡ãƒ¼ã‚¿ãªã—
 	*
 	* @else
 	* @brief

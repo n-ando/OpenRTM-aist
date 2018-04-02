@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file StringUtil.cpp
  * @brief String operation utility
@@ -38,7 +38,7 @@ namespace coil
 {
   /*!
    * @if jp
-   * @brief string ¤«¤é wstring ¤Ø¤ÎÊÑ´¹
+   * @brief string ã‹ã‚‰ wstring ã¸ã®å¤‰æ›
    * @else
    * @brief string to wstring conversion
    * @endif
@@ -52,7 +52,7 @@ namespace coil
 
   /*!
    * @if jp
-   * @brief wstring ¤«¤é string ¤Ø¤ÎÊÑ´¹
+   * @brief wstring ã‹ã‚‰ string ã¸ã®å¤‰æ›
    * @else
    * @brief wstring to string conversion
    * @endif
@@ -66,7 +66,7 @@ namespace coil
 
   /*!
    * @if jp
-   * @brief ÂçÊ¸»ú¤Ø¤ÎÊÑ´¹
+   * @brief å¤§æ–‡å­—ã¸ã®å¤‰æ›
    * @else
    * @brief Uppercase String Transformation
    * @endif
@@ -79,7 +79,7 @@ namespace coil
 
   /*!
    * @if jp
-   * @brief ¾®Ê¸»ú¤Ø¤ÎÊÑ´¹
+   * @brief å°æ–‡å­—ã¸ã®å¤‰æ›
    * @else
    * @brief Lowercase String Transformation
    * @endif
@@ -92,7 +92,7 @@ namespace coil
 
   /*!
    * @if jp
-   * @brief ÆşÎÏ¥¹¥È¥ê¡¼¥à¤«¤é1¹ÔÆÉ¤ß¹ş¤à
+   * @brief å…¥åŠ›ã‚¹ãƒˆãƒªãƒ¼ãƒ ã‹ã‚‰1è¡Œèª­ã¿è¾¼ã‚€
    * @else
    * @brief Read a line from input stream
    * @endif
@@ -127,7 +127,7 @@ namespace coil
   
   /*!
    * @if jp
-   * @brief Ê¸»úÎó¤¬¥¨¥¹¥±¡¼¥×¤µ¤ì¤Æ¤¤¤ë¤«È½ÃÇ¤¹¤ë
+   * @brief æ–‡å­—åˆ—ãŒã‚¨ã‚¹ã‚±ãƒ¼ãƒ—ã•ã‚Œã¦ã„ã‚‹ã‹åˆ¤æ–­ã™ã‚‹
    * @else
    * @brief Check whether the character is escaped or not
    * @endif
@@ -143,7 +143,7 @@ namespace coil
   
   /*!
    * @if jp
-   * @brief Ê¸»úÎó¤ò¥¨¥¹¥±¡¼¥×¤¹¤ë¤¿¤á¤ÎFunctor
+   * @brief æ–‡å­—åˆ—ã‚’ã‚¨ã‚¹ã‚±ãƒ¼ãƒ—ã™ã‚‹ãŸã‚ã®Functor
    * @else
    * @brief Functor to escape string
    * @endif
@@ -167,7 +167,7 @@ namespace coil
   
   /*!
    * @if jp
-   * @brief Ê¸»úÎó¤ò¥¨¥¹¥±¡¼¥×¤¹¤ë
+   * @brief æ–‡å­—åˆ—ã‚’ã‚¨ã‚¹ã‚±ãƒ¼ãƒ—ã™ã‚‹
    * @else
    * @brief Escape string
    * @endif
@@ -179,7 +179,7 @@ namespace coil
   
   /*!
    * @if jp
-   * @brief Ê¸»úÎó¤ò¥¢¥ó¥¨¥¹¥±¡¼¥×¤¹¤ë¤¿¤á¤ÎFunctor
+   * @brief æ–‡å­—åˆ—ã‚’ã‚¢ãƒ³ã‚¨ã‚¹ã‚±ãƒ¼ãƒ—ã™ã‚‹ãŸã‚ã®Functor
    * @else
    * @brief Functor to unescape string
    * @endif
@@ -223,7 +223,7 @@ namespace coil
   
   /*!
    * @if jp
-   * @brief Ê¸»úÎó¤Î¥¨¥¹¥±¡¼¥×¤òÌá¤¹
+   * @brief æ–‡å­—åˆ—ã®ã‚¨ã‚¹ã‚±ãƒ¼ãƒ—ã‚’æˆ»ã™
    * @else
    * @brief Unescape string
    * @endif
@@ -235,7 +235,7 @@ namespace coil
 
   /*!
    * @if jp
-   * @brief Ê¸»úÎó¤Î¶õÇòÊ¸»ú¤òºï½ü¤¹¤ë
+   * @brief æ–‡å­—åˆ—ã®ç©ºç™½æ–‡å­—ã‚’å‰Šé™¤ã™ã‚‹
    * @else
    * @brief Erase blank characters of string
    * @endif
@@ -260,7 +260,7 @@ namespace coil
   
   /*!
    * @if jp
-   * @brief Ê¸»úÎó¤ÎÀèÆ¬¤Î¶õÇòÊ¸»ú¤òºï½ü¤¹¤ë
+   * @brief æ–‡å­—åˆ—ã®å…ˆé ­ã®ç©ºç™½æ–‡å­—ã‚’å‰Šé™¤ã™ã‚‹
    * @else
    * @brief Erase the head blank characters of string
    * @endif
@@ -273,7 +273,7 @@ namespace coil
   
   /*!
    * @if jp
-   * @brief Ê¸»úÎó¤ÎËöÈø¤Î¶õÇòÊ¸»ú¤òºï½ü¤¹¤ë
+   * @brief æ–‡å­—åˆ—ã®æœ«å°¾ã®ç©ºç™½æ–‡å­—ã‚’å‰Šé™¤ã™ã‚‹
    * @else
    * @brief Erase the tail blank characters of string
    * @endif
@@ -288,7 +288,7 @@ namespace coil
 
   /*!
    * @if jp
-   * @brief Ê¸»úÎó¤ÎÀèÆ¬¡¦ËöÈø¤Î¶õÇòÊ¸»ú¤òºï½ü¤¹¤ë
+   * @brief æ–‡å­—åˆ—ã®å…ˆé ­ãƒ»æœ«å°¾ã®ç©ºç™½æ–‡å­—ã‚’å‰Šé™¤ã™ã‚‹
    * @else
    * @brief Erase the head blank and the tail blank characters of string
    * @endif
@@ -301,7 +301,7 @@ namespace coil
 
   /*!
    * @if jp
-   * @brief Ê¸»úÎó¤òÀµµ¬²½¤¹¤ë
+   * @brief æ–‡å­—åˆ—ã‚’æ­£è¦åŒ–ã™ã‚‹
    * @else
    * @brief Erase the head/tail blank and replace upper case to lower case
    * @endif
@@ -315,7 +315,7 @@ namespace coil
   
   /*!
    * @if jp
-   * @brief Ê¸»úÎó¤òÃÖ¤­´¹¤¨¤ë
+   * @brief æ–‡å­—åˆ—ã‚’ç½®ãæ›ãˆã‚‹
    * @else
    * @brief Replace string
    * @endif
@@ -339,7 +339,7 @@ namespace coil
   
   /*!
    * @if jp
-   * @brief Ê¸»úÎó¤òÊ¬³äÊ¸»ú¤ÇÊ¬³ä¤¹¤ë
+   * @brief æ–‡å­—åˆ—ã‚’åˆ†å‰²æ–‡å­—ã§åˆ†å‰²ã™ã‚‹
    * @else
    * @brief Split string by delimiter
    * @endif
@@ -393,7 +393,7 @@ namespace coil
   
   /*!
    * @if jp
-   * @brief ÂçÊ¸»ú¤ËÊÑ´¹¤¹¤ë Functor
+   * @brief å¤§æ–‡å­—ã«å¤‰æ›ã™ã‚‹ Functor
    * @else
    * @brief Functor to convert to capital letters
    * @endif
@@ -408,7 +408,7 @@ namespace coil
   
   /*!
    * @if jp
-   * @brief Í¿¤¨¤é¤ì¤¿Ê¸»úÎó¤òboolÃÍ¤ËÊÑ´¹¤¹¤ë
+   * @brief ä¸ãˆã‚‰ã‚ŒãŸæ–‡å­—åˆ—ã‚’boolå€¤ã«å¤‰æ›ã™ã‚‹
    * @else
    * @brief Convert given string into bool value
    * @endif
@@ -430,7 +430,7 @@ namespace coil
 
   /*!
    * @if jp
-   * @brief Ê¸»úÎó¥ê¥¹¥ÈÃæ¤Ë¤¢¤ëÊ¸»úÎó¤¬´Ş¤Ş¤ì¤ë¤«¤É¤¦¤«¤òÈ½ÃÇ¤¹¤ë
+   * @brief æ–‡å­—åˆ—ãƒªã‚¹ãƒˆä¸­ã«ã‚ã‚‹æ–‡å­—åˆ—ãŒå«ã¾ã‚Œã‚‹ã‹ã©ã†ã‹ã‚’åˆ¤æ–­ã™ã‚‹
    * @else
    * @brief Include if a string is included in string list
    * @endif
@@ -450,7 +450,7 @@ namespace coil
 
   /*!
    * @if jp
-   * @brief Ê¸»úÎó¥ê¥¹¥ÈÃæ¤Ë¤¢¤ëÊ¸»úÎó¤¬´Ş¤Ş¤ì¤ë¤«¤É¤¦¤«¤òÈ½ÃÇ¤¹¤ë
+   * @brief æ–‡å­—åˆ—ãƒªã‚¹ãƒˆä¸­ã«ã‚ã‚‹æ–‡å­—åˆ—ãŒå«ã¾ã‚Œã‚‹ã‹ã©ã†ã‹ã‚’åˆ¤æ–­ã™ã‚‹
    * @else
    * @brief Include if a string is included in string list
    * @endif
@@ -463,7 +463,7 @@ namespace coil
   
   /*!
    * @if jp
-   * @brief Í¿¤¨¤é¤ì¤¿Ê¸»úÎó¤¬ÀäÂĞ¥Ñ¥¹¤«¤É¤¦¤«¤òÈ½ÃÇ¤¹¤ë
+   * @brief ä¸ãˆã‚‰ã‚ŒãŸæ–‡å­—åˆ—ãŒçµ¶å¯¾ãƒ‘ã‚¹ã‹ã©ã†ã‹ã‚’åˆ¤æ–­ã™ã‚‹
    * @else
    * @brief Investigate whether the given string is absolute path or not
    * @endif
@@ -482,7 +482,7 @@ namespace coil
   
   /*!
    * @if jp
-   * @brief Í¿¤¨¤é¤ì¤¿Ê¸»úÎó¤¬URL¤«¤É¤¦¤«¤òÈ½ÃÇ¤¹¤ë
+   * @brief ä¸ãˆã‚‰ã‚ŒãŸæ–‡å­—åˆ—ãŒURLã‹ã©ã†ã‹ã‚’åˆ¤æ–­ã™ã‚‹
    * @else
    * @brief Investigate whether the given string is URL or not
    * @endif
@@ -562,16 +562,16 @@ namespace coil
   
   /*!
    * @if jp
-   * @brief URL¥Ñ¥é¥á¡¼¥¿¤òmapstring¤ËÊ¬²ò¤·¤ÆÊÖ¤¹
+   * @brief URLãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã‚’mapstringã«åˆ†è§£ã—ã¦è¿”ã™
    *
-   * URL¥Ñ¥é¥á¡¼¥¿É½¸½ something?key0=value0&key1=value1.... ¤Î¤¦¤Á
-   * '?' °Ê¹ß¤ÎÉôÊ¬¤òÊ¬²ò¤·¤Æ¡¢std::map<std::string, std::string> ·Á¼°
-   * ¤ËÊÑ´¹¤¹¤ë¡£Í¿¤¨¤é¤ì¤¿Ê¸»úÎó¤òº¸¤«¤é¥µ¡¼¥Á¤·¡¢'?' ¤è¤ê±¦Â¦¤ÎÉôÊ¬¤Ë
-   * ¤Ä¤¤¤Æ²òÀÏ¤ò¹Ô¤¦¡£'&'¤ÇÊ¬³ä¤·¡¢º¸¤«¤é '=' ¤ò¸¡º÷¤·¡¢ºÇ½é¤Î '=' ¤Î
-   * ±¦ÊÕ¤Èº¸ÊÕ¤ò¤½¤ì¤¾¤ì¡¢key ¤È value ¤È¤·¤Æ map ¤Ë³ÊÇ¼¤¹¤ë¡£
+   * URLãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿è¡¨ç¾ something?key0=value0&key1=value1.... ã®ã†ã¡
+   * '?' ä»¥é™ã®éƒ¨åˆ†ã‚’åˆ†è§£ã—ã¦ã€std::map<std::string, std::string> å½¢å¼
+   * ã«å¤‰æ›ã™ã‚‹ã€‚ä¸ãˆã‚‰ã‚ŒãŸæ–‡å­—åˆ—ã‚’å·¦ã‹ã‚‰ã‚µãƒ¼ãƒã—ã€'?' ã‚ˆã‚Šå³å´ã®éƒ¨åˆ†ã«
+   * ã¤ã„ã¦è§£æã‚’è¡Œã†ã€‚'&'ã§åˆ†å‰²ã—ã€å·¦ã‹ã‚‰ '=' ã‚’æ¤œç´¢ã—ã€æœ€åˆã® '=' ã®
+   * å³è¾ºã¨å·¦è¾ºã‚’ãã‚Œãã‚Œã€key ã¨ value ã¨ã—ã¦ map ã«æ ¼ç´ã™ã‚‹ã€‚
    *
-   * @param str Ê¬²òÂĞ¾İÊ¸»úÎó
-   * @return mapstring ·¿¤Î key/value¥Ç¡¼¥¿
+   * @param str åˆ†è§£å¯¾è±¡æ–‡å­—åˆ—
+   * @return mapstring å‹ã® key/valueãƒ‡ãƒ¼ã‚¿
    *
    * @else
    * @brief Investigate whether the given string is URL or not
@@ -615,7 +615,7 @@ namespace coil
 
   /*!
    * @if jp
-   * @brief ¥ê¥¹¥ÈÆâ¤ÎÊ¸»úÎó¤ò¸¡º÷¤¹¤ë Functor
+   * @brief ãƒªã‚¹ãƒˆå†…ã®æ–‡å­—åˆ—ã‚’æ¤œç´¢ã™ã‚‹ Functor
    * @else
    * @brief Functor to find string in a list
    * @endif
@@ -632,7 +632,7 @@ namespace coil
 
   /*!
    * @if jp
-   * @brief Í¿¤¨¤é¤ì¤¿Ê¸»úÎó¤òstd::string¤ËÊÑ´¹
+   * @brief ä¸ãˆã‚‰ã‚ŒãŸæ–‡å­—åˆ—ã‚’std::stringã«å¤‰æ›
    * @else
    * @brief Convert the given string to std::string.
    * @endif
@@ -647,7 +647,7 @@ namespace coil
   
   /*!
    * @if jp
-   * @brief Í¿¤¨¤é¤ì¤¿Ê¸»úÎó¤òbool¤ËÊÑ´¹
+   * @brief ä¸ãˆã‚‰ã‚ŒãŸæ–‡å­—åˆ—ã‚’boolã«å¤‰æ›
    * @else
    * @brief Convert the given string to bool.
    * @endif
@@ -676,7 +676,7 @@ namespace coil
   
   /*!
    * @if jp
-   * @brief Í¿¤¨¤é¤ì¤¿Ê¸»úÎó¥ê¥¹¥È¤«¤é½ÅÊ£¤òºï½ü
+   * @brief ä¸ãˆã‚‰ã‚ŒãŸæ–‡å­—åˆ—ãƒªã‚¹ãƒˆã‹ã‚‰é‡è¤‡ã‚’å‰Šé™¤
    * @else
    * @brief Eliminate duplication from the given string list
    * @endif
@@ -688,7 +688,7 @@ namespace coil
   
   /*!
    * @if jp
-   * @brief Í¿¤¨¤é¤ì¤¿Ê¸»úÎó¥ê¥¹¥È¤«¤éCSV¤òÀ¸À®
+   * @brief ä¸ãˆã‚‰ã‚ŒãŸæ–‡å­—åˆ—ãƒªã‚¹ãƒˆã‹ã‚‰CSVã‚’ç”Ÿæˆ
    * @else
    * @brief Create CSV file from the given string list
    * @endif
@@ -707,7 +707,7 @@ namespace coil
   
   /*!
    * @if jp
-   * @brief Í¿¤¨¤é¤ì¤¿Ê¸»úÎó¥ê¥¹¥È¤ò°ú¿ô¥ê¥¹¥È¤ËÊÑ´¹
+   * @brief ä¸ãˆã‚‰ã‚ŒãŸæ–‡å­—åˆ—ãƒªã‚¹ãƒˆã‚’å¼•æ•°ãƒªã‚¹ãƒˆã«å¤‰æ›
    * @else
    * @brief Convert the given string list into the argument list
    * @endif
@@ -732,7 +732,7 @@ namespace coil
 
   /*!
    * @if jp
-   * @brief »ØÄê¤µ¤ì¤¿½ñ¼°¤ËÊÑ´¹
+   * @brief æŒ‡å®šã•ã‚ŒãŸæ›¸å¼ã«å¤‰æ›
    * @else
    * @brief Convert it into a format given with an argumen
    * @endif
@@ -758,15 +758,15 @@ namespace coil
 
   /*!
   * @if jp
-  * @brief Ê¸»úÎóÃæ¤Î´Ä¶­ÊÑ¿ô¤òÃÖ¤­´¹¤¨¤ë
+  * @brief æ–‡å­—åˆ—ä¸­ã®ç’°å¢ƒå¤‰æ•°ã‚’ç½®ãæ›ãˆã‚‹
   *
   *
   *
-  * Ê¸»úÎóÃæ¤Ë${}¤Ç°Ï¤Ş¤ì¤¿Ê¸»úÎó¤¬¤¢¤ë¾ì¹ç¤Ë¡¢´Ä¶­ÊÑ¿ô¤ÈÃÖ¤­´¹¤¨¤ë
-  * Îã¡§${RTM_ROOT}\bin -> C:\Program Files (x86)\OpenRTM-aist\1.1.2\
+  * æ–‡å­—åˆ—ä¸­ã«${}ã§å›²ã¾ã‚ŒãŸæ–‡å­—åˆ—ãŒã‚ã‚‹å ´åˆã«ã€ç’°å¢ƒå¤‰æ•°ã¨ç½®ãæ›ãˆã‚‹
+  * ä¾‹ï¼š${RTM_ROOT}\bin -> C:\Program Files (x86)\OpenRTM-aist\1.1.2\
   *
-  * @param str ÃÖ¤­´¹¤¨Á°¤ÎÊ¸»úÎó
-  * @return ÃÖ¤­´¹¤¨¸å¤ÎÊ¸»úÎó
+  * @param str ç½®ãæ›ãˆå‰ã®æ–‡å­—åˆ—
+  * @return ç½®ãæ›ãˆå¾Œã®æ–‡å­—åˆ—
   *
   * @else
   * @brief

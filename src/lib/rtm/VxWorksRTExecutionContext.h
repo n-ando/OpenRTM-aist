@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file VxWorksRTExecutionContext.h
  * @brief VxWorksRTExecutionContext class
@@ -35,9 +35,9 @@ namespace RTC_exp
   /*!
    * @if jp
    * @class VxWorksRTExecutionContext
-   * @brief VxWorksRTExecutionContext ¥¯¥é¥¹
+   * @brief VxWorksRTExecutionContext ã‚¯ãƒ©ã‚¹
    *
-   * Periodic Sampled Data Processing(¼ş´ü¼Â¹ÔÍÑ)ExecutionContext¥¯¥é¥¹¡£
+   * Periodic Sampled Data Processing(å‘¨æœŸå®Ÿè¡Œç”¨)ExecutionContextã‚¯ãƒ©ã‚¹ã€‚
    *
    * @since 0.4.0
    *
@@ -59,10 +59,10 @@ namespace RTC_exp
   public:
     /*!
      * @if jp
-     * @brief ¥Ç¥Õ¥©¥ë¥È¥³¥ó¥¹¥È¥é¥¯¥¿
+     * @brief ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
      *
-     * ¥Ç¥Õ¥©¥ë¥È¥³¥ó¥¹¥È¥é¥¯¥¿
-     * ¥×¥í¥Õ¥¡¥¤¥ë¤Ë°Ê²¼¤Î¹àÌÜ¤òÀßÄê¤¹¤ë¡£
+     * ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+     * ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«ã«ä»¥ä¸‹ã®é …ç›®ã‚’è¨­å®šã™ã‚‹ã€‚
      *  - kind : PERIODIC
      *  - rate : 0.0
      *
@@ -80,9 +80,9 @@ namespace RTC_exp
 
     /*!
      * @if jp
-     * @brief ¥Ç¥¹¥È¥é¥¯¥¿
+     * @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
      *
-     * ¥Ç¥¹¥È¥é¥¯¥¿
+     * ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
      *
      * @else
      * @brief Destructor
@@ -95,9 +95,9 @@ namespace RTC_exp
 
     /*!
      * @if jp
-     * @brief ExecutionContext¤Î½é´ü²½¤ò¹Ô¤¦
+     * @brief ExecutionContextã®åˆæœŸåŒ–ã‚’è¡Œã†
      *
-     * ExecutionContext¤Î½é´ü²½½èÍı
+     * ExecutionContextã®åˆæœŸåŒ–å‡¦ç†
      *
      * @else
      * @brief Initialize the ExecutionContext
@@ -110,12 +110,12 @@ namespace RTC_exp
 
     /*!
      * @if jp
-     * @brief ExecutionContext ÍÑ¤Î¥¹¥ì¥Ã¥É¼Â¹Ô´Ø¿ô
+     * @brief ExecutionContext ç”¨ã®ã‚¹ãƒ¬ãƒƒãƒ‰å®Ÿè¡Œé–¢æ•°
      *
-     * ExecutionContext ÍÑ¤Î¥¹¥ì¥Ã¥É¼Â¹Ô´Ø¿ô¡£ÅĞÏ¿¤µ¤ì¤¿¥³¥ó¥İ¡¼¥Í¥ó¥È
-     * ¤Î½èÍı¤ò¸Æ¤Ó½Ğ¤¹¡£
+     * ExecutionContext ç”¨ã®ã‚¹ãƒ¬ãƒƒãƒ‰å®Ÿè¡Œé–¢æ•°ã€‚ç™»éŒ²ã•ã‚ŒãŸã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆ
+     * ã®å‡¦ç†ã‚’å‘¼ã³å‡ºã™ã€‚
      *
-     * @return ¼Â¹Ô·ë²Ì
+     * @return å®Ÿè¡Œçµæœ
      *
      * @else
      * @brief Thread execution function for ExecutionContext
@@ -135,7 +135,7 @@ namespace RTC_exp
   private:
     /*!
      * @if jp
-     * @brief Í¥ÀèÅÙ¤ÎÀßÄê
+     * @brief å„ªå…ˆåº¦ã®è¨­å®š
      *
      * @param prop
      *
@@ -153,7 +153,7 @@ namespace RTC_exp
    void setPriority(coil::Properties& props);
     /*!
      * @if jp
-     * @brief ¥¹¥¿¥Ã¥¯¥µ¥¤¥º¤ÎÀßÄê
+     * @brief ã‚¹ã‚¿ãƒƒã‚¯ã‚µã‚¤ã‚ºã®è¨­å®š
      *
      * @param prop
      *
@@ -171,7 +171,7 @@ namespace RTC_exp
    void setStackSize(coil::Properties& props);
     /*!
      * @if jp
-     * @brief ¥Ê¥ÎÉÃÃ±°Ì¤Îsleep
+     * @brief ãƒŠãƒç§’å˜ä½ã®sleep
      *
      * @param interval
      *
@@ -217,7 +217,7 @@ extern "C"
 {
   /*!
    * @if jp
-   * @brief ECFactory¤Ø¤ÎÅĞÏ¿¤Î¤¿¤á¤Î½é´ü²½´Ø¿ô
+   * @brief ECFactoryã¸ã®ç™»éŒ²ã®ãŸã‚ã®åˆæœŸåŒ–é–¢æ•°
    * @else
    * @brief Initialization function to register to ECFactory
    * @endif

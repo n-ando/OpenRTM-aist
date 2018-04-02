@@ -1,4 +1,4 @@
-/*!
+ï»¿/*!
  * @file ExecutionContext.h
  * @brief ExecutionContext class
  * @date $Date: 2007-04-13 15:45:29 $
@@ -32,7 +32,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ExecutionContext ¤¬¼Â¹ÔÃæ¤«¤É¤¦¤«¤Î¥Æ¥¹¥È
+   * @brief ExecutionContext ãŒå®Ÿè¡Œä¸­ã‹ã©ã†ã‹ã®ãƒ†ã‚¹ãƒˆ
    * @else
    * @brief Test for ExecutionContext running state
    * @endif
@@ -46,7 +46,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ExecutionContext ¤ò¥¹¥¿¡¼¥È¤µ¤»¤ë
+   * @brief ExecutionContext ã‚’ã‚¹ã‚¿ãƒ¼ãƒˆã•ã›ã‚‹
    * @else
    * @brief Start the ExecutionContext
    * @endif
@@ -60,7 +60,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ExecutionContext ¤ò¥¹¥È¥Ã¥×¤µ¤»¤ë
+   * @brief ExecutionContext ã‚’ã‚¹ãƒˆãƒƒãƒ—ã•ã›ã‚‹
    * @else
    * @brief Stop the ExecutionContext
    * @endif
@@ -74,7 +74,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ¼Â¹Ô¼ş´ü(Hz)¤ò¼èÆÀ¤¹¤ë
+   * @brief å®Ÿè¡Œå‘¨æœŸ(Hz)ã‚’å–å¾—ã™ã‚‹
    * @else
    * @brief Get executionrate(Hz)
    * @endif
@@ -88,7 +88,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ¼Â¹Ô¼ş´ü(Hz)¤òÍ¿¤¨¤ë 
+   * @brief å®Ÿè¡Œå‘¨æœŸ(Hz)ã‚’ä¸ãˆã‚‹ 
    * @else
    * @brief Set rate (Hz)
    * @endif
@@ -107,7 +107,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ¥³¥ó¥İ¡¼¥Í¥ó¥È¤ò¥¢¥¯¥Æ¥£¥Ö²½¤¹¤ë
+   * @brief ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã‚’ã‚¢ã‚¯ãƒ†ã‚£ãƒ–åŒ–ã™ã‚‹
    * @else
    * @brief Activate a component
    * @endif
@@ -122,7 +122,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ¥³¥ó¥İ¡¼¥Í¥ó¥È¤òÈó¥¢¥¯¥Æ¥£¥Ö²½¤¹¤ë
+   * @brief ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã‚’éã‚¢ã‚¯ãƒ†ã‚£ãƒ–åŒ–ã™ã‚‹
    * @else
    * @brief Deactivate a component
    * @endif
@@ -137,7 +137,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ¥³¥ó¥İ¡¼¥Í¥ó¥È¤òÈó¥¢¥¯¥Æ¥£¥Ö²½¤¹¤ë
+   * @brief ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã‚’éã‚¢ã‚¯ãƒ†ã‚£ãƒ–åŒ–ã™ã‚‹
    * @else
    * @brief Deactivate a component
    * @endif
@@ -152,7 +152,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ¥³¥ó¥İ¡¼¥Í¥ó¥È¤Î¾õÂÖ¤ò¼èÆÀ¤¹¤ë
+   * @brief ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã®çŠ¶æ…‹ã‚’å–å¾—ã™ã‚‹
    * @else
    * @brief Get component's state
    * @endif
@@ -167,7 +167,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ExecutionKind ¤ò¼èÆÀ¤¹¤ë
+   * @brief ExecutionKind ã‚’å–å¾—ã™ã‚‹
    * @else
    * @brief Get the ExecutionKind
    * @endif
@@ -181,7 +181,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ¥³¥ó¥İ¡¼¥Í¥ó¥È¤òÄÉ²Ã¤¹¤ë
+   * @brief ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã‚’è¿½åŠ ã™ã‚‹
    * @else
    * @brief Add a component
    * @endif
@@ -202,7 +202,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ¥³¥ó¥İ¡¼¥Í¥ó¥È¤ò¥³¥ó¥İ¡¼¥Í¥ó¥È¥ê¥¹¥È¤«¤éºï½ü¤¹¤ë
+   * @brief ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã‚’ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆãƒªã‚¹ãƒˆã‹ã‚‰å‰Šé™¤ã™ã‚‹
    * @else
    * @brief Remove the component from component list
    * @endif
@@ -226,7 +226,7 @@ namespace RTC
   //============================================================
   /*!
    * @if jp
-   * @brief ExecutionContextProfile ¤ò¼èÆÀ¤¹¤ë
+   * @brief ExecutionContextProfile ã‚’å–å¾—ã™ã‚‹
    * @else
    * @brief Get the ExecutionContextProfile
    * @endif

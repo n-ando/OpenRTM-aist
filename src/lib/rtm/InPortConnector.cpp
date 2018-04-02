@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file InPortConnector.cpp
  * @brief InPortConnector base class
@@ -24,7 +24,7 @@ namespace RTC
 {
   /*!
    * @if jp
-   * @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+   * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
    * @else
    * @brief Constructor
    * @endif
@@ -39,7 +39,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ¥Ç¥¹¥È¥é¥¯¥¿
+   * @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
    * @else
    * @brief Destructor
    * @endif
@@ -50,9 +50,9 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ConnectorInfo ¼èÆÀ
+   * @brief ConnectorInfo å–å¾—
    *
-   * Connector ConnectorInfo ¤ò¼èÆÀ¤¹¤ë
+   * Connector ConnectorInfo ã‚’å–å¾—ã™ã‚‹
    *
    * @else
    * @brief Getting ConnectorInfo
@@ -69,9 +69,9 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief Connector ID ¼èÆÀ
+   * @brief Connector ID å–å¾—
    *
-   * Connector ID ¤ò¼èÆÀ¤¹¤ë
+   * Connector ID ã‚’å–å¾—ã™ã‚‹
    *
    * @else
    * @brief Getting Connector ID
@@ -88,9 +88,9 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief Connector Ì¾¼èÆÀ
+   * @brief Connector åå–å¾—
    *
-   * Connector Ì¾¤ò¼èÆÀ¤¹¤ë
+   * Connector åã‚’å–å¾—ã™ã‚‹
    *
    * @else
    * @brief Getting Connector name
@@ -107,9 +107,9 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief Buffer ¤ò¼èÆÀ¤¹¤ë
+   * @brief Buffer ã‚’å–å¾—ã™ã‚‹
    *
-   * Connector ¤¬Êİ»ı¤·¤Æ¤¤¤ë Buffer ¤òÊÖ¤¹
+   * Connector ãŒä¿æŒã—ã¦ã„ã‚‹ Buffer ã‚’è¿”ã™
    *
    * @else
    * @brief Getting Buffer
@@ -125,9 +125,9 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief endian¥¿¥¤¥×ÀßÄê
+   * @brief endianã‚¿ã‚¤ãƒ—è¨­å®š
    *
-   * endian¥¿¥¤¥×¤òÀßÄê¤¹¤ë
+   * endianã‚¿ã‚¤ãƒ—ã‚’è¨­å®šã™ã‚‹
    *
    * @else
    * @brief Setting an endian type
@@ -144,7 +144,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief endian ÀßÄê¤¬little¤«Èİ¤«ÊÖ¤¹
+   * @brief endian è¨­å®šãŒlittleã‹å¦ã‹è¿”ã™
    * @else
    * @brief return it whether endian setting is little
    * @endif

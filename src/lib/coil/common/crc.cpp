@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file crc.cpp
  * @brief CRC calculation functions
@@ -21,15 +21,15 @@ namespace coil
 {
   /*
    * @if jp
-   * @brief CRC-16 �׻��ؿ�
+   * @brief CRC-16 計算関数
    *
-   * CRC����: CRC-CCITT
-   * CRC¿�༰:  x^16 + x^12 + x^5 + 1 (0x1021)
-   * �����:  0xFFFF
-   * ����XOR: 0x0000
-   * ���ϥӥå�ȿž: �ʤ�
-   * ���ϥӥå�ȿž: �ʤ�
-   * �ӥåȥ��ե�: ��
+   * CRC種類: CRC-CCITT
+   * CRC多項式:  x^16 + x^12 + x^5 + 1 (0x1021)
+   * 初期値:  0xFFFF
+   * 出力XOR: 0x0000
+   * 入力ビット反転: なし
+   * 出力ビット反転: なし
+   * ビットシフト: 左
    *
    * @else
    * @brief CRC-16 calculation function
@@ -94,15 +94,15 @@ namespace coil
   
   /*!
    * @if jp
-   * @brief CRC-32 �׻��ؿ�
+   * @brief CRC-32 計算関数
    *
-   * CRC����: RFC2083 Appendix 15
-   * CRC¿�༰:  0xedb88320L
-   * �����:  0xFFFFFFFF
-   * ����XOR: 0xFFFFFFFF
-   * ���ϥӥå�ȿž: �ʤ�
-   * ���ϥӥå�ȿž: �ʤ�
-   * �ӥåȥ��ե�: ��
+   * CRC種類: RFC2083 Appendix 15
+   * CRC多項式:  0xedb88320L
+   * 初期値:  0xFFFFFFFF
+   * 出力XOR: 0xFFFFFFFF
+   * 入力ビット反転: なし
+   * 出力ビット反転: なし
+   * ビットシフト: 右
    *
    * @else
    * @brief CRC-32 calculation function

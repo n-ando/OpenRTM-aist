@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file ConfigAdmin.cpp
  * @brief Configuration Administration classes
@@ -25,7 +25,7 @@ namespace RTC
 {
   /*!
    * @if jp
-   * @brief ¥³¡¼¥ë¥Ğ¥Ã¥¯¤Î¥»¥Ã¥È
+   * @brief ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ã®ã‚»ãƒƒãƒˆ
    * @else
    * @brief Setting callback
    * @endif
@@ -38,7 +38,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ÊÑ¿ôÊÑ¹¹¤òÃÎ¤é¤»¤ë¥ª¥Ö¥¶¡¼¥Ğ´Ø¿ô
+   * @brief å¤‰æ•°å¤‰æ›´ã‚’çŸ¥ã‚‰ã›ã‚‹ã‚ªãƒ–ã‚¶ãƒ¼ãƒé–¢æ•°
    * @else
    * @brief Observer function to notify variable changed
    * @endif
@@ -51,7 +51,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+   * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
    * @else
    * @endif
    */
@@ -63,7 +63,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ²¾ÁÛ¥Ç¥¹¥È¥é¥¯¥¿
+   * @brief ä»®æƒ³ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
    * @else
    * @brief Virtual destructor
    * @endif
@@ -79,7 +79,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ¥³¥ó¥Õ¥£¥®¥å¥ì¡¼¥·¥ç¥ó¥Ñ¥é¥á¡¼¥¿¤Î²ò½ü
+   * @brief ã‚³ãƒ³ãƒ•ã‚£ã‚®ãƒ¥ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã®è§£é™¤
    * @else
    * @brief Unbinding configuration parameters
    * @endif
@@ -113,8 +113,8 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ¥³¥ó¥Õ¥£¥®¥å¥ì¡¼¥·¥ç¥ó¥Ñ¥é¥á¡¼¥¿¤Î¹¹¿·
-   *        (¥¢¥¯¥Æ¥£¥Ö¥³¥ó¥Õ¥£¥®¥å¥ì¡¼¥·¥ç¥ó¥»¥Ã¥È)
+   * @brief ã‚³ãƒ³ãƒ•ã‚£ã‚®ãƒ¥ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã®æ›´æ–°
+   *        (ã‚¢ã‚¯ãƒ†ã‚£ãƒ–ã‚³ãƒ³ãƒ•ã‚£ã‚®ãƒ¥ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ã‚»ãƒƒãƒˆ)
    * @else
    * @brief Update the values of configuration parameters
    *        (Active configuration set)
@@ -134,7 +134,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ¥³¥ó¥Õ¥£¥®¥å¥ì¡¼¥·¥ç¥ó¥Ñ¥é¥á¡¼¥¿¤Î¹¹¿·(ID»ØÄê)
+   * @brief ã‚³ãƒ³ãƒ•ã‚£ã‚®ãƒ¥ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã®æ›´æ–°(IDæŒ‡å®š)
    * @else
    * @brief Update configuration parameter (By ID)
    * @endif
@@ -160,7 +160,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ¥³¥ó¥Õ¥£¥®¥å¥ì¡¼¥·¥ç¥ó¥Ñ¥é¥á¡¼¥¿¤Î¹¹¿·(Ì¾¾Î»ØÄê)
+   * @brief ã‚³ãƒ³ãƒ•ã‚£ã‚®ãƒ¥ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã®æ›´æ–°(åç§°æŒ‡å®š)
    * @else
    * @brief Update the values of configuration parameters (By name)
    * @endif
@@ -186,7 +186,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ¥³¥ó¥Õ¥£¥®¥å¥ì¡¼¥·¥ç¥ó¥Ñ¥é¥á¡¼¥¿¤ÎÂ¸ºß³ÎÇ§
+   * @brief ã‚³ãƒ³ãƒ•ã‚£ã‚®ãƒ¥ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã®å­˜åœ¨ç¢ºèª
    * @else
    * @brief Check the existence of configuration parameters
    * @endif
@@ -206,7 +206,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief Á´¥³¥ó¥Õ¥£¥®¥å¥ì¡¼¥·¥ç¥ó¥»¥Ã¥È¤Î¼èÆÀ
+   * @brief å…¨ã‚³ãƒ³ãƒ•ã‚£ã‚®ãƒ¥ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ã‚»ãƒƒãƒˆã®å–å¾—
    * @else
    * @brief Get all configuration sets
    * @endif
@@ -218,7 +218,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief »ØÄê¤·¤¿ID¤Î¥³¥ó¥Õ¥£¥®¥å¥ì¡¼¥·¥ç¥ó¥»¥Ã¥È¤Î¼èÆÀ
+   * @brief æŒ‡å®šã—ãŸIDã®ã‚³ãƒ³ãƒ•ã‚£ã‚®ãƒ¥ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ã‚»ãƒƒãƒˆã®å–å¾—
    * @else
    * @brief Get a configuration set by specified ID
    * @endif
@@ -233,7 +233,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief »ØÄê¤·¤¿¥×¥í¥Ñ¥Æ¥£¤Î¥³¥ó¥Õ¥£¥®¥å¥ì¡¼¥·¥ç¥ó¥»¥Ã¥È¤Ø¤ÎÄÉ²Ã
+   * @brief æŒ‡å®šã—ãŸãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã®ã‚³ãƒ³ãƒ•ã‚£ã‚®ãƒ¥ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ã‚»ãƒƒãƒˆã¸ã®è¿½åŠ 
    * @else
    * @brief Add to the configuration set from specified property
    * @endif
@@ -255,7 +255,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ¥¢¥¯¥Æ¥£¥Ö¡¦¥³¥ó¥Õ¥£¥®¥å¥ì¡¼¥·¥ç¥ó¥»¥Ã¥È¤ò¼èÆÀ
+   * @brief ã‚¢ã‚¯ãƒ†ã‚£ãƒ–ãƒ»ã‚³ãƒ³ãƒ•ã‚£ã‚®ãƒ¥ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ã‚»ãƒƒãƒˆã‚’å–å¾—
    * @else
    * @brief Get the active configuration set
    * @endif
@@ -269,7 +269,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ¥³¥ó¥Õ¥£¥®¥å¥ì¡¼¥·¥ç¥ó¥»¥Ã¥È¤ËÀßÄêÃÍ¤òÄÉ²Ã
+   * @brief ã‚³ãƒ³ãƒ•ã‚£ã‚®ãƒ¥ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ã‚»ãƒƒãƒˆã«è¨­å®šå€¤ã‚’è¿½åŠ 
    * @else
    * @brief Add the configuration value to the configuration set
    * @endif
@@ -292,7 +292,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ¥³¥ó¥Õ¥£¥®¥å¥ì¡¼¥·¥ç¥ó¥»¥Ã¥È¤Îºï½ü
+   * @brief ã‚³ãƒ³ãƒ•ã‚£ã‚®ãƒ¥ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ã‚»ãƒƒãƒˆã®å‰Šé™¤
    * @else
    * @brief Remove the configuration set
    * @endif
@@ -319,7 +319,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ¥³¥ó¥Õ¥£¥®¥å¥ì¡¼¥·¥ç¥ó¥»¥Ã¥È¤Î¥¢¥¯¥Æ¥£¥Ö²½
+   * @brief ã‚³ãƒ³ãƒ•ã‚£ã‚®ãƒ¥ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ã‚»ãƒƒãƒˆã®ã‚¢ã‚¯ãƒ†ã‚£ãƒ–åŒ–
    * @else
    * @brief Activate the configuration set
    * @endif
@@ -389,7 +389,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ConfigurationParamListener ¤òÄÉ²Ã¤¹¤ë
+   * @brief ConfigurationParamListener ã‚’è¿½åŠ ã™ã‚‹
    * @else
    * @brief Adding ConfigurationParamListener 
    * @endif
@@ -404,7 +404,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ConfigurationParamListener ¤òºï½ü¤¹¤ë
+   * @brief ConfigurationParamListener ã‚’å‰Šé™¤ã™ã‚‹
    * @else
    * @brief Removing ConfigurationParamListener 
    * @endif
@@ -418,7 +418,7 @@ namespace RTC
     
   /*!
    * @if jp
-   * @brief ConfigurationSetListener ¤òÄÉ²Ã¤¹¤ë
+   * @brief ConfigurationSetListener ã‚’è¿½åŠ ã™ã‚‹
    * @else
    * @brief Adding ConfigurationSetListener 
    * @endif
@@ -433,7 +433,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ConfigurationSetListener ¤òºï½ü¤¹¤ë
+   * @brief ConfigurationSetListener ã‚’å‰Šé™¤ã™ã‚‹
    * @else
    * @brief Removing ConfigurationSetListener 
    * @endif
@@ -447,7 +447,7 @@ namespace RTC
     
   /*!
    * @if jp
-   * @brief ConfigurationSetNameListener ¤òÄÉ²Ã¤¹¤ë
+   * @brief ConfigurationSetNameListener ã‚’è¿½åŠ ã™ã‚‹
    * @else
    * @brief Adding ConfigurationSetNameListener 
    * @endif
@@ -462,7 +462,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ConfigurationSetNameListener ¤òºï½ü¤¹¤ë
+   * @brief ConfigurationSetNameListener ã‚’å‰Šé™¤ã™ã‚‹
    * @else
    * @brief Removing ConfigurationSetNameListener 
    * @endif
@@ -478,7 +478,7 @@ namespace RTC
   // protected functions
   /*!
    * @if jp
-   * @brief ¥³¥ó¥Õ¥£¥®¥å¥ì¡¼¥·¥ç¥ó¥Ñ¥é¥á¡¼¥¿¤Î¹¹¿·(ID»ØÄê)»ş¤Ë¥³¡¼¥ë¤µ¤ì¤ë
+   * @brief ã‚³ãƒ³ãƒ•ã‚£ã‚®ãƒ¥ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã®æ›´æ–°(IDæŒ‡å®š)æ™‚ã«ã‚³ãƒ¼ãƒ«ã•ã‚Œã‚‹
    * @else
    * @brief When the configuration parameter is updated, it is called. 
    * @endif
@@ -490,7 +490,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ¥³¥ó¥Õ¥£¥®¥å¥ì¡¼¥·¥ç¥ó¥Ñ¥é¥á¡¼¥¿¤Î¹¹¿·(Ì¾¾Î»ØÄê)»ş¤Ë¥³¡¼¥ë¤µ¤ì¤ë
+   * @brief ã‚³ãƒ³ãƒ•ã‚£ã‚®ãƒ¥ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã®æ›´æ–°(åç§°æŒ‡å®š)æ™‚ã«ã‚³ãƒ¼ãƒ«ã•ã‚Œã‚‹
    * @else
    * @brief When the configuration parameter is updated, it is called. 
    * @endif
@@ -505,7 +505,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ¥³¥ó¥Õ¥£¥®¥å¥ì¡¼¥·¥ç¥ó¥»¥Ã¥È¤Ø¤ÎÄÉ²Ã»ş¤Ë¥³¡¼¥ë¤µ¤ì¤ë
+   * @brief ã‚³ãƒ³ãƒ•ã‚£ã‚®ãƒ¥ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ã‚»ãƒƒãƒˆã¸ã®è¿½åŠ æ™‚ã«ã‚³ãƒ¼ãƒ«ã•ã‚Œã‚‹
    * @else
    * @brief Called when the property is added to the configuration set
    * @endif
@@ -517,7 +517,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ÀßÄêÃÍ¤¬ÄÉ²Ã¤µ¤ì¤¿¤È¤­¤Ë¥³¡¼¥ë¤µ¤ì¤ë¡£
+   * @brief è¨­å®šå€¤ãŒè¿½åŠ ã•ã‚ŒãŸã¨ãã«ã‚³ãƒ¼ãƒ«ã•ã‚Œã‚‹ã€‚
    * @else
    * @brief Called when a set value is added to the configuration set
    * @endif
@@ -529,7 +529,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ¥»¥Ã¥È¤¬ºï½ü¤µ¤ì¤Æ¤ë¤È¤­¤Ë¥³¡¼¥ë¤µ¤ì¤ë¡£
+   * @brief ã‚»ãƒƒãƒˆãŒå‰Šé™¤ã•ã‚Œã¦ã‚‹ã¨ãã«ã‚³ãƒ¼ãƒ«ã•ã‚Œã‚‹ã€‚
    * @else
    * @brief Called when the configuration set has been deleted
    * @endif
@@ -541,7 +541,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ¥»¥Ã¥È¤¬¥¢¥¯¥Æ¥£¥Ö²½¤µ¤ì¤¿¤È¤­¤Ë¥³¡¼¥ë¤µ¤ì¤ë¡£
+   * @brief ã‚»ãƒƒãƒˆãŒã‚¢ã‚¯ãƒ†ã‚£ãƒ–åŒ–ã•ã‚ŒãŸã¨ãã«ã‚³ãƒ¼ãƒ«ã•ã‚Œã‚‹ã€‚
    * @else
    * @brief Called when the configuration set is made active
    * @endif

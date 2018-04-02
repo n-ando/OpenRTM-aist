@@ -1,4 +1,4 @@
-// A simple simulation of an microwave oven:
+ï»¿// A simple simulation of an microwave oven:
 // Timer can be programmed in minutes, last mode will be resumed if opened.
 //
 // Compile like this:
@@ -20,9 +20,9 @@ namespace MicrowaveFsm
 
   /*!
    * @if jp
-   * @brief “dqƒŒƒ“ƒWó‘Ôƒ}ƒVƒ“ƒTƒ“ƒvƒ‹
+   * @brief é›»å­ãƒ¬ãƒ³ã‚¸çŠ¶æ…‹ãƒã‚·ãƒ³ã‚µãƒ³ãƒ—ãƒ«
    *
-   * Macho ‚É•t‘®‚Ì Microwave FSM ‚ÌƒTƒ“ƒvƒ‹
+   * Macho ã«ä»˜å±ã® Microwave FSM ã®ã‚µãƒ³ãƒ—ãƒ«
    *
    * @else
    * @brief Microwave state machine sample
@@ -34,7 +34,7 @@ namespace MicrowaveFsm
 
   /*!
    * @if jp
-   * @class TOPó‘Ô
+   * @class TOPçŠ¶æ…‹
    *
    *
    * @else

@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file SdoServiceConsumerBase.h
  * @brief SDO service consumer base class and its factory
@@ -31,37 +31,37 @@ namespace RTC
   /*!
    * @if jp
    *
-   * @brief SdoServiceConsumer�����쥯�饹
+   * @brief SdoServiceConsumer　基底クラス
    *
-   * SDO���������Ƥ���SDO�����ӥ��Υ��󥷥塼�ޤ�������뤿��δ��쥯
-   * �饹��SDO�����ӥ��ˤϡ����������󶡥����ӥ���RTC(SDO)¦�����Ѥ���
-   * SDO�����ӥ����󥷥塼�ޤȡ�RTC(SDO)���Ȥ�SDO�����ӥ����󶡤���SDO
-   * �����ӥ��ץ��Х��������롣���٤Ƥ�SDO�����ӥ����󥷥塼�ޤϤ��δ�
-   * �쥯�饹��Ѿ����Ƽ�������롣
+   * SDOで定義されているSDOサービスのコンシューマを実装するための基底ク
+   * ラス。SDOサービスには、外部から提供サービスをRTC(SDO)側で利用する
+   * SDOサービスコンシューマと、RTC(SDO)自身がSDOサービスを提供するSDO
+   * サービスプロバイダがある。すべてのSDOサービスコンシューマはこの基
+   * 底クラスを継承して実装される。
    *
-   * ���Υ��֥������ȤΥ饤�ե�������ϰʲ����̤ꡣ
+   * このオブジェクトのライフサイクルは以下の通り。
    *
-   * -# ���֥������Ȥ��̾��ͭ���֥������� (so, DLL) �Ȥ��ƥ���ѥ��롦
-   *    ��󥯤���롣
-   * -# �ޥ͡�������Ф��ƥ����ɤ����ȥ⥸�塼�������ؿ��ˤ�ꥪ��
-   *    �������ȥե����ȥ꤬��SdoServiceConsumerFactory ���Ф�����Ͽ��
-   *    ��롣��Ͽ�Υ����ˤϥ����ӥ����󥿡��ե������� IFR (interface
-   *    repository) ID �����Ѥ��졢����ˤ�ꥵ���ӥ������̤���롣
-   * -# �����Υġ���ʤɤ��饵���ӥ��ץ��Х����������å����줿��硢����
-   *    �ӥ����󥿡��ե������� IFR ID ��Ʊ��Ǥ��� SDO ���󥷥塼�ޤ���
-   *    �󥹥��󥹲����졢�󶡤��줿SDO�����ӥ��� ServiceProfile (����
-   *    ��¤�Τϥ����ӥ��Υ��֥������ȥ�ե���󥹤�ޤ�) �����󥷥塼
-   *    �ޤ˥����å�����롣
-   * -# ���ΤȤ��Υ����å��������󥹤ϰʲ����̤ꡣ
-   *   -# SDO::get_configuration() �ˤ�� Configuration ���֥������Ȥ����
-   *   -# Configuration::add_service_profile() �ˤ�곰��¦��
-   *      SdoServiceProvider �� ServiceProfile �ˤ�� RTC ��Ϳ���롣
-   *   -# RTC¦�ǥ����ӥ���ƤӽФ�ɬ�פ�ͭ�ä���硢����
-   *      SdoServiceConsumer ���ݻ����Ƥ��륵���ӥ����֥������ȥץ�����
-   *      ���Ф��ƸƤӽФ���Ԥ�
-   * -# �ǽ�Ū�� SdoServiceConsumer �����פˤʤä����ˤϡ�
-   *     Configuration::remove_service_profile() �� id �ȤȤ�˸ƤӽФ���
-   *     SDO�����ӥ����󥷥塼�ޤ� RTC ����������롣
+   * -# オブジェクトは通常、共有オブジェクト (so, DLL) としてコンパイル・
+   *    リンクされる。
+   * -# マネージャに対してロードされるとモジュール初期化関数によりオブ
+   *    ジェクトファクトリが、SdoServiceConsumerFactory に対して登録さ
+   *    れる。登録のキーにはサービスインターフェースの IFR (interface
+   *    repository) ID が利用され、これによりサービスが区別される。
+   * -# 外部のツールなどからサービスプロバイダがアタッチされた場合、サー
+   *    ビスインターフェースの IFR ID が同一である SDO コンシューマがイ
+   *    ンスタンス化され、提供されたSDOサービスの ServiceProfile (この
+   *    構造体はサービスのオブジェクトリファレンスを含む) がコンシュー
+   *    マにアタッチされる。
+   * -# このときのアタッチシーケンスは以下の通り。
+   *   -# SDO::get_configuration() により Configuration オブジェクトを取得
+   *   -# Configuration::add_service_profile() により外部側の
+   *      SdoServiceProvider を ServiceProfile により RTC に与える。
+   *   -# RTC側でサービスを呼び出す必要が有った場合、この
+   *      SdoServiceConsumer が保持しているサービスオブジェクトプロキシ
+   *      に対して呼び出しを行う
+   * -# 最終的に SdoServiceConsumer が不要になった場合には、
+   *     Configuration::remove_service_profile() が id とともに呼び出され
+   *     SDOサービスコンシューマが RTC から削除される。
    *
    * <pre>
    * 
@@ -86,32 +86,32 @@ namespace RTC
    *
    * </pre>
    *
-   * ���Υ��饹�μ����������äƤϡ����ʤ��Ȥ�ʲ��ν�貾�۴ؿ��������
-   * ��ɬ�פ����롣
+   * このクラスの実装に当たっては、少なくとも以下の純粋仮想関数を実装す
+   * る必要がある。
    *
-   * - init(): ������ؿ���Ϳ����줿 RTObject ����� ServiceProfile ��
-   *   �顢�������֥������Ȥ��������롣
-   * - reinit(): �ƽ�����ؿ���ServiceProfile ��������󹹿��Τ���Ʊ��
-   *   ID�ǸƤӽФ���뤳�Ȥ�ͭ�뤬�����κݤˤ��δؿ���������
-   *   ServiceProfile �ȤȤ�˸ƤӽФ���롣�ؿ���Ǥϡ�������ѹ��ʤ�
-   *   �ƽ����������������롣
-   * - getProfile(): ���ꤵ�줿�ץ��ե�������֤��ؿ���
-   * - finalize(): ��λ���������󥷥塼�ޤ��ǥ��å������ݤ˸ƤӽФ���
-   *   ��ؿ����ؿ���ǤϽ�λ������������롣
+   * - init(): 初期化関数。与えられた RTObject および ServiceProfile か
+   *   ら、当該オブジェクトを初期化する。
+   * - reinit(): 再初期化関数。ServiceProfile は設定情報更新のため同一
+   *   IDで呼び出されることが有るが、その際にこの関数が新たな
+   *   ServiceProfile とともに呼び出される。関数内では、設定の変更など
+   *   再初期化処理を実装する。
+   * - getProfile(): 設定されたプロファイルを返す関数。
+   * - finalize(): 終了処理。コンシューマがデタッチされる際に呼び出され
+   *   る関数。関数内では終了処理を実装する。
    *
-   * SdoServiceConsumer ���̾ﶦͭ���֥������ȤȤ��ƥ���ѥ��롦���
-   * ����롣��ͭ���֥������ȤΥ���ȥ�ݥ���Ȥ��̾拾��ѥ��뤵�줿�ե�
-   * ����̾�� basename + "Init" �ˤ��Ƥ������ʲ��ˡ����饹̾���ե�����
-   * ̾������ȥ�ݥ���ȴؿ�̾�ο侩��򼨤���
+   * SdoServiceConsumer は通常共有オブジェクトとしてコンパイル・リンク
+   * される。共有オブジェクトのエントリポイントは通常コンパイルされたファ
+   * イル名の basename + "Init" にしておく。以下に、クラス名、ファイル
+   * 名、エントリポイント関数名の推奨例を示す。
    *
-   * - �������饹̾: MySdoServiceConusmer 
-   * - �ե�����̾: MySdoServiceConsumer.h. MySdoServiceConsumer.cpp
-   * - ��ͭ���֥�������̾: MySdoServiceConsumer.so (or DLL)
-   * - ����ȥ�ݥ���ȴؿ�̾: MySdoServiceConsumerInit()
+   * - 実装クラス名: MySdoServiceConusmer 
+   * - ファイル名: MySdoServiceConsumer.h. MySdoServiceConsumer.cpp
+   * - 共有オブジェクト名: MySdoServiceConsumer.so (or DLL)
+   * - エントリポイント関数名: MySdoServiceConsumerInit()
    *
-   * ����ȥ�ݥ���ȴؿ����̾�ʲ��Τ褦�ˡ�SdoServiceConsumerFactory
-   * ���������󥷥塼�ޤΥե����ȥ� (�Ȳ��Υե��󥯥�) ����Ͽ����ʲ���
-   * �褦�ʴؿ��ˤʤ롣
+   * エントリポイント関数は通常以下のように、SdoServiceConsumerFactory
+   * に当該コンシューマのファクトリ (と解体ファンクタ) を登録する以下の
+   * ような関数になる。
    *
    * <pre>
    * extern "C"
@@ -139,7 +139,7 @@ namespace RTC
   public:
     /*!
      * @if jp
-     * @brief ���ۥǥ��ȥ饯��
+     * @brief 仮想デストラクタ
      * @else
      * @brief virtual destructor
      * @endif
@@ -148,22 +148,22 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ���󥷥塼�ޥ��饹�ν�����ؿ�
+     * @brief コンシューマクラスの初期化関数
      *
-     * ���Υ��֥������Ȥν������Ԥ�����������SDO�����ӥ���
-     * ServiceProfile �ȤȤ�˥����å������ȡ�SDO���󥷥塼�ޤ�����
-     * ���󥹲����졢����ľ��� SDO �����ӥ��������å����줿 RTC ��Ϳ��
-     * ��줿 ServiceProfile ������Ȥ��Ƥ��δؿ����ƤФ�롣
+     * このオブジェクトの初期化を行う。外部からSDOサービスが
+     * ServiceProfile とともにアタッチされると、SDOコンシューマがインス
+     * タンス化され、その直後に SDO サービスがアタッチされた RTC と与え
+     * られた ServiceProfile を引数としてこの関数が呼ばれる。
      *
-     * �ؿ���Ǥϡ�ServiceProfile ��� SDO �����ӥ���ե���󥹤�
-     * CorbaConsumer ���饹�������Ѥ����֥�����������ݻ�����ȤȤ�ˡ�
-     * properties �����������Ƥ��ɤ߹��ߥ����ӥ���ͭ����������Ԥ���Ϳ
-     * ����줿�����ӥ��Υ��֥������ȥ�ե���󥹤����������뤤��
-     * properties �����Ƥ����������ξ�������ͤ� false ���֤���
+     * 関数内では、ServiceProfile 内の SDO サービスリファレンスを
+     * CorbaConsumer クラス等を利用しオブジェクト内に保持するとともに、
+     * properties から設定内容を読み込みサービス固有の設定等を行う。与
+     * えられたサービスのオブジェクトリファレンスが不正、あるいは
+     * properties の内容が不正、等の場合は戻り値に false を返す。
      *
-     * @param rtobj ���Υ��֥������Ȥ����󥹥��󥹲����줿 RTC
-     * @param profile ��������Ϳ����줿 SDO ServiceProfile
-     * @return Ϳ����줿 SDO Service �� ServiceProfile �������ξ�� false
+     * @param rtobj このオブジェクトがインスタンス化された RTC
+     * @param profile 外部から与えられた SDO ServiceProfile
+     * @return 与えられた SDO Service や ServiceProfile が不正の場合 false
      *
      * @else
      * @brief Initialization function of the consumer class
@@ -174,19 +174,19 @@ namespace RTC
                       const SDOPackage::ServiceProfile& profile) = 0;
     /*!
      * @if jp
-     * @brief ���󥷥塼�ޥ��饹�κƽ�����ؿ�
+     * @brief コンシューマクラスの再初期化関数
      *
-     * ���Υ��֥������Ȥκƽ������Ԥ���ServiceProfile �ˤ� id �ե���
-     * ��ɤ˥��å�����ͭ�� UUID �����åȤ���Ƥ��뤬��Ʊ��� id �ξ�
-     * �硢properties �����ꤵ�줿���������ѹ��䡢service �ե������
-     * �Υ����ӥ��λ��Ȥ��ѹ����Ԥ��롣���κݤ˸ƤФ��Τ�����
-     * reinit() �ؿ��Ǥ��롣�����Ǥϡ�service �ե�����ɤΥ��֥�������
-     * ��ե���󥹤�Ʊ�������ǧ�����ۤʤäƤ������ݻ����Ƥ����ե�
-     * ��󥹤򹹿�����ɬ�פ����롣�ޤ� properties �ˤϿ��������꤬Ϳ��
-     * ���Ƥ����ǽ��������Τǡ����Ƥ��ɤ߹�������򹹿����롣
+     * このオブジェクトの再初期化を行う。ServiceProfile には id フィー
+     * ルドにセッション固有の UUID がセットされているが、同一の id の場
+     * 合、properties に設定された設定情報の変更や、service フィールド
+     * のサービスの参照の変更が行われる。その際に呼ばれるのがこの
+     * reinit() 関数である。実装では、service フィールドのオブジェクト
+     * リファレンスの同一性を確認し、異なっている場合保持しているリファ
+     * レンスを更新する必要がある。また properties には新たな設定が与え
+     * られている可能性があるので、内容を読み込み設定を更新する。
      *
-     * @param profile ������Ϳ����줿 SDO ServiceProfile
-     * @return ������ ServiceProfile ��Ϳ����줿���� false
+     * @param profile 新たに与えられた SDO ServiceProfile
+     * @return 不正な ServiceProfile が与えられた場合は false
      *
      * @else
      * @brief Reinitialization function of the consumer class
@@ -197,14 +197,14 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ServiceProfile ���֤�
+     * @brief ServiceProfile を返す
      *
-     * init()/reinit()��Ϳ����줿 ServiceProfile ���̾索�֥���������
-     * ���ݻ�����롣SDO Service �����ե졼�����ϴ����夳�Υ��֥���
-     * ���Ȥ��б����� ServiceProfile ��ɬ�פȤ���Τǡ����δؿ��Ǥ��ݻ�
-     * ����Ƥ��� ServiceProfile ���֤���
+     * init()/reinit()で与えられた ServiceProfile は通常オブジェクト内
+     * で保持される。SDO Service 管理フレームワークは管理上このオブジェ
+     * クトに対応する ServiceProfile を必要とするので、この関数では保持
+     * されている ServiceProfile を返す。
      * 
-     * @return ���Υ��֥������Ȥ��ݻ����Ƥ��� ServiceProfile
+     * @return このオブジェクトが保持している ServiceProfile
      *
      * @else
      * @brief Getting ServiceProfile
@@ -214,11 +214,11 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ��λ����
+     * @brief 終了処理
      *
-     * SDO�����ӥ����ǥ��å������ݤ˸ƤӽФ���뽪λ�����Ѵؿ�������
-     * �ӥ��Τǥ��å��˺ݤ��ơ��������֥������Ȥ��ݻ�����꥽���������
-     * ����ʤɤν�����Ԥ���
+     * SDOサービスがでタッチされる際に呼び出される終了処理用関数。サー
+     * ビスのでタッチに際して、当該オブジェクトが保持するリソースを解放
+     * するなどの処理を行う。
      *
      * @else
      * @brief Finalization
@@ -230,7 +230,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief SdoServiceConsumerFactory �� typedef
+     * @brief SdoServiceConsumerFactory の typedef
      * @else
      * @brief typedef of sdoServiceConsumerFactory
      * @endif
@@ -241,7 +241,7 @@ namespace RTC
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
     /*!
      * @if jp
-     * @brief ���饹�ƥ�ץ졼�Ȥ�����Ū���󥹥��󥹲�
+     * @brief クラステンプレートの明示的インスタンス化
      * @else
      * @brief Explicit instantiation of class template
      * @endif

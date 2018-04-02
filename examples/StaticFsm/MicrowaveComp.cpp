@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file MicrowaveComp.cpp
  * @brief Standalone component

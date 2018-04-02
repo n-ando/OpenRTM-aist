@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file InPortConnector.h
  * @brief InPortConnector base class
@@ -32,9 +32,9 @@ namespace RTC
   /*!
    * @if jp
    * @class InPortConnector
-   * @brief InPortConnector ´ğÄì¥¯¥é¥¹
+   * @brief InPortConnector åŸºåº•ã‚¯ãƒ©ã‚¹
    *
-   * InPort ¤Î Push/Pull ³Æ¼ï Connector ¤òÇÉÀ¸¤µ¤»¤ë¤¿¤á¤Î´ğÄì¥¯¥é¥¹¡£
+   * InPort ã® Push/Pull å„ç¨® Connector ã‚’æ´¾ç”Ÿã•ã›ã‚‹ãŸã‚ã®åŸºåº•ã‚¯ãƒ©ã‚¹ã€‚
    *
    * @since 1.0.0
    *
@@ -55,10 +55,10 @@ namespace RTC
     DATAPORTSTATUS_ENUM
     /*!
      * @if jp
-     * @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+     * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
      *
-     * @param info ÀÜÂ³¾ğÊó¤ò´Ş¤à ConnectorInfo ¥ª¥Ö¥¸¥§¥¯¥È
-     * @param buffer ¤³¤Î¥³¥Í¥¯¥¿¤Î¥Ğ¥Ã¥Õ¥¡¤Ø¤Î¥İ¥¤¥ó¥¿
+     * @param info æ¥ç¶šæƒ…å ±ã‚’å«ã‚€ ConnectorInfo ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+     * @param buffer ã“ã®ã‚³ãƒã‚¯ã‚¿ã®ãƒãƒƒãƒ•ã‚¡ã¸ã®ãƒã‚¤ãƒ³ã‚¿
      *
      * @else
      * @brief Constructor
@@ -74,7 +74,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ¥Ç¥¹¥È¥é¥¯¥¿
+     * @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
      * @else
      * @brief Destructor
      * @endif
@@ -83,11 +83,11 @@ namespace RTC
 
    /*!
      * @if jp
-     * @brief ConnectorInfo ¼èÆÀ
+     * @brief ConnectorInfo å–å¾—
      *
-     * Connector ConnectorInfo ¤ò¼èÆÀ¤¹¤ë
+     * Connector ConnectorInfo ã‚’å–å¾—ã™ã‚‹
      *
-     * @return ¤³¤Î¥³¥Í¥¯¥¿¤¬Êİ»ı¤¹¤ë ConnectorInfo ¥ª¥Ö¥¸¥§¥¯¥È
+     * @return ã“ã®ã‚³ãƒã‚¯ã‚¿ãŒä¿æŒã™ã‚‹ ConnectorInfo ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
      *
      * @else
      * @brief Getting ConnectorInfo
@@ -102,11 +102,11 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief Connector ID ¼èÆÀ
+     * @brief Connector ID å–å¾—
      *
-     * Connector ID ¤ò¼èÆÀ¤¹¤ë
+     * Connector ID ã‚’å–å¾—ã™ã‚‹
      *
-     * @return ¥³¥Í¥¯¥¿ ID Ê¸»úÎó¤Ø¤Î¥İ¥¤¥ó¥¿
+     * @return ã‚³ãƒã‚¯ã‚¿ ID æ–‡å­—åˆ—ã¸ã®ãƒã‚¤ãƒ³ã‚¿
      *
      * @else
      * @brief Getting Connector ID
@@ -121,11 +121,11 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief Connector Ì¾¼èÆÀ
+     * @brief Connector åå–å¾—
      *
-     * Connector Ì¾¤ò¼èÆÀ¤¹¤ë
+     * Connector åã‚’å–å¾—ã™ã‚‹
      *
-     * @return ¥³¥Í¥¯¥¿Ì¾Ê¸»úÎó¤Ø¤Î¥İ¥¤¥ó¥¿
+     * @return ã‚³ãƒã‚¯ã‚¿åæ–‡å­—åˆ—ã¸ã®ãƒã‚¤ãƒ³ã‚¿
      *
      * @else
      * @brief Getting Connector name
@@ -140,9 +140,9 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ÀÜÂ³²ò½ü´Ø¿ô
+     * @brief æ¥ç¶šè§£é™¤é–¢æ•°
      *
-     * Connector ¤¬Êİ»ı¤·¤Æ¤¤¤ëÀÜÂ³¤ò²ò½ü¤¹¤ë
+     * Connector ãŒä¿æŒã—ã¦ã„ã‚‹æ¥ç¶šã‚’è§£é™¤ã™ã‚‹
      *
      * @return ReturnCode
      *
@@ -159,11 +159,11 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief Buffer ¤ò¼èÆÀ¤¹¤ë
+     * @brief Buffer ã‚’å–å¾—ã™ã‚‹
      *
-     * Connector ¤¬Êİ»ı¤·¤Æ¤¤¤ë Buffer ¤òÊÖ¤¹
+     * Connector ãŒä¿æŒã—ã¦ã„ã‚‹ Buffer ã‚’è¿”ã™
      *
-     * @return ¤³¤Î¥³¥Í¥¯¥¿¤¬Êİ»ı¤¹¤ë¥Ğ¥Ã¥Õ¥¡¤Ø¤Î¥İ¥¤¥ó¥¿
+     * @return ã“ã®ã‚³ãƒã‚¯ã‚¿ãŒä¿æŒã™ã‚‹ãƒãƒƒãƒ•ã‚¡ã¸ã®ãƒã‚¤ãƒ³ã‚¿
      *
      * @else
      * @brief Getting Buffer
@@ -178,11 +178,11 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief read ´Ø¿ô
+     * @brief read é–¢æ•°
      *
-     * Buffer ¤«¤é¥Ç¡¼¥¿¤ò InPort ¤Ø read ¤¹¤ë´Ø¿ô
+     * Buffer ã‹ã‚‰ãƒ‡ãƒ¼ã‚¿ã‚’ InPort ã¸ read ã™ã‚‹é–¢æ•°
      *
-     * @param data ¤³¤Î¥³¥Í¥¯¥¿¤«¤éÆÉ¤ß½Ğ¤µ¤ì¤ë¥Ç¡¼¥¿¤ò³ÊÇ¼¤¹¤ëÊÑ¿ô¤Ø¤Î»²¾È
+     * @param data ã“ã®ã‚³ãƒã‚¯ã‚¿ã‹ã‚‰èª­ã¿å‡ºã•ã‚Œã‚‹ãƒ‡ãƒ¼ã‚¿ã‚’æ ¼ç´ã™ã‚‹å¤‰æ•°ã¸ã®å‚ç…§
      * @return ReturnCode
      *
      * @else
@@ -200,9 +200,9 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief endian¥¿¥¤¥×ÀßÄê
+     * @brief endianã‚¿ã‚¤ãƒ—è¨­å®š
      *
-     * endian¥¿¥¤¥×¤òÀßÄê¤¹¤ë
+     * endianã‚¿ã‚¤ãƒ—ã‚’è¨­å®šã™ã‚‹
      *
      * @param endian_type true: little, false: big
      *
@@ -219,9 +219,9 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief endian ÀßÄê¤òÊÖ¤¹
+     * @brief endian è¨­å®šã‚’è¿”ã™
      *
-     * ¤³¤Î¥³¥Í¥¯¥¿¤ËÀßÄê¤µ¤ì¤¿¥¨¥ó¥Ç¥£¥¢¥ó¤¬ little endian ¤«¤É¤¦¤«¡£
+     * ã“ã®ã‚³ãƒã‚¯ã‚¿ã«è¨­å®šã•ã‚ŒãŸã‚¨ãƒ³ãƒ‡ã‚£ã‚¢ãƒ³ãŒ little endian ã‹ã©ã†ã‹ã€‚
      *
      * @return true: little endian, false: big endian
      *
@@ -239,11 +239,11 @@ namespace RTC
 
 	/*!
 	* @if jp
-	* @brief ¥Ç¡¼¥¿¤ò¥À¥¤¥ì¥¯¥È¤Ë½ñ¤­¹ş¤à¤¿¤á¤ÎOutPort¤Î¥µ¡¼¥Ğ¥ó¥È¤òÀßÄê¤¹¤ë
+	* @brief ãƒ‡ãƒ¼ã‚¿ã‚’ãƒ€ã‚¤ãƒ¬ã‚¯ãƒˆã«æ›¸ãè¾¼ã‚€ãŸã‚ã®OutPortã®ã‚µãƒ¼ãƒãƒ³ãƒˆã‚’è¨­å®šã™ã‚‹
 	*
-	* @param directOutPort OutPort¤Î¥µ¡¼¥Ğ¥ó¥È
+	* @param directOutPort OutPortã®ã‚µãƒ¼ãƒãƒ³ãƒˆ
 	*
-	* @return True: ÀßÄê¤ËÀ®¸ù False: ´û¤ËÀßÄêºÑ¤ß¤Î¤¿¤á¼ºÇÔ
+	* @return True: è¨­å®šã«æˆåŠŸ False: æ—¢ã«è¨­å®šæ¸ˆã¿ã®ãŸã‚å¤±æ•—
 	*
 	* @else
 	* @brief 
@@ -299,7 +299,7 @@ namespace RTC
   protected:
     /*!
      * @if jp
-     * @brief ¥í¥¬¡¼¥¹¥È¥ê¡¼¥à
+     * @brief ãƒ­ã‚¬ãƒ¼ã‚¹ãƒˆãƒªãƒ¼ãƒ 
      * @else
      * @brief Logger stream
      * @endif
@@ -315,7 +315,7 @@ namespace RTC
     ConnectorInfo m_profile;
     /*!
      * @if jp
-     * @brief ConnectorListenrs ¤Ø¤Î»²¾È
+     * @brief ConnectorListenrs ã¸ã®å‚ç…§
      * @else
      * @brief A reference to a ConnectorListener
      * @endif
@@ -323,7 +323,7 @@ namespace RTC
     ConnectorListeners& m_listeners;
     /*!
      * @if jp
-     * @brief Connector ¤¬Êİ»ı¤·¤Æ¤¤¤ë Buffer
+     * @brief Connector ãŒä¿æŒã—ã¦ã„ã‚‹ Buffer
      * @else
      * @brief Connector's buffer
      * @endif
@@ -331,7 +331,7 @@ namespace RTC
     CdrBufferBase* m_buffer;
     /*!
      * @if jp
-     * @brief ÀÜÂ³¥¨¥ó¥Ç¥£¥¢¥ó 
+     * @brief æ¥ç¶šã‚¨ãƒ³ãƒ‡ã‚£ã‚¢ãƒ³ 
      * @else
      * @brief Connected Endian
      * @endif
@@ -339,7 +339,7 @@ namespace RTC
     bool m_littleEndian;
     /*!
      * @if jp
-     * @brief OutPort Â¦¤Î ConnectorListenrs ¤Ø¤Î»²¾È
+     * @brief OutPort å´ã® ConnectorListenrs ã¸ã®å‚ç…§
      * @else
      * @brief A pointer to a OutPort's ConnectorListener
      * @endif
@@ -347,7 +347,7 @@ namespace RTC
     ConnectorListeners* m_outPortListeners;
 	/*!
 	* @if jp
-	* @brief Æ±°ì¥×¥í¥»¥¹¾å¤Î¥Ô¥¢OutPort¤Î¥İ¥¤¥ó¥¿
+	* @brief åŒä¸€ãƒ—ãƒ­ã‚»ã‚¹ä¸Šã®ãƒ”ã‚¢OutPortã®ãƒã‚¤ãƒ³ã‚¿
 	* @else
 	* @brief OutProt pointer to the peer in the same process
 	* @endif

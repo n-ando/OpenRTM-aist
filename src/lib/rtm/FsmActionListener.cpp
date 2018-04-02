@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file FsmActionListener.cpp
  * @brief Component action listener class
@@ -24,7 +24,7 @@ namespace RTC
   //============================================================
   /*!
    * @if jp
-   * @class PostFsmActionListener ¥¯¥é¥¹
+   * @class PostFsmActionListener ã‚¯ãƒ©ã‚¹
    * @else
    * @class PostFsmActionListener class
    * @endif
@@ -33,7 +33,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @class PreFsmActionListener ¥¯¥é¥¹
+   * @class PreFsmActionListener ã‚¯ãƒ©ã‚¹
    * @else
    * @class PreFsmActionListener class
    * @endif
@@ -42,7 +42,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @class FsmProfileListener ¥¯¥é¥¹
+   * @class FsmProfileListener ã‚¯ãƒ©ã‚¹
    * @else
    * @class PortActionListener class
    * @endif
@@ -51,7 +51,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @class PortActionListener ¥¯¥é¥¹
+   * @class PortActionListener ã‚¯ãƒ©ã‚¹
    * @else
    * @class PortActionListener class
    * @endif
@@ -63,7 +63,7 @@ namespace RTC
   //============================================================
   /*!
    * @if jp
-   * @class PreFsmActionListener ¥Û¥ë¥À¥¯¥é¥¹
+   * @class PreFsmActionListener ãƒ›ãƒ«ãƒ€ã‚¯ãƒ©ã‚¹
    * @else
    * @class PreFsmActionListener holder class
    * @endif
@@ -124,7 +124,7 @@ namespace RTC
   //============================================================
   /*!
    * @if jp
-   * @class PostFsmActionListener ¥Û¥ë¥À¥¯¥é¥¹
+   * @class PostFsmActionListener ãƒ›ãƒ«ãƒ€ã‚¯ãƒ©ã‚¹
    * @else
    * @class PostFsmActionListener holder class
    * @endif
@@ -183,7 +183,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @class FsmProfileListener ¥Û¥ë¥À¥¯¥é¥¹
+   * @class FsmProfileListener ãƒ›ãƒ«ãƒ€ã‚¯ãƒ©ã‚¹
    * @else
    * @class FsmProfileListener holder class
    * @endif
@@ -242,7 +242,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @class FsmStructureListener ¥Û¥ë¥À¥¯¥é¥¹
+   * @class FsmStructureListener ãƒ›ãƒ«ãƒ€ã‚¯ãƒ©ã‚¹
    * @else
    * @class FsmStructureListener holder class
    * @endif

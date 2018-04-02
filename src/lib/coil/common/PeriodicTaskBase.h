@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file PeriodicTaskBase.h
  * @brief TaskFuncBase TaskFunc PeriodicTaskBase class
@@ -30,7 +30,7 @@ namespace coil
    * @if jp
    *
    * @class TaskFuncBase
-   * @brief TaskFuncBase ���饹
+   * @brief TaskFuncBase クラス
    *
    * @else
    *
@@ -45,9 +45,9 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief �ǥ��ȥ饯��
+     * @brief デストラクタ
      *
-     * �ǥ��ȥ饯����
+     * デストラクタ。
      *
      * @else
      *
@@ -62,9 +62,9 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief ���֥������Ȥδؿ��¹��ѽ�貾�۴ؿ�
+     * @brief オブジェクトの関数実行用純粋仮想関数
      *
-     * ���֥������Ȥδؿ��¹��ѽ�貾�۴ؿ���
+     * オブジェクトの関数実行用純粋仮想関数。
      *
      * @else
      *
@@ -81,7 +81,7 @@ namespace coil
    * @if jp
    *
    * @class TaskFunc
-   * @brief TaskFunc �ƥ�ץ졼�ȥ��饹
+   * @brief TaskFunc テンプレートクラス
    *
    * @else
    *
@@ -98,12 +98,12 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief ���󥹥ȥ饯��
+     * @brief コンストラクタ
      *
-     * ���󥹥ȥ饯����
+     * コンストラクタ。
      *
-     * @param obj ���֥�������
-     * @param func �ؿ�
+     * @param obj オブジェクト
+     * @param func 関数
      *
      * @else
      *
@@ -124,9 +124,9 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief �ǥ��ȥ饯��
+     * @brief デストラクタ
      *
-     * �ǥ��ȥ饯����
+     * デストラクタ。
      *
      * @else
      *
@@ -141,9 +141,9 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief ���֥������Ȥδؿ��¹�
+     * @brief オブジェクトの関数実行
      *
-     * ���֥������Ȥδؿ���¹Ԥ��롣
+     * オブジェクトの関数を実行する。
      *
      * @else
      *
@@ -160,7 +160,7 @@ namespace coil
 
     /*!
      * @if jp
-     * @brief ���֥�������
+     * @brief オブジェクト
      * @else
      * @brief object
      * @endif
@@ -169,7 +169,7 @@ namespace coil
 
     /*!
      * @if jp
-     * @brief �ؿ�
+     * @brief 関数
      * @else
      * @brief function
      * @endif
@@ -181,7 +181,7 @@ namespace coil
    * @if jp
    *
    * @class PeriodicTaskBase
-   * @brief PeriodicTaskBase ���饹
+   * @brief PeriodicTaskBase クラス
    *
    * @else
    *
@@ -197,9 +197,9 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief �ǥ��ȥ饯��
+     * @brief デストラクタ
      *
-     * �ǥ��ȥ饯����
+     * デストラクタ。
      *
      * @else
      *
@@ -214,9 +214,9 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief �������¹Ԥ򳫻Ϥ����貾�۴ؿ�
+     * @brief タスク実行を開始する純粋仮想関数
      *
-     * �������¹Ԥ򳫻Ϥ����貾�۴ؿ���
+     * タスク実行を開始する純粋仮想関数。
      *
      * @else
      *
@@ -231,9 +231,9 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief �������¹Ԥ�λ�����貾�۴ؿ�
+     * @brief タスク実行を終了する純粋仮想関数
      *
-     * �������¹Ԥ�λ�����貾�۴ؿ���
+     * タスク実行を終了する純粋仮想関数。
      *
      * @else
      *
@@ -248,9 +248,9 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief �������¹Ԥ����Ǥ����貾�۴ؿ�
+     * @brief タスク実行を中断する純粋仮想関数
      *
-     * �������¹Ԥ����Ǥ����貾�۴ؿ���
+     * タスク実行を中断する純粋仮想関数。
      *
      * @else
      *
@@ -265,9 +265,9 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief ���Ǥ���Ƥ��륿������Ƴ������貾�۴ؿ�
+     * @brief 中断されているタスクを再開する純粋仮想関数
      *
-     * ���Ǥ���Ƥ��륿������Ƴ������貾�۴ؿ���
+     * 中断されているタスクを再開する純粋仮想関数。
      *
      * @else
      *
@@ -282,9 +282,9 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief ���Ǥ���Ƥ��륿������1���������¹Ԥ����貾�۴ؿ�
+     * @brief 中断されているタスクを1周期だけ実行する純粋仮想関数
      *
-     * ���Ǥ���Ƥ��륿������1���������¹Ԥ����貾�۴ؿ���
+     * 中断されているタスクを1周期だけ実行する純粋仮想関数。
      *
      * @else
      *
@@ -299,12 +299,12 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief �������¹Դؿ��򥻥åȤ����貾�۴ؿ�
+     * @brief タスク実行関数をセットする純粋仮想関数
      *
-     * �������¹Դؿ��򥻥åȤ����貾�۴ؿ���
+     * タスク実行関数をセットする純粋仮想関数。
      *
-     * @param func �ؿ�
-     * @param delete_in_dtor ����ե饰
+     * @param func 関数
+     * @param delete_in_dtor 削除フラグ
      *
      * @else
      *
@@ -322,14 +322,14 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief �������¹Դؿ��򥻥åȤ���
+     * @brief タスク実行関数をセットする
      *
-     * �������¹Դؿ��򥻥åȤ���
+     * タスク実行関数をセットする
      *
-     * @param obj ���֥�������
-     * @param fun �ؿ�
+     * @param obj オブジェクト
+     * @param fun 関数
      *
-     * @return true: ����, false: ����
+     * @return true: 成功, false: 失敗
      *
      * @else
      *
@@ -353,11 +353,11 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief �������¹Լ����򥻥åȤ����貾�۴ؿ�
+     * @brief タスク実行周期をセットする純粋仮想関数
      *
-     * �������¹Լ����򥻥åȤ����貾�۴ؿ���
+     * タスク実行周期をセットする純粋仮想関数。
      *
-     * @param period �¹Լ���
+     * @param period 実行周期
      *
      * @else
      *
@@ -374,11 +374,11 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief �������¹Լ����򥻥åȤ����貾�۴ؿ�
+     * @brief タスク実行周期をセットする純粋仮想関数
      *
-     * �������¹Լ����򥻥åȤ����貾�۴ؿ���
+     * タスク実行周期をセットする純粋仮想関数。
      *
-     * @param period �¹Լ���
+     * @param period 実行周期
      *
      * @else
      *
@@ -395,11 +395,11 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief �������ؿ��¹Ի��ַ�¬��ͭ���ˤ����貾�۴ؿ�
+     * @brief タスク関数実行時間計測を有効にする純粋仮想関数
      *
-     * �������ؿ��¹Ի��ַ�¬��ͭ���ˤ����貾�۴ؿ���
+     * タスク関数実行時間計測を有効にする純粋仮想関数。
      *
-     * @param value �ե饰(true: ͭ��, false: ̵��)
+     * @param value フラグ(true: 有効, false: 無効)
      *
      * @else
      *
@@ -416,11 +416,11 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief �������ؿ��¹Ի��ַ�¬�����ѽ�貾�۴ؿ�
+     * @brief タスク関数実行時間計測周期用純粋仮想関数
      *
-     * �������ؿ��¹Ի��ַ�¬�����ѽ�貾�۴ؿ���
+     * タスク関数実行時間計測周期用純粋仮想関数。
      *
-     * @param n ��¬����
+     * @param n 計測周期
      *
      * @else
      *
@@ -437,11 +437,11 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief �������������ַ�¬��ͭ���ˤ����貾�۴ؿ�
+     * @brief タスク周期時間計測を有効にする純粋仮想関数
      *
-     * �������������ַ�¬��ͭ���ˤ����貾�۴ؿ���
+     * タスク周期時間計測を有効にする純粋仮想関数。
      *
-     * @param value �ե饰(true: ͭ��, false: ̵��)
+     * @param value フラグ(true: 有効, false: 無効)
      *
      * @else
      *
@@ -458,11 +458,11 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief �������������ַ�¬�����ѽ�貾�۴ؿ�
+     * @brief タスク周期時間計測周期用純粋仮想関数
      *
-     * �������������ַ�¬�����ѽ�貾�۴ؿ���
+     * タスク周期時間計測周期用純粋仮想関数。
      *
-     * @param n ��¬����
+     * @param n 計測周期
      *
      * @else
      *
@@ -479,9 +479,9 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief �������ؿ��¹Ի��ַ�¬��̤���������貾�۴ؿ�
+     * @brief タスク関数実行時間計測結果を取得する純粋仮想関数
      *
-     * �������ؿ��¹Ի��ַ�¬��̤���������貾�۴ؿ���
+     * タスク関数実行時間計測結果を取得する純粋仮想関数。
      *
      * @else
      *
@@ -496,9 +496,9 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief �������������ַ�¬��̤���������貾�۴ؿ�
+     * @brief タスク周期時間計測結果を取得する純粋仮想関数
      *
-     * �������������ַ�¬��̤���������貾�۴ؿ���
+     * タスク周期時間計測結果を取得する純粋仮想関数。
      *
      * @else
      *

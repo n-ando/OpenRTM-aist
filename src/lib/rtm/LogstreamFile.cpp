@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file LogstreamBase.h
  * @brief Logger stream buffer base class

@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file ModuleManager.h
  * @brief Loadable modules manager class
@@ -55,9 +55,9 @@ namespace RTC
   /*!
    * @if jp
    * @class ModuleManager
-   * @brief ¥â¥¸¥å¡¼¥ë¥Ş¥Í¡¼¥¸¥ã¥¯¥é¥¹
+   * @brief ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ãƒãƒãƒ¼ã‚¸ãƒ£ã‚¯ãƒ©ã‚¹
    *
-   * ¥â¥¸¥å¡¼¥ë¤Î¥í¡¼¥É¡¢¥¢¥ó¥í¡¼¥É¤Ê¤É¤ò´ÉÍı¤¹¤ë¥¯¥é¥¹
+   * ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ã®ãƒ­ãƒ¼ãƒ‰ã€ã‚¢ãƒ³ãƒ­ãƒ¼ãƒ‰ãªã©ã‚’ç®¡ç†ã™ã‚‹ã‚¯ãƒ©ã‚¹
    *
    * @since 0.4.0
    *
@@ -78,12 +78,12 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+     * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
      *
-     * ¥³¥ó¥¹¥È¥é¥¯¥¿¡£
-     * ÀßÄê¤µ¤ì¤¿ Property ¥ª¥Ö¥¸¥§¥¯¥ÈÆâ¤Î¾ğÊó¤ò´ğ¤Ë½é´ü²½¤ò¼Â¹Ô¤¹¤ë¡£
+     * ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã€‚
+     * è¨­å®šã•ã‚ŒãŸ Property ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå†…ã®æƒ…å ±ã‚’åŸºã«åˆæœŸåŒ–ã‚’å®Ÿè¡Œã™ã‚‹ã€‚
      *
-     * @param prop ½é´ü²½ÍÑ¥×¥í¥Ñ¥Æ¥£
+     * @param prop åˆæœŸåŒ–ç”¨ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£
      *
      * @else
      *
@@ -101,7 +101,7 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief ¥Ç¥¹¥È¥é¥¯¥¿
+     * @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
      *
      * @else
      *
@@ -113,7 +113,7 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief ¥Õ¥¡¥¤¥ë¡¦¥ª¡¼¥×¥ó¼ºÇÔÎã³°½èÍıÍÑ¹½Â¤ÂÎ
+     * @brief ãƒ•ã‚¡ã‚¤ãƒ«ãƒ»ã‚ªãƒ¼ãƒ—ãƒ³å¤±æ•—ä¾‹å¤–å‡¦ç†ç”¨æ§‹é€ ä½“
      * @else
      * @brief Structure for exception handling when file open is failed
      * @endif
@@ -127,7 +127,7 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief Ì¤¼ÂÁõÉô¡¤»ØÄê¥â¥¸¥å¡¼¥ëÉÔÌÀÎã³°½èÍıÍÑ¹½Â¤ÂÎ
+     * @brief æœªå®Ÿè£…éƒ¨ï¼ŒæŒ‡å®šãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ä¸æ˜ä¾‹å¤–å‡¦ç†ç”¨æ§‹é€ ä½“
      * @else
      * @brief Structure for exception handling of unimplemented part
      *        and specified module missing
@@ -142,7 +142,7 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief »ØÄê¥Õ¥¡¥¤¥ëÉÔÌÀÎã³°½èÍıÍÑ¹½Â¤ÂÎ
+     * @brief æŒ‡å®šãƒ•ã‚¡ã‚¤ãƒ«ä¸æ˜ä¾‹å¤–å‡¦ç†ç”¨æ§‹é€ ä½“
      * @else
      * @brief Structure for exception handling when specified file
      *        cannot be found
@@ -157,7 +157,7 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief »ØÄê¥â¥¸¥å¡¼¥ëÉÔÌÀÎã³°½èÍıÍÑ¹½Â¤ÂÎ
+     * @brief æŒ‡å®šãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ä¸æ˜ä¾‹å¤–å‡¦ç†ç”¨æ§‹é€ ä½“
      * @else
      * @brief Structure for exception handling when specified module
      *        cannot be found
@@ -172,7 +172,7 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief »ØÄê¥·¥ó¥Ü¥ëÉÔÌÀÎã³°½èÍıÍÑ¹½Â¤ÂÎ
+     * @brief æŒ‡å®šã‚·ãƒ³ãƒœãƒ«ä¸æ˜ä¾‹å¤–å‡¦ç†ç”¨æ§‹é€ ä½“
      * @else
      * @brief Structure for exception handling when specified symbol
      *        cannot be found
@@ -187,7 +187,7 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief »ØÄêÁàºî¶Ø»ß»şÎã³°½èÍıÍÑ¹½Â¤ÂÎ
+     * @brief æŒ‡å®šæ“ä½œç¦æ­¢æ™‚ä¾‹å¤–å‡¦ç†ç”¨æ§‹é€ ä½“
      * @else
      * @brief Structure for exception handling when specified
      *        operation cannot be allowed.
@@ -202,7 +202,7 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief »ØÄê°ú¿ôÉÔÀµ»şÎã³°½èÍıÍÑ¹½Â¤ÂÎ
+     * @brief æŒ‡å®šå¼•æ•°ä¸æ­£æ™‚ä¾‹å¤–å‡¦ç†ç”¨æ§‹é€ ä½“
      * @else
      * @brief Structure for exception handling when specified
      *        argument is invalid.
@@ -217,7 +217,7 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief »ØÄêÁàºîÉÔÀµ»şÎã³°½èÍıÍÑ¹½Â¤ÂÎ
+     * @brief æŒ‡å®šæ“ä½œä¸æ­£æ™‚ä¾‹å¤–å‡¦ç†ç”¨æ§‹é€ ä½“
      * @else
      * @brief Structure for exception handling when specified
      *        operation is invalid.
@@ -234,24 +234,24 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief ¥â¥¸¥å¡¼¥ë¤Î¥í¡¼¥É
+     * @brief ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ã®ãƒ­ãƒ¼ãƒ‰
      *
-     * file_name ¤òDLL ¤â¤·¤¯¤Ï¶¦Í­¥é¥¤¥Ö¥é¥ê¤È¤·¤Æ¥í¡¼¥É¤¹¤ë¡£
-     * file_name ¤Ï´ûÄê¤Î¥í¡¼¥É¥Ñ¥¹ (manager.modules.load_path) ¤ËÂĞ¤¹¤ë
-     * ÁêÂĞ¥Ñ¥¹¤Ç»ØÄê¤¹¤ë¡£
+     * file_name ã‚’DLL ã‚‚ã—ãã¯å…±æœ‰ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã¨ã—ã¦ãƒ­ãƒ¼ãƒ‰ã™ã‚‹ã€‚
+     * file_name ã¯æ—¢å®šã®ãƒ­ãƒ¼ãƒ‰ãƒ‘ã‚¹ (manager.modules.load_path) ã«å¯¾ã™ã‚‹
+     * ç›¸å¯¾ãƒ‘ã‚¹ã§æŒ‡å®šã™ã‚‹ã€‚
      *
-     * Property manager.modules.abs_path_allowed ¤¬ yes ¤Î¾ì¹ç¡¢
-     * ¥í¡¼¥É¤¹¤ë¥â¥¸¥å¡¼¥ë¤òÀäÂĞ¥Ñ¥¹¤Ç»ØÄê¤¹¤ë¤³¤È¤¬¤Ç¤­¤ë¡£<br>
-     * Property manager.modules.download_allowed ¤¬ yes ¤Î¾ì¹ç¡¢
-     * ¥í¡¼¥É¤¹¤ë¥â¥¸¥å¡¼¥ë¤òURL¤Ç»ØÄê¤¹¤ë¤³¤È¤¬¤Ç¤­¤ë¡£
+     * Property manager.modules.abs_path_allowed ãŒ yes ã®å ´åˆã€
+     * ãƒ­ãƒ¼ãƒ‰ã™ã‚‹ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ã‚’çµ¶å¯¾ãƒ‘ã‚¹ã§æŒ‡å®šã™ã‚‹ã“ã¨ãŒã§ãã‚‹ã€‚<br>
+     * Property manager.modules.download_allowed ãŒ yes ã®å ´åˆã€
+     * ãƒ­ãƒ¼ãƒ‰ã™ã‚‹ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ã‚’URLã§æŒ‡å®šã™ã‚‹ã“ã¨ãŒã§ãã‚‹ã€‚
      *
-     * file_name ¤ÏÀäÂĞ¥Ñ¥¹¤Ç»ØÄê¤¹¤ë¤³¤È¤¬¤Ç¤­¤ë¡£
-     * manager.modules.abs_path_allowd ¤¬ no ¤Î¾ì¹ç¡¢
-     * ´ûÄê¤Î¥â¥¸¥å¡¼¥ë¥í¡¼¥É¥Ñ¥¹¤«¤é¡¢file_name ¤Î¥â¥¸¥å¡¼¥ë¤òÃµ¤·¥í¡¼¥É¤¹¤ë¡£
+     * file_name ã¯çµ¶å¯¾ãƒ‘ã‚¹ã§æŒ‡å®šã™ã‚‹ã“ã¨ãŒã§ãã‚‹ã€‚
+     * manager.modules.abs_path_allowd ãŒ no ã®å ´åˆã€
+     * æ—¢å®šã®ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ãƒ­ãƒ¼ãƒ‰ãƒ‘ã‚¹ã‹ã‚‰ã€file_name ã®ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ã‚’æ¢ã—ãƒ­ãƒ¼ãƒ‰ã™ã‚‹ã€‚
      * 
-     * @param file_name ¥í¡¼¥ÉÂĞ¾İ¥â¥¸¥å¡¼¥ëÌ¾
+     * @param file_name ãƒ­ãƒ¼ãƒ‰å¯¾è±¡ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«å
      *
-     * @return »ØÄê¤·¤¿¥í¡¼¥ÉÂĞ¾İ¥â¥¸¥å¡¼¥ëÌ¾
+     * @return æŒ‡å®šã—ãŸãƒ­ãƒ¼ãƒ‰å¯¾è±¡ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«å
      *
      * @else
      *
@@ -281,15 +281,15 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief ¥â¥¸¥å¡¼¥ë¤Î¥í¡¼¥É¡¢½é´ü²½
+     * @brief ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ã®ãƒ­ãƒ¼ãƒ‰ã€åˆæœŸåŒ–
      *
-     * »ØÄê¤·¤¿¥Õ¥¡¥¤¥ë¤òDLL ¤â¤·¤¯¤Ï¶¦Í­¥é¥¤¥Ö¥é¥ê¤È¤·¤Æ¥í¡¼¥É¤¹¤ë¤È¤È¤â¤Ë¡¢
-     * »ØÄê¤·¤¿½é´ü²½ÍÑ¥ª¥Ú¥ì¡¼¥·¥ç¥ó¤ò¼Â¹Ô¤¹¤ë¡£
+     * æŒ‡å®šã—ãŸãƒ•ã‚¡ã‚¤ãƒ«ã‚’DLL ã‚‚ã—ãã¯å…±æœ‰ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã¨ã—ã¦ãƒ­ãƒ¼ãƒ‰ã™ã‚‹ã¨ã¨ã‚‚ã«ã€
+     * æŒ‡å®šã—ãŸåˆæœŸåŒ–ç”¨ã‚ªãƒšãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ã‚’å®Ÿè¡Œã™ã‚‹ã€‚
      * 
-     * @param file_name ¥í¡¼¥ÉÂĞ¾İ¥â¥¸¥å¡¼¥ëÌ¾
-     * @param init_func ½é´ü²½½èÍıÍÑ¥ª¥Ú¥ì¡¼¥·¥ç¥ó
+     * @param file_name ãƒ­ãƒ¼ãƒ‰å¯¾è±¡ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«å
+     * @param init_func åˆæœŸåŒ–å‡¦ç†ç”¨ã‚ªãƒšãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³
      *
-     * @return »ØÄê¤·¤¿¥í¡¼¥ÉÂĞ¾İ¥â¥¸¥å¡¼¥ëÌ¾
+     * @return æŒ‡å®šã—ãŸãƒ­ãƒ¼ãƒ‰å¯¾è±¡ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«å
      *
      * @else
      *
@@ -310,11 +310,11 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief ¥â¥¸¥å¡¼¥ë¤Î¥¢¥ó¥í¡¼¥É
+     * @brief ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ã®ã‚¢ãƒ³ãƒ­ãƒ¼ãƒ‰
      *
-     * »ØÄê¤·¤¿¥í¡¼¥ÉºÑ¤ß¥â¥¸¥å¡¼¥ë¤ò¥¯¥í¡¼¥º¤·¡¢¥¢¥ó¥í¡¼¥É¤¹¤ë¡£
+     * æŒ‡å®šã—ãŸãƒ­ãƒ¼ãƒ‰æ¸ˆã¿ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ã‚’ã‚¯ãƒ­ãƒ¼ã‚ºã—ã€ã‚¢ãƒ³ãƒ­ãƒ¼ãƒ‰ã™ã‚‹ã€‚
      *
-     * @param file_name ¥¢¥ó¥í¡¼¥ÉÂĞ¾İ¥â¥¸¥å¡¼¥ëÌ¾
+     * @param file_name ã‚¢ãƒ³ãƒ­ãƒ¼ãƒ‰å¯¾è±¡ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«å
      *
      * @else
      * @brief Unload the module
@@ -329,9 +329,9 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief Á´¥â¥¸¥å¡¼¥ë¤Î¥¢¥ó¥í¡¼¥É
+     * @brief å…¨ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ã®ã‚¢ãƒ³ãƒ­ãƒ¼ãƒ‰
      *
-     * Á´¤Æ¤Î¥í¡¼¥ÉºÑ¤ß¥â¥¸¥å¡¼¥ë¤ò¥¢¥ó¥í¡¼¥É¤¹¤ë¡£
+     * å…¨ã¦ã®ãƒ­ãƒ¼ãƒ‰æ¸ˆã¿ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ã‚’ã‚¢ãƒ³ãƒ­ãƒ¼ãƒ‰ã™ã‚‹ã€‚
      *
      * @else
      * @brief Unload all modules
@@ -344,7 +344,7 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief ¥â¥¸¥å¡¼¥ë¤Î¥·¥ó¥Ü¥ë¤Î»²¾È
+     * @brief ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ã®ã‚·ãƒ³ãƒœãƒ«ã®å‚ç…§
      * @else
      * @brief Refer to the symbol of the module
      * @endif
@@ -354,11 +354,11 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief ¥â¥¸¥å¡¼¥ë¥í¡¼¥É¥Ñ¥¹¤ò»ØÄê¤¹¤ë
+     * @brief ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ãƒ­ãƒ¼ãƒ‰ãƒ‘ã‚¹ã‚’æŒ‡å®šã™ã‚‹
      * 
-     * ¥â¥¸¥å¡¼¥ë¥í¡¼¥É»ş¤ËÂĞ¾İ¥â¥¸¥å¡¼¥ë¤ò¸¡º÷¤¹¤ë¥Ñ¥¹¤ò»ØÄê¤¹¤ë¡£
+     * ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ãƒ­ãƒ¼ãƒ‰æ™‚ã«å¯¾è±¡ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ã‚’æ¤œç´¢ã™ã‚‹ãƒ‘ã‚¹ã‚’æŒ‡å®šã™ã‚‹ã€‚
      *
-     * @param load_path ¥â¥¸¥å¡¼¥ë¸¡º÷ÂĞ¾İ¥Ñ¥¹¥ê¥¹¥È
+     * @param load_path ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«æ¤œç´¢å¯¾è±¡ãƒ‘ã‚¹ãƒªã‚¹ãƒˆ
      *
      * @else
      * @brief Set the module load path
@@ -373,11 +373,11 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief ¥â¥¸¥å¡¼¥ë¥í¡¼¥É¥Ñ¥¹¤ò¼èÆÀ¤¹¤ë
+     * @brief ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ãƒ­ãƒ¼ãƒ‰ãƒ‘ã‚¹ã‚’å–å¾—ã™ã‚‹
      * 
-     * ÀßÄê¤µ¤ì¤Æ¤¤¤ë¥â¥¸¥å¡¼¥ë¤ò¸¡º÷ÂĞ¾İ¥Ñ¥¹¥ê¥¹¥È¤ò¼èÆÀ¤¹¤ë¡£
+     * è¨­å®šã•ã‚Œã¦ã„ã‚‹ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ã‚’æ¤œç´¢å¯¾è±¡ãƒ‘ã‚¹ãƒªã‚¹ãƒˆã‚’å–å¾—ã™ã‚‹ã€‚
      * 
-     * @return load_path ¥â¥¸¥å¡¼¥ë¸¡º÷ÂĞ¾İ¥Ñ¥¹¥ê¥¹¥È
+     * @return load_path ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«æ¤œç´¢å¯¾è±¡ãƒ‘ã‚¹ãƒªã‚¹ãƒˆ
      *
      * @else
      * @brief Get the module load path
@@ -395,11 +395,11 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief ¥â¥¸¥å¡¼¥ë¥í¡¼¥É¥Ñ¥¹¤òÄÉ²Ã¤¹¤ë
+     * @brief ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ãƒ­ãƒ¼ãƒ‰ãƒ‘ã‚¹ã‚’è¿½åŠ ã™ã‚‹
      * 
-     * »ØÄê¤µ¤ì¤¿¥Ñ¥¹¥ê¥¹¥È¤ò¸¡º÷ÂĞ¾İ¥Ñ¥¹¥ê¥¹¥È¤ËÄÉ²Ã¤¹¤ë¡£
+     * æŒ‡å®šã•ã‚ŒãŸãƒ‘ã‚¹ãƒªã‚¹ãƒˆã‚’æ¤œç´¢å¯¾è±¡ãƒ‘ã‚¹ãƒªã‚¹ãƒˆã«è¿½åŠ ã™ã‚‹ã€‚
      * 
-     * @return load_path ÄÉ²Ã¥â¥¸¥å¡¼¥ë¸¡º÷ÂĞ¾İ¥Ñ¥¹¥ê¥¹¥È
+     * @return load_path è¿½åŠ ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«æ¤œç´¢å¯¾è±¡ãƒ‘ã‚¹ãƒªã‚¹ãƒˆ
      *
      * @else
      * @brief Add the module load path
@@ -414,11 +414,11 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief ¥í¡¼¥ÉºÑ¤ß¤Î¥â¥¸¥å¡¼¥ë¥ê¥¹¥È¤ò¼èÆÀ¤¹¤ë
+     * @brief ãƒ­ãƒ¼ãƒ‰æ¸ˆã¿ã®ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ãƒªã‚¹ãƒˆã‚’å–å¾—ã™ã‚‹
      *
-     * ´û¤Ë¥í¡¼¥ÉºÑ¤ß¤Î¥â¥¸¥å¡¼¥ë¥ê¥¹¥È¤ò¼èÆÀ¤¹¤ë¡£
+     * æ—¢ã«ãƒ­ãƒ¼ãƒ‰æ¸ˆã¿ã®ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ãƒªã‚¹ãƒˆã‚’å–å¾—ã™ã‚‹ã€‚
      *
-     * @return ¥í¡¼¥ÉºÑ¤ß¥â¥¸¥å¡¼¥ë¥ê¥¹¥È
+     * @return ãƒ­ãƒ¼ãƒ‰æ¸ˆã¿ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ãƒªã‚¹ãƒˆ
      *
      * @else
      * @brief Get the module list that has been loaded
@@ -433,12 +433,12 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief ¥í¡¼¥É²ÄÇ½¥â¥¸¥å¡¼¥ë¥ê¥¹¥È¤ò¼èÆÀ¤¹¤ë
+     * @brief ãƒ­ãƒ¼ãƒ‰å¯èƒ½ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ãƒªã‚¹ãƒˆã‚’å–å¾—ã™ã‚‹
      *
-     * ¥í¡¼¥É²ÄÇ½¤Ê¥â¥¸¥å¡¼¥ë¤Î¥ê¥¹¥È¤ò¼èÆÀ¤¹¤ë¡£
-     * (Ì¤¼ÂÁõ)
+     * ãƒ­ãƒ¼ãƒ‰å¯èƒ½ãªãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ã®ãƒªã‚¹ãƒˆã‚’å–å¾—ã™ã‚‹ã€‚
+     * (æœªå®Ÿè£…)
      *
-     * @return ¥í¡¼¥É²ÄÇ½¥â¥¸¥å¡¼¥ë¥ê¥¹¥È
+     * @return ãƒ­ãƒ¼ãƒ‰å¯èƒ½ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ãƒªã‚¹ãƒˆ
      *
      * @else
      * @brief Get the loadable module list
@@ -453,9 +453,9 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ¥â¥¸¥å¡¼¥ë¤ÎÀäÂĞ¥Ñ¥¹»ØÄêµö²Ä
+     * @brief ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ã®çµ¶å¯¾ãƒ‘ã‚¹æŒ‡å®šè¨±å¯
      *
-     * ¥í¡¼¥ÉÂĞ¾İ¥â¥¸¥å¡¼¥ë¤ÎÀäÂĞ¥Ñ¥¹»ØÄê¤òµö²Ä¤¹¤ë¤è¤¦¤ËÀßÄê¤¹¤ë¡£
+     * ãƒ­ãƒ¼ãƒ‰å¯¾è±¡ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ã®çµ¶å¯¾ãƒ‘ã‚¹æŒ‡å®šã‚’è¨±å¯ã™ã‚‹ã‚ˆã†ã«è¨­å®šã™ã‚‹ã€‚
      *
      * @else
      * @brief Allow absolute path when specify module path
@@ -471,9 +471,9 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief ¥â¥¸¥å¡¼¥ë¤ÎÀäÂĞ¥Ñ¥¹»ØÄê¶Ø»ß
+     * @brief ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ã®çµ¶å¯¾ãƒ‘ã‚¹æŒ‡å®šç¦æ­¢
      *
-     * ¥í¡¼¥ÉÂĞ¾İ¥â¥¸¥å¡¼¥ë¤ÎÀäÂĞ¥Ñ¥¹»ØÄê¤ò¶Ø»ß¤¹¤ë¤è¤¦¤ËÀßÄê¤¹¤ë¡£
+     * ãƒ­ãƒ¼ãƒ‰å¯¾è±¡ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ã®çµ¶å¯¾ãƒ‘ã‚¹æŒ‡å®šã‚’ç¦æ­¢ã™ã‚‹ã‚ˆã†ã«è¨­å®šã™ã‚‹ã€‚
      *
      * @else
      * @brief Disallow absolute path when specify module path
@@ -489,11 +489,11 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief ¥â¥¸¥å¡¼¥ë¤ÎURL»ØÄêµö²Ä
+     * @brief ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ã®URLæŒ‡å®šè¨±å¯
      *
-     * ¥í¡¼¥ÉÂĞ¾İ¥â¥¸¥å¡¼¥ë¤ÎURL»ØÄê¤òµö²Ä¤¹¤ë¡£
-     * ËÜÀßÄê¤¬µö²Ä¤µ¤ì¤Æ¤¤¤ë¾ì¹ç¡¢¥â¥¸¥å¡¼¥ë¤ò¥À¥¦¥ó¥í¡¼¥É¤·¤Æ¥í¡¼¥É¤¹¤ë¤³¤È¤¬
-     * µö²Ä¤µ¤ì¤ë¡£
+     * ãƒ­ãƒ¼ãƒ‰å¯¾è±¡ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ã®URLæŒ‡å®šã‚’è¨±å¯ã™ã‚‹ã€‚
+     * æœ¬è¨­å®šãŒè¨±å¯ã•ã‚Œã¦ã„ã‚‹å ´åˆã€ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ã‚’ãƒ€ã‚¦ãƒ³ãƒ­ãƒ¼ãƒ‰ã—ã¦ãƒ­ãƒ¼ãƒ‰ã™ã‚‹ã“ã¨ãŒ
+     * è¨±å¯ã•ã‚Œã‚‹ã€‚
      *
      * @else
      * @brief Allow URL when specify module path
@@ -511,9 +511,9 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief ¥â¥¸¥å¡¼¥ë¤ÎURL»ØÄê¶Ø»ß
+     * @brief ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ã®URLæŒ‡å®šç¦æ­¢
      *
-     * ¥í¡¼¥ÉÂĞ¾İ¥â¥¸¥å¡¼¥ë¤ÎURL»ØÄê¤ò¶Ø»ß¤¹¤ë¡£
+     * ãƒ­ãƒ¼ãƒ‰å¯¾è±¡ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ã®URLæŒ‡å®šã‚’ç¦æ­¢ã™ã‚‹ã€‚
      *
      * @else
      * @brief Disallow URL when specify module path
@@ -529,14 +529,14 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief LoadPath ¤«¤é¤Î¥Õ¥¡¥¤¥ë¤Î¸¡º÷
+     * @brief LoadPath ã‹ã‚‰ã®ãƒ•ã‚¡ã‚¤ãƒ«ã®æ¤œç´¢
      * 
-     * »ØÄê¤µ¤ì¤¿¥Ñ¥¹Æâ¤Ë¡¢»ØÄê¤µ¤ì¤¿¥Õ¥¡¥¤¥ë¤¬Â¸ºß¤¹¤ë¤«³ÎÇ§¤¹¤ë¡£
+     * æŒ‡å®šã•ã‚ŒãŸãƒ‘ã‚¹å†…ã«ã€æŒ‡å®šã•ã‚ŒãŸãƒ•ã‚¡ã‚¤ãƒ«ãŒå­˜åœ¨ã™ã‚‹ã‹ç¢ºèªã™ã‚‹ã€‚
      *
-     * @param fname ¸¡º÷ÂĞ¾İ¥Õ¥¡¥¤¥ëÌ¾
-     * @param load_path ¸¡º÷Àè¥Ñ¥¹¥ê¥¹¥È
+     * @param fname æ¤œç´¢å¯¾è±¡ãƒ•ã‚¡ã‚¤ãƒ«å
+     * @param load_path æ¤œç´¢å…ˆãƒ‘ã‚¹ãƒªã‚¹ãƒˆ
      *
-     * @return ¸¡º÷¤µ¤ì¤¿¥Õ¥¡¥¤¥ëÌ¾
+     * @return æ¤œç´¢ã•ã‚ŒãŸãƒ•ã‚¡ã‚¤ãƒ«å
      *
      * @else
      * @brief Search the file from the LoadPath
@@ -555,13 +555,13 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief ¥Õ¥¡¥¤¥ë¤¬Â¸ºß¤¹¤ë¤«¤É¤¦¤«¤Î¥Á¥§¥Ã¥¯
+     * @brief ãƒ•ã‚¡ã‚¤ãƒ«ãŒå­˜åœ¨ã™ã‚‹ã‹ã©ã†ã‹ã®ãƒã‚§ãƒƒã‚¯
      *
-     * »ØÄê¤µ¤ì¤¿¥Õ¥¡¥¤¥ë¤¬Â¸ºß¤¹¤ë¤«³ÎÇ§¤¹¤ë¡£
+     * æŒ‡å®šã•ã‚ŒãŸãƒ•ã‚¡ã‚¤ãƒ«ãŒå­˜åœ¨ã™ã‚‹ã‹ç¢ºèªã™ã‚‹ã€‚
      *
-     * @param filename Â¸ºß³ÎÇ§ÂĞ¾İ¥Õ¥¡¥¤¥ëÌ¾
+     * @param filename å­˜åœ¨ç¢ºèªå¯¾è±¡ãƒ•ã‚¡ã‚¤ãƒ«å
      *
-     * @return ¥Õ¥¡¥¤¥ëÂ¸ºß³ÎÇ§·ë²Ì(¥Õ¥¡¥¤¥ë¤¢¤ê:true¡¤¤Ê¤·:false)
+     * @return ãƒ•ã‚¡ã‚¤ãƒ«å­˜åœ¨ç¢ºèªçµæœ(ãƒ•ã‚¡ã‚¤ãƒ«ã‚ã‚Š:trueï¼Œãªã—:false)
      *
      * @else
      * @brief Check whether the file exists
@@ -578,13 +578,13 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief ½é´ü²½´Ø¿ô¥·¥ó¥Ü¥ë¤òÀ¸À®¤¹¤ë
+     * @brief åˆæœŸåŒ–é–¢æ•°ã‚·ãƒ³ãƒœãƒ«ã‚’ç”Ÿæˆã™ã‚‹
      *
-     * ½é´ü²½´Ø¿ô¤ÎÌ¾¾Î¤òÁÈ¤ßÎ©¤Æ¤ë¡£
+     * åˆæœŸåŒ–é–¢æ•°ã®åç§°ã‚’çµ„ã¿ç«‹ã¦ã‚‹ã€‚
      *
-     * @param file_path ½é´ü²½ÂĞ¾İ¥â¥¸¥å¡¼¥ëÌ¾¾Î
+     * @param file_path åˆæœŸåŒ–å¯¾è±¡ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«åç§°
      *
-     * @return ½é´ü²½´Ø¿ôÌ¾¾ÎÁÈ¤ßÎ©¤Æ·ë²Ì
+     * @return åˆæœŸåŒ–é–¢æ•°åç§°çµ„ã¿ç«‹ã¦çµæœ
      *
      * @else
      * @brief Create initialization function symbol
@@ -602,7 +602,7 @@ namespace RTC
   protected:
     /*!
      * @if jp
-     * @brief Ìµ¸ú¤Ê¥â¥¸¥å¡¼¥ë¥×¥í¥Õ¥¡¥¤¥ë¤òºï½ü¤¹¤ë
+     * @brief ç„¡åŠ¹ãªãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«ã‚’å‰Šé™¤ã™ã‚‹
      * @else
      * @brief Removing incalid module profiles
      * @endif
@@ -611,7 +611,7 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief »ØÄê¸À¸ì¤Ë¤ª¤±¤ë¥í¡¼¥É¥Ñ¥¹¾å¤Î¥í¡¼¥À¥Ö¥ë¤Ê¥Õ¥¡¥¤¥ë¥ê¥¹¥È¤òÊÖ¤¹
+     * @brief æŒ‡å®šè¨€èªã«ãŠã‘ã‚‹ãƒ­ãƒ¼ãƒ‰ãƒ‘ã‚¹ä¸Šã®ãƒ­ãƒ¼ãƒ€ãƒ–ãƒ«ãªãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆã‚’è¿”ã™
      * @else
      * @brief Getting loadable file list on the loadpath for given language
      * @endif
@@ -620,7 +620,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ¥­¥ã¥Ã¥·¥å¤ËÌµ¤¤¥Ñ¥¹¤À¤±modules¤ËÄÉ²Ã¤¹¤ë
+     * @brief ã‚­ãƒ£ãƒƒã‚·ãƒ¥ã«ç„¡ã„ãƒ‘ã‚¹ã ã‘modulesã«è¿½åŠ ã™ã‚‹
      * @else
      * @brief Adding file path not existing cache
      * @endif
@@ -629,7 +629,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief »ØÄê¸À¸ì¡¢¥Õ¥¡¥¤¥ë¥ê¥¹¥È¤«¤é¥â¥¸¥å¡¼¥ë¤Î¥×¥í¥Ñ¥Æ¥£¤òÊÖ¤¹
+     * @brief æŒ‡å®šè¨€èªã€ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆã‹ã‚‰ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ã®ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã‚’è¿”ã™
      * @else
      * @brief Getting module properties from given language and file list
      * @endif
@@ -639,7 +639,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ¥í¥¬¡¼¥¹¥È¥ê¡¼¥à
+     * @brief ãƒ­ã‚¬ãƒ¼ã‚¹ãƒˆãƒªãƒ¼ãƒ 
      * @else
      * @brief Logger stream
      * @endif
@@ -648,7 +648,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief DLL´ÉÍıÍÑ¹½Â¤ÂÎ
+     * @brief DLLç®¡ç†ç”¨æ§‹é€ ä½“
      * @else
      * @brief Structure for DLL management
      * @endif
@@ -670,7 +670,7 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief Module Manager ¥×¥í¥Ñ¥Æ¥£
+     * @brief Module Manager ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£
      * @else
      * @brief Module Manager properties
      * @endif
@@ -679,7 +679,7 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief ¥í¡¼¥ÉºÑ¤ß¥â¥¸¥å¡¼¥ë¥ê¥¹¥È
+     * @brief ãƒ­ãƒ¼ãƒ‰æ¸ˆã¿ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ãƒªã‚¹ãƒˆ
      * @else
      * @brief Module list that has already loaded
      * @endif
@@ -697,7 +697,7 @@ namespace RTC
     };
     /*!
      * @if jp
-     * @brief ¥í¡¼¥ÉºÑ¤ß¥â¥¸¥å¡¼¥ë¥ê¥¹¥È
+     * @brief ãƒ­ãƒ¼ãƒ‰æ¸ˆã¿ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ãƒªã‚¹ãƒˆ
      * @else
      * @brief Module list that has already loaded
      * @endif
@@ -706,7 +706,7 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief ¥â¥¸¥å¡¼¥ë¡¦¥í¡¼¥É¡¦¥Ñ¥¹¡¦¥ê¥¹¥È
+     * @brief ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ãƒ»ãƒ­ãƒ¼ãƒ‰ãƒ»ãƒ‘ã‚¹ãƒ»ãƒªã‚¹ãƒˆ
      * @else
      * @brief Module load path list
      * @endif
@@ -714,7 +714,7 @@ namespace RTC
     StringVector m_loadPath;
     /*!
      * @if jp
-     * @brief ¥³¥ó¥Õ¥£¥®¥å¥ì¡¼¥·¥ç¥ó¡¦¥Ñ¥¹¡¦¥ê¥¹¥È
+     * @brief ã‚³ãƒ³ãƒ•ã‚£ã‚®ãƒ¥ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ãƒ»ãƒ‘ã‚¹ãƒ»ãƒªã‚¹ãƒˆ
      * @else
      * @brief Configuration path list
      * @endif
@@ -722,7 +722,7 @@ namespace RTC
     StringVector m_configPath;
     /*!
      * @if jp
-     * @brief ¥â¥¸¥å¡¼¥ëURL»ØÄêµö²Ä¥Õ¥é¥°
+     * @brief ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«URLæŒ‡å®šè¨±å¯ãƒ•ãƒ©ã‚°
      * @else
      * @brief Flag of URL when specify module for the load.
      * @endif
@@ -730,7 +730,7 @@ namespace RTC
     bool m_downloadAllowed;
     /*!
      * @if jp
-     * @brief ¥â¥¸¥å¡¼¥ëÀäÂĞ¥Ñ¥¹»ØÄêµö²Ä¥Õ¥é¥°
+     * @brief ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«çµ¶å¯¾ãƒ‘ã‚¹æŒ‡å®šè¨±å¯ãƒ•ãƒ©ã‚°
      * @else
      * @brief Flag of absolute path when specify module for the load.
      * @endif
@@ -739,7 +739,7 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief ½é´ü¼Â¹Ô´Ø¿ô¥µ¥Õ¥£¥Ã¥¯¥¹
+     * @brief åˆæœŸå®Ÿè¡Œé–¢æ•°ã‚µãƒ•ã‚£ãƒƒã‚¯ã‚¹
      * @else
      * @brief Initial execution function suffix
      * @endif
@@ -748,7 +748,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ½é´ü¼Â¹Ô´Ø¿ô¥×¥ê¥Õ¥£¥Ã¥¯¥¹
+     * @brief åˆæœŸå®Ÿè¡Œé–¢æ•°ãƒ—ãƒªãƒ•ã‚£ãƒƒã‚¯ã‚¹
      * @else
      * @brief Initial execution function prefix
      * @endif
@@ -757,7 +757,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ¥â¥¸¥å¡¼¥ë¥¢¥ó¥í¡¼¥É¥Õ¥¡¥ó¥¯¥¿
+     * @brief ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ã‚¢ãƒ³ãƒ­ãƒ¼ãƒ‰ãƒ•ã‚¡ãƒ³ã‚¯ã‚¿
      * @else
      * @brief Module unloading functor
      * @endif

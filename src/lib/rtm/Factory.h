@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file Factory.h
  * @brief RT-Component factory class
@@ -36,16 +36,16 @@ namespace RTC
   /*!
    * @if jp
    *
-   * @brief RT����ݡ��ͥ�������ѥƥ�ץ졼�ȴؿ�
+   * @brief RTコンポーネント生成用テンプレート関数
    * 
-   * RT����ݡ��ͥ�ȤΥ��󥹥��󥹤��������뤿��Υƥ�ץ졼�ȴؿ���
-   * RT����ݡ��ͥ�ȴ����ѥޥ͡����㤫��ƤӽФ���롣
-   * �ºݤˤϳƥ���ݡ��ͥ�ȤΥ��󥹥ȥ饯�����ƤӽФ���롣
-   * \<_New\>�������о�RT����ݡ��ͥ�Ȥη�����ꤹ�롣
+   * RTコンポーネントのインスタンスを生成するためのテンプレート関数。
+   * RTコンポーネント管理用マネージャから呼び出される。
+   * 実際には各コンポーネントのコンストラクタが呼び出される。
+   * \<_New\>で生成対象RTコンポーネントの型を指定する。
    *
-   * @param manager �ޥ͡����㥪�֥�������
+   * @param manager マネージャオブジェクト
    *
-   * @return �������� RT����ݡ��ͥ�� ���󥹥���
+   * @return 生成した RTコンポーネント インスタンス
    * 
    * @else
    * @brief Template function to create RT-Components
@@ -70,12 +70,12 @@ namespace RTC
   /*!
    * @if jp
    *
-   * @brief RT����ݡ��ͥ���˴��ѥƥ�ץ졼�ȴؿ�
+   * @brief RTコンポーネント破棄用テンプレート関数
    * 
-   * RT����ݡ��ͥ�ȤΥ��󥹥��󥹤��˴����뤿��Υƥ�ץ졼�ȴؿ���
-   * \<_Delete\>�ˤ��˴��о�RT����ݡ��ͥ�Ȥη�����ꤹ�롣
+   * RTコンポーネントのインスタンスを破棄するためのテンプレート関数。
+   * \<_Delete\>にて破棄対象RTコンポーネントの型を指定する。
    *
-   * @param rtc �˴��о�RT����ݡ��ͥ�ȤΥ��󥹥���
+   * @param rtc 破棄対象RTコンポーネントのインスタンス
    *
    * @else
    *
@@ -98,9 +98,9 @@ namespace RTC
    * @if jp
    *
    * @class FactoryBase
-   * @brief FactoryBase ���쥯�饹
+   * @brief FactoryBase 基底クラス
    * 
-   * ����ݡ��ͥ�ȥե����ȥ�δ��쥯�饹��
+   * コンポーネントファクトリの基底クラス。
    *
    * @since 0.2.0
    *
@@ -121,11 +121,11 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief ���󥹥ȥ饯��
+     * @brief コンストラクタ
      *
-     * ���󥹥ȥ饯����
+     * コンストラクタ。
      *
-     * @param profile ����ݡ��ͥ�ȤΥץ��ե�����
+     * @param profile コンポーネントのプロファイル
      *
      * @else
      *
@@ -141,9 +141,9 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief �ǥ��ȥ饯��
+     * @brief デストラクタ
      *
-     * �ǥ��ȥ饯��
+     * デストラクタ
      *
      * @else
      * @brief Destructor
@@ -157,13 +157,13 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief ����ݡ��ͥ�Ȥ�����
+     * @brief コンポーネントの生成
      *
-     * RT-Component �Υ��󥹥��󥹤��������뤿��ν�貾�۴ؿ���
+     * RT-Component のインスタンスを生成するための純粋仮想関数。
      *
-     * @param mgr �ޥ͡����㥪�֥�������
+     * @param mgr マネージャオブジェクト
      *
-     * @return ������������ݡ��ͥ��
+     * @return 生成したコンポーネント
      *
      * @else
      *
@@ -182,11 +182,11 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief ����ݡ��ͥ�Ȥ��˴�
+     * @brief コンポーネントの破棄
      *
-     * RT-Component �Υ��󥹥��󥹤��˴����뤿��ν�貾�۴ؿ���
+     * RT-Component のインスタンスを破棄するための純粋仮想関数。
      *
-     * @param comp �˴��о� RT����ݡ��ͥ��
+     * @param comp 破棄対象 RTコンポーネント
      *
      * @else
      *
@@ -203,11 +203,11 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief ����ݡ��ͥ�ȥץ��ե�����μ���
+     * @brief コンポーネントプロファイルの取得
      *
-     * ����ݡ��ͥ�ȤΥץ��ե�������������
+     * コンポーネントのプロファイルを取得する
      *
-     * @return ����ݡ��ͥ�ȤΥץ��ե�����
+     * @return コンポーネントのプロファイル
      *
      * @else
      *
@@ -224,11 +224,11 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief ���ߤΥ��󥹥��󥹿��μ���
+     * @brief 現在のインスタンス数の取得
      *
-     * ����ݡ��ͥ�Ȥθ��ߤΥ��󥹥��󥹿���������롣
+     * コンポーネントの現在のインスタンス数を取得する。
      *
-     * @return ����ݡ��ͥ�ȤΥ��󥹥��󥹿�
+     * @return コンポーネントのインスタンス数
      *
      * @else
      *
@@ -245,7 +245,7 @@ namespace RTC
   protected:
     /*!
      * @if jp
-     * @brief ����ݡ��ͥ�ȤΥץ��ե�����
+     * @brief コンポーネントのプロファイル
      * @else
      * @brief Component profile
      * @endif
@@ -254,7 +254,7 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief ���ߤΥ��󥹥��󥹿�
+     * @brief 現在のインスタンス数
      * @else
      * @brief Number of current RT-Component's instances.
      * @endif
@@ -265,9 +265,9 @@ namespace RTC
   /*!
    * @if jp
    * @class FactoryCXX
-   * @brief FactoryCXX ���饹
+   * @brief FactoryCXX クラス
    * 
-   * C++�ѥ���ݡ��ͥ�ȥե����ȥꥯ�饹��
+   * C++用コンポーネントファクトリクラス。
    *
    * @since 0.2.0
    *
@@ -290,18 +290,18 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief ���󥹥ȥ饯��
+     * @brief コンストラクタ
      *
-     * ���󥹥ȥ饯����
-     * �ץ��ե����롢�����ؿ��ؤΥݥ��󥿡��˴��ؿ��ؤΥݥ��󥿡�
-     * ����ݡ��ͥ����������̿̾�ݥꥷ��������˼�ꡢ
-     * C++ �Ǽ������줿����ݡ��ͥ�ȤΥե����ȥꥯ�饹���������롣
+     * コンストラクタ。
+     * プロファイル、生成関数へのポインタ、破棄関数へのポインタ、
+     * コンポーネント生成時の命名ポリシーを引数に取り、
+     * C++ で実装されたコンポーネントのファクトリクラスを生成する。
      *
-     * @param profile ����ݡ��ͥ�ȤΥץ��ե�����
-     * @param new_func ����ݡ��ͥ�Ȥ������ؿ��ؤΥݥ���
-     * @param delete_func ����ݡ��ͥ�Ȥ��˴��ؿ��ؤΥݥ���
-     * @param policy ����ݡ��ͥ����������̿̾�ݥꥷ��
-     * (�ǥե������:DefaultNumberingPolicy)
+     * @param profile コンポーネントのプロファイル
+     * @param new_func コンポーネントの生成関数へのポインタ
+     * @param delete_func コンポーネントの破棄関数へのポインタ
+     * @param policy コンポーネント生成時の命名ポリシー
+     * (デフォルト値:DefaultNumberingPolicy)
      *
      * @else
      *
@@ -333,13 +333,13 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief ����ݡ��ͥ�Ȥ�����
+     * @brief コンポーネントの生成
      *
-     * RT-Component �Υ��󥹥��󥹤��������롣
+     * RT-Component のインスタンスを生成する。
      *
-     * @param mgr �ޥ͡����㥪�֥�������
+     * @param mgr マネージャオブジェクト
      *
-     * @return ������������ݡ��ͥ��
+     * @return 生成したコンポーネント
      *
      * @else
      *
@@ -358,11 +358,11 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief ����ݡ��ͥ�Ȥ��˴�
+     * @brief コンポーネントの破棄
      *
-     * RT-Component �Υ��󥹥��󥹤��˴����롣
+     * RT-Component のインスタンスを破棄する。
      *
-     * @param comp �˴��о� RT-Component
+     * @param comp 破棄対象 RT-Component
      *
      * @else
      *
@@ -379,7 +379,7 @@ namespace RTC
   protected:
     /*!
      * @if jp
-     * @brief ����ݡ��ͥ�ȥ��֥������������ؿ��ؤΥݥ���
+     * @brief コンポーネントオブジェクト生成関数へのポインタ
      * @else
      * @brief The pointer to component object create function
      * @endif
@@ -388,7 +388,7 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief ����ݡ��ͥ�ȥ��֥��������˴��ؿ��ؤΥݥ���
+     * @brief コンポーネントオブジェクト破棄関数へのポインタ
      * @else
      * @brief The pointer to component object destroy function
      * @endif
@@ -397,7 +397,7 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief ����ݡ��ͥ����������̿̾�ݥꥷ��
+     * @brief コンポーネント生成時の命名ポリシー
      * @else
      * @brief The naming policy on creating the components
      * @endif

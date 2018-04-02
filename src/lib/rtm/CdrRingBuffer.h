@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file  CdrRingBuffer.h
  * @brief RingBuffer for CDR

@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file ConnectorListener.cpp
  * @brief connector listener class
@@ -50,7 +50,7 @@ namespace RTC
   }
   /*!
    * @if jp
-   * @class ConnectorDataListener ¥¯¥é¥¹
+   * @class ConnectorDataListener ã‚¯ãƒ©ã‚¹
    * @else
    * @class ConnectorDataListener class
    * @endif
@@ -59,7 +59,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @class ConnectorListener ¥¯¥é¥¹
+   * @class ConnectorListener ã‚¯ãƒ©ã‚¹
    * @else
    * @class ConnectorListener class
    * @endif
@@ -68,7 +68,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @class ConnectorDataListener ¥Û¥ë¥À¥¯¥é¥¹
+   * @class ConnectorDataListener ãƒ›ãƒ«ãƒ€ã‚¯ãƒ©ã‚¹
    * @else
    * @class ConnectorDataListener holder class
    * @endif
@@ -141,7 +141,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @class ConnectorListener ¥Û¥ë¥À¥¯¥é¥¹
+   * @class ConnectorListener ãƒ›ãƒ«ãƒ€ã‚¯ãƒ©ã‚¹
    * @else
    * @class ConnectorListener holder class
    * @endif

@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file SeqOutComp.cpp
  * @brief Standalone component

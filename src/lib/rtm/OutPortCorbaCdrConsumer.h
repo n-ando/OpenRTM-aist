@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file  OutPortCorbaCdrConsumer.h
  * @brief OutPortCorbaCdrConsumer class
@@ -31,12 +31,12 @@ namespace RTC
   /*!
    * @if jp
    * @class OutPortCorbaCdrConsumer
-   * @brief OutPortCorbaCdrConsumer ¥¯¥é¥¹
+   * @brief OutPortCorbaCdrConsumer ã‚¯ãƒ©ã‚¹
    *
    * OutPortConsumer 
    *
-   * ¥Ç¡¼¥¿Å¾Á÷¤Ë CORBA ¤Î OpenRTM::OutPortCdr ¥¤¥ó¥¿¡¼¥Õ¥§¡¼¥¹¤òÍøÍÑ¤·
-   * ¤¿¡¢pull ·¿¥Ç¡¼¥¿¥Õ¥í¡¼·¿¤ò¼Â¸½¤¹¤ë OutPort ¥³¥ó¥·¥å¡¼¥Ş¥¯¥é¥¹¡£
+   * ãƒ‡ãƒ¼ã‚¿è»¢é€ã« CORBA ã® OpenRTM::OutPortCdr ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹ã‚’åˆ©ç”¨ã—
+   * ãŸã€pull å‹ãƒ‡ãƒ¼ã‚¿ãƒ•ãƒ­ãƒ¼å‹ã‚’å®Ÿç¾ã™ã‚‹ OutPort ã‚³ãƒ³ã‚·ãƒ¥ãƒ¼ãƒã‚¯ãƒ©ã‚¹ã€‚
    *
    * @since 0.4.0
    *
@@ -61,9 +61,9 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+     * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
      *
-     * ¥³¥ó¥¹¥È¥é¥¯¥¿
+     * ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
      *
      * @else
      * @brief Constructor
@@ -76,9 +76,9 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ¥Ç¥¹¥È¥é¥¯¥¿
+     * @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
      *
-     * ¥Ç¥¹¥È¥é¥¯¥¿
+     * ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
      *
      * @else
      * @brief Destructor
@@ -91,15 +91,15 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ÀßÄê½é´ü²½
+     * @brief è¨­å®šåˆæœŸåŒ–
      *
-     * OutPortConsumer¤Î³Æ¼ïÀßÄê¤ò¹Ô¤¦¡£¼ÂÁõ¥¯¥é¥¹¤Ç¤Ï¡¢Í¿¤¨¤é¤ì¤¿
-     * Properties¤«¤éÉ¬Í×¤Ê¾ğÊó¤ò¼èÆÀ¤·¤Æ³Æ¼ïÀßÄê¤ò¹Ô¤¦¡£¤³¤Î init() ´Ø
-     * ¿ô¤Ï¡¢OutPortProviderÀ¸À®Ä¾¸å¤ª¤è¤Ó¡¢ÀÜÂ³»ş¤Ë¤½¤ì¤¾¤ì¸Æ¤Ğ¤ì¤ë²Ä
-     * Ç½À­¤¬¤¢¤ë¡£¤·¤¿¤¬¤Ã¤Æ¡¢¤³¤Î´Ø¿ô¤ÏÊ£¿ô²ó¸Æ¤Ğ¤ì¤ë¤³¤È¤òÁÛÄê¤·¤Æµ­
-     * ½Ò¤µ¤ì¤ë¤Ù¤­¤Ç¤¢¤ë¡£
+     * OutPortConsumerã®å„ç¨®è¨­å®šã‚’è¡Œã†ã€‚å®Ÿè£…ã‚¯ãƒ©ã‚¹ã§ã¯ã€ä¸ãˆã‚‰ã‚ŒãŸ
+     * Propertiesã‹ã‚‰å¿…è¦ãªæƒ…å ±ã‚’å–å¾—ã—ã¦å„ç¨®è¨­å®šã‚’è¡Œã†ã€‚ã“ã® init() é–¢
+     * æ•°ã¯ã€OutPortProviderç”Ÿæˆç›´å¾ŒãŠã‚ˆã³ã€æ¥ç¶šæ™‚ã«ãã‚Œãã‚Œå‘¼ã°ã‚Œã‚‹å¯
+     * èƒ½æ€§ãŒã‚ã‚‹ã€‚ã—ãŸãŒã£ã¦ã€ã“ã®é–¢æ•°ã¯è¤‡æ•°å›å‘¼ã°ã‚Œã‚‹ã“ã¨ã‚’æƒ³å®šã—ã¦è¨˜
+     * è¿°ã•ã‚Œã‚‹ã¹ãã§ã‚ã‚‹ã€‚
      * 
-     * @param prop ÀßÄê¾ğÊó
+     * @param prop è¨­å®šæƒ…å ±
      *
      * @else
      *
@@ -120,15 +120,15 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ¥Ğ¥Ã¥Õ¥¡¤ò¥»¥Ã¥È¤¹¤ë
+     * @brief ãƒãƒƒãƒ•ã‚¡ã‚’ã‚»ãƒƒãƒˆã™ã‚‹
      *
-     * OutPortConsumer¤¬¥Ç¡¼¥¿¤ò¼è¤ê½Ğ¤¹¥Ğ¥Ã¥Õ¥¡¤ò¥»¥Ã¥È¤¹¤ë¡£
-     * ¤¹¤Ç¤Ë¥»¥Ã¥È¤µ¤ì¤¿¥Ğ¥Ã¥Õ¥¡¤¬¤¢¤ë¾ì¹ç¡¢°ÊÁ°¤Î¥Ğ¥Ã¥Õ¥¡¤Ø¤Î
-     * ¥İ¥¤¥ó¥¿¤ËÂĞ¤·¤Æ¾å½ñ¤­¤µ¤ì¤ë¡£
-     * OutPortProvider¤Ï¥Ğ¥Ã¥Õ¥¡¤Î½êÍ­¸¢¤ò²¾Äê¤·¤Æ¤¤¤Ê¤¤¤Î¤Ç¡¢
-     * ¥Ğ¥Ã¥Õ¥¡¤Îºï½ü¤Ï¥æ¡¼¥¶¤ÎÀÕÇ¤¤Ç¹Ô¤ï¤Ê¤±¤ì¤Ğ¤Ê¤é¤Ê¤¤¡£
+     * OutPortConsumerãŒãƒ‡ãƒ¼ã‚¿ã‚’å–ã‚Šå‡ºã™ãƒãƒƒãƒ•ã‚¡ã‚’ã‚»ãƒƒãƒˆã™ã‚‹ã€‚
+     * ã™ã§ã«ã‚»ãƒƒãƒˆã•ã‚ŒãŸãƒãƒƒãƒ•ã‚¡ãŒã‚ã‚‹å ´åˆã€ä»¥å‰ã®ãƒãƒƒãƒ•ã‚¡ã¸ã®
+     * ãƒã‚¤ãƒ³ã‚¿ã«å¯¾ã—ã¦ä¸Šæ›¸ãã•ã‚Œã‚‹ã€‚
+     * OutPortProviderã¯ãƒãƒƒãƒ•ã‚¡ã®æ‰€æœ‰æ¨©ã‚’ä»®å®šã—ã¦ã„ãªã„ã®ã§ã€
+     * ãƒãƒƒãƒ•ã‚¡ã®å‰Šé™¤ã¯ãƒ¦ãƒ¼ã‚¶ã®è²¬ä»»ã§è¡Œã‚ãªã‘ã‚Œã°ãªã‚‰ãªã„ã€‚
      *
-     * @param buffer OutPortProvider¤¬¥Ç¡¼¥¿¤ò¼è¤ê½Ğ¤¹¥Ğ¥Ã¥Õ¥¡¤Ø¤Î¥İ¥¤¥ó¥¿
+     * @param buffer OutPortProviderãŒãƒ‡ãƒ¼ã‚¿ã‚’å–ã‚Šå‡ºã™ãƒãƒƒãƒ•ã‚¡ã¸ã®ãƒã‚¤ãƒ³ã‚¿
      *
      * @else
      * @brief Setting outside buffer's pointer
@@ -147,13 +147,13 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ¥ê¥¹¥Ê¤òÀßÄê¤¹¤ë¡£
+     * @brief ãƒªã‚¹ãƒŠã‚’è¨­å®šã™ã‚‹ã€‚
      *
-     * InPort ¤Ï¥Ç¡¼¥¿Á÷¿®½èÍı¤Ë¤ª¤±¤ë³Æ¼ï¥¤¥Ù¥ó¥È¤ËÂĞ¤·¤ÆÆÃÄê¤Î¥ê¥¹¥Ê
-     * ¥ª¥Ö¥¸¥§¥¯¥È¤ò¥³¡¼¥ë¤¹¤ë¥³¡¼¥ë¥Ğ¥Ã¥¯µ¡¹½¤òÄó¶¡¤¹¤ë¡£¾ÜºÙ¤Ï
-     * ConnectorListener.h ¤Î ConnectorDataListener, ConnectorListener
-     * Åù¤ò»²¾È¤Î¤³¤È¡£OutPortCorbaCdrProvider ¤Ç¤Ï¡¢°Ê²¼¤Î¥³¡¼¥ë¥Ğ¥Ã¥¯
-     * ¤¬Äó¶¡¤µ¤ì¤ë¡£
+     * InPort ã¯ãƒ‡ãƒ¼ã‚¿é€ä¿¡å‡¦ç†ã«ãŠã‘ã‚‹å„ç¨®ã‚¤ãƒ™ãƒ³ãƒˆã«å¯¾ã—ã¦ç‰¹å®šã®ãƒªã‚¹ãƒŠ
+     * ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ã‚³ãƒ¼ãƒ«ã™ã‚‹ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯æ©Ÿæ§‹ã‚’æä¾›ã™ã‚‹ã€‚è©³ç´°ã¯
+     * ConnectorListener.h ã® ConnectorDataListener, ConnectorListener
+     * ç­‰ã‚’å‚ç…§ã®ã“ã¨ã€‚OutPortCorbaCdrProvider ã§ã¯ã€ä»¥ä¸‹ã®ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯
+     * ãŒæä¾›ã•ã‚Œã‚‹ã€‚
      * 
      * - ON_BUFFER_WRITE
      * - ON_BUFFER_FULL
@@ -163,8 +163,8 @@ namespace RTC
      * - ON_SENDER_TIMEOUT
      * - ON_SENDER_ERROR
      *
-     * @param info ÀÜÂ³¾ğÊó
-     * @param listeners ¥ê¥¹¥Ê¥ª¥Ö¥¸¥§¥¯¥È
+     * @param info æ¥ç¶šæƒ…å ±
+     * @param listeners ãƒªã‚¹ãƒŠã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
      *
      * @else
      * @brief Set the listener. 
@@ -194,13 +194,13 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ¥Ç¡¼¥¿¤òÆÉ¤ß½Ğ¤¹
+     * @brief ãƒ‡ãƒ¼ã‚¿ã‚’èª­ã¿å‡ºã™
      *
-     * ÀßÄê¤µ¤ì¤¿¥Ç¡¼¥¿¤òÆÉ¤ß½Ğ¤¹¡£
+     * è¨­å®šã•ã‚ŒãŸãƒ‡ãƒ¼ã‚¿ã‚’èª­ã¿å‡ºã™ã€‚
      *
-     * @param data ÆÉ¤ß½Ğ¤·¤¿¥Ç¡¼¥¿¤ò¼õ¤±¼è¤ë¥ª¥Ö¥¸¥§¥¯¥È
+     * @param data èª­ã¿å‡ºã—ãŸãƒ‡ãƒ¼ã‚¿ã‚’å—ã‘å–ã‚‹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
      *
-     * @return ¥Ç¡¼¥¿ÆÉ¤ß½Ğ¤·½èÍı·ë²Ì(ÆÉ¤ß½Ğ¤·À®¸ù:true¡¢ÆÉ¤ß½Ğ¤·¼ºÇÔ:false)
+     * @return ãƒ‡ãƒ¼ã‚¿èª­ã¿å‡ºã—å‡¦ç†çµæœ(èª­ã¿å‡ºã—æˆåŠŸ:trueã€èª­ã¿å‡ºã—å¤±æ•—:false)
      *
      * @else
      * @brief Read data
@@ -217,13 +217,13 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ¥Ç¡¼¥¿¼õ¿®ÄÌÃÎ¤Ø¤ÎÅĞÏ¿
+     * @brief ãƒ‡ãƒ¼ã‚¿å—ä¿¡é€šçŸ¥ã¸ã®ç™»éŒ²
      *
-     * »ØÄê¤µ¤ì¤¿¥×¥í¥Ñ¥Æ¥£¤Ë´ğ¤Å¤¤¤Æ¡¢¥Ç¡¼¥¿¼õ¿®ÄÌÃÎ¤Î¼õ¤±¼è¤ê¤ËÅĞÏ¿¤¹¤ë¡£
+     * æŒ‡å®šã•ã‚ŒãŸãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã«åŸºã¥ã„ã¦ã€ãƒ‡ãƒ¼ã‚¿å—ä¿¡é€šçŸ¥ã®å—ã‘å–ã‚Šã«ç™»éŒ²ã™ã‚‹ã€‚
      *
-     * @param properties ÅĞÏ¿¾ğÊó
+     * @param properties ç™»éŒ²æƒ…å ±
      *
-     * @return ÅĞÏ¿½èÍı·ë²Ì(ÅĞÏ¿À®¸ù:true¡¢ÅĞÏ¿¼ºÇÔ:false)
+     * @return ç™»éŒ²å‡¦ç†çµæœ(ç™»éŒ²æˆåŠŸ:trueã€ç™»éŒ²å¤±æ•—:false)
      *
      * @else
      * @brief Subscribe the data receive notification
@@ -241,11 +241,11 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief ¥Ç¡¼¥¿¼õ¿®ÄÌÃÎ¤«¤é¤ÎÅĞÏ¿²ò½ü
+     * @brief ãƒ‡ãƒ¼ã‚¿å—ä¿¡é€šçŸ¥ã‹ã‚‰ã®ç™»éŒ²è§£é™¤
      *
-     * ¥Ç¡¼¥¿¼õ¿®ÄÌÃÎ¤Î¼õ¤±¼è¤ê¤«¤éÅĞÏ¿¤ò²ò½ü¤¹¤ë¡£
+     * ãƒ‡ãƒ¼ã‚¿å—ä¿¡é€šçŸ¥ã®å—ã‘å–ã‚Šã‹ã‚‰ç™»éŒ²ã‚’è§£é™¤ã™ã‚‹ã€‚
      *
-     * @param properties ÅĞÏ¿²ò½ü¾ğÊó
+     * @param properties ç™»éŒ²è§£é™¤æƒ…å ±
      *
      * @else
      * @brief Unsubscribe the data receive notification
@@ -261,7 +261,7 @@ namespace RTC
   private:
     /*!
      * @if jp
-     * @brief ¥ê¥¿¡¼¥ó¥³¡¼¥ÉÊÑ´¹ (DataPortStatus -> BufferStatus)
+     * @brief ãƒªã‚¿ãƒ¼ãƒ³ã‚³ãƒ¼ãƒ‰å¤‰æ› (DataPortStatus -> BufferStatus)
      * @else
      * @brief Return codes conversion
      * @endif
@@ -271,7 +271,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ON_BUFFER_WRITE ¤Î¥ê¥¹¥Ê¤ØÄÌÃÎ¤¹¤ë¡£ 
+     * @brief ON_BUFFER_WRITE ã®ãƒªã‚¹ãƒŠã¸é€šçŸ¥ã™ã‚‹ã€‚ 
      * @param data cdrMemoryStream
      * @else
      * @brief Notify an ON_BUFFER_WRITE event to listeners
@@ -286,7 +286,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ON_BUFFER_FULL ¤Î¥ê¥¹¥Ê¤ØÄÌÃÎ¤¹¤ë¡£ 
+     * @brief ON_BUFFER_FULL ã®ãƒªã‚¹ãƒŠã¸é€šçŸ¥ã™ã‚‹ã€‚ 
      * @param data cdrMemoryStream
      * @else
      * @brief Notify an ON_BUFFER_FULL event to listeners
@@ -301,7 +301,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ON_RECEIVED ¤Î¥ê¥¹¥Ê¤ØÄÌÃÎ¤¹¤ë¡£ 
+     * @brief ON_RECEIVED ã®ãƒªã‚¹ãƒŠã¸é€šçŸ¥ã™ã‚‹ã€‚ 
      * @param data cdrMemoryStream
      * @else
      * @brief Notify an ON_RECEIVED event to listeners
@@ -316,7 +316,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ON_RECEIVER_FULL ¤Î¥ê¥¹¥Ê¤ØÄÌÃÎ¤¹¤ë¡£ 
+     * @brief ON_RECEIVER_FULL ã®ãƒªã‚¹ãƒŠã¸é€šçŸ¥ã™ã‚‹ã€‚ 
      * @param data cdrMemoryStream
      * @else
      * @brief Notify an ON_RECEIVER_FULL event to listeners
@@ -331,7 +331,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ON_SENDER_EMPTY¤Î¥ê¥¹¥Ê¤ØÄÌÃÎ¤¹¤ë¡£ 
+     * @brief ON_SENDER_EMPTYã®ãƒªã‚¹ãƒŠã¸é€šçŸ¥ã™ã‚‹ã€‚ 
      * @else
      * @brief Notify an ON_SENDER_EMPTY event to listeners
      * @endif
@@ -344,7 +344,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ON_SENDER_TIMEOUT ¤Î¥ê¥¹¥Ê¤ØÄÌÃÎ¤¹¤ë¡£ 
+     * @brief ON_SENDER_TIMEOUT ã®ãƒªã‚¹ãƒŠã¸é€šçŸ¥ã™ã‚‹ã€‚ 
      * @else
      * @brief Notify an ON_SENDER_TIMEOUT event to listeners
      * @endif
@@ -357,7 +357,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ON_SENDER_ERROR¤Î¥ê¥¹¥Ê¤ØÄÌÃÎ¤¹¤ë¡£ 
+     * @brief ON_SENDER_ERRORã®ãƒªã‚¹ãƒŠã¸é€šçŸ¥ã™ã‚‹ã€‚ 
      * @else
      * @Brief Notify an ON_SENDER_ERROR event to listeners
      * @endif
@@ -379,9 +379,9 @@ extern "C"
 {
   /*!
    * @if jp
-   * @brief ¥â¥¸¥å¡¼¥ë½é´ü²½´Ø¿ô
+   * @brief ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«åˆæœŸåŒ–é–¢æ•°
    *
-   * OutPortCorbaCdrConsumer ¤Î¥Õ¥¡¥¯¥È¥ê¤òÅĞÏ¿¤¹¤ë½é´ü²½´Ø¿ô¡£
+   * OutPortCorbaCdrConsumer ã®ãƒ•ã‚¡ã‚¯ãƒˆãƒªã‚’ç™»éŒ²ã™ã‚‹åˆæœŸåŒ–é–¢æ•°ã€‚
    *
    * @else
    * @brief Module initialization

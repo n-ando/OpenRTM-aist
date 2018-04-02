@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file TimeMeasure.cpp
  * @brief Periodic time measurement class
@@ -33,7 +33,7 @@ namespace coil
 
   /*!
    * @if jp
-   * @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+   * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
    * @else
    * @brief Constructor
    * @endif
@@ -52,7 +52,7 @@ namespace coil
 
   /*!
    * @if jp
-   * @brief »ş´ÖÅı·×¤Î·×Â¬¤ò³«»Ï¤¹¤ë
+   * @brief æ™‚é–“çµ±è¨ˆã®è¨ˆæ¸¬ã‚’é–‹å§‹ã™ã‚‹
    * @else
    * @brief Begin time measurement for time statistics
    * @endif
@@ -64,7 +64,7 @@ namespace coil
 
   /*!
    * @if jp
-   * @brief »ş´ÖÅı·×¤Î·×Â¬¤ò½ªÎ»¤¹¤ë
+   * @brief æ™‚é–“çµ±è¨ˆã®è¨ˆæ¸¬ã‚’çµ‚äº†ã™ã‚‹
    * @else
    * @brief Finish time measurement for time statistics
    * @endif
@@ -85,7 +85,7 @@ namespace coil
 
   /*!
    * @if jp
-   * @brief ·Ğ²á»ş´Ö¤ò¼èÆÀ¤¹¤ë
+   * @brief çµŒéæ™‚é–“ã‚’å–å¾—ã™ã‚‹
    * @else
    * @brief Get a interval time
    * @endif
@@ -97,7 +97,7 @@ namespace coil
 
   /*!
    * @if jp
-   * @brief Åı·×´ØÏ¢¥Ç¡¼¥¿¤Î½é´ü²½
+   * @brief çµ±è¨ˆé–¢é€£ãƒ‡ãƒ¼ã‚¿ã®åˆæœŸåŒ–
    * @else
    * @brief Initialize for statistics related data
    * @endif
@@ -111,7 +111,7 @@ namespace coil
 
   /*!
    * @if jp
-   * @brief »ş´ÖÅı·×¥Ğ¥Ã¥Õ¥¡¥µ¥¤¥º¤ò¼èÆÀ¤¹¤ë
+   * @brief æ™‚é–“çµ±è¨ˆãƒãƒƒãƒ•ã‚¡ã‚µã‚¤ã‚ºã‚’å–å¾—ã™ã‚‹
    * @else
    * @brief Get number of time measurement buffer
    * @endif
@@ -123,7 +123,7 @@ namespace coil
 
   /*!
    * @if jp
-   * @brief Åı·×¥Ç¡¼¥¿¤ÎÁí·×¤ò¼èÆÀ¤¹¤ë
+   * @brief çµ±è¨ˆãƒ‡ãƒ¼ã‚¿ã®ç·è¨ˆã‚’å–å¾—ã™ã‚‹
    * @else
    * @brief Get total statistics
    * @endif
@@ -160,7 +160,7 @@ namespace coil
 
   /*!
    * @if jp
-   * @brief Åı·×·ë²Ì¤ò¼èÆÀ¤¹¤ë
+   * @brief çµ±è¨ˆçµæœã‚’å–å¾—ã™ã‚‹
    * @else
    * @brief Get statistics result
    * @endif

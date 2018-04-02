@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file  MutexPosix.h
  * @brief RT-Middleware Service interface
@@ -33,8 +33,8 @@ namespace coil
   //------------------------------------------------------------
   /*!
    * @if jp
-   * @class UUID ƒNƒ‰ƒX
-   * @brief UUID ‚Ì’l‚ğ•Û‚·‚éƒNƒ‰ƒX
+   * @class UUID ã‚¯ãƒ©ã‚¹
+   * @brief UUID ã®å€¤ã‚’ä¿æŒã™ã‚‹ã‚¯ãƒ©ã‚¹
    * @else
    * @class UUID class
    * @brief UUID value class
@@ -45,7 +45,7 @@ namespace coil
   public:
     /*!
      * @if jp
-     * @brief UUIDƒNƒ‰ƒX ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+     * @brief UUIDã‚¯ãƒ©ã‚¹ ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
      *
      * @else
      * @brief UUID class constructor
@@ -56,7 +56,7 @@ namespace coil
 
     /*!
      * @if jp
-     * @brief UUIDƒNƒ‰ƒX ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+     * @brief UUIDã‚¯ãƒ©ã‚¹ ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
      *
      * @else
      * @brief UUID class constructor
@@ -67,7 +67,7 @@ namespace coil
 
     /*!
      * @if jp
-     * @brief UUIDƒNƒ‰ƒX ƒfƒXƒgƒ‰ƒNƒ^
+     * @brief UUIDã‚¯ãƒ©ã‚¹ ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
      *
      * @else
      * @brief UUID class destructor
@@ -78,7 +78,7 @@ namespace coil
 
     /*!
      * @if jp
-     * @brief UUID’l‚ğ•¶š—ñ‚É•ÏŠ·‚·‚é
+     * @brief UUIDå€¤ã‚’æ–‡å­—åˆ—ã«å¤‰æ›ã™ã‚‹
      *
      * @else
      * @brief Converting from UUID value to string
@@ -98,8 +98,8 @@ namespace coil
   //------------------------------------------------------------
   /*!
    * @if jp
-   * @class UUID ¶¬ƒNƒ‰ƒX
-   * @brief UUID ’l‚ğ¶¬‚·‚éƒNƒ‰ƒX
+   * @class UUID ç”Ÿæˆã‚¯ãƒ©ã‚¹
+   * @brief UUID å€¤ã‚’ç”Ÿæˆã™ã‚‹ã‚¯ãƒ©ã‚¹
    * @else
    * @class UUID generator class
    * @brief Generate UUID value
@@ -110,7 +110,7 @@ namespace coil
   public:
     /*!
      * @if jp
-     * @brief UUIDƒNƒ‰ƒX ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+     * @brief UUIDã‚¯ãƒ©ã‚¹ ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
      *
      * @else
      * @brief UUID class constructor
@@ -121,7 +121,7 @@ namespace coil
 
     /*!
      * @if jp
-     * @brief UUIDƒNƒ‰ƒX ƒfƒXƒgƒ‰ƒNƒ^
+     * @brief UUIDã‚¯ãƒ©ã‚¹ ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
      *
      * @else
      * @brief UUID class destructor
@@ -132,7 +132,7 @@ namespace coil
 
     /*!
      * @if jp
-     * @brief ‰Šú‰»
+     * @brief åˆæœŸåŒ–
      *
      * @else
      * @brief Initialization
@@ -143,11 +143,11 @@ namespace coil
 
     /*!
      * @if jp
-     * @brief UUID‚ğ¶¬‚·‚é
+     * @brief UUIDã‚’ç”Ÿæˆã™ã‚‹
      *
-     * @param n –¢g—p
-     * @param h –¢g—p
-     * @return ¶¬‚³‚ê‚½UUID’l. ŒÄ‚Ño‚µ‘¤‚Å delete ‚·‚é•K—v‚ª‚ ‚éB
+     * @param n æœªä½¿ç”¨
+     * @param h æœªä½¿ç”¨
+     * @return ç”Ÿæˆã•ã‚ŒãŸUUIDå€¤. å‘¼ã³å‡ºã—å´ã§ delete ã™ã‚‹å¿…è¦ãŒã‚ã‚‹ã€‚
      *
      * @else
      * @brief Generate UUID value

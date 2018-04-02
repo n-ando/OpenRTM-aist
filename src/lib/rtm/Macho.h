@@ -1,4 +1,4 @@
-#ifndef __MACHO_HPP__
+﻿#ifndef __MACHO_HPP__
 #define __MACHO_HPP__
 
 //#if defined(_MSC_VER)

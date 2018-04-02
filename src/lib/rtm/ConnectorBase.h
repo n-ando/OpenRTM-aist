@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file ConnectorBase.h
  * @brief Connector base class
@@ -32,8 +32,8 @@ namespace RTC
 {
   /*!
    * @if jp
-   * @class ConnectorInfo ¥¯¥é¥¹
-   * @brief ConnectorInfo ¥¯¥é¥¹
+   * @class ConnectorInfo ã‚¯ãƒ©ã‚¹
+   * @brief ConnectorInfo ã‚¯ãƒ©ã‚¹
    *
    * @else
    *
@@ -48,14 +48,14 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+     * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
      * 
-     * ¥³¥ó¥¹¥È¥é¥¯¥¿
+     * ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
      *
-     * @param name_ ÀÜÂ³Ì¾Á°
-     * @param id_ ÀÜÂ³ID
-     * @param ports_ ÀÜÂ³¥İ¡¼¥ÈIOR
-     * @param properties_ ¥×¥í¥Ñ¥Æ¥£
+     * @param name_ æ¥ç¶šåå‰
+     * @param id_ æ¥ç¶šID
+     * @param ports_ æ¥ç¶šãƒãƒ¼ãƒˆIOR
+     * @param properties_ ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£
      * 
      * @else
      *
@@ -79,9 +79,9 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+     * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
      * 
-     * ¥³¥ó¥¹¥È¥é¥¯¥¿
+     * ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
      *
      * @else
      *
@@ -96,7 +96,7 @@ namespace RTC
     }
     /*!
      * @if jp
-     * @brief  ÀÜÂ³Ì¾Á°
+     * @brief  æ¥ç¶šåå‰
      * @else
      * @brief  Connection name
      * @endif
@@ -104,7 +104,7 @@ namespace RTC
     std::string name;
     /*!
      * @if jp
-     * @brief  ÀÜÂ³ID
+     * @brief  æ¥ç¶šID
      * @else
      * @brief  ConnectionID 
      * @endif
@@ -112,7 +112,7 @@ namespace RTC
     std::string id;
     /*!
      * @if jp
-     * @brief  ÀÜÂ³¥İ¡¼¥ÈIOR
+     * @brief  æ¥ç¶šãƒãƒ¼ãƒˆIOR
      * @else
      * @brief  Connection ports
      * @endif
@@ -120,7 +120,7 @@ namespace RTC
     coil::vstring ports;
     /*!
      * @if jp
-     * @brief  ¥×¥í¥Ñ¥Æ¥£
+     * @brief  ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£
      * @else
      * @brief  Connection properties 
      * @endif
@@ -137,10 +137,10 @@ namespace RTC
   /*!
    * @if jp
    * @class ConnectorBase
-   * @brief Connector ´ğÄì¥¯¥é¥¹
+   * @brief Connector åŸºåº•ã‚¯ãƒ©ã‚¹
    *
-   * InPort/OutPort, Push/Pull ³Æ¼ï Connector ¤òÇÉÀ¸¤µ¤»¤ë¤¿¤á¤Î
-   * ´ğÄì¥¯¥é¥¹¡£
+   * InPort/OutPort, Push/Pull å„ç¨® Connector ã‚’æ´¾ç”Ÿã•ã›ã‚‹ãŸã‚ã®
+   * åŸºåº•ã‚¯ãƒ©ã‚¹ã€‚
    *
    * @since 1.0.0
    *
@@ -164,9 +164,9 @@ namespace RTC
     /*!
      * @if jp
      * @class Profile
-     * @brief Connector profile ¥í¡¼¥«¥ë¹½Â¤ÂÎ
+     * @brief Connector profile ãƒ­ãƒ¼ã‚«ãƒ«æ§‹é€ ä½“
      *
-     * ConnectorBase ¤ª¤è¤Ó¤½¤ÎÇÉÀ¸¥¯¥é¥¹¤Ç°·¤¦ ConnectorProfile ¹½Â¤ÂÎ¡£
+     * ConnectorBase ãŠã‚ˆã³ãã®æ´¾ç”Ÿã‚¯ãƒ©ã‚¹ã§æ‰±ã† ConnectorProfile æ§‹é€ ä½“ã€‚
      *
      * @since 1.0.0
      *
@@ -185,7 +185,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ¥Ç¥¹¥È¥é¥¯¥¿
+     * @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
      * @else
      * @brief Destructor
      * @endif
@@ -194,9 +194,9 @@ namespace RTC
 
    /*!
      * @if jp
-     * @brief Profile ¼èÆÀ
+     * @brief Profile å–å¾—
      *
-     * Connector Profile ¤ò¼èÆÀ¤¹¤ë
+     * Connector Profile ã‚’å–å¾—ã™ã‚‹
      *
      * @else
      * @brief Getting Profile
@@ -209,9 +209,9 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief Connector ID ¼èÆÀ
+     * @brief Connector ID å–å¾—
      *
-     * Connector ID ¤ò¼èÆÀ¤¹¤ë
+     * Connector ID ã‚’å–å¾—ã™ã‚‹
      *
      * @else
      * @brief Getting Connector ID
@@ -224,9 +224,9 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief Connector Ì¾¼èÆÀ
+     * @brief Connector åå–å¾—
      *
-     * Connector Ì¾¤ò¼èÆÀ¤¹¤ë
+     * Connector åã‚’å–å¾—ã™ã‚‹
      *
      * @else
      * @brief Getting Connector name
@@ -239,9 +239,9 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ÀÜÂ³²ò½ü´Ø¿ô
+     * @brief æ¥ç¶šè§£é™¤é–¢æ•°
      *
-     * Connector ¤¬Êİ»ı¤·¤Æ¤¤¤ëÀÜÂ³¤ò²ò½ü¤¹¤ë
+     * Connector ãŒä¿æŒã—ã¦ã„ã‚‹æ¥ç¶šã‚’è§£é™¤ã™ã‚‹
      *
      * @else
      * @brief Disconnect connection
@@ -254,9 +254,9 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief Buffer ¤ò¼èÆÀ¤¹¤ë
+     * @brief Buffer ã‚’å–å¾—ã™ã‚‹
      *
-     * Connector ¤¬Êİ»ı¤·¤Æ¤¤¤ë Buffer ¤òÊÖ¤¹
+     * Connector ãŒä¿æŒã—ã¦ã„ã‚‹ Buffer ã‚’è¿”ã™
      *
      * @else
      * @brief Getting Buffer
@@ -269,9 +269,9 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ¥¢¥¯¥Æ¥£¥Ö²½
+     * @brief ã‚¢ã‚¯ãƒ†ã‚£ãƒ–åŒ–
      *
-     * ¤³¤Î¥³¥Í¥¯¥¿¤ò¥¢¥¯¥Æ¥£¥Ö²½¤¹¤ë
+     * ã“ã®ã‚³ãƒã‚¯ã‚¿ã‚’ã‚¢ã‚¯ãƒ†ã‚£ãƒ–åŒ–ã™ã‚‹
      *
      * @else
      *
@@ -285,9 +285,9 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief Èó¥¢¥¯¥Æ¥£¥Ö²½
+     * @brief éã‚¢ã‚¯ãƒ†ã‚£ãƒ–åŒ–
      *
-     * ¤³¤Î¥³¥Í¥¯¥¿¤òÈó¥¢¥¯¥Æ¥£¥Ö²½¤¹¤ë
+     * ã“ã®ã‚³ãƒã‚¯ã‚¿ã‚’éã‚¢ã‚¯ãƒ†ã‚£ãƒ–åŒ–ã™ã‚‹
      *
      * @else
      *

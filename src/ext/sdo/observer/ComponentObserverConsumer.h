@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file ComponentObserverConsumer.h
  * @brief Component observer SDO service consumer implementation
@@ -61,7 +61,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ½é´ü²½
+     * @brief åˆæœŸåŒ–
      * @else
      * @brief Initialization
      * @endif
@@ -71,7 +71,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ºÆ½é´ü²½
+     * @brief å†åˆæœŸåŒ–
      * @else
      * @brief Re-initialization
      * @endif
@@ -80,7 +80,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ServiceProfile ¤ò¼èÆÀ¤¹¤ë
+     * @brief ServiceProfile ã‚’å–å¾—ã™ã‚‹
      * @else
      * @brief getting ServiceProfile
      * @endif
@@ -89,7 +89,7 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief ½ªÎ»½èÍı
+     * @brief çµ‚äº†å‡¦ç†
      * @else
      * @brief Finalization
      * @endif
@@ -99,7 +99,7 @@ namespace RTC
   protected:
     /*!
      * @if jp
-     * @brief ¥ê¥â¡¼¥È¥ª¥Ö¥¸¥§¥¯¥È¥³¡¼¥ë
+     * @brief ãƒªãƒ¢ãƒ¼ãƒˆã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚³ãƒ¼ãƒ«
      * @else
      * @brief Calling remote object
      * @endif
@@ -118,7 +118,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief Kind¤òÊ¸»úÎó¤ØÊÑ´¹¤¹¤ë
+     * @brief Kindã‚’æ–‡å­—åˆ—ã¸å¤‰æ›ã™ã‚‹
      * @else
      * @brief Converting kind to string
      * @endif
@@ -139,7 +139,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief RTObject¤Ø¤Î¥ê¥¹¥ÊÀÜÂ³½èÍı
+     * @brief RTObjectã¸ã®ãƒªã‚¹ãƒŠæ¥ç¶šå‡¦ç†
      * @else
      * @brief Connectiong listeners to RTObject
      * @endif
@@ -148,7 +148,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ¥ê¥¹¥ÊÀÜÂ³¡¦ÀÚÃÇ¥¹¥¤¥Ã¥Á¥ó¥°½èÍı
+     * @brief ãƒªã‚¹ãƒŠæ¥ç¶šãƒ»åˆ‡æ–­ã‚¹ã‚¤ãƒƒãƒãƒ³ã‚°å‡¦ç†
      * @else
      * @brief Switching listeners connecting/disconnecting
      * @endif
@@ -161,7 +161,7 @@ namespace RTC
     // Heartbeat related functions
     /*!
      * @if jp
-     * @brief ¥Ï¡¼¥È¥Ó¡¼¥È¤ò¥ª¥Ö¥¶¡¼¥Ğ¤ËÅÁ¤¨¤ë
+     * @brief ãƒãƒ¼ãƒˆãƒ“ãƒ¼ãƒˆã‚’ã‚ªãƒ–ã‚¶ãƒ¼ãƒã«ä¼ãˆã‚‹
      * @else
      * @brief Sending a heartbeart signal to observer
      * @endif
@@ -170,7 +170,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ¥Ï¡¼¥È¥Ó¡¼¥È¤òÀßÄê¤¹¤ë
+     * @brief ãƒãƒ¼ãƒˆãƒ“ãƒ¼ãƒˆã‚’è¨­å®šã™ã‚‹
      * @else
      * @brief Setting heartbeat
      * @endif
@@ -179,7 +179,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ¥Ï¡¼¥È¥Ó¡¼¥È¤ò²ò½ü¤¹¤ë
+     * @brief ãƒãƒ¼ãƒˆãƒ“ãƒ¼ãƒˆã‚’è§£é™¤ã™ã‚‹
      * @else
      * @brief Unsetting heartbeat
      * @endif
@@ -190,7 +190,7 @@ namespace RTC
     // Component status related functions
     /*!
      * @if jp
-     * @brief RTC¾õÂÖÊÑ²½¥ê¥¹¥Ê¤ÎÀßÄê½èÍı
+     * @brief RTCçŠ¶æ…‹å¤‰åŒ–ãƒªã‚¹ãƒŠã®è¨­å®šå‡¦ç†
      * @else
      * @brief Setting RTC status listeners
      * @endif
@@ -199,7 +199,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief RTC¾õÂÖÊÑ²½¥ê¥¹¥Ê¤Î²ò½ü½èÍı
+     * @brief RTCçŠ¶æ…‹å¤‰åŒ–ãƒªã‚¹ãƒŠã®è§£é™¤å‡¦ç†
      * @else
      * @brief Unsetting RTC status listeners
      * @endif
@@ -210,7 +210,7 @@ namespace RTC
     // Port profile related functions
     /*!
      * @if jp
-     * @brief Port¥×¥í¥Õ¥¡¥¤¥ëÊÑ²½¥ê¥¹¥Ê¤ÎÀßÄê½èÍı
+     * @brief Portãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«å¤‰åŒ–ãƒªã‚¹ãƒŠã®è¨­å®šå‡¦ç†
      * @else
      * @brief Setting port profile listener
      * @endif
@@ -219,7 +219,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief Port¥×¥í¥Õ¥¡¥¤¥ëÊÑ²½¥ê¥¹¥Ê¤Î²ò½ü½èÍı
+     * @brief Portãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«å¤‰åŒ–ãƒªã‚¹ãƒŠã®è§£é™¤å‡¦ç†
      * @else
      * @brief Unsetting port profile listener
      * @endif
@@ -231,7 +231,7 @@ namespace RTC
     // EC profile related functions
     /*!
      * @if jp
-     * @brief EC¤Î¾õÂÖÊÑ²½¥ê¥¹¥Ê¤ÎÀßÄê
+     * @brief ECã®çŠ¶æ…‹å¤‰åŒ–ãƒªã‚¹ãƒŠã®è¨­å®š
      * @else
      * @brief Setting EC status listener
      * @endif
@@ -240,7 +240,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief EC¤Î¾õÂÖÊÑ²½¥ê¥¹¥Ê¤Î²ò½ü
+     * @brief ECã®çŠ¶æ…‹å¤‰åŒ–ãƒªã‚¹ãƒŠã®è§£é™¤
      * @else
      * @brief Unsetting EC status listener
      * @endif
@@ -252,7 +252,7 @@ namespace RTC
     // ComponentProfile related functions
     /*!
      * @if jp
-     * @brief ComponentProfile¾õÂÖÊÑ²½¥ê¥¹¥Ê¤ÎÀßÄê
+     * @brief ComponentProfileçŠ¶æ…‹å¤‰åŒ–ãƒªã‚¹ãƒŠã®è¨­å®š
      * @else
      * @brief Setting ComponentProfile listener
      * @endif
@@ -261,7 +261,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ComponentProfile¾õÂÖÊÑ²½¥ê¥¹¥Ê¤Î²ò½ü
+     * @brief ComponentProfileçŠ¶æ…‹å¤‰åŒ–ãƒªã‚¹ãƒŠã®è§£é™¤
      * @else
      * @brief Unsetting ComponentProfile listener
      * @endif
@@ -273,7 +273,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief Configuration¾õÂÖÊÑ²½¥ê¥¹¥Ê¤ÎÀßÄê
+     * @brief ConfigurationçŠ¶æ…‹å¤‰åŒ–ãƒªã‚¹ãƒŠã®è¨­å®š
      * @else
      * @brief Setting Configuration listener
      * @endif
@@ -282,7 +282,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief Configuration¾õÂÖÊÑ²½¥ê¥¹¥Ê¤Î²ò½ü
+     * @brief ConfigurationçŠ¶æ…‹å¤‰åŒ–ãƒªã‚¹ãƒŠã®è§£é™¤
      * @else
      * @brief Unsetting Configurationlistener
      * @endif
@@ -538,7 +538,7 @@ namespace RTC
     bool m_heartbeat;
     ListenerId m_hblistenerid;
 
-    // ¤³¤Î¥¿¥¤¥Ş¡¼¤Ï¤¤¤º¤ì¥°¥í¡¼¥Ğ¥ë¤Ê¥¿¥¤¥Ş¤Ë¤ª¤­¤«¤¨¤ë
+    // ã“ã®ã‚¿ã‚¤ãƒãƒ¼ã¯ã„ãšã‚Œã‚°ãƒ­ãƒ¼ãƒãƒ«ãªã‚¿ã‚¤ãƒã«ãŠãã‹ãˆã‚‹
     coil::Timer m_timer;
 
   };

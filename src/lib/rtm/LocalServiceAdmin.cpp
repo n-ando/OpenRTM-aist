@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file LocalServiceAdmin.cpp
  * @brief SDO service administration class
@@ -32,7 +32,7 @@ namespace RTM
 {
   /*!
    * @if jp
-   * @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+   * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
    * @else
    * @brief Constructor
    * @endif
@@ -45,7 +45,7 @@ namespace RTM
   
   /*!
    * @if jp
-   * @brief ²¾ÁÛ¥Ç¥¹¥È¥é¥¯¥¿
+   * @brief ä»®æƒ³ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
    * @else
    * @brief Virtual destractor
    * @endif
@@ -57,7 +57,7 @@ namespace RTM
   
   /*!
    * @if jp
-   * @brief "all" Ê¸»úÎóÃµº÷Functor
+   * @brief "all" æ–‡å­—åˆ—æ¢ç´¢Functor
    * @else
    * @brief A functor to search "all"
    * @endif
@@ -74,7 +74,7 @@ namespace RTM
   /*!
    * @if jp
    *
-   * @brief LocaServiceAdmin¤Î½é´ü²½
+   * @brief LocaServiceAdminã®åˆæœŸåŒ–
    * @else
    * @brief Initialization of LocalServiceAdmin
    * @endif
@@ -114,7 +114,7 @@ namespace RTM
   
   /*!
    * @if jp
-   * @brief LocalserviceAdmin ¤Î½ªÎ»½èÍı
+   * @brief LocalserviceAdmin ã®çµ‚äº†å‡¦ç†
    * @else
    * @brief Finalization ofLocalServiceAdmin
    * @endif
@@ -132,7 +132,7 @@ namespace RTM
   
   /*!
    * @if jp
-   * @brief LocalServiceProfileList¤Î¼èÆÀ
+   * @brief LocalServiceProfileListã®å–å¾—
    * @else
    * @brief Getting LocalServiceProfileList
    * @endif
@@ -149,7 +149,7 @@ namespace RTM
   
   /*!
    * @if jp
-   * @brief LocalServiceProfile ¤ò¼èÆÀ¤¹¤ë
+   * @brief LocalServiceProfile ã‚’å–å¾—ã™ã‚‹
    * @else
    * @brief Get LocalServiceProfile of an LocalService
    * @endif
@@ -172,7 +172,7 @@ namespace RTM
   
   /*!
    * @if jp
-   * @brief LocalService ¤Î Service ¤ò¼èÆÀ¤¹¤ë
+   * @brief LocalService ã® Service ã‚’å–å¾—ã™ã‚‹
    * @else
    * @brief Get a pointer of a LocalService
    * @endif
@@ -191,7 +191,7 @@ namespace RTM
   
   /*!
    * @if jp
-   * @brief SDO service provider ¤ò¥»¥Ã¥È¤¹¤ë
+   * @brief SDO service provider ã‚’ã‚»ãƒƒãƒˆã™ã‚‹
    * @else
    * @brief Set a SDO service provider
    * @endif
@@ -213,7 +213,7 @@ namespace RTM
   
   /*!
    * @if jp
-   * @brief LocalService ¤òºï½ü¤¹¤ë
+   * @brief LocalService ã‚’å‰Šé™¤ã™ã‚‹
    * @else
    * @brief Remove a LocalService
    * @endif
@@ -247,7 +247,7 @@ namespace RTM
   // private functions
   /*!
    * @if jp
-   * @brief »ØÄê¤µ¤ì¤¿ID¤¬Í­¸ú¤«¤É¤¦¤«¥Á¥§¥Ã¥¯¤¹¤ë
+   * @brief æŒ‡å®šã•ã‚ŒãŸIDãŒæœ‰åŠ¹ã‹ã©ã†ã‹ãƒã‚§ãƒƒã‚¯ã™ã‚‹
    * @else
    * @brief Check if specified ID is enabled
    * @endif
@@ -264,7 +264,7 @@ namespace RTM
   
   /*!
    * @if jp
-   * @brief »ØÄê¤µ¤ì¤¿ID¤¬¤¹¤Ç¤ËÂ¸ºß¤¹¤ë¤«¤É¤¦¤«¥Á¥§¥Ã¥¯¤¹¤ë
+   * @brief æŒ‡å®šã•ã‚ŒãŸIDãŒã™ã§ã«å­˜åœ¨ã™ã‚‹ã‹ã©ã†ã‹ãƒã‚§ãƒƒã‚¯ã™ã‚‹
    * @else
    * @brief Check if specified ID is existing
    * @endif

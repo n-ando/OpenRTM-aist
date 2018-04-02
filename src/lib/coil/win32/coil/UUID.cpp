@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file  MutexPosix.h
  * @brief RT-Middleware Service interface
@@ -26,7 +26,7 @@ namespace coil
   //------------------------------------------------------------
   /*!
    * @if jp
-   * @brief UUIDƒNƒ‰ƒX ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+   * @brief UUIDã‚¯ãƒ©ã‚¹ ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
    * @else
    * @brief UUID class constructor
    * @endif
@@ -38,7 +38,7 @@ namespace coil
   
   /*!
    * @if jp
-   * @brief UUIDƒNƒ‰ƒX ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+   * @brief UUIDã‚¯ãƒ©ã‚¹ ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
    * @else
    * @brief UUID class constructor
    * @endif
@@ -50,7 +50,7 @@ namespace coil
 
   /*!
    * @if jp
-   * @brief UUIDƒNƒ‰ƒX ƒfƒXƒgƒ‰ƒNƒ^
+   * @brief UUIDã‚¯ãƒ©ã‚¹ ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
    * @else
    * @brief UUID class destructor
    * @endif
@@ -62,7 +62,7 @@ namespace coil
 
   /*!
    * @if jp
-   * @brief UUID’l‚ğ•¶š—ñ‚É•ÏŠ·‚·‚é
+   * @brief UUIDå€¤ã‚’æ–‡å­—åˆ—ã«å¤‰æ›ã™ã‚‹
    * @else
    * @brief Converting from UUID value to string
    * @endif
@@ -85,7 +85,7 @@ namespace coil
   //------------------------------------------------------------
   /*!
    * @if jp
-   * @brief UUIDƒNƒ‰ƒX ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+   * @brief UUIDã‚¯ãƒ©ã‚¹ ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
    *
    * @else
    * @brief UUID class constructor
@@ -97,7 +97,7 @@ namespace coil
   }
   /*!
    * @if jp
-   * @brief UUIDƒNƒ‰ƒX ƒfƒXƒgƒ‰ƒNƒ^
+   * @brief UUIDã‚¯ãƒ©ã‚¹ ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
    * @else
    * @brief UUID class destructor
    * @endif
@@ -108,7 +108,7 @@ namespace coil
 
   /*!
    * @if jp
-   * @brief ‰Šú‰»
+   * @brief åˆæœŸåŒ–
    * @else
    * @brief Initialization
    * @endif
@@ -119,7 +119,7 @@ namespace coil
 
   /*!
    * @if jp
-   * @brief UUID‚ğ¶¬‚·‚é
+   * @brief UUIDã‚’ç”Ÿæˆã™ã‚‹
    * @else
    * @brief Generate UUID value
    * @endif

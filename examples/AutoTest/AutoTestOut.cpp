@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file  AutoTestOut.cpp
  * @brief Sample component for auto-test
@@ -103,7 +103,7 @@ RTC::ReturnCode_t AutoTestOut::onShutdown(RTC::UniqueId ec_id)
 
 RTC::ReturnCode_t AutoTestOut::onActivated(RTC::UniqueId ec_id)
 {
-  //‚±‚±‚Åƒtƒ@ƒCƒ‹‚ğŠJ‚­
+  //ã“ã“ã§ãƒ•ã‚¡ã‚¤ãƒ«ã‚’é–‹ã
   fin.open("original-data");
   if (!fin){
     std::cout << "Can't open original-data..." << std::endl;
@@ -126,7 +126,7 @@ RTC::ReturnCode_t AutoTestOut::onExecute(RTC::UniqueId ec_id)
 
   coil::usleep(100000);
 
-  //onexecute‚Åƒtƒ@ƒCƒ‹‚©‚ç3s‚¸‚Â“Ç‚İ‚İ‘—‚é
+  //onexecuteã§ãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰3è¡Œãšã¤èª­ã¿è¾¼ã¿é€ã‚‹
   std::vector<std::string> vstr;
   std::string ss;
   
@@ -159,7 +159,7 @@ RTC::ReturnCode_t AutoTestOut::onExecute(RTC::UniqueId ec_id)
       }
       //fout << m_seqout.data[0] << " " << m_seqout.data[1] << " " << m_seqout.data[2] << " " << m_seqout.data[3] << " " <<m_seqout.data[4] << std::endl;
 
-      if (getline(fin,ss)){ //echo—p
+      if (getline(fin,ss)){ //echoç”¨
 	std::cout << ss << std::endl;
 	//fout << ss << std::endl;
 	char* retmsg;

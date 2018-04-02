@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file DataFlowComponentBase.h
  * @brief DataFlowParticipant RT-Component base class
@@ -28,7 +28,7 @@
  * @if jp
  * @namespace RTC
  *
- * @brief RT¥³¥ó¥İ¡¼¥Í¥ó¥È
+ * @brief RTã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆ
  *
  * @else
  *
@@ -46,11 +46,11 @@ namespace RTC
   /*!
    * @if jp
    * @class DataFlowComponentBase
-   * @brief DataFlowComponentBase ¥¯¥é¥¹
+   * @brief DataFlowComponentBase ã‚¯ãƒ©ã‚¹
    *
-   * ¥Ç¡¼¥¿¥Õ¥í¡¼·¿RTComponent¤Î´ğÄì¥¯¥é¥¹¡£
-   * ³Æ¼ï¥Ç¡¼¥¿¥Õ¥í¡¼·¿RTComponent¤ò¼ÂÁõ¤¹¤ë¾ì¹ç¤Ï¡¢ËÜ¥¯¥é¥¹¤ò·Ñ¾µ¤¹¤ë·Á¤Ç¼ÂÁõ
-   * ¤¹¤ë¡£
+   * ãƒ‡ãƒ¼ã‚¿ãƒ•ãƒ­ãƒ¼å‹RTComponentã®åŸºåº•ã‚¯ãƒ©ã‚¹ã€‚
+   * å„ç¨®ãƒ‡ãƒ¼ã‚¿ãƒ•ãƒ­ãƒ¼å‹RTComponentã‚’å®Ÿè£…ã™ã‚‹å ´åˆã¯ã€æœ¬ã‚¯ãƒ©ã‚¹ã‚’ç¶™æ‰¿ã™ã‚‹å½¢ã§å®Ÿè£…
+   * ã™ã‚‹ã€‚
    *
    * @since 0.4.0
    *
@@ -72,11 +72,11 @@ namespace RTC
   public:
     /*!
      * @if jp
-     * @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+     * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
      *
-     * ¥³¥ó¥¹¥È¥é¥¯¥¿
+     * ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
      *
-     * @param manager ¥Ş¥Í¡¼¥¸¥ã¥ª¥Ö¥¸¥§¥¯¥È
+     * @param manager ãƒãƒãƒ¼ã‚¸ãƒ£ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
      *
      * @else
      * @brief Constructor
@@ -91,9 +91,9 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief ¥Ç¥¹¥È¥é¥¯¥¿
+     * @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
      *
-     * ¥Ç¥¹¥È¥é¥¯¥¿
+     * ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
      *
      * @else
      * @brief Destructor
@@ -106,10 +106,10 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief ½é´ü²½
+     * @brief åˆæœŸåŒ–
      *
-     * ¥Ç¡¼¥¿¥Õ¥í¡¼·¿ RTComponent ¤Î½é´ü²½¤ò¼Â¹Ô¤¹¤ë¡£
-     * ¼Âºİ¤Î½é´ü²½½èÍı¤Ï¡¢³Æ¶ñ¾İ¥¯¥é¥¹Æâ¤Ëµ­½Ò¤¹¤ë¡£
+     * ãƒ‡ãƒ¼ã‚¿ãƒ•ãƒ­ãƒ¼å‹ RTComponent ã®åˆæœŸåŒ–ã‚’å®Ÿè¡Œã™ã‚‹ã€‚
+     * å®Ÿéš›ã®åˆæœŸåŒ–å‡¦ç†ã¯ã€å„å…·è±¡ã‚¯ãƒ©ã‚¹å†…ã«è¨˜è¿°ã™ã‚‹ã€‚
      *
      * @else
      * @brief Initialization

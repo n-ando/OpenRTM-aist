@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file  OutPortConsumer.h
  * @brief OutPortConsumer class
@@ -47,39 +47,39 @@ namespace RTC
    *
    * @class OutPortConsumer
    *
-   * @brief OutPortConsumer ��ݥ��饹
+   * @brief OutPortConsumer 抽象クラス
    *
-   * OutPort �� REQUIRED ���󥿡��ե�������������뤿�����ݴ��쥯�饹��
-   * ���Υ��֥��饹�Υ��֥������Ȥ� InPort ��°����pull ���Υǡ�������
-   * �꡼���¸����롣InPort ���Ф��ƿ��������󥿡��ե��������������
-   * ���ˤϡ����Υ��饹��Ѿ������ʲ��δؿ����������ɬ�פ����롣
+   * OutPort の REQUIRED インターフェースを実装するための抽象基底クラス。
+   * このサブクラスのオブジェクトは InPort に属し、pull 型のデータスト
+   * リームを実現する。InPort に対して新しいインターフェースを実装する
+   * 場合には、このクラスを継承し、以下の関数を実装する必要がある。
    * 
    * - init()
    * - setBuffer()
    * - setListener()
    * - get()
    *
-   * ����ˡ��ʲ��β��۴ؿ��ˡ�ConnectorProfile ����ɬ�פȤ��������
-   * ������ʤɡ���³���Ω���뤤����³�����Ǥ�¹Ԥ��뤿���ɬ�פʽ���
-   * ��������ʤ���Фʤ�ʤ���
+   * さらに、以下の仮想関数に、ConnectorProfile から必要とする情報を取
+   * 得するなど、接続を確立あるいは接続の切断を実行するために必要な処理
+   * を実装しなければならない。
    *
    * - subscribeInterface()
    * - unsubscribeInterface()
    *
-   * InPort �� OutPortConsumer �Υե����ȥ�������饹���Ф������Ѳ�ǽ
-   * �� OutPortConsumer ����礻���󶡲�ǽ�ʥ��󥿡��ե����������פ�
-   * ����������롣���äơ�InPort�����Ф��� REQUIRED ���󥿡��ե�����
-   * ���󶡤��� OutPortConsumer �Υ��֥��饹�ϡ�OutPortConsumerFactory
-   * �˥ե����ȥ�ؿ�����Ͽ����ɬ�פ����롣
+   * InPort は OutPortConsumer のファクトリ管理クラスに対して利用可能
+   * な OutPortConsumer を問合せ、提供可能なインターフェースタイプを外
+   * 部に宣言する。従って、InPort　に対して REQUIRED インターフェース
+   * を提供する OutPortConsumer のサブクラスは、OutPortConsumerFactory
+   * にファクトリ関数を登録する必要がある。
    *
-   * RTC::OutPortConsumerFactory::instance().addFactory() ��
+   * RTC::OutPortConsumerFactory::instance().addFactory() を、
    *
-   * - ��1����: �ץ��Х�����̾��, "corba_cdr" �ʤ�
-   * - ��2����: �ե����ȥ�ؿ� coil::Creator<B, T>
-   * - ��3����: ����ؿ� coil::Destructor<B, T>
+   * - 第1引数: プロバイダの名前, "corba_cdr" など
+   * - 第2引数: ファクトリ関数 coil::Creator<B, T>
+   * - 第3引数: 削除関数 coil::Destructor<B, T>
    * 
-   * ��Ϳ���ƸƤӽФ�ɬ�פ����롣�ʲ��ϡ��ե����ȥ�ؤ���Ͽ�ȡ�������
-   * �����ؿ��Ȥ�����Ǥ��롣
+   * を与えて呼び出す必要がある。以下は、ファクトリへの登録と、それを初
+   * 期化関数とした例である。
    * 
    * <pre>
    * extern "C"
@@ -97,10 +97,10 @@ namespace RTC
    * };
    * </pre>
    *
-   * ������Τ褦�ˡ��ե����ȥ�ؤ���Ͽ�������ؿ��Ȥ��ơ�extern "C"
-   * �ˤ�ꥷ��ܥ�򻲾Ȳ�ǽ�ˤ��Ƥ������������뤳�Ȥǡ�
-   * OutPortConsumer ��ͭ���֥������Ȳ� (DLL��) ����ưŪ�����ɲ�ǽ��
-   * �����ץ��Х����η���ưŪ���ɲä��뤳�Ȥ���ǽ�Ȥʤ롣
+   * この例のように、ファクトリへの登録を初期化関数として、extern "C"
+   * によりシンボルを参照可能にしておく。こうすることで、
+   * OutPortConsumer を共有オブジェクト化 (DLL化) して動的ロード可能に
+   * し、プロバイダの型を動的に追加することが可能となる。
    *
    * @since 0.4.0
    *
@@ -177,9 +177,9 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief �ǥ��ȥ饯��
+     * @brief デストラクタ
      *
-     * ���ۥǥ��ȥ饯����
+     * 仮想デストラクタ。
      *
      * @else
      * @brief Destructor
@@ -192,15 +192,15 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ��������
+     * @brief 設定初期化
      *
-     * OutPortConsumer�γƼ������Ԥ����������饹�Ǥϡ�Ϳ����줿
-     * Properties����ɬ�פʾ����������ƳƼ������Ԥ������� init() ��
-     * ���ϡ�OutPortProvider����ľ�太��ӡ���³���ˤ��줾��ƤФ���
-     * ǽ�������롣�������äơ����δؿ���ʣ����ƤФ�뤳�Ȥ����ꤷ�Ƶ�
-     * �Ҥ����٤��Ǥ��롣
+     * OutPortConsumerの各種設定を行う。実装クラスでは、与えられた
+     * Propertiesから必要な情報を取得して各種設定を行う。この init() 関
+     * 数は、OutPortProvider生成直後および、接続時にそれぞれ呼ばれる可
+     * 能性がある。したがって、この関数は複数回呼ばれることを想定して記
+     * 述されるべきである。
      * 
-     * @param prop �������
+     * @param prop 設定情報
      *
      * @else
      *
@@ -221,15 +221,15 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief �Хåե��򥻥åȤ���
+     * @brief バッファをセットする
      *
-     * OutPortConsumer���ǡ�������Ф��Хåե��򥻥åȤ��롣
-     * ���Ǥ˥��åȤ��줿�Хåե��������硢�����ΥХåե��ؤ�
-     * �ݥ��󥿤��Ф��ƾ�񤭤���롣
-     * OutPortProvider�ϥХåե��ν�ͭ�����ꤷ�Ƥ��ʤ��Τǡ�
-     * �Хåե��κ���ϥ桼������Ǥ�ǹԤ�ʤ���Фʤ�ʤ���
+     * OutPortConsumerがデータを取り出すバッファをセットする。
+     * すでにセットされたバッファがある場合、以前のバッファへの
+     * ポインタに対して上書きされる。
+     * OutPortProviderはバッファの所有権を仮定していないので、
+     * バッファの削除はユーザの責任で行わなければならない。
      *
-     * @param buffer OutPortProvider���ǡ�������Ф��Хåե��ؤΥݥ���
+     * @param buffer OutPortProviderがデータを取り出すバッファへのポインタ
      *
      * @else
      * @brief Setting outside buffer's pointer
@@ -248,17 +248,17 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief �ꥹ�ʤ����ꤹ�롣
+     * @brief リスナを設定する。
      *
-     * OutPort �ϥǡ������������ˤ�����Ƽ磻�٥�Ȥ��Ф�������Υꥹ��
-     * ���֥������Ȥ򥳡��뤹�륳����Хå��������󶡤��롣�ܺ٤�
-     * ConnectorListener.h �� ConnectorDataListener, ConnectorListener
-     * ���򻲾ȤΤ��ȡ�OutPortProvider �Υ��֥��饹�Ǥϡ�Ϳ����줿�ꥹ
-     * �ʤ�Ŭ�ڤʥ����ߥ󥰤ǸƤӽФ��٤��Ǥ��롣�����������٤ƤΥꥹ��
-     * ��ƤӽФ�ɬ�פϤʤ���
+     * OutPort はデータ送信処理における各種イベントに対して特定のリスナ
+     * オブジェクトをコールするコールバック機構を提供する。詳細は
+     * ConnectorListener.h の ConnectorDataListener, ConnectorListener
+     * 等を参照のこと。OutPortProvider のサブクラスでは、与えられたリス
+     * ナを適切なタイミングで呼び出すべきである。ただし、すべてのリスナ
+     * を呼び出す必要はない。
      *
-     * @param info ��³����
-     * @param listeners �ꥹ�ʥ��֥�������
+     * @param info 接続情報
+     * @param listeners リスナオブジェクト
      *
      * @else
      * @brief Set the listener. 
@@ -282,20 +282,20 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief �ǡ������������
+     * @brief データを受信する
      *
-     * �ǡ���������¹Ԥ��뤿��ν�貾�۴ؿ���
-     * ��ݥ��饹�Ǥϡ����줾�����ˡ�ǥ�⡼�Ȥ�OutPort����ǡ�����
-     * ������������å���������롣
-     * �����˴ؤ�����֤˱����ưʲ�������ͤ��֤���
+     * データ受信を実行するための純粋仮想関数。
+     * 具象クラスでは、それぞれの方法でリモートのOutPortからデータを
+     * 受信するロジックを実装する。
+     * 受信に関する状態に応じて以下の戻り値を返す。
      *
-     * @param data �����ǡ���
-     * @return PORT_OK         ���ｪλ
-     *         BUFFER_TIMEOUT  �����ॢ���Ȥ���
-     *         RECV_EMPTY      ������ΥХåե������Ǥ��롣
-     *         CONNECTION_LOST ��³�����Ǥ��줿
-     *         PORT_ERROR      ���顼
-     *         UNKNOWN_ERROR   ���褢�ꤨ�ʤ����顼
+     * @param data 受信データ
+     * @return PORT_OK         正常終了
+     *         BUFFER_TIMEOUT  タイムアウトした
+     *         RECV_EMPTY      取得先のバッファが空である。
+     *         CONNECTION_LOST 接続が切断された
+     *         PORT_ERROR      エラー
+     *         UNKNOWN_ERROR   本来ありえないエラー
      *
      * @else
      *
@@ -310,14 +310,14 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief �ǡ����������Τؤ���Ͽ
+     * @brief データ受信通知への登録
      *
-     * ���ꤵ�줿�ץ��ѥƥ�����˴�Ť��ơ��ǡ����������Τ���Ͽ���뤿���
-     * ��貾�۴ؿ���
+     * 指定されたプロパティ情報に基づいて、データ受信通知に登録するための
+     * 純粋仮想関数。
      *
-     * @param properties ��Ͽ�ѥץ��ѥƥ�
+     * @param properties 登録用プロパティ
      *
-     * @return ��Ͽ�������(��Ͽ����:true����Ͽ����:false)
+     * @return 登録処理結果(登録成功:true、登録失敗:false)
      *
      * @else
      *
@@ -337,13 +337,13 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief �ǡ����������Τ������Ͽ���
+     * @brief データ受信通知からの登録解除
      *
-     * �ǡ����������Τ������Ͽ�������뤿��ν�貾�۴ؿ���
+     * データ受信通知からの登録を解除するための純粋仮想関数。
      *
-     * @param properties ��Ͽ����ѥץ��ѥƥ�
+     * @param properties 登録解除用プロパティ
      *
-     * @return ��Ͽ����������(��Ͽ�������:true����Ͽ�������:false)
+     * @return 登録解除処理結果(登録解除成功:true、登録解除失敗:false)
      *
      * @else
      *
@@ -362,7 +362,7 @@ namespace RTC
   protected:
     /*!
      * @if jp
-     * @brief ���������ȥ꡼��
+     * @brief ロガーストリーム
      * @else
      * @brief Logger stream
      * @endif
@@ -371,7 +371,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief Interface��³��Functor
+     * @brief Interface接続用Functor
      * @else
      * @brief Functor to subscribe the interface
      * @endif
@@ -388,7 +388,7 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief Interface��³�����Functor
+     * @brief Interface接続解除用Functor
      * @else
      * @brief Functor to unsubscribe the interface
      * @endif
@@ -406,7 +406,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief OutPortConsumerFactory�����
+   * @brief OutPortConsumerFactory型宣言
    * @else
    * @brief OutPortConsumerFactory type definition
    * @endif

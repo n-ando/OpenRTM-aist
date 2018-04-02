@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file  InPortCorbaCdrProvider.h
  * @brief InPortCorbaCdrProvider class
@@ -37,12 +37,12 @@ namespace RTC
   /*!
    * @if jp
    * @class InPortCorbaCdrProvider
-   * @brief InPortCorbaCdrProvider ���饹
+   * @brief InPortCorbaCdrProvider クラス
    *
    * InPortProvider 
    *
-   * �ǡ���ž���� CORBA �� OpenRTM::InPortCdr ���󥿡��ե����������Ѥ�
-   * ����push ���ǡ����ե�������¸����� InPort �ץ��Х������饹��
+   * データ転送に CORBA の OpenRTM::InPortCdr インターフェースを利用し
+   * た、push 型データフロー型を実現する InPort プロバイダクラス。
    *
    * @since 0.4.0
    *
@@ -66,9 +66,9 @@ namespace RTC
   public:
     /*!
      * @if jp
-     * @brief ���󥹥ȥ饯��
+     * @brief コンストラクタ
      *
-     * ���󥹥ȥ饯��
+     * コンストラクタ
      *
      * @else
      * @brief Constructor
@@ -81,9 +81,9 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief �ǥ��ȥ饯��
+     * @brief デストラクタ
      *
-     * �ǥ��ȥ饯��
+     * デストラクタ
      *
      * @else
      * @brief Destructor
@@ -96,15 +96,15 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ��������
+     * @brief 設定初期化
      *
-     * InPortCorbaCdrProvider �γƼ������Ԥ���Ϳ����줿
-     * Properties����ɬ�פʾ����������ƳƼ������Ԥ������� init() ��
-     * ���ϡ�InPortProvider����ľ�太��ӡ���³���ˤ��줾��ƤФ���
-     * ǽ�������롣�������äơ����δؿ���ʣ����ƤФ�뤳�Ȥ����ꤷ�Ƶ�
-     * �Ҥ����٤��Ǥ��롣
+     * InPortCorbaCdrProvider の各種設定を行う。与えられた
+     * Propertiesから必要な情報を取得して各種設定を行う。この init() 関
+     * 数は、InPortProvider生成直後および、接続時にそれぞれ呼ばれる可
+     * 能性がある。したがって、この関数は複数回呼ばれることを想定して記
+     * 述されるべきである。
      * 
-     * @param prop �������
+     * @param prop 設定情報
      *
      * @else
      *
@@ -125,15 +125,15 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief �Хåե��򥻥åȤ���
+     * @brief バッファをセットする
      *
-     * OutPortProvider ���ǡ�������Ф��Хåե��򥻥åȤ��롣
-     * ���Ǥ˥��åȤ��줿�Хåե��������硢�����ΥХåե��ؤ�
-     * �ݥ��󥿤��Ф��ƾ�񤭤���롣
-     * OutPortProvider�ϥХåե��ν�ͭ�����ꤷ�Ƥ��ʤ��Τǡ�
-     * �Хåե��κ���ϥ桼������Ǥ�ǹԤ�ʤ���Фʤ�ʤ���
+     * OutPortProvider がデータを取り出すバッファをセットする。
+     * すでにセットされたバッファがある場合、以前のバッファへの
+     * ポインタに対して上書きされる。
+     * OutPortProviderはバッファの所有権を仮定していないので、
+     * バッファの削除はユーザの責任で行わなければならない。
      *
-     * @param buffer OutPortProvider���ǡ�������Ф��Хåե��ؤΥݥ���
+     * @param buffer OutPortProviderがデータを取り出すバッファへのポインタ
      *
      * @else
      * @brief Setting outside buffer's pointer
@@ -152,13 +152,13 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief �ꥹ�ʤ����ꤹ�롣
+     * @brief リスナを設定する。
      *
-     * InPort �ϥǡ������������ˤ�����Ƽ磻�٥�Ȥ��Ф�������Υꥹ��
-     * ���֥������Ȥ򥳡��뤹�륳����Хå��������󶡤��롣�ܺ٤�
-     * ConnectorListener.h �� ConnectorDataListener, ConnectorListener
-     * ���򻲾ȤΤ��ȡ�InPortCorbaCdrProvider �Ǥϡ��ʲ��Υ�����Хå�
-     * ���󶡤���롣
+     * InPort はデータ送信処理における各種イベントに対して特定のリスナ
+     * オブジェクトをコールするコールバック機構を提供する。詳細は
+     * ConnectorListener.h の ConnectorDataListener, ConnectorListener
+     * 等を参照のこと。InPortCorbaCdrProvider では、以下のコールバック
+     * が提供される。
      * 
      * - ON_BUFFER_WRITE
      * - ON_BUFFER_FULL
@@ -170,8 +170,8 @@ namespace RTC
      * - ON_RECEIVER_TIMEOUT
      * - ON_RECEIVER_ERROR
      *
-     * @param info ��³����
-     * @param listeners �ꥹ�ʥ��֥�������
+     * @param info 接続情報
+     * @param listeners リスナオブジェクト
      *
      * @else
      * @brief Set the listener. 
@@ -203,12 +203,12 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief Connector�����ꤹ�롣
+     * @brief Connectorを設定する。
      *
-     * InPort ����³��Ω���� InPortConnector ���֥������Ȥ�����������
-     * ���������֥������ȤΥݥ��󥿤ȶ��ˤ��δؿ���ƤӽФ�����ͭ����
-     * InPort ���ݻ�����Τ� InPortProvider �� InPortConnector ���
-     * �����ƤϤ����ʤ���
+     * InPort は接続確立時に InPortConnector オブジェクトを生成し、生
+     * 成したオブジェクトのポインタと共にこの関数を呼び出す。所有権は
+     * InPort が保持するので InPortProvider は InPortConnector を削
+     * 除してはいけない。
      *
      * @param connector InPortConnector
      *
@@ -229,11 +229,11 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief [CORBA interface] �Хåե��˥ǡ�����񤭹���
+     * @brief [CORBA interface] バッファにデータを書き込む
      *
-     * ���ꤵ�줿�Хåե��˥ǡ�����񤭹��ࡣ
+     * 設定されたバッファにデータを書き込む。
      *
-     * @param data ����оݥǡ���
+     * @param data 書込対象データ
      *
      * @else
      * @brief [CORBA interface] Write data into the buffer
@@ -250,7 +250,7 @@ namespace RTC
   private:
     /*!
      * @if jp
-     * @brief �꥿���󥳡����Ѵ�
+     * @brief リターンコード変換
      * @else
      * @brief Return codes conversion
      * @endif
@@ -262,7 +262,7 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief ON_BUFFER_WRITE �Υꥹ�ʤ����Τ��롣 
+     * @brief ON_BUFFER_WRITE のリスナへ通知する。 
      * @param data cdrMemoryStream
      * @else
      * @brief Notify an ON_BUFFER_WRITE event to listeners
@@ -277,7 +277,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ON_BUFFER_FULL �Υꥹ�ʤ����Τ��롣 
+     * @brief ON_BUFFER_FULL のリスナへ通知する。 
      * @param data cdrMemoryStream
      * @else
      * @brief Notify an ON_BUFFER_FULL event to listeners
@@ -292,7 +292,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ON_BUFFER_WRITE_TIMEOUT �Υꥹ�ʤ����Τ��롣 
+     * @brief ON_BUFFER_WRITE_TIMEOUT のリスナへ通知する。 
      * @param data cdrMemoryStream
      * @else
      * @brief Notify an ON_BUFFER_WRITE_TIMEOUT event to listeners
@@ -307,7 +307,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ON_BUFFER_WRITE_OVERWRITE �Υꥹ�ʤ����Τ��롣 
+     * @brief ON_BUFFER_WRITE_OVERWRITE のリスナへ通知する。 
      * @param data cdrMemoryStream
      * @else
      * @brief Notify an ON_BUFFER_WRITE_OVERWRITE event to listeners
@@ -322,7 +322,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ON_RECEIVED �Υꥹ�ʤ����Τ��롣 
+     * @brief ON_RECEIVED のリスナへ通知する。 
      * @param data cdrMemoryStream
      * @else
      * @brief Notify an ON_RECEIVED event to listeners
@@ -337,7 +337,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ON_RECEIVER_FULL �Υꥹ�ʤ����Τ��롣 
+     * @brief ON_RECEIVER_FULL のリスナへ通知する。 
      * @param data cdrMemoryStream
      * @else
      * @brief Notify an ON_RECEIVER_FULL event to listeners
@@ -352,7 +352,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ON_RECEIVER_TIMEOUT �Υꥹ�ʤ����Τ��롣 
+     * @brief ON_RECEIVER_TIMEOUT のリスナへ通知する。 
      * @else
      * @brief Notify an ON_RECEIVER_TIMEOUT event to listeners
      * @endif
@@ -365,7 +365,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ON_RECEIVER_ERROR�Υꥹ�ʤ����Τ��롣 
+     * @brief ON_RECEIVER_ERRORのリスナへ通知する。 
      * @else
      * @Brief Notify an ON_RECEIVER_ERROR event to listeners
      * @endif
@@ -390,9 +390,9 @@ extern "C"
 {
   /*!
    * @if jp
-   * @brief �⥸�塼�������ؿ�
+   * @brief モジュール初期化関数
    *
-   * InPortCorbaCdrConsumer �Υե����ȥ����Ͽ���������ؿ���
+   * InPortCorbaCdrConsumer のファクトリを登録する初期化関数。
    *
    * @else
    * @brief Module initialization

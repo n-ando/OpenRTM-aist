@@ -1,4 +1,4 @@
-#ifndef CAMERA_FUNCTIONS_H_
+﻿#ifndef CAMERA_FUNCTIONS_H_
 #define CAMERA_FUNCTIONS_H_
 
 #include <hrtm/idls/BasicDataType.h>

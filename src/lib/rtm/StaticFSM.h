@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file StaticFSM.h
  * @brief Static FSM framework based on Macho

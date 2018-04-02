@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file RTObject.cpp
  * @brief RT component base class
@@ -34,7 +34,7 @@ namespace RTC
 {
   /*!
    * @if jp
-   * @brief RT¥³¥ó¥İ¡¼¥Í¥ó¥È¤Î¥Ç¥Õ¥©¥ë¥È¥×¥í¥Õ¥¡¥¤¥ë
+   * @brief RTã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã®ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«
    * @else
    * @brief RT-Component default profile
    * @endif
@@ -57,7 +57,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+   * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
    * @else
    * @brief Constructor
    * @endif
@@ -82,7 +82,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+   * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
    * @else
    * @brief Constructor
    * @endif
@@ -108,7 +108,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ²¾ÁÛ¥Ç¥¹¥È¥é¥¯¥¿
+   * @brief ä»®æƒ³ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
    * @else
    * @brief Virtual destructor
    * @endif
@@ -124,7 +124,7 @@ namespace RTC
   //============================================================
   /*!
    * @if jp
-   * @brief ½é´ü²½½èÍıÍÑ¥³¡¼¥ë¥Ğ¥Ã¥¯´Ø¿ô
+   * @brief åˆæœŸåŒ–å‡¦ç†ç”¨ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
    * @else
    * @brief Callback function to initialize
    * @endif
@@ -139,7 +139,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ½ªÎ»½èÍıÍÑ¥³¡¼¥ë¥Ğ¥Ã¥¯´Ø¿ô
+   * @brief çµ‚äº†å‡¦ç†ç”¨ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
    * @else
    * @brief Callback function to finalize
    * @endif
@@ -154,7 +154,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ³«»Ï½èÍıÍÑ¥³¡¼¥ë¥Ğ¥Ã¥¯´Ø¿ô
+   * @brief é–‹å§‹å‡¦ç†ç”¨ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
    * @else
    * @brief Callback function for startup action
    * @endif
@@ -169,7 +169,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief Ää»ß½èÍıÍÑ¥³¡¼¥ë¥Ğ¥Ã¥¯´Ø¿ô
+   * @brief åœæ­¢å‡¦ç†ç”¨ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
    * @else
    * @brief Callback function for shutdown action
    * @endif
@@ -184,7 +184,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ³èÀ­²½½èÍıÍÑ¥³¡¼¥ë¥Ğ¥Ã¥¯´Ø¿ô
+   * @brief æ´»æ€§åŒ–å‡¦ç†ç”¨ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
    * @else
    * @brief Callback function to activate
    * @endif
@@ -199,7 +199,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief Èó³èÀ­²½½èÍıÍÑ¥³¡¼¥ë¥Ğ¥Ã¥¯´Ø¿ô
+   * @brief éæ´»æ€§åŒ–å‡¦ç†ç”¨ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
    * @else
    * @brief Callback function to deactivate
    * @endif
@@ -214,7 +214,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ¼ş´ü½èÍıÍÑ¥³¡¼¥ë¥Ğ¥Ã¥¯´Ø¿ô
+   * @brief å‘¨æœŸå‡¦ç†ç”¨ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
    * @else
    * @brief Callback function to execute periodically
    * @endif
@@ -229,7 +229,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ÃæÃÇ½èÍıÍÑ¥³¡¼¥ë¥Ğ¥Ã¥¯´Ø¿ô
+   * @brief ä¸­æ–­å‡¦ç†ç”¨ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
    * @else
    * @brief Callback function to abort
    * @endif
@@ -244,7 +244,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ¥¨¥é¡¼½èÍıÍÑ¥³¡¼¥ë¥Ğ¥Ã¥¯´Ø¿ô
+   * @brief ã‚¨ãƒ©ãƒ¼å‡¦ç†ç”¨ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
    * @else
    * @brief Callback function for error handling
    * @endif
@@ -259,7 +259,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ¥ê¥»¥Ã¥È½èÍıÍÑ¥³¡¼¥ë¥Ğ¥Ã¥¯´Ø¿ô
+   * @brief ãƒªã‚»ãƒƒãƒˆå‡¦ç†ç”¨ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
    * @else
    * @brief Callback function to reset
    * @endif
@@ -274,7 +274,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ¾õÂÖÊÑ¹¹½èÍıÍÑ¥³¡¼¥ë¥Ğ¥Ã¥¯´Ø¿ô
+   * @brief çŠ¶æ…‹å¤‰æ›´å‡¦ç†ç”¨ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
    * @else
    * @brief Callback function to update the state
    * @endif
@@ -289,7 +289,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief Æ°ºî¼ş´üÊÑ¹¹ÄÌÃÎÍÑ¥³¡¼¥ë¥Ğ¥Ã¥¯´Ø¿ô
+   * @brief å‹•ä½œå‘¨æœŸå¤‰æ›´é€šçŸ¥ç”¨ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
    * @else
    * @brief Callback function to change execution cycle
    * @endif
@@ -307,7 +307,7 @@ namespace RTC
   //============================================================
   /*!
    * @if jp
-   * @brief [CORBA interface] RTC¤ò½é´ü²½¤¹¤ë
+   * @brief [CORBA interface] RTCã‚’åˆæœŸåŒ–ã™ã‚‹
    * @else
    * @brief [CORBA interface] IInitialize the RTC that realizes this interface.
    * @endif
@@ -355,7 +355,7 @@ namespace RTC
  
   /*!
    * @if jp
-   * @brief [CORBA interface] RTC ¤ò½ªÎ»¤¹¤ë
+   * @brief [CORBA interface] RTC ã‚’çµ‚äº†ã™ã‚‹
    * @else
    * @brief [CORBA interface] Finalize the RTC for preparing it for destruction
    * @endif
@@ -390,8 +390,8 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief [CORBA interface] RTC ¤¬¥ª¡¼¥Ê¡¼¤Ç¤¢¤ë ExecutionContext ¤ò
-   *        Ää»ß¤µ¤»¡¢¤½¤Î¥³¥ó¥Æ¥ó¥Ä¤È¶¦¤Ë½ªÎ»¤µ¤»¤ë
+   * @brief [CORBA interface] RTC ãŒã‚ªãƒ¼ãƒŠãƒ¼ã§ã‚ã‚‹ ExecutionContext ã‚’
+   *        åœæ­¢ã•ã›ã€ãã®ã‚³ãƒ³ãƒ†ãƒ³ãƒ„ã¨å…±ã«çµ‚äº†ã•ã›ã‚‹
    * @else
    * @brief [CORBA interface] RTC stops ExecutionContext of RTC's owner
    *        and finalize it with its contents
@@ -439,7 +439,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief [CORBA interface] RTC ¤¬ Alive ¾õÂÖ¤Ç¤¢¤ë¤«¤É¤¦¤«³ÎÇ§¤¹¤ë¡£
+   * @brief [CORBA interface] RTC ãŒ Alive çŠ¶æ…‹ã§ã‚ã‚‹ã‹ã©ã†ã‹ç¢ºèªã™ã‚‹ã€‚
    * @else
    * @brief [CORBA interface] Confirm whether RTC is the alive state
    * @endif
@@ -467,7 +467,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief [CORBA interface] ExecutionContext¤ò¼èÆÀ¤¹¤ë
+   * @brief [CORBA interface] ExecutionContextã‚’å–å¾—ã™ã‚‹
    * @else
    * @brief [CORBA interface] Get ExecutionContext
    * @endif
@@ -505,7 +505,7 @@ namespace RTC
     
   /*!
    * @if jp
-   * @brief [CORBA interface] ExecutionContextList¤ò¼èÆÀ¤¹¤ë
+   * @brief [CORBA interface] ExecutionContextListã‚’å–å¾—ã™ã‚‹
    * @else
    * @brief [CORBA interface] Get ExecutionContextList
    * @endif
@@ -542,7 +542,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief [CORBA interface] »²²Ã¤·¤Æ¤¤¤ë ExecutionContextList ¤ò¼èÆÀ¤¹¤ë
+   * @brief [CORBA interface] å‚åŠ ã—ã¦ã„ã‚‹ ExecutionContextList ã‚’å–å¾—ã™ã‚‹
    * @else
    * @brief [CORBA interface] Get participating ExecutionContextList.
    * @endif
@@ -562,7 +562,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief [CORBA interface] ExecutionContext ¤Î¥Ï¥ó¥É¥ë¤òÊÖ¤¹
+   * @brief [CORBA interface] ExecutionContext ã®ãƒãƒ³ãƒ‰ãƒ«ã‚’è¿”ã™
    * @else
    * @brief [CORBA interface] Return a handle of a ExecutionContext
    * @endif
@@ -589,7 +589,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief [CORBA interface] ExecutionContext¤òattach¤¹¤ë
+   * @brief [CORBA interface] ExecutionContextã‚’attachã™ã‚‹
    * @else
    * @brief [CORBA interface] Attach ExecutionContext
    * @endif
@@ -666,7 +666,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief [CORBA interface] ExecutionContext¤òdetach¤¹¤ë
+   * @brief [CORBA interface] ExecutionContextã‚’detachã™ã‚‹
    * @else
    * @brief [CORBA interface] Detach ExecutionContext
    * @endif
@@ -704,7 +704,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief [RTObject CORBA interface] ¥³¥ó¥İ¡¼¥Í¥ó¥È¥×¥í¥Õ¥¡¥¤¥ë¤ò¼èÆÀ¤¹¤ë
+   * @brief [RTObject CORBA interface] ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«ã‚’å–å¾—ã™ã‚‹
    * @else
    * @brief [RTCObject CORBA interface] Get RTC's profile
    * @endif
@@ -754,7 +754,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief [RTObject CORBA interface] ¥İ¡¼¥È¤ò¼èÆÀ¤¹¤ë
+   * @brief [RTObject CORBA interface] ãƒãƒ¼ãƒˆã‚’å–å¾—ã™ã‚‹
    * @else
    * @brief [RTCObject CORBA interface] Get Ports
    * @endif
@@ -781,7 +781,7 @@ namespace RTC
   //============================================================
   /*!
    * @if jp
-   * @brief [ComponentAction CORBA interface] RTC ¤Î½é´ü²½
+   * @brief [ComponentAction CORBA interface] RTC ã®åˆæœŸåŒ–
    * @else
    * @brief [ComponentAction CORBA interface] Initialize RTC
    * @endif
@@ -836,7 +836,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief [ComponentAction CORBA interface] RTC ¤Î½ªÎ»
+   * @brief [ComponentAction CORBA interface] RTC ã®çµ‚äº†
    * @else
    * @brief [ComponentAction CORBA interface] Finalize RTC
    * @endif
@@ -861,7 +861,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief [ComponentAction CORBA interface] RTC ¤Î³«»Ï
+   * @brief [ComponentAction CORBA interface] RTC ã®é–‹å§‹
    * @else
    * @brief [ComponentAction CORBA interface] Startup RTC
    * @endif
@@ -886,7 +886,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief [ComponentAction CORBA interface] RTC ¤ÎÄä»ß
+   * @brief [ComponentAction CORBA interface] RTC ã®åœæ­¢
    * @else
    * @brief [ComponentAction CORBA interface] Shutdown RTC
    * @endif
@@ -911,7 +911,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief [ComponentAction CORBA interface] RTC ¤Î³èÀ­²½
+   * @brief [ComponentAction CORBA interface] RTC ã®æ´»æ€§åŒ–
    * @else
    * @brief [ComponentAction CORBA interface] Activate RTC
    * @endif
@@ -938,7 +938,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief [ComponentAction CORBA interface] RTC ¤ÎÈó³èÀ­²½
+   * @brief [ComponentAction CORBA interface] RTC ã®éæ´»æ€§åŒ–
    * @else
    * @brief [ComponentAction CORBA interface] Deactivate RTC
    * @endif
@@ -964,7 +964,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief [ComponentAction CORBA interface] RTC ¤Î¥¨¥é¡¼¾õÂÖ¤Ø¤ÎÁ«°Ü
+   * @brief [ComponentAction CORBA interface] RTC ã®ã‚¨ãƒ©ãƒ¼çŠ¶æ…‹ã¸ã®é·ç§»
    * @else
    * @brief [ComponentAction interface] Transition to the error state
    * @endif
@@ -989,7 +989,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief [ComponentAction CORBA interface] RTC ¤Î¥¨¥é¡¼½èÍı
+   * @brief [ComponentAction CORBA interface] RTC ã®ã‚¨ãƒ©ãƒ¼å‡¦ç†
    * @else
    * @brief [ComponentAction CORBA interface] Error Processing of RTC
    * @endif
@@ -1015,7 +1015,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief [ComponentAction CORBA interface] RTC ¤Î¥ê¥»¥Ã¥È
+   * @brief [ComponentAction CORBA interface] RTC ã®ãƒªã‚»ãƒƒãƒˆ
    * @else
    * @brief [ComponentAction CORBA interface] Resetting RTC
    * @endif
@@ -1040,7 +1040,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief [DataFlowComponentAction CORBA interface] RTC ¤ÎÄê¾ï½èÍı(Âè°ì¼ş´ü)
+   * @brief [DataFlowComponentAction CORBA interface] RTC ã®å®šå¸¸å‡¦ç†(ç¬¬ä¸€å‘¨æœŸ)
    * @else
    * @brief [DataFlowComponentAction CORBA interface] Primary Periodic 
    *        Operation of RTC
@@ -1068,7 +1068,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief [DataFlowComponentAction CORBA interface] RTC ¤ÎÄê¾ï½èÍı(ÂèÆó¼ş´ü)
+   * @brief [DataFlowComponentAction CORBA interface] RTC ã®å®šå¸¸å‡¦ç†(ç¬¬äºŒå‘¨æœŸ)
    * @else
    * @brief [DataFlowComponentAction CORBA interface] Secondary Periodic 
    *        Operation of RTC
@@ -1095,7 +1095,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief [DataFlowComponentAction CORBA interface] ¼Â¹Ô¼ş´üÊÑ¹¹ÄÌÃÎ
+   * @brief [DataFlowComponentAction CORBA interface] å®Ÿè¡Œå‘¨æœŸå¤‰æ›´é€šçŸ¥
    * @else
    * @brief [DataFlowComponentAction CORBA interface] Notify rate changed
    * @endif
@@ -1123,7 +1123,7 @@ namespace RTC
   //============================================================
   /*!
    * @if jp
-   * @brief [SDO interface] Organization ¥ê¥¹¥È¤Î¼èÆÀ 
+   * @brief [SDO interface] Organization ãƒªã‚¹ãƒˆã®å–å¾— 
    * @else
    * @brief [SDO interface] Get Organization list
    * @endif
@@ -1149,7 +1149,7 @@ namespace RTC
   // SDOPackage::SDO
   /*!
    * @if jp
-   * @brief [SDO interface] SDO ID ¤Î¼èÆÀ
+   * @brief [SDO interface] SDO ID ã®å–å¾—
    * @else
    * @brief [SDO interface] Get the SDO ID
    * @endif
@@ -1173,7 +1173,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief [SDO interface] SDO ¥¿¥¤¥×¤Î¼èÆÀ
+   * @brief [SDO interface] SDO ã‚¿ã‚¤ãƒ—ã®å–å¾—
    * @else
    * @brief [SDO interface] Get SDO type
    * @endif
@@ -1199,7 +1199,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief [SDO interface] SDO DeviceProfile ¥ê¥¹¥È¤Î¼èÆÀ 
+   * @brief [SDO interface] SDO DeviceProfile ãƒªã‚¹ãƒˆã®å–å¾— 
    * @else
    * @brief [SDO interface] Get SDO DeviceProfile list
    * @endif
@@ -1228,7 +1228,7 @@ namespace RTC
   //------------------------------------------------------------
   /*!
    * @if jp
-   * @brief [SDO interface] SDO ServiceProfile ¤Î¼èÆÀ 
+   * @brief [SDO interface] SDO ServiceProfile ã®å–å¾— 
    * @else
    * @brief [SDO interface] Get SDO ServiceProfile
    * @endif
@@ -1255,7 +1255,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief [SDO interface] ÆÃÄê¤ÎServiceProfile¤Î¼èÆÀ 
+   * @brief [SDO interface] ç‰¹å®šã®ServiceProfileã®å–å¾— 
    * @else
    * @brief [SDO interface] Get specified ServiceProfile
    * @endif
@@ -1293,7 +1293,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief [SDO interface] »ØÄê¤µ¤ì¤¿ SDO Service ¤Î¼èÆÀ
+   * @brief [SDO interface] æŒ‡å®šã•ã‚ŒãŸ SDO Service ã®å–å¾—
    * @else
    * @brief [SDO interface] Get specified SDO Service's reference
    * @endif
@@ -1327,7 +1327,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief [SDO interface] Configuration ¥ª¥Ö¥¸¥§¥¯¥È¤Î¼èÆÀ 
+   * @brief [SDO interface] Configuration ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®å–å¾— 
    * @else
    * @brief [SDO interface] Get Configuration object
    * @endif
@@ -1361,7 +1361,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief [SDO interface] Monitoring ¥ª¥Ö¥¸¥§¥¯¥È¤Î¼èÆÀ 
+   * @brief [SDO interface] Monitoring ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®å–å¾— 
    * @else
    * @brief [SDO interface] Get Monitoring object
    * @endif
@@ -1378,7 +1378,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief [SDO interface] Organization ¥ê¥¹¥È¤Î¼èÆÀ 
+   * @brief [SDO interface] Organization ãƒªã‚¹ãƒˆã®å–å¾— 
    * @else
    * @brief [SDO interface] Get Organization list
    * @endif
@@ -1404,7 +1404,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief [SDO interface] SDO Status ¥ê¥¹¥È¤Î¼èÆÀ 
+   * @brief [SDO interface] SDO Status ãƒªã‚¹ãƒˆã®å–å¾— 
    * @else
    * @brief [SDO interface] Get SDO Status list
    * @endif
@@ -1429,7 +1429,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief [SDO interface] SDO Status ¤Î¼èÆÀ 
+   * @brief [SDO interface] SDO Status ã®å–å¾— 
    * @else
    * @brief [SDO interface] Get SDO Status
    * @endif
@@ -1462,7 +1462,7 @@ namespace RTC
   //============================================================
   /*!
    * @if jp
-   * @brief [local interface] ¥¤¥ó¥¹¥¿¥ó¥¹Ì¾¤ÎÀßÄê
+   * @brief [local interface] ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹åã®è¨­å®š
    * @else
    * @brief [local interface] Set instance name
    * @endif
@@ -1482,7 +1482,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief [local interface] Naming Server ¾ğÊó¤Î¼èÆÀ
+   * @brief [local interface] Naming Server æƒ…å ±ã®å–å¾—
    * @else
    * @brief [local interface] Get Naming Server information
    * @endif
@@ -1495,7 +1495,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief [local interface] ¥ª¥Ö¥¸¥§¥¯¥È¥ê¥Õ¥¡¥ì¥ó¥¹¤ÎÀßÄê
+   * @brief [local interface] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒªãƒ•ã‚¡ãƒ¬ãƒ³ã‚¹ã®è¨­å®š
    * @else
    * @brief [local interface] Set the object reference
    * @endif
@@ -1508,7 +1508,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief [local interface] ¥ª¥Ö¥¸¥§¥¯¥È¥ê¥Õ¥¡¥ì¥ó¥¹¤Î¼èÆÀ
+   * @brief [local interface] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒªãƒ•ã‚¡ãƒ¬ãƒ³ã‚¹ã®å–å¾—
    * @else
    * @brief [local interface] Get the object reference
    * @endif
@@ -1525,7 +1525,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief [local interface] RTC ¤Î¥×¥í¥Ñ¥Æ¥£¤òÀßÄê¤¹¤ë
+   * @brief [local interface] RTC ã®ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã‚’è¨­å®šã™ã‚‹
    * @else
    * @brief [local interface] Set RTC property
    * @endif
@@ -1553,7 +1553,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief [local interface] RTC ¤Î¥×¥í¥Ñ¥Æ¥£¤ò¼èÆÀ¤¹¤ë
+   * @brief [local interface] RTC ã®ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã‚’å–å¾—ã™ã‚‹
    * @else
    * @brief [local interface] Get RTC property
    * @endif
@@ -1566,7 +1566,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ¥³¥ó¥Õ¥£¥®¥å¥ì¡¼¥·¥ç¥ó¥Ñ¥é¥á¡¼¥¿¤Î¹¹¿·(ID»ØÄê)
+   * @brief ã‚³ãƒ³ãƒ•ã‚£ã‚®ãƒ¥ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã®æ›´æ–°(IDæŒ‡å®š)
    * @else
    * @brief Update configuration parameters (by ID)
    * @endif
@@ -1580,7 +1580,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief [local interface] Port ¤òÅĞÏ¿¤¹¤ë
+   * @brief [local interface] Port ã‚’ç™»éŒ²ã™ã‚‹
    * @else
    * @brief [local interface] Register Port
    * @endif
@@ -1635,7 +1635,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief [local interface] DataInPort ¤òÅĞÏ¿¤¹¤ë
+   * @brief [local interface] DataInPort ã‚’ç™»éŒ²ã™ã‚‹
    * @else
    * @brief [local interface] Register DataInPort
    * @endif
@@ -1676,7 +1676,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief [local interface] DataOutPort ¤òÅĞÏ¿¤¹¤ë
+   * @brief [local interface] DataOutPort ã‚’ç™»éŒ²ã™ã‚‹
    * @else
    * @brief [local interface] Register DataOutPort
    * @endif
@@ -1717,7 +1717,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief [local interface] DataInPort ¤òºï½ü¤¹¤ë
+   * @brief [local interface] DataInPort ã‚’å‰Šé™¤ã™ã‚‹
    * @else
    * @brief [local interface] Unregister DataInPort
    * @endif
@@ -1747,7 +1747,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief [local interface] DataOutPort ¤òºï½ü¤¹¤ë
+   * @brief [local interface] DataOutPort ã‚’å‰Šé™¤ã™ã‚‹
    * @else
    * @brief [local interface] Unregister DataOutPort
    * @endif
@@ -1777,7 +1777,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief [local interface] Port ¤ÎÅĞÏ¿¤òºï½ü¤¹¤ë
+   * @brief [local interface] Port ã®ç™»éŒ²ã‚’å‰Šé™¤ã™ã‚‹
    * @else
    * @brief [local interface] Unregister Port
    * @endif
@@ -1824,7 +1824,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief [local interface] Ì¾Á°»ØÄê¤Ë¤è¤ê Port ¤ÎÅĞÏ¿¤òºï½ü¤¹¤ë
+   * @brief [local interface] åå‰æŒ‡å®šã«ã‚ˆã‚Š Port ã®ç™»éŒ²ã‚’å‰Šé™¤ã™ã‚‹
    * @else
    * @brief [local interface] Delete Port by specifying its name
    * @endif
@@ -1838,7 +1838,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief [local interface] ¼Â¹Ô¥³¥ó¥Æ¥­¥¹¥È¤ò¼èÆÀ¤¹¤ë
+   * @brief [local interface] å®Ÿè¡Œã‚³ãƒ³ãƒ†ã‚­ã‚¹ãƒˆã‚’å–å¾—ã™ã‚‹
    * @else
    * @brief [local interface] Getting current execution context
    * @endif
@@ -1851,7 +1851,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief [local interface] ¼Â¹Ô¥³¥ó¥Æ¥­¥¹¥È¤Î¼Â¹Ô¥ì¡¼¥È¤ò¼èÆÀ¤¹¤ë
+   * @brief [local interface] å®Ÿè¡Œã‚³ãƒ³ãƒ†ã‚­ã‚¹ãƒˆã®å®Ÿè¡Œãƒ¬ãƒ¼ãƒˆã‚’å–å¾—ã™ã‚‹
    * @else
    * @brief [local interface] Getting current context' execution rate
    * @endif
@@ -1868,7 +1868,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief [local interface] ¼Â¹Ô¥³¥ó¥Æ¥­¥¹¥È¤Î¼Â¹Ô¥ì¡¼¥È¤òÀßÄê¤¹¤ë
+   * @brief [local interface] å®Ÿè¡Œã‚³ãƒ³ãƒ†ã‚­ã‚¹ãƒˆã®å®Ÿè¡Œãƒ¬ãƒ¼ãƒˆã‚’è¨­å®šã™ã‚‹
    * @else
    * @brief [local interface] Setting current context' execution rate
    * @endif
@@ -1887,7 +1887,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief [local interface] ¼Â¹Ô¥³¥ó¥Æ¥­¥¹¥È¤Î½êÍ­¸¢¤òÄ´¤Ù¤ë
+   * @brief [local interface] å®Ÿè¡Œã‚³ãƒ³ãƒ†ã‚­ã‚¹ãƒˆã®æ‰€æœ‰æ¨©ã‚’èª¿ã¹ã‚‹
    * @else
    * @brief [local interface] Checking if the current context is own context
    * @endif
@@ -1903,7 +1903,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief [local interface] ¾õÂÖ¤ò Inactive ¤ËÁ«°Ü¤µ¤»¤ë
+   * @brief [local interface] çŠ¶æ…‹ã‚’ Inactive ã«é·ç§»ã•ã›ã‚‹
    * @else
    * @brief [local interface] Make transition to Inactive state
    * @endif
@@ -1920,7 +1920,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief [local interface] ¾õÂÖ¤ò Active ¤ËÁ«°Ü¤µ¤»¤ë
+   * @brief [local interface] çŠ¶æ…‹ã‚’ Active ã«é·ç§»ã•ã›ã‚‹
    * @else
    * @brief [local interface] Make transition to Active state
    * @endif
@@ -1937,7 +1937,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief [local interface] ¾õÂÖ¤ò¥ê¥»¥Ã¥È¤· Inactive ¤ËÁ«°Ü¤µ¤»¤ë
+   * @brief [local interface] çŠ¶æ…‹ã‚’ãƒªã‚»ãƒƒãƒˆã— Inactive ã«é·ç§»ã•ã›ã‚‹
    * @else
    * @brief [local interface] Resetting and go to Inactive state
    * @endif
@@ -1954,7 +1954,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief [local interface] SDO service provider ¤ò¥»¥Ã¥È¤¹¤ë
+   * @brief [local interface] SDO service provider ã‚’ã‚»ãƒƒãƒˆã™ã‚‹
    * @else
    * @brief [local interface] Set a SDO service provider
    * @endif
@@ -1968,7 +1968,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief [local interface] SDO service provider ¤òºï½ü¤¹¤ë
+   * @brief [local interface] SDO service provider ã‚’å‰Šé™¤ã™ã‚‹
    * @else
    * @brief [local interface] Remove a SDO service provider
    * @endif
@@ -1980,7 +1980,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief [local interface] SDO service provider ¤ò¥»¥Ã¥È¤¹¤ë
+   * @brief [local interface] SDO service provider ã‚’ã‚»ãƒƒãƒˆã™ã‚‹
    * @else
    * @brief [local interface] Set a SDO service provider
    * @endif
@@ -1993,7 +1993,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief [local interface] SDO service provider ¤òºï½ü¤¹¤ë
+   * @brief [local interface] SDO service provider ã‚’å‰Šé™¤ã™ã‚‹
    * @else
    * @brief [local interface] Remove a SDO service provider
    * @endif
@@ -2005,8 +2005,8 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief Á´ InPort ¤Î¥Ç¡¼¥¿¤òÆÉ¤ß¹ş¤à¡£
-   * @return ÆÉ¤ß¹ş¤ß·ë²Ì(Á´¥İ¡¼¥È¤ÎÆÉ¤ß¹ş¤ßÀ®¸ù:true¡¤¼ºÇÔ:false)
+   * @brief å…¨ InPort ã®ãƒ‡ãƒ¼ã‚¿ã‚’èª­ã¿è¾¼ã‚€ã€‚
+   * @return èª­ã¿è¾¼ã¿çµæœ(å…¨ãƒãƒ¼ãƒˆã®èª­ã¿è¾¼ã¿æˆåŠŸ:trueï¼Œå¤±æ•—:false)
    * @else
    * @brief Readout the value from All InPorts.
    * @return result (Successful:true, Failed:false) 
@@ -2037,8 +2037,8 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief Á´ OutPort ¤Îwrite()¥á¥½¥Ã¥É¤ò¥³¡¼¥ë¤¹¤ë¡£
-   * @return ÆÉ¤ß¹ş¤ß·ë²Ì(Á´¥İ¡¼¥È¤Ø¤Î½ñ¤­¹ş¤ßÀ®¸ù:true¡¤¼ºÇÔ:false)
+   * @brief å…¨ OutPort ã®write()ãƒ¡ã‚½ãƒƒãƒ‰ã‚’ã‚³ãƒ¼ãƒ«ã™ã‚‹ã€‚
+   * @return èª­ã¿è¾¼ã¿çµæœ(å…¨ãƒãƒ¼ãƒˆã¸ã®æ›¸ãè¾¼ã¿æˆåŠŸ:trueï¼Œå¤±æ•—:false)
    * @else
    * @brief The write() method of all OutPort is called. 
    * @return result (Successful:true, Failed:false)
@@ -2069,14 +2069,14 @@ namespace RTC
   /*!
    * @if jp
    *
-   * @brief onExecute()¼Â¹ÔÁ°¤Ç¤ÎreadAll()¥á¥½¥Ã¥É¤Î¸Æ½Ğ¤òÍ­¸ú¤Ş¤¿¤ÏÌµ¸ú¤Ë¤¹¤ë¡£
+   * @brief onExecute()å®Ÿè¡Œå‰ã§ã®readAll()ãƒ¡ã‚½ãƒƒãƒ‰ã®å‘¼å‡ºã‚’æœ‰åŠ¹ã¾ãŸã¯ç„¡åŠ¹ã«ã™ã‚‹ã€‚
    *
-   * ¤³¤Î¥á¥½¥Ã¥É¤ò¥Ñ¥é¥á¡¼¥¿¤òtrue¤È¤·¤Æ¸Æ¤Ö»ö¤Ë¤è¤ê¡¢onExecute()¼Â¹ÔÁ°¤Ë
-   * readAll()¤¬¸Æ½Ğ¤µ¤ì¤ë¤è¤¦¤Ë¤Ê¤ë¡£
-   * ¥Ñ¥é¥á¡¼¥¿¤¬false¤Î¾ì¹ç¤Ï¡¢readAll()¸Æ½Ğ¤òÌµ¸ú¤Ë¤¹¤ë¡£
+   * ã“ã®ãƒ¡ã‚½ãƒƒãƒ‰ã‚’ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã‚’trueã¨ã—ã¦å‘¼ã¶äº‹ã«ã‚ˆã‚Šã€onExecute()å®Ÿè¡Œå‰ã«
+   * readAll()ãŒå‘¼å‡ºã•ã‚Œã‚‹ã‚ˆã†ã«ãªã‚‹ã€‚
+   * ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ãŒfalseã®å ´åˆã¯ã€readAll()å‘¼å‡ºã‚’ç„¡åŠ¹ã«ã™ã‚‹ã€‚
    *
    * @param read(default:true) 
-   *        (readAll()¥á¥½¥Ã¥É¸Æ½Ğ¤¢¤ê:true, readAll()¥á¥½¥Ã¥É¸Æ½Ğ¤Ê¤·:false)
+   *        (readAll()ãƒ¡ã‚½ãƒƒãƒ‰å‘¼å‡ºã‚ã‚Š:true, readAll()ãƒ¡ã‚½ãƒƒãƒ‰å‘¼å‡ºãªã—:false)
    *
    * @else
    *
@@ -2099,14 +2099,14 @@ namespace RTC
   /*!
    * @if jp
    *
-   * @brief onExecute()¼Â¹Ô¸å¤ËwriteAll()¥á¥½¥Ã¥É¤Î¸Æ½Ğ¤òÍ­¸ú¤Ş¤¿¤ÏÌµ¸ú¤Ë¤¹¤ë¡£
+   * @brief onExecute()å®Ÿè¡Œå¾Œã«writeAll()ãƒ¡ã‚½ãƒƒãƒ‰ã®å‘¼å‡ºã‚’æœ‰åŠ¹ã¾ãŸã¯ç„¡åŠ¹ã«ã™ã‚‹ã€‚
    *
-   * ¤³¤Î¥á¥½¥Ã¥É¤ò¥Ñ¥é¥á¡¼¥¿¤òtrue¤È¤·¤Æ¸Æ¤Ö»ö¤Ë¤è¤ê¡¢onExecute()¼Â¹Ô¸å¤Ë
-   * writeAll()¤¬¸Æ½Ğ¤µ¤ì¤ë¤è¤¦¤Ë¤Ê¤ë¡£
-   * ¥Ñ¥é¥á¡¼¥¿¤¬false¤Î¾ì¹ç¤Ï¡¢writeAll()¸Æ½Ğ¤òÌµ¸ú¤Ë¤¹¤ë¡£
+   * ã“ã®ãƒ¡ã‚½ãƒƒãƒ‰ã‚’ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã‚’trueã¨ã—ã¦å‘¼ã¶äº‹ã«ã‚ˆã‚Šã€onExecute()å®Ÿè¡Œå¾Œã«
+   * writeAll()ãŒå‘¼å‡ºã•ã‚Œã‚‹ã‚ˆã†ã«ãªã‚‹ã€‚
+   * ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ãŒfalseã®å ´åˆã¯ã€writeAll()å‘¼å‡ºã‚’ç„¡åŠ¹ã«ã™ã‚‹ã€‚
    *
    * @param write(default:true) 
-   *        (writeAll()¥á¥½¥Ã¥É¸Æ½Ğ¤¢¤ê:true, writeAll()¥á¥½¥Ã¥É¸Æ½Ğ¤Ê¤·:false)
+   *        (writeAll()ãƒ¡ã‚½ãƒƒãƒ‰å‘¼å‡ºã‚ã‚Š:true, writeAll()ãƒ¡ã‚½ãƒƒãƒ‰å‘¼å‡ºãªã—:false)
    *
    * @else
    *
@@ -2128,7 +2128,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief Á´ Port ¤ÎÅĞÏ¿¤òºï½ü¤¹¤ë
+   * @brief å…¨ Port ã®ç™»éŒ²ã‚’å‰Šé™¤ã™ã‚‹
    * @else
    * @brief Unregister All Ports
    * @endif
@@ -2195,7 +2195,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief PreComponentActionListener ¥ê¥¹¥Ê¤òÄÉ²Ã¤¹¤ë
+   * @brief PreComponentActionListener ãƒªã‚¹ãƒŠã‚’è¿½åŠ ã™ã‚‹
    *
    * @else
    * @brief Adding PreComponentAction type listener
@@ -2214,7 +2214,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief PreComponentActionListener ¥ê¥¹¥Ê¤òºï½ü¤¹¤ë
+   * @brief PreComponentActionListener ãƒªã‚¹ãƒŠã‚’å‰Šé™¤ã™ã‚‹
    *
    * @else
    * @brief Removing PreComponentAction type listener
@@ -2233,7 +2233,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief PostComponentActionListener ¥ê¥¹¥Ê¤òÄÉ²Ã¤¹¤ë
+   * @brief PostComponentActionListener ãƒªã‚¹ãƒŠã‚’è¿½åŠ ã™ã‚‹
    *
    * @else
    * @brief Adding PostComponentAction type listener
@@ -2253,7 +2253,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief PostComponentActionListener ¥ê¥¹¥Ê¤òºï½ü¤¹¤ë
+   * @brief PostComponentActionListener ãƒªã‚¹ãƒŠã‚’å‰Šé™¤ã™ã‚‹
    *
    * @else
    * @brief Removing PostComponentAction type listener
@@ -2271,7 +2271,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief PortActionListener ¥ê¥¹¥Ê¤òÄÉ²Ã¤¹¤ë
+   * @brief PortActionListener ãƒªã‚¹ãƒŠã‚’è¿½åŠ ã™ã‚‹
    *
    * @else
    * @brief Adding PortAction type listener
@@ -2290,7 +2290,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief PortActionListener ¥ê¥¹¥Ê¤òºï½ü¤¹¤ë
+   * @brief PortActionListener ãƒªã‚¹ãƒŠã‚’å‰Šé™¤ã™ã‚‹
    *
    * @else
    * @brief Removing PortAction type listener
@@ -2308,7 +2308,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ExectionContextActionListener ¥ê¥¹¥Ê¤òÄÉ²Ã¤¹¤ë
+   * @brief ExectionContextActionListener ãƒªã‚¹ãƒŠã‚’è¿½åŠ ã™ã‚‹
    *
    * @else
    * @brief Adding ExecutionContextAction type listener
@@ -2327,7 +2327,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ExecutionContextActionListener ¥ê¥¹¥Ê¤òºï½ü¤¹¤ë
+   * @brief ExecutionContextActionListener ãƒªã‚¹ãƒŠã‚’å‰Šé™¤ã™ã‚‹
    *
    * @else
    * @brief Removing ExecutionContextAction type listener
@@ -2344,7 +2344,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief PortConnectListener ¥ê¥¹¥Ê¤òÄÉ²Ã¤¹¤ë
+   * @brief PortConnectListener ãƒªã‚¹ãƒŠã‚’è¿½åŠ ã™ã‚‹
    * @else
    * @brief Adding PortConnect type listener
    * @endif
@@ -2360,7 +2360,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief PortConnectListener ¥ê¥¹¥Ê¤òºï½ü¤¹¤ë
+   * @brief PortConnectListener ãƒªã‚¹ãƒŠã‚’å‰Šé™¤ã™ã‚‹
    * @else
    * @brief Removing PortConnect type listener
    * @endif
@@ -2375,7 +2375,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief PortConnectRetListener ¥ê¥¹¥Ê¤òÄÉ²Ã¤¹¤ë
+   * @brief PortConnectRetListener ãƒªã‚¹ãƒŠã‚’è¿½åŠ ã™ã‚‹
    * @else
    * @brief Adding PortConnectRet type listener
    * @endif
@@ -2391,7 +2391,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief PortConnectRetListener ¥ê¥¹¥Ê¤òºï½ü¤¹¤ë
+   * @brief PortConnectRetListener ãƒªã‚¹ãƒŠã‚’å‰Šé™¤ã™ã‚‹
    * @else
    * @brief Removing PortConnectRet type listener
    * @endif
@@ -2406,7 +2406,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ConfigurationParamListener ¤òÄÉ²Ã¤¹¤ë
+   * @brief ConfigurationParamListener ã‚’è¿½åŠ ã™ã‚‹
    * @else
    * @brief Adding ConfigurationParamListener 
    * @endif
@@ -2421,7 +2421,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ConfigurationParamListener ¤òºï½ü¤¹¤ë
+   * @brief ConfigurationParamListener ã‚’å‰Šé™¤ã™ã‚‹
    * @else
    * @brief Removing ConfigurationParamListener 
    * @endif
@@ -2435,7 +2435,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ConfigurationSetListener ¤òÄÉ²Ã¤¹¤ë
+   * @brief ConfigurationSetListener ã‚’è¿½åŠ ã™ã‚‹
    * @else
    * @brief Adding ConfigurationSetListener 
    * @endif
@@ -2450,7 +2450,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ConfigurationSetListener ¤òºï½ü¤¹¤ë
+   * @brief ConfigurationSetListener ã‚’å‰Šé™¤ã™ã‚‹
    * @else
    * @brief Removing ConfigurationSetListener 
    * @endif
@@ -2464,7 +2464,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ConfigurationSetNameListener ¤òÄÉ²Ã¤¹¤ë
+   * @brief ConfigurationSetNameListener ã‚’è¿½åŠ ã™ã‚‹
    * @else
    * @brief Adding ConfigurationSetNameListener 
    * @endif
@@ -2479,7 +2479,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ConfigurationSetNameListener ¤òºï½ü¤¹¤ë
+   * @brief ConfigurationSetNameListener ã‚’å‰Šé™¤ã™ã‚‹
    * @else
    * @brief Removing ConfigurationSetNameListener 
    * @endif
@@ -2495,7 +2495,7 @@ namespace RTC
   // FSM Listener
   /*!
    * @if jp
-   * @brief PreFsmActionListener ¥ê¥¹¥Ê¤òÄÉ²Ã¤¹¤ë
+   * @brief PreFsmActionListener ãƒªã‚¹ãƒŠã‚’è¿½åŠ ã™ã‚‹
    *
    * @else
    * @brief Adding PreFsmAction type listener
@@ -2514,7 +2514,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief PreFsmActionListener ¥ê¥¹¥Ê¤òºï½ü¤¹¤ë
+   * @brief PreFsmActionListener ãƒªã‚¹ãƒŠã‚’å‰Šé™¤ã™ã‚‹
    *
    * @else
    * @brief Removing PreFsmAction type listener
@@ -2532,7 +2532,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief PostFsmActionListener ¥ê¥¹¥Ê¤òÄÉ²Ã¤¹¤ë
+   * @brief PostFsmActionListener ãƒªã‚¹ãƒŠã‚’è¿½åŠ ã™ã‚‹
    *
    * @else
    * @brief Adding PostFsmAction type listener
@@ -2551,7 +2551,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief PostFsmActionListener ¥ê¥¹¥Ê¤òºï½ü¤¹¤ë
+   * @brief PostFsmActionListener ãƒªã‚¹ãƒŠã‚’å‰Šé™¤ã™ã‚‹
    *
    * @else
    * @brief Removing PostFsmAction type listener
@@ -2568,7 +2568,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief FsmProfileListener ¥ê¥¹¥Ê¤òÄÉ²Ã¤¹¤ë
+   * @brief FsmProfileListener ãƒªã‚¹ãƒŠã‚’è¿½åŠ ã™ã‚‹
    *
    * @else
    * @brief Adding FsmProfile type listener
@@ -2587,7 +2587,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief FsmProfileListener ¥ê¥¹¥Ê¤òºï½ü¤¹¤ë
+   * @brief FsmProfileListener ãƒªã‚¹ãƒŠã‚’å‰Šé™¤ã™ã‚‹
    *
    * @else
    * @brief Removing FsmProfile type listener
@@ -2604,7 +2604,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief FsmStructureListener ¥ê¥¹¥Ê¤òÄÉ²Ã¤¹¤ë
+   * @brief FsmStructureListener ãƒªã‚¹ãƒŠã‚’è¿½åŠ ã™ã‚‹
    *
    * @else
    * @brief Adding FsmStructure type listener
@@ -2623,7 +2623,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief FsmStructureListener ¥ê¥¹¥Ê¤òºï½ü¤¹¤ë
+   * @brief FsmStructureListener ãƒªã‚¹ãƒŠã‚’å‰Šé™¤ã™ã‚‹
    *
    * @else
    * @brief Removing FsmStructure type listener
@@ -2641,7 +2641,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief RTC ¤ò½ªÎ»¤¹¤ë
+   * @brief RTC ã‚’çµ‚äº†ã™ã‚‹
    * @else
    * @brief Shutdown RTC
    * @endif
