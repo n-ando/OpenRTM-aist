@@ -1,4 +1,4 @@
-#include "MyFactory.h"
+﻿#include "MyFactory.h"
 
 
 // for Windows DLL export

@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file   OutPortPushConnectorTests.cpp
  * @brief  OutPortPushConnector test class
@@ -646,7 +646,7 @@ namespace OutPortPushConnector
     }
 		
     /*!
-     * @brief Constructor �᥽�åɥƥ���
+     * @brief Constructor メソッドテスト
      * 
      */
     void test_OutPortPushConnector()
@@ -772,7 +772,7 @@ namespace OutPortPushConnector
         delete consumer;
     }
     /*!
-     * @brief write �᥽�åɥƥ���
+     * @brief write メソッドテスト
      * 
      */
     void test_write()
@@ -830,7 +830,7 @@ namespace OutPortPushConnector
         delete consumer;
     }
     /*!
-     * @brief disconnect �᥽�åɥƥ���
+     * @brief disconnect メソッドテスト
      * 
      */
     void test_disconnect_getBuffer()
@@ -878,7 +878,7 @@ namespace OutPortPushConnector
         delete consumer;
     }
     /*!
-     * @brief activate �᥽�åɥƥ���
+     * @brief activate メソッドテスト
      * 
      */
     void test_activate_deactivate()

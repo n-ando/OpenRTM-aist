@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file   CorbaConsumerTests.cpp
  * @brief  CorbaConsumer test class
@@ -115,21 +115,21 @@ namespace CorbaConsumer
     }
 		
     /*!
-     * @brief setObject()�᥽�åɤ�_ptr()�᥽�åɤΥƥ���
+     * @brief setObject()メソッドと_ptr()メソッドのテスト
      * 
-     * - �������������Х�Ȥ�Consumer�˥��åȤ����塢Consumer���̤��ƥ����Х�ȤΥ᥽�åɤ��������ƤӽФ��뤫��
+     * - 生成したサーバントをConsumerにセットした後、Consumerを通してサーバントのメソッドを正しく呼び出せるか？
      */
     void test_setObject_and__ptr()
     {
-      // Consumer�˳�����Ƥ륪�֥������Ȥ���������
+      // Consumerに割り当てるオブジェクトを生成する
       hello_impl* helloImpl = new hello_impl();
       PortableServer::ObjectId_var objId = m_pPOA->activate_object(helloImpl);
 			
-      // �����������֥������Ȥ�Consumer�˥��åȤ���
+      // 生成したオブジェクトをConsumerにセットする
       RTC::CorbaConsumer<hello> consumer;
       consumer.setObject(m_pPOA->id_to_reference(objId));
 			
-      // Consumer�˳�����Ƥ����֥������ȤΥ᥽�åɤ��������ƤӽФ��뤫��
+      // Consumerに割り当てたオブジェクトのメソッドを正しく呼び出せるか？
       CPPUNIT_ASSERT_EQUAL(0, helloImpl->m_invokedCount);
       consumer._ptr()->hello_world();
       CPPUNIT_ASSERT_EQUAL(1, helloImpl->m_invokedCount);
@@ -139,25 +139,25 @@ namespace CorbaConsumer
     }
 		
     /*!
-     * @brief ���ԡ����󥹥ȥ饯���Υƥ���
+     * @brief コピーコンストラクタのテスト
      * 
-     * - ��¸��Consumer���֥������Ȥ򸵤ˡ��̤ο�����Consumer�򥳥ԡ����󥹥ȥ饯�Ȥ���
-     * ���ο�����Consumer���֥������Ȥ��Ф��ƥ᥽�åɤ��������ƤӽФ��뤫��
+     * - 既存のConsumerオブジェクトを元に、別の新たなConsumerをコピーコンストラクトし、
+     * その新たなConsumerオブジェクトに対してメソッドを正しく呼び出せるか？
      */
     void test_copy_constructor()
     {
-      // Consumer�˳�����Ƥ륪�֥������Ȥ���������
+      // Consumerに割り当てるオブジェクトを生成する
       hello_impl* helloImpl = new hello_impl();
       PortableServer::ObjectId_var objId = m_pPOA->activate_object(helloImpl);
 			
-      // �����������֥������Ȥ�Consumer�˥��åȤ���
+      // 生成したオブジェクトをConsumerにセットする
       RTC::CorbaConsumer<hello> consumer;
       consumer.setObject(m_pPOA->id_to_reference(objId));
 			
-      // ��������Consumer���֥������Ȥ򸵤ˡ��̤ο�����Consumer�򥳥ԡ����󥹥ȥ饯�Ȥ���
+      // 作成したConsumerオブジェクトを元に、別の新たなConsumerをコピーコンストラクトする
       RTC::CorbaConsumer<hello> consumerNew(consumer);
 			
-      // �����˺�������Consumer���Ф��ơ��᥽�åɤ��������ƤӽФ��뤫��
+      // 新たに作成したConsumerに対して、メソッドを正しく呼び出せるか？
       CPPUNIT_ASSERT_EQUAL(0, helloImpl->m_invokedCount);
       consumerNew._ptr()->hello_world();
       CPPUNIT_ASSERT_EQUAL(1, helloImpl->m_invokedCount);
@@ -167,22 +167,22 @@ namespace CorbaConsumer
     }
 		
     /*!
-     * @brief �ݥ��󥿱黻��(operator->())�Υƥ���
+     * @brief ポインタ演算子(operator->())のテスト
      * 
-     * - �������������Х�Ȥ�Consumer�˥��åȤ����塢
-     * Consumer�Υݥ��󥿱黻�Ҥ��̤��ƥ����Х�ȤΥ᥽�åɤ��������ƤӽФ��뤫��
+     * - 生成したサーバントをConsumerにセットした後、
+     * Consumerのポインタ演算子を通してサーバントのメソッドを正しく呼び出せるか？
      */
     void test_pointer_operator()
     {
-      // Consumer�˳�����Ƥ륪�֥������Ȥ���������
+      // Consumerに割り当てるオブジェクトを生成する
       hello_impl* helloImpl = new hello_impl();
       PortableServer::ObjectId_var objId = m_pPOA->activate_object(helloImpl);
 			
-      // �����������֥������Ȥ�Consumer�˥��åȤ���
+      // 生成したオブジェクトをConsumerにセットする
       RTC::CorbaConsumer<hello> consumer;
       consumer.setObject(m_pPOA->id_to_reference(objId));
 			
-      // �ݥ��󥿱黻��(->)���Ѥ��ơ�Consumer�˳�����Ƥ����֥������ȤΥ᥽�åɤ��������ƤӽФ��뤫��
+      // ポインタ演算子(->)を用いて、Consumerに割り当てたオブジェクトのメソッドを正しく呼び出せるか？
       CPPUNIT_ASSERT_EQUAL(0, helloImpl->m_invokedCount);
       consumer->hello_world();
       CPPUNIT_ASSERT_EQUAL(1, helloImpl->m_invokedCount);
@@ -193,18 +193,18 @@ namespace CorbaConsumer
 		
     void test_substitute_operator()
     {
-      // Consumer�˳�����Ƥ륪�֥������Ȥ���������
+      // Consumerに割り当てるオブジェクトを生成する
       hello_impl* helloImpl = new hello_impl();
       PortableServer::ObjectId_var objId = m_pPOA->activate_object(helloImpl);
 			
-      // �����������֥������Ȥ�Consumer�˥��åȤ���
+      // 生成したオブジェクトをConsumerにセットする
       RTC::CorbaConsumer<hello> consumer;
       consumer.setObject(m_pPOA->id_to_reference(objId));
 			
-      // ��������Consumer���֥������Ȥ򸵤ˡ��̤ο�����Consumer�򥳥ԡ����󥹥ȥ饯�Ȥ���
+      // 作成したConsumerオブジェクトを元に、別の新たなConsumerをコピーコンストラクトする
       RTC::CorbaConsumer<hello> consumerNew = consumer;
 			
-      // �����˺�������Consumer���Ф��ơ��᥽�åɤ��������ƤӽФ��뤫��
+      // 新たに作成したConsumerに対して、メソッドを正しく呼び出せるか？
       CPPUNIT_ASSERT_EQUAL(0, helloImpl->m_invokedCount);
       consumerNew._ptr()->hello_world();
       CPPUNIT_ASSERT_EQUAL(1, helloImpl->m_invokedCount);
@@ -214,24 +214,24 @@ namespace CorbaConsumer
     }
 		
     /*!
-     * @brief releaseObject()�᥽�åɤΥƥ���
+     * @brief releaseObject()メソッドのテスト
      * 
-     * - releaseObject()�ƽФˤ�äơ��ݻ�����Ƥ��륪�֥������Ȼ��Ȥ����������ꥢ����뤫��
+     * - releaseObject()呼出によって、保持されているオブジェクト参照が正しくクリアされるか？
      */
     void test_releaseObject()
     {
-      // Consumer�˳�����Ƥ륪�֥������Ȥ���������
+      // Consumerに割り当てるオブジェクトを生成する
       hello_impl* helloImpl = new hello_impl();
       PortableServer::ObjectId_var objId = m_pPOA->activate_object(helloImpl);
 			
-      // �����������֥������Ȥ�Consumer�˥��åȤ���
+      // 生成したオブジェクトをConsumerにセットする
       RTC::CorbaConsumer<hello> consumer;
       consumer.setObject(m_pPOA->id_to_reference(objId));
 
-      // ���λ����Ǥϡ����֥������Ȼ��Ȥ��ݻ�����Ƥ���Ϥ�
+      // この時点では、オブジェクト参照は保持されているはず
       CPPUNIT_ASSERT(! CORBA::is_nil(consumer._ptr()));
 			
-      // releaseObject()�ƽФˤ�äơ��ݻ�����Ƥ��륪�֥������Ȼ��Ȥ����������ꥢ����뤫��
+      // releaseObject()呼出によって、保持されているオブジェクト参照が正しくクリアされるか？
       consumer.releaseObject();
       CPPUNIT_ASSERT(CORBA::is_nil(consumer._ptr()));
 

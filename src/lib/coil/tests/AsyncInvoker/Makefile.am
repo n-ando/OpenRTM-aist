@@ -68,6 +68,5 @@ AsyncInvoker_vc9.vcproj:
 		--yaml ../coil_test.vcproj.yaml \
 		--source $(TEST_SRC)
 #		--header $(TEST_H)
-	qkc -O- -sm $(win32_builddir)/AsyncInvoker_vc9.vcproj
 
 

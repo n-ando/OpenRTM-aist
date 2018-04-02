@@ -85,7 +85,6 @@ vc9proj:
 		--yaml ../rtc.vcproj.yaml                    \
 		--source ConsoleIn.cpp ConsoleInComp.cpp     \
 		--header ConsoleIn.h
-	qkc -O- -sm $(win32_builddir)/ConsoleIn_vc9.vcproj
 	$(top_builddir)/build/vcprojtool.py vcproj              \
 		--type DLL                                      \
 		--vcversion "9.00"                              \
@@ -95,7 +94,6 @@ vc9proj:
 		--yaml ../rtcdll.vcproj.yaml                    \
 		--source ConsoleIn.cpp                          \
 		--header ConsoleIn.h
-	qkc -O- -sm $(win32_builddir)/ConsoleInDll_vc9.vcproj
 	$(top_builddir)/build/vcprojtool.py vcproj            \
 		--type EXE                                    \
 		--vcversion "9.00"                            \
@@ -105,7 +103,6 @@ vc9proj:
 		--yaml ../rtc.vcproj.yaml                     \
 		--source ConsoleOut.cpp ConsoleOutComp.cpp    \
 		--header ConsoleOut.h
-	qkc -O- -sm $(win32_builddir)/ConsoleOut_vc9.vcproj
 	$(top_builddir)/build/vcprojtool.py vcproj               \
 		--type DLL                                       \
 		--vcversion "9.00"                               \
@@ -115,7 +112,6 @@ vc9proj:
 		--yaml ../rtcdll.vcproj.yaml                     \
 		--source ConsoleOut.cpp                          \
 		--header ConsoleOut.h
-	qkc -O- -sm $(win32_builddir)/ConsoleOutDll_vc9.vcproj
 	$(top_builddir)/build/vcprojtool.py vcproj               \
 		--type EXE                                       \
 		--vcversion "9.00"                               \
@@ -136,7 +132,6 @@ vcxproj:
 			--yaml ../rtc.vcproj.yaml                    \
 			--source ConsoleIn.cpp ConsoleInComp.cpp     \
 			--header ConsoleIn.h ; \
-		qkc -O- -sm $(win32_builddir)/ConsoleIn_vc$${ver}.vcxproj ; \
 		$(top_builddir)/build/vcxprojtool.py vcxproj              \
 			--type DLL                                      \
 			--vcversion "$${ver}.00"                              \
@@ -146,7 +141,6 @@ vcxproj:
 			--yaml ../rtcdll.vcproj.yaml                    \
 			--source ConsoleIn.cpp                          \
 			--header ConsoleIn.h ; \
-		qkc -O- -sm $(win32_builddir)/ConsoleInDll_vc$${ver}.vcxproj ; \
 		$(top_builddir)/build/vcxprojtool.py vcxproj            \
 			--type EXE                                    \
 			--vcversion "$${ver}.00"                            \
@@ -156,7 +150,6 @@ vcxproj:
 			--yaml ../rtc.vcproj.yaml                     \
 			--source ConsoleOut.cpp ConsoleOutComp.cpp    \
 			--header ConsoleOut.h ; \
-		qkc -O- -sm $(win32_builddir)/ConsoleOut_vc$${ver}.vcxproj ; \
 		$(top_builddir)/build/vcxprojtool.py vcxproj               \
 			--type DLL                                       \
 			--vcversion "$${ver}.00"                               \
@@ -166,7 +159,6 @@ vcxproj:
 			--yaml ../rtcdll.vcproj.yaml                     \
 			--source ConsoleOut.cpp                          \
 			--header ConsoleOut.h ; \
-		qkc -O- -sm $(win32_builddir)/ConsoleOutDll_vc$${ver}.vcxproj ; \
 		$(top_builddir)/build/vcxprojtool.py vcxproj               \
 			--type EXE                                       \
 			--vcversion "$${ver}.00"                               \

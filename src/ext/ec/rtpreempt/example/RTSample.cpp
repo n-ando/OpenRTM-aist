@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file  RTSample.cpp * @brief Realtime periodic execution example component * $Date$ 
  *

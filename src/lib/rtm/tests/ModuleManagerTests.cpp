@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file 
  * @brief Properties test class
@@ -19,7 +19,7 @@
 
 using namespace std;
 
-// ModuleManagerTests ¤ò¥Æ¥¹¥È¤¹¤ë [3]
+// ModuleManagerTests ã‚’ãƒ†ã‚¹ãƒˆã™ã‚‹ [3]
 class ModuleManagerTests
   : public CppUnit::TestFixture
 {
@@ -49,7 +49,7 @@ private:
 public:
   
   /*
-   * ¥³¥ó¥¹¥È¥é¥¯¥¿/¥Ç¥¹¥È¥é¥¯¥¿ [7]
+   * ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿/ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ [7]
    */
   ModuleManagerTests()
   {
@@ -62,7 +62,7 @@ public:
   
 
   /*
-   * ½é´ü²½/¸å»ÏËö [8]
+   * åˆæœŸåŒ–/å¾Œå§‹æœ« [8]
    */
   virtual void setUp()
   {
@@ -103,7 +103,7 @@ public:
     try {
 
       // Success case
-      // ¥Õ¥¡¥¤¥ëÌ¾¤À¤±Í¿¤¨¤ë¡£
+      // ãƒ•ã‚¡ã‚¤ãƒ«åã ã‘ä¸ãˆã‚‹ã€‚
       libname = m_pModMgr->load("libRTC.so");
       CPPUNIT_ASSERT(libname == "/usr/lib/libRTC.so");
 
@@ -113,11 +113,11 @@ public:
       libname = m_pModMgr->load("libRTC.so");
       CPPUNIT_ASSERT(libname == "/usr/lib/libRTC.so");
 
-      // ¥Õ¥¡¥¤¥ëÌ¾¤òÀäÂĞ¥Ñ¥¹¤ÇÍ¿¤¨¤ë¡£
+      // ãƒ•ã‚¡ã‚¤ãƒ«åã‚’çµ¶å¯¾ãƒ‘ã‚¹ã§ä¸ãˆã‚‹ã€‚
       libname = m_pModMgr->load("/usr/lib/libRTC.so");
       CPPUNIT_ASSERT(libname == "/usr/lib/libRTC.so");
 
-      // ¥Ç¥£¥ì¥¯¥È¥ê¤Î¶èÀÚ¤êÊ¸»ú¤Ë"//"¤ä"../"¤¬¤¢¤ë¾ì¹ç¡£ -> OK.
+      // ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã®åŒºåˆ‡ã‚Šæ–‡å­—ã«"//"ã‚„"../"ãŒã‚ã‚‹å ´åˆã€‚ -> OK.
       libname = m_pModMgr->load("/usr//users/kurihara/../kurihara/Components/test/test.so");
       CPPUNIT_ASSERT(libname == "/usr//users/kurihara/../kurihara/Components/test/test.so");
 
@@ -125,19 +125,19 @@ public:
 
       // Failure case
       // 
-      // ¥Õ¥¡¥¤¥ëÌ¾¤À¤±Í¿¤¨¤ë¡£ -> Error DLL open failed.
+      // ãƒ•ã‚¡ã‚¤ãƒ«åã ã‘ä¸ãˆã‚‹ã€‚ -> Error DLL open failed.
       //      libname = m_pModMgr->load("libm.a");
       //      CPPUNIT_ASSERT(libname == "/usr/lib/libm.a");
 
-      // ¥Ç¥£¥ì¥¯¥È¥êÌ¾¤òÍ¿¤¨¤ë¡£ -> Error DLL open failed.
+      // ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªåã‚’ä¸ãˆã‚‹ã€‚ -> Error DLL open failed.
       //      libname = m_pModMgr->load("OpenRTM");
       //      CPPUNIT_ASSERT(libname == "/usr/lib/OpenRTM");
 
-      // ¼Â¹Ô¥Õ¥¡¥¤¥ë¤òÍ¿¤¨¤ë¡£  -> Error Invalid file name.
+      // å®Ÿè¡Œãƒ•ã‚¡ã‚¤ãƒ«ã‚’ä¸ãˆã‚‹ã€‚  -> Error Invalid file name.
       //      libname = m_pModMgr->load("rtm-naming");
       //      CPPUNIT_ASSERT(libname == "/usr/bin/rtm-naming");
       
-      // Â¸ºß¤·¤Ê¤¤¥Õ¥¡¥¤¥ëÌ¾¤òÍ¿¤¨¤ë¡£-> Error Invalid file name.
+      // å­˜åœ¨ã—ãªã„ãƒ•ã‚¡ã‚¤ãƒ«åã‚’ä¸ãˆã‚‹ã€‚-> Error Invalid file name.
       //      libname = m_pModMgr->load("test.test");
       //      cout << "libname: " << libname << endl;
       //    CPPUNIT_ASSERT(libname == "/usr/lib/libRTC.so");
@@ -172,13 +172,13 @@ public:
 
 
       // Failure case
-      // ¥Õ¥¡¥¤¥ëÌ¾¤À¤±¤òÍ¿¤¨¤ë¡£ -> NotFound. ÀäÂĞ¥Ñ¥¹¤ÇÍ¿¤¨¤ëÉ¬Í×¤¬¤¢¤ë¡£
+      // ãƒ•ã‚¡ã‚¤ãƒ«åã ã‘ã‚’ä¸ãˆã‚‹ã€‚ -> NotFound. çµ¶å¯¾ãƒ‘ã‚¹ã§ä¸ãˆã‚‹å¿…è¦ãŒã‚ã‚‹ã€‚
       //      m_pModMgr->unload("libRTC.so");
 
-      // load¤·¤Æ¤¤¤Ê¤¤¥Õ¥¡¥¤¥ë¤òunload¤¹¤ë¡£ -> NotFound.
+      // loadã—ã¦ã„ãªã„ãƒ•ã‚¡ã‚¤ãƒ«ã‚’unloadã™ã‚‹ã€‚ -> NotFound.
       //      m_pModMgr->unload("usr/users/kurihara/Components/test/test.so");
 
-      // °ìÅÙunload¤·¤¿¥Õ¥¡¥¤¥ë¤òunload¤¹¤ë¡£ ->  NotFound.
+      // ä¸€åº¦unloadã—ãŸãƒ•ã‚¡ã‚¤ãƒ«ã‚’unloadã™ã‚‹ã€‚ ->  NotFound.
       //      m_pModMgr->unload("/usr/lib/libRTC.so");
       
     }
@@ -222,7 +222,7 @@ public:
   /* tests for void* symbol(const string& file_name, const string& func_name) */
   void test_symbol() {
 
-    //============ °ÂÆ£»áºîÀ®¤Î¥Æ¥¹¥È¥×¥í¥°¥é¥à¤è¤êÈ´¿è ==============================
+    //============ å®‰è—¤æ°ä½œæˆã®ãƒ†ã‚¹ãƒˆãƒ—ãƒ­ã‚°ãƒ©ãƒ ã‚ˆã‚ŠæŠœç²‹ ==============================
     string libname;
 
     try
@@ -270,7 +270,7 @@ public:
     typedef void (*testHello)();
 
     testHello _th;
-    // nm --dynamic test.so¤Ç"hello"¤¬´Ş¤Ş¤ì¤ëÊ¸»úÎó(¥·¥ó¥Ü¥ë)¤òÃµ¤·¤Æ»ÈÍÑ¤·¤¿¡£
+    // nm --dynamic test.soã§"hello"ãŒå«ã¾ã‚Œã‚‹æ–‡å­—åˆ—(ã‚·ãƒ³ãƒœãƒ«)ã‚’æ¢ã—ã¦ä½¿ç”¨ã—ãŸã€‚
     _th = (testHello) m_pModMgr->symbol(libname, "_ZN4test5helloEv");
     (*_th)();
   }
@@ -344,7 +344,7 @@ public:
 
   /* tests for vector<string> getLoadableModules() */
   void test_getLoadableModules() {
-    // ModuelManager.cpp¤Ç¼ÂÁõ¤µ¤ì¤Æ¤¤¤Ê¤¤l¡£
+    // ModuelManager.cppã§å®Ÿè£…ã•ã‚Œã¦ã„ãªã„lã€‚
 
     vector<string> get_modlist;
     get_modlist = m_pModMgr->getLoadableModules();
@@ -397,25 +397,25 @@ public:
 
   /* tests for void disallowAbsolutePath() */
   void test_disallowAbsolutePath() {
-    // test_allowAbsolutePath()¤Ë¤Æ¥Æ¥¹¥ÈºÑ¤ß¡£
+    // test_allowAbsolutePath()ã«ã¦ãƒ†ã‚¹ãƒˆæ¸ˆã¿ã€‚
   }
 
 
   /* tests for void allowModuleDownload() */
   void test_allowModuleDownload() {
-    // ¥Æ¥¹¥È¤Ş¤À
+    // ãƒ†ã‚¹ãƒˆã¾ã 
   }
 
 
   /* tests for void disallowModuleDownload() */
   void test_disallowModuleDownload() {
-    // ¥Æ¥¹¥È¤Ş¤À
+    // ãƒ†ã‚¹ãƒˆã¾ã 
   }
 
 
   /* tests for string findFile(const string& fname, const vector<string>& load_path) */
   void test_findFile() {
-    //============ °ÂÆ£»áºîÀ®¤Î¥Æ¥¹¥È¥×¥í¥°¥é¥à¤è¤êÈ´¿è ==============================
+    //============ å®‰è—¤æ°ä½œæˆã®ãƒ†ã‚¹ãƒˆãƒ—ãƒ­ã‚°ãƒ©ãƒ ã‚ˆã‚ŠæŠœç²‹ ==============================
     std::string result;
     std::vector<std::string> path;
     path.push_back("/lib");
@@ -468,7 +468,7 @@ public:
   void test_getInitFuncName() {
     std::string result;
 
-    //============ °ÂÆ£»áºîÀ®¤Î¥Æ¥¹¥È¥×¥í¥°¥é¥à¤è¤êÈ´¿è ==============================
+    //============ å®‰è—¤æ°ä½œæˆã®ãƒ†ã‚¹ãƒˆãƒ—ãƒ­ã‚°ãƒ©ãƒ ã‚ˆã‚ŠæŠœç²‹ ==============================
     result = m_pModMgr->getInitFuncName("Manipulator");
     CPPUNIT_ASSERT_MESSAGE("getInitFuncName error: Manipulator",
 			   result == "ManipulatorInit");

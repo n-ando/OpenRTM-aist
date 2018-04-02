@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file   PeriodicECSharedCompositeTests.cpp
  * @brief  PeriodicECSharedComposite test class
@@ -91,7 +91,7 @@ namespace PeriodicECSharedComposite
     }
 		
     /*!
-     * @brief add_members(), set_members(), remove_member(), removeAllMembers(), updateDelegatedPorts() ¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief add_members(), set_members(), remove_member(), removeAllMembers(), updateDelegatedPorts() ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
      */
     void test_PeriodicECOrganization()
@@ -160,7 +160,7 @@ namespace PeriodicECSharedComposite
       // updateDelegatedPorts()
       peco->updateDelegatedPorts();
 
-      // ºï½ü¸å¤ÎÎã³°¥Á¥§¥Ã¥¯
+      // å‰Šé™¤å¾Œã®ä¾‹å¤–ãƒã‚§ãƒƒã‚¯
       sflg = -1;
       try {
         // remove_member()
@@ -244,7 +244,7 @@ namespace PeriodicECSharedComposite
     }
 
     /*!
-     * @brief onInitialize(), onActivated(), onDeactivated(), onReset(), onFinalize() ¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief onInitialize(), onActivated(), onDeactivated(), onReset(), onFinalize() ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
      */
     void test_PeriodicECSharedComposite()

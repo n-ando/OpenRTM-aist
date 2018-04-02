@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file   InPortPushConnectorTests.cpp
  * @brief  InPortPushConnector test class
@@ -520,7 +520,7 @@ namespace InPortPushConnector
     }
 		
     /*!
-     * @brief Constructor �᥽�åɥƥ���
+     * @brief Constructor メソッドテスト
      * 
      */
     void test_InPortPushConnector()
@@ -595,7 +595,7 @@ namespace InPortPushConnector
 
     }
     /*!
-     * @brief read �᥽�åɥƥ���
+     * @brief read メソッドテスト
      * 
      */
     void test_read()
@@ -652,7 +652,7 @@ namespace InPortPushConnector
 
     }
     /*!
-     * @brief disconnect �᥽�åɥƥ���
+     * @brief disconnect メソッドテスト
      * 
      */
     void test_disconnect()

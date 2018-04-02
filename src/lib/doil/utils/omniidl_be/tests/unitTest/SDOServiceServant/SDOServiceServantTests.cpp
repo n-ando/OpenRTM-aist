@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file   SDOServiceServantTests.cpp
  * @brief  SDOServiceServant test class

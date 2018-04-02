@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file  BasicTypeConversion.h
  * @brief doil CORBA basic type conversion functions

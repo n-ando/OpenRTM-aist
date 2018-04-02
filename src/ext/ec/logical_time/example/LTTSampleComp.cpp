@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file LTTSampleComp.cpp
  * @brief Standalone component

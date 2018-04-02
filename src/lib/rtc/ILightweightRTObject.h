@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file  ILightweightRTObject.h
  * @brief ILightweightRTObject interface class
@@ -32,7 +32,7 @@ namespace Local
     /*!
      * @if jp
      * @class ILightweightRTObject
-     * @brief ILightweightRTObject ¥¤¥ó¥¿¡¼¥Õ¥§¡¼¥¹¥¯¥é¥¹
+     * @brief ILightweightRTObject ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹ã‚¯ãƒ©ã‚¹
      * @else
      * @class ILightweightRTObject
      * @brief ILightweightRTObject interface class

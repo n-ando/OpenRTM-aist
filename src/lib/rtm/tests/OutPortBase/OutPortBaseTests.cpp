@@ -1,4 +1,4 @@
-// -*- C++ -*-
+О╩©// -*- C++ -*-
 /*!
  * @file   OutPortBaseTests.cpp
  * @brief  OutPortBase test class
@@ -884,12 +884,12 @@ namespace OutPortBase
      */
     virtual void setUp()
     {
-        //╢Ш╓к "corba_cdr" ╓гепо©╓╣╓Л╓ф╓╓╓К╬Л╧Г╓о╨О╫Э╓╧╓К║ё
+        //Ф≈╒Ц│╚ "corba_cdr" Ц│╖Г≥╩И▄╡Ц│∙Ц┌▄Ц│╕Ц│└Ц┌▀Е═╢Е░┬Ц│╞Е┴┼И≥╓Ц│≥Ц┌▀Ц─┌
         if( RTC::InPortConsumerFactory::instance().hasFactory("corba_cdr") )
         {
             RTC::InPortConsumerFactory::instance().removeFactory("corba_cdr");
         }
-        //"corba_cdr" ╓к InPortCorbaCdrConsumerMock ╓Репо©╓╧╓К║ё
+        //"corba_cdr" Ц│╚ InPortCorbaCdrConsumerMock Ц┌▓Г≥╩И▄╡Ц│≥Ц┌▀Ц─┌
         RTC::InPortConsumerFactory::instance().
         addFactory("corba_cdr",
                    ::coil::Creator< ::RTC::InPortConsumer, 
@@ -897,12 +897,12 @@ namespace OutPortBase
                    ::coil::Destructor< ::RTC::InPortConsumer, 
                                        InPortCorbaCdrConsumerMock>);
 
-        //╢Ш╓к "corba_cdr" ╓гепо©╓╣╓Л╓ф╓╓╓К╬Л╧Г╓о╨О╫Э╓╧╓К║ё
+        //Ф≈╒Ц│╚ "corba_cdr" Ц│╖Г≥╩И▄╡Ц│∙Ц┌▄Ц│╕Ц│└Ц┌▀Е═╢Е░┬Ц│╞Е┴┼И≥╓Ц│≥Ц┌▀Ц─┌
         if( RTC::OutPortProviderFactory::instance().hasFactory("corba_cdr") )
         {
             RTC::OutPortProviderFactory::instance().removeFactory("corba_cdr");
         }
-        //"corba_cdr" ╓к OutPortCorbaCdrProviderMock ╓Репо©╓╧╓К║ё
+        //"corba_cdr" Ц│╚ OutPortCorbaCdrProviderMock Ц┌▓Г≥╩И▄╡Ц│≥Ц┌▀Ц─┌
         RTC::OutPortProviderFactory::instance().
         addFactory("corba_cdr",
                    ::coil::Creator< ::RTC::OutPortProvider, 
@@ -911,7 +911,7 @@ namespace OutPortBase
                                        OutPortCorbaCdrProviderMock>);
 
 
-        //╢Ш╓к "subscription_type" епо©╓╣╓Л╓ф╓╓╓К╬Л╧Г╓о╨О╫Э╓╧╓К║ё
+        //Ф≈╒Ц│╚ "subscription_type" Г≥╩И▄╡Ц│∙Ц┌▄Ц│╕Ц│└Ц┌▀Е═╢Е░┬Ц│╞Е┴┼И≥╓Ц│≥Ц┌▀Ц─┌
         if( RTC::PublisherFactory::instance().hasFactory("new") )
         {
             RTC::PublisherFactory::instance().removeFactory("new");
@@ -954,17 +954,17 @@ namespace OutPortBase
     }
 		
     /*!
-     * @brief ╔Ё╔С╔╧╔И╔╞╔©╓н╔ф╔╧╔х
+     * @brief Ц┌ЁЦ┐ЁЦ┌╧Ц┐╘Ц┌╞Ц┌©Ц│╝Ц┐├Ц┌╧Ц┐┬
      * 
      */
     void test_constructor()
     {
-        //╢Ш╓к "corba_cdr" ╓гепо©╓╣╓Л╓ф╓╓╓К╬Л╧Г╓о╨О╫Э╓╧╓К║ё
+        //Ф≈╒Ц│╚ "corba_cdr" Ц│╖Г≥╩И▄╡Ц│∙Ц┌▄Ц│╕Ц│└Ц┌▀Е═╢Е░┬Ц│╞Е┴┼И≥╓Ц│≥Ц┌▀Ц─┌
         if( RTC::InPortConsumerFactory::instance().hasFactory("corba_cdr") )
         {
             RTC::InPortConsumerFactory::instance().removeFactory("corba_cdr");
         }
-        //"corba_cdr" ╓к InPortCorbaCdrConsumerMock ╓Репо©╓╧╓К║ё
+        //"corba_cdr" Ц│╚ InPortCorbaCdrConsumerMock Ц┌▓Г≥╩И▄╡Ц│≥Ц┌▀Ц─┌
         RTC::InPortConsumerFactory::instance().
         addFactory("corba_cdr",
                    ::coil::Creator< ::RTC::InPortConsumer, 
@@ -972,12 +972,12 @@ namespace OutPortBase
                    ::coil::Destructor< ::RTC::InPortConsumer, 
                                        InPortCorbaCdrConsumerMock>);
 
-        //╢Ш╓к "corba_cdr" ╓гепо©╓╣╓Л╓ф╓╓╓К╬Л╧Г╓о╨О╫Э╓╧╓К║ё
+        //Ф≈╒Ц│╚ "corba_cdr" Ц│╖Г≥╩И▄╡Ц│∙Ц┌▄Ц│╕Ц│└Ц┌▀Е═╢Е░┬Ц│╞Е┴┼И≥╓Ц│≥Ц┌▀Ц─┌
         if( RTC::OutPortProviderFactory::instance().hasFactory("corba_cdr") )
         {
             RTC::OutPortProviderFactory::instance().removeFactory("corba_cdr");
         }
-        //"corba_cdr" ╓к OutPortCorbaCdrProviderMock ╓Репо©╓╧╓К║ё
+        //"corba_cdr" Ц│╚ OutPortCorbaCdrProviderMock Ц┌▓Г≥╩И▄╡Ц│≥Ц┌▀Ц─┌
         RTC::OutPortProviderFactory::instance().
         addFactory("corba_cdr",
                    ::coil::Creator< ::RTC::OutPortProvider, 
@@ -986,7 +986,7 @@ namespace OutPortBase
                                        OutPortCorbaCdrProviderMock>);
 
 
-        //╢Ш╓к "subscription_type" епо©╓╣╓Л╓ф╓╓╓К╬Л╧Г╓о╨О╫Э╓╧╓К║ё
+        //Ф≈╒Ц│╚ "subscription_type" Г≥╩И▄╡Ц│∙Ц┌▄Ц│╕Ц│└Ц┌▀Е═╢Е░┬Ц│╞Е┴┼И≥╓Ц│≥Ц┌▀Ц─┌
         if( RTC::PublisherFactory::instance().hasFactory("new") )
         {
             RTC::PublisherFactory::instance().removeFactory("new");
@@ -1093,18 +1093,18 @@ namespace OutPortBase
         }
     }
     /*!
-     * @brief initConsumers()╔А╔╫╔ц╔и╓н╔ф╔╧╔х
+     * @brief initConsumers()Ц┐║Ц┌╫Ц┐┐Ц┐┴Ц│╝Ц┐├Ц┌╧Ц┐┬
      * 
      */
     void test_initConsumers()
     {
-        //╢Ш╓к "corba_cdr" ╓гепо©╓╣╓Л╓ф╓╓╓К╬Л╧Г╓о╨О╫Э╓╧╓К║ё
+        //Ф≈╒Ц│╚ "corba_cdr" Ц│╖Г≥╩И▄╡Ц│∙Ц┌▄Ц│╕Ц│└Ц┌▀Е═╢Е░┬Ц│╞Е┴┼И≥╓Ц│≥Ц┌▀Ц─┌
         if( RTC::InPortConsumerFactory::instance().hasFactory("corba_cdr") )
         {
             RTC::InPortConsumerFactory::instance().removeFactory("corba_cdr");
         }
 
-        //╢Ш╓к "corba_cdr" ╓гепо©╓╣╓Л╓ф╓╓╓К╬Л╧Г╓о╨О╫Э╓╧╓К║ё
+        //Ф≈╒Ц│╚ "corba_cdr" Ц│╖Г≥╩И▄╡Ц│∙Ц┌▄Ц│╕Ц│└Ц┌▀Е═╢Е░┬Ц│╞Е┴┼И≥╓Ц│≥Ц┌▀Ц─┌
         if( RTC::OutPortProviderFactory::instance().hasFactory("corba_cdr") )
         {
             RTC::OutPortProviderFactory::instance().removeFactory("corba_cdr");
@@ -1116,14 +1116,14 @@ namespace OutPortBase
         RTC::PortAdmin portAdmin(m_pORB,m_pPOA);
         portAdmin.registerPort(outPort); 
 
-        //"corba_cdr" ╓к InPortCorbaCdrConsumerMock ╓Репо©╓╧╓К║ё
+        //"corba_cdr" Ц│╚ InPortCorbaCdrConsumerMock Ц┌▓Г≥╩И▄╡Ц│≥Ц┌▀Ц─┌
         RTC::InPortConsumerFactory::instance().
         addFactory("corba_cdr",
                    ::coil::Creator< ::RTC::InPortConsumer, 
                                     InPortCorbaCdrConsumerMock>,
                    ::coil::Destructor< ::RTC::InPortConsumer, 
                                        InPortCorbaCdrConsumerMock>);
-        //"corba_cdr" ╓к OutPortCorbaCdrProviderMock ╓Репо©╓╧╓К║ё
+        //"corba_cdr" Ц│╚ OutPortCorbaCdrProviderMock Ц┌▓Г≥╩И▄╡Ц│≥Ц┌▀Ц─┌
         RTC::OutPortProviderFactory::instance().
         addFactory("corba_cdr",
                    ::coil::Creator< ::RTC::OutPortProvider, 
@@ -1146,13 +1146,13 @@ namespace OutPortBase
         profile = outPort.getPortProfile();
         prop = NVUtil::toProperties(profile.properties);
 
-        //getPortProfile╓нproperties╓к╟й╡╪╓╛ди╡ц╓╣╓Л╓К
+        //getPortProfileЦ│╝propertiesЦ│╚Д╩╔Д╦▀Ц│▄Х©╫Е┼═Ц│∙Ц┌▄Ц┌▀
         CPPUNIT_ASSERT_EQUAL(std::string("push"),
                              prop["dataport.dataflow_type"]);
         CPPUNIT_ASSERT_EQUAL(std::string("corba_cdr, direct"),
                              prop["dataport.interface_type"]);
  
-        //ProviderTypes,ConsumerTypes╓╛╪Хфю╓╣╓Л╓К
+        //ProviderTypes,ConsumerTypesЦ│▄Е▐√Е╬≈Ц│∙Ц┌▄Ц┌▀
         cstr = outPort.get_m_consumerTypes();
         CPPUNIT_ASSERT((size_t)0!= cstr.size());
         CPPUNIT_ASSERT_EQUAL(std::string("corba_cdr"),
@@ -1161,18 +1161,18 @@ namespace OutPortBase
         portAdmin.deletePort(outPort);
     }
     /*!
-     * @brief initConsumers()╔А╔╫╔ц╔и╓н╔ф╔╧╔х
+     * @brief initConsumers()Ц┐║Ц┌╫Ц┐┐Ц┐┴Ц│╝Ц┐├Ц┌╧Ц┐┬
      * 
      */
     void test_initConsumers2()
     {
-        //╢Ш╓к "corba_cdr" ╓гепо©╓╣╓Л╓ф╓╓╓К╬Л╧Г╓о╨О╫Э╓╧╓К║ё
+        //Ф≈╒Ц│╚ "corba_cdr" Ц│╖Г≥╩И▄╡Ц│∙Ц┌▄Ц│╕Ц│└Ц┌▀Е═╢Е░┬Ц│╞Е┴┼И≥╓Ц│≥Ц┌▀Ц─┌
         if( RTC::InPortConsumerFactory::instance().hasFactory("corba_cdr") )
         {
             RTC::InPortConsumerFactory::instance().removeFactory("corba_cdr");
         }
 
-        //╢Ш╓к "corba_cdr" ╓гепо©╓╣╓Л╓ф╓╓╓К╬Л╧Г╓о╨О╫Э╓╧╓К║ё
+        //Ф≈╒Ц│╚ "corba_cdr" Ц│╖Г≥╩И▄╡Ц│∙Ц┌▄Ц│╕Ц│└Ц┌▀Е═╢Е░┬Ц│╞Е┴┼И≥╓Ц│≥Ц┌▀Ц─┌
         if( RTC::OutPortProviderFactory::instance().hasFactory("corba_cdr") )
         {
             RTC::OutPortProviderFactory::instance().removeFactory("corba_cdr");
@@ -1184,7 +1184,7 @@ namespace OutPortBase
         RTC::PortAdmin portAdmin(m_pORB,m_pPOA);
         portAdmin.registerPort(outPort); 
 
-        //"corba_cdr" ╓к OutPortCorbaCdrProviderMock ╓Репо©╓╧╓К║ё
+        //"corba_cdr" Ц│╚ OutPortCorbaCdrProviderMock Ц┌▓Г≥╩И▄╡Ц│≥Ц┌▀Ц─┌
         RTC::OutPortProviderFactory::instance().
         addFactory("corba_cdr",
                    ::coil::Creator< ::RTC::OutPortProvider, 
@@ -1207,31 +1207,31 @@ namespace OutPortBase
         profile = outPort.getPortProfile();
         prop = NVUtil::toProperties(profile.properties);
 
-        //getPortProfile╓нproperties╓к╟й╡╪╓╛ди╡ц╓╣╓Л╓К
+        //getPortProfileЦ│╝propertiesЦ│╚Д╩╔Д╦▀Ц│▄Х©╫Е┼═Ц│∙Ц┌▄Ц┌▀
         CPPUNIT_ASSERT_EQUAL(std::string("push"),
                              prop["dataport.dataflow_type"]);
         CPPUNIT_ASSERT_EQUAL(std::string("direct"),
                              prop["dataport.interface_type"]);
  
-        //ProviderTypes,ConsumerTypes╓╛╪Хфю╓╣╓Л╓К
+        //ProviderTypes,ConsumerTypesЦ│▄Е▐√Е╬≈Ц│∙Ц┌▄Ц┌▀
         cstr = outPort.get_m_consumerTypes();
         CPPUNIT_ASSERT((size_t)0!= cstr.size());
 
         portAdmin.deletePort(outPort);
     }
     /*!
-     * @brief initProviders()╔А╔╫╔ц╔и╓н╔ф╔╧╔х
+     * @brief initProviders()Ц┐║Ц┌╫Ц┐┐Ц┐┴Ц│╝Ц┐├Ц┌╧Ц┐┬
      * 
      */
     void test_initProviders()
     {
-        //╢Ш╓к "corba_cdr" ╓гепо©╓╣╓Л╓ф╓╓╓К╬Л╧Г╓о╨О╫Э╓╧╓К║ё
+        //Ф≈╒Ц│╚ "corba_cdr" Ц│╖Г≥╩И▄╡Ц│∙Ц┌▄Ц│╕Ц│└Ц┌▀Е═╢Е░┬Ц│╞Е┴┼И≥╓Ц│≥Ц┌▀Ц─┌
         if( RTC::InPortConsumerFactory::instance().hasFactory("corba_cdr") )
         {
             RTC::InPortConsumerFactory::instance().removeFactory("corba_cdr");
         }
 
-        //╢Ш╓к "corba_cdr" ╓гепо©╓╣╓Л╓ф╓╓╓К╬Л╧Г╓о╨О╫Э╓╧╓К║ё
+        //Ф≈╒Ц│╚ "corba_cdr" Ц│╖Г≥╩И▄╡Ц│∙Ц┌▄Ц│╕Ц│└Ц┌▀Е═╢Е░┬Ц│╞Е┴┼И≥╓Ц│≥Ц┌▀Ц─┌
         if( RTC::OutPortProviderFactory::instance().hasFactory("corba_cdr") )
         {
             RTC::OutPortProviderFactory::instance().removeFactory("corba_cdr");
@@ -1243,14 +1243,14 @@ namespace OutPortBase
         RTC::PortAdmin portAdmin(m_pORB,m_pPOA);
         portAdmin.registerPort(outPort); 
 
-        //"corba_cdr" ╓к InPortCorbaCdrConsumerMock ╓Репо©╓╧╓К║ё
+        //"corba_cdr" Ц│╚ InPortCorbaCdrConsumerMock Ц┌▓Г≥╩И▄╡Ц│≥Ц┌▀Ц─┌
         RTC::InPortConsumerFactory::instance().
         addFactory("corba_cdr",
                    ::coil::Creator< ::RTC::InPortConsumer, 
                                     InPortCorbaCdrConsumerMock>,
                    ::coil::Destructor< ::RTC::InPortConsumer, 
                                        InPortCorbaCdrConsumerMock>);
-        //"corba_cdr" ╓к OutPortCorbaCdrProviderMock ╓Репо©╓╧╓К║ё
+        //"corba_cdr" Ц│╚ OutPortCorbaCdrProviderMock Ц┌▓Г≥╩И▄╡Ц│≥Ц┌▀Ц─┌
         RTC::OutPortProviderFactory::instance().
         addFactory("corba_cdr",
                    ::coil::Creator< ::RTC::OutPortProvider, 
@@ -1273,13 +1273,13 @@ namespace OutPortBase
         profile = outPort.getPortProfile();
         prop = NVUtil::toProperties(profile.properties);
 
-        //getPortProfile╓нproperties╓к╟й╡╪╓╛ди╡ц╓╣╓Л╓К
+        //getPortProfileЦ│╝propertiesЦ│╚Д╩╔Д╦▀Ц│▄Х©╫Е┼═Ц│∙Ц┌▄Ц┌▀
         CPPUNIT_ASSERT_EQUAL(std::string("pull"),
                              prop["dataport.dataflow_type"]);
         CPPUNIT_ASSERT_EQUAL(std::string("corba_cdr"),
                              prop["dataport.interface_type"]);
  
-        //ProviderTypes,ConsumerTypes╓╛╪Хфю╓╣╓Л╓К
+        //ProviderTypes,ConsumerTypesЦ│▄Е▐√Е╬≈Ц│∙Ц┌▄Ц┌▀
         cstr = outPort.get_m_providerTypes();
         CPPUNIT_ASSERT((size_t)0!= cstr.size());
         CPPUNIT_ASSERT_EQUAL(std::string("corba_cdr"),
@@ -1288,18 +1288,18 @@ namespace OutPortBase
         portAdmin.deletePort(outPort);
     }
     /*!
-     * @brief initProviders()╔А╔╫╔ц╔и╓н╔ф╔╧╔х
+     * @brief initProviders()Ц┐║Ц┌╫Ц┐┐Ц┐┴Ц│╝Ц┐├Ц┌╧Ц┐┬
      * 
      */
     void test_initProviders2()
     {
-        //╢Ш╓к "corba_cdr" ╓гепо©╓╣╓Л╓ф╓╓╓К╬Л╧Г╓о╨О╫Э╓╧╓К║ё
+        //Ф≈╒Ц│╚ "corba_cdr" Ц│╖Г≥╩И▄╡Ц│∙Ц┌▄Ц│╕Ц│└Ц┌▀Е═╢Е░┬Ц│╞Е┴┼И≥╓Ц│≥Ц┌▀Ц─┌
         if( RTC::InPortConsumerFactory::instance().hasFactory("corba_cdr") )
         {
             RTC::InPortConsumerFactory::instance().removeFactory("corba_cdr");
         }
 
-        //╢Ш╓к "corba_cdr" ╓гепо©╓╣╓Л╓ф╓╓╓К╬Л╧Г╓о╨О╫Э╓╧╓К║ё
+        //Ф≈╒Ц│╚ "corba_cdr" Ц│╖Г≥╩И▄╡Ц│∙Ц┌▄Ц│╕Ц│└Ц┌▀Е═╢Е░┬Ц│╞Е┴┼И≥╓Ц│≥Ц┌▀Ц─┌
         if( RTC::OutPortProviderFactory::instance().hasFactory("corba_cdr") )
         {
             RTC::OutPortProviderFactory::instance().removeFactory("corba_cdr");
@@ -1311,7 +1311,7 @@ namespace OutPortBase
         RTC::PortAdmin portAdmin(m_pORB,m_pPOA);
         portAdmin.registerPort(outPort); 
 
-        //"corba_cdr" ╓к InPortCorbaCdrConsumerMock ╓Репо©╓╧╓К║ё
+        //"corba_cdr" Ц│╚ InPortCorbaCdrConsumerMock Ц┌▓Г≥╩И▄╡Ц│≥Ц┌▀Ц─┌
         RTC::InPortConsumerFactory::instance().
         addFactory("corba_cdr",
                    ::coil::Creator< ::RTC::InPortConsumer, 
@@ -1334,20 +1334,20 @@ namespace OutPortBase
         profile = outPort.getPortProfile();
         prop = NVUtil::toProperties(profile.properties);
 
-        //getPortProfile╓нproperties╓к╟й╡╪╓╛ди╡ц╓╣╓Л╓К
+        //getPortProfileЦ│╝propertiesЦ│╚Д╩╔Д╦▀Ц│▄Х©╫Е┼═Ц│∙Ц┌▄Ц┌▀
         CPPUNIT_ASSERT_EQUAL(std::string(""),
                              prop["dataport.dataflow_type"]);
         CPPUNIT_ASSERT_EQUAL(std::string(""),
                              prop["dataport.interface_type"]);
  
-        //ProviderTypes,ConsumerTypes╓╛╪Хфю╓╣╓Л╓К
+        //ProviderTypes,ConsumerTypesЦ│▄Е▐√Е╬≈Ц│∙Ц┌▄Ц┌▀
         cstr = outPort.get_m_providerTypes();
         CPPUNIT_ASSERT((size_t)0== cstr.size());
 
         portAdmin.deletePort(outPort);
     }
     /*!
-     * @brief init(),properties()╔А╔╫╔ц╔и╓н╔ф╔╧╔х
+     * @brief init(),properties()Ц┐║Ц┌╫Ц┐┐Ц┐┴Ц│╝Ц┐├Ц┌╧Ц┐┬
      * 
      */
     void test_init_properties()
@@ -1387,9 +1387,9 @@ namespace OutPortBase
         portAdmin.deletePort(outPort);
     }
     /*!
-     * @brief name()╔А╔╫╔ц╔и╓н╔ф╔╧╔х
+     * @brief name()Ц┐║Ц┌╫Ц┐┐Ц┐┴Ц│╝Ц┐├Ц┌╧Ц┐┬
      * 
-     * - ╔щ║╪╔хл╬╓Рю╣╓╥╓╞╪Хфю╓г╓╜╓К╓╚║╘
+     * - Ц┐²Ц┐╪Ц┐┬Е░█Ц┌▓Ф╜ёЦ│≈Ц│▐Е▐√Е╬≈Ц│╖Ц│█Ц┌▀Ц│▀О╪÷
      */
     void test_name()
     {
@@ -1403,7 +1403,7 @@ namespace OutPortBase
     }
 		
     /*!
-     * @brief connectors(),getConnectorProfiles()╔А╔╫╔ц╔и╓н╔ф╔╧╔х
+     * @brief connectors(),getConnectorProfiles()Ц┐║Ц┌╫Ц┐┐Ц┐┴Ц│╝Ц┐├Ц┌╧Ц┐┬
      * 
      */
     void test_connectors_getConnectorXX(void)
@@ -1626,7 +1626,7 @@ namespace OutPortBase
     }
 
     /*!
-     * @brief activateInterfaces(),deactivateInterfaces()╔А╔╫╔ц╔и╓н╔ф╔╧╔х
+     * @brief activateInterfaces(),deactivateInterfaces()Ц┐║Ц┌╫Ц┐┐Ц┐┴Ц│╝Ц┐├Ц┌╧Ц┐┬
      * 
      */
     void test_activateInterfaces_deactivateInterfaces(void)
@@ -1719,17 +1719,17 @@ namespace OutPortBase
 
     }
     /*!
-     * @brief publishInterfaces()╔А╔╫╔ц╔и╓н╔ф╔╧╔х
+     * @brief publishInterfaces()Ц┐║Ц┌╫Ц┐┐Ц┐┴Ц│╝Ц┐├Ц┌╧Ц┐┬
      * 
      */
     void test_publishInterfaces(void)
     {
-        //╢Ш╓к "corba_cdr" ╓гепо©╓╣╓Л╓ф╓╓╓К╬Л╧Г╓о╨О╫Э╓╧╓К║ё
+        //Ф≈╒Ц│╚ "corba_cdr" Ц│╖Г≥╩И▄╡Ц│∙Ц┌▄Ц│╕Ц│└Ц┌▀Е═╢Е░┬Ц│╞Е┴┼И≥╓Ц│≥Ц┌▀Ц─┌
         if( RTC::OutPortProviderFactory::instance().hasFactory("corba_cdr") )
         {
             RTC::OutPortProviderFactory::instance().removeFactory("corba_cdr");
         }
-        //"corba_cdr" ╓к OutPortCorbaCdrProviderMock ╓Репо©╓╧╓К║ё
+        //"corba_cdr" Ц│╚ OutPortCorbaCdrProviderMock Ц┌▓Г≥╩И▄╡Ц│≥Ц┌▀Ц─┌
         RTC::OutPortProviderFactory::instance().
         addFactory("corba_cdr",
                    ::coil::Creator< ::RTC::OutPortProvider, 
@@ -1737,12 +1737,12 @@ namespace OutPortBase
                    ::coil::Destructor< ::RTC::OutPortProvider, 
                                        OutPortCorbaCdrProviderMock>);
 
-        //╢Ш╓к "corba_cdr" ╓гепо©╓╣╓Л╓ф╓╓╓К╬Л╧Г╓о╨О╫Э╓╧╓К║ё
+        //Ф≈╒Ц│╚ "corba_cdr" Ц│╖Г≥╩И▄╡Ц│∙Ц┌▄Ц│╕Ц│└Ц┌▀Е═╢Е░┬Ц│╞Е┴┼И≥╓Ц│≥Ц┌▀Ц─┌
         if( RTC::InPortConsumerFactory::instance().hasFactory("corba_cdr") )
         {
             RTC::InPortConsumerFactory::instance().removeFactory("corba_cdr");
         }
-        //"corba_cdr" ╓к InPortCorbaCdrProviderMock ╓Репо©╓╧╓К║ё
+        //"corba_cdr" Ц│╚ InPortCorbaCdrProviderMock Ц┌▓Г≥╩И▄╡Ц│≥Ц┌▀Ц─┌
         RTC::InPortConsumerFactory::instance().
         addFactory("corba_cdr",
                    ::coil::Creator< ::RTC::InPortConsumer, 
@@ -1788,21 +1788,21 @@ namespace OutPortBase
         portAdmin.deletePort(outPort);
     }
     /*!
-     * @brief publishInterfaces()╔А╔╫╔ц╔и╓н╔ф╔╧╔х
+     * @brief publishInterfaces()Ц┐║Ц┌╫Ц┐┐Ц┐┴Ц│╝Ц┐├Ц┌╧Ц┐┬
      * 
      */
     void test_publishInterfaces2(void)
     {
         //
-        //dataport.dataflow_type╓╛push╓гpublisherInterface╓Р╔Ё║╪╔К
+        //dataport.dataflow_typeЦ│▄pushЦ│╖publisherInterfaceЦ┌▓Ц┌ЁЦ┐╪Ц┐╚
         //
 
-        //╢Ш╓к "corba_cdr" ╓гепо©╓╣╓Л╓ф╓╓╓К╬Л╧Г╓о╨О╫Э╓╧╓К║ё
+        //Ф≈╒Ц│╚ "corba_cdr" Ц│╖Г≥╩И▄╡Ц│∙Ц┌▄Ц│╕Ц│└Ц┌▀Е═╢Е░┬Ц│╞Е┴┼И≥╓Ц│≥Ц┌▀Ц─┌
         if( RTC::OutPortProviderFactory::instance().hasFactory("corba_cdr") )
         {
             RTC::OutPortProviderFactory::instance().removeFactory("corba_cdr");
         }
-        //"corba_cdr" ╓к OutPortCorbaCdrProviderMock ╓Репо©╓╧╓К║ё
+        //"corba_cdr" Ц│╚ OutPortCorbaCdrProviderMock Ц┌▓Г≥╩И▄╡Ц│≥Ц┌▀Ц─┌
         RTC::OutPortProviderFactory::instance().
         addFactory("corba_cdr",
                    ::coil::Creator< ::RTC::OutPortProvider, 
@@ -1810,12 +1810,12 @@ namespace OutPortBase
                    ::coil::Destructor< ::RTC::OutPortProvider, 
                                        OutPortCorbaCdrProviderMock>);
 
-        //╢Ш╓к "corba_cdr" ╓гепо©╓╣╓Л╓ф╓╓╓К╬Л╧Г╓о╨О╫Э╓╧╓К║ё
+        //Ф≈╒Ц│╚ "corba_cdr" Ц│╖Г≥╩И▄╡Ц│∙Ц┌▄Ц│╕Ц│└Ц┌▀Е═╢Е░┬Ц│╞Е┴┼И≥╓Ц│≥Ц┌▀Ц─┌
         if( RTC::InPortConsumerFactory::instance().hasFactory("corba_cdr") )
         {
             RTC::InPortConsumerFactory::instance().removeFactory("corba_cdr");
         }
-        //"corba_cdr" ╓к InPortCorbaCdrProviderMock ╓Репо©╓╧╓К║ё
+        //"corba_cdr" Ц│╚ InPortCorbaCdrProviderMock Ц┌▓Г≥╩И▄╡Ц│≥Ц┌▀Ц─┌
         RTC::InPortConsumerFactory::instance().
         addFactory("corba_cdr",
                    ::coil::Creator< ::RTC::InPortConsumer, 
@@ -1855,21 +1855,21 @@ namespace OutPortBase
         portAdmin.deletePort(outPort);
     }
     /*!
-     * @brief publishInterfaces()╔А╔╫╔ц╔и╓н╔ф╔╧╔х
+     * @brief publishInterfaces()Ц┐║Ц┌╫Ц┐┐Ц┐┴Ц│╝Ц┐├Ц┌╧Ц┐┬
      * 
      */
     void test_publishInterfaces3(void)
     {
         //
-        //dataport.dataflow_type╓╛else╓гpublisherInterface╓Р╔Ё║╪╔К
+        //dataport.dataflow_typeЦ│▄elseЦ│╖publisherInterfaceЦ┌▓Ц┌ЁЦ┐╪Ц┐╚
         //
 
-        //╢Ш╓к "corba_cdr" ╓гепо©╓╣╓Л╓ф╓╓╓К╬Л╧Г╓о╨О╫Э╓╧╓К║ё
+        //Ф≈╒Ц│╚ "corba_cdr" Ц│╖Г≥╩И▄╡Ц│∙Ц┌▄Ц│╕Ц│└Ц┌▀Е═╢Е░┬Ц│╞Е┴┼И≥╓Ц│≥Ц┌▀Ц─┌
         if( RTC::OutPortProviderFactory::instance().hasFactory("corba_cdr") )
         {
             RTC::OutPortProviderFactory::instance().removeFactory("corba_cdr");
         }
-        //"corba_cdr" ╓к OutPortCorbaCdrProviderMock ╓Репо©╓╧╓К║ё
+        //"corba_cdr" Ц│╚ OutPortCorbaCdrProviderMock Ц┌▓Г≥╩И▄╡Ц│≥Ц┌▀Ц─┌
         RTC::OutPortProviderFactory::instance().
         addFactory("corba_cdr",
                    ::coil::Creator< ::RTC::OutPortProvider, 
@@ -1877,12 +1877,12 @@ namespace OutPortBase
                    ::coil::Destructor< ::RTC::OutPortProvider, 
                                        OutPortCorbaCdrProviderMock>);
 
-        //╢Ш╓к "corba_cdr" ╓гепо©╓╣╓Л╓ф╓╓╓К╬Л╧Г╓о╨О╫Э╓╧╓К║ё
+        //Ф≈╒Ц│╚ "corba_cdr" Ц│╖Г≥╩И▄╡Ц│∙Ц┌▄Ц│╕Ц│└Ц┌▀Е═╢Е░┬Ц│╞Е┴┼И≥╓Ц│≥Ц┌▀Ц─┌
         if( RTC::InPortConsumerFactory::instance().hasFactory("corba_cdr") )
         {
             RTC::InPortConsumerFactory::instance().removeFactory("corba_cdr");
         }
-        //"corba_cdr" ╓к InPortCorbaCdrProviderMock ╓Репо©╓╧╓К║ё
+        //"corba_cdr" Ц│╚ InPortCorbaCdrProviderMock Ц┌▓Г≥╩И▄╡Ц│≥Ц┌▀Ц─┌
         RTC::InPortConsumerFactory::instance().
         addFactory("corba_cdr",
                    ::coil::Creator< ::RTC::InPortConsumer, 
@@ -1922,27 +1922,27 @@ namespace OutPortBase
         portAdmin.deletePort(outPort);
     }
     /*!
-     * @brief publishInterfaces()╔А╔╫╔ц╔и╓н╔ф╔╧╔х
+     * @brief publishInterfaces()Ц┐║Ц┌╫Ц┐┐Ц┐┴Ц│╝Ц┐├Ц┌╧Ц┐┬
      * 
      */
     void test_publishInterfaces4(void)
     {
         //
-        //Provider╓й╓╥╓гpublisherInterface╓Р╔Ё║╪╔К
+        //ProviderЦ│╙Ц│≈Ц│╖publisherInterfaceЦ┌▓Ц┌ЁЦ┐╪Ц┐╚
         //
 
-        //╢Ш╓к "corba_cdr" ╓гепо©╓╣╓Л╓ф╓╓╓К╬Л╧Г╓о╨О╫Э╓╧╓К║ё
+        //Ф≈╒Ц│╚ "corba_cdr" Ц│╖Г≥╩И▄╡Ц│∙Ц┌▄Ц│╕Ц│└Ц┌▀Е═╢Е░┬Ц│╞Е┴┼И≥╓Ц│≥Ц┌▀Ц─┌
         if( RTC::OutPortProviderFactory::instance().hasFactory("corba_cdr") )
         {
             RTC::OutPortProviderFactory::instance().removeFactory("corba_cdr");
         }
 
-        //╢Ш╓к "corba_cdr" ╓гепо©╓╣╓Л╓ф╓╓╓К╬Л╧Г╓о╨О╫Э╓╧╓К║ё
+        //Ф≈╒Ц│╚ "corba_cdr" Ц│╖Г≥╩И▄╡Ц│∙Ц┌▄Ц│╕Ц│└Ц┌▀Е═╢Е░┬Ц│╞Е┴┼И≥╓Ц│≥Ц┌▀Ц─┌
         if( RTC::InPortConsumerFactory::instance().hasFactory("corba_cdr") )
         {
             RTC::InPortConsumerFactory::instance().removeFactory("corba_cdr");
         }
-        //"corba_cdr" ╓к InPortCorbaCdrProviderMock ╓Репо©╓╧╓К║ё
+        //"corba_cdr" Ц│╚ InPortCorbaCdrProviderMock Ц┌▓Г≥╩И▄╡Ц│≥Ц┌▀Ц─┌
         RTC::InPortConsumerFactory::instance().
         addFactory("corba_cdr",
                    ::coil::Creator< ::RTC::InPortConsumer, 
@@ -1983,17 +1983,17 @@ namespace OutPortBase
         portAdmin.deletePort(outPort);
     }
     /*!
-     * @brief publishInterfaces()╔А╔╫╔ц╔и╓н╔ф╔╧╔х
+     * @brief publishInterfaces()Ц┐║Ц┌╫Ц┐┐Ц┐┴Ц│╝Ц┐├Ц┌╧Ц┐┬
      * 
      */
     void test_publishInterfaces5(void)
     {
-        //╢Ш╓к "corba_cdr" ╓гепо©╓╣╓Л╓ф╓╓╓К╬Л╧Г╓о╨О╫Э╓╧╓К║ё
+        //Ф≈╒Ц│╚ "corba_cdr" Ц│╖Г≥╩И▄╡Ц│∙Ц┌▄Ц│╕Ц│└Ц┌▀Е═╢Е░┬Ц│╞Е┴┼И≥╓Ц│≥Ц┌▀Ц─┌
         if( RTC::OutPortProviderFactory::instance().hasFactory("corba_cdr") )
         {
             RTC::OutPortProviderFactory::instance().removeFactory("corba_cdr");
         }
-        //"corba_cdr" ╓к OutPortCorbaCdrProviderMock ╓Репо©╓╧╓К║ё
+        //"corba_cdr" Ц│╚ OutPortCorbaCdrProviderMock Ц┌▓Г≥╩И▄╡Ц│≥Ц┌▀Ц─┌
         RTC::OutPortProviderFactory::instance().
         addFactory("corba_cdr",
                    ::coil::Creator< ::RTC::OutPortProvider, 
@@ -2001,12 +2001,12 @@ namespace OutPortBase
                    ::coil::Destructor< ::RTC::OutPortProvider, 
                                        OutPortCorbaCdrProviderMock>);
 
-        //╢Ш╓к "corba_cdr" ╓гепо©╓╣╓Л╓ф╓╓╓К╬Л╧Г╓о╨О╫Э╓╧╓К║ё
+        //Ф≈╒Ц│╚ "corba_cdr" Ц│╖Г≥╩И▄╡Ц│∙Ц┌▄Ц│╕Ц│└Ц┌▀Е═╢Е░┬Ц│╞Е┴┼И≥╓Ц│≥Ц┌▀Ц─┌
         if( RTC::InPortConsumerFactory::instance().hasFactory("corba_cdr") )
         {
             RTC::InPortConsumerFactory::instance().removeFactory("corba_cdr");
         }
-        //"corba_cdr" ╓к InPortCorbaCdrProviderMock ╓Репо©╓╧╓К║ё
+        //"corba_cdr" Ц│╚ InPortCorbaCdrProviderMock Ц┌▓Г≥╩И▄╡Ц│≥Ц┌▀Ц─┌
         RTC::InPortConsumerFactory::instance().
         addFactory("corba_cdr",
                    ::coil::Creator< ::RTC::InPortConsumer, 
@@ -2049,17 +2049,17 @@ namespace OutPortBase
         portAdmin.deletePort(outPort);
     }
     /*!
-     * @brief subscribeInterfaces()╔А╔╫╔ц╔и╓н╔ф╔╧╔х
+     * @brief subscribeInterfaces()Ц┐║Ц┌╫Ц┐┐Ц┐┴Ц│╝Ц┐├Ц┌╧Ц┐┬
      * 
      */
     void test_subscribeInterfaces(void)
     {
-        //╢Ш╓к "corba_cdr" ╓гепо©╓╣╓Л╓ф╓╓╓К╬Л╧Г╓о╨О╫Э╓╧╓К║ё
+        //Ф≈╒Ц│╚ "corba_cdr" Ц│╖Г≥╩И▄╡Ц│∙Ц┌▄Ц│╕Ц│└Ц┌▀Е═╢Е░┬Ц│╞Е┴┼И≥╓Ц│≥Ц┌▀Ц─┌
         if( RTC::OutPortProviderFactory::instance().hasFactory("corba_cdr") )
         {
             RTC::OutPortProviderFactory::instance().removeFactory("corba_cdr");
         }
-        //"corba_cdr" ╓к OutPortCorbaCdrProviderMock ╓Репо©╓╧╓К║ё
+        //"corba_cdr" Ц│╚ OutPortCorbaCdrProviderMock Ц┌▓Г≥╩И▄╡Ц│≥Ц┌▀Ц─┌
         RTC::OutPortProviderFactory::instance().
         addFactory("corba_cdr",
                    ::coil::Creator< ::RTC::OutPortProvider, 
@@ -2067,12 +2067,12 @@ namespace OutPortBase
                    ::coil::Destructor< ::RTC::OutPortProvider, 
                                        OutPortCorbaCdrProviderMock>);
 
-        //╢Ш╓к "corba_cdr" ╓гепо©╓╣╓Л╓ф╓╓╓К╬Л╧Г╓о╨О╫Э╓╧╓К║ё
+        //Ф≈╒Ц│╚ "corba_cdr" Ц│╖Г≥╩И▄╡Ц│∙Ц┌▄Ц│╕Ц│└Ц┌▀Е═╢Е░┬Ц│╞Е┴┼И≥╓Ц│≥Ц┌▀Ц─┌
         if( RTC::InPortConsumerFactory::instance().hasFactory("corba_cdr") )
         {
             RTC::InPortConsumerFactory::instance().removeFactory("corba_cdr");
         }
-        //"corba_cdr" ╓к InPortCorbaCdrConsumerMock ╓Репо©╓╧╓К║ё
+        //"corba_cdr" Ц│╚ InPortCorbaCdrConsumerMock Ц┌▓Г≥╩И▄╡Ц│≥Ц┌▀Ц─┌
         RTC::InPortConsumerFactory::instance().
         addFactory("corba_cdr",
                    ::coil::Creator< ::RTC::InPortConsumer, 
@@ -2119,17 +2119,17 @@ namespace OutPortBase
         portAdmin.deletePort(outPort);
     }
     /*!
-     * @brief subscribeInterfaces()╔А╔╫╔ц╔и╓н╔ф╔╧╔х
+     * @brief subscribeInterfaces()Ц┐║Ц┌╫Ц┐┐Ц┐┴Ц│╝Ц┐├Ц┌╧Ц┐┬
      * 
      */
     void test_subscribeInterfaces2(void)
     {
-        //╢Ш╓к "corba_cdr" ╓гепо©╓╣╓Л╓ф╓╓╓К╬Л╧Г╓о╨О╫Э╓╧╓К║ё
+        //Ф≈╒Ц│╚ "corba_cdr" Ц│╖Г≥╩И▄╡Ц│∙Ц┌▄Ц│╕Ц│└Ц┌▀Е═╢Е░┬Ц│╞Е┴┼И≥╓Ц│≥Ц┌▀Ц─┌
         if( RTC::OutPortProviderFactory::instance().hasFactory("corba_cdr") )
         {
             RTC::OutPortProviderFactory::instance().removeFactory("corba_cdr");
         }
-        //"corba_cdr" ╓к OutPortCorbaCdrProviderMock ╓Репо©╓╧╓К║ё
+        //"corba_cdr" Ц│╚ OutPortCorbaCdrProviderMock Ц┌▓Г≥╩И▄╡Ц│≥Ц┌▀Ц─┌
         RTC::OutPortProviderFactory::instance().
         addFactory("corba_cdr",
                    ::coil::Creator< ::RTC::OutPortProvider, 
@@ -2137,12 +2137,12 @@ namespace OutPortBase
                    ::coil::Destructor< ::RTC::OutPortProvider, 
                                        OutPortCorbaCdrProviderMock>);
 
-        //╢Ш╓к "corba_cdr" ╓гепо©╓╣╓Л╓ф╓╓╓К╬Л╧Г╓о╨О╫Э╓╧╓К║ё
+        //Ф≈╒Ц│╚ "corba_cdr" Ц│╖Г≥╩И▄╡Ц│∙Ц┌▄Ц│╕Ц│└Ц┌▀Е═╢Е░┬Ц│╞Е┴┼И≥╓Ц│≥Ц┌▀Ц─┌
         if( RTC::InPortConsumerFactory::instance().hasFactory("corba_cdr") )
         {
             RTC::InPortConsumerFactory::instance().removeFactory("corba_cdr");
         }
-        //"corba_cdr" ╓к InPortCorbaCdrConsumerMock ╓Репо©╓╧╓К║ё
+        //"corba_cdr" Ц│╚ InPortCorbaCdrConsumerMock Ц┌▓Г≥╩И▄╡Ц│≥Ц┌▀Ц─┌
         RTC::InPortConsumerFactory::instance().
         addFactory("corba_cdr",
                    ::coil::Creator< ::RTC::InPortConsumer, 
@@ -2180,17 +2180,17 @@ namespace OutPortBase
         portAdmin.deletePort(outPort);
     }
     /*!
-     * @brief subscribeInterfaces()╔А╔╫╔ц╔и╓н╔ф╔╧╔х
+     * @brief subscribeInterfaces()Ц┐║Ц┌╫Ц┐┐Ц┐┴Ц│╝Ц┐├Ц┌╧Ц┐┬
      * 
      */
     void test_subscribeInterfaces3(void)
     {
-        //╢Ш╓к "corba_cdr" ╓гепо©╓╣╓Л╓ф╓╓╓К╬Л╧Г╓о╨О╫Э╓╧╓К║ё
+        //Ф≈╒Ц│╚ "corba_cdr" Ц│╖Г≥╩И▄╡Ц│∙Ц┌▄Ц│╕Ц│└Ц┌▀Е═╢Е░┬Ц│╞Е┴┼И≥╓Ц│≥Ц┌▀Ц─┌
         if( RTC::OutPortProviderFactory::instance().hasFactory("corba_cdr") )
         {
             RTC::OutPortProviderFactory::instance().removeFactory("corba_cdr");
         }
-        //"corba_cdr" ╓к OutPortCorbaCdrProviderMock ╓Репо©╓╧╓К║ё
+        //"corba_cdr" Ц│╚ OutPortCorbaCdrProviderMock Ц┌▓Г≥╩И▄╡Ц│≥Ц┌▀Ц─┌
         RTC::OutPortProviderFactory::instance().
         addFactory("corba_cdr",
                    ::coil::Creator< ::RTC::OutPortProvider, 
@@ -2198,12 +2198,12 @@ namespace OutPortBase
                    ::coil::Destructor< ::RTC::OutPortProvider, 
                                        OutPortCorbaCdrProviderMock>);
 
-        //╢Ш╓к "corba_cdr" ╓гепо©╓╣╓Л╓ф╓╓╓К╬Л╧Г╓о╨О╫Э╓╧╓К║ё
+        //Ф≈╒Ц│╚ "corba_cdr" Ц│╖Г≥╩И▄╡Ц│∙Ц┌▄Ц│╕Ц│└Ц┌▀Е═╢Е░┬Ц│╞Е┴┼И≥╓Ц│≥Ц┌▀Ц─┌
         if( RTC::InPortConsumerFactory::instance().hasFactory("corba_cdr") )
         {
             RTC::InPortConsumerFactory::instance().removeFactory("corba_cdr");
         }
-        //"corba_cdr" ╓к InPortCorbaCdrConsumerMock ╓Репо©╓╧╓К║ё
+        //"corba_cdr" Ц│╚ InPortCorbaCdrConsumerMock Ц┌▓Г≥╩И▄╡Ц│≥Ц┌▀Ц─┌
         RTC::InPortConsumerFactory::instance().
         addFactory("corba_cdr",
                    ::coil::Creator< ::RTC::InPortConsumer, 
@@ -2241,17 +2241,17 @@ namespace OutPortBase
         portAdmin.deletePort(outPort);
     }
     /*!
-     * @brief subscribeInterfaces()╔А╔╫╔ц╔и╓н╔ф╔╧╔х
+     * @brief subscribeInterfaces()Ц┐║Ц┌╫Ц┐┐Ц┐┴Ц│╝Ц┐├Ц┌╧Ц┐┬
      * 
      */
     void test_subscribeInterfaces4(void)
     {
-        //╢Ш╓к "corba_cdr" ╓гепо©╓╣╓Л╓ф╓╓╓К╬Л╧Г╓о╨О╫Э╓╧╓К║ё
+        //Ф≈╒Ц│╚ "corba_cdr" Ц│╖Г≥╩И▄╡Ц│∙Ц┌▄Ц│╕Ц│└Ц┌▀Е═╢Е░┬Ц│╞Е┴┼И≥╓Ц│≥Ц┌▀Ц─┌
         if( RTC::OutPortProviderFactory::instance().hasFactory("corba_cdr") )
         {
             RTC::OutPortProviderFactory::instance().removeFactory("corba_cdr");
         }
-        //"corba_cdr" ╓к OutPortCorbaCdrProviderMock ╓Репо©╓╧╓К║ё
+        //"corba_cdr" Ц│╚ OutPortCorbaCdrProviderMock Ц┌▓Г≥╩И▄╡Ц│≥Ц┌▀Ц─┌
         RTC::OutPortProviderFactory::instance().
         addFactory("corba_cdr",
                    ::coil::Creator< ::RTC::OutPortProvider, 
@@ -2259,7 +2259,7 @@ namespace OutPortBase
                    ::coil::Destructor< ::RTC::OutPortProvider, 
                                        OutPortCorbaCdrProviderMock>);
 
-        //╢Ш╓к "corba_cdr" ╓гепо©╓╣╓Л╓ф╓╓╓К╬Л╧Г╓о╨О╫Э╓╧╓К║ё
+        //Ф≈╒Ц│╚ "corba_cdr" Ц│╖Г≥╩И▄╡Ц│∙Ц┌▄Ц│╕Ц│└Ц┌▀Е═╢Е░┬Ц│╞Е┴┼И≥╓Ц│≥Ц┌▀Ц─┌
         if( RTC::InPortConsumerFactory::instance().hasFactory("corba_cdr") )
         {
             RTC::InPortConsumerFactory::instance().removeFactory("corba_cdr");
@@ -2295,17 +2295,17 @@ namespace OutPortBase
         portAdmin.deletePort(outPort);
     }
     /*!
-     * @brief subscribeInterfaces()╔А╔╫╔ц╔и╓н╔ф╔╧╔х
+     * @brief subscribeInterfaces()Ц┐║Ц┌╫Ц┐┐Ц┐┴Ц│╝Ц┐├Ц┌╧Ц┐┬
      * 
      */
     void test_subscribeInterfaces5(void)
     {
-        //╢Ш╓к "corba_cdr" ╓гепо©╓╣╓Л╓ф╓╓╓К╬Л╧Г╓о╨О╫Э╓╧╓К║ё
+        //Ф≈╒Ц│╚ "corba_cdr" Ц│╖Г≥╩И▄╡Ц│∙Ц┌▄Ц│╕Ц│└Ц┌▀Е═╢Е░┬Ц│╞Е┴┼И≥╓Ц│≥Ц┌▀Ц─┌
         if( RTC::OutPortProviderFactory::instance().hasFactory("corba_cdr") )
         {
             RTC::OutPortProviderFactory::instance().removeFactory("corba_cdr");
         }
-        //"corba_cdr" ╓к OutPortCorbaCdrProviderMock ╓Репо©╓╧╓К║ё
+        //"corba_cdr" Ц│╚ OutPortCorbaCdrProviderMock Ц┌▓Г≥╩И▄╡Ц│≥Ц┌▀Ц─┌
         RTC::OutPortProviderFactory::instance().
         addFactory("corba_cdr",
                    ::coil::Creator< ::RTC::OutPortProvider, 
@@ -2313,12 +2313,12 @@ namespace OutPortBase
                    ::coil::Destructor< ::RTC::OutPortProvider, 
                                        OutPortCorbaCdrProviderMock>);
 
-        //╢Ш╓к "corba_cdr" ╓гепо©╓╣╓Л╓ф╓╓╓К╬Л╧Г╓о╨О╫Э╓╧╓К║ё
+        //Ф≈╒Ц│╚ "corba_cdr" Ц│╖Г≥╩И▄╡Ц│∙Ц┌▄Ц│╕Ц│└Ц┌▀Е═╢Е░┬Ц│╞Е┴┼И≥╓Ц│≥Ц┌▀Ц─┌
         if( RTC::InPortConsumerFactory::instance().hasFactory("corba_cdr") )
         {
             RTC::InPortConsumerFactory::instance().removeFactory("corba_cdr");
         }
-        //"corba_cdr" ╓к InPortCorbaCdrConsumerMock ╓Репо©╓╧╓К║ё
+        //"corba_cdr" Ц│╚ InPortCorbaCdrConsumerMock Ц┌▓Г≥╩И▄╡Ц│≥Ц┌▀Ц─┌
         RTC::InPortConsumerFactory::instance().
         addFactory("corba_cdr",
                    ::coil::Creator< ::RTC::InPortConsumer, 
@@ -2363,7 +2363,7 @@ namespace OutPortBase
     }
 
     /*!
-     * @brief addConnectorDataListener(), removeConnectorDataListener(), addConnectorListener(), removeConnectorListener(), isLittleEndian(), connect() ╔А╔╫╔ц╔и╓н╔ф╔╧╔х
+     * @brief addConnectorDataListener(), removeConnectorDataListener(), addConnectorListener(), removeConnectorListener(), isLittleEndian(), connect() Ц┐║Ц┌╫Ц┐┐Ц┐┴Ц│╝Ц┐├Ц┌╧Ц┐┬
      * 
      */
     void test_ConnectorListener(void)

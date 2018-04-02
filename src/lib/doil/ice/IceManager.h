@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file IceManager.h
  * @brief Ice manager for doil
@@ -33,9 +33,9 @@ namespace Ice
 {
   /*!
    * @if jp
-   * @class IceManager ���饹
+   * @class IceManager クラス
    *
-   * Ice ORB �� IORB �ǥ��󥿡��ե��������� Singleton ���饹��
+   * Ice ORB を IORB でインターフェースする Singleton クラス。
    *
    * @else
    * @class IceManager class
@@ -50,7 +50,7 @@ namespace Ice
   public:
     /*!
      * @if jp
-     * @brief ������ؿ�
+     * @brief 初期化関数
      * @else
      * @brief initializer
      * @endif
@@ -60,7 +60,7 @@ namespace Ice
 
     /*!
      * @if jp
-     * @brief ���󥹥��󥹼����ؿ�
+     * @brief インスタンス取得関数
      * @else
      * @brief getting instance
      * @endif
@@ -73,10 +73,10 @@ namespace Ice
     //------------------------------------------------------------
     /*!
      * @if jp
-     * @brief ORB ��̾�����������
+     * @brief ORB の名前を取得する
      *
-     * ORB ��̾�����֤���
-     * ���δؿ���ɬ�� "corba" ���֤���
+     * ORB の名前を返す。
+     * この関数は必ず "corba" を返す。
      *
      * @else
      * @brief Getting ORB's name
@@ -95,14 +95,14 @@ namespace Ice
 
     /*!
      * @if jp
-     * @brief Servant �� Factory ����Ͽ����
+     * @brief Servant の Factory を登録する
      *
-     * Servant �� Factory ����Ͽ���롣
+     * Servant の Factory を登録する。
      *
-     * @return OK:             ���ｪλ
-     *         ALREADY_EXISTS: Ϳ����줿�ե����ȥ�Ϥ��Ǥ���Ͽ�Ѥ�
-     *         INVALID_ARGS:   �����ΰ�İʾ夬����
-     *         UNKNOWN:        �����ʥ��顼
+     * @return OK:             正常終了
+     *         ALREADY_EXISTS: 与えられたファクトリはすでに登録済み
+     *         INVALID_ARGS:   引数の一つ以上が不正
+     *         UNKNOWN:        不明なエラー
      *
      * @else
      * @brief Register servant's factory
@@ -124,17 +124,17 @@ namespace Ice
 
     /*!
      * @if jp
-     * @brief ���֥������Ȥ�activate����
+     * @brief オブジェクトをactivateする
      *
-     * Ϳ����줿���֥������Ȥ򥢥��ƥ��ֲ����롣
-     * Ϳ����줿���֥������Ȥ�ID�ȹ��פ��륵���Х�ȤΥե����ȥ꤬
-     * ��Ͽ�ѤߤǤ���ɬ�פ����롣�⤷�����֥������Ȥ�ID�ȹ��פ���ե����ȥ�
-     * ��¸�ߤ��ʤ���硢INVALID_ARGS ���顼���֤���롣
+     * 与えられたオブジェクトをアクティブ化する。
+     * 与えられたオブジェクトのIDと合致するサーバントのファクトリが
+     * 登録済みである必要がある。もし、オブジェクトのIDと合致するファクトリ
+     * が存在しない場合、INVALID_ARGS エラーが返される。
      *
-     * @return OK:             ���ｪλ
-     *         ALREADY_EXISTS: Ϳ����줿���֥������ȤϤ��Ǥ�¸�ߤ���
-     *         INVALID_ARGS:   ����������
-     *         UNKNOWN:        �����ʥ��顼
+     * @return OK:             正常終了
+     *         ALREADY_EXISTS: 与えられたオブジェクトはすでに存在する
+     *         INVALID_ARGS:   引数が不正
+     *         UNKNOWN:        不明なエラー
      *
      * @else
      * @brief Activate object
@@ -156,17 +156,17 @@ namespace Ice
 
     /*!
      * @if jp
-     * @brief ���֥������Ȥ�activate����
+     * @brief オブジェクトをactivateする
      *
-     * Ϳ����줿���֥������Ȥ�Ϳ����줿�����Х�Ȥȶ��˥����ƥ��ֲ����롣
-     * ���֥������Ȥ򥢥��ƥ��ֲ����륵���Х�Ȥ�¸�ߤ���ɬ�פϤʤ���
-     * ��������Ϳ����줿�����Х�Ȥ�ID��Ϳ����줿���֥������Ȥ�ID��
-     * ���פ��Ƥ���ɬ�פ����롣���פ��ʤ����� INVALID_ARGS ���顼���֤���롣
+     * 与えられたオブジェクトを与えられたサーバントと共にアクティブ化する。
+     * オブジェクトをアクティブ化するサーバントは存在する必要はない。
+     * ただし、与えられたサーバントのIDと与えられたオブジェクトのIDは
+     * 一致している必要がある。一致しない場合は INVALID_ARGS エラーが返される。
      *
-     * @return OK:             ���ｪλ
-     *         ALREADY_EXISTS: Ϳ����줿���֥������ȤϤ��Ǥ�¸�ߤ���
-     *         INVALID_ARGS:   ����������
-     *         UNKNOWN:        �����ʥ��顼
+     * @return OK:             正常終了
+     *         ALREADY_EXISTS: 与えられたオブジェクトはすでに存在する
+     *         INVALID_ARGS:   引数が不正
+     *         UNKNOWN:        不明なエラー
      *
      * @else
      * @brief Activate object
@@ -190,15 +190,15 @@ namespace Ice
 
     /*!
      * @if jp
-     * @brief ���֥������Ȥ�deactivate����
+     * @brief オブジェクトをdeactivateする
      *
-     * Ϳ����줿���֥������Ȥ��󥢥��ƥ��ֲ����롣
-     * ���֥������Ȥ����֥������ȥޥåפˤʤ����� NOT_FOUND ���顼���֤���롣
+     * 与えられたオブジェクトを非アクティブ化する。
+     * オブジェクトがオブジェクトマップにない場合は NOT_FOUND エラーが返される。
      *
-     * @return OK:             ���ｪλ
-     *         NOT_FOUND:      Ϳ����줿���֥������Ȥϥޥå׾��¸�ߤ��ʤ�
-     *         INVALID_ARGS:   ����������
-     *         UNKNOWN:        �����ʥ��顼
+     * @return OK:             正常終了
+     *         NOT_FOUND:      与えられたオブジェクトはマップ上に存在しない
+     *         INVALID_ARGS:   引数が不正
+     *         UNKNOWN:        不明なエラー
      *
      * @else
      * @brief Deactivate object
@@ -219,15 +219,15 @@ namespace Ice
 
     /*!
      * @if jp
-     * @brief ���֥������Ȥ�deactivate����
+     * @brief オブジェクトをdeactivateする
      *
-     * Ϳ����줿̾���Υ��֥������Ȥ��󥢥��ƥ��ֲ����롣���֥�������̾
-     * �����֥������ȥޥåפˤʤ����� NOT_FOUND ���顼���֤���롣
+     * 与えられた名前のオブジェクトを非アクティブ化する。オブジェクト名
+     * がオブジェクトマップにない場合は NOT_FOUND エラーが返される。
      *
-     * @return OK:             ���ｪλ
-     *         NOT_FOUND:      Ϳ����줿���֥������Ȥϥޥå׾��¸�ߤ��ʤ�
-     *         INVALID_ARGS:   ����������
-     *         UNKNOWN:        �����ʥ��顼
+     * @return OK:             正常終了
+     *         NOT_FOUND:      与えられたオブジェクトはマップ上に存在しない
+     *         INVALID_ARGS:   引数が不正
+     *         UNKNOWN:        不明なエラー
      *
      * @else
      * @brief Deactivate object
@@ -248,15 +248,15 @@ namespace Ice
 
     /*!
      * @if jp
-     * @brief Impl���֥������Ȥ�̾���Ǽ�������
+     * @brief Implオブジェクトを名前で取得する
      *
-     * Ϳ����줿̾���Υ��֥������Ȥ�������롣
-     * ���֥������Ȥ��ޥåפˤʤ����� NOT_FOUND ���顼���֤���롣
+     * 与えられた名前のオブジェクトを取得する。
+     * オブジェクトがマップにない場合は NOT_FOUND エラーが返される。
      *
-     * @return OK:             ���ｪλ
-     *         NOT_FOUND:      ���֥������Ȥϥޥå׾��¸�ߤ��ʤ�
-     *         INVALID_ARGS:   ����������
-     *         UNKNOWN:        �����ʥ��顼
+     * @return OK:             正常終了
+     *         NOT_FOUND:      オブジェクトはマップ上に存在しない
+     *         INVALID_ARGS:   引数が不正
+     *         UNKNOWN:        不明なエラー
      *
      * @else
      * @brief Getting object by name
@@ -277,15 +277,15 @@ namespace Ice
 
     /*!
      * @if jp
-     * @brief Impl���֥������Ȥ�Servant�Ǽ�������
+     * @brief ImplオブジェクトをServantで取得する
      *
-     * Ϳ����줿���֥������Ȥ��б����륵���Х�Ȥ�������롣
-     * ���֥������Ȥ��ޥåפˤʤ����� NOT_FOUND ���顼���֤���롣
+     * 与えられたオブジェクトに対応するサーバントを取得する。
+     * オブジェクトがマップにない場合は NOT_FOUND エラーが返される。
      *
-     * @return OK:             ���ｪλ
-     *         NOT_FOUND:      ���֥������Ȥϥޥå׾��¸�ߤ��ʤ�
-     *         INVALID_ARGS:   ����������
-     *         UNKNOWN:        �����ʥ��顼
+     * @return OK:             正常終了
+     *         NOT_FOUND:      オブジェクトはマップ上に存在しない
+     *         INVALID_ARGS:   引数が不正
+     *         UNKNOWN:        不明なエラー
      *
      * @else
      * @brief Getting impl object by servant
@@ -306,15 +306,15 @@ namespace Ice
 
     /*!
      * @if jp
-     * @brief Servant���֥������Ȥ��������
+     * @brief Servantオブジェクトを取得する
      *
-     * Ϳ����줿̾����Servant���֥������Ȥ�������롣
-     * ���֥������Ȥ��ޥåפˤʤ����� NOT_FOUND ���顼���֤���롣
+     * 与えられた名前のServantオブジェクトを取得する。
+     * オブジェクトがマップにない場合は NOT_FOUND エラーが返される。
      *
-     * @return OK:             ���ｪλ
-     *         NOT_FOUND:      ���֥������Ȥϥޥå׾��¸�ߤ��ʤ�
-     *         INVALID_ARGS:   ����������
-     *         UNKNOWN:        �����ʥ��顼
+     * @return OK:             正常終了
+     *         NOT_FOUND:      オブジェクトはマップ上に存在しない
+     *         INVALID_ARGS:   引数が不正
+     *         UNKNOWN:        不明なエラー
      *
      * @else
      * @brief Getting servant object by name
@@ -335,15 +335,15 @@ namespace Ice
 
     /*!
      * @if jp
-     * @brief Servant���֥������Ȥ��������
+     * @brief Servantオブジェクトを取得する
      *
-     * Ϳ����줿impl���֥������Ȥ�Servant���֥������Ȥ�������롣
-     * ���֥������Ȥ��ޥåפˤʤ����� NOT_FOUND ���顼���֤���롣
+     * 与えられたimplオブジェクトのServantオブジェクトを取得する。
+     * オブジェクトがマップにない場合は NOT_FOUND エラーが返される。
      *
-     * @return OK:             ���ｪλ
-     *         NOT_FOUND:      ���֥������Ȥϥޥå׾��¸�ߤ��ʤ�
-     *         INVALID_ARGS:   ����������
-     *         UNKNOWN:        �����ʥ��顼
+     * @return OK:             正常終了
+     *         NOT_FOUND:      オブジェクトはマップ上に存在しない
+     *         INVALID_ARGS:   引数が不正
+     *         UNKNOWN:        不明なエラー
      *
      * @else
      * @brief Getting servant object by impl object
@@ -367,7 +367,7 @@ namespace Ice
     //------------------------------------------------------------
     /*!
      * @if jp
-     * @brief Object���Ϣ�դ���줿Impl���Ѵ�����
+     * @brief Objectを関連付けられたImplに変換する
      *
      * @else
      * @brief Convert Ice ObjectPrx to Impl related to it.
@@ -379,7 +379,7 @@ namespace Ice
 
     /*!
      * @if jp
-     * @brief ̾�����饪�֥������Ȼ��Ȥ��������
+     * @brief 名前からオブジェクト参照を取得する
      *
      * @else
      * @brief Getting object reference from the given name
@@ -391,7 +391,7 @@ namespace Ice
 
     /*!
      * @if jp
-     * @brief Impl���֥������Ȥ��饪�֥������Ȼ��Ȥ��Ѵ�����
+     * @brief Implオブジェクトからオブジェクト参照へ変換する
      *
      * @else
      * @brief Converting Impl object to object reference
@@ -403,7 +403,7 @@ namespace Ice
 
     /*!
      * @if jp
-     * @brief Servant���֥������Ȥ��饪�֥������Ȼ��Ȥ��Ѵ�����
+     * @brief Servantオブジェクトからオブジェクト参照へ変換する
      *
      * @else
      * @brief Converting Servant object to object reference
@@ -415,7 +415,7 @@ namespace Ice
 
     /*!
      * @if jp
-     * @brief ORB�Υݥ��󥿤��������
+     * @brief ORBのポインタを取得する
      *
      * @else
      * @brief Getting ORB pointer
@@ -430,7 +430,7 @@ namespace Ice
     //------------------------------------------------------------
     /*!
      * @if jp
-     * @brief ORB�Υݥ��󥿤��������
+     * @brief ORBのポインタを取得する
      *
      * @else
      * @brief Getting ORB pointer
@@ -442,7 +442,7 @@ namespace Ice
 
     /*!
      * @if jp
-     * @brief �ǥե����POA�Υݥ��󥿤��������
+     * @brief デフォルトPOAのポインタを取得する
      *
      * @else
      * @brief Getting default POA pointer
@@ -458,11 +458,11 @@ namespace Ice
   protected:
     /*!
      * @if jp
-     * @brief Ice ORB �ν��������
+     * @brief Ice ORB の初期化処理
      *
-     * �����ˤ��Ϳ����줿����򸵤�ORB���������롣
+     * 引数により与えられた設定を元にORBを初期化する。
      *
-     * @return ORB ������������(���������:true�����������:false)
+     * @return ORB 初期化処理結果(初期化成功:true、初期化失敗:false)
      *
      * @else
      * @brief Ice ORB initialization
@@ -477,12 +477,12 @@ namespace Ice
 
     /*!
      * @if jp
-     * @brief ORB �Υ��ޥ�ɥ饤�󥪥ץ�������
+     * @brief ORB のコマンドラインオプション作成
      *
-     * ����ե�����졼������������ꤵ�줿���Ƥ���
-     * ORB �ε�ư�����ץ�����������롣
+     * コンフィギュレーション情報に設定された内容から
+     * ORB の起動時オプションを作成する。
      *
-     * @return ORB ��ư�����ץ����
+     * @return ORB 起動時オプション
      *
      * @else
      * @brief Create ORB command options

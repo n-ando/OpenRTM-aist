@@ -1,4 +1,4 @@
-#include <doil/ImplBase.h>
+﻿#include <doil/ImplBase.h>
 #include "EchoImpl.h"
 
 //------------------------------------------------------------

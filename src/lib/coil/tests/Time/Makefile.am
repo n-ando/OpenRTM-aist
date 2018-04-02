@@ -74,7 +74,6 @@ Time_vc9.vcproj:
 		--yaml ../coil_test.vcproj.yaml \
 		--source $(TEST_SRC)
 #		--header $(TEST_H)
-	qkc -O- -sm $(win32_builddir)/Time_vc9.vcproj
 
 Time_vc10.vcproj:
 	$(top_builddir)/build/vcprojtool.py vcproj \
@@ -85,6 +84,5 @@ Time_vc10.vcproj:
 		--out $(win32_builddir)/Time_vc10.vcproj \
 		--yaml ../coil_test.vcproj.yaml \
 		--source $(TEST_SRC)
-	qkc -O- -sm $(win32_builddir)/Time_vc10.vcproj
 
 

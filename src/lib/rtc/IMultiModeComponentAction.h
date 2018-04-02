@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file  IMultiiModeComponentAction.h
  * @brief IMultiiModeComponentAction class
@@ -29,7 +29,7 @@ namespace Local
   /*!
    * @if jp
    * @class IMultiiModeComponentAction
-   * @brief IMultiiModeComponentAction ¥¯¥é¥¹
+   * @brief IMultiiModeComponentAction ã‚¯ãƒ©ã‚¹
    * @else
    * @class IMultiiModeComponentAction
    * @brief IMultiiModeComponentAction class
@@ -40,7 +40,7 @@ namespace Local
   public:
     /*!
      * @if jp
-     * @brief ¥Ç¥¹¥È¥é¥¯¥¿
+     * @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
      * @else
      * @brief Destructor
      * @endif

@@ -1,4 +1,4 @@
-// -*- C++ -*-
+я╗┐// -*- C++ -*-
 /*!
  * @file   CorbaNamingTests.cpp
  * @brief  CorbaNaming test class
@@ -185,7 +185,7 @@ namespace CorbaNaming
     }
 		
     /*!
-     * @brief getNameServer(), toString(), toUrl(), resolveStr()есе╜е├е╔д╬е╞е╣е╚
+     * @brief getNameServer(), toString(), toUrl(), resolveStr()уГбуВ╜уГГуГЙуБоуГЖуВ╣уГИ
      * 
      * - 
      */
@@ -194,7 +194,7 @@ namespace CorbaNaming
       std::string set_name("corbaloc::localhost:2809/NameService");
       m_pNaming->init("localhost:2809");
 
-      // е═б╝ере╡б╝е╨д╬╠╛┴░дЄ└╡д╖дп╝ш╞└д╟дндыдл
+      // уГНуГ╝уГауВ╡уГ╝уГРуБохРНхЙНуВТцнгуБЧуБПхПЦх╛ЧуБзуБНуВЛуБЛ
       std::string get_name(m_pNaming->getNameServer());
       CPPUNIT_ASSERT_EQUAL(set_name, get_name);
 
@@ -202,7 +202,7 @@ namespace CorbaNaming
       name.length(1);
       name[0].id = "id";
       name[0].kind = "kind";
-      // ═┐дидщдьд┐ NameComponent д╬╩╕╗·╬є╔╜╕╜дЄ└╡д╖дп╩╓д╣дл
+      // ф╕ОуБИуВЙуВМуБЯ NameComponent уБоцЦЗхнЧхИЧшбичП╛уВТцнгуБЧуБПш┐ФуБЩуБЛ
       std::string str(m_pNaming->toString(name));
       CPPUNIT_ASSERT("id.kind" == str);
 
@@ -214,7 +214,7 @@ namespace CorbaNaming
       CPPUNIT_ASSERT(! CORBA::is_nil(rto->getObjRef()));
       m_pNaming->bindByString("id.kind", rto->getObjRef());
 
-      // ═┐дидщдьд┐╩╕╗·╬є╔╜╕╜дЄ resolve д╖еке╓е╕езепе╚дЄ╩╓д╣дл
+      // ф╕ОуБИуВЙуВМуБЯцЦЗхнЧхИЧшбичП╛уВТ resolve уБЧуВкуГЦуВ╕уВзуВпуГИуВТш┐ФуБЩуБЛ
       CORBA::Object_ptr obj = m_pNaming->resolveStr("id.kind");
       CPPUNIT_ASSERT(obj->_is_equivalent(rto->_this()));
 
@@ -222,15 +222,15 @@ namespace CorbaNaming
     }
 		
     /*!
-     * @brief bindOrResolve()есе╜е├е╔д╬е╞е╣е╚
+     * @brief bindOrResolve()уГбуВ╜уГГуГЙуБоуГЖуВ╣уГИ
      * 
-     * - еке╓е╕езепе╚д╬╠╛┴░дЄе╨едеєе╔д▐д┐д╧▓Є╖шд╟дндыдл
+     * - уВкуГЦуВ╕уВзуВпуГИуБохРНхЙНуВТуГРуВдуГ│уГЙуБ╛уБЯуБпшзгц▒║уБзуБНуВЛуБЛ
      */
     void test_bindOrResolve()
     {
       RTC::CorbaObjectManager objMgr(m_pORB, m_pPOA);
 			
-      // е╨едеєе╔└шд╚д╩дые│еєе╞ене╣е╚дЄ┼╨╧┐д╖д╞дкдп
+      // уГРуВдуГ│уГЙхЕИуБиуБкуВЛуВ│уГ│уГЖуВнуВ╣уГИуВТчЩ╗щМ▓уБЧуБжуБКуБП
       RTC::RTObject_impl* rto0 = new RTC::RTObject_impl(m_pORB, m_pPOA);
       objMgr.activate(rto0);
       CPPUNIT_ASSERT(! CORBA::is_nil(rto0->getObjRef()));
@@ -241,12 +241,12 @@ namespace CorbaNaming
       CosNaming::NamingContext_var nc0 = CosNaming::NamingContextExt::_narrow(obj0);
       CPPUNIT_ASSERT(! CORBA::is_nil(nc0));
 			
-      // евепе╞еге╓▓╜д╣ды
+      // уВвуВпуГЖуВгуГЦхМЦуБЩуВЛ
       RTC::RTObject_impl* rto = new RTC::RTObject_impl(m_pORB, m_pPOA);
       objMgr.activate(rto);
       CPPUNIT_ASSERT(! CORBA::is_nil(rto->getObjRef()));
 
-      // еке╓е╕езепе╚дЄе╨едеєе╔д╖бвд╜дьдм└╡д╖дп└▀─ъд╡дьдыдлбй
+      // уВкуГЦуВ╕уВзуВпуГИуВТуГРуВдуГ│уГЙуБЧуАБуБЭуВМуБМцнгуБЧуБПшинхоЪуБХуВМуВЛуБЛя╝Я
       const char* fullName = "lv1-id.lv1-kind";
       CORBA::Object_ptr obj1 = m_pNaming->bindOrResolve(nc0._retn(), 
                                           m_pNaming->toName(fullName), rto->getObjRef());
@@ -258,15 +258,15 @@ namespace CorbaNaming
     }
 		
     /*!
-     * @brief bindOrResolveContext()есе╜е├е╔д╬е╞е╣е╚
+     * @brief bindOrResolveContext()уГбуВ╜уГГуГЙуБоуГЖуВ╣уГИ
      * 
-     * - ╠╛┴░дЄе╨едеєе╔д▐д┐д╧▓Є╖шд╟дндыдл
+     * - хРНхЙНуВТуГРуВдуГ│уГЙуБ╛уБЯуБпшзгц▒║уБзуБНуВЛуБЛ
      */
     void test_bindOrResolveContext()
     {
       RTC::CorbaObjectManager objMgr(m_pORB, m_pPOA);
 			
-      // е╨едеєе╔└шд╚д╩дые│еєе╞ене╣е╚дЄ┼╨╧┐д╖д╞дкдп
+      // уГРуВдуГ│уГЙхЕИуБиуБкуВЛуВ│уГ│уГЖуВнуВ╣уГИуВТчЩ╗щМ▓уБЧуБжуБКуБП
       RTC::RTObject_impl* rto0 = new RTC::RTObject_impl(m_pORB, m_pPOA);
       objMgr.activate(rto0);
       CPPUNIT_ASSERT(! CORBA::is_nil(rto0->getObjRef()));
@@ -277,12 +277,12 @@ namespace CorbaNaming
       CosNaming::NamingContext_var nc0 = CosNaming::NamingContextExt::_narrow(obj0);
       CPPUNIT_ASSERT(! CORBA::is_nil(nc0));
 			
-      // евепе╞еге╓▓╜д╣ды
+      // уВвуВпуГЖуВгуГЦхМЦуБЩуВЛ
       RTC::RTObject_impl* rto = new RTC::RTObject_impl(m_pORB, m_pPOA);
       objMgr.activate(rto);
       CPPUNIT_ASSERT(! CORBA::is_nil(rto->getObjRef()));
 
-      // еке╓е╕езепе╚дЄе╨едеєе╔д╖бвд╜дьдм└╡д╖дп└▀─ъд╡дьдыдлбй
+      // уВкуГЦуВ╕уВзуВпуГИуВТуГРуВдуГ│уГЙуБЧуАБуБЭуВМуБМцнгуБЧуБПшинхоЪуБХуВМуВЛуБЛя╝Я
       const char* fullName = "lv1-id.lv1-kind";
       CosNaming::NamingContext_var nc1 = m_pNaming->bindOrResolveContext(nc0._retn(), 
                                           m_pNaming->toName(fullName) );
@@ -297,20 +297,20 @@ namespace CorbaNaming
     }
 		
     /*!
-     * @brief bind()есе╜е├е╔д╬е╞е╣е╚
+     * @brief bind()уГбуВ╜уГГуГЙуБоуГЖуВ╣уГИ
      * 
-     * - еке╓е╕езепе╚дЄе╨едеєе╔д╖бвд╜дьдм└╡д╖дп└▀─ъд╡дьдыдлбй
+     * - уВкуГЦуВ╕уВзуВпуГИуВТуГРуВдуГ│уГЙуБЧуАБуБЭуВМуБМцнгуБЧуБПшинхоЪуБХуВМуВЛуБЛя╝Я
      */
     void test_bind()
     {
       RTC::CorbaObjectManager objMgr(m_pORB, m_pPOA);
 			
-      // евепе╞еге╓▓╜д╣ды
+      // уВвуВпуГЖуВгуГЦхМЦуБЩуВЛ
       RTC::RTObject_impl* rto = new RTC::RTObject_impl(m_pORB, m_pPOA);
       objMgr.activate(rto);
       CPPUNIT_ASSERT(! CORBA::is_nil(rto->getObjRef()));
 
-      // еке╓е╕езепе╚дЄе╨едеєе╔д╖бвд╜дьдм└╡д╖дп└▀─ъд╡дьдыдлбй
+      // уВкуГЦуВ╕уВзуВпуГИуВТуГРуВдуГ│уГЙуБЧуАБуБЭуВМуБМцнгуБЧуБПшинхоЪуБХуВМуВЛуБЛя╝Я
       const char* fullName = "lv1-id.lv1-kind/lv2-id.lv2-kind/lv3-id.lv3-kind";
       m_pNaming->bind(m_pNaming->toName(fullName), rto->getObjRef());
       CORBA::Object_ptr obj = resolveRecursive(fullName);
@@ -319,21 +319,21 @@ namespace CorbaNaming
     }
 		
     /*!
-     * @brief bindByString()есе╜е├е╔д╬е╞е╣е╚
+     * @brief bindByString()уГбуВ╜уГГуГЙуБоуГЖуВ╣уГИ
      * 
-     * - еке╓е╕езепе╚дЄе╨едеєе╔д╖бвд╜дьдм└╡д╖дп└▀─ъд╡дьдыдлбй
+     * - уВкуГЦуВ╕уВзуВпуГИуВТуГРуВдуГ│уГЙуБЧуАБуБЭуВМуБМцнгуБЧуБПшинхоЪуБХуВМуВЛуБЛя╝Я
      */
     void test_bindByString()
     {
 
       RTC::CorbaObjectManager objMgr(m_pORB, m_pPOA);
 			
-      // евепе╞еге╓▓╜д╣ды
+      // уВвуВпуГЖуВгуГЦхМЦуБЩуВЛ
       RTC::RTObject_impl* rto = new RTC::RTObject_impl(m_pORB, m_pPOA);
       objMgr.activate(rto);
       CPPUNIT_ASSERT(! CORBA::is_nil(rto->getObjRef()));
 
-      // еке╓е╕езепе╚дЄе╨едеєе╔д╖бвд╜дьдм└╡д╖дп└▀─ъд╡дьдыдлбй
+      // уВкуГЦуВ╕уВзуВпуГИуВТуГРуВдуГ│уГЙуБЧуАБуБЭуВМуБМцнгуБЧуБПшинхоЪуБХуВМуВЛуБЛя╝Я
       const char* fullName = "lv1-id.lv1-kind/lv2-id.lv2-kind/lv3-id.lv3-kind";
       m_pNaming->bindByString(fullName, rto->getObjRef());
       CORBA::Object_ptr obj = resolveRecursive(fullName);
@@ -342,15 +342,15 @@ namespace CorbaNaming
     }
 		
     /*!
-     * @brief bindRecursive()есе╜е├е╔д╬е╞е╣е╚
+     * @brief bindRecursive()уГбуВ╜уГГуГЙуБоуГЖуВ╣уГИ
      * 
-     * - еке╓е╕езепе╚дЄе╨едеєе╔д╖бвд╜дьдм└╡д╖дп└▀─ъд╡дьдыдлбй
+     * - уВкуГЦуВ╕уВзуВпуГИуВТуГРуВдуГ│уГЙуБЧуАБуБЭуВМуБМцнгуБЧуБПшинхоЪуБХуВМуВЛуБЛя╝Я
      */
     void test_bindRecursive()
     {
       RTC::CorbaObjectManager objMgr(m_pORB, m_pPOA);
 			
-      // е╨едеєе╔└шд╚д╩дые│еєе╞ене╣е╚дЄ┼╨╧┐д╖д╞дкдп
+      // уГРуВдуГ│уГЙхЕИуБиуБкуВЛуВ│уГ│уГЖуВнуВ╣уГИуВТчЩ╗щМ▓уБЧуБжуБКуБП
       RTC::RTObject_impl* rto0 = new RTC::RTObject_impl(m_pORB, m_pPOA);
       objMgr.activate(rto0);
       CPPUNIT_ASSERT(! CORBA::is_nil(rto0->getObjRef()));
@@ -362,12 +362,12 @@ namespace CorbaNaming
       CosNaming::NamingContext_var nc0 = CosNaming::NamingContextExt::_narrow(obj0);
       CPPUNIT_ASSERT(! CORBA::is_nil(nc0));
 			
-      // евепе╞еге╓▓╜д╣ды
+      // уВвуВпуГЖуВгуГЦхМЦуБЩуВЛ
       RTC::RTObject_impl* rto = new RTC::RTObject_impl(m_pORB, m_pPOA);
       objMgr.activate(rto);
       CPPUNIT_ASSERT(! CORBA::is_nil(rto->getObjRef()));
 
-      // еке╓е╕езепе╚дЄе╨едеєе╔д╖бвд╜дьдм└╡д╖дп└▀─ъд╡дьдыдлбй
+      // уВкуГЦуВ╕уВзуВпуГИуВТуГРуВдуГ│уГЙуБЧуАБуБЭуВМуБМцнгуБЧуБПшинхоЪуБХуВМуВЛуБЛя╝Я
       const char* fullName = "lv1-id.lv1-kind/lv2-id.lv2-kind/lv3-id.lv3-kind";
       m_pNaming->bindRecursive(nc0._retn(), m_pNaming->toName(fullName), rto->getObjRef());
       CORBA::Object_ptr obj = resolveRecursive("id0-lv0.kind0-lv0/lv1-id.lv1-kind/lv2-id.lv2-kind/lv3-id.lv3-kind");
@@ -377,26 +377,26 @@ namespace CorbaNaming
     }
 		
     /*!
-     * @brief bind()есе╜е├е╔д╬е╞е╣е╚
+     * @brief bind()уГбуВ╜уГГуГЙуБоуГЖуВ╣уГИ
      * 
-     * - д╣д╟д╦е╨едеєе╔║╤д▀д╬╠╛╛╬дЄ╗╪─ъд╖д╞е╨едеєе╔дЄ╗юд▀д┐╛ь╣чбв░╒┐▐д╔дкдъд╬╬у│░дме╣еэб╝д╡дьдыдлбй
+     * - уБЩуБзуБлуГРуВдуГ│уГЙц╕ИуБ┐уБохРНчз░уВТцМЗхоЪуБЧуБжуГРуВдуГ│уГЙуВТшйжуБ┐уБЯха┤хРИуАБцДПхЫ│уБйуБКуВКуБоф╛ЛхдЦуБМуВ╣уГнуГ╝уБХуВМуВЛуБЛя╝Я
      */
     void test_bind_already_bound()
     {
       RTC::CorbaObjectManager objMgr(m_pORB, m_pPOA);
 			
-      // евепе╞еге╓▓╜д╣ды
+      // уВвуВпуГЖуВгуГЦхМЦуБЩуВЛ
       RTC::RTObject_impl* rto = new RTC::RTObject_impl(m_pORB, m_pPOA);
       objMgr.activate(rto);
       CPPUNIT_ASSERT(! CORBA::is_nil(rto->getObjRef()));
 
-      // еке╓е╕езепе╚дЄе╨едеєе╔д╖бвд╜дьдм└╡д╖дп└▀─ъд╡дьдыдлбй
+      // уВкуГЦуВ╕уВзуВпуГИуВТуГРуВдуГ│уГЙуБЧуАБуБЭуВМуБМцнгуБЧуБПшинхоЪуБХуВМуВЛуБЛя╝Я
       const char* fullName = "lv1-id.lv1-kind/lv2-id.lv2-kind/lv3-id.lv3-kind";
       m_pNaming->bind(m_pNaming->toName(fullName), rto->getObjRef());
       CORBA::Object_ptr obj = resolveRecursive(fullName);
       CPPUNIT_ASSERT(obj->_is_equivalent(rto->_this()));
 			
-      // д╣д╟д╦е╨едеєе╔║╤д▀д╬╠╛╛╬дЄ╗╪─ъд╖д╞е╨едеєе╔дЄ╗юд▀д┐╛ь╣чбв░╒┐▐д╔дкдъд╬╬у│░дме╣еэб╝д╡дьдыдлбй
+      // уБЩуБзуБлуГРуВдуГ│уГЙц╕ИуБ┐уБохРНчз░уВТцМЗхоЪуБЧуБжуГРуВдуГ│уГЙуВТшйжуБ┐уБЯха┤хРИуАБцДПхЫ│уБйуБКуВКуБоф╛ЛхдЦуБМуВ╣уГнуГ╝уБХуВМуВЛуБЛя╝Я
       try
 	{
 	  m_pNaming->bind(m_pNaming->toName(fullName), rto->getObjRef());
@@ -407,15 +407,15 @@ namespace CorbaNaming
     }
 		
     /*!
-     * @brief rebind()есе╜е├е╔д╬е╞е╣е╚
+     * @brief rebind()уГбуВ╜уГГуГЙуБоуГЖуВ╣уГИ
      * 
-     * - д╣д╟д╦е╨едеєе╔║╤д▀д╬╠╛╛╬дЄ╗╪─ъд╖д╞еъе╨едеєе╔дЄ╗юд▀д┐╛ь╣чбв┐╖д╖дде╨едеєе╟егеєе░д╦├╓дн┤╣дядыдлбй
+     * - уБЩуБзуБлуГРуВдуГ│уГЙц╕ИуБ┐уБохРНчз░уВТцМЗхоЪуБЧуБжуГкуГРуВдуГ│уГЙуВТшйжуБ┐уБЯха┤хРИуАБцЦ░уБЧуБДуГРуВдуГ│уГЗуВгуГ│уВ░уБлч╜оуБНцПЫуВПуВЛуБЛя╝Я
      */
     void test_rebind()
     {
       RTC::CorbaObjectManager objMgr(m_pORB, m_pPOA);
 			
-      // евепе╞еге╓▓╜д╣ды
+      // уВвуВпуГЖуВгуГЦхМЦуБЩуВЛ
       RTC::RTObject_impl* rto1 = new RTC::RTObject_impl(m_pORB, m_pPOA);
       objMgr.activate(rto1);
       CPPUNIT_ASSERT(! CORBA::is_nil(rto1->getObjRef()));
@@ -423,13 +423,13 @@ namespace CorbaNaming
       objMgr.activate(rto2);
       CPPUNIT_ASSERT(! CORBA::is_nil(rto2->getObjRef()));
 
-      // еке╓е╕езепе╚дЄе╨едеєе╔д╖бвд╜дьдм└╡д╖дп└▀─ъд╡дьдыдлбй
+      // уВкуГЦуВ╕уВзуВпуГИуВТуГРуВдуГ│уГЙуБЧуАБуБЭуВМуБМцнгуБЧуБПшинхоЪуБХуВМуВЛуБЛя╝Я
       const char* fullName = "lv1-id.lv1-kind/lv2-id.lv2-kind/lv3-id.lv3-kind";
       m_pNaming->bind(m_pNaming->toName(fullName), rto1->getObjRef());
       CORBA::Object_ptr obj1 = resolveRecursive(fullName);
       CPPUNIT_ASSERT(obj1->_is_equivalent(rto1->_this()));
 			
-      // д╣д╟д╦е╨едеєе╔║╤д▀д╬╠╛╛╬дЄ╗╪─ъд╖д╞еъе╨едеєе╔дЄ╗юд▀д┐╛ь╣чбв┐╖д╖дде╨едеєе╟егеєе░д╦├╓дн┤╣дядыдлбй
+      // уБЩуБзуБлуГРуВдуГ│уГЙц╕ИуБ┐уБохРНчз░уВТцМЗхоЪуБЧуБжуГкуГРуВдуГ│уГЙуВТшйжуБ┐уБЯха┤хРИуАБцЦ░уБЧуБДуГРуВдуГ│уГЗуВгуГ│уВ░уБлч╜оуБНцПЫуВПуВЛуБЛя╝Я
       m_pNaming->rebind(m_pNaming->toName(fullName), rto2->getObjRef());
       CORBA::Object_ptr obj2 = resolveRecursive(fullName);
       CPPUNIT_ASSERT(obj2->_is_equivalent(rto2->_this()));
@@ -438,15 +438,15 @@ namespace CorbaNaming
     }
 		
     /*!
-     * @brief rebindByString()есе╜е├е╔д╬е╞е╣е╚
+     * @brief rebindByString()уГбуВ╜уГГуГЙуБоуГЖуВ╣уГИ
      * 
-     * - д╣д╟д╦е╨едеєе╔║╤д▀д╬╠╛╛╬дЄ╗╪─ъд╖д╞еъе╨едеєе╔дЄ╗юд▀д┐╛ь╣чбв┐╖д╖дде╨едеєе╟егеєе░д╦├╓дн┤╣дядыдлбй
+     * - уБЩуБзуБлуГРуВдуГ│уГЙц╕ИуБ┐уБохРНчз░уВТцМЗхоЪуБЧуБжуГкуГРуВдуГ│уГЙуВТшйжуБ┐уБЯха┤хРИуАБцЦ░уБЧуБДуГРуВдуГ│уГЗуВгуГ│уВ░уБлч╜оуБНцПЫуВПуВЛуБЛя╝Я
      */
     void test_rebindByString()
     {
       RTC::CorbaObjectManager objMgr(m_pORB, m_pPOA);
 			
-      // евепе╞еге╓▓╜д╣ды
+      // уВвуВпуГЖуВгуГЦхМЦуБЩуВЛ
       RTC::RTObject_impl* rto1 = new RTC::RTObject_impl(m_pORB, m_pPOA);
       objMgr.activate(rto1);
       CPPUNIT_ASSERT(! CORBA::is_nil(rto1->getObjRef()));
@@ -454,13 +454,13 @@ namespace CorbaNaming
       objMgr.activate(rto2);
       CPPUNIT_ASSERT(! CORBA::is_nil(rto2->getObjRef()));
 
-      // еке╓е╕езепе╚дЄе╨едеєе╔д╖бвд╜дьдм└╡д╖дп└▀─ъд╡дьдыдлбй
+      // уВкуГЦуВ╕уВзуВпуГИуВТуГРуВдуГ│уГЙуБЧуАБуБЭуВМуБМцнгуБЧуБПшинхоЪуБХуВМуВЛуБЛя╝Я
       const char* fullName = "lv1-id.lv1-kind/lv2-id.lv2-kind/lv3-id.lv3-kind";
       m_pNaming->bind(m_pNaming->toName(fullName), rto1->getObjRef());
       CORBA::Object_ptr obj1 = resolveRecursive(fullName);
       CPPUNIT_ASSERT(obj1->_is_equivalent(rto1->_this()));
 			
-      // д╣д╟д╦е╨едеєе╔║╤д▀д╬╠╛╛╬дЄ╗╪─ъд╖д╞еъе╨едеєе╔дЄ╗юд▀д┐╛ь╣чбв┐╖д╖дде╨едеєе╟егеєе░д╦├╓дн┤╣дядыдлбй
+      // уБЩуБзуБлуГРуВдуГ│уГЙц╕ИуБ┐уБохРНчз░уВТцМЗхоЪуБЧуБжуГкуГРуВдуГ│уГЙуВТшйжуБ┐уБЯха┤хРИуАБцЦ░уБЧуБДуГРуВдуГ│уГЗуВгуГ│уВ░уБлч╜оуБНцПЫуВПуВЛуБЛя╝Я
       m_pNaming->rebindByString(fullName, rto2->getObjRef());
       CORBA::Object_ptr obj2 = resolveRecursive(fullName);
       CPPUNIT_ASSERT(obj2->_is_equivalent(rto2->_this()));
@@ -469,15 +469,15 @@ namespace CorbaNaming
     }
 		
     /*!
-     * @brief rebindRecursive()есе╜е├е╔д╬е╞е╣е╚
+     * @brief rebindRecursive()уГбуВ╜уГГуГЙуБоуГЖуВ╣уГИ
      * 
-     * - д╣д╟д╦е╨едеєе╔║╤д▀д╬╠╛╛╬дЄ╗╪─ъд╖д╞еъе╨едеєе╔дЄ╗юд▀д┐╛ь╣чбв└╡д╖дп┐╖д╖дде╨едеєе╟егеєе░д╦├╓дн┤╣дядыдлбй
+     * - уБЩуБзуБлуГРуВдуГ│уГЙц╕ИуБ┐уБохРНчз░уВТцМЗхоЪуБЧуБжуГкуГРуВдуГ│уГЙуВТшйжуБ┐уБЯха┤хРИуАБцнгуБЧуБПцЦ░уБЧуБДуГРуВдуГ│уГЗуВгуГ│уВ░уБлч╜оуБНцПЫуВПуВЛуБЛя╝Я
      */
     void tset_rebindRecursive()
     {
       RTC::CorbaObjectManager objMgr(m_pORB, m_pPOA);
 			
-      // е╨едеєе╔└шд╚д╩дые│еєе╞ене╣е╚дЄ║ю└од╖бве╨едеєе╔д╖д╞дкдп
+      // уГРуВдуГ│уГЙхЕИуБиуБкуВЛуВ│уГ│уГЖуВнуВ╣уГИуВТф╜ЬцИРуБЧуАБуГРуВдуГ│уГЙуБЧуБжуБКуБП
       CosNaming::NamingContext_ptr ncParent = m_pNaming->newContext();
       CPPUNIT_ASSERT(! CORBA::is_nil(ncParent));
 			
@@ -485,7 +485,7 @@ namespace CorbaNaming
       CORBA::Object_ptr objParent = resolveRecursive("id-parent.kind-parent");
       CPPUNIT_ASSERT(objParent->_is_equivalent(ncParent));
 			
-      // е╞е╣е╚═╤д╦е╨едеєе╔д╣дыеке╓е╕езепе╚дЄ║ю└од╖д╞дкдп
+      // уГЖуВ╣уГИчФиуБлуГРуВдуГ│уГЙуБЩуВЛуВкуГЦуВ╕уВзуВпуГИуВТф╜ЬцИРуБЧуБжуБКуБП
       RTC::RTObject_impl* rto1 = new RTC::RTObject_impl(m_pORB, m_pPOA);
       objMgr.activate(rto1);
       CPPUNIT_ASSERT(! CORBA::is_nil(rto1->getObjRef()));
@@ -494,14 +494,14 @@ namespace CorbaNaming
       objMgr.activate(rto2);
       CPPUNIT_ASSERT(! CORBA::is_nil(rto2->getObjRef()));
 			
-      // г▒д─╠▄д╬еке╓е╕езепе╚дЄе╨едеєе╔д╣ды
+      // я╝СуБдчЫоуБоуВкуГЦуВ╕уВзуВпуГИуВТуГРуВдуГ│уГЙуБЩуВЛ
       m_pNaming->bindRecursive(
 			       ncParent, m_pNaming->toName("id-rto.kind-rto"), rto1->getObjRef());
       CORBA::Object_ptr objRto1 = resolveRecursive(
 						   "id-parent.kind-parent/id-rto.kind-rto");
       CPPUNIT_ASSERT(objRto1->_is_equivalent(rto1->getObjRef()));
 			
-      // г▓д─╠▄д╬еке╓е╕езепе╚дЄбвг▒д─╠▄д╚╞▒д╕░╠├╓д╦└╡д╖дпеъе╨едеєе╔д╟дндыдлбй
+      // я╝ТуБдчЫоуБоуВкуГЦуВ╕уВзуВпуГИуВТуАБя╝СуБдчЫоуБихРМуБШф╜Нч╜оуБлцнгуБЧуБПуГкуГРуВдуГ│уГЙуБзуБНуВЛуБЛя╝Я
       m_pNaming->rebindRecursive(
 				 ncParent, m_pNaming->toName("id-rto.kind-rto"), rto2->getObjRef());
       CORBA::Object_ptr objRto2 = resolveRecursive(
@@ -512,26 +512,26 @@ namespace CorbaNaming
     }
 		
     /*!
-     * @brief bindContext()есе╜е├е╔д╬е╞е╣е╚
+     * @brief bindContext()уГбуВ╜уГГуГЙуБоуГЖуВ╣уГИ
      * 
-     * - NamingContextдЄ└╡д╖дпе╨едеєе╔д╟дндыдлбй
+     * - NamingContextуВТцнгуБЧуБПуГРуВдуГ│уГЙуБзуБНуВЛуБЛя╝Я
      */
     void test_bindContext()
     {
       RTC::CorbaObjectManager objMgr(m_pORB, m_pPOA);
 
-      // е╨едеєе╔└шд╚д╩дые│еєе╞ене╣е╚дЄ┼╨╧┐д╖д╞дкдп
+      // уГРуВдуГ│уГЙхЕИуБиуБкуВЛуВ│уГ│уГЖуВнуВ╣уГИуВТчЩ╗щМ▓уБЧуБжуБКуБП
       RTC::RTObject_impl* rto = new RTC::RTObject_impl(m_pORB, m_pPOA);
       objMgr.activate(rto);
       CPPUNIT_ASSERT(! CORBA::is_nil(rto->getObjRef()));
 
-      // е╞е╣е╚д╦═╤дддые│еєе╞ене╣е╚дЄ╜р╚ўд╖д╞дкдп
+      // уГЖуВ╣уГИуБлчФиуБДуВЛуВ│уГ│уГЖуВнуВ╣уГИуВТц║ЦхВЩуБЧуБжуБКуБП
       CosNaming::NamingContext_ptr nc = m_pNaming->newContext();
       CPPUNIT_ASSERT(! CORBA::is_nil(nc));
 			
       nc->bind(m_pNaming->toName("id.kind"), rto->getObjRef());
 			
-      // е│еєе╞ене╣е╚дЄе╨едеєе╔д╖бв└╡д╖дпе╨едеєе╔д╟днд┐д│д╚дЄ│╬╟зд╣ды
+      // уВ│уГ│уГЖуВнуВ╣уГИуВТуГРуВдуГ│уГЙуБЧуАБцнгуБЧуБПуГРуВдуГ│уГЙуБзуБНуБЯуБУуБиуВТчв║шкНуБЩуВЛ
       m_pNaming->bindContext("id-lv0.kind-lv0/id-lv1.kind-lv1", nc);
 			
       CORBA::Object_ptr objNc = resolveRecursive("id-lv0.kind-lv0/id-lv1.kind-lv1");
@@ -543,15 +543,15 @@ namespace CorbaNaming
     }
 
     /*!
-     * @brief bindContextRecursive()есе╜е├е╔д╬е╞е╣е╚
+     * @brief bindContextRecursive()уГбуВ╜уГГуГЙуБоуГЖуВ╣уГИ
      * 
-     * - е╨едеєе╔└шд╚д╩дые│еєе╞ене╣е╚дЄ╗╪─ъд╖д╞бве╨едеєе╔┬╨╛▌д╚д╩дые│еєе╞ене╣е╚дЄе╨едеєе╔д╟дндыдлбй
+     * - уГРуВдуГ│уГЙхЕИуБиуБкуВЛуВ│уГ│уГЖуВнуВ╣уГИуВТцМЗхоЪуБЧуБжуАБуГРуВдуГ│уГЙхп╛ш▒буБиуБкуВЛуВ│уГ│уГЖуВнуВ╣уГИуВТуГРуВдуГ│уГЙуБзуБНуВЛуБЛя╝Я
      */
     void test_bindContextRecursive()
     {
       RTC::CorbaObjectManager objMgr(m_pORB, m_pPOA);
 
-      // е╨едеєе╔└шд╚д╩дые│еєе╞ене╣е╚дЄ║ю└од╖бвдвдщдлд╕дсе╨едеєе╔д╖д╞дкдп
+      // уГРуВдуГ│уГЙхЕИуБиуБкуВЛуВ│уГ│уГЖуВнуВ╣уГИуВТф╜ЬцИРуБЧуАБуБВуВЙуБЛуБШуВБуГРуВдуГ│уГЙуБЧуБжуБКуБП
       CosNaming::NamingContext_ptr ncParent = m_pNaming->newContext();
       CPPUNIT_ASSERT(! CORBA::is_nil(ncParent));
 			
@@ -559,7 +559,7 @@ namespace CorbaNaming
       CORBA::Object_ptr objParent = resolveRecursive("id-parent.kind-parent");
       CPPUNIT_ASSERT(objParent->_is_equivalent(ncParent));
 			
-      // е╨едеєе╔д╣дые│еєе╞ене╣е╚дЄ║ю└од╖д╞дкдп
+      // уГРуВдуГ│уГЙуБЩуВЛуВ│уГ│уГЖуВнуВ╣уГИуВТф╜ЬцИРуБЧуБжуБКуБП
       RTC::RTObject_impl* rto = new RTC::RTObject_impl(m_pORB, m_pPOA);
       objMgr.activate(rto);
       CPPUNIT_ASSERT(! CORBA::is_nil(rto->getObjRef()));
@@ -568,7 +568,7 @@ namespace CorbaNaming
       CPPUNIT_ASSERT(! CORBA::is_nil(nc));
       nc->bind(m_pNaming->toName("id.kind"), rto->getObjRef());
 			
-      // е╨едеєе╔└шд╚д╩дые│еєе╞ене╣е╚дЄ╗╪─ъд╖д╞бве╨едеєе╔┬╨╛▌д╚д╩дые│еєе╞ене╣е╚дЄе╨едеєе╔д╟дндыдлбй
+      // уГРуВдуГ│уГЙхЕИуБиуБкуВЛуВ│уГ│уГЖуВнуВ╣уГИуВТцМЗхоЪуБЧуБжуАБуГРуВдуГ│уГЙхп╛ш▒буБиуБкуВЛуВ│уГ│уГЖуВнуВ╣уГИуВТуГРуВдуГ│уГЙуБзуБНуВЛуБЛя╝Я
       m_pNaming->bindContextRecursive(
 				      ncParent, m_pNaming->toName("id-lv0.kind-lv0/id-lv1.kind-lv1"), nc);
 			
@@ -583,16 +583,16 @@ namespace CorbaNaming
     }
 		
     /*!
-     * @brief rebindContext()есе╜е├е╔д╬е╞е╣е╚
+     * @brief rebindContext()уГбуВ╜уГГуГЙуБоуГЖуВ╣уГИ
      * 
-     * - д╣д╟д╦е╨едеєе╔║╤д▀д╬е│еєе╞ене╣е╚дЄ╞▒д╕░╠├╓д╦╩╠д╬е│еєе╞ене╣е╚д╬е╨едеєе╔д╖бв└╡д╖дпеъе╨едеєе╔д╟дндыд│д╚дЄ│╬╟зд╣ды
+     * - уБЩуБзуБлуГРуВдуГ│уГЙц╕ИуБ┐уБоуВ│уГ│уГЖуВнуВ╣уГИуВТхРМуБШф╜Нч╜оуБлхИеуБоуВ│уГ│уГЖуВнуВ╣уГИуБоуГРуВдуГ│уГЙуБЧуАБцнгуБЧуБПуГкуГРуВдуГ│уГЙуБзуБНуВЛуБУуБиуВТчв║шкНуБЩуВЛ
      */
     void test_rebindContext()
     {
 
       RTC::CorbaObjectManager objMgr(m_pORB, m_pPOA);
 
-      // е╞е╣е╚д╦═╤дддые│еєе╞ене╣е╚дЄ╜р╚ўд╖д╞дкдп
+      // уГЖуВ╣уГИуБлчФиуБДуВЛуВ│уГ│уГЖуВнуВ╣уГИуВТц║ЦхВЩуБЧуБжуБКуБП
       RTC::RTObject_impl* rto1 = new RTC::RTObject_impl(m_pORB, m_pPOA);
       objMgr.activate(rto1);
       CPPUNIT_ASSERT(! CORBA::is_nil(rto1->getObjRef()));
@@ -609,12 +609,12 @@ namespace CorbaNaming
       CPPUNIT_ASSERT(! CORBA::is_nil(nc2));
       nc2->bind(m_pNaming->toName("id-rto.kind-rto"), rto2->getObjRef());
 			
-      // г▒д─╠▄д╬е│еєе╞ене╣е╚дЄе╨едеєе╔д╣ды
+      // я╝СуБдчЫоуБоуВ│уГ│уГЖуВнуВ╣уГИуВТуГРуВдуГ│уГЙуБЩуВЛ
       m_pNaming->bindContext(m_pNaming->toName("id-nc.kind-nc"), nc1);
       CORBA::Object_ptr objRto1 = resolveRecursive("id-nc.kind-nc/id-rto.kind-rto");
       CPPUNIT_ASSERT(objRto1->_is_equivalent(rto1->getObjRef()));
 			
-      // г▓д─╠▄д╬е│еєе╞ене╣е╚дЄ╞▒д╕░╠├╓д╦е╨едеєе╔д╖бв└╡д╖дпеъе╨едеєе╔д╟дндыд│д╚дЄ│╬╟зд╣ды
+      // я╝ТуБдчЫоуБоуВ│уГ│уГЖуВнуВ╣уГИуВТхРМуБШф╜Нч╜оуБлуГРуВдуГ│уГЙуБЧуАБцнгуБЧуБПуГкуГРуВдуГ│уГЙуБзуБНуВЛуБУуБиуВТчв║шкНуБЩуВЛ
       m_pNaming->rebindContext(m_pNaming->toName("id-nc.kind-nc"), nc2);
       CORBA::Object_ptr objRto2 = resolveRecursive("id-nc.kind-nc/id-rto.kind-rto");
       CPPUNIT_ASSERT(objRto2->_is_equivalent(rto2->getObjRef()));
@@ -623,15 +623,15 @@ namespace CorbaNaming
     }
 
     /*!
-     * @brief rebindContextRecursive()есе╜е├е╔д╬е╞е╣е╚
+     * @brief rebindContextRecursive()уГбуВ╜уГГуГЙуБоуГЖуВ╣уГИ
      * 
-     * - д╣д╟д╦е╨едеєе╔║╤д▀д╬е│еєе╞ене╣е╚д╚╞▒д╕░╠├╓д╦бв░█д╩дые│еєе╞ене╣е╚дЄ└╡д╖дпеъе╨едеєе╔д╟дндыдлбй
+     * - уБЩуБзуБлуГРуВдуГ│уГЙц╕ИуБ┐уБоуВ│уГ│уГЖуВнуВ╣уГИуБихРМуБШф╜Нч╜оуБлуАБчХ░уБкуВЛуВ│уГ│уГЖуВнуВ╣уГИуВТцнгуБЧуБПуГкуГРуВдуГ│уГЙуБзуБНуВЛуБЛя╝Я
      */
     void test_rebindContextRecursive()
     {
       RTC::CorbaObjectManager objMgr(m_pORB, m_pPOA);
 			
-      // е╨едеєе╔└шд╚д╩дые│еєе╞ене╣е╚дЄ║ю└од╖бве╨едеєе╔д╖д╞дкдп
+      // уГРуВдуГ│уГЙхЕИуБиуБкуВЛуВ│уГ│уГЖуВнуВ╣уГИуВТф╜ЬцИРуБЧуАБуГРуВдуГ│уГЙуБЧуБжуБКуБП
       CosNaming::NamingContext_ptr ncParent = m_pNaming->newContext();
       CPPUNIT_ASSERT(! CORBA::is_nil(ncParent));
 			
@@ -639,7 +639,7 @@ namespace CorbaNaming
       CORBA::Object_ptr objParent = resolveRecursive("id-parent.kind-parent");
       CPPUNIT_ASSERT(objParent->_is_equivalent(ncParent));
 			
-      // е╞е╣е╚д╦═╤дддые│еєе╞ене╣е╚дЄ╜р╚ўд╖д╞дкдп
+      // уГЖуВ╣уГИуБлчФиуБДуВЛуВ│уГ│уГЖуВнуВ╣уГИуВТц║ЦхВЩуБЧуБжуБКуБП
       RTC::RTObject_impl* rto1 = new RTC::RTObject_impl(m_pORB, m_pPOA);
       objMgr.activate(rto1);
       CPPUNIT_ASSERT(! CORBA::is_nil(rto1->getObjRef()));
@@ -656,14 +656,14 @@ namespace CorbaNaming
       CPPUNIT_ASSERT(! CORBA::is_nil(nc2));
       nc2->bind(m_pNaming->toName("id-rto.kind-rto"), rto2->getObjRef());
 			
-      // г▒д─╠▄д╬е│еєе╞ене╣е╚дЄе╨едеєе╔д╣ды
+      // я╝СуБдчЫоуБоуВ│уГ│уГЖуВнуВ╣уГИуВТуГРуВдуГ│уГЙуБЩуВЛ
       m_pNaming->bindContextRecursive(
 				      ncParent, m_pNaming->toName("id-nc.kind-nc"), nc1);
       CORBA::Object_ptr objRto1 = resolveRecursive(
 						   "id-parent.kind-parent/id-nc.kind-nc/id-rto.kind-rto");
       CPPUNIT_ASSERT(objRto1->_is_equivalent(rto1->getObjRef()));
 			
-      // г▓д─╠▄д╬е│еєе╞ене╣е╚дЄ╞▒д╕░╠├╓д╦е╨едеєе╔д╖бв└╡д╖дпеъе╨едеєе╔д╟дндыд│д╚дЄ│╬╟зд╣ды
+      // я╝ТуБдчЫоуБоуВ│уГ│уГЖуВнуВ╣уГИуВТхРМуБШф╜Нч╜оуБлуГРуВдуГ│уГЙуБЧуАБцнгуБЧуБПуГкуГРуВдуГ│уГЙуБзуБНуВЛуБУуБиуВТчв║шкНуБЩуВЛ
       m_pNaming->rebindContextRecursive(
 					ncParent, m_pNaming->toName("id-nc.kind-nc"), nc2);
       CORBA::Object_ptr objRto2 = resolveRecursive(
@@ -675,33 +675,33 @@ namespace CorbaNaming
 		
     void test_resolve()
     {
-      // ┬╛е╞е╣е╚╖▓д╦д╞╖єд═ды
+      // ф╗ЦуГЖуВ╣уГИч╛дуБлуБжхЕ╝уБнуВЛ
     }
 		
     /*!
-     * @brief unbind()есе╜е├е╔д╬е╞е╣е╚
+     * @brief unbind()уГбуВ╜уГГуГЙуБоуГЖуВ╣уГИ
      * 
-     * - е╨едеєе╔║╤д▀д╬еке╓е╕езепе╚дЄ└╡╛яд╦евеєе╨едеєе╔д╟дндыдлбй
-     * - евеєе╨едеєе╔║╤д▀д╬еке╓е╕езепе╚д╬▓Є╖шдЄ╗юд▀д╞бв░╒┐▐д╔дкдъд╬╬у│░дме╣еэб╝д╡дьдыдлбй
+     * - уГРуВдуГ│уГЙц╕ИуБ┐уБоуВкуГЦуВ╕уВзуВпуГИуВТцнгх╕╕уБлуВвуГ│уГРуВдуГ│уГЙуБзуБНуВЛуБЛя╝Я
+     * - уВвуГ│уГРуВдуГ│уГЙц╕ИуБ┐уБоуВкуГЦуВ╕уВзуВпуГИуБошзгц▒║уВТшйжуБ┐уБжуАБцДПхЫ│уБйуБКуВКуБоф╛ЛхдЦуБМуВ╣уГнуГ╝уБХуВМуВЛуБЛя╝Я
      */
     void test_unbind()
     {
       RTC::CorbaObjectManager objMgr(m_pORB, m_pPOA);
 			
-      // евепе╞еге╓▓╜д╣ды
+      // уВвуВпуГЖуВгуГЦхМЦуБЩуВЛ
       RTC::RTObject_impl* rto = new RTC::RTObject_impl(m_pORB, m_pPOA);
       objMgr.activate(rto);
       CPPUNIT_ASSERT(! CORBA::is_nil(rto->getObjRef()));
 
-      // еке╓е╕езепе╚дЄе╨едеєе╔д╣ды
+      // уВкуГЦуВ╕уВзуВпуГИуВТуГРуВдуГ│уГЙуБЩуВЛ
       m_pNaming->bindByString("id.kind", rto->getObjRef());
       CORBA::Object_ptr obj = m_pNaming->resolve("id.kind");
       CPPUNIT_ASSERT(obj->_is_equivalent(rto->_this()));
 			
-      // еке╓е╕езепе╚дЄевеєе╨едеєе╔д╣ды
+      // уВкуГЦуВ╕уВзуВпуГИуВТуВвуГ│уГРуВдуГ│уГЙуБЩуВЛ
       m_pNaming->unbind("id.kind");
 			
-      // евеєе╨едеєе╔д╖д┐еке╓е╕езепе╚д╬▓Є╖шдЄ╗юд▀д╞бв░╒┐▐д╔дкдъд╬╬у│░дме╣еэб╝д╡дьдыдлбй
+      // уВвуГ│уГРуВдуГ│уГЙуБЧуБЯуВкуГЦуВ╕уВзуВпуГИуБошзгц▒║уВТшйжуБ┐уБжуАБцДПхЫ│уБйуБКуВКуБоф╛ЛхдЦуБМуВ╣уГнуГ╝уБХуВМуВЛуБЛя╝Я
       try
 	{
 	  m_pNaming->resolve("id.kind");
@@ -719,26 +719,26 @@ namespace CorbaNaming
     }
 		
     /*!
-     * @brief bindNewContext()есе╜е├е╔д╬е╞е╣е╚
+     * @brief bindNewContext()уГбуВ╜уГГуГЙуБоуГЖуВ╣уГИ
      * 
-     * - ┐╖д╖дде│еєе╞ене╣е╚дЄе╨едеєе╔д╟дндыдлбй
-     * - е╨едеєе╔д╖д┐е│еєе╞ене╣е╚дЄ═°═╤д╖д╞еке╓е╕езепе╚╗▓╛╚дЄ└╡д╖дпе╨едеєе╔д╟дндыдлбй
+     * - цЦ░уБЧуБДуВ│уГ│уГЖуВнуВ╣уГИуВТуГРуВдуГ│уГЙуБзуБНуВЛуБЛя╝Я
+     * - уГРуВдуГ│уГЙуБЧуБЯуВ│уГ│уГЖуВнуВ╣уГИуВТхИйчФиуБЧуБжуВкуГЦуВ╕уВзуВпуГИхПВчЕзуВТцнгуБЧуБПуГРуВдуГ│уГЙуБзуБНуВЛуБЛя╝Я
      */
     void test_bindNewContext()
     {
       RTC::CorbaObjectManager objMgr(m_pORB, m_pPOA);
 			
-      // евепе╞еге╓▓╜д╣ды
+      // уВвуВпуГЖуВгуГЦхМЦуБЩуВЛ
       RTC::RTObject_impl* rto = new RTC::RTObject_impl(m_pORB, m_pPOA);
       objMgr.activate(rto);
       CPPUNIT_ASSERT(! CORBA::is_nil(rto->getObjRef()));
 
-      // ┐╖д╖дде│еєе╞ене╣е╚дЄе╨едеєе╔д╟дндыдлбй
+      // цЦ░уБЧуБДуВ│уГ│уГЖуВнуВ╣уГИуВТуГРуВдуГ│уГЙуБзуБНуВЛуБЛя╝Я
       CosNaming::NamingContext_ptr nc
 	= m_pNaming->bindNewContext(m_pNaming->toName("id-lv0.kind-lv0"));
       CPPUNIT_ASSERT(! CORBA::is_nil(nc));
 			
-      // е╨едеєе╔д╖д┐е│еєе╞ене╣е╚дЄ═°═╤д╖д╞еке╓е╕езепе╚╗▓╛╚дЄе╨едеєе╔д╟дндыдлбй
+      // уГРуВдуГ│уГЙуБЧуБЯуВ│уГ│уГЖуВнуВ╣уГИуВТхИйчФиуБЧуБжуВкуГЦуВ╕уВзуВпуГИхПВчЕзуВТуГРуВдуГ│уГЙуБзуБНуВЛуБЛя╝Я
       nc->bind(m_pNaming->toName("id.kind"), rto->getObjRef());
       CORBA::Object_ptr obj = resolveRecursive("id-lv0.kind-lv0/id.kind");
       CPPUNIT_ASSERT(! CORBA::is_nil(obj));
@@ -748,15 +748,15 @@ namespace CorbaNaming
 		
     void test_destroy()
     {
-      // CosNaming::NamingContext::destroy()д╪д╬├▒╜уд╩░╤╛∙д╩д╬д╟бве╞е╣е╚╛╩╬м
+      // CosNaming::NamingContext::destroy()уБ╕уБохНШч┤ФуБкхзФшн▓уБкуБоуБзуАБуГЖуВ╣уГИчЬБчХе
     }
 		
     void test_destroyRecursive()
     {
       RTC::CorbaObjectManager objMgr(m_pORB, m_pPOA);
 			
-      // destroy┬╨╛▌д╚д╩дые│еєе╞ене╣е╚д╬е─еъб╝дЄ╣╜├█д╣дыб╩┐╞г▒бз╗╥г▓б╦
-      // (┐╞)
+      // destroyхп╛ш▒буБиуБкуВЛуВ│уГ│уГЖуВнуВ╣уГИуБоуГДуГкуГ╝уВТцзЛчпЙуБЩуВЛя╝Ишжкя╝Ся╝ЪхнРя╝Тя╝Й
+      // (шжк)
       CosNaming::NamingContext_ptr ncParent = m_pNaming->newContext();
       CPPUNIT_ASSERT(! CORBA::is_nil(ncParent));
 			
@@ -764,7 +764,7 @@ namespace CorbaNaming
       CORBA::Object_ptr objNcParent = resolveRecursive("id-parent.kind-parent");
       CPPUNIT_ASSERT(objNcParent->_is_equivalent(ncParent));
 			
-      // (╗╥г▒)
+      // (хнРя╝С)
       CosNaming::NamingContext_ptr nc1 = m_pNaming->newContext();
       CPPUNIT_ASSERT(! CORBA::is_nil(nc1));
 			
@@ -772,7 +772,7 @@ namespace CorbaNaming
       CORBA::Object_ptr objNc1 = resolveRecursive("id-parent.kind-parent/id1.kind1");
       CPPUNIT_ASSERT(objNc1->_is_equivalent(nc1));
 
-      // (╗╥г▓)
+      // (хнРя╝Т)
       CosNaming::NamingContext_ptr nc2 = m_pNaming->newContext();
       CPPUNIT_ASSERT(! CORBA::is_nil(nc2));
 			
@@ -780,13 +780,13 @@ namespace CorbaNaming
       CORBA::Object_ptr objNc2 = resolveRecursive("id-parent.kind-parent/id2.kind2");
       CPPUNIT_ASSERT(objNc2->_is_equivalent(nc2));
 			
-      // destroyRecursive()дЄ╕╞д╙╜╨д╣
+      // destroyRecursive()уВТхС╝уБ│хЗ║уБЩ
       m_pNaming->destroyRecursive(m_pNaming->getRootContext());
 			
-      // │╞е│еєе╞ене╣е╚дмdestroyд╡дьд╞дддыдлбй
-      // б╩│╞е│еєе╞ене╣е╚д╪д╬есе╜е├е╔╕╞╜╨д╖дЄ╣╘ддбв░╒┐▐д╔дкдъ╬у│░дме╣еэб╝д╡дьдыдлбйб╦
-      // виCORBA╝┬┴їд╦дшд├д╞д╧CORBA::OBJECT_NOT_EXIST╬у│░д╟д╧д╩дддлдт├╬дьд╩ддбй
-      //   д╜д│д╟бвCORBA::OBJECT_NOT_EXISTд╟д╩дд╛ь╣чдт╣═╬╕д╖д╞е┴езе├епд╖д╞дддыбг
+      // хРДуВ│уГ│уГЖуВнуВ╣уГИуБМdestroyуБХуВМуБжуБДуВЛуБЛя╝Я
+      // я╝ИхРДуВ│уГ│уГЖуВнуВ╣уГИуБ╕уБоуГбуВ╜уГГуГЙхС╝хЗ║уБЧуВТшбМуБДуАБцДПхЫ│уБйуБКуВКф╛ЛхдЦуБМуВ╣уГнуГ╝уБХуВМуВЛуБЛя╝Яя╝Й
+      // тА╗CORBAхоЯшгЕуБлуВИуБгуБжуБпCORBA::OBJECT_NOT_EXISTф╛ЛхдЦуБзуБпуБкуБДуБЛуВВчЯеуВМуБкуБДя╝Я
+      //   уБЭуБУуБзуАБCORBA::OBJECT_NOT_EXISTуБзуБкуБДха┤хРИуВВшАГцЕоуБЧуБжуГБуВзуГГуВпуБЧуБжуБДуВЛуАВ
 
       //new_context doesn't throw out the exception. 
       //Therefore, the following tests are omitted.  

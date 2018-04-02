@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file   ExecutionContextProxyTests.cpp
  * @brief  ExecutionContextProxy test class

@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file   ConfigurationProxyTests.cpp
  * @brief  ConfigurationProxy test class

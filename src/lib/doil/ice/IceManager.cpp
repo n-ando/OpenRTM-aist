@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file CorbaManager.cpp
  * @brief RTM Ice manager class
@@ -34,7 +34,7 @@ namespace Ice
 
   /*!
    * @if jp
-   * @brief ½é´ü²½´Ø¿ô
+   * @brief åˆæœŸåŒ–é–¢æ•°
    * @else
    * @brief initializer
    * @endif
@@ -56,7 +56,7 @@ namespace Ice
 
   /*!
    * @if jp
-   * @brief ¥¤¥ó¥¹¥¿¥ó¥¹¼èÆÀ´Ø¿ô
+   * @brief ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹å–å¾—é–¢æ•°
    * @else
    * @brief getting instance
    * @endif
@@ -70,7 +70,7 @@ namespace Ice
 
   /*!
    * @if jp
-   * @brief ORB ¤ÎÌ¾Á°¤ò¼èÆÀ¤¹¤ë
+   * @brief ORB ã®åå‰ã‚’å–å¾—ã™ã‚‹
    * @else
    * @brief Getting ORB's name
    * @endif
@@ -107,7 +107,7 @@ namespace Ice
 
   /*!
    * @if jp
-   * @brief Servant ¤Î Factory ¤òÅĞÏ¿¤¹¤ë
+   * @brief Servant ã® Factory ã‚’ç™»éŒ²ã™ã‚‹
    * @else
    * @brief Register servant's factory
    * @endif
@@ -130,7 +130,7 @@ namespace Ice
 
   /*!
    * @if jp
-   * @brief ¥ª¥Ö¥¸¥§¥¯¥È¤òactivate¤¹¤ë
+   * @brief ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’activateã™ã‚‹
    * @else
    * @brief Activate object
    * @endif
@@ -175,7 +175,7 @@ namespace Ice
 
   /*!
    * @if jp
-   * @brief ¥ª¥Ö¥¸¥§¥¯¥È¤òactivate¤¹¤ë
+   * @brief ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’activateã™ã‚‹
    * @else
    * @brief Activate object
    * @endif
@@ -208,7 +208,7 @@ namespace Ice
   
   /*!
    * @if jp
-   * @brief ¥ª¥Ö¥¸¥§¥¯¥È¤òdeactivate¤¹¤ë
+   * @brief ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’deactivateã™ã‚‹
    * @else
    * @brief Deactivate object
    * @endif
@@ -222,7 +222,7 @@ namespace Ice
 
   /*!
    * @if jp
-   * @brief ¥ª¥Ö¥¸¥§¥¯¥È¤òdeactivate¤¹¤ë
+   * @brief ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’deactivateã™ã‚‹
    * @else
    * @brief Deactivate object
    * @endif
@@ -250,7 +250,7 @@ namespace Ice
 
   /*!
    * @if jp
-   * @brief Impl¥ª¥Ö¥¸¥§¥¯¥È¤òÌ¾Á°¤Ç¼èÆÀ¤¹¤ë
+   * @brief Implã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’åå‰ã§å–å¾—ã™ã‚‹
    * @else
    * @brief Getting object by name
    * @endif
@@ -267,7 +267,7 @@ namespace Ice
 
   /*!
    * @if jp
-   * @brief Impl¥ª¥Ö¥¸¥§¥¯¥È¤òServant¤Ç¼èÆÀ¤¹¤ë
+   * @brief Implã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’Servantã§å–å¾—ã™ã‚‹
    * @else
    * @brief Getting impl object by servant
    * @endif
@@ -286,7 +286,7 @@ namespace Ice
 
   /*!
    * @if jp
-   * @brief Servant¥ª¥Ö¥¸¥§¥¯¥È¤ò¼èÆÀ¤¹¤ë
+   * @brief Servantã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’å–å¾—ã™ã‚‹
    * @else
    * @brief Getting servant object by name
    * @endif
@@ -304,7 +304,7 @@ namespace Ice
 
   /*!
    * @if jp
-   * @brief Servant¥ª¥Ö¥¸¥§¥¯¥È¤ò¼èÆÀ¤¹¤ë
+   * @brief Servantã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’å–å¾—ã™ã‚‹
    * @else
    * @brief Getting servant object by impl object
    * @endif
@@ -321,7 +321,7 @@ namespace Ice
   //------------------------------------------------------------
   /*!
    * @if jp
-   * @brief Object¤ò´ØÏ¢ÉÕ¤±¤é¤ì¤¿Impl¤ËÊÑ´¹¤¹¤ë
+   * @brief Objectã‚’é–¢é€£ä»˜ã‘ã‚‰ã‚ŒãŸImplã«å¤‰æ›ã™ã‚‹
    * @else
    * @brief Convert Ice ObjectPrx to Impl related to it.
    * @endif
@@ -337,7 +337,7 @@ namespace Ice
 
   /*!
    * @if jp
-   * @brief Ì¾Á°¤«¤é¥ª¥Ö¥¸¥§¥¯¥È»²¾È¤ò¼èÆÀ¤¹¤ë
+   * @brief åå‰ã‹ã‚‰ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå‚ç…§ã‚’å–å¾—ã™ã‚‹
    * @else
    * @brief Getting object reference from the given name
    * @endif
@@ -352,7 +352,7 @@ namespace Ice
 
   /*!
    * @if jp
-   * @brief Impl¥ª¥Ö¥¸¥§¥¯¥È¤«¤é¥ª¥Ö¥¸¥§¥¯¥È»²¾È¤ØÊÑ´¹¤¹¤ë
+   * @brief Implã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‹ã‚‰ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå‚ç…§ã¸å¤‰æ›ã™ã‚‹
    * @else
    * @brief Converting Impl object to object reference
    * @endif
@@ -365,7 +365,7 @@ namespace Ice
 
   /*!
    * @if jp
-   * @brief Servant¥ª¥Ö¥¸¥§¥¯¥È¤«¤é¥ª¥Ö¥¸¥§¥¯¥È»²¾È¤ØÊÑ´¹¤¹¤ë
+   * @brief Servantã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‹ã‚‰ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå‚ç…§ã¸å¤‰æ›ã™ã‚‹
    * @else
    * @brief Converting Servant object to object reference
    * @endif
@@ -378,7 +378,7 @@ namespace Ice
 
   /*!
    * @if jp
-   * @brief ORB¤Î¥İ¥¤¥ó¥¿¤ò¼èÆÀ¤¹¤ë
+   * @brief ORBã®ãƒã‚¤ãƒ³ã‚¿ã‚’å–å¾—ã™ã‚‹
    *
    * @else
    * @brief Getting ORB pointer
@@ -396,7 +396,7 @@ namespace Ice
   //------------------------------------------------------------
   /*!
    * @if jp
-   * @brief ORB¤Î¥İ¥¤¥ó¥¿¤ò¼èÆÀ¤¹¤ë
+   * @brief ORBã®ãƒã‚¤ãƒ³ã‚¿ã‚’å–å¾—ã™ã‚‹
    * @else
    * @brief Getting ORB pointer
    * @endif
@@ -409,7 +409,7 @@ namespace Ice
 
   /*!
    * @if jp
-   * @brief ¥Ç¥Õ¥©¥ë¥ÈPOA¤Î¥İ¥¤¥ó¥¿¤ò¼èÆÀ¤¹¤ë
+   * @brief ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆPOAã®ãƒã‚¤ãƒ³ã‚¿ã‚’å–å¾—ã™ã‚‹
    * @else
    * @brief Getting default POA pointer
    * @endif

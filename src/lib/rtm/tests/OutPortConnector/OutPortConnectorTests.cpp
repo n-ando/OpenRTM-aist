@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file   OutPortConnectorTests.cpp
  * @brief  OutPortConnector test class
@@ -168,7 +168,7 @@ namespace OutPortConnector
     }
 		
     /*!
-     * @brief profile(), id(), name(), setEndian(), isLittleEndian() �᥽�åɤΥƥ���
+     * @brief profile(), id(), name(), setEndian(), isLittleEndian() メソッドのテスト
      * 
      */
     void test_case0()

@@ -1,4 +1,4 @@
-// -*- C++ -*-
+Ôªø// -*- C++ -*-
 /*!
  * @file   CORBAManagerTests.cpp
  * @brief  CORBAManager test class
@@ -167,7 +167,7 @@ namespace CORBAManager
         }
     }
 
-    // §¥§¡§„§ﬁ§º§Œ•∆•π•»
+    // „Åî„Å°„ÇÉ„Åæ„Åú„ÅÆ„ÉÜ„Çπ„Éà
     void test_case0()
     {
       doil::CORBA::CORBAManager& mgr(doil::CORBA::CORBAManager::instance());

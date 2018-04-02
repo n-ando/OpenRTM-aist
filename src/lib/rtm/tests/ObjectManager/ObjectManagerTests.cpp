@@ -1,4 +1,4 @@
-// -*- C++ -*-
+я╗┐// -*- C++ -*-
 /*!
  * @file   ObjectManagerTests.cpp
  * @brief  ObjectManager test class
@@ -117,66 +117,66 @@ namespace ObjectManagerTests
     }
     
     /*!
-     * @brief registerObject()есе╜е├е╔д╬е╞е╣е╚
+     * @brief registerObject()уГбуВ╜уГГуГЙуБоуГЖуВ╣уГИ
      * 
-     * - еке╓е╕езепе╚дЄ└╡╛яд╦┼╨╧┐д╟дндыдлбй
+     * - уВкуГЦуВ╕уВзуВпуГИуВТцнгх╕╕уБлчЩ╗щМ▓уБзуБНуВЛуБЛя╝Я
      */
     void test_registerObject()
     {
       ::ObjectManager<std::string, ObjectMock, PredicateMock> objMgr;
 
-      // еке╓е╕езепе╚дЄ╜р╚ўд╖д╞дкдп
+      // уВкуГЦуВ╕уВзуВпуГИуВТц║ЦхВЩуБЧуБжуБКуБП
       ObjectMock obj1("ID 1");
       ObjectMock obj2("ID 2");
 			
-      // еке╓е╕езепе╚дЄ└╡╛яд╦┼╨╧┐д╟дндыдлбй
+      // уВкуГЦуВ╕уВзуВпуГИуВТцнгх╕╕уБлчЩ╗щМ▓уБзуБНуВЛуБЛя╝Я
       CPPUNIT_ASSERT_EQUAL(true, objMgr.registerObject(&obj1));
       CPPUNIT_ASSERT_EQUAL(true, objMgr.registerObject(&obj2));
     }
     
     /*!
-     * @brief registerObject()есе╜е├е╔д╬е╞е╣е╚
+     * @brief registerObject()уГбуВ╜уГГуГЙуБоуГЖуВ╣уГИ
      * 
-     * - ╞▒░ьд╬еке╓е╕езепе╚б╩┼Ў┴│бв╝▒╩╠╗╥дт╞▒д╕б╦д╬┼╨╧┐дЄ╗юд▀д╞бв░╒┐▐д╔дкдъ╝║╟╘д╣дыдлбй
-     * - ╞▒░ьд╬╝▒╩╠╗╥дЄ╗¤д─╩╠д╬еке╓е╕езепе╚д╬┼╨╧┐дЄ╗юд▀д╞бв░╒┐▐д╔дкдъ╝║╟╘д╣дыдлбй
+     * - хРМф╕АуБоуВкуГЦуВ╕уВзуВпуГИя╝Их╜УчД╢уАБшнШхИехнРуВВхРМуБШя╝ЙуБочЩ╗щМ▓уВТшйжуБ┐уБжуАБцДПхЫ│уБйуБКуВКхд▒цХЧуБЩуВЛуБЛя╝Я
+     * - хРМф╕АуБошнШхИехнРуВТцМБуБдхИеуБоуВкуГЦуВ╕уВзуВпуГИуБочЩ╗щМ▓уВТшйжуБ┐уБжуАБцДПхЫ│уБйуБКуВКхд▒цХЧуБЩуВЛуБЛя╝Я
      */
     void test_registerObject_with_overlapped_identifier()
     {
       ::ObjectManager<std::string, ObjectMock, PredicateMock> objMgr;
 
-      // ╞▒░ьд╬╝▒╩╠╗╥дЄ╗¤д─еке╓е╕езепе╚дЄ╜р╚ўд╖д╞дкдп
+      // хРМф╕АуБошнШхИехнРуВТцМБуБдуВкуГЦуВ╕уВзуВпуГИуВТц║ЦхВЩуБЧуБжуБКуБП
       ObjectMock obj1("ID");
       ObjectMock obj2("ID");
 
-      // еке╓е╕езепе╚дЄ┼╨╧┐д╣ды
+      // уВкуГЦуВ╕уВзуВпуГИуВТчЩ╗щМ▓уБЩуВЛ
       CPPUNIT_ASSERT_EQUAL(true, objMgr.registerObject(&obj1));
 			
-      // ╞▒░ьд╬еке╓е╕езепе╚б╩┼Ў┴│бв╝▒╩╠╗╥дт╞▒д╕б╦д╬┼╨╧┐дЄ╗юд▀д╞бв░╒┐▐д╔дкдъ╝║╟╘д╣дыдлбй
+      // хРМф╕АуБоуВкуГЦуВ╕уВзуВпуГИя╝Их╜УчД╢уАБшнШхИехнРуВВхРМуБШя╝ЙуБочЩ╗щМ▓уВТшйжуБ┐уБжуАБцДПхЫ│уБйуБКуВКхд▒цХЧуБЩуВЛуБЛя╝Я
       CPPUNIT_ASSERT_EQUAL(false, objMgr.registerObject(&obj1));
 			
-      // ╞▒░ьд╬╝▒╩╠╗╥дЄ╗¤д─╩╠д╬еке╓е╕езепе╚д╬┼╨╧┐дЄ╗юд▀д╞бв░╒┐▐д╔дкдъ╝║╟╘д╣дыдлбй
+      // хРМф╕АуБошнШхИехнРуВТцМБуБдхИеуБоуВкуГЦуВ╕уВзуВпуГИуБочЩ╗щМ▓уВТшйжуБ┐уБжуАБцДПхЫ│уБйуБКуВКхд▒цХЧуБЩуВЛуБЛя╝Я
       CPPUNIT_ASSERT_EQUAL(false, objMgr.registerObject(&obj2));
     }
     
     /*!
-     * @brief find()есе╜е├е╔д╬е╞е╣е╚
+     * @brief find()уГбуВ╜уГГуГЙуБоуГЖуВ╣уГИ
      * 
-     * - ┼╨╧┐д╡дьд┐еке╓е╕езепе╚дЄfind()д╟└╡д╖дп╝ш╞└д╟дндыдлбй
-     * - ┬╕║▀д╖д╩ддIDдЄ╗╪─ъд╖д┐╛ь╣чбв░╒┐▐д╔дкдъNULLдм╝ш╞└д╡дьдыдлбй
+     * - чЩ╗щМ▓уБХуВМуБЯуВкуГЦуВ╕уВзуВпуГИуВТfind()уБзцнгуБЧуБПхПЦх╛ЧуБзуБНуВЛуБЛя╝Я
+     * - хнШхЬиуБЧуБкуБДIDуВТцМЗхоЪуБЧуБЯха┤хРИуАБцДПхЫ│уБйуБКуВКNULLуБМхПЦх╛ЧуБХуВМуВЛуБЛя╝Я
      */
     void test_find()
     {
       ::ObjectManager<std::string, ObjectMock, PredicateMock> objMgr;
     	
-      // еке╓е╕езепе╚дЄ╜р╚ўд╖д╞дкдп
+      // уВкуГЦуВ╕уВзуВпуГИуВТц║ЦхВЩуБЧуБжуБКуБП
       ObjectMock obj1("ID 1");
       ObjectMock obj2("ID 2");
 
-      // еке╓е╕езепе╚дЄ┼╨╧┐д╣ды
+      // уВкуГЦуВ╕уВзуВпуГИуВТчЩ╗щМ▓уБЩуВЛ
       CPPUNIT_ASSERT_EQUAL(true, objMgr.registerObject(&obj1));
       CPPUNIT_ASSERT_EQUAL(true, objMgr.registerObject(&obj2));
 			
-      // ┼╨╧┐д╡дьд┐еке╓е╕езепе╚дЄfind()д╟└╡д╖дп╝ш╞└д╟дндыдлбй
+      // чЩ╗щМ▓уБХуВМуБЯуВкуГЦуВ╕уВзуВпуГИуВТfind()уБзцнгуБЧуБПхПЦх╛ЧуБзуБНуВЛуБЛя╝Я
       ObjectMock* pObjRet1 = objMgr.find("ID 1");
       CPPUNIT_ASSERT(pObjRet1 != NULL);
       CPPUNIT_ASSERT_EQUAL(std::string("ID 1"), pObjRet1->getId());
@@ -185,61 +185,61 @@ namespace ObjectManagerTests
       CPPUNIT_ASSERT(pObjRet2 != NULL);
       CPPUNIT_ASSERT_EQUAL(std::string("ID 2"), pObjRet2->getId());
 			
-      // ┬╕║▀д╖д╩ддIDдЄ╗╪─ъд╖д┐╛ь╣чбв░╒┐▐д╔дкдъNULLдм╝ш╞└д╡дьдыдлбй
+      // хнШхЬиуБЧуБкуБДIDуВТцМЗхоЪуБЧуБЯха┤хРИуАБцДПхЫ│уБйуБКуВКNULLуБМхПЦх╛ЧуБХуВМуВЛуБЛя╝Я
       CPPUNIT_ASSERT_EQUAL((ObjectMock*) NULL, objMgr.find("INEXIST ID"));
     }
     
     /*!
-     * @brief unregisterObject()есе╜е├е╔д╚find()есе╜е├е╔д╬е╞е╣е╚
+     * @brief unregisterObject()уГбуВ╜уГГуГЙуБиfind()уГбуВ╜уГГуГЙуБоуГЖуВ╣уГИ
      * 
-     * - еке╓е╕езепе╚дЄunregisterObject()д╟┼╨╧┐▓Є╜№д╖д╞бвд╜д╬еке╓е╕езепе╚дЄ└╡д╖дп╝ш╞└д╟дндыдлбй
-     * - ┼╨╧┐▓Є╜№д╖д┐еке╓е╕езепе╚д╬IDдЄ╗╪─ъд╖д╞find()д╖д┐╛ь╣чбв░╒┐▐д╔дкдъNULLдЄ╞└дыдлбй
-     * - ┼╨╧┐▓Є╜№д╖д╞ддд╩ддеке╓е╕езепе╚д╧бв░═┴│д╚д╖д╞find()д╟└╡д╖дп╝ш╞└д╟дндыдлбй
+     * - уВкуГЦуВ╕уВзуВпуГИуВТunregisterObject()уБзчЩ╗щМ▓шзгщЩдуБЧуБжуАБуБЭуБоуВкуГЦуВ╕уВзуВпуГИуВТцнгуБЧуБПхПЦх╛ЧуБзуБНуВЛуБЛя╝Я
+     * - чЩ╗щМ▓шзгщЩдуБЧуБЯуВкуГЦуВ╕уВзуВпуГИуБоIDуВТцМЗхоЪуБЧуБжfind()уБЧуБЯха┤хРИуАБцДПхЫ│уБйуБКуВКNULLуВТх╛ЧуВЛуБЛя╝Я
+     * - чЩ╗щМ▓шзгщЩдуБЧуБжуБДуБкуБДуВкуГЦуВ╕уВзуВпуГИуБпуАБф╛ЭчД╢уБиуБЧуБжfind()уБзцнгуБЧуБПхПЦх╛ЧуБзуБНуВЛуБЛя╝Я
      */
     void test_unregisterObject_and_find()
     {
       ::ObjectManager<std::string, ObjectMock, PredicateMock> objMgr;
     	
-      // еке╓е╕езепе╚дЄ╜р╚ўд╖д╞дкдп
+      // уВкуГЦуВ╕уВзуВпуГИуВТц║ЦхВЩуБЧуБжуБКуБП
       ObjectMock obj1("ID 1");
       ObjectMock obj2("ID 2");
 
-      // еке╓е╕езепе╚дЄ┼╨╧┐д╣ды
+      // уВкуГЦуВ╕уВзуВпуГИуВТчЩ╗щМ▓уБЩуВЛ
       CPPUNIT_ASSERT_EQUAL(true, objMgr.registerObject(&obj1));
       CPPUNIT_ASSERT_EQUAL(true, objMgr.registerObject(&obj2));
 			
-      // еке╓е╕езепе╚дЄ┼╨╧┐▓Є╜№д╖д╞бвд╜д╬еке╓е╕езепе╚дЄ└╡д╖дп╝ш╞└д╟дндыдлбй
+      // уВкуГЦуВ╕уВзуВпуГИуВТчЩ╗щМ▓шзгщЩдуБЧуБжуАБуБЭуБоуВкуГЦуВ╕уВзуВпуГИуВТцнгуБЧуБПхПЦх╛ЧуБзуБНуВЛуБЛя╝Я
       ObjectMock* pObjRet1 = objMgr.unregisterObject("ID 1");
       CPPUNIT_ASSERT(pObjRet1 != NULL);
       CPPUNIT_ASSERT_EQUAL(std::string("ID 1"), pObjRet1->getId());
 			
-      // ┼╨╧┐▓Є╜№д╖д┐еке╓е╕езепе╚д╬IDдЄ╗╪─ъд╖д╞find()д╖д┐╛ь╣чбв░╒┐▐д╔дкдъNULLдЄ╞└дыдлбй
+      // чЩ╗щМ▓шзгщЩдуБЧуБЯуВкуГЦуВ╕уВзуВпуГИуБоIDуВТцМЗхоЪуБЧуБжfind()уБЧуБЯха┤хРИуАБцДПхЫ│уБйуБКуВКNULLуВТх╛ЧуВЛуБЛя╝Я
       CPPUNIT_ASSERT_EQUAL((ObjectMock*) NULL, objMgr.find("ID 1"));
 			
-      // ┼╨╧┐▓Є╜№д╖д╞ддд╩ддеке╓е╕езепе╚д╧бв░═┴│д╚д╖д╞find()д╟└╡д╖дп╝ш╞└д╟дндыдлбй
+      // чЩ╗щМ▓шзгщЩдуБЧуБжуБДуБкуБДуВкуГЦуВ╕уВзуВпуГИуБпуАБф╛ЭчД╢уБиуБЧуБжfind()уБзцнгуБЧуБПхПЦх╛ЧуБзуБНуВЛуБЛя╝Я
       ObjectMock* pObjRet2 = objMgr.find("ID 2");
       CPPUNIT_ASSERT(pObjRet2 != NULL);
       CPPUNIT_ASSERT_EQUAL(std::string("ID 2"), pObjRet2->getId());
     }
     
     /*!
-     * @brief getObjects()есе╜е├е╔д╬е╞е╣е╚
+     * @brief getObjects()уГбуВ╜уГГуГЙуБоуГЖуВ╣уГИ
      * 
-     * - getObjects()д╟бв┼╨╧┐║╤д▀д╬┴┤еке╓е╕езепе╚дЄ└╡д╖дп╝ш╞└д╟дндыдлбй
+     * - getObjects()уБзуАБчЩ╗щМ▓ц╕ИуБ┐уБохЕиуВкуГЦуВ╕уВзуВпуГИуВТцнгуБЧуБПхПЦх╛ЧуБзуБНуВЛуБЛя╝Я
      */
     void test_getObjects()
     {
       ::ObjectManager<std::string, ObjectMock, PredicateMock> objMgr;
     	
-      // еке╓е╕езепе╚дЄ╜р╚ўд╖д╞дкдп
+      // уВкуГЦуВ╕уВзуВпуГИуВТц║ЦхВЩуБЧуБжуБКуБП
       ObjectMock obj1("ID 1");
       ObjectMock obj2("ID 2");
 
-      // еке╓е╕езепе╚дЄ┼╨╧┐д╣ды
+      // уВкуГЦуВ╕уВзуВпуГИуВТчЩ╗щМ▓уБЩуВЛ
       CPPUNIT_ASSERT_EQUAL(true, objMgr.registerObject(&obj1));
       CPPUNIT_ASSERT_EQUAL(true, objMgr.registerObject(&obj2));
 			
-      // getObjects()д╟бв┼╨╧┐║╤д▀д╬┴┤еке╓е╕езепе╚дЄ└╡д╖дп╝ш╞└д╟дндыдлбй
+      // getObjects()уБзуАБчЩ╗щМ▓ц╕ИуБ┐уБохЕиуВкуГЦуВ╕уВзуВпуГИуВТцнгуБЧуБПхПЦх╛ЧуБзуБНуВЛуБЛя╝Я
       std::vector<ObjectMock*> objs = objMgr.getObjects();
       CPPUNIT_ASSERT_EQUAL(2, (int) objs.size());
       CPPUNIT_ASSERT_EQUAL(std::string("ID 1"),

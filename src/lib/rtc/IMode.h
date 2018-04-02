@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file  IMode.h
  * @brief IMode interface class
@@ -29,7 +29,7 @@ namespace Local
   /*!
    * @if jp
    * @class IMode
-   * @brief IMode ¥¯¥é¥¹
+   * @brief IMode ã‚¯ãƒ©ã‚¹
    * @else
    * @class IMode
    * @brief IMode class

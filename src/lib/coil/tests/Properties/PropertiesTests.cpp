@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file   PropertiesTests.cpp
  * @brief  Properties test class
@@ -153,20 +153,20 @@ namespace Properties
 
 		
     /*!
-     * @brief Properties(const char* key = "", const char* value = "")���󥹥ȥ饯���Υƥ���
+     * @brief Properties(const char* key = "", const char* value = "")コンストラクタのテスト
      * 
      * <ul>
-     * <li>key��value�ǻ��ꤷ���ͤ���������������뤫��</li>
+     * <li>keyとvalueで指定した値が正しく取得されるか？</li>
      * </ul>
      */
     void test_Properties_key_value()
     {
-      /* key,value�ˤ��ǥե�����ͻ����Properties���֥������Ȥ��������� */
+      /* key,valueによるデフォルト値指定でPropertiesオブジェクトを生成する */
       string value("test");
 
       /*
-      // �ץ��ѥƥ���̾�Τ��ͤ������󥹥ȥ饯���ǻ��ꤷ���ͤǼ�������뤳�Ȥ��ǧ����
-      // (1) �������ز����ʤ��ǥƥ���
+      // プロパティの名称と値が、コンストラクタで指定した値で取得されることを確認する
+      // (1) キーを階層化しないでテスト
       */
       string key0("manager");
       coil::Properties prop0(key0.c_str(),value.c_str());
@@ -177,7 +177,7 @@ namespace Properties
 
 
       /*
-      // (2) �������ز����ƥƥ���
+      // (2) キーを階層化してテスト
       */
       string key1("manager.test.test");
       coil::Properties prop1(key1.c_str(),value.c_str());
@@ -189,11 +189,11 @@ namespace Properties
     }
 
     /*!
-     * @brief Properties(std::map<string, string>&)���󥹥ȥ饯���Υƥ���
+     * @brief Properties(std::map<string, string>&)コンストラクタのテスト
      * 
      * <ul>
-     * <li>std::map�ǻ��ꤷ���ǥե�����ͤ����ǥե�����ͤȤ�����������
-     * ������뤫��</li>
+     * <li>std::mapで指定したデフォルト値が、デフォルト値として正しく取
+     * 得されるか？</li>
      * </ul>
      */
     void test_ctor_map()
@@ -216,11 +216,11 @@ namespace Properties
       defaults["rtc.openrtm.vendor"] = "AIST TaskIntelligence";
       defaults["rtc.openrtm.version"] = "0.4.0";
 			
-      /* map�ˤ��ǥե�����ͻ����Properties���֥������Ȥ���������    */
+      /* mapによるデフォルト値指定でPropertiesオブジェクトを生成する    */
       coil::Properties prop(defaults);
 			
-      /* �ƥץ��ѥƥ��Υǥե�����ͤ�����̾��ͤ�������⡢���󥹥ȥ饯 */
-      /* ���ǻ��ꤷ���ͤǼ�������뤳�Ȥ��ǧ����                       */
+      /* 各プロパティのデフォルト値および通常値がいずれも、コンストラク */
+      /* タで指定した値で取得されることを確認する                       */
       map<string, string>::iterator it;
       it = defaults.begin();
       for (; it != defaults.end(); ++it) {
@@ -255,7 +255,7 @@ namespace Properties
       
       coil::Properties prop(defaults);
       /*
-      // �ƥץ��ѥƥ��Υǥե�����ͤ�����̾��ͤ�������⡢���󥹥ȥ饯���ǻ��ꤷ���ͤǼ�������뤳�Ȥ��ǧ����
+      // 各プロパティのデフォルト値および通常値がいずれも、コンストラクタで指定した値で取得されることを確認する
       */
       for (int i = 0; defaults[i] != ""; i += 2) {
 	string key = defaults[i];
@@ -266,10 +266,10 @@ namespace Properties
     }
 		
     /*!
-     * @brief Properties(const Properties& prop)���ԡ����󥹥ȥ饯���Υƥ���
+     * @brief Properties(const Properties& prop)コピーコンストラクタのテスト
      * 
      * <ul>
-     * <li>prop�ǻ��ꤷ���ǥե�����ͤ������ԡ����֥������Ȥ�����������������뤫��</li>
+     * <li>propで指定したデフォルト値が、コピーオブジェクトから正しく取得されるか？</li>
      * </ul>
      */
     void test_Properties_copy()
@@ -291,12 +291,12 @@ namespace Properties
       defaults["rtc.openrtm.vendor"] = "AIST TaskIntelligence";
       defaults["rtc.openrtm.version"] = "0.4.0";
 			
-      /* map�ˤ��ǥե�����ͻ����Properties���֥������Ȥ��������� */
+      /* mapによるデフォルト値指定でPropertiesオブジェクトを生成する */
       coil::Properties prop(defaults);
       coil::Properties cprop(prop);
 
 
-      /* �ƥץ��ѥƥ��Υǥե�����ͤ�����̾��ͤ�������⡢���󥹥ȥ饯���ǻ��ꤷ���ͤǼ�������뤳�Ȥ��ǧ���� */
+      /* 各プロパティのデフォルト値および通常値がいずれも、コンストラクタで指定した値で取得されることを確認する */
       for (map<string, string>::iterator it = defaults.begin(); it != defaults.end(); it++) {
 	string key = it->first;
 	string value = it->second;
@@ -307,10 +307,10 @@ namespace Properties
 
 
     /*!
-     * @brief ~Properties(void)�ǥ��ȥ饯���Υƥ���
+     * @brief ~Properties(void)デストラクタのテスト
      * 
      * <ul>
-     * <li>�ǥ��ȥ饯���ˤ�ꥪ�֥������Ȥ���ǡ������������������뤫��</li>
+     * <li>デストラクタによりオブジェクトからデータが正しく削除されるか？</li>
      * </ul>
      */
     void test_Properties_destructor()
@@ -332,15 +332,15 @@ namespace Properties
       defaults["rtc.openrtm.vendor"] = "AIST TaskIntelligence";
       defaults["rtc.openrtm.version"] = "0.4.0";
 			
-      /* map�ˤ��ǥե�����ͻ����Properties���֥������Ȥ��������� */
+      /* mapによるデフォルト値指定でPropertiesオブジェクトを生成する */
       coil::Properties prop(defaults);
       std::vector<coil::Properties*> leaf0(prop.getNode("rtc").getLeaf());
       CPPUNIT_ASSERT(leaf0.size() == 3);
 
-      /* rtc.manager�Ρ��ɤ������� */
+      /* rtc.managerノードを削除する */
       delete &prop.getNode("rtc.manager");
 
-      /* rtc�Ρ��ɤ���manager���������Ƥ�������ǧ���롣*/
+      /* rtcノードからmanagerが削除されている事を確認する。*/
       std::vector<coil::Properties*> leaf1(prop.getNode("rtc").getLeaf());
       CPPUNIT_ASSERT(leaf1.size() == 2);
       std::string getval(prop.getNode("rtc.manager").getValue());
@@ -348,40 +348,40 @@ namespace Properties
     }
 
     /*!
-     * @brief =�黻�ҡ������黻�ҡˤΥƥ���
+     * @brief =演算子（代入演算子）のテスト
      * 
      * <ul>
-     * <li>�ǥե�����͡��̾��ͤΤ���������ꤵ��Ƥ�����ˡ������ξ
-     * ������������������뤫��</li>
-     * <li>�ǥե�����ͤΤ����ꤵ��Ƥ��ꡢ�̾��ͤ����ꤵ��Ƥ��ʤ����
-     * �ˡ������ξ������������������뤫��</li>
-     * <li>�ǥե�����ͤ����ꤵ��Ƥ��ʤ������̾��ͤ����ꤵ��Ƥ�����
-     * �ˡ������ξ������������������뤫��</li>
+     * <li>デフォルト値、通常値のいずれも設定されている場合に、それら両
+     * 方が正しく代入されるか？</li>
+     * <li>デフォルト値のみ設定されており、通常値が設定されていない場合
+     * に、それら両方が正しく代入されるか？</li>
+     * <li>デフォルト値が設定されていないが、通常値が設定されている場合
+     * に、それら両方が正しく代入されるか？</li>
      * </ul>
      */
     void test_substitute()
     {
-      /* �������Ȥʤ�Properties��������� */
+      /* 代入元となるPropertiesを作成する */
       coil::Properties propSrc;
 			
-      /* (1) �ǥե�����͡��̾��ͤΤ���������ꤵ��Ƥ����� */
+      /* (1) デフォルト値、通常値のいずれも設定されている場合 */
       string key1 = "key1";
       string key1DefaultValue = "key1-default-value";
       string key1Value = "key1-value";
       propSrc.setDefault(key1, key1DefaultValue);
       propSrc.setProperty(key1, key1Value);
 			
-      /* (2) �ǥե�����ͤΤ����ꤵ��Ƥ��ꡢ�̾��ͤ����ꤵ��Ƥ��ʤ���� */
+      /* (2) デフォルト値のみ設定されており、通常値が設定されていない場合 */
       string key2 = "key2";
       string key2DefaultValue = "key2-default-value";
       propSrc.setDefault(key2, key2DefaultValue);
 			
-      /* (3) �ǥե�����ͤ����ꤵ��Ƥ��ʤ������̾��ͤ����ꤵ��Ƥ����� */
+      /* (3) デフォルト値が設定されていないが、通常値が設定されている場合 */
       string key3 = "key3";
       string key3Value = "key3-value";
       propSrc.setProperty(key3, key3Value);
 			
-      /* ������Ԥ������줾��ξ��ǡ��������������줿���Ȥ��ǧ���� */
+      /* 代入を行い、それぞれの場合で、正しく代入されたことを確認する */
       coil::Properties prop;
       prop = propSrc;
 			
@@ -395,17 +395,17 @@ namespace Properties
 
 
     /*!
-     * @brief getProperty()�᥽�åɤΥƥ���
+     * @brief getProperty()メソッドのテスト
      * 
      * <ul>
-     * <li>�ǥե�����ͤ����ꤵ��Ƥ��ꡢ�����̾���ͤ����ꤵ��Ƥ����
-     *     ��ˡ��ץ��ѥƥ��ͤȤ����������̾���ͤ���������뤫��</li>
-     * <li>�ǥե�����ͤ����ꤵ��Ƥ��뤬���̾���ͤ����ꤵ��Ƥ��ʤ���
-     *     ��ˡ��ץ��ѥƥ��ͤȤ����������ǥե�����ͤ���������뤫��</li>
-     * <li>�ǥե�����ͤ����ꤵ��Ƥ��ʤ������̾���ͤ����ꤵ��Ƥ����
-     *     ��ˡ��ץ��ѥƥ��ͤȤ����������̾���ͤ���������뤫��</li>
-     * <li>�ǥե�����͡��̾���ͤΤ���������ꤵ��Ƥ��ʤ����ˡ��ץ�
-     *     �ѥƥ��ͤȤ�����������ʸ���󤬼�������뤫��</li>
+     * <li>デフォルト値が設定されており、かつ通常の値も設定されている場
+     *     合に、プロパティ値として正しく通常の値が取得されるか？</li>
+     * <li>デフォルト値が設定されているが、通常の値は設定されていない場
+     *     合に、プロパティ値として正しくデフォルト値が取得されるか？</li>
+     * <li>デフォルト値は設定されていないが、通常の値は設定されている場
+     *     合に、プロパティ値として正しく通常の値が取得されるか？</li>
+     * <li>デフォルト値、通常の値のいずれも設定されていない場合に、プロ
+     *     パティ値として正しく空文字列が取得されるか？</li>
      * </ul>
      */		
     void test_getProperty()
@@ -417,44 +417,44 @@ namespace Properties
       prop.setDefault("property_2", "default_2");
       prop.setProperty("property_3", "value_3");
 			
-      /* (1) �ǥե�����ͤ����ꤵ��Ƥ��ꡢ�����̾���ͤ����ꤵ��Ƥ��� */
-      /* ���ˡ��ץ��ѥƥ��ͤȤ����������̾���ͤ���������뤫��       */
+      /* (1) デフォルト値が設定されており、かつ通常の値も設定されている */
+      /* 場合に、プロパティ値として正しく通常の値が取得されるか？       */
       string expected_1 = "value_1";
       CPPUNIT_ASSERT_EQUAL(expected_1, prop.getProperty("property_1"));
 			
-      /* (2) �ǥե�����ͤ����ꤵ��Ƥ��뤬���̾���ͤ����ꤵ��Ƥ��ʤ� */
-      /*/ ���ˡ��ץ��ѥƥ��ͤȤ����������ǥե�����ͤ���������뤫��  */
+      /* (2) デフォルト値が設定されているが、通常の値は設定されていない */
+      /*/ 場合に、プロパティ値として正しくデフォルト値が取得されるか？  */
       string expected_2 = "default_2";
       CPPUNIT_ASSERT_EQUAL(expected_2, prop.getProperty("property_2"));
 			
-      /* (3) �ǥե�����ͤ����ꤵ��Ƥ��ʤ������̾���ͤ����ꤵ��Ƥ��� */
-      /* ���ˡ��ץ��ѥƥ��ͤȤ����������̾���ͤ���������뤫��       */
+      /* (3) デフォルト値は設定されていないが、通常の値は設定されている */
+      /* 場合に、プロパティ値として正しく通常の値が取得されるか？       */
       string expected_3 = "value_3";
       CPPUNIT_ASSERT_EQUAL(expected_3, prop.getProperty("property_3"));
 			
-      /* (4) �ǥե�����͡��̾���ͤΤ���������ꤵ��Ƥ��ʤ����ˡ��� */
-      /* ���ѥƥ��ͤȤ�����������ʸ���󤬼�������뤫��                 */
+      /* (4) デフォルト値、通常の値のいずれも設定されていない場合に、プ */
+      /* ロパティ値として正しく空文字列が取得されるか？                 */
       string expected_4 = "";
       CPPUNIT_ASSERT_EQUAL(expected_4, prop.getProperty("property_4"));
     }
 
 
     /*!
-     * @brief getDefault()�Υƥ���
+     * @brief getDefault()のテスト
      * 
      * <ul>
      *
-     * <li>�ǥե�����ͤ����ꤵ��Ƥ��ꡢ�����̾���ͤ����ꤵ��Ƥ����
-     * ��ˡ����������ꤵ��Ƥ���ǥե�����ͤ�����Ǥ��뤫��</li>
+     * <li>デフォルト値が設定されており、かつ通常の値も設定されている場
+     * 合に、正しく設定されているデフォルト値を取得できるか？</li>
      *
-     * <li>�ǥե�����ͤ����ꤵ��Ƥ��뤬���̾���ͤ����ꤵ��Ƥ��ʤ���
-     * ��ˡ����������ꤵ��Ƥ���ǥե�����ͤ�����Ǥ��뤫��</li>
+     * <li>デフォルト値が設定されているが、通常の値は設定されていない場
+     * 合に、正しく設定されているデフォルト値を取得できるか？</li>
      * 
-     * <li>�ǥե�����ͤ����ꤵ��Ƥ��ʤ������̾���ͤ����ꤵ��Ƥ����
-     * ��ˡ��ǥե�����ͤȤ��ƶ�ʸ���󤬼�������뤫��</li>
+     * <li>デフォルト値は設定されていないが、通常の値は設定されている場
+     * 合に、デフォルト値として空文字列が取得されるか？</li>
      * 
-     * <li>�ǥե�����͡��̾���ͤΤ���������ꤵ��Ƥ��ʤ����ˡ��ǥե�
-     * ����ͤȤ��ƶ�ʸ���󤬼�������뤫��</li>
+     * <li>デフォルト値、通常の値のいずれも設定されていない場合に、デフォ
+     * ルト値として空文字列が取得されるか？</li>
      *
      * </ul>
      */
@@ -476,30 +476,30 @@ namespace Properties
       string key3Value = "key3-value";
       prop.setProperty(key3, key3Value);
 			
-      /* (1) �ǥե�����ͤ����ꤵ��Ƥ��ꡢ�����̾���ͤ����ꤵ��Ƥ��� */
-      /* ���ˡ����������ꤵ��Ƥ���ǥե�����ͤ�����Ǥ��뤫��       */
+      /* (1) デフォルト値が設定されており、かつ通常の値も設定されている */
+      /* 場合に、正しく設定されているデフォルト値を取得できるか？       */
       CPPUNIT_ASSERT_EQUAL(key1DefaultValue, prop.getDefault(key1));
 			
-      /* (2) �ǥե�����ͤ����ꤵ��Ƥ��뤬���̾���ͤ����ꤵ��Ƥ��ʤ� */
-      /* ���ˡ����������ꤵ��Ƥ���ǥե�����ͤ�����Ǥ��뤫��       */
+      /* (2) デフォルト値が設定されているが、通常の値は設定されていない */
+      /* 場合に、正しく設定されているデフォルト値を取得できるか？       */
       CPPUNIT_ASSERT_EQUAL(key2DefaultValue, prop.getDefault(key2));
 			
-      /* (3) �ǥե�����ͤ����ꤵ��Ƥ��ʤ������̾���ͤ����ꤵ��Ƥ��� */
-      /* ���ˡ��ǥե�����ͤȤ��ƶ�ʸ���󤬼�������뤫��             */
+      /* (3) デフォルト値は設定されていないが、通常の値は設定されている */
+      /* 場合に、デフォルト値として空文字列が取得されるか？             */
       CPPUNIT_ASSERT_EQUAL(EMPTY_STRING, prop.getDefault(key3));
 			
-      /* (4) �ǥե�����͡��̾���ͤΤ���������ꤵ��Ƥ��ʤ����ˡ��� */
-      /* �ե�����ͤȤ��ƶ�ʸ���󤬼�������뤫��                       */
+      /* (4) デフォルト値、通常の値のいずれも設定されていない場合に、デ */
+      /* フォルト値として空文字列が取得されるか？                       */
       string keyNonExist = "key-non-exist";
       CPPUNIT_ASSERT_EQUAL(EMPTY_STRING, prop.getDefault(keyNonExist));
     }
 		
     /*!
-     * @brief setProperty()�᥽�åɤΥƥ���
+     * @brief setProperty()メソッドのテスト
      * 
      * <ul>
-     * <li>������˻��ꤷ���ͤ������������ꤵ��뤫��</li>
-     * <li>�����������ͤȤ��ơ����������ͤ���������������뤫��</li>
+     * <li>設定時に指定した値が、正しく設定されるか？</li>
+     * <li>設定時の戻り値として、元の設定値が正しく取得されるか？</li>
      * </ul>
      */
     void test_setProperty()
@@ -511,26 +511,26 @@ namespace Properties
       coil::Properties prop;
       prop.setProperty(key, oldValue);
 			
-      /* (1) ������˻��ꤷ���ͤ������������ꤵ��뤫�� */
+      /* (1) 設定時に指定した値が、正しく設定されるか？ */
       CPPUNIT_ASSERT_EQUAL(oldValue, prop.getProperty(key));
 
-      /* (2) �����������ͤȤ��ơ����������ͤ���������������뤫�� */
+      /* (2) 設定時の戻り値として、元の設定値が正しく取得されるか？ */
       CPPUNIT_ASSERT_EQUAL(oldValue, prop.setProperty(key, newValue));
 
-      /* (1) ������˻��ꤷ���ͤ������������ꤵ��뤫���ʤ��Σ��� */
+      /* (1) 設定時に指定した値が、正しく設定されるか？（その２） */
       CPPUNIT_ASSERT_EQUAL(newValue, prop.getProperty(key));
     }
 
 
     /*!
-     * @brief list()�᥽�åɤΥƥ���
+     * @brief list()メソッドのテスト
      * 
      * <ul>
      *
-     * <li>���ꤵ��Ƥ���ץ��ѥƥ��ͤ������������Ϥ���뤫��</li>
+     * <li>設定されているプロパティ値が、正しく出力されるか？</li>
      *
-     * <li>\�ʥХå�����å���ˤ�ޤ��ͤ������������������׽��������
-     * ���Ϥ���뤫��</li>
+     * <li>\（バックスラッシュ）を含む値が、正しくエスケープ処理されて
+     * 出力されるか？</li>
      *
      * </ul>
      */
@@ -586,7 +586,7 @@ namespace Properties
         }
       inFile.close();
 			
-      /* �ե�����˽񤭹��ޤ줿���Ƥȴ����ͤ���Ӥ��� */
+      /* ファイルに書き込まれた内容と期待値を比較する */
       sort(expectedLines.begin(), expectedLines.end());
       sort(storedLines.begin(), storedLines.end());
       CPPUNIT_ASSERT_EQUAL(expectedLines.size(), storedLines.size());
@@ -597,23 +597,23 @@ namespace Properties
     }
 		
     /*!
-     * @brief load()�᥽�åɤΥƥ���
+     * @brief load()メソッドのテスト
      * <ul>
      *
-     * <li>�ץ��ѥƥ��ꥹ�Ȥ�ե����뤫��Properties���֥������Ȥ�������
-     * �ɤ߹���뤫��</li>
+     * <li>プロパティリストをファイルからPropertiesオブジェクトへ正しく
+     * 読み込めるか？</li>
      *
      * </ul>
      */
     void test_load()
     {
-      /* �ץ��ѥƥ��ꥹ�Ȥ�ե����뤫��Properties���֥������Ȥ��ɤ߹��� */
+      /* プロパティリストをファイルからPropertiesオブジェクトへ読み込む */
       coil::Properties prop;
       std::ifstream ifl("defaults.conf");
       prop.load(ifl);
       ifl.close();
 			
-      /* �����ͤ���Ӥ��ơ��������ɤ߹��ޤ줿���Ȥ��ǧ���� */
+      /* 期待値と比較して、正しく読み込まれたことを確認する */
       map<string, string>::iterator expected;
       for (expected = DEFAULTS_CONF.begin();
            expected != DEFAULTS_CONF.end(); expected++) {
@@ -624,22 +624,22 @@ namespace Properties
     }
 		
     /*!
-     * @brief store()�᥽�åɤΥƥ���
+     * @brief store()メソッドのテスト
      * 
      * <ul>
      *
-     * <li>���ꤵ��Ƥ���ץ��ѥƥ��ͤ������������Ϥ���뤫��</li>
+     * <li>設定されているプロパティ値が、正しく出力されるか？</li>
      *
-     * <li>���ꤷ���إå�ʸ���󤬡����������Ϥ���뤫��</li>
+     * <li>指定したヘッダ文字列が、正しく出力されるか？</li>
      *
-     * <li>\�ʥХå�����å���ˤ�ޤ��ͤ������������������׽��������
-     * ���Ϥ���뤫��</li>
+     * <li>\（バックスラッシュ）を含む値が、正しくエスケープ処理されて
+     * 出力されるか？</li>
      *
      * </ul>
      */
     void test_store()
     {
-      /* �ƥ����ѤΥץ��ѥƥ������ꤹ�� */
+      /* テスト用のプロパティを設定する */
       coil::Properties prop;
       prop.setProperty("rtc.component.conf.path",
                        "C:\\Program\\ Files\\OpenRTM-aist");
@@ -665,7 +665,7 @@ namespace Properties
       prop.store(outFile, "stored data");
       outFile.close();
 			
-      /* ��ӤΤ���δ����ͤ�������� */
+      /* 比較のための期待値を準備する */
       vector<string> expectedLines;
       expectedLines.push_back("# stored data");
       expectedLines.push_back("rtc.component.conf.path: C:\\\\Program\\\\ Files\\\\OpenRTM-aist");
@@ -685,7 +685,7 @@ namespace Properties
       expectedLines.push_back("rtc.openrtm.version: 0.4.0");
       expectedLines.push_back("hello: \\tHello\\t");
 			
-      /* ���Ϥ��줿�ե��������Ȥ򣱹ԤŤ��ɤ߹��� */
+      /* 出力されたファイルの中身を１行づつ読み込む */
       vector<string> storedLines;
       std::ifstream inFile("stored.conf");
       string str;
@@ -694,7 +694,7 @@ namespace Properties
       }
       inFile.close();
 			
-      /* �ե�����˽񤭹��ޤ줿���Ƥȴ����ͤ���Ӥ��� */
+      /* ファイルに書き込まれた内容と期待値を比較する */
       sort(expectedLines.begin(), expectedLines.end());
       sort(storedLines.begin(), storedLines.end());
       CPPUNIT_ASSERT_EQUAL(expectedLines.size(), storedLines.size());
@@ -705,18 +705,18 @@ namespace Properties
 
 
     /*!
-     * @brief propertyNames()�᥽�åɤΥƥ���
+     * @brief propertyNames()メソッドのテスト
      * 
      * <ul>
      *
-     * <li>�̾�Υץ��ѥƥ��ͤȥǥե�����ͤ�ξ�������ꤵ��Ƥ���ץ���
-     * �ƥ��ˤĤ��ơ�����̾����������뤫��</li>
+     * <li>通常のプロパティ値とデフォルト値の両方が設定されているプロパ
+     * ティについて、キー名が取得されるか？</li>
      *
-     * <li>�̾�Υץ��ѥƥ��ͤΤߤ����ꤵ��Ƥ���ץ��ѥƥ��ˤĤ��ơ�����
-     * ̾����������뤫��</li>
+     * <li>通常のプロパティ値のみが設定されているプロパティについて、キー
+     * 名が取得されるか？</li>
      *
-     * <li>�ǥե�����ͤΤߤ����ꤵ��Ƥ���ץ��ѥƥ��ˤĤ��ơ�����̾��
-     * ��������뤫��</li>
+     * <li>デフォルト値のみが設定されているプロパティについて、キー名が
+     * 取得されるか？</li>
      *
      * </ul>
      */
@@ -724,17 +724,17 @@ namespace Properties
     {
       coil::Properties prop;
 			
-      /* (1) �̾�Υץ��ѥƥ��ͤȥǥե�����ͤ�ξ�������ꤹ�� */
+      /* (1) 通常のプロパティ値とデフォルト値の両方を設定する */
       prop.setProperty("property_01", "value_01");
       prop.setDefault("property_01", "default_01");
 			
-      /* (2) �̾�Υץ��ѥƥ��ͤΤߤ����ꤹ�� */
+      /* (2) 通常のプロパティ値のみを設定する */
       prop.setProperty("property_02", "value_02");
 			
-      /* (3) �ǥե�����ͤΤߤ����ꤹ�� */
+      /* (3) デフォルト値のみを設定する */
       prop.setDefault("property_03", "default_03");
 			
-      /* (1),(2),(3)������ξ��ˤĤ��Ƥ⥭��̾����������뤳�Ȥ��ǧ���� */
+      /* (1),(2),(3)いずれの場合についてもキー名が取得されることを確認する */
       vector<string> keys = prop.propertyNames();
       CPPUNIT_ASSERT_EQUAL(3, (int) keys.size());
       CPPUNIT_ASSERT(find(keys.begin(), keys.end(), "property_01")
@@ -747,10 +747,10 @@ namespace Properties
 
 
     /*!
-     * @brief getName(void)�᥽�åɤΥƥ���
+     * @brief getName(void)メソッドのテスト
      * 
      * <ul>
-     * <li>���󥹥ȥ饯���ǻ��ꤷ���ץ��ѥƥ���̾�Τ���������������뤫��</li>
+     * <li>コンストラクタで指定したプロパティの名称が正しく取得されるか？</li>
      * </ul>
      */
     void test_getName()
@@ -758,15 +758,15 @@ namespace Properties
 
       string value("test");
 
-      /* (1) �������ز����Ƥ��ʤ���� */
-      /* key,value�ˤ��ǥե�����ͻ����Properties���֥������Ȥ��������� */
+      /* (1) キーを階層化していない場合 */
+      /* key,valueによるデフォルト値指定でPropertiesオブジェクトを生成する */
       string key0("manager");
       coil::Properties prop0(key0.c_str(),value.c_str());
       string retkey(prop0.getName());
       CPPUNIT_ASSERT_EQUAL(key0, retkey);
 
-      /* (1) �������ز�������� */
-      /* key,value�ˤ��ǥե�����ͻ����Properties���֥������Ȥ��������� */
+      /* (1) キーを階層化した場合 */
+      /* key,valueによるデフォルト値指定でPropertiesオブジェクトを生成する */
       string key1("manager.hoge");
       coil::Properties prop1(key1.c_str(),value.c_str());
       retkey= prop1.getName();
@@ -774,29 +774,29 @@ namespace Properties
     }
 
     /*!
-     * @brief getValue(void)�᥽�åɤΥƥ���
+     * @brief getValue(void)メソッドのテスト
      * 
      * <ul>
-     * <li>���󥹥ȥ饯���ǻ��ꤷ���ץ��ѥƥ����ͤ���������������뤫��</li>
+     * <li>コンストラクタで指定したプロパティの値が正しく取得されるか？</li>
      * </ul>
      */
     void test_getValue()
     {
-      /* key,value�ˤ��ǥե�����ͻ����Properties���֥������Ȥ��������� */
+      /* key,valueによるデフォルト値指定でPropertiesオブジェクトを生成する */
       string key("manager");
       string value("test.test");
       coil::Properties prop(key.c_str(),value.c_str());
 			
-      /* ���󥹥ȥ饯���ǻ��ꤷ���ץ��ѥƥ����ͤ���������뤳�Ȥ��ǧ���� */
+      /* コンストラクタで指定したプロパティの値が取得されることを確認する */
       string retval(prop.getValue());
       CPPUNIT_ASSERT_EQUAL(value, retval);
     }
 
     /*!
-     * @brief getDefaultValue(void)�᥽�åɤΥƥ���
+     * @brief getDefaultValue(void)メソッドのテスト
      * 
      * <ul>
-     * <li>setDefault�ǻ��ꤷ���ץ��ѥƥ����ͤ���������������뤫��</li>
+     * <li>setDefaultで指定したプロパティの値が正しく取得されるか？</li>
      * </ul>
      */
     void test_getDefaultValue()
@@ -805,19 +805,19 @@ namespace Properties
 
       string key("property_1");
       string value("default_1");
-      /* �ǥե�����ͤ����ꤹ�� */
+      /* デフォルト値を設定する */
       prop.setDefault(key.c_str(), value.c_str());
 
-      /* �ǥե�����ͤ�������� */
+      /* デフォルト値を取得する */
       string retval(prop.getNode(key.c_str()).getDefaultValue());
       CPPUNIT_ASSERT_EQUAL(value, retval);
     }
 
     /*!
-     * @brief getLeaf(void)�᥽�åɤΥƥ���
+     * @brief getLeaf(void)メソッドのテスト
      * 
      * <ul>
-     * <li>getLeaf�ǻ����Ǥ���������������뤫��</li>
+     * <li>getLeafで子要素が正しく取得されるか？</li>
      * </ul>
      */
     void test_getLeaf()
@@ -839,20 +839,20 @@ namespace Properties
       defaults["rtc.openrtm.vendor"] = "AIST TaskIntelligence";
       defaults["rtc.openrtm.version"] = "0.4.0";
 			
-      /* map�ˤ��ǥե�����ͻ����Properties���֥������Ȥ��������� */
+      /* mapによるデフォルト値指定でPropertiesオブジェクトを生成する */
       coil::Properties prop(defaults);
 
-      /* getLeaf()�ǻ����Ǥ���� */
+      /* getLeaf()で子要素を取得 */
       std::vector<coil::Properties*> leaf(prop.getNode("rtc").getLeaf());
       CPPUNIT_ASSERT(leaf[1]->getProperty("arch") == "i386");
       CPPUNIT_ASSERT(leaf[1]->getProperty("debug.level") == "PARANOID");
     }
 
     /*!
-     * @brief getRoot(void)�᥽�åɤΥƥ���
+     * @brief getRoot(void)メソッドのテスト
      * 
      * <ul>
-     * <li>getRoot�ǥ롼�����Ǥ���������������뤫��</li>
+     * <li>getRootでルート要素が正しく取得されるか？</li>
      * </ul>
      */
     void test_getRoot()
@@ -874,20 +874,20 @@ namespace Properties
       defaults["rtc.openrtm.vendor"] = "AIST TaskIntelligence";
       defaults["rtc.openrtm.version"] = "0.4.0";
 			
-      /* map�ˤ��ǥե�����ͻ����Properties���֥������Ȥ��������� */
+      /* mapによるデフォルト値指定でPropertiesオブジェクトを生成する */
       coil::Properties prop(defaults);
 
-      /* getLeaf()�ǥ롼�����Ǥ���� */
+      /* getLeaf()でルート要素を取得 */
       const coil::Properties* root(prop.getNode("rtc.manager.os").getRoot());
       CPPUNIT_ASSERT(root->getProperty("arch") == "i386");
       CPPUNIT_ASSERT(root->getProperty("debug.level") == "PARANOID");
     }
 
     /*!
-     * @brief operator[]()�᥽�åɤΥƥ���
+     * @brief operator[]()メソッドのテスト
      * 
      * <ul>
-     * <li>���ꤵ�줿��������ĥץ��ѥƥ��򡢥ץ��ѥƥ��ꥹ�Ȥ���õ���뤫��</li>
+     * <li>指定されたキーを持つプロパティを、プロパティリストから探せるか？</li>
      * </ul>
      */
     void test_operator()
@@ -911,14 +911,14 @@ namespace Properties
 			
       //  const std::string& 
       //     Properties::operator[](const std::string& key) const
-      //  �Υƥ���
+      //  のテスト
       const coil::Properties prop0(defaults);
       const string& retval0(prop0["rtc.manager.arch"]);
       CPPUNIT_ASSERT(retval0 == "i386");
 
       //  std::string& 
       //     Properties::operator[](const std::string& key)
-      //  �Υƥ���
+      //  のテスト
       coil::Properties prop1(defaults);
       string retval1(prop1["rtc.manager.arch"]);
       CPPUNIT_ASSERT(retval1 == "i386");
@@ -926,10 +926,10 @@ namespace Properties
     }
 
     /*!
-     * @brief setDefaults()�᥽�åɤΥƥ���
+     * @brief setDefaults()メソッドのテスト
      * 
      * <ul>
-     * <li>�ǥե�����ͤ���Ͽ���������ͤ������������Ǥ��뤫��</li>
+     * <li>デフォルト値を登録し、その値が正しく取得できるか？</li>
      * </ul>
      */
     void test_setDefaults()
@@ -957,7 +957,7 @@ namespace Properties
       prop.setDefaults(defaults);
 
       /*
-      // �ƥץ��ѥƥ��Υǥե�����ͤ�setDefaults�ǻ��ꤷ���ͤǼ�������뤳�Ȥ��ǧ����
+      // 各プロパティのデフォルト値がsetDefaultsで指定した値で取得されることを確認する
       */
       for (int i = 0; defaults[i] != ""; i += 2) {
 	string key = defaults[i];
@@ -967,10 +967,10 @@ namespace Properties
     }
 
     /*!
-     * @brief size()�᥽�åɤΥƥ���
+     * @brief size()メソッドのテスト
      * 
      * <ul>
-     * <li>�ץ��ѥƥ��ο��������������Ǥ��뤫��</li>
+     * <li>プロパティの数が正しく取得できるか？</li>
      * </ul>
      */
     void test_size()
@@ -994,10 +994,10 @@ namespace Properties
 			
       coil::Properties prop(defaults);
 
-      /* (1) ���󥹥ȥ饯�������ˤƻ��ꤷ���ץ��ѥƥ��ο��������������Ǥ��뤫�� */
+      /* (1) コンストラクタ引数にて指定したプロパティの数が正しく取得できるか？ */
       CPPUNIT_ASSERT(15 == prop.size());
 
-      /* (2) �������ɲø�Υץ��ѥƥ��ο��������������Ǥ��뤫�� */
+      /* (2) 新たに追加後のプロパティの数が正しく取得できるか？ */
       string key = "key";
       string newValue = "new-value";
       prop.setProperty(key, newValue);
@@ -1005,10 +1005,10 @@ namespace Properties
     }
 
     /*!
-     * @brief findNode()�᥽�åɤΥƥ���
+     * @brief findNode()メソッドのテスト
      * 
      * <ul>
-     * <li>�����ǻ��ꤷ���Ρ��ɤ������������Ǥ��뤫��</li>
+     * <li>キーで指定したノードが正しく検索できるか？</li>
      * </ul>
      */
     void test_findNode()
@@ -1030,24 +1030,24 @@ namespace Properties
       defaults["rtc.openrtm.vendor"] = "AIST TaskIntelligence";
       defaults["rtc.openrtm.version"] = "0.4.0";
 			
-      /* map�ˤ��ǥե�����ͻ����Properties���֥������Ȥ��������� */
+      /* mapによるデフォルト値指定でPropertiesオブジェクトを生成する */
       coil::Properties prop(defaults);
 
-      /* (1) ¸�ߤ���Ρ��ɤ���ꤷ�Ρ��ɤ���� */
+      /* (1) 存在するノードを指定しノードを取得 */
       CPPUNIT_ASSERT(prop.findNode("rtc.manager")->getProperty("arch") == "i386");
       CPPUNIT_ASSERT(prop.findNode("rtc.manager")->getProperty("debug.level") == "PARANOID");
       CPPUNIT_ASSERT(prop.findNode("rtc.manager") != NULL);
 
-      /* (2) ¸�ߤ��ʤ��Ρ��ɤ���ꤷ�Ρ��ɤ���� */
+      /* (2) 存在しないノードを指定しノードを取得 */
       CPPUNIT_ASSERT(prop.findNode("manager") == NULL);
       CPPUNIT_ASSERT(prop.findNode("rtc.MANAGER") == NULL);
     }
 
     /*!
-     * @brief getNode()�᥽�åɤΥƥ���
+     * @brief getNode()メソッドのテスト
      * 
      * <ul>
-     * <li>�����ǻ��ꤷ���Ρ��ɤ������������Ǥ��뤫��</li>
+     * <li>キーで指定したノードが正しく取得できるか？</li>
      * </ul>
      */
     void test_getNode()
@@ -1069,24 +1069,24 @@ namespace Properties
       defaults["rtc.openrtm.vendor"] = "AIST TaskIntelligence";
       defaults["rtc.openrtm.version"] = "0.4.0";
 			
-      /* map�ˤ��ǥե�����ͻ����Properties���֥������Ȥ��������� */
+      /* mapによるデフォルト値指定でPropertiesオブジェクトを生成する */
       coil::Properties prop(defaults);
 
-      /* (1) ����¸�ߤ���Ρ��ɤ���� */
+      /* (1) 既に存在するノードを取得 */
       CPPUNIT_ASSERT(prop.getNode("rtc.manager").getProperty("arch") == "i386");
       CPPUNIT_ASSERT(prop.getNode("rtc.manager").getProperty("debug.level") == "PARANOID");
 
-      /* (2) ¸�ߤ��ʤ��Ρ��ɤ���� */
+      /* (2) 存在しないノードを取得 */
       std::string getval(prop.getNode("manager").getValue());
       CPPUNIT_ASSERT(getval == "");
 //      CPPUNIT_ASSERT(prop.getNode("rtc.manager") != NULL);
     }
 
     /*!
-     * @brief removeNode()�᥽�åɤΥƥ���
+     * @brief removeNode()メソッドのテスト
      * 
      * <ul>
-     * <li>���ꤷ���Ρ��ɤ�����������Ǥ��뤫��</li>
+     * <li>指定したノードが正しく削除できるか？</li>
      * </ul>
      */
     void test_removeNode()
@@ -1108,28 +1108,28 @@ namespace Properties
       defaults["rtc.openrtm.vendor"] = "AIST TaskIntelligence";
       defaults["rtc.openrtm.version"] = "0.4.0";
 			
-      /* map�ˤ��ǥե�����ͻ����Properties���֥������Ȥ��������� */
+      /* mapによるデフォルト値指定でPropertiesオブジェクトを生成する */
       coil::Properties prop(defaults);
 
-      /* "rtc.manager"�Τ褦�˻��ꤷ����硢����Ǥ��ʤ��� */
+      /* "rtc.manager"のように指定した場合、削除できない。 */
       CPPUNIT_ASSERT(prop.removeNode("rtc.manager") == NULL);
 
-      /* "rtc.manager"�Ρ��ɤκ�� */
+      /* "rtc.manager"ノードの削除 */
       CPPUNIT_ASSERT(prop.getNode("rtc").removeNode("manager") != NULL);
 
-      /* (1) ��������Ρ��ɤ򸡺� */
+      /* (1) 削除したノードを検索 */
       CPPUNIT_ASSERT(prop.findNode("rtc.manager") == NULL);
 
-      /* (2) ��������Ρ��ɤ���� */
+      /* (2) 削除したノードを取得 */
       std::string getval0(prop.getNode("rtc.manager").getValue());
       CPPUNIT_ASSERT(getval0 == "");
     }
 
     /*!
-     * @brief hasKey()�᥽�åɤΥƥ���
+     * @brief hasKey()メソッドのテスト
      * 
      * <ul>
-     * <li>�ҥΡ��ɤ�key�����뤫�ɤ�����</li>
+     * <li>子ノードにkeyがあるかどうか？</li>
      * </ul>
      */
     void test_hasKey()
@@ -1151,27 +1151,27 @@ namespace Properties
       defaults["rtc.openrtm.vendor"] = "AIST TaskIntelligence";
       defaults["rtc.openrtm.version"] = "0.4.0";
 			
-      /* map�ˤ��ǥե�����ͻ����Properties���֥������Ȥ��������� */
+      /* mapによるデフォルト値指定でPropertiesオブジェクトを生成する */
       coil::Properties prop(defaults);
 
-      /* (1) ¸�ߤ��륭���ǥƥ��� */
+      /* (1) 存在するキーでテスト */
       CPPUNIT_ASSERT(prop.hasKey("rtc") != NULL);
 
-      /* (2) ¸�ߤ��ʤ������ǥƥ��� */
+      /* (2) 存在しないキーでテスト */
       CPPUNIT_ASSERT(prop.hasKey("hoge") == NULL);
 
-      /* (3) ¸�ߤ��륭���ǥƥ��� */
+      /* (3) 存在するキーでテスト */
       CPPUNIT_ASSERT(prop.getNode("rtc").hasKey("manager") != NULL);
 
-      /* (4) ¸�ߤ��ʤ������ǥƥ��� */
+      /* (4) 存在しないキーでテスト */
       CPPUNIT_ASSERT(prop.getNode("rtc").hasKey("hoge") == NULL);
     }
 
     /*!
-     * @brief clear()�᥽�åɤΥƥ���
+     * @brief clear()メソッドのテスト
      * 
      * <ul>
-     * <li>�ҥΡ��ɤ����٤ƺ������뤫�ɤ�����</li>
+     * <li>子ノードがすべて削除されるかどうか？</li>
      * </ul>
      */
     void test_clear()
@@ -1193,20 +1193,20 @@ namespace Properties
       defaults["rtc.openrtm.vendor"] = "AIST TaskIntelligence";
       defaults["rtc.openrtm.version"] = "0.4.0";
 			
-      /* map�ˤ��ǥե�����ͻ����Properties���֥������Ȥ��������� */
+      /* mapによるデフォルト値指定でPropertiesオブジェクトを生成する */
       coil::Properties prop(defaults);
 
       prop.getNode("rtc.manager.os").clear();
 
-      /* (1) "rtc.manager.os"�ʲ��ΥΡ��ɤ��������Ƥ��뤫�� */
+      /* (1) "rtc.manager.os"以下のノードが削除されているか？ */
       CPPUNIT_ASSERT(prop.findNode("rtc.manager.os.name") == NULL);
       CPPUNIT_ASSERT(prop.findNode("rtc.manager.os.release") == NULL);
       
-      /* (2) "rtc.manager.os"�ʳ��ΥΡ��ɤϺ������Ƥ��ʤ����� */
+      /* (2) "rtc.manager.os"以外のノードは削除されていないか？ */
       CPPUNIT_ASSERT(prop.findNode("rtc.manager.arch") != NULL);
       CPPUNIT_ASSERT(prop.findNode("rtc.manager.orb") != NULL);
 
-      /* (3) ���٤ƤΥΡ��ɤ��������Ƥ��뤫�� */
+      /* (3) すべてのノードが削除されているか？ */
       prop.clear();
       CPPUNIT_ASSERT(prop.findNode("rtc.manager.os") == NULL);
       CPPUNIT_ASSERT(prop.findNode("rtc.manager") == NULL);
@@ -1217,21 +1217,21 @@ namespace Properties
 
 
     /*!
-     * @brief createNode()�Υƥ���
+     * @brief createNode()のテスト
      * 
      * <ul>
      *
-     * <li>�ǥե�����ͤ����ꤵ��Ƥ��ꡢ�����̾���ͤ����ꤵ��Ƥ����
-     * ��ˡ���������̾�ο����Ρ��ɺ��������տޤɤ��꼺�Ԥ��뤫��</li>
+     * <li>デフォルト値が設定されており、かつ通常の値も設定されている場
+     * 合に、当該キー名の新規ノード作成が、意図どおり失敗するか？</li>
      *
-     * <li>�ǥե�����ͤ����ꤵ��Ƥ��뤬���̾���ͤ����ꤵ��Ƥ��ʤ���
-     * ��ˡ���������̾�ο����Ρ��ɺ��������տޤɤ��꼺�Ԥ��뤫��</li>
+     * <li>デフォルト値が設定されているが、通常の値は設定されていない場
+     * 合に、当該キー名の新規ノード作成が、意図どおり失敗するか？</li>
      *
-     * <li>�ǥե�����ͤ����ꤵ��Ƥ��ʤ������̾���ͤ����ꤵ��Ƥ����
-     * ��ˡ���������̾�ο����Ρ��ɺ��������տޤɤ��꼺�Ԥ��뤫��</li>
+     * <li>デフォルト値は設定されていないが、通常の値は設定されている場
+     * 合に、当該キー名の新規ノード作成が、意図どおり失敗するか？</li>
      *
-     * <li>�ǥե�����͡��̾���ͤΤ���������ꤵ��Ƥ��ʤ����ˡ�����
-     * �Ρ��ɺ������������뤫��</li>
+     * <li>デフォルト値、通常の値のいずれも設定されていない場合に、新規
+     * ノード作成が成功するか？</li>
      *
      * </ul>
      */
@@ -1254,26 +1254,26 @@ namespace Properties
       prop.setProperty(key3, key3Value);
 			
       /*
-      // (1) �ǥե�����ͤ����ꤵ��Ƥ��ꡢ�����̾���ͤ����ꤵ��Ƥ���
-      // ���ˡ���������̾�ο����Ρ��ɺ��������տޤɤ��꼺�Ԥ��뤫��
+      // (1) デフォルト値が設定されており、かつ通常の値も設定されている
+      // 場合に、当該キー名の新規ノード作成が、意図どおり失敗するか？
       */
       CPPUNIT_ASSERT(! prop.createNode(key1.c_str()));
 			
       /*
-      // (2) �ǥե�����ͤ����ꤵ��Ƥ��뤬���̾���ͤ����ꤵ��Ƥ��ʤ�
-      // ���ˡ���������̾�ο����Ρ��ɺ��������տޤɤ��꼺�Ԥ��뤫��
+      // (2) デフォルト値が設定されているが、通常の値は設定されていない
+      // 場合に、当該キー名の新規ノード作成が、意図どおり失敗するか？
       */
       CPPUNIT_ASSERT(! prop.createNode(key2.c_str()));
 			
       /*
-      // (3) �ǥե�����ͤ����ꤵ��Ƥ��ʤ������̾���ͤ����ꤵ��Ƥ���
-      // ���ˡ���������̾�ο����Ρ��ɺ��������տޤɤ��꼺�Ԥ��뤫��
+      // (3) デフォルト値は設定されていないが、通常の値は設定されている
+      // 場合に、当該キー名の新規ノード作成が、意図どおり失敗するか？
       */
       CPPUNIT_ASSERT(! prop.createNode(key3.c_str()));
 			
       /*
-      // (4) �ǥե�����͡��̾���ͤΤ���������ꤵ��Ƥ��ʤ����ˡ���
-      // ���Ρ��ɺ������������뤫��
+      // (4) デフォルト値、通常の値のいずれも設定されていない場合に、新
+      // 規ノード作成が成功するか？
       */
       string keyNonExist = "key-non-exist";
       CPPUNIT_ASSERT(prop.createNode(keyNonExist.c_str()));
@@ -1281,23 +1281,23 @@ namespace Properties
 
 
     /*!
-     * @brief <<�黻�ҤΥƥ���
+     * @brief <<演算子のテスト
      * 
      * <ul>
      *
-     * <li>�ǥե�����ͤϡ����Ϥ���ʤ����Ȥ��ǧ����</li>
+     * <li>デフォルト値は、入力されないことを確認する</li>
      *
-     * <li>���Ĥ�Properties�Τ����������������ꤵ��Ƥ��륭���˴ؤ��ơ�
-     * ���ꤵ��Ƥ����̾��ͤ�������������Ѳ����ʤ�����</li>
+     * <li>２つのPropertiesのうち片方だけに設定されているキーに関して、
+     * 設定されている通常値が、入力前後で変化しないか？</li>
      *
-     * <li>���Ĥ�Properties��ξ���˶��̤��Ƥ��륭���˴ؤ��ơ����ꤵ���
-     * �����̾��ͤ����Ϥ����ͤǾ�񤭤���뤫��</li>
+     * <li>２つのPropertiesの両方に共通しているキーに関して、設定されて
+     * いる通常値が入力した値で上書きされるか？</li>
      *
      * </ul>
      */
     void test_streamInput()
     {
-      /* ���ϸ��Ȥʤ�Properties�Σ����ܤ�������� */
+      /* 入力元となるPropertiesの１つ目を作成する */
       coil::Properties propA;
 			
       string keyA1 = "keyA1";
@@ -1314,7 +1314,7 @@ namespace Properties
       string keyA3Value = "keyA3-value";
       propA.setProperty(keyA3, keyA3Value);
 			
-      /* ���ϸ��Ȥʤ�Properties�Σ����ܤ�������� */
+      /* 入力元となるPropertiesの２つ目を作成する */
       coil::Properties propB;
 			
       string keyB1 = "keyB1";
@@ -1332,7 +1332,7 @@ namespace Properties
       propB.setProperty(keyB3, keyB3Value);
 			
       /*
-      // ���Ĥ�Properties�ˡ����̤��륭��̾�Ǹߤ��˰ۤʤ��ͤ����ꤷ�Ƥ���
+      // ２つのPropertiesに、共通するキー名で互いに異なる値を設定しておく
       */
       string keyCommon = "keyCommon";
       string keyCommonValueA = "keyCommon-value-A";
@@ -1340,12 +1340,12 @@ namespace Properties
       propA.setProperty(keyCommon, keyCommonValueA);
       propB.setProperty(keyCommon, keyCommonValueB);
 
-      /* propB��propA�����Ϥ��� */
+      /* propBをpropAに入力する */
       propA << propB;
 			
-      /* �������ޡ������줿���Ȥ��ǧ���� */
-      /* (1) �������������ꤵ��Ƥ��ꡢ���̥����Ǥʤ���Τϡ���ȤΤޤ� */
-      /* �Ǥ��뤳�Ȥ��ǧ����                                           */
+      /* 正しくマージされたことを確認する */
+      /* (1) 入力前から設定されており、共通キーでないものは、もとのまま */
+      /* であることを確認する                                           */
       CPPUNIT_ASSERT_EQUAL(keyA1DefaultValue, propA.getDefault(keyA1));
       CPPUNIT_ASSERT_EQUAL(keyA1Value, propA.getProperty(keyA1));
       CPPUNIT_ASSERT_EQUAL(keyA2DefaultValue, propA.getDefault(keyA2));
@@ -1353,7 +1353,7 @@ namespace Properties
       CPPUNIT_ASSERT_EQUAL(EMPTY_STRING, propA.getDefault(keyA3));
       CPPUNIT_ASSERT_EQUAL(keyA3Value, propA.getProperty(keyA3));
 
-      /* (2) �̾��ͤ����Ϥ��졢�ǥե�����ͤ����Ϥ���ʤ����Ȥ��ǧ���� */
+      /* (2) 通常値は入力され、デフォルト値は入力されないことを確認する */
       CPPUNIT_ASSERT_EQUAL(EMPTY_STRING, propA.getDefault(keyB1));
       CPPUNIT_ASSERT_EQUAL(keyB1Value, propA.getProperty(keyB1));
       CPPUNIT_ASSERT_EQUAL(EMPTY_STRING, propA.getDefault(keyB2));
@@ -1361,26 +1361,26 @@ namespace Properties
       CPPUNIT_ASSERT_EQUAL(EMPTY_STRING, propA.getDefault(keyB3));
       CPPUNIT_ASSERT_EQUAL(keyB3Value, propA.getProperty(keyB3));
 			
-      /* (3) ���̥���̾�ˤĤ��ơ����Ϥ����ͤǾ�񤭤���Ƥ��뤳�Ȥ��ǧ���� */
+      /* (3) 共通キー名について、入力した値で上書きされていることを確認する */
       CPPUNIT_ASSERT_EQUAL(keyCommonValueB, propA.getProperty(keyCommon));
     }
 
     /*!
-     * @brief splitKeyValue()�᥽�åɤΥƥ���
+     * @brief splitKeyValue()メソッドのテスト
      * 
      * <ul>
      *
-     * <li>���������˶���ʸ����ޤ���ˤĤ��ơ��������ͤ�������ʬΥ��
-     * ���뤫��</li>
+     * <li>キーの前に空白文字を含む場合について、キーと値を正しく分離で
+     * きるか？</li>
      *
-     * <li>�����ȥǥ�ߥ��δ֤˶���ʸ����ޤ���ˤĤ��ơ��������ͤ���
-     * ����ʬΥ�Ǥ��뤫��</li>
+     * <li>キーとデリミタの間に空白文字を含む場合について、キーと値を正
+     * しく分離できるか？</li>
      *
-     * <li>�ǥ�ߥ����ͤδ֤˶���ʸ����ޤ���ˤĤ��ơ��������ͤ�����
-     * ��ʬΥ�Ǥ��뤫��</li>
+     * <li>デリミタと値の間に空白文字を含む場合について、キーと値を正し
+     * く分離できるか？</li>
      *
-     *a <li>�ͤθ���˶���ʸ����ޤ���ˤĤ��ơ��������ͤ�������ʬΥ��
-     * ���뤫��</li>
+     *a <li>値の後ろに空白文字を含む場合について、キーと値を正しく分離で
+     * きるか？</li>
      *
      * </ul>
      */
@@ -1402,8 +1402,8 @@ namespace Properties
       P prop;
       prop.splitKeyValue_protected(keyAndValue, key, value);
 			
-      /* �������ͤ���;ʬ�ʶ���ʸ��������줿������ʬΥ����Ƥ��뤳�� */
-      /* ���ǧ����                                                     */
+      /* キーと値が、余分な空白文字が除去されたうえで分離されていること */
+      /* を確認する                                                     */
       string expectedKey("property_name");
       CPPUNIT_ASSERT_EQUAL(expectedKey, key);
 

@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file   SdoOrganizationTests.cpp
  * @brief  SdoOrganization test class
@@ -143,12 +143,12 @@ namespace SdoOrganization
       string str;
       
       try {
-	// ¥×¥í¥Ñ¥Æ¥£¤Î¼èÆÀ length 0¤Î¥×¥í¥Ñ¥Æ¥£¤¬ÊÖ¤µ¤ì¤ë¡£
+	// ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã®å–å¾— length 0ã®ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ãŒè¿”ã•ã‚Œã‚‹ã€‚
 	get_prop = m_pOi->get_organization_property();
 //	cout << endl << "get property length: " << get_prop->properties.length() << endl;
 	
 	
-	// ¶õ¤ÎOrganizationProperty¤ò¥»¥Ã¥È¤¹¤ë¡£ OK.
+	// ç©ºã®OrganizationPropertyã‚’ã‚»ãƒƒãƒˆã™ã‚‹ã€‚ OK.
 	ret = m_pOi->add_organization_property(set_prop);
 	
 	
@@ -161,10 +161,10 @@ namespace SdoOrganization
 	nvList[0] = nv;
 	
 	set_prop.properties = nvList;
-	// ¥×¥í¥Ñ¥Æ¥£¤Î¥»¥Ã¥È
+	// ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã®ã‚»ãƒƒãƒˆ
 	ret = m_pOi->add_organization_property(set_prop);
 	
-	// ¥×¥í¥Ñ¥Æ¥£¤Î¼èÆÀ length 1¤Î¥×¥í¥Ñ¥Æ¥£¥ê¥¹¥È¤ò»ı¤ÄOrganizationProperty¤¬ÊÖ¤µ¤ì¤ë¡£
+	// ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã®å–å¾— length 1ã®ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ãƒªã‚¹ãƒˆã‚’æŒã¤OrganizationPropertyãŒè¿”ã•ã‚Œã‚‹ã€‚
 	get_prop = m_pOi->get_organization_property();
 //	cout << "get property length: " << get_prop->properties.length() << endl;
 	
@@ -182,10 +182,10 @@ namespace SdoOrganization
 	nvList[0] = nv;
 	
 	set_prop.properties = nvList;
-	// ¥×¥í¥Ñ¥Æ¥£¤Î¥»¥Ã¥È
+	// ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã®ã‚»ãƒƒãƒˆ
 	ret = m_pOi->add_organization_property(set_prop);
 	
-	// ¥×¥í¥Ñ¥Æ¥£¤Î¼èÆÀ
+	// ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã®å–å¾—
 	get_prop = m_pOi->get_organization_property();
 //	cout << "get property length: " << get_prop->properties.length() << endl;
 	
@@ -224,7 +224,7 @@ namespace SdoOrganization
 	
 	//      nv.name = "char";
 	//      strg = "STRING";
-	//      nv.value <<= CORBA::Any::from_char('C'); // ¤³¤³¤Ç¥»¥°¥á¥ó¥È¥¨¥é¡¼È¯À¸
+	//      nv.value <<= CORBA::Any::from_char('C'); // ã“ã“ã§ã‚»ã‚°ãƒ¡ãƒ³ãƒˆã‚¨ãƒ©ãƒ¼ç™ºç”Ÿ
 	//      cout << "char" << endl;
 	//      nvList[4] = nv;
 	
@@ -233,7 +233,7 @@ namespace SdoOrganization
 	//      nv.name = "string";
 	//      strg = "STRING";
 	//      char * p = "STRING";
-	//      nv.value <<= CORBA::Any::from_string(p,7); // ¤³¤³¤Ç¥»¥°¥á¥ó¥È¥¨¥é¡¼È¯À¸
+	//      nv.value <<= CORBA::Any::from_string(p,7); // ã“ã“ã§ã‚»ã‚°ãƒ¡ãƒ³ãƒˆã‚¨ãƒ©ãƒ¼ç™ºç”Ÿ
 	//      nvList[4] = nv;
 	
 //	cout << "set_prop.properties" << endl;
@@ -318,50 +318,50 @@ namespace SdoOrganization
       string str;
       
       try {
-	// ¥×¥í¥Ñ¥Æ¥£¤Î¼èÆÀ length 0¤Î¥×¥í¥Ñ¥Æ¥£¤¬ÊÖ¤µ¤ì¤ë¡£
+	// ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã®å–å¾— length 0ã®ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ãŒè¿”ã•ã‚Œã‚‹ã€‚
 	get_prop = m_pOi->get_organization_property();
 //	cout << endl << "get property length: " << get_prop->properties.length() << endl;
 	
-	// ¶õ¤ÎOrganizationProperty¤ò¥»¥Ã¥È¤¹¤ë¡£ OK.
+	// ç©ºã®OrganizationPropertyã‚’ã‚»ãƒƒãƒˆã™ã‚‹ã€‚ OK.
 	ret = m_pOi->add_organization_property(set_prop);
 	CPPUNIT_ASSERT(ret);
 	
-	// ¥×¥í¥Ñ¥Æ¥£¤ÎÀßÄê»ş¡¢true ¤¬ÊÖ¤µ¤ì¤ë¤«¡©
+	// ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã®è¨­å®šæ™‚ã€true ãŒè¿”ã•ã‚Œã‚‹ã‹ï¼Ÿ
 	ft = 11.111;
 	any <<= ft;
 	ret = m_pOi->set_organization_property_value("hoge1", any);
 	CPPUNIT_ASSERT(ret);
 
-        // ¥×¥í¥Ñ¥Æ¥£¤ÎÀßÄêÃÍ¼èÆÀ»ş¡¢ ÀßÄêÃÍ¤¬ÊÖ¤µ¤ì¤ë¤«¡©
+        // ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã®è¨­å®šå€¤å–å¾—æ™‚ã€ è¨­å®šå€¤ãŒè¿”ã•ã‚Œã‚‹ã‹ï¼Ÿ
 	rany = m_pOi->get_organization_property_value("hoge1");
 	(*rany) >>= rft;
 	CPPUNIT_ASSERT_EQUAL(ft, rft);
 
 
-        // ¥×¥í¥Ñ¥Æ¥£¤ÎÀßÄê»ş¡¢true ¤¬ÊÖ¤µ¤ì¤ë¤«¡©
+        // ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã®è¨­å®šæ™‚ã€true ãŒè¿”ã•ã‚Œã‚‹ã‹ï¼Ÿ
 	st = 123;
 	any <<= st;
 	ret = m_pOi->set_organization_property_value("hoge2", any);
 	CPPUNIT_ASSERT(ret);
 
-        // ¥×¥í¥Ñ¥Æ¥£¤ÎÀßÄêÃÍ¼èÆÀ»ş¡¢ ÀßÄêÃÍ¤¬ÊÖ¤µ¤ì¤ë¤«¡©
+        // ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã®è¨­å®šå€¤å–å¾—æ™‚ã€ è¨­å®šå€¤ãŒè¿”ã•ã‚Œã‚‹ã‹ï¼Ÿ
 	rany = m_pOi->get_organization_property_value("hoge2");
 	(*rany) >>= rst;
 	CPPUNIT_ASSERT_EQUAL(st, rst);
 
 
-        // ¥×¥í¥Ñ¥Æ¥£¤Î¹¹¿·»ş¡¢true ¤¬ÊÖ¤µ¤ì¤ë¤«¡©
+        // ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã®æ›´æ–°æ™‚ã€true ãŒè¿”ã•ã‚Œã‚‹ã‹ï¼Ÿ
 	st = 456;
 	any <<= st;
 	ret = m_pOi->set_organization_property_value("hoge2", any);
 	CPPUNIT_ASSERT(ret);
 
-        // ¥×¥í¥Ñ¥Æ¥£¤Î¹¹¿·ÃÍ¼èÆÀ»ş¡¢ ÀßÄêÃÍ¤¬ÊÖ¤µ¤ì¤ë¤«¡©
+        // ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã®æ›´æ–°å€¤å–å¾—æ™‚ã€ è¨­å®šå€¤ãŒè¿”ã•ã‚Œã‚‹ã‹ï¼Ÿ
 	rany = m_pOi->get_organization_property_value("hoge2");
 	(*rany) >>= rst;
 	CPPUNIT_ASSERT_EQUAL(st, rst);
 
-        // ¥×¥í¥Ñ¥Æ¥£¤ÎÀßÄê»ş¡¢name Ì¤ÀßÄê¤Ë¤è¤ë InvalidParameter ¤¬ÊÖ¤µ¤ì¤ë¤«¡©
+        // ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã®è¨­å®šæ™‚ã€name æœªè¨­å®šã«ã‚ˆã‚‹ InvalidParameter ãŒè¿”ã•ã‚Œã‚‹ã‹ï¼Ÿ
 	short sflg = -1;
 	try {
 	  ret = m_pOi->set_organization_property_value("", any);
@@ -373,7 +373,7 @@ namespace SdoOrganization
 	}
 	CPPUNIT_ASSERT(sflg == 1);
 
-        // ¥×¥í¥Ñ¥Æ¥£¤ÎÀßÄêÃÍ¼èÆÀ»ş¡¢name Ì¤ÀßÄê¤Ë¤è¤ë InvalidParameter ¤¬ÊÖ¤µ¤ì¤ë¤«¡©
+        // ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã®è¨­å®šå€¤å–å¾—æ™‚ã€name æœªè¨­å®šã«ã‚ˆã‚‹ InvalidParameter ãŒè¿”ã•ã‚Œã‚‹ã‹ï¼Ÿ
 	sflg = -1;
 	try {
 	  ret = m_pOi->get_organization_property_value("");
@@ -385,7 +385,7 @@ namespace SdoOrganization
 	}
 	CPPUNIT_ASSERT(sflg == 1);
 
-        // ¥×¥í¥Ñ¥Æ¥£¤ÎÀßÄêÃÍ¼èÆÀ»ş¡¢name Ì¤ÅĞÏ¿¤Ë¤è¤ë InvalidParameter ¤¬ÊÖ¤µ¤ì¤ë¤«¡©
+        // ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã®è¨­å®šå€¤å–å¾—æ™‚ã€name æœªç™»éŒ²ã«ã‚ˆã‚‹ InvalidParameter ãŒè¿”ã•ã‚Œã‚‹ã‹ï¼Ÿ
 	sflg = -1;
 	try {
 	  ret = m_pOi->get_organization_property_value("hoge99");
@@ -434,11 +434,11 @@ namespace SdoOrganization
       nvList[0] = nv;
 
       set_prop.properties = nvList;
-      // ¥×¥í¥Ñ¥Æ¥£¤Î¥»¥Ã¥È
+      // ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã®ã‚»ãƒƒãƒˆ
       ret = m_pOi->add_organization_property(set_prop);
       CPPUNIT_ASSERT(ret);
 
-      // InvalidParameter exception¤ò³ÎÇ§
+      // InvalidParameter exceptionã‚’ç¢ºèª
       short sflg = -1;
       try {
 	ret = m_pOi->remove_organization_property("short");
@@ -465,7 +465,7 @@ namespace SdoOrganization
       }
       CPPUNIT_ASSERT(sflg == 1);
       
-      // Ìá¤êÃÍ:true ¤ò³ÎÇ§
+      // æˆ»ã‚Šå€¤:true ã‚’ç¢ºèª
       sflg = -1;
       try {
 	ret = m_pOi->remove_organization_property("hoge");
@@ -506,14 +506,14 @@ namespace SdoOrganization
       SDOPackage::SDOSystemElement_ptr ptrOwner;
 
       try {
-	// ¥ª¡¼¥Ê¡¼¼èÆÀ¤¬¹Ô¤¨¤ë¤«¡©
+	// ã‚ªãƒ¼ãƒŠãƒ¼å–å¾—ãŒè¡Œãˆã‚‹ã‹ï¼Ÿ
 	varOwner = m_pOi->get_owner();
 	CPPUNIT_ASSERT(!::CORBA::is_nil(varOwner));
 
-	// InvalidParameter exception¤ò³ÎÇ§
+	// InvalidParameter exceptionã‚’ç¢ºèª
 	short sflg = -1;
 	try {
-	  // ¥ª¡¼¥Ê¡¼ÀßÄê»ş¡¢InvalidParameter ¤¬ÊÖ¤µ¤ì¤ë¤«¡©
+	  // ã‚ªãƒ¼ãƒŠãƒ¼è¨­å®šæ™‚ã€InvalidParameter ãŒè¿”ã•ã‚Œã‚‹ã‹ï¼Ÿ
 	  ptrOwner = SDOPackage::SDOSystemElement::_nil();
 	  ret = m_pOi->set_owner(ptrOwner);
 	  CPPUNIT_ASSERT(ret);
@@ -537,10 +537,10 @@ namespace SdoOrganization
 	}
 	CPPUNIT_ASSERT(sflg == 1);
 
-	// Ìá¤êÃÍ:true ¤ò³ÎÇ§
+	// æˆ»ã‚Šå€¤:true ã‚’ç¢ºèª
 	sflg = -1;
 	try {
-	  // ¥ª¡¼¥Ê¡¼ÀßÄê»ş¡¢true ¤¬ÊÖ¤µ¤ì¤ë¤«¡©
+	  // ã‚ªãƒ¼ãƒŠãƒ¼è¨­å®šæ™‚ã€true ãŒè¿”ã•ã‚Œã‚‹ã‹ï¼Ÿ
 	  ::RTC::RTObject_impl* rtobj2;
 	  ::RTC::Manager& mgr2(RTC::Manager::instance());
 	  rtobj2 = new ::RTC::RTObject_impl(&mgr2);
@@ -595,10 +595,10 @@ namespace SdoOrganization
       SDOPackage::SDOList slist;
       SDOPackage::SDOList* rslist;
 
-      // SDO ¤Î¥»¥Ã¥È»ş¡¢InvalidParameter ¤ò¼èÆÀ¤Ç¤­¤ë¤«¡©
-      // set_members()¤Ë¡¢NULL ¤ä ¶õ¤Î¥ê¥¹¥È¤òÅÏ¤·¤Æ¤âlength()=0¤È¤Ê¤ë¤¿¤á
-      // InvalidParameter¤òÊÖ¤¹¥±¡¼¥¹¤Ï¤Ê¤¤¡£
-      // SDOList ¤Î¥»¥Ã¥È»ş¡¢¶õ¤Î¥ê¥¹¥È¤òÅÏ¤·¤Æ¼èÆÀ¤Ç¤­¤ë¤«¡©
+      // SDO ã®ã‚»ãƒƒãƒˆæ™‚ã€InvalidParameter ã‚’å–å¾—ã§ãã‚‹ã‹ï¼Ÿ
+      // set_members()ã«ã€NULL ã‚„ ç©ºã®ãƒªã‚¹ãƒˆã‚’æ¸¡ã—ã¦ã‚‚length()=0ã¨ãªã‚‹ãŸã‚
+      // InvalidParameterã‚’è¿”ã™ã‚±ãƒ¼ã‚¹ã¯ãªã„ã€‚
+      // SDOList ã®ã‚»ãƒƒãƒˆæ™‚ã€ç©ºã®ãƒªã‚¹ãƒˆã‚’æ¸¡ã—ã¦å–å¾—ã§ãã‚‹ã‹ï¼Ÿ
       short sflg = -1;
       try {
 	slist = NULL;
@@ -624,12 +624,12 @@ namespace SdoOrganization
       }
       CPPUNIT_ASSERT(sflg == 0);
 
-      // 0·ï¤ÎSDOList¼èÆÀ¤¬¹Ô¤¨¤ë¤«¡©
+      // 0ä»¶ã®SDOListå–å¾—ãŒè¡Œãˆã‚‹ã‹ï¼Ÿ
       rslist = m_pOi->get_members();
       CPPUNIT_ASSERT(rslist->length() == 0);
 
 
-      // SDOList ¤Î¥»¥Ã¥È»ş¡¢¥ê¥¹¥È¤ò¥»¥Ã¥È¤·¤Æ true ¤ò¼èÆÀ¤Ç¤­¤ë¤«¡©
+      // SDOList ã®ã‚»ãƒƒãƒˆæ™‚ã€ãƒªã‚¹ãƒˆã‚’ã‚»ãƒƒãƒˆã—ã¦ true ã‚’å–å¾—ã§ãã‚‹ã‹ï¼Ÿ
       sflg = -1;
       try {
 	RTC::RTObject_impl* rtobj2;
@@ -660,7 +660,7 @@ namespace SdoOrganization
       }
       CPPUNIT_ASSERT(sflg == 0);
 
-      // 1·ï¤ÎSDOList¼èÆÀ¤¬¹Ô¤¨¤ë¤«¡©
+      // 1ä»¶ã®SDOListå–å¾—ãŒè¡Œãˆã‚‹ã‹ï¼Ÿ
       rslist = m_pOi->get_members();
       CPPUNIT_ASSERT(rslist->length() == 1);
 //      std::cout << "test_set_get_members OUT" << std::endl;
@@ -686,10 +686,10 @@ namespace SdoOrganization
       rtobj2 = new ::RTC::RTObject_impl(&mgr2);
       m_pOi2 = new Organization_impl(rtobj2->getObjRef());
 
-      // SDO ¤Î¥»¥Ã¥È»ş¡¢InvalidParameter ¤ò¼èÆÀ¤Ç¤­¤ë¤«¡©
-      // add_members()¤Ë¡¢NULL ¤ä ¶õ¤Î¥ê¥¹¥È¤òÅÏ¤·¤Æ¤âlength()=0¤È¤Ê¤ë¤¿¤á
-      // InvalidParameter¤òÊÖ¤¹¥±¡¼¥¹¤Ï¤Ê¤¤¡£
-      // SDOList ¤Î¥»¥Ã¥È»ş¡¢¶õ¤Î¥ê¥¹¥È¤òÅÏ¤·¤Æ true ¤ò¼èÆÀ¤Ç¤­¤ë¤«¡©
+      // SDO ã®ã‚»ãƒƒãƒˆæ™‚ã€InvalidParameter ã‚’å–å¾—ã§ãã‚‹ã‹ï¼Ÿ
+      // add_members()ã«ã€NULL ã‚„ ç©ºã®ãƒªã‚¹ãƒˆã‚’æ¸¡ã—ã¦ã‚‚length()=0ã¨ãªã‚‹ãŸã‚
+      // InvalidParameterã‚’è¿”ã™ã‚±ãƒ¼ã‚¹ã¯ãªã„ã€‚
+      // SDOList ã®ã‚»ãƒƒãƒˆæ™‚ã€ç©ºã®ãƒªã‚¹ãƒˆã‚’æ¸¡ã—ã¦ true ã‚’å–å¾—ã§ãã‚‹ã‹ï¼Ÿ
 
       short sflg = -1;
       try {
@@ -716,14 +716,14 @@ namespace SdoOrganization
       }
       CPPUNIT_ASSERT(sflg == 0);
 
-      // SDOList ¤Î¥»¥Ã¥È»ş¡¢¥ê¥¹¥È¤ò¥»¥Ã¥È¤·¤Æ true ¤ò¼èÆÀ¤Ç¤­¤ë¤«¡©
+      // SDOList ã®ã‚»ãƒƒãƒˆæ™‚ã€ãƒªã‚¹ãƒˆã‚’ã‚»ãƒƒãƒˆã—ã¦ true ã‚’å–å¾—ã§ãã‚‹ã‹ï¼Ÿ
       sflg = -1;
       try {
 	sdo = SDOPackage::SDO::_duplicate(rtobj2->getObjRef());
 	CORBA_SeqUtil::push_back(slist, sdo);
 	rtobj2->setInstanceName("hoge1");
 
-	// SDO¥á¥ó¥Ğ¡¼¤ÎÄÉ²Ã¤¬À®¸ù¤¹¤ë¤«¡©
+	// SDOãƒ¡ãƒ³ãƒãƒ¼ã®è¿½åŠ ãŒæˆåŠŸã™ã‚‹ã‹ï¼Ÿ
 	ret = m_pOi2->add_members(slist);
 	CPPUNIT_ASSERT(ret);
 	sflg = 0;
@@ -750,11 +750,11 @@ namespace SdoOrganization
       }
       CPPUNIT_ASSERT(sflg == 0);
 
-      // 1·ï¤ÎSDOList¼èÆÀ¤¬¹Ô¤¨¤ë¤«¡©
+      // 1ä»¶ã®SDOListå–å¾—ãŒè¡Œãˆã‚‹ã‹ï¼Ÿ
       rslist = m_pOi2->get_members();
       CPPUNIT_ASSERT(rslist->length() == 1);
 
-      // SDOListºï½ü»ş¡¢°ú¿ôÌ¤ÄêµÁ¤ÇInvalidParameter¤ò¼èÆÀ¤Ç¤­¤ë¤«¡©
+      // SDOListå‰Šé™¤æ™‚ã€å¼•æ•°æœªå®šç¾©ã§InvalidParameterã‚’å–å¾—ã§ãã‚‹ã‹ï¼Ÿ
       sflg = -1;
       try {
 	ret = m_pOi2->remove_member("");
@@ -779,7 +779,7 @@ namespace SdoOrganization
       }
       CPPUNIT_ASSERT(sflg == 1);
 
-      // SDOListºï½ü»ş¡¢°ú¿ôÉÔÀµ¤ÇInvalidParameter¤ò¼èÆÀ¤Ç¤­¤ë¤«¡©
+      // SDOListå‰Šé™¤æ™‚ã€å¼•æ•°ä¸æ­£ã§InvalidParameterã‚’å–å¾—ã§ãã‚‹ã‹ï¼Ÿ
       sflg = -1;
       try {
 	ret = m_pOi2->remove_member("dummy");
@@ -804,7 +804,7 @@ namespace SdoOrganization
       }
       CPPUNIT_ASSERT(sflg == 1);
 
-      // SDOListºï½ü»ş¡¢Àµ¤·¤¤°ú¿ô¤Çºï½ü¤Ç¤­¤ë¤«¡©
+      // SDOListå‰Šé™¤æ™‚ã€æ­£ã—ã„å¼•æ•°ã§å‰Šé™¤ã§ãã‚‹ã‹ï¼Ÿ
       sflg = -1;
       try {
 	ret = m_pOi2->remove_member("hoge1");
@@ -829,7 +829,7 @@ namespace SdoOrganization
       }
       CPPUNIT_ASSERT(sflg == 0);
 
-      // 0·ï¤ÎSDOList¼èÆÀ¤¬¹Ô¤¨¤ë¤«¡©
+      // 0ä»¶ã®SDOListå–å¾—ãŒè¡Œãˆã‚‹ã‹ï¼Ÿ
       rslist = m_pOi2->get_members();
       CPPUNIT_ASSERT(rslist->length() == 0);
 
@@ -864,7 +864,7 @@ namespace SdoOrganization
 //      cout << "depType: " << depType << endl;
       
       // Failure case.
-      //    m_pOi->set_dependency(0); // ¥³¥ó¥Ñ¥¤¥ë¥¨¥é¡¼
+      //    m_pOi->set_dependency(0); // ã‚³ãƒ³ãƒ‘ã‚¤ãƒ«ã‚¨ãƒ©ãƒ¼
       //    CPPUNIT_ASSERT(depType == 3);
       //    cout << "depType: " << depType << endl;
 //      std::cout << "test_set_get_dependency OUT" << std::endl;

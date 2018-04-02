@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file   NVUtilTests.cpp
  * @brief  NVUtil test class
@@ -122,13 +122,13 @@ namespace NVUtil
     }
 
     /*!
-     * @brief newNV(char*,Value)¤Î¥Æ¥¹¥È
+     * @brief newNV(char*,Value)ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - CORBA::Short·¿¥Ç¡¼¥¿¤ÎNameValue¤òÀµ¤·¤¯À¸À®¤Ç¤­¤ë¤«¡©
+     * - CORBA::Shortå‹ãƒ‡ãƒ¼ã‚¿ã®NameValueã‚’æ­£ã—ãç”Ÿæˆã§ãã‚‹ã‹ï¼Ÿ
      */
     void test_newNV_Short()
     {
-      // CORBA::Short·¿¤Î¥Ç¡¼¥¿¤ò»ı¤ÄNameValue¤òÀ¸À®¤·¡¢ÃÍ¤òÈæ³Ó¤·¤ÆÀµ¤·¤¯À¸À®¤µ¤ì¤Æ¤¤¤ë¤³¤È¤ò³ÎÇ§¤¹¤ë
+      // CORBA::Shortå‹ã®ãƒ‡ãƒ¼ã‚¿ã‚’æŒã¤NameValueã‚’ç”Ÿæˆã—ã€å€¤ã‚’æ¯”è¼ƒã—ã¦æ­£ã—ãç”Ÿæˆã•ã‚Œã¦ã„ã‚‹ã“ã¨ã‚’ç¢ºèªã™ã‚‹
       CORBA::Short value = 1;
       string name = "short";
       SDOPackage::NameValue nv = newNV(name.c_str(), value);
@@ -142,13 +142,13 @@ namespace NVUtil
     }
 
     /*!
-     * @brief newNV(char*,Value)¤Î¥Æ¥¹¥È
+     * @brief newNV(char*,Value)ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - CORBA::Long·¿¥Ç¡¼¥¿¤ÎNameValue¤òÀµ¤·¤¯À¸À®¤Ç¤­¤ë¤«¡©
+     * - CORBA::Longå‹ãƒ‡ãƒ¼ã‚¿ã®NameValueã‚’æ­£ã—ãç”Ÿæˆã§ãã‚‹ã‹ï¼Ÿ
      */
     void test_newNV_Long()
     {
-      // CORBA::Long·¿¤Î¥Ç¡¼¥¿¤ò»ı¤ÄNameValue¤òÀ¸À®¤·¡¢ÃÍ¤òÈæ³Ó¤·¤ÆÀµ¤·¤¯À¸À®¤µ¤ì¤Æ¤¤¤ë¤³¤È¤ò³ÎÇ§¤¹¤ë
+      // CORBA::Longå‹ã®ãƒ‡ãƒ¼ã‚¿ã‚’æŒã¤NameValueã‚’ç”Ÿæˆã—ã€å€¤ã‚’æ¯”è¼ƒã—ã¦æ­£ã—ãç”Ÿæˆã•ã‚Œã¦ã„ã‚‹ã“ã¨ã‚’ç¢ºèªã™ã‚‹
       CORBA::Long value = 999999999;
       string name = "long";
       SDOPackage::NameValue nv = newNV(name.c_str(), value);
@@ -162,13 +162,13 @@ namespace NVUtil
     }
 
     /*!
-     * @brief newNV(char*,Value)¤Î¥Æ¥¹¥È
+     * @brief newNV(char*,Value)ã®ãƒ†ã‚¹ãƒˆ
      * 
-     *  - CORBA::Float·¿¥Ç¡¼¥¿¤ÎNameValue¤òÀµ¤·¤¯À¸À®¤Ç¤­¤ë¤«¡©
+     *  - CORBA::Floatå‹ãƒ‡ãƒ¼ã‚¿ã®NameValueã‚’æ­£ã—ãç”Ÿæˆã§ãã‚‹ã‹ï¼Ÿ
      */
     void test_newNV_Float()
     {
-      // CORBA::Float·¿¤Î¥Ç¡¼¥¿¤ò»ı¤ÄNameValue¤òÀ¸À®¤·¡¢ÃÍ¤òÈæ³Ó¤·¤ÆÀµ¤·¤¯À¸À®¤µ¤ì¤Æ¤¤¤ë¤³¤È¤ò³ÎÇ§¤¹¤ë
+      // CORBA::Floatå‹ã®ãƒ‡ãƒ¼ã‚¿ã‚’æŒã¤NameValueã‚’ç”Ÿæˆã—ã€å€¤ã‚’æ¯”è¼ƒã—ã¦æ­£ã—ãç”Ÿæˆã•ã‚Œã¦ã„ã‚‹ã“ã¨ã‚’ç¢ºèªã™ã‚‹
       CORBA::Float value = 99999.9;
       string name = "float";
       SDOPackage::NameValue nv = newNV(name.c_str(), value);
@@ -182,13 +182,13 @@ namespace NVUtil
     }
 
     /*!
-     * @brief newNV(char*,Value)¤Î¥Æ¥¹¥È
+     * @brief newNV(char*,Value)ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - CORBA::Double·¿¥Ç¡¼¥¿¤ÎNameValue¤òÀµ¤·¤¯À¸À®¤Ç¤­¤ë¤«¡©
+     * - CORBA::Doubleå‹ãƒ‡ãƒ¼ã‚¿ã®NameValueã‚’æ­£ã—ãç”Ÿæˆã§ãã‚‹ã‹ï¼Ÿ
      */
     void test_newNV_Double()
     {
-      // CORBA::Double·¿¤Î¥Ç¡¼¥¿¤ò»ı¤ÄNameValue¤òÀ¸À®¤·¡¢ÃÍ¤òÈæ³Ó¤·¤ÆÀµ¤·¤¯À¸À®¤µ¤ì¤Æ¤¤¤ë¤³¤È¤ò³ÎÇ§¤¹¤ë
+      // CORBA::Doubleå‹ã®ãƒ‡ãƒ¼ã‚¿ã‚’æŒã¤NameValueã‚’ç”Ÿæˆã—ã€å€¤ã‚’æ¯”è¼ƒã—ã¦æ­£ã—ãç”Ÿæˆã•ã‚Œã¦ã„ã‚‹ã“ã¨ã‚’ç¢ºèªã™ã‚‹
       CORBA::Double value = 9999999.999;
       string name = "double";
       SDOPackage::NameValue nv = newNV(name.c_str(), value);
@@ -202,22 +202,22 @@ namespace NVUtil
     }
     
     /*!
-     * @brief newNV(const char*, const char*)¤Î¥Æ¥¹¥È
+     * @brief newNV(const char*, const char*)ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - const char*·¿¥Ç¡¼¥¿¤ÎNameValue¤òÀµ¤·¤¯À¸À®¤Ç¤­¤ë¤«¡©
+     * - const char*å‹ãƒ‡ãƒ¼ã‚¿ã®NameValueã‚’æ­£ã—ãç”Ÿæˆã§ãã‚‹ã‹ï¼Ÿ
      */
     void test_newNV_Str()
     {
-      // (1) CORBA::String_var·¿¤Îvalue¤Èchar*·¿¤Îname¤ònewNV()¤ËÅÏ¤·¡¢NameValue¤ò¼èÆÀ¤¹¤ë
+      // (1) CORBA::String_varå‹ã®valueã¨char*å‹ã®nameã‚’newNV()ã«æ¸¡ã—ã€NameValueã‚’å–å¾—ã™ã‚‹
       string name = "string";
       CORBA::String_var value = CORBA::string_dup("Hello, world!");
       SDOPackage::NameValue nv = newNV(name.c_str(), value);
     	
-      // (2) newNV()¤Ë¥»¥Ã¥È¤·¤¿name¤È¡¢¼èÆÀ¤·¤¿NameValue.name¤òÈæ³Ó¤¹¤ë
+      // (2) newNV()ã«ã‚»ãƒƒãƒˆã—ãŸnameã¨ã€å–å¾—ã—ãŸNameValue.nameã‚’æ¯”è¼ƒã™ã‚‹
       string nvName(nv.name);
       CPPUNIT_ASSERT_EQUAL(name, nvName);
     	
-      // (3) newNV()¤Ë¥»¥Ã¥È¤·¤¿value¤È¡¢¼èÆÀ¤·¤¿NameValue.value¤òÈæ³Ó¤¹¤ë
+      // (3) newNV()ã«ã‚»ãƒƒãƒˆã—ãŸvalueã¨ã€å–å¾—ã—ãŸNameValue.valueã‚’æ¯”è¼ƒã™ã‚‹
       //    	CORBA::String_var nvValue;
       const char* nvValue;
       nv.value >>= nvValue;
@@ -225,31 +225,31 @@ namespace NVUtil
     }
     
     /*!
-     * @brief newNVChar()¤Î¥Æ¥¹¥È
+     * @brief newNVChar()ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - CORBA::Char·¿¥Ç¡¼¥¿¤ÎNameValue¤òÀµ¤·¤¯À¸À®¤Ç¤­¤ë¤«¡©
+     * - CORBA::Charå‹ãƒ‡ãƒ¼ã‚¿ã®NameValueã‚’æ­£ã—ãç”Ÿæˆã§ãã‚‹ã‹ï¼Ÿ
      */
     void test_newNVChar()
     {
-      // (1) CORBA::Char·¿¤Îvalue¤Èchar*·¿¤Îname¤ònewNVChar()¤ËÅÏ¤·¡¢NameValue¤ò¼èÆÀ¤¹¤ë¡£
+      // (1) CORBA::Charå‹ã®valueã¨char*å‹ã®nameã‚’newNVChar()ã«æ¸¡ã—ã€NameValueã‚’å–å¾—ã™ã‚‹ã€‚
       string name = "char";
       CORBA::Char value = 'A';
       SDOPackage::NameValue nv = newNVChar(name.c_str(), value);
       
-      // (2) newNVChar()¤Ë¥»¥Ã¥È¤·¤¿name¤È¼èÆÀ¤·¤¿NameValue.name¤ÎÈæ³Ó¡£
+      // (2) newNVChar()ã«ã‚»ãƒƒãƒˆã—ãŸnameã¨å–å¾—ã—ãŸNameValue.nameã®æ¯”è¼ƒã€‚
       string nvName(nv.name);
       CPPUNIT_ASSERT_EQUAL(name, nvName);
       
-      // (3) newNVChar()¤Ë¥»¥Ã¥È¤·¤¿value¤È¼èÆÀ¤·¤¿NameValue.value¤ÎÈæ³Ó¡£
+      // (3) newNVChar()ã«ã‚»ãƒƒãƒˆã—ãŸvalueã¨å–å¾—ã—ãŸNameValue.valueã®æ¯”è¼ƒã€‚
       CORBA::Char nvValue;
       nv.value >>= CORBA::Any::to_char(nvValue);
       CPPUNIT_ASSERT_EQUAL(value, nvValue);
     }
     
     /*!
-     * @brief newNVBool()¤Î¥Æ¥¹¥È
+     * @brief newNVBool()ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - CORBA::Boolean·¿¥Ç¡¼¥¿¤ÎNameValue¤òÀµ¤·¤¯À¸À®¤Ç¤­¤ë¤«¡©
+     * - CORBA::Booleanå‹ãƒ‡ãƒ¼ã‚¿ã®NameValueã‚’æ­£ã—ãç”Ÿæˆã§ãã‚‹ã‹ï¼Ÿ
      */
     void test_newNVBool()
     {
@@ -266,9 +266,9 @@ namespace NVUtil
     }
 
     /*!
-     * @brief newNVOctet()¤Î¥Æ¥¹¥È
+     * @brief newNVOctet()ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - CORBA::Octet·¿¥Ç¡¼¥¿¤ÎNameValue¤òÀµ¤·¤¯À¸À®¤Ç¤­¤ë¤«¡©
+     * - CORBA::Octetå‹ãƒ‡ãƒ¼ã‚¿ã®NameValueã‚’æ­£ã—ãç”Ÿæˆã§ãã‚‹ã‹ï¼Ÿ
      */
     void test_newNVOctet()
     {
@@ -285,25 +285,25 @@ namespace NVUtil
     }
     
     /*!
-     * @brief copy()¤Î¥Æ¥¹¥È
+     * @brief copy()ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - RTC::Properties¤ÎÆâÍÆ¤òÀµ¤·¤¯¤òNVList¤Ë¥³¥Ô¡¼¤Ç¤­¤ë¤«¡©
+     * - RTC::Propertiesã®å†…å®¹ã‚’æ­£ã—ãã‚’NVListã«ã‚³ãƒ”ãƒ¼ã§ãã‚‹ã‹ï¼Ÿ
      */
     void test_copy()
     {
-      // (1) RTC::Properties¥ª¥Ö¥¸¥§¥¯¥È¤ÎÀ¸À®
-      // ¢¨ Properties¤Î¥³¥ó¥¹¥È¥é¥¯¥¿¤Ç¤Ï°ú¿ô¤ÇÍ¿¤¨¤é¤ì¤¿map¤Î¥­¡¼ÃÍ¤À¤±¤¬ÊİÂ¸¤µ¤ì¤ë¡£
+      // (1) RTC::Propertiesã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ç”Ÿæˆ
+      // â€» Propertiesã®ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã§ã¯å¼•æ•°ã§ä¸ãˆã‚‰ã‚ŒãŸmapã®ã‚­ãƒ¼å€¤ã ã‘ãŒä¿å­˜ã•ã‚Œã‚‹ã€‚
       string name = "port-type";
       string value = "port-type-value";
       map<string, string> mProp;
       mProp[name] = value;
       coil::Properties prop(mProp);
       
-      // (2¡Ëcopy()¤Ë¤ÆProperties¥ª¥Ö¥¸¥§¥¯¥È¤ònvlist¤Ë¥³¥Ô¡¼
+      // (2ï¼‰copy()ã«ã¦Propertiesã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’nvlistã«ã‚³ãƒ”ãƒ¼
       SDOPackage::NVList nvlist;
       copyFromProperties(nvlist, prop);
       
-      // (3) copy()¤Ë¤è¤ê°ú¿ô¤ÇÍ¿¤¨¤¿nvlist¤¬½ñ¤­´¹¤¨¤é¤ì¤Æ¤¤¤ë¤«¤ò³ÎÇ§¡£
+      // (3) copy()ã«ã‚ˆã‚Šå¼•æ•°ã§ä¸ãˆãŸnvlistãŒæ›¸ãæ›ãˆã‚‰ã‚Œã¦ã„ã‚‹ã‹ã‚’ç¢ºèªã€‚
       string nvName(nvlist[0].name);
       CPPUNIT_ASSERT_EQUAL(name, nvName);
       
@@ -314,13 +314,13 @@ namespace NVUtil
     }
 
     /*!
-     * @brief toProperties()¤Î¥Æ¥¹¥È
+     * @brief toProperties()ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - NVList¤ÎÆâÍÆ¤òÀµ¤·¤¯RTC::Properties¤ËÊÑ´¹¤Ç¤­¤ë¤«¡©
+     * - NVListã®å†…å®¹ã‚’æ­£ã—ãRTC::Propertiesã«å¤‰æ›ã§ãã‚‹ã‹ï¼Ÿ
      */
     void test_toProperties()
     {
-      // (1) ÊÑ´¹¸µ¤È¤Ê¤ëNVList¥ª¥Ö¥¸¥§¥¯¥È¤òÀ¸À®¤¹¤ë
+      // (1) å¤‰æ›å…ƒã¨ãªã‚‹NVListã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ç”Ÿæˆã™ã‚‹
       SDOPackage::NVList nvlist;		    	
       nvlist.length(2);
     	
@@ -334,10 +334,10 @@ namespace NVUtil
       nvlist[1].name = name2.c_str();
       nvlist[1].value <<= value2.c_str();
 			
-      // (2) RTC::Properties¤ØÊÑ´¹¤¹¤ë
+      // (2) RTC::Propertiesã¸å¤‰æ›ã™ã‚‹
       coil::Properties prop = toProperties(nvlist);
 			
-      // (3) Àµ¤·¤¯ÊÑ´¹¤µ¤ì¤Æ¤¤¤ë¤³¤È¤ò³ÎÇ§¤¹¤ë
+      // (3) æ­£ã—ãå¤‰æ›ã•ã‚Œã¦ã„ã‚‹ã“ã¨ã‚’ç¢ºèªã™ã‚‹
       string propValue1 = prop.getProperty(name1);
       CPPUNIT_ASSERT_EQUAL(value1, propValue1);
 			
@@ -346,13 +346,13 @@ namespace NVUtil
     }
 
     /*!
-     * @brief copyToProperties()¤Î¥Æ¥¹¥È
+     * @brief copyToProperties()ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - NVList¤ÎÆâÍÆ¤òÀµ¤·¤¯RTC::Properties¤Ë¥³¥Ô¡¼¤Ç¤­¤ë¤«¡©
+     * - NVListã®å†…å®¹ã‚’æ­£ã—ãRTC::Propertiesã«ã‚³ãƒ”ãƒ¼ã§ãã‚‹ã‹ï¼Ÿ
      */
     void test_copyToProperties()
     {
-      // (1) ¥³¥Ô¡¼¸µ¤È¤Ê¤ëNVList¥ª¥Ö¥¸¥§¥¯¥È¤òÀ¸À®¤¹¤ë
+      // (1) ã‚³ãƒ”ãƒ¼å…ƒã¨ãªã‚‹NVListã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ç”Ÿæˆã™ã‚‹
       SDOPackage::NVList nvlist;
       nvlist.length(2);
 
@@ -366,11 +366,11 @@ namespace NVUtil
       nvlist[1].name = name2.c_str();
       nvlist[1].value <<= value2.c_str();
 
-      // (2) RTC::Properties¤Ø¥³¥Ô¡¼¤¹¤ë
+      // (2) RTC::Propertiesã¸ã‚³ãƒ”ãƒ¼ã™ã‚‹
       coil::Properties prop;
       copyToProperties(prop, nvlist);
     	
-      // (3) ÃÍ¤òÈæ³Ó¤·¤Æ¡¢Àµ¤·¤¯¥³¥Ô¡¼¤µ¤ì¤Æ¤¤¤ë¤³¤È¤ò³ÎÇ§¤¹¤ë
+      // (3) å€¤ã‚’æ¯”è¼ƒã—ã¦ã€æ­£ã—ãã‚³ãƒ”ãƒ¼ã•ã‚Œã¦ã„ã‚‹ã“ã¨ã‚’ç¢ºèªã™ã‚‹
       string propValue1 = prop.getProperty(name1);
       CPPUNIT_ASSERT_EQUAL(value1, propValue1);
       string propValue2 = prop.getProperty(name2);
@@ -378,128 +378,128 @@ namespace NVUtil
     }
     
     /*!
-     * @brief find()¤Î¥Æ¥¹¥È
+     * @brief find()ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - »ØÄê¤·¤¿Ì¾¾Î¤ÇNVListÆâ¤ÎÃÍ¤òÀµ¤·¤¯¸¡º÷¤Ç¤­¤ë¤«¡©
+     * - æŒ‡å®šã—ãŸåç§°ã§NVListå†…ã®å€¤ã‚’æ­£ã—ãæ¤œç´¢ã§ãã‚‹ã‹ï¼Ÿ
      */
     void test_find()
     {
       SDOPackage::NVList nvlist;
       nvlist.length(2);
       
-      // (1) NVListÍ×ÁÇ¤Îname¤Ë"short",value¤Ëshort·¿¤Î¥Ç¡¼¥¿¤ò¥»¥Ã¥È¡£
+      // (1) NVListè¦ç´ ã®nameã«"short",valueã«shortå‹ã®ãƒ‡ãƒ¼ã‚¿ã‚’ã‚»ãƒƒãƒˆã€‚
       string name1 = "short";
       CORBA::Short value1 = 1;
       nvlist[0].name = name1.c_str();
       nvlist[0].value <<= value1;
       
-      // (2) NVListÍ×ÁÇ¤Îname¤Ë"long",value¤Ëlong·¿¤Î¥Ç¡¼¥¿¤ò¥»¥Ã¥È¡£
+      // (2) NVListè¦ç´ ã®nameã«"long",valueã«longå‹ã®ãƒ‡ãƒ¼ã‚¿ã‚’ã‚»ãƒƒãƒˆã€‚
       string name2 = "long";
       CORBA::Long value2 = 111;
       nvlist[1].name = name2.c_str();
       nvlist[1].value <<= value2;
 
-      // (3) nvlist¤ÎÃæ¤«¤éNameValue.name¤¬"long"¤ÎNameValue.value¤ò¸¡º÷¤·¤Æ¡¢Àµ¤·¤¤ÃÍ¤ò¼èÆÀ¤Ç¤­¤ë¤³¤È¤ò³ÎÇ§¤¹¤ë¡£
+      // (3) nvlistã®ä¸­ã‹ã‚‰NameValue.nameãŒ"long"ã®NameValue.valueã‚’æ¤œç´¢ã—ã¦ã€æ­£ã—ã„å€¤ã‚’å–å¾—ã§ãã‚‹ã“ã¨ã‚’ç¢ºèªã™ã‚‹ã€‚
       CORBA::Short foundValue1;
       (find(nvlist, name1.c_str())) >>= foundValue1;
       CPPUNIT_ASSERT_EQUAL(value1, foundValue1);
       
-      // (4) nvlist¤ÎÃæ¤«¤éNameValue.name¤¬"short"¤ÎNameValue.value¤ò¸¡º÷¤·¤Æ¡¢Àµ¤·¤¤ÃÍ¤ò¼èÆÀ¤Ç¤­¤ë¤³¤È¤ò³ÎÇ§¤¹¤ë¡£
+      // (4) nvlistã®ä¸­ã‹ã‚‰NameValue.nameãŒ"short"ã®NameValue.valueã‚’æ¤œç´¢ã—ã¦ã€æ­£ã—ã„å€¤ã‚’å–å¾—ã§ãã‚‹ã“ã¨ã‚’ç¢ºèªã™ã‚‹ã€‚
       CORBA::Long foundValue2;
       (find(nvlist, name2.c_str())) >>= foundValue2;
       CPPUNIT_ASSERT_EQUAL(value2, foundValue2);
     }
     
     /*!
-     * @brief find_index()¤Î¥Æ¥¹¥È
+     * @brief find_index()ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - »ØÄê¤·¤¿Ì¾¾Î¤ÇNVListÆâ¤ÎÍ×ÁÇÈÖ¹æ¤òÀµ¤·¤¯¸¡º÷¤Ç¤­¤ë¤«¡©
+     * - æŒ‡å®šã—ãŸåç§°ã§NVListå†…ã®è¦ç´ ç•ªå·ã‚’æ­£ã—ãæ¤œç´¢ã§ãã‚‹ã‹ï¼Ÿ
      */
     void test_find_index()
     {
       SDOPackage::NVList nvlist;
       nvlist.length(2);
       
-      // (1) NVListÍ×ÁÇ¤Îname¤Ë"short",value¤Ëshort·¿¤Î¥Ç¡¼¥¿¤ò¥»¥Ã¥È¡£
+      // (1) NVListè¦ç´ ã®nameã«"short",valueã«shortå‹ã®ãƒ‡ãƒ¼ã‚¿ã‚’ã‚»ãƒƒãƒˆã€‚
       string name1 = "short";
       CORBA::Short value1 = 1;
       nvlist[0].name = name1.c_str();
       nvlist[0].value <<= value1;
       
-      // (2) NVListÍ×ÁÇ¤Îname¤Ë"long",value¤Ëlong·¿¤Î¥Ç¡¼¥¿¤ò¥»¥Ã¥È¡£
+      // (2) NVListè¦ç´ ã®nameã«"long",valueã«longå‹ã®ãƒ‡ãƒ¼ã‚¿ã‚’ã‚»ãƒƒãƒˆã€‚
       string name2 = "long";
       CORBA::Long value2 = 111;
       nvlist[1].name = name2.c_str();
       nvlist[1].value <<= value2;
 
-      // (3) nvlist¤ÎÃæ¤«¤éNameValue.name¤¬"long"¤ÎNameValue.value¤ò¸¡º÷¤·¤Æ¡¢Í×ÁÇÈÖ¹æ¤ò¼èÆÀ¤Ç¤­¤ë¤³¤È¤ò³ÎÇ§¤¹¤ë¡£
+      // (3) nvlistã®ä¸­ã‹ã‚‰NameValue.nameãŒ"long"ã®NameValue.valueã‚’æ¤œç´¢ã—ã¦ã€è¦ç´ ç•ªå·ã‚’å–å¾—ã§ãã‚‹ã“ã¨ã‚’ç¢ºèªã™ã‚‹ã€‚
       CORBA::Long ret;
       ret = find_index(nvlist, name1.c_str());
       CPPUNIT_ASSERT_EQUAL((CORBA::Long)0, ret);
       
-      // (4) nvlist¤ÎÃæ¤«¤éNameValue.name¤¬"short"¤ÎNameValue.value¤ò¸¡º÷¤·¤Æ¡¢Í×ÁÇÈÖ¹æ¤ò¼èÆÀ¤Ç¤­¤ë¤³¤È¤ò³ÎÇ§¤¹¤ë¡£
+      // (4) nvlistã®ä¸­ã‹ã‚‰NameValue.nameãŒ"short"ã®NameValue.valueã‚’æ¤œç´¢ã—ã¦ã€è¦ç´ ç•ªå·ã‚’å–å¾—ã§ãã‚‹ã“ã¨ã‚’ç¢ºèªã™ã‚‹ã€‚
       ret = find_index(nvlist, name2.c_str());
       CPPUNIT_ASSERT_EQUAL((CORBA::Long)1, ret);
     }
     
     /*!
-     * @brief isString()¤Î¥Æ¥¹¥È
+     * @brief isString()ã®ãƒ†ã‚¹ãƒˆ
      * 
-     *  - NVListÆâ¤Î»ØÄê¤·¤¿Ì¾¾Î¤ò»ı¤ÄÃÍ¤¬string·¿¤«¤É¤¦¤«¤òÀµ¤·¤¯È½Äê¤Ç¤­¤ë¤«¡©
+     *  - NVListå†…ã®æŒ‡å®šã—ãŸåç§°ã‚’æŒã¤å€¤ãŒstringå‹ã‹ã©ã†ã‹ã‚’æ­£ã—ãåˆ¤å®šã§ãã‚‹ã‹ï¼Ÿ
      */
     void test_isString()
     {
       SDOPackage::NVList nvlist;
       nvlist.length(2);
       
-      // (1) NVListÍ×ÁÇ¤Îname¤Ë"short",value¤Ëshort·¿¤Î¥Ç¡¼¥¿¤ò¥»¥Ã¥È¡£
+      // (1) NVListè¦ç´ ã®nameã«"short",valueã«shortå‹ã®ãƒ‡ãƒ¼ã‚¿ã‚’ã‚»ãƒƒãƒˆã€‚
       string name1 = "short";
       CORBA::Short value1 = 1;
       nvlist[0].name = name1.c_str();
       nvlist[0].value <<= value1;
       
-      // (2) NVListÍ×ÁÇ¤Îname¤Ë"string",value¤Ëstring·¿¤Î¥Ç¡¼¥¿¤ò¥»¥Ã¥È¡£
+      // (2) NVListè¦ç´ ã®nameã«"string",valueã«stringå‹ã®ãƒ‡ãƒ¼ã‚¿ã‚’ã‚»ãƒƒãƒˆã€‚
       string name2 = "string";
       string value2 = "test";
       nvlist[1].name = name2.c_str();
       nvlist[1].value <<= value2.c_str();
       
-      // (3) isString(nvlist,name)¤Ë¤Æ,»ØÄê¤µ¤ì¤¿name¤Îvalue¤Î·¿¤¬string¤«¤É¤¦¤«¤òÈ½Äê¡£
+      // (3) isString(nvlist,name)ã«ã¦,æŒ‡å®šã•ã‚ŒãŸnameã®valueã®å‹ãŒstringã‹ã©ã†ã‹ã‚’åˆ¤å®šã€‚
       CPPUNIT_ASSERT(!isString(nvlist, name1.c_str()));
       CPPUNIT_ASSERT(isString(nvlist, name2.c_str()));
     }
 
     /*!
-     * @brief isStringValue()¤Î¥Æ¥¹¥È
+     * @brief isStringValue()ã®ãƒ†ã‚¹ãƒˆ
      * 
-     *  - NVListÆâ¤Î»ØÄê¤·¤¿Ì¾¾Î¤ò»ı¤ÄÃÍ¤¬string·¿¤«¤É¤¦¤«¤òÀµ¤·¤¯È½Äê¤Ç¤­¤ë¤«¡©
+     *  - NVListå†…ã®æŒ‡å®šã—ãŸåç§°ã‚’æŒã¤å€¤ãŒstringå‹ã‹ã©ã†ã‹ã‚’æ­£ã—ãåˆ¤å®šã§ãã‚‹ã‹ï¼Ÿ
      */
     void test_isStringValue()
     {
       SDOPackage::NVList nvlist;
       nvlist.length(2);
       
-      // (1) NVListÍ×ÁÇ¤Îname¤Ë"short",value¤Ëshort·¿¤Î¥Ç¡¼¥¿¤ò¥»¥Ã¥È¡£
+      // (1) NVListè¦ç´ ã®nameã«"short",valueã«shortå‹ã®ãƒ‡ãƒ¼ã‚¿ã‚’ã‚»ãƒƒãƒˆã€‚
       string name1 = "short";
       CORBA::Short value1 = 1;
       nvlist[0].name = name1.c_str();
       nvlist[0].value <<= value1;
       
-      // (2) NVListÍ×ÁÇ¤Îname¤Ë"string",value¤Ëstring·¿¤Î¥Ç¡¼¥¿¤ò¥»¥Ã¥È¡£
+      // (2) NVListè¦ç´ ã®nameã«"string",valueã«stringå‹ã®ãƒ‡ãƒ¼ã‚¿ã‚’ã‚»ãƒƒãƒˆã€‚
       string name2 = "string";
       string value2 = "test";
       nvlist[1].name = name2.c_str();
       nvlist[1].value <<= value2.c_str();
       
-      // (3) isString(nvlist,name)¤Ë¤Æ,»ØÄê¤µ¤ì¤¿name¤Îvalue¤Î·¿¤¬string¤«¤É¤¦¤«¤òÈ½Äê¡£
+      // (3) isString(nvlist,name)ã«ã¦,æŒ‡å®šã•ã‚ŒãŸnameã®valueã®å‹ãŒstringã‹ã©ã†ã‹ã‚’åˆ¤å®šã€‚
       CPPUNIT_ASSERT(!isStringValue(nvlist, name1.c_str(), "1"));
       CPPUNIT_ASSERT(isStringValue(nvlist, name2.c_str(), "test"));
     }
 
     /*!
-     * @brief toString()¤Î¥Æ¥¹¥È
+     * @brief toString()ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - NVListÆâ¤Î»ØÄê¤·¤¿Ì¾¾Î¤ò»ı¤ÄÃÍ¤¬string·¿¤Ç¤¢¤ë¾ì¹ç¤Ë¡¢¤½¤ÎÃÍ¤òÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
+     * - NVListå†…ã®æŒ‡å®šã—ãŸåç§°ã‚’æŒã¤å€¤ãŒstringå‹ã§ã‚ã‚‹å ´åˆã«ã€ãã®å€¤ã‚’æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
      */
     void test_toString() {
 
@@ -507,28 +507,28 @@ namespace NVUtil
       SDOPackage::NVList nvlist;
       nvlist.length(2);
 			
-      // (1) NVListÍ×ÁÇ¤Îname¤Ë"short",value¤Ëshort·¿¤Î¥Ç¡¼¥¿¤ò¥»¥Ã¥È¡£
+      // (1) NVListè¦ç´ ã®nameã«"short",valueã«shortå‹ã®ãƒ‡ãƒ¼ã‚¿ã‚’ã‚»ãƒƒãƒˆã€‚
       string name1 = "short";
       CORBA::Short value1 = 1;
       nvlist[0].name = name1.c_str();
       nvlist[0].value <<= value1;
 			
-      // (2) NVListÍ×ÁÇ¤Îname¤Ë"string",value¤Ëstring·¿¤Î¥Ç¡¼¥¿¤ò¥»¥Ã¥È¡£
+      // (2) NVListè¦ç´ ã®nameã«"string",valueã«stringå‹ã®ãƒ‡ãƒ¼ã‚¿ã‚’ã‚»ãƒƒãƒˆã€‚
       string name2 = "string";
       string value2 = "test";
       nvlist[1].name = name2.c_str();
       nvlist[1].value <<= value2.c_str();
 			
-      // (3) toString(nvlist,name)¤Ë¤Æ,»ØÄê¤µ¤ì¤¿name¤Îvalue¤òstring·¿¤Ç°Õ¿Ş¤È¤ª¤ê¤Ë¼èÆÀ¤Ç¤­¤ë¤«¡©
+      // (3) toString(nvlist,name)ã«ã¦,æŒ‡å®šã•ã‚ŒãŸnameã®valueã‚’stringå‹ã§æ„å›³ã¨ãŠã‚Šã«å–å¾—ã§ãã‚‹ã‹ï¼Ÿ
       string empty("");
       CPPUNIT_ASSERT_EQUAL(empty, toString(nvlist, name1.c_str()));
       CPPUNIT_ASSERT_EQUAL(value2, toString(nvlist, name2.c_str()));
     }
 
     /*!
-     * @brief appendStringValue()¤Î¥Æ¥¹¥È
+     * @brief appendStringValue()ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - »ØÄê¤·¤¿Ì¾¾Î¤ÈÃÍ¤ò»ı¤ÄNameValue¤ò¡¢NVList¤ËÀµ¤·¤¯ÄÉ²Ã¤Ç¤­¤ë¤«¡©
+     * - æŒ‡å®šã—ãŸåç§°ã¨å€¤ã‚’æŒã¤NameValueã‚’ã€NVListã«æ­£ã—ãè¿½åŠ ã§ãã‚‹ã‹ï¼Ÿ
      */
     void test_appendStringValue()
     {
@@ -536,7 +536,7 @@ namespace NVUtil
       SDOPackage::NVList nvlist;
       nvlist.length(3);
 			
-      // (1) ÄÉ²ÃÂĞ¾İ¤È¤Ê¤ëNVList¤òºîÀ®¤¹¤ë
+      // (1) è¿½åŠ å¯¾è±¡ã¨ãªã‚‹NVListã‚’ä½œæˆã™ã‚‹
       string name1 = "language";
       string value1 = "japanese";
       nvlist[0].name = name1.c_str();
@@ -552,26 +552,26 @@ namespace NVUtil
       nvlist[2].name = name3.c_str();
       nvlist[2].value <<= value3.c_str();
 			
-      // (2) ºîÀ®¤·¤¿NVList¤Ë¡¢Ì¾¾Î"os", ÃÍ"unix"¤ÎNameValue¤òÀµ¤·¤¯ÄÉ²Ã¤Ç¤­¤ë¤«¡©
+      // (2) ä½œæˆã—ãŸNVListã«ã€åç§°"os", å€¤"unix"ã®NameValueã‚’æ­£ã—ãè¿½åŠ ã§ãã‚‹ã‹ï¼Ÿ
       string name4 = "os";
       string value4 = "unix";
       CPPUNIT_ASSERT(appendStringValue(nvlist, name4.c_str(), value4.c_str()));
       CPPUNIT_ASSERT_EQUAL(value4, toString(nvlist, name4.c_str()));
 			
-      // (3) ´ûÂ¸¤ÎÌ¾¾Î¤Ç¤¢¤ë"language"¤Ë¡¢ÃÍ"english"¤òÀµ¤·¤¯ÄÉ²Ã¤Ç¤­¤ë¤«¡©
+      // (3) æ—¢å­˜ã®åç§°ã§ã‚ã‚‹"language"ã«ã€å€¤"english"ã‚’æ­£ã—ãè¿½åŠ ã§ãã‚‹ã‹ï¼Ÿ
       string name5 = name1;
       string value5 = "english";
       CPPUNIT_ASSERT(appendStringValue(nvlist, name5.c_str(), value5.c_str()));
       string expectedValueLanguage = "japanese,english";
       CPPUNIT_ASSERT_EQUAL(expectedValueLanguage, toString(nvlist, name5.c_str()));
 			
-      // (4) ´ûÂ¸¤ÎÌ¾¾Î¡¦ÃÍ¤ÈÁ´¤¯Æ±°ì¤ÎNameValue¤òÄÉ²Ã¤·¤è¤¦¤È¤·¤¿¤È¤­¤Ë¡¢°Õ¿Ş¤É¤ª¤ê²¿¤âÄÉ²Ã¤»¤º¤Ë½ªÎ»¤¹¤ë¤«¡©
+      // (4) æ—¢å­˜ã®åç§°ãƒ»å€¤ã¨å…¨ãåŒä¸€ã®NameValueã‚’è¿½åŠ ã—ã‚ˆã†ã¨ã—ãŸã¨ãã«ã€æ„å›³ã©ãŠã‚Šä½•ã‚‚è¿½åŠ ã›ãšã«çµ‚äº†ã™ã‚‹ã‹ï¼Ÿ
       string name6 = name2;
       string value6 = value2;
       CPPUNIT_ASSERT(appendStringValue(nvlist, name6.c_str(), value6.c_str()));
       CPPUNIT_ASSERT_EQUAL(value2, toString(nvlist, name6.c_str()));
 			
-      // (5) °ìÉô¤ÎÃÍ¤¬¡¢´ûÂ¸¤ÎÃÍ¤È½ÅÊ£¤¹¤ëNameValue¤òÄÉ²Ã¤·¤è¤¦¤È¤·¤¿»ş¤Ë¡¢°Õ¿Ş¤É¤ª¤ê¤Ë¥Ş¡¼¥¸¤µ¤ì¤ë¤«¡©
+      // (5) ä¸€éƒ¨ã®å€¤ãŒã€æ—¢å­˜ã®å€¤ã¨é‡è¤‡ã™ã‚‹NameValueã‚’è¿½åŠ ã—ã‚ˆã†ã¨ã—ãŸæ™‚ã«ã€æ„å›³ã©ãŠã‚Šã«ãƒãƒ¼ã‚¸ã•ã‚Œã‚‹ã‹ï¼Ÿ
       string name7 = name3;
       string value7 = "coke, beer";
       CPPUNIT_ASSERT(appendStringValue(nvlist, name7.c_str(), value7.c_str()));
@@ -580,13 +580,13 @@ namespace NVUtil
     }
 
     /*!
-     * @brief append()¤Î¥Æ¥¹¥È
+     * @brief append()ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - NVList¤ÎÆâÍÆ¤ò¡¢Â¾¤ÎNVList¤ËÀµ¤·¤¯ÄÉ²Ã¤Ç¤­¤ë¤«¡©
+     * - NVListã®å†…å®¹ã‚’ã€ä»–ã®NVListã«æ­£ã—ãè¿½åŠ ã§ãã‚‹ã‹ï¼Ÿ
      */
     void test_append()
     {
-      // (1) 1¤ÄÌÜ¤ÎNVList¤òºîÀ®¤¹¤ë
+      // (1) 1ã¤ç›®ã®NVListã‚’ä½œæˆã™ã‚‹
       SDOPackage::NVList nvlistA;
       nvlistA.length(2);
 			
@@ -600,7 +600,7 @@ namespace NVUtil
       nvlistA[1].name = nameA2.c_str();
       nvlistA[1].value <<= valueA2.c_str();
 			
-      // (2) 2¤ÄÌÜ¤ÎNVList¤òºîÀ®¤¹¤ë
+      // (2) 2ã¤ç›®ã®NVListã‚’ä½œæˆã™ã‚‹
       SDOPackage::NVList nvlistB;
       nvlistB.length(2);
 			
@@ -614,10 +614,10 @@ namespace NVUtil
       nvlistB[1].name = nameB2.c_str();
       nvlistB[1].value <<= valueB2.c_str();
 			
-      // (3) 1¤ÄÌÜ¤ÎNVList¤Ë¡¢2¤ÄÌÜ¤ÎNVList¤òÄÉ²Ã¤¹¤ë
+      // (3) 1ã¤ç›®ã®NVListã«ã€2ã¤ç›®ã®NVListã‚’è¿½åŠ ã™ã‚‹
       append(nvlistA, nvlistB);
 			
-      // (4) Àµ¤·¤¯ÄÉ²Ã¤µ¤ì¤¿¤³¤È¤ò³ÎÇ§¤¹¤ë
+      // (4) æ­£ã—ãè¿½åŠ ã•ã‚ŒãŸã“ã¨ã‚’ç¢ºèªã™ã‚‹
       CPPUNIT_ASSERT_EQUAL(valueA1, toString(nvlistA, nameA1.c_str()));
       CPPUNIT_ASSERT_EQUAL(valueA2, toString(nvlistA, nameA2.c_str()));
       CPPUNIT_ASSERT_EQUAL(valueB1, toString(nvlistA, nameB1.c_str()));
@@ -647,7 +647,7 @@ namespace NVUtil
       dump(nvlistC);
     }	
 
-    // std::string toString(const SDOPackage::NVList& nv);¤Î¥Æ¥¹¥È¤Ç¤¹¡£
+    // std::string toString(const SDOPackage::NVList& nv);ã®ãƒ†ã‚¹ãƒˆã§ã™ã€‚
     void test_toStringNV()
     {
       SDOPackage::NVList nvlistD;
@@ -669,19 +669,19 @@ namespace NVUtil
       SDOPackage::NVList nvlistE;
       nvlistE.length(2);
 			
-      // (1) NVListÍ×ÁÇ¤Îname¤Ë"short",value¤Ëshort·¿¤Î¥Ç¡¼¥¿¤ò¥»¥Ã¥È¡£
+      // (1) NVListè¦ç´ ã®nameã«"short",valueã«shortå‹ã®ãƒ‡ãƒ¼ã‚¿ã‚’ã‚»ãƒƒãƒˆã€‚
       string nameE1 = "short";
       CORBA::Short valueE1 = 1;
       nvlistE[0].name = nameE1.c_str();
       nvlistE[0].value <<= valueE1;
 			
-      // (2) NVListÍ×ÁÇ¤Îname¤Ë"string",value¤Ëstring·¿¤Î¥Ç¡¼¥¿¤ò¥»¥Ã¥È¡£
+      // (2) NVListè¦ç´ ã®nameã«"string",valueã«stringå‹ã®ãƒ‡ãƒ¼ã‚¿ã‚’ã‚»ãƒƒãƒˆã€‚
       string nameE2 = "string";
       string valueE2 = "test";
       nvlistE[1].name = nameE2.c_str();
       nvlistE[1].value <<= valueE2.c_str();
       			
-      // (3) ¥¹¥È¥ê¥ó¥°°Ê³°¤Î¥Ç¡¼¥¿¤¬¥»¥Ã¥È¤µ¤ì¤¿¤È¤­¤Î¥á¥Ã¥»¡¼¥¸¤ò³ÎÇ§¡£
+      // (3) ã‚¹ãƒˆãƒªãƒ³ã‚°ä»¥å¤–ã®ãƒ‡ãƒ¼ã‚¿ãŒã‚»ãƒƒãƒˆã•ã‚ŒãŸã¨ãã®ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’ç¢ºèªã€‚
 
       std::string empty = "short: not a string value\nstring: test\n";
       std::string str_nvlistE = toString(nvlistE);

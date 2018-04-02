@@ -236,7 +236,6 @@ vc9proj: libRTCSkel.vcproj.yaml
 		--yaml libRTCSkel.vcproj.yaml \
 		--source $(SKEL_CPP) ComponentObserverSkel.cpp \
 		--header $(SKEL_H) ComponentObserverSkel.h
-	qkc -O- -sm $(win32_builddir)/rtm/idl/libRTCSkel_vc9.vcproj
 
 vcxproj: libRTCSkel.vcproj.yaml
 	for ver in $(VC_VERSION); do \
@@ -248,7 +247,6 @@ vcxproj: libRTCSkel.vcproj.yaml
 			--yaml libRTCSkel.vcproj.yaml \
 			--source $(SKEL_CPP) ComponentObserverSkel.cpp \
 			--header $(SKEL_H) ComponentObserverSkel.h ; \
-		qkc -O- -sm $(win32_builddir)/rtm/idl/libRTCSkel_vc$${ver}.vcxproj ; \
 	done
 
 dist-hook: lst vcproj

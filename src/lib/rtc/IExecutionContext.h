@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file  IExecutionContext.h
  * @brief IExecutionContext interface class
@@ -44,7 +44,7 @@ namespace Local
   /*!
    * @if jp
    * @class IExecutionContext
-   * @brief IExecutionContext ¥¯¥é¥¹
+   * @brief IExecutionContext ã‚¯ãƒ©ã‚¹
    * @else
    * @class IExecutionContext
    * @brief IExecutionContext class

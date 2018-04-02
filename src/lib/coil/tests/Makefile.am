@@ -59,7 +59,6 @@ coiltest_vc9.sln: coil_test.sln.dep vcproj
 		--dep coil_test.sln.dep \
 		--out coiltest_vc9.sln \
 		`find ./ -name '*_vc9.vcproj'`
-	qkc -O- -ms coiltest_vc9.sln
 
 #coiltest_vc10.sln: coil_test.sln.dep vcproj
 #	$(top_srcdir)/build/slntool.py     \
@@ -67,6 +66,5 @@ coiltest_vc9.sln: coil_test.sln.dep vcproj
 		--dep coil_test.sln.dep \
 		--out coiltest_vc10.sln \
 		`find ./ -name '*_vc10.vcproj'`
-#	qkc -O- -ms coiltest_vc10.sln
 
 

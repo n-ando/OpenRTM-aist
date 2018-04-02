@@ -244,7 +244,6 @@ vc9proj: libRTC.vcproj.yaml
 		--yaml libRTC.vcproj.yaml \
 		--source $(RTC_SRC) ../ext/sdo/observer/ComponentObserverConsumer.cpp \
 		--header $(rtmheader_HEADERS) ../ext/sdo/observer/ComponentObserverConsumer.h
-	qkc -O- -sm $(win32_builddir)/rtm/libRTC_vc9.vcproj
 
 vcxproj: libRTC.vcproj.yaml
 	for ver in $(VC_VERSION); do \
@@ -256,7 +255,6 @@ vcxproj: libRTC.vcproj.yaml
 			--yaml libRTC.vcproj.yaml \
 			--source $(RTC_SRC) ../ext/sdo/observer/ComponentObserverConsumer.cpp \
 			--header $(rtmheader_HEADERS) ../ext/sdo/observer/ComponentObserverConsumer.h ; \
-		qkc -O- -sm $(win32_builddir)/rtm/libRTC_vc$${ver}.vcxproj ; \
 	done
 
 dist-hook: lst vcproj

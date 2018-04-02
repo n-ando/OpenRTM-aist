@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file  SeqIn.cpp
  * @brief Sequence InPort component

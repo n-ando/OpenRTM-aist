@@ -1,4 +1,4 @@
-// -*- C++ -*-
+Ôªø// -*- C++ -*-
 /*!
  * @file   ExtTrigExecutionContextTests.cpp
  * @brief  ExtTrigExecutionContext test class
@@ -354,13 +354,13 @@ namespace ExtTrigExecutionContext
 		
     void test_tick()
     {
-      // RTObject§Ú¿∏¿Æ§π§Î
+      // RTObject„ÇíÁîüÊàê„Åô„Çã
       POA_RTC::LightweightRTObject* rto
 	= new DataFlowComponentMock(); // will be deleted automatically
       DataFlowComponentMock* mock
 	= dynamic_cast<DataFlowComponentMock*>(rto);
 
-      // ExecutionContext§Ú¿∏¿Æ§π§Î
+      // ExecutionContext„ÇíÁîüÊàê„Åô„Çã
       RTC::ExtTrigExecutionContext* ec
 	= new RTC::ExtTrigExecutionContext(); // will be deleted automatically
 
@@ -368,7 +368,7 @@ namespace ExtTrigExecutionContext
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->add_component(rto->_this()));
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->activate_component(rto->_this()));
 			
-      // tick()∏∆Ω–§Úπ‘§§°¢§Ω§Œ≤ÛøÙ§»on_execute()§Œ∏∆Ω–≤ÛøÙ§¨∞Ï√◊§∑§∆§§§Î§≥§»§Ú≥Œ«ß§π§Î
+      // tick()ÂëºÂá∫„ÇíË°å„ÅÑ„ÄÅ„Åù„ÅÆÂõûÊï∞„Å®on_execute()„ÅÆÂëºÂá∫ÂõûÊï∞„Åå‰∏ÄËá¥„Åó„Å¶„ÅÑ„Çã„Åì„Å®„ÇíÁ¢∫Ë™ç„Åô„Çã
       ec->tick();
       for (int tickCalledCount = 0; tickCalledCount < 10; tickCalledCount++)
 	{

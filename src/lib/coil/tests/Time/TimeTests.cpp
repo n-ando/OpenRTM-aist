@@ -1,4 +1,4 @@
-// -*- C++ -*-
+я╗┐// -*- C++ -*-
 /*!
  * @file   TimeTests.cpp
  * @brief  Time test class
@@ -217,7 +217,7 @@ namespace Time
       icnt = tta->m_count_time;
       delete tta;
       sprintf(cstr,"main:%d svc:%d", ic, icnt);
-      //ележеєе┐дЄе┴езе├еп
+      //уВлуВжуГ│уВ┐уВТуГБуВзуГГуВп
       CPPUNIT_ASSERT_MESSAGE( cstr, (ic == icnt) );
 
       tta = new TimeTests::TestTimeTask;
@@ -247,7 +247,7 @@ namespace Time
       icnt = tta->m_count_time;
       delete tta;
       sprintf(cstr,"main:%d svc:%d", ic, icnt);
-      //ележеєе┐дЄе┴езе├еп
+      //уВлуВжуГ│уВ┐уВТуГБуВзуГГуВп
       CPPUNIT_ASSERT_MESSAGE( cstr, (ic == icnt) );
     }
     /*
@@ -415,7 +415,7 @@ namespace Time
       icnt = tta->m_count_time;
       delete tta;
       sprintf(cstr,"main:%d svc:%d", ic, icnt);
-      //ележеєе┐дЄе┴езе├еп
+      //уВлуВжуГ│уВ┐уВТуГБуВзуГГуВп
       CPPUNIT_ASSERT_MESSAGE( cstr, (ic == icnt) );
     }
     /*

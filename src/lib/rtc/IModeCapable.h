@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file  IModeCapable.h
  * @brief IModeCapable class
@@ -31,7 +31,7 @@ namespace Local
   /*!
    * @if jp
    * @class IModeCapable
-   * @brief IModeCapable ¥¯¥é¥¹
+   * @brief IModeCapable ã‚¯ãƒ©ã‚¹
    * @else
    * @class IModeCapable
    * @brief IModeCapable class

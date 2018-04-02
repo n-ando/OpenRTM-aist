@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file   OutPortCorbaCdrProviderTests.cpp
  * @brief  OutPortCorbaCdrProvider test class
@@ -110,7 +110,7 @@ namespace OutPortCorbaCdrProvider
       {
       }
       /*!
-       *  ³ÎÇ§ÍÑ 
+       *  ç¢ºèªç”¨ 
        * 
        */
       SDOPackage::NVList get_m_properties()
@@ -225,12 +225,12 @@ namespace OutPortCorbaCdrProvider
         provider->setListener(info, &m_listeners);
 
         int index;
-        //IOR ¤ò¥×¥í¤Ú¥Æ¥£¤ËÄÉ²Ã¤¹¤ë¤³¤È¤ò³ÎÇ§
+        //IOR ã‚’ãƒ—ãƒ­ãºãƒ†ã‚£ã«è¿½åŠ ã™ã‚‹ã“ã¨ã‚’ç¢ºèª
         index = NVUtil::find_index(provider->get_m_properties(),
                                    "dataport.corba_cdr.outport_ior");
         CPPUNIT_ASSERT(0<=index);
 
-        //ref ¤ò¥×¥í¤Ú¥Æ¥£¤ËÄÉ²Ã¤¹¤ë¤³¤È¤ò³ÎÇ§
+        //ref ã‚’ãƒ—ãƒ­ãºãƒ†ã‚£ã«è¿½åŠ ã™ã‚‹ã“ã¨ã‚’ç¢ºèª
         index = NVUtil::find_index(provider->get_m_properties(),
                                    "dataport.corba_cdr.outport_ref");
         CPPUNIT_ASSERT(0<=index);
@@ -244,7 +244,7 @@ namespace OutPortCorbaCdrProvider
 
         ::OpenRTM::CdrData_var cdr_data;
 
-        // buffer ¤¬¤Ê¤¤¾õÂÖ¤Ç¥³¡¼¥ë(unkown error)
+        // buffer ãŒãªã„çŠ¶æ…‹ã§ã‚³ãƒ¼ãƒ«(unkown error)
         retcode = provider->get(cdr_data.out());
         CPPUNIT_ASSERT_EQUAL((::OpenRTM::PortStatus)5, retcode);
         
@@ -261,7 +261,7 @@ namespace OutPortCorbaCdrProvider
           }
         provider->setConnector(connector);
 
-        //¥Ç¡¼¥¿¤Ê¤·¤Î¾õÂÖ¤Ç¥³¡¼¥ë(empty)
+        //ãƒ‡ãƒ¼ã‚¿ãªã—ã®çŠ¶æ…‹ã§ã‚³ãƒ¼ãƒ«(empty)
         retcode = provider->get(cdr_data);
         CPPUNIT_ASSERT_EQUAL((::OpenRTM::PortStatus)3, retcode);
 

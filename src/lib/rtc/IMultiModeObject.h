@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file  IMultiModeObject.h
  * @brief IMultiModeObject class
@@ -31,7 +31,7 @@ namespace Local
   /*!
    * @if jp
    * @class IMultiModeObject
-   * @brief IMultiModeObject ¥¯¥é¥¹
+   * @brief IMultiModeObject ã‚¯ãƒ©ã‚¹
    * @else
    * @class IMultiModeObject
    * @brief IMultiModeObject class
@@ -45,7 +45,7 @@ namespace Local
   public:
     /*!
      * @if jp
-     * @brief ¥Ç¥¹¥È¥é¥¯¥¿
+     * @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
      * @else
      * @brief Destructor
      * @endif

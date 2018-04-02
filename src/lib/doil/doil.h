@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file doil.h
  * @brief doil
@@ -25,15 +25,15 @@ namespace doil
 {
   /*!
    * @if jp
-   * @brief �꥿���󥳡���
+   * @brief リターンコード
    *
-   * ���Υ��饹���̾�⥸�塼�붭���˰��֤��뤿�ᡢ���顼��
-   * �꥿���󥳡��ɤ��֤���
+   * このクラスは通常モジュール境界に位置するため、エラーは
+   * リターンコードで返す。
    *
-   * - OK: ���ｪλ
-   * - NOT_FOUND: ���ꤷ����Τ����Ĥ���ʤ�
-   * - ALREADY_EXISTS: ���ꤷ����Τ�����¸�ߤ���
-   * - UNKNOWN: �����ʥ��顼
+   * - OK: 正常終了
+   * - NOT_FOUND: 指定したものが見つからない
+   * - ALREADY_EXISTS: 指定したものが既に存在する
+   * - UNKNOWN: 不明なエラー
    *
    * @else
    * @brief Return code

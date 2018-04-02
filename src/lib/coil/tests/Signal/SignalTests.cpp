@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file   SignalTests.cpp
  * @brief  Signal test class
@@ -147,7 +147,7 @@ static int Signum;
 
     /* Signal Handler */
     /*!
-     *  @brief ‚n‚r‚©‚ç“n‚³‚ê‚½ƒVƒOƒiƒ‹”Ô†‚ÆA—\’è‚³‚ê‚Ä‚¢‚½ƒVƒOƒiƒ‹”Ô†‚ğ”äŠrŒŸØ‚·‚éB
+     *  @brief ï¼¯ï¼³ã‹ã‚‰æ¸¡ã•ã‚ŒãŸã‚·ã‚°ãƒŠãƒ«ç•ªå·ã¨ã€äºˆå®šã•ã‚Œã¦ã„ãŸã‚·ã‚°ãƒŠãƒ«ç•ªå·ã‚’æ¯”è¼ƒæ¤œè¨¼ã™ã‚‹ã€‚
      */
     static void signalHandler(int aSignum)
     {

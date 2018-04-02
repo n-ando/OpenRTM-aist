@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file   ORBManagerTests.cpp
  * @brief  ORBManager test class

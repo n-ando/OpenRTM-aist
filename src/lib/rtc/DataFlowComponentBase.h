@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file  DataFlowComponentBase.h
  * @brief DataFlowComponentBase class
@@ -31,7 +31,7 @@ namespace Local
   /*!
    * @if jp
    * @class DataFlowComponentBase
-   * @brief DataFlowComponentBase ¥¯¥é¥¹
+   * @brief DataFlowComponentBase ã‚¯ãƒ©ã‚¹
    * @else
    * @class DataFlowComponentBase
    * @brief DataFlowComponentBase class

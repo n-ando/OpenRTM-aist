@@ -1,4 +1,4 @@
-#ifndef MYFACTORY_H
+﻿#ifndef MYFACTORY_H
 #define MYFACTORY_H
 #include <coil/Factory.h>
 

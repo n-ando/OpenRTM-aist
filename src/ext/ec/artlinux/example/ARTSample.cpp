@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file  ARTSample.cpp
  * @brief Realtime periodic execution example component

@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file   FsmServiceServantTests.cpp
  * @brief  FsmServiceServant test class

@@ -99,7 +99,6 @@ ExecutionContextProxy_vc9.vcproj:
 		--yaml ../coil_test.vcproj.yaml \
 		--source $(TEST_SRC)
 #		--header $(TEST_H)
-	qkc -O- -sm $(win32_builddir)/ExecutionContextProxy_vc9.vcproj
 
 
 ExecutionContextProxy_vc10.vcproj:
@@ -111,5 +110,4 @@ ExecutionContextProxy_vc10.vcproj:
 		--out $(win32_builddir)/ExecutionContextProxy_vc10.vcproj \
 		--yaml ../coil_test.vcproj.yaml \
 		--source $(TEST_SRC)
-	qkc -O- -sm $(win32_builddir)/ExecutionContextProxy_vc10.vcproj
 

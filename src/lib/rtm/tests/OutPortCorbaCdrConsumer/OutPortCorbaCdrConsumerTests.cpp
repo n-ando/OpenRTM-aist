@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file   OutPortCorbaCdrConsumerTests.cpp
  * @brief  OutPortCorbaCdrConsumer test class
@@ -111,7 +111,7 @@ namespace OutPortCorbaCdrConsumer
       {
       }
       /*!
-       *  ³ÎÇ§ÍÑ 
+       *  ç¢ºèªç”¨ 
        * 
        */
       CORBA::Object_var get_m_objre()
@@ -231,7 +231,7 @@ namespace OutPortCorbaCdrConsumer
         bool ret;
 
         ret = consumer.subscribeInterface(prof.properties);
-        //ior ¤òÀßÄê¤·¤Æ¤¤¤Ê¤¤¤Î¤Çfalse¤È¤Ê¤ë¤³¤È¤ò³ÎÇ§¤¹¤ë¡£
+        //ior ã‚’è¨­å®šã—ã¦ã„ãªã„ã®ã§falseã¨ãªã‚‹ã“ã¨ã‚’ç¢ºèªã™ã‚‹ã€‚
         CPPUNIT_ASSERT_EQUAL(false, ret);
 
         RTC::OutPortCorbaCdrProvider provider;
@@ -254,12 +254,12 @@ namespace OutPortCorbaCdrConsumer
  
         consumer.setBuffer(buffer);
 
-        //provider Â¦¤Î buffer ¤¬¤Ê¤¤¾õÂÖ¤Ç¥³¡¼¥ë(unkown error)
+        //provider å´ã® buffer ãŒãªã„çŠ¶æ…‹ã§ã‚³ãƒ¼ãƒ«(unkown error)
         retcode = consumer.get(indata);
         CPPUNIT_ASSERT_EQUAL((::RTC::DataPortStatus::Enum)13, retcode);
         provider.setBuffer(buffer);
 
-        //¥Ç¡¼¥¿¤Ê¤·¤Î¾õÂÖ¤Ç¥³¡¼¥ë(empty)
+        //ãƒ‡ãƒ¼ã‚¿ãªã—ã®çŠ¶æ…‹ã§ã‚³ãƒ¼ãƒ«(empty)
         retcode = consumer.get(indata);
         CPPUNIT_ASSERT_EQUAL((::RTC::DataPortStatus::Enum)4, retcode);
 

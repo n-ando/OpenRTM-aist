@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file ORBManager.cpp
  * @brief Generic ORB manager
@@ -31,7 +31,7 @@ namespace doil
   //------------------------------------------------------------
   /*!
    * @if jp
-   * @brief ½é´ü²½´Ø¿ô
+   * @brief åˆæœŸåŒ–é–¢æ•°
    * @else
    * @brief initializer
    * @endif
@@ -53,7 +53,7 @@ namespace doil
 
   /*!
    * @if jp
-   * @brief ¥¤¥ó¥¹¥¿¥ó¥¹¼èÆÀ´Ø¿ô
+   * @brief ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹å–å¾—é–¢æ•°
    * @else
    * @brief getting instance
    * @endif
@@ -67,7 +67,7 @@ namespace doil
 
   /*!
    * @if jp
-   * @brief ORBManager ¤ò shutdown ¤¹¤ë
+   * @brief ORBManager ã‚’ shutdown ã™ã‚‹
    * @else
    * @brief shutdown ORBManager
    * @endif
@@ -88,7 +88,7 @@ namespace doil
   
   /*!
    * @if jp
-   * @brief ORBManager ¤Ë ORB ¤òÅĞÏ¿¤¹¤ë
+   * @brief ORBManager ã« ORB ã‚’ç™»éŒ²ã™ã‚‹
    * @else
    * @brief Register an ORB to the ORBManager
    * @endif
@@ -111,7 +111,7 @@ namespace doil
   
   /*!
    * @if jp
-   * @brief ÅĞÏ¿ºÑ¤ß¤Î ORB ¤ò¼èÆÀ¤¹¤ë
+   * @brief ç™»éŒ²æ¸ˆã¿ã® ORB ã‚’å–å¾—ã™ã‚‹
    * @else
    * @brief Get an ORB that is registered in this ORBManager
    * @endif
@@ -135,7 +135,7 @@ namespace doil
   
   /*!
    * @if jp
-   * @brief ÅĞÏ¿ºÑ¤ß¤Î¤¹¤Ù¤Æ¤Î ORB ¤ò¼èÆÀ¤¹¤ë
+   * @brief ç™»éŒ²æ¸ˆã¿ã®ã™ã¹ã¦ã® ORB ã‚’å–å¾—ã™ã‚‹
    * @else
    * @brief Get all the ORBs that are registered in this ORBManager
    * @endif
@@ -158,7 +158,7 @@ namespace doil
   
   /*!
    * @if jp
-   * @brief ÅĞÏ¿ºÑ¤ß¤Î¤¹¤Ù¤Æ¤Î ORB ¤òÌ¾Á°¤ò¼èÆÀ¤¹¤ë
+   * @brief ç™»éŒ²æ¸ˆã¿ã®ã™ã¹ã¦ã® ORB ã‚’åå‰ã‚’å–å¾—ã™ã‚‹
    * @else
    * @brief Get all the ORBs' name that are registered in this ORBManager
    * @endif
@@ -181,7 +181,7 @@ namespace doil
   
   /*!
    * @if jp
-   * @brief ÅĞÏ¿ºÑ¤ß¤Î ORB ¤ò ORBManager ¤Î¥ê¥¹¥È¤«¤éºï½ü¤¹¤ë
+   * @brief ç™»éŒ²æ¸ˆã¿ã® ORB ã‚’ ORBManager ã®ãƒªã‚¹ãƒˆã‹ã‚‰å‰Šé™¤ã™ã‚‹
    * @else
    * @brief Delete registered ORB by name.
    * @endif
@@ -203,7 +203,7 @@ namespace doil
   
   /*!
    * @if jp
-   * @brief ¥ª¥Ö¥¸¥§¥¯¥È¤ò¥¢¥¯¥Æ¥£¥Ö²½¤¹¤ë
+   * @brief ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ã‚¢ã‚¯ãƒ†ã‚£ãƒ–åŒ–ã™ã‚‹
    * @else
    * @brief Activate object
    * @endif
@@ -231,7 +231,7 @@ namespace doil
   
   /*!
    * @if jp
-   * @brief ¥ª¥Ö¥¸¥§¥¯¥È¤òÈó¥¢¥¯¥Æ¥£¥Ö²½¤¹¤ë
+   * @brief ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’éã‚¢ã‚¯ãƒ†ã‚£ãƒ–åŒ–ã™ã‚‹
    * @else
    * @brief Deactivate object
    * @endif

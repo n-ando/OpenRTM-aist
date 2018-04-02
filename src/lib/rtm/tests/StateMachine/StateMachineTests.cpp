@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file   StateMachineTests.cpp
  * @brief  StateMachine test class
@@ -331,15 +331,15 @@ namespace StateMachineTests
     }
 		
     /*!
-     * @brief StateMachine�ˤ��������ܤΥƥ���
+     * @brief StateMachineによる状態遷移のテスト
      * 
-     * ���ξ��ˡ��տޤɤ���ν���ǥ�����Хå����ƤӽФ���뤳�Ȥ��ǧ���롨
-     * - PreDo��Ǽ����֤���ꤷ�����
-     * - Do��Ǽ����֤���ꤷ�����
-     * - PostDo��Ǽ����֤���ꤷ�����
-     * - Entry��Ǽ����֤���ꤷ�����
+     * 次の場合に、意図どおりの順序でコールバックが呼び出されることを確認する；
+     * - PreDo内で次状態を指定した場合
+     * - Do内で次状態を指定した場合
+     * - PostDo内で次状態を指定した場合
+     * - Entry内で次状態を指定した場合
      * 
-     * �ޤ���Entry/PreDo/Do/PostDo�Τ�����ˤ����Ƥ⼡���֤����ܤ��ʤ����ˡ������֤�α�ޤ뤳�Ȥ��ǧ���롣
+     * また、Entry/PreDo/Do/PostDoのいずれにおいても次状態を遷移しない場合に、現状態に留まることを確認する。
      */
     void test_transition_story1()
     {

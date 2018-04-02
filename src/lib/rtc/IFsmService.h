@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file  IFsmService.h
  * @brief IFsmService class
@@ -44,7 +44,7 @@ namespace Local
   /*!
    * @if jp
    * @class IFsmService
-   * @brief IFsmService ¥¯¥é¥¹
+   * @brief IFsmService ã‚¯ãƒ©ã‚¹
    * @else
    * @class IFsmService
    * @brief IFsmService class

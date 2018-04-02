@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file   OutPortTests.cpp
  * @brief  OutPort test class
@@ -728,7 +728,7 @@ namespace RTC
    */
   /*!
    * @if jp
-   * @brief ���󥹥ȥ饯��
+   * @brief コンストラクタ
    * @else
    * @brief Constructor
    * @endif
@@ -744,7 +744,7 @@ namespace RTC
   }
   /*!
    * @if jp
-   * @brief �ǥ��ȥ饯��
+   * @brief デストラクタ
    * @else
    * @brief Destructor
    * @endif
@@ -754,7 +754,7 @@ namespace RTC
   }
   /*!
    * @if jp
-   * @brief ��³���
+   * @brief 接続解除
    * @else
    * @brief disconnect
    * @endif
@@ -773,7 +773,7 @@ namespace RTC
  }
   /*!
    * @if jp
-   * @brief �ǡ����ν񤭹���
+   * @brief データの書き込み
    * @else
    * @brief Writing data
    * @endif
@@ -951,7 +951,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ������٥��ʸ��������ꤹ��
+   * @brief ログレベルを文字列で設定する
    * @else
    * @brief Set log level by string
    * @endif
@@ -963,7 +963,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief �إå����ղä��������ե����ޥåȤ���ꤹ�롣
+   * @brief ヘッダに付加する日時フォーマットを指定する。
    * @else
    * @brief Set date/time format for adding the header
    * @endif
@@ -974,7 +974,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief �إå��������θ���ղä���ʸ��������ꤹ�롣
+   * @brief ヘッダの日時の後に付加する文字列を設定する。
    * @else
    * @brief Set suffix of date/time string of header.
    * @endif
@@ -985,7 +985,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ��å������Υץ�ե��å����ɲôؿ�
+   * @brief メッセージのプリフィックス追加関数
    * @else
    * @brief Message prefix appender function
    * @endif
@@ -996,7 +996,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief �ե����ޥåȤ��줿��������ʸ�����������롣
+   * @brief フォーマットされた現在日時文字列を取得する。
    * @else
    * @brief Get the current formatted date/time string
    * @endif
@@ -1011,7 +1011,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ������٥�����
+   * @brief ログレベル設定
    * @else
    * @brief Set the log level
    * @endif
@@ -1023,7 +1023,7 @@ namespace RTC
 #endif
   /*!
    * @if jp
-   * @brief �ǥ��ȥ饯��
+   * @brief デストラクタ
    * @else
    * @brief Destructor
    * @endif
@@ -1042,7 +1042,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief InterfaceProfile������������
+   * @brief InterfaceProfile情報を公開する
    * @else
    * @brief Publish InterfaceProfile information
    * @endif
@@ -1056,7 +1056,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief Interface������������
+   * @brief Interface情報を公開する
    * @else
    * @brief Publish interface information
    * @endif
@@ -1077,7 +1077,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief �ݡ��ȥ����פ����ꤹ��
+   * @brief ポートタイプを設定する
    * @else
    * @brief Set the port type
    * @endif
@@ -1089,7 +1089,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief �ǡ��������פ����ꤹ��
+   * @brief データタイプを設定する
    * @else
    * @brief Set the data type
    * @endif
@@ -1101,7 +1101,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ���󥿡��ե����������פ����ꤹ��
+   * @brief インターフェースタイプを設定する
    * @else
    * @brief Set the interface type
    * @endif
@@ -1113,7 +1113,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief �ǡ����ե��������פ����ꤹ��
+   * @brief データフロータイプを設定する
    * @else
    * @brief Set the data flow type
    * @endif
@@ -1125,7 +1125,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ���֥�����ץ���󥿥��פ����ꤹ��
+   * @brief サブスクリプションタイプを設定する
    * @else
    * @brief Set the subscription type
    * @endif
@@ -1295,7 +1295,7 @@ namespace OutPortTs
     }
 
     /*!
-     * @brief write()�᥽�åɤΥƥ���
+     * @brief write()メソッドのテスト
      * 
      */
     void test_write(void)
@@ -1440,9 +1440,9 @@ namespace OutPortTs
     }
 
     /*!
-     * @brief write()�᥽�åɤ�OnWrite������Хå��ƽХƥ���
+     * @brief write()メソッドのOnWriteコールバック呼出テスト
      * 
-     * - ���餫�������ꤵ�줿OnWrite������Хå����������ƤӽФ���뤫��
+     * - あらかじめ設定されたOnWriteコールバックが正しく呼び出されるか？
      */
     void test_write_OnWrite()
     {
@@ -1455,12 +1455,12 @@ namespace OutPortTs
       onWrite.m_value.data = 0;
       outPort->setOnWrite(&onWrite);
 			
-      // write()�᥽�åɤ��������뤫��
+      // write()メソッドは成功するか？
       RTC::TimedDouble writeValue;
       writeValue.data = 3.14159265;
       CPPUNIT_ASSERT(outPort->write(writeValue));
 			
-      // ���餫�������ꤵ�줿OnWrite������Хå����������ƤӽФ��줿����
+      // あらかじめ設定されたOnWriteコールバックが正しく呼び出されたか？
       CPPUNIT_ASSERT_EQUAL(writeValue.data, onWrite.m_value.data);
 
       m_pPOA->deactivate_object(*m_pPOA->servant_to_id(outPort));
@@ -1468,9 +1468,9 @@ namespace OutPortTs
     }
 		
     /*!
-     * @brief �Хåե��ե����write()�᥽�åɤ�OnWrite������Хå��ƽХƥ���
+     * @brief バッファフル時のwrite()メソッドのOnWriteコールバック呼出テスト
      * 
-     * - ���餫�������ꤵ�줿OnWrite������Хå����������ƤӽФ���뤫��
+     * - あらかじめ設定されたOnWriteコールバックが正しく呼び出されるか？
      */
     void test_write_OnWrite_full()
     {
@@ -1511,7 +1511,7 @@ namespace OutPortTs
 					     "new"));
       inPort->connect(prof);
 
-      // �Хåե��ե�ˤ��write()�᥽�åɤϰտޤɤ��꼺�Ԥ��뤫��
+      // バッファフルによりwrite()メソッドは意図どおり失敗するか？
       RTC::TimedDouble writeValue;
       writeValue.data = 3.14159265;
       for(int ic(0);ic<8;++ic)
@@ -1520,20 +1520,20 @@ namespace OutPortTs
         }
       CPPUNIT_ASSERT(! outPort->write(writeValue));
 			
-      // ���餫�������ꤵ�줿OnWrite������Хå����������ƤӽФ��줿����
+      // あらかじめ設定されたOnWriteコールバックが正しく呼び出されたか？
       CPPUNIT_ASSERT_EQUAL(writeValue.data, onWrite.m_value.data);
       delete inPort;
       delete outPort;
     }
 		
     /*!
-     * @brief write()�᥽�åɤ�OnOverflow������Хå��ƽХƥ���
+     * @brief write()メソッドのOnOverflowコールバック呼出テスト
      * 
-     * - OutPort�˳�����Ƥ��줿�Хåե����ե�ξ��ˡ����餫�������ꤵ�줿OnOverflow������Хå����������ƤӽФ���뤫��
+     * - OutPortに割り当てされたバッファがフルの場合に、あらかじめ設定されたOnOverflowコールバックが正しく呼び出されるか？
      */
     void test_write_OnOverflow()
     {
-      // ��˥ե���֤Ǥ���Хåե����Ѥ���OutPort���֥������Ȥ���������
+      // 常にフル状態であるバッファを用いてOutPortオブジェクトを生成する
       RTC::TimedDouble bindValue;
       RTC::OutPort<RTC::TimedDouble>* outPort
 	= new RTC::OutPort<RTC::TimedDouble>("OutPort", bindValue);
@@ -1570,7 +1570,7 @@ namespace OutPortTs
 					     "new"));
       inPort->connect(prof);
 
-      // �Хåե��ե�ˤ��write()�᥽�åɤϰտޤɤ��꼺�Ԥ��뤫��
+      // バッファフルによりwrite()メソッドは意図どおり失敗するか？
       RTC::TimedDouble writeValue;
       writeValue.data = 3.14159265;
       for(int ic(0);ic<8;++ic)
@@ -1579,16 +1579,16 @@ namespace OutPortTs
         }
       CPPUNIT_ASSERT(! outPort->write(writeValue));
 			
-      // OutPort�˳�����Ƥ��줿�Хåե����ե�ξ��ˡ����餫�������ꤵ�줿OnOverflow������Хå����������ƤӽФ��줿����
+      // OutPortに割り当てされたバッファがフルの場合に、あらかじめ設定されたOnOverflowコールバックが正しく呼び出されたか？
 //      CPPUNIT_ASSERT_EQUAL(writeValue.data, onOverflow.m_value.data);
       delete inPort;
       delete outPort;
     }
 
     /*!
-     * @brief �Хåե��ե�Ǥʤ����Ρ�write()�᥽�åɤ�OnOverflow������Хå��ƽХƥ���
+     * @brief バッファフルでない時の、write()メソッドのOnOverflowコールバック呼出テスト
      * 
-     * - �Хåե��ե�Ǥʤ���硢OnOverflow������Хå����տޤɤ���̤�ƽФΤޤޤ���
+     * - バッファフルでない場合、OnOverflowコールバックが意図どおり未呼出のままか？
      */
     void test_write_OnOverflow_not_full()
     {
@@ -1628,12 +1628,12 @@ namespace OutPortTs
 			       NVUtil::newNV("dataport.subscription_type",
 					     "new"));
       inPort->connect(prof);
-      // write()�᥽�åɤ��������뤫��
+      // write()メソッドは成功するか？
       RTC::TimedDouble writeValue;
       writeValue.data = 3.14159265;
       CPPUNIT_ASSERT(outPort->write(writeValue));
 			
-      // �Хåե��ե�Ǥʤ���硢OnOverflow������Хå����տޤɤ���̤�ƽФΤޤޤ���
+      // バッファフルでない場合、OnOverflowコールバックが意図どおり未呼出のままか？
 //      CPPUNIT_ASSERT_EQUAL((double) 0, onOverflow.m_value.data);
       delete inPort;
       delete outPort;
@@ -1681,14 +1681,14 @@ namespace OutPortTs
 
 		
     /*!
-     * @brief write()�᥽�åɤΥ����ॢ���Ƚ����ƥ���
+     * @brief write()メソッドのタイムアウト処理テスト
      * 
-     * - OutPort�˳�����Ƥ��줿�Хåե����ե�ξ��ˡ����ꤷ�����֤ɤ����write()�᥽�åɤ������ॢ���Ȥ��뤫��
-     * - OutPort�˳�����Ƥ�줿�Хåե����ե�ξ��ˡ�write()�᥽�åɤ��տޤɤ��꼺�Ԥ��뤫��
+     * - OutPortに割り当てされたバッファがフルの場合に、指定した時間どおりにwrite()メソッドがタイムアウトするか？
+     * - OutPortに割り当てられたバッファがフルの場合に、write()メソッドが意図どおり失敗するか？
      */
     void test_write_timeout()
     {
-      // ��˥ե���֤Ǥ���Хåե����Ѥ���OutPort���֥������Ȥ���������
+      // 常にフル状態であるバッファを用いてOutPortオブジェクトを生成する
       RTC::TimedDouble bindValue;
       RTC::OutPort<RTC::TimedDouble>* outPort
 	= new RTC::OutPort<RTC::TimedDouble>("OutPort", bindValue);
@@ -1722,10 +1722,10 @@ namespace OutPortTs
 					     "new"));
       inPort->connect(prof);
 
-      // OutPort���֥������Ȥ��Ф��ơ��֥��å��󥰥⡼��ON����ꤹ��
+      // OutPortオブジェクトに対して、ブロッキングモードONを指定する
 //      outPort->setWriteBlock(true);
 			
-      // OutPort���֥������Ȥ��Ф��ơ������ॢ�����ͤ���ꤹ��
+      // OutPortオブジェクトに対して、タイムアウト値を指定する
 //      outPort->setWriteTimeout(WTIMEOUT_USEC);
 			
       timeval tm_pre;
@@ -1742,10 +1742,10 @@ namespace OutPortTs
 	RTC::TimedDouble writeValue;
 	writeValue.data = i * 3.14159265;
 				
-	// OutPort�˳�����Ƥ�줿�Хåե����ե�ξ��ˡ�write()�᥽�åɤ��տޤɤ��꼺�Ԥ��뤫��
+	// OutPortに割り当てられたバッファがフルの場合に、write()メソッドが意図どおり失敗するか？
 	CPPUNIT_ASSERT(! outPort->write(writeValue));
 				
-	// OutPort�˳�����Ƥ��줿�Хåե����ե�ξ��ˡ����ꤷ�����֤ɤ����write()�᥽�åɤ������ॢ���Ȥ��Ƥ��뤫��
+	// OutPortに割り当てされたバッファがフルの場合に、指定した時間どおりにwrite()メソッドがタイムアウトしているか？
 	timeval tm_cur;
 	gettimeofday(&tm_cur, 0);
 				

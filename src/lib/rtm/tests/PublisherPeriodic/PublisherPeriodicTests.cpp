@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file   PublisherPeriodicTests.cpp
  * @brief  PublisherPeriodic test class
@@ -421,7 +421,7 @@ namespace PublisherPeriodic
     }
 		
     /*!
-     * @brief init()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief init()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
      */
     void test_init(void)
@@ -431,7 +431,7 @@ namespace PublisherPeriodic
         RTC::PublisherBase::ReturnCode retcode;
         coil::Properties prop;
 
-        //Properties¤¬¶õ¤Î¾õÂÖ¤Ç¤Ï¥¨¥é¡¼¤Ë¤Ê¤ë¤³¤È¤ò³ÎÇ§¤¹¤ë
+        //PropertiesãŒç©ºã®çŠ¶æ…‹ã§ã¯ã‚¨ãƒ©ãƒ¼ã«ãªã‚‹ã“ã¨ã‚’ç¢ºèªã™ã‚‹
         retcode = publisher.init(prop);
         //coil::usleep(10000);
         CPPUNIT_ASSERT_EQUAL(RTC::PublisherPeriodic::INVALID_ARGS, retcode);
@@ -442,12 +442,12 @@ namespace PublisherPeriodic
         prop.setProperty("measurement.period_count","1");
         prop.setProperty("publisher.push_rate","10.0");
 
-        //thread_type ¤¬ÉÔÀµ¤Î¾ì¹ç INVALID_ARGS ¤òÊÖ¤¹¤³¤È¤ò³ÎÇ§¤¹¤ë¡£
+        //thread_type ãŒä¸æ­£ã®å ´åˆ INVALID_ARGS ã‚’è¿”ã™ã“ã¨ã‚’ç¢ºèªã™ã‚‹ã€‚
         retcode = publisher.init(prop);
         //coil::usleep(10000);
         CPPUNIT_ASSERT_EQUAL(RTC::PublisherPeriodic::PORT_OK, retcode);
 
-        //°Ê²¼¤Îproperties¤ÎÀßÄê¤ÇÆ°ºî¤¹¤ë¤³¤È¤ò³ÎÇ§¤¹¤ë¡£
+        //ä»¥ä¸‹ã®propertiesã®è¨­å®šã§å‹•ä½œã™ã‚‹ã“ã¨ã‚’ç¢ºèªã™ã‚‹ã€‚
         prop.setProperty("publisher.push_policy","all");
         prop.setProperty("publisher.skip_count","0");
         prop.setProperty("thread_type","default");
@@ -534,7 +534,7 @@ namespace PublisherPeriodic
 
     }
     /*!
-     * @brief setConsumer()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief setConsumer()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
      */
     void test_setConsumer(void)
@@ -545,7 +545,7 @@ namespace PublisherPeriodic
                                     = new RTC::InPortCorbaCdrConsumer();
         RTC::PublisherPeriodic publisher;
 
-        //NULL¤òÅÏ¤·¤¿¾ì¹çINVALID_ARGS¤È¤Ê¤ë¤³¤È¤ò³ÎÇ§¤¹¤ë¡£
+        //NULLã‚’æ¸¡ã—ãŸå ´åˆINVALID_ARGSã¨ãªã‚‹ã“ã¨ã‚’ç¢ºèªã™ã‚‹ã€‚
         CPPUNIT_ASSERT_EQUAL(RTC::PublisherPeriodic::INVALID_ARGS, 
                              publisher.setConsumer(NULL));
 
@@ -561,7 +561,7 @@ namespace PublisherPeriodic
         delete consumer0;
     }
     /*!
-     * @brief setBuffer()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief setBuffer()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
      */
     void test_setBuffer(void)
@@ -570,7 +570,7 @@ namespace PublisherPeriodic
         RTC::CdrBufferBase* buffer1 = new RTC::CdrRingBuffer();
         RTC::PublisherPeriodic publisher;
 
-        //NULL¤òÅÏ¤·¤¿¾ì¹çINVALID_ARGS¤È¤Ê¤ë¤³¤È¤ò³ÎÇ§¤¹¤ë¡£
+        //NULLã‚’æ¸¡ã—ãŸå ´åˆINVALID_ARGSã¨ãªã‚‹ã“ã¨ã‚’ç¢ºèªã™ã‚‹ã€‚
         CPPUNIT_ASSERT_EQUAL(RTC::PublisherPeriodic::INVALID_ARGS, 
                              publisher.setBuffer(NULL));
 
@@ -586,7 +586,7 @@ namespace PublisherPeriodic
         delete buffer0;
     }
     /*!
-     * @brief activate(),deactivate(),isActive¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief activate(),deactivate(),isActiveãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
      */
     void test_activate_deactivate_isActive(void)
@@ -596,13 +596,13 @@ namespace PublisherPeriodic
         RTC::PublisherPeriodic publisher;
         publisher.setConsumer(consumer);
 
-        //init() ¤»¤º¤Ë activate() ¤ò¥³¡¼¥ë¤·¤¿¾ì¹ç¤òi
-        //PRECONDITION_NOT_MET ÊÖ¤¹¤³¤È¤ò³ÎÇ§¤¹¤ë¡£
+        //init() ã›ãšã« activate() ã‚’ã‚³ãƒ¼ãƒ«ã—ãŸå ´åˆã‚’i
+        //PRECONDITION_NOT_MET è¿”ã™ã“ã¨ã‚’ç¢ºèªã™ã‚‹ã€‚
         CPPUNIT_ASSERT_EQUAL(RTC::PublisherPeriodic::PRECONDITION_NOT_MET, 
                              publisher.activate());
 
-        //init() ¤»¤º¤Ë deactivate() ¤ò¥³¡¼¥ë¤·¤¿¾ì¹ç¤òi
-        //PRECONDITION_NOT_MET ÊÖ¤¹¤³¤È¤ò³ÎÇ§¤¹¤ë¡£
+        //init() ã›ãšã« deactivate() ã‚’ã‚³ãƒ¼ãƒ«ã—ãŸå ´åˆã‚’i
+        //PRECONDITION_NOT_MET è¿”ã™ã“ã¨ã‚’ç¢ºèªã™ã‚‹ã€‚
         CPPUNIT_ASSERT_EQUAL(RTC::PublisherPeriodic::PRECONDITION_NOT_MET, 
                              publisher.deactivate());
 
@@ -620,8 +620,8 @@ namespace PublisherPeriodic
         coil::usleep(10000);
 
         
-        //setBuffer() ¤»¤º¤Ë activate() ¤ò¥³¡¼¥ë¤·¤¿¾ì¹ç¤òi
-        //PRECONDITION_NOT_MET ÊÖ¤¹¤³¤È¤ò³ÎÇ§¤¹¤ë¡£
+        //setBuffer() ã›ãšã« activate() ã‚’ã‚³ãƒ¼ãƒ«ã—ãŸå ´åˆã‚’i
+        //PRECONDITION_NOT_MET è¿”ã™ã“ã¨ã‚’ç¢ºèªã™ã‚‹ã€‚
         CPPUNIT_ASSERT_EQUAL(RTC::PublisherPeriodic::PRECONDITION_NOT_MET, 
                              publisher.activate());
 
@@ -639,9 +639,9 @@ namespace PublisherPeriodic
         CPPUNIT_ASSERT_EQUAL(true, 
                              publisher.isActive());
 
-        //´û¤Ë activate ¤µ¤ì¤Æ¤¤¤ë¾ì¹ç¤Ï 
-        //activate¤¹¤ë¤È
-        //PORT_OK ¤òÊÖ¤¹¤³¤È¤ò³ÎÇ§¤¹¤ë¡£
+        //æ—¢ã« activate ã•ã‚Œã¦ã„ã‚‹å ´åˆã¯ 
+        //activateã™ã‚‹ã¨
+        //PORT_OK ã‚’è¿”ã™ã“ã¨ã‚’ç¢ºèªã™ã‚‹ã€‚
         CPPUNIT_ASSERT_EQUAL(RTC::PublisherPeriodic::PORT_OK, 
                              publisher.activate());
 
@@ -654,9 +654,9 @@ namespace PublisherPeriodic
         CPPUNIT_ASSERT_EQUAL(false, 
                              publisher.isActive());
         
-        //activate ¤µ¤ì¤Æ¤¤¤Ê¤¤¾õÂÖ¤Ç¡¢
-        //deactivate¤¹¤ë¤È
-        //PORT_OK ¤òÊÖ¤¹¤³¤È¤ò³ÎÇ§¤¹¤ë¡£
+        //activate ã•ã‚Œã¦ã„ãªã„çŠ¶æ…‹ã§ã€
+        //deactivateã™ã‚‹ã¨
+        //PORT_OK ã‚’è¿”ã™ã“ã¨ã‚’ç¢ºèªã™ã‚‹ã€‚
         CPPUNIT_ASSERT_EQUAL(RTC::PublisherPeriodic::PORT_OK, 
                              publisher.deactivate());
         
@@ -667,9 +667,9 @@ namespace PublisherPeriodic
         delete consumer;
     }
     /*!
-     * @brief write(), pushAll() ¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief write(), pushAll() ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      *
-     * -provider Â¦¤Î¥Ğ¥Ã¥Õ¥¡ full ¾õÂÖ¤Ç¤â¥Ç¡¼¥¿È´¤±¤¬¤¬¤Ê¤¤¤³¤È¤ò³ÎÇ§¤¹¤ë¡£
+     * -provider å´ã®ãƒãƒƒãƒ•ã‚¡ full çŠ¶æ…‹ã§ã‚‚ãƒ‡ãƒ¼ã‚¿æŠœã‘ãŒãŒãªã„ã“ã¨ã‚’ç¢ºèªã™ã‚‹ã€‚
      */
     void test_pushAll(void)
     {
@@ -739,7 +739,7 @@ namespace PublisherPeriodic
         }
 
         coil::usleep(150000);
-        //provider Â¦¤Î¥Ğ¥Ã¥Õ¥¡ full ¤Î¾õÂÖ¤Ç¥³¡¼¥ë(full)
+        //provider å´ã®ãƒãƒƒãƒ•ã‚¡ full ã®çŠ¶æ…‹ã§ã‚³ãƒ¼ãƒ«(full)
         {
         cdrMemoryStream cdr;
         RTC::TimedLong td;
@@ -759,8 +759,8 @@ namespace PublisherPeriodic
         coil::usleep(150000);
         }
 
-        //provider Â¦¤Î¥Ğ¥Ã¥Õ¥¡¤«¤é 4 ·ï¼èÆÀ
-        //(full ¤Ç¤Ï¤Ê¤¤¾õÂÖ¤Ë¤¹¤ë )
+        //provider å´ã®ãƒãƒƒãƒ•ã‚¡ã‹ã‚‰ 4 ä»¶å–å¾—
+        //(full ã§ã¯ãªã„çŠ¶æ…‹ã«ã™ã‚‹ )
         for(int icc(0);icc<4;++icc)
         {
             cdrMemoryStream data;
@@ -774,7 +774,7 @@ namespace PublisherPeriodic
         }
 
         coil::usleep(150000);
-        //provider Â¦¤Î¥Ğ¥Ã¥Õ¥¡ full ¤Ç¤Ï¤Ê¤¤¾õÂÖ¤Ç¥³¡¼¥ë
+        //provider å´ã®ãƒãƒƒãƒ•ã‚¡ full ã§ã¯ãªã„çŠ¶æ…‹ã§ã‚³ãƒ¼ãƒ«
         {
         cdrMemoryStream cdr;
         RTC::TimedLong td;
@@ -794,7 +794,7 @@ namespace PublisherPeriodic
         coil::usleep(150000);
         }
 
-        //¥Ç¡¼¥¿È´¤±¤¬¤¬¤Ê¤¤¤³¤È¤ò³ÎÇ§¤¹¤ë¡£
+        //ãƒ‡ãƒ¼ã‚¿æŠœã‘ãŒãŒãªã„ã“ã¨ã‚’ç¢ºèªã™ã‚‹ã€‚
         for(int icc(0);icc<8;++icc)
         {
             cdrMemoryStream data;
@@ -813,7 +813,7 @@ namespace PublisherPeriodic
         
     }
     /*!
-     * @brief write(), pushAll() ¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief write(), pushAll() ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      *
      * -
      */
@@ -895,8 +895,8 @@ namespace PublisherPeriodic
 
         }
 
-        //consumer ¤È provider Î¾Êı¤Î buffer ¤¬ full ¾õÂÖ¤Î¤¿¤á¡¢
-        // ¤³¤Î write ¥Ç¡¼¥¿¤ÏÈ´¤±¤ë¡£
+        //consumer ã¨ provider ä¸¡æ–¹ã® buffer ãŒ full çŠ¶æ…‹ã®ãŸã‚ã€
+        // ã“ã® write ãƒ‡ãƒ¼ã‚¿ã¯æŠœã‘ã‚‹ã€‚
         {
         cdrMemoryStream cdr;
         RTC::TimedLong td;
@@ -907,7 +907,7 @@ namespace PublisherPeriodic
         coil::usleep(150000);
         }
 
-        //¥Ç¡¼¥¿¤ò³ÎÇ§¤¹¤ë¡£
+        //ãƒ‡ãƒ¼ã‚¿ã‚’ç¢ºèªã™ã‚‹ã€‚
         for(int icc(0);icc<8;++icc)
         {
             cdrMemoryStream data;
@@ -921,7 +921,7 @@ namespace PublisherPeriodic
         }
 
         coil::usleep(300000);
-        //¥Ç¡¼¥¿¤ò³ÎÇ§¤¹¤ë¡£
+        //ãƒ‡ãƒ¼ã‚¿ã‚’ç¢ºèªã™ã‚‹ã€‚
         for(int icc(0);icc<8;++icc)
         {
             cdrMemoryStream data;
@@ -942,7 +942,7 @@ namespace PublisherPeriodic
                                  publisher.write(cdr,0,0));
         coil::usleep(150000);
         }
-        //¥Ç¡¼¥¿¤ò³ÎÇ§¤¹¤ë¡£
+        //ãƒ‡ãƒ¼ã‚¿ã‚’ç¢ºèªã™ã‚‹ã€‚
         {
         cdrMemoryStream data;
         data = consumer->get_m_put_data();
@@ -962,7 +962,7 @@ namespace PublisherPeriodic
         
     }
     /*!
-     * @brief pushFifo()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief pushFifo()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
      */
     void test_pushFifo(void)
@@ -1033,7 +1033,7 @@ namespace PublisherPeriodic
         coil::usleep(150000);
         }
 
-        //provider Â¦¤Î¥Ğ¥Ã¥Õ¥¡ full ¤Î¾õÂÖ¤Ç¥³¡¼¥ë(full)
+        //provider å´ã®ãƒãƒƒãƒ•ã‚¡ full ã®çŠ¶æ…‹ã§ã‚³ãƒ¼ãƒ«(full)
         {
         cdrMemoryStream cdr;
         RTC::TimedLong td;
@@ -1053,8 +1053,8 @@ namespace PublisherPeriodic
         coil::usleep(150000);
         }
 
-        //provider Â¦¤Î¥Ğ¥Ã¥Õ¥¡¤«¤é 4 ·ï¼èÆÀ
-        //(full ¤Ç¤Ï¤Ê¤¤¾õÂÖ¤Ë¤¹¤ë )
+        //provider å´ã®ãƒãƒƒãƒ•ã‚¡ã‹ã‚‰ 4 ä»¶å–å¾—
+        //(full ã§ã¯ãªã„çŠ¶æ…‹ã«ã™ã‚‹ )
         for(int icc(0);icc<4;++icc)
         {
             cdrMemoryStream data;
@@ -1068,7 +1068,7 @@ namespace PublisherPeriodic
         }
         coil::usleep(220000); //Waits to complete writing 8 and 9. 
 
-        //provider Â¦¤Î¥Ğ¥Ã¥Õ¥¡ full ¤Ç¤Ï¤Ê¤¤¾õÂÖ¤Ç¥³¡¼¥ë
+        //provider å´ã®ãƒãƒƒãƒ•ã‚¡ full ã§ã¯ãªã„çŠ¶æ…‹ã§ã‚³ãƒ¼ãƒ«
         {
         cdrMemoryStream cdr;
         RTC::TimedLong td;
@@ -1106,7 +1106,7 @@ namespace PublisherPeriodic
         coil::usleep(150000);
         }
 
-        //¥Ç¡¼¥¿È´¤±¤¬¤¬¤Ê¤¤¤³¤È¤ò³ÎÇ§¤¹¤ë¡£
+        //ãƒ‡ãƒ¼ã‚¿æŠœã‘ãŒãŒãªã„ã“ã¨ã‚’ç¢ºèªã™ã‚‹ã€‚
         for(int icc(0);icc<8;++icc)
         {
             cdrMemoryStream data;
@@ -1139,7 +1139,7 @@ namespace PublisherPeriodic
         
     }
     /*!
-     * @brief write(), pushFifo() ¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief write(), pushFifo() ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      *
      * -
      */
@@ -1198,7 +1198,7 @@ namespace PublisherPeriodic
         publisher.setBuffer(buffer);
         publisher.activate();
 
-        //consumer ¤È provider Î¾Êı¤Î buffer ¤ò full ¾õÂÖ¤Ë¤¹¤ë
+        //consumer ã¨ provider ä¸¡æ–¹ã® buffer ã‚’ full çŠ¶æ…‹ã«ã™ã‚‹
         for(int icc(0);icc<16;++icc)
         {
             cdrMemoryStream cdr;
@@ -1222,8 +1222,8 @@ namespace PublisherPeriodic
 
         }
 
-        //consumer ¤È provider Î¾Êı¤Î buffer ¤¬ full ¾õÂÖ¤Î¤¿¤á¡¢
-        // ¤³¤Î write ¥Ç¡¼¥¿¤ÏÈ´¤±¤ë¡£
+        //consumer ã¨ provider ä¸¡æ–¹ã® buffer ãŒ full çŠ¶æ…‹ã®ãŸã‚ã€
+        // ã“ã® write ãƒ‡ãƒ¼ã‚¿ã¯æŠœã‘ã‚‹ã€‚
         {
         cdrMemoryStream cdr;
         RTC::TimedLong td;
@@ -1234,7 +1234,7 @@ namespace PublisherPeriodic
         coil::usleep(100000);
         }
 
-        //¥Ç¡¼¥¿¤ò³ÎÇ§¤¹¤ë¡£
+        //ãƒ‡ãƒ¼ã‚¿ã‚’ç¢ºèªã™ã‚‹ã€‚
         for(int icc(0);icc<8;++icc)
         {
             cdrMemoryStream data;
@@ -1248,7 +1248,7 @@ namespace PublisherPeriodic
         }
 
         coil::usleep(800000);
-        // ¤³¤Î write ¥Ç¡¼¥¿¤ÏÅ¾Á÷¤µ¤ì¤ë¡£
+        // ã“ã® write ãƒ‡ãƒ¼ã‚¿ã¯è»¢é€ã•ã‚Œã‚‹ã€‚
         for(int icc(0);icc<8;++icc)
         {
             cdrMemoryStream cdr;
@@ -1270,7 +1270,7 @@ namespace PublisherPeriodic
             coil::usleep(100000);
         }
         coil::usleep(80000);
-        //¥Ç¡¼¥¿¤ò³ÎÇ§¤¹¤ë¡£
+        //ãƒ‡ãƒ¼ã‚¿ã‚’ç¢ºèªã™ã‚‹ã€‚
         for(int icc(0);icc<8;++icc)
         {
             cdrMemoryStream data;
@@ -1293,7 +1293,7 @@ namespace PublisherPeriodic
         coil::usleep(100000);
         }
         coil::usleep(800000);
-        //¥Ç¡¼¥¿¤ò³ÎÇ§¤¹¤ë¡£
+        //ãƒ‡ãƒ¼ã‚¿ã‚’ç¢ºèªã™ã‚‹ã€‚
         for(int icc(0);icc<8;++icc)
         {
             cdrMemoryStream data;
@@ -1315,7 +1315,7 @@ namespace PublisherPeriodic
         
     }
     /*!
-     * @brief pushSklip()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief pushSklip()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
      */
     void test_pushSkip(void)
@@ -1386,7 +1386,7 @@ namespace PublisherPeriodic
             coil::usleep(150000);
         }
 
-        //provider Â¦¤Î¥Ğ¥Ã¥Õ¥¡ full ¤Î¾õÂÖ¤Ç¥³¡¼¥ë(full)
+        //provider å´ã®ãƒãƒƒãƒ•ã‚¡ full ã®çŠ¶æ…‹ã§ã‚³ãƒ¼ãƒ«(full)
         {
         cdrMemoryStream cdr;
         RTC::TimedLong td;
@@ -1406,8 +1406,8 @@ namespace PublisherPeriodic
         coil::usleep(150000);
         }
 
-        //provider Â¦¤Î¥Ğ¥Ã¥Õ¥¡¤«¤é 4 ·ï¼èÆÀ
-        //(full ¤Ç¤Ï¤Ê¤¤¾õÂÖ¤Ë¤¹¤ë )
+        //provider å´ã®ãƒãƒƒãƒ•ã‚¡ã‹ã‚‰ 4 ä»¶å–å¾—
+        //(full ã§ã¯ãªã„çŠ¶æ…‹ã«ã™ã‚‹ )
         for(int icc(0);icc<4;++icc)
         {
             cdrMemoryStream data;
@@ -1421,7 +1421,7 @@ namespace PublisherPeriodic
         }
 
         coil::usleep(450000);
-        //provider Â¦¤Î¥Ğ¥Ã¥Õ¥¡ full ¤Ç¤Ï¤Ê¤¤¾õÂÖ¤Ç¥³¡¼¥ë
+        //provider å´ã®ãƒãƒƒãƒ•ã‚¡ full ã§ã¯ãªã„çŠ¶æ…‹ã§ã‚³ãƒ¼ãƒ«
         {
         cdrMemoryStream cdr;
         RTC::TimedLong td;
@@ -1441,7 +1441,7 @@ namespace PublisherPeriodic
         coil::usleep(150000);
         }
 
-        //¥Ç¡¼¥¿È´¤±¤¬¤¬¤Ê¤¤¤³¤È¤ò³ÎÇ§¤¹¤ë¡£
+        //ãƒ‡ãƒ¼ã‚¿æŠœã‘ãŒãŒãªã„ã“ã¨ã‚’ç¢ºèªã™ã‚‹ã€‚
         CPPUNIT_ASSERT_EQUAL(6,
                               consumer->get_m_put_data_len());
         for(int icc(0);icc<6;++icc)
@@ -1462,7 +1462,7 @@ namespace PublisherPeriodic
         delete consumer;
     }
     /*!
-     * @brief write(), pushSkip() ¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief write(), pushSkip() ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      *
      * -
      */
@@ -1521,7 +1521,7 @@ namespace PublisherPeriodic
         publisher.setBuffer(buffer);
         publisher.activate();
 
-        //consumer ¤È provider Î¾Êı¤Î buffer ¤ò full ¾õÂÖ¤Ë¤¹¤ë
+        //consumer ã¨ provider ä¸¡æ–¹ã® buffer ã‚’ full çŠ¶æ…‹ã«ã™ã‚‹
         for(int icc(0);icc<25;++icc)
         {
             cdrMemoryStream cdr;
@@ -1545,8 +1545,8 @@ namespace PublisherPeriodic
 
         }
 
-        //consumer ¤È provider Î¾Êı¤Î buffer ¤¬ full ¾õÂÖ¤Î¤¿¤á¡¢
-        // ¤³¤Î write ¥Ç¡¼¥¿¤ÏÈ´¤±¤ë¡£
+        //consumer ã¨ provider ä¸¡æ–¹ã® buffer ãŒ full çŠ¶æ…‹ã®ãŸã‚ã€
+        // ã“ã® write ãƒ‡ãƒ¼ã‚¿ã¯æŠœã‘ã‚‹ã€‚
         {
         cdrMemoryStream cdr;
         RTC::TimedLong td;
@@ -1557,7 +1557,7 @@ namespace PublisherPeriodic
         coil::usleep(150000);
         }
 
-        //¥Ç¡¼¥¿¤ò³ÎÇ§¤¹¤ë¡£
+        //ãƒ‡ãƒ¼ã‚¿ã‚’ç¢ºèªã™ã‚‹ã€‚
         for(int icc(0);icc<8;++icc)
         {
             cdrMemoryStream data;
@@ -1571,7 +1571,7 @@ namespace PublisherPeriodic
         }
 
         coil::usleep(150000);
-        //¥Ç¡¼¥¿¤ò³ÎÇ§¤¹¤ë¡£
+        //ãƒ‡ãƒ¼ã‚¿ã‚’ç¢ºèªã™ã‚‹ã€‚
         int len =consumer->get_m_put_data_len();
         CPPUNIT_ASSERT_EQUAL(4,len);
         for(int icc(0);icc<len;++icc)
@@ -1604,7 +1604,7 @@ namespace PublisherPeriodic
                                  publisher.write(cdr,0,0));
         coil::usleep(150000);
         }
-        //¥Ç¡¼¥¿¤ò³ÎÇ§¤¹¤ë¡£
+        //ãƒ‡ãƒ¼ã‚¿ã‚’ç¢ºèªã™ã‚‹ã€‚
         {
 
         cdrMemoryStream data;
@@ -1625,7 +1625,7 @@ namespace PublisherPeriodic
         
     }
     /*!
-     * @brief pushNew()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief pushNew()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
      */
     void test_pushNew(void)
@@ -1683,8 +1683,8 @@ namespace PublisherPeriodic
         publisher.setBuffer(buffer);
         publisher.activate();
 
-        //8·ï¤Î¥Ç¡¼¥¿¤ÏÅ¾Á÷¤µ¤ì¤Ê¤¤
-        //ºÇ¿·¥Ç¡¼¥¿¤Î7¤ÏÅ¾Á÷¤µ¤ì¤ë¡£
+        //8ä»¶ã®ãƒ‡ãƒ¼ã‚¿ã¯è»¢é€ã•ã‚Œãªã„
+        //æœ€æ–°ãƒ‡ãƒ¼ã‚¿ã®7ã¯è»¢é€ã•ã‚Œã‚‹ã€‚
         for(int icc(0);icc<8;++icc)
         {
             cdrMemoryStream cdr;
@@ -1699,7 +1699,7 @@ namespace PublisherPeriodic
 
   
         coil::usleep(150000);
-        //provider Â¦¤Î¥Ğ¥Ã¥Õ¥¡¤«¤é¼èÆÀ
+        //provider å´ã®ãƒãƒƒãƒ•ã‚¡ã‹ã‚‰å–å¾—
         //
         int len = consumer->get_m_put_data_len() -1;
         for(int icc(0);icc<len;++icc)
@@ -1710,7 +1710,7 @@ namespace PublisherPeriodic
             CPPUNIT_ASSERT_EQUAL(12,(int)inlen);
         }
         coil::usleep(150000);
-        //ºÇ¿·¥Ç¡¼¥¿¤¬Å¾Á÷¤µ¤ì¤Æ¤¤¤ë¤³¤È¤ò³ÎÇ§¤¹¤ë¡£
+        //æœ€æ–°ãƒ‡ãƒ¼ã‚¿ãŒè»¢é€ã•ã‚Œã¦ã„ã‚‹ã“ã¨ã‚’ç¢ºèªã™ã‚‹ã€‚
         {
         cdrMemoryStream data;
         data = consumer->get_m_put_data();
@@ -1728,9 +1728,9 @@ namespace PublisherPeriodic
         delete consumer;
     }
     /*!
-     * @brief write()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief write()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - ¼ê½ç¤òÌµ»ë¤·¤Æ write ¤·¤¿¾ì¹ç
+     * - æ‰‹é †ã‚’ç„¡è¦–ã—ã¦ write ã—ãŸå ´åˆ
      */
     void test_write(void)
     {
@@ -1846,44 +1846,44 @@ namespace PublisherPeriodic
         delete consumer;
     }
     /*!
-     * @brief ¥Ç¥¹¥È¥é¥¯¥¿¤Î¥Æ¥¹¥È
+     * @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - ¥Ç¥¹¥È¥é¥¯¥¿¸Æ½Ğ¤Ë¤è¤ê¡¢release()¥á¥½¥Ã¥É¤ò¸Æ¤Ó½Ğ¤µ¤º¤È¤âPublisher¤ÎÆ°ºî¤¬ÌäÂê¤Ê¤¯Ää»ß¤¹¤ë¤«¡©
+     * - ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿å‘¼å‡ºã«ã‚ˆã‚Šã€release()ãƒ¡ã‚½ãƒƒãƒ‰ã‚’å‘¼ã³å‡ºã•ãšã¨ã‚‚Publisherã®å‹•ä½œãŒå•é¡Œãªãåœæ­¢ã™ã‚‹ã‹ï¼Ÿ
      */
 /*
     void test_destructor()
     {
       CounterConsumer* consumer1 = new CounterConsumer();
 
-      { // Publisher¤Î¥¤¥ó¥¹¥¿¥ó¥¹¥¹¥³¡¼¥×³«»Ï
+      { // Publisherã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚¹ã‚³ãƒ¼ãƒ—é–‹å§‹
 	CounterConsumer* consumer2 = new CounterConsumer(consumer1);
 	coil::Properties prop;
 	prop.setProperty("dataport.push_rate", "10"); // 10 [Hz]
 	RTC::PublisherPeriodic publisher(consumer2, prop);
-	// 5 [sec]¤À¤±Æ°ºî¤µ¤»¤ë
+	// 5 [sec]ã ã‘å‹•ä½œã•ã›ã‚‹
 	coil::usleep(5000000);
 				
-      } // ¥Ç¥¹¥È¥é¥¯¥¿¤ò¸Æ¤Ó½Ğ¤¹¡Ê¥¹¥³¡¼¥×¤ò½ªÎ»¤µ¤»¤ë¡Ë
+      } // ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã‚’å‘¼ã³å‡ºã™ï¼ˆã‚¹ã‚³ãƒ¼ãƒ—ã‚’çµ‚äº†ã•ã›ã‚‹ï¼‰
 			
-      coil::usleep(1000000); // ´°Á´Ää»ß¤¹¤ë¤Ş¤ÇÂÔ¤Ä
+      coil::usleep(1000000); // å®Œå…¨åœæ­¢ã™ã‚‹ã¾ã§å¾…ã¤
 			
-      // ¤³¤Î»şÅÀ¤Ç¤Î¸Æ½Ğ²ó¿ô¤òµ­Ï¿¤¹¤ë
+      // ã“ã®æ™‚ç‚¹ã§ã®å‘¼å‡ºå›æ•°ã‚’è¨˜éŒ²ã™ã‚‹
       int countReleased = consumer1->getCount();
 			
-      // ¤µ¤é¤ËConsumer¤¬¥³¡¼¥ë¥Ğ¥Ã¥¯¤µ¤ìÆÀ¤ë»ş´Ö¤òÍ¿¤¨¤ë
+      // ã•ã‚‰ã«ConsumerãŒã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ã•ã‚Œå¾—ã‚‹æ™‚é–“ã‚’ä¸ãˆã‚‹
       coil::usleep(5000000); // 5 [sec]
 			
-      // ¤³¤Î»şÅÀ¤Ç¤Î¸Æ½Ğ²ó¿ô¤ò¼èÆÀ¤·¡¢Àè¤Ëµ­Ï¿¤·¤Æ¤ª¤¤¤¿²ó¿ô¤«¤éÊÑ²½¤¬¤Ê¤¤
-      // ¡Ê¤Ä¤Ş¤ê¡¢Publisher¤ÎÆ°ºî¤¬Ää»ß¤·¤Æ¤¤¤ë¡Ë¤³¤È¤ò³ÎÇ§¤¹¤ë
+      // ã“ã®æ™‚ç‚¹ã§ã®å‘¼å‡ºå›æ•°ã‚’å–å¾—ã—ã€å…ˆã«è¨˜éŒ²ã—ã¦ãŠã„ãŸå›æ•°ã‹ã‚‰å¤‰åŒ–ãŒãªã„
+      // ï¼ˆã¤ã¾ã‚Šã€Publisherã®å‹•ä½œãŒåœæ­¢ã—ã¦ã„ã‚‹ï¼‰ã“ã¨ã‚’ç¢ºèªã™ã‚‹
       int countSleeped = consumer1->getCount();
       CPPUNIT_ASSERT_EQUAL(countReleased, countSleeped);
     }
 */
 		
     /*!
-     * @brief release()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief release()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - release()¥á¥½¥Ã¥É¸Æ½Ğ¤Ë¤è¤êPublisher¤ÎÆ°ºî¤¬Ää»ß¤¹¤ë¤«¡©
+     * - release()ãƒ¡ã‚½ãƒƒãƒ‰å‘¼å‡ºã«ã‚ˆã‚ŠPublisherã®å‹•ä½œãŒåœæ­¢ã™ã‚‹ã‹ï¼Ÿ
      */
 /*
     void test_release()
@@ -1893,30 +1893,30 @@ namespace PublisherPeriodic
       prop.setProperty("dataport.push_rate", "10"); // 10 [Hz]
       RTC::PublisherPeriodic publisher(consumer, prop);
 			
-      // 5 [sec]¤À¤±Æ°ºî¤µ¤»¤ë
+      // 5 [sec]ã ã‘å‹•ä½œã•ã›ã‚‹
       coil::usleep(5000000);
 			
-      // Publisher¤ÎÆ°ºî¤òÄä»ß¤µ¤»¤ë
+      // Publisherã®å‹•ä½œã‚’åœæ­¢ã•ã›ã‚‹
       publisher.release();
-      coil::usleep(1000000); // ´°Á´Ää»ß¤¹¤ë¤Ş¤ÇÂÔ¤Ä
+      coil::usleep(1000000); // å®Œå…¨åœæ­¢ã™ã‚‹ã¾ã§å¾…ã¤
 			
-      // ¤³¤Î»şÅÀ¤Ç¤Î¸Æ½Ğ²ó¿ô¤òµ­Ï¿¤¹¤ë
+      // ã“ã®æ™‚ç‚¹ã§ã®å‘¼å‡ºå›æ•°ã‚’è¨˜éŒ²ã™ã‚‹
       int countReleased = consumer->getCount();
 			
-      // ¤µ¤é¤ËConsumer¤¬¥³¡¼¥ë¥Ğ¥Ã¥¯¤µ¤ìÆÀ¤ë»ş´Ö¤òÍ¿¤¨¤ë
+      // ã•ã‚‰ã«ConsumerãŒã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ã•ã‚Œå¾—ã‚‹æ™‚é–“ã‚’ä¸ãˆã‚‹
       coil::usleep(5000000); // 5 [sec]
 			
-      // ¤³¤Î»şÅÀ¤Ç¤Î¸Æ½Ğ²ó¿ô¤ò¼èÆÀ¤·¡¢Àè¤Ëµ­Ï¿¤·¤Æ¤ª¤¤¤¿²ó¿ô¤«¤éÊÑ²½¤¬¤Ê¤¤
-      // ¡Ê¤Ä¤Ş¤ê¡¢Publisher¤ÎÆ°ºî¤¬Ää»ß¤·¤Æ¤¤¤ë¡Ë¤³¤È¤ò³ÎÇ§¤¹¤ë
+      // ã“ã®æ™‚ç‚¹ã§ã®å‘¼å‡ºå›æ•°ã‚’å–å¾—ã—ã€å…ˆã«è¨˜éŒ²ã—ã¦ãŠã„ãŸå›æ•°ã‹ã‚‰å¤‰åŒ–ãŒãªã„
+      // ï¼ˆã¤ã¾ã‚Šã€Publisherã®å‹•ä½œãŒåœæ­¢ã—ã¦ã„ã‚‹ï¼‰ã“ã¨ã‚’ç¢ºèªã™ã‚‹
       int countSleeped = consumer->getCount();
       CPPUNIT_ASSERT_EQUAL(countReleased, countSleeped);
     }
 */
 		
     /*!
-     * @brief Publisher¤Ë¤è¤ëConsumer¸Æ½Ğ´Ö³ÖÀºÅÙ¤Î¥Æ¥¹¥È
+     * @brief Publisherã«ã‚ˆã‚‹Consumerå‘¼å‡ºé–“éš”ç²¾åº¦ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - Publisher¤Ë»ØÄê¤·¤¿»ş´Ö´Ö³Ö¤Ç¡¢Àµ¤·¤¯Consumer¤¬¥³¡¼¥ë¥Ğ¥Ã¥¯¤µ¤ì¤ë¤«¡©
+     * - Publisherã«æŒ‡å®šã—ãŸæ™‚é–“é–“éš”ã§ã€æ­£ã—ãConsumerãŒã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ã•ã‚Œã‚‹ã‹ï¼Ÿ
      */
 /*
     void test_interval_accuracy()
@@ -1926,14 +1926,14 @@ namespace PublisherPeriodic
       prop.setProperty("dataport.push_rate", "10"); // 10 [Hz]
       RTC::PublisherPeriodic publisher(consumer, prop);
 			
-      // 5 [sec]¤À¤±Æ°ºî¤µ¤»¤ë
+      // 5 [sec]ã ã‘å‹•ä½œã•ã›ã‚‹
       coil::usleep(5000000);
 			
-      // Publisher¤ÎÆ°ºî¤òÄä»ß¤µ¤»¤ë
+      // Publisherã®å‹•ä½œã‚’åœæ­¢ã•ã›ã‚‹
       publisher.release();
-      coil::usleep(1000000); // ´°Á´Ää»ß¤¹¤ë¤Ş¤ÇÂÔ¤Ä
+      coil::usleep(1000000); // å®Œå…¨åœæ­¢ã™ã‚‹ã¾ã§å¾…ã¤
 			
-      // »ØÄê¤·¤¿»ş´Ö´Ö³Ö¤ÇÀµ¤·¤¯Consumer¤¬¥³¡¼¥ë¥Ğ¥Ã¥¯¤µ¤ì¤Æ¤¤¤ë¤«¡©
+      // æŒ‡å®šã—ãŸæ™‚é–“é–“éš”ã§æ­£ã—ãConsumerãŒã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ã•ã‚Œã¦ã„ã‚‹ã‹ï¼Ÿ
       long permissibleTickMin = static_cast<long>(100000 * 0.9);
       long permissibleTickMax = static_cast<long>(100000 * 1.1);
       const std::vector<long> intervalTicks = consumer->getIntervalTicks();

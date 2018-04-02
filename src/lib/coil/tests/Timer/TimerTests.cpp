@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file   TimerTests.cpp
  * @brief  Timer test class
@@ -114,9 +114,9 @@ namespace Timer
     {
     }
     /*!
-     * @brief registerListener()�᥽�åɤΥƥ���
+     * @brief registerListener()・皈ス・テ・ノ、ホ・ニ・ケ・ネ
      * 
-     * - �����ޤ�ư�������餫������Ͽ����E���E��ʤ��տޤɤ���λ��ֳִ֤ǥ�����EХå�����E�E���
+     * - ・ソ・、・゛、ッニー、キ。「、「、鬢ォ、ク、眷ミマソ、オ、・ソ・・ケ・ハ、ャーユゾ、ノ、ェ、熙ホサ峇岾屬妊魁璽・ミ・テ・ッ、オ、・・ォ。ゥ
      * 
      */
     void test_registerListener()
@@ -143,14 +143,14 @@ namespace Timer
 	  }
 	  timer.stop();
       sprintf(cstr, "count:%d", listener._count );
-      // ���äˣ���θƽФʤΤǡ������󥫥���Ȥ���EƤ���EϤ������٤��θ���ơ�������������ϰϤǤ���E��Ȥ��ǧ����E�      
+      // 」アノテ、ヒ」アイホクニスミ、ハ、ホ、ヌ。「」ア」ーイォ・ヲ・ネ、オ、・ニ、、、・マ、コ。」タコナル、ヘホク、キ、ニ。「」ケ。チ」ア」アイホネマーマ、ヌ、「、・ウ、ネ、ホヌァ、ケ、・」      
       CPPUNIT_ASSERT_MESSAGE(cstr ,(JUDGEMIN <= listener._count) && (listener._count <= JUDGEMAX));
     }
 
     /*!
-     * @brief ʣ���Υ����ޡ������Ū��ľ���ư��������Eƥ���
+     * @brief ハ」ソホ・ソ・、・゛。シ、崚Ⅳ膨称鵑貌虻硺気擦・ニ・ケ・ネ
      * 
-     * - ���ĤΥ����ޡ���ư�����ߤ��˴��Ĥ���E��Ȥʤ������餫������Ͽ����E���E��ʤ��տޤɤ���λ��ֳִ֤ǥ�����EХå�����E�E���
+     * - 」イ、ト、ホ・ソ・、・゛。シ、ホニーコ釥ャク゜、、、ヒエウセト、ケ、・ウ、ネ、ハ、ッ。「、「、鬢ォ、ク、眷ミマソ、オ、・ソ・・ケ・ハ、ャーユゾ、ノ、ェ、熙ホサ峇岾屬妊魁璽・ミ・テ・ッ、オ、・・ォ。ゥ
      * 
      */
     void test_activate_multi_timers_continuously()
@@ -199,7 +199,7 @@ namespace Timer
 	  }
       timer2.stop();
 
-      // ���äˣ���θƽФʤΤǡ������󥫥���Ȥ���EƤ���EϤ������٤��θ���ơ�������������ϰϤǤ���E��Ȥ��ǧ����E�
+      // 」アノテ、ヒ」アイホクニスミ、ハ、ホ、ヌ。「」ア」ーイォ・ヲ・ネ、オ、・ニ、、、・マ、コ。」タコナル、ヘホク、キ、ニ。「」ケ。チ」ア」アイホネマーマ、ヌ、「、・ウ、ネ、ホヌァ、ケ、・」
       sprintf(cstr,"count:%d", listener1._count);
       CPPUNIT_ASSERT_MESSAGE(cstr, (JUDGEMIN <= listener1._count) && (listener1._count <= JUDGEMAX));
       sprintf(cstr,"count:%d", listener2._count);
@@ -207,9 +207,9 @@ namespace Timer
     }
 
     /*!
-     * @brief ʣ���Υ����ޡ������Ū�������ư��������Eƥ���
+     * @brief ハ」ソホ・ソ・、・゛。シ、崚Ⅳ吠体鵑貌虻硺気擦・ニ・ケ・ネ
      * 
-     * - ���ĤΥ����ޡ���ư�����ߤ��˴��Ĥ���E��Ȥʤ������餫������Ͽ����E���E��ʤ��տޤɤ���λ��ֳִ֤ǥ�����EХå�����E�E���
+     * - 」イ、ト、ホ・ソ・、・゛。シ、ホニーコ釥ャク゜、、、ヒエウセト、ケ、・ウ、ネ、ハ、ッ。「、「、鬢ォ、ク、眷ミマソ、オ、・ソ・・ケ・ハ、ャーユゾ、ノ、ェ、熙ホサ峇岾屬妊魁璽・ミ・テ・ッ、オ、・・ォ。ゥ
      * 
      */
     void test_activate_multi_timers_concurrently()
@@ -248,7 +248,7 @@ namespace Timer
       timer1.stop();
       timer2.stop();
 
-      // ���äˣ���θƽФʤΤǡ������󥫥���Ȥ���EƤ���EϤ������٤��θ���ơ�������������ϰϤǤ���E��Ȥ��ǧ����E�
+      // 」アノテ、ヒ」アイホクニスミ、ハ、ホ、ヌ。「」ア」ーイォ・ヲ・ネ、オ、・ニ、、、・マ、コ。」タコナル、ヘホク、キ、ニ。「」ケ。チ」ア」アイホネマーマ、ヌ、「、・ウ、ネ、ホヌァ、ケ、・」
       sprintf(cstr,"count:%d", listener1._count);
       CPPUNIT_ASSERT_MESSAGE(cstr, (JUDGEMIN <= listener1._count) && (listener1._count <= JUDGEMAX));
       sprintf(cstr,"count:%d", listener2._count);

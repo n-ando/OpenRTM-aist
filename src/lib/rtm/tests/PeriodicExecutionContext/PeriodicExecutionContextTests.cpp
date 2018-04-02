@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file   PeriodicExecutionContextTests.cpp
  * @brief  PeriodicExecutionContext test class
@@ -337,7 +337,7 @@ namespace PeriodicExecutionContext
     PeriodicExecutionContextMock() : RTC_exp::PeriodicExecutionContext() {}
     virtual ~PeriodicExecutionContextMock(void){}
 
-    // protected: ÊÑ¿ô¤ò¤³¤³¤Ç¹¹¿·
+    // protected: å¤‰æ•°ã‚’ã“ã“ã§æ›´æ–°
     void set_m_ref()
       {
         RTC_exp::PeriodicExecutionContext::m_ref = m_refmock;
@@ -429,25 +429,25 @@ namespace PeriodicExecutionContext
     }
 		
     /*!
-     * @brief is_running()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief is_running()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - start()¸Æ½ĞÁ°¤Ï¡¢Èórunning¾õÂÖ¤«¡©
-     * - start()¸Æ½Ğ¤·¸å¤Ï¡¢running¾õÂÖ¤«¡©
-     * - stop()¸Æ½Ğ¸å¤Ï¡¢Èórunning¾õÂÖ¤«¡©
+     * - start()å‘¼å‡ºå‰ã¯ã€érunningçŠ¶æ…‹ã‹ï¼Ÿ
+     * - start()å‘¼å‡ºã—å¾Œã¯ã€runningçŠ¶æ…‹ã‹ï¼Ÿ
+     * - stop()å‘¼å‡ºå¾Œã¯ã€érunningçŠ¶æ…‹ã‹ï¼Ÿ
      */
     void test_is_running()
     {
       RTC_exp::PeriodicExecutionContext* ec
 	= new RTC_exp::PeriodicExecutionContext(); // will be deleted automatically
 			
-      // start()¸Æ½Ğ¤·Á°¤Ï¡¢Èórunning¾õÂÖ¤«¡©
+      // start()å‘¼å‡ºã—å‰ã¯ã€érunningçŠ¶æ…‹ã‹ï¼Ÿ
       CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(false), ec->is_running());
 			
-      // start()¸Æ½Ğ¤·¸å¤Ï¡¢running¾õÂÖ¤«¡©
+      // start()å‘¼å‡ºã—å¾Œã¯ã€runningçŠ¶æ…‹ã‹ï¼Ÿ
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->start());
       CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(true), ec->is_running());
 			
-      // stop()¸Æ½Ğ¸å¤Ï¡¢Èórunning¾õÂÖ¤«¡©
+      // stop()å‘¼å‡ºå¾Œã¯ã€érunningçŠ¶æ…‹ã‹ï¼Ÿ
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->stop());
       CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(false), ec->is_running());
 
@@ -456,32 +456,32 @@ namespace PeriodicExecutionContext
     }
 		
     /*!
-     * @brief start()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief start()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - start()¥á¥½¥Ã¥É¸Æ½Ğ¤·¤Ë¤è¤ê¡¢¥³¥ó¥İ¡¼¥Í¥ó¥È¤Îon_startup()¤¬¸Æ¤Ó½Ğ¤µ¤ì¤ë¤«¡©
+     * - start()ãƒ¡ã‚½ãƒƒãƒ‰å‘¼å‡ºã—ã«ã‚ˆã‚Šã€ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã®on_startup()ãŒå‘¼ã³å‡ºã•ã‚Œã‚‹ã‹ï¼Ÿ
      */
     void test_start_invoking_on_startup()
     {
-      // RTObject¤òÀ¸À®¤¹¤ë
+      // RTObjectã‚’ç”Ÿæˆã™ã‚‹
       POA_RTC::LightweightRTObject* rto
 	= new DataFlowComponentMock(); // will be deleted automatically
       DataFlowComponentMock* mock
 	= dynamic_cast<DataFlowComponentMock*>(rto);
 			
-      // ExecutionContext¤òÀ¸À®¤¹¤ë
+      // ExecutionContextã‚’ç”Ÿæˆã™ã‚‹
       RTC_exp::PeriodicExecutionContext* ec
 	= new RTC_exp::PeriodicExecutionContext(); // will be deleted automatically
 				
-      // ExecutionContext¤ËRTObject¤òÅĞÏ¿¤¹¤ë
+      // ExecutionContextã«RTObjectã‚’ç™»éŒ²ã™ã‚‹
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->add_component(rto->_this()));
 			
-      // ¤³¤Î»şÅÀ¤Ç¤Ï¡¢¤Ş¤Àon_startup()¤Ï¸Æ¤Ó½Ğ¤µ¤ì¤Æ¤¤¤Ê¤¤¤Ï¤º
+      // ã“ã®æ™‚ç‚¹ã§ã¯ã€ã¾ã on_startup()ã¯å‘¼ã³å‡ºã•ã‚Œã¦ã„ãªã„ã¯ãš
       CPPUNIT_ASSERT_EQUAL(0, mock->countLog("on_startup"));
 			
-      // start()¤ò¸Æ¤Ó½Ğ¤¹
+      // start()ã‚’å‘¼ã³å‡ºã™
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->start());
 			
-      // ¤³¤Î»şÅÀ¤Ç¡¢on_startup()¤¬1²ó¤À¤±¸Æ¤Ó½Ğ¤µ¤ì¤Æ¤¤¤ë¤Ï¤º
+      // ã“ã®æ™‚ç‚¹ã§ã€on_startup()ãŒ1å›ã ã‘å‘¼ã³å‡ºã•ã‚Œã¦ã„ã‚‹ã¯ãš
       CPPUNIT_ASSERT_EQUAL(1, mock->countLog("on_startup"));
 
       ec->stop();
@@ -492,23 +492,23 @@ namespace PeriodicExecutionContext
     }
 		
     /*!
-     * @brief start()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief start()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - ¤¹¤Ç¤Ërunning¾õÂÖ¤Îºİ¡¢start()¸Æ½Ğ¤¬°Õ¿Ş¤É¤ª¤ê¤Ë¼ºÇÔ¤¹¤ë¤«¡©
+     * - ã™ã§ã«runningçŠ¶æ…‹ã®éš›ã€start()å‘¼å‡ºãŒæ„å›³ã©ãŠã‚Šã«å¤±æ•—ã™ã‚‹ã‹ï¼Ÿ
      */
     void test_start_with_running()
     {
       RTC_exp::PeriodicExecutionContext* ec
 	= new RTC_exp::PeriodicExecutionContext(); // will be deleted automatically
 			
-      // start()¸Æ½Ğ¤·Á°¤Ï¡¢Èórunning¾õÂÖ¤Î¤Ï¤º
+      // start()å‘¼å‡ºã—å‰ã¯ã€érunningçŠ¶æ…‹ã®ã¯ãš
       CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(false), ec->is_running());
 			
-      // start()¸Æ½Ğ¤·¸å¤Ï¡¢running¾õÂÖ¤Î¤Ï¤º
+      // start()å‘¼å‡ºã—å¾Œã¯ã€runningçŠ¶æ…‹ã®ã¯ãš
       ec->start();
       CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(true), ec->is_running());
 			
-      // ¤µ¤é¤Ëstart()¸Æ½Ğ¤·¤ò¹Ô¤¤¡¢°Õ¿Ş¤É¤ª¤ê¤Î¥¨¥é¡¼¥³¡¼¥É¤ÇÌá¤ë¤³¤È¤ò³ÎÇ§¤¹¤ë
+      // ã•ã‚‰ã«start()å‘¼å‡ºã—ã‚’è¡Œã„ã€æ„å›³ã©ãŠã‚Šã®ã‚¨ãƒ©ãƒ¼ã‚³ãƒ¼ãƒ‰ã§æˆ»ã‚‹ã“ã¨ã‚’ç¢ºèªã™ã‚‹
       CPPUNIT_ASSERT_EQUAL(RTC::PRECONDITION_NOT_MET, ec->start());
 
       ec->stop();
@@ -517,26 +517,26 @@ namespace PeriodicExecutionContext
     }
 		
     /*!
-     * @brief start()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief start()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - Alive¾õÂÖ¤Ë¤Ê¤¤¾ì¹ç¤Ëstart()¥á¥½¥Ã¥É¤ò¸Æ½Ğ¤·¤Æ¡¢°Õ¿Ş¤É¤ª¤ê¤Ë¼ºÇÔ¤¹¤ë¤«¡©
+     * - AliveçŠ¶æ…‹ã«ãªã„å ´åˆã«start()ãƒ¡ã‚½ãƒƒãƒ‰ã‚’å‘¼å‡ºã—ã¦ã€æ„å›³ã©ãŠã‚Šã«å¤±æ•—ã™ã‚‹ã‹ï¼Ÿ
      */
     void test_start_with_not_alive()
     {
-      // RTObject¤òÀ¸À®¤¹¤ë
+      // RTObjectã‚’ç”Ÿæˆã™ã‚‹
       POA_RTC::LightweightRTObject* rto
 	= new DataFlowComponentMock(); // will be deleted automatically
       DataFlowComponentMock* mock
 	= dynamic_cast<DataFlowComponentMock*>(rto);
 			
-      // ExecutionContext¤òÀ¸À®¤¹¤ë
+      // ExecutionContextã‚’ç”Ÿæˆã™ã‚‹
       RTC_exp::PeriodicExecutionContext* ec
 	= new RTC_exp::PeriodicExecutionContext(); // will be deleted automatically
 			
-      // ExecutionContext¤ËRTObject¤òÅĞÏ¿¤¹¤ë
+      // ExecutionContextã«RTObjectã‚’ç™»éŒ²ã™ã‚‹
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->add_component(rto->_this()));
 			
-      // ÈóAlive¾õÂÖ¤Ë¤·¤Æ¤ª¤¯
+      // éAliveçŠ¶æ…‹ã«ã—ã¦ãŠã
       mock->setAlive(false);
       CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(false), rto->is_alive(NULL));
 			
@@ -548,35 +548,35 @@ namespace PeriodicExecutionContext
     }
 		
     /*!
-     * @brief stop()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief stop()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - stop()¥á¥½¥Ã¥É¸Æ½Ğ¤·¤Ë¤è¤ê¡¢¥³¥ó¥İ¡¼¥Í¥ó¥È¤Îon_shutdown()¤¬¸Æ¤Ó½Ğ¤µ¤ì¤ë¤«¡©
+     * - stop()ãƒ¡ã‚½ãƒƒãƒ‰å‘¼å‡ºã—ã«ã‚ˆã‚Šã€ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã®on_shutdown()ãŒå‘¼ã³å‡ºã•ã‚Œã‚‹ã‹ï¼Ÿ
      */
     void test_stop_invoking_on_shutdown()
     {
-      // RTObject¤òÀ¸À®¤¹¤ë
+      // RTObjectã‚’ç”Ÿæˆã™ã‚‹
       POA_RTC::LightweightRTObject* rto
 	= new DataFlowComponentMock(); // will be deleted automatically
       DataFlowComponentMock* mock
 	= dynamic_cast<DataFlowComponentMock*>(rto);
 			
-      // ExecutionContext¤òÀ¸À®¤¹¤ë
+      // ExecutionContextã‚’ç”Ÿæˆã™ã‚‹
       RTC_exp::PeriodicExecutionContext* ec
 	= new RTC_exp::PeriodicExecutionContext(); // will be deleted automatically
 			
-      // ExecutionContext¤ËRTObject¤òÅĞÏ¿¤¹¤ë
+      // ExecutionContextã«RTObjectã‚’ç™»éŒ²ã™ã‚‹
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->add_component(rto->_this()));
 			
-      // start()¤ò¸Æ¤Ó½Ğ¤¹
+      // start()ã‚’å‘¼ã³å‡ºã™
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->start());
 			
-      // ¤³¤Î»şÅÀ¤Ç¤Ï¡¢¤Ş¤Àon_shutdown()¤Ï¸Æ¤Ó½Ğ¤µ¤ì¤Æ¤¤¤Ê¤¤¤Ï¤º
+      // ã“ã®æ™‚ç‚¹ã§ã¯ã€ã¾ã on_shutdown()ã¯å‘¼ã³å‡ºã•ã‚Œã¦ã„ãªã„ã¯ãš
       CPPUNIT_ASSERT_EQUAL(0, mock->countLog("on_shutdown"));
 
-      // stop()¤ò¸Æ¤Ó½Ğ¤¹
+      // stop()ã‚’å‘¼ã³å‡ºã™
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->stop());
 			
-      // ¤³¤Î»şÅÀ¤Ç¡¢on_shutdown()¤¬1²ó¤À¤±¸Æ¤Ó½Ğ¤µ¤ì¤Æ¤¤¤ë¤Ï¤º
+      // ã“ã®æ™‚ç‚¹ã§ã€on_shutdown()ãŒ1å›ã ã‘å‘¼ã³å‡ºã•ã‚Œã¦ã„ã‚‹ã¯ãš
       CPPUNIT_ASSERT_EQUAL(1, mock->countLog("on_shutdown"));
 
       m_pPOA->deactivate_object(*m_pPOA->servant_to_id(ec));
@@ -586,29 +586,29 @@ namespace PeriodicExecutionContext
     }
 		
     /*!
-     * @brief stop()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief stop()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - Èórunning¾õÂÖ¤Çstop()¥á¥½¥Ã¥É¤ò¸Æ¤Ó½Ğ¤·¤¿¾ì¹ç¡¢°Õ¿Ş¤É¤ª¤ê¤Ë¼ºÇÔ¤¹¤ë¤«¡©
+     * - érunningçŠ¶æ…‹ã§stop()ãƒ¡ã‚½ãƒƒãƒ‰ã‚’å‘¼ã³å‡ºã—ãŸå ´åˆã€æ„å›³ã©ãŠã‚Šã«å¤±æ•—ã™ã‚‹ã‹ï¼Ÿ
      */
     void test_stop_with_not_running()
     {
-      // ExecutionContext¤òÀ¸À®¤¹¤ë
+      // ExecutionContextã‚’ç”Ÿæˆã™ã‚‹
       RTC_exp::PeriodicExecutionContext* ec
 	= new RTC_exp::PeriodicExecutionContext(); // will be deleted automatically
 
-      // ¤Ş¤Àstart()¤·¤Æ¤¤¤Ê¤¤¾õÂÖ¤Ç¡¢¤Ä¤Ş¤êÈórunning¤Î¾õÂÖ¤Ç¡¢
-      // stop()¤ò¸Æ¤Ó½Ğ¤·¡¢°Õ¿Ş¤É¤ª¤ê¤Î¥¨¥é¡¼¥³¡¼¥É¤ÇÌá¤ë¤³¤È¤ò³ÎÇ§¤¹¤ë
+      // ã¾ã start()ã—ã¦ã„ãªã„çŠ¶æ…‹ã§ã€ã¤ã¾ã‚Šérunningã®çŠ¶æ…‹ã§ã€
+      // stop()ã‚’å‘¼ã³å‡ºã—ã€æ„å›³ã©ãŠã‚Šã®ã‚¨ãƒ©ãƒ¼ã‚³ãƒ¼ãƒ‰ã§æˆ»ã‚‹ã“ã¨ã‚’ç¢ºèªã™ã‚‹
       CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(false), ec->is_running());
       CPPUNIT_ASSERT_EQUAL(RTC::PRECONDITION_NOT_MET, ec->stop());
 
-      // start()¤ò¸Æ¤Ó½Ğ¤¹
+      // start()ã‚’å‘¼ã³å‡ºã™
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->start());
 			
-      // stop()¤ò¸Æ¤Ó½Ğ¤¹
+      // stop()ã‚’å‘¼ã³å‡ºã™
       CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(true), ec->is_running());
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->stop());
 			
-      // ¤µ¤é¤Ëstop()¤ò¸Æ¤Ó½Ğ¤·¡¢°Õ¿Ş¤É¤ª¤ê¤Î¥¨¥é¡¼¥³¡¼¥É¤ÇÌá¤ë¤³¤È¤ò³ÎÇ§¤¹¤ë
+      // ã•ã‚‰ã«stop()ã‚’å‘¼ã³å‡ºã—ã€æ„å›³ã©ãŠã‚Šã®ã‚¨ãƒ©ãƒ¼ã‚³ãƒ¼ãƒ‰ã§æˆ»ã‚‹ã“ã¨ã‚’ç¢ºèªã™ã‚‹
       CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(false), ec->is_running());
       CPPUNIT_ASSERT_EQUAL(RTC::PRECONDITION_NOT_MET, ec->stop());
 
@@ -617,23 +617,23 @@ namespace PeriodicExecutionContext
     }
 		
     /*!
-     * @brief start()¥á¥½¥Ã¥É¤Èstop()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief start()ãƒ¡ã‚½ãƒƒãƒ‰ã¨stop()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - start()¤Èstop()¤ò·«¤êÊÖ¤·Ï¢Â³¤Ç¡¢Àµ¾ï¤Ë¸Æ½Ğ¤·¤Ç¤­¤ë¤«¡©
+     * - start()ã¨stop()ã‚’ç¹°ã‚Šè¿”ã—é€£ç¶šã§ã€æ­£å¸¸ã«å‘¼å‡ºã—ã§ãã‚‹ã‹ï¼Ÿ
      */
     void test_start_and_stop_multiple_times()
     {
-      // ExecutionContext¤òÀ¸À®¤¹¤ë
+      // ExecutionContextã‚’ç”Ÿæˆã™ã‚‹
       RTC_exp::PeriodicExecutionContext* ec
 	= new RTC_exp::PeriodicExecutionContext(); // will be deleted automatically
 			
-      // start(), stop()¤òÏ¢Â³¤·¤ÆÀµ¾ï¤Ë¸Æ¤Ó½Ğ¤»¤ë¤«¡©
+      // start(), stop()ã‚’é€£ç¶šã—ã¦æ­£å¸¸ã«å‘¼ã³å‡ºã›ã‚‹ã‹ï¼Ÿ
       for (int i = 0; i < 1000; ++i)
 	{
-	  // start()¤ò¸Æ¤Ó½Ğ¤¹
+	  // start()ã‚’å‘¼ã³å‡ºã™
 	  CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->start());
 
-	  // stop()¤ò¸Æ¤Ó½Ğ¤¹
+	  // stop()ã‚’å‘¼ã³å‡ºã™
 	  CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->stop());
 	}
 
@@ -642,17 +642,17 @@ namespace PeriodicExecutionContext
     }
 		
     /*!
-     * @brief set_rate()¥á¥½¥Ã¥É¤Èget_rate()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief set_rate()ãƒ¡ã‚½ãƒƒãƒ‰ã¨get_rate()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - set_rate()¤ÇÀßÄê¤·¤¿¥ì¡¼¥ÈÃÍ¤ò¡¢get_rate()¤ÇÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
+     * - set_rate()ã§è¨­å®šã—ãŸãƒ¬ãƒ¼ãƒˆå€¤ã‚’ã€get_rate()ã§æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
      */
     void test_set_rate_and_get_rate()
     {
-      // ExecutionContext¤òÀ¸À®¤¹¤ë
+      // ExecutionContextã‚’ç”Ÿæˆã™ã‚‹
       RTC_exp::PeriodicExecutionContext* ec
 	= new RTC_exp::PeriodicExecutionContext(); // will be deleted automatically
 			
-      // set_rate()¤ÇÀßÄê¤·¤¿¥ì¡¼¥È¤¬¡¢get_rate()¤ÇÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
+      // set_rate()ã§è¨­å®šã—ãŸãƒ¬ãƒ¼ãƒˆãŒã€get_rate()ã§æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
       for (int i = 1; i <= 10; ++i)
 	{
 	  CORBA::Double rate((double) 1.0 * i);
@@ -666,18 +666,18 @@ namespace PeriodicExecutionContext
     }
 		
     /*!
-     * @brief set_rate()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief set_rate()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - ¥ì¡¼¥ÈÃÍ¤Ë0¤ò»ØÄê¤·¤Æset_rate()¤ò¸Æ¤Ó½Ğ¤·¤¿¾ì¹ç¡¢°Õ¿Ş¤É¤ª¤ê¤Ë¼ºÇÔ¤¹¤ë¤«¡©
-     * - ¥ì¡¼¥ÈÃÍ¤ËÉéÃÍ¤ò»ØÄê¤·¤Æset_rate()¤ò¸Æ¤Ó½Ğ¤·¤¿¾ì¹ç¡¢°Õ¿Ş¤É¤ª¤ê¤Ë¼ºÇÔ¤¹¤ë¤«¡©
+     * - ãƒ¬ãƒ¼ãƒˆå€¤ã«0ã‚’æŒ‡å®šã—ã¦set_rate()ã‚’å‘¼ã³å‡ºã—ãŸå ´åˆã€æ„å›³ã©ãŠã‚Šã«å¤±æ•—ã™ã‚‹ã‹ï¼Ÿ
+     * - ãƒ¬ãƒ¼ãƒˆå€¤ã«è² å€¤ã‚’æŒ‡å®šã—ã¦set_rate()ã‚’å‘¼ã³å‡ºã—ãŸå ´åˆã€æ„å›³ã©ãŠã‚Šã«å¤±æ•—ã™ã‚‹ã‹ï¼Ÿ
      */
     void test_set_rate_with_zero_or_negative_rate()
     {
-      // ExecutionContext¤òÀ¸À®¤¹¤ë
+      // ExecutionContextã‚’ç”Ÿæˆã™ã‚‹
       RTC_exp::PeriodicExecutionContext* ec
 	= new RTC_exp::PeriodicExecutionContext(); // will be deleted automatically
 			
-      // 0¤Ş¤¿¤ÏÉé¿ô¤Î¥ì¡¼¥È¤ò»ØÄê¤·¤¿¾ì¹ç¡¢°Õ¿Ş¤É¤ª¤ê¤Î¥¨¥é¡¼¥³¡¼¥É¤ÇÌá¤ë¤«¡©
+      // 0ã¾ãŸã¯è² æ•°ã®ãƒ¬ãƒ¼ãƒˆã‚’æŒ‡å®šã—ãŸå ´åˆã€æ„å›³ã©ãŠã‚Šã®ã‚¨ãƒ©ãƒ¼ã‚³ãƒ¼ãƒ‰ã§æˆ»ã‚‹ã‹ï¼Ÿ
       for (int i = 0; i < 10; ++i)
 	{
 	  CORBA::Double rate((double) - 1.0 * i);
@@ -690,39 +690,39 @@ namespace PeriodicExecutionContext
     }
 		
     /*!
-     * @biref set_rate()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @biref set_rate()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - set_rate()¸Æ½Ğ¤·¤Ë¤è¤ê¡¢¥³¥ó¥İ¡¼¥Í¥ó¥È¤Îon_rate_changed()¤¬¸Æ¤Ó½Ğ¤µ¤ì¤ë¤«¡©
+     * - set_rate()å‘¼å‡ºã—ã«ã‚ˆã‚Šã€ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã®on_rate_changed()ãŒå‘¼ã³å‡ºã•ã‚Œã‚‹ã‹ï¼Ÿ
      */
     void test_set_rate_invoking_on_rate_changed()
     {
-      // RTObject¤òÀ¸À®¤¹¤ë
+      // RTObjectã‚’ç”Ÿæˆã™ã‚‹
       POA_RTC::LightweightRTObject* rto
 	= new DataFlowComponentMock(); // will be deleted automatically
       DataFlowComponentMock* mock
 	= dynamic_cast<DataFlowComponentMock*>(rto);
 			
-      // ExecutionContext¤òÀ¸À®¤¹¤ë
+      // ExecutionContextã‚’ç”Ÿæˆã™ã‚‹
       RTC_exp::PeriodicExecutionContext* ec
 	= new RTC_exp::PeriodicExecutionContext(); // will be deleted automatically
       CPPUNIT_ASSERT_EQUAL(RTC::PERIODIC, ec->get_kind());
 			
-      // ExecutionContext¤ËRTObject¤òÅĞÏ¿¤¹¤ë
+      // ExecutionContextã«RTObjectã‚’ç™»éŒ²ã™ã‚‹
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->add_component(rto->_this()));
 			
-      // ¤³¤Î»şÅÀ¤Ç¤Ï¡¢on_rate_changed()¤Ï1²ó¤â¸Æ¤Ó½Ğ¤µ¤ì¤Æ¤¤¤Ê¤¤¤Ï¤º
+      // ã“ã®æ™‚ç‚¹ã§ã¯ã€on_rate_changed()ã¯1å›ã‚‚å‘¼ã³å‡ºã•ã‚Œã¦ã„ãªã„ã¯ãš
       CPPUNIT_ASSERT_EQUAL(0, mock->countLog("on_rate_changed"));
 			
       RTC::ExecutionContextProfile* ecp;
       ecp = ec->get_profile();
       CPPUNIT_ASSERT_EQUAL(CORBA::Double(1000000), ecp->rate);
 
-      // set_rate()¤ò¸Æ½Ğ¤¹
+      // set_rate()ã‚’å‘¼å‡ºã™
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->set_rate(CORBA::Double(1.0)));
       ecp = ec->get_profile();
       CPPUNIT_ASSERT_EQUAL(CORBA::Double(1.0), ecp->rate);
 			
-      // ¤³¤Î»şÅÀ¤Ç¡¢on_rate_changed()¤¬1²ó¤À¤±¸Æ¤Ó½Ğ¤µ¤ì¤Æ¤¤¤ë¤Ï¤º
+      // ã“ã®æ™‚ç‚¹ã§ã€on_rate_changed()ãŒ1å›ã ã‘å‘¼ã³å‡ºã•ã‚Œã¦ã„ã‚‹ã¯ãš
       CPPUNIT_ASSERT_EQUAL(1, mock->countLog("on_rate_changed"));
 
       ec->stop();
@@ -733,29 +733,29 @@ namespace PeriodicExecutionContext
     }
 		
     /*!
-     * @brief add()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief add()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - add()¥á¥½¥Ã¥É¸Æ½Ğ¤·¤Ë¤è¤ê¡¢¥³¥ó¥İ¡¼¥Í¥ó¥È¤Îattach_executioncontext()¤¬¸Æ¤Ó½Ğ¤µ¤ì¤ë¤«¡©
+     * - add()ãƒ¡ã‚½ãƒƒãƒ‰å‘¼å‡ºã—ã«ã‚ˆã‚Šã€ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã®attach_executioncontext()ãŒå‘¼ã³å‡ºã•ã‚Œã‚‹ã‹ï¼Ÿ
      */
     void test_add_invoking_attach_executioncontext()
     {
-      // RTObject¤òÀ¸À®¤¹¤ë
+      // RTObjectã‚’ç”Ÿæˆã™ã‚‹
       POA_RTC::LightweightRTObject* rto
 	= new DataFlowComponentMock(); // will be deleted automatically
       DataFlowComponentMock* mock
 	= dynamic_cast<DataFlowComponentMock*>(rto);
 			
-      // ExecutionContext¤òÀ¸À®¤¹¤ë
+      // ExecutionContextã‚’ç”Ÿæˆã™ã‚‹
       RTC_exp::PeriodicExecutionContext* ec
 	= new RTC_exp::PeriodicExecutionContext(); // will be deleted automatically
 			
-      // ¤³¤Î»şÅÀ¤Ç¤Ï¡¢attach_executioncontext()¤Ï1²ó¤â¸Æ¤Ó½Ğ¤µ¤ì¤Æ¤¤¤Ê¤¤¤Ï¤º
+      // ã“ã®æ™‚ç‚¹ã§ã¯ã€attach_executioncontext()ã¯1å›ã‚‚å‘¼ã³å‡ºã•ã‚Œã¦ã„ãªã„ã¯ãš
       CPPUNIT_ASSERT_EQUAL(0, mock->countLog("attach_executioncontext"));
 
-      // ExecutionContext¤ËRTObject¤òÅĞÏ¿¤¹¤ë
+      // ExecutionContextã«RTObjectã‚’ç™»éŒ²ã™ã‚‹
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->add_component(rto->_this()));
 			
-      // ¤³¤Î»şÅÀ¤Ç¡¢attach_executioncontext()¤¬1²ó¤À¤±¸Æ¤Ó½Ğ¤µ¤ì¤Æ¤¤¤ë¤Ï¤º
+      // ã“ã®æ™‚ç‚¹ã§ã€attach_executioncontext()ãŒ1å›ã ã‘å‘¼ã³å‡ºã•ã‚Œã¦ã„ã‚‹ã¯ãš
       CPPUNIT_ASSERT_EQUAL(1, mock->countLog("attach_executioncontext"));
 
       ec->stop();
@@ -766,24 +766,24 @@ namespace PeriodicExecutionContext
     }
 		
     /*!
-     * @brief add()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief add()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - ¥Ç¡¼¥¿¥Õ¥í¡¼¥³¥ó¥İ¡¼¥Í¥ó¥È¤Ç¤Ï¤Ê¤¤LightweightRTObject¤ò»ØÄê¤·¤Æadd()¥á¥½¥Ã¥É¤ò¸Æ¤Ó½Ğ¤·¤¿¾ì¹ç¡¢°Õ¿Ş¤É¤ª¤ê¤Ë¼ºÇÔ¤¹¤ë¤«¡©
+     * - ãƒ‡ãƒ¼ã‚¿ãƒ•ãƒ­ãƒ¼ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã§ã¯ãªã„LightweightRTObjectã‚’æŒ‡å®šã—ã¦add()ãƒ¡ã‚½ãƒƒãƒ‰ã‚’å‘¼ã³å‡ºã—ãŸå ´åˆã€æ„å›³ã©ãŠã‚Šã«å¤±æ•—ã™ã‚‹ã‹ï¼Ÿ
      */
     void test_add_not_with_data_flow_component()
     {
-      // RTObject¤òÀ¸À®¤¹¤ë
+      // RTObjectã‚’ç”Ÿæˆã™ã‚‹
 //      POA_RTC::LightweightRTObject* rto
       POA_RTC::LightweightRTObject* rto
 	= new LightweightRTObjectMock(); // will be deleted automatically
 
-      // ExecutionContext¤òÀ¸À®¤¹¤ë
+      // ExecutionContextã‚’ç”Ÿæˆã™ã‚‹
       RTC_exp::PeriodicExecutionContext* ec
 	= new RTC_exp::PeriodicExecutionContext(); // will be deleted automatically
       CPPUNIT_ASSERT_EQUAL(RTC::PERIODIC, ec->get_kind());
 			
-      // LightweightRTObject¤Ç¤Ï¤¢¤ë¤¬¡¢DataFlowComponent¤Ç¤Ï¤Ê¤¤RTObject¤òÍÑ¤¤¤Æ¡¢
-      // add()¸Æ½Ğ¤·¤ò»î¤ß¤Æ¡¢°Õ¿Ş¤É¤ª¤ê¥¨¥é¡¼¥³¡¼¥É¤ÇÌá¤ë¤³¤È¤ò³ÎÇ§¤¹¤ë
+      // LightweightRTObjectã§ã¯ã‚ã‚‹ãŒã€DataFlowComponentã§ã¯ãªã„RTObjectã‚’ç”¨ã„ã¦ã€
+      // add()å‘¼å‡ºã—ã‚’è©¦ã¿ã¦ã€æ„å›³ã©ãŠã‚Šã‚¨ãƒ©ãƒ¼ã‚³ãƒ¼ãƒ‰ã§æˆ»ã‚‹ã“ã¨ã‚’ç¢ºèªã™ã‚‹
       // CPPUNIT_ASSERT_EQUAL(RTC::PRECONDITION_NOT_MET, ec->add(rto->_this()));
 
       ec->stop();
@@ -794,32 +794,32 @@ namespace PeriodicExecutionContext
     }
 		
     /*!
-     * @brief remove()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief remove()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - remove()¸Æ½Ğ¤·¤Ë¤è¤ê¡¢¥³¥ó¥İ¡¼¥Í¥ó¥È¤Îdetach_executioncontext()¤¬¸Æ¤Ó½Ğ¤µ¤ì¤ë¤«¡©
+     * - remove()å‘¼å‡ºã—ã«ã‚ˆã‚Šã€ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã®detach_executioncontext()ãŒå‘¼ã³å‡ºã•ã‚Œã‚‹ã‹ï¼Ÿ
      */
     void test_remove_invoking_detach_executioncontext()
     {
-      // RTObject¤òÀ¸À®¤¹¤ë
+      // RTObjectã‚’ç”Ÿæˆã™ã‚‹
       POA_RTC::LightweightRTObject* rto
 	= new DataFlowComponentMock(); // will be deleted automatically
       DataFlowComponentMock* mock
 	= dynamic_cast<DataFlowComponentMock*>(rto);
 			
-      // ExecutionContext¤òÀ¸À®¤¹¤ë
+      // ExecutionContextã‚’ç”Ÿæˆã™ã‚‹
       RTC_exp::PeriodicExecutionContext* ec
 	= new RTC_exp::PeriodicExecutionContext(); // will be deleted automatically
 			
-      // ExecutionContext¤ËRTObject¤òÅĞÏ¿¤¹¤ë
+      // ExecutionContextã«RTObjectã‚’ç™»éŒ²ã™ã‚‹
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->add_component(rto->_this()));
 
-      // ¤³¤Î»şÅÀ¤Ç¤Ï¡¢attach_executioncontext()¤Ï1²ó¤â¸Æ¤Ó½Ğ¤µ¤ì¤Æ¤¤¤Ê¤¤¤Ï¤º
+      // ã“ã®æ™‚ç‚¹ã§ã¯ã€attach_executioncontext()ã¯1å›ã‚‚å‘¼ã³å‡ºã•ã‚Œã¦ã„ãªã„ã¯ãš
       CPPUNIT_ASSERT_EQUAL(0, mock->countLog("detach_executioncontext"));
 			
-      // ExecutionContext¤Ø¤ÎÅĞÏ¿¤ò²ò½ü¤¹¤ë
+      // ExecutionContextã¸ã®ç™»éŒ²ã‚’è§£é™¤ã™ã‚‹
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->remove_component(rto->_this()));
 			
-      // ¤³¤Î»şÅÀ¤Ç¡¢detach_executioncontext()¤¬1²ó¤À¤±¸Æ¤Ó½Ğ¤µ¤ì¤Æ¤¤¤ë¤Ï¤º
+      // ã“ã®æ™‚ç‚¹ã§ã€detach_executioncontext()ãŒ1å›ã ã‘å‘¼ã³å‡ºã•ã‚Œã¦ã„ã‚‹ã¯ãš
       CPPUNIT_ASSERT_EQUAL(1, mock->countLog("detach_executioncontext"));
 
       ec->stop();
@@ -830,22 +830,22 @@ namespace PeriodicExecutionContext
     }
 		
     /*!
-     * @brief remove()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief remove()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - ¤Ş¤ÀExecutionContext¤ËÅĞÏ¿¤·¤Æ¤¤¤Ê¤¤¥³¥ó¥İ¡¼¥Í¥ó¥È¤Ë¤Ä¤¤¤ÆÅĞÏ¿²ò½ü¤ò»î¤ß¤Æ¡¢°Õ¿Ş¤É¤ª¤ê¤Ë¼ºÇÔ¤¹¤ë¤«¡©
+     * - ã¾ã ExecutionContextã«ç™»éŒ²ã—ã¦ã„ãªã„ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã«ã¤ã„ã¦ç™»éŒ²è§£é™¤ã‚’è©¦ã¿ã¦ã€æ„å›³ã©ãŠã‚Šã«å¤±æ•—ã™ã‚‹ã‹ï¼Ÿ
      */
     void test_remove_with_not_attached_component()
     {
-      // RTObject¤òÀ¸À®¤¹¤ë
+      // RTObjectã‚’ç”Ÿæˆã™ã‚‹
       POA_RTC::LightweightRTObject* rto
 	= new DataFlowComponentMock(); // will be deleted automatically
 
-      // ExecutionContext¤òÀ¸À®¤¹¤ë
+      // ExecutionContextã‚’ç”Ÿæˆã™ã‚‹
       RTC_exp::PeriodicExecutionContext* ec
 	= new RTC_exp::PeriodicExecutionContext(); // will be deleted automatically
 			
-      // ¤Ş¤ÀÅĞÏ¿¤·¤Æ¤¤¤Ê¤¤¥³¥ó¥İ¡¼¥Í¥ó¥È¤Ë¤Ä¤¤¤ÆExecutionContext¤«¤é¤ÎÅĞÏ¿²ò½ü¤ò»î¤ß¤Æ¡¢
-      // °Õ¿Ş¤É¤ª¤ê¤Î¥¨¥é¡¼¥³¡¼¥É¤ÇÌá¤ë¤³¤È¤ò³ÎÇ§¤¹¤ë
+      // ã¾ã ç™»éŒ²ã—ã¦ã„ãªã„ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã«ã¤ã„ã¦ExecutionContextã‹ã‚‰ã®ç™»éŒ²è§£é™¤ã‚’è©¦ã¿ã¦ã€
+      // æ„å›³ã©ãŠã‚Šã®ã‚¨ãƒ©ãƒ¼ã‚³ãƒ¼ãƒ‰ã§æˆ»ã‚‹ã“ã¨ã‚’ç¢ºèªã™ã‚‹
       CPPUNIT_ASSERT_EQUAL(RTC::BAD_PARAMETER, ec->remove_component(rto->_this()));
 
       ec->stop();
@@ -856,30 +856,30 @@ namespace PeriodicExecutionContext
     }
 		
     /*!
-     * @brief remove()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief remove()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - Active¾õÂÖ¤Î¥³¥ó¥İ¡¼¥Í¥ó¥È¤ËÂĞ¤·¤Æremove()¤ò»î¤ß¤¿¾ì¹ç¡¢°Õ¿Ş¤É¤ª¤ê¤Ë¼ºÇÔ¤¹¤ë¤«¡©
+     * - ActiveçŠ¶æ…‹ã®ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã«å¯¾ã—ã¦remove()ã‚’è©¦ã¿ãŸå ´åˆã€æ„å›³ã©ãŠã‚Šã«å¤±æ•—ã™ã‚‹ã‹ï¼Ÿ
      */
     void test_remove_when_component_is_still_active()
     {
-      // RTObject¤òÀ¸À®¤¹¤ë
+      // RTObjectã‚’ç”Ÿæˆã™ã‚‹
       POA_RTC::LightweightRTObject* rto
 	= new DataFlowComponentMock(); // will be deleted automatically
 
-      // ExecutionContext¤òÀ¸À®¤¹¤ë
+      // ExecutionContextã‚’ç”Ÿæˆã™ã‚‹
       RTC_exp::PeriodicExecutionContext* ec
 	= new RTC_exp::PeriodicExecutionContext(); // will be deleted automatically
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->start());
 
-      // ExecutionContext¤ËRTObject¤òÅĞÏ¿¤¹¤ë
+      // ExecutionContextã«RTObjectã‚’ç™»éŒ²ã™ã‚‹
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->add_component(rto->_this()));
 			
-      // ¥³¥ó¥İ¡¼¥Í¥ó¥È¤òActive¤Ë¤¹¤ë
+      // ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã‚’Activeã«ã™ã‚‹
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->activate_component(rto->_this()));
       usleep(100000);
       CPPUNIT_ASSERT_EQUAL(RTC::ACTIVE_STATE, ec->get_component_state(rto->_this()));
 
-      // ¥³¥ó¥İ¡¼¥Í¥ó¥È¤¬Active¤Î¤Ş¤Ş¤Çremove()¤ò»î¤ß¤Æ¡¢°Õ¿Ş¤É¤ª¤ê¤Î¥¨¥é¡¼¥³¡¼¥É¤¬Ìá¤ë¤³¤È¤ò³ÎÇ§¤¹¤ë
+      // ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆãŒActiveã®ã¾ã¾ã§remove()ã‚’è©¦ã¿ã¦ã€æ„å›³ã©ãŠã‚Šã®ã‚¨ãƒ©ãƒ¼ã‚³ãƒ¼ãƒ‰ãŒæˆ»ã‚‹ã“ã¨ã‚’ç¢ºèªã™ã‚‹
       // CPPUNIT_ASSERT_EQUAL(RTC::PRECONDITION_NOT_MET, ec->remove(rto->_this()));
 
       ec->stop();
@@ -890,35 +890,35 @@ namespace PeriodicExecutionContext
     }
 		
     /*!
-     * @brief remove()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief remove()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - Inactive¾õÂÖ¤Î¥³¥ó¥İ¡¼¥Í¥ó¥È¤ËÂĞ¤·¤Æ¡¢Àµ¾ï¤Ëremove()¤Ç¤­¤ë¤«¡©
+     * - InactiveçŠ¶æ…‹ã®ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã«å¯¾ã—ã¦ã€æ­£å¸¸ã«remove()ã§ãã‚‹ã‹ï¼Ÿ
      */
     void test_remove_when_component_is_inactive()
     {
-      // RTObject¤òÀ¸À®¤¹¤ë
+      // RTObjectã‚’ç”Ÿæˆã™ã‚‹
       POA_RTC::LightweightRTObject* rto
 	= new DataFlowComponentMock(); // will be deleted automatically
 
-      // ExecutionContext¤òÀ¸À®¤¹¤ë
+      // ExecutionContextã‚’ç”Ÿæˆã™ã‚‹
       RTC_exp::PeriodicExecutionContext* ec
 	= new RTC_exp::PeriodicExecutionContext(); // will be deleted automatically
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->start());
 
-      // ExecutionContext¤ËRTObject¤òÅĞÏ¿¤¹¤ë
+      // ExecutionContextã«RTObjectã‚’ç™»éŒ²ã™ã‚‹
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->add_component(rto->_this()));
 			
-      // ¥³¥ó¥İ¡¼¥Í¥ó¥È¤òActive¤Ë¤¹¤ë
+      // ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã‚’Activeã«ã™ã‚‹
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->activate_component(rto->_this()));
       coil::usleep(100000);
       CPPUNIT_ASSERT_EQUAL(RTC::ACTIVE_STATE, ec->get_component_state(rto->_this()));
 			
-      // ¥³¥ó¥İ¡¼¥Í¥ó¥È¤òInactive¤Ë¤¹¤ë
+      // ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã‚’Inactiveã«ã™ã‚‹
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->deactivate_component(rto->_this()));
       coil::usleep(100000);
       CPPUNIT_ASSERT_EQUAL(RTC::INACTIVE_STATE, ec->get_component_state(rto->_this()));
 			
-      // remove()¤¬À®¸ù¤¹¤ë¤³¤È¤ò³ÎÇ§¤¹¤ë
+      // remove()ãŒæˆåŠŸã™ã‚‹ã“ã¨ã‚’ç¢ºèªã™ã‚‹
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->remove_component(rto->_this()));
 
       ec->stop();
@@ -929,39 +929,39 @@ namespace PeriodicExecutionContext
     }
 		
     /*!
-     * @brief activate()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief activate()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - activate()¸Æ½Ğ¤·¤Ë¤è¤ê¡¢¥³¥ó¥İ¡¼¥Í¥ó¥È¤Îon_activated()¤¬¸Æ¤Ó½Ğ¤µ¤ì¤ë¤«¡©
+     * - activate()å‘¼å‡ºã—ã«ã‚ˆã‚Šã€ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã®on_activated()ãŒå‘¼ã³å‡ºã•ã‚Œã‚‹ã‹ï¼Ÿ
      */
     void test_activate_component_invoking_on_activated()
     {
-      // RTObject¤òÀ¸À®¤¹¤ë
+      // RTObjectã‚’ç”Ÿæˆã™ã‚‹
       POA_RTC::LightweightRTObject* rto
 	= new DataFlowComponentMock(); // will be deleted automatically
       DataFlowComponentMock* mock
 	= dynamic_cast<DataFlowComponentMock*>(rto);
 
-      // ExecutionContext¤òÀ¸À®¤¹¤ë
+      // ExecutionContextã‚’ç”Ÿæˆã™ã‚‹
       RTC_exp::PeriodicExecutionContext* ec
 	= new RTC_exp::PeriodicExecutionContext(); // will be deleted automatically
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->start());
 
-      // ExecutionContext¤ËRTObject¤òÅĞÏ¿¤¹¤ë
+      // ExecutionContextã«RTObjectã‚’ç™»éŒ²ã™ã‚‹
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->add_component(rto->_this()));
 			
-      // ¤³¤Î»şÅÀ¤Ç¤Ï¡¢¤Ş¤Àon_activated()¤Ï1²ó¤â¸Æ¤Ó½Ğ¤µ¤ì¤Æ¤¤¤Ê¤¤¤Ï¤º
+      // ã“ã®æ™‚ç‚¹ã§ã¯ã€ã¾ã on_activated()ã¯1å›ã‚‚å‘¼ã³å‡ºã•ã‚Œã¦ã„ãªã„ã¯ãš
       CPPUNIT_ASSERT_EQUAL(0, mock->countLog("on_activated"));
 			
-      // ¥³¥ó¥İ¡¼¥Í¥ó¥È¤òActive¤Ë¤¹¤ë
+      // ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã‚’Activeã«ã™ã‚‹
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->activate_component(rto->_this()));
 			
       coil::usleep(100000);
-      // activate_component()¤«¤éon_activated()¤Î¸Æ½Ğ¤·¤ÏÆ±´ü¸Æ½Ğ¤Ç¤¢¤ê¡¢
-      // ¤³¤Î»şÅÀ¤Ç¡¢on_activated()¤¬1²ó¤À¤±¸Æ¤Ó½Ğ¤µ¤ì¤Æ¤¤¤ë¤Ï¤º
+      // activate_component()ã‹ã‚‰on_activated()ã®å‘¼å‡ºã—ã¯åŒæœŸå‘¼å‡ºã§ã‚ã‚Šã€
+      // ã“ã®æ™‚ç‚¹ã§ã€on_activated()ãŒ1å›ã ã‘å‘¼ã³å‡ºã•ã‚Œã¦ã„ã‚‹ã¯ãš
       CPPUNIT_ASSERT_EQUAL(1, mock->countLog("on_activated"));
 
-      // activate_component()¤«¤éon_activated()¤Î¸Æ½Ğ¤·¤ÏÆ±´ü¸Æ½Ğ¤Ç¤¢¤ê¡¢
-      // ¥¹¥ì¥Ã¥É¥³¥ó¥Æ¥­¥¹¥È¤òÀÚÂØ¤¨¤ë¤³¤È¤Ê¤¯¡¢Active¾õÂÖ¤ËÁ«°Ü¤·¤Æ¤¤¤ë¤³¤È¤ò³ÎÇ§¤¹¤ë
+      // activate_component()ã‹ã‚‰on_activated()ã®å‘¼å‡ºã—ã¯åŒæœŸå‘¼å‡ºã§ã‚ã‚Šã€
+      // ã‚¹ãƒ¬ãƒƒãƒ‰ã‚³ãƒ³ãƒ†ã‚­ã‚¹ãƒˆã‚’åˆ‡æ›¿ãˆã‚‹ã“ã¨ãªãã€ActiveçŠ¶æ…‹ã«é·ç§»ã—ã¦ã„ã‚‹ã“ã¨ã‚’ç¢ºèªã™ã‚‹
       CPPUNIT_ASSERT_EQUAL(RTC::ACTIVE_STATE, ec->get_component_state(rto->_this()));
 
       ec->stop();
@@ -972,23 +972,23 @@ namespace PeriodicExecutionContext
     }
 		
     /*!
-     * activate()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * activate()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - ExecutionContext¤ËÌ¤ÅĞÏ¿¤Î¥³¥ó¥İ¡¼¥Í¥ó¥È¤ËÂĞ¤·¤Æactivate()¸Æ½Ğ¤·¤ò¹Ô¤¤¡¢°Õ¿Ş¤É¤ª¤ê¤Ë¼ºÇÔ¤¹¤ë¤«¡©
+     * - ExecutionContextã«æœªç™»éŒ²ã®ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã«å¯¾ã—ã¦activate()å‘¼å‡ºã—ã‚’è¡Œã„ã€æ„å›³ã©ãŠã‚Šã«å¤±æ•—ã™ã‚‹ã‹ï¼Ÿ
      */
     void test_activate_component_without_participating()
     {
-      // RTObject¤òÀ¸À®¤¹¤ë
+      // RTObjectã‚’ç”Ÿæˆã™ã‚‹
       POA_RTC::LightweightRTObject* rto
 	= new DataFlowComponentMock(); // will be deleted automatically
 
-      // ExecutionContext¤òÀ¸À®¤¹¤ë
+      // ExecutionContextã‚’ç”Ÿæˆã™ã‚‹
       RTC_exp::PeriodicExecutionContext* ec
 	= new RTC_exp::PeriodicExecutionContext(); // will be deleted automatically
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->start());
 
-      // ExecutionContext¤Ë¥³¥ó¥İ¡¼¥Í¥ó¥ÈÅĞÏ¿¤¹¤ë¤³¤È¤Ê¤¯activate_component()¤ò¸Æ½Ğ¤·¡¢
-      // °Õ¿Ş¤É¤ª¤ê¤Î¥¨¥é¥³¡¼¥É¤ÇÌá¤ë¤³¤È¤ò³ÎÇ§¤¹¤ë
+      // ExecutionContextã«ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆç™»éŒ²ã™ã‚‹ã“ã¨ãªãactivate_component()ã‚’å‘¼å‡ºã—ã€
+      // æ„å›³ã©ãŠã‚Šã®ã‚¨ãƒ©ã‚³ãƒ¼ãƒ‰ã§æˆ»ã‚‹ã“ã¨ã‚’ç¢ºèªã™ã‚‹
       CPPUNIT_ASSERT_EQUAL(RTC::BAD_PARAMETER, ec->activate_component(rto->_this()));
 
       ec->stop();
@@ -999,31 +999,31 @@ namespace PeriodicExecutionContext
     }
 		
     /*!
-     * @brief activate_component()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief activate_component()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - Error¾õÂÖ¤Çactivate_component()¸Æ½Ğ¤·¤ò¹Ô¤¤¡¢°Õ¿Ş¤É¤ª¤ê¤Ë¼ºÇÔ¤¹¤ë¤«¡©
+     * - ErrorçŠ¶æ…‹ã§activate_component()å‘¼å‡ºã—ã‚’è¡Œã„ã€æ„å›³ã©ãŠã‚Šã«å¤±æ•—ã™ã‚‹ã‹ï¼Ÿ
      */
     void test_activate_component_in_Error_state()
     {
-      // RTObject¤òÀ¸À®¤¹¤ë
+      // RTObjectã‚’ç”Ÿæˆã™ã‚‹
       POA_RTC::LightweightRTObject* rto
 	= new DataFlowComponentMock(); // will be deleted automatically
       DataFlowComponentMock* mock
 	= dynamic_cast<DataFlowComponentMock*>(rto);
 
-      // ExecutionContext¤òÀ¸À®¤¹¤ë
+      // ExecutionContextã‚’ç”Ÿæˆã™ã‚‹
       RTC_exp::PeriodicExecutionContext* ec
 	= new RTC_exp::PeriodicExecutionContext(); // will be deleted automatically
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->start());
 			
-      // ¥³¥ó¥İ¡¼¥Í¥ó¥È¤òError¾õÂÖ¤Ë¤Ş¤ÇÁ«°Ü¤µ¤»¤ë
+      // ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã‚’ErrorçŠ¶æ…‹ã«ã¾ã§é·ç§»ã•ã›ã‚‹
       mock->setError(true);
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->add_component(rto->_this()));
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->activate_component(rto->_this()));
-      coil::sleep(1); // Error¾õÂÖ¤ØÁ«°Ü¤¹¤ë¤Ş¤ÇÂÔ¤Ä¡£ËÜÍè¡¢¤³¤Î¥¹¥ê¡¼¥×¤¬»ÅÍÍ¾åÉ¬Í×¤«Èİ¤«¡©
+      coil::sleep(1); // ErrorçŠ¶æ…‹ã¸é·ç§»ã™ã‚‹ã¾ã§å¾…ã¤ã€‚æœ¬æ¥ã€ã“ã®ã‚¹ãƒªãƒ¼ãƒ—ãŒä»•æ§˜ä¸Šå¿…è¦ã‹å¦ã‹ï¼Ÿ
       CPPUNIT_ASSERT_EQUAL(RTC::ERROR_STATE, ec->get_component_state(rto->_this()));
 			
-      // Error¾õÂÖ¤Çactivate_component()¸Æ½Ğ¤·¤ò¹Ô¤¤¡¢°Õ¿Ş¤É¤ª¤ê¤Î¥¨¥é¡¼¥³¡¼¥É¤ÇÌá¤ë¤³¤È¤ò³ÎÇ§¤¹¤ë
+      // ErrorçŠ¶æ…‹ã§activate_component()å‘¼å‡ºã—ã‚’è¡Œã„ã€æ„å›³ã©ãŠã‚Šã®ã‚¨ãƒ©ãƒ¼ã‚³ãƒ¼ãƒ‰ã§æˆ»ã‚‹ã“ã¨ã‚’ç¢ºèªã™ã‚‹
       CPPUNIT_ASSERT_EQUAL(RTC::PRECONDITION_NOT_MET, ec->activate_component(rto->_this()));
 
       ec->stop();
@@ -1034,30 +1034,30 @@ namespace PeriodicExecutionContext
     }
 		
     /*!
-     * @brief activate_component()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief activate_component()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - ÈóAlive¾õÂÖ¤Î¥³¥ó¥İ¡¼¥Í¥ó¥È¤ËÂĞ¤·¤Æactivate_component()¸Æ½Ğ¤·¤ò¹Ô¤¤¡¢°Õ¿Ş¤É¤ª¤ê¤Ë¼ºÇÔ¤¹¤ë¤«¡©
+     * - éAliveçŠ¶æ…‹ã®ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã«å¯¾ã—ã¦activate_component()å‘¼å‡ºã—ã‚’è¡Œã„ã€æ„å›³ã©ãŠã‚Šã«å¤±æ•—ã™ã‚‹ã‹ï¼Ÿ
      */
     void test_activate_component_not_in_Alive_state()
     {
-      // RTObject¤òÀ¸À®¤¹¤ë
+      // RTObjectã‚’ç”Ÿæˆã™ã‚‹
       POA_RTC::LightweightRTObject* rto
 	= new DataFlowComponentMock(); // will be deleted automatically
       DataFlowComponentMock* mock
 	= dynamic_cast<DataFlowComponentMock*>(rto);
 			
-      // ExecutionContext¤òÀ¸À®¤¹¤ë
+      // ExecutionContextã‚’ç”Ÿæˆã™ã‚‹
       RTC_exp::PeriodicExecutionContext* ec
 	= new RTC_exp::PeriodicExecutionContext(); // will be deleted automatically
 			
-      // ExecutionContext¤ËRTObject¤òÅĞÏ¿¤¹¤ë
+      // ExecutionContextã«RTObjectã‚’ç™»éŒ²ã™ã‚‹
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->add_component(rto->_this()));
 			
-      // ÈóAlive¾õÂÖ¤Ë¤·¤Æ¤ª¤¯
+      // éAliveçŠ¶æ…‹ã«ã—ã¦ãŠã
       mock->setAlive(false);
       CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(false), rto->is_alive(NULL));
 			
-      // activate_component()¸Æ½Ğ¤·¤ò¹Ô¤¤¡¢°Õ¿Ş¤É¤ª¤ê¤Î¥¨¥é¡¼¥³¡¼¥É¤ÇÌá¤ë¤³¤È¤ò³ÎÇ§¤¹¤ë
+      // activate_component()å‘¼å‡ºã—ã‚’è¡Œã„ã€æ„å›³ã©ãŠã‚Šã®ã‚¨ãƒ©ãƒ¼ã‚³ãƒ¼ãƒ‰ã§æˆ»ã‚‹ã“ã¨ã‚’ç¢ºèªã™ã‚‹
       // CPPUNIT_ASSERT_EQUAL(RTC::BAD_PARAMETER, ec->activate_component(rto->_this()));
 
       ec->stop();
@@ -1068,40 +1068,40 @@ namespace PeriodicExecutionContext
     }
 		
     /*!
-     * @brief deactivate_component()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief deactivate_component()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - deactivate_component()¸Æ½Ğ¤·¤Ë¤è¤ê¡¢¥³¥ó¥İ¡¼¥Í¥ó¥È¤Îon_deactivated()¤¬¸Æ¤Ó½Ğ¤µ¤ì¤ë¤«¡©
+     * - deactivate_component()å‘¼å‡ºã—ã«ã‚ˆã‚Šã€ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã®on_deactivated()ãŒå‘¼ã³å‡ºã•ã‚Œã‚‹ã‹ï¼Ÿ
      */
     void test_deactivate_component_invoking_on_deactivated()
     {
-      // RTObject¤òÀ¸À®¤¹¤ë
+      // RTObjectã‚’ç”Ÿæˆã™ã‚‹
       POA_RTC::LightweightRTObject* rto
 	= new DataFlowComponentMock(); // will be deleted automatically
       DataFlowComponentMock* mock
 	= dynamic_cast<DataFlowComponentMock*>(rto);
 
-      // ExecutionContext¤òÀ¸À®¤¹¤ë
+      // ExecutionContextã‚’ç”Ÿæˆã™ã‚‹
       RTC_exp::PeriodicExecutionContext* ec
 	= new RTC_exp::PeriodicExecutionContext(); // will be deleted automatically
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->start());
 
-      // ExecutionContext¤ËRTObject¤òÅĞÏ¿¤¹¤ë
+      // ExecutionContextã«RTObjectã‚’ç™»éŒ²ã™ã‚‹
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->add_component(rto->_this()));
 			
-      // ¥³¥ó¥İ¡¼¥Í¥ó¥È¤òactivate¤¹¤ë
+      // ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã‚’activateã™ã‚‹
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->activate_component(rto->_this()));
       coil::usleep(100000);
       CPPUNIT_ASSERT_EQUAL(RTC::ACTIVE_STATE, ec->get_component_state(rto->_this()));
 
-      // ¤³¤Î»şÅÀ¤Ç¤Ï¡¢¤Ş¤Àon_activated()¤Ï1²ó¤â¸Æ¤Ó½Ğ¤µ¤ì¤Æ¤¤¤Ê¤¤¤Ï¤º
+      // ã“ã®æ™‚ç‚¹ã§ã¯ã€ã¾ã on_activated()ã¯1å›ã‚‚å‘¼ã³å‡ºã•ã‚Œã¦ã„ãªã„ã¯ãš
       CPPUNIT_ASSERT_EQUAL(0, mock->countLog("on_deactivated"));
 
-      // ¥³¥ó¥İ¡¼¥Í¥ó¥È¤òdeactivate¤¹¤ë
+      // ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã‚’deactivateã™ã‚‹
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->deactivate_component(rto->_this()));
       coil::usleep(100000);
       CPPUNIT_ASSERT_EQUAL(RTC::INACTIVE_STATE, ec->get_component_state(rto->_this()));
 
-      // ¤³¤Î»şÅÀ¤Ç¡¢on_deactivated()¤Ï1²ó¤À¤±¸Æ¤Ó½Ğ¤µ¤ì¤Æ¤¤¤ë¤Ï¤º
+      // ã“ã®æ™‚ç‚¹ã§ã€on_deactivated()ã¯1å›ã ã‘å‘¼ã³å‡ºã•ã‚Œã¦ã„ã‚‹ã¯ãš
       CPPUNIT_ASSERT_EQUAL(1, mock->countLog("on_deactivated"));
 
       ec->stop();
@@ -1112,23 +1112,23 @@ namespace PeriodicExecutionContext
     }
 		
     /*!
-     * @brief deactivate_component()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief deactivate_component()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - ExecutionContext¤ËÌ¤ÅĞÏ¿¤Î¥³¥ó¥İ¡¼¥Í¥ó¥È¤ËÂĞ¤·¤Ædeactivate_component()¤ò¸Æ½Ğ¤·¡¢°Õ¿Ş¤É¤ª¤ê¤Ë¼ºÇÔ¤¹¤ë¤«¡©
+     * - ExecutionContextã«æœªç™»éŒ²ã®ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã«å¯¾ã—ã¦deactivate_component()ã‚’å‘¼å‡ºã—ã€æ„å›³ã©ãŠã‚Šã«å¤±æ•—ã™ã‚‹ã‹ï¼Ÿ
      */
     void test_deactivate_component_without_participating()
     {
-      // RTObject¤òÀ¸À®¤¹¤ë
+      // RTObjectã‚’ç”Ÿæˆã™ã‚‹
       POA_RTC::LightweightRTObject* rto
 	= new DataFlowComponentMock(); // will be deleted automatically
 
-      // ExecutionContext¤òÀ¸À®¤¹¤ë
+      // ExecutionContextã‚’ç”Ÿæˆã™ã‚‹
       RTC_exp::PeriodicExecutionContext* ec
 	= new RTC_exp::PeriodicExecutionContext(); // will be deleted automatically
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->start());
 
-      // ExecutionContext¤ËÅĞÏ¿¤·¤Æ¤¤¤Ê¤¤¥³¥ó¥İ¡¼¥Í¥ó¥È¤ËÂĞ¤·¤Ædeactivate¤ò»î¤ß¤Æ¡¢
-      // °Õ¿Ş¤É¤ª¤ê¤Î¥¨¥é¡¼¥³¡¼¥É¤ÇÌá¤ë¤³¤È¤ò³ÎÇ§¤¹¤ë
+      // ExecutionContextã«ç™»éŒ²ã—ã¦ã„ãªã„ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã«å¯¾ã—ã¦deactivateã‚’è©¦ã¿ã¦ã€
+      // æ„å›³ã©ãŠã‚Šã®ã‚¨ãƒ©ãƒ¼ã‚³ãƒ¼ãƒ‰ã§æˆ»ã‚‹ã“ã¨ã‚’ç¢ºèªã™ã‚‹
       CPPUNIT_ASSERT_EQUAL(RTC::BAD_PARAMETER, ec->deactivate_component(rto->_this()));
 
       ec->stop();
@@ -1139,37 +1139,37 @@ namespace PeriodicExecutionContext
     }
 		
     /*!
-     * @brief deactivate_component()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief deactivate_component()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - ÈóAlive¾õÂÖ¤Î¥³¥ó¥İ¡¼¥Í¥ó¥È¤ËÂĞ¤·¤Ædeactivate_component()¸Æ½Ğ¤·¤ò¹Ô¤¤¡¢°Õ¿Ş¤É¤ª¤ê¤Ë¼ºÇÔ¤¹¤ë¤«¡©
+     * - éAliveçŠ¶æ…‹ã®ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã«å¯¾ã—ã¦deactivate_component()å‘¼å‡ºã—ã‚’è¡Œã„ã€æ„å›³ã©ãŠã‚Šã«å¤±æ•—ã™ã‚‹ã‹ï¼Ÿ
      */
     void test_deactivate_component_not_in_Alive_state()
     {
-      // RTObject¤òÀ¸À®¤¹¤ë
+      // RTObjectã‚’ç”Ÿæˆã™ã‚‹
       POA_RTC::LightweightRTObject* rto
 	= new DataFlowComponentMock(); // will be deleted automatically
       DataFlowComponentMock* mock
 	= dynamic_cast<DataFlowComponentMock*>(rto);
 			
-      // ExecutionContext¤òÀ¸À®¤¹¤ë
+      // ExecutionContextã‚’ç”Ÿæˆã™ã‚‹
       RTC_exp::PeriodicExecutionContext* ec
 	= new RTC_exp::PeriodicExecutionContext(); // will be deleted automatically
 
       ec->start();
 			
-      // ExecutionContext¤ËRTObject¤òÅĞÏ¿¤¹¤ë
+      // ExecutionContextã«RTObjectã‚’ç™»éŒ²ã™ã‚‹
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->add_component(rto->_this()));
 			
-      // ¥³¥ó¥İ¡¼¥Í¥ó¥È¤òactivate¤¹¤ë
+      // ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã‚’activateã™ã‚‹
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->activate_component(rto->_this()));
       usleep(100000);
       CPPUNIT_ASSERT_EQUAL(RTC::ACTIVE_STATE, ec->get_component_state(rto->_this()));
 
-      // ÈóAlive¾õÂÖ¤Ë¤·¤Æ¤ª¤¯
+      // éAliveçŠ¶æ…‹ã«ã—ã¦ãŠã
       mock->setAlive(false);
       CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(false), rto->is_alive(NULL));
 
-      // ÈóAlive¾õÂÖ¤Î¥³¥ó¥İ¡¼¥Í¥ó¥È¤ËÂĞ¤·¤Ædeactivate¤ò»î¤ß¤Æ¡¢°Õ¿Ş¤É¤ª¤ê¤Î¥¨¥é¡¼¥³¡¼¥É¤ÇÌá¤ë¤³¤È¤ò³ÎÇ§¤¹¤ë
+      // éAliveçŠ¶æ…‹ã®ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã«å¯¾ã—ã¦deactivateã‚’è©¦ã¿ã¦ã€æ„å›³ã©ãŠã‚Šã®ã‚¨ãƒ©ãƒ¼ã‚³ãƒ¼ãƒ‰ã§æˆ»ã‚‹ã“ã¨ã‚’ç¢ºèªã™ã‚‹
       // CPPUNIT_ASSERT_EQUAL(RTC::BAD_PARAMETER, ec->deactivate_component(rto->_this()));
 
       ec->stop();
@@ -1180,37 +1180,37 @@ namespace PeriodicExecutionContext
     }
 		
     /*!
-     * @brief reset_component()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief reset_component()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - reset_component()¸Æ½Ğ¤·¤Ë¤è¤ê¡¢¥³¥ó¥İ¡¼¥Í¥ó¥È¤Îon_reset()¤¬¸Æ¤Ó½Ğ¤µ¤ì¤ë¤«¡©
+     * - reset_component()å‘¼å‡ºã—ã«ã‚ˆã‚Šã€ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã®on_reset()ãŒå‘¼ã³å‡ºã•ã‚Œã‚‹ã‹ï¼Ÿ
      */
     void test_reset_component_invoking_on_reset()
     {
-      // RTObject¤òÀ¸À®¤¹¤ë
+      // RTObjectã‚’ç”Ÿæˆã™ã‚‹
       POA_RTC::LightweightRTObject* rto
 	= new DataFlowComponentMock(); // will be deleted automatically
       DataFlowComponentMock* mock
 	= dynamic_cast<DataFlowComponentMock*>(rto);
 
-      // ExecutionContext¤òÀ¸À®¤¹¤ë
+      // ExecutionContextã‚’ç”Ÿæˆã™ã‚‹
       RTC_exp::PeriodicExecutionContext* ec
 	= new RTC_exp::PeriodicExecutionContext(); // will be deleted automatically
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->start());
 			
-      // ¥³¥ó¥İ¡¼¥Í¥ó¥È¤òError¾õÂÖ¤Ë¤Ş¤ÇÁ«°Ü¤µ¤»¤ë
+      // ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã‚’ErrorçŠ¶æ…‹ã«ã¾ã§é·ç§»ã•ã›ã‚‹
       mock->setError(true);
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->add_component(rto->_this()));
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->activate_component(rto->_this()));
-      coil::sleep(1); // Error¾õÂÖ¤ØÁ«°Ü¤¹¤ë¤Ş¤ÇÂÔ¤Ä¡£ËÜÍè¡¢¤³¤Î¥¹¥ê¡¼¥×¤¬»ÅÍÍ¾åÉ¬Í×¤«Èİ¤«¡©
+      coil::sleep(1); // ErrorçŠ¶æ…‹ã¸é·ç§»ã™ã‚‹ã¾ã§å¾…ã¤ã€‚æœ¬æ¥ã€ã“ã®ã‚¹ãƒªãƒ¼ãƒ—ãŒä»•æ§˜ä¸Šå¿…è¦ã‹å¦ã‹ï¼Ÿ
       CPPUNIT_ASSERT_EQUAL(RTC::ERROR_STATE, ec->get_component_state(rto->_this()));
 			
-      // ¤³¤Î»şÅÀ¤Ç¤Ï¡¢on_reset()¤Ï1²ó¤â¸Æ¤Ó½Ğ¤µ¤ì¤Æ¤¤¤Ê¤¤¤Ï¤º
+      // ã“ã®æ™‚ç‚¹ã§ã¯ã€on_reset()ã¯1å›ã‚‚å‘¼ã³å‡ºã•ã‚Œã¦ã„ãªã„ã¯ãš
       CPPUNIT_ASSERT_EQUAL(0, mock->countLog("on_reset"));
 
-      // reset_component()¤ò¸Æ½Ğ¤·¡¢À®¸ù¤¹¤ë¤³¤È¤ò³ÎÇ§¤¹¤ë
+      // reset_component()ã‚’å‘¼å‡ºã—ã€æˆåŠŸã™ã‚‹ã“ã¨ã‚’ç¢ºèªã™ã‚‹
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->reset_component(rto->_this()));
       coil::usleep(100000);
-      // ¤³¤Î»şÅÀ¤Ç¡¢on_reset()¤¬1²ó¤À¤±¸Æ¤Ó½Ğ¤µ¤ì¤Æ¤¤¤ë¤Ï¤º
+      // ã“ã®æ™‚ç‚¹ã§ã€on_reset()ãŒ1å›ã ã‘å‘¼ã³å‡ºã•ã‚Œã¦ã„ã‚‹ã¯ãš
       CPPUNIT_ASSERT_EQUAL(1, mock->countLog("on_reset"));
 
       ec->stop();
@@ -1221,25 +1221,25 @@ namespace PeriodicExecutionContext
     }
 		
     /*!
-     * @brief reset_component()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief reset_component()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - ÈóError¾õÂÖ¤Î¥³¥ó¥İ¡¼¥Í¥ó¥È¤ËÂĞ¤·¤Æreset_component()¸Æ½Ğ¤·¤ò¹Ô¤¤¡¢°Õ¿Ş¤É¤ª¤ê¤Ë¼ºÇÔ¤¹¤ë¤«¡©
+     * - éErrorçŠ¶æ…‹ã®ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã«å¯¾ã—ã¦reset_component()å‘¼å‡ºã—ã‚’è¡Œã„ã€æ„å›³ã©ãŠã‚Šã«å¤±æ•—ã™ã‚‹ã‹ï¼Ÿ
      */
     void test_reset_component_not_in_Error_state()
     {
-      // RTObject¤òÀ¸À®¤¹¤ë
+      // RTObjectã‚’ç”Ÿæˆã™ã‚‹
       POA_RTC::LightweightRTObject* rto
 	= new DataFlowComponentMock(); // will be deleted automatically
 			
-      // ExecutionContext¤òÀ¸À®¤¹¤ë
+      // ExecutionContextã‚’ç”Ÿæˆã™ã‚‹
       RTC_exp::PeriodicExecutionContext* ec
 	= new RTC_exp::PeriodicExecutionContext(); // will be deleted automatically
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->start());
 			
-      // ExecutionContext¤ËRTObject¤òÅĞÏ¿¤¹¤ë
+      // ExecutionContextã«RTObjectã‚’ç™»éŒ²ã™ã‚‹
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->add_component(rto->_this()));
 			
-      // ¤³¤Î¾õÂÖ(Inactive)¤Çreset_component()¸Æ½Ğ¤·¤ò¹Ô¤¤¡¢°Õ¿Ş¤É¤ª¤ê¤Î¥¨¥é¡¼¥³¡¼¥É¤ÇÌá¤ë¤³¤È¤ò³ÎÇ§¤¹¤ë
+      // ã“ã®çŠ¶æ…‹(Inactive)ã§reset_component()å‘¼å‡ºã—ã‚’è¡Œã„ã€æ„å›³ã©ãŠã‚Šã®ã‚¨ãƒ©ãƒ¼ã‚³ãƒ¼ãƒ‰ã§æˆ»ã‚‹ã“ã¨ã‚’ç¢ºèªã™ã‚‹
       CPPUNIT_ASSERT_EQUAL(RTC::INACTIVE_STATE, ec->get_component_state(rto->_this()));
       CPPUNIT_ASSERT_EQUAL(RTC::PRECONDITION_NOT_MET, ec->reset_component(rto->_this()));
 
@@ -1251,30 +1251,30 @@ namespace PeriodicExecutionContext
     }
 		
     /*!
-     * @brief reset_component()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief reset_component()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - ÈóAlive¾õÂÖ¤Î¥³¥ó¥İ¡¼¥Í¥ó¥È¤ËÂĞ¤·¤Æreset_component()¸Æ½Ğ¤·¤ò¹Ô¤¤¡¢°Õ¿Ş¤É¤ª¤ê¤Ë¼ºÇÔ¤¹¤ë¤«¡©
+     * - éAliveçŠ¶æ…‹ã®ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã«å¯¾ã—ã¦reset_component()å‘¼å‡ºã—ã‚’è¡Œã„ã€æ„å›³ã©ãŠã‚Šã«å¤±æ•—ã™ã‚‹ã‹ï¼Ÿ
      */
     void test_reset_component_not_in_Alive_state()
     {
-      // RTObject¤òÀ¸À®¤¹¤ë
+      // RTObjectã‚’ç”Ÿæˆã™ã‚‹
       POA_RTC::LightweightRTObject* rto
 	= new DataFlowComponentMock(); // will be deleted automatically
       DataFlowComponentMock* mock
 	= dynamic_cast<DataFlowComponentMock*>(rto);
 
-      // ÈóAlive¾õÂÖ(Create¾õÂÖ)¤Ë¤·¤Æ¤ª¤¯
+      // éAliveçŠ¶æ…‹(CreateçŠ¶æ…‹)ã«ã—ã¦ãŠã
       mock->setAlive(false);
       CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(false), rto->is_alive(NULL));
 			
-      // ExecutionContext¤òÀ¸À®¤¹¤ë
+      // ExecutionContextã‚’ç”Ÿæˆã™ã‚‹
       RTC_exp::PeriodicExecutionContext* ec
 	= new RTC_exp::PeriodicExecutionContext(); // will be deleted automatically
 
-      // ExecutionContext¤ËRTObject¤òÅĞÏ¿¤¹¤ë
+      // ExecutionContextã«RTObjectã‚’ç™»éŒ²ã™ã‚‹
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->add_component(rto->_this()));
 			
-      // ¤³¤Î¾õÂÖ(Created)¤Çreset_component()¸Æ½Ğ¤·¤ò¹Ô¤¤¡¢°Õ¿Ş¤É¤ª¤ê¤Î¥¨¥é¡¼¥³¡¼¥É¤ÇÌá¤ë¤³¤È¤ò³ÎÇ§¤¹¤ë
+      // ã“ã®çŠ¶æ…‹(Created)ã§reset_component()å‘¼å‡ºã—ã‚’è¡Œã„ã€æ„å›³ã©ãŠã‚Šã®ã‚¨ãƒ©ãƒ¼ã‚³ãƒ¼ãƒ‰ã§æˆ»ã‚‹ã“ã¨ã‚’ç¢ºèªã™ã‚‹
       CPPUNIT_ASSERT_EQUAL(RTC::PRECONDITION_NOT_MET, ec->reset_component(rto->_this()));
 
       ec->stop();
@@ -1285,41 +1285,41 @@ namespace PeriodicExecutionContext
     }
 		
     /*!
-     * @brief bindComponent()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief bindComponent()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - ¥³¥ó¥İ¡¼¥Í¥ó¥È¤Î»²²Ã¼Ô¥ê¥¹¥È¤ØÀµ¤·¤¯ÅĞÏ¿¤µ¤ì¤ë¤«¡©
+     * - ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã®å‚åŠ è€…ãƒªã‚¹ãƒˆã¸æ­£ã—ãç™»éŒ²ã•ã‚Œã‚‹ã‹ï¼Ÿ
      */
     void test_bindComponent()
     {
-      // RTObject¤òÀ¸À®¤¹¤ë
+      // RTObjectã‚’ç”Ÿæˆã™ã‚‹
       RTObjectMock* rto = new RTObjectMock(m_pORB, m_pPOA);
       coil::Properties prop;
       prop.setProperty("exec_cxt.periodic.type","PeriodicExecutionContext");
       prop.setProperty("exec_cxt.periodic.rate","1000");
       rto->setProperties(prop);
 
-      // ExecutionContext¤òÀ¸À®¤¹¤ë
+      // ExecutionContextã‚’ç”Ÿæˆã™ã‚‹
       PeriodicExecutionContextMock* ec = new PeriodicExecutionContextMock();
 
-      // RTC::BAD_PARAMETER ¤òÊÖ¤¹¤«¡©
+      // RTC::BAD_PARAMETER ã‚’è¿”ã™ã‹ï¼Ÿ
       CPPUNIT_ASSERT_EQUAL(RTC::BAD_PARAMETER, ec->bindComponent(NULL));
 
-      // RTC::RTC_OK ¤òÊÖ¤¹¤«¡©
+      // RTC::RTC_OK ã‚’è¿”ã™ã‹ï¼Ÿ
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->bindComponent(rto));
 
-      // 1000·ïÅĞÏ¿¸å¡¢(id > ECOTHER_OFFSET)È½Äê¤ÎRTC::RTC_ERROR ¤òÊÖ¤¹¤«¡©
+      // 1000ä»¶ç™»éŒ²å¾Œã€(id > ECOTHER_OFFSET)åˆ¤å®šã®RTC::RTC_ERROR ã‚’è¿”ã™ã‹ï¼Ÿ
       for (int i = 0; i < 1000; ++i)
         {
           ec->bindComponent(rto);
         }
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_ERROR, ec->bindComponent(rto));
 
-      // m_ref=_nil()ÃÍ¤Î¾ì¹ç¡¢(id < 0)È½Äê¤ÎRTC::RTC_ERROR ¤òÊÖ¤¹¤«¡©
+      // m_ref=_nil()å€¤ã®å ´åˆã€(id < 0)åˆ¤å®šã®RTC::RTC_ERROR ã‚’è¿”ã™ã‹ï¼Ÿ
       ec->m_refmock = RTC::ExecutionContextService::_nil();
       ec->set_m_ref();
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_ERROR, ec->bindComponent(rto));
 
-      // ÅĞÏ¿¤·¤¿¥³¥ó¥İ¡¼¥Í¥ó¥È¤Îºï½ü
+      // ç™»éŒ²ã—ãŸã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã®å‰Šé™¤
       ec->clear_m_comps();
 
       ec->stop();

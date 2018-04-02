@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file   InPortBaseTests.cpp
  * @brief  InPortBase test class
@@ -838,12 +838,12 @@ namespace InPortBase
      */
     virtual void setUp()
     {
-        //´û¤Ë "corba_cdr" ¤ÇÅĞÏ¿¤µ¤ì¤Æ¤¤¤ë¾ì¹ç¤Ïºï½ü¤¹¤ë¡£
+        //æ—¢ã« "corba_cdr" ã§ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹å ´åˆã¯å‰Šé™¤ã™ã‚‹ã€‚
         if( RTC::InPortProviderFactory::instance().hasFactory("corba_cdr") )
         {
             RTC::InPortProviderFactory::instance().removeFactory("corba_cdr");
         }
-        //"corba_cdr" ¤Ë InPortCorbaCdrProviderMock ¤òÅĞÏ¿¤¹¤ë¡£
+        //"corba_cdr" ã« InPortCorbaCdrProviderMock ã‚’ç™»éŒ²ã™ã‚‹ã€‚
         RTC::InPortProviderFactory::instance().
         addFactory("corba_cdr",
                    ::coil::Creator< ::RTC::InPortProvider, 
@@ -851,12 +851,12 @@ namespace InPortBase
                    ::coil::Destructor< ::RTC::InPortProvider, 
                                        InPortCorbaCdrProviderMock>);
 
-        //´û¤Ë "corba_cdr" ¤ÇÅĞÏ¿¤µ¤ì¤Æ¤¤¤ë¾ì¹ç¤Ïºï½ü¤¹¤ë¡£
+        //æ—¢ã« "corba_cdr" ã§ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹å ´åˆã¯å‰Šé™¤ã™ã‚‹ã€‚
         if( RTC::OutPortConsumerFactory::instance().hasFactory("corba_cdr") )
         {
             RTC::OutPortConsumerFactory::instance().removeFactory("corba_cdr");
         }
-        //"corba_cdr" ¤Ë InPortCorbaCdrProviderMock ¤òÅĞÏ¿¤¹¤ë¡£
+        //"corba_cdr" ã« InPortCorbaCdrProviderMock ã‚’ç™»éŒ²ã™ã‚‹ã€‚
         RTC::OutPortConsumerFactory::instance().
         addFactory("corba_cdr",
                    ::coil::Creator< ::RTC::OutPortConsumer, 
@@ -864,12 +864,12 @@ namespace InPortBase
                    ::coil::Destructor< ::RTC::OutPortConsumer, 
                                        OutPortCorbaCdrConsumerMock>);
 
-        //´û¤Ë "ring_buffer" ¤ÇÅĞÏ¿¤µ¤ì¤Æ¤¤¤ë¾ì¹ç¤Ïºï½ü¤¹¤ë¡£
+        //æ—¢ã« "ring_buffer" ã§ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹å ´åˆã¯å‰Šé™¤ã™ã‚‹ã€‚
         if( RTC::CdrBufferFactory::instance().hasFactory("ring_buffer") )
         {
             RTC::CdrBufferFactory::instance().removeFactory("ring_buffer");
         }
-        //"ring_buffer" ¤Ë CdrRingBufferMock ¤òÅĞÏ¿¤¹¤ë¡£
+        //"ring_buffer" ã« CdrRingBufferMock ã‚’ç™»éŒ²ã™ã‚‹ã€‚
         RTC::CdrBufferFactory::instance().
         addFactory("ring_buffer",
                    coil::Creator<RTC::CdrBufferBase, CdrRingBufferMock>,
@@ -884,7 +884,7 @@ namespace InPortBase
     }
 		
     /*!
-     * @brief ¥³¥ó¥¹¥é¥¯¥¿¤Î¥Æ¥¹¥È
+     * @brief ã‚³ãƒ³ã‚¹ãƒ©ã‚¯ã‚¿ã®ãƒ†ã‚¹ãƒˆ
      * 
      */
     void test_constructor()
@@ -907,7 +907,7 @@ namespace InPortBase
 
     }
     /*!
-     * @brief init()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief init()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
      */
     void test_init()
@@ -919,12 +919,12 @@ namespace InPortBase
         //Check
         //  Check that buffer is generated.
         //  
-        //´û¤Ë "corba_cdr" ¤ÇÅĞÏ¿¤µ¤ì¤Æ¤¤¤ë¾ì¹ç¤Ïºï½ü¤¹¤ë¡£
+        //æ—¢ã« "corba_cdr" ã§ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹å ´åˆã¯å‰Šé™¤ã™ã‚‹ã€‚
         if( RTC::InPortProviderFactory::instance().hasFactory("corba_cdr") )
         {
             RTC::InPortProviderFactory::instance().removeFactory("corba_cdr");
         }
-        //"corba_cdr" ¤Ë InPortCorbaCdrProviderMock ¤òÅĞÏ¿¤¹¤ë¡£
+        //"corba_cdr" ã« InPortCorbaCdrProviderMock ã‚’ç™»éŒ²ã™ã‚‹ã€‚
         RTC::InPortProviderFactory::instance().
         addFactory("corba_cdr",
                    ::coil::Creator< ::RTC::InPortProvider, 
@@ -932,12 +932,12 @@ namespace InPortBase
                    ::coil::Destructor< ::RTC::InPortProvider, 
                                        InPortCorbaCdrProviderMock>);
 
-        //´û¤Ë "corba_cdr" ¤ÇÅĞÏ¿¤µ¤ì¤Æ¤¤¤ë¾ì¹ç¤Ïºï½ü¤¹¤ë¡£
+        //æ—¢ã« "corba_cdr" ã§ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹å ´åˆã¯å‰Šé™¤ã™ã‚‹ã€‚
         if( RTC::OutPortConsumerFactory::instance().hasFactory("corba_cdr") )
         {
             RTC::OutPortConsumerFactory::instance().removeFactory("corba_cdr");
         }
-        //"corba_cdr" ¤Ë InPortCorbaCdrProviderMock ¤òÅĞÏ¿¤¹¤ë¡£
+        //"corba_cdr" ã« InPortCorbaCdrProviderMock ã‚’ç™»éŒ²ã™ã‚‹ã€‚
         RTC::OutPortConsumerFactory::instance().
         addFactory("corba_cdr",
                    ::coil::Creator< ::RTC::OutPortConsumer, 
@@ -945,13 +945,13 @@ namespace InPortBase
                    ::coil::Destructor< ::RTC::OutPortConsumer, 
                                        OutPortCorbaCdrConsumerMock>);
 
-        //´û¤Ë "ring_buffer" ¤ÇÅĞÏ¿¤µ¤ì¤Æ¤¤¤ë¾ì¹ç¤Ïºï½ü¤¹¤ë¡£
+        //æ—¢ã« "ring_buffer" ã§ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹å ´åˆã¯å‰Šé™¤ã™ã‚‹ã€‚
         if( RTC::CdrBufferFactory::instance().hasFactory("ring_buffer") )
         {
             RTC::CdrBufferFactory::instance().removeFactory("ring_buffer");
         }
 
-        //"ring_buffer" ¤Ë CdrRingBufferMock ¤òÅĞÏ¿¤¹¤ë¡£
+        //"ring_buffer" ã« CdrRingBufferMock ã‚’ç™»éŒ²ã™ã‚‹ã€‚
         RTC::CdrBufferFactory::instance().
         addFactory("ring_buffer",
                    coil::Creator<RTC::CdrBufferBase, CdrRingBufferMock>,
@@ -982,7 +982,7 @@ namespace InPortBase
         coil::Properties dummy;
         inport.init(dummy);
 
-        //m_singlebuffer¤¬true¤Î¾ì¹çm_thebuffer¤¬¼èÆÀ¤µ¤ì¤ë
+        //m_singlebufferãŒtrueã®å ´åˆm_thebufferãŒå–å¾—ã•ã‚Œã‚‹
         CPPUNIT_ASSERT(0!=inport.getThebuffer());
         CPPUNIT_ASSERT_EQUAL(1,
              CdrRingBufferMock::logger.countLog("RingBufferMock::Constructor"));
@@ -990,13 +990,13 @@ namespace InPortBase
         profile = inport.getPortProfile();
         prop = NVUtil::toProperties(profile.properties);
 
-        //getPortProfile¤Îproperties¤Ë°Ê²¼¤¬ÄÉ²Ã¤µ¤ì¤ë
+        //getPortProfileã®propertiesã«ä»¥ä¸‹ãŒè¿½åŠ ã•ã‚Œã‚‹
         CPPUNIT_ASSERT_EQUAL(std::string("push,pull"),
                              prop["dataport.dataflow_type"]);
         CPPUNIT_ASSERT_EQUAL(std::string("corba_cdr, direct"),
                              prop["dataport.interface_type"]);
  
-        //ProviderTypes,ConsumerTypes¤¬¼èÆÀ¤µ¤ì¤ë
+        //ProviderTypes,ConsumerTypesãŒå–å¾—ã•ã‚Œã‚‹
         pstr = inport.getProviderTypes();
         CPPUNIT_ASSERT_EQUAL(std::string("corba_cdr"),
                              pstr[0]);
@@ -1007,7 +1007,7 @@ namespace InPortBase
         portAdmin.deletePort(inport);
     }
     /*!
-     * @brief init()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief init()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
      */
     void test_init2()
@@ -1019,12 +1019,12 @@ namespace InPortBase
         //Check
         //  Check that buffer is not generated.
         //
-        //´û¤Ë "corba_cdr" ¤ÇÅĞÏ¿¤µ¤ì¤Æ¤¤¤ë¾ì¹ç¤Ïºï½ü¤¹¤ë¡£
+        //æ—¢ã« "corba_cdr" ã§ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹å ´åˆã¯å‰Šé™¤ã™ã‚‹ã€‚
         if( RTC::InPortProviderFactory::instance().hasFactory("corba_cdr") )
         {
             RTC::InPortProviderFactory::instance().removeFactory("corba_cdr");
         }
-        //"corba_cdr" ¤Ë InPortCorbaCdrProviderMock ¤òÅĞÏ¿¤¹¤ë¡£
+        //"corba_cdr" ã« InPortCorbaCdrProviderMock ã‚’ç™»éŒ²ã™ã‚‹ã€‚
         RTC::InPortProviderFactory::instance().
         addFactory("corba_cdr",
                    ::coil::Creator< ::RTC::InPortProvider, 
@@ -1032,12 +1032,12 @@ namespace InPortBase
                    ::coil::Destructor< ::RTC::InPortProvider, 
                                        InPortCorbaCdrProviderMock>);
 
-        //´û¤Ë "corba_cdr" ¤ÇÅĞÏ¿¤µ¤ì¤Æ¤¤¤ë¾ì¹ç¤Ïºï½ü¤¹¤ë¡£
+        //æ—¢ã« "corba_cdr" ã§ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹å ´åˆã¯å‰Šé™¤ã™ã‚‹ã€‚
         if( RTC::OutPortConsumerFactory::instance().hasFactory("corba_cdr") )
         {
             RTC::OutPortConsumerFactory::instance().removeFactory("corba_cdr");
         }
-        //"corba_cdr" ¤Ë InPortCorbaCdrProviderMock ¤òÅĞÏ¿¤¹¤ë¡£
+        //"corba_cdr" ã« InPortCorbaCdrProviderMock ã‚’ç™»éŒ²ã™ã‚‹ã€‚
         RTC::OutPortConsumerFactory::instance().
         addFactory("corba_cdr",
                    ::coil::Creator< ::RTC::OutPortConsumer, 
@@ -1045,12 +1045,12 @@ namespace InPortBase
                    ::coil::Destructor< ::RTC::OutPortConsumer, 
                                        OutPortCorbaCdrConsumerMock>);
 
-        //´û¤Ë "ring_buffer" ¤ÇÅĞÏ¿¤µ¤ì¤Æ¤¤¤ë¾ì¹ç¤Ïºï½ü¤¹¤ë¡£
+        //æ—¢ã« "ring_buffer" ã§ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹å ´åˆã¯å‰Šé™¤ã™ã‚‹ã€‚
         if( RTC::CdrBufferFactory::instance().hasFactory("ring_buffer") )
         {
             RTC::CdrBufferFactory::instance().removeFactory("ring_buffer");
         }
-        //"ring_buffer" ¤Ë CdrRingBufferMock ¤òÅĞÏ¿¤¹¤ë¡£
+        //"ring_buffer" ã« CdrRingBufferMock ã‚’ç™»éŒ²ã™ã‚‹ã€‚
         RTC::CdrBufferFactory::instance().
         addFactory("ring_buffer",
                    coil::Creator<RTC::CdrBufferBase, CdrRingBufferMock>,
@@ -1087,13 +1087,13 @@ namespace InPortBase
         profile = inport.getPortProfile();
         prop = NVUtil::toProperties(profile.properties);
 
-        //getPortProfile¤Îproperties¤Ë°Ê²¼¤¬ÄÉ²Ã¤µ¤ì¤ë
+        //getPortProfileã®propertiesã«ä»¥ä¸‹ãŒè¿½åŠ ã•ã‚Œã‚‹
         CPPUNIT_ASSERT_EQUAL(std::string("push,pull"),
                              prop["dataport.dataflow_type"]);
         CPPUNIT_ASSERT_EQUAL(std::string("corba_cdr, direct"),
                              prop["dataport.interface_type"]);
  
-        //ProviderTypes,ConsumerTypes¤¬¼èÆÀ¤µ¤ì¤ë
+        //ProviderTypes,ConsumerTypesãŒå–å¾—ã•ã‚Œã‚‹
         pstr = inport.getProviderTypes();
         CPPUNIT_ASSERT_EQUAL(std::string("corba_cdr"),
                              pstr[0]);
@@ -1104,7 +1104,7 @@ namespace InPortBase
         portAdmin.deletePort(inport);
     }
     /*!
-     * @brief init()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief init()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
      */
     void test_init3()
@@ -1116,12 +1116,12 @@ namespace InPortBase
         //Check
         //  Check that buffer is not generated.
         //  
-        //´û¤Ë "corba_cdr" ¤ÇÅĞÏ¿¤µ¤ì¤Æ¤¤¤ë¾ì¹ç¤Ïºï½ü¤¹¤ë¡£
+        //æ—¢ã« "corba_cdr" ã§ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹å ´åˆã¯å‰Šé™¤ã™ã‚‹ã€‚
         if( RTC::InPortProviderFactory::instance().hasFactory("corba_cdr") )
         {
             RTC::InPortProviderFactory::instance().removeFactory("corba_cdr");
         }
-        //"corba_cdr" ¤Ë InPortCorbaCdrProviderMock ¤òÅĞÏ¿¤¹¤ë¡£
+        //"corba_cdr" ã« InPortCorbaCdrProviderMock ã‚’ç™»éŒ²ã™ã‚‹ã€‚
         RTC::InPortProviderFactory::instance().
         addFactory("corba_cdr",
                    ::coil::Creator< ::RTC::InPortProvider, 
@@ -1129,12 +1129,12 @@ namespace InPortBase
                    ::coil::Destructor< ::RTC::InPortProvider, 
                                        InPortCorbaCdrProviderMock>);
 
-        //´û¤Ë "corba_cdr" ¤ÇÅĞÏ¿¤µ¤ì¤Æ¤¤¤ë¾ì¹ç¤Ïºï½ü¤¹¤ë¡£
+        //æ—¢ã« "corba_cdr" ã§ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹å ´åˆã¯å‰Šé™¤ã™ã‚‹ã€‚
         if( RTC::OutPortConsumerFactory::instance().hasFactory("corba_cdr") )
         {
             RTC::OutPortConsumerFactory::instance().removeFactory("corba_cdr");
         }
-        //"corba_cdr" ¤Ë InPortCorbaCdrProviderMock ¤òÅĞÏ¿¤¹¤ë¡£
+        //"corba_cdr" ã« InPortCorbaCdrProviderMock ã‚’ç™»éŒ²ã™ã‚‹ã€‚
         RTC::OutPortConsumerFactory::instance().
         addFactory("corba_cdr",
                    ::coil::Creator< ::RTC::OutPortConsumer, 
@@ -1142,7 +1142,7 @@ namespace InPortBase
                    ::coil::Destructor< ::RTC::OutPortConsumer, 
                                        OutPortCorbaCdrConsumerMock>);
 
-        //´û¤Ë "ring_buffer" ¤ÇÅĞÏ¿¤µ¤ì¤Æ¤¤¤ë¾ì¹ç¤Ïºï½ü¤¹¤ë¡£
+        //æ—¢ã« "ring_buffer" ã§ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹å ´åˆã¯å‰Šé™¤ã™ã‚‹ã€‚
         if( RTC::CdrBufferFactory::instance().hasFactory("ring_buffer") )
         {
             RTC::CdrBufferFactory::instance().removeFactory("ring_buffer");
@@ -1172,7 +1172,7 @@ namespace InPortBase
         coil::Properties dummy;
         inport.init(dummy);
 
-        //m_singlebuffer¤¬true¤Î¾ì¹çm_thebuffer¤¬¼èÆÀ¤µ¤ì¤ë
+        //m_singlebufferãŒtrueã®å ´åˆm_thebufferãŒå–å¾—ã•ã‚Œã‚‹
         CPPUNIT_ASSERT(0==inport.getThebuffer());
         CPPUNIT_ASSERT_EQUAL(0,
              CdrRingBufferMock::logger.countLog("RingBufferMock::Constructor"));
@@ -1180,13 +1180,13 @@ namespace InPortBase
         profile = inport.getPortProfile();
         prop = NVUtil::toProperties(profile.properties);
 
-        //getPortProfile¤Îproperties¤Ë°Ê²¼¤¬ÄÉ²Ã¤µ¤ì¤ë
+        //getPortProfileã®propertiesã«ä»¥ä¸‹ãŒè¿½åŠ ã•ã‚Œã‚‹
         CPPUNIT_ASSERT_EQUAL(std::string("push,pull"),
                              prop["dataport.dataflow_type"]);
         CPPUNIT_ASSERT_EQUAL(std::string("corba_cdr, direct"),
                              prop["dataport.interface_type"]);
  
-        //ProviderTypes,ConsumerTypes¤¬¼èÆÀ¤µ¤ì¤ë
+        //ProviderTypes,ConsumerTypesãŒå–å¾—ã•ã‚Œã‚‹
         pstr = inport.getProviderTypes();
         CPPUNIT_ASSERT_EQUAL(std::string("corba_cdr"),
                              pstr[0]);
@@ -1198,17 +1198,17 @@ namespace InPortBase
         portAdmin.deletePort(inport);
     }
     /*!
-     * @brief initProviders()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief initProviders()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
      */
     void test_initProviders()
     {
-        //´û¤Ë "corba_cdr" ¤ÇÅĞÏ¿¤µ¤ì¤Æ¤¤¤ë¾ì¹ç¤Ïºï½ü¤¹¤ë¡£
+        //æ—¢ã« "corba_cdr" ã§ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹å ´åˆã¯å‰Šé™¤ã™ã‚‹ã€‚
         if( RTC::InPortProviderFactory::instance().hasFactory("corba_cdr") )
         {
             RTC::InPortProviderFactory::instance().removeFactory("corba_cdr");
         }
-        //"corba_cdr" ¤Ë InPortCorbaCdrProviderMock ¤òÅĞÏ¿¤¹¤ë¡£
+        //"corba_cdr" ã« InPortCorbaCdrProviderMock ã‚’ç™»éŒ²ã™ã‚‹ã€‚
         RTC::InPortProviderFactory::instance().
         addFactory("corba_cdr",
                    ::coil::Creator< ::RTC::InPortProvider, 
@@ -1216,18 +1216,18 @@ namespace InPortBase
                    ::coil::Destructor< ::RTC::InPortProvider, 
                                        InPortCorbaCdrProviderMock>);
 
-        //´û¤Ë "ring_buffer" ¤ÇÅĞÏ¿¤µ¤ì¤Æ¤¤¤ë¾ì¹ç¤Ïºï½ü¤¹¤ë¡£
+        //æ—¢ã« "ring_buffer" ã§ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹å ´åˆã¯å‰Šé™¤ã™ã‚‹ã€‚
         if( RTC::CdrBufferFactory::instance().hasFactory("ring_buffer") )
         {
             RTC::CdrBufferFactory::instance().removeFactory("ring_buffer");
         }
 
-        //´û¤Ë "corba_cdr" ¤ÇÅĞÏ¿¤µ¤ì¤Æ¤¤¤ë¾ì¹ç¤Ïºï½ü¤¹¤ë¡£
+        //æ—¢ã« "corba_cdr" ã§ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹å ´åˆã¯å‰Šé™¤ã™ã‚‹ã€‚
         if( RTC::OutPortConsumerFactory::instance().hasFactory("corba_cdr") )
         {
             RTC::OutPortConsumerFactory::instance().removeFactory("corba_cdr");
         }
-        //"corba_cdr" ¤Ë InPortCorbaCdrProviderMock ¤òÅĞÏ¿¤¹¤ë¡£
+        //"corba_cdr" ã« InPortCorbaCdrProviderMock ã‚’ç™»éŒ²ã™ã‚‹ã€‚
         RTC::OutPortConsumerFactory::instance().
         addFactory("corba_cdr",
                    ::coil::Creator< ::RTC::OutPortConsumer, 
@@ -1235,7 +1235,7 @@ namespace InPortBase
                    ::coil::Destructor< ::RTC::OutPortConsumer, 
                                        OutPortCorbaCdrConsumerMock>);
 
-        //"ring_buffer" ¤Ë CdrRingBufferMock ¤òÅĞÏ¿¤¹¤ë¡£
+        //"ring_buffer" ã« CdrRingBufferMock ã‚’ç™»éŒ²ã™ã‚‹ã€‚
         RTC::CdrBufferFactory::instance().
         addFactory("ring_buffer",
                    coil::Creator<RTC::CdrBufferBase, CdrRingBufferMock>,
@@ -1262,13 +1262,13 @@ namespace InPortBase
         profile = inport.getPortProfile();
         prop = NVUtil::toProperties(profile.properties);
 
-        //getPortProfile¤Îproperties¤Ë°Ê²¼¤¬ÄÉ²Ã¤µ¤ì¤ë
+        //getPortProfileã®propertiesã«ä»¥ä¸‹ãŒè¿½åŠ ã•ã‚Œã‚‹
         CPPUNIT_ASSERT_EQUAL(std::string("push"),
                              prop["dataport.dataflow_type"]);
         CPPUNIT_ASSERT_EQUAL(std::string("corba_cdr, direct"),
                              prop["dataport.interface_type"]);
  
-        //ProviderTypes,ConsumerTypes¤¬¼èÆÀ¤µ¤ì¤ë
+        //ProviderTypes,ConsumerTypesãŒå–å¾—ã•ã‚Œã‚‹
         pstr = inport.getProviderTypes();
         CPPUNIT_ASSERT((size_t)0!= pstr.size());
         CPPUNIT_ASSERT_EQUAL(std::string("corba_cdr"),
@@ -1277,24 +1277,24 @@ namespace InPortBase
         portAdmin.deletePort(inport);
     }
     /*!
-     * @brief initProviders()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief initProviders()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * The provider is not registered in Factory.
      * 
      */
     void test_initProviders2()
     {
-        //´û¤Ë "corba_cdr" ¤ÇÅĞÏ¿¤µ¤ì¤Æ¤¤¤ë¾ì¹ç¤Ïºï½ü¤¹¤ë¡£
+        //æ—¢ã« "corba_cdr" ã§ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹å ´åˆã¯å‰Šé™¤ã™ã‚‹ã€‚
         if( RTC::InPortProviderFactory::instance().hasFactory("corba_cdr") )
         {
             RTC::InPortProviderFactory::instance().removeFactory("corba_cdr");
         }
 
-        //´û¤Ë "corba_cdr" ¤ÇÅĞÏ¿¤µ¤ì¤Æ¤¤¤ë¾ì¹ç¤Ïºï½ü¤¹¤ë¡£
+        //æ—¢ã« "corba_cdr" ã§ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹å ´åˆã¯å‰Šé™¤ã™ã‚‹ã€‚
         if( RTC::OutPortConsumerFactory::instance().hasFactory("corba_cdr") )
         {
             RTC::OutPortConsumerFactory::instance().removeFactory("corba_cdr");
         }
-        //"corba_cdr" ¤Ë InPortCorbaCdrProviderMock ¤òÅĞÏ¿¤¹¤ë¡£
+        //"corba_cdr" ã« InPortCorbaCdrProviderMock ã‚’ç™»éŒ²ã™ã‚‹ã€‚
         RTC::OutPortConsumerFactory::instance().
         addFactory("corba_cdr",
                    ::coil::Creator< ::RTC::OutPortConsumer, 
@@ -1302,12 +1302,12 @@ namespace InPortBase
                    ::coil::Destructor< ::RTC::OutPortConsumer, 
                                        OutPortCorbaCdrConsumerMock>);
 
-        //´û¤Ë "ring_buffer" ¤ÇÅĞÏ¿¤µ¤ì¤Æ¤¤¤ë¾ì¹ç¤Ïºï½ü¤¹¤ë¡£
+        //æ—¢ã« "ring_buffer" ã§ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹å ´åˆã¯å‰Šé™¤ã™ã‚‹ã€‚
         if( RTC::CdrBufferFactory::instance().hasFactory("ring_buffer") )
         {
             RTC::CdrBufferFactory::instance().removeFactory("ring_buffer");
         }
-        //"ring_buffer" ¤Ë CdrRingBufferMock ¤òÅĞÏ¿¤¹¤ë¡£
+        //"ring_buffer" ã« CdrRingBufferMock ã‚’ç™»éŒ²ã™ã‚‹ã€‚
         RTC::CdrBufferFactory::instance().
         addFactory("ring_buffer",
                    coil::Creator<RTC::CdrBufferBase, CdrRingBufferMock>,
@@ -1334,30 +1334,30 @@ namespace InPortBase
         profile = inport.getPortProfile();
         prop = NVUtil::toProperties(profile.properties);
 
-        //getPortProfile¤Îproperties¤Ë°Ê²¼¤¬ÄÉ²Ã¤µ¤ì¤ë
+        //getPortProfileã®propertiesã«ä»¥ä¸‹ãŒè¿½åŠ ã•ã‚Œã‚‹
         CPPUNIT_ASSERT_EQUAL(std::string("push"),
                              prop["dataport.dataflow_type"]);
         CPPUNIT_ASSERT_EQUAL(std::string("direct"),
                              prop["dataport.interface_type"]);
 
-        //ProviderTypes,ConsumerTypes¤¬¼èÆÀ¤µ¤ì¤ë
+        //ProviderTypes,ConsumerTypesãŒå–å¾—ã•ã‚Œã‚‹
         pstr = inport.getProviderTypes();
         CPPUNIT_ASSERT((size_t)0!= pstr.size());
 
         portAdmin.deletePort(inport);
     }
     /*!
-     * @brief initConsumers()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief initConsumers()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
      */
     void test_initConsumers()
     {
-        //´û¤Ë "corba_cdr" ¤ÇÅĞÏ¿¤µ¤ì¤Æ¤¤¤ë¾ì¹ç¤Ïºï½ü¤¹¤ë¡£
+        //æ—¢ã« "corba_cdr" ã§ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹å ´åˆã¯å‰Šé™¤ã™ã‚‹ã€‚
         if( RTC::InPortProviderFactory::instance().hasFactory("corba_cdr") )
         {
             RTC::InPortProviderFactory::instance().removeFactory("corba_cdr");
         }
-        //"corba_cdr" ¤Ë InPortCorbaCdrProviderMock ¤òÅĞÏ¿¤¹¤ë¡£
+        //"corba_cdr" ã« InPortCorbaCdrProviderMock ã‚’ç™»éŒ²ã™ã‚‹ã€‚
         RTC::InPortProviderFactory::instance().
         addFactory("corba_cdr",
                    ::coil::Creator< ::RTC::InPortProvider, 
@@ -1365,12 +1365,12 @@ namespace InPortBase
                    ::coil::Destructor< ::RTC::InPortProvider, 
                                        InPortCorbaCdrProviderMock>);
 
-        //´û¤Ë "corba_cdr" ¤ÇÅĞÏ¿¤µ¤ì¤Æ¤¤¤ë¾ì¹ç¤Ïºï½ü¤¹¤ë¡£
+        //æ—¢ã« "corba_cdr" ã§ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹å ´åˆã¯å‰Šé™¤ã™ã‚‹ã€‚
         if( RTC::OutPortConsumerFactory::instance().hasFactory("corba_cdr") )
         {
             RTC::OutPortConsumerFactory::instance().removeFactory("corba_cdr");
         }
-        //"corba_cdr" ¤Ë InPortCorbaCdrProviderMock ¤òÅĞÏ¿¤¹¤ë¡£
+        //"corba_cdr" ã« InPortCorbaCdrProviderMock ã‚’ç™»éŒ²ã™ã‚‹ã€‚
         RTC::OutPortConsumerFactory::instance().
         addFactory("corba_cdr",
                    ::coil::Creator< ::RTC::OutPortConsumer, 
@@ -1378,12 +1378,12 @@ namespace InPortBase
                    ::coil::Destructor< ::RTC::OutPortConsumer, 
                                        OutPortCorbaCdrConsumerMock>);
 
-        //´û¤Ë "ring_buffer" ¤ÇÅĞÏ¿¤µ¤ì¤Æ¤¤¤ë¾ì¹ç¤Ïºï½ü¤¹¤ë¡£
+        //æ—¢ã« "ring_buffer" ã§ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹å ´åˆã¯å‰Šé™¤ã™ã‚‹ã€‚
         if( RTC::CdrBufferFactory::instance().hasFactory("ring_buffer") )
         {
             RTC::CdrBufferFactory::instance().removeFactory("ring_buffer");
         }
-        //"ring_buffer" ¤Ë CdrRingBufferMock ¤òÅĞÏ¿¤¹¤ë¡£
+        //"ring_buffer" ã« CdrRingBufferMock ã‚’ç™»éŒ²ã™ã‚‹ã€‚
         RTC::CdrBufferFactory::instance().
         addFactory("ring_buffer",
                    coil::Creator<RTC::CdrBufferBase, CdrRingBufferMock>,
@@ -1409,13 +1409,13 @@ namespace InPortBase
         profile = inport.getPortProfile();
         prop = NVUtil::toProperties(profile.properties);
 
-        //getPortProfile¤Îproperties¤Ë°Ê²¼¤¬ÄÉ²Ã¤µ¤ì¤ë
+        //getPortProfileã®propertiesã«ä»¥ä¸‹ãŒè¿½åŠ ã•ã‚Œã‚‹
         CPPUNIT_ASSERT_EQUAL(std::string("pull"),
                              prop["dataport.dataflow_type"]);
         CPPUNIT_ASSERT_EQUAL(std::string("corba_cdr"),
                              prop["dataport.interface_type"]);
  
-        //ProviderTypes,ConsumerTypes¤¬¼èÆÀ¤µ¤ì¤ë
+        //ProviderTypes,ConsumerTypesãŒå–å¾—ã•ã‚Œã‚‹
         cstr = inport.get_m_consumerTypes();
         CPPUNIT_ASSERT((size_t)0!= cstr.size());
         CPPUNIT_ASSERT_EQUAL(std::string("corba_cdr"),
@@ -1425,17 +1425,17 @@ namespace InPortBase
 
     }
     /*!
-     * @brief initConsumers()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief initConsumers()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
      */
     void test_initConsumers2()
     {
-        //´û¤Ë "corba_cdr" ¤ÇÅĞÏ¿¤µ¤ì¤Æ¤¤¤ë¾ì¹ç¤Ïºï½ü¤¹¤ë¡£
+        //æ—¢ã« "corba_cdr" ã§ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹å ´åˆã¯å‰Šé™¤ã™ã‚‹ã€‚
         if( RTC::InPortProviderFactory::instance().hasFactory("corba_cdr") )
         {
             RTC::InPortProviderFactory::instance().removeFactory("corba_cdr");
         }
-        //"corba_cdr" ¤Ë InPortCorbaCdrProviderMock ¤òÅĞÏ¿¤¹¤ë¡£
+        //"corba_cdr" ã« InPortCorbaCdrProviderMock ã‚’ç™»éŒ²ã™ã‚‹ã€‚
         RTC::InPortProviderFactory::instance().
         addFactory("corba_cdr",
                    ::coil::Creator< ::RTC::InPortProvider, 
@@ -1443,18 +1443,18 @@ namespace InPortBase
                    ::coil::Destructor< ::RTC::InPortProvider, 
                                        InPortCorbaCdrProviderMock>);
 
-        //´û¤Ë "corba_cdr" ¤ÇÅĞÏ¿¤µ¤ì¤Æ¤¤¤ë¾ì¹ç¤Ïºï½ü¤¹¤ë¡£
+        //æ—¢ã« "corba_cdr" ã§ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹å ´åˆã¯å‰Šé™¤ã™ã‚‹ã€‚
         if( RTC::OutPortConsumerFactory::instance().hasFactory("corba_cdr") )
         {
             RTC::OutPortConsumerFactory::instance().removeFactory("corba_cdr");
         }
 
-        //´û¤Ë "ring_buffer" ¤ÇÅĞÏ¿¤µ¤ì¤Æ¤¤¤ë¾ì¹ç¤Ïºï½ü¤¹¤ë¡£
+        //æ—¢ã« "ring_buffer" ã§ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹å ´åˆã¯å‰Šé™¤ã™ã‚‹ã€‚
         if( RTC::CdrBufferFactory::instance().hasFactory("ring_buffer") )
         {
             RTC::CdrBufferFactory::instance().removeFactory("ring_buffer");
         }
-        //"ring_buffer" ¤Ë CdrRingBufferMock ¤òÅĞÏ¿¤¹¤ë¡£
+        //"ring_buffer" ã« CdrRingBufferMock ã‚’ç™»éŒ²ã™ã‚‹ã€‚
         RTC::CdrBufferFactory::instance().
         addFactory("ring_buffer",
                    coil::Creator<RTC::CdrBufferBase, CdrRingBufferMock>,
@@ -1480,13 +1480,13 @@ namespace InPortBase
         profile = inport.getPortProfile();
         prop = NVUtil::toProperties(profile.properties);
 
-        //getPortProfile¤Îproperties¤Ë°Ê²¼¤¬ÄÉ²Ã¤µ¤ì¤ë
+        //getPortProfileã®propertiesã«ä»¥ä¸‹ãŒè¿½åŠ ã•ã‚Œã‚‹
         CPPUNIT_ASSERT_EQUAL(std::string(""),
                              prop["dataport.dataflow_type"]);
         CPPUNIT_ASSERT_EQUAL(std::string(""),
                              prop["dataport.interface_type"]);
 
-        //ProviderTypes,ConsumerTypes¤¬¼èÆÀ¤µ¤ì¤ë
+        //ProviderTypes,ConsumerTypesãŒå–å¾—ã•ã‚Œã‚‹
         cstr = inport.get_m_consumerTypes();
         CPPUNIT_ASSERT((size_t)0== cstr.size());
 
@@ -1494,17 +1494,17 @@ namespace InPortBase
 
     }
     /*!
-     * @brief activateInterfaces(),deactivateInterfaces()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief activateInterfaces(),deactivateInterfaces()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
      */
     void test_activateInterfaces_deactivateInterfaces(void)
     {
-        //´û¤Ë "corba_cdr" ¤ÇÅĞÏ¿¤µ¤ì¤Æ¤¤¤ë¾ì¹ç¤Ïºï½ü¤¹¤ë¡£
+        //æ—¢ã« "corba_cdr" ã§ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹å ´åˆã¯å‰Šé™¤ã™ã‚‹ã€‚
         if( RTC::InPortProviderFactory::instance().hasFactory("corba_cdr") )
         {
             RTC::InPortProviderFactory::instance().removeFactory("corba_cdr");
         }
-        //"corba_cdr" ¤Ë InPortCorbaCdrProviderMock ¤òÅĞÏ¿¤¹¤ë¡£
+        //"corba_cdr" ã« InPortCorbaCdrProviderMock ã‚’ç™»éŒ²ã™ã‚‹ã€‚
         RTC::InPortProviderFactory::instance().
         addFactory("corba_cdr",
                    ::coil::Creator< ::RTC::InPortProvider, 
@@ -1512,12 +1512,12 @@ namespace InPortBase
                    ::coil::Destructor< ::RTC::InPortProvider, 
                                        InPortCorbaCdrProviderMock>);
 
-        //´û¤Ë "corba_cdr" ¤ÇÅĞÏ¿¤µ¤ì¤Æ¤¤¤ë¾ì¹ç¤Ïºï½ü¤¹¤ë¡£
+        //æ—¢ã« "corba_cdr" ã§ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹å ´åˆã¯å‰Šé™¤ã™ã‚‹ã€‚
         if( RTC::OutPortConsumerFactory::instance().hasFactory("corba_cdr") )
         {
             RTC::OutPortConsumerFactory::instance().removeFactory("corba_cdr");
         }
-        //"corba_cdr" ¤Ë InPortCorbaCdrProviderMock ¤òÅĞÏ¿¤¹¤ë¡£
+        //"corba_cdr" ã« InPortCorbaCdrProviderMock ã‚’ç™»éŒ²ã™ã‚‹ã€‚
         RTC::OutPortConsumerFactory::instance().
         addFactory("corba_cdr",
                    ::coil::Creator< ::RTC::OutPortConsumer, 
@@ -1525,13 +1525,13 @@ namespace InPortBase
                    ::coil::Destructor< ::RTC::OutPortConsumer, 
                                        OutPortCorbaCdrConsumerMock>);
 
-        //´û¤Ë "ring_buffer" ¤ÇÅĞÏ¿¤µ¤ì¤Æ¤¤¤ë¾ì¹ç¤Ïºï½ü¤¹¤ë¡£
+        //æ—¢ã« "ring_buffer" ã§ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹å ´åˆã¯å‰Šé™¤ã™ã‚‹ã€‚
         if( RTC::CdrBufferFactory::instance().hasFactory("ring_buffer") )
         {
             RTC::CdrBufferFactory::instance().removeFactory("ring_buffer");
         }
 
-        //"ring_buffer" ¤Ë CdrRingBufferMock ¤òÅĞÏ¿¤¹¤ë¡£
+        //"ring_buffer" ã« CdrRingBufferMock ã‚’ç™»éŒ²ã™ã‚‹ã€‚
         RTC::CdrBufferFactory::instance().
         addFactory("ring_buffer",
                    coil::Creator<RTC::CdrBufferBase, CdrRingBufferMock>,
@@ -1627,17 +1627,17 @@ namespace InPortBase
         delete ic;
     }
     /*!
-     * @brief publishInterfaces()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief publishInterfaces()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
      */
     void test_publishInterfaces(void)
     {
-        //´û¤Ë "corba_cdr" ¤ÇÅĞÏ¿¤µ¤ì¤Æ¤¤¤ë¾ì¹ç¤Ïºï½ü¤¹¤ë¡£
+        //æ—¢ã« "corba_cdr" ã§ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹å ´åˆã¯å‰Šé™¤ã™ã‚‹ã€‚
         if( RTC::InPortProviderFactory::instance().hasFactory("corba_cdr") )
         {
             RTC::InPortProviderFactory::instance().removeFactory("corba_cdr");
         }
-        //"corba_cdr" ¤Ë InPortCorbaCdrProviderMock ¤òÅĞÏ¿¤¹¤ë¡£
+        //"corba_cdr" ã« InPortCorbaCdrProviderMock ã‚’ç™»éŒ²ã™ã‚‹ã€‚
         RTC::InPortProviderFactory::instance().
         addFactory("corba_cdr",
                    ::coil::Creator< ::RTC::InPortProvider, 
@@ -1645,12 +1645,12 @@ namespace InPortBase
                    ::coil::Destructor< ::RTC::InPortProvider, 
                                        InPortCorbaCdrProviderMock>);
 
-        //´û¤Ë "corba_cdr" ¤ÇÅĞÏ¿¤µ¤ì¤Æ¤¤¤ë¾ì¹ç¤Ïºï½ü¤¹¤ë¡£
+        //æ—¢ã« "corba_cdr" ã§ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹å ´åˆã¯å‰Šé™¤ã™ã‚‹ã€‚
         if( RTC::OutPortConsumerFactory::instance().hasFactory("corba_cdr") )
         {
             RTC::OutPortConsumerFactory::instance().removeFactory("corba_cdr");
         }
-        //"corba_cdr" ¤Ë InPortCorbaCdrProviderMock ¤òÅĞÏ¿¤¹¤ë¡£
+        //"corba_cdr" ã« InPortCorbaCdrProviderMock ã‚’ç™»éŒ²ã™ã‚‹ã€‚
         RTC::OutPortConsumerFactory::instance().
         addFactory("corba_cdr",
                    ::coil::Creator< ::RTC::OutPortConsumer, 
@@ -1658,13 +1658,13 @@ namespace InPortBase
                    ::coil::Destructor< ::RTC::OutPortConsumer, 
                                        OutPortCorbaCdrConsumerMock>);
 
-        //´û¤Ë "ring_buffer" ¤ÇÅĞÏ¿¤µ¤ì¤Æ¤¤¤ë¾ì¹ç¤Ïºï½ü¤¹¤ë¡£
+        //æ—¢ã« "ring_buffer" ã§ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹å ´åˆã¯å‰Šé™¤ã™ã‚‹ã€‚
         if( RTC::CdrBufferFactory::instance().hasFactory("ring_buffer") )
         {
             RTC::CdrBufferFactory::instance().removeFactory("ring_buffer");
         }
 
-        //"ring_buffer" ¤Ë CdrRingBufferMock ¤òÅĞÏ¿¤¹¤ë¡£
+        //"ring_buffer" ã« CdrRingBufferMock ã‚’ç™»éŒ²ã™ã‚‹ã€‚
         RTC::CdrBufferFactory::instance().
         addFactory("ring_buffer",
                    coil::Creator<RTC::CdrBufferBase, CdrRingBufferMock>,
@@ -1705,23 +1705,23 @@ namespace InPortBase
         portAdmin.deletePort(inport);
     }
     /*!
-     * @brief publishInterfaces()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
-     * dataport.dataflow_type¤¬pull¤ÇpublisherInterface¤ò¥³¡¼¥ë
+     * @brief publishInterfaces()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
+     * dataport.dataflow_typeãŒpullã§publisherInterfaceã‚’ã‚³ãƒ¼ãƒ«
      *
      * 
      */
     void test_publishInterfaces2(void)
     {
         //
-        //dataport.dataflow_type¤¬pull¤ÇpublisherInterface¤ò¥³¡¼¥ë
+        //dataport.dataflow_typeãŒpullã§publisherInterfaceã‚’ã‚³ãƒ¼ãƒ«
         //
 
-        //´û¤Ë "corba_cdr" ¤ÇÅĞÏ¿¤µ¤ì¤Æ¤¤¤ë¾ì¹ç¤Ïºï½ü¤¹¤ë¡£
+        //æ—¢ã« "corba_cdr" ã§ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹å ´åˆã¯å‰Šé™¤ã™ã‚‹ã€‚
         if( RTC::InPortProviderFactory::instance().hasFactory("corba_cdr") )
         {
             RTC::InPortProviderFactory::instance().removeFactory("corba_cdr");
         }
-        //"corba_cdr" ¤Ë InPortCorbaCdrProviderMock ¤òÅĞÏ¿¤¹¤ë¡£
+        //"corba_cdr" ã« InPortCorbaCdrProviderMock ã‚’ç™»éŒ²ã™ã‚‹ã€‚
         RTC::InPortProviderFactory::instance().
         addFactory("corba_cdr",
                    ::coil::Creator< ::RTC::InPortProvider, 
@@ -1729,12 +1729,12 @@ namespace InPortBase
                    ::coil::Destructor< ::RTC::InPortProvider, 
                                        InPortCorbaCdrProviderMock>);
 
-        //´û¤Ë "corba_cdr" ¤ÇÅĞÏ¿¤µ¤ì¤Æ¤¤¤ë¾ì¹ç¤Ïºï½ü¤¹¤ë¡£
+        //æ—¢ã« "corba_cdr" ã§ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹å ´åˆã¯å‰Šé™¤ã™ã‚‹ã€‚
         if( RTC::OutPortConsumerFactory::instance().hasFactory("corba_cdr") )
         {
             RTC::OutPortConsumerFactory::instance().removeFactory("corba_cdr");
         }
-        //"corba_cdr" ¤Ë InPortCorbaCdrProviderMock ¤òÅĞÏ¿¤¹¤ë¡£
+        //"corba_cdr" ã« InPortCorbaCdrProviderMock ã‚’ç™»éŒ²ã™ã‚‹ã€‚
         RTC::OutPortConsumerFactory::instance().
         addFactory("corba_cdr",
                    ::coil::Creator< ::RTC::OutPortConsumer, 
@@ -1742,13 +1742,13 @@ namespace InPortBase
                    ::coil::Destructor< ::RTC::OutPortConsumer, 
                                        OutPortCorbaCdrConsumerMock>);
 
-        //´û¤Ë "ring_buffer" ¤ÇÅĞÏ¿¤µ¤ì¤Æ¤¤¤ë¾ì¹ç¤Ïºï½ü¤¹¤ë¡£
+        //æ—¢ã« "ring_buffer" ã§ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹å ´åˆã¯å‰Šé™¤ã™ã‚‹ã€‚
         if( RTC::CdrBufferFactory::instance().hasFactory("ring_buffer") )
         {
             RTC::CdrBufferFactory::instance().removeFactory("ring_buffer");
         }
 
-        //"ring_buffer" ¤Ë CdrRingBufferMock ¤òÅĞÏ¿¤¹¤ë¡£
+        //"ring_buffer" ã« CdrRingBufferMock ã‚’ç™»éŒ²ã™ã‚‹ã€‚
         RTC::CdrBufferFactory::instance().
         addFactory("ring_buffer",
                    coil::Creator<RTC::CdrBufferBase, CdrRingBufferMock>,
@@ -1789,21 +1789,21 @@ namespace InPortBase
         portAdmin.deletePort(inport);
     }
     /*!
-     * @brief publishInterfaces()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief publishInterfaces()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
      */
     void test_publishInterfaces3(void)
     {
         //
-        //dataport.dataflow_type¤¬ÉÔÀµ¤Ê¾õÂÖ¤ÇpublisherInterface¤ò¥³¡¼¥ë
+        //dataport.dataflow_typeãŒä¸æ­£ãªçŠ¶æ…‹ã§publisherInterfaceã‚’ã‚³ãƒ¼ãƒ«
         //
 
-        //´û¤Ë "corba_cdr" ¤ÇÅĞÏ¿¤µ¤ì¤Æ¤¤¤ë¾ì¹ç¤Ïºï½ü¤¹¤ë¡£
+        //æ—¢ã« "corba_cdr" ã§ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹å ´åˆã¯å‰Šé™¤ã™ã‚‹ã€‚
         if( RTC::InPortProviderFactory::instance().hasFactory("corba_cdr") )
         {
             RTC::InPortProviderFactory::instance().removeFactory("corba_cdr");
         }
-        //"corba_cdr" ¤Ë InPortCorbaCdrProviderMock ¤òÅĞÏ¿¤¹¤ë¡£
+        //"corba_cdr" ã« InPortCorbaCdrProviderMock ã‚’ç™»éŒ²ã™ã‚‹ã€‚
         RTC::InPortProviderFactory::instance().
         addFactory("corba_cdr",
                    ::coil::Creator< ::RTC::InPortProvider, 
@@ -1811,12 +1811,12 @@ namespace InPortBase
                    ::coil::Destructor< ::RTC::InPortProvider, 
                                        InPortCorbaCdrProviderMock>);
 
-        //´û¤Ë "corba_cdr" ¤ÇÅĞÏ¿¤µ¤ì¤Æ¤¤¤ë¾ì¹ç¤Ïºï½ü¤¹¤ë¡£
+        //æ—¢ã« "corba_cdr" ã§ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹å ´åˆã¯å‰Šé™¤ã™ã‚‹ã€‚
         if( RTC::OutPortConsumerFactory::instance().hasFactory("corba_cdr") )
         {
             RTC::OutPortConsumerFactory::instance().removeFactory("corba_cdr");
         }
-        //"corba_cdr" ¤Ë InPortCorbaCdrProviderMock ¤òÅĞÏ¿¤¹¤ë¡£
+        //"corba_cdr" ã« InPortCorbaCdrProviderMock ã‚’ç™»éŒ²ã™ã‚‹ã€‚
         RTC::OutPortConsumerFactory::instance().
         addFactory("corba_cdr",
                    ::coil::Creator< ::RTC::OutPortConsumer, 
@@ -1824,13 +1824,13 @@ namespace InPortBase
                    ::coil::Destructor< ::RTC::OutPortConsumer, 
                                        OutPortCorbaCdrConsumerMock>);
 
-        //´û¤Ë "ring_buffer" ¤ÇÅĞÏ¿¤µ¤ì¤Æ¤¤¤ë¾ì¹ç¤Ïºï½ü¤¹¤ë¡£
+        //æ—¢ã« "ring_buffer" ã§ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹å ´åˆã¯å‰Šé™¤ã™ã‚‹ã€‚
         if( RTC::CdrBufferFactory::instance().hasFactory("ring_buffer") )
         {
             RTC::CdrBufferFactory::instance().removeFactory("ring_buffer");
         }
 
-        //"ring_buffer" ¤Ë CdrRingBufferMock ¤òÅĞÏ¿¤¹¤ë¡£
+        //"ring_buffer" ã« CdrRingBufferMock ã‚’ç™»éŒ²ã™ã‚‹ã€‚
         RTC::CdrBufferFactory::instance().
         addFactory("ring_buffer",
                    coil::Creator<RTC::CdrBufferBase, CdrRingBufferMock>,
@@ -1871,27 +1871,27 @@ namespace InPortBase
         portAdmin.deletePort(inport);
     }
     /*!
-     * @brief publishInterfaces(),deactivateInterfaces()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief publishInterfaces(),deactivateInterfaces()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
      */
     void test_publishInterfaces4(void)
     {
         //
-        //Provider¤Ê¤·¤ÇpublisherInterface¤ò¥³¡¼¥ë
+        //Providerãªã—ã§publisherInterfaceã‚’ã‚³ãƒ¼ãƒ«
         //
 
-        //´û¤Ë "corba_cdr" ¤ÇÅĞÏ¿¤µ¤ì¤Æ¤¤¤ë¾ì¹ç¤Ïºï½ü¤¹¤ë¡£
+        //æ—¢ã« "corba_cdr" ã§ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹å ´åˆã¯å‰Šé™¤ã™ã‚‹ã€‚
         if( RTC::InPortProviderFactory::instance().hasFactory("corba_cdr") )
         {
             RTC::InPortProviderFactory::instance().removeFactory("corba_cdr");
         }
 
-        //´û¤Ë "corba_cdr" ¤ÇÅĞÏ¿¤µ¤ì¤Æ¤¤¤ë¾ì¹ç¤Ïºï½ü¤¹¤ë¡£
+        //æ—¢ã« "corba_cdr" ã§ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹å ´åˆã¯å‰Šé™¤ã™ã‚‹ã€‚
         if( RTC::OutPortConsumerFactory::instance().hasFactory("corba_cdr") )
         {
             RTC::OutPortConsumerFactory::instance().removeFactory("corba_cdr");
         }
-        //"corba_cdr" ¤Ë InPortCorbaCdrProviderMock ¤òÅĞÏ¿¤¹¤ë¡£
+        //"corba_cdr" ã« InPortCorbaCdrProviderMock ã‚’ç™»éŒ²ã™ã‚‹ã€‚
         RTC::OutPortConsumerFactory::instance().
         addFactory("corba_cdr",
                    ::coil::Creator< ::RTC::OutPortConsumer, 
@@ -1899,13 +1899,13 @@ namespace InPortBase
                    ::coil::Destructor< ::RTC::OutPortConsumer, 
                                        OutPortCorbaCdrConsumerMock>);
 
-        //´û¤Ë "ring_buffer" ¤ÇÅĞÏ¿¤µ¤ì¤Æ¤¤¤ë¾ì¹ç¤Ïºï½ü¤¹¤ë¡£
+        //æ—¢ã« "ring_buffer" ã§ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹å ´åˆã¯å‰Šé™¤ã™ã‚‹ã€‚
         if( RTC::CdrBufferFactory::instance().hasFactory("ring_buffer") )
         {
             RTC::CdrBufferFactory::instance().removeFactory("ring_buffer");
         }
 
-        //"ring_buffer" ¤Ë CdrRingBufferMock ¤òÅĞÏ¿¤¹¤ë¡£
+        //"ring_buffer" ã« CdrRingBufferMock ã‚’ç™»éŒ²ã™ã‚‹ã€‚
         RTC::CdrBufferFactory::instance().
         addFactory("ring_buffer",
                    coil::Creator<RTC::CdrBufferBase, CdrRingBufferMock>,
@@ -1940,21 +1940,21 @@ namespace InPortBase
         portAdmin.deletePort(inport);
     }
     /*!
-     * @brief publishInterfaces()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief publishInterfaces()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
      */
     void test_publishInterfaces5(void)
     {
         //
-        //Buffer¤Ê¤·¤ÇpublisherInterface¤ò¥³¡¼¥ë
+        //Bufferãªã—ã§publisherInterfaceã‚’ã‚³ãƒ¼ãƒ«
         //
 
-        //´û¤Ë "corba_cdr" ¤ÇÅĞÏ¿¤µ¤ì¤Æ¤¤¤ë¾ì¹ç¤Ïºï½ü¤¹¤ë¡£
+        //æ—¢ã« "corba_cdr" ã§ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹å ´åˆã¯å‰Šé™¤ã™ã‚‹ã€‚
         if( RTC::InPortProviderFactory::instance().hasFactory("corba_cdr") )
         {
             RTC::InPortProviderFactory::instance().removeFactory("corba_cdr");
         }
-        //"corba_cdr" ¤Ë InPortCorbaCdrProviderMock ¤òÅĞÏ¿¤¹¤ë¡£
+        //"corba_cdr" ã« InPortCorbaCdrProviderMock ã‚’ç™»éŒ²ã™ã‚‹ã€‚
         RTC::InPortProviderFactory::instance().
         addFactory("corba_cdr",
                    ::coil::Creator< ::RTC::InPortProvider, 
@@ -1962,12 +1962,12 @@ namespace InPortBase
                    ::coil::Destructor< ::RTC::InPortProvider, 
                                        InPortCorbaCdrProviderMock>);
 
-        //´û¤Ë "corba_cdr" ¤ÇÅĞÏ¿¤µ¤ì¤Æ¤¤¤ë¾ì¹ç¤Ïºï½ü¤¹¤ë¡£
+        //æ—¢ã« "corba_cdr" ã§ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹å ´åˆã¯å‰Šé™¤ã™ã‚‹ã€‚
         if( RTC::OutPortConsumerFactory::instance().hasFactory("corba_cdr") )
         {
             RTC::OutPortConsumerFactory::instance().removeFactory("corba_cdr");
         }
-        //"corba_cdr" ¤Ë InPortCorbaCdrProviderMock ¤òÅĞÏ¿¤¹¤ë¡£
+        //"corba_cdr" ã« InPortCorbaCdrProviderMock ã‚’ç™»éŒ²ã™ã‚‹ã€‚
         RTC::OutPortConsumerFactory::instance().
         addFactory("corba_cdr",
                    ::coil::Creator< ::RTC::OutPortConsumer, 
@@ -1975,7 +1975,7 @@ namespace InPortBase
                    ::coil::Destructor< ::RTC::OutPortConsumer, 
                                        OutPortCorbaCdrConsumerMock>);
 
-        //´û¤Ë "ring_buffer" ¤ÇÅĞÏ¿¤µ¤ì¤Æ¤¤¤ë¾ì¹ç¤Ïºï½ü¤¹¤ë¡£
+        //æ—¢ã« "ring_buffer" ã§ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹å ´åˆã¯å‰Šé™¤ã™ã‚‹ã€‚
         if( RTC::CdrBufferFactory::instance().hasFactory("ring_buffer") )
         {
             RTC::CdrBufferFactory::instance().removeFactory("ring_buffer");
@@ -2012,17 +2012,17 @@ namespace InPortBase
         portAdmin.deletePort(inport);
     }
     /*!
-     * @brief subscribeInterfaces()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief subscribeInterfaces()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
      */
     void test_subscribeInterfaces(void)
     {
-        //´û¤Ë "corba_cdr" ¤ÇÅĞÏ¿¤µ¤ì¤Æ¤¤¤ë¾ì¹ç¤Ïºï½ü¤¹¤ë¡£
+        //æ—¢ã« "corba_cdr" ã§ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹å ´åˆã¯å‰Šé™¤ã™ã‚‹ã€‚
         if( RTC::InPortProviderFactory::instance().hasFactory("corba_cdr") )
         {
             RTC::InPortProviderFactory::instance().removeFactory("corba_cdr");
         }
-        //"corba_cdr" ¤Ë InPortCorbaCdrProviderMock ¤òÅĞÏ¿¤¹¤ë¡£
+        //"corba_cdr" ã« InPortCorbaCdrProviderMock ã‚’ç™»éŒ²ã™ã‚‹ã€‚
         RTC::InPortProviderFactory::instance().
         addFactory("corba_cdr",
                    ::coil::Creator< ::RTC::InPortProvider, 
@@ -2030,12 +2030,12 @@ namespace InPortBase
                    ::coil::Destructor< ::RTC::InPortProvider, 
                                        InPortCorbaCdrProviderMock>);
 
-        //´û¤Ë "corba_cdr" ¤ÇÅĞÏ¿¤µ¤ì¤Æ¤¤¤ë¾ì¹ç¤Ïºï½ü¤¹¤ë¡£
+        //æ—¢ã« "corba_cdr" ã§ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹å ´åˆã¯å‰Šé™¤ã™ã‚‹ã€‚
         if( RTC::OutPortConsumerFactory::instance().hasFactory("corba_cdr") )
         {
             RTC::OutPortConsumerFactory::instance().removeFactory("corba_cdr");
         }
-        //"corba_cdr" ¤Ë InPortCorbaCdrProviderMock ¤òÅĞÏ¿¤¹¤ë¡£
+        //"corba_cdr" ã« InPortCorbaCdrProviderMock ã‚’ç™»éŒ²ã™ã‚‹ã€‚
         RTC::OutPortConsumerFactory::instance().
         addFactory("corba_cdr",
                    ::coil::Creator< ::RTC::OutPortConsumer, 
@@ -2043,13 +2043,13 @@ namespace InPortBase
                    ::coil::Destructor< ::RTC::OutPortConsumer, 
                                        OutPortCorbaCdrConsumerMock>);
 
-        //´û¤Ë "ring_buffer" ¤ÇÅĞÏ¿¤µ¤ì¤Æ¤¤¤ë¾ì¹ç¤Ïºï½ü¤¹¤ë¡£
+        //æ—¢ã« "ring_buffer" ã§ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹å ´åˆã¯å‰Šé™¤ã™ã‚‹ã€‚
         if( RTC::CdrBufferFactory::instance().hasFactory("ring_buffer") )
         {
             RTC::CdrBufferFactory::instance().removeFactory("ring_buffer");
         }
 
-        //"ring_buffer" ¤Ë CdrRingBufferMock ¤òÅĞÏ¿¤¹¤ë¡£
+        //"ring_buffer" ã« CdrRingBufferMock ã‚’ç™»éŒ²ã™ã‚‹ã€‚
         RTC::CdrBufferFactory::instance().
         addFactory("ring_buffer",
                    coil::Creator<RTC::CdrBufferBase, CdrRingBufferMock>,
@@ -2090,22 +2090,22 @@ namespace InPortBase
         portAdmin.deletePort(inport);
     }
     /*!
-     * @brief subscribeInterfaces()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
-     * dataport.dataflow_type¤¬pull¤ÇsubscribeInterface¤ò¥³¡¼¥ë
+     * @brief subscribeInterfaces()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
+     * dataport.dataflow_typeãŒpullã§subscribeInterfaceã‚’ã‚³ãƒ¼ãƒ«
      *
      */
     void test_subscribeInterfaces2(void)
     {
         //
-        //dataport.dataflow_type¤¬pull¤ÇsubscribeInterface¤ò¥³¡¼¥ë
+        //dataport.dataflow_typeãŒpullã§subscribeInterfaceã‚’ã‚³ãƒ¼ãƒ«
         //
 
-        //´û¤Ë "corba_cdr" ¤ÇÅĞÏ¿¤µ¤ì¤Æ¤¤¤ë¾ì¹ç¤Ïºï½ü¤¹¤ë¡£
+        //æ—¢ã« "corba_cdr" ã§ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹å ´åˆã¯å‰Šé™¤ã™ã‚‹ã€‚
         if( RTC::InPortProviderFactory::instance().hasFactory("corba_cdr") )
         {
             RTC::InPortProviderFactory::instance().removeFactory("corba_cdr");
         }
-        //"corba_cdr" ¤Ë InPortCorbaCdrProviderMock ¤òÅĞÏ¿¤¹¤ë¡£
+        //"corba_cdr" ã« InPortCorbaCdrProviderMock ã‚’ç™»éŒ²ã™ã‚‹ã€‚
         RTC::InPortProviderFactory::instance().
         addFactory("corba_cdr",
                    ::coil::Creator< ::RTC::InPortProvider, 
@@ -2113,12 +2113,12 @@ namespace InPortBase
                    ::coil::Destructor< ::RTC::InPortProvider, 
                                        InPortCorbaCdrProviderMock>);
 
-        //´û¤Ë "corba_cdr" ¤ÇÅĞÏ¿¤µ¤ì¤Æ¤¤¤ë¾ì¹ç¤Ïºï½ü¤¹¤ë¡£
+        //æ—¢ã« "corba_cdr" ã§ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹å ´åˆã¯å‰Šé™¤ã™ã‚‹ã€‚
         if( RTC::OutPortConsumerFactory::instance().hasFactory("corba_cdr") )
         {
             RTC::OutPortConsumerFactory::instance().removeFactory("corba_cdr");
         }
-        //"corba_cdr" ¤Ë InPortCorbaCdrProviderMock ¤òÅĞÏ¿¤¹¤ë¡£
+        //"corba_cdr" ã« InPortCorbaCdrProviderMock ã‚’ç™»éŒ²ã™ã‚‹ã€‚
         RTC::OutPortConsumerFactory::instance().
         addFactory("corba_cdr",
                    ::coil::Creator< ::RTC::OutPortConsumer, 
@@ -2126,13 +2126,13 @@ namespace InPortBase
                    ::coil::Destructor< ::RTC::OutPortConsumer, 
                                        OutPortCorbaCdrConsumerMock>);
 
-        //´û¤Ë "ring_buffer" ¤ÇÅĞÏ¿¤µ¤ì¤Æ¤¤¤ë¾ì¹ç¤Ïºï½ü¤¹¤ë¡£
+        //æ—¢ã« "ring_buffer" ã§ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹å ´åˆã¯å‰Šé™¤ã™ã‚‹ã€‚
         if( RTC::CdrBufferFactory::instance().hasFactory("ring_buffer") )
         {
             RTC::CdrBufferFactory::instance().removeFactory("ring_buffer");
         }
 
-        //"ring_buffer" ¤Ë CdrRingBufferMock ¤òÅĞÏ¿¤¹¤ë¡£
+        //"ring_buffer" ã« CdrRingBufferMock ã‚’ç™»éŒ²ã™ã‚‹ã€‚
         RTC::CdrBufferFactory::instance().
         addFactory("ring_buffer",
                    coil::Creator<RTC::CdrBufferBase, CdrRingBufferMock>,
@@ -2168,21 +2168,21 @@ namespace InPortBase
         portAdmin.deletePort(inport);
     }
     /*!
-     * @brief subscribeInterfaces()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief subscribeInterfaces()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
      */
     void test_subscribeInterfaces3(void)
     {
         //
-        //dataport.dataflow_type¤¬ÉÔÀµ¤Ê¾õÂÖ¤ÇsubscrtibeInterface¤ò¥³¡¼¥ë
+        //dataport.dataflow_typeãŒä¸æ­£ãªçŠ¶æ…‹ã§subscrtibeInterfaceã‚’ã‚³ãƒ¼ãƒ«
         //
 
-        //´û¤Ë "corba_cdr" ¤ÇÅĞÏ¿¤µ¤ì¤Æ¤¤¤ë¾ì¹ç¤Ïºï½ü¤¹¤ë¡£
+        //æ—¢ã« "corba_cdr" ã§ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹å ´åˆã¯å‰Šé™¤ã™ã‚‹ã€‚
         if( RTC::InPortProviderFactory::instance().hasFactory("corba_cdr") )
         {
             RTC::InPortProviderFactory::instance().removeFactory("corba_cdr");
         }
-        //"corba_cdr" ¤Ë InPortCorbaCdrProviderMock ¤òÅĞÏ¿¤¹¤ë¡£
+        //"corba_cdr" ã« InPortCorbaCdrProviderMock ã‚’ç™»éŒ²ã™ã‚‹ã€‚
         RTC::InPortProviderFactory::instance().
         addFactory("corba_cdr",
                    ::coil::Creator< ::RTC::InPortProvider, 
@@ -2190,12 +2190,12 @@ namespace InPortBase
                    ::coil::Destructor< ::RTC::InPortProvider, 
                                        InPortCorbaCdrProviderMock>);
 
-        //´û¤Ë "corba_cdr" ¤ÇÅĞÏ¿¤µ¤ì¤Æ¤¤¤ë¾ì¹ç¤Ïºï½ü¤¹¤ë¡£
+        //æ—¢ã« "corba_cdr" ã§ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹å ´åˆã¯å‰Šé™¤ã™ã‚‹ã€‚
         if( RTC::OutPortConsumerFactory::instance().hasFactory("corba_cdr") )
         {
             RTC::OutPortConsumerFactory::instance().removeFactory("corba_cdr");
         }
-        //"corba_cdr" ¤Ë InPortCorbaCdrProviderMock ¤òÅĞÏ¿¤¹¤ë¡£
+        //"corba_cdr" ã« InPortCorbaCdrProviderMock ã‚’ç™»éŒ²ã™ã‚‹ã€‚
         RTC::OutPortConsumerFactory::instance().
         addFactory("corba_cdr",
                    ::coil::Creator< ::RTC::OutPortConsumer, 
@@ -2203,13 +2203,13 @@ namespace InPortBase
                    ::coil::Destructor< ::RTC::OutPortConsumer, 
                                        OutPortCorbaCdrConsumerMock>);
 
-        //´û¤Ë "ring_buffer" ¤ÇÅĞÏ¿¤µ¤ì¤Æ¤¤¤ë¾ì¹ç¤Ïºï½ü¤¹¤ë¡£
+        //æ—¢ã« "ring_buffer" ã§ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹å ´åˆã¯å‰Šé™¤ã™ã‚‹ã€‚
         if( RTC::CdrBufferFactory::instance().hasFactory("ring_buffer") )
         {
             RTC::CdrBufferFactory::instance().removeFactory("ring_buffer");
         }
 
-        //"ring_buffer" ¤Ë CdrRingBufferMock ¤òÅĞÏ¿¤¹¤ë¡£
+        //"ring_buffer" ã« CdrRingBufferMock ã‚’ç™»éŒ²ã™ã‚‹ã€‚
         RTC::CdrBufferFactory::instance().
         addFactory("ring_buffer",
                    coil::Creator<RTC::CdrBufferBase, CdrRingBufferMock>,
@@ -2245,21 +2245,21 @@ namespace InPortBase
         portAdmin.deletePort(inport);
     }
     /*!
-     * @brief subscribeInterfaces()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief subscribeInterfaces()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
      */
     void test_subscribeInterfaces4(void)
     {
         //
-        //Consumer¤Ê¤·¤ÇsubscribeInterface¤ò¥³¡¼¥ë
+        //Consumerãªã—ã§subscribeInterfaceã‚’ã‚³ãƒ¼ãƒ«
         //
 
-        //´û¤Ë "corba_cdr" ¤ÇÅĞÏ¿¤µ¤ì¤Æ¤¤¤ë¾ì¹ç¤Ïºï½ü¤¹¤ë¡£
+        //æ—¢ã« "corba_cdr" ã§ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹å ´åˆã¯å‰Šé™¤ã™ã‚‹ã€‚
         if( RTC::InPortProviderFactory::instance().hasFactory("corba_cdr") )
         {
             RTC::InPortProviderFactory::instance().removeFactory("corba_cdr");
         }
-        //"corba_cdr" ¤Ë InPortCorbaCdrProviderMock ¤òÅĞÏ¿¤¹¤ë¡£
+        //"corba_cdr" ã« InPortCorbaCdrProviderMock ã‚’ç™»éŒ²ã™ã‚‹ã€‚
         RTC::InPortProviderFactory::instance().
         addFactory("corba_cdr",
                    ::coil::Creator< ::RTC::InPortProvider, 
@@ -2267,19 +2267,19 @@ namespace InPortBase
                    ::coil::Destructor< ::RTC::InPortProvider, 
                                        InPortCorbaCdrProviderMock>);
 
-        //´û¤Ë "corba_cdr" ¤ÇÅĞÏ¿¤µ¤ì¤Æ¤¤¤ë¾ì¹ç¤Ïºï½ü¤¹¤ë¡£
+        //æ—¢ã« "corba_cdr" ã§ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹å ´åˆã¯å‰Šé™¤ã™ã‚‹ã€‚
         if( RTC::OutPortConsumerFactory::instance().hasFactory("corba_cdr") )
         {
             RTC::OutPortConsumerFactory::instance().removeFactory("corba_cdr");
         }
 
-        //´û¤Ë "ring_buffer" ¤ÇÅĞÏ¿¤µ¤ì¤Æ¤¤¤ë¾ì¹ç¤Ïºï½ü¤¹¤ë¡£
+        //æ—¢ã« "ring_buffer" ã§ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹å ´åˆã¯å‰Šé™¤ã™ã‚‹ã€‚
         if( RTC::CdrBufferFactory::instance().hasFactory("ring_buffer") )
         {
             RTC::CdrBufferFactory::instance().removeFactory("ring_buffer");
         }
 
-        //"ring_buffer" ¤Ë CdrRingBufferMock ¤òÅĞÏ¿¤¹¤ë¡£
+        //"ring_buffer" ã« CdrRingBufferMock ã‚’ç™»éŒ²ã™ã‚‹ã€‚
         RTC::CdrBufferFactory::instance().
         addFactory("ring_buffer",
                    coil::Creator<RTC::CdrBufferBase, CdrRingBufferMock>,
@@ -2314,21 +2314,21 @@ namespace InPortBase
         portAdmin.deletePort(inport);
     }
     /*!
-     * @brief subscribeInterfaces()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief subscribeInterfaces()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
      */
     void test_subscribeInterfaces5(void)
     {
         //
-        //Buffer¤Ê¤·¤ÇsubscribeInterface¤ò¥³¡¼¥ë
+        //Bufferãªã—ã§subscribeInterfaceã‚’ã‚³ãƒ¼ãƒ«
         //
 
-        //´û¤Ë "corba_cdr" ¤ÇÅĞÏ¿¤µ¤ì¤Æ¤¤¤ë¾ì¹ç¤Ïºï½ü¤¹¤ë¡£
+        //æ—¢ã« "corba_cdr" ã§ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹å ´åˆã¯å‰Šé™¤ã™ã‚‹ã€‚
         if( RTC::InPortProviderFactory::instance().hasFactory("corba_cdr") )
         {
             RTC::InPortProviderFactory::instance().removeFactory("corba_cdr");
         }
-        //"corba_cdr" ¤Ë InPortCorbaCdrProviderMock ¤òÅĞÏ¿¤¹¤ë¡£
+        //"corba_cdr" ã« InPortCorbaCdrProviderMock ã‚’ç™»éŒ²ã™ã‚‹ã€‚
         RTC::InPortProviderFactory::instance().
         addFactory("corba_cdr",
                    ::coil::Creator< ::RTC::InPortProvider, 
@@ -2336,12 +2336,12 @@ namespace InPortBase
                    ::coil::Destructor< ::RTC::InPortProvider, 
                                        InPortCorbaCdrProviderMock>);
 
-        //´û¤Ë "corba_cdr" ¤ÇÅĞÏ¿¤µ¤ì¤Æ¤¤¤ë¾ì¹ç¤Ïºï½ü¤¹¤ë¡£
+        //æ—¢ã« "corba_cdr" ã§ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹å ´åˆã¯å‰Šé™¤ã™ã‚‹ã€‚
         if( RTC::OutPortConsumerFactory::instance().hasFactory("corba_cdr") )
         {
             RTC::OutPortConsumerFactory::instance().removeFactory("corba_cdr");
         }
-        //"corba_cdr" ¤Ë InPortCorbaCdrProviderMock ¤òÅĞÏ¿¤¹¤ë¡£
+        //"corba_cdr" ã« InPortCorbaCdrProviderMock ã‚’ç™»éŒ²ã™ã‚‹ã€‚
         RTC::OutPortConsumerFactory::instance().
         addFactory("corba_cdr",
                    ::coil::Creator< ::RTC::OutPortConsumer, 
@@ -2349,7 +2349,7 @@ namespace InPortBase
                    ::coil::Destructor< ::RTC::OutPortConsumer, 
                                        OutPortCorbaCdrConsumerMock>);
 
-        //´û¤Ë "ring_buffer" ¤ÇÅĞÏ¿¤µ¤ì¤Æ¤¤¤ë¾ì¹ç¤Ïºï½ü¤¹¤ë¡£
+        //æ—¢ã« "ring_buffer" ã§ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹å ´åˆã¯å‰Šé™¤ã™ã‚‹ã€‚
         if( RTC::CdrBufferFactory::instance().hasFactory("ring_buffer") )
         {
             RTC::CdrBufferFactory::instance().removeFactory("ring_buffer");
@@ -2384,7 +2384,7 @@ namespace InPortBase
         portAdmin.deletePort(inport);
     }
     /*!
-     * @brief createConnector()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief createConnector()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
      */
     void test_createConnector(void)
@@ -2406,7 +2406,7 @@ namespace InPortBase
 //        delete provider;
     }
     /*!
-     * @brief createConnector()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief createConnector()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
      */
     void test_createConnector2(void)
@@ -2430,7 +2430,7 @@ namespace InPortBase
     }
 
     /*!
-     * @brief addConnectorDataListener(), removeConnectorDataListener(), addConnectorListener(), removeConnectorListener(), isLittleEndian(), connect() ¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief addConnectorDataListener(), removeConnectorDataListener(), addConnectorListener(), removeConnectorListener(), isLittleEndian(), connect() ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
      */
     void test_ConnectorListener(void)
@@ -2440,12 +2440,12 @@ namespace InPortBase
         coil::Properties dummy;
         outport.init(dummy);
 
-        //´û¤Ë "corba_cdr" ¤ÇÅĞÏ¿¤µ¤ì¤Æ¤¤¤ë¾ì¹ç¤Ïºï½ü¤¹¤ë¡£
+        //æ—¢ã« "corba_cdr" ã§ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹å ´åˆã¯å‰Šé™¤ã™ã‚‹ã€‚
         if( RTC::InPortProviderFactory::instance().hasFactory("corba_cdr") )
         {
             RTC::InPortProviderFactory::instance().removeFactory("corba_cdr");
         }
-        //"corba_cdr" ¤Ë InPortCorbaCdrProvider ¤òÅĞÏ¿¤¹¤ë¡£
+        //"corba_cdr" ã« InPortCorbaCdrProvider ã‚’ç™»éŒ²ã™ã‚‹ã€‚
         RTC::InPortProviderFactory::instance().
         addFactory("corba_cdr",
                    ::coil::Creator< ::RTC::InPortProvider, 
@@ -2453,12 +2453,12 @@ namespace InPortBase
                    ::coil::Destructor< ::RTC::InPortProvider, 
                                        ::RTC::InPortCorbaCdrProvider>);
 
-        //´û¤Ë "corba_cdr" ¤ÇÅĞÏ¿¤µ¤ì¤Æ¤¤¤ë¾ì¹ç¤Ïºï½ü¤¹¤ë¡£
+        //æ—¢ã« "corba_cdr" ã§ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹å ´åˆã¯å‰Šé™¤ã™ã‚‹ã€‚
         if( RTC::OutPortConsumerFactory::instance().hasFactory("corba_cdr") )
         {
             RTC::OutPortConsumerFactory::instance().removeFactory("corba_cdr");
         }
-        //"corba_cdr" ¤Ë InPortCorbaCdrProvider ¤òÅĞÏ¿¤¹¤ë¡£
+        //"corba_cdr" ã« InPortCorbaCdrProvider ã‚’ç™»éŒ²ã™ã‚‹ã€‚
         RTC::OutPortConsumerFactory::instance().
         addFactory("corba_cdr",
                    ::coil::Creator< ::RTC::OutPortConsumer, 
@@ -2466,13 +2466,13 @@ namespace InPortBase
                    ::coil::Destructor< ::RTC::OutPortConsumer, 
                                        ::RTC::OutPortCorbaCdrConsumer>);
 
-        //´û¤Ë "ring_buffer" ¤ÇÅĞÏ¿¤µ¤ì¤Æ¤¤¤ë¾ì¹ç¤Ïºï½ü¤¹¤ë¡£
+        //æ—¢ã« "ring_buffer" ã§ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹å ´åˆã¯å‰Šé™¤ã™ã‚‹ã€‚
         if( RTC::CdrBufferFactory::instance().hasFactory("ring_buffer") )
         {
             RTC::CdrBufferFactory::instance().removeFactory("ring_buffer");
         }
 
-        //"ring_buffer" ¤Ë CdrRingBufferMock ¤òÅĞÏ¿¤¹¤ë¡£
+        //"ring_buffer" ã« CdrRingBufferMock ã‚’ç™»éŒ²ã™ã‚‹ã€‚
         RTC::CdrBufferFactory::instance().
         addFactory("ring_buffer",
                    coil::Creator<RTC::CdrBufferBase, CdrRingBufferMock>,

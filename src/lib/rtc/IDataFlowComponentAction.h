@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file  IDataFlowComponentAction.h
  * @brief IDataFlowComponentAction interface class
@@ -29,7 +29,7 @@ namespace Local
   /*!
    * @if jp
    * @class IDataFlowComponentAction
-   * @brief IDataFlowComponentAction ¥¤¥ó¥¿¡¼¥Õ¥§¡¼¥¹¥¯¥é¥¹
+   * @brief IDataFlowComponentAction ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹ã‚¯ãƒ©ã‚¹
    * @else
    * @class IDataFlowComponentAction
    * @brief IDataFlowComponentAction class

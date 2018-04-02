@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file   SdoConfigurationTests.cpp
  * @brief  SdoConfiguration test class
@@ -100,10 +100,10 @@ namespace SdoConfiguration
     CPPUNIT_TEST(test_remove_configuration_set);
     CPPUNIT_TEST(test_set_configuration_set_values);
     CPPUNIT_TEST(test_activate_configuration_set_and_get_active_configuration_set);
-	//CPPUNIT_TEST(test_get_configuration_parameters);       //Ì¤¼ÂÁõ¤Î¤¿¤áÌ¤¥Æ¥¹¥È
-	//CPPUNIT_TEST(test_get_configuration_parameter_values); //Ì¤¼ÂÁõ¤Î¤¿¤áÌ¤¥Æ¥¹¥È
-	//CPPUNIT_TEST(test_get_configuration_parameter_value);  //Ì¤¼ÂÁõ¤Î¤¿¤áÌ¤¥Æ¥¹¥È
-	//CPPUNIT_TEST(test_set_configuration_parameter);        //Ì¤¼ÂÁõ¤Î¤¿¤áÌ¤¥Æ¥¹¥È
+	//CPPUNIT_TEST(test_get_configuration_parameters);       //æœªå®Ÿè£…ã®ãŸã‚æœªãƒ†ã‚¹ãƒˆ
+	//CPPUNIT_TEST(test_get_configuration_parameter_values); //æœªå®Ÿè£…ã®ãŸã‚æœªãƒ†ã‚¹ãƒˆ
+	//CPPUNIT_TEST(test_get_configuration_parameter_value);  //æœªå®Ÿè£…ã®ãŸã‚æœªãƒ†ã‚¹ãƒˆ
+	//CPPUNIT_TEST(test_set_configuration_parameter);        //æœªå®Ÿè£…ã®ãŸã‚æœªãƒ†ã‚¹ãƒˆ
 
     CPPUNIT_TEST_SUITE_END();
 	
@@ -148,9 +148,9 @@ namespace SdoConfiguration
     }
 		
     /*!
-     * set_device_profile()¥á¥½¥Ã¥É¤ÈgetDeviceProfile()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * set_device_profile()ãƒ¡ã‚½ãƒƒãƒ‰ã¨getDeviceProfile()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - set_device_profile()¤ÇÀßÄê¤·¤¿DeviceProfile¤ò¡¢getDeviceProfile()¤ÇÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
+     * - set_device_profile()ã§è¨­å®šã—ãŸDeviceProfileã‚’ã€getDeviceProfile()ã§æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
      */
     void test_set_device_profile_and_getDeviceProfile()
     {
@@ -159,7 +159,7 @@ namespace SdoConfiguration
       RTC::ConfigAdmin cfgAdmin(cfgAdminProp);
       SDOPackage::Configuration_impl* sdoCfg = new Configuration_impl(cfgAdmin);
 			
-      // DeviceProfile¤ò½àÈ÷¤¹¤ë
+      // DeviceProfileã‚’æº–å‚™ã™ã‚‹
       SDOPackage::DeviceProfile devProf;
       devProf.device_type = "DEVICE_TYPE";
       devProf.manufacturer = "MANUFACTURER";
@@ -175,10 +175,10 @@ namespace SdoConfiguration
 	devProf.properties = properties;
       }
 			
-      // set_device_profile()¤ò¸Æ½Ğ¤·¤Æ¡¢½àÈ÷¤·¤¿DeviceProfile¤òÀßÄê¤¹¤ë
+      // set_device_profile()ã‚’å‘¼å‡ºã—ã¦ã€æº–å‚™ã—ãŸDeviceProfileã‚’è¨­å®šã™ã‚‹
       CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(true), sdoCfg->set_device_profile(devProf));
 			
-      // getDeviceProfile()¤ÇÀßÄê¤µ¤ì¤Æ¤¤¤ëDeviceProfile¤ò¼è¤ê½Ğ¤·¡¢ÀßÄê¤·¤¿¤â¤Î¤È°ìÃ×¤¹¤ë¤³¤È¤ò³ÎÇ§¤¹¤ë
+      // getDeviceProfile()ã§è¨­å®šã•ã‚Œã¦ã„ã‚‹DeviceProfileã‚’å–ã‚Šå‡ºã—ã€è¨­å®šã—ãŸã‚‚ã®ã¨ä¸€è‡´ã™ã‚‹ã“ã¨ã‚’ç¢ºèªã™ã‚‹
       const SDOPackage::DeviceProfile devProfRet = sdoCfg->getDeviceProfile();
       CPPUNIT_ASSERT_EQUAL(std::string("DEVICE_TYPE"),
 			   std::string(devProfRet.device_type));
@@ -205,9 +205,9 @@ namespace SdoConfiguration
     }
 		
     /*!
-     * @brief set_service_profile()¥á¥½¥Ã¥É¤ÈgetServiceProfile()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief set_service_profile()ãƒ¡ã‚½ãƒƒãƒ‰ã¨getServiceProfile()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - set_service_profile()¤ÇÀßÄê¤·¤¿ServiceProfile¤ò¡¢getServiceProfile()¤ÇÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
+     * - set_service_profile()ã§è¨­å®šã—ãŸServiceProfileã‚’ã€getServiceProfile()ã§æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
      */
     void test_set_service_profile_and_getServiceProfile()
     {
@@ -216,7 +216,7 @@ namespace SdoConfiguration
       RTC::ConfigAdmin cfgAdmin(cfgAdminProp);
       SDOPackage::Configuration_impl* sdoCfg = new Configuration_impl(cfgAdmin);
 			
-      // ServiceProfile¤ò½àÈ÷¤¹¤ë
+      // ServiceProfileã‚’æº–å‚™ã™ã‚‹
       SDOPackage::ServiceProfile svcProf;
       svcProf.id = "ID";
       svcProf.interface_type = "INTERFACE_TYPE";
@@ -230,10 +230,10 @@ namespace SdoConfiguration
 	svcProf.properties = properties;
       }
 			
-      // ServiceProfile¤òÀßÄê¤¹¤ë
+      // ServiceProfileã‚’è¨­å®šã™ã‚‹
       CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(true), sdoCfg->add_service_profile(svcProf));
 			
-      // getServiceProfile()¤ÇServiceProfile¤ò¼èÆÀ¤·¡¢ÀßÄê¤·¤¿¤â¤Î¤È°ìÃ×¤·¤Æ¤¤¤ë¤«³ÎÇ§¤¹¤ë
+      // getServiceProfile()ã§ServiceProfileã‚’å–å¾—ã—ã€è¨­å®šã—ãŸã‚‚ã®ã¨ä¸€è‡´ã—ã¦ã„ã‚‹ã‹ç¢ºèªã™ã‚‹
       const SDOPackage::ServiceProfile svcProfRet = sdoCfg->getServiceProfile("ID");
       CPPUNIT_ASSERT_EQUAL(std::string("ID"), std::string(svcProfRet.id));
       CPPUNIT_ASSERT_EQUAL(std::string("INTERFACE_TYPE"),
@@ -255,9 +255,9 @@ namespace SdoConfiguration
     }
 		
     /*!
-     * @brief getServiceProfiles()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief getServiceProfiles()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - ÅĞÏ¿¤µ¤ì¤Æ¤¤¤ëÊ£¿ô¤ÎServiceProfile¤ò¡¢getServiceProfiles()¤ÇÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
+     * - ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹è¤‡æ•°ã®ServiceProfileã‚’ã€getServiceProfiles()ã§æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
      */
     void test_getServiceProfiles()
     {
@@ -266,7 +266,7 @@ namespace SdoConfiguration
       RTC::ConfigAdmin cfgAdmin(cfgAdminProp);
       SDOPackage::Configuration_impl* sdoCfg = new Configuration_impl(cfgAdmin);
 			
-      // ServiceProfile¤ò½àÈ÷¤¹¤ë
+      // ServiceProfileã‚’æº–å‚™ã™ã‚‹
       SDOPackage::ServiceProfile svcProf0;
       svcProf0.id = "ID 0";
       svcProf0.interface_type = "INTERFACE_TYPE 0";
@@ -293,15 +293,15 @@ namespace SdoConfiguration
 	svcProf1.properties = properties;
       }
 			
-      // ServiceProfile¤òÀßÄê¤¹¤ë
+      // ServiceProfileã‚’è¨­å®šã™ã‚‹
       CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(true), sdoCfg->add_service_profile(svcProf0));
       CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(true), sdoCfg->add_service_profile(svcProf1));
 			
-      // getServiceProfiles()¤ÇÀßÄê¤µ¤ì¤Æ¤¤¤ëServiceProfile·²¤ò¼èÆÀ¤¹¤ë
+      // getServiceProfiles()ã§è¨­å®šã•ã‚Œã¦ã„ã‚‹ServiceProfileç¾¤ã‚’å–å¾—ã™ã‚‹
       const SDOPackage::ServiceProfileList svcProfList = sdoCfg->getServiceProfiles();
       CPPUNIT_ASSERT_EQUAL(CORBA::ULong(2), svcProfList.length());
 			
-      // ÀßÄê¤·¤¿ServiceProfile¤È°ìÃ×¤·¤Æ¤¤¤ë¤«¡©
+      // è¨­å®šã—ãŸServiceProfileã¨ä¸€è‡´ã—ã¦ã„ã‚‹ã‹ï¼Ÿ
       {
 	CORBA::ULong idx = CORBA_SeqUtil::find(svcProfList, ServiceProfileFinder("ID 0"));
 				
@@ -348,9 +348,9 @@ namespace SdoConfiguration
     }
     
     /*!
-     * @brief remove_service_profile()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief remove_service_profile()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - »ØÄê¤·¤¿ID¤ò»ı¤ÄServiceProfile¤òÀµ¤·¤¯ÅĞÏ¿²ò½ü¤Ç¤­¤ë¤«¡©
+     * - æŒ‡å®šã—ãŸIDã‚’æŒã¤ServiceProfileã‚’æ­£ã—ãç™»éŒ²è§£é™¤ã§ãã‚‹ã‹ï¼Ÿ
      */
     void test_remove_service_profile()
     {
@@ -359,7 +359,7 @@ namespace SdoConfiguration
       RTC::ConfigAdmin cfgAdmin(cfgAdminProp);
       SDOPackage::Configuration_impl* sdoCfg = new Configuration_impl(cfgAdmin);
 			
-      // ServiceProfile¤ò½àÈ÷¤¹¤ë
+      // ServiceProfileã‚’æº–å‚™ã™ã‚‹
       SDOPackage::ServiceProfile svcProf0;
       svcProf0.id = "ID 0";
       svcProf0.interface_type = "INTERFACE_TYPE 0";
@@ -386,20 +386,20 @@ namespace SdoConfiguration
 	svcProf1.properties = properties;
       }
 			
-      // ServiceProfile¤òÀßÄê¤¹¤ë
+      // ServiceProfileã‚’è¨­å®šã™ã‚‹
       CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(true), sdoCfg->add_service_profile(svcProf0));
       CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(true), sdoCfg->add_service_profile(svcProf1));
 			
-      // ÀßÄê¤·¤¿ServiceProfile¤Î¤¦¤Á¡¢ÊÒÊı¤òÅĞÏ¿²ò½ü¤¹¤ë
+      // è¨­å®šã—ãŸServiceProfileã®ã†ã¡ã€ç‰‡æ–¹ã‚’ç™»éŒ²è§£é™¤ã™ã‚‹
       CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(true), sdoCfg->remove_service_profile("ID 0"));
 			
-      // getServiceProfiles()¤ÇÁ´ServiceProfile¤ò¼èÆÀ¤·¡¢ÅĞÏ¿²ò½ü¤·¤¿¤â¤Î¤¬´Ş¤Ş¤ì¤Ê¤¤¤³¤È¤ò³ÎÇ§¤¹¤ë
+      // getServiceProfiles()ã§å…¨ServiceProfileã‚’å–å¾—ã—ã€ç™»éŒ²è§£é™¤ã—ãŸã‚‚ã®ãŒå«ã¾ã‚Œãªã„ã“ã¨ã‚’ç¢ºèªã™ã‚‹
       const SDOPackage::ServiceProfileList svcProfList = sdoCfg->getServiceProfiles();
       CPPUNIT_ASSERT_EQUAL(CORBA::ULong(1), svcProfList.length());
       CPPUNIT_ASSERT_EQUAL(CORBA::Long(-1),
 			   CORBA_SeqUtil::find(svcProfList, ServiceProfileFinder("ID 0")));
 			
-      // ÅĞÏ¿²ò½ü¤·¤Æ¤¤¤Ê¤¤¤â¤Î¤Ï¡¢°ÍÁ³¤È¤·¤Æ´Ş¤Ş¤ì¤Æ¤¤¤ë¤«¡©
+      // ç™»éŒ²è§£é™¤ã—ã¦ã„ãªã„ã‚‚ã®ã¯ã€ä¾ç„¶ã¨ã—ã¦å«ã¾ã‚Œã¦ã„ã‚‹ã‹ï¼Ÿ
       CPPUNIT_ASSERT_EQUAL(CORBA::Long(0),
 			   CORBA_SeqUtil::find(svcProfList, ServiceProfileFinder("ID 1")));
 
@@ -408,10 +408,10 @@ namespace SdoConfiguration
     }
     
     /* 
-     * @brief add_organization()¥á¥½¥Ã¥É¤ÈgetOrganizations()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief add_organization()ãƒ¡ã‚½ãƒƒãƒ‰ã¨getOrganizations()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - add_organization()¤ÇOrganization_ptr¥¤¥ó¥¹¥¿¥ó¥¹¤òÅĞÏ¿¤Ç¤­¤ë¤«¡©
-     * - getOrganizations()¤ÇÅĞÏ¿¤µ¤ì¤Æ¤¤¤ëOrganization_ptr¥¤¥ó¥¹¥¿¥ó¥¹·²¤ò¼èÆÀ¤Ç¤­¤ë¤«¡©
+     * - add_organization()ã§Organization_ptrã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’ç™»éŒ²ã§ãã‚‹ã‹ï¼Ÿ
+     * - getOrganizations()ã§ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹Organization_ptrã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ç¾¤ã‚’å–å¾—ã§ãã‚‹ã‹ï¼Ÿ
      */
     void test_add_organization_and_getOrganizations()
     {
@@ -420,7 +420,7 @@ namespace SdoConfiguration
       RTC::ConfigAdmin cfgAdmin(cfgAdminProp);
       SDOPackage::Configuration_impl* sdoCfg = new Configuration_impl(cfgAdmin);
 			
-      // Organization¤ò2¤ÄÅĞÏ¿¤¹¤ë
+      // Organizationã‚’2ã¤ç™»éŒ²ã™ã‚‹
       SDOPackage::Organization_var org1;
       CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(true),
 			   sdoCfg->add_organization(org1._retn()));
@@ -429,7 +429,7 @@ namespace SdoConfiguration
       CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(true),
 			   sdoCfg->add_organization(org2._retn()));
       
-      // ¼èÆÀ¤µ¤ì¤ëOrganization¤Î¿ô¤Ï¡¢°Õ¿Ş¤É¤ª¤ê2¤Ä¤«¡©
+      // å–å¾—ã•ã‚Œã‚‹Organizationã®æ•°ã¯ã€æ„å›³ã©ãŠã‚Š2ã¤ã‹ï¼Ÿ
       SDOPackage::OrganizationList orgList = sdoCfg->getOrganizations();
       CPPUNIT_ASSERT_EQUAL(CORBA::ULong(2), orgList.length());
 
@@ -438,8 +438,8 @@ namespace SdoConfiguration
     }
     
     /*
-     * @brief remove_organization()¤Î¥Æ¥¹¥È
-     * - add_organization()¤ÇÅĞÏ¿¤·¡¢remove_organization()¤ÇÀµ¤·¤¯ºï½ü¤Ç¤­¤ë¤«¡©
+     * @brief remove_organization()ã®ãƒ†ã‚¹ãƒˆ
+     * - add_organization()ã§ç™»éŒ²ã—ã€remove_organization()ã§æ­£ã—ãå‰Šé™¤ã§ãã‚‹ã‹ï¼Ÿ
      */
     void test_remove_organization()
     {
@@ -453,18 +453,18 @@ namespace SdoConfiguration
       rtobj = new ::RTC::RTObject_impl(&mgr);
       m_pOi = new Organization_impl(rtobj->getObjRef());
 			
-      // Organization¤òÅĞÏ¿¤¹¤ë
+      // Organizationã‚’ç™»éŒ²ã™ã‚‹
       CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(true),
 			   sdoCfg->add_organization(m_pOi->getObjRef()));
 
-      // organization_id¤ò¼èÆÀ¤¹¤ë
+      // organization_idã‚’å–å¾—ã™ã‚‹
       std::string id(m_pOi->get_organization_id());
 
-      // ÅĞÏ¿¤·¤¿Organization¤òºï½ü¤¹¤ë
+      // ç™»éŒ²ã—ãŸOrganizationã‚’å‰Šé™¤ã™ã‚‹
       CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(true),
 			   sdoCfg->remove_organization(id.c_str()));
 
-      // ¼èÆÀ¤µ¤ì¤ëOrganization¤Î¿ô¤Ï¡¢°Õ¿Ş¤É¤ª¤ê0·ï¤«¡©
+      // å–å¾—ã•ã‚Œã‚‹Organizationã®æ•°ã¯ã€æ„å›³ã©ãŠã‚Š0ä»¶ã‹ï¼Ÿ
       SDOPackage::OrganizationList orgList = sdoCfg->getOrganizations();
       CPPUNIT_ASSERT_EQUAL(CORBA::ULong(0), orgList.length());
 
@@ -475,54 +475,54 @@ namespace SdoConfiguration
     }
 				
     /*
-     * @brief get_configuration_parameters()¤Î¥Æ¥¹¥È
+     * @brief get_configuration_parameters()ã®ãƒ†ã‚¹ãƒˆ
      */
     void test_get_configuration_parameters()
     {
-      // ¥Æ¥¹¥ÈÂĞ¾İ¤Ç¤¢¤ëSDOPackage::Confirutaion_impl::get_configuration_parameters()¤¬
-      // Ì¤¼ÂÁõ¤Ç¤¢¤ë¤¿¤á¡¢ËÜ¥Æ¥¹¥È¤âÌ¤¼ÂÁõ¤Ç¤¢¤ë¡£
+      // ãƒ†ã‚¹ãƒˆå¯¾è±¡ã§ã‚ã‚‹SDOPackage::Confirutaion_impl::get_configuration_parameters()ãŒ
+      // æœªå®Ÿè£…ã§ã‚ã‚‹ãŸã‚ã€æœ¬ãƒ†ã‚¹ãƒˆã‚‚æœªå®Ÿè£…ã§ã‚ã‚‹ã€‚
 //      std::cout << "test_get_configuration_parameters() IN" << std::endl;
 //      std::cout << "test_get_configuration_parameters() OUT" << std::endl;
     }
 		
     /*!
-     * @brief get_configuration_parameter_values()¤Î¥Æ¥¹¥È
+     * @brief get_configuration_parameter_values()ã®ãƒ†ã‚¹ãƒˆ
      */
     void test_get_configuration_parameter_values()
     {
-      // ¥Æ¥¹¥ÈÂĞ¾İ¤Ç¤¢¤ëSDOPackage::Confirutaion_impl::get_configuration_parameter_values()¤¬
-      // Ì¤¼ÂÁõ¤Ç¤¢¤ë¤¿¤á¡¢ËÜ¥Æ¥¹¥È¤âÌ¤¼ÂÁõ¤Ç¤¢¤ë¡£
+      // ãƒ†ã‚¹ãƒˆå¯¾è±¡ã§ã‚ã‚‹SDOPackage::Confirutaion_impl::get_configuration_parameter_values()ãŒ
+      // æœªå®Ÿè£…ã§ã‚ã‚‹ãŸã‚ã€æœ¬ãƒ†ã‚¹ãƒˆã‚‚æœªå®Ÿè£…ã§ã‚ã‚‹ã€‚
 //      std::cout << "test_get_configuration_parameter_values() IN" << std::endl;
 //      std::cout << "test_get_configuration_parameter_values() OUT" << std::endl;
     }
 		
     /*!
-     * @brief get_configuration_parameter_value()¤Î¥Æ¥¹¥È
+     * @brief get_configuration_parameter_value()ã®ãƒ†ã‚¹ãƒˆ
      */
     void test_get_configuration_parameter_value()
     {
-      // ¥Æ¥¹¥ÈÂĞ¾İ¤Ç¤¢¤ëSDOPackage::Confirutaion_impl::get_configuration_parameter_value()¤¬
-      // Ì¤¼ÂÁõ¤Ç¤¢¤ë¤¿¤á¡¢ËÜ¥Æ¥¹¥È¤âÌ¤¼ÂÁõ¤Ç¤¢¤ë¡£
+      // ãƒ†ã‚¹ãƒˆå¯¾è±¡ã§ã‚ã‚‹SDOPackage::Confirutaion_impl::get_configuration_parameter_value()ãŒ
+      // æœªå®Ÿè£…ã§ã‚ã‚‹ãŸã‚ã€æœ¬ãƒ†ã‚¹ãƒˆã‚‚æœªå®Ÿè£…ã§ã‚ã‚‹ã€‚
 //      std::cout << "test_get_configuration_parameter_value() IN" << std::endl;
 //      std::cout << "test_get_configuration_parameter_value() OUT" << std::endl;
     }
 		
     /*!
-     * @brief set_configuration_parameter()¤Î¥Æ¥¹¥È
+     * @brief set_configuration_parameter()ã®ãƒ†ã‚¹ãƒˆ
      */
     void test_set_configuration_parameter()
     {
-      // ¥Æ¥¹¥ÈÂĞ¾İ¤Ç¤¢¤ëSDOPackage::Confirutaion_impl::set_configuration_parameter()¤¬
-      // Ì¤¼ÂÁõ¤Ç¤¢¤ë¤¿¤á¡¢ËÜ¥Æ¥¹¥È¤âÌ¤¼ÂÁõ¤Ç¤¢¤ë¡£
+      // ãƒ†ã‚¹ãƒˆå¯¾è±¡ã§ã‚ã‚‹SDOPackage::Confirutaion_impl::set_configuration_parameter()ãŒ
+      // æœªå®Ÿè£…ã§ã‚ã‚‹ãŸã‚ã€æœ¬ãƒ†ã‚¹ãƒˆã‚‚æœªå®Ÿè£…ã§ã‚ã‚‹ã€‚
 //      std::cout << "test_set_configuration_parameter() IN" << std::endl;
 //      std::cout << "test_set_configuration_parameter() OUT" << std::endl;
     }
 		
     /*!
-     * @brief add/get_configuration_set()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief add/get_configuration_set()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - ConfigurationSet¤òadd_configuration_set()¤ÇÀµ¾ï¤ËÅĞÏ¿¤Ç¤­¤ë¤«¡©
-     * - add_configuration_set()¤ÇÅĞÏ¿¤·¤¿ConfigurationSet¤ò¡¢get_configuration_set()¤ÇÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
+     * - ConfigurationSetã‚’add_configuration_set()ã§æ­£å¸¸ã«ç™»éŒ²ã§ãã‚‹ã‹ï¼Ÿ
+     * - add_configuration_set()ã§ç™»éŒ²ã—ãŸConfigurationSetã‚’ã€get_configuration_set()ã§æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
      */
     void test_add_configuration_set_and_get_configuration_set()
     {
@@ -531,7 +531,7 @@ namespace SdoConfiguration
       RTC::ConfigAdmin cfgAdmin(cfgAdminProp);
       SDOPackage::Configuration_impl* sdoCfg = new Configuration_impl(cfgAdmin);
 			
-      // ConfigurationSet¤ò½àÈ÷¤¹¤ë
+      // ConfigurationSetã‚’æº–å‚™ã™ã‚‹
       SDOPackage::ConfigurationSet cfgSet0;
       cfgSet0.id = "ID 0";
       cfgSet0.description = "DESCRIPTION 0";
@@ -550,11 +550,11 @@ namespace SdoConfiguration
       cfgSet1.configuration_data[1].name = "NAME 1-1";
       cfgSet1.configuration_data[1].value <<= "1.7320508";
 			
-      // ½àÈ÷¤·¤¿ConfigurationSet¤òÅĞÏ¿¤¹¤ë
+      // æº–å‚™ã—ãŸConfigurationSetã‚’ç™»éŒ²ã™ã‚‹
       CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(true), sdoCfg->add_configuration_set(cfgSet0));
       CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(true), sdoCfg->add_configuration_set(cfgSet1));
 			
-      // ÅĞÏ¿¤·¤¿ConfigurationSet¤òÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
+      // ç™»éŒ²ã—ãŸConfigurationSetã‚’æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
       SDOPackage::ConfigurationSet* cfgSetRet0 = sdoCfg->get_configuration_set("ID 0");
       CPPUNIT_ASSERT_EQUAL(std::string("ID 0"),
 			   std::string(cfgSetRet0->id));
@@ -602,10 +602,10 @@ namespace SdoConfiguration
     }
 		
     /*!
-     * @brief remove_configuration_set()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief remove_configuration_set()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - ÅĞÏ¿ºÑ¤ß¤ÎConfigurationSet¤òÀµ¤·¤¯ÅĞÏ¿²ò½ü¤Ç¤­¤ë¤«¡©
-     * - ÅĞÏ¿¤µ¤ì¤Æ¤¤¤Ê¤¤ID¤ò»ØÄê¤·¤¿¾ì¹ç¡¢°Õ¿Ş¤É¤ª¤êÎã³°¤¬¥¹¥í¡¼¤µ¤ì¤ë¤«¡©
+     * - ç™»éŒ²æ¸ˆã¿ã®ConfigurationSetã‚’æ­£ã—ãç™»éŒ²è§£é™¤ã§ãã‚‹ã‹ï¼Ÿ
+     * - ç™»éŒ²ã•ã‚Œã¦ã„ãªã„IDã‚’æŒ‡å®šã—ãŸå ´åˆã€æ„å›³ã©ãŠã‚Šä¾‹å¤–ãŒã‚¹ãƒ­ãƒ¼ã•ã‚Œã‚‹ã‹ï¼Ÿ
      */
     void test_remove_configuration_set()
     {
@@ -614,7 +614,7 @@ namespace SdoConfiguration
       RTC::ConfigAdmin cfgAdmin(cfgAdminProp);
       SDOPackage::Configuration_impl* sdoCfg = new Configuration_impl(cfgAdmin);
 			
-      // ConfigurationSet¤ò½àÈ÷¤¹¤ë
+      // ConfigurationSetã‚’æº–å‚™ã™ã‚‹
       SDOPackage::ConfigurationSet cfgSet0;
       cfgSet0.id = "ID 0";
       cfgSet0.description = "DESCRIPTION 0";
@@ -633,15 +633,15 @@ namespace SdoConfiguration
       cfgSet1.configuration_data[1].name = "NAME 1-1";
       cfgSet1.configuration_data[1].value <<= "1.7320508";
 			
-      // ½àÈ÷¤·¤¿ConfigurationSet¤òÅĞÏ¿¤¹¤ë
+      // æº–å‚™ã—ãŸConfigurationSetã‚’ç™»éŒ²ã™ã‚‹
       CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(true), sdoCfg->add_configuration_set(cfgSet0));
       CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(true), sdoCfg->add_configuration_set(cfgSet1));
 			
-      // ÅĞÏ¿¤·¤¿¤¦¤Á¡¢ÊÒÊı¤ÎConfigurationSet¤òÅĞÏ¿²ò½ü¤¹¤ë
+      // ç™»éŒ²ã—ãŸã†ã¡ã€ç‰‡æ–¹ã®ConfigurationSetã‚’ç™»éŒ²è§£é™¤ã™ã‚‹
       CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(true), sdoCfg->remove_configuration_set("ID 0"));
 			
-      // ÅĞÏ¿²ò½ü¤·¤¿ConfigurationSet¤ò»ØÄê¤·¤Æ¡¢get_configuration_set()¸Æ½Ğ¤ò»î¤ß¤Æ¡¢
-      // °Õ¿Ş¤É¤ª¤ê¤ËÎã³°¤¬¥¹¥í¡¼¤µ¤ì¤ë¤«¡©
+      // ç™»éŒ²è§£é™¤ã—ãŸConfigurationSetã‚’æŒ‡å®šã—ã¦ã€get_configuration_set()å‘¼å‡ºã‚’è©¦ã¿ã¦ã€
+      // æ„å›³ã©ãŠã‚Šã«ä¾‹å¤–ãŒã‚¹ãƒ­ãƒ¼ã•ã‚Œã‚‹ã‹ï¼Ÿ
       try
 	{
 	  sdoCfg->get_configuration_set("ID 0");
@@ -650,8 +650,8 @@ namespace SdoConfiguration
       catch (SDOPackage::InvalidParameter expected) {}
       catch (...) {}
 			
-      // ¶õ¤Îid¤ò»ØÄê¤·¤Æ¡¢get_configuration_set()¸Æ½Ğ¤ò»î¤ß¤Æ¡¢
-      // °Õ¿Ş¤É¤ª¤ê¤ËÎã³°¤¬¥¹¥í¡¼¤µ¤ì¤ë¤«¡©
+      // ç©ºã®idã‚’æŒ‡å®šã—ã¦ã€get_configuration_set()å‘¼å‡ºã‚’è©¦ã¿ã¦ã€
+      // æ„å›³ã©ãŠã‚Šã«ä¾‹å¤–ãŒã‚¹ãƒ­ãƒ¼ã•ã‚Œã‚‹ã‹ï¼Ÿ
       try
 	{
 	  sdoCfg->get_configuration_set("");
@@ -660,11 +660,11 @@ namespace SdoConfiguration
       catch (SDOPackage::InvalidParameter expected) {}
       catch (...) {}
 			
-      // ÅĞÏ¿²ò½ü¤·¤Æ¤¤¤Ê¤¤ConfigurationSet¤Ï¡¢°ÍÁ³¤È¤·¤Æ¼èÆÀ¤Ç¤­¤ë¤«¡©
+      // ç™»éŒ²è§£é™¤ã—ã¦ã„ãªã„ConfigurationSetã¯ã€ä¾ç„¶ã¨ã—ã¦å–å¾—ã§ãã‚‹ã‹ï¼Ÿ
       SDOPackage::ConfigurationSet* cfgSetRet = sdoCfg->get_configuration_set("ID 1");
       CPPUNIT_ASSERT_EQUAL(std::string("ID 1"), std::string(cfgSetRet->id));
 			
-      // Â¸ºß¤·¤Ê¤¤ID¤ò»ØÄê¤·¤ÆÅĞÏ¿²ò½ü¤ò»î¤ß¤¿¾ì¹ç¤Ë¡¢°Õ¿Ş¤É¤ª¤ê¤ËÎã³°¤¬¥¹¥í¡¼¤µ¤ì¤ë¤«¡©
+      // å­˜åœ¨ã—ãªã„IDã‚’æŒ‡å®šã—ã¦ç™»éŒ²è§£é™¤ã‚’è©¦ã¿ãŸå ´åˆã«ã€æ„å›³ã©ãŠã‚Šã«ä¾‹å¤–ãŒã‚¹ãƒ­ãƒ¼ã•ã‚Œã‚‹ã‹ï¼Ÿ
       try
 	{
 	  sdoCfg->remove_configuration_set("inexist ID");
@@ -678,10 +678,10 @@ namespace SdoConfiguration
     }
 		
     /*!
-     * @brief set_configuration_set_values()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief set_configuration_set_values()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - ÅĞÏ¿ºÑ¤ß¤ÎConfigurationSet¤ÎID¤ò»ØÄê¤·¤Æ¡¢Àµ¤·¤¯ConfigurationSet¤ò¹¹¿·¤Ç¤­¤ë¤«¡©
-     * - Â¸ºß¤·¤Ê¤¤ID¤ò»ØÄê¤·¤¿¾ì¹ç¤Ë¡¢°Õ¿Ş¤É¤ª¤ê¤ËÎã³°¤¬¥¹¥í¡¼¤µ¤ì¤ë¤«¡©
+     * - ç™»éŒ²æ¸ˆã¿ã®ConfigurationSetã®IDã‚’æŒ‡å®šã—ã¦ã€æ­£ã—ãConfigurationSetã‚’æ›´æ–°ã§ãã‚‹ã‹ï¼Ÿ
+     * - å­˜åœ¨ã—ãªã„IDã‚’æŒ‡å®šã—ãŸå ´åˆã«ã€æ„å›³ã©ãŠã‚Šã«ä¾‹å¤–ãŒã‚¹ãƒ­ãƒ¼ã•ã‚Œã‚‹ã‹ï¼Ÿ
      */
     void test_set_configuration_set_values()
     {
@@ -690,7 +690,7 @@ namespace SdoConfiguration
       RTC::ConfigAdmin cfgAdmin(cfgAdminProp);
       SDOPackage::Configuration_impl* sdoCfg = new Configuration_impl(cfgAdmin);
 			
-      // ConfigurationSet¤ò½àÈ÷¤¹¤ë
+      // ConfigurationSetã‚’æº–å‚™ã™ã‚‹
       SDOPackage::ConfigurationSet cfgSet0;
       cfgSet0.id = "ID 0";
       cfgSet0.description = "DESCRIPTION 0";
@@ -718,15 +718,15 @@ namespace SdoConfiguration
       cfgSet1_Modified.configuration_data[1].name = "NAME 1-1";
       cfgSet1_Modified.configuration_data[1].value <<= "2.44948974";
 
-      // ½àÈ÷¤·¤¿ConfigurationSet¤òÅĞÏ¿¤¹¤ë
+      // æº–å‚™ã—ãŸConfigurationSetã‚’ç™»éŒ²ã™ã‚‹
       CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(true), sdoCfg->add_configuration_set(cfgSet0));
       CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(true), sdoCfg->add_configuration_set(cfgSet1));
 			
-      // ÅĞÏ¿¤·¤¿ConfigurationSet¤Î¤¦¤ÁÊÒÊı¤ò¡¢set_configuration_set_values()¤Ç¹¹¿·¤¹¤ë
+      // ç™»éŒ²ã—ãŸConfigurationSetã®ã†ã¡ç‰‡æ–¹ã‚’ã€set_configuration_set_values()ã§æ›´æ–°ã™ã‚‹
       CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(true),
 			   sdoCfg->set_configuration_set_values(cfgSet1_Modified));
 			
-      // ¹¹¿·¤·¤¿ConfigurationSet¤ò¡¢Àµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
+      // æ›´æ–°ã—ãŸConfigurationSetã‚’ã€æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
       SDOPackage::ConfigurationSet* cfgSetRet = sdoCfg->get_configuration_set("ID 1");
       CPPUNIT_ASSERT_EQUAL(std::string("ID 1"), std::string(cfgSetRet->id));
 
@@ -745,8 +745,8 @@ namespace SdoConfiguration
 	CPPUNIT_ASSERT_EQUAL(std::string("2.44948974"), std::string(value));
       }
 			
-      // ¶õ¤ÎID¤ò»ØÄê¤·¤Æset_configuration_set_values()¤ò¸Æ½Ğ¤·¡¢
-      // °Õ¿Ş¤É¤ª¤êÎã³°¤¬¥¹¥í¡¼¤µ¤ì¤ë¤«¡©
+      // ç©ºã®IDã‚’æŒ‡å®šã—ã¦set_configuration_set_values()ã‚’å‘¼å‡ºã—ã€
+      // æ„å›³ã©ãŠã‚Šä¾‹å¤–ãŒã‚¹ãƒ­ãƒ¼ã•ã‚Œã‚‹ã‹ï¼Ÿ
       try
 	{
 	  cfgSet1_Modified.id = "";
@@ -761,8 +761,8 @@ namespace SdoConfiguration
     }
 		
     /*!
-     * @brief activate_configuration_set()¥á¥½¥Ã¥É¡¢get_active_configuration_set()¥á¥½¥Ã¥É¡¢
-     * get_configuration_sets()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief activate_configuration_set()ãƒ¡ã‚½ãƒƒãƒ‰ã€get_active_configuration_set()ãƒ¡ã‚½ãƒƒãƒ‰ã€
+     * get_configuration_sets()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
      */
     void test_activate_configuration_set_and_get_active_configuration_set()
@@ -772,7 +772,7 @@ namespace SdoConfiguration
       RTC::ConfigAdmin cfgAdmin(cfgAdminProp);
       SDOPackage::Configuration_impl* sdoCfg = new Configuration_impl(cfgAdmin);
 	
-      // ConfigurationSet¤ò½àÈ÷¤¹¤ë
+      // ConfigurationSetã‚’æº–å‚™ã™ã‚‹
       SDOPackage::ConfigurationSet cfgSet0;
       cfgSet0.id = "ID 0";
       cfgSet0.description = "DESCRIPTION 0";
@@ -791,14 +791,14 @@ namespace SdoConfiguration
       cfgSet1.configuration_data[1].name = "NAME 1-1";
       cfgSet1.configuration_data[1].value <<= "1.7320508";
 
-      // ½àÈ÷¤·¤¿ConfigurationSet¤òÅĞÏ¿¤¹¤ë
+      // æº–å‚™ã—ãŸConfigurationSetã‚’ç™»éŒ²ã™ã‚‹
       CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(true), sdoCfg->add_configuration_set(cfgSet0));
       CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(true), sdoCfg->add_configuration_set(cfgSet1));
 			
-      // ConfigurationSet ¥ê¥¹¥È¤ò¼èÆÀ¤¹¤ë
+      // ConfigurationSet ãƒªã‚¹ãƒˆã‚’å–å¾—ã™ã‚‹
       ConfigurationSetList_var config_sets(sdoCfg->get_configuration_sets());
 
-      // ¼èÆÀ¤·¤¿·ï¿ô¤ÈÆâÍÆ¤¬°ìÃ×¤·¤Æ¤¤¤ë¤«¡©
+      // å–å¾—ã—ãŸä»¶æ•°ã¨å†…å®¹ãŒä¸€è‡´ã—ã¦ã„ã‚‹ã‹ï¼Ÿ
       CPPUNIT_ASSERT(config_sets->length() == 2);
       CPPUNIT_ASSERT_EQUAL(std::string("ID 0"),
 			   std::string(config_sets[0].id));
@@ -830,10 +830,10 @@ namespace SdoConfiguration
 	CPPUNIT_ASSERT_EQUAL(std::string("1.7320508"), std::string(value));
       }
 
-      // "ID 0"¤Î¤Û¤¦¤ò¥¢¥¯¥Æ¥£¥Ö²½¤¹¤ë
+      // "ID 0"ã®ã»ã†ã‚’ã‚¢ã‚¯ãƒ†ã‚£ãƒ–åŒ–ã™ã‚‹
       CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(true), sdoCfg->activate_configuration_set("ID 0"));
 			
-      // ¥¢¥¯¥Æ¥£¥Ö¤ÊConfigurationSet¤ò¼èÆÀ¤·¡¢¤½¤ì¤¬¥¢¥¯¥Æ¥£¥Ö²½¤·¤¿¤â¤Î¤È°ìÃ×¤¹¤ë¤«¡©
+      // ã‚¢ã‚¯ãƒ†ã‚£ãƒ–ãªConfigurationSetã‚’å–å¾—ã—ã€ãã‚ŒãŒã‚¢ã‚¯ãƒ†ã‚£ãƒ–åŒ–ã—ãŸã‚‚ã®ã¨ä¸€è‡´ã™ã‚‹ã‹ï¼Ÿ
       SDOPackage::ConfigurationSet* cfgSetRet0 = sdoCfg->get_active_configuration_set();
       CPPUNIT_ASSERT_EQUAL(std::string("ID 0"), std::string(cfgSetRet0->id));
 
@@ -855,10 +855,10 @@ namespace SdoConfiguration
 	CPPUNIT_ASSERT_EQUAL(std::string("2.71828"), std::string(value));
       }
 
-      // "ID 1"¤Î¤Û¤¦¤ò¥¢¥¯¥Æ¥£¥Ö²½¤¹¤ë
+      // "ID 1"ã®ã»ã†ã‚’ã‚¢ã‚¯ãƒ†ã‚£ãƒ–åŒ–ã™ã‚‹
       CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(true), sdoCfg->activate_configuration_set("ID 1"));
 			
-      // ¥¢¥¯¥Æ¥£¥Ö¤ÊConfigurationSet¤ò¼èÆÀ¤·¡¢¤½¤ì¤¬¥¢¥¯¥Æ¥£¥Ö²½¤·¤¿¤â¤Î¤È°ìÃ×¤¹¤ë¤«¡©
+      // ã‚¢ã‚¯ãƒ†ã‚£ãƒ–ãªConfigurationSetã‚’å–å¾—ã—ã€ãã‚ŒãŒã‚¢ã‚¯ãƒ†ã‚£ãƒ–åŒ–ã—ãŸã‚‚ã®ã¨ä¸€è‡´ã™ã‚‹ã‹ï¼Ÿ
       SDOPackage::ConfigurationSet* cfgSetRet1 = sdoCfg->get_active_configuration_set();
       CPPUNIT_ASSERT_EQUAL(std::string("ID 1"), std::string(cfgSetRet1->id));
 
@@ -880,7 +880,7 @@ namespace SdoConfiguration
 	CPPUNIT_ASSERT_EQUAL(std::string("1.7320508"), std::string(value));
       }
 			
-      // Â¸ºß¤·¤Ê¤¤ID¤ò»ØÄê¤·¤Æactivate_configuration_set()¤ò¸Æ½Ğ¤·¡¢°Õ¿Ş¤É¤ª¤ê¤ÎÎã³°¤¬¥¹¥í¡¼¤µ¤ì¤ë¤«¡©
+      // å­˜åœ¨ã—ãªã„IDã‚’æŒ‡å®šã—ã¦activate_configuration_set()ã‚’å‘¼å‡ºã—ã€æ„å›³ã©ãŠã‚Šã®ä¾‹å¤–ãŒã‚¹ãƒ­ãƒ¼ã•ã‚Œã‚‹ã‹ï¼Ÿ
       try
 	{
 	  sdoCfg->activate_configuration_set("inexist ID");

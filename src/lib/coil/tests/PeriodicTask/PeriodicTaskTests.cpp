@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file   PeriodicTaskTests.cpp
  * @brief  PeriodicTask test class
@@ -205,7 +205,7 @@ namespace PeriodicTask
 
     }
     /*!
-     *@brief setTask¥Æ¥¹¥È
+     *@brief setTaskãƒ†ã‚¹ãƒˆ
      *
      */
     void test_setTask()
@@ -228,7 +228,7 @@ namespace PeriodicTask
 
     }
     /*!
-     *@brief setPeriodic¥Æ¥¹¥È
+     *@brief setPeriodicãƒ†ã‚¹ãƒˆ
      *
      */
     void test_setPeriodic()
@@ -280,7 +280,7 @@ namespace PeriodicTask
 
     }
     /*!
-     *@brief signal,suspend,resume,finalize¥Æ¥¹¥È
+     *@brief signal,suspend,resume,finalizeãƒ†ã‚¹ãƒˆ
      *
      */
     void test_signal()
@@ -324,8 +324,8 @@ namespace PeriodicTask
 
     }
     /*!
-     *@brief executionMeasure¥Æ¥¹¥È
-     * ¼Â¹Ô¼ş´ü¤Ï50ms,svc¤Î¼Â¹Ô»ş´Ö¤Ï30ms¡£
+     *@brief executionMeasureãƒ†ã‚¹ãƒˆ
+     * å®Ÿè¡Œå‘¨æœŸã¯50ms,svcã®å®Ÿè¡Œæ™‚é–“ã¯30msã€‚
      */
     void test_executionMeasure()
     {
@@ -341,7 +341,7 @@ std::cout<<"IN  test_executionMeasure()"<<std::endl;
       p.setPeriod(0.05);
       p.executionMeasure(true);
 
-      /* ²ó¿ô(executionMeasureConut)¤¬¥Ç¥Õ¥©¥ë¥È(10)¤Î¾ì¹ç */
+      /* å›æ•°(executionMeasureConut)ãŒãƒ‡ãƒ•ã‚©ãƒ«ãƒˆ(10)ã®å ´åˆ */
       p.activate();
 
       coil::usleep(600000);
@@ -369,7 +369,7 @@ std::cout<<"IN  test_executionMeasure()"<<std::endl;
 
 
 
-      /* ²ó¿ô(executionMeasureConut)5¤Î¾ì¹ç */
+      /* å›æ•°(executionMeasureConut)5ã®å ´åˆ */
       p.executionMeasureCount(5);
       p.resume();
       coil::usleep(300000);
@@ -394,7 +394,7 @@ std::cout<<"IN  test_executionMeasure()"<<std::endl;
       CPPUNIT_ASSERT_MESSAGE(ss.str(),fabs(estat.mean_interval - wait) < 0.03);
       CPPUNIT_ASSERT_MESSAGE(ss.str(),estat.std_deviation < (wait / 5.0));
 
-      /* ¼Â¹Ô²ó¿ô¤¬²ó¿ô(executionMeasureConut)¤ËËş¤¿¤Ê¤¤¾ì¹ç */
+      /* å®Ÿè¡Œå›æ•°ãŒå›æ•°(executionMeasureConut)ã«æº€ãŸãªã„å ´åˆ */
       p.executionMeasureCount(10);
       p.resume();
       coil::usleep(300000);
@@ -402,15 +402,15 @@ std::cout<<"IN  test_executionMeasure()"<<std::endl;
       coil::usleep(50000);
       p.finalize();
       coil::TimeMeasure::Statistics estat2 = p.getExecStat();
-      /* ²ó¿ô(periodicMeasureConut)¤ËËş¤¿¤Ê¤¤¤¿¤á¡¢Á°²ó¤ÈÆ±¤¸ÃÍ¤òÊÖ¤¹¡£*/
+      /* å›æ•°(periodicMeasureConut)ã«æº€ãŸãªã„ãŸã‚ã€å‰å›ã¨åŒã˜å€¤ã‚’è¿”ã™ã€‚*/
       CPPUNIT_ASSERT(estat.max_interval == estat2.max_interval);
       CPPUNIT_ASSERT(estat.min_interval == estat2.min_interval);
       CPPUNIT_ASSERT(estat.mean_interval == estat2.mean_interval);
       CPPUNIT_ASSERT(estat.std_deviation == estat2.std_deviation);
     }
     /*!
-     *@brief periodicMeasure¥Æ¥¹¥È
-     * ¼Â¹Ô¼ş´ü¤Ï50ms,svc¤Î¼Â¹Ô»ş´Ö¤Ï30ms¡£
+     *@brief periodicMeasureãƒ†ã‚¹ãƒˆ
+     * å®Ÿè¡Œå‘¨æœŸã¯50ms,svcã®å®Ÿè¡Œæ™‚é–“ã¯30msã€‚
      */
     void test_periodicMeasure()
     {
@@ -426,7 +426,7 @@ std::cout<<"IN  test_periodicMeasure()"<<std::endl;
       p.setPeriod(0.05);
       p.periodicMeasure(true);
 
-      /* ²ó¿ô(periodicMeasureConut)¤¬¥Ç¥Õ¥©¥ë¥È(10)¤Î¾ì¹ç */
+      /* å›æ•°(periodicMeasureConut)ãŒãƒ‡ãƒ•ã‚©ãƒ«ãƒˆ(10)ã®å ´åˆ */
       p.activate();
 
       coil::usleep(600000);
@@ -447,7 +447,7 @@ std::cout<<"IN  test_periodicMeasure()"<<std::endl;
 
 
 
-      /* ²ó¿ô(periodicMeasureConut)5¤Î¾ì¹ç */
+      /* å›æ•°(periodicMeasureConut)5ã®å ´åˆ */
       p.periodicMeasureCount(5);
       p.resume();
       coil::usleep(300000);
@@ -466,7 +466,7 @@ std::cout<<"IN  test_periodicMeasure()"<<std::endl;
       CPPUNIT_ASSERT(pstat.std_deviation < (wait / 5.0));
 
 
-      /* ¼Â¹Ô²ó¿ô¤¬²ó¿ô(periodicMeasureConut)¤ËËş¤¿¤Ê¤¤¾ì¹ç */
+      /* å®Ÿè¡Œå›æ•°ãŒå›æ•°(periodicMeasureConut)ã«æº€ãŸãªã„å ´åˆ */
       p.periodicMeasureCount(10);
       p.resume();
       coil::usleep(300000);
@@ -474,7 +474,7 @@ std::cout<<"IN  test_periodicMeasure()"<<std::endl;
       coil::usleep(50000);
       p.finalize();
       coil::TimeMeasure::Statistics pstat2 = p.getPeriodStat();
-      /* ²ó¿ô(periodicMeasureConut)¤ËËş¤¿¤Ê¤¤¤¿¤á¡¢Á°²ó¤ÈÆ±¤¸ÃÍ¤òÊÖ¤¹¡£*/
+      /* å›æ•°(periodicMeasureConut)ã«æº€ãŸãªã„ãŸã‚ã€å‰å›ã¨åŒã˜å€¤ã‚’è¿”ã™ã€‚*/
       CPPUNIT_ASSERT(pstat.max_interval == pstat2.max_interval);
       CPPUNIT_ASSERT(pstat.min_interval == pstat2.min_interval);
       CPPUNIT_ASSERT(pstat.mean_interval == pstat2.mean_interval);

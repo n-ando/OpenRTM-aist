@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file   UUIDTests.cpp
  * @brief  UUID test class
@@ -101,7 +101,7 @@ namespace coilUUID
      */
     void test_UUID_Generator_init()
     {
-      // init()‚ÍŒÄ‚Î‚ê‚Ä‚à‰½‚à‚µ‚È‚¢ƒƒ\ƒh‚È‚Ì‚ÅAƒeƒXƒg“à—e–³‚µ
+      // init()ã¯å‘¼ã°ã‚Œã¦ã‚‚ä½•ã‚‚ã—ãªã„ãƒ¡ã‚½ãƒ‰ãªã®ã§ã€ãƒ†ã‚¹ãƒˆå†…å®¹ç„¡ã—
     }
 
     /*!
@@ -120,7 +120,7 @@ namespace coilUUID
     }
 
 	/*!
-	 *  @brief •¶š—ñ‚ªUUIDƒtƒH[ƒ}ƒbƒg‚©‚Ç‚¤‚©‚ğ”»•Ê‚·‚éB
+	 *  @brief æ–‡å­—åˆ—ãŒUUIDãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆã‹ã©ã†ã‹ã‚’åˆ¤åˆ¥ã™ã‚‹ã€‚
 	 */
     bool isUuidString(const char* aString)
 	{
@@ -194,7 +194,7 @@ int main(int argc, char* argv[])
  */
 
 /*!
- *  @brief •¶š—ñ‚ªUUIDƒtƒH[ƒ}ƒbƒg‚©‚Ç‚¤‚©‚ğ”»•Ê‚·‚éB
+ *  @brief æ–‡å­—åˆ—ãŒUUIDãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆã‹ã©ã†ã‹ã‚’åˆ¤åˆ¥ã™ã‚‹ã€‚
  */
 static bool isUuidString(const char* aString)
 {

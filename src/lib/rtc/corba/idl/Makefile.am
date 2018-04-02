@@ -165,7 +165,6 @@ vc9proj: libRTCSkel.vcproj.yaml
 		--yaml libRTCSkel.vcproj.yaml \
 		--source $(SKEL_CPP) \
 		--header $(SKEL_H)
-	qkc -O- -sm $(win32_builddir)/rtm/idl/libRTCSkel_vc9.vcproj
 
 vc10proj: libRTCSkel.vcproj.yaml
 	$(top_builddir)/build/vcprojtool.py vcproj \
@@ -176,7 +175,6 @@ vc10proj: libRTCSkel.vcproj.yaml
 		--yaml libRTCSkel.vcproj.yaml \
 		--source $(SKEL_CPP) \
 		--header $(SKEL_H)
-	qkc -O- -sm $(win32_builddir)/rtm/idl/libRTCSkel_vc10.vcproj
 
 
 dist-hook: lst vcproj

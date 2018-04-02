@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file   IceManagerTests.cpp
  * @brief  IceManager test class

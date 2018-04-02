@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file  IRTObject.h
  * @brief IRTObject interface class
@@ -52,7 +52,7 @@ namespace Local
   /*!
    * @if jp
    * @class IRTObject
-   * @brief IRTObject ¥¤¥ó¥¿¡¼¥Õ¥§¡¼¥¹¥¯¥é¥¹
+   * @brief IRTObject ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹ã‚¯ãƒ©ã‚¹
    * @else
    * @class IRTObject
    * @brief IRTObject interface class

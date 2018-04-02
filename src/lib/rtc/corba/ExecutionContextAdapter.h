@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file  ExecutionContextAdapter.h
  * @brief ExecutionContextAdapter

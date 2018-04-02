@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file   RTObjectServantTests.cpp
  * @brief  RTObjectServant test class

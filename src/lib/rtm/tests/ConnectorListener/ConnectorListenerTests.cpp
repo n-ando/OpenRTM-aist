@@ -1,4 +1,4 @@
-// -*- C++ -*-
+Ôªø// -*- C++ -*-
 /*!
  * @file   ConnectorListenerTests.cpp
  * @brief  ConnectorListener test class
@@ -251,7 +251,7 @@ namespace ConnectorListener
 
         CPPUNIT_ASSERT_EQUAL(0, cdl_count);
 
-        // •«•π•»•È•Ø•ø§«delete §∑§∆§§§Î§Œ§«…‘Õ◊°£
+        // „Éá„Çπ„Éà„É©„ÇØ„Çø„Åßdelete „Åó„Å¶„ÅÑ„Çã„ÅÆ„Åß‰∏çË¶Å„ÄÇ
         // delete datalisteners;
     }
 
@@ -296,7 +296,7 @@ namespace ConnectorListener
         }
         CPPUNIT_ASSERT_EQUAL(0, cl_count);
 
-        // •«•π•»•È•Ø•ø§«delete §∑§∆§§§Î§Œ§«…‘Õ◊°£
+        // „Éá„Çπ„Éà„É©„ÇØ„Çø„Åßdelete „Åó„Å¶„ÅÑ„Çã„ÅÆ„Åß‰∏çË¶Å„ÄÇ
         // delete datalisteners;
     }
 

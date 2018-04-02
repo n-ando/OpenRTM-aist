@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file   FactoryTests.cpp
  * @brief  Factory test class
@@ -155,11 +155,11 @@ namespace Tests
     }
 		
     /*!
-     * @brief create()¥á¥½¥Ã¥É¤Èdestroy()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief create()ãƒ¡ã‚½ãƒƒãƒ‰ã¨destroy()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - Àµ¾ï¤Ë¥³¥ó¥İ¡¼¥Í¥ó¥È¤òÀ¸À®¤Ç¤­¤ë¤«¡©
-     * - À¸À®¤µ¤ì¤¿¥³¥ó¥İ¡¼¥Í¥ó¥È¤Ë¤Ï¡¢Àµ¤·¤¯¥×¥í¥Ñ¥Æ¥£¤¬ÀßÄê¤µ¤ì¤Æ¤¤¤ë¤«¡©
-     * - Àµ¾ï¤Ë¥³¥ó¥İ¡¼¥Í¥ó¥È¤òÇË´ş¤Ç¤­¤ë¤«¡©¡Ê¥Ç¥¹¥È¥é¥¯¥¿¤¬¸Æ¤Ğ¤ì¤ë¤«¡©¡Ë
+     * - æ­£å¸¸ã«ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã‚’ç”Ÿæˆã§ãã‚‹ã‹ï¼Ÿ
+     * - ç”Ÿæˆã•ã‚ŒãŸã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã«ã¯ã€æ­£ã—ããƒ—ãƒ­ãƒ‘ãƒ†ã‚£ãŒè¨­å®šã•ã‚Œã¦ã„ã‚‹ã‹ï¼Ÿ
+     * - æ­£å¸¸ã«ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã‚’ç ´æ£„ã§ãã‚‹ã‹ï¼Ÿï¼ˆãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ãŒå‘¼ã°ã‚Œã‚‹ã‹ï¼Ÿï¼‰
      */
     void test_create_and_destroy()
     {
@@ -169,7 +169,7 @@ namespace Tests
       RTC::FactoryCXX factory(
 			      properties, CreateRTObjectMock, DeleteRTObjectMock);
 			
-      // Àµ¾ï¤Ë¥³¥ó¥İ¡¼¥Í¥ó¥È¤òÀ¸À®¤Ç¤­¤ë¤«¡©
+      // æ­£å¸¸ã«ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã‚’ç”Ÿæˆã§ãã‚‹ã‹ï¼Ÿ
       RTC::RtcBase* rtc = factory.create(m_mgr);
       CPPUNIT_ASSERT(rtc != NULL);
 			
@@ -179,18 +179,18 @@ namespace Tests
       Logger logger;
       mock->setLogger(&logger);
 			
-      // À¸À®¤µ¤ì¤¿¥³¥ó¥İ¡¼¥Í¥ó¥È¤Ë¤Ï¡¢Àµ¤·¤¯¥×¥í¥Ñ¥Æ¥£¤¬ÀßÄê¤µ¤ì¤Æ¤¤¤ë¤«¡©
+      // ç”Ÿæˆã•ã‚ŒãŸã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã«ã¯ã€æ­£ã—ããƒ—ãƒ­ãƒ‘ãƒ†ã‚£ãŒè¨­å®šã•ã‚Œã¦ã„ã‚‹ã‹ï¼Ÿ
       coil::Properties propertiesRet = rtc->getProperties();
       CPPUNIT_ASSERT_EQUAL(std::string("NAME"), propertiesRet.getProperty("name"));
 			
-      // Àµ¾ï¤Ë¥³¥ó¥İ¡¼¥Í¥ó¥È¤òÇË´ş¤Ç¤­¤ë¤«¡©
+      // æ­£å¸¸ã«ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã‚’ç ´æ£„ã§ãã‚‹ã‹ï¼Ÿ
       factory.destroy(rtc);
     }
 		
     /*!
-     * @brief profile()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief profile()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - ¥³¥ó¥¹¥È¥é¥¯¥¿¤Ç»ØÄê¤·¤¿¥×¥í¥Ñ¥Æ¥£¤ò¼èÆÀ¤Ç¤­¤ë¤«¡©
+     * - ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã§æŒ‡å®šã—ãŸãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã‚’å–å¾—ã§ãã‚‹ã‹ï¼Ÿ
      */
     void test_profile()
     {
@@ -200,15 +200,15 @@ namespace Tests
       RTC::FactoryCXX factory(
 			      properties, CreateRTObjectMock, DeleteRTObjectMock);
 			
-      // ¥³¥ó¥¹¥È¥é¥¯¥¿¤Ç»ØÄê¤·¤¿¥×¥í¥Ñ¥Æ¥£¤ò¼èÆÀ¤Ç¤­¤ë¤«¡©
+      // ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã§æŒ‡å®šã—ãŸãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã‚’å–å¾—ã§ãã‚‹ã‹ï¼Ÿ
       coil::Properties propertiesRet = factory.profile();
       CPPUNIT_ASSERT_EQUAL(std::string("NAME"), propertiesRet.getProperty("name"));
     }
 		
     /*!
-     * @brief number()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief number()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - À¸À®¤·¤¿¥¤¥ó¥¹¥¿¥ó¥¹¿ô¤¬Àµ¤·¤¯ÆÀ¤é¤ì¤ë¤«¡©
+     * - ç”Ÿæˆã—ãŸã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹æ•°ãŒæ­£ã—ãå¾—ã‚‰ã‚Œã‚‹ã‹ï¼Ÿ
      */
     void test_number()
     {
@@ -224,14 +224,14 @@ namespace Tests
       std::vector<RTC::RtcBase*> rtcList;
       for (int i = 0; i < MAX_NUM; ++i)
 	{
-	  // create()¸Æ½ĞÁ°¤Î¥¤¥ó¥¹¥¿¥ó¥¹¿ô¤Ï´üÂÔ¤É¤ª¤ê¤«¡©
+	  // create()å‘¼å‡ºå‰ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹æ•°ã¯æœŸå¾…ã©ãŠã‚Šã‹ï¼Ÿ
 	  CPPUNIT_ASSERT_EQUAL(i-1, factory.number());
 				
-	  // create¤¹¤ë
+	  // createã™ã‚‹
 	  RTC::RtcBase* rtc = factory.create(m_mgr);
 	  CPPUNIT_ASSERT(rtc != NULL);
 				
-	  // create()¸Æ½Ğ¸å¤Î¥¤¥ó¥¹¥¿¥ó¥¹¿ô¤Ï´üÂÔ¤É¤ª¤ê¤«¡©
+	  // create()å‘¼å‡ºå¾Œã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹æ•°ã¯æœŸå¾…ã©ãŠã‚Šã‹ï¼Ÿ
 	  CPPUNIT_ASSERT_EQUAL(i, factory.number());
 				
 	  rtcList.push_back(rtc);
@@ -239,16 +239,16 @@ namespace Tests
 			
       for (int i = 0; i < MAX_NUM; ++i)
 	{
-	  // destroy()¸Æ½ĞÁ°¤Î¥¤¥ó¥¹¥¿¥ó¥¹¿ô¤Ï´üÂÔ¤É¤ª¤ê¤«¡©
+	  // destroy()å‘¼å‡ºå‰ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹æ•°ã¯æœŸå¾…ã©ãŠã‚Šã‹ï¼Ÿ
 	  CPPUNIT_ASSERT_EQUAL(i, factory.number());
 				
 	  try {
-	    // destroy¤¹¤ë
+	    // destroyã™ã‚‹
 	    factory.destroy(rtcList[i]);
 	  }
 	  catch (...) {}
 				
-	  // destroy()¸Æ½Ğ¸å¤Î¥¤¥ó¥¹¥¿¥ó¥¹¿ô¤Ï´üÂÔ¤É¤ª¤ê¤«¡©
+	  // destroy()å‘¼å‡ºå¾Œã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹æ•°ã¯æœŸå¾…ã©ãŠã‚Šã‹ï¼Ÿ
 	  CPPUNIT_ASSERT_EQUAL(i-1, factory.number());
 	}
 

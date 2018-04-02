@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file   ManagerTests.cpp
  * @brief  Manager test class
@@ -154,15 +154,15 @@ namespace Tests
   };
 	
 	
-  // protected: ´Ø¿ô¤Î¥Æ¥¹¥ÈÍÑ
+  // protected: é–¢æ•°ã®ãƒ†ã‚¹ãƒˆç”¨
   class ManagerTestMock : public RTC::Manager
   {
   public:
-    // ¥³¥ó¥¹¥È¥é¥¯¥È
+    // ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ãƒˆ
     ManagerTestMock() : RTC::Manager() {}
     virtual ~ManagerTestMock(void) {}
 
-    // Manager::procContextArgs ¤Ï¡¢protected: ¤Î°Ù¤³¤³¤ØÄêµÁ¡£
+    // Manager::procContextArgs ã¯ã€protected: ã®ç‚ºã“ã“ã¸å®šç¾©ã€‚
     bool procContextArgs(const char* ec_args, 
                                std::string& ec_id,
                                coil::Properties& ec_conf)
@@ -291,11 +291,11 @@ namespace Tests
 //    CPPUNIT_TEST(test_cleanupComponent);  //OK
 //    CPPUNIT_TEST(test_getComponents);  //OK
 		
-    // ¢¨¸½ºß¡¢³Æ¥Æ¥¹¥È´Ö¤ÎÆÈÎ©À­¤ò´°Á´¤Ë³ÎÊİ¤Ç¤­¤Æ¤¤¤Ê¤¤¤¿¤á¡¢²¼µ­¥Æ¥¹¥È¤Ï¼Â»Ü½ç½ø¤òÊÑ¹¹¤·¤Ê¤¤¤³¤È¡£
-    //   ¤Ş¤¿¡¢¥Æ¥¹¥ÈÆâÍÆ¤òÊÑ¹¹¤·¤¿¤ê¡¢Â¾¥Æ¥¹¥È¤òÄÉ²Ã¤·¤¿¤ê¤¹¤ë¾ì¹ç¤Ï¡¢É¬¤º¤·¤â¥Æ¥¹¥È´Ö¤ÎÆÈÎ©À­¤¬
-    //   Êİ¤¿¤ì¤Ê¤¤ÅÀ¤ËÎ±°Õ¤¹¤ë¤³¤È¡£¤Ê¤ª¡¢ÆÈÎ©À­¤¬Êİ¤Æ¤Ê¤¤¤Î¤Ï¡¢omniORB¤òÍÑ¤¤¤¿¾ì¹ç¤Ë¡¢
-    //   CORBA::ORB::destroy()¤¬¼ºÇÔ¤¹¤ë¾ì¹ç¤¬¤¢¤ê¡¢¼¡¥Æ¥¹¥È»ş¤ÎCORBA::ORB_init()¸Æ½Ğ¤¬
-    //   ¿·ORB¥¤¥ó¥¹¥¿¥ó¥¹¤òÊÖ¤µ¤Ê¤¤¾ì¹ç¤¬¤¢¤ë¤¿¤á¡£¾Ü¤·¤¤¸¶°ø¤Ï¸½»şÅÀ¤Ç¤ÏÉÔÌÀ¡£
+    // â€»ç¾åœ¨ã€å„ãƒ†ã‚¹ãƒˆé–“ã®ç‹¬ç«‹æ€§ã‚’å®Œå…¨ã«ç¢ºä¿ã§ãã¦ã„ãªã„ãŸã‚ã€ä¸‹è¨˜ãƒ†ã‚¹ãƒˆã¯å®Ÿæ–½é †åºã‚’å¤‰æ›´ã—ãªã„ã“ã¨ã€‚
+    //   ã¾ãŸã€ãƒ†ã‚¹ãƒˆå†…å®¹ã‚’å¤‰æ›´ã—ãŸã‚Šã€ä»–ãƒ†ã‚¹ãƒˆã‚’è¿½åŠ ã—ãŸã‚Šã™ã‚‹å ´åˆã¯ã€å¿…ãšã—ã‚‚ãƒ†ã‚¹ãƒˆé–“ã®ç‹¬ç«‹æ€§ãŒ
+    //   ä¿ãŸã‚Œãªã„ç‚¹ã«ç•™æ„ã™ã‚‹ã“ã¨ã€‚ãªãŠã€ç‹¬ç«‹æ€§ãŒä¿ã¦ãªã„ã®ã¯ã€omniORBã‚’ç”¨ã„ãŸå ´åˆã«ã€
+    //   CORBA::ORB::destroy()ãŒå¤±æ•—ã™ã‚‹å ´åˆãŒã‚ã‚Šã€æ¬¡ãƒ†ã‚¹ãƒˆæ™‚ã®CORBA::ORB_init()å‘¼å‡ºãŒ
+    //   æ–°ORBã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’è¿”ã•ãªã„å ´åˆãŒã‚ã‚‹ãŸã‚ã€‚è©³ã—ã„åŸå› ã¯ç¾æ™‚ç‚¹ã§ã¯ä¸æ˜ã€‚
     //
     // CPPUNIT_TEST(test_createComponent_DataFlowComponent);
     // CPPUNIT_TEST(test_createComponent_Non_DataFlowComponent);  //OK
@@ -405,22 +405,22 @@ namespace Tests
       */
     }
     /*!
-     * @brief init()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief init()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - ¥³¥Ş¥ó¥É¥é¥¤¥ó°ú¿ô¤Ê¤·¤Çinit()¤òÀµ¾ï¤Ë¸Æ½Ğ¤·¤Æ¡¢¥¤¥ó¥¹¥¿¥ó¥¹¤ò¼èÆÀ¤Ç¤­¤ë¤«¡©
+     * - ã‚³ãƒãƒ³ãƒ‰ãƒ©ã‚¤ãƒ³å¼•æ•°ãªã—ã§init()ã‚’æ­£å¸¸ã«å‘¼å‡ºã—ã¦ã€ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’å–å¾—ã§ãã‚‹ã‹ï¼Ÿ
      */
     void test_init_without_arguments()
     {
-      // ¥³¥Ş¥ó¥É¥é¥¤¥ó°ú¿ô¤Ê¤·¤Çinit()¤òÀµ¾ï¤Ë¸Æ½Ğ¤·¤Æ¡¢¥¤¥ó¥¹¥¿¥ó¥¹¤ò¼èÆÀ¤Ç¤­¤ë¤«¡©
+      // ã‚³ãƒãƒ³ãƒ‰ãƒ©ã‚¤ãƒ³å¼•æ•°ãªã—ã§init()ã‚’æ­£å¸¸ã«å‘¼å‡ºã—ã¦ã€ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’å–å¾—ã§ãã‚‹ã‹ï¼Ÿ
       m_mgr = RTC::Manager::init(0, NULL);
       CPPUNIT_ASSERT(m_mgr != NULL);
       //      m_mgr->terminate();
     }
 		
     /*!
-     * @brief instance()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief instance()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - instance()¤òÄÌ¤¸¤Æ¼èÆÀ¤·¤¿¥¤¥ó¥¹¥¿¥ó¥¹¤Ï¡¢init()»ş¤ËÆÀ¤¿¥¤¥ó¥¹¥¿¥ó¥¹¤ÈÆ±°ì¤«¡©
+     * - instance()ã‚’é€šã˜ã¦å–å¾—ã—ãŸã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã¯ã€init()æ™‚ã«å¾—ãŸã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã¨åŒä¸€ã‹ï¼Ÿ
      */
     void test_instance()
     {
@@ -430,30 +430,30 @@ namespace Tests
       m_mgr = RTC::Manager::init(argc, argv);
       CPPUNIT_ASSERT(m_mgr != NULL);
 			
-      // instance()¤òÄÌ¤¸¤Æ¼èÆÀ¤·¤¿¥¤¥ó¥¹¥¿¥ó¥¹¤Ï¡¢init()»ş¤ËÆÀ¤¿¥¤¥ó¥¹¥¿¥ó¥¹¤ÈÆ±°ì¤«¡©
+      // instance()ã‚’é€šã˜ã¦å–å¾—ã—ãŸã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã¯ã€init()æ™‚ã«å¾—ãŸã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã¨åŒä¸€ã‹ï¼Ÿ
       RTC::Manager& instance = RTC::Manager::instance();
       CPPUNIT_ASSERT_EQUAL(m_mgr, &instance);
     }
 		
     /*!
-     * @brief instance()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief instance()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - »öÁ°¤Ëinit()¤ò¸Æ½Ğ¤µ¤º¤Ëinstance()¤ò¸Æ½Ğ¤·¤¿¾ì¹ç¡¢Àµ¾ï¤Ë¥¤¥ó¥¹¥¿¥ó¥¹¤¬À¸À®¤µ¤ì¤ë¤«¡©
+     * - äº‹å‰ã«init()ã‚’å‘¼å‡ºã•ãšã«instance()ã‚’å‘¼å‡ºã—ãŸå ´åˆã€æ­£å¸¸ã«ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ãŒç”Ÿæˆã•ã‚Œã‚‹ã‹ï¼Ÿ
      */
     void test_instance_without_init()
     {
-      // »öÁ°¤Ëinit()¤ò¸Æ½Ğ¤µ¤º¤Ëinstance()¤ò¸Æ½Ğ¤·¤¿¾ì¹ç¡¢Àµ¾ï¤Ë¥¤¥ó¥¹¥¿¥ó¥¹¤¬À¸À®¤µ¤ì¤ë¤«¡©
+      // äº‹å‰ã«init()ã‚’å‘¼å‡ºã•ãšã«instance()ã‚’å‘¼å‡ºã—ãŸå ´åˆã€æ­£å¸¸ã«ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ãŒç”Ÿæˆã•ã‚Œã‚‹ã‹ï¼Ÿ
       RTC::Manager::instance();
     }
 		
     /*!
-     * @brief terminate()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief terminate()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - ½é´ü²½¸å¤¹¤°¤Ëterminate()¤ò¸Æ½Ğ¤·¡¢Àµ¾ï¤Ë½ªÎ»¤Ç¤­¤ë¤«¡©
+     * - åˆæœŸåŒ–å¾Œã™ãã«terminate()ã‚’å‘¼å‡ºã—ã€æ­£å¸¸ã«çµ‚äº†ã§ãã‚‹ã‹ï¼Ÿ
      */
     void test_terminate_immediately_after_the_initialization()
     {
-      // ½é´ü²½¤ò¹Ô¤¦
+      // åˆæœŸåŒ–ã‚’è¡Œã†
       int argc = 0;
       char* argv[] = {};
 			
@@ -462,7 +462,7 @@ namespace Tests
       CPPUNIT_ASSERT(m_mgr->getORB() != NULL);
       CPPUNIT_ASSERT(m_mgr->getPOA() != NULL);
 			
-      // ½é´ü²½¸å¤¹¤°¤Ëterminate()¤ò¸Æ½Ğ¤·¡¢Àµ¾ï¤Ë½ªÎ»¤Ç¤­¤ë¤«¡©
+      // åˆæœŸåŒ–å¾Œã™ãã«terminate()ã‚’å‘¼å‡ºã—ã€æ­£å¸¸ã«çµ‚äº†ã§ãã‚‹ã‹ï¼Ÿ
       CPPUNIT_ASSERT(! CORBA::is_nil(m_mgr->getORB()));
       CPPUNIT_ASSERT(! CORBA::is_nil(m_mgr->getPOA()));
       m_mgr->terminate();
@@ -473,13 +473,13 @@ namespace Tests
     }
 		
     /*!
-     * @brief terminate()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief terminate()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - active²½¤Î¸å¤Çterminate()¤ò¸Æ½Ğ¤·¡¢Àµ¾ï¤Ë½ªÎ»¤Ç¤­¤ë¤«¡©
+     * - activeåŒ–ã®å¾Œã§terminate()ã‚’å‘¼å‡ºã—ã€æ­£å¸¸ã«çµ‚äº†ã§ãã‚‹ã‹ï¼Ÿ
      */
     void test_terminate_after_the_activation()
     {
-      // ½é´ü²½¤ò¹Ô¤¦
+      // åˆæœŸåŒ–ã‚’è¡Œã†
       int argc = 0;
       char* argv[] = {};
 			
@@ -491,10 +491,10 @@ namespace Tests
       CPPUNIT_ASSERT(! CORBA::is_nil(m_mgr->getPOA()));
       CPPUNIT_ASSERT(! CORBA::is_nil(m_mgr->getPOAManager()));
 			
-      // active²½¤¹¤ë
+      // activeåŒ–ã™ã‚‹
       CPPUNIT_ASSERT(m_mgr->activateManager());
 			
-      // active²½¤Î¸å¤Çterminate()¤ò¸Æ½Ğ¤·¡¢Àµ¾ï¤Ë½ªÎ»¤Ç¤­¤ë¤«¡©
+      // activeåŒ–ã®å¾Œã§terminate()ã‚’å‘¼å‡ºã—ã€æ­£å¸¸ã«çµ‚äº†ã§ãã‚‹ã‹ï¼Ÿ
       CPPUNIT_ASSERT(! CORBA::is_nil(m_mgr->getORB()));
       CPPUNIT_ASSERT(! CORBA::is_nil(m_mgr->getPOA()));
       m_mgr->terminate();
@@ -505,35 +505,35 @@ namespace Tests
 		
     void test_notifyFinalized()
     {
-      // shutdown()¤òÄÌ¤¸¤Æ¸Æ¤Ó½Ğ¤µ¤ì¤ë¥á¥½¥Ã¥É¤Ç¤¢¤ë¤¿¤á¡¢Ä¾ÀÜ¤Î¥Æ¥¹¥ÈÂĞ¾İ¤È¤Ï¤·¤Ê¤¤
+      // shutdown()ã‚’é€šã˜ã¦å‘¼ã³å‡ºã•ã‚Œã‚‹ãƒ¡ã‚½ãƒƒãƒ‰ã§ã‚ã‚‹ãŸã‚ã€ç›´æ¥ã®ãƒ†ã‚¹ãƒˆå¯¾è±¡ã¨ã¯ã—ãªã„
     }
 		
     void test_shutdown()
     {
-      // terminate()¤òÄÌ¤¸¤Æ¸Æ¤Ó½Ğ¤µ¤ì¤ë¥á¥½¥Ã¥É¤Ç¤¢¤ë¤¿¤á¡¢Ä¾ÀÜ¤Î¥Æ¥¹¥ÈÂĞ¾İ¤È¤Ï¤·¤Ê¤¤
+      // terminate()ã‚’é€šã˜ã¦å‘¼ã³å‡ºã•ã‚Œã‚‹ãƒ¡ã‚½ãƒƒãƒ‰ã§ã‚ã‚‹ãŸã‚ã€ç›´æ¥ã®ãƒ†ã‚¹ãƒˆå¯¾è±¡ã¨ã¯ã—ãªã„
     }
 		
     void test_join()
     {
-      // shutdown()¤ÎÃæ¤Ç»ÈÍÑ¤µ¤ì¤ë¥á¥½¥Ã¥É¤Ç¤¢¤ë¤¿¤á¡¢Ä¾ÀÜ¤Î¥Æ¥¹¥ÈÂĞ¾İ¤È¤Ï¤·¤Ê¤¤
-      // ¢¨¤½¤â¤½¤â¡¢¤Ê¤¼public¥á¥½¥Ã¥É¤Ë¤Ê¤Ã¤Æ¤¤¤ë¤Î¤À¤í¤¦¤«¡©
+      // shutdown()ã®ä¸­ã§ä½¿ç”¨ã•ã‚Œã‚‹ãƒ¡ã‚½ãƒƒãƒ‰ã§ã‚ã‚‹ãŸã‚ã€ç›´æ¥ã®ãƒ†ã‚¹ãƒˆå¯¾è±¡ã¨ã¯ã—ãªã„
+      // â€»ãã‚‚ãã‚‚ã€ãªãœpublicãƒ¡ã‚½ãƒƒãƒ‰ã«ãªã£ã¦ã„ã‚‹ã®ã ã‚ã†ã‹ï¼Ÿ
     }
 		
     /*!
-     * @brief getConfig()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief getConfig()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - conf¥Õ¥¡¥¤¥ë¤Ç»ØÄê¤·¤¿³Æ¼ïÀßÄê¤ò¡¢getConfig()¤òÄÌ¤¸¤ÆÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
+     * - confãƒ•ã‚¡ã‚¤ãƒ«ã§æŒ‡å®šã—ãŸå„ç¨®è¨­å®šã‚’ã€getConfig()ã‚’é€šã˜ã¦æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
      */
     void test_getConfig()
     {
-      // ½é´ü²½¤ò¹Ô¤¦
+      // åˆæœŸåŒ–ã‚’è¡Œã†
       int argc = 3;
       char* argv[] = { "ManagerTests","-f","fixture2.conf" };
 			
       m_mgr = RTC::Manager::init(argc, argv);
       CPPUNIT_ASSERT(m_mgr != NULL);
 			
-      // conf¥Õ¥¡¥¤¥ë¤Ç»ØÄê¤·¤¿³Æ¼ïÀßÄê¤ò¡¢getConfig()¤òÄÌ¤¸¤ÆÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
+      // confãƒ•ã‚¡ã‚¤ãƒ«ã§æŒ‡å®šã—ãŸå„ç¨®è¨­å®šã‚’ã€getConfig()ã‚’é€šã˜ã¦æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
       coil::Properties& properties = m_mgr->getConfig();
       CPPUNIT_ASSERT_EQUAL(std::string("NO"),
 			   properties.getProperty("logger.enable"));
@@ -542,27 +542,27 @@ namespace Tests
     }
 		
     /*!
-     * @brief setModuleInitProc()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief setModuleInitProc()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - ¥¢¥¯¥Æ¥£¥Ö²½¤Ë¤è¤ê¡¢ÀßÄê¤·¤¿½é´ü²½¥×¥í¥·¡¼¥¸¥ã¤¬Àµ¤·¤¯¸Æ¤Ó½Ğ¤µ¤ì¤ë¤«¡©
+     * - ã‚¢ã‚¯ãƒ†ã‚£ãƒ–åŒ–ã«ã‚ˆã‚Šã€è¨­å®šã—ãŸåˆæœŸåŒ–ãƒ—ãƒ­ã‚·ãƒ¼ã‚¸ãƒ£ãŒæ­£ã—ãå‘¼ã³å‡ºã•ã‚Œã‚‹ã‹ï¼Ÿ
      */
     void test_setModuleInitProc()
     {
-      // Mock¤Î½àÈ÷
+      // Mockã®æº–å‚™
       Logger logger;
       ModuleMock::setLogger(&logger);
 			
-      // ½é´ü²½¤ò¹Ô¤¦
+      // åˆæœŸåŒ–ã‚’è¡Œã†
       int argc = 0;
       char* argv[] = {};
 			
       m_mgr = RTC::Manager::init(argc, argv);
       CPPUNIT_ASSERT(m_mgr != NULL);
 			
-      // ½é´ü²½¥×¥í¥·¡¼¥¸¥ã¤òÅĞÏ¿¤¹¤ë
+      // åˆæœŸåŒ–ãƒ—ãƒ­ã‚·ãƒ¼ã‚¸ãƒ£ã‚’ç™»éŒ²ã™ã‚‹
       m_mgr->setModuleInitProc(&ModuleMock::InitProc);
 			
-      // ¥¢¥¯¥Æ¥£¥Ö²½¤Ë¤è¤ê¡¢ÀßÄê¤·¤¿½é´ü²½¥×¥í¥·¡¼¥¸¥ã¤¬Àµ¤·¤¯¸Æ¤Ó½Ğ¤µ¤ì¤ë¤«¡©
+      // ã‚¢ã‚¯ãƒ†ã‚£ãƒ–åŒ–ã«ã‚ˆã‚Šã€è¨­å®šã—ãŸåˆæœŸåŒ–ãƒ—ãƒ­ã‚·ãƒ¼ã‚¸ãƒ£ãŒæ­£ã—ãå‘¼ã³å‡ºã•ã‚Œã‚‹ã‹ï¼Ÿ
       CPPUNIT_ASSERT_EQUAL(0, logger.countLog("InitProc"));
       CPPUNIT_ASSERT(m_mgr->activateManager());
       CPPUNIT_ASSERT_EQUAL(1, logger.countLog("InitProc"));
@@ -570,23 +570,23 @@ namespace Tests
 		
     void test_activateManager()
     {
-      // Â¾¥Æ¥¹¥ÈÃæ¤Ç»ÈÍÑ¤µ¤ì¤Æ¤¤¤ë¤¿¤á¾ÊÎ¬¤¹¤ë
+      // ä»–ãƒ†ã‚¹ãƒˆä¸­ã§ä½¿ç”¨ã•ã‚Œã¦ã„ã‚‹ãŸã‚çœç•¥ã™ã‚‹
     }
 		
     /*!
-     * @brief runManager()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È¡ÊÈó¥Ö¥í¥Ã¥­¥ó¥°¥â¡¼¥É¡Ë
+     * @brief runManager()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆï¼ˆéãƒ–ãƒ­ãƒƒã‚­ãƒ³ã‚°ãƒ¢ãƒ¼ãƒ‰ï¼‰
      * 
-     * - POAManager¤¬¥¢¥¯¥Æ¥£¥Ö²½¤µ¤ì¤ë¤«¡©
+     * - POAManagerãŒã‚¢ã‚¯ãƒ†ã‚£ãƒ–åŒ–ã•ã‚Œã‚‹ã‹ï¼Ÿ
      */
     void test_runManager_no_block()
     {
-      // ½é´ü²½¤ò¹Ô¤¦
+      // åˆæœŸåŒ–ã‚’è¡Œã†
       int argc = 0;
       char* argv[] = {};
       m_mgr = RTC::Manager::init(argc, argv);
       CPPUNIT_ASSERT(m_mgr != NULL);
 
-      // ¥ª¥Ö¥¸¥§¥¯¥È¤òÀ¸À®¤·¤Æ¡¢»²¾È¤òÆÀ¤ë
+      // ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ç”Ÿæˆã—ã¦ã€å‚ç…§ã‚’å¾—ã‚‹
       CORBA::ORB_ptr orb = m_mgr->getORB();
       CPPUNIT_ASSERT(! CORBA::is_nil(orb));
       PortableServer::POA_ptr poa = m_mgr->getPOA();
@@ -610,17 +610,17 @@ namespace Tests
       RTC::DataFlowComponent_ptr rtoRef
 	= RTC::DataFlowComponent::_narrow(poa->id_to_reference(rtoId));
       CPPUNIT_ASSERT(! CORBA::is_nil(rtoRef));
-      // ¥Æ¥¹¥ÈÍÑ¤Ë¥í¥¬¡¼¤òÀßÄê¤·¤Æ¤ª¤¯
+      // ãƒ†ã‚¹ãƒˆç”¨ã«ãƒ­ã‚¬ãƒ¼ã‚’è¨­å®šã—ã¦ãŠã
       Logger logger;
       rto->setLogger(&logger);
 			
-      // Èó¥Ö¥í¥Ã¥­¥ó¥°¥â¡¼¥É¤Ç¥Ş¥Í¡¼¥¸¥ã¤òºîÆ°¤µ¤»¤ë
+      // éãƒ–ãƒ­ãƒƒã‚­ãƒ³ã‚°ãƒ¢ãƒ¼ãƒ‰ã§ãƒãƒãƒ¼ã‚¸ãƒ£ã‚’ä½œå‹•ã•ã›ã‚‹
       CPPUNIT_ASSERT(m_mgr->activateManager());
-      m_mgr->runManager(true); // true:Èó¥Ö¥í¥Ã¥­¥ó¥°¡¤false:¥Ö¥í¥Ã¥­¥ó¥°
+      m_mgr->runManager(true); // true:éãƒ–ãƒ­ãƒƒã‚­ãƒ³ã‚°ï¼Œfalse:ãƒ–ãƒ­ãƒƒã‚­ãƒ³ã‚°
 
-      // runManager()¤Ë¤è¤êPOAManager¤¬Àµ¤·¤¯active²½¤µ¤ì¤Æ¤¤¤ë¤«¡©
-      // ¡Ê¼èÆÀ¤·¤¿¥ª¥Ö¥¸¥§¥¯¥È»²¾È¤ËÂĞ¤·¤Æ¥á¥½¥Ã¥É¸Æ½Ğ¤ò¹Ô¤¤¡¢
-      // ¥ê¥â¡¼¥ÈÂ¦¤¬¸Æ½Ğ¤µ¤ì¤¿¤³¤È¤Ë¤è¤êPOAManager¤Î¥¢¥¯¥Æ¥£¥Ö²½¤ò³ÎÇ§¤¹¤ë¡Ë
+      // runManager()ã«ã‚ˆã‚ŠPOAManagerãŒæ­£ã—ãactiveåŒ–ã•ã‚Œã¦ã„ã‚‹ã‹ï¼Ÿ
+      // ï¼ˆå–å¾—ã—ãŸã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå‚ç…§ã«å¯¾ã—ã¦ãƒ¡ã‚½ãƒƒãƒ‰å‘¼å‡ºã‚’è¡Œã„ã€
+      // ãƒªãƒ¢ãƒ¼ãƒˆå´ãŒå‘¼å‡ºã•ã‚ŒãŸã“ã¨ã«ã‚ˆã‚ŠPOAManagerã®ã‚¢ã‚¯ãƒ†ã‚£ãƒ–åŒ–ã‚’ç¢ºèªã™ã‚‹ï¼‰
       CPPUNIT_ASSERT_EQUAL(0, logger.countLog("initialize"));
       rtoRef->initialize();
       coil::sleep(3);
@@ -631,20 +631,20 @@ namespace Tests
     }
 		
     /*!
-     * @brief runManager()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È¡Ê¥Ö¥í¥Ã¥­¥ó¥°¥â¡¼¥É¡Ë
+     * @brief runManager()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆï¼ˆãƒ–ãƒ­ãƒƒã‚­ãƒ³ã‚°ãƒ¢ãƒ¼ãƒ‰ï¼‰
      * 
-     * - POAManager¤¬¥¢¥¯¥Æ¥£¥Ö²½¤µ¤ì¤ë¤«¡©
+     * - POAManagerãŒã‚¢ã‚¯ãƒ†ã‚£ãƒ–åŒ–ã•ã‚Œã‚‹ã‹ï¼Ÿ
      */
     void test_runManager_block()
     {
-      // ½é´ü²½¤ò¹Ô¤¦
+      // åˆæœŸåŒ–ã‚’è¡Œã†
       int argc = 0;
       char* argv[] = {};
 			
       m_mgr = RTC::Manager::init(argc, argv);
       CPPUNIT_ASSERT(m_mgr != NULL);
 			
-      // ¥ª¥Ö¥¸¥§¥¯¥È¤òÀ¸À®¤·¤Æ¡¢»²¾È¤òÆÀ¤ë
+      // ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ç”Ÿæˆã—ã¦ã€å‚ç…§ã‚’å¾—ã‚‹
       CORBA::ORB_ptr orb = m_mgr->getORB();
       CPPUNIT_ASSERT(! CORBA::is_nil(orb));
       PortableServer::POA_ptr poa = m_mgr->getPOA();
@@ -667,16 +667,16 @@ namespace Tests
 	= RTC::DataFlowComponent::_narrow(poa->id_to_reference(rtoId));
       CPPUNIT_ASSERT(! CORBA::is_nil(rtoRef));
 			
-      // ¥Æ¥¹¥ÈÍÑ¤Ë¥í¥¬¡¼¤òÀßÄê¤·¤Æ¤ª¤¯
+      // ãƒ†ã‚¹ãƒˆç”¨ã«ãƒ­ã‚¬ãƒ¼ã‚’è¨­å®šã—ã¦ãŠã
       Logger logger;
       rto->setLogger(&logger);
 
-      // ¥Ö¥í¥Ã¥­¥ó¥°¥â¡¼¥É¤Ç¥Ş¥Í¡¼¥¸¥ã¤òºîÆ°¤µ¤»¤ë
+      // ãƒ–ãƒ­ãƒƒã‚­ãƒ³ã‚°ãƒ¢ãƒ¼ãƒ‰ã§ãƒãƒãƒ¼ã‚¸ãƒ£ã‚’ä½œå‹•ã•ã›ã‚‹
       CPPUNIT_ASSERT(m_mgr->activateManager());
       CPPUNIT_ASSERT_EQUAL(0, logger.countLog("initialize"));
       {
 	InvokerMock invoker(rtoRef, m_mgr);
-	m_mgr->runManager(false); // true:Èó¥Ö¥í¥Ã¥­¥ó¥°¡¤false:¥Ö¥í¥Ã¥­¥ó¥°
+	m_mgr->runManager(false); // true:éãƒ–ãƒ­ãƒƒã‚­ãƒ³ã‚°ï¼Œfalse:ãƒ–ãƒ­ãƒƒã‚­ãƒ³ã‚°
 	coil::sleep(3);
       }
       CPPUNIT_ASSERT_EQUAL(1, logger.countLog("initialize"));
@@ -706,7 +706,7 @@ namespace Tests
 	m_rtoRef->initialize();
 	coil::sleep(1);
 				
-	// ¥Ö¥í¥Ã¥¯¤µ¤ì¤Æ¤¤¤ërunManager¸Æ½Ğ¤ò¥Ö¥í¥Ã¥¯²ò½ü¤¹¤ë
+	// ãƒ–ãƒ­ãƒƒã‚¯ã•ã‚Œã¦ã„ã‚‹runManagerå‘¼å‡ºã‚’ãƒ–ãƒ­ãƒƒã‚¯è§£é™¤ã™ã‚‹
         m_rtoRef->exit();
         m_mgr->shutdown();
 	m_mgr->join();
@@ -720,20 +720,20 @@ namespace Tests
     };
 		
     /*!
-     * @brief load()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief load()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - »ØÄê¤·¤¿¥â¥¸¥å¡¼¥ë¤ò¥í¡¼¥É¤·¤Æ¡¢»ØÄê¤Î½é´ü²½´Ø¿ô¤¬Àµ¤·¤¯¸Æ¤Ó½Ğ¤µ¤ì¤ë¤«¡©
+     * - æŒ‡å®šã—ãŸãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ã‚’ãƒ­ãƒ¼ãƒ‰ã—ã¦ã€æŒ‡å®šã®åˆæœŸåŒ–é–¢æ•°ãŒæ­£ã—ãå‘¼ã³å‡ºã•ã‚Œã‚‹ã‹ï¼Ÿ
      */
     void test_load()
     {
-      // ½é´ü²½¤ò¹Ô¤¦
+      // åˆæœŸåŒ–ã‚’è¡Œã†
       int argc = 3;
       char* argv[] = { "ManagerTests","-f","fixture3.conf" };
 			
       m_mgr = RTC::Manager::init(argc, argv);
       CPPUNIT_ASSERT(m_mgr != NULL);
 
-      // Manager¤È¤ÏÊÌ¤Ë¡¢³ÎÇ§ÍÑ¤Ë¥â¥¸¥å¡¼¥ë¤Ø¤Î¥·¥ó¥Ü¥ë¤ò¼èÆÀ¤·¤Æ¤ª¤¯
+      // Managerã¨ã¯åˆ¥ã«ã€ç¢ºèªç”¨ã«ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ã¸ã®ã‚·ãƒ³ãƒœãƒ«ã‚’å–å¾—ã—ã¦ãŠã
       typedef int (*FUNC_GETINITPROCCOUNT)();
       typedef void (*FUNC_RESETINITPROCCOUNT)();
       coil::DynamicLib loader("./.libs/DummyModule.so");
@@ -746,9 +746,9 @@ namespace Tests
 	= (FUNC_RESETINITPROCCOUNT) loader.symbol("resetInitProcCount");
       CPPUNIT_ASSERT(pResetInitProcCount != NULL);
 			
-      (*pResetInitProcCount)(); // ¥«¥¦¥ó¥¿¥¯¥ê¥¢
+      (*pResetInitProcCount)(); // ã‚«ã‚¦ãƒ³ã‚¿ã‚¯ãƒªã‚¢
 			
-      // ¥â¥¸¥å¡¼¥ë¥í¡¼¥É¤Ë¤è¤ê¡¢»ØÄê¤·¤¿½é´ü²½´Ø¿ô¤¬¸Æ¤Ó½Ğ¤µ¤ì¤ë¤«¡©
+      // ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ãƒ­ãƒ¼ãƒ‰ã«ã‚ˆã‚Šã€æŒ‡å®šã—ãŸåˆæœŸåŒ–é–¢æ•°ãŒå‘¼ã³å‡ºã•ã‚Œã‚‹ã‹ï¼Ÿ
       CPPUNIT_ASSERT_EQUAL(0, (*pGetInitProcCount)());
       // std::string moduleName = m_mgr->load("DummyModule.so", "InitProc");
       m_mgr->load("./.libs/DummyModule.so", "InitProc");
@@ -758,20 +758,20 @@ namespace Tests
    }
 		
     /*!
-     * @brief unload()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief unload()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - ¤¤¤Ã¤¿¤óload¤·¤¿¥â¥¸¥å¡¼¥ë¤ò¡¢Àµ¤·¤¯unload¤Ç¤­¤ë¤«¡©
+     * - ã„ã£ãŸã‚“loadã—ãŸãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ã‚’ã€æ­£ã—ãunloadã§ãã‚‹ã‹ï¼Ÿ
      */
     void test_unload()
     {
-      // ½é´ü²½¤ò¹Ô¤¦
+      // åˆæœŸåŒ–ã‚’è¡Œã†
       int argc = 1;
       char* argv[] = { "-f fixture3.conf" };
 			
       m_mgr = RTC::Manager::init(argc, argv);
       CPPUNIT_ASSERT(m_mgr != NULL);
 
-      // Manager¤È¤ÏÊÌ¤Ë¡¢³ÎÇ§ÍÑ¤Ë¥â¥¸¥å¡¼¥ë¤Ø¤Î¥·¥ó¥Ü¥ë¤ò¼èÆÀ¤·¤Æ¤ª¤¯
+      // Managerã¨ã¯åˆ¥ã«ã€ç¢ºèªç”¨ã«ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ã¸ã®ã‚·ãƒ³ãƒœãƒ«ã‚’å–å¾—ã—ã¦ãŠã
       typedef int (*FUNC_GETINITPROCCOUNT)();
       typedef void (*FUNC_RESETINITPROCCOUNT)();
       coil::DynamicLib loader("./.libs/DummyModule.so");
@@ -784,35 +784,35 @@ namespace Tests
 	= (FUNC_RESETINITPROCCOUNT) loader.symbol("resetInitProcCount");
       CPPUNIT_ASSERT(pResetInitProcCount != NULL);
 			
-      (*pResetInitProcCount)(); // ¥«¥¦¥ó¥¿¥¯¥ê¥¢
+      (*pResetInitProcCount)(); // ã‚«ã‚¦ãƒ³ã‚¿ã‚¯ãƒªã‚¢
 			
-      // ¤¤¤Ã¤¿¤óload¤·¤Æ¤ª¤¯
+      // ã„ã£ãŸã‚“loadã—ã¦ãŠã
       CPPUNIT_ASSERT_EQUAL(0, (*pGetInitProcCount)());
       m_mgr->load("./.libs/DummyModule.so", "InitProc");
       // std::string moduleName = m_mgr->load("DummyModule.so", "InitProc");
       // CPPUNIT_ASSERT(isFound(m_mgr->getLoadedModules(), moduleName));
       // CPPUNIT_ASSERT_EQUAL(1, (*pGetInitProcCount)());
 			
-      // ¤¤¤Ã¤¿¤óload¤·¤¿¥â¥¸¥å¡¼¥ë¤ò¡¢Àµ¤·¤¯unload¤Ç¤­¤ë¤«¡©
+      // ã„ã£ãŸã‚“loadã—ãŸãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ã‚’ã€æ­£ã—ãunloadã§ãã‚‹ã‹ï¼Ÿ
       // m_mgr->unload(moduleName.c_str());
       // CPPUNIT_ASSERT(! isFound(m_mgr->getLoadedModules(), moduleName));
     }
 		
     /*!
-     * @brief unloadAll()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief unloadAll()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - unloadAll()¤Ë¤è¤ê¡¢¥í¡¼¥É¤·¤¿¥â¥¸¥å¡¼¥ë¤¬¤¹¤Ù¤Æ¥¢¥ó¥í¡¼¥É¤µ¤ì¤ë¤«¡©
+     * - unloadAll()ã«ã‚ˆã‚Šã€ãƒ­ãƒ¼ãƒ‰ã—ãŸãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ãŒã™ã¹ã¦ã‚¢ãƒ³ãƒ­ãƒ¼ãƒ‰ã•ã‚Œã‚‹ã‹ï¼Ÿ
      */
     void test_unloadAll()
     {
-      // ½é´ü²½¤ò¹Ô¤¦
+      // åˆæœŸåŒ–ã‚’è¡Œã†
       int argc = 3;
       char* argv[] = { "ManagerTests","-f","fixture3.conf" };
 			
       m_mgr = RTC::Manager::init(argc, argv);
       CPPUNIT_ASSERT(m_mgr != NULL);
 
-      // Manager¤È¤ÏÊÌ¤Ë¡¢³ÎÇ§ÍÑ¤Ë¥â¥¸¥å¡¼¥ë¤Ø¤Î¥·¥ó¥Ü¥ë¤ò¼èÆÀ¤·¤Æ¤ª¤¯
+      // Managerã¨ã¯åˆ¥ã«ã€ç¢ºèªç”¨ã«ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ã¸ã®ã‚·ãƒ³ãƒœãƒ«ã‚’å–å¾—ã—ã¦ãŠã
       typedef int (*FUNC_GETINITPROCCOUNT)();
       typedef void (*FUNC_RESETINITPROCCOUNT)();
 			
@@ -835,10 +835,10 @@ namespace Tests
 	= (FUNC_RESETINITPROCCOUNT) loader2.symbol("resetInitProcCount");
       CPPUNIT_ASSERT(pResetInitProcCount2 != NULL);
 			
-      (*pResetInitProcCount1)(); // ¥«¥¦¥ó¥¿¥¯¥ê¥¢
-      (*pResetInitProcCount2)(); // ¥«¥¦¥ó¥¿¥¯¥ê¥¢
+      (*pResetInitProcCount1)(); // ã‚«ã‚¦ãƒ³ã‚¿ã‚¯ãƒªã‚¢
+      (*pResetInitProcCount2)(); // ã‚«ã‚¦ãƒ³ã‚¿ã‚¯ãƒªã‚¢
 			
-      // ¤¤¤Ã¤¿¤óload¤·¤Æ¤ª¤¯
+      // ã„ã£ãŸã‚“loadã—ã¦ãŠã
       CPPUNIT_ASSERT_EQUAL(0, (*pGetInitProcCount1)());
       CPPUNIT_ASSERT_EQUAL(0, (*pGetInitProcCount2)());
 
@@ -853,16 +853,16 @@ namespace Tests
       // CPPUNIT_ASSERT_EQUAL(1, (*pGetInitProcCount1)());
       // CPPUNIT_ASSERT_EQUAL(1, (*pGetInitProcCount2)());
 			
-      // unloadAll()¤Ë¤è¤ê¡¢¥í¡¼¥É¤·¤¿¥â¥¸¥å¡¼¥ë¤¬¤¹¤Ù¤Æ¥¢¥ó¥í¡¼¥É¤µ¤ì¤ë¤«¡©
+      // unloadAll()ã«ã‚ˆã‚Šã€ãƒ­ãƒ¼ãƒ‰ã—ãŸãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ãŒã™ã¹ã¦ã‚¢ãƒ³ãƒ­ãƒ¼ãƒ‰ã•ã‚Œã‚‹ã‹ï¼Ÿ
       m_mgr->unloadAll();
       // CPPUNIT_ASSERT(! isFound(m_mgr->getLoadedModules(), moduleName1));
       // CPPUNIT_ASSERT(! isFound(m_mgr->getLoadedModules(), moduleName2));
     }
 		
     /*!
-     * @brief getLoadableModules()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief getLoadableModules()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - ¥í¡¼¥É²ÄÇ½¤Ê¥â¥¸¥å¡¼¥ë¥ê¥¹¥È¤òÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
+     * - ãƒ­ãƒ¼ãƒ‰å¯èƒ½ãªãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ãƒªã‚¹ãƒˆã‚’æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
      */
     void test_getLoadableModules()
     {
@@ -872,7 +872,7 @@ namespace Tests
       m_mgr = RTC::Manager::init(argc, argv);
       CPPUNIT_ASSERT(m_mgr != NULL);
 
-      // Manager¤È¤ÏÊÌ¤Ë¡¢³ÎÇ§ÍÑ¤Ë¥â¥¸¥å¡¼¥ë¤Ø¤Î¥·¥ó¥Ü¥ë¤ò¼èÆÀ¤·¤Æ¤ª¤¯
+      // Managerã¨ã¯åˆ¥ã«ã€ç¢ºèªç”¨ã«ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ã¸ã®ã‚·ãƒ³ãƒœãƒ«ã‚’å–å¾—ã—ã¦ãŠã
       typedef int (*FUNC_GETINITPROCCOUNT)();
       typedef void (*FUNC_RESETINITPROCCOUNT)();
       coil::DynamicLib loader("./.libs/DummyModule.so");
@@ -885,12 +885,12 @@ namespace Tests
 	= (FUNC_RESETINITPROCCOUNT) loader.symbol("resetInitProcCount");
       CPPUNIT_ASSERT(pResetInitProcCount != NULL);
 			
-      (*pResetInitProcCount)(); // ¥«¥¦¥ó¥¿¥¯¥ê¥¢
+      (*pResetInitProcCount)(); // ã‚«ã‚¦ãƒ³ã‚¿ã‚¯ãƒªã‚¢
 			
       CPPUNIT_ASSERT_EQUAL(0, (*pGetInitProcCount)());
       m_mgr->load("./.libs/DummyModule.so", "InitProc");
 
-      // ¥í¡¼¥É²ÄÇ½¤Ê¥â¥¸¥å¡¼¥ë¥ê¥¹¥È¤òÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
+      // ãƒ­ãƒ¼ãƒ‰å¯èƒ½ãªãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ãƒªã‚¹ãƒˆã‚’æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
       std::vector<coil::Properties> props = m_mgr->getLoadableModules();
       CPPUNIT_ASSERT(props.size() > 0);
 
@@ -904,20 +904,20 @@ namespace Tests
     }
 		
     /*!
-     * @brief registerFactory()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief registerFactory()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - Factory¤òÀµ¾ï¤ËÅĞÏ¿¤Ç¤­¤ë¤«¡©
+     * - Factoryã‚’æ­£å¸¸ã«ç™»éŒ²ã§ãã‚‹ã‹ï¼Ÿ
      */
     void test_registerFactory()
     {
-      // ½é´ü²½¤ò¹Ô¤¦
+      // åˆæœŸåŒ–ã‚’è¡Œã†
       int argc = 0;
       char* argv[] = {};
 			
       m_mgr = RTC::Manager::init(argc, argv);
       CPPUNIT_ASSERT(m_mgr != NULL);
 			
-      // Factory¤òÀµ¾ï¤ËÅĞÏ¿¤Ç¤­¤ë¤«¡©
+      // Factoryã‚’æ­£å¸¸ã«ç™»éŒ²ã§ãã‚‹ã‹ï¼Ÿ
       coil::Properties properties;
       properties.setProperty("implementation_id", "ID");
 
@@ -930,24 +930,24 @@ namespace Tests
     /*!
      * @brief registerECFactory()
      * 
-     * - Àµ¾ï¤ËECFactory¤òÅĞÏ¿¤Ç¤­¤ë¤«¡©
+     * - æ­£å¸¸ã«ECFactoryã‚’ç™»éŒ²ã§ãã‚‹ã‹ï¼Ÿ
      */
     void test_registerECFactory()
     {
-      // ½é´ü²½¤ò¹Ô¤¦
+      // åˆæœŸåŒ–ã‚’è¡Œã†
       int argc = 0;
       char* argv[] = {};
 			
       m_mgr = RTC::Manager::init(argc, argv);
       CPPUNIT_ASSERT(m_mgr != NULL);
 			
-      // Àµ¾ï¤ËECFactory¤òÅĞÏ¿¤Ç¤­¤ë¤«¡©
+      // æ­£å¸¸ã«ECFactoryã‚’ç™»éŒ²ã§ãã‚‹ã‹ï¼Ÿ
       CPPUNIT_ASSERT(m_mgr->registerECFactory(
 		      "PeriodicEC",
 		      RTC::ECCreate<RTC_exp::PeriodicExecutionContext>,
 		      RTC::ECDelete<RTC_exp::PeriodicExecutionContext>));
 			
-      // ÅĞÏ¿ºÑ¤ß¤ÎECFactory¤ÈÆ±°ì¤ÎÌ¾¾Î¤ÇÅĞÏ¿¤ò»î¤ß¤¿¾ì¹ç¡¢°Õ¿Ş¤É¤ª¤êÅĞÏ¿¼ºÇÔ¤¹¤ë¤«¡©
+      // ç™»éŒ²æ¸ˆã¿ã®ECFactoryã¨åŒä¸€ã®åç§°ã§ç™»éŒ²ã‚’è©¦ã¿ãŸå ´åˆã€æ„å›³ã©ãŠã‚Šç™»éŒ²å¤±æ•—ã™ã‚‹ã‹ï¼Ÿ
       CPPUNIT_ASSERT(! m_mgr->registerECFactory(
 			"PeriodicEC",
 			RTC::ECCreate<RTC_exp::PeriodicExecutionContext>,
@@ -955,20 +955,20 @@ namespace Tests
     }
 		
     /*!
-     * @brief getModulesFactories()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief getModulesFactories()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - ÅĞÏ¿¤µ¤ì¤Æ¤¤¤ëFactory¤Î¡Ê"implementation_id"¥×¥í¥Ñ¥Æ¥£¤Î¡Ë¥ê¥¹¥È¤òÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
+     * - ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹Factoryã®ï¼ˆ"implementation_id"ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã®ï¼‰ãƒªã‚¹ãƒˆã‚’æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
      */
     void test_getModulesFactories()
     {
-      // ½é´ü²½¤ò¹Ô¤¦
+      // åˆæœŸåŒ–ã‚’è¡Œã†
       int argc = 0;
       char* argv[] = {};
 			
       m_mgr = RTC::Manager::init(argc, argv);
       CPPUNIT_ASSERT(m_mgr != NULL);
 			
-      // Ê£¿ô¤ÎFactory¤òÅĞÏ¿¤·¤Æ¤ª¤¯
+      // è¤‡æ•°ã®Factoryã‚’ç™»éŒ²ã—ã¦ãŠã
       coil::Properties properties1;
       properties1.setProperty("implementation_id", "ID 1");
       CPPUNIT_ASSERT(m_mgr->registerFactory(
@@ -979,7 +979,7 @@ namespace Tests
       CPPUNIT_ASSERT(m_mgr->registerFactory(
 		    properties2, CreateDataFlowComponentMock, DeleteDataFlowComponentMock));
 				
-      // ÅĞÏ¿¤µ¤ì¤Æ¤¤¤ëFactory¤Î¡Ê"implementation_id"¥×¥í¥Ñ¥Æ¥£¤Î¡Ë¥ê¥¹¥È¤òÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
+      // ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹Factoryã®ï¼ˆ"implementation_id"ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã®ï¼‰ãƒªã‚¹ãƒˆã‚’æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
       CPPUNIT_ASSERT_EQUAL(3, (int) m_mgr->getModulesFactories().size());
       CPPUNIT_ASSERT(isFound(m_mgr->getModulesFactories(), "ID 1"));
       CPPUNIT_ASSERT(isFound(m_mgr->getModulesFactories(), "ID 2"));
@@ -987,13 +987,13 @@ namespace Tests
     }
 		
     /*!
-     * @brief createComponent()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È¡ÊDataFlowComponent¤Î¾ì¹ç¡Ë
+     * @brief createComponent()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆï¼ˆDataFlowComponentã®å ´åˆï¼‰
      * 
-     * - Àµ¤·¤¯¥³¥ó¥İ¡¼¥Í¥ó¥È¤òÀ¸À®¤Ç¤­¤ë¤«¡©
+     * - æ­£ã—ãã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã‚’ç”Ÿæˆã§ãã‚‹ã‹ï¼Ÿ
      */
     void test_createComponent_DataFlowComponent()
     {
-      // ½é´ü²½¤ò¹Ô¤¦
+      // åˆæœŸåŒ–ã‚’è¡Œã†
       int argc = 3;
       char* argv[] = { "ManagerTests","-f","fixture4.conf" };
 			
@@ -1003,39 +1003,39 @@ namespace Tests
       CPPUNIT_ASSERT(! CORBA::is_nil(m_mgr->getPOA()));
       CPPUNIT_ASSERT(! CORBA::is_nil(m_mgr->getPOAManager()));
 
-      // Èó¥Ö¥í¥Ã¥­¥ó¥°¥â¡¼¥É¤Ç¥Ş¥Í¡¼¥¸¥ã¤òºîÆ°¤µ¤»¤ë
+      // éãƒ–ãƒ­ãƒƒã‚­ãƒ³ã‚°ãƒ¢ãƒ¼ãƒ‰ã§ãƒãƒãƒ¼ã‚¸ãƒ£ã‚’ä½œå‹•ã•ã›ã‚‹
       CPPUNIT_ASSERT(m_mgr->activateManager());
-      m_mgr->runManager(true); // true:Èó¥Ö¥í¥Ã¥­¥ó¥°¡¤false:¥Ö¥í¥Ã¥­¥ó¥°
+      m_mgr->runManager(true); // true:éãƒ–ãƒ­ãƒƒã‚­ãƒ³ã‚°ï¼Œfalse:ãƒ–ãƒ­ãƒƒã‚­ãƒ³ã‚°
 			
-      // Factory¤òÅĞÏ¿¤·¤Æ¤ª¤¯
+      // Factoryã‚’ç™»éŒ²ã—ã¦ãŠã
       coil::Properties properties;
       properties.setProperty("implementation_id", "DataFlowComponentFactory");
       properties.setProperty("type_name", "DataFlowComponent");
       CPPUNIT_ASSERT(m_mgr->registerFactory(
 		    properties, CreateDataFlowComponentMock, DeleteDataFlowComponentMock));
 			
-      // ECFactory¤òÅĞÏ¿¤·¤Æ¤ª¤¯
+      // ECFactoryã‚’ç™»éŒ²ã—ã¦ãŠã
       CPPUNIT_ASSERT(m_mgr->registerECFactory(
 		      "PeriodicEC",
 		      RTC::ECCreate<RTC_exp::PeriodicExecutionContext>,
 		      RTC::ECDelete<RTC_exp::PeriodicExecutionContext>));
 			
-      // Àµ¤·¤¯¥³¥ó¥İ¡¼¥Í¥ó¥È¤òÀ¸À®¤Ç¤­¤ë¤«¡©
+      // æ­£ã—ãã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã‚’ç”Ÿæˆã§ãã‚‹ã‹ï¼Ÿ
       RTC::RtcBase* comp = m_mgr->createComponent("DataFlowComponentFactory");
       CPPUNIT_ASSERT(comp != NULL);
       CPPUNIT_ASSERT(dynamic_cast<DataFlowComponentMock*>(comp) != NULL);
       CPPUNIT_ASSERT(! CORBA::is_nil(comp->_this()));
       CPPUNIT_ASSERT_EQUAL(
-			   std::string("DataFlowComponent0"), // ¢¨ËöÈø¤Î0¤ÏNumberingPolicy¤Ë¤è¤êÉÕ²Ã¤µ¤ì¤ë
+			   std::string("DataFlowComponent0"), // â€»æœ«å°¾ã®0ã¯NumberingPolicyã«ã‚ˆã‚Šä»˜åŠ ã•ã‚Œã‚‹
 			   std::string(comp->getInstanceName()));
 			
-      // ¥³¥ó¥İ¡¼¥Í¥ó¥È¤Ë¡¢°Õ¿Ş¤É¤ª¤êExecutionContext¤¬¥¢¥¿¥Ã¥Á¤µ¤ì¤Æ¤¤¤ë¤«¡©
+      // ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã«ã€æ„å›³ã©ãŠã‚ŠExecutionContextãŒã‚¢ã‚¿ãƒƒãƒã•ã‚Œã¦ã„ã‚‹ã‹ï¼Ÿ
       RTC::ExecutionContextList* ecList = comp->get_owned_contexts();
       CPPUNIT_ASSERT(ecList != NULL);
       CPPUNIT_ASSERT_EQUAL(1, (int) ecList->length());
 			
-      // À¸À®¤µ¤ì¤¿¥³¥ó¥İ¡¼¥Í¥ó¥È¤Ï¡¢Àµ¤·¤¯¥Í¡¼¥à¥µ¡¼¥Ó¥¹¤ËÅĞÏ¿¤µ¤ì¤Æ¤¤¤ë¤«¡©
-      // ¢¨fixture4.conf¤Î³ÆÀßÄê¤Ë¹ç¤ï¤»¤Æ¤¤¤ëÅÀ¤ËÃí°Õ
+      // ç”Ÿæˆã•ã‚ŒãŸã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã¯ã€æ­£ã—ããƒãƒ¼ãƒ ã‚µãƒ¼ãƒ“ã‚¹ã«ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹ã‹ï¼Ÿ
+      // â€»fixture4.confã®å„è¨­å®šã«åˆã‚ã›ã¦ã„ã‚‹ç‚¹ã«æ³¨æ„
       RTC::NamingManager nmgr(m_mgr);
       const char* name_server = "localhost:2809";
       nmgr.registerNameServer("corba", name_server);
@@ -1047,18 +1047,18 @@ namespace Tests
 
     void test_createComponent_Non_DataFlowComponent()
     {
-      // ¸½»şÅÀ¤Ç¤Ï¡¢ManagerÂ¦¤¬DataFlowComponent¤Î¤ß¤ËÂĞ±ş¤·¤Æ¤¤¤ë¤¿¤á¡¢¥Æ¥¹¥È¾ÊÎ¬¤¹¤ë
+      // ç¾æ™‚ç‚¹ã§ã¯ã€Managerå´ãŒDataFlowComponentã®ã¿ã«å¯¾å¿œã—ã¦ã„ã‚‹ãŸã‚ã€ãƒ†ã‚¹ãƒˆçœç•¥ã™ã‚‹
     }
 		
     /*!
-     * @brief createComponent()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief createComponent()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - ÅĞÏ¿¤µ¤ì¤Æ¤¤¤Ê¤¤¥â¥¸¥å¡¼¥ëÌ¾¤ò»ØÄê¤·¤Æ¥³¥ó¥İ¡¼¥Í¥ó¥ÈÀ¸À®¤ò»î¤ß¤Æ¡¢°Õ¿Ş¤É¤ª¤êNULL¤ÇÌá¤ë¤«¡©
-     * - ¥â¥¸¥å¡¼¥ëÌ¾¤ËNULL¤ò»ØÄê¤·¤Æ¥³¥ó¥İ¡¼¥Í¥ó¥ÈÀ¸À®¤ò»î¤ß¤Æ¡¢°Õ¿Ş¤É¤ª¤êNULL¤ÇÌá¤ë¤«¡©
+     * - ç™»éŒ²ã•ã‚Œã¦ã„ãªã„ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«åã‚’æŒ‡å®šã—ã¦ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆç”Ÿæˆã‚’è©¦ã¿ã¦ã€æ„å›³ã©ãŠã‚ŠNULLã§æˆ»ã‚‹ã‹ï¼Ÿ
+     * - ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«åã«NULLã‚’æŒ‡å®šã—ã¦ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆç”Ÿæˆã‚’è©¦ã¿ã¦ã€æ„å›³ã©ãŠã‚ŠNULLã§æˆ»ã‚‹ã‹ï¼Ÿ
      */
     void test_createComponent_with_illegal_module_name()
     {
-      // ½é´ü²½¤ò¹Ô¤¦
+      // åˆæœŸåŒ–ã‚’è¡Œã†
       int argc = 0;
       char* argv[] = {};
 			
@@ -1068,18 +1068,18 @@ namespace Tests
       CPPUNIT_ASSERT(! CORBA::is_nil(m_mgr->getPOA()));
       CPPUNIT_ASSERT(! CORBA::is_nil(m_mgr->getPOAManager()));
 
-      // ÅĞÏ¿¤µ¤ì¤Æ¤¤¤Ê¤¤¥â¥¸¥å¡¼¥ëÌ¾¤ò»ØÄê¤·¤Æ¥³¥ó¥İ¡¼¥Í¥ó¥ÈÀ¸À®¤ò»î¤ß¤Æ¡¢°Õ¿Ş¤É¤ª¤êNULL¤ÇÌá¤ë¤«¡©
+      // ç™»éŒ²ã•ã‚Œã¦ã„ãªã„ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«åã‚’æŒ‡å®šã—ã¦ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆç”Ÿæˆã‚’è©¦ã¿ã¦ã€æ„å›³ã©ãŠã‚ŠNULLã§æˆ»ã‚‹ã‹ï¼Ÿ
       RTC::RtcBase* comp1 = m_mgr->createComponent("illegal_module_name");
       CPPUNIT_ASSERT(comp1 == NULL);
 			
-      // ¥â¥¸¥å¡¼¥ëÌ¾¤ËNULL¤ò»ØÄê¤·¤Æ¥³¥ó¥İ¡¼¥Í¥ó¥ÈÀ¸À®¤ò»î¤ß¤Æ¡¢°Õ¿Ş¤É¤ª¤êNULL¤ÇÌá¤ë¤«¡©
+      // ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«åã«NULLã‚’æŒ‡å®šã—ã¦ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆç”Ÿæˆã‚’è©¦ã¿ã¦ã€æ„å›³ã©ãŠã‚ŠNULLã§æˆ»ã‚‹ã‹ï¼Ÿ
       RTC::RtcBase* comp2 = m_mgr->createComponent(NULL);
       CPPUNIT_ASSERT(comp2 == NULL);
     }
 		
     void test_createComponent_failed_in_bindExecutionContext()
     {
-      // ½é´ü²½¤ò¹Ô¤¦
+      // åˆæœŸåŒ–ã‚’è¡Œã†
       int argc = 3;
       char* argv[] = { "ManagerTests","-f","fixture4.conf" };
 			
@@ -1089,20 +1089,20 @@ namespace Tests
       CPPUNIT_ASSERT(! CORBA::is_nil(m_mgr->getPOA()));
       CPPUNIT_ASSERT(! CORBA::is_nil(m_mgr->getPOAManager()));
 
-      // Èó¥Ö¥í¥Ã¥­¥ó¥°¥â¡¼¥É¤Ç¥Ş¥Í¡¼¥¸¥ã¤òºîÆ°¤µ¤»¤ë
+      // éãƒ–ãƒ­ãƒƒã‚­ãƒ³ã‚°ãƒ¢ãƒ¼ãƒ‰ã§ãƒãƒãƒ¼ã‚¸ãƒ£ã‚’ä½œå‹•ã•ã›ã‚‹
       CPPUNIT_ASSERT(m_mgr->activateManager());
-      m_mgr->runManager(true); // true:Èó¥Ö¥í¥Ã¥­¥ó¥°¡¤false:¥Ö¥í¥Ã¥­¥ó¥°
+      m_mgr->runManager(true); // true:éãƒ–ãƒ­ãƒƒã‚­ãƒ³ã‚°ï¼Œfalse:ãƒ–ãƒ­ãƒƒã‚­ãƒ³ã‚°
 			
-      // Factory¤òÅĞÏ¿¤·¤Æ¤ª¤¯
+      // Factoryã‚’ç™»éŒ²ã—ã¦ãŠã
       coil::Properties properties;
       properties.setProperty("implementation_id", "DataFlowComponentFactory");
       properties.setProperty("type_name", "DataFlowComponent");
       CPPUNIT_ASSERT(m_mgr->registerFactory(
 		    properties, CreateDataFlowComponentMock, DeleteDataFlowComponentMock));
 			
-      // bindExecutionContext()¤Ç¼ºÇÔ¤¹¤ë¤è¤¦¤Ë¡¢°Õ¿ŞÅª¤ËECFactory¤òÅĞÏ¿¤»¤º¤Ë¤ª¤¯
+      // bindExecutionContext()ã§å¤±æ•—ã™ã‚‹ã‚ˆã†ã«ã€æ„å›³çš„ã«ECFactoryã‚’ç™»éŒ²ã›ãšã«ãŠã
 			
-      // ¥³¥ó¥İ¡¼¥Í¥ó¥ÈÀ¸À®¤ò»î¤ß¤Æ¡¢°Õ¿Ş¤É¤ª¤êNULL¤ÇÌá¤ë¤«¡©
+      // ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆç”Ÿæˆã‚’è©¦ã¿ã¦ã€æ„å›³ã©ãŠã‚ŠNULLã§æˆ»ã‚‹ã‹ï¼Ÿ
       RTC::RtcBase* comp = m_mgr->createComponent("DataFlowComponentFactory");
       CPPUNIT_ASSERT(comp == NULL);
 
@@ -1111,14 +1111,14 @@ namespace Tests
     }
 		
     /*!
-     * @brief cleanupComponent()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief cleanupComponent()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - ÅĞÏ¿¤·¤¿¥³¥ó¥İ¡¼¥Í¥ó¥È¤¬¡¢¥Í¡¼¥à¥µ¡¼¥Ó¥¹¤«¤éÀµ¤·¤¯ÅĞÏ¿²ò½ü¤µ¤ì¤ë¤«¡©
-     * - ÅĞÏ¿¤·¤¿¥³¥ó¥İ¡¼¥Í¥ó¥È¤¬¡¢Manager¤«¤éÀµ¤·¤¯ÅĞÏ¿²ò½ü¤µ¤ì¤ë¤«¡©
+     * - ç™»éŒ²ã—ãŸã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆãŒã€ãƒãƒ¼ãƒ ã‚µãƒ¼ãƒ“ã‚¹ã‹ã‚‰æ­£ã—ãç™»éŒ²è§£é™¤ã•ã‚Œã‚‹ã‹ï¼Ÿ
+     * - ç™»éŒ²ã—ãŸã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆãŒã€Managerã‹ã‚‰æ­£ã—ãç™»éŒ²è§£é™¤ã•ã‚Œã‚‹ã‹ï¼Ÿ
      */
     void test_cleanupComponent()
     {
-      // ½é´ü²½¤ò¹Ô¤¦
+      // åˆæœŸåŒ–ã‚’è¡Œã†
 //      int argc = 1;
 //      char* argv[] = { "-f fixture4.conf" };
       int argc = 3;
@@ -1130,47 +1130,47 @@ namespace Tests
       CPPUNIT_ASSERT(! CORBA::is_nil(m_mgr->getPOA()));
       CPPUNIT_ASSERT(! CORBA::is_nil(m_mgr->getPOAManager()));
 
-      // Èó¥Ö¥í¥Ã¥­¥ó¥°¥â¡¼¥É¤Ç¥Ş¥Í¡¼¥¸¥ã¤òºîÆ°¤µ¤»¤ë
+      // éãƒ–ãƒ­ãƒƒã‚­ãƒ³ã‚°ãƒ¢ãƒ¼ãƒ‰ã§ãƒãƒãƒ¼ã‚¸ãƒ£ã‚’ä½œå‹•ã•ã›ã‚‹
       CPPUNIT_ASSERT(m_mgr->activateManager());
-      m_mgr->runManager(true); // true:Èó¥Ö¥í¥Ã¥­¥ó¥°¡¤false:¥Ö¥í¥Ã¥­¥ó¥°
+      m_mgr->runManager(true); // true:éãƒ–ãƒ­ãƒƒã‚­ãƒ³ã‚°ï¼Œfalse:ãƒ–ãƒ­ãƒƒã‚­ãƒ³ã‚°
 			
-      // Factory¤òÅĞÏ¿¤·¤Æ¤ª¤¯
+      // Factoryã‚’ç™»éŒ²ã—ã¦ãŠã
       coil::Properties properties;
       properties.setProperty("implementation_id", "DataFlowComponentFactory");
       properties.setProperty("type_name", "DataFlowComponent");
       CPPUNIT_ASSERT(m_mgr->registerFactory(
 		    properties, CreateDataFlowComponentMock, DeleteDataFlowComponentMock));
 			
-      // ECFactory¤òÅĞÏ¿¤·¤Æ¤ª¤¯
+      // ECFactoryã‚’ç™»éŒ²ã—ã¦ãŠã
       CPPUNIT_ASSERT(m_mgr->registerECFactory(
 		      "PeriodicEC",
 		      RTC::ECCreate<RTC_exp::PeriodicExecutionContext>,
 		      RTC::ECDelete<RTC_exp::PeriodicExecutionContext>));
 
-      // ³ÎÇ§ÍÑ¤Ë¥Í¡¼¥à¥µ¡¼¥Ó¥¹¤Ø¤Î¥¢¥¯¥»¥¹¼êÃÊ¤È¤·¤ÆNamingManager¤ò½àÈ÷¤·¤Æ¤ª¤¯
-      // ¢¨fixture4.conf¤Î³ÆÀßÄê¤Ë¹ç¤ï¤»¤Æ¤¤¤ëÅÀ¤ËÃí°Õ
+      // ç¢ºèªç”¨ã«ãƒãƒ¼ãƒ ã‚µãƒ¼ãƒ“ã‚¹ã¸ã®ã‚¢ã‚¯ã‚»ã‚¹æ‰‹æ®µã¨ã—ã¦NamingManagerã‚’æº–å‚™ã—ã¦ãŠã
+      // â€»fixture4.confã®å„è¨­å®šã«åˆã‚ã›ã¦ã„ã‚‹ç‚¹ã«æ³¨æ„
       RTC::NamingManager nmgr(m_mgr);
       const char* name_server = "localhost:2809";
       nmgr.registerNameServer("corba", name_server);
 			
-      // Àµ¤·¤¯¥³¥ó¥İ¡¼¥Í¥ó¥È¤òÀ¸À®¤Ç¤­¤ë¤«¡©
+      // æ­£ã—ãã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã‚’ç”Ÿæˆã§ãã‚‹ã‹ï¼Ÿ
       RTC::RtcBase* comp = m_mgr->createComponent("DataFlowComponentFactory");
 
       CPPUNIT_ASSERT(comp != NULL);
       CPPUNIT_ASSERT(dynamic_cast<DataFlowComponentMock*>(comp) != NULL);
       CPPUNIT_ASSERT(! CORBA::is_nil(comp->_this()));
       CPPUNIT_ASSERT_EQUAL(
-			   std::string("DataFlowComponent0"), // ¢¨ËöÈø¤Î0¤ÏNumberingPolicy¤Ë¤è¤êÉÕ²Ã¤µ¤ì¤ë
+			   std::string("DataFlowComponent0"), // â€»æœ«å°¾ã®0ã¯NumberingPolicyã«ã‚ˆã‚Šä»˜åŠ ã•ã‚Œã‚‹
 			   std::string(comp->getInstanceName()));
 
-      // ¥³¥ó¥İ¡¼¥Í¥ó¥È¤Ë¡¢°Õ¿Ş¤É¤ª¤êExecutionContext¤¬¥¢¥¿¥Ã¥Á¤µ¤ì¤Æ¤¤¤ë¤«¡©
+      // ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã«ã€æ„å›³ã©ãŠã‚ŠExecutionContextãŒã‚¢ã‚¿ãƒƒãƒã•ã‚Œã¦ã„ã‚‹ã‹ï¼Ÿ
       RTC::ExecutionContextList* ecList = comp->get_owned_contexts();
       CPPUNIT_ASSERT(ecList != NULL);
       CPPUNIT_ASSERT_EQUAL(1, (int) ecList->length());
 			
-      // cleanupComponent()¤Ë¤è¤ê¡¢Àµ¤·¤¯ÅĞÏ¿²ò½ü¤µ¤ì¤ë¤«¡©
-      // - ÅĞÏ¿¤·¤¿¥³¥ó¥İ¡¼¥Í¥ó¥È¤¬¡¢¥Í¡¼¥à¥µ¡¼¥Ó¥¹¤«¤éÀµ¤·¤¯ÅĞÏ¿²ò½ü¤µ¤ì¤ë¤«¡©
-      // - ÅĞÏ¿¤·¤¿¥³¥ó¥İ¡¼¥Í¥ó¥È¤¬¡¢Manager¤«¤éÀµ¤·¤¯ÅĞÏ¿²ò½ü¤µ¤ì¤ë¤«¡©
+      // cleanupComponent()ã«ã‚ˆã‚Šã€æ­£ã—ãç™»éŒ²è§£é™¤ã•ã‚Œã‚‹ã‹ï¼Ÿ
+      // - ç™»éŒ²ã—ãŸã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆãŒã€ãƒãƒ¼ãƒ ã‚µãƒ¼ãƒ“ã‚¹ã‹ã‚‰æ­£ã—ãç™»éŒ²è§£é™¤ã•ã‚Œã‚‹ã‹ï¼Ÿ
+      // - ç™»éŒ²ã—ãŸã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆãŒã€Managerã‹ã‚‰æ­£ã—ãç™»éŒ²è§£é™¤ã•ã‚Œã‚‹ã‹ï¼Ÿ
       CPPUNIT_ASSERT(!canResolve(name_server, "DataFlowComponent0", "rtc"));
       CPPUNIT_ASSERT_EQUAL(comp, m_mgr->getComponent("DataFlowComponent0"));
 
@@ -1186,28 +1186,28 @@ namespace Tests
 		
     void test_unregisterComponent()
     {
-      // Manager::cleanupComponent()Æâ¤Ç»ÈÍÑ¤µ¤ì¤Æ¤¤¤ë¤Î¤Ç¡¢¤³¤³¤Ç¤Ï¥Æ¥¹¥È¾ÊÎ¬¤¹¤ë
+      // Manager::cleanupComponent()å†…ã§ä½¿ç”¨ã•ã‚Œã¦ã„ã‚‹ã®ã§ã€ã“ã“ã§ã¯ãƒ†ã‚¹ãƒˆçœç•¥ã™ã‚‹
     }
 		
     void test_bindExecutionContext()
     {
-      // Manager::createComponent()Æâ¤Ç»ÈÍÑ¤µ¤ì¤Æ¤¤¤ë¤Î¤Ç¡¢¤³¤³¤Ç¤Ï¥Æ¥¹¥È¾ÊÎ¬¤¹¤ë
+      // Manager::createComponent()å†…ã§ä½¿ç”¨ã•ã‚Œã¦ã„ã‚‹ã®ã§ã€ã“ã“ã§ã¯ãƒ†ã‚¹ãƒˆçœç•¥ã™ã‚‹
     }
 		
     void test_getComponent()
     {
-      // Â¾¥Æ¥¹¥ÈÆâ¤Ç»ÈÍÑ¤µ¤ì¤Æ¤¤¤ë¤Î¤Ç¡¢¤½¤Á¤é¤Ç·ó¤Í¤ë¤â¤Î¤È¤·¤Æ¡¢¤³¤³¤Ç¤Ï¥Æ¥¹¥È¾ÊÎ¬¤¹¤ë
+      // ä»–ãƒ†ã‚¹ãƒˆå†…ã§ä½¿ç”¨ã•ã‚Œã¦ã„ã‚‹ã®ã§ã€ãã¡ã‚‰ã§å…¼ã­ã‚‹ã‚‚ã®ã¨ã—ã¦ã€ã“ã“ã§ã¯ãƒ†ã‚¹ãƒˆçœç•¥ã™ã‚‹
     }
 		
     /*!
-     * @brief getComponents()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief getComponents()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - getComponents()¤Ç¡¢À¸À®¤·¤¿¤¹¤Ù¤Æ¤Î¥³¥ó¥İ¡¼¥Í¥ó¥È¤ò¼èÆÀ¤Ç¤­¤ë¤«¡©
-     * - ÅĞÏ¿²ò½ü¤·¤¿¥³¥ó¥İ¡¼¥Í¥ó¥È¤¬¡¢Àµ¤·¤¯°ìÍ÷¤«¤é½ü³°¤µ¤ì¤Æ¤¤¤ë¤«¡©
+     * - getComponents()ã§ã€ç”Ÿæˆã—ãŸã™ã¹ã¦ã®ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã‚’å–å¾—ã§ãã‚‹ã‹ï¼Ÿ
+     * - ç™»éŒ²è§£é™¤ã—ãŸã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆãŒã€æ­£ã—ãä¸€è¦§ã‹ã‚‰é™¤å¤–ã•ã‚Œã¦ã„ã‚‹ã‹ï¼Ÿ
      */
     void test_getComponents()
     {
-      // ½é´ü²½¤ò¹Ô¤¦
+      // åˆæœŸåŒ–ã‚’è¡Œã†
       int argc = 3;
       char* argv[] = { "ManagerTests","-f","fixture4.conf" };
 			
@@ -1217,24 +1217,24 @@ namespace Tests
       CPPUNIT_ASSERT(! CORBA::is_nil(m_mgr->getPOA()));
       CPPUNIT_ASSERT(! CORBA::is_nil(m_mgr->getPOAManager()));
 
-      // Èó¥Ö¥í¥Ã¥­¥ó¥°¥â¡¼¥É¤Ç¥Ş¥Í¡¼¥¸¥ã¤òºîÆ°¤µ¤»¤ë
+      // éãƒ–ãƒ­ãƒƒã‚­ãƒ³ã‚°ãƒ¢ãƒ¼ãƒ‰ã§ãƒãƒãƒ¼ã‚¸ãƒ£ã‚’ä½œå‹•ã•ã›ã‚‹
       CPPUNIT_ASSERT(m_mgr->activateManager());
-      m_mgr->runManager(true); // true:Èó¥Ö¥í¥Ã¥­¥ó¥°¡¤false:¥Ö¥í¥Ã¥­¥ó¥°
+      m_mgr->runManager(true); // true:éãƒ–ãƒ­ãƒƒã‚­ãƒ³ã‚°ï¼Œfalse:ãƒ–ãƒ­ãƒƒã‚­ãƒ³ã‚°
 			
-      // Factory¤òÅĞÏ¿¤·¤Æ¤ª¤¯
+      // Factoryã‚’ç™»éŒ²ã—ã¦ãŠã
       coil::Properties properties;
       properties.setProperty("implementation_id", "DataFlowComponentFactory");
       properties.setProperty("type_name", "DataFlowComponent");
       CPPUNIT_ASSERT(m_mgr->registerFactory(
 		    properties, CreateDataFlowComponentMock, DeleteDataFlowComponentMock));
 			
-      // ECFactory¤òÅĞÏ¿¤·¤Æ¤ª¤¯
+      // ECFactoryã‚’ç™»éŒ²ã—ã¦ãŠã
       CPPUNIT_ASSERT(m_mgr->registerECFactory(
 		      "PeriodicEC",
 		      RTC::ECCreate<RTC_exp::PeriodicExecutionContext>,
 		      RTC::ECDelete<RTC_exp::PeriodicExecutionContext>));
 			
-      // Ê£¿ô¤Î¥³¥ó¥İ¡¼¥Í¥ó¥È¤òÀ¸À®¤·¤Æ¤ª¤¯
+      // è¤‡æ•°ã®ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã‚’ç”Ÿæˆã—ã¦ãŠã
       RTC::RtcBase* comp1 = m_mgr->createComponent("DataFlowComponentFactory");
       CPPUNIT_ASSERT(comp1 != NULL);
       CPPUNIT_ASSERT(dynamic_cast<DataFlowComponentMock*>(comp1) != NULL);
@@ -1247,13 +1247,13 @@ namespace Tests
 			
       CPPUNIT_ASSERT(comp1 != comp2);
 			
-      // getComponents()¤Ç¡¢À¸À®¤·¤¿¤¹¤Ù¤Æ¤Î¥³¥ó¥İ¡¼¥Í¥ó¥È¤ò¼èÆÀ¤Ç¤­¤ë¤«¡©
+      // getComponents()ã§ã€ç”Ÿæˆã—ãŸã™ã¹ã¦ã®ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã‚’å–å¾—ã§ãã‚‹ã‹ï¼Ÿ
       std::vector<RTC::RtcBase*> comps = m_mgr->getComponents();
       CPPUNIT_ASSERT_EQUAL(2, (int) comps.size());
       CPPUNIT_ASSERT(std::find(comps.begin(), comps.end(), comp1) != comps.end());
       CPPUNIT_ASSERT(std::find(comps.begin(), comps.end(), comp2) != comps.end());
 			
-      // ¥³¥ó¥İ¡¼¥Í¥ó¥È¤ò£±¤Ä¤À¤±ÅĞÏ¿²ò½ü¤·¤¿¾ì¹ç¡¢²ò½ü¤·¤¿¤â¤Î¤¬°ìÍ÷¤«¤é½ü³°¤µ¤ì¤Æ¤¤¤ë¤«¡©
+      // ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã‚’ï¼‘ã¤ã ã‘ç™»éŒ²è§£é™¤ã—ãŸå ´åˆã€è§£é™¤ã—ãŸã‚‚ã®ãŒä¸€è¦§ã‹ã‚‰é™¤å¤–ã•ã‚Œã¦ã„ã‚‹ã‹ï¼Ÿ
       m_mgr->cleanupComponent(comp1);
       comps = m_mgr->getComponents();
       CPPUNIT_ASSERT(std::find(comps.begin(), comps.end(), comp1) == comps.end());
@@ -1266,31 +1266,31 @@ namespace Tests
 		
     void test_getORB()
     {
-      // Â¾¥Æ¥¹¥ÈÆâ¤Ç»ÈÍÑ¤µ¤ì¤Æ¤¤¤ë¤Î¤Ç¡¢¤³¤³¤Ç¤Ï¥Æ¥¹¥È¾ÊÎ¬¤¹¤ë
+      // ä»–ãƒ†ã‚¹ãƒˆå†…ã§ä½¿ç”¨ã•ã‚Œã¦ã„ã‚‹ã®ã§ã€ã“ã“ã§ã¯ãƒ†ã‚¹ãƒˆçœç•¥ã™ã‚‹
     }
 		
     void test_getPOA()
     {
-      // Â¾¥Æ¥¹¥ÈÆâ¤Ç»ÈÍÑ¤µ¤ì¤Æ¤¤¤ë¤Î¤Ç¡¢¤³¤³¤Ç¤Ï¥Æ¥¹¥È¾ÊÎ¬¤¹¤ë
+      // ä»–ãƒ†ã‚¹ãƒˆå†…ã§ä½¿ç”¨ã•ã‚Œã¦ã„ã‚‹ã®ã§ã€ã“ã“ã§ã¯ãƒ†ã‚¹ãƒˆçœç•¥ã™ã‚‹
     }
 		
     void test_getPOAManager()
     {
-      // Â¾¥Æ¥¹¥ÈÆâ¤Ç»ÈÍÑ¤µ¤ì¤Æ¤¤¤ë¤Î¤Ç¡¢¤³¤³¤Ç¤Ï¥Æ¥¹¥È¾ÊÎ¬¤¹¤ë
+      // ä»–ãƒ†ã‚¹ãƒˆå†…ã§ä½¿ç”¨ã•ã‚Œã¦ã„ã‚‹ã®ã§ã€ã“ã“ã§ã¯ãƒ†ã‚¹ãƒˆçœç•¥ã™ã‚‹
     }
 		
     /*!
-     * @brief initFactories()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief initFactories()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - init()¼Â¹Ô¸å¡¢initFactories()¤Î¼Â¹Ô·ë²Ì¤È¤·¤ÆFactoryMap¤ËÀµ¤·¤¯ÅĞÏ¿¤µ¤ì¤Æ¤¤¤ë¤«¡©
+     * - init()å®Ÿè¡Œå¾Œã€initFactories()ã®å®Ÿè¡Œçµæœã¨ã—ã¦FactoryMapã«æ­£ã—ãç™»éŒ²ã•ã‚Œã¦ã„ã‚‹ã‹ï¼Ÿ
      */
     void test_initFactories()
     {
-      // init()¤ÎÃæ¤ÇinitFactories()¤¬¼Â¹Ô¤µ¤ì¤ë
+      // init()ã®ä¸­ã§initFactories()ãŒå®Ÿè¡Œã•ã‚Œã‚‹
       m_mgr = RTC::Manager::init(0, NULL);
       CPPUNIT_ASSERT(m_mgr != NULL);
 
-      // initFactories()¤Î¼Â¹Ô·ë²Ì¤È¤·¤ÆFactoryMap¤ËÀµ¤·¤¯ÅĞÏ¿¤µ¤ì¤Æ¤¤¤ë¤«¡©
+      // initFactories()ã®å®Ÿè¡Œçµæœã¨ã—ã¦FactoryMapã«æ­£ã—ãç™»éŒ²ã•ã‚Œã¦ã„ã‚‹ã‹ï¼Ÿ
       bool bret = RTC::CdrBufferFactory::instance().hasFactory("ring_buffer");
       CPPUNIT_ASSERT(bret);
 
@@ -1324,25 +1324,25 @@ namespace Tests
     }
 		
     /*!
-     * @brief initComposite()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief initComposite()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - init()¼Â¹Ô¸å¡¢initComposite()¤Î¼Â¹Ô·ë²Ì¤È¤·¤ÆFactoryManager¤ËÀµ¤·¤¯ÅĞÏ¿¤µ¤ì¤Æ¤¤¤ë¤«¡©
+     * - init()å®Ÿè¡Œå¾Œã€initComposite()ã®å®Ÿè¡Œçµæœã¨ã—ã¦FactoryManagerã«æ­£ã—ãç™»éŒ²ã•ã‚Œã¦ã„ã‚‹ã‹ï¼Ÿ
      */
     void test_initComposite()
     {
-      // init()¤ÎÃæ¤ÇinitComposite()¤¬¼Â¹Ô¤µ¤ì¤ë
+      // init()ã®ä¸­ã§initComposite()ãŒå®Ÿè¡Œã•ã‚Œã‚‹
       m_mgr = RTC::Manager::init(0, NULL);
       CPPUNIT_ASSERT(m_mgr != NULL);
 
-      // initComposite()¤Î¼Â¹Ô·ë²Ì¤È¤·¤ÆFactoryManager¤ËÀµ¤·¤¯ÅĞÏ¿¤µ¤ì¤Æ¤¤¤ë¤«¡©
-      // "implementation_id"¤Ë¤Ï, "PeriodicECSharedComposite"¤¬ÀßÄê¤µ¤ì¤Æ¤¤¤ë
+      // initComposite()ã®å®Ÿè¡Œçµæœã¨ã—ã¦FactoryManagerã«æ­£ã—ãç™»éŒ²ã•ã‚Œã¦ã„ã‚‹ã‹ï¼Ÿ
+      // "implementation_id"ã«ã¯, "PeriodicECSharedComposite"ãŒè¨­å®šã•ã‚Œã¦ã„ã‚‹
       CPPUNIT_ASSERT(isFound(m_mgr->getModulesFactories(), "PeriodicECSharedComposite"));
     }
 		
     /*!
-     * @brief procContextArgs()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief procContextArgs()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - °ú¿ôec_args¤Ë¤è¤êÌá¤êÃÍtrue¡¦false¤¬Àµ¤·¤¯ÊÖµÑ¤µ¤ì¤ë¤«¡©
+     * - å¼•æ•°ec_argsã«ã‚ˆã‚Šæˆ»ã‚Šå€¤trueãƒ»falseãŒæ­£ã—ãè¿”å´ã•ã‚Œã‚‹ã‹ï¼Ÿ
      */
     void test_procContextArgs()
     {
@@ -1350,25 +1350,25 @@ namespace Tests
       std::string ec_id;
       coil::Properties ec_prop;
 
-      // ¥¤¥ó¥¹¥¿¥ó¥¹À¸À®
+      // ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ç”Ÿæˆ
       ManagerTestMock* man = new ManagerTestMock();
 
-      // false¤òÊÖ¤¹¥±¡¼¥¹1¡§ec_args.size=0
+      // falseã‚’è¿”ã™ã‚±ãƒ¼ã‚¹1ï¼šec_args.size=0
       ec_args = "";
       bool bret = man->procContextArgs(ec_args.c_str(), ec_id, ec_prop);
       CPPUNIT_ASSERT(!bret);
 
-      // false¤òÊÖ¤¹¥±¡¼¥¹2¡§ec_args.size=3
+      // falseã‚’è¿”ã™ã‚±ãƒ¼ã‚¹2ï¼šec_args.size=3
       ec_args = "periodic?rate=1000?policy=skip";
       bret = man->procContextArgs(ec_args.c_str(), ec_id, ec_prop);
       CPPUNIT_ASSERT(!bret);
 
-      // false¤òÊÖ¤¹¥±¡¼¥¹3¡§ec_args[0].empty
+      // falseã‚’è¿”ã™ã‚±ãƒ¼ã‚¹3ï¼šec_args[0].empty
       ec_args = "?rate=1000";
       bret = man->procContextArgs(ec_args.c_str(), ec_id, ec_prop);
       CPPUNIT_ASSERT(!bret);
 
-      // true¤òÊÖ¤¹¥±¡¼¥¹4¡§ec_args.size=2
+      // trueã‚’è¿”ã™ã‚±ãƒ¼ã‚¹4ï¼šec_args.size=2
       ec_args = "periodic?rate=1000";
       bret = man->procContextArgs(ec_args.c_str(), ec_id, ec_prop);
       CPPUNIT_ASSERT(bret);
@@ -1381,9 +1381,9 @@ namespace Tests
     }
 		
     /*!
-     * @brief getLogLevel()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief getLogLevel()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - log_level¤¬Àµ¤·¤¯ÊÖµÑ¤µ¤ì¤ë¤«¡©
+     * - log_levelãŒæ­£ã—ãè¿”å´ã•ã‚Œã‚‹ã‹ï¼Ÿ
      */
     void test_getLogLevel()
     {
@@ -1394,9 +1394,9 @@ namespace Tests
     }
 		
     /*!
-     * @brief getLoadedModules()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief getLoadedModules()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - ¥í¡¼¥ÉºÑ¤ß¤Î¥â¥¸¥å¡¼¥ë¥ê¥¹¥È¤òÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
+     * - ãƒ­ãƒ¼ãƒ‰æ¸ˆã¿ã®ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ãƒªã‚¹ãƒˆã‚’æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
      */
     void test_getLoadedModules()
     {
@@ -1406,7 +1406,7 @@ namespace Tests
       m_mgr = RTC::Manager::init(argc, argv);
       CPPUNIT_ASSERT(m_mgr != NULL);
 
-      // Manager¤È¤ÏÊÌ¤Ë¡¢³ÎÇ§ÍÑ¤Ë¥â¥¸¥å¡¼¥ë¤Ø¤Î¥·¥ó¥Ü¥ë¤ò¼èÆÀ¤·¤Æ¤ª¤¯
+      // Managerã¨ã¯åˆ¥ã«ã€ç¢ºèªç”¨ã«ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ã¸ã®ã‚·ãƒ³ãƒœãƒ«ã‚’å–å¾—ã—ã¦ãŠã
       typedef int (*FUNC_GETINITPROCCOUNT)();
       typedef void (*FUNC_RESETINITPROCCOUNT)();
       coil::DynamicLib loader("./.libs/DummyModule.so");
@@ -1419,12 +1419,12 @@ namespace Tests
 	= (FUNC_RESETINITPROCCOUNT) loader.symbol("resetInitProcCount");
       CPPUNIT_ASSERT(pResetInitProcCount != NULL);
 			
-      (*pResetInitProcCount)(); // ¥«¥¦¥ó¥¿¥¯¥ê¥¢
+      (*pResetInitProcCount)(); // ã‚«ã‚¦ãƒ³ã‚¿ã‚¯ãƒªã‚¢
 			
       CPPUNIT_ASSERT_EQUAL(0, (*pGetInitProcCount)());
       m_mgr->load("./.libs/DummyModule.so", "InitProc");
 
-      // ¥í¡¼¥ÉºÑ¤ß¤Î¥â¥¸¥å¡¼¥ë¥ê¥¹¥È¤òÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
+      // ãƒ­ãƒ¼ãƒ‰æ¸ˆã¿ã®ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ãƒªã‚¹ãƒˆã‚’æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
       std::vector<coil::Properties> props = m_mgr->getLoadedModules();
       CPPUNIT_ASSERT(props.size() > 0);
 
@@ -1434,16 +1434,16 @@ namespace Tests
     }
 		
     /*!
-     * @brief getFactoryProfiles()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief getFactoryProfiles()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - RT¥³¥ó¥İ¡¼¥Í¥ó¥ÈÍÑ¥Õ¥¡¥¯¥È¥ê¤ò¥ê¥¹¥È¤òÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
+     * - RTã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆç”¨ãƒ•ã‚¡ã‚¯ãƒˆãƒªã‚’ãƒªã‚¹ãƒˆã‚’æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
      */
     void test_getFactoryProfiles()
     {
       m_mgr = RTC::Manager::init(0, NULL);
       CPPUNIT_ASSERT(m_mgr != NULL);
 
-      // Factory¤òÀµ¾ï¤ËÅĞÏ¿¤Ç¤­¤ë¤«¡©
+      // Factoryã‚’æ­£å¸¸ã«ç™»éŒ²ã§ãã‚‹ã‹ï¼Ÿ
       coil::Properties properties;
       properties.setProperty("implementation_id", "ID");
 
@@ -1462,9 +1462,9 @@ namespace Tests
     }
 		
     /*!
-     * @brief createContext()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief createContext()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - ExecutionContextBase¤òÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
+     * - ExecutionContextBaseã‚’æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
      */
     void test_createContext()
     {
@@ -1494,9 +1494,9 @@ namespace Tests
     }
 		
     /*!
-     * @brief deleteComponent()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief deleteComponent()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - RT¥³¥ó¥İ¡¼¥Í¥ó¥È¤Îºï½ü¤¬Àµ¤·¤¯¤Ç¤­¤ë¤«¡©
+     * - RTã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã®å‰Šé™¤ãŒæ­£ã—ãã§ãã‚‹ã‹ï¼Ÿ
      */
     void test_deleteComponent()
     {
@@ -1509,24 +1509,24 @@ namespace Tests
       CPPUNIT_ASSERT(! CORBA::is_nil(m_mgr->getPOA()));
       CPPUNIT_ASSERT(! CORBA::is_nil(m_mgr->getPOAManager()));
 
-      // Èó¥Ö¥í¥Ã¥­¥ó¥°¥â¡¼¥É¤Ç¥Ş¥Í¡¼¥¸¥ã¤òºîÆ°¤µ¤»¤ë
+      // éãƒ–ãƒ­ãƒƒã‚­ãƒ³ã‚°ãƒ¢ãƒ¼ãƒ‰ã§ãƒãƒãƒ¼ã‚¸ãƒ£ã‚’ä½œå‹•ã•ã›ã‚‹
       CPPUNIT_ASSERT(m_mgr->activateManager());
-      m_mgr->runManager(true); // true:Èó¥Ö¥í¥Ã¥­¥ó¥°¡¤false:¥Ö¥í¥Ã¥­¥ó¥°
+      m_mgr->runManager(true); // true:éãƒ–ãƒ­ãƒƒã‚­ãƒ³ã‚°ï¼Œfalse:ãƒ–ãƒ­ãƒƒã‚­ãƒ³ã‚°
 
-      // Factory¤òÅĞÏ¿¤·¤Æ¤ª¤¯
+      // Factoryã‚’ç™»éŒ²ã—ã¦ãŠã
       coil::Properties properties;
       properties.setProperty("implementation_id", "DataFlowComponentFactory");
       properties.setProperty("type_name", "DataFlowComponent");
       CPPUNIT_ASSERT(m_mgr->registerFactory(
 		    properties, CreateDataFlowComponentMock, DeleteDataFlowComponentMock));
 
-      // ECFactory¤òÅĞÏ¿¤·¤Æ¤ª¤¯
+      // ECFactoryã‚’ç™»éŒ²ã—ã¦ãŠã
       CPPUNIT_ASSERT(m_mgr->registerECFactory(
 		      "PeriodicEC",
 		      RTC::ECCreate<RTC_exp::PeriodicExecutionContext>,
 		      RTC::ECDelete<RTC_exp::PeriodicExecutionContext>));
 
-      // Àµ¤·¤¯¥³¥ó¥İ¡¼¥Í¥ó¥È¤òÀ¸À®¤Ç¤­¤ë¤«¡©
+      // æ­£ã—ãã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã‚’ç”Ÿæˆã§ãã‚‹ã‹ï¼Ÿ
       RTC::RtcBase* comp = m_mgr->createComponent("DataFlowComponentFactory");
       CPPUNIT_ASSERT(comp != NULL);
       CPPUNIT_ASSERT(dynamic_cast<DataFlowComponentMock*>(comp) != NULL);
@@ -1539,21 +1539,21 @@ namespace Tests
       std::vector<RTC::RTObject_impl*> comps = m_mgr->getComponents();
       CPPUNIT_ASSERT(comps.size() > 0);
 
-      // Àµ¤·¤¯¥³¥ó¥İ¡¼¥Í¥ó¥È¤òºï½ü¤Ç¤­¤ë¤«¡©
+      // æ­£ã—ãã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã‚’å‰Šé™¤ã§ãã‚‹ã‹ï¼Ÿ
       m_mgr->deleteComponent("DataFlowComponent0");
       CPPUNIT_ASSERT(m_mgr->getComponent("DataFlowComponent0") == NULL);
 
-      // deleteComponent()¤Çexit()¤ò¼Â¹Ô¤·¤Æ¤¤¤ë¤¿¤á¡¢¤³¤ì°Ê¹ß¤Î¥Æ¥¹¥È¤Ï¤Ç¤­¤Ş¤»¤ó¡£
+      // deleteComponent()ã§exit()ã‚’å®Ÿè¡Œã—ã¦ã„ã‚‹ãŸã‚ã€ã“ã‚Œä»¥é™ã®ãƒ†ã‚¹ãƒˆã¯ã§ãã¾ã›ã‚“ã€‚
     }
 		
     /*!
-     * @brief init()¡¢shutdown()¤«¤é¸Æ¤Ğ¤ì¤ëprotected´Ø¿ô¤Î¥Æ¥¹¥È
+     * @brief init()ã€shutdown()ã‹ã‚‰å‘¼ã°ã‚Œã‚‹protectedé–¢æ•°ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - protected´Ø¿ô¤¬Àµ¤·¤¯Æ°ºî¤·¤Æ¤¤¤ë¤«¡©
+     * - protectedé–¢æ•°ãŒæ­£ã—ãå‹•ä½œã—ã¦ã„ã‚‹ã‹ï¼Ÿ
      */
     void test_init2()
     {
-      // Manager::init()¤è¤êprotected´Ø¿ô¤¬»ÈÍÑ¤µ¤ì¤Æ¤¤¤ë¤Î¤Ç¡¢¤³¤³¤Ç¤Ï¥Æ¥¹¥È¾ÊÎ¬¤¹¤ë
+      // Manager::init()ã‚ˆã‚Šprotectedé–¢æ•°ãŒä½¿ç”¨ã•ã‚Œã¦ã„ã‚‹ã®ã§ã€ã“ã“ã§ã¯ãƒ†ã‚¹ãƒˆçœç•¥ã™ã‚‹
       //   initManager()
       //   initLogger()
       //   initORB()
@@ -1564,7 +1564,7 @@ namespace Tests
       //   initTimer()
       //   initManagerServant()
 
-      // Manager::shutdown()¤è¤êprotected´Ø¿ô¤¬»ÈÍÑ¤µ¤ì¤Æ¤¤¤ë¤Î¤Ç¡¢¤³¤³¤Ç¤Ï¥Æ¥¹¥È¾ÊÎ¬¤¹¤ë
+      // Manager::shutdown()ã‚ˆã‚Šprotectedé–¢æ•°ãŒä½¿ç”¨ã•ã‚Œã¦ã„ã‚‹ã®ã§ã€ã“ã“ã§ã¯ãƒ†ã‚¹ãƒˆçœç•¥ã™ã‚‹
       //    shutdownComponents();
       //    shutdownNaming();
       //    shutdownORB();

@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file   stringutilTests.cpp
  * @brief  stringutil test class

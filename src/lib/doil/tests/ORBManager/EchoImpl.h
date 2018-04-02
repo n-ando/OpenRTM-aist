@@ -1,4 +1,4 @@
-#include <doil/ImplBase.h>
+﻿#include <doil/ImplBase.h>
 #include <string>
 #include <iostream>
 #include "IEcho.h"

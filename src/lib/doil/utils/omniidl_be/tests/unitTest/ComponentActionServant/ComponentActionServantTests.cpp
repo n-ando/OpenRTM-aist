@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file   ComponentActionServantTests.cpp
  * @brief  ComponentActionServant test class

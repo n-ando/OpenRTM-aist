@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file   InPortConnectorTests.cpp
  * @brief  InPortConnector test class
@@ -120,7 +120,7 @@ namespace InPortConnector
     }
 		
     /*!
-     * @brief profile(),id(),name(),getBuffer(),setEndian(),isLittleEndian() �᥽�åɤΥƥ���
+     * @brief profile(),id(),name(),getBuffer(),setEndian(),isLittleEndian() メソッドのテスト
      * 
      */
     void test_case0()

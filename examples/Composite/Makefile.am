@@ -125,7 +125,6 @@ vc9proj:
 		--yaml ../rtc.vcproj.yaml                    \
 		--source Controller.cpp ControllerComp.cpp     \
 		--header Controller.h
-	qkc -O- -sm $(win32_builddir)/Controller_vc9.vcproj
 	$(top_builddir)/build/vcprojtool.py vcproj              \
 		--type DLL                                      \
 		--vcversion "9.00"                              \
@@ -135,7 +134,6 @@ vc9proj:
 		--yaml ../rtcdll.vcproj.yaml                    \
 		--source Controller.cpp                          \
 		--header Controller.h
-	qkc -O- -sm $(win32_builddir)/ControllerDll_vc9.vcproj
 
 	$(top_builddir)/build/vcprojtool.py vcproj           \
 		--type EXE                                   \
@@ -146,7 +144,6 @@ vc9proj:
 		--yaml ../rtc.vcproj.yaml                    \
 		--source Motor.cpp MotorComp.cpp     \
 		--header Motor.h
-	qkc -O- -sm $(win32_builddir)/Motor_vc9.vcproj
 	$(top_builddir)/build/vcprojtool.py vcproj              \
 		--type DLL                                      \
 		--vcversion "9.00"                              \
@@ -156,7 +153,6 @@ vc9proj:
 		--yaml ../rtcdll.vcproj.yaml                    \
 		--source Motor.cpp                          \
 		--header Motor.h
-	qkc -O- -sm $(win32_builddir)/MotorDll_vc9.vcproj
 
 	$(top_builddir)/build/vcprojtool.py vcproj           \
 		--type EXE                                   \
@@ -167,7 +163,6 @@ vc9proj:
 		--yaml ../rtc.vcproj.yaml                    \
 		--source Sensor.cpp SensorComp.cpp     \
 		--header Sensor.h
-	qkc -O- -sm $(win32_builddir)/Sensor_vc9.vcproj
 	$(top_builddir)/build/vcprojtool.py vcproj              \
 		--type DLL                                      \
 		--vcversion "9.00"                              \
@@ -177,7 +172,6 @@ vc9proj:
 		--yaml ../rtcdll.vcproj.yaml                    \
 		--source Sensor.cpp                          \
 		--header Sensor.h
-	qkc -O- -sm $(win32_builddir)/SensorDll_vc9.vcproj
 	$(top_builddir)/build/vcprojtool.py vcproj           \
 		--type EXE                                   \
 		--vcversion "9.00"                           \
@@ -186,7 +180,6 @@ vc9proj:
 		--out $(win32_builddir)/Composite_vc9.vcproj \
 		--yaml ../rtc.vcproj.yaml                    \
 		--source Composite.cpp
-	qkc -O- -sm $(win32_builddir)/Composite_vc9.vcproj
 
 vcxproj:
 	for ver in $(VC_VERSION); do \
@@ -199,7 +192,6 @@ vcxproj:
 			--yaml ../rtc.vcproj.yaml                    \
 			--source Controller.cpp ControllerComp.cpp     \
 			--header Controller.h ; \
-		qkc -O- -sm $(win32_builddir)/Controller_vc$${ver}.vcxproj ; \
 		$(top_builddir)/build/vcxprojtool.py vcxproj              \
 			--type DLL                                      \
 			--vcversion "$${ver}.00"                              \
@@ -209,7 +201,6 @@ vcxproj:
 			--yaml ../rtcdll.vcproj.yaml                    \
 			--source Controller.cpp                          \
 			--header Controller.h ; \
-		qkc -O- -sm $(win32_builddir)/ControllerDll_vc$${ver}.vcxproj ; \
 		\
 		$(top_builddir)/build/vcxprojtool.py vcxproj           \
 			--type EXE                                   \
@@ -220,7 +211,6 @@ vcxproj:
 			--yaml ../rtc.vcproj.yaml                    \
 			--source Motor.cpp MotorComp.cpp     \
 			--header Motor.h ; \
-		qkc -O- -sm $(win32_builddir)/Motor_vc$${ver}.vcxproj ; \
 		$(top_builddir)/build/vcxprojtool.py vcxproj              \
 			--type DLL                                      \
 			--vcversion "$${ver}.00"                              \
@@ -230,7 +220,6 @@ vcxproj:
 			--yaml ../rtcdll.vcproj.yaml                    \
 			--source Motor.cpp                          \
 			--header Motor.h ; \
-		qkc -O- -sm $(win32_builddir)/MotorDll_vc$${ver}.vcxproj ; \
 		\
 		$(top_builddir)/build/vcxprojtool.py vcxproj           \
 			--type EXE                                   \
@@ -241,7 +230,6 @@ vcxproj:
 			--yaml ../rtc.vcproj.yaml                    \
 			--source Sensor.cpp SensorComp.cpp     \
 			--header Sensor.h ; \
-		qkc -O- -sm $(win32_builddir)/Sensor_vc$${ver}.vcxproj ; \
 		$(top_builddir)/build/vcxprojtool.py vcxproj              \
 			--type DLL                                      \
 			--vcversion "$${ver}.00"                              \
@@ -251,7 +239,6 @@ vcxproj:
 			--yaml ../rtcdll.vcproj.yaml                    \
 			--source Sensor.cpp                          \
 			--header Sensor.h ; \
-		qkc -O- -sm $(win32_builddir)/SensorDll_vc$${ver}.vcxproj ; \
 		$(top_builddir)/build/vcxprojtool.py vcxproj           \
 			--type EXE                                   \
 			--vcversion "$${ver}.00"                           \
@@ -260,7 +247,6 @@ vcxproj:
 			--out $(win32_builddir)/Composite_vc$${ver}.vcxproj \
 			--yaml ../rtc.vcproj.yaml                    \
 			--source Composite.cpp ; \
-		qkc -O- -sm $(win32_builddir)/Composite_vc$${ver}.vcxproj ; \
 	done
 
 dist-hook: lst vcproj

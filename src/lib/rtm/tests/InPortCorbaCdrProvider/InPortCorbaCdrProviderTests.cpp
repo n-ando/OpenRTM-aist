@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file   InPortCorbaCdrProviderTests.cpp
  * @brief  InPortCorbaCdrProvider test class
@@ -106,7 +106,7 @@ namespace InPortCorbaCdrProvider
       {
       }
       /*!
-       *  ³ÎÇ§ÍÑ 
+       *  ç¢ºèªç”¨ 
        * 
        */
       SDOPackage::NVList get_m_properties()
@@ -217,11 +217,11 @@ namespace InPortCorbaCdrProvider
         m_listeners.connector_[RTC::ON_DISCONNECT].addListener(
                                     new ConnListener("ON_DISCONNECT"), true);
 
-        //IOR ¤ò¥×¥í¥Ñ¥Æ¥£¤ËÄÉ²Ã¤¹¤ë¤³¤È¤ò³ÎÇ§
+        //IOR ã‚’ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã«è¿½åŠ ã™ã‚‹ã“ã¨ã‚’ç¢ºèª
         index = NVUtil::find_index(provider.get_m_properties(),"dataport.corba_cdr.inport_ior");
         CPPUNIT_ASSERT(0<=index);
 
-        //ref ¤ò¥×¥í¥Ñ¥Æ¥£¤ËÄÉ²Ã¤¹¤ë¤³¤È¤ò³ÎÇ§
+        //ref ã‚’ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã«è¿½åŠ ã™ã‚‹ã“ã¨ã‚’ç¢ºèª
         index = NVUtil::find_index(provider.get_m_properties(),"dataport.corba_cdr.inport_ref");
         CPPUNIT_ASSERT(0<=index);
 
@@ -242,7 +242,7 @@ namespace InPortCorbaCdrProvider
         cdr.get_octet_array(&(data[0]), len);
         ret = provider.put(data);
 
-        // buffer Ì¤ÀßÄê¤Ë¤è¤ëPORT_ERROR
+        // buffer æœªè¨­å®šã«ã‚ˆã‚‹PORT_ERROR
         CPPUNIT_ASSERT_EQUAL(::OpenRTM::PORT_ERROR,ret);
 
         RTC::CdrBufferBase* buffer;
@@ -284,7 +284,7 @@ namespace InPortCorbaCdrProvider
         CPPUNIT_ASSERT_EQUAL(::OpenRTM::PORT_OK,ret);
 
         // delete connector;
-        // ¤³¤³¤Ç delete ¤¹¤ë¤ÈÍî¤Á¤ë¤Î¤Ç¡¢¥Ç¥¹¥È¥é¥¯¥¿¤Ç¹Ô¤¦¡£
+        // ã“ã“ã§ delete ã™ã‚‹ã¨è½ã¡ã‚‹ã®ã§ã€ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã§è¡Œã†ã€‚
     }
     
   };

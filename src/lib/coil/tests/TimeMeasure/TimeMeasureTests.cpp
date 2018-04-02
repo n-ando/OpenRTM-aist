@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file   TimeMeasureTests.cpp
  * @brief  TimeMeasure test class
