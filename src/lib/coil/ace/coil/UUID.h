@@ -22,13 +22,13 @@
 
 #include <coil/config_coil.h>
 #if defined (WIN32)
-#pragma warning( disable : 4244 ) 
-#pragma warning( disable : 4312 ) 
+#pragma warning( disable : 4244 )
+#pragma warning( disable : 4312 )
 #endif
 #include <ace/UUID.h>
 #if defined (WIN32)
-#pragma warning( default : 4244 ) 
-#pragma warning( default : 4312 ) 
+#pragma warning( default : 4244 )
+#pragma warning( default : 4312 )
 #endif
 
 namespace coil
@@ -40,7 +40,7 @@ namespace coil
   {
   public:
     UUID_Generator() : ACE_Utils::UUID_Generator() {}
-#ifndef ACE_5_6_1_OR_EARLIER  
+#ifndef ACE_5_6_1_OR_EARLIER
     coil::UUID*
     generateUUID(ACE_UINT16 version = 0x0001, u_char variant = 0x80)
     {

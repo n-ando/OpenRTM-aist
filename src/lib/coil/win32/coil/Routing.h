@@ -21,13 +21,13 @@
 #define COIL_ROUTING_H
 
 #include <string>
- 
+
 namespace coil
 {
   /*!
    * @if jp
    * @brief 宛先アドレスから利用されるエンドポイントアドレスを得る
-   * 
+   *
    * 宛先アドレスを与えると、その際に利用されるエンドポイントのアドレス
    * が返される。宛先アドレス dest_addr には、IPアドレスまたはFQDNホス
    * ト名を与えることができる。宛先アドレスが到
@@ -37,7 +37,7 @@ namespace coil
    * @param dest_addr 宛先アドレスまたはホスト名
    * @param dest_if 宛先と通信を行う際に使用されるインターフェース名
    * @return 成功 true, 失敗 false
-   * 
+   *
    * @else
    * @brief Getting network interface name from destination address
    *

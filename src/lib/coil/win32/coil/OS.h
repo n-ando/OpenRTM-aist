@@ -101,7 +101,7 @@ namespace coil
       {
         os = "Windows CE %d.%d";
       }
-    
+
     sprintf(name->release, os,
             static_cast<int>(version_info.dwMajorVersion),
             static_cast<int>(version_info.dwMinorVersion));
@@ -235,7 +235,7 @@ namespace coil
 #define  BADCH  (int)'?'
 #define  BADARG  (int)':'
 #define  EMSG  ""
-  
+
   /*!
    * @if jp
    *
@@ -260,12 +260,12 @@ namespace coil
     static char *place = EMSG;        /* option letter processing */
     const char *oli;            /* option letter list index */
     char *p;
-    
+
     if (optreset || !*place) {        /* update scanning pointer */
       optreset = 0;
       /* Check that the scanning reached the last element. */
       if (optind >= nargc)
-      { 
+      {
         place = EMSG;
         return(-1);
       }
@@ -273,18 +273,18 @@ namespace coil
       {
         /* Check that the scanning reached the last element. */
         if (optind >= nargc)
-        {                
+        {
           place = EMSG;
           return(-1);
         }
         place = nargv[optind];
         /* Check that the first character of the element is '-'. */
         if (*place != '-')
-        {                  
+        {
           /* When the head of the element is not '-',        */
           /* Scan the next element disregarding the element. */
           optind++;
-                   
+
         }
         else
         {
@@ -398,7 +398,7 @@ namespace coil
      * @endif
      */
     GetOpt(int argc, char* const argv[], const char* opt, int flag)
-      : m_argc(argc), m_argv(argv), m_opt(opt), 
+      : m_argc(argc), m_argv(argv), m_opt(opt),
         m_flag(flag), optind(1), opterr(1), optopt(0)
 
     {
@@ -472,7 +472,7 @@ namespace coil
     int m_flag;
 
   };
-    
+
 };  // namespace coil
 
 #endif // COIL_OS_H

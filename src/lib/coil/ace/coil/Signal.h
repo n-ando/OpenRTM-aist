@@ -20,13 +20,13 @@
 #ifndef COIL_SIGNAL_H
 #define COIL_SIGNAL_H
 #if defined (WIN32)
-#pragma warning( disable : 4244 ) 
-#pragma warning( disable : 4312 ) 
+#pragma warning( disable : 4244 )
+#pragma warning( disable : 4312 )
 #endif
 #include <ace/Signal.h>
 #if defined (WIN32)
-#pragma warning( default : 4244 ) 
-#pragma warning( default : 4312 ) 
+#pragma warning( default : 4244 )
+#pragma warning( default : 4312 )
 #endif
 
 namespace coil

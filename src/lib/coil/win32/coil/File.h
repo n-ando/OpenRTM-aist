@@ -87,7 +87,7 @@ namespace coil
                 dir_name = return_dirname;
               }
           }
-        else 
+        else
           {
             *(p+1) = '\0';
             dir_name = return_dirname;
@@ -174,7 +174,7 @@ namespace coil
 
 
   typedef unsigned int ino_t;
-  
+
   /*!
    * @if jp
    *
@@ -248,11 +248,11 @@ namespace coil
         if (pos == std::string::npos)
           {
             path.push_back('\\'); // delim = '\'
-          } 
+          }
         else
           {
             path.push_back('/'); // delim = '/'
-          } 
+          }
       }
     path.push_back('*'); // now path is "/dir/dir/../*"
 
@@ -320,7 +320,7 @@ namespace coil
 
     strcpy_s(dir->entry.d_name, _MAX_PATH, dir->fd->cFileName);
     dir->has_next = FindNextFileA(dir->h, dir->fd);
- 
+
     return &dir->entry;
   }
 
@@ -389,7 +389,7 @@ namespace coil
    */
   inline coil::vstring filelist(const char* path, const char* glob_str = "")
   {
-    struct dirent* ent; 
+    struct dirent* ent;
     coil::vstring flist;
     bool has_glob(false);
 
@@ -398,7 +398,7 @@ namespace coil
 
     DIR* dir_ptr(coil::opendir(path));
     if (dir_ptr == 0) { return flist; }
-    
+
     while ((ent = coil::readdir(dir_ptr)) != 0)
       {
         bool match(true);
@@ -440,10 +440,10 @@ namespace coil
                   {
                     if (fname[i] != *globc) { match = false; }
                   }
-                
+
                 // in the last fname character, if glob is not end,
                 // or *, fname is not matched.
-                if (i + 1 == fname.size() && 
+                if (i + 1 == fname.size() &&
                     globc[1] != '\0' && globc[1] != '*') { match = false; }
               }
           }

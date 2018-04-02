@@ -22,15 +22,15 @@
 #include <coil/config_coil.h>
 #include <coil/TimeValue.h>
 #if defined (WIN32)
-#pragma warning( disable : 4244 ) 
-#pragma warning( disable : 4312 ) 
+#pragma warning( disable : 4244 )
+#pragma warning( disable : 4312 )
 #endif
 #include <ace/OS_NS_sys_time.h>
 #include <ace/OS_NS_unistd.h>
 #include <ace/OS_NS_sys_select.h>
 #if defined (WIN32)
-#pragma warning( default : 4244 ) 
-#pragma warning( default : 4312 ) 
+#pragma warning( default : 4244 )
+#pragma warning( default : 4312 )
 #endif
 
 namespace coil

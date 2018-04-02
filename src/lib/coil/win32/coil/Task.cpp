@@ -96,7 +96,7 @@ namespace coil
            (HANDLE)::_beginthreadex(NULL, // security
            0, //stuck size
            Task::svc_run, // func
-           reinterpret_cast<void*>ethis), // argument
+           reinterpret_cast<void*>(this), // argument
            0, // flag (0 or CREATE_SUSPEND)
            NULL); //thread descripter
         ++m_count;
