@@ -114,8 +114,7 @@ namespace coil
   {
     if (m_count > 0)
       {
-        DWORD retval;
-        retval = ::WaitForSingleObject(m_thread, INFINITE);
+        DWORD retval = ::WaitForSingleObject(m_thread, INFINITE);
       }
     return 0;
   }

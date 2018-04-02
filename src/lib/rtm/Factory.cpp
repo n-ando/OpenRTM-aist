@@ -102,7 +102,7 @@ namespace RTC
     try
       {
         RTObject_impl* rtobj(m_New(mgr));
-        if (rtobj == 0) return NULL;
+        if (rtobj == 0) { return NULL; }
 
         ++m_Number;
         rtobj->setProperties(this->profile());

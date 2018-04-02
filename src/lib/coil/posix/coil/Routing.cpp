@@ -38,7 +38,7 @@ namespace coil
    */
   bool dest_to_endpoint(std::string dest_addr, std::string& endpoint)
   {
-    std::string dest_if;
+    std::string dest_if = std::string();
     if (!find_dest_ifname(dest_addr, dest_if))
       {
         return false;

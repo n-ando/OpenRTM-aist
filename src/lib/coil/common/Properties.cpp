@@ -72,7 +72,7 @@ namespace coil
    * @brief Constructor(Give the default value with char*[])
    * @endif
    */
-  Properties::Properties(const char* defaults[], long num)
+  Properties::Properties(const char** defaults, long num)
     : name(""), value(""), default_value(""), root(NULL), m_empty("")
   {
     leaf.clear();
@@ -341,11 +341,11 @@ namespace coil
    */
   void Properties::load(std::istream& inStream)
   {
-    std::string pline;
+    std::string pline = std::string();
 
     while (!inStream.eof())
       {
-        std::string tmp;
+        std::string tmp = std::string();
         coil::getlinePortable(inStream, tmp);
         coil::eraseHeadBlank(tmp);
 
@@ -807,7 +807,7 @@ namespace coil
    */
   std::string Properties::indent(int index)
   {
-    std::string space;
+    std::string space = std::string();
     for (int i(0); i < index - 1; ++i)
       {
         space += "  ";

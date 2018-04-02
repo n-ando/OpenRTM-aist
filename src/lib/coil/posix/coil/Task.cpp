@@ -112,7 +112,7 @@ namespace coil
   {
     if (m_count > 0)
       {
-        void* retval;
+        void* retval = NULL;
         ::pthread_join(m_thread, &retval);
       }
     return 0;

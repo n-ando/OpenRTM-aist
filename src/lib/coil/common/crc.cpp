@@ -135,7 +135,7 @@ namespace coil
      *      crc32table[n] = c;
      *   }
      */
-    static const unsigned crc32tab[256] =
+    static const unsigned int crc32tab[256] =
       {
         0x00000000, 0x77073096, 0xee0e612c, 0x990951ba, 0x076dc419, 0x706af48f,
         0xe963a535, 0x9e6495a3, 0x0edb8832, 0x79dcb8a4, 0xe0d5e91e, 0x97d2d988,
@@ -182,9 +182,9 @@ namespace coil
         0xb40bbe37, 0xc30c8ea1, 0x5a05df1b, 0x2d02ef8d,
       };
     unsigned long c(0xffffffffL);
-    for (int i(0); i < len; ++i)
+    for (size_t i(0); i < len; ++i)
       {
-        c = crc32tab[(c ^ str[i]) & 0xff] ^ (c >> 8);
+        c = crc32tab[(0xff ^ str[i]) & 0xff] ^ (c >> 8);
       }
     return c ^ 0xffffffffL;
   }

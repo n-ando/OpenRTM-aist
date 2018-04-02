@@ -33,8 +33,8 @@ namespace coil
     : m_period(0.0), m_nowait(false),
       m_func(0), m_deleteInDtor(true),
       m_alive(false), m_suspend(false),
-      m_execCount(0), m_execCountMax(10),
-      m_periodCount(0), m_periodCountMax(10)
+      m_execCount(0), m_execCountMax(1000),
+      m_periodCount(0), m_periodCountMax(1000)
   {
   }
 
