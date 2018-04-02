@@ -131,6 +131,9 @@ namespace coil
       {
         return m_systemClock;
       }
+    else
+      {
+      }
     return m_systemClock;
   }
 

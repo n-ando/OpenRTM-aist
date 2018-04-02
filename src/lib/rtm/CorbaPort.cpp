@@ -276,6 +276,9 @@ namespace RTC
           {
             strict = true;
           }
+        else
+          {
+          }
         RTC_DEBUG(("Connetion strictness is: %s",
                    strict ? "strict" : "best_effort"))
       }

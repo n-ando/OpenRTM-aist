@@ -677,6 +677,9 @@ namespace coil
         val = false;
         return true;
       }
+    else
+      {
+      }
     return false;
   }
 

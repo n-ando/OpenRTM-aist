@@ -1669,6 +1669,9 @@ std::vector<coil::Properties> Manager::getLoadableModules()
           {
             opt += "-ORBIIOPAddr inet:" + endpoint;
           }
+        else
+          {
+          }
       }
   }
 

@@ -68,7 +68,7 @@ namespace RTC_impl
 
   RTObjectStateMachine::~RTObjectStateMachine(void)
   {
-    if (!m_ca)
+    if (m_ca)
       {
         m_ca = false;
         m_caVar = RTC::ComponentAction::_nil();

@@ -212,6 +212,9 @@ namespace coil
         ++m_sec;
         m_usec -= TIMEVALUE_ONE_SECOND_IN_USECS;
       }
+    else
+      {
+      }
   }
 
 };  // namespace coil
