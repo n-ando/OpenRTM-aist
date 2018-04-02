@@ -519,7 +519,7 @@ namespace coil
 
     std::vector<Stream> m_streams;
     Mutex m_mutex;
-    char m_buf[BUFFER_LEN];
+    char m_buf[BUFFER_LEN] = {'\0'};
   };
 
 
