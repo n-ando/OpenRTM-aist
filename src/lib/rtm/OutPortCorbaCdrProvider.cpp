@@ -204,7 +204,7 @@ namespace RTC
 #endif
 #else
         data->length(len);
-        cdr.get_octet_array((char *)&((*data)[0]), (int)len);
+        cdr.get_octet_array(reinterpret_cast<char *>(&((*data)[0]), static_cast<int>(len)));
 #endif // ORB_IS_RTORB
       }
 

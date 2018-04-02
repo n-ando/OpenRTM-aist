@@ -178,7 +178,7 @@ namespace coil
         NULL,
         dwcode,
         MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-        (char *)cstr,
+        reinterpret_cast<char *>(cstr),
         256,
         NULL
     );

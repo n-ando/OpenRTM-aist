@@ -133,8 +133,8 @@ namespace coil
                                   double &mean_interval,
                                   double &stddev)
   {
-    max_interval = (double)0;
-    min_interval = (double)ULLONG_MAX;
+    max_interval = static_cast<double>(0);
+    min_interval = static_cast<double>(ULLONG_MAX);
 
     double sum = 0;
     double sq_sum = 0;

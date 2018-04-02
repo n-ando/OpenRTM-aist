@@ -167,9 +167,9 @@ namespace RTC
       {
         char msec[4];
 #ifdef WIN32
-        _snprintf(msec, 4, "%03d", (int)(tm.usec() / 1000));
+        _snprintf(msec, 4, "%03d", static_cast<int>(tm.usec() / 1000));
 #else
-        snprintf(msec, 4, "%03d", (int)(tm.usec() / 1000));
+        snprintf(msec, 4, "%03d", static_cast<int>(tm.usec() / 1000));
 #endif
         coil::replaceString(fmt, "#m#", msec);
       }
@@ -178,10 +178,10 @@ namespace RTC
         char usec[4];
 #ifdef WIN32
         _snprintf(usec, 4, "%03d",
-                 (int)(tm.usec() - ((tm.usec() / 1000) * 1000)));
+                 static_cast<int>(tm.usec() - ((tm.usec() / 1000) * 1000)));
 #else
         snprintf(usec, 4, "%03d",
-                 (int)(tm.usec() - ((tm.usec() / 1000) * 1000)));
+                 static_cast<int>(tm.usec() - ((tm.usec() / 1000) * 1000)));
 #endif
         coil::replaceString(fmt, "#u#", usec);
       }

@@ -103,11 +103,11 @@ namespace coil
       }
     
     sprintf(name->release, os,
-            (int) version_info.dwMajorVersion,
-            (int) version_info.dwMinorVersion);
+            static_cast<int>(version_info.dwMajorVersion),
+            static_cast<int>(version_info.dwMinorVersion));
 
     sprintf(name->version, "Build %d %s",
-            (int) version_info.dwBuildNumber,
+            static_cast<int>(version_info.dwBuildNumber),
             version_info.szCSDVersion);
 
     // name.machine
@@ -297,13 +297,13 @@ namespace coil
         return(-1);
       }
     }                    /* option letter okay? */
-    if ((optopt = (int)*place++) == (int)':' ||
+    if ((optopt = static_cast<int>(*place++)) == static_cast<int>(':') ||
         !(oli = strchr(ostr, optopt))) {
       /*
        * if the user didn't specify '-' as an option,
        * assume it means -1 (EOF).
        */
-      if (optopt == (int)'-')
+      if (optopt == static_cast<int>('-'))
         return(-1);
       if (!*place)
         ++optind;

@@ -129,7 +129,7 @@ namespace coil
 
     tv.tv_sec = interval.sec();
     tv.tv_usec = interval.usec();
-    iret = ::select((int)ssoc+1, &mask, NULL, NULL, &tv);
+    iret = ::select(static_cast<int>(ssoc+1), &mask, NULL, NULL, &tv);
     if ( iret == SOCKET_ERROR ) 
     {
       iret = ::WSAGetLastError();
@@ -200,7 +200,7 @@ namespace coil
     
     tv.tv_sec = usec / 1000000;
     tv.tv_usec = usec % 1000000;
-    iret = ::select((int)ssoc+1, &mask, NULL, NULL, &tv);
+    iret = ::select(static_cast<int>(ssoc+1), &mask, NULL, NULL, &tv);
     if ( iret == SOCKET_ERROR ) 
     {
       iret = ::WSAGetLastError();

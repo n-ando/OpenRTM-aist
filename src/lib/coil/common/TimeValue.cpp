@@ -45,15 +45,15 @@ namespace coil
   {
     double dbHalfAdj;
     if ( timeval >= 0 )
-      {
+    {
         dbHalfAdj = +0.5;
-      }
+    }
     else
-      {
+    {
         dbHalfAdj = -0.5;
-      }
+    }
     m_sec = (long int)timeval;
-    m_usec = (long)((timeval - (double)m_sec)
+    m_usec = (long)((timeval - static_cast<double>(m_sec))
                     * TIMEVALUE_ONE_SECOND_IN_USECS + dbHalfAdj);
     normalize();
   }
@@ -139,8 +139,8 @@ namespace coil
       }
 
     m_sec = (long)time;
-    m_usec = (long)((time -
-                     (double)m_sec)*TIMEVALUE_ONE_SECOND_IN_USECS + dbHalfAdj);
+    m_usec = (long)((time - static_cast<double>(m_sec)) *
+                     TIMEVALUE_ONE_SECOND_IN_USECS + dbHalfAdj);
     normalize();
     return *this;
   }
@@ -154,7 +154,8 @@ namespace coil
    */
   TimeValue::operator double() const
   {
-    return (double)m_sec + ((double)m_usec/TIMEVALUE_ONE_SECOND_IN_USECS);
+    return static_cast<double>(m_sec) +
+          (static_cast<double>(m_usec) / TIMEVALUE_ONE_SECOND_IN_USECS);
   }
 
   /*!
