@@ -120,5 +120,5 @@ namespace coil
   bool ifname_to_ipaddr(std::string ifname, std::string& ipaddr);
 
 
-  }; //namespace coil
-#endif // COIL_ROUTING_H
+  };  // namespace coil
+#endif  // COIL_ROUTING_H

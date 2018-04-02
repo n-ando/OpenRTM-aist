@@ -326,24 +326,36 @@ namespace coil
     else
       {                    /* need an argument */
         if (*place)            /* no white space */
-          optarg = place;
+          {
+            optarg = place;
+          }
         else if (nargc <= ++optind)
           {    /* no arg */
             place = EMSG;
             if (!(p = strrchr(*nargv, '/')))
-              p = *nargv;
+              {
+                p = *nargv;
+              }
             else
-              ++p;
+              {
+                ++p;
+              }
             if (*ostr == ':')
-              return(BADARG);
+              {
+                return(BADARG);
+              }
             if (opterr)
-              fprintf(stderr,
+              {
+                fprintf(stderr,
                       "%s: option requires an argument -- %c\n",
                       p, optopt);
-              return(BADCH);
+                return(BADCH);
+              }
           }
         else                /* white space */
-          optarg = nargv[optind];
+          {
+            optarg = nargv[optind];
+          }
         place = EMSG;
         ++optind;
       }
@@ -451,7 +463,7 @@ namespace coil
     int optind;       //! 処理対象引数
     int opterr;       //! エラー表示 0:抑止、1:表示
     int optopt;       //! オプション文字が足りない時、多い時にセットされる
- 
+
 
   private:
     int m_argc;

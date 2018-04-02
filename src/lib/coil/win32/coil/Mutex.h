@@ -63,14 +63,14 @@ namespace coil
      */
     explicit Mutex(const char * const name = 0)
     {
-        SECURITY_DESCRIPTOR sd_buffer;
-        ::InitializeSecurityDescriptor(&sd_buffer, 
-                                       SECURITY_DESCRIPTOR_REVISION);
-        ::SetSecurityDescriptorDacl (&sd_buffer, TRUE, 0, FALSE);
-        m_Security_attr.nLength = sizeof(SECURITY_ATTRIBUTES);
-        m_Security_attr.lpSecurityDescriptor = &sd_buffer;
-        m_Security_attr.bInheritHandle = TRUE;
-        mutex_ = ::CreateMutexA(&m_Security_attr, FALSE,name);
+      SECURITY_DESCRIPTOR sd_buffer;
+      ::InitializeSecurityDescriptor(&sd_buffer, 
+                                     SECURITY_DESCRIPTOR_REVISION);
+      ::SetSecurityDescriptorDacl (&sd_buffer, TRUE, 0, FALSE);
+      m_Security_attr.nLength = sizeof(SECURITY_ATTRIBUTES);
+      m_Security_attr.lpSecurityDescriptor = &sd_buffer;
+      m_Security_attr.bInheritHandle = TRUE;
+      mutex_ = ::CreateMutexA(&m_Security_attr, FALSE, name);
 
 
     }
@@ -138,7 +138,6 @@ namespace coil
         {
         case WAIT_ABANDONED:
           return true;
-          break;
         case WAIT_OBJECT_0:
           return false;
         case WAIT_TIMEOUT:
@@ -176,4 +175,4 @@ namespace coil
     Mutex& operator=(const Mutex &);
   };
 };  // namespace coil
-#endif // COIL_MUTEX_H
+#endif  // COIL_MUTEX_H

@@ -166,4 +166,4 @@ public:
 
 //#endif // COMPAT_OPENRTM_0_4
 
-#endif // RTC_H
+#endif  // RTC_H

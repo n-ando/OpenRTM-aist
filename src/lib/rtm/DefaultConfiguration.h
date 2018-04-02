@@ -117,4 +117,4 @@ static const char* default_config[] =
     "sdo.service.consumer.enabled_services",  "ALL",
     ""
   };
-#endif //RTM_DEFAULTCONFIGURATION_H
+#endif  // RTM_DEFAULTCONFIGURATION_H

@@ -101,6 +101,6 @@ namespace coil
    * @endif
    */
   unsigned long crc32(const char* str, size_t len);
-}; //namespace coil
+};  // namespace coil
 
-#endif // COIL_CRC_H
+#endif  // COIL_CRC_H

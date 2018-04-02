@@ -57,5 +57,5 @@ namespace coil
    */
   bool dest_to_endpoint(std::string dest_addr, std::string& endpoint);
 
-}; //namespace coil
-#endif // COIL_ROUTING_H
+};  // namespace coil
+#endif  // COIL_ROUTING_H
