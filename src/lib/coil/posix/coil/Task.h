@@ -262,6 +262,6 @@ namespace coil
     void* m_args;
 
   };
-};
+};  // namespace coil
 
 #endif // COIL_TASK_H

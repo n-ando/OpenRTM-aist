@@ -494,4 +494,4 @@ namespace RTC
   }
 
 
-};  // namepsace RTC
+};  // namespace RTC

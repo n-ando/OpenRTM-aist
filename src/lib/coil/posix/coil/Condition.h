@@ -196,5 +196,5 @@ namespace coil
     pthread_cond_t m_cond;
     M& m_mutex;
   };
-};
+};  // namespace coil
 #endif // COIL_CONDITION_H

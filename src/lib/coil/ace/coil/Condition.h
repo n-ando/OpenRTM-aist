@@ -84,5 +84,5 @@ namespace coil
     ACE_cond_t m_cond;
     Mutex& m_mutex;
   };
-};
+};  // namespace coil
 #endif // COIL_CONDITION_H

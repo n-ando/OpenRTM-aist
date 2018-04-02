@@ -217,6 +217,5 @@ namespace RTC
       }
   }
 
-};
-
+};  // namespace RTC
 

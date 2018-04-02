@@ -37,7 +37,7 @@ class DummyModule2
   virtual ~DummyModule2();
 
   // The initialize action (on CREATED->ALIVE transition)
-  // formaer rtc_init_entry() 
+  // formaer rtc_init_entry()
 //  virtual RTC::ReturnCode_t onInitialize();
 
   // The finalize action (on ALIVE->END transition)
@@ -75,7 +75,7 @@ class DummyModule2
   // The reset action that is invoked resetting
   // This is same but different the former rtc_init_entry()
   // virtual RTC::ReturnCode_t onReset(RTC::UniqueId ec_id);
-  
+
   // The state update action that is invoked after onExecute() action
   // no corresponding operation exists in OpenRTm-aist-0.2.0
   // virtual RTC::ReturnCode_t onStateUpdate(RTC::UniqueId ec_id);
@@ -90,28 +90,28 @@ class DummyModule2
   // <rtc-template block="inport_declare">
 //  TimedLong m_in;
 //  InPort<TimedLong> m_inIn;
-  
+
   // </rtc-template>
 
 
   // DataOutPort declaration
   // <rtc-template block="outport_declare">
-  
+
   // </rtc-template>
 
   // CORBA Port declaration
   // <rtc-template block="corbaport_declare">
-  
+
   // </rtc-template>
 
   // Service declaration
   // <rtc-template block="service_declare">
-  
+
   // </rtc-template>
 
   // Consumer declaration
   // <rtc-template block="consumer_declare">
-  
+
   // </rtc-template>
 
  private:

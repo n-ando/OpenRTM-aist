@@ -2204,7 +2204,7 @@ namespace RTC
     // ECファクトリへ渡す述語クラス
     struct ECFactoryPredicate
     {
-      explicit ECFactoryPredicate(const char* name) : m_name(name){}
+      explicit ECFactoryPredicate(const char* name) : m_name(name) {}
       explicit ECFactoryPredicate(ECFactoryBase* factory)
         : m_name(factory->name()) {}
       bool operator()(ECFactoryBase* factory)

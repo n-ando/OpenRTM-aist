@@ -273,6 +273,6 @@ namespace coil
     int m_flag;
   };
 
-};
+};  // namespace coil
 
 #endif // COIL_OS_H

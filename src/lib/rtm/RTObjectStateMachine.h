@@ -36,7 +36,7 @@
 namespace RTC
 {
   class RTObject_impl;
-}
+}  // namespace RTC
 namespace RTC_impl
 {
   typedef RTC::ExecutionContextHandle_t Ecid;
@@ -123,7 +123,7 @@ namespace RTC_impl
     coil::TimeMeasure m_svtMeasure;
     coil::TimeMeasure m_refMeasure;
   };
-}; // namespace RTC
+};  // namespace RTC_impl
 
 #ifdef WIN32
 #pragma warning( default : 4290 )

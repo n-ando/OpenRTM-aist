@@ -406,5 +406,5 @@ namespace coil
     M& m_mutex;
   };  // class Condition
 
-};    // namespace Coil
+};  // namespace coil
 #endif // COIL_CONDITION_H

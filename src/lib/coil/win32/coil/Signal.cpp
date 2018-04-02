@@ -68,4 +68,4 @@ namespace coil
   {
   }
 
-};
+};  // namespace coil

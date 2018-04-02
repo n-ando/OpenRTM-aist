@@ -346,11 +346,18 @@ namespace coil
         coil::eraseHeadBlank(tmp);
         
         // Skip comments or empty lines
-        if (tmp.empty()) { continue; }
-        if (tmp[0] == '#' || tmp[0] == '!') { continue; }
+        if (tmp.empty())
+          {
+            continue;
+          }
+        if (tmp[0] == '#' || tmp[0] == '!')
+          {
+            continue;
+          }
         
         // line-end '\' continues entry
-        if (tmp[tmp.size() - 1] == '\\' && !coil::isEscaped(tmp, tmp.size() - 1))
+        if (tmp[tmp.size() - 1] == '\\'
+        && !coil::isEscaped(tmp, tmp.size() - 1))
           {
             tmp.erase(tmp.size() - 1);
             pline += tmp;
@@ -359,7 +366,10 @@ namespace coil
         pline += tmp;
         
         // Skip empty line (made of only ' ' or '\t')
-        if (pline.empty()) { continue; }
+        if (pline.empty())
+          {
+            continue;
+          }
         
         std::string key, value;
         splitKeyValue(pline, key, value);
@@ -443,7 +453,10 @@ namespace coil
    */
   Properties* const Properties::findNode(const std::string& key) const
   {
-    if (key.empty()) { return 0; }
+    if (key.empty())
+      {
+        return 0;
+      }
     std::vector<std::string> keys;
     //    std::string value;
     split(key, '.', keys);
@@ -459,7 +472,10 @@ namespace coil
    */
   Properties& Properties::getNode(const std::string& key)
   {
-    if (key.empty()) { return *this; }
+    if (key.empty())
+      {
+        return *this;
+      }
     Properties* const leaf(findNode(key));
     if (leaf != 0)
       {
@@ -478,7 +494,10 @@ namespace coil
    */
   bool Properties::createNode(const std::string& key)
   {
-    if (key.empty()) { return false; }
+    if (key.empty())
+      {
+        return false;
+      }
     
     if (findNode(key) != 0) 
       {
@@ -524,7 +543,9 @@ namespace coil
     for (size_t i(0), len(leaf.size()); i < len; ++i)
       {
         if (leaf[i]->name == key)
-          return leaf[i];
+          {
+            return leaf[i];
+          }
       }
     return NULL;
   }

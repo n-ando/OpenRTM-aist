@@ -357,5 +357,5 @@ namespace RTC
      */
     ECDeleteFunc m_Delete;
   };
-};
+};  // namespace RTC
 #endif // RTC_ECFACTORY_H

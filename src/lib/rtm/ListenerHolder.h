@@ -242,8 +242,8 @@ namespace util
      */
     EntryList m_listeners;
   };
-}; // util
-}; // RTM
+};  // namespace util
+};  // namespace RTM
 
 #define LISTENERHOLDER_CALLBACK(func, args)               \
   {                                                       \

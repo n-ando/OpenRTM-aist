@@ -386,7 +386,8 @@ namespace CORBA_IORUtil
     sstr << "       Object Key: \"";
     for (unsigned int j = 0; j < key.length(); ++j)
       {
-        if ( static_cast<char>(key[j]) >= ' ' && static_cast<char>(key[j]) <= '~')
+        if (static_cast<char>(key[j]) >= ' '
+         && static_cast<char>(key[j]) <= '~')
           {
             sstr << static_cast<char>(key[j]);
           }

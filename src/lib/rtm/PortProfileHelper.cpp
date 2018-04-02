@@ -22,13 +22,11 @@ namespace RTC
 {
   PortProfileHelper::PortProfileHelper()
   {
-    ;
   }
 
 
   PortProfileHelper::~PortProfileHelper()
   {
-    ;
   }
 
 
@@ -356,4 +354,4 @@ namespace RTC
     return m_properties;
   }
 
-};
+};  // namespace RTC

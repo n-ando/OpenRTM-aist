@@ -94,12 +94,12 @@ static const char* default_config[] =
     "manager.modules.C++.manager_cmd",       "rtcd",
     "manager.modules.C++.profile_cmd",       "rtcprof",
 #ifdef WIN32
-    "manager.modules.C++.suffixes",          "dll",
+    "manager.modules.C++.suffixes",           "dll",
 #else
 #ifdef RTM_OS_DARWIN
-    "manager.modules.C++.suffixes",          "dylib",
+    "manager.modules.C++.suffixes",           "dylib",
 #else
-    "manager.modules.C++.suffixes",          "so",
+    "manager.modules.C++.suffixes",           "so",
 #endif
 #endif
     "manager.modules.C++.load_paths",        "",

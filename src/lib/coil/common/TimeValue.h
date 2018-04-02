@@ -271,6 +271,6 @@ namespace coil
     long int m_sec;
     long int m_usec;
   };
-};
+};  // namespace coil
 
 #endif // COIL_TIMEVALUE_H

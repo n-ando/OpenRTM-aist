@@ -224,7 +224,8 @@ namespace RTC
      */
     struct publishInterfaceProfileFunc
     {
-      explicit publishInterfaceProfileFunc(SDOPackage::NVList& prop) : m_prop(prop) {}
+      explicit publishInterfaceProfileFunc(SDOPackage::NVList& prop)
+             : m_prop(prop) {}
       void operator()(InPortConsumer* consumer)
       {
         consumer->publishInterfaceProfile(m_prop);
@@ -241,7 +242,8 @@ namespace RTC
      */
     struct subscribeInterfaceFunc
     {
-      explicit subscribeInterfaceFunc(SDOPackage::NVList& prop) : m_prop(prop) {}
+      explicit subscribeInterfaceFunc(SDOPackage::NVList& prop)
+             : m_prop(prop) {}
       bool operator()(InPortConsumer* consumer)
       {
         return consumer->subscribeInterface(m_prop);

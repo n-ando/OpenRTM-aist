@@ -1,7 +1,7 @@
 // -*- C++ -*-
 /*!
  * @file  DummyModule1.h
- * @brief 
+ * @brief
  * @date  $Date: 2008-02-29 04:55:01 $
  *
  * $Id: DummyModule1.h 849 2008-09-25 11:20:51Z n-ando $
@@ -37,7 +37,7 @@ class DummyModule1
   virtual ~DummyModule1();
 
   // The initialize action (on CREATED->ALIVE transition)
-  // formaer rtc_init_entry() 
+  // formaer rtc_init_entry()
 //  virtual RTC::ReturnCode_t onInitialize();
 
   // The finalize action (on ALIVE->END transition)
@@ -75,7 +75,7 @@ class DummyModule1
   // The reset action that is invoked resetting
   // This is same but different the former rtc_init_entry()
   // virtual RTC::ReturnCode_t onReset(RTC::UniqueId ec_id);
-  
+
   // The state update action that is invoked after onExecute() action
   // no corresponding operation exists in OpenRTm-aist-0.2.0
   // virtual RTC::ReturnCode_t onStateUpdate(RTC::UniqueId ec_id);
@@ -88,7 +88,7 @@ class DummyModule1
  protected:
   // DataInPort declaration
   // <rtc-template block="inport_declare">
-  
+
   // </rtc-template>
 
 
@@ -96,22 +96,22 @@ class DummyModule1
   // <rtc-template block="outport_declare">
 //  TimedLong m_out;
 //  OutPort<TimedLong> m_outOut;
-  
+
   // </rtc-template>
 
   // CORBA Port declaration
   // <rtc-template block="corbaport_declare">
-  
+
   // </rtc-template>
 
   // Service declaration
   // <rtc-template block="service_declare">
-  
+
   // </rtc-template>
 
   // Consumer declaration
   // <rtc-template block="consumer_declare">
-  
+
   // </rtc-template>
 
  private:

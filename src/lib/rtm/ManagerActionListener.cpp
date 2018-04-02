@@ -520,4 +520,4 @@ namespace RTM
     LISTENERHOLDER_CALLBACK(preServiceFinalize, (service_name, service));
   }
   
-};
+};  // namespace RTM

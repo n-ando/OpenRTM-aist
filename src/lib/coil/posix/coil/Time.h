@@ -192,6 +192,6 @@ namespace coil
   }
 
 
-};
+};  // namespace coil
 
 #endif // COIL_TIME_H

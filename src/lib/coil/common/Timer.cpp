@@ -178,4 +178,4 @@ namespace coil
       }
     return false;
   }
-}; // namespace RTC
+};  // namespace coil

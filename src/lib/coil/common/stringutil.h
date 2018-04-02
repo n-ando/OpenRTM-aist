@@ -38,7 +38,7 @@
 namespace std
 {
   typedef basic_string<wchar_t> wstring;
-}
+}  // namespace std
 #endif
 
 namespace coil

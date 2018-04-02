@@ -333,6 +333,6 @@ namespace coil
     std::vector<Task> m_tasks;
     Mutex  m_taskMutex;
   };
-};
+};  // namespace coil
 #endif // Timer_h
 

@@ -3341,7 +3341,7 @@ namespace RTC
      *
      * @endif
      */
-    void setWriteAll(bool write=true, bool completion=false);
+    void setWriteAll(bool write = true, bool completion = false);
 
 
     /*!
@@ -5569,7 +5569,8 @@ namespace RTC
         if (!::CORBA::is_nil(ec) && !ec->_non_existent())
           {
 
-            ec->deactivate_component(RTC::LightweightRTObject::_duplicate(m_comp));
+            ec->deactivate_component(
+                            RTC::LightweightRTObject::_duplicate(m_comp));
             ec->stop();
           }
       }

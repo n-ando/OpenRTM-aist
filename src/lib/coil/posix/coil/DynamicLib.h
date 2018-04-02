@@ -287,6 +287,6 @@ namespace coil
     int m_error;
   };
 
-};
+};  // namespace coil
 
 #endif // DynamicLib_h

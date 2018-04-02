@@ -434,4 +434,4 @@ namespace SDOPackage
       }
     return false;
   }
-};
+};  // namespace SDOPackage

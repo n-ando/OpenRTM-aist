@@ -376,7 +376,8 @@ namespace RTC
         return ret;
       }
     long int cycle =
-      static_cast<long int>(static_cast<double>(m_activationTimeout) / static_cast<double>(getPeriod()));
+      static_cast<long int>(static_cast<double>(m_activationTimeout)
+                          / static_cast<double>(getPeriod()));
     RTC_DEBUG(("Timeout is %f [s] (%f [s] in %d times)",
                static_cast<double>(m_activationTimeout), getRate(), cycle));
     // Wating INACTIVE -> ACTIVE
@@ -464,7 +465,8 @@ namespace RTC
         return ret;
       }
     long int cycle =
-      static_cast<long int>(static_cast<double>(m_deactivationTimeout) / static_cast<double>(getPeriod()));
+      static_cast<long int>(static_cast<double>(m_deactivationTimeout)
+                          / static_cast<double>(getPeriod()));
     RTC_DEBUG(("Timeout is %f [s] (%f [s] in %d times)",
                static_cast<double>(m_deactivationTimeout), getRate(), cycle));
     // Wating ACTIVE -> INACTIVE
@@ -551,7 +553,8 @@ namespace RTC
         return ret;
       }
     long int cycle =
-      static_cast<long int>(static_cast<double>(m_resetTimeout) / static_cast<double>(getPeriod()));
+      static_cast<long int>(static_cast<double>(m_resetTimeout)
+                          / static_cast<double>(getPeriod()));
     RTC_DEBUG(("Timeout is %f [s] (%f [s] in %d times)",
                static_cast<double>(m_resetTimeout), getRate(), cycle));
     // Wating ERROR -> INACTIVE
