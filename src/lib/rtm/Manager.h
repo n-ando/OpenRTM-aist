@@ -2088,7 +2088,7 @@ namespace RTC
     {
       explicit InstanceName(RTObject_impl* comp);
       explicit InstanceName(const char* name);
-      explicit InstanceName(const std::string name);
+      explicit InstanceName(const std::string& name);
       bool operator()(RTObject_impl* comp);
       std::string m_name;
     };
