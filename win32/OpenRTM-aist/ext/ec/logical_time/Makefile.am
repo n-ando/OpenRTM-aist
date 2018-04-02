@@ -15,8 +15,5 @@ src:
 	cp -p $(top_srcdir)/src/ext/ec/logical_time/*.cpp .
 	cp -p $(top_srcdir)/src/ext/ec/logical_time/*.h .
 	cp -p $(top_srcdir)/src/ext/ec/logical_time/*.idl .
-	qkc -O- -ms *.cpp
-	qkc -O- -ms *.h
-	qkc -O- -ms *.idl
 
 dist-hook: src

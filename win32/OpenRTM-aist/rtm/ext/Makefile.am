@@ -11,7 +11,6 @@ clean-local:
 
 src:
 	cp -p $(top_srcdir)/src/lib/rtm/ext/*.idl .
-	qkc -O- -ms *.idl
 
 
 dist-hook: src

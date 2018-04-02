@@ -14,8 +14,5 @@ src:
 	cp -p $(top_srcdir)/src/ext/sdo/observer/ComponentObserverConsumer.cpp .
 	cp -p $(top_srcdir)/src/ext/sdo/observer/ComponentObserverConsumer.h .
 	cp -p $(top_srcdir)/src/ext/sdo/observer/*.idl .
-	qkc -O- -ms *.cpp
-	qkc -O- -ms *.h
-	qkc -O- -ms *.idl
 
 dist-hook: src

@@ -14,7 +14,5 @@ src:
 	cp -p $(top_srcdir)/examples/ExtTrigger/*.cpp .
 	cp -p $(top_srcdir)/examples/ExtTrigger/*.h .
 	cp -p $(top_srcdir)/examples/ExtTrigger/rtc.conf .
-	qkc -O- -ms *.cpp
-	qkc -O- -ms *.h
 
 dist-hook: src
