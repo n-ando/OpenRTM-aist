@@ -390,7 +390,7 @@ namespace coil
     class alive_t
     {
     public:
-      alive_t(bool val) : value(val) {}
+      explicit alive_t(bool val) : value(val) {}
       bool value;
       coil::Mutex mutex;
     };
@@ -413,7 +413,7 @@ namespace coil
      */
     struct suspend_t
     {
-      suspend_t(bool sus) : suspend(sus), mutex(), cond(mutex) {}
+      explicit suspend_t(bool sus) : suspend(sus), mutex(), cond(mutex) {}
       bool suspend;
       coil::Mutex mutex;
       coil::Condition<coil::Mutex> cond;

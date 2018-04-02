@@ -629,7 +629,7 @@ namespace RTC
      *
      * @endif
      */
-    ConfigAdmin(coil::Properties& prop);
+    explicit ConfigAdmin(coil::Properties& prop);
     
     /*!
      * @if jp
@@ -1545,7 +1545,7 @@ namespace RTC
     struct find_conf
     {
       std::string m_name;
-      find_conf(const char* name) : m_name(name) {};
+      explicit find_conf(const char* name) : m_name(name) {};
       bool operator()(ConfigBase* conf)
       {
         if (conf == 0) { return false; }

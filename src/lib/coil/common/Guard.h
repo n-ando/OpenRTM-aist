@@ -61,7 +61,7 @@ namespace coil
      *
      * @endif
      */
-    Guard(M& mutex) : m_mutex(mutex)
+    explicit Guard(M& mutex) : m_mutex(mutex)
     {
       m_mutex.lock();
     }

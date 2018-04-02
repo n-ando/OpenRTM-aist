@@ -147,7 +147,7 @@ namespace coil
      * 
      * @endif
      */
-    Properties(std::map<std::string, std::string>& defaults);
+    explicit Properties(std::map<std::string, std::string>& defaults);
     
     /*!
      * @if jp

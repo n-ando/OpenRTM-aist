@@ -587,7 +587,7 @@ namespace RTC
     // Functor to find PortInterfaceProfile by name
     struct if_name
     {
-      if_name(const char* name) :  m_name(name) {};
+      explicit if_name(const char* name) :  m_name(name) {};
       bool operator()(const PortInterfaceProfile& p)
       {
 	std::string name(p.instance_name);
@@ -599,7 +599,7 @@ namespace RTC
     // Functor to find ConnectorProfile by name
     struct conn_name
     {
-      conn_name(const char* name) :  m_name(name) {};
+      explicit conn_name(const char* name) :  m_name(name) {};
       bool operator()(const ConnectorProfile& c)
       {
 	std::string name(c.name);
@@ -611,7 +611,7 @@ namespace RTC
     // Functor to find ConnectorProfile by id
     struct conn_id
     {
-      conn_id(const char* id) :  m_id(id) {};
+      explicit conn_id(const char* id) :  m_id(id) {};
       bool operator()(const ConnectorProfile& c)
       {
 	std::string id(c.connector_id);

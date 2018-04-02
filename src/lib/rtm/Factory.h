@@ -137,7 +137,7 @@ namespace RTC
      *
      * @endif
      */
-    FactoryBase(const coil::Properties& profile);
+    explicit FactoryBase(const coil::Properties& profile);
     
     /*!
      * @if jp

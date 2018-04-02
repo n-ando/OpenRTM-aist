@@ -96,7 +96,7 @@ namespace RTC
      *
      * @endif
      */
-    ModuleManager(coil::Properties& prop);
+    explicit ModuleManager(coil::Properties& prop);
     
     /*!
      * @if jp
@@ -120,7 +120,7 @@ namespace RTC
      */
     struct Error
     {
-      Error(const std::string& _reason)
+      explicit Error(const std::string& _reason)
 	: reason(_reason) {}
       std::string reason;
     };
@@ -135,7 +135,7 @@ namespace RTC
      */
     struct NotFound
     {
-      NotFound(const std::string& _name)
+      explicit NotFound(const std::string& _name)
 	: name(_name) {}
       std::string name;
     };
@@ -151,7 +151,7 @@ namespace RTC
     struct FileNotFound
       : public NotFound
     {
-      FileNotFound(const std::string& _name)
+      explicit FileNotFound(const std::string& _name)
 	: NotFound(_name) {}
     };
     
@@ -166,7 +166,7 @@ namespace RTC
     struct ModuleNotFound
       : public NotFound
     {
-      ModuleNotFound(const std::string& _name)
+      explicit ModuleNotFound(const std::string& _name)
 	: NotFound(_name) {}
     };
     
@@ -181,7 +181,7 @@ namespace RTC
     struct SymbolNotFound
       : public NotFound
     {
-      SymbolNotFound(const std::string& _name)
+      explicit SymbolNotFound(const std::string& _name)
 	: NotFound(_name) {}
     };
     
@@ -196,7 +196,7 @@ namespace RTC
     struct NotAllowedOperation
       : public Error
     {
-      NotAllowedOperation(const std::string& _reason)
+      explicit NotAllowedOperation(const std::string& _reason)
 	: Error(_reason) {}
     };
     
@@ -211,7 +211,7 @@ namespace RTC
     struct InvalidArguments
       : public Error
     {
-      InvalidArguments(const std::string& _reason)
+      explicit InvalidArguments(const std::string& _reason)
 	: Error(_reason) {}
     };
     
@@ -226,7 +226,7 @@ namespace RTC
     struct InvalidOperation
       : public Error
     {
-      InvalidOperation(const std::string& _reason)
+      explicit InvalidOperation(const std::string& _reason)
 	: Error(_reason) {}
     };
     typedef void (*ModuleInitFunc)(Manager*);
@@ -688,8 +688,8 @@ namespace RTC
     {
       std::string m_filepath;
     public:
-      DllPred(const char* filepath) : m_filepath(filepath) {}
-      DllPred(const DLLEntity* dll) : m_filepath(dll->properties["file_path"]) {}
+      explicit DllPred(const char* filepath) : m_filepath(filepath) {}
+      explicit DllPred(const DLLEntity* dll) : m_filepath(dll->properties["file_path"]) {}
       bool operator()(DLLEntity* dllentity)
       {
         return m_filepath == dllentity->properties.getProperty("file_path");

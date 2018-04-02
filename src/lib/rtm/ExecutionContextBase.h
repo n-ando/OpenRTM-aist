@@ -382,7 +382,7 @@ namespace RTC
      *
      * @endif
      */
-    ExecutionContextBase(const char* name);
+    explicit ExecutionContextBase(const char* name);
 
     /*!
      * @if jp

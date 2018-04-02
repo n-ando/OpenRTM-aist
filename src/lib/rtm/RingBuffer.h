@@ -115,7 +115,7 @@ namespace RTC
      * 
      * @endif
      */
-    RingBuffer(long int length = RINGBUFFER_DEFAULT_LENGTH)
+    explicit RingBuffer(long int length = RINGBUFFER_DEFAULT_LENGTH)
       : m_overwrite(true), m_readback(true),
         m_timedwrite(false), m_timedread(false),
         m_wtimeout(1, 0), m_rtimeout(1, 0),

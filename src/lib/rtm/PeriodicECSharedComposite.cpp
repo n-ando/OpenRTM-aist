@@ -575,7 +575,7 @@ namespace RTC
     : public OnSetConfigurationSetCallback
   {
   public:
-    setCallback(::SDOPackage::PeriodicECOrganization* org) : m_org(org) {}
+    explicit setCallback(::SDOPackage::PeriodicECOrganization* org) : m_org(org) {}
     virtual ~setCallback(){};
     virtual void operator()(const coil::Properties& config_set)
     {
@@ -590,7 +590,7 @@ namespace RTC
     : public OnAddConfigurationAddCallback
   {
   public:
-    addCallback(::SDOPackage::PeriodicECOrganization* org) : m_org(org) {}
+    explicit addCallback(::SDOPackage::PeriodicECOrganization* org) : m_org(org) {}
     virtual ~addCallback(){};
     virtual void operator()(const coil::Properties& config_set)
     {

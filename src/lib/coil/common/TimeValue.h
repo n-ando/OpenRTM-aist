@@ -86,7 +86,7 @@ namespace coil
      * 
      * @endif
      */
-    TimeValue(double timeval);
+    explicit TimeValue(double timeval);
 
     /*!
      * @if jp

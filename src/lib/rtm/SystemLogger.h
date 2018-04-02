@@ -131,7 +131,7 @@ namespace RTC
      *
      * @endif
      */
-    Logger(const char* name = "");
+    explicit Logger(const char* name = "");
     /*!
      * @if jp
      * @brief コンストラクタ
@@ -150,7 +150,7 @@ namespace RTC
      *
      * @endif
      */
-    Logger(LogStreamBuf* streambuf);
+    explicit Logger(LogStreamBuf* streambuf);
     /*!
      * @if jp
      *

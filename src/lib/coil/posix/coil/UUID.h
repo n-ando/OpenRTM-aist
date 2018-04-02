@@ -30,7 +30,7 @@ namespace coil
   {
   public:
     UUID();
-    UUID(const uuid_t& uuid);
+    explicit UUID(const uuid_t& uuid);
     ~UUID();
     const char* to_string();
   private:

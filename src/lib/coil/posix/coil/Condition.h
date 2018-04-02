@@ -60,7 +60,7 @@ namespace coil
      *
      * @endif
      */
-    Condition(M& mutex)
+    explicit Condition(M& mutex)
       : m_mutex(mutex)
     {
       ::pthread_cond_init(&m_cond, 0);
@@ -191,7 +191,7 @@ namespace coil
     }
 
   private:
-    Condition(const M&);
+    explicit Condition(const M&);
     Condition& operator=(const M &);
     pthread_cond_t m_cond;
     M& m_mutex;

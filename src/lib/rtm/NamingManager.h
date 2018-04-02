@@ -648,7 +648,7 @@ namespace RTC
      *
      * @endif
      */
-    NamingManager(Manager* manager);
+    explicit NamingManager(Manager* manager);
     
     /*!
      * @if jp
