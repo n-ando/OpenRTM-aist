@@ -20,6 +20,8 @@
 #include <coil/ClockManager.h>
 #include <coil/Guard.h>
 
+#include <string>
+
 namespace coil
 {
   //============================================================

@@ -27,8 +27,9 @@
 #include <rtm/idl/DataPortSkel.h>
 #include <rtm/ConnectorListener.h>
 
-#include <iostream>
 #include <assert.h>
+#include <iostream>
+#include <string>
 
 namespace RTC
 {

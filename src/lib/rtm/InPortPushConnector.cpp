@@ -21,6 +21,8 @@
 #include <rtm/InPortProvider.h>
 #include <rtm/ConnectorListener.h>
 
+#include <string>
+
 namespace RTC
 {
   /*!

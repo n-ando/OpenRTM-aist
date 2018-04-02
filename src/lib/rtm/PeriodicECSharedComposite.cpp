@@ -19,9 +19,11 @@
 #include <rtm/RTC.h>
 #include <rtm/PeriodicECSharedComposite.h>
 #include <rtm/Manager.h>
-#include <string>
+
+#include <algorithm>
 #include <iostream>
 #include <iterator>
+#include <string>
 
 
 static const char* periodicecsharedcomposite_spec[] =
