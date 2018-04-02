@@ -57,8 +57,10 @@
 #include <ext/sdo/observer/ComponentObserverConsumer.h>
 #endif
 
-void FactoryInit()
+namespace RTM
 {
+  void FactoryInit()
+  {
     // Logstream
     LogstreamFileInit();
 
@@ -100,5 +102,5 @@ void FactoryInit()
 #ifdef ENABLE_OBSERVER
     ComponentObserverConsumerInit();
 #endif
-}
+  }
 }; // namespace RTM

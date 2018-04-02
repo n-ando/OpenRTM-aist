@@ -153,7 +153,7 @@ namespace RTC
         tmp = const_cast<coil::Properties*>(&prop)->getNode(propkey.c_str());
         NVUtil::copyFromProperties(prof.properties, tmp);
         // TODO: return value must be concerned
-        if (svc->init(rtobj, prof) != true)
+        if (svc->init(m_rtobj, prof) != true)
           {
             svc->finalize();
             delete svc;
