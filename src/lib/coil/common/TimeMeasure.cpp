@@ -18,8 +18,8 @@
  */
 
 #include <coil/Time.h>
-#include <math.h>
 #include <coil/TimeMeasure.h>
+#include <math.h>
 
 //#define RDTSC(X) __asm__ __volatile__ ("rdtsc" : "=A" (X))
 //#define NSEC_PER_SEC 1000000000

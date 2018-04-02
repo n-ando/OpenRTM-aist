@@ -24,9 +24,9 @@
 
 #include <sys/time.h>
 #include <sys/types.h>
+#include <unistd.h>
 #include <time.h>
 #include <iostream>
-#include <unistd.h>
 
 namespace coil
 {

@@ -59,7 +59,7 @@ namespace coil
     char buf[37];
   public:
     UUID();
-    UUID(uuid_t*);
+    explicit UUID(uuid_t*);
     const char* to_string();
   };
 
@@ -71,7 +71,7 @@ namespace coil
     void init();
     UUID* generateUUID(int n, int h);
   };
-};
+};  // namespace coil
 #endif
 
 #endif // COIL_UUID_H
