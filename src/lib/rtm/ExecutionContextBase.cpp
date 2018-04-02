@@ -347,7 +347,10 @@ namespace RTC
         return ret;
       }
     RTC_impl::RTObjectStateMachine* rtobj;
-    ret = m_worker.activateComponent(comp, rtobj);  // Actual activateComponent()
+
+    // Actual activateComponent()
+    ret = m_worker.activateComponent(comp, rtobj);
+
     if (ret != RTC::RTC_OK) { return ret; }
     if (!m_syncActivation)  // Asynchronous activation mode
       {

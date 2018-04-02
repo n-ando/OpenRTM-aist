@@ -185,7 +185,8 @@ namespace SDOPackage
     RTC_TRACE(("set_organization_property_value(name=%s)", name));
     if (std::string(name).empty())
       {
-        throw InvalidParameter("set_organization_property_value(): Enpty name.");
+        throw InvalidParameter(
+                        "set_organization_property_value(): Enpty name.");
       }
 
     CORBA::Long index;

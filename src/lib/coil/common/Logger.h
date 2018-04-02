@@ -320,7 +320,7 @@ namespace coil
      * @endif
      */
 
-    virtual int overflow (int c = traits_type::eof())
+    virtual int overflow(int c = traits_type::eof())
     {
       Guard guard(m_mutex);
 //      if (traits_type::eq_int_type(c, traits_type::eof()))

@@ -68,7 +68,7 @@
 #endif
 
 //static sig_atomic_t g_mgrActive = true;
-extern "C" void handler (int)
+extern "C" void handler(int)
 {
   ::RTC::Manager::instance().terminate();
 }
@@ -2084,10 +2084,12 @@ std::vector<coil::Properties> Manager::getLoadableModules()
       {
         try {
           PortableServer::RefCountServantBase* servant;
-          servant = dynamic_cast<PortableServer::RefCountServantBase*>(m_ecs[i]);
+          servant =
+                  dynamic_cast<PortableServer::RefCountServantBase*>(m_ecs[i]);
           if (servant == NULL)
             {
-              RTC_ERROR(("Invalid dynamic cast. EC->RefCountServantBase failed."));
+              RTC_ERROR(
+                  ("Invalid dynamic cast. EC->RefCountServantBase failed."));
               return;
             }
           PortableServer::ObjectId_var oid = m_pPOA->servant_to_id(servant);
@@ -2420,7 +2422,10 @@ std::vector<coil::Properties> Manager::getLoadableModules()
                 else if (c == 'h')  str += m_config["os.hostname"];
                 else if (c == 'M')  str += m_config["manager.name"];
                 else if (c == 'p')  str += m_config["manager.pid"];
-                else str.push_back(c);
+                else
+                  {
+                    str.push_back(c);
+                  }
               }
             else
               {

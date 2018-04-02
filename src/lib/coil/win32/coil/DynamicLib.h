@@ -246,7 +246,7 @@ namespace coil
      *
      * @endif
      */
-    void *symbol (const char* symbol_name);
+    void *symbol(const char* symbol_name);
 
     /*!
      * @if jp

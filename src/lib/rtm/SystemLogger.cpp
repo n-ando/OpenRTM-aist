@@ -23,6 +23,8 @@
 #define snprintf _snprintf
 #endif
 
+#define MAXSIZE 256
+
 namespace RTC
 {
   const char* Logger::m_levelString[] =
@@ -150,15 +152,15 @@ namespace RTC
    */
   std::string Logger::getDate(void)
   {
-    const int maxsize = 256;
-    char buf[maxsize];
+    char buf[MAXSIZE];
     coil::TimeValue tm(m_clock->gettime());
 
     time_t timer;
     struct tm* date;
+    struct tm datearg;
 
     timer = tm.sec();
-    date = gmtime_r(&timer, date);
+    date = gmtime_r(&timer, &datearg);
 
     strftime(buf, sizeof(buf), m_dateFormat.c_str(), date);
     std::string fmt(buf);
@@ -167,9 +169,11 @@ namespace RTC
       {
         char msec[4];
 #ifdef WIN32
-        _snprintf(msec, 4, "%03d", static_cast<int>(tm.usec() / 1000));
+        _snprintf(msec, sizeof(msec), "%03d",
+                        static_cast<int>(tm.usec() / 1000));
 #else
-        snprintf(msec, 4, "%03d", static_cast<int>(tm.usec() / 1000));
+        snprintf(msec, sizeof(msec), "%03d",
+                        static_cast<int>(tm.usec() / 1000));
 #endif
         coil::replaceString(fmt, "#m#", msec);
       }
@@ -177,10 +181,10 @@ namespace RTC
       {
         char usec[4];
 #ifdef WIN32
-        _snprintf(usec, 4, "%03d",
+        _snprintf(usec, sizeof(usec), "%03d",
                  static_cast<int>(tm.usec() - ((tm.usec() / 1000) * 1000)));
 #else
-        snprintf(usec, 4, "%03d",
+        snprintf(usec, sizeof(usec), "%03d",
                  static_cast<int>(tm.usec() - ((tm.usec() / 1000) * 1000)));
 #endif
         coil::replaceString(fmt, "#u#", usec);

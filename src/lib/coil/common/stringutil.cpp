@@ -161,7 +161,10 @@ namespace coil
       else if (c == '\\')  str += "\\\\";
       //    else if (c == '\"')  str += "\\\"";
       //    else if (c == '\'')  str += "\\\'";
-      else str.push_back(c);
+      else
+        {
+          str.push_back(c);
+        }
     }
     std::string str;
   };
@@ -209,7 +212,10 @@ namespace coil
               else if (c == 'r')  str.push_back('\r');
               else if (c == '\"') str.push_back('\"');
               else if (c == '\'') str.push_back('\'');
-              else str.push_back(c);
+              else
+                {
+                  str.push_back(c);
+                }
             }
           else
             {
