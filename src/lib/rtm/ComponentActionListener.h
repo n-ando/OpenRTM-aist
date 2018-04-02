@@ -145,6 +145,8 @@ namespace RTC
      */
     static const char* toString(PreComponentActionListenerType type)
     {
+      if (type < PRE_COMPONENT_ACTION_LISTENER_NUM) 
+        { 
       static const char* typeString[] =
         {
           "PRE_ON_INITIALIZE",
@@ -161,7 +163,8 @@ namespace RTC
           "PRE_ON_RATE_CHANGED",
           "PRE_COMPONENT_ACTION_LISTENER_NUM"
         };
-      if (type < PRE_COMPONENT_ACTION_LISTENER_NUM) { return typeString[type]; }
+                return typeString[type]; 
+        }
       return "";
     }
 
@@ -308,6 +311,8 @@ namespace RTC
      */
     static const char* toString(PostComponentActionListenerType type)
     {
+      if (type < POST_COMPONENT_ACTION_LISTENER_NUM)
+        {
       static const char* typeString[] =
         {
           "POST_ON_INITIALIZE",
@@ -324,8 +329,6 @@ namespace RTC
           "POST_ON_RATE_CHANGED",
           "POST_COMPONENT_ACTION_LISTENER_NUM"
         };
-      if (type < POST_COMPONENT_ACTION_LISTENER_NUM)
-        {
           return typeString[type];
         }
       return "";
@@ -428,13 +431,16 @@ namespace RTC
      */
     static const char* toString(PortActionListenerType type)
     {
+      if (type < PORT_ACTION_LISTENER_NUM)
+        { 
       static const char* typeString[] =
         {
           "ADD_PORT",
           "REMOVE_PORT",
           "PORT_ACTION_LISTENER_NUM"
         };
-      if (type < PORT_ACTION_LISTENER_NUM) { return typeString[type]; }
+          return typeString[type];
+        }
       return "";
     }
 
@@ -535,13 +541,16 @@ namespace RTC
      */
     static const char* toString(ExecutionContextActionListenerType type)
     {
+      if (type < EC_ACTION_LISTENER_NUM)
+        { 
       static const char* typeString[] =
         {
           "ATTACH_EC",
           "DETACH_ECT",
           "EC_ACTION_LISTENER_NUM"
         };
-      if (type < EC_ACTION_LISTENER_NUM) { return typeString[type]; }
+          return typeString[type];
+        }
       return "";
     }
 

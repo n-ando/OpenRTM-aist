@@ -339,11 +339,11 @@ struct timezone {
 	  FILETIME ftime;
 	  LARGE_INTEGER lint;
 	  __int64 val64;
-	  int bias(0);
 
 	// tv,tz -> ftime
 	if (tv != NULL)
 	{
+	   int bias(0);
 		if (tz != NULL)
 		{
 			bias = tz->tz_minuteswest;

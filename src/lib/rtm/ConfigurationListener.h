@@ -97,13 +97,13 @@ namespace RTC
      */
     static const char* toString(ConfigurationParamListenerType type)
     {
-      static const char* typeString[] =
-        {
-          "ON_UPDATE_CONFIG_PARAM",
-          "CONFIG_PARAM_LISTENER_NUM"
-        };
       if (type < CONFIG_PARAM_LISTENER_NUM)
         {
+          static const char* typeString[] =
+          {
+            "ON_UPDATE_CONFIG_PARAM",
+            "CONFIG_PARAM_LISTENER_NUM"
+          };
           return typeString[type];
         }
       return "";
@@ -214,13 +214,16 @@ namespace RTC
      */
     static const char* toString(ConfigurationSetListenerType type)
     {
-      static const char* typeString[] =
-        {
-          "ON_SET_CONFIG_SET",
-          "ON_ADD_CONFIG_SET",
-          "CONFIG_SET_LISTENER_NUM"
-        };
-      if (type < CONFIG_SET_LISTENER_NUM) { return typeString[type]; }
+      if (type < CONFIG_SET_LISTENER_NUM)
+        { 
+          static const char* typeString[] =
+          {
+            "ON_SET_CONFIG_SET",
+            "ON_ADD_CONFIG_SET",
+            "CONFIG_SET_LISTENER_NUM"
+          };
+          return typeString[type];
+        }
       return "";
     }
 
@@ -324,14 +327,17 @@ namespace RTC
      */
     static const char* toString(ConfigurationSetNameListenerType type)
     {
-      static const char* typeString[] =
-        {
-          "ON_UPDATE_CONFIG_SET",
-          "ON_REMOVE_CONFIG_SET",
-          "ON_ACTIVATE_CONFIG_SET",
-          "CONFIG_SET_NAME_LISTENER_NUM"
-        };
-      if (type < CONFIG_SET_NAME_LISTENER_NUM) { return typeString[type]; }
+      if (type < CONFIG_SET_NAME_LISTENER_NUM)
+        { 
+          static const char* typeString[] =
+          {
+            "ON_UPDATE_CONFIG_SET",
+            "ON_REMOVE_CONFIG_SET",
+            "ON_ACTIVATE_CONFIG_SET",
+            "CONFIG_SET_NAME_LISTENER_NUM"
+          };
+          return typeString[type];
+        }
       return "";
     }
 
