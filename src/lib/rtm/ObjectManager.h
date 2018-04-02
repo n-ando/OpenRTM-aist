@@ -121,11 +121,11 @@ public:
     Guard guard(m_objects._mutex);
     
     it = std::find_if(m_objects._obj.begin(), m_objects._obj.end(),
-		      Predicate(obj));
+                      Predicate(obj));
     if (it == m_objects._obj.end())
       {
-	m_objects._obj.push_back(obj);
-	return true;
+        m_objects._obj.push_back(obj);
+        return true;
       }
     return false;
   }
@@ -161,12 +161,12 @@ public:
     Guard guard(m_objects._mutex);
     
     it = std::find_if(m_objects._obj.begin(), m_objects._obj.end(),
-		      Predicate(id));
+                      Predicate(id));
     if (it != m_objects._obj.end())
       {
-	Object* obj(*it);
-	m_objects._obj.erase(it);
-	return obj;
+        Object* obj(*it);
+        m_objects._obj.erase(it);
+        return obj;
       }
     return NULL;;
   }
@@ -204,10 +204,10 @@ public:
     ObjectVectorConstItr it;
     Guard guard(m_objects._mutex);
     it = std::find_if(m_objects._obj.begin(), m_objects._obj.end(),
-		      Predicate(id));
+                      Predicate(id));
     if (it != m_objects._obj.end())
       {
-	return *it;
+        return *it;
       }
     return NULL;
   }

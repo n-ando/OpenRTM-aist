@@ -133,13 +133,13 @@ namespace coil
 
       // DLC pattern
       if (!m_instance)
-      {
-        coil::Guard<coil::Mutex> guard(m_mutex);
-	if (!m_instance)
-	  {
-	    m_instance = new SingletonClass();
-	  }
-      }
+        {
+          coil::Guard<coil::Mutex> guard(m_mutex);
+          if (!m_instance)
+            {
+              m_instance = new SingletonClass();
+            }
+        }
       return *m_instance;
     }
 

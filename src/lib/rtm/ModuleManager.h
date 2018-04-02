@@ -121,7 +121,7 @@ namespace RTC
     struct Error
     {
       explicit Error(const std::string& _reason)
-	: reason(_reason) {}
+        : reason(_reason) {}
       std::string reason;
     };
     
@@ -136,7 +136,7 @@ namespace RTC
     struct NotFound
     {
       explicit NotFound(const std::string& _name)
-	: name(_name) {}
+        : name(_name) {}
       std::string name;
     };
     
@@ -152,7 +152,7 @@ namespace RTC
       : public NotFound
     {
       explicit FileNotFound(const std::string& _name)
-	: NotFound(_name) {}
+        : NotFound(_name) {}
     };
     
     /*!
@@ -167,7 +167,7 @@ namespace RTC
       : public NotFound
     {
       explicit ModuleNotFound(const std::string& _name)
-	: NotFound(_name) {}
+        : NotFound(_name) {}
     };
     
     /*!
@@ -182,7 +182,7 @@ namespace RTC
       : public NotFound
     {
       explicit SymbolNotFound(const std::string& _name)
-	: NotFound(_name) {}
+        : NotFound(_name) {}
     };
     
     /*!
@@ -197,7 +197,7 @@ namespace RTC
       : public Error
     {
       explicit NotAllowedOperation(const std::string& _reason)
-	: Error(_reason) {}
+        : Error(_reason) {}
     };
     
     /*!
@@ -212,7 +212,7 @@ namespace RTC
       : public Error
     {
       explicit InvalidArguments(const std::string& _reason)
-	: Error(_reason) {}
+        : Error(_reason) {}
     };
     
     /*!
@@ -227,7 +227,7 @@ namespace RTC
       : public Error
     {
       explicit InvalidOperation(const std::string& _reason)
-	: Error(_reason) {}
+        : Error(_reason) {}
     };
     typedef void (*ModuleInitFunc)(Manager*);
     
@@ -551,7 +551,7 @@ namespace RTC
      * @endif
      */
     std::string findFile(const std::string& fname,
-			 const std::vector<std::string>& load_path);
+                         const std::vector<std::string>& load_path);
     
     /*!
      * @if jp

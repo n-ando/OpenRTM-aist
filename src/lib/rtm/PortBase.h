@@ -1831,7 +1831,7 @@ namespace RTC
      * @endif
      */
     bool appendInterface(const char* name, const char* type_name,
-			 PortInterfacePolarity pol);
+                         PortInterfacePolarity pol);
     
     /*!
      * @if jp
@@ -1891,7 +1891,7 @@ namespace RTC
     void addProperty(const char* key, ValueType value)
     {
       CORBA_SeqUtil::push_back(m_profile.properties,
-			       NVUtil::newNV(key, value));
+                               NVUtil::newNV(key, value));
     }
 
     /*!
@@ -2249,7 +2249,7 @@ namespace RTC
       explicit find_conn_id(const char* id) : m_id(id) {};
       bool operator()(const ConnectorProfile& cprof)
       {
-	return m_id == std::string(cprof.connector_id);
+        return m_id == std::string(cprof.connector_id);
       }
       std::string m_id;
     };  // struct find_conn_id
@@ -2272,7 +2272,7 @@ namespace RTC
 #else
       bool operator()(PortService_ptr port_ref)
       {
-	return m_port->_is_equivalent(port_ref);
+        return m_port->_is_equivalent(port_ref);
       }
 #endif
       PortService_ptr m_port;
@@ -2288,13 +2288,13 @@ namespace RTC
     struct find_interface
     {
       find_interface(const char* name, PortInterfacePolarity pol)
-	: m_name(name), m_pol(pol)
+        : m_name(name), m_pol(pol)
       {}
       
       bool operator()(const PortInterfaceProfile& prof)
       {
-	CORBA::String_var name(CORBA::string_dup(prof.instance_name));
-	return ((m_name == (const char *)name) && (m_pol == prof.polarity));
+        CORBA::String_var name(CORBA::string_dup(prof.instance_name));
+        return ((m_name == (const char *)name) && (m_pol == prof.polarity));
       }
       std::string m_name;
       PortInterfacePolarity m_pol;

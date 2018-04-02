@@ -94,7 +94,7 @@ public:
  * @endif
  */
 template <class ListenerClass,
-	  class CallbackFunc = void (ListenerClass::*)()>
+          class CallbackFunc = void (ListenerClass::*)()>
 class ListenerObject
   : public ListenerBase
 {

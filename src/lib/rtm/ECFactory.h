@@ -246,8 +246,8 @@ namespace RTC
      * @endif
      */
     ECFactoryCXX(const char* name,
-		 ECNewFunc new_func,
-		 ECDeleteFunc delete_func);
+                 ECNewFunc new_func,
+                 ECDeleteFunc delete_func);
     
     /*!
      * @if jp

@@ -55,15 +55,15 @@ namespace coil
   {
     cv->waiters_count_ = 0;
     cv->was_broadcast_ = 0;
-	cv->sema_ = ::CreateSemaphore (NULL,       // no security
+    cv->sema_ = ::CreateSemaphore (NULL,       // no security
                                   0,          // initially 0
                                   0x7fffffff, // max count
                                   NULL);      // unnamed 
-	cv->waiters_done_ = ::CreateEvent (NULL,  // no security
+    cv->waiters_done_ = ::CreateEvent (NULL,  // no security
                                      FALSE, // auto-reset
                                      FALSE, // non-signaled initially
                                      NULL); // unnamed
-	return 0;
+    return 0;
   }
 
   /*!
@@ -185,8 +185,8 @@ namespace coil
      */
     bool wait()
     {
-	  return 0 == pthread_cond_wait(&m_cond, &m_mutex, INFINITE);
-	}
+      return 0 == pthread_cond_wait(&m_cond, &m_mutex, INFINITE);
+    }
 
     /*!
      * @if jp
@@ -331,7 +331,7 @@ namespace coil
 //    std::cout << "Before ReleaseSemaphore(1)" << std::endl << std::flush ; 
       ReleaseSemaphore (cv->sema_, 1, 0);
 //    std::cout << "After ReleaseSemaphore(1)" << std::endl << std::flush ; 
-	return 0;
+    return 0;
   }
 
     /*!
@@ -385,7 +385,7 @@ namespace coil
     }
     else
     cv->waiters_count_lock_.unlock();
-	return 0;
+    return 0;
   }
 
     explicit Condition(const Mutex&);

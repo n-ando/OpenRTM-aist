@@ -551,8 +551,8 @@ namespace RTC
      * @endif
      */
     bool registerFactory(coil::Properties& profile,
-			 RtcNewFunc new_func,
-			 RtcDeleteFunc delete_func);
+                         RtcNewFunc new_func,
+                         RtcDeleteFunc delete_func);
 
     /*!
      * @if jp
@@ -600,8 +600,8 @@ namespace RTC
      * @endif
      */
     bool registerECFactory(const char* name,
-			   ECNewFunc new_func,
-			   ECDeleteFunc delete_func);
+                           ECNewFunc new_func,
+                           ECDeleteFunc delete_func);
     
     /*!
      * @if jp
@@ -1923,7 +1923,7 @@ namespace RTC
      * @endif
      */
     std::string formatString(const char* naming_format,
-			     coil::Properties& prop);
+                             coil::Properties& prop);
 
     /*!
      * @if jp
@@ -2123,7 +2123,7 @@ namespace RTC
       {
       }
       explicit FactoryPredicate(FactoryBase* factory)
-	: m_vendor(factory->profile()["vendor"]),
+        : m_vendor(factory->profile()["vendor"]),
           m_category(factory->profile()["category"]),
           m_impleid(factory->profile()["implementation_id"]),
           m_version(factory->profile()["version"])
@@ -2186,7 +2186,7 @@ namespace RTC
      * @endif
      */
     typedef ObjectManager<const coil::Properties, FactoryBase,
-			  FactoryPredicate> FactoryManager;
+                          FactoryPredicate> FactoryManager;
 
     /*!
      * @if jp
@@ -2205,16 +2205,16 @@ namespace RTC
     {
       explicit ECFactoryPredicate(const char* name) : m_name(name){};
       explicit ECFactoryPredicate(ECFactoryBase* factory)
-	: m_name(factory->name()) {};
+        : m_name(factory->name()) {};
       bool operator()(ECFactoryBase* factory)
       {
-	return m_name == factory->name();
+        return m_name == factory->name();
       }
       std::string m_name;
     };
     typedef ObjectManager<const char*,
-			  ECFactoryBase,
-			  ECFactoryPredicate> ECFactoryManager;
+                          ECFactoryBase,
+                          ECFactoryPredicate> ECFactoryManager;
     
     /*!
      * @if jp
@@ -2239,7 +2239,7 @@ namespace RTC
     {
       void operator()(FactoryBase* f)
       {
-	modlist.push_back(f->profile().getProperty("implementation_id"));
+        modlist.push_back(f->profile().getProperty("implementation_id"));
       }
       std::vector<std::string> modlist;
     };
@@ -2285,7 +2285,7 @@ namespace RTC
        */
       explicit OrbRunner(CORBA::ORB_ptr orb) : m_pORB(orb)
       {
-	open(0);
+        open(0);
       };
       
       /*!
@@ -2311,8 +2311,8 @@ namespace RTC
        */
       virtual int open(void *args)
       {
-	activate();
-	return 0;
+        activate();
+        return 0;
       }
       
       /*!
@@ -2334,9 +2334,9 @@ namespace RTC
        */
       virtual int svc(void)
       {
-	m_pORB->run();
-//	Manager::instance().shutdown();
-	return 0;
+        m_pORB->run();
+//        Manager::instance().shutdown();
+        return 0;
       }
       
       /*!
@@ -2362,7 +2362,7 @@ namespace RTC
        */
       virtual int close(unsigned long flags)
       {
-	return 0;
+        return 0;
       }
     private:
       CORBA::ORB_ptr m_pORB;
@@ -2436,7 +2436,7 @@ namespace RTC
        */
       void terminate()
       {
-	open(0);
+        open(0);
       }
       
       /*!
@@ -2462,8 +2462,8 @@ namespace RTC
        */
       virtual int open(void *args)
       {
-	activate();
-	return 0;
+        activate();
+        return 0;
       }
       
       /*!
@@ -2485,8 +2485,8 @@ namespace RTC
        */
       virtual int svc(void)
       {
-	Manager::instance().shutdown();
-	return 0;
+        Manager::instance().shutdown();
+        return 0;
       }
       Manager* m_manager;
     };

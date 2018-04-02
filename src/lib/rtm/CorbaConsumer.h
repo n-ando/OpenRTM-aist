@@ -225,9 +225,9 @@ namespace RTC
     virtual bool setObject(CORBA::Object_ptr obj)
     {
       if (CORBA::is_nil(obj))
-	{
-	  return false;
-	}
+        {
+          return false;
+        }
       m_objref = CORBA::Object::_duplicate(obj);
       return true;
     }
@@ -337,8 +337,8 @@ namespace RTC
    * @endif
    */
   template <class ObjectType,
-	    typename ObjectTypePtr = typename ObjectType::_ptr_type,
-	    typename ObjectTypeVar = typename ObjectType::_var_type>
+            typename ObjectTypePtr = typename ObjectType::_ptr_type,
+            typename ObjectTypeVar = typename ObjectType::_var_type>
   class CorbaConsumer
     : public CorbaConsumerBase
   {

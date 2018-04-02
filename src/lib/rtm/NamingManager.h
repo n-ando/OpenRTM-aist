@@ -1056,7 +1056,7 @@ namespace RTC
     struct Comps
     {
       Comps(const char* n, const RTObject_impl* obj)
-	: name(n), rtobj(obj)
+        : name(n), rtobj(obj)
       {}
       std::string name;
       const RTObject_impl* rtobj;
@@ -1071,7 +1071,7 @@ namespace RTC
     struct Port
     {
       Port(const char* n, const PortBase* p)
-	: name(n), port(p)
+        : name(n), port(p)
       {}
       std::string name;
       const PortBase* port;
@@ -1086,7 +1086,7 @@ namespace RTC
     struct Mgr
     {
       Mgr(const char* n, const RTM::ManagerServant* obj)
-	: name(n), mgr(obj)
+        : name(n), mgr(obj)
       {}
       std::string name;
       const RTM::ManagerServant* mgr;

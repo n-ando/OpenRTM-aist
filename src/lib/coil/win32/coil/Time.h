@@ -34,10 +34,10 @@
 
 namespace coil
 {
-	#define EPOCHFILETIME (116444736000000000i64)
-struct timezone {
-	  int tz_minuteswest;
-	  int tz_dsttime;
+  #define EPOCHFILETIME (116444736000000000i64)
+  struct timezone {
+    int tz_minuteswest;
+    int tz_dsttime;
   };
 
   /*!
@@ -335,28 +335,28 @@ struct timezone {
   inline int settimeofday(const struct timeval *tv , const struct timezone *tz)
   {
 
-	  SYSTEMTIME systime;
-	  FILETIME ftime;
-	  LARGE_INTEGER lint;
-	  __int64 val64;
+    SYSTEMTIME systime;
+    FILETIME ftime;
+    LARGE_INTEGER lint;
+    __int64 val64;
 
-	// tv,tz -> ftime
-	if (tv != NULL)
-	{
-	   int bias(0);
-		if (tz != NULL)
-		{
-			bias = tz->tz_minuteswest;
-		}
+    // tv,tz -> ftime
+    if (tv != NULL)
+      {
+        int bias(0);
+        if (tz != NULL)
+          {
+            bias = tz->tz_minuteswest;
+          }
 
-		val64 = (tv->tv_sec + bias * 60) * 1000000;
-		val64 = val64 + tv->tv_usec;
-		lint.QuadPart = val64;
-		ftime.dwHighDateTime = lint.LowPart;
-		ftime.dwHighDateTime = lint.HighPart;
-		::FileTimeToSystemTime(&ftime, &systime);
-		::SetSystemTime(&systime);
-	}
+        val64 = (tv->tv_sec + bias * 60) * 1000000;
+        val64 = val64 + tv->tv_usec;
+        lint.QuadPart = val64;
+        ftime.dwHighDateTime = lint.LowPart;
+        ftime.dwHighDateTime = lint.HighPart;
+        ::FileTimeToSystemTime(&ftime, &systime);
+        ::SetSystemTime(&systime);
+      }
 
     return 0;
   }

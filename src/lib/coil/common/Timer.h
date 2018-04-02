@@ -253,8 +253,8 @@ namespace coil
      */
     template <class ListenerClass>
     ListenerId registerListenerObj(ListenerClass* obj,
-				   void (ListenerClass::*cbf)(),
-				   TimeValue tm)
+                   void (ListenerClass::*cbf)(),
+                   TimeValue tm)
     {
       return registerListener(new ListenerObject<ListenerClass>(obj, cbf), tm);
     }
@@ -322,7 +322,7 @@ namespace coil
     struct Task
     {
       Task(ListenerBase* l, TimeValue p)
-	: listener(l), period(p), remains(p)
+        : listener(l), period(p), remains(p)
       {
       }
       ListenerBase* listener;

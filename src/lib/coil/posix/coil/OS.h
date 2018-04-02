@@ -239,11 +239,11 @@ namespace coil
       int result = getopt(m_argc, m_argv, m_opt);
 #ifdef __QNX__
         if(::optind == optind_last)
-	  {
+          {
             ::optind++;
             result = getopt(m_argc, m_argv, m_opt);
             optind_last = ::optind;
-	  }
+          }
 #endif
       optarg = ::optarg;
       optind = ::optind;

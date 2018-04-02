@@ -418,7 +418,7 @@ namespace coil
      * @endif
      */
     const std::string& getProperty(const std::string& key,
-				   const std::string& def) const;
+                                   const std::string& def) const;
     
     /*!
      * @if jp
@@ -1103,7 +1103,7 @@ namespace coil
      * @endif
      */
     static void splitKeyValue(const std::string& str, std::string& key,
-			      std::string& value);
+                              std::string& value);
     
     /*!
      * @if jp
@@ -1137,7 +1137,7 @@ namespace coil
      * @endif
      */
     static bool split(const std::string& str, const char delim,
-		      std::vector<std::string>& value);
+                      std::vector<std::string>& value);
     
     /*!
      * @if jp
@@ -1172,8 +1172,8 @@ namespace coil
      * @endif
      */
     static Properties* _getNode(std::vector<std::string>& keys,
-				std::vector<Properties*>::size_type index,
-				const Properties* curr);
+                                std::vector<Properties*>::size_type index,
+                                const Properties* curr);
     
     /*!
      * @if jp
@@ -1197,8 +1197,8 @@ namespace coil
      * @endif
      */
     static void _propertiyNames(std::vector<std::string>& names,
-				std::string curr_name,
-				const Properties* curr);
+                                std::string curr_name,
+                                const Properties* curr);
     
     /*!
      * @if jp
@@ -1222,7 +1222,7 @@ namespace coil
      * @endif
      */
     static void _store(std::ostream& out, std::string curr_name,
-		       Properties* curr);
+                       Properties* curr);
     
     /*!
      * @if jp
@@ -1252,7 +1252,7 @@ namespace coil
      * @endif
      */
     static std::ostream& _dump(std::ostream& out, const Properties& curr,
-			       int index);
+                               int index);
     
     /*!
      * @if jp
