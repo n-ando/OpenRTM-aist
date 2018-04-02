@@ -19,9 +19,9 @@
 #include <rtm/RTC.h>
 #include <rtm/ECFactory.h>
 
-namespace RTC 
+namespace RTC
 {
-  
+
   /*!
    * @if jp
    * @brief コンストラクタ
@@ -37,7 +37,7 @@ namespace RTC
       m_Delete(delete_func)
   {
   }
-  
+
   /*!
    * @if jp
    * @brief 仮想デストラクタ
@@ -48,7 +48,7 @@ namespace RTC
   ECFactoryCXX::~ECFactoryCXX()
   {
   }
-  
+
   /*!
    * @if jp
    * @brief 生成対象ExecutionContext名称を取得
@@ -60,7 +60,7 @@ namespace RTC
   {
     return m_name.c_str();
   }
-  
+
   /*!
    * @if jp
    * @brief 生成対象ExecutionContextインスタンスを生成
@@ -72,7 +72,7 @@ namespace RTC
   {
     return m_New();
   }
-  
+
   /*!
    * @if jp
    * @brief 対象ExecutionContextインスタンスを破棄
@@ -84,5 +84,5 @@ namespace RTC
   {
     m_Delete(ec);
   }
-  
-};
+
+};  // namespace RTC

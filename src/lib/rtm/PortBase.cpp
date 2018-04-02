@@ -17,8 +17,6 @@
  *
  */
 
-#include <assert.h>
-#include <memory>
 #include <coil/UUID.h>
 #include <rtm/PortBase.h>
 #include <rtm/PortCallback.h>
@@ -27,7 +25,7 @@
 namespace RTC
 {
   //============================================================
-  // class PortBase 
+  // class PortBase
   //============================================================
   /*!
    * @if jp
@@ -62,7 +60,7 @@ namespace RTC
     m_profile.owner = RTC::RTObject::_nil();
     m_profile.properties.length(0);
   }
-  
+
   /*!
    * @if jp
    * @brief デストラクタ
@@ -99,7 +97,7 @@ namespace RTC
         RTC_ERROR(("Unknown exception caught."));
       }
   }
-  
+
   /*!
    * @if jp
    * @brief [CORBA interface] PortProfileを取得する
@@ -118,7 +116,7 @@ namespace RTC
     prof = new PortProfile(m_profile);
     return prof._retn();
   }
-  
+
   /*!
    * @if jp
    * @brief [Local interface] PortProfile を取得する。
@@ -132,7 +130,7 @@ namespace RTC
 
     return m_profile;
   }
-  
+
   /*!
    * @if jp
    * @brief [CORBA interface] ConnectorProfileListを取得する
@@ -152,7 +150,7 @@ namespace RTC
     conn_prof = new ConnectorProfileList(m_profile.connector_profiles);
     return conn_prof._retn();
   }
-  
+
   /*!
    * @if jp
    * @brief [CORBA interface] ConnectorProfile を取得する
@@ -180,7 +178,7 @@ namespace RTC
     conn_prof = new ConnectorProfile(m_profile.connector_profiles[index]);
     return conn_prof._retn();
   }
-  
+
   /*!
    * @if jp
    * @brief [CORBA interface] Port の接続を行う
@@ -228,7 +226,7 @@ namespace RTC
       }
     return RTC::RTC_ERROR;
   }
-  
+
   /*!
    * @if jp
    * @brief [CORBA interface] Port の接続通知を行う
@@ -298,7 +296,7 @@ namespace RTC
       }
 
     retval[2] = subscribeInterfaces(connector_profile);
-    if (retval[2] != RTC::RTC_OK) 
+    if (retval[2] != RTC::RTC_OK)
       {
         RTC_ERROR(("subscribeInterfaces() in notify_connect() failed."));
       }
@@ -338,7 +336,7 @@ namespace RTC
     onConnected(getName(), connector_profile, RTC::RTC_OK);
     return RTC::RTC_OK;
   }
- 
+
   /*!
    * @if jp
    * @brief Interface情報を公開する
@@ -412,7 +410,7 @@ namespace RTC
 #endif
 #else // ORB_IS_RTORB
             RTC_WARN(("Exception caught"));
-#endif // ORB_IS_RTORB
+#endif  // ORB_IS_RTORB
             continue;
           }
         catch (...)
@@ -424,7 +422,7 @@ namespace RTC
     RTC_ERROR(("notify_disconnect() for all ports failed."));
     return RTC::RTC_ERROR;
   }
-  
+
   /*!
    * @if jp
    * @brief [CORBA interface] Port の接続解除通知を行う
@@ -441,12 +439,12 @@ namespace RTC
 
     // find connector_profile
     CORBA::Long index(findConnProfileIndex(connector_id));
-    if (index < 0) 
+    if (index < 0)
       {
         RTC_ERROR(("Invalid connector id: %s", connector_id));
         return RTC::BAD_PARAMETER;
       }
-    
+
     ConnectorProfile& prof(m_profile.connector_profiles[(CORBA::ULong)index]);
     onNotifyDisconnect(getName(), prof);
 
@@ -459,7 +457,7 @@ namespace RTC
       }
     onUnsubscribeInterfaces(getName(), prof);
     unsubscribeInterfaces(prof);
- 
+
     if (m_onDisconnected != 0)
       {
         (*m_onDisconnected)(prof);
@@ -467,22 +465,22 @@ namespace RTC
 // Why RtORB does not use CORBA_SeqUtil?
 #ifndef ORB_IS_RTORB
     CORBA_SeqUtil::erase(m_profile.connector_profiles, index);
-#else // ORB_IS_RTORB
+#else  // ORB_IS_RTORB
     CORBA::ULong len(m_profile.connector_profiles.length());
     if (index < (CORBA::Long)len)
       {
         for (CORBA::ULong i(index); i < len - 1; ++i)
           {
-            m_profile.connector_profiles[i] = 
-              m_profile.connector_profiles[i + 1] ;
+            m_profile.connector_profiles[i] =
+              m_profile.connector_profiles[i + 1];
           }
         m_profile.connector_profiles._length = len-1;
       }
-#endif // ORB_IS_RTORB
+#endif  // ORB_IS_RTORB
     onDisconnected(getName(), prof, retval);
     return retval;
   }
-  
+
   /*!
    * @if jp
    * @brief [CORBA interface] Port の全接続を解除する
@@ -510,10 +508,10 @@ namespace RTC
         tmpret = this->disconnect(plist[i].connector_id);
         if (tmpret != RTC::RTC_OK) retcode = tmpret;
       }
-    
+
     return retcode;
   }
-  
+
   //============================================================
   // Local operations
   //============================================================
@@ -545,7 +543,7 @@ namespace RTC
     RTC_TRACE(("getName() = %s", (const char*)m_profile.name));
     return m_profile.name;
   }
-  
+
   /*!
    * @if jp
    * @brief PortProfileを取得する
@@ -559,7 +557,7 @@ namespace RTC
     Guard guard(m_profile_mutex);
     return m_profile;
   }
-  
+
   /*!
    * @if jp
    * @brief Port のオブジェクト参照を設定する
@@ -573,7 +571,7 @@ namespace RTC
     Guard gurad(m_profile_mutex);
     m_profile.port_ref = port_ref;
   }
-  
+
   /*!
    * @if jp
    * @brief Port のオブジェクト参照を取得する
@@ -591,7 +589,7 @@ namespace RTC
     return m_profile.port_ref;
 #endif
   }
-  
+
   /*!
    * @if jp
    * @brief Port の owner の RTObject を指定する
@@ -607,7 +605,7 @@ namespace RTC
     RTC_TRACE(("setOwner(%s)", m_ownerInstanceName.c_str()));
 
     {
-      Guard gurad(m_profile_mutex); 
+      Guard gurad(m_profile_mutex);
       std::string portname((const char*)m_profile.name);
       coil::vstring p(coil::split(portname, "."));
       // Now Port name is <instance_name>.<port_name>. r1648
@@ -633,7 +631,7 @@ namespace RTC
   {
     m_onConnected = on_connected;
   }
-  
+
   void PortBase::setOnUnsubscribeInterfaces(ConnectionCallback* on_unsubscribe)
   {
     m_onUnsubscribeInterfaces = on_unsubscribe;
@@ -643,11 +641,11 @@ namespace RTC
   {
     m_onDisconnected = on_disconnected;
   }
-  
+
   void PortBase::setOnConnectionLost(ConnectionCallback* on_connection_lost)
   {
     m_onConnectionLost = on_connection_lost;
-  }  
+  }
 
   void PortBase::
   setPortConnectListenerHolder(PortConnectListeners* portconnListeners)
@@ -671,9 +669,9 @@ namespace RTC
     CORBA::Long index;
     index = CORBA_SeqUtil::find(connector_profile.ports,
                                 find_port_ref(m_profile.port_ref));
-    
+
     if (index < 0) return RTC::BAD_PARAMETER;
-    
+
     if (++index < static_cast<CORBA::Long>(connector_profile.ports.length()))
       {
         RTC::PortService_ptr p;
@@ -682,7 +680,7 @@ namespace RTC
       }
     return RTC::RTC_OK;
   }
-  
+
   /*!
    * @if jp
    * @brief 次の Port に対して notify_disconnect() をコールする
@@ -703,9 +701,9 @@ namespace RTC
       {
         return RTC::RTC_OK;
       }
-    
+
     CORBA::ULong len = cprof.ports.length();
-    
+
     ++index;
     for (CORBA::ULong i(index); i < len; ++i)
       {
@@ -725,16 +723,16 @@ namespace RTC
 #endif
 #else // ORB_IS_RTORB
             RTC_WARN(("Exception caught"));
-#endif // ORB_IS_RTORB
+#endif  // ORB_IS_RTORB
             continue;
-          } 
+          }
         catch (...)
           {
             RTC_WARN(("Unknown exception caught."));
             continue;
           }
       }
-        
+
     return RTC::RTC_ERROR;
   }
   /*!
@@ -748,7 +746,7 @@ namespace RTC
   {
     m_connectionLimit = limit_value;
   }
-  
+
   //============================================================
   // protected utility functions
   //============================================================
@@ -763,8 +761,8 @@ namespace RTC
   {
     return connector_profile.connector_id[(CORBA::ULong)0] == 0;
   }
-  
-  
+
+
   /*!
    * @if jp
    * @brief UUIDを生成する
@@ -777,10 +775,10 @@ namespace RTC
     coil::UUID_Generator uugen;
     uugen.init();
     std::auto_ptr<coil::UUID> uuid(uugen.generateUUID(2, 0x01));
-    
+
     return std::string((const char*)uuid->to_string());
   }
-  
+
   /*!
    * @if jp
    * @brief UUIDを生成し ConnectorProfile にセットする
@@ -793,7 +791,7 @@ namespace RTC
     connector_profile.connector_id = CORBA::string_dup(getUUID().c_str());
     assert(connector_profile.connector_id[(CORBA::ULong)0] != 0);
   }
-  
+
   /*!
    * @if jp
    * @brief id が既存の ConnectorProfile のものかどうか判定する
@@ -806,7 +804,7 @@ namespace RTC
     return CORBA_SeqUtil::find(m_profile.connector_profiles,
                                find_conn_id(id)) >= 0;
   }
-  
+
   /*!
    * @if jp
    * @brief id を持つ ConnectorProfile を探す
@@ -821,7 +819,7 @@ namespace RTC
                                 find_conn_id(id));
     return m_profile.connector_profiles[index];
   }
-  
+
   /*!
    * @if jp
    * @brief id を持つ ConnectorProfile を探す
@@ -834,7 +832,7 @@ namespace RTC
     return CORBA_SeqUtil::find(m_profile.connector_profiles,
                                find_conn_id(id));
   }
-  
+
   /*!
    * @if jp
    * @brief ConnectorProfile の追加もしくは更新
@@ -848,7 +846,7 @@ namespace RTC
     CORBA::Long index;
     index = CORBA_SeqUtil::find(m_profile.connector_profiles,
                                 find_conn_id(connector_profile.connector_id));
-    
+
     if (index < 0)
       {
         CORBA_SeqUtil::push_back(m_profile.connector_profiles,
@@ -859,7 +857,7 @@ namespace RTC
         m_profile.connector_profiles[index] = connector_profile;
       }
   }
-  
+
   /*!
    * @if jp
    * @brief ConnectorProfile を削除する
@@ -873,11 +871,11 @@ namespace RTC
     index = CORBA_SeqUtil::find(m_profile.connector_profiles,
                                 find_conn_id(id));
     if (index < 0) return false;
-    
+
     CORBA_SeqUtil::erase(m_profile.connector_profiles, index);
     return true;
   }
-  
+
   /*!
    * @if jp
    * @brief PortInterfaceProfile に インターフェースを登録する
@@ -892,7 +890,7 @@ namespace RTC
     CORBA::Long index;
     index = CORBA_SeqUtil::find(m_profile.interfaces,
                                 find_interface(instance_name, pol));
-    
+
     if (index >= 0) return false;
     // setup PortInterfaceProfile
     PortInterfaceProfile prof;
@@ -900,10 +898,10 @@ namespace RTC
     prof.type_name     = CORBA::string_dup(type_name);
     prof.polarity      = pol;
     CORBA_SeqUtil::push_back(m_profile.interfaces, prof);
-    
+
     return true;
   }
-  
+
   /*!
    * @if jp
    * @brief PortInterfaceProfile からインターフェース登録を削除する
@@ -916,9 +914,9 @@ namespace RTC
     CORBA::Long index;
     index = CORBA_SeqUtil::find(m_profile.interfaces,
                                 find_interface(name, pol));
-    
+
     if (index < 0) return false;
-    
+
     CORBA_SeqUtil::erase(m_profile.interfaces, index);
     return true;
   }
@@ -948,7 +946,7 @@ namespace RTC
               RTC_WARN(("Dead connection: %s", id));
             }
         }
-#else // ORB_IS_RTORB
+#else  // ORB_IS_RTORB
       ConnectorProfileList* clist;
       clist = new ConnectorProfileList(m_profile.connector_profiles);
 
@@ -962,7 +960,7 @@ namespace RTC
             }
         }
       delete clist;
-#endif // ORB_IS_RTORB
+#endif  // ORB_IS_RTORB
     }
 
     for (std::vector<std::string>::iterator it(connector_ids.begin());
@@ -971,7 +969,7 @@ namespace RTC
         this->disconnect((*it).c_str());
       }
   }
-  
+
   /*!
    * @if jp
    * @brief ポートの存在を確認する。
@@ -981,9 +979,9 @@ namespace RTC
    */
 #ifndef ORB_IS_RTORB
   bool PortBase::checkPorts(::RTC::PortServiceList& ports)
-#else // ORB_IS_RTORB
+#else  // ORB_IS_RTORB
   bool PortBase::checkPorts(RTC_PortServiceList& ports)
-#endif // ORB_IS_RTORB
+#endif  // ORB_IS_RTORB
   {
     for (CORBA::ULong i(0), len(ports.length()); i < len; ++i)
       {

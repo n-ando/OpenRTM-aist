@@ -17,10 +17,6 @@
  *
  */
 
-#include <iostream>
-#include <algorithm>
-#include <functional>
-#include <iterator>
 #include <coil/stringutil.h>
 
 #include <rtm/ConnectorBase.h>
@@ -28,6 +24,10 @@
 #include <rtm/OutPortPullConnector.h>
 #include <rtm/OutPortBase.h>
 #include <rtm/PublisherBase.h>
+#include <iostream>
+#include <algorithm>
+#include <functional>
+#include <iterator>
 
 #include <rtm/InPortBase.h>
 
@@ -103,7 +103,7 @@ namespace RTC
     addProperty("dataport.io_mode", pubs.c_str());
 
   };
-  
+
   /*!
    * @if jp
    * @brief デストラクタ
@@ -119,7 +119,7 @@ namespace RTC
                   m_connectors.end(),
                   connector_cleanup());
   }
-             
+
   /*!
    * @if jp
    * @brief プロパティの初期化
@@ -146,10 +146,10 @@ namespace RTC
     initConsumers();
     initProviders();
     int num(-1);
-    if (!coil::stringTo(num, 
+    if (!coil::stringTo(num,
                      m_properties.getProperty("connection_limit", "-1").c_str()))
       {
-        RTC_ERROR(("invalid connection_limit value: %s", 
+        RTC_ERROR(("invalid connection_limit value: %s",
                    m_properties.getProperty("connection_limit").c_str()));
       }
 
@@ -338,7 +338,7 @@ namespace RTC
         m_connectors[i]->activate();
       }
   }
-  
+
   /*!
    * @if jp
    * @brief 全ての Port のインターフェースを deactivates する
@@ -355,7 +355,7 @@ namespace RTC
         m_connectors[i]->deactivate();
       }
   }
-  
+
 
   /*!
    * @if jp
@@ -407,7 +407,7 @@ namespace RTC
     RTC_ERROR(("removeConnectorDataListener(): Unknown Listener Type"));
     return;
   }
-  
+
   /*!
    * @if jp
    * @brief ConnectorListener リスナを追加する
@@ -431,7 +431,7 @@ namespace RTC
     RTC_ERROR(("addConnectorListener(): Unknown Listener Type"));
     return;
   }
-  
+
   /*!
    * @if jp
    * @brief ConnectorListener リスナを削除する
@@ -531,7 +531,7 @@ namespace RTC
     {
       coil::Properties conn_prop;
       NVUtil::copyToProperties(conn_prop, cprof.properties);
-      prop << conn_prop.getNode("dataport"); // marge ConnectorProfile
+      prop << conn_prop.getNode("dataport");  // marge ConnectorProfile
       /*
        * marge ConnectorProfile for buffer property.
        * e.g.
@@ -566,7 +566,7 @@ namespace RTC
           {
             return RTC::BAD_PARAMETER;
           }
-        
+
         // create OutPortPullConnector
         OutPortConnector* connector(createConnector(cprof, prop, provider));
         if (connector == 0)
@@ -602,7 +602,7 @@ namespace RTC
     {
       coil::Properties conn_prop;
       NVUtil::copyToProperties(conn_prop, cprof.properties);
-      prop << conn_prop.getNode("dataport"); // marge ConnectorProfile
+      prop << conn_prop.getNode("dataport");  // marge ConnectorProfile
       /*
        * marge ConnectorProfile for buffer property.
        * e.g.
@@ -668,7 +668,7 @@ namespace RTC
         RTC_DEBUG(("subscribeInterfaces() successfully finished."));
         return RTC::RTC_OK;
       }
-    
+
     RTC_ERROR(("unsupported dataflow_type: %s", dflow_type.c_str()));
     return RTC::BAD_PARAMETER;
   }
@@ -794,7 +794,7 @@ namespace RTC
                               std::back_inserter(consumer_types));
       }
 #endif
-    
+
     // InPortConsumer supports "push" dataflow type
     if (consumer_types.size() > 0)
       {
@@ -806,7 +806,7 @@ namespace RTC
                         (*itr).c_str());
         }
       }
-    
+
     m_consumerTypes = consumer_types;
   }
 
@@ -866,12 +866,12 @@ namespace RTC
                    coil::flatten(m_providerTypes).c_str()));
         return 0;
       }
-    
+
     RTC_DEBUG(("interface_type: %s", prop["interface_type"].c_str()));
     OutPortProvider* provider;
     provider = OutPortProviderFactory::
       instance().createObject(prop["interface_type"].c_str());
-    
+
     if (provider != 0)
       {
         RTC_TRACE(("provider created"));
@@ -884,7 +884,7 @@ namespace RTC
             OutPortProviderFactory::instance().deleteObject(provider);
             return 0;
           }
-#else // ORB_IS_RTORB
+#else  // ORB_IS_RTORB
         ::SDOPackage::NVList_ptr prop_ref(cprof.properties);
         if (!provider->publishInterface(*prop_ref))
           {
@@ -892,7 +892,7 @@ namespace RTC
             OutPortProviderFactory::instance().deleteObject(provider);
             return 0;
           }
-#endif // ORB_IS_RTORB
+#endif  // ORB_IS_RTORB
         return provider;
       }
 
@@ -920,12 +920,12 @@ namespace RTC
                    coil::flatten(m_consumerTypes).c_str()));
         return 0;
       }
-    
+
     RTC_DEBUG(("interface_type: %s", prop["interface_type"].c_str()));
     InPortConsumer* consumer;
     consumer = InPortConsumerFactory::
       instance().createObject(prop["interface_type"].c_str());
-    
+
     if (consumer != 0)
       {
         RTC_TRACE(("consumer created"));
@@ -942,7 +942,7 @@ namespace RTC
       }
 
     RTC_ERROR(("consumer creation failed"));
-    return 0; 
+    return 0;
   }
 
   /*!
@@ -961,14 +961,14 @@ namespace RTC
     ConnectorInfo profile(cprof.name,
                           cprof.connector_id,
                           CORBA_SeqUtil::refToVstring(cprof.ports),
-                          prop); 
-#else // ORB_IS_RTORB
+                          prop);
+#else  // ORB_IS_RTORB
     ConnectorInfo profile(cprof.name,
                           cprof.connector_id,
                           CORBA_SeqUtil::
                           refToVstring(RTC::PortServiceList(cprof.ports)),
-                          prop); 
-#endif // ORB_IS_RTORB
+                          prop);
+#endif  // ORB_IS_RTORB
 
     try
       {
@@ -1031,14 +1031,14 @@ namespace RTC
     ConnectorInfo profile(cprof.name,
                           cprof.connector_id,
                           CORBA_SeqUtil::refToVstring(cprof.ports),
-                          prop); 
-#else // ORB_IS_RTORB
+                          prop);
+#else  // ORB_IS_RTORB
     ConnectorInfo profile(cprof.name,
                           cprof.connector_id,
                           CORBA_SeqUtil::
                           refToVstring(RTC::PortServiceList(cprof.ports)),
-                          prop); 
-#endif // ORB_IS_RTORB
+                          prop);
+#endif  // ORB_IS_RTORB
 
     try
       {
