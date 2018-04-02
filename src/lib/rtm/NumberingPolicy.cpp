@@ -51,7 +51,7 @@ namespace RTM
         return coil::otos((int)(m_objects.size() - 1));
       }
   }
-  
+
   /*!
    * @if jp
    * @brief オブジェクト削除時の名称解放
@@ -69,7 +69,7 @@ namespace RTM
       }
     --m_num;
   }
-  
+
   /*!
    * @if jp
    * @brief オブジェクトの検索

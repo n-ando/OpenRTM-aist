@@ -33,7 +33,7 @@ namespace coil
     m_usec = usec;
     normalize();
   }
-  
+
   /*!
    * @if jp
    * @brief コンストラクタ
@@ -44,20 +44,20 @@ namespace coil
   TimeValue::TimeValue(double timeval)
   {
     double dbHalfAdj;
-    if ( timeval >= 0 ) 
-    {
+    if ( timeval >= 0 )
+      {
         dbHalfAdj = +0.5;
-    }
+      }
     else
-    {
+      {
         dbHalfAdj = -0.5;
-    }
+      }
     m_sec = (long int)timeval;
     m_usec = (long)((timeval - (double)m_sec)
                     * TIMEVALUE_ONE_SECOND_IN_USECS + dbHalfAdj);
     normalize();
   }
-  
+
   /*!
    * @if jp
    * @brief 時間減算
@@ -97,7 +97,7 @@ namespace coil
     res.normalize();
     return res;
   }
-  
+
   /*!
    * @if jp
    * @brief 時間加算
@@ -118,7 +118,7 @@ namespace coil
     res.normalize();
     return res;
   }
-  
+
   /*!
    * @if jp
    * @brief double型→時間型変換
@@ -129,7 +129,7 @@ namespace coil
   TimeValue TimeValue::operator=(double time)
   {
     double dbHalfAdj;
-    if ( time >= 0 ) 
+    if ( time >= 0 )
       {
         dbHalfAdj = +0.5;
       }
@@ -139,12 +139,12 @@ namespace coil
       }
 
     m_sec = (long)time;
-    m_usec = (long)((time - 
+    m_usec = (long)((time -
                      (double)m_sec)*TIMEVALUE_ONE_SECOND_IN_USECS + dbHalfAdj);
     normalize();
     return *this;
   }
-  
+
   /*!
    * @if jp
    * @brief 時間型→double型変換
@@ -156,7 +156,7 @@ namespace coil
   {
     return (double)m_sec + ((double)m_usec/TIMEVALUE_ONE_SECOND_IN_USECS);
   }
-  
+
   /*!
    * @if jp
    * @brief 符号判定
@@ -172,7 +172,7 @@ namespace coil
     if (m_usec < 0) return -1;
     return 0;
   }
-  
+
   /*!
    * @if jp
    * @brief 正規化
@@ -189,7 +189,7 @@ namespace coil
             ++m_sec;
             m_usec -= TIMEVALUE_ONE_SECOND_IN_USECS;
           }
-        while (m_usec >= TIMEVALUE_ONE_SECOND_IN_USECS) {}
+        while (m_usec >= TIMEVALUE_ONE_SECOND_IN_USECS);
       }
     else if (m_usec <= -TIMEVALUE_ONE_SECOND_IN_USECS)
       {
@@ -198,9 +198,9 @@ namespace coil
             --m_sec;
             m_usec += TIMEVALUE_ONE_SECOND_IN_USECS;
           }
-        while (m_usec <= -TIMEVALUE_ONE_SECOND_IN_USECS) {}
+        while (m_usec <= -TIMEVALUE_ONE_SECOND_IN_USECS);
       }
-    
+
     if (m_sec >= 1 && m_usec < 0)
       {
         --m_sec;
@@ -212,5 +212,5 @@ namespace coil
         m_usec -= TIMEVALUE_ONE_SECOND_IN_USECS;
       }
   }
-  
+
 };  // namespace coil

@@ -52,7 +52,7 @@ namespace RTC
     // "consumer" should be deleted in the Connector
     m_consumer = 0;
   }
-  
+
   /*!
    * @if jp
    * @brief 初期化
@@ -77,7 +77,7 @@ namespace RTC
   PublisherFlush::setConsumer(InPortConsumer* consumer)
   {
     RTC_TRACE(("setConsumer()"));
-    
+
     if (consumer == 0)
       {
         return INVALID_ARGS;
@@ -106,7 +106,7 @@ namespace RTC
    * @else
    * @brief Setting buffer pointer
    * @endif
-   */ 
+   */
   ::RTC::DataPortStatus::Enum
   PublisherFlush::setListener(ConnectorInfo& info,
                               RTC::ConnectorListeners* listeners)
@@ -129,7 +129,7 @@ namespace RTC
    * @if jp
    * @brief データを書き込む
    * @else
-   * @brief Write data 
+   * @brief Write data
    * @endif
    */
   PublisherBase::ReturnCode PublisherFlush::write(cdrMemoryStream& data,

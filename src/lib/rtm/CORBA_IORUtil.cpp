@@ -33,9 +33,9 @@ namespace CORBA_IORUtil
 #endif
 
 #if !defined(ORB_IS_RTORB) && !defined(ORB_IS_ORBEXPRESS) && !defined(ORB_IS_TAO)
-  // prototype of static functions 
+  // prototype of static functions
   static void print_key(std::stringstream& s, OctetUSequence& key);
-  
+
   static void print_omni_key(std::stringstream& sstr, OctetUSequence& key);
 
   static int get_poa_info(OctetUSequence& key, StringUSequence& poas_out,
@@ -142,7 +142,7 @@ namespace CORBA_IORUtil
    * @if jp
    * @brief IOR構造体をIOR文字列へ変換する
    * @else
-   * @brief Convert from IOR structure to IOR string 
+   * @brief Convert from IOR structure to IOR string
    * @endif
    */
 #if !defined(ORB_IS_ORBEXPRESS) && !defined(ORB_IS_TAO)
@@ -158,7 +158,7 @@ namespace CORBA_IORUtil
     buf.rewindInputPtr();
     size_t s = buf.bufSize();
     CORBA::Char* data = (CORBA::Char *)buf.bufPtr();
-    
+
     char *result = new char[4 + s * 2 + 1];
     result[4 + s * 2] = '\0';
     result[0] = 'I';
@@ -266,7 +266,7 @@ namespace CORBA_IORUtil
         return retstr.str();
       }
 
-    retstr << "IOR information" << std::endl; 
+    retstr << "IOR information" << std::endl;
     retstr << "  Type ID: \"" << (const char*) ior.type_id
            << "\"" << std::endl;;
     retstr << "  Profiles:" << std::endl;;
@@ -277,16 +277,16 @@ namespace CORBA_IORUtil
           {
             IIOP::ProfileBody pBody;
             IIOP::unmarshalProfile(ior.profiles[count], pBody);
-            
+
             retstr << "IIOP " << static_cast<int>(pBody.version.major) << "."
                    << static_cast<int>(pBody.version.minor) << " ";
             retstr << (const char*) pBody.address.host
                    << " " << pBody.address.port << std::endl;
-            
+
             print_omni_key(retstr, pBody.object_key);
             print_key(retstr, pBody.object_key);
             print_tagged_components(retstr, pBody.components);
-            
+
             retstr << std::endl;
           }
 		else if (ior.profiles[count].tag == IOP::TAG_MULTIPLE_COMPONENTS)
@@ -296,7 +296,7 @@ namespace CORBA_IORUtil
 			IIOP::unmarshalMultiComponentProfile(ior.profiles[count],
 				pBody.components);
             print_tagged_components(retstr, pBody.components);
-            
+
             retstr << std::endl;
 		  }
 		else
@@ -429,7 +429,7 @@ namespace CORBA_IORUtil
     StringUSequence poas;
     int is_transient;
     OctetUSequence id;
-    
+
     if (get_poa_info(key, poas, is_transient, id))
       {
         sstr << "       POA(" << (char*)poas[0];
@@ -456,24 +456,24 @@ namespace CORBA_IORUtil
     const char* k = (const char*) key.NP_data();
     int len = key.length();
     const char* kend = k + len;
-    
+
     poas_out.length(1);
     poas_out[0] = CORBA::string_dup("root");
-    
+
     if (*k != TRANSIENT_SUFFIX_SEP && *k != POA_NAME_SEP) { return 0; }
-    
+
     while (k < kend && *k == POA_NAME_SEP)
       {
         ++k;
         const char* name = k;
-        
-        while (k < kend && *k && *k != POA_NAME_SEP 
+
+        while (k < kend && *k && *k != POA_NAME_SEP
               && *k != TRANSIENT_SUFFIX_SEP)
           {
             ++k;
           }
         if (k == kend)  { return 0; }
-    
+
         char* nm = new char[k - name + 1];
         memcpy(nm, name, k - name);
         nm[k - name] = '\0';
@@ -481,7 +481,7 @@ namespace CORBA_IORUtil
         poas_out[poas_out.length() - 1] = nm;
       }
     if (k == kend)  { return 0; }
-    
+
     transient_out = 0;
     if (*k == TRANSIENT_SUFFIX_SEP)
       {
@@ -503,7 +503,7 @@ namespace CORBA_IORUtil
   {
 #if defined(RTM_OMNIORB_40) || defined(RTM_OMNIORB_41)
     CORBA::ULong total(components.length());
-    
+
     for (CORBA::ULong index(0); index < total; ++index)
       {
         try

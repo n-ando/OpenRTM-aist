@@ -39,7 +39,7 @@ namespace coil
   {
     leaf.clear();
   }
-  
+
   /*!
    * @if jp
    * @brief コンストラクタ(mapでデフォルト値を与える)
@@ -53,14 +53,14 @@ namespace coil
     leaf.clear();
     std::map<std::string, std::string>::iterator it(defaults.begin());
     std::map<std::string, std::string>::iterator it_end(defaults.end());
-    
+
     while (it != it_end)
       {
         setDefault(it->first.c_str(), it->second.c_str());
         ++it;
       }
   }
-  
+
   /*!
    * @if jp
    * @brief コンストラクタ(char*[] でデフォルト値を与える)
@@ -74,7 +74,7 @@ namespace coil
     leaf.clear();
     setDefaults(defaults, num);
   }
-  
+
   /*!
    * @if jp
    * @brief コピーコンストラクタ
@@ -98,7 +98,7 @@ namespace coil
           }
       }
   }
-  
+
   /*!
    * @if jp
    * @brief 代入演算子
@@ -112,7 +112,7 @@ namespace coil
     name = prop.name;
     value = prop.value;
     default_value = prop.default_value;
-    
+
     std::vector<std::string> keys;
     keys = prop.propertyNames();
     for (size_t i(0), len(keys.size()); i < len; ++i)
@@ -124,10 +124,10 @@ namespace coil
             setProperty(keys[i], node->value);
           }
       }
-    
+
     return *this;
   }
-  
+
   /*!
    * @if jp
    * @brief デストラクタ
@@ -136,17 +136,17 @@ namespace coil
    * @endif
    */
   Properties::~Properties(void)
-  {  
+  {
     // Delete children
     clear();
-    
+
     // delete myself from parent
     if (root != NULL)
       {
         root->removeNode(name.c_str());
       }
   };
-  
+
   //============================================================
   // public fnctions
   //============================================================
@@ -168,7 +168,7 @@ namespace coil
       }
     return m_empty;
   }
-  
+
   /*!
    * @if jp
    * @brief 指定されたキーを持つプロパティを、プロパティリストから探す
@@ -180,10 +180,10 @@ namespace coil
                                              const std::string& def) const
   {
     const std::string& value((*this)[key]);
-    
+
     return value.empty() ? def : value;
   }
-  
+
   /*!
    * @if jp
    * @brief 指定されたキーを持つプロパティを、プロパティリストから探す
@@ -195,7 +195,7 @@ namespace coil
   {
     return getProperty(key);
   }
-  
+
   /*!
    * @if jp
    * @brief 指定されたキーを持つプロパティを、プロパティリストから探す
@@ -207,10 +207,10 @@ namespace coil
   {
     setProperty(key, getProperty(key));
     Properties& prop(getNode(key));
-    
+
     return prop.value;
   }
-  
+
   /*!
    * @if jp
    * @brief 指定されたキーに対してデフォルト値を取得する
@@ -229,7 +229,7 @@ namespace coil
       }
     return m_empty;
   }
-  
+
   /*!
    * @if jp
    * @brief Properties に value を key について登録する
@@ -242,7 +242,7 @@ namespace coil
   {
     std::vector<std::string> keys;
     split(key, '.', keys);
-    
+
     Properties* curr(this);
     for (size_t i(0), len(keys.size()); i < len; ++i)
       {
@@ -259,7 +259,7 @@ namespace coil
     curr->value = value;
     return retval;
   }
-  
+
   /*!
    * @if jp
    * @brief デフォルト値を登録する
@@ -272,7 +272,7 @@ namespace coil
   {
     std::vector<std::string> keys;
     split(key, '.', keys);
-    
+
     Properties* curr(this);
     for (size_t i(0), len(keys.size()); i < len; ++i)
       {
@@ -288,7 +288,7 @@ namespace coil
     curr->default_value = value;
     return value;
   }
-  
+
   /*!
    * @if jp
    * @brief Properties にデフォルト値をまとめて登録する
@@ -302,17 +302,17 @@ namespace coil
       {
         std::string key(defaults[i]);
         std::string value(defaults[i + 1]);
-        
+
         coil::eraseHeadBlank(key);
         coil::eraseTailBlank(key);
-        
+
         coil::eraseHeadBlank(value);
         coil::eraseTailBlank(value);
-        
+
         setDefault(key.c_str(), value.c_str());
       }
   }
-  
+
   //============================================================
   // load and save functions
   //============================================================
@@ -327,7 +327,7 @@ namespace coil
   {
     _store(out, "", this);
   }
-  
+
   /*!
    * @if jp
    * @brief 入力ストリームからキーと要素が対になったプロパティリストを読み込む
@@ -338,13 +338,13 @@ namespace coil
   void Properties::load(std::istream& inStream)
   {
     std::string pline;
-    
+
     while (!inStream.eof())
       {
         std::string tmp;
         coil::getlinePortable(inStream, tmp);
         coil::eraseHeadBlank(tmp);
-        
+
         // Skip comments or empty lines
         if (tmp.empty())
           {
@@ -354,7 +354,7 @@ namespace coil
           {
             continue;
           }
-        
+
         // line-end '\' continues entry
         if (tmp[tmp.size() - 1] == '\\'
         && !coil::isEscaped(tmp, tmp.size() - 1))
@@ -364,28 +364,28 @@ namespace coil
             continue;
           }
         pline += tmp;
-        
+
         // Skip empty line (made of only ' ' or '\t')
         if (pline.empty())
           {
             continue;
           }
-        
+
         std::string key, value;
         splitKeyValue(pline, key, value);
         key = coil::unescape(key);
         coil::eraseHeadBlank(key);
         coil::eraseTailBlank(key);
-        
+
         value = coil::unescape(value);
         coil::eraseHeadBlank(value);
         coil::eraseTailBlank(value);
-        
+
         setProperty(key.c_str(), value.c_str());
         pline.clear();
       }
   }
-  
+
   /*!
    * @if jp
    * @brief プロパティリストを指定されたストリームに保存する
@@ -398,7 +398,7 @@ namespace coil
     store(out, header);
     return;
   }
-  
+
   /*!
    * @if jp
    * @brief プロパティリストを出力ストリームへ保存する
@@ -411,7 +411,7 @@ namespace coil
     out << "# " << header << std::endl;
     _store(out, "", this);
   }
-  
+
   //============================================================
   // other util functions
   //============================================================
@@ -431,7 +431,7 @@ namespace coil
       }
     return names;
   }
-  
+
   /*!
    * @if jp
    * @brief プロパティの数を取得する
@@ -443,7 +443,7 @@ namespace coil
   {
     return static_cast<int>(propertyNames().size());
   }
-  
+
   /*!
    * @if jp
    * @brief ノードを検索する
@@ -462,7 +462,7 @@ namespace coil
     split(key, '.', keys);
     return _getNode(keys, 0, this);
   }
-  
+
   /*!
    * @if jp
    * @brief ノードを取得する
@@ -498,8 +498,8 @@ namespace coil
       {
         return false;
       }
-    
-    if (findNode(key) != 0) 
+
+    if (findNode(key) != 0)
       {
         return false;
       }
@@ -530,7 +530,7 @@ namespace coil
       }
     return NULL;
   }
-  
+
   /*!
    * @if jp
    * @brief 子ノードにkeyがあるかどうか
@@ -549,7 +549,7 @@ namespace coil
       }
     return NULL;
   }
-  
+
   /*!
    * @if jp
    * @brief 子ノードを全て削除する
@@ -565,7 +565,7 @@ namespace coil
           delete leaf.back();    // back() returns always new
       }
   }
-  
+
   /*!
    * @if jp
    * @brief Propertyをマージする
@@ -583,7 +583,7 @@ namespace coil
       }
     return (*this);
   }
-  
+
   //------------------------------------------------------------
   // Protected functions
   //------------------------------------------------------------
@@ -599,7 +599,7 @@ namespace coil
   {
     std::string::size_type i(0);
     std::string::size_type len(str.size());
-    
+
     while (i < len)
       {
         if ((str[i] == ':' || str[i] == '=') && !coil::isEscaped(str, i))
@@ -614,7 +614,7 @@ namespace coil
           }
         ++i;
       }
-    
+
     // If no ':' or '=' exist, ' ' would be delimiter.
     i = 0;
     while (i < len)
@@ -631,12 +631,12 @@ namespace coil
           }
         ++i;
       }
-    
+
     key = str;
     value = "";
     return;
   }
-  
+
   /*!
    * @if jp
    * @brief 文字列を分割する
@@ -648,10 +648,10 @@ namespace coil
                          std::vector<std::string>& value)
   {
     if (str.empty()) return false;
-    
+
     std::string::size_type begin_it(0), end_it(0);
     std::string::size_type len(str.size());
-    
+
     while (end_it < len)
       {
         if ((str[end_it] == delim) && !coil::isEscaped(str, end_it))
@@ -665,7 +665,7 @@ namespace coil
     value.push_back(str.substr(begin_it, end_it));
     return true;
   }
-  
+
   /*!
    * @if jp
    * @brief プロパティを取得する
@@ -679,12 +679,12 @@ namespace coil
                        const Properties* curr)
   {
     Properties* next(curr->hasKey(keys[index].c_str()));
-    
+
     if (next == NULL)
       {
         return NULL;
       }
-    
+
     if (index < keys.size() - 1) // node
       {
         return next->_getNode(keys, ++index, next);
@@ -695,7 +695,7 @@ namespace coil
       }
     return NULL;
   }
-  
+
   /*!
    * @if jp
    * @brief プロパティの名称リストを取得する
@@ -724,7 +724,7 @@ namespace coil
       }
     return;
   }
-  
+
   /*!
    * @if jp
    * @brief プロパティの名称リストを保存する
@@ -738,7 +738,7 @@ namespace coil
   {
     if (!curr->leaf.empty())
       {
-        
+
         for (size_t i(0), len(curr->leaf.size()); i < len; ++i)
           {
             std::string next_name;
@@ -753,7 +753,7 @@ namespace coil
             _store(out, next_name, curr->leaf[i]);
           }
       }
-    
+
     if (curr->root != NULL)
       {
         if (curr->value.length() > 0)
@@ -762,7 +762,7 @@ namespace coil
           }
       }
   }
-  
+
   /*!
    * @if jp
    * @brief プロパティの内容を保存する
@@ -793,7 +793,7 @@ namespace coil
       }
     return out;
   }
-  
+
   /*!
    * @if jp
    * @brief インデントを生成する
@@ -810,7 +810,7 @@ namespace coil
       }
     return space;
   }
-  
+
   /*!
    * @if jp
    * @brief インデントを生成する
@@ -827,7 +827,7 @@ namespace coil
       }
     return space;
   }
-  
+
   /*!
    * @if jp
    * @brief Propertyをストリームに出力する

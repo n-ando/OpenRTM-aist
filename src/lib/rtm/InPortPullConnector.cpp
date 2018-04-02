@@ -52,7 +52,7 @@ namespace RTC
 
     onConnect();
   }
-  
+
   /*!
    * @if jp
    * @brief デストラクタ
@@ -65,7 +65,7 @@ namespace RTC
     onDisconnect();
     disconnect();
   }
-  
+
   /*!
    * @if jp
    * @brief read 関数
@@ -83,7 +83,7 @@ namespace RTC
       }
     return m_consumer->get(data);
   }
-  
+
   /*!
    * @if jp
    * @brief 接続解除関数
@@ -104,7 +104,7 @@ namespace RTC
 
     return PORT_OK;
   }
-  
+
   /*!
    * @if jp
    * @brief Bufferの生成

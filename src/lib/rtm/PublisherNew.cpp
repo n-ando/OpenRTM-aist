@@ -83,7 +83,7 @@ namespace RTC
   {
     RTC_TRACE(("init()"));
     RTC_DEBUG_STR((prop));
-    
+
     setPushPolicy(prop);
     if (!createTask(prop))
       {
@@ -102,7 +102,7 @@ namespace RTC
   PublisherBase::ReturnCode PublisherNew::setConsumer(InPortConsumer* consumer)
   {
     RTC_TRACE(("setConsumer()"));
-    
+
     if (consumer == 0)
       {
         RTC_ERROR(("setConsumer(consumer = 0): invalid argument."));
@@ -159,7 +159,7 @@ namespace RTC
    * @if jp
    * @brief データを書き込む
    * @else
-   * @brief Write data 
+   * @brief Write data
    * @endif
    */
   PublisherBase::ReturnCode PublisherNew::write(cdrMemoryStream& data,
@@ -234,7 +234,7 @@ namespace RTC
     m_active = false;
     return PORT_OK;
   }
-  
+
   /*!
    * @if jp
    * @brief PublisherNew::スレッド実行関数
@@ -244,7 +244,7 @@ namespace RTC
    */
   int PublisherNew::svc(void)
   {
-    
+
     Guard guard(m_retmutex);
     switch (m_pushPolicy)
       {
@@ -334,7 +334,7 @@ namespace RTC
     m_task->setPeriod(0.0);
     m_task->executionMeasure(coil::toBool(prop["measurement.exec_time"],
                                     "enable", "disable", true));
-    
+
     int ecount;
     if (coil::stringTo(ecount, prop["measurement.exec_count"].c_str()))
       {
@@ -369,7 +369,7 @@ namespace RTC
       {
         cdrMemoryStream& cdr(m_buffer->get());
         onBufferRead(cdr);
-        
+
         onSend(cdr);
         ReturnCode ret(m_consumer->put(cdr));
         if (ret != PORT_OK)
@@ -378,7 +378,7 @@ namespace RTC
             return invokeListener(ret, cdr);
           }
         onReceived(cdr);
-        
+
         m_buffer->advanceRptr();
       }
     return PORT_OK;
@@ -394,7 +394,7 @@ namespace RTC
     cdrMemoryStream& cdr(m_buffer->get());
 
     onBufferRead(cdr);
-    
+
     onSend(cdr);
     ReturnCode ret(m_consumer->put(cdr));
     if (ret != PORT_OK)
@@ -403,9 +403,9 @@ namespace RTC
         return invokeListener(ret, cdr);
       }
     onReceived(cdr);
-    
+
     m_buffer->advanceRptr();
-    
+
     return PORT_OK;
   }
 
@@ -423,11 +423,11 @@ namespace RTC
     for (int i(0); i < loopcnt; ++i)
       {
         m_buffer->advanceRptr(postskip);
-        
+
         cdrMemoryStream& cdr(m_buffer->get());
 
         onBufferRead(cdr);
-        
+
         onSend(cdr);
         ret = m_consumer->put(cdr);
         if (ret != PORT_OK)
@@ -447,7 +447,7 @@ namespace RTC
     else
       {
         if ( m_retcode != PORT_OK )
-          {  // put Error after 
+          {  // put Error after
             m_leftskip = 0;
           }
         else
@@ -466,7 +466,7 @@ namespace RTC
     RTC_TRACE(("pushNew()"));
 
     m_buffer->advanceRptr(m_buffer->readable() - 1);
-        
+
     cdrMemoryStream& cdr(m_buffer->get());
     onBufferRead(cdr);
 
@@ -478,9 +478,9 @@ namespace RTC
         return invokeListener(ret, cdr);
       }
     onReceived(cdr);
-    
+
     m_buffer->advanceRptr();
-    
+
     return PORT_OK;
   }
 
@@ -551,23 +551,23 @@ namespace RTC
       case PORT_ERROR:
         onReceiverError(data);
         return PORT_ERROR;
-        
+
       case SEND_FULL:
         onReceiverFull(data);
         return SEND_FULL;
-        
+
       case SEND_TIMEOUT:
         onReceiverTimeout(data);
         return SEND_TIMEOUT;
-        
+
       case CONNECTION_LOST:
         onReceiverError(data);
         return CONNECTION_LOST;
-        
+
       case UNKNOWN_ERROR:
         onReceiverError(data);
         return UNKNOWN_ERROR;
-        
+
       default:
         onReceiverError(data);
         return PORT_ERROR;

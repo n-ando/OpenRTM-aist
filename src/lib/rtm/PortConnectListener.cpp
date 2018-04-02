@@ -72,7 +72,7 @@ namespace RTC
         "ON_DISCONNECTED",
         ""
       };
-    type = type < PORT_CONNECT_RET_LISTENER_NUM ? 
+    type = type < PORT_CONNECT_RET_LISTENER_NUM ?
       type : PORT_CONNECT_RET_LISTENER_NUM;
       return typeString[type];
   }
@@ -97,8 +97,8 @@ namespace RTC
   PortConnectListenerHolder::PortConnectListenerHolder()
   {
   }
-    
-  
+
+
   PortConnectListenerHolder::~PortConnectListenerHolder()
   {
     Guard guard(m_mutex);
@@ -111,20 +111,20 @@ namespace RTC
       }
   }
 
-  
+
   void PortConnectListenerHolder::addListener(PortConnectListener* listener,
                                               bool autoclean)
   {
     Guard guard(m_mutex);
     m_listeners.push_back(Entry(listener, autoclean));
   }
-  
-  
+
+
   void PortConnectListenerHolder::removeListener(PortConnectListener* listener)
   {
     Guard guard(m_mutex);
     std::vector<Entry>::iterator it(m_listeners.begin());
-    
+
     for (; it != m_listeners.end(); ++it)
       {
         if ((*it).first == listener)
@@ -137,10 +137,10 @@ namespace RTC
             return;
           }
       }
-    
+
   }
-  
-  
+
+
   void PortConnectListenerHolder::notify(const char* portname,
                                          RTC::ConnectorProfile& profile)
   {
@@ -162,7 +162,7 @@ namespace RTC
   PortConnectRetListenerHolder::PortConnectRetListenerHolder()
   {
   }
-  
+
 
   PortConnectRetListenerHolder::~PortConnectRetListenerHolder()
   {
@@ -176,7 +176,7 @@ namespace RTC
       }
   }
 
-  
+
   void PortConnectRetListenerHolder::
   addListener(PortConnectRetListener* listener, bool autoclean)
   {
@@ -184,7 +184,7 @@ namespace RTC
     m_listeners.push_back(Entry(listener, autoclean));
   }
 
-  
+
   void PortConnectRetListenerHolder::
   removeListener(PortConnectRetListener* listener)
   {
@@ -202,10 +202,10 @@ namespace RTC
             return;
           }
       }
-    
+
   }
 
-    
+
   void PortConnectRetListenerHolder::notify(const char* portname,
                                             RTC::ConnectorProfile& profile,
                                             ReturnCode_t ret)

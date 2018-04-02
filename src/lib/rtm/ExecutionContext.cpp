@@ -21,7 +21,7 @@
 
 namespace RTC
 {
-  
+
   ExecutionContextBase::ExecutionContextBase(RTObject_ptr owner)
     : rtclog("exec_cxt"), m_running(false)
   {
@@ -43,7 +43,7 @@ namespace RTC
     RTC_TRACE(("is_running()"));
     return m_running;
   }
-  
+
 
   /*!
    * @if jp
@@ -57,7 +57,7 @@ namespace RTC
     RTC_TRACE(("start()"));
     return RTC::RTC_OK;
   }
-  
+
 
   /*!
    * @if jp
@@ -71,8 +71,8 @@ namespace RTC
     RTC_TRACE(("stop()"));
     return RTC::RTC_OK;
   }
-  
-  
+
+
   /*!
    * @if jp
    * @brief 実行周期(Hz)を取得する
@@ -85,11 +85,11 @@ namespace RTC
     RTC_TRACE(("get_rate()"));
     return m_profile.rate;
   }
-  
-  
+
+
   /*!
    * @if jp
-   * @brief 実行周期(Hz)を与える 
+   * @brief 実行周期(Hz)を与える
    * @else
    * @brief Set rate (Hz)
    * @endif
@@ -104,7 +104,7 @@ namespace RTC
       }
     return RTC::BAD_PARAMETER;
   }
-  
+
 
   /*!
    * @if jp
@@ -112,14 +112,14 @@ namespace RTC
    * @else
    * @brief Activate a component
    * @endif
-   */ 
+   */
   ReturnCode_t
   ExecutionContextBase::activate_component(LightweightRTObject_ptr comp)
   {
     RTC_TRACE(("activate_component()"));
     return RTC::RTC_OK;
   }
-  
+
 
   /*!
    * @if jp
@@ -127,14 +127,14 @@ namespace RTC
    * @else
    * @brief Deactivate a component
    * @endif
-   */  
+   */
   ReturnCode_t
   ExecutionContextBase::deactivate_component(LightweightRTObject_ptr comp)
   {
     RTC_TRACE(("deactivate_component()"));
     return RTC::RTC_OK;
   }
-  
+
 
   /*!
    * @if jp
@@ -142,15 +142,15 @@ namespace RTC
    * @else
    * @brief Deactivate a component
    * @endif
-   */  
+   */
   ReturnCode_t
   ExecutionContextBase::reset_component(LightweightRTObject_ptr comp)
   {
     RTC_TRACE(("reset_component()"));
     return RTC::RTC_OK;
   }
-  
-  
+
+
   /*!
    * @if jp
    * @brief コンポーネントの状態を取得する
@@ -164,8 +164,8 @@ namespace RTC
     RTC_TRACE(("get_component_state()"));
     return RTC::INACTIVE_STATE;
   }
-  
-  
+
+
   /*!
    * @if jp
    * @brief ExecutionKind を取得する
@@ -178,7 +178,7 @@ namespace RTC
     RTC_TRACE(("get_kind()"));
     return m_profile.kind;
   }
-  
+
 
   /*!
    * @if jp
@@ -199,8 +199,8 @@ namespace RTC
       }
     return RTC::BAD_PARAMETER;
   }
-  
-  
+
+
   /*!
    * @if jp
    * @brief コンポーネントをコンポーネントリストから削除する
@@ -239,7 +239,7 @@ namespace RTC
     p = new ExecutionContextProfile(m_profile);
     return p._retn();
   }
-  
-  
-  
+
+
+
 }; // namespace RTC

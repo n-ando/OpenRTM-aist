@@ -26,7 +26,7 @@
 
 #ifndef ULLONG_MAX
 #define ULLONG_MAX 0xffffffffffffffffULL
-#endif 
+#endif
 
 namespace coil
 {
@@ -147,11 +147,11 @@ namespace coil
         double trecord(m_record[i]);
         sum += trecord;
         sq_sum += trecord * trecord;
-        
+
         if (trecord > max_interval) max_interval = trecord;
         if (trecord < min_interval) min_interval = trecord;
       }
-    
+
     mean_interval = sum / len;
     stddev = sqrt(sq_sum / len - (mean_interval * mean_interval));
 

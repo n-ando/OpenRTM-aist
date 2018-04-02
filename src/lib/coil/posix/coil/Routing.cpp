@@ -59,11 +59,11 @@ namespace coil
     // routing interface like AFROUTE or sysctl.
     struct ::hostent *hostent;
     struct ::sockaddr_in addr;
-    
+
     hostent = gethostbyname(dest_addr.c_str());
     addr.sin_addr.s_addr = **(unsigned int **)(hostent->h_addr_list);
     dest_addr = inet_ntoa(addr.sin_addr);
-    
+
 #if defined(COIL_OS_FREEBSD) || defined(COIL_OS_DARWIN) \
                              || defined(COIL_OS_CYGWIN) \
                              || defined(COIL_OS_QNX)
@@ -82,8 +82,8 @@ namespace coil
     const char* delimiter = " ";
     cmd += dest_addr;
     cmd += " 2> /dev/null";
-#endif // COIL_OS_IS_LINUX    
-    
+#endif // COIL_OS_IS_LINUX
+
     FILE* fp;
     if ((fp = popen(cmd.c_str(), "r")) == NULL)
       {
@@ -95,9 +95,9 @@ namespace coil
         char str[512];
         fgets(str, 512, fp);
         std::string line(str);
-        
+
         if (std::string::npos == line.find(match_str)) { continue; }
-        
+
         line.erase(line.end() - 1);
         coil::vstring vs(coil::split(line, delimiter));
 
@@ -141,21 +141,21 @@ namespace coil
     std::string cmd("ifconfig ");
     cmd += ifname;
     cmd += " 2> /dev/null";
-    
+
     FILE* fp;
     if ((fp = popen(cmd.c_str(), "r")) == NULL)
       {
         return false;
       }
-    
+
     do
       {
         char str[512];
         fgets(str, 512, fp);
         std::string line(str);
-        
+
         if (std::string::npos == line.find("inet ")) { continue; }
-        
+
         line.erase(line.end() - 1);
         coil::eraseHeadBlank(line);
         coil::vstring vs(coil::split(line, " "));
@@ -171,5 +171,5 @@ namespace coil
     wait(NULL);
     return false;
   }
-  
+
 }; // namespace coil

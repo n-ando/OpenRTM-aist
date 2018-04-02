@@ -50,7 +50,7 @@ namespace RTC
     RTC_DEBUG(("Actual period: %d [sec], %d [usec]",
                m_profile.getPeriod().sec(), m_profile.getPeriod().usec()));
   }
-  
+
   /*!
    * @if jp
    * @brief デストラクタ

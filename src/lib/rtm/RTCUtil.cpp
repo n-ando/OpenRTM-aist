@@ -34,7 +34,7 @@ namespace RTC_Utils
     dfp = OpenRTM::DataFlowComponent::_narrow(obj);
     return !CORBA::is_nil(dfp);
   }
-  
+
   /*!
    * @if jp
    * @brief FsmParticipant であるか判定する
@@ -48,7 +48,7 @@ namespace RTC_Utils
     fsmp = RTC::FsmParticipant::_narrow(obj);
     return !CORBA::is_nil(fsmp);
   }
-  
+
   /*!
    * @if jp
    * @brief Fsm であるか判定する
@@ -62,7 +62,7 @@ namespace RTC_Utils
     fsm = RTC::FsmObject::_narrow(obj);
     return !CORBA::is_nil(fsm);
   }
-  
+
   /*!
    * @if jp
    * @brief multiModeComponent であるか判定する

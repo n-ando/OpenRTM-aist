@@ -20,7 +20,7 @@
 
 namespace RTM
 {
-  
+
   //============================================================
   /*!
    * @if jp
@@ -32,7 +32,7 @@ namespace RTM
   ManagerActionListener::~ManagerActionListener()
   {
   }
-  
+
   /*!
    * @if jp
    * @class ManagerActionListenerHolder クラス
@@ -43,7 +43,7 @@ namespace RTM
   ManagerActionListenerHolder::~ManagerActionListenerHolder()
   {
   }
-  
+
   /*!
    * @if jp
    * @brief preShutdown コールバック関数
@@ -57,7 +57,7 @@ namespace RTM
   {
     LISTENERHOLDER_CALLBACK(preShutdown, ());
   }
-  
+
   /*!
    * @if jp
    * @brief postShutdown コールバック関数
@@ -71,7 +71,7 @@ namespace RTM
   {
     LISTENERHOLDER_CALLBACK(postShutdown, ());
   }
-  
+
   /*!
    * @if jp
    * @brief preReinit コールバック関数
@@ -85,7 +85,7 @@ namespace RTM
   {
     LISTENERHOLDER_CALLBACK(preReinit, ());
   }
-  
+
   /*!
    * @if jp
    * @brief postReinit コールバック関数
@@ -99,8 +99,8 @@ namespace RTM
   {
     LISTENERHOLDER_CALLBACK(postReinit, ());
   }
-  
-  
+
+
   //============================================================
   /*!
    * @if jp
@@ -112,7 +112,7 @@ namespace RTM
   ModuleActionListener::~ModuleActionListener()
   {
   }
-  
+
   /*!
    * @if jp
    * @class ModuleActionListener ホルダクラス
@@ -123,7 +123,7 @@ namespace RTM
   ModuleActionListenerHolder::~ModuleActionListenerHolder()
   {
   }
-  
+
   /*!
    * @if jp
    * @brief preLoad コールバック関数
@@ -138,7 +138,7 @@ namespace RTM
   {
     LISTENERHOLDER_CALLBACK(preLoad, (modname, funcname));
   }
-  
+
   /*!
    * @if jp
    * @brief postLoad コールバック関数
@@ -153,7 +153,7 @@ namespace RTM
   {
     LISTENERHOLDER_CALLBACK(postLoad, (modname, funcname));
   }
-  
+
   /*!
    * @if jp
    * @brief preUnload コールバック関数
@@ -167,7 +167,7 @@ namespace RTM
   {
     LISTENERHOLDER_CALLBACK(preUnload, (modname));
   }
-  
+
   /*!
    * @if jp
    * @brief postUnload コールバック関数
@@ -181,8 +181,8 @@ namespace RTM
   {
     LISTENERHOLDER_CALLBACK(postUnload, (modname));
   }
-  
-  
+
+
   //============================================================
   /*!
    * @if jp
@@ -196,7 +196,7 @@ namespace RTM
   RtcLifecycleActionListener::~RtcLifecycleActionListener()
   {
   }
-  
+
   /*!
    * @if jp
    * @brief デストラクタ
@@ -207,7 +207,7 @@ namespace RTM
   RtcLifecycleActionListenerHolder::~RtcLifecycleActionListenerHolder()
   {
   }
-  
+
   /*!
    * @if jp
    * @brief preCreate コールバック関数
@@ -221,7 +221,7 @@ namespace RTM
   {
     LISTENERHOLDER_CALLBACK(preCreate, (args));
   }
-  
+
   /*!
    * @if jp
    * @brief postCreate コールバック関数
@@ -235,7 +235,7 @@ namespace RTM
   {
     LISTENERHOLDER_CALLBACK(postCreate, (rtobj));
   }
-  
+
   /*!
    * @if jp
    * @brief preConfigure コールバック関数
@@ -249,7 +249,7 @@ namespace RTM
   {
     LISTENERHOLDER_CALLBACK(preConfigure, (prop));
   }
-  
+
   /*!
    * @if jp
    * @brief postConfigure コールバック関数
@@ -263,7 +263,7 @@ namespace RTM
   {
     LISTENERHOLDER_CALLBACK(postConfigure, (prop));
   }
-  
+
   /*!
    * @if jp
    * @brief preInitialize コールバック関数
@@ -277,7 +277,7 @@ namespace RTM
   {
     LISTENERHOLDER_CALLBACK(preInitialize, ());
   }
-  
+
   /*!
    * @if jp
    * @brief postInitialize コールバック関数
@@ -291,8 +291,8 @@ namespace RTM
   {
     LISTENERHOLDER_CALLBACK(postInitialize, ());
   }
-  
-  
+
+
   //============================================================
   /*!
    * @if jp
@@ -304,7 +304,7 @@ namespace RTM
   NamingActionListener::~NamingActionListener()
   {
   }
-  
+
   /*!
    * @if jp
    * @brief デストラクタ
@@ -315,7 +315,7 @@ namespace RTM
   NamingActionListenerHolder::~NamingActionListenerHolder()
   {
   }
-  
+
   /*!
    * @if jp
    * @brief preBind コールバック関数
@@ -330,7 +330,7 @@ namespace RTM
   {
     LISTENERHOLDER_CALLBACK(preBind, (rtobj, name));
   }
-  
+
   /*!
    * @if jp
    * @brief postBind コールバック関数
@@ -345,7 +345,7 @@ namespace RTM
   {
     LISTENERHOLDER_CALLBACK(postBind, (rtobj, name));
   }
-  
+
   /*!
    * @if jp
    * @brief preUnbind コールバック関数
@@ -360,7 +360,7 @@ namespace RTM
   {
     LISTENERHOLDER_CALLBACK(preUnbind, (rtobj, name));
   }
-  
+
   /*!
    * @if jp
    * @brief postUnbind コールバック関数
@@ -375,8 +375,8 @@ namespace RTM
   {
     LISTENERHOLDER_CALLBACK(postUnbind, (rtobj, name));
   }
-  
-  
+
+
   //============================================================
   /*!
    * @if jp
@@ -388,7 +388,7 @@ namespace RTM
   LocalServiceActionListener::~LocalServiceActionListener()
   {
   }
-  
+
   /*!
    * @if jp
    * @brief デストラクタ
@@ -399,7 +399,7 @@ namespace RTM
   LocalServiceActionListenerHolder::~LocalServiceActionListenerHolder()
   {
   }
-  
+
   /*!
    * @if jp
    * @brief preServiceRegister コールバック関数
@@ -414,7 +414,7 @@ namespace RTM
   {
     LISTENERHOLDER_CALLBACK(preServiceRegister, (service_name));
   }
-  
+
   /*!
    * @if jp
    * @brief postServiceRegister コールバック関数
@@ -429,7 +429,7 @@ namespace RTM
   {
     LISTENERHOLDER_CALLBACK(postServiceRegister, (service_name, service));
   }
-  
+
   /*!
    * @if jp
    * @brief preServiceInit コールバック関数
@@ -444,7 +444,7 @@ namespace RTM
   {
     LISTENERHOLDER_CALLBACK(preServiceInit, (prop, service));
   }
-  
+
   /*!
    * @if jp
    * @brief postServiceInit コールバック関数
@@ -459,7 +459,7 @@ namespace RTM
   {
     LISTENERHOLDER_CALLBACK(postServiceInit, (prop, service));
   }
-  
+
   /*!
    * @if jp
    * @brief preServiceReinit コールバック関数
@@ -474,7 +474,7 @@ namespace RTM
   {
     LISTENERHOLDER_CALLBACK(preServiceReinit, (prop, service));
   }
-  
+
   /*!
    * @if jp
    * @brief postServiceReinit コールバック関数
@@ -489,7 +489,7 @@ namespace RTM
   {
     LISTENERHOLDER_CALLBACK(postServiceReinit, (prop, service));
   }
-  
+
   /*!
    * @if jp
    * @brief postServiceFinalize コールバック関数
@@ -504,7 +504,7 @@ namespace RTM
   {
     LISTENERHOLDER_CALLBACK(postServiceFinalize, (service_name, service));
   }
-  
+
   /*!
    * @if jp
    * @brief preServiceFinalize コールバック関数
@@ -519,5 +519,5 @@ namespace RTM
   {
     LISTENERHOLDER_CALLBACK(preServiceFinalize, (service_name, service));
   }
-  
+
 };  // namespace RTM

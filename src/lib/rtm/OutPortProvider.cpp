@@ -32,7 +32,7 @@ namespace RTC
   OutPortProvider::~OutPortProvider(void)
   {
   }
-  
+
   /*!
    * @if jp
    * @brief 設定初期化
@@ -63,7 +63,7 @@ namespace RTC
 #endif // ORB_IS_RTORB
     NVUtil::append(prop, m_properties);
   }
-  
+
   /*!
    * @if jp
    * @brief Interface情報を公開する
@@ -79,11 +79,11 @@ namespace RTC
       {
         return false;
       }
-    
+
     NVUtil::append(prop, m_properties);
     return true;
   }
-  
+
   /*!
    * @if jp
    * @brief ポートタイプを設定する
@@ -95,7 +95,7 @@ namespace RTC
   {
     m_portType = port_type;
   }
-  
+
   /*!
    * @if jp
    * @brief データタイプを設定する
@@ -107,7 +107,7 @@ namespace RTC
   {
     m_dataType = data_type;
   }
-  
+
   /*!
    * @if jp
    * @brief インターフェースタイプを設定する
@@ -119,7 +119,7 @@ namespace RTC
   {
     m_interfaceType = interface_type;
   }
-  
+
   /*!
    * @if jp
    * @brief データフロータイプを設定する
@@ -131,7 +131,7 @@ namespace RTC
   {
     m_dataflowType = dataflow_type;
   }
-  
+
   /*!
    * @if jp
    * @brief サブスクリプションタイプを設定する

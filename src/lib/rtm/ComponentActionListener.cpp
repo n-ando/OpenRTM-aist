@@ -48,7 +48,7 @@ namespace RTC
    * @endif
    */
   PortActionListener::~PortActionListener() {}
-  
+
   /*!
    * @if jp
    * @class ExecutionContextActionListener クラス
@@ -57,7 +57,7 @@ namespace RTC
    * @endif
    */
   ExecutionContextActionListener::~ExecutionContextActionListener() {}
-  
+
 
 
 
@@ -73,8 +73,8 @@ namespace RTC
   PreComponentActionListenerHolder::PreComponentActionListenerHolder()
   {
   }
-    
-  
+
+
   PreComponentActionListenerHolder::~PreComponentActionListenerHolder()
   {
     Guard guard(m_mutex);
@@ -87,7 +87,7 @@ namespace RTC
       }
   }
 
-  
+
   void PreComponentActionListenerHolder::
   addListener(PreComponentActionListener* listener,
               bool autoclean)
@@ -95,14 +95,14 @@ namespace RTC
     Guard guard(m_mutex);
     m_listeners.push_back(Entry(listener, autoclean));
   }
-  
-  
+
+
   void PreComponentActionListenerHolder::
   removeListener(PreComponentActionListener* listener)
   {
     Guard guard(m_mutex);
     std::vector<Entry>::iterator it(m_listeners.begin());
-    
+
     for (; it != m_listeners.end(); ++it)
       {
         if ((*it).first == listener)
@@ -115,10 +115,10 @@ namespace RTC
             return;
           }
       }
-    
+
   }
-  
-  
+
+
   void PreComponentActionListenerHolder::notify(UniqueId ec_id)
   {
     Guard guard(m_mutex);
@@ -139,7 +139,7 @@ namespace RTC
   PostComponentActionListenerHolder::PostComponentActionListenerHolder()
   {
   }
-  
+
 
   PostComponentActionListenerHolder::~PostComponentActionListenerHolder()
   {
@@ -153,7 +153,7 @@ namespace RTC
       }
   }
 
-  
+
   void PostComponentActionListenerHolder::
   addListener(PostComponentActionListener* listener, bool autoclean)
   {
@@ -161,7 +161,7 @@ namespace RTC
     m_listeners.push_back(Entry(listener, autoclean));
   }
 
-  
+
   void PostComponentActionListenerHolder::
   removeListener(PostComponentActionListener* listener)
   {
@@ -179,10 +179,10 @@ namespace RTC
             return;
           }
       }
-    
+
   }
 
-    
+
   void PostComponentActionListenerHolder::notify(UniqueId ec_id,
                                                  ReturnCode_t ret)
   {
@@ -204,8 +204,8 @@ namespace RTC
   PortActionListenerHolder::PortActionListenerHolder()
   {
   }
-    
-  
+
+
   PortActionListenerHolder::~PortActionListenerHolder()
   {
     Guard guard(m_mutex);
@@ -218,20 +218,20 @@ namespace RTC
       }
   }
 
-  
+
   void PortActionListenerHolder::addListener(PortActionListener* listener,
                                              bool autoclean)
   {
     Guard guard(m_mutex);
     m_listeners.push_back(Entry(listener, autoclean));
   }
-  
-  
+
+
   void PortActionListenerHolder::removeListener(PortActionListener* listener)
   {
     Guard guard(m_mutex);
     std::vector<Entry>::iterator it(m_listeners.begin());
-    
+
     for (; it != m_listeners.end(); ++it)
       {
         if ((*it).first == listener)
@@ -244,10 +244,10 @@ namespace RTC
             return;
           }
       }
-    
+
   }
-  
-  
+
+
   void PortActionListenerHolder::notify(const RTC::PortProfile& pprofile)
   {
     Guard guard(m_mutex);
@@ -269,8 +269,8 @@ namespace RTC
   ExecutionContextActionListenerHolder::ExecutionContextActionListenerHolder()
   {
   }
-    
-  
+
+
   ExecutionContextActionListenerHolder::~ExecutionContextActionListenerHolder()
   {
     Guard guard(m_mutex);
@@ -283,7 +283,7 @@ namespace RTC
       }
   }
 
-  
+
   void ExecutionContextActionListenerHolder::
   addListener(ExecutionContextActionListener* listener,
               bool autoclean)
@@ -291,14 +291,14 @@ namespace RTC
     Guard guard(m_mutex);
     m_listeners.push_back(Entry(listener, autoclean));
   }
-  
-  
+
+
   void ExecutionContextActionListenerHolder::
   removeListener(ExecutionContextActionListener* listener)
   {
     Guard guard(m_mutex);
     std::vector<Entry>::iterator it(m_listeners.begin());
-    
+
     for (; it != m_listeners.end(); ++it)
       {
         if ((*it).first == listener)
@@ -311,10 +311,10 @@ namespace RTC
             return;
           }
       }
-    
+
   }
-  
-  
+
+
   void ExecutionContextActionListenerHolder::notify(UniqueId ec_id)
   {
     Guard guard(m_mutex);

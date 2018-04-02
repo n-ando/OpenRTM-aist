@@ -32,7 +32,7 @@ using std::sprintf;
 
 namespace RTC
 {
-  
+
   // The list of default configuration file path.
 #ifdef RTM_OS_WIN32
   const char* ManagerConfig::config_file_path[] = 
@@ -55,7 +55,7 @@ namespace RTC
   
   // Environment value to specify configuration file
   const char* ManagerConfig::config_file_env = "RTC_MANAGER_CONFIG";
-  
+
   /*!
    * @if jp
    * @brief コンストラクタ
@@ -67,7 +67,7 @@ namespace RTC
     : m_isMaster(false)
   {
   }
-  
+
   /*!
    * @if jp
    * @brief コンストラクタ
@@ -80,7 +80,7 @@ namespace RTC
   {
     init(argc, argv);
   }
-  
+
   /*!
    * @if jp
    * @brief デストラクタ
@@ -91,7 +91,7 @@ namespace RTC
   ManagerConfig::~ManagerConfig()
   {
   }
-  
+
   /*!
    * @if jp
    * @brief 初期化
@@ -103,7 +103,7 @@ namespace RTC
   {
     parseArgs(argc, argv);
   }
-  
+
   /*!
    * @if jp
    * @brief Configuration 情報を Property に設定する
@@ -130,7 +130,7 @@ namespace RTC
     prop << m_argprop;
     prop["config_file"] = m_configFile;
   }
-  
+
   /*!
    * @if jp
    * @brief コマンド引数をパースする
@@ -142,9 +142,9 @@ namespace RTC
   {
     coil::GetOpt get_opts(argc, argv, "af:l:o:p:d", 0);
     int opt;
-    
+
     //  if (argc == 0) return true;
-    
+
     while ((opt = get_opts()) > 0)
       {
         switch (opt)
@@ -204,7 +204,7 @@ namespace RTC
       }
     return;
   }
-  
+
   /*!
    * @if jp
    * @brief Configuration file の検索
@@ -215,7 +215,7 @@ namespace RTC
   bool ManagerConfig::findConfigFile()
   {
     // Check existance of configuration file given command arg
-    if (m_configFile != "") 
+    if (m_configFile != "")
       {
         if (fileExist(m_configFile))
           {
@@ -251,7 +251,7 @@ namespace RTC
       }
     return false;
   }
-  
+
   /*!
    * @if jp
    * @brief システム情報を設定する
@@ -260,23 +260,23 @@ namespace RTC
    * @endif
    */
   void ManagerConfig::setSystemInformation(coil::Properties& prop)
-  { 
+  {
     //
     // Get system information by using ACE_OS::uname (UNIX/Windows)
-    // 
+    //
     coil::utsname  sysinfo;
     if (coil::uname(&sysinfo) != 0)
       {
         return;
       }
-    
+
     //
     // Getting current proccess pid by using ACE_OS::getpid() (UNIX/Windows)
     //
     coil::pid_t pid = coil::getpid();
     char pidc[8];
     snprintf(pidc, sizeof(pidc), "%d", pid);
-    
+
     prop.setProperty("os.name",     sysinfo.sysname);
     prop.setProperty("os.release",  sysinfo.release);
     prop.setProperty("os.version",  sysinfo.version);
@@ -286,7 +286,7 @@ namespace RTC
 
     return;
   }
-  
+
   /*!
    * @if jp
    * @brief ファイルの存在確認
@@ -299,7 +299,7 @@ namespace RTC
     std::ifstream infile;
     infile.open(filename.c_str(), std::ios::in);
     // fial() 0: ok, !0: fail
-    if (infile.fail() != 0) 
+    if (infile.fail() != 0)
       {
         infile.close();
         return false;

@@ -91,7 +91,7 @@ namespace RTC
     return m_name == comp->getInstanceName();
   }
 
-  
+
   /*!
    * @if jp
    * @brief Protected コンストラクタ
@@ -106,7 +106,7 @@ namespace RTC
   {
     new coil::SignalAction((coil::SignalHandler) handler, SIGINT);
   }
-  
+
   /*!
    * @if jp
    * @brief Protected コピーコンストラクタ
@@ -121,7 +121,7 @@ namespace RTC
   {
     new coil::SignalAction((coil::SignalHandler) handler, SIGINT);
   }
-  
+
   /*!
    * @if jp
    * @brief マネージャの初期化
@@ -151,7 +151,7 @@ namespace RTC
       }
     return manager;
   }
-  
+
   /*!
    * @if jp
    * @brief マネージャのインスタンスの取得
@@ -181,20 +181,20 @@ namespace RTC
       }
     return *manager;
   }
-  
+
   /*!
    * @if jp
    * @brief マネージャ終了処理
    * @else
    * @brief Terminate Manager
    * @endif
-   */ 
+   */
   void Manager::terminate()
   {
     if (m_terminator != NULL)
       m_terminator->terminate();
   }
-  
+
   /*!
    * @if jp
    * @brief マネージャ・シャットダウン
@@ -222,14 +222,14 @@ namespace RTC
     m_listeners.manager_.postShutdown();
     shutdownLogger();
   }
-  
+
   /*!
    * @if jp
    * @brief マネージャ終了処理の待ち合わせ
    * @else
    * @brief Wait for Manager's termination
    * @endif
-   */ 
+   */
   void Manager::join()
   {
     RTC_TRACE(("Manager::wait()"));
@@ -246,30 +246,30 @@ namespace RTC
         coil::usleep(100000);
       }
   }
-  
+
   /*!
    * @if jp
    * @brief 初期化プロシージャのセット
    * @else
    * @brief Set initial procedure
    * @endif
-   */ 
+   */
   void Manager::setModuleInitProc(ModuleInitProc proc)
   {
     m_initProc = proc;
   }
-  
+
   /*!
    * @if jp
    * @brief Managerのアクティブ化
    * @else
    * @brief Activate the Manager
    * @endif
-   */ 
+   */
   bool Manager::activateManager()
   {
     RTC_TRACE(("Manager::activateManager()"));
-    
+
     try
       {
         if (CORBA::is_nil(this->thePOAManager()))
@@ -403,14 +403,14 @@ namespace RTC
 
     return true;
   }
-  
+
   /*!
    * @if jp
    * @brief Managerの実行
    * @else
    * @brief Run the Manager
    * @endif
-   */ 
+   */
   void Manager::runManager(bool no_block)
   {
     if (no_block)
@@ -428,7 +428,7 @@ namespace RTC
       }
     return;
   }
-  
+
   //============================================================
   // Module management
   //============================================================
@@ -489,7 +489,7 @@ namespace RTC
       }
     return RTC::RTC_OK;
   }
-  
+
   /*!
    * @if jp
    * @brief モジュールのアンロード
@@ -506,21 +506,21 @@ namespace RTC
     m_listeners.module_.postUnload(fnamestr);
     return;
   }
-  
+
   /*!
    * @if jp
    * @brief 全モジュールのアンロード
    * @else
    * @brief Unload all modules
    * @endif
-   */ 
+   */
   void Manager::unloadAll()
   {
     RTC_TRACE(("Manager::unloadAll()"));
     m_module->unloadAll();
     return;
   }
-  
+
   /*!
    * @if jp
    * @brief ロード済みのモジュールリストを取得する
@@ -533,7 +533,7 @@ namespace RTC
     RTC_TRACE(("Manager::getLoadedModules()"));
     return m_module->getLoadedModules();
   }
-  
+
   /*!
    * @if jp
    * @brief ロード可能なモジュールリストを取得する
@@ -542,11 +542,11 @@ namespace RTC
    * @endif
    */
 std::vector<coil::Properties> Manager::getLoadableModules()
-  {    
+  {
     RTC_TRACE(("Manager::getLoadableModules()"));
     return m_module->getLoadableModules();
   }
-  
+
   //============================================================
   // Component factory management
   //============================================================
@@ -591,7 +591,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
         return false;
       }
   }
-  
+
   std::vector<coil::Properties> Manager::getFactoryProfiles()
   {
     std::vector<FactoryBase*> factories(m_factory.getObjects());
@@ -602,7 +602,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
       }
     return props;
   }
-  
+
   /*!
    * @if jp
    * @brief ExecutionContext用ファクトリを登録する
@@ -616,7 +616,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   {
     RTC_TRACE(("Manager::registerECFactory(%s)", name));
     try
-      {    
+      {
         ECFactoryBase* factory;
         factory = new ECFactoryCXX(name, new_func, delete_func);
         if (m_ecfactory.registerObject(factory))
@@ -630,7 +630,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
       }
     return false;
   }
-  
+
   /*!
    * @if jp
    * @brief ファクトリ全リストを取得する
@@ -641,11 +641,11 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   std::vector<std::string> Manager::getModulesFactories()
   {
     RTC_TRACE(("Manager::getModulesFactories()"));
-    
+
     ModuleFactories m;
     return m_factory.for_each(m).modlist;
   }
-  
+
   //============================================================
   // Component management
   //============================================================
@@ -667,8 +667,8 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     if (!procComponentArgs(argstr.c_str(), comp_id, comp_prop)) return NULL;
 
     //------------------------------------------------------------
-    // Because the format of port-name had been changed from <port_name> 
-    // to <instance_name>.<port_name>, the following processing was added. 
+    // Because the format of port-name had been changed from <port_name>
+    // to <instance_name>.<port_name>, the following processing was added.
     // (since r1648)
 
     if (comp_prop.findNode("exported_ports") != 0)
@@ -688,16 +688,16 @@ std::vector<coil::Properties> Manager::getLoadableModules()
               {
                 exported_ports_str += exported_ports[i];
               }
-            
+
             if (i != exported_ports.size() - 1)
               {
                 exported_ports_str += ",";
               }
           }
-                                
+
          comp_prop["exported_ports"] = exported_ports_str;
          comp_prop["conf.default.exported_ports"] = exported_ports_str;
- 
+
       }
     //------------------------------------------------------------
 
@@ -708,7 +708,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
       {
         RTC_ERROR(("Factory not found: %s",
                    comp_id["implementation_id"].c_str()));
-        
+
         if (!coil::toBool(m_config["manager.modules.search_auto"], "YES", "NO", true))
           {
             return 0;
@@ -716,7 +716,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
         // automatic module loading
         std::vector<coil::Properties> mp(m_module->getLoadableModules());
         RTC_INFO(("%d loadable modules found", mp.size()));
-        
+
         std::vector<coil::Properties>::iterator it;
         it = std::find_if(mp.begin(), mp.end(), ModulePredicate(comp_id));
         if (it == mp.end())
@@ -734,7 +734,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
         RTC_INFO(("Loading module: %s", (*it)["module_file_name"].c_str()))
           load((*it)["module_file_name"].c_str(), "");
         factory = m_factory.find(comp_id);
-        if (factory == 0) 
+        if (factory == 0)
           {
             RTC_ERROR(("Factory not found for loaded module: %s",
                        comp_id["implementation_id"].c_str()));
@@ -826,7 +826,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     configureComponent(comp, prop);
     m_listeners.rtclifecycle_.postConfigure(prop);
     // comp->setProperties(prop);
-    
+
     //------------------------------------------------------------
     // Component initialization
     m_listeners.rtclifecycle_.preInitialize();
@@ -850,7 +850,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     registerComponent(comp);
     return comp;
   }
-  
+
   /*!
    * @if jp
    * @brief RTコンポーネントを直接 Manager に登録する
@@ -863,9 +863,9 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     RTC_TRACE(("Manager::registerComponent(%s)", comp->getInstanceName()));
     // ### NamingManager のみで代用可能
     m_compManager.registerObject(comp);
-    
+
     coil::vstring names(comp->getNamingNames());
-    
+
     m_listeners.naming_.preBind(comp, names);
     for (int i(0), len(names.size()); i < len; ++i)
       {
@@ -903,7 +903,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 
     return true;
   }
-  
+
   /*!
    * @if jp
    * @brief RTコンポーネントの登録を解除する
@@ -916,7 +916,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     RTC_TRACE(("Manager::unregisterComponent(%s)", comp->getInstanceName()));
     // ### NamingManager のみで代用可能
     m_compManager.unregisterObject(comp->getInstanceName());
-    
+
     coil::vstring names(comp->getNamingNames());
 
     m_listeners.naming_.preUnbind(comp, names);
@@ -929,12 +929,12 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 
     return true;
   }
-  
+
 
   ExecutionContextBase* Manager::createContext(const char* ec_args)
   {
     RTC_TRACE(("Manager::createContext()"));
-    RTC_TRACE(("ExecutionContext type: %s", 
+    RTC_TRACE(("ExecutionContext type: %s",
                m_config.getProperty("exec_cxt.periodic.type").c_str()));
 
     std::string ec_id;
@@ -952,7 +952,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     ec = factory->create();
     return ec;
   }
-  
+
   /*!
    * @if jp
    * @brief Manager に登録されているRTコンポーネントを削除する
@@ -980,8 +980,8 @@ std::vector<coil::Properties> Manager::getLoadableModules()
         RTC_DEBUG(("Factory found: %s",
                    comp_id["implementation_id"].c_str()));
         factory->destroy(comp);
-      } 
-    
+      }
+
     if (coil::toBool(m_config["manager.shutdown_on_nortcs"],
                      "YES", "NO", true) &&
         !coil::toBool(m_config["manager.is_master"], "YES", "NO", false))
@@ -993,7 +993,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
             shutdown();
           }
       }
-  } 
+  }
 
   void Manager::deleteComponent(const char* instance_name)
   {
@@ -1007,7 +1007,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
       }
     deleteComponent(comp);
   }
-  
+
   /*!
    * @if jp
    * @brief Manager に登録されているRTコンポーネントを検索する
@@ -1020,7 +1020,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     RTC_TRACE(("Manager::getComponent(%s)", instance_name));
     return m_compManager.find(instance_name);
   }
-  
+
   /*!
    * @if jp
    * @brief Manager に登録されている全RTコンポーネントを取得する
@@ -1045,7 +1045,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   {
     m_listeners.manager_.removeListener(listener);
   }
-  
+
   void Manager::
   addModuleActionListener(RTM::ModuleActionListener* listener,
                            bool autoclean)
@@ -1069,7 +1069,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   {
     m_listeners.rtclifecycle_.removeListener(listener);
   }
-  
+
   void Manager::
   addNamingActionListener(RTM::NamingActionListener* listener,
                           bool autoclean)
@@ -1082,7 +1082,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   {
     m_listeners.naming_.removeListener(listener);
   }
-  
+
   void Manager::
   addLocalServiceActionListener(RTM::LocalServiceActionListener* listener,
                                 bool autoclean)
@@ -1096,7 +1096,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     m_listeners.localservice_.removeListener(listener);
   }
 
-  
+
   //============================================================
   // CORBA 関連
   //============================================================
@@ -1124,7 +1124,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     RTC_TRACE(("Manager::getORB()"));
     return CORBA::ORB::_duplicate(m_pORB);
   }
-  
+
   /*!
    * @if jp
    * @brief Manager が持つ RootPOA のポインタを取得する (所有権保持)
@@ -1176,7 +1176,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     RTC_TRACE(("Manager::thePOAManager()"));
     return m_pPOAManager.in();
   }
-  
+
   /*!
    * @if jp
    * @brief Manager が持つ POAManager を取得する (所有権複製)
@@ -1189,11 +1189,11 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     RTC_TRACE(("Manager::getPOAManager()"));
     return PortableServer::POAManager::_duplicate(m_pPOAManager);
   }
-  
+
   //============================================================
   // Protected functions
   //============================================================
-  
+
   //============================================================
   // Manager initialization and finalization
   //============================================================
@@ -1209,7 +1209,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     // load configurations
     ManagerConfig config(argc, argv);
     config.configure(m_config);
-    
+
     // initialize ModuleManager
     m_module = new ModuleManager(m_config);
 
@@ -1219,7 +1219,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
       Guard guard(m_terminate.mutex);
       m_terminate.waiting = 0;
     }
-    
+
     // initialize Timer
     if (coil::toBool(m_config["timer.enable"], "YES", "NO", true))
       {
@@ -1248,16 +1248,16 @@ std::vector<coil::Properties> Manager::getLoadableModules()
           }
         if (m_timer != NULL)
           {
-            m_timer->registerListenerObj(this, 
+            m_timer->registerListenerObj(this,
                                          &Manager::shutdownOnNoRtcs, tm);
           }
       }
-    
+
     {
-      coil::TimeValue tm(1, 0); 
+      coil::TimeValue tm(1, 0);
       if (m_timer != NULL)
         {
-          m_timer->registerListenerObj(this, 
+          m_timer->registerListenerObj(this,
                                        &Manager::cleanupComponents, tm);
         }
     }
@@ -1289,7 +1289,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 
 
   }
-  
+
   /*!
    * @if jp
    * @brief Manager の終了処理
@@ -1316,7 +1316,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
       }
 
   }
-  
+
   //============================================================
   // Logger initialization and finalization
   //============================================================
@@ -1476,7 +1476,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
         m_logfiles.clear();
       }
   }
-  
+
   //============================================================
   // ORB initialization and finalization
   //============================================================
@@ -1548,7 +1548,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
                   {
                     IIOP::Address iiop_addr;
                     iiop_addr.host = addr_port[0].c_str();
-                    CORBA::UShort port; 
+                    CORBA::UShort port;
                     coil::stringTo(port, addr_port[1].c_str());
                     iiop_addr.port = port;
 #if defined(RTM_OMNIORB_40) || defined(RTM_OMNIORB_41)
@@ -1568,7 +1568,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
       }
     return true;
   }
-  
+
   /*!
    * @if jp
    * @brief ORB のコマンドラインオプション作成
@@ -1671,7 +1671,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
       }
   }
 
-  
+
   /*!
    * @if jp
    * @brief ORB の終了処理
@@ -1697,10 +1697,10 @@ std::vector<coil::Properties> Manager::getLoadableModules()
         RTC_DEBUG(("No pending works of ORB. Shutting down POA and ORB."));
       }
     catch(...)
-      { 
+      {
         RTC_ERROR(("Caught SystemException during perform_work."));
       }
-    
+
     if (!CORBA::is_nil(m_pPOA))
       {
         try
@@ -1724,7 +1724,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
             RTC_ERROR(("Caught unknown exception during POA destruction."));
           }
       }
-    
+
     if (!CORBA::is_nil(m_pORB))
       {
         try
@@ -1748,7 +1748,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
           }
       }
   }
-  
+
   //============================================================
   // Naming initialization and finalization
   //============================================================
@@ -1762,33 +1762,33 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   bool Manager::initNaming()
   {
     RTC_TRACE(("Manager::initNaming()"));
-    
+
     m_namingManager = new NamingManager(this);
-    
+
     // If NameService is disabled, return immediately
     if (!coil::toBool(m_config["naming.enable"], "YES", "NO", true))
       {
         return true;
       }
-    
+
     // NameServer registration for each method and servers
     std::vector<std::string> meth(coil::split(m_config["naming.type"], ","));
-    
+
     for (int i(0), len_i(meth.size()); i < len_i; ++i)
       {
         std::vector<std::string> names;
         names = coil::split(m_config[meth[i] + ".nameservers"], ",");
-        
-        
+
+
         for (int j(0), len_j(names.size()); j < len_j; ++j)
           {
             RTC_TRACE(("Register Naming Server: %s/%s",                \
-                       meth[i].c_str(), names[j].c_str()));        
+                       meth[i].c_str(), names[j].c_str()));
             m_namingManager->registerNameServer(meth[i].c_str(),
                                                 names[j].c_str());
           }
       }
-    
+
     // NamingManager Timer update initialization
     if (coil::toBool(m_config["naming.update.enable"], "YES", "NO", true))
       {
@@ -1800,13 +1800,13 @@ std::vector<coil::Properties> Manager::getLoadableModules()
           }
         if (m_timer != NULL)
           {
-            m_timer->registerListenerObj(m_namingManager, 
+            m_timer->registerListenerObj(m_namingManager,
                                          &NamingManager::update, tm);
           }
       }
     return true;
   }
-  
+
   /*!
    * @if jp
    * @brief NamingManager の終了処理
@@ -1884,7 +1884,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 
     return true;
   }
-  
+
   bool Manager::initFactories()
   {
     RTC_TRACE(("Manager::initFactories()"));
@@ -1937,7 +1937,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
       }
 #endif // RTM_OS_LINUX
   }
-  
+
   /*!
    * @if jp
    * @brief Timer の初期化
@@ -2098,7 +2098,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
       }
     return;
   }
-  
+
   /*!
    * @if jp
    * @brief RTコンポーネントの登録解除
@@ -2131,7 +2131,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     Guard guard(m_finalized.mutex);
     m_finalized.comps.push_back(comp);
   }
-  
+
   /*!
    * @if jp
    * @brief createComponentの引数を処理する
@@ -2215,7 +2215,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
         return false;
       }
     ec_id = id_and_conf[0];
-    
+
     if (id_and_conf.size() == 2)
       {
         std::vector<std::string> conf(coil::split(id_and_conf[1], "&"));
@@ -2228,7 +2228,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
       }
     return true;
   }
-  
+
   /*!
    * @if jp
    * @brief RTコンポーネントのコンフィギュレーション処理
@@ -2308,12 +2308,12 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     type_prop << name_prop;
     type_prop["config_file"] = coil::flatten(coil::unique_sv(config_fname));
     comp->setProperties(type_prop);
-    
+
     //------------------------------------------------------------
     // Format component's name for NameService
     std::string naming_formats;
     coil::Properties& comp_prop(comp->getProperties());
-    
+
     naming_formats += m_config["naming.formats"];
     if (comp_prop.findNode("naming.formats") != 0)
       {
@@ -2321,13 +2321,13 @@ std::vector<coil::Properties> Manager::getLoadableModules()
       }
     naming_formats = coil::flatten(coil::unique_sv(coil::split(naming_formats,
                                                                ",")));
-    
+
     std::string naming_names;
     naming_names = formatString(naming_formats.c_str(), comp->getProperties());
     comp->getProperties()["naming.formats"] = naming_formats;
     comp->getProperties()["naming.names"] = naming_names;
   }
-  
+
   /*!
    * @if jp
    * @brief プロパティ情報のマージ
@@ -2354,7 +2354,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
       }
     return false;
   }
-  
+
   /*!
    * @if jp
    * @brief NamingServer に登録する際の登録情報を組み立てる
@@ -2368,7 +2368,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     std::string name(naming_format), str("");
     std::string::iterator it, it_end;
     int count(0);
-    
+
     it = name.begin();
     it_end = name.end();
     for ( ; it != it_end; ++it)

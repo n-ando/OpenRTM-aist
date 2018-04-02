@@ -82,7 +82,7 @@ namespace RTM
           }
       }
   }
-  
+
   ManagerServant::~ManagerServant()
   {
     Guard guardm(m_masterMutex);
@@ -132,7 +132,7 @@ namespace RTM
 	poa->deactivate_object(id.in());
 
   }
-  
+
   /*!
    * @if jp
    * @brief モジュールをロードする
@@ -146,26 +146,26 @@ namespace RTM
     RTC_TRACE(("ManagerServant::load_module(%s, %s)", pathname, initfunc));
 
     m_mgr.load(pathname, initfunc);
-    
+
     return ::RTC::RTC_OK;
   }
-  
+
   /*!
    * @if jp
    * @brief モジュールをアンロードする
    * @else
    * @brief Unloading a module
    * @endig
-   */  
+   */
   RTC::ReturnCode_t ManagerServant::unload_module(const char* pathname)
   {
     RTC_TRACE(("ManagerServant::unload_module(%s)", pathname));
-    
+
     m_mgr.unload(pathname);
-    
+
     return ::RTC::RTC_OK;
   }
-  
+
   /*!
    * @if jp
    * @brief ロード可能なモジュールのプロファイルを取得する
@@ -176,7 +176,7 @@ namespace RTM
   RTM::ModuleProfileList* ManagerServant::get_loadable_modules()
   {
     RTC_TRACE(("get_loadable_modules()"));
-    
+
     // copy local module profiles
     ::RTM::ModuleProfileList_var cprof = new ::RTM::ModuleProfileList();
     std::vector<coil::Properties> prof(m_mgr.getLoadableModules());
@@ -210,20 +210,20 @@ namespace RTM
 #else // ORB_IS_RTORB
                     CORBA_SeqUtil::push_back_list(cprof, sprof);
 #endif // ORB_IS_RTORB
-                    continue; 
+                    continue;
                   }
               }
             catch (...)
               {
-            RTC_INFO(("slave (%d) has disappeared.", i));
-            m_slaves[i] = RTM::Manager::_nil();
+                RTC_INFO(("slave (%d) has disappeared.", i));
+                m_slaves[i] = RTM::Manager::_nil();
               }
             CORBA_SeqUtil::erase(m_slaves, i); --i;
           }
       }
     return cprof._retn();
   }
-  
+
   /*!
    * @if jp
    * @brief ロード済みのモジュールのプロファイルを取得する
@@ -234,11 +234,11 @@ namespace RTM
   RTM::ModuleProfileList* ManagerServant::get_loaded_modules()
   {
     RTC_TRACE(("get_loaded_modules()"));
-    
+
     // copy local module profiles
     ::RTM::ModuleProfileList_var cprof = new RTM::ModuleProfileList();
     std::vector<coil::Properties> prof(m_mgr.getLoadedModules());
-    
+
     cprof->length(prof.size());
     for (int i(0), len(prof.size()); i < len; ++i)
       {
@@ -281,7 +281,7 @@ namespace RTM
       }
     return cprof._retn();
   }
-  
+
   /*!
    * @if jp
    * @brief コンポーネントファクトリのプロファイルを取得する
@@ -296,7 +296,7 @@ namespace RTM
     // copy local factory profiles
     ::RTM::ModuleProfileList_var cprof = new RTM::ModuleProfileList();
     std::vector<coil::Properties> prof(m_mgr.getFactoryProfiles());
-    
+
     cprof->length(prof.size());
     for (int i(0), len(prof.size()); i < len; ++i)
       {
@@ -514,7 +514,7 @@ namespace RTM
     // no RTObject created.
     return RTC::RTObject::_nil();
   }
-  
+
   /*!
    * @if jp
    * @brief コンポーネントを削除する
@@ -543,7 +543,7 @@ namespace RTM
       }
     return ::RTC::RTC_OK;
   }
-  
+
   /*!
    * @if jp
    * @brief 起動中のコンポーネントのリストを取得する
@@ -597,7 +597,7 @@ namespace RTM
       }
     return crtcs._retn();
   }
-  
+
   /*!
    * @if jp
    * @brief 起動中のコンポーネントプロファイルのリストを取得する
@@ -651,7 +651,7 @@ namespace RTM
       }
     return cprofs._retn();
   }
-  
+
   // manager 基本
   /*!
    * @if jp
@@ -668,7 +668,7 @@ namespace RTM
                                m_mgr.getConfig().getNode("manager"));
     return prof;
   }
-  
+
   /*!
    * @if jp
    * @brief マネージャのコンフィギュレーションを取得する
@@ -690,7 +690,7 @@ namespace RTM
 #endif
     return nvlist;
   }
-  
+
   /*!
    * @if jp
    * @brief マネージャのコンフィギュレーションを設定する
@@ -717,7 +717,7 @@ namespace RTM
     RTC_TRACE(("is_master(): %s", m_isMaster ? "YES" : "NO"));
     return m_isMaster;
   }
-  
+
   /*!
    * @if jp
    * @brief マスターマネージャの取得
@@ -731,7 +731,7 @@ namespace RTM
     Guard guard(m_masterMutex);
     return new ManagerList(m_masters);
   }
-  
+
   /*!
    * @if jp
    * @brief マスターマネージャの追加
@@ -745,18 +745,18 @@ namespace RTM
     CORBA::Long index;
     RTC_TRACE(("add_master_manager(), %d masters", m_masters.length()));
     index = CORBA_SeqUtil::find(m_masters, is_equiv(mgr));
-    
+
     if (!(index < 0)) // found in my list
       {
         RTC_ERROR(("Already exists."));
         return RTC::BAD_PARAMETER;
       }
-    
+
     CORBA_SeqUtil::push_back(m_masters, RTM::Manager::_duplicate(mgr));
     RTC_TRACE(("add_master_manager() done, %d masters", m_masters.length()));
     return RTC::RTC_OK;
   }
-  
+
   /*!
    * @if jp
    * @brief マスターマネージャの削除
@@ -772,18 +772,18 @@ namespace RTM
 
     CORBA::Long index;
     index = CORBA_SeqUtil::find(m_masters, is_equiv(mgr));
-    
+
     if (index < 0) // not found in my list
       {
         RTC_ERROR(("Not found."));
         return RTC::BAD_PARAMETER;
       }
-    
+
     CORBA_SeqUtil::erase(m_masters, index);
     RTC_TRACE(("remove_master_manager() done, %d masters", m_masters.length()));
     return RTC::RTC_OK;
   }
-  
+
   /*!
    * @if jp
    * @brief スレーブマネージャの取得
@@ -795,7 +795,7 @@ namespace RTM
   {
     Guard guard(m_slaveMutex);
     RTC_TRACE(("get_slave_managers(), %d slaves", m_slaves.length()));
-    
+
     return new ManagerList(m_slaves);
   }
 
@@ -810,21 +810,21 @@ namespace RTM
   {
     Guard guard(m_slaveMutex);
     RTC_TRACE(("add_slave_manager(), %d slaves", m_slaves.length()));
-    
+
     CORBA::Long index;
     index = CORBA_SeqUtil::find(m_slaves, is_equiv(mgr));
-    
+
     if (!(index < 0)) // found in my list
       {
         RTC_ERROR(("Already exists."));
         return RTC::BAD_PARAMETER;
       }
-    
+
     CORBA_SeqUtil::push_back(m_slaves, RTM::Manager::_duplicate(mgr));
     RTC_TRACE(("add_slave_manager() done, %d slaves", m_slaves.length()));
     return RTC::RTC_OK;;
   }
-  
+
   /*!
    * @if jp
    * @brief スレーブマネージャの削除
@@ -838,13 +838,13 @@ namespace RTM
     RTC_TRACE(("remove_slave_manager(), %d slaves", m_slaves.length()));
     CORBA::Long index;
     index = CORBA_SeqUtil::find(m_slaves, is_equiv(mgr));
-    
+
     if (index < 0) // not found in my list
       {
         RTC_ERROR(("Not found."));
         return RTC::BAD_PARAMETER;
       }
-    
+
     CORBA_SeqUtil::erase(m_slaves, index);
     RTC_TRACE(("remove_slave_manager() done, %d slaves", m_slaves.length()));
     return RTC::RTC_OK;
@@ -1014,7 +1014,7 @@ namespace RTM
         poa->activate_object_with_id(id.in(), this);
         CORBA::Object_var mgrobj = poa->id_to_reference(id);
 
-        // Set m_objref 
+        // Set m_objref
         m_objref = ::RTM::Manager::_narrow(mgrobj);
 
         CORBA::String_var ior;
@@ -1097,7 +1097,7 @@ namespace RTM
         std::string iorstr((const char*)ior);
         RTC_DEBUG(("Manager's IOR information:\n %s",
                    CORBA_IORUtil::formatIORinfo(iorstr.c_str()).c_str()));
-     
+
         return mgr._retn();
       }
     catch(CORBA::SystemException& e)

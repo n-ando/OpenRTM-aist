@@ -33,17 +33,17 @@ namespace RTC
    * @endif
    */
   OutPortCorbaCdrProvider::OutPortCorbaCdrProvider(void)
-    : m_buffer(0) 
+    : m_buffer(0)
   {
     // PortProfile setting
     setInterfaceType("corba_cdr");
-    
+
     // ConnectorProfile setting
 #ifdef ORB_IS_OMNIORB
     ::RTC::Manager::instance().theShortCutPOA()->activate_object(this);
 #endif
     m_objref = this->_this();
-    
+
     // set outPort's reference
     CORBA::ORB_var orb = ::RTC::Manager::instance().getORB();
     CORBA::String_var ior = orb->object_to_string(m_objref.in());
@@ -60,7 +60,7 @@ namespace RTC
       push_back(m_properties,
                 NVUtil::newNV("dataport.corba_cdr.outport_ref", m_objref));
   }
-  
+
   /*!
    * @if jp
    * @brief デストラクタ
@@ -104,7 +104,7 @@ namespace RTC
         RTC_ERROR(("Unknown exception caught."));
       }
   }
-  
+
   /*!
    * @if jp
    * @brief 設定初期化
@@ -132,7 +132,7 @@ namespace RTC
    * @if jp
    * @brief リスナを設定する。
    * @else
-   * @brief Set the listener. 
+   * @brief Set the listener.
    * @endif
    */
   void OutPortCorbaCdrProvider::setListener(ConnectorInfo& info,
@@ -177,7 +177,7 @@ namespace RTC
 
     cdrMemoryStream cdr;
     CdrBufferBase::ReturnCode ret(m_buffer->read(cdr));
-    
+
     if (ret == CdrBufferBase::BUFFER_OK)
       {
 #ifdef ORB_IS_ORBEXPRESS
