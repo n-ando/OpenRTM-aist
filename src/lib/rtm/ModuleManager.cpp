@@ -368,6 +368,7 @@ namespace RTC
     while (it != it_end)
       {
 	std::string f((*it) + "/" + file_name);
+	coil::replaceString(f, "//", "/");
 	if (fileExist(f))
 	  {
 	    return f;
@@ -503,9 +504,12 @@ namespace RTC
             //std::string fpath(path + flist[j]);
             //addNewFile(fpath, modules);
             coil::replaceString(flist[j], "\\", "/");
+            coil::replaceString(flist[j], "//", "/");
             addNewFile(flist[j], modules);
           }
       }
+      std::sort(modules.begin(), modules.end());
+      modules.erase(std::unique(modules.begin(), modules.end()), modules.end());
   }
 
   /*!

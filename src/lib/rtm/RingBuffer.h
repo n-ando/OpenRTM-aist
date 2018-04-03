@@ -348,16 +348,18 @@ namespace RTC
       //     n satisfies n'<= readable elements
       //                 n'<= m_fillcount
       //                 n >= - m_fillcount
-      Guard guard(m_posmutex);
-      if ((n > 0 && n > static_cast<long int>(m_length - m_fillcount)) ||
-          (n < 0 && n < static_cast<long int>(-m_fillcount)))
-        {
-          return ::RTC::BufferStatus::PRECONDITION_NOT_MET;
-        }
+      {
+          Guard guard(m_posmutex);
+          if ((n > 0 && n > static_cast<long int>(m_length - m_fillcount)) ||
+              (n < 0 && n < static_cast<long int>(-m_fillcount)))
+            {
+              return ::RTC::BufferStatus::PRECONDITION_NOT_MET;
+            }
 
-      m_wpos = (m_wpos + n + m_length) % m_length;
-      m_fillcount += n;
-      m_wcount += n;
+          m_wpos = (m_wpos + n + m_length) % m_length;
+          m_fillcount += n;
+          m_wcount += n;
+      }
 
       if(unlock_enable)
         {
@@ -614,15 +616,17 @@ namespace RTC
       // n < 0 : -n = n'
       //     n satisfies n'<= m_length - m_fillcount
       //                 n >= m_fillcount - m_length
-      Guard guard(m_posmutex);
-      if ((n > 0 && n > static_cast<long int>(m_fillcount)) ||
-          (n < 0 && n < static_cast<long int>(m_fillcount - m_length)))
-        {
-          return ::RTC::BufferStatus::PRECONDITION_NOT_MET;
-        }
+      {
+          Guard guard(m_posmutex);
+          if ((n > 0 && n > static_cast<long int>(m_fillcount)) ||
+              (n < 0 && n < static_cast<long int>(m_fillcount - m_length)))
+            {
+              return ::RTC::BufferStatus::PRECONDITION_NOT_MET;
+            }
 
-      m_rpos = (m_rpos + n + m_length) % m_length;
-      m_fillcount -= n;
+          m_rpos = (m_rpos + n + m_length) % m_length;
+          m_fillcount -= n;
+      }
 
       if(unlock_enable)
         {
@@ -758,7 +762,7 @@ namespace RTC
                 {
                   return ::RTC::BufferStatus::BUFFER_EMPTY;
                 }
-              advanceRptr(-1);
+              advanceRptr(-1,false);
             }
           else if (!readback && !timedread)  // "do_nothing" mode
             {
