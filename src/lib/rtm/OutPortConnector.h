@@ -216,22 +216,40 @@ namespace RTC
     {
       if (m_directInPort != NULL)
         {
-			DirectInPortBase<DataType>* inport = static_cast<DirectInPortBase<DataType>*>(m_directInPort->getDirectPort());
-			
-          if (inport->isNew())
-            {
-              // ON_BUFFER_OVERWRITE(In,Out), ON_RECEIVER_FULL(In,Out) callback
+          DirectInPortBase<DataType>* inport = dynamic_cast<DirectInPortBase<DataType>*>(m_directInPort->getDirectPort());
+          if(inport)
+            {		
+              if (inport->isNew())
+                {
+                  // ON_BUFFER_OVERWRITE(In,Out), ON_RECEIVER_FULL(In,Out) callback
+                  m_listeners.
+                    connectorData_[ON_BUFFER_OVERWRITE].notify(m_profile, data);
+                  m_inPortListeners->
+                    connectorData_[ON_BUFFER_OVERWRITE].notify(m_profile, data);
+                  m_listeners.
+                    connectorData_[ON_RECEIVER_FULL].notify(m_profile, data);
+                  m_inPortListeners->
+                    connectorData_[ON_RECEIVER_FULL].notify(m_profile, data);
+                  RTC_PARANOID(("ON_BUFFER_OVERWRITE(InPort,OutPort), "
+                                "ON_RECEIVER_FULL(InPort,OutPort) "
+                                "callback called in direct mode."));
+                }
+              // ON_BUFFER_WRITE(In,Out) callback
               m_listeners.
-                connectorData_[ON_BUFFER_OVERWRITE].notify(m_profile, data);
+                connectorData_[ON_BUFFER_WRITE].notify(m_profile, data);
               m_inPortListeners->
-                connectorData_[ON_BUFFER_OVERWRITE].notify(m_profile, data);
+                connectorData_[ON_BUFFER_WRITE].notify(m_profile, data);
+              RTC_PARANOID(("ON_BUFFER_WRITE(InPort,OutPort), "
+                                "callback called in direct mode."));
+              inport->write(data);  // write to InPort variable!!
+              // ON_RECEIVED(In,Out) callback
               m_listeners.
-                connectorData_[ON_RECEIVER_FULL].notify(m_profile, data);
+                connectorData_[ON_RECEIVED].notify(m_profile, data);
               m_inPortListeners->
-                connectorData_[ON_RECEIVER_FULL].notify(m_profile, data);
-              RTC_PARANOID(("ON_BUFFER_OVERWRITE(InPort,OutPort), "
-                            "ON_RECEIVER_FULL(InPort,OutPort) "
+                connectorData_[ON_RECEIVED].notify(m_profile, data);
+              RTC_PARANOID(("ON_RECEIVED(InPort,OutPort), "
                             "callback called in direct mode."));
+              return PORT_OK;
             }
           // ON_BUFFER_WRITE(In,Out) callback
           m_listeners.
