@@ -643,6 +643,9 @@ namespace RTC
      */
     virtual ReturnCode_t onFinalize(void);
 
+    virtual ReturnCode_t exit()
+      throw (CORBA::SystemException);
+
   protected:
     /*!
      * @if jp

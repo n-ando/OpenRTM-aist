@@ -778,6 +778,39 @@ namespace RTC
     return RTC::RTC_OK;
   }
 
+
+  ReturnCode_t PeriodicECSharedComposite::exit()
+  {
+    ReturnCode_t ret = RTObject_impl::exit();
+    try
+      {
+        PortableServer::ObjectId_var oid;
+        oid = m_pPOA->servant_to_id(m_org);
+        m_pPOA->deactivate_object(oid);
+      }
+    catch (PortableServer::POA::ServantNotActive &e)
+      {
+#ifdef ORB_IS_ORBEXPRESS
+        oe_out << e << oe_endl << oe_flush;
+#else
+        RTC_ERROR(("%s", e._name()));
+#endif
+      }
+    catch (PortableServer::POA::WrongPolicy &e)
+      {
+#ifdef ORB_IS_ORBEXPRESS
+        oe_out << e << oe_endl << oe_flush;
+#else
+        RTC_ERROR(("%s", e._name()));
+#endif
+      }
+    catch (...)
+      {
+        RTC_ERROR(("Unknown exception caught."));
+      }
+    return ret;
+  }
+
 };  // namespace RTC
 
 extern "C"
