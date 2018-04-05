@@ -768,6 +768,7 @@ namespace RTC
 
 
   ReturnCode_t PeriodicECSharedComposite::exit()
+    throw (CORBA::SystemException)
   {
     ReturnCode_t ret = RTObject_impl::exit();
     try
