@@ -882,14 +882,18 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 
 	try
 	{
+		std::string id_str = comp->getCategory();
+		id_str = id_str + "." + comp->getInstanceName();
+
+#ifndef ORB_IS_TAO
 		CORBA::Object_ptr obj = theORB()->resolve_initial_references("omniINSPOA");
 		PortableServer::POA_ptr poa = PortableServer::POA::_narrow(obj);
 		poa->the_POAManager()->activate();
 
-		std::string id_str = comp->getCategory();
-		id_str = id_str + "." + comp->getInstanceName();
+		
 
 		PortableServer::ObjectId_var id;
+
 #ifndef ORB_IS_RTORB
 		id = PortableServer::string_to_ObjectId(id_str.c_str());
 #else // ORB_IS_RTORB
@@ -901,6 +905,15 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 
 		CORBA::Object_var rtcobj = poa->id_to_reference(id);
 		comp->setINSObjRef(::RTC::LightweightRTObject::_narrow(rtcobj));
+#else
+		CORBA::Object_var obj = theORB()->resolve_initial_references("IORTable");
+		IORTable::Table_var adapter = IORTable::Table::_narrow(obj.in());
+
+		CORBA::String_var ior = theORB()->object_to_string(comp->getObjRef());
+		adapter->bind(id_str.c_str(), ior.in());
+
+		comp->setINSObjRef(comp->getObjRef());
+#endif
 	}
 	catch (...)
 	{

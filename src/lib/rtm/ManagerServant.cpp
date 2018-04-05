@@ -123,17 +123,28 @@ namespace RTM
 
 	if (!CORBA::is_nil(m_objref))
 	{
+#ifndef ORB_IS_TAO
 #ifndef ORB_IS_RTORB
 		CORBA::Object_ptr obj = m_mgr.theORB()->resolve_initial_references("omniINSPOA");
 #else // ROB_IS_RTORB
 		CORBA::Object_ptr obj = m_mgr.theORB()->resolve_initial_references((char*)"omniINSPOA");
 #endif // ORB_IS_RTORB
 
+
 		PortableServer::POA_ptr poa = PortableServer::POA::_narrow(obj);
 		PortableServer::ObjectId_var id;
 		id = poa->servant_to_id(this);
 
 		poa->deactivate_object(id.in());
+#else
+		CORBA::Object_var obj = m_mgr.theORB()->resolve_initial_references("IORTable");
+		IORTable::Table_var adapter = IORTable::Table::_narrow(obj.in());
+
+
+		coil::Properties config(m_mgr.getConfig());
+
+		adapter->unbind(config["manager.name"].c_str());
+#endif
 	}
 
   }
@@ -1043,7 +1054,7 @@ namespace RTM
 		// Object activation
 		RTC_DEBUG(("Activating manager with id(%s)", config["manager.name"].c_str()));
 		CORBA::String_var ior = m_mgr.theORB()->object_to_string(_this());
-		adapter->bind("udpprovider", ior.in());
+		adapter->bind(config["manager.name"].c_str(), ior.in());
 
 		// Set m_objref 
 		m_objref = _this();

@@ -453,7 +453,14 @@ namespace RTC
 		  {
 			  Guard guard(m_valueMutex);
 			  RTC_DEBUG(("data read succeeded"));
+#ifdef ORB_IS_ORBEXPRESS
+			  cdr.cdr >> m_value;
+#elif defined(ORB_IS_TAO)
+			  TAO_InputCDR tao_cdr = TAO_InputCDR(cdr.cdr);
+			  tao_cdr >> m_value;
+#else
 			  m_value <<= cdr;
+#endif
 			  if (m_OnReadConvert != 0)
 			  {
 				  m_value = (*m_OnReadConvert)(m_value);

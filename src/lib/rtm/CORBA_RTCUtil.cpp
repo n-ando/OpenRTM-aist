@@ -111,9 +111,9 @@ namespace CORBA_RTCUtil
         eclist = rtc->get_owned_contexts();
         if (ec_id >= (CORBA::Long)eclist->length())
           { return RTC::ExecutionContext::_nil(); }
-        if (CORBA::is_nil(eclist[ec_id]))
+        if (CORBA::is_nil(eclist[(CORBA::ULong)ec_id]))
           { return RTC::ExecutionContext::_nil(); }
-        return eclist[ec_id];
+		return eclist[(CORBA::ULong)ec_id];
       }
     if (ec_id >= 1000)
       {
@@ -122,9 +122,9 @@ namespace CORBA_RTCUtil
         eclist = rtc->get_participating_contexts();
         if (pec_id >= (CORBA::Long)eclist->length())
           { return RTC::ExecutionContext::_nil(); }
-        if (CORBA::is_nil(eclist[pec_id]))
+		if (CORBA::is_nil(eclist[(CORBA::ULong)pec_id]))
           { return RTC::ExecutionContext::_nil(); }
-        return eclist[pec_id];
+		return eclist[(CORBA::ULong)pec_id];
       }
     return RTC::ExecutionContext::_nil();
   }
@@ -539,7 +539,11 @@ namespace CORBA_RTCUtil
     for (unsigned int i = 0; i < ports.length(); i++)
       {
         RTC::PortProfile* pp = ports[i]->get_port_profile();
+#ifdef ORB_IS_TAO
+		std::string s(pp->name);
+#else
         std::string s(static_cast<char*>(pp->name));
+#endif
         names.push_back(s);
       }
     return names;
@@ -572,7 +576,11 @@ namespace CORBA_RTCUtil
 
         if (prop["port.port_type"] == "DataInPort")
           {
+#ifdef ORB_IS_TAO
+			std::string s(pp->name);
+#else
             std::string s(static_cast<char*>(pp->name));
+#endif
             names.push_back(s);
           }
       }
@@ -606,7 +614,11 @@ namespace CORBA_RTCUtil
 
         if (prop["port.port_type"] == "DataOutPort")
           {
+#ifdef ORB_IS_TAO
+			std::string s(pp->name);
+#else
             std::string s(static_cast<char*>(pp->name));
+#endif
             names.push_back(s);
           }
       }
@@ -642,7 +654,11 @@ namespace CORBA_RTCUtil
 
         if (prop["port.port_type"] == "CorbaPort")
           {
+#ifdef ORB_IS_TAO
+			std::string s(pp->name);
+#else
             std::string s(static_cast<char*>(pp->name));
+#endif
             names.push_back(s);
           }
       }
@@ -1286,7 +1302,11 @@ namespace CORBA_RTCUtil
   {
     SDOPackage::Configuration_ptr conf = rtc->get_configuration();
     SDOPackage::ConfigurationSet* confset = conf->get_active_configuration_set();
+#ifdef ORB_IS_TAO
+	return confset->id;
+#else
     return static_cast<char*>(confset->id);
+#endif
   }
   /*!
    * @if jp
