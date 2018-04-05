@@ -121,18 +121,20 @@ namespace RTM
     m_slaves.length(0);
 
 
-
+	if (!CORBA::is_nil(m_objref))
+	{
 #ifndef ORB_IS_RTORB
-	CORBA::Object_ptr obj = m_mgr.theORB()->resolve_initial_references("omniINSPOA");
+		CORBA::Object_ptr obj = m_mgr.theORB()->resolve_initial_references("omniINSPOA");
 #else // ROB_IS_RTORB
-	CORBA::Object_ptr obj = m_mgr.theORB()->resolve_initial_references((char*)"omniINSPOA");
+		CORBA::Object_ptr obj = m_mgr.theORB()->resolve_initial_references((char*)"omniINSPOA");
 #endif // ORB_IS_RTORB
-	
-	PortableServer::POA_ptr poa = PortableServer::POA::_narrow(obj);
-	PortableServer::ObjectId_var id;
-	id = poa->servant_to_id(this);
 
-	poa->deactivate_object(id.in());
+		PortableServer::POA_ptr poa = PortableServer::POA::_narrow(obj);
+		PortableServer::ObjectId_var id;
+		id = poa->servant_to_id(this);
+
+		poa->deactivate_object(id.in());
+	}
 
   }
 

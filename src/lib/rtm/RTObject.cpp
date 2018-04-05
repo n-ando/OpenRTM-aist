@@ -71,7 +71,8 @@ namespace RTC
       m_properties(default_conf), m_configsets(m_properties.getNode("conf")),
       m_sdoservice(*this),
       m_readAll(false), m_writeAll(false),
-      m_readAllCompletion(false), m_writeAllCompletion(false)
+      m_readAllCompletion(false), m_writeAllCompletion(false),
+	  m_insref(RTC::LightweightRTObject::_nil())
   {
     m_objref = this->_this();
     m_pSdoConfigImpl = new SDOPackage::Configuration_impl(m_configsets,
@@ -2673,20 +2674,18 @@ namespace RTC
         oid2 = m_pPOA->servant_to_id(this);
         m_pPOA->deactivate_object(oid1);
         m_pPOA->deactivate_object(oid2);
-
-
+		if (!CORBA::is_nil(m_insref))
+		  {
 #ifndef ORB_IS_RTORB
-        CORBA::Object_ptr obj = m_pORB->resolve_initial_references("omniINSPOA");
+			CORBA::Object_ptr obj = m_pORB->resolve_initial_references("omniINSPOA");
 #else // ROB_IS_RTORB
-        CORBA::Object_ptr obj = m_pORB->resolve_initial_references((char*)"omniINSPOA");
+			CORBA::Object_ptr obj = m_pORB->resolve_initial_references((char*)"omniINSPOA");
 #endif // ORB_IS_RTORB
-        PortableServer::POA_ptr poa = PortableServer::POA::_narrow(obj);
-
-        PortableServer::ObjectId_var oid3;
-        oid3 = poa->servant_to_id(this);
-
-
-        poa->deactivate_object(oid3.in());
+		    PortableServer::POA_ptr poa = PortableServer::POA::_narrow(obj);
+		    PortableServer::ObjectId_var oid3;
+		    oid3 = poa->servant_to_id(this);
+		    poa->deactivate_object(oid3.in());
+		  }
       }
     catch (PortableServer::POA::ServantNotActive &e)
       {
@@ -3026,6 +3025,23 @@ namespace RTC
         ec->bindComponent(this);
       }
     return ret;
+  }
+
+
+  /*!
+  * @if jp
+  *
+  * @brief omniINSPOAから取得したオブジェクトを登録
+  *
+  * @else
+  *
+  * @brief
+  *
+  * @endif
+  */
+  void RTObject_impl::setINSObjRef(RTC::LightweightRTObject_ptr obj)
+  {
+	  m_insref = obj;
   }
 
 

@@ -887,7 +887,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 		poa->the_POAManager()->activate();
 
 		std::string id_str = comp->getCategory();
-		id_str = id_str + "/" + comp->getInstanceName();
+		id_str = id_str + "." + comp->getInstanceName();
 
 		PortableServer::ObjectId_var id;
 #ifndef ORB_IS_RTORB
@@ -898,6 +898,9 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 #endif // ORB_IS_RTORB
 
 		poa->activate_object_with_id(id.in(), comp);
+
+		CORBA::Object_var rtcobj = poa->id_to_reference(id);
+		comp->setINSObjRef(::RTC::LightweightRTObject::_narrow(rtcobj));
 	}
 	catch (...)
 	{

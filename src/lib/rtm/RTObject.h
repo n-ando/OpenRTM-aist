@@ -3377,6 +3377,19 @@ namespace RTC
      */
     void finalizeContexts();
 
+	/*!
+	* @if jp
+	*
+	* @brief omniINSPOAから取得したオブジェクトを登録
+	*
+	* @else
+	*
+	* @brief 
+	*
+	* @endif
+	*/
+	void setINSObjRef(RTC::LightweightRTObject_ptr obj);
+
 
     /*!
      * @if jp
@@ -5459,6 +5472,8 @@ namespace RTC
      * @endif
      */
     FsmActionListeners m_fsmActionListeners;
+
+	RTC::LightweightRTObject_var m_insref;
 
     //------------------------------------------------------------
     // Functor
