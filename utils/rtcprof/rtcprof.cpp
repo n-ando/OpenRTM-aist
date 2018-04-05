@@ -42,7 +42,8 @@ int main(int argc, char* argv[])
   // file name with full path
   std::string fullname(argv[1]);
   // directory name
-  std::string dirname(coil::dirname(argv[1]));
+  coil::replaceString(fullname, "\\", "/");
+  std::string dirname(coil::dirname((char*)fullname.c_str()));
   // basename
   std::string basename(coil::basename(fullname.c_str()));
 
