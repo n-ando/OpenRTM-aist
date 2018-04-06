@@ -775,6 +775,7 @@ namespace RTC
     };
 
     vProperties m_modprofs;
+	coil::vstring m_loadfailmods;
 
   };   // class ModuleManager
 };  // namespace RTC

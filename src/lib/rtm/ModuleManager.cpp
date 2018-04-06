@@ -524,15 +524,25 @@ namespace RTC
   {
     bool exists(false);
     for (size_t k(0); k < m_modprofs.size(); ++k)
-      {
+	{
+		  
         if (m_modprofs[k]["module_file_path"] == fpath)
           {
+			  
             exists = true;
             RTC_DEBUG(("Module %s already exists in cache.",
                        fpath.c_str()));
             break;
           }
       }
+	for (size_t k(0); k < m_loadfailmods.size(); ++k)
+	{
+		if (m_loadfailmods[k] == fpath)
+		{
+			exists = true;
+			break;
+		}
+	}
     if (!exists)
       {
         RTC_DEBUG(("New module: %s", fpath.c_str()));
@@ -563,6 +573,7 @@ namespace RTC
         if ((fd = popen(cmd.c_str(), "r")) == NULL)
           {
             std::cerr << "popen faild" << std::endl;
+			m_loadfailmods.push_back(modules[i]);
             continue;
           }
         coil::Properties p;
@@ -584,7 +595,10 @@ namespace RTC
           } while (!feof(fd));
         pclose(fd);
         RTC_DEBUG(("rtcprof cmd sub process done."));
-        if (p["implementation_id"].empty()) { continue; }
+        if (p["implementation_id"].empty()) { 
+			m_loadfailmods.push_back(modules[i]);
+			continue;
+		}
         p["module_file_name"] = coil::basename(modules[i].c_str());
         p["module_file_path"] = modules[i].c_str();
         modprops.push_back(p);
