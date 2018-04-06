@@ -591,11 +591,10 @@ namespace RTC
 
 #ifdef ORB_IS_ORBEXPRESS
 		  cdrdata.cdr.rewind();
-		  cdrdata.cdr >> data;
+		  cdrdata.cdr << data;
 #elif defined(ORB_IS_TAO)
 		  cdrdata.cdr.reset();
-		  TAO_InputCDR tao_cdr = TAO_InputCDR(cdrdata.cdr);
-		  tao_cdr >> data;
+		  cdrdata.cdr << data;
 #else
 		  cdrdata.rewindPtrs();
 		  data >>= cdrdata;

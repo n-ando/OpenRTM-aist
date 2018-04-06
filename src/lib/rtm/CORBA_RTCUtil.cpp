@@ -113,7 +113,11 @@ namespace CORBA_RTCUtil
           { return RTC::ExecutionContext::_nil(); }
         if (CORBA::is_nil(eclist[(CORBA::ULong)ec_id]))
           { return RTC::ExecutionContext::_nil(); }
-		return eclist[(CORBA::ULong)ec_id];
+#ifdef ORB_IS_TAO
+        return eclist[(CORBA::ULong)ec_id].in();
+#else
+        return eclist[(CORBA::ULong)ec_id];
+#endif
       }
     if (ec_id >= 1000)
       {
@@ -124,7 +128,11 @@ namespace CORBA_RTCUtil
           { return RTC::ExecutionContext::_nil(); }
 		if (CORBA::is_nil(eclist[(CORBA::ULong)pec_id]))
           { return RTC::ExecutionContext::_nil(); }
-		return eclist[(CORBA::ULong)pec_id];
+#ifdef ORB_IS_TAO
+        return eclist[(CORBA::ULong)pec_id].in();
+#else
+        return eclist[(CORBA::ULong)pec_id];
+#endif
       }
     return RTC::ExecutionContext::_nil();
   }
@@ -1191,7 +1199,11 @@ namespace CORBA_RTCUtil
       {
         RTC::PortProfile_var pp = ports[p]->get_port_profile();
         std::string s(CORBA::string_dup(pp->name));
+#ifdef ORB_IS_TAO
+        if (name == s) { return ports[p].in(); }
+#else
         if (name == s) { return ports[p]; }
+#endif
       }
     return RTC::PortService::_nil();
   }
@@ -1303,7 +1315,7 @@ namespace CORBA_RTCUtil
     SDOPackage::Configuration_ptr conf = rtc->get_configuration();
     SDOPackage::ConfigurationSet* confset = conf->get_active_configuration_set();
 #ifdef ORB_IS_TAO
-	return confset->id;
+	return std::string(confset->id);
 #else
     return static_cast<char*>(confset->id);
 #endif
