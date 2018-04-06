@@ -192,6 +192,27 @@ namespace coil
     return ::settimeofday(tv, tz);
   }
 
+  /*!
+   * @if jp
+   * @brief 高分解能パフォーマンスカウンタから時間を取得する
+   *
+   *
+   * @return TimeValueオブジェクト
+   *
+   * @else
+   * @brief 
+   *
+   *
+   *
+   * @return TimeValue object
+   *
+   * @endif
+   */
+  inline TimeValue clock()
+  {
+    return coil::gettimeofday();
+  }
+
 
 };  // namespace coil
 

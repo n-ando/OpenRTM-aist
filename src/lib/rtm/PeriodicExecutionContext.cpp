@@ -167,10 +167,10 @@ namespace RTC_exp
               m_workerthread.cond_.wait();
             }
         }
-        coil::TimeValue t0(coil::gettimeofday());
+        coil::TimeValue t0(coil::clock());
         ExecutionContextBase::invokeWorkerDo();
         ExecutionContextBase::invokeWorkerPostDo();
-        coil::TimeValue t1(coil::gettimeofday());
+        coil::TimeValue t1(coil::clock());
 
         coil::TimeValue period(getPeriod());
         if (count > 1000)
@@ -180,7 +180,7 @@ namespace RTC_exp
             RTC_PARANOID(("Sleep:     %f [s]",
                                     static_cast<double>(period - (t1 - t0))));
           }
-        coil::TimeValue t2(coil::gettimeofday());
+        coil::TimeValue t2(coil::clock());
         if (!m_nowait && period > (t1 - t0))
           {
             if (count > 1000) { RTC_PARANOID(("sleeping...")); }
@@ -188,7 +188,7 @@ namespace RTC_exp
           }
         if (count > 1000)
           {
-            coil::TimeValue t3(coil::gettimeofday());
+            coil::TimeValue t3(coil::clock());
             RTC_PARANOID(("Slept:     %f [s]", static_cast<double>(t3 - t2)));
             count = 0;
           }

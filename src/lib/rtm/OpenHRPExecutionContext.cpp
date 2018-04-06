@@ -77,11 +77,11 @@ namespace RTC
     Guard guard(m_tickmutex);
 
     ExecutionContextBase::invokeWorkerPreDo();  // update state
-    coil::TimeValue t0(coil::gettimeofday());
+    coil::TimeValue t0(coil::clock());
     ExecutionContextBase::invokeWorkerDo();
-    coil::TimeValue t1(coil::gettimeofday());
+    coil::TimeValue t1(coil::clock());
     ExecutionContextBase::invokeWorkerPostDo();
-    coil::TimeValue t2(coil::gettimeofday());
+    coil::TimeValue t2(coil::clock());
 
     coil::TimeValue period(getPeriod());
     if (m_count > 1000)
@@ -92,7 +92,7 @@ namespace RTC
         RTC_PARANOID(("Sleep:       %f [s]",
                                 static_cast<double>(period - (t2 - t0))));
       }
-    coil::TimeValue t3(coil::gettimeofday());
+    coil::TimeValue t3(coil::clock());
     if (period > (t2 - t0))
       {
         if (m_count > 1000) { RTC_PARANOID(("sleeping...")); }
@@ -100,7 +100,7 @@ namespace RTC
       }
     if (m_count > 1000)
       {
-        coil::TimeValue t4(coil::gettimeofday());
+        coil::TimeValue t4(coil::clock());
         RTC_PARANOID(("Slept:       %f [s]", static_cast<double>(t4 - t3)));
         m_count = 0;
       }

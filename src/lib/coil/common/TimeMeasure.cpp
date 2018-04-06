@@ -59,7 +59,7 @@ namespace coil
    */
   void TimeMeasure::tick()
   {
-    m_begin = gettimeofday();  // [TimeValue]
+    m_begin = clock();  // [TimeValue]
   }
 
   /*!
@@ -73,7 +73,7 @@ namespace coil
   {
     if (m_begin.sec() == 0) { return; }
 
-    m_interval = gettimeofday() - m_begin;
+    m_interval = clock() - m_begin;
     m_record.at(m_count) = m_interval;
     ++m_count;
     if (m_count == m_countMax)

@@ -246,51 +246,36 @@ namespace coil
    */
   inline int gettimeofday(struct timeval *tv, struct timezone *tz)
   {
-	  LARGE_INTEGER frequency;
-	  BOOL ret = QueryPerformanceFrequency(&frequency);
-
-	  if (ret == 0)
-	  {
-		  FILETIME        ftime;
-		  LARGE_INTEGER   lint;
-		  __int64         val64;
-		  static int      tzflag;
-		  if (tv != NULL)
-		  {
-			  ::GetSystemTimeAsFileTime(&ftime);
-			  lint.LowPart = ftime.dwLowDateTime;
-			  lint.HighPart = ftime.dwHighDateTime;
-			  val64 = lint.QuadPart;
-			  val64 = val64 - EPOCHFILETIME;
-			  val64 = val64 / 10;
-			  tv->tv_sec = (long)(val64 / 1000000);
-			  tv->tv_usec = (long)(val64 % 1000000);
-		  }
-		  if (tz)
-		  {
-			  if (!tzflag)
-			  {
-				  ::_tzset();
-				  ++tzflag;
-			  }
-			  long tzone = 0;
-			  ::_get_timezone(&tzone);
-			  tz->tz_minuteswest = tzone / 60;
-			  int dlight = 0;
-			  ::_get_daylight(&dlight);
-			  tz->tz_dsttime = dlight;
-		  }
-	  }
-	  else
-	  {
-		  LARGE_INTEGER current;
-		  QueryPerformanceCounter(&current);
-		  LONGLONG current_time = (current.QuadPart*1000000) / frequency.QuadPart;
-		  tv->tv_sec = (long)(current_time / 1000000);
-		  tv->tv_usec = (long)(current_time % 1000000);
-
-	  }
-	  return 0;
+      FILETIME        ftime;
+      LARGE_INTEGER   lint;
+      __int64         val64;
+      static int      tzflag;
+      if (tv != NULL)
+      {
+	      ::GetSystemTimeAsFileTime(&ftime);
+	      lint.LowPart = ftime.dwLowDateTime;
+	      lint.HighPart = ftime.dwHighDateTime;
+	      val64 = lint.QuadPart;
+	      val64 = val64 - EPOCHFILETIME;
+	      val64 = val64 / 10;
+	      tv->tv_sec = (long)(val64 / 1000000);
+	      tv->tv_usec = (long)(val64 % 1000000);
+      }
+      if (tz)
+      {
+	      if (!tzflag)
+	      {
+		      ::_tzset();
+		      ++tzflag;
+	      }
+	      long tzone = 0;
+	      ::_get_timezone(&tzone);
+	      tz->tz_minuteswest = tzone / 60;
+	      int dlight = 0;
+	      ::_get_daylight(&dlight);
+	      tz->tz_dsttime = dlight;
+      }
+      return 0;
   }
 
   /*!
@@ -368,6 +353,77 @@ namespace coil
 
     return 0;
   }
+
+
+  /*!
+  * @if jp
+  * @brief 高分解能パフォーマンスカウンタから時間を取得する
+  * 高分解能パフォーマンスカウンタが利用できない場合はgettimeofday関数から取得する
+  *
+  * @param tv 時間
+  *
+  * @return 0: 成功
+  *
+  * @else
+  * @brief
+  *
+  *
+  * @param tv
+  *
+  * @return 0: successful
+  *
+  * @endif
+  */
+  inline int clock(TimeValue &tv)
+  {
+	  LARGE_INTEGER frequency;
+	  BOOL ret = QueryPerformanceFrequency(&frequency);
+
+	  if (ret == 0)
+	  {
+		  return 1;
+	  }
+	  else
+	  {
+		  LARGE_INTEGER current;
+		  QueryPerformanceCounter(&current);
+		  LONGLONG current_time = (current.QuadPart * 1000000) / frequency.QuadPart;
+		  tv = TimeValue((long)(current_time / 1000000), (long)(current_time % 1000000));
+		  return 0;
+	  }
+  }
+
+  /*!
+   * @if jp
+   * @brief 高分解能パフォーマンスカウンタから時間を取得する
+   *
+   *
+   * @return TimeValueオブジェクト
+   *
+   * @else
+   * @brief 
+   *
+   *
+   *
+   * @return TimeValue object
+   *
+   * @endif
+   */
+  inline TimeValue clock()
+  {
+    TimeValue ret;
+    if(coil::clock(ret))
+    {
+      timeval tv;
+      coil::gettimeofday(&tv, 0);
+      return TimeValue(tv.tv_sec, tv.tv_usec);
+    }
+    else
+    {
+      return ret;
+    }
+  }
+
 
 
 };  // namespace coil

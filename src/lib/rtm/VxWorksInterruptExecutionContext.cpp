@@ -157,11 +157,11 @@ namespace RTC
             }
           if (!m_worker.ticked_) { continue; }
         }
-        coil::TimeValue t0(coil::gettimeofday());
+        coil::TimeValue t0(coil::clock());
         ExecutionContextBase::invokeWorkerPreDo();
         ExecutionContextBase::invokeWorkerDo();
         ExecutionContextBase::invokeWorkerPostDo();
-        coil::TimeValue t1(coil::gettimeofday());
+        coil::TimeValue t1(coil::clock());
         {
           Guard gurad(m_worker.mutex_);
           m_worker.ticked_ = false;
@@ -173,7 +173,7 @@ namespace RTC
             RTC_PARANOID(("Execution: %f [s]", (double)(t1 - t0)));
             RTC_PARANOID(("Sleep:     %f [s]", (double)(period - (t1 - t0))));
           }
-        coil::TimeValue t2(coil::gettimeofday());
+        coil::TimeValue t2(coil::clock());
         if (period > (t1 - t0))
           {
             if (1 /*count > 1000*/) { RTC_PARANOID(("sleeping...")); }
@@ -181,7 +181,7 @@ namespace RTC
           }
         if (1) //count > 1000)
           {
-            coil::TimeValue t3(coil::gettimeofday());
+            coil::TimeValue t3(coil::clock());
             RTC_PARANOID(("Slept:       %f [s]", (double)(t3 - t2)));
             count = 0;
           }
