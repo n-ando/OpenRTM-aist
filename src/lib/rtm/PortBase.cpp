@@ -17,6 +17,7 @@
  *
  */
 
+#include <memory> 
 #include <coil/UUID.h>
 #include <rtm/PortBase.h>
 #include <rtm/PortCallback.h>
