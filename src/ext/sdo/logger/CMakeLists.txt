@@ -25,7 +25,7 @@ add_custom_target(${idl_name}_TGT DEPENDS ${idl_name}Skel.cpp ${idl_name}Stub.cp
 
 
 
-message(STATUS ${ORB_LINK_DIR})
+
 link_directories(${ORB_LINK_DIR})
 include_directories(
 		${RTM_INCLUDE_DIR}

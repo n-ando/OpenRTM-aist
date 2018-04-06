@@ -149,9 +149,17 @@ set(RTM_INCLUDE_DIR ${CMAKE_SOURCE_DIR}
 		${CMAKE_CURRENT_SOURCE_DIR}/..
 		)
 
+
+
+
+
+
+
 include_directories(
 		${RTM_INCLUDE_DIR}
 		)
+
+
 
 
 set(RTM_INCLUDE_DIR ${RTM_INCLUDE_DIR}  PARENT_SCOPE)
@@ -159,6 +167,8 @@ set(RTM_INCLUDE_DIR ${RTM_INCLUDE_DIR}  PARENT_SCOPE)
 
 
 add_subdirectory(idl)
+add_subdirectory(ext)
+
 
 
 set(rtm_headers
@@ -367,6 +377,14 @@ if(VXWORKS)
 		set(rtm_srcs ${rtm_srcs} VxWorksInterruptExecutionContext.cpp)
 	endif(RTP)
 endif(VXWORKS)
+
+
+if(OBSERVER_ENABLE)
+	add_definitions(-DENABLE_OBSERVER)
+	include_directories(${CMAKE_SOURCE_DIR}/src)
+	set(rtm_srcs ${rtm_srcs} ${CMAKE_SOURCE_DIR}/src/ext/sdo/observer/ComponentObserverConsumer.cpp
+				${CMAKE_SOURCE_DIR}/src/ext/sdo/observer/ComponentObserverConsumer.h)
+endif(OBSERVER_ENABLE)
 
 
 

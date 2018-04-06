@@ -183,4 +183,11 @@ install(FILES  ${coil_headers} DESTINATION include/coil)
 #add_executable(coil  ${coil_srcs} )
 
 
+install(FILES ${CMAKE_SOURCE_DIR}/build/makedeffile.py DESTINATION bin)
+install(FILES ${CMAKE_SOURCE_DIR}/build/setuptest.py DESTINATION bin)
+install(FILES ${CMAKE_SOURCE_DIR}/build/slntool.py DESTINATION bin)
+install(FILES ${CMAKE_SOURCE_DIR}/build/uuid.py DESTINATION bin)
+install(FILES ${CMAKE_SOURCE_DIR}/build/vcprojtool.py DESTINATION bin)
+install(FILES ${CMAKE_SOURCE_DIR}/build/vcxprojtool.py DESTINATION bin)
+install(FILES ${CMAKE_SOURCE_DIR}/build/yat.py DESTINATION bin)
 

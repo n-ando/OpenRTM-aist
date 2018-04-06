@@ -1,7 +1,9 @@
 cmake_minimum_required (VERSION 2.6)
 
 
-project (RTCSkel)
+set(target rtmCamera${RTM_SHORT_VERSION}_${RTM_VC_VER})
+
+project (${target})
 
 
 
@@ -11,13 +13,13 @@ project (RTCSkel)
 
 macro(idl_compile idl_name)
 
-	set(ALL_IDL_FILES ${ALL_IDL_FILES} ${idl_name}.idl)
+	set(ALL_IDL_FILES ${ALL_IDL_FILES} ../${idl_name}.idl)
 	add_custom_command(
 		OUTPUT ${idl_name}Skel.cpp
 		#COMMAND mkdir -p include/rtm/idl
 		#COMMAND cd include/rtm/idl
-		#COMMAND ${IDL_COMPILE_COMMAND} ${IDLCOMMAND_FLAGS} -I${PROJECT_SOURCE_DIR}/idl ${PROJECT_SOURCE_DIR}/idl/${idl_name}.idl
-		COMMAND ${IDL_COMPILE_COMMAND} ${IDLCOMMAND_FLAGS} -I${PROJECT_SOURCE_DIR} ${PROJECT_SOURCE_DIR}/${idl_name}.idl
+		#COMMAND ${IDL_COMPILE_COMMAND} ${IDLCOMMAND_FLAGS} -I${PROJECT_SOURCE_DIR}/idl ${PROJECT_SOURCE_DIR}/ext/${idl_name}.idl
+		COMMAND ${IDL_COMPILE_COMMAND} ${IDLCOMMAND_FLAGS} -I${PROJECT_SOURCE_DIR}/.. -I${PROJECT_SOURCE_DIR}/../../idl ${PROJECT_SOURCE_DIR}/../${idl_name}.idl
 		COMMAND python ${SKELWRAPPER_COMMAND} --include-dir="" --skel-suffix=Skel --stub-suffix=Stub --idl-file=${idl_name}.idl
 		#WORKING_DIRECTORY ${CURRENT_BINARY_DIR}/include/rtm/idl
 		WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
@@ -49,42 +51,31 @@ endmacro()
 
 
 set(idls
-	BasicDataType
-	DataPort
-	ExtendedDataTypes
-	InterfaceDataTypes
-	Manager
-	OpenRTM
-	RTC
-	SDOPackage
-	SharedMemory
-	ExtendedFsmService
+	CameraCommonInterface
 	)
 
 
-if(OBSERVER_ENABLE)
-configure_file(${CMAKE_SOURCE_DIR}/src/ext/sdo/observer/ComponentObserver.idl ${CMAKE_CURRENT_SOURCE_DIR}/ComponentObserver.idl COPYONLY)
-set(idls ${idls} ComponentObserver)
-endif(OBSERVER_ENABLE)
 
-
-if(CORBA MATCHES "TAO")
-	set(idls ${idls} DataPortUDP)
-endif()
 
 foreach(idl ${idls})
 	idl_compile(${idl})
 endforeach(idl)
 
 
+
 link_directories(${ORB_LINK_DIR})
 include_directories(
-		${RTM_INCLUDE_DIR}
 		${ORB_INCLUDE_DIR}
+		${PROJECT_BINARY_DIR}
 		)
+add_definitions(${ORB_C_FLAGS_LIST})
+
+
+
+
+link_directories(${ORB_LINK_DIR})
+include_directories(${ORB_INCLUDE_DIR})
 ADD_DEFINITIONS(${ORB_C_FLAGS_LIST})
-
-
 
 
 
@@ -92,13 +83,34 @@ ADD_DEFINITIONS(${ORB_C_FLAGS_LIST})
 
 set_source_files_properties(${ALL_IDL_SRCS} PROPERTIES GENERATED 1)
 
-add_library(RTCSkel STATIC ${ALL_IDL_SRCS} )
+
+
+
+
+if(VXWORKS)
+	add_library(${target} SHARED ${ALL_IDL_SRCS})
+	install(TARGETS ${RTM_PROJECT_NAME} ARCHIVE DESTINATION lib)
+else(VXWORKS)
+	add_library(${target} SHARED ${ALL_IDL_SRCS})
+	set_target_properties(${target} PROPERTIES DEBUG_POSTFIX d)
+	target_link_libraries(${target} ${ORB_LIBRARIES} ${RTCSKEL_PROJECT_NAME})
+	if(UNIX)
+		install(TARGETS ${target} LIBRARY DESTINATION lib)
+	elseif(WIN32)
+		install(TARGETS ${target} RUNTIME DESTINATION bin)
+	endif()
+endif(VXWORKS)
+
+
+
+
 
 if(NOT TARGET ALL_IDL_TGT)
   add_custom_target(ALL_IDL_TGT)
 
 endif(NOT TARGET ALL_IDL_TGT)
-add_dependencies(RTCSkel ALL_IDL_TGT)
+add_dependencies(${target} ALL_IDL_TGT)
+add_dependencies(${target} ${RTCSKEL_PROJECT_NAME})
 
 
 install(FILES ${ALL_IDL_FILES} ${ALL_IDL_HEADERS} DESTINATION include/rtm/idl)
