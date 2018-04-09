@@ -1,10 +1,10 @@
 cmake_minimum_required (VERSION 2.6)
 
-project (LoggerConsumer)
+project (LogicalTimeTriggeredEC)
 
 
 
-set(idl_name Logger)
+set(idl_name LogicalTimeTriggeredEC)
 
 
 
@@ -36,9 +36,9 @@ include_directories(
 ADD_DEFINITIONS(${ORB_C_FLAGS_LIST})
 
 
-set(target LoggerConsumer)
+set(target LogicalTimeTriggeredEC)
 
-set(srcs LoggerConsumer.cpp LoggerConsumer.h ${${idl_name}_STUB})
+set(srcs LogicalTimeTriggeredEC.cpp LogicalTimeTriggeredEC.h ${${idl_name}_STUB})
 
 
 if(VXWORKS AND NOT RTP)
@@ -49,7 +49,7 @@ if(VXWORKS AND NOT RTP)
 	add_dependencies(${target} ${RTM_PROJECT_NAME})
 	add_dependencies(${target} ${idl_name}_TGT)
 
-	install(TARGETS ${target} RUNTIME DESTINATION ext/sdo/logger)
+	install(TARGETS ${target} RUNTIME DESTINATION ext/ec/logical_time)
 else()
 	if(VXWORKS)
 		set(libs ${RTM_PROJECT_NAME} ${ORB_LIBRARIES} ${COIL_PROJECT_NAME} ${RTCSKEL_PROJECT_NAME})
@@ -66,9 +66,9 @@ else()
 
 
 	if(WIN32)
-		install(TARGETS ${target} RUNTIME DESTINATION ext/sdo/logger)
+		install(TARGETS ${target} RUNTIME DESTINATION ext/ec/logical_time)
 	else(WIN32)
-		install(TARGETS ${target} LIBRARY DESTINATION ext/sdo/logger)
+		install(TARGETS ${target} LIBRARY DESTINATION ext/ec/logical_time)
 	endif(WIN32)
 endif()
 

@@ -19,7 +19,7 @@ add_custom_command(
 	WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
 )
 add_custom_target(IDLReference DEPENDS IDLReference/html/index.html)
-
+add_dependencies(${RTM_PROJECT_NAME} IDLReference)
 
 
 add_custom_command(
@@ -28,7 +28,7 @@ add_custom_command(
 	WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
 )
 add_custom_target(ClassReference DEPENDS ClassReference/html/index.html)
-
+add_dependencies(${RTM_PROJECT_NAME} ClassReference)
 
 
 
@@ -53,16 +53,16 @@ add_custom_command(
 	WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
 )
 add_custom_target(IDLReference-en DEPENDS IDLReference-en/html/index.html)
-
+add_dependencies(${RTM_PROJECT_NAME} IDLReference-en)
 
 
 add_custom_command(
 	OUTPUT ClassReference-en/html/index.html
-	COMMAND doxygen ${PROJECT_SOURCE_DIR}/doxygen_idlref-en.conf
+	COMMAND doxygen ${PROJECT_SOURCE_DIR}/doxygen_classref-en.conf
 	WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
 )
 add_custom_target(ClassReference-en DEPENDS ClassReference-en/html/index.html)
-
+add_dependencies(${RTM_PROJECT_NAME} ClassReference-en)
 
 
 install(DIRECTORY IDLReference DESTINATION docs)

@@ -1,18 +1,18 @@
 cmake_minimum_required (VERSION 2.6)
 
-project (LoggerConsumer)
+project (ComponentObserverConsumer)
 
 
 
-set(idl_name Logger)
+set(idl_name ComponentObserver)
 
 
 
 
 
-set(${idl_name}_DIR ${CMAKE_CURRENT_BINARY_DIR})
-set(${idl_name}_SKEL ${CMAKE_CURRENT_BINARY_DIR}/${idl_name}Skel.cpp ${CMAKE_CURRENT_BINARY_DIR}/${idl_name}Skel.h)
-set(${idl_name}_STUB ${CMAKE_CURRENT_BINARY_DIR}/${idl_name}Stub.cpp ${CMAKE_CURRENT_BINARY_DIR}/${idl_name}Stub.h)
+set(${idl_name}_RTC_DIR ${CMAKE_CURRENT_BINARY_DIR})
+set(${idl_name}_RTC_SKEL ${CMAKE_CURRENT_BINARY_DIR}/${idl_name}Skel.cpp ${CMAKE_CURRENT_BINARY_DIR}/${idl_name}Skel.h)
+set(${idl_name}_RTC_STUB ${CMAKE_CURRENT_BINARY_DIR}/${idl_name}Stub.cpp ${CMAKE_CURRENT_BINARY_DIR}/${idl_name}Stub.h)
 
 
 add_custom_command(
@@ -21,7 +21,7 @@ add_custom_command(
 		COMMAND python ${SKELWRAPPER_COMMAND} --include-dir="" --skel-suffix=Skel --stub-suffix=Stub --idl-file=${idl_name}.idl
 		WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
 )
-add_custom_target(${idl_name}_TGT DEPENDS ${idl_name}Skel.cpp ${idl_name}Stub.cpp)
+add_custom_target(${idl_name}_RTC_TGT DEPENDS ${idl_name}Skel.cpp ${idl_name}Stub.cpp)
 
 
 
@@ -30,15 +30,15 @@ link_directories(${ORB_LINK_DIR})
 include_directories(
 		${RTM_INCLUDE_DIR}
 		${ORB_INCLUDE_DIR}
-		${${idl_name}_DIR}
+		${${idl_name}_RTC_DIR}
 		)
 
 ADD_DEFINITIONS(${ORB_C_FLAGS_LIST})
 
 
-set(target LoggerConsumer)
+set(target ComponentObserverConsumer)
 
-set(srcs LoggerConsumer.cpp LoggerConsumer.h ${${idl_name}_STUB})
+set(srcs ComponentObserverConsumer.cpp ComponentObserverConsumer.h ${${idl_name}_RTC_STUB})
 
 
 if(VXWORKS AND NOT RTP)
@@ -47,9 +47,9 @@ if(VXWORKS AND NOT RTP)
 	add_executable(${target} ${srcs})
 	target_link_libraries(${target} ${libs})
 	add_dependencies(${target} ${RTM_PROJECT_NAME})
-	add_dependencies(${target} ${idl_name}_TGT)
+	add_dependencies(${target} ${idl_name}_RTC_TGT)
 
-	install(TARGETS ${target} RUNTIME DESTINATION ext/sdo/logger)
+	install(TARGETS ${target} RUNTIME DESTINATION ext/sdo/fsm4rtc_observer)
 else()
 	if(VXWORKS)
 		set(libs ${RTM_PROJECT_NAME} ${ORB_LIBRARIES} ${COIL_PROJECT_NAME} ${RTCSKEL_PROJECT_NAME})
@@ -61,19 +61,19 @@ else()
 	add_library(${target} SHARED ${srcs})
 	target_link_libraries(${target} ${libs} ${RTM_LINKER_OPTION})
 	add_dependencies(${target} ${RTM_PROJECT_NAME})
-	add_dependencies(${target} ${idl_name}_TGT)
+	add_dependencies(${target} ${idl_name}_RTC_TGT)
 	set_target_properties(${target} PROPERTIES PREFIX "")
 
 
 	if(WIN32)
-		install(TARGETS ${target} RUNTIME DESTINATION ext/sdo/logger)
+		install(TARGETS ${target} RUNTIME DESTINATION ext/sdo/fsm4rtc_observer)
 	else(WIN32)
-		install(TARGETS ${target} LIBRARY DESTINATION ext/sdo/logger)
+		install(TARGETS ${target} LIBRARY DESTINATION ext/sdo/fsm4rtc_observer)
 	endif(WIN32)
 endif()
 
 
-set_source_files_properties(${${idl_name}_STUB} PROPERTIES GENERATED 1)
+set_source_files_properties(${${idl_name}_RTC_STUB} PROPERTIES GENERATED 1)
 
 
 

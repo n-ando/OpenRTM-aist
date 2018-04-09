@@ -1,6 +1,8 @@
 cmake_minimum_required (VERSION 2.6)
 
 add_subdirectory(sdo)
+add_subdirectory(local_service)
+add_subdirectory(ec)
 
 
 if(VXWORKS)
