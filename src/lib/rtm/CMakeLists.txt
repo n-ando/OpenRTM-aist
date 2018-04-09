@@ -360,11 +360,13 @@ set(rtm_srcs
 )
 
 if(CORBA MATCHES "TAO")
+	set(rtm_headers ${rtm_headers}
+		InPortCorbaCdrUDPConsumer.h
+		InPortCorbaCdrUDPProvider.h
+	 )
 	set(rtm_srcs ${rtm_srcs} 
 		InPortCorbaCdrUDPConsumer.cpp
-		InPortCorbaCdrUDPConsumer.h
 		InPortCorbaCdrUDPProvider.cpp
-		InPortCorbaCdrUDPProvider.h
 	 )
 endif()
 
@@ -382,8 +384,9 @@ endif(VXWORKS)
 if(OBSERVER_ENABLE)
 	add_definitions(-DENABLE_OBSERVER)
 	include_directories(${CMAKE_SOURCE_DIR}/src)
-	set(rtm_srcs ${rtm_srcs} ${CMAKE_SOURCE_DIR}/src/ext/sdo/observer/ComponentObserverConsumer.cpp
-				${CMAKE_SOURCE_DIR}/src/ext/sdo/observer/ComponentObserverConsumer.h)
+	#set(rtm_headers ${rtm_headers} ${CMAKE_SOURCE_DIR}/src/ext/sdo/observer/ComponentObserverConsumer.h)
+	set(rtm_srcs ${rtm_srcs} ${CMAKE_SOURCE_DIR}/src/ext/sdo/observer/ComponentObserverConsumer.cpp	)
+	install(FILES ${CMAKE_SOURCE_DIR}/src/ext/sdo/observer/ComponentObserverConsumer.h DESTINATION include/ext/sdo/observer)
 endif(OBSERVER_ENABLE)
 
 
