@@ -18,6 +18,7 @@
 #include <rtm/NVUtil.h>
 #include <rtm/RTObjectStateMachine.h>
 #include <rtm/ExecutionContextBase.h>
+#include <rtm/RTObject.h>
 
 namespace RTC
 {
@@ -110,6 +111,7 @@ namespace RTC
   RTC::ReturnCode_t ExecutionContextBase::
   bindComponent(RTC::RTObject_impl* rtc)
   {
+    setOwner(rtc->getObjRef());
     return m_worker.bindComponent(rtc);
   }
 
