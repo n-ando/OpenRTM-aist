@@ -501,7 +501,7 @@ namespace coil
 
 	  {
 		  std::string file_fff = dir + "\\" + filename;
-		  std::ifstream ifs(file_fff);
+		  std::ifstream ifs(file_fff.c_str());
 		  
 		  if (ifs.is_open())
 		  {
