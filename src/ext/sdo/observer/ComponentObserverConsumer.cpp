@@ -448,6 +448,23 @@ namespace RTC
                                              m_portaction,
                                              &PortAction::onDisconnect);
       }
+
+    const std::vector<InPortBase*>& inports = m_rtobj->getInPorts();
+    for (size_t i(0); i < inports.size(); ++i)
+      {
+        std::string msg("RECEIVE:InPort:");
+        msg += inports[i]->getName();
+        inports[i]->addConnectorDataListener(ON_RECEIVED,
+                                             new DataPortAction(*this, msg));
+      }
+    const std::vector<OutPortBase*>& outports = m_rtobj->getOutPorts();
+    for (size_t i(0); i < outports.size(); ++i)
+      {
+        std::string msg("SEND:OutPort:");
+        msg += outports[i]->getName();
+        outports[i]->addConnectorDataListener(ON_SEND,
+                                              new DataPortAction(*this, msg));
+      }
   }
 
   /*!

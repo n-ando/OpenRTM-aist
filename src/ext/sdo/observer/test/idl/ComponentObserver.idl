@@ -17,6 +17,7 @@
  */
 
 #include <SDOPackage.idl>
+//#include <RTC.idl>
 
 /*!
  * @if jp
