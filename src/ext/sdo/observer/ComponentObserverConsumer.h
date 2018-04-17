@@ -400,6 +400,35 @@ namespace RTC
 
     /*!
      * @if jp
+     * @brief DataPortデータ送信・受信アクションリスナ
+     * @else
+     * @brief DataPort's data send/receive action listener
+     * @endif
+     */
+    class DataPortAction
+      : public ConnectorDataListener
+    {
+    public:
+      DataPortAction(ComponentObserverConsumer& coc,
+                     const std::string msg)
+        : m_coc(coc), m_msg(msg)
+      {
+      }
+      virtual ~DataPortAction() {}
+
+      virtual ReturnCode operator()(ConnectorInfo& info,
+                                    cdrMemoryStream& data)
+      {
+        m_coc.updateStatus(OpenRTM::PORT_PROFILE, m_msg.c_str());
+        return NO_CHANGE;
+      }
+    private:
+      ComponentObserverConsumer& m_coc;
+      std::string m_msg;
+    };
+    
+    /*!
+     * @if jp
      * @brief ExecutionContextActionListener
      * @else
      * @brief ExecutionContextActionListener
