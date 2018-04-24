@@ -7,7 +7,7 @@
 	<Tool
 		Name="VCCLCompilerTool"
 		AdditionalIncludeDirectories="$(ssl_includes);$(omni_includes);$(rtm_includes)"
-		PreprocessorDefinitions="RTC_CORBA_CXXMAPPING11;_WIN32_WINNT=0x0500"
+		PreprocessorDefinitions="RTC_CORBA_CXXMAPPING11;_WIN32_WINNT=0x0500;ENABLE_OBSERVER"
 	/>
 	<Tool
 		Name="VCLinkerTool"

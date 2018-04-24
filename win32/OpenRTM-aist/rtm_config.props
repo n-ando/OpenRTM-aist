@@ -38,7 +38,7 @@
   <ItemDefinitionGroup>
     <ClCompile>
       <AdditionalIncludeDirectories>$(ssl_includes);$(omni_includes);$(rtm_includes);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>RTC_CORBA_CXXMAPPING11;_WIN32_WINNT=0x0500;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>RTC_CORBA_CXXMAPPING11;_WIN32_WINNT=0x0500;ENABLE_OBSERVER;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(ssl_libdir);$(omni_libdir);$(rtm_libdir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
