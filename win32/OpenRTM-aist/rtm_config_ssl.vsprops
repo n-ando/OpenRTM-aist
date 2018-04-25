@@ -6,12 +6,16 @@
 	>
 	<Tool
 		Name="VCCLCompilerTool"
-		AdditionalIncludeDirectories="$(omni_includes);$(rtm_includes)"
+		AdditionalIncludeDirectories="$(ssl_includes);$(omni_includes);$(rtm_includes)"
 		PreprocessorDefinitions="RTC_CORBA_CXXMAPPING11;_WIN32_WINNT=0x0500;ENABLE_OBSERVER"
 	/>
 	<Tool
 		Name="VCLinkerTool"
-		AdditionalLibraryDirectories="$(omni_libdir);$(rtm_libdir)"
+		AdditionalLibraryDirectories="$(ssl_libdir);$(omni_libdir);$(rtm_libdir)"
+	/>
+	<UserMacro
+		Name="ssl_root"
+		Value="%SSL_ROOT%"
 	/>
 	<UserMacro
 		Name="omni_root"
@@ -28,6 +32,10 @@
 	<UserMacro
 		Name="omnithread_dllver"
 		Value="%OMNITHREAD_DLLVER%"
+	/>
+	<UserMacro
+		Name="omnissl_dllver"
+		Value="%OMNISSL_DLLVER%"
 	/>
 	<UserMacro
 		Name="rtm_root"
@@ -64,11 +72,28 @@
 	/>
 	<UserMacro
 		Name="omni_lib"
-		Value="omniORB$(omni_dllver)_rt.lib omniDynamic$(omni_dllver)_rt.lib omnithread$(omnithread_dllver)_rt.lib"
+		Value="omniORB$(omni_dllver)_rt.lib omniDynamic$(omni_dllver)_rt.lib omnithread$(omnithread_dllver)_rt.lib omnisslTP$(omnissl_dllver)_rt.lib"
 	/>
 	<UserMacro
 		Name="omni_libd"
-		Value="omniORB$(omni_dllver)_rtd.lib omniDynamic$(omni_dllver)_rtd.lib omnithread$(omnithread_dllver)_rtd.lib"
+		Value="omniORB$(omni_dllver)_rtd.lib omniDynamic$(omni_dllver)_rtd.lib omnithread$(omnithread_dllver)_rtd.lib omnisslTP$(omnissl_dllver)_rtd.lib"
+	/>
+	<!-- OpenSSL macros -->
+	<UserMacro
+		Name="ssl_includes"
+		Value="&quot;$(ssl_root)\include&quot;"
+	/>
+	<UserMacro
+		Name="ssl_libdir"
+		Value="&quot;$(ssl_root)\lib&quot;"
+	/>
+	<UserMacro
+		Name="ssl_lib"
+		Value="libssl.lib libcrypto.lib"
+	/>
+	<UserMacro
+		Name="ssl_libd"
+		Value="libssl.lib libcrypto.lib"
 	/>
 	<!-- OpenRTM-aist macros -->
 	<UserMacro
@@ -89,19 +114,19 @@
 	/>
 	<UserMacro
 		Name="rtm_libd"
-		Value="RTC$(rtm_dllver)d.lib $(coil_libd) $(omni_libd) advapi32.lib ws2_32.lib mswsock.lib $(user_libd)"
+		Value="RTC$(rtm_dllver)d.lib $(coil_libd) $(ssl_libd) $(omni_libd) advapi32.lib ws2_32.lib mswsock.lib $(user_libd)"
 	/>
 	<UserMacro
 		Name="rtm_libd_x64"
-		Value="RTC$(rtm_dllver_x64)d.lib $(coil_libd_x64) $(omni_libd) advapi32.lib ws2_32.lib mswsock.lib $(user_libd)"
+		Value="RTC$(rtm_dllver_x64)d.lib $(coil_libd_x64) $(ssl_libd) $(omni_libd) advapi32.lib ws2_32.lib mswsock.lib $(user_libd)"
 	/>
 	<UserMacro
 		Name="rtm_lib"
-		Value="RTC$(rtm_dllver).lib $(coil_lib) $(omni_lib) advapi32.lib ws2_32.lib mswsock.lib $(user_lib)"
+		Value="RTC$(rtm_dllver).lib $(coil_lib) $(ssl_lib) $(omni_lib) advapi32.lib ws2_32.lib mswsock.lib $(user_lib)"
 	/>
 	<UserMacro
 		Name="rtm_lib_x64"
-		Value="RTC$(rtm_dllver_x64).lib $(coil_lib_x64) $(omni_lib) advapi32.lib ws2_32.lib mswsock.lib $(user_lib)"
+		Value="RTC$(rtm_dllver_x64).lib $(coil_lib_x64) $(ssl_lib) $(omni_lib) advapi32.lib ws2_32.lib mswsock.lib $(user_lib)"
 	/>
 	<UserMacro
 		Name="rtm_idlc"
