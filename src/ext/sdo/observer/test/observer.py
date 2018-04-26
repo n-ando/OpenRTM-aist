@@ -50,6 +50,8 @@ uuid_val = uuid.uuid4().get_bytes()
 intf_type = obs._this()._NP_RepositoryId
 props = dict_to_nvlist({'heartbeat.enable': 'YES',
                         'heartbeat.interval': '1.0',
+                        'port_profile.send_event.min_interval': '1.0',
+                        'port_profile.receive_event.min_interval': '1.0',
                         'observed_status': 'ALL'})
 
 sprof = SDOPackage.ServiceProfile(id=uuid_val,
@@ -57,5 +59,8 @@ sprof = SDOPackage.ServiceProfile(id=uuid_val,
                                   service=obs._this(),
                                   properties=props)
 res = conf.add_service_profile(sprof)
-orb.run()
+try:
+    orb.run()
+except KeyboardInterrupt:
+    conf.remove_service_profile(uuid_val)
 print res
