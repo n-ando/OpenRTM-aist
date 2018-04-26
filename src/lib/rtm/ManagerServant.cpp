@@ -889,6 +889,23 @@ namespace RTM
    */
   RTC::ReturnCode_t ManagerServant::shutdown()
   {
+    if (!m_isMaster)
+      {
+	Guard guardm(m_masterMutex);
+	for (CORBA::ULong i(0); i < m_masters.length(); ++i)
+	  {
+	    try
+	      {
+		if (CORBA::is_nil(m_masters[i])) { continue; }
+		m_masters[i]
+		  ->remove_slave_manager(RTM::Manager::_duplicate(m_objref));
+	      }
+	    catch (...)
+	      {
+		m_masters[i] = RTM::Manager::_nil();
+	      }
+	  }
+      }
     m_mgr.terminate();
     return ::RTC::RTC_OK;
   }
