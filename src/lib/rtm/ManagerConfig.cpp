@@ -141,6 +141,7 @@ namespace RTC
    */
   void ManagerConfig::parseArgs(int argc, char** argv)
   {
+	bool ignoreNoConf(false);
     coil::GetOpt get_opts(argc, argv, "af:io:p:d", 0);
     int opt;
 
@@ -161,7 +162,7 @@ namespace RTC
               {
                 std::cerr << "Configuration file: " << m_configFile;
                 std::cerr << " not found." << std::endl;
-                for (size_t i(0); i < (ulong)argc; ++i)
+				for (size_t i(0); i < (size_t)argc; ++i)
                   {
                     std::string tmp(argv[i]);
                     if (tmp == "-i") { ignoreNoConf = true; }
