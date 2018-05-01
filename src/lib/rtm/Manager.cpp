@@ -207,6 +207,10 @@ namespace RTC
   {
     RTC_TRACE(("Manager::shutdown()"));
     m_listeners.manager_.preShutdown();
+    if (m_timer != NULL)
+      {
+        m_timer->stop();
+      }
     shutdownComponents();
     shutdownNaming();
     shutdownORB();
@@ -1318,10 +1322,6 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   void Manager::shutdownManager()
   {
     RTC_TRACE(("Manager::shutdownManager()"));
-    if (m_timer != NULL)
-      {
-        m_timer->stop();
-      }
   }
 
   void  Manager::shutdownOnNoRtcs()
@@ -1332,7 +1332,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
         std::vector<RTObject_impl*> comps(getComponents());
         if (comps.size() == 0)
           {
-            shutdown();
+            terminate();
           }
       }
 
