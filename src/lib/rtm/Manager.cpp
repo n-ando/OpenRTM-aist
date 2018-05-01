@@ -1318,7 +1318,10 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   void Manager::shutdownManager()
   {
     RTC_TRACE(("Manager::shutdownManager()"));
-    m_timer->stop();
+    if (m_timer != NULL)
+      {
+        m_timer->stop();
+      }
   }
 
   void  Manager::shutdownOnNoRtcs()
