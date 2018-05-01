@@ -2415,7 +2415,8 @@ namespace RTC
        *
        * @endif
        */
-      Terminator(Manager* manager) : m_manager(manager) {};
+      Terminator(Manager* manager, double waittime = 0)
+	: m_manager(manager), m_waittime(waittime) {};
       
       /*!
        * @if jp
@@ -2481,10 +2482,12 @@ namespace RTC
        */
       virtual int svc(void)
       {
+	coil::sleep(m_waittime);
 	Manager::instance().shutdown();
 	return 0;
       }
       Manager* m_manager;
+      coil::TimeValue m_waittime;
     };
     
     /*!

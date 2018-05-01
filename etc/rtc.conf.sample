@@ -43,9 +43,17 @@ corba.master_manager: localhost:2810
 #   process will be shutdown in case no rtc exists when rtc is deleted.
 # - manager.shutdown_auto:
 #   process will be shutdown in case no rtc exists on periodic check.
+# - manager.auto_shutdown_duration:
+#   manager duration time [s] until shutdown after no RTCs existing
 manager.shutdown_on_nortcs: YES
 manager.shutdown_auto: YES
 manager.auto_shutdown_duration: 10.0
+
+#------------------------------------------------------------
+# Manager termination wait time
+# - manager.termination_waittime:
+#   wait time length before manager termination thread started
+manager.termination_waittime: 0.5
 
 #------------------------------------------------------------
 # Manager process's CPU affinity setting
