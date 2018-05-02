@@ -193,7 +193,9 @@ namespace RTC
   void Manager::terminate()
   {
     if (m_terminator != NULL)
-      m_terminator->terminate();
+      {
+	m_terminator->terminate();
+      }
   }
 
   /*!
@@ -1236,7 +1238,16 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     m_module = new ModuleManager(m_config);
 
     // initialize Terminator
-    m_terminator = new Terminator(this);
+    double waittime(0.5);
+    if (m_config.findNode("manager.termination_waittime") != 0)
+      {
+	const char* s = m_config["manager.termination_waittime"].c_str();
+	if (!coil::stringTo(waittime, s))
+	  {
+	    waittime = 0.5;
+	  }
+      }
+    m_terminator = new Terminator(this, waittime);
     {
       Guard guard(m_terminate.mutex);
       m_terminate.waiting = 0;

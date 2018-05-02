@@ -162,7 +162,7 @@ namespace RTC
               {
                 std::cerr << "Configuration file: " << m_configFile;
                 std::cerr << " not found." << std::endl;
-				for (size_t i(0); i < (size_t)argc; ++i)
+                for (size_t i(0); i < (size_t)argc; ++i)
                   {
                     std::string tmp(argv[i]);
                     if (tmp == "-i") { ignoreNoConf = true; }

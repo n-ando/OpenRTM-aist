@@ -905,6 +905,25 @@ namespace RTM
 		m_masters[i] = RTM::Manager::_nil();
 	      }
 	  }
+	m_masters.length(0);
+      }
+    else
+      {
+	Guard guards(m_slaveMutex);
+	for (CORBA::ULong i(0); i < m_slaves.length(); ++i)
+	  {
+	    try
+	      {
+		if (CORBA::is_nil(m_slaves[i])) { continue; }
+		m_slaves[i]
+		  ->remove_master_manager(RTM::Manager::_duplicate(m_objref));
+	      }
+	    catch (...)
+	      {
+		m_slaves[i] = RTM::Manager::_nil();
+	      }
+	  }
+	m_slaves.length(0);
       }
     m_mgr.terminate();
     return ::RTC::RTC_OK;
