@@ -71,7 +71,7 @@ namespace coil
   {
     char path_name[strlen(path)+1];
     snprintf(path_name, sizeof(path_name), "%s", path);
-    std::string dir_name = ::dirname(path);
+    std::string dir_name = ::dirname(path_name);
     return dir_name;
   }
 
