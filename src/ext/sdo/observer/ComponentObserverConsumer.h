@@ -179,6 +179,15 @@ namespace RTC
 
     /*!
      * @if jp
+     * @brief ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆã‚¤ãƒ™ãƒ³ãƒˆã®é–“éš”ã‚’è¨­å®šã™ã‚‹
+     * @else
+     * @brief Setting interval of dataport events
+     * @endif
+     */
+    void setDataPortInterval(coil::Properties& prop);
+
+    /*!
+     * @if jp
      * @brief ãƒãƒ¼ãƒˆãƒ“ãƒ¼ãƒˆã‚’è§£é™¤ã™ã‚‹
      * @else
      * @brief Unsetting heartbeat
@@ -400,7 +409,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief DataPort¥Ç¡¼¥¿Á÷¿®¡¦¼õ¿®¥¢¥¯¥·¥ç¥ó¥ê¥¹¥Ê
+     * @brief DataPort\??\?A |? ï¿ \ï¿£\ãƒ»\c\o\?\E
      * @else
      * @brief DataPort's data send/receive action listener
      * @endif
@@ -410,8 +419,10 @@ namespace RTC
     {
     public:
       DataPortAction(ComponentObserverConsumer& coc,
-                     const std::string msg)
-        : m_coc(coc), m_msg(msg)
+                     const std::string msg,
+                     coil::TimeValue interval)
+        : m_coc(coc), m_msg(msg), m_interval(interval),
+          m_last(coil::gettimeofday())
       {
       }
       virtual ~DataPortAction() {}
@@ -419,12 +430,21 @@ namespace RTC
       virtual ReturnCode operator()(ConnectorInfo& info,
                                     cdrMemoryStream& data)
       {
-        m_coc.updateStatus(OpenRTM::PORT_PROFILE, m_msg.c_str());
+        coil::TimeValue curr = coil::gettimeofday();
+        coil::TimeValue intvl = curr - m_last;
+        if (intvl > m_interval)
+          {
+            m_last = curr;
+            m_coc.updateStatus(OpenRTM::PORT_PROFILE, m_msg.c_str());
+          }
+
         return NO_CHANGE;
       }
     private:
       ComponentObserverConsumer& m_coc;
       std::string m_msg;
+      coil::TimeValue m_interval;
+      coil::TimeValue m_last;
     };
     
     /*!
@@ -558,11 +578,19 @@ namespace RTC
 
     bool m_observed[OpenRTM::STATUS_KIND_NUM];
 
+    // ComponentProfile
     CompStatMsg m_compstat;
+
+    // PortProfile
     PortAction m_portaction;
+    coil::TimeValue m_inportInterval;
+    coil::TimeValue m_outportInterval;
+
+    // Execution Context
     ECAction m_ecaction;
     ConfigAction m_configMsg;
 
+    // Heartbeat
     coil::TimeValue m_interval;
     bool m_heartbeat;
     ListenerId m_hblistenerid;

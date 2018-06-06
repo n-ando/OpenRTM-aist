@@ -34,6 +34,7 @@ namespace RTC
   ComponentObserverConsumer::ComponentObserverConsumer()
     : m_rtobj(NULL),
       m_compstat(*this), m_portaction(*this),
+      m_inportInterval(1, 0), m_outportInterval(1, 0),
       m_ecaction(*this), m_configMsg(*this),
       m_interval(0, 100000), m_heartbeat(false),
       m_hblistenerid(NULL),
@@ -84,6 +85,7 @@ namespace RTC
     coil::Properties prop;
     NVUtil::copyToProperties(prop, profile.properties);
     setHeartbeat(prop);
+    setDataPortInterval(prop);
     setListeners(prop);
     return true;
   }
@@ -304,6 +306,29 @@ namespace RTC
 
   /*!
    * @if jp
+   * @brief データポートイベントの間隔を設定する
+   * @else
+   * @brief Setting interval of dataport events
+   * @endif
+   */
+  void ComponentObserverConsumer::setDataPortInterval(coil::Properties& prop)
+  {
+    double outportInterval;
+    if (coil::stringTo(outportInterval,
+                      prop["port_profile.send_event.min_interval"].c_str()))
+      {
+        m_outportInterval = outportInterval;
+      }
+    double inportInterval;
+    if (coil::stringTo(inportInterval,
+                      prop["port_profile.receive_event.min_interval"].c_str()))
+      {
+        m_inportInterval = inportInterval;
+      }
+  }
+
+  /*!
+   * @if jp
    * @brief ハートビートを解除する
    * @else
    * @brief Unsetting heartbeat
@@ -455,7 +480,8 @@ namespace RTC
         std::string msg("RECEIVE:InPort:");
         msg += inports[i]->getName();
         inports[i]->addConnectorDataListener(ON_RECEIVED,
-                                             new DataPortAction(*this, msg));
+                                             new DataPortAction(*this, msg,
+                                                                m_inportInterval));
       }
     const std::vector<OutPortBase*>& outports = m_rtobj->getOutPorts();
     for (size_t i(0); i < outports.size(); ++i)
@@ -463,7 +489,8 @@ namespace RTC
         std::string msg("SEND:OutPort:");
         msg += outports[i]->getName();
         outports[i]->addConnectorDataListener(ON_SEND,
-                                              new DataPortAction(*this, msg));
+                                              new DataPortAction(*this, msg,
+                                                                 m_outportInterval));
       }
   }
 

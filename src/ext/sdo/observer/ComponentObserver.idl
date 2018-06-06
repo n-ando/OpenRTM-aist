@@ -188,22 +188,55 @@ module OpenRTM
      * hint には、いずれかのアクションが行われたかと、対象となるポート
      * の名前が与えられる。
      *
+     * - ADD: ポートの追加イベント
+     * - REMOVE: ポートの削除イベント
+     * - CONNECT: コネクタの追加イベント
+     * - DISCONNECT: コネクタの切断イベント
+     * - SEND: OutPortの送信イベント
+     * - RECEIVE: InProtの受信イベント
+     *
      * hint: (ADD, REMOVE, CONNECT, DISCONNECT, SEND, RECEIVE):<port name>
      * 例:
      *   CONNECT:velocity (velocity ポートで接続が確立された)
+     *   SEND:OutPort:ConsoleIn0.out (ConoleIn0.outポートからデータが送信された)
+     *   RECEIVE:InPort:ConsoleOut0.in (ConsoleOut0.inポートでデータを受信した)
+     *
+     * なお、データ送信周期が速い場合には、メッセージが多数送信されるた
+     * め、これを間引きたい場合には、ServiceProfile::properties に以下
+     * のオプションをセットする。
+     *
+     *  port_profile.send_event.min_interval x [s] (最低送信イベント間隔)
+     *  port_profile.receive_event.min_interval: x [s] (最低受信イベント間隔))
      *
      * @else
      *
      * @brief The stauts of ports
-     * 
+     *
      * This is enumerator which notifies that port is added, removed,
      * connected and/or disconnected.  Which action is performed and
      * target port's name is given to the hint argument in
      * ComponentObserver::updateStatus() operation.
      *
+     * - ADD: Port add event
+     * - REMOVE: Port remove event
+     * - CONNECT: Connector connection event
+     * - DISCONNECT: Connector disconnect event
+     * - SEND: OutPort data send event
+     * - RECEIVE: InProt data receive event
+     *
      * hint: (ADD, REMOVE, CONNECT, DISCONNECT, SEND_RECEIVE):<port name>
      * Example:
      *   CONNECT:velocity (A connection established in the velocity port)
+     *   SEND:OutPort:ConsoleIn0.out (data was sent from ConoleIn0.out)
+     *   RECEIVE:InPort:ConsoleOut0.in (data was received by ConsoleOut0.in)
+     *
+     * Since many event messages would be send when the data
+     * transimission cycle is fast, so if you want to decrease event
+     * receiving cycle, please set the following options in the
+     * ServiceProfile::properties.
+     *
+     *  port_profile.send_event.min_interval x [s] (最低送信イベント間隔)
+     *  port_profile.receive_event.min_interval: x [s] (最低受信イベント間隔))
      *
      * @endif
      */
