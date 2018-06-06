@@ -306,9 +306,9 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ハートビートを設定する
+   * @brief データポートイベントの間隔を設定する
    * @else
-   * @brief Setting heartbeat
+   * @brief Setting interval of dataport events
    * @endif
    */
   void ComponentObserverConsumer::setDataPortInterval(coil::Properties& prop)
