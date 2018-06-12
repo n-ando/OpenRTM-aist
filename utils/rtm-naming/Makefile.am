@@ -10,7 +10,7 @@ AUTOMAKE_OPTIONS = 1.4
 COSNAMES = @COSNAMES@
 ORB = @ORB@
 
-bin_SCRIPTS = rtm-naming
+bin_SCRIPTS = rtm-naming kill-rtm-naming
 
 rtm-naming: rtm-naming.in
 	echo '#!/bin/sh' > $@
@@ -20,7 +20,15 @@ rtm-naming: rtm-naming.in
 	cat rtm-naming.in >> $@
 	chmod 755 $@
 
-EXTRA_DIST = rtm-naming.in
+kill-rtm-naming: kill-rtm-naming.in
+	echo '#!/bin/sh' > $@
+	echo '' >> $@
+	echo 'cosnames="'${COSNAMES}'"' >> $@
+	echo 'orb="'${ORB}'"' >> $@
+	cat kill-rtm-naming.in >> $@
+	chmod 755 $@
+
+EXTRA_DIST = rtm-naming.in kill-rtm-naming.in
 
 clean-local:
-	rm -rf rtm-naming *~ *core
+	rm -rf *rtm-naming *~ *core

@@ -20,4 +20,5 @@ dist-hook: clean-local copy_scripts
 
 EXTRA_DIST = \
 	rtm-naming.bat \
+	kill-rtm-naming.bat \
 	rtc.conf

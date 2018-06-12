@@ -130,6 +130,7 @@ cp %{_topdir}/../../src/ext/sdo/observer/idl/*.cc %{ext_dir}/sdo/observer/idl
 /etc/rtc.conf.sample
 %defattr(-,root,root,-)
 %attr(755,root,root) %{_bindir}/rtm-naming
+%attr(755,root,root) %{_bindir}/kill-rtm-naming
 %attr(755,root,root) %{_bindir}/rtcd
 %attr(755,root,root) %{_bindir}/rtcprof
 %attr(755,root,root) %{_bindir}/rtm-config
