@@ -12,6 +12,7 @@
 %define _unpackaged_files_terminate_build   1
 %define __os_install_post %{nil}
 %define rtm_libdir     %{_libdir}/openrtm-%{shortversion}
+%global debug_package %{nil}
 
 #------------------------------------------------------------
 # Package information
@@ -130,6 +131,7 @@ cp %{_topdir}/../../src/ext/sdo/observer/idl/*.cc %{ext_dir}/sdo/observer/idl
 /etc/rtc.conf.sample
 %defattr(-,root,root,-)
 %attr(755,root,root) %{_bindir}/rtm-naming
+%attr(755,root,root) %{_bindir}/kill-rtm-naming
 %attr(755,root,root) %{_bindir}/rtcd
 %attr(755,root,root) %{_bindir}/rtcprof
 %attr(755,root,root) %{_bindir}/rtm-config
@@ -138,7 +140,7 @@ cp %{_topdir}/../../src/ext/sdo/observer/idl/*.cc %{ext_dir}/sdo/observer/idl
 %{_libdir}/librtm*
 %{rtm_libdir}/ec/*
 %{rtm_libdir}/sdo/*
-
+%{rtm_libdir}/ssl/*
 
 #------------------------------------------------------------
 # devel package file list
@@ -179,10 +181,10 @@ cp %{_topdir}/../../src/ext/sdo/observer/idl/*.cc %{ext_dir}/sdo/observer/idl
 * Wed Nov 16 2016 Noriaki Ando <n-ando@aist.go.jp> - 1.2.0-0._distname
 - The 1.2.0 release of OpenRTM-aist.
 
-* Thu Jun 4 2011 Noriaki Ando <n-ando@aist.go.jp> - 1.1.0-0._distname
+* Sat Jun 4 2011 Noriaki Ando <n-ando@aist.go.jp> - 1.1.0-0._distname
 - CMakefile has been added.
 
-* Thu May 7 2011 Noriaki Ando <n-ando@aist.go.jp> - 1.1.0-0._distname
+* Sat May 7 2011 Noriaki Ando <n-ando@aist.go.jp> - 1.1.0-0._distname
 - The 1.1.0 release of OpenRTM-aist.
 
 * Thu Sep 27 2007 Noriaki Ando <n-ando@aist.go.jp> - 0.4.1-1._distname
