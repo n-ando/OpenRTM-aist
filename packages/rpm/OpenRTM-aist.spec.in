@@ -140,7 +140,7 @@ cp %{_topdir}/../../src/ext/sdo/observer/idl/*.cc %{ext_dir}/sdo/observer/idl
 %{_libdir}/librtm*
 %{rtm_libdir}/ec/*
 %{rtm_libdir}/sdo/*
-
+%{rtm_libdir}/ssl/*
 
 #------------------------------------------------------------
 # devel package file list
