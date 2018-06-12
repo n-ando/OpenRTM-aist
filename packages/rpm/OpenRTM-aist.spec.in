@@ -180,10 +180,10 @@ cp %{_topdir}/../../src/ext/sdo/observer/idl/*.cc %{ext_dir}/sdo/observer/idl
 * Wed Nov 16 2016 Noriaki Ando <n-ando@aist.go.jp> - 1.2.0-0._distname
 - The 1.2.0 release of OpenRTM-aist.
 
-* Thu Jun 4 2011 Noriaki Ando <n-ando@aist.go.jp> - 1.1.0-0._distname
+* Sat Jun 4 2011 Noriaki Ando <n-ando@aist.go.jp> - 1.1.0-0._distname
 - CMakefile has been added.
 
-* Thu May 7 2011 Noriaki Ando <n-ando@aist.go.jp> - 1.1.0-0._distname
+* Sat May 7 2011 Noriaki Ando <n-ando@aist.go.jp> - 1.1.0-0._distname
 - The 1.1.0 release of OpenRTM-aist.
 
 * Thu Sep 27 2007 Noriaki Ando <n-ando@aist.go.jp> - 0.4.1-1._distname
