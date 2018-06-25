@@ -391,7 +391,7 @@ namespace RTC
   /*!
    * @if jp
    *
-   * @brief rtcname形式でRTCのオブジェクトリファレンスを取得する
+   * @brief rtcloc形式でRTCのオブジェクトリファレンスを取得する
    *
    * @param name rtcloc形式でのRTC名
    * rtcloc://localhost:2809/example/ConsoleIn
