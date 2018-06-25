@@ -88,7 +88,7 @@ namespace RTC
     RTC_TRACE(("write()"));
     RTC_PARANOID(("data size = %d bytes", data.bufSize()));
     
-    return m_publisher->write(data, 0, 0);
+    return m_publisher->write(data, -1, 0);
   }
   
   /*!
