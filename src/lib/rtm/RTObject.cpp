@@ -2018,6 +2018,28 @@ namespace RTC
     return m_sdoservice.removeSdoServiceConsumer(id);
   }
 
+
+
+  /*!
+  * @if jp
+  * @brief [local interface] SDO service provider を別スレッドで削除する
+  * @else
+  * @brief [local interface] Remove a SDO service provider
+  * @endif
+  */
+  void RTObject_impl::removeSdoServiceConsumerStartThread(const char* id)
+  {
+    if (m_sdoconterm)
+      {
+        m_sdoconterm->wait();
+        delete m_sdoconterm;
+      }
+    m_sdoconterm = new SdoServiceConsumerTerminator();
+    m_sdoconterm->setSdoServiceConsumer(&m_sdoservice, id);
+    m_sdoconterm->activate();
+	  
+  }
+
   /*!
    * @if jp
    * @brief 全 InPort のデータを読み込む。

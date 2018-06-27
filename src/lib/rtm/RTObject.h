@@ -3230,6 +3230,15 @@ namespace RTC
 
     /*!
      * @if jp
+     * @brief [local interface] SDO service provider を別スレッドで削除する
+     * @else
+     * @brief [local interface] Remove a SDO service provider
+     * @endif
+     */
+    void removeSdoServiceConsumerStartThread(const char* id);
+
+    /*!
+     * @if jp
      *
      * @brief 全 InPort のデータを読み込む。
      *
@@ -5473,7 +5482,33 @@ namespace RTC
      */
     FsmActionListeners m_fsmActionListeners;
 
-	RTC::LightweightRTObject_var m_insref;
+    RTC::LightweightRTObject_var m_insref;
+
+
+    class SdoServiceConsumerTerminator
+		: public coil::Task
+    {
+    public:
+        SdoServiceConsumerTerminator()
+          {
+
+          };
+        void setSdoServiceConsumer(SdoServiceAdmin* sdoservice, const char* id)
+          {
+            m_sdoservice = sdoservice;
+            m_id = id;
+          }
+        virtual int svc(void)
+          {
+            m_sdoservice->removeSdoServiceConsumer(m_id.c_str());
+            return 0;
+          }
+    private:
+        SdoServiceAdmin *m_sdoservice;
+        std::string m_id;
+    };
+    SdoServiceConsumerTerminator *m_sdoconterm;
+
 
     //------------------------------------------------------------
     // Functor
