@@ -55,12 +55,20 @@ namespace RTC
    */
   ComponentObserverConsumer::~ComponentObserverConsumer()
   {
-    unsetComponentProfileListeners();
-    unsetComponentStatusListeners();
-    unsetPortProfileListeners();
-    unsetExecutionContextListeners();
-    unsetConfigurationListeners();
-    unsetHeartbeat();
+      {
+        Guard guard(mutex);
+        unsetComponentProfileListeners();
+        unsetComponentStatusListeners();
+        unsetPortProfileListeners();
+        unsetExecutionContextListeners();
+        unsetConfigurationListeners();
+        unsetHeartbeat();
+      }
+
+      {
+        coil::sleep(1.0);
+        Guard guard(mutex);
+      }
   }
 
   /*!
@@ -479,18 +487,23 @@ namespace RTC
       {
         std::string msg("RECEIVE:InPort:");
         msg += inports[i]->getName();
+        DataPortAction *action = new DataPortAction(*this, msg,
+                                                    m_inportInterval);
         inports[i]->addConnectorDataListener(ON_RECEIVED,
-                                             new DataPortAction(*this, msg,
-                                                                m_inportInterval));
+                                                    action);
+        m_recievedactions.push_back(action);
+
       }
     const std::vector<OutPortBase*>& outports = m_rtobj->getOutPorts();
     for (size_t i(0); i < outports.size(); ++i)
       {
         std::string msg("SEND:OutPort:");
         msg += outports[i]->getName();
+        DataPortAction *action = new DataPortAction(*this, msg,
+                                                    m_outportInterval);
         outports[i]->addConnectorDataListener(ON_SEND,
-                                              new DataPortAction(*this, msg,
-                                                                 m_outportInterval));
+                                              action);
+        m_sendactions.push_back(action);
       }
   }
 
@@ -526,6 +539,24 @@ namespace RTC
         m_rtobj->removePortConnectRetListener(ON_DISCONNECTED,
                                            m_portaction.portDisconnectListener);
         m_portaction.portDisconnectListener = NULL;
+      }
+
+
+    const std::vector<InPortBase*>& inports = m_rtobj->getInPorts();
+    for (size_t i(0); i < inports.size(); ++i)
+      {
+        for (size_t j(0); j < m_recievedactions.size(); ++j)
+          {
+            inports[i]->removeConnectorDataListener(ON_RECEIVED, m_recievedactions[j]);
+          }
+      }
+    const std::vector<OutPortBase*>& outports = m_rtobj->getOutPorts();
+    for (size_t i(0); i < outports.size(); ++i)
+      {
+        for (size_t j(0); j < m_sendactions.size(); ++j)
+          {
+            outports[i]->removeConnectorDataListener(ON_SEND, m_sendactions[j]);
+          }
       }
   }
 

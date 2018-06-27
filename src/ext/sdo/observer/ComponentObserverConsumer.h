@@ -40,6 +40,7 @@ namespace RTC
   class ComponentObserverConsumer
     : public SdoServiceConsumerBase
   {
+    typedef coil::Guard<coil::Mutex> Guard;
   public:
     /*!
      * @if jp
@@ -106,13 +107,14 @@ namespace RTC
      */
     inline void updateStatus(OpenRTM::StatusKind statuskind, const char* msg)
     {
+      Guard guard(mutex);
       try
         {
           m_observer->update_status(statuskind, msg);
         }
       catch (...)
         {
-          m_rtobj->removeSdoServiceConsumer(m_profile.id);
+          m_rtobj->removeSdoServiceConsumerStartThread(m_profile.id);
         }
     }
 
@@ -597,6 +599,10 @@ namespace RTC
 
     // このタイマーはいずれグローバルなタイマにおきかえる
     coil::Timer m_timer;
+    coil::Mutex mutex;
+
+    std::vector<DataPortAction*> m_recievedactions;
+    std::vector<DataPortAction*> m_sendactions;
 
   };
 

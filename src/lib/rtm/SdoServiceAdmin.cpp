@@ -397,11 +397,14 @@ namespace RTC
             SdoServiceConsumerFactory& 
               factory(SdoServiceConsumerFactory::instance());
             factory.deleteObject(*it);
-            m_consumers.erase(it);
+            it = m_consumers.erase(it);
             RTC_INFO(("SDO service has been deleted: %s", id));
             return true;
           }
-        ++it;
+        else 
+          {
+            ++it;
+          }
       }
     RTC_WARN(("Specified SDO consumer not found: %s", id));
     return false;
