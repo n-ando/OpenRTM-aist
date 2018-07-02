@@ -3226,7 +3226,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief [local interface] SDO service provider ã‚’åˆ¥ã‚¹ãƒ¬ãƒƒãƒ‰ã§å‰Šé™¤ã™ã‚‹
+     * @brief [local interface] SDO service provider ¤òÊÌ¥¹¥ì¥Ã¥É¤Çºï½ü¤¹¤ë
      * @else
      * @brief [local interface] Remove a SDO service provider
      * @endif
