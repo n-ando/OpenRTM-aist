@@ -233,7 +233,7 @@ stop_existing_ns()
             # Restart naming service
             if test "x$FORCEKILL" = "x" ; then
                 read -p "Kill anyway and start $pname again? (y/N)" killns
-                if test "x$killns" != "xy" -o  "x$killns" != "xY"; then
+                if test "x$killns" != "xy" -a  "x$killns" != "xY"; then
                     echo "Aborting"
                     exit 1
                 fi
