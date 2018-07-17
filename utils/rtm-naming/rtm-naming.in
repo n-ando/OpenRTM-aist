@@ -90,10 +90,14 @@ debug()
 get_pid_of_nsport()
 {
     _port=$1
-    debug "netstat -tanp 2> /dev/null | grep $_port | awk '{print $7;}'"
-    netstat_tanp=`netstat -tanp`
-    _netstat=`netstat -tanp 2> /dev/null | grep $_port | awk '{if($7!="-"){print $7;}}'`
-    debug "A possible process that is using $port port:" $_netstat
+    debug "netstat -tlnp 2> /dev/null | grep $_port | awk '{print $7;}'"
+    netstat_tanp=`netstat -tlnp`
+    if test "x$PASSWORD" = "x"; then
+        _netstat=`sudo netstat -tlnp 2> /dev/null | grep $_port | awk '{if($7!="-"){print $7;}}'`
+    else
+        _netstat=`echo $PASSWORD | sudo -S netstat -tlnp 2> /dev/null | grep $_port | awk '{if($7!="-"){print $7;}}'`
+    fi
+    debug "A possible process that is using $_port port:" $_netstat
     if test "x$_netstat" = "x"; then
         debug "No process using port number ${_port} on the system."
         return 1
@@ -278,10 +282,19 @@ stop_existing_ns()
 start_omninames()
 {
     echo 'Starting omniORB omniNames: '$hostname':'$PORT
-    rm -f ./omninames-$hostname.log
-    rm -f ./omninames-$hostname.bak
-    rm -f ./omninames-$hostname.dat
-    $cosnames -start $PORT -logdir $currdir &
+    if test "x$PASSWORD" = "x" ; then
+        rm -f ./omninames-$hostname.log
+        rm -f ./omninames-$hostname.bak
+        rm -f ./omninames-$hostname.dat
+        $cosnames -start $PORT -logdir $currdir &
+        echo "$cosnames -start $PORT -logdir $currdir &"
+    else
+        echo $PASSWORD | sudo -S rm -f ./omninames-$hostname.log
+        echo $PASSWORD | sudo -S rm -f ./omninames-$hostname.bak
+        echo $PASSWORD | sudo -S rm -f ./omninames-$hostname.dat
+        echo $PASSWORD | sudo -S $cosnames -start $PORT -logdir $currdir &
+        echo "sudo $cosnames -start $PORT -logdir $currdir &"
+    fi
     ret=$!
     sleep 1
     debug "return code of omniNames:" $ret
