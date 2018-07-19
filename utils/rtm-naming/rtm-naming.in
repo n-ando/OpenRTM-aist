@@ -221,6 +221,7 @@ delete_omninames_files()
 #
 stop_existing_ns()
 {
+    debug "---stop_existing_ns"
     get_pid_of_nsport $PORT
     if test $? -eq 0; then
 	debug "The Process information using the port could be obtained."
@@ -318,10 +319,10 @@ stop_existing_ns()
 #
 start_omninames()
 {
+    debug "---start_omninames"
     echo 'Starting omniORB omniNames: '$hostname':'$PORT
-    delete_omninames_files
+    init_script=`grep $orb /etc/init.d/* | awk 'BEGIN{FS=":";}{if(FNR==1){print $1;}}'`
     if test "x$PASSWORD" = "x" ; then
-	    init_script=`grep $cosnames /etc/init.d/* | awk 'BEGIN{FS=":";}{if(FNR==1){print $1;}}'`
         sudo $init_script start
     else
         echo $PASSWORD | sudo -S $init_script start
@@ -329,13 +330,17 @@ start_omninames()
     debug "$init_script start"
     pids=`pgrep $pname`
     sleep 1
-    debug "omniNames process ID:" $pids
-    omnip=`ps $pids | wc -l`
-    if test $omnip -gt 1; then
-	echo "omniNames properly started"
-	exit 0
+    if test "x$pids" != "x" ; then
+        debug "omniNames process ID:" $pids
+        omnip=`ps $pids | wc -l`
+        if test $omnip -gt 1; then
+            echo "omniNames properly started"
+            exit 0
+        fi
+    else
+        debug "omniNames was not properly started."
     fi
-    return 1
+    return 0
 }
 
 omniname()
