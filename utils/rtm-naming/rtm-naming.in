@@ -32,6 +32,7 @@ usage()
   Options:
     -p         Port number of naming service. (default 2809)
     -f         Force kill current running naming service.
+    -k         Stop existing naming service.
     -w         Current user's passoword to restart naming service.
     -h         Print this help.
 
@@ -48,12 +49,14 @@ get_opt()
         PORT=2809
     fi
 
-    while getopts p:fw:h OPT
+    while getopts p:fkw:h OPT
     do
         case $OPT in
             p) PORT=$OPTARG
                 ;;
             f) FORCEKILL="YES"
+                ;;
+            k) STOPNAMESERVICE="YES"
                 ;;
             w) PASSWORD=$OPTARG
                 ;;
@@ -179,6 +182,22 @@ check_cosname()
     fi
 }
 
+delete_omninames_files()
+{
+    if test "x$PASSWORD" = "x" ; then
+        rm -f ./omninames-$hostname.log
+        rm -f ./omninames-$hostname.bak
+        rm -f ./omninames-$hostname.dat
+    else
+        echo $PASSWORD | sudo -S rm -f ./omninames-$hostname.log
+        echo $PASSWORD | sudo -S rm -f ./omninames-$hostname.bak
+        echo $PASSWORD | sudo -S rm -f ./omninames-$hostname.dat
+        echo $PASSWORD | sudo -S rm -f /var/lib/omniorb/omninames-$hostname.log
+        echo $PASSWORD | sudo -S rm -f /var/lib/omniorb/omninames-$hostname.bak
+        echo $PASSWORD | sudo -S rm -f /var/lib/omniorb/omninames-$hostname.dat
+    fi
+    debug "omninames-$hostname files deleted."
+}
 
 #
 # stop_existing_ns
@@ -198,6 +217,7 @@ check_cosname()
 #
 stop_existing_ns()
 {
+    debug "---stop_existing_ns"
     get_pid_of_nsport $PORT
     if test $? -eq 0; then
 	debug "The Process information using the port could be obtained."
@@ -232,14 +252,27 @@ stop_existing_ns()
 
             # Restart naming service
             if test "x$FORCEKILL" = "x" ; then
-                read -p "Kill anyway and start $pname again? (y/N)" killns
+                if test "x$STOPNAMESERVICE" = "x" ; then
+		            read -p "Kill anyway and start $pname again? (y/N)" killns
+	            else
+                    read -p "Kill anyway? (y/N)" killns
+		        fi
                 if test "x$killns" != "xy" -o  "x$killns" != "xY"; then
                     echo "Aborting"
                     exit 1
                 fi
+	        fi
+            if test "x$PASSWORD" = "x" ; then
+                sudo pkill -f $pname
+                sudo rm -f /var/run/$pname.pid 
+            else
+                echo $PASSWORD | sudo -S pkill -f $pname
+                echo $PASSWORD | sudo -S rm -f /var/run/$pname.pid
             fi
-            pkill -f $pname
             echo "$pname (pid: $pid_of_nsport) are killed"
+            debug "$pname (pid: $pid_of_nsport) are killed"
+            debug "/var/run/$pname.pid  are deleted"
+            delete_omninames_files
             return 0
         fi
         echo "No running $pname found. The process using the port $PORT "
@@ -249,7 +282,7 @@ stop_existing_ns()
     # omniNames is started by init script
     echo "omniNames might be started $init_script."
 
-    if test "x$FORCEKILL" = "x" ; then
+    if test "x$FORCEKILL" = "x" && test "x$STOPNAMESERVICE" = "x" ; then
         echo "Stop it (password for sudo is required.)"
         read -p "and start omniNames by rtm-naming? (y/N)" startns
         if test "x$startns" != "xy" -a "x$startns" != "xY" ; then
@@ -260,9 +293,14 @@ stop_existing_ns()
     echo "Stopping omniNames by $init_script."
     if test "x$PASSWORD" = "x" ; then
        sudo $init_script stop
+       sudo rm -f /var/run/$pname.pid 
     else
         echo $PASSWORD | sudo -S $init_script stop
+        echo $PASSWORD | sudo -S rm -f /var/run/$pname.pid
     fi
+    debug "$init_script stop"
+    debug "/var/run/$pname.pid  are deleted"
+    delete_omninames_files
     return 0
 }
 
@@ -277,20 +315,49 @@ stop_existing_ns()
 #
 start_omninames()
 {
+    debug "---start_omninames"
     echo 'Starting omniORB omniNames: '$hostname':'$PORT
+<<<<<<< .working
     rm -f ./omninames-$hostname.log
     rm -f ./omninames-$hostname.bak
     rm -f ./omninames-$hostname.dat
     $cosnames -start $PORT -logdir $currdir &
-    ret=$!
-    sleep 1
-    debug "return code of omniNames:" $ret
-    omnip=`ps $! | wc -l`
-    if test $omnip -gt 1; then
-	echo "omniNames properly started"
-	exit 0
+||||||| .merge-left.r3391
+    if test "x$PASSWORD" = "x" ; then
+        rm -f ./omninames-$hostname.log
+        rm -f ./omninames-$hostname.bak
+        rm -f ./omninames-$hostname.dat
+        $cosnames -start $PORT -logdir $currdir &
+        echo "$cosnames -start $PORT -logdir $currdir &"
+    else
+        echo $PASSWORD | sudo -S rm -f ./omninames-$hostname.log
+        echo $PASSWORD | sudo -S rm -f ./omninames-$hostname.bak
+        echo $PASSWORD | sudo -S rm -f ./omninames-$hostname.dat
+        echo $PASSWORD | sudo -S $cosnames -start $PORT -logdir $currdir &
+        echo "sudo $cosnames -start $PORT -logdir $currdir &"
     fi
-    return 1
+=======
+    init_script=`grep $orb /etc/init.d/* | awk 'BEGIN{FS=":";}{if(FNR==1){print $1;}}'`
+    if test "x$PASSWORD" = "x" ; then
+        sudo $init_script start
+    else
+        echo $PASSWORD | sudo -S $init_script start
+    fi
+>>>>>>> .merge-right.r3394
+    debug "$init_script start"
+    pids=`pgrep $pname`
+    sleep 1
+    if test "x$pids" != "x" ; then
+        debug "omniNames process ID:" $pids
+        omnip=`ps $pids | wc -l`
+        if test $omnip -gt 1; then
+            echo "omniNames properly started"
+            exit 0
+        fi
+    else
+        debug "omniNames was not properly started."
+    fi
+    return 0
 }
 
 omniname()
@@ -299,15 +366,19 @@ omniname()
     check_cosname
 
     # Starting omniNames
-    start_omninames
-    echo "omniNames was not properly started."
+    if test "x$STOPNAMESERVICE" = "x" ; then
+      start_omninames
+      echo "omniNames was not properly started."
+    fi
 
     # Stopping existing name service
     stop_existing_ns
 
     # Try to start omniNames again
-    start_omninames
-    echo "omniNames was not properly started."
+    if test "x$STOPNAMESERVICE" = "x" ; then
+      start_omninames
+      echo "omniNames was not properly started."
+    fi
 }
 
 #------------------------------------------------------------
