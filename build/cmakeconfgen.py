@@ -46,6 +46,12 @@ template="""
 #
 # OpenRTM-aist specific directory
 # - COIL_INCLUDE_DIR: coil include dir
+# - RTM_CAMERA_INCLUDE_DIR: rtmCamera include dir
+# - RTM_CAMERA_LIB_DIR: rtmCamera's lib directory
+# - RTM_CAMERA_LIBRARIES: rtmCamera libraries
+# - RTM_MANIPULATOR_INCLUDE_DIR: rtmManipulator include dir
+# - RTM_MANIPULATOR_LIB_DIR: rtmManipulator's lib directory
+# - RTM_MANIPULATOR_LIBRARIES: rtmManipulator libraries
 #
 # OpenRTM-aist version
 # - OPENRTM_VERSION: x.y.z version
@@ -70,6 +76,10 @@ set(OPENRTM_VERSION_MAJOR [openrtm_version_major])
 set(OPENRTM_VERSION_MINOR [openrtm_version_minor])
 set(OPENRTM_VERSION_PATCH [openrtm_version_patch])
 set(OPENRTM_SHORT_VERSION [openrtm_short_version])
+set(RTM_DLLVER [rtm_dllver])
+set(COIL_DLLVER [coil_dllver])
+set(OMNI_DLLVER [omni_dllver])
+set(OMNITHREAD_DLLVER [omnithread_dllver])
 
 string(REPLACE "\\\\" "/" OPENRTM_DIR "$ENV{RTM_ROOT}")
 string(REGEX REPLACE "/$" "" OPENRTM_DIR "${OPENRTM_DIR}")
@@ -100,6 +110,16 @@ foreach(rtm_lib ${rtm_libs})
 endforeach()
 message(STATUS "OPENRTM_BIN_PATH=${OPENRTM_BIN_PATH}")
 
+# rtmCamera options
+set(RTM_CAMERA_INCLUDE_DIR "${OPENRTM_DIR}/rtm/idl")
+set(RTM_CAMERA_LIB_DIR "${OPENRTM_BIN_PATH}")
+set(RTM_CAMERA_LIBRARIES [camera_libraries])
+
+# rtmManipulator options
+set(RTM_MANIPULATOR_INCLUDE_DIR "${OPENRTM_DIR}/rtm/idl")
+set(RTM_MANIPULATOR_LIB_DIR "${OPENRTM_BIN_PATH}")
+set(RTM_MANIPULATOR_LIBRARIES [manipulator_libraries])
+
 set(OPENRTM_LIBRARY_DIRS [openrtm_lib_dirs])
 set(OPENRTM_LIBRARIES [openrtm_libs])
 
@@ -122,6 +142,13 @@ message(STATUS "  OMNIORB_INCLUDE_DIRS=${OMNIORB_INCLUDE_DIRS}")
 message(STATUS "  OMNIORB_LDFLAGS=${OMNIORB_LDFLAGS}")
 message(STATUS "  OMNIORB_LIBRARY_DIRS=${OMNIORB_LIBRARY_DIRS}")
 message(STATUS "  OMNIORB_LIBRARIES=${OMNIORB_LIBRARIES}")
+
+message(STATUS "  RTM_CAMERA_INCLUDE_DIR=${RTM_CAMERA_INCLUDE_DIR}")
+message(STATUS "  RTM_CAMERA_LIB_DIR=${RTM_CAMERA_LIB_DIR}")
+message(STATUS "  RTM_CAMERA_LIBRARIES=${RTM_CAMERA_LIBRARIES}")
+message(STATUS "  RTM_MANIPULATOR_INCLUDE_DIR=${RTM_MANIPULATOR_INCLUDE_DIR}")
+message(STATUS "  RTM_MANIPULATOR_LIB_DIR=${RTM_MANIPULATOR_LIB_DIR}")
+message(STATUS "  RTM_MANIPULATOR_LIBRARIES=${RTM_MANIPULATOR_LIBRARIES}")
 
 message(STATUS "  OPENRTM_DIR=${OPENRTM_DIR}")
 message(STATUS "  OPENRTM_VERSION=${OPENRTM_VERSION}")
@@ -223,10 +250,13 @@ if __name__ == '__main__':
     # libs
     omni_libs  = process_lib(dict["omni_lib"], "optimized")
     omni_libs += ";" + process_lib(dict["omni_libd"], "debug")
+    camera_libs  = process_lib(dict["rtm_camera_lib"], "optimized")
+    camera_libs += ";" + process_lib(dict["rtm_camera_libd"], "debug")
+    manipulator_libs  = process_lib(dict["rtm_manipulator_lib"], "optimized")
+    manipulator_libs += ";" + process_lib(dict["rtm_manipulator_libd"], "debug")
     rtm_libs   = process_lib(dict["rtm_lib"], "optimized")
-    rtm_libs  += ";" + process_lib(dict["rtm_ext_lib"], "optimized")
     rtm_libs  += ";" + process_lib(dict["rtm_libd"], "debug")
-    rtm_libs  += ";" + process_lib(dict["rtm_ext_libd"], "debug")
+    rtm_libs  += ";${OMNIORB_LIBRARIES};${RTM_CAMERA_LIBRARIES};${RTM_MANIPULATOR_LIBRARIES}"
 
     dict["omniorb_cflags"] = omni_cflags
     dict["omniorb_include_dirs"] = dict["omni_includes"] 
@@ -234,6 +264,8 @@ if __name__ == '__main__':
     dict["omniorb_library_dirs"] = dict["omni_libdir"]
     dict["omniorb_libraries"] = omni_libs
     dict["omniorb_version"] = str(dict["omni_version"])
+    dict["camera_libraries"] = camera_libs
+    dict["manipulator_libraries"] = manipulator_libs
 
     dict["openrtm_cflags"] = rtm_cflags
     dict["openrtm_include_dirs"] = str(dict["rtm_includes"])

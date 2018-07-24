@@ -64,11 +64,11 @@
 	/>
 	<UserMacro
 		Name="omni_lib"
-		Value="omniORB$(omni_dllver)_rt.lib omniDynamic$(omni_dllver)_rt.lib omnithread$(omnithread_dllver)_rt.lib"
+		Value="omniORB${OMNI_DLLVER}_rt.lib omniDynamic${OMNI_DLLVER}_rt.lib omnithread${OMNITHREAD_DLLVER}_rt.lib"
 	/>
 	<UserMacro
 		Name="omni_libd"
-		Value="omniORB$(omni_dllver)_rtd.lib omniDynamic$(omni_dllver)_rtd.lib omnithread$(omnithread_dllver)_rtd.lib"
+		Value="omniORB${OMNI_DLLVER}_rtd.lib omniDynamic${OMNI_DLLVER}_rtd.lib omnithread${OMNITHREAD_DLLVER}_rtd.lib"
 	/>
 	<!-- OpenRTM-aist macros -->
 	<UserMacro
@@ -89,19 +89,11 @@
 	/>
 	<UserMacro
 		Name="rtm_libd"
-		Value="RTC$(rtm_dllver)d.lib $(coil_libd) $(omni_libd) advapi32.lib ws2_32.lib mswsock.lib $(user_libd)"
-	/>
-	<UserMacro
-		Name="rtm_libd_x64"
-		Value="RTC$(rtm_dllver_x64)d.lib $(coil_libd_x64) $(omni_libd) advapi32.lib ws2_32.lib mswsock.lib $(user_libd)"
+		Value="RTC${RTM_DLLVER}d.lib $(coil_libd) advapi32.lib ws2_32.lib mswsock.lib $(user_libd)"
 	/>
 	<UserMacro
 		Name="rtm_lib"
-		Value="RTC$(rtm_dllver).lib $(coil_lib) $(omni_lib) advapi32.lib ws2_32.lib mswsock.lib $(user_lib)"
-	/>
-	<UserMacro
-		Name="rtm_lib_x64"
-		Value="RTC$(rtm_dllver_x64).lib $(coil_lib_x64) $(omni_lib) advapi32.lib ws2_32.lib mswsock.lib $(user_lib)"
+		Value="RTC${RTM_DLLVER}.lib $(coil_lib) advapi32.lib ws2_32.lib mswsock.lib $(user_lib)"
 	/>
 	<UserMacro
 		Name="rtm_idlc"
@@ -114,34 +106,26 @@
 	<!-- coil macros -->
 	<UserMacro
 		Name="coil_lib"
-		Value="coil$(coil_dllver).lib"
-	/>
-	<UserMacro
-		Name="coil_lib_x64"
-		Value="coil$(coil_dllver_x64).lib"
+		Value="coil${COIL_DLLVER}.lib"
 	/>
 	<UserMacro
 		Name="coil_libd"
-		Value="coil$(coil_dllver)d.lib"
+		Value="coil${COIL_DLLVER}d.lib"
 	/>
 	<UserMacro
-		Name="coil_libd_x64"
-		Value="coil$(coil_dllver_x64)d.lib"
+		Name="rtm_camera_lib"
+		Value="rtmCamera${RTM_DLLVER}.lib"
 	/>
 	<UserMacro
-		Name="rtm_ext_lib"
-		Value="rtmCamera$(rtm_dllver).lib rtmManipulator$(rtm_dllver).lib"
+		Name="rtm_camera_libd"
+		Value="rtmCamera${RTM_DLLVER}d.lib"
 	/>
 	<UserMacro
-		Name="rtm_ext_libd"
-		Value="rtmCamera$(rtm_dllver)d.lib rtmManipulator$(rtm_dllver)d.lib"
+		Name="rtm_manipulator_lib"
+		Value="rtmManipulator${RTM_DLLVER}.lib"
 	/>
 	<UserMacro
-		Name="rtm_ext_lib_x64"
-		Value="rtmCamera$(rtm_dllver_x64).lib rtmManipulator$(rtm_dllver_x64).lib"
-	/>
-	<UserMacro
-		Name="rtm_ext_libd_x64"
-		Value="rtmCamera$(rtm_dllver_x64)d.lib rtmManipulator$(rtm_dllver_x64)d.lib"
+		Name="rtm_manipulator_libd"
+		Value="rtmManipulator${RTM_DLLVER}d.lib"
 	/>
 </VisualStudioPropertySheet>
