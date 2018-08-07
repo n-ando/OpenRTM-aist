@@ -594,7 +594,7 @@ Configurations:
     OutputDirectory: "$(ProjectDir)__PROJECT_NAME__\\\\$(ConfigurationName)"
     IntermediateDirectory: "__PROJECT_NAME__\\\\$(ConfigurationName)"
     ConfigurationType: "1"
-    InheritedPropertySheets: "$(SolutionDir)rtm_config.vsprops;$(SolutionDir)user_config.vsprops"
+    InheritedPropertySheets: "$(SolutionDir)rtm_config_vc9.vsprops;$(SolutionDir)user_config.vsprops"
     CharacterSet: "0"
     VCPreBuildEventTool:
       - Key: CommandLine
@@ -641,7 +641,7 @@ Configurations:
     OutputDirectory: "$(ProjectDir)__PROJECT_NAME__\\\\$(ConfigurationName)"
     IntermediateDirectory: "__PROJECT_NAME__\\\\$(ConfigurationName)"
     ConfigurationType: "1"
-    InheritedPropertySheets: "$(SolutionDir)rtm_config.vsprops;$(SolutionDir)user_config.vsprops"
+    InheritedPropertySheets: "$(SolutionDir)rtm_config_vc9.vsprops;$(SolutionDir)user_config.vsprops"
     CharacterSet: "0"
     WholeProgramOptimization: "0"
     VCPreBuildEventTool:
@@ -703,7 +703,7 @@ Configurations:
     OutputDirectory: "$(ProjectDir)__PROJECT_NAME__\\\\$(ConfigurationName)"
     IntermediateDirectory: "__PROJECT_NAME__\\\\$(ConfigurationName)"
     ConfigurationType: "2"
-    InheritedPropertySheets: "$(SolutionDir)rtm_config.vsprops;$(SolutionDir)user_config.vsprops"
+    InheritedPropertySheets: "$(SolutionDir)rtm_config_vc9.vsprops;$(SolutionDir)user_config.vsprops"
     CharacterSet: "0"
     VCPreBuildEventTool:
       - Key: CommandLine
@@ -754,7 +754,7 @@ Configurations:
     OutputDirectory: "$(ProjectDir)__PROJECT_NAME__\\\\$(ConfigurationName)"
     IntermediateDirectory: "__PROJECT_NAME__\\\\$(ConfigurationName)"
     ConfigurationType: "2"
-    InheritedPropertySheets: "$(SolutionDir)rtm_config.vsprops;$(SolutionDir)user_config.vsprops"
+    InheritedPropertySheets: "$(SolutionDir)rtm_config_vc9.vsprops;$(SolutionDir)user_config.vsprops"
     CharacterSet: "0"
     WholeProgramOptimization: "0"
     VCPreBuildEventTool:

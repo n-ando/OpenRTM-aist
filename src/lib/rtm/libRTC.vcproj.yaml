@@ -17,7 +17,7 @@ Configurations:
     OutputDirectory: "$(ProjectDir)$(ConfigurationName)"
     IntermediateDirectory: "$(ConfigurationName)"
     ConfigurationType: "2"
-    InheritedPropertySheets: "$(SolutionDir)rtm_config.vsprops;$(SolutionDir)rtm_distbuild.vsprops"
+    InheritedPropertySheets: "$(SolutionDir)rtm_config_vc9.vsprops;$(SolutionDir)rtm_distbuild.vsprops"
     CharacterSet: "0"
     VCCLCompilerTool:
       - Key: Optimization
@@ -123,7 +123,7 @@ Configurations:
     OutputDirectory: "$(ProjectDir)$(ConfigurationName)"
     IntermediateDirectory: "$(ConfigurationName)"
     ConfigurationType: "2"
-    InheritedPropertySheets: "$(SolutionDir)rtm_config.vsprops;$(SolutionDir)rtm_distbuild.vsprops"
+    InheritedPropertySheets: "$(SolutionDir)rtm_config_vc9.vsprops;$(SolutionDir)rtm_distbuild.vsprops"
     CharacterSet: "0"
     VCCLCompilerTool:
       - Key: Optimization
@@ -232,7 +232,7 @@ Configurations:
     OutputDirectory: "$(ProjectDir)$(ConfigurationName)"
     IntermediateDirectory: "$(ConfigurationName)"
     ConfigurationType: "2"
-    InheritedPropertySheets: "$(SolutionDir)rtm_config.vsprops;$(SolutionDir)rtm_distbuild.vsprops"
+    InheritedPropertySheets: "$(SolutionDir)rtm_config_vc9.vsprops;$(SolutionDir)rtm_distbuild.vsprops"
     CharacterSet: "0"
     WholeProgramOptimization: "0"
     VCCLCompilerTool:
@@ -331,7 +331,7 @@ Configurations:
     OutputDirectory: "$(ProjectDir)$(ConfigurationName)"
     IntermediateDirectory: "$(ConfigurationName)"
     ConfigurationType: "2"
-    InheritedPropertySheets: "$(SolutionDir)rtm_config.vsprops;$(SolutionDir)rtm_distbuild.vsprops"
+    InheritedPropertySheets: "$(SolutionDir)rtm_config_vc9.vsprops;$(SolutionDir)rtm_distbuild.vsprops"
     CharacterSet: "0"
     WholeProgramOptimization: "0"
     VCCLCompilerTool:
