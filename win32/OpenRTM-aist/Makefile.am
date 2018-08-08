@@ -101,6 +101,7 @@ EXTRA_DIST =                      \
 	coil_config.vsprops           \
 	rtm_distbuild.vsprops         \
 	rtm_config.vsprops            \
+	rtm_config_vc9.vsprops        \
 	coil_distbuild.props          \
 	coil_config.props             \
 	rtm_distbuild.props           \
