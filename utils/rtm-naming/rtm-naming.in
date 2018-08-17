@@ -308,6 +308,30 @@ stop_existing_ns()
     return 0
 }
 
+fedora_omninames()
+{
+    _param=$1
+    if test "x$PASSWORD" = "x" ; then
+        sudo service $pname $_param 
+    else
+        echo $PASSWORD | sudo -S service $pname $_param 
+    fi
+    debug "OMNI Naming services $_param: $pname"
+    sleep 1
+    pids=`pgrep $pname`
+    if test "x$pids" != "x" ; then
+        debug "omniNames process ID:" $pids
+        omnip=`ps $pids | wc -l`
+        if test $omnip -gt 1; then
+            echo "omniNames properly started"
+            exit 0
+        fi
+    else
+        debug "omniNames was not properly started."
+    fi
+    return 0 
+}
+
 #------------------------------------------------------------
 # omniNames specific functions
 #------------------------------------------------------------
@@ -348,7 +372,14 @@ omniname()
     # Check cosname variable is properly set
     check_cosname
 
-    # Starting omniNames
+    # Starting omniNames (Fedora)
+    if test "x$STOPNAMESERVICE" = "x" && test -f /etc/fedora-release ; then
+      fedora_omninames start
+      fedora_omninames restart
+      return 0
+    fi
+
+    # Starting omniNames (Debian)
     if test "x$STOPNAMESERVICE" = "x" ; then
       start_omninames
       echo "omniNames was not properly started."
