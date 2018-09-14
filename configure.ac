@@ -226,7 +226,7 @@ orb_to_use=
 more_incs="`echo $with_includes | sed 's/:/ /g'`"
 more_libs="`echo $with_libs     | sed 's/:/ /g'`"
 base_incs="`echo $CPLUS_INCLUDE_PATH | sed 's/:/ /g'` /local/include /usr/local/include /usr/include"
-base_libs="`echo $LIBPATH $LIBRARY_PATH $LD_LIBRARY_PATH $SHLIB_PATH | sed 's/:/ /g'` /usr/local/lib /usr/lib /usr/lib64"
+base_libs="`echo $LIBPATH $LIBRARY_PATH $LD_LIBRARY_PATH $SHLIB_PATH | sed 's/:/ /g'` /usr/local/lib /usr/lib /usr/lib64 /usr/lib/x86_64-linux-gnu /usr/lib/i386-linux-gnu"
 base_bins="`echo $PATH | sed 's/:/\/.. /g'` /local/bin /usr/local/bin /usr/bin"
 base_dirs="$prefix `echo $PATH | sed 's/:/\/.. /g'`"
 
