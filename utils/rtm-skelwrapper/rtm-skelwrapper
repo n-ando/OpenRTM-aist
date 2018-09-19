@@ -17,6 +17,8 @@
 #  $Id$
 # 
 
+from __future__ import print_function
+
 import os
 import sys
 import getopt
@@ -45,7 +47,7 @@ config_inc = """
 
 
 def usage():
-	print """
+	print("""
 Usage: rtm-skelwrapper [OPTIONS]
 
 Options:
@@ -102,7 +104,7 @@ following include guard will be defined.
 
 #endif // _USR_INCLUDE_IDL_MYINTERFACE_H
 
-"""
+""")
 
 
 def main():
@@ -110,7 +112,7 @@ def main():
 		opts, args = getopt.getopt(sys.argv[1:], "f:I:o:h",
 					   opt_args_fmt)
 	except getopt.GetoptError:
-		print "Error: Invalid options.", getopt.GetoptError
+		print("Error: Invalid options.", getopt.GetoptError)
 		usage()
 		sys.exit(-1)
 
@@ -144,7 +146,7 @@ def main():
 			stub_suffix = arg
 
 	if not idl_file:
-		print "Error: IDL file is not given."
+		print("Error: IDL file is not given.")
 		usage()
 		sys.exit(-1)
 

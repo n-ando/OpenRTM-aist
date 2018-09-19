@@ -15,6 +15,8 @@
 #  $Id$
 # 
 
+from __future__ import print_function
+
 import yat
 import re
 import sys
@@ -270,18 +272,18 @@ class skel_wrapper:
 			newtext = re.sub(" \@date.*?\n", "", text)
 			oldtext2 = re.sub(" \@date.*?\n", "", oldtext)
 			if newtext == oldtext2:
-				print "\"" + fname + \
-			    "\" exists and contents is same."
-				print "No need to generate the file."
+				print("\"" + fname + \
+			    "\" exists and contents is same.")
+				print("No need to generate the file.")
 				return
 			else:
-				print "\"", fname, \
-			    "\" already exists but contents are not same"
+				print("\"", fname, \
+			    "\" already exists but contents are not same")
 
-		f = file(fname, "w")
+		f = open(fname, "w")
 		f.write(text)
 		f.close()
-		print "\"" + fname + "\"" " was generated."
+		print("\"" + fname + "\"" " was generated.")
 		return
 
 	def print_skel_h(self):

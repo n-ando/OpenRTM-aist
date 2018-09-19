@@ -251,7 +251,7 @@ class Template:
 
     def generate(self, dict):
         # eval generated script
-        exec(self.script)
+        exec(self.script, globals())
         # script includes Generator class
         gen = Generator(self.token, dict)
         # execute generated script
@@ -281,7 +281,7 @@ class Template:
         try:
             # split into (TEXT DIRECTIVE BRACKET)* TEXT
             self.__parse()
-        except YATException, e:
+        except YATException as e:
             self.__print_error(e)
             sys.exit(-1)
 
@@ -581,7 +581,7 @@ class Generator(GeneratorBase):
     def generate(self):
         try:
             self.process()
-        except YATException, e:
+        except YATException as e:
             self.print_error(e)
             sys.exit(-1)
         return self.text
@@ -669,7 +669,7 @@ class GeneratorBase:
         try:
             self.get_value(keytext)
             return True
-        except NotFound, e:
+        except NotFound as e:
             return False
 
     def get_value(self, keytext):
