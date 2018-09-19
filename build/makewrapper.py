@@ -255,7 +255,7 @@ class wrapper_gen:
         text = t.generate(data)
 
         if os.access(fname, os.F_OK): # file exists
-            f = file(fname, "r")
+            f = open(fname, "r")
             oldtext = f.read()
             f.close()
 
@@ -269,7 +269,7 @@ class wrapper_gen:
             else:
                 print("\"", fname, "\" already exists but contents are not same")
 
-        f = file(fname, "w")
+        f = open(fname, "w")
         f.write(text)
         f.close()
         print("\"", fname, "\"" " was generated.")
