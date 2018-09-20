@@ -1,29 +1,27 @@
 ﻿// -*- C++ -*-
 /*!
- * @file  InPortDirectConsumer.h
- * @brief InPortDirectConsumer class
- * @date  $Date: 2007-12-31 03:08:03 $
- * @author Noriaki Ando <n-ando@aist.go.jp>
+ * @file  InPortDSConsumer.h
+ * @brief InPortDSConsumer class
+ * @date  $Date: 2018-09-20 07:49:59 $
+ * @author Nobuhiko Miyamoto <n-miyamoto@aist.go.jp>
  *
- * Copyright (C) 2006
- *     Noriaki Ando
- *     Task-intelligence Research Group,
- *     Intelligent Systems Research Institute,
+ * Copyright (C) 2018
+ *     Nobuhiko Miyamoto
+ *     Robot Innovation Research Center,
  *     National Institute of
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: InPortDirectConsumer.h 1255 2009-04-07 01:09:47Z kurihara $
  *
  */
 
-#ifndef RTC_INPORTDIRECTCONSUMER_H
-#define RTC_INPORTDIRECTCONSUMER_H
+#ifndef RTC_INPORTDSCONSUMER_H
+#define RTC_INPORTDSCONSUMER_H
 
 
 //#include <rtm/BufferBase.h>
 
-
+#include <rtm/idl/DataPortSkel.h>
 #include <rtm/CorbaConsumer.h>
 #include <rtm/InPortConsumer.h>
 #include <rtm/Manager.h>
@@ -32,21 +30,21 @@ namespace RTC
 {
   /*!
    * @if jp
-   * @class InPortDirectConsumer
-   * @brief InPortDirectConsumer クラス
+   * @class InPortDSConsumer
+   * @brief InPortDSConsumer クラス
    *
    * InPortConsumer
    *
-   * データ転送に CORBA の OpenRTM::InPortCdr インターフェースを利用し
+   * データ転送に CORBA の RTC::DataPushService インターフェースを利用し
    * た、push 型データフロー型を実現する InPort コンシューマクラス。
    *
    * @since 0.4.0
    *
    * @else
-   * @class InPortDirectConsumer
-   * @brief InPortDirectConsumer class
+   * @class InPortDSConsumer
+   * @brief InPortDSConsumer class
    *
-   * The InPort consumer class which uses the OpenRTM::InPortCdr
+   * The InPort consumer class which uses the RTC::DataPushService
    * interface in CORBA for data transfer and realizes a push-type
    * dataflow.
    *
@@ -54,8 +52,9 @@ namespace RTC
    *
    * @endif
    */
-  class InPortDirectConsumer
-    : public InPortConsumer
+  class InPortDSConsumer
+    : public InPortConsumer,
+      public CorbaConsumer< ::RTC::DataPushService >
   {
   public:
     DATAPORTSTATUS_ENUM
@@ -76,7 +75,7 @@ namespace RTC
      *
      * @endif
      */
-    InPortDirectConsumer(void);
+    InPortDSConsumer(void);
 
     /*!
      * @if jp
@@ -91,7 +90,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~InPortDirectConsumer(void);
+    virtual ~InPortDSConsumer(void);
 
     /*!
      * @if jp
@@ -225,6 +224,76 @@ namespace RTC
     virtual void unsubscribeInterface(const SDOPackage::NVList& properties);
 
   private:
+    /*!
+     * @if jp
+     * @brief IOR文字列からオブジェクト参照を取得する
+     *
+     * @return true: 正常取得, false: 取得失敗
+     *
+     * @else
+     * @brief Getting object reference fromn IOR string
+     *
+     * @return true: succeeded, false: failed
+     *
+     * @endif
+     */
+    bool subscribeFromIor(const SDOPackage::NVList& properties);
+
+    /*!
+     * @if jp
+     * @brief Anyから直接オブジェクト参照を取得する
+     *
+     * @return true: 正常取得, false: 取得失敗
+     *
+     * @else
+     * @brief Getting object reference fromn Any directry
+     *
+     * @return true: succeeded, false: failed
+     *
+     * @endif
+     */
+    bool subscribeFromRef(const SDOPackage::NVList& properties);
+
+    /*!
+     * @if jp
+     * @brief 接続解除(IOR版)
+     *
+     * @return true: 正常取得, false: 取得失敗
+     *
+     * @else
+     * @brief ubsubscribing (IOR version)
+     *
+     * @return true: succeeded, false: failed
+     *
+     * @endif
+     */
+    bool unsubscribeFromIor(const SDOPackage::NVList& properties);
+
+    /*!
+     * @if jp
+     * @brief 接続解除(Object reference版)
+     *
+     * @return true: 正常取得, false: 取得失敗
+     *
+     * @else
+     * @brief ubsubscribing (Object reference version)
+     *
+     * @return true: succeeded, false: failed
+     *
+     * @endif
+     */
+    bool unsubscribeFromRef(const SDOPackage::NVList& properties);
+
+  private:
+    /*!
+     * @if jp
+     * @brief リターンコード変換
+     * @else
+     * @brief Return codes conversion
+     * @endif
+     */
+    InPortConsumer::ReturnCode convertReturnCode(RTC::PortStatus ret);
+
     mutable Logger rtclog;
     coil::Properties m_properties;
   };
@@ -236,17 +305,17 @@ extern "C"
    * @if jp
    * @brief モジュール初期化関数
    *
-   * InPortDirectConsumer のファクトリを登録する初期化関数。
+   * InPortDSConsumer のファクトリを登録する初期化関数。
    *
    * @else
    * @brief Module initialization
    *
-   * This initialization function registers InPortDirectConsumer's factory.
+   * This initialization function registers InPortDSConsumer's factory.
    *
    * @endif
    */
-  void InPortDirectConsumerInit(void);
+  void InPortDSConsumerInit(void);
 };
 
-#endif  // RTC_INPORTDIRECTCONSUMER_H
+#endif  // RTC_INPORTDSCONSUMER_H
 

@@ -1,64 +1,67 @@
 ﻿// -*- C++ -*-
 /*!
- * @file  OutPortCorbaCdrConsumer.h
- * @brief OutPortCorbaCdrConsumer class
- * @date  $Date: 2008-01-13 10:28:27 $
- * @author Noriaki Ando <n-ando@aist.go.jp>
+ * @file  InPortDSProvider.h
+ * @brief InPortDSProvider class
+ * @date  $Date: 2018-09-20 07:49:59 $
+ * @author Nobuhiko Miyamoto <n-miyamoto@aist.go.jp>
  *
- * Copyright (C) 2009-2010
- *     Noriaki Ando
- *     Task-intelligence Research Group,
- *     Intelligent Systems Research Institute,
+ * Copyright (C) 2018
+ *     Nobuhiko Miyamoto
+ *     Robot Innovation Research Center,
  *     National Institute of
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id$
  *
  */
 
-#ifndef RTC_OUTPORTCORBACDRCONSUMER_H
-#define RTC_OUTPORTCORBACDRCONSUMER_H
+#ifndef RTC_INPORTDSPROVIDER_H
+#define RTC_INPORTDSPROVIDER_H
 
-#include <rtm/idl/DataPort_OpenRTMSkel.h>
-#include <rtm/CorbaConsumer.h>
-#include <rtm/OutPortConsumer.h>
+#include <rtm/idl/DataPortSkel.h>
+#include <rtm/BufferBase.h>
+#include <rtm/InPortProvider.h>
+#include <rtm/CORBA_SeqUtil.h>
+#include <rtm/Manager.h>
 #include <rtm/ConnectorListener.h>
 #include <rtm/ConnectorBase.h>
+
+#ifdef WIN32
+#pragma warning( disable : 4290 )
+#endif
 
 namespace RTC
 {
   /*!
    * @if jp
-   * @class OutPortCorbaCdrConsumer
-   * @brief OutPortCorbaCdrConsumer クラス
+   * @class InPortDSProvider
+   * @brief InPortDSProvider クラス
    *
-   * OutPortConsumer
+   * InPortProvider
    *
-   * データ転送に CORBA の OpenRTM::OutPortCdr インターフェースを利用し
-   * た、pull 型データフロー型を実現する OutPort コンシューマクラス。
+   * データ転送に CORBA の RTC::DataPushService インターフェースを利用し
+   * た、push 型データフロー型を実現する InPort プロバイダクラス。
    *
    * @since 0.4.0
    *
    * @else
-   * @class OutPortCorbaCdrConsumer
-   * @brief OutPortCorbaCdrConsumer class
+   * @class InPortDSProvider
+   * @brief InPortDSProvider class
    *
-   * The OutPort consumer class which uses the OpenRTM::OutPortCdr
-   * interface in CORBA for data transfer and realizes a pull-type
+   * The InPort provider class which uses the RTC::DataPushService
+   * interface in CORBA for data transfer and realizes a push-type
    * dataflow.
    *
    * @since 0.4.0
    *
    * @endif
    */
-  class OutPortCorbaCdrConsumer
-    : public OutPortConsumer,
-      public CorbaConsumer< ::OpenRTM::OutPortCdr >
+  class InPortDSProvider
+    : public InPortProvider,
+      public virtual POA_RTC::DataPushService,
+      public virtual PortableServer::RefCountServantBase
   {
   public:
-    DATAPORTSTATUS_ENUM
-
     /*!
      * @if jp
      * @brief コンストラクタ
@@ -72,7 +75,7 @@ namespace RTC
      *
      * @endif
      */
-    OutPortCorbaCdrConsumer();
+    InPortDSProvider(void);
 
     /*!
      * @if jp
@@ -87,15 +90,15 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~OutPortCorbaCdrConsumer(void);
+    virtual ~InPortDSProvider(void);
 
     /*!
      * @if jp
      * @brief 設定初期化
      *
-     * OutPortConsumerの各種設定を行う。実装クラスでは、与えられた
+     * InPortDSProvider の各種設定を行う。与えられた
      * Propertiesから必要な情報を取得して各種設定を行う。この init() 関
-     * 数は、OutPortProvider生成直後および、接続時にそれぞれ呼ばれる可
+     * 数は、InPortProvider生成直後および、接続時にそれぞれ呼ばれる可
      * 能性がある。したがって、この関数は複数回呼ばれることを想定して記
      * 述されるべきである。
      *
@@ -122,7 +125,7 @@ namespace RTC
      * @if jp
      * @brief バッファをセットする
      *
-     * OutPortConsumerがデータを取り出すバッファをセットする。
+     * OutPortProvider がデータを取り出すバッファをセットする。
      * すでにセットされたバッファがある場合、以前のバッファへの
      * ポインタに対して上書きされる。
      * OutPortProviderはバッファの所有権を仮定していないので、
@@ -143,7 +146,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual void setBuffer(CdrBufferBase* buffer);
+    virtual void setBuffer(BufferBase<cdrMemoryStream>* buffer);
 
     /*!
      * @if jp
@@ -152,16 +155,18 @@ namespace RTC
      * InPort はデータ送信処理における各種イベントに対して特定のリスナ
      * オブジェクトをコールするコールバック機構を提供する。詳細は
      * ConnectorListener.h の ConnectorDataListener, ConnectorListener
-     * 等を参照のこと。OutPortCorbaCdrProvider では、以下のコールバック
+     * 等を参照のこと。InPortDSProvider では、以下のコールバック
      * が提供される。
      *
      * - ON_BUFFER_WRITE
      * - ON_BUFFER_FULL
+     * - ON_BUFFER_WRITE_TIMEOUT
+     * - ON_BUFFER_OVERWRITE
      * - ON_RECEIVED
      * - ON_RECEIVER_FULL
-     * - ON_SENDER_EMPTY
-     * - ON_SENDER_TIMEOUT
-     * - ON_SENDER_ERROR
+     * - ON_RECEIVER_FULL
+     * - ON_RECEIVER_TIMEOUT
+     * - ON_RECEIVER_ERROR
      *
      * @param info 接続情報
      * @param listeners リスナオブジェクト
@@ -169,20 +174,22 @@ namespace RTC
      * @else
      * @brief Set the listener.
      *
-     * OutPort provides callback functionality that calls specific
+     * InPort provides callback functionality that calls specific
      * listener objects according to the events in the data publishing
      * process. For details, see documentation of
      * ConnectorDataListener class and ConnectorListener class in
-     * ConnectorListener.h. In this OutPortCorbaCdrProvider provides
+     * ConnectorListener.h. In this InPortDSProvider provides
      * the following callbacks.
      *
      * - ON_BUFFER_WRITE
      * - ON_BUFFER_FULL
+     * - ON_BUFFER_WRITE_TIMEOUT
+     * - ON_BUFFER_OVERWRITE
      * - ON_RECEIVED
      * - ON_RECEIVER_FULL
-     * - ON_SENDER_EMPTY
-     * - ON_SENDER_TIMEOUT
-     * - ON_SENDER_ERROR
+     * - ON_RECEIVER_FULL
+     * - ON_RECEIVER_TIMEOUT
+     * - ON_RECEIVER_ERROR
      *
      * @param info Connector information
      * @param listeners Listener objects
@@ -194,80 +201,62 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief データを読み出す
+     * @brief Connectorを設定する。
      *
-     * 設定されたデータを読み出す。
+     * InPort は接続確立時に InPortConnector オブジェクトを生成し、生
+     * 成したオブジェクトのポインタと共にこの関数を呼び出す。所有権は
+     * InPort が保持するので InPortProvider は InPortConnector を削
+     * 除してはいけない。
      *
-     * @param data 読み出したデータを受け取るオブジェクト
-     *
-     * @return データ読み出し処理結果(読み出し成功:true、読み出し失敗:false)
+     * @param connector InPortConnector
      *
      * @else
-     * @brief Read data
+     * @brief set Connector
      *
-     * Read set data
+     * InPort creates InPortConnector object when it establishes
+     * connection between InPort and InPort, and it calls this
+     * function with a pointer to the connector object. Since the
+     * InPort has the ownership of this connector, InPortProvider
+     * should not delete it.
      *
-     * @param data Object to receive the read data
-     *
-     * @return Read result (Successful:true, Failed:false)
+     * @param connector InPortConnector
      *
      * @endif
      */
-    virtual ReturnCode get(cdrMemoryStream& data);
+    virtual void setConnector(InPortConnector* connector);
 
     /*!
      * @if jp
-     * @brief データ受信通知への登録
+     * @brief [CORBA interface] バッファにデータを書き込む
      *
-     * 指定されたプロパティに基づいて、データ受信通知の受け取りに登録する。
+     * 設定されたバッファにデータを書き込む。
      *
-     * @param properties 登録情報
-     *
-     * @return 登録処理結果(登録成功:true、登録失敗:false)
+     * @param data 書込対象データ
      *
      * @else
-     * @brief Subscribe the data receive notification
+     * @brief [CORBA interface] Write data into the buffer
      *
-     * Subscribe the data receive notification based on specified property
-     * information
+     * Write data into the specified buffer.
      *
-     * @param properties Subscription information
-     *
-     * @return Subscription result (Successful:true, Failed:false)
+     * @param data The target data for writing
      *
      * @endif
      */
-    virtual bool subscribeInterface(const SDOPackage::NVList& properties);
-
-    /*!
-     * @if jp
-     * @brief データ受信通知からの登録解除
-     *
-     * データ受信通知の受け取りから登録を解除する。
-     *
-     * @param properties 登録解除情報
-     *
-     * @else
-     * @brief Unsubscribe the data receive notification
-     *
-     * Unsubscribe the data receive notification.
-     *
-     * @param properties Unsubscription information
-     *
-     * @endif
-     */
-    virtual void unsubscribeInterface(const SDOPackage::NVList& properties);
+    virtual ::RTC::PortStatus push(const ::RTC::OctetSeq& data)
+      throw (CORBA::SystemException);
 
   private:
     /*!
      * @if jp
-     * @brief リターンコード変換 (DataPortStatus -> BufferStatus)
+     * @brief リターンコード変換
      * @else
      * @brief Return codes conversion
      * @endif
      */
-    OutPortConsumer::ReturnCode convertReturn(::OpenRTM::PortStatus status,
-                                              cdrMemoryStream& data);
+    ::RTC::PortStatus
+    convertReturn(BufferStatus::Enum status,
+                  cdrMemoryStream& data);
+
 
     /*!
      * @if jp
@@ -297,6 +286,36 @@ namespace RTC
     {
       m_listeners->
         connectorData_[ON_BUFFER_FULL].notify(m_profile, data);
+    }
+
+    /*!
+     * @if jp
+     * @brief ON_BUFFER_WRITE_TIMEOUT のリスナへ通知する。
+     * @param data cdrMemoryStream
+     * @else
+     * @brief Notify an ON_BUFFER_WRITE_TIMEOUT event to listeners
+     * @param data cdrMemoryStream
+     * @endif
+     */
+    inline void onBufferWriteTimeout(cdrMemoryStream& data)
+    {
+      m_listeners->
+        connectorData_[ON_BUFFER_WRITE_TIMEOUT].notify(m_profile, data);
+    }
+
+    /*!
+     * @if jp
+     * @brief ON_BUFFER_WRITE_OVERWRITE のリスナへ通知する。
+     * @param data cdrMemoryStream
+     * @else
+     * @brief Notify an ON_BUFFER_WRITE_OVERWRITE event to listeners
+     * @param data cdrMemoryStream
+     * @endif
+     */
+    inline void onBufferWriteOverwrite(cdrMemoryStream& data)
+    {
+      m_listeners->
+        connectorData_[ON_BUFFER_OVERWRITE].notify(m_profile, data);
     }
 
     /*!
@@ -331,49 +350,39 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ON_SENDER_EMPTYのリスナへ通知する。
+     * @brief ON_RECEIVER_TIMEOUT のリスナへ通知する。
      * @else
-     * @brief Notify an ON_SENDER_EMPTY event to listeners
+     * @brief Notify an ON_RECEIVER_TIMEOUT event to listeners
      * @endif
      */
-    inline void onSenderEmpty()
+    inline void onReceiverTimeout(cdrMemoryStream& data)
     {
       m_listeners->
-        connector_[ON_SENDER_EMPTY].notify(m_profile);
+        connectorData_[ON_RECEIVER_TIMEOUT].notify(m_profile, data);
     }
 
     /*!
      * @if jp
-     * @brief ON_SENDER_TIMEOUT のリスナへ通知する。
+     * @brief ON_RECEIVER_ERRORのリスナへ通知する。
      * @else
-     * @brief Notify an ON_SENDER_TIMEOUT event to listeners
+     * @Brief Notify an ON_RECEIVER_ERROR event to listeners
      * @endif
      */
-    inline void onSenderTimeout()
+    inline void onReceiverError(cdrMemoryStream& data)
     {
       m_listeners->
-        connector_[ON_SENDER_TIMEOUT].notify(m_profile);
+        connectorData_[ON_RECEIVER_ERROR].notify(m_profile, data);
     }
 
-    /*!
-     * @if jp
-     * @brief ON_SENDER_ERRORのリスナへ通知する。
-     * @else
-     * @Brief Notify an ON_SENDER_ERROR event to listeners
-     * @endif
-     */
-    inline void onSenderError()
-    {
-      m_listeners->
-        connector_[ON_SENDER_ERROR].notify(m_profile);
-    }
-
-    //    RTC::OutPortCdr_var m_outport;
+  private:
     CdrBufferBase* m_buffer;
+    ::RTC::DataPushService_var m_objref;
     ConnectorListeners* m_listeners;
     ConnectorInfo m_profile;
-  };
-};     // namespace RTC
+    InPortConnector* m_connector;
+
+  };  // class InPortDSProvider
+};  // namespace RTC
 
 extern "C"
 {
@@ -381,16 +390,21 @@ extern "C"
    * @if jp
    * @brief モジュール初期化関数
    *
-   * OutPortCorbaCdrConsumer のファクトリを登録する初期化関数。
+   * InPortDSConsumer のファクトリを登録する初期化関数。
    *
    * @else
    * @brief Module initialization
    *
-   * This initialization function registers OutPortCorbaCdrConsumer's factory.
+   * This initialization function registers InPortDSConsumer's factory.
    *
    * @endif
    */
-  void OutPortCorbaCdrConsumerInit(void);
+  void InPortDSProviderInit(void);
 };
 
-#endif  // RTC_OUTPORTCORBACDRCONSUMER_H
+#ifdef WIN32
+#pragma warning( default : 4290 )
+#endif
+
+#endif  // RTC_INPORTDSPROVIDER_H
+

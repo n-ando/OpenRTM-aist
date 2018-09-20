@@ -1,26 +1,24 @@
 ﻿// -*- C++ -*-
 /*!
- * @file  OutPortCorbaCdrConsumer.h
- * @brief OutPortCorbaCdrConsumer class
- * @date  $Date: 2008-01-13 10:28:27 $
- * @author Noriaki Ando <n-ando@aist.go.jp>
+ * @file  OutPortDSConsumer.h
+ * @brief OutPortDSConsumer class
+ * @date  $Date: 2018-09-20 07:49:59 $
+ * @author Nobuhiko Miyamoto <n-miyamoto@aist.go.jp>
  *
- * Copyright (C) 2009-2010
- *     Noriaki Ando
- *     Task-intelligence Research Group,
- *     Intelligent Systems Research Institute,
+ * Copyright (C) 2018
+ *     Nobuhiko Miyamoto
+ *     Robot Innovation Research Center,
  *     National Institute of
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id$
  *
  */
 
-#ifndef RTC_OUTPORTCORBACDRCONSUMER_H
-#define RTC_OUTPORTCORBACDRCONSUMER_H
+#ifndef RTC_OUTPORTDSCONSUMER_H
+#define RTC_OUTPORTDSCONSUMER_H
 
-#include <rtm/idl/DataPort_OpenRTMSkel.h>
+#include <rtm/idl/DataPortSkel.h>
 #include <rtm/CorbaConsumer.h>
 #include <rtm/OutPortConsumer.h>
 #include <rtm/ConnectorListener.h>
@@ -30,21 +28,21 @@ namespace RTC
 {
   /*!
    * @if jp
-   * @class OutPortCorbaCdrConsumer
-   * @brief OutPortCorbaCdrConsumer クラス
+   * @class OutPortDSConsumer
+   * @brief OutPortDSConsumer クラス
    *
    * OutPortConsumer
    *
-   * データ転送に CORBA の OpenRTM::OutPortCdr インターフェースを利用し
+   * データ転送に CORBA の RTC::DataPullService インターフェースを利用し
    * た、pull 型データフロー型を実現する OutPort コンシューマクラス。
    *
    * @since 0.4.0
    *
    * @else
-   * @class OutPortCorbaCdrConsumer
-   * @brief OutPortCorbaCdrConsumer class
+   * @class OutPortDSConsumer
+   * @brief OutPortDSConsumer class
    *
-   * The OutPort consumer class which uses the OpenRTM::OutPortCdr
+   * The OutPort consumer class which uses the RTC::DataPullService
    * interface in CORBA for data transfer and realizes a pull-type
    * dataflow.
    *
@@ -52,9 +50,9 @@ namespace RTC
    *
    * @endif
    */
-  class OutPortCorbaCdrConsumer
+  class OutPortDSConsumer
     : public OutPortConsumer,
-      public CorbaConsumer< ::OpenRTM::OutPortCdr >
+      public CorbaConsumer< ::RTC::DataPullService >
   {
   public:
     DATAPORTSTATUS_ENUM
@@ -72,7 +70,7 @@ namespace RTC
      *
      * @endif
      */
-    OutPortCorbaCdrConsumer();
+    OutPortDSConsumer();
 
     /*!
      * @if jp
@@ -87,7 +85,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~OutPortCorbaCdrConsumer(void);
+    virtual ~OutPortDSConsumer(void);
 
     /*!
      * @if jp
@@ -152,7 +150,7 @@ namespace RTC
      * InPort はデータ送信処理における各種イベントに対して特定のリスナ
      * オブジェクトをコールするコールバック機構を提供する。詳細は
      * ConnectorListener.h の ConnectorDataListener, ConnectorListener
-     * 等を参照のこと。OutPortCorbaCdrProvider では、以下のコールバック
+     * 等を参照のこと。OutPortDSProvider では、以下のコールバック
      * が提供される。
      *
      * - ON_BUFFER_WRITE
@@ -173,7 +171,7 @@ namespace RTC
      * listener objects according to the events in the data publishing
      * process. For details, see documentation of
      * ConnectorDataListener class and ConnectorListener class in
-     * ConnectorListener.h. In this OutPortCorbaCdrProvider provides
+     * ConnectorListener.h. In this OutPortDSProvider provides
      * the following callbacks.
      *
      * - ON_BUFFER_WRITE
@@ -266,7 +264,7 @@ namespace RTC
      * @brief Return codes conversion
      * @endif
      */
-    OutPortConsumer::ReturnCode convertReturn(::OpenRTM::PortStatus status,
+    OutPortConsumer::ReturnCode convertReturn(::RTC::PortStatus status,
                                               cdrMemoryStream& data);
 
     /*!
@@ -381,16 +379,16 @@ extern "C"
    * @if jp
    * @brief モジュール初期化関数
    *
-   * OutPortCorbaCdrConsumer のファクトリを登録する初期化関数。
+   * OutPortDSConsumer のファクトリを登録する初期化関数。
    *
    * @else
    * @brief Module initialization
    *
-   * This initialization function registers OutPortCorbaCdrConsumer's factory.
+   * This initialization function registers OutPortDSConsumer's factory.
    *
    * @endif
    */
-  void OutPortCorbaCdrConsumerInit(void);
+  void OutPortDSConsumerInit(void);
 };
 
-#endif  // RTC_OUTPORTCORBACDRCONSUMER_H
+#endif  // RTC_OUTPORTDSCONSUMER_H

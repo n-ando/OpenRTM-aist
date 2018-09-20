@@ -124,9 +124,9 @@ set (RTC_CORBA_CXXMAPPING11 ON)
 
 
 
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config_rtc_cmake.h.in ${CMAKE_CURRENT_SOURCE_DIR}/config_rtc.h)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config_rtc_cmake.h.in ${PROJECT_BINARY_DIR}/config_rtc.h)
 
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/version_cmake.h.in ${CMAKE_CURRENT_SOURCE_DIR}/version.h)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/version_cmake.h.in ${PROJECT_BINARY_DIR}/version.h)
 
 
 
@@ -277,6 +277,10 @@ set(rtm_headers
 	OutPortDirectConsumer.h
 	OutPortDirectProvider.h
 	CORBA_RTCUtil.h
+	OutPortDSProvider.h
+	OutPortDSConsumer.h
+	InPortDSProvider.h
+	InPortDSConsumer.h
 	${PROJECT_BINARY_DIR}/config_rtc.h
 	${PROJECT_BINARY_DIR}/version.h
 )
@@ -356,6 +360,10 @@ set(rtm_srcs
 	OutPortDirectConsumer.cpp
 	OutPortDirectProvider.cpp
 	CORBA_RTCUtil.cpp
+	OutPortDSProvider.cpp
+	OutPortDSConsumer.cpp
+	InPortDSProvider.cpp
+	InPortDSConsumer.cpp
 	${rtm_headers}
 )
 

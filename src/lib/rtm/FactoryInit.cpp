@@ -43,6 +43,10 @@
 #include <rtm/InPortSHMConsumer.h>
 #include <rtm/OutPortSHMProvider.h>
 #include <rtm/OutPortSHMConsumer.h>
+#include <rtm/InPortDSProvider.h>
+#include <rtm/InPortDSConsumer.h>
+#include <rtm/OutPortDSProvider.h>
+#include <rtm/OutPortDSConsumer.h>
 #ifdef ORB_IS_TAO
 #include <rtm/InPortCorbaCdrUDPProvider.h>
 #include <rtm/InPortCorbaCdrUDPConsumer.h>
@@ -88,6 +92,10 @@ namespace RTM
     InPortSHMConsumerInit();
     OutPortSHMProviderInit();
     OutPortSHMConsumerInit();
+    InPortDSProviderInit();
+    InPortDSConsumerInit();
+    OutPortDSProviderInit();
+    OutPortDSConsumerInit();
 #ifdef ORB_IS_TAO
     InPortCorbaCdrUDPProviderInit();
     InPortCorbaCdrUDPConsumerInit();

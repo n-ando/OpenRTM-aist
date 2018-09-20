@@ -20,7 +20,7 @@
 #ifndef RTC_INPORTCORBACDRPROVIDER_H
 #define RTC_INPORTCORBACDRPROVIDER_H
 
-#include <rtm/idl/DataPortSkel.h>
+#include <rtm/idl/DataPort_OpenRTMSkel.h>
 #include <rtm/BufferBase.h>
 #include <rtm/InPortProvider.h>
 #include <rtm/CORBA_SeqUtil.h>
@@ -383,7 +383,7 @@ namespace RTC
     ConnectorInfo m_profile;
     InPortConnector* m_connector;
 
-  };  // class InPortCorCdrbaProvider
+  };  // class InPortCorbaCdrProvider
 };  // namespace RTC
 
 extern "C"

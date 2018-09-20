@@ -31,6 +31,7 @@
 #include <tao/corba.h>
 #include <orbsvcs/CosNamingC.h>
 #include <rtm/idl/DataPortSkel.h>
+#include <rtm/idl/DataPort_OpenRTMSkel.h>
 #endif
 
 #ifdef ORB_IS_RTORB
@@ -155,6 +156,35 @@ public:
 	}
 
 	void decodeCDRData(const ::OpenRTM::CdrData &data)
+	{
+		decodeCDRData(&data);
+	}
+
+
+	void encodeCDRData(::RTC::OctetSeq *data)
+	{
+		data->length(cdr.total_length());
+		CORBA::Octet *buf = data->get_buffer();
+		for (const ACE_Message_Block *i = cdr.begin(); i != 0; i = i->cont())
+		{
+			const size_t len = i->length();
+			ACE_OS::memcpy(buf, i->rd_ptr(), len);
+			buf += len;
+		}
+	}
+
+	void encodeCDRData(::RTC::OctetSeq &data)
+	{
+		encodeCDRData(&data);
+	}
+
+	
+	void decodeCDRData(const ::RTC::OctetSeq *data)
+	{
+		cdr.write_octet_array(data->get_buffer(), data->length());
+	}
+
+	void decodeCDRData(const ::RTC::OctetSeq &data)
 	{
 		decodeCDRData(&data);
 	}

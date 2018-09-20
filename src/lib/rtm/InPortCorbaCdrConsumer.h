@@ -23,7 +23,7 @@
 
 //#include <rtm/BufferBase.h>
 
-#include <rtm/idl/DataPortSkel.h>
+#include <rtm/idl/DataPort_OpenRTMSkel.h>
 #include <rtm/CorbaConsumer.h>
 #include <rtm/InPortConsumer.h>
 #include <rtm/Manager.h>

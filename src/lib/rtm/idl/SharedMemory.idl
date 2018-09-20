@@ -12,7 +12,7 @@
 #define SharedMemory_idl
 
 
-#include "DataPort.idl"
+#include "DataPort_OpenRTM.idl"
 
 module OpenRTM
 {

@@ -51,6 +51,7 @@ endmacro()
 set(idls
 	BasicDataType
 	DataPort
+	DataPort_OpenRTM
 	ExtendedDataTypes
 	InterfaceDataTypes
 	Manager

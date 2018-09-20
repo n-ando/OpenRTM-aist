@@ -62,7 +62,7 @@ endif()
 #	set (WITH_ACE ON)
 #endif()
 
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config_coil_cmake.h.in ${CMAKE_CURRENT_SOURCE_DIR}/common/coil/config_coil.h)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config_coil_cmake.h.in ${PROJECT_BINARY_DIR}/config_coil.h)
 
 
 set(coil_headers
