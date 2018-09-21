@@ -36,10 +36,11 @@ doxygen_idlref.conf:
 EXTRA_DIST = \
 	doxygen_classref.conf \
 	doxygen_idlref.conf \
-	ClassReference \
-	ClassReference-en \
-	IDLReference \
-	IDLReference-en
+	Makefile.docs
+#	ClassReference \
+#	ClassReference-en \
+#	IDLReference \
+#	IDLReference-en
 #	DevelopersGuide.ps \
 #	DevelopersGuide.pdf
 

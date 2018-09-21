@@ -20,4 +20,4 @@ IDLReference-en:
 clean-local:
 	rm -rf *~ ClassReference ClassReference-en IDLReference IDLReference-en
 
-dist-hook: clean-local ClassReference ClassReference-en IDLReference IDLReference-en
+#dist-hook: clean-local ClassReference ClassReference-en IDLReference IDLReference-en
