@@ -31,7 +31,7 @@ namespace RTC
    * @endif
    */
   InPortDSProvider::InPortDSProvider(void)
-  : m_buffer(0)
+      : m_buffer(0), m_connector(0)
   {
     // PortProfile setting
     setInterfaceType("data_service");
@@ -153,7 +153,7 @@ namespace RTC
   {
     RTC_PARANOID(("InPortDSProvider::push()"));
 
-    if (m_buffer == 0)
+    if (m_connector == 0)
       {
         cdrMemoryStream cdr;
 #ifdef ORB_IS_ORBEXPRESS
@@ -191,7 +191,7 @@ namespace RTC
 
 
     onReceived(cdr);
-    BufferStatus::Enum ret = m_buffer->write(cdr);
+    BufferStatus::Enum ret = m_connector->write(cdr);
 
     return convertReturn(ret, cdr);
   }

@@ -168,4 +168,9 @@ namespace RTC
 	  }
   };
 
+  BufferStatus::Enum InPortConnector::write(cdrMemoryStream &cdr)
+  {
+      return BufferStatus::BUFFER_OK;
+  };
+
 }; // namespace RTC

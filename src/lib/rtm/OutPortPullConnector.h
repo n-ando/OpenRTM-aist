@@ -81,6 +81,7 @@ namespace RTC
   class OutPortPullConnector
     : public OutPortConnector
   {
+    typedef coil::Guard<coil::Mutex> Guard;
   public:
     DATAPORTSTATUS_ENUM
 
@@ -163,6 +164,8 @@ namespace RTC
      * @endif
      */
     virtual ReturnCode write(cdrMemoryStream& data);
+
+    virtual CdrBufferBase::ReturnCode read(cdrMemoryStream &data);
 
     /*!
      * @if jp
@@ -282,6 +285,20 @@ namespace RTC
      * @endif
      */
     CdrBufferBase* m_buffer;
+  private:
+      bool m_sync_readwrite;
+
+      struct WorkerThreadCtrl
+      {
+          WorkerThreadCtrl() : cond_(mutex_), completed_(false) {}
+          coil::Mutex mutex_;
+          coil::Condition<coil::Mutex> cond_;
+          bool completed_;
+      };
+      WorkerThreadCtrl m_writecompleted_worker;
+      WorkerThreadCtrl m_readcompleted_worker;
+      WorkerThreadCtrl m_readready_worker;
+
   };
 };  // namespace RTC
 

@@ -273,6 +273,8 @@ namespace RTC
       return write(m_cdr);
     }
 
+    virtual CdrBufferBase::ReturnCode read(cdrMemoryStream &data);
+
 	bool setInPort(InPortBase* directInPort);
 	/*!
 	* @if jp

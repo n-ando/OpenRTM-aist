@@ -39,7 +39,8 @@ namespace RTC
     : InPortConnector(info, listeners, buffer),
       m_provider(provider),
       m_listeners(listeners),
-      m_deleteBuffer(buffer == 0 ? true : false)
+      m_deleteBuffer(buffer == 0 ? true : false),
+      m_sync_readwrite(false)
   {
     // publisher/buffer creation. This may throw std::bad_alloc;
     if (m_buffer == 0)
@@ -52,6 +53,11 @@ namespace RTC
     m_provider->init(info.properties);
     m_provider->setBuffer(m_buffer);
     m_provider->setListener(info, &m_listeners);
+
+    if (coil::toBool(info.properties["sync_readwrite"], "YES", "NO", false))
+    {
+        m_sync_readwrite = true;
+    }
 
     onConnect();
   }
@@ -91,7 +97,44 @@ namespace RTC
       {
         return PRECONDITION_NOT_MET;
       }
+    if (m_sync_readwrite)
+    {
+    
+        {
+            Guard guard(m_readcompleted_worker.mutex_);
+            m_readcompleted_worker.completed_ = false;
+        }
+
+        {
+            Guard guard(m_readready_worker.mutex_);
+            m_readready_worker.completed_ = true;
+            m_readready_worker.cond_.signal();
+        }
+        {
+            Guard guard(m_writecompleted_worker.mutex_);
+            while (!m_writecompleted_worker.completed_)
+            {
+                m_writecompleted_worker.cond_.wait();
+            }
+        }
+    }
+
     BufferStatus::Enum ret = m_buffer->read(data);
+
+    if (m_sync_readwrite)
+    {
+        {
+            Guard guard(m_readcompleted_worker.mutex_);
+            m_readcompleted_worker.completed_ = true;
+            m_readcompleted_worker.cond_.signal();
+        }
+
+        {
+            Guard guard(m_readready_worker.mutex_);
+            m_readready_worker.completed_ = false;
+        }
+    }
+
     switch (ret)
       {
       case BufferStatus::BUFFER_OK:
@@ -181,6 +224,47 @@ namespace RTC
   {
     m_listeners.connector_[ON_DISCONNECT].notify(m_profile);
   }
+
+  BufferStatus::Enum InPortPushConnector::write(cdrMemoryStream &cdr)
+  {
+      if (m_sync_readwrite)
+      {
+          {
+              Guard guard(m_readready_worker.mutex_);
+              while (!m_readready_worker.completed_)
+              {
+                  m_readready_worker.cond_.wait();
+              }
+          }
+      }
+
+      BufferStatus::Enum ret = m_buffer->write(cdr);
+
+      if (m_sync_readwrite)
+      {
+          {
+              Guard guard(m_writecompleted_worker.mutex_);
+              m_writecompleted_worker.completed_ = true;
+              m_writecompleted_worker.cond_.signal();
+          }
+
+
+          {
+              Guard guard(m_readcompleted_worker.mutex_);
+              while (!m_readcompleted_worker.completed_)
+              {
+                  m_readcompleted_worker.cond_.wait();
+              }
+          }
+          {
+              Guard guard(m_writecompleted_worker.mutex_);
+              m_writecompleted_worker.completed_ = false;
+          }
+      }
+
+
+      return ret;
+  };
 
 };  // namespace RTC
 

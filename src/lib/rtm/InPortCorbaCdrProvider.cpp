@@ -33,7 +33,7 @@ namespace RTC
    * @endif
    */
   InPortCorbaCdrProvider::InPortCorbaCdrProvider(void)
-  : m_buffer(0)
+      : m_buffer(0), m_connector(NULL)
   {
     // PortProfile setting
     setInterfaceType("corba_cdr");
@@ -155,7 +155,7 @@ namespace RTC
   {
     RTC_PARANOID(("InPortCorbaCdrProvider::put()"));
 
-    if (m_buffer == 0)
+    if (m_connector == NULL)
       {
         cdrMemoryStream cdr;
 #ifdef ORB_IS_ORBEXPRESS
@@ -193,7 +193,7 @@ namespace RTC
 
 
     onReceived(cdr);
-    BufferStatus::Enum ret = m_buffer->write(cdr);
+    BufferStatus::Enum ret = m_connector->write(cdr);
 
     return convertReturn(ret, cdr);
   }

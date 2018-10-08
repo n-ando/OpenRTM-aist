@@ -123,7 +123,7 @@ namespace RTC
     throw (CORBA::SystemException)
   {
     RTC_PARANOID(("InPortSHMProvider::put()"));
-	if (m_buffer == 0)
+    if (m_connector == NULL)
 	{
 		return ::OpenRTM::PORT_ERROR;
 	}
@@ -152,7 +152,7 @@ namespace RTC
 	
 	onReceived(cdr);
 	
-	BufferStatus::Enum ret = m_buffer->write(cdr);
+    BufferStatus::Enum ret = m_connector->write(cdr);
 	
 	return convertReturn(ret, cdr);
   }

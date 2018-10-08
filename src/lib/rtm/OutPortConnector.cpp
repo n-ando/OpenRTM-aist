@@ -177,4 +177,9 @@ namespace RTC
 	  m_inPortListeners = &(directInPort->getListeners());
 	  return true;
   }
+
+  CdrBufferBase::ReturnCode OutPortConnector::read(cdrMemoryStream &data)
+  {
+      return CdrBufferBase::BUFFER_OK;
+  }
 }; // namespace RTC

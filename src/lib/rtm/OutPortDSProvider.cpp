@@ -31,7 +31,7 @@ namespace RTC
    * @endif
    */
   OutPortDSProvider::OutPortDSProvider(void)
-    : m_buffer(0)
+    : m_buffer(0), m_connector(NULL)
   {
     // PortProfile setting
     setInterfaceType("data_service");
@@ -167,14 +167,14 @@ namespace RTC
     // at least the output "data" area should be allocated
     data = new ::RTC::OctetSeq();
 
-    if (m_buffer == 0)
+    if (m_connector == NULL)
       {
         onSenderError();
         return ::RTC::UNKNOWN_ERROR;
       }
 
     cdrMemoryStream cdr = cdrMemoryStream();
-    CdrBufferBase::ReturnCode ret(m_buffer->read(cdr));
+    CdrBufferBase::ReturnCode ret(m_connector->read(cdr));
 
     if (ret == CdrBufferBase::BUFFER_OK)
       {

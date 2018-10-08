@@ -38,7 +38,8 @@ namespace RTC
     : OutPortConnector(info, listeners),
       m_provider(provider),
       m_listeners(listeners),
-      m_buffer(buffer)
+      m_buffer(buffer),
+      m_sync_readwrite(false)
   {
     // create buffer
     if (m_buffer == 0)
@@ -53,6 +54,11 @@ namespace RTC
     m_provider->setConnector(this);
     //    m_provider->init(m_profile /* , m_listeners */);
     m_provider->setListener(info, &m_listeners);
+
+    if (coil::toBool(info.properties["sync_readwrite"], "YES", "NO", false))
+    {
+        m_sync_readwrite = true;
+    }
 
     onConnect();
   }
@@ -80,8 +86,99 @@ namespace RTC
   ConnectorBase::ReturnCode
   OutPortPullConnector::write(cdrMemoryStream& data)
   {
+
+    if (m_buffer == 0)
+    {
+        return PRECONDITION_NOT_MET;
+    }
+
+    if (m_sync_readwrite)
+    {
+        {
+            Guard guard(m_readready_worker.mutex_);
+            while (!m_readready_worker.completed_)
+            {
+                m_readready_worker.cond_.wait();
+            }
+        }
+    }
+
     m_buffer->write(data);
+
+    if (m_sync_readwrite)
+    {
+        {
+            Guard guard(m_writecompleted_worker.mutex_);
+            m_writecompleted_worker.completed_ = true;
+            m_writecompleted_worker.cond_.signal();
+        }
+
+
+          {
+              Guard guard(m_readcompleted_worker.mutex_);
+              while (!m_readcompleted_worker.completed_)
+              {
+                  m_readcompleted_worker.cond_.wait();
+              }
+          }
+          {
+              Guard guard(m_writecompleted_worker.mutex_);
+              m_writecompleted_worker.completed_ = false;
+          }
+    }
+
     return PORT_OK;
+  }
+
+  CdrBufferBase::ReturnCode
+  OutPortPullConnector::read(cdrMemoryStream &data)
+  {
+      if (m_buffer == 0)
+      {
+          return CdrBufferBase::PRECONDITION_NOT_MET;
+      }
+
+      if (m_sync_readwrite)
+      {
+
+        {
+            Guard guard(m_readcompleted_worker.mutex_);
+            m_readcompleted_worker.completed_ = false;
+        }
+
+        {
+            Guard guard(m_readready_worker.mutex_);
+            m_readready_worker.completed_ = true;
+            m_readready_worker.cond_.signal();
+        }
+        {
+            Guard guard(m_writecompleted_worker.mutex_);
+            while (!m_writecompleted_worker.completed_)
+            {
+                m_writecompleted_worker.cond_.wait();
+            }
+        }
+      }
+
+      CdrBufferBase::ReturnCode ret = m_buffer->read(data);
+
+
+      if (m_sync_readwrite)
+      {
+        {
+            Guard guard(m_readcompleted_worker.mutex_);
+            m_readcompleted_worker.completed_ = true;
+            m_readcompleted_worker.cond_.signal();
+        }
+
+        {
+            Guard guard(m_readready_worker.mutex_);
+            m_readready_worker.completed_ = false;
+        }
+      }
+
+
+      return ret;
   }
 
   /*!

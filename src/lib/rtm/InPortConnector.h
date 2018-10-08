@@ -236,6 +236,8 @@ namespace RTC
      */
     virtual bool isLittleEndian();
 
+    virtual BufferStatus::Enum write(cdrMemoryStream &cdr);
+
 
 	/*!
 	* @if jp

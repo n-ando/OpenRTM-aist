@@ -33,7 +33,8 @@ namespace RTC
    */
   OutPortSHMProvider::OutPortSHMProvider(void)
    : m_buffer(0),
-     m_memory_size(0)
+     m_memory_size(0),
+     m_connector(NULL)
   {
     // PortProfile setting
     setInterfaceType("shared_memory");
@@ -172,7 +173,7 @@ namespace RTC
       }
 
     cdrMemoryStream cdr;
-    CdrBufferBase::ReturnCode ret(m_buffer->read(cdr));
+    CdrBufferBase::ReturnCode ret(m_connector->read(cdr));
     if (ret == CdrBufferBase::BUFFER_OK)
       {
 #ifdef ORB_IS_ORBEXPRESS

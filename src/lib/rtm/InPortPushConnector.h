@@ -80,6 +80,7 @@ namespace RTC
   class InPortPushConnector
     : public InPortConnector
   {
+    typedef coil::Guard<coil::Mutex> Guard;
   public:
     DATAPORTSTATUS_ENUM
 
@@ -254,6 +255,8 @@ namespace RTC
      */
     virtual CdrBufferBase* createBuffer(ConnectorInfo& info);
 
+    virtual BufferStatus::Enum write(cdrMemoryStream &cdr);
+
     /*!
      * @if jp
      * @brief 接続確立時にコールバックを呼ぶ
@@ -310,6 +313,20 @@ namespace RTC
     ConnectorListeners& m_listeners;
 
     bool m_deleteBuffer;
+
+    bool m_sync_readwrite;
+
+    struct WorkerThreadCtrl
+    {
+        WorkerThreadCtrl() : cond_(mutex_), completed_(false) {}
+        coil::Mutex mutex_;
+        coil::Condition<coil::Mutex> cond_;
+        bool completed_;
+    };
+    WorkerThreadCtrl m_writecompleted_worker;
+    WorkerThreadCtrl m_readcompleted_worker;
+    WorkerThreadCtrl m_readready_worker;
+
   };
 };  // namespace RTC
 
