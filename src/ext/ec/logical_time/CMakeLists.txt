@@ -38,7 +38,7 @@ ADD_DEFINITIONS(${ORB_C_FLAGS_LIST})
 
 set(target LogicalTimeTriggeredEC)
 
-set(srcs LogicalTimeTriggeredEC.cpp LogicalTimeTriggeredEC.h ${${idl_name}_STUB})
+set(srcs LogicalTimeTriggeredEC.cpp LogicalTimeTriggeredEC.h ${${idl_name}_SKEL})
 
 
 if(VXWORKS AND NOT RTP)
@@ -73,7 +73,7 @@ else()
 endif()
 
 
-set_source_files_properties(${${idl_name}_STUB} PROPERTIES GENERATED 1)
+set_source_files_properties(${${idl_name}_SKEL} PROPERTIES GENERATED 1)
 
 
 

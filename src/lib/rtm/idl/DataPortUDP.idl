@@ -23,7 +23,7 @@
 #include <tao/orb.idl>
 #endif
 
-#include "DataPort.idl"
+#include "DataPort_OpenRTM.idl"
 
 
 #pragma prefix "openrtm.aist.go.jp"
