@@ -2576,8 +2576,10 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 			  }
 			  std::string tmp = param_itr->first;
 			  coil::replaceString(tmp, "port", "");
+              std::string::size_type pos = param_itr->first.find("port");
+
 			  int val = 0;
-			  if (coil::stringTo<int>(val, tmp.c_str()))
+              if (coil::stringTo<int>(val, tmp.c_str()) && pos != std::string::npos)
 			  {
 				  ports.push_back(param_itr->second);
 				  continue;
@@ -2586,13 +2588,14 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 		  }
 
 
-
+          /*
 		  if (ports.size() == 0)
 		  {
 			  RTC_ERROR(("Invalid format for pre-connection."));
 			  RTC_ERROR(("Format must be Comp0.port0?port=Comp1.port1"));
 			  continue;
 		  }
+          */
 
 		  if (configs.count("dataflow_type") == 0)
 		  {
@@ -2644,6 +2647,25 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 			  RTC_DEBUG(("port %s found: ", port0_str.c_str()));
 			  continue;
 		  }
+
+          if (ports.size() == 0)
+          {
+              coil::Properties prop;
+
+              for (coil::mapstring::iterator config_itr = configs.begin(); config_itr != configs.end(); ++config_itr) {
+                  std::string key = config_itr->first;
+                  std::string value = config_itr->second;
+                  coil::eraseBothEndsBlank(key);
+                  coil::eraseBothEndsBlank(value);
+
+                  prop["dataport." + key] = value;
+              }
+
+              if (RTC::RTC_OK != CORBA_RTCUtil::connect(connectors[i], prop, port0_var, RTC::PortService::_nil()))
+              {
+                  RTC_ERROR(("Connection error: %s", connectors[i].c_str()));
+              }
+          }
 
 		  for (coil::vstring::iterator port_itr = ports.begin(); port_itr != ports.end(); ++port_itr)
 		  {

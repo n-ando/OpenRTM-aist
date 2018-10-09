@@ -781,9 +781,18 @@ namespace CORBA_RTCUtil
     std::string prof_name;
     conn_prof->name = CORBA::string_dup(name.c_str());
     conn_prof->connector_id = CORBA::string_dup("");
-    conn_prof->ports.length(2);
-    conn_prof->ports[0] = RTC::PortService::_duplicate(port0);
-    conn_prof->ports[1] = RTC::PortService::_duplicate(port1);
+    if (CORBA::is_nil(port1))
+    {
+        conn_prof->ports.length(1);
+        conn_prof->ports[0] = RTC::PortService::_duplicate(port0);
+    }
+    else
+    {
+        conn_prof->ports.length(2);
+        conn_prof->ports[0] = RTC::PortService::_duplicate(port0);
+        conn_prof->ports[1] = RTC::PortService::_duplicate(port1);
+    }
+    
     if (prop["dataport.dataflow_type"].empty())
       {
         prop["dataport.dataflow_type"] = "push";
@@ -849,8 +858,10 @@ namespace CORBA_RTCUtil
                             const RTC::PortService_ptr port1)
   {
     if (CORBA::is_nil(port0)) { return RTC::BAD_PARAMETER; }
-    if (CORBA::is_nil(port1)) { return RTC::BAD_PARAMETER; }
-    if (port0->_is_equivalent(port1)) { return RTC::BAD_PARAMETER; }
+    if (!CORBA::is_nil(port1)) {
+        if (port0->_is_equivalent(port1)) { return RTC::BAD_PARAMETER; }
+    }
+    
     RTC::ConnectorProfile_var cprof;
     cprof = create_connector(name, prop, port0, port1);
     return port0->connect(cprof);
