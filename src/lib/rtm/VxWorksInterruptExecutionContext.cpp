@@ -651,8 +651,6 @@ namespace RTC
         int_value = IV_IPI3;
     }
 #endif
-std::cout << props << std::endl;
-std::cout << int_param << std::endl;
     if(int_value >= 0)
     {
         intConnect(INUM_TO_IVEC(int_value), (VOIDFUNCPTR)tickHandler, (int)this);

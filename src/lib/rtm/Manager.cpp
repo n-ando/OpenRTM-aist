@@ -369,7 +369,6 @@ namespace RTC
           }
         if (filename.find_first_of('.') == std::string::npos)
           {
-            std::cout <<  m_config["manager.modules.C++.suffixes"] << std::endl;
             if (m_config.findNode("manager.modules.C++.suffixes") != 0)
               {
                 filename += "." + m_config["manager.modules.C++.suffixes"];
@@ -2955,7 +2954,6 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 		  PortProfile_var prof = ports[i]->get_port_profile();
 		  coil::Properties prop;
 		  NVUtil::copyToProperties(prop, prof->properties);
-		  std::cout << prop;
 		  if ((prop.hasKey("publish_topic") == 0 ||
 			  prop["publish_topic"] == "") &&
 			  (prop.hasKey("subscribe_topic") == 0 ||

@@ -19,6 +19,8 @@
 
 #include <rtm/RTObject.h>
 #include <rtm/Macho.h>
+#include <rtm/RingBuffer.h>
+#include <rtm/EventBase.h>
 
 /*!
  * @brief State machine definition macros
@@ -117,6 +119,20 @@ namespace RTC
     {
     }
     virtual ~Machine() {}
+    virtual RingBuffer<EventBase*>& getBuffer()
+    {
+        return m_buffer;
+    }
+    virtual void run_event()
+    {
+        while (m_buffer.readable() > 0)
+        {
+            EventBase* ebt = m_buffer.get();
+            (*ebt)();
+            m_buffer.advanceRptr();
+            delete ebt;
+        }
+    }
 
   private:
     Machine(const Machine<TOP> & other);
@@ -131,6 +147,7 @@ namespace RTC
     template<class T> friend class Macho::StateID;
 
     RTObject_impl* rtComponent;
+    RingBuffer<EventBase*> m_buffer;
   };
 
   /*!

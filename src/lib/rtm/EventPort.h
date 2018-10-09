@@ -36,19 +36,24 @@
 #include <rtm/InPortConnector.h>
 #include <rtm/Timestamp.h>
 #include <rtm/StaticFSM.h>
+#include <rtm/RingBuffer.h>
+#include <rtm/EventBase.h>
 
 namespace RTC
 {
+
+
   template <class FSM, class TOP, class R>
   class EventBinder0
-    : public ConnectorDataListener
+    : public ConnectorDataListener, EventBinderBase0
   {
     USE_CONNLISTENER_STATUS;
   public:
     EventBinder0(FSM& fsm,
                  const char* event_name,
-                 R (TOP::*handler)())
-      : m_fsm(fsm), m_eventName(event_name), m_handler(handler) {}
+                 R (TOP::*handler)(),
+                 RingBuffer<EventBase*> &buffer)
+      : m_fsm(fsm), m_eventName(event_name), m_handler(handler), m_buffer(buffer) {}
 
     virtual ~EventBinder0() {}
 
@@ -58,28 +63,38 @@ namespace RTC
       if (info.properties["fsm_event_name"] == m_eventName ||
           info.name == m_eventName)
         {
-          m_fsm.dispatch(Macho::Event(m_handler));
-          std::cout << "Event dispatched: " << m_eventName << std::endl;
+            m_buffer.write(new Event0(this));
+          //m_fsm.dispatch(Macho::Event(m_handler));
+          //std::cout << "Event dispatched: " << m_eventName << std::endl;
           return NO_CHANGE;
         }
       return NO_CHANGE;
     }
 
+    virtual void run()
+    {
+        
+        m_fsm.dispatch(Macho::Event(m_handler));
+    }
+
     FSM& m_fsm;
     std::string m_eventName;
     R (TOP::*m_handler)();
+    RingBuffer<EventBase*> &m_buffer;
+
   };
 
   template <class FSM, class TOP, class R, class P0>
   class EventBinder1
-    : public ConnectorDataListenerT<P0>
+    : public ConnectorDataListenerT<P0>, EventBinderBase1<P0>
   {
     USE_CONNLISTENER_STATUS;
   public:
     EventBinder1(FSM& fsm,
                  const char* event_name,
-                 R (TOP::*handler)(P0))
-      : m_fsm(fsm), m_eventName(event_name), m_handler(handler) {}
+                 R (TOP::*handler)(P0),
+                 RingBuffer<EventBase*> &buffer)
+      : m_fsm(fsm), m_eventName(event_name), m_handler(handler), m_buffer(buffer) {}
 
     virtual ~EventBinder1() {}
 
@@ -88,16 +103,53 @@ namespace RTC
       if (info.properties["fsm_event_name"] == m_eventName ||
           info.name == m_eventName)
         {
-          m_fsm.dispatch(Macho::Event(m_handler, data));
-          std::cout << "Event dispatched: " << m_eventName << std::endl;
+            m_buffer.write(new Event1<P0>(this, data));
+          //m_fsm.dispatch(Macho::Event(m_handler, data));
+          //std::cout << "Event dispatched: " << m_eventName << std::endl;
           return NO_CHANGE;
         }
       return NO_CHANGE;
     }
 
+    virtual void run(P0& data)
+    {
+        m_fsm.dispatch(Macho::Event(m_handler, data));
+    }
+
     FSM& m_fsm;
     std::string m_eventName;
     R (TOP::*m_handler)(P0);
+    RingBuffer<EventBase*> &m_buffer;
+  };
+
+  class EventConnListener
+      : public ConnectorListener
+  {
+      USE_CONNLISTENER_STATUS;
+  public:
+      EventConnListener(RingBuffer<EventBase*>&buffer, CdrBufferBase* m_thebuffer) :
+          m_buffer(buffer), m_thebuffer(m_thebuffer) {}
+      virtual ~EventConnListener()
+      {
+      }
+
+      virtual ReturnCode operator()(ConnectorInfo& info)
+      {
+          coil::Properties prop;
+          prop["write.full_policy"] = "do_nothing";
+          prop["read.empty_policy"] = "do_nothing";
+          m_thebuffer->init(prop);
+
+          coil::Properties prop_(info.properties.getNode("dataport.buffer"));
+          prop_ << info.properties.getNode("inport.buffer");
+
+          m_buffer.init(prop_);
+
+
+          return NO_CHANGE;
+      };
+      RingBuffer<EventBase*>&m_buffer;
+      CdrBufferBase *m_thebuffer;
   };
 
 
@@ -211,7 +263,7 @@ namespace RTC
                 bool read_block = false, bool write_block = false,
                 int read_timeout = 0, int write_timeout = 0)
       : InPortBase(name, "any"),
-        m_name(name), m_fsm(fsm)
+      m_name(name), m_fsm(fsm), m_buffer(fsm.getBuffer())
     {
     }
 
@@ -256,13 +308,21 @@ namespace RTC
       return m_name.c_str();
     }
 
+    virtual void init(coil::Properties& prop)
+    {
+        InPortBase::init(prop);
+        this->addConnectorListener
+            (ON_CONNECT,
+            new EventConnListener(m_buffer, m_thebuffer));
+    }
+
     template <class TOP, class R, class P0>
     void bindEvent(const char* name,
                    R (TOP::*handler)(P0))
     {
       this->addConnectorDataListener
         (ON_RECEIVED,
-         new EventBinder1<FsmType, TOP, R, P0>(m_fsm, name, handler));
+         new EventBinder1<FsmType, TOP, R, P0>(m_fsm, name, handler, m_buffer));
     }
     template <typename TOP, class R>
     void bindEvent(const char* name,
@@ -270,9 +330,9 @@ namespace RTC
     {
       this->addConnectorDataListener
         (ON_RECEIVED,
-         new EventBinder0<FsmType, TOP, R>(m_fsm, name, handler));
+         new EventBinder0<FsmType, TOP, R>(m_fsm, name, handler, m_buffer));
     }
-    virtual bool read() { return true; }
+    virtual bool read(std::string name="") { return true; }
   private:
     /*!
      * @if jp
@@ -283,6 +343,7 @@ namespace RTC
      */
     std::string m_name;
     FsmType& m_fsm;
+    RingBuffer<EventBase*> &m_buffer;
   };
 }; // End of namesepace RTM
 

@@ -281,6 +281,8 @@ set(rtm_headers
 	OutPortDSConsumer.h
 	InPortDSProvider.h
 	InPortDSConsumer.h
+	MultilayerCompositeEC.h
+	EventBase.h
 	${PROJECT_BINARY_DIR}/config_rtc.h
 	${PROJECT_BINARY_DIR}/version.h
 )
@@ -364,6 +366,7 @@ set(rtm_srcs
 	OutPortDSConsumer.cpp
 	InPortDSProvider.cpp
 	InPortDSConsumer.cpp
+	MultilayerCompositeEC.cpp
 	${rtm_headers}
 )
 

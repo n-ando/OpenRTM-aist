@@ -130,7 +130,7 @@ namespace RTC
      * @param prop Property for setting ports
      * @endif
      */
-    void init(coil::Properties& prop);
+    virtual void init(coil::Properties& prop);
 
     /*!
      * @if jp
@@ -146,7 +146,7 @@ namespace RTC
      * @return true:Success,false:Failure
      * @endif
      */
-    virtual bool read() = 0;
+    virtual bool read(std::string name="") = 0;
 
     /*!
      * @if jp
