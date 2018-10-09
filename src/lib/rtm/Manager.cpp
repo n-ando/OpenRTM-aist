@@ -28,6 +28,7 @@
 #include <rtm/ExtTrigExecutionContext.h>
 #include <rtm/OpenHRPExecutionContext.h>
 #include <rtm/PeriodicECSharedComposite.h>
+#include <rtm/MultilayerCompositeEC.h>
 #include <rtm/RTCUtil.h>
 #include <rtm/ManagerServant.h>
 #include <coil/Properties.h>
@@ -1898,6 +1899,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     ExtTrigExecutionContextInit(this);
     OpenHRPExecutionContextInit(this);
     SimulatorExecutionContextInit(this);
+    MultilayerCompositeECInit(this);
 #ifdef RTM_OS_VXWORKS
     VxWorksRTExecutionContextInit(this);
 #ifndef __RTP__

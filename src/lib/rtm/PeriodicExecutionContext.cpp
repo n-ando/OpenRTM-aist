@@ -194,6 +194,7 @@ namespace RTC_exp
           }
         ++count;
       } while (threadRunning());
+      
     RTC_DEBUG(("Thread terminated."));
     return 0;
   }
@@ -440,6 +441,7 @@ namespace RTC_exp
     m_workerthread.running_ = false;
     return RTC::RTC_OK;
   }
+
   // template virtual functions adding/removing component
   /*!
    * @brief onAddedComponent() template function
@@ -480,12 +482,15 @@ namespace RTC_exp
                   getStateString(comp->getStates().next)));
     // Now comp's next state must be ACTIVE state
     // If worker thread is stopped, restart worker thread.
-    Guard guard(m_workerthread.mutex_);
-    if (m_workerthread.running_ == false)
-      {
-        m_workerthread.running_ = true;
-        m_workerthread.cond_.signal();
-      }
+    if (isRunning())
+    {
+        Guard guard(m_workerthread.mutex_);
+        if (m_workerthread.running_ == false)
+        {
+            m_workerthread.running_ = true;
+            m_workerthread.cond_.signal();
+        }
+    }
     return RTC::RTC_OK;
   }
 
@@ -506,12 +511,15 @@ namespace RTC_exp
 
     // Now comp's next state must be ACTIVE state
     // If worker thread is stopped, restart worker thread.
-    Guard guard(m_workerthread.mutex_);
-    if (m_workerthread.running_ == false)
-      {
-        m_workerthread.running_ = true;
-        m_workerthread.cond_.signal();
-      }
+    if (isRunning())
+    {
+        Guard guard(m_workerthread.mutex_);
+        if (m_workerthread.running_ == false)
+        {
+            m_workerthread.running_ = true;
+            m_workerthread.cond_.signal();
+        }
+    }
     return RTC::RTC_OK;
   }
 
@@ -606,7 +614,6 @@ namespace RTC_exp
   void PeriodicExecutionContext::setCpuAffinity(coil::Properties& props)
   {
     RTC_TRACE(("setCpuAffinity()"));
-    std::cout << props;
     std::string affinity;
     getProperty(props, "cpu_affinity", affinity);
     RTC_DEBUG(("CPU affinity property: %s", affinity.c_str()));

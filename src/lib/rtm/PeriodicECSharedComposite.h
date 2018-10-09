@@ -247,6 +247,7 @@ namespace SDOPackage
      * @endif
      */
     void removeOrganizationFromTarget(Member& member);
+    void addRTCToEC(RTC::RTObject_var rtobj);
 
     /*!
      * @if jp
@@ -553,6 +554,7 @@ namespace RTC
      * @endif
      */
     virtual ReturnCode_t onActivated(RTC::UniqueId exec_handle);
+    void activateChildComp(RTC::RTObject_var rtobj);
     /*!
      * @if jp
      *

@@ -320,28 +320,36 @@ namespace SDOPackage
       }
 
 
-    // set ec to target RTC
-    m_ec->add_component(member.rtobj_.in());
+    addRTCToEC(member.rtobj_.in());
 
-    OrganizationList_var orglist = member.rtobj_->get_organizations();
-    for (CORBA::ULong i(0); i < orglist->length(); ++i)
+
+  }
+
+  void PeriodicECOrganization::addRTCToEC(RTC::RTObject_var rtobj)
+  {
+      SDOPackage::OrganizationList_var orglist = rtobj->get_owned_organizations();
+      if (orglist->length() == 0)
       {
-        SDOList_var sdos = orglist[i]->get_members();
-        for (CORBA::ULong j(0); j < sdos->length(); ++j)
-          {
-#ifndef ORB_IS_RTORB
-            ::OpenRTM::DataFlowComponent_var dfc;
-            if (!sdoToDFC(sdos[j].in(), dfc.out())) { continue; }
-#else  // ORB_IS_RTORB
-            ::OpenRTM::DataFlowComponent_var dfc;
-            ::OpenRTM::DataFlowComponent_ptr dfc_ptr(dfc);
-            if (!sdoToDFC(sdos[j].in(), dfc_ptr)) { continue; }
-#endif  // ORB_IS_RTORB
-            m_ec->add_component(dfc.in());
-          }
+          // set ec to target RTC
+          m_ec->add_component(rtobj.in());
       }
 
-
+      for (CORBA::ULong i(0); i < orglist->length(); ++i)
+      {
+          SDOPackage::SDOList_var sdos = orglist[i]->get_members();
+          for (CORBA::ULong j(0); j < sdos->length(); ++j)
+          {
+#ifndef ORB_IS_RTORB
+              ::OpenRTM::DataFlowComponent_var dfc;
+              if (!sdoToDFC(sdos[j].in(), dfc.out())) { continue; }
+#else  // ORB_IS_RTORB
+              ::OpenRTM::DataFlowComponent_var dfc;
+              ::OpenRTM::DataFlowComponent_ptr dfc_ptr(dfc);
+              if (!sdoToDFC(sdos[j].in(), dfc_ptr)) { continue; }
+#endif  // ORB_IS_RTORB
+              addRTCToEC(dfc.in());
+          }
+      }
   }
 
   /*!
@@ -371,7 +379,7 @@ namespace SDOPackage
     OrganizationList_var orglist = member.rtobj_->get_organizations();
     for (CORBA::ULong i(0); i < orglist->length(); ++i)
       {
-        SDOList_var sdos = orglist[i]->get_members();
+        SDOPackage::SDOList_var sdos = orglist[i]->get_members();
         for (CORBA::ULong j(0); j < sdos->length(); ++j)
           {
 #ifndef ORB_IS_RTORB
@@ -622,6 +630,11 @@ namespace RTC
     m_configsets.setOnSetConfigurationSet(new setCallback(m_org));
     m_configsets.setOnAddConfigurationSet(new addCallback(m_org));
 
+    m_properties["exec_cxt.periodic.sync_transition"] = "NO";
+    m_properties["exec_cxt.periodic.sync_activation"] = "NO";
+    m_properties["exec_cxt.periodic.sync_deactivation"] = "NO";
+    m_properties["exec_cxt.periodic.sync_reset"] = "NO";
+
   }
 
 
@@ -668,6 +681,9 @@ namespace RTC
     ::SDOPackage::SDOList sdos;
     for (int i(0), len(m_members.size()); i < len; ++i)
       {
+          coil::replaceString(m_members[i], "|", "");
+          coil::eraseBothEndsBlank(m_members[i]);
+
         RTObject_impl* rtc = mgr.getComponent(m_members[i].c_str());
         if (rtc == NULL) {
           continue;
@@ -707,17 +723,37 @@ namespace RTC
   ReturnCode_t PeriodicECSharedComposite::onActivated(RTC::UniqueId exec_handle)
   {
     RTC_TRACE(("onActivated(%d)", exec_handle));
-    ::RTC::ExecutionContextList_var ecs(get_owned_contexts());
     ::SDOPackage::SDOList_var sdos(m_org->get_members());
 
     for (::CORBA::ULong i(0), len(sdos->length()); i < len; ++i)
       {
         ::RTC::RTObject_var rtc(::RTC::RTObject::_narrow(sdos[i]));
-        ecs[CORBA::ULong(0)]->activate_component(rtc.in());
+        activateChildComp(rtc.in());
       }
     RTC_DEBUG(("%d member RTC%s activated.", sdos->length(),
                sdos->length() == 1 ? " was" : "s were"));
     return ::RTC::RTC_OK;
+  }
+
+  void PeriodicECSharedComposite::activateChildComp(RTC::RTObject_var rtobj)
+  {
+      ::RTC::ExecutionContextList_var ecs(get_owned_contexts());
+      SDOPackage::OrganizationList_var orglist = rtobj->get_owned_organizations();
+
+      if (orglist->length() == 0)
+      {
+          ecs[CORBA::ULong(0)]->activate_component(rtobj.in());
+      }
+
+      for (CORBA::ULong i(0); i < orglist->length(); ++i)
+      {
+          SDOPackage::SDOList_var child_sdos = orglist[i]->get_members();
+          for (CORBA::ULong j(0); j < child_sdos->length(); ++j)
+          {
+              ::RTC::RTObject_var child(::RTC::RTObject::_narrow(child_sdos[i]));
+              activateChildComp(child.in());
+          }
+      }
   }
 
   /*!
