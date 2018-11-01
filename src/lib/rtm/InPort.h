@@ -231,6 +231,69 @@ namespace RTC
      *
      * @endif
      */
+    virtual bool isNew(std::string name)
+    {
+        RTC_TRACE(("isNew()"));
+
+        
+        {
+            Guard guard(m_connectorsMutex);
+            if (m_connectors.size() == 0)
+            {
+                RTC_DEBUG(("no connectors"));
+                return false;
+            }
+            for (ConnectorList::iterator itr = m_connectors.begin(); itr != m_connectors.end(); ++itr)
+            {
+                if (std::string((*itr)->name()) == name)
+                {
+                    int r = (*itr)->getBuffer()->readable();
+                    if (r > 0)
+                    {
+                        RTC_DEBUG(("isNew() = true, readable data: %d", r));
+                        return true;
+                    }
+                }
+            }
+        }
+
+        RTC_DEBUG(("isNew() = false, no readable data"));
+        return false;
+    }
+    virtual bool isNew(coil::vstring &names)
+    {
+        names.clear();
+        RTC_TRACE(("isNew()"));
+
+
+        
+        {
+            Guard guard(m_connectorsMutex);
+            if (m_connectors.size() == 0)
+            {
+                RTC_DEBUG(("no connectors"));
+                return false;
+            }
+            for (ConnectorList::iterator itr = m_connectors.begin(); itr != m_connectors.end(); ++itr)
+            {
+                int r = (*itr)->getBuffer()->readable();
+                if (r > 0)
+                {
+                    names.push_back((*itr)->name());
+                }
+            }
+            
+        }
+
+        if (!names.empty())
+        {
+            RTC_DEBUG(("isNew() = true, buffer is not empty"));
+            return true;
+        }
+
+        RTC_DEBUG(("isNew() = false, no readable data"));
+        return false;
+    }
     virtual bool isNew()
     {
       RTC_TRACE(("isNew()"));
@@ -290,6 +353,69 @@ namespace RTC
      *
      * @endif
      */
+    virtual bool isEmpty(std::string name)
+    {
+        RTC_TRACE(("isEmpty()"));
+
+
+        {
+            Guard guard(m_connectorsMutex);
+            if (m_connectors.size() == 0)
+            {
+                RTC_DEBUG(("no connectors"));
+                return false;
+            }
+            for (ConnectorList::iterator itr = m_connectors.begin(); itr != m_connectors.end(); ++itr)
+            {
+                if (std::string((*itr)->name()) == name)
+                {
+                    int r = (*itr)->getBuffer()->readable();
+                    if (r == 0)
+                    {
+                        RTC_DEBUG(("isEmpty() = true, buffer is empty"));
+                        return true;
+                    }
+                }
+            }
+        }
+
+        RTC_DEBUG(("isEmpty() = false, no readable data"));
+        return false;
+    }
+    virtual bool isEmpty(coil::vstring &names)
+    {
+        names.clear();
+        RTC_TRACE(("isEmpty()"));
+
+
+
+        {
+            Guard guard(m_connectorsMutex);
+            if (m_connectors.size() == 0)
+            {
+                RTC_DEBUG(("no connectors"));
+                return false;
+            }
+            for (ConnectorList::iterator itr = m_connectors.begin(); itr != m_connectors.end(); ++itr)
+            {
+                int r = (*itr)->getBuffer()->readable();
+                if (r == 0)
+                {
+                    names.push_back((*itr)->name());
+                }
+            }
+
+        }
+
+        if (!names.empty())
+        {
+            RTC_DEBUG(("isEmpty() = true, buffer is empty"));
+            return true;
+        }
+
+        RTC_DEBUG(("isEmpty() = false, no readable data"));
+        return false;
+    }
     virtual bool isEmpty()
     {
       RTC_TRACE(("isEmpty()"));
@@ -400,7 +526,7 @@ namespace RTC
      *
      * @endif
      */
-    bool read()
+    bool read(std::string name="")
     {
       RTC_TRACE(("DataType read()"));
 
@@ -439,14 +565,37 @@ namespace RTC
         
       }
 
-	  if (!m_connectors[0]->getDirectData(m_value))
+      InPortConnector* connector = NULL;
+
+      if (name.empty())
+      {
+          connector = m_connectors[0];
+      }
+      else
+      {
+          for (ConnectorList::iterator itr = m_connectors.begin(); itr != m_connectors.end(); ++itr)
+          {
+              if (std::string((*itr)->name()) == name)
+              {
+                  connector = (*itr);
+              }
+          }
+      }
+
+      if (!connector)
+      {
+          RTC_ERROR(("can not find %s",name.c_str()));
+          return false;
+      }
+
+      if (!connector->getDirectData(m_value))
 	  {
 		  {
 			  Guard guard(m_connectorsMutex);
 			  // In single-buffer mode, all connectors share the same buffer. This
 			  // means that we only need to read from the first connector to get data
 			  // received by any connector.
-			  ret = m_connectors[0]->read(cdr);
+              ret = connector->read(cdr);
 		  }
 		  m_status[0] = ret;
 		  if (ret == PORT_OK)
