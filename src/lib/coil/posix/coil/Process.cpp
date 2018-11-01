@@ -27,6 +27,8 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <coil/stringutil.h>
+#include <coil/File.h>
+
 
 namespace coil
 {
@@ -79,6 +81,27 @@ namespace coil
     return daemon(nochdir, noclose);
   }
 
+  int create_process(std::string command, std::vector<std::string> &out)
+  {
+    FILE* fd;
+    out.clear();
+    if ((fd = popen(command.c_str(), "r")) == NULL)
+      {
+        //std::cerr << "popen faild" << std::endl;
+        return -1;
+      }
+    do
+      {
+        char str[512];
+        fgets(str, 512, fd);
+        std::string line(str);
+        if (0 < line.size())
+          line.erase(line.size() - 1);
+        out.push_back(line);
+      } while (!feof(fd));
+
+    return 0;
+  }
 
 }; // namespace coil
 #endif // COIL_PROCESS_H
