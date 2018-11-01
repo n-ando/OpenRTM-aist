@@ -60,5 +60,27 @@ namespace coil
 
   int daemon(int nochdir, int noclose);
 
+  /*!
+  * @if jp
+  * @brief プロセスを起動して出力を取得する
+  *
+  *
+  *
+  * @param cmd 起動する実行ファイルのフルパス
+  * @param out 出力結果
+  * @return 0: 成功, -1: 失敗
+  *
+  * @else
+  * @brief Launching a process
+  *
+  *
+  * @param command full path string to a command to be executed.
+  * @param out
+  * @return 0: successful, -1: failed
+  *
+  * @endif
+  */
+  int create_process(std::string command, std::vector<std::string> &out);
+
 };  // namespace coil
 #endif  // COIL_PROCESS_H

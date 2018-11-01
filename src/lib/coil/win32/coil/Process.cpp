@@ -68,5 +68,81 @@ namespace coil
     // not implemented
     return 0;
   }
+
+
+  /*!
+  * @if jp
+  * @brief プロセスを起動して出力を取得する
+  *
+  * @else
+  *
+  * @endif
+  */
+  int create_process(std::string command, std::vector<std::string> &out)
+  {
+      HANDLE rPipe, wPipe;
+      SECURITY_ATTRIBUTES sa;
+      sa.nLength = sizeof(sa);
+      sa.bInheritHandle = TRUE;
+      sa.lpSecurityDescriptor = NULL;
+      if (!CreatePipe(&rPipe, &wPipe, &sa, 0))
+      {
+          return -1;
+      }
+
+
+      STARTUPINFO si = { 0 };
+      si.cb = sizeof(si);
+      si.dwFlags = STARTF_USESTDHANDLES;
+      si.hStdInput = stdin;
+      si.hStdOutput = wPipe;
+      si.hStdError = wPipe;
+
+
+#ifdef UNICODE
+      // std::string -> LPTSTR
+      std::wstring wcommand = string2wstring(command);
+      LPTSTR lpcommand = new TCHAR[wcommand.size() + 1];
+      _tcscpy(lpcommand, wcommand.c_str());
+#else
+      // std::string -> LPTSTR
+      LPTSTR lpcommand = new TCHAR[command.size() + 1];
+      _tcscpy(lpcommand, command.c_str());
+#endif // UNICODE
+
+      PROCESS_INFORMATION pi = { 0 };
+      if (!CreateProcess(NULL, lpcommand, NULL, NULL, TRUE, CREATE_NO_WINDOW, NULL, NULL, &si, &pi))
+      {
+          delete lpcommand;
+          return -1;
+      }
+
+
+      WaitForSingleObject(pi.hProcess, INFINITE);
+      CloseHandle(pi.hProcess);
+      CloseHandle(pi.hThread);
+
+
+      char Buf[1025] = { 0 };
+      DWORD len;
+      ReadFile(rPipe, Buf, sizeof(Buf) - 1, &len, NULL);
+
+
+      out = coil::split(std::string(Buf), "\n");
+
+      for (coil::vstring::iterator itr = out.begin(); itr != out.end(); ++itr)
+      {
+          std::string &tmp = (*itr);
+          if (0 < tmp.size())
+          {
+              tmp.erase(tmp.size() - 1);
+          }
+          coil::eraseBothEndsBlank(tmp);
+      }
+
+      delete lpcommand;
+      return 0;
+
+  }
 };  // namespace coil
 

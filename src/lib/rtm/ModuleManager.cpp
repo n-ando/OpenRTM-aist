@@ -567,33 +567,35 @@ namespace RTC
 
     for (size_t i(0), len(modules.size()); i < len; ++i)
       {
+          
         std::string cmd(lprop["profile_cmd"]);
         cmd += " \"" + modules[i] + "\"";
-        FILE* fd;
-        if ((fd = popen(cmd.c_str(), "r")) == NULL)
-          {
-            std::cerr << "popen faild" << std::endl;
-			m_loadfailmods.push_back(modules[i]);
+
+        coil::vstring out;
+        if (coil::create_process(cmd, out) == -1)
+        {
+            std::cerr << "create_process faild" << std::endl;
             continue;
-          }
+        }
         coil::Properties p;
-        do
-          {
-            char str[512];
-            fgets(str, 512, fd);
-            std::string line(str);
-            if (0 < line.size())
-              line.erase(line.size() - 1);
-            std::string::size_type pos(line.find(":"));
+        
+        for (coil::vstring::iterator itr = out.begin(); itr != out.end(); ++itr)
+        {
+            std::string tmp = (*itr);
+            std::string::size_type pos(tmp.find(":"));
             if (pos != std::string::npos)
-              {
-                std::string key(line.substr(0, pos));
+            {
+                std::string key(tmp.substr(0, pos));
                 coil::eraseBothEndsBlank(key);
-                p[key] = line.substr(pos + 1);
+                p[key] = tmp.substr(pos + 1);
                 coil::eraseBothEndsBlank(p[key]);
-              }
-          } while (!feof(fd));
-        pclose(fd);
+            }
+            
+        }
+
+        
+        
+
         RTC_DEBUG(("rtcprof cmd sub process done."));
         if (p["implementation_id"].empty()) { 
 			m_loadfailmods.push_back(modules[i]);
@@ -602,6 +604,7 @@ namespace RTC
         p["module_file_name"] = coil::basename(modules[i].c_str());
         p["module_file_path"] = modules[i].c_str();
         modprops.push_back(p);
+        
       }
 #endif
   }

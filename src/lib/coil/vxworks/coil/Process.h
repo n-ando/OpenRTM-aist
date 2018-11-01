@@ -57,5 +57,7 @@ namespace coil
 
   int daemon(int nochdir, int noclose);
 
+  int create_process(std::string command, std::vector<std::string> &out);
+
 }; // namespace coil
 #endif // COIL_PROCESS_H

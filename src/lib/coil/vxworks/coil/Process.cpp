@@ -48,6 +48,11 @@ namespace coil
     return -1;
   }
 
+  int create_process(std::string command, std::vector<std::string> &out)
+  {
+    return -1;
+  }
+
 
 }; // namespace coil
 #endif // COIL_PROCESS_H
