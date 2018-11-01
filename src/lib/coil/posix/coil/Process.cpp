@@ -20,6 +20,7 @@
 #ifndef COIL_PROCESS_H
 #define COIL_PROCESS_H
 
+#include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <libgen.h>
