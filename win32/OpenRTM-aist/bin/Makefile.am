@@ -41,4 +41,5 @@ dist-hook: clean-local copy_scripts wxs
 
 EXTRA_DIST = \
 	rtm-naming.bat \
+	kill-rtm-naming.bat \
 	rtc.conf

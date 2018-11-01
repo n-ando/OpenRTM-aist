@@ -20,7 +20,7 @@ rtm-naming: rtm-naming.in
 	cat rtm-naming.in >> $@
 	chmod 755 $@
 
-EXTRA_DIST = rtm-naming.in
+EXTRA_DIST = rtm-naming.in 
 
 clean-local:
 	rm -rf rtm-naming *~ *core

@@ -1,5 +1,7 @@
 @echo off
 
+call kill-rtm-naming.bat
+
 set cosnames="omninames"
 set orb="omniORB"
 set port=%1
