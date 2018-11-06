@@ -159,6 +159,7 @@ endif()
 include_directories(
 		${PROJECT_SOURCE_DIR}/common 
 		${PROJECT_SOURCE_DIR}/${COIL_OS_DIR}
+		${PROJECT_BINARY_DIR}/..
 		)
 #message(STATUS ${CMAKE_INCLUDE_DIRECTORIES_BEFORE})
 
