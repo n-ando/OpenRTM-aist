@@ -73,7 +73,7 @@ else()
 endif()
 
 
-set_source_files_properties(${${idl_name}_STUB} PROPERTIES GENERATED 1)
+set_source_files_properties(${${idl_name}_SKEL} PROPERTIES GENERATED 1)
 
 
 
