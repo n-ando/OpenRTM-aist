@@ -66,9 +66,14 @@ static const char* default_config[] =
     "naming.update.interval",                "10.0",
     "timer.enable",                          "YES",
     "timer.tick",                            "0.1",
+#ifdef ORB_IS_OMNIORB
     "corba.args",                            "-ORBclientCallTimeOutPeriod 10000",
+    "corba.endpoints", "all",
+#else
+    "corba.args",                            "",
+    "corba.endpoints", "",
+#endif
     "corba.endpoint",                        "",  // hostname:port_number
-    "corba.endpoints",                       "all",  
     "corba.id",                              corba_name,
     "corba.nameservers",                     "localhost",
     "corba.master_manager",                  "localhost:2810",

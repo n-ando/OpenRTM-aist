@@ -27,7 +27,7 @@ if(VXWORKS AND NOT RTP)
 	target_link_libraries(${target} ${libs})
 	add_dependencies(${target} ${RTM_PROJECT_NAME})
 
-	install(TARGETS ${target} RUNTIME DESTINATION examples)
+	install(TARGETS ${target} RUNTIME DESTINATION ${INSTALL_RTM_EXAMPLE_DIR})
 else()
 	if(VXWORKS)
 		set(libs ${RTM_PROJECT_NAME} ${ORB_LIBRARIES} ${COIL_PROJECT_NAME} ${RTCSKEL_PROJECT_NAME})
@@ -44,14 +44,16 @@ else()
 	add_dependencies(${target} ${RTM_PROJECT_NAME})
 	set_target_properties(${target} PROPERTIES PREFIX "")
 
-	install(TARGETS ${target}Comp RUNTIME DESTINATION examples)
+
+	install(TARGETS ${target}Comp RUNTIME DESTINATION ${INSTALL_RTM_EXAMPLE_DIR})
 	if(WIN32)
-		install(TARGETS ${target} RUNTIME DESTINATION examples)
+		install(TARGETS ${target} RUNTIME DESTINATION ${INSTALL_RTM_EXAMPLE_DIR})
 		file(GLOB script_files "scripts/*")
-		install(FILES  ${script_files} DESTINATION examples)
+		install(FILES  ${script_files} DESTINATION ${INSTALL_RTM_EXAMPLE_DIR})
 	else(WIN32)
-		install(TARGETS ${target} LIBRARY DESTINATION examples)
+		install(TARGETS ${target} LIBRARY DESTINATION ${INSTALL_RTM_EXAMPLE_DIR})
 	endif(WIN32)
+
 endif()
 
 

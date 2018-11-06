@@ -65,10 +65,10 @@ add_custom_target(ClassReference-en DEPENDS ClassReference-en/html/index.html)
 add_dependencies(${RTM_PROJECT_NAME} ClassReference-en)
 
 
-install(DIRECTORY IDLReference DESTINATION docs)
-install(DIRECTORY ClassReference DESTINATION docs)
-install(DIRECTORY IDLReference-en DESTINATION docs)
-install(DIRECTORY ClassReference-en DESTINATION docs)
+install(DIRECTORY IDLReference DESTINATION ${INSTALL_RTM_DOC_DIR})
+install(DIRECTORY ClassReference DESTINATION ${INSTALL_RTM_DOC_DIR})
+install(DIRECTORY IDLReference-en DESTINATION ${INSTALL_RTM_DOC_DIR})
+install(DIRECTORY ClassReference-en DESTINATION ${INSTALL_RTM_DOC_DIR})
  
 
 

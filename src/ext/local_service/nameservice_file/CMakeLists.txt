@@ -29,7 +29,7 @@ if(VXWORKS AND NOT RTP)
 	target_link_libraries(${target} ${libs})
 	add_dependencies(${target} ${RTM_PROJECT_NAME})
 
-	install(TARGETS ${target} RUNTIME DESTINATION ext/local_service/nameservice_file)
+	install(TARGETS ${target} RUNTIME DESTINATION ${INSTALL_RTM_EXT_DIR}/local_service/nameservice_file)
 else()
 	if(VXWORKS)
 		set(libs ${RTM_PROJECT_NAME} ${ORB_LIBRARIES} ${COIL_PROJECT_NAME} ${RTCSKEL_PROJECT_NAME})
@@ -45,9 +45,9 @@ else()
 
 
 	if(WIN32)
-		install(TARGETS ${target} RUNTIME DESTINATION ext/local_service/nameservice_file)
+		install(TARGETS ${target} RUNTIME DESTINATION ${INSTALL_RTM_BIN_DIR})
 	else(WIN32)
-		install(TARGETS ${target} LIBRARY DESTINATION ext/local_service/nameservice_file)
+		install(TARGETS ${target} LIBRARY DESTINATION ${INSTALL_RTM_EXT_DIR}/local_service/nameservice_file)
 	endif(WIN32)
 endif()
 

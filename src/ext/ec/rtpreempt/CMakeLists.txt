@@ -12,9 +12,7 @@ link_directories(${ORB_LINK_DIR})
 include_directories(
 		${RTM_INCLUDE_DIR}
 		${ORB_INCLUDE_DIR}
-		${CMAKE_CURRENT_SOURCE_DIR}
 		)
-
 
 ADD_DEFINITIONS(${ORB_C_FLAGS_LIST})
 
@@ -31,7 +29,7 @@ if(VXWORKS AND NOT RTP)
 	target_link_libraries(${target} ${libs})
 	add_dependencies(${target} ${RTM_PROJECT_NAME})
 
-	install(TARGETS ${target} RUNTIME DESTINATION ext/ec/rtpreempt)
+	install(TARGETS ${target} RUNTIME DESTINATION ${INSTALL_RTM_EXT_DIR}/ec/rtpreempt)
 else()
 	if(VXWORKS)
 		set(libs ${RTM_PROJECT_NAME} ${ORB_LIBRARIES} ${COIL_PROJECT_NAME} ${RTCSKEL_PROJECT_NAME})
@@ -47,9 +45,9 @@ else()
 
 
 	if(WIN32)
-		install(TARGETS ${target} RUNTIME DESTINATION ext/ec/rtpreempt)
+		install(TARGETS ${target} RUNTIME DESTINATION ${INSTALL_RTM_BIN_DIR})
 	else(WIN32)
-		install(TARGETS ${target} LIBRARY DESTINATION ext/ec/rtpreempt)
+		install(TARGETS ${target} LIBRARY DESTINATION ${INSTALL_RTM_EXT_DIR}/ec/rtpreempt)
 	endif(WIN32)
 endif()
 

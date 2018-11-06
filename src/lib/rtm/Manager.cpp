@@ -1694,7 +1694,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
           }
         else if (corba == "TAO")
           {
-            opt += "-ORBEndPoint iiop://" + endpoint;
+            opt += " -ORBEndPoint iiop://" + endpoint;
           }
         else if (corba == "MICO")
           {

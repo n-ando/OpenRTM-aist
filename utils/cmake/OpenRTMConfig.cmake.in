@@ -1,0 +1,70 @@
+# -*- cmake -*-
+#
+# OpenRTM-aist CMake configuration file.
+#
+# @file OpenRTMConfig.cmake
+#
+# This file is used for cmake config-mode.
+
+
+message(STATUS "OpenRTMConfig.cmake found.")
+message(STATUS "CMAKE_GENERATOR check mode.")
+
+
+
+if (${CMAKE_GENERATOR} STREQUAL "Visual Studio 9 2008")
+	set(RTM_VC_VER "vc9")
+endif()
+if (${CMAKE_GENERATOR} STREQUAL "Visual Studio 10 2010")
+	set(RTM_VC_VER "vc10")
+endif()
+if (${CMAKE_GENERATOR} STREQUAL "Visual Studio 10 2010 Win64")
+	set(RTM_VC_VER "vc10")
+endif()
+if (${CMAKE_GENERATOR} STREQUAL "Visual Studio 11 2012")
+	set(RTM_VC_VER "vc11")
+endif()
+if (${CMAKE_GENERATOR} STREQUAL "Visual Studio 11 2012 Win64")
+	set(RTM_VC_VER "vc11")
+endif()
+if (${CMAKE_GENERATOR} STREQUAL "Visual Studio 12 2013")
+	set(RTM_VC_VER "vc12")
+endif()
+if (${CMAKE_GENERATOR} STREQUAL "Visual Studio 12 2013 Win64")
+	set(RTM_VC_VER "vc12")
+endif()
+if (${CMAKE_GENERATOR} STREQUAL "Visual Studio 14 2015")
+	set(RTM_VC_VER "vc14")
+endif()
+if (${CMAKE_GENERATOR} STREQUAL "Visual Studio 14 2015 Win64")
+	set(RTM_VC_VER "vc14")
+endif()
+if (${CMAKE_GENERATOR} STREQUAL "Visual Studio 15 2017")
+	set(RTM_VC_VER "vc141")
+endif()
+if (${CMAKE_GENERATOR} STREQUAL "Visual Studio 15 2017 Win64")
+	set(RTM_VC_VER "vc141")
+endif()
+if (${CMAKE_GENERATOR} STREQUAL "Visual Studio 11 2012 ARM")
+	set(RTM_VC_VER "vc11")
+endif()
+if (${CMAKE_GENERATOR} STREQUAL "Visual Studio 12 2013 ARM")
+	set(RTM_VC_VER "vc12")
+endif()
+if (${CMAKE_GENERATOR} STREQUAL "Visual Studio 14 2015 ARM")
+	set(RTM_VC_VER "vc14")
+endif()
+if (${CMAKE_GENERATOR} STREQUAL "Visual Studio 15 2017 ARM")
+	set(RTM_VC_VER "vc141")
+endif()
+
+
+MESSAGE(STATUS "VC version is : ${CMAKE_GENERATOR}")
+
+
+get_filename_component(OpenRTM_CONFIG_PATH "${CMAKE_CURRENT_LIST_FILE}" PATH CACHE)
+set(OPENRTM_DIR "${OpenRTM_CONFIG_PATH}/../")
+
+include("${OPENRTM_DIR}/bin/${RTM_VC_VER}/OpenRTMConfig.cmake")
+
+# end of OpenRTMConfig.cmake

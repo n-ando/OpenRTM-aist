@@ -44,4 +44,4 @@ if(VXWORKS)
 endif(VXWORKS)
 
 
-install(TARGETS ${target} RUNTIME DESTINATION bin)
+install(TARGETS ${target} RUNTIME DESTINATION ${INSTALL_RTM_BIN_DIR})

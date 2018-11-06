@@ -159,35 +159,36 @@ endif()
 include_directories(
 		${PROJECT_SOURCE_DIR}/common 
 		${PROJECT_SOURCE_DIR}/${COIL_OS_DIR}
-		${PROJECT_BINARY_DIR}/..
 		)
 #message(STATUS ${CMAKE_INCLUDE_DIRECTORIES_BEFORE})
 
 if(VXWORKS)
 	add_library(${COIL_PROJECT_NAME} STATIC ${coil_srcs} )
-	install(TARGETS ${COIL_PROJECT_NAME} ARCHIVE DESTINATION lib)
+	install(TARGETS ${COIL_PROJECT_NAME} ARCHIVE DESTINATION ${INSTALL_RTM_LIB_DIR})
 else(VXWORKS)
 	add_library(${COIL_PROJECT_NAME} SHARED ${coil_srcs} )
 	set_target_properties(${COIL_PROJECT_NAME} PROPERTIES DEBUG_POSTFIX d)
 	target_link_libraries(${COIL_PROJECT_NAME} ${RTM_LINKER_OPTION})
 	if(UNIX)
-		install(TARGETS ${COIL_PROJECT_NAME} LIBRARY DESTINATION lib)
+		install(TARGETS ${COIL_PROJECT_NAME} LIBRARY DESTINATION ${INSTALL_RTM_LIB_DIR})
 	elseif(WIN32)
 		set_source_files_properties(${DEF_FILE_NAME} PROPERTIES GENERATED 1)
 		add_dependencies(${COIL_PROJECT_NAME} ${COIL_PROJECT_NAME}_TGT)
 		add_dependencies(${COIL_PROJECT_NAME} ${COIL_PROJECT_NAME}_static)
-		install(TARGETS ${COIL_PROJECT_NAME} RUNTIME DESTINATION bin)
+		install(TARGETS ${COIL_PROJECT_NAME} LIBRARY DESTINATION ${INSTALL_RTM_LIB_DIR}
+						 ARCHIVE DESTINATION ${INSTALL_RTM_LIB_DIR}
+						RUNTIME DESTINATION ${INSTALL_RTM_LIB_DIR})
 	endif()
 endif(VXWORKS)
-install(FILES  ${coil_headers} DESTINATION include/coil)
+install(FILES  ${coil_headers} DESTINATION ${INSTALL_RTM_INCLUDE_DIR}/coil)
 #add_executable(coil  ${coil_srcs} )
 
 
-install(FILES ${CMAKE_SOURCE_DIR}/build/makedeffile.py DESTINATION bin)
-install(FILES ${CMAKE_SOURCE_DIR}/build/setuptest.py DESTINATION bin)
-install(FILES ${CMAKE_SOURCE_DIR}/build/slntool.py DESTINATION bin)
-install(FILES ${CMAKE_SOURCE_DIR}/build/uuid.py DESTINATION bin)
-install(FILES ${CMAKE_SOURCE_DIR}/build/vcprojtool.py DESTINATION bin)
-install(FILES ${CMAKE_SOURCE_DIR}/build/vcxprojtool.py DESTINATION bin)
-install(FILES ${CMAKE_SOURCE_DIR}/build/yat.py DESTINATION bin)
+install(FILES ${CMAKE_SOURCE_DIR}/build/makedeffile.py DESTINATION ${INSTALL_RTM_SCRIPT_DIR})
+install(FILES ${CMAKE_SOURCE_DIR}/build/setuptest.py DESTINATION ${INSTALL_RTM_SCRIPT_DIR})
+install(FILES ${CMAKE_SOURCE_DIR}/build/slntool.py DESTINATION ${INSTALL_RTM_SCRIPT_DIR})
+install(FILES ${CMAKE_SOURCE_DIR}/build/uuid.py DESTINATION ${INSTALL_RTM_SCRIPT_DIR})
+install(FILES ${CMAKE_SOURCE_DIR}/build/vcprojtool.py DESTINATION ${INSTALL_RTM_SCRIPT_DIR})
+install(FILES ${CMAKE_SOURCE_DIR}/build/vcxprojtool.py DESTINATION ${INSTALL_RTM_SCRIPT_DIR})
+install(FILES ${CMAKE_SOURCE_DIR}/build/yat.py DESTINATION ${INSTALL_RTM_SCRIPT_DIR})
 

@@ -49,7 +49,7 @@ if(VXWORKS AND NOT RTP)
 	add_dependencies(${target} ${RTM_PROJECT_NAME})
 	add_dependencies(${target} ${idl_name}_TGT)
 
-	install(TARGETS ${target} RUNTIME DESTINATION ext/sdo/logger)
+	install(TARGETS ${target} RUNTIME DESTINATION ${INSTALL_RTM_EXT_DIR}/sdo/logger)
 else()
 	if(VXWORKS)
 		set(libs ${RTM_PROJECT_NAME} ${ORB_LIBRARIES} ${COIL_PROJECT_NAME} ${RTCSKEL_PROJECT_NAME})
@@ -66,9 +66,9 @@ else()
 
 
 	if(WIN32)
-		install(TARGETS ${target} RUNTIME DESTINATION ext/sdo/logger)
+		install(TARGETS ${target} RUNTIME DESTINATION ${INSTALL_RTM_BIN_DIR})
 	else(WIN32)
-		install(TARGETS ${target} LIBRARY DESTINATION ext/sdo/logger)
+		install(TARGETS ${target} LIBRARY DESTINATION ${INSTALL_RTM_EXT_DIR}/sdo/logger)
 	endif(WIN32)
 endif()
 

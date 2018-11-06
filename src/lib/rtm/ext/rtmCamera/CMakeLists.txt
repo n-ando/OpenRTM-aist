@@ -85,19 +85,47 @@ set_source_files_properties(${ALL_IDL_SRCS} PROPERTIES GENERATED 1)
 
 
 
+if(WIN32)
+	if(CMAKE_BUILD_TYPE MATCHES RELEASE)
+		set(DEF_FILE_NAME  ${target}.def)
+	else()
+		set(DEF_FILE_NAME  ${target}d.def)
+	endif()
+
+	add_library(${target}_static STATIC ${ALL_IDL_SRCS} )
+	add_dependencies(${target}_static ${RTCSKEL_PROJECT_NAME})
+	set_source_files_properties(${ALL_IDL_SRCS_RTM} PROPERTIES GENERATED 1)
+	get_property(rtm_static_location TARGET ${target}_static PROPERTY LOCATION)
+
+	add_custom_command(OUTPUT ${DEF_FILE_NAME}
+		COMMAND python ${MAKE_DEF_COMMAND} ${rtm_static_location} ${target} ${RTM_SHORT_VERSION} ${DEF_FILE_NAME}
+		
+		WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+	)
+	add_custom_target(${target}_TGT DEPENDS ${DEF_FILE_NAME})
+	add_dependencies(${target}_TGT ${target}_static)
+	set(ALL_IDL_SRCS ${ALL_IDL_SRCS} ${CMAKE_CURRENT_BINARY_DIR}/${DEF_FILE_NAME})
+endif(WIN32)
+
+
 
 
 if(VXWORKS)
 	add_library(${target} SHARED ${ALL_IDL_SRCS})
-	install(TARGETS ${RTM_PROJECT_NAME} ARCHIVE DESTINATION lib)
+	install(TARGETS ${RTM_PROJECT_NAME} ARCHIVE DESTINATION ${INSTALL_RTM_LIB_DIR})
 else(VXWORKS)
 	add_library(${target} SHARED ${ALL_IDL_SRCS})
 	set_target_properties(${target} PROPERTIES DEBUG_POSTFIX d)
 	target_link_libraries(${target} ${ORB_LIBRARIES} ${RTCSKEL_PROJECT_NAME})
 	if(UNIX)
-		install(TARGETS ${target} LIBRARY DESTINATION lib)
+		install(TARGETS ${target} LIBRARY DESTINATION ${INSTALL_RTM_LIB_DIR})
 	elseif(WIN32)
-		install(TARGETS ${target} RUNTIME DESTINATION bin)
+		set_source_files_properties(${DEF_FILE_NAME} PROPERTIES GENERATED 1)
+		add_dependencies(${target} ${target}_TGT)
+		add_dependencies(${target} ${target}_static)
+		install(TARGETS ${target} LIBRARY DESTINATION ${INSTALL_RTM_LIB_DIR}
+						ARCHIVE DESTINATION ${INSTALL_RTM_LIB_DIR}
+						RUNTIME DESTINATION ${INSTALL_RTM_LIB_DIR})
 	endif()
 endif(VXWORKS)
 
@@ -113,7 +141,21 @@ add_dependencies(${target} ALL_IDL_TGT)
 add_dependencies(${target} ${RTCSKEL_PROJECT_NAME})
 
 
-install(FILES ${ALL_IDL_FILES} ${ALL_IDL_HEADERS} DESTINATION include/rtm/idl)
- 
+install(FILES ${ALL_IDL_FILES} ${ALL_IDL_HEADERS} DESTINATION ${INSTALL_RTM_INCLUDE_DIR}/rtm/idl)
+
+foreach(idl ${idls})
+	if(CORBA STREQUAL "ORBexpress")
+		set(SKEL_STUB_HEADER_FILES ${SKEL_STUB_HEADER_FILES} ${PROJECT_BINARY_DIR}/${idl}.h ${PROJECT_BINARY_DIR}/${idl}_c.h)
+		set(SKEL_STUB_SOURCE_FILES ${SKEL_STUB_SOURCE_FILES} ${PROJECT_BINARY_DIR}/${idl}.cc ${PROJECT_BINARY_DIR}/${idl}_c.cc)
+	elseif(CORBA STREQUAL "omniORB")
+		set(SKEL_STUB_HEADER_FILES ${SKEL_STUB_HEADER_FILES} ${PROJECT_BINARY_DIR}/${idl}.hh)
+		set(SKEL_STUB_SOURCE_FILES ${SKEL_STUB_SOURCE_FILES} ${PROJECT_BINARY_DIR}/${idl}SK.cc ${PROJECT_BINARY_DIR}/${idl}DynSK.cc)
+	elseif(CORBA STREQUAL "TAO")
+		set(SKEL_STUB_HEADER_FILES ${SKEL_STUB_HEADER_FILES} ${PROJECT_BINARY_DIR}/${idl}S.h ${PROJECT_BINARY_DIR}/${idl}C.h ${PROJECT_BINARY_DIR}/${idl}C.inl)
+		set(SKEL_STUB_SOURCE_FILES ${SKEL_STUB_SOURCE_FILES} ${PROJECT_BINARY_DIR}/${idl}S.cpp ${PROJECT_BINARY_DIR}/${idl}C.cpp)
+	endif()
+endforeach(idl)
+
+install(FILES ${SKEL_STUB_HEADER_FILES} DESTINATION ${INSTALL_RTM_INCLUDE_DIR}/rtm/idl)
 
 

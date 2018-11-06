@@ -45,7 +45,7 @@ set_target_properties(${target} PROPERTIES PREFIX "")
 
 
 if(WIN32)
-	install(TARGETS ${target} RUNTIME DESTINATION ext/ssl)
+	install(TARGETS ${target} RUNTIME DESTINATION ${INSTALL_RTM_BIN_DIR})
 else(WIN32)
-	install(TARGETS ${target} LIBRARY DESTINATION ext/ssl)
+	install(TARGETS ${target} LIBRARY DESTINATION ${INSTALL_RTM_EXT_DIR}/ssl)
 endif(WIN32)
