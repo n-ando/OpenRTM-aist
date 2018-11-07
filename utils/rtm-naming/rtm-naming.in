@@ -196,11 +196,72 @@ delete_omninames_files()
         echo $PASSWORD | sudo -S rm -f ./omninames-$hostname.log
         echo $PASSWORD | sudo -S rm -f ./omninames-$hostname.bak
         echo $PASSWORD | sudo -S rm -f ./omninames-$hostname.dat
-        echo $PASSWORD | sudo -S rm -f /var/lib/omniorb/omninames-$hostname.log
-        echo $PASSWORD | sudo -S rm -f /var/lib/omniorb/omninames-$hostname.bak
-        echo $PASSWORD | sudo -S rm -f /var/lib/omniorb/omninames-$hostname.dat
     fi
     debug "omninames-$hostname files deleted."
+}
+
+#
+# specified_port_used_check
+#
+# Find a process which is using specified port.
+#
+specified_port_used_check()
+{
+    get_pid_of_nsport $PORT
+    if test $? -eq 0; then
+        debug "The Process information using the port could be obtained."
+        # If "port" is used by other program -> abort
+
+        pids=`pgrep $pname`
+        matchflag=0
+        for p in $pids; do
+            if test "x$pid_of_nsport" = "x$p"; then
+                matchflag=1
+            fi
+        done
+        if test $matchflag -eq 0; then
+            echo "$pname_of_nsport (not $pname) is using the port."
+            echo "Starting $pname aborted. Please use the other port."
+            exit 1
+        fi
+    else
+        debug "The process information using the port could not be obtained."
+        pname_of_nsport=$pname
+        pid_of_nsport=`pgrep $pname`
+    fi
+}
+
+#
+# stop omninames by init script
+#
+# Process is started from the init script, it tries to stop it
+# by the script.
+#
+stop_omninames_by_init_script()
+{
+    echo "omniNames might be started $init_script."
+
+    if test "x$FORCEKILL" = "x" && test "x$STOPNAMESERVICE" = "x" ; then
+        echo "Stop it (password for sudo is required.)"
+        read -p "and start omniNames by rtm-naming? (y/N)" startns
+        if test "x$startns" != "xy" -a "x$startns" != "xY" ; then
+            echo "Aborted."
+            exit 1
+        fi
+    fi
+    echo "Stopping omniNames by $init_script."
+    if test "x$PASSWORD" = "x" ; then
+       sudo $init_script stop
+       sudo rm -f /var/run/$pname.pid
+    else
+        echo $PASSWORD | sudo -S $init_script stop
+        echo $PASSWORD | sudo -S rm -f /var/run/$pname.pid
+    fi
+    debug "$init_script stop"
+    debug "/var/run/$pname.pid  are deleted"
+    delete_omninames_files
+    return 0
+
 }
 
 #
@@ -222,30 +283,11 @@ delete_omninames_files()
 stop_existing_ns()
 {
     debug "---stop_existing_ns"
-    get_pid_of_nsport $PORT
-    if test $? -eq 0; then
-	debug "The Process information using the port could be obtained."
-        # If "port" is used by other program -> abort
 
-	pids=`pgrep $pname`
-	matchflag=0
-	for p in $pids; do
-	    if test "x$pid_of_nsport" = "x$p"; then
-		matchflag=1
-	    fi
-	done
-	if test $matchflag -eq 0; then
-	    echo "$pname_of_nsport (not $pname) is using the port."
-	    echo "Starting $pname aborted. Please use the other port."
-	    exit 1
-	fi
-    else
-	debug "The process information using the port could not be obtained."
-	pname_of_nsport=$pname
-	pid_of_nsport=`pgrep $pname`
-    fi
+    # Find a process which is using specified port.
+    specified_port_used_check
 
-
+    # Started form /etc/init.d/ script?
     is_started_from_init $pname_of_nsport $pid_of_nsport
 
     # omniNames is not started by init script
@@ -267,15 +309,12 @@ stop_existing_ns()
                 fi
 	        fi
             if test "x$PASSWORD" = "x" ; then
-                sudo pkill -f $pname
-                sudo rm -f /var/run/$pname.pid 
+                sudo kill -9 $pid_of_nsport
             else
-                echo $PASSWORD | sudo -S pkill -f $pname
-                echo $PASSWORD | sudo -S rm -f /var/run/$pname.pid
+                echo $PASSWORD | sudo -S kill -9 $pid_of_nsport
             fi
             echo "$pname (pid: $pid_of_nsport) are killed"
             debug "$pname (pid: $pid_of_nsport) are killed"
-            debug "/var/run/$pname.pid  are deleted"
             delete_omninames_files
             return 0
         fi
@@ -284,52 +323,8 @@ stop_existing_ns()
         exit 1
     fi
     # omniNames is started by init script
-    echo "omniNames might be started $init_script."
-
-    if test "x$FORCEKILL" = "x" && test "x$STOPNAMESERVICE" = "x" ; then
-        echo "Stop it (password for sudo is required.)"
-        read -p "and start omniNames by rtm-naming? (y/N)" startns
-        if test "x$startns" != "xy" -a "x$startns" != "xY" ; then
-            echo "Aborted."
-            exit 1
-        fi
-    fi
-    echo "Stopping omniNames by $init_script."
-    if test "x$PASSWORD" = "x" ; then
-       sudo $init_script stop
-       sudo rm -f /var/run/$pname.pid 
-    else
-        echo $PASSWORD | sudo -S $init_script stop
-        echo $PASSWORD | sudo -S rm -f /var/run/$pname.pid
-    fi
-    debug "$init_script stop"
-    debug "/var/run/$pname.pid  are deleted"
-    delete_omninames_files
+    stop_omninames_by_init_script
     return 0
-}
-
-fedora_omninames()
-{
-    _param=$1
-    if test "x$PASSWORD" = "x" ; then
-        sudo service $pname $_param 
-    else
-        echo $PASSWORD | sudo -S service $pname $_param 
-    fi
-    debug "OMNI Naming services $_param: $pname"
-    sleep 1
-    pids=`pgrep $pname`
-    if test "x$pids" != "x" ; then
-        debug "omniNames process ID:" $pids
-        omnip=`ps $pids | wc -l`
-        if test $omnip -gt 1; then
-            echo "omniNames properly started"
-            exit 0
-        fi
-    else
-        debug "omniNames was not properly started."
-    fi
-    return 0 
 }
 
 #------------------------------------------------------------
@@ -345,26 +340,21 @@ start_omninames()
 {
     debug "---start_omninames"
     echo 'Starting omniORB omniNames: '$hostname':'$PORT
-    init_script=`grep $orb /etc/init.d/* | awk 'BEGIN{FS=":";}{if(FNR==1){print $1;}}'`
+    delete_omninames_files
     if test "x$PASSWORD" = "x" ; then
-        sudo $init_script start
+        $cosnames -start $PORT -logdir $currdir &
     else
-        echo $PASSWORD | sudo -S $init_script start
+        echo $PASSWORD | sudo -S $cosnames -start $PORT -logdir $currdir &
     fi
-    debug "$init_script start"
-    pids=`pgrep $pname`
+    ret=$!
     sleep 1
-    if test "x$pids" != "x" ; then
-        debug "omniNames process ID:" $pids
-        omnip=`ps $pids | wc -l`
-        if test $omnip -gt 1; then
-            echo "omniNames properly started"
-            exit 0
-        fi
-    else
-        debug "omniNames was not properly started."
+    debug "return code of omniNames:" $ret
+    omnip=`ps $! | wc -l`
+    if test $omnip -gt 1; then
+        echo "omniNames properly started"
+        exit 0
     fi
-    return 0
+    return 1 
 }
 
 omniname()
@@ -372,14 +362,7 @@ omniname()
     # Check cosname variable is properly set
     check_cosname
 
-    # Starting omniNames (Fedora)
-    if test "x$STOPNAMESERVICE" = "x" && test -f /etc/fedora-release ; then
-      fedora_omninames start
-      fedora_omninames restart
-      return 0
-    fi
-
-    # Starting omniNames (Debian)
+    # Starting omniNames 
     if test "x$STOPNAMESERVICE" = "x" ; then
       start_omninames
       echo "omniNames was not properly started."
