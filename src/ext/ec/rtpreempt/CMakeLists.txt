@@ -12,6 +12,7 @@ link_directories(${ORB_LINK_DIR})
 include_directories(
 		${RTM_INCLUDE_DIR}
 		${ORB_INCLUDE_DIR}
+		${CMAKE_CURRENT_SOURCE_DIR}
 		)
 
 ADD_DEFINITIONS(${ORB_C_FLAGS_LIST})
