@@ -185,7 +185,7 @@ else(VXWORKS)
 						RUNTIME DESTINATION ${INSTALL_RTM_LIB_DIR})
 	endif()
 endif(VXWORKS)
-install(FILES  ${coil_headers} DESTINATION ${INSTALL_RTM_INCLUDE_DIR}/coil)
+install(FILES  ${coil_headers} DESTINATION ${INSTALL_COIL_INCLUDE_DIR}/coil)
 #add_executable(coil  ${coil_srcs} )
 
 
@@ -196,4 +196,6 @@ install(FILES ${CMAKE_SOURCE_DIR}/build/uuid.py DESTINATION ${INSTALL_RTM_SCRIPT
 install(FILES ${CMAKE_SOURCE_DIR}/build/vcprojtool.py DESTINATION ${INSTALL_RTM_SCRIPT_DIR})
 install(FILES ${CMAKE_SOURCE_DIR}/build/vcxprojtool.py DESTINATION ${INSTALL_RTM_SCRIPT_DIR})
 install(FILES ${CMAKE_SOURCE_DIR}/build/yat.py DESTINATION ${INSTALL_RTM_SCRIPT_DIR})
+
+add_subdirectory(utils)
 

@@ -5,7 +5,7 @@ add_subdirectory(rtcd)
 add_subdirectory(rtcprof)
 add_subdirectory(cmake)
 add_subdirectory(rtm-skelwrapper)
-
+add_subdirectory(rtc-template)
 
 
 if(VXWORKS)
@@ -17,6 +17,7 @@ endif(VXWORKS)
 
 if(UNIX)
 	add_subdirectory(rtm-naming)
+	add_subdirectory(rtm-config)
 endif(UNIX)
 
 if(CORBA MATCHES "ORBexpress")

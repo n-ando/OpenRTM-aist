@@ -133,3 +133,6 @@ if(WIN32)
 	#set(SKEL_IDL_DIR ${PROJECT_BINARY_DIR} PARENT_SCOPE)
 else(WIN32)
 endif(WIN32)
+
+
+add_subdirectory(device_interfaces)

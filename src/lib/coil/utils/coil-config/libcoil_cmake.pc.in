@@ -1,0 +1,18 @@
+prefix=@CMAKE_INSTALL_PREFIX@
+exec_prefix=${prefix}
+libdir=${prefix}/@INSTALL_COIL_DIR@
+includedir=${prefix}/@INSTALL_RTM_LIB_DIR@
+coil_prefix=@prefix@
+coil_exec_prefix=@exec_prefix@
+coil_cxx=@CMAKE_CXX_COMPILER@
+coil_cflags= @CXXFLAGS@ -I${prefix}/@INSTALL_COIL_DIR@
+coil_libs=@RTM_LINKER_OPTION@ -L${prefix}/lib @LIBS@
+coil_libdir=@INSTALL_COIL_DIR@
+coil_version=@COIL_VERSION@
+
+Name: @PACKAGE@
+Description: @COIL_DESCRIPTION@
+Version: @COIL_VERSION@
+Requires:
+Libs: ${COIL_LIBS}
+Cflags: ${COIL_CFLAGS}

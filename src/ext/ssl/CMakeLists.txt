@@ -16,7 +16,12 @@ endif()
 
 set(SSL_INCLUDE_DIR ${OPENSSL_ROOT}/include)
 set(SSL_LINK_DIR ${OPENSSL_ROOT}/lib)
-set(SSL_LIBRARIES libssl libcrypto)
+
+if(WIN32)
+	set(SSL_LIBRARIES libssl libcrypto)
+else(WIN32)
+	set(SSL_LIBRARIES ssl crypto)
+endif(WIN32)
 
 
 link_directories(${ORB_LINK_DIR} ${SSL_LINK_DIR})

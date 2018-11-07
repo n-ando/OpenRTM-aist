@@ -49,7 +49,9 @@ if(VXWORKS AND NOT RTP)
 	add_dependencies(${target} ${RTM_PROJECT_NAME})
 	add_dependencies(${target} ${idl_name}_RTC_TGT)
 
-	install(TARGETS ${target} RUNTIME DESTINATION ${INSTALL_RTM_EXT_DIR}/sdo/fsm4rtc_observer)
+	install(TARGETS ${target} LIBRARY DESTINATION ${INSTALL_RTM_EXT_DIR}/sdo
+				ARCHIVE DESTINATION ${INSTALL_RTM_EXT_DIR}/sdo
+				RUNTIME DESTINATION ${INSTALL_RTM_EXT_DIR}/sdo)
 else()
 	if(VXWORKS)
 		set(libs ${RTM_PROJECT_NAME} ${ORB_LIBRARIES} ${COIL_PROJECT_NAME} ${RTCSKEL_PROJECT_NAME})
@@ -65,11 +67,9 @@ else()
 	set_target_properties(${target} PROPERTIES PREFIX "")
 
 
-	if(WIN32)
-		install(TARGETS ${target} RUNTIME DESTINATION ${INSTALL_RTM_BIN_DIR})
-	else(WIN32)
-		install(TARGETS ${target} LIBRARY DESTINATION ${INSTALL_RTM_EXT_DIR}/sdo/fsm4rtc_observer)
-	endif(WIN32)
+	install(TARGETS ${target} LIBRARY DESTINATION ${INSTALL_RTM_EXT_DIR}/sdo
+				ARCHIVE DESTINATION ${INSTALL_RTM_EXT_DIR}/sdo
+				RUNTIME DESTINATION ${INSTALL_RTM_EXT_DIR}/sdo)
 endif()
 
 

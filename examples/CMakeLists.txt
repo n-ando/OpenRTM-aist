@@ -11,3 +11,5 @@ add_subdirectory(Analyzer)
 add_subdirectory(Throughput)
 
 add_subdirectory(StaticFsm)
+
+add_subdirectory(Templates)

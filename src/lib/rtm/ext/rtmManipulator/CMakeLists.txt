@@ -1,7 +1,13 @@
 cmake_minimum_required (VERSION 2.6)
 
 
-set(target rtmManipulator${RTM_SHORT_VERSION}_${RTM_VC_VER})
+
+
+if(WIN32)
+	set(target rtmManipulator${RTM_SHORT_VERSION}_${RTM_VC_VER})
+else(WIN32)
+	set(target rtmManipulator)
+endif(WIN32)
 
 project (${target})
 
@@ -154,7 +160,7 @@ add_dependencies(${target} ${RTCSKEL_PROJECT_NAME})
 
 
 
-install(FILES ${ALL_IDL_FILES} ${ALL_IDL_HEADERS} DESTINATION ${OPENRTM_VERSION}/rtm/idl)
+install(FILES ${ALL_IDL_FILES} ${ALL_IDL_HEADERS} DESTINATION ${INSTALL_RTM_INCLUDE_DIR}/rtm/ext)
  
 
 
@@ -171,4 +177,4 @@ foreach(idl ${idls})
 	endif()
 endforeach(idl)
 
-install(FILES ${SKEL_STUB_HEADER_FILES} DESTINATION ${INSTALL_RTM_INCLUDE_DIR}/rtm/idl)
+install(FILES ${SKEL_STUB_HEADER_FILES} DESTINATION ${INSTALL_RTM_INCLUDE_DIR}/rtm/ext)
