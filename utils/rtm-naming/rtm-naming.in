@@ -102,11 +102,8 @@ get_pid_of_nsport()
     fi
     debug "A possible process that is using $_port port:" $_netstat
     if test "x$_netstat" = "x"; then
+        echo "No process using port number ${_port} on the system."
         debug "No process using port number ${_port} on the system."
-        return 1
-    fi
-    if test "x$_netstat" = "x"; then
-        debug "Process information could not be identified."
         return 1
     fi
 
@@ -226,8 +223,7 @@ specified_port_used_check()
         fi
     else
         debug "The process information using the port could not be obtained."
-        pname_of_nsport=$pname
-        pid_of_nsport=`pgrep $pname`
+        exit 1
     fi
 }
 
