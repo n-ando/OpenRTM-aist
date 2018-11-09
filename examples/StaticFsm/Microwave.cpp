@@ -34,6 +34,9 @@ Microwave::Microwave(RTC::Manager* manager)
     m_eventIn("event", m_fsm)
     // </rtc-template>
 {
+#ifdef ORB_IS_TAO
+  ::CORBA_Util::toRepositoryIdOfStruct<TimedLong>();
+#endif
   // Registration: InPort/OutPort/Service
   // <rtc-template block="registration">
   // Set InPort buffers
