@@ -31,7 +31,8 @@ if(VXWORKS AND NOT RTP)
 
 	install(TARGETS ${target} LIBRARY DESTINATION ${INSTALL_RTM_EXT_DIR}/local_service
 				ARCHIVE DESTINATION ${INSTALL_RTM_EXT_DIR}/local_service
-				RUNTIME DESTINATION ${INSTALL_RTM_EXT_DIR}/local_service)
+				RUNTIME DESTINATION ${INSTALL_RTM_EXT_DIR}/local_service
+				COMPONENT ext)
 
 
 else()
@@ -50,7 +51,8 @@ else()
 
 	install(TARGETS ${target} LIBRARY DESTINATION ${INSTALL_RTM_EXT_DIR}/local_service
 				ARCHIVE DESTINATION ${INSTALL_RTM_EXT_DIR}/local_service
-				RUNTIME DESTINATION ${INSTALL_RTM_EXT_DIR}/local_service)
+				RUNTIME DESTINATION ${INSTALL_RTM_EXT_DIR}/local_service
+				COMPONENT ext)
 endif()
 
 

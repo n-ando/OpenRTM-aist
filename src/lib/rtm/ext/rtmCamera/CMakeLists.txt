@@ -117,7 +117,8 @@ if(VXWORKS)
 	add_library(${target} SHARED ${ALL_IDL_SRCS})
 	install(TARGETS ${RTM_PROJECT_NAME} LIBRARY DESTINATION ${INSTALL_RTM_LIB_DIR}
 						ARCHIVE DESTINATION ${INSTALL_RTM_BIN_DIR}
-						RUNTIME DESTINATION ${INSTALL_RTM_BIN_DIR})
+						RUNTIME DESTINATION ${INSTALL_RTM_BIN_DIR}
+						COMPONENT ext)
 else(VXWORKS)
 	add_library(${target} SHARED ${ALL_IDL_SRCS})
 	set_target_properties(${target} PROPERTIES DEBUG_POSTFIX d)
@@ -125,14 +126,16 @@ else(VXWORKS)
 	if(UNIX)
 		install(TARGETS ${target} LIBRARY DESTINATION ${INSTALL_RTM_LIB_DIR}
 						ARCHIVE DESTINATION ${INSTALL_RTM_LIB_DIR}
-						RUNTIME DESTINATION ${INSTALL_RTM_BIN_DIR})
+						RUNTIME DESTINATION ${INSTALL_RTM_BIN_DIR}
+						COMPONENT ext)
 	elseif(WIN32)
 		set_source_files_properties(${DEF_FILE_NAME} PROPERTIES GENERATED 1)
 		add_dependencies(${target} ${target}_TGT)
 		add_dependencies(${target} ${target}_static)
 		install(TARGETS ${target} LIBRARY DESTINATION ${INSTALL_RTM_LIB_DIR}
 						ARCHIVE DESTINATION ${INSTALL_RTM_LIB_DIR}
-						RUNTIME DESTINATION ${INSTALL_RTM_LIB_DIR})
+						RUNTIME DESTINATION ${INSTALL_RTM_LIB_DIR}
+						COMPONENT ext)
 	endif()
 endif(VXWORKS)
 
@@ -148,7 +151,7 @@ add_dependencies(${target} ALL_IDL_TGT)
 add_dependencies(${target} ${RTCSKEL_PROJECT_NAME})
 
 
-install(FILES ${ALL_IDL_FILES} ${ALL_IDL_HEADERS} DESTINATION ${INSTALL_RTM_INCLUDE_DIR}/rtm/ext)
+install(FILES ${ALL_IDL_FILES} ${ALL_IDL_HEADERS} DESTINATION ${INSTALL_RTM_INCLUDE_DIR}/rtm/ext COMPONENT ext)
 
 foreach(idl ${idls})
 	if(CORBA STREQUAL "ORBexpress")
@@ -163,6 +166,6 @@ foreach(idl ${idls})
 	endif()
 endforeach(idl)
 
-install(FILES ${SKEL_STUB_HEADER_FILES} DESTINATION ${INSTALL_RTM_INCLUDE_DIR}/rtm/ext)
+install(FILES ${SKEL_STUB_HEADER_FILES} DESTINATION ${INSTALL_RTM_INCLUDE_DIR}/rtm/ext COMPONENT ext)
 
 

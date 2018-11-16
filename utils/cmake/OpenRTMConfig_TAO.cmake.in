@@ -93,7 +93,7 @@ set(OPENRTM_ORB TAO)
 set(OPENRTM_IDL_WRAPPER rtm-skelwrapper.py)
 set(OPENRTM_IDL_WRAPPER_FLAGS --include-dir="";--skel-suffix=Skel;--stub-suffix=Stub)
 set(OPENRTM_IDLC tao_idl)
-set(OPENRTM_IDLFLAGS -as -DTAO_IDL -I${TAO_DIR}/TAO -I${OPENRTM_DIR}/rtm/idl)
+set(OPENRTM_IDLFLAGS -as -DTAO_IDL -I${OMNIORB_DIR}/TAO -I${OPENRTM_DIR}/rtm/idl)
 
 
 message(STATUS "OpenRTM-aist configuration done")

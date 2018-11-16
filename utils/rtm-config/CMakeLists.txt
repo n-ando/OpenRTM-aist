@@ -23,8 +23,8 @@ set(LIBS ${LIBS} -l${RTM_PROJECT_NAME} -l${COIL_PROJECT_NAME} -lrtmCamera -lrtmM
 
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/rtm-config.in ${PROJECT_BINARY_DIR}/rtm-config @ONLY)
-install(FILES ${PROJECT_BINARY_DIR}/rtm-config DESTINATION ${INSTALL_RTM_BIN_DIR})
+install(FILES ${PROJECT_BINARY_DIR}/rtm-config DESTINATION ${INSTALL_RTM_BIN_DIR} COMPONENT utils)
 
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/openrtm-aist_cmake.pc.in ${PROJECT_BINARY_DIR}/openrtm-aist.pc @ONLY)
-install(FILES ${PROJECT_BINARY_DIR}/openrtm-aist.pc DESTINATION ${INSTALL_RTM_LIB_DIR}/pkgconfig)
+install(FILES ${PROJECT_BINARY_DIR}/openrtm-aist.pc DESTINATION ${INSTALL_RTM_LIB_DIR}/pkgconfig COMPONENT utils)

@@ -398,7 +398,7 @@ if(OBSERVER_ENABLE)
 	include_directories(${CMAKE_SOURCE_DIR}/src)
 	#set(rtm_headers ${rtm_headers} ${CMAKE_SOURCE_DIR}/src/ext/sdo/observer/ComponentObserverConsumer.h)
 	set(rtm_srcs ${rtm_srcs} ${CMAKE_SOURCE_DIR}/src/ext/sdo/observer/ComponentObserverConsumer.cpp	)
-	install(FILES ${CMAKE_SOURCE_DIR}/src/ext/sdo/observer/ComponentObserverConsumer.h DESTINATION ${INSTALL_RTM_EXT_DIR}/sdo/observer)
+	install(FILES ${CMAKE_SOURCE_DIR}/src/ext/sdo/observer/ComponentObserverConsumer.h DESTINATION ${INSTALL_RTM_EXT_DIR}/sdo/observer COMPONENT headers)
 endif(OBSERVER_ENABLE)
 
 
@@ -468,7 +468,8 @@ if(VXWORKS)
 	add_library(${RTM_PROJECT_NAME} STATIC ${rtm_srcs})
 	install(TARGETS ${RTM_PROJECT_NAME} LIBRARY DESTINATION ${INSTALL_RTM_LIB_DIR}
 					ARCHIVE DESTINATION ${INSTALL_RTM_BIN_DIR}
-					RUNTIME DESTINATION ${INSTALL_RTM_BIN_DIR})
+					RUNTIME DESTINATION ${INSTALL_RTM_BIN_DIR}
+					COMPONENT openrtm)
 
 else(VXWORKS)
 	
@@ -484,7 +485,8 @@ else(VXWORKS)
 		target_link_libraries(${RTM_PROJECT_NAME} ${ORB_LIBRARIES} ${COIL_PROJECT_NAME} ${RTCSKEL_PROJECT_NAME} ${RTM_LINKER_OPTION})
 		install(TARGETS ${RTM_PROJECT_NAME} LIBRARY DESTINATION ${INSTALL_RTM_LIB_DIR}
 						ARCHIVE DESTINATION ${INSTALL_RTM_LIB_DIR}
-						RUNTIME DESTINATION ${INSTALL_RTM_BIN_DIR})
+						RUNTIME DESTINATION ${INSTALL_RTM_BIN_DIR}
+						COMPONENT openrtm)
 	elseif(WIN32)
 		target_link_libraries(${RTM_PROJECT_NAME} ${ORB_LIBRARIES} ${COIL_PROJECT_NAME} ${RTM_LINKER_OPTION})
 		add_dependencies(${RTM_PROJECT_NAME} ALL_IDL_TGT)
@@ -493,12 +495,13 @@ else(VXWORKS)
 		add_dependencies(${RTM_PROJECT_NAME} ${RTM_PROJECT_NAME}_static)
 		install(TARGETS ${RTM_PROJECT_NAME} LIBRARY DESTINATION ${INSTALL_RTM_LIB_DIR}
 						ARCHIVE DESTINATION ${INSTALL_RTM_LIB_DIR}
-						RUNTIME DESTINATION ${INSTALL_RTM_LIB_DIR})
+						RUNTIME DESTINATION ${INSTALL_RTM_LIB_DIR}
+						COMPONENT openrtm)
 
 	endif()
 endif(VXWORKS)
 
-install(FILES  ${rtm_headers} DESTINATION ${INSTALL_RTM_INCLUDE_DIR}/rtm)
+install(FILES  ${rtm_headers} DESTINATION ${INSTALL_RTM_INCLUDE_DIR}/rtm COMPONENT headers)
 
 
 
