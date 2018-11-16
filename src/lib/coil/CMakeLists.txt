@@ -128,11 +128,7 @@ set(coil_srcs
 
 
 if(WIN32)
-	if(CMAKE_BUILD_TYPE MATCHES RELEASE)
-		set(DEF_FILE_NAME  ${COIL_PROJECT_NAME}.def)
-	else()
-		set(DEF_FILE_NAME  ${COIL_PROJECT_NAME}d.def)
-	endif()
+	set(DEF_FILE_NAME  ${COIL_PROJECT_NAME}.def)
 	add_library(${COIL_PROJECT_NAME}_static STATIC ${coil_srcs})
 	get_property(coil_static_location TARGET ${COIL_PROJECT_NAME}_static PROPERTY LOCATION)
 	add_custom_command(OUTPUT ${DEF_FILE_NAME}

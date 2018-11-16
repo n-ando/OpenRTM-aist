@@ -92,11 +92,7 @@ set_source_files_properties(${ALL_IDL_SRCS} PROPERTIES GENERATED 1)
 
 
 if(WIN32)
-	if(CMAKE_BUILD_TYPE MATCHES RELEASE)
-		set(DEF_FILE_NAME  ${target}.def)
-	else()
-		set(DEF_FILE_NAME  ${target}d.def)
-	endif()
+	set(DEF_FILE_NAME  ${target}.def)
 
 	add_library(${target}_static STATIC ${ALL_IDL_SRCS} )
 	add_dependencies(${target}_static ${RTCSKEL_PROJECT_NAME})

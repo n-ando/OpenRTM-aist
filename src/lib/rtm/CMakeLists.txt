@@ -422,11 +422,7 @@ if(WIN32)
 	#	set(skel_files ${skel_files} ${SKEL_IDL_DIR}/${filename})
 	#ENDFOREACH()
 
-	if(CMAKE_BUILD_TYPE MATCHES RELEASE)
-		set(DEF_FILE_NAME  ${RTM_PROJECT_NAME}.def)
-	else()
-		set(DEF_FILE_NAME  ${RTM_PROJECT_NAME}d.def)
-	endif()
+	set(DEF_FILE_NAME  ${RTM_PROJECT_NAME}.def)
 	#ADD_DEFINITIONS(-DLIBRARY_EXPORTS)
 	#add_library(${RTM_PROJECT_NAME}_static STATIC ${rtm_srcs} ${ALL_IDL_SRCS_RTM})
 
