@@ -158,9 +158,6 @@ namespace SDOPackage
     RTC_DEBUG(("remove_member(id = %s)", id));
     for (MemIt it(m_rtcMembers.begin()); it != m_rtcMembers.end();)
       {
-		CORBA::Boolean result;
-		result = ::SDOPackage::Organization_impl::remove_member(id);
-
 
         Member& member(*it);
 		size_t len = max(strlen(id), strlen(member.profile_->instance_name));
@@ -178,12 +175,15 @@ namespace SDOPackage
         removeOrganizationFromTarget(member);
         startOwnedEC(member);
         it = m_rtcMembers.erase(it);
-		
-		return result;
+		break;
+
       }
+
+    CORBA::Boolean result;
+    result = ::SDOPackage::Organization_impl::remove_member(id);
 	
     
-	return false;
+    return result;
   }
 
   /*!
