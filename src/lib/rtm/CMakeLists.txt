@@ -125,10 +125,10 @@ set (RTC_CORBA_CXXMAPPING11 ON)
 
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config_rtc_cmake.h.in ${PROJECT_BINARY_DIR}/config_rtc.h)
-
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/version_cmake.h.in ${PROJECT_BINARY_DIR}/version.h)
 
-
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config_rtc_cmake.h.in ${CMAKE_CURRENT_SOURCE_DIR}/config_rtc.h)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/version_cmake.h.in ${CMAKE_CURRENT_SOURCE_DIR}/version.h)
 
 
 
