@@ -160,7 +160,12 @@ namespace SDOPackage
       {
 
         Member& member(*it);
-		size_t len = std::max(strlen(id), strlen(member.profile_->instance_name));
+		size_t len = strlen(id);
+		if (len < strlen(member.profile_->instance_name))
+		{
+			len = strlen(member.profile_->instance_name);
+		}
+		//size_t len = (std::max)(strlen(id), strlen(member.profile_->instance_name));
         if (strncmp(id, member.profile_->instance_name, len))
           {
             ++it;
