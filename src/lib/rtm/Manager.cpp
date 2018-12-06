@@ -1432,6 +1432,8 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     // Log stream mutex locking mode
     coil::toBool(m_config["logger.stream_lock"], "enable", "disable", false) ?
       rtclog.enableLock() : rtclog.disableLock();
+    coil::toBool(m_config["logger.escape_sequence_enable"], "YES", "NO", false) ?
+      rtclog.enableEscapeSequence() : rtclog.disableEscapeSequence();
 
     // File Logstream init
     initLogstreamFile();

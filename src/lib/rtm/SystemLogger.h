@@ -318,6 +318,42 @@ namespace RTC
      * @endif
      */
     void setName(const char* name);
+    /*!
+     * @if jp
+     *
+     * @brief エスケープシーケンスを有効にする
+     *
+     * 
+     *
+     * @else
+     *
+     * @brief 
+     * 
+     * </pre>
+     *
+     * 
+     *
+     * @endif
+     */
+    void enableEscapeSequence();
+    /*!
+     * @if jp
+     *
+     * @brief エスケープシーケンスを無効にする
+     *
+     *
+     *
+     * @else
+     *
+     * @brief
+     *
+     * </pre>
+     *
+     *
+     *
+     * @endif
+     */
+    void disableEscapeSequence();
 
   protected:
     /*!
@@ -383,6 +419,7 @@ namespace RTC
     static const char* m_levelString[];
     int m_msEnable;
     int m_usEnable;
+    bool m_esEnable;
   };    
 
 

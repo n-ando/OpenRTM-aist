@@ -44,7 +44,7 @@ namespace RTC
       m_name(name),
       m_dateFormat("%b %d %H:%M:%S.%Q"),
       m_clock(&coil::ClockManager::instance().getClock("system")),
-      m_msEnable(0), m_usEnable(0)
+      m_msEnable(0), m_usEnable(0), m_esEnable(0)
   {
     setLevel(Manager::instance().getLogLevel().c_str());
     coil::Properties& prop(Manager::instance().getConfig());
@@ -56,6 +56,8 @@ namespace RTC
       {
         setClockType(prop["logger.clock_type"]);
       }
+    coil::toBool(prop["logger.escape_sequence_enable"], "YES", "NO", false) ?
+        enableEscapeSequence() : disableEscapeSequence();
   }
 
   Logger::Logger(LogStreamBuf* streambuf)
@@ -64,7 +66,7 @@ namespace RTC
       m_name("unknown"),
       m_dateFormat("%b %d %H:%M:%S.%Q"),
       m_clock(&coil::ClockManager::instance().getClock("system")),
-      m_msEnable(0), m_usEnable(0)
+      m_msEnable(0), m_usEnable(0), m_esEnable(0)
   {
     setDateFormat(m_dateFormat.c_str());
   }
@@ -124,21 +126,27 @@ namespace RTC
    */
   void Logger::header(int level)
   {
-    const char* color[] =
+    if (m_esEnable)
       {
-        "\x1b[0m",         // SLILENT  (none)
-        "\x1b[0m\x1b[31m", // FATAL    (red)
-        "\x1b[0m\x1b[35m", // ERROR    (magenta)
-        "\x1b[0m\x1b[33m", // WARN     (yellow)
-        "\x1b[0m\x1b[34m", // INFO     (blue)
-        "\x1b[0m\x1b[32m", // DEBUG    (green)
-        "\x1b[0m\x1b[36m", // TRACE    (cyan)
-        "\x1b[0m\x1b[39m", // VERBOSE  (default)
-        "\x1b[0m\x1b[37m"  // PARANOID (white)
-      };
-    *this << color[level];
+        const char* color[] =
+          {
+            "\x1b[0m",         // SLILENT  (none)
+            "\x1b[0m\x1b[31m", // FATAL    (red)
+            "\x1b[0m\x1b[35m", // ERROR    (magenta)
+            "\x1b[0m\x1b[33m", // WARN     (yellow)
+            "\x1b[0m\x1b[34m", // INFO     (blue)
+            "\x1b[0m\x1b[32m", // DEBUG    (green)
+            "\x1b[0m\x1b[36m", // TRACE    (cyan)
+            "\x1b[0m\x1b[39m", // VERBOSE  (default)
+            "\x1b[0m\x1b[37m"  // PARANOID (white)
+          };
+        *this << color[level];
+      }
     *this << getDate() + m_levelString[level] + m_name + ": ";
-    *this << "\x1b[0m";
+    if (m_esEnable)
+      {
+        *this << "\x1b[0m";
+      }
   }
 
   /*!
@@ -219,6 +227,46 @@ namespace RTC
       return RTL_PARANOID;
     else
       return RTL_SILENT;
+  }
+
+  /*!
+  * @if jp
+  *
+  * @brief エスケープシーケンスの有効にする
+  *
+  *
+  * @else
+  *
+  * @brief
+  *
+  * </pre>
+  *
+  *
+  * @endif
+  */
+  void Logger::enableEscapeSequence()
+  {
+	  m_esEnable = true;
+  }
+
+  /*!
+  * @if jp
+  *
+  * @brief エスケープシーケンスの無効にする
+  *
+  *
+  * @else
+  *
+  * @brief
+  *
+  * </pre>
+  *
+  *
+  * @endif
+  */
+  void Logger::disableEscapeSequence()
+  {
+	  m_esEnable = false;
   }
 
 }; // namespace RTC

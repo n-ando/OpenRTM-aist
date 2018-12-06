@@ -56,6 +56,7 @@ static const char* default_config[] =
     "logger.log_level",                      "INFO",
     "logger.stream_lock",                    "NO",
     "logger.master_logger",                  "",
+	"logger.escape_sequence_enable",         "NO",
     "module.conf_path",                      "",
     "module.load_path",                      "",
     "naming.enable",                         "YES",
