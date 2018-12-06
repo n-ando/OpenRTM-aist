@@ -321,6 +321,43 @@ namespace RTC
      */
     void setName(const char* name);
 
+    /*!
+	 * @if jp
+	 *
+	 * @brief エスケープシーケンスを有効にする
+	 *
+	 * 
+	 *
+	 * @else
+	 *
+	 * @brief 
+	 * 
+	 * </pre>
+	 *
+	 * 
+	 *
+	 * @endif
+	 */
+	void enableEscapeSequence();
+	/*!
+	 * @if jp
+	 *
+	 * @brief エスケープシーケンスを無効にする
+	 *
+	 *
+	 *
+	 * @else
+	 *
+	 * @brief
+	 *
+	 * </pre>
+	 *
+	 *
+	 *
+	 * @endif
+	 */
+	void disableEscapeSequence();
+
   protected:
     /*!
      * @if jp
@@ -378,6 +415,8 @@ namespace RTC
      */
     int strToLevel(const char* level);
 
+
+
   private:
     std::string m_name;
     std::string m_dateFormat;
@@ -385,6 +424,7 @@ namespace RTC
     static const char* m_levelString[];
     int m_msEnable;
     int m_usEnable;
+	bool m_esEnable;
   };
 
 
