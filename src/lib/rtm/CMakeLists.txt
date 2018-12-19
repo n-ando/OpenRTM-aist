@@ -65,11 +65,15 @@ if(VXWORKS)
 	set(OSVERSION ${VXWORKS_MAJOR}${VXWORKS_MINOR} CACHE STRING "OS version.")
 	set (RTM_OS_VXWORKS ON)
 	set (STDC_HEADERS ON)
-#	set　(STDC_HEADERS_VALUE 1 CACHE STRING "Define to 1 if you have the ANSI C header files.")
+#	set (STDC_HEADERS_VALUE 1 CACHE STRING "Define to 1 if you have the ANSI C header files.")
 elseif(UNIX)
 	set (STDC_HEADERS OFF)
 	set (OSVERSION OFF)
-	set (RTM_OS_LINUX ON)
+	if(CMAKE_SYSTEM_NAME MATCHES QNX)
+		set (RTM_OS_QNX ON)
+	else()
+		set (RTM_OS_LINUX ON)
+	endif()
 elseif(WIN32)
 	set (STDC_HEADERS OFF)
 	set (OSVERSION OFF)
@@ -159,6 +163,11 @@ include_directories(
 		${RTM_INCLUDE_DIR}
 		)
 
+
+if(CMAKE_SYSTEM_NAME MATCHES QNX)
+	include_directories(/usr/local/include)
+	link_directories(/usr/qnx650/target/qnx6/x86/lib/gcc/4.4.2/ /usr/qnx650/target/qnx6/x86/lib/ /usr/local/lib)
+endif()
 
 
 

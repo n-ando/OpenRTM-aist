@@ -222,7 +222,11 @@ namespace coil
   inline void findFile(std::string dir, std::string filename, coil::vstring &filelist)
   {
 	struct dirent **namelist=NULL;
+#ifndef COIL_OS_QNX
 	int files = scandir(dir.c_str(), &namelist, NULL, NULL);
+#else
+	int files = scandir(const_cast<char*>(dir.c_str()), &namelist, NULL, NULL);
+#endif
 
 	for (int i=0; i<files; i++) {
 		std::string dname = namelist[i]->d_name;
@@ -273,7 +277,11 @@ namespace coil
   inline void getFileList(std::string dir, std::string ext, coil::vstring &filelist)
   {
 	struct dirent **namelist=NULL;
+#ifndef COIL_OS_QNX
 	int files = scandir(dir.c_str(), &namelist, NULL, NULL);
+#else
+	int files = scandir(const_cast<char*>(dir.c_str()), &namelist, NULL, NULL);
+#endif
 
 	for (int i=0; i<files; i++) {
 		std::string dname = namelist[i]->d_name;

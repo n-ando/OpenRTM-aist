@@ -53,7 +53,11 @@ set(PACKAGE_VERSION "1.0" CACHE STRING "Define to the version of this package.")
 if(VXWORKS)
 	set (COIL_OS_VXWORKS ON)
 elseif(UNIX)
-	set (COIL_OS_LINUX ON)
+	if(CMAKE_SYSTEM_NAME MATCHES QNX)
+		set (COIL_OS_QNX ON)
+	else()
+		set (COIL_OS_LINUX ON)
+	endif()
 elseif(WIN32)
 	set (COIL_OS_WIN32 ON)
 endif()
@@ -158,6 +162,10 @@ include_directories(
 		${PROJECT_SOURCE_DIR}/${COIL_OS_DIR}
 		${PROJECT_BINARY_DIR}/..
 		)
+if(CMAKE_SYSTEM_NAME MATCHES QNX)
+	include_directories(/usr/local/include)
+	link_directories(/usr/qnx650/target/qnx6/x86/lib/gcc/4.4.2/ /usr/qnx650/target/qnx6/x86/lib/ /usr/local/lib)
+endif()
 #message(STATUS ${CMAKE_INCLUDE_DIRECTORIES_BEFORE})
 
 if(VXWORKS)

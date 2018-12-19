@@ -21,7 +21,15 @@ set(ORB_ROOT ${ORB_ROOT} CACHE PATH "set ORB_ROOT")
 if(NOT ORB_ROOT)
 	if(CORBA STREQUAL "omniORB")
 		if(UNIX)
-			set(ORB_ROOT "" CACHE PATH "set ORB_ROOT")
+			include(FindPkgConfig)
+			pkg_check_modules(OMNIORB REQUIRED omniORB4)
+			if(NOT OMNIORB_DIR)
+			  if(OMNIORB_FOUND)
+			    set(OMNIORB_DIR )
+			  endif()
+			  set(OMNIORB_DIR CACHE PATH omniORB root directory)
+			endif()
+			#set(ORB_ROOT "" CACHE PATH "set ORB_ROOT" FORCE)
 		else(UNIX)
 			message(FATAL_ERROR "Please set ORB_ROOT.")
 		endif(UNIX)
@@ -279,21 +287,43 @@ elseif(CORBA STREQUAL "omniORB")
 			set(ORB_LINK_DIR ${ORB_ROOT}/lib/${CPU_TYPE}_vxWorks_kernel_${VXWORKS_MAJOR}.${VXWORKS_MINOR})
 		endif()
 		set(ORB_LIBRARIES omniDynamic4 omniORB4 omnithread)
+		set(ORB_INCLUDE_DIR ${ORB_ROOT}/include)
 	elseif(UNIX)
 		if("${CMAKE_SYSTEM_PROCESSOR}" STREQUAL "ARM")
 			SET (ORB_C_FLAGS_LIST
 				-D__arm__
+				-D__linux__
 			)
 		else()
 			SET (ORB_C_FLAGS_LIST
 				-D__x86__
+				-D__linux__
 			)
 		endif()
-		set(ORB_LINK_DIR ${ORB_ROOT}/lib)
+		if(CMAKE_SYSTEM_NAME MATCHES QNX)
+			SET (ORB_C_FLAGS_LIST
+				${ORB_C_FLAGS_LIST}
+				-D__QNX__
+			)
+		else()
+			SET (ORB_C_FLAGS_LIST
+				${ORB_C_FLAGS_LIST}
+				-D__linux__
+			)
+		endif()
+		if(ORB_ROOT)
+			set(ORB_LINK_DIR ${ORB_ROOT}/lib)
+			set(ORB_INCLUDE_DIR ${ORB_ROOT}/include)
+		else(ORB_ROOT)
+			set(ORB_LINK_DIR ${OMNIORB_LIBRARY_DIRS})
+			set(ORB_INCLUDE_DIR ${OMNIORB_INCLUDE_DIRS})
+		endif(ORB_ROOT)
 		set(ORB_LIBRARIES omniDynamic4 omniORB4 omnithread)
 		if(SSL_ENABLE)
 			set(ORBSSL_LIBRARIES omnisslTP4)
 		endif(SSL_ENABLE)
+		
+
 	elseif(MSVC)
 		if("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "ARM")
 			SET(ARCH_NAME ARM_win32)
@@ -375,10 +405,10 @@ elseif(CORBA STREQUAL "omniORB")
 
 		#install(FILES  ${OMNIORB_HEADERFILES} DESTINATION ${ORB_INSTALL_DIR}/include)
 
-
+		set(ORB_INCLUDE_DIR ${ORB_ROOT}/include)
 	endif(VXWORKS)
 
-	set(ORB_INCLUDE_DIR ${ORB_ROOT}/include)
+
 	
 
 	
@@ -570,7 +600,11 @@ elseif(UNIX)
 	set(COIL_OS_DIR "posix")
 	set (RTM_OS_LINUX ON)
 	ADD_DEFINITIONS(-fPIC)
-	set(RTM_LINKER_OPTION -luuid -ldl -export-dynamic -lrt)
+	if(CMAKE_SYSTEM_NAME MATCHES QNX)
+		set(RTM_LINKER_OPTION -luuid -export-dynamic)
+	else()
+		set(RTM_LINKER_OPTION -luuid -ldl -export-dynamic -lrt)
+	endif()
 elseif(WIN32)
 	set(COIL_OS_DIR "win32")
 	set(RTM_LINKER_OPTION advapi32.lib;ws2_32.lib;mswsock.lib;rpcrt4.lib;optimized;msvcrt.lib;optimized;msvcmrt.lib;debug;msvcrtd.lib)

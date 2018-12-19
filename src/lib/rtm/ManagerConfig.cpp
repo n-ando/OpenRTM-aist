@@ -162,12 +162,14 @@ namespace RTC
               {
                 std::cerr << "Configuration file: " << m_configFile;
                 std::cerr << " not found." << std::endl;
+#ifndef __QNX__
                 for (size_t i(0); i < (size_t)argc; ++i)
                   {
                     std::string tmp(argv[i]);
                     if (tmp == "-i") { ignoreNoConf = true; }
                   }
                 if (!ignoreNoConf) { exit(-1); }
+#endif
               }
             m_configFile = get_opts.optarg;
             break;
