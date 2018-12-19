@@ -300,7 +300,7 @@ elseif(CORBA STREQUAL "omniORB")
 				-D__linux__
 			)
 		endif()
-		if(CMAKE_SYSTEM_NAME MATCHES QNX)
+		if(${CMAKE_SYSTEM_NAME} MATCHES QNX)
 			SET (ORB_C_FLAGS_LIST
 				${ORB_C_FLAGS_LIST}
 				-D__QNX__
@@ -600,7 +600,7 @@ elseif(UNIX)
 	set(COIL_OS_DIR "posix")
 	set (RTM_OS_LINUX ON)
 	ADD_DEFINITIONS(-fPIC)
-	if(CMAKE_SYSTEM_NAME MATCHES QNX)
+	if(${CMAKE_SYSTEM_NAME} MATCHES QNX)
 		set(RTM_LINKER_OPTION -luuid -export-dynamic)
 	else()
 		set(RTM_LINKER_OPTION -luuid -ldl -export-dynamic -lrt)

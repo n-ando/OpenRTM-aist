@@ -69,7 +69,7 @@ if(VXWORKS)
 elseif(UNIX)
 	set (STDC_HEADERS OFF)
 	set (OSVERSION OFF)
-	if(CMAKE_SYSTEM_NAME MATCHES QNX)
+	if(${CMAKE_SYSTEM_NAME} MATCHES QNX)
 		set (RTM_OS_QNX ON)
 	else()
 		set (RTM_OS_LINUX ON)
@@ -164,7 +164,7 @@ include_directories(
 		)
 
 
-if(CMAKE_SYSTEM_NAME MATCHES QNX)
+if(${CMAKE_SYSTEM_NAME} MATCHES QNX)
 	include_directories(/usr/local/include)
 	link_directories(/usr/qnx650/target/qnx6/x86/lib/gcc/4.4.2/ /usr/qnx650/target/qnx6/x86/lib/ /usr/local/lib)
 endif()
