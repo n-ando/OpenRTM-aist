@@ -1,0 +1,8 @@
+set(CMAKE_SYSTEM_NAME QNX)
+
+set(arch 5.4.0,gcc_ntox86_64)
+
+set(CMAKE_C_COMPILER qcc)
+set(CMAKE_C_COMPILER_TARGET ${arch})
+set(CMAKE_CXX_COMPILER q++)
+set(CMAKE_CXX_COMPILER_TARGET ${arch})
