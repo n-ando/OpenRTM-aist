@@ -177,7 +177,6 @@ if(UNIX)
 	include_directories(${UUID_INCLUDE_DIRS})
 	link_directories(${UUID_LIBRARY_DIRS})
 	add_definitions(${UUID_CFLAGS})
-	message(STATUS ${UUID_LIBDIR})
 endif(UNIX)
 #message(STATUS ${CMAKE_INCLUDE_DIRECTORIES_BEFORE})
 
