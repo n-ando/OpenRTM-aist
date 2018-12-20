@@ -162,10 +162,23 @@ include_directories(
 		${PROJECT_SOURCE_DIR}/${COIL_OS_DIR}
 		${PROJECT_BINARY_DIR}/..
 		)
-if(${CMAKE_SYSTEM_NAME}test MATCHES QNXtest)
-	include_directories(/usr/local/include)
-	link_directories(/usr/qnx650/target/qnx6/x86/lib/gcc/4.4.2/ /usr/qnx650/target/qnx6/x86/lib/ /usr/local/lib)
-endif()
+if(UNIX)
+	if(${CMAKE_SYSTEM_NAME}test MATCHES QNXtest)
+		if(QNX7)
+		else()
+		include_directories(/usr/local/include)
+		link_directories(/usr/qnx650/target/qnx6/x86/lib/gcc/4.4.2/ /usr/qnx650/target/qnx6/x86/lib/ /usr/local/lib)
+		endif()
+	endif()
+
+	include(FindPkgConfig)
+	pkg_check_modules(UUID REQUIRED uuid)
+
+	include_directories(${UUID_INCLUDE_DIRS})
+	link_directories(${UUID_LIBRARY_DIRS})
+	add_definitions(${UUID_CFLAGS})
+	message(STATUS ${UUID_LIBDIR})
+endif(UNIX)
 #message(STATUS ${CMAKE_INCLUDE_DIRECTORIES_BEFORE})
 
 if(VXWORKS)
@@ -175,9 +188,9 @@ if(VXWORKS)
 					RUNTIME DESTINATION ${INSTALL_RTM_BIN_DIR}
 					COMPONENT coil)
 else(VXWORKS)
-	add_library(${COIL_PROJECT_NAME} SHARED ${coil_srcs} )
+	add_library(${COIL_PROJECT_NAME} SHARED ${coil_srcs})
 	set_target_properties(${COIL_PROJECT_NAME} PROPERTIES DEBUG_POSTFIX d)
-	target_link_libraries(${COIL_PROJECT_NAME} ${RTM_LINKER_OPTION})
+	target_link_libraries(${COIL_PROJECT_NAME} ${RTM_LINKER_OPTION}  ${UUID_LIBRARIES})
 	if(UNIX)
 		install(TARGETS ${COIL_PROJECT_NAME} LIBRARY DESTINATION ${INSTALL_RTM_LIB_DIR}
 						ARCHIVE DESTINATION ${INSTALL_RTM_LIB_DIR}
@@ -206,4 +219,3 @@ install(FILES ${CMAKE_SOURCE_DIR}/build/vcxprojtool.py DESTINATION ${INSTALL_RTM
 install(FILES ${CMAKE_SOURCE_DIR}/build/yat.py DESTINATION ${INSTALL_RTM_SCRIPT_DIR} COMPONENT scripts)
 
 add_subdirectory(utils)
-
