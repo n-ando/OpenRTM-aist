@@ -1,18 +1,18 @@
 ============================================================
- OpenRTM-aist-0.4.0 �Υ���������Υ��󥹥ȡ���
+ OpenRTM-aist-0.4.0 のソースからのインストール
 ============================================================
 
-���Υɥ�����ȤǤϡ�OpenRTM-aist-0.4.0 �򥽡�������ӥ�ɤ����󥹥ȡ��뤹��
-�����������ޤ������μ��˽��äƥ��󥹥ȡ����ԤäƤ���������
+このドキュメントでは、OpenRTM-aist-0.4.0 をソースからビルドしインストールする
+手順を説明します。この手順に従ってインストールを行ってください。
 
 
 ------------------------------------------------------------
- UNIX�ϥ����ƥ�ǤΥӥ�ɤȥ��󥹥ȡ���
+ UNIX系システムでのビルドとインストール
 ------------------------------------------------------------
 
-1. �б�OS����ӥǥ����ȥ�ӥ塼�����
-OpenRTM-aist-0.4.0 �ϲ����� OS ����� Linux �ǥ����ȥ�ӥ塼������ư��
-���뤳�Ȥ���ǧ����Ƥ��ޤ���
+1. 対応OSおよびディストリビューション
+OpenRTM-aist-0.4.0 は下記の OS および Linux ディストリビューションで動作
+することが確認されています。
 
 - FreeBSD-5.2
 - FreeBSD-6.0
@@ -25,18 +25,18 @@ OpenRTM-aist-0.4.0 �ϲ����� OS ����� Linux �ǥ����ȥ�ӥ塼������ư��
 - Debian3.1(Sarge)
 - Ubuntu Linux 7
 
-2. ư����
-OpenRTM-aist-0.4.0 �Υ��󥹥ȡ���ˤϲ����Υѥå�������ɬ�פǤ���
+2. 動作条件
+OpenRTM-aist-0.4.0 のインストールには下記のパッケージが必要です。
 
-[1] The ADAPTIVE Communication Environment (ACE) 5.4 �ʾ�
+[1] The ADAPTIVE Communication Environment (ACE) 5.4 以上
 [2] ORB
-    ���ߤΤȤ����б�ORB������ omniORB-4.0 �ʾ�ΤߤȤʤäƤ��ޤ���
-[3] gcc �� version3 �ʹߤ�˾�ޤ�����gcc2.95.x �Ǥ⥳��ѥ����ǽ�Ǥ�����
-    ���ץ�������ꤹ��ɬ�פ�����ޤ���(��������)
+    現在のところ対応ORB実装は omniORB-4.0 以上のみとなっています。
+[3] gcc は version3 以降が望ましい。gcc2.95.x でもコンパイル可能ですが、
+    オプションを指定する必要があります。(下記参照)
 
 
-�ʤ��������� OS �ڤ� Linux �ǥ����ȥ�ӥ塼�����ˤĤ��Ƥϡ������Υѥå�����
-�򥤥󥹥ȡ��뤹�뤿��Υ�����ץȤ� build �ǥ��쥯�ȥ�β��ˤ���ޤ���
+なお、下記の OS 及び Linux ディストリビューションについては、これらのパッケージ
+をインストールするためのスクリプトが build ディレクトリの下にあります。
 
 - FreeBSD 5.2: pkg_install_freebsd52.sh
 - FreeBSD 6.x: pkg_install_freebsd6.sh
@@ -47,32 +47,32 @@ OpenRTM-aist-0.4.0 �Υ��󥹥ȡ���ˤϲ����Υѥå�������ɬ�פǤ���
 - Fedora Core 6: pkg_install_fc6.sh
 - Debian3.1(Sarge): pkg_install_debianSarge.sh
 
-�� FreeBSD, Debian, Ubuntu Linux �ϡ�ACE ����� omniORB �� OS ɸ��Υѥå�����
-   �Ȥ����󶡤���Ƥ��ޤ��Τǡ��� OS ��°�Υѥå��������󥹥ȡ���ġ�����Ѥ���
-   ��ư�ǥ��󥹥ȡ��뤹�뤳�Ȥ�Ǥ��ޤ���
+※ FreeBSD, Debian, Ubuntu Linux は、ACE および omniORB が OS 標準のパッケージ
+   として提供されていますので、各 OS 付属のパッケージインストールツールを用いて
+   手動でインストールすることもできます。
 
-�嵭�ʳ���OS�ˤ����Ƥϡ����줾��Υѥå������Υɥ�����Ȥ˽������󥹥ȡ����
-�ԤäƤ��������������Υѥå���������ɸ��Υǥ��쥯�ȥ� (/usr, /usr/local ��)
- ���˥��󥹥ȡ��뤵��Ƥ���ȡ��ʹߤ� OpenRTM-aist �Υ���ѥ����Ȥ����Ū
-��ñ�˹Ԥ����Ȥ��Ǥ��ޤ���
+上記以外のOSにおいては、それぞれのパッケージのドキュメントに従いインストールを
+行ってください。これらのパッケージが、標準のディレクトリ (/usr, /usr/local 等)
+ 下にインストールされていると、以降の OpenRTM-aist のコンパイル作業を比較的
+簡単に行うことができます。
 
-3. �����������ɤ�Ÿ��
-�ޤ������������� OpenRTM-aist-0.4.0.tar.gz ��Ŭ���ʥǥ��쥯�ȥ��Ÿ�����ޤ���
+3. ソースコードの展開
+まずソースコード OpenRTM-aist-0.4.0.tar.gz を適当なディレクトリに展開します。
 
 > tar xvzf OpenRTM-aist-0.4.0.tar.gz
 > cd OpenRTM-aist-0.4.0
 
-4. �ӥ��
-OpenRTM-aist �ϥѥå������Υӥ�ɤ� autoconf, automake ����Ѥ��Ƥ��ޤ���
-�ӥ�ɤλ����ϡ�¾�� autoconf, automake ����Ѥ����ѥå�������Ʊ�ͤ˹Ԥ��ޤ���
+4. ビルド
+OpenRTM-aist はパッケージのビルドに autoconf, automake を使用しています。
+ビルドの仕方は、他の autoconf, automake を使用したパッケージと同様に行います。
 
 > ./configure [options]
 
-./configure��Ϳ���뤳�ȤΤǤ��륪�ץ����ΰ�����ʲ��˼����ޤ���
+./configureに与えることのできるオプションの一部を以下に示します。
 
-<<���Ѥ���ORB>>
-�����ߤ�omniORB�������ݡ��Ȥ���Ƥ��ޤ���¾�Υ��ץ����Ͼ���Τ����ͽ�󤵤�
-�Ƥ��ޤ���
+<<使用するORB>>
+※現在はomniORBしかサポートされていません。他のオプションは将来のために予約され
+ています。
 
   --with-omniorb=dir
   --with-tao=dir
@@ -81,43 +81,43 @@ OpenRTM-aist �ϥѥå������Υӥ�ɤ� autoconf, automake ����Ѥ��Ƥ��ޤ���
   --with-orbacus=dir
 
 
-<<���������åѡ��⥸�塼��μ���λ���>>
-OpenRTM-aist-0.4.0 �ǥ��ݡ��Ȥ���Ƥ���Python�ѤΥ�åѡ��⥸�塼��ϡ�
-OpenRTM-aist-0.4.0 �Ǥϥ��ݡ��Ȥ���ʤ��ʤ�ޤ�����
+<<生成するラッパーモジュールの種類の指定>>
+OpenRTM-aist-0.4.0 でサポートされていたPython用のラッパーモジュールは、
+OpenRTM-aist-0.4.0 ではサポートされなくなりました。
 
-<<gcc3.x�����Υ���ѥ����gcc2.95.x���ˤ���Ѥ�����>>
-�С������3̤����gcc�Ǥϥƥ�ץ졼�ȤΥ���ѥ�����Զ�礬�����ޤ��Τǡ�
-gcc2.95.x�ʤɤΥ���ѥ������Ѥ�����ϡ��ʲ��Υ��ץ�������ꤷ�Ƥ���������
+<<gcc3.x以前のコンパイラ（gcc2.95.x等）を使用する場合>>
+バージョン3未満のgccではテンプレートのコンパイルで不具合が生じますので、
+gcc2.95.xなどのコンパイラを使用する場合は、以下のオプションを指定してください。
 
   --with-gcc2
 
-<<ACEinclude �ѥ�, lib �ѥ�>>
-ACE ��ɸ��Ū�ʥǥ��쥯�ȥ�˥��󥹥Ȱ�뤵��Ƥ��ʤ����ʲ��Υ��ץ����Ǥإå�
-�ȥ饤�֥��Υǥ��쥯�ȥ����ꤷ�Ʋ�������
+<<ACEinclude パス, lib パス>>
+ACE が標準的なディレクトリにインスト一ルされていない場合以下のオプションでへッダ
+とライブラリのディレクトリを指定して下さい。
 
   --with-ace-includes=dir
   --with-ace-lib=dir
 
-ACE_wrppers������ "/tmp/src/ACE_wrappers" �ʲ��˥��󥹥ȡ��뤵��Ƥ�����
+ACE_wrppersが仮に "/tmp/src/ACE_wrappers" 以下にインストールされている場合
 
   --with-ace-include=/tmp/src/ACE_wrappers
   --with-ace-libs=/tmp/src/ACE_wrappers/ace
 
-�Τ褦�˻��ꤷ�ޤ���
+のように指定します。
 
-<<����¾>>
-����¾���Ѳ�ǽ�ʥ��ץ�����
+<<その他>>
+その他使用可能なオプションは
 
 > ./configure --help
 
-�ǻ��Ȥ��Ʋ�������
+で参照して下さい。
 
 5. make
-configure ������˽�λ�������Ȥ��ǧ���Ʋ�����������˽�λ������make���ޤ���
+configure が正常に終了したことを確認して下さい。正常に終了したらmakeします。
 
 > make
 
-���󥹥ȡ��뤹�뤿��ˤϾ��ʤ��Ȥ�
+インストールするためには少なくとも
 
   OpenRTM-aist-0.4.0/rtm
   OpenRTM-aist-0.4.0/rtm/idl
@@ -125,36 +125,36 @@ configure ������˽�λ�������Ȥ��ǧ���Ʋ�����������˽�λ������make���ޤ���
   OpenRTM-aist-0.4.0/util/rtm-naming
   OpenRTM-aist-0.4.0/util/rtc-template
 
-�ʲ��Υǥ��쥯�ȥ꤬����˥ӥ�ɤ���Ƥ���ɬ�פ�����ޤ����ӥ�ɤ�����˽�λ��
-���顢�إå��ե����롢�饤�֥�ꡢ�桼�ƥ���ƥ����ޥ�ɷ��򥤥󥹥ȡ��뤷�ޤ���
+以下のディレクトリが正常にビルドされている必要があります。ビルドが正常に終了し
+たら、ヘッダファイル、ライブラリ、ユーティリティコマンド群をインストールします。
 
 ------------------------------------------------------------
 > su
 # make install
 ------------------------------------------------------------
 
-6. ����ץ�Υƥ���
-���󥹥ȡ��뤬����˽�λ�����顢example/SimpleIO �ʲ��Υ���ץ�ǥƥ��Ȥ��ޤ���
+6. サンプルのテスト
+インストールが正常に終了したら、example/SimpleIO 以下のサンプルでテストします。
 
 ------------------------------------------------------------
 > cd examples/SimpleIO/
 > run.sh
 ------------------------------------------------------------
 
-�Ϥ���˥����ߥʥ���̤�2�ĳ��������ø�ˤ⤦�ҤȤĳ����ޤ���
-3���ܤΥ����ߥʥ���̤������ޤǡ�ɬ���ԤäƤ���������
-������ɥ������ȥ�� ConsoleIn �Ȥ������ǿ������Ǥ����ߤޤ������Ϥ�������ϡ�
-short int �˼��ޤ��ϰϤο��ͤ����Ϥ��Ƥ����������������Ǥ�����ȡ�ConsoleOut
-�ȥ�����ɥ������ȥ�Τ��������顢���Ϥ����Τ�Ʊ�������Ȼ��� (sec:nsec�Υե���
-�ޥåȤˤʤäƤ���)������ޤ���
-�����ޤǤǤ���С��饤�֥�� (libRTC.so) ���������ӥ�ɤ���Ƥ��뤳�Ȥ��狼���
-����
+はじめにターミナル画面が2つ開き、数秒後にもうひとつ開きます。
+3つ目のターミナル画面が開くまで、必ず待ってください。
+ウインドウタイトルに ConsoleIn とある方で数字を打ち込みます。入力する数字は、
+short int に収まる範囲の数値を入力してください。数字を打ち込むと、ConsoleOut
+とウインドウタイトルのある方から、入力したのと同じ数字と時刻 (sec:nsecのフォー
+マットになっている)が現れます。
+ここまでできれば、ライブラリ (libRTC.so) が正しくビルドされていることがわかりま
+す。
 
-7. ����ݡ��ͥ�ȥƥ�ץ졼�ȤΥƥ���
-���ˡ�����ݡ��ͥ�ȤΥƥ�ץ졼�ȥ����ͥ졼������Ѥ��ơ���ñ�ʥ���ݡ��ͥ��
-���������ƥ��Ȥ�Ԥ��ޤ����ƥ�ץ졼�ȥ����ͥ졼�� (rtc-template) ����Ѥ���
-��������ݡ��ͥ�Ȥ��������ǥ��쥯�ȥ�(Ǥ�դΥǥ��쥯�ȥ�Ƿ빽�Ǥ���)
-��������ơ������ǥ���ݡ��ͥ�Ȥ����������ѥ��뤷�Ƥߤޤ���
+7. コンポーネントテンプレートのテスト
+次に、コンポーネントのテンプレートジェネレータを使用して、簡単なコンポーネント
+を作成するテストを行います。テンプレートジェネレータ (rtc-template) を使用しま
+す。コンポーネントを作成するデイレクトリ(任意のディレクトリで結構です。)
+を作成して、そこでコンポーネントを作成しコンパイルしてみます。
 
 ------------------------------------------------------------
 > cd 
@@ -162,7 +162,7 @@ short int �˼��ޤ��ϰϤο��ͤ����Ϥ��Ƥ����������������Ǥ�����ȡ�ConsoleOut
 > cd SampleComponent
 ------------------------------------------------------------
 
-�ޤ���help�򸫤Ƥߤޤ���
+まずはhelpを見てみます。
 
 ------------------------------------------------------------
 > rtc-template --help
@@ -192,7 +192,7 @@ Options:
     [--consumer-idl[=IDL_file]]           IDL file name for consumer
     [--idl-include=[path]]                Search path for IDL compile
        :
-     ��ά
+     中略
        :
 Example:
     rtc-template -bcxx \
@@ -211,14 +211,14 @@ Example:
     --service-idl=MyService.idl --consumer-idl=YourService.idl
 ------------------------------------------------------------
 
-rtc-template ���Ф��ƺ�������������ݡ��ͥ�Ȥ����������Ȥ����Ϥ��ȡ�
-����ݡ��ͥ�Ȥο�����������ޤ��������Ǥϡ�help ��ɽ���κǸ��ɽ�����줿
- "Example:" �ʲ��򥳥ԡ����ƻ�Ƥߤޤ���
+rtc-template に対して作成したいコンポーネントの設定を引数として渡すと、
+コンポーネントの雛形を作成します。ここでは、help の表示の最後に表示された
+ "Example:" 以下をコピーして試してみます。
 
-"Example" ����Ǥϡ������ӥ��ץ��Х����Ȥ��� MyService�������ӥ����󥷥塼��
-�Ȥ��� YourService �����Ѥ��륪�ץ����Ϳ�����Ƥ��ꡢ���Τ����IDL
-�ե�����򥫥��ȥǥ��쥯�ȥ�ˤ����Ƥ���ɬ�פ�����ޤ���
-�����Ǥϡ���ñ��IDL�ե������ʲ��Τ褦�˺������Ƥ����ޤ���
+"Example" の例では、サービスプロバイダとして MyService、サービスコンシューマ
+として YourService を利用するオプションが与えられており、そのためのIDL
+ファイルをカレントディレクトリにおいておく必要があります。
+ここでは、簡単なIDLファイルを以下のように作成しておきます。
 
 MyService.idl
 ------------------------------------------------------------
@@ -236,8 +236,8 @@ interface YourService
 };
 ------------------------------------------------------------
 
-�����Υե��������������顢"Example" ����򥳥ԡ����ڡ����Ȥ���ʤɤ��ơ�
-���ޥ�ɤȤ������Ϥ��ޤ���
+これらのファイルを作成したら、"Example" の例をコピー＆ペーストするなどして、
+コマンドとして入力します。
 
 ------------------------------------------------------------
 > rtc-template -bcxx \
@@ -267,20 +267,20 @@ MyService.idl           README.Sample           SampleComp.cpp
 MyServiceSVC_impl.cpp   Sample.cpp              YourService.idl
 ------------------------------------------------------------
 
-���Τ褦�ˡ�����ݡ��ͥ�Ȥ�C++�Υ����ɡ������ӥ��μ��������ɡ������Makefile
-����������ޤ��������ǡ�
+このように、コンポーネントのC++のコード、サービスの実装コード、およびMakefile
+が作成されます。ここで、
 
 > make -f Makefile.Sample
-�⤷����
+もしくは
 > mv Makefile.Sample Makefile
 > make
 
-�Ȥ��� make ���ޤ���
+として make します。
 
 ------------------------------------------------------------
 > make -f Makefile.Sample
      :
-    ��ά
+    中略
      :
 c++ -o SampleComp Sample.o MyServiceSkel.o      YourServiceStub.o
  MyServiceSVC_impl.o SampleComp.o `rtm-config --libs`
@@ -296,20 +296,20 @@ MyServiceSVC_impl.o     Sample.so*              YourServiceStub.cpp
 MyServiceSkel.cpp       SampleComp*             YourServiceStub.h
 MyServiceSkel.h         SampleComp.cpp          YourServiceStub.o
 ------------------------------------------------------------
-����ǡ��������֥�⥸�塼���ǤΥ���ݡ��ͥ��(Sample.so)�ȼ¹Է����Υ���ݡ���
-���(SampleComp)����������ޤ�����
-�����ǡ��¹Է����Υ���ݡ��ͥ�Ȥ�¹Ԥ��Ƥߤޤ���
-����ݡ��ͥ�Ȥμ¹Ԥˤϥ���ե�����졼�����ե�����(�̾�� rtc.conf �Ȥ���
-̾��)��ɬ�פǤ���
-�����Ǥϡ��ʰ��ǤΤ�Τ򥫥��ȥǥ��쥯�ȥ�˺������ޤ���
+これで、ローダブルモジュール版のコンポーネント(Sample.so)と実行形式のコンポーネ
+ント(SampleComp)が作成されました。
+ここで、実行形式のコンポーネントを実行してみます。
+コンポーネントの実行にはコンフィギュレーションファイル(通常は rtc.conf という
+名前)が必要です。
+ここでは、簡易版のものをカレントディレクトリに作成します。
 
 rtc.conf
 ------------------------------------------------------------
-corba.nameservers: �͡��ॵ����̾:�ݡ����ֹ�
+corba.nameservers: ネームサーバ名:ポート番号
 naming_formats: %n.rtc
 logger.log_level: PARANOID
 ------------------------------------------------------------
-�����ǡ����˥ۥ���̾��rtm.or.jp �ݡ����ֹ�ϥǥե���ȤȤ��ޤ���
+ここで、仮にホスト名：rtm.or.jp ポート番号はデフォルトとします。
 
 rtc.conf
 ------------------------------------------------------------
@@ -317,12 +317,12 @@ corba.nameservers: rtm.or.jp
 naming_formats: %n.rtc
 logger.log_level: PARANOID
 ------------------------------------------------------------
-���ˡ�CORBA �Υ͡��ߥ󥰥����ӥ���ư���ޤ���CORBA�Υ͡��ߥ󥰥����ӥ��ϡ�
+次に、CORBA のネーミングサービスを起動します。CORBAのネーミングサービスは、
 
-> rtm-naming [�ݡ����ֹ�]
+> rtm-naming [ポート番号]
 
-�ǵ�ư�Ǥ��ޤ��Τǡ���ۤ�rtc.conf �ǻ��ꤷ���ݡ����ֹ����ꤷ�Ƶ�ư����
-����������������ꤷ�ʤ���Хǥե���ȥݡ��Ȥ���Ѥ��ޤ���
+で起動できますので、先ほどrtc.conf で指定したポート番号を指定して起動して
+ください。何も指定しなければデフォルトポートを使用します。
 
 ------------------------------------------------------------
 > rtm-naming
@@ -343,25 +343,25 @@ Checkpointing Phase 2: Commit.
 Checkpointing completed.
 
 ------------------------------------------------------------
-���ˡ�����ݡ��ͥ�Ȥ�ư���ޤ���
+次に、コンポーネントを起動します。
 
 ------------------------------------------------------------
 > SampleComp -f rtc.conf
-�⤷����
-> SampleComp (�ǥե���Ȥǥ����ȥǥ��쥯�ȥ��rtc.conf���ɤ߹���)
+もしくは
+> SampleComp (デフォルトでカレントディレクトリのrtc.confを読み込む)
 ------------------------------------------------------------
-����ǡ�����ݡ��ͥ�Ȥ���ư�Ǥ���RtcLink��
-- InPort��2��
-- OutPort��2��
-- �����ӥ��ݡ��Ȥ�2��
-- ����ե�����졼������6��
-���ĥ���ݡ��ͥ�Ȥ�ɽ�������С�OpenRTM-aist-0.2.0������˥��󥹥ȡ���
-���줿���Ȥˤʤ�ޤ���
+これで、コンポーネントが起動でき、RtcLinkで
+- InPortを2つ
+- OutPortを2つ
+- サービスポートを2つ
+- コンフィギュレーションを6個
+持つコンポーネントが表示されれば、OpenRTM-aist-0.2.0が正常にインストール
+されたことになります。
 
-����Ū�ʥ���ݡ��ͥ�Ȥκ����λ����ϡ��ޥ˥奢��򻲾Ȥ��Ƥ���������
+具体的なコンポーネントの作成の仕方は、マニュアルを参照してください。
 
 ------------------------------------------------------------
- Windows�ϥ����ƥ�ǤΥӥ�ɤȥ��󥹥ȡ���
+ Windows系システムでのビルドとインストール
 ------------------------------------------------------------
-�����꡼�������ͽ�ꡣ
+今後リリースされる予定。
 
