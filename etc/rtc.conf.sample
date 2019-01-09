@@ -29,35 +29,6 @@ openrtm.version: 1.0.0
 manager.name: manager
 
 #------------------------------------------------------------
-# The instance name of manager (default = manager)
-#
-manager.instance_name: manager
-
-#
-# Manager naming format
-#
-# The name format of manager that is bound to naming services.
-# The delimiter between names is "/".
-# The delimiter between name and kind is ".".
-#
-# This is formatted according to the following replacement rules.
-#
-# %n: The instance name of the manager.
-# %h: The hostname.
-# %M: The manager name.
-# %p: PID of the manager.
-#
-naming.formats: %h.host_cxt/%n.mgr
-
-
-#------------------------------------------------------------
-# Activate the function to set colors on terminal output
-#
-logger.escape_sequence_enable: NO
-
-
-
-#------------------------------------------------------------
 # Master manager
 # - manager.is_master: YES/NO, This process made a master or not.
 # - manager.corba_servant: YES/NO, create manager's corba service or not
@@ -97,37 +68,6 @@ manager.termination_waittime: 0.5
 #   manager.cpu_affinity: 0, 1, 2, ...
 #
 manager.cpu_affinity: 0
-
-
-#------------------------------------------------------------
-# Naming policy
-#
-# "process_unique", "node_unique" and "ns_unique" are supported.
-#
-manager.components.naming_policy: process_unique
-
-#------------------------------------------------------------
-# Supported languages
-#
-manager.supported_languages: C++, Python, Java
-
-
-#------------------------------------------------------------
-# Activate module automatic search function
-#
-manager.modules.search_auto: YES
-
-#------------------------------------------------------------
-# Module List to load before CORBA initialization
-#
-# Valid settings:
-# manager.preload.modules: SSLTransport.dll
-# manager.preload.modules: SSLTransport.py
-# manager.preload.modules: SSLTransport
-# manager.preload.modules: C:\\Python27\\Lib\\site-packages\\OpenRTM_aist\\ext\\SSLTransport
-#
-manager.preload.modules: 
-
 
 
 #============================================================
@@ -242,24 +182,6 @@ corba.nameservice.replace_endpoint: NO
 #
 corba.alternate_iiop_addresses: addr:port
 
-#
-# Auto update to Master Manager
-#
-corba.update_master_manager.enable:YES
-
-#
-# Update interval [s] for auto update
-#
-corba.update_master_manager.interval: 10.0
-
-#------------------------------------------------------------
-# SSL Transport settings
-#
-# corba.ssl.certificate_authority_file: root.crt
-# corba.ssl.key_file: server.pem
-# corba.ssl.key_file_password: password
-# corba.args:-ORBclientTransportRule "* ssl, tcp"
-
 #============================================================
 # Naming configurations
 #============================================================
@@ -271,7 +193,7 @@ naming.enable: YES
 #
 # Naming Types
 #
-# "corba" and "manager" are supported.
+# Now only "corba" is supported.
 #
 naming.type: corba
 
@@ -564,20 +486,16 @@ timer.tick: 0.1
 #
 # Other availabilities in OpenRTM-aist
 #
-# - ExtTrigExecutionContext:   External triggered EC. It is embedded in
-#                              OpenRTM library.
-# - OpenHRPExecutionContext:   External triggred paralell execution
-#                              EC. It is embedded in OpenRTM
-#                              library. This is usually used with
-#                              OpenHRP3.
-# - SimulatorExecutionContext: External triggred paralell execution
-#                              EC. It is embedded in OpenRTM
-#                              library. This is usually used with
-#                              Choreonoid.
-# - RTPreemptEC:               Real-time execution context for Linux
-#                              RT-preemptive pathed kernel.
-# - ArtExecutionContext:       Real-time execution context for ARTLinux
-#                              (http://sourceforge.net/projects/art-linux/)
+# - ExtTrigExecutionContext: External triggered EC. It is embedded in
+#                            OpenRTM library.
+# - OpenHRPExecutionContext: External triggred paralell execution
+#                            EC. It is embedded in OpenRTM
+#                            library. This is usually used with
+#                            OpenHRP3.
+# - RTPreemptEC:             Real-time execution context for Linux
+#                            RT-preemptive pathed kernel.
+# - ArtExecutionContext:     Real-time execution context for ARTLinux
+#                            (http://sourceforge.net/projects/art-linux/)
 #
 exec_cxt.periodic.type: PeriodicExecutionContext
 # exec_cxt.event_driven_type: to be implemented
@@ -670,20 +588,3 @@ logger.logstream.fluentd.output1.match: *
 logger.logstream.fluentd.input0.plugin: cpu
 logger.logstream.fluentd.input0.tag: fluent_cpu
 
-
-#============================================================
-# DataPort setting
-#============================================================
-
-#------------------------------------------------------------
-# 
-# Number of connectors that can be generated on the target data port
-# port.inport.<InPortName>.fan_out: 100
-# port.outport.<OutPortName>.fan_out: 100
-
-
-#------------------------------------------------------------
-# 
-# Activate double connection prevention function
-# port.inport.<InPortName>.allow_dup_connection: YES
-# port.outport.<OutPortName>.allow_dup_connection: YES
