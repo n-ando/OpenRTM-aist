@@ -678,7 +678,7 @@ logger.logstream.fluentd.input0.tag: fluent_cpu
 #------------------------------------------------------------
 # 
 # Number of connectors that can be generated on the target data port
-# port.inport.<InPortName>.fan_out: 100
+# port.inport.<InPortName>.fan_in: 100
 # port.outport.<OutPortName>.fan_out: 100
 
 
