@@ -21,28 +21,30 @@ rtm_data_prefix="${prefix}/@INSTALL_RTM_SHARE_DIR@"
 prefix="@CMAKE_INSTALL_PREFIX@"
 exec_prefix="${prefix}"
 datarootdir="${prefix}/@INSTALL_INCLUDE_DIR@"
+libdir="${prefix}/@INSTALL_RTM_LIB_DIR@"
+idldir="${prefix}/@INSTALL_RTM_IDL_DIR@"
 
 init_variables()
 {
 # basic options
 rtm_cxx="@CMAKE_CXX_COMPILER@"
-rtm_cflags=`echo @CXXFLAGS@ -I@prefix@/include -I@coil_includedir@ -I@rtm_includedir@ -I@rtm_idldir@ | sed -e 's/^[ ]*//g' -e 's/ \{2,\}/ /g'`
+rtm_cflags=`echo @CXXFLAGS@ -I@prefix@/include -I@coil_includedir@ -I@rtm_includedir@ -I${idldir} | sed -e 's/^[ ]*//g' -e 's/ \{2,\}/ /g'`
 rtm_cflags_I=`echo $rtm_cflags | sed -e 's/-[^I][^ ]*//g' -e 's/^[ ]*//g' -e 's/ \{2,\}/ /g'`
 rtm_cflags_o=`echo $rtm_cflags | sed -e 's/-I[^ ]*//g' -e 's/^[ ]*//g' -e 's/ \{2,\}/ /g'`
-rtm_libs=`echo @LDFLAGS@ -L@libdir@ @LIBS@ -lRTC -lcoil | sed -e 's/^[ ]*//g' -e 's/ \{2,\}/ /g'`
+rtm_libs=`echo @LDFLAGS@ -L${libdir} @LIBS@ | sed -e 's/^[ ]*//g' -e 's/ \{2,\}/ /g'`
 rtm_libs_l=`echo $rtm_libs | sed -e 's/-[^l][^ ]*//g' -e 's/^[ ]*//g' -e 's/ \{2,\}/ /g'`
 rtm_libs_L=`echo $rtm_libs | sed -e 's/-[^L][^ ]*//g' -e 's/^[ ]*//g' -e 's/ \{2,\}/ /g'`
 rtm_libs_o=`echo $rtm_libs | sed -e 's/-[lL][^ ]*//g' -e 's/^[ ]*//g' -e 's/ \{2,\}/ /g'`
 rtm_version="@RTM_VERSION@"
 rtm_orb="@CORBA@"
 rtm_idlc="@IDL_COMPILE_COMMAND@"
-rtm_idlflags=` echo @IDL_FLAGS@ -I@rtm_idldir@ | sed -e 's/^[ ]*//g' -e 's/ \{2,\}/ /g'`
+rtm_idlflags=` echo @IDL_FLAGS@ -I${idldir} | sed -e 's/^[ ]*//g' -e 's/ \{2,\}/ /g'`
 rtm_idlflags_I=` echo $rtm_idlflags | sed -e 's/-[^I][^ ]*//g' -e 's/^[ ]*//g' -e 's/ \{2,\}/ /g'`
 rtm_idlflags_o=` echo $rtm_idlflags | sed -e 's/-I[^ ]*//g' -e 's/^[ ]*//g' -e 's/ \{2,\}/ /g'`
 # other variables
 rtm_includedir="${prefix}/@INSTALL_RTM_INCLUDE_DIR@"
 rtm_idldir="${prefix}/@INSTALL_RTM_IDL_DIR@"
-rtm_libdir="${exec_prefix}/@INSTALL_RTM_LIB_DIR@"
+rtm_libdir="${exec_prefix}/@INSTALL_RTM_EXT_DIR@"
 rtm_datadir="${datarootdir}/@INSTALL_DATA_DIR@"
 rtm_rtcdir="${prefix}/@INSTALL_RTC_DIR@"
 rtm_ecdir="${prefix}/@INSTALL_EC_DIR@"

@@ -67,9 +67,25 @@ set(OPENRTM_IDL_WRAPPER rtm-skelwrapper)
 set(OPENRTM_IDL_WRAPPER_FLAGS --include-dir= --skel-suffix=Skel --stub-suffix=Stub)
 set(OPENRTM_IDLC @IDL_COMPILE_COMMAND@)
 
-set(OPENRTM_IDLFLAGS -as -DTAO_IDL -I/usr/include -I/usr/local/include -I${OPENRTM_DIR}/rtm/idl)
 
-include(FindPkgConfig)
+
+# TAO version
+set(TAO_DIR @ORB_ROOT@)
+if(test${TAO_DIR} STREQUAL "test")
+	set(OPENRTM_IDLFLAGS -as -DTAO_IDL -I/usr/include -I/usr/local/include  -I${OPENRTM_DIR}/rtm/idl)
+else()
+	set(OPENRTM_IDLFLAGS -as -DTAO_IDL -I${TAO_DIR}/include -I${OPENRTM_DIR}/rtm/idl)
+endif()
+set(TAO_CFLAGS @ORB_C_FLAGS_LIST@;)
+set(TAO_INCLUDE_DIRS @ORB_INCLUDE_DIR@)
+set(TAO_LDFLAGS )
+set(TAO_LIBRARY_DIRS @ORB_LINK_DIR@)
+set(TAO_LIBRARIES @ORB_LIBRARIES@)
+
+set(OPENRTM_CFLAGS ${OPENRTM_CFLAGS} ${TAO_CFLAGS})
+set(OPENRTM_INCLUDE_DIRS ${OPENRTM_INCLUDE_DIRS} ${TAO_INCLUDE_DIRS})
+set(OPENRTM_LDFLAGS ${OPENRTM_LDFLAGS} ${TAO_LDFLAGS})
+set(OPENRTM_LIBRARY_DIRS ${OPENRTM_LIBRARY_DIRS} ${TAO_LIBRARY_DIRS})
 
 
 
