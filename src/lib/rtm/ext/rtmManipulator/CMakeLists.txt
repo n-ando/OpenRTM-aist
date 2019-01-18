@@ -114,6 +114,13 @@ else(VXWORKS)
 						ARCHIVE DESTINATION ${INSTALL_RTM_LIB_DIR}
 						RUNTIME DESTINATION ${INSTALL_RTM_BIN_DIR}
 						COMPONENT ext)
+		add_library(${target}-static STATIC ${ALL_IDL_SRCS})
+		set_target_properties(${target}-static PROPERTIES DEBUG_POSTFIX d)
+		set_target_properties(${target}-static PROPERTIES OUTPUT_NAME ${target} CLEAN_DIRECT_OUTPUT 1)
+		install(TARGETS ${target}-static LIBRARY DESTINATION ${INSTALL_RTM_LIB_DIR}
+						ARCHIVE DESTINATION ${INSTALL_RTM_LIB_DIR}
+						RUNTIME DESTINATION ${INSTALL_RTM_BIN_DIR}
+						COMPONENT ext)
 	elseif(WIN32)
 		set_source_files_properties(${DEF_FILE_NAME} PROPERTIES GENERATED 1)
 		add_dependencies(${target} ${target}_static)

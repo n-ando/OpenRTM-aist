@@ -101,8 +101,18 @@ else(VXWORKS)
 	add_library(${target} SHARED ${ALL_IDL_SRCS})
 	set_target_properties(${target} PROPERTIES DEBUG_POSTFIX d)
 	target_link_libraries(${target} ${ORB_LIBRARIES} ${RTCSKEL_PROJECT_NAME})
+
+
 	if(UNIX)
 		install(TARGETS ${target} LIBRARY DESTINATION ${INSTALL_RTM_LIB_DIR}
+						ARCHIVE DESTINATION ${INSTALL_RTM_LIB_DIR}
+						RUNTIME DESTINATION ${INSTALL_RTM_BIN_DIR}
+						COMPONENT ext)
+
+		add_library(${target}-static STATIC ${ALL_IDL_SRCS})
+		set_target_properties(${target}-static PROPERTIES DEBUG_POSTFIX d)
+		set_target_properties(${target}-static PROPERTIES OUTPUT_NAME ${target} CLEAN_DIRECT_OUTPUT 1)
+		install(TARGETS ${target}-static LIBRARY DESTINATION ${INSTALL_RTM_LIB_DIR}
 						ARCHIVE DESTINATION ${INSTALL_RTM_LIB_DIR}
 						RUNTIME DESTINATION ${INSTALL_RTM_BIN_DIR}
 						COMPONENT ext)
@@ -144,5 +154,4 @@ foreach(idl ${idls})
 endforeach(idl)
 
 install(FILES ${SKEL_STUB_HEADER_FILES} DESTINATION ${INSTALL_RTM_INCLUDE_DIR}/rtm/ext COMPONENT ext)
-
 
