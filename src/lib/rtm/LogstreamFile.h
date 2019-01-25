@@ -101,7 +101,7 @@ namespace RTC
        *
        * @endif
        */
-      void header(int level, std::string name, std::string date, bool es_enable = false);
+      void header(int level, std::string &name, std::string &date, bool es_enable = false);
 
       /*!
        * @if jp
@@ -117,41 +117,41 @@ namespace RTC
        */
       virtual void flush();
       /*!
-	   * @if jp
-	   *
-	   * @brief エスケープシーケンスを有効にする
-	   *
-	   * 
-	   *
-	   * @else
-	   *
-	   * @brief 
-	   * 
-	   * 
-	   *
-	   * 
-	   *
-	   * @endif
-	   */
-	  void enableEscapeSequence();
-	  /*!
-	   * @if jp
-	   *
-	   * @brief エスケープシーケンスを無効にする
-	   *
-	   *
-	   *
-	   * @else
-	   *
-	   * @brief
-	   *
-	   * 
-	   *
-	   *
-	   *
-	   * @endif
-	   */
-	  void disableEscapeSequence();
+       * @if jp
+       *
+       * @brief エスケープシーケンスを有効にする
+       *
+       *
+       *
+       * @else
+       *
+       * @brief
+       *
+       *
+       *
+       *
+       *
+       * @endif
+       */
+      void enableEscapeSequence();
+      /*!
+       * @if jp
+       *
+       * @brief エスケープシーケンスを無効にする
+       *
+       *
+       *
+       * @else
+       *
+       * @brief
+       *
+       *
+       *
+       *
+       *
+       * @endif
+       */
+      void disableEscapeSequence();
       
   protected:
       std::basic_ostream<char> *m_stream;

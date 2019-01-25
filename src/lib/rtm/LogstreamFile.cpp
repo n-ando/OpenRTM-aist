@@ -50,7 +50,7 @@ namespace RTC
    *
    * @endif
    */
-  void FileStreamBase::header(int level, std::string name, std::string date, bool es_enable)
+  void FileStreamBase::header(int level, std::string &name, std::string &date, bool es_enable)
   {
       const char* color[] =
       {
