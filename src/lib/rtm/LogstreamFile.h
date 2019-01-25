@@ -101,7 +101,7 @@ namespace RTC
        *
        * @endif
        */
-      void header(int level, std::string &name, std::string &date, bool es_enable = false);
+      void header(int level, const std::string &name, const std::string &date, bool es_enable = false);
 
       /*!
        * @if jp
