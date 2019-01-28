@@ -52,4 +52,3 @@ elseif(MSVC)
 #	configure_file(${CMAKE_CURRENT_SOURCE_DIR}/OpenRTMFind_win.cmake.in ${PROJECT_BINARY_DIR}/OpenRTMFind.cmake @ONLY)
 endif()
 
-
