@@ -247,7 +247,7 @@ namespace RTC
    *
    * @endif
    */
-  void Logger::write(int level, coil::Properties &prop)
+  void Logger::write(int level, const coil::Properties &prop)
   {
       if (ostream_type)
       {

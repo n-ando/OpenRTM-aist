@@ -369,7 +369,7 @@ namespace RTC
      *
      * @endif
      */
-    void write(int level, coil::Properties &prop);
+    void write(int level, const coil::Properties &prop);
 
     /*!
      * @if jp
