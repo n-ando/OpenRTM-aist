@@ -8,10 +8,12 @@ project (FileNameservice)
 
 
 
-link_directories(${ORB_LINK_DIR})
+link_directories(${ORB_LINK_DIR}
+		 ${Boost_LIBRARY_DIRS})
 include_directories(
 		${RTM_INCLUDE_DIR}
 		${ORB_INCLUDE_DIR}
+		${Boost_INCLUDE_DIRS}
 		)
 
 ADD_DEFINITIONS(${ORB_C_FLAGS_LIST})
@@ -66,6 +68,5 @@ if(VXWORKS)
 		set_target_properties(${target} PROPERTIES SUFFIX ".out")
 	endif(RTP)
 endif(VXWORKS)
-
 
 
