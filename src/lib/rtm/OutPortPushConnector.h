@@ -189,7 +189,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode write(cdrMemoryStream& data);
+    virtual ReturnCode write(RTC::ByteDataStreamBase* data);
 
     /*!
      * @if jp

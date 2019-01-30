@@ -22,12 +22,14 @@
 #include <coil/Guard.h>
 #include <rtm/RTC.h>
 #include <rtm/ConnectorBase.h>
+#include <rtm/ByteData.h>
+#include <rtm/CORBA_CdrMemoryStream.h>
 
 #include <string>
 #include <vector>
 #include <utility>
 
-class cdrMemoryStream;
+
 
 namespace RTC
 {
@@ -477,7 +479,7 @@ namespace RTC
      * @endif
      */
 	virtual ReturnCode operator()(ConnectorInfo& info,
-                            cdrMemoryStream& data) = 0;
+                            ByteData& data) = 0;
   };
 
   /*!
@@ -544,16 +546,23 @@ namespace RTC
      * @endif
      */
 	virtual ReturnCode operator()(ConnectorInfo& info,
-                                  cdrMemoryStream& cdrdata)
+                                  ByteData& cdrdata)
     {
       DataType data;
-#ifdef ORB_IS_ORBEXPRESS
-      cdrMemoryStream cdr(cdrdata);
-#elif defined(ORB_IS_TAO)
-      cdrMemoryStream cdr(cdrdata);
-#else
-      cdrMemoryStream cdr(cdrdata.bufPtr(), cdrdata.bufSize());
-#endif
+      std::string marshaling_type = info.properties.getProperty("marshalig_type", "corba");
+      coil::normalize(marshaling_type);
+      
+      ByteDataStream<DataType> *cdr = coil::GlobalFactory <::RTC::ByteDataStream<DataType>>::instance().createObject(marshaling_type);
+      
+      
+      if (!cdr)
+      {
+          
+          return NO_CHANGE;
+      }
+      
+      
+      cdr->writeData(cdrdata.getBuffer(), cdrdata.getDataLength());
       // endian type check
       std::string endian_type;
       endian_type = info.properties.getProperty("serializer.cdr.endian",
@@ -561,47 +570,37 @@ namespace RTC
       coil::normalize(endian_type);
       std::vector<std::string> endian(coil::split(endian_type, ","));
 
-#ifdef ORB_IS_ORBEXPRESS
       if (endian[0] == "little")
-        {
-          cdr.cdr.is_little_endian(true);
-        }
+      {
+          cdr->isLittleEndian(true);
+      }
       else if (endian[0] == "big")
-        {
-          cdr.cdr.is_little_endian(false);
-        }
-       cdr.cdr >> data;
-#elif defined(ORB_IS_TAO)
-       TAO_InputCDR tao_cdr = TAO_InputCDR(cdr.cdr);
-       tao_cdr >> data;
-#else
-      if (endian[0] == "little")
-        {
-          cdr.setByteSwapFlag(true);
-        }
-      else if (endian[0] == "big")
-        {
-          cdr.setByteSwapFlag(false);
-        }
-      data <<= cdr;
-#endif
-	  ReturnCode ret = this->operator()(info, data);
-	  if (ret == DATA_CHANGED || ret == BOTH_CHANGED)
-	  {
+      {
+          cdr->isLittleEndian(false);
+      }
 
-#ifdef ORB_IS_ORBEXPRESS
-		  cdrdata.cdr.rewind();
-		  cdrdata.cdr << data;
-#elif defined(ORB_IS_TAO)
-		  cdrdata.cdr.reset();
-		  cdrdata.cdr << data;
-#else
-		  cdrdata.rewindPtrs();
-		  data >>= cdrdata;
-#endif
-	  }
+      cdr->deserialize(data);
+
+      ReturnCode ret = this->operator()(info, data);
+      if (ret == DATA_CHANGED || ret == BOTH_CHANGED)
+      {
+          if (endian[0] == "little")
+          {
+              cdr->serialize(data, true);
+          }
+          else if (endian[0] == "big")
+          {
+              cdr->serialize(data, false);
+          }
+      }
+
+      cdrdata.setDataLength(cdr->getDataLength());
+      cdr->readData(cdrdata.getBuffer(), cdrdata.getDataLength());
+
+      coil::GlobalFactory <::RTC::ByteDataStream<DataType>>::instance().deleteObject(cdr);
+  
 	  return ret;
-    }
+    };
 
     /*!
      * @if jp
@@ -1060,7 +1059,7 @@ namespace RTC
      * @endif
      */
 	ReturnCode notify(ConnectorInfo& info,
-                cdrMemoryStream& cdrdata);
+                ByteData& cdrdata);
 
     /*!
      * @if jp
@@ -1088,6 +1087,16 @@ namespace RTC
     {
       Guard guard(m_mutex);
       ReturnCode ret(NO_CHANGE);
+
+      std::string endian_type;
+      endian_type = info.properties.getProperty("serializer.cdr.endian",
+          "little");
+      coil::normalize(endian_type);
+      std::vector<std::string> endian(coil::split(endian_type, ","));
+
+      
+
+
       for (int i(0), len(m_listeners.size()); i < len; ++i)
         {
           ConnectorDataListenerT<DataType>* listener(0);
@@ -1099,16 +1108,18 @@ namespace RTC
             }
           else
             {
-              cdrMemoryStream cdr;
-#ifdef ORB_IS_ORBEXPRESS
-			  cdr.cdr << typeddata;
-#elif defined(ORB_IS_TAO)
-			  //TAO_InputCDR tao_cdr = TAO_InputCDR(cdr.cdr);
-			  cdr.cdr << typeddata;
-#else
-              typeddata >>= cdr;
-#endif
-              ret = ret | m_listeners[i].first->operator()(info, cdr);
+              CORBA_CdrMemoryStream<DataType> cdr;
+              
+              if (endian[0] == "little")
+              {
+                  cdr.serialize(typeddata, true);
+              }
+              else if (endian[0] == "big")
+              {
+                  cdr.serialize(typeddata, false);
+              }
+              ByteData tmp = cdr;
+              ret = ret | m_listeners[i].first->operator()(info, tmp);
             }
         }
 	  return ret;

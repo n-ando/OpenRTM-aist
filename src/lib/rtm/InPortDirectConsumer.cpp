@@ -67,7 +67,7 @@ namespace RTC
    * @endif
    */
   InPortConsumer::ReturnCode InPortDirectConsumer::
-	  put(cdrMemoryStream& data)
+	  put(ByteData& data)
   {
     RTC_PARANOID(("put(): never called."));
     return UNKNOWN_ERROR;

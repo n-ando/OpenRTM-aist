@@ -61,6 +61,9 @@ namespace RTC
     m_publisher->setBuffer(m_buffer);
     m_publisher->setListener(m_profile, &m_listeners);
 
+    m_marshaling_type = info.properties.getProperty("marshalig_type", "corba");
+    coil::normalize(m_marshaling_type);
+
     onConnect();
   }
 
@@ -85,16 +88,10 @@ namespace RTC
    * @endif
    */
   ConnectorBase::ReturnCode
-  OutPortPushConnector::write(cdrMemoryStream& data)
+  OutPortPushConnector::write(RTC::ByteDataStreamBase* data)
   {
     RTC_TRACE(("write()"));
-#ifdef ORB_IS_ORBEXPRESS
-    RTC_PARANOID(("data size = %d bytes", data.cdr.size_written()));
-#elif defined(ORB_IS_TAO)
-    RTC_PARANOID(("data size = %d bytes", data.cdr.total_length()));
-#else
-    RTC_PARANOID(("data size = %d bytes", data.bufSize()));
-#endif
+    RTC_PARANOID(("data size = %d bytes", data->getDataLength()));
     
     return m_publisher->write(data, -1, 0);
   }

@@ -24,10 +24,11 @@
 
 #include <rtm/RTC.h>
 #include <rtm/BufferBase.h>
+#include <rtm/ByteData.h>
 
 namespace RTC
 {
-  typedef BufferBase<cdrMemoryStream> CdrBufferBase;
+  typedef BufferBase<ByteData> CdrBufferBase;
   typedef ::coil::GlobalFactory<CdrBufferBase> CdrBufferFactory;
 };  // namespace RTC
 #endif  // RTC_CDRBUFFERBASE_H

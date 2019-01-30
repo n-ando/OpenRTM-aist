@@ -293,6 +293,9 @@ set(rtm_headers
 	InPortDSConsumer.h
 	MultilayerCompositeEC.h
 	EventBase.h
+	CORBA_CdrMemoryStream.h
+	ByteData.h
+	ByteDataStreamBase.h
 	${PROJECT_BINARY_DIR}/config_rtc.h
 	${PROJECT_BINARY_DIR}/version.h
 )
@@ -377,6 +380,9 @@ set(rtm_srcs
 	InPortDSProvider.cpp
 	InPortDSConsumer.cpp
 	MultilayerCompositeEC.cpp
+	ByteData.cpp
+	ByteDataStreamBase.cpp
+	CORBA_CdrMemoryStream.cpp
 	${rtm_headers}
 )
 
@@ -432,7 +438,7 @@ if(WIN32)
 	#ENDFOREACH()
 
 	set(DEF_FILE_NAME  ${RTM_PROJECT_NAME}.def)
-	#ADD_DEFINITIONS(-DLIBRARY_EXPORTS)
+	ADD_DEFINITIONS(-DLIBRARY_EXPORTS)
 	#add_library(${RTM_PROJECT_NAME}_static STATIC ${rtm_srcs} ${ALL_IDL_SRCS_RTM})
 
 	set(rtm_srcs ${rtm_srcs} ${SKEL_IDL_SRCS})

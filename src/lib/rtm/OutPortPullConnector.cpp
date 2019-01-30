@@ -60,6 +60,9 @@ namespace RTC
         m_sync_readwrite = true;
     }
 
+    m_marshaling_type = info.properties.getProperty("marshalig_type", "corba");
+    coil::normalize(m_marshaling_type);
+
     onConnect();
   }
 
@@ -84,7 +87,7 @@ namespace RTC
    * @endif
    */
   ConnectorBase::ReturnCode
-  OutPortPullConnector::write(cdrMemoryStream& data)
+  OutPortPullConnector::write(ByteDataStreamBase* data)
   {
 
     if (m_buffer == 0)
@@ -103,7 +106,7 @@ namespace RTC
         }
     }
 
-    m_buffer->write(data);
+    m_buffer->write(*data);
 
     if (m_sync_readwrite)
     {
@@ -131,7 +134,7 @@ namespace RTC
   }
 
   CdrBufferBase::ReturnCode
-  OutPortPullConnector::read(cdrMemoryStream &data)
+  OutPortPullConnector::read(ByteData &data)
   {
       if (m_buffer == 0)
       {

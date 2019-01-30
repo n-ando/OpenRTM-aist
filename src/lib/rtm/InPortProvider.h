@@ -276,7 +276,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual void setBuffer(BufferBase<cdrMemoryStream>* buffer) = 0;
+    virtual void setBuffer(BufferBase<ByteData>* buffer) = 0;
 
     /*!
      * @if jp

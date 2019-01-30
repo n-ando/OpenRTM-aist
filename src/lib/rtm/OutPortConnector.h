@@ -25,6 +25,8 @@
 #include <rtm/ConnectorListener.h>
 #include <rtm/DirectInPortBase.h>
 #include <rtm/PortBase.h>
+#include <rtm/CORBA_CdrMemoryStream.h>
+#include <rtm/ByteData.h>
 
 
 
@@ -162,7 +164,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode write(cdrMemoryStream& data) = 0;
+    virtual ReturnCode write(ByteDataStreamBase* data) = 0;
 
     /*!
      * @if jp
@@ -214,11 +216,12 @@ namespace RTC
     template <class DataType>
     ReturnCode write(DataType& data)
     {
+
       if (m_directInPort != NULL)
         {
           DirectInPortBase<DataType>* inport = dynamic_cast<DirectInPortBase<DataType>*>(m_directInPort->getDirectPort());
           if(inport)
-            {		
+            {
               if (inport->isNew())
                 {
                   // ON_BUFFER_OVERWRITE(In,Out), ON_RECEIVER_FULL(In,Out) callback
@@ -249,58 +252,54 @@ namespace RTC
                 connectorData_[ON_RECEIVED].notify(m_profile, data);
               RTC_PARANOID(("ON_RECEIVED(InPort,OutPort), "
                             "callback called in direct mode."));
+              
               return PORT_OK;
             }
         }
       // normal case
-#ifdef ORB_IS_ORBEXPRESS
-      m_cdr.cdr.rewind();
+      ::RTC::ByteDataStream<DataType> *cdr = coil::GlobalFactory <::RTC::ByteDataStream<DataType>>::instance().createObject(m_marshaling_type);
+      if (!cdr)
+      {
+          RTC_ERROR(("Can not find Marshalizer: %s", m_marshaling_type.c_str()));
+          return PORT_ERROR;
+      }
 
+      cdr->serialize(data, isLittleEndian());
       RTC_TRACE(("connector endian: %s", isLittleEndian() ? "little":"big"));
-      m_cdr.cdr.is_little_endian(isLittleEndian());
-      m_cdr.cdr << data;
-#elif defined(ORB_IS_TAO)
-      m_cdr.cdr.reset();
-      RTC_TRACE(("connector endian: %s", isLittleEndian() ? "little" : "big"));
-      m_cdr.cdr << data;
-#else
-      m_cdr.rewindPtrs();
-
-      RTC_TRACE(("connector endian: %s", isLittleEndian() ? "little":"big"));
-      m_cdr.setByteSwapFlag(isLittleEndian());
-      data >>= m_cdr;
-#endif
-      return write(m_cdr);
+      
+      ReturnCode ret = write((ByteDataStreamBase*)cdr);
+      coil::GlobalFactory <::RTC::ByteDataStream<DataType>>::instance().deleteObject(cdr);
+      return ret;
     }
 
-    virtual CdrBufferBase::ReturnCode read(cdrMemoryStream &data);
+    virtual CdrBufferBase::ReturnCode read(ByteData &data);
 
-	bool setInPort(InPortBase* directInPort);
-	/*!
-	* @if jp
-	* @brief ダイレクト接続モードに設定
-	*
-	*
-	* @else
-	* @brief
-	*
-	*
-	* @endif
-	*/
-	virtual void setPullDirectMode();
-	/*!
-	* @if jp
-	* @brief ダイレクト接続モードかの判定
-	*
-	* @return True：ダイレクト接続モード,false：それ以外
-	*
-	* @else
-	* @brief
-	*
-	*
-	* @endif
-	*/
-	virtual bool pullDirectMode();
+    bool setInPort(InPortBase* directInPort);
+    /*!
+     * @if jp
+     * @brief ダイレクト接続モードに設定
+     *
+     *
+     * @else
+     * @brief
+     *
+     *
+     * @endif
+     */
+    virtual void setPullDirectMode();
+    /*!
+     * @if jp
+     * @brief ダイレクト接続モードかの判定
+     *
+     * @return True：ダイレクト接続モード,false：それ以外
+     *
+     * @else
+     * @brief
+     *
+     *
+     * @endif
+     */
+    virtual bool pullDirectMode();
   protected:
     /*!
      * @if jp
@@ -326,14 +325,7 @@ namespace RTC
      * @endif
      */
     bool m_littleEndian;
-    /*!
-     * @if jp
-     * @brief cdrストリーム
-     * @else
-     * @brief CDR stream
-     * @endif
-     */
-    cdrMemoryStream m_cdr;
+    
 
 
     /*!
@@ -363,7 +355,24 @@ namespace RTC
      */
     ConnectorListeners* m_inPortListeners;
 
-	bool m_directMode;
+    /*!
+     * @if jp
+     * @brief ダイレクト接続のフラグ
+     * Trueでダイレクト接続モード
+     * @else
+     * @brief 
+     * @endif
+     */
+    bool m_directMode;
+
+    /*!
+     * @if jp
+     * @brief シリアライザの名前
+     * @else
+     * @brief
+     * @endif
+     */
+    std::string m_marshaling_type;
 
   };
 };  // namespace RTC

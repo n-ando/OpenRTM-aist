@@ -94,7 +94,7 @@ namespace RTC
    * @endif
    */
   OutPortConsumer::ReturnCode
-  OutPortCorbaCdrConsumer::get(cdrMemoryStream& data)
+  OutPortCorbaCdrConsumer::get(ByteData& data)
   {
     RTC_TRACE(("OutPortCorbaCdrConsumer::get()"));
     ::OpenRTM::CdrData_var cdr_data;
@@ -106,12 +106,13 @@ namespace RTC
         if (ret == ::OpenRTM::PORT_OK)
           {
             RTC_DEBUG(("get() successful"));
+
 #ifdef ORB_IS_ORBEXPRESS
-            data.cdr.write_array_1(cdr_data->get_buffer(), (CORBA::ULong)cdr_data->length());
+            data.writeData((void*)cdr_data.get_buffer(), (CORBA::ULong)cdr_data.length());
 #elif defined(ORB_IS_TAO)
-            data.decodeCDRData(cdr_data.in());
+            data.writeData((void*)cdr_data->get_buffer(), (CORBA::ULong)cdr_data->length());
 #else
-            data.put_octet_array(&(cdr_data[0]), (int)cdr_data->length());
+            data.writeData((void*)&(cdr_data[0]), (CORBA::ULong)cdr_data->length());
 #endif
             RTC_PARANOID(("CDR data length: %d", cdr_data->length()));
 
@@ -230,7 +231,7 @@ namespace RTC
    */
   OutPortConsumer::ReturnCode
   OutPortCorbaCdrConsumer::convertReturn(::OpenRTM::PortStatus status,
-                                         cdrMemoryStream& data)
+                                         ByteData& data)
   {
     switch (status)
       {

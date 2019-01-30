@@ -147,7 +147,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual void setBuffer(BufferBase<cdrMemoryStream>* buffer);
+    virtual void setBuffer(BufferBase<ByteData>* buffer);
 
     /*!
      * @if jp
@@ -259,7 +259,7 @@ namespace RTC
      * @param data cdrMemoryStream
      * @endif
      */
-    inline void onBufferWrite(cdrMemoryStream& data)
+    inline void onBufferWrite(ByteData& data)
     {
       m_listeners->
         connectorData_[ON_BUFFER_WRITE].notify(m_profile, data);
@@ -274,7 +274,7 @@ namespace RTC
      * @param data cdrMemoryStream
      * @endif
      */
-    inline void onBufferFull(cdrMemoryStream& data)
+    inline void onBufferFull(ByteData& data)
     {
       m_listeners->
         connectorData_[ON_BUFFER_FULL].notify(m_profile, data);
@@ -289,7 +289,7 @@ namespace RTC
      * @param data cdrMemoryStream
      * @endif
      */
-    inline void onBufferWriteTimeout(cdrMemoryStream& data)
+    inline void onBufferWriteTimeout(ByteData& data)
     {
       m_listeners->
         connectorData_[ON_BUFFER_WRITE_TIMEOUT].notify(m_profile, data);
@@ -304,7 +304,7 @@ namespace RTC
      * @param data cdrMemoryStream
      * @endif
      */
-    inline void onBufferWriteOverwrite(cdrMemoryStream& data)
+    inline void onBufferWriteOverwrite(ByteData& data)
     {
       m_listeners->
         connectorData_[ON_BUFFER_OVERWRITE].notify(m_profile, data);
@@ -319,7 +319,7 @@ namespace RTC
      * @param data cdrMemoryStream
      * @endif
      */
-    inline void onReceived(cdrMemoryStream& data)
+    inline void onReceived(ByteData& data)
     {
       m_listeners->
         connectorData_[ON_RECEIVED].notify(m_profile, data);
@@ -334,7 +334,7 @@ namespace RTC
      * @param data cdrMemoryStream
      * @endif
      */
-    inline void onReceiverFull(cdrMemoryStream& data)
+    inline void onReceiverFull(ByteData& data)
     {
       m_listeners->
         connectorData_[ON_RECEIVER_FULL].notify(m_profile, data);
@@ -347,7 +347,7 @@ namespace RTC
      * @brief Notify an ON_RECEIVER_TIMEOUT event to listeners
      * @endif
      */
-    inline void onReceiverTimeout(cdrMemoryStream& data)
+    inline void onReceiverTimeout(ByteData& data)
     {
       m_listeners->
         connectorData_[ON_RECEIVER_TIMEOUT].notify(m_profile, data);
@@ -360,7 +360,7 @@ namespace RTC
      * @Brief Notify an ON_RECEIVER_ERROR event to listeners
      * @endif
      */
-    inline void onReceiverError(cdrMemoryStream& data)
+    inline void onReceiverError(ByteData& data)
     {
       m_listeners->
         connectorData_[ON_RECEIVER_ERROR].notify(m_profile, data);
@@ -374,7 +374,7 @@ namespace RTC
 	  * @brief Return codes conversion
 	  * @endif
 	  */
-	  void convertReturn(BufferStatus::Enum status, cdrMemoryStream& data);
+	  void convertReturn(BufferStatus::Enum status, ByteData& data);
 
     CdrBufferBase* m_buffer;
     ::OpenRTM::InPortCdrUDP_var m_objref;

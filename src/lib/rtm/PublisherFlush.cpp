@@ -132,7 +132,7 @@ namespace RTC
    * @brief Write data
    * @endif
    */
-  PublisherBase::ReturnCode PublisherFlush::write(cdrMemoryStream& data,
+  PublisherBase::ReturnCode PublisherFlush::write(ByteDataStreamBase* data,
                                                   unsigned long sec,
                                                   unsigned long usec)
   {
@@ -146,34 +146,36 @@ namespace RTC
         RTC_DEBUG(("write(): connection lost."));
         return m_retcode;
       }
+    ByteData data_ = *data;
 
-    onSend(data);
-    ReturnCode ret(m_consumer->put(data));
+
+    onSend(data_);
+    ReturnCode ret(m_consumer->put(data_));
     // consumer::put() returns
     //  {PORT_OK, PORT_ERROR, SEND_FULL, SEND_TIMEOUT, UNKNOWN_ERROR}
 
     switch (ret)
       {
       case PORT_OK:
-        onReceived(data);
+        onReceived(data_);
         return ret;
       case PORT_ERROR:
-        onReceiverError(data);
+        onReceiverError(data_);
         return ret;
       case SEND_FULL:
-        onReceiverFull(data);
+        onReceiverFull(data_);
         return ret;
       case SEND_TIMEOUT:
-        onReceiverTimeout(data);
+        onReceiverTimeout(data_);
         return ret;
       case CONNECTION_LOST:
-        onReceiverTimeout(data);
+        onReceiverTimeout(data_);
         return ret;
       case UNKNOWN_ERROR:
-        onReceiverError(data);
+        onReceiverError(data_);
         return ret;
       default:
-        onReceiverError(data);
+        onReceiverError(data_);
         return ret;
       }
     return ret;

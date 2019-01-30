@@ -25,6 +25,8 @@
 #include <rtm/RTC.h>
 #include <rtm/CdrBufferBase.h>
 #include <rtm/DataPortStatus.h>
+#include <rtm/ByteDataStreamBase.h>
+
 
 namespace coil
 {
@@ -159,7 +161,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode setBuffer(BufferBase<cdrMemoryStream>* buffer) = 0;
+    virtual ReturnCode setBuffer(BufferBase<ByteData>* buffer) = 0;
 
     /*!
      * @if jp
@@ -253,7 +255,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode write(cdrMemoryStream& data,
+    virtual ReturnCode write(ByteDataStreamBase* data,
                              unsigned long sec,
                              unsigned long usec) = 0;
 
