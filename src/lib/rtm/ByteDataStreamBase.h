@@ -77,9 +77,7 @@ namespace RTC
      *
      * @endif
      */
-    ByteDataStreamBase()
-    {
-    }
+     ByteDataStreamBase();
 
     /*!
      * @if jp
@@ -96,9 +94,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~ByteDataStreamBase(void)
-    {
-    }
+    virtual ~ByteDataStreamBase(void);
 
     /*!
      * @if jp
@@ -113,7 +109,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual void init(const coil::Properties& prop) = 0;
+    virtual void init(const coil::Properties& prop);
     /*!
      * @if jp
      * @brief 保持しているバッファにデータを書き込む
@@ -175,7 +171,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual void isLittleEndian(bool little_endian) = 0;
+    virtual void isLittleEndian(bool little_endian);
   };
 
 
