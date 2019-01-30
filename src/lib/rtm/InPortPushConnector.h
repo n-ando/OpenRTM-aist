@@ -178,7 +178,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode read(cdrMemoryStream& data);
+    virtual ReturnCode read(ByteDataStreamBase* data);
 
     /*!
      * @if jp
@@ -255,7 +255,7 @@ namespace RTC
      */
     virtual CdrBufferBase* createBuffer(ConnectorInfo& info);
 
-    virtual BufferStatus::Enum write(cdrMemoryStream &cdr);
+    virtual BufferStatus::Enum write(ByteData &cdr);
 
     /*!
      * @if jp
@@ -275,19 +275,19 @@ namespace RTC
      */
     void onDisconnect();
     
-    inline void onBufferRead(cdrMemoryStream& data)
+    inline void onBufferRead(ByteData& data)
     {
       m_listeners.
         connectorData_[ON_BUFFER_READ].notify(m_profile, data);
 
     }
-    void onBufferEmpty(cdrMemoryStream& data)
+    void onBufferEmpty(ByteData& data)
     {
       m_listeners.
         connector_[ON_BUFFER_EMPTY].notify(m_profile);
 
     }
-    void onBufferReadTimeout(cdrMemoryStream& data)
+    void onBufferReadTimeout(ByteData& data)
     {
       m_listeners.
         connector_[ON_BUFFER_READ_TIMEOUT].notify(m_profile);

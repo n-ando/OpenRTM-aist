@@ -163,9 +163,9 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode write(cdrMemoryStream& data);
+    virtual ReturnCode write(ByteDataStreamBase* data);
 
-    virtual CdrBufferBase::ReturnCode read(cdrMemoryStream &data);
+    virtual CdrBufferBase::ReturnCode read(ByteData &data);
 
     /*!
      * @if jp

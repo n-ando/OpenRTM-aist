@@ -84,7 +84,7 @@ namespace RTC
    * @endif
    */
   void InPortSHMProvider::
-  setBuffer(BufferBase<cdrMemoryStream>* buffer)
+  setBuffer(BufferBase<ByteData>* buffer)
   {
     m_buffer = buffer;
   }
@@ -128,7 +128,7 @@ namespace RTC
 		return ::OpenRTM::PORT_ERROR;
 	}
 	
-	cdrMemoryStream cdr;
+    ByteData cdr;
 	bool endian_type = m_connector->isLittleEndian();
 
 	try
@@ -136,13 +136,8 @@ namespace RTC
 		setEndian(endian_type);
 		read(cdr);
 		
-#ifdef ORB_IS_ORBEXPRESS
-		RTC_PARANOID(("received data size: %d", cdr.cdr.size_written()));
-#elif defined(ORB_IS_TAO)
-		RTC_PARANOID(("received data size: %d", cdr.cdr.total_length()));
-#else
-		RTC_PARANOID(("received data size: %d", cdr.bufSize()));
-#endif
+		RTC_PARANOID(("received data size: %d", cdr.getDataLength()));
+
 		
 	}
 	catch (...)
@@ -166,7 +161,7 @@ namespace RTC
    */
   ::OpenRTM::PortStatus
   InPortSHMProvider::convertReturn(BufferStatus::Enum status,
-                                        cdrMemoryStream& data)
+                                        ByteData& data)
   {
     switch(status)
       {

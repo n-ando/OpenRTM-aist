@@ -111,7 +111,7 @@ namespace RTC
    * @endif
    */
   void InPortCorbaCdrProvider::
-  setBuffer(BufferBase<cdrMemoryStream>* buffer)
+  setBuffer(BufferBase<ByteData>* buffer)
   {
     m_buffer = buffer;
   }
@@ -157,13 +157,14 @@ namespace RTC
 
     if (m_connector == NULL)
       {
-        cdrMemoryStream cdr;
+        ByteData cdr;
+        
 #ifdef ORB_IS_ORBEXPRESS
-        cdr.cdr.write_array_1(data.get_buffer(), data.length());
+        cdr.writeData((void*)data.get_buffer(), (CORBA::ULong)data.length());
 #elif defined(ORB_IS_TAO)
-        cdr.decodeCDRData(data);
+        cdr.writeData((void*)data.get_buffer(), (CORBA::ULong)data.length());
 #else
-        cdr.put_octet_array(&(data[0]), data.length());
+        cdr.writeData((void*)&(data[0]), (CORBA::ULong)data.length());
 #endif
 
         onReceiverError(cdr);
@@ -171,28 +172,30 @@ namespace RTC
       }
 
     RTC_PARANOID(("received data size: %d", data.length()))
-    cdrMemoryStream cdr;
+    ByteData cdr;
     // set endian type
     bool endian_type = m_connector->isLittleEndian();
     RTC_TRACE(("connector endian: %s", endian_type ? "little":"big"));
+    
 
+
+
+    
+
+    cdr.isLittleEndian(endian_type);
 #ifdef ORB_IS_ORBEXPRESS
-    cdr.is_little_endian(endian_type);
-    cdr.write_array_1(data.get_buffer(), data.length());
-    RTC_PARANOID(("converted CDR data size: %d", cdr.size_written()));
+    cdr.writeData((void*)data.get_buffer(), (CORBA::ULong)data.length());
 #elif defined(ORB_IS_TAO)
-    //cdr.setByteSwapFlag(endian_type);
-    cdr.decodeCDRData(data);
-	
-    RTC_PARANOID(("converted CDR data size: %d", cdr.cdr.total_length()));
+    cdr.writeData((void*)data.get_buffer(), (CORBA::ULong)data.length());
 #else
-    cdr.setByteSwapFlag(endian_type);
-    cdr.put_octet_array(&(data[0]), data.length());
-    RTC_PARANOID(("converted CDR data size: %d", cdr.bufSize()));
+    cdr.writeData((void*)&(data[0]), (CORBA::ULong)data.length());
 #endif
+    RTC_PARANOID(("converted CDR data size: %d", cdr.getDataLength()));
 
-
+    
+    
     onReceived(cdr);
+    
     BufferStatus::Enum ret = m_connector->write(cdr);
 
     return convertReturn(ret, cdr);
@@ -207,7 +210,7 @@ namespace RTC
    */
   ::OpenRTM::PortStatus
   InPortCorbaCdrProvider::convertReturn(BufferStatus::Enum status,
-                                        cdrMemoryStream& data)
+                                        ByteData& data)
   {
     switch (status)
       {
