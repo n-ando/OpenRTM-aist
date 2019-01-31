@@ -267,7 +267,7 @@ namespace RTC
 		  close_memory(true);
 		  create_memory(memory_size, m_shmem.get_addresss().c_str());
 	  }
-      CORBA_CdrMemoryStreamBase data_size_cdr;
+      CORBA_CdrMemoryStream data_size_cdr;
 
       
       data_size_cdr.serialize_cdr(data_size, m_endian);
@@ -301,7 +301,7 @@ namespace RTC
 	  //if (ret == 0)
 	  if (m_shmem.created())
 	  {
-          CORBA_CdrMemoryStreamBase data_size_cdr;
+          CORBA_CdrMemoryStream data_size_cdr;
           CORBA::ULongLong data_size;
           data.isLittleEndian(m_endian);
           data_size_cdr.setEndian(m_endian);

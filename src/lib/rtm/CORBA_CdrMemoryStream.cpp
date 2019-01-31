@@ -39,11 +39,11 @@
   */
 namespace RTC
 {
-    CORBA_CdrMemoryStreamBase::CORBA_CdrMemoryStreamBase()
+    CORBA_CdrMemoryStream::CORBA_CdrMemoryStream()
     {
     }
 
-    void CORBA_CdrMemoryStreamBase::setEndian(bool little_endian)
+    void CORBA_CdrMemoryStream::setEndian(bool little_endian)
     {
 #ifdef ORB_IS_ORBEXPRESS
         m_cdr.is_little_endian(little_endian);
@@ -54,7 +54,7 @@ namespace RTC
 #endif
     }
 
-    unsigned long CORBA_CdrMemoryStreamBase::getCdrDataLength() const
+    unsigned long CORBA_CdrMemoryStream::getCdrDataLength() const
     {
 #ifdef ORB_IS_ORBEXPRESS
         return m_cdr.size_written();
@@ -65,7 +65,7 @@ namespace RTC
 #endif
     }
 
-    const void* CORBA_CdrMemoryStreamBase::getBuffer()
+    const void* CORBA_CdrMemoryStream::getBuffer()
     {
 #ifdef ORB_IS_ORBEXPRESS
         return m_cdr.get_buffer();
@@ -77,18 +77,18 @@ namespace RTC
     }
 
 #ifdef ORB_IS_ORBEXPRESS
-    CORBA::Stream& CORBA_CdrMemoryStreamBase::getCdr()
+    CORBA::Stream& CORBA_CdrMemoryStream::getCdr()
 #elif defined(ORB_IS_TAO)
-    TAO_OutputCDR& CORBA_CdrMemoryStreamBase::getCdr()
+    TAO_OutputCDR& CORBA_CdrMemoryStream::getCdr()
 #else
-    cdrMemoryStream& CORBA_CdrMemoryStreamBase::getCdr()
+    cdrMemoryStream& CORBA_CdrMemoryStream::getCdr()
 #endif
     {
         return m_cdr;
     };
 
 
-    void CORBA_CdrMemoryStreamBase::writeCdrData(const void* buffer, unsigned long length)
+    void CORBA_CdrMemoryStream::writeCdrData(const void* buffer, unsigned long length)
     {
 #ifdef ORB_IS_ORBEXPRESS
         m_cdr.write_array_1(buffer, length);
@@ -99,7 +99,7 @@ namespace RTC
 #endif
     };
 
-    void CORBA_CdrMemoryStreamBase::readCdrData(void* buffer, unsigned long length) const
+    void CORBA_CdrMemoryStream::readCdrData(void* buffer, unsigned long length) const
     {
 #ifdef ORB_IS_ORBEXPRESS
         length = tmp_data.cdr.size_written();

@@ -45,7 +45,7 @@ namespace RTC
     /*!
      * @if jp
      * @class CORBA_CdrMemoryStreamBase
-     * @brief CDRシリアライザの基底クラス
+     * @brief CDRシリアライザ
      * CDRマーシャリングに関わる関数を提供
      *
      *
@@ -62,7 +62,7 @@ namespace RTC
      *
      * @endif
      */
-    class CORBA_CdrMemoryStreamBase
+    class CORBA_CdrMemoryStream
     {
     public:
         /*!
@@ -79,7 +79,7 @@ namespace RTC
          *
          * @endif
          */
-        CORBA_CdrMemoryStreamBase();
+        CORBA_CdrMemoryStream();
 
         /*!
          * @if jp
@@ -322,6 +322,66 @@ namespace RTC
          */
         void readCdrData(void* buffer, unsigned long length) const;
 
+        /*!
+         * @if jp
+         * @brief コピーコンストラクタ
+         *
+         * @param rhs
+         *
+         * @else
+         * @brief
+         *
+         * @param rhs
+         *
+         * @endif
+         */
+        CORBA_CdrMemoryStream(const CORBA_CdrMemoryStream &rhs)
+        {
+#ifdef ORB_IS_ORBEXPRESS
+            m_cdr.copy(rhs.m_cdr);
+#elif defined(ORB_IS_TAO)
+            for (const ACE_Message_Block *i = rhs.m_cdr.begin(); i != 0; i = i->cont())
+            {
+                cdr.write_octet_array_mb(i);
+        }
+#else
+            m_cdr = rhs.m_cdr;
+#endif
+        }
+
+
+        /*!
+         * @if jp
+         * @brief 代入演算子
+         *
+         * @param rhs
+         * @return
+         *
+         * @else
+         * @brief
+         *
+         * @param rhs
+         * @return
+         *
+         * @endif
+         */
+        CORBA_CdrMemoryStream& operator= (const CORBA_CdrMemoryStream &rhs)
+        {
+#ifdef ORB_IS_ORBEXPRESS
+            m_cdr.copy(rhs.m_cdr);
+            return *this;
+#elif defined(ORB_IS_TAO)
+            for (const ACE_Message_Block *i = rhs.m_cdr.begin(); i != 0; i = i->cont())
+            {
+                m_cdr.write_octet_array_mb(i);
+            }
+            return *this;
+#else
+            m_cdr = rhs.m_cdr;
+            return *this;
+#endif
+        };
+
     protected:
 #ifdef ORB_IS_ORBEXPRESS
         CORBA::Stream m_cdr;
@@ -351,7 +411,7 @@ namespace RTC
      * @endif
      */
     template <class DataType>
-    class CORBA_CdrMemoryStream : public ByteDataStream<DataType>, public CORBA_CdrMemoryStreamBase
+    class CORBA_CdrSerializer : public ByteDataStream<DataType>
     {
     public:
         /*!
@@ -368,7 +428,7 @@ namespace RTC
          *
          * @endif
          */
-        CORBA_CdrMemoryStream()
+        CORBA_CdrSerializer()
         {
         }
 
@@ -387,7 +447,7 @@ namespace RTC
          *
          * @endif
          */
-        virtual ~CORBA_CdrMemoryStream(void)
+        virtual ~CORBA_CdrSerializer(void)
         {
         }
 
@@ -425,7 +485,7 @@ namespace RTC
          */
         virtual void writeData(const void* buffer, unsigned long length)
         {
-            writeCdrData(buffer, length);
+            m_cdr.writeCdrData(buffer, length);
         };
 
         /*!
@@ -446,7 +506,7 @@ namespace RTC
          */
         virtual void readData(void* buffer, unsigned long length) const
         {
-            readCdrData(buffer, length);
+            m_cdr.readCdrData(buffer, length);
         };
 
         /*!
@@ -464,7 +524,7 @@ namespace RTC
          */
         virtual unsigned long getDataLength() const
         {
-            return getCdrDataLength();
+            return m_cdr.getCdrDataLength();
         };
 
         /*!
@@ -484,7 +544,7 @@ namespace RTC
          */
         virtual bool serialize(const DataType& data, bool little_endian)
         {
-            return serialize_cdr(data, little_endian);
+            return m_cdr.serialize_cdr(data, little_endian);
         };
 
         /*!
@@ -502,7 +562,7 @@ namespace RTC
          */
         virtual bool deserialize(DataType& data)
         {
-            return deserialize_cdr(data);
+            return m_cdr.deserialize_cdr(data);
         };
 
         /*!
@@ -518,18 +578,9 @@ namespace RTC
          *
          * @endif
          */
-        CORBA_CdrMemoryStream<DataType>(const CORBA_CdrMemoryStream<DataType> &rhs)
+        CORBA_CdrSerializer<DataType>(const CORBA_CdrSerializer<DataType> &rhs)
         {
-#ifdef ORB_IS_ORBEXPRESS
-            m_cdr.copy(rhs.m_cdr);
-#elif defined(ORB_IS_TAO)
-            for (const ACE_Message_Block *i = rhs.m_cdr.begin(); i != 0; i = i->cont())
-            {
-                cdr.write_octet_array_mb(i);
-            }
-#else
-            m_cdr = rhs.m_cdr;
-#endif
+            m_cdr = rhs.m_cdr.m_cdr;
         };
 
         /*!
@@ -547,21 +598,10 @@ namespace RTC
          *
          * @endif
          */
-        CORBA_CdrMemoryStream<DataType>& operator= (const CORBA_CdrMemoryStream<DataType> &rhs)
+        CORBA_CdrSerializer<DataType>& operator= (const CORBA_CdrSerializer<DataType> &rhs)
         {
-#ifdef ORB_IS_ORBEXPRESS
-            m_cdr.copy(rhs.m_cdr);
-            return *this;
-#elif defined(ORB_IS_TAO)
-            for (const ACE_Message_Block *i = rhs.m_cdr.begin(); i != 0; i = i->cont())
-            {
-                m_cdr.write_octet_array_mb(i);
-            }
-            return *this;
-#else
             m_cdr = rhs.m_cdr;
             return *this;
-#endif
         };
 
         /*!
@@ -579,9 +619,13 @@ namespace RTC
          */
         virtual void isLittleEndian(bool little_endian)
         {
-            setEndian(little_endian);
+            m_cdr.setEndian(little_endian);
         }
+    private:
+        CORBA_CdrMemoryStream m_cdr;
+
     };
+
 
 
 
