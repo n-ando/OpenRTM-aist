@@ -599,7 +599,7 @@ namespace RTC
 
       coil::GlobalFactory <::RTC::ByteDataStream<DataType>>::instance().deleteObject(cdr);
   
-	  return ret;
+      return ret;
     };
 
     /*!
@@ -1108,18 +1108,23 @@ namespace RTC
             }
           else
             {
-              CORBA_CdrMemoryStream<DataType> cdr;
+              std::string marshaling_type = info.properties.getProperty("marshalig_type", "corba");
+              coil::normalize(marshaling_type);
+
+              ByteDataStream<DataType> *cdr = coil::GlobalFactory <::RTC::ByteDataStream<DataType>>::instance().createObject(marshaling_type);
+
               
               if (endian[0] == "little")
               {
-                  cdr.serialize(typeddata, true);
+                  cdr->serialize(typeddata, true);
               }
               else if (endian[0] == "big")
               {
-                  cdr.serialize(typeddata, false);
+                  cdr->serialize(typeddata, false);
               }
               ByteData tmp = cdr;
               ret = ret | m_listeners[i].first->operator()(info, tmp);
+              coil::GlobalFactory <::RTC::ByteDataStream<DataType>>::instance().deleteObject(cdr);
             }
         }
 	  return ret;
