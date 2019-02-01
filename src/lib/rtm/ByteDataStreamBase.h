@@ -254,7 +254,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual bool serialize(const DataType& data, bool little_endian) = 0;
+    virtual bool serialize(const DataType& data) = 0;
     /*!
      * @if jp
      * @brief データの復号化

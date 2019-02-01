@@ -586,12 +586,14 @@ namespace RTC
       {
           if (endian[0] == "little")
           {
-              cdr->serialize(data, true);
+              cdr->isLittleEndian(true);
           }
           else if (endian[0] == "big")
           {
-              cdr->serialize(data, false);
+              cdr->isLittleEndian(false);
           }
+
+          cdr->serialize(data);
       }
 
       cdrdata.setDataLength(cdr->getDataLength());
@@ -1116,13 +1118,14 @@ namespace RTC
               
               if (endian[0] == "little")
               {
-                  cdr->serialize(typeddata, true);
+                  cdr->isLittleEndian(true);
               }
               else if (endian[0] == "big")
               {
-                  cdr->serialize(typeddata, false);
+                  cdr->isLittleEndian(false);
               }
-              ByteData tmp = cdr;
+              cdr->serialize(typeddata);
+              ByteData tmp = *cdr;
               ret = ret | m_listeners[i].first->operator()(info, tmp);
               coil::GlobalFactory <::RTC::ByteDataStream<DataType>>::instance().deleteObject(cdr);
             }

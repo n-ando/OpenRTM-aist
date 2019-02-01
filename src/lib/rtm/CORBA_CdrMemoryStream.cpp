@@ -39,12 +39,13 @@
   */
 namespace RTC
 {
-    CORBA_CdrMemoryStream::CORBA_CdrMemoryStream()
+    CORBA_CdrMemoryStream::CORBA_CdrMemoryStream(): m_endian(true)
     {
     }
 
     void CORBA_CdrMemoryStream::setEndian(bool little_endian)
     {
+        m_endian = little_endian;
 #ifdef ORB_IS_ORBEXPRESS
         m_cdr.is_little_endian(little_endian);
 #elif defined(ORB_IS_TAO)

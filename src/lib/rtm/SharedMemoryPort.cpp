@@ -269,8 +269,8 @@ namespace RTC
 	  }
       CORBA_CdrMemoryStream data_size_cdr;
 
-      
-      data_size_cdr.serialize_cdr(data_size, m_endian);
+      data_size_cdr.setEndian(m_endian);
+      data_size_cdr.serializeCDR(data_size);
       int ret = m_shmem.write((char*)data_size_cdr.getBuffer(), 0, sizeof(CORBA::ULongLong));
 
 	  if (ret == 0)
@@ -306,7 +306,7 @@ namespace RTC
           data.isLittleEndian(m_endian);
           data_size_cdr.setEndian(m_endian);
           data_size_cdr.writeCdrData((void*)&(m_shmem.get_data()[0]), sizeof(CORBA::ULongLong));
-          data_size_cdr.deserialize_cdr(data_size);
+          data_size_cdr.deserializeCDR(data_size);
 
           //CORBA::Octet *shm_data = new CORBA::Octet[data_size];
           //ret = m_shmem.read((char*)shm_data, sizeof(CORBA::ULongLong), (int)data_size);

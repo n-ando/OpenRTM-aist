@@ -103,13 +103,13 @@ namespace RTC
          * @endif
          */
         template<class ExDataType>
-        bool serialize_cdr(const ExDataType& data, bool little_endian)
+        bool serializeCDR(const ExDataType& data)
         {
 #ifdef ORB_IS_ORBEXPRESS
             try
             {
                 m_cdr.rewind();
-                m_cdr.is_little_endian(little_endian);
+                m_cdr.is_little_endian(m_endian);
                 m_cdr << data;
                 return true;
             }
@@ -132,7 +132,7 @@ namespace RTC
             try
             {
                 m_cdr.rewindPtrs();
-                m_cdr.setByteSwapFlag(little_endian);
+                m_cdr.setByteSwapFlag(m_endian);
                 data >>= m_cdr;
                 return true;
             }
@@ -163,7 +163,7 @@ namespace RTC
          * @endif
          */
         template<class ExDataType>
-        bool deserialize_cdr(ExDataType& data)
+        bool deserializeCDR(ExDataType& data)
         {
 #ifdef ORB_IS_ORBEXPRESS
             try
@@ -390,6 +390,7 @@ namespace RTC
 #else
         cdrMemoryStream m_cdr;
 #endif
+        bool m_endian;
     };
     /*!
      * @if jp
@@ -542,9 +543,9 @@ namespace RTC
          *
          * @endif
          */
-        virtual bool serialize(const DataType& data, bool little_endian)
+        virtual bool serialize(const DataType& data)
         {
-            return m_cdr.serialize_cdr(data, little_endian);
+            return m_cdr.serializeCDR(data);
         };
 
         /*!
@@ -562,7 +563,7 @@ namespace RTC
          */
         virtual bool deserialize(DataType& data)
         {
-            return m_cdr.deserialize_cdr(data);
+            return m_cdr.deserializeCDR(data);
         };
 
         /*!
@@ -623,6 +624,7 @@ namespace RTC
         }
     private:
         CORBA_CdrMemoryStream m_cdr;
+        
 
     };
 

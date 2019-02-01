@@ -263,8 +263,8 @@ namespace RTC
           RTC_ERROR(("Can not find Marshalizer: %s", m_marshaling_type.c_str()));
           return PORT_ERROR;
       }
-
-      cdr->serialize(data, isLittleEndian());
+      cdr->isLittleEndian(isLittleEndian());
+      cdr->serialize(data);
       RTC_TRACE(("connector endian: %s", isLittleEndian() ? "little":"big"));
       
       ReturnCode ret = write((ByteDataStreamBase*)cdr);
