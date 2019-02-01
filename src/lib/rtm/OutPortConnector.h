@@ -257,7 +257,7 @@ namespace RTC
             }
         }
       // normal case
-      ::RTC::ByteDataStream<DataType> *cdr = coil::GlobalFactory <::RTC::ByteDataStream<DataType>>::instance().createObject(m_marshaling_type);
+      ::RTC::ByteDataStream<DataType> *cdr = coil::GlobalFactory < ::RTC::ByteDataStream<DataType> >::instance().createObject(m_marshaling_type);
       if (!cdr)
       {
           RTC_ERROR(("Can not find Marshalizer: %s", m_marshaling_type.c_str()));
@@ -268,7 +268,7 @@ namespace RTC
       RTC_TRACE(("connector endian: %s", isLittleEndian() ? "little":"big"));
       
       ReturnCode ret = write((ByteDataStreamBase*)cdr);
-      coil::GlobalFactory <::RTC::ByteDataStream<DataType>>::instance().deleteObject(cdr);
+      coil::GlobalFactory < ::RTC::ByteDataStream<DataType> >::instance().deleteObject(cdr);
       return ret;
     }
 

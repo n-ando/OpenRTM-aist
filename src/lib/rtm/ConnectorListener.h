@@ -552,7 +552,7 @@ namespace RTC
       std::string marshaling_type = info.properties.getProperty("marshalig_type", "corba");
       coil::normalize(marshaling_type);
       
-      ByteDataStream<DataType> *cdr = coil::GlobalFactory <::RTC::ByteDataStream<DataType>>::instance().createObject(marshaling_type);
+      ByteDataStream<DataType> *cdr = coil::GlobalFactory < ::RTC::ByteDataStream<DataType> >::instance().createObject(marshaling_type);
       
       
       if (!cdr)
@@ -599,7 +599,7 @@ namespace RTC
       cdrdata.setDataLength(cdr->getDataLength());
       cdr->readData(cdrdata.getBuffer(), cdrdata.getDataLength());
 
-      coil::GlobalFactory <::RTC::ByteDataStream<DataType>>::instance().deleteObject(cdr);
+      coil::GlobalFactory < ::RTC::ByteDataStream<DataType> >::instance().deleteObject(cdr);
   
       return ret;
     };
@@ -1113,7 +1113,7 @@ namespace RTC
               std::string marshaling_type = info.properties.getProperty("marshalig_type", "corba");
               coil::normalize(marshaling_type);
 
-              ByteDataStream<DataType> *cdr = coil::GlobalFactory <::RTC::ByteDataStream<DataType>>::instance().createObject(marshaling_type);
+              ByteDataStream<DataType> *cdr = coil::GlobalFactory < ::RTC::ByteDataStream<DataType> >::instance().createObject(marshaling_type);
 
               
               if (endian[0] == "little")
@@ -1127,7 +1127,7 @@ namespace RTC
               cdr->serialize(typeddata);
               ByteData tmp = *cdr;
               ret = ret | m_listeners[i].first->operator()(info, tmp);
-              coil::GlobalFactory <::RTC::ByteDataStream<DataType>>::instance().deleteObject(cdr);
+              coil::GlobalFactory < ::RTC::ByteDataStream<DataType> >::instance().deleteObject(cdr);
             }
         }
 	  return ret;

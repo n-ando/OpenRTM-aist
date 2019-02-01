@@ -221,7 +221,7 @@ namespace RTC
     template<class DataType>
     ReturnCode read(DataType& data)
     {
-        ::RTC::ByteDataStream<DataType> *cdr = coil::GlobalFactory <::RTC::ByteDataStream<DataType>>::instance().createObject(m_marshaling_type);
+        ::RTC::ByteDataStream<DataType> *cdr = coil::GlobalFactory < ::RTC::ByteDataStream<DataType> >::instance().createObject(m_marshaling_type);
 
         
         if (!cdr)
@@ -234,7 +234,7 @@ namespace RTC
         {
             cdr->deserialize(data);
         }
-        coil::GlobalFactory <::RTC::ByteDataStream<DataType>>::instance().deleteObject(cdr);
+        coil::GlobalFactory < ::RTC::ByteDataStream<DataType> >::instance().deleteObject(cdr);
         return ret;
     }
 
