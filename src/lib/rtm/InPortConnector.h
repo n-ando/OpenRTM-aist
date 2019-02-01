@@ -232,6 +232,7 @@ namespace RTC
         ReturnCode ret = read((ByteDataStreamBase*)cdr);
         if (ret == PORT_OK)
         {
+            cdr->isLittleEndian(isLittleEndian());
             cdr->deserialize(data);
         }
         coil::GlobalFactory < ::RTC::ByteDataStream<DataType> >::instance().deleteObject(cdr);
