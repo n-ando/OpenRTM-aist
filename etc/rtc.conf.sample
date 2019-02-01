@@ -504,28 +504,28 @@ logger.file_name: ./rtc%p.log
 #
 logger.date_format: %b %d %H:%M:%S
 
-#
-# Log level (default = NORMAL)
-#
-# The following LogLevels are allowed.
-# SILENT, ERROR, WARN, NORMAL, INFO, DEBUG, TRACE, VERBOSE, PARANOID
-#
-#
-# SILENT  : completely silent
-# ERROR   : includes (ERROR)
-# WARN    : includes (ERROR, WARN)
-# INFO    : includes (ERROR, WARN, INFO)
-# NORMAL  : includes (ERROR, WARN, INFO, NORMAL)
-# DEBUG   : includes (ERROR, WARN, INFO, NORMAL, DEBUG)
-# TRACE   : includes (ERROR, WARN, INFO, NORMAL, DEBUG, TRACE)
-# VERBOSE : includes (ERROR, WARN, INFO, NORMAL, DEBUG, TRACE, VERBOSE)
-# PARANOID: includes (ERROR, WARN, INFO, NORMAL, DEBUG, TRACE, VERBOSE, PARA)
-#
-# Warning!!!
-# "TRACE", "VERBOSE", "PARANOID" logging level will create a huge log file!!
-# "PARANOID" log level will tangle the log file.
-#
-logger.log_level: NORMAL
+##
+## Log level (default = INFO)
+##
+## The following LogLevels are allowed.
+## SILENT, FATAL, ERROR, WARN, INFO, DEBUG, TRACE, VERBOSE, PARANOID
+##
+##
+## SILENT  : completely silent
+## FATAL   : includes (FATAL)
+## ERROR   : includes (FATAL, ERROR)
+## WARN    : includes (FATAL, ERROR, WARN)
+## INFO    : includes (FATAL, ERROR, WARN, INFO)
+## DEBUG   : includes (FATAL, ERROR, WARN, INFO, DEBUG)
+## TRACE   : includes (FATAL, ERROR, WARN, INFO, DEBUG, TRACE)
+## VERBOSE : includes (FATAL, ERROR, WARN, INFO, DEBUG, TRACE, VERBOSE)
+## PARANOID: includes (FATAL, ERROR, WARN, INFO, DEBUG, TRACE, VERBOSE, PARA)
+##
+## Warning!!!
+## "TRACE", "VERBOSE", "PARANOID" logging level will create a huge log file!!
+## "PARANOID" log level will tangle the log file.
+##
+logger.log_level: INFO
 
 #
 # Logger's clock time
