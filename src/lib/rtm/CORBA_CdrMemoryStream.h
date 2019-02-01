@@ -44,7 +44,7 @@ namespace RTC
 {
     /*!
      * @if jp
-     * @class CORBA_CdrMemoryStreamBase
+     * @class CORBA_CdrMemoryStream
      * @brief CDRシリアライザ
      * CDRマーシャリングに関わる関数を提供
      *
@@ -54,7 +54,7 @@ namespace RTC
      * @since 2.0.0
      *
      * @else
-     * @class CORBA_CdrMemoryStreamBase
+     * @class CORBA_CdrMemoryStream
      * @brief 
      *
      *
@@ -394,8 +394,8 @@ namespace RTC
     };
     /*!
      * @if jp
-     * @class ByteDataStreamBase
-     * @brief
+     * @class CORBA_CdrSerializer
+     * @brief CORBAのCDRシリアライザの実装
      *
      *
      * @param
@@ -403,8 +403,8 @@ namespace RTC
      * @since 2.0.0
      *
      * @else
-     * @class RingBuffer
-     * @brief Ring buffer implementation class
+     * @class CORBA_CdrSerializer
+     * @brief 
      *
      *
      * @since 2.0.0
@@ -639,7 +639,17 @@ namespace RTC
 
 
 
-
+/*!
+ * @if jp
+ * @brief CDRシリアライザの初期化関数
+ *
+ *
+ * @else
+ * @brief
+ *
+ *
+ * @endif
+ */
 template <typename DataType>
 void CdrMemoryStreamInit()
 {
