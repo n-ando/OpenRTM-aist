@@ -1,0 +1,21 @@
+language: c
+sudo: required
+
+services:
+  - docker
+
+env:
+  - TARGET_DIST=ubuntu TARGET_VER=1604
+
+branches:
+  only:
+  - master
+
+script: 
+  - docker build --rm -t ${TARGET_DIST}-${TARGET_VER} -f build/${TARGET_DIST}_${TARGET_VER}/Dockerfile .
+  - export CONTAINER_NAME=${TARGET_DIST}-${TARGET_VER}
+  - docker run --name ${CONTAINER_NAME} -itd ${CONTAINER_NAME} bash
+  - docker exec ${CONTAINER_NAME} git clone https://github.com/n-kawauchi/OpenRTM-aist.git
+  - docker exec ${CONTAINER_NAME} bash -c 'cd OpenRTM-aist; mkdir src/lib/coil/common/coil; cp src/lib/coil/common/*.* src/lib/coil/common/coil/'
+  - docker exec ${CONTAINER_NAME} bash -c 'cp OpenRTM-aist/build/yat.py OpenRTM-aist/utils/rtm-skelwrapper/'
+  - docker exec ${CONTAINER_NAME} bash -c 'cd OpenRTM-aist; mkdir build_linux; cd build_linux; cmake -DCORBA=omniORB ..; make' 
