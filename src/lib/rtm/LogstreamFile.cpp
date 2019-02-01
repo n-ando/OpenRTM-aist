@@ -317,7 +317,7 @@ namespace RTC
       coil::toBool(prop["logger.escape_sequence_enable"], "YES", "NO", false) ?
           enableEscapeSequence() : disableEscapeSequence();
 
-      m_fileout.open(filename, std::ios::out | std::ios::app);
+      m_fileout.open(filename.c_str(), std::ios::out | std::ios::app);
       m_stream = new std::basic_ostream<char>(&m_fileout);
   }
 
