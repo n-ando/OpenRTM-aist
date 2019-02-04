@@ -65,7 +65,7 @@ namespace RTC
     ByteData::ByteData(const ByteData &rhs)
     {
         m_len = rhs.m_len;
-        m_buf = new char[m_len];
+        m_buf = new unsigned char[m_len];
         memcpy(m_buf, rhs.m_buf, m_len);
     }
 
@@ -89,7 +89,7 @@ namespace RTC
     ByteData::ByteData(const ByteDataStreamBase &rhs)
     {
         m_len = rhs.getDataLength();
-        m_buf = new char[m_len];
+        m_buf = new unsigned char[m_len];
         rhs.readData(m_buf, m_len);
     }
     /*!
@@ -113,7 +113,7 @@ namespace RTC
     ByteData& ByteData::operator= (const ByteData &rhs)
     {
         m_len = rhs.m_len;
-        m_buf = new char[m_len];
+        m_buf = new unsigned char[m_len];
         memcpy(m_buf, rhs.m_buf, m_len);
         return *this;
     }
@@ -138,7 +138,7 @@ namespace RTC
     ByteData& ByteData::operator= (const ByteDataStreamBase &rhs)
     {
         m_len = rhs.getDataLength();
-        m_buf = new char[m_len];
+        m_buf = new unsigned char[m_len];
         rhs.readData(m_buf, m_len);
         return *this;
     }
@@ -158,7 +158,7 @@ namespace RTC
      *
      * @endif
      */
-    void* ByteData::getBuffer() const
+    unsigned char* ByteData::getBuffer() const
     {
         return m_buf;
     }
@@ -202,7 +202,7 @@ namespace RTC
      *
      * @endif
      */
-    void ByteData::readData(void* data, unsigned long length) const
+    void ByteData::readData(unsigned char* data, unsigned long length) const
     {
         if (length <= 0)
         {
@@ -235,7 +235,7 @@ namespace RTC
      *
      * @endif
      */
-    void ByteData::writeData(const void* data, unsigned long length)
+    void ByteData::writeData(const unsigned char* data, unsigned long length)
     {
         if (length <= 0)
         {
@@ -246,7 +246,7 @@ namespace RTC
             delete m_buf;
         }
         m_len = length;
-        m_buf = new char[length];
+        m_buf = new unsigned char[length];
         memcpy(m_buf, data, length);
     }
     /*!
@@ -297,7 +297,7 @@ namespace RTC
         {
             delete m_buf;
         }
-        m_buf = new char[length];
+        m_buf = new unsigned char[length];
     }
     /*!
      * @if jp

@@ -126,7 +126,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual void writeData(const void* buffer, unsigned long length) = 0;
+    virtual void writeData(const unsigned char* buffer, unsigned long length) = 0;
     /*!
      * @if jp
      * @brief 引数のバッファにデータを書き込む
@@ -143,7 +143,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual void readData(void* buffer, unsigned long length) const = 0;
+    virtual void readData(unsigned char* buffer, unsigned long length) const = 0;
     /*!
      * @if jp
      * @brief データの長さを取得

@@ -66,14 +66,14 @@ namespace RTC
 #endif
     }
 
-    const void* CORBA_CdrMemoryStream::getBuffer()
+    const unsigned char* CORBA_CdrMemoryStream::getBuffer()
     {
 #ifdef ORB_IS_ORBEXPRESS
-        return m_cdr.get_buffer();
+        return (unsigned char*)m_cdr.get_buffer();
 #elif defined(ORB_IS_TAO)
-        return m_cdr.begin();
+        return (unsigned char*)m_cdr.begin();
 #else
-        return m_cdr.bufPtr();
+        return (unsigned char*)m_cdr.bufPtr();
 #endif
     }
 
@@ -89,7 +89,7 @@ namespace RTC
     };
 
 
-    void CORBA_CdrMemoryStream::writeCdrData(const void* buffer, unsigned long length)
+    void CORBA_CdrMemoryStream::writeCdrData(const unsigned char* buffer, unsigned long length)
     {
 #ifdef ORB_IS_ORBEXPRESS
         m_cdr.write_array_1(buffer, length);
@@ -100,7 +100,7 @@ namespace RTC
 #endif
     };
 
-    void CORBA_CdrMemoryStream::readCdrData(void* buffer, unsigned long length) const
+    void CORBA_CdrMemoryStream::readCdrData(unsigned char* buffer, unsigned long length) const
     {
 #ifdef ORB_IS_ORBEXPRESS
         length = tmp_data.cdr.size_written();

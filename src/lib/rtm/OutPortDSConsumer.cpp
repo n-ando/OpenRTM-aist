@@ -105,11 +105,11 @@ namespace RTC
           {
             RTC_DEBUG(("get() successful"));
 #ifdef ORB_IS_ORBEXPRESS
-            data.writeData((void*)cdr_data.get_buffer(), (CORBA::ULong)cdr_data.length());
+            data.writeData((unsigned char*)cdr_data.get_buffer(), (CORBA::ULong)cdr_data.length());
 #elif defined(ORB_IS_TAO)
-            data.writeData((void*)cdr_data->get_buffer(), (CORBA::ULong)cdr_data->length());
+            data.writeData((unsigned char*)cdr_data->get_buffer(), (CORBA::ULong)cdr_data->length());
 #else
-            data.writeData((void*)&(cdr_data[0]), (CORBA::ULong)cdr_data->length());
+            data.writeData((unsigned char*)&(cdr_data[0]), (CORBA::ULong)cdr_data->length());
 #endif
             RTC_PARANOID(("CDR data length: %d", cdr_data->length()));
 

@@ -158,13 +158,12 @@ namespace RTC
     if (m_connector == NULL)
       {
         ByteData cdr;
-        
 #ifdef ORB_IS_ORBEXPRESS
-        cdr.writeData((void*)data.get_buffer(), (CORBA::ULong)data.length());
+        cdr.writeData((unsigned char*)data.get_buffer(), (CORBA::ULong)data.length());
 #elif defined(ORB_IS_TAO)
-        cdr.writeData((void*)data.get_buffer(), (CORBA::ULong)data.length());
+        cdr.writeData((unsigned char*)data.get_buffer(), (CORBA::ULong)data.length());
 #else
-        cdr.writeData((void*)&(data[0]), (CORBA::ULong)data.length());
+        cdr.writeData((unsigned char*)&(data[0]), (CORBA::ULong)data.length());
 #endif
 
         onReceiverError(cdr);
@@ -184,11 +183,11 @@ namespace RTC
 
     cdr.isLittleEndian(endian_type);
 #ifdef ORB_IS_ORBEXPRESS
-    cdr.writeData((void*)data.get_buffer(), (CORBA::ULong)data.length());
+    cdr.writeData((unsigned char*)data.get_buffer(), (CORBA::ULong)data.length());
 #elif defined(ORB_IS_TAO)
-    cdr.writeData((void*)data.get_buffer(), (CORBA::ULong)data.length());
+    cdr.writeData((unsigned char*)data.get_buffer(), (CORBA::ULong)data.length());
 #else
-    cdr.writeData((void*)&(data[0]), (CORBA::ULong)data.length());
+    cdr.writeData((unsigned char*)&(data[0]), (CORBA::ULong)data.length());
 #endif
     RTC_PARANOID(("converted CDR data size: %d", cdr.getDataLength()));
 

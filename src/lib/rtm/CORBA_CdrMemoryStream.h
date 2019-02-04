@@ -235,7 +235,7 @@ namespace RTC
          *
          * @endif
          */
-        const void* getBuffer();
+        const unsigned char* getBuffer();
         /*!
          * @if jp
          *
@@ -299,7 +299,7 @@ namespace RTC
          *
          * @endif
          */
-        void writeCdrData(const void* buffer, unsigned long length);
+        void writeCdrData(const unsigned char* buffer, unsigned long length);
 
         /*!
          * @if jp
@@ -320,7 +320,7 @@ namespace RTC
          *
          * @endif
          */
-        void readCdrData(void* buffer, unsigned long length) const;
+        void readCdrData(unsigned char* buffer, unsigned long length) const;
 
         /*!
          * @if jp
@@ -484,7 +484,7 @@ namespace RTC
          *
          * @endif
          */
-        virtual void writeData(const void* buffer, unsigned long length)
+        virtual void writeData(const unsigned char* buffer, unsigned long length)
         {
             m_cdr.writeCdrData(buffer, length);
         };
@@ -505,7 +505,7 @@ namespace RTC
          *
          * @endif
          */
-        virtual void readData(void* buffer, unsigned long length) const
+        virtual void readData(unsigned char* buffer, unsigned long length) const
         {
             m_cdr.readCdrData(buffer, length);
         };

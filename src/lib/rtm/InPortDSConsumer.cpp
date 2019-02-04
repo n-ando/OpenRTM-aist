@@ -73,7 +73,7 @@ namespace RTC
     ::RTC::OctetSeq tmp;
     CORBA::ULong len = (CORBA::ULong)data.getDataLength();
     tmp.length(len);
-    data.readData((void*)tmp.get_buffer(), len);
+    data.readData((unsigned char*)tmp.get_buffer(), len);
 #else // ORB_IS_RTORB
     OpenRTM_CdrData *cdrdata_tmp = new OpenRTM_CdrData();
     cdrdata_tmp->_buffer =

@@ -152,7 +152,7 @@ namespace RTC
          *
          * @endif
          */
-        void readData(void* data, unsigned long length) const;
+        void readData(unsigned char* data, unsigned long length) const;
         /*!
          * @if jp
          *
@@ -173,7 +173,7 @@ namespace RTC
          *
          * @endif
          */
-        void writeData(const void* data, unsigned long length);
+        void writeData(const unsigned char* data, unsigned long length);
         /*!
          * @if jp
          *
@@ -190,7 +190,7 @@ namespace RTC
          *
          * @endif
          */
-        void* getBuffer() const;
+        unsigned char* getBuffer() const;
         /*!
          * @if jp
          *
@@ -263,7 +263,7 @@ namespace RTC
          */
         bool getEndian();
     private:
-        void* m_buf;
+        unsigned char* m_buf;
         unsigned long m_len;
         bool m_little_endian;
     };

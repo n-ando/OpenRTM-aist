@@ -305,7 +305,7 @@ namespace RTC
           CORBA::ULongLong data_size;
           data.isLittleEndian(m_endian);
           data_size_cdr.setEndian(m_endian);
-          data_size_cdr.writeCdrData((void*)&(m_shmem.get_data()[0]), sizeof(CORBA::ULongLong));
+          data_size_cdr.writeCdrData((unsigned char*)&(m_shmem.get_data()[0]), sizeof(CORBA::ULongLong));
           data_size_cdr.deserializeCDR(data_size);
 
           //CORBA::Octet *shm_data = new CORBA::Octet[data_size];
@@ -316,7 +316,7 @@ namespace RTC
               	 
               data.put_octet_array(&(shm_data[0]), (int)data_size);
           }*/
-          data.writeData((void*)&(m_shmem.get_data()[sizeof(CORBA::ULongLong)]), (unsigned long)data_size);
+          data.writeData((unsigned char*)(m_shmem.get_data()[sizeof(CORBA::ULongLong)]), (unsigned long)data_size);
           //delete shm_data;
 	  }
 
