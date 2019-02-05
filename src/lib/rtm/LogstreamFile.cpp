@@ -64,11 +64,24 @@ namespace RTC
         "\x1b[0m\x1b[39m",  // VERBOSE  (default)
         "\x1b[0m\x1b[37m"   // PARANOID (white)
       };
+
+      const char* level_str[] =
+      {
+        "SILENT:   ",
+        "FATAL:    ",
+        "ERROR:    ",
+        "WARN:     ",
+        "INFO:     ",
+        "DEBUG:    ",
+        "TRACE:    ",
+        "VERBOSE:  ",
+        "PARANOID: "
+      };
       if (es_enable)
       {
           *m_stream << color[level];
       }
-      *m_stream << date << " " << Logger::getLevelString(level) << ": " << name << ": ";
+      *m_stream << date << " " << level_str[level] << name << ": ";
       if (es_enable)
       {
           *m_stream << "\x1b[0m";
