@@ -41,7 +41,7 @@ namespace RTC
     {
         if (m_buf)
         {
-            delete m_buf;
+            delete[] m_buf;
         }
     }
 
@@ -241,10 +241,9 @@ namespace RTC
         {
             return;
         }
-        if (m_buf)
-        {
-            delete m_buf;
-        }
+        
+        delete[] m_buf;
+        
         m_len = length;
         m_buf = new unsigned char[length];
         memcpy(m_buf, data, length);
@@ -293,10 +292,8 @@ namespace RTC
         {
             return;
         }
-        if (m_buf)
-        {
-            delete m_buf;
-        }
+        delete[] m_buf;
+
         m_buf = new unsigned char[length];
     }
     /*!
