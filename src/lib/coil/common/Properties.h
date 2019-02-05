@@ -1081,7 +1081,7 @@ namespace coil
      *
      * @endif
      */
-    explicit operator std::vector<std::string>() const;
+    operator std::vector<std::string>() const;
     /*!
      * @if jp
      * @brief Propertyの内容を文字列に格納する
