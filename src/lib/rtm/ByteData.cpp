@@ -39,10 +39,7 @@ namespace RTC
      */
     ByteData::~ByteData()
     {
-        if (m_buf)
-        {
-            delete[] m_buf;
-        }
+        delete[] m_buf;
     }
 
     /*!
