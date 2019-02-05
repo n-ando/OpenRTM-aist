@@ -67,21 +67,21 @@ namespace RTC
 
       const char* level_str[] =
       {
-        "SILENT:   ",
-        "FATAL:    ",
-        "ERROR:    ",
-        "WARN:     ",
-        "INFO:     ",
-        "DEBUG:    ",
-        "TRACE:    ",
-        "VERBOSE:  ",
-        "PARANOID: "
+        " SILENT: ",
+        " FATAL: ",
+        " ERROR: ",
+        " WARNING: ",
+        " INFO: ",
+        " DEBUG: ",
+        " TRACE: ",
+        " VERBOSE: ",
+        " PARANOID: "
       };
       if (es_enable)
       {
           *m_stream << color[level];
       }
-      *m_stream << date << " " << level_str[level] << name << ": ";
+      *m_stream << date << level_str[level] << name << ": ";
       if (es_enable)
       {
           *m_stream << "\x1b[0m";
