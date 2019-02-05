@@ -187,13 +187,7 @@ namespace RTC
         }
 #ifndef ORB_IS_RTORB
         data->length(len);
-#ifdef ORB_IS_ORBEXPRESS
-        cdr.readData(data->get_buffer(), len);
-#elif defined(ORB_IS_TAO)
-        cdr.readData(&((*data)[0]), len);
-#else
-        cdr.readData(&((*data)[0]), len);
-#endif
+        cdr.readData((unsigned char*)data->get_buffer(), len);
 #else
         data->length(len);
         cdr.readData(reinterpret_cast<char *>(&((*data)[0]),

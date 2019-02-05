@@ -340,9 +340,9 @@ namespace RTC
 #ifdef ORB_IS_ORBEXPRESS
             m_cdr.copy(rhs.m_cdr);
 #elif defined(ORB_IS_TAO)
-            for (const ACE_Message_Block *i = rhs.m_cdr.begin(); i != 0; i = i->cont())
-            {
-                cdr.write_octet_array_mb(i);
+        for (const ACE_Message_Block *i = rhs.m_cdr.begin(); i != 0; i = i->cont())
+        {
+            m_cdr.write_octet_array_mb(i);
         }
 #else
             m_cdr = rhs.m_cdr;

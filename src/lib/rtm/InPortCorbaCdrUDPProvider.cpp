@@ -159,13 +159,7 @@ namespace RTC
       {
         ByteData cdr;
 
-#ifdef ORB_IS_ORBEXPRESS
-        cdr.writeData((void*)data.get_buffer(), data.length());
-#elif defined(ORB_IS_TAO)
-        cdr.writeData((void*)data.get_buffer(), data.length());
-#else
-        cdr.writeData((void*)&(data[0]), data.length());
-#endif
+        cdr.writeData((unsigned char*)data.get_buffer(), data.length());
 
         onReceiverError(cdr);
         return;
@@ -178,13 +172,7 @@ namespace RTC
     RTC_TRACE(("connector endian: %s", endian_type ? "little":"big"));
 
     cdr.isLittleEndian(endian_type);
-#ifdef ORB_IS_ORBEXPRESS
-    cdr.writeData((void*)data.get_buffer(), data.length());
-#elif defined(ORB_IS_TAO)
-    cdr.writeData((void*)data.get_buffer(), data.length());
-#else
-    cdr.writeData((void*)&(data[0]), data.length());
-#endif
+    cdr.writeData((unsigned char*)&(data[0]), data.length());
     RTC_PARANOID(("converted CDR data size: %d", cdr.getDataLength()));
 
 

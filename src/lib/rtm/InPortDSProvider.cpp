@@ -157,13 +157,7 @@ namespace RTC
       {
         ByteData cdr;
 
-#ifdef ORB_IS_ORBEXPRESS
         cdr.writeData((unsigned char*)data.get_buffer(), (CORBA::ULong)data.length());
-#elif defined(ORB_IS_TAO)
-        cdr.writeData((unsigned char*)data.get_buffer(), (CORBA::ULong)data.length());
-#else
-        cdr.writeData((unsigned char*)&(data[0]), (CORBA::ULong)data.length());
-#endif
 
         onReceiverError(cdr);
         return ::RTC::PORT_ERROR;
@@ -176,13 +170,7 @@ namespace RTC
     RTC_TRACE(("connector endian: %s", endian_type ? "little":"big"));
 
     cdr.isLittleEndian(endian_type);
-#ifdef ORB_IS_ORBEXPRESS
     cdr.writeData((unsigned char*)data.get_buffer(), (CORBA::ULong)data.length());
-#elif defined(ORB_IS_TAO)
-    cdr.writeData((unsigned char*)data.get_buffer(), (CORBA::ULong)data.length());
-#else
-    cdr.writeData((unsigned char*)&(data[0]), (CORBA::ULong)data.length());
-#endif
     RTC_PARANOID(("converted CDR data size: %d", cdr.getDataLength()));
 
 
