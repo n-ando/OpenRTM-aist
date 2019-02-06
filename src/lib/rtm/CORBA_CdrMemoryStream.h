@@ -581,7 +581,7 @@ namespace RTC
          */
         CORBA_CdrSerializer<DataType>(const CORBA_CdrSerializer<DataType> &rhs)
         {
-            m_cdr = rhs.m_cdr.m_cdr;
+            m_cdr = rhs.m_cdr;
         };
 
         /*!
@@ -650,7 +650,7 @@ namespace RTC
  *
  * @endif
  */
-template <typename DataType>
+template <class DataType>
 void CdrMemoryStreamInit()
 {
     coil::GlobalFactory < ::RTC::ByteDataStream<DataType> > ::
