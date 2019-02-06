@@ -164,9 +164,7 @@ namespace RTC
    */
   StdoutStream::StdoutStream()
   {
-      coil::Properties& prop(Manager::instance().getConfig());
-      coil::toBool(prop["logger.escape_sequence_enable"], "YES", "NO", false) ?
-          enableEscapeSequence() : disableEscapeSequence();
+      
 
       m_stream = new std::basic_ostream<char>(std::cout.rdbuf());
   }
@@ -245,9 +243,7 @@ namespace RTC
    */
   StderrStream::StderrStream()
   {
-      coil::Properties& prop(Manager::instance().getConfig());
-      coil::toBool(prop["logger.escape_sequence_enable"], "YES", "NO", false) ?
-          enableEscapeSequence() : disableEscapeSequence();
+      
       m_stream = new std::basic_ostream<char>(std::cerr.rdbuf());
   }
 
@@ -326,9 +322,7 @@ namespace RTC
    */
   FileStream::FileStream(std::string filename)
   {
-      coil::Properties& prop(Manager::instance().getConfig());
-      coil::toBool(prop["logger.escape_sequence_enable"], "YES", "NO", false) ?
-          enableEscapeSequence() : disableEscapeSequence();
+      
 
       m_fileout.open(filename.c_str(), std::ios::out | std::ios::app);
       m_stream = new std::basic_ostream<char>(&m_fileout);
@@ -445,6 +439,9 @@ namespace RTC
 
   bool LogstreamFile::init(const coil::Properties& prop)
   {
+
+    bool escape_sequence = coil::toBool(prop["escape_sequence_enable"], "YES", "NO", false);
+
     coil::vstring files = coil::split(prop["file_name"], ",");
 
     for (size_t i(0); i < files.size(); ++i)
@@ -460,18 +457,42 @@ namespace RTC
           {
             std::cout << "##### STDOUT!! #####" << std::endl;
             m_stdout = new StdoutStream();
+            if (escape_sequence)
+            {
+                m_stdout->enableEscapeSequence();
+            }
+            else
+            {
+                m_stdout->disableEscapeSequence();
+            }
             return true;
           }
         else if (fname == "stderr")
           {
             std::cout << "##### STDOUT!! #####" << std::endl;
             m_stdout = new StderrStream();
+            if (escape_sequence)
+            {
+                m_stdout->enableEscapeSequence();
+            }
+            else
+            {
+                m_stdout->disableEscapeSequence();
+            }
             return true;
           }
         else
           {
             std::cout << "##### file #####" << std::endl;
             m_fileout = new FileStream(files[i]);
+            if (escape_sequence)
+            {
+                m_fileout->enableEscapeSequence();
+            }
+            else
+            {
+                m_fileout->disableEscapeSequence();
+            }
             
             if (m_fileout->is_open()) { return true; }
           }
