@@ -33,7 +33,7 @@ namespace RTC
                                    ConnectorListeners& listeners,
                                    CdrBufferBase* buffer)
     : rtclog("InPortConnector"), m_profile(info),
-	m_listeners(listeners), m_buffer(buffer), m_littleEndian(true), m_directOutPort(NULL), m_outPortListeners(NULL)
+	m_listeners(listeners), m_buffer(buffer), m_littleEndian(true), m_directOutPort(NULL), m_outPortListeners(NULL), m_marshaling_type("corba")
   {
   }
 
