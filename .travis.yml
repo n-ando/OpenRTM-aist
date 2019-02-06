@@ -1,21 +1,33 @@
-language: c
 sudo: required
 
 services:
   - docker
 
+before_install:
+  # install newer docker
+  - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+  - sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+  - sudo apt-get update
+  - sudo apt-get -y -o Dpkg::Options::="--force-confnew" install docker-ce
+  # enable buildkit (only 18.09 or later)
+  ## - export DOCKER_BUILDKIT=1
+
+addons:
+  apt:
+    packages:
+      - docker-ce
+
 env:
   - TARGET_DIST=ubuntu TARGET_VER=1604
 
-branches:
-  only:
-  - master
+#branches:
+#  only:
+#  - master
 
-script: 
-  - docker build --rm -t ${TARGET_DIST}-${TARGET_VER} -f build/${TARGET_DIST}_${TARGET_VER}/Dockerfile .
-  - export CONTAINER_NAME=${TARGET_DIST}-${TARGET_VER}
-  - docker run --name ${CONTAINER_NAME} -itd ${CONTAINER_NAME} bash
-  - docker exec ${CONTAINER_NAME} git clone https://github.com/n-kawauchi/OpenRTM-aist.git
-  - docker exec ${CONTAINER_NAME} bash -c 'cd OpenRTM-aist; mkdir src/lib/coil/common/coil; cp src/lib/coil/common/*.* src/lib/coil/common/coil/'
-  - docker exec ${CONTAINER_NAME} bash -c 'cp OpenRTM-aist/build/yat.py OpenRTM-aist/utils/rtm-skelwrapper/'
-  - docker exec ${CONTAINER_NAME} bash -c 'cd OpenRTM-aist; mkdir build_linux; cd build_linux; cmake -DCORBA=omniORB ..; make' 
+script:
+  - mkdir ../workdir
+  - cd ../workdir
+  - mv ../OpenRTM-aist .
+
+  - export IMAGE_NAME=openrtm:${TARGET_DIST}-${TARGET_VER}
+  - docker build -f OpenRTM-aist/build/${TARGET_DIST}_${TARGET_VER}/Dockerfile . -t ${IMAGE_NAME}

@@ -2,11 +2,23 @@ FROM ubuntu:16.04
 
 ENV DEBIAN_FRONTEND noninteractive
 
-RUN set -x && \
-    apt-get update -qq
+RUN apt-get update\
+ && apt-get install -y --no-install-recommends\
+ g++\
+ make\
+ cmake\
+ uuid-dev\
+ libboost-filesystem-dev\
+ omniorb-nameserver\
+ libomniorb4-dev\
+ omniidl\
+ && apt-get clean\
+ && rm -rf /var/lib/apt/lists/*
 
-COPY build/pkg_install_ubuntu.sh /
-RUN chmod a+x ./pkg_install_ubuntu.sh&& \
-    ./pkg_install_ubuntu.sh -l c++ -l python -c --yes
-
-ENTRYPOINT ["/bin/bash", "-c"]
+COPY OpenRTM-aist /root/OpenRTM-aist
+WORKDIR /root/OpenRTM-aist
+RUN ln -s . src/lib/coil/common/coil\
+ && ln -s ../../build/yat.py utils/rtm-skelwrapper/yat.py
+RUN mkdir build_openrtm && cd build_openrtm\
+ && cmake -DCORBA=omniORB ..\
+ && make -j$(nproc)
