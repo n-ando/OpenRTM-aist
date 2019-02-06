@@ -291,7 +291,8 @@ namespace RTC
         }
         delete[] m_buf;
 
-        m_buf = new unsigned char[length];
+        m_len = length;
+        m_buf = new unsigned char[m_len];
     }
     /*!
      * @if jp
