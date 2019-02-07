@@ -52,7 +52,7 @@ namespace RTC
    */
   void FileStreamBase::header(int level, const std::string &name, const std::string &date, bool es_enable)
   {
-      const char* color[] =
+      static const char* color[] =
       {
         "\x1b[0m",          // SLILENT  (none)
         "\x1b[0m\x1b[31m",  // FATAL    (red)
@@ -65,7 +65,7 @@ namespace RTC
         "\x1b[0m\x1b[37m"   // PARANOID (white)
       };
 
-      const char* level_str[] =
+      static const char* level_str[] =
       {
         " SILENT: ",
         " FATAL: ",
