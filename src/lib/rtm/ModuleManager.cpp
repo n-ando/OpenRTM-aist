@@ -78,7 +78,7 @@ namespace RTC
   std::string ModuleManager::load(const std::string& file_name)
   {
     RTC_TRACE(("load(fname = %s)", file_name.c_str()));
-    if (file_name == "") throw InvalidArguments("Invalid file name.");
+    if (file_name.empty()) throw InvalidArguments("Invalid file name.");
 
     if (coil::isURL(file_name))
       {
@@ -113,7 +113,7 @@ namespace RTC
       }
 
     // Now file_name is valid full path to moduleW
-    if (file_path == "" || !fileExist(file_path))
+    if (file_path.empty() || !fileExist(file_path))
       {
         RTC_ERROR(("Module file not found: %s", file_name.c_str()));
         throw FileNotFound(file_name.c_str());
@@ -155,7 +155,7 @@ namespace RTC
     std::string name;
     name = load(file_name);
 
-    if (name == "")
+    if (name.empty())
       {
         throw InvalidOperation("Invalid file name");
       }
