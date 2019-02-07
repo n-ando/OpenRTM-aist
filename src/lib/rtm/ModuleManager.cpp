@@ -112,16 +112,11 @@ namespace RTC
         file_path = findFile(file_name, m_loadPath);
       }
 
-    // Now file_name is valid full path to module
-    if (file_path == "")
+    // Now file_name is valid full path to moduleW
+    if (file_path == "" || !fileExist(file_path))
       {
-        RTC_ERROR(("Invalid file name: Empty file name."));
-        throw InvalidArguments("Invalid file name.");
-      }
-    if (!fileExist(file_path))
-      {
-        RTC_ERROR(("Module file not found: %s", file_path.c_str()));
-        throw FileNotFound(file_path.c_str());
+        RTC_ERROR(("Module file not found: %s", file_name.c_str()));
+        throw FileNotFound(file_name.c_str());
       }
 
     DLLEntity* dll(new DLLEntity());
@@ -367,20 +362,20 @@ namespace RTC
 
     while (it != it_end)
       {
-	std::string f((*it) + "/" + file_name);
-	coil::replaceString(f, "//", "/");
-	if (fileExist(f))
-	  {
-	    return f;
-	  }
-	coil::vstring ret;
-	coil::findFile((*it), file_name, ret);
-	if (!ret.empty())
-	  {
-		return ret.front();
-	  }
+        std::string f((*it) + "/" + file_name);
+        coil::replaceString(f, "//", "/");
+        if (fileExist(f))
+          {
+            return f;
+          }
+        coil::vstring ret;
+        coil::findFile((*it), file_name, ret);
+        if (!ret.empty())
+          {
+            return ret.front();
+          }
 
-	++it;
+        ++it;
       }
 
     return std::string("");
@@ -524,25 +519,25 @@ namespace RTC
   {
     bool exists(false);
     for (size_t k(0); k < m_modprofs.size(); ++k)
-	{
-		  
+      {
+                  
         if (m_modprofs[k]["module_file_path"] == fpath)
           {
-			  
+
             exists = true;
             RTC_DEBUG(("Module %s already exists in cache.",
                        fpath.c_str()));
             break;
           }
       }
-	for (size_t k(0); k < m_loadfailmods.size(); ++k)
-	{
-		if (m_loadfailmods[k] == fpath)
-		{
-			exists = true;
-			break;
-		}
-	}
+    for (size_t k(0); k < m_loadfailmods.size(); ++k)
+      {
+        if (m_loadfailmods[k] == fpath)
+          {
+            exists = true;
+            break;
+          }
+      }
     if (!exists)
       {
         RTC_DEBUG(("New module: %s", fpath.c_str()));
@@ -597,10 +592,11 @@ namespace RTC
         
 
         RTC_DEBUG(("rtcprof cmd sub process done."));
-        if (p["implementation_id"].empty()) { 
-			m_loadfailmods.push_back(modules[i]);
-			continue;
-		}
+        if (p["implementation_id"].empty()) 
+          { 
+            m_loadfailmods.push_back(modules[i]);
+            continue;
+          }
         p["module_file_name"] = coil::basename(modules[i].c_str());
         p["module_file_path"] = modules[i].c_str();
         modprops.push_back(p);
