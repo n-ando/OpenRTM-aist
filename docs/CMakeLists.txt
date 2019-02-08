@@ -3,9 +3,18 @@ cmake_minimum_required (VERSION 2.6)
 
 project (docs)
 
+set(INPUT_RTM_DIRECTORY ${PROJECT_SOURCE_DIR}/../src/lib/rtm)
+set(INPUT_COIL_DIRECTORY ${PROJECT_SOURCE_DIR}/../src/lib/coil)
+set(INPUT_IDL_DIRECTORY ${PROJECT_SOURCE_DIR}/../src/lib/rtm/idl)
+set(INPUT_EXT_DIRECTORY ${PROJECT_SOURCE_DIR}/../src/lib/rtm/ext)
+
+
+
 set(ENABLED_SECTIONS jp)
 set(OUTPUT_LANGUAGE Japanese)
 set(OUTPUT_DIRECTORY IDLReference)
+
+
 
 
 configure_file(doxygen_idlref.conf.cmake.in ${PROJECT_BINARY_DIR}/doxygen_idlref.conf @ONLY)
