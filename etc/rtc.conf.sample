@@ -404,7 +404,7 @@ manager.components.precreate:
 # "key=falue" format with "&" delimiter.
 #
 # Example:
-# manager.components.preconnect: ConsoleIn.out:ConsoleOut.in(dataflow_type=push&interface_type=corba_cdr), SeqIn.octet:SeqOut.octet(dataflow_type=push&&interface_type=direct)
+# manager.components.preconnect: ConsoleIn.out?port=ConsoleOut.in&dataflow_type=push&interface_type=corba_cdr, SeqIn.octet?port=SeqOut.octet&dataflow_type=push&interface_type=direct
 # if no parenthis parts are included, dataflow_type=push, interface_type=corba_cdr
 #
 manager.components.preconnect: 
