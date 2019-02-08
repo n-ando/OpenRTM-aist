@@ -550,7 +550,7 @@ namespace RTC
     {
       DataType data;
       std::string marshaling_type = info.properties.getProperty("marshalig_type", "corba");
-      coil::normalize(marshaling_type);
+      coil::eraseBothEndsBlank(marshaling_type);
       
       ByteDataStream<DataType> *cdr = coil::GlobalFactory < ::RTC::ByteDataStream<DataType> >::instance().createObject(marshaling_type);
       
