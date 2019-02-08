@@ -418,9 +418,9 @@ manager.components.preconnect:
 # manager.components.precreate optinos.
 #
 # Example:
-# manager.components.preactivate: ConsoleIn0, ConsoleOut0
+# manager.components.preactivation: ConsoleIn0, ConsoleOut0
 #
-manager.components.preactivate:
+manager.components.preactivation:
 
 #
 # Loading local service modules
