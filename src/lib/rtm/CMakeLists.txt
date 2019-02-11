@@ -430,7 +430,7 @@ endif(OBSERVER_ENABLE)
 
 
 
-
+set(rtm_srcs ${rtm_srcs} ${SKEL_IDL_SRCS})
 
 if(WIN32)
 	#FOREACH(filename ${SKEL_IDL_SRCS})
@@ -441,7 +441,7 @@ if(WIN32)
 	ADD_DEFINITIONS(-DLIBRARY_EXPORTS)
 	#add_library(${RTM_PROJECT_NAME}_static STATIC ${rtm_srcs} ${ALL_IDL_SRCS_RTM})
 
-	set(rtm_srcs ${rtm_srcs} ${SKEL_IDL_SRCS})
+	
 	set_source_files_properties(${SKEL_IDL_SRCS} PROPERTIES GENERATED 1)
 	add_library(${RTM_PROJECT_NAME}_static STATIC ${rtm_srcs} )
 	
@@ -491,15 +491,13 @@ else(VXWORKS)
 	
 
 
-
+	target_link_libraries(${RTM_PROJECT_NAME} ${ORB_LIBRARIES} ${COIL_PROJECT_NAME} ${RTM_LINKER_OPTION})
 	if(UNIX)
-		target_link_libraries(${RTM_PROJECT_NAME} ${ORB_LIBRARIES} ${COIL_PROJECT_NAME} ${RTCSKEL_PROJECT_NAME} ${RTM_LINKER_OPTION})
 		install(TARGETS ${RTM_PROJECT_NAME} LIBRARY DESTINATION ${INSTALL_RTM_LIB_DIR}
 						ARCHIVE DESTINATION ${INSTALL_RTM_LIB_DIR}
 						RUNTIME DESTINATION ${INSTALL_RTM_BIN_DIR}
 						COMPONENT openrtm)
 	elseif(WIN32)
-		target_link_libraries(${RTM_PROJECT_NAME} ${ORB_LIBRARIES} ${COIL_PROJECT_NAME} ${RTM_LINKER_OPTION})
 		add_dependencies(${RTM_PROJECT_NAME} ALL_IDL_TGT)
 		set_source_files_properties(${DEF_FILE_NAME} PROPERTIES GENERATED 1)
 		add_dependencies(${RTM_PROJECT_NAME} ${RTM_PROJECT_NAME}_TGT)
