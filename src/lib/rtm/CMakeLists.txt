@@ -431,6 +431,7 @@ endif(OBSERVER_ENABLE)
 
 
 set(rtm_srcs ${rtm_srcs} ${SKEL_IDL_SRCS})
+set_source_files_properties(${SKEL_IDL_SRCS} PROPERTIES GENERATED 1)
 
 if(WIN32)
 	#FOREACH(filename ${SKEL_IDL_SRCS})
@@ -442,7 +443,7 @@ if(WIN32)
 	#add_library(${RTM_PROJECT_NAME}_static STATIC ${rtm_srcs} ${ALL_IDL_SRCS_RTM})
 
 	
-	set_source_files_properties(${SKEL_IDL_SRCS} PROPERTIES GENERATED 1)
+	
 	add_library(${RTM_PROJECT_NAME}_static STATIC ${rtm_srcs} )
 	
 	add_dependencies(${RTM_PROJECT_NAME}_static ALL_IDL_TGT)
@@ -527,7 +528,6 @@ add_dependencies(${RTM_PROJECT_NAME} ${RTCSKEL_PROJECT_NAME})
 
 
 #target_link_libraries(rtm ${ORB_LIBRARIES} coil)
-
 
 
 
