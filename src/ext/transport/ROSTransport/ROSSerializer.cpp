@@ -444,20 +444,6 @@ namespace RTC
             RTC::ROSMessageInfo<sensor_msgs::Image > >);
   }
 
-  template class ROSSerializerBase<RTC::TimedState>;
-  template class ROSSerializerBase<RTC::TimedShort>;
-  template class ROSSerializerBase<RTC::TimedLong>;
-  template class ROSSerializerBase<RTC::TimedUShort>;
-  template class ROSSerializerBase<RTC::TimedULong>;
-  template class ROSSerializerBase<RTC::TimedFloat>;
-  template class ROSSerializerBase<RTC::TimedDouble>;
-  template class ROSSerializerBase<RTC::TimedShortSeq>;
-  template class ROSSerializerBase<RTC::TimedLongSeq>;
-  template class ROSSerializerBase<RTC::TimedUShortSeq>;
-  template class ROSSerializerBase<RTC::TimedULongSeq>;
-  template class ROSSerializerBase<RTC::TimedFloatSeq>;
-  template class ROSSerializerBase<RTC::TimedDoubleSeq>;
-
 }
 
 
