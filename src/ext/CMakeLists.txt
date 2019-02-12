@@ -4,6 +4,7 @@ add_subdirectory(sdo)
 add_subdirectory(local_service)
 add_subdirectory(ec)
 
+add_subdirectory(transport)
 
 if(VXWORKS)
 	if(RTP)
