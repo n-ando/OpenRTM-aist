@@ -53,6 +53,8 @@
 
 namespace RTC
 {
+  
+
   template <class DataType, class MessageType>
   void ROSSimpleDataInitBaseFunc(const char* name)
   {
@@ -385,7 +387,15 @@ namespace RTC
       msg.header.stamp.nsec = data.tm.nsec;
       msg.height = data.height;
       msg.width = data.width;
-      msg.encoding = data.format;
+      if(std::string(data.format) == "")
+      {
+        msg.encoding = "rgb8";
+      }
+      else
+      {
+        msg.encoding = data.format;
+      }
+      msg.step = 1920;
       msg.data.resize(data.pixels.length());
       memcpy(&msg.data[0], &data.pixels[0], data.pixels.length());
 
@@ -407,6 +417,8 @@ namespace RTC
       data.height = msg.height;
       data.width = msg.width;
       data.format = CORBA::string_dup(msg.encoding.c_str());
+
+
       data.pixels.length(msg.data.size());
       
       memcpy(&data.pixels[0], &msg.data[0], data.pixels.length());
@@ -432,6 +444,20 @@ namespace RTC
             RTC::ROSMessageInfo<sensor_msgs::Image > >);
   }
 
+  template class ROSSerializerBase<RTC::TimedState>;
+  template class ROSSerializerBase<RTC::TimedShort>;
+  template class ROSSerializerBase<RTC::TimedLong>;
+  template class ROSSerializerBase<RTC::TimedUShort>;
+  template class ROSSerializerBase<RTC::TimedULong>;
+  template class ROSSerializerBase<RTC::TimedFloat>;
+  template class ROSSerializerBase<RTC::TimedDouble>;
+  template class ROSSerializerBase<RTC::TimedShortSeq>;
+  template class ROSSerializerBase<RTC::TimedLongSeq>;
+  template class ROSSerializerBase<RTC::TimedUShortSeq>;
+  template class ROSSerializerBase<RTC::TimedULongSeq>;
+  template class ROSSerializerBase<RTC::TimedFloatSeq>;
+  template class ROSSerializerBase<RTC::TimedDoubleSeq>;
+
 }
 
 
@@ -446,6 +472,7 @@ extern "C"
    */
   void ROSSerializerInit(RTC::Manager* manager)
   {
+    (void)manager;
     RTC::ROSSimpleDataInit<RTC::TimedState>();
     RTC::ROSSimpleDataInit<RTC::TimedShort>();
     RTC::ROSSimpleDataInit<RTC::TimedLong>();

@@ -331,6 +331,7 @@ namespace RTC
     void onHeaderWritten(const ros::ConnectionPtr& conn)
     {
       RTC_VERBOSE(("onHeaderWritten()"));
+      (void)conn;
       Guard guard(m_mutex);
       m_start = true;
     }
@@ -357,6 +358,7 @@ namespace RTC
      */
     void onMessageWritten(const ros::ConnectionPtr& conn)
     {
+      (void)conn;
       RTC_VERBOSE(("onMessageWritten()"));
     };
 

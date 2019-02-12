@@ -33,6 +33,7 @@ extern "C"
    */
   void ROSTransportInit(RTC::Manager* manager)
   {
+    (void)manager;
     {
       RTC::InPortProviderFactory& factory(RTC::InPortProviderFactory::instance());
       factory.addFactory("ros",

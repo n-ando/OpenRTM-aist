@@ -57,11 +57,13 @@ namespace RTC
     RosTopicManager& topicmgr = RosTopicManager::instance();
     topicmgr.removePublisher(this);
 
-    XmlRpc::XmlRpcValue request;
-    XmlRpc::XmlRpcValue response;
-
     if(!m_roscorehost.empty())
     {
+
+      XmlRpc::XmlRpcValue request;
+      XmlRpc::XmlRpcValue response;
+
+
       XmlRpc::XmlRpcClient *master = ros::XMLRPCManager::instance()->getXMLRPCClient(m_roscorehost, m_roscoreport, "/");
 
       
@@ -73,7 +75,10 @@ namespace RTC
 
       RTC_PARANOID(("unregisterPublisher:%s", std::string(ros::XMLRPCManager::instance()->getServerURI()).c_str()));
       bool b = master->execute("unregisterPublisher", request, response);
-
+      if(!b)
+      {
+        RTC_ERROR(("unregisterPublisher Error"));
+      }
       
     }
 
@@ -90,6 +95,13 @@ namespace RTC
   void ROSOutPort::init(coil::Properties& prop)
   { 
     RTC_PARANOID(("ROSOutPort::init()"));
+
+    if(prop.propertyNames().size() == 0)
+    {
+      RTC_DEBUG(("Property is empty."));
+      return;
+    }
+
 
     RosTopicManager& topicmgr = RosTopicManager::instance();
 

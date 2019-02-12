@@ -32,7 +32,8 @@ namespace RTC
   class ROSSerializerBase : public ByteDataStream<DataType>
   {
   public:
-    virtual ~ROSSerializerBase() = 0;
+    ROSSerializerBase(){};
+    virtual ~ROSSerializerBase(){};
 
 
     virtual void writeData(const unsigned char* buffer, unsigned long length)
@@ -54,6 +55,17 @@ namespace RTC
     virtual unsigned long getDataLength() const
     {
       return m_message.num_bytes;
+    };
+
+    virtual bool serialize(const DataType& data)
+    {
+      (void)data;
+      return false;
+    };
+    virtual bool deserialize(DataType& data)
+    {
+      (void)data;
+      return true;
     };
 
   protected:

@@ -298,6 +298,7 @@ namespace RTC
     void onHeaderWritten(const ros::ConnectionPtr& conn)
     {
       RTC_VERBOSE(("onHeaderWritten()"));
+      (void)conn;
     };
 
     /*!
@@ -325,6 +326,7 @@ namespace RTC
     bool onHeaderReceived(const ros::ConnectionPtr& conn, const ros::Header& header)
     {
       RTC_VERBOSE(("onHeaderReceived()"));
+      (void)header;
       conn->read(4, boost::bind(&ROSInPort::onMessageLength, this, _1, _2, _3, _4));
       return true;
     }
@@ -360,6 +362,8 @@ namespace RTC
         RTC_ERROR(("Message read error"));
         return;
       }
+
+      (void)size;
 
       uint32_t len = *((uint32_t*)buffer.get());
 
@@ -425,6 +429,23 @@ namespace RTC
         onReceived(cdr);
       
         BufferStatus::Enum ret = m_connector->write(cdr);
+
+        switch (ret)
+        {
+          case BufferStatus::BUFFER_OK:
+            RTC_VERBOSE(("BUFFER_OK"));
+            break;
+          case BufferStatus::BUFFER_EMPTY:
+            RTC_ERROR(("BUFFER_EMPTY"));
+            break;
+          case BufferStatus::TIMEOUT:
+            RTC_ERROR(("TIMEOUT"));
+            break;
+          case BufferStatus::PRECONDITION_NOT_MET:
+            RTC_ERROR(("PRECONDITION_NOT_MET"));
+          default:
+            RTC_ERROR(("PORT_ERROR"));
+        }
 
 
         conn->read(4, boost::bind(&ROSInPort::onMessageLength, this, _1, _2, _3, _4));

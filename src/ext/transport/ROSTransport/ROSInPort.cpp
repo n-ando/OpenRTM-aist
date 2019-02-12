@@ -75,18 +75,25 @@ namespace RTC
     RosTopicManager& topicmgr = RosTopicManager::instance();
     topicmgr.removeSubscriber(this);
 
-    XmlRpc::XmlRpcValue request;
-    XmlRpc::XmlRpcValue response;
+    if(!m_roscorehost.empty())
+    {
+        XmlRpc::XmlRpcValue request;
+        XmlRpc::XmlRpcValue response;
 
-    XmlRpc::XmlRpcClient *master = ros::XMLRPCManager::instance()->getXMLRPCClient(m_roscorehost, m_roscoreport, "/");
 
-    request[0] = m_callerid;
-    request[1] = m_topic;
-    request[2] = std::string(ros::XMLRPCManager::instance()->getServerURI());
+        XmlRpc::XmlRpcClient *master = ros::XMLRPCManager::instance()->getXMLRPCClient(m_roscorehost, m_roscoreport, "/");
 
-    RTC_PARANOID(("unregisterSubscriber:%s", std::string(ros::XMLRPCManager::instance()->getServerURI()).c_str()));
-    bool b = master->execute("unregisterSubscriber", request, response);
+        request[0] = m_callerid;
+        request[1] = m_topic;
+        request[2] = std::string(ros::XMLRPCManager::instance()->getServerURI());
 
+        RTC_PARANOID(("unregisterSubscriber:%s", std::string(ros::XMLRPCManager::instance()->getServerURI()).c_str()));
+        bool b = master->execute("unregisterSubscriber", request, response);
+        if(!b)
+        {
+          RTC_ERROR(("unregisterSubscriber Error"));
+        }
+    }
   }
 
 
@@ -110,6 +117,12 @@ namespace RTC
   {
 
     RTC_PARANOID(("ROSInPort::init()"));
+
+    if(prop.propertyNames().size() == 0)
+    {
+      RTC_DEBUG(("Property is empty."));
+      return;
+    }
 
     RosTopicManager& topicmgr = RosTopicManager::instance();
     if(topicmgr.existSubscriber(this))
@@ -255,6 +268,7 @@ namespace RTC
   {
     RTC_PARANOID(("connectTCP(%s, %s, %s)",caller_id.c_str(), topic.c_str(), xmlrpc_uri.c_str()));
 
+
     if(topic != m_topic)
     {
       return;
@@ -299,9 +313,10 @@ namespace RTC
     XmlRpc::XmlRpcValue response;
 
     bool b = c->execute("requestTopic", params, response);
-    if(b)
+    if(!b)
     {
       RTC_ERROR(("requestTopic Error"));
+      return;
     }
 
     int code = response[0];
@@ -339,8 +354,6 @@ namespace RTC
       header["type"] = info->type();
       header["tcp_nodelay"] = "0";
 
-      ROSMessageInfoFactory::instance().deleteObject(info);
-
       RTC_VERBOSE(("writeHeader()"));
       RTC_VERBOSE(("Message Type:%s", info->type().c_str()));
       RTC_VERBOSE(("Md5sum:%s", info->md5sum().c_str()));
@@ -348,6 +361,10 @@ namespace RTC
       RTC_VERBOSE(("Caller ID:%s", caller_id.c_str()));
       RTC_VERBOSE(("Topic Name:%s", topic.c_str()));
       RTC_VERBOSE(("TCPTransPort created"));
+
+      ROSMessageInfoFactory::instance().deleteObject(info);
+
+
 
       connection->writeHeader(header, boost::bind(&ROSInPort::onHeaderWritten, this, _1));
 
