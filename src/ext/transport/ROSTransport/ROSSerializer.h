@@ -65,7 +65,7 @@ namespace RTC
     virtual bool deserialize(DataType& data)
     {
       (void)data;
-      return true;
+      return false;
     };
 
   protected:
