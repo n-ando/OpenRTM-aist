@@ -50,10 +50,10 @@ reposerver=""
 
 #--------------------------------------- C++
 autotools="autoconf automake libtool"
-if test "x$version_num" = "x29" ; then
-  cxx_devel="gcc-c++ make python3-pyyaml"
-else
+if [ $version_num -lt 29 ] ; then
   cxx_devel="gcc-c++ make PyYAML"
+else
+  cxx_devel="gcc-c++ make python3-pyyaml"
 fi
 cmake_tools="cmake doxygen graphviz nkf"
 build_tools="subversion git"
@@ -78,10 +78,10 @@ u_core_pkgs="$u_src_pkgs"
 
 #--------------------------------------- Python
 omnipy="omniORBpy-devel"
-if test "x$version_num" = "x29" ; then
-  python_runtime="python3-omniORB"
-else
+if [ $version_num -lt 29 ] ; then
   python_runtime="python python-omniORB"
+else
+  python_runtime="python3-omniORB"
 fi
 python_devel="$cmake_tools $omnipy"
 openrtm_py_devel="OpenRTM-aist-Python-doc"
