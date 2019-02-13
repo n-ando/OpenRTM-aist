@@ -27,7 +27,7 @@ A clear and concise description of what you expected to happen.
 If applicable, add screenshots or logs to help explain your problem.
 
 **Environment**
- - OS: [e.g. Ubnutn 16.04 32bits]
+ - OS: [e.g. Ubuntu 16.04 32bits]
  - OpenRTM-aist Version [e.g. 1.2.1]
  - ...
 
