@@ -1,5 +1,7 @@
-cmake_minimum_required (VERSION 2.6)
-project (${COIL_PROJECT_NAME})
+cmake_minimum_required (VERSION 3.0.2)
+project (${COIL_PROJECT_NAME}
+	VERSION ${RTM_VERSION}
+	LANGUAGES C CXX)
 
 
 
@@ -136,14 +138,13 @@ set(coil_srcs
 if(WIN32)
 	set(DEF_FILE_NAME  ${COIL_PROJECT_NAME}.def)
 	add_library(${COIL_PROJECT_NAME}_static STATIC ${coil_srcs})
-	get_property(coil_static_location TARGET ${COIL_PROJECT_NAME}_static PROPERTY LOCATION)
-	add_custom_command(OUTPUT ${DEF_FILE_NAME}
-		COMMAND python ${MAKE_DEF_COMMAND} ${coil_static_location} ${COIL_PROJECT_NAME} ${RTM_SHORT_VERSION} ${DEF_FILE_NAME}
-		
+	add_custom_command(TARGET ${COIL_PROJECT_NAME}_static 
+		POST_BUILD
+		COMMAND python ${MAKE_DEF_COMMAND} $<TARGET_FILE:${COIL_PROJECT_NAME}_static> ${COIL_PROJECT_NAME} ${RTM_SHORT_VERSION} ${DEF_FILE_NAME}
 		WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-	)
-	add_custom_target(${COIL_PROJECT_NAME}_TGT DEPENDS ${DEF_FILE_NAME})
-	add_dependencies(${COIL_PROJECT_NAME}_TGT ${COIL_PROJECT_NAME}_static)
+	) 
+	#add_custom_target(${COIL_PROJECT_NAME}_TGT DEPENDS ${DEF_FILE_NAME})
+	#add_dependencies(${COIL_PROJECT_NAME}_TGT ${COIL_PROJECT_NAME}_static)
 	set(coil_srcs ${coil_srcs} ${CMAKE_CURRENT_BINARY_DIR}/${DEF_FILE_NAME})
 #	add_custom_command(OUTPUT ${COIL_PROJECT_NAME}.def
 #		COMMAND lib -out:"coil_static.lib" "$(IntDir)Skel*.obj"
@@ -192,13 +193,14 @@ else(VXWORKS)
 	set_target_properties(${COIL_PROJECT_NAME} PROPERTIES DEBUG_POSTFIX d)
 	target_link_libraries(${COIL_PROJECT_NAME} ${RTM_LINKER_OPTION}  ${UUID_LIBRARIES})
 	if(UNIX)
+		set_target_properties(${COIL_PROJECT_NAME} PROPERTIES VERSION ${RTM_VERSION} SOVERSION ${COIL_SO_VERSION})
 		install(TARGETS ${COIL_PROJECT_NAME} LIBRARY DESTINATION ${INSTALL_RTM_LIB_DIR}
 						ARCHIVE DESTINATION ${INSTALL_RTM_LIB_DIR}
 						RUNTIME DESTINATION ${INSTALL_RTM_BIN_DIR}
 						COMPONENT coil)
 	elseif(WIN32)
 		set_source_files_properties(${DEF_FILE_NAME} PROPERTIES GENERATED 1)
-		add_dependencies(${COIL_PROJECT_NAME} ${COIL_PROJECT_NAME}_TGT)
+		#add_dependencies(${COIL_PROJECT_NAME} ${COIL_PROJECT_NAME}_TGT)
 		add_dependencies(${COIL_PROJECT_NAME} ${COIL_PROJECT_NAME}_static)
 		install(TARGETS ${COIL_PROJECT_NAME} LIBRARY DESTINATION ${INSTALL_RTM_LIB_DIR}
 						 ARCHIVE DESTINATION ${INSTALL_RTM_LIB_DIR}

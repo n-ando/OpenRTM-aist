@@ -1,6 +1,8 @@
-cmake_minimum_required (VERSION 2.6)
+cmake_minimum_required (VERSION 3.0.2)
 
-project (${RTM_PROJECT_NAME})
+project (${RTM_PROJECT_NAME}
+	VERSION ${RTM_VERSION}
+	LANGUAGES C CXX)
 
 
 
@@ -441,16 +443,23 @@ if(WIN32)
 	
 	add_dependencies(${RTM_PROJECT_NAME}_static ALL_IDL_TGT)
 	#add_dependencies(${RTM_PROJECT_NAME}_static ${RTCSKEL_PROJECT_NAME})
-	get_property(rtm_static_location TARGET ${RTM_PROJECT_NAME}_static PROPERTY LOCATION)
+	#get_target_property(rtm_static_location ${RTM_PROJECT_NAME}_static LOCATION)
 	#message(STATUS ${rtm_static_location})
-	add_custom_command(OUTPUT ${DEF_FILE_NAME}
-		COMMAND python ${MAKE_DEF_COMMAND} ${rtm_static_location} ${RTM_PROJECT_NAME} ${RTM_SHORT_VERSION} ${DEF_FILE_NAME}
-		
+	#add_custom_command(OUTPUT ${DEF_FILE_NAME}
+	#	COMMAND python ${MAKE_DEF_COMMAND} ${rtm_static_location} ${RTM_PROJECT_NAME} ${RTM_SHORT_VERSION} ${DEF_FILE_NAME}
+	#	WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+	#)
+	#add_custom_target(${RTM_PROJECT_NAME}_TGT DEPENDS ${DEF_FILE_NAME})
+	#add_dependencies(${RTM_PROJECT_NAME}_TGT ${RTM_PROJECT_NAME}_static)
+
+
+	add_custom_command(TARGET ${RTM_PROJECT_NAME}_static 
+		POST_BUILD
+		COMMAND python ${MAKE_DEF_COMMAND} $<TARGET_FILE:${RTM_PROJECT_NAME}_static> ${RTM_PROJECT_NAME} ${RTM_SHORT_VERSION} ${DEF_FILE_NAME}
 		WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-	)
-	add_custom_target(${RTM_PROJECT_NAME}_TGT DEPENDS ${DEF_FILE_NAME})
-	add_dependencies(${RTM_PROJECT_NAME}_TGT ${RTM_PROJECT_NAME}_static)
+	) 
 	set(rtm_srcs ${rtm_srcs} ${CMAKE_CURRENT_BINARY_DIR}/${DEF_FILE_NAME})
+	
 
 	#get_property(rtcskel_location TARGET ${RTCSKEL_PROJECT_NAME} PROPERTY LOCATION)
 	#add_custom_command(OUTPUT ${RTCSKEL_PROJECT_NAME}.def
@@ -492,11 +501,12 @@ else(VXWORKS)
 						ARCHIVE DESTINATION ${INSTALL_RTM_LIB_DIR}
 						RUNTIME DESTINATION ${INSTALL_RTM_BIN_DIR}
 						COMPONENT openrtm)
+		set_target_properties(${RTM_PROJECT_NAME} PROPERTIES VERSION ${RTM_VERSION} SOVERSION ${RTM_SO_VERSION})
 	elseif(WIN32)
 		target_link_libraries(${RTM_PROJECT_NAME} ${ORB_LIBRARIES} ${COIL_PROJECT_NAME} ${RTM_LINKER_OPTION})
 		add_dependencies(${RTM_PROJECT_NAME} ALL_IDL_TGT)
 		set_source_files_properties(${DEF_FILE_NAME} PROPERTIES GENERATED 1)
-		add_dependencies(${RTM_PROJECT_NAME} ${RTM_PROJECT_NAME}_TGT)
+		#add_dependencies(${RTM_PROJECT_NAME} ${RTM_PROJECT_NAME}_TGT)
 		add_dependencies(${RTM_PROJECT_NAME} ${RTM_PROJECT_NAME}_static)
 		install(TARGETS ${RTM_PROJECT_NAME} LIBRARY DESTINATION ${INSTALL_RTM_LIB_DIR}
 						ARCHIVE DESTINATION ${INSTALL_RTM_LIB_DIR}
@@ -523,7 +533,6 @@ add_dependencies(${RTM_PROJECT_NAME} ${RTCSKEL_PROJECT_NAME})
 
 
 #target_link_libraries(rtm ${ORB_LIBRARIES} coil)
-
 
 
 

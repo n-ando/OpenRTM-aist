@@ -1,10 +1,12 @@
-cmake_minimum_required (VERSION 2.6)
+cmake_minimum_required (VERSION 3.0.2)
 
 
 
 set(target interrupt_task)
 
-project (${target})
+project (${target}
+	VERSION ${RTM_VERSION}
+	LANGUAGES C CXX)
 
 add_executable(${target} ${target}.cpp)
 

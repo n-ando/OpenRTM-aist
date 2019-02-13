@@ -1,4 +1,4 @@
-cmake_minimum_required (VERSION 2.6)
+cmake_minimum_required (VERSION 3.0.2)
 
 if(WIN32)
 	set(target rtmCamera${RTM_SHORT_VERSION}_${RTM_VC_VER})
@@ -6,7 +6,9 @@ else(WIN32)
 	set(target rtmCamera)
 endif(WIN32)
 
-project (${target})
+project (${target}
+	VERSION ${RTM_VERSION}
+	LANGUAGES C CXX)
 
 
 
@@ -94,15 +96,13 @@ if(WIN32)
 	add_library(${target}_static STATIC ${ALL_IDL_SRCS} )
 	add_dependencies(${target}_static ${RTCSKEL_PROJECT_NAME})
 	set_source_files_properties(${ALL_IDL_SRCS_RTM} PROPERTIES GENERATED 1)
-	get_property(rtm_static_location TARGET ${target}_static PROPERTY LOCATION)
-
-	add_custom_command(OUTPUT ${DEF_FILE_NAME}
-		COMMAND python ${MAKE_DEF_COMMAND} ${rtm_static_location} ${target} ${RTM_SHORT_VERSION} ${DEF_FILE_NAME}
-		
+	add_custom_command(TARGET ${target}_static 
+		POST_BUILD
+		COMMAND python ${MAKE_DEF_COMMAND} $<TARGET_FILE:${target}_static>  ${target} ${RTM_SHORT_VERSION} ${DEF_FILE_NAME}
 		WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-	)
-	add_custom_target(${target}_TGT DEPENDS ${DEF_FILE_NAME})
-	add_dependencies(${target}_TGT ${target}_static)
+	) 
+	#add_custom_target(${target}_TGT DEPENDS ${DEF_FILE_NAME})
+	#add_dependencies(${target}_TGT ${target}_static)
 	set(ALL_IDL_SRCS ${ALL_IDL_SRCS} ${CMAKE_CURRENT_BINARY_DIR}/${DEF_FILE_NAME})
 endif(WIN32)
 
@@ -126,7 +126,7 @@ else(VXWORKS)
 						COMPONENT ext)
 	elseif(WIN32)
 		set_source_files_properties(${DEF_FILE_NAME} PROPERTIES GENERATED 1)
-		add_dependencies(${target} ${target}_TGT)
+		#add_dependencies(${target} ${target}_TGT)
 		add_dependencies(${target} ${target}_static)
 		install(TARGETS ${target} LIBRARY DESTINATION ${INSTALL_RTM_LIB_DIR}
 						ARCHIVE DESTINATION ${INSTALL_RTM_LIB_DIR}
