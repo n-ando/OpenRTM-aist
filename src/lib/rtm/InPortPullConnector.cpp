@@ -51,8 +51,8 @@ namespace RTC
     m_consumer->setBuffer(m_buffer);
     m_consumer->setListener(info, &m_listeners);
 
-    m_marshaling_type = info.properties.getProperty("marshalig_type", "corba");
-    coil::eraseBothEndsBlank(m_marshaling_type);
+    m_marshalling_type = info.properties.getProperty("marshalling_type", "corba");
+    coil::eraseBothEndsBlank(m_marshalling_type);
 
     onConnect();
   }

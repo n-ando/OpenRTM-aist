@@ -478,7 +478,7 @@ namespace RTC
      *
      * @endif
      */
-	virtual ReturnCode operator()(ConnectorInfo& info,
+    virtual ReturnCode operator()(ConnectorInfo& info,
                             ByteData& data) = 0;
   };
 
@@ -545,14 +545,14 @@ namespace RTC
      *
      * @endif
      */
-	virtual ReturnCode operator()(ConnectorInfo& info,
+    virtual ReturnCode operator()(ConnectorInfo& info,
                                   ByteData& cdrdata)
     {
       DataType data;
-      std::string marshaling_type = info.properties.getProperty("marshalig_type", "corba");
-      coil::eraseBothEndsBlank(marshaling_type);
+      std::string marshalling_type = info.properties.getProperty("marshalling_type", "corba");
+      coil::eraseBothEndsBlank(marshalling_type);
       
-      ByteDataStream<DataType> *cdr = coil::GlobalFactory < ::RTC::ByteDataStream<DataType> >::instance().createObject(marshaling_type);
+      ByteDataStream<DataType> *cdr = coil::GlobalFactory < ::RTC::ByteDataStream<DataType> >::instance().createObject(marshalling_type);
       
       
       if (!cdr)
@@ -621,7 +621,7 @@ namespace RTC
      *
      * @endif
      */
-	virtual ReturnCode operator()(ConnectorInfo& info,
+    virtual ReturnCode operator()(ConnectorInfo& info,
                                  DataType& data) = 0;
   };
 
@@ -937,7 +937,7 @@ namespace RTC
      *
      * @endif
      */
-	virtual ReturnCode operator()(ConnectorInfo& info) = 0;
+    virtual ReturnCode operator()(ConnectorInfo& info) = 0;
   };
 
 
@@ -1060,7 +1060,7 @@ namespace RTC
      * @param cdrdata Data
      * @endif
      */
-	ReturnCode notify(ConnectorInfo& info,
+    ReturnCode notify(ConnectorInfo& info,
                 ByteData& cdrdata);
 
     /*!
@@ -1085,7 +1085,7 @@ namespace RTC
      * @endif
      */
     template <class DataType>
-	ReturnCode notify(ConnectorInfo& info, DataType& typeddata)
+    ReturnCode notify(ConnectorInfo& info, DataType& typeddata)
     {
       Guard guard(m_mutex);
       ReturnCode ret(NO_CHANGE);
@@ -1110,10 +1110,10 @@ namespace RTC
             }
           else
             {
-              std::string marshaling_type = info.properties.getProperty("marshalig_type", "corba");
-              coil::normalize(marshaling_type);
+              std::string marshalling_type = info.properties.getProperty("marshalling_type", "corba");
+              coil::normalize(marshalling_type);
 
-              ByteDataStream<DataType> *cdr = coil::GlobalFactory < ::RTC::ByteDataStream<DataType> >::instance().createObject(marshaling_type);
+              ByteDataStream<DataType> *cdr = coil::GlobalFactory < ::RTC::ByteDataStream<DataType> >::instance().createObject(marshalling_type);
 
               
               if (endian[0] == "little")
@@ -1130,7 +1130,7 @@ namespace RTC
               coil::GlobalFactory < ::RTC::ByteDataStream<DataType> >::instance().deleteObject(cdr);
             }
         }
-	  return ret;
+      return ret;
     }
 
   private:
@@ -1155,7 +1155,7 @@ namespace RTC
    * @endif
    */
   class ConnectorListenerHolder
-	  : public ConnectorListenerStatus
+      : public ConnectorListenerStatus
   {
     typedef std::pair<ConnectorListener*, bool> Entry;
     typedef coil::Guard<coil::Mutex> Guard;
@@ -1257,7 +1257,7 @@ namespace RTC
      * @param info ConnectonotifyrInfo
      * @endif
      */
-	ReturnCode notify(ConnectorInfo& info);
+    ReturnCode notify(ConnectorInfo& info);
 
   private:
     std::vector<Entry> m_listeners;
