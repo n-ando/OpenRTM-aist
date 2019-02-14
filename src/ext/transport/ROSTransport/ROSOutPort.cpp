@@ -113,7 +113,7 @@ namespace RTC
 
     m_properties = prop;
 
-    m_messageType = prop.getProperty("marshalig_type", "ROSFloat32");
+    m_messageType = prop.getProperty("marshalling_type", "ROSFloat32");
 
     m_topic = prop.getProperty("topic", "/chatter");
 
