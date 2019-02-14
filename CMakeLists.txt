@@ -32,7 +32,6 @@ if(NOT ORB_ROOT)
 			  endif()
 			  set(OMNIORB_DIR CACHE PATH omniORB root directory)
 			endif()
-			#set(ORB_ROOT "" CACHE PATH "set ORB_ROOT" FORCE)
 		else(UNIX)
 			message(FATAL_ERROR "Please set ORB_ROOT.")
 		endif(UNIX)
@@ -178,7 +177,6 @@ elseif(CORBA STREQUAL "omniORB")
 		endif()
 	endif()
 	SET(IDLCOMMAND_FLAGS -bcxx -Wba -nf -Wbshortcut)
-	#SET(IDLCOMMAND_FLAGS -bcxx -Wba -nf)
 
 	set(OMNI_VERSION ${OMNI_VERSION} CACHE STRING "set OMNI_VERSION")
 	if(UNIX AND OMNIORB_FOUND)
@@ -367,9 +365,6 @@ elseif(CORBA STREQUAL "omniORB")
 
 
 
-		#message(STATUS ${OMNI_VERSION1})
-		#message(STATUS ${OMNI_VERSION2})
-
 		set(ORB_INSTALL_DIR ${OPENRTM_VERSION}/omniORB/${OMNI_VERSION1}.${OMNI_VERSION2}.${OMNI_MINOR}_${RTM_VC_VER}/)
 		foreach(library ${ORB_LIBRARIES};${ORBSSL_LIBRARIES})
 			if((NOT (${library} STREQUAL "optimized")) AND (NOT (${library} STREQUAL "debug")))
@@ -397,7 +392,6 @@ elseif(CORBA STREQUAL "omniORB")
 		foreach(file_path ${OMNIORB_HEADERFILES})
 			get_filename_component(dir_path "${file_path}" DIRECTORY)
 			string(REPLACE "${ORB_ROOT}/include" "" file "${dir_path}")
-			#message(STATUS ${dir_path})
 			install(FILES ${file_path} DESTINATION ${ORB_INSTALL_DIR}/include/${file} COMPONENT corbalib)
 		endforeach()
 
@@ -421,7 +415,6 @@ elseif(CORBA STREQUAL "omniORB")
 		install(PROGRAMS ${ORB_ROOT}/bin/${ARCH_NAME}/omniNames.exe DESTINATION ${ORB_INSTALL_DIR}/bin/${ARCH_NAME} COMPONENT corbalib)
 
 
-		#install(FILES  ${OMNIORB_HEADERFILES} DESTINATION ${ORB_INSTALL_DIR}/include)
 
 		set(ORB_INCLUDE_DIR ${ORB_ROOT}/include)
 	endif(VXWORKS)
@@ -482,10 +475,6 @@ elseif(CORBA STREQUAL "TAO")
 		file(GLOB ACE_HEADERFILES10 "${ORB_ROOT}/ace/*/*/*/*/*.inl")
 
 		file(GLOB ACE_HEADERFILES11 "${ORB_ROOT}/ace/*.cpp")
-		#file(GLOB ACE_HEADERFILES12 "${ORB_ROOT}/ace/*/*.cpp")
-		#file(GLOB ACE_HEADERFILES13 "${ORB_ROOT}/ace/*/*/*.cpp")
-		#file(GLOB ACE_HEADERFILES14 "${ORB_ROOT}/ace/*/*/*/*.cpp")
-		#file(GLOB ACE_HEADERFILES15 "${ORB_ROOT}/ace/*/*/*/*/*.cpp")
 
 
 		file(GLOB ACE_HEADERFILES16 "${ORB_ROOT}/TAO/tao/*.h")
@@ -502,28 +491,15 @@ elseif(CORBA STREQUAL "TAO")
 
 		file(GLOB ACE_HEADERFILES26 "${ORB_ROOT}/TAO/tao/*.cpp")
 		file(GLOB ACE_HEADERFILES27 "${ORB_ROOT}/TAO/tao/*/*.cpp")
-		#file(GLOB ACE_HEADERFILES28 "${ORB_ROOT}/TAO/tao/*/*/*.cpp")
-		#file(GLOB ACE_HEADERFILES29 "${ORB_ROOT}/TAO/tao/*/*/*/*.cpp")
-		#file(GLOB ACE_HEADERFILES30 "${ORB_ROOT}/TAO/tao/*/*/*/*/*.cpp")
 
 
 		file(GLOB ACE_HEADERFILES31 "${ORB_ROOT}/TAO/orbsvcs/*.h")
 		file(GLOB ACE_HEADERFILES32 "${ORB_ROOT}/TAO/orbsvcs/*/*.h")
 		file(GLOB ACE_HEADERFILES33 "${ORB_ROOT}/TAO/orbsvcs/*/*/*.h")
-		#file(GLOB ACE_HEADERFILES34 "${ORB_ROOT}/TAO/orbsvcs/*/*/*/*.h")
-		#file(GLOB ACE_HEADERFILES35 "${ORB_ROOT}/TAO/orbsvcs/*/*/*/*/*.h")
 
 		file(GLOB ACE_HEADERFILES36 "${ORB_ROOT}/TAO/orbsvcs/*.inl")
 		file(GLOB ACE_HEADERFILES37 "${ORB_ROOT}/TAO/orbsvcs/*/*.inl")
-		#file(GLOB ACE_HEADERFILES38 "${ORB_ROOT}/TAO/orbsvcs/*/*/*.inl")
-		#file(GLOB ACE_HEADERFILES39 "${ORB_ROOT}/TAO/orbsvcs/*/*/*/*.inl")
-		#file(GLOB ACE_HEADERFILES40 "${ORB_ROOT}/TAO/orbsvcs/*/*/*/*/*.inl")
 
-		#file(GLOB ACE_HEADERFILES41 "${ORB_ROOT}/TAO/orbsvcs/*.cpp")
-		#file(GLOB ACE_HEADERFILES42 "${ORB_ROOT}/TAO/orbsvcs/*/*.cpp")
-		#file(GLOB ACE_HEADERFILES43 "${ORB_ROOT}/TAO/orbsvcs/*/*/*.cpp")
-		#file(GLOB ACE_HEADERFILES44 "${ORB_ROOT}/TAO/orbsvcs/*/*/*/*.cpp")
-		#file(GLOB ACE_HEADERFILES45 "${ORB_ROOT}/TAO/orbsvcs/*/*/*/*/*.cpp")
 
 
 		file(GLOB ACE_HEADERFILES46 "${ORB_ROOT}/TAO/tao/*.pidl")
