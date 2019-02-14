@@ -244,13 +244,13 @@ namespace RTC
      * @brief データの符号化
      *
      * @param data 符号化前のデータ
-     * @param little_endian　リトルエンディアン(True)、ビッグエンディアン(False)
+     * @return True：成功、False：失敗
      *
      * @else
      * @brief
      *
      * @param data 
-     * @param little_endian　
+     * @return
      *
      * @endif
      */
@@ -260,11 +260,13 @@ namespace RTC
      * @brief データの復号化
      *
      * @param data 復号前のデータ
+     * @return True：成功、False：失敗
      *
      * @else
      * @brief
      *
      * @param data
+     * @return
      *
      * @endif
      */
