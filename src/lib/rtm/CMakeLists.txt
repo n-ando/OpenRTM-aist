@@ -127,8 +127,7 @@ endif(VXWORKS)
 include_directories(${ORB_INCLUDE_DIR})
 
 
-set(RTM_INCLUDE_DIR ${CMAKE_SOURCE_DIR}
-		${CMAKE_SOURCE_DIR}/src/lib/coil/common
+set(RTM_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/src/lib/coil/common
 		${PROJECT_BINARY_DIR}/idl
 		${CMAKE_SOURCE_DIR}/src/lib/coil/${COIL_OS_DIR}
 		${PROJECT_BINARY_DIR}/..
