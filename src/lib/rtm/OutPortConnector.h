@@ -257,10 +257,10 @@ namespace RTC
             }
         }
       // normal case
-      ::RTC::ByteDataStream<DataType> *cdr = coil::GlobalFactory < ::RTC::ByteDataStream<DataType> >::instance().createObject(m_marshalling_type);
+      ::RTC::ByteDataStream<DataType> *cdr = coil::GlobalFactory < ::RTC::ByteDataStream<DataType> >::instance().createObject(m_marshaling_type);
       if (!cdr)
       {
-          RTC_ERROR(("Can not find Marshalizer: %s", m_marshalling_type.c_str()));
+          RTC_ERROR(("Can not find Marshalizer: %s", m_marshaling_type.c_str()));
           return PORT_ERROR;
       }
       cdr->isLittleEndian(isLittleEndian());
@@ -372,7 +372,7 @@ namespace RTC
      * @brief
      * @endif
      */
-    std::string m_marshalling_type;
+    std::string m_marshaling_type;
 
   };
 };  // namespace RTC

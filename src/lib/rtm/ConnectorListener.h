@@ -549,10 +549,10 @@ namespace RTC
                                   ByteData& cdrdata)
     {
       DataType data;
-      std::string marshalling_type = info.properties.getProperty("marshalling_type", "corba");
-      coil::eraseBothEndsBlank(marshalling_type);
+      std::string marshaling_type = info.properties.getProperty("marshaling_type", "corba");
+      coil::eraseBothEndsBlank(marshaling_type);
       
-      ByteDataStream<DataType> *cdr = coil::GlobalFactory < ::RTC::ByteDataStream<DataType> >::instance().createObject(marshalling_type);
+      ByteDataStream<DataType> *cdr = coil::GlobalFactory < ::RTC::ByteDataStream<DataType> >::instance().createObject(marshaling_type);
       
       
       if (!cdr)
@@ -1110,10 +1110,10 @@ namespace RTC
             }
           else
             {
-              std::string marshalling_type = info.properties.getProperty("marshalling_type", "corba");
-              coil::normalize(marshalling_type);
+              std::string marshaling_type = info.properties.getProperty("marshaling_type", "corba");
+              coil::normalize(marshaling_type);
 
-              ByteDataStream<DataType> *cdr = coil::GlobalFactory < ::RTC::ByteDataStream<DataType> >::instance().createObject(marshalling_type);
+              ByteDataStream<DataType> *cdr = coil::GlobalFactory < ::RTC::ByteDataStream<DataType> >::instance().createObject(marshaling_type);
 
               
               if (endian[0] == "little")
