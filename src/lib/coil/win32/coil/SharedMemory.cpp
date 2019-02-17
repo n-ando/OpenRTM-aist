@@ -109,7 +109,7 @@ namespace coil
    * @endif
    */
   int SharedMemory::create(std::string shm_address,
-                     int memory_size)
+                    unsigned long long memory_size)
   {
 
     m_shm_address = shm_address;
@@ -118,7 +118,7 @@ namespace coil
 		(HANDLE)-1,
 		NULL,
 		PAGE_READWRITE | SEC_COMMIT,
-		0, m_memory_size, 
+		0, (DWORD)m_memory_size,
 		shm_address.c_str());
     /*
     if(GetLastError() == ERROR_ALREADY_EXISTS)
@@ -157,7 +157,7 @@ namespace coil
    *
    * @endif
    */
-  int SharedMemory::open(std::string shm_address, int memory_size)
+  int SharedMemory::open(std::string shm_address, unsigned long long memory_size)
   {
     m_shm_address = shm_address;
 	m_memory_size = memory_size;
@@ -187,7 +187,7 @@ namespace coil
    *
    * @endif
    */
-  int SharedMemory::write(const char *data, const int pos, const int size)
+  int SharedMemory::write(const char *data, const unsigned long long pos, const unsigned long long size)
   {
 	  if (!created())
 	  {
@@ -220,7 +220,7 @@ namespace coil
    *
    * @endif
    */
-  int SharedMemory::read(char* data, const int pos, const int size)
+  int SharedMemory::read(char* data, const unsigned long long pos, const unsigned long long size)
   {
 	  if (!created())
 	  {
@@ -294,7 +294,7 @@ namespace coil
    *
    * @endif
    */
-  unsigned int SharedMemory::get_size()
+  unsigned long long SharedMemory::get_size()
   {
 	return m_memory_size;
   }

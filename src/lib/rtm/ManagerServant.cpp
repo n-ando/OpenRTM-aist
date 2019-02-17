@@ -1361,7 +1361,7 @@ namespace RTM
                 break;
               }
             RTC_DEBUG(("Waiting for slave manager started."));
-            coil::sleep(0.01);
+            coil::sleep(coil::TimeValue(0.01));
           }
       }
 
@@ -1460,7 +1460,7 @@ namespace RTM
             return RTC::RTObject::_nil();
           }
 
-        coil::sleep(0.01);
+        coil::sleep(coil::TimeValue(0.01));
         for (size_t i(0); i < 1000; ++i)
           {
             RTC_DEBUG(("Detecting new slave manager (%s).", mgrstr.c_str()))
@@ -1471,7 +1471,7 @@ namespace RTM
                 break;
               }
             RTC_DEBUG(("Waiting for slave manager started."));
-            coil::sleep(0.01);
+            coil::sleep(coil::TimeValue(0.01));
           }
 
         if (CORBA::is_nil(mgrobj))
