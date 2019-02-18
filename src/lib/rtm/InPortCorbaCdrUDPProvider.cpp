@@ -111,7 +111,7 @@ namespace RTC
    * @endif
    */
   void InPortCorbaCdrUDPProvider::
-  setBuffer(BufferBase<cdrMemoryStream>* buffer)
+  setBuffer(BufferBase<ByteData>* buffer)
   {
     m_buffer = buffer;
   }
@@ -157,38 +157,23 @@ namespace RTC
 
     if (m_buffer == 0)
       {
-        cdrMemoryStream cdr;
-#ifdef ORB_IS_ORBEXPRESS
-        cdr.cdr.write_array_1(data.get_buffer(), data.length());
-#elif defined(ORB_IS_TAO)
-        cdr.decodeCDRData(data);
-#else
-        cdr.put_octet_array(&(data[0]), data.length());
-#endif
+        ByteData cdr;
+
+        cdr.writeData((unsigned char*)data.get_buffer(), data.length());
 
         onReceiverError(cdr);
         return;
       }
 
     RTC_PARANOID(("received data size: %d", data.length()))
-    cdrMemoryStream cdr;
+    ByteData cdr;
     // set endian type
     bool endian_type = m_connector->isLittleEndian();
     RTC_TRACE(("connector endian: %s", endian_type ? "little":"big"));
 
-#ifdef ORB_IS_ORBEXPRESS
-    cdr.is_little_endian(endian_type);
-    cdr.write_array_1(data.get_buffer(), data.length());
-    RTC_PARANOID(("converted CDR data size: %d", cdr.size_written()));
-#elif defined(ORB_IS_TAO)
-    //cdr.setByteSwapFlag(endian_type);
-    cdr.decodeCDRData(data);
-    RTC_PARANOID(("converted CDR data size: %d", cdr.cdr.total_length()));
-#else
-    cdr.setByteSwapFlag(endian_type);
-    cdr.put_octet_array(&(data[0]), data.length());
-    RTC_PARANOID(("converted CDR data size: %d", cdr.bufSize()));
-#endif
+    cdr.isLittleEndian(endian_type);
+    cdr.writeData((unsigned char*)&(data[0]), data.length());
+    RTC_PARANOID(("converted CDR data size: %d", cdr.getDataLength()));
 
 
     onReceived(cdr);
@@ -206,7 +191,7 @@ namespace RTC
   */
   void
 	  InPortCorbaCdrUDPProvider::convertReturn(BufferStatus::Enum status,
-		  cdrMemoryStream& data)
+		  ByteData& data)
   {
 	  switch (status)
 	  {

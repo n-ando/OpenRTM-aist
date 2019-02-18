@@ -171,7 +171,7 @@ namespace RTC
    * @endif
    */
   PublisherBase::ReturnCode
-  PublisherPeriodic::write(cdrMemoryStream& data,
+  PublisherPeriodic::write(ByteDataStreamBase* data,
                            unsigned long sec,
                            unsigned long usec)
   {
@@ -187,18 +187,20 @@ namespace RTC
         return m_retcode;
       }
 
+    ByteData data_ = *data;
+
     if (m_retcode == SEND_FULL)
       {
         RTC_DEBUG(("write(): InPort buffer is full."));
-        m_buffer->write(data, sec, usec);
+        m_buffer->write(data_, sec, usec);
         return BUFFER_FULL;
       }
 
-    onBufferWrite(data);
-    CdrBufferBase::ReturnCode ret(m_buffer->write(data, sec, usec));
+    onBufferWrite(data_);
+    CdrBufferBase::ReturnCode ret(m_buffer->write(data_, sec, usec));
     RTC_DEBUG(("%s = write()", CdrBufferBase::toString(ret)));
     m_task->resume();
-    return convertReturn(ret, data);
+    return convertReturn(ret, data_);
   }
 
   /*!
@@ -285,7 +287,7 @@ namespace RTC
 
     while (m_buffer->readable() > 0)
       {
-        cdrMemoryStream& cdr(m_buffer->get());
+        ByteData& cdr(m_buffer->get());
         onBufferRead(cdr);
 
         onSend(cdr);
@@ -311,7 +313,7 @@ namespace RTC
     RTC_TRACE(("pushFifo()"));
     if (bufferIsEmpty()) { return BUFFER_EMPTY; }
 
-    cdrMemoryStream& cdr(m_buffer->get());
+    ByteData& cdr(m_buffer->get());
     onBufferRead(cdr);
 
     onSend(cdr);
@@ -348,7 +350,7 @@ namespace RTC
       {
         m_buffer->advanceRptr(postskip);
         readable -= postskip;
-        cdrMemoryStream& cdr(m_buffer->get());
+        ByteData& cdr(m_buffer->get());
         onBufferRead(cdr);
 
         onSend(cdr);
@@ -384,7 +386,7 @@ namespace RTC
     m_readback = true;
     m_buffer->advanceRptr(m_buffer->readable() - 1);
 
-    cdrMemoryStream& cdr(m_buffer->get());
+    ByteData& cdr(m_buffer->get());
 
     onBufferRead(cdr);
 
@@ -519,7 +521,7 @@ namespace RTC
    */
   PublisherBase::ReturnCode
   PublisherPeriodic::convertReturn(BufferStatus::Enum status,
-                                   cdrMemoryStream& data)
+                                   ByteData& data)
   {
     /*
      * BufferStatus -> DataPortStatus
@@ -567,7 +569,7 @@ namespace RTC
    */
   PublisherPeriodic::ReturnCode
   PublisherPeriodic::invokeListener(DataPortStatus::Enum status,
-                                    cdrMemoryStream& data)
+                                    ByteData& data)
   {
     // ret:
     // PORT_OK, PORT_ERROR, SEND_FULL, SEND_TIMEOUT, CONNECTION_LOST,

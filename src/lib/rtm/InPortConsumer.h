@@ -22,6 +22,7 @@
 
 #include <coil/Factory.h>
 #include <rtm/DataPortStatus.h>
+#include <rtm/ByteData.h>
 
 namespace coil
 {
@@ -36,7 +37,7 @@ namespace SDOPackage
 };
 #endif  // ORB_IS_RTORB
 
-class cdrMemoryStream;
+
 
 namespace RTC
 {
@@ -144,7 +145,7 @@ namespace RTC
      *
      * @endif
      */
-	virtual ReturnCode put(cdrMemoryStream& data) = 0;
+	virtual ReturnCode put(ByteData& data) = 0;
 
     /*!
      * @if jp

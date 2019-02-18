@@ -67,30 +67,15 @@ namespace RTC
    * @endif
    */
   InPortConsumer::ReturnCode InPortCorbaCdrConsumer::
-	  put(cdrMemoryStream& data)
+	  put(ByteData& data)
   {
     RTC_PARANOID(("put()"));
 
 #ifndef ORB_IS_RTORB
-#ifdef ORB_IS_ORBEXPRESS
-    cdrMemoryStream tmp_data;
-    tmp_data = data;
     ::OpenRTM::CdrData tmp;
-    CORBA::ULong len = tmp_data.cdr.size_written();
+    CORBA::ULong len = (CORBA::ULong)data.getDataLength();
     tmp.length(len);
-    tmp_data.cdr.read_array_1((void*)tmp.get_buffer(), len);
-    //CORBA::Octet* to;
-    //cdrMemoryStream data_tmp = data;
-    //*static_cast<CORBA::Octet*>(to) = data_tmp.read_octet();
-    //::OpenRTM::CdrData tmp(data_tmp.size_written(), data_tmp.size_written(),
-    //                       to, 0);
-#elif defined(ORB_IS_TAO)
-	::OpenRTM::CdrData tmp;
-	data.encodeCDRData(tmp);
-#else
-    ::OpenRTM::CdrData tmp(data.bufSize(), data.bufSize(),
-                           static_cast<CORBA::Octet*>(data.bufPtr()), 0);
-#endif
+    data.readData((unsigned char*)tmp.get_buffer(), len);
 #else // ORB_IS_RTORB
     OpenRTM_CdrData *cdrdata_tmp = new OpenRTM_CdrData();
     cdrdata_tmp->_buffer =

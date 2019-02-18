@@ -21,6 +21,8 @@
 #include <rtm/Manager.h>
 #include <rtm/idl/SharedMemorySkel.h>
 #include <coil/SharedMemory.h>
+#include <rtm/CORBA_CdrMemoryStream.h>
+#include <rtm/ByteData.h>
 
 #define DEFAULT_DATA_SIZE 8
 #define DEFAULT_SHARED_MEMORY_SIZE 2097152
@@ -177,7 +179,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual void write(cdrMemoryStream& data);
+    virtual void write(ByteData& data);
      /*!
      * @if jp
      * @brief データを読み込む
@@ -192,7 +194,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual void read(cdrMemoryStream& data);
+    virtual void read(ByteData& data);
      /*!
      * @if jp
      * @brief 通信先のCORBAインターフェースを登録する

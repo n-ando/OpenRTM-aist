@@ -650,7 +650,6 @@ elseif(UNIX)
 elseif(WIN32)
 	set(COIL_OS_DIR "win32")
 	set(RTM_LINKER_OPTION advapi32.lib;ws2_32.lib;mswsock.lib;rpcrt4.lib;optimized;msvcrt.lib;optimized;msvcmrt.lib;debug;msvcrtd.lib)
-	ADD_DEFINITIONS(-DLIBRARY_EXPORTS)
 endif()
 
 

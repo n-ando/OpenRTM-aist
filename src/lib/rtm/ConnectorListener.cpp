@@ -127,7 +127,7 @@ namespace RTC
 
   ConnectorDataListenerHolder::ReturnCode
 	  ConnectorDataListenerHolder::notify(ConnectorInfo& info,
-                                                 cdrMemoryStream& cdrdata)
+                                                 ByteData& cdrdata)
   {
     Guard guard(m_mutex);
     ConnectorListenerHolder::ReturnCode ret(NO_CHANGE);

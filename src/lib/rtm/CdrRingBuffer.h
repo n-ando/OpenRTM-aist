@@ -22,10 +22,11 @@
 
 #include <rtm/RingBuffer.h>
 #include <rtm/CdrBufferBase.h>
+#include <rtm/ByteData.h>
 
 namespace RTC
 {
-  typedef RingBuffer<cdrMemoryStream> CdrRingBuffer;
+  typedef RingBuffer<ByteData> CdrRingBuffer;
 };  // namespace RTC
 
 extern "C"

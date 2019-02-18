@@ -183,7 +183,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode read(cdrMemoryStream& data);
+    virtual ReturnCode read(ByteDataStreamBase* data);
 
     /*!
      * @if jp

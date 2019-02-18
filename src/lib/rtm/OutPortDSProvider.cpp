@@ -173,18 +173,12 @@ namespace RTC
         return ::RTC::UNKNOWN_ERROR;
       }
 
-    cdrMemoryStream cdr = cdrMemoryStream();
+    ByteData cdr;
     CdrBufferBase::ReturnCode ret(m_connector->read(cdr));
 
     if (ret == CdrBufferBase::BUFFER_OK)
       {
-#ifdef ORB_IS_ORBEXPRESS
-        CORBA::ULong len((CORBA::ULong)cdr.cdr.size_written());
-#elif defined(ORB_IS_TAO)
-	CORBA::ULong len((CORBA::ULong)cdr.cdr.total_length());
-#else
-        CORBA::ULong len((CORBA::ULong)cdr.bufSize());
-#endif
+        CORBA::ULong len((CORBA::ULong)cdr.getDataLength());
         RTC_PARANOID(("converted CDR data size: %d", len));
 
         if (len == (CORBA::ULong)0) {
@@ -193,16 +187,10 @@ namespace RTC
         }
 #ifndef ORB_IS_RTORB
         data->length(len);
-#ifdef ORB_IS_ORBEXPRESS
-        cdr.cdr.read_array_1(data->get_buffer(), len);
-#elif defined(ORB_IS_TAO)
-	TAO_InputCDR(cdr.cdr).read_octet_array(&((*data)[0]), len);
-#else
-        cdr.get_octet_array(&((*data)[0]), len);
-#endif
+        cdr.readData((unsigned char*)data->get_buffer(), len);
 #else
         data->length(len);
-        cdr.get_octet_array(reinterpret_cast<char *>(&((*data)[0]),
+        cdr.readData(reinterpret_cast<char *>(&((*data)[0]),
                                         static_cast<int>(len)));
 #endif  // ORB_IS_RTORB
       }
@@ -219,7 +207,7 @@ namespace RTC
    */
   ::RTC::PortStatus
   OutPortDSProvider::convertReturn(BufferStatus::Enum status,
-                                         cdrMemoryStream& data)
+                                         ByteData& data)
   {
     switch (status)
       {

@@ -265,7 +265,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode write(cdrMemoryStream& data,
+    virtual ReturnCode write(ByteDataStreamBase* data,
                              unsigned long sec,
                              unsigned long usec);
     /*!
@@ -361,7 +361,7 @@ namespace RTC
      * @param data cdrMemoryStream
      * @endif
      */
-    inline void onSend(cdrMemoryStream& data)
+    inline void onSend(ByteData& data)
     {
       m_listeners->
         connectorData_[ON_SEND].notify(m_profile, data);
@@ -376,7 +376,7 @@ namespace RTC
      * @param data cdrMemoryStream
      * @endif
      */
-    inline void onReceived(cdrMemoryStream& data)
+    inline void onReceived(ByteData& data)
     {
       m_listeners->
         connectorData_[ON_RECEIVED].notify(m_profile, data);
@@ -391,7 +391,7 @@ namespace RTC
      * @param data cdrMemoryStream
      * @endif
      */
-    inline void onReceiverFull(cdrMemoryStream& data)
+    inline void onReceiverFull(ByteData& data)
     {
       m_listeners->
         connectorData_[ON_RECEIVER_FULL].notify(m_profile, data);
@@ -406,7 +406,7 @@ namespace RTC
      * @param data cdrMemoryStream
      * @endif
      */
-    inline void onReceiverTimeout(cdrMemoryStream& data)
+    inline void onReceiverTimeout(ByteData& data)
     {
       m_listeners->
         connectorData_[ON_RECEIVER_TIMEOUT].notify(m_profile, data);
@@ -421,7 +421,7 @@ namespace RTC
      * @param data cdrMemoryStream
      * @endif
      */
-    inline void onReceiverError(cdrMemoryStream& data)
+    inline void onReceiverError(ByteData& data)
     {
       m_listeners->
         connectorData_[ON_RECEIVER_ERROR].notify(m_profile, data);

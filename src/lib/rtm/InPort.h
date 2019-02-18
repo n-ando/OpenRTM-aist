@@ -34,6 +34,7 @@
 #include <rtm/InPortConnector.h>
 #include <rtm/Timestamp.h>
 #include <rtm/DirectInPortBase.h>
+#include <rtm/CORBA_CdrMemoryStream.h>
 
 
 
@@ -163,6 +164,8 @@ namespace RTC
       this->addConnectorDataListener(ON_BUFFER_READ,
                                      new Timestamp<DataType>("on_read"));
 	  m_directport = this;
+
+      CdrMemoryStreamInit<DataType>();
     }
 
     /*!
@@ -552,7 +555,7 @@ namespace RTC
           }
       }
       // 2) network connection
-      cdrMemoryStream cdr;
+      
       ReturnCode ret;
       {
         Guard guard(m_connectorsMutex);
@@ -589,50 +592,43 @@ namespace RTC
       }
 
       if (!connector->getDirectData(m_value))
-	  {
-		  {
-			  Guard guard(m_connectorsMutex);
-			  // In single-buffer mode, all connectors share the same buffer. This
-			  // means that we only need to read from the first connector to get data
-			  // received by any connector.
-              ret = connector->read(cdr);
-		  }
-		  m_status[0] = ret;
-		  if (ret == PORT_OK)
-		  {
-			  Guard guard(m_valueMutex);
-			  RTC_DEBUG(("data read succeeded"));
-#ifdef ORB_IS_ORBEXPRESS
-			  cdr.cdr >> m_value;
-#elif defined(ORB_IS_TAO)
-			  TAO_InputCDR tao_cdr = TAO_InputCDR(cdr.cdr);
-			  tao_cdr >> m_value;
-#else
-			  m_value <<= cdr;
-#endif
-			  if (m_OnReadConvert != 0)
-			  {
-				  m_value = (*m_OnReadConvert)(m_value);
-				  RTC_DEBUG(("OnReadConvert called"));
-				  return true;
-			  }
-			  return true;
-		  }
-		  else if (ret == BUFFER_EMPTY)
-		  {
-			  RTC_WARN(("buffer empty"));
-			  return false;
-		  }
-		  else if (ret == BUFFER_TIMEOUT)
-		  {
-			  RTC_WARN(("buffer read timeout"));
-			  return false;
-		  }
-	  }
-	  else
-	  {
-		  return true;
-	  }
+      {
+          {
+              Guard guard(m_connectorsMutex);
+              // In single-buffer mode, all connectors share the same buffer. This
+              // means that we only need to read from the first connector to get data
+              // received by any connector.
+              ret = connector->read(m_value);
+          }
+          m_status[0] = ret;
+          if (ret == PORT_OK)
+          {
+              Guard guard(m_valueMutex);
+              RTC_DEBUG(("data read succeeded"));
+
+              if (m_OnReadConvert != 0)
+              {
+                  m_value = (*m_OnReadConvert)(m_value);
+                  RTC_DEBUG(("OnReadConvert called"));
+                  return true;
+              }
+              return true;
+          }
+          else if (ret == BUFFER_EMPTY)
+          {
+              RTC_WARN(("buffer empty"));
+              return false;
+          }
+          else if (ret == BUFFER_TIMEOUT)
+          {
+              RTC_WARN(("buffer read timeout"));
+              return false;
+          }
+      }
+      else
+      {
+          return true;
+      }
       RTC_ERROR(("unknown retern value from buffer.read()"));
       return false;
     }

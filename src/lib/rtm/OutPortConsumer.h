@@ -305,7 +305,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode get(cdrMemoryStream& data) = 0;
+    virtual ReturnCode get(ByteData& data) = 0;
 
     /*!
      * @if jp

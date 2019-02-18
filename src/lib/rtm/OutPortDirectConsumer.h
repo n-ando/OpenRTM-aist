@@ -212,7 +212,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode get(cdrMemoryStream& data);
+    virtual ReturnCode get(ByteData& data);
 
     /*!
      * @if jp

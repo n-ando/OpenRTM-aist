@@ -274,6 +274,9 @@ set(rtm_headers
 	InPortDSConsumer.h
 	MultilayerCompositeEC.h
 	EventBase.h
+	CORBA_CdrMemoryStream.h
+	ByteData.h
+	ByteDataStreamBase.h
 	${PROJECT_BINARY_DIR}/config_rtc.h
 	${PROJECT_BINARY_DIR}/version.h
 )
@@ -358,6 +361,9 @@ set(rtm_srcs
 	InPortDSProvider.cpp
 	InPortDSConsumer.cpp
 	MultilayerCompositeEC.cpp
+	ByteData.cpp
+	ByteDataStreamBase.cpp
+	CORBA_CdrMemoryStream.cpp
 	${rtm_headers}
 )
 
@@ -391,14 +397,13 @@ if(OBSERVER_ENABLE)
 endif(OBSERVER_ENABLE)
 
 
+set(rtm_srcs ${rtm_srcs} ${SKEL_IDL_SRCS})
+set_source_files_properties(${SKEL_IDL_SRCS} PROPERTIES GENERATED 1)
 
 if(WIN32)
-
 	set(DEF_FILE_NAME  ${RTM_PROJECT_NAME}.def)
-	set(rtm_srcs ${rtm_srcs} ${SKEL_IDL_SRCS})
-	set_source_files_properties(${SKEL_IDL_SRCS} PROPERTIES GENERATED 1)
+	ADD_DEFINITIONS(-DLIBRARY_EXPORTS)
 	add_library(${RTM_PROJECT_NAME}_static STATIC ${rtm_srcs} )
-	
 	add_dependencies(${RTM_PROJECT_NAME}_static ALL_IDL_TGT)
 
 	add_custom_command(TARGET ${RTM_PROJECT_NAME}_static 
@@ -413,8 +418,6 @@ if(WIN32)
 					COMPONENT openrtm)
 	set(rtm_srcs ${rtm_srcs} ${CMAKE_CURRENT_BINARY_DIR}/${DEF_FILE_NAME})
 	
-
-
 endif(WIN32)
 
 
@@ -434,9 +437,8 @@ else(VXWORKS)
 	
 
 
-
+	target_link_libraries(${RTM_PROJECT_NAME} ${ORB_LIBRARIES} ${COIL_PROJECT_NAME} ${RTM_LINKER_OPTION})
 	if(UNIX)
-		target_link_libraries(${RTM_PROJECT_NAME} ${ORB_LIBRARIES} ${COIL_PROJECT_NAME} ${RTCSKEL_PROJECT_NAME} ${RTM_LINKER_OPTION})
 		install(TARGETS ${RTM_PROJECT_NAME} LIBRARY DESTINATION ${INSTALL_RTM_LIB_DIR}
 						ARCHIVE DESTINATION ${INSTALL_RTM_LIB_DIR}
 						RUNTIME DESTINATION ${INSTALL_RTM_BIN_DIR}
@@ -456,7 +458,6 @@ else(VXWORKS)
 		add_dependencies(${RTM_PROJECT_NAME}-static ${RTCSKEL_PROJECT_NAME})
 
 	elseif(WIN32)
-		target_link_libraries(${RTM_PROJECT_NAME} ${ORB_LIBRARIES} ${COIL_PROJECT_NAME} ${RTM_LINKER_OPTION})
 		add_dependencies(${RTM_PROJECT_NAME} ALL_IDL_TGT)
 		set_source_files_properties(${DEF_FILE_NAME} PROPERTIES GENERATED 1)
 		add_dependencies(${RTM_PROJECT_NAME} ${RTM_PROJECT_NAME}_static)
@@ -478,4 +479,5 @@ add_dependencies(${RTM_PROJECT_NAME} ${COIL_PROJECT_NAME})
 
 
 add_dependencies(${RTM_PROJECT_NAME} ${RTCSKEL_PROJECT_NAME})
+
 

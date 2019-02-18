@@ -155,7 +155,7 @@ namespace RTC
      *
      * @endif
      */
-	virtual ReturnCode put(cdrMemoryStream& data);
+	virtual ReturnCode put(ByteData& data);
 
     /*!
      * @if jp

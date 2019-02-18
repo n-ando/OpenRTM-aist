@@ -153,6 +153,8 @@ namespace RTC
 
 	  m_directport = this;
 
+      CdrMemoryStreamInit<DataType>();
+
     }
 
     /*!

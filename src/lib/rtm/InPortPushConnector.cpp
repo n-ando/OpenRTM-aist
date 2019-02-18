@@ -59,6 +59,10 @@ namespace RTC
         m_sync_readwrite = true;
     }
 
+    m_marshaling_type = info.properties.getProperty("marshaling_type", "corba");
+    coil::eraseBothEndsBlank(m_marshaling_type);
+    
+
     onConnect();
   }
 
@@ -83,7 +87,7 @@ namespace RTC
    * @endif
    */
   ConnectorBase::ReturnCode
-  InPortPushConnector::read(cdrMemoryStream& data)
+  InPortPushConnector::read(ByteDataStreamBase* data)
   {
     RTC_TRACE(("read()"));
     /*
@@ -118,8 +122,9 @@ namespace RTC
             }
         }
     }
-
-    BufferStatus::Enum ret = m_buffer->read(data);
+    ByteData tmp;
+    BufferStatus::Enum ret = m_buffer->read(tmp);
+    data->writeData(tmp.getBuffer(), tmp.getDataLength());
 
     if (m_sync_readwrite)
     {
@@ -138,15 +143,15 @@ namespace RTC
     switch (ret)
       {
       case BufferStatus::BUFFER_OK:
-        onBufferRead(data);
+        onBufferRead(tmp);
         return PORT_OK;
         break;
       case BufferStatus::BUFFER_EMPTY:
-        onBufferEmpty(data);
+        onBufferEmpty(tmp);
         return BUFFER_EMPTY;
         break;
       case BufferStatus::TIMEOUT:
-        onBufferReadTimeout(data);
+        onBufferReadTimeout(tmp);
         return BUFFER_TIMEOUT;
         break;
       case BufferStatus::PRECONDITION_NOT_MET:
@@ -225,7 +230,7 @@ namespace RTC
     m_listeners.connector_[ON_DISCONNECT].notify(m_profile);
   }
 
-  BufferStatus::Enum InPortPushConnector::write(cdrMemoryStream &cdr)
+  BufferStatus::Enum InPortPushConnector::write(ByteData &cdr)
   {
       if (m_sync_readwrite)
       {
@@ -237,6 +242,8 @@ namespace RTC
               }
           }
       }
+
+      
 
       BufferStatus::Enum ret = m_buffer->write(cdr);
 

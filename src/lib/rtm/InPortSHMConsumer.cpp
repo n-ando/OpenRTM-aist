@@ -116,7 +116,7 @@ namespace RTC
 	* @brief Write data into the buffer
 	* @endif
 	*/
-	InPortConsumer::ReturnCode InPortSHMConsumer::put(cdrMemoryStream& data)
+	InPortConsumer::ReturnCode InPortSHMConsumer::put(ByteData& data)
 	{
 		RTC_PARANOID(("put()"));
 

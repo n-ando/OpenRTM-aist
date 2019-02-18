@@ -213,7 +213,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode get(cdrMemoryStream& data);
+    virtual ReturnCode get(ByteData& data);
 
     /*!
      * @if jp
@@ -267,7 +267,7 @@ namespace RTC
      * @endif
      */
     OutPortConsumer::ReturnCode convertReturn(::OpenRTM::PortStatus status,
-                                              cdrMemoryStream& data);
+                                              ByteData& data);
 
     /*!
      * @if jp
@@ -278,7 +278,7 @@ namespace RTC
      * @param data cdrMemoryStream
      * @endif
      */
-    inline void onBufferWrite(cdrMemoryStream& data)
+    inline void onBufferWrite(ByteData& data)
     {
       m_listeners->
         connectorData_[ON_BUFFER_WRITE].notify(m_profile, data);
@@ -293,7 +293,7 @@ namespace RTC
      * @param data cdrMemoryStream
      * @endif
      */
-    inline void onBufferFull(cdrMemoryStream& data)
+    inline void onBufferFull(ByteData& data)
     {
       m_listeners->
         connectorData_[ON_BUFFER_FULL].notify(m_profile, data);
@@ -308,7 +308,7 @@ namespace RTC
      * @param data cdrMemoryStream
      * @endif
      */
-    inline void onReceived(cdrMemoryStream& data)
+    inline void onReceived(ByteData& data)
     {
       m_listeners->
         connectorData_[ON_RECEIVED].notify(m_profile, data);
@@ -323,7 +323,7 @@ namespace RTC
      * @param data cdrMemoryStream
      * @endif
      */
-    inline void onReceiverFull(cdrMemoryStream& data)
+    inline void onReceiverFull(ByteData& data)
     {
       m_listeners->
         connectorData_[ON_RECEIVER_FULL].notify(m_profile, data);

@@ -62,7 +62,7 @@ namespace RTC
    * @endif
    */
   void InPortDirectProvider::
-  setBuffer(BufferBase<cdrMemoryStream>* buffer)
+  setBuffer(BufferBase<ByteData>* buffer)
   {
     m_buffer = buffer;
   }

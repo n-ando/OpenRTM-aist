@@ -51,6 +51,9 @@ namespace RTC
     m_consumer->setBuffer(m_buffer);
     m_consumer->setListener(info, &m_listeners);
 
+    m_marshaling_type = info.properties.getProperty("marshaling_type", "corba");
+    coil::eraseBothEndsBlank(m_marshaling_type);
+
     onConnect();
   }
 
@@ -75,14 +78,17 @@ namespace RTC
    * @endif
    */
   ConnectorBase::ReturnCode
-  InPortPullConnector::read(cdrMemoryStream& data)
+  InPortPullConnector::read(ByteDataStreamBase* data)
   {
     RTC_TRACE(("InPortPullConnector::read()"));
     if (m_consumer == 0)
       {
         return PORT_ERROR;
       }
-    return m_consumer->get(data);
+    ByteData tmp;
+    ConnectorBase::ReturnCode ret = m_consumer->get(tmp);
+    data->writeData(tmp.getBuffer(), tmp.getDataLength());
+    return ret;
   }
 
   /*!

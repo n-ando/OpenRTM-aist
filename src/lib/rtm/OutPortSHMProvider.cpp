@@ -172,17 +172,11 @@ namespace RTC
         return ::OpenRTM::UNKNOWN_ERROR;
       }
 
-    cdrMemoryStream cdr;
+    ByteData cdr;
     CdrBufferBase::ReturnCode ret(m_connector->read(cdr));
     if (ret == CdrBufferBase::BUFFER_OK)
       {
-#ifdef ORB_IS_ORBEXPRESS
-        CORBA::ULong len((CORBA::ULong)cdr.cdr.size_written());
-#elif defined(ORB_IS_TAO)
-	CORBA::ULong len((CORBA::ULong)cdr.cdr.total_length());
-#else
-        CORBA::ULong len((CORBA::ULong)cdr.bufSize());
-#endif
+        CORBA::ULong len((CORBA::ULong)cdr.getDataLength());
         RTC_PARANOID(("converted CDR data size: %d", len));
 	if (len == (CORBA::ULong)0) {
 	  RTC_ERROR(("buffer is empty."));
@@ -206,7 +200,7 @@ namespace RTC
    */
   ::OpenRTM::PortStatus
   OutPortSHMProvider::convertReturn(BufferStatus::Enum status,
-                                        cdrMemoryStream& data)
+                                        ByteData& data)
   {
     switch(status)
       {

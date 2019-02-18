@@ -58,7 +58,7 @@ namespace RTC
     virtual ~EventBinder0() {}
 
     virtual ReturnCode operator()(ConnectorInfo& info,
-                                  cdrMemoryStream& data)
+                                  ByteData& data)
     {
       if (info.properties["fsm_event_name"] == m_eventName ||
           info.name == m_eventName)

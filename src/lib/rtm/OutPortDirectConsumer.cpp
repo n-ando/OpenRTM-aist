@@ -88,7 +88,7 @@ namespace RTC
    * @endif
    */
   OutPortConsumer::ReturnCode
-  OutPortDirectConsumer::get(cdrMemoryStream& data)
+  OutPortDirectConsumer::get(ByteData& data)
   {
     RTC_PARANOID(("get(): never called."));
     return UNKNOWN_ERROR;

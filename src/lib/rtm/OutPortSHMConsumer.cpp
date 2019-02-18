@@ -117,7 +117,7 @@ namespace RTC
    * @endif
    */
   OutPortConsumer::ReturnCode
-  OutPortSHMConsumer::get(cdrMemoryStream& data)
+  OutPortSHMConsumer::get(ByteData& data)
   {
     RTC_TRACE(("OutPortSHMConsumer::get()"));
 
@@ -133,13 +133,7 @@ namespace RTC
 				m_shmem.read(data);
 
 				RTC_DEBUG(("get() successful"));
-#ifdef ORB_IS_ORBEXPRESS
-				RTC_PARANOID(("CDR data length: %d", data.cdr.size_written()));
-#elif defined(ORB_IS_TAO)
-				RTC_PARANOID(("CDR data length: %d", data.cdr.total_length()));
-#else
-				RTC_PARANOID(("CDR data length: %d", data.bufSize()));
-#endif
+                RTC_PARANOID(("CDR data length: %d", data.getDataLength()));
 
 				onReceived(data);
 				onBufferWrite(data);
@@ -257,7 +251,7 @@ namespace RTC
    */
   OutPortConsumer::ReturnCode
   OutPortSHMConsumer::convertReturn(::OpenRTM::PortStatus status,
-                                         cdrMemoryStream& data)
+                                         ByteData& data)
   {
     switch(status)
       {

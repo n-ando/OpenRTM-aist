@@ -197,7 +197,7 @@ namespace RTC
      * @endif
      */
     ::OpenRTM::PortStatus convertReturn(BufferStatus::Enum status,
-                                        cdrMemoryStream& data);
+                                        ByteData& data);
 
 
     /*!
@@ -209,7 +209,7 @@ namespace RTC
      * @param data cdrMemoryStream
      * @endif
      */
-    inline void onBufferRead(cdrMemoryStream& data)
+    inline void onBufferRead(ByteData& data)
     {
       m_listeners->
         connectorData_[ON_BUFFER_READ].notify(m_profile, data);
@@ -224,7 +224,7 @@ namespace RTC
      * @param data cdrMemoryStream
      * @endif
      */
-    inline void onSend(cdrMemoryStream& data)
+    inline void onSend(ByteData& data)
     {
       m_listeners->
         connectorData_[ON_SEND].notify(m_profile, data);
