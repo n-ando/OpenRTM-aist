@@ -42,6 +42,32 @@ namespace RTC
       "PARANOID"
     };
 
+  const char* Logger::m_levelOutputString[] =
+    {
+      " SILENT: ",
+      " FATAL: ",
+      " ERROR: ",
+      " WARNING: ",
+      " INFO: ",
+      " DEBUG: ",
+      " TRACE: ",
+      " VERBOSE: ",
+      " PARANOID: "
+    };
+
+  const char* Logger::m_levelColor[] =
+    {
+      "\x1b[0m",          // SLILENT  (none)
+      "\x1b[0m\x1b[31m",  // FATAL    (red)
+      "\x1b[0m\x1b[35m",  // ERROR    (magenta)
+      "\x1b[0m\x1b[33m",  // WARN     (yellow)
+      "\x1b[0m\x1b[34m",  // INFO     (blue)
+      "\x1b[0m\x1b[32m",  // DEBUG    (green)
+      "\x1b[0m\x1b[36m",  // TRACE    (cyan)
+      "\x1b[0m\x1b[39m",  // VERBOSE  (default)
+      "\x1b[0m\x1b[37m"   // PARANOID (white)
+    };
+
   Logger::Logger(const char* name)
     : ::coil::LogStream(&(Manager::instance().getLogStreamBuf()),
                         RTL_SILENT, RTL_PARANOID, RTL_SILENT),

@@ -398,6 +398,62 @@ namespace RTC
         return m_levelString[level];
     }
 
+    /*!
+     * @if jp
+     *
+     * @brief ログレベルを対応した出力用の文字列に変換
+     *
+     *
+     * @param level ログレベル
+     *
+     * @return 文字列
+     *
+     * @else
+     *
+     * @brief
+     *
+     *
+     *
+     * @param level log level
+     *
+     * @return string
+     *
+     * @endif
+     */
+    static std::string getLevelOutputString(int level)
+    {
+        return m_levelOutputString[level];
+    }
+
+
+    /*!
+     * @if jp
+     *
+     * @brief ログレベルを対応したエスケープシケーンスに変換
+     *
+     *
+     * @param level ログレベル
+     *
+     * @return 文字列
+     *
+     * @else
+     *
+     * @brief
+     *
+     *
+     *
+     * @param level log level
+     *
+     * @return string
+     *
+     * @endif
+     */
+    static std::string getLevelColor(int level)
+    {
+        return m_levelColor[level];
+    }
+    
+
   protected:
 
 
@@ -444,6 +500,8 @@ namespace RTC
     std::string m_dateFormat;
     coil::IClock* m_clock;
     static const char* m_levelString[];
+    static const char* m_levelOutputString[];
+    static const char* m_levelColor[];
     int m_msEnable;
     int m_usEnable;
   };
