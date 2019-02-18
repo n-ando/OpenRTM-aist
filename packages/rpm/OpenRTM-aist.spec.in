@@ -33,7 +33,6 @@ Buildroot:     %{_tmppath}/%{pkgname}-%{version}-%{release}-root
 Requires:      omniORB
 Requires:      omniORB-servers
 BuildRequires: omniORB-devel
-BuildRequires: python
 
 %description
 OpenRTM-aist is a reference implementation of RTC (Robotic Technology
