@@ -110,7 +110,7 @@ ADD_DEFINITIONS (${VXWORKS_C_FLAGS_LIST})
 
 
 	string(REPLACE ";" " " VXWORKS_C_FLAGS_LIST_STR "${VXWORKS_C_FLAGS_LIST}")
-	SET (RUN_MUNCH_SCRIPT ${CMAKE_SOURCE_DIR}/cmake/run_munch.sh)
+	SET (RUN_MUNCH_SCRIPT ${CMAKE_SOURCE_DIR}/build/cmake/run_munch.sh)
 	SET (CMAKE_C_LINK_EXECUTABLE
 		  "${CMAKE_LINKER}  <LINK_FLAGS> <CMAKE_CXX_LINK_FLAGS> -warn-common -S <OBJECTS> -o <TARGET>_partialImage.o  <LINK_LIBRARIES>"
 #		  "${CMAKE_LINKER}  <LINK_FLAGS> <CMAKE_CXX_LINK_FLAGS> -warn-common -S <OBJECTS> -o <TARGET>_partialImage.o  <LINK_LIBRARIES>  /home/openrtm/OIS/ORBexpress/RT_2.8.4_PATCH_KC1/target/ppc_8xx-vxworks_6.6/gcc_4.1.2_ExLcRi/config_rt_full/OENames_2.1.6/lib/libOEnames.a /home/openrtm/OIS/ORBexpress/RT_2.8.4_PATCH_KC1/target/ppc_8xx-vxworks_6.6/gcc_4.1.2_ExLcRi/config_rt_full/lib/libOEtcp.a /home/openrtm/OIS/ORBexpress/RT_2.8.4_PATCH_KC1/target/ppc_8xx-vxworks_6.6/gcc_4.1.2_ExLcRi/config_rt_full/lib/libOEmirror.a /home/openrtm/OIS/ORBexpress/RT_2.8.4_PATCH_KC1/target/ppc_8xx-vxworks_6.6/gcc_4.1.2_ExLcRi/config_rt_full/lib/libOEbridge.a /home/openrtm/OIS/ORBexpress/RT_2.8.4_PATCH_KC1/target/ppc_8xx-vxworks_6.6/gcc_4.1.2_ExLcRi/config_rt_full/lib/libOEudp.a /home/openrtm/OIS/ORBexpress/RT_2.8.4_PATCH_KC1/target/ppc_8xx-vxworks_6.6/gcc_4.1.2_ExLcRi/config_rt_full/lib/libOEipmc.a /home/openrtm/OIS/ORBexpress/RT_2.8.4_PATCH_KC1/target/ppc_8xx-vxworks_6.6/gcc_4.1.2_ExLcRi/config_rt_full/lib/libOEshrmem.a /home/openrtm/OIS/ORBexpress/RT_2.8.4_PATCH_KC1/target/ppc_8xx-vxworks_6.6/gcc_4.1.2_ExLcRi/config_rt_full/lib/libOEorb.a"

@@ -381,7 +381,7 @@ else(RTP)
 		SET (TCLSH ${WIND_HOME}/workbench-3.3/foundation/x86-linux2/bin/tclsh CACHE FILEPATH "tclsh")
 		SET (TAGS ${VSB_DIR}/tags/${VX_CPU_FAMILY}/${VX_CPU}/common/dkm.tags CACHE FILEPATH "tags")
 		string(REPLACE ";" " " VXWORKS_C_FLAGS_LIST_STR "${VXWORKS_C_FLAGS_LIST}")
-		SET (RUN_MUNCH_SCRIPT ${CMAKE_SOURCE_DIR}/cmake/run_munch_69.sh)
+		SET (RUN_MUNCH_SCRIPT ${CMAKE_SOURCE_DIR}/build/cmake/run_munch_69.sh)
 		SET (CMAKE_C_LINK_EXECUTABLE
 		  "${CMAKE_C_COMPILER} ${CMAKE_PARTICALIMAGE_LINKER_FLAGS} -o <TARGET>_partialImage.o <OBJECTS> <LINK_LIBRARIES>"
 		  "sh ${RUN_MUNCH_SCRIPT} ${CMAKE_NM} <TARGET>_partialImage.o ${TCLSH} ${MUNCH} ${NM_FLAG} ${TAGS} ctdt.c"
@@ -393,7 +393,7 @@ else(RTP)
 #		SET (TCLSH ${WIND_HOME}/workbench-3.0/foundation/4.1.1/x86-linux2/bin/tclsh CACHE FILEPATH "tclsh")
 		SET (MUNCH ${WIND_BASE}/host/${WIND_HOST_TYPE}/bin/munch CACHE FILEPATH "munch")
 		string(REPLACE ";" " " VXWORKS_C_FLAGS_LIST_STR "${VXWORKS_C_FLAGS_LIST};${CPU_C_FLAGS_LIST}")
-		SET (RUN_MUNCH_SCRIPT ${CMAKE_SOURCE_DIR}/cmake/run_munch.sh)
+		SET (RUN_MUNCH_SCRIPT ${CMAKE_SOURCE_DIR}/build/cmake/run_munch.sh)
 		SET (CMAKE_C_LINK_EXECUTABLE
 		  "${CMAKE_LINKER}  <LINK_FLAGS> <CMAKE_CXX_LINK_FLAGS> -warn-common -S <OBJECTS> -o <TARGET>_partialImage.o  <LINK_LIBRARIES>"
 		  "sh ${RUN_MUNCH_SCRIPT} ${CMAKE_NM} <TARGET>_partialImage.o ${MUNCH} ctdt.c"
