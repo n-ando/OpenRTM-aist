@@ -1,6 +1,8 @@
-cmake_minimum_required (VERSION 2.6)
+cmake_minimum_required (VERSION 3.0.2)
 set(target rtcd)
-project (${target})
+project (${target}
+	VERSION ${RTM_VERSION}
+	LANGUAGES CXX)
 
 
 link_directories(${ORB_LINK_DIR})
@@ -13,8 +15,6 @@ ADD_DEFINITIONS(${ORB_C_FLAGS_LIST})
 
 if(VXWORKS)
 	add_executable(${target} rtcd_vxorks.cpp)
-#	add_executable(${target} rtcd_vxorks.cpp ConsoleIn.cpp ConsoleIn.h)
-#	add_executable(${target} hello_s.cxx hello_s.h server.cpp hello.cxx hello.h)
 else(VXWORKS)
 	add_executable(${target} rtcd.cpp)
 endif(VXWORKS)
@@ -31,7 +31,6 @@ endif(VXWORKS)
 
 target_link_libraries(${target} ${libs} ${RTM_LINKER_OPTION})
 
-#target_link_libraries(${target} ${ORB_LIBRARIES})
 
 
 

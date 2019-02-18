@@ -1,6 +1,8 @@
-cmake_minimum_required (VERSION 2.6)
+cmake_minimum_required (VERSION 3.0.2)
 set(target ConfigSample)
-project (${target})
+project (${target}
+	VERSION ${RTM_VERSION}
+	LANGUAGES CXX)
 
 
 link_directories(${ORB_LINK_DIR})
@@ -35,14 +37,12 @@ else()
 	else(VXWORKS)
 		set(libs ${RTM_PROJECT_NAME} ${ORB_LIBRARIES} ${COIL_PROJECT_NAME})
 	endif(VXWORKS)
-	#message(STATUS ${libs})
 
 	add_executable(${target}Comp ${standalone_srcs})
 	target_link_libraries(${target}Comp ${libs} ${RTM_LINKER_OPTION})
 	add_dependencies(${target}Comp ${RTM_PROJECT_NAME})
 
 	add_library(${target} SHARED ${srcs})
-	#message(STATUS ${libs} ${RTM_LINKER_OPTION})
 	target_link_libraries(${target} ${libs} ${RTM_LINKER_OPTION})
 	add_dependencies(${target} ${RTM_PROJECT_NAME})
 	set_target_properties(${target} PROPERTIES PREFIX "")
