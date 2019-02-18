@@ -2,7 +2,7 @@ cmake_minimum_required (VERSION 3.0.2)
 
 project (OpenRTM_aist
 	VERSION 2.0.0
-	LANGUAGES C CXX)
+	LANGUAGES CXX)
 
 
 

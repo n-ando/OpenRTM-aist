@@ -8,7 +8,7 @@ endif(WIN32)
 
 project (${target}
 	VERSION ${RTM_VERSION}
-	LANGUAGES C CXX)
+	LANGUAGES CXX)
 
 
 

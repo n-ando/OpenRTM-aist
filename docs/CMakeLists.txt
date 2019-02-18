@@ -3,7 +3,7 @@ cmake_minimum_required (VERSION 3.0.2)
 
 project (docs
 	VERSION ${RTM_VERSION}
-	LANGUAGES C CXX)
+	LANGUAGES CXX)
 
 set(ENABLED_SECTIONS jp)
 set(OUTPUT_LANGUAGE Japanese)

@@ -6,7 +6,7 @@ set(target interrupt_task)
 
 project (${target}
 	VERSION ${RTM_VERSION}
-	LANGUAGES C CXX)
+	LANGUAGES CXX)
 
 add_executable(${target} ${target}.cpp)
 

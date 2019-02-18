@@ -2,7 +2,7 @@ cmake_minimum_required (VERSION 3.0.2)
 
 project (SimpleIO
 	VERSION ${RTM_VERSION}
-	LANGUAGES C CXX)
+	LANGUAGES CXX)
 
 
 link_directories(${ORB_LINK_DIR})

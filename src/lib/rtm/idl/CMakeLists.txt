@@ -3,7 +3,7 @@ cmake_minimum_required (VERSION 3.0.2)
 
 project (${RTCSKEL_PROJECT_NAME}
 	VERSION ${RTM_VERSION}
-	LANGUAGES C CXX)
+	LANGUAGES CXX)
 
 
 
