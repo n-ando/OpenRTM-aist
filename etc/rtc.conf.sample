@@ -404,7 +404,7 @@ manager.components.precreate:
 # "key=falue" format with "&" delimiter.
 #
 # Example:
-# manager.components.preconnect: ConsoleIn.out:ConsoleOut.in(dataflow_type=push&interface_type=corba_cdr), SeqIn.octet:SeqOut.octet(dataflow_type=push&&interface_type=direct)
+# manager.components.preconnect: ConsoleIn.out?port=ConsoleOut.in&dataflow_type=push&interface_type=corba_cdr, SeqIn.octet?port=SeqOut.octet&dataflow_type=push&interface_type=direct
 # if no parenthis parts are included, dataflow_type=push, interface_type=corba_cdr
 #
 manager.components.preconnect: 
@@ -418,9 +418,9 @@ manager.components.preconnect:
 # manager.components.precreate optinos.
 #
 # Example:
-# manager.components.preactivate: ConsoleIn0, ConsoleOut0
+# manager.components.preactivation: ConsoleIn0, ConsoleOut0
 #
-manager.components.preactivate:
+manager.components.preactivation:
 
 #
 # Loading local service modules
@@ -504,28 +504,28 @@ logger.file_name: ./rtc%p.log
 #
 logger.date_format: %b %d %H:%M:%S
 
-#
-# Log level (default = NORMAL)
-#
-# The following LogLevels are allowed.
-# SILENT, ERROR, WARN, NORMAL, INFO, DEBUG, TRACE, VERBOSE, PARANOID
-#
-#
-# SILENT  : completely silent
-# ERROR   : includes (ERROR)
-# WARN    : includes (ERROR, WARN)
-# INFO    : includes (ERROR, WARN, INFO)
-# NORMAL  : includes (ERROR, WARN, INFO, NORMAL)
-# DEBUG   : includes (ERROR, WARN, INFO, NORMAL, DEBUG)
-# TRACE   : includes (ERROR, WARN, INFO, NORMAL, DEBUG, TRACE)
-# VERBOSE : includes (ERROR, WARN, INFO, NORMAL, DEBUG, TRACE, VERBOSE)
-# PARANOID: includes (ERROR, WARN, INFO, NORMAL, DEBUG, TRACE, VERBOSE, PARA)
-#
-# Warning!!!
-# "TRACE", "VERBOSE", "PARANOID" logging level will create a huge log file!!
-# "PARANOID" log level will tangle the log file.
-#
-logger.log_level: NORMAL
+##
+## Log level (default = INFO)
+##
+## The following LogLevels are allowed.
+## SILENT, FATAL, ERROR, WARN, INFO, DEBUG, TRACE, VERBOSE, PARANOID
+##
+##
+## SILENT  : completely silent
+## FATAL   : includes (FATAL)
+## ERROR   : includes (FATAL, ERROR)
+## WARN    : includes (FATAL, ERROR, WARN)
+## INFO    : includes (FATAL, ERROR, WARN, INFO)
+## DEBUG   : includes (FATAL, ERROR, WARN, INFO, DEBUG)
+## TRACE   : includes (FATAL, ERROR, WARN, INFO, DEBUG, TRACE)
+## VERBOSE : includes (FATAL, ERROR, WARN, INFO, DEBUG, TRACE, VERBOSE)
+## PARANOID: includes (FATAL, ERROR, WARN, INFO, DEBUG, TRACE, VERBOSE, PARA)
+##
+## Warning!!!
+## "TRACE", "VERBOSE", "PARANOID" logging level will create a huge log file!!
+## "PARANOID" log level will tangle the log file.
+##
+logger.log_level: INFO
 
 #
 # Logger's clock time

@@ -336,9 +336,10 @@ namespace RTC
     virtual ReturnCode advanceWptr(long int n = 1, bool unlock_enable = true)
     {
       bool empty_ = false;
-      if(unlock_enable && n > 0)
+      bool lock_ = (unlock_enable && n > 0);
+      if(lock_)
         {
-          Guard fguard(m_empty.mutex);
+          m_empty.mutex.lock();
           empty_ = empty();
         }
       // n > 0 :
@@ -353,6 +354,10 @@ namespace RTC
           if ((n > 0 && n > static_cast<long int>(m_length - m_fillcount)) ||
               (n < 0 && n < static_cast<long int>(-m_fillcount)))
             {
+              if (lock_)
+              {
+                  m_empty.mutex.unlock();
+              }
               return ::RTC::BufferStatus::PRECONDITION_NOT_MET;
             }
 
@@ -361,13 +366,13 @@ namespace RTC
           m_wcount += n;
       }
 
-      if(unlock_enable)
+      if(lock_)
         {
           if(empty_)
             {
-              Guard fguard(m_empty.mutex);
               m_empty.cond.signal();
             }
+          m_empty.mutex.unlock();
         }
 
       return ::RTC::BufferStatus::BUFFER_OK;
@@ -605,9 +610,10 @@ namespace RTC
     virtual ReturnCode advanceRptr(long int n = 1, bool unlock_enable = true)
     {
       bool full_ = false;
-      if(unlock_enable && n > 0)
+      bool lock_ = (unlock_enable && n > 0);
+      if(lock_)
         {
-          Guard fguard(m_full.mutex);
+          m_full.mutex.lock();
           full_ = full();
         }
       // n > 0 :
@@ -621,6 +627,10 @@ namespace RTC
           if ((n > 0 && n > static_cast<long int>(m_fillcount)) ||
               (n < 0 && n < static_cast<long int>(m_fillcount - m_length)))
             {
+              if (lock_)
+              {
+                  m_full.mutex.unlock();
+              }
               return ::RTC::BufferStatus::PRECONDITION_NOT_MET;
             }
 
@@ -628,13 +638,13 @@ namespace RTC
           m_fillcount -= n;
       }
 
-      if(unlock_enable)
+      if(lock_)
         {
           if(full_)
             {
-              Guard fguard(m_full.mutex);
               m_full.cond.signal();
             }
+          m_full.mutex.unlock();
         }
 
       return ::RTC::BufferStatus::BUFFER_OK;

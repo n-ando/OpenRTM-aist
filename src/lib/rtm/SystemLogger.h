@@ -27,6 +27,7 @@
 #include <coil/Mutex.h>
 #include <coil/Guard.h>
 #include <coil/stringutil.h>
+#include <coil/Properties.h>
 
 #include <string>
 
@@ -321,63 +322,140 @@ namespace RTC
      */
     void setName(const char* name);
 
-    /*!
-	 * @if jp
-	 *
-	 * @brief エスケープシーケンスを有効にする
-	 *
-	 * 
-	 *
-	 * @else
-	 *
-	 * @brief 
-	 * 
-	 * </pre>
-	 *
-	 * 
-	 *
-	 * @endif
-	 */
-	void enableEscapeSequence();
-	/*!
-	 * @if jp
-	 *
-	 * @brief エスケープシーケンスを無効にする
-	 *
-	 *
-	 *
-	 * @else
-	 *
-	 * @brief
-	 *
-	 * </pre>
-	 *
-	 *
-	 *
-	 * @endif
-	 */
-	void disableEscapeSequence();
 
-  protected:
     /*!
      * @if jp
      *
-     * @brief メッセージのプリフィックス追加関数
+     * @brief ログの出力
      *
-     * サブクラスにおいてこの関数をオーバーライドし、
-     * ログメッセージに適当なプリフィックスるを追加する。
+     * 指定したメッセージのログを出力する
+     *
+     * @param level ログレベル
+     * @param mes メッセージ
+     *
      *
      * @else
      *
-     * @brief Message prefix appender function
+     * @brief log output
      *
-     * Subclasses of this class should override this operation, and
-     * this function should be defined to append some prefix to the
-     * log messages.
+     *
+     *
+     * @param level log level
+     * @param mes message
      *
      * @endif
      */
-    virtual void header(int level);
+    virtual void write(int level, const std::string &mes);
+
+    /*!
+     * @if jp
+     *
+     * @brief ログの出力
+     *
+     * 指定したプロパティを文字列に変換してログに出力する
+     *
+     * @param level ログレベル
+     * @param prop プロパティ
+     *
+     *
+     * @else
+     *
+     * @brief log output
+     *
+     * 
+     *
+     * @param level log level
+     * @param prop properties
+     *
+     * @endif
+     */
+    void write(int level, const coil::Properties &prop);
+
+    /*!
+     * @if jp
+     *
+     * @brief ログレベルを数値から文字列に変換
+     *
+     *
+     * @param level ログレベル
+     * 
+     * @return 文字列
+     *
+     * @else
+     *
+     * @brief 
+     *
+     * 
+     *
+     * @param level log level
+     * 
+     * @return string
+     *
+     * @endif
+     */
+    static std::string getLevelString(int level)
+    {
+        return m_levelString[level];
+    }
+
+    /*!
+     * @if jp
+     *
+     * @brief ログレベルを対応した出力用の文字列に変換
+     *
+     *
+     * @param level ログレベル
+     *
+     * @return 文字列
+     *
+     * @else
+     *
+     * @brief
+     *
+     *
+     *
+     * @param level log level
+     *
+     * @return string
+     *
+     * @endif
+     */
+    static std::string getLevelOutputString(int level)
+    {
+        return m_levelOutputString[level];
+    }
+
+
+    /*!
+     * @if jp
+     *
+     * @brief ログレベルを対応したエスケープシケーンスに変換
+     *
+     *
+     * @param level ログレベル
+     *
+     * @return 文字列
+     *
+     * @else
+     *
+     * @brief
+     *
+     *
+     *
+     * @param level log level
+     *
+     * @return string
+     *
+     * @endif
+     */
+    static std::string getLevelColor(int level)
+    {
+        return m_levelColor[level];
+    }
+    
+
+  protected:
+
 
     /*!
      * @if jp
@@ -422,9 +500,10 @@ namespace RTC
     std::string m_dateFormat;
     coil::IClock* m_clock;
     static const char* m_levelString[];
+    static const char* m_levelOutputString[];
+    static const char* m_levelColor[];
     int m_msEnable;
     int m_usEnable;
-	bool m_esEnable;
   };
 
 
@@ -449,7 +528,7 @@ namespace RTC
     {                                                       \
       std::string str = ::coil::sprintf fmt;                \
       rtclog.lock();                                        \
-      rtclog.level(LV) << str << std::endl; \
+      rtclog.write(LV, str);                                \
       rtclog.unlock();                                      \
     }
 
@@ -457,7 +536,7 @@ namespace RTC
   if (rtclog.isValid(LV))                                   \
     {                                                       \
       rtclog.lock();                                        \
-      rtclog.level(LV) << str << std::endl;  \
+      rtclog.write(LV, str);                                \
       rtclog.unlock();                                      \
     }
 

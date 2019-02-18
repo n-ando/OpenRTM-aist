@@ -1,6 +1,14 @@
-cmake_minimum_required (VERSION 2.6)
+cmake_minimum_required (VERSION 3.0.2)
 
-
-
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/rtm-naming.in ${PROJECT_BINARY_DIR}/rtm-naming @ONLY)
-install(FILES ${PROJECT_BINARY_DIR}/rtm-naming DESTINATION ${INSTALL_RTM_BIN_DIR} COMPONENT utils)
+if(CORBA STREQUAL "ORBexpress")
+elseif(CORBA STREQUAL "omniORB")
+	if(test${ORB_ROOT} STREQUAL "test")
+		execute_process(COMMAND which omniNames OUTPUT_VARIABLE COSNAMES)
+		string(REGEX REPLACE "\n" "" COSNAMES ${COSNAMES})
+	else()
+		set(COSNAMES ${ORB_ROOT}/bin/omniNames)
+	endif()
+	configure_file(${CMAKE_CURRENT_SOURCE_DIR}/rtm-naming_cmake.in ${PROJECT_BINARY_DIR}/rtm-naming @ONLY)
+	install(FILES ${PROJECT_BINARY_DIR}/rtm-naming DESTINATION ${INSTALL_RTM_BIN_DIR} COMPONENT utils  PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ GROUP_EXECUTE GROUP_READ)
+elseif(CORBA STREQUAL "TAO")
+endif()

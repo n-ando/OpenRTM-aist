@@ -187,7 +187,7 @@ namespace RTC_exp
                   RTC::RTObject_impl* comp = mgr.getComponent(m.c_str());
                   if (comp == NULL)
                   {
-                      RTC_ERROR(("no RTC found: %s", member));
+                      RTC_ERROR(("no RTC found: %s", m.c_str()));
                       continue;
                   }
                   RTC::RTObject_ptr rtobj = comp->getObjRef();
@@ -287,6 +287,11 @@ namespace RTC_exp
 
   MultilayerCompositeEC::ChildTask::ChildTask(coil::PeriodicTaskBase* task, MultilayerCompositeEC* ec) :
       m_task(task), m_ec(ec)
+  {
+
+  }
+
+  MultilayerCompositeEC::ChildTask::~ChildTask()
   {
 
   }

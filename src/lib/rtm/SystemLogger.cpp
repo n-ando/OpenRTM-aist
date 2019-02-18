@@ -31,6 +31,19 @@ namespace RTC
 {
   const char* Logger::m_levelString[] =
     {
+      "SILENT",
+      "FATAL",
+      "ERROR",
+      "WARNING",
+      "INFO",
+      "DEBUG",
+      "TRACE",
+      "VERBOSE",
+      "PARANOID"
+    };
+
+  const char* Logger::m_levelOutputString[] =
+    {
       " SILENT: ",
       " FATAL: ",
       " ERROR: ",
@@ -42,13 +55,26 @@ namespace RTC
       " PARANOID: "
     };
 
+  const char* Logger::m_levelColor[] =
+    {
+      "\x1b[0m",          // SLILENT  (none)
+      "\x1b[0m\x1b[31m",  // FATAL    (red)
+      "\x1b[0m\x1b[35m",  // ERROR    (magenta)
+      "\x1b[0m\x1b[33m",  // WARN     (yellow)
+      "\x1b[0m\x1b[34m",  // INFO     (blue)
+      "\x1b[0m\x1b[32m",  // DEBUG    (green)
+      "\x1b[0m\x1b[36m",  // TRACE    (cyan)
+      "\x1b[0m\x1b[39m",  // VERBOSE  (default)
+      "\x1b[0m\x1b[37m"   // PARANOID (white)
+    };
+
   Logger::Logger(const char* name)
     : ::coil::LogStream(&(Manager::instance().getLogStreamBuf()),
                         RTL_SILENT, RTL_PARANOID, RTL_SILENT),
       m_name(name),
       m_dateFormat("%b %d %H:%M:%S.%Q"),
       m_clock(&coil::ClockManager::instance().getClock("system")),
-      m_msEnable(0), m_usEnable(0), m_esEnable(0)
+      m_msEnable(0), m_usEnable(0)
   {
     setLevel(Manager::instance().getLogLevel().c_str());
     coil::Properties& prop(Manager::instance().getConfig());
@@ -60,8 +86,7 @@ namespace RTC
       {
         setClockType(prop["logger.clock_type"]);
       }
-	coil::toBool(prop["logger.escape_sequence_enable"], "YES", "NO", false) ?
-		enableEscapeSequence() : disableEscapeSequence();
+	
   }
 
   Logger::Logger(LogStreamBuf* streambuf)
@@ -70,7 +95,7 @@ namespace RTC
       m_name("unknown"),
       m_dateFormat("%b %d %H:%M:%S.%Q"),
       m_clock(&coil::ClockManager::instance().getClock("system")),
-      m_msEnable(0), m_usEnable(0), m_esEnable(0)
+      m_msEnable(0), m_usEnable(0)
   {
     setDateFormat(m_dateFormat.c_str());
   }
@@ -121,37 +146,7 @@ namespace RTC
     m_name = name;
   }
 
-  /*!
-   * @if jp
-   * @brief メッセージのプリフィックス追加関数
-   * @else
-   * @brief Message prefix appender function
-   * @endif
-   */
-  void Logger::header(int level)
-    {
-	  if (m_esEnable)
-	    {
-		  const char* color[] =
-		  {
-			"\x1b[0m",          // SLILENT  (none)
-			"\x1b[0m\x1b[31m",  // FATAL    (red)
-			"\x1b[0m\x1b[35m",  // ERROR    (magenta)
-			"\x1b[0m\x1b[33m",  // WARN     (yellow)
-			"\x1b[0m\x1b[34m",  // INFO     (blue)
-			"\x1b[0m\x1b[32m",  // DEBUG    (green)
-			"\x1b[0m\x1b[36m",  // TRACE    (cyan)
-			"\x1b[0m\x1b[39m",  // VERBOSE  (default)
-			"\x1b[0m\x1b[37m"   // PARANOID (white)
-		  };
-		  *this << color[level];
-	    }
-      *this << getDate() + m_levelString[level] + m_name + ": ";
-	  if (m_esEnable)
-	    {
-		  *this << "\x1b[0m";
-	    }
-    }
+
 
   /*!
    * @if jp
@@ -224,44 +219,70 @@ namespace RTC
       return RTL_SILENT;
   }
 
-  /*!
-  * @if jp
-  *
-  * @brief エスケープシーケンスの有効にする
-  *
-  *
-  * @else
-  *
-  * @brief
-  *
-  * </pre>
-  *
-  *
-  * @endif
-  */
-  void Logger::enableEscapeSequence()
-  {
-	  m_esEnable = true;
-  }
+
 
   /*!
-  * @if jp
-  *
-  * @brief エスケープシーケンスの無効にする
-  *
-  *
-  * @else
-  *
-  * @brief
-  *
-  * </pre>
-  *
-  *
-  * @endif
-  */
-  void Logger::disableEscapeSequence()
+   * @if jp
+   *
+   * @brief ログの出力
+   *
+   * 指定したメッセージのログを出力する
+   *
+   * @param level ログレベル
+   * @param mes メッセージ
+   *
+   *
+   * @else
+   *
+   * @brief log output
+   *
+   * 
+   *
+   * @param level log level
+   * @param mes message
+   *
+   * @endif
+   */
+  void Logger::write(int level, const std::string &mes)
   {
-	  m_esEnable = false;
+      if (ostream_type)
+      {
+          std::string date = getDate();
+          ostream_type->write(level, m_name, date, mes);
+      }
+  }
+  /*!
+   * @if jp
+   *
+   * @brief ログの出力
+   *
+   * 指定したプロパティを文字列に変換してログに出力する
+   *
+   * @param level ログレベル
+   * @param prop プロパティ
+   *
+   *
+   * @else
+   *
+   * @brief log output
+   *
+   * 
+   *
+   * @param level log level
+   * @param prop properties
+   *
+   * @endif
+   */
+  void Logger::write(int level, const coil::Properties &prop)
+  {
+      if (ostream_type)
+      {
+          std::vector<std::string> vec(prop);
+          for (std::vector<std::string>::iterator itr = vec.begin(); itr != vec.end(); ++itr)
+          {
+              ostream_type->write(level, m_name, getDate(), *itr);
+          }
+      }
   }
 
 };  // namespace RTC

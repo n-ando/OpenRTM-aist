@@ -249,7 +249,7 @@ namespace coil
       optarg = ::optarg;
       optind = ::optind;
       optopt = ::optopt;
-#if __QNX__
+#ifdef __QNX__
       if (optind_last < m_argc)
         {
           ++optind_last;

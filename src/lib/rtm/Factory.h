@@ -91,8 +91,26 @@ namespace RTC
   template <class _Delete>
   void Delete(RTObject_impl* rtc)
   {
-    delete rtc;
+    deleteRTObject(rtc);
   }
+
+  /*!
+   * @if jp
+   *
+   * @brief RTコンポーネント破棄用関数
+   *
+   *
+   * @param rtc 破棄対象RTコンポーネントのインスタンス
+   *
+   * @else
+   *
+   * @brief 
+   *
+   * @param rtc The target RT-Component's instances for destruction
+   *
+   * @endif
+   */
+  void deleteRTObject(RTObject_impl* rtc);
 
   /*!
    * @if jp

@@ -1,6 +1,8 @@
-cmake_minimum_required (VERSION 2.6)
+cmake_minimum_required (VERSION 3.0.2)
 set(target rtcprof)
-project (${target})
+project (${target}
+	VERSION ${RTM_VERSION}
+	LANGUAGES CXX)
 
 
 link_directories(${ORB_LINK_DIR})
@@ -20,14 +22,6 @@ ADD_DEFINITIONS(${ORB_C_FLAGS_LIST})
 set(srcs rtcprof.cpp)
 
 
-#if(VXWORKS)
-#	if(RTP)
-#		set(libs ${RTM_PROJECT_NAME} ${ORB_LIBRARIES} ${COIL_PROJECT_NAME} ${RTCSKEL_PROJECT_NAME})
-#	else(RTP)
-#		set(srcs ${srcs} ${CMAKE_SOURCE_DIR}/rtm/DataFlowComponentBase.cpp)
-#		set(libs ${RTCSKEL_PROJECT_NAME})	
-#	endif(RTP)
-#endif(VXWORKS)
 
 if(VXWORKS)
 	set(libs ${RTM_PROJECT_NAME} ${ORB_LIBRARIES} ${COIL_PROJECT_NAME} ${RTCSKEL_PROJECT_NAME})

@@ -16,9 +16,10 @@ We must be able to understand the design of your change from this description.
 
 ## Verification 
 
-
-Verify that the change has not introduced any regressions. 
-
+Verify that the change has not introduced any regressions.   
+Check the item below and fill the checbox.  
+You can fill checbox by using the [X].  
+if this request do not need to build and tests, delete the items and specify that these are no need.  
 
 - [ ] Did you succesed the build?  
 - [ ] No warnings for the build?  

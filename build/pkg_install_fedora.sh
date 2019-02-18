@@ -50,7 +50,11 @@ reposerver=""
 
 #--------------------------------------- C++
 autotools="autoconf automake libtool"
-cxx_devel="gcc-c++ make PyYAML"
+if [ $version_num -lt 29 ] ; then
+  cxx_devel="gcc-c++ make PyYAML"
+else
+  cxx_devel="gcc-c++ make python3-pyyaml"
+fi
 cmake_tools="cmake doxygen graphviz nkf"
 build_tools="subversion git"
 rpm_pkg="uuid-devel libuuid-devel boost boost-devel openssl-devel"
@@ -74,7 +78,11 @@ u_core_pkgs="$u_src_pkgs"
 
 #--------------------------------------- Python
 omnipy="omniORBpy-devel"
-python_runtime="python python-omniORB"
+if [ $version_num -lt 29 ] ; then
+  python_runtime="python python-omniORB"
+else
+  python_runtime="python3-omniORB"
+fi
 python_devel="$cmake_tools $omnipy"
 openrtm_py_devel="OpenRTM-aist-Python-doc"
 openrtm_py_runtime="OpenRTM-aist-Python OpenRTM-aist-Python-example"

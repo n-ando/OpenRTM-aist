@@ -1,6 +1,8 @@
-cmake_minimum_required (VERSION 2.6)
+cmake_minimum_required (VERSION 3.0.2)
 
-project (SSLTransport)
+project (SSLTransport
+	VERSION ${RTM_VERSION}
+	LANGUAGES CXX)
 
 
 set(OPENSSL_ROOT ${OPENSSL_ROOT} CACHE PATH "set OPENSSL_ROOT")

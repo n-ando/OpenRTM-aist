@@ -69,9 +69,8 @@ namespace coil
    */
   inline std::string dirname(char* path)
   {
-    char path_name[strlen(path)+1];
-    snprintf(path_name, sizeof(path_name), "%s", path);
-    std::string dir_name = ::dirname(path_name);
+    std::string path_name(path);
+    std::string dir_name = ::dirname(&path_name[0]);
     return dir_name;
   }
 
@@ -100,9 +99,8 @@ namespace coil
    */
   inline std::string basename(const char* path)
   {
-    char path_name[strlen(path)+1];
-    snprintf(path_name, sizeof(path_name), "%s", path);
-    std::string base_name = ::basename(path_name);
+    std::string path_name(path);
+    std::string base_name = ::basename(&path_name[0]);
     return base_name;
   }
 

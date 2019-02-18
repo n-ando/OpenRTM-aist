@@ -1,5 +1,7 @@
-cmake_minimum_required (VERSION 2.6)
-project (${COIL_PROJECT_NAME})
+cmake_minimum_required (VERSION 3.0.2)
+project (${COIL_PROJECT_NAME}
+	VERSION ${RTM_VERSION}
+	LANGUAGES CXX)
 
 
 
@@ -62,9 +64,7 @@ elseif(WIN32)
 	set (COIL_OS_WIN32 ON)
 endif()
 
-#if(CORBA MATCHES "TAO")
-#	set (WITH_ACE ON)
-#endif()
+
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config_coil_cmake.h.in ${PROJECT_BINARY_DIR}/config_coil.h)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config_coil_cmake.h.in ${CMAKE_CURRENT_SOURCE_DIR}/${COIL_OS_DIR}/coil/config_coil.h)
@@ -115,6 +115,7 @@ set(coil_srcs
 	common/coil/Timer.cpp
 	common/coil/crc.cpp
 	common/coil/stringutil.cpp
+	common/coil/Logger.cpp
 	${COIL_OS_DIR}/coil/Condition.cpp
 	${COIL_OS_DIR}/coil/DynamicLib.cpp
 	${COIL_OS_DIR}/coil/Mutex.cpp
@@ -135,23 +136,17 @@ set(coil_srcs
 if(WIN32)
 	set(DEF_FILE_NAME  ${COIL_PROJECT_NAME}.def)
 	add_library(${COIL_PROJECT_NAME}_static STATIC ${coil_srcs})
-	get_property(coil_static_location TARGET ${COIL_PROJECT_NAME}_static PROPERTY LOCATION)
-	add_custom_command(OUTPUT ${DEF_FILE_NAME}
-		COMMAND python ${MAKE_DEF_COMMAND} ${coil_static_location} ${COIL_PROJECT_NAME} ${RTM_SHORT_VERSION} ${DEF_FILE_NAME}
-		
+
+	add_custom_command(TARGET ${COIL_PROJECT_NAME}_static 
+		POST_BUILD
+		COMMAND python ${MAKE_DEF_COMMAND} $<TARGET_FILE:${COIL_PROJECT_NAME}_static> ${COIL_PROJECT_NAME} ${RTM_SHORT_VERSION} ${DEF_FILE_NAME}
 		WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
 	)
-	add_custom_target(${COIL_PROJECT_NAME}_TGT DEPENDS ${DEF_FILE_NAME})
-	add_dependencies(${COIL_PROJECT_NAME}_TGT ${COIL_PROJECT_NAME}_static)
+	install(TARGETS ${COIL_PROJECT_NAME}_static LIBRARY DESTINATION ${INSTALL_RTM_LIB_DIR}
+					 ARCHIVE DESTINATION ${INSTALL_RTM_LIB_DIR}
+					RUNTIME DESTINATION ${INSTALL_RTM_LIB_DIR}
+					COMPONENT coil)
 	set(coil_srcs ${coil_srcs} ${CMAKE_CURRENT_BINARY_DIR}/${DEF_FILE_NAME})
-#	add_custom_command(OUTPUT ${COIL_PROJECT_NAME}.def
-#		COMMAND lib -out:"coil_static.lib" "$(IntDir)Skel*.obj"
-#		COMMAND python ${MAKE_DEF_COMMAND} coil_static.lib ${COIL_PROJECT_NAME} ${RTM_SHORT_VERSION} ${COIL_PROJECT_NAME}.def
-#		PRE_LINK
-#		WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-#		DEPENDS ${COIL_PROJECT_NAME}
-#	)
-#	set(coil_srcs ${coil_srcs} ${CMAKE_CURRENT_BINARY_DIR}/${COIL_PROJECT_NAME}.def)
 	
 else(WIN32)
 endif()
@@ -178,7 +173,7 @@ if(UNIX)
 	link_directories(${UUID_LIBRARY_DIRS})
 	add_definitions(${UUID_CFLAGS})
 endif(UNIX)
-#message(STATUS ${CMAKE_INCLUDE_DIRECTORIES_BEFORE})
+
 
 if(VXWORKS)
 	add_library(${COIL_PROJECT_NAME} STATIC ${coil_srcs} )
@@ -191,13 +186,21 @@ else(VXWORKS)
 	set_target_properties(${COIL_PROJECT_NAME} PROPERTIES DEBUG_POSTFIX d)
 	target_link_libraries(${COIL_PROJECT_NAME} ${RTM_LINKER_OPTION}  ${UUID_LIBRARIES})
 	if(UNIX)
+		set_target_properties(${COIL_PROJECT_NAME} PROPERTIES VERSION ${RTM_VERSION} SOVERSION ${COIL_SO_VERSION})
 		install(TARGETS ${COIL_PROJECT_NAME} LIBRARY DESTINATION ${INSTALL_RTM_LIB_DIR}
 						ARCHIVE DESTINATION ${INSTALL_RTM_LIB_DIR}
 						RUNTIME DESTINATION ${INSTALL_RTM_BIN_DIR}
 						COMPONENT coil)
+		add_library(${COIL_PROJECT_NAME}-static STATIC ${coil_srcs})
+		set_target_properties(${COIL_PROJECT_NAME}-static PROPERTIES DEBUG_POSTFIX d)
+		set_target_properties(${COIL_PROJECT_NAME}-static PROPERTIES OUTPUT_NAME ${COIL_PROJECT_NAME} CLEAN_DIRECT_OUTPUT 1)
+		install(TARGETS ${COIL_PROJECT_NAME}-static LIBRARY DESTINATION ${INSTALL_RTM_LIB_DIR}
+						ARCHIVE DESTINATION ${INSTALL_RTM_LIB_DIR}
+						RUNTIME DESTINATION ${INSTALL_RTM_BIN_DIR}
+						COMPONENT coil)
+
 	elseif(WIN32)
 		set_source_files_properties(${DEF_FILE_NAME} PROPERTIES GENERATED 1)
-		add_dependencies(${COIL_PROJECT_NAME} ${COIL_PROJECT_NAME}_TGT)
 		add_dependencies(${COIL_PROJECT_NAME} ${COIL_PROJECT_NAME}_static)
 		install(TARGETS ${COIL_PROJECT_NAME} LIBRARY DESTINATION ${INSTALL_RTM_LIB_DIR}
 						 ARCHIVE DESTINATION ${INSTALL_RTM_LIB_DIR}
@@ -206,7 +209,7 @@ else(VXWORKS)
 	endif()
 endif(VXWORKS)
 install(FILES  ${coil_headers} DESTINATION ${INSTALL_COIL_INCLUDE_DIR}/coil COMPONENT headers)
-#add_executable(coil  ${coil_srcs} )
+
 
 
 install(FILES ${CMAKE_SOURCE_DIR}/build/makedeffile.py DESTINATION ${INSTALL_RTM_SCRIPT_DIR} COMPONENT scripts)
