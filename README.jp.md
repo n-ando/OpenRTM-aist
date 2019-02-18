@@ -12,7 +12,7 @@ COPYING.LIB - LGPL (GNU劣等一般公衆利用許諾契約書)
 INSTALL     - インストール手順(英語版)  
 INSTALL.jp  - インストール手順  
 
-このプロジェクトは、[コントリビュータ行動規範](CODE_OF_CONDUCT.md)を遵守します。  
+このプロジェクトは、[コントリビュータ行動規範](.github/CODE_OF_CONDUCT.md)を遵守します。  
 受け入れられない振る舞いがあれば n-ando@aist.go.jp まで報告してください。  
 
 # ドキュメントとIssueトラック  
