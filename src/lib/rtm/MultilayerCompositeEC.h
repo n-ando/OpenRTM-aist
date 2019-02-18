@@ -154,6 +154,7 @@ namespace RTC_exp
       {
       public:
           ChildTask(coil::PeriodicTaskBase* task, MultilayerCompositeEC* ec);
+          virtual ~ChildTask();
           void addComponent(RTC::LightweightRTObject_ptr rtc);
           void updateCompList();
           virtual int svc();

@@ -52,36 +52,11 @@ namespace RTC
    */
   void FileStreamBase::header(int level, const std::string &name, const std::string &date, bool es_enable)
   {
-      static const char* color[] =
-      {
-        "\x1b[0m",          // SLILENT  (none)
-        "\x1b[0m\x1b[31m",  // FATAL    (red)
-        "\x1b[0m\x1b[35m",  // ERROR    (magenta)
-        "\x1b[0m\x1b[33m",  // WARN     (yellow)
-        "\x1b[0m\x1b[34m",  // INFO     (blue)
-        "\x1b[0m\x1b[32m",  // DEBUG    (green)
-        "\x1b[0m\x1b[36m",  // TRACE    (cyan)
-        "\x1b[0m\x1b[39m",  // VERBOSE  (default)
-        "\x1b[0m\x1b[37m"   // PARANOID (white)
-      };
-
-      static const char* level_str[] =
-      {
-        " SILENT: ",
-        " FATAL: ",
-        " ERROR: ",
-        " WARNING: ",
-        " INFO: ",
-        " DEBUG: ",
-        " TRACE: ",
-        " VERBOSE: ",
-        " PARANOID: "
-      };
       if (es_enable)
       {
-          *m_stream << color[level];
+          *m_stream << Logger::getLevelColor(level);
       }
-      *m_stream << date << level_str[level] << name << ": ";
+      *m_stream << date << Logger::getLevelOutputString(level) << name << ": ";
       if (es_enable)
       {
           *m_stream << "\x1b[0m";

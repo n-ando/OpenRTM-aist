@@ -1,6 +1,8 @@
-cmake_minimum_required (VERSION 2.6)
+cmake_minimum_required (VERSION 3.0.2)
 
-project (${RTM_PROJECT_NAME})
+project (${RTM_PROJECT_NAME}
+	VERSION ${RTM_VERSION}
+	LANGUAGES CXX)
 
 
 
@@ -101,27 +103,7 @@ endif()
 
 
 
-
-
 set (RTC_CORBA_CXXMAPPING11 ON)
-
-
-
-
-#ADD_DEFINITIONS(-DRTC_CORBA_CXXMAPPING11)
-
-
-
-
-
-
-#ADD_DEFINITIONS(-DCORBA_ANY_SHARED_PTR_OPERATORS -DINCLUDE_CORBA_CORBALOC)
-
-
-
-
-
-
 
 
 
@@ -145,8 +127,7 @@ endif(VXWORKS)
 include_directories(${ORB_INCLUDE_DIR})
 
 
-set(RTM_INCLUDE_DIR ${CMAKE_SOURCE_DIR}
-		${CMAKE_SOURCE_DIR}/src/lib/coil/common
+set(RTM_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/src/lib/coil/common
 		${PROJECT_BINARY_DIR}/idl
 		${CMAKE_SOURCE_DIR}/src/lib/coil/${COIL_OS_DIR}
 		${PROJECT_BINARY_DIR}/..
@@ -405,67 +386,35 @@ endif(VXWORKS)
 if(OBSERVER_ENABLE)
 	add_definitions(-DENABLE_OBSERVER)
 	include_directories(${CMAKE_SOURCE_DIR}/src)
-	#set(rtm_headers ${rtm_headers} ${CMAKE_SOURCE_DIR}/src/ext/sdo/observer/ComponentObserverConsumer.h)
 	set(rtm_srcs ${rtm_srcs} ${CMAKE_SOURCE_DIR}/src/ext/sdo/observer/ComponentObserverConsumer.cpp	)
 	install(FILES ${CMAKE_SOURCE_DIR}/src/ext/sdo/observer/ComponentObserverConsumer.h DESTINATION ${INSTALL_RTM_EXT_DIR}/sdo/observer COMPONENT headers)
 endif(OBSERVER_ENABLE)
 
 
 
-
-
-
-#message(STATUS ${ALL_IDL_SRCS})
-
-#message(STATUS ${ORB_LIBRARIES})
-
-#add_executable(rtm rtcd.cpp TestRTC.cpp ${rtm_srcs} ${ALL_IDL_SRCS})
-#add_library(rtm STATIC ${rtm_srcs} ${ALL_IDL_SRCS} )
-
-
-
-
-
 if(WIN32)
-	#FOREACH(filename ${SKEL_IDL_SRCS})
-	#	set(skel_files ${skel_files} ${SKEL_IDL_DIR}/${filename})
-	#ENDFOREACH()
 
 	set(DEF_FILE_NAME  ${RTM_PROJECT_NAME}.def)
-	#ADD_DEFINITIONS(-DLIBRARY_EXPORTS)
-	#add_library(${RTM_PROJECT_NAME}_static STATIC ${rtm_srcs} ${ALL_IDL_SRCS_RTM})
-
 	set(rtm_srcs ${rtm_srcs} ${SKEL_IDL_SRCS})
 	set_source_files_properties(${SKEL_IDL_SRCS} PROPERTIES GENERATED 1)
 	add_library(${RTM_PROJECT_NAME}_static STATIC ${rtm_srcs} )
 	
 	add_dependencies(${RTM_PROJECT_NAME}_static ALL_IDL_TGT)
-	#add_dependencies(${RTM_PROJECT_NAME}_static ${RTCSKEL_PROJECT_NAME})
-	get_property(rtm_static_location TARGET ${RTM_PROJECT_NAME}_static PROPERTY LOCATION)
-	#message(STATUS ${rtm_static_location})
-	add_custom_command(OUTPUT ${DEF_FILE_NAME}
-		COMMAND python ${MAKE_DEF_COMMAND} ${rtm_static_location} ${RTM_PROJECT_NAME} ${RTM_SHORT_VERSION} ${DEF_FILE_NAME}
-		
+
+	add_custom_command(TARGET ${RTM_PROJECT_NAME}_static 
+		POST_BUILD
+		COMMAND python ${MAKE_DEF_COMMAND} $<TARGET_FILE:${RTM_PROJECT_NAME}_static> ${RTM_PROJECT_NAME} ${RTM_SHORT_VERSION} ${DEF_FILE_NAME}
 		WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
 	)
-	add_custom_target(${RTM_PROJECT_NAME}_TGT DEPENDS ${DEF_FILE_NAME})
-	add_dependencies(${RTM_PROJECT_NAME}_TGT ${RTM_PROJECT_NAME}_static)
+
+	install(TARGETS ${RTM_PROJECT_NAME}_static LIBRARY DESTINATION ${INSTALL_RTM_LIB_DIR}
+					ARCHIVE DESTINATION ${INSTALL_RTM_LIB_DIR}
+					RUNTIME DESTINATION ${INSTALL_RTM_LIB_DIR}
+					COMPONENT openrtm)
 	set(rtm_srcs ${rtm_srcs} ${CMAKE_CURRENT_BINARY_DIR}/${DEF_FILE_NAME})
+	
 
-	#get_property(rtcskel_location TARGET ${RTCSKEL_PROJECT_NAME} PROPERTY LOCATION)
-	#add_custom_command(OUTPUT ${RTCSKEL_PROJECT_NAME}.def
-	#	COMMAND python ${MAKE_DEF_COMMAND} ${rtcskel_location} ${RTCSKEL_PROJECT_NAME} ${RTM_SHORT_VERSION} ${RTCSKEL_PROJECT_NAME}.def
-	#	WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-	#)
 
-#	add_custom_command(OUTPUT ${RTM_PROJECT_NAME}.def
-#		COMMAND lib -out:"rtm_static.lib"  "$(IntDir)*.obj" "idl\\RTCSkel.dir\\Release\\*.obj"
-#		COMMAND python ${MAKE_DEF_COMMAND} rtm_static.lib ${RTM_PROJECT_NAME} ${RTM_SHORT_VERSION} ${RTM_PROJECT_NAME}.def
-#		PRE_LINK
-#		WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-#		DEPENDS ${RTM_PROJECT_NAME}
-#	)
-#	set(rtm_srcs ${rtm_srcs} ${CMAKE_CURRENT_BINARY_DIR}/${RTM_PROJECT_NAME}.def)
 endif(WIN32)
 
 
@@ -492,11 +441,24 @@ else(VXWORKS)
 						ARCHIVE DESTINATION ${INSTALL_RTM_LIB_DIR}
 						RUNTIME DESTINATION ${INSTALL_RTM_BIN_DIR}
 						COMPONENT openrtm)
+
+		set_target_properties(${RTM_PROJECT_NAME} PROPERTIES VERSION ${RTM_VERSION} SOVERSION ${RTM_SO_VERSION})
+
+
+		add_library(${RTM_PROJECT_NAME}-static STATIC ${rtm_srcs})
+		set_target_properties(${RTM_PROJECT_NAME}-static PROPERTIES DEBUG_POSTFIX d)
+		set_target_properties(${RTM_PROJECT_NAME}-static PROPERTIES OUTPUT_NAME ${RTM_PROJECT_NAME} CLEAN_DIRECT_OUTPUT 1)
+		install(TARGETS ${RTM_PROJECT_NAME}-static LIBRARY DESTINATION ${INSTALL_RTM_LIB_DIR}
+						ARCHIVE DESTINATION ${INSTALL_RTM_LIB_DIR}
+						RUNTIME DESTINATION ${INSTALL_RTM_BIN_DIR}
+						COMPONENT openrtm)
+		add_dependencies(${RTM_PROJECT_NAME}-static ${COIL_PROJECT_NAME})
+		add_dependencies(${RTM_PROJECT_NAME}-static ${RTCSKEL_PROJECT_NAME})
+
 	elseif(WIN32)
 		target_link_libraries(${RTM_PROJECT_NAME} ${ORB_LIBRARIES} ${COIL_PROJECT_NAME} ${RTM_LINKER_OPTION})
 		add_dependencies(${RTM_PROJECT_NAME} ALL_IDL_TGT)
 		set_source_files_properties(${DEF_FILE_NAME} PROPERTIES GENERATED 1)
-		add_dependencies(${RTM_PROJECT_NAME} ${RTM_PROJECT_NAME}_TGT)
 		add_dependencies(${RTM_PROJECT_NAME} ${RTM_PROJECT_NAME}_static)
 		install(TARGETS ${RTM_PROJECT_NAME} LIBRARY DESTINATION ${INSTALL_RTM_LIB_DIR}
 						ARCHIVE DESTINATION ${INSTALL_RTM_LIB_DIR}
@@ -511,19 +473,9 @@ install(FILES  ${rtm_headers} DESTINATION ${INSTALL_RTM_INCLUDE_DIR}/rtm COMPONE
 
 
 add_dependencies(${RTM_PROJECT_NAME} ${COIL_PROJECT_NAME})
-#add_dependencies(rtm ALL_IDL_TGT)
 
 
 
 
 add_dependencies(${RTM_PROJECT_NAME} ${RTCSKEL_PROJECT_NAME})
-
-
-
-
-
-#target_link_libraries(rtm ${ORB_LIBRARIES} coil)
-
-
-
 

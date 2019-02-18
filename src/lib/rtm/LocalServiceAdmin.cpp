@@ -87,7 +87,6 @@ namespace RTM
     RTC_TRACE(("LocalServiceAdmin::init():"));
     RTC_DEBUG_STR((props));
     coil::vstring svcs(coil::split(props["enabled_services"], ","));
-    find_all fa();
     bool all_enable(false);
     if (std::find_if(svcs.begin(), svcs.end(), find_all()) != svcs.end())
       {

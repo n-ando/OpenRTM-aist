@@ -490,7 +490,7 @@ namespace CORBA_IORUtil
     if (k >= kend || *k)  { return 0; }
     k++;
 
-    id_out.length(kend - k);
+    id_out.length((CORBA::ULong)(kend - k));
     memcpy(id_out.NP_data(), k, kend - k);
 
     return 1;

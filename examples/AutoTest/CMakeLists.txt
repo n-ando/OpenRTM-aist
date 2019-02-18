@@ -1,6 +1,8 @@
-cmake_minimum_required (VERSION 2.6)
+cmake_minimum_required (VERSION 3.0.2)
 
-project (AutoTest)
+project (AutoTest
+	VERSION ${RTM_VERSION}
+	LANGUAGES CXX)
 
 set(idl_name AutoTestService)
 

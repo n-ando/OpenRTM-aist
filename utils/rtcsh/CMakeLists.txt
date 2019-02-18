@@ -1,6 +1,8 @@
-cmake_minimum_required (VERSION 2.6)
+cmake_minimum_required (VERSION 3.0.2)
 set(target rtcsh)
-project (${target})
+project (${target}
+	VERSION ${RTM_VERSION}
+	LANGUAGES CXX)
 
 
 link_directories(${ORB_LINK_DIR})
