@@ -26,12 +26,14 @@ namespace RTC
   {
   public:
       EventBinderBase0(){};
+      virtual ~EventBinderBase0() {};
       virtual void run() = 0;
   };
   template <class P0>class EventBinderBase1
   {
   public:
       EventBinderBase1(){};
+      virtual ~EventBinderBase1() {};
       virtual void run(P0& data) = 0;
   };
 
