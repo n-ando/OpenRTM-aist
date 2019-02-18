@@ -291,6 +291,11 @@ namespace RTC_exp
 
   }
 
+  MultilayerCompositeEC::ChildTask::~ChildTask()
+  {
+
+  }
+
   void MultilayerCompositeEC::ChildTask::addComponent(RTC::LightweightRTObject_ptr rtc)
   {
       m_rtcs.push_back(rtc);
