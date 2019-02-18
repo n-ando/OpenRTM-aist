@@ -52,8 +52,6 @@ namespace RTC
    */
   void FileStreamBase::header(int level, const std::string &name, const std::string &date, bool es_enable)
   {
-
-
       if (es_enable)
       {
           *m_stream << Logger::getLevelColor(level);
@@ -122,6 +120,39 @@ namespace RTC
 	  m_esEnable = false;
   }
 
+
+  /*!
+   * @if jp
+   *
+   * @brief ログの出力
+   *
+   * 指定したメッセージのログを出力する
+   *
+   * @param level ログレベル
+   * @param name 名前
+   * @param date 時間
+   * @param mes メッセージ
+   *
+   *
+   * @else
+   *
+   * @brief log output
+   *
+   *
+   *
+   * @param level log level
+   * @param name log name
+   * @param date time
+   * @param mes message
+   *
+   * @endif
+   */
+  void FileStreamBase::write(int level, const std::string &name, const std::string &date, const std::string &mes)
+  {
+      header(level, name, date, m_esEnable);
+      *m_stream << mes << std::endl;
+  }
+
   /*!
    * @if jp
    *
@@ -168,37 +199,7 @@ namespace RTC
   }
 
 
-  /*!
-   * @if jp
-   *
-   * @brief ログの出力
-   *
-   * 指定したメッセージのログを出力する
-   *
-   * @param level ログレベル
-   * @param name 名前
-   * @param date 時間
-   * @param mes メッセージ
-   *
-   *
-   * @else
-   *
-   * @brief log output
-   *
-   *
-   *
-   * @param level log level
-   * @param name log name
-   * @param date time
-   * @param mes message
-   *
-   * @endif
-   */
-  void StdoutStream::write(int level, const std::string &name, const std::string &date, const std::string &mes)
-  {
-      header(level, name, date, m_esEnable);
-      *m_stream << mes << std::endl;
-  }
+
 
 
   /*!
@@ -244,37 +245,7 @@ namespace RTC
       delete m_stream;
   }
 
-  /*!
-   * @if jp
-   *
-   * @brief ログの出力
-   *
-   * 指定したメッセージのログを出力する
-   *
-   * @param level ログレベル
-   * @param name 名前
-   * @param date 時間
-   * @param mes メッセージ
-   *
-   *
-   * @else
-   *
-   * @brief log output
-   *
-   *
-   *
-   * @param level log level
-   * @param name log name
-   * @param date time
-   * @param mes message
-   *
-   * @endif
-   */
-  void StderrStream::write(int level, const std::string &name, const std::string &date, const std::string &mes)
-  {
-      header(level, name, date, m_esEnable);
-      *m_stream << mes << std::endl;
-  }
+
 
   /*!
    * @if jp
@@ -367,37 +338,7 @@ namespace RTC
       }
   }
 
-  /*!
-   * @if jp
-   *
-   * @brief ログの出力
-   *
-   * 指定したメッセージのログを出力する
-   *
-   * @param level ログレベル
-   * @param name 名前
-   * @param date 時間
-   * @param mes メッセージ
-   *
-   *
-   * @else
-   *
-   * @brief log output
-   *
-   *
-   *
-   * @param level log level
-   * @param name log name
-   * @param date time
-   * @param mes message
-   *
-   * @endif
-   */
-  void FileStream::write(int level, const std::string &name, const std::string &date, const std::string &mes)
-  {
-      header(level, name, date, m_esEnable);
-      *m_stream << mes << std::endl;
-  }
+  
   
   LogstreamFile::LogstreamFile()
     : m_stdout(NULL), m_fileout(NULL)

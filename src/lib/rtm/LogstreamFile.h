@@ -152,6 +152,34 @@ namespace RTC
        * @endif
        */
       void disableEscapeSequence();
+
+      /*!
+       * @if jp
+       *
+       * @brief ログの出力
+       *
+       * 指定したメッセージのログを出力する
+       *
+       * @param level ログレベル
+       * @param name 名前
+       * @param date 時間
+       * @param mes メッセージ
+       *
+       *
+       * @else
+       *
+       * @brief log output
+       *
+       *
+       *
+       * @param level log level
+       * @param name log name
+       * @param date time
+       * @param mes message
+       *
+       * @endif
+       */
+      virtual void write(int level, const std::string &name, const std::string &date, const std::string &mes);
       
   protected:
       std::basic_ostream<char> *m_stream;
@@ -209,33 +237,7 @@ namespace RTC
        */
       virtual ~StdoutStream();
 
-      /*!
-       * @if jp
-       *
-       * @brief ログの出力
-       *
-       * 指定したメッセージのログを出力する
-       *
-       * @param level ログレベル
-       * @param name 名前
-       * @param date 時間
-       * @param mes メッセージ
-       *
-       *
-       * @else
-       *
-       * @brief log output
-       *
-       * 
-       *
-       * @param level log level
-       * @param name log name
-       * @param date time
-       * @param mes message
-       *
-       * @endif
-       */
-      virtual void write(int level, const std::string &name, const std::string &date, const std::string &mes);
+      
       
   };
 
@@ -289,33 +291,7 @@ namespace RTC
        * @endif
        */
       virtual ~StderrStream();
-      /*!
-       * @if jp
-       *
-       * @brief ログの出力
-       *
-       * 指定したメッセージのログを出力する
-       *
-       * @param level ログレベル
-       * @param name 名前
-       * @param date 時間
-       * @param mes メッセージ
-       *
-       *
-       * @else
-       *
-       * @brief log output
-       *
-       *
-       *
-       * @param level log level
-       * @param name log name
-       * @param date time
-       * @param mes message
-       *
-       * @endif
-       */
-      virtual void write(int level, const std::string &name, const std::string &date, const std::string &mes);
+      
       
 
   };
@@ -405,33 +381,7 @@ namespace RTC
        * @endif
        */
       void close();
-      /*!
-       * @if jp
-       *
-       * @brief ログの出力
-       *
-       * 指定したメッセージのログを出力する
-       *
-       * @param level ログレベル
-       * @param name 名前
-       * @param date 時間
-       * @param mes メッセージ
-       *
-       *
-       * @else
-       *
-       * @brief log output
-       *
-       *
-       *
-       * @param level log level
-       * @param name log name
-       * @param date time
-       * @param mes message
-       *
-       * @endif
-       */
-      virtual void write(int level, const std::string &name, const std::string &date, const std::string &mes);
+      
       
   private:
       std::filebuf m_fileout;
