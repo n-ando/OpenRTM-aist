@@ -411,6 +411,10 @@ if(VXWORKS)
 					COMPONENT openrtm)
 
 else(VXWORKS)
+	if(WIN32)
+		add_definitions(-DLIBRARY_EXPORTS)
+	endif(WIN32)
+
 	add_library(${RTM_PROJECT_NAME}_objlib OBJECT ${rtm_srcs})
 	set_property(TARGET ${RTM_PROJECT_NAME}_objlib PROPERTY POSITION_INDEPENDENT_CODE 1)
 	add_dependencies(${RTM_PROJECT_NAME}_objlib ${COIL_PROJECT_NAME})
@@ -423,7 +427,6 @@ else(VXWORKS)
 
 	if(WIN32)
 		set(DEF_FILE_NAME ${RTM_PROJECT_NAME}.def)
-		add_definitions(-DLIBRARY_EXPORTS)
 
 		add_custom_command(TARGET ${RTM_PROJECT_NAME}-static 
 			POST_BUILD
