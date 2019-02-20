@@ -684,7 +684,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
         coil::vstring exported_ports;
         exported_ports = coil::split(comp_prop["exported_ports"], ",");
 
-        std::string exported_ports_str("");
+        std::string exported_ports_str;
         for (size_t i(0), len(exported_ports.size()); i < len; ++i)
           {
             coil::vstring keyval(coil::split(exported_ports[i], "."));
@@ -2403,7 +2403,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   std::string Manager::formatString(const char* naming_format,
                                     coil::Properties& prop)
   {
-    std::string name(naming_format), str("");
+    std::string name(naming_format), str;
     std::string::iterator it, it_end;
     int count(0);
 

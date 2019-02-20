@@ -515,7 +515,7 @@ namespace SDOPackage
           {
             coil::vstring
               exported_ports(coil::split(conf["exported_ports"], ","));
-            std::string exported_ports_str("");
+            std::string exported_ports_str;
             for (size_t i(0), len(exported_ports.size()); i < len; ++i)
               {
                 coil::vstring keyval(coil::split(exported_ports[i], "."));
