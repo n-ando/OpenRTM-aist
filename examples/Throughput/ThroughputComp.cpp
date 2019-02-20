@@ -95,7 +95,7 @@ int main (int argc, char** argv)
   manager = RTC::Manager::init(argc, argv);
 
   // Initialize manager
-  manager->init(argc, argv);
+  RTC::Manager::init(argc, argv);
 
   // Set module initialization proceduer
   // This procedure will be invoked in activateManager() function.
