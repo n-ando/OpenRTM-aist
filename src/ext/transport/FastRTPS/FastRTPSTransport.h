@@ -21,8 +21,7 @@
 
 
 
-#include "FastRTPSOutPort.h"
-#include "FastRTPSInPort.h"
+#include <rtm/Manager.h>
 
 
 

@@ -18,7 +18,8 @@
 
 
 #include "FastRTPSTransport.h"
-
+#include "FastRTPSOutPort.h"
+#include "FastRTPSInPort.h"
 
 
 extern "C"
