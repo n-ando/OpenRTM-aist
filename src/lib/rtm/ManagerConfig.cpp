@@ -22,7 +22,7 @@
 #include <coil/OS.h>
 #include <coil/stringutil.h>
 #include <rtm/DefaultConfiguration.h>
-#include <stdlib.h>
+#include <cstdlib>
 
 #include <fstream>
 #include <iostream>

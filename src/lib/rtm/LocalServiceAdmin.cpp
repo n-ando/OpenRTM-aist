@@ -26,7 +26,7 @@
 #include <rtm/LocalServiceAdmin.h>
 #include <rtm/LocalServiceBase.h>
 
-#include <string.h>
+#include <cstring>
 #include <algorithm>
 #include <memory>
 #include <vector>

@@ -14,7 +14,7 @@
 #include <rtm/Manager.h>
 #include <iostream>
 #include <string>
-#include <stdlib.h>
+#include <cstdlib>
 #include "Analyzer_test.h"
 
 

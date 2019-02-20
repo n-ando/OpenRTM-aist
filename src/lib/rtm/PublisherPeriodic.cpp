@@ -26,7 +26,7 @@
 #include <rtm/PeriodicTaskFactory.h>
 #include <rtm/SystemLogger.h>
 
-#include <stdlib.h>
+#include <cstdlib>
 #include <string>
 
 namespace RTC

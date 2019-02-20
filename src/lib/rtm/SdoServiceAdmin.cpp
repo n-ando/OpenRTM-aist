@@ -26,7 +26,7 @@
 #include <rtm/SdoServiceProviderBase.h>
 #include <rtm/SdoServiceConsumerBase.h>
 
-#include <string.h>
+#include <cstring>
 
 #include <memory>
 #include <vector>

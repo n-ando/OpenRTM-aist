@@ -19,7 +19,7 @@
 #include <rtm/RTObjectStateMachine.h>
 #include <rtm/Manager.h>
 #include <rtm/RTObject.h>
-#include <stdio.h>
+#include <cstdio>
 #include <iostream>
 
 namespace RTC_impl

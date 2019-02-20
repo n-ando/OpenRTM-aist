@@ -16,9 +16,9 @@
  *
  */
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <time.h>
+#include <cstdlib>
+#include <cstdio>
+#include <ctime>
 #include <sched.h>
 #include <sys/mman.h>
 

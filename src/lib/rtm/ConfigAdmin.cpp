@@ -18,8 +18,8 @@
 
 #include <rtm/ConfigAdmin.h>
 
-#include <assert.h>
-#include <string.h>
+#include <cassert>
+#include <cstring>
 #include <algorithm>
 
 namespace RTC

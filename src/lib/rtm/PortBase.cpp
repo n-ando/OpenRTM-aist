@@ -17,7 +17,7 @@
  *
  */
 
-#include <assert.h>
+#include <cassert>
 #include <memory>
 #include <coil/UUID.h>
 #include <rtm/PortBase.h>

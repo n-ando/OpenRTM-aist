@@ -20,7 +20,7 @@
 #ifndef RTC_BUFFERBASE_H
 #define RTC_BUFFERBASE_H
 
-#include <stddef.h>
+#include <cstddef>
 #include <coil/Properties.h>
 #include <rtm/BufferStatus.h>
 

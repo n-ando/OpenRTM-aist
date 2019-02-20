@@ -22,7 +22,7 @@
 
 #include <coil/Singleton.h>
 
-#include <assert.h>
+#include <cassert>
 #include <algorithm>
 #include <functional>
 #include <string>
