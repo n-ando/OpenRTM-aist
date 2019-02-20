@@ -577,7 +577,7 @@ namespace RTC
         for (coil::vstring::iterator itr = out.begin(); itr != out.end(); ++itr)
         {
             std::string tmp = (*itr);
-            std::string::size_type pos(tmp.find(":"));
+            std::string::size_type pos(tmp.find(':'));
             if (pos != std::string::npos)
             {
                 std::string key(tmp.substr(0, pos));

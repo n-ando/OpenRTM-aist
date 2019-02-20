@@ -510,7 +510,7 @@ namespace coil
     typedef std::string::size_type size;
     size pos;
     if (str.empty()) return false;
-    pos = str.find(":");
+    pos = str.find(':');
     if ((pos != 0) &&
         (pos != std::string::npos) &&
         (str[pos + 1] == '/') &&
@@ -618,7 +618,7 @@ namespace coil
     std::map<std::string, std::string> retmap;
     for (size_t i(0); i < tmp.size(); ++i)
       {
-        std::string::size_type pos = tmp[i].find("=");
+        std::string::size_type pos = tmp[i].find('=');
         if (pos != std::string::npos)
           {
             retmap[tmp[i].substr(0, pos)] = tmp[i].substr(pos + 1);
