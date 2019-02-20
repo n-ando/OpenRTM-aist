@@ -245,7 +245,7 @@ namespace RTC
       Guard guard(m_terminate.mutex);
       ++m_terminate.waiting;
     }
-    while (1)
+    while (true)
       {
         {
           Guard guard(m_terminate.mutex);

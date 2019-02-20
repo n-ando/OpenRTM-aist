@@ -1011,7 +1011,7 @@ namespace RTC
     if (input.substr(0, delim_size) == delimiter)
       begin_pos = pre_pos = delim_size;
 
-    while (1)
+    while (true)
       {
       REFIND:
         found_pos = input.find(delimiter, begin_pos);

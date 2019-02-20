@@ -208,7 +208,7 @@ namespace RTM
 #endif
       }
 
-    if (0)
+    if (false)
       {
         // copy slaves' module profiles
         Guard gurad(m_slaveMutex);
@@ -266,7 +266,7 @@ namespace RTM
 #endif
       }
 
-    if (0)
+    if (false)
       {
         // copy slaves' module profile
         Guard guard(m_slaveMutex);
@@ -324,7 +324,7 @@ namespace RTM
 #endif
       }
 
-    if (0)
+    if (false)
       {
         // copy slaves' factory profile
         Guard guard(m_slaveMutex);
