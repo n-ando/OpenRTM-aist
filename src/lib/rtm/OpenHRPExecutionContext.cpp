@@ -317,7 +317,7 @@ namespace RTC
 
 	  return RTC::RTC_OK;
   }
-};
+}  // namespace RTC;
 
 
 extern "C"

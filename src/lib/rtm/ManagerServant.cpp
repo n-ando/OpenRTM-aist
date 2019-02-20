@@ -1640,4 +1640,4 @@ namespace RTM
   {
 	  return m_version;
   }
-};
+}  // namespace RTM;

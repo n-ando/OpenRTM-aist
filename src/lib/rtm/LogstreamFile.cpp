@@ -431,7 +431,7 @@ namespace RTC
     return new StdoutStream();
   }
 
-};
+}  // namespace RTC;
 
 extern "C"
 {

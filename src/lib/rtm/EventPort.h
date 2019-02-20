@@ -345,6 +345,6 @@ namespace RTC
     FsmType& m_fsm;
     RingBuffer<EventBase*> &m_buffer;
   };
-}; // End of namesepace RTM
+}  // namespace RTC
 
 #endif // RTC_EVENTINPORT_H

@@ -212,7 +212,7 @@ namespace RTC
 
   }
 
-};
+}  // namespace RTC;
 
 
 

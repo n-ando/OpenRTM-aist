@@ -98,7 +98,7 @@ namespace RTC
     }
 
 
-}
+}  // namespace RTC
 
 
 #ifdef LIBRARY_EXPORTS

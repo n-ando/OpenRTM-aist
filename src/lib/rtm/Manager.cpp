@@ -3072,4 +3072,4 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   }
   
 
-};
+}  // namespace RTC;

@@ -530,5 +530,5 @@ namespace CORBA_IORUtil
 #endif  // defined(RTM_OMNIORB_40) || defined(RTM_OMNIORB_41)
   }
 #endif  // ORB_IS_RTORB
-};
+}  // namespace CORBA_IORUtil;
 
