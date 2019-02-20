@@ -241,7 +241,7 @@ namespace RTC
         
         {
             Guard guard(m_connectorsMutex);
-            if (m_connectors.size() == 0)
+            if (m_connectors.empty())
             {
                 RTC_DEBUG(("no connectors"));
                 return false;
@@ -272,7 +272,7 @@ namespace RTC
         
         {
             Guard guard(m_connectorsMutex);
-            if (m_connectors.size() == 0)
+            if (m_connectors.empty())
             {
                 RTC_DEBUG(("no connectors"));
                 return false;
@@ -315,7 +315,7 @@ namespace RTC
       int r(0);
       {
         Guard guard(m_connectorsMutex);
-        if (m_connectors.size() == 0)
+        if (m_connectors.empty())
           {
             RTC_DEBUG(("no connectors"));
             return false;
@@ -363,7 +363,7 @@ namespace RTC
 
         {
             Guard guard(m_connectorsMutex);
-            if (m_connectors.size() == 0)
+            if (m_connectors.empty())
             {
                 RTC_DEBUG(("no connectors"));
                 return false;
@@ -394,7 +394,7 @@ namespace RTC
 
         {
             Guard guard(m_connectorsMutex);
-            if (m_connectors.size() == 0)
+            if (m_connectors.empty())
             {
                 RTC_DEBUG(("no connectors"));
                 return false;
@@ -427,7 +427,7 @@ namespace RTC
 
       {
         Guard guard(m_connectorsMutex);
-        if (m_connectors.size() == 0)
+        if (m_connectors.empty())
           {
             RTC_DEBUG(("no connectors"));
             return true;
@@ -559,7 +559,7 @@ namespace RTC
       ReturnCode ret;
       {
         Guard guard(m_connectorsMutex);
-        if (m_connectors.size() == 0)
+        if (m_connectors.empty())
           {
             RTC_DEBUG(("no connectors"));
             return false;

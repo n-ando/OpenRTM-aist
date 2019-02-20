@@ -746,7 +746,7 @@ namespace coil
         for (size_t i(0), len(curr->leaf.size()); i < len; ++i)
           {
             std::string next_name;
-            if (curr_name == "")
+            if (curr_name.empty())
               {
                 next_name = curr->leaf[i]->name;
               }

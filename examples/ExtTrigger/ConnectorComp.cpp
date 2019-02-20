@@ -113,7 +113,7 @@ int main (int argc, char** argv)
     }
   
   std::cout << "Subscription Type: " << subs_type << std::endl;
-  if (period != "")
+  if (!period.empty())
     std::cout << "Period: " << period << " [Hz]" << std::endl;
   std::cout << "push policy: " << push_policy << std::endl;
   std::cout << "skip count: " << skip_count << std::endl;
@@ -166,7 +166,7 @@ int main (int argc, char** argv)
   CORBA_SeqUtil::push_back(prof.properties,
 			   NVUtil::newNV("dataport.dataflow_type",
 					 "push"));
-  if (subs_type != "")
+  if (!subs_type.empty())
     CORBA_SeqUtil::push_back(prof.properties,
 			   NVUtil::newNV("dataport.subscription_type",
 					 subs_type.c_str()));
@@ -174,15 +174,15 @@ int main (int argc, char** argv)
     CORBA_SeqUtil::push_back(prof.properties,
 			   NVUtil::newNV("dataport.subscription_type",
 					 "flush"));
-  if (subs_type == "periodic" && period != "")
+  if (subs_type == "periodic" && !period.empty())
     CORBA_SeqUtil::push_back(prof.properties,
 			   NVUtil::newNV("dataport.publisher.push_rate",
 					 period.c_str()));
-  if (push_policy != "")
+  if (!push_policy.empty())
     CORBA_SeqUtil::push_back(prof.properties,
 			   NVUtil::newNV("dataport.publisher.push_policy",
 					 push_policy.c_str()));
-  if (push_policy == "skip" && skip_count != "")
+  if (push_policy == "skip" && !skip_count.empty())
     CORBA_SeqUtil::push_back(prof.properties,
 			   NVUtil::newNV("dataport.publisher.skip_count",
 					 skip_count.c_str()));

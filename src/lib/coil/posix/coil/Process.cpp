@@ -98,7 +98,7 @@ namespace coil
         char str[512];
         fgets(str, 512, fd);
         std::string line(str);
-        if (0 < line.size())
+        if (!line.empty())
           line.erase(line.size() - 1);
         out.push_back(line);
       } while (!feof(fd));

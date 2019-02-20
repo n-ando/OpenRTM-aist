@@ -744,7 +744,7 @@ namespace RTC
 #endif
 
     // OutPortProvider supports "pull" dataflow type
-    if (provider_types.size() > 0)
+    if (!provider_types.empty())
       {
         RTC_DEBUG(("dataflow_type pull is supported"));
         appendProperty("dataport.dataflow_type", "pull");
@@ -796,7 +796,7 @@ namespace RTC
 #endif
 
     // InPortConsumer supports "push" dataflow type
-    if (consumer_types.size() > 0)
+    if (!consumer_types.empty())
       {
         RTC_PARANOID(("dataflow_type push is supported"));
         appendProperty("dataport.dataflow_type", "push");
