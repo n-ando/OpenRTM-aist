@@ -60,7 +60,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~FastRTPSMessageInfoBase(void);
+    virtual ~FastRTPSMessageInfoBase(void) = 0;
     /*!
      * @if jp
      *
@@ -78,7 +78,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual std::string topic_name(std::string topic);
+    virtual std::string topic_name(std::string topic) = 0;
     /*!
      * @if jp
      *
@@ -94,10 +94,7 @@ namespace RTC
      *
      * @endif
      */
-    std::string data_type();
-  protected:
-    std::string m_dataType;
-
+    virtual std::string data_type() = 0;
   };
 
 

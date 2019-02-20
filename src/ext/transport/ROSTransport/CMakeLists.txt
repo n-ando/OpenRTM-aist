@@ -22,7 +22,7 @@ endif()
 
 
 find_package(catkin REQUIRED COMPONENTS
-  roscpp
+	roscpp
 )
 
 
@@ -41,8 +41,8 @@ include_directories(
 add_definitions(${ORB_C_FLAGS_LIST})
 
 if(WIN32)
-  add_definitions(-DNOGDI)
-  add_definitions(-DTRANSPORT_PLUGIN)
+	add_definitions(-DNOGDI)
+	add_definitions(-DTRANSPORT_PLUGIN)
 endif()
 
 
