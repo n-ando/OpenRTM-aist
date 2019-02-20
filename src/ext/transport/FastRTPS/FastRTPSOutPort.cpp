@@ -71,7 +71,7 @@ namespace RTC
   void FastRTPSOutPort::init(coil::Properties& prop)
   { 
     RTC_PARANOID(("ROSOutPort::init()"));
-
+    
     if(prop.propertyNames().size() == 0)
     {
       RTC_DEBUG(("Property is empty."));
@@ -79,6 +79,14 @@ namespace RTC
     }
 
     FastRTPSManager& topicmgr = FastRTPSManager::instance();
+    Participant* paticipant = topicmgr.getParticipant();
+
+    if (paticipant == nullptr)
+    {
+        RTC_ERROR(("Can not initialize Fast-RTPS"));
+        return;
+    }
+
     std::string marshaling_type = prop.getProperty("marshaling_type", "corba");
     m_topic = prop.getProperty("topic", "chatter");
 
@@ -96,21 +104,28 @@ namespace RTC
         m_topic = info->topic_name(m_topic);
 
         FastRTPSMessageInfoFactory::instance().deleteObject(info);
+
+        m_type.init(m_dataType, true);
     }
     else
     {
         m_dataType = prop.getProperty("data_type", "RTC::CDR_Data");
+        m_type.init(m_dataType, false);
     }
 
-    Participant* paticipant = topicmgr.getParticipant();
-
-    if (paticipant == nullptr)
+    std::string endian_type(prop.getProperty("serializer.cdr.endian", ""));
+    coil::normalize(endian_type);
+    std::vector<std::string> endian(coil::split(endian_type, ","));
+    if (endian[0] == "little")
     {
-        RTC_ERROR(("Participant is None"));
-        return;
+        m_type.setEndian(true);
     }
-
-    m_type.init(m_dataType);
+    else if (endian[0] == "big")
+    {
+        m_type.setEndian(false);
+    }
+    
+    
     topicmgr.registerType(&m_type);
 
     PublisherAttributes Wparam;

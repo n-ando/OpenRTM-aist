@@ -31,7 +31,9 @@ using namespace eprosima::fastrtps::rtps;
 
 namespace RTC
 {
-    CORBACdrDataPubSubType::CORBACdrDataPubSubType() {
+    CORBACdrDataPubSubType::CORBACdrDataPubSubType()
+        : m_endian(true), m_header_enable(false)
+    {
     }
 
     CORBACdrDataPubSubType::~CORBACdrDataPubSubType() {
@@ -39,40 +41,81 @@ namespace RTC
             free(m_keyBuffer);
     }
 
-    void CORBACdrDataPubSubType::init(std::string name) {
+    void CORBACdrDataPubSubType::init(std::string name, bool header_enable) {
         setName(name.c_str());
         m_typeSize = (uint32_t)CORBACdrData::getMaxCdrSerializedSize() + 4 /*encapsulation*/;
         m_isGetKeyDefined = CORBACdrData::isKeyDefined();
         m_keyBuffer = (unsigned char*)malloc(CORBACdrData::getKeyMaxCdrSerializedSize()>16 ? CORBACdrData::getKeyMaxCdrSerializedSize() : 16);
+        m_header_enable = header_enable;
+    }
+
+    void CORBACdrDataPubSubType::setEndian(bool endian)
+    {
+        m_endian = endian;
     }
 
     bool CORBACdrDataPubSubType::serialize(void *data, SerializedPayload_t *payload) {
         RTC::ByteData* p_type = (RTC::ByteData*) data;
-        eprosima::fastcdr::FastBuffer fastbuffer((char*) payload->data, payload->max_size); // Object that manages the raw buffer.
-        eprosima::fastcdr::Cdr ser(fastbuffer, eprosima::fastcdr::Cdr::DEFAULT_ENDIAN,
+        if (!m_header_enable)
+        {
+            eprosima::fastcdr::FastBuffer fastbuffer((char*)payload->data, payload->max_size); // Object that manages the raw buffer.
+            eprosima::fastcdr::Cdr::Endianness endian = eprosima::fastcdr::Cdr::DEFAULT_ENDIAN;
+            if (m_endian)
+            {
+                endian = eprosima::fastcdr::Cdr::LITTLE_ENDIANNESS;
+            }
+            else
+            {
+                endian = eprosima::fastcdr::Cdr::BIG_ENDIANNESS;
+            }
+            eprosima::fastcdr::Cdr ser(fastbuffer, endian,
                 eprosima::fastcdr::Cdr::DDS_CDR); // Object that serializes the data.
-        payload->encapsulation = ser.endianness() == eprosima::fastcdr::Cdr::BIG_ENDIANNESS ? CDR_BE : CDR_LE;
-        // Serialize encapsulation
-        ser.serialize_encapsulation();
-
-
-        payload->length = (uint32_t)ser.getSerializedDataLength() + p_type->getDataLength(); //Get the serialized length
-        memcpy(payload->data + 4, p_type->getBuffer(), p_type->getDataLength());
+            payload->encapsulation = ser.endianness() == eprosima::fastcdr::Cdr::BIG_ENDIANNESS ? CDR_BE : CDR_LE;
+            // Serialize encapsulation
+            ser.serialize_encapsulation();
+            payload->length = (uint32_t)ser.getSerializedDataLength() + p_type->getDataLength(); //Get the serialized length
+            memcpy(payload->data + 4, p_type->getBuffer(), p_type->getDataLength());
+        }
+        else
+        {
+            payload->length = p_type->getDataLength();
+            payload->max_size = p_type->getDataLength();
+            payload->data = (octet*)calloc(p_type->getDataLength(), sizeof(octet));
+            memcpy(payload->data, p_type->getBuffer(), p_type->getDataLength());
+        }
+        
+        
 
         return true;
     }
 
     bool CORBACdrDataPubSubType::deserialize(SerializedPayload_t* payload, void* data) {
+
         RTC::ByteData* p_type = (RTC::ByteData*) data; 	//Convert DATA to pointer of your type
         eprosima::fastcdr::FastBuffer fastbuffer((char*)payload->data, payload->length); // Object that manages the raw buffer.
+        eprosima::fastcdr::Cdr::Endianness endian = eprosima::fastcdr::Cdr::DEFAULT_ENDIAN;
+        if (m_endian)
+        {
+            endian = eprosima::fastcdr::Cdr::LITTLE_ENDIANNESS;
+        }
+        else
+        {
+            endian = eprosima::fastcdr::Cdr::BIG_ENDIANNESS;
+        }
         eprosima::fastcdr::Cdr deser(fastbuffer, eprosima::fastcdr::Cdr::DEFAULT_ENDIAN,
                 eprosima::fastcdr::Cdr::DDS_CDR); // Object that deserializes the data.
         // Deserialize encapsulation.
         deser.read_encapsulation();
         payload->encapsulation = deser.endianness() == eprosima::fastcdr::Cdr::BIG_ENDIANNESS ? CDR_BE : CDR_LE;
 
-
-        p_type->writeData(payload->data+4, payload->length-4);
+        if (!m_header_enable)
+        {
+            p_type->writeData(payload->data + 4, payload->length - 4);
+        }
+        else
+        {
+            p_type->writeData(payload->data, payload->length);
+        }
 
         return true;
     }

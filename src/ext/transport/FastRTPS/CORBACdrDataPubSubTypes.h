@@ -39,7 +39,8 @@ namespace RTC
 
     	CORBACdrDataPubSubType();
     	virtual ~CORBACdrDataPubSubType();
-   	    void init(std::string name);
+        void init(std::string name, bool header_enable);
+        void setEndian(bool endian);
     	bool serialize(void *data, eprosima::fastrtps::rtps::SerializedPayload_t *payload);
     	bool deserialize(eprosima::fastrtps::rtps::SerializedPayload_t *payload, void *data);
             std::function<uint32_t()> getSerializedSizeProvider(void* data);
@@ -52,6 +53,8 @@ namespace RTC
     	void deleteData(void * data);
     	MD5 m_md5;
     	unsigned char* m_keyBuffer;
+        bool m_endian;
+        bool m_header_enable;
     };
 }
 
