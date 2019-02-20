@@ -444,6 +444,9 @@ namespace RTC
             onReceiverError(data);
             break;
 
+        case BufferStatus::NOT_SUPPORTED:
+            break;
+
         case BufferStatus::TIMEOUT:
             onBufferWriteTimeout(data);
             onReceiverTimeout(data);

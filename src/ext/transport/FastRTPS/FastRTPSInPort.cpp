@@ -256,6 +256,9 @@ namespace RTC
               break;
           case BufferStatus::PRECONDITION_NOT_MET:
               RTC_ERROR(("PRECONDITION_NOT_MET"));
+              break;
+          case BufferStatus::NOT_SUPPORTED:
+              break;
           default:
               RTC_ERROR(("PORT_ERROR"));
           }
