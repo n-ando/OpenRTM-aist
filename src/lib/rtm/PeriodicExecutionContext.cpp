@@ -414,7 +414,7 @@ namespace RTC_exp
       if (!m_svc)
         {
           m_svc = true;
-          this->open(0);
+          this->open(nullptr);
         }
     }
     if (isAllNextState(RTC::INACTIVE_STATE))

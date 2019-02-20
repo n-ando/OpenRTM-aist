@@ -31,7 +31,7 @@ namespace coil
    */
   PeriodicTask::PeriodicTask()
     : m_period(0.0), m_nowait(false),
-      m_func(0), m_deleteInDtor(true),
+      m_func(nullptr), m_deleteInDtor(true),
       m_alive(false), m_suspend(false),
       m_execCount(0), m_execCountMax(1000),
       m_periodCount(0), m_periodCountMax(1000)
@@ -49,7 +49,7 @@ namespace coil
   {
     finalize();
     wait();
-    if (m_func != 0 && m_deleteInDtor)
+    if (m_func != nullptr && m_deleteInDtor)
       {
         delete m_func;
       }
@@ -65,7 +65,7 @@ namespace coil
   void PeriodicTask::activate()
   {
     Guard guard(m_alive.mutex);
-    if (m_func == 0)   { return; }
+    if (m_func == nullptr)   { return; }
     if (m_alive.value) { return; }
 
     m_alive.value = true;
@@ -143,7 +143,7 @@ namespace coil
    */
   bool PeriodicTask::setTask(TaskFuncBase* func, bool delete_in_dtor)
   {
-    if (func == 0) { return false; }
+    if (func == nullptr) { return false; }
     m_deleteInDtor = delete_in_dtor;
     m_func = func;
     return true;

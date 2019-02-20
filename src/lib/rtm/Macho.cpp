@@ -72,7 +72,7 @@ _StateInstance & _StateSpecification::_getInstance(_MachineBase & machine) {
 	// Look first in machine for existing StateInstance.
 	_StateInstance * & instance = machine.getInstance(0);
 	if (!instance)
-		instance = new _RootInstance(machine, 0);
+		instance = new _RootInstance(machine, nullptr);
 
 	return *instance;
 }
@@ -100,11 +100,11 @@ void _StateSpecification::setState(_StateInstance & current) {
 // StateInstance implementation
 _StateInstance::_StateInstance(_MachineBase & machine, _StateInstance * parent)
 	: myMachine(machine)
-	, mySpecification(0)
-	, myHistory(0)
+	, mySpecification(nullptr)
+	, myHistory(nullptr)
 	, myParent(parent)
-	, myBox(0)
-	, myBoxPlace(0)
+	, myBox(nullptr)
+	, myBoxPlace(nullptr)
 {}
 
 _StateInstance::~_StateInstance() {
@@ -157,7 +157,7 @@ void _StateInstance::init(bool history) {
 		mySpecification->init();
 	}
 
-	myHistory = 0;
+	myHistory = nullptr;
 }
 
 #ifdef MACHO_SNAPSHOTS
@@ -189,11 +189,11 @@ _StateInstance * _StateInstance::clone(_MachineBase & newMachine) {
 ////////////////////////////////////////////////////////////////////////////////
 // Base class for Machine objects.
 _MachineBase::_MachineBase()
-	: myCurrentState(0)
-	, myPendingState(0)
-	, myPendingInit(0)
-	, myPendingBox(0)	// Deprecated!
-	, myPendingEvent(0)
+	: myCurrentState(nullptr)
+	, myPendingState(nullptr)
+	, myPendingInit(nullptr)
+	, myPendingBox(nullptr)	// Deprecated!
+	, myPendingEvent(nullptr)
 {}
 
 _MachineBase::~_MachineBase() {
@@ -243,13 +243,13 @@ void _MachineBase::shutdown() {
 	// Performs exit actions by going to Root (=StateSpecification) state.
 	setState(_StateSpecification::_getInstance(*this), &_theDefaultInitializer);
 
-	myCurrentState = 0;
+	myCurrentState = nullptr;
 }
 
 void _MachineBase::allocate(unsigned int count) {
 	myInstances = new _StateInstance *[count];
 	for (unsigned int i = 0; i < count; ++i)
-		myInstances[i] = 0;
+		myInstances[i] = nullptr;
 }
 
 void _MachineBase::free(unsigned int count) {
@@ -258,7 +258,7 @@ void _MachineBase::free(unsigned int count) {
 	while (i > 0) {
 		--i;
 		delete myInstances[i];
-		myInstances[i] = 0;
+		myInstances[i] = nullptr;
 	}
 }
 
@@ -267,7 +267,7 @@ void _MachineBase::clearHistoryDeep(unsigned int count, const _StateInstance & i
 	for (unsigned int i = 0; i < count; ++i) {
 		_StateInstance * s = myInstances[i];
 		if (s && s->isChild(instance))
-			s->setHistory(0);
+			s->setHistory(nullptr);
 	}
 }
 
@@ -326,14 +326,14 @@ void _MachineBase::rattleOn() {
 			// Deprecated!
 			if (myPendingBox) {
 				myCurrentState->setBox(myPendingBox);
-				myPendingBox = 0;
+				myPendingBox = nullptr;
 			}
 
 			// Perform entry actions on next state's parents (which exactly depends on previous state).
 			myCurrentState->entry(*previous);
 			// State transition complete.
 			// Clear 'pending' information just now so that setState would assert in exits and entries, but not in init.
-			myPendingState = 0;
+			myPendingState = nullptr;
 
 			// Use initializer to call proper "init" action.
 			myPendingInit->execute(*myCurrentState);
@@ -346,20 +346,20 @@ void _MachineBase::rattleOn() {
 #ifndef NDEBUG
 			// Clear dummy event if need be
 			if (myPendingEvent == (_IEventBase *) &myPendingEvent)
-				myPendingEvent = 0;
+				myPendingEvent = nullptr;
 #endif
 		} // while (myPendingState)
 
 		if (myPendingEvent) {
 			_IEventBase * event = myPendingEvent;
-			myPendingEvent = 0;
+			myPendingEvent = nullptr;
 			event->dispatch(*myCurrentState);
 			delete event;
 		}
 
 	} // while (myPendingState || myPendingEvent)
 
-	myPendingInit = 0;
+	myPendingInit = nullptr;
 
 } // rattleOn
 
@@ -370,7 +370,7 @@ void _MachineBase::rattleOn() {
 Key _AdaptingInitializer::adapt(Key key) {
 	ID id = static_cast<_KeyData *>(key)->id;
 	const _StateInstance * instance = myMachine.getInstance(id);
-	_StateInstance * history = 0;
+	_StateInstance * history = nullptr;
 
 	if (instance)
 		history = instance->history();

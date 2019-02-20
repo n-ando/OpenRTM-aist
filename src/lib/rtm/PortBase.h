@@ -1977,7 +1977,7 @@ namespace RTC
     inline void onNotifyConnect(const char* portname,
                                 RTC::ConnectorProfile& profile)
     {
-      if (m_portconnListeners != NULL)
+      if (m_portconnListeners != nullptr)
         {
           m_portconnListeners->
             portconnect_[ON_NOTIFY_CONNECT].notify(portname, profile);
@@ -1987,7 +1987,7 @@ namespace RTC
     inline void onNotifyDisconnect(const char* portname,
                                    RTC::ConnectorProfile& profile)
     {
-      if (m_portconnListeners != NULL)
+      if (m_portconnListeners != nullptr)
         {
           m_portconnListeners->
             portconnect_[ON_NOTIFY_DISCONNECT].notify(portname, profile);
@@ -1996,7 +1996,7 @@ namespace RTC
     inline void onUnsubscribeInterfaces(const char* portname,
                                         RTC::ConnectorProfile& profile)
     {
-      if (m_portconnListeners != NULL)
+      if (m_portconnListeners != nullptr)
         {
           m_portconnListeners->
             portconnect_[ON_UNSUBSCRIBE_INTERFACES].notify(portname, profile);
@@ -2007,7 +2007,7 @@ namespace RTC
                                     RTC::ConnectorProfile& profile,
                                     ReturnCode_t ret)
     {
-      if (m_portconnListeners != NULL)
+      if (m_portconnListeners != nullptr)
         {
           m_portconnListeners->
             portconnret_[ON_PUBLISH_INTERFACES].notify(portname,
@@ -2019,7 +2019,7 @@ namespace RTC
                                   RTC::ConnectorProfile& profile,
                                   ReturnCode_t ret)
     {
-      if (m_portconnListeners != NULL)
+      if (m_portconnListeners != nullptr)
         {
           m_portconnListeners->
             portconnret_[ON_CONNECT_NEXTPORT].notify(portname,
@@ -2031,7 +2031,7 @@ namespace RTC
                                       RTC::ConnectorProfile& profile,
                                       ReturnCode_t ret)
     {
-      if (m_portconnListeners != NULL)
+      if (m_portconnListeners != nullptr)
         {
           m_portconnListeners->
             portconnret_[ON_SUBSCRIBE_INTERFACES].notify(portname,
@@ -2043,7 +2043,7 @@ namespace RTC
                             RTC::ConnectorProfile& profile,
                             ReturnCode_t ret)
     {
-      if (m_portconnListeners != NULL)
+      if (m_portconnListeners != nullptr)
         {
           m_portconnListeners->
             portconnret_[ON_CONNECTED].notify(portname, profile, ret);
@@ -2054,7 +2054,7 @@ namespace RTC
                                  RTC::ConnectorProfile& profile,
                                  ReturnCode_t ret)
     {
-      if (m_portconnListeners != NULL)
+      if (m_portconnListeners != nullptr)
         {
           m_portconnListeners->
             portconnret_[ON_DISCONNECT_NEXT].notify(portname, profile, ret);
@@ -2065,7 +2065,7 @@ namespace RTC
                                RTC::ConnectorProfile& profile,
                                ReturnCode_t ret)
     {
-      if (m_portconnListeners != NULL)
+      if (m_portconnListeners != nullptr)
         {
           m_portconnListeners->
             portconnret_[ON_DISCONNECTED].notify(portname, profile, ret);
