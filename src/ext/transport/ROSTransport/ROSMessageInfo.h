@@ -76,6 +76,17 @@ namespace RTC
   class ROSMessageInfo : public ROSMessageInfoBase
   {
   public:
+    /*!
+     * @if jp
+     *
+     * @brief コンストラクタ
+     *
+     * @else
+     *
+     * @brief Constructor
+     *
+     * @endif
+     */
     ROSMessageInfo()
     {
       m_type = ros::message_traits::DataType<MessageType>::value();;
