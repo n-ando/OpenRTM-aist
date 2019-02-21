@@ -148,6 +148,10 @@ namespace RTC
         if(!m_isGetKeyDefined)
             return false;
         RTC::ByteData* p_type = (RTC::ByteData*) data;
+        if (m_keyBuffer == nullptr)
+        {
+            return false;
+        }
         eprosima::fastcdr::FastBuffer fastbuffer((char*)m_keyBuffer,CORBACdrData::getKeyMaxCdrSerializedSize()); 	// Object that manages the raw buffer.
         eprosima::fastcdr::Cdr ser(fastbuffer, eprosima::fastcdr::Cdr::BIG_ENDIANNESS); 	// Object that serializes the data.
         
