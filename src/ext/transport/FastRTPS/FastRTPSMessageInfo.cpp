@@ -17,3 +17,11 @@
  */
 
 #include "FastRTPSMessageInfo.h"
+
+namespace RTC
+{
+    FastRTPSMessageInfoBase::~FastRTPSMessageInfoBase(void)
+    {
+        
+    }
+}

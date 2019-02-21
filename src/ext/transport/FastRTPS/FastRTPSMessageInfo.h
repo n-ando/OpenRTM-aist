@@ -60,7 +60,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~FastRTPSMessageInfoBase(void) = 0;
+    virtual ~FastRTPSMessageInfoBase(void);
     /*!
      * @if jp
      *
