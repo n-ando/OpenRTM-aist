@@ -409,50 +409,54 @@ namespace RTC
     }
   }
 
-
   /*!
-  * @if jp
-  * @brief リターンコード変換
-  * @else
-  * @brief Return codes conversion
-  * @endif
-  */
-  void
-  ROSInPort::convertReturn(BufferStatus::Enum status,
-	    ByteData& data)
+   * @if jp
+   * @brief リターンコード変換
+   * @else
+   * @brief Return codes conversion
+   * @endif
+   */
+  void ROSInPort::convertReturn(BufferStatus::Enum status,
+                                        ByteData& data)
   {
-      switch (status)
+    switch (status)
       {
-        case BufferStatus::BUFFER_OK:
-            onBufferWrite(data);
-            break;
+      case BufferStatus::BUFFER_OK:
+        onBufferWrite(data);
+        return;
+        break;
 
-        case BufferStatus::BUFFER_ERROR:
-            onReceiverError(data);
-            break;
+      case BufferStatus::BUFFER_ERROR:
+        onReceiverError(data);
+        return;
+        break;
 
-        case BufferStatus::BUFFER_FULL:
-            onBufferFull(data);
-            onReceiverFull(data);
-            break;
+      case BufferStatus::BUFFER_FULL:
+        onBufferFull(data);
+        onReceiverFull(data);
+        return;
+        break;
 
-        case BufferStatus::BUFFER_EMPTY:
-            // never come here
-            break;
+      case BufferStatus::BUFFER_EMPTY:
+        // never come here
+        return;
+        break;
 
-        case BufferStatus::PRECONDITION_NOT_MET:
-            onReceiverError(data);
-            break;
+      case BufferStatus::PRECONDITION_NOT_MET:
+        onReceiverError(data);
+        return;
+        break;
 
-        case BufferStatus::NOT_SUPPORTED:
-            break;
+      case BufferStatus::TIMEOUT:
+        onBufferWriteTimeout(data);
+        onReceiverTimeout(data);
+        return;
+        break;
 
-        case BufferStatus::TIMEOUT:
-            onBufferWriteTimeout(data);
-            onReceiverTimeout(data);
-            break;
-    }
-    onReceiverError(data);
+      default:
+        onReceiverError(data);
+        return;
+      }
   }
 
 };     // namespace RTC

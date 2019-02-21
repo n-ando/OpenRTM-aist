@@ -24,6 +24,7 @@ add_definitions(${ORB_C_FLAGS_LIST})
 
 if(WIN32)
 	add_definitions(-DNOGDI)
+	add_definitions(-DNOMINMAX)
 	add_definitions(-DTRANSPORT_PLUGIN)
 endif()
 

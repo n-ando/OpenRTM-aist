@@ -27,8 +27,7 @@
 #include "FastRTPSManager.h"
 #include "FastRTPSMessageInfo.h"
 
-using namespace eprosima::fastrtps;
-using namespace eprosima::fastrtps::rtps;
+
 
 
 
@@ -72,7 +71,7 @@ namespace RTC
 
     if (m_subscriber != nullptr)
     {
-        Domain::removeSubscriber(m_subscriber);
+        eprosima::fastrtps::Domain::removeSubscriber(m_subscriber);
     }
 
   }
@@ -106,7 +105,7 @@ namespace RTC
     }
 
     FastRTPSManager& topicmgr = FastRTPSManager::instance();
-    Participant* paticipant = topicmgr.getParticipant();
+    eprosima::fastrtps::Participant* paticipant = topicmgr.getParticipant();
 
     if (paticipant == nullptr)
     {
@@ -161,11 +160,11 @@ namespace RTC
     topicmgr.registerType(&m_type);
 
 
-    SubscriberAttributes Rparam;
-    Rparam.topic.topicKind = NO_KEY;
+    eprosima::fastrtps::SubscriberAttributes Rparam;
+    Rparam.topic.topicKind = eprosima::fastrtps::rtps::NO_KEY;
     Rparam.topic.topicDataType = m_type.getName();
     Rparam.topic.topicName = m_topic;
-    m_subscriber = Domain::createSubscriber(paticipant,Rparam,(SubscriberListener*)&m_listener);
+    m_subscriber = eprosima::fastrtps::Domain::createSubscriber(paticipant,Rparam,(eprosima::fastrtps::SubscriberListener*)&m_listener);
     if(m_subscriber == nullptr)
     {
         return;
@@ -243,25 +242,7 @@ namespace RTC
       {
           onReceived(cdr);
           BufferStatus::Enum ret = m_connector->write(cdr);
-          switch (ret)
-          {
-          case BufferStatus::BUFFER_OK:
-              RTC_VERBOSE(("BUFFER_OK"));
-              break;
-          case BufferStatus::BUFFER_EMPTY:
-              RTC_ERROR(("BUFFER_EMPTY"));
-              break;
-          case BufferStatus::TIMEOUT:
-              RTC_ERROR(("TIMEOUT"));
-              break;
-          case BufferStatus::PRECONDITION_NOT_MET:
-              RTC_ERROR(("PRECONDITION_NOT_MET"));
-              break;
-          case BufferStatus::NOT_SUPPORTED:
-              break;
-          default:
-              RTC_ERROR(("PORT_ERROR"));
-          }
+          convertReturn(ret, cdr);
       }
 
   }
@@ -340,7 +321,7 @@ namespace RTC
    *
    * @endif
    */
-  void FastRTPSInPort::SubListener::onNewDataMessage(Subscriber* sub)
+  void FastRTPSInPort::SubListener::onNewDataMessage(eprosima::fastrtps::Subscriber* sub)
   {
     RTC_PARANOID(("~onNewDataMessage()"));
 
@@ -349,7 +330,7 @@ namespace RTC
     RTC_PARANOID(("takeNextData"));
     if(sub->takeNextData(&st, &m_info))
     {
-      if(m_info.sampleKind == ALIVE)
+      if(m_info.sampleKind == eprosima::fastrtps::rtps::ALIVE)
       {
           m_provider->put(st);
       }
@@ -358,45 +339,54 @@ namespace RTC
 
 
   /*!
-  * @if jp
-  * @brief リターンコード変換
-  * @else
-  * @brief Return codes conversion
-  * @endif
-  */
-  void
-  FastRTPSInPort::convertReturn(BufferStatus::Enum status,
-	    ByteData& data)
+   * @if jp
+   * @brief リターンコード変換
+   * @else
+   * @brief Return codes conversion
+   * @endif
+   */
+  void FastRTPSInPort::convertReturn(BufferStatus::Enum status,
+                                        ByteData& data)
   {
-      switch (status)
+    switch (status)
       {
-        case BufferStatus::BUFFER_OK:
-            onBufferWrite(data);
-            break;
+      case BufferStatus::BUFFER_OK:
+        onBufferWrite(data);
+        return;
+        break;
 
-        case BufferStatus::BUFFER_ERROR:
-            onReceiverError(data);
-            break;
+      case BufferStatus::BUFFER_ERROR:
+        onReceiverError(data);
+        return;
+        break;
 
-        case BufferStatus::BUFFER_FULL:
-            onBufferFull(data);
-            onReceiverFull(data);
-            break;
+      case BufferStatus::BUFFER_FULL:
+        onBufferFull(data);
+        onReceiverFull(data);
+        return;
+        break;
 
-        case BufferStatus::BUFFER_EMPTY:
-            // never come here
-            break;
+      case BufferStatus::BUFFER_EMPTY:
+        // never come here
+        return;
+        break;
 
-        case BufferStatus::PRECONDITION_NOT_MET:
-            onReceiverError(data);
-            break;
+      case BufferStatus::PRECONDITION_NOT_MET:
+        onReceiverError(data);
+        return;
+        break;
 
-        case BufferStatus::TIMEOUT:
-            onBufferWriteTimeout(data);
-            onReceiverTimeout(data);
-            break;
-    }
-    onReceiverError(data);
+      case BufferStatus::TIMEOUT:
+        onBufferWriteTimeout(data);
+        onReceiverTimeout(data);
+        return;
+        break;
+
+      default:
+        onReceiverError(data);
+        return;
+      }
   }
+
 
 };     // namespace RTC

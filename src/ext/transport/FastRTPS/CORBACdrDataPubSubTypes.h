@@ -43,7 +43,7 @@ namespace RTC
         void setEndian(bool endian);
     	bool serialize(void *data, eprosima::fastrtps::rtps::SerializedPayload_t *payload);
     	bool deserialize(eprosima::fastrtps::rtps::SerializedPayload_t *payload, void *data);
-            std::function<uint32_t()> getSerializedSizeProvider(void* data);
+        std::function<uint32_t()> getSerializedSizeProvider(void* data);
 #if (FASTRTPS_VERSION_MAJOR <= 1) && (FASTRTPS_VERSION_MINOR <= 6)
     	bool getKey(void *data, eprosima::fastrtps::rtps::InstanceHandle_t *ihandle);
 #else

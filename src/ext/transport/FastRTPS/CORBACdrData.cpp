@@ -29,7 +29,6 @@ namespace { char dummy; }
 #include <fastcdr/Cdr.h>
 
 #include <fastcdr/exceptions/BadParamException.h>
-using namespace eprosima::fastcdr::exception;
 
 #include <utility>
 

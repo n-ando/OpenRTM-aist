@@ -27,8 +27,7 @@
 #include "FastRTPSMessageInfo.h"
 
 
-using namespace eprosima::fastrtps;
-using namespace eprosima::fastrtps::rtps;
+
 
 
 
@@ -79,7 +78,7 @@ namespace RTC
     }
 
     FastRTPSManager& topicmgr = FastRTPSManager::instance();
-    Participant* paticipant = topicmgr.getParticipant();
+    eprosima::fastrtps::Participant* paticipant = topicmgr.getParticipant();
 
     if (paticipant == nullptr)
     {
@@ -128,11 +127,11 @@ namespace RTC
     
     topicmgr.registerType(&m_type);
 
-    PublisherAttributes Wparam;
-    Wparam.topic.topicKind = NO_KEY;
+    eprosima::fastrtps::PublisherAttributes Wparam;
+    Wparam.topic.topicKind = eprosima::fastrtps::rtps::NO_KEY;
     Wparam.topic.topicDataType = m_type.getName();
     Wparam.topic.topicName = m_topic;
-    m_publisher = Domain::createPublisher(paticipant, Wparam, (PublisherListener*)&m_listener);
+    m_publisher = eprosima::fastrtps::Domain::createPublisher(paticipant, Wparam, (eprosima::fastrtps::PublisherListener*)&m_listener);
     if (m_publisher == nullptr)
     {
         RTC_ERROR(("Publisher initialize failed"));
@@ -156,16 +155,19 @@ namespace RTC
     if (m_publisher == nullptr)
     {
         RTC_VERBOSE(("Publisher is None"));
+        return PRECONDITION_NOT_MET;
     }
     if (m_publisher->write(&data))
     {
         RTC_PARANOID(("write:OK"));
+        return PORT_OK;
     }
     else
     {
         RTC_ERROR(("write:ERROR"));
+        return PORT_ERROR;
     }
-    return PORT_OK;
+    
   }
 
   /*!

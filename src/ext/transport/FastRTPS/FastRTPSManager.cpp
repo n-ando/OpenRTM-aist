@@ -22,8 +22,7 @@
 #include <fastrtps/attributes/ParticipantAttributes.h>
 #include <fastrtps/Domain.h>
 
-using namespace eprosima::fastrtps;
-using namespace eprosima::fastrtps::rtps;
+
 
 
 namespace RTC
@@ -99,11 +98,11 @@ namespace RTC
    */
   void FastRTPSManager::start()
   {
-      ParticipantAttributes PParam;
+      eprosima::fastrtps::ParticipantAttributes PParam;
       PParam.rtps.builtin.domainId = 0;
-      PParam.rtps.builtin.leaseDuration = c_TimeInfinite;
+      PParam.rtps.builtin.leaseDuration = eprosima::fastrtps::rtps::c_TimeInfinite;
       PParam.rtps.setName("Participant_openrtm");
-      m_participant = Domain::createParticipant(PParam);
+      m_participant = eprosima::fastrtps::Domain::createParticipant(PParam);
    
   }
 
@@ -120,7 +119,7 @@ namespace RTC
    *
    * @endif
    */
-  Participant* FastRTPSManager::getParticipant()
+  eprosima::fastrtps::Participant* FastRTPSManager::getParticipant()
   {
       return m_participant;
   }
@@ -140,9 +139,9 @@ namespace RTC
    *
    * @endif
    */
-  bool FastRTPSManager::registerType(TopicDataType* type)
+  bool FastRTPSManager::registerType(eprosima::fastrtps::TopicDataType* type)
   {
-      return Domain::registerType(m_participant,type);	
+      return eprosima::fastrtps::Domain::registerType(m_participant,type);
   }
 
   /*!
@@ -162,7 +161,7 @@ namespace RTC
    */
   bool FastRTPSManager::unregisterType(const char* name)
   {
-      return Domain::unregisterType(m_participant, name);
+      return eprosima::fastrtps::Domain::unregisterType(m_participant, name);
   }
 
   /*!

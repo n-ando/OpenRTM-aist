@@ -23,11 +23,11 @@
 #include <fastcdr/FastBuffer.h>
 #include <fastcdr/Cdr.h>
 #include <rtm/ByteData.h>
+#include <algorithm>
 
 #include "CORBACdrDataPubSubTypes.h"
 
-using namespace eprosima::fastrtps;
-using namespace eprosima::fastrtps::rtps;
+
 
 namespace RTC
 {
@@ -37,15 +37,14 @@ namespace RTC
     }
 
     CORBACdrDataPubSubType::~CORBACdrDataPubSubType() {
-        if(m_keyBuffer!=nullptr)
-            free(m_keyBuffer);
+        delete[] m_keyBuffer;
     }
 
     void CORBACdrDataPubSubType::init(std::string name, bool header_enable) {
         setName(name.c_str());
         m_typeSize = (uint32_t)CORBACdrData::getMaxCdrSerializedSize() + 4 /*encapsulation*/;
         m_isGetKeyDefined = CORBACdrData::isKeyDefined();
-        m_keyBuffer = (unsigned char*)malloc(CORBACdrData::getKeyMaxCdrSerializedSize()>16 ? CORBACdrData::getKeyMaxCdrSerializedSize() : 16);
+        m_keyBuffer = new unsigned char[std::max(CORBACdrData::getKeyMaxCdrSerializedSize(), (size_t)16)];
         m_header_enable = header_enable;
     }
 
@@ -54,12 +53,12 @@ namespace RTC
         m_endian = endian;
     }
 
-    bool CORBACdrDataPubSubType::serialize(void *data, SerializedPayload_t *payload) {
+    bool CORBACdrDataPubSubType::serialize(void *data, eprosima::fastrtps::rtps::SerializedPayload_t *payload) {
         RTC::ByteData* p_type = (RTC::ByteData*) data;
         if (!m_header_enable)
         {
             eprosima::fastcdr::FastBuffer fastbuffer((char*)payload->data, payload->max_size); // Object that manages the raw buffer.
-            eprosima::fastcdr::Cdr::Endianness endian = eprosima::fastcdr::Cdr::DEFAULT_ENDIAN;
+            eprosima::fastcdr::Cdr::Endianness endian;
             if (m_endian)
             {
                 endian = eprosima::fastcdr::Cdr::LITTLE_ENDIANNESS;
@@ -80,7 +79,14 @@ namespace RTC
         {
             payload->length = p_type->getDataLength();
             payload->max_size = p_type->getDataLength();
-            payload->data = (octet*)calloc(p_type->getDataLength(), sizeof(octet));
+            try
+            {
+                payload->data = new eprosima::fastrtps::rtps::octet[p_type->getDataLength()];
+            }
+            catch (std::bad_alloc)
+            {
+                return false;
+            }
             memcpy(payload->data, p_type->getBuffer(), p_type->getDataLength());
         }
         
@@ -89,11 +95,11 @@ namespace RTC
         return true;
     }
 
-    bool CORBACdrDataPubSubType::deserialize(SerializedPayload_t* payload, void* data) {
+    bool CORBACdrDataPubSubType::deserialize(eprosima::fastrtps::rtps::SerializedPayload_t* payload, void* data) {
 
         RTC::ByteData* p_type = (RTC::ByteData*) data; 	//Convert DATA to pointer of your type
         eprosima::fastcdr::FastBuffer fastbuffer((char*)payload->data, payload->length); // Object that manages the raw buffer.
-        eprosima::fastcdr::Cdr::Endianness endian = eprosima::fastcdr::Cdr::DEFAULT_ENDIAN;
+        eprosima::fastcdr::Cdr::Endianness endian;
         if (m_endian)
         {
             endian = eprosima::fastcdr::Cdr::LITTLE_ENDIANNESS;
@@ -135,7 +141,7 @@ namespace RTC
         delete((RTC::ByteData*)data);
     }
 #if (FASTRTPS_VERSION_MAJOR <= 1) && (FASTRTPS_VERSION_MINOR == 6)
-    bool CORBACdrDataPubSubType::getKey(void *data, InstanceHandle_t* handle) {
+    bool CORBACdrDataPubSubType::getKey(void *data, eprosima::fastrtps::rtps::InstanceHandle_t* handle) {
 #else
     bool CORBACdrDataPubSubType::getKey(void *data, InstanceHandle_t* handle, bool force_md5) {
 #endif

@@ -2,10 +2,10 @@
 /*!
  * @file  FastRTPSInPort.h
  * @brief FastRTPSInPort class
- * @date  $Date: 2018-01-15 03:08:03 $
+ * @date  $Date: 2019-02-21 03:08:03 $
  * @author Nobuhiko Miyamoto <n-miyamoto@aist.go.jp>
  *
- * Copyright (C) 2018
+ * Copyright (C) 2019
  *     Nobuhiko Miyamoto
  *     Robot Innovation Research Center,
  *     National Institute of
@@ -375,6 +375,7 @@ namespace RTC
     }
 
   private:
+
     /*!
      * @if jp
      * @brief リターンコード変換
