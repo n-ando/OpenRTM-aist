@@ -38,7 +38,7 @@ function(ComponentBuild target srcs mainfile dependencies vxaddfile)
 		add_executable(${target}Comp $<TARGET_OBJECTS:${target}_objlib> ${mainfile})
 		target_link_libraries(${target}Comp ${libs} ${RTM_LINKER_OPTION})
 		add_dependencies(${target}Comp ${RTM_PROJECT_NAME})
-		add_dependencies(${target}Comp ${target}_objlib )
+		add_dependencies(${target}Comp ${target}_objlib)
 
 		add_library(${target} SHARED $<TARGET_OBJECTS:${target}_objlib>)
 		target_link_libraries(${target} ${libs} ${RTM_LINKER_OPTION})
