@@ -22,6 +22,7 @@
 
 #include <fastcdr/FastBuffer.h>
 #include <fastcdr/Cdr.h>
+#include <fastcdr/exceptions/BadParamException.h>
 #include <rtm/ByteData.h>
 #include <algorithm>
 
@@ -71,7 +72,19 @@ namespace RTC
                 eprosima::fastcdr::Cdr::DDS_CDR); // Object that serializes the data.
             payload->encapsulation = ser.endianness() == eprosima::fastcdr::Cdr::BIG_ENDIANNESS ? CDR_BE : CDR_LE;
             // Serialize encapsulation
-            ser.serialize_encapsulation();
+            try
+            {
+                ser.serialize_encapsulation();
+            }
+            catch (eprosima::fastcdr::exception::NotEnoughMemoryException)
+            {
+                return false;
+            }
+            catch (eprosima::fastcdr::exception::BadParamException)
+            {
+                return false;
+            }
+
             payload->length = (uint32_t)ser.getSerializedDataLength() + p_type->getDataLength(); //Get the serialized length
             memcpy(payload->data + 4, p_type->getBuffer(), p_type->getDataLength());
         }
@@ -111,7 +124,18 @@ namespace RTC
         eprosima::fastcdr::Cdr deser(fastbuffer, eprosima::fastcdr::Cdr::DEFAULT_ENDIAN,
                 eprosima::fastcdr::Cdr::DDS_CDR); // Object that deserializes the data.
         // Deserialize encapsulation.
-        deser.read_encapsulation();
+        try
+        {
+            deser.read_encapsulation();
+        }
+        catch (eprosima::fastcdr::exception::NotEnoughMemoryException)
+        {
+            return false;
+        }
+        catch (eprosima::fastcdr::exception::BadParamException)
+        {
+            return false;
+        }
         payload->encapsulation = deser.endianness() == eprosima::fastcdr::Cdr::BIG_ENDIANNESS ? CDR_BE : CDR_LE;
 
         if (!m_header_enable)
