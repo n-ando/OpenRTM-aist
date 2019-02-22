@@ -5,7 +5,82 @@ project (${RTM_PROJECT_NAME}
 	LANGUAGES CXX)
 
 
-
+set(DATA_TYPE_LIST
+	TimedState
+	TimedShort
+	TimedLong
+	TimedUShort
+	TimedULong
+	TimedFloat
+	TimedDouble
+	TimedChar
+	TimedWChar
+	TimedBoolean
+	TimedOctet
+	TimedString
+	TimedWString
+	TimedShortSeq
+	TimedLongSeq
+	TimedUShortSeq
+	TimedULongSeq
+	TimedFloatSeq
+	TimedDoubleSeq
+	TimedCharSeq
+	TimedWCharSeq
+	TimedBooleanSeq
+	TimedOctetSeq
+	TimedStringSeq
+	TimedWStringSeq
+	TimedRGBColour
+	TimedPoint2D
+	TimedVector2D
+	TimedPose2D
+	TimedVelocity2D
+	TimedAcceleration2D
+	TimedPoseVel2D
+	TimedSize2D
+	TimedGeometry2D
+	TimedCovariance2D
+	TimedPointCovariance2D
+	TimedCarlike
+	TimedSpeedHeading2D
+	TimedPoint3D
+	TimedVector3D
+	TimedOrientation3D
+	TimedPose3D
+	TimedVelocity3D
+	TimedAngularVelocity3D
+	TimedAcceleration3D
+	TimedAngularAcceleration3D
+	TimedPoseVel3D
+	TimedSize3D
+	TimedGeometry3D
+	TimedCovariance3D
+	TimedSpeedHeading3D
+	TimedOAP
+	TimedQuaternion
+	ActArrayActuatorPos
+	ActArrayActuatorSpeed
+	ActArrayActuatorCurrent
+	ActArrayState
+	CameraImage
+	Fiducials
+	GPSData
+	GripperState
+	INSData
+	LimbState
+	Hypotheses2D
+	Hypotheses3D
+	Features
+	MultiCameraImages
+	Path2D
+	Path3D
+	PointCloud
+	PanTiltAngles
+	PanTiltState
+	RangeData
+	IntensityData
+)
 
 
 
@@ -475,6 +550,23 @@ else(VXWORKS)
 						ARCHIVE DESTINATION ${INSTALL_RTM_LIB_DIR}
 						RUNTIME DESTINATION ${INSTALL_RTM_LIB_DIR}
 						COMPONENT openrtm)
+
+		foreach(data_type ${DATA_TYPE_LIST})
+			set(RTC_DATA_TYPE RTC::${data_type})
+			set(filename ${PROJECT_BINARY_DIR}/${data_type}Factory.cpp)
+			set(DT_TARGET ${data_type}Factory_${RTM_VC_VER})
+			configure_file(${CMAKE_CURRENT_SOURCE_DIR}/SerializerFactory.cpp.in ${filename} @ONLY)
+			add_library(${DT_TARGET} SHARED ${filename})
+			target_link_libraries(${DT_TARGET} ${ORB_LIBRARIES} ${COIL_PROJECT_NAME} ${RTM_LINKER_OPTION} ${RTM_PROJECT_NAME})
+			set_target_properties(${DT_TARGET} PROPERTIES DEBUG_POSTFIX d)
+			add_dependencies(${DT_TARGET} ${RTM_PROJECT_NAME})
+			set(DATATYPE_FACTORIES ${DATATYPE_FACTORIES} ${DT_TARGET})
+			install(TARGETS ${DT_TARGET} LIBRARY DESTINATION ${INSTALL_RTM_LIB_DIR}
+							ARCHIVE DESTINATION ${INSTALL_RTM_LIB_DIR}
+							RUNTIME DESTINATION ${INSTALL_RTM_LIB_DIR}
+							COMPONENT openrtm)
+		endforeach()
+		set(DATATYPE_FACTORIES ${DATATYPE_FACTORIES} PARENT_SCOPE)
 
 	endif()
 endif(VXWORKS)

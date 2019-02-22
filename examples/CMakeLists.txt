@@ -1,5 +1,6 @@
 ﻿cmake_minimum_required (VERSION 3.0.2)
 
+
 function(ComponentBuild target srcs mainfile dependencies vxaddfile)
 	link_directories(${ORB_LINK_DIR})
 	include_directories(
@@ -28,7 +29,7 @@ function(ComponentBuild target srcs mainfile dependencies vxaddfile)
 		if(VXWORKS)
 			set(libs ${RTM_PROJECT_NAME} ${ORB_LIBRARIES} ${COIL_PROJECT_NAME} ${RTCSKEL_PROJECT_NAME})
 		else(VXWORKS)
-			set(libs ${RTM_PROJECT_NAME} ${ORB_LIBRARIES} ${COIL_PROJECT_NAME})
+			set(libs ${RTM_PROJECT_NAME} ${ORB_LIBRARIES} ${COIL_PROJECT_NAME} ${DATATYPE_FACTORIES})
 		endif(VXWORKS)
 
 		add_library(${target}_objlib OBJECT ${srcs})
@@ -39,11 +40,14 @@ function(ComponentBuild target srcs mainfile dependencies vxaddfile)
 		target_link_libraries(${target}Comp ${libs} ${RTM_LINKER_OPTION})
 		add_dependencies(${target}Comp ${RTM_PROJECT_NAME})
 		add_dependencies(${target}Comp ${target}_objlib)
+		add_dependencies(${target}Comp ${DATATYPE_FACTORIES})
+ 
 
 		add_library(${target} SHARED $<TARGET_OBJECTS:${target}_objlib>)
 		target_link_libraries(${target} ${libs} ${RTM_LINKER_OPTION})
 		add_dependencies(${target} ${RTM_PROJECT_NAME})
 		add_dependencies(${target} ${target}_objlib)
+		add_dependencies(${target} ${DATATYPE_FACTORIES})
 		set_target_properties(${target} PROPERTIES PREFIX "")
 
 		if(dependencies)
