@@ -40,7 +40,9 @@ function(ComponentBuild target srcs mainfile dependencies vxaddfile)
 		target_link_libraries(${target}Comp ${libs} ${RTM_LINKER_OPTION})
 		add_dependencies(${target}Comp ${RTM_PROJECT_NAME})
 		add_dependencies(${target}Comp ${target}_objlib)
-		add_dependencies(${target}Comp ${DATATYPE_FACTORIES})
+		if(DATATYPE_FACTORIES)
+			add_dependencies(${target}Comp ${DATATYPE_FACTORIES})
+		endif(DATATYPE_FACTORIES)
  
 
 		add_library(${target} SHARED $<TARGET_OBJECTS:${target}_objlib>)
