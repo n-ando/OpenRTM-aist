@@ -355,21 +355,20 @@ namespace RTC
     RTC_TRACE(("findFile(%s, %s)", fname.c_str(),
                coil::flatten(load_path, ", ").c_str()));
     StringVectorConstItr it, it_end;
-    const std::string& file_name(fname);
 
     it     = load_path.begin();
     it_end = load_path.end();
 
     while (it != it_end)
       {
-        std::string f((*it) + "/" + file_name);
+        std::string f((*it) + "/" + fname);
         coil::replaceString(f, "//", "/");
         if (fileExist(f))
           {
             return f;
           }
         coil::vstring ret;
-        coil::findFile((*it), file_name, ret);
+        coil::findFile((*it), fname, ret);
         if (!ret.empty())
           {
             return ret.front();
