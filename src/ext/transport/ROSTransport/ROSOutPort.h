@@ -251,6 +251,27 @@ namespace RTC
      */
     bool connectTCP(const ros::TransportTCPPtr& transport);
 
+    /*!
+     * @if jp
+     * @brief ヘッダ情報受信時のコールバック関数
+     *
+     *
+     * @param conn ros::ConnectionPtr
+     * @param header ヘッダ情報
+     *
+     * @return true：問題なし、false：ヘッダが不正
+     * 
+     * @else
+     * @brief 
+     *
+     *
+     * @param conn 
+     * @param header 
+     * 
+     * @return
+     *
+     * @endif
+     */
     bool onConnectionHeaderReceived(const ros::ConnectionPtr& conn, const ros::Header& header)
     {
       RTC_VERBOSE(("onConnectionHeaderReceived()"));
