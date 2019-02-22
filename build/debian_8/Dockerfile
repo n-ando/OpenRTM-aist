@@ -1,4 +1,4 @@
-FROM ubuntu:16.04
+FROM debian:8
 
 RUN apt-get update\
  && apt-get install -y --no-install-recommends\
