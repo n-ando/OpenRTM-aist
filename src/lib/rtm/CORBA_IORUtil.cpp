@@ -148,7 +148,7 @@ namespace CORBA_IORUtil
   bool toString(IOP::IOR& ior, std::string& iorstr)
   {
 #ifndef ORB_IS_RTORB
-    cdrMemoryStream buf(CORBA::ULong(0), true);
+    cdrMemoryStream buf(CORBA::ULong(0), CORBA::Boolean(1));
     buf.marshalBoolean(omni::myByteOrder);
     buf.marshalRawString(ior.type_id);
     ior.profiles >>= buf;
