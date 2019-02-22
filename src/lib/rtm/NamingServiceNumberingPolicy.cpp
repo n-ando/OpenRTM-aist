@@ -26,7 +26,6 @@ namespace RTM
   // NamingServiceNumberingPolicy
   //============================================================
 	NamingServiceNumberingPolicy::NamingServiceNumberingPolicy()
-		: m_num(0)
 	{
 		m_mgr = &RTC::Manager::instance();
 	}

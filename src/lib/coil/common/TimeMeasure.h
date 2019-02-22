@@ -240,7 +240,6 @@ namespace coil
 
     unsigned long int m_count;
     const unsigned long int m_countMax;
-    unsigned long long int m_cpuClock;
 
     bool m_recurred;
   };
