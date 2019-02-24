@@ -385,15 +385,6 @@ namespace RTC
 
   private:
 
-    /*!
-     * @if jp
-     * @brief リターンコード変換
-     * @else
-     * @brief Return codes conversion
-     * @endif
-     */
-    void convertReturn(BufferStatus::Enum status, ByteData& data);
-
     mutable Logger rtclog;
     bool m_start;
     coil::Properties m_properties;
