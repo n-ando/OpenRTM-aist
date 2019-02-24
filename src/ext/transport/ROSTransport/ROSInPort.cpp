@@ -132,7 +132,8 @@ namespace RTC
     }
 
     m_messageType = prop.getProperty("marshaling_type", "ROSFloat32");
-    m_topic = prop.getProperty("topic", "/chatter");
+    m_topic = prop.getProperty("topic", "chatter");
+    m_topic = "/" + m_topic;
 
 
     m_roscorehost = prop.getProperty("roscore_host", "localhost");

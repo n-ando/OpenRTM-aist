@@ -604,14 +604,14 @@ namespace RTC
   void ROS2QuaternionDataInit()
   {
     coil::GlobalFactory < ::RTC::ByteDataStream<RTC::TimedQuaternion> >::
-            instance().addFactory("ROS2Quaternion",
+            instance().addFactory("ROS2QuaternionStamped",
             ::coil::Creator< ::RTC::ByteDataStream<RTC::TimedQuaternion>,
             RTC::ROS2QuaternionData>,
             ::coil::Destructor< ::RTC::ByteDataStream<RTC::TimedQuaternion>,
             RTC::ROS2QuaternionData>);
 
     RTC::FastRTPSMessageInfoFactory::
-            instance().addFactory("ROS2Quaternion",
+            instance().addFactory("ROS2QuaternionStamped",
             ::coil::Creator< ::RTC::FastRTPSMessageInfoBase,
             RTC::ROS2MessageInfo<geometry_msgs::msg::QuaternionStamped > >,
             ::coil::Destructor< ::RTC::FastRTPSMessageInfoBase,
@@ -754,14 +754,14 @@ namespace RTC
   void ROS2Vector3DDataInit()
   {
     coil::GlobalFactory < ::RTC::ByteDataStream<RTC::TimedVector3D> >::
-            instance().addFactory("ROS2Vector3D",
+            instance().addFactory("ROS2Vector3Stamped",
             ::coil::Creator< ::RTC::ByteDataStream<RTC::TimedVector3D>,
             RTC::ROS2Vector3DData>,
             ::coil::Destructor< ::RTC::ByteDataStream<RTC::TimedVector3D>,
             RTC::ROS2Vector3DData>);
 
     RTC::FastRTPSMessageInfoFactory::
-            instance().addFactory("ROSVector3D",
+            instance().addFactory("ROS2Vector3Stamped",
             ::coil::Creator< ::RTC::FastRTPSMessageInfoBase,
             RTC::ROS2MessageInfo<geometry_msgs::msg::Vector3Stamped > >,
             ::coil::Destructor< ::RTC::FastRTPSMessageInfoBase,
@@ -849,7 +849,7 @@ namespace RTC
       msg.header.stamp.nanosec = data.tm.nsec;
       msg.height = data.height;
       msg.width = data.width;
-      if(std::string(data.format) == "")
+      if(std::string(data.format).empty())
       {
         msg.encoding = "rgb8";
       }
@@ -920,14 +920,14 @@ namespace RTC
   void ROS2CameraImageDataInit()
   {
     coil::GlobalFactory < ::RTC::ByteDataStream<RTC::CameraImage> >::
-            instance().addFactory("ROS2CameraImage",
+            instance().addFactory("ROS2Image",
             ::coil::Creator< ::RTC::ByteDataStream<RTC::CameraImage>,
             RTC::ROS2CameraImageData>,
             ::coil::Destructor< ::RTC::ByteDataStream<RTC::CameraImage>,
             RTC::ROS2CameraImageData>);
 
     RTC::FastRTPSMessageInfoFactory::
-            instance().addFactory("ROS2CameraImage",
+            instance().addFactory("ROS2Image",
             ::coil::Creator< ::RTC::FastRTPSMessageInfoBase,
             RTC::ROS2MessageInfo<sensor_msgs::msg::Image > >,
             ::coil::Destructor< ::RTC::FastRTPSMessageInfoBase,
