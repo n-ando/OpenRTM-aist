@@ -1,5 +1,4 @@
-cmake_minimum_required (VERSION 2.6)
-
+cmake_minimum_required (VERSION 3.0.2)
 
 set(ROS_ENABLE ${ROS_ENABLE} CACHE BOOL "set ROS_ENABLE")
 

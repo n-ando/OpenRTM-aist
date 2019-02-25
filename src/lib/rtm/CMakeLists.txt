@@ -5,81 +5,156 @@ project (${RTM_PROJECT_NAME}
 	LANGUAGES CXX)
 
 
+set(DATA_TYPE_LIST
+	TimedState
+	TimedShort
+	TimedLong
+	TimedUShort
+	TimedULong
+	TimedFloat
+	TimedDouble
+	TimedChar
+	TimedWChar
+	TimedBoolean
+	TimedOctet
+	TimedString
+	TimedWString
+	TimedShortSeq
+	TimedLongSeq
+	TimedUShortSeq
+	TimedULongSeq
+	TimedFloatSeq
+	TimedDoubleSeq
+	TimedCharSeq
+	TimedWCharSeq
+	TimedBooleanSeq
+	TimedOctetSeq
+	TimedStringSeq
+	TimedWStringSeq
+	TimedRGBColour
+	TimedPoint2D
+	TimedVector2D
+	TimedPose2D
+	TimedVelocity2D
+	TimedAcceleration2D
+	TimedPoseVel2D
+	TimedSize2D
+	TimedGeometry2D
+	TimedCovariance2D
+	TimedPointCovariance2D
+	TimedCarlike
+	TimedSpeedHeading2D
+	TimedPoint3D
+	TimedVector3D
+	TimedOrientation3D
+	TimedPose3D
+	TimedVelocity3D
+	TimedAngularVelocity3D
+	TimedAcceleration3D
+	TimedAngularAcceleration3D
+	TimedPoseVel3D
+	TimedSize3D
+	TimedGeometry3D
+	TimedCovariance3D
+	TimedSpeedHeading3D
+	TimedOAP
+	TimedQuaternion
+	ActArrayActuatorPos
+	ActArrayActuatorSpeed
+	ActArrayActuatorCurrent
+	ActArrayState
+	CameraImage
+	Fiducials
+	GPSData
+	GripperState
+	INSData
+	LimbState
+	Hypotheses2D
+	Hypotheses3D
+	Features
+	MultiCameraImages
+	Path2D
+	Path3D
+	PointCloud
+	PanTiltAngles
+	PanTiltState
+	RangeData
+	IntensityData
+)
 
 
 
 
+set(ARTLINUX OFF)
+set(HAVE_DLFCN_H ON)
+set(HAVE_INTTYPES_H ON)
+set(HAVE_MEMORY_H ON)
+set(HAVE_NLIST_H ON)
+set(HAVE_STDINT_H ON)
+set(HAVE_STRINGS_H ON)
+set(HAVE_STRING_H ON)
+set(HAVE_SYS_STAT_H ON)
+set(HAVE_SYS_TYPES_H ON)
+set(HAVE_UNAME ON)
+set(HAVE_UNISTD_H ON)
+set(ORB_IS_MICO OFF)
+set(ORB_IS_OMNIORB OFF)
+set(ORB_IS_ORBEXPRESS OFF)
+set(ORB_IS_ORBACUS OFF)
+set(ORB_IS_ORBIT2 OFF)
+set(ORB_IS_ORBIX OFF)
+set(ORB_IS_RTORB OFF)
+set(ORB_IS_TAO OFF)
+set(RTM_PACKAGE OFF)
+set(RTM_PACKAGE_BUGREPORT OFF)
+set(RTM_PACKAGE_NAME OFF)
+set(RTM_PACKAGE_STRING OFF)
+set(RTM_PACKAGE_TARNAME OFF)
+set(RTM_PACKAGE_URL OFF)
+set(RTM_PACKAGE_VERSION OFF)
+set(PYTHON_WRAPPER OFF)
+set(RTC_CORBA_CXXMAPPING11 OFF)
+set(RTC_SOCK_DATAPORT OFF)
+set(RTM_GCC2 OFF)
+set(RTM_OMNIORB_40 OFF)
+set(RTM_OMNIORB_41 OFF)
+set(RTM_OMNIORB_42 OFF)
+set(RTM_OS_CYGWIN OFF)
+set(RTM_OS_DARWIN OFF)
+set(RTM_OS_FREEBSD OFF)
+set(RTM_OS_HPUX OFF)
+set(RTM_OS_IRIX OFF)
+set(RTM_OS_LINUX OFF)
+set(RTM_OS_VXWORKS OFF)
+set(RTM_OS_OSF1 OFF)
+set(RTM_OS_QNX OFF)
+set(RTM_OS_SUNOS OFF)
+set(RTM_OS_WIN32 OFF)
+set(RTM_RTDSC OFF)
+set(WITH_DMALLOC OFF)
+set(_REENTRANT ON)
 
-option (ARTLINUX "ARTLinux is avaiable" OFF)
-option (HAVE_DLFCN_H "Define to 1 if you have the <dlfcn.h> header file." ON)
-option (HAVE_INTTYPES_H "Define to 1 if you have the <inttypes.h> header file." ON)
-option (HAVE_MEMORY_H "Define to 1 if you have the <memory.h> header file." ON)
-option (HAVE_NLIST_H "Define to 1 if you have the <nlist.h> header file." ON)
-option (HAVE_STDINT_H "Define to 1 if you have the <stdlib.h> header file." ON)
-option (HAVE_STRINGS_H "Define to 1 if you have the <strings.h> header file." ON)
-option (HAVE_STRING_H "Define to 1 if you have the <string.h> header file." ON)
-option (HAVE_SYS_STAT_H "Define to 1 if you have the <sys/stat.h> header file." ON)
-option (HAVE_SYS_TYPES_H "Define to 1 if you have the <sys/types.h> header file." ON)
-option (HAVE_UNAME "Define to 1 if you have the `uname' function." ON)
-option (HAVE_UNISTD_H "Define to 1 if you have the <unistd.h> header file." ON)
-option (ORB_IS_MICO "ORB is MICO" OFF)
-option (ORB_IS_OMNIORB "ORB is omniORB" OFF)
-option (ORB_IS_ORBEXPRESS "ORB is ORBexpresds" OFF)
-option (ORB_IS_ORBACUS "ORB is ORBacus" OFF)
-option (ORB_IS_ORBIT2 "ORB is ORBit2" OFF)
-option (ORB_IS_ORBIX "ORB is Orbix" OFF)
-option (ORB_IS_RTORB "ORB is RtORB" OFF)
-option (ORB_IS_TAO "ORB is TAO" OFF)
-option (RTM_PACKAGE "Name of package" OFF)
-option (RTM_PACKAGE_BUGREPORT "Define to the address where bug reports for this package should be sent." OFF)
-option (RTM_PACKAGE_NAME "Define to the full name of this package." OFF)
-option (RTM_PACKAGE_STRING "Define to the full name and version of this package." OFF)
-option (RTM_PACKAGE_TARNAME "Define to the one symbol short name of this package." OFF)
-option (RTM_PACKAGE_URL "Define to the home page for this package." OFF)
-option (RTM_PACKAGE_VERSION "Define to the version of this package." OFF)
-option (PYTHON_WRAPPER " Python wrapper is enable" OFF)
-option (RTC_CORBA_CXXMAPPING11 "CORBA C++ mapping is ver1.1" OFF)
-option (RTC_SOCK_DATAPORT "Socket DataPort is enable" OFF)
-option (RTM_GCC2 "RTM is compiled with gcc2" OFF)
-option (RTM_OMNIORB_40 "omniORB version is 4.0" OFF)
-option (RTM_OMNIORB_41 "omniORB version is 4.1" OFF)
-option (RTM_OMNIORB_42 "omniORB version is 4.2" OFF)
-option (RTM_OS_CYGWIN "OS is Cygwin" OFF)
-option (RTM_OS_DARWIN "OS is Max OS X" OFF)
-option (RTM_OS_FREEBSD "OS is FreeBSD" OFF)
-option (RTM_OS_HPUX "OS is HP-UX" OFF)
-option (RTM_OS_IRIX "OS is IRIX" OFF)
-option (RTM_OS_LINUX "OS is Linux" OFF)
-option (RTM_OS_VXWORKS "OS is VxWorks" OFF)
-option (RTM_OS_OSF1 "OS is OSF1" OFF)
-option (RTM_OS_QNX "OS is QNX" OFF)
-option (RTM_OS_SUNOS "OS is SunOS" OFF)
-option (RTM_OS_WIN32 "OS is Windows" OFF)
-option (RTM_RTDSC "RDTSC is enable" OFF)
-option (WITH_DMALLOC "Define if using the dmalloc debugging malloc package" OFF)
-option (_REENTRANT "Multi Thread Support" ON)
 
-
-set(LT_OBJDIR .libs/ CACHE STRING "Define to the sub-directory in which libtool stores uninstalled libraries.")
+set(LT_OBJDIR .libs/)
 
 if(VXWORKS)
-	set (OSVERSION ON)
-	set(OSVERSION ${VXWORKS_MAJOR}${VXWORKS_MINOR} CACHE STRING "OS version.")
-	set (RTM_OS_VXWORKS ON)
-	set (STDC_HEADERS ON)
-#	set (STDC_HEADERS_VALUE 1 CACHE STRING "Define to 1 if you have the ANSI C header files.")
+	set(OSVERSION ON)
+	set(OSVERSION ${VXWORKS_MAJOR}${VXWORKS_MINOR})
+	set(RTM_OS_VXWORKS ON)
+	set(STDC_HEADERS ON)
+#	set(STDC_HEADERS_VALUE 1)
 elseif(UNIX)
-	set (STDC_HEADERS OFF)
-	set (OSVERSION OFF)
+	set(STDC_HEADERS OFF)
+	set(OSVERSION OFF)
 	if(${CMAKE_SYSTEM_NAME}test MATCHES QNXtest)
-		set (RTM_OS_QNX ON)
+		set(RTM_OS_QNX ON)
 	else()
-		set (RTM_OS_LINUX ON)
+		set(RTM_OS_LINUX ON)
 	endif()
 elseif(WIN32)
-	set (STDC_HEADERS OFF)
-	set (OSVERSION OFF)
-	set (RTM_OS_WIN32 ON)
+	set(STDC_HEADERS OFF)
+	set(OSVERSION OFF)
+	set(RTM_OS_WIN32 ON)
 endif()
 
 
@@ -88,11 +163,11 @@ if(CORBA MATCHES "ORBexpress")
 	set (ORB_IS_ORBEXPRESS ON)
 elseif(CORBA MATCHES "omniORB")
 	if(OMNI_VERSION MATCHES "40")
-		set (RTM_OMNIORB_40 ON)
+		set(RTM_OMNIORB_40 ON)
 	elseif(OMNI_VERSION MATCHES "41")
-		set (RTM_OMNIORB_41 ON)
+		set(RTM_OMNIORB_41 ON)
 	else()
-		set (RTM_OMNIORB_42 ON)
+		set(RTM_OMNIORB_42 ON)
 	endif()
 	set (ORB_IS_OMNIORB ON)
 elseif(CORBA MATCHES "TAO")
@@ -113,8 +188,7 @@ set (RTC_CORBA_CXXMAPPING11 ON)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config_rtc_cmake.h.in ${PROJECT_BINARY_DIR}/config_rtc.h)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/version_cmake.h.in ${PROJECT_BINARY_DIR}/version.h)
 
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config_rtc_cmake.h.in ${CMAKE_CURRENT_SOURCE_DIR}/config_rtc.h)
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/version_cmake.h.in ${CMAKE_CURRENT_SOURCE_DIR}/version.h)
+
 
 
 
@@ -400,25 +474,7 @@ endif(OBSERVER_ENABLE)
 set(rtm_srcs ${rtm_srcs} ${SKEL_IDL_SRCS})
 set_source_files_properties(${SKEL_IDL_SRCS} PROPERTIES GENERATED 1)
 
-if(WIN32)
-	set(DEF_FILE_NAME  ${RTM_PROJECT_NAME}.def)
-	ADD_DEFINITIONS(-DLIBRARY_EXPORTS)
-	add_library(${RTM_PROJECT_NAME}_static STATIC ${rtm_srcs} )
-	add_dependencies(${RTM_PROJECT_NAME}_static ALL_IDL_TGT)
 
-	add_custom_command(TARGET ${RTM_PROJECT_NAME}_static 
-		POST_BUILD
-		COMMAND python ${MAKE_DEF_COMMAND} $<TARGET_FILE:${RTM_PROJECT_NAME}_static> ${RTM_PROJECT_NAME} ${RTM_SHORT_VERSION} ${DEF_FILE_NAME}
-		WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-	)
-
-	install(TARGETS ${RTM_PROJECT_NAME}_static LIBRARY DESTINATION ${INSTALL_RTM_LIB_DIR}
-					ARCHIVE DESTINATION ${INSTALL_RTM_LIB_DIR}
-					RUNTIME DESTINATION ${INSTALL_RTM_LIB_DIR}
-					COMPONENT openrtm)
-	set(rtm_srcs ${rtm_srcs} ${CMAKE_CURRENT_BINARY_DIR}/${DEF_FILE_NAME})
-	
-endif(WIN32)
 
 
 if(VXWORKS)
@@ -429,9 +485,34 @@ if(VXWORKS)
 					COMPONENT openrtm)
 
 else(VXWORKS)
+	if(WIN32)
+		add_definitions(-DLIBRARY_EXPORTS)
+	endif(WIN32)
+
+	add_library(${RTM_PROJECT_NAME}_objlib OBJECT ${rtm_srcs})
+	set_property(TARGET ${RTM_PROJECT_NAME}_objlib PROPERTY POSITION_INDEPENDENT_CODE 1)
+	add_dependencies(${RTM_PROJECT_NAME}_objlib ${COIL_PROJECT_NAME})
+	add_dependencies(${RTM_PROJECT_NAME}_objlib ALL_IDL_TGT)
+
+	add_library(${RTM_PROJECT_NAME}-static STATIC $<TARGET_OBJECTS:${RTM_PROJECT_NAME}_objlib>)
+	add_dependencies(${RTM_PROJECT_NAME}-static ${COIL_PROJECT_NAME})
+	add_dependencies(${RTM_PROJECT_NAME}-static ALL_IDL_TGT)
+	add_dependencies(${RTM_PROJECT_NAME}-static ${RTM_PROJECT_NAME}_objlib)
+
+	if(WIN32)
+		set(DEF_FILE_NAME ${RTM_PROJECT_NAME}.def)
+
+		add_custom_command(TARGET ${RTM_PROJECT_NAME}-static 
+			POST_BUILD
+			COMMAND python ${MAKE_DEF_COMMAND} $<TARGET_FILE:${RTM_PROJECT_NAME}-static> ${RTM_PROJECT_NAME} ${RTM_SHORT_VERSION} ${DEF_FILE_NAME}
+			WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+		)
 	
-	add_library(${RTM_PROJECT_NAME} SHARED ${rtm_srcs})
+	endif(WIN32)
+
+	add_library(${RTM_PROJECT_NAME} SHARED $<TARGET_OBJECTS:${RTM_PROJECT_NAME}_objlib> ${CMAKE_CURRENT_BINARY_DIR}/${DEF_FILE_NAME})
 	set_target_properties(${RTM_PROJECT_NAME} PROPERTIES DEBUG_POSTFIX d)
+	add_dependencies(${RTM_PROJECT_NAME} ${RTM_PROJECT_NAME}_objlib)
 
 
 	
@@ -447,24 +528,44 @@ else(VXWORKS)
 		set_target_properties(${RTM_PROJECT_NAME} PROPERTIES VERSION ${RTM_VERSION} SOVERSION ${RTM_SO_VERSION})
 
 
-		add_library(${RTM_PROJECT_NAME}-static STATIC ${rtm_srcs})
+		
 		set_target_properties(${RTM_PROJECT_NAME}-static PROPERTIES DEBUG_POSTFIX d)
 		set_target_properties(${RTM_PROJECT_NAME}-static PROPERTIES OUTPUT_NAME ${RTM_PROJECT_NAME} CLEAN_DIRECT_OUTPUT 1)
 		install(TARGETS ${RTM_PROJECT_NAME}-static LIBRARY DESTINATION ${INSTALL_RTM_LIB_DIR}
 						ARCHIVE DESTINATION ${INSTALL_RTM_LIB_DIR}
 						RUNTIME DESTINATION ${INSTALL_RTM_BIN_DIR}
 						COMPONENT openrtm)
-		add_dependencies(${RTM_PROJECT_NAME}-static ${COIL_PROJECT_NAME})
-		add_dependencies(${RTM_PROJECT_NAME}-static ${RTCSKEL_PROJECT_NAME})
 
 	elseif(WIN32)
 		add_dependencies(${RTM_PROJECT_NAME} ALL_IDL_TGT)
 		set_source_files_properties(${DEF_FILE_NAME} PROPERTIES GENERATED 1)
-		add_dependencies(${RTM_PROJECT_NAME} ${RTM_PROJECT_NAME}_static)
+		add_dependencies(${RTM_PROJECT_NAME} ${RTM_PROJECT_NAME}-static)
 		install(TARGETS ${RTM_PROJECT_NAME} LIBRARY DESTINATION ${INSTALL_RTM_LIB_DIR}
 						ARCHIVE DESTINATION ${INSTALL_RTM_LIB_DIR}
 						RUNTIME DESTINATION ${INSTALL_RTM_LIB_DIR}
 						COMPONENT openrtm)
+
+		install(TARGETS ${RTM_PROJECT_NAME}-static LIBRARY DESTINATION ${INSTALL_RTM_LIB_DIR}
+						ARCHIVE DESTINATION ${INSTALL_RTM_LIB_DIR}
+						RUNTIME DESTINATION ${INSTALL_RTM_LIB_DIR}
+						COMPONENT openrtm)
+
+		foreach(data_type ${DATA_TYPE_LIST})
+			set(RTC_DATA_TYPE RTC::${data_type})
+			set(filename ${PROJECT_BINARY_DIR}/${data_type}Factory.cpp)
+			set(DT_TARGET ${data_type}Factory_${RTM_VC_VER})
+			configure_file(${CMAKE_CURRENT_SOURCE_DIR}/SerializerFactory.cpp.in ${filename} @ONLY)
+			add_library(${DT_TARGET} SHARED ${filename})
+			target_link_libraries(${DT_TARGET} ${ORB_LIBRARIES} ${COIL_PROJECT_NAME} ${RTM_LINKER_OPTION} ${RTM_PROJECT_NAME})
+			set_target_properties(${DT_TARGET} PROPERTIES DEBUG_POSTFIX d)
+			add_dependencies(${DT_TARGET} ${RTM_PROJECT_NAME})
+			set(DATATYPE_FACTORIES ${DATATYPE_FACTORIES} ${DT_TARGET})
+			install(TARGETS ${DT_TARGET} LIBRARY DESTINATION ${INSTALL_RTM_LIB_DIR}
+							ARCHIVE DESTINATION ${INSTALL_RTM_LIB_DIR}
+							RUNTIME DESTINATION ${INSTALL_RTM_LIB_DIR}
+							COMPONENT openrtm)
+		endforeach()
+		set(DATATYPE_FACTORIES ${DATATYPE_FACTORIES} PARENT_SCOPE)
 
 	endif()
 endif(VXWORKS)
