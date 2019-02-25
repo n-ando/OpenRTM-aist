@@ -19,6 +19,7 @@ addons:
 
 env:
   - TARGET_DIST=ubuntu TARGET_VER=1604
+  - TARGET_DIST=debian TARGET_VER=8
 
 #branches:
 #  only:
