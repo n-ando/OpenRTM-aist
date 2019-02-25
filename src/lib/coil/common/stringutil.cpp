@@ -825,7 +825,7 @@ namespace coil
 	  }
 
 
-	  std::string ret_str = "";
+	  std::string ret_str;
 	  for (vstring::iterator itr = ret.begin(); itr != ret.end(); ++itr)
 	  {
 		  ret_str = ret_str + (*itr);
