@@ -389,7 +389,7 @@ namespace RTC
     if (!m_svc)
       { // If start() is called first time, start the worker thread.
         m_svc = true;
-        this->open(0);
+        this->open(nullptr);
       }
     return RTC::RTC_OK;
   }

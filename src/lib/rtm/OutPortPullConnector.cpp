@@ -42,12 +42,12 @@ namespace RTC
       m_sync_readwrite(false)
   {
     // create buffer
-    if (m_buffer == 0)
+    if (m_buffer == nullptr)
       {
         m_buffer = createBuffer(info);
       }
 
-    if (m_provider == 0 || m_buffer == 0) { throw std::bad_alloc(); }
+    if (m_provider == nullptr || m_buffer == nullptr) { throw std::bad_alloc(); }
 
     m_buffer->init(info.properties.getNode("buffer"));
     m_provider->setBuffer(m_buffer);
@@ -90,7 +90,7 @@ namespace RTC
   OutPortPullConnector::write(ByteDataStreamBase* data)
   {
 
-    if (m_buffer == 0)
+    if (m_buffer == nullptr)
     {
         return PRECONDITION_NOT_MET;
     }
@@ -136,7 +136,7 @@ namespace RTC
   CdrBufferBase::ReturnCode
   OutPortPullConnector::read(ByteData &data)
   {
-      if (m_buffer == 0)
+      if (m_buffer == nullptr)
       {
           return CdrBufferBase::PRECONDITION_NOT_MET;
       }
@@ -195,20 +195,20 @@ namespace RTC
   {
     RTC_TRACE(("disconnect()"));
     // delete provider
-    if (m_provider != 0)
+    if (m_provider != nullptr)
       {
         OutPortProviderFactory& cfactory(OutPortProviderFactory::instance());
         cfactory.deleteObject(m_provider);
       }
-    m_provider = 0;
+    m_provider = nullptr;
 
     // delete buffer
-    if (m_buffer != 0)
+    if (m_buffer != nullptr)
       {
         CdrBufferFactory& bfactory(CdrBufferFactory::instance());
         bfactory.deleteObject(m_buffer);
       }
-    m_buffer = 0;
+    m_buffer = nullptr;
 
     return PORT_OK;
   }

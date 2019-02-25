@@ -83,7 +83,7 @@ namespace coil
     timeval tv;
     tv.tv_sec = interval.sec();
     tv.tv_usec = interval.usec();
-    return ::select(0, 0, 0, 0, &tv);
+    return ::select(0, nullptr, nullptr, nullptr, &tv);
   }
 
   /*!
@@ -160,7 +160,7 @@ namespace coil
   inline TimeValue gettimeofday()
   {
     timeval tv;
-    ::gettimeofday(&tv, 0);
+    ::gettimeofday(&tv, nullptr);
     return TimeValue(tv.tv_sec, tv.tv_usec);
   }
 

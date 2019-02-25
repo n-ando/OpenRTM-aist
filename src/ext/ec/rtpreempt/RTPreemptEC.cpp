@@ -188,7 +188,7 @@ namespace RTC_exp
         if (getSleepTime(sleeptime, ts0, ts1) == true)
           {
             clock_nanosleep(CLOCK_MONOTONIC, !TIMER_ABSTIME,
-                            &sleeptime, NULL);
+                            &sleeptime, nullptr);
             if (count > 1000)
               {
                 clock_gettime(CLOCK_MONOTONIC ,&ts3);
@@ -418,7 +418,7 @@ namespace RTC_exp
       if (!m_svc)
         {
           m_svc = true;
-          this->open(0);
+          this->open(nullptr);
         }
     }
     if (isAllNextState(RTC::INACTIVE_STATE))

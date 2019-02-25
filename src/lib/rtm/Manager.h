@@ -2281,7 +2281,7 @@ namespace RTC
        */
       explicit OrbRunner(CORBA::ORB_ptr orb) : m_pORB(orb)
       {
-        open(0);
+        open(nullptr);
       };
 
       /*!
@@ -2433,7 +2433,7 @@ namespace RTC
        */
       void terminate()
       {
-        open(0);
+        open(nullptr);
       }
 
       /*!

@@ -127,7 +127,7 @@ namespace RTC
     InPortPushConnector(ConnectorInfo info,
                         InPortProvider* provider,
                         ConnectorListeners& listeners,
-                        CdrBufferBase* buffer = 0);
+                        CdrBufferBase* buffer = nullptr);
 
     /*!
      * @if jp

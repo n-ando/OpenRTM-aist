@@ -85,7 +85,7 @@ namespace RTC
 
 	RTC_impl::RTObjectStateMachine* rtobj = m_worker.findComponent(comp);
 
-	if (rtobj == NULL)
+	if (rtobj == nullptr)
 	{
 		return RTC::BAD_PARAMETER;
 	}
@@ -136,7 +136,7 @@ namespace RTC
 
 	RTC_impl::RTObjectStateMachine* rtobj = m_worker.findComponent(comp);
 
-	if (rtobj == NULL)
+	if (rtobj == nullptr)
 	{
 		  return RTC::BAD_PARAMETER;
 	}
@@ -189,7 +189,7 @@ namespace RTC
 
 	RTC_impl::RTObjectStateMachine* rtobj = m_worker.findComponent(comp);
 
-	if (rtobj == NULL)
+	if (rtobj == nullptr)
 	{
 		return RTC::BAD_PARAMETER;
 	}

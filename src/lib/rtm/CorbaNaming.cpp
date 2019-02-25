@@ -588,7 +588,7 @@ namespace RTC
   void CorbaNaming::list(const char* string_name,
                          CosNaming::BindingList_var& bl)
   {
-    if (string_name == 0) { return; }
+    if (string_name == nullptr) { return; }
     CORBA::Object_var obj = resolveStr(string_name);
     CosNaming::NamingContext_var nc;
     nc = CosNaming::NamingContext::_narrow(obj);
@@ -639,8 +639,8 @@ namespace RTC
                                const char* string_kind,
                                CosNaming::BindingList_var& bl)
   {
-    if (string_name == 0) { bl->length(0); return; }
-    if (string_kind == 0) { bl->length(0); return; }
+    if (string_name == nullptr) { bl->length(0); return; }
+    if (string_kind == nullptr) { bl->length(0); return; }
     std::string kind(string_kind);
 
     CosNaming::BindingList_var tmp_bl;  // = new CosNaming::BindingList();

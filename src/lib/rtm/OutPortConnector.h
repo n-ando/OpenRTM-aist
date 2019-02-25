@@ -217,7 +217,7 @@ namespace RTC
     ReturnCode write(DataType& data)
     {
 
-      if (m_directInPort != NULL)
+      if (m_directInPort != nullptr)
         {
           DirectInPortBase<DataType>* inport = dynamic_cast<DirectInPortBase<DataType>*>(m_directInPort->getDirectPort());
           if(inport)

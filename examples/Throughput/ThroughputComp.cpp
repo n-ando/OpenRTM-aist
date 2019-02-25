@@ -40,7 +40,7 @@ void MyModuleInit(RTC::Manager* manager)
   // Create a component
   comp = manager->createComponent("Throughput");
 
-  if (comp==NULL)
+  if (comp==nullptr)
   {
     std::cerr << "Component create failed." << std::endl;
     abort();

@@ -33,7 +33,7 @@ namespace RTC
    * @endif
    */
   InPortCorbaCdrProvider::InPortCorbaCdrProvider(void)
-      : m_buffer(0), m_connector(NULL)
+      : m_buffer(nullptr), m_connector(nullptr)
   {
     // PortProfile setting
     setInterfaceType("corba_cdr");
@@ -155,7 +155,7 @@ namespace RTC
   {
     RTC_PARANOID(("InPortCorbaCdrProvider::put()"));
 
-    if (m_connector == NULL)
+    if (m_connector == nullptr)
       {
         ByteData cdr;
         cdr.writeData((unsigned char*)data.get_buffer(), (CORBA::ULong)data.length());
