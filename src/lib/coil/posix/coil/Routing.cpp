@@ -17,7 +17,7 @@
  *
  */
 
-#include <stdio.h>
+#include <cstdio>
 #include <netdb.h>       // gethostbyname
 #include <arpa/inet.h>   // inet_ntoa
 #include <netinet/in.h>  // sockaddr_in

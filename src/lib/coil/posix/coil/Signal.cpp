@@ -19,7 +19,7 @@
 
 #include <coil/config_coil.h>
 #include <coil/Signal.h>
-#include <string.h>
+#include <cstring>
 
 #ifdef COIL_OS_FREEBSD
 #define _SIGSET_NWORDS _SIG_WORDS

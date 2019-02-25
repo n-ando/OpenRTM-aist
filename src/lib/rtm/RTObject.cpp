@@ -16,7 +16,7 @@
  *
  */
 
-#include <assert.h>
+#include <cassert>
 #include <rtm/RTObject.h>
 #include <rtm/SdoConfiguration.h>
 #include <rtm/CORBA_SeqUtil.h>

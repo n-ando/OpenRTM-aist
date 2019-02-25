@@ -22,7 +22,7 @@
 #include <rtm/NVUtil.h>
 #include <rtm/CORBA_SeqUtil.h>
 #include <rtm/CorbaConsumer.h>
-#include <assert.h>
+#include <cassert>
 #include <coil/stringutil.h>
 
 

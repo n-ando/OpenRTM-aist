@@ -27,7 +27,7 @@
 #include <rtm/idl/DataPortSkel.h>
 #include <rtm/ConnectorListener.h>
 
-#include <assert.h>
+#include <cassert>
 #include <iostream>
 #include <string>
 

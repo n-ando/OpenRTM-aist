@@ -28,7 +28,7 @@
 #include <algorithm>
 #endif // RTM_OS_LINUX
 
-#include <string.h>
+#include <cstring>
 #include <algorithm>
 #include <iostream>
 #include <string>

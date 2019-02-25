@@ -10,7 +10,7 @@
 #include "MyServiceConsumer.h"
 #include <rtm/CORBA_SeqUtil.h>
 #include <vector>
-#include <stdlib.h>
+#include <cstdlib>
 #include <coil/Async.h>
 #include <functional>
 

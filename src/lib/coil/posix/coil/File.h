@@ -24,12 +24,12 @@
 
 #include <dirent.h>
 #include <libgen.h>
-#include <stdio.h>
+#include <cstdio>
 #include <sys/types.h>
 #include <string>
 #include <cstring>
 
-#include <string.h>
+#include <cstring>
 #include <sys/stat.h>
 
 

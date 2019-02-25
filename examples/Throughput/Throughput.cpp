@@ -10,7 +10,7 @@
  */
 
 #include "Throughput.h"
-#include <math.h>
+#include <cmath>
 #include <coil/Async.h>
 
 #define DEBUG 1

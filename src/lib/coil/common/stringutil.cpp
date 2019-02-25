@@ -19,10 +19,10 @@
 
 #include <coil/stringutil.h>
 
-#include <limits.h>
-#include <stdarg.h>
-#include <stdio.h>
-#include <string.h>
+#include <climits>
+#include <cstdarg>
+#include <cstdio>
+#include <cstring>
 #include <algorithm>
 #include <iostream>
 #include <cstring>

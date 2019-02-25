@@ -25,13 +25,13 @@
 #include <map>
 #include <sstream>
 #include <cassert>
-#include <errno.h>
+#include <cerrno>
 #include <cstdlib>
 
 #if defined (_MSC_VER) && (_MSC_VER <=1500)  // VC2008(VC9.0) or before
 #elif defined(VXWORKS_66) && !defined(__RTP__)
 #else
-#include <stdint.h>
+#include <cstdint>
 #endif
 // Cygwin's gcc does not provide wstring type
 #if defined(Cygwin) && ( __GNUC__ < 4 )

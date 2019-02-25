@@ -19,7 +19,7 @@
 #include <rtm/RTC.h>
 #include <rtm/PortAdmin.h>
 #include <rtm/CORBA_SeqUtil.h>
-#include <string.h>
+#include <cstring>
 #include <functional>
 #include <vector>
 

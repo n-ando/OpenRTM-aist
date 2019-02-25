@@ -19,13 +19,13 @@
 #ifndef RTC_IMPL_RTOBJECTSTATEMACHINE_H
 #define RTC_IMPL_RTOBJECTSTATEMACHINE_H
 
-#include <stdlib.h>
+#include <cstdlib>
 #include <rtm/SystemLogger.h>
 #include <coil/NonCopyable.h>
 #include <coil/TimeMeasure.h>
 #include <rtm/idl/RTCSkel.h>
 #include <rtm/StateMachine.h>
-#include <assert.h>
+#include <cassert>
 #include <iostream>
 
 #define NUM_OF_LIFECYCLESTATE 4
