@@ -441,7 +441,6 @@ namespace coil
         this->m_maxLevel = x.m_maxLevel;
         this->m_logLevel = x.m_logLevel;
         this->ostream_type = x.ostream_type;
-        this->m_lockEnable = x.m_lockEnable;
     }
 
     /*!
@@ -473,7 +472,6 @@ namespace coil
         this->m_maxLevel = x.m_maxLevel;
         this->m_logLevel = x.m_logLevel;
         this->ostream_type = x.ostream_type;
-        this->m_lockEnable = x.m_lockEnable;
         return *this;
     }
 
