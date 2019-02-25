@@ -163,7 +163,7 @@ namespace RTC
                          "dataport.data_service.outport_ior"))
       {
         RTC_DEBUG(("dataport.data_service.outport_ior found."));
-        const char* ior(NULL);
+        const char* ior(nullptr);
         properties[index].value >>= ior;
 
         CORBA::ORB_var orb = ::RTC::Manager::instance().getORB();

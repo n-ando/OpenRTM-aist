@@ -25,13 +25,13 @@
 #include <map>
 #include <sstream>
 #include <cassert>
-#include <errno.h>
+#include <cerrno>
 #include <cstdlib>
 
 #if defined (_MSC_VER) && (_MSC_VER <=1500)  // VC2008(VC9.0) or before
 #elif defined(VXWORKS_66) && !defined(__RTP__)
 #else
-#include <stdint.h>
+#include <cstdint>
 #endif
 // Cygwin's gcc does not provide wstring type
 #if defined(Cygwin) && ( __GNUC__ < 4 )
@@ -634,7 +634,7 @@ namespace coil
   template <typename To>
   bool stringTo(To& val, const char* str)
   {
-    if (str == 0) { return false; }
+    if (str == nullptr) { return false; }
 
     std::stringstream s;
     if ((s << str).fail()) { return false; }
@@ -892,5 +892,5 @@ namespace coil
   */
   std::string replaceEnv(std::string str);
   
-}; // namepsace coil
+}  // namespace coil
 #endif  // COIL_STRINGUTIL_H

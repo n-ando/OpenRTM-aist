@@ -59,9 +59,9 @@ namespace coil
      *
      * @endif
      */
-    explicit Mutex(const char * const name = 0)
+    explicit Mutex(const char * const name = nullptr)
     {
-      ::pthread_mutex_init(&mutex_, 0);
+      ::pthread_mutex_init(&mutex_, nullptr);
     }
 
     /*!

@@ -167,7 +167,7 @@ namespace RTC
   {
   protected:
     Link(_StateInstance & instance)
-      : Macho::Link<C, P>(instance), rtComponent(NULL)
+      : Macho::Link<C, P>(instance), rtComponent(nullptr)
     {
     }
     virtual ~Link()
@@ -176,10 +176,10 @@ namespace RTC
 
     void setrtc()
     {
-      if (rtComponent != NULL) { return; }
+      if (rtComponent != nullptr) { return; }
       const RTC::Machine<typename P::TOP>* machine =
         dynamic_cast<const RTC::Machine<typename P::TOP>*>(&P::machine());
-      if (machine != NULL) { rtComponent = machine->rtComponent; }
+      if (machine != nullptr) { rtComponent = machine->rtComponent; }
     }
   public:
     typedef Link<C, P> LINK;
@@ -187,7 +187,7 @@ namespace RTC
     virtual void entry()
     {
       setrtc();
-      if (rtComponent == NULL)
+      if (rtComponent == nullptr)
         {
           onEntry();
         }
@@ -201,7 +201,7 @@ namespace RTC
     virtual void init()
     {
       setrtc();
-      if (rtComponent == NULL)
+      if (rtComponent == nullptr)
         {
           onInit();
         }
@@ -214,7 +214,7 @@ namespace RTC
     virtual void exit()
     {
       setrtc();
-      if (rtComponent == NULL)
+      if (rtComponent == nullptr)
         {
           onExit();
         }
@@ -232,5 +232,5 @@ namespace RTC
 
     RTObject_impl* rtComponent;
   };
-};
+}  // namespace RTC
 #endif // RTC_STATICFSM_H

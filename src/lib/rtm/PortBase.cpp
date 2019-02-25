@@ -17,7 +17,7 @@
  *
  */
 
-#include <assert.h>
+#include <cassert>
 #include <memory>
 #include <coil/UUID.h>
 #include <rtm/PortBase.h>
@@ -40,14 +40,14 @@ namespace RTC
     : rtclog(name),
       m_ownerInstanceName("unknown"),
       m_connectionLimit(-1),
-      m_onPublishInterfaces(0),
-      m_onSubscribeInterfaces(0),
-      m_onConnected(0),
-      m_onUnsubscribeInterfaces(0),
-      m_onDisconnected(0),
-      m_onConnectionLost(0),
-      m_portconnListeners(NULL),
-	  m_directport(NULL)
+      m_onPublishInterfaces(nullptr),
+      m_onSubscribeInterfaces(nullptr),
+      m_onConnected(nullptr),
+      m_onUnsubscribeInterfaces(nullptr),
+      m_onDisconnected(nullptr),
+      m_onConnectionLost(nullptr),
+      m_portconnListeners(nullptr),
+	  m_directport(nullptr)
   {
     m_objref = this->_this();
     // Now Port name is <instance_name>.<port_name>. r1648
@@ -276,7 +276,7 @@ namespace RTC
         RTC_ERROR(("publishInterfaces() in notify_connect() failed."));
       }
     onPublishInterfaces(getName(), connector_profile, retval[0]);
-    if (m_onPublishInterfaces != 0)
+    if (m_onPublishInterfaces != nullptr)
       {
         (*m_onPublishInterfaces)(connector_profile);
       }
@@ -292,7 +292,7 @@ namespace RTC
 
     // subscribe interface from the ConnectorProfile's information
 
-    if (m_onSubscribeInterfaces != 0)
+    if (m_onSubscribeInterfaces != nullptr)
       {
         (*m_onSubscribeInterfaces)(connector_profile);
       }
@@ -331,7 +331,7 @@ namespace RTC
       }
 
     // connection established without errors
-    if (m_onConnected != 0)
+    if (m_onConnected != nullptr)
       {
         (*m_onConnected)(connector_profile);
       }
@@ -453,14 +453,14 @@ namespace RTC
     ReturnCode_t retval(disconnectNext(prof));
     onDisconnectNextport(getName(), prof, retval);
 
-    if (m_onUnsubscribeInterfaces != 0)
+    if (m_onUnsubscribeInterfaces != nullptr)
       {
         (*m_onUnsubscribeInterfaces)(prof);
       }
     onUnsubscribeInterfaces(getName(), prof);
     unsubscribeInterfaces(prof);
 
-    if (m_onDisconnected != 0)
+    if (m_onDisconnected != nullptr)
       {
         (*m_onDisconnected)(prof);
       }

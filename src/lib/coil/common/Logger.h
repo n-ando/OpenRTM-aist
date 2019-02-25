@@ -23,8 +23,8 @@
 #include <coil/Mutex.h>
 #include <coil/Guard.h>
 
-#include <limits.h>
-#include <string.h>
+#include <climits>
+#include <cstring>
 #include <fstream>
 #include <iostream>
 #include <string>

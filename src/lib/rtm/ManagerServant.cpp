@@ -208,7 +208,7 @@ namespace RTM
 #endif
       }
 
-    if (0)
+    if (false)
       {
         // copy slaves' module profiles
         Guard gurad(m_slaveMutex);
@@ -266,7 +266,7 @@ namespace RTM
 #endif
       }
 
-    if (0)
+    if (false)
       {
         // copy slaves' module profile
         Guard guard(m_slaveMutex);
@@ -324,7 +324,7 @@ namespace RTM
 #endif
       }
 
-    if (0)
+    if (false)
       {
         // copy slaves' factory profile
         Guard guard(m_slaveMutex);
@@ -521,7 +521,7 @@ namespace RTM
 		RTC_DEBUG(("Creating component on this manager"));
 		RTC_DEBUG(("arg: %s", create_arg.c_str()));
 		RTC::RTObject_impl* rtc = m_mgr.createComponent(create_arg.c_str());
-		if (rtc != NULL)
+		if (rtc != nullptr)
 		{
 			return RTC::RTObject::_duplicate(rtc->getObjRef());
 		}
@@ -543,7 +543,7 @@ namespace RTM
     RTC_TRACE(("delete_component(%s)", instance_name));
 
     RTC::RTObject_impl* comp = m_mgr.getComponent(instance_name);
-    if (comp == NULL)
+    if (comp == nullptr)
       {
         RTC_WARN(("No such component exists: %s", instance_name));
         return RTC::BAD_PARAMETER;
@@ -1640,4 +1640,4 @@ namespace RTM
   {
 	  return m_version;
   }
-};
+}  // namespace RTM;

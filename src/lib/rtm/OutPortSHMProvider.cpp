@@ -32,9 +32,9 @@ namespace RTC
    * @endif
    */
   OutPortSHMProvider::OutPortSHMProvider(void)
-   : m_buffer(0),
+   : m_buffer(nullptr),
      m_memory_size(0),
-     m_connector(NULL)
+     m_connector(nullptr)
   {
     // PortProfile setting
     setInterfaceType("shared_memory");
@@ -91,7 +91,7 @@ namespace RTC
 	std::string ds = prop["shem_default_size"];
 	m_memory_size = string_to_MemorySize(ds);
 
-	if (prop.hasKey("serializer") == NULL)
+	if (prop.hasKey("serializer") == nullptr)
 	{
 		m_endian = true;
 		return;
@@ -166,7 +166,7 @@ namespace RTC
     // at least the output "data" area should be allocated
 
 
-    if (m_buffer == 0)
+    if (m_buffer == nullptr)
       {
         onSenderError();
         return ::OpenRTM::UNKNOWN_ERROR;

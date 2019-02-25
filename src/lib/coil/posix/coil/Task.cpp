@@ -112,7 +112,7 @@ namespace coil
   {
     if (m_count > 0)
       {
-        void* retval = NULL;
+        void* retval = nullptr;
         ::pthread_join(m_thread, &retval);
       }
     return 0;
@@ -178,7 +178,7 @@ namespace coil
     Task* t = (coil::Task*)args;
     t->svc();
     t->finalize();
-    return 0;
+    return nullptr;
   }
 };  // namespace coil
 

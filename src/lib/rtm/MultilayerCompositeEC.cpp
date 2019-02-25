@@ -31,7 +31,7 @@
 #include <algorithm>
 #endif // RTM_OS_LINUX
 
-#include <string.h>
+#include <cstring>
 #include <algorithm>
 #include <iostream>
 #include <string>
@@ -48,7 +48,7 @@ namespace RTC_exp
    */
   MultilayerCompositeEC::
   MultilayerCompositeEC()
-  : PeriodicExecutionContext(), m_ownersm(NULL)
+  : PeriodicExecutionContext(), m_ownersm(nullptr)
   {
     RTC_TRACE(("MultilayerCompositeEC()"));
   }
@@ -185,7 +185,7 @@ namespace RTC_exp
               {
                   
                   RTC::RTObject_impl* comp = mgr.getComponent(m.c_str());
-                  if (comp == NULL)
+                  if (comp == nullptr)
                   {
                       RTC_ERROR(("no RTC found: %s", m.c_str()));
                       continue;
@@ -220,7 +220,7 @@ namespace RTC_exp
       RTC::PeriodicTaskFactory& factory(RTC::PeriodicTaskFactory::instance());
 
       coil::PeriodicTaskBase* task = factory.createObject(prop.getProperty("thread_type", "default"));
-      if (task == NULL)
+      if (task == nullptr)
       {
           RTC_ERROR(("Task creation failed: %s",
               prop.getProperty("thread_type", "default").c_str()));
@@ -307,7 +307,7 @@ namespace RTC_exp
       while (rtc != m_rtcs.end())
       {
           RTC_impl::RTObjectStateMachine* comp = m_ec->findComponent(*rtc);
-          if (comp != NULL)
+          if (comp != nullptr)
           {
               rtc = m_rtcs.erase(rtc);
               m_comps.push_back(comp);

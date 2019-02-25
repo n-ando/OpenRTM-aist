@@ -19,7 +19,7 @@
 #include <rtm/RTC.h>
 #include <rtm/PortAdmin.h>
 #include <rtm/CORBA_SeqUtil.h>
-#include <string.h>
+#include <cstring>
 #include <functional>
 #include <vector>
 
@@ -288,7 +288,7 @@ namespace RTC
         m_pPOA->deactivate_object(oid);
         port.setPortRef(RTC::PortService::_nil());
 
-        return m_portServants.unregisterObject(tmp) == NULL ? false : true;
+        return m_portServants.unregisterObject(tmp) == nullptr ? false : true;
       }
     catch (...)
       {

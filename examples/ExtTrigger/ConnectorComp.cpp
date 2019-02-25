@@ -22,7 +22,7 @@
 #include <rtm/NVUtil.h>
 #include <rtm/CORBA_SeqUtil.h>
 #include <rtm/CorbaConsumer.h>
-#include <assert.h>
+#include <cassert>
 #include <coil/stringutil.h>
 
 
@@ -63,7 +63,7 @@ int main (int argc, char** argv)
 {
   int _argc(0);
   char** _argv;
-  _argv = 0;
+  _argv = nullptr;
 
   std::string subs_type;
   std::string period;
@@ -195,7 +195,7 @@ int main (int argc, char** argv)
   NVUtil::dump(prof.properties);
 
   std::string cmd;
-  while (1)
+  while (true)
     {
       try
 	{

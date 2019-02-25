@@ -732,7 +732,7 @@ namespace RTC_exp
     template <class T>
     void getProperty(coil::Properties& prop, const char* key, T& value)
     {
-    if (prop.findNode(key) != 0)
+    if (prop.findNode(key) != nullptr)
       {
         T tmp;
         if (coil::stringTo(tmp, prop[key].c_str()))
@@ -810,7 +810,7 @@ namespace RTC_exp
     int m_policy;
     int m_waitoffset;
   }; // class RTPreemptEC
-}; // namespace RTC
+}  // namespace RTC_exp
 
 #ifdef WIN32
 #pragma warning( default : 4290 )

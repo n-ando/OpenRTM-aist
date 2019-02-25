@@ -26,5 +26,5 @@ namespace std
       }
     return is;
   }
-}
+}  // namespace std
 

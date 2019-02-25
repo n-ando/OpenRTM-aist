@@ -17,7 +17,7 @@
  *
  */
 
-#include <stdio.h>
+#include <cstdio>
 #include <netdb.h>       // gethostbyname
 #include <arpa/inet.h>   // inet_ntoa
 #include <netinet/in.h>  // sockaddr_in
@@ -85,7 +85,7 @@ namespace coil
 #endif  // COIL_OS_IS_LINUX
 
     FILE* fp;
-    if ((fp = popen(cmd.c_str(), "r")) == NULL)
+    if ((fp = popen(cmd.c_str(), "r")) == nullptr)
       {
         return false;
       }
@@ -125,7 +125,7 @@ namespace coil
 #endif  // COIL_OS_LINUX
       } while (!feof(fp));
     pclose(fp);
-    wait(NULL);
+    wait(nullptr);
     return false;
   }
 
@@ -143,7 +143,7 @@ namespace coil
     cmd += " 2> /dev/null";
 
     FILE* fp;
-    if ((fp = popen(cmd.c_str(), "r")) == NULL)
+    if ((fp = popen(cmd.c_str(), "r")) == nullptr)
       {
         return false;
       }
@@ -163,12 +163,12 @@ namespace coil
           {
             ipaddr = vs[1];
             pclose(fp);
-            wait(NULL);
+            wait(nullptr);
             return true;
           }
       } while (!feof(fp));
     pclose(fp);
-    wait(NULL);
+    wait(nullptr);
     return false;
   }
 

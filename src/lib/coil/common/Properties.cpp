@@ -39,7 +39,7 @@ namespace coil
    * @endif
    */
   Properties::Properties(const char* key, const char* value)
-    : name(key), value(value), default_value(""), root(NULL), m_empty("")
+    : name(key), value(value), default_value(""), root(nullptr), m_empty("")
   {
     leaf.clear();
   }
@@ -52,7 +52,7 @@ namespace coil
    * @endif
    */
   Properties::Properties(std::map<std::string, std::string>& defaults)
-    : name(""), value(""), default_value(""), root(NULL), m_empty("")
+    : name(""), value(""), default_value(""), root(nullptr), m_empty("")
   {
     leaf.clear();
     std::map<std::string, std::string>::iterator it(defaults.begin());
@@ -73,7 +73,7 @@ namespace coil
    * @endif
    */
   Properties::Properties(const char** defaults, long num)
-    : name(""), value(""), default_value(""), root(NULL), m_empty("")
+    : name(""), value(""), default_value(""), root(nullptr), m_empty("")
   {
     leaf.clear();
     setDefaults(defaults, num);
@@ -88,14 +88,14 @@ namespace coil
    */
   Properties::Properties(const Properties& prop)
     : name(prop.name), value(prop.value),
-      default_value(prop.default_value), root(NULL), m_empty("")
+      default_value(prop.default_value), root(nullptr), m_empty("")
   {
     std::vector<std::string> keys;
     keys = prop.propertyNames();
     for (size_t i(0), len(keys.size()); i < len; ++i)
       {
-        const Properties* node(NULL);
-        if ((node = prop.findNode(keys[i])) != NULL)
+        const Properties* node(nullptr);
+        if ((node = prop.findNode(keys[i])) != nullptr)
           {
             setDefault(keys[i],  node->default_value);
             setProperty(keys[i], node->value);
@@ -122,7 +122,7 @@ namespace coil
     for (size_t i(0), len(keys.size()); i < len; ++i)
       {
         const Properties* node(prop.findNode(keys[i]));
-        if (node != 0)
+        if (node != nullptr)
           {
             setDefault(keys[i],  node->default_value);
             setProperty(keys[i], node->value);
@@ -145,7 +145,7 @@ namespace coil
     clear();
 
     // delete myself from parent
-    if (root != NULL)
+    if (root != nullptr)
       {
         root->removeNode(name.c_str());
       }
@@ -165,8 +165,8 @@ namespace coil
   {
     std::vector<std::string> keys;
     split(key, '.', keys);
-    Properties* node(NULL);
-    if ((node = _getNode(keys, 0, this)) != NULL)
+    Properties* node(nullptr);
+    if ((node = _getNode(keys, 0, this)) != nullptr)
       {
         return (!node->value.empty()) ? node->value : node->default_value;
       }
@@ -226,8 +226,8 @@ namespace coil
   {
     std::vector<std::string> keys;
     split(key, '.', keys);
-    Properties* node(NULL);
-    if ((node = _getNode(keys, 0, this)) != NULL)
+    Properties* node(nullptr);
+    if ((node = _getNode(keys, 0, this)) != nullptr)
       {
         return node->default_value;
       }
@@ -251,7 +251,7 @@ namespace coil
     for (size_t i(0), len(keys.size()); i < len; ++i)
       {
         Properties* next(curr->hasKey(keys[i].c_str()));
-        if (next == NULL)
+        if (next == nullptr)
           {
             next = new Properties(keys[i].c_str());
             next->root = curr;
@@ -281,7 +281,7 @@ namespace coil
     for (size_t i(0), len(keys.size()); i < len; ++i)
       {
         Properties* next(curr->hasKey(keys[i].c_str()));
-        if (next == NULL)
+        if (next == nullptr)
           {
             next = new Properties(keys[i].c_str());
             next->root = curr;
@@ -459,7 +459,7 @@ namespace coil
   {
     if (key.empty())
       {
-        return 0;
+        return nullptr;
       }
     std::vector<std::string> keys;
     //    std::string value;
@@ -481,7 +481,7 @@ namespace coil
         return *this;
       }
     Properties* const leaf(findNode(key));
-    if (leaf != 0)
+    if (leaf != nullptr)
       {
         return *leaf;
       }
@@ -503,7 +503,7 @@ namespace coil
         return false;
       }
 
-    if (findNode(key) != 0)
+    if (findNode(key) != nullptr)
       {
         return false;
       }
@@ -532,7 +532,7 @@ namespace coil
           }
         ++it;
       }
-    return NULL;
+    return nullptr;
   }
 
   /*!
@@ -551,7 +551,7 @@ namespace coil
             return leaf[i];
           }
       }
-    return NULL;
+    return nullptr;
   }
 
   /*!
@@ -565,7 +565,7 @@ namespace coil
   {
     while (!leaf.empty())
       {
-        if (leaf.back() != NULL)  // recursive delete
+        if (leaf.back() != nullptr)  // recursive delete
           delete leaf.back();     // back() returns always new
       }
   }
@@ -684,9 +684,9 @@ namespace coil
   {
     Properties* next(curr->hasKey(keys[index].c_str()));
 
-    if (next == NULL)
+    if (next == nullptr)
       {
-        return NULL;
+        return nullptr;
       }
 
     if (index < keys.size() - 1)  // node
@@ -697,7 +697,7 @@ namespace coil
       {
         return next;
       }
-    return NULL;
+    return nullptr;
   }
 
   /*!
@@ -758,7 +758,7 @@ namespace coil
           }
       }
 
-    if (curr->root != NULL)
+    if (curr->root != nullptr)
       {
         if (curr->value.length() > 0)
           {

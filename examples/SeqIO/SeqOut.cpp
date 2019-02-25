@@ -8,7 +8,7 @@
  */
 
 #include "SeqOut.h"
-#include <stdlib.h>
+#include <cstdlib>
 
 // Connector Listener Dump Flag
 bool g_Listener_dump_enabled = false;

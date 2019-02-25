@@ -14,7 +14,7 @@
 #include <rtm/Manager.h>
 #include <iostream>
 #include <string>
-#include <stdlib.h>
+#include <cstdlib>
 #include "Analyzer_test.h"
 
 
@@ -43,7 +43,7 @@ void MyModuleInit(RTC::Manager* manager)
   // Create a component
   comp = manager->createComponent("Analyzer_test");
 
-  if (comp==NULL)
+  if (comp==nullptr)
   {
     std::cerr << "Component create failed." << std::endl;
     abort();

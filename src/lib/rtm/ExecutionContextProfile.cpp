@@ -16,7 +16,7 @@
  *
  */
 
-#include <assert.h>
+#include <cassert>
 #include <rtm/ExecutionContextProfile.h>
 #include <rtm/CORBA_SeqUtil.h>
 #include <rtm/NVUtil.h>

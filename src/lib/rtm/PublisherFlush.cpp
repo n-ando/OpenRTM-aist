@@ -35,7 +35,7 @@ namespace RTC
    */
   PublisherFlush::PublisherFlush()
     : rtclog("PublisherFlush"),
-      m_consumer(0), m_listeners(0), m_retcode(PORT_OK), m_active(false)
+      m_consumer(nullptr), m_listeners(nullptr), m_retcode(PORT_OK), m_active(false)
   {
   }
 
@@ -50,7 +50,7 @@ namespace RTC
   {
     RTC_TRACE(("~PublisherFlush()"));
     // "consumer" should be deleted in the Connector
-    m_consumer = 0;
+    m_consumer = nullptr;
   }
 
   /*!
@@ -78,7 +78,7 @@ namespace RTC
   {
     RTC_TRACE(("setConsumer()"));
 
-    if (consumer == 0)
+    if (consumer == nullptr)
       {
         return INVALID_ARGS;
       }
@@ -113,7 +113,7 @@ namespace RTC
   {
     RTC_TRACE(("setListeners()"));
 
-    if (listeners == 0)
+    if (listeners == nullptr)
       {
         RTC_ERROR(("setListeners(listeners == 0): invalid argument"));
         return INVALID_ARGS;
@@ -138,8 +138,8 @@ namespace RTC
   {
     RTC_PARANOID(("write()"));
 
-    if (m_consumer == 0) { return PRECONDITION_NOT_MET; }
-    if (m_listeners == 0) { return PRECONDITION_NOT_MET; }
+    if (m_consumer == nullptr) { return PRECONDITION_NOT_MET; }
+    if (m_listeners == nullptr) { return PRECONDITION_NOT_MET; }
 
     if (m_retcode == CONNECTION_LOST)
       {

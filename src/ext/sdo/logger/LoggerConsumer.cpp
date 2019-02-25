@@ -32,7 +32,7 @@ namespace RTC
    * @endif
    */
   LoggerConsumer::LoggerConsumer()
-    : m_rtobj(NULL)
+    : m_rtobj(nullptr)
   {
   }
 
