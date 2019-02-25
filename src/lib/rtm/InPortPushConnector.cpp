@@ -39,15 +39,15 @@ namespace RTC
     : InPortConnector(info, listeners, buffer),
       m_provider(provider),
       m_listeners(listeners),
-      m_deleteBuffer(buffer == 0 ? true : false),
+      m_deleteBuffer(buffer == nullptr ? true : false),
       m_sync_readwrite(false)
   {
     // publisher/buffer creation. This may throw std::bad_alloc;
-    if (m_buffer == 0)
+    if (m_buffer == nullptr)
       {
         m_buffer = createBuffer(info);
       }
-    if (m_buffer == 0 || m_provider == 0) { throw std::bad_alloc(); }
+    if (m_buffer == nullptr || m_provider == nullptr) { throw std::bad_alloc(); }
 
     m_buffer->init(info.properties.getNode("buffer"));
     m_provider->init(info.properties);
@@ -97,7 +97,7 @@ namespace RTC
      *   TIMEOUT
      *   PRECONDITION_NOT_MET
      */
-    if (m_buffer == 0)
+    if (m_buffer == nullptr)
       {
         return PRECONDITION_NOT_MET;
       }
@@ -173,20 +173,20 @@ namespace RTC
   {
     RTC_TRACE(("disconnect()"));
     // delete provider
-    if (m_provider != 0)
+    if (m_provider != nullptr)
       {
         InPortProviderFactory& cfactory(InPortProviderFactory::instance());
         cfactory.deleteObject(m_provider);
       }
-    m_provider = 0;
+    m_provider = nullptr;
 
     // delete buffer
-    if (m_buffer != 0 && m_deleteBuffer == true)
+    if (m_buffer != nullptr && m_deleteBuffer == true)
       {
         CdrBufferFactory& bfactory(CdrBufferFactory::instance());
         bfactory.deleteObject(m_buffer);
       }
-    m_buffer = 0;
+    m_buffer = nullptr;
 
     return PORT_OK;
   }

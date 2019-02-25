@@ -430,7 +430,7 @@ namespace RTC
       virtual ~DataPortAction() {}
 
       virtual ReturnCode operator()(ConnectorInfo& info,
-                                    cdrMemoryStream& data)
+                                    ByteData& data)
       {
         coil::TimeValue curr = coil::gettimeofday();
         coil::TimeValue intvl = curr - m_last;

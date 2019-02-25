@@ -63,7 +63,7 @@ int main (int argc, char** argv)
 {
   int _argc(0);
   char** _argv;
-  _argv = 0;
+  _argv = nullptr;
 
   std::string subs_type;
   std::string period;

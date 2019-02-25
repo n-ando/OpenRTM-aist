@@ -55,7 +55,7 @@ namespace coil
     timeval tv;
     tv.tv_sec = clocktime.sec();
     tv.tv_usec = clocktime.usec();
-    if (coil::settimeofday(&tv, 0) == 0)
+    if (coil::settimeofday(&tv, nullptr) == 0)
       {
         return true;
       }

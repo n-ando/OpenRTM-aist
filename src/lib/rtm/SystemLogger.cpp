@@ -78,11 +78,11 @@ namespace RTC
   {
     setLevel(Manager::instance().getLogLevel().c_str());
     coil::Properties& prop(Manager::instance().getConfig());
-    if (prop.findNode("logger.date_format") != NULL)
+    if (prop.findNode("logger.date_format") != nullptr)
       {
         setDateFormat(prop["logger.date_format"].c_str());
       }
-    if (prop.findNode("logger.clock_type") != NULL)
+    if (prop.findNode("logger.clock_type") != nullptr)
       {
         setClockType(prop["logger.clock_type"]);
       }

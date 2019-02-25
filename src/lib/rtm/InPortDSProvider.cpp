@@ -31,7 +31,7 @@ namespace RTC
    * @endif
    */
   InPortDSProvider::InPortDSProvider(void)
-      : m_buffer(0), m_connector(0)
+      : m_buffer(nullptr), m_connector(nullptr)
   {
     // PortProfile setting
     setInterfaceType("data_service");
@@ -153,7 +153,7 @@ namespace RTC
   {
     RTC_PARANOID(("InPortDSProvider::push()"));
 
-    if (m_connector == 0)
+    if (m_connector == nullptr)
       {
         ByteData cdr;
 

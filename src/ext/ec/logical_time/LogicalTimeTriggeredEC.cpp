@@ -82,7 +82,7 @@ namespace RTC
   {
     RTC_TRACE(("init()"));
     ExecutionContextBase::init(props);
-    if (props.findNode("sync_tick") != NULL)
+    if (props.findNode("sync_tick") != nullptr)
       {
         m_syncTick = coil::toBool(props["sync_tick"], "YES", "NO", true);
         RTC_DEBUG(("Tick mode: %s",
@@ -468,7 +468,7 @@ namespace RTC
     if (!m_svc)
       { // If start() is called first time, start the worker thread.
         m_svc = true;
-        this->open(0);
+        this->open(nullptr);
       }
     return RTC::RTC_OK;
   }

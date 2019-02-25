@@ -9,11 +9,9 @@ project (OpenRTM_aist
 
 
 
-set(CORBA ${CORBA} CACHE STRING "set CORBA ")
+set(CORBA omniORB CACHE STRING "set CORBA ")
 
-if(NOT CORBA)
-	message(FATAL_ERROR "Please set CORBA.")
-endif()
+
 
 
 
@@ -662,8 +660,17 @@ if(WIN32)
 endif(WIN32)
 
 add_subdirectory(src)
-add_subdirectory(examples)
-add_subdirectory(utils)
+
+set(EXAMPLES_ENABLE TRUE CACHE BOOL "set EXAMPLES_ENABLE ")
+if(EXAMPLES_ENABLE)
+	add_subdirectory(examples)
+endif(EXAMPLES_ENABLE)
+
+set(UTILS_ENABLE TRUE CACHE BOOL "set UTILS_ENABLE ")
+if(UTILS_ENABLE)
+	add_subdirectory(utils)
+endif(UTILS_ENABLE)
+
 add_subdirectory(etc)
 
 set(DOCUMENTS_ENABLE ${DOCUMENTS_ENABLE} CACHE BOOL "set DOCUMENTS_ENABLE")
@@ -677,7 +684,7 @@ if(WIN32)
 endif(WIN32)
 
 
-CONFIGURE_FILE ("${PROJECT_SOURCE_DIR}/uninstall_target.cmake.in"
+CONFIGURE_FILE ("${PROJECT_SOURCE_DIR}/build/cmake/uninstall_target.cmake.in"
     "${PROJECT_BINARY_DIR}/uninstall_target.cmake" IMMEDIATE @ONLY)
 ADD_CUSTOM_TARGET (uninstall "${CMAKE_COMMAND}" -P
     "${PROJECT_BINARY_DIR}/uninstall_target.cmake")

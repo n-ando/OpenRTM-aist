@@ -58,7 +58,7 @@ namespace CORBA_IORUtil
   bool toIOR(const char* iorstr, IOP::IOR& ior)
   {
 #ifndef ORB_IS_RTORB
-    if (iorstr == 0) { return false; }
+    if (iorstr == nullptr) { return false; }
     size_t size = strlen(iorstr);
 
     if (size < 4)

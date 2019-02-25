@@ -181,7 +181,7 @@ namespace RTC
   void ModuleManager::unload(const std::string& file_name)
   {
     DLLEntity* dll(m_modules.find(file_name.c_str()));
-    if (dll == NULL)
+    if (dll == nullptr)
       throw NotFound(file_name.c_str());
 
     dll->dll.close();
@@ -228,7 +228,7 @@ namespace RTC
                file_name.c_str(), func_name.c_str()))
     // "file_name" should be in modules map.
     DLLEntity* dll(m_modules.find(file_name.c_str()));
-    if (dll == NULL)
+    if (dll == nullptr)
       {
         RTC_ERROR(("Module %s not found in module table.", file_name.c_str()));
         throw ModuleNotFound(file_name);
