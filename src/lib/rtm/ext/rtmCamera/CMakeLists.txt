@@ -57,6 +57,7 @@ endforeach(idl)
 
 link_directories(${ORB_LINK_DIR})
 include_directories(
+		${RTM_INCLUDE_DIR}
 		${ORB_INCLUDE_DIR}
 		${PROJECT_BINARY_DIR}
 		)
@@ -67,7 +68,7 @@ add_definitions(${ORB_C_FLAGS_LIST})
 
 link_directories(${ORB_LINK_DIR})
 include_directories(${ORB_INCLUDE_DIR})
-ADD_DEFINITIONS(${ORB_C_FLAGS_LIST})
+add_definitions(${ORB_C_FLAGS_LIST})
 
 
 set_source_files_properties(${ALL_IDL_SRCS} PROPERTIES GENERATED 1)
@@ -84,7 +85,11 @@ if(VXWORKS)
 						RUNTIME DESTINATION ${INSTALL_RTM_BIN_DIR}
 						COMPONENT ext)
 else(VXWORKS)
-	add_library(${target}_objlib OBJECT ${ALL_IDL_SRCS})
+	if(WIN32)
+		add_library(${target}_objlib OBJECT ${ALL_IDL_SRCS} rtmCameraFactory.cpp)
+	else(WIN32)
+		add_library(${target}_objlib OBJECT ${ALL_IDL_SRCS})
+	endif(WIN32)
 	set_property(TARGET ${target}_objlib PROPERTY POSITION_INDEPENDENT_CODE 1)
 	add_dependencies(${target}_objlib ${RTCSKEL_PROJECT_NAME})
 
@@ -101,12 +106,18 @@ else(VXWORKS)
 			COMMAND python ${MAKE_DEF_COMMAND} $<TARGET_FILE:${target}-static> ${target} ${RTM_SHORT_VERSION} ${DEF_FILE_NAME}
 			WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
 		)
+
+		add_dependencies(${target}_objlib ${RTM_PROJECT_NAME})
 	endif(WIN32)
 
 
 	add_library(${target} SHARED $<TARGET_OBJECTS:${target}_objlib> ${CMAKE_CURRENT_BINARY_DIR}/${DEF_FILE_NAME})
 	set_target_properties(${target} PROPERTIES DEBUG_POSTFIX d)
-	target_link_libraries(${target} ${ORB_LIBRARIES} ${RTCSKEL_PROJECT_NAME})
+	if(WIN32)
+		target_link_libraries(${target} ${ORB_LIBRARIES} ${COIL_PROJECT_NAME} ${RTM_LINKER_OPTION} ${RTM_PROJECT_NAME})
+	else(WIN32)
+		target_link_libraries(${target} ${ORB_LIBRARIES})
+	endif(WIN32)
 	add_dependencies(${target} ${target}_objlib)
 
 

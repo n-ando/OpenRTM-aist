@@ -111,7 +111,7 @@ namespace RTC
   RTC::ReturnCode_t ExecutionContextBase::
   bindComponent(RTC::RTObject_impl* rtc)
   {
-	if (rtc == NULL)
+	if (rtc == nullptr)
 	{
 		  return RTC::BAD_PARAMETER;
 	}
@@ -848,7 +848,7 @@ namespace RTC
    */
   bool ExecutionContextBase::setExecutionRate(coil::Properties& props)
   {
-    if (props.findNode("rate") != NULL)
+    if (props.findNode("rate") != nullptr)
       {
         double rate;
         if (coil::stringTo(rate, props["rate"].c_str()))
@@ -871,7 +871,7 @@ namespace RTC
   setTransitionMode(coil::Properties& props, const char* key, bool& flag)
   {
     RTC_TRACE(("setTransitionMode(%s)", key));
-    if (props.findNode(key) != NULL)
+    if (props.findNode(key) != nullptr)
       {
         flag = coil::toBool(props[key], "YES", "NO", "YES");
         RTC_DEBUG(("Transition Mode: %s = %s",
@@ -894,7 +894,7 @@ namespace RTC
              coil::TimeValue& timevalue)
   {
     RTC_TRACE(("setTimeout(%s)", key));
-    if (props.findNode(key) != NULL)
+    if (props.findNode(key) != nullptr)
       {
         double timeout;
         if (coil::stringTo(timeout, props[key].c_str()))

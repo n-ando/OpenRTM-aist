@@ -26,7 +26,7 @@
 #include <rtm/SdoServiceProviderBase.h>
 #include <rtm/SdoServiceConsumerBase.h>
 
-#include <string.h>
+#include <cstring>
 
 #include <memory>
 #include <vector>
@@ -358,9 +358,9 @@ namespace RTC
     SdoServiceConsumerFactory&
       factory(SdoServiceConsumerFactory::instance());
     const char* ctype = static_cast<const char*>(sProfile.interface_type);
-    if (ctype == NULL) { return false; }
+    if (ctype == nullptr) { return false; }
     SdoServiceConsumerBase* consumer(factory.createObject(ctype));
-    if (consumer == NULL)
+    if (consumer == nullptr)
       {
         RTC_ERROR(("Hmm... consumer must be created."));
         return false;
@@ -403,7 +403,7 @@ namespace RTC
   bool SdoServiceAdmin::removeSdoServiceConsumer(const char* id)
   {
     Guard guard(m_consumer_mutex);
-    if (id == NULL || id[0] == '\0')
+    if (id == nullptr || id[0] == '\0')
       {
         RTC_ERROR(("removeSdoServiceConsumer(): id is invalid."));
         return false;

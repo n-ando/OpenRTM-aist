@@ -10,7 +10,7 @@
 #include "MyServiceConsumer.h"
 #include <rtm/CORBA_SeqUtil.h>
 #include <vector>
-#include <stdlib.h>
+#include <cstdlib>
 #include <coil/Async.h>
 #include <functional>
 
@@ -37,7 +37,7 @@ MyServiceConsumer::MyServiceConsumer(RTC::Manager* manager)
     // <rtc-template block="initializer">
     m_MyServicePort("MyService"),
     // </rtc-template>
-    async_set_value(0), async_echo(0)
+    async_set_value(nullptr), async_echo(nullptr)
 {
 }
 
@@ -136,16 +136,16 @@ RTC::ReturnCode_t MyServiceConsumer::onExecute(RTC::UniqueId ec_id)
 	  argv.push_back(args);
 	}
       
-      if (async_echo != 0 && async_echo->finished())
+      if (async_echo != nullptr && async_echo->finished())
         {
           std::cout << "echo() finished: " <<  m_result << std::endl;
           delete async_echo;
-          async_echo = 0;
+          async_echo = nullptr;
         }
       
       if (argv[0] == "echo" && argv.size() > 1)
 	{
-          if (async_echo == 0)
+          if (async_echo == nullptr)
             {
               // char* retmsg;
               // retmsg = m_myservice0->echo(argv[1].c_str());

@@ -287,7 +287,7 @@ namespace RTC_Utils
      */
     explicit StateMachine(int num_of_state)
       : m_num(num_of_state),
-        m_listener(NULL),
+        m_listener(nullptr),
         m_entry(m_num, (Callback)NULL),
         m_predo(m_num, (Callback)NULL),
         m_do(m_num, (Callback)NULL),
@@ -382,7 +382,7 @@ namespace RTC_Utils
      */
     void setListener(Listener* listener)
     {
-      assert(listener != NULL);
+      assert(listener != nullptr);
       m_listener = listener;
     }
 
@@ -808,7 +808,7 @@ namespace RTC_Utils
       sync(state);
       if (state.curr == state.next)
         {
-          if (m_predo[state.curr] != NULL)
+          if (m_predo[state.curr] != nullptr)
             {
               (m_listener->*m_predo[state.curr])(state);
             }
@@ -816,7 +816,7 @@ namespace RTC_Utils
         }
 
       // State changed
-      if (m_exit[state.curr] != NULL)
+      if (m_exit[state.curr] != nullptr)
         {
           (m_listener->*m_exit[state.curr])(state);
         }
@@ -824,7 +824,7 @@ namespace RTC_Utils
       if (state.curr != state.next)
         {
           state.curr = state.next;
-          if (m_entry[state.curr] != NULL)
+          if (m_entry[state.curr] != nullptr)
             {
               (m_listener->*m_entry[state.curr])(state);
             }
@@ -836,7 +836,7 @@ namespace RTC_Utils
     {
       States state;
       sync(state);
-      if (m_do[state.curr] != NULL)
+      if (m_do[state.curr] != nullptr)
         {
           (m_listener->*m_do[state.curr])(state);
         }
@@ -846,7 +846,7 @@ namespace RTC_Utils
     {
       States state;
       sync(state);
-      if (m_postdo[state.curr] != NULL)
+      if (m_postdo[state.curr] != nullptr)
         {
           (m_listener->*m_postdo[state.curr])(state);
         }

@@ -128,7 +128,7 @@ namespace RTC
     OutPortPullConnector(ConnectorInfo info,
                          OutPortProvider* provider,
                          ConnectorListeners& listeners,
-                         CdrBufferBase* buffer = 0);
+                         CdrBufferBase* buffer = nullptr);
 
     /*!
      * @if jp

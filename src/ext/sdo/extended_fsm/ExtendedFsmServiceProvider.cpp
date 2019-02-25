@@ -32,7 +32,7 @@ namespace RTC
    * @endif
    */
   ExtendedFsmServiceProvider::ExtendedFsmServiceProvider()
-    : m_rtobj(NULL)
+    : m_rtobj(nullptr)
   {
     std::cout << "ExtendedFsmServiceProvider()" << std::endl;
 

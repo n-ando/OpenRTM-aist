@@ -526,7 +526,7 @@ namespace RTC
     struct publishInterfaceFunc
     {
       explicit publishInterfaceFunc(SDOPackage::NVList& prop)
-        : m_prop(prop), provider_(0) {}
+        : m_prop(prop), provider_(nullptr) {}
       void operator()(OutPortProvider* provider)
       {
         if (provider->publishInterface(m_prop))

@@ -23,11 +23,11 @@
 #include <coil/File.h>
 #include <coil/stringutil.h>
 
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstdlib>
 #include <unistd.h>
 #include <libgen.h>
-#include <signal.h>
+#include <csignal>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <string>
@@ -88,7 +88,7 @@ namespace coil
   {
     FILE* fd;
     out.clear();
-    if ((fd = popen(command.c_str(), "r")) == NULL)
+    if ((fd = popen(command.c_str(), "r")) == nullptr)
       {
         //std::cerr << "popen faild" << std::endl;
         return -1;

@@ -22,7 +22,7 @@
 
 #include <coil/Singleton.h>
 
-#include <stddef.h>
+#include <cstddef>
 #include <new>
 
 namespace coil

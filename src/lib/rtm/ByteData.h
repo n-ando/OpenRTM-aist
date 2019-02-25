@@ -1,4 +1,4 @@
-#ifndef RTC_BYTEDATA_H
+ï»¿#ifndef RTC_BYTEDATA_H
 #define RTC_BYTEDATA_H
 
 
@@ -9,7 +9,7 @@ namespace RTC
     /*!
      * @if jp
      * @class ByteData
-     * @brief ƒVƒŠƒAƒ‰ƒCƒYŒã‚ÌƒoƒCƒg—ñ‚ğ‘€ì‚·‚éƒNƒ‰ƒX
+     * @brief ã‚·ãƒªã‚¢ãƒ©ã‚¤ã‚ºå¾Œã®ãƒã‚¤ãƒˆåˆ—ã‚’æ“ä½œã™ã‚‹ã‚¯ãƒ©ã‚¹
      * 
      *
      *
@@ -32,7 +32,7 @@ namespace RTC
         /*!
          * @if jp
          *
-         * @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+         * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
          *
          *
          *
@@ -47,7 +47,7 @@ namespace RTC
         /*!
          * @if jp
          *
-         * @brief ƒfƒXƒgƒ‰ƒNƒ^
+         * @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
          *
          *
          *
@@ -62,7 +62,7 @@ namespace RTC
         /*!
          * @if jp
          *
-         * @brief ƒRƒs[ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+         * @brief ã‚³ãƒ”ãƒ¼ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
          *
          * @param rhs
          *
@@ -80,7 +80,7 @@ namespace RTC
         /*!
          * @if jp
          *
-         * @brief ƒRƒs[ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+         * @brief ã‚³ãƒ”ãƒ¼ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
          *
          * @param rhs
          *
@@ -97,7 +97,7 @@ namespace RTC
         /*!
          * @if jp
          *
-         * @brief ‘ã“ü‰‰Zq
+         * @brief ä»£å…¥æ¼”ç®—å­
          *
          * @param rhs
          * @return
@@ -116,7 +116,7 @@ namespace RTC
         /*!
          * @if jp
          *
-         * @brief ‘ã“ü‰‰Zq
+         * @brief ä»£å…¥æ¼”ç®—å­
          *
          * @param rhs
          * @return
@@ -135,10 +135,10 @@ namespace RTC
         /*!
          * @if jp
          *
-         * @brief ˆø”‚Ì•Ï”‚Éƒf[ƒ^‚ğŠi”[
+         * @brief å¼•æ•°ã®å¤‰æ•°ã«ãƒ‡ãƒ¼ã‚¿ã‚’æ ¼ç´
          *
-         * @param data ‘‚«‚İæ‚Ì•Ï”
-         * @param length ƒf[ƒ^‚Ì’·‚³
+         * @param data æ›¸ãè¾¼ã¿å…ˆã®å¤‰æ•°
+         * @param length ãƒ‡ãƒ¼ã‚¿ã®é•·ã•
          * @return
          *
          *
@@ -156,10 +156,10 @@ namespace RTC
         /*!
          * @if jp
          *
-         * @brief “à•”‚Ì•Ï”‚Éƒf[ƒ^‚ğŠi”[
+         * @brief å†…éƒ¨ã®å¤‰æ•°ã«ãƒ‡ãƒ¼ã‚¿ã‚’æ ¼ç´
          *
-         * @param data ‘‚«‚İŒ³‚Ì•Ï”
-         * @param length ƒf[ƒ^‚Ì’·‚³
+         * @param data æ›¸ãè¾¼ã¿å…ƒã®å¤‰æ•°
+         * @param length ãƒ‡ãƒ¼ã‚¿ã®é•·ã•
          * @return
          *
          *
@@ -177,9 +177,9 @@ namespace RTC
         /*!
          * @if jp
          *
-         * @brief ƒoƒbƒtƒ@‚Ìƒ|ƒCƒ“ƒ^‚ğæ“¾
+         * @brief ãƒãƒƒãƒ•ã‚¡ã®ãƒã‚¤ãƒ³ã‚¿ã‚’å–å¾—
          *
-         * @return ƒoƒbƒtƒ@‚Ìƒ|ƒCƒ“ƒ^
+         * @return ãƒãƒƒãƒ•ã‚¡ã®ãƒã‚¤ãƒ³ã‚¿
          *
          *
          * @else
@@ -194,9 +194,9 @@ namespace RTC
         /*!
          * @if jp
          *
-         * @brief ƒoƒbƒtƒ@‚ÌƒTƒCƒY‚ğæ“¾
+         * @brief ãƒãƒƒãƒ•ã‚¡ã®ã‚µã‚¤ã‚ºã‚’å–å¾—
          *
-         * @return ƒoƒbƒtƒ@‚ÌƒTƒCƒY
+         * @return ãƒãƒƒãƒ•ã‚¡ã®ã‚µã‚¤ã‚º
          *
          *
          * @else
@@ -211,9 +211,9 @@ namespace RTC
         /*!
          * @if jp
          *
-         * @brief ƒGƒ“ƒfƒBƒAƒ“‚Ìİ’è
+         * @brief ã‚¨ãƒ³ãƒ‡ã‚£ã‚¢ãƒ³ã®è¨­å®š
          *
-         * @param little_endian ƒŠƒgƒ‹ƒGƒ“ƒfƒBƒAƒ“(True)AƒrƒbƒOƒGƒ“ƒfƒBƒAƒ“(False)
+         * @param little_endian ãƒªãƒˆãƒ«ã‚¨ãƒ³ãƒ‡ã‚£ã‚¢ãƒ³(True)ã€ãƒ“ãƒƒã‚°ã‚¨ãƒ³ãƒ‡ã‚£ã‚¢ãƒ³(False)
          *
          *
          *
@@ -229,9 +229,9 @@ namespace RTC
         /*!
          * @if jp
          *
-         * @brief ƒf[ƒ^‚ÌƒTƒCƒY‚Ìİ’è
+         * @brief ãƒ‡ãƒ¼ã‚¿ã®ã‚µã‚¤ã‚ºã®è¨­å®š
          *
-         * @param length ƒf[ƒ^‚ÌƒTƒCƒY
+         * @param length ãƒ‡ãƒ¼ã‚¿ã®ã‚µã‚¤ã‚º
          *
          *
          *
@@ -247,9 +247,9 @@ namespace RTC
         /*!
          * @if jp
          *
-         * @brief ƒGƒ“ƒfƒBƒAƒ“‚Ìæ“¾
+         * @brief ã‚¨ãƒ³ãƒ‡ã‚£ã‚¢ãƒ³ã®å–å¾—
          *
-         * @return ƒŠƒgƒ‹ƒGƒ“ƒfƒBƒAƒ“(True)AƒrƒbƒOƒGƒ“ƒfƒBƒAƒ“(False)
+         * @return ãƒªãƒˆãƒ«ã‚¨ãƒ³ãƒ‡ã‚£ã‚¢ãƒ³(True)ã€ãƒ“ãƒƒã‚°ã‚¨ãƒ³ãƒ‡ã‚£ã‚¢ãƒ³(False)
          *
          *
          *
@@ -268,7 +268,7 @@ namespace RTC
         bool m_little_endian;
     };
 
-}
+}  // namespace RTC
 
 
 #endif  // RTC_BYTEDATA_H

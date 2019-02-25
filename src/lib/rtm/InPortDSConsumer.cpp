@@ -171,7 +171,7 @@ namespace RTC
         return false;
       }
 
-    const char* ior(0);
+    const char* ior(nullptr);
     if (!(properties[index].value >>= ior))
       {
         RTC_ERROR(("inport_ior has no string"));
@@ -260,7 +260,7 @@ namespace RTC
         return false;
       }
 
-    const char* ior = NULL;
+    const char* ior = nullptr;
     if (!(properties[index].value >>= ior))
       {
         RTC_ERROR(("prop[inport_ior] is not string"));

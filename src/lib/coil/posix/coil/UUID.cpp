@@ -19,7 +19,7 @@
 
 #include <coil/UUID.h>
 
-#include <string.h>
+#include <cstring>
 #include <iostream>
 
 

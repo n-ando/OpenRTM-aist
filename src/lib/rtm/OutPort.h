@@ -142,7 +142,7 @@ namespace RTC
       : OutPortBase(name, ::CORBA_Util::toRepositoryId<DataType>()),
 #endif
 	  DirectOutPortBase<DataType>(value),
-	  m_value(value), m_onWrite(0), m_onWriteConvert(0),
+	  m_value(value), m_onWrite(nullptr), m_onWriteConvert(nullptr),
 	  m_directNewData(false), m_directValue(value)
     {
 
@@ -221,7 +221,7 @@ namespace RTC
     {
       RTC_TRACE(("DataType write()"));
 
-      if (m_onWrite != NULL)
+      if (m_onWrite != nullptr)
         {
           (*m_onWrite)(value);
           RTC_TRACE(("OnWrite called"));
@@ -244,7 +244,7 @@ namespace RTC
             ReturnCode ret;
 			if (!m_connectors[i]->pullDirectMode())
 			{
-				if (m_onWriteConvert != NULL)
+				if (m_onWriteConvert != nullptr)
 				{
 					RTC_DEBUG(("m_connectors.OnWriteConvert called"));
 					DataType tmp = (*m_onWriteConvert)(value);
@@ -259,7 +259,7 @@ namespace RTC
 			else
 			{
 				Guard guard(m_valueMutex);
-				if (m_onWriteConvert != NULL)
+				if (m_onWriteConvert != nullptr)
 				{
 					RTC_DEBUG(("m_connectors.OnWriteConvert called"));
 					m_directValue = ((*m_onWriteConvert)(value));
@@ -281,7 +281,7 @@ namespace RTC
               {
                 const char* id(m_connectors[i]->profile().id.c_str());
                 RTC_WARN(("connection_lost id: %s", id));
-                if (m_onConnectionLost != 0)
+                if (m_onConnectionLost != nullptr)
                   {
                     RTC::ConnectorProfile prof(findConnProfile(id));
                     (*m_onConnectionLost)(prof);
