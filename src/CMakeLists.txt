@@ -4,3 +4,4 @@ add_subdirectory(lib)
 add_subdirectory(ext)
 
 set(RTM_INCLUDE_DIR ${RTM_INCLUDE_DIR}  PARENT_SCOPE)
+set(DATATYPE_FACTORIES ${DATATYPE_FACTORIES} PARENT_SCOPE)
