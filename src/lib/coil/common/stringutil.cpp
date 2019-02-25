@@ -716,7 +716,7 @@ namespace coil
    */
   std::string flatten(vstring sv, std::string delimiter)
   {
-    if (sv.empty()) return "";
+    if (sv.empty()) { return ""; }
 
     std::string str = std::string();
     for (size_t i(0), len(sv.size() - 1); i < len; ++i)
