@@ -160,6 +160,6 @@ namespace RTC
     
 
   };
-}; // End of namesepace RTM
+}  // namespace RTC
 
 #endif // RTC_DIRECTINPORTBASE_H

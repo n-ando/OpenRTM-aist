@@ -149,7 +149,7 @@ namespace RTC
   private:
 
   };
-};
+}  // namespace RTC
 
 
 

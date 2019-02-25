@@ -154,7 +154,7 @@ namespace MicrowaveFsm
     virtual RTC::ReturnCode_t onEntry();
     virtual RTC::ReturnCode_t onExit();
   };
-};
+}  // namespace MicrowaveFsm
 
 //typedef Macho::Machine<MicrowaveFsm::Top> MicrowaveFsmImpl;
 

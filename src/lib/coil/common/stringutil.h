@@ -892,5 +892,5 @@ namespace coil
   */
   std::string replaceEnv(std::string str);
   
-}; // namepsace coil
+}  // namespace coil
 #endif  // COIL_STRINGUTIL_H

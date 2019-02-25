@@ -268,7 +268,7 @@ namespace RTC
         bool m_little_endian;
     };
 
-}
+}  // namespace RTC
 
 
 #endif  // RTC_BYTEDATA_H
