@@ -38,7 +38,7 @@ namespace coil
 
   /*!
    * @if jp
-   * @brief ¥×¥í¥»¥¹¤òµ¯Æ°¤¹¤ë
+   * @brief Â¥Ã—Â¥Ã­Â¥Â»Â¥Â¹Â¤Ã²ÂµÂ¯Ã†Â°Â¤Â¹Â¤Ã«
    * @else
    * @brief Launching a process
    * @endif
@@ -81,7 +81,7 @@ namespace coil
 
   int daemon(int nochdir, int noclose)
   {
-    return -1;
+    return ::daemon(nochdir, noclose);
   }
 
   int create_process(std::string command, std::vector<std::string> &out)
