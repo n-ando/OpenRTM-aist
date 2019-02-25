@@ -188,7 +188,7 @@ namespace RTM
             return m_services[i];
           }
       }
-    return NULL;
+    return nullptr;
   }
 
   /*!
@@ -201,7 +201,7 @@ namespace RTM
   bool
   LocalServiceAdmin::addLocalService(::RTM::LocalServiceBase* service)
   {
-    if (service == NULL)
+    if (service == nullptr)
       {
         RTC_ERROR(("Invalid argument: addLocalService(service == NULL)"));
         return false;

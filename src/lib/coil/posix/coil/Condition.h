@@ -62,7 +62,7 @@ namespace coil
     explicit Condition(M& mutex)
       : m_mutex(mutex)
     {
-      ::pthread_cond_init(&m_cond, 0);
+      ::pthread_cond_init(&m_cond, nullptr);
     }
 
     /*!
@@ -179,7 +179,7 @@ namespace coil
       struct timeval tv;
       timespec abstime;
 
-      ::gettimeofday(&tv, NULL);
+      ::gettimeofday(&tv, nullptr);
       abstime.tv_sec  = tv.tv_sec + second;
       abstime.tv_nsec = tv.tv_usec * 1000 + nano_second;
       if (abstime.tv_nsec >= 1000000000) {

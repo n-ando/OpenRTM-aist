@@ -370,7 +370,7 @@ namespace coil
     //  if (input.substr(0, delim_size) == delimiter)
     //    begin_pos = pre_pos = delim_size;
 
-    while (1)
+    while (true)
       {
         //    REFIND:
         found_pos = input.find(delimiter, begin_pos);
@@ -565,7 +565,7 @@ namespace coil
         try
           {
             if (ipv6[i].empty()) { continue; }
-            char* endptr = 0;
+            char* endptr = nullptr;
             long int hexval = std::strtol(ipv6[i].c_str(), &endptr, 16);
             if (errno == ERANGE) { return false; }
             if (hexval < 0x0 || hexval > 0xFFFF) { return false; }
@@ -658,7 +658,7 @@ namespace coil
   template<>
   bool stringTo<std::string>(std::string& val, const char* str)
   {
-    if (str == 0) { return false; }
+    if (str == nullptr) { return false; }
     val = str;
     return true;
   }
@@ -673,7 +673,7 @@ namespace coil
   template <>
   bool stringTo<bool>(bool& val, const char* str)
   {
-    if (str == 0) { return false; }
+    if (str == nullptr) { return false; }
     std::string boolstr(str);
     coil::normalize(boolstr);
     if (boolstr == "true" || boolstr == "1" ||
@@ -747,7 +747,7 @@ namespace coil
         strncpy(argv[i], args[i].c_str(), sz);
         argv[i][sz] = '\0';
       }
-    argv[argc] = NULL;
+    argv[argc] = nullptr;
     return argv;
   }
 

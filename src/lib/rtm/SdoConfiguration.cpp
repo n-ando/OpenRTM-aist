@@ -511,7 +511,7 @@ namespace SDOPackage
         // Because the format of port-name had been changed from
         // <port_name> to <instance_name>.<port_name>, the following
         // processing was added.  (since r1648)
-        if (conf.findNode("exported_ports") != 0)
+        if (conf.findNode("exported_ports") != nullptr)
           {
             coil::vstring
               exported_ports(coil::split(conf["exported_ports"], ","));

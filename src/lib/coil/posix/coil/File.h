@@ -135,13 +135,13 @@ namespace coil
     coil::vstring flist;
     bool has_glob(false);
 
-    if (path == 0) { return flist; }
+    if (path == nullptr) { return flist; }
     if (glob_str[0] != '\0') { has_glob = true; }
 
     DIR* dir_ptr(::opendir(path));
-    if (dir_ptr == 0) { return flist; }
+    if (dir_ptr == nullptr) { return flist; }
 
-    while ((ent = ::readdir(dir_ptr)) != 0)
+    while ((ent = ::readdir(dir_ptr)) != nullptr)
       {
         bool match(true);
         if (has_glob)
@@ -219,9 +219,9 @@ namespace coil
   */
   inline void findFile(std::string dir, std::string filename, coil::vstring &filelist)
   {
-	struct dirent **namelist=NULL;
+	struct dirent **namelist=nullptr;
 #ifndef COIL_OS_QNX
-	int files = scandir(dir.c_str(), &namelist, NULL, NULL);
+	int files = scandir(dir.c_str(), &namelist, nullptr, nullptr);
 #else
 	int files = scandir(const_cast<char*>(dir.c_str()), &namelist, NULL, NULL);
 #endif
@@ -274,9 +274,9 @@ namespace coil
   */
   inline void getFileList(std::string dir, std::string ext, coil::vstring &filelist)
   {
-	struct dirent **namelist=NULL;
+	struct dirent **namelist=nullptr;
 #ifndef COIL_OS_QNX
-	int files = scandir(dir.c_str(), &namelist, NULL, NULL);
+	int files = scandir(dir.c_str(), &namelist, nullptr, nullptr);
 #else
 	int files = scandir(const_cast<char*>(dir.c_str()), &namelist, NULL, NULL);
 #endif
@@ -307,6 +307,6 @@ namespace coil
 	}
 	
   }
-};
+}  // namespace coil
 
 #endif // COIL_FILE_H

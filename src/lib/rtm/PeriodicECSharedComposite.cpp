@@ -697,7 +697,7 @@ namespace RTC
           coil::eraseBothEndsBlank(m_members[i]);
 
         RTObject_impl* rtc = mgr.getComponent(m_members[i].c_str());
-        if (rtc == NULL) {
+        if (rtc == nullptr) {
           continue;
         }
 

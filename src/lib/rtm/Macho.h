@@ -331,7 +331,7 @@ namespace Macho {
 		new (place) B;
 
 		void * box = place;
-		place = 0;
+		place = nullptr;
 
 		return box;
 	}
@@ -343,7 +343,7 @@ namespace Macho {
 
 		static_cast<B *>(box)->~B();
 		place = box;
-		box = 0;
+		box = nullptr;
 	}
 
 #ifdef MACHO_SNAPSHOTS
@@ -700,7 +700,7 @@ namespace Macho {
 			if (myBoxPlace) {
 				// Free cached memory of previously used box.
 				::operator delete(myBoxPlace);
-				myBoxPlace = 0;
+				myBoxPlace = nullptr;
 			}
 
 			myBox = box;
@@ -763,7 +763,7 @@ namespace Macho {
 
 		virtual Key key() {
 			// Can't happen: key is only called by users, and they don't know about Root.
-			assert(false); return 0;
+			assert(false); return nullptr;
 		}
 
 		virtual void createBox() {}
@@ -1925,7 +1925,7 @@ namespace Macho {
 	/* static */ void Link<C, P>::clearHistory(const _MachineBase & machine) {
 		const _StateInstance * instance = machine.getInstance(StateID<C>::value);
 		if (instance)
-			instance->setHistory(0);
+			instance->setHistory(nullptr);
 	}
 
 	template<class C, class P>
@@ -1938,7 +1938,7 @@ namespace Macho {
 	template<class C, class P>
 	/* static */ Alias Link<C, P>::history(const _MachineBase & machine) {
 		const _StateInstance * instance = machine.getInstance(StateID<C>::value);
-		_StateInstance * history = 0;
+		_StateInstance * history = nullptr;
 
 		if (instance)
 			history = instance->history();

@@ -96,7 +96,7 @@ namespace coil
     if (!m_running)
       {
         m_running = true;
-        open(0);
+        open(nullptr);
       }
   }
 

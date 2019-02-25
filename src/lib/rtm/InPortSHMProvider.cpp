@@ -33,8 +33,8 @@ namespace RTC
    * @endif
    */
   InPortSHMProvider::InPortSHMProvider(void)
-   : m_buffer(0),
-     m_connector(NULL)
+   : m_buffer(nullptr),
+     m_connector(nullptr)
   {
     // PortProfile setting
     setInterfaceType("shared_memory");
@@ -123,7 +123,7 @@ namespace RTC
     throw (CORBA::SystemException)
   {
     RTC_PARANOID(("InPortSHMProvider::put()"));
-    if (m_connector == NULL)
+    if (m_connector == nullptr)
 	{
 		return ::OpenRTM::PORT_ERROR;
 	}

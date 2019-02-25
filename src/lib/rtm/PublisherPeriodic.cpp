@@ -40,7 +40,7 @@ namespace RTC
    */
   PublisherPeriodic::PublisherPeriodic()
     : rtclog("PublisherPeriodic"),
-      m_consumer(0), m_buffer(0), m_task(0), m_listeners(0),
+      m_consumer(nullptr), m_buffer(nullptr), m_task(nullptr), m_listeners(nullptr),
       m_retcode(PORT_OK), m_pushPolicy(PUBLISHER_POLICY_NEW),
       m_skipn(0), m_active(false), m_readback(false), m_leftskip(0)
   {
@@ -57,7 +57,7 @@ namespace RTC
   PublisherPeriodic::~PublisherPeriodic()
   {
     RTC_TRACE(("~PublisherPeriodic()"));
-    if (m_task != 0)
+    if (m_task != nullptr)
       {
         m_task->resume();
         m_task->finalize();
@@ -68,9 +68,9 @@ namespace RTC
       }
 
     // "consumer" should be deleted in the Connector
-    m_consumer = 0;
+    m_consumer = nullptr;
     // "buffer"   should be deleted in the Connector
-    m_buffer = 0;
+    m_buffer = nullptr;
   }
 
   /*!
@@ -111,7 +111,7 @@ namespace RTC
   {
     RTC_TRACE(("setConsumer()"));
 
-    if (consumer == 0)
+    if (consumer == nullptr)
       {
         RTC_ERROR(("setConsumer(consumer = 0): invalid argument."));
         return INVALID_ARGS;
@@ -131,7 +131,7 @@ namespace RTC
   {
     RTC_TRACE(("setBuffer()"));
 
-    if (buffer == 0)
+    if (buffer == nullptr)
       {
         RTC_ERROR(("setBuffer(buffer == 0): invalid argument"));
         return INVALID_ARGS;
@@ -153,7 +153,7 @@ namespace RTC
   {
     RTC_TRACE(("setListeners()"));
 
-    if (listeners == 0)
+    if (listeners == nullptr)
       {
         RTC_ERROR(("setListeners(listeners == 0): invalid argument"));
         return INVALID_ARGS;
@@ -177,9 +177,9 @@ namespace RTC
   {
     RTC_PARANOID(("write()"));
 
-    if (m_consumer == 0) { return PRECONDITION_NOT_MET; }
-    if (m_buffer == 0) { return PRECONDITION_NOT_MET; }
-    if (m_listeners == 0) { return PRECONDITION_NOT_MET; }
+    if (m_consumer == nullptr) { return PRECONDITION_NOT_MET; }
+    if (m_buffer == nullptr) { return PRECONDITION_NOT_MET; }
+    if (m_listeners == nullptr) { return PRECONDITION_NOT_MET; }
 
     if (m_retcode == CONNECTION_LOST)
       {
@@ -224,8 +224,8 @@ namespace RTC
    */
   PublisherBase::ReturnCode PublisherPeriodic::activate()
   {
-    if (m_task == 0) { return PRECONDITION_NOT_MET; }
-    if (m_buffer == 0) { return PRECONDITION_NOT_MET; }
+    if (m_task == nullptr) { return PRECONDITION_NOT_MET; }
+    if (m_buffer == nullptr) { return PRECONDITION_NOT_MET; }
     m_active = true;
     m_task->resume();
     return PORT_OK;
@@ -240,7 +240,7 @@ namespace RTC
    */
   PublisherBase::ReturnCode PublisherPeriodic::deactivate()
   {
-    if (m_task == 0) { return PRECONDITION_NOT_MET; }
+    if (m_task == nullptr) { return PRECONDITION_NOT_MET; }
     m_active = false;
     m_task->suspend();
     return PORT_OK;
@@ -460,7 +460,7 @@ namespace RTC
     RTC_DEBUG(("available task types: %s", coil::flatten(th).c_str()));
 
     m_task = factory.createObject(prop.getProperty("thread_type", "default"));
-    if (m_task == 0)
+    if (m_task == nullptr)
       {
         RTC_ERROR(("Task creation failed: %s",
                    prop.getProperty("thread_type", "default").c_str()));

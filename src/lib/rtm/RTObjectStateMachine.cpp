@@ -30,7 +30,7 @@ namespace RTC_impl
       m_rtobj(RTC::LightweightRTObject::_duplicate(comp)),
       m_sm(NUM_OF_LIFECYCLESTATE),
       m_ca(false), m_dfc(false), m_fsm(false), m_mode(false),
-      m_rtobjPtr(NULL), m_measure(false)
+      m_rtobjPtr(nullptr), m_measure(false)
   {
     m_caVar   = RTC::ComponentAction::_nil();
     m_dfcVar  = RTC::DataFlowComponentAction::_nil();
@@ -169,11 +169,11 @@ namespace RTC_impl
       }
     catch (CORBA::SystemException& ex)
       {
-        m_rtobjPtr = NULL;
+        m_rtobjPtr = nullptr;
       }
     catch (...)
       {
-        m_rtobjPtr = NULL;
+        m_rtobjPtr = nullptr;
       }
   }
 
@@ -202,7 +202,7 @@ namespace RTC_impl
   void RTObjectStateMachine::onStartup(void)
   {
     // call Servant
-    if (m_rtobjPtr != NULL)
+    if (m_rtobjPtr != nullptr)
       {
         m_rtobjPtr->on_startup(m_id);
         return;
@@ -214,7 +214,7 @@ namespace RTC_impl
   void RTObjectStateMachine::onShutdown(void)
   {
     // call Servant
-    if (m_rtobjPtr != NULL)
+    if (m_rtobjPtr != nullptr)
       {
         m_rtobjPtr->on_shutdown(m_id);
         return;
@@ -226,7 +226,7 @@ namespace RTC_impl
   void RTObjectStateMachine::onActivated(const ExecContextStates& st)
   {
     // call Servant
-    if (m_rtobjPtr != NULL)
+    if (m_rtobjPtr != nullptr)
       {
         if (m_rtobjPtr->on_activated(m_id) != RTC::RTC_OK)
           {
@@ -247,7 +247,7 @@ namespace RTC_impl
   void RTObjectStateMachine::onDeactivated(const ExecContextStates& st)
   {
     // call Servant
-    if (m_rtobjPtr != NULL)
+    if (m_rtobjPtr != nullptr)
       {
         m_rtobjPtr->on_deactivated(m_id);
         return;
@@ -260,7 +260,7 @@ namespace RTC_impl
   void RTObjectStateMachine::onAborting(const ExecContextStates& st)
   {
     // call Servant
-    if (m_rtobjPtr != NULL)
+    if (m_rtobjPtr != nullptr)
       {
         m_rtobjPtr->on_aborting(m_id);
         return;
@@ -273,7 +273,7 @@ namespace RTC_impl
   void RTObjectStateMachine::onError(const ExecContextStates& st)
   {
     // call Servant
-    if (m_rtobjPtr != NULL)
+    if (m_rtobjPtr != nullptr)
       {
         m_rtobjPtr->on_error(m_id);
         return;
@@ -286,7 +286,7 @@ namespace RTC_impl
   void RTObjectStateMachine::onReset(const ExecContextStates& st)
   {
     // call Servant
-    if (m_rtobjPtr != NULL)
+    if (m_rtobjPtr != nullptr)
       {
         if (m_rtobjPtr->on_reset(m_id) != RTC::RTC_OK)
           {
@@ -310,7 +310,7 @@ namespace RTC_impl
     static int count;
     double max_interval, min_interval, mean_interval, stddev;
     // call Servant
-    if (m_rtobjPtr != NULL)
+    if (m_rtobjPtr != nullptr)
       {
         if (m_measure) { m_svtMeasure.tick(); }
         if (m_rtobjPtr->on_execute(m_id) != RTC::RTC_OK)
@@ -368,7 +368,7 @@ namespace RTC_impl
   void RTObjectStateMachine::onStateUpdate(const ExecContextStates& st)
   {
     // call Servant
-    if (m_rtobjPtr != NULL)
+    if (m_rtobjPtr != nullptr)
       {
         if (m_rtobjPtr->on_state_update(m_id) != RTC::RTC_OK)
           {
@@ -389,7 +389,7 @@ namespace RTC_impl
   RTC::ReturnCode_t RTObjectStateMachine::onRateChanged(void)
   {
     // call Servant
-    if (m_rtobjPtr != NULL)
+    if (m_rtobjPtr != nullptr)
       {
         RTC::ReturnCode_t ret = m_rtobjPtr->on_rate_changed(m_id);
         if (ret != RTC::RTC_OK)

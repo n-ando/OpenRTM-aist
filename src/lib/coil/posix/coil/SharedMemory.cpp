@@ -33,7 +33,7 @@ namespace coil
    */
   SharedMemory::SharedMemory()
     : m_memory_size(0),
-      m_shm(NULL),
+      m_shm(nullptr),
       m_file_create(false),
       m_fd(-1)
   {
@@ -125,7 +125,7 @@ namespace coil
         return -1;
     }
     ftruncate(m_fd, m_memory_size);
-    m_shm = (char*)mmap(NULL,
+    m_shm = (char*)mmap(nullptr,
             m_memory_size,
             PROT_READ|PROT_WRITE,
             MAP_SHARED,
@@ -170,7 +170,7 @@ namespace coil
         return -1;
     }
     ftruncate(m_fd, m_memory_size);
-    m_shm = (char*)mmap(NULL,
+    m_shm = (char*)mmap(nullptr,
             m_memory_size,
             PROT_READ|PROT_WRITE,
             MAP_SHARED,
@@ -415,4 +415,4 @@ namespace coil
 
 
 
-}
+}  // namespace coil

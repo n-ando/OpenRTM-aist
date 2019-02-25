@@ -593,7 +593,7 @@ namespace RTC
     Guard guard(m_namesMutex);
     for (int i(0), len(m_names.size()); i < len; ++i)
       {
-        if (m_names[i]->ns != 0)
+        if (m_names[i]->ns != nullptr)
           {
             try
               {
@@ -602,7 +602,7 @@ namespace RTC
             catch (...)
               {
                 delete m_names[i]->ns;
-                m_names[i]->ns = 0;
+                m_names[i]->ns = nullptr;
               }
           }
       }
@@ -616,7 +616,7 @@ namespace RTC
     Guard guard(m_namesMutex);
     for (int i(0), len(m_names.size()); i < len; ++i)
       {
-        if (m_names[i]->ns != 0)
+        if (m_names[i]->ns != nullptr)
           {
             try
               {
@@ -625,7 +625,7 @@ namespace RTC
             catch (...)
               {
                 delete m_names[i]->ns;
-                m_names[i]->ns = 0;
+                m_names[i]->ns = nullptr;
               }
           }
       }
@@ -639,7 +639,7 @@ namespace RTC
     Guard guard(m_namesMutex);
     for (int i(0), len(m_names.size()); i < len; ++i)
       {
-        if (m_names[i]->ns != 0)
+        if (m_names[i]->ns != nullptr)
           {
             try
               {
@@ -648,7 +648,7 @@ namespace RTC
             catch (...)
               {
                 delete m_names[i]->ns;
-                m_names[i]->ns = 0;
+                m_names[i]->ns = nullptr;
               }
           }
       }
@@ -671,7 +671,7 @@ namespace RTC
                              "YES", "NO", false));
     for (int i(0), len(m_names.size()); i < len; ++i)
       {
-        if (m_names[i]->ns == 0)  // if ns==NULL
+        if (m_names[i]->ns == nullptr)  // if ns==NULL
           {
             RTC_DEBUG(("Retrying connection to %s/%s",
                        m_names[i]->method.c_str(),
@@ -689,7 +689,7 @@ namespace RTC
                               m_names[i]->nsname.c_str(),
                               m_names[i]->method.c_str()));
                     delete m_names[i]->ns;
-                    m_names[i]->ns = 0;
+                    m_names[i]->ns = nullptr;
                   }
               }
             catch (...)
@@ -698,7 +698,7 @@ namespace RTC
                           m_names[i]->nsname.c_str(),
                           m_names[i]->method.c_str()));
                 delete m_names[i]->ns;
-                m_names[i]->ns = 0;
+                m_names[i]->ns = nullptr;
               }
           }
       }
@@ -718,7 +718,7 @@ namespace RTC
     Guard guard(m_namesMutex);
     for (int i(0), len(m_names.size()); i < len; ++i)
       {
-        if (m_names[i]->ns != NULL)
+        if (m_names[i]->ns != nullptr)
         {
           m_names[i]->ns->unbindObject(name);
         }
@@ -809,7 +809,7 @@ namespace RTC
             NamingBase* name;
             CORBA::ORB_var orb = m_manager->getORB();
             name = new NamingOnCorba(orb.in(), name_server);
-            if (name == NULL) return NULL;
+            if (name == nullptr) return nullptr;
             RTC_INFO(("NameServer connection succeeded: %s/%s", \
                       method, name_server));
             return name;
@@ -818,7 +818,7 @@ namespace RTC
           {
             RTC_INFO(("NameServer connection failed: %s/%s",    \
                       method, name_server));
-            return NULL;
+            return nullptr;
           }
       }
 	else if (m == "manager")
@@ -828,7 +828,7 @@ namespace RTC
 		name = new NamingOnManager(orb.in(), m_manager);
 		return name;
 	}
-    return NULL;
+    return nullptr;
   }
 
   /*!
@@ -942,12 +942,12 @@ namespace RTC
   void NamingManager::retryConnection(NamingService* ns)
   {
     // recreate NamingObj
-    NamingBase* nsobj(0);
+    NamingBase* nsobj(nullptr);
     try
       {
         nsobj = createNamingObj(ns->method.c_str(),
                                 ns->nsname.c_str());
-        if (nsobj != 0)  // if succeed
+        if (nsobj != nullptr)  // if succeed
           {
             RTC_INFO(("Connected to a name server: %s/%s",
                       ns->method.c_str(), ns->nsname.c_str()));
@@ -967,10 +967,10 @@ namespace RTC
         RTC_DEBUG(("Name server: %s/%s disappeared again.",
                    ns->method.c_str(),
                    ns->nsname.c_str()));
-        if (nsobj != 0)
+        if (nsobj != nullptr)
           {
             delete ns->ns;
-            ns->ns = 0;
+            ns->ns = nullptr;
           }
       }
   }
@@ -1000,7 +1000,7 @@ namespace RTC
   {
 	  
 	  for (std::vector<NamingService*>::iterator itr = m_names.begin(); itr != m_names.end(); ++itr) {
-		  if ((*itr)->ns != 0)
+		  if ((*itr)->ns != nullptr)
 		  {
 			  RTCList comps = (*itr)->ns->string_to_component(name);
 			  if (comps.length() > 0)

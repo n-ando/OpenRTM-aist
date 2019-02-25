@@ -80,6 +80,6 @@ namespace RTC
   };
 
 
-}; // End of namesepace RTM
+}  // namespace RTC
 
 #endif // RTC_EVENTBASE_H

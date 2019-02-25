@@ -1101,10 +1101,10 @@ namespace RTC
 
       for (int i(0), len(m_listeners.size()); i < len; ++i)
         {
-          ConnectorDataListenerT<DataType>* listener(0);
+          ConnectorDataListenerT<DataType>* listener(nullptr);
           listener =
           dynamic_cast<ConnectorDataListenerT<DataType>*>(m_listeners[i].first);
-          if (listener != 0)
+          if (listener != nullptr)
             {
               ret = ret | listener->operator()(info, typeddata);
             }

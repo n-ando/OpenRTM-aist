@@ -634,7 +634,7 @@ namespace coil
   template <typename To>
   bool stringTo(To& val, const char* str)
   {
-    if (str == 0) { return false; }
+    if (str == nullptr) { return false; }
 
     std::stringstream s;
     if ((s << str).fail()) { return false; }
@@ -892,5 +892,5 @@ namespace coil
   */
   std::string replaceEnv(std::string str);
   
-}; // namepsace coil
+}  // namespace coil
 #endif  // COIL_STRINGUTIL_H

@@ -133,7 +133,7 @@ namespace RTC
     InPortPullConnector(ConnectorInfo info,
                         OutPortConsumer* consumer,
                         ConnectorListeners& listeners,
-                        CdrBufferBase* buffer = 0);
+                        CdrBufferBase* buffer = nullptr);
 
     /*!
      * @if jp

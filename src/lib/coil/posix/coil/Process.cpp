@@ -88,7 +88,7 @@ namespace coil
   {
     FILE* fd;
     out.clear();
-    if ((fd = popen(command.c_str(), "r")) == NULL)
+    if ((fd = popen(command.c_str(), "r")) == nullptr)
       {
         //std::cerr << "popen faild" << std::endl;
         return -1;

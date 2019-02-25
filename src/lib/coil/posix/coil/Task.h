@@ -92,7 +92,7 @@ namespace coil
      *
      * @endif
      */
-    virtual int open(void* args = 0);
+    virtual int open(void* args = nullptr);
 
     /*!
      * @if jp
@@ -253,7 +253,7 @@ namespace coil
      *
      * @endif
      */
-    static void* svc_run(void* args = 0);
+    static void* svc_run(void* args = nullptr);
 
   private:
     int m_count;

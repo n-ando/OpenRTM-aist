@@ -171,7 +171,7 @@ namespace RTC_impl
   {
     RTC_TRACE(("activateComponent()"));
     RTObjectStateMachine* obj = findComponent(comp);
-    if (obj == NULL)
+    if (obj == nullptr)
       {
         RTC_ERROR(("Given RTC is not participant of this EC."));
         return RTC::BAD_PARAMETER;
@@ -203,7 +203,7 @@ namespace RTC_impl
     RTC_TRACE(("deactivateComponent()"));
 
     rtobj = findComponent(comp);
-    if (rtobj == NULL)
+    if (rtobj == nullptr)
       {
         RTC_ERROR(("Given RTC is not participant of this EC."));
         return RTC::BAD_PARAMETER;
@@ -231,7 +231,7 @@ namespace RTC_impl
     RTC_TRACE(("resetComponent()"));
 
     rtobj = findComponent(comp);
-    if (rtobj == NULL)
+    if (rtobj == nullptr)
       {
         RTC_ERROR(("Given RTC is not participant of this EC."));
         return RTC::BAD_PARAMETER;
@@ -258,7 +258,7 @@ namespace RTC_impl
     RTC_TRACE(("getComponentState()"));
 
     RTObjectStateMachine* rtobj = findComponent(comp);
-    if (rtobj == NULL)
+    if (rtobj == nullptr)
       {
         RTC_WARN(("Given RTC is not participant of this EC."));
         return RTC::CREATED_STATE;
@@ -319,7 +319,7 @@ namespace RTC_impl
   {
     RTC_TRACE(("bindComponent()"));
     Guard m_guard(m_mutex);
-    if (rtc == NULL)
+    if (rtc == nullptr)
       {
         RTC_ERROR(("NULL pointer is given."));
         return RTC::BAD_PARAMETER;
@@ -363,7 +363,7 @@ namespace RTC_impl
 
     RTObjectStateMachine* rtobj = findComponent(comp);
 
-    if (rtobj == NULL)
+    if (rtobj == nullptr)
       {
         RTC_ERROR(("no RTC found in this context."));
         return  RTC::BAD_PARAMETER;
@@ -421,7 +421,7 @@ namespace RTC_impl
             return m_comps.at(i);
           }
       }
-    return NULL;
+    return nullptr;
   }
 
   bool ExecutionContextWorker::

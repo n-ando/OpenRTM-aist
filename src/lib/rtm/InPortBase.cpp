@@ -41,7 +41,7 @@ namespace RTC
    * @endif
    */
   InPortBase::InPortBase(const char* name, const char* data_type)
-    : PortBase(name), m_singlebuffer(true), m_thebuffer(0), m_littleEndian(true)
+    : PortBase(name), m_singlebuffer(true), m_thebuffer(nullptr), m_littleEndian(true)
   {
     RTC_DEBUG(("Port name: %s", name));
 
@@ -76,7 +76,7 @@ namespace RTC
           }
       }
 
-    if (m_thebuffer != 0)
+    if (m_thebuffer != nullptr)
       {
         CdrBufferFactory::instance().deleteObject(m_thebuffer);
         if (!m_singlebuffer)
@@ -112,7 +112,7 @@ namespace RTC
       {
         RTC_DEBUG(("single buffer mode."));
         m_thebuffer = CdrBufferFactory::instance().createObject("ring_buffer");
-        if (m_thebuffer == 0)
+        if (m_thebuffer == nullptr)
           {
             RTC_ERROR(("default buffer creation failed"));
           }
@@ -236,7 +236,7 @@ namespace RTC
           }
       }
     RTC_WARN(("ConnectorProfile with the id(%s) not found.", id));
-    return 0;
+    return nullptr;
   }
 
   /*!
@@ -259,7 +259,7 @@ namespace RTC
           }
       }
     RTC_WARN(("ConnectorProfile with the name(%s) not found.", name));
-    return 0;
+    return nullptr;
   }
 
   /*!
@@ -274,7 +274,7 @@ namespace RTC
   {
     RTC_TRACE(("getConnectorProfileById(id = %s)", id));
     InPortConnector* conn(getConnectorById(id));
-    if (conn == 0)
+    if (conn == nullptr)
       {
         return false;
       }
@@ -294,7 +294,7 @@ namespace RTC
   {
     RTC_TRACE(("getConnectorProfileByName(name = %s)", name));
     InPortConnector* conn(getConnectorByName(name));
-    if (conn == 0)
+    if (conn == nullptr)
       {
         return false;
       }
@@ -512,7 +512,7 @@ namespace RTC
 
         // create InPortProvider
         InPortProvider* provider(createProvider(cprof, prop));
-        if (provider == 0)
+        if (provider == nullptr)
           {
             RTC_ERROR(("InPort provider creation failed."));
             return RTC::BAD_PARAMETER;
@@ -520,7 +520,7 @@ namespace RTC
 
         // create InPortPushConnector
         InPortConnector* connector(createConnector(cprof, prop, provider));
-        if (connector == 0)
+        if (connector == nullptr)
           {
             RTC_ERROR(("PushConnector creation failed."));
             return RTC::RTC_ERROR;
@@ -593,7 +593,7 @@ namespace RTC
 
         // setting endian type
         InPortConnector* conn(getConnectorById(cprof.connector_id));
-        if (conn == 0)
+        if (conn == nullptr)
           {
             RTC_ERROR(("specified connector not found: %s",
                        (const char*)cprof.connector_id));
@@ -610,14 +610,14 @@ namespace RTC
 
         // create OutPortConsumer
         OutPortConsumer* consumer(createConsumer(cprof, prop));
-        if (consumer == 0)
+        if (consumer == nullptr)
           {
             return RTC::BAD_PARAMETER;
           }
 
         // create InPortPullConnector
         InPortConnector* connector(createConnector(cprof, prop, consumer));
-        if (connector == 0)
+        if (connector == nullptr)
           {
             return RTC::RTC_ERROR;
           }
@@ -781,7 +781,7 @@ namespace RTC
                                bool& littleEndian)
   {
         // old version check
-    if (prop.hasKey("serializer") == NULL)
+    if (prop.hasKey("serializer") == nullptr)
       {
         littleEndian = true;
         return true;
@@ -826,7 +826,7 @@ namespace RTC
         RTC_DEBUG(("interface_type:  %s", prop["interface_type"].c_str()));
         RTC_DEBUG(("interface_types: %s",
                    coil::flatten(m_providerTypes).c_str()));
-        return 0;
+        return nullptr;
       }
 
     RTC_DEBUG(("interface_type: %s", prop["interface_type"].c_str()));
@@ -834,7 +834,7 @@ namespace RTC
     provider = InPortProviderFactory::
       instance().createObject(prop["interface_type"].c_str());
 
-    if (provider != 0)
+    if (provider != nullptr)
       {
         RTC_DEBUG(("provider created"));
         provider->init(prop.getNode("provider"));
@@ -844,7 +844,7 @@ namespace RTC
           {
             RTC_ERROR(("publishing interface information error"));
             InPortProviderFactory::instance().deleteObject(provider);
-            return 0;
+            return nullptr;
           }
 #else  // ORB_IS_RTORB
         // RtORB's copy ctor's bug?
@@ -860,7 +860,7 @@ namespace RTC
       }
 
     RTC_ERROR(("provider creation failed"));
-    return 0;
+    return nullptr;
   }
 
   /*!
@@ -881,7 +881,7 @@ namespace RTC
         RTC_DEBUG(("interface_type:  %s", prop["interface_type"].c_str()));
         RTC_DEBUG(("interface_types: %s",
                    coil::flatten(m_consumerTypes).c_str()));
-        return 0;
+        return nullptr;
       }
 
     RTC_DEBUG(("interface_type: %s", prop["interface_type"].c_str()));
@@ -889,7 +889,7 @@ namespace RTC
     consumer = OutPortConsumerFactory::
       instance().createObject(prop["interface_type"].c_str());
 
-    if (consumer != 0)
+    if (consumer != nullptr)
       {
         RTC_DEBUG(("consumer created"));
         consumer->init(prop.getNode("consumer"));
@@ -898,14 +898,14 @@ namespace RTC
           {
             RTC_ERROR(("interface subscription failed."));
             OutPortConsumerFactory::instance().deleteObject(consumer);
-            return 0;
+            return nullptr;
           }
 
         return consumer;
       }
 
     RTC_ERROR(("consumer creation failed"));
-    return 0;
+    return nullptr;
   }
 
   /*!
@@ -934,7 +934,7 @@ namespace RTC
 
     try
       {
-        InPortConnector* connector(0);
+        InPortConnector* connector(nullptr);
         if (m_singlebuffer)
           {
             connector = new InPortPushConnector(profile, provider,
@@ -948,10 +948,10 @@ namespace RTC
                                                 m_listeners);
           }
 
-        if (connector == 0)
+        if (connector == nullptr)
           {
             RTC_ERROR(("old compiler? new returned 0;"));
-            return 0;
+            return nullptr;
           }
         RTC_TRACE(("InPortPushConnector created"));
 
@@ -962,10 +962,10 @@ namespace RTC
     catch (std::bad_alloc& e)
       {
         RTC_ERROR(("InPortPushConnector creation failed"));
-        return 0;
+        return nullptr;
       }
     RTC_FATAL(("never comes here: createConnector()"));
-    return 0;
+    return nullptr;
   }
 
   /*!
@@ -995,7 +995,7 @@ namespace RTC
 
     try
       {
-        InPortConnector* connector(0);
+        InPortConnector* connector(nullptr);
         if (m_singlebuffer)
           {
             connector = new InPortPullConnector(profile, consumer,
@@ -1007,10 +1007,10 @@ namespace RTC
             connector = new InPortPullConnector(profile, consumer, m_listeners);
           }
 
-        if (connector == 0)
+        if (connector == nullptr)
           {
             RTC_ERROR(("old compiler? new returned 0;"));
-            return 0;
+            return nullptr;
           }
         RTC_TRACE(("InPortPushConnector created"));
 
@@ -1021,12 +1021,12 @@ namespace RTC
 		if (coil::normalize(prop["interface_type"]) == "direct")
 		{
 			OutPortBase* outport = getLocalOutPort(profile);
-			if (outport == NULL)
+			if (outport == nullptr)
 			{
 				RTC_DEBUG(("interface_type is direct, "
 					"but a peer InPort servant could not be obtained."));
 				delete connector;
-				return 0;
+				return nullptr;
 			}
 			
 
@@ -1042,10 +1042,10 @@ namespace RTC
     catch (std::bad_alloc& e)
       {
         RTC_ERROR(("InPortPullConnector creation failed"));
-        return 0;
+        return nullptr;
       }
     RTC_FATAL(("never comes here: createConnector()"));
-    return 0;
+    return nullptr;
   }
 
   ConnectorListeners& InPortBase::getListeners()
@@ -1087,7 +1087,7 @@ namespace RTC
 			  RTC_DEBUG(("Peer port might be a remote port"));
 		  }
 	  }
-	  return NULL;
+	  return nullptr;
   }
 
   ReturnCode_t InPortBase::notify_connect(ConnectorProfile& connector_profile)
@@ -1121,4 +1121,4 @@ namespace RTC
 
 	  return PortBase::notify_connect(connector_profile);
   }
-};
+}  // namespace RTC;

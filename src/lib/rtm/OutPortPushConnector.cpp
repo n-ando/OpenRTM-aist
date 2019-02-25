@@ -38,16 +38,16 @@ namespace RTC
                                              ConnectorListeners& listeners,
                                              CdrBufferBase* buffer)
     : OutPortConnector(info, listeners),
-      m_consumer(consumer), m_publisher(0),
+      m_consumer(consumer), m_publisher(nullptr),
       m_listeners(listeners), m_buffer(buffer)
   {
     // publisher/buffer creation. This may throw std::bad_alloc;
     m_publisher = createPublisher(info);
-    if (m_buffer == 0)
+    if (m_buffer == nullptr)
       {
         m_buffer = createBuffer(info);
       }
-    if (m_publisher == 0 || m_buffer == 0 || m_consumer == 0)
+    if (m_publisher == nullptr || m_buffer == nullptr || m_consumer == nullptr)
       { throw std::bad_alloc(); }
 
     if (m_publisher->init(info.properties) != PORT_OK)
@@ -107,31 +107,31 @@ namespace RTC
   {
     RTC_TRACE(("disconnect()"));
     // delete publisher
-    if (m_publisher != 0)
+    if (m_publisher != nullptr)
       {
         RTC_DEBUG(("delete publisher"));
         PublisherFactory& pfactory(PublisherFactory::instance());
         pfactory.deleteObject(m_publisher);
       }
-    m_publisher = 0;
+    m_publisher = nullptr;
 
     // delete consumer
-    if (m_consumer != 0)
+    if (m_consumer != nullptr)
       {
         RTC_DEBUG(("delete consumer"));
         InPortConsumerFactory& cfactory(InPortConsumerFactory::instance());
         cfactory.deleteObject(m_consumer);
       }
-    m_consumer = 0;
+    m_consumer = nullptr;
 
     // delete buffer
-    if (m_buffer != 0)
+    if (m_buffer != nullptr)
       {
         RTC_DEBUG(("delete buffer"));
         CdrBufferFactory& bfactory(CdrBufferFactory::instance());
         bfactory.deleteObject(m_buffer);
       }
-    m_buffer = 0;
+    m_buffer = nullptr;
     RTC_TRACE(("disconnect() done"));
     return PORT_OK;
   }

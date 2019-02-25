@@ -31,7 +31,7 @@ namespace RTC
    * @endif
    */
   OutPortDSProvider::OutPortDSProvider(void)
-    : m_buffer(0), m_connector(NULL)
+    : m_buffer(nullptr), m_connector(nullptr)
   {
     // PortProfile setting
     setInterfaceType("data_service");
@@ -167,7 +167,7 @@ namespace RTC
     // at least the output "data" area should be allocated
     data = new ::RTC::OctetSeq();
 
-    if (m_connector == NULL)
+    if (m_connector == nullptr)
       {
         onSenderError();
         return ::RTC::UNKNOWN_ERROR;
