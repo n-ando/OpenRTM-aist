@@ -195,7 +195,7 @@ int main (int argc, char** argv)
   NVUtil::dump(prof.properties);
 
   std::string cmd;
-  while (1)
+  while (true)
     {
       try
 	{

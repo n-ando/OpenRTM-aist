@@ -79,7 +79,7 @@ namespace CORBA_IORUtil
     size = (size - 4) / 2;  // how many octets are there in the string
     p += 4;
 
-    cdrMemoryStream buf((CORBA::ULong)size, 0);
+    cdrMemoryStream buf((CORBA::ULong)size, false);
     for (int i(0); i < static_cast<int>(size); ++i)
       {
         CORBA::Octet v;
@@ -228,9 +228,9 @@ namespace CORBA_IORUtil
                 IIOP::encodeProfile(pBody, profile);
                 CORBA::ULong max = profile.profile_data.maximum();
                 CORBA::ULong len = profile.profile_data.length();
-                CORBA::Octet* buf = profile.profile_data.get_buffer(1);
+                CORBA::Octet* buf = profile.profile_data.get_buffer(true);
                 // replace is not standard function
-                ior.profiles[count].profile_data.replace(max, len, buf, 1);
+                ior.profiles[count].profile_data.replace(max, len, buf, true);
               }
           }
         return toString(ior, iorstr);
@@ -362,7 +362,7 @@ namespace CORBA_IORUtil
         if (comp[i].tag == IOP::TAG_ALTERNATE_IIOP_ADDRESS)
           {
             cdrEncapsulationStream e(comp[i].component_data.get_buffer(),
-                                     comp[i].component_data.length(), 1);
+                                     comp[i].component_data.length(), true);
             IIOP::Address v;
             v.host = e.unmarshalRawString();
             v.port <<= e;
