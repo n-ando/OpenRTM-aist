@@ -66,7 +66,7 @@ namespace RTC
   {
     RTC_TRACE(("~InPortBase()"));
 
-    if (m_connectors.size() != 0)
+    if (!m_connectors.empty())
       {
         RTC_ERROR(("connector.size should be 0 in InPortBase's dtor."));
         for (int i(0), len(m_connectors.size()); i < len; ++i)
@@ -704,7 +704,7 @@ namespace RTC
 #endif
 
     // InPortProvider supports "push" dataflow type
-    if (provider_types.size() > 0)
+    if (!provider_types.empty())
       {
         RTC_DEBUG(("dataflow_type push is supported"));
         appendProperty("dataport.dataflow_type", "push");
@@ -756,7 +756,7 @@ namespace RTC
 #endif
 
     // OutPortConsumer supports "pull" dataflow type
-    if (consumer_types.size() > 0)
+    if (!consumer_types.empty())
       {
         RTC_PARANOID(("dataflow_type pull is supported"));
         appendProperty("dataport.dataflow_type", "pull");

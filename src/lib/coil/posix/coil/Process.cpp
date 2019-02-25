@@ -38,7 +38,7 @@ namespace coil
 
   /*!
    * @if jp
-   * @brief ¥×¥í¥»¥¹¤òµ¯Æ°¤¹¤ë
+   * @brief Â¥Ã—Â¥Ã­Â¥Â»Â¥Â¹Â¤Ã²ÂµÂ¯Ã†Â°Â¤Â¹Â¤Ã«
    * @else
    * @brief Launching a process
    * @endif
@@ -98,8 +98,10 @@ namespace coil
         char str[512];
         fgets(str, 512, fd);
         std::string line(str);
-        if (0 < line.size())
-          line.erase(line.size() - 1);
+        if (!line.empty())
+          {
+            line.erase(line.size() - 1);
+          }
         out.push_back(line);
       } while (!feof(fd));
 

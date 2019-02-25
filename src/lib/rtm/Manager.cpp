@@ -806,7 +806,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
         return nullptr;
       }
 
-    if (m_config.getProperty("corba.endpoints_ipv4") == "")
+    if (m_config.getProperty("corba.endpoints_ipv4").empty())
       {
         setEndpointProperty(comp->getObjRef());
       }
@@ -1012,7 +1012,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
       {
         std::vector<RTObject_impl*> comps;
         comps = getComponents();
-        if (comps.size() == 0)
+        if (comps.empty())
           {
             shutdown();
           }
@@ -1341,7 +1341,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     if (coil::toBool(m_config["manager.shutdown_on_nortcs"], "YES", "NO", true))
       {
         std::vector<RTObject_impl*> comps(getComponents());
-        if (comps.size() == 0)
+        if (comps.empty())
           {
             terminate();
           }
@@ -1994,7 +1994,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
         return true;
       }
     m_mgrservant = new ::RTM::ManagerServant();
-    if (m_config.getProperty("corba.endpoints_ipv4") == "")
+    if (m_config.getProperty("corba.endpoints_ipv4").empty())
       {
         setEndpointProperty(m_mgrservant->getObjRef());
       }
@@ -2510,7 +2510,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
         if (ipv4 && coil::isIPv4(addr))
           {
             std::string tmp(addr + ":" + coil::otos(endpoints[i].port));
-            if (ipv4_list.size() == 0 ||
+            if (ipv4_list.empty() ||
                 std::find(ipv4_list.begin(), ipv4_list.end(), ipv4_count)
                 != ipv4_list.end())
               {
@@ -2522,7 +2522,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
         if (ipv6 && coil::isIPv6(addr))
           {
             std::string tmp("[" + addr + "]:" + coil::otos(endpoints[i].port));
-            if (ipv6_list.size() == 0 ||
+            if (ipv6_list.empty() ||
                 std::find(ipv6_list.begin(), ipv6_list.end(), ipv6_count)
                 != ipv6_list.end())
               {
@@ -2701,7 +2701,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 			  continue;
 		  }
 
-          if (ports.size() == 0)
+          if (ports.empty())
           {
               coil::Properties prop;
 

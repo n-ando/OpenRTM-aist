@@ -88,7 +88,7 @@ int main(int argc, char* argv[])
     }
 
   // loaded component profile have to be one
-  if (profs.size() == 0)
+  if (profs.empty())
     {
       std::cerr << "Load failed." << std::endl;
       return -1;

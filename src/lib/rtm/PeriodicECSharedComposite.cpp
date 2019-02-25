@@ -419,7 +419,7 @@ namespace SDOPackage
                                   PortList& portlist)
   {
     RTC_TRACE(("addPort(%s)", ::coil::flatten(portlist).c_str()));
-    if (portlist.size() == 0) { return; }
+    if (portlist.empty()) { return; }
 
 #ifndef ORB_IS_RTORB
     ::RTC::PortProfileList& plist(member.profile_->port_profiles);
@@ -468,7 +468,7 @@ namespace SDOPackage
                                           PortList& portlist)
   {
     RTC_TRACE(("removePort(%s)", coil::flatten(portlist).c_str()));
-    if (portlist.size() == 0) { return; }
+    if (portlist.empty()) { return; }
 
 #ifndef ORB_IS_RTORB
     ::RTC::PortProfileList& plist(member.profile_->port_profiles);

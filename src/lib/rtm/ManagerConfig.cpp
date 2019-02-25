@@ -227,7 +227,7 @@ namespace RTC
   bool ManagerConfig::findConfigFile()
   {
     // Check existance of configuration file given command arg
-    if (m_configFile != "")
+    if (!m_configFile.empty())
       {
         if (fileExist(m_configFile))
           {
