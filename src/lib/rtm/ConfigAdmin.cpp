@@ -309,7 +309,7 @@ namespace RTC
     if (it == m_newConfig.end()) { return false; }
 
     coil::Properties* p(m_configsets.removeNode(config_id));
-    if (p != nullptr) { delete p; }
+    delete p; 
     m_newConfig.erase(it);
 
     m_changed = true;
