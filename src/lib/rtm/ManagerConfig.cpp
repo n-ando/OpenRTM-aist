@@ -179,7 +179,7 @@ namespace RTC
           case 'o':
             {
               std::string optarg(get_opts.optarg);
-              std::string::size_type pos(optarg.find(":"));
+              std::string::size_type pos(optarg.find(':'));
               if (pos != std::string::npos)
                 {
                   std::string key = optarg.substr(0, pos);

@@ -125,7 +125,7 @@ RTC::ReturnCode_t MyServiceConsumer::onExecute(RTC::UniqueId ec_id)
       std::getline(std::cin, args);
 #endif
       
-      pos = args.find_first_of(" ");
+      pos = args.find_first_of(' ');
       if (pos != std::string::npos)
 	{
 	  argv.push_back(args.substr(0, pos));

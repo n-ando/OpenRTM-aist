@@ -716,7 +716,7 @@ namespace RTC
     for (CORBA::ULong i = 0; i < nc_length; ++i)
       {
         std::string::size_type pos;
-        pos = name_comps[i].find_last_of(".");
+        pos = name_comps[i].find_last_of('.');
         if (pos != name_comps[i].npos)
           {
             name[i].id   =

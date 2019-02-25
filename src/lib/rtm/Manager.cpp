@@ -1670,7 +1670,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
       {
         std::string& endpoint(endpoints[i]);
         RTC_DEBUG(("Endpoint is : %s", endpoint.c_str()));
-        if (endpoint.find(":") == std::string::npos) { endpoint += ":"; }
+        if (endpoint.find(':') == std::string::npos) { endpoint += ":"; }
 
         if (corba == "omniORB")
           {
@@ -2192,7 +2192,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 
 	//RTM::CompParam::prof_list
 
-    if (id_and_conf[0].find(":") == std::string::npos)
+    if (id_and_conf[0].find(':') == std::string::npos)
       {
 		  std::string id = RTM::CompParam::prof_list[0];
 		  id = id + ":::";

@@ -405,7 +405,7 @@ namespace RTM
 
 
 
-	  int eqpos = paramstr.find("=");
+	  int eqpos = paramstr.find('=');
 
 	  
 
