@@ -90,11 +90,10 @@ namespace RTC
         }
         else
         {
-            payload->length = p_type->getDataLength();
             payload->max_size = p_type->getDataLength();
             try
             {
-                payload->data = new eprosima::fastrtps::rtps::octet[p_type->getDataLength()];
+                payload->reserve(p_type->getDataLength());
             }
             catch (std::bad_alloc)
             {
