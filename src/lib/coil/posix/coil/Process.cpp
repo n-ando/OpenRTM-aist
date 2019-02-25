@@ -81,7 +81,7 @@ namespace coil
 
   int daemon(int nochdir, int noclose)
   {
-    return daemon(nochdir, noclose);
+    return ::daemon(nochdir, noclose);
   }
 
   int create_process(std::string command, std::vector<std::string> &out)
