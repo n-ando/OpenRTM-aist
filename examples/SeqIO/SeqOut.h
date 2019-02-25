@@ -29,7 +29,7 @@
 
 using namespace RTC;
 
-// Connector Listener Dump Flag
+// Connector Listener Dump Flag : default OFF
 extern bool g_Listener_dump_enabled;
 
 class DataListener
