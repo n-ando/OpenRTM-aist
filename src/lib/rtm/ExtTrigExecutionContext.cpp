@@ -86,7 +86,7 @@ namespace RTC
    * @brief Generate internal activity thread for ExecutionContext
    * @endif
    */
-  int ExtTrigExecutionContext::open(void *args)
+  int ExtTrigExecutionContext::open(void * /*args*/)
   {
     RTC_TRACE(("open()"));
     activate();
@@ -159,7 +159,7 @@ namespace RTC
    * @brief Thread execution function for ExecutionContext
    * @endif
    */
-  int ExtTrigExecutionContext::close(unsigned long flags)
+  int ExtTrigExecutionContext::close(unsigned long  /*flags*/)
   {
     RTC_TRACE(("close()"));
     // At this point, this component have to be finished.
@@ -398,7 +398,7 @@ namespace RTC
    * @brief onAddedComponent() template function
    */
   RTC::ReturnCode_t ExtTrigExecutionContext::
-  onAddedComponent(RTC::LightweightRTObject_ptr rtobj)
+  onAddedComponent(RTC::LightweightRTObject_ptr  /*rtobj*/)
   {
     Guard guard(m_worker.mutex_);
     if (m_worker.ticked_ == false)
@@ -411,7 +411,7 @@ namespace RTC
    * @brief onRemovedComponent() template function
    */
   RTC::ReturnCode_t ExtTrigExecutionContext::
-  onRemovedComponent(RTC::LightweightRTObject_ptr rtobj)
+  onRemovedComponent(RTC::LightweightRTObject_ptr  /*rtobj*/)
   {
     Guard guard(m_worker.mutex_);
     if (m_worker.ticked_ == false)
@@ -483,7 +483,7 @@ extern "C"
    * @brief Register Factory class for this ExecutionContext
    * @endif
    */
-  void ExtTrigExecutionContextInit(RTC::Manager* manager)
+  void ExtTrigExecutionContextInit(RTC::Manager*  /*manager*/)
   {
     RTC::ExecutionContextFactory::
       instance().addFactory("ExtTrigExecutionContext",

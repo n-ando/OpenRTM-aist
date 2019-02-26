@@ -597,7 +597,7 @@ namespace RTC
     explicit setCallback(::SDOPackage::PeriodicECOrganization* org)
            : m_org(org) {}
     virtual ~setCallback() {}
-    virtual void operator()(const coil::Properties& config_set)
+    virtual void operator()(const coil::Properties&  /*config_set*/)
     {
       m_org->updateDelegatedPorts();
     }
@@ -613,7 +613,7 @@ namespace RTC
     explicit addCallback(::SDOPackage::PeriodicECOrganization* org)
            : m_org(org) {}
     virtual ~addCallback() {}
-    virtual void operator()(const coil::Properties& config_set)
+    virtual void operator()(const coil::Properties&  /*config_set*/)
     {
       m_org->updateDelegatedPorts();
     }

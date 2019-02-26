@@ -126,7 +126,7 @@ RTC::ReturnCode_t Analyzer_test::onDeactivated(RTC::UniqueId ec_id)
 */
 
 
-RTC::ReturnCode_t Analyzer_test::onExecute(RTC::UniqueId ec_id)
+RTC::ReturnCode_t Analyzer_test::onExecute(RTC::UniqueId  /*ec_id*/)
 {
 	if (m_inIn.isNew())
 	{

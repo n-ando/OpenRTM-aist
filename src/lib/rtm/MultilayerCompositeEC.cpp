@@ -439,7 +439,7 @@ extern "C"
    * @endif
    */
 
-  void MultilayerCompositeECInit(RTC::Manager* manager)
+  void MultilayerCompositeECInit(RTC::Manager*  /*manager*/)
   {
     RTC::ExecutionContextFactory::
       instance().addFactory("MultilayerCompositeEC",

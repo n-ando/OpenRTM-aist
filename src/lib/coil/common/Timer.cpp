@@ -56,7 +56,7 @@ namespace coil
    * @brief Generate thread for Timer
    * @endif
    */
-  int Timer::open(void *args)
+  int Timer::open(void * /*args*/)
   {
     activate();
     return 0;

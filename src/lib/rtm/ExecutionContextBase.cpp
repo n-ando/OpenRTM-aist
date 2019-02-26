@@ -22,7 +22,7 @@
 
 namespace RTC
 {
-  ExecutionContextBase::ExecutionContextBase(const char* name)
+  ExecutionContextBase::ExecutionContextBase(const char*  /*name*/)
     : rtclog("ec_base"),
       m_activationTimeout(0.5),
       m_deactivationTimeout(0.5),

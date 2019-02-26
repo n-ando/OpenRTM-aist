@@ -53,7 +53,7 @@ namespace coil
    * @brief Task open
    * @endif
    */
-  int Task::open(void* args)
+  int Task::open(void*  /*args*/)
   {
     return 0;
   }
@@ -65,7 +65,7 @@ namespace coil
    * @brief Task close
    * @endif
    */
-  int Task::close(unsigned long flags)
+  int Task::close(unsigned long  /*flags*/)
   {
     return 0;
   }

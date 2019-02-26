@@ -358,7 +358,7 @@ namespace SDOPackage
    */
   CORBA::Boolean
   Configuration_impl::set_configuration_parameter(const char* name,
-                                                  const CORBA::Any& value)
+                                                  const CORBA::Any&  /*value*/)
     throw (CORBA::SystemException,
            InvalidParameter, NotAvailable, InternalError)
   {

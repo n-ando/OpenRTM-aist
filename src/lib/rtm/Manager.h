@@ -2305,7 +2305,7 @@ namespace RTC
        *
        * @endif
        */
-      virtual int open(void *args)
+      virtual int open(void * /*args*/)
       {
         activate();
         return 0;
@@ -2356,7 +2356,7 @@ namespace RTC
        *
        * @endif
        */
-      virtual int close(unsigned long flags)
+      virtual int close(unsigned long  /*flags*/)
       {
         return 0;
       }
@@ -2457,7 +2457,7 @@ namespace RTC
        *
        * @endif
        */
-      virtual int open(void *args)
+      virtual int open(void * /*args*/)
       {
         activate();
         return 0;

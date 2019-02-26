@@ -142,7 +142,7 @@ namespace RTC
 
   
 	void InPortSHMConsumer::
-		publishInterfaceProfile(SDOPackage::NVList& properties)
+		publishInterfaceProfile(SDOPackage::NVList&  /*properties*/)
 	{
 		return;
 	}

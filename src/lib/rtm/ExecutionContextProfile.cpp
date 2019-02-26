@@ -34,7 +34,7 @@ namespace RTC_impl
    * @endif
    */
   ExecutionContextProfile::
-  ExecutionContextProfile(RTC::ExecutionKind kind)
+  ExecutionContextProfile(RTC::ExecutionKind  /*kind*/)
     : rtclog("periodic_ecprofile"),
       m_period(static_cast<double>(DEEFAULT_PERIOD)),
       m_ref(RTC::ExecutionContextService::_nil())
