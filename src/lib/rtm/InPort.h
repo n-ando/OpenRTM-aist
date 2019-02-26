@@ -585,7 +585,7 @@ namespace RTC
           }
       }
 
-      if (!connector)
+      if (connector == nullptr)
       {
           RTC_ERROR(("can not find %s",name.c_str()));
           return false;

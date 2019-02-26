@@ -334,7 +334,7 @@ namespace RTC
    */
   void PortAdmin::deletePortByName(const char* port_name)
   {
-    if (!port_name) return;
+    if (port_name == nullptr) return;
     PortBase& p(*m_portServants.find(port_name));
     removePort(p);
   }

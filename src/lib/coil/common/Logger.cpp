@@ -410,7 +410,7 @@ namespace coil
      */
     void LogStream::flush()
     {
-        if (ostream_type)
+        if (ostream_type != nullptr)
         {
             ostream_type->flush();
         }

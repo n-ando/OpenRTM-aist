@@ -184,23 +184,23 @@ namespace RTC
         coil::toUpper(observed[i]);
         if (observed[i] == "COMPONENT_PROFILE")
           {
-            flags[OpenRTM::COMPONENT_PROFILE] = 1;
+            flags[OpenRTM::COMPONENT_PROFILE] = true;
           }
         else if (observed[i] == "RTC_STATUS")
           {
-            flags[OpenRTM::RTC_STATUS] = 1;
+            flags[OpenRTM::RTC_STATUS] = true;
           }
         else if (observed[i] == "EC_STATUS")
           {
-            flags[OpenRTM::EC_STATUS] = 1;
+            flags[OpenRTM::EC_STATUS] = true;
           }
         else if (observed[i] == "PORT_PROFILE")
           {
-            flags[OpenRTM::PORT_PROFILE] = 1;
+            flags[OpenRTM::PORT_PROFILE] = true;
           }
         else if (observed[i] == "CONFIGURATION")
           {
-            flags[OpenRTM::CONFIGURATION] = 1;
+            flags[OpenRTM::CONFIGURATION] = true;
           }
         else if (observed[i] == "ALL")
           {

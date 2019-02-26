@@ -201,14 +201,14 @@ namespace coil
       if (c == '\\')
         {
           ++count;
-          if (!(count % 2))
+          if ((count % 2) == 0)
             {
               str.push_back(c);
             }
         }
       else
         {
-          if (count > 0 && (count % 2))
+          if (count > 0 && ((count % 2) != 0))
             {
               count = 0;
               if      (c == 't')  str.push_back('\t');
@@ -491,7 +491,7 @@ namespace coil
     // UNIX absolute path is begun from '/'
     if (str[0] == '/') return true;
     // Windows absolute path is begun from '[a-zA-Z]:\'
-    if (isalpha(str[0]) && (str[1] == ':') && str[2] == '\\') return true;
+    if ((isalpha(str[0]) != 0) && (str[1] == ':') && str[2] == '\\') return true;
     // Windows network file path is begun from '\\'
     if (str[0] == '\\' && str[1] == '\\') return true;
 

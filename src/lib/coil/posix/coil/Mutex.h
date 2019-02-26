@@ -121,7 +121,7 @@ namespace coil
      */
     inline bool trylock()
     {
-      return ::pthread_mutex_trylock(&mutex_);
+      return ::pthread_mutex_trylock(&mutex_) != 0;
     }
 
     /*!

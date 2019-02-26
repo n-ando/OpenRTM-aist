@@ -873,7 +873,7 @@ namespace RTC
     RTC_TRACE(("setTransitionMode(%s)", key));
     if (props.findNode(key) != nullptr)
       {
-        flag = coil::toBool(props[key], "YES", "NO", "YES");
+        flag = coil::toBool(props[key], "YES", "NO", true);
         RTC_DEBUG(("Transition Mode: %s = %s",
                    key, flag ? "YES" : "NO"));
         return true;

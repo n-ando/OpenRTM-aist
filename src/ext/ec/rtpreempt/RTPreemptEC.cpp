@@ -187,7 +187,7 @@ namespace RTC_exp
         struct timespec sleeptime;
         if (getSleepTime(sleeptime, ts0, ts1) == true)
           {
-            clock_nanosleep(CLOCK_MONOTONIC, !TIMER_ABSTIME,
+            clock_nanosleep(CLOCK_MONOTONIC, static_cast<int>(!TIMER_ABSTIME),
                             &sleeptime, nullptr);
             if (count > 1000)
               {

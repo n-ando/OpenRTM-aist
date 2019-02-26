@@ -239,7 +239,7 @@ namespace RTC
     void* func;
     func = dll->dll.symbol(func_name.c_str());
 
-    if (!func)
+    if (func == nullptr)
       {
         RTC_ERROR(("Specified symbol %s not found.", func_name.c_str()));
         throw SymbolNotFound(func_name);
@@ -393,7 +393,7 @@ namespace RTC
     std::ifstream infile;
     infile.open(filename.c_str(), std::ios::in);
     // fial() 0: ok, !0: fail
-    if (infile.fail() != 0)
+    if (static_cast<int>(infile.fail()) != 0)
       {
         infile.close();
         return false;

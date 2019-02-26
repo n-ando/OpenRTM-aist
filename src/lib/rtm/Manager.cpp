@@ -134,10 +134,10 @@ namespace RTC
   Manager* Manager::init(int argc, char** argv)
   {
     // DCL for singleton
-    if (!manager)
+    if (manager == nullptr)
       {
         Guard guard(mutex);
-        if (!manager)
+        if (manager == nullptr)
           {
             manager = new Manager();
             manager->initManager(argc, argv);
@@ -164,10 +164,10 @@ namespace RTC
   Manager& Manager::instance()
   {
     // DCL for singleton
-    if (!manager)
+    if (manager == nullptr)
       {
         Guard guard(mutex);
-        if (!manager)
+        if (manager == nullptr)
           {
             manager = new Manager();
             manager->initManager(0, nullptr);
@@ -2023,7 +2023,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 			{
 				tm = coil::TimeValue(duration);
 			}
-			if (m_timer)
+			if (m_timer != nullptr)
 			{
 				m_timer->registerListenerObj(m_mgrservant, &RTM::ManagerServant::updateMasterManager, tm);
 			}
@@ -2415,7 +2415,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
         if (c == '%')
           {
             ++count;
-            if (!(count % 2)) str.push_back((*it));
+            if ((count % 2) == 0) str.push_back((*it));
           }
         else if (c == '$')
           {
@@ -2439,7 +2439,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
           }
         else
           {
-            if (count > 0 && (count % 2))
+            if (count > 0 && ((count % 2) != 0))
               {
                 count = 0;
                 if      (c == 'n')  str += prop["instance_name"];

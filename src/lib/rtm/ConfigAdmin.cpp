@@ -101,7 +101,7 @@ namespace RTC
 
     for (size_t i(0); i < leaf.size(); ++i)
       {
-        if (leaf[i]->hasKey(param_name))
+        if (leaf[i]->hasKey(param_name) != nullptr)
           {
             coil::Properties* p(leaf[i]->removeNode(param_name));
             delete p;

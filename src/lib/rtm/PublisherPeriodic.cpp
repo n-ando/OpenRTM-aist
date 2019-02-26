@@ -464,7 +464,7 @@ namespace RTC
       {
         RTC_ERROR(("Task creation failed: %s",
                    prop.getProperty("thread_type", "default").c_str()));
-        return INVALID_ARGS;
+        return INVALID_ARGS != 0u;
       }
     m_task->setTask(this, &PublisherPeriodic::svc);
     RTC_PARANOID(("Task creation succeeded."));
