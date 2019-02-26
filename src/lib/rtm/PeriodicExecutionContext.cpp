@@ -156,6 +156,10 @@ namespace RTC_exp
         }
 #endif
     }
+    else
+    {
+        RTC_DEBUG(("cpu affinity is not set"));
+    }
 
     do
       {

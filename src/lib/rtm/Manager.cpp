@@ -1974,6 +1974,10 @@ std::vector<coil::Properties> Manager::getLoadableModules()
         }
 #endif
     }
+    else
+    {
+        RTC_DEBUG(("cpu affinity is not set"));
+    }
 
   }
 
