@@ -1960,7 +1960,6 @@ std::vector<coil::Properties> Manager::getLoadableModules()
         coil::CpuMask ret_cpu;
         result = coil::getProcCpuAffinity(ret_cpu);
 
-#ifdef RTM_OS_LINUX
         std::sort(ret_cpu.begin(), ret_cpu.end());
         std::sort(cpu_list.begin(), cpu_list.end());
         if (result && !ret_cpu.empty() && !cpu_list.empty() && ret_cpu.size() == cpu_list.size()
@@ -1972,7 +1971,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
         {
             RTC_ERROR(("pthread_getaffinity_np(): returned error."));
         }
-#endif
+
     }
     else
     {
