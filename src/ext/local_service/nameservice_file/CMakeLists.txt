@@ -19,7 +19,8 @@ include_directories(
 		${Boost_INCLUDE_DIRS}
 		)
 
-ADD_DEFINITIONS(${ORB_C_FLAGS_LIST})
+add_definitions(${ORB_C_FLAGS_LIST})
+add_definitions(${COIL_C_FLAGS_LIST})
 
 
 set(target FileNameservice)

@@ -35,7 +35,8 @@ include_directories(
 		${${idl_name}_DIR}
 		)
 
-ADD_DEFINITIONS(${ORB_C_FLAGS_LIST})
+add_definitions(${ORB_C_FLAGS_LIST})
+add_definitions(${COIL_C_FLAGS_LIST})
 
 
 set(target LoggerConsumer)
