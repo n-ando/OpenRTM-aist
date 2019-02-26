@@ -1906,9 +1906,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 #endif
 #endif
     // initialize CPU affinity
-#ifdef RTM_OS_LINUX
     initCpuAffinity();
-#endif  // RTM_OS_LINUX
 
     return true;
   }
@@ -1931,7 +1929,6 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   void Manager::initCpuAffinity()
   {
     RTC_TRACE(("initCpuAffinity()"));
-#ifdef RTM_OS_LINUX
     if (m_config.findNode("manager.cpu_affinity") == nullptr) { return; }
 
     std::string& affinity(m_config["manager.cpu_affinity"]);
@@ -1939,39 +1936,45 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 
     coil::vstring tmp = coil::split(affinity, ",", true);
 
-    pid_t pid = getpid();
-    cpu_set_t cpu_set; CPU_ZERO(&cpu_set);
-
+    coil::CpuMask cpu_list;
     for (size_t i(0); i < tmp.size(); ++i)
-      {
+    {
         int num;
         if (coil::stringTo(num, tmp[i].c_str()))
-          {
-            CPU_SET(num, &cpu_set);
-            RTC_DEBUG(("CPU affinity mask set to %d", num));
-          }
-      }
+        {
+            cpu_list.push_back(num);
+            RTC_DEBUG(("CPU affinity int value: %d added.", num));
+        }
+    }
 
-    int result = sched_setaffinity(pid, sizeof(cpu_set_t), &cpu_set);
-    if (result != 0)
-      {
-        RTC_ERROR(("pthread_getaffinity_np():"
-                   "CPU affinity mask setting failed"));
-      }
-    CPU_ZERO(&cpu_set);
-    result = sched_getaffinity(pid, sizeof(cpu_set_t), &cpu_set);
-    if (result != 0)
-      {
-        RTC_ERROR(("pthread_getaffinity_np(): returned error."));
-      }
-    for (size_t j(0); j < CPU_SETSIZE; ++j)
-      {
-        if (CPU_ISSET(j, &cpu_set))
-          {
-            RTC_DEBUG(("Current CPU affinity mask is %d.", j));
-          }
-      }
-#endif  // RTM_OS_LINUX
+    if (!cpu_list.empty())
+    {
+        bool result = coil::setProcCpuAffinity(cpu_list);
+
+        if (!result)
+        {
+            RTC_ERROR(("pthread_getaffinity_np():"
+                "CPU affinity mask setting failed"));
+        }
+
+        coil::CpuMask ret_cpu;
+        result = coil::getProcCpuAffinity(ret_cpu);
+
+#ifdef RTM_OS_LINUX
+        std::sort(ret_cpu.begin(), ret_cpu.end());
+        std::sort(cpu_list.begin(), cpu_list.end());
+        if (result && !ret_cpu.empty() && !cpu_list.empty() && ret_cpu.size() == cpu_list.size()
+            && std::equal(ret_cpu.begin(), ret_cpu.end(), cpu_list.begin()))
+        {
+
+        }
+        else
+        {
+            RTC_ERROR(("pthread_getaffinity_np(): returned error."));
+        }
+#endif
+    }
+
   }
 
   /*!
