@@ -155,7 +155,7 @@ namespace SDOPackage
      *
      * @endif
      */
-    virtual ::CORBA::Boolean set_members(const SDOList& sdos)
+    virtual ::CORBA::Boolean set_members(const SDOList& sdo_list)
       throw (::CORBA::SystemException,
              InvalidParameter, NotAvailable, InternalError);
 

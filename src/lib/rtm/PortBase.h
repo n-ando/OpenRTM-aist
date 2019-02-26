@@ -1177,7 +1177,7 @@ namespace RTC
      *
      * @endif
      */
-    void setOnUnsubscribeInterfaces(ConnectionCallback* on_subscribe);
+    void setOnUnsubscribeInterfaces(ConnectionCallback* on_unsubscribe);
 
     /*!
      * @if jp
@@ -1413,7 +1413,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode_t disconnectNext(ConnectorProfile& connector_profile);
+    virtual ReturnCode_t disconnectNext(ConnectorProfile& cprof);
 
     /*! @if jp
      *
