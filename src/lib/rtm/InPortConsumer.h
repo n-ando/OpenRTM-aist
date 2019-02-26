@@ -27,14 +27,14 @@
 namespace coil
 {
   class Properties;
-};
+} // namespace coil
 
 // Why RtORB does not allow forward declaration?
 #if !defined ORB_IS_RTORB && !defined ORB_IS_ORBEXPRESS
 namespace SDOPackage
 {
   class NVList;
-};
+} // namespace SDOPackage
 #endif  // ORB_IS_RTORB
 
 

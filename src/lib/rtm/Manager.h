@@ -44,12 +44,12 @@
 namespace RTM
 {
   class ManagerServant;
-}
+} // namespace RTM
 
 namespace coil
 {
   class Timer;
-};
+} // namespace coil
 
 namespace RTC
 {

@@ -35,7 +35,7 @@
 namespace coil
 {
   class Properties;
-};
+} // namespace coil
 
 namespace RTC
 {

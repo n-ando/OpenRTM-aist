@@ -35,7 +35,7 @@
 namespace coil
 {
   class IClock;
-};
+} // namespace coil;
 namespace RTC
 {
   /*!

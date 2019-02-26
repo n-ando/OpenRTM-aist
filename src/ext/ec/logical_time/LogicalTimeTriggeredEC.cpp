@@ -542,7 +542,7 @@ namespace RTC
       }
     return RTC::RTC_OK;
   }
-}  // namespace RTC;
+} // namespace RTC
 
 
 extern "C"
