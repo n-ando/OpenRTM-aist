@@ -196,41 +196,32 @@ namespace RTC
       case BufferStatus::BUFFER_OK:
         onBufferWrite(data);
         return ::RTC::PORT_OK;
-        break;
 
       case BufferStatus::BUFFER_ERROR:
         onReceiverError(data);
         return ::RTC::PORT_ERROR;
-        break;
 
       case BufferStatus::BUFFER_FULL:
         onBufferFull(data);
         onReceiverFull(data);
         return ::RTC::BUFFER_FULL;
-        break;
 
       case BufferStatus::BUFFER_EMPTY:
         // never come here
         return ::RTC::BUFFER_EMPTY;
-        break;
 
       case BufferStatus::PRECONDITION_NOT_MET:
         onReceiverError(data);
         return ::RTC::PORT_ERROR;
-        break;
 
       case BufferStatus::TIMEOUT:
         onBufferWriteTimeout(data);
         onReceiverTimeout(data);
         return ::RTC::BUFFER_TIMEOUT;
-        break;
 
       default:
         return ::RTC::UNKNOWN_ERROR;
       }
-
-    onReceiverError(data);
-    return ::RTC::UNKNOWN_ERROR;
   }
 
 };     // namespace RTC

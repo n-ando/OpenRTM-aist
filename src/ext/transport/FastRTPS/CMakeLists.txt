@@ -4,13 +4,6 @@ project (FastRTPSTransport
 	VERSION ${RTM_VERSION}
 	LANGUAGES CXX)
 
-
-if(NOT CMAKE_CXX_STANDARD)
-	set(CMAKE_CXX_STANDARD 11)
-endif()
-
-set(CMAKE_CXX_EXTENSIONS OFF)
-
 find_package(fastcdr REQUIRED)
 find_package(fastrtps REQUIRED)
 
@@ -58,6 +51,11 @@ else()
 	add_dependencies(${target} ${RTM_PROJECT_NAME})
 	set_target_properties(${target} PROPERTIES PREFIX "")
 
+	set_target_properties(${target} PROPERTIES
+				CXX_STANDARD 11
+				CXX_STANDARD_REQUIRED YES
+				CXX_EXTENSIONS NO
+				)
 
 	install(TARGETS ${target} LIBRARY DESTINATION ${INSTALL_RTM_EXT_DIR}/transport
 				ARCHIVE DESTINATION ${INSTALL_RTM_EXT_DIR}/transport

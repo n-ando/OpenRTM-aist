@@ -161,7 +161,7 @@ namespace RTC
     }
 
     void CORBACdrDataPubSubType::deleteData(void* data) {
-        delete((RTC::ByteData*)data);
+        delete data;
     }
 #if (FASTRTPS_VERSION_MAJOR <= 1) && (FASTRTPS_VERSION_MINOR == 6)
     bool CORBACdrDataPubSubType::getKey(void *data, eprosima::fastrtps::rtps::InstanceHandle_t* handle) {

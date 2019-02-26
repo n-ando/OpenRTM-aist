@@ -353,34 +353,28 @@ namespace RTC
       case BufferStatus::BUFFER_OK:
         onBufferWrite(data);
         return;
-        break;
 
       case BufferStatus::BUFFER_ERROR:
         onReceiverError(data);
         return;
-        break;
 
       case BufferStatus::BUFFER_FULL:
         onBufferFull(data);
         onReceiverFull(data);
         return;
-        break;
 
       case BufferStatus::BUFFER_EMPTY:
         // never come here
         return;
-        break;
 
       case BufferStatus::PRECONDITION_NOT_MET:
         onReceiverError(data);
         return;
-        break;
 
       case BufferStatus::TIMEOUT:
         onBufferWriteTimeout(data);
         onReceiverTimeout(data);
         return;
-        break;
 
       default:
         onReceiverError(data);
