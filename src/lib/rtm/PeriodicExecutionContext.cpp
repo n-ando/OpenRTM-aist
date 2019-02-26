@@ -123,7 +123,7 @@ namespace RTC_exp
    * @brief Thread execution function for ExecutionContext
    * @endif
    */
-  int PeriodicExecutionContext::svc(void)
+  int PeriodicExecutionContext::svc()
   {
     RTC_TRACE(("svc()"));
     int count(0);

@@ -31,7 +31,7 @@ namespace RTC
    * @brief Constructor
    * @endif
    */
-  OutPortSHMProvider::OutPortSHMProvider(void)
+  OutPortSHMProvider::OutPortSHMProvider()
    : m_buffer(nullptr),
      m_memory_size(0),
      m_connector(nullptr)
@@ -74,7 +74,7 @@ namespace RTC
    * @brief Destructor
    * @endif
    */
-  OutPortSHMProvider::~OutPortSHMProvider(void)
+  OutPortSHMProvider::~OutPortSHMProvider()
   {
 
   }

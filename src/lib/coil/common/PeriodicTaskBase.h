@@ -260,7 +260,7 @@ namespace coil
      *
      * @endif
      */
-    virtual int suspend(void) = 0;
+    virtual int suspend() = 0;
 
     /*!
      * @if jp
@@ -277,7 +277,7 @@ namespace coil
      *
      * @endif
      */
-    virtual int resume(void) = 0;
+    virtual int resume() = 0;
 
     /*!
      * @if jp

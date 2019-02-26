@@ -100,7 +100,7 @@ namespace RTC
    * @brief Invoke each component's operation
    * @endif
    */
-  int ExtTrigExecutionContext::svc(void)
+  int ExtTrigExecutionContext::svc()
   {
     RTC_TRACE(("svc()"));
     unsigned int count(0);

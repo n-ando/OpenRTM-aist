@@ -30,7 +30,7 @@ namespace RTC
    * @brief Constructor
    * @endif
    */
-  OutPortDirectProvider::OutPortDirectProvider(void)
+  OutPortDirectProvider::OutPortDirectProvider()
    : m_buffer(nullptr) 
   {
     // PortProfile setting
@@ -45,7 +45,7 @@ namespace RTC
    * @brief Destructor
    * @endif
    */
-  OutPortDirectProvider::~OutPortDirectProvider(void)
+  OutPortDirectProvider::~OutPortDirectProvider()
   {
 
   }

@@ -282,7 +282,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~EventInPort(void){};
+    virtual ~EventInPort(){};
 
     /*!
      * @if jp

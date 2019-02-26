@@ -2328,7 +2328,7 @@ namespace RTC
        *
        * @endif
        */
-      virtual int svc(void)
+      virtual int svc()
       {
         m_pORB->run();
 //        Manager::instance().shutdown();
@@ -2480,7 +2480,7 @@ namespace RTC
        *
        * @endif
        */
-      virtual int svc(void)
+      virtual int svc()
       {
         coil::sleep(m_waittime);
         Manager::instance().shutdown();

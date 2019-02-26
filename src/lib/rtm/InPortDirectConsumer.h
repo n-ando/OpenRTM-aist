@@ -76,7 +76,7 @@ namespace RTC
      *
      * @endif
      */
-    InPortDirectConsumer(void);
+    InPortDirectConsumer();
 
     /*!
      * @if jp
@@ -91,7 +91,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~InPortDirectConsumer(void);
+    virtual ~InPortDirectConsumer();
 
     /*!
      * @if jp

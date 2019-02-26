@@ -137,7 +137,7 @@ namespace coil
      *
      * @endif
      */
-    virtual int svc(void);
+    virtual int svc();
 
     //============================================================
     // public functions

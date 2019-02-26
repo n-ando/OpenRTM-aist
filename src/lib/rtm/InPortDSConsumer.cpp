@@ -28,7 +28,7 @@ namespace RTC
    * @param buffer The buffer object that is attached to this Consumer
    * @endif
    */
-  InPortDSConsumer::InPortDSConsumer(void)
+  InPortDSConsumer::InPortDSConsumer()
     : rtclog("InPortDSConsumer")
   {
   }
@@ -40,7 +40,7 @@ namespace RTC
    * @brief Destructor
    * @endif
    */
-  InPortDSConsumer::~InPortDSConsumer(void)
+  InPortDSConsumer::~InPortDSConsumer()
   {
     RTC_PARANOID(("~InPortDSConsumer()"));
   }

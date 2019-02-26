@@ -145,7 +145,7 @@ namespace RTC_exp
       }
     return true;
   }
-  int RTPreemptEC::svc(void)
+  int RTPreemptEC::svc()
   {
     RTC_TRACE(("svc()"));
     if (!prepareThread()) { return -1; }

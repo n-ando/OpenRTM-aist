@@ -66,7 +66,7 @@ namespace RTC_impl
     m_sm.goTo(RTC::INACTIVE_STATE);
   }
 
-  RTObjectStateMachine::~RTObjectStateMachine(void)
+  RTObjectStateMachine::~RTObjectStateMachine()
   {
     if (m_ca)
       {
@@ -199,7 +199,7 @@ namespace RTC_impl
   }
 
   // RTC::ComponentAction operations
-  void RTObjectStateMachine::onStartup(void)
+  void RTObjectStateMachine::onStartup()
   {
     // call Servant
     if (m_rtobjPtr != nullptr)
@@ -211,7 +211,7 @@ namespace RTC_impl
     if (!m_ca) { return; }
     m_caVar->on_startup(m_id);
   }
-  void RTObjectStateMachine::onShutdown(void)
+  void RTObjectStateMachine::onShutdown()
   {
     // call Servant
     if (m_rtobjPtr != nullptr)
@@ -386,7 +386,7 @@ namespace RTC_impl
     return;
   }
 
-  RTC::ReturnCode_t RTObjectStateMachine::onRateChanged(void)
+  RTC::ReturnCode_t RTObjectStateMachine::onRateChanged()
   {
     // call Servant
     if (m_rtobjPtr != nullptr)
@@ -432,12 +432,12 @@ namespace RTC_impl
   }
 
   // Getting state of the context
-  ExecContextState RTObjectStateMachine::getState(void)
+  ExecContextState RTObjectStateMachine::getState()
   {
     return m_sm.getState();
   }
 
-  ExecContextStates RTObjectStateMachine::getStates(void)
+  ExecContextStates RTObjectStateMachine::getStates()
   {
     return m_sm.getStates();
   }
@@ -458,17 +458,17 @@ namespace RTC_impl
   }
 
   // Workers
-  void RTObjectStateMachine::workerPreDo(void)
+  void RTObjectStateMachine::workerPreDo()
   {
     return m_sm.worker_pre();
   }
 
-  void RTObjectStateMachine::workerDo(void)
+  void RTObjectStateMachine::workerDo()
   {
     return m_sm.worker_do();
   }
 
-  void RTObjectStateMachine::workerPostDo(void)
+  void RTObjectStateMachine::workerPostDo()
   {
     return m_sm.worker_post();
   }

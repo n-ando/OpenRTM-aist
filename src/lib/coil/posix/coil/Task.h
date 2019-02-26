@@ -164,7 +164,7 @@ namespace coil
      *
      * @endif
      */
-    virtual int wait(void);
+    virtual int wait();
 
     /*!
      * @if jp
@@ -181,7 +181,7 @@ namespace coil
      *
      * @endif
      */
-    virtual int suspend(void);
+    virtual int suspend();
 
     /*!
      * @if jp
@@ -198,7 +198,7 @@ namespace coil
      *
      * @endif
      */
-    virtual int resume(void);
+    virtual int resume();
 
     /*!
      * @if jp

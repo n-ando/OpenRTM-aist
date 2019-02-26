@@ -69,7 +69,7 @@ namespace coil
    * @brief Thread execution function for Timer
    * @endif
    */
-  int Timer::svc(void)
+  int Timer::svc()
   {
     TimeValue t_curr, t_pre, tm;
     while (m_running)

@@ -397,7 +397,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~ExecutionContextBase(void);
+    virtual ~ExecutionContextBase();
 
     /*!
      * @if jp
@@ -484,7 +484,7 @@ namespace RTC
      *
      * @endif
      */
-    RTC::ReturnCode_t start(void);
+    RTC::ReturnCode_t start();
 
     /*!
      * @if jp
@@ -512,7 +512,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual RTC::ReturnCode_t stop(void);
+    virtual RTC::ReturnCode_t stop();
 
     /*!
      * @if jp
@@ -534,8 +534,8 @@ namespace RTC
      *
      * @endif
      */
-    double getRate(void) const;
-    coil::TimeValue getPeriod(void) const;
+    double getRate() const;
+    coil::TimeValue getPeriod() const;
 
     /*!
      * @if jp
@@ -795,7 +795,7 @@ namespace RTC
      *
      * @endif
      */
-    RTC::ExecutionKind getKind(void) const;
+    RTC::ExecutionKind getKind() const;
 
     /*!
      * @if jp
@@ -819,7 +819,7 @@ namespace RTC
      *
      * @endif
      */
-    RTC::ExecutionContextProfile* getProfile(void);
+    RTC::ExecutionContextProfile* getProfile();
 
     //============================================================
     // Delegated functions to ExecutionContextProfile
@@ -863,7 +863,7 @@ namespace RTC
      *
      * @endif
      */
-    RTC::ExecutionContextService_ptr getObjRef(void) const;
+    RTC::ExecutionContextService_ptr getObjRef() const;
 
     /*!
      * @if jp
@@ -1026,7 +1026,7 @@ namespace RTC
      *
      * @endif
      */
-    const RTC::ExecutionContextProfile& getProfile(void) const;
+    const RTC::ExecutionContextProfile& getProfile() const;
     // end of delegated functions to ExecutionContextProfile
     //============================================================
 
