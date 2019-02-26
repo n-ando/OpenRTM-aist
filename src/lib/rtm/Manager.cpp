@@ -2909,11 +2909,11 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 		  coil::Properties prop;
 		  NVUtil::copyToProperties(prop, prof->properties);
 		  if ((prop.hasKey("publish_topic") == nullptr ||
-			  prop["publish_topic"] == "") &&
+			  prop["publish_topic"].empty()) &&
 			  (prop.hasKey("subscribe_topic") == nullptr ||
-			  prop["subscribe_topic"] == "") &&
+			  prop["subscribe_topic"].empty()) &&
 			  (prop.hasKey("rendezvous_point") == nullptr ||
-			  prop["rendezvous_point"] == "")) {
+			  prop["rendezvous_point"].empty())) {
 			  continue;
 		  }
 
@@ -2955,11 +2955,11 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 		  coil::Properties prop;
 		  NVUtil::copyToProperties(prop, prof->properties);
 		  if ((prop.hasKey("publish_topic") == nullptr ||
-			  prop["publish_topic"] == "") &&
+			  prop["publish_topic"].empty()) &&
 			  (prop.hasKey("subscribe_topic") == nullptr ||
-			  prop["subscribe_topic"] == "") &&
+			  prop["subscribe_topic"].empty()) &&
 			  (prop.hasKey("rendezvous_point") == nullptr ||
-			  prop["rendezvous_point"] == "")) {
+			  prop["rendezvous_point"].empty())) {
 			  continue;
 		  }
 
