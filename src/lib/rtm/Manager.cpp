@@ -740,7 +740,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
           }
         // module loading
         RTC_INFO(("Loading module: %s", (*it)["module_file_name"].c_str()))
-          load((*it)["module_file_name"].c_str(), "");
+          load((*it)["module_file_name"], "");
         factory = m_factory.find(comp_id);
         if (factory == nullptr)
           {
@@ -1434,7 +1434,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
         if (!logstream->init(*leaf0[i]))
           {
             RTC_WARN(("Logstream %s init failed.", lstype.c_str()));
-            factory.deleteObject(lstype.c_str(), logstream);
+            factory.deleteObject(lstype, logstream);
             RTC_WARN(("Logstream %s deleted.", lstype.c_str()));
           }
         RTC_INFO(("Logstream %s added.", lstype.c_str()));
@@ -2296,7 +2296,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
             RTC_INFO(("Component instance conf file: %s loaded.",
                       m_config[name_conf].c_str()));
             RTC_DEBUG_STR((name_prop))
-            config_fname.push_back(m_config[name_conf].c_str());
+            config_fname.push_back(m_config[name_conf]);
           }
       }
     if (m_config.findNode(category + "." + inst_name) != nullptr)
@@ -2323,7 +2323,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
             RTC_INFO(("Component type conf file: %s loaded.",
                       m_config[type_conf].c_str()));
             RTC_DEBUG_STR((type_prop));
-            config_fname.push_back(m_config[type_conf].c_str());
+            config_fname.push_back(m_config[type_conf]);
           }
       }
     if (m_config.findNode(category + "." + type_name) != nullptr)

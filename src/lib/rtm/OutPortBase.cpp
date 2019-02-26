@@ -870,7 +870,7 @@ namespace RTC
     RTC_DEBUG(("interface_type: %s", prop["interface_type"].c_str()));
     OutPortProvider* provider;
     provider = OutPortProviderFactory::
-      instance().createObject(prop["interface_type"].c_str());
+      instance().createObject(prop["interface_type"]);
 
     if (provider != nullptr)
       {
@@ -924,7 +924,7 @@ namespace RTC
     RTC_DEBUG(("interface_type: %s", prop["interface_type"].c_str()));
     InPortConsumer* consumer;
     consumer = InPortConsumerFactory::
-      instance().createObject(prop["interface_type"].c_str());
+      instance().createObject(prop["interface_type"]);
 
     if (consumer != nullptr)
       {

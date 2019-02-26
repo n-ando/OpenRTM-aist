@@ -67,7 +67,7 @@ int main(int argc, char* argv[])
 
   // loaded profile = old profiles - new profiles
   std::vector<coil::Properties> oldp(mgr.getFactoryProfiles());
-  mgr.load(basename.c_str(), "");
+  mgr.load(basename, "");
   std::vector<coil::Properties> newp(mgr.getFactoryProfiles());
   std::vector<coil::Properties> profs;
 
