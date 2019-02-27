@@ -112,11 +112,11 @@ namespace coil
                       os = "Windows CE %d.%d";
                   }
 
-                  sprintf(name->release, os,
+                  sprintf_s(name->release, sizeof(name->release), os,
                       static_cast<int>(version_info.dwMajorVersion),
                       static_cast<int>(version_info.dwMinorVersion));
 
-                  sprintf(name->version, "Build %d %s",
+                  sprintf_s(name->version, sizeof(name->release), "Build %d %s",
                       static_cast<int>(version_info.dwBuildNumber),
                       version_info.szCSDVersion);
 
@@ -197,7 +197,7 @@ namespace coil
                     os = "Windows CE %d.%d";
                 }
 
-                sprintf(name->release, os,
+                sprintf_s(name->release, sizeof(name->release), os,
                     static_cast<int>(version_info.dwMajorVersion),
                     static_cast<int>(version_info.dwMinorVersion));
 
@@ -237,7 +237,7 @@ namespace coil
         strcpy_s(cputype, sizeof(cputype), "Unknown");
         strcpy_s(subtype, sizeof(subtype), "Unknown");
       }
-    sprintf(name->machine, "%s %s", cputype, subtype);
+    sprintf_s(name->machine, sizeof(name->machine), "%s %s", cputype, subtype);
 
     // name.nodename
     DWORD len = COIL_UTSNAME_LENGTH;
