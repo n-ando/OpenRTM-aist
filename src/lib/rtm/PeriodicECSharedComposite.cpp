@@ -550,10 +550,10 @@ namespace SDOPackage
     RTC_VERBOSE(("remove ports: %s", ::coil::flatten(removedPorts).c_str()));
     RTC_VERBOSE(("add    ports: %s", ::coil::flatten(createdPorts).c_str()));
 
-    for (int i(0), len(m_rtcMembers.size()); i < len; ++i)
+    for (std::vector<Member>::iterator member = m_rtcMembers.begin(); member != m_rtcMembers.end(); ++member)
       {
-        removePort(m_rtcMembers[i], removedPorts);
-        addPort(m_rtcMembers[i], createdPorts);
+        removePort(*member, removedPorts);
+        addPort(*member, createdPorts);
       }
 
     m_expPorts = newPorts;
@@ -691,12 +691,12 @@ namespace RTC
     mgr.getComponents();
 
     ::SDOPackage::SDOList sdos;
-    for (int i(0), len(m_members.size()); i < len; ++i)
+    for (coil::vstring::iterator member = m_members.begin(); member != m_members.end(); ++member)
       {
-          coil::replaceString(m_members[i], "|", "");
-          coil::eraseBothEndsBlank(m_members[i]);
+          coil::replaceString(*member, "|", "");
+          coil::eraseBothEndsBlank(*member);
 
-        RTObject_impl* rtc = mgr.getComponent(m_members[i].c_str());
+        RTObject_impl* rtc = mgr.getComponent((*member).c_str());
         if (rtc == nullptr) {
           continue;
         }

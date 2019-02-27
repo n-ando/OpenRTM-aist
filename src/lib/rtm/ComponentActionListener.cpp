@@ -78,11 +78,11 @@ namespace RTC
   PreComponentActionListenerHolder::~PreComponentActionListenerHolder()
   {
     Guard guard(m_mutex);
-    for (int i(0), len(m_listeners.size()); i < len; ++i)
+    for (std::vector<Entry>::iterator listener = m_listeners.begin(); listener != m_listeners.end(); ++listener)
       {
-        if (m_listeners[i].second)
+        if ((*listener).second)
           {
-            delete m_listeners[i].first;
+            delete (*listener).first;
           }
       }
   }
@@ -122,9 +122,9 @@ namespace RTC
   void PreComponentActionListenerHolder::notify(UniqueId ec_id)
   {
     Guard guard(m_mutex);
-    for (int i(0), len(m_listeners.size()); i < len; ++i)
+    for (std::vector<Entry>::iterator listener = m_listeners.begin(); listener != m_listeners.end(); ++listener)
       {
-        m_listeners[i].first->operator()(ec_id);
+        (*listener).first->operator()(ec_id);
       }
   }
 
@@ -144,11 +144,11 @@ namespace RTC
   PostComponentActionListenerHolder::~PostComponentActionListenerHolder()
   {
     Guard guard(m_mutex);
-    for (int i(0), len(m_listeners.size()); i < len; ++i)
+    for (std::vector<Entry>::iterator listener = m_listeners.begin(); listener != m_listeners.end(); ++listener)
       {
-        if (m_listeners[i].second)
+        if ((*listener).second)
           {
-            delete m_listeners[i].first;
+            delete (*listener).first;
           }
       }
   }
@@ -187,9 +187,9 @@ namespace RTC
                                                  ReturnCode_t ret)
   {
     Guard guard(m_mutex);
-    for (int i(0), len(m_listeners.size()); i < len; ++i)
+    for (std::vector<Entry>::iterator listener = m_listeners.begin(); listener != m_listeners.end(); ++listener)
       {
-        m_listeners[i].first->operator()(ec_id, ret);
+        (*listener).first->operator()(ec_id, ret);
       }
   }
 
@@ -209,11 +209,11 @@ namespace RTC
   PortActionListenerHolder::~PortActionListenerHolder()
   {
     Guard guard(m_mutex);
-    for (int i(0), len(m_listeners.size()); i < len; ++i)
+    for (std::vector<Entry>::iterator listener = m_listeners.begin(); listener != m_listeners.end(); ++listener)
       {
-        if (m_listeners[i].second)
+        if ((*listener).second)
           {
-            delete m_listeners[i].first;
+            delete (*listener).first;
           }
       }
   }
@@ -251,9 +251,9 @@ namespace RTC
   void PortActionListenerHolder::notify(const RTC::PortProfile& pprofile)
   {
     Guard guard(m_mutex);
-    for (int i(0), len(m_listeners.size()); i < len; ++i)
+    for (std::vector<Entry>::iterator listener = m_listeners.begin(); listener != m_listeners.end(); ++listener)
       {
-        m_listeners[i].first->operator()(pprofile);
+        (*listener).first->operator()(pprofile);
       }
   }
 
@@ -274,11 +274,11 @@ namespace RTC
   ExecutionContextActionListenerHolder::~ExecutionContextActionListenerHolder()
   {
     Guard guard(m_mutex);
-    for (int i(0), len(m_listeners.size()); i < len; ++i)
+    for (std::vector<Entry>::iterator listener = m_listeners.begin(); listener != m_listeners.end(); ++listener)
       {
-        if (m_listeners[i].second)
+        if ((*listener).second)
           {
-            delete m_listeners[i].first;
+            delete (*listener).first;
           }
       }
   }
@@ -318,9 +318,9 @@ namespace RTC
   void ExecutionContextActionListenerHolder::notify(UniqueId ec_id)
   {
     Guard guard(m_mutex);
-    for (int i(0), len(m_listeners.size()); i < len; ++i)
+    for (std::vector<Entry>::iterator listener = m_listeners.begin(); listener != m_listeners.end(); ++listener)
       {
-        m_listeners[i].first->operator()(ec_id);
+        (*listener).first->operator()(ec_id);
       }
   }
 
