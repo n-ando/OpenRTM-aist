@@ -744,7 +744,7 @@ namespace coil
       {
         size_t sz(args[i].size());
         argv[i] = new char[sz + 1];
-        strncpy(argv[i], args[i].c_str(), sz);
+        strncpy_s(argv[i], sz + 1, args[i].c_str(), sz);
         argv[i][sz] = '\0';
       }
     argv[argc] = nullptr;
@@ -768,7 +768,7 @@ namespace coil
 
     va_start(ap, fmt);
 #ifdef WIN32
-    _vsnprintf(str, LINE_MAX - 1, fmt, ap);
+    _vsnprintf_s(str, LINE_MAX - 1, _TRUNCATE, fmt, ap);
 #else
     vsnprintf(str, LINE_MAX - 1, fmt, ap);
 #endif
@@ -813,7 +813,7 @@ namespace coil
 		  if (tmp2.size() == 2)
 		  {
 			  char s[100];
-			  strcpy(s, coil::getenv(tmp2[0].c_str()));
+			  strcpy_s(s, sizeof(s), coil::getenv(tmp2[0].c_str()));
 			  ret.push_back(std::string(s));
 			  ret.push_back(tmp2[1]);
 		  }

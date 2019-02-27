@@ -20,22 +20,15 @@
 #define COIL_OS_H
 
 
-#ifdef WINVER
-#undef WINVER
-#endif
-#define WINVER 0x0500
-
-#ifdef _WIN32_WINNT
-#undef _WIN32_WINNT
-#endif
-#define _WIN32_WINNT 0x0500
-
 #include <windows.h>
 #include <string.h>
 #include <stdio.h>
 #include <process.h>
 #include <stdlib.h>
 #include <winbase.h>
+#include <iostream>
+#include <map>
+
 
 extern "C"
 {
@@ -54,6 +47,86 @@ namespace coil
     char version[COIL_UTSNAME_LENGTH];
     char machine[COIL_UTSNAME_LENGTH];
   };
+
+  class osversion
+  {
+  public:
+      osversion() : major(0), minor(0)
+      {
+
+      }
+      osversion(DWORD majar_version,DWORD minor_version) : major(majar_version), minor(minor_version)
+      {
+      }
+      osversion(osversion &obj)
+      {
+          major = obj.major;
+          minor = obj.minor;
+      }
+      DWORD major;
+      DWORD minor;
+  };
+
+  /*!
+  * @if jp
+  *
+  * @brief RtlGetVersion APIによりOSの情報取得
+  *
+  *
+  * @param name 構造体名称
+  *
+  * @return 0: 成功, -1: 失敗
+  *
+  * @else
+  *
+  * @brief 
+  *
+  *
+  * @param name Name of structure
+  *
+  * @return 0: Successful, -1: failed
+  *
+  * @endif
+  */
+  inline bool rtlgetinfo(utsname* name)
+  {
+      HMODULE handle = GetModuleHandle("ntdll.dll");
+
+      if (handle)
+      {
+          typedef LONG(WINAPI* RtlGetVersionFunc)(PRTL_OSVERSIONINFOW lpVersionInformation);
+
+          RTL_OSVERSIONINFOW version_info;
+          RtlGetVersionFunc RtlGetVersion = (RtlGetVersionFunc)GetProcAddress(handle, "RtlGetVersion");
+          if (RtlGetVersion != nullptr)
+          {
+              if (RtlGetVersion(&version_info) == 0)
+              {
+                  const char *os;
+                  if (version_info.dwPlatformId == VER_PLATFORM_WIN32_NT)
+                  {
+                      os = "Windows NT %d.%d";
+                  }
+                  else
+                  {
+                      os = "Windows CE %d.%d";
+                  }
+
+                  sprintf(name->release, os,
+                      static_cast<int>(version_info.dwMajorVersion),
+                      static_cast<int>(version_info.dwMinorVersion));
+
+                  sprintf(name->version, "Build %d %s",
+                      static_cast<int>(version_info.dwBuildNumber),
+                      version_info.szCSDVersion);
+
+                  return true;
+              }
+          }
+          FreeLibrary(handle);
+      }
+      return false;
+  }
 
   /*!
    * @if jp
@@ -84,31 +157,57 @@ namespace coil
     int ret(0);
 
     // name.sysname
-    ::strcpy(name->sysname, "Win32");
+    ::strcpy_s(name->sysname, sizeof(name->sysname), "Win32");
 
-    // name.release, name.version
-    OSVERSIONINFO version_info;
-    version_info.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
-    if (::GetVersionEx(&version_info) == false)
-      ret = -1;
 
-    const char *os;
-    if (version_info.dwPlatformId == VER_PLATFORM_WIN32_NT)
-      {
-        os = "Windows NT %d.%d";
-      }
-    else
-      {
-        os = "Windows CE %d.%d";
-      }
+    
+    if(!rtlgetinfo(name))
+    {
 
-    sprintf(name->release, os,
-            static_cast<int>(version_info.dwMajorVersion),
-            static_cast<int>(version_info.dwMinorVersion));
+        std::map<std::string, osversion> oslist;
+        oslist["Windows 2000"] = osversion(5, 0);
+        oslist["Windows XP 32bit"] = osversion(5, 1);
+        oslist["Windows XP 64bit"] = osversion(5, 2);
+        oslist["Windows Vista"] = osversion(6, 0);
+        oslist["Windows 7"] = osversion(6, 1);
+        oslist["Windows 8"] = osversion(6, 2);
+        oslist["Windows 8.1"] = osversion(6, 3);
+        oslist["Windows 10"] = osversion(10, 0);
 
-    sprintf(name->version, "Build %d %s",
-            static_cast<int>(version_info.dwBuildNumber),
-            version_info.szCSDVersion);
+        for (std::map<std::string, osversion>::iterator itr = oslist.begin(); itr != oslist.end(); ++itr)
+        {
+            // name.release, name.version
+            OSVERSIONINFOEX version_info;
+            ULONGLONG condition = 0;
+            version_info.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
+            version_info.dwMajorVersion = itr->second.major;
+            version_info.dwMinorVersion = itr->second.minor;
+            VER_SET_CONDITION(condition, VER_MAJORVERSION, VER_EQUAL);
+            VER_SET_CONDITION(condition, VER_MINORVERSION, VER_EQUAL);
+
+            if (::VerifyVersionInfo(&version_info, VER_MAJORVERSION | VER_MINORVERSION, condition))
+            {
+                const char *os;
+                if (version_info.dwPlatformId == VER_PLATFORM_WIN32_NT)
+                {
+                    os = "Windows NT %d.%d";
+                }
+                else
+                {
+                    os = "Windows CE %d.%d";
+                }
+
+                sprintf(name->release, os,
+                    static_cast<int>(version_info.dwMajorVersion),
+                    static_cast<int>(version_info.dwMinorVersion));
+
+                break;
+            }
+
+
+        }
+    }
+
 
     // name.machine
     SYSTEM_INFO sys_info;
@@ -120,23 +219,23 @@ namespace coil
     switch (arch)
       {
       case PROCESSOR_ARCHITECTURE_INTEL:
-        strcpy(cputype, "Intel");
+        strcpy_s(cputype, sizeof(cputype), "Intel");
         if (sys_info.wProcessorLevel == 3)
-          strcpy(subtype, "80386");
+          strcpy_s(subtype, sizeof(subtype), "80386");
         else if (sys_info.wProcessorLevel == 4)
-          strcpy(subtype, "80486");
+          strcpy_s(subtype, sizeof(subtype), "80486");
         else if (sys_info.wProcessorLevel == 5)
-          strcpy(subtype, "Pentium");
+          strcpy_s(subtype, sizeof(subtype), "Pentium");
         else if (sys_info.wProcessorLevel == 6)
-          strcpy(subtype, "Pentium Pro");
+          strcpy_s(subtype, sizeof(subtype), "Pentium Pro");
         else if (sys_info.wProcessorLevel == 7)
-          strcpy(subtype, "Pentium II");
+          strcpy_s(subtype, sizeof(subtype), "Pentium II");
         else
-          strcpy(subtype, "Pentium Family");
+          strcpy_s(subtype, sizeof(subtype), "Pentium Family");
         break;
       default:
-        strcpy(cputype, "Unknown");
-        strcpy(subtype, "Unknown");
+        strcpy_s(cputype, sizeof(cputype), "Unknown");
+        strcpy_s(subtype, sizeof(subtype), "Unknown");
       }
     sprintf(name->machine, "%s %s", cputype, subtype);
 
@@ -223,7 +322,11 @@ namespace coil
    */
   inline char* getenv(const char* name)
   {
-    return ::getenv(name);
+    size_t return_size;
+    ::getenv_s(&return_size, NULL, 0, name);
+    char *buff = new char[return_size * sizeof(char)];
+    ::getenv_s(&return_size, buff, return_size, name);
+    return buff;
   }
 
   static int    opterr = 1,     /* if error message should be printed */
