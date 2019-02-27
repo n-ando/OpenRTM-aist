@@ -324,6 +324,10 @@ namespace coil
   {
     size_t return_size;
     ::getenv_s(&return_size, NULL, 0, name);
+    if (return_size == 0)
+    {
+        return nullptr;
+    }
     char *buff = new char[return_size * sizeof(char)];
     ::getenv_s(&return_size, buff, return_size, name);
     return buff;

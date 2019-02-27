@@ -65,7 +65,7 @@ namespace coil
     {
       len = sizeof(return_dirname) / sizeof(char);
     }
-    strncpy_s(return_dirname, sizeof(return_dirname), path, len);
+    std::strncpy(return_dirname, path, len);
     return_dirname[len] = '\0';
 
     const char delimiter('/');
@@ -132,7 +132,7 @@ namespace coil
     {
       len = sizeof(p) / sizeof(char);
     }
-    strncpy_s(p, sizeof(p), path, len);
+    std::strncpy(p, path, len);
     p[len] = '\0';
 
     const char delimiter('/');
