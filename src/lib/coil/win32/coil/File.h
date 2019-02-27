@@ -268,7 +268,6 @@ namespace coil
       }
     catch (...)
       {
-        FindClose(dhandle);
         return 0;
       }
 
