@@ -760,7 +760,11 @@ namespace coil
       {
         size_t sz(args[i].size());
         argv[i] = new char[sz + 1];
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
         strncpy_s(argv[i], sz + 1, args[i].c_str(), sz);
+#else
+        strncpy(argv[i], args[i].c_str(), sz);
+#endif
         argv[i][sz] = '\0';
       }
     argv[argc] = nullptr;
@@ -817,36 +821,38 @@ namespace coil
   */
   std::string replaceEnv(std::string str)
   {
-	  vstring tmp = split(str, "${");
-	  if (tmp.size() < 2)
-	  {
-		  return str;
-	  }
-	  vstring ret;
-	  for (vstring::iterator itr = tmp.begin(); itr != tmp.end(); ++itr)
-	  {
-		  vstring tmp2 = split((*itr), "}");
-		  if (tmp2.size() == 2)
-		  {
-			  char s[100];
-			  strcpy_s(s, sizeof(s), coil::getenv(tmp2[0].c_str()));
-			  ret.push_back(std::string(s));
-			  ret.push_back(tmp2[1]);
-		  }
-		  else
-		  {
-			  ret.push_back((*itr));
-		  }
-		  
-	  }
+      vstring tmp = split(str, "${");
+      if (tmp.size() < 2)
+      {
+          return str;
+      }
+      vstring ret;
+      for (vstring::iterator itr = tmp.begin(); itr != tmp.end(); ++itr)
+      {
+          vstring tmp2 = split((*itr), "}");
+          if (tmp2.size() == 2)
+          {
+              char s[100];
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
+              strcpy_s(s, sizeof(s), coil::getenv(tmp2[0].c_str()));
+#else
+              strcpy(s, coil::getenv(tmp2[0].c_str()));
+#endif
+              ret.push_back(std::string(s));
+              ret.push_back(tmp2[1]);
+          }
+          else
+          {
+              ret.push_back((*itr));
+          }
+      }
 
-
-	  std::string ret_str;
-	  for (vstring::iterator itr = ret.begin(); itr != ret.end(); ++itr)
-	  {
-		  ret_str = ret_str + (*itr);
-	  }
-	  return ret_str;
+      std::string ret_str;
+      for (vstring::iterator itr = ret.begin(); itr != ret.end(); ++itr)
+      {
+          ret_str = ret_str + (*itr);
+      }
+      return ret_str;
   }
 
 }; // namespace coil
