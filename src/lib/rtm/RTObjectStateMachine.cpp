@@ -167,7 +167,7 @@ namespace RTC_impl
         m_rtobjPtr =
           dynamic_cast<RTC::RTObject_impl*>(poa->reference_to_servant(comp));
       }
-    catch (CORBA::SystemException& ex)
+    catch (CORBA::SystemException&)
       {
         m_rtobjPtr = nullptr;
       }

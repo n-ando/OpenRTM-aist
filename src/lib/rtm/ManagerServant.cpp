@@ -488,7 +488,7 @@ namespace RTM
 
 
                   }
-                catch (CORBA::SystemException& e)
+                catch (CORBA::SystemException&)
                   {
                     RTC_DEBUG(("Exception was caught while creating component."));
                   }
@@ -1367,7 +1367,7 @@ namespace RTM
       {
         return mgrobj->create_component(create_arg_str.c_str());
       }
-    catch (CORBA::SystemException& e)
+    catch (CORBA::SystemException&)
       {
         RTC_ERROR(("Exception was caught while creating component."));
         return RTC::RTObject::_nil();
@@ -1477,7 +1477,7 @@ namespace RTM
           {
             return mgrobj->create_component(create_arg_str.c_str());
           }
-        catch (CORBA::SystemException& e)
+        catch (CORBA::SystemException&)
           {
             RTC_ERROR(("Exception was caught while creating component."));
             return RTC::RTObject::_nil();

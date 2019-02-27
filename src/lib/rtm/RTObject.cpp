@@ -1286,7 +1286,7 @@ namespace RTC
       {
         prof = m_sdoservice.getServiceProviderProfile(id);
       }
-    catch (SDOPackage::InvalidParameter &e)
+    catch (SDOPackage::InvalidParameter&)
       {
         RTC_ERROR(("InvalidParameter exception: name (%s) is not found", id));
         throw;
@@ -1322,7 +1322,7 @@ namespace RTC
       {
         sdo = m_sdoservice.getServiceProvider(id);
       }
-    catch (SDOPackage::InvalidParameter &e)
+    catch (SDOPackage::InvalidParameter&)
       {
         throw;
       }
