@@ -628,10 +628,10 @@ namespace RTC_exp
     coil::vstring tmp = coil::split(affinity, ",", true);
     m_cpu.clear();
 
-    for (coil::vstring::iterator itr = tmp.begin(); itr != tmp.end(); ++itr)
+    for (size_t i(0); i < tmp.size(); ++i)
       {
         int num;
-        if (coil::stringTo(num, (*itr).c_str()))
+        if (coil::stringTo(num, tmp[i].c_str()))
           {
             m_cpu.push_back(num);
             RTC_DEBUG(("CPU affinity int value: %d added.", num));

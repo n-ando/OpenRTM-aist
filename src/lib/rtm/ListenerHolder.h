@@ -249,9 +249,9 @@ namespace util
 #define LISTENERHOLDER_CALLBACK(func, args)               \
   {                                                       \
     Guard guard(m_mutex);                                 \
-    for (std::vector<Entry>::iterator listener = m_listeners.begin(); listener != m_listeners.end(); ++listener) \
+    for (int i(0), len(m_listeners.size()); i < len; ++i) \
       {                                                   \
-        (*listener).first->func args;                  \
+        m_listeners[i].first->func args;                  \
       }                                                   \
   }
 

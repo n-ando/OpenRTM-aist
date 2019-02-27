@@ -75,11 +75,11 @@ namespace RTC
   PreFsmActionListenerHolder::~PreFsmActionListenerHolder()
   {
     Guard guard(m_mutex);
-    for (std::vector<Entry>::iterator listener = m_listeners.begin(); listener != m_listeners.end(); ++listener)
+    for (int i(0), len(m_listeners.size()); i < len; ++i)
       {
-        if ((*listener).second)
+        if (m_listeners[i].second)
           {
-            delete (*listener).first;
+            delete m_listeners[i].first;
           }
       }
   }
@@ -115,9 +115,9 @@ namespace RTC
   void PreFsmActionListenerHolder::notify(const char* state)
   {
     Guard guard(m_mutex);
-    for (std::vector<Entry>::iterator listener = m_listeners.begin(); listener != m_listeners.end(); ++listener)
+    for (int i(0), len(m_listeners.size()); i < len; ++i)
       {
-        (*listener).first->operator()(state);
+        m_listeners[i].first->operator()(state);
       }
   }
 
@@ -136,11 +136,11 @@ namespace RTC
   PostFsmActionListenerHolder::~PostFsmActionListenerHolder()
   {
     Guard guard(m_mutex);
-    for (std::vector<Entry>::iterator listener = m_listeners.begin(); listener != m_listeners.end(); ++listener)
+    for (int i(0), len(m_listeners.size()); i < len; ++i)
       {
-        if ((*listener).second)
+        if (m_listeners[i].second)
           {
-            delete (*listener).first;
+            delete m_listeners[i].first;
           }
       }
   }
@@ -175,9 +175,9 @@ namespace RTC
                                            ReturnCode_t ret)
   {
     Guard guard(m_mutex);
-    for (std::vector<Entry>::iterator listener = m_listeners.begin(); listener != m_listeners.end(); ++listener)
+    for (int i(0), len(m_listeners.size()); i < len; ++i)
       {
-        (*listener).first->operator()(state, ret);
+        m_listeners[i].first->operator()(state, ret);
       }
   }
 
@@ -195,11 +195,11 @@ namespace RTC
   FsmProfileListenerHolder::~FsmProfileListenerHolder()
   {
     Guard guard(m_mutex);
-    for (std::vector<Entry>::iterator listener = m_listeners.begin(); listener != m_listeners.end(); ++listener)
+    for (int i(0), len(m_listeners.size()); i < len; ++i)
       {
-        if ((*listener).second)
+        if (m_listeners[i].second)
           {
-            delete (*listener).first;
+            delete m_listeners[i].first;
           }
       }
   }
@@ -234,9 +234,9 @@ namespace RTC
   void FsmProfileListenerHolder::notify(RTC::FsmProfile& profile)
   {
     Guard guard(m_mutex);
-    for (std::vector<Entry>::iterator listener = m_listeners.begin(); listener != m_listeners.end(); ++listener)
+    for (int i(0), len(m_listeners.size()); i < len; ++i)
       {
-        (*listener).first->operator()(profile);
+        m_listeners[i].first->operator()(profile);
       }
   }
 
@@ -254,11 +254,11 @@ namespace RTC
   FsmStructureListenerHolder::~FsmStructureListenerHolder()
   {
     Guard guard(m_mutex);
-    for (std::vector<Entry>::iterator listener = m_listeners.begin(); listener != m_listeners.end(); ++listener)
+    for (int i(0), len(m_listeners.size()); i < len; ++i)
       {
-        if ((*listener).second)
+        if (m_listeners[i].second)
           {
-            delete (*listener).first;
+            delete m_listeners[i].first;
           }
       }
   }
@@ -293,9 +293,9 @@ namespace RTC
   void FsmStructureListenerHolder::notify(RTC::FsmStructure& structure)
   {
     Guard guard(m_mutex);
-    for (std::vector<Entry>::iterator listener = m_listeners.begin(); listener != m_listeners.end(); ++listener)
+    for (int i(0), len(m_listeners.size()); i < len; ++i)
       {
-        (*listener).first->operator()(structure);
+        m_listeners[i].first->operator()(structure);
       }
   }
 

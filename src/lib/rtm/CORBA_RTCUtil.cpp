@@ -1206,7 +1206,7 @@ namespace CORBA_RTCUtil
   {
     RTC::PortServiceList_var ports = rtc->get_ports();
     RTC::PortService_var port_var;
-    for (CORBA::ULong p(0); p < ports->length(); ++p)
+    for (size_t p(0); p < ports->length(); ++p)
       {
         RTC::PortProfile_var pp = ports[p]->get_port_profile();
         std::string s(CORBA::string_dup(pp->name));

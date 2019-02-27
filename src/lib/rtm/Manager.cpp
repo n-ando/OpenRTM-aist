@@ -297,24 +297,23 @@ namespace RTC
     std::vector<std::string> lsvc;
     lsvc = coil::split(m_config["manager.local_service.modules"], ",");
 
-
-    for (coil::vstring::iterator itr = lsvc.begin(); itr != lsvc.end(); ++itr)
+    for (int i(0), len(lsvc.size()); i < len; ++i)
       {
-        size_t begin_pos((*itr).find_first_of('('));
-        size_t end_pos((*itr).find_first_of(')'));
+        size_t begin_pos(lsvc[i].find_first_of('('));
+        size_t end_pos(lsvc[i].find_first_of(')'));
         std::string filename, initfunc;
         if (begin_pos != std::string::npos && end_pos != std::string::npos &&
             begin_pos < end_pos)
           {
-            initfunc = (*itr).substr(begin_pos + 1, end_pos - (begin_pos + 1));
-            filename = (*itr).substr(0, begin_pos);
+            initfunc = lsvc[i].substr(begin_pos + 1, end_pos - (begin_pos + 1));
+            filename = lsvc[i].substr(0, begin_pos);
             coil::eraseBothEndsBlank(initfunc);
             coil::eraseBothEndsBlank(filename);
           }
         else
           {
-            initfunc = coil::split((*itr), ".").operator[](0) + "Init";
-            filename = (*itr);
+            initfunc = coil::split(lsvc[i], ".").operator[](0) + "Init";
+            filename = lsvc[i];
           }
         if (filename.find_first_of('.') == std::string::npos)
           {
@@ -350,23 +349,23 @@ namespace RTC
     std::vector<std::string> mods;
     mods = coil::split(m_config["manager.modules.preload"], ",");
 
-    for (coil::vstring::iterator itr = mods.begin(); itr != mods.end(); ++itr)
+    for (int i(0), len(mods.size()); i < len; ++i)
       {
-        size_t begin_pos((*itr).find_first_of('('));
-        size_t end_pos((*itr).find_first_of(')'));
+        size_t begin_pos(mods[i].find_first_of('('));
+        size_t end_pos(mods[i].find_first_of(')'));
         std::string filename, initfunc;
         if (begin_pos != std::string::npos && end_pos != std::string::npos &&
             begin_pos < end_pos)
           {
-            initfunc = (*itr).substr(begin_pos + 1, end_pos - (begin_pos + 1));
-            filename = (*itr).substr(0, begin_pos);
+            initfunc = mods[i].substr(begin_pos + 1, end_pos - (begin_pos + 1));
+            filename = mods[i].substr(0, begin_pos);
             coil::eraseBothEndsBlank(initfunc);
             coil::eraseBothEndsBlank(filename);
           }
         else
           {
-            initfunc = coil::split((*itr), ".").operator[](0) + "Init";
-            filename = (*itr);
+            initfunc = coil::split(mods[i], ".").operator[](0) + "Init";
+            filename = mods[i];
           }
         if (filename.find_first_of('.') == std::string::npos)
           {
@@ -604,9 +603,9 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   {
     std::vector<FactoryBase*> factories(m_factory.getObjects());
     std::vector<coil::Properties> props;
-    for(std::vector<FactoryBase*>::iterator factory= factories.begin();factory != factories.end();++factory)
+    for (int i(0), len(factories.size()); i < len; ++i)
       {
-        props.push_back((*factory)->profile());
+        props.push_back(factories[i]->profile());
       }
     return props;
   }
@@ -876,10 +875,10 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     coil::vstring names(comp->getNamingNames());
 
     m_listeners.naming_.preBind(comp, names);
-    for (coil::vstring::iterator name = names.begin(); name != names.end(); ++name)
+    for (int i(0), len(names.size()); i < len; ++i)
       {
-        RTC_TRACE(("Bind name: %s", (*name).c_str()));
-        m_namingManager->bindObject((*name).c_str(), comp);
+        RTC_TRACE(("Bind name: %s", names[i].c_str()));
+        m_namingManager->bindObject(names[i].c_str(), comp);
       }
     m_listeners.naming_.postBind(comp, names);
 
@@ -945,10 +944,10 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     coil::vstring names(comp->getNamingNames());
 
     m_listeners.naming_.preUnbind(comp, names);
-    for (coil::vstring::iterator name = names.begin(); name != names.end(); ++name)
+    for (int i(0), len(names.size()); i < len; ++i)
       {
-        RTC_TRACE(("Unbind name: %s", (*name).c_str()));
-        m_namingManager->unbindObject((*name).c_str());
+        RTC_TRACE(("Unbind name: %s", names[i].c_str()));
+        m_namingManager->unbindObject(names[i].c_str());
       }
     m_listeners.naming_.postUnbind(comp, names);
 
@@ -1372,9 +1371,9 @@ std::vector<coil::Properties> Manager::getLoadableModules()
       coil::split(m_config["logger.file_name"], ",");
     coil::Properties& logprop = m_config.getNode("logger");
 
-    for (coil::vstring::iterator logout = logouts.begin(); logout != logouts.end(); ++logout)
+    for (int i(0), len(logouts.size()); i < len; ++i)
       {
-        if ((*logout).empty()) { continue; }
+        if (logouts[i].empty()) { continue; }
 
         LogstreamBase* logstream =
           LogstreamFactory::instance().createObject("file");
@@ -1398,18 +1397,18 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     // loading logstream module
     // create logstream object and attach to the logger
     coil::vstring mods = coil::split(m_config["logger.plugins"], ",");
-    for (coil::vstring::iterator itr = mods.begin(); itr != mods.end(); ++itr)
+    for (size_t i(0); i < mods.size(); ++i)
       {
-        std::string basename = (*itr).substr(0, (*itr).find('.'));
+        std::string basename = mods[i].substr(0, mods[i].find('.'));
         basename += "Init";
         try
           {
-            m_module->load((*itr), basename);
+            m_module->load(mods[i], basename);
           }
         catch (...)
           {
             RTC_WARN(("Logstream plugin module load failed: %s",
-                      (*itr).c_str()));
+                      mods[i].c_str()));
             continue;
           }
       }
@@ -1498,11 +1497,11 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     RTC_TRACE(("Manager::shutdownLogger()"));
     rtclog.flush();
 
-    for (std::vector<std::filebuf*>::iterator logfile = m_logfiles.begin(); logfile != m_logfiles.end(); ++logfile)
+    for (int i(0), len(m_logfiles.size()); i < len; ++i)
       {
-        (*logfile)->close();
+        m_logfiles[i]->close();
         //        m_logStreamBuf.removeStream(m_logfiles[i]->rdbuf());
-        delete (*logfile);
+        delete m_logfiles[i];
       }
     if (!m_logfiles.empty())
       {
@@ -1530,7 +1529,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 	// TAO's ORB_init needs argv[0] as command name.
 	args.insert(args.begin(), "manager");
 	char** argv = coil::toArgv(args);
-	int argc((int)args.size());
+	int argc(args.size());
 	
 #ifdef ORB_IS_ORBEXPRESS
 	CORBA::ORB::spawn_flags(VX_SPE_TASK | VX_STDIO);
@@ -1574,9 +1573,9 @@ std::vector<coil::Properties> Manager::getLoadableModules()
             coil::vstring addr_list;
             addr_list = coil::split(m_config[conf], ",", true);
 
-            for (coil::vstring::iterator addr = addr_list.begin(); addr != addr_list.end(); ++addr)
+            for (size_t i(0); i < addr_list.size(); ++i)
               {
-                coil::vstring addr_port = coil::split(*addr, ":");
+                coil::vstring addr_port = coil::split(addr_list[i], ":");
                 if (addr_port.size() == 2)
                   {
                     IIOP::Address iiop_addr;
@@ -1667,9 +1666,9 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     std::string corba(m_config["corba.id"]);
     RTC_DEBUG(("corba.id: %s", corba.c_str()));
 
-    for (coil::vstring::iterator itr = endpoints.begin(); itr != endpoints.end(); ++itr)
+    for (size_t i(0); i < endpoints.size(); ++i)
       {
-        std::string& endpoint(*itr);
+        std::string& endpoint(endpoints[i]);
         RTC_DEBUG(("Endpoint is : %s", endpoint.c_str()));
         if (endpoint.find(':') == std::string::npos) { endpoint += ":"; }
 
@@ -1810,17 +1809,18 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     // NameServer registration for each method and servers
     std::vector<std::string> meth(coil::split(m_config["naming.type"], ","));
 
-    for (std::vector<std::string>::iterator m = meth.begin(); m != meth.end(); ++m)
+    for (int i(0), len_i(meth.size()); i < len_i; ++i)
       {
         std::vector<std::string> names;
-        names = coil::split(m_config[(*m) + ".nameservers"], ",");
+        names = coil::split(m_config[meth[i] + ".nameservers"], ",");
 
-        for (std::vector<std::string>::iterator name = names.begin(); name != names.end(); ++name)
+
+        for (int j(0), len_j(names.size()); j < len_j; ++j)
           {
             RTC_TRACE(("Register Naming Server: %s/%s",                \
-                       (*m).c_str(), (*name).c_str()));
-            m_namingManager->registerNameServer((*m).c_str(),
-                                                (*name).c_str());
+                       meth[i].c_str(), names[j].c_str()));
+            m_namingManager->registerNameServer(meth[i].c_str(),
+                                                names[j].c_str());
           }
       }
 
@@ -1854,15 +1854,15 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     RTC_TRACE(("Manager::shutdownNaming()"));
     std::vector<RTObject_impl*> comps = getComponents();
 
-    for (std::vector<RTObject_impl*>::iterator comp = comps.begin(); comp != comps.end(); ++comp)
+    for (size_t i(0); i < comps.size(); ++i)
       {
-        coil::vstring names = (*comp)->getNamingNames();
-        m_listeners.naming_.preUnbind((*comp), names);
-        for (coil::vstring::iterator name = names.begin(); name != names.end(); ++name)
+        coil::vstring names = comps[i]->getNamingNames();
+        m_listeners.naming_.preUnbind(comps[i], names);
+        for (size_t j(0); j < names.size(); ++j)
           {
-            m_namingManager->unbindObject((*name).c_str());
+            m_namingManager->unbindObject(names[j].c_str());
           }
-        m_listeners.naming_.postUnbind((*comp), names);
+        m_listeners.naming_.postUnbind(comps[i], names);
       }
 
     m_namingManager->unbindAll();
@@ -1937,10 +1937,10 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     coil::vstring tmp = coil::split(affinity, ",", true);
 
     coil::CpuMask cpu_list;
-    for (coil::vstring::iterator c = tmp.begin(); c != tmp.end(); ++c)
+    for (size_t i(0); i < tmp.size(); ++i)
     {
         int num;
-        if (coil::stringTo(num, (*c).c_str()))
+        if (coil::stringTo(num, tmp[i].c_str()))
         {
             cpu_list.push_back(num);
             RTC_DEBUG(("CPU affinity int value: %d added.", num));
@@ -2009,9 +2009,9 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 
     if (coil::toBool(prop["is_master"], "YES", "NO", true))
       {
-        for (std::vector<std::string>::iterator name = names.begin(); name != names.end(); ++name)
+        for (int i(0), len(names.size()); i < len; ++i)
           {
-            std::string mgr_name(formatString((*name).c_str(), prop));
+            std::string mgr_name(formatString(names[i].c_str(), prop));
             m_namingManager->bindObject(mgr_name.c_str(), m_mgrservant);
           }
       }
@@ -2086,10 +2086,10 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     RTC_DEBUG_STR((prop));
 
     RTM::LocalServiceProfileList svclist = admin.getServiceProfiles();
-    for (RTM::LocalServiceProfileList::iterator svc = svclist.begin(); svc != svclist.end(); ++svc)
+    for (size_t i(0); i < svclist.size(); ++i)
       {
         RTC_INFO(("Available local service: %s (%s)",
-        (*svc).name.c_str(), (*svc).uuid.c_str()));
+        svclist[i].name.c_str(), svclist[i].uuid.c_str()));
       }
     return true;
   }
@@ -2106,13 +2106,13 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     RTC_TRACE(("Manager::shutdownComponents()"));
     std::vector<RTObject_impl*> comps;
     comps = m_namingManager->getObjects();
-    for (std::vector<RTObject_impl*>::iterator comp = comps.begin(); comp != comps.end(); ++comp)
+    for (int i(0), len(comps.size()); i < len; ++i)
       {
         try
           {
-            (*comp)->exit();
-            coil::Properties p((*comp)->getInstanceName());
-            p << (*comp)->getProperties();
+            comps[i]->exit();
+            coil::Properties p(comps[i]->getInstanceName());
+            p << comps[i]->getProperties();
             rtclog.lock();
             rtclog.write(::RTC::Logger::RTL_PARANOID,  p);
             rtclog.unlock();
@@ -2121,12 +2121,12 @@ std::vector<coil::Properties> Manager::getLoadableModules()
           {
           }
       }
-    for (std::vector<ExecutionContextBase*>::iterator ec = m_ecs.begin(); ec != m_ecs.end(); ++ec)
+    for (CORBA::ULong i(0), len(m_ecs.size()); i < len; ++i)
       {
         try {
           PortableServer::RefCountServantBase* servant;
           servant =
-                  dynamic_cast<PortableServer::RefCountServantBase*>((*ec));
+                  dynamic_cast<PortableServer::RefCountServantBase*>(m_ecs[i]);
           if (servant == nullptr)
             {
               RTC_ERROR(
@@ -2162,9 +2162,9 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     Guard guard(m_finalized.mutex);
     RTC_VERBOSE(("%d components are marked as finalized.",
                m_finalized.comps.size()));
-    for (std::vector<RTObject_impl*>::iterator comp = m_finalized.comps.begin(); comp != m_finalized.comps.end(); ++comp)
+    for (size_t i(0); i < m_finalized.comps.size(); ++i)
       {
-        deleteComponent(*comp);
+        deleteComponent(m_finalized.comps[i]);
       }
     m_finalized.comps.clear();
   }
@@ -2221,7 +2221,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
         RTC_ERROR(("Invalid id type: %s", id[0].c_str()));
         return false;
       }
-	for (unsigned int i(1); i < RTM::CompParam::prof_list_size; ++i)
+	for (size_t i(1); i < RTM::CompParam::prof_list_size; ++i)
       {
 		  comp_id[RTM::CompParam::prof_list[i]] = id[i];
 		  RTC_TRACE(("RTC basic propfile %s: %s", RTM::CompParam::prof_list[i], id[i].c_str()));
@@ -2230,10 +2230,10 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     if (id_and_conf.size() == 2)
       {
         std::vector<std::string> conf(coil::split(id_and_conf[1], "&"));
-        for (coil::vstring::iterator c = conf.begin(); c != conf.end(); ++c)
+        for (int i(0), len(conf.size()); i < len; ++i)
           {
-            if ((*c).empty()) { continue; }
-            std::vector<std::string> keyval(coil::split((*c), "="));
+            if (conf[i].empty()) { continue; }
+            std::vector<std::string> keyval(coil::split(conf[i], "="));
             if (keyval.size() != 2) { continue; }
             comp_conf[keyval[0]] = keyval[1];
             RTC_TRACE(("RTC property %s: %s",
@@ -2263,9 +2263,9 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     if (id_and_conf.size() == 2)
       {
         std::vector<std::string> conf(coil::split(id_and_conf[1], "&"));
-        for (coil::vstring::iterator c = conf.begin(); c != conf.end(); ++c)
+        for (int i(0), len(conf.size()); i < len; ++i)
           {
-            std::vector<std::string> k(coil::split(*c, "="));
+            std::vector<std::string> k(coil::split(conf[i], "="));
             ec_conf[k[0]] = k[1];
             RTC_TRACE(("EC property %s: %s", k[0].c_str(), k[1].c_str()));
           }
@@ -2510,12 +2510,12 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     size_t ipv4_count(0), ipv6_count(0);
 
     coil::vstring addrs;
-    for (std::vector<IIOP::Address>::iterator endpoint = endpoints.begin(); endpoint != endpoints.end(); ++endpoint)
+    for (size_t i(0); i < endpoints.size(); ++i)
       {
-        std::string addr((*endpoint).host);
+        std::string addr(endpoints[i].host);
         if (ipv4 && coil::isIPv4(addr))
           {
-            std::string tmp(addr + ":" + coil::otos((*endpoint).port));
+            std::string tmp(addr + ":" + coil::otos(endpoints[i].port));
             if (ipv4_list.empty() ||
                 std::find(ipv4_list.begin(), ipv4_list.end(), ipv4_count)
                 != ipv4_list.end())
@@ -2527,7 +2527,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
           }
         if (ipv6 && coil::isIPv6(addr))
           {
-            std::string tmp("[" + addr + "]:" + coil::otos((*endpoint).port));
+            std::string tmp("[" + addr + "]:" + coil::otos(endpoints[i].port));
             if (ipv6_list.empty() ||
                 std::find(ipv6_list.begin(), ipv6_list.end(), ipv6_count)
                 != ipv6_list.end())
@@ -2578,10 +2578,10 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 
     std::string list_num(ep_prop.substr(par_begin + 1, par_end - 1));
     coil::vstring nums = coil::split(list_num, ",");
-    for (coil::vstring::iterator num = nums.begin(); num != nums.end(); ++num)
+    for (size_t i(0); i < nums.size(); ++i)
       {
         int n;
-        if (coil::stringTo(n, (*num).c_str()))
+        if (coil::stringTo(n, nums[i].c_str()))
           {
             ip_list.push_back(n);
           }
@@ -2612,17 +2612,17 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 		  m_config["manager.components.preconnect"].c_str()));
 	  std::vector<std::string> connectors;
 	  connectors = coil::split(m_config["manager.components.preconnect"], ",");
-      for (coil::vstring::iterator con = connectors.begin(); con != connectors.end(); ++con)
+	  for (int i(0), len(connectors.size()); i < len; ++i)
 	  {
 		  
-		  coil::eraseBothEndsBlank(*con);
-		  if ((*con).empty())
+		  coil::eraseBothEndsBlank(connectors[i]);
+		  if (connectors[i].empty())
 		  {
 			  continue;
 		  }
 
-		  std::string port0_str = coil::split(*con, "?")[0];
-		  coil::mapstring param = coil::urlparam2map(*con);
+		  std::string port0_str = coil::split(connectors[i], "?")[0];
+		  coil::mapstring param = coil::urlparam2map(connectors[i]);
 
 		  coil::vstring ports;
 		  coil::mapstring configs;
@@ -2720,9 +2720,9 @@ std::vector<coil::Properties> Manager::getLoadableModules()
                   prop["dataport." + key] = value;
               }
 
-              if (RTC::RTC_OK != CORBA_RTCUtil::connect(*con, prop, port0_var, RTC::PortService::_nil()))
+              if (RTC::RTC_OK != CORBA_RTCUtil::connect(connectors[i], prop, port0_var, RTC::PortService::_nil()))
               {
-                  RTC_ERROR(("Connection error: %s", (*con).c_str()));
+                  RTC_ERROR(("Connection error: %s", connectors[i].c_str()));
               }
           }
 
@@ -2785,9 +2785,9 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 
 
 
-			  if (RTC::RTC_OK != CORBA_RTCUtil::connect(*con, prop, port0_var, port_var))
+			  if (RTC::RTC_OK != CORBA_RTCUtil::connect(connectors[i], prop, port0_var, port_var))
 			  {
-				  RTC_ERROR(("Connection error: %s", (*con).c_str()));
+				  RTC_ERROR(("Connection error: %s", connectors[i].c_str()));
 			  }
 		  }
 	  }
@@ -2814,28 +2814,27 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 	  std::vector<std::string> comps;
 	  comps = coil::split(m_config["manager.components.preactivation"],
 		  ",");
-
-      for (coil::vstring::iterator c = comps.begin(); c != comps.end(); ++c)
+	  for (int i(0), len(comps.size()); i < len; ++i)
 	  {
-		  coil::eraseBothEndsBlank(*c);
-		  if (!(*c).empty())
+		  coil::eraseBothEndsBlank(comps[i]);
+		  if (!comps[i].empty())
 		  {
 			  RTC::RTObject_ptr comp_ref;
-			  if ((*c).find("://") == std::string::npos)
+			  if (comps[i].find("://") == std::string::npos)
 			  {
-				  RTObject_impl* comp = getComponent((*c).c_str());
+				  RTObject_impl* comp = getComponent(comps[i].c_str());
 				  if (comp == nullptr)
 				  {
-					  RTC_ERROR(("%s not found.", (*c).c_str())); continue;
+					  RTC_ERROR(("%s not found.", comps[i].c_str())); continue;
 				  }
 				  comp_ref = comp->getObjRef();
 			  }
 			  else
 			  {
-				  RTC::RTCList rtcs = m_namingManager->string_to_component(*c);
+				  RTC::RTCList rtcs = m_namingManager->string_to_component(comps[i]);
 				  if (rtcs.length() == 0)
 				  {
-					  RTC_ERROR(("%s not found.", (*c).c_str()));
+					  RTC_ERROR(("%s not found.", comps[i].c_str()));
 					  continue;
 				  }
 				  comp_ref = rtcs[0];
@@ -2845,11 +2844,11 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 			  RTC::ReturnCode_t ret = CORBA_RTCUtil::activate(comp_ref);
 			  if (ret != RTC::RTC_OK)
 			  {
-				  RTC_ERROR(("%s activation filed.", (*c).c_str()));
+				  RTC_ERROR(("%s activation filed.", comps[i].c_str()));
 			  }
 			  else
 			  {
-				  RTC_INFO(("%s activated.", (*c).c_str()));
+				  RTC_INFO(("%s activated.", comps[i].c_str()));
 			  }
 		  }
 		  
@@ -2875,11 +2874,11 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   {
 	  RTC_TRACE(("Components pre-creation: %s",
 		  m_config["manager.components.precreate"].c_str()));
-	  std::vector<std::string> comps;
-	  comps = coil::split(m_config["manager.components.precreate"], ",");
-      for (coil::vstring::iterator comp = comps.begin(); comp != comps.end(); ++comp)
+	  std::vector<std::string> comp;
+	  comp = coil::split(m_config["manager.components.precreate"], ",");
+	  for (int i(0), len(comp.size()); i < len; ++i)
 	  {
-		  this->createComponent((*comp).c_str());
+		  this->createComponent(comp[i].c_str());
 	  }
   }
 
@@ -2910,7 +2909,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   void Manager::publishPorts(RTObject_impl* comp)
   {
 	  PortServiceList_var ports = comp->get_ports();
-	  for (CORBA::ULong i(0); i < ports->length(); ++i)
+	  for (size_t i(0); i < ports->length(); ++i)
 	  {
 		  PortProfile_var prof = ports[i]->get_port_profile();
 		  coil::Properties prop;
@@ -2956,7 +2955,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   void Manager::subscribePorts(RTObject_impl* comp)
   {
 	  PortServiceList_var ports = comp->get_ports();
-	  for (CORBA::ULong i(0); i < ports->length(); ++i)
+	  for (size_t i(0); i < ports->length(); ++i)
 	  {
 		  PortProfile_var prof = ports[i]->get_port_profile();
 		  coil::Properties prop;
@@ -3001,9 +3000,9 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   {
 	  PortServiceList_var ports = new PortServiceList();
 	  std::vector<RTC::NamingService*>& ns(m_namingManager->getNameServices());
-      for (std::vector<RTC::NamingService*>::iterator n = ns.begin(); n != ns.end(); ++n)
+	  for (size_t i(0); i < ns.size(); ++i)
 	  {
-		  NamingOnCorba* noc = dynamic_cast<NamingOnCorba*>((*n)->ns);
+		  NamingOnCorba* noc = dynamic_cast<NamingOnCorba*>(ns[i]->ns);
 		  if (noc == nullptr) { continue; }
 		  CorbaNaming& cns(noc->getCorbaNaming());
 		  CosNaming::BindingList_var bl = new CosNaming::BindingList();

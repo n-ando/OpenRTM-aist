@@ -81,11 +81,11 @@ namespace RTC
   ConnectorDataListenerHolder::~ConnectorDataListenerHolder()
   {
     Guard guard(m_mutex);
-    for (std::vector<Entry>::iterator listener = m_listeners.begin(); listener != m_listeners.end(); ++listener)
+    for (int i(0), len(m_listeners.size()); i < len; ++i)
       {
-        if ((*listener).second)
+        if (m_listeners[i].second)
           {
-            delete (*listener).first;
+            delete m_listeners[i].first;
           }
       }
   }
@@ -131,9 +131,9 @@ namespace RTC
   {
     Guard guard(m_mutex);
     ConnectorListenerHolder::ReturnCode ret(NO_CHANGE);
-    for (std::vector<Entry>::iterator listener = m_listeners.begin(); listener != m_listeners.end(); ++listener)
+    for (int i(0), len(m_listeners.size()); i < len; ++i)
       {
-        ret = ret | (*listener).first->operator()(info, cdrdata);
+        ret = ret | m_listeners[i].first->operator()(info, cdrdata);
       }
     return ret;
   }
@@ -154,11 +154,11 @@ namespace RTC
   ConnectorListenerHolder::~ConnectorListenerHolder()
   {
     Guard guard(m_mutex);
-    for (std::vector<Entry>::iterator listener = m_listeners.begin(); listener != m_listeners.end(); ++listener)
+    for (int i(0), len(m_listeners.size()); i < len; ++i)
       {
-        if ((*listener).second)
+        if (m_listeners[i].second)
           {
-            delete (*listener).first;
+            delete m_listeners[i].first;
           }
       }
   }
@@ -202,9 +202,9 @@ namespace RTC
   {
     Guard guard(m_mutex);
     ConnectorListenerHolder::ReturnCode ret(NO_CHANGE);
-    for (std::vector<Entry>::iterator listener = m_listeners.begin(); listener != m_listeners.end(); ++listener)
+    for (int i(0), len(m_listeners.size()); i < len; ++i)
       {
-        ret = ret | (*listener).first->operator()(info);
+        ret = ret | m_listeners[i].first->operator()(info);
       }
     return ret;
   }

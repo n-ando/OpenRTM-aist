@@ -402,7 +402,7 @@ namespace SDOPackage
         // Ctor's first arg is max length. Actual length has to be set.
         config_sets->length((CORBA::ULong)cf.size());
 
-        for (CORBA::ULong i(0), len((CORBA::ULong)cf.size()); i < len; ++i)
+        for (CORBA::ULong i(0), len(cf.size()); i < len; ++i)
           {
             toConfigurationSet(config_sets[i], *(cf[i]));
           }
