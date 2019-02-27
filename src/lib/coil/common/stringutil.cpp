@@ -46,8 +46,16 @@ namespace coil
    */
   std::wstring string2wstring(std::string str)
   {
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
+    int buff_size = MultiByteToWideChar(CP_UTF7, 0, str.c_str(), -1, (wchar_t*)NULL, 0);
+    wchar_t* ret = new wchar_t[buff_size];
+    MultiByteToWideChar(CP_UTF7, 0, str.c_str(), -1, ret, buff_size);
+    std::wstring wstr(ret, ret + buff_size - 1);
+    delete[] ret;
+#else
     std::wstring wstr(str.length(), L' ');
     std::copy(str.begin(), str.end(), wstr.begin());
+#endif
     return wstr;
   }
 
@@ -60,8 +68,16 @@ namespace coil
    */
   std::string wstring2string(std::wstring wstr)
   {
-    std::string str(wstr.length(), ' ');
-    std::copy(wstr.begin(), wstr.end(), str.begin());
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
+      int buff_size = WideCharToMultiByte(CP_ACP, 0, wstr.c_str(), -1, (char*)NULL, 0, NULL, NULL);
+      CHAR* ret = new CHAR[buff_size];
+      WideCharToMultiByte(CP_ACP, 0, wstr.c_str(), -1, ret, buff_size, NULL, NULL);
+      std::string str(ret, ret + buff_size - 1);
+      delete[] ret;
+#else
+      std::string str(wstr.length(), ' ');
+      std::copy(wstr.begin(), wstr.end(), str.begin());
+#endif
     return str;
   }
 
