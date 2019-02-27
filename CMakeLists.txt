@@ -624,7 +624,7 @@ elseif(UNIX)
 	set(CMAKE_CXX_FLAGS "-O2 -Wall -Wextra -std=c++11")
 elseif(WIN32)
 	set(COIL_OS_DIR "win32")
-	set(COIL_C_FLAGS_LIST "-DWINVER=0x0500" "-D_WIN32_WINNT=0x0500")
+	set(COIL_C_FLAGS_LIST "-D_WIN32_WINNT=0x0602")
 	set(RTM_LINKER_OPTION advapi32.lib;ws2_32.lib;mswsock.lib;rpcrt4.lib;optimized;msvcrt.lib;optimized;msvcmrt.lib;debug;msvcrtd.lib)
 endif()
 
