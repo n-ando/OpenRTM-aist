@@ -116,7 +116,7 @@ namespace coil
                       static_cast<int>(version_info.dwMajorVersion),
                       static_cast<int>(version_info.dwMinorVersion));
 
-                  sprintf_s(name->version, sizeof(name->release), "Build %d %s",
+                  sprintf_s(name->version, sizeof(name->release), "Build %d %ls",
                       static_cast<int>(version_info.dwBuildNumber),
                       version_info.szCSDVersion);
 
