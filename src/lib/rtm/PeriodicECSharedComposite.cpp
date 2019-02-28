@@ -388,7 +388,7 @@ namespace SDOPackage
       }
     m_ec->remove_component(member.rtobj_.in());
 
-    OrganizationList_var orglist = member.rtobj_->get_organizations();
+    OrganizationList_var orglist = member.rtobj_->get_owned_organizations();
     for (CORBA::ULong i(0); i < orglist->length(); ++i)
       {
         SDOPackage::SDOList_var sdos = orglist[i]->get_members();
