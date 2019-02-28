@@ -332,7 +332,7 @@ namespace SDOPackage
       }
 
 
-    addRTCToEC(member.rtobj_.in());
+    addRTCToEC(member.rtobj_);
 
 
   }
