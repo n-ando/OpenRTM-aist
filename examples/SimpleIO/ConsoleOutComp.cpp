@@ -59,6 +59,7 @@ void MyModuleInit(RTC::Manager* manager)
   PortServiceList* portlist;
   portlist = comp->get_ports();
 
+
   for (CORBA::ULong i(0), n(portlist->length()); i < n; ++i)
     {
       PortService_ptr port;
