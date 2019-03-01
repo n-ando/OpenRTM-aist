@@ -247,7 +247,7 @@ namespace SDOPackage
      * @endif
      */
     void removeOrganizationFromTarget(Member& member);
-    void addRTCToEC(RTC::RTObject_var rtobj);
+    void addRTCToEC(RTC::RTObject_ptr rtobj);
 
     /*!
      * @if jp
