@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file  Analyzer.h
  * @brief Clock Analyzer Component
