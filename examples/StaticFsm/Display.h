@@ -18,9 +18,7 @@
 #include <rtm/DataOutPort.h>
 #include <rtm/ConnectorListener.h>
 #include <rtm/Macho.h>
-#ifdef RTM_OS_LINUX
 #pragma GCC diagnostic ignored "-Wunused-but-set-variable"
-#endif
 
 #include <iostream>
 

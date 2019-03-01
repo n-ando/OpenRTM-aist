@@ -250,7 +250,7 @@ namespace RTC
             {
                 if (std::string((*itr)->name()) == name)
                 {
-                    size_t r = (*itr)->getBuffer()->readable();
+                    int r = (*itr)->getBuffer()->readable();
                     if (r > 0)
                     {
                         RTC_DEBUG(("isNew() = true, readable data: %d", r));
@@ -279,7 +279,7 @@ namespace RTC
             }
             for (ConnectorList::iterator itr = m_connectors.begin(); itr != m_connectors.end(); ++itr)
             {
-                size_t r = (*itr)->getBuffer()->readable();
+                int r = (*itr)->getBuffer()->readable();
                 if (r > 0)
                 {
                     names.push_back((*itr)->name());
@@ -312,7 +312,7 @@ namespace RTC
             return true;
           }
       }
-      size_t r(0);
+      int r(0);
       {
         Guard guard(m_connectorsMutex);
         if (m_connectors.empty())
@@ -372,7 +372,7 @@ namespace RTC
             {
                 if (std::string((*itr)->name()) == name)
                 {
-                    size_t r = (*itr)->getBuffer()->readable();
+                    int r = (*itr)->getBuffer()->readable();
                     if (r == 0)
                     {
                         RTC_DEBUG(("isEmpty() = true, buffer is empty"));
@@ -401,7 +401,7 @@ namespace RTC
             }
             for (ConnectorList::iterator itr = m_connectors.begin(); itr != m_connectors.end(); ++itr)
             {
-                size_t r = (*itr)->getBuffer()->readable();
+                int r = (*itr)->getBuffer()->readable();
                 if (r == 0)
                 {
                     names.push_back((*itr)->name());
@@ -423,7 +423,7 @@ namespace RTC
     {
       RTC_TRACE(("isEmpty()"));
       if (m_directNewData == true) { return false; }
-      size_t r(0);
+      int r(0);
 
       {
         Guard guard(m_connectorsMutex);

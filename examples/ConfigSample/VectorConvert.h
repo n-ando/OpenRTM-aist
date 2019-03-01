@@ -16,7 +16,7 @@ namespace std
     is >> s;
     sv = coil::split(s ,",");
     v.resize(sv.size());
-    for (size_t i(0), len(sv.size()); i < len; ++i)
+    for (int i(0), len(sv.size()); i < len; ++i)
       {
 	T tv;
 	if (coil::stringTo(tv, sv[i].c_str()))

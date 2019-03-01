@@ -150,26 +150,26 @@ RTC::ReturnCode_t ConfigSample::onExecute(RTC::UniqueId ec_id)
       std::cout << "double_param1:    " << m_double_param1 << c << std::endl;
       std::cout << "str_param0:       " << m_str_param0 << c << std::endl;
       std::cout << "str_param1:       " << m_str_param1 << c << std::endl;
-      for (size_t i(0), len(m_vector_param0.size()); i < len; ++i)
-	  {
-	      std::cout << "vector_param0[" << i << "]: ";
-	      std::cout << m_vector_param0[i] << c << std::endl;
-	  }
+      for (int i(0), len(m_vector_param0.size()); i < len; ++i)
+	{
+	  std::cout << "vector_param0[" << i << "]: ";
+	  std::cout << m_vector_param0[i] << c << std::endl;
+	}
       std::cout << "---------------------------------------" << std::endl;
 
-      curlen = (int)m_vector_param0.size();
+      curlen = m_vector_param0.size();
       maxlen = maxlen > curlen ? maxlen : curlen;
       for (int i(0), len(maxlen - curlen); i < len; ++i)
-	  {
-	      std::cout << c << c << std::endl;
-	  }
+	{
+	  std::cout << c << c << std::endl;
+	}
 
       std::cout << "Updating.... " << ticktack() << c << std::endl;
 
       for (int i(0), len(11 + maxlen); i < len; ++i)
-	  {
-	    std::cout << "[A\r";
-	  }
+	{
+	  std::cout << "[A\r";
+	}
     }
   if (m_int_param0 > 1000 && m_int_param0 < 1000000)
     {
