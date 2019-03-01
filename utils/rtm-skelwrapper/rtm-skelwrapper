@@ -26,13 +26,16 @@ import subprocess
 
 if os.name != "nt":
 	cmd = "rtm-config --libdir"
-	p = subprocess.Popen(cmd.split(), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-	p.wait()
-	libdir_path = p.stdout.readlines()
-	pyhelper_path = libdir_path[0].replace("\n","")
-	if pyhelper_path:
-		pyhelper_path = pyhelper_path + "/py_helper"
-		sys.path.append(pyhelper_path)
+	try:
+		p = subprocess.Popen(cmd.split(), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+		p.wait()
+		libdir_path = p.stdout.readlines()
+		pyhelper_path = libdir_path[0].replace("\n","")
+		if pyhelper_path:
+			pyhelper_path = pyhelper_path + "/py_helper"
+			sys.path.append(pyhelper_path)
+	except:
+		pass
 
 import skel_wrapper
 
@@ -167,5 +170,3 @@ def main():
 
 if __name__ == "__main__":
 	main()
-
-		
