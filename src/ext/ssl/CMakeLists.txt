@@ -8,22 +8,23 @@ project (SSLTransport
 set(OPENSSL_ROOT ${OPENSSL_ROOT} CACHE PATH "set OPENSSL_ROOT")
 
 
-if(NOT OPENSSL_ROOT)
-	if(UNIX)
-		set(ORB_ROOT "/usr")
-	else(UNIX)
-		message(FATAL_ERROR "Please set OPENSSL_ROOT.")
-	endif(UNIX)
-endif()
+if(OPENSSL_ROOT)
+	set(SSL_INCLUDE_DIR ${OPENSSL_ROOT}/include)
+	set(SSL_LINK_DIR ${OPENSSL_ROOT}/lib)
+	if(WIN32)
+		set(SSL_LIBRARIES libssl libcrypto)
+	else(WIN32)
+		set(SSL_LIBRARIES ssl crypto)
+	endif(WIN32)
+else(OPENSSL_ROOT)
+	find_package(OpenSSL REQUIRED)
+	set(SSL_INCLUDE_DIR ${OPENSSL_INCLUDE_DIR})
+	set(SSL_LIBRARIES ${OPENSSL_LIBRARIES})
+endif(OPENSSL_ROOT)
 
-set(SSL_INCLUDE_DIR ${OPENSSL_ROOT}/include)
-set(SSL_LINK_DIR ${OPENSSL_ROOT}/lib)
 
-if(WIN32)
-	set(SSL_LIBRARIES libssl libcrypto)
-else(WIN32)
-	set(SSL_LIBRARIES ssl crypto)
-endif(WIN32)
+
+
 
 
 link_directories(${ORB_LINK_DIR} ${SSL_LINK_DIR})
@@ -57,13 +58,14 @@ install(TARGETS ${target} LIBRARY DESTINATION ${INSTALL_RTM_EXT_DIR}/ssl
 			COMPONENT ext)
 
 if(WIN32)
-	file(GLOB OPENSSL_DLLS1 "${OPENSSL_ROOT}/bin/libcrypto*.dll")
-	file(GLOB OPENSSL_DLLS2 "${OPENSSL_ROOT}/bin/libssl*.dll")
-
+	if(OPENSSL_ROOT)
+		file(GLOB OPENSSL_DLLS1 "${OPENSSL_ROOT}/bin/libcrypto*.dll")
+		file(GLOB OPENSSL_DLLS2 "${OPENSSL_ROOT}/bin/libssl*.dll")
+		install(PROGRAMS ${OPENSSL_ROOT}/bin/openssl.exe DESTINATION ${INSTALL_RTM_EXT_DIR}/ssl COMPONENT ssllibs)
+	endif(OPENSSL_ROOT)
 	foreach(library ${OPENSSL_DLLS1};${OPENSSL_DLLS2})
 		install(PROGRAMS ${library} DESTINATION ${INSTALL_RTM_EXT_DIR}/ssl COMPONENT ssllibs)
 	endforeach()
-	install(PROGRAMS ${OPENSSL_ROOT}/bin/openssl.exe DESTINATION ${INSTALL_RTM_EXT_DIR}/ssl COMPONENT ssllibs)
 	
 else(WIN32)
 endif(WIN32)
