@@ -30,6 +30,9 @@ if os.name != "nt":
 		p = subprocess.Popen(cmd.split(), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 		p.wait()
 		libdir_path = p.stdout.readlines()
+		if sys.version_info[0] == 3:
+			libdir_path[0] = libdir_path[0].decode()
+
 		pyhelper_path = libdir_path[0].replace("\n","")
 		if pyhelper_path:
 			pyhelper_path = pyhelper_path + "/py_helper"
