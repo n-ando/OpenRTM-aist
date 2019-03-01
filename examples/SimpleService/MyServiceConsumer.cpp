@@ -164,7 +164,7 @@ RTC::ReturnCode_t MyServiceConsumer::onExecute(RTC::UniqueId ec_id)
       
       if (argv[0] == "set_value" && argv.size() > 1)
 	{
-          CORBA::Float val(atof(argv[1].c_str()));
+          CORBA::Float val((CORBA::Float)atof(argv[1].c_str()));
           coil::AsyncInvoker(&m_myservice0, set_value_functor(val),
                              true)->invoke();
           std::cout << "Set remote value: " << val << std::endl;
