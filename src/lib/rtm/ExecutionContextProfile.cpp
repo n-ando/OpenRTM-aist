@@ -92,7 +92,7 @@ namespace RTC_impl
    * @endif
    */
   RTC::ExecutionContextService_ptr
-  ExecutionContextProfile::getObjRef(void) const
+  ExecutionContextProfile::getObjRef() const
   {
     RTC_TRACE(("getObjRef()"));
     Guard guard(m_profileMutex);
@@ -210,7 +210,7 @@ namespace RTC_impl
    * @brief Get the ExecutionKind
    * @endif
    */
-  RTC::ExecutionKind ExecutionContextProfile::getKind(void) const
+  RTC::ExecutionKind ExecutionContextProfile::getKind() const
   {
     Guard guard(m_profileMutex);
     RTC_TRACE(("%s = getKind()", getKindString(m_profile.kind)));

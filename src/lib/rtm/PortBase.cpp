@@ -346,7 +346,7 @@ namespace RTC
    * @brief Publish interface information
    * @endif
    */
-  ReturnCode_t PortBase::_publishInterfaces(void)
+  ReturnCode_t PortBase::_publishInterfaces()
   {
     if (!(m_connectionLimit < 0))
       {

@@ -83,7 +83,7 @@ namespace RTC_exp
    * @brief Thread execution function for ExecutionContext
    * @endif
    */
-  int MultilayerCompositeEC::svc(void)
+  int MultilayerCompositeEC::svc()
   {
     RTC_TRACE(("svc()"));
     int count(0);

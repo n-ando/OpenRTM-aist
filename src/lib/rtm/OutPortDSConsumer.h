@@ -85,7 +85,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~OutPortDSConsumer(void);
+    virtual ~OutPortDSConsumer();
 
     /*!
      * @if jp

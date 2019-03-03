@@ -117,7 +117,7 @@ namespace RTC
    * @brief Invoke each component's operation
    * @endif
    */
-  int LogicalTimeTriggeredEC::svc(void)
+  int LogicalTimeTriggeredEC::svc()
   {
     RTC_TRACE(("svc()"));
     unsigned int count(0);

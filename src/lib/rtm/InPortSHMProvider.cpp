@@ -32,7 +32,7 @@ namespace RTC
    * @brief Constructor
    * @endif
    */
-  InPortSHMProvider::InPortSHMProvider(void)
+  InPortSHMProvider::InPortSHMProvider()
    : m_buffer(nullptr),
      m_connector(nullptr)
   {
@@ -67,7 +67,7 @@ namespace RTC
    * @brief Destructor
    * @endif
    */
-  InPortSHMProvider::~InPortSHMProvider(void)
+  InPortSHMProvider::~InPortSHMProvider()
   {
 
   }

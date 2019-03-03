@@ -68,7 +68,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~ConnectionCallback(void) {}
+    virtual ~ConnectionCallback() {}
 
     /*!
      * @if jp
@@ -137,7 +137,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~DisconnectCallback(void) {}
+    virtual ~DisconnectCallback() {}
     /*!
      * @if jp
      *
@@ -205,7 +205,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~OnWrite(void) {}
+    virtual ~OnWrite() {}
 
     /*!
      * @if jp
@@ -270,7 +270,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~OnWriteConvert(void) {}
+    virtual ~OnWriteConvert() {}
 
     /*!
      * @if jp
@@ -337,7 +337,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~OnRead(void) {}
+    virtual ~OnRead() {}
 
     /*!
      * @if jp
@@ -399,7 +399,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~OnReadConvert(void) {}
+    virtual ~OnReadConvert() {}
 
     /*!
      * @if jp

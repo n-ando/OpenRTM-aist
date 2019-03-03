@@ -69,7 +69,7 @@ namespace RTC
    * @brief Virtual destructor
    * @endif
    */
-  ConfigAdmin::~ConfigAdmin(void)
+  ConfigAdmin::~ConfigAdmin()
   {
     for (int i(0), len(m_params.size()); i < len; ++i)
       {
@@ -121,7 +121,7 @@ namespace RTC
    *        (Active configuration set)
    * @endif
    */
-  void ConfigAdmin::update(void)
+  void ConfigAdmin::update()
   {
     m_changedParam.clear();
     if (m_changed && m_active)
@@ -212,7 +212,7 @@ namespace RTC
    * @brief Get all configuration sets
    * @endif
    */
-  const std::vector<coil::Properties*>& ConfigAdmin::getConfigurationSets(void)
+  const std::vector<coil::Properties*>& ConfigAdmin::getConfigurationSets()
   {
     return m_configsets.getLeaf();
   }
@@ -261,7 +261,7 @@ namespace RTC
    * @brief Get the active configuration set
    * @endif
    */
-  const coil::Properties& ConfigAdmin::getActiveConfigurationSet(void)
+  const coil::Properties& ConfigAdmin::getActiveConfigurationSet()
   {
     coil::Properties& p(m_configsets.getNode(m_activeId));
 

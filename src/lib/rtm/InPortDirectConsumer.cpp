@@ -30,7 +30,7 @@ namespace RTC
    * @param buffer The buffer object that is attached to this Consumer
    * @endif
    */
-  InPortDirectConsumer::InPortDirectConsumer(void)
+  InPortDirectConsumer::InPortDirectConsumer()
     : rtclog("InPortDirectConsumer")
   {
   }
@@ -42,7 +42,7 @@ namespace RTC
    * @brief Destructor
    * @endif
    */
-  InPortDirectConsumer::~InPortDirectConsumer(void)
+  InPortDirectConsumer::~InPortDirectConsumer()
   {
     RTC_PARANOID(("~InPortDirectConsumer()"));
   }

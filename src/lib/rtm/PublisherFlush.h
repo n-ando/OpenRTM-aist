@@ -92,7 +92,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~PublisherFlush(void);
+    virtual ~PublisherFlush();
 
     /*!
      * @if jp

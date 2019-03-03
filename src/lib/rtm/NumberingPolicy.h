@@ -81,7 +81,7 @@ namespace RTM
      *
      * @endif
      */
-    virtual ~ProcessUniquePolicy(void){};
+    virtual ~ProcessUniquePolicy(){};
     
     /*!
      * @if jp

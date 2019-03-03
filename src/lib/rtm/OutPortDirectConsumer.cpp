@@ -39,7 +39,7 @@ namespace RTC
    * @brief Destructor
    * @endif
    */
-  OutPortDirectConsumer::~OutPortDirectConsumer(void)
+  OutPortDirectConsumer::~OutPortDirectConsumer()
   {
   } 
 
