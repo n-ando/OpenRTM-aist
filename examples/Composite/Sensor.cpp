@@ -99,7 +99,7 @@ RTC::ReturnCode_t Sensor::onDeactivated(RTC::UniqueId ec_id)
 */
 
 
-RTC::ReturnCode_t Sensor::onExecute(RTC::UniqueId ec_id)
+RTC::ReturnCode_t Sensor::onExecute(RTC::UniqueId  /*ec_id*/)
 {
   if (m_inIn.isNew()) {
     m_inIn.read();

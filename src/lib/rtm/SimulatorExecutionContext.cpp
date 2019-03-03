@@ -219,7 +219,7 @@ namespace RTC
 
 extern "C"
 {
-  void SimulatorExecutionContextInit(RTC::Manager* manager)
+  void SimulatorExecutionContextInit(RTC::Manager*  /*manager*/)
   {
   /*!
    * @if jp

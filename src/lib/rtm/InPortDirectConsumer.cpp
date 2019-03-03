@@ -67,7 +67,7 @@ namespace RTC
    * @endif
    */
   InPortConsumer::ReturnCode InPortDirectConsumer::
-	  put(ByteData& data)
+	  put(ByteData&  /*data*/)
   {
     RTC_PARANOID(("put(): never called."));
     return UNKNOWN_ERROR;
@@ -81,7 +81,7 @@ namespace RTC
    * @endif
    */
   void InPortDirectConsumer::
-  publishInterfaceProfile(SDOPackage::NVList& properties)
+  publishInterfaceProfile(SDOPackage::NVList&  /*properties*/)
   {
     return;
   }
@@ -94,7 +94,7 @@ namespace RTC
    * @endif
    */
   bool InPortDirectConsumer::
-  subscribeInterface(const SDOPackage::NVList& properties)
+  subscribeInterface(const SDOPackage::NVList&  /*properties*/)
   {
     RTC_TRACE(("subscribeInterface(): do nothing"));
     return true;
@@ -108,7 +108,7 @@ namespace RTC
    * @endif
    */
   void InPortDirectConsumer::
-  unsubscribeInterface(const SDOPackage::NVList& properties)
+  unsubscribeInterface(const SDOPackage::NVList&  /*properties*/)
   {
     RTC_TRACE(("unsubscribeInterface(): do nothing"));
   }

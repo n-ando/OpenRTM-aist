@@ -105,7 +105,7 @@ namespace RTC_exp
    * @brief Generate internal activity thread for ExecutionContext
    * @endif
    */
-  int PeriodicExecutionContext::open(void *args)
+  int PeriodicExecutionContext::open(void * /*args*/)
   {
     RTC_TRACE(("open()"));
     activate();
@@ -206,7 +206,7 @@ namespace RTC_exp
    * @brief Thread execution function for ExecutionContext
    * @endif
    */
-  int PeriodicExecutionContext::close(unsigned long flags)
+  int PeriodicExecutionContext::close(unsigned long  /*flags*/)
   {
     RTC_TRACE(("close()"));
     // At this point, this component have to be finished.
@@ -447,7 +447,7 @@ namespace RTC_exp
    * @brief onAddedComponent() template function
    */
   RTC::ReturnCode_t PeriodicExecutionContext::
-  onAddedComponent(RTC::LightweightRTObject_ptr rtobj)
+  onAddedComponent(RTC::LightweightRTObject_ptr  /*rtobj*/)
   {
     Guard guard(m_workerthread.mutex_);
     if (m_workerthread.running_ == false)
@@ -460,7 +460,7 @@ namespace RTC_exp
    * @brief onRemovedComponent() template function
    */
   RTC::ReturnCode_t PeriodicExecutionContext::
-  onRemovedComponent(RTC::LightweightRTObject_ptr rtobj)
+  onRemovedComponent(RTC::LightweightRTObject_ptr  /*rtobj*/)
   {
     Guard guard(m_workerthread.mutex_);
     if (m_workerthread.running_ == false)
@@ -644,7 +644,7 @@ extern "C"
    * @endif
    */
 
-  void PeriodicExecutionContextInit(RTC::Manager* manager)
+  void PeriodicExecutionContextInit(RTC::Manager*  /*manager*/)
   {
     RTC::ExecutionContextFactory::
       instance().addFactory("PeriodicExecutionContext",

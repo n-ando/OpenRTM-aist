@@ -103,7 +103,7 @@ namespace RTC
    * @endif
    */
   void InPortDSConsumer::
-  publishInterfaceProfile(SDOPackage::NVList& properties)
+  publishInterfaceProfile(SDOPackage::NVList&  /*properties*/)
   {
     return;
   }

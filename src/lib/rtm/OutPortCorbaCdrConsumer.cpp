@@ -53,7 +53,7 @@ namespace RTC
    * @brief Initializing configuration
    * @endif
    */
-  void OutPortCorbaCdrConsumer::init(coil::Properties& prop)
+  void OutPortCorbaCdrConsumer::init(coil::Properties&  /*prop*/)
   {
     RTC_TRACE(("OutPortCorbaCdrConsumer::init()"));
   }
@@ -231,7 +231,7 @@ namespace RTC
    */
   OutPortConsumer::ReturnCode
   OutPortCorbaCdrConsumer::convertReturn(::OpenRTM::PortStatus status,
-                                         ByteData& data)
+                                         ByteData&  /*data*/)
   {
     switch (status)
       {

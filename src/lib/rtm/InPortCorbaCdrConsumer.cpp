@@ -105,7 +105,7 @@ namespace RTC
    * @endif
    */
   void InPortCorbaCdrConsumer::
-  publishInterfaceProfile(SDOPackage::NVList& properties)
+  publishInterfaceProfile(SDOPackage::NVList&  /*properties*/)
   {
     return;
   }

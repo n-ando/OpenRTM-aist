@@ -168,7 +168,7 @@ namespace RTC
 	  }
   };
 
-  BufferStatus::Enum InPortConnector::write(ByteData &cdr)
+  BufferStatus::Enum InPortConnector::write(ByteData & /*cdr*/)
   {
       return BufferStatus::BUFFER_OK;
   };

@@ -1004,7 +1004,7 @@ namespace RTM
    * @brief Get the reference of RTC.
    * @endif
    */
-  CORBA::Object_ptr ManagerServant::get_service(const char* name)
+  CORBA::Object_ptr ManagerServant::get_service(const char*  /*name*/)
   {
     return ::CORBA::Object::_nil();
   }
