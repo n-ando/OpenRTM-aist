@@ -56,7 +56,7 @@ namespace coil
    * @brief Generate thread for Timer
    * @endif
    */
-  int Timer::open(void *args)
+  int Timer::open(void * /*args*/)
   {
     activate();
     return 0;
@@ -69,7 +69,7 @@ namespace coil
    * @brief Thread execution function for Timer
    * @endif
    */
-  int Timer::svc(void)
+  int Timer::svc()
   {
     TimeValue t_curr, t_pre, tm;
     while (m_running)
@@ -154,7 +154,7 @@ namespace coil
             return listener;
           }
       }
-    m_tasks.push_back(Task(listener, tm));
+    m_tasks.emplace_back(listener, tm);
     return listener;
   }
 

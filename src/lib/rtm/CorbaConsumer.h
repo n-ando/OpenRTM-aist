@@ -191,7 +191,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~CorbaConsumerBase(void)
+    virtual ~CorbaConsumerBase()
     {
       releaseObject();
     };
@@ -427,7 +427,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~CorbaConsumer(void)
+    virtual ~CorbaConsumer()
     {
       releaseObject();
     };

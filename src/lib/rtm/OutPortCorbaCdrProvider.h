@@ -77,7 +77,7 @@ namespace RTC
      *
      * @endif
      */
-    OutPortCorbaCdrProvider(void);
+    OutPortCorbaCdrProvider();
 
     /*!
      * @if jp
@@ -92,7 +92,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~OutPortCorbaCdrProvider(void);
+    virtual ~OutPortCorbaCdrProvider();
 
     /*!
      * @if jp

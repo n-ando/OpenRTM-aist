@@ -245,7 +245,7 @@ namespace RTC
    * @brief Thread execution function
    * @endif
    */
-  int PublisherNew::svc(void)
+  int PublisherNew::svc()
   {
 
     Guard guard(m_retmutex);

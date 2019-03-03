@@ -29,7 +29,7 @@ namespace RTC
    * @brief Destructor
    * @endif
    */
-  OutPortProvider::~OutPortProvider(void)
+  OutPortProvider::~OutPortProvider()
   {
   }
 

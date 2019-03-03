@@ -346,7 +346,7 @@ namespace RTC
    * @brief Publish interface information
    * @endif
    */
-  ReturnCode_t PortBase::_publishInterfaces(void)
+  ReturnCode_t PortBase::_publishInterfaces()
   {
     if (!(m_connectionLimit < 0))
       {
@@ -776,7 +776,7 @@ namespace RTC
   {
     coil::UUID_Generator uugen;
     uugen.init();
-    std::auto_ptr<coil::UUID> uuid(uugen.generateUUID(2, 0x01));
+    std::unique_ptr<coil::UUID> uuid(uugen.generateUUID(2, 0x01));
 
     return std::string((const char*)uuid->to_string());
   }
@@ -944,7 +944,7 @@ namespace RTC
           if (!checkPorts(clist[i].ports))
             {
               const char* id(clist[i].connector_id);
-              connector_ids.push_back(id);
+              connector_ids.emplace_back(id);
               RTC_WARN(("Dead connection: %s", id));
             }
         }

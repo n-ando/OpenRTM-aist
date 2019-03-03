@@ -132,7 +132,7 @@ RTC::ReturnCode_t ConfigSample::onDeactivated(RTC::UniqueId ec_id)
 */
 
 
-RTC::ReturnCode_t ConfigSample::onExecute(RTC::UniqueId ec_id)
+RTC::ReturnCode_t ConfigSample::onExecute(RTC::UniqueId  /*ec_id*/)
 {
   static int  maxlen(0);
   int curlen(0);

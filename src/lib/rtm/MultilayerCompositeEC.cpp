@@ -83,7 +83,7 @@ namespace RTC_exp
    * @brief Thread execution function for ExecutionContext
    * @endif
    */
-  int MultilayerCompositeEC::svc(void)
+  int MultilayerCompositeEC::svc()
   {
     RTC_TRACE(("svc()"));
     int count(0);
@@ -439,7 +439,7 @@ extern "C"
    * @endif
    */
 
-  void MultilayerCompositeECInit(RTC::Manager* manager)
+  void MultilayerCompositeECInit(RTC::Manager*  /*manager*/)
   {
     RTC::ExecutionContextFactory::
       instance().addFactory("MultilayerCompositeEC",
