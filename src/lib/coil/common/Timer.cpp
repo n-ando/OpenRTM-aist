@@ -154,7 +154,7 @@ namespace coil
             return listener;
           }
       }
-    m_tasks.push_back(Task(listener, tm));
+    m_tasks.emplace_back(listener, tm);
     return listener;
   }
 

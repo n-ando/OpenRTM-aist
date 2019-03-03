@@ -891,7 +891,7 @@ namespace coil
           }
           return;
       }
-      if (index != 0)out.push_back("");
+      if (index != 0) { out.emplace_back(""); }
       for (size_t i(0), len(curr.leaf.size()); i < len; ++i)
       {
           _dump(out, *(curr.leaf[i]), index + 1);
