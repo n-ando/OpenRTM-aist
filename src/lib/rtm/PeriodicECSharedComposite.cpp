@@ -337,13 +337,13 @@ namespace SDOPackage
 
   }
 
-  void PeriodicECOrganization::addRTCToEC(RTC::RTObject_var rtobj)
+  void PeriodicECOrganization::addRTCToEC(RTC::RTObject_ptr rtobj)
   {
       SDOPackage::OrganizationList_var orglist = rtobj->get_owned_organizations();
       if (orglist->length() == 0)
       {
           // set ec to target RTC
-          m_ec->add_component(rtobj.in());
+          m_ec->add_component(rtobj);
       }
 
       for (CORBA::ULong i(0); i < orglist->length(); ++i)
@@ -388,7 +388,7 @@ namespace SDOPackage
       }
     m_ec->remove_component(member.rtobj_.in());
 
-    OrganizationList_var orglist = member.rtobj_->get_organizations();
+    OrganizationList_var orglist = member.rtobj_->get_owned_organizations();
     for (CORBA::ULong i(0); i < orglist->length(); ++i)
       {
         SDOPackage::SDOList_var sdos = orglist[i]->get_members();
