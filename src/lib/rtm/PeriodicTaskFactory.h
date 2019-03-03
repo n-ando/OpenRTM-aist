@@ -32,6 +32,6 @@ namespace RTC
   EXTERN template class DLL_PLUGIN
                      ::coil::GlobalFactory<coil::PeriodicTaskBase>;
 #endif
-};
+} // namespace RTC
 
 #endif  // RTC_PERIODICTASKFACTORY_H

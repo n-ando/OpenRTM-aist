@@ -44,7 +44,7 @@
 namespace SDOPackage
 {
   class Configuration_impl;
-};
+} // namespace SDOPackage
 
 #ifdef WIN32
 #pragma warning( disable : 4290 )

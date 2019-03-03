@@ -33,7 +33,7 @@
 namespace RTC
 {
   class RTObject_impl;
-};
+} // namespace RTC
 
 namespace RTM
 {
