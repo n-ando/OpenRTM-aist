@@ -63,6 +63,7 @@
 
 #include <fstream>
 #include <iostream>
+#include <utility>
 
 #if defined(minor)
 #undef minor
@@ -85,8 +86,8 @@ namespace RTC
   Manager::InstanceName::InstanceName(const char* name)
     : m_name(name)
   {}
-  Manager::InstanceName::InstanceName(const std::string& name)
-    : m_name(name)
+  Manager::InstanceName::InstanceName(std::string  name)
+    : m_name(std::move(name))
   {}
   bool Manager::InstanceName::operator()(RTObject_impl* comp)
   {
