@@ -1,7 +1,7 @@
 ﻿// -*- C++ -*-
 /*!
- * @file  ROSOutPort.cpp
- * @brief ROSOutPort class
+ * @file  FastRTPSOutPort.cpp
+ * @brief FastRTPSOutPort class
  * @date  $Date: 2019-01-31 03:08:03 $
  * @author Nobuhiko Miyamoto <n-miyamoto@aist.go.jp>
  *
@@ -17,12 +17,9 @@
  */
 
 
-#include "ROSTransport.h"
-#include "ROSSerializer.h"
-#include "ROSOutPort.h"
-#include "ROSInPort.h"
-
-
+#include "FastRTPSTransport.h"
+#include "FastRTPSOutPort.h"
+#include "FastRTPSInPort.h"
 
 
 extern "C"
@@ -34,27 +31,28 @@ extern "C"
    * @brief Module initialization
    * @endif
    */
-  void ROSTransportInit(RTC::Manager* manager)
+  void FastRTPSTransportInit(RTC::Manager* manager)
   {
     (void)manager;
     {
+        
       RTC::InPortProviderFactory& factory(RTC::InPortProviderFactory::instance());
-      factory.addFactory("ros",
+      factory.addFactory("fast-rtps",
                         ::coil::Creator< ::RTC::InPortProvider,
-                                          ::RTC::ROSInPort>,
+                                          ::RTC::FastRTPSInPort>,
                         ::coil::Destructor< ::RTC::InPortProvider,
-                                            ::RTC::ROSInPort>);
+                                            ::RTC::FastRTPSInPort>);
     }
 
     {
       RTC::InPortConsumerFactory& factory(RTC::InPortConsumerFactory::instance());
-      factory.addFactory("ros",
+      factory.addFactory("fast-rtps",
                         ::coil::Creator< ::RTC::InPortConsumer,
-                                          ::RTC::ROSOutPort>,
+                                          ::RTC::FastRTPSOutPort>,
                         ::coil::Destructor< ::RTC::InPortConsumer,
-                                            ::RTC::ROSOutPort>);
+                                            ::RTC::FastRTPSOutPort>);
     }
-    ROSSerializerInit(manager);
+    
   }
   
 };

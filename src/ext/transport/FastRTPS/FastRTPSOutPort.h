@@ -1,7 +1,7 @@
 ﻿// -*- C++ -*-
 /*!
- * @file  ROSOutPort.h
- * @brief ROSOutPort class
+ * @file  FastRTPSOutPort.h
+ * @brief FastRTPSOutPort class
  * @date  $Date: 2019-01-31 03:08:03 $
  * @author Nobuhiko Miyamoto <n-miyamoto@aist.go.jp>
  *
@@ -16,27 +16,27 @@
  *
  */
 
-#ifndef RTC_ROSOUTPORT_H
-#define RTC_ROSOUTPORT_H
+#ifndef RTC_FASTRTPSOUTPORT_H
+#define RTC_FASTRTPSOUTPORT_H
 
 
 
 #include <map>
 #include <rtm/InPortConsumer.h>
 #include <rtm/Manager.h>
-#include <ros/transport/transport_tcp.h>
-#include <ros/connection.h>
-#include <std_msgs/Float32.h>
 #include <coil/Mutex.h>
-#include "ROSMessageInfo.h"
+#include <fastrtps/fastrtps_fwd.h>
+#include <fastrtps/publisher/PublisherListener.h>
+#include "CORBACdrDataPubSubTypes.h"
+
 
 
 namespace RTC
 {
   /*!
    * @if jp
-   * @class ROSOutPort
-   * @brief ROSOutPort クラス
+   * @class FastRTPSOutPort
+   * @brief FastRTPSOutPort クラス
    *
    * InPortConsumer 
    *
@@ -46,8 +46,8 @@ namespace RTC
    * @since 2.0.0
    *
    * @else
-   * @class ROSOutPort
-   * @brief ROSOutPort class
+   * @class FastRTPSOutPort
+   * @brief FastRTPSOutPort class
    *
    * The InPort consumer class which uses the OpenRTM::InPortCdr
    * interface in CORBA for data transfer and realizes a push-type
@@ -57,7 +57,7 @@ namespace RTC
    *
    * @endif
    */
-  class ROSOutPort
+  class FastRTPSOutPort
     : public InPortConsumer
   {
   public:
@@ -81,7 +81,7 @@ namespace RTC
      *
      * @endif
      */
-    ROSOutPort(void);
+    FastRTPSOutPort(void);
     
     /*!
      * @if jp
@@ -96,7 +96,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~ROSOutPort(void);
+    virtual ~FastRTPSOutPort(void);
 
     /*!
      * @if jp
@@ -229,166 +229,98 @@ namespace RTC
      */
     virtual void unsubscribeInterface(const SDOPackage::NVList& properties);
 
-    /*!
-     * @if jp
-     * @brief ROSTCPでパブリッシャーとサブスクライバーを接続する
-     *
-     *
-     * @param transport TransportTCP
-     *
-     * @return True：接続成功、False：接続失敗
-     * 接続済みの場合はFalse
-     * 
-     * @else
-     * @brief 
-     *
-     *
-     * @param transport 
-     * 
-     * @return
-     *
-     * @endif
-     */
-    bool connectTCP(const ros::TransportTCPPtr& transport);
 
-    bool onConnectionHeaderReceived(const ros::ConnectionPtr& conn, const ros::Header& header)
-    {
-      RTC_VERBOSE(("onConnectionHeaderReceived()"));
-
-      std::string topic;
-      if (!header.getValue("topic", topic))
-      {
-        RTC_ERROR(("Topic name does not exist in header"));
-        return false;
-      }
-
-      if(m_topic != topic)
-      {
-        RTC_VERBOSE(("Topic names do not match. %s %s", m_topic.c_str(), topic.c_str()));
-        return false;
-      }
-
-      std::string client_callerid;
-      if (!header.getValue("callerid", client_callerid))
-      {
-        RTC_ERROR(("Callse id does not exist in header"));
-        return false;
-      }
-
-      
-
-      ROSMessageInfoBase* info = ROSMessageInfoFactory::instance().createObject(m_messageType);
-      
-      if(!info)
-      {
-        RTC_ERROR(("Can not find message type(%s)", m_messageType.c_str()));
-        return false;
-      }
-
-      ros::M_string m;
-      m["type"] = info->type();
-      m["md5sum"] = info->md5sum();
-      m["message_definition"] = info->message_definition();
-      m["callerid"] = client_callerid;
-      m["latching"] = "0";
-      m["topic"] = topic;
-
-      
-
-      RTC_VERBOSE(("TCPTransPort created"));
-      RTC_VERBOSE(("Message Type:%s", info->type().c_str()));
-      RTC_VERBOSE(("Md5sum:%s", info->md5sum().c_str()));
-      RTC_VERBOSE(("Message Definition:%s", info->message_definition().c_str()));
-      RTC_VERBOSE(("Caller ID:%s", client_callerid.c_str()));
-      RTC_VERBOSE(("Topic Name:%s", topic.c_str()));
-      RTC_VERBOSE(("TCPTransPort created"));
-
-
-      ROSMessageInfoFactory::instance().deleteObject(info);
-
-      conn->writeHeader(m, boost::bind(&ROSOutPort::onHeaderWritten, this, _1));
-      return true;
-    }
-
-    /*!
-     * @if jp
-     * @brief ヘッダー情報送信時のコールバック関数
-     *
-     *
-     * @param conn ros::Connection
-     *
-     * 
-     * @else
-     * @brief 
-     *
-     *
-     * @param conn 
-     * 
-     * @return
-     *
-     * @endif
-     */
-    void onHeaderWritten(const ros::ConnectionPtr& conn)
-    {
-      RTC_VERBOSE(("onHeaderWritten()"));
-      (void)conn;
-      Guard guard(m_mutex);
-      m_start = true;
-    }
-
-
-
-    /*!
-     * @if jp
-     * @brief メッセージ送信時のコールバック関数
-     *
-     *
-     * @param conn ros::Connection
-     *
-     * 
-     * @else
-     * @brief 
-     *
-     *
-     * @param conn 
-     * 
-     * @return
-     *
-     * @endif
-     */
-    void onMessageWritten(const ros::ConnectionPtr& conn)
-    {
-      (void)conn;
-      RTC_VERBOSE(("onMessageWritten()"));
-    };
 
   private:
 
-    /*!
-     * @if jp
-     * @brief リターンコード変換
-     * @else
-     * @brief Return codes conversion
-     * @endif
-     */
-    void convertReturn(BufferStatus::Enum status, ByteData& data);
+
 
     mutable Logger rtclog;
     bool m_start;
     coil::Properties m_properties;
-    std::map<std::string, ros::ConnectionPtr> m_tcp_connecters;
     
     std::string m_topic;
-    std::string m_callerid;
-    std::string m_messageType;
+    std::string m_dataType;
     Mutex m_mutex;
 
-    std::string m_roscorehost;
-    unsigned int m_roscoreport;
+    eprosima::fastrtps::Publisher *m_publisher;
+
+    /*!
+     * @if jp
+     * @class PubListener
+     * @brief PubListener クラス
+     *
+     * パブリッシャーのリスナ
+     *
+     * @since 2.0.0
+     *
+     * @else
+     * @class PubListener
+     * @brief PubListener class
+     *
+     *
+     * @since 2.0.0
+     *
+     * @endif
+     */
+    class PubListener : public eprosima::fastrtps::PublisherListener
+    {
+    public:
+        /*!
+         * @if jp
+         * @brief コンストラクタ
+         *
+         * コンストラクタ
+         *
+         *
+         * @else
+         * @brief Constructor
+         *
+         * Constructor
+         *
+         *
+         * @endif
+         */
+        PubListener();
+        /*!
+         * @if jp
+         * @brief デストラクタ
+         *
+         * デストラクタ
+         *
+         * @else
+         * @brief Destructor
+         *
+         * Destructor
+         *
+         * @endif
+         */
+        ~PubListener();
+        /*!
+         * @if jp
+         * @brief
+         *
+         * 同じトピックのPublisherを検出したときのコールバック関数
+         *
+         * @param sub Subscriber
+         * @param info 一致情報
+         *
+         * @else
+         * @brief
+         *
+         * @param sub
+         * @param info
+         *
+         *
+         * @endif
+         */
+        void onPublicationMatched(eprosima::fastrtps::Publisher* pub, eprosima::fastrtps::rtps::MatchingInfo& info);
+    } m_listener;
+    CORBACdrDataPubSubType m_type;
   };
 };     // namespace RTC
 
 
 
-#endif // RTC_ROSOUTPORT_H
+#endif // RTC_FASTRTPSOUTPORT_H
 

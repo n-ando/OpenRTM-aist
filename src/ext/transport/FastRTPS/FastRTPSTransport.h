@@ -1,11 +1,11 @@
 ﻿// -*- C++ -*-
 /*!
- * @file  ROSTransport.h
- * @brief ROSTransport class
+ * @file  FastRTPSTransport.h
+ * @brief FastRTPSTransport class
  * @date  $Date: 2019-02-04 03:08:03 $
  * @author Nobuhiko Miyamoto <n-miyamoto@aist.go.jp>
  *
- * Copyright (C) 2018
+ * Copyright (C) 2019
  *     Nobuhiko Miyamoto
  *     Robot Innovation Research Center,
  *     National Institute of
@@ -16,11 +16,13 @@
  *
  */
 
-#ifndef RTC_ROSTRANSPORT_H
-#define RTC_ROSTRANSPORT_H
+#ifndef RTC_FASTRTPSTRANSPORT_H
+#define RTC_FASTRTPSTRANSPORT_H
+
 
 
 #include <rtm/Manager.h>
+
 
 
 extern "C"
@@ -29,7 +31,7 @@ extern "C"
    * @if jp
    * @brief モジュール初期化関数
    *
-   * ROSOutPort、ROSInPort のファクトリを登録する初期化関数。
+   * FastRTPSOutPort、FastRTPSInPort のファクトリを登録する初期化関数。
    *
    * @else
    * @brief Module initialization
@@ -38,8 +40,8 @@ extern "C"
    *
    * @endif
    */
-  DLL_EXPORT void ROSTransportInit(RTC::Manager* manager);
+  DLL_EXPORT void FastRTPSTransportInit(RTC::Manager* manager);
 };
 
-#endif // RTC_ROSTRANSPORT_H
+#endif // RTC_FASTRTPSTRANSPORT_H
 

@@ -1,38 +1,11 @@
 cmake_minimum_required (VERSION 3.0.2)
 
-project (ROSTransport
+project (FastRTPSTransport
 	VERSION ${RTM_VERSION}
 	LANGUAGES CXX)
 
-
-if(NOT WIN32)
-  set_directory_properties(PROPERTIES COMPILE_OPTIONS "-Wall;-Wextra")
-endif()
-
-if(UNIX)
-	include(CheckCXXCompilerFlag)
-	CHECK_CXX_COMPILER_FLAG("-std=c++11" COMPILER_SUPPORTS_CXX11)
-	CHECK_CXX_COMPILER_FLAG("-std=c++0x" COMPILER_SUPPORTS_CXX0X)
-	if(COMPILER_SUPPORTS_CXX11)
-		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
-	elseif(COMPILER_SUPPORTS_CXX0X)
-	 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
-	else()
-	 	message(STATUS "The compiler ${CMAKE_CXX_COMPILER} has no C++11 support. Please use a different C++ compiler.")
-	endif()
-endif()
-
-
-find_package(catkin REQUIRED COMPONENTS
-	roscpp
-)
-
-
-find_package(Boost REQUIRED COMPONENTS chrono filesystem signals system)
-
-include_directories(include ${CATKIN_DEVEL_PREFIX}/${CATKIN_GLOBAL_INCLUDE_DESTINATION}/ros ${catkin_INCLUDE_DIRS} ${Boost_INCLUDE_DIRS})
-
-
+find_package(fastcdr REQUIRED)
+find_package(fastrtps REQUIRED)
 
 link_directories(${ORB_LINK_DIR})
 include_directories(
@@ -44,20 +17,21 @@ add_definitions(${ORB_C_FLAGS_LIST})
 
 if(WIN32)
 	add_definitions(-DNOGDI)
+	add_definitions(-DNOMINMAX)
 	add_definitions(-DTRANSPORT_PLUGIN)
 endif()
 
 
-set(target ROSTransport)
+set(target FastRTPSTransport)
 
-set(srcs ROSTransport.cpp ROSTransport.h ROSInPort.cpp ROSInPort.h ROSOutPort.cpp ROSOutPort.h ROSMessageInfo.cpp ROSMessageInfo.h RosTopicManager.cpp RosTopicManager.h ROSSerializer.cpp ROSSerializer.h)
+set(srcs FastRTPSTransport.cpp FastRTPSTransport.h FastRTPSInPort.cpp FastRTPSInPort.h FastRTPSOutPort.cpp FastRTPSOutPort.h FastRTPSManager.cpp FastRTPSManager.h FastRTPSMessageInfo.cpp FastRTPSMessageInfo.h CORBACdrData.cpp CORBACdrData.h CORBACdrDataPubSubTypes.cpp CORBACdrDataPubSubTypes.h)
 
 
 if(VXWORKS AND NOT RTP)
 	set(libs ${RTCSKEL_PROJECT_NAME})
 
 	add_executable(${target} ${srcs})
-	target_link_libraries(${target} ${libs} ${catkin_LIBRARIES} ${Boost_LIBRARIES})
+	target_link_libraries(${target} ${libs} fastcdr fastrtps)
 	add_dependencies(${target} ${RTM_PROJECT_NAME})
 
 	install(TARGETS ${target} LIBRARY DESTINATION ${INSTALL_RTM_EXT_DIR}/transport
@@ -73,10 +47,15 @@ else()
 
 
 	add_library(${target} SHARED ${srcs})
-	target_link_libraries(${target} ${libs} ${RTM_LINKER_OPTION} ${catkin_LIBRARIES} ${Boost_LIBRARIES})
+	target_link_libraries(${target} ${libs} ${RTM_LINKER_OPTION} fastcdr fastrtps)
 	add_dependencies(${target} ${RTM_PROJECT_NAME})
 	set_target_properties(${target} PROPERTIES PREFIX "")
 
+	set_target_properties(${target} PROPERTIES
+				CXX_STANDARD 11
+				CXX_STANDARD_REQUIRED YES
+				CXX_EXTENSIONS NO
+				)
 
 	install(TARGETS ${target} LIBRARY DESTINATION ${INSTALL_RTM_EXT_DIR}/transport
 				ARCHIVE DESTINATION ${INSTALL_RTM_EXT_DIR}/transport
@@ -85,7 +64,7 @@ else()
 endif()
 
 
-install(FILES ROSMessageInfo.h DESTINATION ${INSTALL_RTM_INCLUDE_DIR}/rtm/ext COMPONENT ext)
+install(FILES FastRTPSMessageInfo.h DESTINATION ${INSTALL_RTM_INCLUDE_DIR}/rtm/ext COMPONENT ext)
 
 
 
@@ -95,5 +74,4 @@ if(VXWORKS)
 		set_target_properties(${target} PROPERTIES SUFFIX ".out")
 	endif(RTP)
 endif(VXWORKS)
-
 
