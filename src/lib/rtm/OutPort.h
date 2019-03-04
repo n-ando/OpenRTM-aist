@@ -172,7 +172,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~OutPort(void)
+    virtual ~OutPort()
     {
     }
 

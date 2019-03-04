@@ -111,7 +111,7 @@ namespace RTC
    * @brief Destructor
    * @endif
    */
-  OutPortBase::~OutPortBase(void)
+  OutPortBase::~OutPortBase()
   {
     RTC_TRACE(("~OutPortBase()"));
     // connector のクリーンナップ

@@ -32,7 +32,7 @@ namespace RTC
    * @brief Constructor
    * @endif
    */
-  OutPortCorbaCdrProvider::OutPortCorbaCdrProvider(void)
+  OutPortCorbaCdrProvider::OutPortCorbaCdrProvider()
     : m_buffer(nullptr), m_connector(nullptr)
   {
     // PortProfile setting
@@ -68,7 +68,7 @@ namespace RTC
    * @brief Destructor
    * @endif
    */
-  OutPortCorbaCdrProvider::~OutPortCorbaCdrProvider(void)
+  OutPortCorbaCdrProvider::~OutPortCorbaCdrProvider()
   {
     try
       {

@@ -142,7 +142,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~RingBuffer(void)
+    virtual ~RingBuffer()
     {
     }
 
@@ -212,7 +212,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual size_t length(void) const
+    virtual size_t length() const
     {
       Guard guard(m_posmutex);
       return m_length;
@@ -552,7 +552,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual bool full(void) const
+    virtual bool full() const
     {
       Guard guard(m_posmutex);
       return m_length == m_fillcount;
@@ -854,7 +854,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual bool empty(void) const
+    virtual bool empty() const
     {
       Guard guard(m_posmutex);
       return m_fillcount == 0;

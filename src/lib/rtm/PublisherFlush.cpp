@@ -60,7 +60,7 @@ namespace RTC
    * @brief initialization
    * @endif
    */
-  PublisherBase::ReturnCode PublisherFlush::init(coil::Properties& prop)
+  PublisherBase::ReturnCode PublisherFlush::init(coil::Properties&  /*prop*/)
   {
     RTC_TRACE(("init()"));
     return PORT_OK;
@@ -93,7 +93,7 @@ namespace RTC
    * @brief Setting buffer pointer
    * @endif
    */
-  PublisherBase::ReturnCode PublisherFlush::setBuffer(CdrBufferBase* buffer)
+  PublisherBase::ReturnCode PublisherFlush::setBuffer(CdrBufferBase*  /*buffer*/)
   {
     RTC_TRACE(("setBuffer()"));
 
@@ -133,8 +133,8 @@ namespace RTC
    * @endif
    */
   PublisherBase::ReturnCode PublisherFlush::write(ByteDataStreamBase* data,
-                                                  unsigned long sec,
-                                                  unsigned long usec)
+                                                  unsigned long  /*sec*/,
+                                                  unsigned long  /*usec*/)
   {
     RTC_PARANOID(("write()"));
 

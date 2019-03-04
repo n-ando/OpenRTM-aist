@@ -102,7 +102,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~DataFlowComponentBase(void);
+    virtual ~DataFlowComponentBase();
 
     /*!
      * @if jp

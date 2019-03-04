@@ -79,7 +79,7 @@ namespace RTM
      *
      * @endif
      */
-	  virtual ~NodeNumberingPolicy(void){};
+	  virtual ~NodeNumberingPolicy(){};
     
     /*!
      * @if jp

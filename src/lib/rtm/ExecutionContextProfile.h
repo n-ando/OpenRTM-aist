@@ -91,7 +91,7 @@ namespace RTC_impl
      *
      * @endif
      */
-    virtual ~ExecutionContextProfile(void);
+    virtual ~ExecutionContextProfile();
 
     /*!
      * @if jp
@@ -137,7 +137,7 @@ namespace RTC_impl
      *
      * @endif
      */
-    RTC::ExecutionContextService_ptr getObjRef(void) const;
+    RTC::ExecutionContextService_ptr getObjRef() const;
 
     /*!
      * @if jp
@@ -196,8 +196,8 @@ namespace RTC_impl
      *
      * @endif
      */
-    double getRate(void) const;
-    coil::TimeValue getPeriod(void) const;
+    double getRate() const;
+    coil::TimeValue getPeriod() const;
 
     /*!
      * @if jp
@@ -266,7 +266,7 @@ namespace RTC_impl
      *
      * @endif
      */
-    RTC::ExecutionKind getKind(void) const;
+    RTC::ExecutionKind getKind() const;
 
     /*!
      * @if jp
@@ -464,7 +464,7 @@ namespace RTC_impl
      *
      * @endif
      */
-    RTC::ExecutionContextProfile* getProfile(void);
+    RTC::ExecutionContextProfile* getProfile();
 
     /*!
      * @if jp
@@ -483,7 +483,7 @@ namespace RTC_impl
      *
      * @endif
      */
-    const RTC::ExecutionContextProfile& getProfile(void) const;
+    const RTC::ExecutionContextProfile& getProfile() const;
 
     /*!
      * @if jp

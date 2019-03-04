@@ -89,7 +89,7 @@ namespace RTC_exp
      *
      * @endif
      */
-    virtual ~MultilayerCompositeEC(void);
+    virtual ~MultilayerCompositeEC();
 
     /*!
      * @if jp
@@ -126,7 +126,7 @@ namespace RTC_exp
      *
      * @endif
      */
-    virtual int svc(void);
+    virtual int svc();
 
     /*!
      * @if jp

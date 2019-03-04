@@ -384,7 +384,7 @@ namespace RTC
         onGeneric("REMOVE:", static_cast<const char*>(pprof.name));
       }
       void onConnect(const char* portname,
-                     ::RTC::ConnectorProfile& pprof, ReturnCode_t ret)
+                     ::RTC::ConnectorProfile&  /*pprof*/, ReturnCode_t ret)
       {
         if (ret == RTC::RTC_OK)
           {
@@ -392,7 +392,7 @@ namespace RTC
           }
       }
       void onDisconnect(const char* portname,
-                        ::RTC::ConnectorProfile& pprof, ReturnCode_t ret)
+                        ::RTC::ConnectorProfile&  /*pprof*/, ReturnCode_t ret)
       {
         if (ret == RTC::RTC_OK)
           {
@@ -429,8 +429,8 @@ namespace RTC
       }
       virtual ~DataPortAction() {}
 
-      virtual ReturnCode operator()(ConnectorInfo& info,
-                                    ByteData& data)
+      virtual ReturnCode operator()(ConnectorInfo&  /*info*/,
+                                    ByteData&  /*data*/)
       {
         coil::TimeValue curr = coil::gettimeofday();
         coil::TimeValue intvl = curr - m_last;

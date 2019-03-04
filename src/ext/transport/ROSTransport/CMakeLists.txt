@@ -24,7 +24,7 @@ endif()
 
 
 find_package(catkin REQUIRED COMPONENTS
-  roscpp
+	roscpp
 )
 
 
@@ -44,8 +44,8 @@ add_definitions(${ORB_C_FLAGS_LIST})
 add_definitions(${COIL_C_FLAGS_LIST})
 
 if(WIN32)
-  add_definitions(-DNOGDI)
-  add_definitions(-DLIBRARY_EXPORTS)
+	add_definitions(-DNOGDI)
+	add_definitions(-DTRANSPORT_PLUGIN)
 endif()
 
 
@@ -86,7 +86,7 @@ else()
 endif()
 
 
-
+install(FILES ROSMessageInfo.h DESTINATION ${INSTALL_RTM_INCLUDE_DIR}/rtm/ext COMPONENT ext)
 
 
 

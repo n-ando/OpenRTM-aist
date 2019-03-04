@@ -419,4 +419,4 @@ namespace RTC
 		//return ::OpenRTM::PortSharedMemory::_duplicate(m_objref);
 		return this->_this();
 	}
-}  // namespace RTC;
+} // namespace RTC

@@ -349,21 +349,21 @@ namespace RTC
   * @endif
   */
   void NamingOnManager::bindObject(const char* name,
-	  const RTObject_impl* rtobj)
+	  const RTObject_impl*  /*rtobj*/)
   {
 	  RTC_TRACE(("bindObject(name = %s, rtobj)", name));
 	  return;
   }
 
   void NamingOnManager::bindObject(const char* name,
-	  const PortBase* port)
+	  const PortBase*  /*port*/)
   {
 	  RTC_TRACE(("bindObject(name = %s, rtobj)", name));
 	  return;
   }
 
   void NamingOnManager::bindObject(const char* name,
-	  const RTM::ManagerServant* mgr)
+	  const RTM::ManagerServant*  /*mgr*/)
   {
 	  RTC_TRACE(("bindObject(name = %s, mgr)", name));
 	  return;
