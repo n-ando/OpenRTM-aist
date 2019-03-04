@@ -251,6 +251,62 @@ namespace coil
         else
           strcpy_s(subtype, sizeof(subtype), "Pentium Family");
         break;
+      case PROCESSOR_ARCHITECTURE_MIPS:
+          strcpy_s(cputype, sizeof(cputype), "MIPS");
+          strcpy_s(subtype, sizeof(subtype), "");
+          break;
+      case PROCESSOR_ARCHITECTURE_ALPHA:
+          strcpy_s(cputype, sizeof(cputype), "ALPHA");
+          strcpy_s(subtype, sizeof(subtype), "");
+          break;
+      case PROCESSOR_ARCHITECTURE_PPC:
+          strcpy_s(cputype, sizeof(cputype), "PPC");
+          strcpy_s(subtype, sizeof(subtype), "");
+          break;
+      case PROCESSOR_ARCHITECTURE_SHX:
+          strcpy_s(cputype, sizeof(cputype), "SHX");
+          strcpy_s(subtype, sizeof(subtype), "");
+          break;
+      case PROCESSOR_ARCHITECTURE_ARM:
+          strcpy_s(cputype, sizeof(cputype), "ARM");
+          strcpy_s(subtype, sizeof(subtype), "");
+          break;
+      case PROCESSOR_ARCHITECTURE_IA64:
+          strcpy_s(cputype, sizeof(cputype), "IA64");
+          strcpy_s(subtype, sizeof(subtype), "");
+          break;
+      case PROCESSOR_ARCHITECTURE_ALPHA64:
+          strcpy_s(cputype, sizeof(cputype), "ALPHA64");
+          strcpy_s(subtype, sizeof(subtype), "");
+          break;
+      case PROCESSOR_ARCHITECTURE_MSIL:
+          strcpy_s(cputype, sizeof(cputype), "MSIL");
+          strcpy_s(subtype, sizeof(subtype), "");
+          break;
+      case PROCESSOR_ARCHITECTURE_AMD64:
+          strcpy_s(cputype, sizeof(cputype), "AMD64");
+          strcpy_s(subtype, sizeof(subtype), "");
+          break;
+      case PROCESSOR_ARCHITECTURE_IA32_ON_WIN64:
+          strcpy_s(cputype, sizeof(cputype), "IA32_ON_WIN64");
+          strcpy_s(subtype, sizeof(subtype), "");
+          break;
+      case PROCESSOR_ARCHITECTURE_NEUTRAL:
+          strcpy_s(cputype, sizeof(cputype), "NEUTRAL");
+          strcpy_s(subtype, sizeof(subtype), "");
+          break;
+      case PROCESSOR_ARCHITECTURE_ARM64:
+          strcpy_s(cputype, sizeof(cputype), "ARM64");
+          strcpy_s(subtype, sizeof(subtype), "");
+          break;
+      case PROCESSOR_ARCHITECTURE_ARM32_ON_WIN64:
+          strcpy_s(cputype, sizeof(cputype), "ARM32_ON_WIN64");
+          strcpy_s(subtype, sizeof(subtype), "");
+          break;
+      case PROCESSOR_ARCHITECTURE_IA32_ON_ARM64:
+          strcpy_s(cputype, sizeof(cputype), "IA32_ON_ARM64");
+          strcpy_s(subtype, sizeof(subtype), "");
+          break;
       default:
         strcpy_s(cputype, sizeof(cputype), "Unknown");
         strcpy_s(subtype, sizeof(subtype), "Unknown");
