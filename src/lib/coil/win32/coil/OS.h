@@ -134,6 +134,13 @@ namespace coil
    * @brief システム情報取得
    *
    * システム情報を構造体に設定して返す。
+   * OSのバージョンはRtlGetVersionにより取得する
+   * RtlGetVersionはRTL_OSVERSIONINFOWにOSのメジャーバージョン、
+   * マイナーバージョン、ビルドナンバー、サービスパックの情報などを格納する
+   * ただし、ライブラリ(ntdll.dll)が存在せず利用できない場合は
+   * VerifyVersionInfoによるバージョン比較を行う。
+   * VerifyVersionInfoは設定したOSのバージョンと指定のバージョンを比較する関数である。
+   * VerifyVersionInfoを使う場合はビルドナンバーは設定されない
    *
    * @param name 構造体名称
    *
@@ -144,6 +151,12 @@ namespace coil
    * @brief Get System information
    *
    * Return a system information to a structure.
+   * Set system information to structure and return it.
+   * Obtain version of OS by RtlGetVersion function.
+   * RtlGetVersion function stores the major version, minor version, build number, service pack information etc of OS in RTL_OSVERSIONINFOW.
+   * However, if the library (ntdll.dll) does not exist and can not be used, version comparison by VerifyVersionInfo function is performed.
+   * VerifyVersionInfo function is a function to compare the version of the specified OS with the specified version.
+   * When using VerifyVersionInfo function, the build number is not set.
    *
    * @param name Name of structure
    *
