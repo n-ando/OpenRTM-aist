@@ -29,17 +29,6 @@ namespace coil
 };
 #else
 
-#ifndef NTDDI_VERSION
-#define NTDDI_VERSION 0x05000000
-#define WINVER _WIN32_WINNT
-#ifdef _WIN32_WINNT
-#undef _WIN32_WINNT
-#endif  // _WIN32_WINNT
-#define _WIN32_WINNT 0x0500
-#define _WIN32_WINDOWS _WIN32_WINNT
-#define _WIN32_IE 0x0501
-#endif  // NTDDI_VERSION
-
 #include <winsock2.h>
 #include <ws2tcpip.h>
 #include <iphlpapi.h>
@@ -83,30 +72,59 @@ namespace coil
    */
   bool dest_to_endpoint(std::string dest_addr, std::string& endpoint)
   {
-    Winsock winsock;
-    {
-      struct hostent* hp;
-      hp = ::gethostbyname(dest_addr.c_str());
-      if (hp == 0) { return false; }
+    PADDRINFOA res;
+    ADDRINFOA hints;
 
-      int i(0);
-      while (hp->h_addr_list[i] != 0)
-        {
-          if (hp->h_addrtype == AF_INET)
-            {
-              struct sockaddr_in addr;
-              memset(reinterpret_cast<char*>(&addr), 0, sizeof(addr));
-              memcpy(reinterpret_cast<char*>(&addr.sin_addr),
-                              hp->h_addr_list[i], hp->h_length);
-              dest_addr = inet_ntoa(addr.sin_addr);
-              break;
-            }
-          ++i;
-        }
+    WSADATA data;
+    WSAStartup(MAKEWORD(2, 0), &data);
+
+    memset(&hints, 0, sizeof(hints));
+    hints.ai_socktype = SOCK_STREAM;
+    hints.ai_family = AF_INET;
+
+    if (getaddrinfo(dest_addr.c_str(), NULL, &hints, &res) != 0) {
+        return false;
     }
 
-    UINT ipaddress(inet_addr(dest_addr.c_str()));
-    if (ipaddress == INADDR_NONE) { return false; }
+    if (res->ai_family == AF_INET)
+    {
+        struct sockaddr_in *addr;
+        addr = (struct sockaddr_in *) res->ai_addr;
+        char str_buffer[INET_ADDRSTRLEN] = { 0 };
+
+        if (inet_ntop(AF_INET, &addr->sin_addr, str_buffer, sizeof(str_buffer)))
+        {
+            dest_addr = str_buffer;
+        }
+        else
+        {
+            freeaddrinfo(res);
+            WSACleanup();
+            return false;
+        }
+    }
+    else
+    {
+        freeaddrinfo(res);
+        WSACleanup();
+        return false;
+    }
+    
+    freeaddrinfo(res);
+    WSACleanup();
+
+    ULONG ipaddress;
+
+    struct sockaddr_in ip_addr;
+    ip_addr.sin_family = AF_INET;
+    if (inet_pton(AF_INET, dest_addr.c_str(), &ip_addr.sin_addr.S_un.S_addr) == 1)
+    {
+        ipaddress = ip_addr.sin_addr.S_un.S_addr;
+    }
+    else
+    {
+        return false;
+    }
 
     DWORD bestifindex;
     if (NO_ERROR != GetBestInterface(ipaddress, &bestifindex)) { return false; }
@@ -133,7 +151,15 @@ namespace coil
           {
             IN_ADDR inipaddr;
             inipaddr.S_un.S_addr = (u_long) ipaddr_table->table[i].dwAddr;
-            endpoint = inet_ntoa(inipaddr);
+            char str_buffer[INET_ADDRSTRLEN] = { 0 };
+            if (inet_ntop(AF_INET, &inipaddr.S_un, str_buffer, sizeof(str_buffer)))
+            {
+                endpoint = str_buffer;
+            }
+            else
+            {
+                return false;
+            }
             return true;
           }
       }
