@@ -237,7 +237,7 @@ namespace coil
     switch (arch)
       {
       case PROCESSOR_ARCHITECTURE_INTEL:
-        strcpy_s(cputype, sizeof(cputype), "Intel");
+        strcpy_s(cputype, sizeof(cputype), "x86 Intel");
         if (sys_info.wProcessorLevel == 3)
           strcpy_s(subtype, sizeof(subtype), "80386");
         else if (sys_info.wProcessorLevel == 4)
@@ -245,7 +245,7 @@ namespace coil
         else if (sys_info.wProcessorLevel == 5)
           strcpy_s(subtype, sizeof(subtype), "Pentium");
         else if (sys_info.wProcessorLevel == 6)
-          strcpy_s(subtype, sizeof(subtype), "Pentium Pro");
+          strcpy_s(subtype, sizeof(subtype), "Pentium Pro or Core I5, I7, I9");
         else if (sys_info.wProcessorLevel == 7)
           strcpy_s(subtype, sizeof(subtype), "Pentium II");
         else
@@ -284,8 +284,16 @@ namespace coil
           strcpy_s(subtype, sizeof(subtype), "");
           break;
       case PROCESSOR_ARCHITECTURE_AMD64:
-          strcpy_s(cputype, sizeof(cputype), "AMD64");
-          strcpy_s(subtype, sizeof(subtype), "");
+          if (sys_info.wProcessorLevel == 6)
+          {
+              strcpy_s(cputype, sizeof(cputype), "x64 Intel");
+              strcpy_s(subtype, sizeof(subtype), "Core I5, I7, I9");
+          }
+          else
+          {
+              strcpy_s(cputype, sizeof(cputype), "x64(AMD or Intel)");
+              strcpy_s(subtype, sizeof(subtype), "");
+          }
           break;
       case PROCESSOR_ARCHITECTURE_IA32_ON_WIN64:
           strcpy_s(cputype, sizeof(cputype), "IA32_ON_WIN64");
