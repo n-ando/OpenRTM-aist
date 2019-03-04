@@ -71,6 +71,10 @@ namespace coil
   * @if jp
   *
   * @brief RtlGetVersion APIによりOSの情報取得
+  * RtlGetVersion関数によりOSのメジャーバージョン、マイナーバージョン、
+  * ビルドナンバー、サービスパックの情報を取得する
+  * RtlGetVersion関数アドレス取得失敗、OSの情報取得失敗の場合は-1を返す
+  * この関数はrtlgetinfo関数で使用するためのものであり、基本的に外部からは使用しない
   *
   *
   * @param name 構造体名称
@@ -79,8 +83,9 @@ namespace coil
   *
   * @else
   *
-  * @brief 
-  *
+  * @brief Obtain OS information using RtlGetVersion API
+  * Get major version, minor version, build number, service pack information of OS by RtlGetVersion function
+  * RtlGetVersion function Returns -1 in the case of address acquisition failure, OS information acquisition failure.
   *
   * @param name Name of structure
   *
