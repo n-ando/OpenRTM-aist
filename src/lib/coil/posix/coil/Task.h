@@ -259,8 +259,6 @@ namespace coil
     int m_count;
     pthread_t m_thread;
     pthread_attr_t m_attr;
-    void* m_args;
-
   };
 };  // namespace coil
 

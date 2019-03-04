@@ -283,7 +283,6 @@ namespace coil
     int m_mode;
     int m_closeflag;
     void* m_handle;
-    int m_error;
   };
 
 };  // namespace coil
