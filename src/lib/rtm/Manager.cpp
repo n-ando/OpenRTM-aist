@@ -63,6 +63,7 @@
 
 #include <fstream>
 #include <iostream>
+#include <utility>
 
 #if defined(minor)
 #undef minor
@@ -85,8 +86,8 @@ namespace RTC
   Manager::InstanceName::InstanceName(const char* name)
     : m_name(name)
   {}
-  Manager::InstanceName::InstanceName(const std::string& name)
-    : m_name(name)
+  Manager::InstanceName::InstanceName(std::string  name)
+    : m_name(std::move(name))
   {}
   bool Manager::InstanceName::operator()(RTObject_impl* comp)
   {
@@ -116,7 +117,7 @@ namespace RTC
    * @brief Protected Copy Constructor
    * @endif
    */
-  Manager::Manager(const Manager& manager)
+  Manager::Manager(const Manager&  /*manager*/)
     : m_initProc(nullptr), m_namingManager(nullptr), m_timer(nullptr),
       m_logStreamBuf(), rtclog(&m_logStreamBuf),
       m_runner(nullptr), m_terminator(nullptr)
@@ -3079,4 +3080,4 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   }
   
 
-}  // namespace RTC;
+} // namespace RTC

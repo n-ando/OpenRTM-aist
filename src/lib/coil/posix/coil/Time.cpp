@@ -18,7 +18,6 @@
 
 #include <coil/Time.h>
 
-namespace coil
-{
-  // no implementation
-};
+
+  
+

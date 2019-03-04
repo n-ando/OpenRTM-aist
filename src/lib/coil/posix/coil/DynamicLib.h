@@ -209,7 +209,7 @@ namespace coil
      *
      * @endif
      */
-    virtual int close(void);
+    virtual int close();
 
     /*!
      * @if jp
@@ -255,7 +255,7 @@ namespace coil
      *
      * @endif
      */
-    const char* error(void) const;
+    const char* error() const;
 
     /*!
      * @if jp
@@ -276,7 +276,7 @@ namespace coil
      *
      * @endif
      */
-    static int ForExternTest(void) { return 0xdeadbeef; }
+    static int ForExternTest() { return 0xdeadbeef; }
 
   private:
     std::string m_name;

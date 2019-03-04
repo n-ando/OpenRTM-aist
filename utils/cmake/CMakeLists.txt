@@ -9,6 +9,8 @@ elseif(CORBA STREQUAL "omniORB")
 elseif(CORBA STREQUAL "TAO")
 endif()
 
+set(RTM_C_FLAGS_LIST ${ORB_C_FLAGS_LIST} ${COIL_C_FLAGS_LIST})
+
 
 
 

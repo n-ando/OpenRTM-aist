@@ -113,7 +113,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~InPortBase(void);
+    virtual ~InPortBase();
 
     /*!
      * @if jp

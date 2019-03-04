@@ -44,7 +44,7 @@
 namespace SDOPackage
 {
   class Configuration_impl;
-};
+} // namespace SDOPackage
 
 #ifdef WIN32
 #pragma warning( disable : 4290 )
@@ -148,7 +148,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~RTObject_impl(void);
+    virtual ~RTObject_impl();
 
   protected:
     //============================================================
@@ -5498,7 +5498,7 @@ namespace RTC
             m_sdoservice = sdoservice;
             m_id = id;
           }
-        virtual int svc(void)
+        virtual int svc()
           {
             m_sdoservice->removeSdoServiceConsumer(m_id.c_str());
             return 0;

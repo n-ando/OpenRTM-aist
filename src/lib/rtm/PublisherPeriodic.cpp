@@ -253,7 +253,7 @@ namespace RTC
    * @brief Thread execution function
    * @endif
    */
-  int PublisherPeriodic::svc(void)
+  int PublisherPeriodic::svc()
   {
     Guard guard(m_retmutex);
     switch (m_pushPolicy)

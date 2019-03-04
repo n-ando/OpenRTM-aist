@@ -103,7 +103,7 @@ RTC::ReturnCode_t MyServiceConsumer::onDeactivated(RTC::UniqueId ec_id)
 */
 
 
-RTC::ReturnCode_t MyServiceConsumer::onExecute(RTC::UniqueId ec_id)
+RTC::ReturnCode_t MyServiceConsumer::onExecute(RTC::UniqueId  /*ec_id*/)
 {
   try
     {

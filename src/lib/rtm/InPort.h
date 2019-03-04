@@ -146,9 +146,9 @@ namespace RTC
      * @endif
      */
     InPort(const char* name, DataType& value,
-           int bufsize = 64,
-           bool read_block = false, bool write_block = false,
-           int read_timeout = 0, int write_timeout = 0)
+           int  /*bufsize*/ = 64,
+           bool  /*read_block*/ = false, bool  /*write_block*/ = false,
+           int  /*read_timeout*/ = 0, int  /*write_timeout*/ = 0)
 #if defined(__GNUC__) && (__GNUC__ <= 3 && __GNUC_MINOR__ <= 3)
       : InPortBase(name, ::CORBA_Util::toRepositoryIdOfStruct<DataType>()),
 #else
@@ -183,7 +183,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~InPort(void) {}
+    virtual ~InPort() {}
 
     /*!
      * @if jp
@@ -720,7 +720,7 @@ namespace RTC
      *
      * @endif
      */
-    DataPortStatus::Enum getStatus(int index)
+    DataPortStatus::Enum getStatus(int  /*index*/)
     {
       return m_status[0];
     }

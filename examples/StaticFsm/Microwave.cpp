@@ -72,7 +72,7 @@ RTC::ReturnCode_t Microwave::onInitialize()
  return RTC::RTC_OK;
 }
 
-RTC::ReturnCode_t Microwave::onExecute(RTC::UniqueId ec_id)
+RTC::ReturnCode_t Microwave::onExecute(RTC::UniqueId  /*ec_id*/)
 {
   //coil::usleep(1000000);
     m_fsm.run_event();

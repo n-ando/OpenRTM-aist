@@ -78,7 +78,7 @@ namespace RTM
      *
      * @endif
      */
-	  virtual ~NamingServiceNumberingPolicy(void){};
+	  virtual ~NamingServiceNumberingPolicy(){};
     
     /*!
      * @if jp

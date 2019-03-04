@@ -96,7 +96,7 @@ namespace coil
    * @brief Suspending the task
    * @endif
    */
-  int PeriodicTask::suspend(void)
+  int PeriodicTask::suspend()
   {
     Guard gaurd(m_suspend.mutex);
     m_suspend.suspend = true;
@@ -110,7 +110,7 @@ namespace coil
    * @brief Resuming the suspended task
    * @endif
    */
-  int PeriodicTask::resume(void)
+  int PeriodicTask::resume()
   {
     m_periodTime.reset();
     m_execTime.reset();
@@ -128,7 +128,7 @@ namespace coil
    * @brief Executing the suspended task one tick
    * @endif
    */
-  void PeriodicTask::signal(void)
+  void PeriodicTask::signal()
   {
     Guard gaurd(m_suspend.mutex);
     m_suspend.cond.signal();

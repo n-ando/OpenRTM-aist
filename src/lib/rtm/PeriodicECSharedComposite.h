@@ -104,7 +104,7 @@ namespace SDOPackage
      *
      * @endif
      */
-    virtual ~PeriodicECOrganization(void);
+    virtual ~PeriodicECOrganization();
 
     /*!
      * @if jp
@@ -191,7 +191,7 @@ namespace SDOPackage
      * @brief Remove a member of Organization
      * @endif
      */
-    void removeAllMembers(void);
+    void removeAllMembers();
     /*!
      * @if jp
      * @brief Organizationメンバーを更新/削除する
@@ -199,7 +199,7 @@ namespace SDOPackage
      * @brief Update/Remove a member of Organization
      * @endif
      */
-    void updateDelegatedPorts(void);
+    void updateDelegatedPorts();
 
   protected:
     class Member;
@@ -247,7 +247,7 @@ namespace SDOPackage
      * @endif
      */
     void removeOrganizationFromTarget(Member& member);
-    void addRTCToEC(RTC::RTObject_var rtobj);
+    void addRTCToEC(RTC::RTObject_ptr rtobj);
 
     /*!
      * @if jp
@@ -292,7 +292,7 @@ namespace SDOPackage
      * @brief PortsList is updated.
      * @endif
      */
-    void updateExportedPortsList(void);
+    void updateExportedPortsList();
 
   protected:
     /*!
@@ -337,7 +337,7 @@ namespace SDOPackage
         config_  = rtobj->get_configuration();
       }
 
-      virtual ~Member(void)
+      virtual ~Member()
       {
         /*
         rtobj_.out();
@@ -504,7 +504,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~PeriodicECSharedComposite(void);
+    virtual ~PeriodicECSharedComposite();
 
     /*!
      * @if jp
@@ -521,7 +521,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode_t onInitialize(void);
+    virtual ReturnCode_t onInitialize();
     /*!
      * @if jp
      *
@@ -643,7 +643,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode_t onFinalize(void);
+    virtual ReturnCode_t onFinalize();
 
     virtual ReturnCode_t exit()
       throw (CORBA::SystemException);

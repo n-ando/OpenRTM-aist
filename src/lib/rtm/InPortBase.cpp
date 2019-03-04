@@ -1123,4 +1123,4 @@ namespace RTC
 
 	  return PortBase::notify_connect(connector_profile);
   }
-}  // namespace RTC;
+} // namespace RTC

@@ -171,7 +171,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~FactoryBase(void);
+    virtual ~FactoryBase();
 
     /*!
      * @if jp

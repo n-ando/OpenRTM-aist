@@ -438,7 +438,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~LogstreamFile(void);
+    virtual ~LogstreamFile();
 
     /*!
      * @if jp

@@ -75,7 +75,7 @@ namespace RTC
      *
      * @endif
      */
-    InPortDSProvider(void);
+    InPortDSProvider();
 
     /*!
      * @if jp
@@ -90,7 +90,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~InPortDSProvider(void);
+    virtual ~InPortDSProvider();
 
     /*!
      * @if jp

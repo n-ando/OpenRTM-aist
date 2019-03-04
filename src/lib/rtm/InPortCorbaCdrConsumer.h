@@ -77,7 +77,7 @@ namespace RTC
      *
      * @endif
      */
-    InPortCorbaCdrConsumer(void);
+    InPortCorbaCdrConsumer();
 
     /*!
      * @if jp
@@ -92,7 +92,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~InPortCorbaCdrConsumer(void);
+    virtual ~InPortCorbaCdrConsumer();
 
     /*!
      * @if jp

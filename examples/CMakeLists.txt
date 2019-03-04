@@ -9,6 +9,7 @@ function(ComponentBuild target srcs mainfile dependencies vxaddfile)
 			)
 
 	add_definitions(${ORB_C_FLAGS_LIST})
+	add_definitions(${COIL_C_FLAGS_LIST})
 
 	if(VXWORKS AND NOT RTP)
 		set(standalone_srcs ${srcs} ${mainfile} ${CMAKE_SOURCE_DIR}/src/lib/rtm/DataFlowComponentBase.cpp ${vxaddfile})

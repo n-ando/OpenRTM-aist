@@ -116,7 +116,7 @@ namespace RTC
                                               bool autoclean)
   {
     Guard guard(m_mutex);
-    m_listeners.push_back(Entry(listener, autoclean));
+    m_listeners.emplace_back(listener, autoclean);
   }
 
 
@@ -181,7 +181,7 @@ namespace RTC
   addListener(PortConnectRetListener* listener, bool autoclean)
   {
     Guard guard(m_mutex);
-    m_listeners.push_back(Entry(listener, autoclean));
+    m_listeners.emplace_back(listener, autoclean);
   }
 
 
