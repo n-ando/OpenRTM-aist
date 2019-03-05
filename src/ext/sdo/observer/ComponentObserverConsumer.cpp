@@ -304,7 +304,7 @@ namespace RTC
       }
     else
       {
-        if (m_heartbeat == true && m_hblistenerid != nullptr)
+        if (m_heartbeat && m_hblistenerid != nullptr)
           {
             unsetHeartbeat();
             m_timer.stop();

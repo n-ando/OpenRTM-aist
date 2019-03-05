@@ -1909,11 +1909,7 @@ namespace RTC
    */
   bool RTObject_impl::isOwnExecutionContext(RTC::UniqueId ec_id)
   {
-    if (ec_id < ECOTHER_OFFSET)
-      {
-        return true;
-      }
-    return false;
+    return ec_id < ECOTHER_OFFSET;
   }
 
   /*!

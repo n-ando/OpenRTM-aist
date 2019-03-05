@@ -137,8 +137,7 @@ RTC::ReturnCode_t ConfigSample::onExecute(RTC::UniqueId  /*ec_id*/)
   static int  maxlen(0);
   int curlen(0);
   const char* c = "                    ";
-  if (true)
-    {
+  {
       std::cout << "---------------------------------------" << std::endl;
       std::cout << " Active Configuration Set: ";
       std::cout << m_configsets.getActiveId() << c << std::endl;
