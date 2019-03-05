@@ -273,7 +273,7 @@ namespace RTM
    * TODO: Documentation
    * @endif
    */
-  void RtcLifecycleActionListenerHolder::preInitialize(void)
+  void RtcLifecycleActionListenerHolder::preInitialize()
   {
     LISTENERHOLDER_CALLBACK(preInitialize, ());
   }
@@ -287,7 +287,7 @@ namespace RTM
    * TODO: Documentation
    * @endif
    */
-  void RtcLifecycleActionListenerHolder::postInitialize(void)
+  void RtcLifecycleActionListenerHolder::postInitialize()
   {
     LISTENERHOLDER_CALLBACK(postInitialize, ());
   }

@@ -31,6 +31,7 @@
 
 // STL includes
 #include <string>
+#include <utility>
 #include <vector>
 #include <map>
 
@@ -109,7 +110,7 @@ namespace RTC
      *
      * @endif
      */
-    ~ModuleManager(void);
+    ~ModuleManager();
 
     /*!
      * @if jp
@@ -120,8 +121,8 @@ namespace RTC
      */
     struct Error
     {
-      explicit Error(const std::string& _reason)
-        : reason(_reason) {}
+      explicit Error(std::string  _reason)
+        : reason(std::move(_reason)) {}
       std::string reason;
     };
 
@@ -135,8 +136,8 @@ namespace RTC
      */
     struct NotFound
     {
-      explicit NotFound(const std::string& _name)
-        : name(_name) {}
+      explicit NotFound(std::string  _name)
+        : name(std::move(_name)) {}
       std::string name;
     };
 

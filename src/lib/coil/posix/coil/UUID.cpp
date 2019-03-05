@@ -106,7 +106,7 @@ namespace coil
   UUID_Generator::UUID_Generator() {}
 
   void UUID_Generator::init() {}
-  UUID* UUID_Generator::generateUUID(int varsion, int variant)
+  UUID* UUID_Generator::generateUUID(int  /*varsion*/, int  /*variant*/)
   {
     uuid_t uuid;
 

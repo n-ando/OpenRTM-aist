@@ -140,6 +140,10 @@ include_directories(
 		${PROJECT_SOURCE_DIR}/${COIL_OS_DIR}
 		${PROJECT_BINARY_DIR}/..
 		)
+
+add_definitions(${COIL_C_FLAGS_LIST})
+
+
 if(UNIX)
 	if(${CMAKE_SYSTEM_NAME}test MATCHES QNXtest)
 		if(QNX7)

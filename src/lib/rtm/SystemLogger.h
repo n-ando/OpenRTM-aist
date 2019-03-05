@@ -165,7 +165,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~Logger(void);
+    virtual ~Logger();
 
     /*!
      * @if jp
@@ -472,7 +472,7 @@ namespace RTC
      *
      * @endif
      */
-    std::string getDate(void);
+    std::string getDate();
 
     /*!
      * @if jp

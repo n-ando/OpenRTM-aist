@@ -98,7 +98,7 @@ RTC::ReturnCode_t Display::onInitialize()
  return RTC::RTC_OK;
 }
 
-RTC::ReturnCode_t Display::onExecute(RTC::UniqueId ec_id)
+RTC::ReturnCode_t Display::onExecute(RTC::UniqueId  /*ec_id*/)
 {
   if (m_inIn.isNew())
     {

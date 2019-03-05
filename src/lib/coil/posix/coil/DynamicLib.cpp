@@ -107,7 +107,7 @@ namespace coil
    */
   int DynamicLib::open(const char* dll_name,
                    int open_mode,
-                   int close_handle_on_destruction)
+                   int  /*close_handle_on_destruction*/)
   {
     void* handle = ::dlopen(dll_name, open_mode);
     if (handle == nullptr)
@@ -126,7 +126,7 @@ namespace coil
    * @brief Unload of the Dynamic link library 
    * @endif
    */
-  int DynamicLib::close(void)
+  int DynamicLib::close()
   {
     if (m_handle == nullptr)
       return -1;
@@ -160,7 +160,7 @@ namespace coil
    * @brief Return the explanation message about the error
    * @endif
    */
-  const char* DynamicLib::error(void) const
+  const char* DynamicLib::error() const
   {
     return ::dlerror();
   }

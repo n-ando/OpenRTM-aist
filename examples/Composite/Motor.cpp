@@ -104,7 +104,7 @@ RTC::ReturnCode_t Motor::onDeactivated(RTC::UniqueId ec_id)
 */
 
 
-RTC::ReturnCode_t Motor::onExecute(RTC::UniqueId ec_id)
+RTC::ReturnCode_t Motor::onExecute(RTC::UniqueId  /*ec_id*/)
 {
   if (m_inIn.isNew()) {
     m_inIn.read();

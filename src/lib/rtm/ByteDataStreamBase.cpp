@@ -56,7 +56,7 @@ namespace RTC
      *
      * @endif
      */
-    ByteDataStreamBase::~ByteDataStreamBase(void)
+    ByteDataStreamBase::~ByteDataStreamBase()
     {
     }
 

@@ -107,7 +107,7 @@ namespace coil
   coil::TimeValue AdjustedClock::gettime() const
   {
     Guard<Mutex> guard(m_offsetMutex);
-    return coil::gettimeofday() - m_offset;
+    return TimeValue(coil::gettimeofday() - m_offset);
   }
 
   bool AdjustedClock::settime(coil::TimeValue clocktime)

@@ -73,7 +73,7 @@ namespace RTC
      *
      * @endif
      */
-    InPortDirectProvider(void);
+    InPortDirectProvider();
 
     /*!
      * @if jp
@@ -88,7 +88,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~InPortDirectProvider(void);
+    virtual ~InPortDirectProvider();
 
     /*!
      * @if jp

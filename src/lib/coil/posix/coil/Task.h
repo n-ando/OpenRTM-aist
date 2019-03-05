@@ -164,7 +164,7 @@ namespace coil
      *
      * @endif
      */
-    virtual int wait(void);
+    virtual int wait();
 
     /*!
      * @if jp
@@ -181,7 +181,7 @@ namespace coil
      *
      * @endif
      */
-    virtual int suspend(void);
+    virtual int suspend();
 
     /*!
      * @if jp
@@ -198,7 +198,7 @@ namespace coil
      *
      * @endif
      */
-    virtual int resume(void);
+    virtual int resume();
 
     /*!
      * @if jp
@@ -259,8 +259,6 @@ namespace coil
     int m_count;
     pthread_t m_thread;
     pthread_attr_t m_attr;
-    void* m_args;
-
   };
 };  // namespace coil
 

@@ -93,7 +93,7 @@ namespace RTM
      *
      * @endif
      */
-    virtual ~ManagerServant(void);
+    virtual ~ManagerServant();
 
     /*!
      * @if jp

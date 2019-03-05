@@ -430,22 +430,7 @@ namespace RTC
       
         BufferStatus::Enum ret = m_connector->write(cdr);
 
-        switch (ret)
-        {
-          case BufferStatus::BUFFER_OK:
-            RTC_VERBOSE(("BUFFER_OK"));
-            break;
-          case BufferStatus::BUFFER_EMPTY:
-            RTC_ERROR(("BUFFER_EMPTY"));
-            break;
-          case BufferStatus::TIMEOUT:
-            RTC_ERROR(("TIMEOUT"));
-            break;
-          case BufferStatus::PRECONDITION_NOT_MET:
-            RTC_ERROR(("PRECONDITION_NOT_MET"));
-          default:
-            RTC_ERROR(("PORT_ERROR"));
-        }
+        convertReturn(ret, cdr);
 
 
         conn->read(4, boost::bind(&ROSInPort::onMessageLength, this, _1, _2, _3, _4));

@@ -178,7 +178,7 @@ namespace RTC
 	  return true;
   }
 
-  CdrBufferBase::ReturnCode OutPortConnector::read(ByteData& data)
+  CdrBufferBase::ReturnCode OutPortConnector::read(ByteData&  /*data*/)
   {
       return CdrBufferBase::BUFFER_OK;
   }

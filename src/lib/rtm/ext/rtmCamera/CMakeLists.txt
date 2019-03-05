@@ -62,14 +62,7 @@ include_directories(
 		${PROJECT_BINARY_DIR}
 		)
 add_definitions(${ORB_C_FLAGS_LIST})
-
-
-
-
-link_directories(${ORB_LINK_DIR})
-include_directories(${ORB_INCLUDE_DIR})
-add_definitions(${ORB_C_FLAGS_LIST})
-
+add_definitions(${COIL_C_FLAGS_LIST})
 
 set_source_files_properties(${ALL_IDL_SRCS} PROPERTIES GENERATED 1)
 

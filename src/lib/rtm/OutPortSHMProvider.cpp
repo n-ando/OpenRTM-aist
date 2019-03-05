@@ -31,7 +31,7 @@ namespace RTC
    * @brief Constructor
    * @endif
    */
-  OutPortSHMProvider::OutPortSHMProvider(void)
+  OutPortSHMProvider::OutPortSHMProvider()
    : m_buffer(nullptr),
      m_memory_size(0),
      m_connector(nullptr)
@@ -63,7 +63,7 @@ namespace RTC
 
     coil::UUID_Generator uugen;
     uugen.init();
-    std::auto_ptr<coil::UUID> uuid(uugen.generateUUID(2, 0x01));
+    std::unique_ptr<coil::UUID> uuid(uugen.generateUUID(2, 0x01));
     m_shm_address = uuid->to_string();
   }
   
@@ -74,7 +74,7 @@ namespace RTC
    * @brief Destructor
    * @endif
    */
-  OutPortSHMProvider::~OutPortSHMProvider(void)
+  OutPortSHMProvider::~OutPortSHMProvider()
   {
 
   }
