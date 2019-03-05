@@ -245,7 +245,7 @@ namespace coil
         else if (sys_info.wProcessorLevel == 5)
           strcpy_s(subtype, sizeof(subtype), "Pentium");
         else if (sys_info.wProcessorLevel == 6)
-          strcpy_s(subtype, sizeof(subtype), "Pentium Pro or Core I3, I5, I7, I9");
+          strcpy_s(subtype, sizeof(subtype), "Pentium Pro");
         else if (sys_info.wProcessorLevel == 7)
           strcpy_s(subtype, sizeof(subtype), "Pentium II");
         else
@@ -287,7 +287,7 @@ namespace coil
           if (sys_info.wProcessorLevel == 6)
           {
               strcpy_s(cputype, sizeof(cputype), "x64 Intel");
-              strcpy_s(subtype, sizeof(subtype), "Core I3, I5, I7, I9");
+              strcpy_s(subtype, sizeof(subtype), "Pentium Pro");
           }
           else
           {
