@@ -20,7 +20,7 @@
 #ifndef COIL_SIGNAL_H
 #define COIL_SIGNAL_H
 
-#include <signal.h>
+#include <csignal>
 
 namespace coil
 {

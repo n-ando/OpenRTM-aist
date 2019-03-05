@@ -1,9 +1,23 @@
-cmake_minimum_required (VERSION 3.0.2)
+﻿cmake_minimum_required (VERSION 3.0.2)
 
 project (ExtTrigger
 	VERSION ${RTM_VERSION}
 	LANGUAGES CXX)
 
+
+
+set(srcs ConsoleIn.cpp ConsoleIn.h)
+ComponentBuild(ConsoleInEx "${srcs}" ConsoleInComp.cpp "" "")
+
+
+set(srcs ConsoleOut.cpp ConsoleOut.h)
+ComponentBuild(ConsoleOutEx "${srcs}" ConsoleOutComp.cpp "" "")
+
+
+set(target ConnectorCompEx)
+
+
+set(srcs ConnectorComp.cpp)
 
 link_directories(${ORB_LINK_DIR})
 include_directories(
@@ -11,129 +25,9 @@ include_directories(
 		${ORB_INCLUDE_DIR}
 		)
 
-ADD_DEFINITIONS(${ORB_C_FLAGS_LIST})
+add_definitions(${ORB_C_FLAGS_LIST})
+add_definitions(${COIL_C_FLAGS_LIST})
 
-
-set(target ConsoleInEx)
-
-set(srcs ConsoleIn.cpp ConsoleIn.h)
-set(standalone_srcs ConsoleInComp.cpp ${srcs})
-
-if(VXWORKS AND NOT RTP)
-	set(standalone_srcs ${standalone_srcs} ${CMAKE_SOURCE_DIR}/src/lib/rtm/DataFlowComponentBase.cpp)
-	set(libs ${RTCSKEL_PROJECT_NAME})
-
-	add_executable(${target} ${standalone_srcs})
-	target_link_libraries(${target} ${libs})
-	add_dependencies(${target} ${RTM_PROJECT_NAME})
-
-	install(TARGETS ${target} LIBRARY DESTINATION ${INSTALL_RTM_EXAMPLE_DIR}
-				ARCHIVE DESTINATION ${INSTALL_RTM_EXAMPLE_DIR}
-				RUNTIME DESTINATION ${INSTALL_RTM_EXAMPLE_DIR}
-				COMPONENT examples)
-else()
-	if(VXWORKS)
-		set(libs ${RTM_PROJECT_NAME} ${ORB_LIBRARIES} ${COIL_PROJECT_NAME} ${RTCSKEL_PROJECT_NAME})
-	else(VXWORKS)
-		set(libs ${RTM_PROJECT_NAME} ${ORB_LIBRARIES} ${COIL_PROJECT_NAME})
-	endif(VXWORKS)
-
-	add_executable(${target}Comp ${standalone_srcs})
-	target_link_libraries(${target}Comp ${libs} ${RTM_LINKER_OPTION})
-	add_dependencies(${target}Comp ${RTM_PROJECT_NAME})
-
-	add_library(${target} SHARED ${srcs})
-	target_link_libraries(${target} ${libs} ${RTM_LINKER_OPTION})
-	add_dependencies(${target} ${RTM_PROJECT_NAME})
-	set_target_properties(${target} PROPERTIES PREFIX "")
-
-	install(TARGETS ${target}Comp LIBRARY DESTINATION ${INSTALL_RTM_EXAMPLE_DIR}
-					ARCHIVE DESTINATION ${INSTALL_RTM_EXAMPLE_DIR}
-					RUNTIME DESTINATION ${INSTALL_RTM_EXAMPLE_DIR}
-					COMPONENT examples)
-
-	install(TARGETS ${target} LIBRARY DESTINATION ${INSTALL_RTM_EXAMPLE_SHAREDLIB_DIR}
-					ARCHIVE DESTINATION ${INSTALL_RTM_EXAMPLE_SHAREDLIB_DIR}
-					RUNTIME DESTINATION ${INSTALL_RTM_EXAMPLE_SHAREDLIB_DIR}
-					COMPONENT examples)
-
-	install(FILES ${standalone_srcs} DESTINATION ${INSTALL_RTM_EXAMPLE_DIR}/src/ExtTrigger COMPONENT sources)
-
-endif()
-
-if(VXWORKS)
-	if(RTP)
-		set_target_properties(${target}Comp PROPERTIES SUFFIX ".vxe")
-	else(RTP)	
-		set_target_properties(${target} PROPERTIES SUFFIX ".out")
-	endif(RTP)
-endif(VXWORKS)
-
-
-
-set(target ConsoleOutEx)
-
-set(srcs ConsoleOut.cpp ConsoleOut.h)
-set(standalone_srcs ConsoleOutComp.cpp ${srcs})
-
-if(VXWORKS AND NOT RTP)
-	set(standalone_srcs ${standalone_srcs} ${CMAKE_SOURCE_DIR}/src/lib/rtm/DataFlowComponentBase.cpp)
-	set(libs ${RTCSKEL_PROJECT_NAME})
-
-	add_executable(${target} ${standalone_srcs})
-	target_link_libraries(${target} ${libs})
-	add_dependencies(${target} ${RTM_PROJECT_NAME})
-
-	install(TARGETS ${target} LIBRARY DESTINATION ${INSTALL_RTM_EXAMPLE_DIR}
-				ARCHIVE DESTINATION ${INSTALL_RTM_EXAMPLE_DIR}
-				RUNTIME DESTINATION ${INSTALL_RTM_EXAMPLE_DIR}
-				COMPONENT examples)
-else()
-	if(VXWORKS)
-		set(libs ${RTM_PROJECT_NAME} ${ORB_LIBRARIES} ${COIL_PROJECT_NAME} ${RTCSKEL_PROJECT_NAME})
-	else(VXWORKS)
-		set(libs ${RTM_PROJECT_NAME} ${ORB_LIBRARIES} ${COIL_PROJECT_NAME})
-	endif(VXWORKS)
-
-	add_executable(${target}Comp ${standalone_srcs})
-	target_link_libraries(${target}Comp ${libs} ${RTM_LINKER_OPTION})
-	add_dependencies(${target}Comp ${RTM_PROJECT_NAME})
-
-	add_library(${target} SHARED ${srcs})
-	target_link_libraries(${target} ${libs} ${RTM_LINKER_OPTION})
-	add_dependencies(${target} ${RTM_PROJECT_NAME})
-	set_target_properties(${target} PROPERTIES PREFIX "")
-
-	install(TARGETS ${target}Comp LIBRARY DESTINATION ${INSTALL_RTM_EXAMPLE_DIR}
-					ARCHIVE DESTINATION ${INSTALL_RTM_EXAMPLE_DIR}
-					RUNTIME DESTINATION ${INSTALL_RTM_EXAMPLE_DIR}
-					COMPONENT examples)
-
-	install(TARGETS ${target} LIBRARY DESTINATION ${INSTALL_RTM_EXAMPLE_SHAREDLIB_DIR}
-					ARCHIVE DESTINATION ${INSTALL_RTM_EXAMPLE_SHAREDLIB_DIR}
-					RUNTIME DESTINATION ${INSTALL_RTM_EXAMPLE_SHAREDLIB_DIR}
-					COMPONENT examples)
-
-	install(FILES ${standalone_srcs} DESTINATION ${INSTALL_RTM_EXAMPLE_DIR}/src/ExtTrigger COMPONENT sources)
-endif()
-
-
-if(VXWORKS)
-	if(RTP)
-		set_target_properties(${target}Comp PROPERTIES SUFFIX ".vxe")
-	else(RTP)	
-		set_target_properties(${target} PROPERTIES SUFFIX ".out")
-	endif(RTP)
-endif(VXWORKS)
-
-
-
-
-
-set(target ConnectorCompEx)
-
-
-set(srcs ConnectorComp.cpp)
 
 if(VXWORKS AND NOT RTP)
 

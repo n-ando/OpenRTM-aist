@@ -181,7 +181,7 @@ namespace RTC
   void ModuleManager::unload(const std::string& file_name)
   {
     DLLEntity* dll(m_modules.find(file_name.c_str()));
-    if (dll == NULL)
+    if (dll == nullptr)
       throw NotFound(file_name.c_str());
 
     dll->dll.close();
@@ -204,9 +204,9 @@ namespace RTC
     RTC_TRACE(("unloadAll()"));
     std::vector<DLLEntity*> dlls(m_modules.getObjects());
 
-    for (int i(0), len(dlls.size()); i < len; ++i)
+    for (std::vector<DLLEntity*>::iterator d = dlls.begin(); d != dlls.end(); ++d)
       {
-        std::string ident(dlls[i]->properties["file_path"]);
+        std::string ident((*d)->properties["file_path"]);
         DLLEntity* dll(m_modules.unregisterObject(ident.c_str()));
         dll->dll.close();
       }
@@ -228,7 +228,7 @@ namespace RTC
                file_name.c_str(), func_name.c_str()))
     // "file_name" should be in modules map.
     DLLEntity* dll(m_modules.find(file_name.c_str()));
-    if (dll == NULL)
+    if (dll == nullptr)
       {
         RTC_ERROR(("Module %s not found in module table.", file_name.c_str()));
         throw ModuleNotFound(file_name);
@@ -296,9 +296,9 @@ namespace RTC
     RTC_TRACE(("getLoadedModules()"));
     std::vector< DLLEntity* > dlls(m_modules.getObjects());
     std::vector<coil::Properties> modules(0);
-    for (int i(0), len(dlls.size()); i < len; ++i)
+    for (std::vector< DLLEntity* >::iterator dll = dlls.begin(); dll != dlls.end(); ++dll)
       {
-        modules.push_back(dlls[i]->properties);
+        modules.push_back((*dll)->properties);
       }
     return modules;
   }
@@ -320,16 +320,16 @@ namespace RTC
     RTC_DEBUG(("langs: %s", gprop["manager.supported_languages"].c_str()));
 
     // for each languages
-    for (size_t l(0); l < langs.size(); ++l)
+    for (coil::vstring::iterator lang = langs.begin(); lang != langs.end(); ++lang)
       {
         // 1. getting loadable files list
         coil::vstring modules(0);
-        getModuleList(langs[l], modules);
-        RTC_DEBUG(("%s: %s", langs[l].c_str(), coil::flatten(modules).c_str()));
+        getModuleList((*lang), modules);
+        RTC_DEBUG(("%s: %s", (*lang).c_str(), coil::flatten(modules).c_str()));
 
         // 2. getting module properties from loadable modules
         vProperties tmpprops(0);
-        getModuleProfiles(langs[l], modules, tmpprops);
+        getModuleProfiles((*lang), modules, tmpprops);
         RTC_DEBUG(("Modile profile size: %d (newly founded modules)",
                    tmpprops.size()));
         m_modprofs.insert(m_modprofs.end(), tmpprops.begin(), tmpprops.end());
@@ -355,21 +355,20 @@ namespace RTC
     RTC_TRACE(("findFile(%s, %s)", fname.c_str(),
                coil::flatten(load_path, ", ").c_str()));
     StringVectorConstItr it, it_end;
-    std::string file_name(fname);
 
     it     = load_path.begin();
     it_end = load_path.end();
 
     while (it != it_end)
       {
-        std::string f((*it) + "/" + file_name);
+        std::string f((*it) + "/" + fname);
         coil::replaceString(f, "//", "/");
         if (fileExist(f))
           {
             return f;
           }
         coil::vstring ret;
-        coil::findFile((*it), file_name, ret);
+        coil::findFile((*it), fname, ret);
         if (!ret.empty())
           {
             return ret.front();
@@ -469,38 +468,38 @@ namespace RTC
     RTC_DEBUG(("suffixes: %s", coil::flatten(suffixes).c_str()));
 
     // for each load path list
-    for (size_t i(0); i < paths.size(); ++i)
+    for (coil::vstring::iterator p = paths.begin(); p != paths.end(); ++p)
       {
-        if (paths[i].empty())
+        if ((*p).empty())
           {
             RTC_WARN(("Given load path is empty"));
             continue;
           }
-        std::string& path(paths[i]);
+        std::string& path(*p);
         RTC_DEBUG(("Module load path: %s", path.c_str()));
 
         // get file list for each suffixes
         coil::vstring flist(0);
-        for (size_t s(0); s < suffixes.size(); ++s)
+        for (coil::vstring::iterator suffix = suffixes.begin(); suffix != suffixes.end(); ++suffix)
           {
             //std::string glob("*."); glob += suffixes[s];
             //coil::vstring tmp = coil::filelist(path.c_str(), glob.c_str());
             coil::vstring tmp;
-            coil::getFileList(path, suffixes[s], tmp);
+            coil::getFileList(path, (*suffix), tmp);
             RTC_DEBUG(("File list (path:%s, ext:%s): %s", path.c_str(),
-                       suffixes[s].c_str(), coil::flatten(tmp).c_str()));
+                       (*suffix).c_str(), coil::flatten(tmp).c_str()));
             flist.insert(flist.end(), tmp.begin(), tmp.end());
           }
 
         // reformat file path and remove cached files
-        for (size_t j(0); j < flist.size(); ++j)
+        for (coil::vstring::iterator f = flist.begin(); f != flist.end(); ++f)
           {
             //if (*(path.end() - 1) != '/') { path += "/"; }
             //std::string fpath(path + flist[j]);
             //addNewFile(fpath, modules);
-            coil::replaceString(flist[j], "\\", "/");
-            coil::replaceString(flist[j], "//", "/");
-            addNewFile(flist[j], modules);
+            coil::replaceString(*f, "\\", "/");
+            coil::replaceString(*f, "//", "/");
+            addNewFile(*f, modules);
           }
       }
       std::sort(modules.begin(), modules.end());
@@ -518,10 +517,10 @@ namespace RTC
                                  coil::vstring& modules)
   {
     bool exists(false);
-    for (size_t k(0); k < m_modprofs.size(); ++k)
+    for (vProperties::iterator prof = m_modprofs.begin(); prof != m_modprofs.end(); ++prof)
       {
                   
-        if (m_modprofs[k]["module_file_path"] == fpath)
+        if ((*prof)["module_file_path"] == fpath)
           {
 
             exists = true;
@@ -530,9 +529,9 @@ namespace RTC
             break;
           }
       }
-    for (size_t k(0); k < m_loadfailmods.size(); ++k)
+    for (coil::vstring::iterator mod = m_loadfailmods.begin(); mod != m_loadfailmods.end(); ++mod)
       {
-        if (m_loadfailmods[k] == fpath)
+        if ((*mod) == fpath)
           {
             exists = true;
             break;
@@ -560,33 +559,33 @@ namespace RTC
     std::string l = "manager.modules." + lang;
     coil::Properties& lprop(Manager::instance().getConfig().getNode(l));
 
-    for (size_t i(0), len(modules.size()); i < len; ++i)
+    for (coil::vstring::const_iterator mod = modules.begin(); mod != modules.end(); ++mod)
       {
           
         std::string cmd(lprop["profile_cmd"]);
-        cmd += " \"" + modules[i] + "\"";
+        cmd += " \"" + (*mod) + "\"";
 
         coil::vstring out;
         if (coil::create_process(cmd, out) == -1)
-        {
-            std::cerr << "create_process faild" << std::endl;
-            continue;
-        }
+          {
+              std::cerr << "create_process faild" << std::endl;
+              continue;
+          }
         coil::Properties p;
         
         for (coil::vstring::iterator itr = out.begin(); itr != out.end(); ++itr)
-        {
+          {
             std::string tmp = (*itr);
-            std::string::size_type pos(tmp.find(":"));
+            std::string::size_type pos(tmp.find(':'));
             if (pos != std::string::npos)
-            {
-                std::string key(tmp.substr(0, pos));
-                coil::eraseBothEndsBlank(key);
-                p[key] = tmp.substr(pos + 1);
-                coil::eraseBothEndsBlank(p[key]);
-            }
+              {
+                  std::string key(tmp.substr(0, pos));
+                  coil::eraseBothEndsBlank(key);
+                  p[key] = tmp.substr(pos + 1);
+                  coil::eraseBothEndsBlank(p[key]);
+              }
             
-        }
+          }
 
         
         
@@ -594,11 +593,11 @@ namespace RTC
         RTC_DEBUG(("rtcprof cmd sub process done."));
         if (p["implementation_id"].empty()) 
           { 
-            m_loadfailmods.push_back(modules[i]);
+            m_loadfailmods.push_back((*mod));
             continue;
           }
-        p["module_file_name"] = coil::basename(modules[i].c_str());
-        p["module_file_path"] = modules[i].c_str();
+        p["module_file_name"] = coil::basename((*mod).c_str());
+        p["module_file_path"] = (*mod).c_str();
         modprops.push_back(p);
         
       }

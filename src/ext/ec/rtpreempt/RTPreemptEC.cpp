@@ -16,9 +16,9 @@
  *
  */
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <time.h>
+#include <cstdlib>
+#include <cstdio>
+#include <ctime>
 #include <sched.h>
 #include <sys/mman.h>
 
@@ -109,7 +109,7 @@ namespace RTC_exp
    * @brief Generate internal activity thread for ExecutionContext
    * @endif
    */
-  int RTPreemptEC::open(void *args)
+  int RTPreemptEC::open(void * /*args*/)
   {
     RTC_TRACE(("open()"));
     activate();
@@ -145,7 +145,7 @@ namespace RTC_exp
       }
     return true;
   }
-  int RTPreemptEC::svc(void)
+  int RTPreemptEC::svc()
   {
     RTC_TRACE(("svc()"));
     if (!prepareThread()) { return -1; }
@@ -188,7 +188,7 @@ namespace RTC_exp
         if (getSleepTime(sleeptime, ts0, ts1) == true)
           {
             clock_nanosleep(CLOCK_MONOTONIC, !TIMER_ABSTIME,
-                            &sleeptime, NULL);
+                            &sleeptime, nullptr);
             if (count > 1000)
               {
                 clock_gettime(CLOCK_MONOTONIC ,&ts3);
@@ -210,7 +210,7 @@ namespace RTC_exp
    * @brief Thread execution function for ExecutionContext
    * @endif
    */
-  int RTPreemptEC::close(unsigned long flags)
+  int RTPreemptEC::close(unsigned long  /*flags*/)
   {
     RTC_TRACE(("close()"));
     // At this point, this component have to be finished.
@@ -418,7 +418,7 @@ namespace RTC_exp
       if (!m_svc)
         {
           m_svc = true;
-          this->open(0);
+          this->open(nullptr);
         }
     }
     if (isAllNextState(RTC::INACTIVE_STATE))
@@ -650,7 +650,7 @@ namespace RTC_exp
       }
     return true; // sleeptime >= 0
   }
-}; // namespace RTC
+}  // namespace RTC_exp
 
 extern "C"
 {
@@ -662,7 +662,7 @@ extern "C"
    * @endif
    */
 
- void RTPreemptECInit(RTC::Manager* manager)
+ void RTPreemptECInit(RTC::Manager*  /*manager*/)
   {
     RTC::ExecutionContextFactory::
       instance().addFactory("RTPreemptEC",

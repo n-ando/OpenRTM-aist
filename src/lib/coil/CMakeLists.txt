@@ -8,46 +8,46 @@ project (${COIL_PROJECT_NAME}
 
 
 
-option (ACE_5_6_1_OR_EARLIER "ACE version 5.6.1 or earlier" OFF)
-option (COIL_OS_DARWIN "OS is Max OS X" OFF)
-option (COIL_OS_FREEBSD "OS is FreeBSD" OFF)
-option (COIL_OS_HPUX "OS is HP-UX" OFF)
-option (COIL_OS_IRIX "OS is IRIX" OFF)
-option (COIL_OS_LINUX "OS is Linux" OFF)
-option (COIL_OS_OSF1 "OS is OSF1" OFF)
-option (COIL_OS_QNX "OS is QNX" OFF)
-option (COIL_OS_SUNOS "OS is SunOS" OFF)
-option (COIL_OS_VXWORKS "OS is VxWorks" OFF)
-option (COIL_OS_WIN32 "OS is Windows" OFF)
-option (HAVE_DLFCN_H "Define to 1 if you have the <dlfcn.h> header file." ON)
-option (HAVE_INTTYPES_H "Define to 1 if you have the <inttypes.h> header file." ON)
-option (HAVE_MEMORY_H "Define to 1 if you have the <memory.h> header file." ON)
-option (HAVE_NLIST_H "Define to 1 if you have the <nlist.h> header file." OFF)
-option (HAVE_STDINT_H "Define to 1 if you have the <stdint.h> header file." ON)
-option (HAVE_STDLIB_H "Define to 1 if you have the <stdlib.h> header file." ON)
-option (HAVE_STRINGS_H "Define to 1 if you have the <strings.h> header file." ON)
-option (HAVE_STRING_H "Define to 1 if you have the <string.h> header file." ON)
-option (HAVE_SYS_STAT_H "Define to 1 if you have the <sys/stat.h> header file." ON)
-option (HAVE_SYS_TYPES_H "Define to 1 if you have the <sys/types.h> header file." ON)
-option (HAVE_UNAME "Define to 1 if you have the `uname' function." ON)
-option (HAVE_UNISTD_H "Define to 1 if you have the <unistd.h> header file." ON)
-option (STDC_HEADERS "Define to 1 if you have the ANSI C header files." OFF)
-option (WITH_ACE "compiled with ACE" OFF)
-option (WITH_DMALLOC "Define if using the dmalloc debugging malloc package" OFF)
-option (_REENTRANT "Multi Thread Support" ON)
+set(ACE_5_6_1_OR_EARLIER OFF)
+set(COIL_OS_DARWIN OFF)
+set(COIL_OS_FREEBSD OFF)
+set(COIL_OS_HPUX OFF)
+set(COIL_OS_IRIX OFF)
+set(COIL_OS_LINUX OFF)
+set(COIL_OS_OSF1 OFF)
+set(COIL_OS_QNX OFF)
+set(COIL_OS_SUNOS OFF)
+set(COIL_OS_VXWORKS OFF)
+set(COIL_OS_WIN32 OFF)
+set(HAVE_DLFCN_H ON)
+set(HAVE_INTTYPES_H ON)
+set(HAVE_MEMORY_H ON)
+set(HAVE_NLIST_H OFF)
+set(HAVE_STDINT_H ON)
+set(HAVE_STDLIB_H ON)
+set(HAVE_STRINGS_H ON)
+set(HAVE_STRING_H ON)
+set(HAVE_SYS_STAT_H ON)
+set(HAVE_SYS_TYPES_H ON)
+set(HAVE_UNAME ON)
+set(HAVE_UNISTD_H ON)
+set(STDC_HEADERS OFF)
+set(WITH_ACE OFF)
+set(WITH_DMALLOC OFF)
+set(_REENTRANT ON)
 
-set(COIL_MAJOR_VERSION "1.0" CACHE STRING "COIL major version")
-set(COIL_MINOR_VERSION "1.0" CACHE STRING "COIL minor version")
-set(COIL_PLATFORM "POSIX" CACHE STRING "coil platform is ACE")
-set(COIL_REVISION_NUM "1.0" CACHE STRING "")
-set(COIL_SHORT_VERSION "1.01.01.0" CACHE STRING "COIL version")
-set(COIL_VERSION "1.0" CACHE STRING "COIL version")
-set(PACKAGE "coil" CACHE STRING "Name of package")
-set(PACKAGE_BUGREPORT "n-ando@aist.go.jp" CACHE STRING "Define to the address where bug reports for this package should be sent.")
-set(PACKAGE_NAME "coil" CACHE STRING "Define to the full name of this package.")
-set(PACKAGE_STRING "coil 1.0" CACHE STRING "Define to the full name and version of this package.")
-set(PACKAGE_TARNAME "coil" CACHE STRING "Define to the one symbol short name of this package.")
-set(PACKAGE_VERSION "1.0" CACHE STRING "Define to the version of this package.")
+set(COIL_MAJOR_VERSION ${${COIL_PROJECT_NAME}_VERSION_MAJOR})
+set(COIL_MINOR_VERSION ${${COIL_PROJECT_NAME}_VERSION_MINOR})
+set(COIL_PLATFORM "POSIX")
+set(COIL_REVISION_NUM ${${COIL_PROJECT_NAME}_VERSION_PATCH})
+set(COIL_SHORT_VERSION ${${COIL_PROJECT_NAME}_VERSION_MAJOR}.${${COIL_PROJECT_NAME}_VERSION_MINOR})
+set(COIL_VERSION ${${COIL_PROJECT_NAME}_VERSION})
+set(PACKAGE "coil")
+set(PACKAGE_BUGREPORT "n-ando@aist.go.jp")
+set(PACKAGE_NAME "coil")
+set(PACKAGE_STRING "coil ${COIL_SHORT_VERSION}")
+set(PACKAGE_TARNAME "coil")
+set(PACKAGE_VERSION ${COIL_SHORT_VERSION})
 
 
 
@@ -67,7 +67,6 @@ endif()
 
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config_coil_cmake.h.in ${PROJECT_BINARY_DIR}/config_coil.h)
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config_coil_cmake.h.in ${CMAKE_CURRENT_SOURCE_DIR}/${COIL_OS_DIR}/coil/config_coil.h)
 
 
 set(coil_headers
@@ -133,23 +132,7 @@ set(coil_srcs
 
 
 
-if(WIN32)
-	set(DEF_FILE_NAME  ${COIL_PROJECT_NAME}.def)
-	add_library(${COIL_PROJECT_NAME}_static STATIC ${coil_srcs})
 
-	add_custom_command(TARGET ${COIL_PROJECT_NAME}_static 
-		POST_BUILD
-		COMMAND python ${MAKE_DEF_COMMAND} $<TARGET_FILE:${COIL_PROJECT_NAME}_static> ${COIL_PROJECT_NAME} ${RTM_SHORT_VERSION} ${DEF_FILE_NAME}
-		WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-	)
-	install(TARGETS ${COIL_PROJECT_NAME}_static LIBRARY DESTINATION ${INSTALL_RTM_LIB_DIR}
-					 ARCHIVE DESTINATION ${INSTALL_RTM_LIB_DIR}
-					RUNTIME DESTINATION ${INSTALL_RTM_LIB_DIR}
-					COMPONENT coil)
-	set(coil_srcs ${coil_srcs} ${CMAKE_CURRENT_BINARY_DIR}/${DEF_FILE_NAME})
-	
-else(WIN32)
-endif()
 
 
 include_directories(
@@ -157,6 +140,10 @@ include_directories(
 		${PROJECT_SOURCE_DIR}/${COIL_OS_DIR}
 		${PROJECT_BINARY_DIR}/..
 		)
+
+add_definitions(${COIL_C_FLAGS_LIST})
+
+
 if(UNIX)
 	if(${CMAKE_SYSTEM_NAME}test MATCHES QNXtest)
 		if(QNX7)
@@ -182,16 +169,35 @@ if(VXWORKS)
 					RUNTIME DESTINATION ${INSTALL_RTM_BIN_DIR}
 					COMPONENT coil)
 else(VXWORKS)
-	add_library(${COIL_PROJECT_NAME} SHARED ${coil_srcs})
+	add_library(${COIL_PROJECT_NAME}_objlib OBJECT ${coil_srcs})
+	set_property(TARGET ${COIL_PROJECT_NAME}_objlib PROPERTY POSITION_INDEPENDENT_CODE 1)
+
+	add_library(${COIL_PROJECT_NAME}-static STATIC $<TARGET_OBJECTS:${COIL_PROJECT_NAME}_objlib>)
+	add_dependencies(${COIL_PROJECT_NAME}-static ${COIL_PROJECT_NAME}_objlib)
+
+	if(WIN32)
+		set(DEF_FILE_NAME  ${COIL_PROJECT_NAME}.def)
+
+		add_custom_command(TARGET ${COIL_PROJECT_NAME}-static 
+			POST_BUILD
+			COMMAND python ${MAKE_DEF_COMMAND} $<TARGET_FILE:${COIL_PROJECT_NAME}-static> ${COIL_PROJECT_NAME} ${RTM_SHORT_VERSION} ${DEF_FILE_NAME}
+			WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+		)
+		
+	endif(WIN32)
+
+	add_library(${COIL_PROJECT_NAME} SHARED $<TARGET_OBJECTS:${COIL_PROJECT_NAME}_objlib> ${CMAKE_CURRENT_BINARY_DIR}/${DEF_FILE_NAME})
 	set_target_properties(${COIL_PROJECT_NAME} PROPERTIES DEBUG_POSTFIX d)
 	target_link_libraries(${COIL_PROJECT_NAME} ${RTM_LINKER_OPTION}  ${UUID_LIBRARIES})
+	add_dependencies(${COIL_PROJECT_NAME} ${COIL_PROJECT_NAME}_objlib)
+
 	if(UNIX)
 		set_target_properties(${COIL_PROJECT_NAME} PROPERTIES VERSION ${RTM_VERSION} SOVERSION ${COIL_SO_VERSION})
 		install(TARGETS ${COIL_PROJECT_NAME} LIBRARY DESTINATION ${INSTALL_RTM_LIB_DIR}
 						ARCHIVE DESTINATION ${INSTALL_RTM_LIB_DIR}
 						RUNTIME DESTINATION ${INSTALL_RTM_BIN_DIR}
 						COMPONENT coil)
-		add_library(${COIL_PROJECT_NAME}-static STATIC ${coil_srcs})
+
 		set_target_properties(${COIL_PROJECT_NAME}-static PROPERTIES DEBUG_POSTFIX d)
 		set_target_properties(${COIL_PROJECT_NAME}-static PROPERTIES OUTPUT_NAME ${COIL_PROJECT_NAME} CLEAN_DIRECT_OUTPUT 1)
 		install(TARGETS ${COIL_PROJECT_NAME}-static LIBRARY DESTINATION ${INSTALL_RTM_LIB_DIR}
@@ -201,8 +207,13 @@ else(VXWORKS)
 
 	elseif(WIN32)
 		set_source_files_properties(${DEF_FILE_NAME} PROPERTIES GENERATED 1)
-		add_dependencies(${COIL_PROJECT_NAME} ${COIL_PROJECT_NAME}_static)
+		add_dependencies(${COIL_PROJECT_NAME} ${COIL_PROJECT_NAME}-static)
 		install(TARGETS ${COIL_PROJECT_NAME} LIBRARY DESTINATION ${INSTALL_RTM_LIB_DIR}
+						 ARCHIVE DESTINATION ${INSTALL_RTM_LIB_DIR}
+						RUNTIME DESTINATION ${INSTALL_RTM_LIB_DIR}
+						COMPONENT coil)
+
+		install(TARGETS ${COIL_PROJECT_NAME}-static LIBRARY DESTINATION ${INSTALL_RTM_LIB_DIR}
 						 ARCHIVE DESTINATION ${INSTALL_RTM_LIB_DIR}
 						RUNTIME DESTINATION ${INSTALL_RTM_LIB_DIR}
 						COMPONENT coil)

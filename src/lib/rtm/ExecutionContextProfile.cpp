@@ -16,7 +16,7 @@
  *
  */
 
-#include <assert.h>
+#include <cassert>
 #include <rtm/ExecutionContextProfile.h>
 #include <rtm/CORBA_SeqUtil.h>
 #include <rtm/NVUtil.h>
@@ -34,7 +34,7 @@ namespace RTC_impl
    * @endif
    */
   ExecutionContextProfile::
-  ExecutionContextProfile(RTC::ExecutionKind kind)
+  ExecutionContextProfile(RTC::ExecutionKind  /*kind*/)
     : rtclog("periodic_ecprofile"),
       m_period(static_cast<double>(DEEFAULT_PERIOD)),
       m_ref(RTC::ExecutionContextService::_nil())
@@ -92,7 +92,7 @@ namespace RTC_impl
    * @endif
    */
   RTC::ExecutionContextService_ptr
-  ExecutionContextProfile::getObjRef(void) const
+  ExecutionContextProfile::getObjRef() const
   {
     RTC_TRACE(("getObjRef()"));
     Guard guard(m_profileMutex);
@@ -210,7 +210,7 @@ namespace RTC_impl
    * @brief Get the ExecutionKind
    * @endif
    */
-  RTC::ExecutionKind ExecutionContextProfile::getKind(void) const
+  RTC::ExecutionKind ExecutionContextProfile::getKind() const
   {
     Guard guard(m_profileMutex);
     RTC_TRACE(("%s = getKind()", getKindString(m_profile.kind)));

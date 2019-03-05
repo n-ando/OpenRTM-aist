@@ -23,12 +23,14 @@
 #include <rtm/RTObjectStateMachine.h>
 
 #ifdef RTM_OS_LINUX
+#ifndef _GNU_SOURCE
 #define _GNU_SOURCE
 #include <pthread.h>
+#endif // _GNU_SOURCE
 #include <algorithm>
 #endif // RTM_OS_LINUX
 
-#include <string.h>
+#include <cstring>
 #include <algorithm>
 #include <iostream>
 #include <string>
@@ -105,7 +107,7 @@ namespace RTC_exp
    * @brief Generate internal activity thread for ExecutionContext
    * @endif
    */
-  int PeriodicExecutionContext::open(void *args)
+  int PeriodicExecutionContext::open(void * /*args*/)
   {
     RTC_TRACE(("open()"));
     activate();
@@ -123,36 +125,43 @@ namespace RTC_exp
    * @brief Thread execution function for ExecutionContext
    * @endif
    */
-  int PeriodicExecutionContext::svc(void)
+  int PeriodicExecutionContext::svc()
   {
     RTC_TRACE(("svc()"));
     int count(0);
 
-    bool result = coil::setThreadCpuAffinity(m_cpu);
+    if (!m_cpu.empty())
+    {
+        bool result = coil::setThreadCpuAffinity(m_cpu);
 
-    if (!result)
-      {
-        RTC_ERROR(("setThreadCpuAffinity():"
-                   "CPU affinity mask setting failed"));
-      };
-	
-	coil::CpuMask ret_cpu;
-	result = coil::getThreadCpuAffinity(ret_cpu);
-	
+        if (!result)
+        {
+            RTC_ERROR(("setThreadCpuAffinity():"
+                "CPU affinity mask setting failed"));
+        };
+
+        coil::CpuMask ret_cpu;
+        result = coil::getThreadCpuAffinity(ret_cpu);
+
 
 #ifdef RTM_OS_LINUX
-	std::sort(ret_cpu.begin(), ret_cpu.end());
-	std::sort(m_cpu.begin(), m_cpu.end());
-	if (result && ret_cpu.size() > 0 && m_cpu.size() > 0 && ret_cpu.size() == m_cpu.size()
-        && std::equal(ret_cpu.begin(), ret_cpu.end(), m_cpu.begin()))
-	{
+        std::sort(ret_cpu.begin(), ret_cpu.end());
+        std::sort(m_cpu.begin(), m_cpu.end());
+        if (result && !ret_cpu.empty() && !m_cpu.empty() && ret_cpu.size() == m_cpu.size()
+            && std::equal(ret_cpu.begin(), ret_cpu.end(), m_cpu.begin()))
+        {
 
-	}
-	else
-	{
-		RTC_ERROR(("pthread_getaffinity_np(): returned error."));
-	}
+        }
+        else
+        {
+            RTC_ERROR(("pthread_getaffinity_np(): returned error."));
+        }
 #endif
+    }
+    else
+    {
+        RTC_DEBUG(("cpu affinity is not set"));
+    }
 
     do
       {
@@ -206,7 +215,7 @@ namespace RTC_exp
    * @brief Thread execution function for ExecutionContext
    * @endif
    */
-  int PeriodicExecutionContext::close(unsigned long flags)
+  int PeriodicExecutionContext::close(unsigned long  /*flags*/)
   {
     RTC_TRACE(("close()"));
     // At this point, this component have to be finished.
@@ -414,7 +423,7 @@ namespace RTC_exp
       if (!m_svc)
         {
           m_svc = true;
-          this->open(0);
+          this->open(nullptr);
         }
     }
     if (isAllNextState(RTC::INACTIVE_STATE))
@@ -447,7 +456,7 @@ namespace RTC_exp
    * @brief onAddedComponent() template function
    */
   RTC::ReturnCode_t PeriodicExecutionContext::
-  onAddedComponent(RTC::LightweightRTObject_ptr rtobj)
+  onAddedComponent(RTC::LightweightRTObject_ptr  /*rtobj*/)
   {
     Guard guard(m_workerthread.mutex_);
     if (m_workerthread.running_ == false)
@@ -460,7 +469,7 @@ namespace RTC_exp
    * @brief onRemovedComponent() template function
    */
   RTC::ReturnCode_t PeriodicExecutionContext::
-  onRemovedComponent(RTC::LightweightRTObject_ptr rtobj)
+  onRemovedComponent(RTC::LightweightRTObject_ptr  /*rtobj*/)
   {
     Guard guard(m_workerthread.mutex_);
     if (m_workerthread.running_ == false)
@@ -621,10 +630,10 @@ namespace RTC_exp
     coil::vstring tmp = coil::split(affinity, ",", true);
     m_cpu.clear();
 
-    for (size_t i(0); i < tmp.size(); ++i)
+    for (coil::vstring::iterator itr = tmp.begin(); itr != tmp.end(); ++itr)
       {
         int num;
-        if (coil::stringTo(num, tmp[i].c_str()))
+        if (coil::stringTo(num, (*itr).c_str()))
           {
             m_cpu.push_back(num);
             RTC_DEBUG(("CPU affinity int value: %d added.", num));
@@ -644,7 +653,7 @@ extern "C"
    * @endif
    */
 
-  void PeriodicExecutionContextInit(RTC::Manager* manager)
+  void PeriodicExecutionContextInit(RTC::Manager*  /*manager*/)
   {
     RTC::ExecutionContextFactory::
       instance().addFactory("PeriodicExecutionContext",

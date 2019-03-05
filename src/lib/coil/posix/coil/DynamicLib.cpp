@@ -73,7 +73,7 @@ namespace coil
    * @endif
    */
   DynamicLib::DynamicLib(const DynamicLib& rhs)
-    : m_name(""), m_mode(0), m_closeflag(0), m_handle(0)
+    : m_name(""), m_mode(0), m_closeflag(0), m_handle(nullptr)
   {
     if (!rhs.m_name.empty() &&
         open(rhs.m_name.c_str(), rhs.m_mode, rhs.m_closeflag) == 0)
@@ -107,10 +107,10 @@ namespace coil
    */
   int DynamicLib::open(const char* dll_name,
                    int open_mode,
-                   int close_handle_on_destruction)
+                   int  /*close_handle_on_destruction*/)
   {
     void* handle = ::dlopen(dll_name, open_mode);
-    if (handle == NULL)
+    if (handle == nullptr)
       {
         return -1;
       }
@@ -126,16 +126,16 @@ namespace coil
    * @brief Unload of the Dynamic link library 
    * @endif
    */
-  int DynamicLib::close(void)
+  int DynamicLib::close()
   {
-    if (m_handle == NULL)
+    if (m_handle == nullptr)
       return -1;
     if (m_name.empty())
       {
         return -1;
       }
     ::dlclose(m_handle);
-    m_handle = NULL;
+    m_handle = nullptr;
     m_name = "";
     return 0;
   }
@@ -149,7 +149,7 @@ namespace coil
    */
   void* DynamicLib::symbol(const char* symbol_name)
   {
-    if (m_handle == NULL) return NULL;
+    if (m_handle == nullptr) return nullptr;
     return ::dlsym(m_handle, symbol_name);
   }
 
@@ -160,7 +160,7 @@ namespace coil
    * @brief Return the explanation message about the error
    * @endif
    */
-  const char* DynamicLib::error(void) const
+  const char* DynamicLib::error() const
   {
     return ::dlerror();
   }

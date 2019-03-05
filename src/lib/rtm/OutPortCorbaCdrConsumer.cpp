@@ -42,7 +42,7 @@ namespace RTC
    * @brief Destructor
    * @endif
    */
-  OutPortCorbaCdrConsumer::~OutPortCorbaCdrConsumer(void)
+  OutPortCorbaCdrConsumer::~OutPortCorbaCdrConsumer()
   {
   }
 
@@ -53,7 +53,7 @@ namespace RTC
    * @brief Initializing configuration
    * @endif
    */
-  void OutPortCorbaCdrConsumer::init(coil::Properties& prop)
+  void OutPortCorbaCdrConsumer::init(coil::Properties&  /*prop*/)
   {
     RTC_TRACE(("OutPortCorbaCdrConsumer::init()"));
   }
@@ -166,7 +166,7 @@ namespace RTC
                          "dataport.corba_cdr.outport_ior"))
       {
         RTC_DEBUG(("dataport.corba_cdr.outport_ior found."));
-        const char* ior(NULL);
+        const char* ior(nullptr);
         properties[index].value >>= ior;
 
         CORBA::ORB_var orb = ::RTC::Manager::instance().getORB();
@@ -231,7 +231,7 @@ namespace RTC
    */
   OutPortConsumer::ReturnCode
   OutPortCorbaCdrConsumer::convertReturn(::OpenRTM::PortStatus status,
-                                         ByteData& data)
+                                         ByteData&  /*data*/)
   {
     switch (status)
       {

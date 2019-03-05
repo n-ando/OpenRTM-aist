@@ -23,7 +23,7 @@
 #include <coil/stringutil.h>
 
 #include <libgen.h>
-#include <stdlib.h>
+#include <cstdlib>
 #include <unistd.h>
 #include <string>
 

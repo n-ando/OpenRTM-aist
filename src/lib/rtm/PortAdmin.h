@@ -88,7 +88,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~PortAdmin(void) {}
+    virtual ~PortAdmin() {}
 
     /*!
      * @if jp

@@ -119,4 +119,4 @@ namespace RTC
     };
 
 
-}
+}  // namespace RTC

@@ -23,11 +23,11 @@
 #include <coil/File.h>
 #include <coil/stringutil.h>
 
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstdlib>
 #include <unistd.h>
 #include <libgen.h>
-#include <signal.h>
+#include <csignal>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <string>
@@ -38,7 +38,7 @@ namespace coil
 
   /*!
    * @if jp
-   * @brief ¥×¥í¥»¥¹¤òµ¯Æ°¤¹¤ë
+   * @brief Â¥Ã—Â¥Ã­Â¥Â»Â¥Â¹Â¤Ã²ÂµÂ¯Ã†Â°Â¤Â¹Â¤Ã«
    * @else
    * @brief Launching a process
    * @endif
@@ -81,14 +81,14 @@ namespace coil
 
   int daemon(int nochdir, int noclose)
   {
-    return daemon(nochdir, noclose);
+    return ::daemon(nochdir, noclose);
   }
 
   int create_process(std::string command, std::vector<std::string> &out)
   {
     FILE* fd;
     out.clear();
-    if ((fd = popen(command.c_str(), "r")) == NULL)
+    if ((fd = popen(command.c_str(), "r")) == nullptr)
       {
         //std::cerr << "popen faild" << std::endl;
         return -1;
@@ -98,8 +98,10 @@ namespace coil
         char str[512];
         fgets(str, 512, fd);
         std::string line(str);
-        if (0 < line.size())
-          line.erase(line.size() - 1);
+        if (!line.empty())
+          {
+            line.erase(line.size() - 1);
+          }
         out.push_back(line);
       } while (!feof(fd));
 

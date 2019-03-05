@@ -85,7 +85,7 @@ namespace RTC
 
 	RTC_impl::RTObjectStateMachine* rtobj = m_worker.findComponent(comp);
 
-	if (rtobj == NULL)
+	if (rtobj == nullptr)
 	{
 		return RTC::BAD_PARAMETER;
 	}
@@ -136,7 +136,7 @@ namespace RTC
 
 	RTC_impl::RTObjectStateMachine* rtobj = m_worker.findComponent(comp);
 
-	if (rtobj == NULL)
+	if (rtobj == nullptr)
 	{
 		  return RTC::BAD_PARAMETER;
 	}
@@ -189,7 +189,7 @@ namespace RTC
 
 	RTC_impl::RTObjectStateMachine* rtobj = m_worker.findComponent(comp);
 
-	if (rtobj == NULL)
+	if (rtobj == nullptr)
 	{
 		return RTC::BAD_PARAMETER;
 	}
@@ -212,14 +212,14 @@ namespace RTC
 
   }
 
-};
+} // namespace RTC
 
 
 
 
 extern "C"
 {
-  void SimulatorExecutionContextInit(RTC::Manager* manager)
+  void SimulatorExecutionContextInit(RTC::Manager*  /*manager*/)
   {
   /*!
    * @if jp

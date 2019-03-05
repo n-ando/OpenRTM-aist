@@ -68,7 +68,7 @@ namespace RTC
      * @brief Destructor 
      * @endif
      */
-    virtual ~SimulatorExecutionContext(void);
+    virtual ~SimulatorExecutionContext();
 
     /*!
      * @if jp
@@ -149,7 +149,7 @@ namespace RTC
   private:
 
   };
-};
+}  // namespace RTC
 
 
 

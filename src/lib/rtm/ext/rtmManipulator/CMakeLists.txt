@@ -15,10 +15,6 @@ project (${target}
 
 
 
-
-
-
-
 macro(idl_compile idl_name)
 
 	set(ALL_IDL_FILES ${ALL_IDL_FILES} ../${idl_name}.idl)
@@ -65,40 +61,12 @@ include_directories(
 		${ORB_INCLUDE_DIR}
 		${PROJECT_BINARY_DIR}
 		)
-ADD_DEFINITIONS(${ORB_C_FLAGS_LIST})
-
-
-link_directories(${ORB_LINK_DIR})
-include_directories(${ORB_INCLUDE_DIR})
-ADD_DEFINITIONS(${ORB_C_FLAGS_LIST})
+add_definitions(${ORB_C_FLAGS_LIST})
+add_definitions(${COIL_C_FLAGS_LIST})
 
 
 
 set_source_files_properties(${ALL_IDL_SRCS} PROPERTIES GENERATED 1)
-
-
-
-
-if(WIN32)
-	set(DEF_FILE_NAME  ${target}.def)
-
-	add_library(${target}_static STATIC ${ALL_IDL_SRCS} )
-	add_dependencies(${target}_static ${RTCSKEL_PROJECT_NAME})
-	set_source_files_properties(${ALL_IDL_SRCS_RTM} PROPERTIES GENERATED 1)
-
-
-
-	add_custom_command(TARGET ${target}_static 
-		POST_BUILD
-		COMMAND python ${MAKE_DEF_COMMAND} $<TARGET_FILE:${target}_static> ${target} ${RTM_SHORT_VERSION} ${DEF_FILE_NAME}
-		WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-	)
-	install(TARGETS ${target}_static LIBRARY DESTINATION ${INSTALL_RTM_LIB_DIR}
-					ARCHIVE DESTINATION ${INSTALL_RTM_LIB_DIR}
-					RUNTIME DESTINATION ${INSTALL_RTM_LIB_DIR}
-					COMPONENT ext)
-	set(ALL_IDL_SRCS ${ALL_IDL_SRCS} ${CMAKE_CURRENT_BINARY_DIR}/${DEF_FILE_NAME})
-endif(WIN32)
 
 
 
@@ -111,15 +79,36 @@ if(VXWORKS)
 						RUNTIME DESTINATION ${INSTALL_RTM_BIN_DIR}
 						COMPONENT ext)
 else(VXWORKS)
-	add_library(${target} SHARED ${ALL_IDL_SRCS})
+	add_library(${target}_objlib OBJECT ${ALL_IDL_SRCS})
+	set_property(TARGET ${target}_objlib PROPERTY POSITION_INDEPENDENT_CODE 1)
+	add_dependencies(${target}_objlib ${RTCSKEL_PROJECT_NAME})
+
+	add_library(${target}-static STATIC $<TARGET_OBJECTS:${target}_objlib>)
+	add_dependencies(${target}-static ${RTCSKEL_PROJECT_NAME})
+	add_dependencies(${target}-static ${target}_objlib)
+
+	if(WIN32)
+		set(DEF_FILE_NAME  ${target}.def)
+		set_source_files_properties(${ALL_IDL_SRCS_RTM} PROPERTIES GENERATED 1)
+
+		add_custom_command(TARGET ${target}-static 
+			POST_BUILD
+			COMMAND python ${MAKE_DEF_COMMAND} $<TARGET_FILE:${target}-static> ${target} ${RTM_SHORT_VERSION} ${DEF_FILE_NAME}
+			WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+		)
+	endif(WIN32)
+
+	add_library(${target} SHARED $<TARGET_OBJECTS:${target}_objlib> ${CMAKE_CURRENT_BINARY_DIR}/${DEF_FILE_NAME})
 	set_target_properties(${target} PROPERTIES DEBUG_POSTFIX d)
 	target_link_libraries(${target} ${ORB_LIBRARIES} ${RTCSKEL_PROJECT_NAME})
+	add_dependencies(${target} ${target}_objlib)
+
 	if(UNIX)
 		install(TARGETS ${target} LIBRARY DESTINATION ${INSTALL_RTM_LIB_DIR}
 						ARCHIVE DESTINATION ${INSTALL_RTM_LIB_DIR}
 						RUNTIME DESTINATION ${INSTALL_RTM_BIN_DIR}
 						COMPONENT ext)
-		add_library(${target}-static STATIC ${ALL_IDL_SRCS})
+
 		set_target_properties(${target}-static PROPERTIES DEBUG_POSTFIX d)
 		set_target_properties(${target}-static PROPERTIES OUTPUT_NAME ${target} CLEAN_DIRECT_OUTPUT 1)
 		install(TARGETS ${target}-static LIBRARY DESTINATION ${INSTALL_RTM_LIB_DIR}
@@ -128,8 +117,13 @@ else(VXWORKS)
 						COMPONENT ext)
 	elseif(WIN32)
 		set_source_files_properties(${DEF_FILE_NAME} PROPERTIES GENERATED 1)
-		add_dependencies(${target} ${target}_static)
+		add_dependencies(${target} ${target}-static)
 		install(TARGETS ${target} LIBRARY DESTINATION ${INSTALL_RTM_LIB_DIR}
+						ARCHIVE DESTINATION ${INSTALL_RTM_LIB_DIR}
+						RUNTIME DESTINATION ${INSTALL_RTM_LIB_DIR}
+						COMPONENT ext)
+
+		install(TARGETS ${target}-static LIBRARY DESTINATION ${INSTALL_RTM_LIB_DIR}
 						ARCHIVE DESTINATION ${INSTALL_RTM_LIB_DIR}
 						RUNTIME DESTINATION ${INSTALL_RTM_LIB_DIR}
 						COMPONENT ext)
@@ -148,10 +142,6 @@ if(NOT TARGET ALL_IDL_TGT)
 endif(NOT TARGET ALL_IDL_TGT)
 add_dependencies(${target} ALL_IDL_TGT)
 add_dependencies(${target} ${RTCSKEL_PROJECT_NAME})
-
-
-
-
 
 
 

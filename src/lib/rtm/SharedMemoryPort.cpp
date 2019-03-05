@@ -109,7 +109,7 @@ namespace RTC
   {
 	  int memory_size = DEFAULT_MEMORY_SIZE;
 	  std::string size_str_n = coil::normalize(size_str);
-	  if (size_str.size() > 0)
+	  if (!size_str.empty())
 	  {
 		  std::string unit_str_M = "M";
 		  unit_str_M = coil::normalize(unit_str_M);
@@ -419,4 +419,4 @@ namespace RTC
 		//return ::OpenRTM::PortSharedMemory::_duplicate(m_objref);
 		return this->_this();
 	}
-};
+} // namespace RTC

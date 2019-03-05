@@ -22,7 +22,7 @@
 
 namespace RTC
 {
-  ExecutionContextBase::ExecutionContextBase(const char* name)
+  ExecutionContextBase::ExecutionContextBase(const char*  /*name*/)
     : rtclog("ec_base"),
       m_activationTimeout(0.5),
       m_deactivationTimeout(0.5),
@@ -37,7 +37,7 @@ namespace RTC
    * @brief Virtual Destructor
    * @endif
    */
-  ExecutionContextBase::~ExecutionContextBase(void)
+  ExecutionContextBase::~ExecutionContextBase()
   {
   }
 
@@ -111,7 +111,7 @@ namespace RTC
   RTC::ReturnCode_t ExecutionContextBase::
   bindComponent(RTC::RTObject_impl* rtc)
   {
-	if (rtc == NULL)
+	if (rtc == nullptr)
 	{
 		  return RTC::BAD_PARAMETER;
 	}
@@ -206,13 +206,13 @@ namespace RTC
    * @return Execution cycle(Unit:Hz)
    * @endif
    */
-  double ExecutionContextBase::getRate(void) const
+  double ExecutionContextBase::getRate() const
   {
     double rate = m_profile.getRate();  // Actual getRate()
     return onGetRate(rate);  // Template
   }
 
-  coil::TimeValue ExecutionContextBase::getPeriod(void) const
+  coil::TimeValue ExecutionContextBase::getPeriod() const
   {
     coil::TimeValue period = m_profile.getPeriod();
     return period;
@@ -665,7 +665,7 @@ namespace RTC
    *
    * @endif
    */
-  RTC::ExecutionKind ExecutionContextBase::getKind(void) const
+  RTC::ExecutionKind ExecutionContextBase::getKind() const
   {
     RTC::ExecutionKind kind = m_profile.getKind();
     RTC_TRACE(("getKind() = %s", getKindString(kind)));
@@ -696,7 +696,7 @@ namespace RTC
    *
    * @endif
    */
-  RTC::ExecutionContextProfile* ExecutionContextBase::getProfile(void)
+  RTC::ExecutionContextProfile* ExecutionContextBase::getProfile()
   {
     RTC_TRACE(("getProfile()"));
     RTC::ExecutionContextProfile* prof = m_profile.getProfile();
@@ -731,7 +731,7 @@ namespace RTC
    * @brief Getting object reference
    * @endif
    */
-  RTC::ExecutionContextService_ptr ExecutionContextBase::getObjRef(void) const
+  RTC::ExecutionContextService_ptr ExecutionContextBase::getObjRef() const
   {
     return m_profile.getObjRef();
   }
@@ -829,7 +829,7 @@ namespace RTC
    * @endif
    */
   const RTC::ExecutionContextProfile& ExecutionContextBase::
-  getProfile(void) const
+  getProfile() const
   {
     return m_profile.getProfile();
   }
@@ -848,7 +848,7 @@ namespace RTC
    */
   bool ExecutionContextBase::setExecutionRate(coil::Properties& props)
   {
-    if (props.findNode("rate") != NULL)
+    if (props.findNode("rate") != nullptr)
       {
         double rate;
         if (coil::stringTo(rate, props["rate"].c_str()))
@@ -871,7 +871,7 @@ namespace RTC
   setTransitionMode(coil::Properties& props, const char* key, bool& flag)
   {
     RTC_TRACE(("setTransitionMode(%s)", key));
-    if (props.findNode(key) != NULL)
+    if (props.findNode(key) != nullptr)
       {
         flag = coil::toBool(props[key], "YES", "NO", "YES");
         RTC_DEBUG(("Transition Mode: %s = %s",
@@ -894,7 +894,7 @@ namespace RTC
              coil::TimeValue& timevalue)
   {
     RTC_TRACE(("setTimeout(%s)", key));
-    if (props.findNode(key) != NULL)
+    if (props.findNode(key) != nullptr)
       {
         double timeout;
         if (coil::stringTo(timeout, props[key].c_str()))

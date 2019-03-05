@@ -22,11 +22,12 @@
 
 #include <coil/Singleton.h>
 
-#include <assert.h>
+#include <cassert>
 #include <algorithm>
 #include <functional>
 #include <string>
 #include <map>
+#include <utility>
 #include <vector>
 
 // for Windows DLL export
@@ -83,11 +84,11 @@ namespace coil
   template <class AbstractClass, class ConcreteClass>
   void Destructor(AbstractClass*& obj)
   {
-    if (obj == 0) { return; }
+    if (obj == nullptr) { return; }
     ConcreteClass* tmp = dynamic_cast<ConcreteClass*>(obj);
-    if (tmp == 0) { return; }
+    if (tmp == nullptr) { return; }
     delete obj;
-    obj = 0;
+    obj = nullptr;
   }
 
   /*!
@@ -292,7 +293,7 @@ namespace coil
      */
     AbstractClass* createObject(const Identifier& id)
     {
-      if (m_creators.count(id) == 0) { return 0; }
+      if (m_creators.count(id) == 0) { return nullptr; }
       AbstractClass* obj = m_creators[id].creator_();
       assert(m_objects.count(obj) == 0);
       m_objects[obj] = m_creators[id];
@@ -547,7 +548,7 @@ namespace coil
        * @endif
        */
       FactoryEntry(Identifier id, Creator creator, Destructor destructor)
-        : id_(id), creator_(creator), destructor_(destructor)
+        : id_(std::move(id)), creator_(creator), destructor_(destructor)
       {
       }
       std::string id_;

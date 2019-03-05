@@ -181,9 +181,9 @@ namespace RTC
   FastRTPSManager* FastRTPSManager::init()
   {
     //RTC_PARANOID(("init()"));
+    Guard guard(mutex);
     if (!manager)
     {
-      Guard guard(mutex);
       manager = new FastRTPSManager();
       manager->start();
     }
@@ -206,9 +206,9 @@ namespace RTC
    */
   FastRTPSManager& FastRTPSManager::instance()
   {
+    Guard guard(mutex);
     if (!manager)
     {
-      Guard guard(mutex);
       manager = new FastRTPSManager();
       manager->start();
     }

@@ -79,7 +79,7 @@ namespace RTM
      *
      * @endif
      */
-	  virtual ~NodeNumberingPolicy(void){};
+	  virtual ~NodeNumberingPolicy(){};
     
     /*!
      * @if jp
@@ -160,7 +160,6 @@ namespace RTM
 	  virtual bool find(std::string name);
     
   private:
-    int m_num;
     std::vector<void*> m_objects;
 	RTC::Manager *m_mgr;
   };

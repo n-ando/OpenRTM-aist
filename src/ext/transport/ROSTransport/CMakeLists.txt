@@ -1,6 +1,8 @@
-cmake_minimum_required (VERSION 2.6)
+cmake_minimum_required (VERSION 3.0.2)
 
-project (ROSTransport)
+project (ROSTransport
+	VERSION ${RTM_VERSION}
+	LANGUAGES CXX)
 
 
 if(NOT WIN32)
@@ -39,6 +41,7 @@ include_directories(
 		)
 
 add_definitions(${ORB_C_FLAGS_LIST})
+add_definitions(${COIL_C_FLAGS_LIST})
 
 if(WIN32)
 	add_definitions(-DNOGDI)

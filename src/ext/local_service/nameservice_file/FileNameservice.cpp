@@ -363,7 +363,7 @@ namespace RTM
      * @endif
      */
     bool
-    FileNameservice::processServiceProfile(const ::coil::Properties& prof)
+    FileNameservice::processServiceProfile(const ::coil::Properties&  /*prof*/)
     {
       return true;
     }
@@ -456,13 +456,13 @@ namespace RTM
      * @endif
      */
     void
-    NamingAction::postUnbind(RTC::RTObject_impl* rtobj, coil::vstring& name)
+    NamingAction::postUnbind(RTC::RTObject_impl*  /*rtobj*/, coil::vstring& name)
     {
       m_fns.onUnregisterNameservice(name);
     }
     
-  }; // LocalService
-}; // RTM
+  }  // namespace LocalService
+}  // namespace RTM
 
 extern "C"
 {

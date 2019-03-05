@@ -146,9 +146,9 @@ namespace RTC
      * @endif
      */
     InPort(const char* name, DataType& value,
-           int bufsize = 64,
-           bool read_block = false, bool write_block = false,
-           int read_timeout = 0, int write_timeout = 0)
+           int  /*bufsize*/ = 64,
+           bool  /*read_block*/ = false, bool  /*write_block*/ = false,
+           int  /*read_timeout*/ = 0, int  /*write_timeout*/ = 0)
 #if defined(__GNUC__) && (__GNUC__ <= 3 && __GNUC_MINOR__ <= 3)
       : InPortBase(name, ::CORBA_Util::toRepositoryIdOfStruct<DataType>()),
 #else
@@ -156,7 +156,7 @@ namespace RTC
 #endif
 	  DirectInPortBase<DataType>(value),
         m_name(name), m_value(value),
-        m_OnRead(NULL),  m_OnReadConvert(NULL),
+        m_OnRead(nullptr),  m_OnReadConvert(nullptr),
         m_status(1), m_directNewData(false)
     {
       this->addConnectorDataListener(ON_RECEIVED,
@@ -183,7 +183,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~InPort(void) {}
+    virtual ~InPort() {}
 
     /*!
      * @if jp
@@ -241,7 +241,7 @@ namespace RTC
         
         {
             Guard guard(m_connectorsMutex);
-            if (m_connectors.size() == 0)
+            if (m_connectors.empty())
             {
                 RTC_DEBUG(("no connectors"));
                 return false;
@@ -272,7 +272,7 @@ namespace RTC
         
         {
             Guard guard(m_connectorsMutex);
-            if (m_connectors.size() == 0)
+            if (m_connectors.empty())
             {
                 RTC_DEBUG(("no connectors"));
                 return false;
@@ -315,7 +315,7 @@ namespace RTC
       int r(0);
       {
         Guard guard(m_connectorsMutex);
-        if (m_connectors.size() == 0)
+        if (m_connectors.empty())
           {
             RTC_DEBUG(("no connectors"));
             return false;
@@ -363,7 +363,7 @@ namespace RTC
 
         {
             Guard guard(m_connectorsMutex);
-            if (m_connectors.size() == 0)
+            if (m_connectors.empty())
             {
                 RTC_DEBUG(("no connectors"));
                 return false;
@@ -394,7 +394,7 @@ namespace RTC
 
         {
             Guard guard(m_connectorsMutex);
-            if (m_connectors.size() == 0)
+            if (m_connectors.empty())
             {
                 RTC_DEBUG(("no connectors"));
                 return false;
@@ -427,7 +427,7 @@ namespace RTC
 
       {
         Guard guard(m_connectorsMutex);
-        if (m_connectors.size() == 0)
+        if (m_connectors.empty())
           {
             RTC_DEBUG(("no connectors"));
             return true;
@@ -533,7 +533,7 @@ namespace RTC
     {
       RTC_TRACE(("DataType read()"));
 
-      if (m_OnRead != NULL)
+      if (m_OnRead != nullptr)
         {
           (*m_OnRead)();
           RTC_TRACE(("OnRead called"));
@@ -544,7 +544,7 @@ namespace RTC
         if (m_directNewData == true)
           {
             RTC_DEBUG(("Direct data transfer"));
-            if (m_OnReadConvert != 0)
+            if (m_OnReadConvert != nullptr)
               {
                 m_value = (*m_OnReadConvert)(m_value);
                 RTC_DEBUG(("OnReadConvert for direct data called"));
@@ -559,7 +559,7 @@ namespace RTC
       ReturnCode ret;
       {
         Guard guard(m_connectorsMutex);
-        if (m_connectors.size() == 0)
+        if (m_connectors.empty())
           {
             RTC_DEBUG(("no connectors"));
             return false;
@@ -568,7 +568,7 @@ namespace RTC
         
       }
 
-      InPortConnector* connector = NULL;
+      InPortConnector* connector = nullptr;
 
       if (name.empty())
       {
@@ -606,7 +606,7 @@ namespace RTC
               Guard guard(m_valueMutex);
               RTC_DEBUG(("data read succeeded"));
 
-              if (m_OnReadConvert != 0)
+              if (m_OnReadConvert != nullptr)
               {
                   m_value = (*m_OnReadConvert)(m_value);
                   RTC_DEBUG(("OnReadConvert called"));
@@ -720,7 +720,7 @@ namespace RTC
      *
      * @endif
      */
-    DataPortStatus::Enum getStatus(int index)
+    DataPortStatus::Enum getStatus(int  /*index*/)
     {
       return m_status[0];
     }

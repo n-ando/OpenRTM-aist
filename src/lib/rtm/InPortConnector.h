@@ -319,7 +319,7 @@ namespace RTC
     template <typename DataType>
     bool getDirectData(DataType &data)
     {
-        if (m_directOutPort == NULL)
+        if (m_directOutPort == nullptr)
         {
             return false;
         }

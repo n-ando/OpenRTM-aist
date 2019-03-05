@@ -32,8 +32,8 @@ namespace RTC
    * @brief Constructor
    * @endif
    */
-  InPortDirectProvider::InPortDirectProvider(void)
-    : m_buffer(0)
+  InPortDirectProvider::InPortDirectProvider()
+    : m_buffer(nullptr)
   {
     // PortProfile setting
     setInterfaceType("direct");
@@ -46,7 +46,7 @@ namespace RTC
    * @brief Destructor
    * @endif
    */
-  InPortDirectProvider::~InPortDirectProvider(void)
+  InPortDirectProvider::~InPortDirectProvider()
   {
   }
 

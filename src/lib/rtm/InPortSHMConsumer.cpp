@@ -40,7 +40,7 @@ namespace RTC
   {
 	  coil::UUID_Generator uugen;
 	  uugen.init();
-	  std::auto_ptr<coil::UUID> uuid(uugen.generateUUID(2, 0x01));
+	  std::unique_ptr<coil::UUID> uuid(uugen.generateUUID(2, 0x01));
 	  m_shm_address = uuid->to_string();
   }
   
@@ -71,7 +71,7 @@ namespace RTC
 	std::string ds = m_properties["shem_default_size"];
 	m_memory_size = m_shmem.string_to_MemorySize(ds);
 
-	if (m_properties.hasKey("serializer") == NULL)
+	if (m_properties.hasKey("serializer") == nullptr)
 	{
 		m_endian = true;
 		return;
@@ -142,7 +142,7 @@ namespace RTC
 
   
 	void InPortSHMConsumer::
-		publishInterfaceProfile(SDOPackage::NVList& properties)
+		publishInterfaceProfile(SDOPackage::NVList&  /*properties*/)
 	{
 		return;
 	}
@@ -183,7 +183,7 @@ namespace RTC
 			return false;
 		}
 
-		const char* ior(0);
+		const char* ior(nullptr);
 		if (!(properties[index].value >>= ior))
 		{
 			RTC_ERROR(("inport_ior has no string"));

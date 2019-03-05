@@ -78,11 +78,11 @@ namespace RTC
   {
     setLevel(Manager::instance().getLogLevel().c_str());
     coil::Properties& prop(Manager::instance().getConfig());
-    if (prop.findNode("logger.date_format") != NULL)
+    if (prop.findNode("logger.date_format") != nullptr)
       {
         setDateFormat(prop["logger.date_format"].c_str());
       }
-    if (prop.findNode("logger.clock_type") != NULL)
+    if (prop.findNode("logger.clock_type") != nullptr)
       {
         setClockType(prop["logger.clock_type"]);
       }
@@ -100,7 +100,7 @@ namespace RTC
     setDateFormat(m_dateFormat.c_str());
   }
 
-  Logger::~Logger(void)
+  Logger::~Logger()
   {
   }
 
@@ -155,7 +155,7 @@ namespace RTC
    * @brief Get the current formatted date/time string
    * @endif
    */
-  std::string Logger::getDate(void)
+  std::string Logger::getDate()
   {
     char buf[MAXSIZE];
     coil::TimeValue tm(m_clock->gettime());

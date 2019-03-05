@@ -9,11 +9,9 @@ project (OpenRTM_aist
 
 
 
-set(CORBA ${CORBA} CACHE STRING "set CORBA ")
+set(CORBA omniORB CACHE STRING "set CORBA ")
 
-if(NOT CORBA)
-	message(FATAL_ERROR "Please set CORBA.")
-endif()
+
 
 
 
@@ -114,10 +112,10 @@ set(RTM_MINOR_VERSION ${OpenRTM_aist_VERSION_MINOR})
 set(RTM_REVISION_NUM ${OpenRTM_aist_VERSION_PATCH})
 set(RTM_SHORT_VERSION ${OpenRTM_aist_VERSION_MAJOR}${OpenRTM_aist_VERSION_MINOR}${OpenRTM_aist_VERSION_PATCH})
 set(RTM_VERSION ${OpenRTM_aist_VERSION})
-set(OPENRTM_VERSION ${RTM_MAJOR_VERSION}.${RTM_MINOR_VERSION}.${RTM_REVISION_NUM} CACHE STRING "RTM version.")
-set(OPENRTM_NAME OpenRTM-aist-${OPENRTM_VERSION} CACHE STRING "RTM name.")
-set(RTM_SO_VERSION ${OpenRTM_aist_VERSION_MAJOR})
-set(COIL_SO_VERSION ${OpenRTM_aist_VERSION_MAJOR})
+set(OPENRTM_VERSION ${RTM_MAJOR_VERSION}.${RTM_MINOR_VERSION}.${RTM_REVISION_NUM})
+set(OPENRTM_NAME OpenRTM-aist-${OPENRTM_VERSION})
+set(RTM_SO_VERSION ${OpenRTM_aist_VERSION_MAJOR}.${OpenRTM_aist_VERSION_MINOR})
+set(COIL_SO_VERSION ${OpenRTM_aist_VERSION_MAJOR}.${OpenRTM_aist_VERSION_MINOR})
 
 
 if(UNIX)
@@ -179,8 +177,16 @@ endif(MSVC)
 
 
 
-set(SSL_ENABLE ${SSL_ENABLE} CACHE BOOL "set SSL_ENABLE")
-set(OBSERVER_ENABLE ${OBSERVER_ENABLE} CACHE BOOL "set OBSERVER_ENABLE")
+set(SSL_ENABLE FALSE CACHE BOOL "set SSL_ENABLE")
+set(OBSERVER_ENABLE FALSE CACHE BOOL "set OBSERVER_ENABLE")
+
+set(LOGGING_ENABLE TRUE CACHE BOOL "set LOGGING_ENABLE")
+if(NO_LOGGING)
+	SET (ORB_C_FLAGS_LIST
+		${ORB_C_FLAGS_LIST}
+		-DNO_LOGGING
+	)
+endif(NO_LOGGING)
 
 
 if(CORBA STREQUAL "ORBexpress")
@@ -254,10 +260,6 @@ endif()
 
 
 
-
-
-
-
 if(VXWORKS)
 	if("${VX_CPU_FAMILY}" STREQUAL "ppc")
 		SET (CPU_TYPE powerpc)
@@ -308,7 +310,6 @@ if(CORBA STREQUAL "ORBexpress")
 	else()
 		set(ORB_C_FLAGS_LIST ${ORB_C_FLAGS_LIST} -D__x86__)
 	endif()
-	ADD_DEFINITIONS(${ORB_C_FLAGS_LIST})
 elseif(CORBA STREQUAL "omniORB")
 	set(CORBA_NAME "omniORB" CACHE STRING "CORBA name.")
 	if(VXWORKS)
@@ -444,12 +445,6 @@ elseif(CORBA STREQUAL "omniORB")
 
 		set(ORB_INCLUDE_DIR ${ORB_ROOT}/include)
 	endif(VXWORKS)
-
-
-	
-
-	
-	ADD_DEFINITIONS(${ORB_C_FLAGS_LIST})
 elseif(CORBA STREQUAL "TAO")
 	set(CORBA_NAME "TAO" CACHE STRING "CORBA name.")
 	
@@ -585,18 +580,8 @@ elseif(CORBA STREQUAL "TAO")
 
 
 	endif()
-	
-	ADD_DEFINITIONS(${ORB_C_FLAGS_LIST})
 endif()
 
-
-if(NO_LOGGING)
-	SET (ORB_C_FLAGS_LIST
-		${ORB_C_FLAGS_LIST}
-		-DNO_LOGGING
-	)
-	ADD_DEFINITIONS(-DNO_LOGGING)
-endif(NO_LOGGING)
 
 
 if(VXWORKS)
@@ -623,19 +608,10 @@ set(ORB_C_FLAGS_LIST ${ORB_C_FLAGS_LIST})
 
 
 
-
-
-
-
-
-
-
-
-
 if(VXWORKS)
 	set(COIL_OS_DIR "vxworks")
 	set(RTM_OS_VXWORKS ON)
-	ADD_DEFINITIONS(-O2)
+	add_definitions(-O2)
 elseif(UNIX)
 	set(COIL_OS_DIR "posix")
 	set(CMAKE_POSITION_INDEPENDENT_CODE ON)
@@ -645,16 +621,12 @@ elseif(UNIX)
 		set(RTM_OS_LINUX ON)
 		set(RTM_LINKER_OPTION dl rt)
 	endif()
-	set(CMAKE_C_FLAGS "-O2 -Wall")
-	set(CMAKE_CXX_FLAGS "-O2 -Wall")
+	set(CMAKE_CXX_FLAGS "-O2 -Wall -Wextra -std=c++11")
 elseif(WIN32)
 	set(COIL_OS_DIR "win32")
+	set(COIL_C_FLAGS_LIST "-D_WIN32_WINNT=0x0602")
 	set(RTM_LINKER_OPTION advapi32.lib;ws2_32.lib;mswsock.lib;rpcrt4.lib;optimized;msvcrt.lib;optimized;msvcmrt.lib;debug;msvcrtd.lib)
 endif()
-
-
-
-
 
 
 
@@ -663,11 +635,20 @@ if(WIN32)
 endif(WIN32)
 
 add_subdirectory(src)
-add_subdirectory(examples)
-add_subdirectory(utils)
+
+set(EXAMPLES_ENABLE TRUE CACHE BOOL "set EXAMPLES_ENABLE ")
+if(EXAMPLES_ENABLE)
+	add_subdirectory(examples)
+endif(EXAMPLES_ENABLE)
+
+set(UTILS_ENABLE TRUE CACHE BOOL "set UTILS_ENABLE ")
+if(UTILS_ENABLE)
+	add_subdirectory(utils)
+endif(UTILS_ENABLE)
+
 add_subdirectory(etc)
 
-set(DOCUMENTS_ENABLE ${DOCUMENTS_ENABLE} CACHE BOOL "set DOCUMENTS_ENABLE")
+set(DOCUMENTS_ENABLE FALSE CACHE BOOL "set DOCUMENTS_ENABLE")
 
 if(DOCUMENTS_ENABLE)
 	add_subdirectory(docs)
@@ -678,7 +659,7 @@ if(WIN32)
 endif(WIN32)
 
 
-CONFIGURE_FILE ("${PROJECT_SOURCE_DIR}/uninstall_target.cmake.in"
+CONFIGURE_FILE ("${PROJECT_SOURCE_DIR}/build/cmake/uninstall_target.cmake.in"
     "${PROJECT_BINARY_DIR}/uninstall_target.cmake" IMMEDIATE @ONLY)
 ADD_CUSTOM_TARGET (uninstall "${CMAKE_COMMAND}" -P
     "${PROJECT_BINARY_DIR}/uninstall_target.cmake")

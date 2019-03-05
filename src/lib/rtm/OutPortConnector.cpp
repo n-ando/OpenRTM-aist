@@ -32,7 +32,7 @@ namespace RTC
   OutPortConnector::OutPortConnector(ConnectorInfo& info,
                                      ConnectorListeners& listeners)
     : rtclog("OutPortConnector"), m_profile(info), m_littleEndian(true),
-	m_directInPort(NULL), m_listeners(listeners), m_directMode(false), m_marshaling_type("corba")
+	m_directInPort(nullptr), m_listeners(listeners), m_directMode(false), m_marshaling_type("corba")
   {
   }
 
@@ -169,7 +169,7 @@ namespace RTC
 
   bool OutPortConnector::setInPort(InPortBase* directInPort)
   {
-	  if (directInPort == NULL)
+	  if (directInPort == nullptr)
 	  {
 		  return false;
 	  }
@@ -178,7 +178,7 @@ namespace RTC
 	  return true;
   }
 
-  CdrBufferBase::ReturnCode OutPortConnector::read(ByteData& data)
+  CdrBufferBase::ReturnCode OutPortConnector::read(ByteData&  /*data*/)
   {
       return CdrBufferBase::BUFFER_OK;
   }

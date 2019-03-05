@@ -88,7 +88,7 @@ namespace RTC
 {
   typedef coil::Properties Properties;
 
-};
+} // namespace RTC
 
 //#endif // COMPAT_OPENRTM_0_4
 

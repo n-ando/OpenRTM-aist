@@ -22,7 +22,7 @@
 #include <coil/OS.h>
 #include <coil/stringutil.h>
 #include <rtm/DefaultConfiguration.h>
-#include <stdlib.h>
+#include <cstdlib>
 
 #include <fstream>
 #include <iostream>
@@ -50,7 +50,7 @@ namespace RTC
       "/etc/rtc/rtc.conf",
       "/usr/local/etc/rtc.conf",
       "/usr/local/etc/rtc/rtc.conf",
-      NULL
+      nullptr
     };
 #endif
   
@@ -179,7 +179,7 @@ namespace RTC
           case 'o':
             {
               std::string optarg(get_opts.optarg);
-              std::string::size_type pos(optarg.find(":"));
+              std::string::size_type pos(optarg.find(':'));
               if (pos != std::string::npos)
                 {
                   std::string key = optarg.substr(0, pos);
@@ -227,7 +227,7 @@ namespace RTC
   bool ManagerConfig::findConfigFile()
   {
     // Check existance of configuration file given command arg
-    if (m_configFile != "")
+    if (!m_configFile.empty())
       {
         if (fileExist(m_configFile))
           {
@@ -238,7 +238,7 @@ namespace RTC
       }
     // Search rtc configuration file from environment variable
     char* env = getenv(config_file_env);
-    if (env != NULL)
+    if (env != nullptr)
       {
         if (fileExist(env))
           {
@@ -250,7 +250,7 @@ namespace RTC
       }
     // Search rtc configuration file from default search path
     int i = 0;
-    while (config_file_path[i] != NULL)
+    while (config_file_path[i] != nullptr)
       {
         std::string cpath = coil::replaceEnv(config_file_path[i]);
 

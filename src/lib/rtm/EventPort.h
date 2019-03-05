@@ -58,7 +58,7 @@ namespace RTC
     virtual ~EventBinder0() {}
 
     virtual ReturnCode operator()(ConnectorInfo& info,
-                                  ByteData& data)
+                                  ByteData&  /*data*/)
     {
       if (info.properties["fsm_event_name"] == m_eventName ||
           info.name == m_eventName)
@@ -259,9 +259,9 @@ namespace RTC
      * @endif
      */
     EventInPort(const char* name, FsmType& fsm,
-                int bufsize=64,
-                bool read_block = false, bool write_block = false,
-                int read_timeout = 0, int write_timeout = 0)
+                int  /*bufsize*/=64,
+                bool  /*read_block*/ = false, bool  /*write_block*/ = false,
+                int  /*read_timeout*/ = 0, int  /*write_timeout*/ = 0)
       : InPortBase(name, "any"),
       m_name(name), m_fsm(fsm), m_buffer(fsm.getBuffer())
     {
@@ -282,7 +282,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~EventInPort(void){};
+    virtual ~EventInPort(){};
 
     /*!
      * @if jp
@@ -332,7 +332,7 @@ namespace RTC
         (ON_RECEIVED,
          new EventBinder0<FsmType, TOP, R>(m_fsm, name, handler, m_buffer));
     }
-    virtual bool read(std::string name="") { return true; }
+    virtual bool read(std::string  /*name*/="") { return true; }
   private:
     /*!
      * @if jp
@@ -345,6 +345,6 @@ namespace RTC
     FsmType& m_fsm;
     RingBuffer<EventBase*> &m_buffer;
   };
-}; // End of namesepace RTM
+}  // namespace RTC
 
 #endif // RTC_EVENTINPORT_H

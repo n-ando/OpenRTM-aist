@@ -19,7 +19,7 @@
 
 #include <coil/config_coil.h>
 #include <coil/Signal.h>
-#include <string.h>
+#include <cstring>
 
 #ifdef COIL_OS_FREEBSD
 #define _SIGSET_NWORDS _SIG_WORDS
@@ -35,7 +35,7 @@ namespace coil
    * @endif
    */
   SignalAction::SignalAction()
-    : m_handle(0), m_signum(0), m_mask(0), m_flags(0)
+    : m_handle(nullptr), m_signum(0), m_mask(nullptr), m_flags(0)
   {
   }
 
@@ -51,19 +51,19 @@ namespace coil
    * @endif
    */
   SignalAction::SignalAction(SignalHandler handle, int signum)
-    : m_handle(handle), m_signum(signum), m_mask(0), m_flags(0)
+    : m_handle(handle), m_signum(signum), m_mask(nullptr), m_flags(0)
   {
     struct sigaction action;
     memset(&action, 0, sizeof(action));  // clear.
     action.sa_handler = m_handle;
 
     signal(m_signum, SIG_IGN);
-    if (sigaction(m_signum, &action, 0) < 0)
+    if (sigaction(m_signum, &action, nullptr) < 0)
       {
         signal(m_signum, SIG_DFL);
-        m_handle = 0;
+        m_handle = nullptr;
         m_signum = 0;
-        m_mask   = 0;
+        m_mask   = nullptr;
         m_flags  = 0;
       }
   }
@@ -78,9 +78,9 @@ namespace coil
   SignalAction::~SignalAction()
   {
     signal(m_signum, SIG_DFL);
-    m_handle = 0;
+    m_handle = nullptr;
     m_signum = 0;
-    m_mask   = 0;
+    m_mask   = nullptr;
     m_flags  = 0;
   }
 

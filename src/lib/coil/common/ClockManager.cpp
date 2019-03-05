@@ -55,7 +55,7 @@ namespace coil
     timeval tv;
     tv.tv_sec = clocktime.sec();
     tv.tv_usec = clocktime.usec();
-    if (coil::settimeofday(&tv, 0) == 0)
+    if (coil::settimeofday(&tv, nullptr) == 0)
       {
         return true;
       }
@@ -107,7 +107,7 @@ namespace coil
   coil::TimeValue AdjustedClock::gettime() const
   {
     Guard<Mutex> guard(m_offsetMutex);
-    return coil::gettimeofday() - m_offset;
+    return TimeValue(coil::gettimeofday() - m_offset);
   }
 
   bool AdjustedClock::settime(coil::TimeValue clocktime)

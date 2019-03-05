@@ -156,7 +156,7 @@ RTC::ReturnCode_t SeqIn::onDeactivated(RTC::UniqueId ec_id)
 */
 
 
-RTC::ReturnCode_t SeqIn::onExecute(RTC::UniqueId ec_id)
+RTC::ReturnCode_t SeqIn::onExecute(RTC::UniqueId  /*ec_id*/)
 {
   m_DoubleIn.read();
   m_FloatIn.read();

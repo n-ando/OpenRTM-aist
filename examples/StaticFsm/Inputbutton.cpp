@@ -71,7 +71,7 @@ RTC::ReturnCode_t Inputbutton::onInitialize()
 
   return RTC::RTC_OK;
 }
-RTC::ReturnCode_t Inputbutton::onExecute(RTC::UniqueId ec_id)
+RTC::ReturnCode_t Inputbutton::onExecute(RTC::UniqueId  /*ec_id*/)
 {
   std::string cmd;
   std::cout << std::endl;

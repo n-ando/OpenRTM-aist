@@ -30,7 +30,7 @@ namespace RTC
    * @endif
    */
   OutPortSHMConsumer::OutPortSHMConsumer()
-  : m_listeners(NULL)
+  : m_listeners(nullptr)
   {
     rtclog.setName("OutPortSHMConsumer");
 	
@@ -61,7 +61,7 @@ namespace RTC
    * @brief Initializing configuration
    * @endif
    */
-  void OutPortSHMConsumer::init(coil::Properties& prop)
+  void OutPortSHMConsumer::init(coil::Properties&  /*prop*/)
   {
 	RTC_TRACE(("OutPortSHMConsumer::init()"));
 	
@@ -251,7 +251,7 @@ namespace RTC
    */
   OutPortConsumer::ReturnCode
   OutPortSHMConsumer::convertReturn(::OpenRTM::PortStatus status,
-                                         ByteData& data)
+                                         ByteData&  /*data*/)
   {
     switch(status)
       {

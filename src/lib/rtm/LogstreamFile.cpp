@@ -341,7 +341,7 @@ namespace RTC
   
   
   LogstreamFile::LogstreamFile()
-    : m_stdout(NULL), m_fileout(NULL)
+    : m_stdout(nullptr), m_fileout(nullptr)
   {
   }
 
@@ -349,7 +349,7 @@ namespace RTC
   {
     s_files.erase(std::remove(s_files.begin(), s_files.end(), m_fileName),
                   s_files.end());
-    if (m_fileout != NULL)
+    if (m_fileout != nullptr)
       {
         m_fileout->close();
       }
@@ -362,14 +362,14 @@ namespace RTC
 
     coil::vstring files = coil::split(prop["file_name"], ",");
 
-    for (size_t i(0); i < files.size(); ++i)
+    for (coil::vstring::iterator file = files.begin(); file != files.end(); ++file)
       {
-        std::cout << "#### file: " << files[i] << std::endl;
-        if (std::count(s_files.begin(), s_files.end(), files[i]) > 0) { continue; }
-        m_fileName = files[i];
-        s_files.push_back(files[i]);
+        std::cout << "#### file: " << (*file) << std::endl;
+        if (std::count(s_files.begin(), s_files.end(), (*file)) > 0) { continue; }
+        m_fileName = (*file);
+        s_files.push_back(*file);
 
-        std::string fname(files[i]);
+        std::string fname(*file);
         coil::normalize(fname);
         if (fname == "stdout")
           {
@@ -402,7 +402,7 @@ namespace RTC
         else
           {
             std::cout << "##### file #####" << std::endl;
-            m_fileout = new FileStream(files[i]);
+            m_fileout = new FileStream(*file);
             if (escape_sequence)
             {
                 m_fileout->enableEscapeSequence();
@@ -420,18 +420,18 @@ namespace RTC
 
   coil::LogStreamBuffer* LogstreamFile::getStreamBuffer()
   {
-    if (m_stdout != NULL)
+    if (m_stdout != nullptr)
       {
         return m_stdout;
       }
-    else if (m_fileout != NULL)
+    else if (m_fileout != nullptr)
       {
         return m_fileout;
       }
     return new StdoutStream();
   }
 
-};
+} // namespace RTC
 
 extern "C"
 {

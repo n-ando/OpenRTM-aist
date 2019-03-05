@@ -21,7 +21,7 @@
 //#define ACE_HAS_WINSOCK2 0
 #endif  // WIN32
 
-#include <assert.h>
+#include <cassert>
 #include <rtm/CorbaNaming.h>
 #include <iostream>
 
@@ -462,7 +462,7 @@ namespace RTC
    * @endif
    */
   CosNaming::NamingContext_ptr
-  CorbaNaming::bindNewContext(const char* string_name, bool force)
+  CorbaNaming::bindNewContext(const char* string_name, bool  /*force*/)
     throw (SystemException, NotFound, CannotProceed, InvalidName, AlreadyBound)
   {
     return bindNewContext(toName(string_name));
@@ -588,7 +588,7 @@ namespace RTC
   void CorbaNaming::list(const char* string_name,
                          CosNaming::BindingList_var& bl)
   {
-    if (string_name == 0) { return; }
+    if (string_name == nullptr) { return; }
     CORBA::Object_var obj = resolveStr(string_name);
     CosNaming::NamingContext_var nc;
     nc = CosNaming::NamingContext::_narrow(obj);
@@ -639,8 +639,8 @@ namespace RTC
                                const char* string_kind,
                                CosNaming::BindingList_var& bl)
   {
-    if (string_name == 0) { bl->length(0); return; }
-    if (string_kind == 0) { bl->length(0); return; }
+    if (string_name == nullptr) { bl->length(0); return; }
+    if (string_kind == nullptr) { bl->length(0); return; }
     std::string kind(string_kind);
 
     CosNaming::BindingList_var tmp_bl;  // = new CosNaming::BindingList();
@@ -716,7 +716,7 @@ namespace RTC
     for (CORBA::ULong i = 0; i < nc_length; ++i)
       {
         std::string::size_type pos;
-        pos = name_comps[i].find_last_of(".");
+        pos = name_comps[i].find_last_of('.');
         if (pos != name_comps[i].npos)
           {
             name[i].id   =
@@ -1011,7 +1011,7 @@ namespace RTC
     if (input.substr(0, delim_size) == delimiter)
       begin_pos = pre_pos = delim_size;
 
-    while (1)
+    while (true)
       {
       REFIND:
         found_pos = input.find(delimiter, begin_pos);
@@ -1035,6 +1035,6 @@ namespace RTC
         begin_pos = found_pos + delim_size;
         pre_pos   = found_pos + delim_size;
       }
-    return results.size();
+    return (unsigned int)results.size();
   }
 };  // namespace RTC

@@ -76,7 +76,7 @@ namespace RTM
      *
      * @endif
      */
-    virtual ~NumberingPolicyBase(void) {};
+    virtual ~NumberingPolicyBase() {};
     
     /*!
      * @if jp
@@ -131,5 +131,5 @@ namespace RTM
   EXTERN template class DLL_PLUGIN coil::GlobalFactory<NumberingPolicyBase>;
 #endif
   
-};
+}  // namespace RTM
 #endif // RTC_NUMBERINGPOLICYBASE_H

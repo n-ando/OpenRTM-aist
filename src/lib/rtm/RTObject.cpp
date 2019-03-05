@@ -16,7 +16,7 @@
  *
  */
 
-#include <assert.h>
+#include <cassert>
 #include <rtm/RTObject.h>
 #include <rtm/SdoConfiguration.h>
 #include <rtm/CORBA_SeqUtil.h>
@@ -90,7 +90,7 @@ namespace RTC
    */
   RTObject_impl::RTObject_impl(CORBA::ORB_ptr orb,
                                PortableServer::POA_ptr poa)
-    : m_pManager(NULL),
+    : m_pManager(nullptr),
       m_pORB(CORBA::ORB::_duplicate(orb)),
       m_pPOA(PortableServer::POA::_duplicate(poa)),
       m_portAdmin(orb, poa),
@@ -758,7 +758,7 @@ namespace RTC
       {
       }
     assert(false);
-    return 0;
+    return nullptr;
   }
 
   /*!
@@ -780,7 +780,7 @@ namespace RTC
       {
       }
     assert(false);
-    return 0;
+    return nullptr;
   }
 
 
@@ -1346,7 +1346,7 @@ namespace RTC
            SDOPackage::InternalError)
   {
     RTC_TRACE(("get_configuration()"));
-    if (m_pSdoConfig == NULL)
+    if (m_pSdoConfig == nullptr)
       throw SDOPackage::InterfaceNotImplemented();
     try
       {
@@ -2181,16 +2181,16 @@ namespace RTC
   void RTObject_impl::finalizeContexts()
   {
     RTC_TRACE(("finalizeContexts()"));
-    for (int i(0), len(m_eclist.size()); i < len; ++i)
+    for (std::vector<ExecutionContextBase*>::iterator ec = m_eclist.begin(); ec != m_eclist.end(); ++ec)
       {
-        m_eclist[i]->getObjRef()->stop();
+        (*ec)->getObjRef()->stop();
         try
           {
-            PortableServer::RefCountServantBase* servant(NULL);
+            PortableServer::RefCountServantBase* servant(nullptr);
             servant =
-              dynamic_cast<PortableServer::RefCountServantBase*>(m_eclist[i]);
+              dynamic_cast<PortableServer::RefCountServantBase*>(*ec);
 
-            if (servant == NULL)
+            if (servant == nullptr)
               {
                 RTC_ERROR(("Dynamic cast error: ECBase -> Servant."));
                 continue;
@@ -2222,7 +2222,7 @@ namespace RTC
             // never throws exception
             RTC_ERROR(("Unknown exception caught."));
           }
-        RTC::ExecutionContextFactory::instance().deleteObject(m_eclist[i]);
+        RTC::ExecutionContextFactory::instance().deleteObject(*ec);
       }
     if (!m_eclist.empty())
       {
@@ -2740,7 +2740,7 @@ namespace RTC
         RTC_ERROR(("Unknown exception caught."));
       }
 
-    if (m_pManager != NULL)
+    if (m_pManager != nullptr)
       {
         RTC_DEBUG(("Cleanup on Manager"));
         m_pManager->notifyFinalized(this);
@@ -2767,7 +2767,7 @@ namespace RTC
         ""
       };
     coil::Properties* p = m_properties.findNode("exec_cxt");
-    if (p == NULL)
+    if (p == nullptr)
       {
         RTC_WARN(("No exec_cxt option found."));
         return RTC::RTC_ERROR;
@@ -2775,7 +2775,7 @@ namespace RTC
     RTC_DEBUG(("Copying inherited EC options."));
     for (size_t i(0); inherited_opts[i][0] != '\0'; ++i)
       {
-        if ((*p).findNode(inherited_opts[i]) != NULL)
+        if ((*p).findNode(inherited_opts[i]) != nullptr)
           {
             RTC_PARANOID(("Option %s exists.", inherited_opts[i]));
             default_opts[inherited_opts[i]] = (*p)[inherited_opts[i]];
@@ -2792,7 +2792,7 @@ namespace RTC
   {
     RTC_TRACE(("getPrivateContextOptions()"));
     // Component specific multiple EC option available
-    if (m_properties.findNode("execution_contexts") == NULL)
+    if (m_properties.findNode("execution_contexts") == nullptr)
       {
         RTC_DEBUG(("No component specific EC specified."));
         return RTC::RTC_ERROR;
@@ -2805,19 +2805,19 @@ namespace RTC
 
     coil::Properties default_opts;
     getInheritedECOptions(default_opts);
-    for (size_t i(0); i < ecs_tmp.size(); ++i)
+    for (coil::vstring::const_iterator ec_itr = ecs_tmp.begin(); ec_itr != ecs_tmp.end(); ++ec_itr)
       {
-        std::string ec_tmp = ecs_tmp[i];
+        std::string ec_tmp = *ec_itr;
         if (coil::normalize(ec_tmp) == "none")
           {
             RTC_INFO(("EC none. EC will not be bound to the RTC."));
             ec_args.clear();
             return RTC::RTC_OK;
           }
-        coil::vstring type_and_name = coil::split(ecs_tmp[i], "(", true);
+        coil::vstring type_and_name = coil::split(*ec_itr, "(", true);
         if (type_and_name.size() > 2)
           {
-            RTC_DEBUG(("Invalid EC type specified: %s", ecs_tmp[i].c_str()));
+            RTC_DEBUG(("Invalid EC type specified: %s", (*ec_itr).c_str()));
             continue;
           }
         coil::Properties p = default_opts;
@@ -2825,7 +2825,7 @@ namespace RTC
         p["type"] = type_and_name[0];
         RTC_DEBUG(("p_type: %s", p["type"].c_str()));
         coil::Properties* p_type = m_properties.findNode("ec." + p["type"]);
-        if (p_type != NULL)
+        if (p_type != nullptr)
           {
             RTC_DEBUG(("p_type props:"));
             RTC_DEBUG_STR((*p_type));
@@ -2845,7 +2845,7 @@ namespace RTC
             type_and_name[1].erase(type_and_name[1].size() - 1);
             p["name"] = type_and_name[1];
             coil::Properties* p_name = m_properties.findNode("ec." + p["name"]);
-            if (p_name != NULL)
+            if (p_name != nullptr)
               {
                 RTC_DEBUG(("p_name props:"));
                 RTC_DEBUG_STR((*p_name));
@@ -2873,7 +2873,7 @@ namespace RTC
     RTC_TRACE(("getGlobalContextOptions()"));
 
     coil::Properties* prop = m_properties.findNode("exec_cxt.periodic");
-    if (prop == NULL)
+    if (prop == nullptr)
       {
         RTC_WARN(("No global EC options found."));
         return RTC::RTC_ERROR;
@@ -2920,12 +2920,12 @@ namespace RTC
   {
     std::vector<RTC::ExecutionContextBase*> eclist;
     eclist = RTC::ExecutionContextFactory::instance().createdObjects();
-    for (size_t i(0); i < eclist.size(); ++i)
+    for (std::vector<RTC::ExecutionContextBase*>::iterator ec_itr = eclist.begin(); ec_itr != eclist.end(); ++ec_itr)
       {
-        if (eclist[i]->getProperties()["type"] == ec_arg["type"] &&
-            eclist[i]->getProperties()["name"] == ec_arg["name"])
+        if ((*ec_itr)->getProperties()["type"] == ec_arg["type"] &&
+            (*ec_itr)->getProperties()["name"] == ec_arg["name"])
           {
-            ec = eclist[i];
+            ec = *ec_itr;
             return RTC::RTC_OK;
           }
       }
@@ -2942,13 +2942,13 @@ namespace RTC
     coil::vstring avail_ec
       = RTC::ExecutionContextFactory::instance().getIdentifiers();
 
-    for (size_t i(0); i < ec_args.size(); ++i)
+    for (std::vector<coil::Properties>::iterator ec_arg = ec_args.begin(); ec_arg != ec_args.end(); ++ec_arg)
       {
-        std::string& ec_type(ec_args[i]["type"]);
-        std::string& ec_name(ec_args[i]["name"]);
+        std::string& ec_type((*ec_arg)["type"]);
+        std::string& ec_name((*ec_arg)["name"]);
         RTC::ExecutionContextBase* ec;
         if (!ec_name.empty() &&
-            findExistingEC(ec_args[i], ec) == RTC::RTC_OK)
+            findExistingEC(*ec_arg, ec) == RTC::RTC_OK)
           { // if EC's name exists, find existing EC in the factory.
             RTC_DEBUG(("EC: type=%s, name=%s already exists.",
                        ec_type.c_str(), ec_name.c_str()));
@@ -2967,7 +2967,7 @@ namespace RTC
               instance().createObject(ec_type.c_str());
           }
 
-        if (ec == NULL)
+        if (ec == nullptr)
           { // EC factory available but creation failed. Resource full?
             RTC_ERROR(("EC (%s) creation failed.", ec_type.c_str()));
             RTC_DEBUG(("Available EC list: %s",
@@ -2977,7 +2977,7 @@ namespace RTC
           }
         RTC_DEBUG(("EC (%s) created.", ec_type.c_str()));
 
-        ec->init(ec_args[i]);
+        ec->init(*ec_arg);
         m_eclist.push_back(ec);
         ec->bindComponent(this);
       }
@@ -2987,7 +2987,7 @@ namespace RTC
       {
         coil::Properties default_prop;
         default_prop.setDefaults(default_config);
-        RTC::ExecutionContextBase* ec = NULL;
+        RTC::ExecutionContextBase* ec = nullptr;
 
         std::string& ec_type(default_prop["exec_cxt.periodic.type"]);
         if (std::find(avail_ec.begin(), avail_ec.end(), ec_type)
@@ -3000,7 +3000,7 @@ namespace RTC
         }
         ec = RTC::ExecutionContextFactory::instance().
           createObject(ec_type.c_str());
-        if (ec == NULL)
+        if (ec == nullptr)
           {
             RTC_ERROR(("EC (%s) creation failed.",
                        ec_type.c_str()));
@@ -3012,7 +3012,7 @@ namespace RTC
         coil::Properties default_opts;
         coil::Properties* prop = default_prop.findNode("exec_cxt.periodic");
 
-        if (prop == NULL)
+        if (prop == nullptr)
           {
             RTC_WARN(("No default EC options found."));
             return RTC::RTC_ERROR;
@@ -3037,7 +3037,7 @@ namespace RTC
           };
 
         coil::Properties* p = default_prop.findNode("exec_cxt");
-        if (p == NULL)
+        if (p == nullptr)
           {
             RTC_WARN(("No exec_cxt option found."));
             return RTC::RTC_ERROR;
@@ -3045,7 +3045,7 @@ namespace RTC
         RTC_DEBUG(("Copying inherited EC options."));
         for (size_t i(0); inherited_opts[i][0] != '\0'; ++i)
           {
-            if ((*p).findNode(inherited_opts[i]) != NULL)
+            if ((*p).findNode(inherited_opts[i]) != nullptr)
               {
                 RTC_PARANOID(("Option %s exists.", inherited_opts[i]));
                 default_opts[inherited_opts[i]] = (*p)[inherited_opts[i]];

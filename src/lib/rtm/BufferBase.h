@@ -20,7 +20,7 @@
 #ifndef RTC_BUFFERBASE_H
 #define RTC_BUFFERBASE_H
 
-#include <stddef.h>
+#include <cstddef>
 #include <coil/Properties.h>
 #include <rtm/BufferStatus.h>
 
@@ -118,7 +118,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~BufferBase(void)
+    virtual ~BufferBase()
     {
     };
 
@@ -154,7 +154,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual size_t length(void) const = 0;
+    virtual size_t length() const = 0;
 
     /*!
      * @if jp
@@ -353,7 +353,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual bool full(void) const = 0;
+    virtual bool full() const = 0;
 
     //----------------------------------------------------------------------
     /*!
@@ -518,7 +518,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual bool empty(void) const = 0;
+    virtual bool empty() const = 0;
 
   };
 
@@ -574,7 +574,7 @@ namespace RTC
      *
      * @endif
      */
-    explicit NullBuffer(long int size = 1)
+    explicit NullBuffer(long int  /*size*/ = 1)
       : m_length(1)
     {
     }
@@ -594,7 +594,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~NullBuffer(void)
+    virtual ~NullBuffer()
     {
     }
 
@@ -617,7 +617,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual long int length(void) const
+    virtual long int length() const
     {
       return 1;
     }
@@ -699,7 +699,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual bool isFull(void) const
+    virtual bool isFull() const
     {
       return false;
     }
@@ -723,7 +723,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual bool isEmpty(void) const
+    virtual bool isEmpty() const
     {
       return false;
     }
@@ -772,7 +772,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual const DataType& get(void)
+    virtual const DataType& get()
     {
       return m_data;
     }
@@ -799,7 +799,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual DataType& getRef(void)
+    virtual DataType& getRef()
     {
       return m_data;
     }

@@ -12,10 +12,6 @@
 #include <string>
 #include "SeqIn.h"
 
-
-// Connector Listener Dump Flag : default OFF
-extern bool g_Listener_dump_enabled;
-
 #if defined(RTM_OS_VXWORKS) && not defined(__RTP__)
 int seqin_main()
 {

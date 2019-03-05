@@ -39,11 +39,11 @@ namespace RTC
     : InPortConnector(info, listeners, buffer), m_consumer(consumer),
       m_listeners(listeners)
   {
-    if (buffer == 0)
+    if (buffer == nullptr)
       {
         m_buffer = createBuffer(m_profile);
       }
-    if (m_buffer == 0 || m_consumer == 0)
+    if (m_buffer == nullptr || m_consumer == nullptr)
       {
         throw std::bad_alloc();
       }
@@ -81,7 +81,7 @@ namespace RTC
   InPortPullConnector::read(ByteDataStreamBase* data)
   {
     RTC_TRACE(("InPortPullConnector::read()"));
-    if (m_consumer == 0)
+    if (m_consumer == nullptr)
       {
         return PORT_ERROR;
       }
@@ -102,12 +102,12 @@ namespace RTC
   {
     RTC_TRACE(("disconnect()"));
     // delete consumer
-    if (m_consumer != 0)
+    if (m_consumer != nullptr)
       {
         OutPortConsumerFactory& cfactory(OutPortConsumerFactory::instance());
         cfactory.deleteObject(m_consumer);
       }
-    m_consumer = 0;
+    m_consumer = nullptr;
 
     return PORT_OK;
   }

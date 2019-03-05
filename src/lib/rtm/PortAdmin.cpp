@@ -19,7 +19,7 @@
 #include <rtm/RTC.h>
 #include <rtm/PortAdmin.h>
 #include <rtm/CORBA_SeqUtil.h>
-#include <string.h>
+#include <cstring>
 #include <functional>
 #include <vector>
 
@@ -288,7 +288,7 @@ namespace RTC
         m_pPOA->deactivate_object(oid);
         port.setPortRef(RTC::PortService::_nil());
 
-        return m_portServants.unregisterObject(tmp) == NULL ? false : true;
+        return m_portServants.unregisterObject(tmp) == nullptr ? false : true;
       }
     catch (...)
       {
@@ -350,9 +350,9 @@ namespace RTC
   {
     std::vector<PortBase*> ports;
     ports = m_portServants.getObjects();
-    for (int i(0), len(ports.size()); i < len; ++i)
+    for (std::vector<PortBase*>::iterator port = ports.begin(); port != ports.end(); ++port)
       {
-        ports[i]->activateInterfaces();
+        (*port)->activateInterfaces();
       }
   }
 
@@ -367,9 +367,9 @@ namespace RTC
   {
     std::vector<PortBase*> ports;
     ports = m_portServants.getObjects();
-    for (int i(0), len(ports.size()); i < len; ++i)
+    for (std::vector<PortBase*>::iterator port = ports.begin(); port != ports.end(); ++port)
       {
-        ports[i]->deactivateInterfaces();
+        (*port)->deactivateInterfaces();
       }
   }
 

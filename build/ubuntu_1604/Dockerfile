@@ -1,7 +1,5 @@
 FROM ubuntu:16.04
 
-ENV DEBIAN_FRONTEND noninteractive
-
 RUN apt-get update\
  && apt-get install -y --no-install-recommends\
  g++\
@@ -19,6 +17,5 @@ COPY OpenRTM-aist /root/OpenRTM-aist
 WORKDIR /root/OpenRTM-aist
 RUN ln -s . src/lib/coil/common/coil\
  && ln -s ../../build/yat.py utils/rtm-skelwrapper/yat.py
-RUN mkdir build_openrtm && cd build_openrtm\
- && cmake -DCORBA=omniORB ..\
- && make -j$(nproc)
+RUN cmake -DCORBA=omniORB -DSSL_ENABLE=ON -DOBSEVER_ENABLE=ON -S . -Bbuild_openrtm\
+ && cmake --build build_openrtm -- -j$(nproc)

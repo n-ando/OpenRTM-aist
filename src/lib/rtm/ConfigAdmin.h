@@ -182,7 +182,7 @@ namespace RTC
      */
     ConfigBase(const char* name_, const char* def_val)
       : name(name_), default_value(def_val),
-        string_value(""), m_admin(NULL), m_callback(NULL)
+        string_value(""), m_admin(nullptr), m_callback(nullptr)
     {}
 
     /*!
@@ -200,7 +200,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~ConfigBase(void) {}
+    virtual ~ConfigBase() {}
 
     // typedef of ConfigAdmin's member function
     typedef void (ConfigAdmin::*CallbackFunc)(const char*, const char*);
@@ -399,7 +399,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~Config(void) {}
+    virtual ~Config() {}
 
     /*!
      * @if jp
@@ -647,7 +647,7 @@ namespace RTC
      *
      * @endif
      */
-    ~ConfigAdmin(void);
+    ~ConfigAdmin();
 
     /*!
      * @if jp
@@ -694,8 +694,8 @@ namespace RTC
                        const char* def_val,
                        bool (*trans)(VarType&, const char*) = coil::stringTo)
     {
-      if (param_name == 0) { return false; }
-      if (def_val == 0) { return false; }
+      if (param_name == nullptr) { return false; }
+      if (def_val == nullptr) { return false; }
       if (isExist(param_name)) { return false; }
       if (!trans(var, def_val)) { return false; }
       Config<VarType>* c = new Config<VarType>(param_name, var, def_val, trans);
@@ -758,7 +758,7 @@ namespace RTC
      *
      * @endif
      */
-    void update(void);
+    void update();
 
     /*!
      * @if jp
@@ -883,7 +883,7 @@ namespace RTC
      *
      * @endif
      */
-    bool isChanged(void) {return m_changed;}
+    bool isChanged() {return m_changed;}
 
     /*!
      * @if jp
@@ -925,7 +925,7 @@ namespace RTC
      *
      * @endif
      */
-    const char* getActiveId(void) {return m_activeId.c_str();}
+    const char* getActiveId() {return m_activeId.c_str();}
 
     /*!
      * @if jp
@@ -953,7 +953,7 @@ namespace RTC
      */
     bool haveConfig(const char* config_id)
     {
-      return (m_configsets.hasKey(config_id) == NULL) ? false : true;
+      return (m_configsets.hasKey(config_id) == nullptr) ? false : true;
     }
 
     /*!
@@ -976,7 +976,7 @@ namespace RTC
      *
      * @endif
      */
-    bool isActive(void)
+    bool isActive()
     {
       return m_active;
     }
@@ -1003,7 +1003,7 @@ namespace RTC
      *
      * @endif
      */
-    const std::vector<coil::Properties*>& getConfigurationSets(void);
+    const std::vector<coil::Properties*>& getConfigurationSets();
 
     /*!
      * @if jp
@@ -1088,7 +1088,7 @@ namespace RTC
      *
      * @endif
      */
-    const coil::Properties& getActiveConfigurationSet(void);
+    const coil::Properties& getActiveConfigurationSet();
 
     /*!
      * @if jp
@@ -1549,7 +1549,7 @@ namespace RTC
       explicit find_conf(const char* name) : m_name(name) {}
       bool operator()(ConfigBase* conf)
       {
-        if (conf == 0) { return false; }
+        if (conf == nullptr) { return false; }
         return (m_name == conf->name);
       }
     };

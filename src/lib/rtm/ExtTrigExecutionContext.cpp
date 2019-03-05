@@ -86,7 +86,7 @@ namespace RTC
    * @brief Generate internal activity thread for ExecutionContext
    * @endif
    */
-  int ExtTrigExecutionContext::open(void *args)
+  int ExtTrigExecutionContext::open(void * /*args*/)
   {
     RTC_TRACE(("open()"));
     activate();
@@ -100,7 +100,7 @@ namespace RTC
    * @brief Invoke each component's operation
    * @endif
    */
-  int ExtTrigExecutionContext::svc(void)
+  int ExtTrigExecutionContext::svc()
   {
     RTC_TRACE(("svc()"));
     unsigned int count(0);
@@ -127,7 +127,7 @@ namespace RTC
           m_worker.ticked_ = false;
         }
         coil::TimeValue period(getPeriod());
-        if (1)  // count > 1000)
+        if (true)  // count > 1000)
           {
             RTC_PARANOID(("Period:    %f [s]", static_cast<double>(period)));
             RTC_PARANOID(("Execution: %f [s]", static_cast<double>(t1 - t0)));
@@ -137,10 +137,10 @@ namespace RTC
         coil::TimeValue t2(coil::clock());
         if (period > (t1 - t0))
           {
-            if (1 /*count > 1000*/) { RTC_PARANOID(("sleeping...")); }
+            if (true /*count > 1000*/) { RTC_PARANOID(("sleeping...")); }
             coil::sleep((coil::TimeValue)(period - (t1 - t0)));
           }
-        if (1)  // count > 1000)
+        if (true)  // count > 1000)
           {
             coil::TimeValue t3(coil::clock());
             RTC_PARANOID(("Slept:       %f [s]", static_cast<double>(t3 - t2)));
@@ -159,7 +159,7 @@ namespace RTC
    * @brief Thread execution function for ExecutionContext
    * @endif
    */
-  int ExtTrigExecutionContext::close(unsigned long flags)
+  int ExtTrigExecutionContext::close(unsigned long  /*flags*/)
   {
     RTC_TRACE(("close()"));
     // At this point, this component have to be finished.
@@ -389,7 +389,7 @@ namespace RTC
     if (!m_svc)
       { // If start() is called first time, start the worker thread.
         m_svc = true;
-        this->open(0);
+        this->open(nullptr);
       }
     return RTC::RTC_OK;
   }
@@ -398,7 +398,7 @@ namespace RTC
    * @brief onAddedComponent() template function
    */
   RTC::ReturnCode_t ExtTrigExecutionContext::
-  onAddedComponent(RTC::LightweightRTObject_ptr rtobj)
+  onAddedComponent(RTC::LightweightRTObject_ptr  /*rtobj*/)
   {
     Guard guard(m_worker.mutex_);
     if (m_worker.ticked_ == false)
@@ -411,7 +411,7 @@ namespace RTC
    * @brief onRemovedComponent() template function
    */
   RTC::ReturnCode_t ExtTrigExecutionContext::
-  onRemovedComponent(RTC::LightweightRTObject_ptr rtobj)
+  onRemovedComponent(RTC::LightweightRTObject_ptr  /*rtobj*/)
   {
     Guard guard(m_worker.mutex_);
     if (m_worker.ticked_ == false)
@@ -483,7 +483,7 @@ extern "C"
    * @brief Register Factory class for this ExecutionContext
    * @endif
    */
-  void ExtTrigExecutionContextInit(RTC::Manager* manager)
+  void ExtTrigExecutionContextInit(RTC::Manager*  /*manager*/)
   {
     RTC::ExecutionContextFactory::
       instance().addFactory("ExtTrigExecutionContext",

@@ -109,7 +109,7 @@ namespace RTC
       m_Delete(delete_func),
       m_policy(policy)
   {
-    if (m_policy == NULL)
+    if (m_policy == nullptr)
       throw std::bad_alloc();
   }
 
@@ -125,7 +125,7 @@ namespace RTC
     try
       {
         RTObject_impl* rtobj(m_New(mgr));
-        if (rtobj == 0) { return NULL; }
+        if (rtobj == nullptr) { return nullptr; }
 
         ++m_Number;
         rtobj->setProperties(this->profile());
@@ -139,7 +139,7 @@ namespace RTC
       }
     catch (...)
       {
-        return NULL;
+        return nullptr;
       }
   }
 

@@ -44,12 +44,12 @@
 namespace RTM
 {
   class ManagerServant;
-}
+} // namespace RTM
 
 namespace coil
 {
   class Timer;
-};
+} // namespace coil
 
 namespace RTC
 {
@@ -2083,7 +2083,7 @@ namespace RTC
     {
       explicit InstanceName(RTObject_impl* comp);
       explicit InstanceName(const char* name);
-      explicit InstanceName(const std::string& name);
+      explicit InstanceName(std::string  name);
       bool operator()(RTObject_impl* comp);
       std::string m_name;
     };
@@ -2281,7 +2281,7 @@ namespace RTC
        */
       explicit OrbRunner(CORBA::ORB_ptr orb) : m_pORB(orb)
       {
-        open(0);
+        open(nullptr);
       };
 
       /*!
@@ -2305,7 +2305,7 @@ namespace RTC
        *
        * @endif
        */
-      virtual int open(void *args)
+      virtual int open(void * /*args*/)
       {
         activate();
         return 0;
@@ -2328,7 +2328,7 @@ namespace RTC
        *
        * @endif
        */
-      virtual int svc(void)
+      virtual int svc()
       {
         m_pORB->run();
 //        Manager::instance().shutdown();
@@ -2356,7 +2356,7 @@ namespace RTC
        *
        * @endif
        */
-      virtual int close(unsigned long flags)
+      virtual int close(unsigned long  /*flags*/)
       {
         return 0;
       }
@@ -2433,7 +2433,7 @@ namespace RTC
        */
       void terminate()
       {
-        open(0);
+        open(nullptr);
       }
 
       /*!
@@ -2457,7 +2457,7 @@ namespace RTC
        *
        * @endif
        */
-      virtual int open(void *args)
+      virtual int open(void * /*args*/)
       {
         activate();
         return 0;
@@ -2480,7 +2480,7 @@ namespace RTC
        *
        * @endif
        */
-      virtual int svc(void)
+      virtual int svc()
       {
         coil::sleep(m_waittime);
         Manager::instance().shutdown();

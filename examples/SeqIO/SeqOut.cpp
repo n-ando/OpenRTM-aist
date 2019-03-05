@@ -8,7 +8,7 @@
  */
 
 #include "SeqOut.h"
-#include <stdlib.h>
+#include <cstdlib>
 
 // Connector Listener Dump Flag
 bool g_Listener_dump_enabled = false;
@@ -171,7 +171,7 @@ RTC::ReturnCode_t SeqOut::onDeactivated(RTC::UniqueId ec_id)
 */
 
 
-RTC::ReturnCode_t SeqOut::onExecute(RTC::UniqueId ec_id)
+RTC::ReturnCode_t SeqOut::onExecute(RTC::UniqueId  /*ec_id*/)
 {
   static unsigned char cnt0, cntseq0;
   static short  cnt1, cntseq1;

@@ -19,7 +19,7 @@
 #include <rtm/RTObjectStateMachine.h>
 #include <rtm/Manager.h>
 #include <rtm/RTObject.h>
-#include <stdio.h>
+#include <cstdio>
 #include <iostream>
 
 namespace RTC_impl
@@ -30,7 +30,7 @@ namespace RTC_impl
       m_rtobj(RTC::LightweightRTObject::_duplicate(comp)),
       m_sm(NUM_OF_LIFECYCLESTATE),
       m_ca(false), m_dfc(false), m_fsm(false), m_mode(false),
-      m_rtobjPtr(NULL), m_measure(false)
+      m_rtobjPtr(nullptr), m_measure(false)
   {
     m_caVar   = RTC::ComponentAction::_nil();
     m_dfcVar  = RTC::DataFlowComponentAction::_nil();
@@ -66,7 +66,7 @@ namespace RTC_impl
     m_sm.goTo(RTC::INACTIVE_STATE);
   }
 
-  RTObjectStateMachine::~RTObjectStateMachine(void)
+  RTObjectStateMachine::~RTObjectStateMachine()
   {
     if (m_ca)
       {
@@ -169,11 +169,11 @@ namespace RTC_impl
       }
     catch (CORBA::SystemException& ex)
       {
-        m_rtobjPtr = NULL;
+        m_rtobjPtr = nullptr;
       }
     catch (...)
       {
-        m_rtobjPtr = NULL;
+        m_rtobjPtr = nullptr;
       }
   }
 
@@ -199,10 +199,10 @@ namespace RTC_impl
   }
 
   // RTC::ComponentAction operations
-  void RTObjectStateMachine::onStartup(void)
+  void RTObjectStateMachine::onStartup()
   {
     // call Servant
-    if (m_rtobjPtr != NULL)
+    if (m_rtobjPtr != nullptr)
       {
         m_rtobjPtr->on_startup(m_id);
         return;
@@ -211,10 +211,10 @@ namespace RTC_impl
     if (!m_ca) { return; }
     m_caVar->on_startup(m_id);
   }
-  void RTObjectStateMachine::onShutdown(void)
+  void RTObjectStateMachine::onShutdown()
   {
     // call Servant
-    if (m_rtobjPtr != NULL)
+    if (m_rtobjPtr != nullptr)
       {
         m_rtobjPtr->on_shutdown(m_id);
         return;
@@ -223,10 +223,10 @@ namespace RTC_impl
     if (!m_ca) { return; }
     m_caVar->on_shutdown(m_id);
   }
-  void RTObjectStateMachine::onActivated(const ExecContextStates& st)
+  void RTObjectStateMachine::onActivated(const ExecContextStates&  /*st*/)
   {
     // call Servant
-    if (m_rtobjPtr != NULL)
+    if (m_rtobjPtr != nullptr)
       {
         if (m_rtobjPtr->on_activated(m_id) != RTC::RTC_OK)
           {
@@ -244,10 +244,10 @@ namespace RTC_impl
     return;
   }
 
-  void RTObjectStateMachine::onDeactivated(const ExecContextStates& st)
+  void RTObjectStateMachine::onDeactivated(const ExecContextStates&  /*st*/)
   {
     // call Servant
-    if (m_rtobjPtr != NULL)
+    if (m_rtobjPtr != nullptr)
       {
         m_rtobjPtr->on_deactivated(m_id);
         return;
@@ -257,10 +257,10 @@ namespace RTC_impl
     m_caVar->on_deactivated(m_id);
   }
 
-  void RTObjectStateMachine::onAborting(const ExecContextStates& st)
+  void RTObjectStateMachine::onAborting(const ExecContextStates&  /*st*/)
   {
     // call Servant
-    if (m_rtobjPtr != NULL)
+    if (m_rtobjPtr != nullptr)
       {
         m_rtobjPtr->on_aborting(m_id);
         return;
@@ -270,10 +270,10 @@ namespace RTC_impl
     m_caVar->on_aborting(m_id);
   }
 
-  void RTObjectStateMachine::onError(const ExecContextStates& st)
+  void RTObjectStateMachine::onError(const ExecContextStates&  /*st*/)
   {
     // call Servant
-    if (m_rtobjPtr != NULL)
+    if (m_rtobjPtr != nullptr)
       {
         m_rtobjPtr->on_error(m_id);
         return;
@@ -283,10 +283,10 @@ namespace RTC_impl
     m_caVar->on_error(m_id);
   }
 
-  void RTObjectStateMachine::onReset(const ExecContextStates& st)
+  void RTObjectStateMachine::onReset(const ExecContextStates&  /*st*/)
   {
     // call Servant
-    if (m_rtobjPtr != NULL)
+    if (m_rtobjPtr != nullptr)
       {
         if (m_rtobjPtr->on_reset(m_id) != RTC::RTC_OK)
           {
@@ -305,12 +305,12 @@ namespace RTC_impl
   }
 
   // RTC::DataflowComponentAction
-  void RTObjectStateMachine::onExecute(const ExecContextStates& st)
+  void RTObjectStateMachine::onExecute(const ExecContextStates&  /*st*/)
   {
     static int count;
     double max_interval, min_interval, mean_interval, stddev;
     // call Servant
-    if (m_rtobjPtr != NULL)
+    if (m_rtobjPtr != nullptr)
       {
         if (m_measure) { m_svtMeasure.tick(); }
         if (m_rtobjPtr->on_execute(m_id) != RTC::RTC_OK)
@@ -365,10 +365,10 @@ namespace RTC_impl
     return;
   }
 
-  void RTObjectStateMachine::onStateUpdate(const ExecContextStates& st)
+  void RTObjectStateMachine::onStateUpdate(const ExecContextStates&  /*st*/)
   {
     // call Servant
-    if (m_rtobjPtr != NULL)
+    if (m_rtobjPtr != nullptr)
       {
         if (m_rtobjPtr->on_state_update(m_id) != RTC::RTC_OK)
           {
@@ -386,10 +386,10 @@ namespace RTC_impl
     return;
   }
 
-  RTC::ReturnCode_t RTObjectStateMachine::onRateChanged(void)
+  RTC::ReturnCode_t RTObjectStateMachine::onRateChanged()
   {
     // call Servant
-    if (m_rtobjPtr != NULL)
+    if (m_rtobjPtr != nullptr)
       {
         RTC::ReturnCode_t ret = m_rtobjPtr->on_rate_changed(m_id);
         if (ret != RTC::RTC_OK)
@@ -409,7 +409,7 @@ namespace RTC_impl
   }
 
   // FsmParticipantAction
-  void RTObjectStateMachine::onAction(const ExecContextStates& st)
+  void RTObjectStateMachine::onAction(const ExecContextStates&  /*st*/)
   {
     if (!m_fsm) { return; }
     if (m_fsmVar->on_action(m_id) != RTC::RTC_OK)
@@ -420,7 +420,7 @@ namespace RTC_impl
     return;
   }
   // MultiModeComponentAction
-  void RTObjectStateMachine::onModeChanged(const ExecContextStates& st)
+  void RTObjectStateMachine::onModeChanged(const ExecContextStates&  /*st*/)
   {
     if (!m_mode) { return; }
     if (m_modeVar->on_mode_changed(m_id) != RTC::RTC_OK)
@@ -432,12 +432,12 @@ namespace RTC_impl
   }
 
   // Getting state of the context
-  ExecContextState RTObjectStateMachine::getState(void)
+  ExecContextState RTObjectStateMachine::getState()
   {
     return m_sm.getState();
   }
 
-  ExecContextStates RTObjectStateMachine::getStates(void)
+  ExecContextStates RTObjectStateMachine::getStates()
   {
     return m_sm.getStates();
   }
@@ -458,17 +458,17 @@ namespace RTC_impl
   }
 
   // Workers
-  void RTObjectStateMachine::workerPreDo(void)
+  void RTObjectStateMachine::workerPreDo()
   {
     return m_sm.worker_pre();
   }
 
-  void RTObjectStateMachine::workerDo(void)
+  void RTObjectStateMachine::workerDo()
   {
     return m_sm.worker_do();
   }
 
-  void RTObjectStateMachine::workerPostDo(void)
+  void RTObjectStateMachine::workerPostDo()
   {
     return m_sm.worker_post();
   }

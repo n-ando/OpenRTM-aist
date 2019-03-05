@@ -30,8 +30,8 @@ namespace RTC
    * @brief Constructor
    * @endif
    */
-  InPortDSProvider::InPortDSProvider(void)
-      : m_buffer(0), m_connector(0)
+  InPortDSProvider::InPortDSProvider()
+      : m_buffer(nullptr), m_connector(nullptr)
   {
     // PortProfile setting
     setInterfaceType("data_service");
@@ -61,7 +61,7 @@ namespace RTC
    * @brief Destructor
    * @endif
    */
-  InPortDSProvider::~InPortDSProvider(void)
+  InPortDSProvider::~InPortDSProvider()
   {
     try
       {
@@ -153,7 +153,7 @@ namespace RTC
   {
     RTC_PARANOID(("InPortDSProvider::push()"));
 
-    if (m_connector == 0)
+    if (m_connector == nullptr)
       {
         ByteData cdr;
 
@@ -196,41 +196,32 @@ namespace RTC
       case BufferStatus::BUFFER_OK:
         onBufferWrite(data);
         return ::RTC::PORT_OK;
-        break;
 
       case BufferStatus::BUFFER_ERROR:
         onReceiverError(data);
         return ::RTC::PORT_ERROR;
-        break;
 
       case BufferStatus::BUFFER_FULL:
         onBufferFull(data);
         onReceiverFull(data);
         return ::RTC::BUFFER_FULL;
-        break;
 
       case BufferStatus::BUFFER_EMPTY:
         // never come here
         return ::RTC::BUFFER_EMPTY;
-        break;
 
       case BufferStatus::PRECONDITION_NOT_MET:
         onReceiverError(data);
         return ::RTC::PORT_ERROR;
-        break;
 
       case BufferStatus::TIMEOUT:
         onBufferWriteTimeout(data);
         onReceiverTimeout(data);
         return ::RTC::BUFFER_TIMEOUT;
-        break;
 
       default:
         return ::RTC::UNKNOWN_ERROR;
       }
-
-    onReceiverError(data);
-    return ::RTC::UNKNOWN_ERROR;
   }
 
 };     // namespace RTC

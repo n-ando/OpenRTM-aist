@@ -131,7 +131,7 @@ namespace RTC
     OutPortPushConnector(ConnectorInfo info,
                          InPortConsumer* consumer,
                          ConnectorListeners& listeners,
-                         CdrBufferBase* buffer = 0);
+                         CdrBufferBase* buffer = nullptr);
 
     /*!
      * @if jp

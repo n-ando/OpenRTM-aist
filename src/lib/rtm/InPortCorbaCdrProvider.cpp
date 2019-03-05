@@ -32,8 +32,8 @@ namespace RTC
    * @brief Constructor
    * @endif
    */
-  InPortCorbaCdrProvider::InPortCorbaCdrProvider(void)
-      : m_buffer(0), m_connector(NULL)
+  InPortCorbaCdrProvider::InPortCorbaCdrProvider()
+      : m_buffer(nullptr), m_connector(nullptr)
   {
     // PortProfile setting
     setInterfaceType("corba_cdr");
@@ -63,7 +63,7 @@ namespace RTC
    * @brief Destructor
    * @endif
    */
-  InPortCorbaCdrProvider::~InPortCorbaCdrProvider(void)
+  InPortCorbaCdrProvider::~InPortCorbaCdrProvider()
   {
     try
       {
@@ -155,7 +155,7 @@ namespace RTC
   {
     RTC_PARANOID(("InPortCorbaCdrProvider::put()"));
 
-    if (m_connector == NULL)
+    if (m_connector == nullptr)
       {
         ByteData cdr;
         cdr.writeData((unsigned char*)data.get_buffer(), (CORBA::ULong)data.length());
@@ -204,41 +204,33 @@ namespace RTC
       case BufferStatus::BUFFER_OK:
         onBufferWrite(data);
         return ::OpenRTM::PORT_OK;
-        break;
 
       case BufferStatus::BUFFER_ERROR:
         onReceiverError(data);
         return ::OpenRTM::PORT_ERROR;
-        break;
 
       case BufferStatus::BUFFER_FULL:
         onBufferFull(data);
         onReceiverFull(data);
         return ::OpenRTM::BUFFER_FULL;
-        break;
 
       case BufferStatus::BUFFER_EMPTY:
         // never come here
         return ::OpenRTM::BUFFER_EMPTY;
-        break;
 
       case BufferStatus::PRECONDITION_NOT_MET:
         onReceiverError(data);
         return ::OpenRTM::PORT_ERROR;
-        break;
 
       case BufferStatus::TIMEOUT:
         onBufferWriteTimeout(data);
         onReceiverTimeout(data);
         return ::OpenRTM::BUFFER_TIMEOUT;
-        break;
 
       default:
         return ::OpenRTM::UNKNOWN_ERROR;
       }
 
-    onReceiverError(data);
-    return ::OpenRTM::UNKNOWN_ERROR;
   }
 
 };     // namespace RTC

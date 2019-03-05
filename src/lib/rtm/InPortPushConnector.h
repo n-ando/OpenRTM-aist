@@ -127,7 +127,7 @@ namespace RTC
     InPortPushConnector(ConnectorInfo info,
                         InPortProvider* provider,
                         ConnectorListeners& listeners,
-                        CdrBufferBase* buffer = 0);
+                        CdrBufferBase* buffer = nullptr);
 
     /*!
      * @if jp
@@ -281,13 +281,13 @@ namespace RTC
         connectorData_[ON_BUFFER_READ].notify(m_profile, data);
 
     }
-    void onBufferEmpty(ByteData& data)
+    void onBufferEmpty(ByteData&  /*data*/)
     {
       m_listeners.
         connector_[ON_BUFFER_EMPTY].notify(m_profile);
 
     }
-    void onBufferReadTimeout(ByteData& data)
+    void onBufferReadTimeout(ByteData&  /*data*/)
     {
       m_listeners.
         connector_[ON_BUFFER_READ_TIMEOUT].notify(m_profile);

@@ -76,7 +76,7 @@ namespace RTC
 	*
 	* @endif
 	*/
-    virtual ~DirectInPortBase(void){};
+    virtual ~DirectInPortBase(){};
 
 
 
@@ -160,6 +160,6 @@ namespace RTC
     
 
   };
-}; // End of namesepace RTM
+}  // namespace RTC
 
 #endif // RTC_DIRECTINPORTBASE_H

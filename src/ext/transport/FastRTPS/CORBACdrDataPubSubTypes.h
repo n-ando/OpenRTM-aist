@@ -20,8 +20,8 @@
  */
 
 
-#ifndef _RTC_CORBACDRDATA_PUBSUBTYPES_H_
-#define _RTC_CORBACDRDATA_PUBSUBTYPES_H_
+#ifndef RTC_CORBACDRDATA_PUBSUBTYPES_H_
+#define RTC_CORBACDRDATA_PUBSUBTYPES_H_
 
 #include <fastrtps/TopicDataType.h>
 
@@ -58,4 +58,4 @@ namespace RTC
     };
 }
 
-#endif // _RTC_CORBACDRDATA_PUBSUBTYPES_H_
+#endif // RTC_CORBACDRDATA_PUBSUBTYPES_H_

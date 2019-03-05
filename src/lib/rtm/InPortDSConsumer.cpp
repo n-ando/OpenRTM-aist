@@ -28,7 +28,7 @@ namespace RTC
    * @param buffer The buffer object that is attached to this Consumer
    * @endif
    */
-  InPortDSConsumer::InPortDSConsumer(void)
+  InPortDSConsumer::InPortDSConsumer()
     : rtclog("InPortDSConsumer")
   {
   }
@@ -40,7 +40,7 @@ namespace RTC
    * @brief Destructor
    * @endif
    */
-  InPortDSConsumer::~InPortDSConsumer(void)
+  InPortDSConsumer::~InPortDSConsumer()
   {
     RTC_PARANOID(("~InPortDSConsumer()"));
   }
@@ -103,7 +103,7 @@ namespace RTC
    * @endif
    */
   void InPortDSConsumer::
-  publishInterfaceProfile(SDOPackage::NVList& properties)
+  publishInterfaceProfile(SDOPackage::NVList&  /*properties*/)
   {
     return;
   }
@@ -171,7 +171,7 @@ namespace RTC
         return false;
       }
 
-    const char* ior(0);
+    const char* ior(nullptr);
     if (!(properties[index].value >>= ior))
       {
         RTC_ERROR(("inport_ior has no string"));
@@ -260,7 +260,7 @@ namespace RTC
         return false;
       }
 
-    const char* ior = NULL;
+    const char* ior = nullptr;
     if (!(properties[index].value >>= ior))
       {
         RTC_ERROR(("prop[inport_ior] is not string"));

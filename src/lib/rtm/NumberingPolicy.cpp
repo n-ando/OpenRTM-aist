@@ -40,7 +40,7 @@ namespace RTM
     
     try
       {
-        pos = find(NULL);
+        pos = find(nullptr);
         m_objects[pos] = obj;
         return coil::otos(pos);
       }
@@ -65,7 +65,7 @@ namespace RTM
     pos = find(obj);
     if (pos < m_objects.size())
       {
-        m_objects[pos] = NULL;
+        m_objects[pos] = nullptr;
       }
     --m_num;
   }
@@ -83,10 +83,10 @@ namespace RTM
     std::vector<void*>::size_type i(0);
     for (i = 0; i < len; ++i)
       {
-        if (m_objects[i] == obj) return i;
+        if (m_objects[i] == obj) return (int)i;
       }
     throw ObjectNotFound();
-    return i;
+    return (int)i;
   }
 }; //namespace RTM  
 

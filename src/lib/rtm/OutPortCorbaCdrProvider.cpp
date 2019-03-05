@@ -32,8 +32,8 @@ namespace RTC
    * @brief Constructor
    * @endif
    */
-  OutPortCorbaCdrProvider::OutPortCorbaCdrProvider(void)
-    : m_buffer(0), m_connector(NULL)
+  OutPortCorbaCdrProvider::OutPortCorbaCdrProvider()
+    : m_buffer(nullptr), m_connector(nullptr)
   {
     // PortProfile setting
     setInterfaceType("corba_cdr");
@@ -68,7 +68,7 @@ namespace RTC
    * @brief Destructor
    * @endif
    */
-  OutPortCorbaCdrProvider::~OutPortCorbaCdrProvider(void)
+  OutPortCorbaCdrProvider::~OutPortCorbaCdrProvider()
   {
     try
       {
@@ -169,7 +169,7 @@ namespace RTC
     // at least the output "data" area should be allocated
     data = new ::OpenRTM::CdrData();
 
-    if (m_connector == NULL)
+    if (m_connector == nullptr)
       {
         onSenderError();
         return ::OpenRTM::UNKNOWN_ERROR;

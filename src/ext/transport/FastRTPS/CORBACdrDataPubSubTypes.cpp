@@ -76,35 +76,49 @@ namespace RTC
             {
                 ser.serialize_encapsulation();
             }
-            catch (eprosima::fastcdr::exception::NotEnoughMemoryException)
+            catch (eprosima::fastcdr::exception::NotEnoughMemoryException& e)
             {
+                std::cout << "NotEnoughMemoryException:" << e.what() << std::endl;
                 return false;
             }
-            catch (eprosima::fastcdr::exception::BadParamException)
+            catch (eprosima::fastcdr::exception::BadParamException& e)
             {
+                std::cout << "BadParamException:" << e.what() << std::endl;
                 return false;
             }
-
-            payload->length = (uint32_t)ser.getSerializedDataLength() + p_type->getDataLength(); //Get the serialized length
-            memcpy(payload->data + 4, p_type->getBuffer(), p_type->getDataLength());
+            uint32_t data_size = p_type->getDataLength() + (uint32_t)ser.getSerializedDataLength();
+            try
+            {
+                payload->reserve(data_size);
+            }
+            catch (std::bad_alloc& e)
+            {
+                std::cout << "bad_alloc:" << e.what() << std::endl;
+                return false;
+            }
+            payload->length = data_size;
+            if (payload->max_size >= data_size)
+            {
+                memcpy(payload->data + ser.getSerializedDataLength(), p_type->getBuffer(), p_type->getDataLength());
+            }
         }
         else
         {
-            payload->length = p_type->getDataLength();
-            payload->max_size = p_type->getDataLength();
             try
             {
-                payload->data = new eprosima::fastrtps::rtps::octet[p_type->getDataLength()];
+                payload->reserve(p_type->getDataLength());
             }
-            catch (std::bad_alloc)
+            catch (std::bad_alloc& e)
             {
+                std::cout << "bad_alloc:" << e.what() << std::endl;
                 return false;
             }
-            memcpy(payload->data, p_type->getBuffer(), p_type->getDataLength());
+            payload->length = p_type->getDataLength();
+            if (payload->max_size >= p_type->getDataLength())
+            {
+                memcpy(payload->data, p_type->getBuffer(), p_type->getDataLength());
+            }
         }
-        
-        
-
         return true;
     }
 
@@ -122,25 +136,30 @@ namespace RTC
             endian = eprosima::fastcdr::Cdr::BIG_ENDIANNESS;
         }
         eprosima::fastcdr::Cdr deser(fastbuffer, eprosima::fastcdr::Cdr::DEFAULT_ENDIAN,
-                eprosima::fastcdr::Cdr::DDS_CDR); // Object that deserializes the data.
-        // Deserialize encapsulation.
+                                      eprosima::fastcdr::Cdr::DDS_CDR); // Object that deserializes the data.
+                                              // Deserialize encapsulation.
         try
         {
             deser.read_encapsulation();
         }
-        catch (eprosima::fastcdr::exception::NotEnoughMemoryException)
+        catch (eprosima::fastcdr::exception::NotEnoughMemoryException& e)
         {
+            std::cout << "NotEnoughMemoryException:" << e.what() << std::endl;
             return false;
         }
-        catch (eprosima::fastcdr::exception::BadParamException)
+        catch (eprosima::fastcdr::exception::BadParamException& e)
         {
+            std::cout << "BadParamException:" << e.what() << std::endl;
             return false;
         }
         payload->encapsulation = deser.endianness() == eprosima::fastcdr::Cdr::BIG_ENDIANNESS ? CDR_BE : CDR_LE;
 
         if (!m_header_enable)
         {
-            p_type->writeData(payload->data + 4, payload->length - 4);
+            if (payload->length >= (uint32_t)deser.getSerializedDataLength())
+            {
+                p_type->writeData(payload->data + deser.getSerializedDataLength(), payload->length - (uint32_t)deser.getSerializedDataLength());
+            }
         }
         else
         {
@@ -162,7 +181,7 @@ namespace RTC
     }
 
     void CORBACdrDataPubSubType::deleteData(void* data) {
-        delete((RTC::ByteData*)data);
+        delete data;
     }
 #if (FASTRTPS_VERSION_MAJOR <= 1) && (FASTRTPS_VERSION_MINOR == 6)
     bool CORBACdrDataPubSubType::getKey(void *data, eprosima::fastrtps::rtps::InstanceHandle_t* handle) {
