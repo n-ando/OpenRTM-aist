@@ -234,7 +234,9 @@ class skel_wrapper:
 			sys.stderr.write("Invalid IDL file name specified.\n")
 			sys.exit(1)
 			
-		dirname  = os.path.dirname(basename) + "/"
+		dirname  = os.path.dirname(basename)
+		if dirname:
+			dirname += "/"
 		basename = os.path.basename(basename)
 		self.data["basename"] = basename
 		self.data["skel_h"]   = basename + skel_suffix + ".h"
