@@ -71,6 +71,10 @@ namespace coil
   * @if jp
   *
   * @brief RtlGetVersion APIによりOSの情報取得
+  * RtlGetVersion関数によりOSのメジャーバージョン、マイナーバージョン、
+  * ビルドナンバー、サービスパックの情報を取得する
+  * RtlGetVersion関数アドレス取得失敗、OSの情報取得失敗の場合は-1を返す
+  * この関数はrtlgetinfo関数で使用するためのものであり、基本的に外部からは使用しない
   *
   *
   * @param name 構造体名称
@@ -79,8 +83,9 @@ namespace coil
   *
   * @else
   *
-  * @brief 
-  *
+  * @brief Obtain OS information using RtlGetVersion API
+  * Get major version, minor version, build number, service pack information of OS by RtlGetVersion function
+  * RtlGetVersion function Returns -1 in the case of address acquisition failure, OS information acquisition failure.
   *
   * @param name Name of structure
   *
@@ -134,6 +139,13 @@ namespace coil
    * @brief システム情報取得
    *
    * システム情報を構造体に設定して返す。
+   * OSのバージョンはRtlGetVersionにより取得する
+   * RtlGetVersionはRTL_OSVERSIONINFOWにOSのメジャーバージョン、
+   * マイナーバージョン、ビルドナンバー、サービスパックの情報などを格納する
+   * ただし、ライブラリ(ntdll.dll)が存在せず利用できない場合は
+   * VerifyVersionInfoによるバージョン比較を行う。
+   * VerifyVersionInfoは設定したOSのバージョンと指定のバージョンを比較する関数である。
+   * VerifyVersionInfoを使う場合はビルドナンバーは設定されない
    *
    * @param name 構造体名称
    *
@@ -144,6 +156,12 @@ namespace coil
    * @brief Get System information
    *
    * Return a system information to a structure.
+   * Set system information to structure and return it.
+   * Obtain version of OS by RtlGetVersion function.
+   * RtlGetVersion function stores the major version, minor version, build number, service pack information etc of OS in RTL_OSVERSIONINFOW.
+   * However, if the library (ntdll.dll) does not exist and can not be used, version comparison by VerifyVersionInfo function is performed.
+   * VerifyVersionInfo function is a function to compare the version of the specified OS with the specified version.
+   * When using VerifyVersionInfo function, the build number is not set.
    *
    * @param name Name of structure
    *

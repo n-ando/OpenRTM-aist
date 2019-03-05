@@ -187,7 +187,6 @@ class MyServiceConsumer
     std::string& m_result;
   };
  private:
-  coil::Async* async_set_value;
   coil::Async* async_echo;
   std::string m_result;
 

@@ -37,7 +37,7 @@ MyServiceConsumer::MyServiceConsumer(RTC::Manager* manager)
     // <rtc-template block="initializer">
     m_MyServicePort("MyService"),
     // </rtc-template>
-    async_set_value(nullptr), async_echo(nullptr)
+    async_echo(nullptr)
 {
 }
 

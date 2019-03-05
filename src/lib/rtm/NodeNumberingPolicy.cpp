@@ -26,7 +26,6 @@ namespace RTM
   // NodeNumberingPolicy
   //============================================================
 	NodeNumberingPolicy::NodeNumberingPolicy()
-		: m_num(0)
 	{
 		m_mgr = &RTC::Manager::instance();
 	}
