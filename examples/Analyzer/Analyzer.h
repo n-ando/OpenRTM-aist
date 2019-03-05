@@ -340,7 +340,7 @@ public:
 	DataListener(Analyzer *comp);
 	virtual ~DataListener();
 
-	virtual ReturnCode operator()(ConnectorInfo& info,
+	virtual ReturnCode operator()(ConnectorInfo&  /*info*/,
 		TimedOctetSeq& data)
 	{
 		m_comp->writeData(data);

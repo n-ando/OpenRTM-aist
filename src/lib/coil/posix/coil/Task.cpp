@@ -53,7 +53,7 @@ namespace coil
    * @brief Task open
    * @endif
    */
-  int Task::open(void* args)
+  int Task::open(void*  /*args*/)
   {
     return 0;
   }
@@ -65,7 +65,7 @@ namespace coil
    * @brief Task close
    * @endif
    */
-  int Task::close(unsigned long flags)
+  int Task::close(unsigned long  /*flags*/)
   {
     return 0;
   }
@@ -108,7 +108,7 @@ namespace coil
    * @brief Waiting for the thread terminate
    * @endif
    */
-  int Task::wait(void)
+  int Task::wait()
   {
     if (m_count > 0)
       {
@@ -125,7 +125,7 @@ namespace coil
    * @brief Suspending the task
    * @endif
    */
-  int Task::suspend(void)
+  int Task::suspend()
   {
     return 0;
   }
@@ -137,7 +137,7 @@ namespace coil
    * @brief Resuming the suspended task
    * @endif
    */
-  int Task::resume(void)
+  int Task::resume()
   {
     return 0;
   }

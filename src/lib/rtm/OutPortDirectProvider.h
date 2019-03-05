@@ -69,7 +69,7 @@ namespace RTC
      *
      * @endif
      */
-    OutPortDirectProvider(void);
+    OutPortDirectProvider();
 
     /*!
      * @if jp
@@ -84,7 +84,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~OutPortDirectProvider(void);
+    virtual ~OutPortDirectProvider();
 
     /*!
      * @if jp

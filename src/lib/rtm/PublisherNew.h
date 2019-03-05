@@ -37,7 +37,7 @@
 namespace coil
 {
   class Properties;
-};
+} // namespace coil
 
 namespace RTC
 {
@@ -104,7 +104,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~PublisherNew(void);
+    virtual ~PublisherNew();
 
     /*!
      * @if jp
@@ -424,7 +424,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual int svc(void);
+    virtual int svc();
 
   protected:
     enum Policy

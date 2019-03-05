@@ -1,4 +1,4 @@
-﻿// -*- C++ -*-
+// -*- C++ -*-
 /*!
  * @file  Analyzer.cpp
  * @brief Clock Analyzer Component
@@ -145,7 +145,7 @@ RTC::ReturnCode_t Analyzer::onShutdown(RTC::UniqueId ec_id)
 */
 
 
-RTC::ReturnCode_t Analyzer::onActivated(RTC::UniqueId ec_id)
+RTC::ReturnCode_t Analyzer::onActivated(RTC::UniqueId  /*ec_id*/)
 {
 	data_size = 0;
 	m_fs.open(m_outputfile.c_str(), std::ios::out);
@@ -158,7 +158,7 @@ RTC::ReturnCode_t Analyzer::onActivated(RTC::UniqueId ec_id)
 
 
 
-RTC::ReturnCode_t Analyzer::onDeactivated(RTC::UniqueId ec_id)
+RTC::ReturnCode_t Analyzer::onDeactivated(RTC::UniqueId  /*ec_id*/)
 {
 	if (m_fs)
 	{
@@ -169,7 +169,7 @@ RTC::ReturnCode_t Analyzer::onDeactivated(RTC::UniqueId ec_id)
 
 
 
-RTC::ReturnCode_t Analyzer::onExecute(RTC::UniqueId ec_id)
+RTC::ReturnCode_t Analyzer::onExecute(RTC::UniqueId  /*ec_id*/)
 {
 	//static int ds = 0;
 	//ds += 10000;
@@ -295,5 +295,4 @@ extern "C"
   }
   
 };
-
 

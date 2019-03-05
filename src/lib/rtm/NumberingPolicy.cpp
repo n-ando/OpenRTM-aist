@@ -83,10 +83,10 @@ namespace RTM
     std::vector<void*>::size_type i(0);
     for (i = 0; i < len; ++i)
       {
-        if (m_objects[i] == obj) return i;
+        if (m_objects[i] == obj) return (int)i;
       }
     throw ObjectNotFound();
-    return i;
+    return (int)i;
   }
 }; //namespace RTM  
 

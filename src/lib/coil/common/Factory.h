@@ -27,6 +27,7 @@
 #include <functional>
 #include <string>
 #include <map>
+#include <utility>
 #include <vector>
 
 // for Windows DLL export
@@ -547,7 +548,7 @@ namespace coil
        * @endif
        */
       FactoryEntry(Identifier id, Creator creator, Destructor destructor)
-        : id_(id), creator_(creator), destructor_(destructor)
+        : id_(std::move(id)), creator_(creator), destructor_(destructor)
       {
       }
       std::string id_;
