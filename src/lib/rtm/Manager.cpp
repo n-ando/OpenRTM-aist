@@ -374,7 +374,7 @@ namespace RTC
             }
             else
             {
-                initfunc = coil::split((*itr) ".").operator[](0) + "Init";
+                initfunc = coil::split((*itr), ".").operator[](0) + "Init";
             }
             filename = (*itr);
           }
