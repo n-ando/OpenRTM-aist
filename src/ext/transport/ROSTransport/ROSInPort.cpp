@@ -424,6 +424,7 @@ namespace RTC
       {
       case BufferStatus::BUFFER_OK:
         onBufferWrite(data);
+        return;
 
       case BufferStatus::BUFFER_ERROR:
         onReceiverError(data);
