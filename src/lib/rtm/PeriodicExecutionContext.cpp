@@ -23,8 +23,10 @@
 #include <rtm/RTObjectStateMachine.h>
 
 #ifdef RTM_OS_LINUX
+#ifndef _GNU_SOURCE
 #define _GNU_SOURCE
 #include <pthread.h>
+#endif // _GNU_SOURCE
 #include <algorithm>
 #endif // RTM_OS_LINUX
 
