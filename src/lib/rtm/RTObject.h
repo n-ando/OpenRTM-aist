@@ -2146,7 +2146,7 @@ namespace RTC
      *
      * @endif
      */
-    void setObjRef(const RTObject_ptr rtobj);
+    void setObjRef(RTObject_ptr rtobj);
 
     /*!
      * @if jp

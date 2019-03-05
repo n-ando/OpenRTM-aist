@@ -210,7 +210,7 @@ namespace SDOPackage
      * @brief Conversion from SDO to DFC
      * @endif
      */
-    bool sdoToDFC(const SDO_ptr sdo, ::OpenRTM::DataFlowComponent_ptr& dfc);
+    bool sdoToDFC(SDO_ptr sdo, ::OpenRTM::DataFlowComponent_ptr& dfc);
 
     /*!
      * @if jp
