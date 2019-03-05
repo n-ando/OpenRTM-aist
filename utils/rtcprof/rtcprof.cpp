@@ -71,20 +71,20 @@ int main(int argc, char* argv[])
   std::vector<coil::Properties> newp(mgr.getFactoryProfiles());
   std::vector<coil::Properties> profs;
 
-  for (size_t i(0); i < newp.size(); ++i)
+  for (auto & i : newp)
     {
       bool exists(false);
-      for (size_t j(0); j < oldp.size(); ++j)
+      for (auto & j : oldp)
         {
-          if (oldp[j]["implementation_id"] == newp[i]["implementation_id"] &&
-              oldp[j]["type_name"]         == newp[i]["type_name"] &&
-              oldp[j]["description"]       == newp[i]["description"] &&
-              oldp[j]["version"]           == newp[i]["version"])
+          if (j["implementation_id"] == i["implementation_id"] &&
+              j["type_name"]         == i["type_name"] &&
+              j["description"]       == i["description"] &&
+              j["version"]           == i["version"])
             {
               exists = true;
             }
         }
-      if (!exists) { profs.push_back(newp[i]); }
+      if (!exists) { profs.push_back(i); }
     }
 
   // loaded component profile have to be one
@@ -102,9 +102,9 @@ int main(int argc, char* argv[])
 
   coil::vstring keys(profs[0].propertyNames());
 
-  for (size_t i(0); i < keys.size(); ++i)
+  for (const auto & key : keys)
     {
-      std::cout << keys[i] << ": " << profs[0][keys[i]] << std::endl;
+      std::cout << key << ": " << profs[0][key] << std::endl;
     }
 
   return 0;

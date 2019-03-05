@@ -591,18 +591,18 @@ namespace RTC
     RTC_TRACE(("NamingManager::bindObject(%s)", name));
 
     Guard guard(m_namesMutex);
-    for (std::vector<NamingService*>::iterator n = m_names.begin(); n != m_names.end(); ++n)
+    for (auto & m_name : m_names)
       {
-        if ((*n)->ns != nullptr)
+        if (m_name->ns != nullptr)
           {
             try
               {
-                (*n)->ns->bindObject(name, rtobj);
+                m_name->ns->bindObject(name, rtobj);
               }
             catch (...)
               {
-                delete (*n)->ns;
-                (*n)->ns = nullptr;
+                delete m_name->ns;
+                m_name->ns = nullptr;
               }
           }
       }
@@ -614,18 +614,18 @@ namespace RTC
     RTC_TRACE(("NamingManager::bindObject(%s)", name));
 
     Guard guard(m_namesMutex);
-    for (std::vector<NamingService*>::iterator n = m_names.begin(); n != m_names.end(); ++n)
+    for (auto & m_name : m_names)
       {
-        if ((*n)->ns != nullptr)
+        if (m_name->ns != nullptr)
           {
             try
               {
-                (*n)->ns->bindObject(name, port);
+                m_name->ns->bindObject(name, port);
               }
             catch (...)
               {
-                delete (*n)->ns;
-                (*n)->ns = nullptr;
+                delete m_name->ns;
+                m_name->ns = nullptr;
               }
           }
       }
@@ -637,18 +637,18 @@ namespace RTC
     RTC_TRACE(("NamingManager::bindObject(%s)", name));
 
     Guard guard(m_namesMutex);
-    for (std::vector<NamingService*>::iterator n = m_names.begin(); n != m_names.end(); ++n)
+    for (auto & m_name : m_names)
       {
-        if ((*n)->ns != nullptr)
+        if (m_name->ns != nullptr)
           {
             try
               {
-                (*n)->ns->bindObject(name, mgr);
+                m_name->ns->bindObject(name, mgr);
               }
             catch (...)
               {
-                delete (*n)->ns;
-                (*n)->ns = nullptr;
+                delete m_name->ns;
+                m_name->ns = nullptr;
               }
           }
       }
@@ -669,36 +669,36 @@ namespace RTC
     Guard guard(m_namesMutex);
     bool rebind(coil::toBool(m_manager->getConfig()["naming.update.rebind"],
                              "YES", "NO", false));
-    for (std::vector<NamingService*>::iterator n = m_names.begin(); n != m_names.end(); ++n)
+    for (auto & m_name : m_names)
       {
-        if ((*n)->ns == nullptr)  // if ns==NULL
+        if (m_name->ns == nullptr)  // if ns==NULL
           {
             RTC_DEBUG(("Retrying connection to %s/%s",
-                       (*n)->method.c_str(),
-                       (*n)->nsname.c_str()));
-            retryConnection(*n);
+                       m_name->method.c_str(),
+                       m_name->nsname.c_str()));
+            retryConnection(m_name);
           }
         else
           {
             try
               {
-                if (rebind) { bindCompsTo((*n)->ns); }
-                if (!(*n)->ns->isAlive())
+                if (rebind) { bindCompsTo(m_name->ns); }
+                if (!m_name->ns->isAlive())
                   {
                     RTC_INFO(("Name server: %s (%s) disappeared.",
-                              (*n)->nsname.c_str(),
-                              (*n)->method.c_str()));
-                    delete (*n)->ns;
-                    (*n)->ns = nullptr;
+                              m_name->nsname.c_str(),
+                              m_name->method.c_str()));
+                    delete m_name->ns;
+                    m_name->ns = nullptr;
                   }
               }
             catch (...)
               {
                 RTC_INFO(("Name server: %s (%s) disappeared.",
-                          (*n)->nsname.c_str(),
-                          (*n)->method.c_str()));
-                delete (*n)->ns;
-                (*n)->ns = nullptr;
+                          m_name->nsname.c_str(),
+                          m_name->method.c_str()));
+                delete m_name->ns;
+                m_name->ns = nullptr;
               }
           }
       }
@@ -716,11 +716,11 @@ namespace RTC
     RTC_TRACE(("NamingManager::unbindObject(%s)", name));
 
     Guard guard(m_namesMutex);
-    for (std::vector<NamingService*>::iterator n = m_names.begin(); n != m_names.end(); ++n)
+    for (auto & m_name : m_names)
       {
-        if ((*n)->ns != nullptr)
+        if (m_name->ns != nullptr)
         {
-            (*n)->ns->unbindObject(name);
+            m_name->ns->unbindObject(name);
         }
       }
     unregisterCompName(name);
@@ -741,13 +741,13 @@ namespace RTC
       Guard guard(m_compNamesMutex);
       coil::vstring names;
       // unbindObject modifiy m_compNames
-      for (std::vector<Comps*>::iterator comp = m_compNames.begin(); comp != m_compNames.end(); ++comp)
+      for (auto & m_compName : m_compNames)
         {
-          names.push_back((*comp)->name);
+          names.push_back(m_compName->name);
         }
-      for (coil::vstring::iterator name = names.begin(); name != names.end(); ++name)
+      for (auto & name : names)
         {
-          unbindObject((*name).c_str());
+          unbindObject(name.c_str());
         }
 
     }
@@ -755,13 +755,13 @@ namespace RTC
       Guard guard(m_mgrNamesMutex);
       coil::vstring names;
       // unbindObject modifiy m_mgrNames
-      for (std::vector<Mgr*>::iterator mgr = m_mgrNames.begin(); mgr != m_mgrNames.end(); ++mgr)
+      for (auto & m_mgrName : m_mgrNames)
         {
-          names.push_back((*mgr)->name);
+          names.push_back(m_mgrName->name);
         }
-      for (coil::vstring::iterator name = names.begin(); name != names.end(); ++name)
+      for (auto & name : names)
         {
-          unbindObject((*name).c_str());
+          unbindObject(name.c_str());
         }
     }
   }
@@ -778,9 +778,9 @@ namespace RTC
     std::vector<RTObject_impl*> comps;
     Guard guard(m_compNamesMutex);
 
-    for (std::vector<Comps*>::iterator cn = m_compNames.begin(); cn != m_compNames.end(); ++cn)
+    for (auto & m_compName : m_compNames)
       {
-        comps.push_back(const_cast<RTObject_impl*>((*cn)->rtobj));
+        comps.push_back(const_cast<RTObject_impl*>(m_compName->rtobj));
       }
     return comps;
   }
@@ -840,9 +840,9 @@ namespace RTC
    */
   void NamingManager::bindCompsTo(NamingBase* ns)
   {
-      for (std::vector<Comps*>::iterator cn = m_compNames.begin(); cn != m_compNames.end(); ++cn)
+      for (auto & m_compName : m_compNames)
       {
-        ns->bindObject((*cn)->name.c_str(), (*cn)->rtobj);
+        ns->bindObject(m_compName->name.c_str(), m_compName->rtobj);
       }
   }
 
@@ -856,11 +856,11 @@ namespace RTC
   void NamingManager::registerCompName(const char* name,
                                        const RTObject_impl* rtobj)
   {
-      for (std::vector<Comps*>::iterator cn = m_compNames.begin(); cn != m_compNames.end(); ++cn)
+      for (auto & m_compName : m_compNames)
       {
-        if ((*cn)->name == name)
+        if (m_compName->name == name)
           {
-            (*cn)->rtobj = rtobj;
+            m_compName->rtobj = rtobj;
             return;
           }
       }
@@ -877,11 +877,11 @@ namespace RTC
   void NamingManager::registerPortName(const char* name,
                                        const PortBase* port)
   {
-    for (std::vector<Port*>::iterator pn = m_portNames.begin(); pn != m_portNames.end(); ++pn)
+    for (auto & m_portName : m_portNames)
       {
-        if ((*pn)->name == name)
+        if (m_portName->name == name)
           {
-            (*pn)->port = port;
+            m_portName->port = port;
             return;
           }
       }
@@ -891,11 +891,11 @@ namespace RTC
   void NamingManager::registerMgrName(const char* name,
                                       const RTM::ManagerServant* mgr)
   {
-    for (std::vector<Mgr*>::iterator mn = m_mgrNames.begin(); mn != m_mgrNames.end(); ++mn)
+    for (auto & m_mgrName : m_mgrNames)
       {
-        if ((*mn)->name == name)
+        if (m_mgrName->name == name)
           {
-            (*mn)->mgr = mgr;
+            m_mgrName->mgr = mgr;
             return;
           }
       }
@@ -997,10 +997,10 @@ namespace RTC
   RTCList NamingManager::string_to_component(std::string name)
   {
 	  
-	  for (std::vector<NamingService*>::iterator itr = m_names.begin(); itr != m_names.end(); ++itr) {
-		  if ((*itr)->ns != nullptr)
+	  for (auto & m_name : m_names) {
+		  if (m_name->ns != nullptr)
 		  {
-			  RTCList comps = (*itr)->ns->string_to_component(name);
+			  RTCList comps = m_name->ns->string_to_component(name);
 			  if (comps.length() > 0)
 			  {
 				  return comps;

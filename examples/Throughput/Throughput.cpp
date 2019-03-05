@@ -499,9 +499,9 @@ void Throughput::setConnectorProfile(const RTC::ConnectorInfo &info)
   std::stringstream ss;
   ss << info.properties;
   coil::vstring propv = coil::split(ss.str(), "\n");
-  for (size_t i(0); i < propv.size(); ++i)
+  for (const auto & i : propv)
     {
-      m_fs << "# " << propv[i] << std::endl;
+      m_fs << "# " << i << std::endl;
     }
 
   // print header

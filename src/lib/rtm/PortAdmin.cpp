@@ -350,9 +350,9 @@ namespace RTC
   {
     std::vector<PortBase*> ports;
     ports = m_portServants.getObjects();
-    for (std::vector<PortBase*>::iterator port = ports.begin(); port != ports.end(); ++port)
+    for (auto & port : ports)
       {
-        (*port)->activateInterfaces();
+        port->activateInterfaces();
       }
   }
 
@@ -367,9 +367,9 @@ namespace RTC
   {
     std::vector<PortBase*> ports;
     ports = m_portServants.getObjects();
-    for (std::vector<PortBase*>::iterator port = ports.begin(); port != ports.end(); ++port)
+    for (auto & port : ports)
       {
-        (*port)->deactivateInterfaces();
+        port->deactivateInterfaces();
       }
   }
 

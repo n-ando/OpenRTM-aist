@@ -70,10 +70,10 @@ namespace coil
 #ifndef COIL_OS_QNX
     coil::vstring tmp = coil::split(cpu_mask, ",", true);
     CpuMask mask;
-    for (size_t i(0); i < tmp.size(); ++i)
+    for (auto & i : tmp)
       {
         int num;
-        if (coil::stringTo(num, tmp[i].c_str()))
+        if (coil::stringTo(num, i.c_str()))
           {
             mask.push_back(num);
           }
@@ -129,10 +129,10 @@ namespace coil
 #ifndef COIL_OS_QNX
     coil::vstring tmp = coil::split(cpu_mask, ",", true);
     CpuMask mask;
-    for (size_t i(0); i < tmp.size(); ++i)
+    for (auto & i : tmp)
       {
         int num;
-        if (coil::stringTo(num, tmp[i].c_str()))
+        if (coil::stringTo(num, i.c_str()))
           {
             mask.push_back(num);
           }

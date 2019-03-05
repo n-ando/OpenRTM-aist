@@ -102,11 +102,11 @@ namespace RTC
   PortConnectListenerHolder::~PortConnectListenerHolder()
   {
     Guard guard(m_mutex);
-    for (std::vector<Entry>::iterator listener = m_listeners.begin(); listener != m_listeners.end(); ++listener)
+    for (auto & m_listener : m_listeners)
       {
-        if ((*listener).second)
+        if (m_listener.second)
           {
-            delete (*listener).first;
+            delete m_listener.first;
           }
       }
   }
@@ -145,9 +145,9 @@ namespace RTC
                                          RTC::ConnectorProfile& profile)
   {
     Guard guard(m_mutex);
-    for (std::vector<Entry>::iterator listener = m_listeners.begin(); listener != m_listeners.end(); ++listener)
+    for (auto & m_listener : m_listeners)
       {
-        (*listener).first->operator()(portname, profile);
+        m_listener.first->operator()(portname, profile);
       }
   }
 
@@ -167,11 +167,11 @@ namespace RTC
   PortConnectRetListenerHolder::~PortConnectRetListenerHolder()
   {
     Guard guard(m_mutex);
-    for (std::vector<Entry>::iterator listener = m_listeners.begin(); listener != m_listeners.end(); ++listener)
+    for (auto & m_listener : m_listeners)
       {
-        if ((*listener).second)
+        if (m_listener.second)
           {
-            delete (*listener).first;
+            delete m_listener.first;
           }
       }
   }
@@ -211,9 +211,9 @@ namespace RTC
                                             ReturnCode_t ret)
   {
     Guard guard(m_mutex);
-    for (std::vector<Entry>::iterator listener = m_listeners.begin(); listener != m_listeners.end(); ++listener)
+    for (auto & m_listener : m_listeners)
       {
-        (*listener).first->operator()(portname, profile, ret);
+        m_listener.first->operator()(portname, profile, ret);
       }
   }
 

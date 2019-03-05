@@ -204,9 +204,9 @@ namespace RTC
     RTC_TRACE(("unloadAll()"));
     std::vector<DLLEntity*> dlls(m_modules.getObjects());
 
-    for (std::vector<DLLEntity*>::iterator d = dlls.begin(); d != dlls.end(); ++d)
+    for (auto & d : dlls)
       {
-        std::string ident((*d)->properties["file_path"]);
+        std::string ident(d->properties["file_path"]);
         DLLEntity* dll(m_modules.unregisterObject(ident.c_str()));
         dll->dll.close();
       }
@@ -296,9 +296,9 @@ namespace RTC
     RTC_TRACE(("getLoadedModules()"));
     std::vector< DLLEntity* > dlls(m_modules.getObjects());
     std::vector<coil::Properties> modules(0);
-    for (std::vector< DLLEntity* >::iterator dll = dlls.begin(); dll != dlls.end(); ++dll)
+    for (auto & dll : dlls)
       {
-        modules.push_back((*dll)->properties);
+        modules.push_back(dll->properties);
       }
     return modules;
   }
@@ -320,16 +320,16 @@ namespace RTC
     RTC_DEBUG(("langs: %s", gprop["manager.supported_languages"].c_str()));
 
     // for each languages
-    for (coil::vstring::iterator lang = langs.begin(); lang != langs.end(); ++lang)
+    for (auto & lang : langs)
       {
         // 1. getting loadable files list
         coil::vstring modules(0);
-        getModuleList((*lang), modules);
-        RTC_DEBUG(("%s: %s", (*lang).c_str(), coil::flatten(modules).c_str()));
+        getModuleList(lang, modules);
+        RTC_DEBUG(("%s: %s", lang.c_str(), coil::flatten(modules).c_str()));
 
         // 2. getting module properties from loadable modules
         vProperties tmpprops(0);
-        getModuleProfiles((*lang), modules, tmpprops);
+        getModuleProfiles(lang, modules, tmpprops);
         RTC_DEBUG(("Modile profile size: %d (newly founded modules)",
                    tmpprops.size()));
         m_modprofs.insert(m_modprofs.end(), tmpprops.begin(), tmpprops.end());
@@ -468,38 +468,38 @@ namespace RTC
     RTC_DEBUG(("suffixes: %s", coil::flatten(suffixes).c_str()));
 
     // for each load path list
-    for (coil::vstring::iterator p = paths.begin(); p != paths.end(); ++p)
+    for (auto & p : paths)
       {
-        if ((*p).empty())
+        if (p.empty())
           {
             RTC_WARN(("Given load path is empty"));
             continue;
           }
-        std::string& path(*p);
+        std::string& path(p);
         RTC_DEBUG(("Module load path: %s", path.c_str()));
 
         // get file list for each suffixes
         coil::vstring flist(0);
-        for (coil::vstring::iterator suffix = suffixes.begin(); suffix != suffixes.end(); ++suffix)
+        for (auto & suffixe : suffixes)
           {
             //std::string glob("*."); glob += suffixes[s];
             //coil::vstring tmp = coil::filelist(path.c_str(), glob.c_str());
             coil::vstring tmp;
-            coil::getFileList(path, (*suffix), tmp);
+            coil::getFileList(path, suffixe, tmp);
             RTC_DEBUG(("File list (path:%s, ext:%s): %s", path.c_str(),
-                       (*suffix).c_str(), coil::flatten(tmp).c_str()));
+                       suffixe.c_str(), coil::flatten(tmp).c_str()));
             flist.insert(flist.end(), tmp.begin(), tmp.end());
           }
 
         // reformat file path and remove cached files
-        for (coil::vstring::iterator f = flist.begin(); f != flist.end(); ++f)
+        for (auto & f : flist)
           {
             //if (*(path.end() - 1) != '/') { path += "/"; }
             //std::string fpath(path + flist[j]);
             //addNewFile(fpath, modules);
-            coil::replaceString(*f, "\\", "/");
-            coil::replaceString(*f, "//", "/");
-            addNewFile(*f, modules);
+            coil::replaceString(f, "\\", "/");
+            coil::replaceString(f, "//", "/");
+            addNewFile(f, modules);
           }
       }
       std::sort(modules.begin(), modules.end());
@@ -517,10 +517,10 @@ namespace RTC
                                  coil::vstring& modules)
   {
     bool exists(false);
-    for (vProperties::iterator prof = m_modprofs.begin(); prof != m_modprofs.end(); ++prof)
+    for (auto & m_modprof : m_modprofs)
       {
                   
-        if ((*prof)["module_file_path"] == fpath)
+        if (m_modprof["module_file_path"] == fpath)
           {
 
             exists = true;
@@ -529,9 +529,9 @@ namespace RTC
             break;
           }
       }
-    for (coil::vstring::iterator mod = m_loadfailmods.begin(); mod != m_loadfailmods.end(); ++mod)
+    for (auto & m_loadfailmod : m_loadfailmods)
       {
-        if ((*mod) == fpath)
+        if (m_loadfailmod == fpath)
           {
             exists = true;
             break;
@@ -559,11 +559,11 @@ namespace RTC
     std::string l = "manager.modules." + lang;
     coil::Properties& lprop(Manager::instance().getConfig().getNode(l));
 
-    for (coil::vstring::const_iterator mod = modules.begin(); mod != modules.end(); ++mod)
+    for (const auto & module : modules)
       {
           
         std::string cmd(lprop["profile_cmd"]);
-        cmd += " \"" + (*mod) + "\"";
+        cmd += " \"" + module + "\"";
 
         coil::vstring out;
         if (coil::create_process(cmd, out) == -1)
@@ -573,9 +573,9 @@ namespace RTC
           }
         coil::Properties p;
         
-        for (coil::vstring::iterator itr = out.begin(); itr != out.end(); ++itr)
+        for (auto & itr : out)
           {
-            std::string tmp = (*itr);
+            std::string tmp = itr;
             std::string::size_type pos(tmp.find(':'));
             if (pos != std::string::npos)
               {
@@ -593,11 +593,11 @@ namespace RTC
         RTC_DEBUG(("rtcprof cmd sub process done."));
         if (p["implementation_id"].empty()) 
           { 
-            m_loadfailmods.push_back((*mod));
+            m_loadfailmods.push_back(module);
             continue;
           }
-        p["module_file_name"] = coil::basename(mod->c_str());
-        p["module_file_path"] = *mod;
+        p["module_file_name"] = coil::basename(module.c_str());
+        p["module_file_path"] = module;
         modprops.push_back(p);
         
       }

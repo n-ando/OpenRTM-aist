@@ -283,18 +283,17 @@ namespace RTC
                    strict ? "strict" : "best_effort"))
       }
 
-    for (CorbaConsumerList::iterator it(m_consumers.begin());
-         it != m_consumers.end(); ++it)
+    for (auto & m_consumer : m_consumers)
       {
         std::string ior = std::string();
-        if (findProvider(nv, *it, ior))
+        if (findProvider(nv, m_consumer, ior))
           {
-            setObject(ior, *it);
+            setObject(ior, m_consumer);
             continue;
           }
-        if (findProviderOld(nv, *it, ior))
+        if (findProviderOld(nv, m_consumer, ior))
           {
-            setObject(ior, *it);
+            setObject(ior, m_consumer);
             continue;
           }
 
@@ -327,20 +326,19 @@ namespace RTC
     const NVList& nv(connector_profile.properties);
     RTC_DEBUG_STR((NVUtil::toString(nv)));
 
-    for (CorbaConsumerList::iterator it(m_consumers.begin());
-         it != m_consumers.end(); ++it)
+    for (auto & m_consumer : m_consumers)
       {
         std::string ior;
-        if (findProvider(nv, *it, ior))
+        if (findProvider(nv, m_consumer, ior))
           {
             RTC_DEBUG(("Correspoinding consumer found."));
-            releaseObject(ior, *it);
+            releaseObject(ior, m_consumer);
             continue;
           }
-        if (findProviderOld(nv, *it, ior))
+        if (findProviderOld(nv, m_consumer, ior))
           {
             RTC_DEBUG(("Correspoinding consumer found."));
-            releaseObject(ior, *it);
+            releaseObject(ior, m_consumer);
             continue;
           }
       }

@@ -289,9 +289,9 @@ namespace RTC
       if (ostream_type)
       {
           std::vector<std::string> vec(prop);
-          for (std::vector<std::string>::iterator itr = vec.begin(); itr != vec.end(); ++itr)
+          for (auto & itr : vec)
           {
-              ostream_type->write(level, m_name, getDate(), *itr);
+              ostream_type->write(level, m_name, getDate(), itr);
           }
       }
   }

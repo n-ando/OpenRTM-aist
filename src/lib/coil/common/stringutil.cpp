@@ -473,9 +473,8 @@ namespace coil
   {
     if (ignore_case) { toLower(value); }
 
-    for (int i(0), len(static_cast<int>(list.size())); i < len; ++i)
+    for (auto str : list)
       {
-        std::string str(list[i]);
         if (ignore_case) { toLower(str); }
         if (str == value) return true;
       }
@@ -534,19 +533,19 @@ namespace coil
   }
   bool isIPv4(const std::string& str)
   {
-    for (size_t i(0); i < str.size(); ++i)
+    for (char i : str)
       {
-        if (!((str[i] >= '0' && str[i] <= '9') ||
-              str[i] == '.' || str[i] == ':'))
+        if (!((i >= '0' && i <= '9') ||
+              i == '.' || i == ':'))
           { return false; }
       }
     coil::vstring tmp = coil::split(str, ":");
     coil::vstring ipv4 = coil::split(str, ".");
     if (ipv4.size() != 4) { return false; }
-    for (size_t i(0); i < ipv4.size(); ++i)
+    for (auto & i : ipv4)
       {
         unsigned short int dec;
-        if (!coil::stringTo(dec, ipv4[i].c_str())) { return false; }
+        if (!coil::stringTo(dec, i.c_str())) { return false; }
         if (dec < 0 || dec > 255) { return false; }
       }
     return true;
@@ -556,12 +555,12 @@ namespace coil
     // IPv6 address must be
     // 1111:1111:1111:1111:1111:1111:1111:1111 (addr)
     // [1111:1111:1111:1111:1111:1111:1111:1111]:11111 (addr, port)
-    for (size_t i(0); i < str.size(); ++i)
+    for (char i : str)
       {
-        if (!((str[i] >= '0' && str[i] <= '9') ||
-             (str[i] >= 'a' && str[i] <= 'f') ||
-             (str[i] >= 'A' && str[i] <= 'F') ||
-              str[i] == ':' || str[i] == '[' || str[i] == ']'))
+        if (!((i >= '0' && i <= '9') ||
+             (i >= 'a' && i <= 'f') ||
+             (i >= 'A' && i <= 'F') ||
+              i == ':' || i == '[' || i == ']'))
           { return false; }
       }
     coil::vstring tmp = coil::split(str, "]:");
@@ -574,13 +573,13 @@ namespace coil
     
     coil::vstring ipv6 = coil::split(tmp[0], ":");
     if (ipv6.size() > 8) { return false; }
-    for (size_t i(0); i < ipv6.size(); ++i)
+    for (auto & i : ipv6)
       {
         try
           {
-            if (ipv6[i].empty()) { continue; }
+            if (i.empty()) { continue; }
             char* endptr = nullptr;
-            long int hexval = std::strtol(ipv6[i].c_str(), &endptr, 16);
+            long int hexval = std::strtol(i.c_str(), &endptr, 16);
             if (errno == ERANGE) { return false; }
             if (hexval < 0x0 || hexval > 0xFFFF) { return false; }
           }
@@ -630,16 +629,16 @@ namespace coil
     coil::vstring tmp = coil::split(str.substr(qpos), "&");
 
     std::map<std::string, std::string> retmap;
-    for (size_t i(0); i < tmp.size(); ++i)
+    for (auto & i : tmp)
       {
-        std::string::size_type pos = tmp[i].find('=');
+        std::string::size_type pos = i.find('=');
         if (pos != std::string::npos)
           {
-            retmap[tmp[i].substr(0, pos)] = tmp[i].substr(pos + 1);
+            retmap[i.substr(0, pos)] = i.substr(pos + 1);
           }
         else
           {
-            retmap[tmp[i]] = std::string("");
+            retmap[i] = std::string("");
           }
       }
     return retmap;
@@ -825,9 +824,9 @@ namespace coil
           return str;
       }
       vstring ret;
-      for (vstring::iterator itr = tmp.begin(); itr != tmp.end(); ++itr)
+      for (auto & itr : tmp)
       {
-          vstring tmp2 = split((*itr), "}");
+          vstring tmp2 = split(itr, "}");
           if (tmp2.size() == 2)
           {
               char s[100];
@@ -841,14 +840,14 @@ namespace coil
           }
           else
           {
-              ret.push_back((*itr));
+              ret.push_back(itr);
           }
       }
 
       std::string ret_str;
-      for (vstring::iterator itr = ret.begin(); itr != ret.end(); ++itr)
+      for (auto & itr : ret)
       {
-          ret_str = ret_str + (*itr);
+          ret_str = ret_str + itr;
       }
       return ret_str;
   }

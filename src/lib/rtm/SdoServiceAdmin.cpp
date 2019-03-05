@@ -78,17 +78,17 @@ namespace RTC
    */
   SdoServiceAdmin::~SdoServiceAdmin()
   {
-    for (std::vector<SdoServiceProviderBase*>::iterator provider = m_providers.begin(); provider != m_providers.end(); ++provider)
+    for (auto & m_provider : m_providers)
       {
-        (*provider)->finalize();
-        delete (*provider);
+        m_provider->finalize();
+        delete m_provider;
       }
     m_providers.clear();
 
-    for (std::vector<SdoServiceConsumerBase*>::iterator consumer = m_consumers.begin(); consumer != m_consumers.end(); ++consumer)
+    for (auto & m_consumer : m_consumers)
       {
-        (*consumer)->finalize();
-        delete (*consumer);
+        m_consumer->finalize();
+        delete m_consumer;
       }
     m_consumers.clear();
   }
@@ -119,9 +119,9 @@ namespace RTC
 
     // If types include '[Aa][Ll][Ll]', all types enabled in this RTC
     ::coil::vstring activeProviderTypes;
-    for (coil::vstring::iterator eprotype = enabledProviderTypes.begin(); eprotype != enabledProviderTypes.end(); ++eprotype)
+    for (auto & enabledProviderType : enabledProviderTypes)
       {
-        std::string tmp(*eprotype);
+        std::string tmp(enabledProviderType);
         coil::toLower(tmp);
         if (tmp == "all")
           {
@@ -129,26 +129,26 @@ namespace RTC
             RTC_DEBUG(("sdo.service.provider.enabled_services: ALL"));
             break;
           }
-        for (coil::vstring::iterator aprotype = availableProviderTypes.begin(); aprotype != availableProviderTypes.end(); ++aprotype)
+        for (auto & availableProviderType : availableProviderTypes)
           {
-            if (*aprotype == *eprotype)
+            if (availableProviderType == enabledProviderType)
               {
-                activeProviderTypes.push_back(*aprotype);
+                activeProviderTypes.push_back(availableProviderType);
               }
           }
       }
 
     SdoServiceProviderFactory& factory(SdoServiceProviderFactory::instance());
-    for(coil::vstring::iterator aprotype = activeProviderTypes.begin(); aprotype != activeProviderTypes.end(); ++aprotype)
+    for(auto & activeProviderType : activeProviderTypes)
       {
         SdoServiceProviderBase* svc
-          = factory.createObject(*aprotype);
+          = factory.createObject(activeProviderType);
 
         SDOPackage::ServiceProfile prof;
-        prof.id             = CORBA::string_dup((*aprotype).c_str());
-        prof.interface_type = CORBA::string_dup((*aprotype).c_str());
+        prof.id             = CORBA::string_dup(activeProviderType.c_str());
+        prof.interface_type = CORBA::string_dup(activeProviderType.c_str());
         prof.service        = svc->_this();
-        std::string propkey = ifrToKey(*aprotype);
+        std::string propkey = ifrToKey(activeProviderType);
         coil::Properties tmp;
         tmp = const_cast<coil::Properties*>(&prop)->getNode(propkey);
         NVUtil::copyFromProperties(prof.properties, tmp);
@@ -181,9 +181,8 @@ namespace RTC
                prop["sdo.service.consumer.available_services"].c_str()));
 
     // If types include '[Aa][Ll][Ll]', all types enabled in this RTC
-    for (coil::vstring::iterator contype = m_consumerTypes.begin(); contype != m_consumerTypes.end(); ++contype)
+    for (auto tmp : m_consumerTypes)
       {
-        std::string tmp(*contype);
         coil::toLower(tmp);
         if (tmp == "all")
           {
@@ -225,11 +224,11 @@ namespace RTC
   {
     std::string idstr(id);
     Guard guard(m_provider_mutex);
-    for (std::vector<SdoServiceProviderBase*>::iterator provider = m_providers.begin(); provider != m_providers.end(); ++provider)
+    for (auto & m_provider : m_providers)
       {
-        if (idstr == static_cast<const char*>((*provider)->getProfile().id))
+        if (idstr == static_cast<const char*>(m_provider->getProfile().id))
           {
-            return new SDOPackage::ServiceProfile((*provider)->getProfile());
+            return new SDOPackage::ServiceProfile(m_provider->getProfile());
           }
       }
     throw SDOPackage::InvalidParameter();
@@ -268,9 +267,9 @@ namespace RTC
     Guard guard(m_provider_mutex);
 
     std::string id(static_cast<const char*>(prof.id));
-    for (std::vector<SdoServiceProviderBase*>::iterator provider = m_providers.begin(); provider != m_providers.end(); ++provider)
+    for (auto & m_provider : m_providers)
       {
-        if (id == static_cast<const char*>((*provider)->getProfile().id))
+        if (id == static_cast<const char*>(m_provider->getProfile().id))
           {
             RTC_ERROR(("SDO service(id=%s, ifr=%s) already exists",
                        static_cast<const char*>(prof.id),
@@ -341,14 +340,14 @@ namespace RTC
     RTC_DEBUG(("Valid ID specified"));
     { // re-initialization
       std::string id(sProfile.id);
-      for (std::vector<SdoServiceConsumerBase*>::iterator consumer = m_consumers.begin(); consumer != m_consumers.end(); ++consumer)
+      for (auto & m_consumer : m_consumers)
         {
-          if (id == static_cast<const char*>((*consumer)->getProfile().id))
+          if (id == static_cast<const char*>(m_consumer->getProfile().id))
             {
               RTC_INFO(("Existing consumer is reinitilized."));
               RTC_DEBUG(("Propeteis are: %s",
                          NVUtil::toString(sProfile.properties).c_str()));
-              return (*consumer)->reinit(sProfile);
+              return m_consumer->reinit(sProfile);
             }
         }
     }
@@ -450,9 +449,9 @@ namespace RTC
   {
     if (m_allConsumerEnabled) { return true; }
 
-    for (coil::vstring::iterator contype = m_consumerTypes.begin(); contype != m_consumerTypes.end(); ++contype)
+    for (auto & m_consumerType : m_consumerTypes)
       {
-        if (*contype ==
+        if (m_consumerType ==
             static_cast<const char*>(sProfile.interface_type))
           {
             RTC_DEBUG(("%s is supported SDO service.",

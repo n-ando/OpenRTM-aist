@@ -1381,12 +1381,11 @@ namespace RTC
 
       void operator()(const SDOPackage::NameValue& nv)
       {
-        for (CorbaConsumerList::iterator it(m_consumers.begin());
-             it != m_consumers.end(); ++it)
+        for (auto & m_consumer : m_consumers)
           {
-            if (it->descriptor() == (const char*)nv.name)
+            if (m_consumer.descriptor() == (const char*)nv.name)
               {
-                it->releaseObject();
+                m_consumer.releaseObject();
               }
           }
       }
