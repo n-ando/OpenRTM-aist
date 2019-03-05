@@ -22,26 +22,26 @@
 
 namespace coil
 {
-  DWORD listToCUPNUM(CpuMask &cpu_mask)
+  DWORD_PTR listToCUPNUM(CpuMask &cpu_mask)
   {
-    DWORD cpu_num = 0;
+    DWORD_PTR cpu_num = 0;
     for(CpuMask::iterator itr = cpu_mask.begin(); itr != cpu_mask.end(); ++itr) {
-      DWORD_PTR p = 0x01 << (*itr);
+      DWORD_PTR p = (DWORD_PTR)0x01 << (*itr);
       cpu_num += p;
     }
     return cpu_num;
   }
   bool getProcCpuAffinity(CpuMask& cpu_mask)
   {
-	  DWORD cpu_num = listToCUPNUM(cpu_mask);
-    DWORD processMask, systemMask = 0;
+    DWORD_PTR cpu_num = listToCUPNUM(cpu_mask);
+    DWORD_PTR processMask, systemMask = 0;
     HANDLE h = GetCurrentProcess();
 	BOOL success = GetProcessAffinityMask(h, (PDWORD_PTR)&processMask, (PDWORD_PTR)&systemMask);
 	if (success)
     {
 		for (int i = 0; i < 32; i++)
 		{
-			if (processMask & (0x00000001 << i))
+			if (processMask & ((DWORD_PTR)0x00000001 << i))
 			{
 				cpu_mask.push_back(i);
 			}
@@ -56,7 +56,7 @@ namespace coil
 
   bool setProcCpuAffinity(std::vector<unsigned int> mask)
   {
-	  DWORD cpu_num = listToCUPNUM(mask);
+    DWORD_PTR cpu_num = listToCUPNUM(mask);
     HANDLE h = GetCurrentProcess();
     BOOL success = SetProcessAffinityMask(h, cpu_num);
 	if (success)
@@ -91,10 +91,10 @@ namespace coil
 
   bool setThreadCpuAffinity(std::vector<unsigned int> mask)
   {
-	  DWORD cpu_num = listToCUPNUM(mask);
+    DWORD_PTR cpu_num = listToCUPNUM(mask);
     HANDLE h = GetCurrentThread();
-    BOOL success = SetThreadAffinityMask(h, cpu_num);
-	if (success)
+    DWORD_PTR success = SetThreadAffinityMask(h, cpu_num);
+	if (success != 0)
 	{
 		return true;
 	}

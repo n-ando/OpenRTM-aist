@@ -72,7 +72,7 @@ namespace RTC
      * @brief Destructor
      * @endif
      */
-    virtual ~OpenHRPExecutionContext(void);
+    virtual ~OpenHRPExecutionContext();
 
 
     //============================================================
@@ -121,7 +121,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual CORBA::Boolean is_running(void)
+    virtual CORBA::Boolean is_running()
       throw (CORBA::SystemException);
 
     /*!
@@ -151,7 +151,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual RTC::ReturnCode_t start(void)
+    virtual RTC::ReturnCode_t start()
       throw (CORBA::SystemException);
 
     /*!
@@ -180,7 +180,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual RTC::ReturnCode_t stop(void)
+    virtual RTC::ReturnCode_t stop()
       throw (CORBA::SystemException);
 
     /*!
@@ -203,7 +203,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual CORBA::Double get_rate(void)
+    virtual CORBA::Double get_rate()
       throw (CORBA::SystemException);
 
     /*!
@@ -395,7 +395,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual RTC::ExecutionKind get_kind(void)
+    virtual RTC::ExecutionKind get_kind()
       throw (CORBA::SystemException);
 
     /*!
@@ -485,7 +485,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual RTC::ExecutionContextProfile* get_profile(void)
+    virtual RTC::ExecutionContextProfile* get_profile()
       throw (CORBA::SystemException);
   protected:
     // template virtual functions adding/removing component	

@@ -462,7 +462,7 @@ namespace RTC
    * @endif
    */
   CosNaming::NamingContext_ptr
-  CorbaNaming::bindNewContext(const char* string_name, bool force)
+  CorbaNaming::bindNewContext(const char* string_name, bool  /*force*/)
     throw (SystemException, NotFound, CannotProceed, InvalidName, AlreadyBound)
   {
     return bindNewContext(toName(string_name));
@@ -1035,6 +1035,6 @@ namespace RTC
         begin_pos = found_pos + delim_size;
         pre_pos   = found_pos + delim_size;
       }
-    return results.size();
+    return (unsigned int)results.size();
   }
 };  // namespace RTC

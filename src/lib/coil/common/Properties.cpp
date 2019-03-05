@@ -139,7 +139,7 @@ namespace coil
    * @brief Destructor
    * @endif
    */
-  Properties::~Properties(void)
+  Properties::~Properties()
   {
     // Delete children
     clear();
@@ -443,7 +443,7 @@ namespace coil
    * @brief Get the number of properties
    * @endif
    */
-  int Properties::size(void) const
+  int Properties::size() const
   {
     return static_cast<int>(propertyNames().size());
   }
@@ -561,7 +561,7 @@ namespace coil
    * @brief Clear the children
    * @endif
    */
-  void Properties::clear(void)
+  void Properties::clear()
   {
     while (!leaf.empty())
       {
@@ -891,7 +891,7 @@ namespace coil
           }
           return;
       }
-      if (index != 0)out.push_back("");
+      if (index != 0) { out.emplace_back(""); }
       for (size_t i(0), len(curr.leaf.size()); i < len; ++i)
       {
           _dump(out, *(curr.leaf[i]), index + 1);

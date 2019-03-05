@@ -33,7 +33,7 @@ namespace RTC
    *
    * @class ROSMessageInfo
    *
-   * @brief ROSのメッセージ型に関する格納する基底クラス
+   * @brief ROSのメッセージ型に関する情報を格納する基底クラス
    *
    *
    * @since 2.0.0
@@ -76,6 +76,17 @@ namespace RTC
   class ROSMessageInfo : public ROSMessageInfoBase
   {
   public:
+    /*!
+     * @if jp
+     *
+     * @brief コンストラクタ
+     *
+     * @else
+     *
+     * @brief Constructor
+     *
+     * @endif
+     */
     ROSMessageInfo()
     {
       m_type = ros::message_traits::DataType<MessageType>::value();;
@@ -89,9 +100,12 @@ namespace RTC
 }
 
 
-
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
-  EXTERN template class DLL_PLUGIN coil::GlobalFactory<RTC::ROSMessageInfoBase>;
+#ifdef TRANSPORT_PLUGIN
+  template class __declspec(dllexport) coil::GlobalFactory<RTC::ROSMessageInfoBase;
+#else
+  extern template class __declspec(dllimport) coil::GlobalFactory<RTC::ROSMessageInfoBase;
+#endif
 #endif
 
 
