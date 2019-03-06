@@ -468,14 +468,14 @@ namespace RTC
     RTC_DEBUG(("suffixes: %s", coil::flatten(suffixes).c_str()));
 
     // for each load path list
-    for (auto & p : paths)
+    for (auto & path : paths)
       {
-        if (p.empty())
+        if (path.empty())
           {
             RTC_WARN(("Given load path is empty"));
             continue;
           }
-        std::string& path(p);
+        
         RTC_DEBUG(("Module load path: %s", path.c_str()));
 
         // get file list for each suffixes
@@ -517,10 +517,10 @@ namespace RTC
                                  coil::vstring& modules)
   {
     bool exists(false);
-    for (auto & m_modprof : m_modprofs)
+    for (auto & modprof : m_modprofs)
       {
                   
-        if (m_modprof["module_file_path"] == fpath)
+        if (modprof["module_file_path"] == fpath)
           {
 
             exists = true;
@@ -529,9 +529,9 @@ namespace RTC
             break;
           }
       }
-    for (auto & m_loadfailmod : m_loadfailmods)
+    for (auto & loadfailmod : m_loadfailmods)
       {
-        if (m_loadfailmod == fpath)
+        if (loadfailmod == fpath)
           {
             exists = true;
             break;
@@ -565,17 +565,17 @@ namespace RTC
         std::string cmd(lprop["profile_cmd"]);
         cmd += " \"" + module + "\"";
 
-        coil::vstring out;
-        if (coil::create_process(cmd, out) == -1)
+        coil::vstring outlist;
+        if (coil::create_process(cmd, outlist) == -1)
           {
               std::cerr << "create_process faild" << std::endl;
               continue;
           }
         coil::Properties p;
         
-        for (auto & itr : out)
+        for (auto & out : outlist)
           {
-            std::string tmp = itr;
+            std::string tmp = out;
             std::string::size_type pos(tmp.find(':'));
             if (pos != std::string::npos)
               {

@@ -174,21 +174,21 @@ namespace RTC_exp
           std::vector<RTC::LightweightRTObject_ptr> rtcs;
           coil::vstring members = coil::split(thread, ",");
 
-          for (auto m : members)
+          for (auto member : members)
           {
-              coil::eraseBothEndsBlank(m);
+              coil::eraseBothEndsBlank(member);
 
-              if (m.empty())
+              if (member.empty())
               {
                   continue;
               }
               else
               {
                   
-                  RTC::RTObject_impl* comp = mgr.getComponent(m.c_str());
+                  RTC::RTObject_impl* comp = mgr.getComponent(member.c_str());
                   if (comp == nullptr)
                   {
-                      RTC_ERROR(("no RTC found: %s", m.c_str()));
+                      RTC_ERROR(("no RTC found: %s", member.c_str()));
                       continue;
                   }
                   RTC::RTObject_ptr rtobj = comp->getObjRef();
@@ -342,11 +342,11 @@ namespace RTC_exp
       
       
       updateCompList();
-      for (auto & m_comp : m_comps)
+      for (auto & comp : m_comps)
       {
-          m_comp->workerPreDo();
-          m_comp->workerDo();
-          m_comp->workerPostDo();
+          comp->workerPreDo();
+          comp->workerDo();
+          comp->workerPostDo();
       }
       
       {

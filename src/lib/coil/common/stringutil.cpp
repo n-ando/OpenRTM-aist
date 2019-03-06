@@ -533,19 +533,19 @@ namespace coil
   }
   bool isIPv4(const std::string& str)
   {
-    for (char i : str)
+    for (char c : str)
       {
-        if (!((i >= '0' && i <= '9') ||
-              i == '.' || i == ':'))
+        if (!((c >= '0' && c <= '9') ||
+              c == '.' || c == ':'))
           { return false; }
       }
     coil::vstring tmp = coil::split(str, ":");
     coil::vstring ipv4 = coil::split(str, ".");
     if (ipv4.size() != 4) { return false; }
-    for (auto & i : ipv4)
+    for (auto & c : ipv4)
       {
         unsigned short int dec;
-        if (!coil::stringTo(dec, i.c_str())) { return false; }
+        if (!coil::stringTo(dec, c.c_str())) { return false; }
         if (dec < 0 || dec > 255) { return false; }
       }
     return true;
@@ -555,12 +555,12 @@ namespace coil
     // IPv6 address must be
     // 1111:1111:1111:1111:1111:1111:1111:1111 (addr)
     // [1111:1111:1111:1111:1111:1111:1111:1111]:11111 (addr, port)
-    for (char i : str)
+    for (char c : str)
       {
-        if (!((i >= '0' && i <= '9') ||
-             (i >= 'a' && i <= 'f') ||
-             (i >= 'A' && i <= 'F') ||
-              i == ':' || i == '[' || i == ']'))
+        if (!((c >= '0' && c <= '9') ||
+             (c >= 'a' && c <= 'f') ||
+             (c >= 'A' && c <= 'F') ||
+              c == ':' || c == '[' || c == ']'))
           { return false; }
       }
     coil::vstring tmp = coil::split(str, "]:");
@@ -573,13 +573,13 @@ namespace coil
     
     coil::vstring ipv6 = coil::split(tmp[0], ":");
     if (ipv6.size() > 8) { return false; }
-    for (auto & i : ipv6)
+    for (auto & v : ipv6)
       {
         try
           {
-            if (i.empty()) { continue; }
+            if (v.empty()) { continue; }
             char* endptr = nullptr;
-            long int hexval = std::strtol(i.c_str(), &endptr, 16);
+            long int hexval = std::strtol(v.c_str(), &endptr, 16);
             if (errno == ERANGE) { return false; }
             if (hexval < 0x0 || hexval > 0xFFFF) { return false; }
           }
@@ -626,19 +626,19 @@ namespace coil
     std::string::size_type qpos = str.find('?');
     if (qpos == std::string::npos) { qpos = 0; }
     else { ++qpos; }
-    coil::vstring tmp = coil::split(str.substr(qpos), "&");
+    coil::vstring params = coil::split(str.substr(qpos), "&");
 
     std::map<std::string, std::string> retmap;
-    for (auto & i : tmp)
+    for (auto & param : params)
       {
-        std::string::size_type pos = i.find('=');
+        std::string::size_type pos = param.find('=');
         if (pos != std::string::npos)
           {
-            retmap[i.substr(0, pos)] = i.substr(pos + 1);
+            retmap[param.substr(0, pos)] = param.substr(pos + 1);
           }
         else
           {
-            retmap[i] = std::string("");
+            retmap[param] = std::string("");
           }
       }
     return retmap;
@@ -818,15 +818,15 @@ namespace coil
   */
   std::string replaceEnv(std::string str)
   {
-      vstring tmp = split(str, "${");
-      if (tmp.size() < 2)
+      vstring str_list = split(str, "${");
+      if (str_list.size() < 2)
       {
           return str;
       }
       vstring ret;
-      for (auto & itr : tmp)
+      for (auto & str : str_list)
       {
-          vstring tmp2 = split(itr, "}");
+          vstring tmp2 = split(str, "}");
           if (tmp2.size() == 2)
           {
               char s[100];
@@ -840,14 +840,14 @@ namespace coil
           }
           else
           {
-              ret.push_back(itr);
+              ret.push_back(str);
           }
       }
 
       std::string ret_str;
-      for (auto & itr : ret)
+      for (auto & str : ret)
       {
-          ret_str = ret_str + itr;
+          ret_str = ret_str + str;
       }
       return ret_str;
   }

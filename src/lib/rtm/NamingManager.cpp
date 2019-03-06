@@ -591,18 +591,18 @@ namespace RTC
     RTC_TRACE(("NamingManager::bindObject(%s)", name));
 
     Guard guard(m_namesMutex);
-    for (auto & m_name : m_names)
+    for (auto & n : m_names)
       {
-        if (m_name->ns != nullptr)
+        if (n->ns != nullptr)
           {
             try
               {
-                m_name->ns->bindObject(name, rtobj);
+                n->ns->bindObject(name, rtobj);
               }
             catch (...)
               {
-                delete m_name->ns;
-                m_name->ns = nullptr;
+                delete n->ns;
+                n->ns = nullptr;
               }
           }
       }
@@ -614,18 +614,18 @@ namespace RTC
     RTC_TRACE(("NamingManager::bindObject(%s)", name));
 
     Guard guard(m_namesMutex);
-    for (auto & m_name : m_names)
+    for (auto & n : m_names)
       {
-        if (m_name->ns != nullptr)
+        if (n->ns != nullptr)
           {
             try
               {
-                m_name->ns->bindObject(name, port);
+                n->ns->bindObject(name, port);
               }
             catch (...)
               {
-                delete m_name->ns;
-                m_name->ns = nullptr;
+                delete n->ns;
+                n->ns = nullptr;
               }
           }
       }
@@ -637,18 +637,18 @@ namespace RTC
     RTC_TRACE(("NamingManager::bindObject(%s)", name));
 
     Guard guard(m_namesMutex);
-    for (auto & m_name : m_names)
+    for (auto & n : m_names)
       {
-        if (m_name->ns != nullptr)
+        if (n->ns != nullptr)
           {
             try
               {
-                m_name->ns->bindObject(name, mgr);
+                n->ns->bindObject(name, mgr);
               }
             catch (...)
               {
-                delete m_name->ns;
-                m_name->ns = nullptr;
+                delete n->ns;
+                n->ns = nullptr;
               }
           }
       }
@@ -669,14 +669,14 @@ namespace RTC
     Guard guard(m_namesMutex);
     bool rebind(coil::toBool(m_manager->getConfig()["naming.update.rebind"],
                              "YES", "NO", false));
-    for (auto & m_name : m_names)
+    for (auto & n : m_names)
       {
-        if (m_name->ns == nullptr)  // if ns==NULL
+        if (n->ns == nullptr)  // if ns==NULL
           {
             RTC_DEBUG(("Retrying connection to %s/%s",
-                       m_name->method.c_str(),
-                       m_name->nsname.c_str()));
-            retryConnection(m_name);
+                       n->method.c_str(),
+                       n->nsname.c_str()));
+            retryConnection(n);
           }
         else
           {
@@ -716,11 +716,11 @@ namespace RTC
     RTC_TRACE(("NamingManager::unbindObject(%s)", name));
 
     Guard guard(m_namesMutex);
-    for (auto & m_name : m_names)
+    for (auto & n : m_names)
       {
-        if (m_name->ns != nullptr)
+        if (n->ns != nullptr)
         {
-            m_name->ns->unbindObject(name);
+            n->ns->unbindObject(name);
         }
       }
     unregisterCompName(name);
@@ -741,9 +741,9 @@ namespace RTC
       Guard guard(m_compNamesMutex);
       coil::vstring names;
       // unbindObject modifiy m_compNames
-      for (auto & m_compName : m_compNames)
+      for (auto & compName : m_compNames)
         {
-          names.push_back(m_compName->name);
+          names.push_back(compName->name);
         }
       for (auto & name : names)
         {
@@ -755,9 +755,9 @@ namespace RTC
       Guard guard(m_mgrNamesMutex);
       coil::vstring names;
       // unbindObject modifiy m_mgrNames
-      for (auto & m_mgrName : m_mgrNames)
+      for (auto & mgrName : m_mgrNames)
         {
-          names.push_back(m_mgrName->name);
+          names.push_back(mgrName->name);
         }
       for (auto & name : names)
         {
@@ -778,9 +778,9 @@ namespace RTC
     std::vector<RTObject_impl*> comps;
     Guard guard(m_compNamesMutex);
 
-    for (auto & m_compName : m_compNames)
+    for (auto & compName : m_compNames)
       {
-        comps.push_back(const_cast<RTObject_impl*>(m_compName->rtobj));
+        comps.push_back(const_cast<RTObject_impl*>(compName->rtobj));
       }
     return comps;
   }
@@ -840,9 +840,9 @@ namespace RTC
    */
   void NamingManager::bindCompsTo(NamingBase* ns)
   {
-      for (auto & m_compName : m_compNames)
+      for (auto & compName : m_compNames)
       {
-        ns->bindObject(m_compName->name.c_str(), m_compName->rtobj);
+        ns->bindObject(compName->name.c_str(), compName->rtobj);
       }
   }
 
@@ -856,11 +856,11 @@ namespace RTC
   void NamingManager::registerCompName(const char* name,
                                        const RTObject_impl* rtobj)
   {
-      for (auto & m_compName : m_compNames)
+      for (auto & compName : m_compNames)
       {
-        if (m_compName->name == name)
+        if (compName->name == name)
           {
-            m_compName->rtobj = rtobj;
+            compName->rtobj = rtobj;
             return;
           }
       }
@@ -877,11 +877,11 @@ namespace RTC
   void NamingManager::registerPortName(const char* name,
                                        const PortBase* port)
   {
-    for (auto & m_portName : m_portNames)
+    for (auto & portName : m_portNames)
       {
-        if (m_portName->name == name)
+        if (portName->name == name)
           {
-            m_portName->port = port;
+            portName->port = port;
             return;
           }
       }
@@ -891,11 +891,11 @@ namespace RTC
   void NamingManager::registerMgrName(const char* name,
                                       const RTM::ManagerServant* mgr)
   {
-    for (auto & m_mgrName : m_mgrNames)
+    for (auto & mgrName : m_mgrNames)
       {
-        if (m_mgrName->name == name)
+        if (mgrName->name == name)
           {
-            m_mgrName->mgr = mgr;
+            mgrName->mgr = mgr;
             return;
           }
       }
@@ -997,10 +997,10 @@ namespace RTC
   RTCList NamingManager::string_to_component(std::string name)
   {
 	  
-	  for (auto & m_name : m_names) {
-		  if (m_name->ns != nullptr)
+	  for (auto & n : m_names) {
+		  if (n->ns != nullptr)
 		  {
-			  RTCList comps = m_name->ns->string_to_component(name);
+			  RTCList comps = n->ns->string_to_component(name);
 			  if (comps.length() > 0)
 			  {
 				  return comps;

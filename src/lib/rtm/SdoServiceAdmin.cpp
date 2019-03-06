@@ -78,17 +78,17 @@ namespace RTC
    */
   SdoServiceAdmin::~SdoServiceAdmin()
   {
-    for (auto & m_provider : m_providers)
+    for (auto & provider : m_providers)
       {
-        m_provider->finalize();
-        delete m_provider;
+        provider->finalize();
+        delete provider;
       }
     m_providers.clear();
 
-    for (auto & m_consumer : m_consumers)
+    for (auto & consumer : m_consumers)
       {
-        m_consumer->finalize();
-        delete m_consumer;
+        consumer->finalize();
+        delete consumer;
       }
     m_consumers.clear();
   }
@@ -181,10 +181,10 @@ namespace RTC
                prop["sdo.service.consumer.available_services"].c_str()));
 
     // If types include '[Aa][Ll][Ll]', all types enabled in this RTC
-    for (auto tmp : m_consumerTypes)
+    for (auto consumerType : m_consumerTypes)
       {
-        coil::toLower(tmp);
-        if (tmp == "all")
+        coil::toLower(consumerType);
+        if (consumerType == "all")
           {
             m_allConsumerEnabled = true;
             RTC_DEBUG(("sdo.service.consumer.enabled_services: ALL"));
@@ -224,11 +224,11 @@ namespace RTC
   {
     std::string idstr(id);
     Guard guard(m_provider_mutex);
-    for (auto & m_provider : m_providers)
+    for (auto & provider : m_providers)
       {
-        if (idstr == static_cast<const char*>(m_provider->getProfile().id))
+        if (idstr == static_cast<const char*>(provider->getProfile().id))
           {
-            return new SDOPackage::ServiceProfile(m_provider->getProfile());
+            return new SDOPackage::ServiceProfile(provider->getProfile());
           }
       }
     throw SDOPackage::InvalidParameter();
@@ -267,9 +267,9 @@ namespace RTC
     Guard guard(m_provider_mutex);
 
     std::string id(static_cast<const char*>(prof.id));
-    for (auto & m_provider : m_providers)
+    for (auto & provider : m_providers)
       {
-        if (id == static_cast<const char*>(m_provider->getProfile().id))
+        if (id == static_cast<const char*>(provider->getProfile().id))
           {
             RTC_ERROR(("SDO service(id=%s, ifr=%s) already exists",
                        static_cast<const char*>(prof.id),
@@ -340,14 +340,14 @@ namespace RTC
     RTC_DEBUG(("Valid ID specified"));
     { // re-initialization
       std::string id(sProfile.id);
-      for (auto & m_consumer : m_consumers)
+      for (auto & consumer : m_consumers)
         {
-          if (id == static_cast<const char*>(m_consumer->getProfile().id))
+          if (id == static_cast<const char*>(consumer->getProfile().id))
             {
               RTC_INFO(("Existing consumer is reinitilized."));
               RTC_DEBUG(("Propeteis are: %s",
                          NVUtil::toString(sProfile.properties).c_str()));
-              return m_consumer->reinit(sProfile);
+              return consumer->reinit(sProfile);
             }
         }
     }
@@ -449,9 +449,9 @@ namespace RTC
   {
     if (m_allConsumerEnabled) { return true; }
 
-    for (auto & m_consumerType : m_consumerTypes)
+    for (auto & consumerType : m_consumerTypes)
       {
-        if (m_consumerType ==
+        if (consumerType ==
             static_cast<const char*>(sProfile.interface_type))
           {
             RTC_DEBUG(("%s is supported SDO service.",

@@ -2916,12 +2916,12 @@ namespace RTC
   {
     std::vector<RTC::ExecutionContextBase*> eclist;
     eclist = RTC::ExecutionContextFactory::instance().createdObjects();
-    for (auto & ec_itr : eclist)
+    for (auto & ec_ref : eclist)
       {
-        if (ec_itr->getProperties()["type"] == ec_arg["type"] &&
-            ec_itr->getProperties()["name"] == ec_arg["name"])
+        if (ec_ref->getProperties()["type"] == ec_arg["type"] &&
+            ec_ref->getProperties()["name"] == ec_arg["name"])
           {
-            ec = ec_itr;
+            ec = ec_ref;
             return RTC::RTC_OK;
           }
       }

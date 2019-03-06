@@ -71,20 +71,20 @@ int main(int argc, char* argv[])
   std::vector<coil::Properties> newp(mgr.getFactoryProfiles());
   std::vector<coil::Properties> profs;
 
-  for (auto & i : newp)
+  for (auto & propnew : newp)
     {
       bool exists(false);
-      for (auto & j : oldp)
+      for (auto & propold : oldp)
         {
-          if (j["implementation_id"] == i["implementation_id"] &&
-              j["type_name"]         == i["type_name"] &&
-              j["description"]       == i["description"] &&
-              j["version"]           == i["version"])
+          if (propold["implementation_id"] == propnew["implementation_id"] &&
+              propold["type_name"]         == propnew["type_name"] &&
+              propold["description"]       == propnew["description"] &&
+              propold["version"]           == propnew["version"])
             {
               exists = true;
             }
         }
-      if (!exists) { profs.push_back(i); }
+      if (!exists) { profs.push_back(propnew); }
     }
 
   // loaded component profile have to be one

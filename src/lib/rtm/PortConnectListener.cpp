@@ -102,11 +102,11 @@ namespace RTC
   PortConnectListenerHolder::~PortConnectListenerHolder()
   {
     Guard guard(m_mutex);
-    for (auto & m_listener : m_listeners)
+    for (auto & listener : m_listeners)
       {
-        if (m_listener.second)
+        if (listener.second)
           {
-            delete m_listener.first;
+            delete listener.first;
           }
       }
   }
@@ -145,9 +145,9 @@ namespace RTC
                                          RTC::ConnectorProfile& profile)
   {
     Guard guard(m_mutex);
-    for (auto & m_listener : m_listeners)
+    for (auto & listener : m_listeners)
       {
-        m_listener.first->operator()(portname, profile);
+        listener.first->operator()(portname, profile);
       }
   }
 
@@ -167,11 +167,11 @@ namespace RTC
   PortConnectRetListenerHolder::~PortConnectRetListenerHolder()
   {
     Guard guard(m_mutex);
-    for (auto & m_listener : m_listeners)
+    for (auto & listener : m_listeners)
       {
-        if (m_listener.second)
+        if (listener.second)
           {
-            delete m_listener.first;
+            delete listener.first;
           }
       }
   }
@@ -211,9 +211,9 @@ namespace RTC
                                             ReturnCode_t ret)
   {
     Guard guard(m_mutex);
-    for (auto & m_listener : m_listeners)
+    for (auto & listener : m_listeners)
       {
-        m_listener.first->operator()(portname, profile, ret);
+        listener.first->operator()(portname, profile, ret);
       }
   }
 

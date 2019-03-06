@@ -429,9 +429,9 @@ namespace coil
   std::vector<std::string> Properties::propertyNames() const
   {
     std::vector<std::string> names;
-    for (auto i : leaf)
+    for (auto prop : leaf)
       {
-        _propertiyNames(names, i->name, i);
+        _propertiyNames(names, prop->name, prop);
       }
     return names;
   }
@@ -544,11 +544,11 @@ namespace coil
    */
   Properties* Properties::hasKey(const char* key) const
   {
-    for (auto i : leaf)
+    for (auto prop : leaf)
       {
-        if (i->name == key)
+        if (prop->name == key)
           {
-            return i;
+            return prop;
           }
       }
     return nullptr;
@@ -714,12 +714,12 @@ namespace coil
   {
     if (!curr->leaf.empty())
       {
-        for (auto i : curr->leaf)
+        for (auto prop : curr->leaf)
           {
             std::string next_name;
             //            if (curr_name == "") next_name = curr->leaf[i]->name;
-            next_name = curr_name + "." + i->name;
-            _propertiyNames(names, next_name, i);
+            next_name = curr_name + "." + prop->name;
+            _propertiyNames(names, next_name, prop);
           }
       }
     else
@@ -743,18 +743,18 @@ namespace coil
     if (!curr->leaf.empty())
       {
 
-        for (auto & i : curr->leaf)
+        for (auto & prop : curr->leaf)
           {
             std::string next_name;
             if (curr_name.empty())
               {
-                next_name = i->name;
+                next_name = prop->name;
               }
             else
               {
-                next_name = curr_name + "." + i->name;
+                next_name = curr_name + "." + prop->name;
               }
-            _store(out, next_name, i);
+            _store(out, next_name, prop);
           }
       }
 
@@ -791,9 +791,9 @@ namespace coil
         return out;
       }
     if (index != 0) out << std::endl;
-    for (auto i : curr.leaf)
+    for (auto prop : curr.leaf)
       {
-        _dump(out, *i, index + 1);
+        _dump(out, *prop, index + 1);
       }
     return out;
   }
@@ -870,9 +870,9 @@ namespace coil
           return;
       }
       if (index != 0) out += "\n";
-      for (auto i : curr.leaf)
+      for (auto prop : curr.leaf)
       {
-          _dump(out, *i, index + 1);
+          _dump(out, *prop, index + 1);
       }
   }
 
@@ -892,9 +892,9 @@ namespace coil
           return;
       }
       if (index != 0) { out.emplace_back(""); }
-      for (auto i : curr.leaf)
+      for (auto prop : curr.leaf)
       {
-          _dump(out, *i, index + 1);
+          _dump(out, *prop, index + 1);
       }
   }
 };  // namespace coil

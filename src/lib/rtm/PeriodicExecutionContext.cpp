@@ -627,13 +627,13 @@ namespace RTC_exp
     getProperty(props, "cpu_affinity", affinity);
     RTC_DEBUG(("CPU affinity property: %s", affinity.c_str()));
 
-    coil::vstring tmp = coil::split(affinity, ",", true);
+    coil::vstring cpulist = coil::split(affinity, ",", true);
     m_cpu.clear();
 
-    for (auto & itr : tmp)
+    for (auto & cpu : cpulist)
       {
         int num;
-        if (coil::stringTo(num, itr.c_str()))
+        if (coil::stringTo(num, cpu.c_str()))
           {
             m_cpu.push_back(num);
             RTC_DEBUG(("CPU affinity int value: %d added.", num));

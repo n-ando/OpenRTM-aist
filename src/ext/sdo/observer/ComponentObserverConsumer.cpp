@@ -40,9 +40,9 @@ namespace RTC
       m_hblistenerid(nullptr),
       m_timer(m_interval)
   {
-    for (bool & i : m_observed)
+    for (bool & observed : m_observed)
       {
-        i = false;
+        observed = false;
       }
   }
 
@@ -173,36 +173,36 @@ namespace RTC
         prop["observed_status"] = "ALL";
       }
 
-    coil::vstring observed(coil::split(prop["observed_status"], ","));
+    coil::vstring observedlist(coil::split(prop["observed_status"], ","));
     bool flags[OpenRTM::STATUS_KIND_NUM];
     for (bool & flag : flags)
       {
         flag = false;
       }
-    for (auto & i : observed)
+    for (auto & observed : observedlist)
       {
-        coil::toUpper(i);
-        if (i == "COMPONENT_PROFILE")
+        coil::toUpper(observed);
+        if (observed == "COMPONENT_PROFILE")
           {
             flags[OpenRTM::COMPONENT_PROFILE] = 1;
           }
-        else if (i == "RTC_STATUS")
+        else if (observed == "RTC_STATUS")
           {
             flags[OpenRTM::RTC_STATUS] = 1;
           }
-        else if (i == "EC_STATUS")
+        else if (observed == "EC_STATUS")
           {
             flags[OpenRTM::EC_STATUS] = 1;
           }
-        else if (i == "PORT_PROFILE")
+        else if (observed == "PORT_PROFILE")
           {
             flags[OpenRTM::PORT_PROFILE] = 1;
           }
-        else if (i == "CONFIGURATION")
+        else if (observed == "CONFIGURATION")
           {
             flags[OpenRTM::CONFIGURATION] = 1;
           }
-        else if (i == "ALL")
+        else if (observed == "ALL")
           {
             for (bool & flag : flags)
               {

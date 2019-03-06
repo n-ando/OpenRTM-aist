@@ -1099,14 +1099,14 @@ namespace RTC
       
 
 
-      for (auto & m_listener : m_listeners)
+      for (auto & listener : m_listeners)
         {
-          ConnectorDataListenerT<DataType>* listener(nullptr);
-          listener =
-          dynamic_cast<ConnectorDataListenerT<DataType>*>(m_listener.first);
-          if (listener != nullptr)
+          ConnectorDataListenerT<DataType>* datalistener(nullptr);
+          datalistener =
+          dynamic_cast<ConnectorDataListenerT<DataType>*>(listener.first);
+          if (datalistener != nullptr)
             {
-              ret = ret | listener->operator()(info, typeddata);
+              ret = ret | datalistener->operator()(info, typeddata);
             }
           else
             {

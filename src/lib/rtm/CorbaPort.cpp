@@ -283,17 +283,17 @@ namespace RTC
                    strict ? "strict" : "best_effort"))
       }
 
-    for (auto & m_consumer : m_consumers)
+    for (auto & consumer : m_consumers)
       {
         std::string ior = std::string();
-        if (findProvider(nv, m_consumer, ior))
+        if (findProvider(nv, consumer, ior))
           {
-            setObject(ior, m_consumer);
+            setObject(ior, consumer);
             continue;
           }
-        if (findProviderOld(nv, m_consumer, ior))
+        if (findProviderOld(nv, consumer, ior))
           {
-            setObject(ior, m_consumer);
+            setObject(ior, consumer);
             continue;
           }
 
@@ -326,19 +326,19 @@ namespace RTC
     const NVList& nv(connector_profile.properties);
     RTC_DEBUG_STR((NVUtil::toString(nv)));
 
-    for (auto & m_consumer : m_consumers)
+    for (auto & consumer : m_consumers)
       {
         std::string ior;
-        if (findProvider(nv, m_consumer, ior))
+        if (findProvider(nv, consumer, ior))
           {
             RTC_DEBUG(("Correspoinding consumer found."));
-            releaseObject(ior, m_consumer);
+            releaseObject(ior, consumer);
             continue;
           }
-        if (findProviderOld(nv, m_consumer, ior))
+        if (findProviderOld(nv, consumer, ior))
           {
             RTC_DEBUG(("Correspoinding consumer found."));
-            releaseObject(ior, m_consumer);
+            releaseObject(ior, consumer);
             continue;
           }
       }

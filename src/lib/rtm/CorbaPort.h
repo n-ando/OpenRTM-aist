@@ -1381,11 +1381,11 @@ namespace RTC
 
       void operator()(const SDOPackage::NameValue& nv)
       {
-        for (auto & m_consumer : m_consumers)
+        for (auto & consumer : m_consumers)
           {
-            if (m_consumer.descriptor() == (const char*)nv.name)
+            if (consumer.descriptor() == (const char*)nv.name)
               {
-                m_consumer.releaseObject();
+                consumer.releaseObject();
               }
           }
       }

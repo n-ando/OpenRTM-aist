@@ -124,10 +124,10 @@ namespace RTM
   void LocalServiceAdmin::finalize()
   {
     RTM::LocalServiceFactory& factory(RTM::LocalServiceFactory::instance());
-    for (auto & m_service : m_services)
+    for (auto & service : m_services)
       {
-        m_service->finalize();
-        factory.deleteObject(m_service);
+        service->finalize();
+        factory.deleteObject(service);
       }
     m_services.clear();
   }
@@ -142,9 +142,9 @@ namespace RTM
   RTM::LocalServiceProfileList LocalServiceAdmin::getServiceProfiles()
   {
     RTM::LocalServiceProfileList profs(0);
-    for (auto & m_service : m_services)
+    for (auto & service : m_services)
       {
-        profs.push_back(m_service->getProfile());
+        profs.push_back(service->getProfile());
       }
     return profs;
   }
@@ -161,11 +161,11 @@ namespace RTM
                                        ::RTM::LocalServiceProfile& prof)
   {
     Guard guard(m_services_mutex);
-    for (auto & m_service : m_services)
+    for (auto & service : m_services)
       {
-        if (name == m_service->getProfile().name)
+        if (name == service->getProfile().name)
           {
-            prof = m_service->getProfile();
+            prof = service->getProfile();
             return true;
           }
       }
@@ -181,11 +181,11 @@ namespace RTM
    */
   RTM::LocalServiceBase* LocalServiceAdmin::getService(const char* id)
   {
-      for (auto & m_service : m_services)
+      for (auto & service : m_services)
       {
-        if (m_service->getProfile().name == id)
+        if (service->getProfile().name == id)
           {
-            return m_service;
+            return service;
           }
       }
     return nullptr;
@@ -274,9 +274,9 @@ namespace RTM
   bool LocalServiceAdmin::notExisting(const std::string& id)
   {
     Guard gurad(m_mutex);
-    for (auto & m_service : m_services)
+    for (auto & service : m_services)
       {
-        if (m_service->getProfile().name == id)
+        if (service->getProfile().name == id)
           {
             RTC_WARN(("Local service %s already exists.", id.c_str()));
             return false;

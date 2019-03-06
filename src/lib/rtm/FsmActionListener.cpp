@@ -75,11 +75,11 @@ namespace RTC
   PreFsmActionListenerHolder::~PreFsmActionListenerHolder()
   {
     Guard guard(m_mutex);
-    for (auto & m_listener : m_listeners)
+    for (auto & listener : m_listeners)
       {
-        if (m_listener.second)
+        if (listener.second)
           {
-            delete m_listener.first;
+            delete listener.first;
           }
       }
   }
@@ -115,9 +115,9 @@ namespace RTC
   void PreFsmActionListenerHolder::notify(const char* state)
   {
     Guard guard(m_mutex);
-    for (auto & m_listener : m_listeners)
+    for (auto & listener : m_listeners)
       {
-        m_listener.first->operator()(state);
+        listener.first->operator()(state);
       }
   }
 
@@ -136,11 +136,11 @@ namespace RTC
   PostFsmActionListenerHolder::~PostFsmActionListenerHolder()
   {
     Guard guard(m_mutex);
-    for (auto & m_listener : m_listeners)
+    for (auto & listener : m_listeners)
       {
-        if (m_listener.second)
+        if (listener.second)
           {
-            delete m_listener.first;
+            delete listener.first;
           }
       }
   }
@@ -175,9 +175,9 @@ namespace RTC
                                            ReturnCode_t ret)
   {
     Guard guard(m_mutex);
-    for (auto & m_listener : m_listeners)
+    for (auto & listener : m_listeners)
       {
-        m_listener.first->operator()(state, ret);
+        listener.first->operator()(state, ret);
       }
   }
 
@@ -195,11 +195,11 @@ namespace RTC
   FsmProfileListenerHolder::~FsmProfileListenerHolder()
   {
     Guard guard(m_mutex);
-    for (auto & m_listener : m_listeners)
+    for (auto & listener : m_listeners)
       {
-        if (m_listener.second)
+        if (listener.second)
           {
-            delete m_listener.first;
+            delete listener.first;
           }
       }
   }
@@ -234,9 +234,9 @@ namespace RTC
   void FsmProfileListenerHolder::notify(RTC::FsmProfile& profile)
   {
     Guard guard(m_mutex);
-    for (auto & m_listener : m_listeners)
+    for (auto & listener : m_listeners)
       {
-        m_listener.first->operator()(profile);
+        listener.first->operator()(profile);
       }
   }
 
@@ -254,11 +254,11 @@ namespace RTC
   FsmStructureListenerHolder::~FsmStructureListenerHolder()
   {
     Guard guard(m_mutex);
-    for (auto & m_listener : m_listeners)
+    for (auto & listener : m_listeners)
       {
-        if (m_listener.second)
+        if (listener.second)
           {
-            delete m_listener.first;
+            delete listener.first;
           }
       }
   }
@@ -293,9 +293,9 @@ namespace RTC
   void FsmStructureListenerHolder::notify(RTC::FsmStructure& structure)
   {
     Guard guard(m_mutex);
-    for (auto & m_listener : m_listeners)
+    for (auto & listener : m_listeners)
       {
-        m_listener.first->operator()(structure);
+        listener.first->operator()(structure);
       }
   }
 

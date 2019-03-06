@@ -71,9 +71,9 @@ namespace RTC
    */
   ConfigAdmin::~ConfigAdmin()
   {
-    for (auto & m_param : m_params)
+    for (auto & param : m_params)
       {
-        if (m_param != nullptr) { delete m_param; }
+        if (param != nullptr) { delete param; }
       }
     m_params.clear();
   }
@@ -100,11 +100,11 @@ namespace RTC
     const std::vector<coil::Properties*>& leaf(m_configsets.getLeaf());
 
 
-    for (auto i : leaf)
+    for (auto prop : leaf)
       {
-        if (i->hasKey(param_name))
+        if (prop->hasKey(param_name))
           {
-            coil::Properties* p(i->removeNode(param_name));
+            coil::Properties* p(prop->removeNode(param_name));
             delete p;
           }
       }
@@ -148,12 +148,12 @@ namespace RTC
     m_changedParam.clear();
     coil::Properties& prop(m_configsets.getNode(config_set));
 
-    for (auto & m_param : m_params)
+    for (auto & param : m_params)
       {
-        if (prop.hasKey(m_param->name) != nullptr)
+        if (prop.hasKey(param->name) != nullptr)
           {
             // m_changedParam is updated here
-            m_param->update(prop[m_param->name].c_str());
+            param->update(prop[param->name].c_str());
           }
       }
     onUpdate(config_set);

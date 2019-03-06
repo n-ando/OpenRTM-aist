@@ -193,9 +193,9 @@ namespace RTC
   {
     RTC_TRACE(("getConnectorProfiles(): size = %d", m_connectors.size()));
     ConnectorInfoList profs;
-    for (auto & m_connector : m_connectors)
+    for (auto & connector : m_connectors)
       {
-        profs.push_back(m_connector->profile());
+        profs.push_back(connector->profile());
       }
     return profs;
   }
@@ -210,9 +210,9 @@ namespace RTC
   coil::vstring OutPortBase::getConnectorIds()
   {
     coil::vstring ids;
-    for (auto & m_connector : m_connectors)
+    for (auto & connector : m_connectors)
       {
-        ids.push_back(m_connector->id());
+        ids.push_back(connector->id());
       }
     RTC_TRACE(("getConnectorIds(): %s", coil::flatten(ids).c_str()));
     return ids;
@@ -228,9 +228,9 @@ namespace RTC
   coil::vstring OutPortBase::getConnectorNames()
   {
     coil::vstring names;
-    for (auto & m_connector : m_connectors)
+    for (auto & connector : m_connectors)
       {
-        names.push_back(m_connector->name());
+        names.push_back(connector->name());
       }
     RTC_TRACE(("getConnectorNames(): %s", coil::flatten(names).c_str()));
     return names;
@@ -248,11 +248,11 @@ namespace RTC
     RTC_TRACE(("getConnectorById(id = %s)", id));
 
     std::string sid(id);
-    for (auto & m_connector : m_connectors)
+    for (auto & connector : m_connectors)
       {
-        if (sid  == m_connector->id())
+        if (sid  == connector->id())
           {
-            return m_connector;
+            return connector;
           }
       }
     RTC_WARN(("ConnectorProfile with the id(%s) not found.", id));
@@ -271,11 +271,11 @@ namespace RTC
     RTC_TRACE(("getConnectorByName(name = %s)", name));
 
     std::string sname(name);
-    for (auto & m_connector : m_connectors)
+    for (auto & connector : m_connectors)
       {
-        if (sname  == m_connector->name())
+        if (sname  == connector->name())
           {
-            return m_connector;
+            return connector;
           }
       }
     RTC_WARN(("ConnectorProfile with the name(%s) not found.", name));
@@ -333,9 +333,9 @@ namespace RTC
   {
     RTC_TRACE(("activateInterfaces()"));
 
-    for (auto & m_connector : m_connectors)
+    for (auto & connector : m_connectors)
       {
-        m_connector->activate();
+        connector->activate();
       }
   }
 
@@ -350,9 +350,9 @@ namespace RTC
   {
     RTC_TRACE(("deactivateInterfaces()"));
 
-    for (auto & m_connector : m_connectors)
+    for (auto & connector : m_connectors)
       {
-        m_connector->deactivate();
+        connector->deactivate();
       }
   }
 

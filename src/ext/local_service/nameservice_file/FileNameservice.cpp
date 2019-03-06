@@ -176,9 +176,9 @@ namespace RTM
                  coil::flatten(ns_path).c_str()));
       RTC_TRACE((" nsinfo = %s", coil::flatten(ns_info).c_str()));
       
-      for (auto & i : ns_path)
+      for (auto & ns_name : ns_path)
         {
-          fs::path filepath(getFname(i).c_str());
+          fs::path filepath(getFname(ns_name).c_str());
           fs::path directory = filepath.parent_path();
           RTC_DEBUG(("file path: %s", filepath.string().c_str()));
           RTC_DEBUG(("directory: %s", directory.string().c_str()));
@@ -192,9 +192,9 @@ namespace RTM
               RTC_DEBUG(("file name: %s", filename.string().c_str()));
               std::ofstream ofs(filepath.string().c_str(),
                                 std::ios::out | std::ios::trunc);
-              for (const auto & i : ns_info)
+              for (const auto & ior : ns_info)
                 {
-                  ofs << i << std::endl;
+                  ofs << ior << std::endl;
                 }
               RTC_INFO(("RTC %s's IOR has been successfully registered: %s",
                         filename.string().c_str(), filepath.string().c_str()));
@@ -225,9 +225,9 @@ namespace RTM
     {
       RTC_TRACE(("onUnregisterNameservice(%s)",
                  coil::flatten(ns_path).c_str()));
-      for (auto & i : ns_path)
+      for (auto & ns_name : ns_path)
         {
-          fs::path filepath(getFname(i));
+          fs::path filepath(getFname(ns_name));
           if (!fs::exists(filepath))
             {
               RTC_ERROR(("No such file: %s", filepath.string().c_str()));
