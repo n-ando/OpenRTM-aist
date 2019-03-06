@@ -1126,7 +1126,7 @@ namespace RTC
               }
               cdr->serialize(typeddata);
               ByteData tmp = *cdr;
-              ret = ret | m_listener.first->operator()(info, tmp);
+              ret = ret | listener.first->operator()(info, tmp);
               coil::GlobalFactory < ::RTC::ByteDataStream<DataType> >::instance().deleteObject(cdr);
             }
         }
