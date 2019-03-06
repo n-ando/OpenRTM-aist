@@ -669,36 +669,36 @@ namespace RTC
     Guard guard(m_namesMutex);
     bool rebind(coil::toBool(m_manager->getConfig()["naming.update.rebind"],
                              "YES", "NO", false));
-    for (auto & n : m_names)
+    for (auto & name : m_names)
       {
-        if (n->ns == nullptr)  // if ns==NULL
+        if (name->ns == nullptr)  // if ns==NULL
           {
             RTC_DEBUG(("Retrying connection to %s/%s",
-                       n->method.c_str(),
-                       n->nsname.c_str()));
-            retryConnection(n);
+                       name->method.c_str(),
+                       name->nsname.c_str()));
+            retryConnection(name);
           }
         else
           {
             try
               {
-                if (rebind) { bindCompsTo(m_name->ns); }
-                if (!m_name->ns->isAlive())
+                if (rebind) { bindCompsTo(name->ns); }
+                if (!name->ns->isAlive())
                   {
                     RTC_INFO(("Name server: %s (%s) disappeared.",
-                              m_name->nsname.c_str(),
-                              m_name->method.c_str()));
-                    delete m_name->ns;
-                    m_name->ns = nullptr;
+                              name->nsname.c_str(),
+                              name->method.c_str()));
+                    delete name->ns;
+                    name->ns = nullptr;
                   }
               }
             catch (...)
               {
                 RTC_INFO(("Name server: %s (%s) disappeared.",
-                          m_name->nsname.c_str(),
-                          m_name->method.c_str()));
-                delete m_name->ns;
-                m_name->ns = nullptr;
+                          name->nsname.c_str(),
+                          name->method.c_str()));
+                delete name->ns;
+                name->ns = nullptr;
               }
           }
       }
