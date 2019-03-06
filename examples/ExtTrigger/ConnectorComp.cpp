@@ -133,33 +133,33 @@ int main (int argc, char** argv)
 
   // get ports
   pin = conin->get_ports();
-  pin[(CORBA::ULong)0]->disconnect_all();
+  pin[static_cast<CORBA::ULong>(0)]->disconnect_all();
   assert(pin->length() > 0);
   // activate ConsoleIn0
   ExecutionContextList_var eclisti;
   eclisti = conin->get_owned_contexts();
-  eclisti[(CORBA::ULong)0]->activate_component(RTObject::_duplicate(conin._ptr()));
-  ec0.setObject(eclisti[(CORBA::ULong)0]);
+  eclisti[static_cast<CORBA::ULong>(0)]->activate_component(RTObject::_duplicate(conin._ptr()));
+  ec0.setObject(eclisti[static_cast<CORBA::ULong>(0)]);
 
   // find ConsoleOut0 component
   conout.setObject(naming.resolve("ConsoleOut0.rtc"));
   // get ports
   pout = conout->get_ports();
-  pout[(CORBA::ULong)0]->disconnect_all();
+  pout[static_cast<CORBA::ULong>(0)]->disconnect_all();
   assert(pout->length() > 0);
   // activate ConsoleOut0
   ExecutionContextList_var eclisto;
   eclisto = conout->get_owned_contexts();
-  eclisto[(CORBA::ULong)0]->activate_component(RTObject::_duplicate(conout._ptr()));
-  ec1.setObject(eclisto[(CORBA::ULong)0]);
+  eclisto[static_cast<CORBA::ULong>(0)]->activate_component(RTObject::_duplicate(conout._ptr()));
+  ec1.setObject(eclisto[static_cast<CORBA::ULong>(0)]);
 
   // connect ports
   ConnectorProfile prof;
   prof.connector_id = CORBA::string_dup("");
   prof.name = CORBA::string_dup("connector0");
   prof.ports.length(2);
-  prof.ports[0] = pin[(CORBA::ULong)0];
-  prof.ports[1] = pout[(CORBA::ULong)0];
+  prof.ports[0] = pin[static_cast<CORBA::ULong>(0)];
+  prof.ports[1] = pout[static_cast<CORBA::ULong>(0)];
   CORBA_SeqUtil::push_back(prof.properties,
 			   NVUtil::newNV("dataport.interface_type",
 					 "corba_cdr"));
@@ -188,7 +188,7 @@ int main (int argc, char** argv)
 					 skip_count.c_str()));
 
   ReturnCode_t ret;
-  ret = pin[(CORBA::ULong)0]->connect(prof);
+  ret = pin[static_cast<CORBA::ULong>(0)]->connect(prof);
   assert(ret == RTC::RTC_OK);
 
   std::cout << "Connector ID: " << prof.connector_id << std::endl;

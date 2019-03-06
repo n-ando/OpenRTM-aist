@@ -180,16 +180,16 @@ namespace RTC
 
     if (ret == CdrBufferBase::BUFFER_OK)
       {
-        CORBA::ULong len((CORBA::ULong)cdr.getDataLength());
+        CORBA::ULong len(static_cast<CORBA::ULong>(cdr.getDataLength()));
         RTC_PARANOID(("converted CDR data size: %d", len));
 
-        if (len == (CORBA::ULong)0) {
+        if (len == static_cast<CORBA::ULong>(0)) {
           RTC_ERROR(("buffer is empty."));
           return ::OpenRTM::BUFFER_EMPTY;
         }
 #ifndef ORB_IS_RTORB
         data->length(len);
-        cdr.readData((unsigned char*)data->get_buffer(), len);
+        cdr.readData(static_cast<unsigned char*>(data->get_buffer()), len);
 #else
         data->length(len);
         cdr.readData(reinterpret_cast<char *>(&((*data)[0]),

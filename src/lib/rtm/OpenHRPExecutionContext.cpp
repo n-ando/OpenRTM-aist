@@ -96,7 +96,7 @@ namespace RTC
     if (period > (t2 - t0))
       {
         if (m_count > 1000) { RTC_PARANOID(("sleeping...")); }
-        coil::sleep((coil::TimeValue)(period - (t2 - t0)));
+        coil::sleep(coil::TimeValue(period - (t2 - t0)));
       }
     if (m_count > 1000)
       {

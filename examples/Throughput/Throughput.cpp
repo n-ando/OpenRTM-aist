@@ -255,7 +255,7 @@ RTC::ReturnCode_t Throughput::onExecute(RTC::UniqueId ec_id)
     }
   else
     {
-      if((long)m_sendcount > m_maxsend)
+      if(static_cast<long>(m_sendcount) > m_maxsend)
         {
           exit();
           return RTC::RTC_OK;
@@ -473,7 +473,7 @@ void Throughput::receiveData(const RTC::Time &tm, const CORBA::ULong seq_length)
   m_record[record_ptr] = received_time - send_time;
   size = seq_length;
   record_ptr++; record_num++;
-  if ((long)record_ptr == m_maxsample) { record_ptr = 0; }
+  if (static_cast<long>(record_ptr) == m_maxsample) { record_ptr = 0; }
   return;
 }
 

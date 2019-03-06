@@ -114,7 +114,7 @@ namespace NVUtil
   {
     std::vector<std::string> keys;
     keys = prop.propertyNames();
-    CORBA::ULong len((CORBA::ULong)keys.size());
+    CORBA::ULong len(static_cast<CORBA::ULong>(keys.size()));
     nv.length(len);
 
     for (CORBA::ULong i = 0; i < len; ++i)

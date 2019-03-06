@@ -61,7 +61,7 @@ namespace coil
     struct ::sockaddr_in addr;
 
     hostent = gethostbyname(dest_addr.c_str());
-    addr.sin_addr.s_addr = **(unsigned int **)(hostent->h_addr_list);
+    addr.sin_addr.s_addr = **reinterpret_cast<unsigned int **>(hostent->h_addr_list);
     dest_addr = inet_ntoa(addr.sin_addr);
 
 #if defined(COIL_OS_FREEBSD) || defined(COIL_OS_DARWIN) \

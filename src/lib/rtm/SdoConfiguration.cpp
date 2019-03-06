@@ -304,7 +304,7 @@ namespace SDOPackage
     RTC_TRACE(("get_configuration_parameter_values()"));
     Guard guard(m_config_mutex);
     NVList_var nvlist;
-    nvlist = new NVList((CORBA::ULong)0);
+    nvlist = new NVList(static_cast<CORBA::ULong>(0));
 
     /*
       CORBA::Long index;
@@ -398,11 +398,11 @@ namespace SDOPackage
 
         std::vector<coil::Properties*> cf(m_configsets.getConfigurationSets());
         ConfigurationSetList_var config_sets =
-          new ConfigurationSetList((CORBA::ULong)cf.size());
+          new ConfigurationSetList(static_cast<CORBA::ULong>(cf.size()));
         // Ctor's first arg is max length. Actual length has to be set.
-        config_sets->length((CORBA::ULong)cf.size());
+        config_sets->length(static_cast<CORBA::ULong>(cf.size()));
 
-        for (CORBA::ULong i(0), len((CORBA::ULong)cf.size()); i < len; ++i)
+        for (CORBA::ULong i(0), len(static_cast<CORBA::ULong>(cf.size())); i < len; ++i)
           {
             toConfigurationSet(config_sets[i], *(cf[i]));
           }
@@ -728,6 +728,6 @@ namespace SDOPackage
     uugen.init();
     std::unique_ptr<coil::UUID> uuid(uugen.generateUUID(2, 0x01));
 
-    return (const char*) uuid->to_string();
+    return uuid->to_string();
   }
 };  // namespace SDOPackage
