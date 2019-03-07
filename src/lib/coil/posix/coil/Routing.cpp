@@ -63,7 +63,7 @@ namespace coil
     hostent = gethostbyname(dest_addr.c_str());
     addr.sin_addr.s_addr = **(unsigned int **)(hostent->h_addr_list);
     char src[48];
-    if(inet_ntop(AF_INET, addr.sin_addr, src, size_of(src)) != nullptr)
+    if(inet_ntop(AF_INET, addr.sin_addr, src, sizeof(src)) != nullptr)
     {
             dest_addr = src;
     }
