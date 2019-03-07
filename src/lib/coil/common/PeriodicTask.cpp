@@ -361,5 +361,5 @@ namespace coil
     ++m_periodCount;
   }
 
-};  // namespace coil
+} // namespace coil
 

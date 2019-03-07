@@ -254,7 +254,7 @@ namespace RTC
     return ::OpenRTM::UNKNOWN_ERROR;
   }
 
-};  // namespace RTC
+} // namespace RTC
 
 extern "C"
 {

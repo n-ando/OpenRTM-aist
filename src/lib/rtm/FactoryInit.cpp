@@ -111,4 +111,4 @@ namespace RTM
     ComponentObserverConsumerInit();
 #endif
   }
-}; // namespace RTM
+} // namespace RTM

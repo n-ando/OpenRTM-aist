@@ -54,5 +54,5 @@ namespace coil
   }
 
 
-}; // namespace coil
+} // namespace coil
 #endif // COIL_PROCESS_H

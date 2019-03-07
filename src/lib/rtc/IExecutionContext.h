@@ -89,7 +89,7 @@ namespace Local
     virtual const ExecutionContextProfile&
     get_profile() const = 0;
   };
-};     // namespace Local
-};     // namespace RTC
+} // namespace Local
+} // namespace RTC
 #endif // RTC_LOCAL_IEXECUTIONCONTEXT_H
 

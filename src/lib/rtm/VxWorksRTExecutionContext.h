@@ -206,7 +206,7 @@ namespace RTC_exp
     long int m_sec;
     long int m_nsec;
   };
-}; // namespace RTC
+} // namespace RTC
 
 #ifdef WIN32
 #pragma warning( default : 4290 )

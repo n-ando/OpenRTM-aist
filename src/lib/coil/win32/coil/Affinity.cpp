@@ -118,4 +118,4 @@ namespace coil
       }
     return setThreadCpuAffinity(mask);
   }
-}; // namespace coil
+} // namespace coil

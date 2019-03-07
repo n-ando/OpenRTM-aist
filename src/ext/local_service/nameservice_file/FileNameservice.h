@@ -298,8 +298,8 @@ namespace RTM
       RTM::LocalService::FileNameservice& m_fns;
     };
     
-  }  // namespace LocalService
-}  // namespace RTM
+  } // namespace LocalService
+} // namespace RTM
 
 extern "C"
 {

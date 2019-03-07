@@ -143,4 +143,4 @@ namespace RTC
   {
     m_subscriptionType = subs_type;
   }
-};  // namespace RTC
+} // namespace RTC

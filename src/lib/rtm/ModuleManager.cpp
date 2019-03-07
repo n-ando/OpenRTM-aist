@@ -604,4 +604,4 @@ namespace RTC
 #endif
   }
 
-}; // namespace RTC
+} // namespace RTC

@@ -429,7 +429,7 @@ namespace RTC_exp
       RTC::PeriodicTaskFactory::instance().deleteObject(m_task);
   }
 
-};  // namespace RTC_exp
+} // namespace RTC_exp
 
 extern "C"
 {

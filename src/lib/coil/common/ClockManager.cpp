@@ -153,4 +153,4 @@ namespace coil
     return *clockmgr;
   }
 #endif
-};  // namespace coil
+} // namespace coil

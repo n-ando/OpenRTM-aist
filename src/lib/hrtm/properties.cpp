@@ -32,5 +32,5 @@ namespace utils
   Properties::~Properties()
   {
   }
-}; // namespace utils
-}; // namespace hrtm
+} // namespace utils
+} // namespace hrtm

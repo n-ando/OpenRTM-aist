@@ -519,7 +519,7 @@ namespace RTC
     unsigned int m_count;
 
   };  // class OpenHRPExecutionContext
-};  // namespace RTC
+} // namespace RTC
 
 #ifdef WIN32
 #pragma warning( default : 4290 )

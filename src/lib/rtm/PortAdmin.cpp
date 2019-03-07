@@ -387,4 +387,4 @@ namespace RTC
     ports = m_portServants.getObjects();
     for_each(ports.begin(), ports.end(), del_port(this));
   }
-};  // namespace RTC
+} // namespace RTC

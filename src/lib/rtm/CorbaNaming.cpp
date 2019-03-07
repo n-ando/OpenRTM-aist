@@ -1037,4 +1037,4 @@ namespace RTC
       }
     return (unsigned int)results.size();
   }
-};  // namespace RTC
+} // namespace RTC

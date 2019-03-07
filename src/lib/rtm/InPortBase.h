@@ -895,7 +895,7 @@ namespace RTC
      */
     ConnectorListeners m_listeners;
   };
-};  // namespace RTC
+} // namespace RTC
 
 #ifdef WIN32
 #pragma warning( pop )

@@ -118,5 +118,5 @@ namespace coil
    */
   bool setThreadCpuAffinity(std::string mask);
 
-}; // namespace coil
+} // namespace coil
 #endif // COIL_AFFINITY_H

@@ -1301,6 +1301,6 @@ namespace RTC
      */
     ConnectorListenerHolder connector_[CONNECTOR_LISTENER_NUM];
   };
-};  // namespace RTC
+} // namespace RTC
 
 #endif // RTC_CONNECTORLISTENER_H

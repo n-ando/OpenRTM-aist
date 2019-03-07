@@ -354,4 +354,4 @@ namespace RTC
     return m_properties;
   }
 
-};  // namespace RTC
+} // namespace RTC

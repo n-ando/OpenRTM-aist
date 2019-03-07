@@ -35,7 +35,7 @@
 namespace coil
 {
   class IClock;
-} // namespace coil;
+} // namespace coil 
 namespace RTC
 {
   /*!
@@ -699,7 +699,7 @@ namespace RTC
     Worker m_worker;
 
   };  // class LogicalTimeTriggeredEC
-};  // namespace RTC
+} // namespace RTC
 
 #ifdef WIN32
 #pragma warning( default : 4290 )

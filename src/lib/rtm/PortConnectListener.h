@@ -513,6 +513,6 @@ namespace RTC
   };
 
 
-};  // namespace RTC
+} // namespace RTC
 
 #endif  // RTC_PORTCONNECTLISTENER_H

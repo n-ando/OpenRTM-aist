@@ -855,4 +855,4 @@ namespace coil
       return ret_str;
   }
 
-}; // namespace coil
+} // namespace coil

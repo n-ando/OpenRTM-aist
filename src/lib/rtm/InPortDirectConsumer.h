@@ -228,7 +228,7 @@ namespace RTC
     mutable Logger rtclog;
     coil::Properties m_properties;
   };
-};  // namespace RTC
+} // namespace RTC
 
 extern "C"
 {

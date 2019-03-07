@@ -1161,6 +1161,6 @@ namespace RTC
      */
     Logger rtclog;
   };  // class NamingManager
-};  // namespace RTC
+} // namespace RTC
 
 #endif  // RTC_NAMINGMANAGER_H

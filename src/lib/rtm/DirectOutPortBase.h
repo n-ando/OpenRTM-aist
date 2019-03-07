@@ -132,6 +132,6 @@ namespace RTC
     
   protected:
   };
-}; // namespace RTC
+} // namespace RTC
 
 #endif // RTC_DIRECTOUTPORTBASE_H

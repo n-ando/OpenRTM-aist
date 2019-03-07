@@ -252,7 +252,7 @@ namespace RTC
     return ::RTC::UNKNOWN_ERROR;
   }
 
-};  // namespace RTC
+} // namespace RTC
 
 extern "C"
 {

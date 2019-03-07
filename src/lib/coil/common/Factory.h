@@ -628,7 +628,7 @@ namespace coil
     friend class Singleton<GlobalFactory>;
   };
 
-}; // namespace coil
+} // namespace coil
 
 
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)

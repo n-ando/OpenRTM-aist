@@ -276,7 +276,7 @@ namespace RTC
 
     
   };  // class SharedMemoryPort
-};  // namespace RTC
+} // namespace RTC
 
 #ifdef WIN32
 #pragma warning( default : 4290 )

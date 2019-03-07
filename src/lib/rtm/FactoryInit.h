@@ -21,5 +21,5 @@
 namespace RTM
 {
   void FactoryInit();
-}; // namespace RTM
+} // namespace RTM
 #endif  // RTM_FACTORYINIT_H

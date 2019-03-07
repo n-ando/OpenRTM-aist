@@ -368,6 +368,6 @@ namespace coil
     int m_fd;
   };  // class SharedMemory
 
-};  // namespace coil
+} // namespace coil
 
 #endif // SharedMemory_h

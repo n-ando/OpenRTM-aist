@@ -1439,5 +1439,5 @@ namespace CORBA_RTCUtil
 
     return true;
   }
-}  // namespace CORBA_RTCUtil
+} // namespace CORBA_RTCUtil
 

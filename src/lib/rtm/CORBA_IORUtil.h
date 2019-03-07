@@ -94,5 +94,5 @@ namespace CORBA_IORUtil
                     std::vector<IIOP::Address>& addr);
 #endif
 
-}; // namespace CORBA_IORUtil
+} // namespace CORBA_IORUtil
 #endif // CORBA_IORUTIL_H

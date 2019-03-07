@@ -503,5 +503,5 @@ namespace RTC_impl
     updateComponentList();
   }
 
-};  // namespace RTC_impl
+} // namespace RTC_impl
 

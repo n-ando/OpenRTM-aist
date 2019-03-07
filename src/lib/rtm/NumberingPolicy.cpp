@@ -88,7 +88,7 @@ namespace RTM
     throw ObjectNotFound();
     return (int)i;
   }
-}; //namespace RTM  
+} //namespace RTM 
 
 extern "C"
 {

@@ -897,4 +897,4 @@ namespace coil
           _dump(out, *(curr.leaf[i]), index + 1);
       }
   }
-};  // namespace coil
+} // namespace coil

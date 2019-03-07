@@ -112,7 +112,7 @@ namespace RTM
 			return false;
 		}
 	}
-}; //namespace RTM  
+} //namespace RTM 
 
 extern "C"
 {

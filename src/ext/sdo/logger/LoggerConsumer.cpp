@@ -124,7 +124,7 @@ namespace RTC
   //============================================================
   // protected functions
  
-}; // namespace RTC
+} // namespace RTC
 
 extern "C"
 {

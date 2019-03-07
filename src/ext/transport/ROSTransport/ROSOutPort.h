@@ -386,7 +386,7 @@ namespace RTC
     std::string m_roscorehost;
     unsigned int m_roscoreport;
   };
-};     // namespace RTC
+} // namespace RTC
 
 
 

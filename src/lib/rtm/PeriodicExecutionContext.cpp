@@ -641,7 +641,7 @@ namespace RTC_exp
       }
   }
 
-};  // namespace RTC_exp
+} // namespace RTC_exp
 
 extern "C"
 {

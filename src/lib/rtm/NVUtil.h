@@ -643,5 +643,5 @@ namespace NVUtil
   std::string toString(const SDOPackage::NVList& nv);
 
 
-};  // namespace NVUtil
+} // namespace NVUtil
 #endif  // NVUTIL_NVUTIL_H

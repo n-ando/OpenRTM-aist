@@ -1704,7 +1704,7 @@ namespace RTC
     CORBA::ULong m_blLength;
 
   };  // class CorbaNaming
-};  // namespace RTC
+} // namespace RTC
 
 #ifdef WIN32
 #pragma warning( default : 4290 )

@@ -108,5 +108,5 @@ namespace coil
     return 0;
   }
 
-};  // namespace coil
+} // namespace coil
 #endif  // COIL_PROCESS_H

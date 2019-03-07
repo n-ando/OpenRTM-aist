@@ -80,6 +80,6 @@ namespace CORBA
     ExecutionContextProfile m_profile;
   };
 
-};     // namespace CORBA
-};     // namespace RTC
+} // namespace CORBA
+} // namespace RTC
 #endif // RTC_CORBA_EXECUTIONCONTEXTADAPTER_H

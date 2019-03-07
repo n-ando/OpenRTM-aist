@@ -2528,6 +2528,6 @@ namespace RTC
 
     ::RTM::ManagerActionListeners m_listeners;
   };  // class Manager
-};  // namespace RTC
+} // namespace RTC
 
 #endif  // RTC_MANAGER_H

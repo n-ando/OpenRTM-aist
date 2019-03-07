@@ -609,5 +609,5 @@ namespace coil
   };
 
 
-};  // namespace coil
+} // namespace coil
 #endif  // LOGGER_H

@@ -142,4 +142,4 @@ namespace coil
     return true;
 #endif
   }
-}; // namespace coil
+} // namespace coil
