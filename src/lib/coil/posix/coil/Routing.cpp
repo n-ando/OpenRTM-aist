@@ -67,6 +67,10 @@ namespace coil
     {
             dest_addr = src;
     }
+    else
+    {
+            return false;
+    }
 #if defined(COIL_OS_FREEBSD) || defined(COIL_OS_DARWIN) \
                              || defined(COIL_OS_CYGWIN) \
                              || defined(COIL_OS_QNX)
