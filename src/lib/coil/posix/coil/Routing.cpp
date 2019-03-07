@@ -19,7 +19,7 @@
 
 #include <cstdio>
 #include <netdb.h>       // gethostbyname
-#include <arpa/inet.h>   // inet_ntoa
+#include <arpa/inet.h>   // inet_ntop
 #include <netinet/in.h>  // sockaddr_in
 #include <sys/wait.h>
 
@@ -62,8 +62,11 @@ namespace coil
 
     hostent = gethostbyname(dest_addr.c_str());
     addr.sin_addr.s_addr = **(unsigned int **)(hostent->h_addr_list);
-    dest_addr = inet_ntoa(addr.sin_addr);
-
+    char src[48];
+    if(inet_ntop(AF_INET, addr.sin_addr, src, size_of(src)) != nullptr)
+    {
+            dest_addr = src;
+    }
 #if defined(COIL_OS_FREEBSD) || defined(COIL_OS_DARWIN) \
                              || defined(COIL_OS_CYGWIN) \
                              || defined(COIL_OS_QNX)
