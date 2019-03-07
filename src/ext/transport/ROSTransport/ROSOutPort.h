@@ -26,7 +26,6 @@
 #include <rtm/Manager.h>
 #include <ros/transport/transport_tcp.h>
 #include <ros/connection.h>
-#include <std_msgs/Float32.h>
 #include <coil/Mutex.h>
 #include "ROSMessageInfo.h"
 
