@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file  Analyzer_test.cpp
  * @brief Clock Analyzer test
@@ -206,5 +206,4 @@ extern "C"
   }
   
 };
-
 

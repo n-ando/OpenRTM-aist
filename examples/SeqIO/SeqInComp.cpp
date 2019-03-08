@@ -12,7 +12,7 @@
 #include <string>
 #include "SeqIn.h"
 
-#if defined(RTM_OS_VXWORKS) && not defined(__RTP__)
+#if defined(RTM_OS_VXWORKS) && !defined(__RTP__)
 int seqin_main()
 {
   RTC::Manager* manager = &RTC::Manager::instance();

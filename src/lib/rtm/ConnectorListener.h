@@ -1098,7 +1098,6 @@ namespace RTC
 
       
 
-
       for (auto & listener : m_listeners)
         {
           ConnectorDataListenerT<DataType>* datalistener(nullptr);

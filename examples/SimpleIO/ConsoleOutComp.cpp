@@ -15,7 +15,7 @@
 
 
 
-#if defined(RTM_OS_VXWORKS) && not defined(__RTP__)
+#if defined(RTM_OS_VXWORKS) && !defined(__RTP__)
 int consoleout_main()
 {
   RTC::Manager* manager = &RTC::Manager::instance();
@@ -58,6 +58,7 @@ void MyModuleInit(RTC::Manager* manager)
 
   PortServiceList* portlist;
   portlist = comp->get_ports();
+
 
   for (CORBA::ULong i(0), n(portlist->length()); i < n; ++i)
     {
