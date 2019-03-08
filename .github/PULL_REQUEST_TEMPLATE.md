@@ -21,6 +21,6 @@ Check the item below and fill the checbox.
 You can fill checbox by using the [X].  
 if this request do not need to build and tests, delete the items and specify that these are no need.  
 
-- [ ] Did you succesed the build?  
+- [ ] Did you succeed the build?  
 - [ ] No warnings for the build?  
 - [ ] Have you passed the unit tests?  

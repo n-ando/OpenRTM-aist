@@ -288,7 +288,7 @@ namespace RTC
         m_pPOA->deactivate_object(oid);
         port.setPortRef(RTC::PortService::_nil());
 
-        return m_portServants.unregisterObject(tmp) == nullptr ? false : true;
+        return m_portServants.unregisterObject(tmp) != nullptr;
       }
     catch (...)
       {
@@ -350,9 +350,9 @@ namespace RTC
   {
     std::vector<PortBase*> ports;
     ports = m_portServants.getObjects();
-    for (std::vector<PortBase*>::iterator port = ports.begin(); port != ports.end(); ++port)
+    for (auto & port : ports)
       {
-        (*port)->activateInterfaces();
+        port->activateInterfaces();
       }
   }
 
@@ -367,9 +367,9 @@ namespace RTC
   {
     std::vector<PortBase*> ports;
     ports = m_portServants.getObjects();
-    for (std::vector<PortBase*>::iterator port = ports.begin(); port != ports.end(); ++port)
+    for (auto & port : ports)
       {
-        (*port)->deactivateInterfaces();
+        port->deactivateInterfaces();
       }
   }
 

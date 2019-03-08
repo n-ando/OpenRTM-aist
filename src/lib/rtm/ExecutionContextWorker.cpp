@@ -99,9 +99,9 @@ namespace RTC_impl
         return RTC::PRECONDITION_NOT_MET;
       }
     // invoke ComponentAction::on_startup for each comps.
-    for (std::vector<RTC_impl::RTObjectStateMachine*>::iterator comp = m_comps.begin(); comp != m_comps.end(); ++comp)
+    for (auto & comp : m_comps)
       {
-        (*comp)->onStartup();
+        comp->onStartup();
       }
     RTC_DEBUG(("%d components started.", m_comps.size()));
     // change EC thread state
@@ -130,9 +130,9 @@ namespace RTC_impl
     m_running = false;
 
     // invoke on_shutdown for each comps.
-    for (std::vector<RTC_impl::RTObjectStateMachine*>::iterator comp = m_comps.begin(); comp != m_comps.end(); ++comp)
+    for (auto & comp : m_comps)
       {
-        (*comp)->onShutdown();
+        comp->onShutdown();
       }
     return RTC::RTC_OK;
   }
@@ -149,9 +149,9 @@ namespace RTC_impl
     RTC_TRACE(("rateChanged()"));
     // invoke on_shutdown for each comps.
     RTC::ReturnCode_t ret(RTC::RTC_OK);
-    for (std::vector<RTC_impl::RTObjectStateMachine*>::iterator comp = m_comps.begin(); comp != m_comps.end(); ++comp)
+    for (auto & comp : m_comps)
       {
-        RTC::ReturnCode_t tmp = (*comp)->onRateChanged();
+        RTC::ReturnCode_t tmp = comp->onRateChanged();
         if (tmp != RTC::RTC_OK) { ret = tmp; }
       }
     return ret;
@@ -385,18 +385,17 @@ namespace RTC_impl
   {
     {    // adding component
       Guard addedGuard(m_addedMutex);
-      for (std::vector<RTC_impl::RTObjectStateMachine*>::iterator comp = m_addedComps.begin(); comp != m_addedComps.end(); ++comp)
+      for (auto & m_addedComp : m_addedComps)
         {
-          m_comps.push_back((*comp));
+          m_comps.push_back(m_addedComp);
           RTC_TRACE(("Component added."));
         }
       m_addedComps.clear();
     }
     {    // removing component
       Guard removedGuard(m_removedMutex);
-      for (std::vector<RTC_impl::RTObjectStateMachine*>::iterator comp = m_removedComps.begin(); comp != m_removedComps.end(); ++comp)
+      for (auto rtobj : m_removedComps)
         {
-          RTObjectStateMachine* rtobj = (*comp);
           RTC::LightweightRTObject_var lwrtobj = rtobj->getRTObject();
           lwrtobj->detach_context(rtobj->getExecutionContextHandle());
           CompItr it;
@@ -414,11 +413,11 @@ namespace RTC_impl
   ExecutionContextWorker::findComponent(RTC::LightweightRTObject_ptr comp)
   {
     Guard guard(m_mutex);
-    for (std::vector<RTC_impl::RTObjectStateMachine*>::iterator itr = m_comps.begin(); itr != m_comps.end(); ++itr)
+    for (auto & rtobj : m_comps)
       {
-        if ((*itr)->isEquivalent(comp))
+        if (rtobj->isEquivalent(comp))
           {
-            return (*itr);
+            return rtobj;
           }
       }
     return nullptr;
@@ -428,9 +427,9 @@ namespace RTC_impl
   isAllCurrentState(ExecContextState state)
   {
     Guard gurad(m_mutex);
-    for (std::vector<RTC_impl::RTObjectStateMachine*>::iterator comp = m_comps.begin(); comp != m_comps.end(); ++comp)
+    for (auto & comp : m_comps)
       {
-        if (!(*comp)->isCurrentState(state)) { return false; }
+        if (!comp->isCurrentState(state)) { return false; }
       }
     return true;
   }
@@ -439,9 +438,9 @@ namespace RTC_impl
   isAllNextState(ExecContextState state)
   {
     Guard gurad(m_mutex);
-    for (std::vector<RTC_impl::RTObjectStateMachine*>::iterator comp = m_comps.begin(); comp != m_comps.end(); ++comp)
+    for (auto & comp : m_comps)
       {
-        if (!(*comp)->isNextState(state)) { return false; }
+        if (!comp->isNextState(state)) { return false; }
       }
     return true;
   }
@@ -450,9 +449,9 @@ namespace RTC_impl
   isOneOfCurrentState(ExecContextState state)
   {
     Guard gurad(m_mutex);
-    for (std::vector<RTC_impl::RTObjectStateMachine*>::iterator comp = m_comps.begin(); comp != m_comps.end(); ++comp)
+    for (auto & comp : m_comps)
       {
-        if ((*comp)->isCurrentState(state)) { return true; }
+        if (comp->isCurrentState(state)) { return true; }
       }
     return false;
   }
@@ -461,9 +460,9 @@ namespace RTC_impl
   isOneOfNextState(ExecContextState state)
   {
     Guard gurad(m_mutex);
-    for (std::vector<RTC_impl::RTObjectStateMachine*>::iterator comp = m_comps.begin(); comp != m_comps.end(); ++comp)
+    for (auto & comp : m_comps)
       {
-        if ((*comp)->isNextState(state)) { return true; }
+        if (comp->isNextState(state)) { return true; }
       }
     return false;
   }
@@ -472,9 +471,9 @@ namespace RTC_impl
   {
     RTC_PARANOID(("invokeWorker()"));
     // m_comps never changes its size here
-    for (std::vector<RTC_impl::RTObjectStateMachine*>::iterator comp = m_comps.begin(); comp != m_comps.end(); ++comp) { (*comp)->workerPreDo();  }
-    for (std::vector<RTC_impl::RTObjectStateMachine*>::iterator comp = m_comps.begin(); comp != m_comps.end(); ++comp) { (*comp)->workerDo();     }
-    for (std::vector<RTC_impl::RTObjectStateMachine*>::iterator comp = m_comps.begin(); comp != m_comps.end(); ++comp) { (*comp)->workerPostDo(); }
+    for (auto & comp : m_comps) { comp->workerPreDo();  }
+    for (auto & comp : m_comps) { comp->workerDo();     }
+    for (auto & comp : m_comps) { comp->workerPostDo(); }
     Guard guard(m_mutex);
     updateComponentList();
   }
@@ -483,21 +482,21 @@ namespace RTC_impl
   {
     RTC_PARANOID(("invokeWorkerPreDo()"));
     // m_comps never changes its size here
-    for (std::vector<RTC_impl::RTObjectStateMachine*>::iterator comp = m_comps.begin(); comp != m_comps.end(); ++comp) { (*comp)->workerPreDo();  }
+    for (auto & comp : m_comps) { comp->workerPreDo();  }
   }
 
   void ExecutionContextWorker::invokeWorkerDo()
   {
     RTC_PARANOID(("invokeWorkerDo()"));
     // m_comps never changes its size here
-    for (std::vector<RTC_impl::RTObjectStateMachine*>::iterator comp = m_comps.begin(); comp != m_comps.end(); ++comp) { (*comp)->workerDo();     }
+    for (auto & comp : m_comps) { comp->workerDo();     }
   }
 
   void ExecutionContextWorker::invokeWorkerPostDo()
   {
     RTC_PARANOID(("invokeWorkerPostDo()"));
     // m_comps never changes its size here
-    for (std::vector<RTC_impl::RTObjectStateMachine*>::iterator comp = m_comps.begin(); comp != m_comps.end(); ++comp) { (*comp)->workerPostDo(); }
+    for (auto & comp : m_comps) { comp->workerPostDo(); }
     // m_comps might be changed here
     Guard guard(m_mutex);
     updateComponentList();

@@ -965,10 +965,9 @@ namespace RTC
 #endif  // ORB_IS_RTORB
     }
 
-    for (std::vector<std::string>::iterator it(connector_ids.begin());
-         it != connector_ids.end(); ++it)
+    for (auto & connector_id : connector_ids)
       {
-        this->disconnect((*it).c_str());
+        this->disconnect(connector_id.c_str());
       }
   }
 

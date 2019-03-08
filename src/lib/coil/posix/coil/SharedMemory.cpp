@@ -402,14 +402,7 @@ namespace coil
   */
   bool SharedMemory::created()
   {
-	if(m_fd < 0)
-	{
-		return false;
-	}
-	else
-	{
-		return true;
-	}
+	return m_fd >= 0;
   }
 
 

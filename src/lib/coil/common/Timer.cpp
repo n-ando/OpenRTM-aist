@@ -123,13 +123,13 @@ namespace coil
   void Timer::invoke()
   {
     Guard guard(m_taskMutex);
-    for (size_t i(0), len(m_tasks.size()); i < len; ++i)
+    for (auto & task : m_tasks)
       {
-        m_tasks[i].remains = m_tasks[i].remains - m_interval;
-        if (m_tasks[i].remains.sign() <= 0)
+        task.remains = task.remains - m_interval;
+        if (task.remains.sign() <= 0)
           {
-            m_tasks[i].listener->invoke();
-            m_tasks[i].remains = m_tasks[i].period;
+            task.listener->invoke();
+            task.remains = task.period;
           }
       }
   }
@@ -145,12 +145,12 @@ namespace coil
   {
     Guard guard(m_taskMutex);
 
-    for (size_t i(0), len(m_tasks.size()); i < len; ++i)
+    for (auto & task : m_tasks)
       {
-        if (m_tasks[i].listener == listener)
+        if (task.listener == listener)
           {
-            m_tasks[i].period = tm;
-            m_tasks[i].remains = tm;
+            task.period = tm;
+            task.remains = tm;
             return listener;
           }
       }

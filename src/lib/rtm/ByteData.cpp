@@ -1,4 +1,4 @@
-#include "ByteData.h"
+﻿#include "ByteData.h"
 #include <cstring>
 
 namespace RTC

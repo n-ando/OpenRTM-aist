@@ -234,7 +234,9 @@ class skel_wrapper:
 			sys.stderr.write("Invalid IDL file name specified.\n")
 			sys.exit(1)
 			
-		dirname  = os.path.dirname(basename) + "/"
+		dirname  = os.path.dirname(basename)
+		if dirname:
+			dirname += "/"
 		basename = os.path.basename(basename)
 		self.data["basename"] = basename
 		self.data["skel_h"]   = basename + skel_suffix + ".h"
@@ -244,9 +246,21 @@ class skel_wrapper:
 
 		skel_h_guard = dirname + self.data["skel_h"].replace(".","_")
 		skel_h_guard = skel_h_guard.replace("/","_")
+		count = 0
+		for i in range(len(skel_h_guard)):
+			if skel_h_guard[i] != "_":
+				count = i
+				break
+		skel_h_guard = skel_h_guard[count:]
 		skel_h_guard = skel_h_guard.upper()
 		stub_h_guard = dirname + self.data["stub_h"].replace(".","_")
 		stub_h_guard = stub_h_guard.replace("/","_")
+		count = 0
+		for i in range(len(stub_h_guard)):
+			if stub_h_guard[i] != "_":
+				count = i
+				break
+		stub_h_guard = stub_h_guard[count:]
 		stub_h_guard = stub_h_guard.upper()
 		self.data["skel_h_inc_guard"] = skel_h_guard
 		self.data["stub_h_inc_guard"] = stub_h_guard
