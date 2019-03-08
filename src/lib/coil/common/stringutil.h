@@ -764,8 +764,7 @@ namespace coil
     uintptr_t intval = 0;
     if ((s >> intval).fail()) { return false; }
     ptr = reinterpret_cast<T*>(intval);
-    if (ptr == NULL) { return false; }
-    return true;
+    return static_cast<bool>(ptr != NULL);
 #endif
   }
 
