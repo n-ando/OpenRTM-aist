@@ -436,9 +436,9 @@ namespace RTC
   RosTopicManager* RosTopicManager::init()
   {
     //RTC_PARANOID(("init()"));
+    Guard guard(mutex);
     if (!manager)
     {
-      Guard guard(mutex);
       manager = new RosTopicManager();
       manager->start();
     }
@@ -461,9 +461,9 @@ namespace RTC
    */
   RosTopicManager& RosTopicManager::instance()
   {
+    Guard guard(mutex);
     if (!manager)
     {
-      Guard guard(mutex);
       manager = new RosTopicManager();
       manager->start();
     }

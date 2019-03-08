@@ -102,11 +102,11 @@ namespace RTC
   PortConnectListenerHolder::~PortConnectListenerHolder()
   {
     Guard guard(m_mutex);
-    for (int i(0), len(m_listeners.size()); i < len; ++i)
+    for (std::vector<Entry>::iterator listener = m_listeners.begin(); listener != m_listeners.end(); ++listener)
       {
-        if (m_listeners[i].second)
+        if ((*listener).second)
           {
-            delete m_listeners[i].first;
+            delete (*listener).first;
           }
       }
   }
@@ -116,7 +116,7 @@ namespace RTC
                                               bool autoclean)
   {
     Guard guard(m_mutex);
-    m_listeners.push_back(Entry(listener, autoclean));
+    m_listeners.emplace_back(listener, autoclean);
   }
 
 
@@ -145,9 +145,9 @@ namespace RTC
                                          RTC::ConnectorProfile& profile)
   {
     Guard guard(m_mutex);
-    for (int i(0), len(m_listeners.size()); i < len; ++i)
+    for (std::vector<Entry>::iterator listener = m_listeners.begin(); listener != m_listeners.end(); ++listener)
       {
-        m_listeners[i].first->operator()(portname, profile);
+        (*listener).first->operator()(portname, profile);
       }
   }
 
@@ -167,11 +167,11 @@ namespace RTC
   PortConnectRetListenerHolder::~PortConnectRetListenerHolder()
   {
     Guard guard(m_mutex);
-    for (int i(0), len(m_listeners.size()); i < len; ++i)
+    for (std::vector<Entry>::iterator listener = m_listeners.begin(); listener != m_listeners.end(); ++listener)
       {
-        if (m_listeners[i].second)
+        if ((*listener).second)
           {
-            delete m_listeners[i].first;
+            delete (*listener).first;
           }
       }
   }
@@ -181,7 +181,7 @@ namespace RTC
   addListener(PortConnectRetListener* listener, bool autoclean)
   {
     Guard guard(m_mutex);
-    m_listeners.push_back(Entry(listener, autoclean));
+    m_listeners.emplace_back(listener, autoclean);
   }
 
 
@@ -211,9 +211,9 @@ namespace RTC
                                             ReturnCode_t ret)
   {
     Guard guard(m_mutex);
-    for (int i(0), len(m_listeners.size()); i < len; ++i)
+    for (std::vector<Entry>::iterator listener = m_listeners.begin(); listener != m_listeners.end(); ++listener)
       {
-        m_listeners[i].first->operator()(portname, profile, ret);
+        (*listener).first->operator()(portname, profile, ret);
       }
   }
 

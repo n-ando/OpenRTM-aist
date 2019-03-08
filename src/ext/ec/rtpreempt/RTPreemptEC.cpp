@@ -109,7 +109,7 @@ namespace RTC_exp
    * @brief Generate internal activity thread for ExecutionContext
    * @endif
    */
-  int RTPreemptEC::open(void *args)
+  int RTPreemptEC::open(void * /*args*/)
   {
     RTC_TRACE(("open()"));
     activate();
@@ -145,7 +145,7 @@ namespace RTC_exp
       }
     return true;
   }
-  int RTPreemptEC::svc(void)
+  int RTPreemptEC::svc()
   {
     RTC_TRACE(("svc()"));
     if (!prepareThread()) { return -1; }
@@ -210,7 +210,7 @@ namespace RTC_exp
    * @brief Thread execution function for ExecutionContext
    * @endif
    */
-  int RTPreemptEC::close(unsigned long flags)
+  int RTPreemptEC::close(unsigned long  /*flags*/)
   {
     RTC_TRACE(("close()"));
     // At this point, this component have to be finished.
@@ -662,7 +662,7 @@ extern "C"
    * @endif
    */
 
- void RTPreemptECInit(RTC::Manager* manager)
+ void RTPreemptECInit(RTC::Manager*  /*manager*/)
   {
     RTC::ExecutionContextFactory::
       instance().addFactory("RTPreemptEC",

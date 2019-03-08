@@ -19,7 +19,6 @@
 
 #include <coil/Condition.h>
 
-namespace coil
-{
-  // no implementaion
-};
+
+  
+

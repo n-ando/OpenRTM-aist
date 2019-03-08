@@ -142,7 +142,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~RingBuffer(void)
+    virtual ~RingBuffer()
     {
     }
 
@@ -212,7 +212,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual size_t length(void) const
+    virtual size_t length() const
     {
       Guard guard(m_posmutex);
       return m_length;
@@ -351,8 +351,8 @@ namespace RTC
       //                 n >= - m_fillcount
       {
           Guard guard(m_posmutex);
-          if ((n > 0 && n > static_cast<long int>(m_length - m_fillcount)) ||
-              (n < 0 && n < static_cast<long int>(-m_fillcount)))
+          if ((n > 0 && n > static_cast<long int>(m_length) - static_cast<long int>(m_fillcount)) ||
+              (n < 0 && n < -static_cast<long int>(m_fillcount)))
             {
               if (lock_)
               {
@@ -552,7 +552,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual bool full(void) const
+    virtual bool full() const
     {
       Guard guard(m_posmutex);
       return m_length == m_fillcount;
@@ -625,7 +625,7 @@ namespace RTC
       {
           Guard guard(m_posmutex);
           if ((n > 0 && n > static_cast<long int>(m_fillcount)) ||
-              (n < 0 && n < static_cast<long int>(m_fillcount - m_length)))
+              (n < 0 && n < static_cast<long int>(m_fillcount) - static_cast<long int>(m_length)))
             {
               if (lock_)
               {
@@ -854,7 +854,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual bool empty(void) const
+    virtual bool empty() const
     {
       Guard guard(m_posmutex);
       return m_fillcount == 0;

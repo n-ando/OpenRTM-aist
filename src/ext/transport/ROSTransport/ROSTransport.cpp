@@ -19,6 +19,9 @@
 
 #include "ROSTransport.h"
 #include "ROSSerializer.h"
+#include "ROSOutPort.h"
+#include "ROSInPort.h"
+
 
 
 

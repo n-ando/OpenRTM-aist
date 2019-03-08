@@ -46,8 +46,16 @@ namespace coil
    */
   std::wstring string2wstring(std::string str)
   {
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
+    int buff_size = MultiByteToWideChar(CP_UTF7, 0, str.c_str(), -1, (wchar_t*)NULL, 0);
+    wchar_t* ret = new wchar_t[buff_size];
+    MultiByteToWideChar(CP_UTF7, 0, str.c_str(), -1, ret, buff_size);
+    std::wstring wstr(ret, ret + buff_size - 1);
+    delete[] ret;
+#else
     std::wstring wstr(str.length(), L' ');
     std::copy(str.begin(), str.end(), wstr.begin());
+#endif
     return wstr;
   }
 
@@ -60,8 +68,16 @@ namespace coil
    */
   std::string wstring2string(std::wstring wstr)
   {
-    std::string str(wstr.length(), ' ');
-    std::copy(wstr.begin(), wstr.end(), str.begin());
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
+      int buff_size = WideCharToMultiByte(CP_ACP, 0, wstr.c_str(), -1, (char*)NULL, 0, NULL, NULL);
+      CHAR* ret = new CHAR[buff_size];
+      WideCharToMultiByte(CP_ACP, 0, wstr.c_str(), -1, ret, buff_size, NULL, NULL);
+      std::string str(ret, ret + buff_size - 1);
+      delete[] ret;
+#else
+      std::string str(wstr.length(), ' ');
+      std::copy(wstr.begin(), wstr.end(), str.begin());
+#endif
     return str;
   }
 
@@ -744,7 +760,11 @@ namespace coil
       {
         size_t sz(args[i].size());
         argv[i] = new char[sz + 1];
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
+        strncpy_s(argv[i], sz + 1, args[i].c_str(), sz);
+#else
         strncpy(argv[i], args[i].c_str(), sz);
+#endif
         argv[i][sz] = '\0';
       }
     argv[argc] = nullptr;
@@ -768,7 +788,7 @@ namespace coil
 
     va_start(ap, fmt);
 #ifdef WIN32
-    _vsnprintf(str, LINE_MAX - 1, fmt, ap);
+    _vsnprintf_s(str, LINE_MAX - 1, _TRUNCATE, fmt, ap);
 #else
     vsnprintf(str, LINE_MAX - 1, fmt, ap);
 #endif
@@ -801,36 +821,38 @@ namespace coil
   */
   std::string replaceEnv(std::string str)
   {
-	  vstring tmp = split(str, "${");
-	  if (tmp.size() < 2)
-	  {
-		  return str;
-	  }
-	  vstring ret;
-	  for (vstring::iterator itr = tmp.begin(); itr != tmp.end(); ++itr)
-	  {
-		  vstring tmp2 = split((*itr), "}");
-		  if (tmp2.size() == 2)
-		  {
-			  char s[100];
-			  strcpy(s, coil::getenv(tmp2[0].c_str()));
-			  ret.push_back(std::string(s));
-			  ret.push_back(tmp2[1]);
-		  }
-		  else
-		  {
-			  ret.push_back((*itr));
-		  }
-		  
-	  }
+      vstring tmp = split(str, "${");
+      if (tmp.size() < 2)
+      {
+          return str;
+      }
+      vstring ret;
+      for (vstring::iterator itr = tmp.begin(); itr != tmp.end(); ++itr)
+      {
+          vstring tmp2 = split((*itr), "}");
+          if (tmp2.size() == 2)
+          {
+              char s[100];
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
+              strcpy_s(s, sizeof(s), coil::getenv(tmp2[0].c_str()));
+#else
+              strcpy(s, coil::getenv(tmp2[0].c_str()));
+#endif
+              ret.push_back(std::string(s));
+              ret.push_back(tmp2[1]);
+          }
+          else
+          {
+              ret.push_back((*itr));
+          }
+      }
 
-
-	  std::string ret_str;
-	  for (vstring::iterator itr = ret.begin(); itr != ret.end(); ++itr)
-	  {
-		  ret_str = ret_str + (*itr);
-	  }
-	  return ret_str;
+      std::string ret_str;
+      for (vstring::iterator itr = ret.begin(); itr != ret.end(); ++itr)
+      {
+          ret_str = ret_str + (*itr);
+      }
+      return ret_str;
   }
 
 }; // namespace coil

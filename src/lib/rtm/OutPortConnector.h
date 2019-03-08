@@ -179,7 +179,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual void setEndian(const bool endian_type);
+    virtual void setEndian(bool endian_type);
 
     /*!
      * @if jp

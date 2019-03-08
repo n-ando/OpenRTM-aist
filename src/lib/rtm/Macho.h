@@ -394,7 +394,7 @@ namespace Macho {
 	public:
 		virtual ~_StateSpecification() {}
 
-		static bool isChild(Key key) {
+		static bool isChild(Key  /*key*/) {
 			return false;
 		}
 
@@ -609,7 +609,7 @@ namespace Macho {
 		virtual void _deleteBox(_StateInstance & instance);
 
 		// Default history strategy (no history). Not redundant!
-		virtual void _saveHistory(_StateInstance & self, _StateInstance & shallow, _StateInstance & deep) {
+		virtual void _saveHistory(_StateInstance & self, _StateInstance &  /*shallow*/, _StateInstance & deep) {
 			// Bubble up history. If no superstate has history, _setHistorySuper will do nothing.
 			this->_setHistorySuper(self, deep);
 		}

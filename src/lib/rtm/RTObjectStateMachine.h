@@ -49,7 +49,7 @@ namespace RTC_impl
   public:
     RTObjectStateMachine(RTC::ExecutionContextHandle_t id,
                          RTC::LightweightRTObject_ptr comp);
-    virtual ~RTObjectStateMachine(void);
+    virtual ~RTObjectStateMachine();
 //    RTObjectStateMachine(const RTObjectStateMachine& rtobjsm);
 //    RTObjectStateMachine& operator=(const RTObjectStateMachine& rtobjsm);
 //    void swap(RTObjectStateMachine& rtobjsm) throw();
@@ -61,8 +61,8 @@ namespace RTC_impl
     RTC::ExecutionContextHandle_t getExecutionContextHandle();
 
     // RTC::ComponentAction operations
-    void onStartup(void);
-    void onShutdown(void);
+    void onStartup();
+    void onShutdown();
     void onActivated(const ExecContextStates& st);
     void onDeactivated(const ExecContextStates& st);
     void onAborting(const ExecContextStates& st);
@@ -72,7 +72,7 @@ namespace RTC_impl
     // RTC::DataflowComponentAction
     void onExecute(const ExecContextStates& st);
     void onStateUpdate(const ExecContextStates& st);
-    RTC::ReturnCode_t onRateChanged(void);
+    RTC::ReturnCode_t onRateChanged();
 
     // FsmParticipantAction
     void onAction(const ExecContextStates& st);
@@ -81,22 +81,22 @@ namespace RTC_impl
     void onModeChanged(const ExecContextStates& st);
 
     // Getting state of the context
-    ExecContextState getState(void);
-    ExecContextStates getStates(void);
+    ExecContextState getState();
+    ExecContextStates getStates();
     bool isCurrentState(ExecContextState state);
     bool isNextState(ExecContextState state);
     void goTo(ExecContextState state);
 
     // Workers
-    void workerPreDo(void);
-    void workerDo(void);
-    void workerPostDo(void);
+    void workerPreDo();
+    void workerDo();
+    void workerPostDo();
 
   protected:
-    void setComponentAction(const RTC::LightweightRTObject_ptr comp);
-    void setDataFlowComponentAction(const RTC::LightweightRTObject_ptr comp);
-    void setFsmParticipantAction(const RTC::LightweightRTObject_ptr comp);
-    void setMultiModeComponentAction(const RTC::LightweightRTObject_ptr comp);
+    void setComponentAction(RTC::LightweightRTObject_ptr comp);
+    void setDataFlowComponentAction(RTC::LightweightRTObject_ptr comp);
+    void setFsmParticipantAction(RTC::LightweightRTObject_ptr comp);
+    void setMultiModeComponentAction(RTC::LightweightRTObject_ptr comp);
 
   private:  // member variables
     RTC::Logger rtclog;

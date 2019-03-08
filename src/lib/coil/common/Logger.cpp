@@ -86,7 +86,7 @@ namespace coil
      */
     void LogStreamBuffer::addStream(LogStreamBuffer *stream, bool cleanup)
     {
-       m_streams.push_back(Stream(stream, cleanup));
+       m_streams.emplace_back(stream, cleanup);
     }
 
     /*!

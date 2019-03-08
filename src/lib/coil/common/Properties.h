@@ -257,7 +257,7 @@ namespace coil
      *
      * @endif
      */
-    virtual ~Properties(void);
+    virtual ~Properties();
 
     //============================================================
     // public functions
@@ -280,7 +280,7 @@ namespace coil
      *
      * @endif
      */
-    inline const char* getName(void) const          {return name.c_str();}
+    inline const char* getName() const          {return name.c_str();}
 
     /*!
      * @if jp
@@ -299,7 +299,7 @@ namespace coil
      *
      * @endif
      */
-    inline const char* getValue(void) const         {return value.c_str();}
+    inline const char* getValue() const         {return value.c_str();}
 
     /*!
      * @if jp
@@ -318,7 +318,7 @@ namespace coil
      *
      * @endif
      */
-    inline const char* getDefaultValue(void) const
+    inline const char* getDefaultValue() const
     {
       return default_value.c_str();
     }
@@ -340,7 +340,7 @@ namespace coil
      *
      * @endif
      */
-    inline const std::vector<Properties*>& getLeaf(void) const {return leaf;}
+    inline const std::vector<Properties*>& getLeaf() const {return leaf;}
 
     /*!
      * @if jp
@@ -359,7 +359,7 @@ namespace coil
      *
      * @endif
      */
-    inline const Properties* getRoot(void) const    {return root;}
+    inline const Properties* getRoot() const    {return root;}
 
     /*!
      * @if jp
@@ -890,7 +890,7 @@ namespace coil
      *
      * @endif
      */
-    std::vector<std::string> propertyNames(void) const;
+    std::vector<std::string> propertyNames() const;
 
     /*!
      * @if jp
@@ -909,7 +909,7 @@ namespace coil
      *
      * @endif
      */
-    int size(void) const;
+    int size() const;
 
     /*!
      * @if jp
@@ -1043,7 +1043,7 @@ namespace coil
      * @brief Clear the children
      * @endif
      */
-    void clear(void);
+    void clear();
 
     /*!
      * @if jp
@@ -1191,7 +1191,7 @@ namespace coil
      *
      * @endif
      */
-    static bool split(const std::string& str, const char delim,
+    static bool split(const std::string& str, char delim,
                       std::vector<std::string>& value);
 
     /*!

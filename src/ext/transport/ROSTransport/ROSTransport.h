@@ -20,10 +20,7 @@
 #define RTC_ROSTRANSPORT_H
 
 
-
-#include "ROSOutPort.h"
-#include "ROSInPort.h"
-
+#include <rtm/Manager.h>
 
 
 extern "C"
