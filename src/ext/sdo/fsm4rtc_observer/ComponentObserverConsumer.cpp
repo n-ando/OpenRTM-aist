@@ -684,7 +684,7 @@ namespace RTC
       }
     if (m_ecaction.ecDetached != NULL)
       {
-        m_rtobj->removeExecutionContextActionListener(EC_ATTACHED,
+        m_rtobj->removeExecutionContextActionListener(EC_DETACHED,
                                                       m_ecaction.ecDetached);
       }
     if (m_ecaction.ecRatechanged != NULL)
