@@ -73,7 +73,7 @@ namespace RTC
   {
     for (auto & param : m_params)
       {
-        if (param != nullptr) { delete param; }
+        delete param; 
       }
     m_params.clear();
   }
