@@ -304,7 +304,7 @@ namespace RTC
       }
     else
       {
-        if (m_heartbeat == true && m_hblistenerid != nullptr)
+        if (m_heartbeat && m_hblistenerid != nullptr)
           {
             unsetHeartbeat();
             m_timer.stop();
@@ -625,7 +625,7 @@ namespace RTC
       }
     if (m_ecaction.ecDetached != nullptr)
       {
-        m_rtobj->removeExecutionContextActionListener(EC_ATTACHED,
+        m_rtobj->removeExecutionContextActionListener(EC_DETACHED,
                                                       m_ecaction.ecDetached);
       }
     if (m_ecaction.ecRatechanged != nullptr)

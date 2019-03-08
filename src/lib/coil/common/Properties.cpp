@@ -60,7 +60,7 @@ namespace coil
 
     while (it != it_end)
       {
-        setDefault(it->first.c_str(), it->second.c_str());
+        setDefault(it->first, it->second);
         ++it;
       }
   }
@@ -313,7 +313,7 @@ namespace coil
         coil::eraseHeadBlank(value);
         coil::eraseTailBlank(value);
 
-        setDefault(key.c_str(), value.c_str());
+        setDefault(key, value);
       }
   }
 
@@ -385,7 +385,7 @@ namespace coil
         coil::eraseHeadBlank(value);
         coil::eraseTailBlank(value);
 
-        setProperty(key.c_str(), value.c_str());
+        setProperty(key, value);
         pline.clear();
       }
   }

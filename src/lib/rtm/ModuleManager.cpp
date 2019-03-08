@@ -116,7 +116,7 @@ namespace RTC
     if (file_path.empty() || !fileExist(file_path))
       {
         RTC_ERROR(("Module file not found: %s", file_name.c_str()));
-        throw FileNotFound(file_name.c_str());
+        throw FileNotFound(file_name);
       }
 
     DLLEntity* dll(new DLLEntity());
@@ -164,7 +164,7 @@ namespace RTC
 
     ModuleInitFunc init;
 
-    init = (ModuleInitFunc)this->symbol(name.c_str(), init_func);
+    init = (ModuleInitFunc)this->symbol(name, init_func);
 
     init(&(Manager::instance()));
 
@@ -182,7 +182,7 @@ namespace RTC
   {
     DLLEntity* dll(m_modules.find(file_name.c_str()));
     if (dll == nullptr)
-      throw NotFound(file_name.c_str());
+      throw NotFound(file_name);
 
     dll->dll.close();
     m_modules.unregisterObject(file_name.c_str());
@@ -596,8 +596,8 @@ namespace RTC
             m_loadfailmods.push_back((*mod));
             continue;
           }
-        p["module_file_name"] = coil::basename((*mod).c_str());
-        p["module_file_path"] = (*mod).c_str();
+        p["module_file_name"] = coil::basename(mod->c_str());
+        p["module_file_path"] = *mod;
         modprops.push_back(p);
         
       }

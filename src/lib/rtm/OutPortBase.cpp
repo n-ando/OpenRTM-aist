@@ -870,7 +870,7 @@ namespace RTC
     RTC_DEBUG(("interface_type: %s", prop["interface_type"].c_str()));
     OutPortProvider* provider;
     provider = OutPortProviderFactory::
-      instance().createObject(prop["interface_type"].c_str());
+      instance().createObject(prop["interface_type"]);
 
     if (provider != nullptr)
       {
@@ -924,7 +924,7 @@ namespace RTC
     RTC_DEBUG(("interface_type: %s", prop["interface_type"].c_str()));
     InPortConsumer* consumer;
     consumer = InPortConsumerFactory::
-      instance().createObject(prop["interface_type"].c_str());
+      instance().createObject(prop["interface_type"]);
 
     if (consumer != nullptr)
       {
@@ -1005,7 +1005,7 @@ namespace RTC
                       m_connectors.size()));
         return connector;
       }
-    catch (std::bad_alloc& e)
+    catch (std::bad_alloc&)
       {
         RTC_ERROR(("OutPortPushConnector creation failed"));
         return nullptr;
@@ -1063,7 +1063,7 @@ namespace RTC
                       m_connectors.size()));
         return connector;
       }
-    catch (std::bad_alloc& e)
+    catch (std::bad_alloc&)
       {
         RTC_ERROR(("OutPortPullConnector creation failed"));
         return nullptr;

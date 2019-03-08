@@ -79,7 +79,7 @@ namespace RTM
        * @endif
        */
       virtual bool
-      init(const ::coil::Properties& profile);
+      init(const ::coil::Properties& props);
       
       /*!
        * @if jp
@@ -98,7 +98,7 @@ namespace RTM
        * @endif
        */
       virtual bool
-      reinit(const ::coil::Properties& profile);
+      reinit(const ::coil::Properties& props);
       
       /*!
        * @if jp

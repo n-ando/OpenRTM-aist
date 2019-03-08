@@ -155,8 +155,7 @@ namespace coil
      */
     bool hasFactory(const Identifier& id)
     {
-      if (m_creators.count(id) == 0) { return false; }
-      return true;
+      return static_cast<bool>(m_creators.count(id) != 0);
     }
 
     /*!

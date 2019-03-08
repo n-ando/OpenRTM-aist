@@ -198,11 +198,7 @@ namespace RTC
     std::vector<ConfigBase*>::iterator it;
     it = std::find_if(m_params.begin(), m_params.end(),
                       find_conf(param_name));
-    if (it != m_params.end())
-      {
-        return true;
-      }
-    return false;
+    return it != m_params.end();
   }
 
 

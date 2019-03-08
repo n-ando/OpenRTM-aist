@@ -235,8 +235,7 @@ namespace SDOPackage
 
     // narrowing: SDO -> RTC (DataFlowComponent)
     dfc = ::OpenRTM::DataFlowComponent::_narrow(sdo);
-    if (::CORBA::is_nil(dfc)) return false;
-    return true;
+    return !::CORBA::is_nil(dfc);
   }
 
   /*!

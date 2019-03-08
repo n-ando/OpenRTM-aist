@@ -366,7 +366,16 @@ namespace RTC
           }
         else
           {
-            initfunc = coil::split((*itr), ".").operator[](0) + "Init";
+            if (coil::isAbsolutePath((*itr)))
+            {
+                coil::vstring namelist(coil::split((*itr), "/"));
+                namelist = coil::split(namelist.back(), "\\");
+                initfunc = coil::split(namelist.back(), ".").operator[](0) + "Init";
+            }
+            else
+            {
+                initfunc = coil::split((*itr), ".").operator[](0) + "Init";
+            }
             filename = (*itr);
           }
         if (filename.find_first_of('.') == std::string::npos)
@@ -461,8 +470,18 @@ namespace RTC
       {
         if (init_func.empty())
           {
-            coil::vstring mod(coil::split(file_name, "."));
-            init_func = mod[0] + "Init";
+            if (coil::isAbsolutePath(file_name))
+            {
+                coil::vstring mod(coil::split(file_name, "/"));
+                mod = coil::split(mod.back(), "\\");
+                mod = coil::split(mod.back(), ".");
+                init_func = mod[0] + "Init";
+            }
+            else
+            {
+                coil::vstring mod(coil::split(file_name, "."));
+                init_func = mod[0] + "Init";
+            }
           }
         std::string path(m_module->load(file_name, init_func));
         RTC_DEBUG(("module path: %s", path.c_str()));
@@ -742,7 +761,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
           }
         // module loading
         RTC_INFO(("Loading module: %s", (*it)["module_file_name"].c_str()))
-          load((*it)["module_file_name"].c_str(), "");
+          load((*it)["module_file_name"], "");
         factory = m_factory.find(comp_id);
         if (factory == nullptr)
           {
@@ -1436,7 +1455,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
         if (!logstream->init(*leaf0[i]))
           {
             RTC_WARN(("Logstream %s init failed.", lstype.c_str()));
-            factory.deleteObject(lstype.c_str(), logstream);
+            factory.deleteObject(lstype, logstream);
             RTC_WARN(("Logstream %s deleted.", lstype.c_str()));
           }
         RTC_INFO(("Logstream %s added.", lstype.c_str()));
@@ -2303,7 +2322,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
             RTC_INFO(("Component instance conf file: %s loaded.",
                       m_config[name_conf].c_str()));
             RTC_DEBUG_STR((name_prop))
-            config_fname.push_back(m_config[name_conf].c_str());
+            config_fname.push_back(m_config[name_conf]);
           }
       }
     if (m_config.findNode(category + "." + inst_name) != nullptr)
@@ -2330,7 +2349,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
             RTC_INFO(("Component type conf file: %s loaded.",
                       m_config[type_conf].c_str()));
             RTC_DEBUG_STR((type_prop));
-            config_fname.push_back(m_config[type_conf].c_str());
+            config_fname.push_back(m_config[type_conf]);
           }
       }
     if (m_config.findNode(category + "." + type_name) != nullptr)
@@ -2917,11 +2936,11 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 		  coil::Properties prop;
 		  NVUtil::copyToProperties(prop, prof->properties);
 		  if ((prop.hasKey("publish_topic") == nullptr ||
-			  prop["publish_topic"] == "") &&
+			  prop["publish_topic"].empty()) &&
 			  (prop.hasKey("subscribe_topic") == nullptr ||
-			  prop["subscribe_topic"] == "") &&
+			  prop["subscribe_topic"].empty()) &&
 			  (prop.hasKey("rendezvous_point") == nullptr ||
-			  prop["rendezvous_point"] == "")) {
+			  prop["rendezvous_point"].empty())) {
 			  continue;
 		  }
 
@@ -2963,11 +2982,11 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 		  coil::Properties prop;
 		  NVUtil::copyToProperties(prop, prof->properties);
 		  if ((prop.hasKey("publish_topic") == nullptr ||
-			  prop["publish_topic"] == "") &&
+			  prop["publish_topic"].empty()) &&
 			  (prop.hasKey("subscribe_topic") == nullptr ||
-			  prop["subscribe_topic"] == "") &&
+			  prop["subscribe_topic"].empty()) &&
 			  (prop.hasKey("rendezvous_point") == nullptr ||
-			  prop["rendezvous_point"] == "")) {
+			  prop["rendezvous_point"].empty())) {
 			  continue;
 		  }
 

@@ -136,7 +136,7 @@ namespace RTC
           "CONFIGURATION",
           "HEARTBEAT"
         };
-      return (size_t)kind < sizeof(kind)/sizeof(char*) ? kinds[kind] : "";
+      return (size_t)kind < sizeof(kinds)/sizeof(kinds[0]) ? kinds[kind] : "";
     }
 
     /*!

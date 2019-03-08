@@ -161,12 +161,23 @@ namespace RTC
     coil::TimeValue tm(m_clock->gettime());
 
     time_t timer;
-    struct tm* date;
 
     timer = tm.sec();
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
+    struct tm date;
+    errno_t error = gmtime_s(&date, &timer);
+    if (error == EOVERFLOW)
+    {
+        return std::string();
+    }
+    strftime(buf, sizeof(buf), m_dateFormat.c_str(), &date);
+#else
+    struct tm* date;
     date = gmtime(&timer);
-
     strftime(buf, sizeof(buf), m_dateFormat.c_str(), date);
+#endif
+
+    
     std::string fmt(buf);
 
     if (m_msEnable > 0)

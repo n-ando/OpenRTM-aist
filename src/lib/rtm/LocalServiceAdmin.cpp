@@ -70,7 +70,7 @@ namespace RTM
     bool operator()(const std::string& str)
     {
       std::string a = str;
-      return coil::normalize(a) == "all" ? true : false;
+      return coil::normalize(a) == "all";
     }
   };
 

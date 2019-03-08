@@ -17,5 +17,5 @@ COPY OpenRTM-aist /root/OpenRTM-aist
 WORKDIR /root/OpenRTM-aist
 RUN ln -s . src/lib/coil/common/coil\
  && ln -s ../../build/yat.py utils/rtm-skelwrapper/yat.py
-RUN cmake -DCORBA=omniORB -DSSL_ENABLE=ON -DOBSEVER_ENABLE=ON -S . -Bbuild_openrtm\
+RUN cmake -DCORBA=omniORB -DSSL_ENABLE=ON -DOBSERVER_ENABLE=ON -S . -Bbuild_openrtm\
  && cmake --build build_openrtm -- -j$(nproc)

@@ -253,7 +253,7 @@ namespace RTC
      * @endif
      */
     void bind(const CosNaming::Name& name, CORBA::Object_ptr obj,
-              const bool force = true)
+              bool force = true)
       throw (SystemException, NotFound, CannotProceed,
              InvalidName, AlreadyBound);
 
@@ -296,7 +296,7 @@ namespace RTC
      * @endif
      */
     void bindByString(const char* string_name, CORBA::Object_ptr obj,
-                      const bool force = true)
+                      bool force = true)
       throw (SystemException, NotFound, CannotProceed,
              InvalidName, AlreadyBound);
 
@@ -403,7 +403,7 @@ namespace RTC
      * @endif
      */
     void rebind(const CosNaming::Name& name, CORBA::Object_ptr obj,
-                const bool force = true)
+                bool force = true)
       throw (SystemException, NotFound, CannotProceed, InvalidName);
 
     /*!
@@ -443,7 +443,7 @@ namespace RTC
      * @endif
      */
     void rebindByString(const char* string_name, CORBA::Object_ptr obj,
-                        const bool force = true)
+                        bool force = true)
       throw (SystemException, NotFound, CannotProceed, InvalidName);
 
     /*!
@@ -526,7 +526,7 @@ namespace RTC
      */
     void bindContext(const CosNaming::Name& name,
                      CosNaming::NamingContext_ptr name_cxt,
-                     const bool force = true)
+                     bool force = true)
       throw (SystemException, NotFound, CannotProceed,
              InvalidName, AlreadyBound);
 
@@ -569,7 +569,7 @@ namespace RTC
      */
     void bindContext(const char* string_name,
                      CosNaming::NamingContext_ptr name_cxt,
-                     const bool force = true)
+                     bool force = true)
       throw (SystemException, NotFound, CannotProceed,
              InvalidName, AlreadyBound);
 
@@ -642,7 +642,7 @@ namespace RTC
      */
     void rebindContext(const CosNaming::Name& name,
                        CosNaming::NamingContext_ptr name_cxt,
-                       const bool force = true)
+                       bool force = true)
       throw (SystemException, NotFound, CannotProceed, InvalidName);
 
     /*!
@@ -685,7 +685,7 @@ namespace RTC
      */
     void rebindContext(const char* string_name,
                        CosNaming::NamingContext_ptr name_cxt,
-                       const bool force = true)
+                       bool force = true)
       throw (SystemException, NotFound, CannotProceed, InvalidName);
 
     /*!
@@ -1254,7 +1254,7 @@ namespace RTC
      *
      * @endif
      */
-    CosNaming::Name toName(const char* string_name)
+    CosNaming::Name toName(const char* sname)
       throw (SystemException, InvalidName);
 
     /*!

@@ -527,12 +527,10 @@ namespace coil
     size pos;
     if (str.empty()) return false;
     pos = str.find(':');
-    if ((pos != 0) &&
+    return (pos != 0) &&
         (pos != std::string::npos) &&
         (str[pos + 1] == '/') &&
-        (str[pos + 2] == '/'))
-      return true;
-    return false;
+        (str[pos + 2] == '/');
   }
   bool isIPv4(const std::string& str)
   {

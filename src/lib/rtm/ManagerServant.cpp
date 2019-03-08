@@ -64,7 +64,7 @@ namespace RTM
         try
           {
             RTM::Manager_var owner;
-            owner = findManager(config["corba.master_manager"].c_str());
+            owner = findManager(config["corba.master_manager"]);
             if (CORBA::is_nil(owner))
               {
                 RTC_WARN(("Master manager not found"));
@@ -488,7 +488,7 @@ namespace RTM
 
 
                   }
-                catch (CORBA::SystemException& e)
+                catch (CORBA::SystemException&)
                   {
                     RTC_DEBUG(("Exception was caught while creating component."));
                   }
@@ -1310,7 +1310,7 @@ namespace RTM
           }
 
         RTC_DEBUG(("Invoking command: %s.", rtcd_cmd.c_str()));
-        int ret(coil::launch_shell(rtcd_cmd.c_str()));
+        int ret(coil::launch_shell(rtcd_cmd));
         if (ret == -1)
           {
             RTC_DEBUG(("%s: failed", rtcd_cmd.c_str()));
@@ -1367,7 +1367,7 @@ namespace RTM
       {
         return mgrobj->create_component(create_arg_str.c_str());
       }
-    catch (CORBA::SystemException& e)
+    catch (CORBA::SystemException&)
       {
         RTC_ERROR(("Exception was caught while creating component."));
         return RTC::RTObject::_nil();
@@ -1442,7 +1442,7 @@ namespace RTM
         rtcd_cmd += " -d ";
 
         RTC_DEBUG(("Invoking command: %s.", rtcd_cmd.c_str()));
-        int ret(coil::launch_shell(rtcd_cmd.c_str()));
+        int ret(coil::launch_shell(rtcd_cmd));
         if (ret == -1)
           {
             RTC_DEBUG(("%s: failed", rtcd_cmd.c_str()));
@@ -1477,7 +1477,7 @@ namespace RTM
           {
             return mgrobj->create_component(create_arg_str.c_str());
           }
-        catch (CORBA::SystemException& e)
+        catch (CORBA::SystemException&)
           {
             RTC_ERROR(("Exception was caught while creating component."));
             return RTC::RTObject::_nil();

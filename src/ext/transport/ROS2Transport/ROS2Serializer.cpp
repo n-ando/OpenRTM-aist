@@ -1,7 +1,7 @@
 ﻿// -*- C++ -*-
 /*!
- * @file  ROSSerializer.cpp
- * @brief ROSSerializer class
+ * @file  ROS2Serializer.cpp
+ * @brief ROS2Serializer class
  * @date  $Date: 2019-01-31 03:08:03 $
  * @author Nobuhiko Miyamoto <n-miyamoto@aist.go.jp>
  *
@@ -20,35 +20,35 @@
 #include <rtm/idl/BasicDataTypeSkel.h>
 #include <rtm/idl/ExtendedDataTypesSkel.h>
 #include <rtm/idl/InterfaceDataTypesSkel.h>
-#include <std_msgs/Float32.h>
-#include <std_msgs/Float64.h>
-#include <std_msgs/Int8.h>
-#include <std_msgs/Int16.h>
-#include <std_msgs/Int32.h>
-#include <std_msgs/Int64.h>
-#include <std_msgs/UInt8.h>
-#include <std_msgs/UInt16.h>
-#include <std_msgs/UInt32.h>
-#include <std_msgs/UInt64.h>
-#include <std_msgs/Float32.h>
-#include <std_msgs/Float64.h>
-#include <std_msgs/Float32MultiArray.h>
-#include <std_msgs/Float64MultiArray.h>
-#include <std_msgs/Int8MultiArray.h>
-#include <std_msgs/Int16MultiArray.h>
-#include <std_msgs/Int32MultiArray.h>
-#include <std_msgs/Int64MultiArray.h>
-#include <std_msgs/UInt8MultiArray.h>
-#include <std_msgs/UInt16MultiArray.h>
-#include <std_msgs/UInt32MultiArray.h>
-#include <std_msgs/UInt64MultiArray.h>
-#include <std_msgs/String.h>
-#include <geometry_msgs/PointStamped.h>
-#include <geometry_msgs/QuaternionStamped.h>
-#include <geometry_msgs/Vector3Stamped.h>
-#include <sensor_msgs/Image.h>
-#include "ROSSerializer.h"
-#include "ROSMessageInfo.h"
+
+#include <std_msgs/msg/float32.hpp>
+#include <std_msgs/msg/float64.hpp>
+#include <std_msgs/msg/int8.hpp>
+#include <std_msgs/msg/int16.hpp>
+#include <std_msgs/msg/int32.hpp>
+#include <std_msgs/msg/int64.hpp>
+#include <std_msgs/msg/u_int8.hpp>
+#include <std_msgs/msg/u_int16.hpp>
+#include <std_msgs/msg/u_int32.hpp>
+#include <std_msgs/msg/u_int64.hpp>
+#include <std_msgs/msg/float32_multi_array.hpp>
+#include <std_msgs/msg/float64_multi_array.hpp>
+#include <std_msgs/msg/int8_multi_array.hpp>
+#include <std_msgs/msg/int16_multi_array.hpp>
+#include <std_msgs/msg/int32_multi_array.hpp>
+#include <std_msgs/msg/int64_multi_array.hpp>
+#include <std_msgs/msg/u_int8_multi_array.hpp>
+#include <std_msgs/msg/u_int16_multi_array.hpp>
+#include <std_msgs/msg/u_int32_multi_array.hpp>
+#include <std_msgs/msg/u_int64_multi_array.hpp>
+#include <std_msgs/msg/string.h>
+#include <geometry_msgs/msg/point_stamped.hpp>
+#include <geometry_msgs/msg/quaternion_stamped.hpp>
+#include <geometry_msgs/msg/vector3_stamped.hpp>
+#include <sensor_msgs/msg/image.hpp>
+
+#include "ROS2Serializer.h"
+#include "ROS2MessageInfo.h"
 
 
 namespace RTC
@@ -70,21 +70,21 @@ namespace RTC
    * @endif
    */
   template <class DataType, class MessageType>
-  void ROSSimpleDataInitBaseFunc(const char* name)
+  void ROS2SimpleDataInitBaseFunc(const char* name)
   {
     coil::GlobalFactory < ::RTC::ByteDataStream<DataType> >::
             instance().addFactory(name,
             ::coil::Creator< ::RTC::ByteDataStream<DataType>,
-            RTC::ROSSimpleData<DataType, MessageType> >,
+            RTC::ROS2SimpleData<DataType, MessageType> >,
             ::coil::Destructor< ::RTC::ByteDataStream<DataType>,
-            RTC::ROSSimpleData<DataType, MessageType> >);
+            RTC::ROS2SimpleData<DataType, MessageType> >);
 
-    RTC::ROSMessageInfoFactory::
+    RTC::FastRTPSMessageInfoFactory::
             instance().addFactory(name,
-            ::coil::Creator< ::RTC::ROSMessageInfoBase,
-            RTC::ROSMessageInfo<MessageType> >,
-            ::coil::Destructor< ::RTC::ROSMessageInfoBase,
-            RTC::ROSMessageInfo<MessageType> >);
+            ::coil::Creator< ::RTC::FastRTPSMessageInfoBase,
+            RTC::ROS2MessageInfo<MessageType> >,
+            ::coil::Destructor< ::RTC::FastRTPSMessageInfoBase,
+            RTC::ROS2MessageInfo<MessageType> >);
   }
 
   /*!
@@ -101,18 +101,19 @@ namespace RTC
    * @endif
    */
   template <class DataType>
-  void ROSSimpleDataInit()
+  void ROS2SimpleDataInit()
   {
-    ROSSimpleDataInitBaseFunc<DataType, std_msgs::Float32>("ROSFloat32");
-    ROSSimpleDataInitBaseFunc<DataType, std_msgs::Float64>("ROSFloat64");
-    ROSSimpleDataInitBaseFunc<DataType, std_msgs::Int8>("ROSInt8");
-    ROSSimpleDataInitBaseFunc<DataType, std_msgs::Int16>("ROSInt16");
-    ROSSimpleDataInitBaseFunc<DataType, std_msgs::Int32>("ROSInt32");
-    ROSSimpleDataInitBaseFunc<DataType, std_msgs::Int64>("ROSInt64");
-    ROSSimpleDataInitBaseFunc<DataType, std_msgs::UInt8>("ROSUInt8");
-    ROSSimpleDataInitBaseFunc<DataType, std_msgs::UInt16>("ROSUInt16");
-    ROSSimpleDataInitBaseFunc<DataType, std_msgs::UInt32>("ROSUInt32");
-    ROSSimpleDataInitBaseFunc<DataType, std_msgs::UInt64>("ROSUInt64");
+    ROS2SimpleDataInitBaseFunc<DataType, std_msgs::msg::Float32>("ROS2Float32");
+    ROS2SimpleDataInitBaseFunc<DataType, std_msgs::msg::Float64>("ROS2Float64");
+    ROS2SimpleDataInitBaseFunc<DataType, std_msgs::msg::Int8>("ROS2Int8");
+    ROS2SimpleDataInitBaseFunc<DataType, std_msgs::msg::Int16>("ROS2Int16");
+    ROS2SimpleDataInitBaseFunc<DataType, std_msgs::msg::Int32>("ROS2Int32");
+    ROS2SimpleDataInitBaseFunc<DataType, std_msgs::msg::Int64>("ROS2Int64");
+    ROS2SimpleDataInitBaseFunc<DataType, std_msgs::msg::UInt8>("ROS2UInt8");
+    ROS2SimpleDataInitBaseFunc<DataType, std_msgs::msg::UInt16>("ROS2UInt16");
+    ROS2SimpleDataInitBaseFunc<DataType, std_msgs::msg::UInt32>("ROS2UInt32");
+    ROS2SimpleDataInitBaseFunc<DataType, std_msgs::msg::UInt64>("ROS2UInt64");
+    
   }
 
   /*!
@@ -131,21 +132,21 @@ namespace RTC
    * @endif
    */
   template <class DataType, class MessageType>
-  void ROSSequenceDataInitBaseFunc(const char* name)
+  void ROS2SequenceDataInitBaseFunc(const char* name)
   {
     coil::GlobalFactory < ::RTC::ByteDataStream<DataType> >::
             instance().addFactory(name,
             ::coil::Creator< ::RTC::ByteDataStream<DataType>,
-            RTC::ROSSequenceData<DataType, MessageType> >,
+            RTC::ROS2SequenceData<DataType, MessageType> >,
             ::coil::Destructor< ::RTC::ByteDataStream<DataType>,
-            RTC::ROSSequenceData<DataType, MessageType> >);
+            RTC::ROS2SequenceData<DataType, MessageType> >);
 
-    RTC::ROSMessageInfoFactory::
+    RTC::FastRTPSMessageInfoFactory::
             instance().addFactory(name,
-            ::coil::Creator< ::RTC::ROSMessageInfoBase,
-            RTC::ROSMessageInfo<MessageType> >,
-            ::coil::Destructor< ::RTC::ROSMessageInfoBase,
-            RTC::ROSMessageInfo<MessageType> >);
+            ::coil::Creator< ::RTC::FastRTPSMessageInfoBase,
+            RTC::ROS2MessageInfo<MessageType> >,
+            ::coil::Destructor< ::RTC::FastRTPSMessageInfoBase,
+            RTC::ROS2MessageInfo<MessageType> >);
   }
 
   /*!
@@ -162,24 +163,24 @@ namespace RTC
    * @endif
    */
   template <class DataType>
-  void ROSSequenceDataInit()
+  void ROS2SequenceDataInit()
   {
-    ROSSequenceDataInitBaseFunc<DataType, std_msgs::Float32MultiArray>("ROSFloat32MultiArray");
-    ROSSequenceDataInitBaseFunc<DataType, std_msgs::Float64MultiArray>("ROSFloat64MultiArray");
-    ROSSequenceDataInitBaseFunc<DataType, std_msgs::Int8MultiArray>("ROSInt8MultiArray");
-    ROSSequenceDataInitBaseFunc<DataType, std_msgs::Int16MultiArray>("ROSInt16MultiArray");
-    ROSSequenceDataInitBaseFunc<DataType, std_msgs::Int32MultiArray>("ROSInt32MultiArray");
-    ROSSequenceDataInitBaseFunc<DataType, std_msgs::Int64MultiArray>("ROSInt64MultiArray");
-    ROSSequenceDataInitBaseFunc<DataType, std_msgs::UInt8MultiArray>("ROSUInt8MultiArray");
-    ROSSequenceDataInitBaseFunc<DataType, std_msgs::UInt16MultiArray>("ROSUInt16MultiArray");
-    ROSSequenceDataInitBaseFunc<DataType, std_msgs::UInt32MultiArray>("ROSUInt32MultiArray");
-    ROSSequenceDataInitBaseFunc<DataType, std_msgs::UInt64MultiArray>("ROSUInt64MultiArray");
+    ROS2SequenceDataInitBaseFunc<DataType, std_msgs::msg::Float32MultiArray>("ROSFloat32MultiArray");
+    ROS2SequenceDataInitBaseFunc<DataType, std_msgs::msg::Float64MultiArray>("ROSFloat64MultiArray");
+    ROS2SequenceDataInitBaseFunc<DataType, std_msgs::msg::Int8MultiArray>("ROSInt8MultiArray");
+    ROS2SequenceDataInitBaseFunc<DataType, std_msgs::msg::Int16MultiArray>("ROSInt16MultiArray");
+    ROS2SequenceDataInitBaseFunc<DataType, std_msgs::msg::Int32MultiArray>("ROSInt32MultiArray");
+    ROS2SequenceDataInitBaseFunc<DataType, std_msgs::msg::Int64MultiArray>("ROSInt64MultiArray");
+    ROS2SequenceDataInitBaseFunc<DataType, std_msgs::msg::UInt8MultiArray>("ROSUInt8MultiArray");
+    ROS2SequenceDataInitBaseFunc<DataType, std_msgs::msg::UInt16MultiArray>("ROSUInt16MultiArray");
+    ROS2SequenceDataInitBaseFunc<DataType, std_msgs::msg::UInt32MultiArray>("ROSUInt32MultiArray");
+    ROS2SequenceDataInitBaseFunc<DataType, std_msgs::msg::UInt64MultiArray>("ROSUInt64MultiArray");
   }
 
   /*!
    * @if jp
    *
-   * @class ROSStringData
+   * @class ROS2StringData
    *
    * @brief RTC::TimedString<-->std_msgs::Stringのシリアライザ
    *
@@ -188,7 +189,7 @@ namespace RTC
    *
    * @else
    *
-   * @class ROSStringData
+   * @class ROS2StringData
    *
    * @brief 
    *
@@ -197,7 +198,7 @@ namespace RTC
    *
    * @endif
    */
-  class ROSStringData : public ROSSerializerBase<RTC::TimedString>
+  class ROS2StringData : public ROS2SerializerBase<RTC::TimedString>
   {
   public:
     /*!
@@ -211,7 +212,7 @@ namespace RTC
      *
      * @endif
      */
-    ROSStringData()
+    ROS2StringData()
     {
 
     }
@@ -226,7 +227,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~ROSStringData()
+    virtual ~ROS2StringData()
     {
 
     }
@@ -251,13 +252,11 @@ namespace RTC
     virtual bool serialize(const RTC::TimedString& data)
     {
         
-      std_msgs::String msg;
+      std_msgs::msg::String msg;
       msg.data = data.data;
       
-      ROSSerializerBase<RTC::TimedString>::m_message = ros::serialization::serializeMessage<std_msgs::String>(msg);
-
-      return true;
-    }
+      return ROS2SerializerBase<RTC::TimedString>::stdmsg_serialize(msg);
+    };
     /*!
      * @if jp
      *
@@ -278,13 +277,14 @@ namespace RTC
     virtual bool deserialize(RTC::TimedString& data)
     { 
 
-      std_msgs::String msg;
+      std_msgs::msg::String msg;
         
-      ros::serialization::deserializeMessage(ROSSerializerBase<RTC::TimedString>::m_message, msg);
+      bool ret = ROS2SerializerBase<RTC::TimedString>::stdmsg_deserialize(msg);
+
       data.data = CORBA::string_dup(msg.data.c_str());
 
-      return true;
-    }
+      return ret;
+    };
   };
 
   /*!
@@ -300,27 +300,27 @@ namespace RTC
    *
    * @endif
    */
-  void ROSStringDataInit()
+  void ROS2StringDataInit()
   {
     coil::GlobalFactory < ::RTC::ByteDataStream<RTC::TimedString> >::
-            instance().addFactory("ROSString",
+            instance().addFactory("ROS2String",
             ::coil::Creator< ::RTC::ByteDataStream<RTC::TimedString>,
-            RTC::ROSStringData>,
+            RTC::ROS2StringData>,
             ::coil::Destructor< ::RTC::ByteDataStream<RTC::TimedString>,
-            RTC::ROSStringData>);
+            RTC::ROS2StringData>);
 
-    RTC::ROSMessageInfoFactory::
-            instance().addFactory("ROSString",
-            ::coil::Creator< ::RTC::ROSMessageInfoBase,
-            RTC::ROSMessageInfo<std_msgs::String> >,
-            ::coil::Destructor< ::RTC::ROSMessageInfoBase,
-            RTC::ROSMessageInfo<std_msgs::String> >);
+    RTC::FastRTPSMessageInfoFactory::
+            instance().addFactory("ROS2String",
+            ::coil::Creator< ::RTC::FastRTPSMessageInfoBase,
+            RTC::ROS2MessageInfo<std_msgs::msg::String> >,
+            ::coil::Destructor< ::RTC::FastRTPSMessageInfoBase,
+            RTC::ROS2MessageInfo<std_msgs::msg::String> >);
   }
 
   /*!
    * @if jp
    *
-   * @class ROSPoint3DData
+   * @class ROS2Point3DData
    *
    * @brief RTC::TimedPoint3D<-->geometry_msgs::PointStampedのシリアライザ
    *
@@ -329,7 +329,7 @@ namespace RTC
    *
    * @else
    *
-   * @class ROSPoint3DData
+   * @class ROS2Point3DData
    *
    * @brief 
    *
@@ -338,7 +338,7 @@ namespace RTC
    *
    * @endif
    */
-  class ROSPoint3DData : public ROSSerializerBase<RTC::TimedPoint3D>
+  class ROS2Point3DData : public ROS2SerializerBase<RTC::TimedPoint3D>
   {
   public:
     /*!
@@ -352,10 +352,11 @@ namespace RTC
      *
      * @endif
      */
-    ROSPoint3DData()
+    ROS2Point3DData()
     {
 
     }
+
     /*!
      * @if jp
      *
@@ -367,7 +368,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~ROSPoint3DData()
+    virtual ~ROS2Point3DData()
     {
 
     }
@@ -392,16 +393,14 @@ namespace RTC
     virtual bool serialize(const RTC::TimedPoint3D& data)
     {
         
-      geometry_msgs::PointStamped msg;
+      geometry_msgs::msg::PointStamped msg;
       msg.header.stamp.sec = data.tm.sec;
-      msg.header.stamp.nsec = data.tm.nsec;
+      msg.header.stamp.nanosec = data.tm.nsec;
       msg.point.x = data.data.x;
       msg.point.y = data.data.y;
       msg.point.z = data.data.z;
       
-      ROSSerializerBase<RTC::TimedPoint3D>::m_message = ros::serialization::serializeMessage<geometry_msgs::PointStamped>(msg);
-
-      return true;
+      return ROS2SerializerBase<RTC::TimedPoint3D>::geometrymsg_serialize(msg);
     }
 
     /*!
@@ -424,17 +423,17 @@ namespace RTC
     virtual bool deserialize(RTC::TimedPoint3D& data)
     { 
 
-      geometry_msgs::PointStamped msg;
+      geometry_msgs::msg::PointStamped msg;
       
-      ros::serialization::deserializeMessage(ROSSerializerBase<RTC::TimedPoint3D>::m_message, msg);
-      
+      bool ret = ROS2SerializerBase<RTC::TimedPoint3D>::geometrymsg_deserialize(msg);
+
       data.tm.sec = msg.header.stamp.sec;
-      data.tm.nsec = msg.header.stamp.nsec;
+      data.tm.nsec = msg.header.stamp.nanosec;
       data.data.x = msg.point.x;
       data.data.y = msg.point.y;
       data.data.z = msg.point.z;
 
-      return true;
+      return ret;
     }
   };
 
@@ -451,28 +450,27 @@ namespace RTC
    *
    * @endif
    */
-  void ROSPont3DDataInit()
+  void ROS2Pont3DDataInit()
   {
     coil::GlobalFactory < ::RTC::ByteDataStream<RTC::TimedPoint3D> >::
-            instance().addFactory("ROSPointStamped",
+            instance().addFactory("ROS2PointStamped",
             ::coil::Creator< ::RTC::ByteDataStream<RTC::TimedPoint3D>,
-            RTC::ROSPoint3DData>,
+            RTC::ROS2Point3DData>,
             ::coil::Destructor< ::RTC::ByteDataStream<RTC::TimedPoint3D>,
-            RTC::ROSPoint3DData>);
+            RTC::ROS2Point3DData>);
 
-    RTC::ROSMessageInfoFactory::
-            instance().addFactory("ROSPointStamped",
-            ::coil::Creator< ::RTC::ROSMessageInfoBase,
-            RTC::ROSMessageInfo<geometry_msgs::PointStamped> >,
-            ::coil::Destructor< ::RTC::ROSMessageInfoBase,
-            RTC::ROSMessageInfo<geometry_msgs::PointStamped> >);
+    RTC::FastRTPSMessageInfoFactory::
+            instance().addFactory("ROS2PointStamped",
+            ::coil::Creator< ::RTC::FastRTPSMessageInfoBase,
+            RTC::ROS2MessageInfo<geometry_msgs::msg::PointStamped> >,
+            ::coil::Destructor< ::RTC::FastRTPSMessageInfoBase,
+            RTC::ROS2MessageInfo<geometry_msgs::msg::PointStamped> >);
   }
-
 
   /*!
    * @if jp
    *
-   * @class ROSQuaternionData
+   * @class ROS2QuaternionData
    *
    * @brief RTC::TimedQuaternion<-->geometry_msgs::QuaternionStampedのシリアライザ
    *
@@ -481,7 +479,7 @@ namespace RTC
    *
    * @else
    *
-   * @class ROSQuaternionData
+   * @class ROS2QuaternionData
    *
    * @brief 
    *
@@ -490,7 +488,7 @@ namespace RTC
    *
    * @endif
    */
-  class ROSQuaternionData : public ROSSerializerBase<RTC::TimedQuaternion>
+  class ROS2QuaternionData : public ROS2SerializerBase<RTC::TimedQuaternion>
   {
   public:
     /*!
@@ -504,7 +502,7 @@ namespace RTC
      *
      * @endif
      */
-    ROSQuaternionData()
+    ROS2QuaternionData()
     {
 
     }
@@ -519,7 +517,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~ROSQuaternionData()
+    virtual ~ROS2QuaternionData()
     {
 
     }
@@ -544,18 +542,17 @@ namespace RTC
     virtual bool serialize(const RTC::TimedQuaternion& data)
     {
         
-      geometry_msgs::QuaternionStamped  msg;
+      geometry_msgs::msg::QuaternionStamped  msg;
       msg.header.stamp.sec = data.tm.sec;
-      msg.header.stamp.nsec = data.tm.nsec;
+      msg.header.stamp.nanosec = data.tm.nsec;
       msg.quaternion.x = data.data.x;
       msg.quaternion.y = data.data.y;
       msg.quaternion.z = data.data.z;
       msg.quaternion.w = data.data.w;
       
-      ROSSerializerBase<RTC::TimedQuaternion>::m_message = ros::serialization::serializeMessage<geometry_msgs::QuaternionStamped>(msg);
-
-      return true;
-    }
+      
+      return ROS2SerializerBase<RTC::TimedQuaternion>::geometrymsg_serialize(msg);
+    };
 
     /*!
      * @if jp
@@ -577,18 +574,17 @@ namespace RTC
     virtual bool deserialize(RTC::TimedQuaternion& data)
     { 
 
-      geometry_msgs::QuaternionStamped msg;
+      geometry_msgs::msg::QuaternionStamped msg;
       
-      ros::serialization::deserializeMessage(ROSSerializerBase<RTC::TimedQuaternion>::m_message, msg);
-      
+      bool ret = ROS2SerializerBase<RTC::TimedQuaternion>::geometrymsg_deserialize(msg);
       data.tm.sec = msg.header.stamp.sec;
-      data.tm.nsec = msg.header.stamp.nsec;
+      data.tm.nsec = msg.header.stamp.nanosec;
       data.data.x = msg.quaternion.x;
       data.data.y = msg.quaternion.y;
       data.data.z = msg.quaternion.z;
       data.data.w = msg.quaternion.w;
 
-      return true;
+      return ret;
     }
   };
 
@@ -605,28 +601,27 @@ namespace RTC
    *
    * @endif
    */
-  void ROSQuaternionDataInit()
+  void ROS2QuaternionDataInit()
   {
     coil::GlobalFactory < ::RTC::ByteDataStream<RTC::TimedQuaternion> >::
-            instance().addFactory("ROSQuaternionStamped",
+            instance().addFactory("ROS2QuaternionStamped",
             ::coil::Creator< ::RTC::ByteDataStream<RTC::TimedQuaternion>,
-            RTC::ROSQuaternionData>,
+            RTC::ROS2QuaternionData>,
             ::coil::Destructor< ::RTC::ByteDataStream<RTC::TimedQuaternion>,
-            RTC::ROSQuaternionData>);
+            RTC::ROS2QuaternionData>);
 
-    RTC::ROSMessageInfoFactory::
-            instance().addFactory("ROSQuaternionStamped",
-            ::coil::Creator< ::RTC::ROSMessageInfoBase,
-            RTC::ROSMessageInfo<geometry_msgs::QuaternionStamped > >,
-            ::coil::Destructor< ::RTC::ROSMessageInfoBase,
-            RTC::ROSMessageInfo<geometry_msgs::QuaternionStamped > >);
+    RTC::FastRTPSMessageInfoFactory::
+            instance().addFactory("ROS2QuaternionStamped",
+            ::coil::Creator< ::RTC::FastRTPSMessageInfoBase,
+            RTC::ROS2MessageInfo<geometry_msgs::msg::QuaternionStamped > >,
+            ::coil::Destructor< ::RTC::FastRTPSMessageInfoBase,
+            RTC::ROS2MessageInfo<geometry_msgs::msg::QuaternionStamped > >);
   }
-
 
   /*!
    * @if jp
    *
-   * @class ROSVector3DData
+   * @class ROS2Vector3DData
    *
    * @brief RTC::TimedVector3D<-->geometry_msgs::Vector3Stampedのシリアライザ
    *
@@ -635,7 +630,7 @@ namespace RTC
    *
    * @else
    *
-   * @class ROSVector3DData
+   * @class ROS2Vector3DData
    *
    * @brief 
    *
@@ -644,7 +639,7 @@ namespace RTC
    *
    * @endif
    */
-  class ROSVector3DData : public ROSSerializerBase<RTC::TimedVector3D>
+  class ROS2Vector3DData : public ROS2SerializerBase<RTC::TimedVector3D>
   {
   public:
     /*!
@@ -658,7 +653,7 @@ namespace RTC
      *
      * @endif
      */
-    ROSVector3DData()
+    ROS2Vector3DData()
     {
 
     }
@@ -673,7 +668,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~ROSVector3DData()
+    virtual ~ROS2Vector3DData()
     {
 
     }
@@ -698,18 +693,17 @@ namespace RTC
     virtual bool serialize(const RTC::TimedVector3D& data)
     {
         
-      geometry_msgs::Vector3Stamped  msg;
+      geometry_msgs::msg::Vector3Stamped  msg;
       msg.header.stamp.sec = data.tm.sec;
-      msg.header.stamp.nsec = data.tm.nsec;
+      msg.header.stamp.nanosec = data.tm.nsec;
       msg.vector.x = data.data.x;
       msg.vector.y = data.data.y;
       msg.vector.z = data.data.z;
 
       
-      ROSSerializerBase<RTC::TimedVector3D>::m_message = ros::serialization::serializeMessage<geometry_msgs::Vector3Stamped>(msg);
-
-      return true;
+      return ROS2SerializerBase<RTC::TimedVector3D>::geometrymsg_serialize(msg);
     }
+
     /*!
      * @if jp
      *
@@ -728,19 +722,19 @@ namespace RTC
      * @endif
      */
     virtual bool deserialize(RTC::TimedVector3D& data)
-    {
+    { 
 
-      geometry_msgs::Vector3Stamped msg;
+      geometry_msgs::msg::Vector3Stamped msg;
       
-      ros::serialization::deserializeMessage(ROSSerializerBase<RTC::TimedVector3D>::m_message, msg);
-      
+      bool ret = ROS2SerializerBase<RTC::TimedVector3D>::geometrymsg_deserialize(msg);
+
       data.tm.sec = msg.header.stamp.sec;
-      data.tm.nsec = msg.header.stamp.nsec;
+      data.tm.nsec = msg.header.stamp.nanosec;
       data.data.x = msg.vector.x;
       data.data.y = msg.vector.y;
       data.data.z = msg.vector.z;
 
-      return true;
+      return ret;
     }
   };
 
@@ -757,27 +751,28 @@ namespace RTC
    *
    * @endif
    */
-  void ROSVector3DDataInit()
+  void ROS2Vector3DDataInit()
   {
     coil::GlobalFactory < ::RTC::ByteDataStream<RTC::TimedVector3D> >::
-            instance().addFactory("ROSVector3Stamped",
+            instance().addFactory("ROS2Vector3Stamped",
             ::coil::Creator< ::RTC::ByteDataStream<RTC::TimedVector3D>,
-            RTC::ROSVector3DData>,
+            RTC::ROS2Vector3DData>,
             ::coil::Destructor< ::RTC::ByteDataStream<RTC::TimedVector3D>,
-            RTC::ROSVector3DData>);
+            RTC::ROS2Vector3DData>);
 
-    RTC::ROSMessageInfoFactory::
-            instance().addFactory("ROSVector3Stamped",
-            ::coil::Creator< ::RTC::ROSMessageInfoBase,
-            RTC::ROSMessageInfo<geometry_msgs::Vector3Stamped > >,
-            ::coil::Destructor< ::RTC::ROSMessageInfoBase,
-            RTC::ROSMessageInfo<geometry_msgs::Vector3Stamped > >);
+    RTC::FastRTPSMessageInfoFactory::
+            instance().addFactory("ROS2Vector3Stamped",
+            ::coil::Creator< ::RTC::FastRTPSMessageInfoBase,
+            RTC::ROS2MessageInfo<geometry_msgs::msg::Vector3Stamped > >,
+            ::coil::Destructor< ::RTC::FastRTPSMessageInfoBase,
+            RTC::ROS2MessageInfo<geometry_msgs::msg::Vector3Stamped > >);
   }
 
+  
   /*!
    * @if jp
    *
-   * @class ROSCameraImageData
+   * @class ROS2CameraImageData
    *
    * @brief RTC::CameraImage<-->sensor_msgs::Imageのシリアライザ
    *
@@ -786,7 +781,7 @@ namespace RTC
    *
    * @else
    *
-   * @class ROSCameraImageData
+   * @class ROS2CameraImageData
    *
    * @brief 
    *
@@ -795,7 +790,7 @@ namespace RTC
    *
    * @endif
    */
-  class ROSCameraImageData : public ROSSerializerBase<RTC::CameraImage>
+  class ROS2CameraImageData : public ROS2SerializerBase<RTC::CameraImage>
   {
   public:
     /*!
@@ -809,7 +804,7 @@ namespace RTC
      *
      * @endif
      */
-    ROSCameraImageData()
+    ROS2CameraImageData()
     {
 
     }
@@ -824,7 +819,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~ROSCameraImageData()
+    virtual ~ROS2CameraImageData()
     {
 
     }
@@ -849,9 +844,9 @@ namespace RTC
     virtual bool serialize(const RTC::CameraImage& data)
     {
         
-      sensor_msgs::Image  msg;
+      sensor_msgs::msg::Image  msg;
       msg.header.stamp.sec = data.tm.sec;
-      msg.header.stamp.nsec = data.tm.nsec;
+      msg.header.stamp.nanosec = data.tm.nsec;
       msg.height = data.height;
       msg.width = data.width;
       if(std::string(data.format).empty())
@@ -867,11 +862,8 @@ namespace RTC
       memcpy(&msg.data[0], &data.pixels[0], data.pixels.length());
 
       
-      ROSSerializerBase<RTC::CameraImage>::m_message = ros::serialization::serializeMessage<sensor_msgs::Image>(msg);
-
-      return true;
+      return ROS2SerializerBase<RTC::CameraImage>::sensormsg_serialize(msg);
     }
-
     /*!
      * @if jp
      *
@@ -892,13 +884,13 @@ namespace RTC
     virtual bool deserialize(RTC::CameraImage& data)
     { 
 
-      sensor_msgs::Image msg;
+      sensor_msgs::msg::Image msg;
       
-      ros::serialization::deserializeMessage(ROSSerializerBase<RTC::CameraImage>::m_message, msg);
+      bool ret = ROS2SerializerBase<RTC::CameraImage>::sensormsg_deserialize(msg);
       
       
       data.tm.sec = msg.header.stamp.sec;
-      data.tm.nsec = msg.header.stamp.nsec;
+      data.tm.nsec = msg.header.stamp.nanosec;
       data.height = msg.height;
       data.width = msg.width;
       data.format = CORBA::string_dup(msg.encoding.c_str());
@@ -908,7 +900,7 @@ namespace RTC
       
       memcpy(&data.pixels[0], &msg.data[0], data.pixels.length());
 
-      return true;
+      return ret;
     }
   };
 
@@ -925,21 +917,21 @@ namespace RTC
    *
    * @endif
    */
-  void ROSCameraImageDataInit()
+  void ROS2CameraImageDataInit()
   {
     coil::GlobalFactory < ::RTC::ByteDataStream<RTC::CameraImage> >::
-            instance().addFactory("ROSImage",
+            instance().addFactory("ROS2Image",
             ::coil::Creator< ::RTC::ByteDataStream<RTC::CameraImage>,
-            RTC::ROSCameraImageData>,
+            RTC::ROS2CameraImageData>,
             ::coil::Destructor< ::RTC::ByteDataStream<RTC::CameraImage>,
-            RTC::ROSCameraImageData>);
+            RTC::ROS2CameraImageData>);
 
-    RTC::ROSMessageInfoFactory::
-            instance().addFactory("ROSImage",
-            ::coil::Creator< ::RTC::ROSMessageInfoBase,
-            RTC::ROSMessageInfo<sensor_msgs::Image > >,
-            ::coil::Destructor< ::RTC::ROSMessageInfoBase,
-            RTC::ROSMessageInfo<sensor_msgs::Image > >);
+    RTC::FastRTPSMessageInfoFactory::
+            instance().addFactory("ROS2Image",
+            ::coil::Creator< ::RTC::FastRTPSMessageInfoBase,
+            RTC::ROS2MessageInfo<sensor_msgs::msg::Image > >,
+            ::coil::Destructor< ::RTC::FastRTPSMessageInfoBase,
+            RTC::ROS2MessageInfo<sensor_msgs::msg::Image > >);
   }
 
 }
@@ -954,30 +946,32 @@ extern "C"
    * @brief Module initialization
    * @endif
    */
-  void ROSSerializerInit(RTC::Manager* manager)
+  void ROS2SerializerInit(RTC::Manager* manager)
   {
     (void)manager;
-    RTC::ROSSimpleDataInit<RTC::TimedState>();
-    RTC::ROSSimpleDataInit<RTC::TimedShort>();
-    RTC::ROSSimpleDataInit<RTC::TimedLong>();
-    RTC::ROSSimpleDataInit<RTC::TimedUShort>();
-    RTC::ROSSimpleDataInit<RTC::TimedULong>();
-    RTC::ROSSimpleDataInit<RTC::TimedFloat>();
-    RTC::ROSSimpleDataInit<RTC::TimedDouble>();
+    
+    RTC::ROS2SimpleDataInit<RTC::TimedState>();
+    RTC::ROS2SimpleDataInit<RTC::TimedShort>();
+    RTC::ROS2SimpleDataInit<RTC::TimedLong>();
+    RTC::ROS2SimpleDataInit<RTC::TimedUShort>();
+    RTC::ROS2SimpleDataInit<RTC::TimedULong>();
+    RTC::ROS2SimpleDataInit<RTC::TimedFloat>();
+    RTC::ROS2SimpleDataInit<RTC::TimedDouble>();
 
-    RTC::ROSSequenceDataInit<RTC::TimedShortSeq>();
-    RTC::ROSSequenceDataInit<RTC::TimedLongSeq>();
-    RTC::ROSSequenceDataInit<RTC::TimedUShortSeq>();
-    RTC::ROSSequenceDataInit<RTC::TimedULongSeq>();
-    RTC::ROSSequenceDataInit<RTC::TimedFloatSeq>();
-    RTC::ROSSequenceDataInit<RTC::TimedDoubleSeq>();
+    RTC::ROS2SequenceDataInit<RTC::TimedShortSeq>();
+    RTC::ROS2SequenceDataInit<RTC::TimedLongSeq>();
+    RTC::ROS2SequenceDataInit<RTC::TimedShortSeq>();
+    RTC::ROS2SequenceDataInit<RTC::TimedUShortSeq>();
+    RTC::ROS2SequenceDataInit<RTC::TimedULongSeq>();
+    RTC::ROS2SequenceDataInit<RTC::TimedFloatSeq>();
+    RTC::ROS2SequenceDataInit<RTC::TimedDoubleSeq>();
 
-    RTC::ROSStringDataInit();
-    RTC::ROSPont3DDataInit();
-    RTC::ROSQuaternionDataInit();
-    RTC::ROSVector3DDataInit();
-    RTC::ROSCameraImageDataInit();
-  };
+    RTC::ROS2StringDataInit();
+    RTC::ROS2Pont3DDataInit();
+    RTC::ROS2QuaternionDataInit();
+    RTC::ROS2Vector3DDataInit();
+    RTC::ROS2CameraImageDataInit();
+  }
 }
 
 

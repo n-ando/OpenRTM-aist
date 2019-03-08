@@ -1286,7 +1286,7 @@ namespace RTC
       {
         prof = m_sdoservice.getServiceProviderProfile(id);
       }
-    catch (SDOPackage::InvalidParameter &e)
+    catch (SDOPackage::InvalidParameter&)
       {
         RTC_ERROR(("InvalidParameter exception: name (%s) is not found", id));
         throw;
@@ -1322,7 +1322,7 @@ namespace RTC
       {
         sdo = m_sdoservice.getServiceProvider(id);
       }
-    catch (SDOPackage::InvalidParameter &e)
+    catch (SDOPackage::InvalidParameter&)
       {
         throw;
       }
@@ -1909,11 +1909,7 @@ namespace RTC
    */
   bool RTObject_impl::isOwnExecutionContext(RTC::UniqueId ec_id)
   {
-    if (ec_id < ECOTHER_OFFSET)
-      {
-        return true;
-      }
-    return false;
+    return ec_id < ECOTHER_OFFSET;
   }
 
   /*!
@@ -2964,7 +2960,7 @@ namespace RTC
                 continue;
               }
             ec = RTC::ExecutionContextFactory::
-              instance().createObject(ec_type.c_str());
+              instance().createObject(ec_type);
           }
 
         if (ec == nullptr)
@@ -2999,7 +2995,7 @@ namespace RTC
             return RTC::RTC_ERROR;
         }
         ec = RTC::ExecutionContextFactory::instance().
-          createObject(ec_type.c_str());
+          createObject(ec_type);
         if (ec == nullptr)
           {
             RTC_ERROR(("EC (%s) creation failed.",

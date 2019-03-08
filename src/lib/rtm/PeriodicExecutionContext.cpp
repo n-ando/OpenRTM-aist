@@ -459,7 +459,7 @@ namespace RTC_exp
   onAddedComponent(RTC::LightweightRTObject_ptr  /*rtobj*/)
   {
     Guard guard(m_workerthread.mutex_);
-    if (m_workerthread.running_ == false)
+    if (!m_workerthread.running_)
       {
         m_worker.updateComponentList();
       }
@@ -472,7 +472,7 @@ namespace RTC_exp
   onRemovedComponent(RTC::LightweightRTObject_ptr  /*rtobj*/)
   {
     Guard guard(m_workerthread.mutex_);
-    if (m_workerthread.running_ == false)
+    if (!m_workerthread.running_)
       {
         m_worker.updateComponentList();
       }
@@ -494,7 +494,7 @@ namespace RTC_exp
     if (isRunning())
     {
         Guard guard(m_workerthread.mutex_);
-        if (m_workerthread.running_ == false)
+        if (!m_workerthread.running_)
         {
             m_workerthread.running_ = true;
             m_workerthread.cond_.signal();
@@ -523,7 +523,7 @@ namespace RTC_exp
     if (isRunning())
     {
         Guard guard(m_workerthread.mutex_);
-        if (m_workerthread.running_ == false)
+        if (!m_workerthread.running_)
         {
             m_workerthread.running_ = true;
             m_workerthread.cond_.signal();
@@ -545,7 +545,7 @@ namespace RTC_exp
     if (isAllNextState(RTC::INACTIVE_STATE))
       {
         Guard guard(m_workerthread.mutex_);
-        if (m_workerthread.running_ == true)
+        if (m_workerthread.running_)
           {
             m_workerthread.running_ = false;
             RTC_TRACE(("All RTCs are INACTIVE. Stopping worker thread."));
@@ -567,7 +567,7 @@ namespace RTC_exp
     if (isAllNextState(RTC::INACTIVE_STATE))
       {
         Guard guard(m_workerthread.mutex_);
-        if (m_workerthread.running_ == true)
+        if (m_workerthread.running_)
           {
             m_workerthread.running_ = false;
             RTC_TRACE(("All RTCs are INACTIVE. Stopping worker thread."));
@@ -589,7 +589,7 @@ namespace RTC_exp
     if (isAllNextState(RTC::INACTIVE_STATE))
       {
         Guard guard(m_workerthread.mutex_);
-        if (m_workerthread.running_ == true)
+        if (m_workerthread.running_)
           {
             m_workerthread.running_ = false;
             RTC_TRACE(("All RTCs are INACTIVE. Stopping worker thread."));
@@ -611,7 +611,7 @@ namespace RTC_exp
     if (isAllNextState(RTC::INACTIVE_STATE))
       {
         Guard guard(m_workerthread.mutex_);
-        if (m_workerthread.running_ == true)
+        if (m_workerthread.running_)
           {
             m_workerthread.running_ = false;
             RTC_TRACE(("All RTCs are INACTIVE. Stopping worker thread."));

@@ -150,10 +150,10 @@ namespace RTC
         prof.service        = svc->_this();
         std::string propkey = ifrToKey(*aprotype);
         coil::Properties tmp;
-        tmp = const_cast<coil::Properties*>(&prop)->getNode(propkey.c_str());
+        tmp = const_cast<coil::Properties*>(&prop)->getNode(propkey);
         NVUtil::copyFromProperties(prof.properties, tmp);
         // TODO: return value must be concerned
-        if (svc->init(m_rtobj, prof) != true)
+        if (!svc->init(m_rtobj, prof))
           {
             svc->finalize();
             delete svc;

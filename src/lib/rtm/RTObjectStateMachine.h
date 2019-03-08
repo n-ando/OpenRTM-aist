@@ -93,10 +93,10 @@ namespace RTC_impl
     void workerPostDo();
 
   protected:
-    void setComponentAction(const RTC::LightweightRTObject_ptr comp);
-    void setDataFlowComponentAction(const RTC::LightweightRTObject_ptr comp);
-    void setFsmParticipantAction(const RTC::LightweightRTObject_ptr comp);
-    void setMultiModeComponentAction(const RTC::LightweightRTObject_ptr comp);
+    void setComponentAction(RTC::LightweightRTObject_ptr comp);
+    void setDataFlowComponentAction(RTC::LightweightRTObject_ptr comp);
+    void setFsmParticipantAction(RTC::LightweightRTObject_ptr comp);
+    void setMultiModeComponentAction(RTC::LightweightRTObject_ptr comp);
 
   private:  // member variables
     RTC::Logger rtclog;

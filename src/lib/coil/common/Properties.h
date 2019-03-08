@@ -1191,7 +1191,7 @@ namespace coil
      *
      * @endif
      */
-    static bool split(const std::string& str, const char delim,
+    static bool split(const std::string& str, char delim,
                       std::vector<std::string>& value);
 
     /*!
