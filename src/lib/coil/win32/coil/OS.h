@@ -662,6 +662,6 @@ namespace coil
 
   };
 
-}  // namespace coil
+} // namespace coil
 
 #endif  // COIL_OS_H
