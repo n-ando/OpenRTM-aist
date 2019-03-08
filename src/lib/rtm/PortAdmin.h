@@ -604,5 +604,5 @@ namespace RTC
     ObjectManager<const char*, PortBase, comp_op<PortBase> > m_portServants;
 
   };
-};  // namespace RTC
+} // namespace RTC
 #endif  // RTC_PORTADMIN_H

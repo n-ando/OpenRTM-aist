@@ -351,8 +351,8 @@ namespace RTC
       //                 n >= - m_fillcount
       {
           Guard guard(m_posmutex);
-          if ((n > 0 && n > static_cast<long int>(m_length - m_fillcount)) ||
-              (n < 0 && n < static_cast<long int>(-m_fillcount)))
+          if ((n > 0 && n > static_cast<long int>(m_length) - static_cast<long int>(m_fillcount)) ||
+              (n < 0 && n < -static_cast<long int>(m_fillcount)))
             {
               if (lock_)
               {
@@ -625,7 +625,7 @@ namespace RTC
       {
           Guard guard(m_posmutex);
           if ((n > 0 && n > static_cast<long int>(m_fillcount)) ||
-              (n < 0 && n < static_cast<long int>(m_fillcount - m_length)))
+              (n < 0 && n < static_cast<long int>(m_fillcount) - static_cast<long int>(m_length)))
             {
               if (lock_)
               {
@@ -1080,6 +1080,6 @@ namespace RTC
      */
     condition m_full;
   };
-};  // namespace RTC
+} // namespace RTC
 
 #endif  // RTC_RINGBUFFER_H

@@ -44,7 +44,7 @@ namespace Local
   public:
     virtual ~IDataFlowComponent() {};
   };
-};     // namespace Local
-};     // namespace RTC
+} // namespace Local
+} // namespace RTC
 #endif // RTC_LOCAL_IDATAFLOWCOMPONENT_H
 

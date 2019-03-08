@@ -401,7 +401,7 @@ namespace RTC
   onAddedComponent(RTC::LightweightRTObject_ptr  /*rtobj*/)
   {
     Guard guard(m_worker.mutex_);
-    if (m_worker.ticked_ == false)
+    if (!m_worker.ticked_)
       {
         ExecutionContextBase::m_worker.updateComponentList();
       }
@@ -414,7 +414,7 @@ namespace RTC
   onRemovedComponent(RTC::LightweightRTObject_ptr  /*rtobj*/)
   {
     Guard guard(m_worker.mutex_);
-    if (m_worker.ticked_ == false)
+    if (!m_worker.ticked_)
       {
         ExecutionContextBase::m_worker.updateComponentList();
       }
@@ -471,7 +471,7 @@ namespace RTC
     m_worker.cond_.signal();
     return RTC::RTC_OK;
   }
-};  // namespace RTC
+} // namespace RTC
 
 
 extern "C"

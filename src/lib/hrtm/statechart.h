@@ -1014,8 +1014,8 @@ template<class S> StateCharacter State<S>::the_character_ = {
   State<S>::clone
 };
 
-}  // namespace sc
-}  // namespace hrtm
+} // namespace sc
+} // namespace hrtm
 #if defined(_MSC_VER)
 #pragma warning(pop)
 #endif

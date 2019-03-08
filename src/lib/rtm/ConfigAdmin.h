@@ -630,7 +630,7 @@ namespace RTC
      *
      * @endif
      */
-    explicit ConfigAdmin(coil::Properties& prop);
+    explicit ConfigAdmin(coil::Properties& configsets);
 
     /*!
      * @if jp
@@ -1063,7 +1063,7 @@ namespace RTC
      *
      * @endif
      */
-    bool setConfigurationSetValues(const coil::Properties& configuration_set);
+    bool setConfigurationSetValues(const coil::Properties& config_set);
 
     /*!
      * @if jp
@@ -1113,7 +1113,7 @@ namespace RTC
      *
      * @endif
      */
-    bool addConfigurationSet(const coil::Properties& configuration_set);
+    bool addConfigurationSet(const coil::Properties& config_set);
 
     /*!
      * @if jp
@@ -1453,7 +1453,7 @@ namespace RTC
      *
      * @endif
      */
-    void onUpdateParam(const char* config_set, const char* config_param);
+    void onUpdateParam(const char* config_param, const char* config_value);
 
     /*!
      * @if jp
@@ -1565,5 +1565,5 @@ namespace RTC
     ConfigurationListeners m_listeners;
 
   };
-};  // namespace RTC
+} // namespace RTC
 #endif  // RTC_CONFIGADMIN_H

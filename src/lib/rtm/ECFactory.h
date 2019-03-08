@@ -327,7 +327,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual void destroy(ExecutionContextBase* comp);
+    virtual void destroy(ExecutionContextBase* ec);
 
   protected:
     /*!
@@ -357,5 +357,5 @@ namespace RTC
      */
     ECDeleteFunc m_Delete;
   };
-};  // namespace RTC
+} // namespace RTC
 #endif  // RTC_ECFACTORY_H

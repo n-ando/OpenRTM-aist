@@ -1191,7 +1191,7 @@ namespace coil
      *
      * @endif
      */
-    static bool split(const std::string& str, const char delim,
+    static bool split(const std::string& str, char delim,
                       std::vector<std::string>& value);
 
     /*!
@@ -1368,6 +1368,6 @@ namespace coil
     friend std::ostream& operator<<(std::ostream& lhs, const Properties& rhs);
 
   };  // class Properties
-};  // namespace coil
+} // namespace coil
 #endif  // COIL_PROPERTIES_H
 

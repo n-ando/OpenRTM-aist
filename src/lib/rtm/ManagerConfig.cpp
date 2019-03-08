@@ -237,7 +237,7 @@ namespace RTC
         std::cerr << " not found." << std::endl;
       }
     // Search rtc configuration file from environment variable
-    char* env = getenv(config_file_env);
+    char* env = coil::getenv(config_file_env);
     if (env != nullptr)
       {
         if (fileExist(env))
@@ -322,4 +322,4 @@ namespace RTC
       }
     return false;
   }
-};  // namespace RTC
+} // namespace RTC

@@ -112,14 +112,14 @@ namespace RTC_exp
         m_ownersm->workerPostDo();
         
         
-        for (std::vector<ChildTask*>::iterator task = m_tasklist.begin(); task != m_tasklist.end(); ++task)
+        for (auto & task : m_tasklist)
         {
-            (*task)->signal();
+            task->signal();
         }
         
-        for (std::vector<ChildTask*>::iterator task = m_tasklist.begin(); task != m_tasklist.end(); ++task)
+        for (auto & task : m_tasklist)
         {
-            (*task)->join();
+            task->join();
         }
         
         
@@ -133,9 +133,9 @@ namespace RTC_exp
             RTC_PARANOID(("Sleep:     %f [s]",
                                     static_cast<double>(period - (t1 - t0))));
             int task_num = 0;
-            for (std::vector<ChildTask*>::iterator task = m_tasklist.begin(); task != m_tasklist.end(); ++task)
+            for (auto & task : m_tasklist)
             {
-                coil::TimeMeasure::Statistics st = (*task)->getExecStat();
+                coil::TimeMeasure::Statistics st = task->getExecStat();
                 RTC_PARANOID(("MAX(%d):  %f [s]", task_num, st.max_interval));
                 RTC_PARANOID(("MIN(%d):  %f [s]", task_num, st.min_interval));
                 RTC_PARANOID(("MEAN(%d): %f [s]", task_num, st.mean_interval));
@@ -169,27 +169,26 @@ namespace RTC_exp
       std::string threads_str = rtc->getProperties()["conf.default.members"];
       coil::vstring threads = coil::split(threads_str, "|");
 
-      for (coil::vstring::iterator thread = threads.begin(); thread != threads.end(); ++thread)
+      for (auto & thread : threads)
       {
           std::vector<RTC::LightweightRTObject_ptr> rtcs;
-          coil::vstring members = coil::split(*thread, ",");
+          coil::vstring members = coil::split(thread, ",");
 
-          for (coil::vstring::iterator member = members.begin(); member != members.end(); ++member)
+          for (auto member : members)
           {
-              std::string m = *member;
-              coil::eraseBothEndsBlank(m);
+              coil::eraseBothEndsBlank(member);
 
-              if (m.empty())
+              if (member.empty())
               {
                   continue;
               }
               else
               {
                   
-                  RTC::RTObject_impl* comp = mgr.getComponent(m.c_str());
+                  RTC::RTObject_impl* comp = mgr.getComponent(member.c_str());
                   if (comp == nullptr)
                   {
-                      RTC_ERROR(("no RTC found: %s", m.c_str()));
+                      RTC_ERROR(("no RTC found: %s", member.c_str()));
                       continue;
                   }
                   RTC::RTObject_ptr rtobj = comp->getObjRef();
@@ -252,9 +251,9 @@ namespace RTC_exp
       }
 
 
-      for (std::vector<RTC::LightweightRTObject_ptr>::iterator rtc = rtcs.begin(); rtc != rtcs.end(); ++rtc)
+      for (auto & rtc : rtcs)
       {
-          addRTCToTask(ct, (*rtc));
+          addRTCToTask(ct, rtc);
       }
 
       m_tasklist.push_back(ct);
@@ -343,11 +342,11 @@ namespace RTC_exp
       
       
       updateCompList();
-      for (std::vector<RTC_impl::RTObjectStateMachine*>::iterator comp = m_comps.begin(); comp != m_comps.end(); ++comp)
+      for (auto & comp : m_comps)
       {
-          (*comp)->workerPreDo();
-          (*comp)->workerDo();
-          (*comp)->workerPostDo();
+          comp->workerPreDo();
+          comp->workerDo();
+          comp->workerPostDo();
       }
       
       {
@@ -429,7 +428,7 @@ namespace RTC_exp
       RTC::PeriodicTaskFactory::instance().deleteObject(m_task);
   }
 
-};  // namespace RTC_exp
+} // namespace RTC_exp
 
 extern "C"
 {

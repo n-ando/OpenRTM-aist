@@ -235,8 +235,7 @@ namespace SDOPackage
 
     // narrowing: SDO -> RTC (DataFlowComponent)
     dfc = ::OpenRTM::DataFlowComponent::_narrow(sdo);
-    if (::CORBA::is_nil(dfc)) return false;
-    return true;
+    return !::CORBA::is_nil(dfc);
   }
 
   /*!
@@ -550,16 +549,16 @@ namespace SDOPackage
     RTC_VERBOSE(("remove ports: %s", ::coil::flatten(removedPorts).c_str()));
     RTC_VERBOSE(("add    ports: %s", ::coil::flatten(createdPorts).c_str()));
 
-    for (std::vector<Member>::iterator member = m_rtcMembers.begin(); member != m_rtcMembers.end(); ++member)
+    for (auto & rtcMember : m_rtcMembers)
       {
-        removePort(*member, removedPorts);
-        addPort(*member, createdPorts);
+        removePort(rtcMember, removedPorts);
+        addPort(rtcMember, createdPorts);
       }
 
     m_expPorts = newPorts;
   }
 
-};  // namespace SDOPackage
+} // namespace SDOPackage
 
 
 
@@ -691,12 +690,12 @@ namespace RTC
     mgr.getComponents();
 
     ::SDOPackage::SDOList sdos;
-    for (coil::vstring::iterator member = m_members.begin(); member != m_members.end(); ++member)
+    for (auto & member : m_members)
       {
-          coil::replaceString(*member, "|", "");
-          coil::eraseBothEndsBlank(*member);
+          coil::replaceString(member, "|", "");
+          coil::eraseBothEndsBlank(member);
 
-        RTObject_impl* rtc = mgr.getComponent((*member).c_str());
+        RTObject_impl* rtc = mgr.getComponent(member.c_str());
         if (rtc == nullptr) {
           continue;
         }
@@ -860,7 +859,7 @@ namespace RTC
     return ret;
   }
 
-};  // namespace RTC
+} // namespace RTC
 
 extern "C"
 {

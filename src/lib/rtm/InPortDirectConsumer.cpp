@@ -112,7 +112,7 @@ namespace RTC
   {
     RTC_TRACE(("unsubscribeInterface(): do nothing"));
   }
-};     // namespace RTC
+} // namespace RTC
 
 extern "C"
 {

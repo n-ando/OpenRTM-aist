@@ -103,16 +103,9 @@ namespace RTM
 
 		rtcs = m_mgr->getNaming()->string_to_component(rtc_name);
 
-		if (rtcs.length() > 0)
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
+		return rtcs.length() > 0;
 	}
-}; //namespace RTM  
+} //namespace RTM 
 
 extern "C"
 {

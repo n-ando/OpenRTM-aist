@@ -694,7 +694,7 @@ namespace RTC
     Worker m_worker;
     int exception_number;
   };  // class VxWorksInterruptExecutionContext
-};  // namespace RTC
+} // namespace RTC
 
 
 

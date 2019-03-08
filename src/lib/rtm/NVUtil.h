@@ -146,7 +146,7 @@ namespace NVUtil
    *
    * @endif
    */
-  SDOPackage::NameValue newNVChar(const char* name, const CORBA::Char value);
+  SDOPackage::NameValue newNVChar(const char* name, CORBA::Char value);
 
   /*!
    * @if jp
@@ -174,7 +174,7 @@ namespace NVUtil
    * @endif
    */
   SDOPackage::NameValue newNVBool(const char* name,
-                                  const CORBA::Boolean value);
+                                  CORBA::Boolean value);
 
   /*!
    * @if jp
@@ -201,7 +201,7 @@ namespace NVUtil
    *
    * @endif
    */
-  SDOPackage::NameValue newNVOctet(const char* name, const CORBA::Octet value);
+  SDOPackage::NameValue newNVOctet(const char* name, CORBA::Octet value);
 
   /*!
    * @if jp
@@ -643,5 +643,5 @@ namespace NVUtil
   std::string toString(const SDOPackage::NVList& nv);
 
 
-};  // namespace NVUtil
+} // namespace NVUtil
 #endif  // NVUTIL_NVUTIL_H

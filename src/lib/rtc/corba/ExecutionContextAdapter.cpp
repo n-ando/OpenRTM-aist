@@ -119,5 +119,5 @@ namespace CORBA
 //    m_profile = to_local(m_obj->get_profile());
 //    return m_profile;
 //  }
-};     // namespace CORBA
-};     // namespace RTC
+} // namespace CORBA
+} // namespace RTC

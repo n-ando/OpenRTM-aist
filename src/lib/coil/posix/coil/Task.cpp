@@ -180,6 +180,6 @@ namespace coil
     t->finalize();
     return nullptr;
   }
-};  // namespace coil
+} // namespace coil
 
 

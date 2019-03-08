@@ -132,7 +132,8 @@ namespace RTC
     }
 
     m_messageType = prop.getProperty("marshaling_type", "ROSFloat32");
-    m_topic = prop.getProperty("topic", "/chatter");
+    m_topic = prop.getProperty("topic", "chatter");
+    m_topic = "/" + m_topic;
 
 
     m_roscorehost = prop.getProperty("roscore_host", "localhost");
@@ -424,34 +425,28 @@ namespace RTC
       case BufferStatus::BUFFER_OK:
         onBufferWrite(data);
         return;
-        break;
 
       case BufferStatus::BUFFER_ERROR:
         onReceiverError(data);
         return;
-        break;
 
       case BufferStatus::BUFFER_FULL:
         onBufferFull(data);
         onReceiverFull(data);
         return;
-        break;
 
       case BufferStatus::BUFFER_EMPTY:
         // never come here
         return;
-        break;
 
       case BufferStatus::PRECONDITION_NOT_MET:
         onReceiverError(data);
         return;
-        break;
 
       case BufferStatus::TIMEOUT:
         onBufferWriteTimeout(data);
         onReceiverTimeout(data);
         return;
-        break;
 
       default:
         onReceiverError(data);
@@ -459,4 +454,4 @@ namespace RTC
       }
   }
 
-};     // namespace RTC
+} // namespace RTC

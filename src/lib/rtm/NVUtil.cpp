@@ -435,4 +435,4 @@ namespace NVUtil
     dump_to_stream(s, nv);
     return s.str();
   }
-};  // namespace NVUtil
+} // namespace NVUtil

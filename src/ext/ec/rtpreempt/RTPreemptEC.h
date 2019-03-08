@@ -810,7 +810,7 @@ namespace RTC_exp
     int m_policy;
     int m_waitoffset;
   }; // class RTPreemptEC
-}  // namespace RTC_exp
+} // namespace RTC_exp
 
 #ifdef WIN32
 #pragma warning( default : 4290 )

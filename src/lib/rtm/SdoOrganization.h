@@ -198,7 +198,7 @@ namespace SDOPackage
      * @endif
      */
     virtual CORBA::Boolean
-    add_organization_property(const OrganizationProperty& org_property)
+    add_organization_property(const OrganizationProperty& organization_property)
       throw (CORBA::SystemException,
              InvalidParameter, NotAvailable, InternalError);
 
@@ -875,7 +875,7 @@ namespace SDOPackage
       std::string m_id;
     };  // struct sdo_id
   };  // class Organization_impl
-};  // namespace SDOPackage
+} // namespace SDOPackage
 
 #ifdef WIN32
 #pragma warning( default : 4290 )

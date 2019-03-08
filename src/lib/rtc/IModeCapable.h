@@ -54,7 +54,7 @@ namespace Local
     virtual ReturnCode_t
     set_mode(IMode& new_mode, bool immediate) = 0;
   };
-};     // namespace Local
-};     // namespace RTC
+} // namespace Local
+} // namespace RTC
 #endif // RTC_LOCAL_IMODECAPABLE_H
 

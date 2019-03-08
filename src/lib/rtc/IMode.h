@@ -40,7 +40,7 @@ namespace Local
   public:
     virtual ~IMode() {};
   };
-};     // namespace Local
-};     // namespace RTC
+} // namespace Local
+} // namespace RTC
 #endif // RTC_LOCAL_IMODE_H
 

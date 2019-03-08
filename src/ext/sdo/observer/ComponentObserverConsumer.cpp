@@ -40,9 +40,9 @@ namespace RTC
       m_hblistenerid(nullptr),
       m_timer(m_interval)
   {
-    for (size_t i(0); i < OpenRTM::STATUS_KIND_NUM; ++i)
+    for (bool & observed : m_observed)
       {
-        m_observed[i] = false;
+        observed = false;
       }
   }
 
@@ -173,40 +173,40 @@ namespace RTC
         prop["observed_status"] = "ALL";
       }
 
-    coil::vstring observed(coil::split(prop["observed_status"], ","));
+    coil::vstring observedlist(coil::split(prop["observed_status"], ","));
     bool flags[OpenRTM::STATUS_KIND_NUM];
-    for (int i(0); i < OpenRTM::STATUS_KIND_NUM; ++i)
+    for (bool & flag : flags)
       {
-        flags[i] = false;
+        flag = false;
       }
-    for (size_t i(0); i < observed.size(); ++i)
+    for (auto & observed : observedlist)
       {
-        coil::toUpper(observed[i]);
-        if (observed[i] == "COMPONENT_PROFILE")
+        coil::toUpper(observed);
+        if (observed == "COMPONENT_PROFILE")
           {
             flags[OpenRTM::COMPONENT_PROFILE] = 1;
           }
-        else if (observed[i] == "RTC_STATUS")
+        else if (observed == "RTC_STATUS")
           {
             flags[OpenRTM::RTC_STATUS] = 1;
           }
-        else if (observed[i] == "EC_STATUS")
+        else if (observed == "EC_STATUS")
           {
             flags[OpenRTM::EC_STATUS] = 1;
           }
-        else if (observed[i] == "PORT_PROFILE")
+        else if (observed == "PORT_PROFILE")
           {
             flags[OpenRTM::PORT_PROFILE] = 1;
           }
-        else if (observed[i] == "CONFIGURATION")
+        else if (observed == "CONFIGURATION")
           {
             flags[OpenRTM::CONFIGURATION] = 1;
           }
-        else if (observed[i] == "ALL")
+        else if (observed == "ALL")
           {
-            for (int j(0); j < OpenRTM::STATUS_KIND_NUM; ++j)
+            for (bool & flag : flags)
               {
-                flags[j] = true;
+                flag = true;
               }
             break;
           }
@@ -304,7 +304,7 @@ namespace RTC
       }
     else
       {
-        if (m_heartbeat == true && m_hblistenerid != nullptr)
+        if (m_heartbeat && m_hblistenerid != nullptr)
           {
             unsetHeartbeat();
             m_timer.stop();
@@ -483,25 +483,25 @@ namespace RTC
       }
 
     const std::vector<InPortBase*>& inports = m_rtobj->getInPorts();
-    for (size_t i(0); i < inports.size(); ++i)
+    for (auto inport : inports)
       {
         std::string msg("RECEIVE:InPort:");
-        msg += inports[i]->getName();
+        msg += inport->getName();
         DataPortAction *action = new DataPortAction(*this, msg,
                                                     m_inportInterval);
-        inports[i]->addConnectorDataListener(ON_RECEIVED,
+        inport->addConnectorDataListener(ON_RECEIVED,
                                                     action);
         m_recievedactions.push_back(action);
 
       }
     const std::vector<OutPortBase*>& outports = m_rtobj->getOutPorts();
-    for (size_t i(0); i < outports.size(); ++i)
+    for (auto outport : outports)
       {
         std::string msg("SEND:OutPort:");
-        msg += outports[i]->getName();
+        msg += outport->getName();
         DataPortAction *action = new DataPortAction(*this, msg,
                                                     m_outportInterval);
-        outports[i]->addConnectorDataListener(ON_SEND,
+        outport->addConnectorDataListener(ON_SEND,
                                               action);
         m_sendactions.push_back(action);
       }
@@ -543,19 +543,19 @@ namespace RTC
 
 
     const std::vector<InPortBase*>& inports = m_rtobj->getInPorts();
-    for (size_t i(0); i < inports.size(); ++i)
+    for (auto inport : inports)
       {
-        for (size_t j(0); j < m_recievedactions.size(); ++j)
+        for (auto & m_recievedaction : m_recievedactions)
           {
-            inports[i]->removeConnectorDataListener(ON_RECEIVED, m_recievedactions[j]);
+            inport->removeConnectorDataListener(ON_RECEIVED, m_recievedaction);
           }
       }
     const std::vector<OutPortBase*>& outports = m_rtobj->getOutPorts();
-    for (size_t i(0); i < outports.size(); ++i)
+    for (auto outport : outports)
       {
-        for (size_t j(0); j < m_sendactions.size(); ++j)
+        for (auto & m_sendaction : m_sendactions)
           {
-            outports[i]->removeConnectorDataListener(ON_SEND, m_sendactions[j]);
+            outport->removeConnectorDataListener(ON_SEND, m_sendaction);
           }
       }
   }
@@ -625,7 +625,7 @@ namespace RTC
       }
     if (m_ecaction.ecDetached != nullptr)
       {
-        m_rtobj->removeExecutionContextActionListener(EC_ATTACHED,
+        m_rtobj->removeExecutionContextActionListener(EC_DETACHED,
                                                       m_ecaction.ecDetached);
       }
     if (m_ecaction.ecRatechanged != nullptr)
@@ -751,7 +751,7 @@ namespace RTC
   }
   
   
-}; // namespace RTC
+} // namespace RTC
 
 extern "C"
 {

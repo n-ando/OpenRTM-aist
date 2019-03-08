@@ -17,9 +17,7 @@
  *
  */
 
-#ifndef COIL_PROCESS_H
-#define COIL_PROCESS_H
-
+#include <coil/Process.h>
 #include <coil/File.h>
 #include <coil/stringutil.h>
 
@@ -108,5 +106,4 @@ namespace coil
     return 0;
   }
 
-};  // namespace coil
-#endif  // COIL_PROCESS_H
+} // namespace coil

@@ -362,14 +362,14 @@ namespace RTC
 
     coil::vstring files = coil::split(prop["file_name"], ",");
 
-    for (coil::vstring::iterator file = files.begin(); file != files.end(); ++file)
+    for (auto & file : files)
       {
-        std::cout << "#### file: " << (*file) << std::endl;
-        if (std::count(s_files.begin(), s_files.end(), (*file)) > 0) { continue; }
-        m_fileName = (*file);
-        s_files.push_back(*file);
+        std::cout << "#### file: " << file << std::endl;
+        if (std::count(s_files.begin(), s_files.end(), file) > 0) { continue; }
+        m_fileName = file;
+        s_files.push_back(file);
 
-        std::string fname(*file);
+        std::string fname(file);
         coil::normalize(fname);
         if (fname == "stdout")
           {
@@ -402,7 +402,7 @@ namespace RTC
         else
           {
             std::cout << "##### file #####" << std::endl;
-            m_fileout = new FileStream(*file);
+            m_fileout = new FileStream(file);
             if (escape_sequence)
             {
                 m_fileout->enableEscapeSequence();

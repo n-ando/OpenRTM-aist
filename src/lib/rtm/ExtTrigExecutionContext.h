@@ -658,7 +658,7 @@ namespace RTC
     // A condition variable for external triggered worker
     Worker m_worker;
   };  // class ExtTrigExecutionContext
-};  // namespace RTC
+} // namespace RTC
 
 #ifdef WIN32
 #pragma warning( default : 4290 )

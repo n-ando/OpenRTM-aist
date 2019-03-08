@@ -285,6 +285,6 @@ namespace coil
     void* m_handle;
   };
 
-};  // namespace coil
+} // namespace coil
 
 #endif  // DynamicLib_h

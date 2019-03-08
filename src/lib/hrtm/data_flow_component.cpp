@@ -35,4 +35,4 @@ namespace hrtm
   {
     postOnFsmStateChange(state, RTC::RTC_OK);
   }
-}; // namespace hrtm
+} // namespace hrtm

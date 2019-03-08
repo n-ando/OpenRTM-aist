@@ -27,7 +27,7 @@
 namespace RTC
 {
   typedef RingBuffer<ByteData> CdrRingBuffer;
-};  // namespace RTC
+} // namespace RTC
 
 extern "C"
 {

@@ -732,7 +732,7 @@ namespace RTC
     bool m_active;
     int m_leftskip;
   };
-};  // namespace RTC
+} // namespace RTC
 
 extern "C"
 {

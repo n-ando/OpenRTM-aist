@@ -415,5 +415,5 @@ namespace RTC
      */
     bool m_isMaster;
   };
-};  // namespace RTC
+} // namespace RTC
 #endif  // RTC_MANAGERCONFIG_H

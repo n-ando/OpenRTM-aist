@@ -427,5 +427,5 @@ namespace CORBA_SeqUtil
       }
     return iorlist;
   }
-};  // namespace CORBA_SeqUtil
+} // namespace CORBA_SeqUtil
 #endif  // CORBA_SEQUTIL_H

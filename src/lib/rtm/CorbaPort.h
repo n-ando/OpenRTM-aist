@@ -1381,17 +1381,16 @@ namespace RTC
 
       void operator()(const SDOPackage::NameValue& nv)
       {
-        for (CorbaConsumerList::iterator it(m_consumers.begin());
-             it != m_consumers.end(); ++it)
+        for (auto & consumer : m_consumers)
           {
-            if (it->descriptor() == (const char*)nv.name)
+            if (consumer.descriptor() == (const char*)nv.name)
               {
-                it->releaseObject();
+                consumer.releaseObject();
               }
           }
       }
       CorbaConsumerList& m_consumers;
     };
   };
-};  // namespace RTC
+} // namespace RTC
 #endif  // RTC_CORBAPORT_H

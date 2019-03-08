@@ -779,7 +779,7 @@ namespace RTC
 	coil::vstring m_loadfailmods;
 
   };   // class ModuleManager
-};  // namespace RTC
+} // namespace RTC
 
 #ifdef WIN32
 #pragma warning( default : 4290 )

@@ -926,7 +926,7 @@ namespace RTC
         m_configMsg.activateConfigSetListener = NULL;
       }
   }
-}; // namespace RTC
+} // namespace RTC
 
 extern "C"
 {

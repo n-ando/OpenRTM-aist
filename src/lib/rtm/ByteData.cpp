@@ -1,4 +1,4 @@
-#include "ByteData.h"
+﻿#include "ByteData.h"
 #include <cstring>
 
 namespace RTC
@@ -315,4 +315,4 @@ namespace RTC
     {
         return m_little_endian;
     }
-}  // namespace RTC
+} // namespace RTC

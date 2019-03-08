@@ -302,6 +302,6 @@ namespace coil
     int m_error;
   };  // class DynamicLib
 
-};  // namespace coil
+} // namespace coil
 
 #endif  // DynamicLib_h

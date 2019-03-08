@@ -43,8 +43,8 @@ namespace Local
       send_stimulus(const char* message,
 		    ExecutionContextHandle_t exec_context) = 0;
     };
-};     // namespace Local
-};     // namespace RTC
+} // namespace Local
+} // namespace RTC
 #endif // RTC_LOCAL_IFSMOBJECT_H
   
   

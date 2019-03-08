@@ -490,7 +490,7 @@ namespace RTC
     FileStreamBase* m_stdout;
     FileStream* m_fileout;
   };
-}; // namespace RTC
+} // namespace RTC
 
 extern "C"
 {

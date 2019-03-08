@@ -204,7 +204,7 @@ namespace RTC
      * @endif
      */
     virtual ::RTC::DataPortStatus::Enum
-    setListener(ConnectorInfo& profile,
+    setListener(ConnectorInfo& info,
                 RTC::ConnectorListeners* listeners);
 
     /*!
@@ -437,7 +437,7 @@ namespace RTC
     bool m_active;
   };
 
-};  // namespace RTC
+} // namespace RTC
 
 extern "C"
 {

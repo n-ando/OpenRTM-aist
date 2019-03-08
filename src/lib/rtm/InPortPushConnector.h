@@ -328,6 +328,6 @@ namespace RTC
     WorkerThreadCtrl m_readready_worker;
 
   };
-};  // namespace RTC
+} // namespace RTC
 
 #endif  // RTC_PUSH_CONNECTOR_H

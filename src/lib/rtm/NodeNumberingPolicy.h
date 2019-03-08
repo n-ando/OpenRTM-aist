@@ -163,7 +163,7 @@ namespace RTM
     std::vector<void*> m_objects;
 	RTC::Manager *m_mgr;
   };
-}; // namespace RTM
+} // namespace RTM
 
 extern "C"
 {

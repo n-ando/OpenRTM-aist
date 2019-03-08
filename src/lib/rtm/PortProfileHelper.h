@@ -622,5 +622,5 @@ namespace RTC
     };
 
   };   // class PortProfileHelper
-};  // namespace RTC
+} // namespace RTC
 #endif  // RTC_PORTPROFILEHELPER_H
