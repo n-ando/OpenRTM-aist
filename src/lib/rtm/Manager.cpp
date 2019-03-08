@@ -366,7 +366,16 @@ namespace RTC
           }
         else
           {
-            initfunc = coil::split((*itr), ".").operator[](0) + "Init";
+            if (coil::isAbsolutePath((*itr)))
+            {
+                coil::vstring namelist(coil::split((*itr), "/"));
+                namelist = coil::split(namelist.back(), "\\");
+                initfunc = coil::split(namelist.back(), ".").operator[](0) + "Init";
+            }
+            else
+            {
+                initfunc = coil::split((*itr), ".").operator[](0) + "Init";
+            }
             filename = (*itr);
           }
         if (filename.find_first_of('.') == std::string::npos)
@@ -461,8 +470,18 @@ namespace RTC
       {
         if (init_func.empty())
           {
-            coil::vstring mod(coil::split(file_name, "."));
-            init_func = mod[0] + "Init";
+            if (coil::isAbsolutePath(file_name))
+            {
+                coil::vstring mod(coil::split(file_name, "/"));
+                mod = coil::split(mod.back(), "\\");
+                mod = coil::split(mod.back(), ".");
+                init_func = mod[0] + "Init";
+            }
+            else
+            {
+                coil::vstring mod(coil::split(file_name, "."));
+                init_func = mod[0] + "Init";
+            }
           }
         std::string path(m_module->load(file_name, init_func));
         RTC_DEBUG(("module path: %s", path.c_str()));
