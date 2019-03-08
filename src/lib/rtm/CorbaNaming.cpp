@@ -88,8 +88,7 @@ namespace RTC
   {
     try
       {
-        if (m_rootContext->_non_existent()) { return false; }
-        return true;
+        return !m_rootContext->_non_existent();
       }
     catch (...)
       {
@@ -856,7 +855,7 @@ namespace RTC
   {
     CosNaming::NamingContext_var nc;
     nc = CosNaming::NamingContext::_narrow(obj);
-    return CORBA::is_nil(nc) ? false : true;
+    return !CORBA::is_nil(nc);
   }
 
   /*!

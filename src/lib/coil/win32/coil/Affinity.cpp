@@ -71,12 +71,12 @@ namespace coil
 
   bool setProcCpuAffinity(std::string cpu_mask)
   {
-    coil::vstring tmp = coil::split(cpu_mask, ",", true);
+    coil::vstring masklist = coil::split(cpu_mask, ",", true);
     CpuMask mask;
-    for (size_t i(0); i < tmp.size(); ++i)
+    for (auto & maskstr : masklist)
       {
         int num;
-        if (coil::stringTo(num, tmp[i].c_str()))
+        if (coil::stringTo(num, maskstr.c_str()))
           {
             mask.push_back(num);
           }
@@ -106,12 +106,12 @@ namespace coil
 
   bool setThreadCpuAffinity(std::string cpu_mask)
   {
-    coil::vstring tmp = coil::split(cpu_mask, ",", true);
+    coil::vstring masklist = coil::split(cpu_mask, ",", true);
     CpuMask mask;
-    for (size_t i(0); i < tmp.size(); ++i)
+    for (auto & maskstr : masklist)
       {
         int num;
-        if (coil::stringTo(num, tmp[i].c_str()))
+        if (coil::stringTo(num, maskstr.c_str()))
           {
             mask.push_back(num);
           }

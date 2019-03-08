@@ -64,7 +64,7 @@ namespace RTM
         try
           {
             RTM::Manager_var owner;
-            owner = findManager(config["corba.master_manager"].c_str());
+            owner = findManager(config["corba.master_manager"]);
             if (CORBA::is_nil(owner))
               {
                 RTC_WARN(("Master manager not found"));
@@ -950,14 +950,14 @@ namespace RTM
 
     std::vector<RTC::RTObject_impl*> rtcs = m_mgr.getComponents();
     coil::vstring rtc_name = coil::split(tmp, "/");
-    for (std::vector<RTC::RTObject_impl*>::iterator rtc = rtcs.begin(); rtc != rtcs.end(); ++rtc)
+    for (auto & rtc : rtcs)
       {
         // name = ConsoleIn0, instancename = ConsoleIn0
         if (rtc_name.size() == 1 &&
-            rtc_name[0] == (*rtc)->getInstanceName())
+            rtc_name[0] == rtc->getInstanceName())
           {
             RTC::RTObject_var rtcref =
-              RTC::RTObject::_duplicate((*rtc)->getObjRef());
+              RTC::RTObject::_duplicate(rtc->getObjRef());
 #ifndef ORB_IS_RTORB
             CORBA_SeqUtil::push_back(crtcs.inout(), rtcref.in());
 #else // ORB_IS_RTORB
@@ -970,12 +970,12 @@ namespace RTM
         // name = */ConsoleIn0 instancename = ConsoleIn0   OR
         // naem = sample/ConsoleIn0 category = sample && instance == ConsoleIn0
         if ((rtc_name[0] == "*" &&
-             rtc_name[1] == (*rtc)->getInstanceName()) ||
-            (rtc_name[0] == (*rtc)->getCategory() &&
-             rtc_name[1] == (*rtc)->getInstanceName()))
+             rtc_name[1] == rtc->getInstanceName()) ||
+            (rtc_name[0] == rtc->getCategory() &&
+             rtc_name[1] == rtc->getInstanceName()))
           {
             RTC::RTObject_var rtcref =
-              RTC::RTObject::_duplicate((*rtc)->getObjRef());
+              RTC::RTObject::_duplicate(rtc->getObjRef());
 #ifndef ORB_IS_RTORB
             CORBA_SeqUtil::push_back(crtcs.inout(), rtcref.in());
 #else // ORB_IS_RTORB
@@ -1310,7 +1310,7 @@ namespace RTM
           }
 
         RTC_DEBUG(("Invoking command: %s.", rtcd_cmd.c_str()));
-        int ret(coil::launch_shell(rtcd_cmd.c_str()));
+        int ret(coil::launch_shell(rtcd_cmd));
         if (ret == -1)
           {
             RTC_DEBUG(("%s: failed", rtcd_cmd.c_str()));
@@ -1442,7 +1442,7 @@ namespace RTM
         rtcd_cmd += " -d ";
 
         RTC_DEBUG(("Invoking command: %s.", rtcd_cmd.c_str()));
-        int ret(coil::launch_shell(rtcd_cmd.c_str()));
+        int ret(coil::launch_shell(rtcd_cmd));
         if (ret == -1)
           {
             RTC_DEBUG(("%s: failed", rtcd_cmd.c_str()));

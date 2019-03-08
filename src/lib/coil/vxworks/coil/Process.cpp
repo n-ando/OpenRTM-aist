@@ -16,8 +16,7 @@
  *
  */
 
-#ifndef COIL_PROCESS_H
-#define COIL_PROCESS_H
+#include <coil/Process.h>
 
 #include <stdlib.h>
 #include <unistd.h>
@@ -55,4 +54,3 @@ namespace coil
 
 
 }; // namespace coil
-#endif // COIL_PROCESS_H

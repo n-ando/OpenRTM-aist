@@ -862,7 +862,7 @@ namespace RTC
      * @endif
      */
     virtual ReturnCode_t
-    publishInterfaces(ConnectorProfile& connector_profile);
+    publishInterfaces(ConnectorProfile& cprof);
 
     /*! @if jp
      *
@@ -903,7 +903,7 @@ namespace RTC
      * @endif
      */
     virtual ReturnCode_t
-    subscribeInterfaces(const ConnectorProfile& connector_profile);
+    subscribeInterfaces(const ConnectorProfile& cprof);
 
     /*!
      * @if jp

@@ -39,7 +39,7 @@ namespace RTC
     : InPortConnector(info, listeners, buffer),
       m_provider(provider),
       m_listeners(listeners),
-      m_deleteBuffer(buffer == nullptr ? true : false),
+      m_deleteBuffer(buffer == nullptr),
       m_sync_readwrite(false)
   {
     // publisher/buffer creation. This may throw std::bad_alloc;
@@ -181,7 +181,7 @@ namespace RTC
     m_provider = nullptr;
 
     // delete buffer
-    if (m_buffer != nullptr && m_deleteBuffer == true)
+    if (m_buffer != nullptr && m_deleteBuffer)
       {
         CdrBufferFactory& bfactory(CdrBufferFactory::instance());
         bfactory.deleteObject(m_buffer);
