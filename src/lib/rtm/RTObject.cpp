@@ -2964,7 +2964,7 @@ namespace RTC
                 continue;
               }
             ec = RTC::ExecutionContextFactory::
-              instance().createObject(ec_type.c_str());
+              instance().createObject(ec_type);
           }
 
         if (ec == nullptr)
@@ -2999,7 +2999,7 @@ namespace RTC
             return RTC::RTC_ERROR;
         }
         ec = RTC::ExecutionContextFactory::instance().
-          createObject(ec_type.c_str());
+          createObject(ec_type);
         if (ec == nullptr)
           {
             RTC_ERROR(("EC (%s) creation failed.",

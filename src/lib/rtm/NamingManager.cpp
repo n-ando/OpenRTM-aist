@@ -44,7 +44,7 @@ namespace RTC
     rtclog.setName("NamingOnCorba");
     coil::Properties& prop(Manager::instance().getConfig());
     m_replaceEndpoint =
-      coil::toBool(prop["corba.nameservice.replace_endpoint"].c_str(),
+      coil::toBool(prop["corba.nameservice.replace_endpoint"],
                    "YES", "NO", true);
 
 
