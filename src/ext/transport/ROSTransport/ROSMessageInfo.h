@@ -89,7 +89,7 @@ namespace RTC
      */
     ROSMessageInfo()
     {
-      m_type = ros::message_traits::DataType<MessageType>::value();;
+      m_type = ros::message_traits::DataType<MessageType>::value();
       m_md5sum = ros::message_traits::MD5Sum<MessageType>::value();
       m_message_definition = ros::message_traits::Definition<MessageType>::value();
     }
