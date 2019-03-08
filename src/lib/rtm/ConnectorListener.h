@@ -1098,14 +1098,14 @@ namespace RTC
 
       
 
-      for(std::vector<Entry>::iterator listener_itr = m_listeners.begin(); listener_itr != m_listeners.end();++listener_itr)
+      for (auto & listener : m_listeners)
         {
-          ConnectorDataListenerT<DataType>* listener(nullptr);
-          listener =
-          dynamic_cast<ConnectorDataListenerT<DataType>*>((*listener_itr).first);
-          if (listener != nullptr)
+          ConnectorDataListenerT<DataType>* datalistener(nullptr);
+          datalistener =
+          dynamic_cast<ConnectorDataListenerT<DataType>*>(listener.first);
+          if (datalistener != nullptr)
             {
-              ret = ret | listener->operator()(info, typeddata);
+              ret = ret | datalistener->operator()(info, typeddata);
             }
           else
             {
@@ -1125,7 +1125,7 @@ namespace RTC
               }
               cdr->serialize(typeddata);
               ByteData tmp = *cdr;
-              ret = ret | (*listener_itr).first->operator()(info, tmp);
+              ret = ret | listener.first->operator()(info, tmp);
               coil::GlobalFactory < ::RTC::ByteDataStream<DataType> >::instance().deleteObject(cdr);
             }
         }

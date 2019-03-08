@@ -2177,14 +2177,14 @@ namespace RTC
   void RTObject_impl::finalizeContexts()
   {
     RTC_TRACE(("finalizeContexts()"));
-    for (std::vector<ExecutionContextBase*>::iterator ec = m_eclist.begin(); ec != m_eclist.end(); ++ec)
+    for (auto & ec : m_eclist)
       {
-        (*ec)->getObjRef()->stop();
+        ec->getObjRef()->stop();
         try
           {
             PortableServer::RefCountServantBase* servant(nullptr);
             servant =
-              dynamic_cast<PortableServer::RefCountServantBase*>(*ec);
+              dynamic_cast<PortableServer::RefCountServantBase*>(ec);
 
             if (servant == nullptr)
               {
@@ -2218,7 +2218,7 @@ namespace RTC
             // never throws exception
             RTC_ERROR(("Unknown exception caught."));
           }
-        RTC::ExecutionContextFactory::instance().deleteObject(*ec);
+        RTC::ExecutionContextFactory::instance().deleteObject(ec);
       }
     if (!m_eclist.empty())
       {
@@ -2916,12 +2916,12 @@ namespace RTC
   {
     std::vector<RTC::ExecutionContextBase*> eclist;
     eclist = RTC::ExecutionContextFactory::instance().createdObjects();
-    for (std::vector<RTC::ExecutionContextBase*>::iterator ec_itr = eclist.begin(); ec_itr != eclist.end(); ++ec_itr)
+    for (auto & ec_ref : eclist)
       {
-        if ((*ec_itr)->getProperties()["type"] == ec_arg["type"] &&
-            (*ec_itr)->getProperties()["name"] == ec_arg["name"])
+        if (ec_ref->getProperties()["type"] == ec_arg["type"] &&
+            ec_ref->getProperties()["name"] == ec_arg["name"])
           {
-            ec = *ec_itr;
+            ec = ec_ref;
             return RTC::RTC_OK;
           }
       }
@@ -2938,13 +2938,13 @@ namespace RTC
     coil::vstring avail_ec
       = RTC::ExecutionContextFactory::instance().getIdentifiers();
 
-    for (std::vector<coil::Properties>::iterator ec_arg = ec_args.begin(); ec_arg != ec_args.end(); ++ec_arg)
+    for (auto & ec_arg : ec_args)
       {
-        std::string& ec_type((*ec_arg)["type"]);
-        std::string& ec_name((*ec_arg)["name"]);
+        std::string& ec_type(ec_arg["type"]);
+        std::string& ec_name(ec_arg["name"]);
         RTC::ExecutionContextBase* ec;
         if (!ec_name.empty() &&
-            findExistingEC(*ec_arg, ec) == RTC::RTC_OK)
+            findExistingEC(ec_arg, ec) == RTC::RTC_OK)
           { // if EC's name exists, find existing EC in the factory.
             RTC_DEBUG(("EC: type=%s, name=%s already exists.",
                        ec_type.c_str(), ec_name.c_str()));
@@ -2973,7 +2973,7 @@ namespace RTC
           }
         RTC_DEBUG(("EC (%s) created.", ec_type.c_str()));
 
-        ec->init(*ec_arg);
+        ec->init(ec_arg);
         m_eclist.push_back(ec);
         ec->bindComponent(this);
       }

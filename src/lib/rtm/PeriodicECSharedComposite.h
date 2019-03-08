@@ -419,9 +419,9 @@ namespace SDOPackage
      */
     void print(PortList p)
     {
-      for (std::vector<std::string>::iterator itr=p.begin();itr != p.end();++itr)
+      for (auto & i : p)
         {
-          std::cout << (*itr) << std::endl;
+          std::cout << i << std::endl;
         }
     }
   };

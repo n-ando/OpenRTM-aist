@@ -92,13 +92,13 @@ namespace coil
   {
     std::vector<std::string> keys;
     keys = prop.propertyNames();
-    for (size_t i(0), len(keys.size()); i < len; ++i)
+    for (const auto & key : keys)
       {
         const Properties* node(nullptr);
-        if ((node = prop.findNode(keys[i])) != nullptr)
+        if ((node = prop.findNode(key)) != nullptr)
           {
-            setDefault(keys[i],  node->default_value);
-            setProperty(keys[i], node->value);
+            setDefault(key,  node->default_value);
+            setProperty(key, node->value);
           }
       }
   }
@@ -119,13 +119,13 @@ namespace coil
 
     std::vector<std::string> keys;
     keys = prop.propertyNames();
-    for (size_t i(0), len(keys.size()); i < len; ++i)
+    for (const auto & key : keys)
       {
-        const Properties* node(prop.findNode(keys[i]));
+        const Properties* node(prop.findNode(key));
         if (node != nullptr)
           {
-            setDefault(keys[i],  node->default_value);
-            setProperty(keys[i], node->value);
+            setDefault(key,  node->default_value);
+            setProperty(key, node->value);
           }
       }
 
@@ -248,12 +248,12 @@ namespace coil
     split(key, '.', keys);
 
     Properties* curr(this);
-    for (size_t i(0), len(keys.size()); i < len; ++i)
+    for (auto & key : keys)
       {
-        Properties* next(curr->hasKey(keys[i].c_str()));
+        Properties* next(curr->hasKey(key.c_str()));
         if (next == nullptr)
           {
-            next = new Properties(keys[i].c_str());
+            next = new Properties(key.c_str());
             next->root = curr;
             curr->leaf.push_back(next);
           }
@@ -278,12 +278,12 @@ namespace coil
     split(key, '.', keys);
 
     Properties* curr(this);
-    for (size_t i(0), len(keys.size()); i < len; ++i)
+    for (auto & key : keys)
       {
-        Properties* next(curr->hasKey(keys[i].c_str()));
+        Properties* next(curr->hasKey(key.c_str()));
         if (next == nullptr)
           {
-            next = new Properties(keys[i].c_str());
+            next = new Properties(key.c_str());
             next->root = curr;
             curr->leaf.push_back(next);
           }
@@ -429,9 +429,9 @@ namespace coil
   std::vector<std::string> Properties::propertyNames() const
   {
     std::vector<std::string> names;
-    for (size_t i(0), len(leaf.size()); i < len; ++i)
+    for (auto prop : leaf)
       {
-        _propertiyNames(names, leaf[i]->name, leaf[i]);
+        _propertiyNames(names, prop->name, prop);
       }
     return names;
   }
@@ -544,11 +544,11 @@ namespace coil
    */
   Properties* Properties::hasKey(const char* key) const
   {
-    for (size_t i(0), len(leaf.size()); i < len; ++i)
+    for (auto prop : leaf)
       {
-        if (leaf[i]->name == key)
+        if (prop->name == key)
           {
-            return leaf[i];
+            return prop;
           }
       }
     return nullptr;
@@ -714,12 +714,12 @@ namespace coil
   {
     if (!curr->leaf.empty())
       {
-        for (size_t i(0), len(curr->leaf.size()); i < len; ++i)
+        for (auto prop : curr->leaf)
           {
             std::string next_name;
             //            if (curr_name == "") next_name = curr->leaf[i]->name;
-            next_name = curr_name + "." + curr->leaf[i]->name;
-            _propertiyNames(names, next_name, curr->leaf[i]);
+            next_name = curr_name + "." + prop->name;
+            _propertiyNames(names, next_name, prop);
           }
       }
     else
@@ -743,18 +743,18 @@ namespace coil
     if (!curr->leaf.empty())
       {
 
-        for (size_t i(0), len(curr->leaf.size()); i < len; ++i)
+        for (auto & prop : curr->leaf)
           {
             std::string next_name;
             if (curr_name.empty())
               {
-                next_name = curr->leaf[i]->name;
+                next_name = prop->name;
               }
             else
               {
-                next_name = curr_name + "." + curr->leaf[i]->name;
+                next_name = curr_name + "." + prop->name;
               }
-            _store(out, next_name, curr->leaf[i]);
+            _store(out, next_name, prop);
           }
       }
 
@@ -791,9 +791,9 @@ namespace coil
         return out;
       }
     if (index != 0) out << std::endl;
-    for (size_t i(0), len(curr.leaf.size()); i < len; ++i)
+    for (auto prop : curr.leaf)
       {
-        _dump(out, *(curr.leaf[i]), index + 1);
+        _dump(out, *prop, index + 1);
       }
     return out;
   }
@@ -870,9 +870,9 @@ namespace coil
           return;
       }
       if (index != 0) out += "\n";
-      for (size_t i(0), len(curr.leaf.size()); i < len; ++i)
+      for (auto prop : curr.leaf)
       {
-          _dump(out, *(curr.leaf[i]), index + 1);
+          _dump(out, *prop, index + 1);
       }
   }
 
@@ -892,9 +892,9 @@ namespace coil
           return;
       }
       if (index != 0) { out.emplace_back(""); }
-      for (size_t i(0), len(curr.leaf.size()); i < len; ++i)
+      for (auto prop : curr.leaf)
       {
-          _dump(out, *(curr.leaf[i]), index + 1);
+          _dump(out, *prop, index + 1);
       }
   }
 };  // namespace coil
