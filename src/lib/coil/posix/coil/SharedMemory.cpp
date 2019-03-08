@@ -125,12 +125,12 @@ namespace coil
         return -1;
     }
     ftruncate(m_fd, m_memory_size);
-    m_shm = (char*)mmap(nullptr,
+    m_shm = static_cast<char*>(mmap(nullptr,
             m_memory_size,
             PROT_READ|PROT_WRITE,
             MAP_SHARED,
             m_fd,
-            0);
+            0));
 
     m_file_create = true;
     return 0;
@@ -170,12 +170,12 @@ namespace coil
         return -1;
     }
     ftruncate(m_fd, m_memory_size);
-    m_shm = (char*)mmap(nullptr,
+    m_shm = static_cast<char*>(mmap(nullptr,
             m_memory_size,
             PROT_READ|PROT_WRITE,
             MAP_SHARED,
             m_fd,
-            0);
+            0));
  
     return 0;
   }

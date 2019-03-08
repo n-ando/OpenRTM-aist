@@ -43,7 +43,7 @@ int main(int argc, char* argv[])
   std::string fullname(argv[1]);
   // directory name
   coil::replaceString(fullname, "\\", "/");
-  std::string dirname(coil::dirname((char*)fullname.c_str()));
+  std::string dirname(coil::dirname(const_cast<char*>(fullname.c_str())));
   // basename
   std::string basename(coil::basename(fullname.c_str()));
 

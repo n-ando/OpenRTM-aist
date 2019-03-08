@@ -144,7 +144,7 @@ namespace CORBA_SeqUtil
     CORBA::ULong len(seq.length());
     for (CORBA::ULong i = 0; i < len; ++i)
       {
-        if (f(seq[i])) { return (CORBA::Long)i; }
+        if (f(seq[i])) { return static_cast<CORBA::Long>(i); }
       }
     return -1;
   }

@@ -310,7 +310,7 @@ void _MachineBase::rattleOn() {
 #ifndef NDEBUG
 			// Entry/Exit actions may not dispatch events: set dummy event.
 			if (!myPendingEvent)
-				myPendingEvent = (_IEventBase *) &myPendingEvent;
+				myPendingEvent = reinterpret_cast<_IEventBase *>(&myPendingEvent);
 #endif
 
 			// Perform exit actions (which exactly depends on new state).
@@ -345,7 +345,7 @@ void _MachineBase::rattleOn() {
 
 #ifndef NDEBUG
 			// Clear dummy event if need be
-			if (myPendingEvent == (_IEventBase *) &myPendingEvent)
+			if (myPendingEvent == reinterpret_cast<_IEventBase *>(&myPendingEvent))
 				myPendingEvent = nullptr;
 #endif
 		} // while (myPendingState)

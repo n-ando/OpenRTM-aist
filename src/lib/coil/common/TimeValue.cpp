@@ -52,8 +52,8 @@ namespace coil
     {
         dbHalfAdj = -0.5;
     }
-    m_sec = (long int)timeval;
-    m_usec = (long)((timeval - static_cast<double>(m_sec))
+    m_sec = static_cast<long int>(timeval);
+    m_usec = static_cast<long>((timeval - static_cast<double>(m_sec))
                     * TIMEVALUE_ONE_SECOND_IN_USECS + dbHalfAdj);
     normalize();
   }
@@ -138,8 +138,8 @@ namespace coil
         dbHalfAdj = -0.5;
       }
 
-    m_sec = (long)time;
-    m_usec = (long)((time - static_cast<double>(m_sec)) *
+    m_sec = static_cast<long>(time);
+    m_usec = static_cast<long>((time - static_cast<double>(m_sec)) *
                      TIMEVALUE_ONE_SECOND_IN_USECS + dbHalfAdj);
     normalize();
     return *this;

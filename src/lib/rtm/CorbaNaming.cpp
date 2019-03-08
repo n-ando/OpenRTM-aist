@@ -1034,6 +1034,6 @@ namespace RTC
         begin_pos = found_pos + delim_size;
         pre_pos   = found_pos + delim_size;
       }
-    return (unsigned int)results.size();
+    return static_cast<unsigned int>(results.size());
   }
 } // namespace RTC

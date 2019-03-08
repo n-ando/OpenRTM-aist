@@ -164,7 +164,7 @@ namespace RTC
 
     ModuleInitFunc init;
 
-    init = (ModuleInitFunc)this->symbol(name, init_func);
+    init = reinterpret_cast<ModuleInitFunc>(this->symbol(name.c_str(), init_func));
 
     init(&(Manager::instance()));
 

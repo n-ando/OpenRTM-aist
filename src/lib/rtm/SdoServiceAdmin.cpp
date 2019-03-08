@@ -204,10 +204,10 @@ namespace RTC
     SDOPackage::ServiceProfileList_var prof
       = new SDOPackage::ServiceProfileList();
     Guard guard(m_provider_mutex);
-    prof->length((CORBA::Long)m_providers.size());
+    prof->length(static_cast<CORBA::Long>(m_providers.size()));
     for (size_t i(0); i < m_providers.size(); ++i)
       {
-        prof[(CORBA::Long)i] = m_providers[i]->getProfile();
+        prof[static_cast<CORBA::Long>(i)] = m_providers[i]->getProfile();
       }
     return prof._retn();
   }
@@ -500,7 +500,7 @@ namespace RTC
     uugen.init();
     std::unique_ptr<coil::UUID> uuid(uugen.generateUUID(2, 0x01));
 
-    return (const char*) uuid->to_string();
+    return uuid->to_string();
   }
 
   std::string SdoServiceAdmin::ifrToKey(std::string& ifr)

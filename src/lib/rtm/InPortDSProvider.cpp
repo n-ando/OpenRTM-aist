@@ -157,7 +157,7 @@ namespace RTC
       {
         ByteData cdr;
 
-        cdr.writeData((unsigned char*)data.get_buffer(), (CORBA::ULong)data.length());
+        cdr.writeData(const_cast<unsigned char*>(data.get_buffer()), static_cast<CORBA::ULong>(data.length()));
 
         onReceiverError(cdr);
         return ::RTC::PORT_ERROR;
@@ -170,7 +170,7 @@ namespace RTC
     RTC_TRACE(("connector endian: %s", endian_type ? "little":"big"));
 
     cdr.isLittleEndian(endian_type);
-    cdr.writeData((unsigned char*)data.get_buffer(), (CORBA::ULong)data.length());
+    cdr.writeData(const_cast<unsigned char*>(data.get_buffer()), static_cast<CORBA::ULong>(data.length()));
     RTC_PARANOID(("converted CDR data size: %d", cdr.getDataLength()));
 
 

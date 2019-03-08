@@ -57,7 +57,7 @@ namespace RTC_exp
 
     // profile initialization
     setKind(RTC::PERIODIC);
-    setRate(1.0 / (double)DEEFAULT_PERIOD);
+    setRate(1.0 / DEEFAULT_PERIOD);
 
     RTC_DEBUG(("Actual period: %d [sec], %d [usec]",
                m_profile.getPeriod().sec(), m_profile.getPeriod().usec()));

@@ -213,7 +213,7 @@ namespace RTC
     try
       {
         RTC::PortService_ptr p;
-        p = connector_profile.ports[(CORBA::ULong)0];
+        p = connector_profile.ports[static_cast<CORBA::ULong>(0)];
         ReturnCode_t ret = p->notify_connect(connector_profile);
         if (ret != RTC::RTC_OK)
           {
@@ -350,7 +350,7 @@ namespace RTC
   {
     if (!(m_connectionLimit < 0))
       {
-        if ((::CORBA::ULong)m_connectionLimit <=
+        if (static_cast<::CORBA::ULong>(m_connectionLimit) <=
             m_profile.connector_profiles.length())
           {
             RTC_PARANOID(("Connected number has reached the limitation."));
@@ -447,7 +447,7 @@ namespace RTC
         return RTC::BAD_PARAMETER;
       }
 
-    ConnectorProfile& prof(m_profile.connector_profiles[(CORBA::ULong)index]);
+    ConnectorProfile& prof(m_profile.connector_profiles[static_cast<CORBA::ULong>(index)]);
     onNotifyDisconnect(getName(), prof);
 
     ReturnCode_t retval(disconnectNext(prof));
@@ -761,7 +761,7 @@ namespace RTC
    */
   bool PortBase::isEmptyId(const ConnectorProfile& connector_profile) const
   {
-    return connector_profile.connector_id[(CORBA::ULong)0] == 0;
+    return connector_profile.connector_id[static_cast<CORBA::ULong>(0)] == 0;
   }
 
 
@@ -778,7 +778,7 @@ namespace RTC
     uugen.init();
     std::unique_ptr<coil::UUID> uuid(uugen.generateUUID(2, 0x01));
 
-    return std::string((const char*)uuid->to_string());
+    return std::string(uuid->to_string());
   }
 
   /*!

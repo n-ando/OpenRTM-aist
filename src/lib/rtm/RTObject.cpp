@@ -483,7 +483,7 @@ namespace RTC
     // owned EC
     if (ec_id < ECOTHER_OFFSET)
       {
-        if ((::CORBA::ULong)ec_id < m_ecMine.length())
+        if (static_cast<::CORBA::ULong>(ec_id) < m_ecMine.length())
           {
             return ExecutionContext::_duplicate(m_ecMine[ec_id]);
           }
@@ -580,14 +580,14 @@ namespace RTC
     num = CORBA_SeqUtil::find(m_ecMine, ec_find(cxt));
     if (num != -1)
       {
-        return (ExecutionContextHandle_t)num;
+        return static_cast<ExecutionContextHandle_t>(num);
       }
     num = CORBA_SeqUtil::find(m_ecOther, ec_find(cxt));
     if (num != -1)
       {
-        return (ExecutionContextHandle_t)(ECOTHER_OFFSET + num);
+        return static_cast<ExecutionContextHandle_t>(ECOTHER_OFFSET + num);
       }
-    return (ExecutionContextHandle_t)(-1);
+    return static_cast<ExecutionContextHandle_t>(-1);
   }
 
 
@@ -685,8 +685,8 @@ namespace RTC
     // ID: offset -       : participating ec
     // owned       ec index = ID
     // participate ec index = ID - offset
-    if ((CORBA::ULong)ec_id < ECOTHER_OFFSET ||
-        (CORBA::ULong)(ec_id - ECOTHER_OFFSET) > len)
+    if (static_cast<CORBA::ULong>(ec_id) < ECOTHER_OFFSET ||
+        static_cast<CORBA::ULong>(ec_id - ECOTHER_OFFSET) > len)
       {
         return RTC::BAD_PARAMETER;
       }
