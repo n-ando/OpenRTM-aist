@@ -516,7 +516,7 @@ namespace RTC
 
 		  return mgr;
 	  }
-	  catch (CORBA::SystemException& ex)
+	  catch (CORBA::SystemException&)
 	  {
 		  
 	  }

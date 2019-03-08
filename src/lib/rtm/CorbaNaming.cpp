@@ -113,7 +113,7 @@ namespace RTC
       {
         m_rootContext->bind(name, obj);
       }
-    catch (NotFound& e)
+    catch (NotFound&)
       {
         force ? bindRecursive(m_rootContext, name, obj) : throw;
       }
@@ -191,7 +191,7 @@ namespace RTC
       {
         m_rootContext->rebind(name, obj);
       }
-    catch (NotFound& e)
+    catch (NotFound&)
       {
         force ? rebindRecursive(m_rootContext, name, obj) : throw;
       }
@@ -438,7 +438,7 @@ namespace RTC
       {
         return m_rootContext->bind_new_context(name);
       }
-    catch (NotFound& e)
+    catch (NotFound&)
       {
         force ? bindRecursive(m_rootContext, name, newContext()) : throw;
       }

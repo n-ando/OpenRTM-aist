@@ -1005,7 +1005,7 @@ namespace RTC
                       m_connectors.size()));
         return connector;
       }
-    catch (std::bad_alloc& e)
+    catch (std::bad_alloc&)
       {
         RTC_ERROR(("OutPortPushConnector creation failed"));
         return nullptr;
@@ -1063,7 +1063,7 @@ namespace RTC
                       m_connectors.size()));
         return connector;
       }
-    catch (std::bad_alloc& e)
+    catch (std::bad_alloc&)
       {
         RTC_ERROR(("OutPortPullConnector creation failed"));
         return nullptr;

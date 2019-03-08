@@ -961,7 +961,7 @@ namespace RTC
         RTC_PARANOID(("connector push backed: %d", m_connectors.size()));
         return connector;
       }
-    catch (std::bad_alloc& e)
+    catch (std::bad_alloc&)
       {
         RTC_ERROR(("InPortPushConnector creation failed"));
         return nullptr;
@@ -1041,7 +1041,7 @@ namespace RTC
         RTC_PARANOID(("connector push backed: %d", m_connectors.size()));
         return connector;
       }
-    catch (std::bad_alloc& e)
+    catch (std::bad_alloc&)
       {
         RTC_ERROR(("InPortPullConnector creation failed"));
         return nullptr;
