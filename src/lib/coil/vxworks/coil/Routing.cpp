@@ -172,4 +172,4 @@ namespace coil
     return false;
   }
   
-}; // namespace coil
+} // namespace coil

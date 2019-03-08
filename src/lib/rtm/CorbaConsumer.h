@@ -571,5 +571,5 @@ namespace RTC
      */
     ObjectTypeVar m_var;
   };
-};  // namespace RTC
+} // namespace RTC
 #endif  // RTC_CORBACONSUMER_H

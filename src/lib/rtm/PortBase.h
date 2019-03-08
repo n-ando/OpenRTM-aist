@@ -2299,7 +2299,7 @@ namespace RTC
       PortInterfacePolarity m_pol;
     };  // struct find_interface
   };  // class PortBase
-};  // namespace RTC
+} // namespace RTC
 
 #ifdef WIN32
 #pragma warning( default : 4290 )

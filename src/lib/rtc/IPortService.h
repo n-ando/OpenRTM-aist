@@ -87,7 +87,7 @@ namespace Local
     notify_disconnect(const UniqueIdentifier connector_id) = 0;
     virtual ReturnCode_t disconnect_all() = 0;
   };
-};     // namespace Local
-};     // namespace RTC
+} // namespace Local
+} // namespace RTC
 #endif // RTC_LOCAL_IPORTSERVICE_H
 

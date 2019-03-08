@@ -80,6 +80,6 @@ namespace RTC
   };
 
 
-}  // namespace RTC
+} // namespace RTC
 
 #endif // RTC_EVENTBASE_H

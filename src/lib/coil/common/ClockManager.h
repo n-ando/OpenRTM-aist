@@ -192,5 +192,5 @@ namespace coil
     LogicalClock  m_logicalClock;
     AdjustedClock m_adjustedClock;
   };
-};  // namespace coil
+} // namespace coil
 #endif  // COIL_CLOCKMANAGER_H

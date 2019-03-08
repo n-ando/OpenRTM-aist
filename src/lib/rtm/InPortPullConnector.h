@@ -291,6 +291,6 @@ namespace RTC
      */
     ConnectorListeners& m_listeners;
   };
-};  // namespace RTC
+} // namespace RTC
 
 #endif  // RTC_PULL_CONNECTOR_H

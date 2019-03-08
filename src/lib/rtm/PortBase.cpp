@@ -1024,4 +1024,4 @@ namespace RTC
 	  return m_directport;
   }
 
-}; // namespace RTC
+} // namespace RTC

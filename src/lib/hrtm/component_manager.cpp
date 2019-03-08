@@ -84,4 +84,4 @@ namespace hrtm
     : RTC::Manager()
   {
   }
-}; // namespace hrtm
+} // namespace hrtm

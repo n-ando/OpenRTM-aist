@@ -103,7 +103,7 @@ namespace RTC
     CorbaConsumer<OpenRTM::Logger> m_logger;
   };
 
-}; // namespace RTC
+} // namespace RTC
 
 extern "C"
 {

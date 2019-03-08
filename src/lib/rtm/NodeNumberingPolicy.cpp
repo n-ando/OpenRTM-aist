@@ -105,7 +105,7 @@ namespace RTM
 
 		return rtcs.length() > 0;
 	}
-}; //namespace RTM  
+} //namespace RTM 
 
 extern "C"
 {

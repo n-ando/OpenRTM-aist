@@ -558,7 +558,7 @@ namespace SDOPackage
     m_expPorts = newPorts;
   }
 
-};  // namespace SDOPackage
+} // namespace SDOPackage
 
 
 
@@ -859,7 +859,7 @@ namespace RTC
     return ret;
   }
 
-};  // namespace RTC
+} // namespace RTC
 
 extern "C"
 {

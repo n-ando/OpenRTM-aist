@@ -471,7 +471,7 @@ namespace RTC
     m_worker.cond_.signal();
     return RTC::RTC_OK;
   }
-};  // namespace RTC
+} // namespace RTC
 
 
 extern "C"

@@ -131,5 +131,5 @@ namespace RTM
   EXTERN template class DLL_PLUGIN coil::GlobalFactory<NumberingPolicyBase>;
 #endif
   
-}  // namespace RTM
+} // namespace RTM
 #endif // RTC_NUMBERINGPOLICYBASE_H

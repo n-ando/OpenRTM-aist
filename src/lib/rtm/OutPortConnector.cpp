@@ -182,4 +182,4 @@ namespace RTC
   {
       return CdrBufferBase::BUFFER_OK;
   }
-}; // namespace RTC
+} // namespace RTC

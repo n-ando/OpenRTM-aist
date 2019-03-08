@@ -232,5 +232,5 @@ namespace RTC
 
     RTObject_impl* rtComponent;
   };
-}  // namespace RTC
+} // namespace RTC
 #endif // RTC_STATICFSM_H

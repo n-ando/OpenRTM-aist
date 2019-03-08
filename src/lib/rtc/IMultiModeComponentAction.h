@@ -48,7 +48,7 @@ namespace Local
     virtual ~IMultiiModeComponentAction() {};
     virtual ReturnCode_t on_mode_changed(ExecutionContextHandle_t ec_handle) = 0;
   };
-};     // namespace Local
-};     // namespace RTC
+} // namespace Local
+} // namespace RTC
 #endif // RTC_LOCAL_IMULTIIMODECOMPONENTACTION_H
 

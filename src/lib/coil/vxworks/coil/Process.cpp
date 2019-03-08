@@ -52,5 +52,4 @@ namespace coil
     return -1;
   }
 
-
-}; // namespace coil
+} // namespace coil

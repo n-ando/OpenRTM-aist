@@ -32,7 +32,7 @@ namespace utils
     explicit Properties(const char* defaults[], long num = LONG_MAX);
     virtual ~Properties();
   };
-}; // namespace utils
-}; // namespace hrtm
+} // namespace utils
+} // namespace hrtm
 #endif // HRTM_PROPERTIES_H
 

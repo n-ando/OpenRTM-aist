@@ -165,6 +165,6 @@ namespace coil
     NonCopyableCRTP(const NonCopyableCRTP &);
     T & operator=(const T &);
   };
-};  // namespace coil
+} // namespace coil
 
 #endif  // COIL_NONCOPYABLE_H

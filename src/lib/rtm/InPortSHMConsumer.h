@@ -169,7 +169,7 @@ protected:
 	int m_memory_size;
 	bool m_endian;
   };
-};     // namespace RTC
+} // namespace RTC
 
 extern "C"
 {

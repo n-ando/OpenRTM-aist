@@ -147,4 +147,4 @@ namespace MicrowaveFsm
     return RTC::RTC_OK;
   }
 
-}  // namespace MicrowaveFsm
+} // namespace MicrowaveFsm

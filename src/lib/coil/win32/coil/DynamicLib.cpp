@@ -185,7 +185,7 @@ namespace coil
         NULL);
     return cstr;
   }
-};  // namespace coil
+} // namespace coil
 
 /*!
  * for Testing UnitTest.

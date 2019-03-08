@@ -371,7 +371,7 @@ namespace RTC
     ConnectorListeners* m_listeners;
     ConnectorInfo m_profile;
   };
-};     // namespace RTC
+} // namespace RTC
 
 extern "C"
 {

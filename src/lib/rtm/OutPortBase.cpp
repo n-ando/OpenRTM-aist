@@ -1147,4 +1147,4 @@ namespace RTC
 	  return m_listeners;
   }
 
-}  // namespace RTC
+} // namespace RTC

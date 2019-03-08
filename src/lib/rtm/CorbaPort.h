@@ -1392,5 +1392,5 @@ namespace RTC
       CorbaConsumerList& m_consumers;
     };
   };
-};  // namespace RTC
+} // namespace RTC
 #endif  // RTC_CORBAPORT_H

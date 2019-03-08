@@ -273,5 +273,5 @@ namespace RTC
       return ret;
   };
 
-};  // namespace RTC
+} // namespace RTC
 

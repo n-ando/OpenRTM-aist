@@ -437,7 +437,7 @@ namespace RTC
     bool m_active;
   };
 
-};  // namespace RTC
+} // namespace RTC
 
 extern "C"
 {

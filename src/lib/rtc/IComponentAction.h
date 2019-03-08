@@ -51,7 +51,7 @@ namespace Local
     virtual ReturnCode_t on_error(ExecutionContextHandle_t ec_handle) = 0;
     virtual ReturnCode_t on_reset(ExecutionContextHandle_t ec_handle) = 0;
   };
-};     // namespace Local
-};     // namespace RTC
+} // namespace Local
+} // namespace RTC
 #endif // RTC_LOCAL_ICOMPONENTACTION_H
 

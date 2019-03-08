@@ -1080,6 +1080,6 @@ namespace RTC
      */
     condition m_full;
   };
-};  // namespace RTC
+} // namespace RTC
 
 #endif  // RTC_RINGBUFFER_H

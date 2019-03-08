@@ -322,4 +322,4 @@ namespace RTC
       }
     return false;
   }
-};  // namespace RTC
+} // namespace RTC

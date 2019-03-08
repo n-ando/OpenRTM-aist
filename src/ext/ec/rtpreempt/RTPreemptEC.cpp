@@ -650,7 +650,7 @@ namespace RTC_exp
       }
     return true; // sleeptime >= 0
   }
-}  // namespace RTC_exp
+} // namespace RTC_exp
 
 extern "C"
 {

@@ -38,7 +38,7 @@
 namespace std
 {
   typedef basic_string<wchar_t> wstring;
-}  // namespace std
+} // namespace std
 #endif
 
 namespace coil
@@ -891,5 +891,5 @@ namespace coil
   */
   std::string replaceEnv(std::string str);
   
-}  // namespace coil
+} // namespace coil
 #endif  // COIL_STRINGUTIL_H

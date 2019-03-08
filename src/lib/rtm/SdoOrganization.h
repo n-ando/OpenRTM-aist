@@ -875,7 +875,7 @@ namespace SDOPackage
       std::string m_id;
     };  // struct sdo_id
   };  // class Organization_impl
-};  // namespace SDOPackage
+} // namespace SDOPackage
 
 #ifdef WIN32
 #pragma warning( default : 4290 )

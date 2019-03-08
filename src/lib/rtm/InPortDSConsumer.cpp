@@ -345,7 +345,7 @@ namespace RTC
     return InPortConsumer::UNKNOWN_ERROR;
   }
 
-};     // namespace RTC
+} // namespace RTC
 
 extern "C"
 {

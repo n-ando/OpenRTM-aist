@@ -720,7 +720,7 @@ namespace RTC_exp
     coil::CpuMask m_cpu;
 
   };  // class PeriodicExecutionContext
-};  // namespace RTC_exp
+} // namespace RTC_exp
 
 #ifdef WIN32
 #pragma warning( default : 4290 )

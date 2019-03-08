@@ -1024,5 +1024,5 @@ namespace CORBA_RTCUtil
                                    std::string value);
 
 
-}  // namespace CORBA_RTCUtil
+} // namespace CORBA_RTCUtil
 #endif // CORBA_SEQUTIL_H

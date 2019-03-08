@@ -361,6 +361,6 @@ namespace coil
     bool m_file_create;
   };  // class SharedMemory
 
-};  // namespace coil
+} // namespace coil
 
 #endif // SharedMemory_h

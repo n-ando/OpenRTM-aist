@@ -321,7 +321,7 @@ namespace RTC
     ConnectorInfo m_profile;
     OutPortConnector* m_connector;
   };  // class OutPortDirectProvider
-};     // namespace RTC
+} // namespace RTC
 
 extern "C"
 {
