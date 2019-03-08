@@ -33,7 +33,7 @@
 namespace RTC
 {
   class RTObject_impl;
-};
+} // namespace RTC
 
 namespace RTM
 {
@@ -417,7 +417,7 @@ namespace RTM
      * TODO: Documentation
      * @endif
      */
-    virtual void preInitialize(void) = 0;
+    virtual void preInitialize() = 0;
 
     /*!
      * @if jp
@@ -428,7 +428,7 @@ namespace RTM
      * TODO: Documentation
      * @endif
      */
-    virtual void postInitialize(void) = 0;
+    virtual void postInitialize() = 0;
   };
 
 
@@ -513,7 +513,7 @@ namespace RTM
      * TODO: Documentation
      * @endif
      */
-    virtual void preInitialize(void);
+    virtual void preInitialize();
 
     /*!
      * @if jp
@@ -524,7 +524,7 @@ namespace RTM
      * TODO: Documentation
      * @endif
      */
-    virtual void postInitialize(void);
+    virtual void postInitialize();
   };
 
 

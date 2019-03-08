@@ -35,7 +35,7 @@
 namespace coil
 {
   class Properties;
-}
+} // namespace coil
 
 namespace RTC
 {
@@ -397,7 +397,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~ExecutionContextBase(void);
+    virtual ~ExecutionContextBase();
 
     /*!
      * @if jp
@@ -484,7 +484,7 @@ namespace RTC
      *
      * @endif
      */
-    RTC::ReturnCode_t start(void);
+    RTC::ReturnCode_t start();
 
     /*!
      * @if jp
@@ -512,7 +512,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual RTC::ReturnCode_t stop(void);
+    virtual RTC::ReturnCode_t stop();
 
     /*!
      * @if jp
@@ -534,8 +534,8 @@ namespace RTC
      *
      * @endif
      */
-    double getRate(void) const;
-    coil::TimeValue getPeriod(void) const;
+    double getRate() const;
+    coil::TimeValue getPeriod() const;
 
     /*!
      * @if jp
@@ -795,7 +795,7 @@ namespace RTC
      *
      * @endif
      */
-    RTC::ExecutionKind getKind(void) const;
+    RTC::ExecutionKind getKind() const;
 
     /*!
      * @if jp
@@ -819,7 +819,7 @@ namespace RTC
      *
      * @endif
      */
-    RTC::ExecutionContextProfile* getProfile(void);
+    RTC::ExecutionContextProfile* getProfile();
 
     //============================================================
     // Delegated functions to ExecutionContextProfile
@@ -863,7 +863,7 @@ namespace RTC
      *
      * @endif
      */
-    RTC::ExecutionContextService_ptr getObjRef(void) const;
+    RTC::ExecutionContextService_ptr getObjRef() const;
 
     /*!
      * @if jp
@@ -1026,7 +1026,7 @@ namespace RTC
      *
      * @endif
      */
-    const RTC::ExecutionContextProfile& getProfile(void) const;
+    const RTC::ExecutionContextProfile& getProfile() const;
     // end of delegated functions to ExecutionContextProfile
     //============================================================
 
@@ -1067,73 +1067,73 @@ namespace RTC
     // template virtual functions getting/setting execution rate
     virtual double onGetRate(double rate) const { return rate; }
     virtual double onSettingRate(double rate) { return rate; }
-    virtual RTC::ReturnCode_t onSetRate(double rate) { return RTC::RTC_OK; }
+    virtual RTC::ReturnCode_t onSetRate(double  /*rate*/) { return RTC::RTC_OK; }
 
     // template virtual functions adding/removing component
     virtual RTC::ReturnCode_t
-    onAddingComponent(RTC::LightweightRTObject_ptr rtobj)
+    onAddingComponent(RTC::LightweightRTObject_ptr  /*rtobj*/)
     {
       return RTC::RTC_OK;
     }
     virtual RTC::ReturnCode_t
-    onAddedComponent(RTC::LightweightRTObject_ptr rtobj)
+    onAddedComponent(RTC::LightweightRTObject_ptr  /*rtobj*/)
     {
       return RTC::RTC_OK;
     }
     virtual RTC::ReturnCode_t
-    onRemovingComponent(RTC::LightweightRTObject_ptr rtobj)
+    onRemovingComponent(RTC::LightweightRTObject_ptr  /*rtobj*/)
     {
       return RTC::RTC_OK;
     }
     virtual RTC::ReturnCode_t
-    onRemovedComponent(RTC::LightweightRTObject_ptr rtobj)
+    onRemovedComponent(RTC::LightweightRTObject_ptr  /*rtobj*/)
     {
       return RTC::RTC_OK;
     }
 
     // template virtual functions related to activation/deactivation/reset
     virtual RTC::ReturnCode_t
-    onActivating(RTC::LightweightRTObject_ptr comp)
+    onActivating(RTC::LightweightRTObject_ptr  /*comp*/)
     {
       return RTC::RTC_OK;
     }
     virtual RTC::ReturnCode_t
-    onWaitingActivated(RTC_impl::RTObjectStateMachine* comp, long int count)
+    onWaitingActivated(RTC_impl::RTObjectStateMachine*  /*comp*/, long int  /*count*/)
     {
       return RTC::RTC_OK;
     }
     virtual RTC::ReturnCode_t
-    onActivated(RTC_impl::RTObjectStateMachine* comp,
-                                     long int count)
+    onActivated(RTC_impl::RTObjectStateMachine*  /*comp*/,
+                                     long int  /*count*/)
     {
       return RTC::RTC_OK;
     }
     virtual RTC::ReturnCode_t
-    onDeactivating(RTC::LightweightRTObject_ptr comp)
+    onDeactivating(RTC::LightweightRTObject_ptr  /*comp*/)
     {
       return RTC::RTC_OK;
     }
     virtual RTC::ReturnCode_t
-    onWaitingDeactivated(RTC_impl::RTObjectStateMachine* comp, long int count)
+    onWaitingDeactivated(RTC_impl::RTObjectStateMachine*  /*comp*/, long int  /*count*/)
     {
       return RTC::RTC_OK;
     }
     virtual RTC::ReturnCode_t
-    onDeactivated(RTC_impl::RTObjectStateMachine* comp, long int count)
+    onDeactivated(RTC_impl::RTObjectStateMachine*  /*comp*/, long int  /*count*/)
     {
       return RTC::RTC_OK;
     }
-    virtual RTC::ReturnCode_t onResetting(RTC::LightweightRTObject_ptr comp)
-    {
-      return RTC::RTC_OK;
-    }
-    virtual RTC::ReturnCode_t
-    onWaitingReset(RTC_impl::RTObjectStateMachine* comp, long int count)
+    virtual RTC::ReturnCode_t onResetting(RTC::LightweightRTObject_ptr  /*comp*/)
     {
       return RTC::RTC_OK;
     }
     virtual RTC::ReturnCode_t
-    onReset(RTC_impl::RTObjectStateMachine* comp, long int count)
+    onWaitingReset(RTC_impl::RTObjectStateMachine*  /*comp*/, long int  /*count*/)
+    {
+      return RTC::RTC_OK;
+    }
+    virtual RTC::ReturnCode_t
+    onReset(RTC_impl::RTObjectStateMachine*  /*comp*/, long int  /*count*/)
     {
       return RTC::RTC_OK;
     }

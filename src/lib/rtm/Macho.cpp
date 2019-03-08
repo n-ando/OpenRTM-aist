@@ -43,7 +43,7 @@ _EmptyBox _EmptyBox::theEmptyBox;
 ////////////////////////////////////////////////////////////////////////////////
 // Helper functions for box creation
 template<>
-void * Macho::_createBox<_EmptyBox>(void * & place) {
+void * Macho::_createBox<_EmptyBox>(void * &  /*place*/) {
 	return &_EmptyBox::theEmptyBox;
 }
 

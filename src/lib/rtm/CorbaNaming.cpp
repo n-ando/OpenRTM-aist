@@ -113,7 +113,7 @@ namespace RTC
       {
         m_rootContext->bind(name, obj);
       }
-    catch (NotFound& e)
+    catch (NotFound&)
       {
         force ? bindRecursive(m_rootContext, name, obj) : throw;
       }
@@ -191,7 +191,7 @@ namespace RTC
       {
         m_rootContext->rebind(name, obj);
       }
-    catch (NotFound& e)
+    catch (NotFound&)
       {
         force ? rebindRecursive(m_rootContext, name, obj) : throw;
       }
@@ -438,7 +438,7 @@ namespace RTC
       {
         return m_rootContext->bind_new_context(name);
       }
-    catch (NotFound& e)
+    catch (NotFound&)
       {
         force ? bindRecursive(m_rootContext, name, newContext()) : throw;
       }
@@ -462,7 +462,7 @@ namespace RTC
    * @endif
    */
   CosNaming::NamingContext_ptr
-  CorbaNaming::bindNewContext(const char* string_name, bool force)
+  CorbaNaming::bindNewContext(const char* string_name, bool  /*force*/)
     throw (SystemException, NotFound, CannotProceed, InvalidName, AlreadyBound)
   {
     return bindNewContext(toName(string_name));
@@ -1035,6 +1035,6 @@ namespace RTC
         begin_pos = found_pos + delim_size;
         pre_pos   = found_pos + delim_size;
       }
-    return results.size();
+    return (unsigned int)results.size();
   }
 };  // namespace RTC

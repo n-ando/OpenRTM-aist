@@ -40,7 +40,7 @@ namespace RTC
    * @brief Destructor
    * @endif
    */
-  OutPortDSConsumer::~OutPortDSConsumer(void)
+  OutPortDSConsumer::~OutPortDSConsumer()
   {
   }
 
@@ -51,7 +51,7 @@ namespace RTC
    * @brief Initializing configuration
    * @endif
    */
-  void OutPortDSConsumer::init(coil::Properties& prop)
+  void OutPortDSConsumer::init(coil::Properties&  /*prop*/)
   {
     RTC_TRACE(("OutPortDSConsumer::init()"));
   }
@@ -228,7 +228,7 @@ namespace RTC
    */
   OutPortConsumer::ReturnCode
   OutPortDSConsumer::convertReturn(::RTC::PortStatus status,
-                                         ByteData& data)
+                                         ByteData&  /*data*/)
   {
     switch (status)
       {

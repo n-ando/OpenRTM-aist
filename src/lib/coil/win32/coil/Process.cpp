@@ -41,7 +41,7 @@ namespace coil
 #else
     // std::string -> LPTSTR
     LPTSTR lpcommand = new TCHAR[command.size() + 1];
-    _tcscpy(lpcommand, command.c_str());
+    _tcscpy_s(lpcommand, command.size() + 1, command.c_str());
 #endif  // UNICODE
 
     STARTUPINFO si;
@@ -107,7 +107,7 @@ namespace coil
 #else
       // std::string -> LPTSTR
       LPTSTR lpcommand = new TCHAR[command.size() + 1];
-      _tcscpy(lpcommand, command.c_str());
+      _tcscpy_s(lpcommand, command.size() + 1, command.c_str());
 #endif // UNICODE
 
       PROCESS_INFORMATION pi = { 0 };

@@ -46,7 +46,7 @@ namespace coil
     m_record.reserve(m_countMax);
     for (unsigned long int i(0); i < m_countMax; ++i)
       {
-        m_record.push_back(TimeValue(0, 0));
+        m_record.emplace_back(0, 0);
       }
   }
 

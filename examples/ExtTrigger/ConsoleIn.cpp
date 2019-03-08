@@ -61,7 +61,7 @@ RTC::ReturnCode_t ConsoleIn::onInitialize()
   return RTC::RTC_OK;
 }
 
-RTC::ReturnCode_t ConsoleIn::onExecute(RTC::UniqueId ec_id)
+RTC::ReturnCode_t ConsoleIn::onExecute(RTC::UniqueId  /*ec_id*/)
 {
   std::cout << "Please input number: ";
   std::cin >> m_out.data;

@@ -175,20 +175,12 @@ elseif(CORBA MATCHES "TAO")
 endif()
 
 
-
-
-
-set (RTC_CORBA_CXXMAPPING11 ON)
-
-
-
+set(RTC_CORBA_CXXMAPPING11 ON)
 
 
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config_rtc_cmake.h.in ${PROJECT_BINARY_DIR}/config_rtc.h)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/version_cmake.h.in ${PROJECT_BINARY_DIR}/version.h)
-
-
 
 
 
@@ -200,6 +192,9 @@ endif(VXWORKS)
 
 include_directories(${ORB_INCLUDE_DIR})
 
+add_definitions(${ORB_C_FLAGS_LIST})
+add_definitions(${COIL_C_FLAGS_LIST})
+
 
 set(RTM_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/src/lib/coil/common
 		${PROJECT_BINARY_DIR}/idl
@@ -207,10 +202,6 @@ set(RTM_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/src/lib/coil/common
 		${PROJECT_BINARY_DIR}/..
 		${CMAKE_CURRENT_SOURCE_DIR}/..
 		)
-
-
-
-
 
 
 
@@ -424,7 +415,6 @@ set(rtm_srcs
 	OutPortSHMProvider.cpp
 	SharedMemoryPort.cpp
 	SimulatorExecutionContext.cpp
-	NumberingPolicyBase.cpp
 	NamingServiceNumberingPolicy.cpp
 	NodeNumberingPolicy.cpp
 	OutPortDirectConsumer.cpp

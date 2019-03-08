@@ -94,7 +94,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~ByteDataStreamBase(void);
+    virtual ~ByteDataStreamBase();
 
     /*!
      * @if jp
@@ -235,7 +235,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~ByteDataStream(void)
+    virtual ~ByteDataStream()
     {
     }
 

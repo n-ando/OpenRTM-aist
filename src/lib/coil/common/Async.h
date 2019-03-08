@@ -22,6 +22,7 @@
 #include <coil/Task.h>
 #include <coil/Guard.h>
 #include <iostream>
+#include <utility>
 
 namespace coil
 {
@@ -157,7 +158,7 @@ namespace coil
      * @endif
      */
     Async_t(Object* obj, Func func, bool auto_delete = false)
-      : m_obj(obj), m_func(func), m_finished(false), m_autodelete(auto_delete)
+      : m_obj(obj), m_func(std::move(func)), m_finished(false), m_autodelete(auto_delete)
     {
     }
 

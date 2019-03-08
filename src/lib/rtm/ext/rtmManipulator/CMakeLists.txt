@@ -15,10 +15,6 @@ project (${target}
 
 
 
-
-
-
-
 macro(idl_compile idl_name)
 
 	set(ALL_IDL_FILES ${ALL_IDL_FILES} ../${idl_name}.idl)
@@ -66,20 +62,11 @@ include_directories(
 		${PROJECT_BINARY_DIR}
 		)
 add_definitions(${ORB_C_FLAGS_LIST})
-
-
-link_directories(${ORB_LINK_DIR})
-include_directories(${ORB_INCLUDE_DIR})
-add_definitions(${ORB_C_FLAGS_LIST})
+add_definitions(${COIL_C_FLAGS_LIST})
 
 
 
 set_source_files_properties(${ALL_IDL_SRCS} PROPERTIES GENERATED 1)
-
-
-
-
-
 
 
 
@@ -155,10 +142,6 @@ if(NOT TARGET ALL_IDL_TGT)
 endif(NOT TARGET ALL_IDL_TGT)
 add_dependencies(${target} ALL_IDL_TGT)
 add_dependencies(${target} ${RTCSKEL_PROJECT_NAME})
-
-
-
-
 
 
 

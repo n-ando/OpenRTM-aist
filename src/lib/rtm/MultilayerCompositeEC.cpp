@@ -26,8 +26,10 @@
 #include <rtm/PeriodicTaskFactory.h>
 
 #ifdef RTM_OS_LINUX
+#ifndef _GNU_SOURCE
 #define _GNU_SOURCE
 #include <pthread.h>
+#endif // _GNU_SOURCE
 #include <algorithm>
 #endif // RTM_OS_LINUX
 
@@ -83,7 +85,7 @@ namespace RTC_exp
    * @brief Thread execution function for ExecutionContext
    * @endif
    */
-  int MultilayerCompositeEC::svc(void)
+  int MultilayerCompositeEC::svc()
   {
     RTC_TRACE(("svc()"));
     int count(0);
@@ -439,7 +441,7 @@ extern "C"
    * @endif
    */
 
-  void MultilayerCompositeECInit(RTC::Manager* manager)
+  void MultilayerCompositeECInit(RTC::Manager*  /*manager*/)
   {
     RTC::ExecutionContextFactory::
       instance().addFactory("MultilayerCompositeEC",

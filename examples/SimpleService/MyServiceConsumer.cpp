@@ -37,7 +37,7 @@ MyServiceConsumer::MyServiceConsumer(RTC::Manager* manager)
     // <rtc-template block="initializer">
     m_MyServicePort("MyService"),
     // </rtc-template>
-    async_set_value(nullptr), async_echo(nullptr)
+    async_echo(nullptr)
 {
 }
 
@@ -103,7 +103,7 @@ RTC::ReturnCode_t MyServiceConsumer::onDeactivated(RTC::UniqueId ec_id)
 */
 
 
-RTC::ReturnCode_t MyServiceConsumer::onExecute(RTC::UniqueId ec_id)
+RTC::ReturnCode_t MyServiceConsumer::onExecute(RTC::UniqueId  /*ec_id*/)
 {
   try
     {

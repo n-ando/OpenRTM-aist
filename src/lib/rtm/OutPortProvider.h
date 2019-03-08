@@ -204,7 +204,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~OutPortProvider(void);
+    virtual ~OutPortProvider();
 
     /*!
      * @if jp

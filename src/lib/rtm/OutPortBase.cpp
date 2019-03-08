@@ -111,7 +111,7 @@ namespace RTC
    * @brief Destructor
    * @endif
    */
-  OutPortBase::~OutPortBase(void)
+  OutPortBase::~OutPortBase()
   {
     RTC_TRACE(("~OutPortBase()"));
     // connector のクリーンナップ
@@ -193,9 +193,9 @@ namespace RTC
   {
     RTC_TRACE(("getConnectorProfiles(): size = %d", m_connectors.size()));
     ConnectorInfoList profs;
-    for (int i(0), len(m_connectors.size()); i < len; ++i)
+    for (std::vector<OutPortConnector*>::iterator con = m_connectors.begin(); con != m_connectors.end(); ++con)
       {
-        profs.push_back(m_connectors[i]->profile());
+        profs.push_back((*con)->profile());
       }
     return profs;
   }
@@ -210,9 +210,9 @@ namespace RTC
   coil::vstring OutPortBase::getConnectorIds()
   {
     coil::vstring ids;
-    for (int i(0), len(m_connectors.size()); i < len; ++i)
+    for (std::vector<OutPortConnector*>::iterator con = m_connectors.begin(); con != m_connectors.end(); ++con)
       {
-        ids.push_back(m_connectors[i]->id());
+        ids.push_back((*con)->id());
       }
     RTC_TRACE(("getConnectorIds(): %s", coil::flatten(ids).c_str()));
     return ids;
@@ -228,9 +228,9 @@ namespace RTC
   coil::vstring OutPortBase::getConnectorNames()
   {
     coil::vstring names;
-    for (int i(0), len(m_connectors.size()); i < len; ++i)
+    for (std::vector<OutPortConnector*>::iterator con = m_connectors.begin(); con != m_connectors.end(); ++con)
       {
-        names.push_back(m_connectors[i]->name());
+        names.push_back((*con)->name());
       }
     RTC_TRACE(("getConnectorNames(): %s", coil::flatten(names).c_str()));
     return names;
@@ -248,11 +248,11 @@ namespace RTC
     RTC_TRACE(("getConnectorById(id = %s)", id));
 
     std::string sid(id);
-    for (int i(0), len(m_connectors.size()); i < len; ++i)
+    for (std::vector<OutPortConnector*>::iterator con = m_connectors.begin(); con != m_connectors.end(); ++con)
       {
-        if (sid  == m_connectors[i]->id())
+        if (sid  == (*con)->id())
           {
-            return m_connectors[i];
+            return (*con);
           }
       }
     RTC_WARN(("ConnectorProfile with the id(%s) not found.", id));
@@ -271,11 +271,11 @@ namespace RTC
     RTC_TRACE(("getConnectorByName(name = %s)", name));
 
     std::string sname(name);
-    for (int i(0), len(m_connectors.size()); i < len; ++i)
+    for (std::vector<OutPortConnector*>::iterator con = m_connectors.begin(); con != m_connectors.end(); ++con)
       {
-        if (sname  == m_connectors[i]->name())
+        if (sname  == (*con)->name())
           {
-            return m_connectors[i];
+            return (*con);
           }
       }
     RTC_WARN(("ConnectorProfile with the name(%s) not found.", name));
@@ -333,9 +333,9 @@ namespace RTC
   {
     RTC_TRACE(("activateInterfaces()"));
 
-    for (int i(0), len(m_connectors.size()); i < len; ++i)
+    for (std::vector<OutPortConnector*>::iterator con = m_connectors.begin(); con != m_connectors.end(); ++con)
       {
-        m_connectors[i]->activate();
+        (*con)->activate();
       }
   }
 
@@ -350,9 +350,9 @@ namespace RTC
   {
     RTC_TRACE(("deactivateInterfaces()"));
 
-    for (int i(0), len(m_connectors.size()); i < len; ++i)
+    for (std::vector<OutPortConnector*>::iterator con = m_connectors.begin(); con != m_connectors.end(); ++con)
       {
-        m_connectors[i]->deactivate();
+        (*con)->deactivate();
       }
   }
 
@@ -1005,7 +1005,7 @@ namespace RTC
                       m_connectors.size()));
         return connector;
       }
-    catch (std::bad_alloc& e)
+    catch (std::bad_alloc&)
       {
         RTC_ERROR(("OutPortPushConnector creation failed"));
         return nullptr;
@@ -1063,7 +1063,7 @@ namespace RTC
                       m_connectors.size()));
         return connector;
       }
-    catch (std::bad_alloc& e)
+    catch (std::bad_alloc&)
       {
         RTC_ERROR(("OutPortPullConnector creation failed"));
         return nullptr;
@@ -1087,12 +1087,12 @@ namespace RTC
     RTC_DEBUG(("Current connector profile: name=%s, id=%s",
                profile.name.c_str(), profile.id.c_str()));
     // finding peer port object
-    for (size_t i = 0;  i < profile.ports.size() ; ++i)
+    for (coil::vstring::const_iterator port = profile.ports.begin(); port != profile.ports.end(); ++port)
       {
         CORBA::Object_var obj;
-        obj = orb->string_to_object(profile.ports[i].c_str());
+        obj = orb->string_to_object((*port).c_str());
         if (getPortRef()->_is_equivalent(obj)) { continue; }
-        RTC_DEBUG(("Peer port found: %s.", profile.ports[i].c_str()));
+        RTC_DEBUG(("Peer port found: %s.", (*port).c_str()));
         try
           {
             PortableServer::POA_var poa = ::RTC::Manager::instance().getPOA();

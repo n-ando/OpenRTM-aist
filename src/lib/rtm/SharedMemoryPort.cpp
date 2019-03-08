@@ -60,7 +60,7 @@ namespace RTC
 		  _default_POA()->deactivate_object(oid);
 #endif
 	  }
-	  catch (PortableServer::POA::ServantNotActive &e)
+	  catch (PortableServer::POA::ServantNotActive&)
 	  {
 #ifdef ORB_IS_ORBEXPRESS
 		  oe_out << e << oe_endl << oe_flush;
@@ -68,7 +68,7 @@ namespace RTC
 		  //RTC_ERROR(("%s", e._name()));
 #endif
 	  }
-	  catch (PortableServer::POA::WrongPolicy &e)
+	  catch (PortableServer::POA::WrongPolicy&)
 	  {
 #ifdef ORB_IS_ORBEXPRESS
 		  oe_out << e << oe_endl << oe_flush;
@@ -419,4 +419,4 @@ namespace RTC
 		//return ::OpenRTM::PortSharedMemory::_duplicate(m_objref);
 		return this->_this();
 	}
-}  // namespace RTC;
+} // namespace RTC

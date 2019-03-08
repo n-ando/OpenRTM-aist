@@ -29,13 +29,13 @@
 namespace SDOPackage
 {
   class NVList;
-};
+} // namespace SDOPackage
 #endif  // ORB_IS_RTORB
 
 namespace coil
 {
   class Properties;
-};
+} // namespace coil
 
 namespace RTC
 {
@@ -188,7 +188,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~OutPortConsumer(void) {}
+    virtual ~OutPortConsumer() {}
 
     /*!
      * @if jp

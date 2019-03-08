@@ -180,7 +180,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~PortBase(void);
+    virtual ~PortBase();
 
     /*!
      * @if jp
@@ -1558,7 +1558,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode_t _publishInterfaces(void);
+    virtual ReturnCode_t _publishInterfaces();
     //============================================================
     // protected utility functions
     //============================================================

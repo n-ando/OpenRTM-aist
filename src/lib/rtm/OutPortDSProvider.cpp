@@ -30,7 +30,7 @@ namespace RTC
    * @brief Constructor
    * @endif
    */
-  OutPortDSProvider::OutPortDSProvider(void)
+  OutPortDSProvider::OutPortDSProvider()
     : m_buffer(nullptr), m_connector(nullptr)
   {
     // PortProfile setting
@@ -66,7 +66,7 @@ namespace RTC
    * @brief Destructor
    * @endif
    */
-  OutPortDSProvider::~OutPortDSProvider(void)
+  OutPortDSProvider::~OutPortDSProvider()
   {
     try
       {
