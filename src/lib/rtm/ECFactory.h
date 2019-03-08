@@ -327,7 +327,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual void destroy(ExecutionContextBase* comp);
+    virtual void destroy(ExecutionContextBase* ec);
 
   protected:
     /*!

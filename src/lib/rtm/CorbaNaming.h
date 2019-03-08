@@ -1254,7 +1254,7 @@ namespace RTC
      *
      * @endif
      */
-    CosNaming::Name toName(const char* string_name)
+    CosNaming::Name toName(const char* sname)
       throw (SystemException, InvalidName);
 
     /*!

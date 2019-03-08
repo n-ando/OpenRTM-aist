@@ -689,7 +689,8 @@ namespace RTM
      * @endif
      */
     RTC::RTObject_ptr
-    createComponentByAddress(std::string module_name);
+    createComponentByAddress(const std::string create_arg);
+
 	/*
 	* @if jp
 	* @brief マスターマネージャの有無を確認してリストを更新する
