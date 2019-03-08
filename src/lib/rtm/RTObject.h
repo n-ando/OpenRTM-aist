@@ -44,7 +44,7 @@
 namespace SDOPackage
 {
   class Configuration_impl;
-};
+} // namespace SDOPackage
 
 #ifdef WIN32
 #pragma warning( disable : 4290 )
@@ -148,7 +148,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~RTObject_impl(void);
+    virtual ~RTObject_impl();
 
   protected:
     //============================================================
@@ -249,7 +249,7 @@ namespace RTC
      */
     // The startup action when ExecutionContext startup
     // former rtc_starting_entry()
-    virtual ReturnCode_t onStartup(RTC::UniqueId exec_handle);
+    virtual ReturnCode_t onStartup(RTC::UniqueId ec_id);
 
     /*!
      * @if jp
@@ -284,7 +284,7 @@ namespace RTC
      */
     // The shutdown action when ExecutionContext stop
     // former rtc_stopping_entry()
-    virtual ReturnCode_t onShutdown(RTC::UniqueId exec_handle);
+    virtual ReturnCode_t onShutdown(RTC::UniqueId ec_id);
 
     /*!
      * @if jp
@@ -319,7 +319,7 @@ namespace RTC
      */
     // The activated action (Active state entry action)
     // former rtc_active_entry()
-    virtual ReturnCode_t onActivated(RTC::UniqueId exec_handle);
+    virtual ReturnCode_t onActivated(RTC::UniqueId ec_id);
 
     /*!
      * @if jp
@@ -354,7 +354,7 @@ namespace RTC
      */
     // The deactivated action (Active state exit action)
     // former rtc_active_exit()
-    virtual ReturnCode_t onDeactivated(RTC::UniqueId exec_handle);
+    virtual ReturnCode_t onDeactivated(RTC::UniqueId ec_id);
 
     /*!
      * @if jp
@@ -394,7 +394,7 @@ namespace RTC
      */
     // The execution action that is invoked periodically
     // former rtc_active_do()
-    virtual ReturnCode_t onExecute(RTC::UniqueId exec_handle);
+    virtual ReturnCode_t onExecute(RTC::UniqueId ec_id);
 
     /*!
      * @if jp
@@ -429,7 +429,7 @@ namespace RTC
      */
     // The aborting action when main logic error occurred.
     // former rtc_aborting_entry()
-    virtual ReturnCode_t onAborting(RTC::UniqueId exec_handle);
+    virtual ReturnCode_t onAborting(RTC::UniqueId ec_id);
 
     /*!
      * @if jp
@@ -463,7 +463,7 @@ namespace RTC
      */
     // The error action in ERROR state
     // former rtc_error_do()
-    virtual ReturnCode_t onError(RTC::UniqueId exec_handle);
+    virtual ReturnCode_t onError(RTC::UniqueId ec_id);
 
     /*!
      * @if jp
@@ -497,7 +497,7 @@ namespace RTC
      */
     // The reset action that is invoked resetting
     // This is same but different the former rtc_init_entry()
-    virtual ReturnCode_t onReset(RTC::UniqueId exec_handle);
+    virtual ReturnCode_t onReset(RTC::UniqueId ec_id);
 
     /*!
      * @if jp
@@ -537,7 +537,7 @@ namespace RTC
      */
     // The state update action that is invoked after onExecute() action
     // no corresponding operation exists in OpenRTm-aist-0.2.0
-    virtual ReturnCode_t onStateUpdate(RTC::UniqueId exec_handle);
+    virtual ReturnCode_t onStateUpdate(RTC::UniqueId ec_id);
 
     /*!
      * @if jp
@@ -576,7 +576,7 @@ namespace RTC
      */
     // The action that is invoked when execution context's rate is changed
     // no corresponding operation exists in OpenRTm-aist-0.2.0
-    virtual ReturnCode_t onRateChanged(RTC::UniqueId exec_handle);
+    virtual ReturnCode_t onRateChanged(RTC::UniqueId ec_id);
 
   public:
     //============================================================
@@ -777,7 +777,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ExecutionContext_ptr get_context(UniqueId exec_handle)
+    virtual ExecutionContext_ptr get_context(UniqueId ec_id)
       throw (CORBA::SystemException);
 
     /*!
@@ -916,7 +916,7 @@ namespace RTC
      *
      * @endif
      */
-    ReturnCode_t detach_context(UniqueId exec_handle)
+    ReturnCode_t detach_context(UniqueId ec_id)
       throw (CORBA::SystemException);
 
     //============================================================
@@ -1076,7 +1076,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode_t on_startup(UniqueId exec_handle)
+    virtual ReturnCode_t on_startup(UniqueId ec_id)
       throw (CORBA::SystemException);
 
     /*!
@@ -1107,7 +1107,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode_t on_shutdown(UniqueId exec_handle)
+    virtual ReturnCode_t on_shutdown(UniqueId ec_id)
       throw (CORBA::SystemException);
 
     /*!
@@ -1136,7 +1136,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode_t on_activated(UniqueId exec_handle)
+    virtual ReturnCode_t on_activated(UniqueId ec_id)
       throw (CORBA::SystemException);
 
     /*!
@@ -1166,7 +1166,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode_t on_deactivated(UniqueId exec_handle)
+    virtual ReturnCode_t on_deactivated(UniqueId ec_id)
       throw (CORBA::SystemException);
 
     /*!
@@ -1201,7 +1201,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode_t on_aborting(UniqueId exec_handle)
+    virtual ReturnCode_t on_aborting(UniqueId ec_id)
       throw (CORBA::SystemException);
 
     /*!
@@ -1247,7 +1247,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode_t on_error(UniqueId exec_handle)
+    virtual ReturnCode_t on_error(UniqueId ec_id)
       throw (CORBA::SystemException);
 
     /*!
@@ -1284,7 +1284,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode_t on_reset(UniqueId exec_handle)
+    virtual ReturnCode_t on_reset(UniqueId ec_id)
       throw (CORBA::SystemException);
 
     //============================================================
@@ -1332,7 +1332,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode_t on_execute(UniqueId exec_handle)
+    virtual ReturnCode_t on_execute(UniqueId ec_id)
       throw (CORBA::SystemException);
 
     /*!
@@ -1378,7 +1378,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode_t on_state_update(UniqueId exec_handle)
+    virtual ReturnCode_t on_state_update(UniqueId ec_id)
       throw (CORBA::SystemException);
 
     /*!
@@ -1417,7 +1417,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode_t on_rate_changed(UniqueId exec_handle)
+    virtual ReturnCode_t on_rate_changed(UniqueId ec_id)
       throw (CORBA::SystemException);
 
     //============================================================
@@ -2146,7 +2146,7 @@ namespace RTC
      *
      * @endif
      */
-    void setObjRef(const RTObject_ptr rtobj);
+    void setObjRef(RTObject_ptr rtobj);
 
     /*!
      * @if jp
@@ -5498,7 +5498,7 @@ namespace RTC
             m_sdoservice = sdoservice;
             m_id = id;
           }
-        virtual int svc(void)
+        virtual int svc()
           {
             m_sdoservice->removeSdoServiceConsumer(m_id.c_str());
             return 0;

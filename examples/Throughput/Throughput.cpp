@@ -194,7 +194,7 @@ RTC::ReturnCode_t Throughput::onInitialize()
   return RTC::RTC_OK;
 }
 
-RTC::ReturnCode_t Throughput::onActivated(RTC::UniqueId ec_id)
+RTC::ReturnCode_t Throughput::onActivated(RTC::UniqueId  /*ec_id*/)
 {
   m_datasize = 1;
   setDataSize(m_datasize);
@@ -205,7 +205,7 @@ RTC::ReturnCode_t Throughput::onActivated(RTC::UniqueId ec_id)
   return RTC::RTC_OK;
 }
 
-RTC::ReturnCode_t Throughput::onDeactivated(RTC::UniqueId ec_id)
+RTC::ReturnCode_t Throughput::onDeactivated(RTC::UniqueId  /*ec_id*/)
 {
   if (m_fs.is_open()) { m_fs.close(); }
 
@@ -246,7 +246,7 @@ RTC::ReturnCode_t Throughput::onExecute(RTC::UniqueId ec_id)
       std::cout << "\tlogmulcnt%3: " << m_logmulcnt % 3;
       std::cout << "\tlogmul[]: " << logmul[m_logmulcnt % 3] << std::endl;
 #endif // DEBUG
-      m_datasize *= logmul[m_logmulcnt % 3];
+      m_datasize *= (long)logmul[m_logmulcnt % 3];
       m_logmulcnt++;
     }
   else if (m_mode == "incr")
@@ -269,7 +269,7 @@ RTC::ReturnCode_t Throughput::onExecute(RTC::UniqueId ec_id)
   std::cout << "\tsendcount: " << m_sendcount << std::endl;
 #endif // DEBUG
 
-  coil::sleep(m_sleep_time); // sleep for calculating measurement statistics
+  coil::sleep(coil::TimeValue(m_sleep_time)); // sleep for calculating measurement statistics
 
   // calculation is triggered data size change
   // to finish the last calculation, size 0 array is sent

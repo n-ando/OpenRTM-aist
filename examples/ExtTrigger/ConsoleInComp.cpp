@@ -14,7 +14,7 @@
 #include <rtm/NVUtil.h>
 
 
-#if defined(RTM_OS_VXWORKS) && not defined(__RTP__)
+#if defined(RTM_OS_VXWORKS) && !defined(__RTP__)
 int consolein_main()
 {
   RTC::Manager* manager = &RTC::Manager::instance();

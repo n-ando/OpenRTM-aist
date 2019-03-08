@@ -130,7 +130,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~ECFactoryBase(void) {}
+    virtual ~ECFactoryBase() {}
 
     /*!
      * @if jp
@@ -264,7 +264,7 @@ namespace RTC
      *
      * @endif
      */
-    ~ECFactoryCXX(void);
+    ~ECFactoryCXX();
 
     /*!
      * @if jp
@@ -327,7 +327,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual void destroy(ExecutionContextBase* comp);
+    virtual void destroy(ExecutionContextBase* ec);
 
   protected:
     /*!

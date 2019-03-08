@@ -132,7 +132,8 @@ namespace RTC
     }
 
     m_messageType = prop.getProperty("marshaling_type", "ROSFloat32");
-    m_topic = prop.getProperty("topic", "/chatter");
+    m_topic = prop.getProperty("topic", "chatter");
+    m_topic = "/" + m_topic;
 
 
     m_roscorehost = prop.getProperty("roscore_host", "localhost");
@@ -409,47 +410,48 @@ namespace RTC
     }
   }
 
-
   /*!
-  * @if jp
-  * @brief リターンコード変換
-  * @else
-  * @brief Return codes conversion
-  * @endif
-  */
-  void
-  ROSInPort::convertReturn(BufferStatus::Enum status,
-	    ByteData& data)
+   * @if jp
+   * @brief リターンコード変換
+   * @else
+   * @brief Return codes conversion
+   * @endif
+   */
+  void ROSInPort::convertReturn(BufferStatus::Enum status,
+                                        ByteData& data)
   {
-      switch (status)
+    switch (status)
       {
-        case BufferStatus::BUFFER_OK:
-            onBufferWrite(data);
-            break;
+      case BufferStatus::BUFFER_OK:
+        onBufferWrite(data);
+        return;
 
-        case BufferStatus::BUFFER_ERROR:
-            onReceiverError(data);
-            break;
+      case BufferStatus::BUFFER_ERROR:
+        onReceiverError(data);
+        return;
 
-        case BufferStatus::BUFFER_FULL:
-            onBufferFull(data);
-            onReceiverFull(data);
-            break;
+      case BufferStatus::BUFFER_FULL:
+        onBufferFull(data);
+        onReceiverFull(data);
+        return;
 
-        case BufferStatus::BUFFER_EMPTY:
-            // never come here
-            break;
+      case BufferStatus::BUFFER_EMPTY:
+        // never come here
+        return;
 
-        case BufferStatus::PRECONDITION_NOT_MET:
-            onReceiverError(data);
-            break;
+      case BufferStatus::PRECONDITION_NOT_MET:
+        onReceiverError(data);
+        return;
 
-        case BufferStatus::TIMEOUT:
-            onBufferWriteTimeout(data);
-            onReceiverTimeout(data);
-            break;
-    }
-    onReceiverError(data);
+      case BufferStatus::TIMEOUT:
+        onBufferWriteTimeout(data);
+        onReceiverTimeout(data);
+        return;
+
+      default:
+        onReceiverError(data);
+        return;
+      }
   }
 
 };     // namespace RTC

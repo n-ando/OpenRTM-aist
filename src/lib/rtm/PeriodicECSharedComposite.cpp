@@ -166,7 +166,7 @@ namespace SDOPackage
 			len = strlen(member.profile_->instance_name);
 		}
 		//size_t len = (std::max)(strlen(id), strlen(member.profile_->instance_name));
-        if (strncmp(id, member.profile_->instance_name, len))
+        if (strncmp(id, member.profile_->instance_name, len) != 0)
           {
             ++it;
             continue;
@@ -235,8 +235,7 @@ namespace SDOPackage
 
     // narrowing: SDO -> RTC (DataFlowComponent)
     dfc = ::OpenRTM::DataFlowComponent::_narrow(sdo);
-    if (::CORBA::is_nil(dfc)) return false;
-    return true;
+    return !::CORBA::is_nil(dfc);
   }
 
   /*!
@@ -337,13 +336,13 @@ namespace SDOPackage
 
   }
 
-  void PeriodicECOrganization::addRTCToEC(RTC::RTObject_var rtobj)
+  void PeriodicECOrganization::addRTCToEC(RTC::RTObject_ptr rtobj)
   {
       SDOPackage::OrganizationList_var orglist = rtobj->get_owned_organizations();
       if (orglist->length() == 0)
       {
           // set ec to target RTC
-          m_ec->add_component(rtobj.in());
+          m_ec->add_component(rtobj);
       }
 
       for (CORBA::ULong i(0); i < orglist->length(); ++i)
@@ -388,7 +387,7 @@ namespace SDOPackage
       }
     m_ec->remove_component(member.rtobj_.in());
 
-    OrganizationList_var orglist = member.rtobj_->get_organizations();
+    OrganizationList_var orglist = member.rtobj_->get_owned_organizations();
     for (CORBA::ULong i(0); i < orglist->length(); ++i)
       {
         SDOPackage::SDOList_var sdos = orglist[i]->get_members();
@@ -550,10 +549,10 @@ namespace SDOPackage
     RTC_VERBOSE(("remove ports: %s", ::coil::flatten(removedPorts).c_str()));
     RTC_VERBOSE(("add    ports: %s", ::coil::flatten(createdPorts).c_str()));
 
-    for (int i(0), len(m_rtcMembers.size()); i < len; ++i)
+    for (std::vector<Member>::iterator member = m_rtcMembers.begin(); member != m_rtcMembers.end(); ++member)
       {
-        removePort(m_rtcMembers[i], removedPorts);
-        addPort(m_rtcMembers[i], createdPorts);
+        removePort(*member, removedPorts);
+        addPort(*member, createdPorts);
       }
 
     m_expPorts = newPorts;
@@ -597,7 +596,7 @@ namespace RTC
     explicit setCallback(::SDOPackage::PeriodicECOrganization* org)
            : m_org(org) {}
     virtual ~setCallback() {}
-    virtual void operator()(const coil::Properties& config_set)
+    virtual void operator()(const coil::Properties&  /*config_set*/)
     {
       m_org->updateDelegatedPorts();
     }
@@ -613,7 +612,7 @@ namespace RTC
     explicit addCallback(::SDOPackage::PeriodicECOrganization* org)
            : m_org(org) {}
     virtual ~addCallback() {}
-    virtual void operator()(const coil::Properties& config_set)
+    virtual void operator()(const coil::Properties&  /*config_set*/)
     {
       m_org->updateDelegatedPorts();
     }
@@ -691,12 +690,12 @@ namespace RTC
     mgr.getComponents();
 
     ::SDOPackage::SDOList sdos;
-    for (int i(0), len(m_members.size()); i < len; ++i)
+    for (coil::vstring::iterator member = m_members.begin(); member != m_members.end(); ++member)
       {
-          coil::replaceString(m_members[i], "|", "");
-          coil::eraseBothEndsBlank(m_members[i]);
+          coil::replaceString(*member, "|", "");
+          coil::eraseBothEndsBlank(*member);
 
-        RTObject_impl* rtc = mgr.getComponent(m_members[i].c_str());
+        RTObject_impl* rtc = mgr.getComponent((*member).c_str());
         if (rtc == nullptr) {
           continue;
         }

@@ -448,7 +448,7 @@ namespace RTC
          *
          * @endif
          */
-        virtual ~CORBA_CdrSerializer(void)
+        virtual ~CORBA_CdrSerializer()
         {
         }
 

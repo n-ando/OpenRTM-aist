@@ -60,7 +60,7 @@ namespace coil
 
     while (it != it_end)
       {
-        setDefault(it->first.c_str(), it->second.c_str());
+        setDefault(it->first, it->second);
         ++it;
       }
   }
@@ -139,7 +139,7 @@ namespace coil
    * @brief Destructor
    * @endif
    */
-  Properties::~Properties(void)
+  Properties::~Properties()
   {
     // Delete children
     clear();
@@ -313,7 +313,7 @@ namespace coil
         coil::eraseHeadBlank(value);
         coil::eraseTailBlank(value);
 
-        setDefault(key.c_str(), value.c_str());
+        setDefault(key, value);
       }
   }
 
@@ -385,7 +385,7 @@ namespace coil
         coil::eraseHeadBlank(value);
         coil::eraseTailBlank(value);
 
-        setProperty(key.c_str(), value.c_str());
+        setProperty(key, value);
         pline.clear();
       }
   }
@@ -443,7 +443,7 @@ namespace coil
    * @brief Get the number of properties
    * @endif
    */
-  int Properties::size(void) const
+  int Properties::size() const
   {
     return static_cast<int>(propertyNames().size());
   }
@@ -561,7 +561,7 @@ namespace coil
    * @brief Clear the children
    * @endif
    */
-  void Properties::clear(void)
+  void Properties::clear()
   {
     while (!leaf.empty())
       {
@@ -891,7 +891,7 @@ namespace coil
           }
           return;
       }
-      if (index != 0)out.push_back("");
+      if (index != 0) { out.emplace_back(""); }
       for (size_t i(0), len(curr.leaf.size()); i < len; ++i)
       {
           _dump(out, *(curr.leaf[i]), index + 1);

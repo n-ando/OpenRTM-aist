@@ -155,7 +155,7 @@ namespace RTC_impl
      *
      * @endif
      */
-    virtual ~ExecutionContextWorker(void);
+    virtual ~ExecutionContextWorker();
 
     //============================================================
     // Object reference to EC
@@ -190,7 +190,7 @@ namespace RTC_impl
      *
      * @endif
      */
-    CORBA::Boolean isRunning(void);
+    CORBA::Boolean isRunning();
 
     /*!
      * @if jp
@@ -219,7 +219,7 @@ namespace RTC_impl
      *
      * @endif
      */
-    RTC::ReturnCode_t start(void);
+    RTC::ReturnCode_t start();
 
     /*!
      * @if jp
@@ -247,11 +247,11 @@ namespace RTC_impl
      *
      * @endif
      */
-    RTC::ReturnCode_t stop(void);
+    RTC::ReturnCode_t stop();
 
-    RTC::ReturnCode_t startThread(void);
+    RTC::ReturnCode_t startThread();
 
-    RTC::ReturnCode_t stopThread(void);
+    RTC::ReturnCode_t stopThread();
 
 
     /*!

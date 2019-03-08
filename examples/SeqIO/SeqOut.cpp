@@ -171,7 +171,7 @@ RTC::ReturnCode_t SeqOut::onDeactivated(RTC::UniqueId ec_id)
 */
 
 
-RTC::ReturnCode_t SeqOut::onExecute(RTC::UniqueId ec_id)
+RTC::ReturnCode_t SeqOut::onExecute(RTC::UniqueId  /*ec_id*/)
 {
   static unsigned char cnt0, cntseq0;
   static short  cnt1, cntseq1;
@@ -208,7 +208,7 @@ RTC::ReturnCode_t SeqOut::onExecute(RTC::UniqueId ec_id)
         {
           cnt3 = 1.0;
         }
-      m_Float.data = cnt3 + 0.12;
+      m_Float.data = cnt3 + (CORBA::Float)0.12;
 
       ++cnt4;
       if( cnt4 > 30000 )
@@ -219,11 +219,11 @@ RTC::ReturnCode_t SeqOut::onExecute(RTC::UniqueId ec_id)
     }
   else				//default
     {
-      m_Octet.data = rand();
-      m_Short.data = rand();
-      m_Long.data = rand();
-      m_Float.data = rand();
-      m_Double.data = rand();
+      m_Octet.data = (CORBA::Octet)rand();
+      m_Short.data = (CORBA::Short)rand();
+      m_Long.data = (CORBA::Long)rand();
+      m_Float.data = (CORBA::Float)rand();
+      m_Double.data = (CORBA::Double)rand();
     }
 
   std::cout << "-: ";
@@ -273,7 +273,7 @@ RTC::ReturnCode_t SeqOut::onExecute(RTC::UniqueId ec_id)
             {
               cntseq3 = 1.0;
             }
-          m_FloatSeq.data[i] = cntseq3 + 0.12;
+          m_FloatSeq.data[i] = cntseq3 + (CORBA::Float)0.12;
 
           ++cntseq4;
           if( cntseq4 > 30000 )

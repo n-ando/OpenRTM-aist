@@ -313,9 +313,9 @@ namespace RTC
     {
     public:
       CompStatMsg(ComponentObserverConsumer& coc)
-        : activatedListener(NULL), deactivatedListener(NULL),
-          resetListener(NULL), abortingListener(NULL),
-          finalizeListener(NULL), m_coc(coc) {}
+        : activatedListener(nullptr), deactivatedListener(nullptr),
+          resetListener(nullptr), abortingListener(nullptr),
+          finalizeListener(nullptr), m_coc(coc) {}
       void onGeneric(const char* msgprefix, UniqueId ec_id, ReturnCode_t ret)
       {
         if (ret == RTC::RTC_OK)
@@ -366,8 +366,8 @@ namespace RTC
     {
     public:
       PortAction(ComponentObserverConsumer& coc)
-        : portAddListener(NULL), portRemoveListener(NULL),
-          portConnectListener(NULL), portDisconnectListener(NULL),
+        : portAddListener(nullptr), portRemoveListener(nullptr),
+          portConnectListener(nullptr), portDisconnectListener(nullptr),
           m_coc(coc) {}
       void onGeneric(const char* _msg, const char* portname)
       {
@@ -384,7 +384,7 @@ namespace RTC
         onGeneric("REMOVE:", static_cast<const char*>(pprof.name));
       }
       void onConnect(const char* portname,
-                     ::RTC::ConnectorProfile& pprof, ReturnCode_t ret)
+                     ::RTC::ConnectorProfile&  /*pprof*/, ReturnCode_t ret)
       {
         if (ret == RTC::RTC_OK)
           {
@@ -392,7 +392,7 @@ namespace RTC
           }
       }
       void onDisconnect(const char* portname,
-                        ::RTC::ConnectorProfile& pprof, ReturnCode_t ret)
+                        ::RTC::ConnectorProfile&  /*pprof*/, ReturnCode_t ret)
       {
         if (ret == RTC::RTC_OK)
           {
@@ -429,8 +429,8 @@ namespace RTC
       }
       virtual ~DataPortAction() {}
 
-      virtual ReturnCode operator()(ConnectorInfo& info,
-                                    ByteData& data)
+      virtual ReturnCode operator()(ConnectorInfo&  /*info*/,
+                                    ByteData&  /*data*/)
       {
         coil::TimeValue curr = coil::gettimeofday();
         coil::TimeValue intvl = curr - m_last;
@@ -460,8 +460,8 @@ namespace RTC
     {
     public:
       ECAction(ComponentObserverConsumer& coc)
-        : ecAttached(NULL), ecDetached(NULL), ecRatechanged(NULL),
-          ecStartup(NULL), ecShutdown(NULL),
+        : ecAttached(nullptr), ecDetached(nullptr), ecRatechanged(nullptr),
+          ecStartup(nullptr), ecShutdown(nullptr),
           m_coc(coc) {}
       void onGeneric(const char* _msg, UniqueId ec_id)
       {
@@ -517,9 +517,9 @@ namespace RTC
     {
     public:
       ConfigAction(ComponentObserverConsumer& coc)
-        : updateConfigParamListener(NULL), setConfigSetListener(NULL),
-          addConfigSetListener(NULL), updateConfigSetListener(NULL),
-          removeConfigSetListener(NULL), activateConfigSetListener(NULL),
+        : updateConfigParamListener(nullptr), setConfigSetListener(nullptr),
+          addConfigSetListener(nullptr), updateConfigSetListener(nullptr),
+          removeConfigSetListener(nullptr), activateConfigSetListener(nullptr),
           m_coc(coc) {}
       void updateConfigParam(const char* configsetname,
                              const char* configparamname)

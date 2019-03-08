@@ -1286,7 +1286,7 @@ namespace RTC
       {
         prof = m_sdoservice.getServiceProviderProfile(id);
       }
-    catch (SDOPackage::InvalidParameter &e)
+    catch (SDOPackage::InvalidParameter&)
       {
         RTC_ERROR(("InvalidParameter exception: name (%s) is not found", id));
         throw;
@@ -1322,7 +1322,7 @@ namespace RTC
       {
         sdo = m_sdoservice.getServiceProvider(id);
       }
-    catch (SDOPackage::InvalidParameter &e)
+    catch (SDOPackage::InvalidParameter&)
       {
         throw;
       }
@@ -1909,11 +1909,7 @@ namespace RTC
    */
   bool RTObject_impl::isOwnExecutionContext(RTC::UniqueId ec_id)
   {
-    if (ec_id < ECOTHER_OFFSET)
-      {
-        return true;
-      }
-    return false;
+    return ec_id < ECOTHER_OFFSET;
   }
 
   /*!
@@ -2181,14 +2177,14 @@ namespace RTC
   void RTObject_impl::finalizeContexts()
   {
     RTC_TRACE(("finalizeContexts()"));
-    for (int i(0), len(m_eclist.size()); i < len; ++i)
+    for (std::vector<ExecutionContextBase*>::iterator ec = m_eclist.begin(); ec != m_eclist.end(); ++ec)
       {
-        m_eclist[i]->getObjRef()->stop();
+        (*ec)->getObjRef()->stop();
         try
           {
             PortableServer::RefCountServantBase* servant(nullptr);
             servant =
-              dynamic_cast<PortableServer::RefCountServantBase*>(m_eclist[i]);
+              dynamic_cast<PortableServer::RefCountServantBase*>(*ec);
 
             if (servant == nullptr)
               {
@@ -2222,7 +2218,7 @@ namespace RTC
             // never throws exception
             RTC_ERROR(("Unknown exception caught."));
           }
-        RTC::ExecutionContextFactory::instance().deleteObject(m_eclist[i]);
+        RTC::ExecutionContextFactory::instance().deleteObject(*ec);
       }
     if (!m_eclist.empty())
       {
@@ -2805,19 +2801,19 @@ namespace RTC
 
     coil::Properties default_opts;
     getInheritedECOptions(default_opts);
-    for (size_t i(0); i < ecs_tmp.size(); ++i)
+    for (coil::vstring::const_iterator ec_itr = ecs_tmp.begin(); ec_itr != ecs_tmp.end(); ++ec_itr)
       {
-        std::string ec_tmp = ecs_tmp[i];
+        std::string ec_tmp = *ec_itr;
         if (coil::normalize(ec_tmp) == "none")
           {
             RTC_INFO(("EC none. EC will not be bound to the RTC."));
             ec_args.clear();
             return RTC::RTC_OK;
           }
-        coil::vstring type_and_name = coil::split(ecs_tmp[i], "(", true);
+        coil::vstring type_and_name = coil::split(*ec_itr, "(", true);
         if (type_and_name.size() > 2)
           {
-            RTC_DEBUG(("Invalid EC type specified: %s", ecs_tmp[i].c_str()));
+            RTC_DEBUG(("Invalid EC type specified: %s", (*ec_itr).c_str()));
             continue;
           }
         coil::Properties p = default_opts;
@@ -2920,12 +2916,12 @@ namespace RTC
   {
     std::vector<RTC::ExecutionContextBase*> eclist;
     eclist = RTC::ExecutionContextFactory::instance().createdObjects();
-    for (size_t i(0); i < eclist.size(); ++i)
+    for (std::vector<RTC::ExecutionContextBase*>::iterator ec_itr = eclist.begin(); ec_itr != eclist.end(); ++ec_itr)
       {
-        if (eclist[i]->getProperties()["type"] == ec_arg["type"] &&
-            eclist[i]->getProperties()["name"] == ec_arg["name"])
+        if ((*ec_itr)->getProperties()["type"] == ec_arg["type"] &&
+            (*ec_itr)->getProperties()["name"] == ec_arg["name"])
           {
-            ec = eclist[i];
+            ec = *ec_itr;
             return RTC::RTC_OK;
           }
       }
@@ -2942,13 +2938,13 @@ namespace RTC
     coil::vstring avail_ec
       = RTC::ExecutionContextFactory::instance().getIdentifiers();
 
-    for (size_t i(0); i < ec_args.size(); ++i)
+    for (std::vector<coil::Properties>::iterator ec_arg = ec_args.begin(); ec_arg != ec_args.end(); ++ec_arg)
       {
-        std::string& ec_type(ec_args[i]["type"]);
-        std::string& ec_name(ec_args[i]["name"]);
+        std::string& ec_type((*ec_arg)["type"]);
+        std::string& ec_name((*ec_arg)["name"]);
         RTC::ExecutionContextBase* ec;
         if (!ec_name.empty() &&
-            findExistingEC(ec_args[i], ec) == RTC::RTC_OK)
+            findExistingEC(*ec_arg, ec) == RTC::RTC_OK)
           { // if EC's name exists, find existing EC in the factory.
             RTC_DEBUG(("EC: type=%s, name=%s already exists.",
                        ec_type.c_str(), ec_name.c_str()));
@@ -2964,7 +2960,7 @@ namespace RTC
                 continue;
               }
             ec = RTC::ExecutionContextFactory::
-              instance().createObject(ec_type.c_str());
+              instance().createObject(ec_type);
           }
 
         if (ec == nullptr)
@@ -2977,7 +2973,7 @@ namespace RTC
           }
         RTC_DEBUG(("EC (%s) created.", ec_type.c_str()));
 
-        ec->init(ec_args[i]);
+        ec->init(*ec_arg);
         m_eclist.push_back(ec);
         ec->bindComponent(this);
       }
@@ -2999,7 +2995,7 @@ namespace RTC
             return RTC::RTC_ERROR;
         }
         ec = RTC::ExecutionContextFactory::instance().
-          createObject(ec_type.c_str());
+          createObject(ec_type);
         if (ec == nullptr)
           {
             RTC_ERROR(("EC (%s) creation failed.",

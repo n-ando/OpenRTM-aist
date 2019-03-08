@@ -69,11 +69,11 @@ namespace RTC
    * @brief Virtual destructor
    * @endif
    */
-  ConfigAdmin::~ConfigAdmin(void)
+  ConfigAdmin::~ConfigAdmin()
   {
-    for (int i(0), len(m_params.size()); i < len; ++i)
+    for (std::vector<ConfigBase*>::iterator param = m_params.begin(); param != m_params.end(); ++param)
       {
-        if (m_params[i] != nullptr) { delete m_params[i]; }
+        if ((*param) != nullptr) { delete (*param); }
       }
     m_params.clear();
   }
@@ -99,6 +99,7 @@ namespace RTC
     // configsets
     const std::vector<coil::Properties*>& leaf(m_configsets.getLeaf());
 
+
     for (size_t i(0); i < leaf.size(); ++i)
       {
         if (leaf[i]->hasKey(param_name))
@@ -121,7 +122,7 @@ namespace RTC
    *        (Active configuration set)
    * @endif
    */
-  void ConfigAdmin::update(void)
+  void ConfigAdmin::update()
   {
     m_changedParam.clear();
     if (m_changed && m_active)
@@ -147,12 +148,12 @@ namespace RTC
     m_changedParam.clear();
     coil::Properties& prop(m_configsets.getNode(config_set));
 
-    for (int i(0), len(m_params.size()); i < len; ++i)
+    for (std::vector<ConfigBase*>::iterator param = m_params.begin(); param != m_params.end(); ++param)
       {
-        if (prop.hasKey(m_params[i]->name) != nullptr)
+        if (prop.hasKey((*param)->name) != nullptr)
           {
             // m_changedParam is updated here
-            m_params[i]->update(prop[m_params[i]->name].c_str());
+            (*param)->update(prop[(*param)->name].c_str());
           }
       }
     onUpdate(config_set);
@@ -197,11 +198,7 @@ namespace RTC
     std::vector<ConfigBase*>::iterator it;
     it = std::find_if(m_params.begin(), m_params.end(),
                       find_conf(param_name));
-    if (it != m_params.end())
-      {
-        return true;
-      }
-    return false;
+    return it != m_params.end();
   }
 
 
@@ -212,7 +209,7 @@ namespace RTC
    * @brief Get all configuration sets
    * @endif
    */
-  const std::vector<coil::Properties*>& ConfigAdmin::getConfigurationSets(void)
+  const std::vector<coil::Properties*>& ConfigAdmin::getConfigurationSets()
   {
     return m_configsets.getLeaf();
   }
@@ -261,7 +258,7 @@ namespace RTC
    * @brief Get the active configuration set
    * @endif
    */
-  const coil::Properties& ConfigAdmin::getActiveConfigurationSet(void)
+  const coil::Properties& ConfigAdmin::getActiveConfigurationSet()
   {
     coil::Properties& p(m_configsets.getNode(m_activeId));
 

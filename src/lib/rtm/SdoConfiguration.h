@@ -177,7 +177,7 @@ namespace SDOPackage
      *
      * @endif
      */
-    Configuration_impl(RTC::ConfigAdmin& configAdmin,
+    Configuration_impl(RTC::ConfigAdmin& configsets,
                        RTC::SdoServiceAdmin& sdoServiceAdmin);
 
     /*!
@@ -195,7 +195,7 @@ namespace SDOPackage
 
      * @endif
      */
-    virtual ~Configuration_impl(void);
+    virtual ~Configuration_impl();
 
     //============================================================
     //

@@ -32,7 +32,7 @@ namespace RTC
    * @brief Constructor
    * @endif
    */
-  InPortSHMProvider::InPortSHMProvider(void)
+  InPortSHMProvider::InPortSHMProvider()
    : m_buffer(nullptr),
      m_connector(nullptr)
   {
@@ -67,7 +67,7 @@ namespace RTC
    * @brief Destructor
    * @endif
    */
-  InPortSHMProvider::~InPortSHMProvider(void)
+  InPortSHMProvider::~InPortSHMProvider()
   {
 
   }
@@ -168,34 +168,28 @@ namespace RTC
       case BufferStatus::BUFFER_OK:
         onBufferWrite(data);
         return ::OpenRTM::PORT_OK;
-        break;
 
       case BufferStatus::BUFFER_ERROR:
         onReceiverError(data);
         return ::OpenRTM::PORT_ERROR;
-        break;
 
       case BufferStatus::BUFFER_FULL:
         onBufferFull(data);
         onReceiverFull(data);
         return ::OpenRTM::BUFFER_FULL;
-        break;
 
       case BufferStatus::BUFFER_EMPTY:
         // never come here
         return ::OpenRTM::BUFFER_EMPTY;
-        break;
 
       case BufferStatus::PRECONDITION_NOT_MET:
         onReceiverError(data);
         return ::OpenRTM::PORT_ERROR;
-        break;
 
       case BufferStatus::TIMEOUT:
         onBufferWriteTimeout(data);
         onReceiverTimeout(data);
         return ::OpenRTM::BUFFER_TIMEOUT;
-        break;
 
       default:
         return ::OpenRTM::UNKNOWN_ERROR;

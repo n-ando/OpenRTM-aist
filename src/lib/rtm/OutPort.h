@@ -172,7 +172,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~OutPort(void)
+    virtual ~OutPort()
     {
     }
 
@@ -242,35 +242,35 @@ namespace RTC
           {
 
             ReturnCode ret;
-			if (!m_connectors[i]->pullDirectMode())
-			{
-				if (m_onWriteConvert != nullptr)
-				{
-					RTC_DEBUG(("m_connectors.OnWriteConvert called"));
-					DataType tmp = (*m_onWriteConvert)(value);
-					ret = m_connectors[i]->write(tmp);
-				}
-				else
-				{
-					RTC_DEBUG(("m_connectors.write called"));
-					ret = m_connectors[i]->write(value);
-				}
-			}
-			else
-			{
-				Guard guard(m_valueMutex);
-				if (m_onWriteConvert != nullptr)
-				{
-					RTC_DEBUG(("m_connectors.OnWriteConvert called"));
-					m_directValue = ((*m_onWriteConvert)(value));
-				}
-				else
-				{
-					m_directValue = value;
-				}
-				m_directNewData = true;
-				ret = PORT_OK;
-			}
+            if (!m_connectors[i]->pullDirectMode())
+              {
+                if (m_onWriteConvert != nullptr)
+                  {
+                    RTC_DEBUG(("m_connectors.OnWriteConvert called"));
+                    DataType tmp = (*m_onWriteConvert)(value);
+                    ret = m_connectors[i]->write(tmp);
+                  }
+                else
+                  {
+                    RTC_DEBUG(("m_connectors.write called"));
+                    ret = m_connectors[i]->write(value);
+                  }
+              }
+            else
+              {
+                Guard guard(m_valueMutex);
+                if (m_onWriteConvert != nullptr)
+                  {
+                    RTC_DEBUG(("m_connectors.OnWriteConvert called"));
+                    m_directValue = ((*m_onWriteConvert)(value));
+                  }
+                else
+                  {
+                    m_directValue = value;
+                  }
+                m_directNewData = true;
+                ret = PORT_OK;
+              }
             m_status[i] = ret;
 
             if (ret == PORT_OK) { continue; }

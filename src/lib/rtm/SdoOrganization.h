@@ -115,7 +115,7 @@ namespace SDOPackage
      *
      * @endif
      */
-    virtual ~Organization_impl(void);
+    virtual ~Organization_impl();
 
     //============================================================
     //
@@ -198,7 +198,7 @@ namespace SDOPackage
      * @endif
      */
     virtual CORBA::Boolean
-    add_organization_property(const OrganizationProperty& org_property)
+    add_organization_property(const OrganizationProperty& organization_property)
       throw (CORBA::SystemException,
              InvalidParameter, NotAvailable, InternalError);
 

@@ -70,7 +70,7 @@ namespace RTM
     bool operator()(const std::string& str)
     {
       std::string a = str;
-      return coil::normalize(a) == "all" ? true : false;
+      return coil::normalize(a) == "all";
     }
   };
 
@@ -98,15 +98,15 @@ namespace RTM
     coil::vstring ids = factory.getIdentifiers();
     RTC_DEBUG(("Available services: %s", coil::flatten(ids).c_str()));
 
-    for (size_t i(0); i < ids.size(); ++i)
+    for (coil::vstring ::iterator id = ids.begin(); id != ids.end(); ++id)
       {
-        if (all_enable || isEnabled(ids[i], svcs))
+        if (all_enable || isEnabled((*id), svcs))
           {
-            if (notExisting(ids[i]))
+            if (notExisting(*id))
               {
-                LocalServiceBase* service(factory.createObject(ids[i]));
-                RTC_DEBUG(("Service created: %s", ids[i].c_str()));
-                coil::Properties& prop(props.getNode(ids[i]));
+                LocalServiceBase* service(factory.createObject(*id));
+                RTC_DEBUG(("Service created: %s", (*id).c_str()));
+                coil::Properties& prop(props.getNode((*id)));
                 service->init(prop);
                 addLocalService(service);
               }
@@ -124,10 +124,10 @@ namespace RTM
   void LocalServiceAdmin::finalize()
   {
     RTM::LocalServiceFactory& factory(RTM::LocalServiceFactory::instance());
-    for (size_t i(0); i < m_services.size(); ++i)
+    for (std::vector<LocalServiceBase*>::iterator service = m_services.begin(); service != m_services.end(); ++service)
       {
-        m_services[i]->finalize();
-        factory.deleteObject(m_services[i]);
+        (*service)->finalize();
+        factory.deleteObject(*service);
       }
     m_services.clear();
   }
@@ -142,9 +142,9 @@ namespace RTM
   RTM::LocalServiceProfileList LocalServiceAdmin::getServiceProfiles()
   {
     RTM::LocalServiceProfileList profs(0);
-    for (size_t i(0); i < m_services.size(); ++i)
+    for (std::vector<LocalServiceBase*>::iterator service = m_services.begin(); service != m_services.end(); ++service)
       {
-        profs.push_back(m_services[i]->getProfile());
+        profs.push_back((*service)->getProfile());
       }
     return profs;
   }
@@ -161,11 +161,11 @@ namespace RTM
                                        ::RTM::LocalServiceProfile& prof)
   {
     Guard guard(m_services_mutex);
-    for (size_t i(0); i < m_services.size(); ++i)
+    for (std::vector<LocalServiceBase*>::iterator service = m_services.begin(); service != m_services.end(); ++service)
       {
-        if (name == m_services[i]->getProfile().name)
+        if (name == (*service)->getProfile().name)
           {
-            prof = m_services[i]->getProfile();
+            prof = (*service)->getProfile();
             return true;
           }
       }
@@ -181,11 +181,11 @@ namespace RTM
    */
   RTM::LocalServiceBase* LocalServiceAdmin::getService(const char* id)
   {
-    for (size_t i(0); i < m_services.size(); ++i)
+      for (std::vector<LocalServiceBase*>::iterator service = m_services.begin(); service != m_services.end(); ++service)
       {
-        if (m_services[i]->getProfile().name == id)
+        if ((*service)->getProfile().name == id)
           {
-            return m_services[i];
+            return (*service);
           }
       }
     return nullptr;
@@ -274,9 +274,9 @@ namespace RTM
   bool LocalServiceAdmin::notExisting(const std::string& id)
   {
     Guard gurad(m_mutex);
-    for (size_t i(0); i < m_services.size(); ++i)
+    for (std::vector<LocalServiceBase*>::iterator service = m_services.begin(); service != m_services.end(); ++service)
       {
-        if (m_services[i]->getProfile().name == id)
+        if ((*service)->getProfile().name == id)
           {
             RTC_WARN(("Local service %s already exists.", id.c_str()));
             return false;

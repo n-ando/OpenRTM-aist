@@ -99,12 +99,12 @@ RTC::ReturnCode_t Sensor::onDeactivated(RTC::UniqueId ec_id)
 */
 
 
-RTC::ReturnCode_t Sensor::onExecute(RTC::UniqueId ec_id)
+RTC::ReturnCode_t Sensor::onExecute(RTC::UniqueId  /*ec_id*/)
 {
   if (m_inIn.isNew()) {
     m_inIn.read();
     std::cout << "Sensor Received data: " << m_in.data << std::endl;
-    m_out.data = m_in.data * 2;
+    m_out.data = (CORBA::Float)m_in.data * 2;
     m_outOut.write();
   }
   return RTC::RTC_OK;

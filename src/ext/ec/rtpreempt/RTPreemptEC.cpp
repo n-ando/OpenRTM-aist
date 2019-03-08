@@ -109,7 +109,7 @@ namespace RTC_exp
    * @brief Generate internal activity thread for ExecutionContext
    * @endif
    */
-  int RTPreemptEC::open(void *args)
+  int RTPreemptEC::open(void * /*args*/)
   {
     RTC_TRACE(("open()"));
     activate();
@@ -145,7 +145,7 @@ namespace RTC_exp
       }
     return true;
   }
-  int RTPreemptEC::svc(void)
+  int RTPreemptEC::svc()
   {
     RTC_TRACE(("svc()"));
     if (!prepareThread()) { return -1; }
@@ -185,7 +185,7 @@ namespace RTC_exp
         if (m_nowait) { ++count; continue; }
 
         struct timespec sleeptime;
-        if (getSleepTime(sleeptime, ts0, ts1) == true)
+        if (getSleepTime(sleeptime, ts0, ts1))
           {
             clock_nanosleep(CLOCK_MONOTONIC, !TIMER_ABSTIME,
                             &sleeptime, nullptr);
@@ -210,7 +210,7 @@ namespace RTC_exp
    * @brief Thread execution function for ExecutionContext
    * @endif
    */
-  int RTPreemptEC::close(unsigned long flags)
+  int RTPreemptEC::close(unsigned long  /*flags*/)
   {
     RTC_TRACE(("close()"));
     // At this point, this component have to be finished.
@@ -459,7 +459,7 @@ namespace RTC_exp
     // Now comp's next state must be ACTIVE state
     // If worker thread is stopped, restart worker thread.
     Guard guard(m_workerthread.mutex_);
-    if (m_workerthread.running_ == false)
+    if (!m_workerthread.running_)
       {
         m_workerthread.running_ = true;
         m_workerthread.cond_.signal();
@@ -485,7 +485,7 @@ namespace RTC_exp
     // Now comp's next state must be ACTIVE state
     // If worker thread is stopped, restart worker thread.
     Guard guard(m_workerthread.mutex_);
-    if (m_workerthread.running_ == false)
+    if (!m_workerthread.running_)
       {
         m_workerthread.running_ = true;
         m_workerthread.cond_.signal();
@@ -506,7 +506,7 @@ namespace RTC_exp
     if (isAllNextState(RTC::INACTIVE_STATE))
       {
         Guard guard(m_workerthread.mutex_);
-        if (m_workerthread.running_ == true)
+        if (m_workerthread.running_)
           {
             m_workerthread.running_ = false;
             RTC_TRACE(("All RTCs are INACTIVE. Stopping worker thread."));
@@ -528,7 +528,7 @@ namespace RTC_exp
     if (isAllNextState(RTC::INACTIVE_STATE))
       {
         Guard guard(m_workerthread.mutex_);
-        if (m_workerthread.running_ == true)
+        if (m_workerthread.running_)
           {
             m_workerthread.running_ = false;
             RTC_TRACE(("All RTCs are INACTIVE. Stopping worker thread."));
@@ -550,7 +550,7 @@ namespace RTC_exp
     if (isAllNextState(RTC::INACTIVE_STATE))
       {
         Guard guard(m_workerthread.mutex_);
-        if (m_workerthread.running_ == true)
+        if (m_workerthread.running_)
           {
             m_workerthread.running_ = false;
             RTC_TRACE(("All RTCs are INACTIVE. Stopping worker thread."));
@@ -572,7 +572,7 @@ namespace RTC_exp
     if (isAllNextState(RTC::INACTIVE_STATE))
       {
         Guard guard(m_workerthread.mutex_);
-        if (m_workerthread.running_ == true)
+        if (m_workerthread.running_)
           {
             m_workerthread.running_ = false;
             RTC_TRACE(("All RTCs are INACTIVE. Stopping worker thread."));
@@ -662,7 +662,7 @@ extern "C"
    * @endif
    */
 
- void RTPreemptECInit(RTC::Manager* manager)
+ void RTPreemptECInit(RTC::Manager*  /*manager*/)
   {
     RTC::ExecutionContextFactory::
       instance().addFactory("RTPreemptEC",

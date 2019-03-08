@@ -663,7 +663,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~CorbaPort(void);
+    virtual ~CorbaPort();
 
     /*!
      * @if jp

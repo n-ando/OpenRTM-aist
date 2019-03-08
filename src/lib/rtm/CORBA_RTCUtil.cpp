@@ -57,11 +57,7 @@ namespace CORBA_RTCUtil
   {
     try
       {
-        if (rtc->_non_existent())
-          {
-            return false;
-          }
-        return true;
+        return !rtc->_non_existent();
       }
     catch (...)
       {
@@ -1186,7 +1182,7 @@ namespace CORBA_RTCUtil
   {
     RTC::PortProfile_var prof = p->get_port_profile();
     std::string c(CORBA::string_dup(prof->name));
-    return (m_name == c) ? true : false;
+    return m_name == c;
   }
   /*!
    * @if jp
@@ -1206,7 +1202,7 @@ namespace CORBA_RTCUtil
   {
     RTC::PortServiceList_var ports = rtc->get_ports();
     RTC::PortService_var port_var;
-    for (size_t p(0); p < ports->length(); ++p)
+    for (CORBA::ULong p(0); p < ports->length(); ++p)
       {
         RTC::PortProfile_var pp = ports[p]->get_port_profile();
         std::string s(CORBA::string_dup(pp->name));

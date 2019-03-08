@@ -29,7 +29,7 @@
 namespace coil
 {
   class Properties;
-};
+} // namespace coil
 
 namespace RTC
 {
@@ -92,7 +92,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~PublisherFlush(void);
+    virtual ~PublisherFlush();
 
     /*!
      * @if jp
@@ -204,7 +204,7 @@ namespace RTC
      * @endif
      */
     virtual ::RTC::DataPortStatus::Enum
-    setListener(ConnectorInfo& profile,
+    setListener(ConnectorInfo& info,
                 RTC::ConnectorListeners* listeners);
 
     /*!

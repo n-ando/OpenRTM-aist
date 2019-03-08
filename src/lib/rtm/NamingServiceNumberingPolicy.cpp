@@ -26,7 +26,6 @@ namespace RTM
   // NamingServiceNumberingPolicy
   //============================================================
 	NamingServiceNumberingPolicy::NamingServiceNumberingPolicy()
-		: m_num(0)
 	{
 		m_mgr = &RTC::Manager::instance();
 	}
@@ -102,14 +101,7 @@ namespace RTM
 
 	  rtcs = m_mgr->getNaming()->string_to_component(rtc_name);
 
-	  if (rtcs.length() > 0)
-	  {
-		  return true;
-	  }
-	  else
-	  {
-		  return false;
-	  }
+	  return rtcs.length() > 0;
   }
 }; //namespace RTM  
 

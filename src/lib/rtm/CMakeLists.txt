@@ -415,7 +415,6 @@ set(rtm_srcs
 	OutPortSHMProvider.cpp
 	SharedMemoryPort.cpp
 	SimulatorExecutionContext.cpp
-	NumberingPolicyBase.cpp
 	NamingServiceNumberingPolicy.cpp
 	NodeNumberingPolicy.cpp
 	OutPortDirectConsumer.cpp

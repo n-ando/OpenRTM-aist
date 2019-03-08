@@ -87,7 +87,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~OutPortCorbaCdrConsumer(void);
+    virtual ~OutPortCorbaCdrConsumer();
 
     /*!
      * @if jp

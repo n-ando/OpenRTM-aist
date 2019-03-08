@@ -61,13 +61,13 @@ int main(int argc, char* argv[])
   opts.push_back("manager.corba_servant:NO");
 
   // Manager initialization
-  RTC::Manager::init(opts.size(), coil::toArgv(opts));
+  RTC::Manager::init((int)opts.size(), coil::toArgv(opts));
   RTC::Manager& mgr(RTC::Manager::instance());
 
 
   // loaded profile = old profiles - new profiles
   std::vector<coil::Properties> oldp(mgr.getFactoryProfiles());
-  mgr.load(basename.c_str(), "");
+  mgr.load(basename, "");
   std::vector<coil::Properties> newp(mgr.getFactoryProfiles());
   std::vector<coil::Properties> profs;
 

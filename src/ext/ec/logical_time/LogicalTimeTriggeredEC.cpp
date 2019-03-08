@@ -103,7 +103,7 @@ namespace RTC
    * @brief Generate internal activity thread for ExecutionContext
    * @endif
    */
-  int LogicalTimeTriggeredEC::open(void *args)
+  int LogicalTimeTriggeredEC::open(void * /*args*/)
   {
     RTC_TRACE(("open()"));
     activate();
@@ -117,7 +117,7 @@ namespace RTC
    * @brief Invoke each component's operation
    * @endif
    */
-  int LogicalTimeTriggeredEC::svc(void)
+  int LogicalTimeTriggeredEC::svc()
   {
     RTC_TRACE(("svc()"));
     unsigned int count(0);
@@ -175,7 +175,7 @@ namespace RTC
    * @brief Thread execution function for ExecutionContext
    * @endif
    */
-  int LogicalTimeTriggeredEC::close(unsigned long flags)
+  int LogicalTimeTriggeredEC::close(unsigned long  /*flags*/)
   {
     RTC_TRACE(("close()"));
     // At this point, this component have to be finished.
@@ -542,7 +542,7 @@ namespace RTC
       }
     return RTC::RTC_OK;
   }
-}  // namespace RTC;
+} // namespace RTC
 
 
 extern "C"
@@ -554,7 +554,7 @@ extern "C"
    * @brief Register Factory class for this ExecutionContext
    * @endif
    */
-  void LogicalTimeTriggeredECInit(RTC::Manager* manager)
+  void LogicalTimeTriggeredECInit(RTC::Manager*  /*manager*/)
   {
     RTC::ExecutionContextFactory::
       instance().addFactory("ltt_ec",

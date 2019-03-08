@@ -35,7 +35,7 @@
 namespace coil
 {
   class Properties;
-};
+} // namespace coil
 
 namespace RTC
 {
@@ -79,7 +79,7 @@ namespace RTC
      *
      * @endif
      */
-    PublisherPeriodic(void);
+    PublisherPeriodic();
 
     /*!
      * @if jp
@@ -94,7 +94,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~PublisherPeriodic(void);
+    virtual ~PublisherPeriodic();
 
     /*!
      * @if jp
@@ -422,7 +422,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual int svc(void);
+    virtual int svc();
 
   protected:
     enum Policy
