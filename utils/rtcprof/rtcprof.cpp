@@ -61,7 +61,7 @@ int main(int argc, char* argv[])
   opts.push_back("manager.corba_servant:NO");
 
   // Manager initialization
-  RTC::Manager::init((int)opts.size(), coil::toArgv(opts));
+  RTC::Manager::init(static_cast<int>(opts.size()), coil::toArgv(opts));
   RTC::Manager& mgr(RTC::Manager::instance());
 
 
