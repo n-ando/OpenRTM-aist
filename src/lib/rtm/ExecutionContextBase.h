@@ -1036,19 +1036,19 @@ namespace RTC
     bool isAllCurrentState(RTC::LifeCycleState state)
     {
       return m_worker.isAllCurrentState(state);
-    };
+    }
     bool isAllNextState(RTC::LifeCycleState state)
     {
       return m_worker.isAllNextState(state);
-    };
+    }
     bool isOneOfCurrentState(RTC::LifeCycleState state)
     {
       return m_worker.isOneOfCurrentState(state);
-    };
+    }
     bool isOneOfNextState(RTC::LifeCycleState state)
     {
       return m_worker.isOneOfNextState(state);
-    };
+    }
 
     void invokeWorker()       { m_worker.invokeWorker(); }
     void invokeWorkerPreDo()  { m_worker.invokeWorkerPreDo(); }

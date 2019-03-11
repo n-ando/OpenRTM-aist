@@ -147,7 +147,7 @@ namespace RTC
 
 
           return NO_CHANGE;
-      };
+      }
       RingBuffer<EventBase*>&m_buffer;
       CdrBufferBase *m_thebuffer;
   };
@@ -250,7 +250,7 @@ namespace RTC
      *
      * @endif
      */
-    ~EventInPort() override{};
+    ~EventInPort() override{}
 
     /*!
      * @if jp

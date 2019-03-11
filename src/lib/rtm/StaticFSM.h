@@ -93,7 +93,7 @@
     ~S() override {}                                                    \
     static const char * _state_name() { return #S; }                    \
     Box & box() { return *static_cast<Box *>(_box()); }                 \
-    friend class ::_VS8_Bug_101615;
+    friend class ::_VS8_Bug_101615
 
 
 using namespace Macho;

@@ -433,8 +433,8 @@ class DataListener
 {
   USE_CONNLISTENER_STATUS;
 public:
-  DataListener(Throughput *comp) : m_comp(comp)  {};
-  ~DataListener() override {};
+  DataListener(Throughput *comp) : m_comp(comp)  {}
+  ~DataListener() override {}
   ReturnCode operator()(ConnectorInfo&  /*info*/,
                           DataType& data) override
   {
@@ -481,7 +481,7 @@ public:
     std::cout << "------------------------------"   << std::endl;
     m_comp->setConnectorProfile(info);
 	return RTC::ConnectorListenerStatus::NO_CHANGE;;
-  };
+  }
   Throughput* m_comp;
 };
 

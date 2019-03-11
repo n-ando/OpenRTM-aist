@@ -68,7 +68,7 @@ namespace RTM
      *
      * @endif
      */
-    ProcessUniquePolicy() : m_num(0) {};
+    ProcessUniquePolicy() : m_num(0) {}
     
     /*!
      * @if jp
@@ -81,7 +81,7 @@ namespace RTM
      *
      * @endif
      */
-    ~ProcessUniquePolicy() override{};
+    ~ProcessUniquePolicy() override{}
     
     /*!
      * @if jp
