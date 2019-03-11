@@ -21,7 +21,7 @@ macro(idl_compile idl_name)
 	add_custom_command(
 		OUTPUT ${idl_name}Skel.cpp
 		COMMAND ${IDL_COMPILE_COMMAND} ${IDLCOMMAND_FLAGS} -I${PROJECT_SOURCE_DIR}/.. -I${PROJECT_SOURCE_DIR}/../../idl ${PROJECT_SOURCE_DIR}/../${idl_name}.idl
-		COMMAND python ${SKELWRAPPER_COMMAND} --include-dir="" --skel-suffix=Skel --stub-suffix=Stub --idl-file=${idl_name}.idl
+		COMMAND python -B ${SKELWRAPPER_COMMAND} --include-dir="" --skel-suffix=Skel --stub-suffix=Stub --idl-file=${idl_name}.idl
 		WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
 	)
 	
@@ -74,7 +74,7 @@ set_source_files_properties(${ALL_IDL_SRCS} PROPERTIES GENERATED 1)
 
 if(VXWORKS)
 	add_library(${target} SHARED ${ALL_IDL_SRCS})
-	install(TARGETS ${RTM_PROJECT_NAME} LIBRARY DESTINATION ${INSTALL_RTM_BIN_DIR}
+	install(TARGETS ${target} LIBRARY DESTINATION ${INSTALL_RTM_BIN_DIR}
 						ARCHIVE DESTINATION ${INSTALL_RTM_BIN_DIR}
 						RUNTIME DESTINATION ${INSTALL_RTM_BIN_DIR}
 						COMPONENT ext)
@@ -93,7 +93,7 @@ else(VXWORKS)
 
 		add_custom_command(TARGET ${target}-static 
 			POST_BUILD
-			COMMAND python ${MAKE_DEF_COMMAND} $<TARGET_FILE:${target}-static> ${target} ${RTM_SHORT_VERSION} ${DEF_FILE_NAME}
+			COMMAND python -B ${MAKE_DEF_COMMAND} $<TARGET_FILE:${target}-static> ${target} ${RTM_SHORT_VERSION} ${DEF_FILE_NAME}
 			WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
 		)
 	endif(WIN32)

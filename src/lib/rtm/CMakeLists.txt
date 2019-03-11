@@ -455,9 +455,7 @@ endif(VXWORKS)
 
 if(OBSERVER_ENABLE)
 	add_definitions(-DENABLE_OBSERVER)
-	include_directories(${CMAKE_SOURCE_DIR}/src)
-	set(rtm_srcs ${rtm_srcs} ${CMAKE_SOURCE_DIR}/src/ext/sdo/observer/ComponentObserverConsumer.cpp	)
-	install(FILES ${CMAKE_SOURCE_DIR}/src/ext/sdo/observer/ComponentObserverConsumer.h DESTINATION ${INSTALL_RTM_EXT_DIR}/sdo/observer COMPONENT headers)
+	include_directories(${CMAKE_SOURCE_DIR}/src ${CMAKE_BINARY_DIR}/src/ext/sdo/observer/)
 endif(OBSERVER_ENABLE)
 
 
@@ -469,6 +467,9 @@ set_source_files_properties(${SKEL_IDL_SRCS} PROPERTIES GENERATED 1)
 
 if(VXWORKS)
 	add_library(${RTM_PROJECT_NAME} STATIC ${rtm_srcs})
+	if(OBSERVER_ENABLE)
+		add_dependencies(${RTM_PROJECT_NAME} ComponentObserver_TGT)
+	endif(OBSERVER_ENABLE)
 	install(TARGETS ${RTM_PROJECT_NAME} LIBRARY DESTINATION ${INSTALL_RTM_LIB_DIR}
 					ARCHIVE DESTINATION ${INSTALL_RTM_BIN_DIR}
 					RUNTIME DESTINATION ${INSTALL_RTM_BIN_DIR}
@@ -483,6 +484,9 @@ else(VXWORKS)
 	set_property(TARGET ${RTM_PROJECT_NAME}_objlib PROPERTY POSITION_INDEPENDENT_CODE 1)
 	add_dependencies(${RTM_PROJECT_NAME}_objlib ${COIL_PROJECT_NAME})
 	add_dependencies(${RTM_PROJECT_NAME}_objlib ALL_IDL_TGT)
+	if(OBSERVER_ENABLE)
+		add_dependencies(${RTM_PROJECT_NAME}_objlib ComponentObserver_TGT)
+	endif(OBSERVER_ENABLE)
 
 	add_library(${RTM_PROJECT_NAME}-static STATIC $<TARGET_OBJECTS:${RTM_PROJECT_NAME}_objlib>)
 	add_dependencies(${RTM_PROJECT_NAME}-static ${COIL_PROJECT_NAME})
@@ -494,7 +498,7 @@ else(VXWORKS)
 
 		add_custom_command(TARGET ${RTM_PROJECT_NAME}-static 
 			POST_BUILD
-			COMMAND python ${MAKE_DEF_COMMAND} $<TARGET_FILE:${RTM_PROJECT_NAME}-static> ${RTM_PROJECT_NAME} ${RTM_SHORT_VERSION} ${DEF_FILE_NAME}
+			COMMAND python -B ${MAKE_DEF_COMMAND} $<TARGET_FILE:${RTM_PROJECT_NAME}-static> ${RTM_PROJECT_NAME} ${RTM_SHORT_VERSION} ${DEF_FILE_NAME}
 			WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
 		)
 	
@@ -505,10 +509,13 @@ else(VXWORKS)
 	add_dependencies(${RTM_PROJECT_NAME} ${RTM_PROJECT_NAME}_objlib)
 
 
-	
+	if(OBSERVER_ENABLE)
+		add_dependencies(${RTM_PROJECT_NAME} ComponentObserverConsumer)
+		target_link_libraries(${RTM_PROJECT_NAME} ${ORB_LIBRARIES} ${COIL_PROJECT_NAME} ${RTM_LINKER_OPTION} ComponentObserverConsumer)
+	else(OBSERVER_ENABLE)
+		target_link_libraries(${RTM_PROJECT_NAME} ${ORB_LIBRARIES} ${COIL_PROJECT_NAME} ${RTM_LINKER_OPTION})
+	endif(OBSERVER_ENABLE)
 
-
-	target_link_libraries(${RTM_PROJECT_NAME} ${ORB_LIBRARIES} ${COIL_PROJECT_NAME} ${RTM_LINKER_OPTION})
 	if(UNIX)
 		install(TARGETS ${RTM_PROJECT_NAME} LIBRARY DESTINATION ${INSTALL_RTM_LIB_DIR}
 						ARCHIVE DESTINATION ${INSTALL_RTM_LIB_DIR}

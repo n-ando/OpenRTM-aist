@@ -20,7 +20,7 @@ set(${idl_name}_RTC_STUB ${CMAKE_CURRENT_BINARY_DIR}/${idl_name}Stub.cpp ${CMAKE
 add_custom_command(
 		OUTPUT ${idl_name}Skel.cpp ${idl_name}Stub.cpp
 		COMMAND ${IDL_COMPILE_COMMAND} ${IDLCOMMAND_FLAGS} -I${CMAKE_CURRENT_SOURCE_DIR} -I${CMAKE_SOURCE_DIR}/src/lib/rtm/idl ${CMAKE_CURRENT_SOURCE_DIR}/${idl_name}.idl
-		COMMAND python ${SKELWRAPPER_COMMAND} --include-dir="" --skel-suffix=Skel --stub-suffix=Stub --idl-file=${idl_name}.idl
+		COMMAND python -B ${SKELWRAPPER_COMMAND} --include-dir="" --skel-suffix=Skel --stub-suffix=Stub --idl-file=${idl_name}.idl
 		WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
 )
 add_custom_target(${idl_name}_RTC_TGT DEPENDS ${idl_name}Skel.cpp ${idl_name}Stub.cpp)

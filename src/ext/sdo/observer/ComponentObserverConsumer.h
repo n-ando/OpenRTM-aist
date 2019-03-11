@@ -27,7 +27,7 @@
 #include <rtm/CorbaConsumer.h>
 #include <rtm/ComponentActionListener.h>
 #include <rtm/idl/SDOPackageStub.h>
-#include "ComponentObserverStub.h"
+#include <ComponentObserverStub.h>
 
 namespace RTC
 {
