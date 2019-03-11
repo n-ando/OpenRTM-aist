@@ -115,7 +115,7 @@ namespace SDOPackage
      *
      * @endif
      */
-    virtual ~Organization_impl();
+    ~Organization_impl() override;
 
     //============================================================
     //
@@ -151,9 +151,9 @@ namespace SDOPackage
      *                          completely due to some internal error.
      * @endif
      */
-    virtual char* get_organization_id()
+    char* get_organization_id()
       throw (CORBA::SystemException,
-             InvalidParameter, NotAvailable, InternalError);
+             InvalidParameter, NotAvailable, InternalError) override;
 
     /*!
      * @if jp
@@ -197,10 +197,10 @@ namespace SDOPackage
      *                          completely due to some internal error.
      * @endif
      */
-    virtual CORBA::Boolean
+    CORBA::Boolean
     add_organization_property(const OrganizationProperty& organization_property)
       throw (CORBA::SystemException,
-             InvalidParameter, NotAvailable, InternalError);
+             InvalidParameter, NotAvailable, InternalError) override;
 
     /*!
      * @if jp
@@ -234,9 +234,9 @@ namespace SDOPackage
      *                          completely due to some internal error.
      * @endif
      */
-    virtual OrganizationProperty* get_organization_property()
+    OrganizationProperty* get_organization_property()
       throw (CORBA::SystemException,
-             NotAvailable, InternalError);
+             NotAvailable, InternalError) override;
 
     /*!
      * @if jp
@@ -277,9 +277,9 @@ namespace SDOPackage
      *                          completely due to some internal error.
      * @endif
      */
-    virtual CORBA::Any* get_organization_property_value(const char* name)
+    CORBA::Any* get_organization_property_value(const char* name)
       throw (CORBA::SystemException,
-             InvalidParameter, NotAvailable, InternalError);
+             InvalidParameter, NotAvailable, InternalError) override;
 
     /*!
      * @if jp
@@ -325,10 +325,10 @@ namespace SDOPackage
      *                          completely due to some internal error.
      * @endif
      */
-    virtual CORBA::Boolean
+    CORBA::Boolean
     set_organization_property_value(const char* name, const CORBA::Any& value)
       throw (CORBA::SystemException,
-             InvalidParameter, NotAvailable, InternalError);
+             InvalidParameter, NotAvailable, InternalError) override;
 
     /*!
      * @if jp
@@ -370,9 +370,9 @@ namespace SDOPackage
      *                          completely due to some internal error.
      * @endif
      */
-    virtual CORBA::Boolean remove_organization_property(const char* name)
+    CORBA::Boolean remove_organization_property(const char* name)
       throw (CORBA::SystemException,
-             InvalidParameter, NotAvailable, InternalError);
+             InvalidParameter, NotAvailable, InternalError) override;
 
     /*!
      * @if jp
@@ -411,9 +411,9 @@ namespace SDOPackage
      *                          completely due to some internal error.
      * @endif
      */
-    virtual CORBA::Boolean add_members(const SDOList& sdo_list)
+    CORBA::Boolean add_members(const SDOList& sdo_list)
       throw (CORBA::SystemException,
-             InvalidParameter, NotAvailable, InternalError);
+             InvalidParameter, NotAvailable, InternalError) override;
 
     /*!
      * @if jp
@@ -447,9 +447,9 @@ namespace SDOPackage
      *                          completely due to some internal error.
      * @endif
      */
-    virtual SDOList* get_members()
+    SDOList* get_members()
       throw (CORBA::SystemException,
-             NotAvailable, InternalError);
+             NotAvailable, InternalError) override;
 
     /*!
      * @if jp
@@ -494,9 +494,9 @@ namespace SDOPackage
      *                          completely due to some internal error.
      * @endif
      */
-    virtual CORBA::Boolean set_members(const SDOList& sdos)
+    CORBA::Boolean set_members(const SDOList& sdos)
       throw (CORBA::SystemException,
-             InvalidParameter, NotAvailable, InternalError);
+             InvalidParameter, NotAvailable, InternalError) override;
 
     /*!
      * @if jp
@@ -534,9 +534,9 @@ namespace SDOPackage
      *                          completely due to some internal error.
      * @endif
      */
-    virtual CORBA::Boolean remove_member(const char* id)
+    CORBA::Boolean remove_member(const char* id)
       throw (CORBA::SystemException,
-             InvalidParameter, NotAvailable, InternalError);
+             InvalidParameter, NotAvailable, InternalError) override;
 
     /*!
      * @if jp
@@ -568,9 +568,9 @@ namespace SDOPackage
      *                          completely due to some internal error.
      * @endif
      */
-    virtual SDOSystemElement_ptr get_owner()
+    SDOSystemElement_ptr get_owner()
       throw (CORBA::SystemException,
-             NotAvailable, InternalError);
+             NotAvailable, InternalError) override;
 
     /*!
      * @if jp
@@ -613,9 +613,9 @@ namespace SDOPackage
      *                          completely due to some internal error.
      * @endif
      */
-    virtual CORBA::Boolean set_owner(SDOSystemElement_ptr sdo)
+    CORBA::Boolean set_owner(SDOSystemElement_ptr sdo)
       throw (CORBA::SystemException,
-             InvalidParameter, NotAvailable, InternalError);
+             InvalidParameter, NotAvailable, InternalError) override;
 
     /*!
      * @if jp
@@ -652,9 +652,9 @@ namespace SDOPackage
      *                          completely due to some internal error.
      * @endif
      */
-    virtual DependencyType get_dependency()
+    DependencyType get_dependency()
       throw (CORBA::SystemException,
-             NotAvailable, InternalError);
+             NotAvailable, InternalError) override;
 
     /*!
      * @if jp
@@ -698,9 +698,9 @@ namespace SDOPackage
      *                          completely due to some internal error.
      * @endif
      */
-    virtual CORBA::Boolean set_dependency(DependencyType dependency)
+    CORBA::Boolean set_dependency(DependencyType dependency)
       throw (CORBA::SystemException,
-             NotAvailable, InternalError);
+             NotAvailable, InternalError) override;
 
     // end of CORBA interface definition
     //============================================================

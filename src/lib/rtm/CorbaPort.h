@@ -663,7 +663,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~CorbaPort();
+    ~CorbaPort() override;
 
     /*!
      * @if jp
@@ -861,8 +861,8 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode_t
-    publishInterfaces(ConnectorProfile& connector_profile);
+    ReturnCode_t
+    publishInterfaces(ConnectorProfile& connector_profile) override;
 
     /*!
      * @if jp
@@ -996,8 +996,8 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode_t
-    subscribeInterfaces(const ConnectorProfile& connector_profile);
+    ReturnCode_t
+    subscribeInterfaces(const ConnectorProfile& connector_profile) override;
 
     /*!
      * @if jp
@@ -1020,8 +1020,8 @@ namespace RTC
      *
      * @endif
      */
-    virtual void
-    unsubscribeInterfaces(const ConnectorProfile& connector_profile);
+    void
+    unsubscribeInterfaces(const ConnectorProfile& connector_profile) override;
 
     //============================================================
     // Local operations
@@ -1042,7 +1042,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual void activateInterfaces();
+    void activateInterfaces() override;
 
     /*!
      * @if jp
@@ -1060,7 +1060,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual void deactivateInterfaces();
+    void deactivateInterfaces() override;
 
   protected:
     /*!

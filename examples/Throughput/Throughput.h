@@ -116,7 +116,7 @@ class Throughput
   /*!
    * @brief destructor
    */
-  ~Throughput();
+  ~Throughput() override;
 
   // <rtc-template block="public_attribute">
   
@@ -135,7 +135,7 @@ class Throughput
    * 
    * 
    */
-   virtual RTC::ReturnCode_t onInitialize();
+   RTC::ReturnCode_t onInitialize() override;
 
   /***
    *
@@ -185,7 +185,7 @@ class Throughput
    * 
    * 
    */
-   virtual RTC::ReturnCode_t onActivated(RTC::UniqueId ec_id);
+   RTC::ReturnCode_t onActivated(RTC::UniqueId ec_id) override;
 
   /***
    *
@@ -198,7 +198,7 @@ class Throughput
    * 
    * 
    */
-   virtual RTC::ReturnCode_t onDeactivated(RTC::UniqueId ec_id);
+   RTC::ReturnCode_t onDeactivated(RTC::UniqueId ec_id) override;
 
   /***
    *
@@ -211,7 +211,7 @@ class Throughput
    * 
    * 
    */
-   virtual RTC::ReturnCode_t onExecute(RTC::UniqueId ec_id);
+   RTC::ReturnCode_t onExecute(RTC::UniqueId ec_id) override;
 
   /***
    *
@@ -434,9 +434,9 @@ class DataListener
   USE_CONNLISTENER_STATUS;
 public:
   DataListener(Throughput *comp) : m_comp(comp)  {};
-  virtual ~DataListener() {};
-  virtual ReturnCode operator()(ConnectorInfo&  /*info*/,
-                          DataType& data)
+  ~DataListener() override {};
+  ReturnCode operator()(ConnectorInfo&  /*info*/,
+                          DataType& data) override
   {
     m_comp->receiveData(data.tm, data.data.length());
 	return RTC::ConnectorListenerStatus::NO_CHANGE;;
@@ -450,8 +450,8 @@ class ConnListener
   USE_CONNLISTENER_STATUS;
 public:
   ConnListener(Throughput *comp) : m_comp(comp) {}
-  virtual ~ConnListener() {}
-  virtual ReturnCode operator()(ConnectorInfo& info)
+  ~ConnListener() override {}
+  ReturnCode operator()(ConnectorInfo& info) override
   {
 // Connector Listener: ON_CONNECT
 // Profile::name:      ConsoleIn0.out_ConsoleOut0.in

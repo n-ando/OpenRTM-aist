@@ -284,7 +284,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~NamingOnCorba() {}
+    ~NamingOnCorba() override {}
 
     /*!
      * @if jp
@@ -309,8 +309,8 @@ namespace RTC
      *
      * @endif
      */
-    virtual void bindObject(const char* name, const RTObject_impl* rtobj);
-    virtual void bindObject(const char* name, const PortBase* port);
+    void bindObject(const char* name, const RTObject_impl* rtobj) override;
+    void bindObject(const char* name, const PortBase* port) override;
 
     /*!
      * @if jp
@@ -329,7 +329,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual void bindObject(const char* name, const RTM::ManagerServant* mgr);
+    void bindObject(const char* name, const RTM::ManagerServant* mgr) override;
 
     /*!
      * @if jp
@@ -350,7 +350,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual void unbindObject(const char* name);
+    void unbindObject(const char* name) override;
 
     /*!
      * @if jp
@@ -367,7 +367,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual bool isAlive();
+    bool isAlive() override;
 	/*!
 	 * @if jp
 	 *
@@ -406,7 +406,7 @@ namespace RTC
 	*
 	* @endif
 	*/
-	virtual RTC::RTCList string_to_component(std::string name);
+	RTC::RTCList string_to_component(std::string name) override;
     CorbaNaming& getCorbaNaming() { return m_cosnaming; }
 
   private:
@@ -474,7 +474,7 @@ namespace RTC
      *
      * @endif
      */
-	 virtual ~NamingOnManager(){};
+	 ~NamingOnManager() override{};
     
     /*!
      * @if jp
@@ -499,8 +499,8 @@ namespace RTC
      *
      * @endif
      */
-    virtual void bindObject(const char* name, const RTObject_impl* rtobj);
-    virtual void bindObject(const char* name, const PortBase* port);
+    void bindObject(const char* name, const RTObject_impl* rtobj) override;
+    void bindObject(const char* name, const PortBase* port) override;
 
     /*!
      * @if jp
@@ -519,7 +519,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual void bindObject(const char* name, const RTM::ManagerServant* mgr);
+    void bindObject(const char* name, const RTM::ManagerServant* mgr) override;
 
     /*!
      * @if jp
@@ -540,7 +540,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual void unbindObject(const char* name);
+    void unbindObject(const char* name) override;
 
     /*!
      * @if jp
@@ -557,7 +557,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual bool isAlive();
+    bool isAlive() override;
 	/*!
 	* @if jp
 	*
@@ -576,7 +576,7 @@ namespace RTC
 	*
 	* @endif
 	*/
-	RTC::RTCList string_to_component(std::string name);
+	RTC::RTCList string_to_component(std::string name) override;
 	/*!
 	* @if jp
 	*

@@ -113,7 +113,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~InPortBase();
+    ~InPortBase() override;
 
     /*!
      * @if jp
@@ -356,7 +356,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual void activateInterfaces();
+    void activateInterfaces() override;
 
     /*!
      * @if jp
@@ -374,7 +374,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual void deactivateInterfaces();
+    void deactivateInterfaces() override;
 
     /*!
      * @if jp
@@ -601,9 +601,9 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode_t
+    ReturnCode_t
     connect(ConnectorProfile& connector_profile)
-      throw (CORBA::SystemException);
+      throw (CORBA::SystemException) override;
 
     /*!
      * @if jp
@@ -623,8 +623,8 @@ namespace RTC
      * @endif
      */
     virtual ConnectorListeners& getListeners();
-    virtual ReturnCode_t notify_connect(ConnectorProfile& connector_profile)
-		throw (CORBA::SystemException);
+    ReturnCode_t notify_connect(ConnectorProfile& connector_profile)
+		throw (CORBA::SystemException) override;
 
   protected:
     /*!
@@ -655,8 +655,8 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode_t
-    publishInterfaces(ConnectorProfile& cprof);
+    ReturnCode_t
+    publishInterfaces(ConnectorProfile& cprof) override;
 
     /*!
      * @if jp
@@ -685,8 +685,8 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode_t
-    subscribeInterfaces(const ConnectorProfile& cprof);
+    ReturnCode_t
+    subscribeInterfaces(const ConnectorProfile& cprof) override;
 
     /*!
      * @if jp
@@ -709,8 +709,8 @@ namespace RTC
      *
      * @endif
      */
-    virtual void
-    unsubscribeInterfaces(const ConnectorProfile& connector_profile);
+    void
+    unsubscribeInterfaces(const ConnectorProfile& connector_profile) override;
 
 
     /*!

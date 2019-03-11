@@ -142,7 +142,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~RingBuffer()
+    ~RingBuffer() override
     {
     }
 
@@ -185,7 +185,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual void init(const coil::Properties& prop)
+    void init(const coil::Properties& prop) override
     {
       initLength(prop);
       initWritePolicy(prop);
@@ -212,7 +212,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual size_t length() const
+    size_t length() const override
     {
       Guard guard(m_posmutex);
       return m_length;
@@ -240,7 +240,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode length(size_t n)
+    ReturnCode length(size_t n) override
     {
       m_buffer.resize(n);
       m_length = n;
@@ -270,7 +270,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode reset()
+    ReturnCode reset() override
     {
       Guard guard(m_posmutex);
       m_fillcount = 0;
@@ -303,7 +303,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual DataType* wptr(long int n = 0)
+    DataType* wptr(long int n = 0) override
     {
       Guard guard(m_posmutex);
       return &m_buffer[(m_wpos + n + m_length) % m_length];
@@ -333,7 +333,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode advanceWptr(long int n = 1, bool unlock_enable = true)
+    ReturnCode advanceWptr(long int n = 1, bool unlock_enable = true) override
     {
       bool empty_ = false;
       bool lock_ = (unlock_enable && n > 0);
@@ -404,7 +404,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode put(const DataType& value)
+    ReturnCode put(const DataType& value) override
     {
       Guard guard(m_posmutex);
       m_buffer[m_wpos] = value;
@@ -452,8 +452,8 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode write(const DataType& value,
-                             long int sec = -1, long int nsec = 0)
+    ReturnCode write(const DataType& value,
+                             long int sec = -1, long int nsec = 0) override
     {
       {
       Guard guard(m_full.mutex);
@@ -527,7 +527,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual size_t writable() const
+    size_t writable() const override
     {
       Guard guard(m_posmutex);
       return m_length - m_fillcount;
@@ -552,7 +552,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual bool full() const
+    bool full() const override
     {
       Guard guard(m_posmutex);
       return m_length == m_fillcount;
@@ -579,7 +579,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual DataType* rptr(long int n = 0)
+    DataType* rptr(long int n = 0) override
     {
       Guard guard(m_posmutex);
       return &(m_buffer[(m_rpos + n + m_length) % m_length]);
@@ -607,7 +607,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode advanceRptr(long int n = 1, bool unlock_enable = true)
+    ReturnCode advanceRptr(long int n = 1, bool unlock_enable = true) override
     {
       bool full_ = false;
       bool lock_ = (unlock_enable && n > 0);
@@ -674,7 +674,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode get(DataType& value)
+    ReturnCode get(DataType& value) override
     {
       Guard gaurd(m_posmutex);
       value = m_buffer[m_rpos];
@@ -699,7 +699,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual DataType& get()
+    DataType& get() override
     {
       Guard gaurd(m_posmutex);
       return m_buffer[m_rpos];
@@ -747,8 +747,8 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode read(DataType& value,
-                            long int sec = -1, long int nsec = 0)
+    ReturnCode read(DataType& value,
+                            long int sec = -1, long int nsec = 0) override
     {
       {
       Guard gaurd(m_empty.mutex);
@@ -829,7 +829,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual size_t readable() const
+    size_t readable() const override
     {
       Guard guard(m_posmutex);
       return m_fillcount;
@@ -854,7 +854,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual bool empty() const
+    bool empty() const override
     {
       Guard guard(m_posmutex);
       return m_fillcount == 0;

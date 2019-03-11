@@ -172,7 +172,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~OutPort()
+    ~OutPort() override
     {
     }
 
@@ -316,7 +316,7 @@ namespace RTC
      *
      * @endif
      */
-    bool write()
+    bool write() override
     {
       return write(m_value);
     }
@@ -512,17 +512,17 @@ namespace RTC
 	*
 	* @endif
 	*/
-	virtual void read(DataType& data)
+	void read(DataType& data) override
 	{
 		Guard guard(m_valueMutex);
 		m_directNewData = false;
 		data = m_directValue;
 	}
-	virtual bool isEmpty()
+	bool isEmpty() override
 	{
 		return !m_directNewData;
 	}
-	virtual bool isNew()
+	bool isNew() override
 	{
 		return m_directNewData;
 	}

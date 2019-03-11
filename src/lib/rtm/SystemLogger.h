@@ -165,7 +165,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~Logger();
+    ~Logger() override;
 
     /*!
      * @if jp
@@ -345,7 +345,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual void write(int level, const std::string &mes);
+    void write(int level, const std::string &mes) override;
 
     /*!
      * @if jp

@@ -344,7 +344,7 @@ namespace RTC
                RtcDeleteFunc delete_func,
                RTM::NumberingPolicyBase* policy = new RTM::ProcessUniquePolicy());
 
-    virtual ~FactoryCXX()
+    ~FactoryCXX() override
     {
       delete m_policy;
     }
@@ -372,7 +372,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual RTObject_impl* create(Manager* mgr);
+    RTObject_impl* create(Manager* mgr) override;
 
     /*!
      * @if jp
@@ -393,7 +393,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual void destroy(RTObject_impl* comp);
+    void destroy(RTObject_impl* comp) override;
 
   protected:
     /*!

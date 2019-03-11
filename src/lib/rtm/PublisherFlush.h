@@ -92,7 +92,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~PublisherFlush();
+    ~PublisherFlush() override;
 
     /*!
      * @if jp
@@ -118,7 +118,7 @@ namespace RTC
      *                    INVALID_ARGS Properties with invalid values.
      * @endif
      */
-    virtual ReturnCode init(coil::Properties& prop);
+    ReturnCode init(coil::Properties& prop) override;
 
     /*!
      * @if jp
@@ -145,7 +145,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode setConsumer(InPortConsumer* consumer);
+    ReturnCode setConsumer(InPortConsumer* consumer) override;
 
     /*!
      * @if jp
@@ -168,7 +168,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode setBuffer(CdrBufferBase* buffer);
+    ReturnCode setBuffer(CdrBufferBase* buffer) override;
 
     /*!
      * @if jp
@@ -203,9 +203,9 @@ namespace RTC
      *         INVALID_ARGS Invalid arguments
      * @endif
      */
-    virtual ::RTC::DataPortStatus::Enum
+    ::RTC::DataPortStatus::Enum
     setListener(ConnectorInfo& info,
-                RTC::ConnectorListeners* listeners);
+                RTC::ConnectorListeners* listeners) override;
 
     /*!
      * @if jp
@@ -265,9 +265,9 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode write(ByteDataStreamBase* data,
+    ReturnCode write(ByteDataStreamBase* data,
                              unsigned long sec,
-                             unsigned long usec);
+                             unsigned long usec) override;
     /*!
      * @if jp
      *
@@ -295,7 +295,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual bool isActive();
+    bool isActive() override;
 
     /*!
      * @if jp
@@ -322,7 +322,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode activate();
+    ReturnCode activate() override;
 
     /*!
      * @if jp
@@ -349,7 +349,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode deactivate();
+    ReturnCode deactivate() override;
 
   protected:
     /*!

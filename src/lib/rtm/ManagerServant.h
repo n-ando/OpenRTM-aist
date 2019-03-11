@@ -93,7 +93,7 @@ namespace RTM
      *
      * @endif
      */
-    virtual ~ManagerServant();
+    ~ManagerServant() override;
 
     /*!
      * @if jp
@@ -119,7 +119,7 @@ namespace RTM
      *
      * @endif
      */
-    RTC::ReturnCode_t load_module(const char* pathname, const char* initfunc);
+    RTC::ReturnCode_t load_module(const char* pathname, const char* initfunc) override;
 
     /*!
      * @if jp
@@ -140,7 +140,7 @@ namespace RTM
      *
      * @endif
      */
-    RTC::ReturnCode_t unload_module(const char* pathname);
+    RTC::ReturnCode_t unload_module(const char* pathname) override;
 
     /*!
      * @if jp
@@ -159,7 +159,7 @@ namespace RTM
      *
      * @endif
      */
-    RTM::ModuleProfileList* get_loadable_modules();
+    RTM::ModuleProfileList* get_loadable_modules() override;
 
     /*!
      * @if jp
@@ -178,7 +178,7 @@ namespace RTM
      *
      * @endif
      */
-    RTM::ModuleProfileList* get_loaded_modules();
+    RTM::ModuleProfileList* get_loaded_modules() override;
 
     // component 関連
     /*!
@@ -200,7 +200,7 @@ namespace RTM
      *
      * @endif
      */
-    RTM::ModuleProfileList* get_factory_profiles();
+    RTM::ModuleProfileList* get_factory_profiles() override;
 
     /*!
      * @if jp
@@ -220,7 +220,7 @@ namespace RTM
      *
      * @endif
      */
-    RTC::RTObject_ptr create_component(const char* module_name);
+    RTC::RTObject_ptr create_component(const char* module_name) override;
 
     /*!
      * @if jp
@@ -240,7 +240,7 @@ namespace RTM
      *
      * @endif
      */
-    RTC::ReturnCode_t delete_component(const char* instance_name);
+    RTC::ReturnCode_t delete_component(const char* instance_name) override;
 
     /*!
      * @if jp
@@ -259,7 +259,7 @@ namespace RTM
      *
      * @endif
      */
-    RTC::RTCList* get_components();
+    RTC::RTCList* get_components() override;
 
     /*!
      * @if jp
@@ -280,7 +280,7 @@ namespace RTM
      *
      * @endif
      */
-    RTC::ComponentProfileList* get_component_profiles();
+    RTC::ComponentProfileList* get_component_profiles() override;
 
     // manager 基本
     /*!
@@ -300,7 +300,7 @@ namespace RTM
      *
      * @endif
      */
-    RTM::ManagerProfile* get_profile();
+    RTM::ManagerProfile* get_profile() override;
 
     /*!
      * @if jp
@@ -319,7 +319,7 @@ namespace RTM
      *
      * @endif
      */
-    RTM::NVList* get_configuration();
+    RTM::NVList* get_configuration() override;
 
     /*!
      * @if jp
@@ -342,7 +342,7 @@ namespace RTM
      *
      * @endif
      */
-    RTC::ReturnCode_t set_configuration(const char* name, const char* value);
+    RTC::ReturnCode_t set_configuration(const char* name, const char* value) override;
 
     /*!
      * @if jp
@@ -363,7 +363,7 @@ namespace RTM
      *
      * @endif
      */
-    ::CORBA::Boolean is_master();
+    ::CORBA::Boolean is_master() override;
 
     /*!
      * @if jp
@@ -386,7 +386,7 @@ namespace RTM
      *
      * @endif
      */
-    RTM::ManagerList* get_master_managers();
+    RTM::ManagerList* get_master_managers() override;
 
     /*!
      * @if jp
@@ -411,7 +411,7 @@ namespace RTM
      *
      * @endif
      */
-    RTC::ReturnCode_t add_master_manager(RTM::Manager_ptr mgr);
+    RTC::ReturnCode_t add_master_manager(RTM::Manager_ptr mgr) override;
 
     /*!
      * @if jp
@@ -432,7 +432,7 @@ namespace RTM
      *
      * @endif
      */
-    RTC::ReturnCode_t remove_master_manager(RTM::Manager_ptr mgr);
+    RTC::ReturnCode_t remove_master_manager(RTM::Manager_ptr mgr) override;
 
     /*!
      * @if jp
@@ -455,7 +455,7 @@ namespace RTM
      *
      * @endif
      */
-    RTM::ManagerList* get_slave_managers();
+    RTM::ManagerList* get_slave_managers() override;
 
     /*!
      * @if jp
@@ -476,7 +476,7 @@ namespace RTM
      *
      * @endif
      */
-    RTC::ReturnCode_t add_slave_manager(RTM::Manager_ptr mgr);
+    RTC::ReturnCode_t add_slave_manager(RTM::Manager_ptr mgr) override;
 
     /*!
      * @if jp
@@ -497,7 +497,7 @@ namespace RTM
      *
      * @endif
      */
-    RTC::ReturnCode_t remove_slave_manager(RTM::Manager_ptr mgr);
+    RTC::ReturnCode_t remove_slave_manager(RTM::Manager_ptr mgr) override;
 
     /*!
      * @if jp
@@ -508,7 +508,7 @@ namespace RTM
      * @return ReturnCode_t
      * @endif
      */
-    RTC::ReturnCode_t fork();
+    RTC::ReturnCode_t fork() override;
     /*!
      * @if jp
      * @brief shutdownする
@@ -518,7 +518,7 @@ namespace RTM
      * @return ReturnCode_t
      * @endif
      */
-    RTC::ReturnCode_t shutdown();
+    RTC::ReturnCode_t shutdown() override;
     /*!
      * @if jp
      * @brief 再起動する。
@@ -528,7 +528,7 @@ namespace RTM
      * @return ReturnCode_t
      * @endif
      */
-    RTC::ReturnCode_t restart();
+    RTC::ReturnCode_t restart() override;
 
      /*!
      * @if jp
@@ -545,7 +545,7 @@ namespace RTM
      *
      * @endig
      */
-    RTC::RTCList* get_components_by_name(const char* name);
+    RTC::RTCList* get_components_by_name(const char* name) override;
 
     /*!
      * @if jp
@@ -556,7 +556,7 @@ namespace RTM
      * @return RTC reference
      * @endif
      */
-    CORBA::Object_ptr get_service(const char* name);
+    CORBA::Object_ptr get_service(const char* name) override;
 
     /*!
      * @if jp

@@ -96,7 +96,7 @@ namespace coil
      *
      * @endif
      */
-    virtual ~PeriodicTask();
+    ~PeriodicTask() override;
 
     /*!
      * @if jp
@@ -120,7 +120,7 @@ namespace coil
      *
      * @endif
      */
-    virtual void activate();
+    void activate() override;
 
     /*!
      * @if jp
@@ -135,7 +135,7 @@ namespace coil
      *
      * @endif
      */
-    virtual void finalize();
+    void finalize() override;
 
     /*!
      * @if jp
@@ -150,7 +150,7 @@ namespace coil
      *
      * @endif
      */
-    virtual int suspend();
+    int suspend() override;
 
     /*!
      * @if jp
@@ -165,7 +165,7 @@ namespace coil
      *
      * @endif
      */
-    virtual int resume();
+    int resume() override;
 
     /*!
      * @if jp
@@ -180,7 +180,7 @@ namespace coil
      *
      * @endif
      */
-    virtual void signal();
+    void signal() override;
 
     /*!
      * @if jp
@@ -195,7 +195,7 @@ namespace coil
      *
      * @endif
      */
-    virtual bool setTask(TaskFuncBase* func, bool delete_in_dtor = true);
+    bool setTask(TaskFuncBase* func, bool delete_in_dtor = true) override;
 
     /*!
      * @if jp
@@ -233,7 +233,7 @@ namespace coil
      *
      * @endif
      */
-    virtual void setPeriod(double period);
+    void setPeriod(double period) override;
 
     /*!
      * @if jp
@@ -248,7 +248,7 @@ namespace coil
      *
      * @endif
      */
-    virtual void setPeriod(TimeValue& period);
+    void setPeriod(TimeValue& period) override;
 
     /*!
      * @if jp
@@ -257,7 +257,7 @@ namespace coil
      * @brief Validate a Task execute time measurement
      * @endif
      */
-    virtual void executionMeasure(bool value);
+    void executionMeasure(bool value) override;
 
     /*!
      * @if jp
@@ -266,7 +266,7 @@ namespace coil
      * @brief Task execute time measurement period
      * @endif
      */
-    virtual void executionMeasureCount(int n);
+    void executionMeasureCount(int n) override;
 
     /*!
      * @if jp
@@ -275,7 +275,7 @@ namespace coil
      * @brief Validate a Task period time measurement
      * @endif
      */
-    virtual void periodicMeasure(bool value);
+    void periodicMeasure(bool value) override;
 
     /*!
      * @if jp
@@ -284,7 +284,7 @@ namespace coil
      * @brief Task period time measurement count
      * @endif
      */
-    virtual void periodicMeasureCount(int n);
+    void periodicMeasureCount(int n) override;
 
     /*!
      * @if jp
@@ -293,7 +293,7 @@ namespace coil
      * @brief Get a result in task execute time measurement
      * @endif
      */
-    virtual TimeMeasure::Statistics getExecStat();
+    TimeMeasure::Statistics getExecStat() override;
 
     /*!
      * @if jp
@@ -302,7 +302,7 @@ namespace coil
      * @brief Get a result in task period time measurement
      * @endif
      */
-    virtual TimeMeasure::Statistics getPeriodStat();
+    TimeMeasure::Statistics getPeriodStat() override;
 
   protected:
     /*!
@@ -312,7 +312,7 @@ namespace coil
      * @brief Thread execution for PeriodicTask
      * @endif
      */
-    virtual int svc();
+    int svc() override;
 
     /*!
      * @if jp

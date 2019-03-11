@@ -90,7 +90,7 @@
       typedef ::__SameType< ::RTC::Link<S, SUPER>, LINK>::Check         \
         MustDeriveFromLink;                                             \
     }                                                                   \
-    ~S() {}                                                             \
+    ~S() override {}                                                    \
     static const char * _state_name() { return #S; }                    \
     Box & box() { return *static_cast<Box *>(_box()); }                 \
     friend class ::_VS8_Bug_101615;
@@ -118,7 +118,7 @@ namespace RTC
       : Macho::Machine<TOP>(), rtComponent(comp)
     {
     }
-    virtual ~Machine() {}
+    ~Machine() override {}
     virtual RingBuffer<EventBase*>& getBuffer()
     {
         return m_buffer;
@@ -170,7 +170,7 @@ namespace RTC
       : Macho::Link<C, P>(instance), rtComponent(nullptr)
     {
     }
-    virtual ~Link()
+    ~Link() override
     {
     }
 
@@ -184,7 +184,7 @@ namespace RTC
   public:
     typedef Link<C, P> LINK;
     
-    virtual void entry()
+    void entry() override
     {
       setrtc();
       if (rtComponent == nullptr)
@@ -198,7 +198,7 @@ namespace RTC
           rtComponent->postOnFsmEntry(C::_state_name(), onEntry());
         }
     }
-    virtual void init()
+    void init() override
     {
       setrtc();
       if (rtComponent == nullptr)
@@ -211,7 +211,7 @@ namespace RTC
           rtComponent->postOnFsmInit(C::_state_name(), onInit());
         }
     }
-    virtual void exit()
+    void exit() override
     {
       setrtc();
       if (rtComponent == nullptr)
@@ -225,10 +225,25 @@ namespace RTC
           rtComponent->preOnFsmStateChange(C::_state_name());
         }
     }
-
-    virtual ReturnCode_t onEntry() { return RTC::RTC_OK; }
-    virtual ReturnCode_t onInit()  { return RTC::RTC_OK; }
-    virtual ReturnCode_t onExit()  { return RTC::RTC_OK; }
+#if defined(__clang__)
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Winconsistent-missing-override"
+#endif
+#if defined(__GNUC__) && !defined(__clang__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wsuggest-override"
+#endif
+    // We can't use 'override' insetd of 'virtual', becase these
+    // methods are used as TOP LEVEL SUPPER CLASS and SUB CLASS.
+    virtual RTC::ReturnCode_t onEntry() { return RTC::RTC_OK; }
+    virtual RTC::ReturnCode_t onInit()  { return RTC::RTC_OK; }
+    virtual RTC::ReturnCode_t onExit()  { return RTC::RTC_OK; }
+#if defined(__GNUC__) && !defined(__clang__)
+#pragma GCC diagnostic pop
+#endif
+#if defined(__clang__)
+#pragma clang diagnostic pop
+#endif
 
     RTObject_impl* rtComponent;
   };

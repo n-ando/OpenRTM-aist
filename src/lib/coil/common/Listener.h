@@ -136,7 +136,7 @@ public:
    *
    * @endif
    */
-  virtual ~ListenerObject()
+  ~ListenerObject() override
   {
   }
 
@@ -153,7 +153,7 @@ public:
    *
    * @endif
    */
-  virtual void invoke()
+  void invoke() override
   {
     (m_obj->*m_cbf)();
   }
@@ -222,7 +222,7 @@ public:
    *
    * @endif
    */
-  virtual ~ListenerFunc() {}
+  ~ListenerFunc() override {}
 
   /*!
    * @if jp
@@ -237,7 +237,7 @@ public:
    *
    * @endif
    */
-  virtual void invoke()
+  void invoke() override
   {
     (*m_cbf)();
   }

@@ -38,7 +38,7 @@ class DataListener
   USE_CONNLISTENER_STATUS;
 public:
   DataListener(const char* name) : m_name(name) {}
-  virtual ~DataListener()
+  ~DataListener() override
   {
     // Connector Listener Dump check
     if(g_Listener_dump_enabled)
@@ -47,8 +47,8 @@ public:
       }
   }
 
-  virtual ReturnCode operator()(ConnectorInfo& info,
-                          TimedLong& data)
+  ReturnCode operator()(ConnectorInfo& info,
+                          TimedLong& data) override
   {
     // Connector Listener Dump check
     if(g_Listener_dump_enabled)
@@ -75,7 +75,7 @@ class ConnListener
   USE_CONNLISTENER_STATUS;
 public:
   ConnListener(const char* name) : m_name(name) {}
-  virtual ~ConnListener()
+  ~ConnListener() override
   {
     // Connector Listener Dump check
     if(g_Listener_dump_enabled)
@@ -84,7 +84,7 @@ public:
       }
   }
 
-  virtual ReturnCode operator()(ConnectorInfo& info)
+  ReturnCode operator()(ConnectorInfo& info) override
   {
     // Connector Listener Dump check
     if(g_Listener_dump_enabled)
@@ -109,11 +109,11 @@ class SeqIn
 {
  public:
   SeqIn(RTC::Manager* manager);
-  ~SeqIn();
+  ~SeqIn() override;
 
   // The initialize action (on CREATED->ALIVE transition)
   // formaer rtc_init_entry() 
-  virtual RTC::ReturnCode_t onInitialize();
+  RTC::ReturnCode_t onInitialize() override;
 
   // The finalize action (on ALIVE->END transition)
   // formaer rtc_exiting_entry()
@@ -137,7 +137,7 @@ class SeqIn
 
   // The execution action that is invoked periodically
   // former rtc_active_do()
-  virtual RTC::ReturnCode_t onExecute(RTC::UniqueId ec_id);
+  RTC::ReturnCode_t onExecute(RTC::UniqueId ec_id) override;
 
   // The aborting action when main logic error occurred.
   // former rtc_aborting_entry()

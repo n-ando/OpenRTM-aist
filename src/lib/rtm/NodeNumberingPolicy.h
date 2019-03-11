@@ -79,7 +79,7 @@ namespace RTM
      *
      * @endif
      */
-	  virtual ~NodeNumberingPolicy(){};
+	  ~NodeNumberingPolicy() override{};
     
     /*!
      * @if jp
@@ -106,7 +106,7 @@ namespace RTM
      *
      * @endif
      */
-    virtual std::string onCreate(void* obj);
+    std::string onCreate(void* obj) override;
     
     /*!
      * @if jp
@@ -129,7 +129,7 @@ namespace RTM
      *
      * @endif
      */
-    virtual void onDelete(void* obj);
+    void onDelete(void* obj) override;
     
   protected:
 	  /*!

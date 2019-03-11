@@ -84,7 +84,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~OutPortSHMConsumer(); 
+    ~OutPortSHMConsumer() override; 
 
     /*!
      * @if jp
@@ -104,7 +104,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual void init(coil::Properties& prop);
+    void init(coil::Properties& prop) override;
 
     /*!
      * @if jp
@@ -123,7 +123,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual void setBuffer(CdrBufferBase* buffer);
+    void setBuffer(CdrBufferBase* buffer) override;
 
     /*!
      * @if jp
@@ -144,8 +144,8 @@ namespace RTC
      *
      * @endif
      */
-    virtual void setListener(ConnectorInfo& info,
-                             ConnectorListeners* listeners);
+    void setListener(ConnectorInfo& info,
+                             ConnectorListeners* listeners) override;
 
     /*!
      * @if jp
@@ -168,7 +168,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode get(ByteData& data);
+    ReturnCode get(ByteData& data) override;
 
     /*!
      * @if jp
@@ -192,7 +192,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual bool subscribeInterface(const SDOPackage::NVList& properties);
+    bool subscribeInterface(const SDOPackage::NVList& properties) override;
     
     /*!
      * @if jp
@@ -211,8 +211,8 @@ namespace RTC
      *
      * @endif
      */
-    virtual void unsubscribeInterface(const SDOPackage::NVList& properties);
-    virtual bool setObject(CORBA::Object_ptr obj);
+    void unsubscribeInterface(const SDOPackage::NVList& properties) override;
+    bool setObject(CORBA::Object_ptr obj) override;
     
   private:
     /*!

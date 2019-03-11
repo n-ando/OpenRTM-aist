@@ -84,7 +84,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~OutPortDirectProvider();
+    ~OutPortDirectProvider() override;
 
     /*!
      * @if jp
@@ -113,7 +113,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual void init(coil::Properties& prop);
+    void init(coil::Properties& prop) override;
 
     /*!
      * @if jp
@@ -140,7 +140,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual void setBuffer(CdrBufferBase* buffer);
+    void setBuffer(CdrBufferBase* buffer) override;
 
     /*!
      * @if jp
@@ -186,8 +186,8 @@ namespace RTC
      *
      * @endif
      */
-    virtual void setListener(ConnectorInfo& info,
-                             ConnectorListeners* listeners);
+    void setListener(ConnectorInfo& info,
+                             ConnectorListeners* listeners) override;
 
     /*!
      * @if jp
@@ -213,7 +213,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual void setConnector(OutPortConnector* connector);
+    void setConnector(OutPortConnector* connector) override;
 
     
   private:

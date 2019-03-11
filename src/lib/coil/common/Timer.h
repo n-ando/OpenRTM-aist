@@ -88,7 +88,7 @@ namespace coil
      *
      * @endif
      */
-    virtual ~Timer();
+    ~Timer() override;
 
     //============================================================
     // ACE_Task
@@ -116,7 +116,7 @@ namespace coil
      *
      * @endif
      */
-    virtual int open(void *args);
+    int open(void *args) override;
 
     /*!
      * @if jp
@@ -137,7 +137,7 @@ namespace coil
      *
      * @endif
      */
-    virtual int svc();
+    int svc() override;
 
     //============================================================
     // public functions

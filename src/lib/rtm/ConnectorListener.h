@@ -520,7 +520,7 @@ namespace RTC
      * @brief Destructor
      * @endif
      */
-    virtual ~ConnectorDataListenerT() {}
+    ~ConnectorDataListenerT() override {}
 
     /*!
      * @if jp
@@ -545,8 +545,8 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode operator()(ConnectorInfo& info,
-                                  ByteData& cdrdata)
+    ReturnCode operator()(ConnectorInfo& info,
+                                  ByteData& cdrdata) override
     {
       DataType data;
       std::string marshaling_type = info.properties.getProperty("marshaling_type", "corba");

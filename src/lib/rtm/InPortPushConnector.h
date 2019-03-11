@@ -144,7 +144,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~InPortPushConnector();
+    ~InPortPushConnector() override;
 
     /*!
      * @if jp
@@ -178,7 +178,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode read(ByteDataStreamBase* data);
+    ReturnCode read(ByteDataStreamBase* data) override;
 
     /*!
      * @if jp
@@ -199,7 +199,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode disconnect();
+    ReturnCode disconnect() override;
 
     /*!
      * @if jp
@@ -215,7 +215,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual void activate() {}  // do nothing
+    void activate() override {}  // do nothing
 
     /*!
      * @if jp
@@ -231,7 +231,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual void deactivate() {}  // do nothing
+    void deactivate() override {}  // do nothing
 
   protected:
     /*!
@@ -255,7 +255,7 @@ namespace RTC
      */
     virtual CdrBufferBase* createBuffer(ConnectorInfo& info);
 
-    virtual BufferStatus::Enum write(ByteData &cdr);
+    BufferStatus::Enum write(ByteData &cdr) override;
 
     /*!
      * @if jp

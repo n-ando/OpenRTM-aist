@@ -68,7 +68,7 @@ namespace RTC
      * @brief Destructor 
      * @endif
      */
-    virtual ~SimulatorExecutionContext();
+    ~SimulatorExecutionContext() override;
 
     /*!
      * @if jp
@@ -92,9 +92,9 @@ namespace RTC
      *
      * @endif
      */
-    virtual RTC::ReturnCode_t
+    RTC::ReturnCode_t
     activate_component(RTC::LightweightRTObject_ptr comp)
-      throw (CORBA::SystemException);
+      throw (CORBA::SystemException) override;
     /*!
      * @if jp
      * @brief RTコンポーネントを非アクティブ化する
@@ -117,9 +117,9 @@ namespace RTC
      *
      * @endif
      */
-    virtual RTC::ReturnCode_t
+    RTC::ReturnCode_t
     deactivate_component(RTC::LightweightRTObject_ptr comp)
-      throw (CORBA::SystemException);
+      throw (CORBA::SystemException) override;
     /*!
      * @if jp
      * @brief RTコンポーネントをリセットする
@@ -142,9 +142,9 @@ namespace RTC
      *
      * @endif
      */
-    virtual RTC::ReturnCode_t
+    RTC::ReturnCode_t
     reset_component(RTC::LightweightRTObject_ptr comp)
-      throw (CORBA::SystemException);
+      throw (CORBA::SystemException) override;
 
   private:
 

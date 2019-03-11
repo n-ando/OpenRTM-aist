@@ -75,7 +75,7 @@ namespace coil
      *
      * @endif
      */
-    virtual ~Async() {}
+    ~Async() override {}
 
     /*!
      * @if jp
@@ -177,7 +177,7 @@ namespace coil
      *
      * @endif
      */
-    virtual ~Async_t()
+    ~Async_t() override
     {
     }
 
@@ -200,7 +200,7 @@ namespace coil
      *
      * @endif
      */
-    virtual int svc()
+    int svc() override
     {
       m_func(m_obj);
       {
@@ -226,7 +226,7 @@ namespace coil
      *
      * @endif
      */
-    virtual void finalize()
+    void finalize() override
     {
       Task::finalize();
       if (m_autodelete) delete this;
@@ -247,7 +247,7 @@ namespace coil
      *
      * @endif
      */
-    virtual void invoke()
+    void invoke() override
     {
       activate();
     }
@@ -271,7 +271,7 @@ namespace coil
      *
      * @endif
      */
-    virtual bool finished()
+    bool finished() override
     {
       coil::Guard<Mutex> guard(m_mutex);
       return m_finished;
@@ -345,7 +345,7 @@ namespace coil
      *
      * @endif
      */
-    virtual ~Async_ref_t()
+    ~Async_ref_t() override
     {
     }
 
@@ -368,7 +368,7 @@ namespace coil
      *
      * @endif
      */
-    virtual int svc()
+    int svc() override
     {
       m_func(m_obj);
       m_finished = true;
@@ -390,7 +390,7 @@ namespace coil
      *
      * @endif
      */
-    virtual void invoke()
+    void invoke() override
     {
       activate();
     }
@@ -414,7 +414,7 @@ namespace coil
      *
      * @endif
      */
-    virtual bool finished()
+    bool finished() override
     {
       return m_finished;
     }
@@ -434,7 +434,7 @@ namespace coil
      *
      * @endif
      */
-    virtual void finalize()
+    void finalize() override
     {
       Task::finalize();
       if (m_autodelete) delete this;

@@ -93,9 +93,9 @@ namespace coil
     : public IClock
   {
   public:
-    virtual ~SystemClock();
-    virtual coil::TimeValue gettime() const;
-    virtual bool settime(coil::TimeValue clocktime);
+    ~SystemClock() override;
+    coil::TimeValue gettime() const override;
+    bool settime(coil::TimeValue clocktime) override;
   };
 
   /*!
@@ -118,9 +118,9 @@ namespace coil
   {
   public:
     LogicalClock();
-    virtual ~LogicalClock();
-    virtual coil::TimeValue gettime() const;
-    virtual bool settime(coil::TimeValue clocktime);
+    ~LogicalClock() override;
+    coil::TimeValue gettime() const override;
+    bool settime(coil::TimeValue clocktime) override;
   private:
     coil::TimeValue m_currentTime;
     mutable coil::Mutex m_currentTimeMutex;
@@ -146,9 +146,9 @@ namespace coil
   {
   public:
     AdjustedClock();
-    virtual ~AdjustedClock();
-    virtual coil::TimeValue gettime() const;
-    virtual bool settime(coil::TimeValue clocktime);
+    ~AdjustedClock() override;
+    coil::TimeValue gettime() const override;
+    bool settime(coil::TimeValue clocktime) override;
   private:
     coil::TimeValue m_offset;
     mutable coil::Mutex m_offsetMutex;

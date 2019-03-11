@@ -78,7 +78,7 @@ namespace RTM
      *
      * @endif
      */
-	  virtual ~NamingServiceNumberingPolicy(){};
+	  ~NamingServiceNumberingPolicy() override{};
     
     /*!
      * @if jp
@@ -105,7 +105,7 @@ namespace RTM
      *
      * @endif
      */
-    virtual std::string onCreate(void* obj);
+    std::string onCreate(void* obj) override;
     
     /*!
      * @if jp
@@ -128,7 +128,7 @@ namespace RTM
      *
      * @endif
      */
-    virtual void onDelete(void* obj);
+    void onDelete(void* obj) override;
 
 
     
