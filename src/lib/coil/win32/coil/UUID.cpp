@@ -136,4 +136,4 @@ namespace coil
         return new UUID(uuid);
       }
   }
-};  // namespace coil
+} // namespace coil

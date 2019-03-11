@@ -193,7 +193,7 @@ namespace RTC_exp
         if (!m_nowait && period > (t1 - t0))
           {
             if (count > 1000) { RTC_PARANOID(("sleeping...")); }
-            coil::sleep((coil::TimeValue)(period - (t1 - t0)));
+            coil::sleep(coil::TimeValue(period - (t1 - t0)));
           }
         if (count > 1000)
           {
@@ -641,7 +641,7 @@ namespace RTC_exp
       }
   }
 
-};  // namespace RTC_exp
+} // namespace RTC_exp
 
 extern "C"
 {

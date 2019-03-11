@@ -48,7 +48,7 @@ namespace RTM
       {
         (void)(e);
         m_objects.push_back(obj);
-        return coil::otos((int)(m_objects.size() - 1));
+        return coil::otos(static_cast<int>(m_objects.size() - 1));
       }
   }
 
@@ -83,12 +83,12 @@ namespace RTM
     std::vector<void*>::size_type i(0);
     for (i = 0; i < len; ++i)
       {
-        if (m_objects[i] == obj) return (int)i;
+        if (m_objects[i] == obj) return static_cast<int>(i);
       }
     throw ObjectNotFound();
-    return (int)i;
+    return static_cast<int>(i);
   }
-}; //namespace RTM  
+} //namespace RTM 
 
 extern "C"
 {

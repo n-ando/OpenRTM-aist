@@ -38,8 +38,8 @@ namespace Local
     public:
       virtual ~IFsm() {};
     };
-};     // namespace Local
-};     // namespace RTC
+} // namespace Local
+} // namespace RTC
 #endif // RTC_LOCAL_IFSM_H
   
   

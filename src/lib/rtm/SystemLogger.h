@@ -738,6 +738,6 @@ namespace RTC
 #define RTC_FATAL_STR(str)
 #endif
 
-};  // namespace RTC
+} // namespace RTC
 
 #endif  // RTC_SYSTEMLOGGER_H

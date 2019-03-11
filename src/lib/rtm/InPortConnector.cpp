@@ -173,4 +173,4 @@ namespace RTC
       return BufferStatus::BUFFER_OK;
   };
 
-}; // namespace RTC
+} // namespace RTC

@@ -214,7 +214,7 @@ namespace [class_name]
     {
     }
   };
-}; // namespace [class_name]
+} // namespace [class_name]
 
 
 /*

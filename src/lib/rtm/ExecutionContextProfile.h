@@ -583,7 +583,7 @@ namespace RTC_impl
 #endif
     };
   };  // class ExecutionContextProfile
-};  // namespace RTC_impl
+} // namespace RTC_impl
 
 #ifdef WIN32
 #pragma warning( default : 4290 )

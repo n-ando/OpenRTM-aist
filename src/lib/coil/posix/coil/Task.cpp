@@ -95,7 +95,7 @@ namespace coil
       {
         ::pthread_create(&m_thread,
                          &m_attr,
-                         (void* (*)(void*))Task::svc_run,
+                         static_cast<void* (*)(void*)>(Task::svc_run),
                          this);
         ++m_count;
       };
@@ -175,11 +175,11 @@ namespace coil
    */
   void* Task::svc_run(void* args)
   {
-    Task* t = (coil::Task*)args;
+    Task* t = static_cast<coil::Task*>(args);
     t->svc();
     t->finalize();
     return nullptr;
   }
-};  // namespace coil
+} // namespace coil
 
 

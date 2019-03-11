@@ -43,6 +43,6 @@ namespace RTC
     }
     std::string m_tstype;
   };
-}  // namespace RTC
+} // namespace RTC
 
 #endif // RTM_TIMESTAMP_H

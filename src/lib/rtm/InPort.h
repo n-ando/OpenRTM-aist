@@ -870,6 +870,6 @@ namespace RTC
      */
     bool m_directNewData;
   };
-};  // namespace RTC
+} // namespace RTC
 
 #endif  // RTC_INPORT_H

@@ -91,7 +91,7 @@ namespace coil
   void toUpper(std::string& str)
   {
     std::transform(str.begin(), str.end(), str.begin(),
-                   (int (*)(int))std::toupper);
+                   static_cast<int (*)(int)>(std::toupper));
   }
 
   /*!
@@ -104,7 +104,7 @@ namespace coil
   void toLower(std::string& str)
   {
     std::transform(str.begin(), str.end(), str.begin(),
-                   (int (*)(int))std::tolower);
+                   static_cast<int (*)(int)>(std::tolower));
   }
 
   /*!
@@ -852,4 +852,4 @@ namespace coil
       return ret_str;
   }
 
-}; // namespace coil
+} // namespace coil

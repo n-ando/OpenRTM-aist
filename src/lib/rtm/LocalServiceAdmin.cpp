@@ -286,4 +286,4 @@ namespace RTM
     return true;
   }
 
-};  // namespace RTM
+} // namespace RTM

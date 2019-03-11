@@ -303,7 +303,7 @@ namespace RTC
   {
   }
 
-}; // namespace RTC
+} // namespace RTC
 
 extern "C"
 {

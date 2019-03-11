@@ -318,7 +318,7 @@ namespace RTC
     } m_listener;
     CORBACdrDataPubSubType m_type;
   };
-};     // namespace RTC
+} // namespace RTC
 
 
 

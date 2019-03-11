@@ -59,7 +59,7 @@ namespace RTC
     ;
   }
 
-}; // namespace RTC
+} // namespace RTC
 """
 
 src_h = """// -*- C++ -*-
@@ -127,7 +127,7 @@ namespace RTC
 
   };
  
-};     // namespace RTC
+} // namespace RTC
 #endif // [class_name]_h
 
 """

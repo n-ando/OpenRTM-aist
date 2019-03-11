@@ -272,6 +272,6 @@ namespace coil
     const char* m_opt;
   };
 
-};  // namespace coil
+} // namespace coil
 
 #endif  // COIL_OS_H

@@ -31,7 +31,7 @@
 namespace coil
 {
   class Properties;
-}  // namespace coil
+} // namespace coil
 namespace RTC
 {
   class InPortConsumer;
@@ -368,5 +368,5 @@ namespace RTC
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
   EXTERN template class DLL_PLUGIN coil::GlobalFactory<PublisherBase>;
 #endif
-};  // namespace RTC
+} // namespace RTC
 #endif  // RTC_PUBLISHERBASE_H

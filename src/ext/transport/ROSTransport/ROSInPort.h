@@ -584,7 +584,7 @@ namespace RTC
 
 
   };  // class InPortCorCdrbaProvider
-};    // namespace RTC
+} // namespace RTC
 
 
 

@@ -426,6 +426,6 @@ namespace RTC
     std::string m_marshaling_type;
 
   };
-};  // namespace RTC
+} // namespace RTC
 
 #endif  // RTC_INPORTCONNECTOR_H

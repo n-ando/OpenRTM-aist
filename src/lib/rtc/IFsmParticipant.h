@@ -43,7 +43,7 @@ namespace Local
   public:
     virtual ~IFsmParticipant() {};
   };
-};     // namespace Local
-};     // namespace RTC
+} // namespace Local
+} // namespace RTC
 #endif // RTC_LOCAL_IFSMPARTICIPANT_H
 

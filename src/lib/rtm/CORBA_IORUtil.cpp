@@ -79,7 +79,7 @@ namespace CORBA_IORUtil
     size = (size - 4) / 2;  // how many octets are there in the string
     p += 4;
 
-    cdrMemoryStream buf((CORBA::ULong)size, false);
+    cdrMemoryStream buf(static_cast<CORBA::ULong>(size), false);
     for (int i(0); i < static_cast<int>(size); ++i)
       {
         CORBA::Octet v;
@@ -156,7 +156,7 @@ namespace CORBA_IORUtil
     // turn the encapsulation into a hex string with "IOR:" prepended
     buf.rewindInputPtr();
     size_t s = buf.bufSize();
-    CORBA::Char* data = (CORBA::Char *)buf.bufPtr();
+    CORBA::Char* data = static_cast<CORBA::Char *>(buf.bufPtr());
 
     char *result = new char[4 + s * 2 + 1];
     result[4 + s * 2] = '\0';
@@ -302,7 +302,7 @@ namespace CORBA_IORUtil
 		 {
 			retstr << "Unrecognised profile tag: 0x"
 				<< std::hex
-				<< (unsigned)(ior.profiles[count].tag)
+				<< static_cast<unsigned>(ior.profiles[count].tag)
 				<< std::dec
 				<< std::endl;
 		}
@@ -343,7 +343,7 @@ namespace CORBA_IORUtil
         else
           {
             std::cerr << "Unrecognised profile tag: 0x"
-                     << std::hex << (unsigned)(ior.profiles[i].tag)
+                     << std::hex << static_cast<unsigned>(ior.profiles[i].tag)
                      << std::dec << std::endl;
           }
       }
@@ -452,7 +452,7 @@ namespace CORBA_IORUtil
   static int get_poa_info(OctetUSequence& key, StringUSequence& poas_out,
                           int& transient_out, OctetUSequence& id_out)
   {
-    const char* k = (const char*) key.NP_data();
+    const char* k = reinterpret_cast<const char*>(key.NP_data());
     size_t len = static_cast<size_t>(key.length());
     const char* kend = k + len;
 
@@ -490,7 +490,7 @@ namespace CORBA_IORUtil
     if (k >= kend || (*k != 0))  { return 0; }
     k++;
 
-    id_out.length((CORBA::ULong)(kend - k));
+    id_out.length(static_cast<CORBA::ULong>(kend - k));
     memcpy(id_out.NP_data(), k, kend - k);
 
     return 1;

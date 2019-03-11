@@ -75,6 +75,6 @@ namespace RTC
 
 
   };
-}  // namespace RTC
+} // namespace RTC
 
 #endif // RTC_DIRECTINPORTBASE_H

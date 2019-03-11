@@ -129,7 +129,7 @@ namespace RTC
       return str[status];
     }
   };
-};  // namespace RTC
+} // namespace RTC
 
 /*!
  * @if jp

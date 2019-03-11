@@ -85,4 +85,4 @@ namespace RTC
     m_Delete(ec);
   }
 
-};  // namespace RTC
+} // namespace RTC

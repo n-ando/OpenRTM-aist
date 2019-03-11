@@ -71,9 +71,9 @@ namespace RTC
 
 #ifndef ORB_IS_RTORB
     ::RTC::OctetSeq tmp;
-    CORBA::ULong len = (CORBA::ULong)data.getDataLength();
+    CORBA::ULong len = static_cast<CORBA::ULong>(data.getDataLength());
     tmp.length(len);
-    data.readData((unsigned char*)tmp.get_buffer(), len);
+    data.readData(static_cast<unsigned char*>(tmp.get_buffer()), len);
 #else // ORB_IS_RTORB
     OpenRTM_CdrData *cdrdata_tmp = new OpenRTM_CdrData();
     cdrdata_tmp->_buffer =
@@ -345,7 +345,7 @@ namespace RTC
     return InPortConsumer::UNKNOWN_ERROR;
   }
 
-};     // namespace RTC
+} // namespace RTC
 
 extern "C"
 {

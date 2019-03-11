@@ -93,7 +93,7 @@ namespace RTC
     m_connector = connector;
   }
 
-};     // namespace RTC
+} // namespace RTC
 
 
 extern "C"

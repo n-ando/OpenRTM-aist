@@ -425,7 +425,7 @@ namespace SDOPackage
         }
     }
   };
-};  // namespace SDOPackage
+} // namespace SDOPackage
 
 
 /*!
@@ -677,7 +677,7 @@ namespace RTC
      */
     SDOPackage::PeriodicECOrganization* m_org;
   };  // class PeriodicECOrganization
-};  // namespace RTC
+} // namespace RTC
 
 #ifdef WIN32
 #pragma warning( default : 4290 )

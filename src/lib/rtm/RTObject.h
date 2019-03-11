@@ -5628,7 +5628,7 @@ namespace RTC
       LightweightRTObject_var m_comp;
     };  // struct deactivate_comps
   };  // class RTObject_impl
-};  // namespace RTC
+} // namespace RTC
 
 #ifdef WIN32
 #pragma warning( default : 4290 )

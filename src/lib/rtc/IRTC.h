@@ -70,7 +70,7 @@ namespace Local
   typedef std::vector<ExecutionContext*> ExecutionContextList;
   
   struct LightweightRTObject;
-};     // namespace Local
-};     // namespace RTC
+} // namespace Local
+} // namespace RTC
 #endif // RTC_IRTC_H
 

@@ -176,9 +176,9 @@ namespace RTC
     CdrBufferBase::ReturnCode ret(m_connector->read(cdr));
     if (ret == CdrBufferBase::BUFFER_OK)
       {
-        CORBA::ULong len((CORBA::ULong)cdr.getDataLength());
+        CORBA::ULong len(static_cast<CORBA::ULong>(cdr.getDataLength()));
         RTC_PARANOID(("converted CDR data size: %d", len));
-	if (len == (CORBA::ULong)0) {
+	if (len == static_cast<CORBA::ULong>(0)) {
 	  RTC_ERROR(("buffer is empty."));
 	  return ::OpenRTM::BUFFER_EMPTY;
 	}
@@ -243,7 +243,7 @@ namespace RTC
 
   }
 
-};     // namespace RTC
+} // namespace RTC
 
 extern "C"
 {

@@ -461,8 +461,8 @@ namespace RTM
       m_fns.onUnregisterNameservice(name);
     }
     
-  }  // namespace LocalService
-}  // namespace RTM
+  } // namespace LocalService
+} // namespace RTM
 
 extern "C"
 {

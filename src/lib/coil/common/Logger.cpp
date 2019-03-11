@@ -475,4 +475,4 @@ namespace coil
         return *this;
     }
 
-};  // namespace coil
+} // namespace coil

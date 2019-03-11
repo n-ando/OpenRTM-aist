@@ -1110,7 +1110,7 @@ namespace RTC
      */
     struct connector_cleanup;
   };
-}; // End of namespace RTC
+} // End of namespace RTC
 
 #ifdef WIN32
 #pragma warning( pop )

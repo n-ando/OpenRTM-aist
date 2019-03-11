@@ -40,7 +40,7 @@ namespace coil
       {
         if (CPU_ISSET(i, &cpu_set))
           {
-            cpu_mask.push_back((unsigned int)i+1);
+            cpu_mask.push_back(static_cast<unsigned int>(i)+1);
           }
       }
 #endif
@@ -99,7 +99,7 @@ namespace coil
       {
         if (CPU_ISSET(i, &cpu_set))
           {
-            cpu_mask.push_back((unsigned int)i+1);
+            cpu_mask.push_back(static_cast<unsigned int>(i)+1);
           }
       }
 #endif
@@ -142,4 +142,4 @@ namespace coil
     return true;
 #endif
   }
-}; // namespace coil
+} // namespace coil

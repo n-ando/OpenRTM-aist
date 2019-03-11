@@ -57,7 +57,7 @@ namespace Local
     virtual const FsmProfile& get_fsm_profile() = 0;
     virtual ReturnCode_t set_fsm_profile(const FsmProfile& fsm_profile) = 0;
   };
-};     // namespace Local
-};     // namespace RTC
+} // namespace Local
+} // namespace RTC
 #endif // RTC_LOCAL_IFSMSERVICE_H
 

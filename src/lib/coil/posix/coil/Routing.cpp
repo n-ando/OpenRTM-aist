@@ -31,7 +31,7 @@ namespace coil
 {
   /*!
    * @if jp
-   * @brief ∞∏¿Ë•¢•…•Ï•π§´§ÈÕ¯Õ—§µ§Ï§Î•®•Û•…•›•§•Û•»•¢•…•Ï•π§Ú∆¿§Î
+   * @brief ÂÆõÂÖà„Ç¢„Éâ„É¨„Çπ„Åã„ÇâÂà©Áî®„Åï„Çå„Çã„Ç®„É≥„Éâ„Éù„Ç§„É≥„Éà„Ç¢„Éâ„É¨„Çπ„ÇíÂæó„Çã
    * @else
    * @brief Getting network interface name from destination address
    * @endif
@@ -48,7 +48,7 @@ namespace coil
 
   /*!
    * @if jp
-   * @brief ∞∏¿Ë•¢•…•Ï•π§´§ÈÕ¯Õ—§µ§Ï§Î•Õ•√•»•Ô°º•Ø•§•Û•ø°º•’•ß°º•πÃæ§Ú∆¿§Î
+   * @brief ÂÆõÂÖà„Ç¢„Éâ„É¨„Çπ„Åã„ÇâÂà©Áî®„Åï„Çå„Çã„Éç„ÉÉ„Éà„ÉØ„Éº„ÇØ„Ç§„É≥„Çø„Éº„Éï„Çß„Éº„ÇπÂêç„ÇíÂæó„Çã
    * @else
    * @brief Getting network interface name from destination address
    * @endif
@@ -61,16 +61,9 @@ namespace coil
     struct ::sockaddr_in addr;
 
     hostent = gethostbyname(dest_addr.c_str());
-    addr.sin_addr.s_addr = **(unsigned int **)(hostent->h_addr_list);
-    char src[48];
-    if(inet_ntop(AF_INET, &addr.sin_addr, src, sizeof(src)) != nullptr)
-    {
-            dest_addr = src;
-    }
-    else
-    {
-            return false;
-    }
+    addr.sin_addr.s_addr = **reinterpret_cast<unsigned int **>(hostent->h_addr_list);
+    dest_addr = inet_ntoa(addr.sin_addr);
+
 #if defined(COIL_OS_FREEBSD) || defined(COIL_OS_DARWIN) \
                              || defined(COIL_OS_CYGWIN) \
                              || defined(COIL_OS_QNX)
@@ -138,7 +131,7 @@ namespace coil
 
   /*!
    * @if jp
-   * @brief •Õ•√•»•Ô°º•Ø•§•Û•ø°º•’•ß°º•πÃæ§´§ÈIP•¢•…•Ï•π§Ú∆¿§Î
+   * @brief „Éç„ÉÉ„Éà„ÉØ„Éº„ÇØ„Ç§„É≥„Çø„Éº„Éï„Çß„Éº„ÇπÂêç„Åã„ÇâIP„Ç¢„Éâ„É¨„Çπ„ÇíÂæó„Çã
    * @else
    * @brief Get IP address from a network interface name
    * @endif
@@ -179,4 +172,4 @@ namespace coil
     return false;
   }
 
-};  // namespace coil
+} // namespace coil

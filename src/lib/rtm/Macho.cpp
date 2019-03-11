@@ -345,7 +345,7 @@ void _MachineBase::rattleOn() {
 
 #ifndef NDEBUG
 			// Clear dummy event if need be
-			if (myPendingEvent == (_IEventBase *) &myPendingEvent)
+			if (myPendingEvent == reinterpret_cast<_IEventBase *>(&myPendingEvent))
 				myPendingEvent = nullptr;
 #endif
 		} // while (myPendingState)

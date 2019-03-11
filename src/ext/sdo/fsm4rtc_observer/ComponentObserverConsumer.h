@@ -223,7 +223,7 @@ namespace RTC
           "FSM_STRUCTURE",
           "USER_DEFINED"
         };
-      return (size_t)kind < sizeof(kind)/sizeof(char*) ? kinds[kind] : "";
+      return (size_t)kind < sizeof(kinds)/sizeof(kinds[0]) ? kinds[kind] : "";
     }
 
     /*!
@@ -810,7 +810,7 @@ namespace RTC
 
   };
 
-}; // namespace RTC
+} // namespace RTC
 
 extern "C"
 {

@@ -107,7 +107,7 @@ namespace RTC
       m_logStreamBuf(), rtclog(&m_logStreamBuf),
       m_runner(nullptr), m_terminator(nullptr)
   {
-    new coil::SignalAction((coil::SignalHandler) handler, SIGINT);
+    new coil::SignalAction(static_cast<coil::SignalHandler>(handler), SIGINT);
   }
 
   /*!
@@ -122,7 +122,7 @@ namespace RTC
       m_logStreamBuf(), rtclog(&m_logStreamBuf),
       m_runner(nullptr), m_terminator(nullptr)
   {
-    new coil::SignalAction((coil::SignalHandler) handler, SIGINT);
+    new coil::SignalAction(static_cast<coil::SignalHandler>(handler), SIGINT);
   }
 
   /*!
@@ -1550,7 +1550,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 	// TAO's ORB_init needs argv[0] as command name.
 	args.insert(args.begin(), "manager");
 	char** argv = coil::toArgv(args);
-	int argc((int)args.size());
+	int argc(static_cast<int>(args.size()));
 	
 #ifdef ORB_IS_ORBEXPRESS
 	CORBA::ORB::spawn_flags(VX_SPE_TASK | VX_STDIO);

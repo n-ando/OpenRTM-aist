@@ -57,6 +57,6 @@ namespace Local
       virtual ExecutionContextList& get_owned_contexts() = 0;
       virtual ExecutionContextList& get_participating_contexts() = 0;
     };
-};     // namespace Local
-};     // namespace RTC
+} // namespace Local
+} // namespace RTC
 #endif // RTC_LOCAL_ILIGHTWEIGHTRTOBJECT_H
