@@ -102,7 +102,7 @@ namespace RTC
 
     for (auto prop : leaf)
       {
-        if (leaf[i]->hasKey(param_name) != nullptr)
+        if (prop->hasKey(param_name) != nullptr)
           {
             coil::Properties* p(prop->removeNode(param_name));
             delete p;
