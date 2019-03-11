@@ -36,7 +36,7 @@
 namespace RTC
 {
   class RTObject_impl;
-}  // namespace RTC
+} // namespace RTC
 namespace RTC_impl
 {
   typedef RTC::ExecutionContextHandle_t Ecid;
@@ -93,10 +93,10 @@ namespace RTC_impl
     void workerPostDo();
 
   protected:
-    void setComponentAction(const RTC::LightweightRTObject_ptr comp);
-    void setDataFlowComponentAction(const RTC::LightweightRTObject_ptr comp);
-    void setFsmParticipantAction(const RTC::LightweightRTObject_ptr comp);
-    void setMultiModeComponentAction(const RTC::LightweightRTObject_ptr comp);
+    void setComponentAction(RTC::LightweightRTObject_ptr comp);
+    void setDataFlowComponentAction(RTC::LightweightRTObject_ptr comp);
+    void setFsmParticipantAction(RTC::LightweightRTObject_ptr comp);
+    void setMultiModeComponentAction(RTC::LightweightRTObject_ptr comp);
 
   private:  // member variables
     RTC::Logger rtclog;
@@ -123,7 +123,7 @@ namespace RTC_impl
     coil::TimeMeasure m_svtMeasure;
     coil::TimeMeasure m_refMeasure;
   };
-};  // namespace RTC_impl
+} // namespace RTC_impl
 
 #ifdef WIN32
 #pragma warning( default : 4290 )

@@ -193,7 +193,7 @@ namespace RTC_exp
         if (!m_nowait && period > (t1 - t0))
           {
             if (count > 1000) { RTC_PARANOID(("sleeping...")); }
-            coil::sleep((coil::TimeValue)(period - (t1 - t0)));
+            coil::sleep(coil::TimeValue(period - (t1 - t0)));
           }
         if (count > 1000)
           {
@@ -459,7 +459,7 @@ namespace RTC_exp
   onAddedComponent(RTC::LightweightRTObject_ptr  /*rtobj*/)
   {
     Guard guard(m_workerthread.mutex_);
-    if (m_workerthread.running_ == false)
+    if (!m_workerthread.running_)
       {
         m_worker.updateComponentList();
       }
@@ -472,7 +472,7 @@ namespace RTC_exp
   onRemovedComponent(RTC::LightweightRTObject_ptr  /*rtobj*/)
   {
     Guard guard(m_workerthread.mutex_);
-    if (m_workerthread.running_ == false)
+    if (!m_workerthread.running_)
       {
         m_worker.updateComponentList();
       }
@@ -494,7 +494,7 @@ namespace RTC_exp
     if (isRunning())
     {
         Guard guard(m_workerthread.mutex_);
-        if (m_workerthread.running_ == false)
+        if (!m_workerthread.running_)
         {
             m_workerthread.running_ = true;
             m_workerthread.cond_.signal();
@@ -523,7 +523,7 @@ namespace RTC_exp
     if (isRunning())
     {
         Guard guard(m_workerthread.mutex_);
-        if (m_workerthread.running_ == false)
+        if (!m_workerthread.running_)
         {
             m_workerthread.running_ = true;
             m_workerthread.cond_.signal();
@@ -545,7 +545,7 @@ namespace RTC_exp
     if (isAllNextState(RTC::INACTIVE_STATE))
       {
         Guard guard(m_workerthread.mutex_);
-        if (m_workerthread.running_ == true)
+        if (m_workerthread.running_)
           {
             m_workerthread.running_ = false;
             RTC_TRACE(("All RTCs are INACTIVE. Stopping worker thread."));
@@ -567,7 +567,7 @@ namespace RTC_exp
     if (isAllNextState(RTC::INACTIVE_STATE))
       {
         Guard guard(m_workerthread.mutex_);
-        if (m_workerthread.running_ == true)
+        if (m_workerthread.running_)
           {
             m_workerthread.running_ = false;
             RTC_TRACE(("All RTCs are INACTIVE. Stopping worker thread."));
@@ -589,7 +589,7 @@ namespace RTC_exp
     if (isAllNextState(RTC::INACTIVE_STATE))
       {
         Guard guard(m_workerthread.mutex_);
-        if (m_workerthread.running_ == true)
+        if (m_workerthread.running_)
           {
             m_workerthread.running_ = false;
             RTC_TRACE(("All RTCs are INACTIVE. Stopping worker thread."));
@@ -611,7 +611,7 @@ namespace RTC_exp
     if (isAllNextState(RTC::INACTIVE_STATE))
       {
         Guard guard(m_workerthread.mutex_);
-        if (m_workerthread.running_ == true)
+        if (m_workerthread.running_)
           {
             m_workerthread.running_ = false;
             RTC_TRACE(("All RTCs are INACTIVE. Stopping worker thread."));
@@ -627,13 +627,13 @@ namespace RTC_exp
     getProperty(props, "cpu_affinity", affinity);
     RTC_DEBUG(("CPU affinity property: %s", affinity.c_str()));
 
-    coil::vstring tmp = coil::split(affinity, ",", true);
+    coil::vstring cpulist = coil::split(affinity, ",", true);
     m_cpu.clear();
 
-    for (coil::vstring::iterator itr = tmp.begin(); itr != tmp.end(); ++itr)
+    for (auto & cpu : cpulist)
       {
         int num;
-        if (coil::stringTo(num, (*itr).c_str()))
+        if (coil::stringTo(num, cpu.c_str()))
           {
             m_cpu.push_back(num);
             RTC_DEBUG(("CPU affinity int value: %d added.", num));
@@ -641,7 +641,7 @@ namespace RTC_exp
       }
   }
 
-};  // namespace RTC_exp
+} // namespace RTC_exp
 
 extern "C"
 {

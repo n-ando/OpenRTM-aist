@@ -219,7 +219,7 @@ namespace RTC
     return PORT_OK;
   }
 
-};  // namespace RTC
+} // namespace RTC
 
 
 extern "C"

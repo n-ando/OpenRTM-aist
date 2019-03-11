@@ -93,7 +93,7 @@ namespace Local
     class DataFlowComponentImpl;
     std::auto_ptr<DataFlowComponentImpl> pimpl;
   };
-};     // namespace Local
-};     // namespace RTC
+} // namespace Local
+} // namespace RTC
 #endif // DataFlowComponentBase_h
 

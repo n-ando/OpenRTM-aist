@@ -308,6 +308,6 @@ namespace RTC
     //    ConnectorBase(const ConnectorBase& x);
     //    ConnectorBase& operator=(const ConnectorBase& x);
   };
-};  // namespace RTC
+} // namespace RTC
 
 #endif  // RTC_CONNECTORBASE_H

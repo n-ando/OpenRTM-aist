@@ -136,7 +136,7 @@ namespace RTC
           "CONFIGURATION",
           "HEARTBEAT"
         };
-      return (size_t)kind < sizeof(kind)/sizeof(char*) ? kinds[kind] : "";
+      return static_cast<size_t>(kind) < sizeof(kind)/sizeof(char*) ? kinds[kind] : "";
     }
 
     /*!
@@ -606,7 +606,7 @@ namespace RTC
 
   };
 
-}; // namespace RTC
+} // namespace RTC
 
 extern "C"
 {

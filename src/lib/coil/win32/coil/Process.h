@@ -113,7 +113,7 @@ namespace coil
   */
   int create_process(std::string command, std::vector<std::string> &out);
 
-};  // namespace coil
+} // namespace coil
 
 inline FILE* popen(const char* cmd, const char* mode)
 {

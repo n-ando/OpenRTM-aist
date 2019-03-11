@@ -348,7 +348,7 @@ namespace RTC
     size_t postskip(m_skipn - m_leftskip);
     for (size_t i(0); i < loopcnt; ++i)
       {
-        m_buffer->advanceRptr((long)postskip);
+        m_buffer->advanceRptr(static_cast<long>(postskip));
         readable -= postskip;
         ByteData& cdr(m_buffer->get());
         onBufferRead(cdr);
@@ -357,7 +357,7 @@ namespace RTC
         ret = m_consumer->put(cdr);
         if (ret != PORT_OK)
           {
-            m_buffer->advanceRptr(-(long)postskip);
+            m_buffer->advanceRptr(-static_cast<long>(postskip));
             RTC_DEBUG(("%s = consumer.put()", DataPortStatus::toString(ret)));
             return invokeListener(ret, cdr);
           }
@@ -365,7 +365,7 @@ namespace RTC
         postskip = m_skipn + 1;
       }
 
-    m_buffer->advanceRptr((long)readable);
+    m_buffer->advanceRptr(static_cast<long>(readable));
     assert(m_skipn >= 0);
     m_leftskip = preskip % (m_skipn +1);
 
@@ -384,7 +384,7 @@ namespace RTC
     // allow readback. But, readback flag should be set as "true"
     // after written at least one datum into the buffer.
     m_readback = true;
-    m_buffer->advanceRptr((long)m_buffer->readable() - 1);
+    m_buffer->advanceRptr(static_cast<long>(m_buffer->readable()) - 1);
 
     ByteData& cdr(m_buffer->get());
 
@@ -464,7 +464,7 @@ namespace RTC
       {
         RTC_ERROR(("Task creation failed: %s",
                    prop.getProperty("thread_type", "default").c_str()));
-        return INVALID_ARGS;
+        return false;
       }
     m_task->setTask(this, &PublisherPeriodic::svc);
     RTC_PARANOID(("Task creation succeeded."));
@@ -602,7 +602,7 @@ namespace RTC
       }
   }
 
-};  // namespace RTC
+} // namespace RTC
 
 extern "C"
 {

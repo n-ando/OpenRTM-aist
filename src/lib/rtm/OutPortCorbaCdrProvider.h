@@ -358,7 +358,7 @@ namespace RTC
     ConnectorInfo m_profile;
     OutPortConnector* m_connector;
   };  // class OutPortCorbaCdrProvider
-};     // namespace RTC
+} // namespace RTC
 
 extern "C"
 {

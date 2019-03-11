@@ -435,4 +435,4 @@ namespace SDOPackage
       }
     return false;
   }
-};  // namespace SDOPackage
+} // namespace SDOPackage

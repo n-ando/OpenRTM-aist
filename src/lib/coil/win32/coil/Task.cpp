@@ -181,6 +181,6 @@ namespace coil
     t->finalize();
     return 0;
   }
-};  // namespace coil
+} // namespace coil
 
 

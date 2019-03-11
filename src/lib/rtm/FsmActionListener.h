@@ -1489,6 +1489,6 @@ namespace RTC
     structure_[FSM_STRUCTURE_LISTENER_NUM];
   };
 
-}; // namespace RTC
+} // namespace RTC
 
 #endif // RTC_FSMACTIONLISTENER_H

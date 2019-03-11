@@ -150,5 +150,5 @@ namespace RTC
   {
     m_listeners.connector_[ON_DISCONNECT].notify(m_profile);
   }
-};  // namespace RTC
+} // namespace RTC
 

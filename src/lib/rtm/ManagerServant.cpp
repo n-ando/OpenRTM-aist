@@ -64,7 +64,7 @@ namespace RTM
         try
           {
             RTM::Manager_var owner;
-            owner = findManager(config["corba.master_manager"].c_str());
+            owner = findManager(config["corba.master_manager"]);
             if (CORBA::is_nil(owner))
               {
                 RTC_WARN(("Master manager not found"));
@@ -197,12 +197,12 @@ namespace RTM
     ::RTM::ModuleProfileList_var cprof = new ::RTM::ModuleProfileList();
     std::vector<coil::Properties> prof(m_mgr.getLoadableModules());
 
-    cprof->length((CORBA::Long)prof.size());
+    cprof->length(static_cast<CORBA::Long>(prof.size()));
     for (size_t i(0), len(prof.size()); i < len; ++i)
       {
         RTC_VERBOSE_STR((prof[i]));
 #ifndef ORB_IS_TAO
-        NVUtil::copyFromProperties(cprof[(CORBA::Long)i].properties, prof[i]);
+        NVUtil::copyFromProperties(cprof[static_cast<CORBA::Long>(i)].properties, prof[i]);
 #else
         NVUtil::copyFromProperties(cprof.inout()[(CORBA::Long)i].properties, prof[i]);
 #endif
@@ -255,12 +255,12 @@ namespace RTM
     ::RTM::ModuleProfileList_var cprof = new RTM::ModuleProfileList();
     std::vector<coil::Properties> prof(m_mgr.getLoadedModules());
 
-    cprof->length((CORBA::Long)prof.size());
+    cprof->length(static_cast<CORBA::Long>(prof.size()));
     for (size_t i(0), len(prof.size()); i < len; ++i)
       {
         RTC_VERBOSE_STR((prof[i]));
 #ifndef ORB_IS_TAO
-        NVUtil::copyFromProperties(cprof[(CORBA::Long)i].properties, prof[i]);
+        NVUtil::copyFromProperties(cprof[static_cast<CORBA::Long>(i)].properties, prof[i]);
 #else
         NVUtil::copyFromProperties(cprof.inout()[(CORBA::Long)i].properties, prof[i]);
 #endif
@@ -313,12 +313,12 @@ namespace RTM
     ::RTM::ModuleProfileList_var cprof = new RTM::ModuleProfileList();
     std::vector<coil::Properties> prof(m_mgr.getFactoryProfiles());
 
-    cprof->length((CORBA::Long)prof.size());
+    cprof->length(static_cast<CORBA::Long>(prof.size()));
     for (size_t i(0), len(prof.size()); i < len; ++i)
       {
         RTC_VERBOSE_STR((prof[i]));
 #ifndef ORB_IS_TAO
-        NVUtil::copyFromProperties(cprof[(CORBA::Long)i].properties, prof[i]);
+        NVUtil::copyFromProperties(cprof[static_cast<CORBA::Long>(i)].properties, prof[i]);
 #else
         NVUtil::copyFromProperties(cprof.inout()[(CORBA::Long)i].properties, prof[i]);
 #endif
@@ -488,7 +488,7 @@ namespace RTM
 
 
                   }
-                catch (CORBA::SystemException& e)
+                catch (CORBA::SystemException&)
                   {
                     RTC_DEBUG(("Exception was caught while creating component."));
                   }
@@ -564,11 +564,11 @@ namespace RTM
     std::vector<RTC::RTObject_impl*> rtcs = m_mgr.getComponents();
     ::RTC::RTCList_var crtcs = new ::RTC::RTCList();
 
-    crtcs->length((CORBA::Long)rtcs.size());
+    crtcs->length(static_cast<CORBA::Long>(rtcs.size()));
     for (size_t i(0), len(rtcs.size()); i < len; ++i)
       {
 #ifndef ORB_IS_TAO
-        crtcs[(CORBA::Long)i] = RTC::RTObject::_duplicate(rtcs[i]->getObjRef());
+        crtcs[static_cast<CORBA::Long>(i)] = RTC::RTObject::_duplicate(rtcs[i]->getObjRef());
 #else
         crtcs.inout()[(CORBA::Long)i] = RTC::RTObject::_duplicate(rtcs[i]->getObjRef());
 #endif
@@ -617,12 +617,12 @@ namespace RTM
     // copy local component profiles
     ::RTC::ComponentProfileList_var cprofs = new ::RTC::ComponentProfileList();
     std::vector<RTC::RTObject_impl*> rtcs = m_mgr.getComponents();
-    cprofs->length((CORBA::Long)rtcs.size());
+    cprofs->length(static_cast<CORBA::Long>(rtcs.size()));
     for (size_t i(0), len(rtcs.size()); i < len; ++i)
       {
         ::RTC::ComponentProfile_var prof = rtcs[i]->get_component_profile();
 #ifndef ORB_IS_TAO
-        cprofs[(CORBA::Long)i] = prof;
+        cprofs[static_cast<CORBA::Long>(i)] = prof;
 #else
         cprofs.inout()[(CORBA::Long)i] = prof;
 #endif
@@ -950,14 +950,14 @@ namespace RTM
 
     std::vector<RTC::RTObject_impl*> rtcs = m_mgr.getComponents();
     coil::vstring rtc_name = coil::split(tmp, "/");
-    for (std::vector<RTC::RTObject_impl*>::iterator rtc = rtcs.begin(); rtc != rtcs.end(); ++rtc)
+    for (auto & rtc : rtcs)
       {
         // name = ConsoleIn0, instancename = ConsoleIn0
         if (rtc_name.size() == 1 &&
-            rtc_name[0] == (*rtc)->getInstanceName())
+            rtc_name[0] == rtc->getInstanceName())
           {
             RTC::RTObject_var rtcref =
-              RTC::RTObject::_duplicate((*rtc)->getObjRef());
+              RTC::RTObject::_duplicate(rtc->getObjRef());
 #ifndef ORB_IS_RTORB
             CORBA_SeqUtil::push_back(crtcs.inout(), rtcref.in());
 #else // ORB_IS_RTORB
@@ -970,12 +970,12 @@ namespace RTM
         // name = */ConsoleIn0 instancename = ConsoleIn0   OR
         // naem = sample/ConsoleIn0 category = sample && instance == ConsoleIn0
         if ((rtc_name[0] == "*" &&
-             rtc_name[1] == (*rtc)->getInstanceName()) ||
-            (rtc_name[0] == (*rtc)->getCategory() &&
-             rtc_name[1] == (*rtc)->getInstanceName()))
+             rtc_name[1] == rtc->getInstanceName()) ||
+            (rtc_name[0] == rtc->getCategory() &&
+             rtc_name[1] == rtc->getInstanceName()))
           {
             RTC::RTObject_var rtcref =
-              RTC::RTObject::_duplicate((*rtc)->getObjRef());
+              RTC::RTObject::_duplicate(rtc->getObjRef());
 #ifndef ORB_IS_RTORB
             CORBA_SeqUtil::push_back(crtcs.inout(), rtcref.in());
 #else // ORB_IS_RTORB
@@ -1310,7 +1310,7 @@ namespace RTM
           }
 
         RTC_DEBUG(("Invoking command: %s.", rtcd_cmd.c_str()));
-        int ret(coil::launch_shell(rtcd_cmd.c_str()));
+        int ret(coil::launch_shell(rtcd_cmd));
         if (ret == -1)
           {
             RTC_DEBUG(("%s: failed", rtcd_cmd.c_str()));
@@ -1367,7 +1367,7 @@ namespace RTM
       {
         return mgrobj->create_component(create_arg_str.c_str());
       }
-    catch (CORBA::SystemException& e)
+    catch (CORBA::SystemException&)
       {
         RTC_ERROR(("Exception was caught while creating component."));
         return RTC::RTObject::_nil();
@@ -1442,7 +1442,7 @@ namespace RTM
         rtcd_cmd += " -d ";
 
         RTC_DEBUG(("Invoking command: %s.", rtcd_cmd.c_str()));
-        int ret(coil::launch_shell(rtcd_cmd.c_str()));
+        int ret(coil::launch_shell(rtcd_cmd));
         if (ret == -1)
           {
             RTC_DEBUG(("%s: failed", rtcd_cmd.c_str()));
@@ -1477,7 +1477,7 @@ namespace RTM
           {
             return mgrobj->create_component(create_arg_str.c_str());
           }
-        catch (CORBA::SystemException& e)
+        catch (CORBA::SystemException&)
           {
             RTC_ERROR(("Exception was caught while creating component."));
             return RTC::RTObject::_nil();

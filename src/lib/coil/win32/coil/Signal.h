@@ -121,5 +121,5 @@ namespace coil
     int m_flags;
 
   };
-};  // namespace coil
+} // namespace coil
 #endif  // COIL_SIGNAL_H

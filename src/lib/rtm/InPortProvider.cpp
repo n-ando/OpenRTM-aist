@@ -130,4 +130,4 @@ namespace RTC
     RTC_TRACE(("setSubscriptionType(%s)", subs_type));
     m_subscriptionType = subs_type;
   }
-};  // namespace RTC
+} // namespace RTC

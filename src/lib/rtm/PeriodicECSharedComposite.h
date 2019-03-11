@@ -155,7 +155,7 @@ namespace SDOPackage
      *
      * @endif
      */
-    virtual ::CORBA::Boolean set_members(const SDOList& sdos)
+    virtual ::CORBA::Boolean set_members(const SDOList& sdo_list)
       throw (::CORBA::SystemException,
              InvalidParameter, NotAvailable, InternalError);
 
@@ -210,7 +210,7 @@ namespace SDOPackage
      * @brief Conversion from SDO to DFC
      * @endif
      */
-    bool sdoToDFC(const SDO_ptr sdo, ::OpenRTM::DataFlowComponent_ptr& dfc);
+    bool sdoToDFC(SDO_ptr sdo, ::OpenRTM::DataFlowComponent_ptr& dfc);
 
     /*!
      * @if jp
@@ -419,13 +419,13 @@ namespace SDOPackage
      */
     void print(PortList p)
     {
-      for (std::vector<std::string>::iterator itr=p.begin();itr != p.end();++itr)
+      for (auto & i : p)
         {
-          std::cout << (*itr) << std::endl;
+          std::cout << i << std::endl;
         }
     }
   };
-};  // namespace SDOPackage
+} // namespace SDOPackage
 
 
 /*!
@@ -677,7 +677,7 @@ namespace RTC
      */
     SDOPackage::PeriodicECOrganization* m_org;
   };  // class PeriodicECOrganization
-};  // namespace RTC
+} // namespace RTC
 
 #ifdef WIN32
 #pragma warning( default : 4290 )

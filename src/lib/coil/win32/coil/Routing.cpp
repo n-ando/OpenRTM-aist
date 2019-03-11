@@ -167,6 +167,6 @@ namespace coil
   }
   
   
-}; // namespace coil
+} // namespace coil
 
 #endif

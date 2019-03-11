@@ -907,4 +907,4 @@ namespace RTC
     RTC_DEBUG(("Configuration %s not found.", key));
     return false;
   }
-};  // namespace RTC
+} // namespace RTC

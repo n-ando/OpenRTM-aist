@@ -382,7 +382,7 @@ namespace RTC
     InPortConnector* m_connector;
 
   };  // class InPortDSProvider
-};  // namespace RTC
+} // namespace RTC
 
 extern "C"
 {

@@ -304,7 +304,7 @@ namespace RTC
     std::string m_shm_address;
     int m_memory_size;
   };  // class OutPortCorbaCdrProvider
-};     // namespace RTC
+} // namespace RTC
 
 extern "C"
 {

@@ -54,7 +54,21 @@
 namespace RTC
 {
   
-
+  /*!
+   * @if jp
+   *
+   * @brief 単純なデータ型のシリアライザを登録するテンプレート関数
+   * 
+   * @param name シリアライザの名前
+   *
+   * @else
+   *
+   * @brief 
+   * 
+   * @param name 
+   *
+   * @endif
+   */
   template <class DataType, class MessageType>
   void ROSSimpleDataInitBaseFunc(const char* name)
   {
@@ -73,6 +87,19 @@ namespace RTC
             RTC::ROSMessageInfo<MessageType> >);
   }
 
+  /*!
+   * @if jp
+   *
+   * @brief 単純なデータ型のシリアライザを登録するテンプレート関数
+   * 
+   *
+   * @else
+   *
+   * @brief 
+   * 
+   *
+   * @endif
+   */
   template <class DataType>
   void ROSSimpleDataInit()
   {
@@ -88,7 +115,21 @@ namespace RTC
     ROSSimpleDataInitBaseFunc<DataType, std_msgs::UInt64>("ROSUInt64");
   }
 
-
+  /*!
+   * @if jp
+   *
+   * @brief 配列データ型のシリアライザを登録するテンプレート関数
+   * 
+   * @param name シリアライザの名前
+   *
+   * @else
+   *
+   * @brief 
+   * 
+   * @param name 
+   *
+   * @endif
+   */
   template <class DataType, class MessageType>
   void ROSSequenceDataInitBaseFunc(const char* name)
   {
@@ -107,6 +148,19 @@ namespace RTC
             RTC::ROSMessageInfo<MessageType> >);
   }
 
+  /*!
+   * @if jp
+   *
+   * @brief 配列データ型のシリアライザを登録するテンプレート関数
+   * 
+   *
+   * @else
+   *
+   * @brief 
+   * 
+   *
+   * @endif
+   */
   template <class DataType>
   void ROSSequenceDataInit()
   {
@@ -122,20 +176,78 @@ namespace RTC
     ROSSequenceDataInitBaseFunc<DataType, std_msgs::UInt64MultiArray>("ROSUInt64MultiArray");
   }
 
-
+  /*!
+   * @if jp
+   *
+   * @class ROSStringData
+   *
+   * @brief RTC::TimedString<-->std_msgs::Stringのシリアライザ
+   *
+   *
+   * @since 2.0.0
+   *
+   * @else
+   *
+   * @class ROSStringData
+   *
+   * @brief 
+   *
+   *
+   * @since 2.0.0
+   *
+   * @endif
+   */
   class ROSStringData : public ROSSerializerBase<RTC::TimedString>
   {
   public:
+    /*!
+     * @if jp
+     *
+     * @brief コンストラクタ
+     *
+     * @else
+     *
+     * @brief Constructor
+     *
+     * @endif
+     */
     ROSStringData()
     {
 
     }
+    /*!
+     * @if jp
+     *
+     * @brief デストラクタ
+     *
+     * @else
+     *
+     * @brief Destructor
+     *
+     * @endif
+     */
     virtual ~ROSStringData()
     {
 
     }
 
-
+    /*!
+     * @if jp
+     *
+     * @brief データの符号化
+     * 
+     * @param data 符号化前のデータ
+     * @return true：符号化成功、false：失敗
+     *
+     * @else
+     *
+     * @brief 
+     * 
+     * @param data 
+     * @return 
+     *
+     * @endif
+     */
     virtual bool serialize(const RTC::TimedString& data)
     {
         
@@ -145,7 +257,24 @@ namespace RTC
       ROSSerializerBase<RTC::TimedString>::m_message = ros::serialization::serializeMessage<std_msgs::String>(msg);
 
       return true;
-    };
+    }
+    /*!
+     * @if jp
+     *
+     * @brief データの復号化
+     * 
+     * @param data 復号化後のデータを格納する変数
+     * @return true：復号化成功、false：失敗
+     *
+     * @else
+     *
+     * @brief 
+     * 
+     * @param data 
+     * @return 
+     *
+     * @endif
+     */
     virtual bool deserialize(RTC::TimedString& data)
     { 
 
@@ -155,9 +284,22 @@ namespace RTC
       data.data = CORBA::string_dup(msg.data.c_str());
 
       return true;
-    };
+    }
   };
 
+  /*!
+   * @if jp
+   *
+   * @brief RTC::TimedString<-->std_msgs::Stringのシリアライザを登録する
+   * 
+   *
+   * @else
+   *
+   * @brief 
+   * 
+   *
+   * @endif
+   */
   void ROSStringDataInit()
   {
     coil::GlobalFactory < ::RTC::ByteDataStream<RTC::TimedString> >::
@@ -175,19 +317,78 @@ namespace RTC
             RTC::ROSMessageInfo<std_msgs::String> >);
   }
 
+  /*!
+   * @if jp
+   *
+   * @class ROSPoint3DData
+   *
+   * @brief RTC::TimedPoint3D<-->geometry_msgs::PointStampedのシリアライザ
+   *
+   *
+   * @since 2.0.0
+   *
+   * @else
+   *
+   * @class ROSPoint3DData
+   *
+   * @brief 
+   *
+   *
+   * @since 2.0.0
+   *
+   * @endif
+   */
   class ROSPoint3DData : public ROSSerializerBase<RTC::TimedPoint3D>
   {
   public:
+    /*!
+     * @if jp
+     *
+     * @brief コンストラクタ
+     *
+     * @else
+     *
+     * @brief Constructor
+     *
+     * @endif
+     */
     ROSPoint3DData()
     {
 
     }
+    /*!
+     * @if jp
+     *
+     * @brief デストラクタ
+     *
+     * @else
+     *
+     * @brief Destructor
+     *
+     * @endif
+     */
     virtual ~ROSPoint3DData()
     {
 
     }
 
-
+    /*!
+     * @if jp
+     *
+     * @brief データの符号化
+     * 
+     * @param data 符号化前のデータ
+     * @return true：符号化成功、false：失敗
+     *
+     * @else
+     *
+     * @brief 
+     * 
+     * @param data 
+     * @return 
+     *
+     * @endif
+     */
     virtual bool serialize(const RTC::TimedPoint3D& data)
     {
         
@@ -201,7 +402,25 @@ namespace RTC
       ROSSerializerBase<RTC::TimedPoint3D>::m_message = ros::serialization::serializeMessage<geometry_msgs::PointStamped>(msg);
 
       return true;
-    };
+    }
+
+    /*!
+     * @if jp
+     *
+     * @brief データの復号化
+     * 
+     * @param data 復号化後のデータを格納する変数
+     * @return true：復号化成功、false：失敗
+     *
+     * @else
+     *
+     * @brief 
+     * 
+     * @param data 
+     * @return 
+     *
+     * @endif
+     */
     virtual bool deserialize(RTC::TimedPoint3D& data)
     { 
 
@@ -216,9 +435,22 @@ namespace RTC
       data.data.z = msg.point.z;
 
       return true;
-    };
+    }
   };
 
+  /*!
+   * @if jp
+   *
+   * @brief RTC::TimedPoint3D<-->geometry_msgs::PointStampedのシリアライザを登録する
+   * 
+   *
+   * @else
+   *
+   * @brief 
+   * 
+   *
+   * @endif
+   */
   void ROSPont3DDataInit()
   {
     coil::GlobalFactory < ::RTC::ByteDataStream<RTC::TimedPoint3D> >::
@@ -237,20 +469,78 @@ namespace RTC
   }
 
 
-
+  /*!
+   * @if jp
+   *
+   * @class ROSQuaternionData
+   *
+   * @brief RTC::TimedQuaternion<-->geometry_msgs::QuaternionStampedのシリアライザ
+   *
+   *
+   * @since 2.0.0
+   *
+   * @else
+   *
+   * @class ROSQuaternionData
+   *
+   * @brief 
+   *
+   *
+   * @since 2.0.0
+   *
+   * @endif
+   */
   class ROSQuaternionData : public ROSSerializerBase<RTC::TimedQuaternion>
   {
   public:
+    /*!
+     * @if jp
+     *
+     * @brief コンストラクタ
+     *
+     * @else
+     *
+     * @brief Constructor
+     *
+     * @endif
+     */
     ROSQuaternionData()
     {
 
     }
+    /*!
+     * @if jp
+     *
+     * @brief デストラクタ
+     *
+     * @else
+     *
+     * @brief Destructor
+     *
+     * @endif
+     */
     virtual ~ROSQuaternionData()
     {
 
     }
 
-
+    /*!
+     * @if jp
+     *
+     * @brief データの符号化
+     * 
+     * @param data 符号化前のデータ
+     * @return true：符号化成功、false：失敗
+     *
+     * @else
+     *
+     * @brief 
+     * 
+     * @param data 
+     * @return 
+     *
+     * @endif
+     */
     virtual bool serialize(const RTC::TimedQuaternion& data)
     {
         
@@ -265,7 +555,25 @@ namespace RTC
       ROSSerializerBase<RTC::TimedQuaternion>::m_message = ros::serialization::serializeMessage<geometry_msgs::QuaternionStamped>(msg);
 
       return true;
-    };
+    }
+
+    /*!
+     * @if jp
+     *
+     * @brief データの復号化
+     * 
+     * @param data 復号化後のデータを格納する変数
+     * @return true：復号化成功、false：失敗
+     *
+     * @else
+     *
+     * @brief 
+     * 
+     * @param data 
+     * @return 
+     *
+     * @endif
+     */
     virtual bool deserialize(RTC::TimedQuaternion& data)
     { 
 
@@ -281,20 +589,33 @@ namespace RTC
       data.data.w = msg.quaternion.w;
 
       return true;
-    };
+    }
   };
 
+  /*!
+   * @if jp
+   *
+   * @brief RTC::TimedQuaternion<-->geometry_msgs::QuaternionStampedのシリアライザを登録する
+   * 
+   *
+   * @else
+   *
+   * @brief 
+   * 
+   *
+   * @endif
+   */
   void ROSQuaternionDataInit()
   {
     coil::GlobalFactory < ::RTC::ByteDataStream<RTC::TimedQuaternion> >::
-            instance().addFactory("ROSQuaternion",
+            instance().addFactory("ROSQuaternionStamped",
             ::coil::Creator< ::RTC::ByteDataStream<RTC::TimedQuaternion>,
             RTC::ROSQuaternionData>,
             ::coil::Destructor< ::RTC::ByteDataStream<RTC::TimedQuaternion>,
             RTC::ROSQuaternionData>);
 
     RTC::ROSMessageInfoFactory::
-            instance().addFactory("ROSQuaternion",
+            instance().addFactory("ROSQuaternionStamped",
             ::coil::Creator< ::RTC::ROSMessageInfoBase,
             RTC::ROSMessageInfo<geometry_msgs::QuaternionStamped > >,
             ::coil::Destructor< ::RTC::ROSMessageInfoBase,
@@ -302,20 +623,78 @@ namespace RTC
   }
 
 
-
+  /*!
+   * @if jp
+   *
+   * @class ROSVector3DData
+   *
+   * @brief RTC::TimedVector3D<-->geometry_msgs::Vector3Stampedのシリアライザ
+   *
+   *
+   * @since 2.0.0
+   *
+   * @else
+   *
+   * @class ROSVector3DData
+   *
+   * @brief 
+   *
+   *
+   * @since 2.0.0
+   *
+   * @endif
+   */
   class ROSVector3DData : public ROSSerializerBase<RTC::TimedVector3D>
   {
   public:
+    /*!
+     * @if jp
+     *
+     * @brief コンストラクタ
+     *
+     * @else
+     *
+     * @brief Constructor
+     *
+     * @endif
+     */
     ROSVector3DData()
     {
 
     }
+    /*!
+     * @if jp
+     *
+     * @brief デストラクタ
+     *
+     * @else
+     *
+     * @brief Destructor
+     *
+     * @endif
+     */
     virtual ~ROSVector3DData()
     {
 
     }
 
-
+    /*!
+     * @if jp
+     *
+     * @brief データの符号化
+     * 
+     * @param data 符号化前のデータ
+     * @return true：符号化成功、false：失敗
+     *
+     * @else
+     *
+     * @brief 
+     * 
+     * @param data 
+     * @return 
+     *
+     * @endif
+     */
     virtual bool serialize(const RTC::TimedVector3D& data)
     {
         
@@ -330,9 +709,26 @@ namespace RTC
       ROSSerializerBase<RTC::TimedVector3D>::m_message = ros::serialization::serializeMessage<geometry_msgs::Vector3Stamped>(msg);
 
       return true;
-    };
+    }
+    /*!
+     * @if jp
+     *
+     * @brief データの復号化
+     * 
+     * @param data 復号化後のデータを格納する変数
+     * @return true：復号化成功、false：失敗
+     *
+     * @else
+     *
+     * @brief 
+     * 
+     * @param data 
+     * @return 
+     *
+     * @endif
+     */
     virtual bool deserialize(RTC::TimedVector3D& data)
-    { 
+    {
 
       geometry_msgs::Vector3Stamped msg;
       
@@ -345,40 +741,111 @@ namespace RTC
       data.data.z = msg.vector.z;
 
       return true;
-    };
+    }
   };
 
+  /*!
+   * @if jp
+   *
+   * @brief RTC::TimedVector3D<-->geometry_msgs::Vector3Stampedのシリアライザを登録する
+   * 
+   *
+   * @else
+   *
+   * @brief 
+   * 
+   *
+   * @endif
+   */
   void ROSVector3DDataInit()
   {
     coil::GlobalFactory < ::RTC::ByteDataStream<RTC::TimedVector3D> >::
-            instance().addFactory("ROSVector3D",
+            instance().addFactory("ROSVector3Stamped",
             ::coil::Creator< ::RTC::ByteDataStream<RTC::TimedVector3D>,
             RTC::ROSVector3DData>,
             ::coil::Destructor< ::RTC::ByteDataStream<RTC::TimedVector3D>,
             RTC::ROSVector3DData>);
 
     RTC::ROSMessageInfoFactory::
-            instance().addFactory("ROSVector3D",
+            instance().addFactory("ROSVector3Stamped",
             ::coil::Creator< ::RTC::ROSMessageInfoBase,
             RTC::ROSMessageInfo<geometry_msgs::Vector3Stamped > >,
             ::coil::Destructor< ::RTC::ROSMessageInfoBase,
             RTC::ROSMessageInfo<geometry_msgs::Vector3Stamped > >);
   }
 
-
+  /*!
+   * @if jp
+   *
+   * @class ROSCameraImageData
+   *
+   * @brief RTC::CameraImage<-->sensor_msgs::Imageのシリアライザ
+   *
+   *
+   * @since 2.0.0
+   *
+   * @else
+   *
+   * @class ROSCameraImageData
+   *
+   * @brief 
+   *
+   *
+   * @since 2.0.0
+   *
+   * @endif
+   */
   class ROSCameraImageData : public ROSSerializerBase<RTC::CameraImage>
   {
   public:
+    /*!
+     * @if jp
+     *
+     * @brief コンストラクタ
+     *
+     * @else
+     *
+     * @brief Constructor
+     *
+     * @endif
+     */
     ROSCameraImageData()
     {
 
     }
+    /*!
+     * @if jp
+     *
+     * @brief デストラクタ
+     *
+     * @else
+     *
+     * @brief Destructor
+     *
+     * @endif
+     */
     virtual ~ROSCameraImageData()
     {
 
     }
 
-
+    /*!
+     * @if jp
+     *
+     * @brief データの符号化
+     * 
+     * @param data 符号化前のデータ
+     * @return true：符号化成功、false：失敗
+     *
+     * @else
+     *
+     * @brief 
+     * 
+     * @param data 
+     * @return 
+     *
+     * @endif
+     */
     virtual bool serialize(const RTC::CameraImage& data)
     {
         
@@ -387,7 +854,7 @@ namespace RTC
       msg.header.stamp.nsec = data.tm.nsec;
       msg.height = data.height;
       msg.width = data.width;
-      if(std::string(data.format) == "")
+      if(std::string(data.format).empty())
       {
         msg.encoding = "rgb8";
       }
@@ -403,7 +870,25 @@ namespace RTC
       ROSSerializerBase<RTC::CameraImage>::m_message = ros::serialization::serializeMessage<sensor_msgs::Image>(msg);
 
       return true;
-    };
+    }
+
+    /*!
+     * @if jp
+     *
+     * @brief データの復号化
+     * 
+     * @param data 復号化後のデータを格納する変数
+     * @return true：復号化成功、false：失敗
+     *
+     * @else
+     *
+     * @brief 
+     * 
+     * @param data 
+     * @return 
+     *
+     * @endif
+     */
     virtual bool deserialize(RTC::CameraImage& data)
     { 
 
@@ -424,20 +909,33 @@ namespace RTC
       memcpy(&data.pixels[0], &msg.data[0], data.pixels.length());
 
       return true;
-    };
+    }
   };
 
+  /*!
+   * @if jp
+   *
+   * @brief RTC::CameraImage<-->sensor_msgs::Imageのシリアライザを登録する
+   * 
+   *
+   * @else
+   *
+   * @brief 
+   * 
+   *
+   * @endif
+   */
   void ROSCameraImageDataInit()
   {
     coil::GlobalFactory < ::RTC::ByteDataStream<RTC::CameraImage> >::
-            instance().addFactory("ROSCameraImage",
+            instance().addFactory("ROSImage",
             ::coil::Creator< ::RTC::ByteDataStream<RTC::CameraImage>,
             RTC::ROSCameraImageData>,
             ::coil::Destructor< ::RTC::ByteDataStream<RTC::CameraImage>,
             RTC::ROSCameraImageData>);
 
     RTC::ROSMessageInfoFactory::
-            instance().addFactory("ROSCameraImage",
+            instance().addFactory("ROSImage",
             ::coil::Creator< ::RTC::ROSMessageInfoBase,
             RTC::ROSMessageInfo<sensor_msgs::Image > >,
             ::coil::Destructor< ::RTC::ROSMessageInfoBase,

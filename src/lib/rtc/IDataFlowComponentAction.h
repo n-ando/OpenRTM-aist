@@ -46,7 +46,7 @@ namespace Local
     virtual ReturnCode_t
     on_rate_changed(ExecutionContextHandle_t ec_handle) = 0;
   };
-};     // namespace Local
-};     // namespace RTC
+} // namespace Local
+} // namespace RTC
 #endif // RTC_LOCAL_IDATAFLOWCOMPONENTACTION_H
 

@@ -57,11 +57,7 @@ namespace CORBA_RTCUtil
   {
     try
       {
-        if (rtc->_non_existent())
-          {
-            return false;
-          }
-        return true;
+        return !rtc->_non_existent();
       }
     catch (...)
       {
@@ -109,14 +105,14 @@ namespace CORBA_RTCUtil
       {
         RTC::ExecutionContextList_var eclist;
         eclist = rtc->get_owned_contexts();
-        if (ec_id >= (CORBA::Long)eclist->length())
+        if (ec_id >= static_cast<CORBA::Long>(eclist->length()))
           { return RTC::ExecutionContext::_nil(); }
-        if (CORBA::is_nil(eclist[(CORBA::ULong)ec_id]))
+        if (CORBA::is_nil(eclist[static_cast<CORBA::ULong>(ec_id)]))
           { return RTC::ExecutionContext::_nil(); }
 #ifdef ORB_IS_TAO
         return eclist[(CORBA::ULong)ec_id].in();
 #else
-        return eclist[(CORBA::ULong)ec_id];
+        return eclist[static_cast<CORBA::ULong>(ec_id)];
 #endif
       }
     if (ec_id >= 1000)
@@ -124,14 +120,14 @@ namespace CORBA_RTCUtil
         RTC::UniqueId pec_id(ec_id - 1000);
         RTC::ExecutionContextList_var eclist;
         eclist = rtc->get_participating_contexts();
-        if (pec_id >= (CORBA::Long)eclist->length())
+        if (pec_id >= static_cast<CORBA::Long>(eclist->length()))
           { return RTC::ExecutionContext::_nil(); }
-		if (CORBA::is_nil(eclist[(CORBA::ULong)pec_id]))
+		if (CORBA::is_nil(eclist[static_cast<CORBA::ULong>(pec_id)]))
           { return RTC::ExecutionContext::_nil(); }
 #ifdef ORB_IS_TAO
         return eclist[(CORBA::ULong)pec_id].in();
 #else
-        return eclist[(CORBA::ULong)pec_id];
+        return eclist[static_cast<CORBA::ULong>(pec_id)];
 #endif
       }
     return RTC::ExecutionContext::_nil();
@@ -1186,7 +1182,7 @@ namespace CORBA_RTCUtil
   {
     RTC::PortProfile_var prof = p->get_port_profile();
     std::string c(CORBA::string_dup(prof->name));
-    return (m_name == c) ? true : false;
+    return m_name == c;
   }
   /*!
    * @if jp
@@ -1439,5 +1435,5 @@ namespace CORBA_RTCUtil
 
     return true;
   }
-}  // namespace CORBA_RTCUtil
+} // namespace CORBA_RTCUtil
 

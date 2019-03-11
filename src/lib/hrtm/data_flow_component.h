@@ -48,6 +48,6 @@ namespace hrtm
     virtual void updateFsmStatus(RTC::StatusKind status_kind,
                                  const char* state);
   };
-}; // namespace hrtm
+} // namespace hrtm
 
 #endif // HRTM_DATA_FLOW_COMPONENT_H

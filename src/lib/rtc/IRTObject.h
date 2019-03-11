@@ -67,6 +67,6 @@ namespace Local
     virtual const ComponentProfile& get_component_profile() = 0;
     virtual PortServiceList& get_ports() = 0;
   };
-};     // namespace Local
-};     // namespace RTC
+} // namespace Local
+} // namespace RTC
 #endif // RTC_LOCAL_IRTOBJECT_H

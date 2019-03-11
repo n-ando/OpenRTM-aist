@@ -429,4 +429,4 @@ namespace RTC_impl
     m_profileMutex.unlock();
   }
 
-};  // namespace RTC_impl
+} // namespace RTC_impl

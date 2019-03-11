@@ -60,7 +60,7 @@ namespace RTC
 		  _default_POA()->deactivate_object(oid);
 #endif
 	  }
-	  catch (PortableServer::POA::ServantNotActive &e)
+	  catch (PortableServer::POA::ServantNotActive&)
 	  {
 #ifdef ORB_IS_ORBEXPRESS
 		  oe_out << e << oe_endl << oe_flush;
@@ -68,7 +68,7 @@ namespace RTC
 		  //RTC_ERROR(("%s", e._name()));
 #endif
 	  }
-	  catch (PortableServer::POA::WrongPolicy &e)
+	  catch (PortableServer::POA::WrongPolicy&)
 	  {
 #ifdef ORB_IS_ORBEXPRESS
 		  oe_out << e << oe_endl << oe_flush;
@@ -250,10 +250,10 @@ namespace RTC
   */
   void SharedMemoryPort::write(ByteData& data)
   {
-      CORBA::ULongLong data_size = (CORBA::ULongLong)data.getDataLength();
+      CORBA::ULongLong data_size = static_cast<CORBA::ULongLong>(data.getDataLength());
 	  if (data_size + sizeof(CORBA::ULongLong) > m_shmem.get_size())
 	  {
-		  int memory_size = (int)data_size + (int)sizeof(CORBA::ULongLong);
+		  int memory_size = static_cast<int>(data_size) + static_cast<int>(sizeof(CORBA::ULongLong));
 		  if (!CORBA::is_nil(m_smInterface))
 		  {
 			  try
@@ -275,7 +275,7 @@ namespace RTC
 
 	  if (ret == 0)
 	  {
-          m_shmem.write((char*)data.getBuffer(), sizeof(CORBA::ULongLong), data.getDataLength());
+          m_shmem.write(reinterpret_cast<char*>(data.getBuffer()), sizeof(CORBA::ULongLong), data.getDataLength());
 	  }
 
   }
@@ -305,7 +305,7 @@ namespace RTC
           CORBA::ULongLong data_size;
           data.isLittleEndian(m_endian);
           data_size_cdr.setEndian(m_endian);
-          data_size_cdr.writeCdrData((unsigned char*)&(m_shmem.get_data()[0]), sizeof(CORBA::ULongLong));
+          data_size_cdr.writeCdrData(reinterpret_cast<unsigned char*>(&(m_shmem.get_data()[0])), sizeof(CORBA::ULongLong));
           data_size_cdr.deserializeCDR(data_size);
 
           //CORBA::Octet *shm_data = new CORBA::Octet[data_size];
@@ -316,7 +316,7 @@ namespace RTC
               	 
               data.put_octet_array(&(shm_data[0]), (int)data_size);
           }*/
-          data.writeData((unsigned char*)(m_shmem.get_data()[sizeof(CORBA::ULongLong)]), (unsigned long)data_size);
+          data.writeData((unsigned char*)(m_shmem.get_data()[sizeof(CORBA::ULongLong)]), static_cast<unsigned long>(data_size));
           //delete shm_data;
 	  }
 

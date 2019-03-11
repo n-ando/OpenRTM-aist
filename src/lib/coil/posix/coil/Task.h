@@ -260,6 +260,6 @@ namespace coil
     pthread_t m_thread;
     pthread_attr_t m_attr;
   };
-};  // namespace coil
+} // namespace coil
 
 #endif  // COIL_TASK_H

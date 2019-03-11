@@ -293,7 +293,7 @@ namespace RTC
   protected:
     FluentBitStream m_fbstream;
   };
-}; // namespace RTC
+} // namespace RTC
 
 extern "C"
 {

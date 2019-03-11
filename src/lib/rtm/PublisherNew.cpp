@@ -420,7 +420,7 @@ namespace RTC
     RTC_TRACE(("pushSkip()"));
 
     ReturnCode ret(PORT_OK);
-    int preskip((int)m_buffer->readable() + m_leftskip);
+    int preskip(static_cast<int>(m_buffer->readable()) + m_leftskip);
     int loopcnt(preskip/(m_skipn +1));
     int postskip(m_skipn - m_leftskip);
     for (int i(0); i < loopcnt; ++i)
@@ -442,7 +442,7 @@ namespace RTC
         onReceived(cdr);
         postskip = m_skipn + 1;
       }
-    m_buffer->advanceRptr((long)m_buffer->readable());
+    m_buffer->advanceRptr(static_cast<long>(m_buffer->readable()));
     if (loopcnt == 0)
       {  // Not put
         m_leftskip = preskip % (m_skipn +1);
@@ -468,7 +468,7 @@ namespace RTC
   {
     RTC_TRACE(("pushNew()"));
 
-    m_buffer->advanceRptr((long)m_buffer->readable() - 1);
+    m_buffer->advanceRptr(static_cast<long>(m_buffer->readable()) - 1);
 
     ByteData& cdr(m_buffer->get());
     onBufferRead(cdr);
@@ -577,7 +577,7 @@ namespace RTC
       }
   }
 
-};  // namespace RTC
+} // namespace RTC
 
 extern "C"
 {

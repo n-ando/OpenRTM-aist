@@ -246,7 +246,7 @@ RTC::ReturnCode_t Throughput::onExecute(RTC::UniqueId ec_id)
       std::cout << "\tlogmulcnt%3: " << m_logmulcnt % 3;
       std::cout << "\tlogmul[]: " << logmul[m_logmulcnt % 3] << std::endl;
 #endif // DEBUG
-      m_datasize *= logmul[m_logmulcnt % 3];
+      m_datasize *= (long)logmul[m_logmulcnt % 3];
       m_logmulcnt++;
     }
   else if (m_mode == "incr")
@@ -255,7 +255,7 @@ RTC::ReturnCode_t Throughput::onExecute(RTC::UniqueId ec_id)
     }
   else
     {
-      if((long)m_sendcount > m_maxsend)
+      if(static_cast<long>(m_sendcount) > m_maxsend)
         {
           exit();
           return RTC::RTC_OK;
@@ -269,7 +269,7 @@ RTC::ReturnCode_t Throughput::onExecute(RTC::UniqueId ec_id)
   std::cout << "\tsendcount: " << m_sendcount << std::endl;
 #endif // DEBUG
 
-  coil::sleep(m_sleep_time); // sleep for calculating measurement statistics
+  coil::sleep(coil::TimeValue(m_sleep_time)); // sleep for calculating measurement statistics
 
   // calculation is triggered data size change
   // to finish the last calculation, size 0 array is sent
@@ -473,7 +473,7 @@ void Throughput::receiveData(const RTC::Time &tm, const CORBA::ULong seq_length)
   m_record[record_ptr] = received_time - send_time;
   size = seq_length;
   record_ptr++; record_num++;
-  if ((long)record_ptr == m_maxsample) { record_ptr = 0; }
+  if (static_cast<long>(record_ptr) == m_maxsample) { record_ptr = 0; }
   return;
 }
 
@@ -499,9 +499,9 @@ void Throughput::setConnectorProfile(const RTC::ConnectorInfo &info)
   std::stringstream ss;
   ss << info.properties;
   coil::vstring propv = coil::split(ss.str(), "\n");
-  for (size_t i(0); i < propv.size(); ++i)
+  for (const auto & prop : propv)
     {
-      m_fs << "# " << propv[i] << std::endl;
+      m_fs << "# " << prop << std::endl;
     }
 
   // print header

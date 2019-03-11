@@ -213,7 +213,7 @@ namespace coil
      *
      * @endif
      */
-    virtual int write(const char *data, const unsigned long long pos, const unsigned long long size);
+    virtual int write(const char *data, unsigned long long pos, unsigned long long size);
 
 
     /*!
@@ -237,7 +237,7 @@ namespace coil
      *
      * @endif
      */
-    virtual int read(char* data, const unsigned long long pos, const unsigned long long size);
+    virtual int read(char* data, unsigned long long pos, unsigned long long size);
 
     /*!
      * @if jp
@@ -368,6 +368,6 @@ namespace coil
     int m_fd;
   };  // class SharedMemory
 
-};  // namespace coil
+} // namespace coil
 
 #endif // SharedMemory_h

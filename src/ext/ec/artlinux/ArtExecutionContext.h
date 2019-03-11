@@ -822,7 +822,7 @@ namespace RTC_exp
     int m_waitoffset;
     coil::TimeValue m_currPeriod;
   }; // class ArtExecutionContext
-}; // namespace RTC
+} // namespace RTC
 
 #ifdef WIN32
 #pragma warning( default : 4290 )

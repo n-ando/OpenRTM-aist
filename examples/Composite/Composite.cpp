@@ -17,7 +17,7 @@
 #include <iostream>
 #include <rtm/Manager.h>
 
-#if defined(RTM_OS_VXWORKS) && not defined(__RTP__)
+#if defined(RTM_OS_VXWORKS) && !defined(__RTP__)
 int composite_main (char* arg1, char* arg2, char* arg3,
 		     char* arg4, char* arg5, char* arg6,
 		     char* arg7, char* arg8, char* arg9)

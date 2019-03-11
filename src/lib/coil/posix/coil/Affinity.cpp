@@ -40,7 +40,7 @@ namespace coil
       {
         if (CPU_ISSET(i, &cpu_set))
           {
-            cpu_mask.push_back((unsigned int)i+1);
+            cpu_mask.push_back(static_cast<unsigned int>(i)+1);
           }
       }
 #endif
@@ -68,12 +68,12 @@ namespace coil
   bool setProcCpuAffinity(std::string cpu_mask)
   {
 #ifndef COIL_OS_QNX
-    coil::vstring tmp = coil::split(cpu_mask, ",", true);
+    coil::vstring masklist = coil::split(cpu_mask, ",", true);
     CpuMask mask;
-    for (size_t i(0); i < tmp.size(); ++i)
+    for (auto & maskstr : masklist)
       {
         int num;
-        if (coil::stringTo(num, tmp[i].c_str()))
+        if (coil::stringTo(num, maskstr.c_str()))
           {
             mask.push_back(num);
           }
@@ -99,7 +99,7 @@ namespace coil
       {
         if (CPU_ISSET(i, &cpu_set))
           {
-            cpu_mask.push_back((unsigned int)i+1);
+            cpu_mask.push_back(static_cast<unsigned int>(i)+1);
           }
       }
 #endif
@@ -127,12 +127,12 @@ namespace coil
   bool setThreadCpuAffinity(std::string cpu_mask)
   {
 #ifndef COIL_OS_QNX
-    coil::vstring tmp = coil::split(cpu_mask, ",", true);
+    coil::vstring masklist = coil::split(cpu_mask, ",", true);
     CpuMask mask;
-    for (size_t i(0); i < tmp.size(); ++i)
+    for (auto & maskstr : masklist)
       {
         int num;
-        if (coil::stringTo(num, tmp[i].c_str()))
+        if (coil::stringTo(num, maskstr.c_str()))
           {
             mask.push_back(num);
           }
@@ -142,4 +142,4 @@ namespace coil
     return true;
 #endif
   }
-}; // namespace coil
+} // namespace coil

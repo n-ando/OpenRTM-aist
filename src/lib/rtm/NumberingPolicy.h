@@ -165,7 +165,7 @@ namespace RTM
     int m_num;
     std::vector<void*> m_objects;
   };
-}; // namespace RTM
+} // namespace RTM
 
 extern "C"
 {

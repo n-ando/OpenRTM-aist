@@ -256,7 +256,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual void setEndian(const bool endian_type);
+    virtual void setEndian(bool endian_type);
 
     /*!
      * @if jp
@@ -426,6 +426,6 @@ namespace RTC
     std::string m_marshaling_type;
 
   };
-};  // namespace RTC
+} // namespace RTC
 
 #endif  // RTC_INPORTCONNECTOR_H

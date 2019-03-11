@@ -43,7 +43,7 @@ int main(int argc, char* argv[])
   std::string fullname(argv[1]);
   // directory name
   coil::replaceString(fullname, "\\", "/");
-  std::string dirname(coil::dirname((char*)fullname.c_str()));
+  std::string dirname(coil::dirname(const_cast<char*>(fullname.c_str())));
   // basename
   std::string basename(coil::basename(fullname.c_str()));
 
@@ -61,30 +61,30 @@ int main(int argc, char* argv[])
   opts.push_back("manager.corba_servant:NO");
 
   // Manager initialization
-  RTC::Manager::init(opts.size(), coil::toArgv(opts));
+  RTC::Manager::init((int)opts.size(), coil::toArgv(opts));
   RTC::Manager& mgr(RTC::Manager::instance());
 
 
   // loaded profile = old profiles - new profiles
   std::vector<coil::Properties> oldp(mgr.getFactoryProfiles());
-  mgr.load(basename.c_str(), "");
+  mgr.load(basename, "");
   std::vector<coil::Properties> newp(mgr.getFactoryProfiles());
   std::vector<coil::Properties> profs;
 
-  for (size_t i(0); i < newp.size(); ++i)
+  for (auto & propnew : newp)
     {
       bool exists(false);
-      for (size_t j(0); j < oldp.size(); ++j)
+      for (auto & propold : oldp)
         {
-          if (oldp[j]["implementation_id"] == newp[i]["implementation_id"] &&
-              oldp[j]["type_name"]         == newp[i]["type_name"] &&
-              oldp[j]["description"]       == newp[i]["description"] &&
-              oldp[j]["version"]           == newp[i]["version"])
+          if (propold["implementation_id"] == propnew["implementation_id"] &&
+              propold["type_name"]         == propnew["type_name"] &&
+              propold["description"]       == propnew["description"] &&
+              propold["version"]           == propnew["version"])
             {
               exists = true;
             }
         }
-      if (!exists) { profs.push_back(newp[i]); }
+      if (!exists) { profs.push_back(propnew); }
     }
 
   // loaded component profile have to be one
@@ -102,9 +102,9 @@ int main(int argc, char* argv[])
 
   coil::vstring keys(profs[0].propertyNames());
 
-  for (size_t i(0); i < keys.size(); ++i)
+  for (const auto & key : keys)
     {
-      std::cout << keys[i] << ": " << profs[0][keys[i]] << std::endl;
+      std::cout << key << ": " << profs[0][key] << std::endl;
     }
 
   return 0;

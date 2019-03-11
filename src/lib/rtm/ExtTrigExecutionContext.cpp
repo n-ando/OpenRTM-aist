@@ -138,7 +138,7 @@ namespace RTC
         if (period > (t1 - t0))
           {
             if (true /*count > 1000*/) { RTC_PARANOID(("sleeping...")); }
-            coil::sleep((coil::TimeValue)(period - (t1 - t0)));
+            coil::sleep(coil::TimeValue(period - (t1 - t0)));
           }
         if (true)  // count > 1000)
           {
@@ -401,7 +401,7 @@ namespace RTC
   onAddedComponent(RTC::LightweightRTObject_ptr  /*rtobj*/)
   {
     Guard guard(m_worker.mutex_);
-    if (m_worker.ticked_ == false)
+    if (!m_worker.ticked_)
       {
         ExecutionContextBase::m_worker.updateComponentList();
       }
@@ -414,7 +414,7 @@ namespace RTC
   onRemovedComponent(RTC::LightweightRTObject_ptr  /*rtobj*/)
   {
     Guard guard(m_worker.mutex_);
-    if (m_worker.ticked_ == false)
+    if (!m_worker.ticked_)
       {
         ExecutionContextBase::m_worker.updateComponentList();
       }
@@ -471,7 +471,7 @@ namespace RTC
     m_worker.cond_.signal();
     return RTC::RTC_OK;
   }
-};  // namespace RTC
+} // namespace RTC
 
 
 extern "C"

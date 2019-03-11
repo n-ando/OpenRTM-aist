@@ -73,7 +73,7 @@ namespace RTC
 #elif defined(ORB_IS_TAO)
         return (unsigned char*)m_cdr.begin();
 #else
-        return (unsigned char*)m_cdr.bufPtr();
+        return static_cast<unsigned char*>(m_cdr.bufPtr());
 #endif
     }
 
@@ -96,7 +96,7 @@ namespace RTC
 #elif defined(ORB_IS_TAO)
         m_cdr.write_octet_array((const unsigned char*)buffer, length);
 #else
-        m_cdr.put_octet_array((const unsigned char*)buffer, length);
+        m_cdr.put_octet_array(buffer, length);
 #endif
     };
 
@@ -119,4 +119,4 @@ namespace RTC
     };
 
 
-}  // namespace RTC
+} // namespace RTC

@@ -26,7 +26,6 @@
 #include <rtm/Manager.h>
 #include <ros/transport/transport_tcp.h>
 #include <ros/connection.h>
-#include <std_msgs/Float32.h>
 #include <coil/Mutex.h>
 #include "ROSMessageInfo.h"
 
@@ -251,6 +250,27 @@ namespace RTC
      */
     bool connectTCP(const ros::TransportTCPPtr& transport);
 
+    /*!
+     * @if jp
+     * @brief ヘッダ情報受信時のコールバック関数
+     *
+     *
+     * @param conn ros::ConnectionPtr
+     * @param header ヘッダ情報
+     *
+     * @return true：問題なし、false：ヘッダが不正
+     * 
+     * @else
+     * @brief 
+     *
+     *
+     * @param conn 
+     * @param header 
+     * 
+     * @return
+     *
+     * @endif
+     */
     bool onConnectionHeaderReceived(const ros::ConnectionPtr& conn, const ros::Header& header)
     {
       RTC_VERBOSE(("onConnectionHeaderReceived()"));
@@ -364,15 +384,6 @@ namespace RTC
 
   private:
 
-    /*!
-     * @if jp
-     * @brief リターンコード変換
-     * @else
-     * @brief Return codes conversion
-     * @endif
-     */
-    void convertReturn(BufferStatus::Enum status, ByteData& data);
-
     mutable Logger rtclog;
     bool m_start;
     coil::Properties m_properties;
@@ -386,7 +397,7 @@ namespace RTC
     std::string m_roscorehost;
     unsigned int m_roscoreport;
   };
-};     // namespace RTC
+} // namespace RTC
 
 
 

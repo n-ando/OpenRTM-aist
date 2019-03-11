@@ -163,7 +163,7 @@ namespace RTC
                 std::cerr << "Configuration file: " << m_configFile;
                 std::cerr << " not found." << std::endl;
 #ifndef __QNX__
-                for (size_t i(0); i < (size_t)argc; ++i)
+                for (size_t i(0); i < static_cast<size_t>(argc); ++i)
                   {
                     std::string tmp(argv[i]);
                     if (tmp == "-i") { ignoreNoConf = true; }
@@ -237,7 +237,7 @@ namespace RTC
         std::cerr << " not found." << std::endl;
       }
     // Search rtc configuration file from environment variable
-    char* env = getenv(config_file_env);
+    char* env = coil::getenv(config_file_env);
     if (env != nullptr)
       {
         if (fileExist(env))
@@ -322,4 +322,4 @@ namespace RTC
       }
     return false;
   }
-};  // namespace RTC
+} // namespace RTC

@@ -300,6 +300,6 @@ namespace RTC
       WorkerThreadCtrl m_readready_worker;
 
   };
-};  // namespace RTC
+} // namespace RTC
 
 #endif  // RTC_PULL_CONNECTOR_H

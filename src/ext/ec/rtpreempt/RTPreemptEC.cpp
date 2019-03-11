@@ -57,7 +57,7 @@ namespace RTC_exp
 
     // profile initialization
     setKind(RTC::PERIODIC);
-    setRate(1.0 / (double)DEEFAULT_PERIOD);
+    setRate(1.0 / DEEFAULT_PERIOD);
 
     RTC_DEBUG(("Actual period: %d [sec], %d [usec]",
                m_profile.getPeriod().sec(), m_profile.getPeriod().usec()));
@@ -185,7 +185,7 @@ namespace RTC_exp
         if (m_nowait) { ++count; continue; }
 
         struct timespec sleeptime;
-        if (getSleepTime(sleeptime, ts0, ts1) == true)
+        if (getSleepTime(sleeptime, ts0, ts1))
           {
             clock_nanosleep(CLOCK_MONOTONIC, !TIMER_ABSTIME,
                             &sleeptime, nullptr);
@@ -459,7 +459,7 @@ namespace RTC_exp
     // Now comp's next state must be ACTIVE state
     // If worker thread is stopped, restart worker thread.
     Guard guard(m_workerthread.mutex_);
-    if (m_workerthread.running_ == false)
+    if (!m_workerthread.running_)
       {
         m_workerthread.running_ = true;
         m_workerthread.cond_.signal();
@@ -485,7 +485,7 @@ namespace RTC_exp
     // Now comp's next state must be ACTIVE state
     // If worker thread is stopped, restart worker thread.
     Guard guard(m_workerthread.mutex_);
-    if (m_workerthread.running_ == false)
+    if (!m_workerthread.running_)
       {
         m_workerthread.running_ = true;
         m_workerthread.cond_.signal();
@@ -506,7 +506,7 @@ namespace RTC_exp
     if (isAllNextState(RTC::INACTIVE_STATE))
       {
         Guard guard(m_workerthread.mutex_);
-        if (m_workerthread.running_ == true)
+        if (m_workerthread.running_)
           {
             m_workerthread.running_ = false;
             RTC_TRACE(("All RTCs are INACTIVE. Stopping worker thread."));
@@ -528,7 +528,7 @@ namespace RTC_exp
     if (isAllNextState(RTC::INACTIVE_STATE))
       {
         Guard guard(m_workerthread.mutex_);
-        if (m_workerthread.running_ == true)
+        if (m_workerthread.running_)
           {
             m_workerthread.running_ = false;
             RTC_TRACE(("All RTCs are INACTIVE. Stopping worker thread."));
@@ -550,7 +550,7 @@ namespace RTC_exp
     if (isAllNextState(RTC::INACTIVE_STATE))
       {
         Guard guard(m_workerthread.mutex_);
-        if (m_workerthread.running_ == true)
+        if (m_workerthread.running_)
           {
             m_workerthread.running_ = false;
             RTC_TRACE(("All RTCs are INACTIVE. Stopping worker thread."));
@@ -572,7 +572,7 @@ namespace RTC_exp
     if (isAllNextState(RTC::INACTIVE_STATE))
       {
         Guard guard(m_workerthread.mutex_);
-        if (m_workerthread.running_ == true)
+        if (m_workerthread.running_)
           {
             m_workerthread.running_ = false;
             RTC_TRACE(("All RTCs are INACTIVE. Stopping worker thread."));
@@ -650,7 +650,7 @@ namespace RTC_exp
       }
     return true; // sleeptime >= 0
   }
-}  // namespace RTC_exp
+} // namespace RTC_exp
 
 extern "C"
 {

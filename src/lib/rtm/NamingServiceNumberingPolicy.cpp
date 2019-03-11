@@ -42,7 +42,7 @@ namespace RTM
 	  while (true)
 	  {
 		  std::string num_str = coil::otos<int>(num);
-		  RTC::RTObject_impl *rtobj = (RTC::RTObject_impl *)obj;
+		  RTC::RTObject_impl *rtobj = static_cast<RTC::RTObject_impl *>(obj);
 
 
 		  std::string name = rtobj->getTypeName() + num_str;
@@ -101,16 +101,9 @@ namespace RTM
 
 	  rtcs = m_mgr->getNaming()->string_to_component(rtc_name);
 
-	  if (rtcs.length() > 0)
-	  {
-		  return true;
-	  }
-	  else
-	  {
-		  return false;
-	  }
+	  return rtcs.length() > 0;
   }
-}; //namespace RTM  
+} //namespace RTM 
 
 extern "C"
 {
