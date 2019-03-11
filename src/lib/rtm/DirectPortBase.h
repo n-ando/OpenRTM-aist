@@ -46,19 +46,6 @@ namespace RTC
   class DirectPortBase
   {
   public:
-	  /*!
-	  * @if jp
-	  * @brief コンストラクタ
-	  *
-	  *
-	  * @else
-	  * @brief Constructor
-	  *
-	  *
-	  * @endif
-	  */
-    DirectPortBase(){};
-    
 	/*!
 	* @if jp
 	* @brief デストラクタ
