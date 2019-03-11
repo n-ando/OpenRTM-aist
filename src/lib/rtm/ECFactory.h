@@ -264,7 +264,7 @@ namespace RTC
      *
      * @endif
      */
-    ~ECFactoryCXX();
+    ~ECFactoryCXX() override;
 
     /*!
      * @if jp
@@ -285,7 +285,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual const char* name();
+    const char* name() override;
 
     /*!
      * @if jp
@@ -306,7 +306,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ExecutionContextBase* create();
+    ExecutionContextBase* create() override;
 
     /*!
      * @if jp
@@ -327,7 +327,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual void destroy(ExecutionContextBase* ec);
+    void destroy(ExecutionContextBase* ec) override;
 
   protected:
     /*!

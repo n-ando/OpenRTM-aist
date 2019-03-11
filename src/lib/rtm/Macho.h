@@ -260,11 +260,11 @@ public: \
 #define DEEPHISTORY() \
 private: \
 	/* If no superstate has history, SUPER::_setHistorySuper is a NOOP */ \
-	virtual void _saveHistory(::Macho::_StateInstance & self, ::Macho::_StateInstance & shallow, ::Macho::_StateInstance & deep) \
+	void _saveHistory(::Macho::_StateInstance & self, ::Macho::_StateInstance & /* shallow */, ::Macho::_StateInstance & deep) override\
 	{ self.setHistory(&deep); SELF::SUPER::_setHistorySuper(self, deep); } \
 protected: \
 	/* Substates may use _setHistorySuper to bubble up history */ \
-	virtual void _setHistorySuper(::Macho::_StateInstance & self, ::Macho::_StateInstance & deep) \
+	void _setHistorySuper(::Macho::_StateInstance & self, ::Macho::_StateInstance & deep) override\
 	{ self.setHistorySuper(deep); } \
 public:
 
@@ -578,9 +578,9 @@ namespace Macho {
 		// These definitions seem redundant but they are not!
 		// They override parent definitions so each substate gets either
 		// this default or their own, but never its parents definitions.
-		virtual void entry() {}
-		virtual void init() {}
-		virtual void exit() {}
+		void entry() override {}
+		void init() override {}
+		void exit() override {}
 
 		// This method keeps '_myStateInstance' attribute private.
 		void * _box();
@@ -606,10 +606,10 @@ namespace Macho {
 		static _StateInstance & _getInstance(_MachineBase & machine);
 
 		// Box is by default not persistent. Not redundant!
-		virtual void _deleteBox(_StateInstance & instance);
+		void _deleteBox(_StateInstance & instance) override;
 
 		// Default history strategy (no history). Not redundant!
-		virtual void _saveHistory(_StateInstance & self, _StateInstance &  /*shallow*/, _StateInstance & deep) {
+		void _saveHistory(_StateInstance & self, _StateInstance &  /*shallow*/, _StateInstance & deep) override {
 			// Bubble up history. If no superstate has history, _setHistorySuper will do nothing.
 			this->_setHistorySuper(self, deep);
 		}
@@ -757,25 +757,25 @@ namespace Macho {
 		}
 
 	public:
-		virtual ID id() {
+		ID id() override {
 			return 0;
 		}
 
-		virtual Key key() {
+		Key key() override {
 			// Can't happen: key is only called by users, and they don't know about Root.
 			assert(false); return nullptr;
 		}
 
-		virtual void createBox() {}
-		virtual void deleteBox() {}
+		void createBox() override {}
+		void deleteBox() override {}
 #ifdef MACHO_SNAPSHOTS
 		virtual void cloneBox(void * box) {}
 #endif
 
-		virtual const char * name() { return "Root"; }
+		const char * name() override { return "Root"; }
 
 		// 'Virtual constructor' needed for cloning.
-		virtual _StateInstance * create(_MachineBase & machine, _StateInstance * parent) {
+		_StateInstance * create(_MachineBase & machine, _StateInstance * parent) override {
 			return new _RootInstance(machine, parent);
 		}
 
@@ -801,32 +801,32 @@ namespace Macho {
 	public:
 		typedef typename S::Box Box;
 
-		virtual ~_SubstateInstance() {
+		~_SubstateInstance() override {
 			if (this->myBox)
 				Macho::_deleteBox<Box>(myBox, myBoxPlace);
 		}
 
-		virtual const char * name() { return S::_state_name(); }
+		const char * name() override { return S::_state_name(); }
 
-		virtual ID id() {
+		ID id() override {
 			return StateID<S>::value;
 		}
 
-		virtual Key key() {
+		Key key() override {
 			return S::key();
 		}
 
 		// 'Virtual constructor' needed for cloning.
-		virtual _StateInstance * create(_MachineBase & machine, _StateInstance * parent) {
+		_StateInstance * create(_MachineBase & machine, _StateInstance * parent) override {
 			return new _SubstateInstance<S>(machine, parent);
 		}
 
-		virtual void createBox() {
+		void createBox() override {
 			if (!this->myBox)
 				this->myBox = Macho::_createBox<Box>(myBoxPlace);
 		}
 
-		virtual void deleteBox() {
+		void deleteBox() override {
 			assert(myBox);
 			Macho::_deleteBox<Box>(myBox, myBoxPlace);
 		}
@@ -1014,7 +1014,7 @@ namespace Macho {
 		{}
 
 	protected:
-		void dispatch(_StateInstance & instance) {
+		void dispatch(_StateInstance & instance) override {
 			TOP & behaviour = static_cast<TOP &>(instance.specification());
 			(behaviour.*myHandler)(myParam1);
 		}
@@ -1035,7 +1035,7 @@ namespace Macho {
 		{}
 
 	protected:
-		void dispatch(_StateInstance & instance) {
+		void dispatch(_StateInstance & instance) override {
 			TOP & behaviour = static_cast<TOP &>(instance.specification());
 			(behaviour.*myHandler)();
 		}
@@ -1158,10 +1158,10 @@ namespace Macho {
 	// Base class for Singleton initializers.
 	class _StaticInitializer : public _Initializer {
 		// Copy of Singleton is Singleton.
-		virtual _Initializer * clone() { return this; }
+		_Initializer * clone() override { return this; }
 
 		// Singletons are never destroyed.
-		virtual void destroy() {}
+		void destroy() override {}
 	};
 
 
@@ -1169,7 +1169,7 @@ namespace Macho {
 	// only.
 	class _DefaultInitializer : public _StaticInitializer {
 	public:
-		virtual void execute(_StateInstance & instance) {
+		void execute(_StateInstance & instance) override {
 			instance.init(false);
 		}
 	};
@@ -1179,7 +1179,7 @@ namespace Macho {
 	// history of state if available.
 	class _HistoryInitializer : public _StaticInitializer {
 	public:
-		virtual void execute(_StateInstance & instance) {
+		void execute(_StateInstance & instance) override {
 			instance.init(true);
 		}
 	};
@@ -1190,15 +1190,15 @@ namespace Macho {
 	public:
 		_AdaptingInitializer(const _MachineBase & machine) : myMachine(machine) {}
 
-		virtual void execute(_StateInstance & instance) {
+		void execute(_StateInstance & instance) override {
 			instance.init(true);
 		}
 
-		virtual _Initializer * clone() {
+		_Initializer * clone() override {
 			return new _AdaptingInitializer(myMachine);
 		}
 
-		virtual Key adapt(Key key);
+		Key adapt(Key key) override;
 
 	protected:
 		const _MachineBase & myMachine;
@@ -1213,11 +1213,11 @@ namespace Macho {
 			: myParam1(p1)
 		{}
 
-		virtual _Initializer * clone() {
+		_Initializer * clone() override {
 			return new _Initializer1<S, P1>(myParam1);
 		}
 
-		virtual void execute(_StateInstance & instance) {
+		void execute(_StateInstance & instance) override {
 			::_VS8_Bug_101615::execute<S, P1>(instance, myParam1);
 			delete this;
 		}
@@ -1234,11 +1234,11 @@ namespace Macho {
 			, myParam2(p2)
 		{}
 
-		virtual _Initializer * clone() {
+		_Initializer * clone() override {
 			return new _Initializer2<S, P1, P2>(myParam1, myParam2);
 		}
 
-		void execute(_StateInstance & instance) {
+		void execute(_StateInstance & instance) override {
 			::_VS8_Bug_101615::execute<S, P1, P2>(instance, myParam1, myParam2);
 			delete this;
 		}
@@ -1257,11 +1257,11 @@ namespace Macho {
 			, myParam3(p3)
 		{}
 
-		virtual _Initializer * clone() {
+		_Initializer * clone() override {
 			return new _Initializer3<S, P1, P2, P3>(myParam1, myParam2, myParam3);
 		}
 
-		void execute(_StateInstance & instance) {
+		void execute(_StateInstance & instance) override {
 			::_VS8_Bug_101615::execute<S, P1, P2, P3>(instance, myParam1, myParam2, myParam3);
 			delete this;
 		}
@@ -1282,11 +1282,11 @@ namespace Macho {
 			, myParam4(p4)
 		{}
 
-		virtual _Initializer * clone() {
+		_Initializer * clone() override {
 			return new _Initializer4<S, P1, P2, P3, P4>(myParam1, myParam2, myParam3, myParam4);
 		}
 
-		void execute(_StateInstance & instance) {
+		void execute(_StateInstance & instance) override {
 			::_VS8_Bug_101615::execute<S, P1, P2, P3, P4>(instance, myParam1, myParam2, myParam3, myParam4);
 			delete this;
 		}
@@ -1309,11 +1309,11 @@ namespace Macho {
 			, myParam5(p5)
 		{}
 
-		virtual _Initializer * clone() {
+		_Initializer * clone() override {
 			return new _Initializer5<S, P1, P2, P3, P4, P5>(myParam1, myParam2, myParam3, myParam4, myParam5);
 		}
 
-		void execute(_StateInstance & instance) {
+		void execute(_StateInstance & instance) override {
 			::_VS8_Bug_101615::execute<S, P1, P2, P3, P4, P5>(instance, myParam1, myParam2, myParam3, myParam4, myParam5);
 			delete this;
 		}
@@ -1338,11 +1338,11 @@ namespace Macho {
 			, myParam6(p6)
 		{}
 
-		virtual _Initializer * clone() {
+		_Initializer * clone() override {
 			return new _Initializer6<S, P1, P2, P3, P4, P5, P6>(myParam1, myParam2, myParam3, myParam4, myParam5, myParam6);
 		}
 
-		void execute(_StateInstance & instance) {
+		void execute(_StateInstance & instance) override {
 			_VS8_Bug_101615::execute<S, P1, P2, P3, P4, P5, P6>(instance, myParam1, myParam2, myParam3, myParam4, myParam5, myParam6);
 			delete this;
 		}
@@ -1719,7 +1719,7 @@ namespace Macho {
 		}
 #endif
 
-		~Machine() {
+		~Machine() override {
 			myCurrentState->shutdown();
 			free(theStateCount);
 		}

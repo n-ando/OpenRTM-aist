@@ -130,7 +130,7 @@ namespace RTM
     : public ::RTM::util::ListenerHolder<ManagerActionListener>
   {
   public:
-    virtual ~ManagerActionListenerHolder();
+    ~ManagerActionListenerHolder() override;
 
     /*!
      * @if jp
@@ -272,7 +272,7 @@ namespace RTM
      * @brief Destructor
      * @endif
      */
-    virtual ~ModuleActionListenerHolder();
+    ~ModuleActionListenerHolder() override;
 
     /*!
      * @if jp
@@ -457,7 +457,7 @@ namespace RTM
      * @brief Destructor
      * @endif
      */
-    virtual ~RtcLifecycleActionListenerHolder();
+    ~RtcLifecycleActionListenerHolder() override;
 
 
     /*!
@@ -641,7 +641,7 @@ namespace RTM
      * @brief Destructor
      * @endif
      */
-    virtual ~NamingActionListenerHolder();
+    ~NamingActionListenerHolder() override;
 
     /*!
      * @if jp
@@ -853,7 +853,7 @@ namespace RTM
      * @brief Destructor
      * @endif
      */
-    virtual ~LocalServiceActionListenerHolder();
+    ~LocalServiceActionListenerHolder() override;
 
     // registration instance of service to svc admin
     /*!

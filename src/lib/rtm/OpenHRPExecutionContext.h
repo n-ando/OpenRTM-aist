@@ -72,7 +72,7 @@ namespace RTC
      * @brief Destructor
      * @endif
      */
-    virtual ~OpenHRPExecutionContext();
+    ~OpenHRPExecutionContext() override;
 
 
     //============================================================
@@ -91,8 +91,8 @@ namespace RTC
      *
      * @endif
      */
-    virtual void tick()
-      throw (CORBA::SystemException);
+    void tick()
+      throw (CORBA::SystemException) override;
 
     //============================================================
     // ExecutionContextService
@@ -121,8 +121,8 @@ namespace RTC
      *
      * @endif
      */
-    virtual CORBA::Boolean is_running()
-      throw (CORBA::SystemException);
+    CORBA::Boolean is_running()
+      throw (CORBA::SystemException) override;
 
     /*!
      * @if jp
@@ -151,8 +151,8 @@ namespace RTC
      *
      * @endif
      */
-    virtual RTC::ReturnCode_t start()
-      throw (CORBA::SystemException);
+    RTC::ReturnCode_t start()
+      throw (CORBA::SystemException) override;
 
     /*!
      * @if jp
@@ -180,8 +180,8 @@ namespace RTC
      *
      * @endif
      */
-    virtual RTC::ReturnCode_t stop()
-      throw (CORBA::SystemException);
+    RTC::ReturnCode_t stop()
+      throw (CORBA::SystemException) override;
 
     /*!
      * @if jp
@@ -203,8 +203,8 @@ namespace RTC
      *
      * @endif
      */
-    virtual CORBA::Double get_rate()
-      throw (CORBA::SystemException);
+    CORBA::Double get_rate()
+      throw (CORBA::SystemException) override;
 
     /*!
      * @if jp
@@ -235,8 +235,8 @@ namespace RTC
      *
      * @endif
      */
-    virtual RTC::ReturnCode_t  set_rate(CORBA::Double rate)
-      throw (CORBA::SystemException);
+    RTC::ReturnCode_t  set_rate(CORBA::Double rate)
+      throw (CORBA::SystemException) override;
 
     /*!
      * @if jp
@@ -271,9 +271,9 @@ namespace RTC
      *
      * @endif
      */
-    virtual RTC::ReturnCode_t
+    RTC::ReturnCode_t
     activate_component(RTC::LightweightRTObject_ptr comp)
-      throw (CORBA::SystemException);
+      throw (CORBA::SystemException) override;
 
     /*!
      * @if jp
@@ -307,9 +307,9 @@ namespace RTC
      *
      * @endif
      */
-    virtual RTC::ReturnCode_t
+    RTC::ReturnCode_t
     deactivate_component(RTC::LightweightRTObject_ptr comp)
-      throw (CORBA::SystemException);
+      throw (CORBA::SystemException) override;
 
     /*!
      * @if jp
@@ -342,9 +342,9 @@ namespace RTC
      *
      * @endif
      */
-    virtual RTC::ReturnCode_t
+    RTC::ReturnCode_t
     reset_component(RTC::LightweightRTObject_ptr comp)
-      throw (CORBA::SystemException);
+      throw (CORBA::SystemException) override;
 
     /*!
      * @if jp
@@ -372,9 +372,9 @@ namespace RTC
      *
      * @endif
      */
-    virtual RTC::LifeCycleState
+    RTC::LifeCycleState
     get_component_state(RTC::LightweightRTObject_ptr comp)
-      throw (CORBA::SystemException);
+      throw (CORBA::SystemException) override;
 
     /*!
      * @if jp
@@ -395,8 +395,8 @@ namespace RTC
      *
      * @endif
      */
-    virtual RTC::ExecutionKind get_kind()
-      throw (CORBA::SystemException);
+    RTC::ExecutionKind get_kind()
+      throw (CORBA::SystemException) override;
 
     /*!
      * @if jp
@@ -429,8 +429,8 @@ namespace RTC
      *
      * @endif
      */
-    virtual RTC::ReturnCode_t add_component(RTC::LightweightRTObject_ptr comp)
-      throw (CORBA::SystemException);
+    RTC::ReturnCode_t add_component(RTC::LightweightRTObject_ptr comp)
+      throw (CORBA::SystemException) override;
 
     /*!
      * @if jp
@@ -462,9 +462,9 @@ namespace RTC
      *
      * @endif
      */
-    virtual RTC::ReturnCode_t
+    RTC::ReturnCode_t
     remove_component(RTC::LightweightRTObject_ptr comp)
-      throw (CORBA::SystemException);
+      throw (CORBA::SystemException) override;
 
     /*!
      * @if jp
@@ -485,20 +485,20 @@ namespace RTC
      *
      * @endif
      */
-    virtual RTC::ExecutionContextProfile* get_profile()
-      throw (CORBA::SystemException);
+    RTC::ExecutionContextProfile* get_profile()
+      throw (CORBA::SystemException) override;
   protected:
     // template virtual functions adding/removing component	
     /*!
     * @brief onAddedComponent() template function
     */
-    virtual RTC::ReturnCode_t
-		onAddedComponent(RTC::LightweightRTObject_ptr rtobj);
+    RTC::ReturnCode_t
+		onAddedComponent(RTC::LightweightRTObject_ptr rtobj) override;
     /*!
     * @brief onRemovedComponent() template function
     */
-    virtual RTC::ReturnCode_t
-		onRemovedComponent(RTC::LightweightRTObject_ptr rtobj);
+    RTC::ReturnCode_t
+		onRemovedComponent(RTC::LightweightRTObject_ptr rtobj) override;
     /*!
      * @brief Mutex to gurad tick() reenter.
      */

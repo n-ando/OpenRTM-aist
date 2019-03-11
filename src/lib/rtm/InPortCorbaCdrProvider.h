@@ -92,7 +92,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~InPortCorbaCdrProvider();
+    ~InPortCorbaCdrProvider() override;
 
     /*!
      * @if jp
@@ -121,7 +121,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual void init(coil::Properties& prop);
+    void init(coil::Properties& prop) override;
 
     /*!
      * @if jp
@@ -148,7 +148,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual void setBuffer(BufferBase<ByteData>* buffer);
+    void setBuffer(BufferBase<ByteData>* buffer) override;
 
     /*!
      * @if jp
@@ -198,8 +198,8 @@ namespace RTC
      *
      * @endif
      */
-    virtual void setListener(ConnectorInfo& info,
-                             ConnectorListeners* listeners);
+    void setListener(ConnectorInfo& info,
+                             ConnectorListeners* listeners) override;
 
     /*!
      * @if jp
@@ -225,7 +225,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual void setConnector(InPortConnector* connector);
+    void setConnector(InPortConnector* connector) override;
 
     /*!
      * @if jp
@@ -244,8 +244,8 @@ namespace RTC
      *
      * @endif
      */
-    virtual ::OpenRTM::PortStatus put(const ::OpenRTM::CdrData& data)
-      throw (CORBA::SystemException);
+    ::OpenRTM::PortStatus put(const ::OpenRTM::CdrData& data)
+      throw (CORBA::SystemException) override;
 
   private:
     /*!

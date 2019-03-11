@@ -30,11 +30,11 @@ class Sensor  : public RTC::DataFlowComponentBase
 {
  public:
   Sensor(RTC::Manager* manager);
-  ~Sensor();
+  ~Sensor() override;
 
   // The initialize action (on CREATED->ALIVE transition)
   // formaer rtc_init_entry() 
- virtual RTC::ReturnCode_t onInitialize();
+ RTC::ReturnCode_t onInitialize() override;
 
   // The finalize action (on ALIVE->END transition)
   // formaer rtc_exiting_entry()
@@ -58,7 +58,7 @@ class Sensor  : public RTC::DataFlowComponentBase
 
   // The execution action that is invoked periodically
   // former rtc_active_do()
-  virtual RTC::ReturnCode_t onExecute(RTC::UniqueId ec_id);
+  RTC::ReturnCode_t onExecute(RTC::UniqueId ec_id) override;
 
   // The aborting action when main logic error occurred.
   // former rtc_aborting_entry()

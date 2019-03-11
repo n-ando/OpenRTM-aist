@@ -37,13 +37,13 @@ class DataListener
   USE_CONNLISTENER_STATUS;
 public:
   DataListener(const char* name) : m_name(name) {}
-  virtual ~DataListener()
+  ~DataListener() override
   {
     std::cout << "dtor of " << m_name << std::endl;
   }
 
-  virtual ReturnCode operator()(ConnectorInfo& info,
-                                TimedLong& data)
+  ReturnCode operator()(ConnectorInfo& info,
+                                TimedLong& data) override
   {
     std::cout << "------------------------------"   << std::endl;
     std::cout << "Data Listener: " << m_name << "(OutPort)"  << std::endl;
@@ -65,12 +65,12 @@ class ConnListener
   USE_CONNLISTENER_STATUS;
 public:
   ConnListener(const char* name) : m_name(name) {}
-  virtual ~ConnListener()
+  ~ConnListener() override
   {
     std::cout << "dtor of " << m_name << std::endl;
   }
 
-  virtual ReturnCode operator()(ConnectorInfo& info)
+  ReturnCode operator()(ConnectorInfo& info) override
   {
     std::cout << "------------------------------"   << std::endl;
     std::cout << "Connector Listener: " << m_name       << std::endl;
@@ -91,11 +91,11 @@ class ConsoleOut
 {
  public:
   ConsoleOut(RTC::Manager* manager);
-  ~ConsoleOut();
+  ~ConsoleOut() override;
 
   // The initialize action (on CREATED->ALIVE transition)
   // formaer rtc_init_entry() 
-  virtual RTC::ReturnCode_t onInitialize();
+  RTC::ReturnCode_t onInitialize() override;
 
   // The finalize action (on ALIVE->END transition)
   // formaer rtc_exiting_entry()
@@ -119,7 +119,7 @@ class ConsoleOut
 
   // The execution action that is invoked periodically
   // former rtc_active_do()
-  virtual RTC::ReturnCode_t onExecute(RTC::UniqueId ec_id);
+  RTC::ReturnCode_t onExecute(RTC::UniqueId ec_id) override;
 
   // The aborting action when main logic error occurred.
   // former rtc_aborting_entry()

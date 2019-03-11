@@ -89,7 +89,7 @@ namespace RTC_exp
      *
      * @endif
      */
-    virtual ~MultilayerCompositeEC();
+    ~MultilayerCompositeEC() override;
 
     /*!
      * @if jp
@@ -104,7 +104,7 @@ namespace RTC_exp
      *
      * @endif
      */
-    virtual  void init(coil::Properties& props);
+     void init(coil::Properties& props) override;
 
 
     /*!
@@ -126,7 +126,7 @@ namespace RTC_exp
      *
      * @endif
      */
-    virtual int svc();
+    int svc() override;
 
     /*!
      * @if jp
@@ -141,7 +141,7 @@ namespace RTC_exp
      *
      * @endif
      */
-    virtual RTC::ReturnCode_t bindComponent(RTC::RTObject_impl* rtc);
+    RTC::ReturnCode_t bindComponent(RTC::RTObject_impl* rtc) override;
 
 
     virtual RTC_impl::RTObjectStateMachine* findComponent(RTC::LightweightRTObject_ptr comp);

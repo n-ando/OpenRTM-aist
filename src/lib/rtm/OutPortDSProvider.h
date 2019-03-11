@@ -90,7 +90,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~OutPortDSProvider();
+    ~OutPortDSProvider() override;
 
     /*!
      * @if jp
@@ -119,7 +119,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual void init(coil::Properties& prop);
+    void init(coil::Properties& prop) override;
 
     /*!
      * @if jp
@@ -146,7 +146,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual void setBuffer(CdrBufferBase* buffer);
+    void setBuffer(CdrBufferBase* buffer) override;
 
     /*!
      * @if jp
@@ -192,8 +192,8 @@ namespace RTC
      *
      * @endif
      */
-    virtual void setListener(ConnectorInfo& info,
-                             ConnectorListeners* listeners);
+    void setListener(ConnectorInfo& info,
+                             ConnectorListeners* listeners) override;
 
     /*!
      * @if jp
@@ -219,7 +219,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual void setConnector(OutPortConnector* connector);
+    void setConnector(OutPortConnector* connector) override;
 
     /*!
      * @if jp
@@ -238,8 +238,8 @@ namespace RTC
      *
      * @endif
      */
-    virtual ::RTC::PortStatus pull(::RTC::OctetSeq_out data)
-      throw (CORBA::SystemException);
+    ::RTC::PortStatus pull(::RTC::OctetSeq_out data)
+      throw (CORBA::SystemException) override;
 
 
   private:

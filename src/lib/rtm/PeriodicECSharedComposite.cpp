@@ -595,8 +595,8 @@ namespace RTC
   public:
     explicit setCallback(::SDOPackage::PeriodicECOrganization* org)
            : m_org(org) {}
-    virtual ~setCallback() {}
-    virtual void operator()(const coil::Properties&  /*config_set*/)
+    ~setCallback() override {}
+    void operator()(const coil::Properties&  /*config_set*/) override
     {
       m_org->updateDelegatedPorts();
     }
@@ -611,8 +611,8 @@ namespace RTC
   public:
     explicit addCallback(::SDOPackage::PeriodicECOrganization* org)
            : m_org(org) {}
-    virtual ~addCallback() {}
-    virtual void operator()(const coil::Properties&  /*config_set*/)
+    ~addCallback() override {}
+    void operator()(const coil::Properties&  /*config_set*/) override
     {
       m_org->updateDelegatedPorts();
     }

@@ -55,10 +55,10 @@ namespace RTC
                  RingBuffer<EventBase*> &buffer)
       : m_fsm(fsm), m_eventName(event_name), m_handler(handler), m_buffer(buffer) {}
 
-    virtual ~EventBinder0() {}
+    ~EventBinder0() override {}
 
-    virtual ReturnCode operator()(ConnectorInfo& info,
-                                  ByteData&  /*data*/)
+    ReturnCode operator()(ConnectorInfo& info,
+                                  ByteData&  /*data*/) override
     {
       if (info.properties["fsm_event_name"] == m_eventName ||
           info.name == m_eventName)
@@ -71,7 +71,7 @@ namespace RTC
       return NO_CHANGE;
     }
 
-    virtual void run()
+    void run() override
     {
         
         m_fsm.dispatch(Macho::Event(m_handler));
@@ -96,9 +96,9 @@ namespace RTC
                  RingBuffer<EventBase*> &buffer)
       : m_fsm(fsm), m_eventName(event_name), m_handler(handler), m_buffer(buffer) {}
 
-    virtual ~EventBinder1() {}
+    ~EventBinder1() override {}
 
-    virtual ReturnCode operator()(ConnectorInfo& info, P0& data)
+    ReturnCode operator()(ConnectorInfo& info, P0& data) override
     {
       if (info.properties["fsm_event_name"] == m_eventName ||
           info.name == m_eventName)
@@ -111,7 +111,7 @@ namespace RTC
       return NO_CHANGE;
     }
 
-    virtual void run(P0& data)
+    void run(P0& data) override
     {
         m_fsm.dispatch(Macho::Event(m_handler, data));
     }
@@ -129,11 +129,11 @@ namespace RTC
   public:
       EventConnListener(RingBuffer<EventBase*>&buffer, CdrBufferBase* m_thebuffer) :
           m_buffer(buffer), m_thebuffer(m_thebuffer) {}
-      virtual ~EventConnListener()
+      ~EventConnListener() override
       {
       }
 
-      virtual ReturnCode operator()(ConnectorInfo& info)
+      ReturnCode operator()(ConnectorInfo& info) override
       {
           coil::Properties prop;
           prop["write.full_policy"] = "do_nothing";
@@ -282,7 +282,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~EventInPort(){};
+    ~EventInPort() override{};
 
     /*!
      * @if jp
@@ -308,7 +308,7 @@ namespace RTC
       return m_name.c_str();
     }
 
-    virtual void init(coil::Properties& prop)
+    void init(coil::Properties& prop) override
     {
         InPortBase::init(prop);
         this->addConnectorListener
@@ -332,7 +332,7 @@ namespace RTC
         (ON_RECEIVED,
          new EventBinder0<FsmType, TOP, R>(m_fsm, name, handler, m_buffer));
     }
-    virtual bool read(std::string  /*name*/="") { return true; }
+    bool read(std::string  /*name*/="") override { return true; }
   private:
     /*!
      * @if jp

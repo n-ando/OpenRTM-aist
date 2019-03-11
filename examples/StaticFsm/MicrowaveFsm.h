@@ -66,7 +66,7 @@ namespace MicrowaveFsm
     // Machine's event protocol
     virtual void open() {}
     virtual void close() {}
-    virtual void minute(RTC::TimedLong time) {}
+    virtual void minute(RTC::TimedLong /* time */) {}
 //    {
 //      std::cout << "Top::minute()" << std::endl;
 //      for (size_t i(0); i < (size_t)time.data; ++i)
@@ -79,9 +79,9 @@ namespace MicrowaveFsm
     virtual void tick() {}		// Minute has passed
 
   private:
-    virtual RTC::ReturnCode_t onInit();
-    virtual RTC::ReturnCode_t onEntry();
-    virtual RTC::ReturnCode_t onExit();
+    RTC::ReturnCode_t onInit() override;
+    RTC::ReturnCode_t onEntry() override;
+    RTC::ReturnCode_t onExit() override;
   };
 
   //============================================================
@@ -91,11 +91,11 @@ namespace MicrowaveFsm
     FSM_STATE(Disabled);
 
     // Event handler
-    virtual void close();
+    void close() override;
 
   private:
-    virtual RTC::ReturnCode_t onEntry();
-    virtual RTC::ReturnCode_t onExit();
+    RTC::ReturnCode_t onEntry() override;
+    RTC::ReturnCode_t onExit() override;
   };
 
   //============================================================
@@ -108,11 +108,11 @@ namespace MicrowaveFsm
     DEEPHISTORY();
 
     // Event handler
-    void open();
-    void stop();
+    void open() override;
+    void stop() override;
 
   private:
-    virtual RTC::ReturnCode_t onInit();
+    RTC::ReturnCode_t onInit() override;
   };
 
   //============================================================
@@ -121,10 +121,10 @@ namespace MicrowaveFsm
   {
     FSM_STATE(Idle);
 
-    void minute(RTC::TimedLong time);
+    void minute(RTC::TimedLong time) override;
 
   private:
-    virtual RTC::ReturnCode_t onEntry();
+    RTC::ReturnCode_t onEntry() override;
   };
 
   //============================================================
@@ -133,13 +133,13 @@ namespace MicrowaveFsm
   {
     FSM_STATE(Programmed);
 
-    void minute(RTC::TimedLong time);
-    void start();
+    void minute(RTC::TimedLong time) override;
+    void start() override;
 
   private:
-    virtual RTC::ReturnCode_t onEntry();
-    virtual RTC::ReturnCode_t onInit();
-    virtual RTC::ReturnCode_t onExit();
+    RTC::ReturnCode_t onEntry() override;
+    RTC::ReturnCode_t onInit() override;
+    RTC::ReturnCode_t onExit() override;
   };
 
   //============================================================
@@ -148,11 +148,11 @@ namespace MicrowaveFsm
   {
     FSM_STATE(Cooking);
 
-    void tick();
+    void tick() override;
 
   private:
-    virtual RTC::ReturnCode_t onEntry();
-    virtual RTC::ReturnCode_t onExit();
+    RTC::ReturnCode_t onEntry() override;
+    RTC::ReturnCode_t onExit() override;
   };
 } // namespace MicrowaveFsm
 

@@ -80,7 +80,7 @@ namespace RTC
      * @brief Destructor
      * @endif
      */
-    virtual ~InPortConnector();
+    ~InPortConnector() override;
 
    /*!
      * @if jp
@@ -99,7 +99,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual const ConnectorInfo& profile();
+    const ConnectorInfo& profile() override;
 
     /*!
      * @if jp
@@ -118,7 +118,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual const char* id();
+    const char* id() override;
 
     /*!
      * @if jp
@@ -137,7 +137,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual const char* name();
+    const char* name() override;
 
     /*!
      * @if jp
@@ -156,7 +156,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode disconnect() = 0;
+    ReturnCode disconnect() override = 0;
 
     /*!
      * @if jp
@@ -175,7 +175,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual CdrBufferBase* getBuffer();
+    CdrBufferBase* getBuffer() override;
 
     /*!
      * @if jp

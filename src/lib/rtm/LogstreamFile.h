@@ -75,7 +75,7 @@ namespace RTC
        *
        * @endif
        */
-      virtual ~FileStreamBase() {};
+      ~FileStreamBase() override {};
       /*!
        * @if jp
        *
@@ -115,7 +115,7 @@ namespace RTC
        *
        * @endif
        */
-      virtual void flush();
+      void flush() override;
       /*!
        * @if jp
        *
@@ -179,7 +179,7 @@ namespace RTC
        *
        * @endif
        */
-      virtual void write(int level, const std::string &name, const std::string &date, const std::string &mes);
+      void write(int level, const std::string &name, const std::string &date, const std::string &mes) override;
       
   protected:
       std::basic_ostream<char> *m_stream;
@@ -235,7 +235,7 @@ namespace RTC
        *
        * @endif
        */
-      virtual ~StdoutStream();
+      ~StdoutStream() override;
 
       
       
@@ -290,7 +290,7 @@ namespace RTC
        *
        * @endif
        */
-      virtual ~StderrStream();
+      ~StderrStream() override;
       
       
 
@@ -349,7 +349,7 @@ namespace RTC
        *
        * @endif
        */
-      virtual ~FileStream();
+      ~FileStream() override;
       /*!
        * @if jp
        *
@@ -438,7 +438,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~LogstreamFile();
+    ~LogstreamFile() override;
 
     /*!
      * @if jp
@@ -461,7 +461,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual bool init(const coil::Properties& prop);
+    bool init(const coil::Properties& prop) override;
 
     /*!
      * @if jp
@@ -482,7 +482,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual coil::LogStreamBuffer* getStreamBuffer();
+    coil::LogStreamBuffer* getStreamBuffer() override;
 
   protected:
     static coil::vstring s_files;

@@ -145,7 +145,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~OutPortPullConnector();
+    ~OutPortPullConnector() override;
 
     /*!
      * @if jp
@@ -163,9 +163,9 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode write(ByteDataStreamBase* data);
+    ReturnCode write(ByteDataStreamBase* data) override;
 
-    virtual CdrBufferBase::ReturnCode read(ByteData &data);
+    CdrBufferBase::ReturnCode read(ByteData &data) override;
 
     /*!
      * @if jp
@@ -182,7 +182,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode disconnect();
+    ReturnCode disconnect() override;
 
     /*!
      * @if jp
@@ -197,7 +197,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual CdrBufferBase* getBuffer();
+    CdrBufferBase* getBuffer() override;
 
     /*!
      * @if jp
@@ -213,7 +213,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual void activate() {}  // do nothing
+    void activate() override {}  // do nothing
 
     /*!
      * @if jp
@@ -229,7 +229,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual void deactivate() {}  // do nothing
+    void deactivate() override {}  // do nothing
 
     /*!
      * @if jp

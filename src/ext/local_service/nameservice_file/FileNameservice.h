@@ -60,7 +60,7 @@ namespace RTM
        * @brief FileNameService dtor
        * @endif
        */
-      virtual ~FileNameservice();
+      ~FileNameservice() override;
       
       /*!
        * @if jp
@@ -78,8 +78,8 @@ namespace RTM
        *
        * @endif
        */
-      virtual bool
-      init(const ::coil::Properties& props);
+      bool
+      init(const ::coil::Properties& props) override;
       
       /*!
        * @if jp
@@ -97,8 +97,8 @@ namespace RTM
        *
        * @endif
        */
-      virtual bool
-      reinit(const ::coil::Properties& props);
+      bool
+      reinit(const ::coil::Properties& props) override;
       
       /*!
        * @if jp
@@ -117,7 +117,7 @@ namespace RTM
        *
        * @endif
        */
-      virtual const LocalServiceProfile& getProfile() const;
+      const LocalServiceProfile& getProfile() const override;
       
       /*!
        * @if jp
@@ -132,7 +132,7 @@ namespace RTM
        *
        * @endif
        */
-      virtual void finalize();
+      void finalize() override;
       
       /*!
        * @if jp
@@ -246,7 +246,7 @@ namespace RTM
        * @brief Destructor
        * @endif
        */
-      virtual ~NamingAction();
+      ~NamingAction() override;
 
       /*!
        * @if jp
@@ -257,8 +257,8 @@ namespace RTM
        * TODO: Documentation
        * @endif
        */
-      virtual void preBind(RTC::RTObject_impl* rtobj,
-                           coil::vstring& name);
+      void preBind(RTC::RTObject_impl* rtobj,
+                           coil::vstring& name) override;
       /*!
        * @if jp
        * @brief postBind コールバック関数
@@ -268,8 +268,8 @@ namespace RTM
        * TODO: Documentation
        * @endif
        */
-      virtual void postBind(RTC::RTObject_impl* rtobj,
-                            coil::vstring& name);
+      void postBind(RTC::RTObject_impl* rtobj,
+                            coil::vstring& name) override;
       
       /*!
        * @if jp
@@ -280,8 +280,8 @@ namespace RTM
        * TODO: Documentation
        * @endif
        */
-      virtual void preUnbind(RTC::RTObject_impl* rtobj,
-                             coil::vstring& name);
+      void preUnbind(RTC::RTObject_impl* rtobj,
+                             coil::vstring& name) override;
       
       /*!
        * @if jp
@@ -292,8 +292,8 @@ namespace RTM
        * TODO: Documentation
        * @endif
        */
-      virtual void postUnbind(RTC::RTObject_impl* rtobj,
-                              coil::vstring& name);
+      void postUnbind(RTC::RTObject_impl* rtobj,
+                              coil::vstring& name) override;
     private:
       RTM::LocalService::FileNameservice& m_fns;
     };

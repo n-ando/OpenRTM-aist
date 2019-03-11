@@ -52,8 +52,8 @@ namespace RTC
           m_eb(eb)
       {
       };
-      virtual ~Event0() {};
-      virtual void operator()()
+      ~Event0() override {};
+      void operator()() override
       {
           m_eb->run();
       };
@@ -69,8 +69,8 @@ namespace RTC
           m_eb(eb), m_data(data)
       {
       };
-      virtual ~Event1() {};
-      virtual void operator()()
+      ~Event1() override {};
+      void operator()() override
       {
           m_eb->run(m_data);
       };

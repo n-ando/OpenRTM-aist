@@ -448,7 +448,7 @@ namespace RTC
          *
          * @endif
          */
-        virtual ~CORBA_CdrSerializer()
+        ~CORBA_CdrSerializer() override
         {
         }
 
@@ -465,7 +465,7 @@ namespace RTC
          *
          * @endif
          */
-        virtual void init(const coil::Properties& prop)
+        void init(const coil::Properties& prop) override
         {
         };
         /*!
@@ -484,7 +484,7 @@ namespace RTC
          *
          * @endif
          */
-        virtual void writeData(const unsigned char* buffer, unsigned long length)
+        void writeData(const unsigned char* buffer, unsigned long length) override
         {
             m_cdr.writeCdrData(buffer, length);
         };
@@ -505,7 +505,7 @@ namespace RTC
          *
          * @endif
          */
-        virtual void readData(unsigned char* buffer, unsigned long length) const
+        void readData(unsigned char* buffer, unsigned long length) const override
         {
             m_cdr.readCdrData(buffer, length);
         };
@@ -523,7 +523,7 @@ namespace RTC
          *
          * @endif
          */
-        virtual unsigned long getDataLength() const
+        unsigned long getDataLength() const override
         {
             return m_cdr.getCdrDataLength();
         };
@@ -543,7 +543,7 @@ namespace RTC
          *
          * @endif
          */
-        virtual bool serialize(const DataType& data)
+        bool serialize(const DataType& data) override
         {
             return m_cdr.serializeCDR(data);
         };
@@ -561,7 +561,7 @@ namespace RTC
          *
          * @endif
          */
-        virtual bool deserialize(DataType& data)
+        bool deserialize(DataType& data) override
         {
             return m_cdr.deserializeCDR(data);
         };
@@ -618,7 +618,7 @@ namespace RTC
          *
          * @endif
          */
-        virtual void isLittleEndian(bool little_endian)
+        void isLittleEndian(bool little_endian) override
         {
             m_cdr.setEndian(little_endian);
         }

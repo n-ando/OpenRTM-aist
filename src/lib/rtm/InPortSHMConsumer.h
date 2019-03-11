@@ -91,7 +91,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~InPortSHMConsumer();
+    ~InPortSHMConsumer() override;
 
     /*!
      * @if jp
@@ -111,7 +111,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual void init(coil::Properties& prop);
+    void init(coil::Properties& prop) override;
     /*!
      * @if jp
      * @brief 接続先へのデータ送信
@@ -130,7 +130,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual InPortConsumer::ReturnCode put(ByteData& data);
+    InPortConsumer::ReturnCode put(ByteData& data) override;
     /*!
      * @if jp
      * @brief 
@@ -147,10 +147,10 @@ namespace RTC
      *
      * @endif
      */
-    virtual bool setObject(CORBA::Object_ptr obj);
-	virtual void publishInterfaceProfile(SDOPackage::NVList& properties);
-	virtual bool subscribeInterface(const SDOPackage::NVList& properties);
-	virtual void unsubscribeInterface(const SDOPackage::NVList& properties);
+    bool setObject(CORBA::Object_ptr obj) override;
+	void publishInterfaceProfile(SDOPackage::NVList& properties) override;
+	bool subscribeInterface(const SDOPackage::NVList& properties) override;
+	void unsubscribeInterface(const SDOPackage::NVList& properties) override;
   
 private:
 	bool subscribeFromIor(const SDOPackage::NVList& properties);

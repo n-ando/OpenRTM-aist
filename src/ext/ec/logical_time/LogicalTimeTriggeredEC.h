@@ -98,7 +98,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~LogicalTimeTriggeredEC();
+    ~LogicalTimeTriggeredEC() override;
 
     /*!
      * @if jp
@@ -113,7 +113,7 @@ namespace RTC
      *
      * @endif
      */
-    void init(coil::Properties& props);
+    void init(coil::Properties& props) override;
 
     /*!
      * @if jp
@@ -139,7 +139,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual int open(void *args);
+    int open(void *args) override;
 
     /*!
      * @if jp
@@ -161,7 +161,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual int svc();
+    int svc() override;
 
     /*!
      * @if jp
@@ -190,7 +190,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual int close(unsigned long flags);
+    int close(unsigned long flags) override;
 
     //============================================================
     // LogicalTimeTriggeredECService
@@ -208,10 +208,10 @@ namespace RTC
      *
      * @endif
      */
-    virtual void tick(::CORBA::ULong sec, ::CORBA::ULong usec)
-      throw (CORBA::SystemException);
-    virtual void get_time(::CORBA::ULong& sec, ::CORBA::ULong& usec)
-      throw (CORBA::SystemException);
+    void tick(::CORBA::ULong sec, ::CORBA::ULong usec)
+      throw (CORBA::SystemException) override;
+    void get_time(::CORBA::ULong& sec, ::CORBA::ULong& usec)
+      throw (CORBA::SystemException) override;
 
     //============================================================
     // ExecutionContextService
@@ -240,8 +240,8 @@ namespace RTC
      *
      * @endif
      */
-    virtual CORBA::Boolean is_running()
-      throw (CORBA::SystemException);
+    CORBA::Boolean is_running()
+      throw (CORBA::SystemException) override;
 
     /*!
      * @if jp
@@ -270,8 +270,8 @@ namespace RTC
      *
      * @endif
      */
-    virtual RTC::ReturnCode_t start()
-      throw (CORBA::SystemException);
+    RTC::ReturnCode_t start()
+      throw (CORBA::SystemException) override;
 
     /*!
      * @if jp
@@ -299,8 +299,8 @@ namespace RTC
      *
      * @endif
      */
-    virtual RTC::ReturnCode_t stop()
-      throw (CORBA::SystemException);
+    RTC::ReturnCode_t stop()
+      throw (CORBA::SystemException) override;
 
     /*!
      * @if jp
@@ -322,8 +322,8 @@ namespace RTC
      *
      * @endif
      */
-    virtual CORBA::Double get_rate()
-      throw (CORBA::SystemException);
+    CORBA::Double get_rate()
+      throw (CORBA::SystemException) override;
 
     /*!
      * @if jp
@@ -354,8 +354,8 @@ namespace RTC
      *
      * @endif
      */
-    virtual RTC::ReturnCode_t  set_rate(CORBA::Double rate)
-      throw (CORBA::SystemException);
+    RTC::ReturnCode_t  set_rate(CORBA::Double rate)
+      throw (CORBA::SystemException) override;
 
     /*!
      * @if jp
@@ -390,9 +390,9 @@ namespace RTC
      *
      * @endif
      */
-    virtual RTC::ReturnCode_t
+    RTC::ReturnCode_t
     activate_component(RTC::LightweightRTObject_ptr comp)
-      throw (CORBA::SystemException);
+      throw (CORBA::SystemException) override;
     
     /*!
      * @if jp
@@ -426,9 +426,9 @@ namespace RTC
      *
      * @endif
      */
-    virtual RTC::ReturnCode_t
+    RTC::ReturnCode_t
     deactivate_component(RTC::LightweightRTObject_ptr comp)
-      throw (CORBA::SystemException);
+      throw (CORBA::SystemException) override;
 
     /*!
      * @if jp
@@ -461,9 +461,9 @@ namespace RTC
      *
      * @endif
      */
-    virtual RTC::ReturnCode_t
+    RTC::ReturnCode_t
     reset_component(RTC::LightweightRTObject_ptr comp)
-      throw (CORBA::SystemException);
+      throw (CORBA::SystemException) override;
 
     /*!
      * @if jp
@@ -491,9 +491,9 @@ namespace RTC
      *
      * @endif
      */
-    virtual RTC::LifeCycleState
+    RTC::LifeCycleState
     get_component_state(RTC::LightweightRTObject_ptr comp)
-      throw (CORBA::SystemException);
+      throw (CORBA::SystemException) override;
 
     /*!
      * @if jp
@@ -514,8 +514,8 @@ namespace RTC
      *
      * @endif
      */
-    virtual RTC::ExecutionKind get_kind()
-      throw (CORBA::SystemException);
+    RTC::ExecutionKind get_kind()
+      throw (CORBA::SystemException) override;
 
     /*!
      * @if jp
@@ -548,8 +548,8 @@ namespace RTC
      *
      * @endif
      */
-    virtual RTC::ReturnCode_t add_component(RTC::LightweightRTObject_ptr comp)
-      throw (CORBA::SystemException);
+    RTC::ReturnCode_t add_component(RTC::LightweightRTObject_ptr comp)
+      throw (CORBA::SystemException) override;
 
     /*!
      * @if jp
@@ -581,9 +581,9 @@ namespace RTC
      *
      * @endif
      */
-    virtual RTC::ReturnCode_t
+    RTC::ReturnCode_t
     remove_component(RTC::LightweightRTObject_ptr comp)
-      throw (CORBA::SystemException);
+      throw (CORBA::SystemException) override;
 
     /*!
      * @if jp
@@ -604,8 +604,8 @@ namespace RTC
      *
      * @endif
      */
-    virtual RTC::ExecutionContextProfile* get_profile()
-      throw (CORBA::SystemException);
+    RTC::ExecutionContextProfile* get_profile()
+      throw (CORBA::SystemException) override;
 
   protected:
     /*!
@@ -615,22 +615,22 @@ namespace RTC
     /*!
      * @brief onStarted() template function
      */
-    virtual RTC::ReturnCode_t onStarted();
+    RTC::ReturnCode_t onStarted() override;
     /*!
      * @brief onWaitingActivated() template function
      */
-    virtual RTC::ReturnCode_t
-    onWaitingActivated(RTC_impl::RTObjectStateMachine* comp, long int count);
+    RTC::ReturnCode_t
+    onWaitingActivated(RTC_impl::RTObjectStateMachine* comp, long int count) override;
     /*!
      * @brief onWaitingDeactivated() template function
      */
-    virtual RTC::ReturnCode_t
-    onWaitingDeactivated(RTC_impl::RTObjectStateMachine* comp, long int count);
+    RTC::ReturnCode_t
+    onWaitingDeactivated(RTC_impl::RTObjectStateMachine* comp, long int count) override;
     /*!
      * @brief onWaitingReset() template function
      */
-    virtual RTC::ReturnCode_t
-    onWaitingReset(RTC_impl::RTObjectStateMachine* comp, long int count);
+    RTC::ReturnCode_t
+    onWaitingReset(RTC_impl::RTObjectStateMachine* comp, long int count) override;
 
   private:
     bool threadRunning()

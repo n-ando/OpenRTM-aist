@@ -71,7 +71,7 @@ class Analyzer
   /*!
    * @brief destructor
    */
-  ~Analyzer();
+  ~Analyzer() override;
 
   // <rtc-template block="public_attribute">
   
@@ -90,7 +90,7 @@ class Analyzer
    * 
    * 
    */
-   virtual RTC::ReturnCode_t onInitialize();
+   RTC::ReturnCode_t onInitialize() override;
 
   /***
    *
@@ -140,7 +140,7 @@ class Analyzer
    * 
    * 
    */
-   virtual RTC::ReturnCode_t onActivated(RTC::UniqueId ec_id);
+   RTC::ReturnCode_t onActivated(RTC::UniqueId ec_id) override;
 
   /***
    *
@@ -153,7 +153,7 @@ class Analyzer
    * 
    * 
    */
-   virtual RTC::ReturnCode_t onDeactivated(RTC::UniqueId ec_id);
+   RTC::ReturnCode_t onDeactivated(RTC::UniqueId ec_id) override;
 
   /***
    *
@@ -166,7 +166,7 @@ class Analyzer
    * 
    * 
    */
-   virtual RTC::ReturnCode_t onExecute(RTC::UniqueId ec_id);
+   RTC::ReturnCode_t onExecute(RTC::UniqueId ec_id) override;
 
   /***
    *
@@ -338,10 +338,10 @@ class DataListener
 	USE_CONNLISTENER_STATUS;
 public:
 	DataListener(Analyzer *comp);
-	virtual ~DataListener();
+	~DataListener() override;
 
-	virtual ReturnCode operator()(ConnectorInfo&  /*info*/,
-		TimedOctetSeq& data)
+	ReturnCode operator()(ConnectorInfo&  /*info*/,
+		TimedOctetSeq& data) override
 	{
 		m_comp->writeData(data);
 		return NO_CHANGE;

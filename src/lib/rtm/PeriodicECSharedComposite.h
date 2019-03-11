@@ -104,7 +104,7 @@ namespace SDOPackage
      *
      * @endif
      */
-    virtual ~PeriodicECOrganization();
+    ~PeriodicECOrganization() override;
 
     /*!
      * @if jp
@@ -128,9 +128,9 @@ namespace SDOPackage
      *
      * @endif
      */
-    virtual ::CORBA::Boolean add_members(const SDOList& sdo_list)
+    ::CORBA::Boolean add_members(const SDOList& sdo_list)
       throw (::CORBA::SystemException,
-             InvalidParameter, NotAvailable, InternalError);
+             InvalidParameter, NotAvailable, InternalError) override;
 
     /*!
      * @if jp
@@ -155,9 +155,9 @@ namespace SDOPackage
      *
      * @endif
      */
-    virtual ::CORBA::Boolean set_members(const SDOList& sdo_list)
+    ::CORBA::Boolean set_members(const SDOList& sdo_list)
       throw (::CORBA::SystemException,
-             InvalidParameter, NotAvailable, InternalError);
+             InvalidParameter, NotAvailable, InternalError) override;
 
     /*!
      * @if jp
@@ -180,9 +180,9 @@ namespace SDOPackage
      *
      * @endif
      */
-    virtual ::CORBA::Boolean remove_member(const char* id)
+    ::CORBA::Boolean remove_member(const char* id)
       throw (::CORBA::SystemException,
-             InvalidParameter, NotAvailable, InternalError);
+             InvalidParameter, NotAvailable, InternalError) override;
 
     /*!
      * @if jp
@@ -504,7 +504,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~PeriodicECSharedComposite();
+    ~PeriodicECSharedComposite() override;
 
     /*!
      * @if jp
@@ -521,7 +521,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode_t onInitialize();
+    ReturnCode_t onInitialize() override;
     /*!
      * @if jp
      *
@@ -553,7 +553,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode_t onActivated(RTC::UniqueId exec_handle);
+    ReturnCode_t onActivated(RTC::UniqueId exec_handle) override;
     void activateChildComp(RTC::RTObject_var rtobj);
     /*!
      * @if jp
@@ -586,7 +586,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode_t onDeactivated(RTC::UniqueId exec_handle);
+    ReturnCode_t onDeactivated(RTC::UniqueId exec_handle) override;
 
     /*!
      * @if jp
@@ -618,7 +618,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode_t onReset(RTC::UniqueId exec_handle);
+    ReturnCode_t onReset(RTC::UniqueId exec_handle) override;
     /*!
      * @if jp
      *
@@ -643,10 +643,10 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode_t onFinalize();
+    ReturnCode_t onFinalize() override;
 
-    virtual ReturnCode_t exit()
-      throw (CORBA::SystemException);
+    ReturnCode_t exit()
+      throw (CORBA::SystemException) override;
 
   protected:
     /*!

@@ -136,7 +136,7 @@ namespace coil
      *
      * @endif
      */
-    virtual ~TaskFunc() {}
+    ~TaskFunc() override {}
 
     /*!
      * @if jp
@@ -153,7 +153,7 @@ namespace coil
      *
      * @endif
      */
-    virtual int operator()()
+    int operator()() override
     {
       return (m_obj->*m_func)();
     }
@@ -209,7 +209,7 @@ namespace coil
      *
      * @endif
      */
-    virtual ~PeriodicTaskBase() {}
+    ~PeriodicTaskBase() override {}
 
     /*!
      * @if jp
@@ -226,7 +226,7 @@ namespace coil
      *
      * @endif
      */
-    virtual void activate() = 0;
+    void activate() override = 0;
 
     /*!
      * @if jp
@@ -243,7 +243,7 @@ namespace coil
      *
      * @endif
      */
-    virtual void finalize() = 0;
+    void finalize() override = 0;
 
     /*!
      * @if jp
@@ -260,7 +260,7 @@ namespace coil
      *
      * @endif
      */
-    virtual int suspend() = 0;
+    int suspend() override = 0;
 
     /*!
      * @if jp
@@ -277,7 +277,7 @@ namespace coil
      *
      * @endif
      */
-    virtual int resume() = 0;
+    int resume() override = 0;
 
     /*!
      * @if jp

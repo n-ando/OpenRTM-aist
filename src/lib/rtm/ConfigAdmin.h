@@ -399,7 +399,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~Config() {}
+    ~Config() override {}
 
     /*!
      * @if jp
@@ -424,7 +424,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual bool update(const char* val)
+    bool update(const char* val) override
     {
       if (string_value == val) { return true; }
       string_value = val;

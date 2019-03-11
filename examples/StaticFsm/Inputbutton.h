@@ -43,8 +43,8 @@ public:
     std::cout << "dtor of " << m_name << std::endl;
   }
 
-  virtual ReturnCode operator()(ConnectorInfo& info,
-                                TimedLong& data)
+  ReturnCode operator()(ConnectorInfo& info,
+                        TimedLong& data) override
   {
     std::cout << "------------------------------"   << std::endl;
     std::cout << "Data Listener: " << m_name       << std::endl;
@@ -72,7 +72,7 @@ public:
     std::cout << "dtor of " << m_name << std::endl;
   }
 
-  virtual ReturnCode operator()(ConnectorInfo& info)
+  ReturnCode operator()(ConnectorInfo& info) override
   {
     std::cout << "------------------------------"   << std::endl;
     std::cout << "Connector Listener: " << m_name       << std::endl;
@@ -96,8 +96,8 @@ class Inputbutton
   ~Inputbutton();
 
   // The initialize action (on CREATED->ALIVE transition)
-  // formaer rtc_init_entry() 
-  virtual RTC::ReturnCode_t onInitialize();
+  // formaer rtc_init_entry()
+  RTC::ReturnCode_t onInitialize() override;
 
   // The finalize action (on ALIVE->END transition)
   // formaer rtc_exiting_entry()
@@ -121,7 +121,7 @@ class Inputbutton
 
   // The execution action that is invoked periodically
   // former rtc_active_do()
-  virtual RTC::ReturnCode_t onExecute(RTC::UniqueId ec_id);
+  RTC::ReturnCode_t onExecute(RTC::UniqueId ec_id) override;
 
   // The aborting action when main logic error occurred.
   // former rtc_aborting_entry()

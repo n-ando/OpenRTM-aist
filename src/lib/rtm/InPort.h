@@ -183,7 +183,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~InPort() {}
+    ~InPort() override {}
 
     /*!
      * @if jp
@@ -297,7 +297,7 @@ namespace RTC
         RTC_DEBUG(("isNew() = false, no readable data"));
         return false;
     }
-    virtual bool isNew()
+    bool isNew() override
     {
       RTC_TRACE(("isNew()"));
 
@@ -419,7 +419,7 @@ namespace RTC
         RTC_DEBUG(("isEmpty() = false, no readable data"));
         return false;
     }
-    virtual bool isEmpty()
+    bool isEmpty() override
     {
       RTC_TRACE(("isEmpty()"));
       if (m_directNewData == true) { return false; }
@@ -529,7 +529,7 @@ namespace RTC
      *
      * @endif
      */
-    bool read(std::string name="")
+    bool read(std::string name="") override
     {
       RTC_TRACE(("DataType read()"));
 

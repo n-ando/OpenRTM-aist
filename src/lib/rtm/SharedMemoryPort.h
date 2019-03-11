@@ -87,7 +87,7 @@ namespace RTC
      *
      * @endif
      */
-	  virtual ~SharedMemoryPort();
+	  ~SharedMemoryPort() override;
     /*!
      * @if jp
      * @brief 文字列で指定したデータサイズを数値に変換する
@@ -126,8 +126,8 @@ namespace RTC
      *
      * @endif
      */
-	virtual void create_memory(::CORBA::ULongLong memory_size, const char *shm_address)
-    	throw (CORBA::SystemException);
+	void create_memory(::CORBA::ULongLong memory_size, const char *shm_address)
+    	throw (CORBA::SystemException) override;
      /*!
      * @if jp
      * @brief 共有メモリのマッピングを行う
@@ -145,8 +145,8 @@ namespace RTC
      *
      * @endif
      */
-	virtual void open_memory(::CORBA::ULongLong memory_size, const char *shm_address)
-    	throw (CORBA::SystemException);
+	void open_memory(::CORBA::ULongLong memory_size, const char *shm_address)
+    	throw (CORBA::SystemException) override;
      /*!
      * @if jp
      * @brief マッピングした共有メモリをアンマップする
@@ -160,8 +160,8 @@ namespace RTC
      *
      * @endif
      */
-	virtual void close_memory(::CORBA::Boolean unlink = false)
-    	throw (CORBA::SystemException);
+	void close_memory(::CORBA::Boolean unlink = false)
+    	throw (CORBA::SystemException) override;
      /*!
      * @if jp
      * @brief データを書き込む
@@ -211,8 +211,8 @@ namespace RTC
      *
      * @endif
      */
-	virtual void setInterface(::OpenRTM::PortSharedMemory_ptr sm)
-    	throw (CORBA::SystemException);
+	void setInterface(::OpenRTM::PortSharedMemory_ptr sm)
+    	throw (CORBA::SystemException) override;
      /*!
      * @if jp
      * @brief エンディアンを設定する
@@ -228,8 +228,8 @@ namespace RTC
      *
      * @endif
      */
-	virtual void setEndian(::CORBA::Boolean endian)
-    	throw (CORBA::SystemException);
+	void setEndian(::CORBA::Boolean endian)
+    	throw (CORBA::SystemException) override;
      /*!
      * @if jp
      * @brief データの送信を知らせる
@@ -245,8 +245,8 @@ namespace RTC
      *
      * @endif
      */
-    virtual ::OpenRTM::PortStatus put()
-      throw (CORBA::SystemException);
+    ::OpenRTM::PortStatus put()
+      throw (CORBA::SystemException) override;
      /*!
      * @if jp
      * @brief データの送信を要求する
@@ -262,8 +262,8 @@ namespace RTC
      *
      * @endif
      */
-    virtual ::OpenRTM::PortStatus get()
-      throw (CORBA::SystemException);
+    ::OpenRTM::PortStatus get()
+      throw (CORBA::SystemException) override;
 
 	virtual ::OpenRTM::PortSharedMemory_ptr getObjRef();
 

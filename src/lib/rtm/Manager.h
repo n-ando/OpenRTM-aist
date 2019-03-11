@@ -2305,7 +2305,7 @@ namespace RTC
        *
        * @endif
        */
-      virtual int open(void * /*args*/)
+      int open(void * /*args*/) override
       {
         activate();
         return 0;
@@ -2328,7 +2328,7 @@ namespace RTC
        *
        * @endif
        */
-      virtual int svc()
+      int svc() override
       {
         m_pORB->run();
 //        Manager::instance().shutdown();
@@ -2356,7 +2356,7 @@ namespace RTC
        *
        * @endif
        */
-      virtual int close(unsigned long  /*flags*/)
+      int close(unsigned long  /*flags*/) override
       {
         return 0;
       }
@@ -2457,7 +2457,7 @@ namespace RTC
        *
        * @endif
        */
-      virtual int open(void * /*args*/)
+      int open(void * /*args*/) override
       {
         activate();
         return 0;
@@ -2480,7 +2480,7 @@ namespace RTC
        *
        * @endif
        */
-      virtual int svc()
+      int svc() override
       {
         coil::sleep(m_waittime);
         Manager::instance().shutdown();

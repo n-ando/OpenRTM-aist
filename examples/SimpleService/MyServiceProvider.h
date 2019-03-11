@@ -35,11 +35,11 @@ class MyServiceProvider
 {
  public:
   MyServiceProvider(RTC::Manager* manager);
-  ~MyServiceProvider();
+  ~MyServiceProvider() override;
 
   // The initialize action (on CREATED->ALIVE transition)
   // formaer rtc_init_entry() 
-  virtual RTC::ReturnCode_t onInitialize();
+  RTC::ReturnCode_t onInitialize() override;
 
   // The finalize action (on ALIVE->END transition)
   // formaer rtc_exiting_entry()

@@ -25,19 +25,19 @@ class MyServiceSVC_impl
  public:
    // standard constructor
    MyServiceSVC_impl();
-   virtual ~MyServiceSVC_impl();
+   ~MyServiceSVC_impl() override;
 
    // attributes and operations
    char* echo(const char* msg)
-     throw (CORBA::SystemException);
+     throw (CORBA::SystemException) override;
   SimpleService::EchoList* get_echo_history()
-     throw (CORBA::SystemException);
+     throw (CORBA::SystemException) override;
    void set_value(CORBA::Float value)
-     throw (CORBA::SystemException);
+     throw (CORBA::SystemException) override;
    CORBA::Float get_value()
-     throw (CORBA::SystemException);
+     throw (CORBA::SystemException) override;
   SimpleService::ValueList* get_value_history()
-     throw (CORBA::SystemException);
+     throw (CORBA::SystemException) override;
 
 private:
   CORBA::Float m_value;

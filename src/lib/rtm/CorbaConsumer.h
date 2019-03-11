@@ -427,7 +427,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~CorbaConsumer()
+    ~CorbaConsumer() override
     {
       releaseObject();
     };
@@ -460,7 +460,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual bool setObject(CORBA::Object_ptr obj)
+    bool setObject(CORBA::Object_ptr obj) override
     {
       if (!CorbaConsumerBase::setObject(obj))
         {
@@ -555,7 +555,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual void releaseObject()
+    void releaseObject() override
     {
       CorbaConsumerBase::releaseObject();
       m_var = ObjectType::_nil();

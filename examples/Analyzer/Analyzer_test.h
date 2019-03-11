@@ -60,7 +60,7 @@ class Analyzer_test
   /*!
    * @brief destructor
    */
-  ~Analyzer_test();
+  ~Analyzer_test() override;
 
   // <rtc-template block="public_attribute">
   
@@ -79,7 +79,7 @@ class Analyzer_test
    * 
    * 
    */
-   virtual RTC::ReturnCode_t onInitialize();
+   RTC::ReturnCode_t onInitialize() override;
 
   /***
    *
@@ -155,7 +155,7 @@ class Analyzer_test
    * 
    * 
    */
-   virtual RTC::ReturnCode_t onExecute(RTC::UniqueId ec_id);
+   RTC::ReturnCode_t onExecute(RTC::UniqueId ec_id) override;
 
   /***
    *

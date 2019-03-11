@@ -235,7 +235,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~ByteDataStream()
+    ~ByteDataStream() override
     {
     }
 

@@ -148,7 +148,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~RTObject_impl();
+    ~RTObject_impl() override;
 
   protected:
     //============================================================
@@ -617,8 +617,8 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode_t initialize()
-      throw (CORBA::SystemException);
+    ReturnCode_t initialize()
+      throw (CORBA::SystemException) override;
 
     /*!
      * @if jp
@@ -665,8 +665,8 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode_t finalize()
-      throw (CORBA::SystemException);
+    ReturnCode_t finalize()
+      throw (CORBA::SystemException) override;
 
     /*!
      * @if jp
@@ -711,8 +711,8 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode_t exit()
-      throw (CORBA::SystemException);
+    ReturnCode_t exit()
+      throw (CORBA::SystemException) override;
 
     /*!
      * @if jp
@@ -747,8 +747,8 @@ namespace RTC
      *
      * @endif
      */
-    virtual CORBA::Boolean is_alive(ExecutionContext_ptr exec_context)
-      throw (CORBA::SystemException);
+    CORBA::Boolean is_alive(ExecutionContext_ptr exec_context)
+      throw (CORBA::SystemException) override;
 
     /*!
      * @if jp
@@ -777,8 +777,8 @@ namespace RTC
      *
      * @endif
      */
-    virtual ExecutionContext_ptr get_context(UniqueId ec_id)
-      throw (CORBA::SystemException);
+    ExecutionContext_ptr get_context(UniqueId ec_id)
+      throw (CORBA::SystemException) override;
 
     /*!
      * @if jp
@@ -798,8 +798,8 @@ namespace RTC
      *
      * @endif
      */
-    virtual ExecutionContextList* get_owned_contexts()
-      throw (CORBA::SystemException);
+    ExecutionContextList* get_owned_contexts()
+      throw (CORBA::SystemException) override;
 
     /*!
      * @if jp
@@ -819,8 +819,8 @@ namespace RTC
      *
      * @endif
      */
-    virtual ExecutionContextList* get_participating_contexts()
-      throw (CORBA::SystemException);
+    ExecutionContextList* get_participating_contexts()
+      throw (CORBA::SystemException) override;
 
     /*!
      * @if jp
@@ -836,9 +836,9 @@ namespace RTC
      *
      * @endif
      */
-    virtual ExecutionContextHandle_t
+    ExecutionContextHandle_t
     get_context_handle(ExecutionContext_ptr cxt)
-      throw (CORBA::SystemException);
+      throw (CORBA::SystemException) override;
 
     /*!
      * @if jp
@@ -871,7 +871,7 @@ namespace RTC
      * @endif
      */
     UniqueId attach_context(ExecutionContext_ptr exec_context)
-      throw (CORBA::SystemException);
+      throw (CORBA::SystemException) override;
 
     UniqueId bindContext(ExecutionContext_ptr exec_context);
 
@@ -917,7 +917,7 @@ namespace RTC
      * @endif
      */
     ReturnCode_t detach_context(UniqueId ec_id)
-      throw (CORBA::SystemException);
+      throw (CORBA::SystemException) override;
 
     //============================================================
     // RTC::RTObject
@@ -941,8 +941,8 @@ namespace RTC
      *
      * @endif
      */
-    virtual ComponentProfile* get_component_profile()
-      throw (CORBA::SystemException);
+    ComponentProfile* get_component_profile()
+      throw (CORBA::SystemException) override;
 
     /*!
      * @if jp
@@ -963,8 +963,8 @@ namespace RTC
      *
      * @endif
      */
-    virtual PortServiceList* get_ports()
-      throw (CORBA::SystemException);
+    PortServiceList* get_ports()
+      throw (CORBA::SystemException) override;
 
     /*!
      * @if jp
@@ -1018,8 +1018,8 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode_t on_initialize()
-      throw (CORBA::SystemException);
+    ReturnCode_t on_initialize()
+      throw (CORBA::SystemException) override;
 
     /*!
      * @if jp
@@ -1045,8 +1045,8 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode_t on_finalize()
-      throw (CORBA::SystemException);
+    ReturnCode_t on_finalize()
+      throw (CORBA::SystemException) override;
 
     /*!
      * @if jp
@@ -1076,8 +1076,8 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode_t on_startup(UniqueId ec_id)
-      throw (CORBA::SystemException);
+    ReturnCode_t on_startup(UniqueId ec_id)
+      throw (CORBA::SystemException) override;
 
     /*!
      * @if jp
@@ -1107,8 +1107,8 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode_t on_shutdown(UniqueId ec_id)
-      throw (CORBA::SystemException);
+    ReturnCode_t on_shutdown(UniqueId ec_id)
+      throw (CORBA::SystemException) override;
 
     /*!
      * @if jp
@@ -1136,8 +1136,8 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode_t on_activated(UniqueId ec_id)
-      throw (CORBA::SystemException);
+    ReturnCode_t on_activated(UniqueId ec_id)
+      throw (CORBA::SystemException) override;
 
     /*!
      * @if jp
@@ -1166,8 +1166,8 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode_t on_deactivated(UniqueId ec_id)
-      throw (CORBA::SystemException);
+    ReturnCode_t on_deactivated(UniqueId ec_id)
+      throw (CORBA::SystemException) override;
 
     /*!
      * @if jp
@@ -1201,8 +1201,8 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode_t on_aborting(UniqueId ec_id)
-      throw (CORBA::SystemException);
+    ReturnCode_t on_aborting(UniqueId ec_id)
+      throw (CORBA::SystemException) override;
 
     /*!
      * @if jp
@@ -1247,8 +1247,8 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode_t on_error(UniqueId ec_id)
-      throw (CORBA::SystemException);
+    ReturnCode_t on_error(UniqueId ec_id)
+      throw (CORBA::SystemException) override;
 
     /*!
      * @if jp
@@ -1284,8 +1284,8 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode_t on_reset(UniqueId ec_id)
-      throw (CORBA::SystemException);
+    ReturnCode_t on_reset(UniqueId ec_id)
+      throw (CORBA::SystemException) override;
 
     //============================================================
     // RTC::DataFlowComponentAction
@@ -1332,8 +1332,8 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode_t on_execute(UniqueId ec_id)
-      throw (CORBA::SystemException);
+    ReturnCode_t on_execute(UniqueId ec_id)
+      throw (CORBA::SystemException) override;
 
     /*!
      * @if jp
@@ -1378,8 +1378,8 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode_t on_state_update(UniqueId ec_id)
-      throw (CORBA::SystemException);
+    ReturnCode_t on_state_update(UniqueId ec_id)
+      throw (CORBA::SystemException) override;
 
     /*!
      * @if jp
@@ -1417,8 +1417,8 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode_t on_rate_changed(UniqueId ec_id)
-      throw (CORBA::SystemException);
+    ReturnCode_t on_rate_changed(UniqueId ec_id)
+      throw (CORBA::SystemException) override;
 
     //============================================================
     // SDOPackage::SdoSystemElement
@@ -1460,9 +1460,9 @@ namespace RTC
      *
      * @endif
      */
-    virtual SDOPackage::OrganizationList* get_owned_organizations()
+    SDOPackage::OrganizationList* get_owned_organizations()
       throw (CORBA::SystemException,
-             SDOPackage::NotAvailable, SDOPackage::InternalError);
+             SDOPackage::NotAvailable, SDOPackage::InternalError) override;
 
     //============================================================
     // SDOPackage::SDO
@@ -1500,9 +1500,9 @@ namespace RTC
      *
      * @endif
      */
-    virtual char* get_sdo_id()
+    char* get_sdo_id()
       throw (CORBA::SystemException,
-             SDOPackage::NotAvailable, SDOPackage::InternalError);
+             SDOPackage::NotAvailable, SDOPackage::InternalError) override;
 
     /*!
      * @if jp
@@ -1537,9 +1537,9 @@ namespace RTC
      *
      * @endif
      */
-    virtual char* get_sdo_type()
+    char* get_sdo_type()
       throw (CORBA::SystemException,
-             SDOPackage::NotAvailable, SDOPackage::InternalError);
+             SDOPackage::NotAvailable, SDOPackage::InternalError) override;
 
     /*!
      * @if jp
@@ -1577,9 +1577,9 @@ namespace RTC
      *
      * @endif
      */
-    virtual SDOPackage::DeviceProfile* get_device_profile()
+    SDOPackage::DeviceProfile* get_device_profile()
       throw (CORBA::SystemException,
-             SDOPackage::NotAvailable, SDOPackage::InternalError);
+             SDOPackage::NotAvailable, SDOPackage::InternalError) override;
 
     /*!
      * @if jp
@@ -1617,9 +1617,9 @@ namespace RTC
      *
      * @endif
      */
-    virtual SDOPackage::ServiceProfileList* get_service_profiles()
+    SDOPackage::ServiceProfileList* get_service_profiles()
       throw (CORBA::SystemException,
-             SDOPackage::NotAvailable, SDOPackage::InternalError);
+             SDOPackage::NotAvailable, SDOPackage::InternalError) override;
 
     /*!
      * @if jp
@@ -1662,10 +1662,10 @@ namespace RTC
      *
      * @endif
      */
-    virtual SDOPackage::ServiceProfile* get_service_profile(const char* id)
+    SDOPackage::ServiceProfile* get_service_profile(const char* id)
       throw (CORBA::SystemException,
              SDOPackage::InvalidParameter, SDOPackage::NotAvailable,
-             SDOPackage::InternalError);
+             SDOPackage::InternalError) override;
 
     /*!
      * @if jp
@@ -1714,10 +1714,10 @@ namespace RTC
      *
      * @endif
      */
-    virtual SDOPackage::SDOService_ptr get_sdo_service(const char* id)
+    SDOPackage::SDOService_ptr get_sdo_service(const char* id)
       throw (CORBA::SystemException,
              SDOPackage::InvalidParameter, SDOPackage::NotAvailable,
-             SDOPackage::InternalError);
+             SDOPackage::InternalError) override;
 
     /*!
      * @if jp
@@ -1763,10 +1763,10 @@ namespace RTC
      *                          completely due to some internal error.
      * @endif
      */
-    virtual SDOPackage::Configuration_ptr get_configuration()
+    SDOPackage::Configuration_ptr get_configuration()
       throw (CORBA::SystemException,
              SDOPackage::InterfaceNotImplemented, SDOPackage::NotAvailable,
-             SDOPackage::InternalError);
+             SDOPackage::InternalError) override;
 
     /*!
      * @if jp
@@ -1811,10 +1811,10 @@ namespace RTC
      *                          completely due to some internal error.
      * @endif
      */
-    virtual SDOPackage::Monitoring_ptr get_monitoring()
+    SDOPackage::Monitoring_ptr get_monitoring()
       throw (CORBA::SystemException,
              SDOPackage::InterfaceNotImplemented, SDOPackage::NotAvailable,
-             SDOPackage::InternalError);
+             SDOPackage::InternalError) override;
 
     /*!
      * @if jp
@@ -1851,9 +1851,9 @@ namespace RTC
      *                          completely due to some internal error.
      * @endif
      */
-    virtual SDOPackage::OrganizationList* get_organizations()
+    SDOPackage::OrganizationList* get_organizations()
       throw (CORBA::SystemException,
-             SDOPackage::NotAvailable, SDOPackage::InternalError);
+             SDOPackage::NotAvailable, SDOPackage::InternalError) override;
 
     /*!
      * @if jp
@@ -1886,9 +1886,9 @@ namespace RTC
      *
      * @endif
      */
-    virtual SDOPackage::NVList* get_status_list()
+    SDOPackage::NVList* get_status_list()
       throw (CORBA::SystemException,
-             SDOPackage::NotAvailable, SDOPackage::InternalError);
+             SDOPackage::NotAvailable, SDOPackage::InternalError) override;
 
     /*!
      * @if jp
@@ -1926,10 +1926,10 @@ namespace RTC
      *
      * @endif
      */
-    virtual CORBA::Any* get_status(const char* name)
+    CORBA::Any* get_status(const char* name)
       throw (CORBA::SystemException,
              SDOPackage::InvalidParameter, SDOPackage::NotAvailable,
-             SDOPackage::InternalError);
+             SDOPackage::InternalError) override;
 
     //============================================================
     // Local interfaces
@@ -3494,7 +3494,7 @@ namespace RTC
           : m_obj(obj), m_memfunc(memfunc)
         {
         }
-        void operator()(UniqueId ec_id)
+        void operator()(UniqueId ec_id) override
         {
           (m_obj.*m_memfunc)(ec_id);
         }
@@ -3628,7 +3628,7 @@ namespace RTC
           : m_obj(obj), m_memfunc(memfunc)
         {
         }
-        void operator()(UniqueId ec_id, ReturnCode_t ret)
+        void operator()(UniqueId ec_id, ReturnCode_t ret) override
         {
           (m_obj.*m_memfunc)(ec_id, ret);
         }
@@ -3741,7 +3741,7 @@ namespace RTC
           : m_obj(obj), m_memfunc(memfunc)
         {
         }
-        void operator()(const RTC::PortProfile& pprofile)
+        void operator()(const RTC::PortProfile& pprofile) override
         {
           (m_obj.*m_memfunc)(pprofile);
         }
@@ -3853,7 +3853,7 @@ namespace RTC
           : m_obj(obj), m_memfunc(memfunc)
         {
         }
-        void operator()(UniqueId ec_id)
+        void operator()(UniqueId ec_id) override
         {
           (m_obj.*m_memfunc)(ec_id);
         }
@@ -3966,7 +3966,7 @@ namespace RTC
           : m_obj(obj), m_memfunc(memfunc)
         {
         }
-        void operator()(const char* portname, ConnectorProfile& cprofile)
+        void operator()(const char* portname, ConnectorProfile& cprofile) override
         {
           (m_obj.*m_memfunc)(portname, cprofile);
         }
@@ -4087,7 +4087,7 @@ namespace RTC
         }
         void operator()(const char* portname,
                         ConnectorProfile& cprofile,
-                        ReturnCode_t ret)
+                        ReturnCode_t ret) override
         {
           (m_obj.*m_memfunc)(portname, cprofile, ret);
         }
@@ -4181,7 +4181,7 @@ namespace RTC
         {
         }
         void operator()(const char* config_set_name,
-                        const char* config_param_name)
+                        const char* config_param_name) override
         {
           (m_obj.*m_memfunc)(config_set_name, config_param_name);
         }
@@ -4273,7 +4273,7 @@ namespace RTC
           : m_obj(obj), m_memfunc(memfunc)
         {
         }
-        virtual void operator()(const coil::Properties& config_set)
+        void operator()(const coil::Properties& config_set) override
         {
           (m_obj.*m_memfunc)(config_set);
         }
@@ -4365,7 +4365,7 @@ namespace RTC
           : m_obj(obj), m_memfunc(memfunc)
         {
         }
-        virtual void operator()(const char* config_set_name)
+        void operator()(const char* config_set_name) override
         {
           (m_obj.*m_memfunc)(config_set_name);
         }
@@ -4503,7 +4503,7 @@ namespace RTC
           : m_obj(obj), m_memfunc(memfunc)
         {
         }
-        void operator()(const char* state)
+        void operator()(const char* state) override
         {
           (m_obj.*m_memfunc)(state);
         }
@@ -4635,7 +4635,7 @@ namespace RTC
           : m_obj(obj), m_memfunc(memfunc)
         {
         }
-        void operator()(const char* state, ReturnCode_t ret)
+        void operator()(const char* state, ReturnCode_t ret) override
         {
           (m_obj.*m_memfunc)(state, ret);
         }
@@ -5498,7 +5498,7 @@ namespace RTC
             m_sdoservice = sdoservice;
             m_id = id;
           }
-        virtual int svc()
+        int svc() override
           {
             m_sdoservice->removeSdoServiceConsumer(m_id.c_str());
             return 0;
