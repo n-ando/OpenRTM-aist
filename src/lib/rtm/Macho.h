@@ -266,7 +266,8 @@ protected: \
 	/* Substates may use _setHistorySuper to bubble up history */ \
 	void _setHistorySuper(::Macho::_StateInstance & self, ::Macho::_StateInstance & deep) override\
 	{ self.setHistorySuper(deep); } \
-public:
+public:\
+	static_assert(true, "dummy for extra semicolon warning")
 
 // Use this macro to select shallow history strategy.
 #define HISTORY() \
@@ -278,7 +279,8 @@ protected: \
 	/* Substates may use _setHistorySuper to bubble up history */ \
 	virtual void _setHistorySuper(::Macho::_StateInstance & self, ::Macho::_StateInstance & deep) \
 	{ self.setHistorySuper(deep); } \
-public:
+public:\
+	static_assert(true, "dummy for extra semicolon warning")
 
 // Use this macro to have boxes survive state transitions
 #define PERSISTENT() \
