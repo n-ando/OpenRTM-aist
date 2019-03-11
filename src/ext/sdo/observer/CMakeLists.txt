@@ -1,12 +1,13 @@
-﻿cmake_minimum_required (VERSION 3.0.2)
+cmake_minimum_required (VERSION 3.0.2)
 
-project (SimpleService
+project (ComponentObserverConsumer
 	VERSION ${RTM_VERSION}
 	LANGUAGES CXX)
 
 
 
-set(idl_name MyService)
+set(idl_name ComponentObserver)
+
 
 
 set(${idl_name}_DIR ${CMAKE_CURRENT_BINARY_DIR})
@@ -22,17 +23,4 @@ add_custom_command(
 )
 add_custom_target(${idl_name}_TGT DEPENDS ${idl_name}Skel.cpp ${idl_name}Stub.cpp)
 
-set_source_files_properties(${${idl_name}_STUB} PROPERTIES GENERATED 1)
-set_source_files_properties(${${idl_name}_SKEL} PROPERTIES GENERATED 1)
-
-include_directories(${${idl_name}_DIR})
-
-
-
-set(srcs MyServiceConsumer.cpp MyServiceConsumer.h ${${idl_name}_STUB})
-ComponentBuild(MyServiceConsumer "${srcs}" MyServiceConsumerComp.cpp ${idl_name}_TGT "")
-
-
-
-set(srcs MyServiceProvider.cpp MyServiceProvider.h MyServiceSVC_impl.cpp MyServiceSVC_impl.h ${${idl_name}_SKEL})
-ComponentBuild(MyServiceProvider "${srcs}" MyServiceProviderComp.cpp ${idl_name}_TGT "")
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/${idl_name}.idl DESTINATION ${INSTALL_RTM_EXT_DIR}/sdo/observer COMPONENT idl)
