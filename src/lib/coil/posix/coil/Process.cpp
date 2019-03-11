@@ -101,7 +101,7 @@ namespace coil
             line.erase(line.size() - 1);
           }
         out.push_back(line);
-      } while (!feof(fd));
+      } while (feof(fd) == 0);
 
     return 0;
   }

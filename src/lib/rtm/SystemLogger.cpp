@@ -256,7 +256,7 @@ namespace RTC
    */
   void Logger::write(int level, const std::string &mes)
   {
-      if (ostream_type)
+      if (ostream_type != nullptr)
       {
           std::string date = getDate();
           ostream_type->write(level, m_name, date, mes);
@@ -286,7 +286,7 @@ namespace RTC
    */
   void Logger::write(int level, const coil::Properties &prop)
   {
-      if (ostream_type)
+      if (ostream_type != nullptr)
       {
           std::vector<std::string> vec(prop);
           for (auto & str : vec)

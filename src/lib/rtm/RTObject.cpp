@@ -1274,7 +1274,7 @@ namespace RTC
            SDOPackage::InvalidParameter, SDOPackage::NotAvailable,
            SDOPackage::InternalError)
   {
-    if (!id)
+    if (id == nullptr)
       {
         throw SDOPackage::
           InvalidParameter("get_service_profile(): Empty name.");
@@ -1312,7 +1312,7 @@ namespace RTC
            SDOPackage::InternalError)
   {
     RTC_TRACE(("get_sdo_service(%s))", id));
-    if (!id)
+    if (id == nullptr)
       {
         throw SDOPackage::InvalidParameter("get_service(): Empty name.");
       }
@@ -2025,7 +2025,7 @@ namespace RTC
   */
   void RTObject_impl::removeSdoServiceConsumerStartThread(const char* id)
   {
-    if (m_sdoconterm)
+    if (m_sdoconterm != nullptr)
       {
         m_sdoconterm->wait();
         delete m_sdoconterm;

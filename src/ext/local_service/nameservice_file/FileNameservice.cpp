@@ -245,7 +245,7 @@ namespace RTM
           boost::system::error_code error;
           const bool result = fs::remove(filepath); // , error);
           RTC_DEBUG(("Removing file: %s", filepath.string().c_str()));
-          if (!result || error)
+          if (!result || (error != nullptr))
             {
               RTC_ERROR(("Removing a file has been failed. %s",
                          filepath.string().c_str()));
@@ -274,7 +274,7 @@ namespace RTM
           boost::system::error_code error;
           const bool result = fs::create_directories(directory); //, error);
           RTC_DEBUG(("Creating directory: %s", directory.string().c_str()));
-          if (!result || error)
+          if (!result || (error != nullptr))
             {
               RTC_ERROR(("Creating directory has been failed. %s",
                          directory.string().c_str()));

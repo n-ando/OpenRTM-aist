@@ -123,7 +123,7 @@ namespace coil
               }
           }
 #endif  // COIL_OS_LINUX
-      } while (!feof(fp));
+      } while (feof(fp) == 0);
     pclose(fp);
     wait(nullptr);
     return false;
@@ -166,7 +166,7 @@ namespace coil
             wait(nullptr);
             return true;
           }
-      } while (!feof(fp));
+      } while (feof(fp) == 0);
     pclose(fp);
     wait(nullptr);
     return false;

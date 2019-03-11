@@ -657,7 +657,7 @@ namespace Macho {
 
 		// Update superstate's history information:
 		void setHistorySuper(_StateInstance & deep) {
-			if (myParent)
+			if (myParent != nullptr)
 				// Let it choose between deep or shallow history.
 				myParent->saveHistory(*this, deep);
 		}
@@ -697,7 +697,7 @@ namespace Macho {
 		void setBox(void * box) {
 			assert(!myBox);
 
-			if (myBoxPlace) {
+			if (myBoxPlace != nullptr) {
 				// Free cached memory of previously used box.
 				::operator delete(myBoxPlace);
 				myBoxPlace = nullptr;
@@ -708,7 +708,7 @@ namespace Macho {
 
 		// Is 'instance' a superstate?
 		bool isChild(const _StateInstance & instance) {
-			return this == &instance || (myParent && myParent->isChild(instance));
+			return this == &instance || ((myParent != nullptr) && myParent->isChild(instance));
 		}
 
 		_StateSpecification & specification() {
@@ -1903,7 +1903,7 @@ namespace Macho {
 	/* static */ inline _StateInstance & Link<C, P>::_getInstance(_MachineBase & machine) {
 		// Look first in machine for existing StateInstance.
 		_StateInstance * & instance = machine.getInstance(StateID<C>::value);
-		if (!instance)
+		if (instance == nullptr)
 			// Will create parent StateInstance object if not already created.
 			instance = new _SubstateInstance<C>(machine, &P::_getInstance(machine));
 
@@ -1924,14 +1924,14 @@ namespace Macho {
 	template<class C, class P>
 	/* static */ void Link<C, P>::clearHistory(const _MachineBase & machine) {
 		const _StateInstance * instance = machine.getInstance(StateID<C>::value);
-		if (instance)
+		if (instance != nullptr)
 			instance->setHistory(nullptr);
 	}
 
 	template<class C, class P>
 	/* static */ void Link<C, P>::clearHistoryDeep(const _MachineBase & machine) {
 		const _StateInstance * instance = machine.getInstance(StateID<C>::value);
-		if (instance)
+		if (instance != nullptr)
 			machine.clearHistoryDeep(Machine<TOP>::theStateCount, *instance);
 	}
 
@@ -1940,10 +1940,10 @@ namespace Macho {
 		const _StateInstance * instance = machine.getInstance(StateID<C>::value);
 		_StateInstance * history = nullptr;
 
-		if (instance)
+		if (instance != nullptr)
 			history = instance->history();
 
-		return history ? history->key() : key();
+		return history != nullptr ? history->key() : key();
 	}
 
 	template<class C, class P>

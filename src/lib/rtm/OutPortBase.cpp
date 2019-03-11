@@ -724,7 +724,7 @@ namespace RTC
                   coil::flatten(provider_types).c_str()));
 
 #ifndef RTC_NO_DATAPORTIF_ACTIVATION_OPTION
-    if (m_properties.hasKey("provider_types") &&
+    if ((m_properties.hasKey("provider_types") != nullptr) &&
         coil::normalize(m_properties["provider_types"]) != "all")
       {
         RTC_DEBUG(("allowed providers: %s",
@@ -776,7 +776,7 @@ namespace RTC
                   coil::flatten(consumer_types).c_str()));
 
 #ifndef RTC_NO_DATAPORTIF_ACTIVATION_OPTION
-    if (m_properties.hasKey("consumer_types") &&
+    if ((m_properties.hasKey("consumer_types") != nullptr) &&
         coil::normalize(m_properties["consumer_types"]) != "all")
       {
         RTC_DEBUG(("allowed consumers: %s",

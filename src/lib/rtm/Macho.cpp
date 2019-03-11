@@ -71,7 +71,7 @@ void Alias::setState(_MachineBase & machine) const {
 _StateInstance & _StateSpecification::_getInstance(_MachineBase & machine) {
 	// Look first in machine for existing StateInstance.
 	_StateInstance * & instance = machine.getInstance(0);
-	if (!instance)
+	if (instance == nullptr)
 		instance = new _RootInstance(machine, nullptr);
 
 	return *instance;
@@ -108,7 +108,7 @@ _StateInstance::_StateInstance(_MachineBase & machine, _StateInstance * parent)
 {}
 
 _StateInstance::~_StateInstance() {
-	if (myBoxPlace)
+	if (myBoxPlace != nullptr)
 		::operator delete(myBoxPlace);
 
 	delete mySpecification;
@@ -116,7 +116,7 @@ _StateInstance::~_StateInstance() {
 
 void _StateInstance::entry(_StateInstance & previous, bool first) {
 	// Only Root has no parent
-	if (!myParent)
+	if (myParent == nullptr)
 		return;
 
 	// first entry or previous state is not substate -> perform entry
@@ -132,7 +132,7 @@ void _StateInstance::entry(_StateInstance & previous, bool first) {
 
 void _StateInstance::exit(_StateInstance & next) {
 	// Only Root has no parent
-	if (!myParent)
+	if (myParent == nullptr)
 		return;
 
 	// self transition or next state is not substate -> perform exit
@@ -149,7 +149,7 @@ void _StateInstance::exit(_StateInstance & next) {
 }
 
 void _StateInstance::init(bool history) {
-	if (history && myHistory) {
+	if (history && (myHistory != nullptr)) {
 		MACHO_TRC3(name(), "History transition to", myHistory->name());
 		myMachine.setPendingState(*myHistory, &_theDefaultInitializer);
 	} else {
@@ -266,7 +266,7 @@ void _MachineBase::free(unsigned int count) {
 void _MachineBase::clearHistoryDeep(unsigned int count, const _StateInstance & instance) const {
 	for (unsigned int i = 0; i < count; ++i) {
 		_StateInstance * s = myInstances[i];
-		if (s && s->isChild(instance))
+		if ((s != nullptr) && s->isChild(instance))
 			s->setHistory(nullptr);
 	}
 }
@@ -301,16 +301,16 @@ _StateInstance * _MachineBase::createClone(ID id, _StateInstance * original) {
 void _MachineBase::rattleOn() {
 	assert(myCurrentState);
 
-	while (myPendingState || myPendingEvent) {
+	while ((myPendingState != nullptr) || (myPendingEvent != nullptr)) {
 
 		// Loop here because init actions might change state again.
-		while (myPendingState) {
+		while (myPendingState != nullptr) {
 			MACHO_TRC3(myCurrentState->name(), "Transition to", myPendingState->name());
 
 #ifndef NDEBUG
 			// Entry/Exit actions may not dispatch events: set dummy event.
-			if (!myPendingEvent)
-				myPendingEvent = reinterpret_cast<_IEventBase *>(&myPendingEvent);
+			if (myPendingEvent == nullptr)
+				myPendingEvent = (_IEventBase *) &myPendingEvent;
 #endif
 
 			// Perform exit actions (which exactly depends on new state).
@@ -324,7 +324,7 @@ void _MachineBase::rattleOn() {
 			myCurrentState = myPendingState;
 
 			// Deprecated!
-			if (myPendingBox) {
+			if (myPendingBox != nullptr) {
 				myCurrentState->setBox(myPendingBox);
 				myPendingBox = nullptr;
 			}
@@ -350,7 +350,7 @@ void _MachineBase::rattleOn() {
 #endif
 		} // while (myPendingState)
 
-		if (myPendingEvent) {
+		if (myPendingEvent != nullptr) {
 			_IEventBase * event = myPendingEvent;
 			myPendingEvent = nullptr;
 			event->dispatch(*myCurrentState);
@@ -372,10 +372,10 @@ Key _AdaptingInitializer::adapt(Key key) {
 	const _StateInstance * instance = myMachine.getInstance(id);
 	_StateInstance * history = nullptr;
 
-	if (instance)
+	if (instance != nullptr)
 		history = instance->history();
 
-	return history ? history->key() : key;
+	return history != nullptr ? history->key() : key;
 }
 
 

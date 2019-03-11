@@ -149,7 +149,7 @@ namespace CORBA_IORUtil
   {
 #ifndef ORB_IS_RTORB
     cdrMemoryStream buf(CORBA::ULong(0), CORBA::Boolean(1));
-    buf.marshalBoolean(omni::myByteOrder);
+    buf.marshalBoolean(omni::myByteOrder != 0u);
     buf.marshalRawString(ior.type_id);
     ior.profiles >>= buf;
 
@@ -261,7 +261,7 @@ namespace CORBA_IORUtil
     if (ior.profiles.length() == 0 && strlen(ior.type_id) == 0)
       {
         retstr << "IOR is a nil object reference." << std::endl;
-        if (iorstr) { retstr << iorstr << std::endl; }
+        if (iorstr != nullptr) { retstr << iorstr << std::endl; }
         return retstr.str();
       }
 
@@ -429,7 +429,7 @@ namespace CORBA_IORUtil
     int is_transient;
     OctetUSequence id;
 
-    if (get_poa_info(key, poas, is_transient, id))
+    if (get_poa_info(key, poas, is_transient, id) != 0)
       {
         sstr << "       POA(" << (char*)poas[0];
         for (unsigned i(1); i < poas.length(); ++i)
@@ -466,7 +466,7 @@ namespace CORBA_IORUtil
         ++k;
         const char* name = k;
 
-        while (k < kend && *k && *k != POA_NAME_SEP
+        while (k < kend && (*k != 0) && *k != POA_NAME_SEP
               && *k != TRANSIENT_SUFFIX_SEP)
           {
             ++k;
@@ -487,7 +487,7 @@ namespace CORBA_IORUtil
         transient_out = 1;
         k += TRANSIENT_SUFFIX_SIZE + 1;
       }
-    if (k >= kend || *k)  { return 0; }
+    if (k >= kend || (*k != 0))  { return 0; }
     k++;
 
     id_out.length(static_cast<CORBA::ULong>(kend - k));
