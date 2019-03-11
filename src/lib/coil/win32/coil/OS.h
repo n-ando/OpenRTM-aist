@@ -303,18 +303,24 @@ namespace coil
           strcpy_s(cputype, sizeof(cputype), "NEUTRAL");
           strcpy_s(subtype, sizeof(subtype), "");
           break;
+#ifdef PROCESSOR_ARCHITECTURE_ARM64
       case PROCESSOR_ARCHITECTURE_ARM64:
           strcpy_s(cputype, sizeof(cputype), "ARM64");
           strcpy_s(subtype, sizeof(subtype), "");
           break;
+#endif
+#ifdef PROCESSOR_ARCHITECTURE_ARM32_ON_WIN64
       case PROCESSOR_ARCHITECTURE_ARM32_ON_WIN64:
           strcpy_s(cputype, sizeof(cputype), "ARM32_ON_WIN64");
           strcpy_s(subtype, sizeof(subtype), "");
           break;
+#endif
+#ifdef PROCESSOR_ARCHITECTURE_IA32_ON_ARM64
       case PROCESSOR_ARCHITECTURE_IA32_ON_ARM64:
           strcpy_s(cputype, sizeof(cputype), "IA32_ON_ARM64");
           strcpy_s(subtype, sizeof(subtype), "");
           break;
+#endif
       default:
         strcpy_s(cputype, sizeof(cputype), "Unknown");
         strcpy_s(subtype, sizeof(subtype), "Unknown");
