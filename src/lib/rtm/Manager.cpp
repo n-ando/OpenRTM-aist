@@ -624,6 +624,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   {
     std::vector<FactoryBase*> factories(m_factory.getObjects());
     std::vector<coil::Properties> props;
+    props.reserve(factories.size());
     for(auto & factorie : factories)
       {
         props.push_back(factorie->profile());
