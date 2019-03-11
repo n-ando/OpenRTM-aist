@@ -95,10 +95,6 @@
     Box & box() { return *static_cast<Box *>(_box()); }                 \
     friend class ::_VS8_Bug_101615;
 
-
-using namespace Macho;
-
-
 namespace RTC
 {
   /*!
@@ -166,7 +162,7 @@ namespace RTC
     : public Macho::Link<C, P>
   {
   protected:
-    Link(_StateInstance & instance)
+    Link(Macho::_StateInstance & instance)
       : Macho::Link<C, P>(instance), rtComponent(nullptr)
     {
     }
