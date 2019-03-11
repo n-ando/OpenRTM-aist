@@ -371,14 +371,14 @@ namespace RTC
   public:
     /*!
      * @if jp
-     * @brief 仮想デストラクタ
+     * @brief コンストラクタ
      *
-     * 仮想デストラクタ
+     * コンストラクタ
      *
      * @else
-     * @brief Virtual Destructor
+     * @brief Constructor
      *
-     * Virtual Destructor
+     * Constructor
      *
      * @endif
      */
