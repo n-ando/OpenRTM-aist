@@ -455,10 +455,7 @@ endif(VXWORKS)
 
 if(OBSERVER_ENABLE)
 	add_definitions(-DENABLE_OBSERVER)
-	include_directories(${CMAKE_SOURCE_DIR}/src ${ComponentObserverConsumer_BINARY_DIR})
-	set(rtm_srcs ${rtm_srcs} ${CMAKE_SOURCE_DIR}/src/ext/sdo/observer/ComponentObserverConsumer.cpp ${ComponentObserverConsumer_BINARY_DIR}/ComponentObserverStub.cpp ${ComponentObserverConsumer_BINARY_DIR}/ComponentObserverStub.h)
-	set_source_files_properties(${ComponentObserverConsumer_BINARY_DIR}/ComponentObserverStub.cpp PROPERTIES GENERATED 1)
-	set_source_files_properties(${ComponentObserverConsumer_BINARY_DIR}/ComponentObserverStub.h PROPERTIES GENERATED 1)
+	include_directories(${CMAKE_SOURCE_DIR}/src ${CMAKE_BINARY_DIR}/src/ext/sdo/observer/)
 endif(OBSERVER_ENABLE)
 
 
@@ -512,10 +509,13 @@ else(VXWORKS)
 	add_dependencies(${RTM_PROJECT_NAME} ${RTM_PROJECT_NAME}_objlib)
 
 
-	
+	if(OBSERVER_ENABLE)
+		add_dependencies(${RTM_PROJECT_NAME} ComponentObserverConsumer)
+		target_link_libraries(${RTM_PROJECT_NAME} ${ORB_LIBRARIES} ${COIL_PROJECT_NAME} ${RTM_LINKER_OPTION} ComponentObserverConsumer)
+	else(OBSERVER_ENABLE)
+		target_link_libraries(${RTM_PROJECT_NAME} ${ORB_LIBRARIES} ${COIL_PROJECT_NAME} ${RTM_LINKER_OPTION})
+	endif(OBSERVER_ENABLE)
 
-
-	target_link_libraries(${RTM_PROJECT_NAME} ${ORB_LIBRARIES} ${COIL_PROJECT_NAME} ${RTM_LINKER_OPTION})
 	if(UNIX)
 		install(TARGETS ${RTM_PROJECT_NAME} LIBRARY DESTINATION ${INSTALL_RTM_LIB_DIR}
 						ARCHIVE DESTINATION ${INSTALL_RTM_LIB_DIR}
