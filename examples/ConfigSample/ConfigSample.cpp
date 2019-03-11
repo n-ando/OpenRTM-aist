@@ -156,7 +156,7 @@ RTC::ReturnCode_t ConfigSample::onExecute(RTC::UniqueId  /*ec_id*/)
 	  }
       std::cout << "---------------------------------------" << std::endl;
 
-      curlen = (int)m_vector_param0.size();
+      curlen = static_cast<int>(m_vector_param0.size());
       maxlen = maxlen > curlen ? maxlen : curlen;
       for (int i(0), len(maxlen - curlen); i < len; ++i)
 	  {
