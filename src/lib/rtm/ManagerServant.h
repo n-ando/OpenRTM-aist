@@ -689,7 +689,7 @@ namespace RTM
      * @endif
      */
     RTC::RTObject_ptr
-    createComponentByAddress(const std::string create_arg);
+    createComponentByAddress(std::string create_arg);
 
 	/*
 	* @if jp
