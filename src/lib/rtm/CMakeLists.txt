@@ -455,20 +455,13 @@ endif(VXWORKS)
 
 if(OBSERVER_ENABLE)
 	add_definitions(-DENABLE_OBSERVER)
-	include_directories(${CMAKE_SOURCE_DIR}/src ${CMAKE_BINARY_DIR}/src/ext/sdo/observer/)
+	include_directories(${CMAKE_SOURCE_DIR}/src ${CMAKE_BINARY_DIR}/src/ext/sdo/observer)
 endif(OBSERVER_ENABLE)
-
-
-set(rtm_srcs ${rtm_srcs} ${SKEL_IDL_SRCS})
-set_source_files_properties(${SKEL_IDL_SRCS} PROPERTIES GENERATED 1)
-
-
-
 
 if(VXWORKS)
 	add_library(${RTM_PROJECT_NAME} STATIC ${rtm_srcs})
 	if(OBSERVER_ENABLE)
-		add_dependencies(${RTM_PROJECT_NAME} ComponentObserver_TGT)
+		add_dependencies(${RTM_PROJECT_NAME} ComponentObserverConsumer_IDLTGT)
 	endif(OBSERVER_ENABLE)
 	install(TARGETS ${RTM_PROJECT_NAME} LIBRARY DESTINATION ${INSTALL_RTM_LIB_DIR}
 					ARCHIVE DESTINATION ${INSTALL_RTM_BIN_DIR}
@@ -481,33 +474,31 @@ else(VXWORKS)
 	endif(WIN32)
 
 	add_library(${RTM_PROJECT_NAME}_objlib OBJECT ${rtm_srcs})
-	set_property(TARGET ${RTM_PROJECT_NAME}_objlib PROPERTY POSITION_INDEPENDENT_CODE 1)
-	add_dependencies(${RTM_PROJECT_NAME}_objlib ${COIL_PROJECT_NAME})
-	add_dependencies(${RTM_PROJECT_NAME}_objlib ALL_IDL_TGT)
+	openrtm_common_set_compile_props(${RTM_PROJECT_NAME}_objlib)
+	add_dependencies(${RTM_PROJECT_NAME}_objlib ${RTCSKEL_PROJECT_NAME}_IDLTGT)
 	if(OBSERVER_ENABLE)
-		add_dependencies(${RTM_PROJECT_NAME}_objlib ComponentObserver_TGT)
+		add_dependencies(${RTM_PROJECT_NAME}_objlib ComponentObserverConsumer_IDLTGT)
 	endif(OBSERVER_ENABLE)
 
-	add_library(${RTM_PROJECT_NAME}-static STATIC $<TARGET_OBJECTS:${RTM_PROJECT_NAME}_objlib>)
-	add_dependencies(${RTM_PROJECT_NAME}-static ${COIL_PROJECT_NAME})
-	add_dependencies(${RTM_PROJECT_NAME}-static ALL_IDL_TGT)
-	add_dependencies(${RTM_PROJECT_NAME}-static ${RTM_PROJECT_NAME}_objlib)
+	add_library(${RTM_PROJECT_NAME}-static STATIC
+		$<TARGET_OBJECTS:${RTM_PROJECT_NAME}_objlib>
+		$<TARGET_OBJECTS:IDL_OBJLIB>)
 
 	if(WIN32)
 		set(DEF_FILE_NAME ${RTM_PROJECT_NAME}.def)
 
-		add_custom_command(TARGET ${RTM_PROJECT_NAME}-static 
+		add_custom_command(TARGET ${RTM_PROJECT_NAME}-static
 			POST_BUILD
 			COMMAND python -B ${MAKE_DEF_COMMAND} $<TARGET_FILE:${RTM_PROJECT_NAME}-static> ${RTM_PROJECT_NAME} ${RTM_SHORT_VERSION} ${DEF_FILE_NAME}
 			WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
 		)
-	
 	endif(WIN32)
 
-	add_library(${RTM_PROJECT_NAME} SHARED $<TARGET_OBJECTS:${RTM_PROJECT_NAME}_objlib> ${CMAKE_CURRENT_BINARY_DIR}/${DEF_FILE_NAME})
+	add_library(${RTM_PROJECT_NAME} SHARED
+	  $<TARGET_OBJECTS:${RTM_PROJECT_NAME}_objlib>
+	  $<TARGET_OBJECTS:IDL_OBJLIB>
+	  ${CMAKE_CURRENT_BINARY_DIR}/${DEF_FILE_NAME})
 	set_target_properties(${RTM_PROJECT_NAME} PROPERTIES DEBUG_POSTFIX d)
-	add_dependencies(${RTM_PROJECT_NAME} ${RTM_PROJECT_NAME}_objlib)
-
 
 	if(OBSERVER_ENABLE)
 		add_dependencies(${RTM_PROJECT_NAME} ComponentObserverConsumer)
@@ -523,9 +514,6 @@ else(VXWORKS)
 						COMPONENT openrtm)
 
 		set_target_properties(${RTM_PROJECT_NAME} PROPERTIES VERSION ${RTM_VERSION} SOVERSION ${RTM_SO_VERSION})
-
-
-		
 		set_target_properties(${RTM_PROJECT_NAME}-static PROPERTIES DEBUG_POSTFIX d)
 		set_target_properties(${RTM_PROJECT_NAME}-static PROPERTIES OUTPUT_NAME ${RTM_PROJECT_NAME} CLEAN_DIRECT_OUTPUT 1)
 		install(TARGETS ${RTM_PROJECT_NAME}-static LIBRARY DESTINATION ${INSTALL_RTM_LIB_DIR}
@@ -534,7 +522,7 @@ else(VXWORKS)
 						COMPONENT openrtm)
 
 	elseif(WIN32)
-		add_dependencies(${RTM_PROJECT_NAME} ALL_IDL_TGT)
+		add_dependencies(${RTM_PROJECT_NAME} ${RTCSKEL_PROJECT_NAME}_IDLTGT)
 		set_source_files_properties(${DEF_FILE_NAME} PROPERTIES GENERATED 1)
 		add_dependencies(${RTM_PROJECT_NAME} ${RTM_PROJECT_NAME}-static)
 		install(TARGETS ${RTM_PROJECT_NAME} LIBRARY DESTINATION ${INSTALL_RTM_LIB_DIR}
@@ -569,13 +557,5 @@ endif(VXWORKS)
 
 install(FILES  ${rtm_headers} DESTINATION ${INSTALL_RTM_INCLUDE_DIR}/rtm COMPONENT headers)
 
-
-
 add_dependencies(${RTM_PROJECT_NAME} ${COIL_PROJECT_NAME})
-
-
-
-
 add_dependencies(${RTM_PROJECT_NAME} ${RTCSKEL_PROJECT_NAME})
-
-

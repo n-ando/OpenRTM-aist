@@ -16,8 +16,10 @@ add_definitions(${COIL_C_FLAGS_LIST})
 
 if(VXWORKS)
 	add_executable(${target} rtcd_vxorks.cpp)
+	openrtm_common_set_compile_props(${target})
 else(VXWORKS)
 	add_executable(${target} rtcd.cpp)
+	openrtm_common_set_compile_props(${target})
 endif(VXWORKS)
 
 

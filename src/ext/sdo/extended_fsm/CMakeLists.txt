@@ -29,6 +29,7 @@ if(VXWORKS AND NOT RTP)
 	set(libs ${RTCSKEL_PROJECT_NAME})
 
 	add_executable(${target} ${srcs})
+	openrtm_common_set_compile_props(${target})
 	target_link_libraries(${target} ${libs})
 	add_dependencies(${target} ${RTM_PROJECT_NAME})
 
@@ -45,6 +46,7 @@ else()
 
 
 	add_library(${target} SHARED ${srcs})
+	openrtm_common_set_compile_props(${target})
 	target_link_libraries(${target} ${libs} ${RTM_LINKER_OPTION})
 	add_dependencies(${target} ${RTM_PROJECT_NAME})
 	set_target_properties(${target} PROPERTIES PREFIX "")

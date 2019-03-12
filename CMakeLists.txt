@@ -611,7 +611,6 @@ set(ORB_C_FLAGS_LIST ${ORB_C_FLAGS_LIST})
 if(VXWORKS)
 	set(COIL_OS_DIR "vxworks")
 	set(RTM_OS_VXWORKS ON)
-	add_definitions(-O2)
 elseif(UNIX)
 	set(COIL_OS_DIR "posix")
 	set(CMAKE_POSITION_INDEPENDENT_CODE ON)
@@ -621,14 +620,288 @@ elseif(UNIX)
 		set(RTM_OS_LINUX ON)
 		set(RTM_LINKER_OPTION dl rt)
 	endif()
-	set(CMAKE_CXX_FLAGS "-O2 -Wall -Wextra -std=c++11")
 elseif(WIN32)
 	set(COIL_OS_DIR "win32")
 	set(COIL_C_FLAGS_LIST "-D_WIN32_WINNT=0x0602")
 	set(RTM_LINKER_OPTION advapi32.lib;ws2_32.lib;mswsock.lib;rpcrt4.lib;optimized;msvcrt.lib;optimized;msvcmrt.lib;debug;msvcrtd.lib)
 endif()
 
+function(openrtm_common_set_compile_definitions target)
+  target_compile_definitions(${target} PRIVATE
+		# none
+	)
+endfunction()
 
+function(openrtm_common_set_compile_options target)
+	# Warning options
+	set(WARN_GCC
+		-pedantic
+		-Wall
+		-Wextra
+		-Walloc-zero
+		-Walloca
+		-Warray-bounds=2
+		-Wcast-align=strict
+		-Wcast-qual
+		-Wcatch-value=3
+		-Wclass-memaccess
+		-Wcomments
+		-Wconditionally-supported
+		-Wconversion
+		-Wctor-dtor-privacy
+		-Wdate-time
+		-Wdelete-non-virtual-dtor
+		-Wdisabled-optimization
+		-Wdouble-promotion
+		-Wduplicated-branches
+		-Wduplicated-cond
+		-Werror-implicit-function-declaration
+		-Wextra-semi
+		-Wfloat-conversion
+		-Wfloat-equal
+		-Wformat
+		-Wformat-nonliteral
+		-Wformat-overflow=2
+		-Wformat-security
+		-Wformat-signedness
+		-Wformat-truncation=2
+		-Wformat-y2k
+		-Wformat=2
+		-Wframe-larger-than=4000
+		-Wimplicit-fallthrough=3
+		-Winit-self
+		-Winline
+		-Winvalid-pch
+		-Wlogical-op
+		-Wmissing-declarations
+		-Wmissing-format-attribute
+		-Wmissing-include-dirs
+		-Wmissing-noreturn
+		-Wmultichar
+		-Wnoexcept
+		-Wnoexcept-type
+		-Wnon-virtual-dtor
+		-Wnull-dereference
+		-Wold-style-cast
+		-Woverlength-strings
+		-Woverloaded-virtual
+		-Wpacked
+		-Wpedantic
+		-Wplacement-new=1
+		-Wpointer-arith
+		-Wredundant-decls
+		-Wregister
+		-Wreorder
+		-Wscalar-storage-order
+		-Wshadow
+		-Wshadow-compatible-local
+		-Wshadow-local
+		-Wshadow=compatible-local
+		-Wshadow=global
+		-Wshadow=local
+		-Wshift-overflow=1
+		-Wsign-conversion
+		-Wsign-promo
+		-Wstack-protector
+		-Wstrict-null-sentinel
+		-Wstrict-overflow=5
+		-Wstringop-overflow=4
+		-Wsuggest-attribute=cold
+		-Wsuggest-attribute=const
+		-Wsuggest-attribute=format
+		-Wsuggest-attribute=malloc
+		-Wsuggest-attribute=noreturn
+		-Wsuggest-attribute=pure
+		-Wsuggest-final-methods
+		-Wsuggest-final-types
+		-Wsuggest-override
+		-Wswitch-default
+		-Wswitch-enum
+		-Wsynth
+		-Wtrampolines
+		-Wundef
+		-Wunreachable-code
+		-Wunsafe-loop-optimizations
+		-Wunused-const-variable=2
+		-Wunused-macros
+		-Wuseless-cast
+		-Wvariadic-macros
+		-Wvector-operation-performance
+		-Wwrite-strings
+		-Wzero-as-null-pointer-constant
+		# exclude rule
+		-Wno-padded)
+	set(WARN_GCC_TEMPORARY
+		-Wall
+		-Wextra
+		-Wno-padded
+		-Wno-deprecated
+		-Wno-ignored-qualifiers
+		-Wno-int-to-pointer-cast
+		-Wno-maybe-uninitialized
+		-Wno-reorder
+		-Wno-sign-compare
+		-Wno-type-limits
+		-Wno-unused-but-set-variable
+		-Wno-unused-parameter
+		-Wno-unused-result
+		-Wno-unused-variable)
+	set(WARN_CLANG -pedantic
+		-Weverything
+		# exclude rule
+		-Wno-documentation
+		-Wno-documentation-unknown-command
+		-Wno-c++98-compat
+		-Wno-c++98-compat-pedantic)
+	set(WARN_CLANG_TEMPORARY
+		-Wall
+		-Wextra
+		-Wno-ignored-qualifiers
+		-Wno-int-to-pointer-cast
+		-Wno-reorder
+		-Wno-sign-compare
+		-Wno-unknown-warning-option
+		-Wno-unused-local-typedef
+		-Wno-unused-parameter
+		-Wno-unused-variable)
+
+	target_compile_options(${target} PRIVATE
+		# C++11: target_compile_features can't be used becase it's support after v3.1.0.
+		$<$<CXX_COMPILER_ID:GNU>:-std=c++11>
+		$<$<CXX_COMPILER_ID:Clang>:-std=c++11>
+		## MSVC always enable c++11 and c++14, so we use c++14 after MSVC 2015.
+		$<$<CXX_COMPILER_ID:MSVC>:
+			$<$<VERSION_GREATER:${MSVC_VERSION}, 1900>:/std:c++14>
+		>
+
+		# warning options
+		$<$<CXX_COMPILER_ID:GNU>:
+			$<$<CONFIG:Debug>:-O2 ${WARN_GCC}> # Some options need O2.
+			$<$<CONFIG:Release>:-Werror ${WARN_GCC_TEMPRARY}>
+			$<$<CONFIG:RelWithDebInfo>:-Werror ${WARN_GCC_TEMPRARY}>
+			$<$<CONFIG:MinSizeRel>:-Werror ${WARN_GCC_TEMPRARY}>
+		>
+
+		$<$<CXX_COMPILER_ID:Clang>:
+			$<$<CONFIG:Debug>:${WARN_CLANG}>
+			$<$<CONFIG:Release>:-Werror ${WARN_CLANG_TEMPRARY}>
+			$<$<CONFIG:RelWithDebInfo>:-Werror ${WARN_CLANG_TEMPRARY}>
+			$<$<CONFIG:MinSizeRel>:-Werror ${WARN_CLANG_TEMPRARY}>
+		>
+
+		$<$<CXX_COMPILER_ID:MSVC>:
+			$<$<CONFIG:Debug>:/W4>
+			$<$<CONFIG:Release>:/W3>
+			$<$<CONFIG:RelWithDebInfo>:/W3>
+			$<$<CONFIG:MinSizeRel>:/W3>
+		>
+	)
+endfunction()
+
+function(openrtm_common_set_compile_props target)
+	openrtm_common_set_compile_definitions(${target})
+	openrtm_common_set_compile_options(${target})
+	set_target_properties(${target} PROPERTIES POSITION_INDEPENDENT_CODE ON)
+endfunction()
+
+function(openrtm_gencode_set_compile_definitions target)
+  target_compile_definitions(${target} PRIVATE
+		# none
+	)
+endfunction()
+
+function(openrtm_gencode_set_compile_options target)
+	target_compile_options(${target} PRIVATE
+		# C++11: target_compile_features can't be used becase it's support after v3.1.0.
+		$<$<CXX_COMPILER_ID:GNU>:-std=c++11>
+		$<$<CXX_COMPILER_ID:Clang>:-std=c++11>
+		## MSVC always enable c++11 and c++14, so we use c++14 after MSVC 2015.
+		$<$<CXX_COMPILER_ID:MSVC>:
+			$<$<VERSION_GREATER:${MSVC_VERSION}, 1900>:/std:c++14>
+		>
+
+		$<$<CXX_COMPILER_ID:MSVC>:
+			$<$<CONFIG:Debug>:/W0>
+			$<$<CONFIG:Release>:/W0>
+			$<$<CONFIG:RelWithDebInfo>:/W0>
+			$<$<CONFIG:MinSizeRel>:/W0>
+		>
+		)
+endfunction()
+
+function(openrtm_gencode_set_compile_props target)
+	openrtm_gencode_set_compile_definitions(${target})
+	openrtm_gencode_set_compile_options(${target})
+	set_target_properties(${target} PROPERTIES POSITION_INDEPENDENT_CODE ON)
+endfunction()
+
+function(openrtm_idl_compile idl_name inc_path output)
+	 set(skel_wrapper ${SKELWRAPPER_COMMAND})
+	 set(compile_flags ${IDLCOMMAND_FLAGS})
+
+	add_custom_command(
+		OUTPUT ${output}
+		COMMAND ${IDL_COMPILE_COMMAND} ${compile_flags} ${inc_path} ${CMAKE_CURRENT_SOURCE_DIR}/${idl_name}
+		COMMAND python -B ${skel_wrapper} --include-dir="" --skel-suffix=Skel --stub-suffix=Stub --idl-file=${idl_name}
+		WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
+endfunction()
+
+# return values
+## TARGET
+### - ${name}_IDLTGT : idl compile target
+## VALIABLE
+### - ${name}_IDLSTUB : stub file generated by skel wrapper
+### - ${name}_IDLSKEL : skel file generated by skel wrapper
+### - ${name}_IDLGEN  : .cpp generated by IDL compiler
+### - ${name}_IDLHDR  : all generated header files
+function(openrtm_idl_compile_all name idls inc_path)
+	foreach(idl ${idls})
+		# set generated file name
+		STRING(REPLACE ".idl" "" base "${idl}")
+		set(stub ${base}Stub.cpp)
+		set(skel ${base}Skel.cpp)
+		set(stub_h ${base}Stub.h)
+		set(skel_h ${base}Skel.h)
+		if(CORBA STREQUAL "ORBexpress")
+			set(h1 ${base}.h)
+			set(h2 ${base}_c.h)
+			set(s1 ${base}.cc)
+			set(s2 ${base}_c.cc)
+		elseif(CORBA STREQUAL "omniORB")
+			set(h1 ${base}.hh)
+			set(s1 ${base}SK.cc)
+			set(s2 ${base}DynSK.cc)
+		elseif(CORBA STREQUAL "TAO")
+			set(h1 ${base}S.h)
+			set(h2 ${base}C.h)
+			set(h3 ${base}C.inl)
+			set(s1 ${base}S.cpp)
+			set(s2 ${base}C.cpp)
+		endif()
+		set(output
+			${stub} ${skel} ${s1} ${s2}
+			${stub_h} ${skel_h} ${h1} ${h2} ${h3})
+
+		# register custom_command which generate source and header files.
+		openrtm_idl_compile(${idl} "${inc_path}" "${output}")
+		set_source_files_properties(${output} PROPERTIES GENERATED 1)
+
+		set(stub_list ${stub_list} ${stub})
+		set(skel_list ${skel_list} ${skel})
+		set(gen_list  ${gen_list}  ${s1} ${s2})
+		set(hdr_list  ${hdr_list} ${stub_h} ${skel_h} ${h1} ${h2} ${h3})
+		set(out_all ${out_all} ${output})
+	endforeach()
+
+	# register target of generated files
+	add_custom_target(${name}_IDLTGT DEPENDS ${out_all})
+
+	# set output variables.
+	set(${name}_IDLSTUB ${stub_list} PARENT_SCOPE)
+	set(${name}_IDLSKEL ${skel_list} PARENT_SCOPE)
+	set(${name}_IDLGEN ${gen_list} PARENT_SCOPE)
+	set(${name}_IDLHDR ${hdr_list} PARENT_SCOPE)
+endfunction()
 
 if(WIN32)
 	set(MAKE_DEF_COMMAND ${CMAKE_SOURCE_DIR}/build/makedeffile.py)

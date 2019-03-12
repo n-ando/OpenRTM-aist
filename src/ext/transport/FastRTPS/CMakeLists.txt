@@ -31,6 +31,7 @@ if(VXWORKS AND NOT RTP)
 	set(libs ${RTCSKEL_PROJECT_NAME})
 
 	add_executable(${target} ${srcs})
+	openrtm_common_set_compile_props(${target})
 	target_link_libraries(${target} ${libs} fastcdr fastrtps)
 	add_dependencies(${target} ${RTM_PROJECT_NAME})
 

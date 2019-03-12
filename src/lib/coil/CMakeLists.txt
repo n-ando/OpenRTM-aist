@@ -170,8 +170,8 @@ if(VXWORKS)
 					COMPONENT coil)
 else(VXWORKS)
 	add_library(${COIL_PROJECT_NAME}_objlib OBJECT ${coil_srcs})
+	openrtm_common_set_compile_props(${COIL_PROJECT_NAME}_objlib)
 	set_property(TARGET ${COIL_PROJECT_NAME}_objlib PROPERTY POSITION_INDEPENDENT_CODE 1)
-
 	add_library(${COIL_PROJECT_NAME}-static STATIC $<TARGET_OBJECTS:${COIL_PROJECT_NAME}_objlib>)
 	add_dependencies(${COIL_PROJECT_NAME}-static ${COIL_PROJECT_NAME}_objlib)
 

@@ -15,6 +15,7 @@ add_definitions(${ORB_C_FLAGS_LIST})
 add_definitions(${COIL_C_FLAGS_LIST})
 
 add_executable(${target} rtcsh.cpp)
+openrtm_common_set_compile_props(${target})
 
 
 add_dependencies(${target} ${RTM_PROJECT_NAME})
