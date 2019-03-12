@@ -461,10 +461,10 @@ namespace RTC
    * @endif
    */
   CosNaming::NamingContext_ptr
-  CorbaNaming::bindNewContext(const char* string_name, bool  /*force*/)
+  CorbaNaming::bindNewContext(const char* string_name, bool force)
     throw (SystemException, NotFound, CannotProceed, InvalidName, AlreadyBound)
   {
-    return bindNewContext(toName(string_name));
+    return bindNewContext(toName(string_name), force);
   }
 
   /*!
