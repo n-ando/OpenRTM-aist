@@ -154,7 +154,6 @@ namespace RTC
 #else
       : InPortBase(name, ::CORBA_Util::toRepositoryId<DataType>()),
 #endif
-	  DirectInPortBase<DataType>(value),
         m_name(name), m_value(value),
         m_OnRead(nullptr),  m_OnReadConvert(nullptr),
         m_status(1), m_directNewData(false)
@@ -448,7 +447,7 @@ namespace RTC
       return false;
     }
 
-    virtual void write(DataType& data)
+    void write(DataType& data) override
     {
       Guard guard(m_valueMutex);
       m_value = data;

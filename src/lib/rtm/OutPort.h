@@ -141,7 +141,6 @@ namespace RTC
 #else
       : OutPortBase(name, ::CORBA_Util::toRepositoryId<DataType>()),
 #endif
-	  DirectOutPortBase<DataType>(value),
 	  m_value(value), m_onWrite(nullptr), m_onWriteConvert(nullptr),
 	  m_directNewData(false), m_directValue(value)
     {
