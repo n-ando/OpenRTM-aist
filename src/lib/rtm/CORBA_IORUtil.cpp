@@ -497,8 +497,8 @@ namespace CORBA_IORUtil
   }
 #endif
 
-  static void print_tagged_components(std::stringstream& /*sstr*/,
-                                      IOP::MultipleComponentProfile& /*components*/)
+  static void print_tagged_components(std::stringstream& sstr,
+                                      IOP::MultipleComponentProfile& components)
   {
 #if defined(RTM_OMNIORB_40) || defined(RTM_OMNIORB_41)
     CORBA::ULong total(components.length());
@@ -522,12 +522,14 @@ namespace CORBA_IORUtil
                 p = q;
               } while (q);
           }
-        catch (CORBA::MARSHAL& ex)
+        catch (CORBA::MARSHAL&)
           {
             sstr << "       Broken component" << std::endl;
           }
       }
 #endif  // defined(RTM_OMNIORB_40) || defined(RTM_OMNIORB_41)
+    (void)sstr;
+    (void)components;
   }
 #endif  // ORB_IS_RTORB
 } // namespace CORBA_IORUtil
