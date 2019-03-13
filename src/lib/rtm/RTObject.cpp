@@ -426,7 +426,7 @@ namespace RTC
     // owned EC will be finalised later in finalizeContext().
 
     // detach myself from other EC
-    for (CORBA::ULong ic(0), len(m_ecOther.length()); ic < len; ++ic)
+    for (CORBA::ULong ic(0), size(m_ecOther.length()); ic < size; ++ic)
       {
         //        m_ecOther[ic]->stop();
         RTC::LightweightRTObject_var comp(this->_this());
@@ -1381,7 +1381,6 @@ namespace RTC
   {
     RTC_TRACE(("get_monitoring()"));
     throw SDOPackage::InterfaceNotImplemented();
-    return SDOPackage::Monitoring::_nil();
   }
 
   /*!

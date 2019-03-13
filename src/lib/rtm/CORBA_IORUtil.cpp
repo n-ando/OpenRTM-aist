@@ -173,20 +173,20 @@ namespace CORBA_IORUtil
         v = v >> 4;
         if (v < 10)
           {
-            result[j] = '0' + v;
+            result[j] = '0' + static_cast<char>(v);
           }
         else
           {
-            result[j] = 'a' + (v - 10);
+            result[j] = 'a' + (static_cast<char>(v) - 10);
           }
         v = ((data[i] & 0xf));
         if (v < 10)
           {
-            result[j+1] = '0' + v;
+            result[j+1] = '0' + static_cast<char>(v);
           }
         else
           {
-            result[j+1] = 'a' + (v - 10);
+            result[j+1] = 'a' + (static_cast<char>(v) - 10);
           }
       }
     iorstr = std::string(result);
@@ -497,8 +497,8 @@ namespace CORBA_IORUtil
   }
 #endif
 
-  static void print_tagged_components(std::stringstream& sstr,
-                                      IOP::MultipleComponentProfile& components)
+  static void print_tagged_components(std::stringstream& /*sstr*/,
+                                      IOP::MultipleComponentProfile& /*components*/)
   {
 #if defined(RTM_OMNIORB_40) || defined(RTM_OMNIORB_41)
     CORBA::ULong total(components.length());
