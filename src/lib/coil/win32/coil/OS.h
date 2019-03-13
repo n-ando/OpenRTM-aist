@@ -492,8 +492,10 @@ namespace coil
         return(-1);
       }
     }                    /* option letter okay? */
-    if ((optopt = static_cast<int>(*place++)) == static_cast<int>(':') ||
-        !(oli = strchr(ostr, optopt))) {
+    optopt = static_cast<int>(*place++);
+    oli = strchr(ostr, optopt);
+    if (optopt == static_cast<int>(':') ||
+        oli == nullptr) {
       /*
        * if the user didn't specify '-' as an option,
        * assume it means -1 (EOF).
@@ -503,7 +505,8 @@ namespace coil
       if (!*place)
         ++optind;
       if (opterr && *ostr != ':') {
-        if (!(p = strrchr(*nargv, '/')))
+        p = strrchr(*nargv, '/');
+        if (p == nullptr)
           p = *nargv;
         else
           ++p;
@@ -527,7 +530,8 @@ namespace coil
         else if (nargc <= ++optind)
           {    /* no arg */
             place = EMSG;
-            if (!(p = strrchr(*nargv, '/')))
+            p = strrchr(*nargv, '/');
+            if (p == nullptr)
               {
                 p = *nargv;
               }
