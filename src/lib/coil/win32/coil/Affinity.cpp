@@ -33,7 +33,6 @@ namespace coil
   }
   bool getProcCpuAffinity(CpuMask& cpu_mask)
   {
-    DWORD_PTR cpu_num = listToCUPNUM(cpu_mask);
     DWORD_PTR processMask, systemMask = 0;
     HANDLE h = GetCurrentProcess();
 	BOOL success = GetProcessAffinityMask(h, (PDWORD_PTR)&processMask, (PDWORD_PTR)&systemMask);
@@ -84,7 +83,7 @@ namespace coil
     return setProcCpuAffinity(mask);
   }
 
-  bool getThreadCpuAffinity(CpuMask& cpu_mask)
+  bool getThreadCpuAffinity(CpuMask& /*cpu_mask*/)
   {
     return true;
   }
