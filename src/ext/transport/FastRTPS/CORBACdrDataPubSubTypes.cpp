@@ -190,7 +190,6 @@ namespace RTC
 #endif
         if(!m_isGetKeyDefined)
             return false;
-        RTC::ByteData* p_type = (RTC::ByteData*) data;
         if (m_keyBuffer == nullptr)
         {
             return false;
