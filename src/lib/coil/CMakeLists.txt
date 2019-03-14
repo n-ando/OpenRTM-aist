@@ -127,19 +127,13 @@ set(coil_srcs
 	${COIL_OS_DIR}/coil/SharedMemory.cpp
 	${COIL_OS_DIR}/coil/Affinity.cpp
 	${coil_headers}
-
 )
 
-
-
-
-
-
 include_directories(
-		${PROJECT_SOURCE_DIR}/common 
-		${PROJECT_SOURCE_DIR}/${COIL_OS_DIR}
-		${PROJECT_BINARY_DIR}/..
-		)
+		${PROJECT_SOURCE_DIR}/common
+		${PROJECT_SOURCE_DIR}/${COIL_OS_DIR})
+include_directories(SYSTEM
+		${PROJECT_BINARY_DIR}/..)
 
 add_definitions(${COIL_C_FLAGS_LIST})
 
@@ -148,7 +142,7 @@ if(UNIX)
 	if(${CMAKE_SYSTEM_NAME}test MATCHES QNXtest)
 		if(QNX7)
 		else()
-		include_directories(/usr/local/include)
+		include_directories(SYSTEM /usr/local/include)
 		link_directories(/usr/qnx650/target/qnx6/x86/lib/gcc/4.4.2/ /usr/qnx650/target/qnx6/x86/lib/ /usr/local/lib)
 		endif()
 	endif()
@@ -156,7 +150,7 @@ if(UNIX)
 	include(FindPkgConfig)
 	pkg_check_modules(UUID REQUIRED uuid)
 
-	include_directories(${UUID_INCLUDE_DIRS})
+	include_directories(SYSTEM ${UUID_INCLUDE_DIRS})
 	link_directories(${UUID_LIBRARY_DIRS})
 	add_definitions(${UUID_CFLAGS})
 endif(UNIX)

@@ -4,19 +4,8 @@ project (OpenRTM_aist
 	VERSION 2.0.0
 	LANGUAGES CXX)
 
-
-
-
-
-
 set(CORBA omniORB CACHE STRING "set CORBA ")
-
-
-
-
-
 set(ORB_ROOT ${ORB_ROOT} CACHE PATH "set ORB_ROOT")
-
 
 if(NOT ORB_ROOT)
 	if(CORBA STREQUAL "omniORB")
@@ -53,9 +42,6 @@ if(NOT ORB_ROOT)
 		message(FATAL_ERROR "Please set ORB_ROOT.")
 	endif()
 endif()
-
-
-
 
 if(MSVC)
 	if (${CMAKE_GENERATOR} STREQUAL "Visual Studio 9 2008")
@@ -105,8 +91,6 @@ if(MSVC)
 	endif()
 endif(MSVC)
 
-
-
 set(RTM_MAJOR_VERSION ${OpenRTM_aist_VERSION_MAJOR})
 set(RTM_MINOR_VERSION ${OpenRTM_aist_VERSION_MINOR})
 set(RTM_REVISION_NUM ${OpenRTM_aist_VERSION_PATCH})
@@ -116,8 +100,6 @@ set(OPENRTM_VERSION ${RTM_MAJOR_VERSION}.${RTM_MINOR_VERSION}.${RTM_REVISION_NUM
 set(OPENRTM_NAME OpenRTM-aist-${OPENRTM_VERSION})
 set(RTM_SO_VERSION ${OpenRTM_aist_VERSION_MAJOR}.${OpenRTM_aist_VERSION_MINOR})
 set(COIL_SO_VERSION ${OpenRTM_aist_VERSION_MAJOR}.${OpenRTM_aist_VERSION_MINOR})
-
-
 if(UNIX)
 	set(COIL_PROJECT_NAME coil)
 	set(RTM_PROJECT_NAME RTC)
@@ -125,9 +107,7 @@ else(UNIX)
 	set(COIL_PROJECT_NAME coil${RTM_MAJOR_VERSION}${RTM_MINOR_VERSION}${RTM_REVISION_NUM})
 	set(RTM_PROJECT_NAME RTC${RTM_MAJOR_VERSION}${RTM_MINOR_VERSION}${RTM_REVISION_NUM})
 endif(UNIX)
-
 set(RTCSKEL_PROJECT_NAME RTCSkel)
-
 if(MSVC)
 	set(COIL_PROJECT_NAME ${COIL_PROJECT_NAME}_${RTM_VC_VER})
 	set(RTM_PROJECT_NAME ${RTM_PROJECT_NAME}_${RTM_VC_VER})
@@ -173,9 +153,6 @@ else()
 	set(INSTALL_RTM_ETC_DIR etc)
 	set(INSTALL_RTM_SHARE_DIR share)
 endif(MSVC)
-
-
-
 
 set(SSL_ENABLE FALSE CACHE BOOL "set SSL_ENABLE")
 set(OBSERVER_ENABLE FALSE CACHE BOOL "set OBSERVER_ENABLE")
@@ -626,6 +603,14 @@ elseif(WIN32)
 	set(RTM_LINKER_OPTION advapi32.lib;ws2_32.lib;mswsock.lib;rpcrt4.lib;optimized;msvcrt.lib;optimized;msvcmrt.lib;debug;msvcrtd.lib)
 endif()
 
+set(RTM_INCLUDE_DIR
+	${CMAKE_SOURCE_DIR}/src/lib/coil/common
+	${CMAKE_SOURCE_DIR}/src/lib/coil/${COIL_OS_DIR}
+	${CMAKE_SOURCE_DIR}/src/lib)
+set(RTM_INCLUDE_GENDIR
+	${PROJECT_BINARY_DIR}/src/lib/rtm/idl
+	${PROJECT_BINARY_DIR}/src/lib)
+
 function(openrtm_common_set_compile_definitions target)
   target_compile_definitions(${target} PRIVATE
 		# none
@@ -731,10 +716,12 @@ function(openrtm_common_set_compile_options target)
 		-Wzero-as-null-pointer-constant
 		# exclude rule
 		-Wno-padded)
-	set(WARN_GCC_TEMPORARY
+	set(WARN_GCC_NEXT_GOAL
 		-Wall
 		-Wextra
-		-Wno-padded
+		-Wno-padded)
+	set(WARN_GCC_TEMPORARY
+		${WARN_GCC_NEXT_GOAL}
 		-Wno-deprecated
 		-Wno-ignored-qualifiers
 		-Wno-int-to-pointer-cast
@@ -746,16 +733,19 @@ function(openrtm_common_set_compile_options target)
 		-Wno-unused-parameter
 		-Wno-unused-result
 		-Wno-unused-variable)
-	set(WARN_CLANG -pedantic
+	set(WARN_CLANG
+		-pedantic
 		-Weverything
 		# exclude rule
 		-Wno-documentation
 		-Wno-documentation-unknown-command
 		-Wno-c++98-compat
 		-Wno-c++98-compat-pedantic)
-	set(WARN_CLANG_TEMPORARY
+	set(WARN_CLANG_NEXT_GOAL
 		-Wall
-		-Wextra
+		-Wextra)
+	set(WARN_CLANG_TEMPORARY
+		${WARN_CLANG_NEXT_GOAL}
 		-Wno-ignored-qualifiers
 		-Wno-int-to-pointer-cast
 		-Wno-reorder
@@ -777,16 +767,16 @@ function(openrtm_common_set_compile_options target)
 		# warning options
 		$<$<CXX_COMPILER_ID:GNU>:
 			$<$<CONFIG:Debug>:-O2 ${WARN_GCC}> # Some options need O2.
-			$<$<CONFIG:Release>:-Werror ${WARN_GCC_TEMPRARY}>
-			$<$<CONFIG:RelWithDebInfo>:-Werror ${WARN_GCC_TEMPRARY}>
-			$<$<CONFIG:MinSizeRel>:-Werror ${WARN_GCC_TEMPRARY}>
+			$<$<CONFIG:Release>:-Werror ${WARN_GCC_TEMPORARY}>
+			$<$<CONFIG:RelWithDebInfo>: ${WARN_GCC_NEXT_GOAL}>
+			$<$<CONFIG:MinSizeRel>: ${WARN_GCC_NEXT_GOAL}>
 		>
 
 		$<$<CXX_COMPILER_ID:Clang>:
 			$<$<CONFIG:Debug>:${WARN_CLANG}>
-			$<$<CONFIG:Release>:-Werror ${WARN_CLANG_TEMPRARY}>
-			$<$<CONFIG:RelWithDebInfo>:-Werror ${WARN_CLANG_TEMPRARY}>
-			$<$<CONFIG:MinSizeRel>:-Werror ${WARN_CLANG_TEMPRARY}>
+			$<$<CONFIG:Release>:-Werror ${WARN_CLANG_TEMPORARY}>
+			$<$<CONFIG:RelWithDebInfo>: ${WARN_CLANG_NEXT_GOAL}>
+			$<$<CONFIG:MinSizeRel>: ${WARN_CLANG_NEXT_GOAL}>
 		>
 
 		$<$<CXX_COMPILER_ID:MSVC>:

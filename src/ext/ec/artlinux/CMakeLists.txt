@@ -4,17 +4,9 @@ project (ArtExecutionContext
 	VERSION ${RTM_VERSION}
 	LANGUAGES CXX)
 
-
-
-
-
-
-
 link_directories(${ORB_LINK_DIR})
-include_directories(
-		${RTM_INCLUDE_DIR}
-		${ORB_INCLUDE_DIR}
-		)
+include_directories(${RTM_INCLUDE_DIR})
+include_directories(SYSTEM ${RTM_INCLUDE_GENDIR} ${ORB_INCLUDE_DIR})
 
 add_definitions(${ORB_C_FLAGS_LIST})
 add_definitions(${COIL_C_FLAGS_LIST})

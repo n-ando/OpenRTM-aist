@@ -190,36 +190,16 @@ else(VXWORKS)
 	link_directories(${ORB_LINK_DIR})
 endif(VXWORKS)
 
-include_directories(${ORB_INCLUDE_DIR})
-
 add_definitions(${ORB_C_FLAGS_LIST})
 add_definitions(${COIL_C_FLAGS_LIST})
 
-
-set(RTM_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/src/lib/coil/common
-		${PROJECT_BINARY_DIR}/idl
-		${CMAKE_SOURCE_DIR}/src/lib/coil/${COIL_OS_DIR}
-		${PROJECT_BINARY_DIR}/..
-		${CMAKE_CURRENT_SOURCE_DIR}/..
-		)
-
-
-
-include_directories(
-		${RTM_INCLUDE_DIR}
-		)
-
+include_directories(${RTM_INCLUDE_DIR})
+include_directories(SYSTEM ${RTM_INCLUDE_GENDIR} ${ORB_INCLUDE_DIR})
 
 if(${CMAKE_SYSTEM_NAME}test MATCHES QNXtest)
-	include_directories(/usr/local/include)
+	include_directories(SYSTEM /usr/local/include)
 	link_directories(/usr/qnx650/target/qnx6/x86/lib/gcc/4.4.2/ /usr/qnx650/target/qnx6/x86/lib/ /usr/local/lib)
 endif()
-
-
-
-set(RTM_INCLUDE_DIR ${RTM_INCLUDE_DIR}  PARENT_SCOPE)
-
-
 
 add_subdirectory(idl)
 
@@ -455,7 +435,8 @@ endif(VXWORKS)
 
 if(OBSERVER_ENABLE)
 	add_definitions(-DENABLE_OBSERVER)
-	include_directories(${CMAKE_SOURCE_DIR}/src ${CMAKE_BINARY_DIR}/src/ext/sdo/observer)
+	include_directories(${CMAKE_SOURCE_DIR}/src)
+	include_directories(SYSTEM ${CMAKE_BINARY_DIR}/src/ext/sdo/observer)
 endif(OBSERVER_ENABLE)
 
 if(VXWORKS)

@@ -10,7 +10,7 @@ openrtm_idl_compile_all(${PROJECT_NAME}
 	"${${PROJECT_NAME}_IDLS}"
 	"-I${CMAKE_CURRENT_SOURCE_DIR};-I${CMAKE_SOURCE_DIR}/src/lib/rtm/idl")
 
-include_directories(${CMAKE_CURRENT_BINARY_DIR})
+include_directories(SYSTEM ${CMAKE_CURRENT_BINARY_DIR})
 
 set(srcs AutoTestIn.cpp AutoTestServiceSVC_impl.cpp ${${PROJECT_NAME}_IDLSKEL})
 ComponentBuild(AutoTestIn "${srcs}" AutoTestInComp.cpp "" "")

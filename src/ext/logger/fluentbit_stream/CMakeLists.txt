@@ -23,16 +23,16 @@ endif()
 
 
 
-include_directories(${FLUENTBIT_ROOT}/include)
-include_directories(${FLUENTBIT_ROOT}/lib/monkey/include)
-include_directories(${FLUENTBIT_ROOT}/lib/mbedtls-2.14.1/include)
-include_directories(${FLUENTBIT_ROOT}/lib/msgpack-3.1.1/include)
-include_directories(${FLUENTBIT_ROOT}/lib/flb_libco)
-include_directories(${FLUENTBIT_ROOT}/lib/jemalloc-5.1.0/include)
-include_directories(${FLUENTBIT_ROOT}/lib/jsmn)
-include_directories(${FLUENTBIT_ROOT}/lib/onigmo)
-include_directories(${FLUENTBIT_ROOT}/lib/sha1)
-include_directories(${FLUENTBIT_ROOT}/lib/sqlite-amalgamation-3400000)
+include_directories(SYSTEM ${FLUENTBIT_ROOT}/include)
+include_directories(SYSTEM ${FLUENTBIT_ROOT}/lib/monkey/include)
+include_directories(SYSTEM ${FLUENTBIT_ROOT}/lib/mbedtls-2.14.1/include)
+include_directories(SYSTEM ${FLUENTBIT_ROOT}/lib/msgpack-3.1.1/include)
+include_directories(SYSTEM ${FLUENTBIT_ROOT}/lib/flb_libco)
+include_directories(SYSTEM ${FLUENTBIT_ROOT}/lib/jemalloc-5.1.0/include)
+include_directories(SYSTEM ${FLUENTBIT_ROOT}/lib/jsmn)
+include_directories(SYSTEM ${FLUENTBIT_ROOT}/lib/onigmo)
+include_directories(SYSTEM ${FLUENTBIT_ROOT}/lib/sha1)
+include_directories(SYSTEM ${FLUENTBIT_ROOT}/lib/sqlite-amalgamation-3400000)
 
 
 link_directories(${FLUENTBIT_WORKDIR}/lib)
@@ -42,10 +42,8 @@ link_directories(${FLUENTBIT_WORKDIR}/lib)
 
 
 link_directories(${ORB_LINK_DIR})
-include_directories(
-		${RTM_INCLUDE_DIR}
-		${ORB_INCLUDE_DIR}
-		)
+include_directories(${RTM_INCLUDE_DIR})
+include_directories(SYSTEM ${RTM_INCLUDE_GENDIR} ${ORB_INCLUDE_DIR})
 
 add_definitions(${ORB_C_FLAGS_LIST})
 add_definitions(${COIL_C_FLAGS_LIST})

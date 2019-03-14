@@ -24,14 +24,15 @@ find_package(sensor_msgs REQUIRED)
 
 link_directories(${ORB_LINK_DIR})
 include_directories(
-		${RTM_INCLUDE_DIR}
-		${ORB_INCLUDE_DIR}
-		${PROJECT_SOURCE_DIR}/..
-		${rclcpp_INCLUDE_DIRS}
-		${std_msgs_INCLUDE_DIRS}
-		${geometry_msgs_INCLUDE_DIRS}
-		${sensor_msgs_INCLUDE_DIRS}
-		)
+	${RTM_INCLUDE_DIR}
+	${PROJECT_SOURCE_DIR}/..)
+include_directories(SYSTEM
+	${RTM_INCLUDE_GENDIR}
+	${ORB_INCLUDE_DIR}
+	${rclcpp_INCLUDE_DIRS}
+	${std_msgs_INCLUDE_DIRS}
+	${geometry_msgs_INCLUDE_DIRS}
+	${sensor_msgs_INCLUDE_DIRS})
 
 add_definitions(${ORB_C_FLAGS_LIST})
 

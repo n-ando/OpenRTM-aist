@@ -12,8 +12,9 @@ openrtm_idl_compile_all(${PROJECT_NAME}
 	"-I${CMAKE_CURRENT_SOURCE_DIR};-I${CMAKE_SOURCE_DIR}/src/lib/rtm/idl")
 
 link_directories(${ORB_LINK_DIR})
-include_directories(
-	${RTM_INCLUDE_DIR}
+include_directories(${RTM_INCLUDE_DIR})
+include_directories(SYSTEM
+	${RTM_INCLUDE_GENDIR}
 	${ORB_INCLUDE_DIR}
 	${CMAKE_CURRENT_BINARY_DIR})
 

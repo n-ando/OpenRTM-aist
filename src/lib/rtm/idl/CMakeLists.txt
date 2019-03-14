@@ -26,9 +26,8 @@ openrtm_idl_compile_all(${PROJECT_NAME} "${${PROJECT_NAME}_IDLS}" "-I${PROJECT_S
 
 # .cpp -> .o .so
 link_directories(${ORB_LINK_DIR})
-include_directories(
-	${RTM_INCLUDE_DIR}
-	${ORB_INCLUDE_DIR})
+include_directories(${RTM_INCLUDE_DIR})
+include_directories(SYSTEM ${RTM_INCLUDE_GENDIR} ${ORB_INCLUDE_DIR})
 
 add_library(${PROJECT_NAME} STATIC ${${PROJECT_NAME}_IDLSKEL})
 openrtm_gencode_set_compile_props(${PROJECT_NAME})
@@ -44,6 +43,8 @@ if(UNIX)
 					COMPONENT openrtm)
 endif()
 install(FILES ${${PROJECT_NAME}_IDLS} DESTINATION ${INSTALL_RTM_INCLUDE_DIR}/rtm/idl COMPONENT idl)
-install(FILES ${${PROJECT_NAME}_HDR} DESTINATION ${INSTALL_RTM_INCLUDE_DIR}/rtm/idl COMPONENT headers)
+foreach(hdr ${${PROJECT_NAME}_IDLHDR})
+	install(FILES "${PROJECT_BINARY_DIR}/${hdr}" DESTINATION ${INSTALL_RTM_INCLUDE_DIR}/rtm/idl COMPONENT headers)
+endforeach()
 
 add_subdirectory(device_interfaces)
