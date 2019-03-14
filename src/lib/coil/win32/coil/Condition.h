@@ -239,7 +239,7 @@ namespace coil
      *
      * @endif
      */
-  int pthread_cond_wait(coil::pthread_cond_t *cv,
+  DWORD pthread_cond_wait(coil::pthread_cond_t *cv,
                         coil::Mutex *external_mutex, DWORD aMilliSecond)
   {
     DWORD result;

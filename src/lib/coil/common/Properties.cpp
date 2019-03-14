@@ -581,7 +581,7 @@ namespace coil
   {
     std::vector<std::string> keys;
     keys = prop.propertyNames();
-    for (size_t i(0), len(prop.size()); i < len; ++i)
+    for (size_t i(0), len(static_cast<size_t>(prop.size())); i < len; ++i)
       {
         (*this)[keys[i]] = prop[keys[i]];
       }
