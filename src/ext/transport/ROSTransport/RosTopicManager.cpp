@@ -241,7 +241,7 @@ namespace RTC
         //RTC_VERBOSE(("Caller ID:%s",caller_id.c_str()));
         //RTC_VERBOSE(("Topic Name:%s",topic.c_str()));
         //RTC_VERBOSE(("URI:%s",xmlrpc_uri.c_str()));
-        subscriber.connectTCP(caller_id, topic, xmlrpc_uri);
+        subscriber->connectTCP(caller_id, topic, xmlrpc_uri);
       }
       new_.push_back(xmlrpc_uri);
     }
@@ -256,7 +256,7 @@ namespace RTC
         //RTC_INFO(("Delete Connector:%s %s %s", caller_id.c_str(), topic.c_str(), old_uri->c_str()));
         for(auto & subscriber : m_subscribers)
         {
-          subscriber.deleteTCPConnector(caller_id, topic, old_uri);
+          subscriber->deleteTCPConnector(caller_id, topic, old_uri);
         }
       }
     }

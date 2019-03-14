@@ -260,7 +260,7 @@ namespace RTC
             //RTC_PARANOID(("tcprosAcceptConnection()"));
             for(auto & publisher : m_publishers) 
             {
-                publisher.connectTCP(transport);
+                publisher->connectTCP(transport);
             }
         };
 
