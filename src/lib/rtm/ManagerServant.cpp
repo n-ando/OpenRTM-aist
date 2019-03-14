@@ -361,13 +361,13 @@ namespace RTM
         size_t pos0 = module_name.find("&" + param_name + "=");
         size_t pos1 = module_name.find("?" + param_name + "=");
 
-        if (pos0 == -1 && pos1 == -1)
+        if (pos0 == std::string::npos && pos1 == std::string::npos)
           {
             return "";
           }
 
         size_t pos = 0;
-        if (pos0 == -1)
+        if (pos0 == std::string::npos)
           {
             pos = pos1;
           }
@@ -380,11 +380,11 @@ namespace RTM
         size_t endpos = module_name.find('&', pos + 1);
 
 
-        if (endpos == -1)
+        if (endpos == std::string::npos)
           {
             endpos = module_name.find('?', pos + 1);
 
-            if (endpos == -1)
+            if (endpos == std::string::npos)
               {
                 paramstr = module_name.substr((pos + 1));
                 
@@ -407,7 +407,7 @@ namespace RTM
 
         RTC_DEBUG(("%s is %s", param_name.c_str(), paramstr.c_str()));
 
-        if (endpos == -1)
+        if (endpos == std::string::npos)
           {
             module_name = module_name.substr(0, pos);
           }
@@ -1556,7 +1556,7 @@ namespace RTM
   bool ManagerServant::isProcessIDManager(std::string mgrname)
     {
       size_t pos = mgrname.find("manager_");
-      if (pos != -1)
+      if (pos != std::string::npos)
         {
           std::string id = mgrname;
           coil::replaceString(id, "manager_", "");

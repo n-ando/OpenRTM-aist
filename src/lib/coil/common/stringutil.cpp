@@ -154,7 +154,7 @@ namespace coil
     if (pos == 0) { return false; }
     --pos;
     size_t i = 0;
-    for ( ; (pos >= 0) && str[pos] == '\\'; ++i)
+    for ( ; str[pos] == '\\'; ++i)
       {
         if (pos == 0) { break; }
         --pos;
@@ -409,7 +409,7 @@ namespace coil
           }
         */
         substr_size = found_pos - pre_pos;
-        if (substr_size >= 0)
+        if (substr_size > 0)
           {
             std::string substr(input.substr(pre_pos, substr_size));
             eraseHeadBlank(substr);
@@ -546,7 +546,7 @@ namespace coil
       {
         unsigned short int dec;
         if (!coil::stringTo(dec, c.c_str())) { return false; }
-        if (dec < 0 || dec > 255) { return false; }
+        if (dec > 255) { return false; }
       }
     return true;
   }

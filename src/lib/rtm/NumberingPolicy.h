@@ -170,7 +170,7 @@ namespace RTM
 extern "C"
 {
   void DLL_EXPORT ProcessUniquePolicyInit();
-};
+}
 
 
 #endif  // RTC_NUMBERINGPOLICY_H
