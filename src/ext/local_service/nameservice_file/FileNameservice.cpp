@@ -129,9 +129,8 @@ namespace RTM
     {
       RTC_TRACE(("reinit()"));
       RTC_DEBUG_STR((props));
-      bool ret(processServiceProfile(props));
       m_profile.properties << props;
-      return ret;
+      return true;
     }
     
     /*!
@@ -351,21 +350,6 @@ namespace RTM
           fs::remove(p);
         }
       m_files.clear();
-    }
-    
-    /*!
-     * @if jp
-     * @brief プロパティの処理
-     * TODO: Documentation
-     * @else
-     * @brief Processing properties
-     * TODO: Documentation
-     * @endif
-     */
-    bool
-    FileNameservice::processServiceProfile(const ::coil::Properties&  /*prof*/)
-    {
-      return true;
     }
     
     /*!
