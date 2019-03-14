@@ -94,7 +94,6 @@ namespace RTC
       {
         return false;
       }
-    return false;
   }
 
   /*!
@@ -787,7 +786,6 @@ namespace RTC
         (void)(e);
         return context->resolve(name);
       }
-    return CORBA::Object::_nil();
   }
 
   /*!

@@ -178,12 +178,12 @@ namespace RTC
               break;
           case 'o':
             {
-              std::string optarg(get_opts.optarg);
-              std::string::size_type pos(optarg.find(':'));
+              std::string opt_arg(get_opts.optarg);
+              std::string::size_type pos(opt_arg.find(':'));
               if (pos != std::string::npos)
                 {
-                  std::string key = optarg.substr(0, pos);
-                  std::string value = optarg.substr(pos + 1);
+                  std::string key = opt_arg.substr(0, pos);
+                  std::string value = opt_arg.substr(pos + 1);
 
                   key = coil::unescape(key);
                   coil::eraseHeadBlank(key);
