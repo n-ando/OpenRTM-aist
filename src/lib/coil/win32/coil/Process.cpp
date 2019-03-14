@@ -130,14 +130,13 @@ namespace coil
 
       out = coil::split(std::string(Buf), "\n");
 
-      for (coil::vstring::iterator itr = out.begin(); itr != out.end(); ++itr)
+      for(auto & o : out)
       {
-          std::string &tmp = (*itr);
-          if (0 < tmp.size())
+          if (0 < o.size())
           {
-              tmp.erase(tmp.size() - 1);
+              o.erase(o.size() - 1);
           }
-          coil::eraseBothEndsBlank(tmp);
+          coil::eraseBothEndsBlank(o);
       }
 
       delete lpcommand;

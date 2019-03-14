@@ -245,11 +245,12 @@ namespace RTC
                 RTC_DEBUG(("no connectors"));
                 return false;
             }
-            for (ConnectorList::iterator itr = m_connectors.begin(); itr != m_connectors.end(); ++itr)
+
+            for(auto & con : m_connectors)
             {
-                if (std::string((*itr)->name()) == name)
+                if (std::string(con->name()) == name)
                 {
-                    size_t r = (*itr)->getBuffer()->readable();
+                    size_t r = con->getBuffer()->readable();
                     if (r > 0)
                     {
                         RTC_DEBUG(("isNew() = true, readable data: %d", r));
@@ -276,12 +277,12 @@ namespace RTC
                 RTC_DEBUG(("no connectors"));
                 return false;
             }
-            for (ConnectorList::iterator itr = m_connectors.begin(); itr != m_connectors.end(); ++itr)
+            for(auto & con : m_connectors)
             {
-                size_t r = (*itr)->getBuffer()->readable();
+                size_t r = con->getBuffer()->readable();
                 if (r > 0)
                 {
-                    names.push_back((*itr)->name());
+                    names.push_back(con->name());
                 }
             }
             
@@ -367,11 +368,12 @@ namespace RTC
                 RTC_DEBUG(("no connectors"));
                 return false;
             }
-            for (ConnectorList::iterator itr = m_connectors.begin(); itr != m_connectors.end(); ++itr)
+
+            for(auto & con : m_connectors)
             {
-                if (std::string((*itr)->name()) == name)
+                if (std::string(con->name()) == name)
                 {
-                    size_t r = (*itr)->getBuffer()->readable();
+                    size_t r = con->getBuffer()->readable();
                     if (r == 0)
                     {
                         RTC_DEBUG(("isEmpty() = true, buffer is empty"));
@@ -398,12 +400,13 @@ namespace RTC
                 RTC_DEBUG(("no connectors"));
                 return false;
             }
-            for (ConnectorList::iterator itr = m_connectors.begin(); itr != m_connectors.end(); ++itr)
+
+            for(auto & con : m_connectors)
             {
-                size_t r = (*itr)->getBuffer()->readable();
+                size_t r = con->getBuffer()->readable();
                 if (r == 0)
                 {
-                    names.push_back((*itr)->name());
+                    names.push_back(con->name());
                 }
             }
 
@@ -575,11 +578,11 @@ namespace RTC
       }
       else
       {
-          for (ConnectorList::iterator itr = m_connectors.begin(); itr != m_connectors.end(); ++itr)
+          for(auto & con : m_connectors)
           {
-              if (std::string((*itr)->name()) == name)
+              if (std::string(con->name()) == name)
               {
-                  connector = (*itr);
+                  connector = con;
               }
           }
       }

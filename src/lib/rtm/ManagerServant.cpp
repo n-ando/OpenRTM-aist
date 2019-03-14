@@ -1236,10 +1236,10 @@ namespace RTM
   {
     RTC_TRACE(("createComponentByManagerName(%s)",create_arg.c_str()));
     coil::mapstring param = coil::urlparam2map(create_arg);
-    for (coil::mapstring::iterator it(param.begin()); it != param.end(); ++it)
+    for(auto & p : param)
       {
         RTC_DEBUG(("create_arg[%s] = %s",
-                   it->first.c_str(), it->second.c_str()));
+                   p.first.c_str(), p.second.c_str()));
       }
 
     std::string mgrstr = param["manager_name"];
@@ -1393,10 +1393,10 @@ namespace RTM
   {
     RTC_TRACE(("createComponentByAddress(%s)",create_arg.c_str()));
     coil::mapstring param = coil::urlparam2map(create_arg);
-    for (coil::mapstring::iterator it(param.begin()); it != param.end(); ++it)
+    for(auto & p : param)
       {
         RTC_DEBUG(("create_arg[%s] = %s",
-                   it->first.c_str(), it->second.c_str()));
+                   p.first.c_str(), p.second.c_str()));
       }
 
     std::string mgrstr = param["manager_address"];
