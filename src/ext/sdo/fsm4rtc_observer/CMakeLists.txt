@@ -4,7 +4,7 @@ project (FSMComponentObserverConsumer
 	VERSION ${RTM_VERSION}
 	LANGUAGES CXX)
 
-set(${PROJECT_NAME}_IDLS ComponentObserver)
+set(${PROJECT_NAME}_IDLS ComponentObserver.idl)
 set(${PROJECT_NAME}_SRCS ComponentObserverConsumer.cpp)
 
 openrtm_idl_compile_all(${PROJECT_NAME}
@@ -55,6 +55,9 @@ else()
 		$<TARGET_OBJECTS:${PROJECT_NAME}_idl_objlib>)
 	target_link_libraries(${PROJECT_NAME} ${libs} ${RTM_LINKER_OPTION})
 	set_target_properties(${PROJECT_NAME} PROPERTIES PREFIX "")
+	set_target_properties(${PROJECT_NAME} PROPERTIES
+		OUTPUT_NAME ComponentObserverConsumer
+		CLEAN_DIRECT_OUTPUT 1)
 
 	install(TARGETS ${PROJECT_NAME} LIBRARY DESTINATION ${INSTALL_RTM_EXT_DIR}/sdo
 				ARCHIVE DESTINATION ${INSTALL_RTM_EXT_DIR}/sdo
