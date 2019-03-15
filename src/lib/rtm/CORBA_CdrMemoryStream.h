@@ -465,7 +465,7 @@ namespace RTC
          *
          * @endif
          */
-        void init(const coil::Properties& prop) override
+        void init(const coil::Properties& /*prop*/) override
         {
         };
         /*!

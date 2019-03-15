@@ -145,17 +145,20 @@ namespace RTC
   {
     std::string message = mes;
     coil::replaceString(message, "\"", "\'");
-    const char* str = message.c_str();
     std::streamsize insize(message.size());
-    std::streamsize outsize(insize);
     for (std::streamsize i(0); i < insize; ++i, ++m_pos)
       {
-        m_buf[m_pos] = str[i];
-        if (str[i] == '\n' || str[i] == '\r' || m_pos == (BUFFER_LEN - 1))
+        m_buf[m_pos] = message[i];
+        if (message[i] == '\n' || message[i] == '\r' || m_pos == (BUFFER_LEN - 1))
           {
             m_buf[m_pos] = '\0';
-            outsize = pushLogger(level, name, date, m_buf);
+            pushLogger(level, name, date, m_buf);
             m_pos = 0;
+          }
+        else if(i == insize-1)
+          {
+            m_buf[m_pos+1] = '\0';
+            pushLogger(level, name, date, m_buf);
           }
       }
      m_pos = 0;

@@ -475,15 +475,14 @@ namespace RTM
                   {
                     RTM::NVList* prof = m_slaves[i]->get_configuration();
                     coil::Properties prop;
-                    RTC::RTObject_var rtobj;
                     NVUtil::copyToProperties(prop, (*prof));
                     std::string slave_lang = prop["manager.language"];
 
                     if (slave_lang == comp_param.language())
                       {
-                        rtobj = m_slaves[i]->create_component(create_arg.c_str());
+                        RTC::RTObject_var comp = m_slaves[i]->create_component(create_arg.c_str());
                         RTC_DEBUG(("Component created %s", create_arg.c_str()));
-                        if (!CORBA::is_nil(rtobj)) { return rtobj._retn(); }
+                        if (!CORBA::is_nil(comp)) { return comp._retn(); }
                       }
 
 
@@ -1292,9 +1291,9 @@ namespace RTM
                 try
                   {
                     RTM::NVList_var nvlist = m_slaves[i]->get_configuration();
-                    coil::Properties prop;
-                    NVUtil::copyToProperties(prop, nvlist);
-                    std::string name = prop["manager.instance_name"];
+                    coil::Properties sleave_prop;
+                    NVUtil::copyToProperties(sleave_prop, nvlist);
+                    std::string name = sleave_prop["manager.instance_name"];
                     if (isProcessIDManager(name))
                       {
                         slaves_names.push_back(name);
@@ -1327,9 +1326,9 @@ namespace RTM
                 for (CORBA::ULong j(0); j < m_slaves.length(); ++j)
                   {
                     RTM::NVList_var nvlist = m_slaves[j]->get_configuration();
-                    coil::Properties prop; 
-                    NVUtil::copyToProperties(prop, nvlist);
-                    std::string name = prop["manager.instance_name"];
+                    coil::Properties sleave_prop;
+                    NVUtil::copyToProperties(sleave_prop, nvlist);
+                    std::string name = sleave_prop["manager.instance_name"];
 
                     if (isProcessIDManager(name))
                       {
@@ -1560,9 +1559,7 @@ namespace RTM
         {
           std::string id = mgrname;
           coil::replaceString(id, "manager_", "");
-           
-          bool ret = true;
-
+          
           int val = 0;
           if (coil::stringTo<int>(val, id.c_str()))
             {

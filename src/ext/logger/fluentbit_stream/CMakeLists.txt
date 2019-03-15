@@ -2,7 +2,7 @@ cmake_minimum_required (VERSION 3.0.2)
 
 project (FluentBit
 	VERSION ${RTM_VERSION}
-	LANGUAGES CXX))
+	LANGUAGES CXX)
 
 
 
@@ -49,6 +49,7 @@ include_directories(
 
 add_definitions(${ORB_C_FLAGS_LIST})
 add_definitions(${COIL_C_FLAGS_LIST})
+add_definitions(-Dtypeof=decltype)
 
 
 set(target FluentBit)
