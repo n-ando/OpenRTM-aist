@@ -23,8 +23,6 @@ endif(VXWORKS)
 add_executable(${target} ${srcs})
 openrtm_common_set_compile_props(${target})
 target_link_libraries(${target} ${libs} ${RTM_LINKER_OPTION})
-add_dependencies(${target} ${RTM_PROJECT_NAME})
-
 
 if(VXWORKS)
 	if(RTP)

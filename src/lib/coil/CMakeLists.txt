@@ -167,7 +167,6 @@ else(VXWORKS)
 	openrtm_common_set_compile_props(${COIL_PROJECT_NAME}_objlib)
 	set_property(TARGET ${COIL_PROJECT_NAME}_objlib PROPERTY POSITION_INDEPENDENT_CODE 1)
 	add_library(${COIL_PROJECT_NAME}-static STATIC $<TARGET_OBJECTS:${COIL_PROJECT_NAME}_objlib>)
-	add_dependencies(${COIL_PROJECT_NAME}-static ${COIL_PROJECT_NAME}_objlib)
 
 	if(WIN32)
 		set(DEF_FILE_NAME  ${COIL_PROJECT_NAME}.def)
@@ -182,8 +181,7 @@ else(VXWORKS)
 
 	add_library(${COIL_PROJECT_NAME} SHARED $<TARGET_OBJECTS:${COIL_PROJECT_NAME}_objlib> ${CMAKE_CURRENT_BINARY_DIR}/${DEF_FILE_NAME})
 	set_target_properties(${COIL_PROJECT_NAME} PROPERTIES DEBUG_POSTFIX d)
-	target_link_libraries(${COIL_PROJECT_NAME} ${RTM_LINKER_OPTION}  ${UUID_LIBRARIES})
-	add_dependencies(${COIL_PROJECT_NAME} ${COIL_PROJECT_NAME}_objlib)
+	target_link_libraries(${COIL_PROJECT_NAME} PRIVATE ${RTM_LINKER_OPTION}  ${UUID_LIBRARIES})
 
 	if(UNIX)
 		set_target_properties(${COIL_PROJECT_NAME} PROPERTIES VERSION ${RTM_VERSION} SOVERSION ${COIL_SO_VERSION})

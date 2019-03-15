@@ -27,7 +27,6 @@ if(VXWORKS AND NOT RTP)
 	add_executable(${PROJECT_NAME} ${${PROJECT_NAME}_SRCS} ${${PROJECT_NAME}_IDLSKEL})
 	openrtm_common_set_compile_props(${PROJECT_NAME})
 	target_link_libraries(${PROJECT_NAME} ${libs})
-	add_dependencies(${PROJECT_NAME} ${RTM_PROJECT_NAME})
 	add_dependencies(${PROJECT_NAME} ${PROJECT_NAME}_IDLTGT)
 
 	install(TARGETS ${PROJECT_NAME} LIBRARY DESTINATION ${INSTALL_RTM_EXT_DIR}/ec
@@ -43,17 +42,18 @@ else()
 
 	add_library(${PROJECT_NAME}_objlib OBJECT ${${PROJECT_NAME}_SRCS})
 	openrtm_common_set_compile_props(${PROJECT_NAME}_objlib)
-	add_dependencies(${PROJECT_NAME}_objlib ${RTM_PROJECT_NAME})
+	add_dependencies(${PROJECT_NAME}_objlib ${RTCSKEL_PROJECT_NAME}_IDLTGT)
+	add_dependencies(${PROJECT_NAME}_objlib ${PROJECT_NAME}_IDLTGT)
 
 	add_library(${PROJECT_NAME}_idl_objlib OBJECT ${${PROJECT_NAME}_IDLSKEL})
 	openrtm_gencode_set_compile_props(${PROJECT_NAME}_idl_objlib)
-	add_dependencies(${PROJECT_NAME}_idl_objlib ${RTM_PROJECT_NAME})
-	add_dependencies(${PROJECT_NAME}_objlib ${PROJECT_NAME}_IDLTGT)
+	add_dependencies(${PROJECT_NAME}_idl_objlib ${RTCSKEL_PROJECT_NAME}_IDLTGT)
+	add_dependencies(${PROJECT_NAME}_idl_objlib ${PROJECT_NAME}_IDLTGT)
 
 	add_library(${PROJECT_NAME} SHARED
 		$<TARGET_OBJECTS:${PROJECT_NAME}_objlib>
 		$<TARGET_OBJECTS:${PROJECT_NAME}_idl_objlib>)
-	target_link_libraries(${PROJECT_NAME} ${libs} ${RTM_LINKER_OPTION})
+	target_link_libraries(${PROJECT_NAME} PRIVATE ${libs} ${RTM_LINKER_OPTION})
 	set_target_properties(${PROJECT_NAME} PROPERTIES PREFIX "")
 
 	install(TARGETS ${PROJECT_NAME} LIBRARY DESTINATION ${INSTALL_RTM_EXT_DIR}/ec

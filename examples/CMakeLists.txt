@@ -34,23 +34,16 @@ function(ComponentBuild target srcs mainfile dependencies vxaddfile)
 
 		add_library(${target}_objlib OBJECT ${srcs})
 		openrtm_common_set_compile_props(${target}_objlib)
-		set_property(TARGET ${target}_objlib PROPERTY POSITION_INDEPENDENT_CODE 1)
-		add_dependencies(${target}_objlib ${RTM_PROJECT_NAME})
 
 		add_executable(${target}Comp $<TARGET_OBJECTS:${target}_objlib> ${mainfile})
 		openrtm_common_set_compile_props(${target}Comp)
 		target_link_libraries(${target}Comp ${libs} ${RTM_LINKER_OPTION})
-		add_dependencies(${target}Comp ${RTM_PROJECT_NAME})
-		add_dependencies(${target}Comp ${target}_objlib)
 		if(DATATYPE_FACTORIES)
 			add_dependencies(${target}Comp ${DATATYPE_FACTORIES})
 		endif(DATATYPE_FACTORIES)
- 
 
 		add_library(${target} SHARED $<TARGET_OBJECTS:${target}_objlib>)
-		target_link_libraries(${target} ${libs} ${RTM_LINKER_OPTION})
-		add_dependencies(${target} ${RTM_PROJECT_NAME})
-		add_dependencies(${target} ${target}_objlib)
+		target_link_libraries(${target} PRIVATE ${libs} ${RTM_LINKER_OPTION})
 		if(DATATYPE_FACTORIES)
 			add_dependencies(${target} ${DATATYPE_FACTORIES})
 		endif(DATATYPE_FACTORIES)
@@ -62,7 +55,6 @@ function(ComponentBuild target srcs mainfile dependencies vxaddfile)
 			add_dependencies(${target}Comp ${dependencies})
 		endif(dependencies)
 
-		
 		install(TARGETS ${target}Comp LIBRARY DESTINATION ${INSTALL_RTM_EXAMPLE_DIR}
 					ARCHIVE DESTINATION ${INSTALL_RTM_EXAMPLE_DIR}
 					RUNTIME DESTINATION ${INSTALL_RTM_EXAMPLE_DIR}

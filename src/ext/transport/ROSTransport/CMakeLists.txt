@@ -59,7 +59,6 @@ if(VXWORKS AND NOT RTP)
 	add_executable(${target} ${srcs})
 	openrtm_common_set_compile_props(${target})
 	target_link_libraries(${target} ${libs} ${catkin_LIBRARIES} ${Boost_LIBRARIES})
-	add_dependencies(${target} ${RTM_PROJECT_NAME})
 
 	install(TARGETS ${target} LIBRARY DESTINATION ${INSTALL_RTM_EXT_DIR}/transport
 				ARCHIVE DESTINATION ${INSTALL_RTM_EXT_DIR}/transport
@@ -74,8 +73,7 @@ else()
 
 
 	add_library(${target} SHARED ${srcs})
-	target_link_libraries(${target} ${libs} ${RTM_LINKER_OPTION} ${catkin_LIBRARIES} ${Boost_LIBRARIES})
-	add_dependencies(${target} ${RTM_PROJECT_NAME})
+	target_link_libraries(${target} PRIVATE ${libs} ${RTM_LINKER_OPTION} ${catkin_LIBRARIES} ${Boost_LIBRARIES})
 	set_target_properties(${target} PROPERTIES PREFIX "")
 
 

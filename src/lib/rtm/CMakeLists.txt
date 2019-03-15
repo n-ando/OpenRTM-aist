@@ -202,7 +202,6 @@ if(${CMAKE_SYSTEM_NAME}test MATCHES QNXtest)
 endif()
 
 add_subdirectory(idl)
-
 add_subdirectory(ext)
 
 
@@ -482,10 +481,11 @@ else(VXWORKS)
 	set_target_properties(${RTM_PROJECT_NAME} PROPERTIES DEBUG_POSTFIX d)
 
 	if(OBSERVER_ENABLE)
-		add_dependencies(${RTM_PROJECT_NAME} ComponentObserverConsumer)
-		target_link_libraries(${RTM_PROJECT_NAME} ${ORB_LIBRARIES} ${COIL_PROJECT_NAME} ${RTM_LINKER_OPTION} ComponentObserverConsumer)
+		target_link_libraries(${RTM_PROJECT_NAME} PRIVATE
+			${ORB_LIBRARIES} ${COIL_PROJECT_NAME} ${RTM_LINKER_OPTION} ComponentObserverConsumer)
 	else(OBSERVER_ENABLE)
-		target_link_libraries(${RTM_PROJECT_NAME} ${ORB_LIBRARIES} ${COIL_PROJECT_NAME} ${RTM_LINKER_OPTION})
+		target_link_libraries(${RTM_PROJECT_NAME} PRIVATE
+			${ORB_LIBRARIES} ${COIL_PROJECT_NAME} ${RTM_LINKER_OPTION})
 	endif(OBSERVER_ENABLE)
 
 	if(UNIX)
@@ -522,7 +522,8 @@ else(VXWORKS)
 			set(DT_TARGET ${data_type}Factory_${RTM_VC_VER})
 			configure_file(${CMAKE_CURRENT_SOURCE_DIR}/SerializerFactory.cpp.in ${filename} @ONLY)
 			add_library(${DT_TARGET} SHARED ${filename})
-			target_link_libraries(${DT_TARGET} ${ORB_LIBRARIES} ${COIL_PROJECT_NAME} ${RTM_LINKER_OPTION} ${RTM_PROJECT_NAME})
+			target_link_libraries(${DT_TARGET} PRIVATE
+				${ORB_LIBRARIES} ${COIL_PROJECT_NAME} ${RTM_LINKER_OPTION} ${RTM_PROJECT_NAME})
 			set_target_properties(${DT_TARGET} PROPERTIES DEBUG_POSTFIX d)
 			add_dependencies(${DT_TARGET} ${RTM_PROJECT_NAME})
 			set(DATATYPE_FACTORIES ${DATATYPE_FACTORIES} ${DT_TARGET})
@@ -537,6 +538,3 @@ else(VXWORKS)
 endif(VXWORKS)
 
 install(FILES  ${rtm_headers} DESTINATION ${INSTALL_RTM_INCLUDE_DIR}/rtm COMPONENT headers)
-
-add_dependencies(${RTM_PROJECT_NAME} ${COIL_PROJECT_NAME})
-add_dependencies(${RTM_PROJECT_NAME} ${RTCSKEL_PROJECT_NAME})

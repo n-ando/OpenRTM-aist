@@ -15,15 +15,9 @@ add_definitions(${COIL_C_FLAGS_LIST})
 add_executable(${target} rtcsh.cpp)
 openrtm_common_set_compile_props(${target})
 
-
-add_dependencies(${target} ${RTM_PROJECT_NAME})
-
-
 set(libs ${RTM_PROJECT_NAME} ${ORB_LIBRARIES} ${COIL_PROJECT_NAME})
 
-
 target_link_libraries(${target} ${libs} ${RTM_LINKER_OPTION})
-
 
 if(VXWORKS)
 	if(RTP)

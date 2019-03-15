@@ -22,16 +22,17 @@ add_definitions(${COIL_C_FLAGS_LIST})
 
 add_library(${PROJECT_NAME}_objlib OBJECT ${${PROJECT_NAME}_SRCS})
 openrtm_common_set_compile_props(${PROJECT_NAME}_objlib)
-add_dependencies(${PROJECT_NAME}_objlib ${PROJECT_NAME}_IDLTGT ${RTCSKEL_PROJECT_NAME}_IDLTGT)
+add_dependencies(${PROJECT_NAME}_objlib ${PROJECT_NAME}_IDLTGT)
+add_dependencies(${PROJECT_NAME}_objlib ${RTCSKEL_PROJECT_NAME}_IDLTGT)
 
 add_library(${PROJECT_NAME}_idl_objlib OBJECT ${${PROJECT_NAME}_IDLSTUB})
 openrtm_gencode_set_compile_props(${PROJECT_NAME}_idl_objlib)
-add_dependencies(${PROJECT_NAME}_idl_objlib ${PROJECT_NAME}_IDLTGT ${RTCSKEL_PROJECT_NAME}_IDLTGT)
-
+add_dependencies(${PROJECT_NAME}_idl_objlib ${PROJECT_NAME}_IDLTGT)
+add_dependencies(${PROJECT_NAME}_idl_objlib ${RTCSKEL_PROJECT_NAME}_IDLTGT)
 add_library(${PROJECT_NAME} SHARED
 	$<TARGET_OBJECTS:${PROJECT_NAME}_objlib>
 	$<TARGET_OBJECTS:${PROJECT_NAME}_idl_objlib>)
-target_link_libraries(${PROJECT_NAME} ${libs} ${RTM_LINKER_OPTION})
+target_link_libraries(${PROJECT_NAME} PRIVATE ${libs} ${RTM_LINKER_OPTION})
 set_target_properties(${PROJECT_NAME} PROPERTIES PREFIX "")
 
 install(FILES ${${PROJECT_NAME}_IDLS} DESTINATION ${INSTALL_RTM_EXT_DIR}/sdo/observer COMPONENT idl)
