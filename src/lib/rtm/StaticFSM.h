@@ -89,6 +89,8 @@
     {                                                                   \
       typedef ::__SameType< ::RTC::Link<S, SUPER>, LINK>::Check         \
         MustDeriveFromLink;                                             \
+      static_assert(static_cast<MustDeriveFromLink*>(nullptr)==nullptr, \
+                    "dummy assert for suppress warning");               \
     }                                                                   \
     ~S() override {}                                                    \
     static const char * _state_name() { return #S; }                    \
