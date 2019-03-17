@@ -455,7 +455,7 @@ namespace coil
    * @brief Find node of properties
    * @endif
    */
-  Properties* const Properties::findNode(const std::string& key) const
+  Properties* Properties::findNode(const std::string& key) const
   {
     if (key.empty())
       {

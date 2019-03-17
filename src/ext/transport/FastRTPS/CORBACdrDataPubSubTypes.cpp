@@ -135,7 +135,7 @@ namespace RTC
         {
             endian = eprosima::fastcdr::Cdr::BIG_ENDIANNESS;
         }
-        eprosima::fastcdr::Cdr deser(fastbuffer, eprosima::fastcdr::Cdr::DEFAULT_ENDIAN,
+        eprosima::fastcdr::Cdr deser(fastbuffer, endian,
                                       eprosima::fastcdr::Cdr::DDS_CDR); // Object that deserializes the data.
                                               // Deserialize encapsulation.
         try

@@ -933,7 +933,7 @@ namespace coil
      *
      * @endif
      */
-    Properties* const findNode(const std::string& key) const;
+    Properties* findNode(const std::string& key) const;
     /*!
      * @if jp
      * @brief ノードを取得する
