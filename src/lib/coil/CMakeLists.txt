@@ -129,12 +129,6 @@ set(coil_srcs
 	${coil_headers}
 )
 
-include_directories(
-		${PROJECT_SOURCE_DIR}/common
-		${PROJECT_SOURCE_DIR}/${COIL_OS_DIR})
-include_directories(SYSTEM
-		${PROJECT_BINARY_DIR}/..)
-
 add_definitions(${COIL_C_FLAGS_LIST})
 
 
@@ -150,7 +144,6 @@ if(UNIX)
 	include(FindPkgConfig)
 	pkg_check_modules(UUID REQUIRED uuid)
 
-	include_directories(SYSTEM ${UUID_INCLUDE_DIRS})
 	link_directories(${UUID_LIBRARY_DIRS})
 	add_definitions(${UUID_CFLAGS})
 endif(UNIX)
@@ -158,6 +151,12 @@ endif(UNIX)
 
 if(VXWORKS)
 	add_library(${COIL_PROJECT_NAME} STATIC ${coil_srcs} )
+	openrtm_common_set_compile_props(${COIL_PROJECT_NAME})
+	target_include_directories(${COIL_PROJECT_NAME}
+		PUBLIC ${PROJECT_SOURCE_DIR}/common
+		PUBLIC ${PROJECT_SOURCE_DIR}/${COIL_OS_DIR})
+	target_include_directories(${COIL_PROJECT_NAME} SYSTEM
+		PUBLIC ${CMAKE_BINARY_DIR}/src/lib)
 	install(TARGETS ${COIL_PROJECT_NAME} LIBRARY DESTINATION ${INSTALL_RTM_LIB_DIR}
 					ARCHIVE DESTINATION ${INSTALL_RTM_BIN_DIR}
 					RUNTIME DESTINATION ${INSTALL_RTM_BIN_DIR}
@@ -165,7 +164,12 @@ if(VXWORKS)
 else(VXWORKS)
 	add_library(${COIL_PROJECT_NAME}_objlib OBJECT ${coil_srcs})
 	openrtm_common_set_compile_props(${COIL_PROJECT_NAME}_objlib)
-	set_property(TARGET ${COIL_PROJECT_NAME}_objlib PROPERTY POSITION_INDEPENDENT_CODE 1)
+	target_include_directories(${COIL_PROJECT_NAME}_objlib
+		PUBLIC ${PROJECT_SOURCE_DIR}/common
+		PUBLIC ${PROJECT_SOURCE_DIR}/${COIL_OS_DIR})
+	target_include_directories(${COIL_PROJECT_NAME}_objlib SYSTEM
+		PUBLIC ${CMAKE_BINARY_DIR}/src/lib
+		PRIVATE ${UUID_INCLUDE_DIRS})
 	add_library(${COIL_PROJECT_NAME}-static STATIC $<TARGET_OBJECTS:${COIL_PROJECT_NAME}_objlib>)
 
 	if(WIN32)

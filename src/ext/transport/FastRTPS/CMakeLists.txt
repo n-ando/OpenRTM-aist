@@ -8,9 +8,6 @@ find_package(fastcdr REQUIRED)
 find_package(fastrtps REQUIRED)
 
 link_directories(${ORB_LINK_DIR})
-include_directories(${RTM_INCLUDE_DIR})
-include_directories(SYSTEM ${RTM_INCLUDE_GENDIR} ${ORB_INCLUDE_DIR})
-
 add_definitions(${ORB_C_FLAGS_LIST})
 
 if(WIN32)
@@ -30,6 +27,7 @@ if(VXWORKS AND NOT RTP)
 
 	add_executable(${target} ${srcs})
 	openrtm_common_set_compile_props(${target})
+	openrtm_include_rtm(${target})
 	target_link_libraries(${target} ${libs} fastcdr fastrtps)
 
 	install(TARGETS ${target} LIBRARY DESTINATION ${INSTALL_RTM_EXT_DIR}/transport
@@ -45,6 +43,8 @@ else()
 
 
 	add_library(${target} SHARED ${srcs})
+	openrtm_common_set_compile_props(${target})
+	openrtm_include_rtm(${target})
 	target_link_libraries(${target} PRIVATE ${libs} ${RTM_LINKER_OPTION} fastcdr fastrtps)
 	set_target_properties(${target} PROPERTIES PREFIX "")
 

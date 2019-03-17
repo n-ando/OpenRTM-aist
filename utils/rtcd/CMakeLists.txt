@@ -6,19 +6,16 @@ project (${target}
 
 
 link_directories(${ORB_LINK_DIR})
-include_directories(${RTM_INCLUDE_DIR})
-include_directories(SYSTEM ${RTM_INCLUDE_GENDIR} ${ORB_INCLUDE_DIR})
-
 add_definitions(${ORB_C_FLAGS_LIST})
 add_definitions(${COIL_C_FLAGS_LIST})
 
 if(VXWORKS)
 	add_executable(${target} rtcd_vxorks.cpp)
-	openrtm_common_set_compile_props(${target})
 else(VXWORKS)
 	add_executable(${target} rtcd.cpp)
-	openrtm_common_set_compile_props(${target})
 endif(VXWORKS)
+openrtm_common_set_compile_props(${target})
+openrtm_include_rtm(${target})
 
 if(VXWORKS)
 	set(libs ${RTM_PROJECT_NAME} ${ORB_LIBRARIES} ${COIL_PROJECT_NAME} ${RTCSKEL_PROJECT_NAME})

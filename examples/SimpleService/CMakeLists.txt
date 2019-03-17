@@ -14,10 +14,10 @@ include_directories(SYSTEM ${CMAKE_CURRENT_BINARY_DIR})
 
 set(srcs MyServiceConsumer.cpp
 	${MyService_IDLSTUB})
-ComponentBuild(MyServiceConsumer "${srcs}" MyServiceConsumerComp.cpp "" "")
+ComponentBuild(MyServiceConsumer "${srcs}" MyServiceConsumerComp.cpp "MyService_IDLTGT" "")
 
 set(srcs
 	MyServiceProvider.cpp
 	MyServiceSVC_impl.cpp
 	${MyService_IDLSKEL})
-ComponentBuild(MyServiceProvider "${srcs}" MyServiceProviderComp.cpp "" "")
+ComponentBuild(MyServiceProvider "${srcs}" MyServiceProviderComp.cpp "MyService_IDLTGT" "")

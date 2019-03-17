@@ -23,17 +23,6 @@ find_package(sensor_msgs REQUIRED)
 
 
 link_directories(${ORB_LINK_DIR})
-include_directories(
-	${RTM_INCLUDE_DIR}
-	${PROJECT_SOURCE_DIR}/..)
-include_directories(SYSTEM
-	${RTM_INCLUDE_GENDIR}
-	${ORB_INCLUDE_DIR}
-	${rclcpp_INCLUDE_DIRS}
-	${std_msgs_INCLUDE_DIRS}
-	${geometry_msgs_INCLUDE_DIRS}
-	${sensor_msgs_INCLUDE_DIRS})
-
 add_definitions(${ORB_C_FLAGS_LIST})
 
 if(WIN32)
@@ -51,6 +40,14 @@ if(VXWORKS AND NOT RTP)
 
 	add_executable(${target} ${srcs})
 	openrtm_common_set_compile_props(${target})
+	openrtm_include_rtm(${target})
+	target_include_directories(${target}
+		PRIVATE ${PROJECT_SOURCE_DIR}/..)
+	target_include_directories(${target} SYSTEM
+		PURBLIC ${rclcpp_INCLUDE_DIRS}
+		PURBLIC ${std_msgs_INCLUDE_DIRS}
+		PURBLIC ${geometry_msgs_INCLUDE_DIRS}
+		PURBLIC ${sensor_msgs_INCLUDE_DIRS})
 	target_link_libraries(${target} ${libs})
 
 	install(TARGETS ${target} LIBRARY DESTINATION ${INSTALL_RTM_EXT_DIR}/transport
@@ -66,6 +63,15 @@ else()
 
 
 	add_library(${target} SHARED ${srcs})
+	openrtm_common_set_compile_props(${target})
+	openrtm_include_rtm(${target})
+	target_include_directories(${target}
+		PRIVATE ${PROJECT_SOURCE_DIR}/..)
+	target_include_directories(${target} SYSTEM
+		PURBLIC ${rclcpp_INCLUDE_DIRS}
+		PURBLIC ${std_msgs_INCLUDE_DIRS}
+		PURBLIC ${geometry_msgs_INCLUDE_DIRS}
+		PURBLIC ${sensor_msgs_INCLUDE_DIRS})
 	target_link_libraries(${target} PRIVATE ${libs} ${RTM_LINKER_OPTION})
 	set_target_properties(${target} PROPERTIES PREFIX "")
 

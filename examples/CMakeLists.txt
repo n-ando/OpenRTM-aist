@@ -3,9 +3,6 @@
 
 function(ComponentBuild target srcs mainfile dependencies vxaddfile)
 	link_directories(${ORB_LINK_DIR})
-	include_directories(${RTM_INCLUDE_DIR})
-	include_directories(SYSTEM ${RTM_INCLUDE_GENDIR} ${ORB_INCLUDE_DIR})
-
 	add_definitions(${ORB_C_FLAGS_LIST})
 	add_definitions(${COIL_C_FLAGS_LIST})
 
@@ -15,8 +12,8 @@ function(ComponentBuild target srcs mainfile dependencies vxaddfile)
 
 		add_executable(${target} ${standalone_srcs})
 		openrtm_common_set_compile_props(${target})
+		openrtm_include_rtm(${target})
 		target_link_libraries(${target} ${libs})
-		add_dependencies(${target} ${RTM_PROJECT_NAME})
 		if(dependencies)
 			add_dependencies(${target} ${dependencies})
 		endif(dependencies)
@@ -34,9 +31,10 @@ function(ComponentBuild target srcs mainfile dependencies vxaddfile)
 
 		add_library(${target}_objlib OBJECT ${srcs})
 		openrtm_common_set_compile_props(${target}_objlib)
-
+		openrtm_include_rtm(${target}_objlib)
 		add_executable(${target}Comp $<TARGET_OBJECTS:${target}_objlib> ${mainfile})
 		openrtm_common_set_compile_props(${target}Comp)
+		openrtm_include_rtm(${target}Comp)
 		target_link_libraries(${target}Comp ${libs} ${RTM_LINKER_OPTION})
 		if(DATATYPE_FACTORIES)
 			add_dependencies(${target}Comp ${DATATYPE_FACTORIES})

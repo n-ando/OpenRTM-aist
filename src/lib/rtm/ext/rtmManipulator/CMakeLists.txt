@@ -20,13 +20,15 @@ openrtm_idl_compile_all(${PROJECT_NAME}
 	"-I${PROJECT_SOURCE_DIR}/..;-I${PROJECT_SOURCE_DIR}/../../idl")
 
 link_directories(${ORB_LINK_DIR})
-include_directories(SYSTEM ${ORB_INCLUDE_DIR} ${PROJECT_BINARY_DIR})
 add_definitions(${ORB_C_FLAGS_LIST})
 add_definitions(${COIL_C_FLAGS_LIST})
 
 if(VXWORKS)
 	add_library(${PROJECT_NAME} SHARED ${${PROJECT_NAME}_IDLSKEL})
 	openrtm_common_set_compile_props(${PROJECT_NAME})
+	openrtm_include_rtm(${PROJECT_NAME})
+	target_include_directories(${PROJECT_NAME} SYSTEM
+		PUBLIC ${PROJECT_BINARY_DIR})
 	install(TARGETS ${PROJECT_NAME} LIBRARY DESTINATION ${INSTALL_RTM_BIN_DIR}
 						ARCHIVE DESTINATION ${INSTALL_RTM_BIN_DIR}
 						RUNTIME DESTINATION ${INSTALL_RTM_BIN_DIR}
@@ -34,7 +36,9 @@ if(VXWORKS)
 else()
 	add_library(${PROJECT_NAME}_objlib OBJECT ${${PROJECT_NAME}_IDLSKEL})
 	openrtm_gencode_set_compile_props(${PROJECT_NAME}_objlib)
-	add_dependencies(${PROJECT_NAME}_objlib ${RTCSKEL_PROJECT_NAME}_IDLTGT)
+	openrtm_include_rtm(${PROJECT_NAME}_objlib)
+	target_include_directories(${PROJECT_NAME}_objlib SYSTEM
+		PUBLIC ${PROJECT_BINARY_DIR})
 
 	add_library(${PROJECT_NAME}-static STATIC $<TARGET_OBJECTS:${PROJECT_NAME}_objlib>)
 

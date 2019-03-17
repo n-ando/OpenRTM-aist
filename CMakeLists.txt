@@ -579,13 +579,16 @@ elseif(WIN32)
 	set(RTM_LINKER_OPTION advapi32.lib;ws2_32.lib;mswsock.lib;rpcrt4.lib;optimized;msvcrt.lib;optimized;msvcmrt.lib;debug;msvcrtd.lib)
 endif()
 
-set(RTM_INCLUDE_DIR
-	${CMAKE_SOURCE_DIR}/src/lib/coil/common
-	${CMAKE_SOURCE_DIR}/src/lib/coil/${COIL_OS_DIR}
-	${CMAKE_SOURCE_DIR}/src/lib)
-set(RTM_INCLUDE_GENDIR
-	${PROJECT_BINARY_DIR}/src/lib/rtm/idl
-	${PROJECT_BINARY_DIR}/src/lib)
+function(openrtm_include_rtm target)
+target_include_directories(${target}
+	PRIVATE ${CMAKE_SOURCE_DIR}/src/lib/coil/common
+	PRIVATE ${CMAKE_SOURCE_DIR}/src/lib/coil/${COIL_OS_DIR}
+	PRIVATE ${CMAKE_SOURCE_DIR}/src/lib)
+target_include_directories(${target} SYSTEM
+	PRIVATE ${CMAKE_BINARY_DIR}/src/lib/rtm/idl
+	PRIVATE ${CMAKE_BINARY_DIR}/src/lib)
+add_dependencies(${target} ${RTCSKEL_PROJECT_NAME}_IDLTGT)
+endfunction()
 
 function(openrtm_common_set_compile_definitions target)
   target_compile_definitions(${target} PRIVATE

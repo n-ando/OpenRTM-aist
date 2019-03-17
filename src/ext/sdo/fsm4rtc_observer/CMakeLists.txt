@@ -12,12 +12,6 @@ openrtm_idl_compile_all(${PROJECT_NAME}
 	"-I${CMAKE_CURRENT_SOURCE_DIR};-I${CMAKE_SOURCE_DIR}/src/lib/rtm/idl")
 
 link_directories(${ORB_LINK_DIR})
-include_directories(${RTM_INCLUDE_DIR})
-include_directories(SYSTEM
-	${RTM_INCLUDE_GENDIR}
-	${ORB_INCLUDE_DIR}
-	${PROJECT_BINARY_DIR})
-
 add_definitions(${ORB_C_FLAGS_LIST})
 add_definitions(${COIL_C_FLAGS_LIST})
 
@@ -26,6 +20,9 @@ if(VXWORKS AND NOT RTP)
 
 	add_executable(${target} ${${PROJECT_NAME}_SRCS} ${${PROJECT_NAME}_IDLSTUB})
 	openrtm_common_set_compile_props(${PROJECT_NAME})
+	openrtm_include_rtm(${PROJECT_NAME})
+	target_include_directories(${PROJECT_NAME} SYSTEM
+		PUBLIC ${PROJECT_BINARY_DIR})
 	target_link_libraries(${PROJECT_NAME} ${libs})
 	add_dependencies(${PROJECT_NAME} ${RTM_PROJECT_NAME})
 	add_dependencies(${PROJECT_NAME} ${PROJECT_NAME}_IDLTGT)
@@ -44,10 +41,17 @@ else()
 
 	add_library(${PROJECT_NAME}_objlib OBJECT ${${PROJECT_NAME}_SRCS})
 	openrtm_common_set_compile_props(${PROJECT_NAME}_objlib)
-	add_dependencies(${PROJECT_NAME}_objlib ${PROJECT_NAME}_IDLTGT)
+	openrtm_include_rtm(${PROJECT_NAME}_objlib)
+	target_include_directories(${PROJECT_NAME}_objlib SYSTEM
+		PUBLIC ${PROJECT_BINARY_DIR})
+add_dependencies(${PROJECT_NAME}_objlib ${PROJECT_NAME}_IDLTGT)
 
 	add_library(${PROJECT_NAME}_idl_objlib OBJECT ${${PROJECT_NAME}_IDLSTUB})
 	openrtm_gencode_set_compile_props(${PROJECT_NAME}_idl_objlib)
+	openrtm_include_rtm(${PROJECT_NAME}_idl_objlib)
+	target_include_directories(${PROJECT_NAME}_idl_objlib SYSTEM
+		PUBLIC ${PROJECT_BINARY_DIR})
+	add_dependencies(${PROJECT_NAME}_idl_objlib ${PROJECT_NAME}_IDLTGT)
 
 	add_library(${PROJECT_NAME} SHARED
 		$<TARGET_OBJECTS:${PROJECT_NAME}_objlib>
