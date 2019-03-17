@@ -317,7 +317,6 @@ namespace Macho {
 	////////////////////////////////////////////////////////////////////////////////
 	// Box for states which don't declare own Box class.
 	class _EmptyBox {
-		_EmptyBox() {}
 	public:
 		static _EmptyBox theEmptyBox;
 	};
