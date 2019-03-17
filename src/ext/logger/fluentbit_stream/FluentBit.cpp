@@ -62,20 +62,20 @@ namespace RTC
 
     const std::vector<coil::Properties*>& leaf(prop.getLeaf());
 
-    for (size_t i(0); i < leaf.size(); ++i)
+    for(auto & lprop : leaf)
       {
-        std::string key(leaf[i]->getName());
+        std::string key(lprop->getName());
         if (key.find("output") != std::string::npos)
           {
-            createOutputStream(*leaf[i]);
+            createOutputStream(lprop);
           }
         else if (key.find("input") != std::string::npos)
           {
-            createInputStream(*leaf[i]);
+            createInputStream(lprop);
           }
         else if (key.find("option") != std::string::npos)
         {
-            setServiceOption(*leaf[i]);
+            setServiceOption(lprop);
         }
       }
     // Start the background worker
@@ -87,9 +87,9 @@ namespace RTC
   {
     const std::vector<Properties*>& leaf = prop.getLeaf();
     int ret = 0;
-    for (size_t i(0); i < leaf.size(); ++i)
+    for(auto & lprop : leaf)
       {
-        ret = flb_service_set(s_flbContext, leaf[i]->getName(), leaf[i]->getValue(), NULL);
+        ret = flb_service_set(s_flbContext, lprop->getName(), lprop->getValue(), NULL);
       }
     return ret;
   }
@@ -102,10 +102,10 @@ namespace RTC
 
     m_flbOut.push_back(flbout);
     const std::vector<Properties*>& leaf = prop.getLeaf();
-    for (size_t i(0); i < leaf.size(); ++i)
+    for(auto & lprop : leaf)
       {
         flb_output_set(s_flbContext, flbout,
-                       leaf[i]->getName(), leaf[i]->getValue(), NULL);
+                       lprop->getName(), lprop->getValue(), NULL);
       }
     return true;
   }
@@ -118,10 +118,10 @@ namespace RTC
                                  (char*)plugin.c_str(), NULL);
     m_flbIn.push_back(flbin);
     const std::vector<Properties*>& leaf = prop.getLeaf();
-    for (size_t i(0); i < leaf.size(); ++i)
+    for(auto & lprop : leaf)
       {
         flb_input_set(s_flbContext, flbin,
-                      leaf[i]->getName(), leaf[i]->getValue(), NULL);
+                      lprop->getName(), lprop->getValue(), NULL);
       }
     return true;
   }
@@ -130,13 +130,13 @@ namespace RTC
   {
     char tmp[BUFFER_LEN];
     std::streamsize n(0);
-    for (size_t i(0); i < m_flbIn.size(); ++i)
+    for(auto & flb : m_flbIn)
       {
 
         n = snprintf(tmp, sizeof(tmp) - 1,
                      "[%lu, {\"message\": \"%s\", \"time\":\"%s\",\"name\":\"%s\",\"level\":\"%s\"}]", time(NULL), mes, date.c_str(), name.c_str(), Logger::getLevelString(level).c_str());
 
-        flb_lib_push(s_flbContext, m_flbIn[i], tmp, n);
+        flb_lib_push(s_flbContext, flb tmp, n);
       }
     return n;
   }

@@ -163,7 +163,7 @@ namespace RTC
                 std::cerr << "Configuration file: " << m_configFile;
                 std::cerr << " not found." << std::endl;
 #ifndef __QNX__
-                for (size_t i(0); i < static_cast<size_t>(argc); ++i)
+                for (int i(0); i < argc; ++i)
                   {
                     std::string tmp(argv[i]);
                     if (tmp == "-i") { ignoreNoConf = true; }
