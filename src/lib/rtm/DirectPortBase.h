@@ -57,7 +57,7 @@ namespace RTC
 	*
 	* @endif
 	*/
-    virtual ~DirectPortBase(){};
+    virtual ~DirectPortBase(){}
 
 
 

@@ -629,7 +629,7 @@ namespace RTC
     virtual void update()
     {
       this->read();
-    };
+    }
 
     /*!
      * @if jp

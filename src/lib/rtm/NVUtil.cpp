@@ -161,7 +161,7 @@ namespace NVUtil
     to_prop()
       : m_prop(coil::Properties())
     {
-    };
+    }
     void operator()(const SDOPackage::NameValue& nv)
     {
       const char* value(nullptr);

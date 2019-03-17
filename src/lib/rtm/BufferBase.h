@@ -120,7 +120,7 @@ namespace RTC
      */
     virtual ~BufferBase()
     {
-    };
+    }
 
     /*!
      * @if jp

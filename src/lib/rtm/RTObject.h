@@ -5492,7 +5492,7 @@ namespace RTC
         SdoServiceConsumerTerminator()
           {
 
-          };
+          }
         void setSdoServiceConsumer(SdoServiceAdmin* sdoservice, const char* id)
           {
             m_sdoservice = sdoservice;
