@@ -541,7 +541,7 @@ namespace coil
      *
      *@endif
      */
-    std::string setProperty(const std::string& key, const std::string& value);
+    std::string setProperty(const std::string& key, const std::string& invalue);
 
     /*!
      * @if jp
@@ -566,7 +566,7 @@ namespace coil
      *
      * @endif
      */
-    std::string setDefault(const std::string& key, const std::string& value);
+    std::string setDefault(const std::string& key, const std::string& invalue);
 
     /*!
      * @if jp

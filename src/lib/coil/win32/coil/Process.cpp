@@ -63,7 +63,7 @@ namespace coil
     return 0;
   }
 
-  int daemon(int nochdir, int noclose)
+  int daemon(int /*nochdir*/, int /*noclose*/)
   {
     // not implemented
     return 0;
