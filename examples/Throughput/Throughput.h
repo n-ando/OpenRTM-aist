@@ -334,7 +334,7 @@ class Throughput
    * - Name: maxsize maxsize
    * - DefaultValue: 10000000
    */
-  long m_maxsize;
+  unsigned long m_maxsize;
 
   /*!
    * mode=constの時のデータ送信回数の最大値
@@ -342,7 +342,7 @@ class Throughput
    * - Name: maxsend maxsend
    * - DefaultValue: 1000
    */
-  long m_maxsend;
+  unsigned long m_maxsend;
 
   /*!
    * 1データセットごとの最大サンプル数
@@ -350,7 +350,7 @@ class Throughput
    * - Name: maxsize maxsample
    * - DefaultValue: 100
    */
-  long m_maxsample;
+  unsigned long m_maxsample;
 
   // </rtc-template>
 
@@ -410,7 +410,7 @@ class Throughput
   //============================================================
   // Time measurement statistics data
   // data size to be send
-  long m_datasize;
+  unsigned long m_datasize;
   std::vector<coil::TimeValue> m_record;
 
   // received data store

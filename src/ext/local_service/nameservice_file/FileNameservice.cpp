@@ -412,7 +412,7 @@ namespace RTM
      * @endif
      */
     void
-    NamingAction::postBind(RTC::RTObject_impl* rtobj, coil::vstring& name)
+    NamingAction::postBind(RTC::RTObject_impl* /*rtobj*/, coil::vstring& /*name*/)
     {
     }
     
@@ -426,7 +426,7 @@ namespace RTM
      * @endif
      */
     void
-    NamingAction::preUnbind(RTC::RTObject_impl* rtobj, coil::vstring& name)
+    NamingAction::preUnbind(RTC::RTObject_impl* /*rtobj*/, coil::vstring& /*name*/)
     {
     }
     
