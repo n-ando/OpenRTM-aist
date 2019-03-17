@@ -1,8 +1,8 @@
 cmake_minimum_required (VERSION 3.0.2)
 
-project (ComponentObserverConsumer
+project (FSMComponentObserverConsumer
 	VERSION ${RTM_VERSION}
-	LANGUAGES CXX))
+	LANGUAGES CXX)
 
 
 
@@ -23,7 +23,7 @@ add_custom_command(
 		COMMAND python -B ${SKELWRAPPER_COMMAND} --include-dir="" --skel-suffix=Skel --stub-suffix=Stub --idl-file=${idl_name}.idl
 		WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
 )
-add_custom_target(${idl_name}_RTC_TGT DEPENDS ${idl_name}Skel.cpp ${idl_name}Stub.cpp)
+add_custom_target(${idl_name}_FSM_TGT DEPENDS ${idl_name}Skel.cpp ${idl_name}Stub.cpp)
 
 
 
@@ -39,7 +39,7 @@ add_definitions(${ORB_C_FLAGS_LIST})
 add_definitions(${COIL_C_FLAGS_LIST})
 
 
-set(target ComponentObserverConsumer)
+set(target FSMComponentObserverConsumer)
 
 set(srcs ComponentObserverConsumer.cpp ComponentObserverConsumer.h ${${idl_name}_RTC_STUB})
 
@@ -50,12 +50,14 @@ if(VXWORKS AND NOT RTP)
 	add_executable(${target} ${srcs})
 	target_link_libraries(${target} ${libs})
 	add_dependencies(${target} ${RTM_PROJECT_NAME})
-	add_dependencies(${target} ${idl_name}_RTC_TGT)
+	add_dependencies(${target} ${idl_name}_FSM_TGT)
+
 
 	install(TARGETS ${target} LIBRARY DESTINATION ${INSTALL_RTM_EXT_DIR}/sdo
 				ARCHIVE DESTINATION ${INSTALL_RTM_EXT_DIR}/sdo
 				RUNTIME DESTINATION ${INSTALL_RTM_EXT_DIR}/sdo
 				COMPONENT ext)
+
 else()
 	if(VXWORKS)
 		set(libs ${RTM_PROJECT_NAME} ${ORB_LIBRARIES} ${COIL_PROJECT_NAME} ${RTCSKEL_PROJECT_NAME})
@@ -67,9 +69,8 @@ else()
 	add_library(${target} SHARED ${srcs})
 	target_link_libraries(${target} ${libs} ${RTM_LINKER_OPTION})
 	add_dependencies(${target} ${RTM_PROJECT_NAME})
-	add_dependencies(${target} ${idl_name}_RTC_TGT)
+	add_dependencies(${target} ${idl_name}_FSM_TGT)
 	set_target_properties(${target} PROPERTIES PREFIX "")
-
 
 	install(TARGETS ${target} LIBRARY DESTINATION ${INSTALL_RTM_EXT_DIR}/sdo
 				ARCHIVE DESTINATION ${INSTALL_RTM_EXT_DIR}/sdo
@@ -78,6 +79,7 @@ else()
 endif()
 
 
+set_target_properties(${target} PROPERTIES OUTPUT_NAME ComponentObserverConsumer CLEAN_DIRECT_OUTPUT 1)
 set_source_files_properties(${${idl_name}_RTC_STUB} PROPERTIES GENERATED 1)
 
 
