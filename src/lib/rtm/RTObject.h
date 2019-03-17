@@ -5619,9 +5619,17 @@ namespace RTC
       {
         if (!::CORBA::is_nil(ec) && !ec->_non_existent())
           {
-
-            ec->deactivate_component(
-                            RTC::LightweightRTObject::_duplicate(m_comp));
+            if (ec->get_component_state(m_comp) == RTC::ACTIVE_STATE)
+              {
+                ec->deactivate_component(
+                    RTC::LightweightRTObject::_duplicate(m_comp));
+              }
+            else if (ec->get_component_state(m_comp) == RTC::ERROR_STATE)
+              {
+                ec->reset_component(
+                    RTC::LightweightRTObject::_duplicate(m_comp));
+              }
+            
           }
       }
       LightweightRTObject_var m_comp;
