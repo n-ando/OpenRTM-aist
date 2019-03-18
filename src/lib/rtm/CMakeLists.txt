@@ -460,7 +460,7 @@ else(VXWORKS)
 
 	add_library(${PROJECT_NAME}-static STATIC
 		$<TARGET_OBJECTS:${PROJECT_NAME}_objlib>
-		$<TARGET_OBJECTS:IDL_OBJLIB>)
+		$<TARGET_OBJECTS:${RTCSKEL_PROJECT_NAME}_objlib>)
 
 	if(WIN32)
 		set(DEF_FILE_NAME ${PROJECT_NAME}.def)
@@ -473,9 +473,9 @@ else(VXWORKS)
 	endif(WIN32)
 
 	add_library(${PROJECT_NAME} SHARED
-	  $<TARGET_OBJECTS:${PROJECT_NAME}_objlib>
-	  $<TARGET_OBJECTS:IDL_OBJLIB>
-	  ${CMAKE_CURRENT_BINARY_DIR}/${DEF_FILE_NAME})
+		$<TARGET_OBJECTS:${PROJECT_NAME}_objlib>
+		$<TARGET_OBJECTS:${RTCSKEL_PROJECT_NAME}_objlib>
+		${CMAKE_CURRENT_BINARY_DIR}/${DEF_FILE_NAME})
 	set_target_properties(${PROJECT_NAME} PROPERTIES DEBUG_POSTFIX d)
 
 	if(OBSERVER_ENABLE)
@@ -520,6 +520,8 @@ else(VXWORKS)
 			set(DT_TARGET ${data_type}Factory_${RTM_VC_VER})
 			configure_file(${CMAKE_CURRENT_SOURCE_DIR}/SerializerFactory.cpp.in ${filename} @ONLY)
 			add_library(${DT_TARGET} SHARED ${filename})
+			openrtm_gencode_set_compile_props(${DT_TARGET})
+			openrtm_include_rtm(${DT_TARGET})
 			target_link_libraries(${DT_TARGET} PRIVATE
 				${ORB_LIBRARIES} ${COIL_PROJECT_NAME} ${RTM_LINKER_OPTION} ${PROJECT_NAME})
 			set_target_properties(${DT_TARGET} PROPERTIES DEBUG_POSTFIX d)

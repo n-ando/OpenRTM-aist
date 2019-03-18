@@ -37,7 +37,8 @@ else()
 		${additional_srcs})
 	openrtm_gencode_set_compile_props(${PROJECT_NAME}_objlib)
 	openrtm_include_rtm(${PROJECT_NAME}_objlib)
-
+	target_include_directories(${PROJECT_NAME}_objlib SYSTEM
+		PUBLIC ${PROJECT_BINARY_DIR})
 	add_library(${PROJECT_NAME}-static STATIC $<TARGET_OBJECTS:${PROJECT_NAME}_objlib>)
 
 	if(WIN32)

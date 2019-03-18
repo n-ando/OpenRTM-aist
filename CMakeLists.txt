@@ -556,10 +556,6 @@ else(VXWORKS)
 endif(VXWORKS)
 
 
-set(ORB_INCLUDE_DIR ${ORB_INCLUDE_DIR})
-set(ORB_C_FLAGS_LIST ${ORB_C_FLAGS_LIST})
-
-
 
 if(VXWORKS)
 	set(COIL_OS_DIR "vxworks")
@@ -586,7 +582,8 @@ target_include_directories(${target}
 	PRIVATE ${CMAKE_SOURCE_DIR}/src/lib)
 target_include_directories(${target} SYSTEM
 	PRIVATE ${CMAKE_BINARY_DIR}/src/lib/rtm/idl
-	PRIVATE ${CMAKE_BINARY_DIR}/src/lib)
+	PRIVATE ${CMAKE_BINARY_DIR}/src/lib
+	${ORB_INCLUDE_DIR})
 add_dependencies(${target} ${RTCSKEL_PROJECT_NAME}_IDLTGT)
 endfunction()
 
@@ -761,7 +758,7 @@ function(openrtm_common_set_compile_options target)
 		$<$<CXX_COMPILER_ID:MSVC>:
 			$<$<CONFIG:Debug>:/W4>
 			$<$<CONFIG:Release>:/W3>
-			$<$<CONFIG:RelWithDebInfo>:/W3>
+			$<$<CONFIG:RelWithDebInfo>:/Wall>
 			$<$<CONFIG:MinSizeRel>:/W3>
 		>
 	)
