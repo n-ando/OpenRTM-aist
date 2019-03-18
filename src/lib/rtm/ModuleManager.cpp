@@ -575,7 +575,7 @@ namespace RTC
         
         for (auto & out : outlist)
           {
-            std::string tmp = out;
+            const std::string& tmp = out;
             std::string::size_type pos(tmp.find(':'));
             if (pos != std::string::npos)
               {

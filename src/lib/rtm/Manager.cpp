@@ -2758,7 +2758,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 		  for (auto & port : ports)
 		  {
 
-			  std::string port_str = port;
+			  const std::string& port_str = port;
 
 			  tmp = coil::split(port_str, ".");
 			  tmp.pop_back();
