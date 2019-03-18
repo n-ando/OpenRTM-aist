@@ -68,10 +68,10 @@ else()
 	target_include_directories(${target}
 		PRIVATE ${PROJECT_SOURCE_DIR}/..)
 	target_include_directories(${target} SYSTEM
-		PURBLIC ${rclcpp_INCLUDE_DIRS}
-		PURBLIC ${std_msgs_INCLUDE_DIRS}
-		PURBLIC ${geometry_msgs_INCLUDE_DIRS}
-		PURBLIC ${sensor_msgs_INCLUDE_DIRS})
+		PUBLIC ${rclcpp_INCLUDE_DIRS}
+		PUBLIC ${std_msgs_INCLUDE_DIRS}
+		PUBLIC ${geometry_msgs_INCLUDE_DIRS}
+		PUBLIC ${sensor_msgs_INCLUDE_DIRS})
 	target_link_libraries(${target} PRIVATE ${libs} ${RTM_LINKER_OPTION})
 	set_target_properties(${target} PROPERTIES PREFIX "")
 
