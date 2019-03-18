@@ -223,7 +223,7 @@ namespace RTC
           "FSM_STRUCTURE",
           "USER_DEFINED"
         };
-      return (size_t)kind < sizeof(kinds)/sizeof(kinds[0]) ? kinds[kind] : "";
+      return static_cast<size_t>(kind) < sizeof(kinds)/sizeof(kinds[0]) ? kinds[kind] : "";
     }
 
     /*!
