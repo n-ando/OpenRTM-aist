@@ -3025,8 +3025,8 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 	  }
   }
 
-  PortServiceList_var Manager::getPortsOnNameServers(std::string nsname,
-	  std::string kind)
+  PortServiceList_var Manager::getPortsOnNameServers(const std::string& nsname,
+	  const std::string& kind)
   {
 	  PortServiceList_var ports = new PortServiceList();
 	  std::vector<RTC::NamingService*>& ns(m_namingManager->getNameServices());
