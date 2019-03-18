@@ -177,6 +177,7 @@ namespace RTC
     ROS2SequenceDataInitBaseFunc<DataType, std_msgs::msg::UInt64MultiArray>("ROSUInt64MultiArray");
   }
 
+#if !(defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__))
   /*!
    * @if jp
    *
@@ -316,7 +317,7 @@ namespace RTC
             ::coil::Destructor< ::RTC::FastRTPSMessageInfoBase,
             RTC::ROS2MessageInfo<std_msgs::msg::String> >);
   }
-
+#endif
   /*!
    * @if jp
    *
@@ -965,8 +966,9 @@ extern "C"
     RTC::ROS2SequenceDataInit<RTC::TimedULongSeq>();
     RTC::ROS2SequenceDataInit<RTC::TimedFloatSeq>();
     RTC::ROS2SequenceDataInit<RTC::TimedDoubleSeq>();
-
+#if !(defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__))
     RTC::ROS2StringDataInit();
+#endif
     RTC::ROS2Pont3DDataInit();
     RTC::ROS2QuaternionDataInit();
     RTC::ROS2Vector3DDataInit();

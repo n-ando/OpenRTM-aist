@@ -46,7 +46,16 @@ namespace RTC
    *
    * @endif
    */
-  class FastRTPSMessageInfoBase
+  
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
+#ifdef TRANSPORT_PLUGIN
+    class __declspec(dllexport) FastRTPSMessageInfoBase
+#else
+    class __declspec(dllimport) FastRTPSMessageInfoBase
+#endif
+#else
+    class FastRTPSMessageInfoBase
+#endif
   {
   public:
     /*!
