@@ -42,9 +42,9 @@ namespace RTC
       m_ecHblistenerid(NULL),
       m_timer(m_rtcInterval)
   {
-    for (size_t i(0); i < RTC::STATUS_KIND_NUM; ++i)
+    for (bool & i : m_observed)
       {
-        m_observed[i] = false;
+        i = false;
       }
   }
 
@@ -170,9 +170,9 @@ namespace RTC
 
     coil::vstring observed(coil::split(prop["observed_status"], ","));
     bool flags[RTC::STATUS_KIND_NUM];
-    for (int i(0); i < RTC::STATUS_KIND_NUM; ++i)
+    for (bool & flag : flags)
       {
-        flags[i] = false;
+        flag = false;
       }
     for(auto & o : observed)
       {
@@ -211,9 +211,9 @@ namespace RTC
           }
         else if (o == "ALL")
           {
-            for (int j(0); j < RTC::STATUS_KIND_NUM; ++j)
+            for (bool & flag : flags)
               {
-                flags[j] = true;
+                flag = true;
               }
             break;
           }
