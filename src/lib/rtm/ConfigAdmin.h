@@ -861,7 +861,7 @@ namespace RTC
      *
      * @endif
      */
-    bool isExist(const char* name);
+    bool isExist(const char* param_name);
 
     /*!
      * @if jp

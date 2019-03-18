@@ -550,17 +550,17 @@ namespace Macho {
 		}
 
 		// Is machine m in this state?
-		static bool isCurrent(const _MachineBase & m);
+		static bool isCurrent(const _MachineBase & machine);
 
 		// Deprecated!
 		// Is machine m in exactly this state?
-		static bool isCurrentDirect(const _MachineBase & m);
+		static bool isCurrentDirect(const _MachineBase & machine);
 
-		static void clearHistory(const _MachineBase & m);
+		static void clearHistory(const _MachineBase & machine);
 
-		static void clearHistoryDeep(const _MachineBase & m);
+		static void clearHistoryDeep(const _MachineBase & machine);
 
-		static Alias history(const _MachineBase & m);
+		static Alias history(const _MachineBase & machine);
 
 	protected:
 		// Needed to perform compile time checks.

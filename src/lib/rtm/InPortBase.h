@@ -451,7 +451,7 @@ namespace RTC
      *
      * @endif
      */
-    void addConnectorDataListener(ConnectorDataListenerType listener_type,
+    void addConnectorDataListener(ConnectorDataListenerType type,
                                   ConnectorDataListener* listener,
                                   bool autoclean = true);
 
@@ -475,7 +475,7 @@ namespace RTC
      *
      * @endif
      */
-    void removeConnectorDataListener(ConnectorDataListenerType listener_type,
+    void removeConnectorDataListener(ConnectorDataListenerType type,
                                      ConnectorDataListener* listener);
 
 
@@ -531,7 +531,7 @@ namespace RTC
      *
      * @endif
      */
-    void addConnectorListener(ConnectorListenerType callback_type,
+    void addConnectorListener(ConnectorListenerType type,
                               ConnectorListener* listener,
                               bool autoclean = true);
 
@@ -554,7 +554,7 @@ namespace RTC
      *
      * @endif
      */
-    void removeConnectorListener(ConnectorListenerType callback_type,
+    void removeConnectorListener(ConnectorListenerType type,
                                  ConnectorListener* listener);
 
     /*!

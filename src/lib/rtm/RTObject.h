@@ -2689,7 +2689,7 @@ namespace RTC
      *
      * @endif
      */
-    bool removeInPort(InPortBase& port);
+    bool removeInPort(InPortBase& inport);
 
     /*!
      * @if jp
@@ -2712,7 +2712,7 @@ namespace RTC
      *
      * @endif
      */
-    bool removeOutPort(OutPortBase& port);
+    bool removeOutPort(OutPortBase& outport);
 
     /*!
      * @if jp
