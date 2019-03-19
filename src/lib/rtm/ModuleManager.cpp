@@ -575,13 +575,12 @@ namespace RTC
         
         for (auto & out : outlist)
           {
-            const std::string& tmp = out;
-            std::string::size_type pos(tmp.find(':'));
+            std::string::size_type pos(out.find(':'));
             if (pos != std::string::npos)
               {
-                  std::string key(tmp.substr(0, pos));
+                  std::string key(out.substr(0, pos));
                   coil::eraseBothEndsBlank(key);
-                  p[key] = tmp.substr(pos + 1);
+                  p[key] = out.substr(pos + 1);
                   coil::eraseBothEndsBlank(p[key]);
               }
             

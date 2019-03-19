@@ -2758,12 +2758,10 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 		  for (auto & port : ports)
 		  {
 
-			  const std::string& port_str = port;
-
-			  tmp = coil::split(port_str, ".");
+			  tmp = coil::split(port, ".");
 			  tmp.pop_back();
 			  std::string comp_name = coil::flatten(tmp, ".");
-			  std::string port_name = port_str;
+			  std::string port_name = port;
 			  RTObject_impl* comp = nullptr;
 			  RTC::RTObject_ptr comp_ref = nullptr;
 
@@ -2787,7 +2785,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 					  continue;
 				  }
 				  comp_ref = rtcs[0];
-				  coil::vstring tmp_port_name = coil::split(port_str, "/");
+				  coil::vstring tmp_port_name = coil::split(port, "/");
 				  port_name = tmp_port_name.back();
 
 
@@ -2797,7 +2795,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 
 			  if (CORBA::is_nil(port_var))
 			  {
-				  RTC_DEBUG(("port %s found: ", port_str.c_str()));
+				  RTC_DEBUG(("port %s found: ", port.c_str()));
 				  continue;
 			  }
 
