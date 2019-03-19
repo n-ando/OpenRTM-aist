@@ -354,6 +354,6 @@ public:
 extern "C"
 {
   DLL_EXPORT void AnalyzerInit(RTC::Manager* manager);
-};
+}
 
 #endif // ANALYZER_H

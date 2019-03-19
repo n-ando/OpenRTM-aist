@@ -303,7 +303,7 @@ namespace RTC
 extern "C"
 {
   DLL_EXPORT void ExtendedFsmServiceProviderInit();
-};
+}
 
 #endif // RTC_EXTENDEDFSMSERVICEPROVIDER_H
 

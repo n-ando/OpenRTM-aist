@@ -215,6 +215,6 @@ class SeqIn
 extern "C"
 {
   DLL_EXPORT void SeqInInit(RTC::Manager* manager);
-};
+}
 
 #endif // SEQIN_H

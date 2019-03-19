@@ -219,6 +219,6 @@ class SeqOut
 extern "C"
 {
   DLL_EXPORT void SeqOutInit(RTC::Manager* manager);
-};
+}
 
 #endif // SEQOUT_H

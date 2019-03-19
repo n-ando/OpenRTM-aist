@@ -400,7 +400,7 @@ extern "C"
    * @endif
    */
   void InPortDSProviderInit(void);
-};
+}
 
 #ifdef WIN32
 #pragma warning( default : 4290 )

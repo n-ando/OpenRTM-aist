@@ -279,6 +279,6 @@ extern "C"
    * @endif
    */
 	void OutPortDirectConsumerInit(void);
-};
+}
 
 #endif // RTC_OUTPORTDIRECTCONSUMER_H

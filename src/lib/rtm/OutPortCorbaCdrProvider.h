@@ -376,7 +376,7 @@ extern "C"
    * @endif
    */
   void OutPortCorbaCdrProviderInit(void);
-};
+}
 
 #ifdef WIN32
 #pragma warning( default : 4290 )

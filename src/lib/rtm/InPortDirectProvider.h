@@ -365,7 +365,7 @@ extern "C"
    * @endif
    */
   void InPortDirectProviderInit(void);
-};
+}
 
 #ifdef WIN32
 #pragma warning( default : 4290 )

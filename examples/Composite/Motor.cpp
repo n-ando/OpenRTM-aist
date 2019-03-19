@@ -160,7 +160,7 @@ extern "C"
                              RTC::Delete<Motor>);
   }
   
-};
+}
 
 
 

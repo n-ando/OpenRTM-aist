@@ -366,4 +366,4 @@ extern "C"
                        ::coil::Destructor< ::RTC::InPortConsumer,
                                            ::RTC::InPortCorbaCdrConsumer>);
   }
-};
+}

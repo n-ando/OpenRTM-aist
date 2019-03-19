@@ -118,5 +118,5 @@ extern "C"
                             ::coil::Destructor< ::RTM::NumberingPolicyBase,
 							::RTM::NodeNumberingPolicy>);
   }
-};
+}
 

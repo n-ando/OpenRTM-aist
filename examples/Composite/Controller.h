@@ -124,7 +124,7 @@ class Controller  : public RTC::DataFlowComponentBase
 extern "C"
 {
   DLL_EXPORT void ControllerInit(RTC::Manager* manager);
-};
+}
 
 #endif // CONTROLLER_H
 

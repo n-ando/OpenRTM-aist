@@ -32,4 +32,4 @@ extern "C"
                  coil::Creator<RTC::CdrBufferBase, RTC::CdrRingBuffer>,
                  coil::Destructor<RTC::CdrBufferBase, RTC::CdrRingBuffer>);
   }
-};
+}

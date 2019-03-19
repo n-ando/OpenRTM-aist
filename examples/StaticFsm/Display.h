@@ -183,6 +183,6 @@ class Display
 extern "C"
 {
   DLL_EXPORT void DisplayInit(RTC::Manager* manager);
-};
+}
 
 #endif // DISPLAY_H

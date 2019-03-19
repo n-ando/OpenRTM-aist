@@ -31,6 +31,6 @@ namespace RTC
 extern "C"
 {
   void DefaultPeriodicTaskInit();
-};
+}
 
 #endif  // RTC_DEFAULTPERIODICTASK_H

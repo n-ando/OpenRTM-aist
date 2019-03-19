@@ -108,7 +108,7 @@ namespace RTC
 extern "C"
 {
   DLL_EXPORT void LoggerConsumerInit();
-};
+}
 
 #endif // RTC_LOGGERCONSUMER_H
 

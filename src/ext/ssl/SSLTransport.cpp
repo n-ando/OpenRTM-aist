@@ -42,4 +42,4 @@ extern "C"
 		
 		SSLTransportSet(manager);
 	}
-};
+}

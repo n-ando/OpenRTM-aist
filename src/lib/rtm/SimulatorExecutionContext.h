@@ -167,6 +167,6 @@ extern "C"
    * @endif
    */
   DLL_EXPORT void SimulatorExecutionContextInit(RTC::Manager* manager);
-};
+}
 
 #endif

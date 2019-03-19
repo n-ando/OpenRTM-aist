@@ -166,11 +166,11 @@ namespace RTC
 		  m_outPortListeners = &(directOutPort->getListeners());
 		  return true;
 	  }
-  };
+  }
 
   BufferStatus::Enum InPortConnector::write(ByteData & /*cdr*/)
   {
       return BufferStatus::BUFFER_OK;
-  };
+  }
 
 } // namespace RTC

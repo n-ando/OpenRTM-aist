@@ -187,7 +187,7 @@ extern "C"
    * @endif
    */
   void InPortSHMConsumerInit(void);
-};
+}
 
 #endif // RTC_INPORTCORBACDRCONSUMER_H
 

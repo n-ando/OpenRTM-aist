@@ -208,6 +208,6 @@ class MyServiceConsumer
 extern "C"
 {
   DLL_EXPORT void MyServiceConsumerInit(RTC::Manager* manager);
-};
+}
 
 #endif // MYSERVICECONSUMER_H

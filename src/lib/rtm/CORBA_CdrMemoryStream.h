@@ -659,7 +659,7 @@ void CdrMemoryStreamInit()
             ::RTC::CORBA_CdrSerializer<DataType> >,
             ::coil::Destructor< ::RTC::ByteDataStream<DataType>,
             ::RTC::CORBA_CdrSerializer<DataType> > );
-};
+}
 
 
 

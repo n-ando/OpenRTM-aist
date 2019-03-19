@@ -724,6 +724,6 @@ extern "C"
    * @endif
    */
   DLL_EXPORT void LogicalTimeTriggeredECInit(RTC::Manager* manager);
-};
+}
 
 #endif // RTC_EXTTRIGEXECUTIONCONTEXT_H

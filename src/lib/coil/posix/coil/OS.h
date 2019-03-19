@@ -28,7 +28,7 @@
 extern "C"
 {
   extern char *optarg;
-};
+}
 
 namespace coil
 {

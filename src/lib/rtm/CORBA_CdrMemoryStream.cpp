@@ -86,7 +86,7 @@ namespace RTC
 #endif
     {
         return m_cdr;
-    };
+    }
 
 
     void CORBA_CdrMemoryStream::writeCdrData(const unsigned char* buffer, unsigned long length)
@@ -98,7 +98,7 @@ namespace RTC
 #else
         m_cdr.put_octet_array(buffer, length);
 #endif
-    };
+    }
 
     void CORBA_CdrMemoryStream::readCdrData(unsigned char* buffer, unsigned long length) const
     {
@@ -116,7 +116,7 @@ namespace RTC
 #else
         memcpy(buffer, m_cdr.bufPtr(), length);
 #endif
-    };
+    }
 
 
 } // namespace RTC

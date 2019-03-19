@@ -317,7 +317,7 @@ extern "C"
    * @endif
    */
   void InPortCorbaCdrConsumerInit(void);
-};
+}
 
 #endif  // RTC_INPORTCORBACDRCONSUMER_H
 

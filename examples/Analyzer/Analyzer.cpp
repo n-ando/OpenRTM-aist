@@ -294,5 +294,5 @@ extern "C"
                              RTC::Delete<Analyzer>);
   }
   
-};
+}
 

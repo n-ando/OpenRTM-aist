@@ -323,4 +323,4 @@ extern "C"
                        ::RTC::ExtendedFsmServiceProvider>);
                        std::cout << "Init()" << std::endl;
   }
-};
+}

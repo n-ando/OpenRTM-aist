@@ -827,6 +827,6 @@ extern "C"
    * @endif
    */
   void RTPreemptECInit(RTC::Manager* manager);
-};
+}
 
 #endif // RTC_RTPREEMPTEC_H

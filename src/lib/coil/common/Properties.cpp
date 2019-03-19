@@ -149,7 +149,7 @@ namespace coil
       {
         root->removeNode(name.c_str());
       }
-  };
+  }
 
   //============================================================
   // public fnctions

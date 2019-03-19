@@ -246,7 +246,7 @@ extern "C"
    * @endif
    */
   void InPortDirectConsumerInit(void);
-};
+}
 
 #endif  // RTC_INPORTDIRECTCONSUMER_H
 

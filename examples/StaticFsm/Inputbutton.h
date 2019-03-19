@@ -191,6 +191,6 @@ class Inputbutton
 extern "C"
 {
   DLL_EXPORT void InputbuttonInit(RTC::Manager* manager);
-};
+}
 
 #endif // INPUTBUTTON_H

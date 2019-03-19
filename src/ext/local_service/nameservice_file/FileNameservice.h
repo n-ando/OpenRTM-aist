@@ -306,6 +306,6 @@ extern "C"
    * @endif
    */
   DLL_EXPORT void FileNameserviceInit();
-};
+}
 
 #endif /* FILENAMESERVICE_H_ */

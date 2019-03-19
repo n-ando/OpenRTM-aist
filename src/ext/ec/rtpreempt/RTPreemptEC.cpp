@@ -677,5 +677,5 @@ extern "C"
                             ::coil::Destructor< ::RTC::ExecutionContextBase,
                             ::RTC_exp::RTPreemptEC>);
   }
-};
+}
 

@@ -121,6 +121,6 @@ extern "C"
                              RTC::Create<Display>,
                              RTC::Delete<Display>);
   }
-};
+}
 
 

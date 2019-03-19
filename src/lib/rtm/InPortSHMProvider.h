@@ -265,7 +265,7 @@ extern "C"
    * @endif
    */
   void InPortSHMProviderInit();
-};
+}
 
 #ifdef WIN32
 #pragma warning( default : 4290 )

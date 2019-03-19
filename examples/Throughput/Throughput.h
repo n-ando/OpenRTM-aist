@@ -489,6 +489,6 @@ public:
 extern "C"
 {
   DLL_EXPORT void ThroughputInit(RTC::Manager* manager);
-};
+}
 
 #endif // THROUGHPUT_H

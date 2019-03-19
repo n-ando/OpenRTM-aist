@@ -495,6 +495,6 @@ namespace RTC
 extern "C"
 {
   void DLL_EXPORT LogstreamFileInit();
-};
+}
 
 #endif // RTC_LOGSTREAMFILE_H

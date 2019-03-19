@@ -197,6 +197,6 @@ extern "C"
    * @endif
    */
   void MultilayerCompositeECInit(RTC::Manager* manager);
-};
+}
 
 #endif  // RTC_MULTILAYERCOMPOSITEEC_H

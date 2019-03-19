@@ -114,7 +114,7 @@ namespace RTC
       }
 
     return true;
-  };
+  }
 
   /*!
    * @if jp

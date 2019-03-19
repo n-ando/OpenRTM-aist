@@ -770,4 +770,4 @@ extern "C"
                        ::coil::Destructor< ::RTC::SdoServiceConsumerBase,
                        ::RTC::ComponentObserverConsumer>);
   }
-};
+}
