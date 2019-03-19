@@ -54,9 +54,9 @@ namespace coil
     }
   }
 
-  bool setProcCpuAffinity(std::vector<unsigned int> mask)
+  bool setProcCpuAffinity(CpuMask cpu_mask)
   {
-    DWORD_PTR cpu_num = listToCUPNUM(mask);
+    DWORD_PTR cpu_num = listToCUPNUM(cpu_mask);
     HANDLE h = GetCurrentProcess();
     BOOL success = SetProcessAffinityMask(h, cpu_num);
 	if (success)
@@ -89,9 +89,9 @@ namespace coil
     return true;
   }
 
-  bool setThreadCpuAffinity(std::vector<unsigned int> mask)
+  bool setThreadCpuAffinity(CpuMask cpu_mask)
   {
-    DWORD_PTR cpu_num = listToCUPNUM(mask);
+    DWORD_PTR cpu_num = listToCUPNUM(cpu_mask);
     HANDLE h = GetCurrentThread();
     DWORD_PTR success = SetThreadAffinityMask(h, cpu_num);
 	if (success != 0)

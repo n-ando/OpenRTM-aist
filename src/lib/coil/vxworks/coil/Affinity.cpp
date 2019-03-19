@@ -33,7 +33,7 @@ namespace coil
     return false;
   }
 
-  bool setProcCpuAffinity(std::vector<unsigned int> mask)
+  bool setProcCpuAffinity(CpuMask cpu_mask)
   {
     return false;
   }
@@ -58,14 +58,14 @@ namespace coil
     return true;
   }
 
-  bool setThreadCpuAffinity(std::vector<unsigned int> mask)
+  bool setThreadCpuAffinity(CpuMask cpu_mask)
   {
     int pid = taskIdSelf();
     cpuset_t cpu_set;
     CPUSET_ZERO (cpu_set);
-    if(mask.size() > 0)
+    if(cpu_mask.size() > 0)
     {
-        CPUSET_SET(cpu_set, mask[0]);
+        CPUSET_SET(cpu_set, cpu_mask[0]);
     }
     else
     {

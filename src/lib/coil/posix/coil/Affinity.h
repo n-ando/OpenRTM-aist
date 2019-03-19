@@ -56,7 +56,7 @@ namespace coil
    * @return True: success, False: fail
    * @endif
    */
-  bool setProcCpuAffinity(CpuMask mask);
+  bool setProcCpuAffinity(CpuMask cpu_mask);
 
   /*!
    * @if jp
@@ -101,7 +101,7 @@ namespace coil
    * @return True: success, False: fail
    * @endif
    */
-  bool setThreadCpuAffinity(CpuMask mask);
+  bool setThreadCpuAffinity(CpuMask cpu_mask);
 
   /*!
    * @if jp
