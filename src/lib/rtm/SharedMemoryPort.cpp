@@ -316,7 +316,7 @@ namespace RTC
               	 
               data.put_octet_array(&(shm_data[0]), (int)data_size);
           }*/
-          data.writeData((unsigned char*)(&m_shmem.get_data()[sizeof(CORBA::ULongLong)]), static_cast<unsigned long>(data_size));
+          data.writeData(reinterpret_cast<unsigned char*>(&m_shmem.get_data()[sizeof(CORBA::ULongLong)]), static_cast<unsigned long>(data_size));
           //delete shm_data;
 	  }
 
