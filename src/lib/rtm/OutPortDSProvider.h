@@ -374,7 +374,7 @@ extern "C"
    * @endif
    */
   void OutPortDSProviderInit(void);
-};
+}
 
 #ifdef WIN32
 #pragma warning( default : 4290 )

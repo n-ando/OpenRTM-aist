@@ -32,5 +32,5 @@ namespace RTC
 extern "C"
 {
   void CdrRingBufferInit();
-};
+}
 #endif  // RTC_CDRRINGBUFFER_H

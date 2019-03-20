@@ -402,7 +402,7 @@ extern "C"
    * @endif
    */
   void InPortCorbaCdrProviderInit(void);
-};
+}
 
 #ifdef WIN32
 #pragma warning( default : 4290 )

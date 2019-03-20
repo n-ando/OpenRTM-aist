@@ -355,6 +355,6 @@ extern "C"
    * @endif
    */
   void OutPortSHMConsumerInit(void);
-};
+}
 
 #endif // RTC_OUTPORTSHMCONSUMER_H

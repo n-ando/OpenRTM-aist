@@ -757,6 +757,6 @@ namespace RTC
 extern "C"
 {
   void DLL_EXPORT PublisherPeriodicInit();
-};
+}
 
 #endif  // RTC_PUBLISHERPERIODIC_H

@@ -467,4 +467,4 @@ extern "C"
                        ::coil::Destructor< ::RTM::LocalServiceBase,
                        ::RTM::LocalService::FileNameservice>);
   }
-};
+}

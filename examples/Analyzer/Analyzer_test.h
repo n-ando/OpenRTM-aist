@@ -297,6 +297,6 @@ class Analyzer_test
 extern "C"
 {
   DLL_EXPORT void Analyzer_testInit(RTC::Manager* manager);
-};
+}
 
 #endif // ANALYZER_TEST_H

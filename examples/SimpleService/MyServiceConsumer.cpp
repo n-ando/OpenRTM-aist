@@ -251,6 +251,6 @@ extern "C"
                              RTC::Delete<MyServiceConsumer>);
   }
   
-};
+}
 
 

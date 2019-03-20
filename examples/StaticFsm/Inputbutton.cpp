@@ -132,6 +132,6 @@ extern "C"
                              RTC::Delete<Inputbutton>);
   }
   
-};
+}
 
 

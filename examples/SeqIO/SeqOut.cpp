@@ -397,4 +397,4 @@ extern "C"
                              RTC::Delete<SeqOut>);
   }
   
-};
+}

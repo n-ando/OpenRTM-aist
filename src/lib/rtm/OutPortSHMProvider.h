@@ -322,7 +322,7 @@ extern "C"
    * @endif
    */
   void OutPortSHMProviderInit(void);
-};
+}
 
 #ifdef WIN32
 #pragma warning( default : 4290 )

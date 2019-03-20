@@ -168,6 +168,6 @@ namespace RTM
 extern "C"
 {
 	void DLL_EXPORT NodeNumberingPolicyInit();
-};
+}
 
 #endif // RTC_NODENUMBERINGPOLICY_H

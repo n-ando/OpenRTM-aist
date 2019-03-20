@@ -815,7 +815,7 @@ namespace RTC
 extern "C"
 {
   DLL_EXPORT void ComponentObserverConsumerInit();
-};
+}
 
 #endif // RTC_COMPONENTOBSERVERCONSUMER_H
 

@@ -230,6 +230,6 @@ extern "C"
                              RTC::Delete<ConfigSample>);
   }
   
-};
+}
 
 

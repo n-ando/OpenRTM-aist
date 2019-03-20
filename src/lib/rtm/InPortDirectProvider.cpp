@@ -114,4 +114,4 @@ extern "C"
                        ::coil::Destructor< ::RTC::InPortProvider,
                                            ::RTC::InPortDirectProvider>);
   }
-};
+}

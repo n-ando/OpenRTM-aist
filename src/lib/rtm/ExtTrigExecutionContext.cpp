@@ -492,4 +492,4 @@ extern "C"
                             ::coil::Destructor< ::RTC::ExecutionContextBase,
                             ::RTC::ExtTrigExecutionContext>);
   }
-};
+}

@@ -151,6 +151,6 @@ extern "C"
                              RTC::Delete<MyServiceProvider>);
   }
   
-};
+}
 
 

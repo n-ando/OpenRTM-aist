@@ -124,7 +124,7 @@ class Sensor  : public RTC::DataFlowComponentBase
 extern "C"
 {
   DLL_EXPORT void SensorInit(RTC::Manager* manager);
-};
+}
 
 #endif // SENSOR_H
 

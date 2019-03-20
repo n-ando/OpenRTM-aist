@@ -132,6 +132,6 @@ class Microwave
 extern "C"
 {
   DLL_EXPORT void MicrowaveInit(RTC::Manager* manager);
-};
+}
 
 #endif // MICROWAVE_H

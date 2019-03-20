@@ -167,6 +167,6 @@ namespace RTM
 extern "C"
 {
 	void DLL_EXPORT NamingServiceNumberingPolicyInit();
-};
+}
 
 #endif // RTC_NAMINGSERVICENUMBERINGPOLICY_H

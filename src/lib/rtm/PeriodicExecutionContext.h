@@ -737,6 +737,6 @@ extern "C"
    * @endif
    */
   void PeriodicExecutionContextInit(RTC::Manager* manager);
-};
+}
 
 #endif  // RTC_PERIODICEXECUTIONCONTEXT_H

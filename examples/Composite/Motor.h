@@ -125,7 +125,7 @@ class Motor  : public RTC::DataFlowComponentBase
 extern "C"
 {
   DLL_EXPORT void MotorInit(RTC::Manager* manager);
-};
+}
 
 #endif // MOTOR_H
 

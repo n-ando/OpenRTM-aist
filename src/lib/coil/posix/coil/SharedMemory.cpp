@@ -328,7 +328,7 @@ namespace coil
   std::string SharedMemory::get_addresss()
   {
 	return m_shm_address;
-  };
+  }
   /*!
    * @if jp
    *

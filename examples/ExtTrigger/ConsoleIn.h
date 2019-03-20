@@ -122,6 +122,6 @@ class ConsoleIn
 extern "C"
 {
   DLL_EXPORT void ConsoleInInit(RTC::Manager* manager);
-};
+}
 
 #endif // CONSOLEIN_H

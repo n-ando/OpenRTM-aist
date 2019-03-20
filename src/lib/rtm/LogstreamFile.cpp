@@ -444,5 +444,5 @@ extern "C"
                             ::coil::Destructor< ::RTC::LogstreamBase,
                                                 ::RTC::LogstreamFile>);
   }
-};
+}
 

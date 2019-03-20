@@ -614,4 +614,4 @@ extern "C"
                             ::coil::Destructor< ::RTC::PublisherBase,
                                                 ::RTC::PublisherPeriodic>);
   }
-};
+}

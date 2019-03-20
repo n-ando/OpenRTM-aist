@@ -205,5 +205,5 @@ extern "C"
                              RTC::Delete<Analyzer_test>);
   }
   
-};
+}
 

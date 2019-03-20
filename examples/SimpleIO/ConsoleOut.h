@@ -179,7 +179,7 @@ class ConsoleOut
 extern "C"
 {
   DLL_EXPORT void ConsoleOutInit(RTC::Manager* manager);
-};
+}
 
 #endif // CONSOLEOUT_H
 

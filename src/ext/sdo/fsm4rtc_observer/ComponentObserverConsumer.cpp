@@ -946,4 +946,4 @@ extern "C"
                        ::RTC::ComponentObserverConsumer>);
                        std::cout << "Init()" << std::endl;
   }
-};
+}

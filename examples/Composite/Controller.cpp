@@ -153,7 +153,7 @@ extern "C"
                              RTC::Delete<Controller>);
   }
   
-};
+}
 
 
 

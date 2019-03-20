@@ -687,6 +687,6 @@ namespace RTC
 extern "C"
 {
   DLL_EXPORT void PeriodicECSharedCompositeInit(RTC::Manager* manager);
-};
+}
 
 #endif  // RTC_PERIODICECSHAREDCOMPOSITE_H

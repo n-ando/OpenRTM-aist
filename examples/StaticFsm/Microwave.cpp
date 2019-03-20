@@ -89,6 +89,6 @@ extern "C"
                              RTC::Create<Microwave>,
                              RTC::Delete<Microwave>);
   }
-};
+}
 
 

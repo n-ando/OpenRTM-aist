@@ -441,4 +441,4 @@ extern "C"
                              RTC::Delete<SeqIn>);
   }
   
-};
+}

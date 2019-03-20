@@ -154,7 +154,7 @@ extern "C"
                              RTC::Delete<Sensor>);
   }
   
-};
+}
 
 
 

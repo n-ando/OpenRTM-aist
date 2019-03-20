@@ -870,4 +870,4 @@ extern "C"
                              RTC::Create<RTC::PeriodicECSharedComposite>,
                              RTC::Delete<RTC::PeriodicECSharedComposite>);
   }
-};
+}

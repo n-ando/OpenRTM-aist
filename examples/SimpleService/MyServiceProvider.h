@@ -123,6 +123,6 @@ class MyServiceProvider
 extern "C"
 {
   DLL_EXPORT void MyServiceProviderInit(RTC::Manager* manager);
-};
+}
 
 #endif // MYSERVICEPROVIDER_H

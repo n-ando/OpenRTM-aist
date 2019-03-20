@@ -665,5 +665,5 @@ extern "C"
     coil::vstring ecs;
     ecs = RTC::ExecutionContextFactory::instance().getIdentifiers();
   }
-};
+}
 

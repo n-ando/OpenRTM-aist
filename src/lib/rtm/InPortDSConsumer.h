@@ -315,7 +315,7 @@ extern "C"
    * @endif
    */
   void InPortDSConsumerInit(void);
-};
+}
 
 #endif  // RTC_INPORTDSCONSUMER_H
 

@@ -550,6 +550,6 @@ extern "C"
                              RTC::Delete<Throughput>);
   }
   
-};
+}
 
 

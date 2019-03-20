@@ -131,6 +131,6 @@ class ConfigSample
 extern "C"
 {
   DLL_EXPORT void ConfigSampleInit(RTC::Manager* manager);
-};
+}
 
 #endif // CONFIGSAMPLE_H

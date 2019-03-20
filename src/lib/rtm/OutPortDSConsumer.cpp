@@ -290,4 +290,4 @@ extern "C"
                        ::coil::Destructor< ::RTC::OutPortConsumer,
                                            ::RTC::OutPortDSConsumer>);
   }
-};
+}

@@ -339,7 +339,7 @@ extern "C"
    * @endif
    */
   void OutPortDirectProviderInit(void);
-};
+}
 
 #ifdef WIN32
 #pragma warning( default : 4290 )
