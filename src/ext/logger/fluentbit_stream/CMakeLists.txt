@@ -13,16 +13,6 @@ if(NOT FLUENTBIT_ROOT)
 	message(FATAL_ERROR "Please set FLUENTBIT_ROOT.")
 endif()
 
-set(FLUENTBIT_WORKDIR ${FLUENTBIT_WORKDIR} CACHE PATH "set FLUENTBIT_WORKDIR")
-
-if(NOT FLUENTBIT_WORKDIR)
-	message(FATAL_ERROR "Please set FLUENTBIT_WORKDIR.")
-endif()
-
-link_directories(${FLUENTBIT_WORKDIR}/lib)
-
-
-
 
 
 link_directories(${ORB_LINK_DIR})
@@ -57,17 +47,8 @@ else()
 	add_library(${target} SHARED ${srcs})
 	openrtm_common_set_compile_props(${target})
 	openrtm_include_rtm(${target})
-	target_include_directories(SYSTEM
-	PRIVATE ${FLUENTBIT_ROOT}/include
-	PRIVATE ${FLUENTBIT_ROOT}/lib/monkey/include
-	PRIVATE ${FLUENTBIT_ROOT}/lib/mbedtls-2.14.1/include
-	PRIVATE ${FLUENTBIT_ROOT}/lib/msgpack-3.1.1/include
-	PRIVATE ${FLUENTBIT_ROOT}/lib/flb_libco
-	PRIVATE ${FLUENTBIT_ROOT}/lib/jemalloc-5.1.0/include
-	PRIVATE ${FLUENTBIT_ROOT}/lib/jsmn
-	PRIVATE ${FLUENTBIT_ROOT}/lib/onigmo
-	PRIVATE ${FLUENTBIT_ROOT}/lib/sha1
-	PRIVATE ${FLUENTBIT_ROOT}/lib/sqlite-amalgamation-3400000)
+	target_include_directories(${target} SYSTEM
+	PRIVATE ${FLUENTBIT_ROOT}/lib/flb_libco)
 	target_link_libraries(${target} PRIVATE ${libs} ${RTM_LINKER_OPTION} fluent-bit)
 	set_target_properties(${target} PROPERTIES PREFIX "")
 
