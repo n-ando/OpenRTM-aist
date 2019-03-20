@@ -28,7 +28,7 @@ target_include_directories(${PROJECT_NAME}_idl_objlib SYSTEM
 	PUBLIC ${PROJECT_BINARY_DIR})
 add_dependencies(${PROJECT_NAME}_idl_objlib ${PROJECT_NAME}_IDLTGT)
 
-add_library(${PROJECT_NAME} SHARED
+add_library(${PROJECT_NAME} STATIC
 	$<TARGET_OBJECTS:${PROJECT_NAME}_objlib>
 	$<TARGET_OBJECTS:${PROJECT_NAME}_idl_objlib>)
 target_link_libraries(${PROJECT_NAME} PRIVATE ${libs} ${RTM_LINKER_OPTION})

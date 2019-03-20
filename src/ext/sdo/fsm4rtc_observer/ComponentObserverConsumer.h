@@ -223,7 +223,7 @@ namespace RTC
           "FSM_STRUCTURE",
           "USER_DEFINED"
         };
-      return (size_t)kind < sizeof(kinds)/sizeof(kinds[0]) ? kinds[kind] : "";
+      return static_cast<size_t>(kind) < sizeof(kinds)/sizeof(kinds[0]) ? kinds[kind] : "";
     }
 
     /*!
@@ -477,9 +477,9 @@ namespace RTC
     {
     public:
       CompStatMsg(ComponentObserverConsumer& coc)
-        : activatedListener(NULL), deactivatedListener(NULL),
-          resetListener(NULL), abortingListener(NULL),
-          finalizeListener(NULL), m_coc(coc) {}
+        : activatedListener(nullptr), deactivatedListener(nullptr),
+          resetListener(nullptr), abortingListener(nullptr),
+          finalizeListener(nullptr), m_coc(coc) {}
       void onGeneric(const char* msgprefix, UniqueId ec_id, ReturnCode_t ret)
       {
         if (ret == RTC::RTC_OK)
@@ -530,8 +530,8 @@ namespace RTC
     {
     public:
       PortAction(ComponentObserverConsumer& coc)
-        : portAddListener(NULL), portRemoveListener(NULL),
-          portConnectListener(NULL), portDisconnectListener(NULL),
+        : portAddListener(nullptr), portRemoveListener(nullptr),
+          portConnectListener(nullptr), portDisconnectListener(nullptr),
           m_coc(coc) {}
       void onGeneric(const char* _msg, const char* portname)
       {
@@ -548,7 +548,7 @@ namespace RTC
         onGeneric("REMOVE:", static_cast<const char*>(pprof.name));
       }
       void onConnect(const char* portname,
-                     ::RTC::ConnectorProfile& pprof, ReturnCode_t ret)
+                     ::RTC::ConnectorProfile&  /*pprof*/, ReturnCode_t ret)
       {
         if (ret == RTC::RTC_OK)
           {
@@ -556,7 +556,7 @@ namespace RTC
           }
       }
       void onDisconnect(const char* portname,
-                        ::RTC::ConnectorProfile& pprof, ReturnCode_t ret)
+                        ::RTC::ConnectorProfile&  /*pprof*/, ReturnCode_t ret)
       {
         if (ret == RTC::RTC_OK)
           {
@@ -584,8 +584,8 @@ namespace RTC
     {
     public:
       ECAction(ComponentObserverConsumer& coc)
-        : ecAttached(NULL), ecDetached(NULL), ecRatechanged(NULL),
-          ecStartup(NULL), ecShutdown(NULL),
+        : ecAttached(nullptr), ecDetached(nullptr), ecRatechanged(nullptr),
+          ecStartup(nullptr), ecShutdown(nullptr),
           m_coc(coc) {}
       void onGeneric(const char* _msg, UniqueId ec_id)
       {
@@ -641,9 +641,9 @@ namespace RTC
     {
     public:
       ConfigAction(ComponentObserverConsumer& coc)
-        : updateConfigParamListener(NULL), setConfigSetListener(NULL),
-          addConfigSetListener(NULL), updateConfigSetListener(NULL),
-          removeConfigSetListener(NULL), activateConfigSetListener(NULL),
+        : updateConfigParamListener(nullptr), setConfigSetListener(nullptr),
+          addConfigSetListener(nullptr), updateConfigSetListener(nullptr),
+          removeConfigSetListener(nullptr), activateConfigSetListener(nullptr),
           m_coc(coc) {}
       void updateConfigParam(const char* configsetname,
                              const char* configparamname)
@@ -741,27 +741,27 @@ namespace RTC
         m_coc.updateStatus(RTC::FSM_STATUS, msg.c_str());
       }
 
-      void postInit(const char* state, ReturnCode_t ret)
+      void postInit(const char* state, ReturnCode_t  /*ret*/)
       {
         std::string msg(state); msg += " POST_ON_INIT";
         m_coc.updateStatus(RTC::FSM_STATUS, msg.c_str());
       }
-      void postEntry(const char* state, ReturnCode_t ret)
+      void postEntry(const char* state, ReturnCode_t  /*ret*/)
       {
         std::string msg(state); msg += " POST_ONENTRY";
         m_coc.updateStatus(RTC::FSM_STATUS, msg.c_str());
       }
-      void postDo(const char* state, ReturnCode_t ret)
+      void postDo(const char* state, ReturnCode_t  /*ret*/)
       {
         std::string msg(state); msg += " POST_ON_DO";
         m_coc.updateStatus(RTC::FSM_STATUS, msg.c_str());
       }
-      void postExit(const char* state, ReturnCode_t ret)
+      void postExit(const char* state, ReturnCode_t  /*ret*/)
       {
         std::string msg(state); msg += " POST_ON_EXIT";
         m_coc.updateStatus(RTC::FSM_STATUS, msg.c_str());
       }
-      void postStateChange(const char* state, ReturnCode_t ret)
+      void postStateChange(const char* state, ReturnCode_t  /*ret*/)
       {
         std::string msg(state); msg += " POST_ON_STATE_CHNAGE";
         m_coc.updateStatus(RTC::FSM_STATUS, msg.c_str());

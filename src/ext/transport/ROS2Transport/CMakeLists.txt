@@ -19,6 +19,8 @@ find_package(rclcpp REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(geometry_msgs REQUIRED)
 find_package(sensor_msgs REQUIRED)
+find_package(fastcdr REQUIRED)
+find_package(fastrtps REQUIRED)
 
 
 
@@ -36,7 +38,7 @@ set(srcs ROS2Transport.cpp ROS2Transport.h ROS2MessageInfo.cpp ROS2MessageInfo.h
 
 
 if(VXWORKS AND NOT RTP)
-	set(libs ${RTCSKEL_PROJECT_NAME})
+	set(libs ${RTCSKEL_PROJECT_NAME} fastcdr fastrtps)
 
 	add_executable(${target} ${srcs})
 	openrtm_common_set_compile_props(${target})
@@ -56,9 +58,9 @@ if(VXWORKS AND NOT RTP)
 				COMPONENT ext)
 else()
 	if(VXWORKS)
-		set(libs ${RTM_PROJECT_NAME} ${ORB_LIBRARIES} ${COIL_PROJECT_NAME} ${RTCSKEL_PROJECT_NAME} FastRTPSTransport ${rclcpp_LIBRARIES} ${std_msgs_LIBRARIES} ${geometry_msgs_LIBRARIES}  ${sensor_msgs_LIBRARIES})
+		set(libs ${RTM_PROJECT_NAME} ${ORB_LIBRARIES} ${COIL_PROJECT_NAME} ${DATATYPE_FACTORIES} ${RTCSKEL_PROJECT_NAME} FastRTPSTransport ${rclcpp_LIBRARIES} ${std_msgs_LIBRARIES} ${geometry_msgs_LIBRARIES}  ${sensor_msgs_LIBRARIES})
 	else(VXWORKS)
-		set(libs ${RTM_PROJECT_NAME} ${ORB_LIBRARIES} ${COIL_PROJECT_NAME} FastRTPSTransport ${rclcpp_LIBRARIES} ${std_msgs_LIBRARIES}  ${geometry_msgs_LIBRARIES} ${sensor_msgs_LIBRARIES})
+		set(libs ${RTM_PROJECT_NAME} ${ORB_LIBRARIES} ${COIL_PROJECT_NAME} ${DATATYPE_FACTORIES} FastRTPSTransport ${rclcpp_LIBRARIES} ${std_msgs_LIBRARIES} ${geometry_msgs_LIBRARIES} ${sensor_msgs_LIBRARIES} fastcdr fastrtps)
 	endif(VXWORKS)
 
 
@@ -68,10 +70,10 @@ else()
 	target_include_directories(${target}
 		PRIVATE ${PROJECT_SOURCE_DIR}/..)
 	target_include_directories(${target} SYSTEM
-		PURBLIC ${rclcpp_INCLUDE_DIRS}
-		PURBLIC ${std_msgs_INCLUDE_DIRS}
-		PURBLIC ${geometry_msgs_INCLUDE_DIRS}
-		PURBLIC ${sensor_msgs_INCLUDE_DIRS})
+		PUBLIC ${rclcpp_INCLUDE_DIRS}
+		PUBLIC ${std_msgs_INCLUDE_DIRS}
+		PUBLIC ${geometry_msgs_INCLUDE_DIRS}
+		PUBLIC ${sensor_msgs_INCLUDE_DIRS})
 	target_link_libraries(${target} PRIVATE ${libs} ${RTM_LINKER_OPTION})
 	set_target_properties(${target} PROPERTIES PREFIX "")
 

@@ -176,7 +176,7 @@ namespace coil
      *
      * @endif
      */
-    GetOpt(int argc, char* const argv[], const char* opt, int flag)
+    GetOpt(int argc, char* const argv[], const char* opt, int  /*flag*/)
       : optarg(::optarg), optind(1), opterr(1), optopt(0),
         m_argc(argc), m_argv(argv), m_opt(opt)
     {

@@ -1,4 +1,4 @@
-This is a release of OpenRTM-aist-1.1.2, dual-license open source RT-Middleware.
+This is a release of OpenRTM-aist-2.0, dual-license open source RT-Middleware.
 
 Carefully read the following files before you configure, build, install  
 OpenRTM and develop RT-Components.
