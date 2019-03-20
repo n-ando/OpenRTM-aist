@@ -1829,7 +1829,7 @@ namespace RTC
      *
      * @endif
      */
-    bool appendInterface(const char* name, const char* type_name,
+    bool appendInterface(const char* instance_name, const char* type_name,
                          PortInterfacePolarity pol);
 
     /*!

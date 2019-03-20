@@ -90,7 +90,7 @@ namespace CORBA_IORUtil
   std::vector<IIOP::Address> getEndpoints(IOP::IOR& ior);
 
 
-  void extractAddrs(IOP::MultipleComponentProfile& components,
+  void extractAddrs(IOP::MultipleComponentProfile& comp,
                     std::vector<IIOP::Address>& addr);
 #endif
 

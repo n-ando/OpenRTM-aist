@@ -360,7 +360,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual void publishInterfaceProfile(SDOPackage::NVList& properties);
+    virtual void publishInterfaceProfile(SDOPackage::NVList& prop);
 
     /*!
      * @if jp
@@ -389,7 +389,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual bool publishInterface(SDOPackage::NVList& properties);
+    virtual bool publishInterface(SDOPackage::NVList& prop);
 
   protected:
     /*!

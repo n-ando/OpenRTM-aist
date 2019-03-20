@@ -30,10 +30,10 @@ namespace coil
   typedef std::vector<unsigned int> CpuMask;
   /*!
    * @if jp
-   * @brief ¥×¥í¥»¥¹¤ÎCPU affinity¤ò¼èÆÀ¤¹¤ë
-   * @prop cpu_mask ¸½ºßÀßÄê¤µ¤ì¤Æ¤¤¤ë affinity ¤¬ CPU ID¤Î
-   *                std::vector<unsigned int> ¤ÇÊÖ¤µ¤ì¤ë¡£
-   * @return True: À®¸ù¡¢False: ¼ºÇÔ
+   * @brief ãƒ—ãƒ­ã‚»ã‚¹ã®CPU affinityã‚’å–å¾—ã™ã‚‹
+   * @prop cpu_mask ç¾åœ¨è¨­å®šã•ã‚Œã¦ã„ã‚‹ affinity ãŒ CPU IDã®
+   *                std::vector<unsigned int> ã§è¿”ã•ã‚Œã‚‹ã€‚
+   * @return True: æˆåŠŸã€False: å¤±æ•—
    * @else
    * @brief Getting current process CPU affinity
    * @prop cpu_mask Current CPU affinity mask is returned as CPU ID in
@@ -45,10 +45,10 @@ namespace coil
 
   /*!
    * @if jp
-   * @brief ¥×¥í¥»¥¹¤ÎCPU affinity¤òÀßÄê¤¹¤ë
-   * @prop cpu_mask ÀßÄê¤¹¤ë CPU affinity ¤ò CPU ID ¤Î
-   *                std::vector<unsigned int> ¥ê¥¹¥È¤ÇÍ¿¤¨¤ë
-   * @return True: À®¸ù¡¢False: ¼ºÇÔ
+   * @brief ãƒ—ãƒ­ã‚»ã‚¹ã®CPU affinityã‚’è¨­å®šã™ã‚‹
+   * @prop cpu_mask è¨­å®šã™ã‚‹ CPU affinity ã‚’ CPU ID ã®
+   *                std::vector<unsigned int> ãƒªã‚¹ãƒˆã§ä¸ãˆã‚‹
+   * @return True: æˆåŠŸã€False: å¤±æ•—
    * @else
    * @brief Setting process CPU affinity
    * @prop cpu_mask CPU affinity mask to be set is given with CPU ID in
@@ -60,10 +60,10 @@ namespace coil
 
   /*!
    * @if jp
-   * @brief ¥×¥í¥»¥¹¤ÎCPU affinity¤òÊ¸»úÎó¤ÇÀßÄê¤¹¤ë
-   * @prop cpu_mask ÀßÄê¤¹¤ë CPU affinity ¤ò CPU ID ¤Î¥«¥ó¥Ş¶èÀÚ¤êÊ¸»ú
-   *                Îó¤Î¥ê¥¹¥È¤ÇÍ¿¤¨¤ë
-   * @return True: À®¸ù¡¢False: ¼ºÇÔ
+   * @brief ãƒ—ãƒ­ã‚»ã‚¹ã®CPU affinityã‚’æ–‡å­—åˆ—ã§è¨­å®šã™ã‚‹
+   * @prop cpu_mask è¨­å®šã™ã‚‹ CPU affinity ã‚’ CPU ID ã®ã‚«ãƒ³ãƒåŒºåˆ‡ã‚Šæ–‡å­—
+   *                åˆ—ã®ãƒªã‚¹ãƒˆã§ä¸ãˆã‚‹
+   * @return True: æˆåŠŸã€False: å¤±æ•—
    * @else
    * @brief Setting process CPU affinity with string
    * @prop cpu_mask CPU affinity mask to be set is given with comma
@@ -75,10 +75,10 @@ namespace coil
 
   /*!
    * @if jp
-   * @brief ¥¹¥ì¥Ã¥É¤ÎCPU affinity¤ò¼èÆÀ¤¹¤ë
-   * @prop cpu_mask ¸½ºßÀßÄê¤µ¤ì¤Æ¤¤¤ë affinity ¤¬ CPU ID¤Î
-   *                std::vector<unsigned int> ¤ÇÊÖ¤µ¤ì¤ë¡£
-   * @return True: À®¸ù¡¢False: ¼ºÇÔ
+   * @brief ã‚¹ãƒ¬ãƒƒãƒ‰ã®CPU affinityã‚’å–å¾—ã™ã‚‹
+   * @prop cpu_mask ç¾åœ¨è¨­å®šã•ã‚Œã¦ã„ã‚‹ affinity ãŒ CPU IDã®
+   *                std::vector<unsigned int> ã§è¿”ã•ã‚Œã‚‹ã€‚
+   * @return True: æˆåŠŸã€False: å¤±æ•—
    * @else
    * @brief Getting current process CPU affinity
    * @prop cpu_mask Current CPU affinity mask is returned as CPU ID in
@@ -90,10 +90,10 @@ namespace coil
 
   /*!
    * @if jp
-   * @brief ¥¹¥ì¥Ã¥É¤ÎCPU affinity¤òÀßÄê¤¹¤ë
-   * @prop cpu_mask ÀßÄê¤¹¤ë CPU affinity ¤ò CPU ID ¤Î
-   *                std::vector<unsigned int> ¥ê¥¹¥È¤ÇÍ¿¤¨¤ë
-   * @return True: À®¸ù¡¢False: ¼ºÇÔ
+   * @brief ã‚¹ãƒ¬ãƒƒãƒ‰ã®CPU affinityã‚’è¨­å®šã™ã‚‹
+   * @prop cpu_mask è¨­å®šã™ã‚‹ CPU affinity ã‚’ CPU ID ã®
+   *                std::vector<unsigned int> ãƒªã‚¹ãƒˆã§ä¸ãˆã‚‹
+   * @return True: æˆåŠŸã€False: å¤±æ•—
    * @else
    * @brief Setting process CPU affinity
    * @prop cpu_mask CPU affinity mask to be set is given with CPU ID in
@@ -105,10 +105,10 @@ namespace coil
 
   /*!
    * @if jp
-   * @brief ¥¹¥ì¥Ã¥É¤ÎCPU affinity¤òÊ¸»úÎó¤ÇÀßÄê¤¹¤ë
-   * @prop cpu_mask ÀßÄê¤¹¤ë CPU affinity ¤ò CPU ID ¤Î¥«¥ó¥Ş¶èÀÚ¤êÊ¸»ú
-   *                Îó¤Î¥ê¥¹¥È¤ÇÍ¿¤¨¤ë
-   * @return True: À®¸ù¡¢False: ¼ºÇÔ
+   * @brief ã‚¹ãƒ¬ãƒƒãƒ‰ã®CPU affinityã‚’æ–‡å­—åˆ—ã§è¨­å®šã™ã‚‹
+   * @prop cpu_mask è¨­å®šã™ã‚‹ CPU affinity ã‚’ CPU ID ã®ã‚«ãƒ³ãƒåŒºåˆ‡ã‚Šæ–‡å­—
+   *                åˆ—ã®ãƒªã‚¹ãƒˆã§ä¸ãˆã‚‹
+   * @return True: æˆåŠŸã€False: å¤±æ•—
    * @else
    * @brief Setting process CPU affinity with string
    * @prop cpu_mask CPU affinity mask to be set is given with comma

@@ -434,9 +434,10 @@ namespace coil
           goto REFIND;
           }
         */
-        substr_size = found_pos - pre_pos;
-        if (substr_size > 0)
+        
+        if (found_pos >= pre_pos)
           {
+            substr_size = found_pos - pre_pos;
             std::string substr(input.substr(pre_pos, substr_size));
             eraseHeadBlank(substr);
             eraseTailBlank(substr);

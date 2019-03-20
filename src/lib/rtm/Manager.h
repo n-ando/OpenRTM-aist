@@ -1369,7 +1369,7 @@ namespace RTC
      *
      * @endif
      */
-    void createORBEndpointOption(std::string& opt, coil::vstring& endpoint);
+    void createORBEndpointOption(std::string& opt, coil::vstring& endpoints);
 
     /*!
      * @if jp
