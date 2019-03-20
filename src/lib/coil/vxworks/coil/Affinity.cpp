@@ -33,12 +33,12 @@ namespace coil
     return false;
   }
 
-  bool setProcCpuAffinity(CpuMask cpu_mask)
+  bool setProcCpuAffinity(const CpuMask& cpu_mask)
   {
     return false;
   }
 
-  bool setProcCpuAffinity(std::string cpu_mask)
+  bool setProcCpuAffinity(const std::string& cpu_mask)
   {
     return false;
   }
@@ -58,7 +58,7 @@ namespace coil
     return true;
   }
 
-  bool setThreadCpuAffinity(CpuMask cpu_mask)
+  bool setThreadCpuAffinity(const CpuMask& cpu_mask)
   {
     int pid = taskIdSelf();
     cpuset_t cpu_set;
@@ -80,7 +80,7 @@ namespace coil
     return true;
   }
 
-  bool setThreadCpuAffinity(std::string cpu_mask)
+  bool setThreadCpuAffinity(const std::string& cpu_mask)
   {
     coil::vstring tmp = coil::split(cpu_mask, ",", true);
     CpuMask mask;

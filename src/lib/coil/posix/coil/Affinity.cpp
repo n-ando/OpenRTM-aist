@@ -47,7 +47,7 @@ namespace coil
     return true;
   }
 
-  bool setProcCpuAffinity(CpuMask cpu_mask)
+  bool setProcCpuAffinity(const CpuMask& cpu_mask)
   {
 #ifndef COIL_OS_QNX
     pid_t pid(getpid());
@@ -106,7 +106,7 @@ namespace coil
     return true;
   }
 
-  bool setThreadCpuAffinity(CpuMask cpu_mask)
+  bool setThreadCpuAffinity(const CpuMask& cpu_mask)
   {
 #ifndef COIL_OS_QNX
     pthread_t tid(pthread_self());

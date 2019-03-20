@@ -22,7 +22,7 @@
 
 namespace coil
 {
-  DWORD_PTR listToCUPNUM(CpuMask &cpu_mask)
+  DWORD_PTR listToCUPNUM(const CpuMask &cpu_mask)
   {
     DWORD_PTR cpu_num = 0;
     for(auto & m : cpu_mask)
@@ -54,7 +54,7 @@ namespace coil
     }
   }
 
-  bool setProcCpuAffinity(CpuMask cpu_mask)
+  bool setProcCpuAffinity(const CpuMask& cpu_mask)
   {
     DWORD_PTR cpu_num = listToCUPNUM(cpu_mask);
     HANDLE h = GetCurrentProcess();
@@ -89,7 +89,7 @@ namespace coil
     return true;
   }
 
-  bool setThreadCpuAffinity(CpuMask cpu_mask)
+  bool setThreadCpuAffinity(const CpuMask& cpu_mask)
   {
     DWORD_PTR cpu_num = listToCUPNUM(cpu_mask);
     HANDLE h = GetCurrentThread();

@@ -57,7 +57,7 @@ namespace coil
    * @return True: success, False: fail
    * @endif
    */
-  bool setProcCpuAffinity(const CpuMask cpu_mask);
+  bool setProcCpuAffinity(const CpuMask& cpu_mask);
 
   /*!
    * @if jp
@@ -72,7 +72,7 @@ namespace coil
    * @return True: success, False: fail
    * @endif
    */
-  bool setProcCpuAffinity(std::string cpu_mask);
+  bool setProcCpuAffinity(const std::string& cpu_mask);
 
   /*!
    * @if jp
@@ -102,7 +102,7 @@ namespace coil
    * @return True: success, False: fail
    * @endif
    */
-  bool setThreadCpuAffinity(const CpuMask cpu_mask);
+  bool setThreadCpuAffinity(const CpuMask& cpu_mask);
 
   /*!
    * @if jp
@@ -117,7 +117,7 @@ namespace coil
    * @return True: success, False: fail
    * @endif
    */
-  bool setThreadCpuAffinity(std::string cpu_mask);
+  bool setThreadCpuAffinity(const std::string& cpu_mask);
 
 } // namespace coil
 #endif // COIL_AFFINITY_H
