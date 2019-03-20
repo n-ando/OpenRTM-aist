@@ -279,7 +279,7 @@ class skel_wrapper:
 		text = t.generate(data)
 
 		if os.access(fname, os.F_OK): # file exists
-			f = file(fname, "r")
+			f = open(fname, "r")
 			oldtext = f.read()
 			f.close()
 
