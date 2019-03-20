@@ -548,7 +548,7 @@ namespace RTC
         onGeneric("REMOVE:", static_cast<const char*>(pprof.name));
       }
       void onConnect(const char* portname,
-                     ::RTC::ConnectorProfile& pprof, ReturnCode_t ret)
+                     ::RTC::ConnectorProfile&  /*pprof*/, ReturnCode_t ret)
       {
         if (ret == RTC::RTC_OK)
           {
@@ -556,7 +556,7 @@ namespace RTC
           }
       }
       void onDisconnect(const char* portname,
-                        ::RTC::ConnectorProfile& pprof, ReturnCode_t ret)
+                        ::RTC::ConnectorProfile&  /*pprof*/, ReturnCode_t ret)
       {
         if (ret == RTC::RTC_OK)
           {
@@ -741,27 +741,27 @@ namespace RTC
         m_coc.updateStatus(RTC::FSM_STATUS, msg.c_str());
       }
 
-      void postInit(const char* state, ReturnCode_t ret)
+      void postInit(const char* state, ReturnCode_t  /*ret*/)
       {
         std::string msg(state); msg += " POST_ON_INIT";
         m_coc.updateStatus(RTC::FSM_STATUS, msg.c_str());
       }
-      void postEntry(const char* state, ReturnCode_t ret)
+      void postEntry(const char* state, ReturnCode_t  /*ret*/)
       {
         std::string msg(state); msg += " POST_ONENTRY";
         m_coc.updateStatus(RTC::FSM_STATUS, msg.c_str());
       }
-      void postDo(const char* state, ReturnCode_t ret)
+      void postDo(const char* state, ReturnCode_t  /*ret*/)
       {
         std::string msg(state); msg += " POST_ON_DO";
         m_coc.updateStatus(RTC::FSM_STATUS, msg.c_str());
       }
-      void postExit(const char* state, ReturnCode_t ret)
+      void postExit(const char* state, ReturnCode_t  /*ret*/)
       {
         std::string msg(state); msg += " POST_ON_EXIT";
         m_coc.updateStatus(RTC::FSM_STATUS, msg.c_str());
       }
-      void postStateChange(const char* state, ReturnCode_t ret)
+      void postStateChange(const char* state, ReturnCode_t  /*ret*/)
       {
         std::string msg(state); msg += " POST_ON_STATE_CHNAGE";
         m_coc.updateStatus(RTC::FSM_STATUS, msg.c_str());
