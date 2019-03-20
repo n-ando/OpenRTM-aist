@@ -98,7 +98,7 @@ void RTC::CORBACdrData::deserialize(eprosima::fastcdr::Cdr &dcdr)
 
 size_t RTC::CORBACdrData::getKeyMaxCdrSerializedSize(size_t current_alignment)
 {
-	size_t current_align = current_alignment;
+    size_t current_align = current_alignment;
             
 
     return current_align;
@@ -109,8 +109,7 @@ bool RTC::CORBACdrData::isKeyDefined()
     return false;
 }
 
-void RTC::CORBACdrData::serializeKey(eprosima::fastcdr::Cdr &scdr) const
+void RTC::CORBACdrData::serializeKey(eprosima::fastcdr::Cdr &/*scdr*/) const
 {
-	(void) scdr;
 	 
 }
