@@ -662,7 +662,7 @@ namespace SDOPackage
      *                          completely due to some internal error.
      * @endif
      */
-    ConfigurationSet* get_configuration_set(const char* config_id)
+    ConfigurationSet* get_configuration_set(const char* id)
       throw (CORBA::SystemException,
              NotAvailable, InternalError) override;
 
@@ -858,7 +858,7 @@ namespace SDOPackage
      *                          completely due to some internal error.
      * @endif
      */
-    CORBA::Boolean remove_configuration_set(const char* config_id)
+    CORBA::Boolean remove_configuration_set(const char* id)
       throw (CORBA::SystemException,
              InvalidParameter, NotAvailable, InternalError) override;
 
@@ -912,7 +912,7 @@ namespace SDOPackage
      *                          completely due to some internal error.
      * @endif
      */
-    CORBA::Boolean activate_configuration_set(const char* config_id)
+    CORBA::Boolean activate_configuration_set(const char* id)
       throw (CORBA::SystemException,
              InvalidParameter, NotAvailable, InternalError) override;
 

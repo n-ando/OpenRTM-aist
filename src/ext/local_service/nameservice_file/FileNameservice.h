@@ -148,7 +148,7 @@ namespace RTM
        * @endif
        */
       void
-      onRegisterNameservice(coil::vstring& path, coil::vstring& ns_info);
+      onRegisterNameservice(coil::vstring& ns_path, coil::vstring& ns_info);
       
       /*!
        * @if jp
@@ -164,7 +164,7 @@ namespace RTM
        * @endif
        */
       void
-      onUnregisterNameservice(coil::vstring& path);
+      onUnregisterNameservice(coil::vstring& ns_path);
       
     protected:
       /*!
@@ -187,7 +187,7 @@ namespace RTM
        * TODO: Documentation
        * @endif
        */
-      std::string getFname(std::string& path) const;
+      std::string getFname(std::string& ns_path) const;
       
       /*!
        * @if jp
@@ -247,7 +247,7 @@ namespace RTM
        * @endif
        */
       void preBind(RTC::RTObject_impl* rtobj,
-                           coil::vstring& name) override;
+                           coil::vstring& name_) override;
       /*!
        * @if jp
        * @brief postBind コールバック関数

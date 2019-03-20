@@ -390,7 +390,7 @@ namespace RTC_impl
      *
      * @endif
      */
-    RTC::ReturnCode_t resetComponent(RTC::LightweightRTObject_ptr com,
+    RTC::ReturnCode_t resetComponent(RTC::LightweightRTObject_ptr comp,
                                      RTObjectStateMachine*& rtobj);
     RTC::ReturnCode_t waitResetComplete(RTObjectStateMachine*& rtobj,
                                         coil::TimeValue timeout = coil::TimeValue(1.0),

@@ -35,7 +35,7 @@ namespace CORBA_IORUtil
 
 #if !defined(ORB_IS_RTORB) && !defined(ORB_IS_ORBEXPRESS) && !defined(ORB_IS_TAO)
   // prototype of static functions
-  static void print_key(std::stringstream& s, OctetUSequence& key);
+  static void print_key(std::stringstream& sstr, OctetUSequence& key);
 
   static void print_omni_key(std::stringstream& sstr, OctetUSequence& key);
 
@@ -43,7 +43,7 @@ namespace CORBA_IORUtil
                           int& transient_out, OctetUSequence& id_out);
 
   static void print_tagged_components(std::stringstream& sstr,
-                                      IOP::MultipleComponentProfile& comps);
+                                      IOP::MultipleComponentProfile& components);
 #endif  // ORB_IS_RTORB
 
 

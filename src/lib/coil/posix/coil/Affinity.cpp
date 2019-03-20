@@ -47,14 +47,14 @@ namespace coil
     return true;
   }
 
-  bool setProcCpuAffinity(std::vector<unsigned int> mask)
+  bool setProcCpuAffinity(CpuMask cpu_mask)
   {
 #ifndef COIL_OS_QNX
     pid_t pid(getpid());
     cpu_set_t cpu_set;
     CPU_ZERO(&cpu_set);
 
-    for (size_t i(0); i < mask.size(); ++i)
+    for (size_t i(0); i < cpu_mask.size(); ++i)
       {
         CPU_SET(i, &cpu_set);
       }
@@ -106,14 +106,14 @@ namespace coil
     return true;
   }
 
-  bool setThreadCpuAffinity(std::vector<unsigned int> mask)
+  bool setThreadCpuAffinity(CpuMask cpu_mask)
   {
 #ifndef COIL_OS_QNX
     pthread_t tid(pthread_self());
     cpu_set_t cpu_set;
     CPU_ZERO(&cpu_set);
 
-    for (size_t i(0); i < mask.size(); ++i)
+    for (size_t i(0); i < cpu_mask.size(); ++i)
       {
         CPU_SET(i, &cpu_set);
       }
