@@ -67,15 +67,15 @@ namespace RTC
         std::string key(lprop->getName());
         if (key.find("output") != std::string::npos)
           {
-            createOutputStream(lprop);
+            createOutputStream(*lprop);
           }
         else if (key.find("input") != std::string::npos)
           {
-            createInputStream(lprop);
+            createInputStream(*lprop);
           }
         else if (key.find("option") != std::string::npos)
         {
-            setServiceOption(lprop);
+            setServiceOption(*lprop);
         }
       }
     // Start the background worker
@@ -136,7 +136,7 @@ namespace RTC
         n = snprintf(tmp, sizeof(tmp) - 1,
                      "[%lu, {\"message\": \"%s\", \"time\":\"%s\",\"name\":\"%s\",\"level\":\"%s\"}]", time(NULL), mes, date.c_str(), name.c_str(), Logger::getLevelString(level).c_str());
 
-        flb_lib_push(s_flbContext, flb tmp, n);
+        flb_lib_push(s_flbContext, flb, tmp, n);
       }
     return n;
   }
