@@ -69,7 +69,7 @@ namespace coil
 	}
   }
 
-  bool setProcCpuAffinity(std::string cpu_mask)
+  bool setProcCpuAffinity(const std::string& cpu_mask)
   {
     coil::vstring masklist = coil::split(cpu_mask, ",", true);
     CpuMask mask;
@@ -104,7 +104,7 @@ namespace coil
 	}
   }
 
-  bool setThreadCpuAffinity(std::string cpu_mask)
+  bool setThreadCpuAffinity(const std::string& cpu_mask)
   {
     coil::vstring masklist = coil::split(cpu_mask, ",", true);
     CpuMask mask;
