@@ -38,8 +38,8 @@ namespace coil
    * @brief Constructor(Create only root node)
    * @endif
    */
-  Properties::Properties(const char* key, const char* value)
-    : name(key), value(value), default_value(""), root(nullptr), m_empty("")
+  Properties::Properties(const char* key, const char* value, bool set_value)
+    : name(key), value(value), default_value(""), set_value((this->value.empty()) ? set_value : true), root(nullptr), m_empty("")
   {
     leaf.clear();
   }
@@ -52,7 +52,7 @@ namespace coil
    * @endif
    */
   Properties::Properties(std::map<std::string, std::string>& defaults)
-    : name(""), value(""), default_value(""), root(nullptr), m_empty("")
+    : name(""), value(""), default_value(""), set_value(false), root(nullptr), m_empty("")
   {
     leaf.clear();
     std::map<std::string, std::string>::iterator it(defaults.begin());
@@ -73,7 +73,7 @@ namespace coil
    * @endif
    */
   Properties::Properties(const char** defaults, long num)
-    : name(""), value(""), default_value(""), root(nullptr), m_empty("")
+    : name(""), value(""), default_value(""), set_value(false), root(nullptr), m_empty("")
   {
     leaf.clear();
     setDefaults(defaults, num);
@@ -88,7 +88,7 @@ namespace coil
    */
   Properties::Properties(const Properties& prop)
     : name(prop.name), value(prop.value),
-      default_value(prop.default_value), root(nullptr), m_empty("")
+      default_value(prop.default_value), set_value(prop.set_value), root(nullptr), m_empty("")
   {
     std::vector<std::string> keys;
     keys = prop.propertyNames();
@@ -98,7 +98,10 @@ namespace coil
         if ((node = prop.findNode(key)) != nullptr)
           {
             setDefault(key,  node->default_value);
-            setProperty(key, node->value);
+            if (node->set_value)
+              {
+                setProperty(key, node->value);
+              }
           }
       }
   }
@@ -116,6 +119,7 @@ namespace coil
     name = prop.name;
     value = prop.value;
     default_value = prop.default_value;
+    set_value = prop.set_value;
 
     std::vector<std::string> keys;
     keys = prop.propertyNames();
@@ -125,7 +129,10 @@ namespace coil
         if (node != nullptr)
           {
             setDefault(key,  node->default_value);
-            setProperty(key, node->value);
+            if (node->set_value)
+              {
+                setProperty(key, node->value);
+              }
           }
       }
 
@@ -168,7 +175,7 @@ namespace coil
     Properties* node(nullptr);
     if ((node = _getNode(keys, 0, this)) != nullptr)
       {
-        return (!node->value.empty()) ? node->value : node->default_value;
+        return (node->set_value) ? node->value : node->default_value;
       }
     return m_empty;
   }
@@ -261,6 +268,7 @@ namespace coil
       }
     std::string retval(curr->value);
     curr->value = invalue;
+    curr->set_value = true;
     return retval;
   }
 
@@ -760,7 +768,7 @@ namespace coil
 
     if (curr->root != nullptr)
       {
-        if (curr->value.length() > 0)
+        if (curr->set_value)
           {
             out << curr_name << ": " << coil::escape(curr->value) << std::endl;
           }
@@ -780,7 +788,7 @@ namespace coil
     if (index != 0) out << indent(index) << "- " << curr.name;
     if (curr.leaf.empty())
       {
-        if (curr.value.empty())
+        if (!curr.set_value)
           {
             out << ": " << curr.default_value << std::endl;
           }
@@ -859,7 +867,7 @@ namespace coil
       if (index != 0) out += indent(index) + "- " + curr.name;
       if (curr.leaf.empty())
       {
-          if (curr.value.empty())
+          if (!curr.set_value)
           {
               out += ": " + curr.default_value + "\n";
           }
@@ -881,7 +889,7 @@ namespace coil
       if (index != 0) out.push_back(indent(index) + "- " + curr.name);
       if (curr.leaf.empty())
       {
-          if (curr.value.empty())
+          if (!curr.set_value)
           {
               out.push_back(": " + curr.default_value);
           }
