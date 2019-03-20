@@ -61,8 +61,7 @@ namespace SDOPackage
    * @endif
    */
   CORBA::Boolean PeriodicECOrganization::add_members(const SDOList& sdo_list)
-    throw (CORBA::SystemException,
-           InvalidParameter, NotAvailable, InternalError)
+    noexcept(false)
   {
     RTC_DEBUG(("add_members()"));
 
@@ -101,8 +100,7 @@ namespace SDOPackage
    * @endif
    */
   CORBA::Boolean PeriodicECOrganization::set_members(const SDOList& sdo_list)
-    throw (CORBA::SystemException,
-           InvalidParameter, NotAvailable, InternalError)
+    noexcept(false)
   {
 
     RTC_DEBUG(("set_members()"));
@@ -152,8 +150,7 @@ namespace SDOPackage
    * @endif
    */
   CORBA::Boolean PeriodicECOrganization::remove_member(const char* id)
-    throw (CORBA::SystemException,
-           InvalidParameter, NotAvailable, InternalError)
+    noexcept(false)
   {
     RTC_DEBUG(("remove_member(id = %s)", id));
     for (MemIt it(m_rtcMembers.begin()); it != m_rtcMembers.end();)
@@ -827,7 +824,7 @@ namespace RTC
 
 
   ReturnCode_t PeriodicECSharedComposite::exit()
-    throw (CORBA::SystemException)
+    noexcept(false)
   {
     ReturnCode_t ret = RTObject_impl::exit();
     try

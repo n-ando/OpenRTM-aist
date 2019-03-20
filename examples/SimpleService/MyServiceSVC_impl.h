@@ -29,15 +29,15 @@ class MyServiceSVC_impl
 
    // attributes and operations
    char* echo(const char* msg)
-     throw (CORBA::SystemException) override;
+     noexcept(false) override;
   SimpleService::EchoList* get_echo_history()
-     throw (CORBA::SystemException) override;
+     noexcept(false) override;
    void set_value(CORBA::Float value)
-     throw (CORBA::SystemException) override;
+     noexcept(false) override;
    CORBA::Float get_value()
-     throw (CORBA::SystemException) override;
+     noexcept(false) override;
   SimpleService::ValueList* get_value_history()
-     throw (CORBA::SystemException) override;
+     noexcept(false) override;
 
 private:
   CORBA::Float m_value;

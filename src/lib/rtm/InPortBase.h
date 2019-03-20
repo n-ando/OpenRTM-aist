@@ -603,7 +603,7 @@ namespace RTC
      */
     ReturnCode_t
     connect(ConnectorProfile& connector_profile)
-      throw (CORBA::SystemException) override;
+      noexcept(false) override;
 
     /*!
      * @if jp
@@ -624,7 +624,7 @@ namespace RTC
      */
     virtual ConnectorListeners& getListeners();
     ReturnCode_t notify_connect(ConnectorProfile& connector_profile)
-		throw (CORBA::SystemException) override;
+		noexcept(false) override;
 
   protected:
     /*!

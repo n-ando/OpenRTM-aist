@@ -243,7 +243,7 @@ namespace RTC
      * @endif
      */
     ::RTC::PortStatus push(const ::RTC::OctetSeq& data)
-      throw (CORBA::SystemException) override;
+      noexcept(false) override;
 
   private:
     /*!

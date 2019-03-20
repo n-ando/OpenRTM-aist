@@ -239,7 +239,7 @@ namespace RTC
      * @endif
      */
     ::RTC::PortStatus pull(::RTC::OctetSeq_out data)
-      throw (CORBA::SystemException) override;
+      noexcept(false) override;
 
 
   private:

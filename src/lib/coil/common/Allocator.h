@@ -84,7 +84,7 @@ namespace coil
      *
      * @endif
      */
-    virtual void* New(size_t t) throw (std::bad_alloc);
+    virtual void* New(size_t t) noexcept(false);
 
     /*!
      * @if jp
@@ -105,7 +105,7 @@ namespace coil
      *
      * @endif
      */
-    virtual void Delete(void* p) throw ();
+    virtual void Delete(void* p) noexcept;
 
     /*!
      * @if jp
@@ -130,7 +130,7 @@ namespace coil
      *
      * @endif
      */
-    virtual void* NewArray(size_t t) throw (std::bad_alloc);
+    virtual void* NewArray(size_t t) noexcept(false);
 
     /*!
      * @if jp
@@ -151,7 +151,7 @@ namespace coil
      *
      * @endif
      */
-    virtual void DeleteArray(void* p) throw ();
+    virtual void DeleteArray(void* p) noexcept;
 
   };
 } // namespace coil

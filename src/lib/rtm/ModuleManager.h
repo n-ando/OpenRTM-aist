@@ -351,7 +351,7 @@ namespace RTC
      * @endif
      */
     void* symbol(const std::string& file_name, const std::string& func_name)
-      throw (ModuleNotFound, SymbolNotFound);
+      noexcept(false);
 
     /*!
      * @if jp

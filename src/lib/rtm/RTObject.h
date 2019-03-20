@@ -618,7 +618,7 @@ namespace RTC
      * @endif
      */
     ReturnCode_t initialize()
-      throw (CORBA::SystemException) override;
+      noexcept(false) override;
 
     /*!
      * @if jp
@@ -666,7 +666,7 @@ namespace RTC
      * @endif
      */
     ReturnCode_t finalize()
-      throw (CORBA::SystemException) override;
+      noexcept(false) override;
 
     /*!
      * @if jp
@@ -712,7 +712,7 @@ namespace RTC
      * @endif
      */
     ReturnCode_t exit()
-      throw (CORBA::SystemException) override;
+      noexcept(false) override;
 
     /*!
      * @if jp
@@ -748,7 +748,7 @@ namespace RTC
      * @endif
      */
     CORBA::Boolean is_alive(ExecutionContext_ptr exec_context)
-      throw (CORBA::SystemException) override;
+      noexcept(false) override;
 
     /*!
      * @if jp
@@ -778,7 +778,7 @@ namespace RTC
      * @endif
      */
     ExecutionContext_ptr get_context(UniqueId ec_id)
-      throw (CORBA::SystemException) override;
+      noexcept(false) override;
 
     /*!
      * @if jp
@@ -799,7 +799,7 @@ namespace RTC
      * @endif
      */
     ExecutionContextList* get_owned_contexts()
-      throw (CORBA::SystemException) override;
+      noexcept(false) override;
 
     /*!
      * @if jp
@@ -820,7 +820,7 @@ namespace RTC
      * @endif
      */
     ExecutionContextList* get_participating_contexts()
-      throw (CORBA::SystemException) override;
+      noexcept(false) override;
 
     /*!
      * @if jp
@@ -838,7 +838,7 @@ namespace RTC
      */
     ExecutionContextHandle_t
     get_context_handle(ExecutionContext_ptr cxt)
-      throw (CORBA::SystemException) override;
+      noexcept(false) override;
 
     /*!
      * @if jp
@@ -871,7 +871,7 @@ namespace RTC
      * @endif
      */
     UniqueId attach_context(ExecutionContext_ptr exec_context)
-      throw (CORBA::SystemException) override;
+      noexcept(false) override;
 
     UniqueId bindContext(ExecutionContext_ptr exec_context);
 
@@ -917,7 +917,7 @@ namespace RTC
      * @endif
      */
     ReturnCode_t detach_context(UniqueId ec_id)
-      throw (CORBA::SystemException) override;
+      noexcept(false) override;
 
     //============================================================
     // RTC::RTObject
@@ -942,7 +942,7 @@ namespace RTC
      * @endif
      */
     ComponentProfile* get_component_profile()
-      throw (CORBA::SystemException) override;
+      noexcept(false) override;
 
     /*!
      * @if jp
@@ -964,7 +964,7 @@ namespace RTC
      * @endif
      */
     PortServiceList* get_ports()
-      throw (CORBA::SystemException) override;
+      noexcept(false) override;
 
     /*!
      * @if jp
@@ -1019,7 +1019,7 @@ namespace RTC
      * @endif
      */
     ReturnCode_t on_initialize()
-      throw (CORBA::SystemException) override;
+      noexcept(false) override;
 
     /*!
      * @if jp
@@ -1046,7 +1046,7 @@ namespace RTC
      * @endif
      */
     ReturnCode_t on_finalize()
-      throw (CORBA::SystemException) override;
+      noexcept(false) override;
 
     /*!
      * @if jp
@@ -1077,7 +1077,7 @@ namespace RTC
      * @endif
      */
     ReturnCode_t on_startup(UniqueId ec_id)
-      throw (CORBA::SystemException) override;
+      noexcept(false) override;
 
     /*!
      * @if jp
@@ -1108,7 +1108,7 @@ namespace RTC
      * @endif
      */
     ReturnCode_t on_shutdown(UniqueId ec_id)
-      throw (CORBA::SystemException) override;
+      noexcept(false) override;
 
     /*!
      * @if jp
@@ -1137,7 +1137,7 @@ namespace RTC
      * @endif
      */
     ReturnCode_t on_activated(UniqueId ec_id)
-      throw (CORBA::SystemException) override;
+      noexcept(false) override;
 
     /*!
      * @if jp
@@ -1167,7 +1167,7 @@ namespace RTC
      * @endif
      */
     ReturnCode_t on_deactivated(UniqueId ec_id)
-      throw (CORBA::SystemException) override;
+      noexcept(false) override;
 
     /*!
      * @if jp
@@ -1202,7 +1202,7 @@ namespace RTC
      * @endif
      */
     ReturnCode_t on_aborting(UniqueId ec_id)
-      throw (CORBA::SystemException) override;
+      noexcept(false) override;
 
     /*!
      * @if jp
@@ -1248,7 +1248,7 @@ namespace RTC
      * @endif
      */
     ReturnCode_t on_error(UniqueId ec_id)
-      throw (CORBA::SystemException) override;
+      noexcept(false) override;
 
     /*!
      * @if jp
@@ -1285,7 +1285,7 @@ namespace RTC
      * @endif
      */
     ReturnCode_t on_reset(UniqueId ec_id)
-      throw (CORBA::SystemException) override;
+      noexcept(false) override;
 
     //============================================================
     // RTC::DataFlowComponentAction
@@ -1333,7 +1333,7 @@ namespace RTC
      * @endif
      */
     ReturnCode_t on_execute(UniqueId ec_id)
-      throw (CORBA::SystemException) override;
+      noexcept(false) override;
 
     /*!
      * @if jp
@@ -1379,7 +1379,7 @@ namespace RTC
      * @endif
      */
     ReturnCode_t on_state_update(UniqueId ec_id)
-      throw (CORBA::SystemException) override;
+      noexcept(false) override;
 
     /*!
      * @if jp
@@ -1418,7 +1418,7 @@ namespace RTC
      * @endif
      */
     ReturnCode_t on_rate_changed(UniqueId ec_id)
-      throw (CORBA::SystemException) override;
+      noexcept(false) override;
 
     //============================================================
     // SDOPackage::SdoSystemElement
@@ -1461,8 +1461,7 @@ namespace RTC
      * @endif
      */
     SDOPackage::OrganizationList* get_owned_organizations()
-      throw (CORBA::SystemException,
-             SDOPackage::NotAvailable, SDOPackage::InternalError) override;
+      noexcept(false) override;
 
     //============================================================
     // SDOPackage::SDO
@@ -1501,8 +1500,7 @@ namespace RTC
      * @endif
      */
     char* get_sdo_id()
-      throw (CORBA::SystemException,
-             SDOPackage::NotAvailable, SDOPackage::InternalError) override;
+      noexcept(false) override;
 
     /*!
      * @if jp
@@ -1538,8 +1536,7 @@ namespace RTC
      * @endif
      */
     char* get_sdo_type()
-      throw (CORBA::SystemException,
-             SDOPackage::NotAvailable, SDOPackage::InternalError) override;
+      noexcept(false) override;
 
     /*!
      * @if jp
@@ -1578,8 +1575,7 @@ namespace RTC
      * @endif
      */
     SDOPackage::DeviceProfile* get_device_profile()
-      throw (CORBA::SystemException,
-             SDOPackage::NotAvailable, SDOPackage::InternalError) override;
+      noexcept(false) override;
 
     /*!
      * @if jp
@@ -1618,8 +1614,7 @@ namespace RTC
      * @endif
      */
     SDOPackage::ServiceProfileList* get_service_profiles()
-      throw (CORBA::SystemException,
-             SDOPackage::NotAvailable, SDOPackage::InternalError) override;
+      noexcept(false) override;
 
     /*!
      * @if jp
@@ -1663,9 +1658,7 @@ namespace RTC
      * @endif
      */
     SDOPackage::ServiceProfile* get_service_profile(const char* id)
-      throw (CORBA::SystemException,
-             SDOPackage::InvalidParameter, SDOPackage::NotAvailable,
-             SDOPackage::InternalError) override;
+      noexcept(false) override;
 
     /*!
      * @if jp
@@ -1715,9 +1708,7 @@ namespace RTC
      * @endif
      */
     SDOPackage::SDOService_ptr get_sdo_service(const char* id)
-      throw (CORBA::SystemException,
-             SDOPackage::InvalidParameter, SDOPackage::NotAvailable,
-             SDOPackage::InternalError) override;
+      noexcept(false) override;
 
     /*!
      * @if jp
@@ -1764,9 +1755,7 @@ namespace RTC
      * @endif
      */
     SDOPackage::Configuration_ptr get_configuration()
-      throw (CORBA::SystemException,
-             SDOPackage::InterfaceNotImplemented, SDOPackage::NotAvailable,
-             SDOPackage::InternalError) override;
+      noexcept(false) override;
 
     /*!
      * @if jp
@@ -1812,9 +1801,7 @@ namespace RTC
      * @endif
      */
     SDOPackage::Monitoring_ptr get_monitoring()
-      throw (CORBA::SystemException,
-             SDOPackage::InterfaceNotImplemented, SDOPackage::NotAvailable,
-             SDOPackage::InternalError) override;
+      noexcept(false) override;
 
     /*!
      * @if jp
@@ -1852,8 +1839,7 @@ namespace RTC
      * @endif
      */
     SDOPackage::OrganizationList* get_organizations()
-      throw (CORBA::SystemException,
-             SDOPackage::NotAvailable, SDOPackage::InternalError) override;
+      noexcept(false) override;
 
     /*!
      * @if jp
@@ -1887,8 +1873,7 @@ namespace RTC
      * @endif
      */
     SDOPackage::NVList* get_status_list()
-      throw (CORBA::SystemException,
-             SDOPackage::NotAvailable, SDOPackage::InternalError) override;
+      noexcept(false) override;
 
     /*!
      * @if jp
@@ -1927,9 +1912,7 @@ namespace RTC
      * @endif
      */
     CORBA::Any* get_status(const char* name)
-      throw (CORBA::SystemException,
-             SDOPackage::InvalidParameter, SDOPackage::NotAvailable,
-             SDOPackage::InternalError) override;
+      noexcept(false) override;
 
     //============================================================
     // Local interfaces

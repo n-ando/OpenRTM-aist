@@ -234,7 +234,7 @@ namespace RTC
      * @endif
      */
     PortProfile* get_port_profile()
-      throw (CORBA::SystemException) override;
+      noexcept(false) override;
 
     /*!
      * @if jp
@@ -316,7 +316,7 @@ namespace RTC
      * @endif
      */
     ConnectorProfileList* get_connector_profiles()
-      throw (CORBA::SystemException) override;
+      noexcept(false) override;
 
     /*!
      * @if jp
@@ -358,7 +358,7 @@ namespace RTC
      * @endif
      */
     ConnectorProfile* get_connector_profile(const char* connector_id)
-      throw (CORBA::SystemException) override;
+      noexcept(false) override;
 
     /*!
      * @if jp
@@ -518,7 +518,7 @@ namespace RTC
      * @endif
      */
     ReturnCode_t connect(ConnectorProfile& connector_profile)
-      throw (CORBA::SystemException) override;
+      noexcept(false) override;
 
     /*!
      * @if jp
@@ -636,7 +636,7 @@ namespace RTC
      * @endif
      */
     ReturnCode_t notify_connect(ConnectorProfile& connector_profile)
-      throw (CORBA::SystemException) override;
+      noexcept(false) override;
 
     /*!
      * @if jp
@@ -704,7 +704,7 @@ namespace RTC
      * @endif
      */
     ReturnCode_t disconnect(const char* connector_id)
-      throw (CORBA::SystemException) override;
+      noexcept(false) override;
 
     /*!
      * @if jp
@@ -795,7 +795,7 @@ namespace RTC
      * @endif
      */
     ReturnCode_t notify_disconnect(const char* connector_id)
-      throw (CORBA::SystemException) override;
+      noexcept(false) override;
 
     /*!
      * @if jp
@@ -817,7 +817,7 @@ namespace RTC
      * @endif
      */
     ReturnCode_t disconnect_all()
-      throw (CORBA::SystemException) override;
+      noexcept(false) override;
 
     //============================================================
     // Local operations

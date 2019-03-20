@@ -475,7 +475,7 @@ namespace RTC
    * @endif
    */
   ReturnCode_t OutPortBase::connect(ConnectorProfile& connector_profile)
-    throw (CORBA::SystemException)
+    noexcept(false)
   {
     RTC_TRACE(("OutPortBase::connect()"));
 
@@ -1110,7 +1110,7 @@ namespace RTC
   }
 
   ReturnCode_t OutPortBase::notify_connect(ConnectorProfile& connector_profile)
-	  throw (CORBA::SystemException)
+	  noexcept(false)
   {
 	  Properties prop;
 	  NVUtil::copyToProperties(prop, connector_profile.properties);

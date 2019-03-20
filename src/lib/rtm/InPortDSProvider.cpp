@@ -149,7 +149,7 @@ namespace RTC
    */
   ::RTC::PortStatus
   InPortDSProvider::push(const ::RTC::OctetSeq& data)
-    throw (CORBA::SystemException)
+    noexcept(false)
   {
     RTC_PARANOID(("InPortDSProvider::push()"));
 

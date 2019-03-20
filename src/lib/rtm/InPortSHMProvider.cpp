@@ -120,7 +120,7 @@ namespace RTC
    */
   ::OpenRTM::PortStatus
   InPortSHMProvider::put()
-    throw (CORBA::SystemException)
+    noexcept(false)
   {
     RTC_PARANOID(("InPortSHMProvider::put()"));
     if (m_connector == nullptr)

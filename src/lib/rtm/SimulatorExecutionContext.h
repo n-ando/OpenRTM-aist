@@ -94,7 +94,7 @@ namespace RTC
      */
     RTC::ReturnCode_t
     activate_component(RTC::LightweightRTObject_ptr comp)
-      throw (CORBA::SystemException) override;
+      noexcept(false) override;
     /*!
      * @if jp
      * @brief RTコンポーネントを非アクティブ化する
@@ -119,7 +119,7 @@ namespace RTC
      */
     RTC::ReturnCode_t
     deactivate_component(RTC::LightweightRTObject_ptr comp)
-      throw (CORBA::SystemException) override;
+      noexcept(false) override;
     /*!
      * @if jp
      * @brief RTコンポーネントをリセットする
@@ -144,7 +144,7 @@ namespace RTC
      */
     RTC::ReturnCode_t
     reset_component(RTC::LightweightRTObject_ptr comp)
-      throw (CORBA::SystemException) override;
+      noexcept(false) override;
 
   private:
 

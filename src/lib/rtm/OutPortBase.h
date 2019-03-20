@@ -776,7 +776,7 @@ namespace RTC
      */
     ReturnCode_t
     connect(ConnectorProfile& connector_profile)
-      throw (CORBA::SystemException) override;
+      noexcept(false) override;
 
 	/*!
 	* @if jp
@@ -1035,7 +1035,7 @@ namespace RTC
                                       OutPortProvider* provider);
 
     ReturnCode_t notify_connect(ConnectorProfile& connector_profile)
-		throw (CORBA::SystemException) override;
+		noexcept(false) override;
 
 
   protected:
