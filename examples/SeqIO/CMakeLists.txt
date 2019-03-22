@@ -2,8 +2,8 @@
 
 
 set(srcs SeqIn.cpp SeqIn.h)
-ComponentBuild(SeqIn "${srcs}" SeqInComp.cpp "" "")
+examples_build(SeqIn SRCS "${srcs}" MAIN SeqInComp.cpp)
 
 
 set(srcs SeqOut.cpp SeqOut.h)
-ComponentBuild(SeqOut "${srcs}" SeqOutComp.cpp "" "")
+examples_build(SeqOut SRCS "${srcs}" MAIN SeqOutComp.cpp)

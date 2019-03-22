@@ -1,83 +1,106 @@
 ﻿cmake_minimum_required (VERSION 3.0.2)
 
-
-function(ComponentBuild target srcs mainfile dependencies vxaddfile)
+function(examples_build target)
+	cmake_parse_arguments(EB
+		""
+		"MAIN;VXADDFILE"
+		"SRCS;GENSRCS;INCLUDE;DEPS"
+		${ARGN})
 	link_directories(${ORB_LINK_DIR})
 	add_definitions(${ORB_C_FLAGS_LIST})
 	add_definitions(${COIL_C_FLAGS_LIST})
 
 	if(VXWORKS AND NOT RTP)
-		set(standalone_srcs ${srcs} ${mainfile} ${CMAKE_SOURCE_DIR}/src/lib/rtm/DataFlowComponentBase.cpp ${vxaddfile})
+		set(standalone_srcs ${EB_SRCS} ${EB_MAIN}
+			${CMAKE_SOURCE_DIR}/src/lib/rtm/DataFlowComponentBase.cpp
+			${EB_VXADDFILE})
 		set(libs ${RTCSKEL_PROJECT_NAME})
 
 		add_executable(${target} ${standalone_srcs})
 		openrtm_common_set_compile_props(${target})
 		openrtm_include_rtm(${target})
+		if(EB_INCLUDE)
+			target_include_directories(${target} PRIVATE ${EB_INCLUDE})
+		endif()
 		target_link_libraries(${target} ${libs})
-		if(dependencies)
-			add_dependencies(${target} ${dependencies})
-		endif(dependencies)
+		if(EB_DEPS)
+			add_dependencies(${target} ${EB_DEPS})
+		endif()
 
 		install(TARGETS ${target} LIBRARY DESTINATION ${INSTALL_RTM_EXAMPLE_DIR}
 					ARCHIVE DESTINATION ${INSTALL_RTM_EXAMPLE_DIR}
 					RUNTIME DESTINATION ${INSTALL_RTM_EXAMPLE_DIR}
 					COMPONENT examples)
+		install(FILES ${standalone_srcs} DESTINATION ${INSTALL_RTM_EXAMPLE_DIR}/src/Analyzer COMPONENT sources)
 	else()
 		if(VXWORKS)
 			set(libs ${RTM_PROJECT_NAME} ${ORB_LIBRARIES} ${COIL_PROJECT_NAME} ${RTCSKEL_PROJECT_NAME})
-		else(VXWORKS)
+		else()
 			set(libs ${RTM_PROJECT_NAME} ${ORB_LIBRARIES} ${COIL_PROJECT_NAME} ${DATATYPE_FACTORIES})
-		endif(VXWORKS)
+		endif()
 
-		add_library(${target}_objlib OBJECT ${srcs})
+		# .cpp -> .o
+		add_library(${target}_objlib OBJECT ${EB_SRCS})
 		openrtm_common_set_compile_props(${target}_objlib)
 		openrtm_include_rtm(${target}_objlib)
-		add_executable(${target}Comp $<TARGET_OBJECTS:${target}_objlib> ${mainfile})
+		target_include_directories(${target}_objlib PRIVATE ${EB_INCLUDE})
+		if(EB_DEPS)
+			add_dependencies(${target}_objlib ${EB_DEPS})
+		endif()
+
+		# generated .cpp -> .o
+		if(EB_GENSRCS)
+			add_library(${target}_gen_objlib OBJECT ${EB_GENSRCS})
+			openrtm_gencode_set_compile_props(${target}_gen_objlib)
+			openrtm_include_rtm(${target}_gen_objlib)
+			target_include_directories(${target}_gen_objlib PRIVATE ${EB_INCLUDE})
+			if(EB_DEPS)
+				add_dependencies(${target}_gen_objlib ${EB_DEPS})
+			endif()
+			set(EB_GENOBJLIB $<TARGET_OBJECTS:${target}_gen_objlib>)
+		endif()
+
+		# .o, main() -> executable
+		add_executable(${target}Comp
+			$<TARGET_OBJECTS:${target}_objlib>
+			${EB_GENOBJLIB}
+			${EB_MAIN})
 		openrtm_common_set_compile_props(${target}Comp)
 		openrtm_include_rtm(${target}Comp)
+		target_include_directories(${target}Comp PRIVATE ${EB_INCLUDE})
 		target_link_libraries(${target}Comp ${libs} ${RTM_LINKER_OPTION})
-		if(DATATYPE_FACTORIES)
-			add_dependencies(${target}Comp ${DATATYPE_FACTORIES})
-		endif(DATATYPE_FACTORIES)
+		if(EB_DEPS)
+			add_dependencies(${target}Comp ${EB_DEPS})
+		endif()
 
-		add_library(${target} SHARED $<TARGET_OBJECTS:${target}_objlib>)
+		# .o -> .s
+		add_library(${target} SHARED
+			$<TARGET_OBJECTS:${target}_objlib>
+			${EB_GENOBJLIB})
 		target_link_libraries(${target} PRIVATE ${libs} ${RTM_LINKER_OPTION})
-		if(DATATYPE_FACTORIES)
-			add_dependencies(${target} ${DATATYPE_FACTORIES})
-		endif(DATATYPE_FACTORIES)
 		set_target_properties(${target} PROPERTIES PREFIX "")
 
-		if(dependencies)
-			add_dependencies(${target}_objlib ${dependencies})
-			add_dependencies(${target} ${dependencies})
-			add_dependencies(${target}Comp ${dependencies})
-		endif(dependencies)
+		install(TARGETS ${target}Comp LIBRARY
+			DESTINATION ${INSTALL_RTM_EXAMPLE_DIR}
+			ARCHIVE DESTINATION ${INSTALL_RTM_EXAMPLE_DIR}
+			RUNTIME DESTINATION ${INSTALL_RTM_EXAMPLE_DIR}
+			COMPONENT examples)
 
-		install(TARGETS ${target}Comp LIBRARY DESTINATION ${INSTALL_RTM_EXAMPLE_DIR}
-					ARCHIVE DESTINATION ${INSTALL_RTM_EXAMPLE_DIR}
-					RUNTIME DESTINATION ${INSTALL_RTM_EXAMPLE_DIR}
-					COMPONENT examples)
-
-		install(TARGETS ${target} LIBRARY DESTINATION ${INSTALL_RTM_EXAMPLE_SHAREDLIB_DIR}
-					ARCHIVE DESTINATION ${INSTALL_RTM_EXAMPLE_SHAREDLIB_DIR}
-					RUNTIME DESTINATION ${INSTALL_RTM_EXAMPLE_SHAREDLIB_DIR}
-					COMPONENT examples)
-
-		install(FILES ${standalone_srcs} DESTINATION ${INSTALL_RTM_EXAMPLE_DIR}/src/Analyzer COMPONENT sources)
+		install(TARGETS ${target} LIBRARY
+			DESTINATION ${INSTALL_RTM_EXAMPLE_SHAREDLIB_DIR}
+			ARCHIVE DESTINATION ${INSTALL_RTM_EXAMPLE_SHAREDLIB_DIR}
+			RUNTIME DESTINATION ${INSTALL_RTM_EXAMPLE_SHAREDLIB_DIR}
+			COMPONENT examples)
 	endif()
-
 
 	if(VXWORKS)
 		if(RTP)
 			set_target_properties(${target}Comp PROPERTIES SUFFIX ".vxe")
-		else(RTP)	
+		else()
 			set_target_properties(${target} PROPERTIES SUFFIX ".out")
-		endif(RTP)
-	endif(VXWORKS)
-
+		endif()
+	endif()
 endfunction()
-
-
 
 add_subdirectory(SimpleIO)
 add_subdirectory(SeqIO)
@@ -90,7 +113,5 @@ add_subdirectory(ConfigSample)
 add_subdirectory(Composite)
 add_subdirectory(Analyzer)
 add_subdirectory(Throughput)
-
 add_subdirectory(StaticFsm)
-
 add_subdirectory(Templates)

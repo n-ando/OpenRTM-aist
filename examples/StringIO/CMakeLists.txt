@@ -7,8 +7,8 @@ project (StringIO
 
 
 set(srcs StringIn.cpp StringIn.h)
-ComponentBuild(StringIn "${srcs}" StringInComp.cpp "" "")
+examples_build(StringIn SRCS "${srcs}" MAIN StringInComp.cpp)
 
 
 set(srcs StringOut.cpp StringOut.h)
-ComponentBuild(StringOut "${srcs}" StringOutComp.cpp "" "")
+examples_build(StringOut SRCS "${srcs}" MAIN StringOutComp.cpp)

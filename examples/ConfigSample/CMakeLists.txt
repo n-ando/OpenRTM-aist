@@ -6,7 +6,7 @@ project (${target}
 
 
 set(srcs ConfigSample.cpp ConfigSample.h)
-ComponentBuild(ConfigSample "${srcs}" ConfigSampleComp.cpp "" "")
+examples_build(ConfigSample SRCS "${srcs}" MAIN ConfigSampleComp.cpp)
 
 
 install(FILES configsample.conf DESTINATION ${INSTALL_RTM_EXAMPLE_DIR} COMPONENT examples)

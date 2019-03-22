@@ -6,4 +6,4 @@ project (${target}
 
 
 set(srcs HelloRTWorld.cpp HelloRTWorld.h)
-ComponentBuild(HelloRTWorld "${srcs}" HelloRTWorldComp.cpp "" "")
+examples_build(HelloRTWorld SRCS "${srcs}" MAIN HelloRTWorldComp.cpp)
