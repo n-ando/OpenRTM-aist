@@ -56,7 +56,7 @@ namespace coil
    *
    * @endif
    */
-  int launch_shell(std::string command);
+  int launch_shell(const std::string& command);
 
   int daemon(int nochdir, int noclose);
 
@@ -80,7 +80,7 @@ namespace coil
   *
   * @endif
   */
-  int create_process(std::string command, std::vector<std::string> &out);
+  int create_process(const std::string& command, std::vector<std::string> &out);
 
 } // namespace coil
 #endif  // COIL_PROCESS_H

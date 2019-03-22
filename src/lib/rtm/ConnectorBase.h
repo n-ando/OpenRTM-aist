@@ -75,7 +75,7 @@ namespace RTC
      * @endif
      */
     ConnectorInfo(const char* name_, const char* id_,
-                  coil::vstring ports_, coil::Properties properties_)
+                  coil::vstring ports_, const coil::Properties& properties_)
       : name(name_), id(id_)
       , ports(std::move(ports_)), properties(properties_)
     {

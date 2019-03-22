@@ -20,6 +20,8 @@
 #include <rtm/CORBA_RTCUtil.h>
 #include <rtm/NamingManager.h>
 
+#include <utility>
+
 namespace CORBA_RTCUtil
 {
   /*!
@@ -706,7 +708,7 @@ namespace CORBA_RTCUtil
    * @return 
    * @endif
    */
-  coil::vstring get_connector_names(const RTC::RTObject_ptr rtc, const std::string port_name)
+  coil::vstring get_connector_names(const RTC::RTObject_ptr rtc, const std::string& port_name)
   {
     coil::vstring names;
     RTC::PortService_var port = get_port_by_name(rtc, port_name);
@@ -759,7 +761,7 @@ namespace CORBA_RTCUtil
    * @return 
    * @endif
    */
-  coil::vstring get_connector_ids(const RTC::RTObject_ptr rtc, const std::string port_name)
+  coil::vstring get_connector_ids(const RTC::RTObject_ptr rtc, const std::string& port_name)
   {
     coil::vstring names;
     RTC::PortService_var port = get_port_by_name(rtc, port_name);
@@ -791,8 +793,8 @@ namespace CORBA_RTCUtil
    * @return 
    * @endif
    */
-  RTC::ConnectorProfile_var create_connector(const std::string name,
-                                             const coil::Properties prop_arg,
+  RTC::ConnectorProfile_var create_connector(const std::string& name,
+                                             const coil::Properties& prop_arg,
                                              const RTC::PortService_ptr port0,
                                              const RTC::PortService_ptr port1)
   {
@@ -872,8 +874,8 @@ namespace CORBA_RTCUtil
    * @return 
    * @endif
    */
-  RTC::ReturnCode_t connect(const std::string name,
-                            const coil::Properties prop,
+  RTC::ReturnCode_t connect(const std::string& name,
+                            const coil::Properties& prop,
                             const RTC::PortService_ptr port0,
                             const RTC::PortService_ptr port1)
   {
@@ -918,7 +920,7 @@ namespace CORBA_RTCUtil
    * @return 
    * @endif
    */
-  RTC::ReturnCode_t disconnect_connector_name(const RTC::PortService_ptr port_ref, const std::string conn_name)
+  RTC::ReturnCode_t disconnect_connector_name(const RTC::PortService_ptr port_ref, const std::string& conn_name)
   {
     if (CORBA::is_nil(port_ref))
       {
@@ -948,7 +950,7 @@ namespace CORBA_RTCUtil
    * @return 
    * @endif
    */
-  RTC::ReturnCode_t disconnect_connector_name(const std::string port_name, const std::string conn_name)
+  RTC::ReturnCode_t disconnect_connector_name(const std::string& port_name, const std::string& conn_name)
   {
     RTC::PortService_var port_ref = get_port_by_url(port_name);
     if (CORBA::is_nil(port_ref))
@@ -980,7 +982,7 @@ namespace CORBA_RTCUtil
    * @return 
    * @endif
    */
-  RTC::ReturnCode_t disconnect_connector_id(const RTC::PortService_ptr port_ref, const std::string conn_id)
+  RTC::ReturnCode_t disconnect_connector_id(const RTC::PortService_ptr port_ref, const std::string& conn_id)
   {
     if (CORBA::is_nil(port_ref))
       {
@@ -1002,7 +1004,7 @@ namespace CORBA_RTCUtil
    * @return 
    * @endif
    */
-  RTC::ReturnCode_t disconnect_connector_id(const std::string port_name, const std::string conn_id)
+  RTC::ReturnCode_t disconnect_connector_id(const std::string& port_name, const std::string& conn_id)
   {
     RTC::PortService_var port_ref = get_port_by_url(port_name);
     if (CORBA::is_nil(port_ref))
@@ -1043,7 +1045,7 @@ namespace CORBA_RTCUtil
    * @return 
    * @endif
    */
-  RTC::ReturnCode_t disconnect_all(const std::string port_name)
+  RTC::ReturnCode_t disconnect_all(const std::string& port_name)
   {
     RTC::PortService_var port_ref = get_port_by_url(port_name);
     if (CORBA::is_nil(port_ref))
@@ -1064,7 +1066,7 @@ namespace CORBA_RTCUtil
    * @return
    * @endif
    */
-  RTC::PortService_var get_port_by_url(std::string port_name)
+  RTC::PortService_var get_port_by_url(const std::string& port_name)
   {
     RTC::Manager& mgr = RTC::Manager::instance();
     RTC::NamingManager* nm = mgr.getNaming();
@@ -1099,7 +1101,7 @@ namespace CORBA_RTCUtil
    * @return 
    * @endif
    */
-  RTC::ReturnCode_t disconnect_name(const RTC::PortService_ptr localport, const std::string othername)
+  RTC::ReturnCode_t disconnect_name(const RTC::PortService_ptr localport, const std::string& othername)
   {
     if (CORBA::is_nil(localport))
       {
@@ -1148,8 +1150,8 @@ namespace CORBA_RTCUtil
    * @return 
    * @endif
    */
-  RTC::ReturnCode_t connect_multi(const std::string name,
-                                  const coil::Properties prop,
+  RTC::ReturnCode_t connect_multi(const std::string& name,
+                                  const coil::Properties& prop,
                                   const RTC::PortService_ptr port,
                                   RTC::PortServiceList_var& target_ports)
   {
@@ -1178,7 +1180,7 @@ namespace CORBA_RTCUtil
    * @return
    * @endif
    */
-  bool find_port::operator()(RTC::PortService_var p)
+  bool find_port::operator()(const RTC::PortService_var& p)
   {
     RTC::PortProfile_var prof = p->get_port_profile();
     std::string c(CORBA::string_dup(prof->name));
@@ -1198,7 +1200,7 @@ namespace CORBA_RTCUtil
    * @endif
    */
   RTC::PortService_var get_port_by_name(const RTC::RTObject_ptr rtc,
-                                        std::string name)
+                                        const std::string& name)
   {
     RTC::PortServiceList_var ports = rtc->get_ports();
     RTC::PortService_var port_var;
@@ -1236,11 +1238,11 @@ namespace CORBA_RTCUtil
    * @return
    * @endif
    */
-  RTC::ReturnCode_t connect_by_name(std::string name, coil::Properties prop,
+  RTC::ReturnCode_t connect_by_name(std::string name, const coil::Properties& prop,
                                     RTC::RTObject_ptr rtc0,
-                                    const std::string portName0,
+                                    const std::string& portName0,
                                     RTC::RTObject_ptr rtc1,
-                                    const std::string portName1)
+                                    const std::string& portName1)
   {
     if (CORBA::is_nil(rtc0)) { return RTC::BAD_PARAMETER; }
     if (CORBA::is_nil(rtc1)) { return RTC::BAD_PARAMETER; }
@@ -1255,7 +1257,7 @@ namespace CORBA_RTCUtil
     if (CORBA::is_nil(port1)) { return RTC::BAD_PARAMETER; }
 
     // Connect
-    return connect(name, prop, port0, port1);
+    return connect(std::move(name), prop, port0, port1);
   }
   /*!
    * @if jp
@@ -1270,7 +1272,7 @@ namespace CORBA_RTCUtil
    * @return 
    * @endif
    */
-  coil::Properties get_configuration(const RTC::RTObject_ptr rtc, const std::string conf_name)
+  coil::Properties get_configuration(const RTC::RTObject_ptr rtc, const std::string& conf_name)
   {
     SDOPackage::Configuration_ptr conf = rtc->get_configuration();
     SDOPackage::ConfigurationSet* confset = conf->get_configuration_set(conf_name.c_str());
@@ -1295,7 +1297,7 @@ namespace CORBA_RTCUtil
    * @return 
    * @endif
    */
-  std::string get_parameter_by_key(const RTC::RTObject_ptr rtc, const std::string confset_name, const std::string value_name)
+  std::string get_parameter_by_key(const RTC::RTObject_ptr rtc, const std::string& confset_name, const std::string& value_name)
   {
     SDOPackage::Configuration_ptr conf = rtc->get_configuration();
     SDOPackage::ConfigurationSet* confset = conf->get_configuration_set(confset_name.c_str());
@@ -1365,7 +1367,7 @@ namespace CORBA_RTCUtil
    * @return 
    * @endif
    */
-  bool set_configuration(const RTC::RTObject_ptr rtc, const std::string confset_name, const std::string value_name, const std::string value)
+  bool set_configuration(const RTC::RTObject_ptr rtc, const std::string& confset_name, const std::string& value_name, const std::string& value)
   {
     SDOPackage::Configuration_ptr conf = rtc->get_configuration();
     SDOPackage::ConfigurationSet* confset = conf->get_configuration_set(confset_name.c_str());
@@ -1391,7 +1393,7 @@ namespace CORBA_RTCUtil
    * @return 
    * @endif
    */
-  bool set_active_configuration(const RTC::RTObject_ptr rtc, const std::string value_name, const std::string value)
+  bool set_active_configuration(const RTC::RTObject_ptr rtc, const std::string& value_name, const std::string& value)
   {
     SDOPackage::Configuration_ptr conf = rtc->get_configuration();
     SDOPackage::ConfigurationSet* confset = conf->get_active_configuration_set();
@@ -1420,7 +1422,7 @@ namespace CORBA_RTCUtil
    * @return 
    * @endif
    */
-  bool set_configuration_parameter(SDOPackage::Configuration_ptr conf, SDOPackage::ConfigurationSet* confset, const std::string value_name, const std::string value)
+  bool set_configuration_parameter(SDOPackage::Configuration_ptr conf, SDOPackage::ConfigurationSet* confset, const std::string& value_name, const std::string& value)
   {
     SDOPackage::NVList confData = confset->configuration_data;
     coil::Properties prop;

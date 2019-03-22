@@ -554,7 +554,7 @@ namespace RTC
      * @endif
      */
     ReturnCode_t onActivated(RTC::UniqueId exec_handle) override;
-    void activateChildComp(RTC::RTObject_var rtobj);
+    void activateChildComp(const RTC::RTObject_var& rtobj);
     /*!
      * @if jp
      *
