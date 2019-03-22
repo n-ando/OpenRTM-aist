@@ -141,7 +141,7 @@ namespace RTC
      * @brief dtor
      * @endif
      */
-    virtual ~ComponentObserverConsumer();
+    ~ComponentObserverConsumer() override;
 
     /*!
      * @if jp
@@ -150,8 +150,8 @@ namespace RTC
      * @brief Initialization
      * @endif
      */
-    virtual bool init(RTObject_impl& rtobj,
-                      const SDOPackage::ServiceProfile& profile);
+    bool init(RTObject_impl& rtobj,
+              const SDOPackage::ServiceProfile& profile) override;
 
     /*!
      * @if jp
@@ -160,7 +160,7 @@ namespace RTC
      * @brief Re-initialization
      * @endif
      */
-    virtual bool reinit(const SDOPackage::ServiceProfile& profile);
+    bool reinit(const SDOPackage::ServiceProfile& profile) override;
 
     /*!
      * @if jp
@@ -169,7 +169,7 @@ namespace RTC
      * @brief getting ServiceProfile
      * @endif
      */
-    virtual const SDOPackage::ServiceProfile& getProfile() const;
+    const SDOPackage::ServiceProfile& getProfile() const override;
     
     /*!
      * @if jp
@@ -178,7 +178,7 @@ namespace RTC
      * @brief Finalization
      * @endif
      */
-    virtual void finalize();
+    void finalize() override;
 
   protected:
     /*!
