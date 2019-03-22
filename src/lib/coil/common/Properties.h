@@ -124,7 +124,7 @@ namespace coil
      *
      * @endif
      */
-    explicit Properties(const char* key = "", const char* value = "");
+    explicit Properties(const char* key = "", const char* value = "", bool set_value = false);
 
     /*!
      * @if jp
@@ -1338,6 +1338,7 @@ namespace coil
     std::string name;
     std::string value;
     std::string default_value;
+    bool set_value;
     Properties* root;
     std::vector<Properties*> leaf;
     const std::string m_empty;
