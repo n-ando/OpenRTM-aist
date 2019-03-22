@@ -587,6 +587,7 @@ namespace RTC
      * @endif
      */
     ReturnCode_t onDeactivated(RTC::UniqueId exec_handle) override;
+    void deactivateChildComp(const RTC::RTObject_var& rtobj);
 
     /*!
      * @if jp
@@ -619,6 +620,7 @@ namespace RTC
      * @endif
      */
     ReturnCode_t onReset(RTC::UniqueId exec_handle) override;
+    void resetChildComp(const RTC::RTObject_var& rtobj);
     /*!
      * @if jp
      *
