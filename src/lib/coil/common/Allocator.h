@@ -84,7 +84,7 @@ namespace coil
      *
      * @endif
      */
-    virtual void* New(size_t t) noexcept(false);
+    virtual void* New(size_t t);
 
     /*!
      * @if jp
@@ -130,7 +130,7 @@ namespace coil
      *
      * @endif
      */
-    virtual void* NewArray(size_t t) noexcept(false);
+    virtual void* NewArray(size_t t);
 
     /*!
      * @if jp

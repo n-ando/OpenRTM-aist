@@ -126,8 +126,7 @@ namespace RTC
      *
      * @endif
      */
-	void create_memory(::CORBA::ULongLong memory_size, const char *shm_address)
-    	noexcept(false) override;
+	void create_memory(::CORBA::ULongLong memory_size, const char *shm_address) override;
      /*!
      * @if jp
      * @brief 共有メモリのマッピングを行う
@@ -145,8 +144,7 @@ namespace RTC
      *
      * @endif
      */
-	void open_memory(::CORBA::ULongLong memory_size, const char *shm_address)
-    	noexcept(false) override;
+	void open_memory(::CORBA::ULongLong memory_size, const char *shm_address) override;
      /*!
      * @if jp
      * @brief マッピングした共有メモリをアンマップする
@@ -160,8 +158,7 @@ namespace RTC
      *
      * @endif
      */
-	void close_memory(::CORBA::Boolean unlink = false)
-    	noexcept(false) override;
+	void close_memory(::CORBA::Boolean unlink = false) override;
      /*!
      * @if jp
      * @brief データを書き込む
@@ -211,8 +208,7 @@ namespace RTC
      *
      * @endif
      */
-	void setInterface(::OpenRTM::PortSharedMemory_ptr sm)
-    	noexcept(false) override;
+	void setInterface(::OpenRTM::PortSharedMemory_ptr sm) override;
      /*!
      * @if jp
      * @brief エンディアンを設定する
@@ -228,8 +224,7 @@ namespace RTC
      *
      * @endif
      */
-	void setEndian(::CORBA::Boolean endian)
-    	noexcept(false) override;
+	void setEndian(::CORBA::Boolean endian) override;
      /*!
      * @if jp
      * @brief データの送信を知らせる
@@ -245,8 +240,7 @@ namespace RTC
      *
      * @endif
      */
-    ::OpenRTM::PortStatus put()
-      noexcept(false) override;
+    ::OpenRTM::PortStatus put() override;
      /*!
      * @if jp
      * @brief データの送信を要求する
@@ -262,8 +256,7 @@ namespace RTC
      *
      * @endif
      */
-    ::OpenRTM::PortStatus get()
-      noexcept(false) override;
+    ::OpenRTM::PortStatus get() override;
 
 	virtual ::OpenRTM::PortSharedMemory_ptr getObjRef();
 

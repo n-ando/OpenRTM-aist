@@ -195,7 +195,6 @@ namespace RTC
    */
   void LogicalTimeTriggeredEC::
   tick(::CORBA::ULong sec, ::CORBA::ULong usec)
-    noexcept(false)
   {
     RTC_TRACE(("tick(sec = %d, usec = %d)", sec, usec));
     coil::TimeValue time(sec, usec);
@@ -225,7 +224,6 @@ namespace RTC
   
   void LogicalTimeTriggeredEC::
   get_time(::CORBA::ULong& sec, ::CORBA::ULong& usec)
-    noexcept(false)
   {
     coil::TimeValue time(m_clock.gettime());
     sec  = time.sec();
@@ -243,7 +241,6 @@ namespace RTC
    * @endif
    */
   CORBA::Boolean LogicalTimeTriggeredEC::is_running()
-    noexcept(false)
   {
     return ExecutionContextBase::isRunning();
   }
@@ -256,7 +253,6 @@ namespace RTC
    * @endif
    */
   RTC::ReturnCode_t LogicalTimeTriggeredEC::start()
-    noexcept(false)
   {
     return ExecutionContextBase::start();
   }
@@ -269,7 +265,6 @@ namespace RTC
    * @endif
    */
   RTC::ReturnCode_t LogicalTimeTriggeredEC::stop()
-    noexcept(false)
   {
     return ExecutionContextBase::stop();
   }
@@ -284,7 +279,6 @@ namespace RTC
    * @endif
    */
   CORBA::Double LogicalTimeTriggeredEC::get_rate()
-    noexcept(false)
   {
     return ExecutionContextBase::getRate();
   }
@@ -297,7 +291,6 @@ namespace RTC
    * @endif
    */
   RTC::ReturnCode_t LogicalTimeTriggeredEC::set_rate(CORBA::Double rate)
-    noexcept(false)
   {
     return ExecutionContextBase::setRate(rate);
   }
@@ -311,7 +304,6 @@ namespace RTC
    */
   RTC::ReturnCode_t
   LogicalTimeTriggeredEC::add_component(RTC::LightweightRTObject_ptr comp)
-    noexcept(false)
   {
     return ExecutionContextBase::addComponent(comp);
   }
@@ -325,7 +317,6 @@ namespace RTC
    */
   RTC::ReturnCode_t LogicalTimeTriggeredEC::
   remove_component(RTC::LightweightRTObject_ptr comp)
-    noexcept(false)
   {
     return ExecutionContextBase::removeComponent(comp);
   }
@@ -339,7 +330,6 @@ namespace RTC
    */
   RTC::ReturnCode_t LogicalTimeTriggeredEC::
   activate_component(RTC::LightweightRTObject_ptr comp)
-    noexcept(false)
   {
     return ExecutionContextBase::activateComponent(comp);
   }
@@ -353,7 +343,6 @@ namespace RTC
    */
   RTC::ReturnCode_t LogicalTimeTriggeredEC::
   deactivate_component(RTC::LightweightRTObject_ptr comp)
-    noexcept(false)
   {
     return ExecutionContextBase::deactivateComponent(comp);
   }
@@ -367,7 +356,6 @@ namespace RTC
    */
   RTC::ReturnCode_t LogicalTimeTriggeredEC::
   reset_component(RTC::LightweightRTObject_ptr comp)
-    noexcept(false)
   {
     return ExecutionContextBase::resetComponent(comp);
   }
@@ -381,7 +369,6 @@ namespace RTC
    */
   RTC::LifeCycleState LogicalTimeTriggeredEC::
   get_component_state(RTC::LightweightRTObject_ptr comp)
-    noexcept(false)
   {
     return ExecutionContextBase::getComponentState(comp);
   }
@@ -394,7 +381,6 @@ namespace RTC
    * @endif
    */
   RTC::ExecutionKind LogicalTimeTriggeredEC::get_kind()
-    noexcept(false)
   {
     return ExecutionContextBase::getKind();
   }
@@ -410,7 +396,6 @@ namespace RTC
    * @endif
    */
   RTC::ExecutionContextProfile* LogicalTimeTriggeredEC::get_profile()
-    noexcept(false)
   {
     return ExecutionContextBase::getProfile();
   }

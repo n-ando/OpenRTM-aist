@@ -187,8 +187,7 @@ namespace RTC
      *
      * @endif
      */
-    void tick()
-      noexcept(false) override;
+    void tick() override;
 
     //============================================================
     // ExecutionContextService
@@ -217,8 +216,7 @@ namespace RTC
      *
      * @endif
      */
-    CORBA::Boolean is_running()
-      noexcept(false) override;
+    CORBA::Boolean is_running() override;
 
     /*!
      * @if jp
@@ -247,8 +245,7 @@ namespace RTC
      *
      * @endif
      */
-    RTC::ReturnCode_t start()
-      noexcept(false) override;
+    RTC::ReturnCode_t start() override;
 
     /*!
      * @if jp
@@ -276,8 +273,7 @@ namespace RTC
      *
      * @endif
      */
-    RTC::ReturnCode_t stop()
-      noexcept(false) override;
+    RTC::ReturnCode_t stop() override;
 
     /*!
      * @if jp
@@ -299,8 +295,7 @@ namespace RTC
      *
      * @endif
      */
-    CORBA::Double get_rate()
-      noexcept(false) override;
+    CORBA::Double get_rate() override;
 
     /*!
      * @if jp
@@ -331,8 +326,7 @@ namespace RTC
      *
      * @endif
      */
-    RTC::ReturnCode_t  set_rate(CORBA::Double rate)
-      noexcept(false) override;
+    RTC::ReturnCode_t  set_rate(CORBA::Double rate) override;
 
     /*!
      * @if jp
@@ -368,8 +362,7 @@ namespace RTC
      * @endif
      */
     RTC::ReturnCode_t
-    activate_component(RTC::LightweightRTObject_ptr comp)
-      noexcept(false) override;
+    activate_component(RTC::LightweightRTObject_ptr comp) override;
 
     /*!
      * @if jp
@@ -404,8 +397,7 @@ namespace RTC
      * @endif
      */
     RTC::ReturnCode_t
-    deactivate_component(RTC::LightweightRTObject_ptr comp)
-      noexcept(false) override;
+    deactivate_component(RTC::LightweightRTObject_ptr comp) override;
 
     /*!
      * @if jp
@@ -439,8 +431,7 @@ namespace RTC
      * @endif
      */
     RTC::ReturnCode_t
-    reset_component(RTC::LightweightRTObject_ptr comp)
-      noexcept(false) override;
+    reset_component(RTC::LightweightRTObject_ptr comp) override;
 
     /*!
      * @if jp
@@ -469,8 +460,7 @@ namespace RTC
      * @endif
      */
     RTC::LifeCycleState
-    get_component_state(RTC::LightweightRTObject_ptr comp)
-      noexcept(false) override;
+    get_component_state(RTC::LightweightRTObject_ptr comp) override;
 
     /*!
      * @if jp
@@ -491,8 +481,7 @@ namespace RTC
      *
      * @endif
      */
-    RTC::ExecutionKind get_kind()
-      noexcept(false) override;
+    RTC::ExecutionKind get_kind() override;
 
     /*!
      * @if jp
@@ -525,8 +514,7 @@ namespace RTC
      *
      * @endif
      */
-    RTC::ReturnCode_t add_component(RTC::LightweightRTObject_ptr comp)
-      noexcept(false) override;
+    RTC::ReturnCode_t add_component(RTC::LightweightRTObject_ptr comp) override;
 
     /*!
      * @if jp
@@ -559,8 +547,7 @@ namespace RTC
      * @endif
      */
     RTC::ReturnCode_t
-    remove_component(RTC::LightweightRTObject_ptr comp)
-      noexcept(false) override;
+    remove_component(RTC::LightweightRTObject_ptr comp) override;
 
     /*!
      * @if jp
@@ -581,8 +568,7 @@ namespace RTC
      *
      * @endif
      */
-    RTC::ExecutionContextProfile* get_profile()
-      noexcept(false) override;
+    RTC::ExecutionContextProfile* get_profile() override;
 
   protected:
     /*!

@@ -253,8 +253,7 @@ namespace RTC
      * @endif
      */
     void bind(const CosNaming::Name& name, CORBA::Object_ptr obj,
-              bool force = true)
-      noexcept(false);
+              bool force = true);
 
     /*!
      * @if jp
@@ -295,8 +294,7 @@ namespace RTC
      * @endif
      */
     void bindByString(const char* string_name, CORBA::Object_ptr obj,
-                      bool force = true)
-      noexcept(false);
+                      bool force = true);
 
     /*!
      * @if jp
@@ -360,8 +358,7 @@ namespace RTC
      */
     void bindRecursive(CosNaming::NamingContext_ptr context,
                        const CosNaming::Name& name,
-                       CORBA::Object_ptr obj)
-      noexcept(false);
+                       CORBA::Object_ptr obj);
 
     /*!
      * @if jp
@@ -401,8 +398,7 @@ namespace RTC
      * @endif
      */
     void rebind(const CosNaming::Name& name, CORBA::Object_ptr obj,
-                bool force = true)
-      noexcept(false);
+                bool force = true);
 
     /*!
      * @if jp
@@ -441,8 +437,7 @@ namespace RTC
      * @endif
      */
     void rebindByString(const char* string_name, CORBA::Object_ptr obj,
-                        bool force = true)
-      noexcept(false);
+                        bool force = true);
 
     /*!
      * @if jp
@@ -483,8 +478,7 @@ namespace RTC
      */
     void rebindRecursive(CosNaming::NamingContext_ptr context,
                          const CosNaming::Name& name,
-                         CORBA::Object_ptr obj)
-      noexcept(false);
+                         CORBA::Object_ptr obj);
 
     /*!
      * @if jp
@@ -524,8 +518,7 @@ namespace RTC
      */
     void bindContext(const CosNaming::Name& name,
                      CosNaming::NamingContext_ptr name_cxt,
-                     bool force = true)
-      noexcept(false);
+                     bool force = true);
 
     /*!
      * @if jp
@@ -566,8 +559,7 @@ namespace RTC
      */
     void bindContext(const char* string_name,
                      CosNaming::NamingContext_ptr name_cxt,
-                     bool force = true)
-      noexcept(false);
+                     bool force = true);
 
     /*!
      * @if jp
@@ -638,8 +630,7 @@ namespace RTC
      */
     void rebindContext(const CosNaming::Name& name,
                        CosNaming::NamingContext_ptr name_cxt,
-                       bool force = true)
-      noexcept(false);
+                       bool force = true);
 
     /*!
      * @if jp
@@ -681,8 +672,7 @@ namespace RTC
      */
     void rebindContext(const char* string_name,
                        CosNaming::NamingContext_ptr name_cxt,
-                       bool force = true)
-      noexcept(false);
+                       bool force = true);
 
     /*!
      * @if jp
@@ -754,8 +744,7 @@ namespace RTC
      *
      * @endif
      */
-    CORBA::Object_ptr resolve(const CosNaming::Name& name)
-      noexcept(false);
+    CORBA::Object_ptr resolve(const CosNaming::Name& name);
 
     /*!
      * @if jp
@@ -799,8 +788,7 @@ namespace RTC
      *
      * @endif
      */
-    CORBA::Object_ptr resolve(const char* string_name)
-      noexcept(false);
+    CORBA::Object_ptr resolve(const char* string_name);
 
     /*!
      * @if jp
@@ -839,8 +827,7 @@ namespace RTC
      *
      * @endif
      */
-    void unbind(const CosNaming::Name& name)
-      noexcept(false);
+    void unbind(const CosNaming::Name& name);
 
     /*!
      * @if jp
@@ -884,8 +871,7 @@ namespace RTC
      *
      * @endif
      */
-    void unbind(const char* string_name)
-      noexcept(false);
+    void unbind(const char* string_name);
 
     /*!
      * @if jp
@@ -950,8 +936,7 @@ namespace RTC
      * @endif
      */
     CosNaming::NamingContext_ptr
-    bindNewContext(const CosNaming::Name& name, bool force = true)
-      noexcept(false);
+    bindNewContext(const CosNaming::Name& name, bool force = true);
 
     /*!
      * @if jp
@@ -994,8 +979,7 @@ namespace RTC
      * @endif
      */
     CosNaming::NamingContext_ptr
-    bindNewContext(const char* string_name, bool force = true)
-      noexcept(false);
+    bindNewContext(const char* string_name, bool force = true);
 
     /*!
      * @if jp
@@ -1024,8 +1008,7 @@ namespace RTC
      *
      * @endif
      */
-    void destroy(CosNaming::NamingContext_ptr context)
-      noexcept(false);
+    void destroy(CosNaming::NamingContext_ptr context);
 
     /*!
      * @if jp
@@ -1058,8 +1041,7 @@ namespace RTC
      *
      * @endif
      */
-    void destroyRecursive(CosNaming::NamingContext_ptr context)
-      noexcept(false);
+    void destroyRecursive(CosNaming::NamingContext_ptr context);
 
     /*!
      * @if jp
@@ -1220,8 +1202,7 @@ namespace RTC
      *
      * @endif
      */
-    char* toString(const CosNaming::Name& name)
-      noexcept(false);
+    char* toString(const CosNaming::Name& name);
 
     /*!
      * @if jp
@@ -1248,8 +1229,7 @@ namespace RTC
      *
      * @endif
      */
-    CosNaming::Name toName(const char* sname)
-      noexcept(false);
+    CosNaming::Name toName(const char* sname);
 
     /*!
      * @if jp
@@ -1280,8 +1260,7 @@ namespace RTC
      *
      * @endif
      */
-    char* toUrl(char* addr, char* string_name)
-      noexcept(false);
+    char* toUrl(char* addr, char* string_name);
 
     /*!
      * @if jp
@@ -1314,8 +1293,7 @@ namespace RTC
      *
      * @endif
      */
-    CORBA::Object_ptr resolveStr(const char* string_name)
-      noexcept(false);
+    CORBA::Object_ptr resolveStr(const char* string_name);
 
     //============================================================
     // Find functions

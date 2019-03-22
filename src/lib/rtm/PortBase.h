@@ -233,8 +233,7 @@ namespace RTC
      *
      * @endif
      */
-    PortProfile* get_port_profile()
-      noexcept(false) override;
+    PortProfile* get_port_profile() override;
 
     /*!
      * @if jp
@@ -315,8 +314,7 @@ namespace RTC
      *
      * @endif
      */
-    ConnectorProfileList* get_connector_profiles()
-      noexcept(false) override;
+    ConnectorProfileList* get_connector_profiles() override;
 
     /*!
      * @if jp
@@ -357,8 +355,7 @@ namespace RTC
      *
      * @endif
      */
-    ConnectorProfile* get_connector_profile(const char* connector_id)
-      noexcept(false) override;
+    ConnectorProfile* get_connector_profile(const char* connector_id) override;
 
     /*!
      * @if jp
@@ -517,8 +514,7 @@ namespace RTC
      *
      * @endif
      */
-    ReturnCode_t connect(ConnectorProfile& connector_profile)
-      noexcept(false) override;
+    ReturnCode_t connect(ConnectorProfile& connector_profile) override;
 
     /*!
      * @if jp
@@ -635,8 +631,7 @@ namespace RTC
      *
      * @endif
      */
-    ReturnCode_t notify_connect(ConnectorProfile& connector_profile)
-      noexcept(false) override;
+    ReturnCode_t notify_connect(ConnectorProfile& connector_profile) override;
 
     /*!
      * @if jp
@@ -703,8 +698,7 @@ namespace RTC
      *
      * @endif
      */
-    ReturnCode_t disconnect(const char* connector_id)
-      noexcept(false) override;
+    ReturnCode_t disconnect(const char* connector_id) override;
 
     /*!
      * @if jp
@@ -794,8 +788,7 @@ namespace RTC
      *
      * @endif
      */
-    ReturnCode_t notify_disconnect(const char* connector_id)
-      noexcept(false) override;
+    ReturnCode_t notify_disconnect(const char* connector_id) override;
 
     /*!
      * @if jp
@@ -816,8 +809,7 @@ namespace RTC
      *
      * @endif
      */
-    ReturnCode_t disconnect_all()
-      noexcept(false) override;
+    ReturnCode_t disconnect_all() override;
 
     //============================================================
     // Local operations

@@ -81,7 +81,6 @@ namespace SDOPackage
    * @endif
    */
   char* Organization_impl::get_organization_id()
-    noexcept(false)
   {
     RTC_TRACE(("get_organization_id() = %s", m_pId.c_str()));
     return CORBA::string_dup(m_pId.c_str());
@@ -95,7 +94,6 @@ namespace SDOPackage
    * @endif
    */
   OrganizationProperty* Organization_impl::get_organization_property()
-    noexcept(false)
   {
     RTC_TRACE(("get_organization_property()"));
     Guard guard(m_org_mutex);
@@ -113,7 +111,6 @@ namespace SDOPackage
    */
   CORBA::Any*
   Organization_impl::get_organization_property_value(const char* name)
-    noexcept(false)
   {
     RTC_TRACE(("get_organization_property_value(%s)", name));
     if (std::string(name).empty())
@@ -149,7 +146,6 @@ namespace SDOPackage
   CORBA::Boolean
   Organization_impl::
   add_organization_property(const OrganizationProperty& organization_property)
-    noexcept(false)
   {
     RTC_TRACE(("add_organization_property()"));
     try
@@ -175,7 +171,6 @@ namespace SDOPackage
   CORBA::Boolean
   Organization_impl::set_organization_property_value(const char* name,
                                                      const CORBA::Any& value)
-    noexcept(false)
   {
     RTC_TRACE(("set_organization_property_value(name=%s)", name));
     if (std::string(name).empty())
@@ -209,7 +204,6 @@ namespace SDOPackage
    */
   CORBA::Boolean
   Organization_impl::remove_organization_property(const char* name)
-    noexcept(false)
   {
     RTC_TRACE(("remove_organization_property(%s)", name));
     if (std::string(name).empty())
@@ -240,7 +234,6 @@ namespace SDOPackage
    * @endif
    */
   SDOSystemElement_ptr Organization_impl::get_owner()
-    noexcept(false)
   {
     RTC_TRACE(("get_owner()"));
     return m_varOwner._retn();
@@ -254,7 +247,6 @@ namespace SDOPackage
    * @endif
    */
   CORBA::Boolean Organization_impl::set_owner(SDOSystemElement_ptr sdo)
-    noexcept(false)
   {
     RTC_TRACE(("set_owner()"));
     if (CORBA::is_nil(sdo))
@@ -279,7 +271,6 @@ namespace SDOPackage
    * @endif
    */
   SDOList* Organization_impl::get_members()
-    noexcept(false)
   {
     RTC_TRACE(("get_members()"));
     try
@@ -302,7 +293,6 @@ namespace SDOPackage
    * @endif
    */
   CORBA::Boolean Organization_impl::set_members(const SDOList& sdos)
-    noexcept(false)
   {
     RTC_TRACE(("set_members()"));
     try
@@ -325,7 +315,6 @@ namespace SDOPackage
    * @endif
    */
   CORBA::Boolean Organization_impl::add_members(const SDOList& sdo_list)
-    noexcept(false)
   {
     RTC_TRACE(("add_members()"));
     if (sdo_list.length() == 0)
@@ -351,7 +340,6 @@ namespace SDOPackage
    * @endif
    */
   CORBA::Boolean Organization_impl::remove_member(const char* id)
-    noexcept(false)
   {
     RTC_TRACE(("remove_member(%s)", id));
 
@@ -391,7 +379,6 @@ namespace SDOPackage
    * @endif
    */
   DependencyType Organization_impl::get_dependency()
-    noexcept(false)
   {
     RTC_TRACE(("get_dependency()"));
     return m_dependency;
@@ -405,7 +392,6 @@ namespace SDOPackage
    * @endif
    */
   CORBA::Boolean Organization_impl::set_dependency(DependencyType dependency)
-    noexcept(false)
   {
     RTC_TRACE(("set_dependency()"));
     try

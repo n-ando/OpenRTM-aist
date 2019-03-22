@@ -238,8 +238,7 @@ namespace RTC
      *
      * @endif
      */
-    ::RTC::PortStatus pull(::RTC::OctetSeq_out data)
-      noexcept(false) override;
+    ::RTC::PortStatus pull(::RTC::OctetSeq_out data) override;
 
 
   private:

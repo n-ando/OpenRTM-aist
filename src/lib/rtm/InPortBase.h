@@ -602,8 +602,7 @@ namespace RTC
      * @endif
      */
     ReturnCode_t
-    connect(ConnectorProfile& connector_profile)
-      noexcept(false) override;
+    connect(ConnectorProfile& connector_profile) override;
 
     /*!
      * @if jp
@@ -623,8 +622,7 @@ namespace RTC
      * @endif
      */
     virtual ConnectorListeners& getListeners();
-    ReturnCode_t notify_connect(ConnectorProfile& connector_profile)
-		noexcept(false) override;
+    ReturnCode_t notify_connect(ConnectorProfile& connector_profile) override;
 
   protected:
     /*!

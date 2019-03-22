@@ -128,8 +128,7 @@ namespace SDOPackage
      *
      * @endif
      */
-    ::CORBA::Boolean add_members(const SDOList& sdo_list)
-      noexcept(false) override;
+    ::CORBA::Boolean add_members(const SDOList& sdo_list) override;
 
     /*!
      * @if jp
@@ -154,8 +153,7 @@ namespace SDOPackage
      *
      * @endif
      */
-    ::CORBA::Boolean set_members(const SDOList& sdo_list)
-      noexcept(false) override;
+    ::CORBA::Boolean set_members(const SDOList& sdo_list) override;
 
     /*!
      * @if jp
@@ -178,8 +176,7 @@ namespace SDOPackage
      *
      * @endif
      */
-    ::CORBA::Boolean remove_member(const char* id)
-      noexcept(false) override;
+    ::CORBA::Boolean remove_member(const char* id) override;
 
     /*!
      * @if jp
@@ -642,8 +639,7 @@ namespace RTC
      */
     ReturnCode_t onFinalize() override;
 
-    ReturnCode_t exit()
-      noexcept(false) override;
+    ReturnCode_t exit() override;
 
   protected:
     /*!

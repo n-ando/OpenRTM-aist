@@ -240,8 +240,7 @@ namespace RTC
      *
      * @endif
      */
-    ::OpenRTM::PortStatus get(::OpenRTM::CdrData_out data)
-      noexcept(false) override;
+    ::OpenRTM::PortStatus get(::OpenRTM::CdrData_out data) override;
 
 
   private:

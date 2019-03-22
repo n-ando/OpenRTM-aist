@@ -184,8 +184,7 @@ namespace RTC
      *
      * @endif
      */
-    ::OpenRTM::PortStatus get()
-      noexcept(false) override;
+    ::OpenRTM::PortStatus get() override;
 
     
   private:

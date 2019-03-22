@@ -181,8 +181,7 @@ namespace RTC
      *
      * @endif
      */
-    ::OpenRTM::PortStatus put()
-      noexcept(false) override;
+    ::OpenRTM::PortStatus put() override;
     
   private:
 

@@ -444,7 +444,6 @@ namespace RTC
    * @endif
    */
   ReturnCode_t InPortBase::connect(ConnectorProfile& connector_profile)
-    noexcept(false)
   {
     RTC_TRACE(("InPortBase::connect()"));
 
@@ -1093,7 +1092,6 @@ namespace RTC
   }
 
   ReturnCode_t InPortBase::notify_connect(ConnectorProfile& connector_profile)
-    noexcept(false)
   {
 	  Properties prop;
 	  NVUtil::copyToProperties(prop, connector_profile.properties);

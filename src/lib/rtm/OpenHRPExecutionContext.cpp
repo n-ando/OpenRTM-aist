@@ -70,7 +70,6 @@ namespace RTC
    * @endif
    */
   void OpenHRPExecutionContext::tick()
-    noexcept(false)
   {
     RTC_TRACE(("tick()"));
     if (!isRunning()) { return; }
@@ -119,7 +118,6 @@ namespace RTC
    * @endif
    */
   CORBA::Boolean OpenHRPExecutionContext::is_running()
-    noexcept(false)
   {
     return ExecutionContextBase::isRunning();
   }
@@ -132,7 +130,6 @@ namespace RTC
    * @endif
    */
   RTC::ReturnCode_t OpenHRPExecutionContext::start()
-    noexcept(false)
   {
     return ExecutionContextBase::start();
   }
@@ -145,7 +142,6 @@ namespace RTC
    * @endif
    */
   RTC::ReturnCode_t OpenHRPExecutionContext::stop()
-    noexcept(false)
   {
     return ExecutionContextBase::stop();
   }
@@ -160,7 +156,6 @@ namespace RTC
    * @endif
    */
   CORBA::Double OpenHRPExecutionContext::get_rate()
-    noexcept(false)
   {
     return ExecutionContextBase::getRate();
   }
@@ -173,7 +168,6 @@ namespace RTC
    * @endif
    */
   RTC::ReturnCode_t OpenHRPExecutionContext::set_rate(CORBA::Double rate)
-    noexcept(false)
   {
     return ExecutionContextBase::setRate(rate);
   }
@@ -187,7 +181,6 @@ namespace RTC
    */
   RTC::ReturnCode_t
   OpenHRPExecutionContext::add_component(RTC::LightweightRTObject_ptr comp)
-    noexcept(false)
   {
     return ExecutionContextBase::addComponent(comp);
   }
@@ -201,7 +194,6 @@ namespace RTC
    */
   RTC::ReturnCode_t OpenHRPExecutionContext::
   remove_component(RTC::LightweightRTObject_ptr comp)
-    noexcept(false)
   {
     return ExecutionContextBase::removeComponent(comp);
   }
@@ -215,7 +207,6 @@ namespace RTC
    */
   RTC::ReturnCode_t OpenHRPExecutionContext::
   activate_component(RTC::LightweightRTObject_ptr comp)
-    noexcept(false)
   {
     return ExecutionContextBase::activateComponent(comp);
   }
@@ -229,7 +220,6 @@ namespace RTC
    */
   RTC::ReturnCode_t OpenHRPExecutionContext::
   deactivate_component(RTC::LightweightRTObject_ptr comp)
-    noexcept(false)
   {
     return ExecutionContextBase::deactivateComponent(comp);
   }
@@ -243,7 +233,6 @@ namespace RTC
    */
   RTC::ReturnCode_t OpenHRPExecutionContext::
   reset_component(RTC::LightweightRTObject_ptr comp)
-    noexcept(false)
   {
     return ExecutionContextBase::resetComponent(comp);
   }
@@ -257,7 +246,6 @@ namespace RTC
    */
   RTC::LifeCycleState OpenHRPExecutionContext::
   get_component_state(RTC::LightweightRTObject_ptr comp)
-    noexcept(false)
   {
     return ExecutionContextBase::getComponentState(comp);
   }
@@ -270,7 +258,6 @@ namespace RTC
    * @endif
    */
   RTC::ExecutionKind OpenHRPExecutionContext::get_kind()
-    noexcept(false)
   {
     return ExecutionContextBase::getKind();
   }
@@ -286,7 +273,6 @@ namespace RTC
    * @endif
    */
   RTC::ExecutionContextProfile* OpenHRPExecutionContext::get_profile()
-    noexcept(false)
   {
     return ExecutionContextBase::getProfile();
   }

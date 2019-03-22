@@ -93,8 +93,7 @@ namespace RTC
      * @endif
      */
     RTC::ReturnCode_t
-    activate_component(RTC::LightweightRTObject_ptr comp)
-      noexcept(false) override;
+    activate_component(RTC::LightweightRTObject_ptr comp) override;
     /*!
      * @if jp
      * @brief RTコンポーネントを非アクティブ化する
@@ -118,8 +117,7 @@ namespace RTC
      * @endif
      */
     RTC::ReturnCode_t
-    deactivate_component(RTC::LightweightRTObject_ptr comp)
-      noexcept(false) override;
+    deactivate_component(RTC::LightweightRTObject_ptr comp) override;
     /*!
      * @if jp
      * @brief RTコンポーネントをリセットする
@@ -143,8 +141,7 @@ namespace RTC
      * @endif
      */
     RTC::ReturnCode_t
-    reset_component(RTC::LightweightRTObject_ptr comp)
-      noexcept(false) override;
+    reset_component(RTC::LightweightRTObject_ptr comp) override;
 
   private:
 

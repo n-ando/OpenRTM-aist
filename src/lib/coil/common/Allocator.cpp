@@ -29,7 +29,7 @@ namespace coil
    * @brief Create of memory allocation
    * @endif
    */
-  void* Allocator::New(size_t t) noexcept(false)
+  void* Allocator::New(size_t t)
   {
     return operator new(t);
   }
@@ -53,7 +53,7 @@ namespace coil
    * @brief Create of array memory allocation
    * @endif
    */
-  void* Allocator::NewArray(size_t t) noexcept(false)
+  void* Allocator::NewArray(size_t t)
   {
     return operator new[](t);
   }

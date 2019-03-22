@@ -151,8 +151,7 @@ namespace SDOPackage
      *                          completely due to some internal error.
      * @endif
      */
-    char* get_organization_id()
-      noexcept(false) override;
+    char* get_organization_id() override;
 
     /*!
      * @if jp
@@ -197,8 +196,7 @@ namespace SDOPackage
      * @endif
      */
     CORBA::Boolean
-    add_organization_property(const OrganizationProperty& organization_property)
-      noexcept(false) override;
+    add_organization_property(const OrganizationProperty& organization_property) override;
 
     /*!
      * @if jp
@@ -232,8 +230,7 @@ namespace SDOPackage
      *                          completely due to some internal error.
      * @endif
      */
-    OrganizationProperty* get_organization_property()
-      noexcept(false) override;
+    OrganizationProperty* get_organization_property() override;
 
     /*!
      * @if jp
@@ -274,8 +271,7 @@ namespace SDOPackage
      *                          completely due to some internal error.
      * @endif
      */
-    CORBA::Any* get_organization_property_value(const char* name)
-      noexcept(false) override;
+    CORBA::Any* get_organization_property_value(const char* name) override;
 
     /*!
      * @if jp
@@ -322,8 +318,7 @@ namespace SDOPackage
      * @endif
      */
     CORBA::Boolean
-    set_organization_property_value(const char* name, const CORBA::Any& value)
-      noexcept(false) override;
+    set_organization_property_value(const char* name, const CORBA::Any& value) override;
 
     /*!
      * @if jp
@@ -365,8 +360,7 @@ namespace SDOPackage
      *                          completely due to some internal error.
      * @endif
      */
-    CORBA::Boolean remove_organization_property(const char* name)
-      noexcept(false) override;
+    CORBA::Boolean remove_organization_property(const char* name) override;
 
     /*!
      * @if jp
@@ -405,8 +399,7 @@ namespace SDOPackage
      *                          completely due to some internal error.
      * @endif
      */
-    CORBA::Boolean add_members(const SDOList& sdo_list)
-      noexcept(false) override;
+    CORBA::Boolean add_members(const SDOList& sdo_list) override;
 
     /*!
      * @if jp
@@ -440,8 +433,7 @@ namespace SDOPackage
      *                          completely due to some internal error.
      * @endif
      */
-    SDOList* get_members()
-      noexcept(false) override;
+    SDOList* get_members() override;
 
     /*!
      * @if jp
@@ -486,8 +478,7 @@ namespace SDOPackage
      *                          completely due to some internal error.
      * @endif
      */
-    CORBA::Boolean set_members(const SDOList& sdos)
-      noexcept(false) override;
+    CORBA::Boolean set_members(const SDOList& sdos) override;
 
     /*!
      * @if jp
@@ -525,8 +516,7 @@ namespace SDOPackage
      *                          completely due to some internal error.
      * @endif
      */
-    CORBA::Boolean remove_member(const char* id)
-      noexcept(false) override;
+    CORBA::Boolean remove_member(const char* id) override;
 
     /*!
      * @if jp
@@ -558,8 +548,7 @@ namespace SDOPackage
      *                          completely due to some internal error.
      * @endif
      */
-    SDOSystemElement_ptr get_owner()
-      noexcept(false) override;
+    SDOSystemElement_ptr get_owner() override;
 
     /*!
      * @if jp
@@ -602,8 +591,7 @@ namespace SDOPackage
      *                          completely due to some internal error.
      * @endif
      */
-    CORBA::Boolean set_owner(SDOSystemElement_ptr sdo)
-      noexcept(false) override;
+    CORBA::Boolean set_owner(SDOSystemElement_ptr sdo) override;
 
     /*!
      * @if jp
@@ -640,8 +628,7 @@ namespace SDOPackage
      *                          completely due to some internal error.
      * @endif
      */
-    DependencyType get_dependency()
-      noexcept(false) override;
+    DependencyType get_dependency() override;
 
     /*!
      * @if jp
@@ -685,8 +672,7 @@ namespace SDOPackage
      *                          completely due to some internal error.
      * @endif
      */
-    CORBA::Boolean set_dependency(DependencyType dependency)
-      noexcept(false) override;
+    CORBA::Boolean set_dependency(DependencyType dependency) override;
 
     // end of CORBA interface definition
     //============================================================

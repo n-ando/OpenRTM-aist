@@ -151,7 +151,6 @@ namespace RTC
    */
   ::OpenRTM::PortStatus
   InPortCorbaCdrProvider::put(const ::OpenRTM::CdrData& data)
-    noexcept(false)
   {
     RTC_PARANOID(("InPortCorbaCdrProvider::put()"));
 
