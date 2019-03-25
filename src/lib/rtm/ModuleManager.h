@@ -350,8 +350,7 @@ namespace RTC
      * @brief Refer to the symbol of the module
      * @endif
      */
-    void* symbol(const std::string& file_name, const std::string& func_name)
-      throw (ModuleNotFound, SymbolNotFound);
+    void* symbol(const std::string& file_name, const std::string& func_name);
 
     /*!
      * @if jp

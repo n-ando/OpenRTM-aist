@@ -79,7 +79,6 @@ namespace RTC
    */
   RTC::ReturnCode_t SimulatorExecutionContext::
 	  activate_component(RTC::LightweightRTObject_ptr comp)
-	  throw (CORBA::SystemException)
   {
 	Guard guard(m_tickmutex);
 
@@ -130,7 +129,6 @@ namespace RTC
    */
   RTC::ReturnCode_t SimulatorExecutionContext::
   deactivate_component(RTC::LightweightRTObject_ptr comp)
-    throw (CORBA::SystemException)
   {
 	Guard guard(m_tickmutex);
 
@@ -183,7 +181,6 @@ namespace RTC
    */
   RTC::ReturnCode_t SimulatorExecutionContext::
   reset_component(RTC::LightweightRTObject_ptr comp)
-    throw (CORBA::SystemException)
   {
 	Guard guard(m_tickmutex);
 

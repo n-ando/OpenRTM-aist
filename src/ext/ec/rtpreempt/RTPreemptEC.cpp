@@ -230,7 +230,6 @@ namespace RTC_exp
    * @endif
    */
   CORBA::Boolean RTPreemptEC::is_running()
-    throw (CORBA::SystemException)
   {
     return ExecutionContextBase::isRunning();
   }
@@ -243,7 +242,6 @@ namespace RTC_exp
    * @endif
    */
   RTC::ReturnCode_t RTPreemptEC::start()
-    throw (CORBA::SystemException)
   {
     return ExecutionContextBase::start();
   }
@@ -256,7 +254,6 @@ namespace RTC_exp
    * @endif
    */
   RTC::ReturnCode_t RTPreemptEC::stop()
-    throw (CORBA::SystemException)
   {
     return ExecutionContextBase::stop();
   }
@@ -271,7 +268,6 @@ namespace RTC_exp
    * @endif
    */
   CORBA::Double RTPreemptEC::get_rate()
-    throw (CORBA::SystemException)
   {
     return ExecutionContextBase::getRate();
   }
@@ -284,7 +280,6 @@ namespace RTC_exp
    * @endif
    */
   RTC::ReturnCode_t RTPreemptEC::set_rate(CORBA::Double rate)
-    throw (CORBA::SystemException)
   {
     return ExecutionContextBase::setRate(rate);
   }
@@ -298,7 +293,6 @@ namespace RTC_exp
    */
   RTC::ReturnCode_t
   RTPreemptEC::add_component(RTC::LightweightRTObject_ptr comp)
-    throw (CORBA::SystemException)
   {
     return ExecutionContextBase::addComponent(comp);
   }
@@ -312,7 +306,6 @@ namespace RTC_exp
    */
   RTC::ReturnCode_t RTPreemptEC::
   remove_component(RTC::LightweightRTObject_ptr comp)
-    throw (CORBA::SystemException)
   {
     return ExecutionContextBase::removeComponent(comp);
   }
@@ -326,7 +319,6 @@ namespace RTC_exp
    */
   RTC::ReturnCode_t RTPreemptEC::
   activate_component(RTC::LightweightRTObject_ptr comp)
-    throw (CORBA::SystemException)
   {
     return ExecutionContextBase::activateComponent(comp);
   }
@@ -340,7 +332,6 @@ namespace RTC_exp
    */
   RTC::ReturnCode_t RTPreemptEC::
   deactivate_component(RTC::LightweightRTObject_ptr comp)
-    throw (CORBA::SystemException)
   {
     return ExecutionContextBase::deactivateComponent(comp);
   }
@@ -354,7 +345,6 @@ namespace RTC_exp
    */
   RTC::ReturnCode_t RTPreemptEC::
   reset_component(RTC::LightweightRTObject_ptr comp)
-    throw (CORBA::SystemException)
   {
     return ExecutionContextBase::resetComponent(comp);
   }
@@ -368,7 +358,6 @@ namespace RTC_exp
    */
   RTC::LifeCycleState RTPreemptEC::
   get_component_state(RTC::LightweightRTObject_ptr comp)
-    throw (CORBA::SystemException)
   {
     RTC::LifeCycleState ret = ExecutionContextBase::getComponentState(comp);
     return ret;
@@ -382,7 +371,6 @@ namespace RTC_exp
    * @endif
    */
   RTC::ExecutionKind RTPreemptEC::get_kind()
-    throw (CORBA::SystemException)
   {
     return ExecutionContextBase::getKind();
   }
@@ -398,7 +386,6 @@ namespace RTC_exp
    * @endif
    */
   RTC::ExecutionContextProfile* RTPreemptEC::get_profile()
-    throw (CORBA::SystemException)
   {
     return ExecutionContextBase::getProfile();
   }

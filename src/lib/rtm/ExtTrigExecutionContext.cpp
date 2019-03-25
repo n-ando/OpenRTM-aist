@@ -178,7 +178,6 @@ namespace RTC
    * @endif
    */
   void ExtTrigExecutionContext::tick()
-    throw (CORBA::SystemException)
   {
     RTC_TRACE(("tick()"));
     if (!isRunning())
@@ -204,7 +203,6 @@ namespace RTC
    * @endif
    */
   CORBA::Boolean ExtTrigExecutionContext::is_running()
-    throw (CORBA::SystemException)
   {
     return ExecutionContextBase::isRunning();
   }
@@ -217,7 +215,6 @@ namespace RTC
    * @endif
    */
   RTC::ReturnCode_t ExtTrigExecutionContext::start()
-    throw (CORBA::SystemException)
   {
     return ExecutionContextBase::start();
   }
@@ -230,7 +227,6 @@ namespace RTC
    * @endif
    */
   RTC::ReturnCode_t ExtTrigExecutionContext::stop()
-    throw (CORBA::SystemException)
   {
     return ExecutionContextBase::stop();
   }
@@ -245,7 +241,6 @@ namespace RTC
    * @endif
    */
   CORBA::Double ExtTrigExecutionContext::get_rate()
-    throw (CORBA::SystemException)
   {
     return ExecutionContextBase::getRate();
   }
@@ -258,7 +253,6 @@ namespace RTC
    * @endif
    */
   RTC::ReturnCode_t ExtTrigExecutionContext::set_rate(CORBA::Double rate)
-    throw (CORBA::SystemException)
   {
     return ExecutionContextBase::setRate(rate);
   }
@@ -272,7 +266,6 @@ namespace RTC
    */
   RTC::ReturnCode_t
   ExtTrigExecutionContext::add_component(RTC::LightweightRTObject_ptr comp)
-    throw (CORBA::SystemException)
   {
     return ExecutionContextBase::addComponent(comp);
   }
@@ -286,7 +279,6 @@ namespace RTC
    */
   RTC::ReturnCode_t ExtTrigExecutionContext::
   remove_component(RTC::LightweightRTObject_ptr comp)
-    throw (CORBA::SystemException)
   {
     return ExecutionContextBase::removeComponent(comp);
   }
@@ -300,7 +292,6 @@ namespace RTC
    */
   RTC::ReturnCode_t ExtTrigExecutionContext::
   activate_component(RTC::LightweightRTObject_ptr comp)
-    throw (CORBA::SystemException)
   {
     return ExecutionContextBase::activateComponent(comp);
   }
@@ -314,7 +305,6 @@ namespace RTC
    */
   RTC::ReturnCode_t ExtTrigExecutionContext::
   deactivate_component(RTC::LightweightRTObject_ptr comp)
-    throw (CORBA::SystemException)
   {
     return ExecutionContextBase::deactivateComponent(comp);
   }
@@ -328,7 +318,6 @@ namespace RTC
    */
   RTC::ReturnCode_t ExtTrigExecutionContext::
   reset_component(RTC::LightweightRTObject_ptr comp)
-    throw (CORBA::SystemException)
   {
     return ExecutionContextBase::resetComponent(comp);
   }
@@ -342,7 +331,6 @@ namespace RTC
    */
   RTC::LifeCycleState ExtTrigExecutionContext::
   get_component_state(RTC::LightweightRTObject_ptr comp)
-    throw (CORBA::SystemException)
   {
     return ExecutionContextBase::getComponentState(comp);
   }
@@ -355,7 +343,6 @@ namespace RTC
    * @endif
    */
   RTC::ExecutionKind ExtTrigExecutionContext::get_kind()
-    throw (CORBA::SystemException)
   {
     return ExecutionContextBase::getKind();
   }
@@ -371,7 +358,6 @@ namespace RTC
    * @endif
    */
   RTC::ExecutionContextProfile* ExtTrigExecutionContext::get_profile()
-    throw (CORBA::SystemException)
   {
     return ExecutionContextBase::getProfile();
   }

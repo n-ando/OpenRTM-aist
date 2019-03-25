@@ -181,8 +181,7 @@ namespace RTC
      *
      * @endif
      */
-    ::OpenRTM::PortStatus put()
-      throw (CORBA::SystemException) override;
+    ::OpenRTM::PortStatus put() override;
     
   private:
 

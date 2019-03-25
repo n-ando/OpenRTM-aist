@@ -132,8 +132,6 @@ namespace SDOPackage
    */
   CORBA::Boolean
   Configuration_impl::set_device_profile(const DeviceProfile& dProfile)
-    throw (CORBA::SystemException,
-           InvalidParameter, NotAvailable, InternalError)
   {
     RTC_TRACE(("set_device_profile()"));
     try
@@ -159,8 +157,6 @@ namespace SDOPackage
    */
   CORBA::Boolean
   Configuration_impl::add_service_profile(const ServiceProfile& sProfile)
-    throw (CORBA::SystemException,
-           InvalidParameter, NotAvailable, InternalError)
   {
     RTC_TRACE(("add_service_profile()"));
     // SDO specification defines that InvalidParameter() exception
@@ -188,8 +184,6 @@ namespace SDOPackage
    */
   CORBA::Boolean
   Configuration_impl::add_organization(Organization_ptr org)
-    throw (CORBA::SystemException,
-           InvalidParameter, NotAvailable, InternalError)
   {
     RTC_TRACE(("add_organization()"));
     try
@@ -215,8 +209,6 @@ namespace SDOPackage
    */
   CORBA::Boolean
   Configuration_impl::remove_service_profile(const char* id)
-    throw (CORBA::SystemException,
-           InvalidParameter, NotAvailable, InternalError)
   {
     RTC_TRACE(("remove_service_profile(%s)", id));
     try
@@ -239,8 +231,6 @@ namespace SDOPackage
    */
   CORBA::Boolean
   Configuration_impl::remove_organization(const char* organization_id)
-    throw (CORBA::SystemException,
-           InvalidParameter, NotAvailable, InternalError)
   {
     RTC_TRACE(("remove_organization(%s)", organization_id));
     try
@@ -269,8 +259,6 @@ namespace SDOPackage
    */
   ParameterList*
   Configuration_impl::get_configuration_parameters()
-    throw (CORBA::SystemException,
-           NotAvailable, InternalError)
   {
     RTC_TRACE(("get_configuration_parameters()"));
     try
@@ -298,8 +286,6 @@ namespace SDOPackage
    */
   NVList*
   Configuration_impl::get_configuration_parameter_values()
-    throw (CORBA::SystemException,
-           NotAvailable, InternalError)
   {
     RTC_TRACE(("get_configuration_parameter_values()"));
     Guard guard(m_config_mutex);
@@ -326,8 +312,6 @@ namespace SDOPackage
    */
   CORBA::Any*
   Configuration_impl::get_configuration_parameter_value(const char* name)
-    throw (CORBA::SystemException,
-           InvalidParameter, NotAvailable, InternalError)
   {
     RTC_TRACE(("get_configuration_parameter_value(%s)", name));
     if (std::string(name).empty()) throw InvalidParameter("Name is empty.");
@@ -359,8 +343,6 @@ namespace SDOPackage
   CORBA::Boolean
   Configuration_impl::set_configuration_parameter(const char* name,
                                                   const CORBA::Any&  /*value*/)
-    throw (CORBA::SystemException,
-           InvalidParameter, NotAvailable, InternalError)
   {
     RTC_TRACE(("set_configuration_parameter(%s, value)", name));
     /*
@@ -388,8 +370,6 @@ namespace SDOPackage
    */
   ConfigurationSetList*
   Configuration_impl::get_configuration_sets()
-    throw (CORBA::SystemException,
-           NotAvailable, InternalError)
   {
     RTC_TRACE(("get_configuration_sets()"));
     try
@@ -441,8 +421,6 @@ namespace SDOPackage
    */
   ConfigurationSet*
   Configuration_impl::get_configuration_set(const char* id)
-    throw (CORBA::SystemException,
-           NotAvailable, InternalError)
   {
     RTC_TRACE(("get_configuration_set(%s)", id));
     if (std::string(id).empty()) throw InternalError("ID is empty");
@@ -495,8 +473,6 @@ namespace SDOPackage
   CORBA::Boolean
   Configuration_impl::
   set_configuration_set_values(const ConfigurationSet& configuration_set)
-    throw (CORBA::SystemException,
-           InvalidParameter, NotAvailable, InternalError)
   {
     RTC_TRACE(("set_configuration_set_values()"));
     std::string id(configuration_set.id);
@@ -554,8 +530,6 @@ namespace SDOPackage
    */
   ConfigurationSet*
   Configuration_impl::get_active_configuration_set()
-    throw (CORBA::SystemException,
-           NotAvailable, InternalError)
   {
     RTC_TRACE(("get_active_configuration_set()"));
     // activeなConfigurationSetは無い
@@ -588,8 +562,6 @@ namespace SDOPackage
   CORBA::Boolean
   Configuration_impl::
   add_configuration_set(const ConfigurationSet& configuration_set)
-    throw (CORBA::SystemException,
-           InvalidParameter, NotAvailable, InternalError)
   {
     RTC_TRACE(("add_configuration_set()"));
     try
@@ -617,8 +589,6 @@ namespace SDOPackage
    */
   CORBA::Boolean
   Configuration_impl::remove_configuration_set(const char* id)
-    throw (CORBA::SystemException,
-           InvalidParameter, NotAvailable, InternalError)
   {
     RTC_TRACE(("remove_configuration_set(%s)", id));
     if (std::string(id).empty())
@@ -646,8 +616,6 @@ namespace SDOPackage
    */
   CORBA::Boolean
   Configuration_impl::activate_configuration_set(const char* id)
-    throw (CORBA::SystemException,
-           InvalidParameter, NotAvailable, InternalError)
   {
     RTC_TRACE(("activate_configuration_set(%s)", id));
     if (std::string(id).empty())

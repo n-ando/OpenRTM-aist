@@ -29,7 +29,7 @@ namespace coil
    * @brief Create of memory allocation
    * @endif
    */
-  void* Allocator::New(size_t t) throw (std::bad_alloc)
+  void* Allocator::New(size_t t)
   {
     return operator new(t);
   }
@@ -41,7 +41,7 @@ namespace coil
    * @brief Delete of memory allocation
    * @endif
    */
-  void Allocator::Delete(void* p) throw ()
+  void Allocator::Delete(void* p) noexcept
   {
     operator delete(p);
   }
@@ -53,7 +53,7 @@ namespace coil
    * @brief Create of array memory allocation
    * @endif
    */
-  void* Allocator::NewArray(size_t t) throw (std::bad_alloc)
+  void* Allocator::NewArray(size_t t)
   {
     return operator new[](t);
   }
@@ -65,7 +65,7 @@ namespace coil
    * @brief Delete of array memory allocation
    * @endif
    */
-  void Allocator::DeleteArray(void* p) throw ()
+  void Allocator::DeleteArray(void* p) noexcept
   {
     operator delete[](p);
   }

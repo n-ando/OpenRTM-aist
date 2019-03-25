@@ -242,9 +242,7 @@ namespace SDOPackage
      *                          completely due to some internal error.
      * @endif
      */
-    CORBA::Boolean set_device_profile(const DeviceProfile& dProfile)
-      throw (CORBA::SystemException,
-             InvalidParameter, NotAvailable, InternalError) override;
+    CORBA::Boolean set_device_profile(const DeviceProfile& dProfile) override;
 
     /*!
      * @if jp
@@ -291,9 +289,7 @@ namespace SDOPackage
      *                          completely due to some internal error.
      * @endif
      */
-    CORBA::Boolean add_service_profile(const ServiceProfile& sProfile)
-      throw (CORBA::SystemException,
-             InvalidParameter, NotAvailable, InternalError) override;
+    CORBA::Boolean add_service_profile(const ServiceProfile& sProfile) override;
 
     /*!
      * @if jp
@@ -330,9 +326,7 @@ namespace SDOPackage
      *                          completely due to some internal error.
      * @endif
      */
-    CORBA::Boolean add_organization(Organization_ptr org)
-      throw (CORBA::SystemException,
-             InvalidParameter, NotAvailable, InternalError) override;
+    CORBA::Boolean add_organization(Organization_ptr org) override;
 
     /*!
      * @if jp
@@ -376,9 +370,7 @@ namespace SDOPackage
      *                          completely due to some internal error.
      * @endif
      */
-    CORBA::Boolean remove_service_profile(const char* id)
-      throw (CORBA::SystemException,
-             InvalidParameter, NotAvailable, InternalError) override;
+    CORBA::Boolean remove_service_profile(const char* id) override;
 
     /*!
      * @if jp
@@ -419,9 +411,7 @@ namespace SDOPackage
      *                          completely due to some internal error.
      * @endif
      */
-    CORBA::Boolean remove_organization(const char* organization_id)
-      throw (CORBA::SystemException,
-             InvalidParameter, NotAvailable, InternalError) override;
+    CORBA::Boolean remove_organization(const char* organization_id) override;
 
     /*!
      * @if jp
@@ -455,9 +445,7 @@ namespace SDOPackage
      *                          completely due to some internal error.
      * @endif
      */
-    ParameterList* get_configuration_parameters()
-      throw (CORBA::SystemException,
-             NotAvailable, InternalError) override;
+    ParameterList* get_configuration_parameters() override;
 
     /*!
      * @if jp
@@ -489,9 +477,7 @@ namespace SDOPackage
      *                          completely due to some internal error.
      * @endif
      */
-    NVList* get_configuration_parameter_values()
-      throw (CORBA::SystemException,
-             NotAvailable, InternalError) override;
+    NVList* get_configuration_parameter_values() override;
 
     /*!
      * @if jp
@@ -533,9 +519,7 @@ namespace SDOPackage
      *                          completely due to some internal error.
      * @endif
      */
-    CORBA::Any* get_configuration_parameter_value(const char* name)
-      throw (CORBA::SystemException,
-             InvalidParameter, NotAvailable, InternalError) override;
+    CORBA::Any* get_configuration_parameter_value(const char* name) override;
 
     /*!
      * @if jp
@@ -580,9 +564,7 @@ namespace SDOPackage
      * @endif
      */
     CORBA::Boolean set_configuration_parameter(const char* name,
-                                                       const CORBA::Any& value)
-      throw (CORBA::SystemException,
-             InvalidParameter, NotAvailable, InternalError) override;
+                                                       const CORBA::Any& value) override;
 
     /*!
      * @if jp
@@ -618,9 +600,7 @@ namespace SDOPackage
      *                          completely due to some internal error.
      * @endif
      */
-    ConfigurationSetList* get_configuration_sets()
-      throw (CORBA::SystemException,
-             NotAvailable, InternalError) override;
+    ConfigurationSetList* get_configuration_sets() override;
 
     /*!
      * @if jp
@@ -662,9 +642,7 @@ namespace SDOPackage
      *                          completely due to some internal error.
      * @endif
      */
-    ConfigurationSet* get_configuration_set(const char* id)
-      throw (CORBA::SystemException,
-             NotAvailable, InternalError) override;
+    ConfigurationSet* get_configuration_set(const char* id) override;
 
     /*!
      * @if jp
@@ -714,9 +692,7 @@ namespace SDOPackage
      *                          completely due to some internal error.
      * @endif
      */
-    ConfigurationSet* get_active_configuration_set()
-      throw (CORBA::SystemException,
-             NotAvailable, InternalError) override;
+    ConfigurationSet* get_active_configuration_set() override;
 
     /*!
      * @if jp
@@ -760,9 +736,7 @@ namespace SDOPackage
      * @endif
      */
     CORBA::Boolean
-    add_configuration_set(const ConfigurationSet& configuration_set)
-      throw (CORBA::SystemException,
-             InvalidParameter, NotAvailable, InternalError) override;
+    add_configuration_set(const ConfigurationSet& configuration_set) override;
 
     /*!
      * @if jp
@@ -816,9 +790,7 @@ namespace SDOPackage
      * @endif
      */
     CORBA::Boolean
-    set_configuration_set_values(const ConfigurationSet& configuration_set)
-      throw (CORBA::SystemException,
-             InvalidParameter, NotAvailable, InternalError) override;
+    set_configuration_set_values(const ConfigurationSet& configuration_set) override;
 
     /*!
      * @if jp
@@ -858,9 +830,7 @@ namespace SDOPackage
      *                          completely due to some internal error.
      * @endif
      */
-    CORBA::Boolean remove_configuration_set(const char* id)
-      throw (CORBA::SystemException,
-             InvalidParameter, NotAvailable, InternalError) override;
+    CORBA::Boolean remove_configuration_set(const char* id) override;
 
     /*!
      * @if jp
@@ -912,9 +882,7 @@ namespace SDOPackage
      *                          completely due to some internal error.
      * @endif
      */
-    CORBA::Boolean activate_configuration_set(const char* id)
-      throw (CORBA::SystemException,
-             InvalidParameter, NotAvailable, InternalError) override;
+    CORBA::Boolean activate_configuration_set(const char* id) override;
 
     // end of CORBA interface definition
     //============================================================

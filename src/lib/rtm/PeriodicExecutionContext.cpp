@@ -235,7 +235,6 @@ namespace RTC_exp
    * @endif
    */
   CORBA::Boolean PeriodicExecutionContext::is_running()
-    throw (CORBA::SystemException)
   {
     return ExecutionContextBase::isRunning();
   }
@@ -248,7 +247,6 @@ namespace RTC_exp
    * @endif
    */
   RTC::ReturnCode_t PeriodicExecutionContext::start()
-    throw (CORBA::SystemException)
   {
     return ExecutionContextBase::start();
   }
@@ -261,7 +259,6 @@ namespace RTC_exp
    * @endif
    */
   RTC::ReturnCode_t PeriodicExecutionContext::stop()
-    throw (CORBA::SystemException)
   {
     return ExecutionContextBase::stop();
   }
@@ -276,7 +273,6 @@ namespace RTC_exp
    * @endif
    */
   CORBA::Double PeriodicExecutionContext::get_rate()
-    throw (CORBA::SystemException)
   {
     return ExecutionContextBase::getRate();
   }
@@ -289,7 +285,6 @@ namespace RTC_exp
    * @endif
    */
   RTC::ReturnCode_t PeriodicExecutionContext::set_rate(CORBA::Double rate)
-    throw (CORBA::SystemException)
   {
     return ExecutionContextBase::setRate(rate);
   }
@@ -303,7 +298,6 @@ namespace RTC_exp
    */
   RTC::ReturnCode_t
   PeriodicExecutionContext::add_component(RTC::LightweightRTObject_ptr comp)
-    throw (CORBA::SystemException)
   {
     return ExecutionContextBase::addComponent(comp);
   }
@@ -317,7 +311,6 @@ namespace RTC_exp
    */
   RTC::ReturnCode_t PeriodicExecutionContext::
   remove_component(RTC::LightweightRTObject_ptr comp)
-    throw (CORBA::SystemException)
   {
     return ExecutionContextBase::removeComponent(comp);
   }
@@ -331,7 +324,6 @@ namespace RTC_exp
    */
   RTC::ReturnCode_t PeriodicExecutionContext::
   activate_component(RTC::LightweightRTObject_ptr comp)
-    throw (CORBA::SystemException)
   {
     return ExecutionContextBase::activateComponent(comp);
   }
@@ -345,7 +337,6 @@ namespace RTC_exp
    */
   RTC::ReturnCode_t PeriodicExecutionContext::
   deactivate_component(RTC::LightweightRTObject_ptr comp)
-    throw (CORBA::SystemException)
   {
     return ExecutionContextBase::deactivateComponent(comp);
   }
@@ -359,7 +350,6 @@ namespace RTC_exp
    */
   RTC::ReturnCode_t PeriodicExecutionContext::
   reset_component(RTC::LightweightRTObject_ptr comp)
-    throw (CORBA::SystemException)
   {
     return ExecutionContextBase::resetComponent(comp);
   }
@@ -373,7 +363,6 @@ namespace RTC_exp
    */
   RTC::LifeCycleState PeriodicExecutionContext::
   get_component_state(RTC::LightweightRTObject_ptr comp)
-    throw (CORBA::SystemException)
   {
     RTC::LifeCycleState ret = ExecutionContextBase::getComponentState(comp);
     return ret;
@@ -387,7 +376,6 @@ namespace RTC_exp
    * @endif
    */
   RTC::ExecutionKind PeriodicExecutionContext::get_kind()
-    throw (CORBA::SystemException)
   {
     return ExecutionContextBase::getKind();
   }
@@ -403,7 +391,6 @@ namespace RTC_exp
    * @endif
    */
   RTC::ExecutionContextProfile* PeriodicExecutionContext::get_profile()
-    throw (CORBA::SystemException)
   {
     return ExecutionContextBase::getProfile();
   }

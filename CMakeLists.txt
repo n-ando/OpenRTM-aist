@@ -576,20 +576,26 @@ elseif(WIN32)
 endif()
 
 function(openrtm_include_rtm target)
-target_include_directories(${target}
-	PRIVATE ${CMAKE_SOURCE_DIR}/src/lib/coil/common
-	PRIVATE ${CMAKE_SOURCE_DIR}/src/lib/coil/${COIL_OS_DIR}
-	PRIVATE ${CMAKE_SOURCE_DIR}/src/lib)
-target_include_directories(${target} SYSTEM
-	PRIVATE ${CMAKE_BINARY_DIR}/src/lib/rtm/idl
-	PRIVATE ${CMAKE_BINARY_DIR}/src/lib
-	${ORB_INCLUDE_DIR})
-add_dependencies(${target} ${RTCSKEL_PROJECT_NAME}_IDLTGT)
+	target_include_directories(${target}
+		PRIVATE ${CMAKE_SOURCE_DIR}/src/lib/coil/common
+		PRIVATE ${CMAKE_SOURCE_DIR}/src/lib/coil/${COIL_OS_DIR}
+		PRIVATE ${CMAKE_SOURCE_DIR}/src/lib)
+	target_include_directories(${target} SYSTEM
+		PRIVATE ${CMAKE_BINARY_DIR}/src/lib/rtm/idl
+		PRIVATE ${CMAKE_BINARY_DIR}/src/lib
+		${ORB_INCLUDE_DIR})
+	add_dependencies(${target} ${RTCSKEL_PROJECT_NAME}_IDLTGT)
 endfunction()
 
 function(openrtm_common_set_compile_definitions target)
-  target_compile_definitions(${target} PRIVATE
-		# none
+	target_compile_definitions(${target} PRIVATE
+		$<$<CXX_COMPILER_ID:MSVC>:
+			# MSVC 2013 does not support noexcept.
+			$<$<VERSION_LESS:${CMAKE_CXX_COMPILER_VERSION},19.00>:
+				_ALLOW_KEYWORD_MACROS
+				noexcept=_NOEXCEPT
+			>
+		>
 	)
 endfunction()
 
@@ -735,9 +741,9 @@ function(openrtm_common_set_compile_options target)
 		# C++11: target_compile_features can't be used becase it's support after v3.1.0.
 		$<$<CXX_COMPILER_ID:GNU>:-std=c++11>
 		$<$<CXX_COMPILER_ID:Clang>:-std=c++11>
-		## MSVC always enable c++11 and c++14, so we use c++14 after MSVC 2015.
+		## MSVC always enable c++11 and c++14 after MSVC 2015 Update 3.
 		$<$<CXX_COMPILER_ID:MSVC>:
-			$<$<VERSION_GREATER:${MSVC_VERSION}, 1900>:/std:c++14>
+			$<$<VERSION_GREATER:${CMAKE_CXX_COMPILER_VERSION},19.00.23918>:/std:c++14>
 		>
 
 		# warning options
@@ -781,9 +787,9 @@ function(openrtm_gencode_set_compile_options target)
 		# C++11: target_compile_features can't be used becase it's support after v3.1.0.
 		$<$<CXX_COMPILER_ID:GNU>:-std=c++11>
 		$<$<CXX_COMPILER_ID:Clang>:-std=c++11>
-		## MSVC always enable c++11 and c++14, so we use c++14 after MSVC 2015.
+		## MSVC always enable c++11 and c++14 after MSVC 2015 Update 3.
 		$<$<CXX_COMPILER_ID:MSVC>:
-			$<$<VERSION_GREATER:${MSVC_VERSION}, 1900>:/std:c++14>
+			$<$<VERSION_GREATER:${CMAKE_CXX_COMPILER_VERSION},19.00.23918>:/std:c++14>
 		>
 
 		$<$<CXX_COMPILER_ID:MSVC>:

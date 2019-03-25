@@ -160,7 +160,6 @@ namespace RTC
    */
   ::OpenRTM::PortStatus
   OutPortSHMProvider::get()
-    throw (CORBA::SystemException)
   {
     RTC_PARANOID(("OutPortSHMProvider::get()"));
     // at least the output "data" area should be allocated

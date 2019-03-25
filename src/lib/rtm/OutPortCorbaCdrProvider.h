@@ -240,8 +240,7 @@ namespace RTC
      *
      * @endif
      */
-    ::OpenRTM::PortStatus get(::OpenRTM::CdrData_out data)
-      throw (CORBA::SystemException) override;
+    ::OpenRTM::PortStatus get(::OpenRTM::CdrData_out data) override;
 
 
   private:
