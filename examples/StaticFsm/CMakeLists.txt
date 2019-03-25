@@ -4,13 +4,15 @@ project (StaticFSM
 	VERSION ${RTM_VERSION}
 	LANGUAGES CXX)
 
+examples_build(Display
+  SRCS Display.cpp Display.h
+  MAIN DisplayComp.cpp)
 
+examples_build(Inputbutton
+  SRCS Inputbutton.cpp Inputbutton.h
+  MAIN InputbuttonComp.cpp)
 
-set(srcs Display.cpp Display.h)
-ComponentBuild(Display "${srcs}" DisplayComp.cpp "" "")
-
-set(srcs Inputbutton.cpp Inputbutton.h)
-ComponentBuild(Inputbutton "${srcs}" InputbuttonComp.cpp "" "")
-
-set(srcs Microwave.cpp Microwave.h MicrowaveFsm.cpp MicrowaveFsm.h)
-ComponentBuild(Microwave "${srcs}" MicrowaveComp.cpp "" ${CMAKE_SOURCE_DIR}/src/lib/rtm/Macho.cpp)
+examples_build(Microwave
+  SRCS Microwave.cpp Microwave.h MicrowaveFsm.cpp MicrowaveFsm.h
+  MAIN MicrowaveComp.cpp
+  VXADDFILE ${CMAKE_SOURCE_DIR}/src/lib/rtm/Macho.cpp)

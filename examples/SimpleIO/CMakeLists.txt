@@ -2,11 +2,11 @@
 
 
 set(srcs ConsoleIn.cpp ConsoleIn.h)
-ComponentBuild(ConsoleIn "${srcs}" ConsoleInComp.cpp "" "")
+examples_build(ConsoleIn SRCS "${srcs}" MAIN ConsoleInComp.cpp)
 
 
 set(srcs ConsoleOut.cpp ConsoleOut.h)
-ComponentBuild(ConsoleOut "${srcs}" ConsoleOutComp.cpp "" "")
+examples_build(ConsoleOut SRCS "${srcs}" MAIN ConsoleOutComp.cpp)
 
 
 install(FILES rtc.conf DESTINATION ${INSTALL_RTM_EXAMPLE_DIR} COMPONENT examples)

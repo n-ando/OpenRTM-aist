@@ -7,11 +7,11 @@ project (ExtTrigger
 
 
 set(srcs ConsoleIn.cpp ConsoleIn.h)
-ComponentBuild(ConsoleInEx "${srcs}" ConsoleInComp.cpp "" "")
+examples_build(ConsoleInEx SRCS "${srcs}" MAIN ConsoleInComp.cpp)
 
 
 set(srcs ConsoleOut.cpp ConsoleOut.h)
-ComponentBuild(ConsoleOutEx "${srcs}" ConsoleOutComp.cpp "" "")
+examples_build(ConsoleOutEx SRCS "${srcs}" MAIN ConsoleOutComp.cpp)
 
 
 set(target ConnectorCompEx)

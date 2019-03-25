@@ -40,15 +40,15 @@ endif(VXWORKS)
 
 
 set(srcs Controller.cpp Controller.h)
-ComponentBuild(Controller "${srcs}" ControllerComp.cpp "" "")
+examples_build(Controller SRCS "${srcs}" MAIN ControllerComp.cpp)
 
 
 set(srcs Motor.cpp Motor.h)
-ComponentBuild(Motor "${srcs}" MotorComp.cpp "" "")
+examples_build(Motor SRCS "${srcs}" MAIN MotorComp.cpp)
 
 
 set(srcs Sensor.cpp Sensor.h)
-ComponentBuild(Sensor "${srcs}" SensorComp.cpp "" "")
+examples_build(Sensor SRCS "${srcs}" MAIN SensorComp.cpp)
 
 
 install(FILES composite.conf DESTINATION ${INSTALL_RTM_EXAMPLE_DIR} COMPONENT examples)

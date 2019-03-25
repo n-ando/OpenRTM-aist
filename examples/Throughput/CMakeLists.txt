@@ -7,4 +7,4 @@ project (Throughput
 
 
 set(srcs Throughput.cpp Throughput.h)
-ComponentBuild(Throughput "${srcs}" ThroughputComp.cpp "" "")
+examples_build(Throughput SRCS "${srcs}" MAIN ThroughputComp.cpp)

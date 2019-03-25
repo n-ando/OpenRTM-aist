@@ -6,9 +6,9 @@ project (Analyzer
 
 
 set(srcs Analyzer.cpp Analyzer.h)
-ComponentBuild(Analyzer "${srcs}" AnalyzerComp.cpp "" "")
+examples_build(Analyzer SRCS "${srcs}" MAIN AnalyzerComp.cpp)
 
 
 
 set(srcs Analyzer_test.cpp Analyzer_test.h)
-ComponentBuild(Analyzer_test "${srcs}" Analyzer_testComp.cpp "" "")
+examples_build(Analyzer_test SRCS "${srcs}" MAIN Analyzer_testComp.cpp)
