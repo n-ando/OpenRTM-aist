@@ -52,7 +52,8 @@ else()
 		target_link_libraries(${PROJECT_NAME} PRIVATE
 			${ORB_LIBRARIES} ${COIL_PROJECT_NAME} ${RTM_LINKER_OPTION} ${RTM_PROJECT_NAME} ${RTCSKEL_PROJECT_NAME})
 	else()
-		target_link_libraries(${PROJECT_NAME} PRIVATE ${ORB_LIBRARIES})
+		target_link_libraries(${PROJECT_NAME} PRIVATE 
+			${ORB_LIBRARIES} ${COIL_PROJECT_NAME} ${RTM_LINKER_OPTION} ${RTM_PROJECT_NAME})
 	endif()
 
 	if(UNIX)
