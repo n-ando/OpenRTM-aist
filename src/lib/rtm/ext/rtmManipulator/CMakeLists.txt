@@ -21,7 +21,7 @@ set(${PROJECT_NAME}_IDLS
 
 openrtm_idl_compile_all(${PROJECT_NAME}
 	"${${PROJECT_NAME}_IDLS}"
-	"-I${PROJECT_SOURCE_DIR}/..;-I${PROJECT_SOURCE_DIR}/../../idl")
+	"-I${PROJECT_SOURCE_DIR};-I${PROJECT_SOURCE_DIR}/..;-I${PROJECT_SOURCE_DIR}/../../idl")
 
 link_directories(${ORB_LINK_DIR})
 add_definitions(${ORB_C_FLAGS_LIST})
