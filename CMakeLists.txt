@@ -605,13 +605,13 @@ function(openrtm_common_set_compile_options target)
 		-pedantic
 		-Wall
 		-Wextra
-		-Walloc-zero
-		-Walloca
-		-Warray-bounds=2
-		-Wcast-align=strict
+		$<$<VERSION_GREATER:${CMAKE_CXX_COMPILER_VERSION},6.9.9>: -Walloc-zero>
+		$<$<VERSION_GREATER:${CMAKE_CXX_COMPILER_VERSION},6.9.9>: -Walloca>
+		$<$<VERSION_GREATER:${CMAKE_CXX_COMPILER_VERSION},4.9.9>: -Warray-bounds=2>
+		$<$<VERSION_GREATER:${CMAKE_CXX_COMPILER_VERSION},7.9.9>: -Wcast-align=strict>
 		-Wcast-qual
-		-Wcatch-value=3
-		-Wclass-memaccess
+		$<$<VERSION_GREATER:${CMAKE_CXX_COMPILER_VERSION},7.9.9>: -Wcatch-value=3>
+		$<$<VERSION_GREATER:${CMAKE_CXX_COMPILER_VERSION},7.9.9>: -Wclass-memaccess>
 		-Wcomments
 		-Wconditionally-supported
 		-Wconversion
@@ -620,22 +620,22 @@ function(openrtm_common_set_compile_options target)
 		-Wdelete-non-virtual-dtor
 		-Wdisabled-optimization
 		-Wdouble-promotion
-		-Wduplicated-branches
-		-Wduplicated-cond
+		$<$<VERSION_GREATER:${CMAKE_CXX_COMPILER_VERSION},6.9.9>: -Wduplicated-branches>
+		$<$<VERSION_GREATER:${CMAKE_CXX_COMPILER_VERSION},5.9.9>: -Wduplicated-cond>
 		-Werror-implicit-function-declaration
-		-Wextra-semi
+		$<$<VERSION_GREATER:${CMAKE_CXX_COMPILER_VERSION},7.9.9>: -Wextra-semi>
 		-Wfloat-conversion
 		-Wfloat-equal
 		-Wformat
 		-Wformat-nonliteral
-		-Wformat-overflow=2
+		$<$<VERSION_GREATER:${CMAKE_CXX_COMPILER_VERSION},6.9.9>: -Wformat-overflow=2>
 		-Wformat-security
-		-Wformat-signedness
-		-Wformat-truncation=2
+		$<$<VERSION_GREATER:${CMAKE_CXX_COMPILER_VERSION},4.9.9>: -Wformat-signedness>
+		$<$<VERSION_GREATER:${CMAKE_CXX_COMPILER_VERSION},6.9.9>: -Wformat-truncation=2>
 		-Wformat-y2k
 		-Wformat=2
 		-Wframe-larger-than=4000
-		-Wimplicit-fallthrough=3
+		$<$<VERSION_GREATER:${CMAKE_CXX_COMPILER_VERSION},6.9.9>: -Wimplicit-fallthrough=3>
 		-Winit-self
 		-Winline
 		-Winvalid-pch
@@ -646,42 +646,42 @@ function(openrtm_common_set_compile_options target)
 		-Wmissing-noreturn
 		-Wmultichar
 		-Wnoexcept
-		-Wnoexcept-type
+		$<$<VERSION_GREATER:${CMAKE_CXX_COMPILER_VERSION},6.9.9>: -Wnoexcept-type>
 		-Wnon-virtual-dtor
-		-Wnull-dereference
+		$<$<VERSION_GREATER:${CMAKE_CXX_COMPILER_VERSION},5.9.9>: -Wnull-dereference>
 		-Wold-style-cast
 		-Woverlength-strings
 		-Woverloaded-virtual
 		-Wpacked
 		-Wpedantic
-		-Wplacement-new=1
+		$<$<VERSION_GREATER:${CMAKE_CXX_COMPILER_VERSION},5.9.9>: -Wplacement-new=1>
 		-Wpointer-arith
 		-Wredundant-decls
-		-Wregister
+		$<$<VERSION_GREATER:${CMAKE_CXX_COMPILER_VERSION},6.9.9>: -Wregister>
 		-Wreorder
-		-Wscalar-storage-order
+		$<$<VERSION_GREATER:${CMAKE_CXX_COMPILER_VERSION},5.9.9>: -Wscalar-storage-order>
 		-Wshadow
-		-Wshadow-compatible-local
-		-Wshadow-local
-		-Wshadow=compatible-local
-		-Wshadow=global
-		-Wshadow=local
-		-Wshift-overflow=1
+		$<$<VERSION_GREATER:${CMAKE_CXX_COMPILER_VERSION},6.9.9>: -Wshadow-compatible-local>
+		$<$<VERSION_GREATER:${CMAKE_CXX_COMPILER_VERSION},6.9.9>: -Wshadow-local>
+		$<$<VERSION_GREATER:${CMAKE_CXX_COMPILER_VERSION},6.9.9>: -Wshadow=compatible-local>
+		$<$<VERSION_GREATER:${CMAKE_CXX_COMPILER_VERSION},6.9.9>: -Wshadow=global>
+		$<$<VERSION_GREATER:${CMAKE_CXX_COMPILER_VERSION},6.9.9>: -Wshadow=local>
+		$<$<VERSION_GREATER:${CMAKE_CXX_COMPILER_VERSION},5.9.9>: -Wshift-overflow=1>
 		-Wsign-conversion
 		-Wsign-promo
 		-Wstack-protector
 		-Wstrict-null-sentinel
 		-Wstrict-overflow=5
-		-Wstringop-overflow=4
-		-Wsuggest-attribute=cold
+		$<$<VERSION_GREATER:${CMAKE_CXX_COMPILER_VERSION},6.9.9>: -Wstringop-overflow=4>
+		$<$<VERSION_GREATER:${CMAKE_CXX_COMPILER_VERSION},7.9.9>: -Wsuggest-attribute=cold>
 		-Wsuggest-attribute=const
 		-Wsuggest-attribute=format
-		-Wsuggest-attribute=malloc
+		$<$<VERSION_GREATER:${CMAKE_CXX_COMPILER_VERSION},7.9.9>: -Wsuggest-attribute=malloc>
 		-Wsuggest-attribute=noreturn
 		-Wsuggest-attribute=pure
-		-Wsuggest-final-methods
-		-Wsuggest-final-types
-		-Wsuggest-override
+		$<$<VERSION_GREATER:${CMAKE_CXX_COMPILER_VERSION},4.9.9>: -Wsuggest-final-methods>
+		$<$<VERSION_GREATER:${CMAKE_CXX_COMPILER_VERSION},4.9.9>: -Wsuggest-final-types>
+		$<$<VERSION_GREATER:${CMAKE_CXX_COMPILER_VERSION},4.9.9>: -Wsuggest-override>
 		-Wswitch-default
 		-Wswitch-enum
 		-Wsynth
@@ -689,7 +689,7 @@ function(openrtm_common_set_compile_options target)
 		-Wundef
 		-Wunreachable-code
 		-Wunsafe-loop-optimizations
-		-Wunused-const-variable=2
+		$<$<VERSION_GREATER:${CMAKE_CXX_COMPILER_VERSION},5.9.9>: -Wunused-const-variable=2>
 		-Wunused-macros
 		-Wuseless-cast
 		-Wvariadic-macros
