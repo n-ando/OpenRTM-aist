@@ -521,7 +521,7 @@ extern "C"
    * @brief Initialization function to register to ECFactory
    * @endif
    */
-  DLL_EXPORT void OpenHRPExecutionContextInit(RTC::Manager* manager);
+  void OpenHRPExecutionContextInit(RTC::Manager* manager);
 }
 
 #endif  // RTC_OPENHRPEXECUTIONCONTEXT_H

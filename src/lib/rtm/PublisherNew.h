@@ -736,7 +736,7 @@ namespace RTC
 
 extern "C"
 {
-  void DLL_EXPORT PublisherNewInit();
+  void PublisherNewInit();
 }
 
 #endif  // RTC_PUBLISHERNEW_H

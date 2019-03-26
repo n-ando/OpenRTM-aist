@@ -163,7 +163,7 @@ extern "C"
    * @brief Initialization function to register to ECFactory
    * @endif
    */
-  DLL_EXPORT void SimulatorExecutionContextInit(RTC::Manager* manager);
+  void SimulatorExecutionContextInit(RTC::Manager* manager);
 }
 
 #endif

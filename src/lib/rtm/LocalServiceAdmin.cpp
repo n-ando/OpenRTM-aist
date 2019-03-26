@@ -222,7 +222,7 @@ namespace RTM
    */
   bool LocalServiceAdmin::removeLocalService(const std::string& name)
   {
-    RTC_TRACE(("removeLocalService(%d)", name.c_str()));
+    RTC_TRACE(("removeLocalService(%s)", name.c_str()));
     Guard gurad(m_services_mutex);
 
     std::vector<LocalServiceBase*>::iterator it = m_services.begin();

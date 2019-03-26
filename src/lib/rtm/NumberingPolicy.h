@@ -169,7 +169,7 @@ namespace RTM
 
 extern "C"
 {
-  void DLL_EXPORT ProcessUniquePolicyInit();
+  void ProcessUniquePolicyInit();
 }
 
 
