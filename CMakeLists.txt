@@ -867,7 +867,6 @@ function(openrtm_idl_compile_all name idls inc_path categoty dependencies)
 
 		# register custom_command which generate source and header files.
 		openrtm_idl_compile(${idl} "${inc_path}" "${output}" ${categoty} "${dependencies}")
-		set_source_files_properties(${output} PROPERTIES GENERATED 1)
 
 		set(stub_list ${stub_list} ${stub})
 		set(skel_list ${skel_list} ${skel})
