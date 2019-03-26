@@ -33,11 +33,7 @@ if(VXWORKS AND NOT RTP)
 				COMPONENT ext)
 
 else()
-	if(VXWORKS)
-		set(libs ${RTM_PROJECT_NAME} ${ORB_LIBRARIES} ${COIL_PROJECT_NAME} ${RTCSKEL_PROJECT_NAME})
-	else(VXWORKS)
-		set(libs ${RTM_PROJECT_NAME} ${ORB_LIBRARIES} ${COIL_PROJECT_NAME})
-	endif(VXWORKS)
+	set(libs ${RTM_PROJECT_NAME} ${ORB_LIBRARIES} ${COIL_PROJECT_NAME} ${DATATYPE_FACTORIES})
 
 	add_library(${PROJECT_NAME}_objlib OBJECT ${${PROJECT_NAME}_SRCS})
 	openrtm_common_set_compile_props(${PROJECT_NAME}_objlib)

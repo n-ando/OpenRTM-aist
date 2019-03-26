@@ -5,6 +5,11 @@ project (${RTM_PROJECT_NAME}
 	LANGUAGES CXX)
 
 
+if(WIN32)
+	set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
+endif()
+
+
 set(DATA_TYPE_LIST
 	TimedState
 	TimedShort
@@ -458,33 +463,33 @@ else(VXWORKS)
 		add_dependencies(${PROJECT_NAME}_objlib ComponentObserverConsumer_IDLTGT)
 	endif(OBSERVER_ENABLE)
 
-	add_library(${PROJECT_NAME}-static STATIC
-		$<TARGET_OBJECTS:${PROJECT_NAME}_objlib>
-		$<TARGET_OBJECTS:${RTCSKEL_PROJECT_NAME}_objlib>)
-
 	if(WIN32)
-		set(DEF_FILE_NAME ${PROJECT_NAME}.def)
+		add_library(${PROJECT_NAME}-static STATIC
+			$<TARGET_OBJECTS:${PROJECT_NAME}_objlib>)
+		add_library(${PROJECT_NAME} SHARED
+			$<TARGET_OBJECTS:${PROJECT_NAME}_objlib>)
+	else()
+		add_library(${PROJECT_NAME}-static STATIC
+			$<TARGET_OBJECTS:${PROJECT_NAME}_objlib>
+			$<TARGET_OBJECTS:${RTCSKEL_PROJECT_NAME}_objlib>)
+		add_library(${PROJECT_NAME} SHARED
+			$<TARGET_OBJECTS:${PROJECT_NAME}_objlib>
+			$<TARGET_OBJECTS:${RTCSKEL_PROJECT_NAME}_objlib>)
+	endif()
 
-		add_custom_command(TARGET ${PROJECT_NAME}-static
-			POST_BUILD
-			COMMAND python -B ${MAKE_DEF_COMMAND} $<TARGET_FILE:${PROJECT_NAME}-static> ${PROJECT_NAME} ${RTM_SHORT_VERSION} ${DEF_FILE_NAME}
-			WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-		)
-	endif(WIN32)
-
-	add_library(${PROJECT_NAME} SHARED
-		$<TARGET_OBJECTS:${PROJECT_NAME}_objlib>
-		$<TARGET_OBJECTS:${RTCSKEL_PROJECT_NAME}_objlib>
-		${CMAKE_CURRENT_BINARY_DIR}/${DEF_FILE_NAME})
 	set_target_properties(${PROJECT_NAME} PROPERTIES DEBUG_POSTFIX d)
 
+	set(libs ${ORB_LIBRARIES} ${COIL_PROJECT_NAME} ${RTM_LINKER_OPTION})
+
+	if(WIN32)
+		set(libs ${libs} ${RTCSKEL_PROJECT_NAME})
+	endif()
+
 	if(OBSERVER_ENABLE)
-		target_link_libraries(${PROJECT_NAME} PRIVATE
-			${ORB_LIBRARIES} ${COIL_PROJECT_NAME} ${RTM_LINKER_OPTION} ComponentObserverConsumer)
-	else(OBSERVER_ENABLE)
-		target_link_libraries(${PROJECT_NAME} PRIVATE
-			${ORB_LIBRARIES} ${COIL_PROJECT_NAME} ${RTM_LINKER_OPTION})
-	endif(OBSERVER_ENABLE)
+		set(libs ${libs} ComponentObserverConsumer)
+	endif()
+
+	target_link_libraries(${PROJECT_NAME} PRIVATE ${libs})
 
 	if(UNIX)
 		install(TARGETS ${PROJECT_NAME} LIBRARY DESTINATION ${INSTALL_RTM_LIB_DIR}
@@ -502,7 +507,6 @@ else(VXWORKS)
 
 	elseif(WIN32)
 		add_dependencies(${PROJECT_NAME} ${RTCSKEL_PROJECT_NAME}_IDLTGT)
-		set_source_files_properties(${DEF_FILE_NAME} PROPERTIES GENERATED 1)
 		add_dependencies(${PROJECT_NAME} ${PROJECT_NAME}-static)
 		install(TARGETS ${PROJECT_NAME} LIBRARY DESTINATION ${INSTALL_RTM_LIB_DIR}
 						ARCHIVE DESTINATION ${INSTALL_RTM_LIB_DIR}
@@ -532,7 +536,7 @@ else(VXWORKS)
 							RUNTIME DESTINATION ${INSTALL_RTM_LIB_DIR}
 							COMPONENT openrtm)
 		endforeach()
-		set(DATATYPE_FACTORIES ${DATATYPE_FACTORIES} PARENT_SCOPE)
+		set(DATATYPE_FACTORIES ${DATATYPE_FACTORIES} ${RTCSKEL_PROJECT_NAME} PARENT_SCOPE)
 
 	endif()
 endif(VXWORKS)

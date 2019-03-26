@@ -14,6 +14,10 @@ openrtm_idl_compile_all(${PROJECT_NAME}
 add_definitions(${ORB_C_FLAGS_LIST})
 add_definitions(${COIL_C_FLAGS_LIST})
 
+if(WIN32)
+	add_definitions(-DLIBRARY_EXPORTS)
+endif(WIN32)
+
 add_library(${PROJECT_NAME}_objlib OBJECT ${${PROJECT_NAME}_SRCS})
 openrtm_common_set_compile_props(${PROJECT_NAME}_objlib)
 openrtm_include_rtm(${PROJECT_NAME}_objlib)

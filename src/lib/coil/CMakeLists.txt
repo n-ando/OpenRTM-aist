@@ -4,7 +4,9 @@ project (${COIL_PROJECT_NAME}
 	LANGUAGES CXX)
 
 
-
+if(WIN32)
+	set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
+endif()
 
 
 
@@ -130,6 +132,9 @@ set(coil_srcs
 )
 
 add_definitions(${COIL_C_FLAGS_LIST})
+if(WIN32)
+	add_definitions(-DCOIL_LIBRARY_EXPORTS)
+endif()
 
 
 if(UNIX)
@@ -150,7 +155,7 @@ endif(UNIX)
 
 
 if(VXWORKS)
-	add_library(${COIL_PROJECT_NAME} STATIC ${coil_srcs} )
+	add_library(${COIL_PROJECT_NAME} STATIC ${coil_srcs})
 	openrtm_common_set_compile_props(${COIL_PROJECT_NAME})
 	target_include_directories(${COIL_PROJECT_NAME}
 		PUBLIC ${PROJECT_SOURCE_DIR}/common
@@ -172,18 +177,7 @@ else(VXWORKS)
 		PRIVATE ${UUID_INCLUDE_DIRS})
 	add_library(${COIL_PROJECT_NAME}-static STATIC $<TARGET_OBJECTS:${COIL_PROJECT_NAME}_objlib>)
 
-	if(WIN32)
-		set(DEF_FILE_NAME  ${COIL_PROJECT_NAME}.def)
-
-		add_custom_command(TARGET ${COIL_PROJECT_NAME}-static 
-			POST_BUILD
-			COMMAND python -B ${MAKE_DEF_COMMAND} $<TARGET_FILE:${COIL_PROJECT_NAME}-static> ${COIL_PROJECT_NAME} ${RTM_SHORT_VERSION} ${DEF_FILE_NAME}
-			WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-		)
-		
-	endif(WIN32)
-
-	add_library(${COIL_PROJECT_NAME} SHARED $<TARGET_OBJECTS:${COIL_PROJECT_NAME}_objlib> ${CMAKE_CURRENT_BINARY_DIR}/${DEF_FILE_NAME})
+	add_library(${COIL_PROJECT_NAME} SHARED $<TARGET_OBJECTS:${COIL_PROJECT_NAME}_objlib>)
 	set_target_properties(${COIL_PROJECT_NAME} PROPERTIES DEBUG_POSTFIX d)
 	target_link_libraries(${COIL_PROJECT_NAME} PRIVATE ${RTM_LINKER_OPTION}  ${UUID_LIBRARIES})
 
@@ -202,7 +196,6 @@ else(VXWORKS)
 						COMPONENT coil)
 
 	elseif(WIN32)
-		set_source_files_properties(${DEF_FILE_NAME} PROPERTIES GENERATED 1)
 		add_dependencies(${COIL_PROJECT_NAME} ${COIL_PROJECT_NAME}-static)
 		install(TARGETS ${COIL_PROJECT_NAME} LIBRARY DESTINATION ${INSTALL_RTM_LIB_DIR}
 						 ARCHIVE DESTINATION ${INSTALL_RTM_LIB_DIR}
