@@ -547,9 +547,10 @@ namespace RTC
    * @endif
    */
   typedef ::coil::GlobalFactory<OutPortProvider> OutPortProviderFactory;
+} // namespace RTC
 
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
-  EXTERN template class DLL_PLUGIN ::coil::GlobalFactory<OutPortProvider>;
+EXTERN template class DLL_PLUGIN coil::GlobalFactory<RTC::OutPortProvider>;
 #endif
-} // namespace RTC
+
 #endif  // RTC_OUTPORTPROVIDER_H

@@ -126,10 +126,10 @@ namespace RTM
   };
   
   typedef coil::GlobalFactory<NumberingPolicyBase> NumberingPolicyFactory;
-  
-#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
-  EXTERN template class DLL_PLUGIN coil::GlobalFactory<NumberingPolicyBase>;
-#endif
-  
 } // namespace RTM
+
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
+EXTERN template class DLL_PLUGIN coil::GlobalFactory<RTM::NumberingPolicyBase>;
+#endif
+
 #endif // RTC_NUMBERINGPOLICYBASE_H
