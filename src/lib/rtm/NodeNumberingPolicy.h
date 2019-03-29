@@ -167,7 +167,7 @@ namespace RTM
 
 extern "C"
 {
-	void DLL_EXPORT NodeNumberingPolicyInit();
+    void NodeNumberingPolicyInit();
 }
 
 #endif // RTC_NODENUMBERINGPOLICY_H

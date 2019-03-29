@@ -232,7 +232,6 @@ namespace RTC
           }
       }
     throw SDOPackage::InvalidParameter();
-    return new SDOPackage::ServiceProfile();
   }
 
   /*!
@@ -290,7 +289,7 @@ namespace RTC
    */
   bool SdoServiceAdmin::removeSdoServiceProvider(const char* id)
   {
-    RTC_TRACE(("removeSdoServiceProvider(%d)", id));
+    RTC_TRACE(("removeSdoServiceProvider(%s)", id));
     Guard gurad(m_provider_mutex);
 
     std::string strid(id);

@@ -441,7 +441,7 @@ namespace RTC
 
 extern "C"
 {
-  void DLL_EXPORT PublisherFlushInit();
+  void PublisherFlushInit();
 }
 
 #endif  // RTC_PUBLISHERFLUSH_H
