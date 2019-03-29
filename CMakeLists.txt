@@ -829,6 +829,7 @@ function(openrtm_idl_compile idl_name inc_path output)
 		OUTPUT ${output}
 		COMMAND ${IDL_COMPILE_COMMAND} ${idl_flags} ${inc_path} ${CMAKE_CURRENT_SOURCE_DIR}/${idl_name}
 		COMMAND python -B ${skel_wrapper} --include-dir="" --skel-suffix=Skel --stub-suffix=Stub --idl-file=${idl_name}
+		DEPENDS ${idl_name}
 		WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
 endfunction()
 
