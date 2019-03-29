@@ -14,12 +14,12 @@ examples_build(MyServiceConsumer
 	SRCS MyServiceConsumer.cpp
 	GENSRCS ${MyService_IDLSTUB}
 	MAIN MyServiceConsumerComp.cpp
-	INCLUDE ${CMAKE_CURRENT_BINARY_DIR}
+	EXTERNAL_INCLUDE PUBLIC ${CMAKE_CURRENT_BINARY_DIR}
 	DEPS MyService_IDLTGT)
 
 examples_build(MyServiceProvider
 	SRCS MyServiceProvider.cpp MyServiceSVC_impl.cpp
 	GENSRCS ${MyService_IDLSKEL}
 	MAIN MyServiceProviderComp.cpp
-	INCLUDE ${CMAKE_CURRENT_BINARY_DIR}
+	EXTERNAL_INCLUDE PUBLIC ${CMAKE_CURRENT_BINARY_DIR}
 	DEPS MyService_IDLTGT)
