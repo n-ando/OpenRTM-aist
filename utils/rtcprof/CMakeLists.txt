@@ -10,11 +10,7 @@ add_definitions(${COIL_C_FLAGS_LIST})
 
 set(srcs rtcprof.cpp)
 
-if(VXWORKS)
-	set(libs ${RTM_PROJECT_NAME} ${ORB_LIBRARIES} ${COIL_PROJECT_NAME} ${RTCSKEL_PROJECT_NAME})
-else(VXWORKS)
-	set(libs ${RTM_PROJECT_NAME} ${ORB_LIBRARIES} ${COIL_PROJECT_NAME})
-endif(VXWORKS)
+set(libs ${RTM_PROJECT_NAME} ${ORB_LIBRARIES} ${COIL_PROJECT_NAME} ${DATATYPE_FACTORIES})
 
 
 add_executable(${target} ${srcs})
