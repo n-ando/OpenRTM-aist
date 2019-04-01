@@ -2785,6 +2785,10 @@ namespace RTC
                 RTC_DEBUG(("p_name none"));
               }
           }
+        else
+          {
+            RTC_DEBUG(("p_name is empty"));
+          }
         ec_args.push_back(p);
         RTC_DEBUG(("New EC properties stored:"));
         RTC_DEBUG_STR((p));
