@@ -108,7 +108,18 @@ namespace RTC
     }
     else
     {
-        m_dataType = prop.getProperty("data_type", "RTC::CDR_Data");
+        std::string data = prop.getProperty("data_type", "IDL:RTC/CDR_Data:1.0");
+
+        coil::vstring typelist = coil::split(data, ":");
+        if (typelist.size() == 3)
+        {
+            m_dataType = typelist[1];
+            coil::replaceString(m_dataType, "/", "::");
+        }
+        else
+        {
+            m_dataType = data;
+        }
         m_type.init(m_dataType, false);
     }
 
