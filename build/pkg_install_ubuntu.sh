@@ -455,7 +455,7 @@ install_branch()
   if test "x$arg_rtshell" = "xtrue" ; then
     select_opt_shl="[rtshell] install"
     install_packages python-pip
-    rtshell_ret=`pip install rtshell`
+    rtshell_ret=`pip install rtshell-aist`
   fi
 }
 
@@ -513,7 +513,7 @@ uninstall_branch()
 
   if test "x$arg_rtshell" = "xtrue" ; then
     select_opt_shl="[rtshell] uninstall"
-    rtshell_ret=`pip uninstall -y rtshell`
+    rtshell_ret=`pip uninstall -y rtshell-aist rtctree-aist rtsprofile-aist`
   fi
 }
 

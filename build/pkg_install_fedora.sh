@@ -18,15 +18,15 @@ usage()
 
     $(basename ${0}) [-l all/c++] [-r/-d/-s/-c] [-u]
     $(basename ${0}) [-l python/java] [-r/-d/-c] [-u]
-    $(basename ${0}) [-l openrtp] [-d] [-u]                           
+    $(basename ${0}) [-l openrtp/rtshell] [-d] [-u]                           
 
   Example:
     $(basename ${0})  [= $(basename ${0}) -l c++ -d]
-    $(basename ${0}) -l all -d  [= -l c++ -l python -l java -l openrtp -d]
+    $(basename ${0}) -l all -d  [= -l c++ -l python -l java -l openrtp -l rtshell -d]
     $(basename ${0}) -l c++ -l python -c --yes
 
   Options:
-    -l <argument>  language or tool [c++/python/java/openrtp]
+    -l <argument>  language or tool [c++/python/java/openrtp/rtshell]
     -r             install robot component runtime
     -d             install robot component developer [default]
     -s             install tool_packages for build source packages
@@ -135,7 +135,6 @@ OPT_CORE=false
 OPT_FLG=true
 install_pkgs=""
 uninstall_pkgs=""
-arg_rtshell=false
 }
 
 check_arg()
@@ -149,7 +148,7 @@ check_arg()
     python ) arg_python=true ;;
     java ) arg_java=true ;;
     openrtp ) arg_openrtp=true ;;
-#    rtshell ) arg_rtshell=true ;;
+    rtshell ) arg_rtshell=true ;;
     *) arg_err=-1 ;;
   esac
 }
@@ -422,7 +421,12 @@ install_branch()
   if test "x$arg_rtshell" = "xtrue" ; then
     select_opt_shl="[rtshell] install"
     install_packages python-pip
-    rtshell_ret=`pip install rtshell`
+    if [ $version_num -lt 29 ] ; then
+      PIP_CMD=pip
+    else
+      PIP_CMD=pip3
+    fi
+    rtshell_ret=`$PIP_CMD install rtshell-aist`
   fi
 }
 
@@ -480,7 +484,12 @@ uninstall_branch()
 
   if test "x$arg_rtshell" = "xtrue" ; then
     select_opt_shl="[rtshell] uninstall"
-    rtshell_ret=`pip uninstall -y rtshell`
+    if [ $version_num -lt 29 ] ; then
+      PIP_CMD=pip
+    else
+      PIP_CMD=pip3
+    fi
+    rtshell_ret=`$PIP_CMD uninstall -y rtshell-aist rtctree-aist rtsprofile-aist`
   fi
 }
 
@@ -582,7 +591,7 @@ if test "x$arg_all" = "xtrue" ; then
   arg_python=true
   arg_java=true
   arg_openrtp=true
-#  arg_rtshell=true
+  arg_rtshell=true
 
   if test "x$OPT_RT" != "xtrue" && 
      test "x$OPT_DEV" != "xtrue" &&
