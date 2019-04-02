@@ -60,7 +60,7 @@ const unsigned int MaxPathLength(256);
    *
    * @endif
    */
-  inline std::string dirname(char* path)
+  inline std::string dirname(const char* path)
   {
 #ifdef __RTP__
     return "";

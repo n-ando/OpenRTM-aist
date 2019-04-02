@@ -117,6 +117,7 @@ set(coil_srcs
 	common/coil/crc.cpp
 	common/coil/stringutil.cpp
 	common/coil/Logger.cpp
+	${COIL_OS_DIR}/coil/Condition.cpp
 	${COIL_OS_DIR}/coil/DynamicLib.cpp
 	${COIL_OS_DIR}/coil/Mutex.cpp
 	${COIL_OS_DIR}/coil/Routing.cpp
@@ -127,6 +128,8 @@ set(coil_srcs
 	${COIL_OS_DIR}/coil/UUID.cpp
 	${COIL_OS_DIR}/coil/SharedMemory.cpp
 	${COIL_OS_DIR}/coil/Affinity.cpp
+	${COIL_OS_DIR}/coil/OS.cpp
+	${COIL_OS_DIR}/coil/File.cpp
 	${coil_headers}
 )
 

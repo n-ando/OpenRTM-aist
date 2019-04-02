@@ -177,9 +177,15 @@ namespace coil
    *
    * @endif
    */
-  inline char* getenv(const char *name)
+  inline bool getenv(const char *name, std::string &env)
   {
-    return ::getenv(name);
+    char* c = ::getenv(name);
+    if(c == nullptr)
+    {
+        return false;
+    }
+    env = c;
+    return true;
   }
 
 

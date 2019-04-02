@@ -2464,8 +2464,11 @@ std::vector<coil::Properties> Manager::getLoadableModules()
                   {
                     env += *it;
                   }
-                char* envval = coil::getenv(env.c_str());
-                if (envval != nullptr) str += envval;
+                std::string value;
+                if (coil::getenv(env.c_str(), value))
+                {
+                    str += value;
+                }
               }
             else
               {
