@@ -227,7 +227,7 @@ namespace RTC
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Winconsistent-missing-override"
 #endif
-#if defined(__GNUC__) && !defined(__clang__)
+#if defined(__GNUC__) && (__GNUC__ >= 5) && !defined(__clang__)
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wsuggest-override"
 #endif
@@ -236,7 +236,7 @@ namespace RTC
     virtual RTC::ReturnCode_t onEntry() { return RTC::RTC_OK; }
     virtual RTC::ReturnCode_t onInit()  { return RTC::RTC_OK; }
     virtual RTC::ReturnCode_t onExit()  { return RTC::RTC_OK; }
-#if defined(__GNUC__) && !defined(__clang__)
+#if defined(__GNUC__) && (__GNUC__ >= 5) && !defined(__clang__)
 #pragma GCC diagnostic pop
 #endif
 #if defined(__clang__)
