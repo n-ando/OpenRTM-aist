@@ -52,6 +52,8 @@ namespace RTC
     RTC_DEBUG(("setting dataport.data_type: %s", data_type));
     addProperty("dataport.data_type", data_type);
 
+    m_properties["data_type"] = data_type;
+
     addProperty("dataport.subscription_type", "Any");
   }
 

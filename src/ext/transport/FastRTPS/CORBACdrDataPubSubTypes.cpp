@@ -54,7 +54,8 @@ namespace RTC
         m_endian = endian;
     }
 
-    bool CORBACdrDataPubSubType::serialize(void *data, eprosima::fastrtps::rtps::SerializedPayload_t *payload) {
+    bool CORBACdrDataPubSubType::serialize(void *data, eprosima::fastrtps::rtps::SerializedPayload_t *payload)
+    {
         RTC::ByteData* p_type = (RTC::ByteData*) data;
         if (!m_header_enable)
         {
@@ -122,7 +123,8 @@ namespace RTC
         return true;
     }
 
-    bool CORBACdrDataPubSubType::deserialize(eprosima::fastrtps::rtps::SerializedPayload_t* payload, void* data) {
+    bool CORBACdrDataPubSubType::deserialize(eprosima::fastrtps::rtps::SerializedPayload_t* payload, void* data)
+    {
 
         RTC::ByteData* p_type = (RTC::ByteData*) data; 	//Convert DATA to pointer of your type
         eprosima::fastcdr::FastBuffer fastbuffer((char*)payload->data, payload->length); // Object that manages the raw buffer.
