@@ -1569,6 +1569,10 @@ std::vector<coil::Properties> Manager::getLoadableModules()
             }
             else
             {
+                args.push_back(opts[i]);
+            }
+         }
+         // TAO's ORB_init needs argv[0] as command name.
          args.insert(args.begin(), "manager");
 
          char** argv = coil::toArgv(args);
