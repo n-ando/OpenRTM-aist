@@ -1202,13 +1202,10 @@ namespace RTC
   };  // class ExecutionContextBase
 
   typedef coil::GlobalFactory<ExecutionContextBase> ExecutionContextFactory;
-
-#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
-  EXTERN template class DLL_PLUGIN coil::GlobalFactory<ExecutionContextBase>;
-#endif
 } // namespace RTC
 
 #ifdef WIN32
+EXTERN template class DLL_PLUGIN coil::GlobalFactory<RTC::ExecutionContextBase>;
 #pragma warning( default : 4290 )
 #endif
 

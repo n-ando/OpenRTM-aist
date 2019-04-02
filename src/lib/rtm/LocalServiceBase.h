@@ -283,6 +283,8 @@ namespace RTM
    * @endif
    */
   typedef ::coil::GlobalFactory< ::RTM::LocalServiceBase > LocalServiceFactory;
+} // namespace RTM
+
 
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
   /*!
@@ -292,9 +294,7 @@ namespace RTM
    * @brief Explicit instantiation of class template
    * @endif
    */
-  EXTERN template class DLL_PLUGIN
-  ::coil::GlobalFactory< ::RTM::LocalServiceBase >;
+EXTERN template class DLL_PLUGIN coil::GlobalFactory<RTM::LocalServiceBase >;
 #endif
-} // namespace RTM
 
 #endif  // RTM_LOCALSERVICEBASE_H

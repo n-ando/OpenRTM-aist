@@ -412,10 +412,12 @@ namespace RTC
    * @endif
    */
   typedef ::coil::GlobalFactory<OutPortConsumer> OutPortConsumerFactory;
+} // namespace RTC
+
 
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
-  EXTERN template class DLL_PLUGIN ::coil::GlobalFactory<OutPortConsumer>;
+EXTERN template class DLL_PLUGIN coil::GlobalFactory<RTC::OutPortConsumer>;
 #endif
-} // namespace RTC
+
 #endif  // RTC_OUTPORTCONSUMER_H
 
