@@ -59,6 +59,22 @@ namespace coil
 
   /*!
    * @if jp
+   * @brief 代入演算子
+   * @else
+   * @brief 
+   * @endif
+   */
+  SignalAction& SignalAction::operator=(const SignalAction &signal)
+  {
+      m_handle = signal.m_handle;
+      m_signum = signal.m_signum;
+      m_mask = signal.m_mask;
+      m_flags = signal.m_flags;
+      return *this;
+  }
+
+  /*!
+   * @if jp
    * @brief デストラクタ
    * @else
    * @brief Destructor
