@@ -1556,45 +1556,61 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     // Initialize ORB
     try
       {
-	std::vector<std::string> args(coil::split(createORBOptions(), " "));
-	// TAO's ORB_init needs argv[0] as command name.
-	args.insert(args.begin(), "manager");
-	char** argv = coil::toArgv(args);
-	int argc(static_cast<int>(args.size()));
-	
+        std::string opt = createORBOptions();
+        std::vector<std::string> args;
+        coil::vstring opts = coil::split(opt, "\"");
+        for(size_t i=0;i < opts.size();i++)
+        {
+            if (i % 2 == 0)
+            {
+                coil::eraseBothEndsBlank(opts[i]);
+                coil::vstring olist = coil::split(opts[i], " ");
+                std::copy(olist.begin(), olist.end(), std::back_inserter(args));
+            }
+            else
+            {
+                args.push_back(opts[i]);
+            }
+         }
+         // TAO's ORB_init needs argv[0] as command name.
+         args.insert(args.begin(), "manager");
+
+         char** argv = coil::toArgv(args);
+         int argc(static_cast<int>(args.size()));
+         
 #ifdef ORB_IS_ORBEXPRESS
-	CORBA::ORB::spawn_flags(VX_SPE_TASK | VX_STDIO);
-	CORBA::ORB::stack_size(20000);
-	m_pORB = CORBA::ORB_init(argc, argv, "");
-	CORBA::Object_var obj =
-          m_pORB->resolve_initial_references((char*)"RootPOA");
-	m_pPOA = PortableServer::POA::_narrow(obj);
+         CORBA::ORB::spawn_flags(VX_SPE_TASK | VX_STDIO);
+         CORBA::ORB::stack_size(20000);
+         m_pORB = CORBA::ORB_init(argc, argv, "");
+         CORBA::Object_var obj =
+         m_pORB->resolve_initial_references((char*)"RootPOA");
+         m_pPOA = PortableServer::POA::_narrow(obj);
 #else
-	// ORB initialization
-	m_pORB = CORBA::ORB_init(argc, argv);
-	// Get the RootPOA
-	CORBA::Object_var obj =
-          m_pORB->resolve_initial_references((char*)"RootPOA");
-	m_pPOA = PortableServer::POA::_narrow(obj);
+         // ORB initialization
+         m_pORB = CORBA::ORB_init(argc, argv);
+         // Get the RootPOA
+         CORBA::Object_var obj =
+         m_pORB->resolve_initial_references((char*)"RootPOA");
+         m_pPOA = PortableServer::POA::_narrow(obj);
 #endif
-	if (CORBA::is_nil(m_pPOA))
-	  {
-	    RTC_ERROR(("Could not resolve RootPOA."));
-	    return false;
-	  }
-	// Get the POAManager
-	m_pPOAManager = m_pPOA->the_POAManager();
+         if (CORBA::is_nil(m_pPOA))
+         {
+             RTC_ERROR(("Could not resolve RootPOA."));
+             return false;
+         }
+         // Get the POAManager
+         m_pPOAManager = m_pPOA->the_POAManager();
 #ifdef ORB_IS_OMNIORB
-	CORBA::PolicyList pl;
-	pl.length(1);
+         CORBA::PolicyList pl;
+         pl.length(1);
 #ifdef RTM_OMNIORB_42
-	pl[0] = omniPolicy::create_local_shortcut_policy(omniPolicy::LOCAL_CALLS_SHORTCUT);
+         pl[0] = omniPolicy::create_local_shortcut_policy(omniPolicy::LOCAL_CALLS_SHORTCUT);
 #else
-	CORBA::Any v;
-	v <<= omniPolicy::LOCAL_CALLS_SHORTCUT;
-	pl[0] = m_pORB->create_policy(omniPolicy::LOCAL_SHORTCUT_POLICY_TYPE, v);
+         CORBA::Any v;
+         v <<= omniPolicy::LOCAL_CALLS_SHORTCUT;
+         pl[0] = m_pORB->create_policy(omniPolicy::LOCAL_SHORTCUT_POLICY_TYPE, v);
 #endif
-	m_pShortCutPOA = m_pPOA->create_POA("shortcut", m_pPOAManager, pl);
+         m_pShortCutPOA = m_pPOA->create_POA("shortcut", m_pPOAManager, pl);
 #endif
 
 #ifdef ORB_IS_OMNIORB
