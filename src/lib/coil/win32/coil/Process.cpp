@@ -143,5 +143,34 @@ namespace coil
       return 0;
 
   }
+
+  Popen::Popen(std::string cmd, std::string mode)
+    {
+      m_fd = _popen(cmd.c_str(), mode.c_str());
+    }
+
+  Popen::~Popen()
+    {
+      if (m_fd != 0)
+        {
+          _pclose(m_fd);
+        }
+    }
+
+  bool Popen::isEof()
+    {
+      if (feof(m_fd)) { return true; }
+      return false;
+    }
+
+  std::string Popen::getline()
+    {
+      if (m_fd == 0) { return ""; }
+      if (feof(m_fd)) { return ""; }
+      char str[512];
+      fgets(str, 512, m_fd);
+      std::string line(str);
+      return line;
+    }
 } // namespace coil
 

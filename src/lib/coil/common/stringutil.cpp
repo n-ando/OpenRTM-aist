@@ -857,13 +857,17 @@ namespace coil
           if (tmp.size() == 2)
           {
               char c[100];
+              std::string env;
+              if (coil::getenv(tmp[0].c_str(), env))
+              {
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
-              strcpy_s(c, sizeof(c), coil::getenv(tmp[0].c_str()));
+                  strcpy_s(c, sizeof(c), env.c_str());
 #else
-              strcpy(c, coil::getenv(tmp[0].c_str()));
+                  strcpy(c, env.c_str());
 #endif
-              ret.push_back(std::string(c));
-              ret.push_back(tmp[1]);
+                  ret.push_back(std::string(c));
+                  ret.push_back(tmp[1]);
+              }
           }
           else
           {

@@ -64,31 +64,10 @@ namespace coil
   {
     FILE* m_fd;
   public:
-    Popen(std::string cmd, std::string mode)
-    {
-      m_fd = _popen(cmd.c_str(), mode.c_str());
-    }
-    virtual ~Popen()
-    {
-      if (m_fd != 0)
-        {
-          _pclose(m_fd);
-        }
-    }
-    bool isEof()
-    {
-      if (feof(m_fd)) { return true; }
-      return false;
-    }
-    std::string getline()
-    {
-      if (m_fd == 0) { return ""; }
-      if (feof(m_fd)) { return ""; }
-      char str[512];
-      fgets(str, 512, m_fd);
-      std::string line(str);
-      return line;
-    }
+    Popen(std::string cmd, std::string mode);
+    virtual ~Popen();
+    bool isEof();
+    std::string getline();
   };
 
   /*!

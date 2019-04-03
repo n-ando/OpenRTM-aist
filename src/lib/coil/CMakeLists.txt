@@ -127,6 +127,8 @@ set(coil_srcs
 	${COIL_OS_DIR}/coil/UUID.cpp
 	${COIL_OS_DIR}/coil/SharedMemory.cpp
 	${COIL_OS_DIR}/coil/Affinity.cpp
+	${COIL_OS_DIR}/coil/OS.cpp
+	${COIL_OS_DIR}/coil/File.cpp
 	${coil_headers}
 )
 

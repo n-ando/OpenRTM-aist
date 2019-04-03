@@ -67,7 +67,7 @@ namespace coil
    *
    * @endif
    */
-  inline std::string dirname(char* path)
+  inline std::string dirname(const char* path)
   {
     std::string path_name(path);
     std::string dir_name = ::dirname(&path_name[0]);

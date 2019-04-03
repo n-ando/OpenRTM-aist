@@ -188,10 +188,3 @@ namespace coil
   }
 } // namespace coil
 
-/*!
- * for Testing UnitTest.
- */
-extern "C"
-{
-  int ForExternTest(void) { return coil::DynamicLib::ForExternTest(); }
-}
