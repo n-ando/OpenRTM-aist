@@ -129,6 +129,7 @@ set(coil_srcs
 	${COIL_OS_DIR}/coil/Affinity.cpp
 	${COIL_OS_DIR}/coil/OS.cpp
 	${COIL_OS_DIR}/coil/File.cpp
+	${COIL_OS_DIR}/coil/Condition.cpp
 	${coil_headers}
 )
 
