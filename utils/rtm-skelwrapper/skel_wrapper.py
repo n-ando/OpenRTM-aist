@@ -45,7 +45,6 @@ skel_h = """// -*- C++ -*-
 #define [skel_h_inc_guard]
 
 
-
 [config_inc]
 
 #if   defined ORB_IS_TAO
@@ -53,7 +52,9 @@ skel_h = """// -*- C++ -*-
 #  include "[include_dir][basename]S.h"
 #elif defined ORB_IS_OMNIORB
 #  if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
-#    undef USE_stub_in_nt_dll
+#    ifndef SKEL_EXTERN_SYMBOL
+#        define USE_stub_in_nt_dll
+#    endif
 #  endif
 #  include "[include_dir][basename].hh"
 #elif defined ORB_IS_MICO
@@ -89,6 +90,8 @@ skel_cpp = """// -*- C++ -*-
  
  *
  */
+
+#define SKEL_EXTERN_SYMBOL
 
 #include "[skel_h]"
 
@@ -142,14 +145,15 @@ stub_h = """// -*- C++ -*-
 #define [stub_h_inc_guard]
 
 
-
 [config_inc]
 
 #if   defined ORB_IS_TAO
 #  include "[basename]C.h"
 #elif defined ORB_IS_OMNIORB
 #  if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
-#    undef USE_stub_in_nt_dll
+#    ifndef STUB_EXTERN_SYMBOL
+#        define USE_stub_in_nt_dll
+#    endif
 #  endif
 #  include "[include_dir][basename].hh"
 #elif defined ORB_IS_MICO
@@ -183,6 +187,8 @@ stub_cpp = """// -*- C++ -*-
  
  *
  */
+
+#define STUB_EXTERN_SYMBOL
 
 #include "[stub_h]"
 

@@ -13,7 +13,7 @@ add_definitions(${COIL_C_FLAGS_LIST})
 set(target CompositeComp)
 
 set(srcs Composite.cpp)
-set(libs ${RTM_PROJECT_NAME} ${ORB_LIBRARIES} ${COIL_PROJECT_NAME})
+set(libs ${RTM_PROJECT_NAME} ${ORB_LIBRARIES} ${COIL_PROJECT_NAME} ${DATATYPE_FACTORIES})
 
 add_executable(${target} ${srcs})
 openrtm_common_set_compile_props(${target})
