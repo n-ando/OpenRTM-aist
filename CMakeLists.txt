@@ -80,6 +80,14 @@ if(MSVC)
 	set(INSTALL_RTM_EXT_DIR ${OPENRTM_VERSION}/ext/)
 	set(INSTALL_RTM_CMAKE_DIR ${OPENRTM_VERSION}/cmake/)
 	set(INSTALL_RTM_ETC_DIR ${OPENRTM_VERSION}/ext/)
+	# For setting warning options manually, delete CMake default options.
+	string(REGEX REPLACE "/W[0-4]" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+	# Suppress warnings in external headers.
+	# This dosen't work in msbuild (.sln), but work in ninja-build now (CMake 3.14).
+	if (CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL 19.13)
+		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /experimental:external /external:W0")
+		set(CMAKE_INCLUDE_SYSTEM_FLAG_CXX "/external:I ")
+	endif()
 elseif(UNIX)
 	include(GNUInstallDirs)
 	set(INSTALL_RTM_SCRIPT_DIR ${CMAKE_INSTALL_LIBDIR}/openrtm-${RTM_MAJOR_VERSION}.${RTM_MINOR_VERSION}/py_helper)
