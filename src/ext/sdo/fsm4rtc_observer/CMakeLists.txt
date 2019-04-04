@@ -9,11 +9,15 @@ set(${PROJECT_NAME}_SRCS ComponentObserverConsumer.cpp)
 
 openrtm_idl_compile_all(${PROJECT_NAME}
 	"${${PROJECT_NAME}_IDLS}"
-	"-I${CMAKE_CURRENT_SOURCE_DIR};-I${CMAKE_SOURCE_DIR}/src/lib/rtm/idl")
+	"-I${CMAKE_CURRENT_SOURCE_DIR};-I${CMAKE_SOURCE_DIR}/src/lib/rtm/idl"
+	${PROJECT_NAME})
 
 link_directories(${ORB_LINK_DIR})
 add_definitions(${ORB_C_FLAGS_LIST})
 add_definitions(${COIL_C_FLAGS_LIST})
+if(WIN32)
+	add_definitions(-DRTM_SKEL_IMPORT_SYMBOL)
+endif()
 
 if(VXWORKS AND NOT RTP)
 	set(libs ${RTCSKEL_PROJECT_NAME})

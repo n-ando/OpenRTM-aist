@@ -52,7 +52,10 @@ skel_h = """// -*- C++ -*-
 #  include "[include_dir][basename]S.h"
 #elif defined ORB_IS_OMNIORB
 #  if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
-#    ifndef SKEL_EXTERN_SYMBOL
+#    ifdef USE_stub_in_nt_dll
+#        undef USE_stub_in_nt_dll
+#    endif
+#    ifdef [category]_IMPORT_SYMBOL
 #        define USE_stub_in_nt_dll
 #    endif
 #  endif
@@ -90,8 +93,6 @@ skel_cpp = """// -*- C++ -*-
  
  *
  */
-
-#define SKEL_EXTERN_SYMBOL
 
 #include "[skel_h]"
 
@@ -151,7 +152,10 @@ stub_h = """// -*- C++ -*-
 #  include "[basename]C.h"
 #elif defined ORB_IS_OMNIORB
 #  if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
-#    ifndef STUB_EXTERN_SYMBOL
+#    ifdef USE_stub_in_nt_dll
+#        undef USE_stub_in_nt_dll
+#    endif
+#    ifdef [category]_IMPORT_SYMBOL
 #        define USE_stub_in_nt_dll
 #    endif
 #  endif
@@ -188,7 +192,6 @@ stub_cpp = """// -*- C++ -*-
  *
  */
 
-#define STUB_EXTERN_SYMBOL
 
 #include "[stub_h]"
 
@@ -228,11 +231,12 @@ config_inc = """
 class skel_wrapper:
 	def __init__(self, idl_fname, skel_suffix = "Skel",
 		     stub_suffix = "Stub", include_dir = "",
-		     config_inc = "", output_dir = "./"):
+		     config_inc = "", output_dir = "./", category = "OpenRTM"):
 		self.data = {}
 		self.data["include_dir"] = include_dir
 		self.data["output_dir"] = output_dir
 		self.data["idl_fname"] = idl_fname
+		self.data["category"] = category
 		m = re.search("\.[iI][dD][lL]$", idl_fname)
 		if m:
 			basename = idl_fname.replace(m.group(0), "")

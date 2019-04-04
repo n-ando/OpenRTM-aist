@@ -8,7 +8,8 @@ set(${PROJECT_NAME}_IDLS MyService.idl)
 
 openrtm_idl_compile_all(MyService
 	"${${PROJECT_NAME}_IDLS}"
-	"-I${CMAKE_CURRENT_SOURCE_DIR};-I${CMAKE_SOURCE_DIR}/src/lib/rtm/idl")
+	"-I${CMAKE_CURRENT_SOURCE_DIR};-I${CMAKE_SOURCE_DIR}/src/lib/rtm/idl"
+	MyService)
 
 examples_build(MyServiceConsumer
 	SRCS MyServiceConsumer.cpp

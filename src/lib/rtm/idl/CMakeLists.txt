@@ -22,7 +22,7 @@ if(CORBA MATCHES "TAO")
 endif()
 
 # .idl -> .cpp
-openrtm_idl_compile_all(${PROJECT_NAME} "${${PROJECT_NAME}_IDLS}" "-I${PROJECT_SOURCE_DIR}")
+openrtm_idl_compile_all(${PROJECT_NAME} "${${PROJECT_NAME}_IDLS}" "-I${PROJECT_SOURCE_DIR}" RTM_SKEL)
 
 # .cpp -> .o .so
 link_directories(${ORB_LINK_DIR})
