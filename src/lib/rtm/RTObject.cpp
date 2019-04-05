@@ -371,19 +371,8 @@ namespace RTC
     // Return RTC::PRECONDITION_NOT_MET,
     // When the component is registered in ExecutionContext.
     // m_ecMine.length() != 0 ||
-    if (m_ecOther.length() != 0)
-      {
 
-        for (CORBA::ULong ic(0), len(m_ecOther.length()); ic < len; ++ic)
-          {
-            if (!CORBA::is_nil(m_ecOther[ic]))
-              {
-                return RTC::PRECONDITION_NOT_MET;
-              }
-          }
-        CORBA_SeqUtil::clear(m_ecOther);
-      }
-
+    CORBA_SeqUtil::clear(m_ecOther);
     ReturnCode_t ret(on_finalize());
 
     shutdown();
@@ -426,10 +415,17 @@ namespace RTC
     for (CORBA::ULong ic(0), size(m_ecOther.length()); ic < size; ++ic)
       {
         //        m_ecOther[ic]->stop();
-        RTC::LightweightRTObject_var comp(this->_this());
-        if (!::CORBA::is_nil(m_ecOther[ic]))
+        try
           {
-            m_ecOther[ic]->remove_component(comp.in());
+            RTC::LightweightRTObject_var comp(this->_this());
+            if (!::CORBA::is_nil(m_ecOther[ic]) && !m_ecOther[ic]->_non_existent())
+            {
+                m_ecOther[ic]->remove_component(comp.in());
+            }
+          }
+        catch (...)
+          {
+            RTC_ERROR(("unknown error"));
           }
       }
     m_exiting = true;
@@ -2113,6 +2109,19 @@ namespace RTC
     for (auto & ec : m_eclist)
       {
         ec->getObjRef()->stop();
+        RTC::RTCList rtcs = ec->getComponentList();
+        for (CORBA::ULong i = 0; i < rtcs.length(); i++)
+          {
+            try
+              {
+                ec->removeComponent(rtcs[i]);
+              }
+            catch (...)
+              {
+                RTC_ERROR(("Unknown exception caught."));
+              }
+          }
+
         try
           {
             PortableServer::RefCountServantBase* servant(nullptr);
