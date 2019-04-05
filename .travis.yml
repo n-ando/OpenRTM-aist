@@ -18,6 +18,7 @@ addons:
       - docker-ce
 
 env:
+  - TARGET_DIST=ubuntu TARGET_VER=1804
   - TARGET_DIST=ubuntu TARGET_VER=1604
   - TARGET_DIST=debian TARGET_VER=8
 
