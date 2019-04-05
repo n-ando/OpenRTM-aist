@@ -64,6 +64,7 @@
 #include <fstream>
 #include <iostream>
 #include <utility>
+#include <iterator>
 
 #if defined(minor)
 #undef minor
