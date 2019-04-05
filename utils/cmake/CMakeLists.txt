@@ -15,6 +15,7 @@ set(RTM_C_FLAGS_LIST ${ORB_C_FLAGS_LIST} ${COIL_C_FLAGS_LIST})
 
 
 if(WIN32)
+	set(RTM_C_FLAGS_LIST ${RTM_C_FLAGS_LIST} -DRTM_IMPORT_SYMBOL -DEXT_RTM_IMPORT_SYMBOL -DRTM_SKEL_IMPORT_SYMBOL)
 	set(rtmCamera rtmCamera${RTM_SHORT_VERSION}_${RTM_VC_VER})
 	set(rtmManipulator rtmManipulator${RTM_SHORT_VERSION}_${RTM_VC_VER})
 	set(OPENRTM_LIBRARIES "optimized;${RTM_PROJECT_NAME};debug;${RTM_PROJECT_NAME}d;optimized;${COIL_PROJECT_NAME};debug;${COIL_PROJECT_NAME}d;${RTM_LINKER_OPTION};optimized;${rtmCamera};debug;${rtmCamera}d;optimized;${rtmManipulator};debug;${rtmManipulator}d")

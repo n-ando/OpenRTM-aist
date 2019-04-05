@@ -449,13 +449,10 @@ if(VXWORKS)
 					COMPONENT openrtm)
 
 else(VXWORKS)
-	if(WIN32)
-		add_definitions(-DLIBRARY_EXPORTS)
-	endif(WIN32)
-
 	add_library(${PROJECT_NAME}_objlib OBJECT ${rtm_srcs})
 	openrtm_common_set_compile_props(${PROJECT_NAME}_objlib)
 	openrtm_include_rtm(${PROJECT_NAME}_objlib)
+	target_compile_definitions(${PROJECT_NAME}_objlib PRIVATE LIBRARY_EXPORTS)
 	if(OBSERVER_ENABLE)
 		target_compile_definitions(${PROJECT_NAME}_objlib PRIVATE ENABLE_OBSERVER)
 		target_include_directories(${PROJECT_NAME}_objlib PRIVATE ${CMAKE_SOURCE_DIR}/src)
@@ -464,6 +461,7 @@ else(VXWORKS)
 	endif(OBSERVER_ENABLE)
 
 	if(WIN32)
+		target_compile_definitions(${PROJECT_NAME}_objlib PRIVATE RTM_SKEL_IMPORT_SYMBOL)
 		add_library(${PROJECT_NAME}-static STATIC
 			$<TARGET_OBJECTS:${PROJECT_NAME}_objlib>)
 		add_library(${PROJECT_NAME} SHARED
@@ -517,7 +515,7 @@ else(VXWORKS)
 						ARCHIVE DESTINATION ${INSTALL_RTM_LIB_DIR}
 						RUNTIME DESTINATION ${INSTALL_RTM_LIB_DIR}
 						COMPONENT openrtm)
-
+		set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS OFF)
 		foreach(data_type ${DATA_TYPE_LIST})
 			set(RTC_DATA_TYPE RTC::${data_type})
 			set(filename ${PROJECT_BINARY_DIR}/${data_type}Factory.cpp)
@@ -527,7 +525,9 @@ else(VXWORKS)
 			openrtm_gencode_set_compile_props(${DT_TARGET})
 			openrtm_include_rtm(${DT_TARGET})
 			target_link_libraries(${DT_TARGET} PRIVATE
-				${ORB_LIBRARIES} ${COIL_PROJECT_NAME} ${RTM_LINKER_OPTION} ${PROJECT_NAME})
+				${ORB_LIBRARIES} ${COIL_PROJECT_NAME} ${RTM_LINKER_OPTION} ${PROJECT_NAME} ${RTCSKEL_PROJECT_NAME})
+			target_compile_definitions(${DT_TARGET} PRIVATE RTM_SKEL_IMPORT_SYMBOL)
+			target_compile_definitions(${DT_TARGET} PRIVATE LIBRARY_EXPORTS)
 			set_target_properties(${DT_TARGET} PROPERTIES DEBUG_POSTFIX d)
 			add_dependencies(${DT_TARGET} ${PROJECT_NAME})
 			set(DATATYPE_FACTORIES ${DATATYPE_FACTORIES} ${DT_TARGET})

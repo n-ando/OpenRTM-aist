@@ -18,6 +18,9 @@ endif()
 link_directories(${ORB_LINK_DIR})
 add_definitions(${ORB_C_FLAGS_LIST})
 add_definitions(${COIL_C_FLAGS_LIST})
+if(WIN32)
+	add_definitions(-DRTM_SKEL_IMPORT_SYMBOL)
+endif()
 add_definitions(-Dtypeof=decltype)
 
 

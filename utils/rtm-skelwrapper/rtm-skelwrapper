@@ -46,7 +46,8 @@ opt_args_fmt = ["help",
 		"idl-file=",
 		"include-dir=",
 		"skel-suffix=",
-		"stub-suffix="]
+		"stub-suffix=",
+		"category="]
 
 
 config_inc = """
@@ -71,6 +72,7 @@ Options:
     [--stub-suffix[=suffix]]              Suffix of client stub files
     [--include-dir[=dir] or -I]           include prefix in #include
     [--output-dir[=dir] or -o]            output directory
+    [--category[=name] or -c]             set category name
 
 Example:
 $ rtm-skelwrapper --idl=file=<IDL path>/<IDL basename>.idl
@@ -78,6 +80,7 @@ $ rtm-skelwrapper --idl=file=<IDL path>/<IDL basename>.idl
                   --output-dir=<output dir>
                   -skel-suffix=<skel suffix> 
                   -stub-suffix=<stub suffix> 
+                  -category=<category name> 
 
 In this case, the following files are generated under <output dir>.
 
@@ -122,7 +125,7 @@ following include guard will be defined.
 
 def main():
 	try:
-		opts, args = getopt.getopt(sys.argv[1:], "f:I:o:h",
+		opts, args = getopt.getopt(sys.argv[1:], "f:I:o:c:h",
 					   opt_args_fmt)
 	except getopt.GetoptError:
 		print("Error: Invalid options.", getopt.GetoptError)
@@ -137,6 +140,7 @@ def main():
 	output_dir  = ""
 	skel_suffix = "Skel"
 	stub_suffix = "Stub"
+	category = "OpenRTM"
 	idl_file    = None
 
 	for opt, arg in opts:
@@ -151,6 +155,9 @@ def main():
 
 		if opt in ("-o", "--output-dir"):
 			output_dir = arg
+
+		if opt in ("-c", "--category"):
+			category = arg
 
 		if opt in ("--skel-suffix"):
 			skel_suffix = arg
@@ -167,7 +174,7 @@ def main():
 	import skel_wrapper
 
 	s = skel_wrapper.skel_wrapper(idl_file, skel_suffix, stub_suffix,
-				      include_dir, config_inc, output_dir)
+				      include_dir, config_inc, output_dir, category)
 	s.generate()
 
 
