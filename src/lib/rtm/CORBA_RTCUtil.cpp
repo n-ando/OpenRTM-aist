@@ -376,6 +376,10 @@ namespace CORBA_RTCUtil
   CORBA::Double get_default_rate(const RTC::RTObject_ptr rtc)
   {
     RTC::ExecutionContext_var ec = get_actual_ec(rtc);
+    if (CORBA::is_nil(ec))
+    {
+        return RTC::BAD_PARAMETER;
+    }
     return ec->get_rate();
   }
   /*!
@@ -395,6 +399,10 @@ namespace CORBA_RTCUtil
   RTC::ReturnCode_t set_default_rate(RTC::RTObject_ptr rtc, const CORBA::Double rate)
   {
     RTC::ExecutionContext_var ec = get_actual_ec(rtc);
+    if (CORBA::is_nil(ec))
+    {
+        return RTC::BAD_PARAMETER;
+    }
     return ec->set_rate(rate);
   }
   /*!
@@ -413,6 +421,10 @@ namespace CORBA_RTCUtil
   CORBA::Double get_current_rate(const RTC::RTObject_ptr rtc, RTC::UniqueId ec_id)
   {
     RTC::ExecutionContext_var ec = get_actual_ec(rtc, ec_id);
+    if (CORBA::is_nil(ec))
+    {
+        return RTC::BAD_PARAMETER;
+    }
     return ec->get_rate();
   }
   /*!
@@ -434,6 +446,10 @@ namespace CORBA_RTCUtil
   RTC::ReturnCode_t set_current_rate(RTC::RTObject_ptr rtc, RTC::UniqueId ec_id, const CORBA::Double rate)
   {
     RTC::ExecutionContext_var ec = get_actual_ec(rtc, ec_id);
+    if (CORBA::is_nil(ec))
+    {
+        return RTC::BAD_PARAMETER;
+    }
     return ec->set_rate(rate);
   }
   /*!
