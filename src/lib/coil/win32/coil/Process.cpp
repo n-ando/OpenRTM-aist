@@ -85,7 +85,7 @@ namespace coil
       sa.nLength = sizeof(sa);
       sa.bInheritHandle = TRUE;
       sa.lpSecurityDescriptor = NULL;
-      if (!CreatePipe(&rPipe, &wPipe, &sa, 0))
+      if (!CreatePipe(&rPipe, &wPipe, &sa, 65535))
       {
           return -1;
       }
@@ -123,7 +123,7 @@ namespace coil
       CloseHandle(pi.hThread);
 
 
-      char Buf[1025] = { 0 };
+      char Buf[65535] = { 0 };
       DWORD len;
       ReadFile(rPipe, Buf, sizeof(Buf) - 1, &len, NULL);
 

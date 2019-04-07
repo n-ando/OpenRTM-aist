@@ -11,6 +11,7 @@ link_directories(${ORB_LINK_DIR})
 add_definitions(${ORB_C_FLAGS_LIST})
 
 if(WIN32)
+	add_definitions(-DRTM_SKEL_IMPORT_SYMBOL)
 	add_definitions(-DNOGDI)
 	add_definitions(-DNOMINMAX)
 	add_definitions(-DTRANSPORT_PLUGIN)
