@@ -36,15 +36,15 @@ init:
   - ps: $Env:cmake_archtecture
   - ps: |
       switch ($Env:cmake_generator) {
-        "Visual Studio 11 2012" { $vc_tool = "11" }
-        "Visual Studio 12 2013" { $vc_tool = "12" }
-        "Visual Studio 14 2015" { $vc_tool = "14" }
-        "Visual Studio 15 2017" { $vc_tool = "141" }
-        "Visual Studio 16 2019" { $vc_tool = "142" }
+        "Visual Studio 11 2012" { $vc_tool = "110" }
+        "Visual Studio 12 2013" { $vc_tool = "120" }
+        "Visual Studio 14 2015" { $vc_tool = "140" }
+        "Visual Studio 15 2017" { $vc_tool = "140" }
+        "Visual Studio 16 2019" { $vc_tool = "140" }
         default {"Not Found Visual Studio tool version."}
       }
-      $Env:omni = "${Env:omniorb}-win$(${Env:cmake_archtecture} -replace "^[a-zA-Z]*")-vc${vc_tool}"
-      $omni_url = "http://tmp.openrtm.org/pub/omniORB/win32/${Env:omniorb}/${Env:omni}-py$(${Env:python}.Split("-")[0]).zip"
+      $Env:omni = "${Env:omniorb}-${Env:cmake_archtecture}-vc${vc_tool}-py$(${Env:python}.Split("-")[0])"
+      $omni_url = "http://tmp.openrtm.org/pub/omniORB/win32/${Env:omniorb}/${Env:omni}.zip"
       $Env:Path = "C:\Python${Env:python};c:\Python${Env:python}\scripts;${Env:Path}"
   - ps: $Env:omni
   - python --version
