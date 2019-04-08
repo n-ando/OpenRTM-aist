@@ -1,16 +1,27 @@
 version: '{build}'
 clone_folder: c:\workspace\OpenRTM-aist
-image:
-- Visual Studio 2013
-#- Visual Studio 2015
-- Visual Studio 2017
 platform:
 - x64
 environment:
   omniorb: omniORB-4.2.3
   cmake_flgas: -DOMNI_VERSION=42 -DOMNI_MINOR=3 -DOMNITHREAD_VERSION=41 -DCORBA=omniORB -DSSL_ENABLE=ON -DOBSERVER_ENABLE=ON
   matrix:
-    - arch: Win64
+    - cmake_generator: Visual Studio 15 2017          # CMake -G
+      cmake_archtecture: x64                          # CMake -A
+      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017 # Choices: Appveyor depend
+      python: 37-x64                                  # Choices: Appveyor depend
+    - cmake_generator: Visual Studio 14 2015
+      cmake_archtecture: x64
+      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
+      python: 27
+    - cmake_generator: Visual Studio 12 2013
+      cmake_archtecture: x64
+      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2013
+      python: 27
+    - cmake_generator: Visual Studio 11 2012
+      cmake_archtecture: x64
+      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2013
+      python: 27
 matrix:
   fast_finish: true
 
@@ -20,28 +31,21 @@ init:
 #  - ps: Start-Sleep -s 5
 #  - ps: Restart-Computer
   - git config --global core.autocrlf false
-  - ps: $Env:arch
   - ps: $Env:APPVEYOR_BUILD_WORKER_IMAGE
+  - ps: $Env:cmake_generator
+  - ps: $Env:cmake_archtecture
   - ps: |
-      if("$Env:APPVEYOR_BUILD_WORKER_IMAGE" -eq "Visual Studio 2017") {
-        $Env:generator = "`"Visual Studio 15 2017 $Env:arch`""
-        $vc = "vc141"
-        $python = "37-x64"
+      switch ($Env:cmake_generator) {
+        "Visual Studio 11 2012" { $vc_tool = "11" }
+        "Visual Studio 12 2013" { $vc_tool = "12" }
+        "Visual Studio 14 2015" { $vc_tool = "14" }
+        "Visual Studio 15 2017" { $vc_tool = "141" }
+        "Visual Studio 16 2019" { $vc_tool = "142" }
+        default {"Not Found Visual Studio tool version."}
       }
-      if("$Env:APPVEYOR_BUILD_WORKER_IMAGE" -eq "Visual Studio 2015") {
-        $Env:generator = "`"Visual Studio 14 2015 $Env:arch`""
-        $vc = "vc14"
-        $python = "27"
-      }
-      if("$Env:APPVEYOR_BUILD_WORKER_IMAGE" -eq "Visual Studio 2013") {
-        $Env:generator = "`"Visual Studio 12 2013 $Env:arch`""
-        $vc = "vc12"
-        $python = "27"
-      }
-      $Env:omni = "${Env:omniorb}-$(${Env:arch}.ToLower())-${vc}"
-      $Env:omni_url = "http://tmp.openrtm.org/pub/omniORB/win32/${Env:omniorb}/${Env:omni}-py$(${python}.Split("-")[0]).zip"
-      $Env:Path = "C:\Python${python};c:\Python${python}\scripts;${Env:Path}"
-  - ps: $Env:generator
+      $Env:omni = "${Env:omniorb}-win$(${Env:cmake_archtecture} -replace "^[a-zA-Z]*")-vc${vc_tool}"
+      $omni_url = "http://tmp.openrtm.org/pub/omniORB/win32/${Env:omniorb}/${Env:omni}-py$(${Env:python}.Split("-")[0]).zip"
+      $Env:Path = "C:\Python${Env:python};c:\Python${Env:python}\scripts;${Env:Path}"
   - ps: $Env:omni
   - python --version
 
@@ -49,7 +53,7 @@ before_build:
   - ps: |
       # prepare omniORB (restored from cache if cached)
       if(-NOT (Test-Path "C:/omni/${Env:omni}")){
-        Invoke-WebRequest -Uri $Env:omni_url -OutFile ${Env:TEMP}\a.zip
+        Invoke-WebRequest -Uri $omni_url -OutFile ${Env:TEMP}\a.zip
         Expand-Archive -Path ${Env:TEMP}\a.zip -DestinationPath "C:/omni"
       }
 
@@ -57,11 +61,12 @@ before_build:
       New-Item -ItemType SymbolicLink -Path $(PWD) -Name src\lib\coil\common\coil -Target src\lib\coil\common
       New-Item -ItemType SymbolicLink -Path $(PWD) -Name utils\rtm-skelwrapper\yat.py -Target build\yat.py
   - cmake --version
-  - cmake %cmake_flgas% -DORB_ROOT=C:/omni/%omni% -G %generator% -S . -B../build
+  - echo cmake %cmake_flgas% -DORB_ROOT=C:/omni/%omni% -G "%cmake_generator%" -A "%cmake_archtecture%" -S . -B../build
+  - cmake %cmake_flgas% -DORB_ROOT=C:/omni/%omni% -G "%cmake_generator%" -A "%cmake_archtecture%" -S . -B../build
 
 build_script:
   - ps: $Env:nproc = (Get-WmiObject -Class Win32_Processor).NumberOfLogicalProcessors + 1
-  - ps: $Env:nproc
+  - echo cmake --build ../build -j %nproc% --config Release -- -verbosity:minimal
   - cmake --build ../build -j %nproc% --config Release -- -verbosity:minimal
 
 #build (.sln) is slower than build_script (cmake)
