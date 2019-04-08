@@ -18,6 +18,7 @@
 
 
 #include <coil/OS.h>
+#include <string>
 
 
 namespace coil
