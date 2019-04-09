@@ -393,7 +393,6 @@ namespace RTC
     
     std::string m_topic;
     std::string m_dataType;
-    CORBACdrDataPubSubType m_type;
     Mutex m_mutex;
     eprosima::fastrtps::Subscriber *m_subscriber;
 
@@ -448,7 +447,7 @@ namespace RTC
        *
        * @endif
        */
-      ~SubListener();
+      ~SubListener() override;
       /*!
        * @if jp
        * @brief 
@@ -467,7 +466,7 @@ namespace RTC
        *
        * @endif
        */
-      void onSubscriptionMatched(eprosima::fastrtps::Subscriber* sub, eprosima::fastrtps::rtps::MatchingInfo& info);
+      void onSubscriptionMatched(eprosima::fastrtps::Subscriber* sub, eprosima::fastrtps::rtps::MatchingInfo& info) override;
       /*!
        * @if jp
        * @brief
@@ -484,7 +483,7 @@ namespace RTC
        *
        * @endif
        */
-      void onNewDataMessage(eprosima::fastrtps::Subscriber* sub);
+      void onNewDataMessage(eprosima::fastrtps::Subscriber* sub) override;
     private:
       eprosima::fastrtps::SampleInfo_t m_info;
       mutable Logger rtclog;

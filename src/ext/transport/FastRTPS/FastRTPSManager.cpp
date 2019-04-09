@@ -44,9 +44,12 @@ namespace RTC
    *
    * @endif
    */
-  FastRTPSManager::FastRTPSManager()// : rtclog("FastRTPSManager")
+  FastRTPSManager::FastRTPSManager(std::string& xml_profile_file)// : rtclog("FastRTPSManager")
   {
-
+      if (!xml_profile_file.empty())
+      {
+          eprosima::fastrtps::Domain::loadXMLProfilesFile(xml_profile_file);
+      }
   }
 
   /*!
@@ -108,6 +111,25 @@ namespace RTC
 
   /*!
    * @if jp
+   * @brief マネージャ終了
+   *
+   *
+   * @else
+   * @brief
+   *
+   *
+   *
+   * @endif
+   */
+  void FastRTPSManager::shutdown()
+  {
+      Guard guard(mutex);
+      eprosima::fastrtps::Domain::removeParticipant(m_participant);
+      manager = nullptr;
+  }
+
+  /*!
+   * @if jp
    * @brief Participant取得
    *
    * @return Participant
@@ -141,7 +163,32 @@ namespace RTC
    */
   bool FastRTPSManager::registerType(eprosima::fastrtps::TopicDataType* type)
   {
+      if (registeredType(type->getName()))
+      {
+          return true;
+      }
       return eprosima::fastrtps::Domain::registerType(m_participant,type);
+  }
+
+  /*!
+   * @if jp
+   * @brief 指定名の型が登録済みかを判定する
+   *
+   * @param name 型名
+   * @return true：登録済み、false：未登録
+   *
+   * @else
+   * @brief
+   *
+   * @param name
+   * @return
+   *
+   * @endif
+   */
+  bool FastRTPSManager::registeredType(const char* name)
+  {
+      eprosima::fastrtps::TopicDataType* type_;
+      return eprosima::fastrtps::Domain::getRegisteredType(m_participant, name, &type_);
   }
 
   /*!
@@ -161,6 +208,10 @@ namespace RTC
    */
   bool FastRTPSManager::unregisterType(const char* name)
   {
+      if (!registeredType(name))
+      {
+          return false;
+      }
       return eprosima::fastrtps::Domain::unregisterType(m_participant, name);
   }
 
@@ -178,13 +229,13 @@ namespace RTC
    *
    * @endif
    */
-  FastRTPSManager* FastRTPSManager::init()
+  FastRTPSManager* FastRTPSManager::init(std::string xml_profile_file)
   {
     //RTC_PARANOID(("init()"));
     Guard guard(mutex);
     if (!manager)
     {
-      manager = new FastRTPSManager();
+      manager = new FastRTPSManager(xml_profile_file);
       manager->start();
     }
     return manager;
@@ -204,12 +255,12 @@ namespace RTC
    *
    * @endif
    */
-  FastRTPSManager& FastRTPSManager::instance()
+  FastRTPSManager& FastRTPSManager::instance(std::string xml_profile_file)
   {
     Guard guard(mutex);
     if (!manager)
     {
-      manager = new FastRTPSManager();
+      manager = new FastRTPSManager(xml_profile_file);
       manager->start();
     }
     return *manager;

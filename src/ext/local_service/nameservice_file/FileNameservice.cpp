@@ -17,7 +17,6 @@
  */
 
 #include <fstream>
-#include <boost/filesystem.hpp>
 #include <coil/stringutil.h>
 #include <rtm/Manager.h>
 #include <rtm/RTObject.h>
