@@ -3022,8 +3022,22 @@ namespace RTC
   */
   void RTObject_impl::setINSObjRef(RTC::LightweightRTObject_ptr obj)
   {
-	  m_insref = obj;
+      m_insref = obj;
   }
+
+  RTObject_impl::SdoServiceConsumerTerminator::SdoServiceConsumerTerminator()
+    {
+    }
+  void RTObject_impl::SdoServiceConsumerTerminator::setSdoServiceConsumer(SdoServiceAdmin* sdoservice, const char* id)
+    {
+      m_sdoservice = sdoservice;
+      m_id = id;
+    }
+  int RTObject_impl::SdoServiceConsumerTerminator::svc()
+    {
+      m_sdoservice->removeSdoServiceConsumer(m_id.c_str());
+      return 0;
+    }
 
 
 } // namespace RTC
