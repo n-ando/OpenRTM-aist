@@ -72,7 +72,7 @@ namespace RTC
       m_sdoservice(*this),
       m_readAll(false), m_writeAll(false),
       m_readAllCompletion(false), m_writeAllCompletion(false),
-	  m_insref(RTC::LightweightRTObject::_nil())
+	  m_insref(RTC::LightweightRTObject::_nil()), m_sdoconterm(nullptr)
   {
     m_objref = this->_this();
     m_pSdoConfigImpl = new SDOPackage::Configuration_impl(m_configsets,
@@ -851,6 +851,7 @@ namespace RTC
       {
         m_sdoconterm->wait();
         delete m_sdoconterm;
+        m_sdoconterm = nullptr;
       }
     return ret;
   }
@@ -1971,6 +1972,7 @@ namespace RTC
       {
         m_sdoconterm->wait();
         delete m_sdoconterm;
+        m_sdoconterm = nullptr;
       }
     m_sdoconterm = new SdoServiceConsumerTerminator();
     m_sdoconterm->setSdoServiceConsumer(&m_sdoservice, id);
