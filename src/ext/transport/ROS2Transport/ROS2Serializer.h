@@ -52,6 +52,10 @@
 #include <geometry_msgs/msg/vector3_stamped__rosidl_typesupport_fastrtps_cpp.hpp>
 #include <sensor_msgs/msg/image__rosidl_typesupport_fastrtps_cpp.hpp>
 
+#if (defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__))
+#pragma warning(push)
+#pragma warning(disable:4244)
+#endif
 
 namespace RTC
 {
@@ -630,7 +634,7 @@ namespace RTC
       
       MessageType msg;
       
-      for(size_t i=0;i < data.data.length();i++)
+      for(CORBA::ULong i=0;i < data.data.length();i++)
       {
         msg.data.push_back(data.data[i]);
       }
@@ -662,7 +666,7 @@ namespace RTC
 
       bool ret = ROS2SerializerBase<DataType>::stdmsg_deserialize(msg);
 
-      data.data.length(msg.data.size());
+      data.data.length((CORBA::ULong)msg.data.size());
       int count = 0;
       for(auto & d : msg.data)
       {
@@ -695,7 +699,9 @@ extern "C"
   DLL_EXPORT void ROS2SerializerInit(RTC::Manager* manager);
 }
 
-
+#if (defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__))
+#pragma warning(pop)
+#endif
 
 
 #endif // RTC_ROSSERIALIZER_H

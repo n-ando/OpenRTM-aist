@@ -897,7 +897,7 @@ namespace RTC
       data.format = CORBA::string_dup(msg.encoding.c_str());
 
 
-      data.pixels.length(msg.data.size());
+      data.pixels.length((CORBA::ULong)msg.data.size());
       
       memcpy(&data.pixels[0], &msg.data[0], data.pixels.length());
 
