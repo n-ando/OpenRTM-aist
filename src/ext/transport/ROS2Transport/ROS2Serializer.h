@@ -52,10 +52,6 @@
 #include <geometry_msgs/msg/vector3_stamped__rosidl_typesupport_fastrtps_cpp.hpp>
 #include <sensor_msgs/msg/image__rosidl_typesupport_fastrtps_cpp.hpp>
 
-#if (defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__))
-#pragma warning(push)
-#pragma warning(disable:4244)
-#endif
 
 namespace RTC
 {
@@ -465,7 +461,7 @@ namespace RTC
    *
    * @endif
    */
-  template <class DataType, class MessageType>
+  template <class DataType, class MessageType, typename originalType, typename convertedType>
   class ROS2SimpleData : public ROS2SerializerBase<DataType>
   {
   public:
@@ -521,7 +517,7 @@ namespace RTC
     {
 
       MessageType msg;
-      msg.data = data.data;
+      msg.data = static_cast<convertedType>(data.data);
       
       return ROS2SerializerBase<DataType>::stdmsg_serialize(msg);
 
@@ -550,7 +546,7 @@ namespace RTC
 
       bool ret = ROS2SerializerBase<DataType>::stdmsg_deserialize(msg);
 
-      data.data = msg.data;
+      data.data = static_cast<originalType>(msg.data);
 
       return ret;
     }
@@ -577,7 +573,7 @@ namespace RTC
    *
    * @endif
    */
-  template <class DataType, class MessageType>
+  template <class DataType, class MessageType, typename originalType, typename convertedType>
   class ROS2SequenceData : public ROS2SerializerBase<DataType>
   {
   public:
@@ -636,7 +632,7 @@ namespace RTC
       
       for(CORBA::ULong i=0;i < data.data.length();i++)
       {
-        msg.data.push_back(data.data[i]);
+        msg.data.push_back(static_cast<convertedType>(data.data[i]));
       }
       
       
@@ -670,7 +666,7 @@ namespace RTC
       int count = 0;
       for(auto & d : msg.data)
       {
-        data.data[count] = d;
+        data.data[count] = static_cast<originalType>(d);
         count++;
       }
 
@@ -699,9 +695,6 @@ extern "C"
   DLL_EXPORT void ROS2SerializerInit(RTC::Manager* manager);
 }
 
-#if (defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__))
-#pragma warning(pop)
-#endif
 
 
 #endif // RTC_ROSSERIALIZER_H

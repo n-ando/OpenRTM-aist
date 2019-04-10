@@ -69,15 +69,15 @@ namespace RTC
    *
    * @endif
    */
-  template <class DataType, class MessageType>
+  template <class DataType, class MessageType, typename originalType, typename convertedType>
   void ROS2SimpleDataInitBaseFunc(const char* name)
   {
     coil::GlobalFactory < ::RTC::ByteDataStream<DataType> >::
             instance().addFactory(name,
             ::coil::Creator< ::RTC::ByteDataStream<DataType>,
-            RTC::ROS2SimpleData<DataType, MessageType> >,
+            RTC::ROS2SimpleData<DataType, MessageType, originalType, convertedType> >,
             ::coil::Destructor< ::RTC::ByteDataStream<DataType>,
-            RTC::ROS2SimpleData<DataType, MessageType> >);
+            RTC::ROS2SimpleData<DataType, MessageType, originalType, convertedType> >);
 
     RTC::FastRTPSMessageInfoFactory::
             instance().addFactory(name,
@@ -100,19 +100,19 @@ namespace RTC
    *
    * @endif
    */
-  template <class DataType>
+  template <class DataType, typename originalType>
   void ROS2SimpleDataInit()
   {
-    ROS2SimpleDataInitBaseFunc<DataType, std_msgs::msg::Float32>("ROS2Float32");
-    ROS2SimpleDataInitBaseFunc<DataType, std_msgs::msg::Float64>("ROS2Float64");
-    ROS2SimpleDataInitBaseFunc<DataType, std_msgs::msg::Int8>("ROS2Int8");
-    ROS2SimpleDataInitBaseFunc<DataType, std_msgs::msg::Int16>("ROS2Int16");
-    ROS2SimpleDataInitBaseFunc<DataType, std_msgs::msg::Int32>("ROS2Int32");
-    ROS2SimpleDataInitBaseFunc<DataType, std_msgs::msg::Int64>("ROS2Int64");
-    ROS2SimpleDataInitBaseFunc<DataType, std_msgs::msg::UInt8>("ROS2UInt8");
-    ROS2SimpleDataInitBaseFunc<DataType, std_msgs::msg::UInt16>("ROS2UInt16");
-    ROS2SimpleDataInitBaseFunc<DataType, std_msgs::msg::UInt32>("ROS2UInt32");
-    ROS2SimpleDataInitBaseFunc<DataType, std_msgs::msg::UInt64>("ROS2UInt64");
+    ROS2SimpleDataInitBaseFunc<DataType, std_msgs::msg::Float32, originalType, float>("ROS2Float32");
+    ROS2SimpleDataInitBaseFunc<DataType, std_msgs::msg::Float64, originalType, float>("ROS2Float64");
+    ROS2SimpleDataInitBaseFunc<DataType, std_msgs::msg::Int8, originalType, char>("ROS2Int8");
+    ROS2SimpleDataInitBaseFunc<DataType, std_msgs::msg::Int16, originalType, short>("ROS2Int16");
+    ROS2SimpleDataInitBaseFunc<DataType, std_msgs::msg::Int32, originalType, long>("ROS2Int32");
+    ROS2SimpleDataInitBaseFunc<DataType, std_msgs::msg::Int64, originalType, long long>("ROS2Int64");
+    ROS2SimpleDataInitBaseFunc<DataType, std_msgs::msg::UInt8, originalType, unsigned char>("ROS2UInt8");
+    ROS2SimpleDataInitBaseFunc<DataType, std_msgs::msg::UInt16, originalType, unsigned short>("ROS2UInt16");
+    ROS2SimpleDataInitBaseFunc<DataType, std_msgs::msg::UInt32, originalType, unsigned long>("ROS2UInt32");
+    ROS2SimpleDataInitBaseFunc<DataType, std_msgs::msg::UInt64, originalType, unsigned long long>("ROS2UInt64");
     
   }
 
@@ -131,15 +131,15 @@ namespace RTC
    *
    * @endif
    */
-  template <class DataType, class MessageType>
+  template <class DataType, class MessageType, typename originalType, typename convertedType>
   void ROS2SequenceDataInitBaseFunc(const char* name)
   {
     coil::GlobalFactory < ::RTC::ByteDataStream<DataType> >::
             instance().addFactory(name,
             ::coil::Creator< ::RTC::ByteDataStream<DataType>,
-            RTC::ROS2SequenceData<DataType, MessageType> >,
+            RTC::ROS2SequenceData<DataType, MessageType, originalType, convertedType> >,
             ::coil::Destructor< ::RTC::ByteDataStream<DataType>,
-            RTC::ROS2SequenceData<DataType, MessageType> >);
+            RTC::ROS2SequenceData<DataType, MessageType, originalType, convertedType> >);
 
     RTC::FastRTPSMessageInfoFactory::
             instance().addFactory(name,
@@ -162,19 +162,19 @@ namespace RTC
    *
    * @endif
    */
-  template <class DataType>
+  template <class DataType, typename originalType>
   void ROS2SequenceDataInit()
   {
-    ROS2SequenceDataInitBaseFunc<DataType, std_msgs::msg::Float32MultiArray>("ROSFloat32MultiArray");
-    ROS2SequenceDataInitBaseFunc<DataType, std_msgs::msg::Float64MultiArray>("ROSFloat64MultiArray");
-    ROS2SequenceDataInitBaseFunc<DataType, std_msgs::msg::Int8MultiArray>("ROSInt8MultiArray");
-    ROS2SequenceDataInitBaseFunc<DataType, std_msgs::msg::Int16MultiArray>("ROSInt16MultiArray");
-    ROS2SequenceDataInitBaseFunc<DataType, std_msgs::msg::Int32MultiArray>("ROSInt32MultiArray");
-    ROS2SequenceDataInitBaseFunc<DataType, std_msgs::msg::Int64MultiArray>("ROSInt64MultiArray");
-    ROS2SequenceDataInitBaseFunc<DataType, std_msgs::msg::UInt8MultiArray>("ROSUInt8MultiArray");
-    ROS2SequenceDataInitBaseFunc<DataType, std_msgs::msg::UInt16MultiArray>("ROSUInt16MultiArray");
-    ROS2SequenceDataInitBaseFunc<DataType, std_msgs::msg::UInt32MultiArray>("ROSUInt32MultiArray");
-    ROS2SequenceDataInitBaseFunc<DataType, std_msgs::msg::UInt64MultiArray>("ROSUInt64MultiArray");
+    ROS2SequenceDataInitBaseFunc<DataType, std_msgs::msg::Float32MultiArray, originalType, float>("ROSFloat32MultiArray");
+    ROS2SequenceDataInitBaseFunc<DataType, std_msgs::msg::Float64MultiArray, originalType, float>("ROSFloat64MultiArray");
+    ROS2SequenceDataInitBaseFunc<DataType, std_msgs::msg::Int8MultiArray, originalType, char>("ROSInt8MultiArray");
+    ROS2SequenceDataInitBaseFunc<DataType, std_msgs::msg::Int16MultiArray, originalType, short>("ROSInt16MultiArray");
+    ROS2SequenceDataInitBaseFunc<DataType, std_msgs::msg::Int32MultiArray, originalType, long>("ROSInt32MultiArray");
+    ROS2SequenceDataInitBaseFunc<DataType, std_msgs::msg::Int64MultiArray, originalType, long long>("ROSInt64MultiArray");
+    ROS2SequenceDataInitBaseFunc<DataType, std_msgs::msg::UInt8MultiArray, originalType, unsigned char>("ROSUInt8MultiArray");
+    ROS2SequenceDataInitBaseFunc<DataType, std_msgs::msg::UInt16MultiArray, originalType, unsigned short>("ROSUInt16MultiArray");
+    ROS2SequenceDataInitBaseFunc<DataType, std_msgs::msg::UInt32MultiArray, originalType, unsigned long>("ROSUInt32MultiArray");
+    ROS2SequenceDataInitBaseFunc<DataType, std_msgs::msg::UInt64MultiArray, originalType, unsigned long long>("ROSUInt64MultiArray");
   }
 
 #if !(defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__))
@@ -951,21 +951,20 @@ extern "C"
   {
     (void)manager;
     
-    RTC::ROS2SimpleDataInit<RTC::TimedState>();
-    RTC::ROS2SimpleDataInit<RTC::TimedShort>();
-    RTC::ROS2SimpleDataInit<RTC::TimedLong>();
-    RTC::ROS2SimpleDataInit<RTC::TimedUShort>();
-    RTC::ROS2SimpleDataInit<RTC::TimedULong>();
-    RTC::ROS2SimpleDataInit<RTC::TimedFloat>();
-    RTC::ROS2SimpleDataInit<RTC::TimedDouble>();
+    RTC::ROS2SimpleDataInit<RTC::TimedState, CORBA::Short>();
+    RTC::ROS2SimpleDataInit<RTC::TimedShort, CORBA::Short>();
+    RTC::ROS2SimpleDataInit<RTC::TimedLong, CORBA::Long>();
+    RTC::ROS2SimpleDataInit<RTC::TimedUShort, CORBA::UShort>();
+    RTC::ROS2SimpleDataInit<RTC::TimedULong, CORBA::ULong>();
+    RTC::ROS2SimpleDataInit<RTC::TimedFloat, CORBA::Float>();
+    RTC::ROS2SimpleDataInit<RTC::TimedDouble, CORBA::Double>();
 
-    RTC::ROS2SequenceDataInit<RTC::TimedShortSeq>();
-    RTC::ROS2SequenceDataInit<RTC::TimedLongSeq>();
-    RTC::ROS2SequenceDataInit<RTC::TimedShortSeq>();
-    RTC::ROS2SequenceDataInit<RTC::TimedUShortSeq>();
-    RTC::ROS2SequenceDataInit<RTC::TimedULongSeq>();
-    RTC::ROS2SequenceDataInit<RTC::TimedFloatSeq>();
-    RTC::ROS2SequenceDataInit<RTC::TimedDoubleSeq>();
+    RTC::ROS2SequenceDataInit<RTC::TimedShortSeq, CORBA::Short>();
+    RTC::ROS2SequenceDataInit<RTC::TimedLongSeq, CORBA::Long>();
+    RTC::ROS2SequenceDataInit<RTC::TimedUShortSeq, CORBA::UShort>();
+    RTC::ROS2SequenceDataInit<RTC::TimedULongSeq, CORBA::ULong>();
+    RTC::ROS2SequenceDataInit<RTC::TimedFloatSeq, CORBA::Float>();
+    RTC::ROS2SequenceDataInit<RTC::TimedDoubleSeq, CORBA::Double>();
 #if !(defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__))
     RTC::ROS2StringDataInit();
 #endif
