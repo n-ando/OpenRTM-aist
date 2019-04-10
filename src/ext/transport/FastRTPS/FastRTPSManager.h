@@ -167,7 +167,7 @@ namespace RTC
          *
          * @endif
          */
-        bool FastRTPSManager::registeredType(const char* name);
+        bool registeredType(const char* name);
         /*!
          * @if jp
          * @brief 型の登録解除
