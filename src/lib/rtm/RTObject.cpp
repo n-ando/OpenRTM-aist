@@ -846,6 +846,12 @@ namespace RTC
         ret = RTC::RTC_ERROR;
       }
     postOnFinalize(0, ret);
+
+    if (m_sdoconterm != nullptr)
+      {
+        m_sdoconterm->wait();
+        delete m_sdoconterm;
+      }
     return ret;
   }
 
