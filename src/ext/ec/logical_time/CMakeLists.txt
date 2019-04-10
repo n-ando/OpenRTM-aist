@@ -10,7 +10,7 @@ set(${PROJECT_NAME}_SRCS LogicalTimeTriggeredEC.cpp)
 openrtm_idl_compile_all(${PROJECT_NAME}
 	"${${PROJECT_NAME}_IDLS}"
 	"-I${CMAKE_CURRENT_SOURCE_DIR};-I${CMAKE_SOURCE_DIR}/src/lib/rtm/idl"
-	${PROJECT_NAME})
+	${PROJECT_NAME} "${RTM_INCLUDE_IDLS}")
 
 link_directories(${ORB_LINK_DIR})
 
