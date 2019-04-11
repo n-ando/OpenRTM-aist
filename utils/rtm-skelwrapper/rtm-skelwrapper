@@ -47,7 +47,8 @@ opt_args_fmt = ["help",
 		"include-dir=",
 		"skel-suffix=",
 		"stub-suffix=",
-		"category="]
+		"category=",
+		"dependencies="]
 
 
 config_inc = """
@@ -73,6 +74,7 @@ Options:
     [--include-dir[=dir] or -I]           include prefix in #include
     [--output-dir[=dir] or -o]            output directory
     [--category[=name] or -c]             set category name
+    [--dependencies[=namelist] or -d]     set dependent idls
 
 Example:
 $ rtm-skelwrapper --idl=file=<IDL path>/<IDL basename>.idl
@@ -80,7 +82,8 @@ $ rtm-skelwrapper --idl=file=<IDL path>/<IDL basename>.idl
                   --output-dir=<output dir>
                   -skel-suffix=<skel suffix> 
                   -stub-suffix=<stub suffix> 
-                  -category=<category name> 
+                  -category=<category name>
+                  -dependencies=<dependent idl list> 
 
 In this case, the following files are generated under <output dir>.
 
@@ -141,6 +144,7 @@ def main():
 	skel_suffix = "Skel"
 	stub_suffix = "Stub"
 	category = "OpenRTM"
+	dependencies = ""
 	idl_file    = None
 
 	for opt, arg in opts:
@@ -159,6 +163,9 @@ def main():
 		if opt in ("-c", "--category"):
 			category = arg
 
+		if opt in ("-d", "--dependencies"):
+			dependencies = arg
+
 		if opt in ("--skel-suffix"):
 			skel_suffix = arg
 
@@ -174,7 +181,7 @@ def main():
 	import skel_wrapper
 
 	s = skel_wrapper.skel_wrapper(idl_file, skel_suffix, stub_suffix,
-				      include_dir, config_inc, output_dir, category)
+				      include_dir, config_inc, output_dir, category, dependencies)
 	s.generate()
 
 

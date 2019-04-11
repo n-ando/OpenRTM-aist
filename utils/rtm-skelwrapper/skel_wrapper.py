@@ -51,6 +51,7 @@ skel_h = """// -*- C++ -*-
 #  include "[include_dir][basename]C.h"
 #  include "[include_dir][basename]S.h"
 #elif defined ORB_IS_OMNIORB
+[dependencies]
 #  if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
 #    ifdef USE_stub_in_nt_dll
 #        undef USE_stub_in_nt_dll
@@ -152,6 +153,7 @@ stub_h = """// -*- C++ -*-
 #  include "[basename]C.h"
 #elif defined ORB_IS_OMNIORB
 #  if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
+[dependencies]
 #    ifdef USE_stub_in_nt_dll
 #        undef USE_stub_in_nt_dll
 #    endif
@@ -231,12 +233,18 @@ config_inc = """
 class skel_wrapper:
 	def __init__(self, idl_fname, skel_suffix = "Skel",
 		     stub_suffix = "Stub", include_dir = "",
-		     config_inc = "", output_dir = "./", category = "OpenRTM"):
+		     config_inc = "", output_dir = "./", category = "OpenRTM", dependencies=""):
 		self.data = {}
 		self.data["include_dir"] = include_dir
 		self.data["output_dir"] = output_dir
 		self.data["idl_fname"] = idl_fname
 		self.data["category"] = category
+		if not dependencies:
+			self.data["dependencies"] = ""
+		else:
+			includes = ["#    include<"+s+"Skel.h>\n" for s in dependencies.split(":")]
+			self.data["dependencies"] = ''.join(includes)
+
 		m = re.search("\.[iI][dD][lL]$", idl_fname)
 		if m:
 			basename = idl_fname.replace(m.group(0), "")
