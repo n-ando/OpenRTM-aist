@@ -72,7 +72,7 @@ namespace RTC
       m_sdoservice(*this),
       m_readAll(false), m_writeAll(false),
       m_readAllCompletion(false), m_writeAllCompletion(false),
-	  m_insref(RTC::LightweightRTObject::_nil())
+	  m_insref(RTC::LightweightRTObject::_nil()), m_sdoconterm(nullptr)
   {
     m_objref = this->_this();
     m_pSdoConfigImpl = new SDOPackage::Configuration_impl(m_configsets,
@@ -846,6 +846,13 @@ namespace RTC
         ret = RTC::RTC_ERROR;
       }
     postOnFinalize(0, ret);
+
+    if (m_sdoconterm != nullptr)
+      {
+        m_sdoconterm->wait();
+        delete m_sdoconterm;
+        m_sdoconterm = nullptr;
+      }
     return ret;
   }
 
@@ -1965,6 +1972,7 @@ namespace RTC
       {
         m_sdoconterm->wait();
         delete m_sdoconterm;
+        m_sdoconterm = nullptr;
       }
     m_sdoconterm = new SdoServiceConsumerTerminator();
     m_sdoconterm->setSdoServiceConsumer(&m_sdoservice, id);
@@ -3014,8 +3022,22 @@ namespace RTC
   */
   void RTObject_impl::setINSObjRef(RTC::LightweightRTObject_ptr obj)
   {
-	  m_insref = obj;
+      m_insref = obj;
   }
+
+  RTObject_impl::SdoServiceConsumerTerminator::SdoServiceConsumerTerminator()
+    {
+    }
+  void RTObject_impl::SdoServiceConsumerTerminator::setSdoServiceConsumer(SdoServiceAdmin* sdoservice, const char* id)
+    {
+      m_sdoservice = sdoservice;
+      m_id = id;
+    }
+  int RTObject_impl::SdoServiceConsumerTerminator::svc()
+    {
+      m_sdoservice->removeSdoServiceConsumer(m_id.c_str());
+      return 0;
+    }
 
 
 } // namespace RTC
