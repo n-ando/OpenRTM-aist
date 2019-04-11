@@ -38,6 +38,7 @@ add_dependencies(${PROJECT_NAME}_objlib ${PROJECT_NAME}_IDLTGT)
 if(WIN32)
 	set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS OFF)
 	add_library(${PROJECT_NAME}-static STATIC $<TARGET_OBJECTS:${PROJECT_NAME}_objlib>)
+	openrtm_set_link_props_static(${PROJECT_NAME}-static)
 	set_target_properties(${PROJECT_NAME}-static PROPERTIES DEBUG_POSTFIX d)
 	set(DEF_FILE_NAME ${PROJECT_NAME}.def)
 	add_custom_command(TARGET ${PROJECT_NAME}-static
@@ -55,6 +56,7 @@ if(WIN32)
 		)
 	target_link_libraries(${PROJECT_NAME} PRIVATE
 		${ORB_LIBRARIES} ${COIL_PROJECT_NAME} ${RTM_LINKER_OPTION})
+	openrtm_set_link_props_shared(${PROJECT_NAME})
 	set_target_properties(${PROJECT_NAME} PROPERTIES DEBUG_POSTFIX d)
 	add_dependencies(${PROJECT_NAME} ${PROJECT_NAME}-static)
 

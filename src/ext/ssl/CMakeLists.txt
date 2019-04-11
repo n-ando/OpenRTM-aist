@@ -38,6 +38,7 @@ set(srcs SSLTransport.cpp )
 set(libs ${RTM_PROJECT_NAME} ${ORB_LIBRARIES} ${COIL_PROJECT_NAME} ${SSL_LIBRARIES} ${ORBSSL_LIBRARIES} ${DATATYPE_FACTORIES})
 
 add_library(${target} SHARED ${srcs})
+openrtm_set_link_props_shared(${target})
 openrtm_common_set_compile_props(${target})
 openrtm_include_rtm(${target})
 target_include_directories(${target} SYSTEM

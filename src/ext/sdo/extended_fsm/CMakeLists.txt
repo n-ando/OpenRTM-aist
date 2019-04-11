@@ -34,6 +34,7 @@ else()
 
 
 	add_library(${target} SHARED ${srcs})
+	openrtm_set_link_props_shared(${target})
 	openrtm_common_set_compile_props(${target})
 	openrtm_include_rtm(${target})
 	target_link_libraries(${target} PRIVATE ${libs} ${RTM_LINKER_OPTION})
