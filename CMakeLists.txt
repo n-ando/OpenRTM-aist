@@ -597,7 +597,7 @@ function(openrtm_common_set_compile_options target)
 		$<$<VERSION_GREATER:${CMAKE_CXX_COMPILER_VERSION},6.9.9>: -Wformat-truncation=2>
 		-Wformat-y2k
 		-Wformat=2
-		-Wframe-larger-than=4000
+		-Wframe-larger-than=9000		# size change 4000 to 9000 so RTPreemptEC.cpp larger than 4000 bytes.
 		$<$<VERSION_GREATER:${CMAKE_CXX_COMPILER_VERSION},6.9.9>: -Wimplicit-fallthrough=3>
 		-Winit-self
 		-Winline
@@ -606,7 +606,6 @@ function(openrtm_common_set_compile_options target)
 		-Wmissing-declarations
 		-Wmissing-format-attribute
 		-Wmissing-include-dirs
-		-Wmissing-noreturn
 		-Wmultichar
 		-Wnoexcept
 		$<$<VERSION_GREATER:${CMAKE_CXX_COMPILER_VERSION},6.9.9>: -Wnoexcept-type>
@@ -637,11 +636,8 @@ function(openrtm_common_set_compile_options target)
 		-Wstrict-overflow=5
 		$<$<VERSION_GREATER:${CMAKE_CXX_COMPILER_VERSION},6.9.9>: -Wstringop-overflow=4>
 		$<$<VERSION_GREATER:${CMAKE_CXX_COMPILER_VERSION},7.9.9>: -Wsuggest-attribute=cold>
-		-Wsuggest-attribute=const
 		-Wsuggest-attribute=format
 		$<$<VERSION_GREATER:${CMAKE_CXX_COMPILER_VERSION},7.9.9>: -Wsuggest-attribute=malloc>
-		-Wsuggest-attribute=noreturn
-		-Wsuggest-attribute=pure
 		$<$<VERSION_GREATER:${CMAKE_CXX_COMPILER_VERSION},4.9.9>: -Wsuggest-final-methods>
 		$<$<VERSION_GREATER:${CMAKE_CXX_COMPILER_VERSION},4.9.9>: -Wsuggest-final-types>
 		$<$<VERSION_GREATER:${CMAKE_CXX_COMPILER_VERSION},4.9.9>: -Wsuggest-override>
@@ -661,23 +657,31 @@ function(openrtm_common_set_compile_options target)
 		-Wzero-as-null-pointer-constant
 		# exclude rule
 		-Wno-padded)
-	set(WARN_GCC_NEXT_GOAL
-		-Wall
-		-Wextra
-		-Wno-padded)
-	set(WARN_GCC_TEMPORARY
-		${WARN_GCC_NEXT_GOAL}
-		-Wno-deprecated
-		-Wno-ignored-qualifiers
-		-Wno-int-to-pointer-cast
-		-Wno-maybe-uninitialized
-		-Wno-reorder
+	set(WARN_GCC_RELEASE
+		${WARN_GCC}
+		-Wno-cast-qual
+		-Wno-conditionally-supported
+		-Wno-conversion
+		-Wno-format-nonliteral
+		-Wno-inline
+		-Wno-missing-declarations
+		-Wno-old-style-cast
+		-Wno-overloaded-virtual
+		-Wno-shadow
 		-Wno-sign-compare
-		-Wno-type-limits
+		-Wno-sign-conversion
+		-Wno-strict-overflow
+		-Wno-suggest-attribute=format
+		$<$<VERSION_GREATER:${CMAKE_CXX_COMPILER_VERSION},7.9.9>: -Wno-suggest-attribute=malloc>
+		$<$<VERSION_GREATER:${CMAKE_CXX_COMPILER_VERSION},4.9.9>: -Wno-suggest-final-methods>
+		$<$<VERSION_GREATER:${CMAKE_CXX_COMPILER_VERSION},4.9.9>: -Wno-suggest-final-types>
+		-Wno-switch-enum
+		$<$<VERSION_LESS:${CMAKE_CXX_COMPILER_VERSION},8.2.0>: -Wno-unsafe-loop-optimizations>
 		-Wno-unused-but-set-variable
-		-Wno-unused-parameter
+		-Wno-unused-macros
 		-Wno-unused-result
-		-Wno-unused-variable)
+		-Wno-useless-cast
+		-Wno-zero-as-null-pointer-constant)
 	set(WARN_CLANG
 		-pedantic
 		-Weverything
@@ -686,19 +690,41 @@ function(openrtm_common_set_compile_options target)
 		-Wno-documentation-unknown-command
 		-Wno-c++98-compat
 		-Wno-c++98-compat-pedantic)
-	set(WARN_CLANG_NEXT_GOAL
-		-Wall
-		-Wextra)
-	set(WARN_CLANG_TEMPORARY
-		${WARN_CLANG_NEXT_GOAL}
-		-Wno-ignored-qualifiers
-		-Wno-int-to-pointer-cast
-		-Wno-reorder
+	set(WARN_CLANG_RELEASE
+		${WARN_CLANG}
+		-Wno-cast-qual
+		-Wno-conversion
+		-Wno-covered-switch-default
+		-Wno-deprecated
+		-Wno-disabled-macro-expansion
+		-Wno-double-promotion
+		-Wno-exit-time-destructors
+		-Wno-format-nonliteral
+		-Wno-global-constructors
+		-Wno-header-hygiene
+		-Wno-inconsistent-missing-destructor-override
+		-Wno-missing-prototypes
+		-Wno-missing-variable-declarations
+		-Wno-old-style-cast
+		-Wno-padded
+		-Wno-reserved-id-macro
+		-Wno-shadow-field-in-constructor
+		-Wno-shadow-field
+		-Wno-shorten-64-to-32
 		-Wno-sign-compare
-		-Wno-unknown-warning-option
+		-Wno-sign-conversion
+		-Wno-switch-enum
+		-Wno-tautological-unsigned-zero-compare
+		-Wno-undefined-reinterpret-cast
+		-Wno-unreachable-code-break
+		-Wno-unreachable-code-return
+		-Wno-unreachable-code
 		-Wno-unused-local-typedef
-		-Wno-unused-parameter
-		-Wno-unused-variable)
+		-Wno-unused-macros
+		-Wno-unused-variable
+		-Wno-weak-vtables
+		-Wno-zero-as-null-pointer-constant
+		)
 
 	target_compile_options(${target} PRIVATE
 		# C++11: target_compile_features can't be used becase it's support after v3.1.0.
@@ -712,21 +738,21 @@ function(openrtm_common_set_compile_options target)
 		# warning options
 		$<$<CXX_COMPILER_ID:GNU>:
 			$<$<CONFIG:Debug>:-O2 ${WARN_GCC}> # Some options need O2.
-			$<$<CONFIG:Release>:-Werror ${WARN_GCC_TEMPORARY}>
-			$<$<CONFIG:RelWithDebInfo>: ${WARN_GCC_NEXT_GOAL}>
-			$<$<CONFIG:MinSizeRel>: ${WARN_GCC_NEXT_GOAL}>
+			$<$<CONFIG:Release>:-Werror ${WARN_GCC_RELEASE}>
+			$<$<CONFIG:RelWithDebInfo>: ${WARN_GCC_RELEASE}>
+			$<$<CONFIG:MinSizeRel>: ${WARN_GCC_RELEASE}>
 		>
 
 		$<$<CXX_COMPILER_ID:Clang>:
 			$<$<CONFIG:Debug>:${WARN_CLANG}>
-			$<$<CONFIG:Release>:-Werror ${WARN_CLANG_TEMPORARY}>
-			$<$<CONFIG:RelWithDebInfo>: ${WARN_CLANG_NEXT_GOAL}>
-			$<$<CONFIG:MinSizeRel>: ${WARN_CLANG_NEXT_GOAL}>
+			$<$<CONFIG:Release>:-Werror ${WARN_CLANG_RELEASE}>
+			$<$<CONFIG:RelWithDebInfo>: ${WARN_CLANG_RELEASE}>
+			$<$<CONFIG:MinSizeRel>: ${WARN_CLANG_RELEASE}>
 		>
 
 		$<$<CXX_COMPILER_ID:MSVC>:
 			$<$<CONFIG:Debug>:/W4>
-			$<$<CONFIG:Release>:/W3>
+			$<$<CONFIG:Release>:/W3 /WX>
 			$<$<CONFIG:RelWithDebInfo>:/Wall>
 			$<$<CONFIG:MinSizeRel>:/W3>
 		>
@@ -851,6 +877,18 @@ function(openrtm_idl_compile_all name idls inc_path categoty dependencies)
 	set(${name}_IDLSKEL ${skel_list} PARENT_SCOPE)
 	set(${name}_IDLGEN ${gen_list} PARENT_SCOPE)
 	set(${name}_IDLHDR ${hdr_list} PARENT_SCOPE)
+endfunction()
+
+function(openrtm_set_link_props_shared target)
+	if(WIN32)
+		target_link_options(${target} PRIVATE /WX)
+	endif()
+endfunction()
+
+function(openrtm_set_link_props_static target)
+	if(WIN32)
+		target_link_options(${target} PRIVATE /WX)
+	endif()
 endfunction()
 
 if(WIN32)

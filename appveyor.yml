@@ -16,11 +16,11 @@ environment:
       python: 27
     - cmake_generator: Visual Studio 12 2013
       cmake_archtecture: x64
-      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2013
+      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
       python: 27
     - cmake_generator: Visual Studio 11 2012
       cmake_archtecture: x64
-      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2013
+      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
       python: 27
 matrix:
   fast_finish: true
