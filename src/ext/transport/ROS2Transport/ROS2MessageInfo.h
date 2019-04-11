@@ -24,7 +24,6 @@
 #include <coil/Factory.h>
 #include <coil/stringutil.h>
 #include <FastRTPS/FastRTPSMessageInfo.h>
-#include <std_msgs/msg/float32.hpp>
 
 
 

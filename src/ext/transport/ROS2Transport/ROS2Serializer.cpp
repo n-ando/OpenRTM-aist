@@ -41,7 +41,7 @@
 #include <std_msgs/msg/u_int16_multi_array.hpp>
 #include <std_msgs/msg/u_int32_multi_array.hpp>
 #include <std_msgs/msg/u_int64_multi_array.hpp>
-#include <std_msgs/msg/string.h>
+#include <std_msgs/msg/string.hpp>
 #include <geometry_msgs/msg/point_stamped.hpp>
 #include <geometry_msgs/msg/quaternion_stamped.hpp>
 #include <geometry_msgs/msg/vector3_stamped.hpp>
@@ -180,7 +180,6 @@ namespace RTC
     ROS2SequenceDataInitBaseFunc<DataType, std_msgs::msg::UInt64MultiArray, originalType, uint64_t>("ROSUInt64MultiArray");
   }
 
-#if !(defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__))
   /*!
    * @if jp
    *
@@ -320,7 +319,7 @@ namespace RTC
             ::coil::Destructor< ::RTC::FastRTPSMessageInfoBase,
             RTC::ROS2MessageInfo<std_msgs::msg::String> >);
   }
-#endif
+
   /*!
    * @if jp
    *
@@ -968,9 +967,9 @@ extern "C"
     RTC::ROS2SequenceDataInit<RTC::TimedULongSeq, CORBA::ULong>();
     RTC::ROS2SequenceDataInit<RTC::TimedFloatSeq, CORBA::Float>();
     RTC::ROS2SequenceDataInit<RTC::TimedDoubleSeq, CORBA::Double>();
-#if !(defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__))
+
     RTC::ROS2StringDataInit();
-#endif
+
     RTC::ROS2Pont3DDataInit();
     RTC::ROS2QuaternionDataInit();
     RTC::ROS2Vector3DDataInit();
