@@ -541,4 +541,6 @@ else(VXWORKS)
 	endif()
 endif(VXWORKS)
 
+set(RTM_INCLUDE_IDLS ${RTM_INCLUDE_IDLS} PARENT_SCOPE)
+
 install(FILES  ${rtm_headers} DESTINATION ${INSTALL_RTM_INCLUDE_DIR}/rtm COMPONENT headers)

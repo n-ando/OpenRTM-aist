@@ -22,7 +22,7 @@ if(CORBA MATCHES "TAO")
 endif()
 
 # .idl -> .cpp
-openrtm_idl_compile_all(${PROJECT_NAME} "${${PROJECT_NAME}_IDLS}" "-I${PROJECT_SOURCE_DIR}" RTM_SKEL)
+openrtm_idl_compile_all(${PROJECT_NAME} "${${PROJECT_NAME}_IDLS}" "-I${PROJECT_SOURCE_DIR}" RTM_SKEL "")
 
 # .cpp -> .o .so
 link_directories(${ORB_LINK_DIR})
@@ -73,5 +73,17 @@ install(FILES ${${PROJECT_NAME}_IDLS} DESTINATION ${INSTALL_RTM_INCLUDE_DIR}/rtm
 foreach(hdr ${${PROJECT_NAME}_IDLHDR})
 	install(FILES "${PROJECT_BINARY_DIR}/${hdr}" DESTINATION ${INSTALL_RTM_INCLUDE_DIR}/rtm/idl COMPONENT headers)
 endforeach()
+
+
+foreach(idl ${${PROJECT_NAME}_IDLS})
+	string(REGEX REPLACE ".idl" "" idl ${idl})
+	if(DEPENDENCES_IDLS)
+		set(DEPENDENCES_IDLS ${DEPENDENCES_IDLS}:rtm/idl/${idl})
+	else()
+		set(DEPENDENCES_IDLS rtm/idl/${idl})
+	endif()
+endforeach()
+
+set(RTM_INCLUDE_IDLS ${DEPENDENCES_IDLS} PARENT_SCOPE)
 
 add_subdirectory(device_interfaces)

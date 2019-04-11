@@ -5436,20 +5436,9 @@ namespace RTC
 		: public coil::Task
     {
     public:
-        SdoServiceConsumerTerminator()
-          {
-
-          }
-        void setSdoServiceConsumer(SdoServiceAdmin* sdoservice, const char* id)
-          {
-            m_sdoservice = sdoservice;
-            m_id = id;
-          }
-        int svc() override
-          {
-            m_sdoservice->removeSdoServiceConsumer(m_id.c_str());
-            return 0;
-          }
+        SdoServiceConsumerTerminator();
+        void setSdoServiceConsumer(SdoServiceAdmin* sdoservice, const char* id);
+        int svc() override;
     private:
         SdoServiceAdmin *m_sdoservice;
         std::string m_id;

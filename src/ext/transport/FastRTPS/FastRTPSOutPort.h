@@ -295,7 +295,7 @@ namespace RTC
          *
          * @endif
          */
-        ~PubListener();
+        ~PubListener() override;
         /*!
          * @if jp
          * @brief
@@ -314,9 +314,9 @@ namespace RTC
          *
          * @endif
          */
-        void onPublicationMatched(eprosima::fastrtps::Publisher* pub, eprosima::fastrtps::rtps::MatchingInfo& info);
+        void onPublicationMatched(eprosima::fastrtps::Publisher* pub, eprosima::fastrtps::rtps::MatchingInfo& info) override;
     } m_listener;
-    CORBACdrDataPubSubType m_type;
+    
   };
 } // namespace RTC
 

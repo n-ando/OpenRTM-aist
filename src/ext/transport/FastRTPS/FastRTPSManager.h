@@ -66,7 +66,7 @@ namespace RTC
          *
          * @endif
          */
-        FastRTPSManager();
+        FastRTPSManager(std::string& xml_profile_file);
         /*!
          * @if jp
          * @brief コピーコンストラクタ
@@ -108,6 +108,19 @@ namespace RTC
          * @endif
          */
         void start();
+        /*!
+         * @if jp
+         * @brief マネージャ終了
+         *
+         *
+         * @else
+         * @brief
+         *
+         *
+         *
+         * @endif
+         */
+        void shutdown();
 
         /*!
          * @if jp
@@ -141,6 +154,22 @@ namespace RTC
         bool registerType(eprosima::fastrtps::TopicDataType* type);
         /*!
          * @if jp
+         * @brief 指定名の型が登録済みかを判定する
+         *
+         * @param name 型名
+         * @return true：登録済み、false：未登録
+         *
+         * @else
+         * @brief
+         *
+         * @param name
+         * @return
+         *
+         * @endif
+         */
+        bool registeredType(const char* name);
+        /*!
+         * @if jp
          * @brief 型の登録解除
          *
          * @param name 型名
@@ -171,7 +200,7 @@ namespace RTC
          *
          * @endif
          */
-        static FastRTPSManager* init();
+        static FastRTPSManager* init(std::string xml_profile_file="");
         /*!
          * @if jp
          * @brief インスタンス取得
@@ -186,7 +215,7 @@ namespace RTC
          *
          * @endif
          */
-        static FastRTPSManager& instance();
+        static FastRTPSManager& instance(std::string xml_profile_file = "");
     private:
         static FastRTPSManager* manager;
         static Mutex mutex;

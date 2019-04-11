@@ -104,10 +104,11 @@ namespace RTC
       return;
     }
 
-    FastRTPSManager& topicmgr = FastRTPSManager::instance();
-    eprosima::fastrtps::Participant* paticipant = topicmgr.getParticipant();
+    std::string profile_xml = prop.getProperty("QOSXML", "");
+    FastRTPSManager& topicmgr = FastRTPSManager::instance(profile_xml);
+    eprosima::fastrtps::Participant* participant = topicmgr.getParticipant();
 
-    if (paticipant == nullptr)
+    if (participant == nullptr)
     {
         RTC_ERROR(("Can not initialize Fast-RTPS"));
         return;
@@ -133,8 +134,6 @@ namespace RTC
         m_topic = info->topic_name(m_topic);
 
         FastRTPSMessageInfoFactory::instance().deleteObject(info);
-
-        m_type.init(m_dataType, true);
     }
     else
     {
@@ -150,32 +149,41 @@ namespace RTC
         {
             m_dataType = data;
         }
-        m_type.init(m_dataType, false);
     }
 
-    std::string endian_type(prop.getProperty("serializer.cdr.endian", ""));
-    coil::normalize(endian_type);
-    std::vector<std::string> endian(coil::split(endian_type, ","));
-    if (endian[0] == "little")
+    if (!topicmgr.registeredType(m_dataType.c_str()))
     {
-        m_type.setEndian(true);
+        CORBACdrDataPubSubType* type = new CORBACdrDataPubSubType();
+        if (marshaling_type != "corba")
+        {
+            type->init(m_dataType, true);
+        }
+        else
+        {
+            type->init(m_dataType, false);
+        }
+
+        std::string endian_type(prop.getProperty("serializer.cdr.endian", ""));
+        coil::normalize(endian_type);
+        std::vector<std::string> endian(coil::split(endian_type, ","));
+        if (endian[0] == "little")
+        {
+            type->setEndian(true);
+        }
+        else if (endian[0] == "big")
+        {
+            type->setEndian(false);
+        }
+
+
+        topicmgr.registerType(type);
     }
-    else if (endian[0] == "big")
-    {
-        m_type.setEndian(false);
-    }
-    
-
-  
-
-    topicmgr.registerType(&m_type);
-
 
     eprosima::fastrtps::SubscriberAttributes Rparam;
     Rparam.topic.topicKind = eprosima::fastrtps::rtps::NO_KEY;
-    Rparam.topic.topicDataType = m_type.getName();
+    Rparam.topic.topicDataType = m_dataType;
     Rparam.topic.topicName = m_topic;
-    m_subscriber = eprosima::fastrtps::Domain::createSubscriber(paticipant,Rparam,(eprosima::fastrtps::SubscriberListener*)&m_listener);
+    m_subscriber = eprosima::fastrtps::Domain::createSubscriber(participant,Rparam,(eprosima::fastrtps::SubscriberListener*)&m_listener);
     if(m_subscriber == nullptr)
     {
         return;

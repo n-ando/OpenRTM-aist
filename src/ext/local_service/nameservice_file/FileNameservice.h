@@ -24,6 +24,7 @@
 #include <rtm/RTC.h>
 #include <rtm/SystemLogger.h>
 #include <rtm/LocalServiceBase.h>
+#include <boost/filesystem.hpp>
 
 namespace fs = boost::filesystem;
 

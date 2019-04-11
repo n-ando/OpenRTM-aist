@@ -19,7 +19,7 @@ set(${PROJECT_NAME}_IDLS CameraCommonInterface.idl)
 openrtm_idl_compile_all(${PROJECT_NAME}
 	"${${PROJECT_NAME}_IDLS}"
 	"-I${PROJECT_SOURCE_DIR}/..;-I${PROJECT_SOURCE_DIR}/../../idl"
-	EXT_RTM)
+	EXT_RTM "${RTM_INCLUDE_IDLS}")
 
 link_directories(${ORB_LINK_DIR})
 add_definitions(${ORB_C_FLAGS_LIST})

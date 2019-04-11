@@ -196,7 +196,7 @@ namespace RTC
         }
       catch (...)
         {
-          m_rtobj->removeSdoServiceConsumer(m_profile.id);
+          m_rtobj->removeSdoServiceConsumerStartThread(m_profile.id);
         }
     }
 
