@@ -47,6 +47,9 @@
 #include <geometry_msgs/msg/vector3_stamped.hpp>
 #include <sensor_msgs/msg/image.hpp>
 
+#include <cstdint>
+
+
 #include "ROS2Serializer.h"
 #include "ROS2MessageInfo.h"
 
@@ -104,15 +107,15 @@ namespace RTC
   void ROS2SimpleDataInit()
   {
     ROS2SimpleDataInitBaseFunc<DataType, std_msgs::msg::Float32, originalType, float>("ROS2Float32");
-    ROS2SimpleDataInitBaseFunc<DataType, std_msgs::msg::Float64, originalType, float>("ROS2Float64");
-    ROS2SimpleDataInitBaseFunc<DataType, std_msgs::msg::Int8, originalType, char>("ROS2Int8");
-    ROS2SimpleDataInitBaseFunc<DataType, std_msgs::msg::Int16, originalType, short>("ROS2Int16");
-    ROS2SimpleDataInitBaseFunc<DataType, std_msgs::msg::Int32, originalType, long>("ROS2Int32");
-    ROS2SimpleDataInitBaseFunc<DataType, std_msgs::msg::Int64, originalType, long long>("ROS2Int64");
-    ROS2SimpleDataInitBaseFunc<DataType, std_msgs::msg::UInt8, originalType, unsigned char>("ROS2UInt8");
-    ROS2SimpleDataInitBaseFunc<DataType, std_msgs::msg::UInt16, originalType, unsigned short>("ROS2UInt16");
-    ROS2SimpleDataInitBaseFunc<DataType, std_msgs::msg::UInt32, originalType, unsigned long>("ROS2UInt32");
-    ROS2SimpleDataInitBaseFunc<DataType, std_msgs::msg::UInt64, originalType, unsigned long long>("ROS2UInt64");
+    ROS2SimpleDataInitBaseFunc<DataType, std_msgs::msg::Float64, originalType, double>("ROS2Float64");
+    ROS2SimpleDataInitBaseFunc<DataType, std_msgs::msg::Int8, originalType, int8_t>("ROS2Int8");
+    ROS2SimpleDataInitBaseFunc<DataType, std_msgs::msg::Int16, originalType, int16_t>("ROS2Int16");
+    ROS2SimpleDataInitBaseFunc<DataType, std_msgs::msg::Int32, originalType, int32_t>("ROS2Int32");
+    ROS2SimpleDataInitBaseFunc<DataType, std_msgs::msg::Int64, originalType, int64_t>("ROS2Int64");
+    ROS2SimpleDataInitBaseFunc<DataType, std_msgs::msg::UInt8, originalType, uint8_t>("ROS2UInt8");
+    ROS2SimpleDataInitBaseFunc<DataType, std_msgs::msg::UInt16, originalType, uint16_t>("ROS2UInt16");
+    ROS2SimpleDataInitBaseFunc<DataType, std_msgs::msg::UInt32, originalType, uint32_t>("ROS2UInt32");
+    ROS2SimpleDataInitBaseFunc<DataType, std_msgs::msg::UInt64, originalType, uint64_t>("ROS2UInt64");
     
   }
 
@@ -166,15 +169,15 @@ namespace RTC
   void ROS2SequenceDataInit()
   {
     ROS2SequenceDataInitBaseFunc<DataType, std_msgs::msg::Float32MultiArray, originalType, float>("ROSFloat32MultiArray");
-    ROS2SequenceDataInitBaseFunc<DataType, std_msgs::msg::Float64MultiArray, originalType, float>("ROSFloat64MultiArray");
-    ROS2SequenceDataInitBaseFunc<DataType, std_msgs::msg::Int8MultiArray, originalType, char>("ROSInt8MultiArray");
-    ROS2SequenceDataInitBaseFunc<DataType, std_msgs::msg::Int16MultiArray, originalType, short>("ROSInt16MultiArray");
-    ROS2SequenceDataInitBaseFunc<DataType, std_msgs::msg::Int32MultiArray, originalType, long>("ROSInt32MultiArray");
-    ROS2SequenceDataInitBaseFunc<DataType, std_msgs::msg::Int64MultiArray, originalType, long long>("ROSInt64MultiArray");
-    ROS2SequenceDataInitBaseFunc<DataType, std_msgs::msg::UInt8MultiArray, originalType, unsigned char>("ROSUInt8MultiArray");
-    ROS2SequenceDataInitBaseFunc<DataType, std_msgs::msg::UInt16MultiArray, originalType, unsigned short>("ROSUInt16MultiArray");
-    ROS2SequenceDataInitBaseFunc<DataType, std_msgs::msg::UInt32MultiArray, originalType, unsigned long>("ROSUInt32MultiArray");
-    ROS2SequenceDataInitBaseFunc<DataType, std_msgs::msg::UInt64MultiArray, originalType, unsigned long long>("ROSUInt64MultiArray");
+    ROS2SequenceDataInitBaseFunc<DataType, std_msgs::msg::Float64MultiArray, originalType, double>("ROSFloat64MultiArray");
+    ROS2SequenceDataInitBaseFunc<DataType, std_msgs::msg::Int8MultiArray, originalType, int8_t>("ROSInt8MultiArray");
+    ROS2SequenceDataInitBaseFunc<DataType, std_msgs::msg::Int16MultiArray, originalType, int16_t>("ROSInt16MultiArray");
+    ROS2SequenceDataInitBaseFunc<DataType, std_msgs::msg::Int32MultiArray, originalType, int32_t>("ROSInt32MultiArray");
+    ROS2SequenceDataInitBaseFunc<DataType, std_msgs::msg::Int64MultiArray, originalType, int64_t>("ROSInt64MultiArray");
+    ROS2SequenceDataInitBaseFunc<DataType, std_msgs::msg::UInt8MultiArray, originalType, uint8_t>("ROSUInt8MultiArray");
+    ROS2SequenceDataInitBaseFunc<DataType, std_msgs::msg::UInt16MultiArray, originalType, uint16_t>("ROSUInt16MultiArray");
+    ROS2SequenceDataInitBaseFunc<DataType, std_msgs::msg::UInt32MultiArray, originalType, uint32_t>("ROSUInt32MultiArray");
+    ROS2SequenceDataInitBaseFunc<DataType, std_msgs::msg::UInt64MultiArray, originalType, uint64_t>("ROSUInt64MultiArray");
   }
 
 #if !(defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__))
