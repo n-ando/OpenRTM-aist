@@ -98,7 +98,7 @@ namespace RTC
       m_properties(default_conf), m_configsets(m_properties.getNode("conf")),
       m_sdoservice(*this),
       m_readAll(false), m_writeAll(false),
-      m_readAllCompletion(false), m_writeAllCompletion(false)
+      m_readAllCompletion(false), m_writeAllCompletion(false), m_sdoconterm(nullptr)
   {
     m_objref = this->_this();
     m_pSdoConfigImpl = new SDOPackage::Configuration_impl(m_configsets,
