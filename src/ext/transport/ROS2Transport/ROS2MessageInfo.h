@@ -24,7 +24,32 @@
 #include <coil/Factory.h>
 #include <coil/stringutil.h>
 #include <FastRTPS/FastRTPSMessageInfo.h>
+
 #include <std_msgs/msg/float32.hpp>
+#include <std_msgs/msg/float64.hpp>
+#include <std_msgs/msg/int8.hpp>
+#include <std_msgs/msg/int16.hpp>
+#include <std_msgs/msg/int32.hpp>
+#include <std_msgs/msg/int64.hpp>
+#include <std_msgs/msg/u_int8.hpp>
+#include <std_msgs/msg/u_int16.hpp>
+#include <std_msgs/msg/u_int32.hpp>
+#include <std_msgs/msg/u_int64.hpp>
+#include <std_msgs/msg/float32_multi_array.hpp>
+#include <std_msgs/msg/float64_multi_array.hpp>
+#include <std_msgs/msg/int8_multi_array.hpp>
+#include <std_msgs/msg/int16_multi_array.hpp>
+#include <std_msgs/msg/int32_multi_array.hpp>
+#include <std_msgs/msg/int64_multi_array.hpp>
+#include <std_msgs/msg/u_int8_multi_array.hpp>
+#include <std_msgs/msg/u_int16_multi_array.hpp>
+#include <std_msgs/msg/u_int32_multi_array.hpp>
+#include <std_msgs/msg/u_int64_multi_array.hpp>
+#include <std_msgs/msg/string.hpp>
+#include <geometry_msgs/msg/point_stamped.hpp>
+#include <geometry_msgs/msg/quaternion_stamped.hpp>
+#include <geometry_msgs/msg/vector3_stamped.hpp>
+#include <sensor_msgs/msg/image.hpp>
 
 
 
