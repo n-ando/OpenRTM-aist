@@ -47,7 +47,8 @@ RUN ./configure\
  && make\
  && make install
 
-RUN cp /root/fluent-bit-1.0.4/lib/flb_libco/libco.h /usr/local/include/
+RUN mkdir -p /usr/local/include/lib/flb_libco\
+ && cp /root/fluent-bit-1.0.4/lib/flb_libco/libco.h /usr/local/include/lib/flb_libco/
 
 FROM ubuntu:18.04 as rtm-build
 
