@@ -23,6 +23,8 @@
 #include <coil/Mutex.h>
 #include <coil/Guard.h>
 #include <ccpp_dds_dcps.h>
+#include <map>
+#include "ccpp_CORBACdrData.h"
 
 
 namespace RTC
@@ -121,7 +123,7 @@ namespace RTC
          *
          * @endif
          */
-        DDS::DomainParticipant_var getParticipant();
+        DDS::DomainParticipant_ptr getParticipant();
         /*!
          * @if jp
          * @brief DataWriter生成
@@ -135,7 +137,7 @@ namespace RTC
          *
          * @endif
          */
-        DDS::DataWriter_var createWriter(std::string topic_name, DDS::DataWriterListener_var listener);
+        DDS::DataWriter_ptr createWriter(std::string& topic_name, DDS::DataWriterListener_ptr listener);
         /*!
          * @if jp
          * @brief DataReader生成
@@ -149,7 +151,7 @@ namespace RTC
          *
          * @endif
          */
-        DDS::DataReader_var createReader(std::string topic_name, DDS::DataReaderListener_var listener);
+        DDS::DataReader_ptr createReader(std::string& topic_name, DDS::DataReaderListener_ptr listener);
         /*!
          * @if jp
          * @brief DataWriter削除
@@ -163,7 +165,7 @@ namespace RTC
          *
          * @endif
          */
-        DDS::ReturnCode_t deleteWriter(DDS::DataWriter_var writer);
+        DDS::ReturnCode_t deleteWriter(DDS::DataWriter_ptr writer);
         /*!
          * @if jp
          * @brief DataReader削除
@@ -177,7 +179,7 @@ namespace RTC
          *
          * @endif
          */
-        DDS::ReturnCode_t deleteReader(DDS::DataReader_var reader);
+        DDS::ReturnCode_t deleteReader(DDS::DataReader_ptr reader);
         /*!
          * @if jp
          * @brief トピック生成
@@ -191,7 +193,35 @@ namespace RTC
          *
          * @endif
          */
-        bool createTopic(std::string topic_name, std::string typeName);
+        bool createTopic(std::string& topic_name, std::string& typeName);
+        /*!
+         * @if jp
+         * @brief Publisher生成
+         *
+         * @return true：生成成功、false：エラー
+         *
+         * @else
+         * @brief create Publisher
+         *
+         * @return 
+         *
+         * @endif
+         */
+        bool createPublisher();
+        /*!
+         * @if jp
+         * @brief Subscriber生成
+         *
+         * @return true：生成成功、false：エラー
+         *
+         * @else
+         * @brief create Subscriber
+         *
+         * @return
+         *
+         * @endif
+         */
+        bool createSubscriber();
         /*!
          * @if jp
          * @brief 型の登録
@@ -207,7 +237,7 @@ namespace RTC
          *
          * @endif
          */
-        bool registerType(std::string datatype, std::string idlpath);
+        bool registerType(std::string& datatype, std::string& idlpath);
         /*!
          * @if jp
          * @brief 型の登録解除
@@ -224,6 +254,21 @@ namespace RTC
          * @endif
          */
         bool unregisterType(const char* name);
+
+        /*!
+         * @if jp
+         * @brief 終了処理
+         * topic、publisher、subscriber、participantの削除を行う
+         *
+         *
+         * @else
+         * @brief
+         *
+         * @return
+         *
+         * @endif
+         */
+        void finalize();
 
 
         /*!
@@ -256,9 +301,45 @@ namespace RTC
          * @endif
          */
         static OpenSpliceManager& instance();
-
+        /*!
+         * @if jp
+         * @brief DDS::ReturnCode_tの値がRETCODE_OK、RETCODE_NO_DATA以外の場合にエラー出力
+         * 
+         * @param status リターンコード
+         * @param info エラーの情報
+         * @return statusががRETCODE_OK、RETCODE_NO_DATAの場合はtrue、それ以外はfalse
+         *
+         * @else
+         * @brief 
+         *
+         * @param status 
+         * @param info 
+         * @return 
+         * 
+         *
+         * @endif
+         */
         static bool checkStatus(DDS::ReturnCode_t status, const char *info);
-        static bool checkHandle(void *handle, std::string info);
+
+        /*!
+         * @if jp
+         * @brief 参照がNULLの場合にエラー出力
+         *
+         * @param handle ポインタ
+         * @param info エラーの情報
+         * @return handleがnullptrではない場合はtrue、nullptrの場合はfalse
+         *
+         * @else
+         * @brief
+         *
+         * @param handle
+         * @param info
+         * @return
+         *
+         *
+         * @endif
+         */
+        static bool checkHandle(void *handle, const char* info);
     private:
         static OpenSpliceManager* manager;
         static Mutex mutex;
@@ -267,20 +348,10 @@ namespace RTC
         DDS::DomainParticipant_var m_participant;
         DDS::Publisher_var m_publisher;
         DDS::Subscriber_var m_subscriber;
+        std::map <std::string, DDS::Topic_var> m_topics;
+        std::map <std::string, OpenRTM::CORBACdrDataTypeSupport_var> m_typesupports;
     protected:
         //mutable Logger rtclog;
-    };
-
-    class TopicType
-    {
-    public:
-        TopicType();
-        TopicType(std::string &inid, std::string &inkeys, std::string &indescriptor);
-        TopicType(const TopicType &obj);
-        TopicType& operator = (const TopicType& obj);
-        std::string id;
-        std::string keys;
-        std::string descriptor;
     };
 
 }

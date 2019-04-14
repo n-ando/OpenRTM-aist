@@ -20,8 +20,7 @@
 
 #include "OpenSpliceOutPort_impl.h"
 #include "OpenSpliceManager.h"
-#include "ccpp_CORBACdrData.h"
-
+#include <iostream>
 
 
 
@@ -29,23 +28,25 @@
 
 namespace RTC
 {
-    class OpenSpliceOutPort_impl : public OpenSpliceOutPortBase
-    {
-    public:
-        OpenSpliceOutPort_impl();
-        ~OpenSpliceOutPort_impl();
-        bool init(std::string datatype, std::string idlpath, std::string topic, bool endian = true, bool corbamode = true);
-        bool write(RTC::ByteData& data);
-
-    private:
-        std::string m_topic;
-        std::string m_dataType;
-        DDS::DataWriter_var m_writer;
-        bool m_endian;
-        std::string m_idlPath;
-        bool m_corbamode;
-    };
-
+    /*!
+     * @if jp
+     * @class OpenSpliceOutPortBase
+     * @brief PubListener クラス
+     *
+     * Writerのリスナクラス
+     *
+     *
+     * @since 2.0.0
+     *
+     * @else
+     * @class PubListener
+     * @brief PubListener class
+     *
+     *
+     * @since 2.0.0
+     *
+     * @endif
+     */
     class PubListener : public DDS::DataWriterListener
     {
     public:
@@ -87,16 +88,171 @@ namespace RTC
         virtual void on_publication_matched(DDS::DataWriter_ptr writer, const DDS::PublicationMatchedStatus& status);
     };
 
+    /*!
+     * @if jp
+     * @class OpenSpliceOutPort_impl
+     * @brief OpenSpliceOutPort_impl クラス
+     *
+     * OpenSpliceのPublisherを操作するための関数を定義したクラス
+     *
+     *
+     * @since 2.0.0
+     *
+     * @else
+     * @class OpenSpliceOutPort_impl
+     * @brief OpenSpliceOutPort_impl class
+     *
+     *
+     * @since 2.0.0
+     *
+     * @endif
+     */
+    class OpenSpliceOutPort_impl : public OpenSpliceOutPortBase
+    {
+    public:
+        /*!
+         * @if jp
+         * @brief コンストラクタ
+         *
+         * コンストラクタ
+         *
+         * @else
+         * @brief Constructor
+         *
+         * Constructor
+         *
+         * @endif
+         */
+        OpenSpliceOutPort_impl();
+        /*!
+         * @if jp
+         * @brief デストラクタ
+         *
+         * デストラクタ
+         *
+         * @else
+         * @brief Destructor
+         *
+         * Destructor
+         *
+         * @endif
+         */
+        ~OpenSpliceOutPort_impl() override;
+        /*!
+         * @if jp
+         * @brief 初期化
+         * OpenSpliceのreaderを初期化する
+         * Participant、DataTypeSupport、Publisher、Topicが初期化されていない場合は初期化する
+         *
+         * @param datatype データ型名
+         * @param idlpath データ型を定義したIDLファイルのパス
+         * @param topic トピック名
+         * @param endian true：リトルエンディアン、false：ビッグエンディアン
+         * @param corbamode true：送信データの先頭に4bitのヘッダーを付加する
+         * @return true：初期化成功、false：問題発生
+         *
+         * @else
+         * @brief
+         *
+         * @param datatype
+         * @param idlpath
+         * @param topic
+         * @param endian
+         * @param corbamode
+         * @return
+         *
+         * @endif
+         */
+        bool init(std::string& datatype, std::string& idlpath, std::string& topic, bool endian = true, bool corbamode = true) override;
+        /*!
+         * @if jp
+         * @brief データ送信
+         *
+         * @param data 送信データ
+         * @return true：送信成功、false：問題発生
+         * writerの未初期化、送信エラー等でfalseを返す
+         *
+         * @else
+         * @brief
+         *
+         * @param data
+         * @return
+         *
+         * @endif
+         */
+        bool write(RTC::ByteData& data) override;
+        /*!
+         * @if jp
+         * @brief 終了処理
+         * writerの削除を行う
+         *
+         *
+         * @else
+         * @brief
+         *
+         *
+         * @endif
+         */
+        void finalize() override;
+
+    private:
+        std::string m_topic;
+        std::string m_dataType;
+        DDS::DataWriter_var m_writer;
+        bool m_endian;
+        std::string m_idlPath;
+        bool m_corbamode;
+        DDS::DataWriterListener_var m_listener;
+    };
 
 
+    /*!
+     * @if jp
+     * @brief デストラクタ
+     *
+     * デストラクタ
+     *
+     * @else
+     * @brief Destructor
+     *
+     * Destructor
+     *
+     * @endif
+     */
     OpenSpliceOutPortBase::~OpenSpliceOutPortBase()
     {
 
     }
 
+    /*!
+     * @if jp
+     * @brief コンストラクタ
+     *
+     * コンストラクタ
+     *
+     * @else
+     * @brief Constructor
+     *
+     * Constructor
+     *
+     * @endif
+     */
     OpenSpliceOutPort_impl::OpenSpliceOutPort_impl() : m_endian(true), m_corbamode(true)
     {
     }
+    /*!
+     * @if jp
+     * @brief デストラクタ
+     *
+     * デストラクタ
+     *
+     * @else
+     * @brief Destructor
+     *
+     * Destructor
+     *
+     * @endif
+     */
     OpenSpliceOutPort_impl::~OpenSpliceOutPort_impl()
     {
         if (m_writer != nullptr)
@@ -105,7 +261,32 @@ namespace RTC
             topicmgr.deleteWriter(m_writer);
         }
     }
-    bool OpenSpliceOutPort_impl::init(std::string datatype, std::string idlpath, std::string topic, bool endian, bool corbamode)
+    /*!
+     * @if jp
+     * @brief 初期化
+     * OpenSpliceのreaderを初期化する
+     * Participant、DataTypeSupport、Publisher、Topicが初期化されていない場合は初期化する
+     *
+     * @param datatype データ型名
+     * @param idlpath データ型を定義したIDLファイルのパス
+     * @param topic トピック名
+     * @param endian true：リトルエンディアン、false：ビッグエンディアン
+     * @param corbamode true：送信データの先頭に4bitのヘッダーを付加する
+     * @return true：初期化成功、false：問題発生
+     *
+     * @else
+     * @brief
+     *
+     * @param datatype
+     * @param idlpath
+     * @param topic
+     * @param endian
+     * @param corbamode
+     * @return
+     *
+     * @endif
+     */
+    bool OpenSpliceOutPort_impl::init(std::string& datatype, std::string& idlpath, std::string& topic, bool endian, bool corbamode)
     {
         m_topic = topic;
         m_dataType = datatype;
@@ -113,21 +294,33 @@ namespace RTC
         m_idlPath = idlpath;
         m_corbamode = corbamode;
 
+        
         OpenSpliceManager& topicmgr = OpenSpliceManager::instance();
-        topicmgr.registerType(m_dataType, m_idlPath);
-
-        topicmgr.createTopic(topic, m_dataType);
-
-       	DDS::DataWriterListener_var listener = new PubListener();
-
-        DDS::DataWriter_var writer = topicmgr.createWriter(m_topic, listener);
-
-        if (!OpenSpliceManager::checkHandle(writer, "createWriter"))
+        if (!topicmgr.registerType(m_dataType, m_idlPath))
+        {
+            return false;
+        }
+        
+        if (!topicmgr.createTopic(topic, m_dataType))
         {
             return false;
         }
 
-        m_writer = OpenRTM::CORBACdrDataDataWriter::_narrow(writer);
+        if (!topicmgr.createPublisher())
+        {
+            return false;
+        }
+
+       	m_listener = new PubListener();
+
+        DDS::DataWriter_var writer = topicmgr.createWriter(m_topic, m_listener.in());
+
+        if (!OpenSpliceManager::checkHandle(writer.in(), "createWriter"))
+        {
+            return false;
+        }
+
+        m_writer = OpenRTM::CORBACdrDataDataWriter::_narrow(writer.in());
 
         if (!OpenSpliceManager::checkHandle(m_writer, "CORBACdrDataDataWriter::_narrow(writer)"))
         {
@@ -136,6 +329,42 @@ namespace RTC
 
         return true;
     }
+    /*!
+     * @if jp
+     * @brief 終了処理
+     * writerの削除を行う
+     *
+     *
+     * @else
+     * @brief
+     *
+     *
+     * @endif
+     */
+    void OpenSpliceOutPort_impl::finalize()
+    {
+        if (m_writer.in() != nullptr)
+        {
+            OpenSpliceManager& topicmgr = OpenSpliceManager::instance();
+            topicmgr.deleteWriter(m_writer.in());
+        }
+    }
+    /*!
+     * @if jp
+     * @brief データ送信
+     *
+     * @param data 送信データ
+     * @return true：送信成功、false：問題発生
+     * writerの未初期化、送信エラー等でfalseを返す
+     *
+     * @else
+     * @brief
+     *
+     * @param data
+     * @return
+     *
+     * @endif
+     */
     bool OpenSpliceOutPort_impl::write(RTC::ByteData& data)
     {
 
@@ -177,7 +406,6 @@ namespace RTC
         {
             return false;
         }
-
 
         DDS::ReturnCode_t result = writer->write_cdr(sample, DDS::HANDLE_NIL);
 
@@ -230,23 +458,43 @@ namespace RTC
 
     void PubListener::on_offered_deadline_missed(DDS::DataWriter_ptr writer, const DDS::OfferedDeadlineMissedStatus& status)
     {
-
     }
     void PubListener::on_offered_incompatible_qos(DDS::DataWriter_ptr writer, const DDS::OfferedIncompatibleQosStatus& status)
     {
-
     }
     void PubListener::on_liveliness_lost(DDS::DataWriter_ptr writer, const DDS::LivelinessLostStatus& status)
     {
-
     }
     void PubListener::on_publication_matched(DDS::DataWriter_ptr writer, const DDS::PublicationMatchedStatus& status)
     {
-
     }
 
-
-    OpenSpliceOutPortBase* createOpenSpliceOutPort(std::string datatype, std::string idlpath, std::string topic, bool endian, bool corbamode)
+    /*!
+     * @if jp
+     * @brief OpenSpliceのPublisherを操作するクラスの初期化を行う関数
+     * OpenSpliceとomniORBのヘッダーファイルを同時にインクルードできないため、
+     * OpenSpliceの処理はOpenSpliceOutPort_impl.cppに記述して以下の関数から抽象クラスを取得する。
+     *
+     * @param datatype データ型名
+     * @param idlpath データ型を定義したIDLファイルのパス
+     * @param topic トピック名
+     * @param endian true：リトルエンディアン、false：ビッグエンディアン
+     * @param corbamode true：送信データの先頭に4bitのヘッダーを付加する
+     * @return OpenSpliceOutPort_implオブジェクト
+     *
+     * @else
+     * @brief
+     *
+     * @param datatype
+     * @param idlpath
+     * @param topic
+     * @param endian
+     * @param corbamode
+     * @return
+     *
+     * @endif
+     */
+    OpenSpliceOutPortBase* createOpenSpliceOutPort(std::string& datatype, std::string& idlpath, std::string& topic, bool endian, bool corbamode)
     {
         OpenSpliceOutPort_impl* publisher = new OpenSpliceOutPort_impl();
         publisher->init(datatype, idlpath, topic, endian, corbamode);

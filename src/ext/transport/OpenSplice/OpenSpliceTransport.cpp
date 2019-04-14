@@ -17,6 +17,7 @@
  */
 
 
+#include <coil/Factory.h>
 #include "OpenSpliceTransport.h"
 #include "OpenSpliceOutPort.h"
 #include "OpenSpliceInPort.h"
@@ -34,10 +35,24 @@ extern "C"
    */
   void OpenSpliceTransportInit(RTC::Manager* /*manager*/)
   {
-    OpenSpliceInPortInit();
-    OpenSpliceOutPortInit();
-    
-    OpenSpliceMessageInfoInit();
+      {
+          RTC::InPortConsumerFactory& factory(RTC::InPortConsumerFactory::instance());
+          factory.addFactory("opensplice",
+              ::coil::Creator< ::RTC::InPortConsumer,
+              ::RTC::OpenSpliceOutPort>,
+              ::coil::Destructor< ::RTC::InPortConsumer,
+              ::RTC::OpenSpliceOutPort>);
+      }
+      {
+          RTC::InPortProviderFactory& factory(RTC::InPortProviderFactory::instance());
+          factory.addFactory("opensplice",
+              ::coil::Creator< ::RTC::InPortProvider,
+              ::RTC::OpenSpliceInPort>,
+              ::coil::Destructor< ::RTC::InPortProvider,
+              ::RTC::OpenSpliceInPort>);
+      }
+      
+      OpenSpliceMessageInfoInit();
     
   }
   

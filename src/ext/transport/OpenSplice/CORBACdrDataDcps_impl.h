@@ -16,7 +16,7 @@ namespace OpenRTM {
     class  CORBACdrDataTypeSupportMetaHolder : public ::DDS::OpenSplice::TypeSupportMetaHolder
     {
     public:
-        CORBACdrDataTypeSupportMetaHolder (const char *datatype, const char *keys, const char* descriptor);
+        CORBACdrDataTypeSupportMetaHolder (::DDS::String datatype, ::DDS::String keys, ::DDS::String descriptor);
         virtual ~CORBACdrDataTypeSupportMetaHolder ();
     
     private:
@@ -28,16 +28,16 @@ namespace OpenRTM {
     
         ::DDS::OpenSplice::DataReaderView * create_view ();
 
-        std::string m_datatype;
-        std::string m_descriptor;
-        std::string m_keys;
+        ::DDS::String_var m_datatype;
+        ::DDS::String_var m_descriptor;
+        ::DDS::String_var m_keys;
     };
     
     class  CORBACdrDataTypeSupport : public virtual CORBACdrDataTypeSupportInterface,
                                                        public ::DDS::OpenSplice::TypeSupport
     {
     public:
-        CORBACdrDataTypeSupport (const char* datatype, const char* keys, const char* descriptor);
+        CORBACdrDataTypeSupport (::DDS::String datatype, ::DDS::String keys, ::DDS::String descriptor);
     
         virtual ~CORBACdrDataTypeSupport ();
     
@@ -152,9 +152,9 @@ namespace OpenRTM {
         virtual DDS::Long read_cdr(
             ::DDS::CDRSample& received_data, 
             ::DDS::SampleInfo& info,
-            ::DDS::Long max_samples,
             ::DDS::ULong sample_states,
-            ::DDS::ULong view_states) THROW_ORB_EXCEPTIONS;
+            ::DDS::ULong view_states,
+            ::DDS::InstanceStateMask instance_states) THROW_ORB_EXCEPTIONS;
 
     
         virtual ::DDS::ReturnCode_t take (

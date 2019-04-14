@@ -10,6 +10,7 @@
 //******************************************************************
 
 #include "CORBACdrDataDcps.h"
+#include <iostream>
 
 #if DDS_USE_EXPLICIT_TEMPLATES
 template class DDS_DCPSUVLSeq < OpenRTM::CORBACdrData, struct CORBACdrDataSeq_uniq_>;

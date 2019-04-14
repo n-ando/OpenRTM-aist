@@ -134,7 +134,7 @@ namespace OpenRTM
       CORBACdrDataDataReader_ptr _this () { return this; }
 
       virtual DDS::Long read (CORBACdrDataSeq& received_data, DDS::SampleInfoSeq& info_seq, DDS::Long max_samples, DDS::ULong sample_states, DDS::ULong view_states, DDS::ULong instance_states) = 0;
-      virtual DDS::Long read_cdr (DDS::CDRSample& received_data, DDS::SampleInfo& info, DDS::Long max_samples, DDS::ULong sample_states, DDS::ULong view_states) = 0;
+      virtual DDS::Long read_cdr (DDS::CDRSample& received_data, DDS::SampleInfo& info, DDS::ULong sample_states, DDS::ULong view_states, ::DDS::InstanceStateMask instance_states) = 0;
       virtual DDS::Long take (CORBACdrDataSeq& received_data, DDS::SampleInfoSeq& info_seq, DDS::Long max_samples, DDS::ULong sample_states, DDS::ULong view_states, DDS::ULong instance_states) = 0;
       virtual DDS::Long read_w_condition (CORBACdrDataSeq& received_data, DDS::SampleInfoSeq& info_seq, DDS::Long max_samples, DDS::ReadCondition_ptr a_condition) = 0;
       virtual DDS::Long take_w_condition (CORBACdrDataSeq& received_data, DDS::SampleInfoSeq& info_seq, DDS::Long max_samples, DDS::ReadCondition_ptr a_condition) = 0;

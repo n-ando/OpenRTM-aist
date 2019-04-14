@@ -1,5 +1,6 @@
 #include "CORBACdrDataDcps_impl.h"
 #include "CORBACdrDataSplDcps.h"
+#include <iostream>
 //
 
 extern v_copyin_result
@@ -14,19 +15,17 @@ __OpenRTM_CORBACdrData__copyOut (
     void *_to);
 
 // DDS OpenRTM::CORBACdrData TypeSupportMetaHolder Object Body
-OpenRTM::CORBACdrDataTypeSupportMetaHolder::CORBACdrDataTypeSupportMetaHolder (const char *datatype, const char *keys, const char* descriptor) :
+OpenRTM::CORBACdrDataTypeSupportMetaHolder::CORBACdrDataTypeSupportMetaHolder (::DDS::String datatype, ::DDS::String keys, ::DDS::String descriptor) :
         DDS::OpenSplice::TypeSupportMetaHolder (datatype, "", keys),
-        m_datatype(datatype), m_keys(keys), m_descriptor(descriptor)
+        m_datatype(DDS::string_dup(datatype)), m_keys(DDS::string_dup(keys)), m_descriptor(DDS::string_dup(descriptor))
 {
     copyIn = (DDS::OpenSplice::cxxCopyIn) __OpenRTM_CORBACdrData__copyIn;
     copyOut = (DDS::OpenSplice::cxxCopyOut) __OpenRTM_CORBACdrData__copyOut;
     
     metaDescriptorArrLength = 1;
-    metaDescriptorLength = m_descriptor.size();
-    //const char *tmp[] = {"<MetaData version=\"1.0.0\"><Module name=\"HelloWorldData\"><Struct name=\"Msg\"><Member name=\"userID\"><Long/></Member><Member name=\"message\"><String/></Member></Struct></Module></MetaData>"};
+    metaDescriptorLength = strlen(m_descriptor)+1;
     metaDescriptor = new const char*[metaDescriptorArrLength];
-    metaDescriptor[0] = new const char[metaDescriptorLength];
-    memcpy((void*)metaDescriptor[0], m_descriptor.c_str(), metaDescriptorLength);
+    metaDescriptor[0] = DDS::string_dup(m_descriptor);
 }
 
 OpenRTM::CORBACdrDataTypeSupportMetaHolder::~CORBACdrDataTypeSupportMetaHolder ()
@@ -37,7 +36,7 @@ OpenRTM::CORBACdrDataTypeSupportMetaHolder::~CORBACdrDataTypeSupportMetaHolder (
 ::DDS::OpenSplice::TypeSupportMetaHolder *
 OpenRTM::CORBACdrDataTypeSupportMetaHolder::clone()
 {
-    return new OpenRTM::CORBACdrDataTypeSupportMetaHolder(m_datatype.c_str(), m_keys.c_str(), m_descriptor.c_str());
+    return new OpenRTM::CORBACdrDataTypeSupportMetaHolder(m_datatype, m_keys, m_descriptor);
 }
 
 ::DDS::OpenSplice::DataWriter *
@@ -59,10 +58,11 @@ OpenRTM::CORBACdrDataTypeSupportMetaHolder::create_view ()
 }
 
 // DDS OpenRTM::CORBACdrData TypeSupport Object Body
-OpenRTM::CORBACdrDataTypeSupport::CORBACdrDataTypeSupport (const char* datatype, const char* keys, const char* descriptor) :
+OpenRTM::CORBACdrDataTypeSupport::CORBACdrDataTypeSupport (::DDS::String datatype, ::DDS::String keys, ::DDS::String descriptor) :
         DDS::OpenSplice::TypeSupport()
 {
     tsMetaHolder = new OpenRTM::CORBACdrDataTypeSupportMetaHolder(datatype, keys, descriptor);
+    
 }
 
 OpenRTM::CORBACdrDataTypeSupport::~CORBACdrDataTypeSupport ()
@@ -252,12 +252,12 @@ OpenRTM::CORBACdrDataDataReader_impl::read (
 OpenRTM::CORBACdrDataDataReader_impl::read_cdr(
     ::DDS::CDRSample & received_data,
     ::DDS::SampleInfo & info,
-    ::DDS::Long max_samples,
     ::DDS::SampleStateMask sample_states,
-    ::DDS::ViewStateMask view_states) THROW_ORB_EXCEPTIONS
+    ::DDS::ViewStateMask view_states,
+    ::DDS::InstanceStateMask instance_states) THROW_ORB_EXCEPTIONS
 {
     ::DDS::ReturnCode_t status = DDS::RETCODE_OK;
-    status = DDS::OpenSplice::FooDataReader_impl::read_cdr(received_data, info, max_samples, sample_states, view_states);
+    status = DDS::OpenSplice::FooDataReader_impl::read_cdr(received_data, info, sample_states, view_states, instance_states);
     return status;
 }
 

@@ -23,37 +23,14 @@
 #include <rapidxml.hpp>
 #include <rapidxml_utils.hpp>
 #include <rapidxml_iterators.hpp>
-#include "ccpp_CORBACdrData.h"
 #include <iostream>
-
+#include <coil/Time.h>
 
 
 namespace RTC
 {
-  OpenSpliceManager* OpenSpliceManager::manager = NULL;
+  OpenSpliceManager* OpenSpliceManager::manager = nullptr;
   coil::Mutex OpenSpliceManager::mutex;
-
-
-  TopicType::TopicType()
-  {
-
-  }
-  TopicType::TopicType(std::string &inid, std::string &inkeys, std::string &indescriptor) :
-          id(inid), keys(inkeys), descriptor(indescriptor)
-  {
-
-  }
-  TopicType::TopicType(const TopicType &obj) {
-      id = obj.id;
-      keys = obj.keys;
-      descriptor = obj.descriptor;
-  }
-  TopicType& TopicType::operator = (const TopicType& obj) {
-      id = obj.id;
-      keys = obj.keys;
-      descriptor = obj.descriptor;
-      return *this;
-  }
 
   template<typename Ch = char>
   class children {
@@ -77,20 +54,55 @@ namespace RTC
       "DDS_RETCODE_ILLEGAL_OPERATION"
   };
 
-
+  /*!
+   * @if jp
+   * @brief DDS::ReturnCode_tの値がRETCODE_OK、RETCODE_NO_DATA以外の場合にエラー出力
+   *
+   * @param status リターンコード
+   * @param info エラーの情報
+   * @return statusががRETCODE_OK、RETCODE_NO_DATAの場合はtrue、それ以外はfalse
+   *
+   * @else
+   * @brief
+   *
+   * @param status
+   * @param info
+   * @return
+   *
+   *
+   * @endif
+   */
   bool OpenSpliceManager::checkStatus(DDS::ReturnCode_t status, const char *info)
   {
       if (status != DDS::RETCODE_OK && status != DDS::RETCODE_NO_DATA) {
-          std::cerr << "Error in " << info << "with return code : " << RetCodeName[status].c_str() << std::endl;
+          std::cerr << "Error in " << info << " with return code : " << RetCodeName[status].c_str() << std::endl;
           return false;
       }
       return true;
   }
 
-  bool OpenSpliceManager::checkHandle(void *handle, std::string info)
+  /*!
+   * @if jp
+   * @brief 参照がNULLの場合にエラー出力
+   *
+   * @param handle ポインタ
+   * @param info エラーの情報
+   * @return handleがnullptrではない場合はtrue、nullptrの場合はfalse
+   *
+   * @else
+   * @brief
+   *
+   * @param handle
+   * @param info
+   * @return
+   *
+   *
+   * @endif
+   */
+  bool OpenSpliceManager::checkHandle(void *handle, const char* info)
   {
       if (!handle) {
-          std::cerr << "Error in " << info.c_str() << ": Creation failed: invalid handle" << std::endl;
+          std::cerr << "Error in " << info << ": Creation failed: invalid handle" << std::endl;
           return false;
       }
       return true;
@@ -151,7 +163,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief トピックマネージャ開始
+   * @brief マネージャ開始
    *
    *
    * @else
@@ -163,46 +175,139 @@ namespace RTC
    */
   void OpenSpliceManager::start()
   {
-      DDS::ReturnCode_t result;
 
       m_factory = DDS::DomainParticipantFactory::get_instance();
-      if(!checkHandle(m_factory, "get_instance() failed"))
+      if(!checkHandle(m_factory.in(), "get_instance() failed"))
       {
           return;
       }
       
       m_domain = DDS::DOMAIN_ID_DEFAULT;
-      m_participant = m_factory->create_participant(m_domain, PARTICIPANT_QOS_DEFAULT, NULL, DDS::STATUS_MASK_NONE);
-      if(!checkHandle(m_participant, "create_participant() failed"))
+      m_participant = m_factory->create_participant(m_domain, PARTICIPANT_QOS_DEFAULT, nullptr, DDS::STATUS_MASK_NONE);
+      if(!checkHandle(m_participant.in(), "create_participant() failed"))
       {
           return;
+      }
+
+  }
+
+  /*!
+   * @if jp
+   * @brief 終了処理
+   * topic、publisher、subscriber、participantの削除を行う
+   *
+   *
+   * @else
+   * @brief
+   *
+   * @return
+   *
+   * @endif
+   */
+  void OpenSpliceManager::finalize()
+  {
+      DDS::ReturnCode_t result;
+
+      if (m_participant.in() != nullptr)
+      {
+          if (m_subscriber.in() != nullptr)
+          {
+              result = m_participant->delete_subscriber(m_subscriber);
+              checkStatus(result, "delete_subscriber() failed");
+          }
+          if (m_publisher.in() != nullptr)
+          {
+              result = m_participant->delete_publisher(m_publisher);
+              if (!checkStatus(result, "delete_publisher() failed"))
+              {
+                  return;
+              }
+          }
+          for (auto topic : m_topics)
+          {
+              result = m_participant->delete_topic(topic.second);
+              if (!checkStatus(result, "delete_topic() failed"))
+              {
+              }
+          }
+          result = m_factory->delete_participant(m_participant);
+
+          if (!checkStatus(result, "delete_participant() failed"))
+          {
+              return;
+          }
+      }
+  }
+
+  /*!
+ * @if jp
+ * @brief Publisher生成
+ *
+ * @return true：生成成功、false：エラー
+ *
+ * @else
+ * @brief create Publisher
+ *
+ * @return
+ *
+ * @endif
+ */
+  bool OpenSpliceManager::createPublisher()
+  {
+      if (m_publisher.in() != nullptr)
+      {
+          return true;
       }
 
       DDS::PublisherQos pQos;
-      result = m_participant->get_default_publisher_qos(pQos);
-      if(!checkStatus(result, "get_default_publisher_qos() failed"))
+      DDS::ReturnCode_t result = m_participant->get_default_publisher_qos(pQos);
+      if (!checkStatus(result, "get_default_publisher_qos() failed"))
       {
-          return;
+          return false;
       }
 
-      m_publisher = m_participant->create_publisher(pQos, NULL, DDS::STATUS_MASK_NONE);
-      if(!checkHandle(m_publisher, "create_publisher() failed"))
+
+      m_publisher = m_participant->create_publisher(pQos, nullptr, DDS::STATUS_MASK_NONE);
+      if (!checkHandle(m_publisher.in(), "create_publisher() failed"))
       {
-          return;
+          return false;
+      }
+      return true;
+  }
+  /*!
+   * @if jp
+   * @brief Subscriber生成
+   *
+   * @return true：生成成功、false：エラー
+   *
+   * @else
+   * @brief create Subscriber
+   *
+   * @return
+   *
+   * @endif
+   */
+  bool OpenSpliceManager::createSubscriber()
+  {
+      if (m_subscriber.in() != nullptr)
+      {
+          return true;
       }
 
       DDS::SubscriberQos sQos;
-      result = m_participant->get_default_subscriber_qos(sQos);
-      if(!checkStatus(result, "get_default_subscriber_qos() failed"))
+      DDS::ReturnCode_t result = m_participant->get_default_subscriber_qos(sQos);
+      if (!checkStatus(result, "get_default_subscriber_qos() failed"))
       {
-          return;
+          return false;
       }
 
-      m_subscriber = m_participant->create_subscriber(sQos, NULL, DDS::STATUS_MASK_NONE);
-      if(!checkHandle(m_subscriber, "create_subscriber() failed"))
+      m_subscriber = m_participant->create_subscriber(sQos, nullptr, DDS::STATUS_MASK_NONE);
+      if (!checkHandle(m_subscriber.in(), "create_subscriber() failed"))
       {
-          return;
+          return false;
       }
+
+      return true;
   }
 
   /*!
@@ -218,18 +323,31 @@ namespace RTC
    *
    * @endif
    */
-  DDS::DomainParticipant_var OpenSpliceManager::getParticipant()
+  DDS::DomainParticipant_ptr OpenSpliceManager::getParticipant()
   {
-      return m_participant;
+      return DDS::DomainParticipant::_duplicate(m_participant.in());
   }
 
-  DDS::DataWriter_var OpenSpliceManager::createWriter(std::string topic_name, DDS::DataWriterListener_var listener)
+  /*!
+   * @if jp
+   * @brief DataWriter生成
+   *
+   * @return DataWriter
+   *
+   * @else
+   * @brief create DataWriter
+   *
+   * @return DataWriter
+   *
+   * @endif
+   */
+  DDS::DataWriter_ptr OpenSpliceManager::createWriter(std::string& topic_name, DDS::DataWriterListener_ptr listener)
   {
-      DDS::Duration_t timeout;
-      DDS::Topic_var topic = m_participant->find_topic(topic_name.c_str(), timeout);
-      if(!checkHandle(topic, "find_topic() failed"))
+      DDS::Duration_t timeout = DDS::DURATION_INFINITE;
+
+      if (m_topics.count(topic_name) == 0)
       {
-           return nullptr;
+          return nullptr;
       }
       DDS::DataWriterQos wQos;
       DDS::ReturnCode_t result = m_publisher->get_default_datawriter_qos(wQos);
@@ -239,7 +357,7 @@ namespace RTC
       }
 
       DDS::TopicQos tQos;
-      result = topic->get_qos(tQos);
+      result = m_topics[topic_name]->get_qos(tQos);
       if (!checkStatus(result, "get_default_datawriter_qos() failed"))
       {
           return nullptr;
@@ -253,20 +371,38 @@ namespace RTC
 
       wQos.writer_data_lifecycle.autodispose_unregistered_instances = false;
 
-      DDS::DataWriter_var writer = m_publisher->create_datawriter(topic, wQos, listener, DDS::STATUS_MASK_NONE);
-      if (!checkHandle(writer, "create_datawriter() failed"))
+      DDS::DataWriter_var writer = m_publisher->create_datawriter(m_topics[topic_name].in(), wQos, listener, DDS::STATUS_MASK_NONE);
+      if (!checkHandle(writer.in(), "create_datawriter() failed"))
       {
           return nullptr;
       }
 
-      return writer;
+      return DDS::DataWriter::_duplicate(writer.in());
   }
 
-  DDS::DataReader_var OpenSpliceManager::createReader(std::string topic_name, DDS::DataReaderListener_var listener)
+  /*!
+   * @if jp
+   * @brief DataReader生成
+   *
+   * @return DataReader
+   *
+   * @else
+   * @brief create DataReader
+   *
+   * @return DataReader
+   *
+   * @endif
+   */
+  DDS::DataReader_ptr OpenSpliceManager::createReader(std::string &topic_name, DDS::DataReaderListener_ptr listener)
   {
-      DDS::Duration_t timeout;
-      DDS::Topic_var topic = m_participant->find_topic(topic_name.c_str(), timeout);
-      if (!checkHandle(topic, "find_topic() failed"))
+      if (m_topics.count(topic_name) == 0)
+      {
+          return nullptr;
+      }
+
+      DDS::Duration_t timeout = DDS::DURATION_INFINITE;
+
+      if (!checkHandle(m_topics[topic_name].in(), "find_topic() failed"))
       {
           return nullptr;
       }
@@ -278,7 +414,7 @@ namespace RTC
       }
 
       DDS::TopicQos tQos;
-      result = topic->get_qos(tQos);
+      result = m_topics[topic_name]->get_qos(tQos);
       if (!checkStatus(result, "get_default_datawriter_qos() failed"))
       {
           return nullptr;
@@ -292,24 +428,62 @@ namespace RTC
       DDS::StatusMask mask =
           DDS::DATA_AVAILABLE_STATUS | DDS::REQUESTED_DEADLINE_MISSED_STATUS;
 
-      DDS::DataReader_var reader = m_subscriber->create_datareader(topic, rQos, listener, mask);
-      if (!checkHandle(reader, "create_datawriter() failed"))
+      DDS::DataReader_var reader = m_subscriber->create_datareader(m_topics[topic_name].in(), rQos, listener, mask);
+      if (!checkHandle(reader.in(), "create_datareader() failed"))
       {
           return nullptr;
       }
 
-      return reader;
+      return DDS::DataReader::_duplicate(reader.in());
   }
-  DDS::ReturnCode_t OpenSpliceManager::deleteWriter(DDS::DataWriter_var writer)
+  /*!
+   * @if jp
+   * @brief DataWriter削除
+   *
+   * @return DataWriter
+   *
+   * @else
+   * @brief delete DataWriter
+   *
+   * @return DataWriter
+   *
+   * @endif
+   */
+  DDS::ReturnCode_t OpenSpliceManager::deleteWriter(DDS::DataWriter_ptr writer)
   {
       return m_publisher->delete_datawriter(writer);
   }
-
-  DDS::ReturnCode_t OpenSpliceManager::deleteReader(DDS::DataReader_var reader)
+  /*!
+   * @if jp
+   * @brief DataReader削除
+   *
+   * @return DataReader
+   *
+   * @else
+   * @brief delete DataReader
+   *
+   * @return DataReader
+   *
+   * @endif
+   */
+  DDS::ReturnCode_t OpenSpliceManager::deleteReader(DDS::DataReader_ptr reader)
   {
       return m_subscriber->delete_datareader(reader);
   }
-  bool OpenSpliceManager::createTopic(std::string topic_name, std::string typeName)
+  /*!
+   * @if jp
+   * @brief トピック生成
+   *
+   * @return DataReader
+   *
+   * @else
+   * @brief create Topic
+   *
+   * @return DataReader
+   *
+   * @endif
+   */
+  bool OpenSpliceManager::createTopic(std::string& topic_name, std::string& typeName)
   {
       DDS::ReturnCode_t result;
       DDS::TopicQos tQos;
@@ -320,11 +494,14 @@ namespace RTC
       }
       tQos.reliability.kind = DDS::RELIABLE_RELIABILITY_QOS;
       tQos.durability.kind = DDS::TRANSIENT_DURABILITY_QOS;
-      DDS::Topic_var topic = m_participant->create_topic("HelloWorldData_Msg", typeName.c_str(), tQos, NULL, DDS::STATUS_MASK_NONE);
-      if (!checkHandle(topic, "create_topic() failed"))
+      DDS::Topic_var topic = m_participant->create_topic(topic_name.c_str(), typeName.c_str(), tQos, nullptr, DDS::STATUS_MASK_NONE);
+      
+      if (!checkHandle(topic.in(), "create_topic() failed"))
       {
           return false;
       }
+
+      m_topics[topic_name] = DDS::Topic::_duplicate(topic.in());
       return true;
   }
 
@@ -343,23 +520,36 @@ namespace RTC
    *
    * @endif
    */
-  bool OpenSpliceManager::registerType(std::string datatype, std::string idlpath)
+  bool OpenSpliceManager::registerType(std::string& datatype, std::string& idlpath)
   {
+      if (m_typesupports.count(datatype))
+      {
+          return true;
+      }
+      
       coil::vstring comout;
       std::string comin = "idlpp -l pythondesc ";
+      
       comin.append(idlpath);
+      
+      
       coil::create_process(comin, comout);
+      
       std::string xmlstr;
       for (auto c : comout)
       {
           xmlstr.append(c);
       }
 
+      
+      
       rapidxml::xml_document<> doc;
       doc.parse<rapidxml::parse_trim_whitespace>(const_cast<char*>(xmlstr.c_str()));
       rapidxml::xml_node<>* topics = doc.first_node("topics");
-
-      std::map<std::string, TopicType> topiclist;
+      
+      DDS::String_var id_;
+      DDS::String_var keys_;
+      DDS::String_var descriptor_;
       if (topics != nullptr)
       {
           for (auto& topictype : children<>(topics))
@@ -373,26 +563,40 @@ namespace RTC
                   rapidxml::xml_node<>* child = descriptor->first_node();
                   if (child != nullptr)
                   {
-                      //std::cout << id->value() << "\t" << child->value() << std::endl;
-                      topiclist[id->value()] = TopicType(std::string(id->value()), std::string(keys->value()), std::string(child->value()));
+                      if (strncmp(id->value(), datatype.c_str(), id->value_size()) == 0)
+                      {
+                          id_ = DDS::string_dup(id->value());
+                          keys_ = DDS::string_dup(keys->value());
+                          descriptor_ = DDS::string_dup(child->value());
+                      }
                   }
               }
           }
       }
-
-      if (topiclist.count(datatype) == 0)
+      
+      if (id_.in() == nullptr)
       {
           return false;
       }
       
-      OpenRTM::CORBACdrDataTypeSupport_var typesupport = new OpenRTM::CORBACdrDataTypeSupport(datatype.c_str(), topiclist[datatype].keys.c_str(), topiclist[datatype].descriptor.c_str());
 
-      DDS::String_var typeName = typesupport->get_type_name();
-      DDS::ReturnCode_t result = typesupport->register_type(m_participant, typeName);
-      if (checkStatus(result, "register_type() failed"))
+      if (!checkHandle(m_participant.in(), "lookup_participant() failed"))
       {
           return false;
       }
+
+
+      OpenRTM::CORBACdrDataTypeSupport_var typesupport = new OpenRTM::CORBACdrDataTypeSupport(id_.inout(), keys_.inout(), descriptor_.inout());
+      
+
+      DDS::String_var typeName = typesupport->get_type_name();
+      DDS::ReturnCode_t result = typesupport->register_type(m_participant.in(), typeName.in());
+      
+      if (!checkStatus(result, "register_type() failed"))
+      {
+          return false;
+      }
+      m_typesupports[datatype] = OpenRTM::CORBACdrDataTypeSupport::_duplicate(typesupport.in());
       return true;
   }
 
