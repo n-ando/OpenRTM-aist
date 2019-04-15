@@ -9,7 +9,7 @@
 #include <iostream>
 
 v_copyin_result
-OpenSplice__OpenRTM_CORBACdrData__copyIn(
+OpenSplice_OpenRTM_CORBACdrData_copyIn(
     c_base base,
     const struct ::OpenRTM::CORBACdrData *from,
     struct OpenSplice_OpenRTM_CORBACdrData *to)
@@ -59,7 +59,7 @@ OpenSplice__OpenRTM_CORBACdrData__copyIn(
 }
 
 void
-OpenSplice__OpenRTM_CORBACdrData__copyOut(
+OpenSplice_OpenRTM_CORBACdrData_copyOut(
     const void *_from,
     void *_to)
 {

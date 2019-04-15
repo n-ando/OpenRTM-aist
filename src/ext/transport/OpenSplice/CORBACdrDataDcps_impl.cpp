@@ -9,8 +9,8 @@ OpenRTM::CORBACdrDataTypeSupportMetaHolder::CORBACdrDataTypeSupportMetaHolder (:
         DDS::OpenSplice::TypeSupportMetaHolder (datatype, "", keys),
         m_datatype(DDS::string_dup(datatype)), m_keys(DDS::string_dup(keys)), m_descriptor(DDS::string_dup(descriptor))
 {
-    copyIn = (DDS::OpenSplice::cxxCopyIn) OpenSplice__OpenRTM_CORBACdrData__copyIn;
-    copyOut = (DDS::OpenSplice::cxxCopyOut) OpenSplice__OpenRTM_CORBACdrData__copyOut;
+    copyIn = (DDS::OpenSplice::cxxCopyIn) OpenSplice_OpenRTM_CORBACdrData_copyIn;
+    copyOut = (DDS::OpenSplice::cxxCopyOut) OpenSplice_OpenRTM_CORBACdrData_copyOut;
     
     metaDescriptorArrLength = 1;
     metaDescriptorLength = strlen(m_descriptor)+1;
@@ -565,7 +565,7 @@ OpenRTM::CORBACdrDataDataReader_impl::dataSeqCopyOut (
     void * to)
 {
     OpenRTM::CORBACdrData *data = reinterpret_cast<OpenRTM::CORBACdrData *>(to);
-    OpenSplice__OpenRTM_CORBACdrData__copyOut(from, data);
+    OpenSplice_OpenRTM_CORBACdrData_copyOut(from, data);
 }
 
 void
@@ -574,7 +574,7 @@ OpenRTM::CORBACdrDataDataReader_impl::copyDataOut (
     void * to)
 {
     OpenRTM::CORBACdrData *data = reinterpret_cast<OpenRTM::CORBACdrData *>(to);
-    OpenSplice__OpenRTM_CORBACdrData__copyOut(from, data);
+    OpenSplice_OpenRTM_CORBACdrData_copyOut(from, data);
 }
 
 
