@@ -123,12 +123,13 @@ namespace coil
       CloseHandle(pi.hThread);
 
 
-      char Buf[65535] = { 0 };
       DWORD len;
-      ReadFile(rPipe, Buf, sizeof(Buf) - 1, &len, NULL);
+      DWORD size = GetFileSize(rPipe, NULL);
+      std::auto_ptr<CHAR> Buf(new CHAR[size]);
+      ReadFile(rPipe, Buf.get(), size, &len, NULL);
 
 
-      out = coil::split(std::string(Buf), "\n");
+      out = coil::split(std::string(Buf.get()), "\n");
 
       for(auto & o : out)
       {
