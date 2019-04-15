@@ -8,8 +8,8 @@
 //  OpenSplice 6.9.190227OSS
 //  
 //******************************************************************
-#ifndef _CORBACDRDATA_H_
-#define _CORBACDRDATA_H_
+#ifndef OPENSPLICE_CORBACDRDATA_H_
+#define OPENSPLICE_CORBACDRDATA_H_
 
 #include "sacpp_mapping.h"
 

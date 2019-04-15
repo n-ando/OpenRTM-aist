@@ -3,24 +3,14 @@
 #include <iostream>
 //
 
-extern v_copyin_result
-__OpenRTM_CORBACdrData__copyIn (
-    c_base base,
-    const struct OpenRTM::CORBACdrData *from,
-    struct _OpenRTM_CORBACdrData *to);
-
-extern void
-__OpenRTM_CORBACdrData__copyOut (
-    const void *_from,
-    void *_to);
 
 // DDS OpenRTM::CORBACdrData TypeSupportMetaHolder Object Body
 OpenRTM::CORBACdrDataTypeSupportMetaHolder::CORBACdrDataTypeSupportMetaHolder (::DDS::String datatype, ::DDS::String keys, ::DDS::String descriptor) :
         DDS::OpenSplice::TypeSupportMetaHolder (datatype, "", keys),
         m_datatype(DDS::string_dup(datatype)), m_keys(DDS::string_dup(keys)), m_descriptor(DDS::string_dup(descriptor))
 {
-    copyIn = (DDS::OpenSplice::cxxCopyIn) __OpenRTM_CORBACdrData__copyIn;
-    copyOut = (DDS::OpenSplice::cxxCopyOut) __OpenRTM_CORBACdrData__copyOut;
+    copyIn = (DDS::OpenSplice::cxxCopyIn) OpenSplice__OpenRTM_CORBACdrData__copyIn;
+    copyOut = (DDS::OpenSplice::cxxCopyOut) OpenSplice__OpenRTM_CORBACdrData__copyOut;
     
     metaDescriptorArrLength = 1;
     metaDescriptorLength = strlen(m_descriptor)+1;
@@ -456,9 +446,9 @@ OpenRTM::CORBACdrDataDataReader_impl::return_loan (
                     if ( result == ::DDS::RETCODE_OK ) {
                         if ( !received_data.release() ) {
                             OpenRTM::CORBACdrDataSeq::freebuf( received_data.get_buffer(false) );
-                            received_data.replace(0, 0, NULL, false);
+                            received_data.replace(0, 0, nullptr, false);
                             ::DDS::SampleInfoSeq::freebuf( info_seq.get_buffer(false) );
-                            info_seq.replace(0, 0, NULL, false);
+                            info_seq.replace(0, 0, nullptr, false);
                         }
                     }
                 }
@@ -575,7 +565,7 @@ OpenRTM::CORBACdrDataDataReader_impl::dataSeqCopyOut (
     void * to)
 {
     OpenRTM::CORBACdrData *data = reinterpret_cast<OpenRTM::CORBACdrData *>(to);
-    __OpenRTM_CORBACdrData__copyOut(from, data);
+    OpenSplice__OpenRTM_CORBACdrData__copyOut(from, data);
 }
 
 void
@@ -584,7 +574,7 @@ OpenRTM::CORBACdrDataDataReader_impl::copyDataOut (
     void * to)
 {
     OpenRTM::CORBACdrData *data = reinterpret_cast<OpenRTM::CORBACdrData *>(to);
-    __OpenRTM_CORBACdrData__copyOut(from, data);
+    OpenSplice__OpenRTM_CORBACdrData__copyOut(from, data);
 }
 
 
@@ -825,9 +815,9 @@ OpenRTM::CORBACdrDataDataReaderView_impl::return_loan (
                     if ( result == ::DDS::RETCODE_OK ) {
                         if ( !received_data.release() ) {
                             OpenRTM::CORBACdrDataSeq::freebuf( received_data.get_buffer(false) );
-                            received_data.replace(0, 0, NULL, false);
+                            received_data.replace(0, 0, nullptr, false);
                             ::DDS::SampleInfoSeq::freebuf( info_seq.get_buffer(false) );
-                            info_seq.replace(0, 0, NULL, false);
+                            info_seq.replace(0, 0, nullptr, false);
                         }
                     } else if ( result == ::DDS::RETCODE_NO_DATA ) {
                         if ( received_data.release() ) {

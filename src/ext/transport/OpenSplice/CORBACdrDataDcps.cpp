@@ -43,7 +43,7 @@ DDS::Boolean OpenRTM::CORBACdrDataTypeSupportInterface::_local_is_a (const char 
 
 OpenRTM::CORBACdrDataTypeSupportInterface_ptr OpenRTM::CORBACdrDataTypeSupportInterface::_narrow (DDS::Object_ptr p)
 {
-   OpenRTM::CORBACdrDataTypeSupportInterface_ptr result = NULL;
+   OpenRTM::CORBACdrDataTypeSupportInterface_ptr result = nullptr;
    if (p && p->_is_a (OpenRTM::CORBACdrDataTypeSupportInterface::_local_id))
    {
       result = dynamic_cast < OpenRTM::CORBACdrDataTypeSupportInterface_ptr> (p);
@@ -87,7 +87,7 @@ DDS::Boolean OpenRTM::CORBACdrDataDataWriter::_local_is_a (const char * _id)
 
 OpenRTM::CORBACdrDataDataWriter_ptr OpenRTM::CORBACdrDataDataWriter::_narrow (DDS::Object_ptr p)
 {
-   OpenRTM::CORBACdrDataDataWriter_ptr result = NULL;
+   OpenRTM::CORBACdrDataDataWriter_ptr result = nullptr;
    if (p && p->_is_a (OpenRTM::CORBACdrDataDataWriter::_local_id))
    {
       result = dynamic_cast < OpenRTM::CORBACdrDataDataWriter_ptr> (p);
@@ -131,7 +131,7 @@ DDS::Boolean OpenRTM::CORBACdrDataDataReader::_local_is_a (const char * _id)
 
 OpenRTM::CORBACdrDataDataReader_ptr OpenRTM::CORBACdrDataDataReader::_narrow (DDS::Object_ptr p)
 {
-   OpenRTM::CORBACdrDataDataReader_ptr result = NULL;
+   OpenRTM::CORBACdrDataDataReader_ptr result = nullptr;
    if (p && p->_is_a (OpenRTM::CORBACdrDataDataReader::_local_id))
    {
       result = dynamic_cast < OpenRTM::CORBACdrDataDataReader_ptr> (p);
@@ -175,7 +175,7 @@ DDS::Boolean OpenRTM::CORBACdrDataDataReaderView::_local_is_a (const char * _id)
 
 OpenRTM::CORBACdrDataDataReaderView_ptr OpenRTM::CORBACdrDataDataReaderView::_narrow (DDS::Object_ptr p)
 {
-   OpenRTM::CORBACdrDataDataReaderView_ptr result = NULL;
+   OpenRTM::CORBACdrDataDataReaderView_ptr result = nullptr;
    if (p && p->_is_a (OpenRTM::CORBACdrDataDataReaderView::_local_id))
    {
       result = dynamic_cast < OpenRTM::CORBACdrDataDataReaderView_ptr> (p);
