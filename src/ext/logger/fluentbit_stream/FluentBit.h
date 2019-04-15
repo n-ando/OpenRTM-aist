@@ -59,7 +59,7 @@ namespace RTC
   public:
     FluentBitStream();
 
-    virtual ~FluentBitStream();
+    ~FluentBitStream() override;
 
     bool init(const coil::Properties& prop);
 
@@ -69,7 +69,7 @@ namespace RTC
 
     int setServiceOption(const coil::Properties& prop);
 
-    virtual void write(int level, const std::string &name, const std::string &date, const std::string &mes);
+    void write(int level, const std::string &name, const std::string &date, const std::string &mes) override;
 
   protected:
     std::streamsize pushLogger(int level, const std::string &name, const std::string &date, const char* mes);
@@ -244,7 +244,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~FluentBit(void);
+    ~FluentBit(void) override;
 
     /*!
      * @if jp
@@ -267,7 +267,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual bool init(const coil::Properties& prop);
+    bool init(const coil::Properties& prop) override;
 
     /*!
      * @if jp
@@ -288,7 +288,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual coil::LogStreamBuffer* getStreamBuffer();
+    coil::LogStreamBuffer* getStreamBuffer() override;
 
   protected:
     FluentBitStream m_fbstream;
@@ -298,6 +298,6 @@ namespace RTC
 extern "C"
 {
   void DLL_EXPORT FluentBitInit();
-};
+}
 
 #endif // RTC_LOGGER_FLUENTBIT_H
