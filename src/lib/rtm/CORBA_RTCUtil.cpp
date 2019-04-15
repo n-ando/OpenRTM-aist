@@ -1273,7 +1273,7 @@ namespace CORBA_RTCUtil
     if (CORBA::is_nil(port1)) { return RTC::BAD_PARAMETER; }
 
     // Connect
-    return connect(std::move(name), prop, port0, port1);
+    return connect(name, prop, port0, port1);
   }
   /*!
    * @if jp
