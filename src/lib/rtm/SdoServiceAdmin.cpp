@@ -476,9 +476,9 @@ namespace RTC
     SdoServiceConsumerFactory& factory(SdoServiceConsumerFactory::instance());
     coil::vstring consumerTypes(factory.getIdentifiers());
 
-    for (coil::vstring::iterator contype = consumerTypes.begin(); contype != consumerTypes.end(); ++contype)
+    for (auto & consumerType : consumerTypes)
       {
-        if (*contype ==
+        if (consumerType ==
             static_cast<const char*>(sProfile.interface_type))
           {
             RTC_DEBUG(("%s exists in the SDO service factory.",
