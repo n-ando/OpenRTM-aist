@@ -70,6 +70,7 @@ else()
 	add_library(${target} SHARED ${srcs})
 	openrtm_common_set_compile_props(${target})
 	openrtm_include_rtm(${target})
+	openrtm_set_link_props_shared(${target})
 	target_include_directories(${target} SYSTEM
 		PRIVATE ${CATKIN_DEVEL_PREFIX}/${CATKIN_GLOBAL_INCLUDE_DESTINATION}/ros
 		PRIVATE${catkin_INCLUDE_DIRS}

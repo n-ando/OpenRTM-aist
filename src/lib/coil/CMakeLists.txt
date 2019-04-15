@@ -178,9 +178,11 @@ else(VXWORKS)
 		PUBLIC ${CMAKE_BINARY_DIR}/src/lib
 		PRIVATE ${UUID_INCLUDE_DIRS})
 	add_library(${COIL_PROJECT_NAME}-static STATIC $<TARGET_OBJECTS:${COIL_PROJECT_NAME}_objlib>)
+	openrtm_set_link_props_static(${COIL_PROJECT_NAME}-static)
 	set_target_properties(${COIL_PROJECT_NAME}-static PROPERTIES DEBUG_POSTFIX d)
 
 	add_library(${COIL_PROJECT_NAME} SHARED $<TARGET_OBJECTS:${COIL_PROJECT_NAME}_objlib>)
+	openrtm_set_link_props_shared(${COIL_PROJECT_NAME})
 	set_target_properties(${COIL_PROJECT_NAME} PROPERTIES DEBUG_POSTFIX d)
 	target_link_libraries(${COIL_PROJECT_NAME} PRIVATE ${RTM_LINKER_OPTION}  ${UUID_LIBRARIES})
 

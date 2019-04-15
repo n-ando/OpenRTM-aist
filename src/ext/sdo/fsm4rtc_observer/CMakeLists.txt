@@ -56,6 +56,7 @@ add_dependencies(${PROJECT_NAME}_objlib ${PROJECT_NAME}_IDLTGT)
 	add_library(${PROJECT_NAME} SHARED
 		$<TARGET_OBJECTS:${PROJECT_NAME}_objlib>
 		$<TARGET_OBJECTS:${PROJECT_NAME}_idl_objlib>)
+	openrtm_set_link_props_shared(${PROJECT_NAME})
 	target_link_libraries(${PROJECT_NAME} PRIVATE ${libs} ${RTM_LINKER_OPTION})
 	set_target_properties(${PROJECT_NAME} PROPERTIES PREFIX "")
 	set_target_properties(${PROJECT_NAME} PROPERTIES

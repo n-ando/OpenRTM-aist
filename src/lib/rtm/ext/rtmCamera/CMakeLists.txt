@@ -48,10 +48,12 @@ else()
 	target_include_directories(${PROJECT_NAME}_objlib SYSTEM
 		PUBLIC ${PROJECT_BINARY_DIR})
 	add_library(${PROJECT_NAME}-static STATIC $<TARGET_OBJECTS:${PROJECT_NAME}_objlib>)
+	openrtm_set_link_props_static(${PROJECT_NAME}-static)
 	set_target_properties(${PROJECT_NAME}-static PROPERTIES DEBUG_POSTFIX d)
 
 	add_library(${PROJECT_NAME} SHARED
 		$<TARGET_OBJECTS:${PROJECT_NAME}_objlib>)
+	openrtm_set_link_props_shared(${PROJECT_NAME})
 	set_target_properties(${PROJECT_NAME} PROPERTIES DEBUG_POSTFIX d)
 	if(WIN32)
 		target_link_libraries(${PROJECT_NAME} PRIVATE

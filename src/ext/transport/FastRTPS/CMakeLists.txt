@@ -41,6 +41,7 @@ else()
 	add_library(${target} SHARED ${srcs})
 	openrtm_common_set_compile_props(${target})
 	openrtm_include_rtm(${target})
+	openrtm_set_link_props_shared(${target})
 	target_link_libraries(${target} PRIVATE ${libs} ${RTM_LINKER_OPTION} fastcdr fastrtps)
 	set_target_properties(${target} PROPERTIES PREFIX "")
 

@@ -80,6 +80,7 @@ function(examples_build target)
 		add_library(${target} SHARED
 			$<TARGET_OBJECTS:${target}_objlib>
 			${EB_GENOBJLIB})
+		openrtm_set_link_props_shared(${target})
 		target_link_libraries(${target} PRIVATE ${libs} ${RTM_LINKER_OPTION})
 		set_target_properties(${target} PROPERTIES PREFIX "")
 
