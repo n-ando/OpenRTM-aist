@@ -125,7 +125,7 @@ namespace coil
 
       DWORD len;
       DWORD size = GetFileSize(rPipe, NULL);
-      std::auto_ptr<CHAR> Buf(new CHAR[size]);
+      std::unique_ptr<CHAR> Buf(new CHAR[size]);
       ReadFile(rPipe, Buf.get(), size, &len, NULL);
 
 
