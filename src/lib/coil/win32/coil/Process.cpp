@@ -18,6 +18,7 @@
  */
 
 #include <coil/Process.h>
+#include <memory>
 
 namespace coil
 {
