@@ -333,7 +333,7 @@ namespace RTC
       }
     else
       {
-        if (m_rtcHeartbeat == true && m_rtcHblistenerid != nullptr)
+        if (m_rtcHeartbeat && m_rtcHblistenerid != nullptr)
           {
             unsetRTCHeartbeat();
             m_timer.stop();
@@ -404,7 +404,7 @@ namespace RTC
       }
     else
       {
-        if (m_ecHeartbeat == true && m_ecHblistenerid != nullptr)
+        if (m_ecHeartbeat && m_ecHblistenerid != nullptr)
           {
             unsetECHeartbeat();
             m_timer.stop();
