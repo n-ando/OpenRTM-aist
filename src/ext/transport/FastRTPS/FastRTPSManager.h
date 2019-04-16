@@ -216,6 +216,20 @@ namespace RTC
          * @endif
          */
         static FastRTPSManager& instance(std::string xml_profile_file = "");
+        /*!
+         * @if jp
+         * @brief FastRTPManagerが初期化されている場合に終了処理を呼び出す
+         *
+         *
+         * @else
+         * @brief
+         *
+         * @return
+         *
+         *
+         * @endif
+         */
+        static void shutdown_global();
     private:
         static FastRTPSManager* manager;
         static Mutex mutex;

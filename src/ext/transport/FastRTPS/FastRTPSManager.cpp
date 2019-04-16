@@ -265,5 +265,26 @@ namespace RTC
     }
     return *manager;
   }
+
+  /*!
+   * @if jp
+   * @brief FastRTPManagerが初期化されている場合に終了処理を呼び出す
+   *
+   *
+   * @else
+   * @brief
+   *
+   * @return
+   *
+   *
+   * @endif
+   */
+  void FastRTPSManager::shutdown_global()
+  {
+      if (manager)
+      {
+          manager->shutdown();
+      }
+  }
 }
 
