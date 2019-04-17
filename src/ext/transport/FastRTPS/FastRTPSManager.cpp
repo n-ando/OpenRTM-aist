@@ -123,7 +123,6 @@ namespace RTC
    */
   void FastRTPSManager::shutdown()
   {
-      Guard guard(mutex);
       eprosima::fastrtps::Domain::removeParticipant(m_participant);
       manager = nullptr;
   }
@@ -143,6 +142,7 @@ namespace RTC
    */
   eprosima::fastrtps::Participant* FastRTPSManager::getParticipant()
   {
+      Guard guard(mutex);
       return m_participant;
   }
 
@@ -163,6 +163,7 @@ namespace RTC
    */
   bool FastRTPSManager::registerType(eprosima::fastrtps::TopicDataType* type)
   {
+      Guard guard(mutex);
       if (registeredType(type->getName()))
       {
           return true;
@@ -187,6 +188,7 @@ namespace RTC
    */
   bool FastRTPSManager::registeredType(const char* name)
   {
+      Guard guard(mutex);
       eprosima::fastrtps::TopicDataType* type_;
       return eprosima::fastrtps::Domain::getRegisteredType(m_participant, name, &type_);
   }
@@ -208,6 +210,7 @@ namespace RTC
    */
   bool FastRTPSManager::unregisterType(const char* name)
   {
+      Guard guard(mutex);
       if (!registeredType(name))
       {
           return false;
@@ -281,11 +284,11 @@ namespace RTC
    */
   void FastRTPSManager::shutdown_global()
   {
+      Guard guard(mutex);
       if (manager)
       {
           manager->shutdown();
       }
-      manager = nullptr;
   }
 }
 
