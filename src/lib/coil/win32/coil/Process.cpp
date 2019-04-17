@@ -18,6 +18,7 @@
  */
 
 #include <coil/Process.h>
+#include <memory>
 
 namespace coil
 {
@@ -85,7 +86,7 @@ namespace coil
       sa.nLength = sizeof(sa);
       sa.bInheritHandle = TRUE;
       sa.lpSecurityDescriptor = NULL;
-      if (!CreatePipe(&rPipe, &wPipe, &sa, 0))
+      if (!CreatePipe(&rPipe, &wPipe, &sa, 65535))
       {
           return -1;
       }
@@ -123,12 +124,13 @@ namespace coil
       CloseHandle(pi.hThread);
 
 
-      char Buf[1025] = { 0 };
       DWORD len;
-      ReadFile(rPipe, Buf, sizeof(Buf) - 1, &len, NULL);
+      DWORD size = GetFileSize(rPipe, NULL);
+      std::unique_ptr<CHAR> Buf(new CHAR[size]);
+      ReadFile(rPipe, Buf.get(), size, &len, NULL);
 
 
-      out = coil::split(std::string(Buf), "\n");
+      out = coil::split(std::string(Buf.get()), "\n");
 
       for(auto & o : out)
       {

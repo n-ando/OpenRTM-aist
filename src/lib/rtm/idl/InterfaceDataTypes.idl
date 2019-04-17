@@ -918,6 +918,28 @@ module RTC {
      * @typedef RFIDTagData
      */
     typedef sequence<octet> RFIDTagData;
+
+    #pragma keylist ActArrayActuatorPos
+    #pragma keylist ActArrayActuatorSpeed
+    #pragma keylist ActArrayActuatorCurrent
+    #pragma keylist ActArrayState
+    #pragma keylist CameraImage
+    #pragma keylist Fiducials
+    #pragma keylist GPSData
+    #pragma keylist GripperState
+    #pragma keylist INSData
+    #pragma keylist LimbState
+    #pragma keylist Hypotheses2D
+    #pragma keylist Hypotheses3D
+    #pragma keylist Features
+    #pragma keylist MultiCameraImages
+    #pragma keylist Path2D
+    #pragma keylist Path3D
+    #pragma keylist PointCloud
+    #pragma keylist PanTiltAngles
+    #pragma keylist PanTiltState
+    #pragma keylist RangeData
+    #pragma keylist IntensityData
 };
 
 #endif // InterfaceDataTypes_idl
