@@ -22,6 +22,17 @@
 
 #include <rtm/Manager.h>
 
+class ManagerActionListener : public RTM::ManagerActionListener
+{
+public:
+    ManagerActionListener();
+    ~ManagerActionListener() override;
+    void preShutdown() override;
+    void postShutdown() override;
+    void postReinit() override;
+    void preReinit() override;
+};
+
 
 extern "C"
 {

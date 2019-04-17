@@ -53,40 +53,6 @@ namespace RTC
   ROSOutPort::~ROSOutPort(void)
   {
     RTC_PARANOID(("~ROSOutPort()"));
-    
-    for(auto & con : m_tcp_connecters)
-    {
-      con.second->drop(ros::Connection::Destructing);
-    }
-    RosTopicManager& topicmgr = RosTopicManager::instance();
-    topicmgr.removePublisher(this);
-
-    if(!m_roscorehost.empty())
-    {
-
-      XmlRpc::XmlRpcValue request;
-      XmlRpc::XmlRpcValue response;
-
-
-      XmlRpc::XmlRpcClient *master = ros::XMLRPCManager::instance()->getXMLRPCClient(m_roscorehost, m_roscoreport, "/");
-
-      
-      request[0] = m_callerid;
-      request[1] = m_topic;
-      request[2] = std::string(ros::XMLRPCManager::instance()->getServerURI());
-
-      
-
-      RTC_PARANOID(("unregisterPublisher:%s", std::string(ros::XMLRPCManager::instance()->getServerURI()).c_str()));
-      bool b = master->execute("unregisterPublisher", request, response);
-      if(!b)
-      {
-        RTC_ERROR(("unregisterPublisher Error"));
-      }
-      
-    }
-
-    
   }
 
   /*!
@@ -328,9 +294,38 @@ namespace RTC
   void ROSOutPort::
   unsubscribeInterface(const SDOPackage::NVList& properties)
   {
-    RTC_TRACE(("unsubscribeInterface()"));
-    RTC_DEBUG_STR((NVUtil::toString(properties)));
-    
+      RTC_DEBUG_STR((NVUtil::toString(properties)));
+      for (auto & con : m_tcp_connecters)
+      {
+          con.second->drop(ros::Connection::Destructing);
+      }
+      RosTopicManager& topicmgr = RosTopicManager::instance();
+      topicmgr.removePublisher(this);
+
+      if (!m_roscorehost.empty())
+      {
+
+          XmlRpc::XmlRpcValue request;
+          XmlRpc::XmlRpcValue response;
+
+
+          XmlRpc::XmlRpcClient *master = ros::XMLRPCManager::instance()->getXMLRPCClient(m_roscorehost, m_roscoreport, "/");
+
+
+          request[0] = m_callerid;
+          request[1] = m_topic;
+          request[2] = std::string(ros::XMLRPCManager::instance()->getServerURI());
+
+
+
+          RTC_PARANOID(("unregisterPublisher:%s", std::string(ros::XMLRPCManager::instance()->getServerURI()).c_str()));
+          bool b = master->execute("unregisterPublisher", request, response);
+          if (!b)
+          {
+              RTC_ERROR(("unregisterPublisher Error"));
+          }
+
+      }
   }
 
 
