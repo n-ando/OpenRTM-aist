@@ -16,7 +16,9 @@
  *
  */
 
-
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
+#include <winsock2.h>
+#endif
 #include "RosTopicManager.h"
 #include <ros/xmlrpc_manager.h>
 #include <ros/network.h>
@@ -71,7 +73,7 @@ namespace RTC
    *
    * @endif
    */
-  RosTopicManager::RosTopicManager(const RosTopicManager &manager)// : rtclog("RosTopicManager")
+  RosTopicManager::RosTopicManager(const RosTopicManager &/*mgr*/)// : rtclog("RosTopicManager")
   {
     
   }

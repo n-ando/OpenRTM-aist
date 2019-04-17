@@ -17,7 +17,9 @@
  *
  */
 
-
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
+#include <winsock2.h>
+#endif
 #include "ROSInPort.h"
 #include <xmlrpcpp/XmlRpc.h>
 #include <xmlrpcpp/XmlRpcSocket.h>
@@ -321,7 +323,7 @@ namespace RTC
       return;
     }
 
-    int code = response[0];
+    //int code = response[0];
     std::string msg = response[1];
 
     std::string id = response[2][0];
