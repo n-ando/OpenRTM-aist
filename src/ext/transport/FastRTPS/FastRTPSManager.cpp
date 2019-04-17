@@ -285,6 +285,7 @@ namespace RTC
       {
           manager->shutdown();
       }
+      manager = nullptr;
   }
 }
 
