@@ -19,7 +19,7 @@
 
 #include <coil/config_coil.h>
 #include <coil/Signal.h>
-#include <signal.h>
+#include <csignal>
 
 namespace coil
 {
