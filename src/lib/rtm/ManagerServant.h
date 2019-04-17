@@ -668,7 +668,7 @@ namespace RTM
      * @endif
      */
     RTC::RTObject_ptr
-    createComponentByManagerName(const std::string& module_name);
+    createComponentByManagerName(const std::string& create_arg);
 
     /*
      * @if jp

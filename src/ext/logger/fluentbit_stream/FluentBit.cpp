@@ -134,7 +134,7 @@ namespace RTC
       {
 
         n = snprintf(tmp, sizeof(tmp) - 1,
-                     "[%lu, {\"message\": \"%s\", \"time\":\"%s\",\"name\":\"%s\",\"level\":\"%s\"}]", time(NULL), mes, date.c_str(), name.c_str(), Logger::getLevelString(level).c_str());
+                     "[%ld, {\"message\": \"%s\", \"time\":\"%s\",\"name\":\"%s\",\"level\":\"%s\"}]", time(NULL), mes, date.c_str(), name.c_str(), Logger::getLevelString(level).c_str());
 
         flb_lib_push(s_flbContext, flb, tmp, n);
       }
@@ -188,7 +188,7 @@ namespace RTC
   }
   // end of FluentBit class
   //============================================================
-};
+}
 
 extern "C"
 {
@@ -201,4 +201,4 @@ extern "C"
                             ::coil::Destructor< ::RTC::LogstreamBase,
                                                 ::RTC::FluentBit>);
   }
-};
+}
