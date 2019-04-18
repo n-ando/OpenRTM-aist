@@ -392,7 +392,7 @@ namespace RTC
     std::ifstream infile;
     infile.open(filename.c_str(), std::ios::in);
     // fial() 0: ok, !0: fail
-    if (static_cast<int>(infile.fail()) != 0)
+    if (infile.fail())
       {
         infile.close();
         return false;
