@@ -134,7 +134,7 @@ namespace coil
 
       for(auto & o : out)
       {
-          if (0 < o.size() && o.back() == '\r')
+          if (!o.empty() && o.back() == '\r')
           {
               o.erase(o.size() - 1);
           }
