@@ -73,6 +73,8 @@ namespace RTC
         RTC_ERROR(("connector.size should be 0 in InPortBase's dtor."));
         for (auto & connector : m_connectors)
           {
+            const coil::Properties prop = connector->profile().properties;
+            connector->unsubscribeInterface(prop);
             connector->disconnect();
             delete connector;
           }
@@ -656,6 +658,9 @@ namespace RTC
           {
             // Connector's dtor must call disconnect()
 // RtORB's bug? This causes double delete and segmeentation fault.
+            coil::Properties prop;
+            NVUtil::copyToProperties(prop, connector_profile.properties);
+            (*it)->unsubscribeInterface(prop);
 #ifndef ORB_IS_RTORB
             delete *it;
 #endif

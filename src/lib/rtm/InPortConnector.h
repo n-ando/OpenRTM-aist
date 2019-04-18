@@ -358,6 +358,21 @@ namespace RTC
         return false;
     }
 
+    /*!
+     * @if jp
+     * @brief コンシューマのインターフェースの登録を取り消す
+     *
+     * @param prop コネクタプロファイルのプロパティ
+     *
+     * @else
+     * @brief
+     *
+     * @param prop
+     *
+     * @endif
+     */
+    virtual void unsubscribeInterface(const coil::Properties& prop);
+
   protected:
     /*!
      * @if jp
