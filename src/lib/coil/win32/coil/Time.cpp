@@ -60,7 +60,7 @@ namespace coil
 
     tv.tv_sec = interval.sec();
     tv.tv_usec = interval.usec();
-    iret = ::select(static_cast<int>(ssoc+1), &mask, NULL, NULL, &tv);
+    iret = ::select(static_cast<int>(ssoc+1), &mask, nullptr, nullptr, &tv);
     if ( iret == SOCKET_ERROR )
       {
         iret = ::WSAGetLastError();
@@ -111,7 +111,7 @@ namespace coil
 
     tv.tv_sec = static_cast<long>(usec) / 1000000;
     tv.tv_usec = static_cast<long>(usec) % 1000000;
-    iret = ::select(static_cast<int>(ssoc+1), &mask, NULL, NULL, &tv);
+    iret = ::select(static_cast<int>(ssoc+1), &mask, nullptr, nullptr, &tv);
     if ( iret == SOCKET_ERROR )
       {
         iret = ::WSAGetLastError();
@@ -135,7 +135,7 @@ namespace coil
       LARGE_INTEGER   lint;
       __int64         val64;
       static int      tzflag;
-      if (tv != NULL)
+      if (tv != nullptr)
       {
           ::GetSystemTimeAsFileTime(&ftime);
           lint.LowPart = ftime.dwLowDateTime;
@@ -172,10 +172,10 @@ namespace coil
     __int64 val64;
 
     // tv,tz -> ftime
-    if (tv != NULL)
+    if (tv != nullptr)
       {
         int bias(0);
-        if (tz != NULL)
+        if (tz != nullptr)
           {
             bias = tz->tz_minuteswest;
           }
@@ -217,7 +217,7 @@ namespace coil
     if(coil::clock(ret))
     {
       timeval tv;
-      coil::gettimeofday(&tv, 0);
+      coil::gettimeofday(&tv, nullptr);
       return TimeValue(tv.tv_sec, tv.tv_usec);
     }
     else

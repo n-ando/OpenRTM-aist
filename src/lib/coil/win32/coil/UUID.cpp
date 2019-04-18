@@ -32,7 +32,7 @@ namespace coil
    * @endif
    */
   UUID::UUID()
-    : m_uuidstr(0)
+    : m_uuidstr(nullptr)
   {
   }
 
@@ -44,7 +44,7 @@ namespace coil
    * @endif
    */
   UUID::UUID(const uuid_t& uuid)
-    : m_uuid(uuid), m_uuidstr(0)
+    : m_uuid(uuid), m_uuidstr(nullptr)
   {
   }
 
@@ -72,7 +72,7 @@ namespace coil
     if (::UuidToStringA(&m_uuid, reinterpret_cast<RPC_CSTR*>(&m_uuidstr))
        != RPC_S_OK)
       {
-        return 0;
+        return nullptr;
       }
     else
       {
@@ -129,7 +129,7 @@ namespace coil
     uuid_t uuid;
     if (::UuidCreate(&uuid) != RPC_S_OK)
       {
-        return 0;
+        return nullptr;
       }
     else
       {

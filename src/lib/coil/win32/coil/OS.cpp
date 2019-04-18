@@ -139,7 +139,7 @@ namespace coil
    */
   int uname(utsname* name)
   {
-    if (name == NULL) return 0;
+    if (name == nullptr) return 0;
     int ret(0);
 
     // name.sysname
@@ -379,7 +379,7 @@ namespace coil
   bool getenv(const char* name, std::string &env)
   {
     size_t return_size;
-    ::getenv_s(&return_size, NULL, 0, name);
+    ::getenv_s(&return_size, nullptr, 0, name);
     if (return_size == 0)
     {
         return false;
@@ -485,7 +485,7 @@ namespace coil
       }
       if (*++oli != ':')             /* don't need argument */
       {
-          optarg = NULL;
+          optarg = nullptr;
           if (!*place)
               ++optind;
       }
