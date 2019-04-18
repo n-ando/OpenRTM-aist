@@ -183,7 +183,7 @@ namespace RTC
       return CdrBufferBase::BUFFER_OK;
   }
 
-  void OutPortConnector::unsubscribeInterface(const coil::Properties& prop)
+  void OutPortConnector::unsubscribeInterface(const coil::Properties& /*prop*/)
   {
 
   }

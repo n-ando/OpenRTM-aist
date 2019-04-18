@@ -173,7 +173,7 @@ namespace RTC
       return BufferStatus::BUFFER_OK;
   }
 
-  void InPortConnector::unsubscribeInterface(const coil::Properties& prop)
+  void InPortConnector::unsubscribeInterface(const coil::Properties& /*prop*/)
   {
 
   }
