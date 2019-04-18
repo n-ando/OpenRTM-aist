@@ -16,6 +16,9 @@
  *
  */
 
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
+#include <winsock2.h>
+#endif
 #include <rtm/NVUtil.h>
 #include <ros/xmlrpc_manager.h>
 #include <coil/UUID.h>
@@ -204,7 +207,7 @@ namespace RTC
           if(!itr->second->isDropped())
           {
             RTC_VERBOSE(("Data Write"));
-            itr->second->write(buffer_, length, boost::bind(&ROSOutPort::onMessageWritten, this, _1), true);
+            itr->second->write(buffer_, static_cast<uint32_t>(length), boost::bind(&ROSOutPort::onMessageWritten, this, _1), true);
           }
           else
           {
@@ -293,7 +296,7 @@ namespace RTC
    * @endif
    */
   void ROSOutPort::
-  publishInterfaceProfile(SDOPackage::NVList& properties)
+  publishInterfaceProfile(SDOPackage::NVList& /*properties*/)
   {
     return;
   }

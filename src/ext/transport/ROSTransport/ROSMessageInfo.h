@@ -102,7 +102,7 @@ namespace RTC
 
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
 #ifdef TRANSPORT_PLUGIN
-  template class __declspec(dllexport) coil::GlobalFactory<RTC::ROSMessageInfoBase;
+  template class __declspec(dllexport) coil::GlobalFactory<RTC::ROSMessageInfoBase>;
 #else
   extern template class __declspec(dllimport) coil::GlobalFactory<RTC::ROSMessageInfoBase;
 #endif

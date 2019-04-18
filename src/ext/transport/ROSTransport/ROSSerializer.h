@@ -150,7 +150,7 @@ namespace RTC
      */
     virtual unsigned long getDataLength() const
     {
-      return m_message.num_bytes;
+      return static_cast<unsigned long>(m_message.num_bytes);
     };
     /*!
      * @if jp
@@ -223,7 +223,7 @@ namespace RTC
    *
    * @endif
    */
-  template <class DataType, class MessageType>
+  template <class DataType, class MessageType, typename originalType, typename convertedType>
   class ROSSimpleData : public ROSSerializerBase<DataType>
   {
   public:
@@ -279,7 +279,7 @@ namespace RTC
     {
         
       MessageType msg;
-      msg.data = data.data;
+      msg.data = static_cast<convertedType>(data.data);
       
       ROSSerializerBase<DataType>::m_message = ros::serialization::serializeMessage<MessageType>(msg);
 
@@ -308,7 +308,7 @@ namespace RTC
       MessageType msg;
         
       ros::serialization::deserializeMessage(ROSSerializerBase<DataType>::m_message, msg);
-      data.data = msg.data;
+      data.data = static_cast<originalType>(msg.data);
 
       return true;
     };
@@ -335,7 +335,7 @@ namespace RTC
    *
    * @endif
    */
-  template <class DataType, class MessageType>
+  template <class DataType, class MessageType, typename originalType, typename convertedType>
   class ROSSequenceData : public ROSSerializerBase<DataType>
   {
   public:
@@ -393,7 +393,7 @@ namespace RTC
       MessageType msg;
       for(size_t i=0;i < data.data.length();i++)
       {
-        msg.data.push_back(data.data[i]);
+        msg.data.push_back(static_cast<convertedType>(data.data[static_cast<CORBA::ULong>(i)]));
       }
       
       
@@ -425,11 +425,11 @@ namespace RTC
       
       ros::serialization::deserializeMessage(ROSSerializerBase<DataType>::m_message, msg);
 
-      data.data.length(msg.data.size());
+      data.data.length(static_cast<CORBA::ULong>(msg.data.size()));
       int count = 0;
       for(auto & d : msg.data)
       {
-        data.data[count] = d;
+        data.data[count] = static_cast<originalType>(d);
         count++;
       }
 

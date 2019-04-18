@@ -257,7 +257,6 @@ namespace RTC
          */
         void tcprosAcceptConnection(const ros::TransportTCPPtr& transport)
         {
-            //RTC_PARANOID(("tcprosAcceptConnection()"));
             for(auto & publisher : m_publishers) 
             {
                 publisher->connectTCP(transport);
@@ -304,7 +303,6 @@ namespace RTC
         ros::XMLRPCManagerPtr m_xmlrpc_manager;
         std::map<std::string, std::vector<std::string>> m_cons;
     protected:
-        //mutable Logger rtclog;
     };
 }
 
