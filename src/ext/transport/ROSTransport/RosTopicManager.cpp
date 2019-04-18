@@ -55,7 +55,7 @@ namespace RTC
    *
    * @endif
    */
-  RosTopicManager::RosTopicManager()// : rtclog("RosTopicManager")
+  RosTopicManager::RosTopicManager()
   {
 
   }
@@ -73,7 +73,7 @@ namespace RTC
    *
    * @endif
    */
-  RosTopicManager::RosTopicManager(const RosTopicManager &/*mgr*/)// : rtclog("RosTopicManager")
+  RosTopicManager::RosTopicManager(const RosTopicManager &/*mgr*/)
   {
     
   }
@@ -109,7 +109,6 @@ namespace RTC
    */
   void RosTopicManager::start()
   {
-    //RTC_PARANOID(("start"));
     ros::M_string remappings;
     ros::network::init(remappings);
 
@@ -119,16 +118,14 @@ namespace RTC
     m_xmlrpc_manager->bind("publisherUpdate", boost::bind(&RosTopicManager::pubUpdateCallback, this, _1, _2));
     
 
-    //RTC_PARANOID(("Poll Manager start"));
     m_poll_manager = ros::PollManager::instance();
     m_poll_manager->start();
     m_tcpserver_transport = boost::make_shared<ros::TransportTCP>(&m_poll_manager->getPollSet());
     
     m_tcpserver_transport->listen(ros::network::getTCPROSPort(), 
-		            100, 
-		            boost::bind(&RosTopicManager::tcprosAcceptConnection, this, _1));
-                
-    //RTC_PARANOID(("XML-RPC Manager start"));
+                            100, 
+                            boost::bind(&RosTopicManager::tcprosAcceptConnection, this, _1));
+
     m_xmlrpc_manager->start();
 
    
@@ -152,12 +149,9 @@ namespace RTC
    */
   void RosTopicManager::requestTopicCallback(XmlRpc::XmlRpcValue& params, XmlRpc::XmlRpcValue& result)
   {
-    //RTC_PARANOID(("requestTopicCallback()"));
     std::string callerid = params[0];
     std::string topic = params[1];
 
-    //RTC_VERBOSE(("Caller ID:%s",callerid.c_str()));
-    //RTC_VERBOSE(("Topic Name:%s",topic.c_str()));
 
     XmlRpc::XmlRpcValue protocols = params[2];
     for(int i=0;i < protocols.size();i++)
@@ -165,16 +159,13 @@ namespace RTC
       if (protocols[i].getType() != XmlRpc::XmlRpcValue::TypeArray)
       {
         result = ros::xmlrpc::responseInt(0, ros::console::g_last_error_message, 0);
-        //RTC_ERROR(("Protocol Name is invalid value"));
         return;
       }
 
       std::string protocol = std::string(protocols[i][0]);
-      //RTC_VERBOSE(("Protocol Type:%s",protocol.c_str()));
 
       if (protocol == std::string("TCPROS"))
       {
-        //RTC_VERBOSE(("TCPROS Connection create."));
         XmlRpc::XmlRpcValue tcpros_params;
         
         tcpros_params[0] = std::string("TCPROS");
@@ -210,12 +201,8 @@ namespace RTC
    */
   void RosTopicManager::pubUpdateCallback(XmlRpc::XmlRpcValue& params, XmlRpc::XmlRpcValue& result)
   {
-    //RTC_PARANOID(("pubUpdateCallback()"));
     std::string caller_id = params[0];
     std::string topic = params[1];
-
-    //RTC_VERBOSE(("Caller ID:%s",caller_id.c_str()));
-    //RTC_VERBOSE(("Topic Name:%s",topic.c_str()));
 
 
     if(m_cons.count(topic) == 0)
@@ -225,8 +212,6 @@ namespace RTC
 
     if (params[2].getType() != XmlRpc::XmlRpcValue::TypeArray)
     {
-      //RTC_ERROR(("Protcol is invalid value."));
-
       result = ros::xmlrpc::responseInt(0, ros::console::g_last_error_message, 0);
       return;
     }
@@ -239,10 +224,6 @@ namespace RTC
       std::string xmlrpc_uri = params[2][i];
       for(auto & subscriber : m_subscribers)
       {
-        //RTC_VERBOSE(("Connect TCP"));
-        //RTC_VERBOSE(("Caller ID:%s",caller_id.c_str()));
-        //RTC_VERBOSE(("Topic Name:%s",topic.c_str()));
-        //RTC_VERBOSE(("URI:%s",xmlrpc_uri.c_str()));
         subscriber->connectTCP(caller_id, topic, xmlrpc_uri);
       }
       new_.push_back(xmlrpc_uri);
@@ -255,7 +236,6 @@ namespace RTC
 
       if (index == new_.size()) 
       {
-        //RTC_INFO(("Delete Connector:%s %s %s", caller_id.c_str(), topic.c_str(), old_uri->c_str()));
         for(auto & subscriber : m_subscribers)
         {
           subscriber->deleteTCPConnector(caller_id, topic, old_uri);
@@ -287,7 +267,6 @@ namespace RTC
    */
   void RosTopicManager::addPublisher(ROSOutPort *publisher)
   {
-    //RTC_PARANOID(("addPublisher()"));
 
     if(!existPublisher(publisher))
     {
@@ -312,7 +291,6 @@ namespace RTC
    */
   void RosTopicManager::addSubscriber(ROSInPort *subscriber)
   {
-    //RTC_PARANOID(("addSubscriber()"));
     if(!existSubscriber(subscriber))
     {
       m_subscribers.push_back(subscriber);
@@ -336,7 +314,6 @@ namespace RTC
    */
   bool RosTopicManager::removePublisher(ROSOutPort *publisher)
   {
-    //RTC_PARANOID(("removePublisher()"));
     if(existPublisher(publisher))
     {
       m_publishers.erase(remove(m_publishers.begin(), m_publishers.end(), publisher), m_publishers.end());
@@ -361,7 +338,6 @@ namespace RTC
    */
   bool RosTopicManager::removeSubscriber(ROSInPort *subscriber)
   {
-    //RTC_PARANOID(("removeSubscriber()"));
     if(existSubscriber(subscriber))
     {
       m_subscribers.erase(remove(m_subscribers.begin(), m_subscribers.end(), subscriber), m_subscribers.end());
@@ -389,7 +365,6 @@ namespace RTC
    */
   bool RosTopicManager::existPublisher(ROSOutPort *publisher)
   {
-    //RTC_PARANOID(("existPublisher()"));
     std::vector<ROSOutPort*>::iterator itr = std::find(m_publishers.begin(), m_publishers.end(), publisher);
     size_t index = std::distance( m_publishers.begin(), itr );
     
@@ -415,7 +390,6 @@ namespace RTC
    */
   bool RosTopicManager::existSubscriber(ROSInPort *subscriber)
   {
-    //RTC_PARANOID(("existSubscriber()"));
     std::vector<ROSInPort*>::iterator itr = std::find(m_subscribers.begin(), m_subscribers.end(), subscriber);
     size_t index = std::distance( m_subscribers.begin(), itr );
     return (index != m_subscribers.size());
@@ -437,7 +411,6 @@ namespace RTC
    */
   RosTopicManager* RosTopicManager::init()
   {
-    //RTC_PARANOID(("init()"));
     Guard guard(mutex);
     if (!manager)
     {
