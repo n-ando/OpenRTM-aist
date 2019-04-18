@@ -221,7 +221,6 @@ namespace RTC
         static Mutex mutex;
 	    eprosima::fastrtps::Participant *m_participant;
     protected:
-        //mutable Logger rtclog;
     };
 }
 

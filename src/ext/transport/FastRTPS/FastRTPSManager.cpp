@@ -44,7 +44,7 @@ namespace RTC
    *
    * @endif
    */
-  FastRTPSManager::FastRTPSManager(std::string& xml_profile_file)// : rtclog("FastRTPSManager")
+  FastRTPSManager::FastRTPSManager(std::string& xml_profile_file)
   {
       if (!xml_profile_file.empty())
       {
@@ -65,7 +65,7 @@ namespace RTC
    *
    * @endif
    */
-  FastRTPSManager::FastRTPSManager(const FastRTPSManager &/*mgr*/)// : rtclog("FastRTPSManager")
+  FastRTPSManager::FastRTPSManager(const FastRTPSManager &/*mgr*/)
   {
     
   }
@@ -231,7 +231,6 @@ namespace RTC
    */
   FastRTPSManager* FastRTPSManager::init(std::string xml_profile_file)
   {
-    //RTC_PARANOID(("init()"));
     Guard guard(mutex);
     if (!manager)
     {
