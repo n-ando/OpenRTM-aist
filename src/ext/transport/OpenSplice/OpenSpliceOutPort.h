@@ -87,7 +87,7 @@ namespace RTC
          *
          * @endif
          */
-        virtual ~OpenSpliceOutPort(void);
+        ~OpenSpliceOutPort(void) override;
 
         /*!
          * @if jp
@@ -116,7 +116,7 @@ namespace RTC
          *
          * @endif
          */
-        virtual void init(coil::Properties& prop);
+        void init(coil::Properties& prop) override;
 
         /*!
          * @if jp
@@ -150,7 +150,7 @@ namespace RTC
          *
          * @endif
          */
-        virtual ReturnCode put(ByteData& data);
+        ReturnCode put(ByteData& data) override;
 
         /*!
          * @if jp
@@ -175,7 +175,7 @@ namespace RTC
          *
          * @endif
          */
-        virtual void publishInterfaceProfile(SDOPackage::NVList& properties);
+        void publishInterfaceProfile(SDOPackage::NVList& properties) override;
 
         /*!
          * @if jp
@@ -199,7 +199,7 @@ namespace RTC
          *
          * @endif
          */
-        virtual bool subscribeInterface(const SDOPackage::NVList& properties);
+        bool subscribeInterface(const SDOPackage::NVList& properties) override;
 
         /*!
          * @if jp
@@ -218,7 +218,7 @@ namespace RTC
          *
          * @endif
          */
-        virtual void unsubscribeInterface(const SDOPackage::NVList& properties);
+        void unsubscribeInterface(const SDOPackage::NVList& properties) override;
 
 
 

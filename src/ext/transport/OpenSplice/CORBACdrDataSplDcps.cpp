@@ -1,3 +1,7 @@
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
+#pragma warning(push)
+#pragma warning(disable:4819)
+#endif
 #include "CORBACdrDataSplDcps.h"
 #include "ccpp_CORBACdrData.h"
 
@@ -6,6 +10,11 @@
 #include <os_stdlib.h>
 #include <string.h>
 #include <os_report.h>
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
+#pragma warning(pop)
+#endif
+
+#include <string.h>
 #include <iostream>
 
 v_copyin_result

@@ -22,10 +22,16 @@
 #include <vector>
 #include <coil/Mutex.h>
 #include <coil/Guard.h>
-#include <ccpp_dds_dcps.h>
 #include <map>
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
+#pragma warning(push)
+#pragma warning(disable:4819)
+#endif
+#include <ccpp_dds_dcps.h>
 #include "ccpp_CORBACdrData.h"
-
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
+#pragma warning(pop)
+#endif
 
 namespace RTC
 {

@@ -25,6 +25,7 @@
 #include <rapidxml_iterators.hpp>
 #include <iostream>
 #include <coil/Time.h>
+#include <fstream>
 
 
 namespace RTC
@@ -530,6 +531,14 @@ namespace RTC
       coil::vstring comout;
       std::string comin = "idlpp -l pythondesc ";
       
+      std::ifstream infile;
+      infile.open(idlpath.c_str(), std::ios::in);
+
+      if (infile.fail())
+      {
+          return false;
+      }
+
       comin.append(idlpath);
       
       
@@ -540,11 +549,18 @@ namespace RTC
       {
           xmlstr.append(c);
       }
+      coil::eraseBothEndsBlank(xmlstr);
 
-      
-      
       rapidxml::xml_document<> doc;
-      doc.parse<rapidxml::parse_trim_whitespace>(const_cast<char*>(xmlstr.c_str()));
+      try
+      {
+          doc.parse<rapidxml::parse_trim_whitespace>(const_cast<char*>(xmlstr.c_str()));
+      }
+      catch (rapidxml::parse_error&)
+      {
+          return false;
+      }
+
       rapidxml::xml_node<>* topics = doc.first_node("topics");
       
       DDS::String_var id_;
@@ -615,7 +631,7 @@ namespace RTC
    *
    * @endif
    */
-  bool OpenSpliceManager::unregisterType(const char* name)
+  bool OpenSpliceManager::unregisterType(const char* /*name*/)
   {
       return false;
   }

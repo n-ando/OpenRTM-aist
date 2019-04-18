@@ -1,5 +1,12 @@
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
+#pragma warning(push)
+#pragma warning(disable:4819)
+#endif
 #include "CORBACdrDataDcps_impl.h"
 #include "CORBACdrDataSplDcps.h"
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
+#pragma warning(pop)
+#endif
 #include <iostream>
 //
 
@@ -13,9 +20,9 @@ OpenRTM::CORBACdrDataTypeSupportMetaHolder::CORBACdrDataTypeSupportMetaHolder (:
     copyOut = (DDS::OpenSplice::cxxCopyOut) OpenSplice_OpenRTM_CORBACdrData_copyOut;
     
     metaDescriptorArrLength = 1;
-    metaDescriptorLength = strlen(m_descriptor)+1;
+    metaDescriptorLength = static_cast<DDS::ULong>(strlen(m_descriptor.in()));
     metaDescriptor = new const char*[metaDescriptorArrLength];
-    metaDescriptor[0] = DDS::string_dup(m_descriptor);
+    metaDescriptor[0] = DDS::string_dup(m_descriptor.in());
 }
 
 OpenRTM::CORBACdrDataTypeSupportMetaHolder::~CORBACdrDataTypeSupportMetaHolder ()
@@ -73,18 +80,18 @@ OpenRTM::CORBACdrDataDataWriter_impl::~CORBACdrDataDataWriter_impl ()
 
 ::DDS::ReturnCode_t
 OpenRTM::CORBACdrDataDataWriter_impl::init (
-        DDS::OpenSplice::Publisher *publisher,
-        DDS::OpenSplice::DomainParticipant *participant,
+        DDS::OpenSplice::Publisher *publisher_,
+        DDS::OpenSplice::DomainParticipant *participant_,
         const DDS::DataWriterQos &qos,
         DDS::OpenSplice::Topic *a_topic,
         const char *name,
-        DDS::OpenSplice::cxxCopyIn copyIn,
-        DDS::OpenSplice::cxxCopyOut copyOut,
-        u_writerCopy writerCopy,
-        void *cdrMarshaler)
+        DDS::OpenSplice::cxxCopyIn copyIn_,
+        DDS::OpenSplice::cxxCopyOut copyOut_,
+        u_writerCopy writerCopy_,
+        void *cdrMarshaler_)
 {
     return DDS::OpenSplice::FooDataWriter_impl::nlReq_init(
-            publisher, participant, qos, a_topic, name, copyIn, copyOut, writerCopy, cdrMarshaler);
+            publisher_, participant_, qos, a_topic, name, copyIn_, copyOut_, writerCopy_, cdrMarshaler_);
 }
 
 ::DDS::InstanceHandle_t
@@ -105,85 +112,85 @@ OpenRTM::CORBACdrDataDataWriter_impl::register_instance_w_timestamp (
 ::DDS::ReturnCode_t
 OpenRTM::CORBACdrDataDataWriter_impl::unregister_instance (
     const OpenRTM::CORBACdrData & instance_data,
-    ::DDS::InstanceHandle_t handle) THROW_ORB_EXCEPTIONS
+    ::DDS::InstanceHandle_t handle_) THROW_ORB_EXCEPTIONS
 {
-    return DDS::OpenSplice::FooDataWriter_impl::unregister_instance(&instance_data, handle);
+    return DDS::OpenSplice::FooDataWriter_impl::unregister_instance(&instance_data, handle_);
 }
 
 ::DDS::ReturnCode_t
 OpenRTM::CORBACdrDataDataWriter_impl::unregister_instance_w_timestamp (
     const CORBACdrData & instance_data,
-    ::DDS::InstanceHandle_t handle,
+    ::DDS::InstanceHandle_t handle_,
     const ::DDS::Time_t & source_timestamp) THROW_ORB_EXCEPTIONS
 {
-    return DDS::OpenSplice::FooDataWriter_impl::unregister_instance_w_timestamp(&instance_data, handle, source_timestamp);
+    return DDS::OpenSplice::FooDataWriter_impl::unregister_instance_w_timestamp(&instance_data, handle_, source_timestamp);
 }
 
 ::DDS::ReturnCode_t
 OpenRTM::CORBACdrDataDataWriter_impl::write_cdr(
     const ::DDS::CDRSample & data,
-    ::DDS::InstanceHandle_t handle) THROW_ORB_EXCEPTIONS
+    ::DDS::InstanceHandle_t handle_) THROW_ORB_EXCEPTIONS
 {
-    return DDS::OpenSplice::FooDataWriter_impl::write_cdr(data, handle);
+    return DDS::OpenSplice::FooDataWriter_impl::write_cdr(data, handle_);
 }
 
 ::DDS::ReturnCode_t
 OpenRTM::CORBACdrDataDataWriter_impl::write (
     const OpenRTM::CORBACdrData & instance_data,
-    ::DDS::InstanceHandle_t handle) THROW_ORB_EXCEPTIONS
+    ::DDS::InstanceHandle_t handle_) THROW_ORB_EXCEPTIONS
 {
-    return DDS::OpenSplice::FooDataWriter_impl::write(&instance_data, handle);
+    return DDS::OpenSplice::FooDataWriter_impl::write(&instance_data, handle_);
 }
 
 ::DDS::ReturnCode_t
 OpenRTM::CORBACdrDataDataWriter_impl::write_w_timestamp (
     const CORBACdrData & instance_data,
-    ::DDS::InstanceHandle_t handle,
+    ::DDS::InstanceHandle_t handle_,
     const ::DDS::Time_t & source_timestamp) THROW_ORB_EXCEPTIONS
 {
-    return DDS::OpenSplice::FooDataWriter_impl::write_w_timestamp(&instance_data, handle, source_timestamp);
+    return DDS::OpenSplice::FooDataWriter_impl::write_w_timestamp(&instance_data, handle_, source_timestamp);
 }
 
 ::DDS::ReturnCode_t
 OpenRTM::CORBACdrDataDataWriter_impl::dispose (
     const OpenRTM::CORBACdrData & instance_data,
-    ::DDS::InstanceHandle_t handle) THROW_ORB_EXCEPTIONS
+    ::DDS::InstanceHandle_t handle_) THROW_ORB_EXCEPTIONS
 {
-    return DDS::OpenSplice::FooDataWriter_impl::dispose(&instance_data, handle);
+    return DDS::OpenSplice::FooDataWriter_impl::dispose(&instance_data, handle_);
 }
 
 ::DDS::ReturnCode_t
 OpenRTM::CORBACdrDataDataWriter_impl::dispose_w_timestamp (
     const CORBACdrData & instance_data,
-    ::DDS::InstanceHandle_t handle,
+    ::DDS::InstanceHandle_t handle_,
     const ::DDS::Time_t & source_timestamp) THROW_ORB_EXCEPTIONS
 {
-    return DDS::OpenSplice::FooDataWriter_impl::dispose_w_timestamp(&instance_data, handle, source_timestamp);
+    return DDS::OpenSplice::FooDataWriter_impl::dispose_w_timestamp(&instance_data, handle_, source_timestamp);
 }
 
 ::DDS::ReturnCode_t
 OpenRTM::CORBACdrDataDataWriter_impl::writedispose (
     const OpenRTM::CORBACdrData & instance_data,
-    ::DDS::InstanceHandle_t handle) THROW_ORB_EXCEPTIONS
+    ::DDS::InstanceHandle_t handle_) THROW_ORB_EXCEPTIONS
 {
-    return DDS::OpenSplice::FooDataWriter_impl::writedispose(&instance_data, handle);
+    return DDS::OpenSplice::FooDataWriter_impl::writedispose(&instance_data, handle_);
 }
 
 ::DDS::ReturnCode_t
 OpenRTM::CORBACdrDataDataWriter_impl::writedispose_w_timestamp (
     const CORBACdrData & instance_data,
-    ::DDS::InstanceHandle_t handle,
+    ::DDS::InstanceHandle_t handle_,
     const ::DDS::Time_t & source_timestamp) THROW_ORB_EXCEPTIONS
 {
-    return DDS::OpenSplice::FooDataWriter_impl::writedispose_w_timestamp(&instance_data, handle, source_timestamp);
+    return DDS::OpenSplice::FooDataWriter_impl::writedispose_w_timestamp(&instance_data, handle_, source_timestamp);
 }
 
 ::DDS::ReturnCode_t
 OpenRTM::CORBACdrDataDataWriter_impl::get_key_value (
     CORBACdrData & key_holder,
-    ::DDS::InstanceHandle_t handle) THROW_ORB_EXCEPTIONS
+    ::DDS::InstanceHandle_t handle_) THROW_ORB_EXCEPTIONS
 {
-    return DDS::OpenSplice::FooDataWriter_impl::get_key_value(&key_holder, handle);
+    return DDS::OpenSplice::FooDataWriter_impl::get_key_value(&key_holder, handle_);
 }
 
 ::DDS::InstanceHandle_t
@@ -464,9 +471,9 @@ OpenRTM::CORBACdrDataDataReader_impl::return_loan (
 ::DDS::ReturnCode_t
 OpenRTM::CORBACdrDataDataReader_impl::get_key_value (
     OpenRTM::CORBACdrData & key_holder,
-    ::DDS::InstanceHandle_t handle) THROW_ORB_EXCEPTIONS
+    ::DDS::InstanceHandle_t handle_) THROW_ORB_EXCEPTIONS
 {
-    return DDS::OpenSplice::FooDataReader_impl::get_key_value(&key_holder, handle);
+    return DDS::OpenSplice::FooDataReader_impl::get_key_value(&key_holder, handle_);
 }
 
 ::DDS::InstanceHandle_t
@@ -839,9 +846,9 @@ OpenRTM::CORBACdrDataDataReaderView_impl::return_loan (
 ::DDS::ReturnCode_t
 OpenRTM::CORBACdrDataDataReaderView_impl::get_key_value (
     OpenRTM::CORBACdrData & key_holder,
-    ::DDS::InstanceHandle_t handle) THROW_ORB_EXCEPTIONS
+    ::DDS::InstanceHandle_t handle_) THROW_ORB_EXCEPTIONS
 {
-    return DDS::OpenSplice::FooDataReaderView_impl::get_key_value(&key_holder, handle);
+    return DDS::OpenSplice::FooDataReaderView_impl::get_key_value(&key_holder, handle_);
 }
 
 ::DDS::InstanceHandle_t

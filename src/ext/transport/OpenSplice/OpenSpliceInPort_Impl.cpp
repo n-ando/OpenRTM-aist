@@ -179,13 +179,13 @@ namespace RTC
          * @endif
          */
         ~SubListener();
-        virtual void on_requested_deadline_missed(DDS::DataReader_ptr reader, const DDS::RequestedDeadlineMissedStatus& status);
-        virtual void on_requested_incompatible_qos(DDS::DataReader_ptr reader, const DDS::RequestedIncompatibleQosStatus& status);
-        virtual void on_sample_rejected(DDS::DataReader_ptr reader, const DDS::SampleRejectedStatus& status);
-        virtual void on_liveliness_changed(DDS::DataReader_ptr reader, const DDS::LivelinessChangedStatus& status);
-        virtual void on_data_available(DDS::DataReader_ptr reader);
-        virtual void on_subscription_matched(DDS::DataReader_ptr reader, const DDS::SubscriptionMatchedStatus& status);
-        virtual void on_sample_lost(DDS::DataReader_ptr reader, const DDS::SampleLostStatus& status);
+        void on_requested_deadline_missed(DDS::DataReader_ptr reader, const DDS::RequestedDeadlineMissedStatus& status) override;
+        void on_requested_incompatible_qos(DDS::DataReader_ptr reader, const DDS::RequestedIncompatibleQosStatus& status) override;
+        void on_sample_rejected(DDS::DataReader_ptr reader, const DDS::SampleRejectedStatus& status) override;
+        void on_liveliness_changed(DDS::DataReader_ptr reader, const DDS::LivelinessChangedStatus& status) override;
+        void on_data_available(DDS::DataReader_ptr reader) override;
+        void on_subscription_matched(DDS::DataReader_ptr reader, const DDS::SubscriptionMatchedStatus& status) override;
+        void on_sample_lost(DDS::DataReader_ptr reader, const DDS::SampleLostStatus& status) override;
 
     private:
         OpenSpliceInPortListenerBase* m_provider;
@@ -392,16 +392,16 @@ namespace RTC
     {
     }
 
-    void SubListener::on_requested_deadline_missed(DDS::DataReader_ptr reader, const DDS::RequestedDeadlineMissedStatus& status)
+    void SubListener::on_requested_deadline_missed(DDS::DataReader_ptr /*reader*/, const DDS::RequestedDeadlineMissedStatus& /*status*/)
     {
     }
-    void SubListener::on_requested_incompatible_qos(DDS::DataReader_ptr reader, const DDS::RequestedIncompatibleQosStatus& status)
+    void SubListener::on_requested_incompatible_qos(DDS::DataReader_ptr /*reader*/, const DDS::RequestedIncompatibleQosStatus& /*status*/)
     {
     }
-    void SubListener::on_sample_rejected(DDS::DataReader_ptr reader, const DDS::SampleRejectedStatus& status)
+    void SubListener::on_sample_rejected(DDS::DataReader_ptr /*reader*/, const DDS::SampleRejectedStatus& /*status*/)
     {
     }
-    void SubListener::on_liveliness_changed(DDS::DataReader_ptr reader, const DDS::LivelinessChangedStatus& status)
+    void SubListener::on_liveliness_changed(DDS::DataReader_ptr /*reader*/, const DDS::LivelinessChangedStatus& /*status*/)
     {
     }
     void SubListener::on_data_available(DDS::DataReader_ptr reader)
@@ -417,9 +417,6 @@ namespace RTC
 
         DDS::CDRSample received_data;
         DDS::SampleInfo info;
-        DDS::Long max_samples;
-        DDS::ULong sample_states;
-        DDS::ULong view_states;
         status = cdr_reader->read_cdr(received_data, info, DDS::ANY_SAMPLE_STATE, DDS::ANY_VIEW_STATE, DDS::ANY_INSTANCE_STATE);
 
         if (!OpenSpliceManager::checkStatus(status, "failed read cdr data"))
@@ -432,10 +429,10 @@ namespace RTC
         data.writeData(received_data.blob.get_buffer(), received_data.blob.length());
         m_provider->put(data);
     }
-    void SubListener::on_subscription_matched(DDS::DataReader_ptr reader, const DDS::SubscriptionMatchedStatus& status)
+    void SubListener::on_subscription_matched(DDS::DataReader_ptr /*reader*/, const DDS::SubscriptionMatchedStatus& /*status*/)
     {
     }
-    void SubListener::on_sample_lost(DDS::DataReader_ptr reader, const DDS::SampleLostStatus& status)
+    void SubListener::on_sample_lost(DDS::DataReader_ptr /*reader*/, const DDS::SampleLostStatus& /*status*/)
     {
     }
 
