@@ -93,12 +93,12 @@ namespace coil
     if (m_count == 0)
       {
         m_thread =
-           (HANDLE)::_beginthreadex(NULL,  // security
+           (HANDLE)::_beginthreadex(nullptr,  // security
            0,  // stuck size
            Task::svc_run,  // func
            reinterpret_cast<void*>(this),  // argument
            0,  // flag (0 or CREATE_SUSPEND)
-           NULL);  // thread descripter
+           nullptr);  // thread descripter
         ++m_count;
       };
   }

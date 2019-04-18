@@ -48,7 +48,7 @@ namespace coil
   std::wstring string2wstring(std::string str)
   {
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
-    int buff_size = MultiByteToWideChar(CP_UTF7, 0, str.c_str(), -1, (wchar_t*)NULL, 0);
+    int buff_size = MultiByteToWideChar(CP_UTF7, 0, str.c_str(), -1, (wchar_t*)nullptr, 0);
     wchar_t* ret = new wchar_t[buff_size];
     MultiByteToWideChar(CP_UTF7, 0, str.c_str(), -1, ret, buff_size);
     std::wstring wstr(ret, ret + buff_size - 1);
@@ -70,9 +70,9 @@ namespace coil
   std::string wstring2string(std::wstring wstr)
   {
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
-      int buff_size = WideCharToMultiByte(CP_ACP, 0, wstr.c_str(), -1, (char*)NULL, 0, NULL, NULL);
+      int buff_size = WideCharToMultiByte(CP_ACP, 0, wstr.c_str(), -1, (char*)nullptr, 0, nullptr, nullptr);
       CHAR* ret = new CHAR[buff_size];
-      WideCharToMultiByte(CP_ACP, 0, wstr.c_str(), -1, ret, buff_size, NULL, NULL);
+      WideCharToMultiByte(CP_ACP, 0, wstr.c_str(), -1, ret, buff_size, nullptr, nullptr);
       std::string str(ret, ret + buff_size - 1);
       delete[] ret;
 #else

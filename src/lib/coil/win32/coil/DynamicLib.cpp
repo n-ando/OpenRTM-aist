@@ -74,7 +74,7 @@ namespace coil
    * @endif
    */
   DynamicLib::DynamicLib(const DynamicLib& rhs)
-    : m_name(""), m_mode(0), m_closeflag(0), m_handle(0)
+    : m_name(""), m_mode(0), m_closeflag(0), m_handle(nullptr)
   {
     if (!rhs.m_name.empty() &&
         open(rhs.m_name.c_str(), rhs.m_mode, rhs.m_closeflag) == 0)
@@ -110,8 +110,8 @@ namespace coil
                    int open_mode,
                    int close_handle_on_destruction)
   {
-    HINSTANCE handle = ::LoadLibraryEx(dll_name, NULL, open_mode);
-    if (handle == NULL)
+    HINSTANCE handle = ::LoadLibraryEx(dll_name, nullptr, open_mode);
+    if (handle == nullptr)
       {
         return -1;
       }
@@ -130,7 +130,7 @@ namespace coil
    */
   int DynamicLib::close(void)
   {
-    if (m_handle == NULL)
+    if (m_handle == nullptr)
       return -1;
     ::FreeLibrary(m_handle);
     return 0;
@@ -145,7 +145,7 @@ namespace coil
    */
   void* DynamicLib::symbol(const char* symbol_name)
   {
-    if (m_handle == NULL) return NULL;
+    if (m_handle == nullptr) return nullptr;
     return ::GetProcAddress(m_handle, symbol_name);
   }
 
@@ -171,19 +171,19 @@ namespace coil
     /* return NULL. */
     if (dwcode == 0)
       {
-        return NULL;
+        return nullptr;
       }
 
     /* Convert the error code into the message. */
     ::FormatMessage(
         FORMAT_MESSAGE_FROM_SYSTEM |
         FORMAT_MESSAGE_IGNORE_INSERTS,
-        NULL,
+        nullptr,
         dwcode,
         MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
         reinterpret_cast<char *>(cstr),
         256,
-        NULL);
+        nullptr);
     return cstr;
   }
 } // namespace coil

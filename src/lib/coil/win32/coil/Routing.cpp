@@ -82,7 +82,7 @@ namespace coil
     hints.ai_socktype = SOCK_STREAM;
     hints.ai_family = AF_INET;
 
-    if (getaddrinfo(dest_addr.c_str(), NULL, &hints, &res) != 0) {
+    if (getaddrinfo(dest_addr.c_str(), nullptr, &hints, &res) != 0) {
         return false;
     }
 
@@ -132,7 +132,7 @@ namespace coil
     PMIB_IPADDRTABLE ipaddr_table;
     ipaddr_table =
           reinterpret_cast<MIB_IPADDRTABLE *>(MALLOC(sizeof (MIB_IPADDRTABLE)));
-    if (ipaddr_table == 0) { return false; }
+    if (ipaddr_table == nullptr) { return false; }
 
     // Make an initial call to GetIpAddrTable to get the
     // necessary size into the size variable
@@ -142,7 +142,7 @@ namespace coil
         FREE(ipaddr_table);
         ipaddr_table = reinterpret_cast<MIB_IPADDRTABLE *>(MALLOC(size));
       }
-    if (ipaddr_table == 0) { return false; }
+    if (ipaddr_table == nullptr) { return false; }
     if (GetIpAddrTable(ipaddr_table, &size, 0) != NO_ERROR) { return false; }
 
     for (int i(0); i < static_cast<int>(ipaddr_table->dwNumEntries); ++i)

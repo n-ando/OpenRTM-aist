@@ -134,7 +134,7 @@ namespace coil
   }
 
 #ifdef WIN32
-  ClockManager* ClockManager::clockmgr = NULL;
+  ClockManager* ClockManager::clockmgr = nullptr;
   coil::Mutex ClockManager::clockmgr_mutex;
   ClockManager& ClockManager::instance()
   {

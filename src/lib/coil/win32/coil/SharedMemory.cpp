@@ -33,9 +33,9 @@ namespace coil
    */
   SharedMemory::SharedMemory()
     : m_memory_size(0),
-      m_shm(NULL),
+      m_shm(nullptr),
       m_file_create(false),
-      m_handle(NULL)
+      m_handle(nullptr)
   {
   }
 
@@ -116,7 +116,7 @@ namespace coil
     m_memory_size = memory_size;
     m_handle = CreateFileMapping(
 		(HANDLE)-1,
-		NULL,
+		nullptr,
 		PAGE_READWRITE | SEC_COMMIT,
 		0, (DWORD)m_memory_size,
 		shm_address.c_str());
@@ -393,7 +393,7 @@ namespace coil
   */
   bool SharedMemory::created()
   {
-	if (m_handle == NULL)
+	if (m_handle == nullptr)
 	{
 		return false;
 	}
