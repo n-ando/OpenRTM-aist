@@ -204,7 +204,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~ROS2StringData()
+    ~ROS2StringData() override
     {
 
     }
@@ -226,7 +226,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual bool serialize(const RTC::TimedString& data)
+    bool serialize(const RTC::TimedString& data) override
     {
         
       std_msgs::msg::String msg;
@@ -251,7 +251,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual bool deserialize(RTC::TimedString& data)
+    bool deserialize(RTC::TimedString& data) override
     { 
 
       std_msgs::msg::String msg;
@@ -345,7 +345,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~ROS2Point3DData()
+    ~ROS2Point3DData() override
     {
 
     }
@@ -367,7 +367,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual bool serialize(const RTC::TimedPoint3D& data)
+    bool serialize(const RTC::TimedPoint3D& data) override
     {
         
       geometry_msgs::msg::PointStamped msg;
@@ -397,7 +397,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual bool deserialize(RTC::TimedPoint3D& data)
+    bool deserialize(RTC::TimedPoint3D& data) override
     { 
 
       geometry_msgs::msg::PointStamped msg;
@@ -494,7 +494,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~ROS2QuaternionData()
+    ~ROS2QuaternionData() override
     {
 
     }
@@ -516,7 +516,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual bool serialize(const RTC::TimedQuaternion& data)
+    bool serialize(const RTC::TimedQuaternion& data) override
     {
         
       geometry_msgs::msg::QuaternionStamped  msg;
@@ -548,7 +548,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual bool deserialize(RTC::TimedQuaternion& data)
+    bool deserialize(RTC::TimedQuaternion& data) override
     { 
 
       geometry_msgs::msg::QuaternionStamped msg;
@@ -645,7 +645,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~ROS2Vector3DData()
+    ~ROS2Vector3DData() override
     {
 
     }
@@ -667,7 +667,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual bool serialize(const RTC::TimedVector3D& data)
+    bool serialize(const RTC::TimedVector3D& data) override
     {
         
       geometry_msgs::msg::Vector3Stamped  msg;
@@ -698,7 +698,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual bool deserialize(RTC::TimedVector3D& data)
+    bool deserialize(RTC::TimedVector3D& data) override
     { 
 
       geometry_msgs::msg::Vector3Stamped msg;
@@ -796,7 +796,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~ROS2CameraImageData()
+    ~ROS2CameraImageData() override
     {
 
     }
@@ -818,7 +818,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual bool serialize(const RTC::CameraImage& data)
+    bool serialize(const RTC::CameraImage& data) override
     {
         
       sensor_msgs::msg::Image  msg;
@@ -858,7 +858,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual bool deserialize(RTC::CameraImage& data)
+    bool deserialize(RTC::CameraImage& data) override
     { 
 
       sensor_msgs::msg::Image msg;
