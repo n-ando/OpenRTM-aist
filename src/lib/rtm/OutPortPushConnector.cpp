@@ -242,5 +242,15 @@ namespace RTC
   {
     m_listeners.connector_[ON_DISCONNECT].notify(m_profile);
   }
+
+  void OutPortPushConnector::unsubscribeInterface(const coil::Properties& prop)
+  {
+      if (m_consumer != nullptr)
+      {
+          SDOPackage::NVList nv;
+          NVUtil::copyFromProperties(nv, prop);
+          m_consumer->unsubscribeInterface(nv);
+      }
+  }
 } // namespace RTC
 

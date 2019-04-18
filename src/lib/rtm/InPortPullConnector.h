@@ -231,6 +231,20 @@ namespace RTC
      * @endif
      */
     void deactivate() override {}  // do nothing
+    /*!
+     * @if jp
+     * @brief コンシューマのインターフェースの登録を取り消す
+     *
+     * @param prop コネクタプロファイルのプロパティ
+     *
+     * @else
+     * @brief
+     *
+     * @param prop
+     *
+     * @endif
+     */
+    void unsubscribeInterface(const coil::Properties& prop) override;
 
   protected:
     /*!

@@ -696,6 +696,9 @@ namespace RTC
         if (id == (*it)->id())
           {
             // Connector's dtor must call disconnect()
+            coil::Properties prop;
+            NVUtil::copyToProperties(prop, connector_profile.properties);
+            (*it)->unsubscribeInterface(prop);
             delete *it;
             m_connectors.erase(it);
             RTC_TRACE(("delete connector: %s", id.c_str()));
