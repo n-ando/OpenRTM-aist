@@ -128,7 +128,7 @@ namespace coil
    * @brief Unload of the Dynamic link library
    * @endif
    */
-  int DynamicLib::close(void)
+  int DynamicLib::close()
   {
     if (m_handle == nullptr)
       return -1;
@@ -156,7 +156,7 @@ namespace coil
    * @brief Return the explanation message about the error
    * @endif
    */
-  const char* DynamicLib::error(void) const
+  const char* DynamicLib::error() const
   {
     DWORD dwcode;
     static char cstr[256] = "";
