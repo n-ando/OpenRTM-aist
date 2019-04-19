@@ -100,6 +100,7 @@ namespace RTC
         /*!
          * @if jp
          * @brief トピックマネージャ開始
+         * XML-RPC、TCPサーバー、ポールマネージャを開始する
          *
          *
          * @else
@@ -110,6 +111,19 @@ namespace RTC
          * @endif
          */
         void start();
+        /*!
+         * @if jp
+         * @brief 終了処理
+         * XML-RPC、TCPサーバー、ポールマネージャを終了する
+         *
+         * @else
+         * @brief
+         *
+         *
+         *
+         * @endif
+         */
+        void shutdown();
         /*!
          * @if jp
          * @brief requestTopic関数リモート呼び出し時のコールバック関数
@@ -293,6 +307,20 @@ namespace RTC
          * @endif
          */
         static RosTopicManager& instance();
+        /*!
+         * @if jp
+         * @brief ROSTopicManagerが初期化されている場合に終了処理を呼び出す
+         *
+         *
+         * @else
+         * @brief
+         *
+         * @return
+         *
+         *
+         * @endif
+         */
+        static void shutdown_global();
     private:
         static RosTopicManager* manager;
         static Mutex mutex;

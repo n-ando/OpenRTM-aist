@@ -23,8 +23,34 @@
 #include "ROSSerializer.h"
 #include "ROSOutPort.h"
 #include "ROSInPort.h"
+#include "ROSTopicManager.h"
 
 
+ManagerActionListener::ManagerActionListener()
+{
+
+}
+ManagerActionListener::~ManagerActionListener()
+{
+
+}
+void ManagerActionListener::preShutdown()
+{
+
+}
+void ManagerActionListener::postShutdown()
+{
+    RTC::RosTopicManager::shutdown_global();
+}
+void ManagerActionListener::postReinit()
+{
+
+}
+
+void ManagerActionListener::preReinit()
+{
+
+}
 
 
 extern "C"
@@ -57,6 +83,9 @@ extern "C"
                                             ::RTC::ROSOutPort>);
     }
     ROSSerializerInit(manager);
+
+    ManagerActionListener *listener = new ManagerActionListener();
+    manager->addManagerActionListener(listener);
   }
   
 };
