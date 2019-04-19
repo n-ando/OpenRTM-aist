@@ -20,7 +20,7 @@
 v_copyin_result
 OpenSplice_OpenRTM_CORBACdrData_copyIn(
     c_base base,
-    const struct ::OpenRTM::CORBACdrData *from,
+    const struct ::OpenRTM_OpenSplice::CORBACdrData *from,
     struct OpenSplice_OpenRTM_CORBACdrData *to)
 {
     v_copyin_result result = V_COPYIN_RESULT_OK;
@@ -32,7 +32,7 @@ OpenSplice_OpenRTM_CORBACdrData_copyIn(
         c_type subtype0;
         c_ulong length0;
         c_octet *dest0;
-        const ::OpenRTM::CORBACdrData::_data_seq *src = &from->data;
+        const ::OpenRTM_OpenSplice::CORBACdrData::_data_seq *src = &from->data;
 
         if (type0 == nullptr) {
             subtype0 = c_type(c_metaResolve (c_metaObject(base), "c_octet"));
@@ -73,11 +73,11 @@ OpenSplice_OpenRTM_CORBACdrData_copyOut(
     void *_to)
 {
     const struct OpenSplice_OpenRTM_CORBACdrData *from = (const struct OpenSplice_OpenRTM_CORBACdrData *)_from;
-    struct ::OpenRTM::CORBACdrData *to = (struct ::OpenRTM::CORBACdrData *)_to;
+    struct ::OpenRTM_OpenSplice::CORBACdrData *to = (struct ::OpenRTM_OpenSplice::CORBACdrData *)_to;
     {
         long size0;
         const c_octet *src0 = (const c_octet *)from->data;
-        ::OpenRTM::CORBACdrData::_data_seq *dst = &to->data;
+        ::OpenRTM_OpenSplice::CORBACdrData::_data_seq *dst = &to->data;
 
         size0 = c_arraySize(c_sequence(from->data));
         to->data.length(size0);

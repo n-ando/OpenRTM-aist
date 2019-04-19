@@ -17,6 +17,7 @@
  */
 
 #include "OpenSpliceMessageInfo.h"
+#include "OpenSpliceManagerFunc.h"
 #include <coil/stringutil.h>
 #include <rtm/idl/BasicDataTypeSkel.h>
 #include <rtm/idl/ExtendedDataTypesSkel.h>
@@ -61,7 +62,7 @@ namespace RTC
     };
 
     template <class DATATYPE, class IDLPATH>
-    void appendOpenSpliceMessageInfo()
+    void appendOpenSpliceMessageInfo(coil::vstring& datatypes)
     {
         RTC::OpenSpliceMessageInfoFactory& factory(RTC::OpenSpliceMessageInfoFactory::instance());
         std::string data_type = ::CORBA_Util::toRepositoryIdOfStruct<DATATYPE>();
@@ -70,6 +71,27 @@ namespace RTC
             ::RTC::OpenSpliceMessageInfo<DATATYPE, IDLPATH> >,
             ::coil::Destructor< OpenSpliceMessageInfoBase,
             ::RTC::OpenSpliceMessageInfo<DATATYPE, IDLPATH> >);
+        
+        if (datatypes.empty())
+        {
+            return;
+        }
+        OpenSpliceMessageInfoBase *info = factory.createObject(data_type);
+        if (info != nullptr)
+        {
+            auto itr = std::find(datatypes.begin(), datatypes.end(), info->data_type());
+            size_t index = std::distance(datatypes.begin(), itr);
+
+            if (index != datatypes.size() || datatypes[0] == "ALL")
+            {
+                if (!RTC_OpenSplice::registeredType(info->data_type()))
+                {
+                    RTC_OpenSplice::registerType(info->data_type(), info->idl_path());
+                }
+            }
+            factory.deleteObject(info);
+        }
+        
     }
 }
 
@@ -95,77 +117,84 @@ const char* BasicDataTypeFile::idlpath = "${RTM_IDL_PATH}/BasicDatatype.idl";
 const char* ExtendedDataTypesFile::idlpath = "${RTM_IDL_PATH}/ExtendedDataTypes.idl";
 const char* InterfaceDataTypesFile::idlpath = "${RTM_IDL_PATH}/InterfaceDataTypes.idl";
 
-void OpenSpliceMessageInfoInit()
+void OpenSpliceMessageInfoInit(const coil::Properties& prop)
 {
-    RTC::appendOpenSpliceMessageInfo<RTC::TimedState, BasicDataTypeFile>();
-    RTC::appendOpenSpliceMessageInfo<RTC::TimedShort, BasicDataTypeFile>();
-    RTC::appendOpenSpliceMessageInfo<RTC::TimedLong, BasicDataTypeFile>();
-    RTC::appendOpenSpliceMessageInfo<RTC::TimedUShort, BasicDataTypeFile>();
-    RTC::appendOpenSpliceMessageInfo<RTC::TimedULong, BasicDataTypeFile>();
-    RTC::appendOpenSpliceMessageInfo<RTC::TimedFloat, BasicDataTypeFile>();
-    RTC::appendOpenSpliceMessageInfo<RTC::TimedDouble, BasicDataTypeFile>();
-    RTC::appendOpenSpliceMessageInfo<RTC::TimedChar, BasicDataTypeFile>();
-    RTC::appendOpenSpliceMessageInfo<RTC::TimedBoolean, BasicDataTypeFile>();
-    RTC::appendOpenSpliceMessageInfo<RTC::TimedOctet, BasicDataTypeFile>();
-    RTC::appendOpenSpliceMessageInfo<RTC::TimedString, BasicDataTypeFile>();
-    RTC::appendOpenSpliceMessageInfo<RTC::TimedShortSeq, BasicDataTypeFile>();
-    RTC::appendOpenSpliceMessageInfo<RTC::TimedLongSeq, BasicDataTypeFile>();
-    RTC::appendOpenSpliceMessageInfo<RTC::TimedUShortSeq, BasicDataTypeFile>();
-    RTC::appendOpenSpliceMessageInfo<RTC::TimedULongSeq, BasicDataTypeFile>();
-    RTC::appendOpenSpliceMessageInfo<RTC::TimedFloatSeq, BasicDataTypeFile>();
-    RTC::appendOpenSpliceMessageInfo<RTC::TimedDoubleSeq, BasicDataTypeFile>();
-    RTC::appendOpenSpliceMessageInfo<RTC::TimedCharSeq, BasicDataTypeFile>();
-    RTC::appendOpenSpliceMessageInfo<RTC::TimedBooleanSeq, BasicDataTypeFile>();
-    RTC::appendOpenSpliceMessageInfo<RTC::TimedOctetSeq, BasicDataTypeFile>();
-    RTC::appendOpenSpliceMessageInfo<RTC::TimedStringSeq, BasicDataTypeFile>();
+    std::string datalist = prop.getProperty("opensplice.datatypes", "ALL");
+    coil::vstring datatypes = coil::split(datalist, ",");
+    for (auto& datatype : datatypes)
+    {
+        coil::eraseBothEndsBlank(datatype);
+    }
 
-    RTC::appendOpenSpliceMessageInfo<RTC::TimedRGBColour, ExtendedDataTypesFile>();
-    RTC::appendOpenSpliceMessageInfo<RTC::TimedPoint2D, ExtendedDataTypesFile>();
-    RTC::appendOpenSpliceMessageInfo<RTC::TimedVector2D, ExtendedDataTypesFile>();
-    RTC::appendOpenSpliceMessageInfo<RTC::TimedPose2D, ExtendedDataTypesFile>();
-    RTC::appendOpenSpliceMessageInfo<RTC::TimedVelocity2D, ExtendedDataTypesFile>();
-    RTC::appendOpenSpliceMessageInfo<RTC::TimedAcceleration2D, ExtendedDataTypesFile>();
-    RTC::appendOpenSpliceMessageInfo<RTC::TimedPoseVel2D, ExtendedDataTypesFile>();
-    RTC::appendOpenSpliceMessageInfo<RTC::TimedSize2D, ExtendedDataTypesFile>();
-    RTC::appendOpenSpliceMessageInfo<RTC::TimedGeometry2D, ExtendedDataTypesFile>();
-    RTC::appendOpenSpliceMessageInfo<RTC::TimedCovariance2D, ExtendedDataTypesFile>();
-    RTC::appendOpenSpliceMessageInfo<RTC::TimedPointCovariance2D, ExtendedDataTypesFile>();
-    RTC::appendOpenSpliceMessageInfo<RTC::TimedCarlike, ExtendedDataTypesFile>();
-    RTC::appendOpenSpliceMessageInfo<RTC::TimedSpeedHeading2D, ExtendedDataTypesFile>();
-    RTC::appendOpenSpliceMessageInfo<RTC::TimedPoint3D, ExtendedDataTypesFile>();
-    RTC::appendOpenSpliceMessageInfo<RTC::TimedVector3D, ExtendedDataTypesFile>();
-    RTC::appendOpenSpliceMessageInfo<RTC::TimedOrientation3D, ExtendedDataTypesFile>();
-    RTC::appendOpenSpliceMessageInfo<RTC::TimedPose3D, ExtendedDataTypesFile>();
-    RTC::appendOpenSpliceMessageInfo<RTC::TimedVelocity3D, ExtendedDataTypesFile>();
-    RTC::appendOpenSpliceMessageInfo<RTC::TimedAngularVelocity3D, ExtendedDataTypesFile>();
-    RTC::appendOpenSpliceMessageInfo<RTC::TimedAcceleration3D, ExtendedDataTypesFile>();
-    RTC::appendOpenSpliceMessageInfo<RTC::TimedAngularAcceleration3D, ExtendedDataTypesFile>();
-    RTC::appendOpenSpliceMessageInfo<RTC::TimedPoseVel3D, ExtendedDataTypesFile>();
-    RTC::appendOpenSpliceMessageInfo<RTC::TimedSize3D, ExtendedDataTypesFile>();
-    RTC::appendOpenSpliceMessageInfo<RTC::TimedGeometry3D, ExtendedDataTypesFile>();
-    RTC::appendOpenSpliceMessageInfo<RTC::TimedCovariance3D, ExtendedDataTypesFile>();
-    RTC::appendOpenSpliceMessageInfo<RTC::TimedSpeedHeading3D, ExtendedDataTypesFile>();
-    RTC::appendOpenSpliceMessageInfo<RTC::TimedOAP, ExtendedDataTypesFile>();
+    RTC::appendOpenSpliceMessageInfo<RTC::TimedState, BasicDataTypeFile>(datatypes);
+    RTC::appendOpenSpliceMessageInfo<RTC::TimedShort, BasicDataTypeFile>(datatypes);
+    RTC::appendOpenSpliceMessageInfo<RTC::TimedLong, BasicDataTypeFile>(datatypes);
+    RTC::appendOpenSpliceMessageInfo<RTC::TimedUShort, BasicDataTypeFile>(datatypes);
+    RTC::appendOpenSpliceMessageInfo<RTC::TimedULong, BasicDataTypeFile>(datatypes);
+    RTC::appendOpenSpliceMessageInfo<RTC::TimedFloat, BasicDataTypeFile>(datatypes);
+    RTC::appendOpenSpliceMessageInfo<RTC::TimedDouble, BasicDataTypeFile>(datatypes);
+    RTC::appendOpenSpliceMessageInfo<RTC::TimedChar, BasicDataTypeFile>(datatypes);
+    RTC::appendOpenSpliceMessageInfo<RTC::TimedBoolean, BasicDataTypeFile>(datatypes);
+    RTC::appendOpenSpliceMessageInfo<RTC::TimedOctet, BasicDataTypeFile>(datatypes);
+    RTC::appendOpenSpliceMessageInfo<RTC::TimedString, BasicDataTypeFile>(datatypes);
+    RTC::appendOpenSpliceMessageInfo<RTC::TimedShortSeq, BasicDataTypeFile>(datatypes);
+    RTC::appendOpenSpliceMessageInfo<RTC::TimedLongSeq, BasicDataTypeFile>(datatypes);
+    RTC::appendOpenSpliceMessageInfo<RTC::TimedUShortSeq, BasicDataTypeFile>(datatypes);
+    RTC::appendOpenSpliceMessageInfo<RTC::TimedULongSeq, BasicDataTypeFile>(datatypes);
+    RTC::appendOpenSpliceMessageInfo<RTC::TimedFloatSeq, BasicDataTypeFile>(datatypes);
+    RTC::appendOpenSpliceMessageInfo<RTC::TimedDoubleSeq, BasicDataTypeFile>(datatypes);
+    RTC::appendOpenSpliceMessageInfo<RTC::TimedCharSeq, BasicDataTypeFile>(datatypes);
+    RTC::appendOpenSpliceMessageInfo<RTC::TimedBooleanSeq, BasicDataTypeFile>(datatypes);
+    RTC::appendOpenSpliceMessageInfo<RTC::TimedOctetSeq, BasicDataTypeFile>(datatypes);
+    RTC::appendOpenSpliceMessageInfo<RTC::TimedStringSeq, BasicDataTypeFile>(datatypes);
 
-    RTC::appendOpenSpliceMessageInfo < RTC::ActArrayActuatorPos, InterfaceDataTypesFile>();
-    RTC::appendOpenSpliceMessageInfo < RTC::ActArrayActuatorSpeed, InterfaceDataTypesFile>();
-    RTC::appendOpenSpliceMessageInfo < RTC::ActArrayActuatorCurrent, InterfaceDataTypesFile>();
-    RTC::appendOpenSpliceMessageInfo < RTC::ActArrayState, InterfaceDataTypesFile>();
-    RTC::appendOpenSpliceMessageInfo < RTC::CameraImage, InterfaceDataTypesFile>();
-    RTC::appendOpenSpliceMessageInfo < RTC::Fiducials, InterfaceDataTypesFile>();
-    RTC::appendOpenSpliceMessageInfo < RTC::GPSData, InterfaceDataTypesFile>();
-    RTC::appendOpenSpliceMessageInfo < RTC::GripperState, InterfaceDataTypesFile>();
-    RTC::appendOpenSpliceMessageInfo < RTC::INSData, InterfaceDataTypesFile>();
-    RTC::appendOpenSpliceMessageInfo < RTC::LimbState, InterfaceDataTypesFile>();
-    RTC::appendOpenSpliceMessageInfo < RTC::Hypotheses2D, InterfaceDataTypesFile>();
-    RTC::appendOpenSpliceMessageInfo < RTC::Hypotheses3D, InterfaceDataTypesFile>();
-    RTC::appendOpenSpliceMessageInfo < RTC::Features, InterfaceDataTypesFile>();
-    RTC::appendOpenSpliceMessageInfo < RTC::MultiCameraImages, InterfaceDataTypesFile>();
-    RTC::appendOpenSpliceMessageInfo < RTC::Path2D, InterfaceDataTypesFile>();
-    RTC::appendOpenSpliceMessageInfo < RTC::Path3D, InterfaceDataTypesFile>();
-    RTC::appendOpenSpliceMessageInfo < RTC::PointCloud, InterfaceDataTypesFile>();
-    RTC::appendOpenSpliceMessageInfo < RTC::PanTiltAngles, InterfaceDataTypesFile>();
-    RTC::appendOpenSpliceMessageInfo < RTC::PanTiltState, InterfaceDataTypesFile>();
-    RTC::appendOpenSpliceMessageInfo < RTC::RangeData, InterfaceDataTypesFile>();
-    RTC::appendOpenSpliceMessageInfo < RTC::IntensityData, InterfaceDataTypesFile>();
+    RTC::appendOpenSpliceMessageInfo<RTC::TimedRGBColour, ExtendedDataTypesFile>(datatypes);
+    RTC::appendOpenSpliceMessageInfo<RTC::TimedPoint2D, ExtendedDataTypesFile>(datatypes);
+    RTC::appendOpenSpliceMessageInfo<RTC::TimedVector2D, ExtendedDataTypesFile>(datatypes);
+    RTC::appendOpenSpliceMessageInfo<RTC::TimedPose2D, ExtendedDataTypesFile>(datatypes);
+    RTC::appendOpenSpliceMessageInfo<RTC::TimedVelocity2D, ExtendedDataTypesFile>(datatypes);
+    RTC::appendOpenSpliceMessageInfo<RTC::TimedAcceleration2D, ExtendedDataTypesFile>(datatypes);
+    RTC::appendOpenSpliceMessageInfo<RTC::TimedPoseVel2D, ExtendedDataTypesFile>(datatypes);
+    RTC::appendOpenSpliceMessageInfo<RTC::TimedSize2D, ExtendedDataTypesFile>(datatypes);
+    RTC::appendOpenSpliceMessageInfo<RTC::TimedGeometry2D, ExtendedDataTypesFile>(datatypes);
+    RTC::appendOpenSpliceMessageInfo<RTC::TimedCovariance2D, ExtendedDataTypesFile>(datatypes);
+    RTC::appendOpenSpliceMessageInfo<RTC::TimedPointCovariance2D, ExtendedDataTypesFile>(datatypes);
+    RTC::appendOpenSpliceMessageInfo<RTC::TimedCarlike, ExtendedDataTypesFile>(datatypes);
+    RTC::appendOpenSpliceMessageInfo<RTC::TimedSpeedHeading2D, ExtendedDataTypesFile>(datatypes);
+    RTC::appendOpenSpliceMessageInfo<RTC::TimedPoint3D, ExtendedDataTypesFile>(datatypes);
+    RTC::appendOpenSpliceMessageInfo<RTC::TimedVector3D, ExtendedDataTypesFile>(datatypes);
+    RTC::appendOpenSpliceMessageInfo<RTC::TimedOrientation3D, ExtendedDataTypesFile>(datatypes);
+    RTC::appendOpenSpliceMessageInfo<RTC::TimedPose3D, ExtendedDataTypesFile>(datatypes);
+    RTC::appendOpenSpliceMessageInfo<RTC::TimedVelocity3D, ExtendedDataTypesFile>(datatypes);
+    RTC::appendOpenSpliceMessageInfo<RTC::TimedAngularVelocity3D, ExtendedDataTypesFile>(datatypes);
+    RTC::appendOpenSpliceMessageInfo<RTC::TimedAcceleration3D, ExtendedDataTypesFile>(datatypes);
+    RTC::appendOpenSpliceMessageInfo<RTC::TimedAngularAcceleration3D, ExtendedDataTypesFile>(datatypes);
+    RTC::appendOpenSpliceMessageInfo<RTC::TimedPoseVel3D, ExtendedDataTypesFile>(datatypes);
+    RTC::appendOpenSpliceMessageInfo<RTC::TimedSize3D, ExtendedDataTypesFile>(datatypes);
+    RTC::appendOpenSpliceMessageInfo<RTC::TimedGeometry3D, ExtendedDataTypesFile>(datatypes);
+    RTC::appendOpenSpliceMessageInfo<RTC::TimedCovariance3D, ExtendedDataTypesFile>(datatypes);
+    RTC::appendOpenSpliceMessageInfo<RTC::TimedSpeedHeading3D, ExtendedDataTypesFile>(datatypes);
+    RTC::appendOpenSpliceMessageInfo<RTC::TimedOAP, ExtendedDataTypesFile>(datatypes);
+
+    RTC::appendOpenSpliceMessageInfo < RTC::ActArrayActuatorPos, InterfaceDataTypesFile>(datatypes);
+    RTC::appendOpenSpliceMessageInfo < RTC::ActArrayActuatorSpeed, InterfaceDataTypesFile>(datatypes);
+    RTC::appendOpenSpliceMessageInfo < RTC::ActArrayActuatorCurrent, InterfaceDataTypesFile>(datatypes);
+    RTC::appendOpenSpliceMessageInfo < RTC::ActArrayState, InterfaceDataTypesFile>(datatypes);
+    RTC::appendOpenSpliceMessageInfo < RTC::CameraImage, InterfaceDataTypesFile>(datatypes);
+    RTC::appendOpenSpliceMessageInfo < RTC::Fiducials, InterfaceDataTypesFile>(datatypes);
+    RTC::appendOpenSpliceMessageInfo < RTC::GPSData, InterfaceDataTypesFile>(datatypes);
+    RTC::appendOpenSpliceMessageInfo < RTC::GripperState, InterfaceDataTypesFile>(datatypes);
+    RTC::appendOpenSpliceMessageInfo < RTC::INSData, InterfaceDataTypesFile>(datatypes);
+    RTC::appendOpenSpliceMessageInfo < RTC::LimbState, InterfaceDataTypesFile>(datatypes);
+    RTC::appendOpenSpliceMessageInfo < RTC::Hypotheses2D, InterfaceDataTypesFile>(datatypes);
+    RTC::appendOpenSpliceMessageInfo < RTC::Hypotheses3D, InterfaceDataTypesFile>(datatypes);
+    RTC::appendOpenSpliceMessageInfo < RTC::Features, InterfaceDataTypesFile>(datatypes);
+    RTC::appendOpenSpliceMessageInfo < RTC::MultiCameraImages, InterfaceDataTypesFile>(datatypes);
+    RTC::appendOpenSpliceMessageInfo < RTC::Path2D, InterfaceDataTypesFile>(datatypes);
+    RTC::appendOpenSpliceMessageInfo < RTC::Path3D, InterfaceDataTypesFile>(datatypes);
+    RTC::appendOpenSpliceMessageInfo < RTC::PointCloud, InterfaceDataTypesFile>(datatypes);
+    RTC::appendOpenSpliceMessageInfo < RTC::PanTiltAngles, InterfaceDataTypesFile>(datatypes);
+    RTC::appendOpenSpliceMessageInfo < RTC::PanTiltState, InterfaceDataTypesFile>(datatypes);
+    RTC::appendOpenSpliceMessageInfo < RTC::RangeData, InterfaceDataTypesFile>(datatypes);
+    RTC::appendOpenSpliceMessageInfo < RTC::IntensityData, InterfaceDataTypesFile>(datatypes);
 }

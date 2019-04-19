@@ -224,7 +224,7 @@ namespace RTC
                   return;
               }
           }
-          for (auto topic : m_topics)
+          for (auto& topic : m_topics)
           {
               result = m_participant->delete_topic(topic.second);
               if (!checkStatus(result, "delete_topic() failed"))
@@ -495,6 +495,7 @@ namespace RTC
       }
       tQos.reliability.kind = DDS::RELIABLE_RELIABILITY_QOS;
       tQos.durability.kind = DDS::TRANSIENT_DURABILITY_QOS;
+      
       DDS::Topic_var topic = m_participant->create_topic(topic_name.c_str(), typeName.c_str(), tQos, nullptr, DDS::STATUS_MASK_NONE);
       
       if (!checkHandle(topic.in(), "create_topic() failed"))
@@ -545,7 +546,7 @@ namespace RTC
       coil::create_process(comin, comout);
       
       std::string xmlstr;
-      for (auto c : comout)
+      for (auto& c : comout)
       {
           xmlstr.append(c);
       }
@@ -602,7 +603,7 @@ namespace RTC
       }
 
 
-      OpenRTM::CORBACdrDataTypeSupport_var typesupport = new OpenRTM::CORBACdrDataTypeSupport(id_.inout(), keys_.inout(), descriptor_.inout());
+      OpenRTM_OpenSplice::CORBACdrDataTypeSupport_var typesupport = new OpenRTM_OpenSplice::CORBACdrDataTypeSupport(id_.inout(), keys_.inout(), descriptor_.inout());
       
 
       DDS::String_var typeName = typesupport->get_type_name();
@@ -612,7 +613,7 @@ namespace RTC
       {
           return false;
       }
-      m_typesupports[datatype] = OpenRTM::CORBACdrDataTypeSupport::_duplicate(typesupport.in());
+      m_typesupports[datatype] = OpenRTM_OpenSplice::CORBACdrDataTypeSupport::_duplicate(typesupport.in());
       return true;
   }
 
@@ -631,9 +632,36 @@ namespace RTC
    *
    * @endif
    */
-  bool OpenSpliceManager::unregisterType(const char* /*name*/)
+  bool OpenSpliceManager::unregisterType(std::string& /*name*/)
   {
       return false;
+  }
+
+  /*!
+   * @if jp
+   * @brief 型が登録済みかを確認
+   *
+   * @param name 型名
+   * @return true：登録済み、false：未登録
+   *
+   * @else
+   * @brief
+   *
+   * @param name
+   * @return
+   *
+   * @endif
+   */
+  bool OpenSpliceManager::registeredType(std::string& name)
+  {
+      if (m_typesupports.count(name) == 0)
+      {
+          return false;
+      }
+      else
+      {
+          return true;
+      }
   }
 
   /*!
@@ -686,5 +714,27 @@ namespace RTC
     }
     return *manager;
   }
+
+  /*!
+   * @if jp
+   * @brief OpenSpliceManagerが初期化されている場合に終了処理を呼び出す
+   *
+   *
+   * @else
+   * @brief
+   *
+   * @return
+   *
+   *
+   * @endif
+   */
+    void OpenSpliceManager::shutdown_global()
+    {
+        Guard guard(mutex);
+        if (manager)
+        {
+            manager->finalize();
+        }
+    }
 }
 

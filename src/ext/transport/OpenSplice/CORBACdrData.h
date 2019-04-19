@@ -14,7 +14,7 @@
 #include "sacpp_mapping.h"
 
 
-namespace OpenRTM
+namespace OpenRTM_OpenSplice
 {
    struct CORBACdrData;
 

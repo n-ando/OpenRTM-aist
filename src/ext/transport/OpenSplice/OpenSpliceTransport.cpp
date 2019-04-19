@@ -22,6 +22,36 @@
 #include "OpenSpliceOutPort.h"
 #include "OpenSpliceInPort.h"
 #include "OpenSpliceMessageInfo.h"
+#include "OpenSpliceManagerFunc.h"
+
+
+ManagerActionListener::ManagerActionListener()
+{
+
+}
+ManagerActionListener::~ManagerActionListener()
+{
+
+}
+void ManagerActionListener::preShutdown()
+{
+
+}
+void ManagerActionListener::postShutdown()
+{
+    //終了処理をすると異常終了するため一旦コメントアウトする
+    //RTC_OpenSplice::shutdown();
+}
+void ManagerActionListener::postReinit()
+{
+
+}
+
+void ManagerActionListener::preReinit()
+{
+
+}
+
 
 
 extern "C"
@@ -33,7 +63,7 @@ extern "C"
    * @brief Module initialization
    * @endif
    */
-  void OpenSpliceTransportInit(RTC::Manager* /*manager*/)
+  void OpenSpliceTransportInit(RTC::Manager* manager)
   {
       {
           RTC::InPortConsumerFactory& factory(RTC::InPortConsumerFactory::instance());
@@ -52,8 +82,13 @@ extern "C"
               ::RTC::OpenSpliceInPort>);
       }
       
-      OpenSpliceMessageInfoInit();
+      RTC_OpenSplice::start();
+      OpenSpliceMessageInfoInit(manager->getConfig());
     
+      ManagerActionListener *listener = new ManagerActionListener();
+      manager->addManagerActionListener(listener);
+      
+
   }
   
 };

@@ -12,7 +12,7 @@
 
 
 struct OpenSplice_OpenRTM_CORBACdrData ;
-v_copyin_result OpenSplice_OpenRTM_CORBACdrData_copyIn(c_base base, const struct OpenRTM::CORBACdrData *from, struct OpenSplice_OpenRTM_CORBACdrData *to);
+v_copyin_result OpenSplice_OpenRTM_CORBACdrData_copyIn(c_base base, const struct OpenRTM_OpenSplice::CORBACdrData *from, struct OpenSplice_OpenRTM_CORBACdrData *to);
 void OpenSplice_OpenRTM_CORBACdrData_copyOut(const void *_from, void *_to);
 struct OpenSplice_OpenRTM_CORBACdrData {
     c_sequence data;

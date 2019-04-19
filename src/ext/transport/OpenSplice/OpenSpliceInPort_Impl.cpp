@@ -408,7 +408,7 @@ namespace RTC
     {
         DDS::ReturnCode_t status;
 
-        OpenRTM::CORBACdrDataDataReader_var cdr_reader = OpenRTM::CORBACdrDataDataReader::_narrow(reader);
+        OpenRTM_OpenSplice::CORBACdrDataDataReader_var cdr_reader = OpenRTM_OpenSplice::CORBACdrDataDataReader::_narrow(reader);
 
         if (!OpenSpliceManager::checkHandle(cdr_reader.in(), "failed narrow CORBACdrDataDataReader"))
         {

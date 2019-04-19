@@ -271,7 +271,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief FastRTPManagerが初期化されている場合に終了処理を呼び出す
+   * @brief FastRTPSManagerが初期化されている場合に終了処理を呼び出す
    *
    *
    * @else

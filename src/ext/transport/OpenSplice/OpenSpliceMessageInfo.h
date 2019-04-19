@@ -22,6 +22,7 @@
 
 #include <coil/Properties.h>
 #include <coil/Factory.h>
+#include <rtm/Manager.h>
 
 
 
@@ -136,7 +137,7 @@ namespace RTC
 #endif
 #endif
 
-void OpenSpliceMessageInfoInit();
+void OpenSpliceMessageInfoInit(const coil::Properties& prop);
 
 
 

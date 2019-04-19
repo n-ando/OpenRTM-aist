@@ -296,6 +296,8 @@ namespace RTC
 
         
         OpenSpliceManager& topicmgr = OpenSpliceManager::instance();
+
+        
         if (!topicmgr.registerType(m_dataType, m_idlPath))
         {
             return false;
@@ -320,7 +322,7 @@ namespace RTC
             return false;
         }
 
-        m_writer = OpenRTM::CORBACdrDataDataWriter::_narrow(writer.in());
+        m_writer = OpenRTM_OpenSplice::CORBACdrDataDataWriter::_narrow(writer.in());
 
         if (!OpenSpliceManager::checkHandle(m_writer, "CORBACdrDataDataWriter::_narrow(writer)"))
         {
@@ -401,7 +403,7 @@ namespace RTC
             memcpy(b, data.getBuffer(), data.getDataLength());
         }
 
-        OpenRTM::CORBACdrDataDataWriter_var writer = OpenRTM::CORBACdrDataDataWriter::_narrow(m_writer);
+        OpenRTM_OpenSplice::CORBACdrDataDataWriter_var writer = OpenRTM_OpenSplice::CORBACdrDataDataWriter::_narrow(m_writer);
         if (!OpenSpliceManager::checkHandle(writer, "writer narrow"))
         {
             return false;

@@ -11,7 +11,7 @@
 #include <string>
 
 
-namespace OpenRTM {
+namespace OpenRTM_OpenSplice {
 
     class  CORBACdrDataTypeSupportMetaHolder : public ::DDS::OpenSplice::TypeSupportMetaHolder
     {

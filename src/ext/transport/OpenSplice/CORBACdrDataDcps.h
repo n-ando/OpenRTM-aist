@@ -17,7 +17,7 @@
 #include "dds_dcps.h"
 
 
-namespace OpenRTM
+namespace OpenRTM_OpenSplice
 {
 
    class CORBACdrDataTypeSupportInterface;
