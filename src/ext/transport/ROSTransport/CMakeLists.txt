@@ -70,8 +70,8 @@ else()
 	openrtm_set_link_props_shared(${target})
 	target_include_directories(${target} SYSTEM
 		PRIVATE ${CATKIN_DEVEL_PREFIX}/${CATKIN_GLOBAL_INCLUDE_DESTINATION}/ros
-		PRIVATE${catkin_INCLUDE_DIRS}
-		PRIVATE${Boost_INCLUDE_DIRS})
+		PRIVATE ${catkin_INCLUDE_DIRS}
+		PRIVATE ${Boost_INCLUDE_DIRS})
 	target_link_libraries(${target} PRIVATE ${libs} ${RTM_LINKER_OPTION} ${catkin_LIBRARIES} ${Boost_LIBRARIES})
 	set_target_properties(${target} PROPERTIES PREFIX "")
 

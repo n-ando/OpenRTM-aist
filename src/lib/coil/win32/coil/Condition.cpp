@@ -25,14 +25,14 @@ namespace coil
     {
         cv->waiters_count_ = 0;
         cv->was_broadcast_ = 0;
-        cv->sema_ = ::CreateSemaphore(NULL,       // no security
+        cv->sema_ = ::CreateSemaphore(nullptr,       // no security
             0,           // initially 0
             0x7fffffff,  // max count
-            NULL);      // unnamed
-        cv->waiters_done_ = ::CreateEvent(NULL,  // no security
+            nullptr);      // unnamed
+        cv->waiters_done_ = ::CreateEvent(nullptr,  // no security
             FALSE,  // auto-reset
             FALSE,  // non-signaled initially
-            NULL);  // unnamed
+            nullptr);  // unnamed
         return 0;
     }
 
@@ -115,7 +115,7 @@ namespace coil
         // If there aren't any waiters, then this is a no-op.
         if (have_waiters)
             //    std::cout << "Before ReleaseSemaphore(1)" << std::endl << std::flush ;
-            ReleaseSemaphore(cv->sema_, 1, 0);
+            ReleaseSemaphore(cv->sema_, 1, nullptr);
         //    std::cout << "After ReleaseSemaphore(1)" << std::endl << std::flush ;
         return 0;
     }
@@ -141,7 +141,7 @@ namespace coil
             // Wake up all the waiters atomically.
     //      std::cout << "Before ReleaseSemaphore(" << cv->waiters_count_ << ")"
     //                << std::endl << std::flush ;
-            ReleaseSemaphore(cv->sema_, cv->waiters_count_, 0);
+            ReleaseSemaphore(cv->sema_, cv->waiters_count_, nullptr);
             //      std::cout << "After ReleaseSemaphore(" << cv->waiters_count_ << ")"
             //                << std::endl << std::flush ;
 

@@ -100,7 +100,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~FastRTPSInPort(void);
+    ~FastRTPSInPort(void) override;
 
     /*!
      * @if jp
@@ -129,7 +129,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual void init(coil::Properties& prop);
+    void init(coil::Properties& prop) override;
 
     /*!
      * @if jp
@@ -156,7 +156,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual void setBuffer(BufferBase<ByteData>* buffer);
+    void setBuffer(BufferBase<ByteData>* buffer) override;
 
     /*!
      * @if jp
@@ -206,8 +206,8 @@ namespace RTC
      *
      * @endif
      */
-    virtual void setListener(ConnectorInfo& info,
-                             ConnectorListeners* listeners);
+    void setListener(ConnectorInfo& info,
+                             ConnectorListeners* listeners) override;
 
     /*!
      * @if jp
@@ -233,7 +233,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual void setConnector(InPortConnector* connector);
+    void setConnector(InPortConnector* connector) override;
 
 
     /*!

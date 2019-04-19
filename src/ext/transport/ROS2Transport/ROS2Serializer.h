@@ -106,7 +106,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~ROS2SerializerBase(){};
+    ~ROS2SerializerBase() override {};
 
     /*!
      * @if jp
@@ -127,7 +127,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual void writeData(const unsigned char* buffer, unsigned long length)
+    void writeData(const unsigned char* buffer, unsigned long length) override
     {
       m_message.reserve(length);
       m_message.length = length;
@@ -155,7 +155,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual void readData(unsigned char* buffer, unsigned long length) const
+    void readData(unsigned char* buffer, unsigned long length) const override
     {
       memcpy(buffer, m_message.data, length);
     }
@@ -176,7 +176,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual unsigned long getDataLength() const
+    unsigned long getDataLength() const override
     {
       return m_message.length;
     }
@@ -197,7 +197,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual bool serialize(const DataType& data)
+    bool serialize(const DataType& data) override
     {
       (void)data;
       return false;
@@ -219,7 +219,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual bool deserialize(DataType& data)
+    bool deserialize(DataType& data) override
     {
       (void)data;
       return false;
@@ -491,7 +491,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~ROS2SimpleData()
+    ~ROS2SimpleData() override
     {
 
     }
@@ -513,7 +513,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual bool serialize(const DataType& data)
+    bool serialize(const DataType& data) override
     {
 
       MessageType msg;
@@ -539,7 +539,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual bool deserialize(DataType& data)
+    bool deserialize(DataType& data) override
     { 
 
       MessageType msg;
@@ -603,7 +603,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~ROS2SequenceData()
+    ~ROS2SequenceData() override
     {
 
     }
@@ -625,7 +625,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual bool serialize(const DataType& data)
+    bool serialize(const DataType& data) override
     {
       
       MessageType msg;
@@ -655,7 +655,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual bool deserialize(DataType& data)
+    bool deserialize(DataType& data) override
     { 
 
       MessageType msg;

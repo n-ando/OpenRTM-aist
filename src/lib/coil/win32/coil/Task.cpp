@@ -93,12 +93,12 @@ namespace coil
     if (m_count == 0)
       {
         m_thread =
-           (HANDLE)::_beginthreadex(NULL,  // security
+           (HANDLE)::_beginthreadex(nullptr,  // security
            0,  // stuck size
            Task::svc_run,  // func
            reinterpret_cast<void*>(this),  // argument
            0,  // flag (0 or CREATE_SUSPEND)
-           NULL);  // thread descripter
+           nullptr);  // thread descripter
         ++m_count;
       };
   }
@@ -110,7 +110,7 @@ namespace coil
    * @brief Waiting for the thread terminate
    * @endif
    */
-  int Task::wait(void)
+  int Task::wait()
   {
     if (m_count > 0)
       {
@@ -134,7 +134,7 @@ namespace coil
    * @brief Suspending the task
    * @endif
    */
-  int Task::suspend(void)
+  int Task::suspend()
   {
     return 0;
   }
@@ -146,7 +146,7 @@ namespace coil
    * @brief Resuming the suspended task
    * @endif
    */
-  int Task::resume(void)
+  int Task::resume()
   {
     return 0;
   }

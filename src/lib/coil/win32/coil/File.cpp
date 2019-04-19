@@ -188,9 +188,9 @@ namespace coil
    */
   DIR* opendir(const char *name)
   {
-    if (name == 0) { return 0; }
+    if (name == nullptr) { return nullptr; }
     std::string path(name);
-    if (path.empty()) { return 0; }
+    if (path.empty()) { return nullptr; }
 
     // path has at least one or more path characters
     if (*(path.end() - 1) != '\\' && *(path.end() - 1) != '/')
@@ -214,12 +214,12 @@ namespace coil
       {
         fd = new WIN32_FIND_DATAA();
         dhandle = FindFirstFileA(path.c_str(), fd);
-        if (dhandle == INVALID_HANDLE_VALUE) { delete fd; return 0; }
+        if (dhandle == INVALID_HANDLE_VALUE) { delete fd; return nullptr; }
 
       }
     catch (...)
       {
-        return 0;
+        return nullptr;
       }
 
     DIR* dir;
@@ -233,7 +233,7 @@ namespace coil
     catch (...)
       {
         delete fd;
-        return 0;
+        return nullptr;
       }
     return dir;
   }
@@ -264,9 +264,9 @@ namespace coil
    */
   dirent* readdir(DIR *dir)
   {
-    if (dir == 0) { return 0; }
-    if (dir->fd == 0) { return 0;}
-    if (!dir->has_next) { return 0; }
+    if (dir == nullptr) { return nullptr; }
+    if (dir->fd == nullptr) { return nullptr;}
+    if (!dir->has_next) { return nullptr; }
 
     strcpy_s(dir->entry.d_name, _MAX_PATH, dir->fd->cFileName);
     dir->has_next = FindNextFileA(dir->h, dir->fd);
@@ -299,12 +299,12 @@ namespace coil
    */
   int closedir(DIR *dir)
   {
-    if (dir == 0) { return -1; }
-    if (dir->h != 0 && dir->h != INVALID_HANDLE_VALUE)
+    if (dir == nullptr) { return -1; }
+    if (dir->h != nullptr && dir->h != INVALID_HANDLE_VALUE)
       {
         FindClose(dir->h);
       }
-    if (dir->fd != 0) { delete dir->fd; }
+    if (dir->fd != nullptr) { delete dir->fd; }
     delete dir;
 
     return 0;
@@ -343,13 +343,13 @@ namespace coil
     coil::vstring flist;
     bool has_glob(false);
 
-    if (path == 0) { return flist; }
+    if (path == nullptr) { return flist; }
     if (glob_str[0] != '\0') { has_glob = true; }
 
     DIR* dir_ptr(coil::opendir(path));
-    if (dir_ptr == 0) { return flist; }
+    if (dir_ptr == nullptr) { return flist; }
 
-    while ((ent = coil::readdir(dir_ptr)) != 0)
+    while ((ent = coil::readdir(dir_ptr)) != nullptr)
       {
         bool match(true);
         if (has_glob)
