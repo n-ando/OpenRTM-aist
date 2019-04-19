@@ -38,7 +38,7 @@ namespace RTC
         typedef CORBACdrData type;
 
     	CORBACdrDataPubSubType();
-    	virtual ~CORBACdrDataPubSubType();
+    	~CORBACdrDataPubSubType() override;
         void init(std::string name, bool header_enable);
         void setEndian(bool endian);
     	bool serialize(void *data, eprosima::fastrtps::rtps::SerializedPayload_t *payload);

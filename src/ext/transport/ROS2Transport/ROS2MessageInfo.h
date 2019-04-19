@@ -101,7 +101,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~ROS2MessageInfo(void) {}
+    ~ROS2MessageInfo(void) override {}
 
     /*!
      * @if jp
@@ -120,7 +120,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual std::string topic_name(std::string topic)
+    std::string topic_name(std::string topic) override
     {
         std::string ret = "rt/" + topic;
         return ret;
@@ -140,7 +140,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual std::string data_type()
+    std::string data_type() override
     {
         std::string str = rosidl_generator_traits::data_type<MessageType>();
         coil::vstring str_list = coil::split(str, "::");

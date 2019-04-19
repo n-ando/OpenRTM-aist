@@ -20,7 +20,34 @@
 #include "FastRTPSTransport.h"
 #include "FastRTPSOutPort.h"
 #include "FastRTPSInPort.h"
+#include "FastRTPSManager.h"
 
+
+ManagerActionListener::ManagerActionListener()
+{
+
+}
+ManagerActionListener::~ManagerActionListener()
+{
+
+}
+void ManagerActionListener::preShutdown()
+{
+
+}
+void ManagerActionListener::postShutdown()
+{
+    RTC::FastRTPSManager::shutdown_global();
+}
+void ManagerActionListener::postReinit()
+{
+
+}
+
+void ManagerActionListener::preReinit()
+{
+
+}
 
 extern "C"
 {
@@ -33,7 +60,7 @@ extern "C"
    */
   void FastRTPSTransportInit(RTC::Manager* manager)
   {
-    (void)manager;
+
     {
         
       RTC::InPortProviderFactory& factory(RTC::InPortProviderFactory::instance());
@@ -52,6 +79,9 @@ extern "C"
                         ::coil::Destructor< ::RTC::InPortConsumer,
                                             ::RTC::FastRTPSOutPort>);
     }
+
+    ManagerActionListener *listener = new ManagerActionListener();
+    manager->addManagerActionListener(listener);
     
   }
   

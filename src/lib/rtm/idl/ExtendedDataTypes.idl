@@ -716,6 +716,34 @@ module RTC {
     Time tm;
     Quaternion data;
   };
+
+  #pragma keylist TimedRGBColour
+  #pragma keylist TimedPoint2D
+  #pragma keylist TimedVector2D
+  #pragma keylist TimedPose2D
+  #pragma keylist TimedVelocity2D
+  #pragma keylist TimedAcceleration2D
+  #pragma keylist TimedPoseVel2D
+  #pragma keylist TimedSize2D
+  #pragma keylist TimedGeometry2D
+  #pragma keylist TimedCovariance2D
+  #pragma keylist TimedPointCovariance2D
+  #pragma keylist TimedCarlike
+  #pragma keylist TimedSpeedHeading2D
+  #pragma keylist TimedPoint3D
+  #pragma keylist TimedVector3D
+  #pragma keylist TimedOrientation3D
+  #pragma keylist TimedPose3D
+  #pragma keylist TimedVelocity3D
+  #pragma keylist TimedAngularVelocity3D
+  #pragma keylist TimedAcceleration3D
+  #pragma keylist TimedAngularAcceleration3D
+  #pragma keylist TimedPoseVel3D
+  #pragma keylist TimedSize3D
+  #pragma keylist TimedGeometry3D
+  #pragma keylist TimedCovariance3D
+  #pragma keylist TimedSpeedHeading3D
+  #pragma keylist TimedOAP
 };
 
 #endif // ExtendedDataTypes_idl

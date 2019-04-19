@@ -323,7 +323,6 @@ namespace RTC
       return;
     }
 
-    //int code = response[0];
     std::string msg = response[1];
 
     std::string id = response[2][0];

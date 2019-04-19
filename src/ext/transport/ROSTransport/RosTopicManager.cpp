@@ -55,7 +55,7 @@ namespace RTC
    *
    * @endif
    */
-  RosTopicManager::RosTopicManager()// : rtclog("RosTopicManager")
+  RosTopicManager::RosTopicManager()
   {
 
   }
@@ -73,7 +73,7 @@ namespace RTC
    *
    * @endif
    */
-  RosTopicManager::RosTopicManager(const RosTopicManager &/*mgr*/)// : rtclog("RosTopicManager")
+  RosTopicManager::RosTopicManager(const RosTopicManager &/*mgr*/)
   {
     
   }
@@ -109,7 +109,6 @@ namespace RTC
    */
   void RosTopicManager::start()
   {
-    //RTC_PARANOID(("start"));
     ros::M_string remappings;
     ros::network::init(remappings);
 
@@ -119,16 +118,14 @@ namespace RTC
     m_xmlrpc_manager->bind("publisherUpdate", boost::bind(&RosTopicManager::pubUpdateCallback, this, _1, _2));
     
 
-    //RTC_PARANOID(("Poll Manager start"));
     m_poll_manager = ros::PollManager::instance();
     m_poll_manager->start();
     m_tcpserver_transport = boost::make_shared<ros::TransportTCP>(&m_poll_manager->getPollSet());
     
     m_tcpserver_transport->listen(ros::network::getTCPROSPort(), 
-		            100, 
-		            boost::bind(&RosTopicManager::tcprosAcceptConnection, this, _1));
-                
-    //RTC_PARANOID(("XML-RPC Manager start"));
+                            100, 
+                            boost::bind(&RosTopicManager::tcprosAcceptConnection, this, _1));
+
     m_xmlrpc_manager->start();
   }
 
@@ -318,6 +315,7 @@ namespace RTC
             result = ros::xmlrpc::responseInt(0, ros::console::g_last_error_message, 0);
             return;
         }
+
         for(auto & subscriber : m_subscribers)
         {
           //RTC_VERBOSE(("Connect TCP"));
@@ -370,7 +368,6 @@ namespace RTC
    */
   void RosTopicManager::addPublisher(ROSOutPort *publisher)
   {
-    //RTC_PARANOID(("addPublisher()"));
 
     if(!existPublisher(publisher))
     {
@@ -395,7 +392,6 @@ namespace RTC
    */
   void RosTopicManager::addSubscriber(ROSInPort *subscriber)
   {
-    //RTC_PARANOID(("addSubscriber()"));
     if(!existSubscriber(subscriber))
     {
       m_subscribers.push_back(subscriber);
@@ -419,7 +415,6 @@ namespace RTC
    */
   bool RosTopicManager::removePublisher(ROSOutPort *publisher)
   {
-    //RTC_PARANOID(("removePublisher()"));
     if(existPublisher(publisher))
     {
       m_publishers.erase(remove(m_publishers.begin(), m_publishers.end(), publisher), m_publishers.end());
@@ -444,7 +439,6 @@ namespace RTC
    */
   bool RosTopicManager::removeSubscriber(ROSInPort *subscriber)
   {
-    //RTC_PARANOID(("removeSubscriber()"));
     if(existSubscriber(subscriber))
     {
       m_subscribers.erase(remove(m_subscribers.begin(), m_subscribers.end(), subscriber), m_subscribers.end());
@@ -472,7 +466,6 @@ namespace RTC
    */
   bool RosTopicManager::existPublisher(ROSOutPort *publisher)
   {
-    //RTC_PARANOID(("existPublisher()"));
     std::vector<ROSOutPort*>::iterator itr = std::find(m_publishers.begin(), m_publishers.end(), publisher);
     size_t index = std::distance( m_publishers.begin(), itr );
     
@@ -498,7 +491,6 @@ namespace RTC
    */
   bool RosTopicManager::existSubscriber(ROSInPort *subscriber)
   {
-    //RTC_PARANOID(("existSubscriber()"));
     std::vector<ROSInPort*>::iterator itr = std::find(m_subscribers.begin(), m_subscribers.end(), subscriber);
     size_t index = std::distance( m_subscribers.begin(), itr );
     return (index != m_subscribers.size());
@@ -520,7 +512,6 @@ namespace RTC
    */
   RosTopicManager* RosTopicManager::init()
   {
-    //RTC_PARANOID(("init()"));
     Guard guard(mutex);
     if (!manager)
     {

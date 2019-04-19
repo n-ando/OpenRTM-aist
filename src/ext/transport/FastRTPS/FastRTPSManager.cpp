@@ -44,7 +44,7 @@ namespace RTC
    *
    * @endif
    */
-  FastRTPSManager::FastRTPSManager(std::string& xml_profile_file)// : rtclog("FastRTPSManager")
+  FastRTPSManager::FastRTPSManager(std::string& xml_profile_file)
   {
       if (!xml_profile_file.empty())
       {
@@ -65,7 +65,7 @@ namespace RTC
    *
    * @endif
    */
-  FastRTPSManager::FastRTPSManager(const FastRTPSManager &/*mgr*/)// : rtclog("FastRTPSManager")
+  FastRTPSManager::FastRTPSManager(const FastRTPSManager &/*mgr*/)
   {
     
   }
@@ -123,7 +123,6 @@ namespace RTC
    */
   void FastRTPSManager::shutdown()
   {
-      Guard guard(mutex);
       eprosima::fastrtps::Domain::removeParticipant(m_participant);
       manager = nullptr;
   }
@@ -143,6 +142,7 @@ namespace RTC
    */
   eprosima::fastrtps::Participant* FastRTPSManager::getParticipant()
   {
+      Guard guard(mutex);
       return m_participant;
   }
 
@@ -163,6 +163,7 @@ namespace RTC
    */
   bool FastRTPSManager::registerType(eprosima::fastrtps::TopicDataType* type)
   {
+      Guard guard(mutex);
       if (registeredType(type->getName()))
       {
           return true;
@@ -187,6 +188,7 @@ namespace RTC
    */
   bool FastRTPSManager::registeredType(const char* name)
   {
+      Guard guard(mutex);
       eprosima::fastrtps::TopicDataType* type_;
       return eprosima::fastrtps::Domain::getRegisteredType(m_participant, name, &type_);
   }
@@ -208,6 +210,7 @@ namespace RTC
    */
   bool FastRTPSManager::unregisterType(const char* name)
   {
+      Guard guard(mutex);
       if (!registeredType(name))
       {
           return false;
@@ -231,7 +234,6 @@ namespace RTC
    */
   FastRTPSManager* FastRTPSManager::init(std::string xml_profile_file)
   {
-    //RTC_PARANOID(("init()"));
     Guard guard(mutex);
     if (!manager)
     {
@@ -264,6 +266,28 @@ namespace RTC
       manager->start();
     }
     return *manager;
+  }
+
+  /*!
+   * @if jp
+   * @brief FastRTPManagerが初期化されている場合に終了処理を呼び出す
+   *
+   *
+   * @else
+   * @brief
+   *
+   * @return
+   *
+   *
+   * @endif
+   */
+  void FastRTPSManager::shutdown_global()
+  {
+      Guard guard(mutex);
+      if (manager)
+      {
+          manager->shutdown();
+      }
   }
 }
 

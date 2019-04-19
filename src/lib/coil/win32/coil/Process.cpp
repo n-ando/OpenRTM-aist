@@ -18,6 +18,7 @@
  */
 
 #include <coil/Process.h>
+#include <memory>
 
 namespace coil
 {
@@ -51,8 +52,8 @@ namespace coil
     PROCESS_INFORMATION pi;
     ZeroMemory( &pi, sizeof(pi) );
 
-    if (!CreateProcess(NULL, lpcommand, NULL, NULL, FALSE, 0,
-                      NULL, NULL, &si, &pi) )
+    if (!CreateProcess(nullptr, lpcommand, nullptr, nullptr, FALSE, 0,
+                      nullptr, nullptr, &si, &pi) )
       {
         delete lpcommand;
         return -1;
@@ -84,8 +85,8 @@ namespace coil
       SECURITY_ATTRIBUTES sa;
       sa.nLength = sizeof(sa);
       sa.bInheritHandle = TRUE;
-      sa.lpSecurityDescriptor = NULL;
-      if (!CreatePipe(&rPipe, &wPipe, &sa, 0))
+      sa.lpSecurityDescriptor = nullptr;
+      if (!CreatePipe(&rPipe, &wPipe, &sa, 65535))
       {
           return -1;
       }
@@ -110,8 +111,8 @@ namespace coil
       _tcscpy_s(lpcommand, command.size() + 1, command.c_str());
 #endif // UNICODE
 
-      PROCESS_INFORMATION pi = { 0 };
-      if (!CreateProcess(NULL, lpcommand, NULL, NULL, TRUE, CREATE_NO_WINDOW, NULL, NULL, &si, &pi))
+      PROCESS_INFORMATION pi = { nullptr };
+      if (!CreateProcess(nullptr, lpcommand, nullptr, nullptr, TRUE, CREATE_NO_WINDOW, nullptr, nullptr, &si, &pi))
       {
           delete lpcommand;
           return -1;
@@ -123,12 +124,13 @@ namespace coil
       CloseHandle(pi.hThread);
 
 
-      char Buf[1025] = { 0 };
       DWORD len;
-      ReadFile(rPipe, Buf, sizeof(Buf) - 1, &len, NULL);
+      DWORD size = GetFileSize(rPipe, nullptr);
+      std::unique_ptr<CHAR> Buf(new CHAR[size]);
+      ReadFile(rPipe, Buf.get(), size, &len, nullptr);
 
 
-      out = coil::split(std::string(Buf), "\n");
+      out = coil::split(std::string(Buf.get()), "\n");
 
       for(auto & o : out)
       {
@@ -151,7 +153,7 @@ namespace coil
 
   Popen::~Popen()
     {
-      if (m_fd != 0)
+      if (m_fd != nullptr)
         {
           _pclose(m_fd);
         }
@@ -165,7 +167,7 @@ namespace coil
 
   std::string Popen::getline()
     {
-      if (m_fd == 0) { return ""; }
+      if (m_fd == nullptr) { return ""; }
       if (feof(m_fd)) { return ""; }
       char str[512];
       fgets(str, 512, m_fd);

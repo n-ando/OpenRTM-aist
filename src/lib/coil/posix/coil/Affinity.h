@@ -116,7 +116,7 @@ namespace coil
    * @return True: success, False: fail
    * @endif
    */
-  bool setThreadCpuAffinity(const std::string& mask);
+  bool setThreadCpuAffinity(const std::string& cpu_mask);
 
 } // namespace coil
 #endif // COIL_AFFINITY_H

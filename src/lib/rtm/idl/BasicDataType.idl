@@ -187,6 +187,28 @@ module RTC {
 	Time tm;
 	sequence<wstring> data;
   };
+
+  #pragma keylist TimedState
+  #pragma keylist TimedShort
+  #pragma keylist TimedLong
+  #pragma keylist TimedUShort
+  #pragma keylist TimedULong
+  #pragma keylist TimedFloat
+  #pragma keylist TimedDouble
+  #pragma keylist TimedChar
+  #pragma keylist TimedBoolean
+  #pragma keylist TimedOctet
+  #pragma keylist TimedString
+  #pragma keylist TimedShortSeq
+  #pragma keylist TimedLongSeq
+  #pragma keylist TimedUShortSeq
+  #pragma keylist TimedULongSeq
+  #pragma keylist TimedFloatSeq
+  #pragma keylist TimedDoubleSeq
+  #pragma keylist TimedCharSeq
+  #pragma keylist TimedBooleanSeq
+  #pragma keylist TimedOctetSeq
+  #pragma keylist TimedStringSeq
   
 };
 
