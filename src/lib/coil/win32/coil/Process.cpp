@@ -125,10 +125,10 @@ namespace coil
 
 
       DWORD len;
-      DWORD size = GetFileSize(rPipe, NULL);
+      DWORD size = GetFileSize(rPipe, nullptr);
       std::unique_ptr<CHAR[]> Buf(new CHAR[size + 1]);
       Buf[size] = '\0';
-      ReadFile(rPipe, Buf.get(), size, &len, NULL);
+      ReadFile(rPipe, Buf.get(), size, &len, nullptr);
 
       out = coil::split(std::string(Buf.get()), "\n");
 
