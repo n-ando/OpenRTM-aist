@@ -126,15 +126,15 @@ namespace coil
 
       DWORD len;
       DWORD size = GetFileSize(rPipe, nullptr);
-      std::unique_ptr<CHAR> Buf(new CHAR[size]);
+      std::unique_ptr<CHAR[]> Buf(new CHAR[size + 1]);
+      Buf[size] = '\0';
       ReadFile(rPipe, Buf.get(), size, &len, nullptr);
-
 
       out = coil::split(std::string(Buf.get()), "\n");
 
       for(auto & o : out)
       {
-          if (0 < o.size())
+          if (!o.empty() && o.back() == '\r')
           {
               o.erase(o.size() - 1);
           }
