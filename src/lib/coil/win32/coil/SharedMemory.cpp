@@ -194,7 +194,7 @@ namespace coil
 		  return -1;
 	  }
 
-	  memcpy(&m_shm[pos],&data[0],size);
+	  memcpy(&m_shm[pos],&data[0], static_cast<size_t>(size));
     
 	  return 0;
   }
@@ -227,7 +227,7 @@ namespace coil
 		  return -1;
 	  }
 
-	  memcpy(&data[0],&m_shm[pos],size);
+	  memcpy(&data[0],&m_shm[pos], static_cast<size_t>(size));
 	  return 0;
   }
 
