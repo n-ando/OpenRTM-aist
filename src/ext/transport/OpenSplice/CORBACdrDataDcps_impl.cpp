@@ -1,101 +1,108 @@
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
+#pragma warning(push)
+#pragma warning(disable:4819)
+#endif
 #include "CORBACdrDataDcps_impl.h"
 #include "CORBACdrDataSplDcps.h"
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
+#pragma warning(pop)
+#endif
 #include <iostream>
 //
 
 
-// DDS OpenRTM::CORBACdrData TypeSupportMetaHolder Object Body
-OpenRTM::CORBACdrDataTypeSupportMetaHolder::CORBACdrDataTypeSupportMetaHolder (::DDS::String datatype, ::DDS::String keys, ::DDS::String descriptor) :
-        DDS::OpenSplice::TypeSupportMetaHolder (datatype, "", keys),
+// DDS OpenRTM_OpenSplice::CORBACdrData TypeSupportMetaHolder Object Body
+OpenRTM_OpenSplice::CORBACdrDataTypeSupportMetaHolder::CORBACdrDataTypeSupportMetaHolder (::DDS::String datatype, ::DDS::String keys, ::DDS::String descriptor) :
+        DDS::OpenSplice::TypeSupportMetaHolder (DDS::string_dup(datatype), "", DDS::string_dup(keys)),
         m_datatype(DDS::string_dup(datatype)), m_keys(DDS::string_dup(keys)), m_descriptor(DDS::string_dup(descriptor))
 {
     copyIn = (DDS::OpenSplice::cxxCopyIn) OpenSplice_OpenRTM_CORBACdrData_copyIn;
     copyOut = (DDS::OpenSplice::cxxCopyOut) OpenSplice_OpenRTM_CORBACdrData_copyOut;
     
     metaDescriptorArrLength = 1;
-    metaDescriptorLength = strlen(m_descriptor)+1;
+    metaDescriptorLength = static_cast<DDS::ULong>(strlen(m_descriptor.in()));
     metaDescriptor = new const char*[metaDescriptorArrLength];
-    metaDescriptor[0] = DDS::string_dup(m_descriptor);
+    metaDescriptor[0] = DDS::string_dup(m_descriptor.in());
 }
 
-OpenRTM::CORBACdrDataTypeSupportMetaHolder::~CORBACdrDataTypeSupportMetaHolder ()
+OpenRTM_OpenSplice::CORBACdrDataTypeSupportMetaHolder::~CORBACdrDataTypeSupportMetaHolder ()
 {
     // Rely on parent destructor.
 }
 
 ::DDS::OpenSplice::TypeSupportMetaHolder *
-OpenRTM::CORBACdrDataTypeSupportMetaHolder::clone()
+OpenRTM_OpenSplice::CORBACdrDataTypeSupportMetaHolder::clone()
 {
-    return new OpenRTM::CORBACdrDataTypeSupportMetaHolder(m_datatype, m_keys, m_descriptor);
+    return new OpenRTM_OpenSplice::CORBACdrDataTypeSupportMetaHolder(m_datatype, m_keys, m_descriptor);
 }
 
 ::DDS::OpenSplice::DataWriter *
-OpenRTM::CORBACdrDataTypeSupportMetaHolder::create_datawriter ()
+OpenRTM_OpenSplice::CORBACdrDataTypeSupportMetaHolder::create_datawriter ()
 {
-    return new OpenRTM::CORBACdrDataDataWriter_impl();
+    return new OpenRTM_OpenSplice::CORBACdrDataDataWriter_impl();
 }
 
 ::DDS::OpenSplice::DataReader *
-OpenRTM::CORBACdrDataTypeSupportMetaHolder::create_datareader ()
+OpenRTM_OpenSplice::CORBACdrDataTypeSupportMetaHolder::create_datareader ()
 {
-    return new OpenRTM::CORBACdrDataDataReader_impl();
+    return new OpenRTM_OpenSplice::CORBACdrDataDataReader_impl();
 }
 
 ::DDS::OpenSplice::DataReaderView *
-OpenRTM::CORBACdrDataTypeSupportMetaHolder::create_view ()
+OpenRTM_OpenSplice::CORBACdrDataTypeSupportMetaHolder::create_view ()
 {
-    return new OpenRTM::CORBACdrDataDataReaderView_impl();
+    return new OpenRTM_OpenSplice::CORBACdrDataDataReaderView_impl();
 }
 
-// DDS OpenRTM::CORBACdrData TypeSupport Object Body
-OpenRTM::CORBACdrDataTypeSupport::CORBACdrDataTypeSupport (::DDS::String datatype, ::DDS::String keys, ::DDS::String descriptor) :
+// DDS OpenRTM_OpenSplice::CORBACdrData TypeSupport Object Body
+OpenRTM_OpenSplice::CORBACdrDataTypeSupport::CORBACdrDataTypeSupport (::DDS::String datatype, ::DDS::String keys, ::DDS::String descriptor) :
         DDS::OpenSplice::TypeSupport()
 {
-    tsMetaHolder = new OpenRTM::CORBACdrDataTypeSupportMetaHolder(datatype, keys, descriptor);
+    tsMetaHolder = new OpenRTM_OpenSplice::CORBACdrDataTypeSupportMetaHolder(datatype, keys, descriptor);
     
 }
 
-OpenRTM::CORBACdrDataTypeSupport::~CORBACdrDataTypeSupport ()
+OpenRTM_OpenSplice::CORBACdrDataTypeSupport::~CORBACdrDataTypeSupport ()
 {
     DDS::release(tsMetaHolder);
 }
 
-// DDS OpenRTM::CORBACdrData DataWriter_impl Object Body
-OpenRTM::CORBACdrDataDataWriter_impl::CORBACdrDataDataWriter_impl ()
+// DDS OpenRTM_OpenSplice::CORBACdrData DataWriter_impl Object Body
+OpenRTM_OpenSplice::CORBACdrDataDataWriter_impl::CORBACdrDataDataWriter_impl ()
 {
     // Parent constructor takes care of everything.
 }
 
-OpenRTM::CORBACdrDataDataWriter_impl::~CORBACdrDataDataWriter_impl ()
+OpenRTM_OpenSplice::CORBACdrDataDataWriter_impl::~CORBACdrDataDataWriter_impl ()
 {
     // Parent destructor takes care of everything.
 }
 
 ::DDS::ReturnCode_t
-OpenRTM::CORBACdrDataDataWriter_impl::init (
-        DDS::OpenSplice::Publisher *publisher,
-        DDS::OpenSplice::DomainParticipant *participant,
+OpenRTM_OpenSplice::CORBACdrDataDataWriter_impl::init (
+        DDS::OpenSplice::Publisher *publisher_,
+        DDS::OpenSplice::DomainParticipant *participant_,
         const DDS::DataWriterQos &qos,
         DDS::OpenSplice::Topic *a_topic,
         const char *name,
-        DDS::OpenSplice::cxxCopyIn copyIn,
-        DDS::OpenSplice::cxxCopyOut copyOut,
-        u_writerCopy writerCopy,
-        void *cdrMarshaler)
+        DDS::OpenSplice::cxxCopyIn copyIn_,
+        DDS::OpenSplice::cxxCopyOut copyOut_,
+        u_writerCopy writerCopy_,
+        void *cdrMarshaler_)
 {
     return DDS::OpenSplice::FooDataWriter_impl::nlReq_init(
-            publisher, participant, qos, a_topic, name, copyIn, copyOut, writerCopy, cdrMarshaler);
+            publisher_, participant_, qos, a_topic, name, copyIn_, copyOut_, writerCopy_, cdrMarshaler_);
 }
 
 ::DDS::InstanceHandle_t
-OpenRTM::CORBACdrDataDataWriter_impl::register_instance (
-    const OpenRTM::CORBACdrData & instance_data) THROW_ORB_EXCEPTIONS
+OpenRTM_OpenSplice::CORBACdrDataDataWriter_impl::register_instance (
+    const OpenRTM_OpenSplice::CORBACdrData & instance_data) THROW_ORB_EXCEPTIONS
 {
     return DDS::OpenSplice::FooDataWriter_impl::register_instance(&instance_data);
 }
 
 ::DDS::InstanceHandle_t
-OpenRTM::CORBACdrDataDataWriter_impl::register_instance_w_timestamp (
+OpenRTM_OpenSplice::CORBACdrDataDataWriter_impl::register_instance_w_timestamp (
     const CORBACdrData & instance_data,
     const ::DDS::Time_t & source_timestamp) THROW_ORB_EXCEPTIONS
 {
@@ -103,109 +110,109 @@ OpenRTM::CORBACdrDataDataWriter_impl::register_instance_w_timestamp (
 }
 
 ::DDS::ReturnCode_t
-OpenRTM::CORBACdrDataDataWriter_impl::unregister_instance (
-    const OpenRTM::CORBACdrData & instance_data,
-    ::DDS::InstanceHandle_t handle) THROW_ORB_EXCEPTIONS
+OpenRTM_OpenSplice::CORBACdrDataDataWriter_impl::unregister_instance (
+    const OpenRTM_OpenSplice::CORBACdrData & instance_data,
+    ::DDS::InstanceHandle_t handle_) THROW_ORB_EXCEPTIONS
 {
-    return DDS::OpenSplice::FooDataWriter_impl::unregister_instance(&instance_data, handle);
+    return DDS::OpenSplice::FooDataWriter_impl::unregister_instance(&instance_data, handle_);
 }
 
 ::DDS::ReturnCode_t
-OpenRTM::CORBACdrDataDataWriter_impl::unregister_instance_w_timestamp (
+OpenRTM_OpenSplice::CORBACdrDataDataWriter_impl::unregister_instance_w_timestamp (
     const CORBACdrData & instance_data,
-    ::DDS::InstanceHandle_t handle,
+    ::DDS::InstanceHandle_t handle_,
     const ::DDS::Time_t & source_timestamp) THROW_ORB_EXCEPTIONS
 {
-    return DDS::OpenSplice::FooDataWriter_impl::unregister_instance_w_timestamp(&instance_data, handle, source_timestamp);
+    return DDS::OpenSplice::FooDataWriter_impl::unregister_instance_w_timestamp(&instance_data, handle_, source_timestamp);
 }
 
 ::DDS::ReturnCode_t
-OpenRTM::CORBACdrDataDataWriter_impl::write_cdr(
+OpenRTM_OpenSplice::CORBACdrDataDataWriter_impl::write_cdr(
     const ::DDS::CDRSample & data,
-    ::DDS::InstanceHandle_t handle) THROW_ORB_EXCEPTIONS
+    ::DDS::InstanceHandle_t handle_) THROW_ORB_EXCEPTIONS
 {
-    return DDS::OpenSplice::FooDataWriter_impl::write_cdr(data, handle);
+    return DDS::OpenSplice::FooDataWriter_impl::write_cdr(data, handle_);
 }
 
 ::DDS::ReturnCode_t
-OpenRTM::CORBACdrDataDataWriter_impl::write (
-    const OpenRTM::CORBACdrData & instance_data,
-    ::DDS::InstanceHandle_t handle) THROW_ORB_EXCEPTIONS
+OpenRTM_OpenSplice::CORBACdrDataDataWriter_impl::write (
+    const OpenRTM_OpenSplice::CORBACdrData & instance_data,
+    ::DDS::InstanceHandle_t handle_) THROW_ORB_EXCEPTIONS
 {
-    return DDS::OpenSplice::FooDataWriter_impl::write(&instance_data, handle);
+    return DDS::OpenSplice::FooDataWriter_impl::write(&instance_data, handle_);
 }
 
 ::DDS::ReturnCode_t
-OpenRTM::CORBACdrDataDataWriter_impl::write_w_timestamp (
+OpenRTM_OpenSplice::CORBACdrDataDataWriter_impl::write_w_timestamp (
     const CORBACdrData & instance_data,
-    ::DDS::InstanceHandle_t handle,
+    ::DDS::InstanceHandle_t handle_,
     const ::DDS::Time_t & source_timestamp) THROW_ORB_EXCEPTIONS
 {
-    return DDS::OpenSplice::FooDataWriter_impl::write_w_timestamp(&instance_data, handle, source_timestamp);
+    return DDS::OpenSplice::FooDataWriter_impl::write_w_timestamp(&instance_data, handle_, source_timestamp);
 }
 
 ::DDS::ReturnCode_t
-OpenRTM::CORBACdrDataDataWriter_impl::dispose (
-    const OpenRTM::CORBACdrData & instance_data,
-    ::DDS::InstanceHandle_t handle) THROW_ORB_EXCEPTIONS
+OpenRTM_OpenSplice::CORBACdrDataDataWriter_impl::dispose (
+    const OpenRTM_OpenSplice::CORBACdrData & instance_data,
+    ::DDS::InstanceHandle_t handle_) THROW_ORB_EXCEPTIONS
 {
-    return DDS::OpenSplice::FooDataWriter_impl::dispose(&instance_data, handle);
+    return DDS::OpenSplice::FooDataWriter_impl::dispose(&instance_data, handle_);
 }
 
 ::DDS::ReturnCode_t
-OpenRTM::CORBACdrDataDataWriter_impl::dispose_w_timestamp (
+OpenRTM_OpenSplice::CORBACdrDataDataWriter_impl::dispose_w_timestamp (
     const CORBACdrData & instance_data,
-    ::DDS::InstanceHandle_t handle,
+    ::DDS::InstanceHandle_t handle_,
     const ::DDS::Time_t & source_timestamp) THROW_ORB_EXCEPTIONS
 {
-    return DDS::OpenSplice::FooDataWriter_impl::dispose_w_timestamp(&instance_data, handle, source_timestamp);
+    return DDS::OpenSplice::FooDataWriter_impl::dispose_w_timestamp(&instance_data, handle_, source_timestamp);
 }
 
 ::DDS::ReturnCode_t
-OpenRTM::CORBACdrDataDataWriter_impl::writedispose (
-    const OpenRTM::CORBACdrData & instance_data,
-    ::DDS::InstanceHandle_t handle) THROW_ORB_EXCEPTIONS
+OpenRTM_OpenSplice::CORBACdrDataDataWriter_impl::writedispose (
+    const OpenRTM_OpenSplice::CORBACdrData & instance_data,
+    ::DDS::InstanceHandle_t handle_) THROW_ORB_EXCEPTIONS
 {
-    return DDS::OpenSplice::FooDataWriter_impl::writedispose(&instance_data, handle);
+    return DDS::OpenSplice::FooDataWriter_impl::writedispose(&instance_data, handle_);
 }
 
 ::DDS::ReturnCode_t
-OpenRTM::CORBACdrDataDataWriter_impl::writedispose_w_timestamp (
+OpenRTM_OpenSplice::CORBACdrDataDataWriter_impl::writedispose_w_timestamp (
     const CORBACdrData & instance_data,
-    ::DDS::InstanceHandle_t handle,
+    ::DDS::InstanceHandle_t handle_,
     const ::DDS::Time_t & source_timestamp) THROW_ORB_EXCEPTIONS
 {
-    return DDS::OpenSplice::FooDataWriter_impl::writedispose_w_timestamp(&instance_data, handle, source_timestamp);
+    return DDS::OpenSplice::FooDataWriter_impl::writedispose_w_timestamp(&instance_data, handle_, source_timestamp);
 }
 
 ::DDS::ReturnCode_t
-OpenRTM::CORBACdrDataDataWriter_impl::get_key_value (
+OpenRTM_OpenSplice::CORBACdrDataDataWriter_impl::get_key_value (
     CORBACdrData & key_holder,
-    ::DDS::InstanceHandle_t handle) THROW_ORB_EXCEPTIONS
+    ::DDS::InstanceHandle_t handle_) THROW_ORB_EXCEPTIONS
 {
-    return DDS::OpenSplice::FooDataWriter_impl::get_key_value(&key_holder, handle);
+    return DDS::OpenSplice::FooDataWriter_impl::get_key_value(&key_holder, handle_);
 }
 
 ::DDS::InstanceHandle_t
-OpenRTM::CORBACdrDataDataWriter_impl::lookup_instance (
-    const OpenRTM::CORBACdrData & instance_data) THROW_ORB_EXCEPTIONS
+OpenRTM_OpenSplice::CORBACdrDataDataWriter_impl::lookup_instance (
+    const OpenRTM_OpenSplice::CORBACdrData & instance_data) THROW_ORB_EXCEPTIONS
 {
     return DDS::OpenSplice::FooDataWriter_impl::lookup_instance(&instance_data);
 }
 
-// DDS OpenRTM::CORBACdrData DataReader_impl Object Body
-OpenRTM::CORBACdrDataDataReader_impl::CORBACdrDataDataReader_impl ()
+// DDS OpenRTM_OpenSplice::CORBACdrData DataReader_impl Object Body
+OpenRTM_OpenSplice::CORBACdrDataDataReader_impl::CORBACdrDataDataReader_impl ()
 {
     // Parent constructor takes care of everything.
 }
 
-OpenRTM::CORBACdrDataDataReader_impl::~CORBACdrDataDataReader_impl ()
+OpenRTM_OpenSplice::CORBACdrDataDataReader_impl::~CORBACdrDataDataReader_impl ()
 {
     // Parent destructor takes care of everything.
 }
 
 DDS::ReturnCode_t
-OpenRTM::CORBACdrDataDataReader_impl::init (
+OpenRTM_OpenSplice::CORBACdrDataDataReader_impl::init (
     DDS::OpenSplice::Subscriber *subscriber,
     const DDS::DataReaderQos &qos,
     DDS::OpenSplice::TopicDescription *a_topic,
@@ -221,8 +228,8 @@ OpenRTM::CORBACdrDataDataReader_impl::init (
 }
 
 ::DDS::ReturnCode_t
-OpenRTM::CORBACdrDataDataReader_impl::read (
-    OpenRTM::CORBACdrDataSeq & received_data,
+OpenRTM_OpenSplice::CORBACdrDataDataReader_impl::read (
+    OpenRTM_OpenSplice::CORBACdrDataSeq & received_data,
     ::DDS::SampleInfoSeq & info_seq,
     ::DDS::Long max_samples,
     ::DDS::SampleStateMask sample_states,
@@ -239,7 +246,7 @@ OpenRTM::CORBACdrDataDataReader_impl::read (
 }
 
 ::DDS::ReturnCode_t
-OpenRTM::CORBACdrDataDataReader_impl::read_cdr(
+OpenRTM_OpenSplice::CORBACdrDataDataReader_impl::read_cdr(
     ::DDS::CDRSample & received_data,
     ::DDS::SampleInfo & info,
     ::DDS::SampleStateMask sample_states,
@@ -253,8 +260,8 @@ OpenRTM::CORBACdrDataDataReader_impl::read_cdr(
 
 
 ::DDS::ReturnCode_t
-OpenRTM::CORBACdrDataDataReader_impl::take (
-    OpenRTM::CORBACdrDataSeq & received_data,
+OpenRTM_OpenSplice::CORBACdrDataDataReader_impl::take (
+    OpenRTM_OpenSplice::CORBACdrDataSeq & received_data,
     ::DDS::SampleInfoSeq & info_seq,
     ::DDS::Long max_samples,
     ::DDS::SampleStateMask sample_states,
@@ -271,8 +278,8 @@ OpenRTM::CORBACdrDataDataReader_impl::take (
 }
 
 ::DDS::ReturnCode_t
-OpenRTM::CORBACdrDataDataReader_impl::read_w_condition (
-    OpenRTM::CORBACdrDataSeq & received_data,
+OpenRTM_OpenSplice::CORBACdrDataDataReader_impl::read_w_condition (
+    OpenRTM_OpenSplice::CORBACdrDataSeq & received_data,
     ::DDS::SampleInfoSeq & info_seq,
     ::DDS::Long max_samples,
     ::DDS::ReadCondition_ptr a_condition) THROW_ORB_EXCEPTIONS
@@ -287,8 +294,8 @@ OpenRTM::CORBACdrDataDataReader_impl::read_w_condition (
 }
 
 ::DDS::ReturnCode_t
-OpenRTM::CORBACdrDataDataReader_impl::take_w_condition (
-    OpenRTM::CORBACdrDataSeq & received_data,
+OpenRTM_OpenSplice::CORBACdrDataDataReader_impl::take_w_condition (
+    OpenRTM_OpenSplice::CORBACdrDataSeq & received_data,
     ::DDS::SampleInfoSeq & info_seq,
     ::DDS::Long max_samples,
     ::DDS::ReadCondition_ptr a_condition) THROW_ORB_EXCEPTIONS
@@ -303,24 +310,24 @@ OpenRTM::CORBACdrDataDataReader_impl::take_w_condition (
 }
 
 ::DDS::ReturnCode_t
-OpenRTM::CORBACdrDataDataReader_impl::read_next_sample (
-    OpenRTM::CORBACdrData & received_data,
+OpenRTM_OpenSplice::CORBACdrDataDataReader_impl::read_next_sample (
+    OpenRTM_OpenSplice::CORBACdrData & received_data,
     ::DDS::SampleInfo & sample_info) THROW_ORB_EXCEPTIONS
 {
     return DDS::OpenSplice::FooDataReader_impl::read_next_sample(&received_data, sample_info);
 }
 
 ::DDS::ReturnCode_t
-OpenRTM::CORBACdrDataDataReader_impl::take_next_sample (
-    OpenRTM::CORBACdrData & received_data,
+OpenRTM_OpenSplice::CORBACdrDataDataReader_impl::take_next_sample (
+    OpenRTM_OpenSplice::CORBACdrData & received_data,
     ::DDS::SampleInfo & sample_info) THROW_ORB_EXCEPTIONS
 {
     return DDS::OpenSplice::FooDataReader_impl::take_next_sample(&received_data, sample_info);
 }
 
 ::DDS::ReturnCode_t
-OpenRTM::CORBACdrDataDataReader_impl::read_instance (
-    OpenRTM::CORBACdrDataSeq & received_data,
+OpenRTM_OpenSplice::CORBACdrDataDataReader_impl::read_instance (
+    OpenRTM_OpenSplice::CORBACdrDataSeq & received_data,
     ::DDS::SampleInfoSeq & info_seq,
     ::DDS::Long max_samples,
     ::DDS::InstanceHandle_t a_handle,
@@ -338,8 +345,8 @@ OpenRTM::CORBACdrDataDataReader_impl::read_instance (
 }
 
 ::DDS::ReturnCode_t
-OpenRTM::CORBACdrDataDataReader_impl::take_instance (
-    OpenRTM::CORBACdrDataSeq & received_data,
+OpenRTM_OpenSplice::CORBACdrDataDataReader_impl::take_instance (
+    OpenRTM_OpenSplice::CORBACdrDataSeq & received_data,
     ::DDS::SampleInfoSeq & info_seq,
     ::DDS::Long max_samples,
     ::DDS::InstanceHandle_t a_handle,
@@ -357,8 +364,8 @@ OpenRTM::CORBACdrDataDataReader_impl::take_instance (
 }
 
 ::DDS::ReturnCode_t
-OpenRTM::CORBACdrDataDataReader_impl::read_next_instance (
-    OpenRTM::CORBACdrDataSeq & received_data,
+OpenRTM_OpenSplice::CORBACdrDataDataReader_impl::read_next_instance (
+    OpenRTM_OpenSplice::CORBACdrDataSeq & received_data,
     ::DDS::SampleInfoSeq & info_seq,
     ::DDS::Long max_samples,
     ::DDS::InstanceHandle_t a_handle,
@@ -376,8 +383,8 @@ OpenRTM::CORBACdrDataDataReader_impl::read_next_instance (
 }
 
 ::DDS::ReturnCode_t
-OpenRTM::CORBACdrDataDataReader_impl::take_next_instance (
-    OpenRTM::CORBACdrDataSeq & received_data,
+OpenRTM_OpenSplice::CORBACdrDataDataReader_impl::take_next_instance (
+    OpenRTM_OpenSplice::CORBACdrDataSeq & received_data,
     ::DDS::SampleInfoSeq & info_seq,
     ::DDS::Long max_samples,
     ::DDS::InstanceHandle_t a_handle,
@@ -395,8 +402,8 @@ OpenRTM::CORBACdrDataDataReader_impl::take_next_instance (
 }
 
 ::DDS::ReturnCode_t
-OpenRTM::CORBACdrDataDataReader_impl::read_next_instance_w_condition (
-    OpenRTM::CORBACdrDataSeq & received_data,
+OpenRTM_OpenSplice::CORBACdrDataDataReader_impl::read_next_instance_w_condition (
+    OpenRTM_OpenSplice::CORBACdrDataSeq & received_data,
     ::DDS::SampleInfoSeq & info_seq,
     ::DDS::Long max_samples,
     ::DDS::InstanceHandle_t a_handle,
@@ -412,8 +419,8 @@ OpenRTM::CORBACdrDataDataReader_impl::read_next_instance_w_condition (
 }
 
 ::DDS::ReturnCode_t
-OpenRTM::CORBACdrDataDataReader_impl::take_next_instance_w_condition (
-    OpenRTM::CORBACdrDataSeq & received_data,
+OpenRTM_OpenSplice::CORBACdrDataDataReader_impl::take_next_instance_w_condition (
+    OpenRTM_OpenSplice::CORBACdrDataSeq & received_data,
     ::DDS::SampleInfoSeq & info_seq,
     ::DDS::Long max_samples,
     ::DDS::InstanceHandle_t a_handle,
@@ -429,8 +436,8 @@ OpenRTM::CORBACdrDataDataReader_impl::take_next_instance_w_condition (
 }
 
 ::DDS::ReturnCode_t
-OpenRTM::CORBACdrDataDataReader_impl::return_loan (
-    OpenRTM::CORBACdrDataSeq & received_data,
+OpenRTM_OpenSplice::CORBACdrDataDataReader_impl::return_loan (
+    OpenRTM_OpenSplice::CORBACdrDataSeq & received_data,
     ::DDS::SampleInfoSeq & info_seq) THROW_ORB_EXCEPTIONS
 {
     ::DDS::ReturnCode_t result = ::DDS::RETCODE_OK;
@@ -445,7 +452,7 @@ OpenRTM::CORBACdrDataDataReader_impl::return_loan (
                                                                                      info_seq.get_buffer() );
                     if ( result == ::DDS::RETCODE_OK ) {
                         if ( !received_data.release() ) {
-                            OpenRTM::CORBACdrDataSeq::freebuf( received_data.get_buffer(false) );
+                            OpenRTM_OpenSplice::CORBACdrDataSeq::freebuf( received_data.get_buffer(false) );
                             received_data.replace(0, 0, nullptr, false);
                             ::DDS::SampleInfoSeq::freebuf( info_seq.get_buffer(false) );
                             info_seq.replace(0, 0, nullptr, false);
@@ -462,23 +469,23 @@ OpenRTM::CORBACdrDataDataReader_impl::return_loan (
 }
 
 ::DDS::ReturnCode_t
-OpenRTM::CORBACdrDataDataReader_impl::get_key_value (
-    OpenRTM::CORBACdrData & key_holder,
-    ::DDS::InstanceHandle_t handle) THROW_ORB_EXCEPTIONS
+OpenRTM_OpenSplice::CORBACdrDataDataReader_impl::get_key_value (
+    OpenRTM_OpenSplice::CORBACdrData & key_holder,
+    ::DDS::InstanceHandle_t handle_) THROW_ORB_EXCEPTIONS
 {
-    return DDS::OpenSplice::FooDataReader_impl::get_key_value(&key_holder, handle);
+    return DDS::OpenSplice::FooDataReader_impl::get_key_value(&key_holder, handle_);
 }
 
 ::DDS::InstanceHandle_t
-OpenRTM::CORBACdrDataDataReader_impl::lookup_instance (
-    const OpenRTM::CORBACdrData & instance) THROW_ORB_EXCEPTIONS
+OpenRTM_OpenSplice::CORBACdrDataDataReader_impl::lookup_instance (
+    const OpenRTM_OpenSplice::CORBACdrData & instance) THROW_ORB_EXCEPTIONS
 {
     return DDS::OpenSplice::FooDataReader_impl::lookup_instance(&instance);
 }
 
 ::DDS::ReturnCode_t
-OpenRTM::CORBACdrDataDataReader_impl::check_preconditions (
-    OpenRTM::CORBACdrDataSeq & received_data,
+OpenRTM_OpenSplice::CORBACdrDataDataReader_impl::check_preconditions (
+    OpenRTM_OpenSplice::CORBACdrDataSeq & received_data,
     ::DDS::SampleInfoSeq & info_seq,
     ::DDS::Long max_samples)
 {
@@ -532,65 +539,65 @@ OpenRTM::CORBACdrDataDataReader_impl::check_preconditions (
 }
 
 void *
-OpenRTM::CORBACdrDataDataReader_impl::dataSeqAlloc (
+OpenRTM_OpenSplice::CORBACdrDataDataReader_impl::dataSeqAlloc (
     void * received_data,
     DDS::ULong len)
 {
-    OpenRTM::CORBACdrDataSeq *data_seq = reinterpret_cast<OpenRTM::CORBACdrDataSeq *>(received_data);
+    OpenRTM_OpenSplice::CORBACdrDataSeq *data_seq = reinterpret_cast<OpenRTM_OpenSplice::CORBACdrDataSeq *>(received_data);
     data_seq->replace(len, len, data_seq->allocbuf(len), false);
     return data_seq->get_buffer();
 }
 
 void *
-OpenRTM::CORBACdrDataDataReader_impl::dataSeqGetBuffer (
+OpenRTM_OpenSplice::CORBACdrDataDataReader_impl::dataSeqGetBuffer (
     void * received_data,
     DDS::ULong index)
 {
-	OpenRTM::CORBACdrDataSeq *data_seq = reinterpret_cast<OpenRTM::CORBACdrDataSeq *>(received_data);
+    OpenRTM_OpenSplice::CORBACdrDataSeq *data_seq = reinterpret_cast<OpenRTM_OpenSplice::CORBACdrDataSeq *>(received_data);
 	return &((*data_seq)[index]);
 }
 
 void
-OpenRTM::CORBACdrDataDataReader_impl::dataSeqLength (
+OpenRTM_OpenSplice::CORBACdrDataDataReader_impl::dataSeqLength (
     void * received_data,
     DDS::ULong len)
 {
-    OpenRTM::CORBACdrDataSeq *data_seq = reinterpret_cast<OpenRTM::CORBACdrDataSeq *>(received_data);
+    OpenRTM_OpenSplice::CORBACdrDataSeq *data_seq = reinterpret_cast<OpenRTM_OpenSplice::CORBACdrDataSeq *>(received_data);
     data_seq->length(len);
 }
 
 void
-OpenRTM::CORBACdrDataDataReader_impl::dataSeqCopyOut (
+OpenRTM_OpenSplice::CORBACdrDataDataReader_impl::dataSeqCopyOut (
     const void * from,
     void * to)
 {
-    OpenRTM::CORBACdrData *data = reinterpret_cast<OpenRTM::CORBACdrData *>(to);
+    OpenRTM_OpenSplice::CORBACdrData *data = reinterpret_cast<OpenRTM_OpenSplice::CORBACdrData *>(to);
     OpenSplice_OpenRTM_CORBACdrData_copyOut(from, data);
 }
 
 void
-OpenRTM::CORBACdrDataDataReader_impl::copyDataOut (
+OpenRTM_OpenSplice::CORBACdrDataDataReader_impl::copyDataOut (
     const void * from,
     void * to)
 {
-    OpenRTM::CORBACdrData *data = reinterpret_cast<OpenRTM::CORBACdrData *>(to);
+    OpenRTM_OpenSplice::CORBACdrData *data = reinterpret_cast<OpenRTM_OpenSplice::CORBACdrData *>(to);
     OpenSplice_OpenRTM_CORBACdrData_copyOut(from, data);
 }
 
 
-// DDS OpenRTM::CORBACdrData DataReaderView_impl Object Body
-OpenRTM::CORBACdrDataDataReaderView_impl::CORBACdrDataDataReaderView_impl ()
+// DDS OpenRTM_OpenSplice::CORBACdrData DataReaderView_impl Object Body
+OpenRTM_OpenSplice::CORBACdrDataDataReaderView_impl::CORBACdrDataDataReaderView_impl ()
 {
     // Parent constructor takes care of everything.
 }
 
-OpenRTM::CORBACdrDataDataReaderView_impl::~CORBACdrDataDataReaderView_impl ()
+OpenRTM_OpenSplice::CORBACdrDataDataReaderView_impl::~CORBACdrDataDataReaderView_impl ()
 {
     // Parent destructor takes care of everything.
 }
 
 DDS::ReturnCode_t
-OpenRTM::CORBACdrDataDataReaderView_impl::init (
+OpenRTM_OpenSplice::CORBACdrDataDataReaderView_impl::init (
     DDS::OpenSplice::DataReader *reader,
     const char *name,
     const DDS::DataReaderViewQos &qos,
@@ -598,13 +605,13 @@ OpenRTM::CORBACdrDataDataReaderView_impl::init (
     DDS::OpenSplice::cxxCopyOut copyOut)
 {
     return DDS::OpenSplice::FooDataReaderView_impl::nlReq_init(
-            reader, name, qos, copyIn, copyOut, OpenRTM::CORBACdrDataDataReader_impl::dataSeqAlloc,
-            OpenRTM::CORBACdrDataDataReader_impl::dataSeqLength);
+            reader, name, qos, copyIn, copyOut, OpenRTM_OpenSplice::CORBACdrDataDataReader_impl::dataSeqAlloc,
+        OpenRTM_OpenSplice::CORBACdrDataDataReader_impl::dataSeqLength);
 }
 
 ::DDS::ReturnCode_t
-OpenRTM::CORBACdrDataDataReaderView_impl::read (
-    OpenRTM::CORBACdrDataSeq & received_data,
+OpenRTM_OpenSplice::CORBACdrDataDataReaderView_impl::read (
+    OpenRTM_OpenSplice::CORBACdrDataSeq & received_data,
     ::DDS::SampleInfoSeq & info_seq,
     ::DDS::Long max_samples,
     ::DDS::SampleStateMask sample_states,
@@ -613,7 +620,7 @@ OpenRTM::CORBACdrDataDataReaderView_impl::read (
 {
     ::DDS::ReturnCode_t status;
 
-    status = OpenRTM::CORBACdrDataDataReader_impl::check_preconditions(received_data, info_seq, max_samples);
+    status = OpenRTM_OpenSplice::CORBACdrDataDataReader_impl::check_preconditions(received_data, info_seq, max_samples);
     if ( status == ::DDS::RETCODE_OK ) {
         status = DDS::OpenSplice::FooDataReaderView_impl::read(&received_data, info_seq, max_samples, sample_states, view_states, instance_states);
     }
@@ -621,8 +628,8 @@ OpenRTM::CORBACdrDataDataReaderView_impl::read (
 }
 
 ::DDS::ReturnCode_t
-OpenRTM::CORBACdrDataDataReaderView_impl::take (
-    OpenRTM::CORBACdrDataSeq & received_data,
+OpenRTM_OpenSplice::CORBACdrDataDataReaderView_impl::take (
+    OpenRTM_OpenSplice::CORBACdrDataSeq & received_data,
     ::DDS::SampleInfoSeq & info_seq,
     ::DDS::Long max_samples,
     ::DDS::SampleStateMask sample_states,
@@ -631,7 +638,7 @@ OpenRTM::CORBACdrDataDataReaderView_impl::take (
 {
     ::DDS::ReturnCode_t status;
 
-    status = OpenRTM::CORBACdrDataDataReader_impl::check_preconditions(received_data, info_seq, max_samples);
+    status = OpenRTM_OpenSplice::CORBACdrDataDataReader_impl::check_preconditions(received_data, info_seq, max_samples);
     if ( status == ::DDS::RETCODE_OK ) {
         status = DDS::OpenSplice::FooDataReaderView_impl::take(&received_data, info_seq, max_samples, sample_states, view_states, instance_states);
     }
@@ -639,15 +646,15 @@ OpenRTM::CORBACdrDataDataReaderView_impl::take (
 }
 
 ::DDS::ReturnCode_t
-OpenRTM::CORBACdrDataDataReaderView_impl::read_w_condition (
-    OpenRTM::CORBACdrDataSeq & received_data,
+OpenRTM_OpenSplice::CORBACdrDataDataReaderView_impl::read_w_condition (
+    OpenRTM_OpenSplice::CORBACdrDataSeq & received_data,
     ::DDS::SampleInfoSeq & info_seq,
     ::DDS::Long max_samples,
     ::DDS::ReadCondition_ptr a_condition) THROW_ORB_EXCEPTIONS
 {
     ::DDS::ReturnCode_t status;
 
-    status = OpenRTM::CORBACdrDataDataReader_impl::check_preconditions(received_data, info_seq, max_samples);
+    status = OpenRTM_OpenSplice::CORBACdrDataDataReader_impl::check_preconditions(received_data, info_seq, max_samples);
     if ( status == ::DDS::RETCODE_OK ) {
         status = DDS::OpenSplice::FooDataReaderView_impl::read_w_condition(&received_data, info_seq, max_samples, a_condition);
     }
@@ -655,15 +662,15 @@ OpenRTM::CORBACdrDataDataReaderView_impl::read_w_condition (
 }
 
 ::DDS::ReturnCode_t
-OpenRTM::CORBACdrDataDataReaderView_impl::take_w_condition (
-    OpenRTM::CORBACdrDataSeq & received_data,
+OpenRTM_OpenSplice::CORBACdrDataDataReaderView_impl::take_w_condition (
+    OpenRTM_OpenSplice::CORBACdrDataSeq & received_data,
     ::DDS::SampleInfoSeq & info_seq,
     ::DDS::Long max_samples,
     ::DDS::ReadCondition_ptr a_condition) THROW_ORB_EXCEPTIONS
 {
     ::DDS::ReturnCode_t status;
 
-    status = OpenRTM::CORBACdrDataDataReader_impl::check_preconditions(received_data, info_seq, max_samples);
+    status = OpenRTM_OpenSplice::CORBACdrDataDataReader_impl::check_preconditions(received_data, info_seq, max_samples);
     if ( status == ::DDS::RETCODE_OK ) {
         status = DDS::OpenSplice::FooDataReaderView_impl::take_w_condition(&received_data, info_seq, max_samples, a_condition);
     }
@@ -671,24 +678,24 @@ OpenRTM::CORBACdrDataDataReaderView_impl::take_w_condition (
 }
 
 ::DDS::ReturnCode_t
-OpenRTM::CORBACdrDataDataReaderView_impl::read_next_sample (
-    OpenRTM::CORBACdrData & received_data,
+OpenRTM_OpenSplice::CORBACdrDataDataReaderView_impl::read_next_sample (
+    OpenRTM_OpenSplice::CORBACdrData & received_data,
     ::DDS::SampleInfo & sample_info) THROW_ORB_EXCEPTIONS
 {
     return DDS::OpenSplice::FooDataReaderView_impl::read_next_sample(&received_data, sample_info);
 }
 
 ::DDS::ReturnCode_t
-OpenRTM::CORBACdrDataDataReaderView_impl::take_next_sample (
-    OpenRTM::CORBACdrData & received_data,
+OpenRTM_OpenSplice::CORBACdrDataDataReaderView_impl::take_next_sample (
+    OpenRTM_OpenSplice::CORBACdrData & received_data,
     ::DDS::SampleInfo & sample_info) THROW_ORB_EXCEPTIONS
 {
     return DDS::OpenSplice::FooDataReaderView_impl::take_next_sample(&received_data, sample_info);
 }
 
 ::DDS::ReturnCode_t
-OpenRTM::CORBACdrDataDataReaderView_impl::read_instance (
-    OpenRTM::CORBACdrDataSeq & received_data,
+OpenRTM_OpenSplice::CORBACdrDataDataReaderView_impl::read_instance (
+    OpenRTM_OpenSplice::CORBACdrDataSeq & received_data,
     ::DDS::SampleInfoSeq & info_seq,
     ::DDS::Long max_samples,
     ::DDS::InstanceHandle_t a_handle,
@@ -698,7 +705,7 @@ OpenRTM::CORBACdrDataDataReaderView_impl::read_instance (
 {
     ::DDS::ReturnCode_t status;
 
-    status = OpenRTM::CORBACdrDataDataReader_impl::check_preconditions(received_data, info_seq, max_samples);
+    status = OpenRTM_OpenSplice::CORBACdrDataDataReader_impl::check_preconditions(received_data, info_seq, max_samples);
     if ( status == ::DDS::RETCODE_OK ) {
         status = DDS::OpenSplice::FooDataReaderView_impl::read_instance(&received_data, info_seq, max_samples, a_handle, sample_states, view_states, instance_states);
     }
@@ -706,8 +713,8 @@ OpenRTM::CORBACdrDataDataReaderView_impl::read_instance (
 }
 
 ::DDS::ReturnCode_t
-OpenRTM::CORBACdrDataDataReaderView_impl::take_instance (
-    OpenRTM::CORBACdrDataSeq & received_data,
+OpenRTM_OpenSplice::CORBACdrDataDataReaderView_impl::take_instance (
+    OpenRTM_OpenSplice::CORBACdrDataSeq & received_data,
     ::DDS::SampleInfoSeq & info_seq,
     ::DDS::Long max_samples,
     ::DDS::InstanceHandle_t a_handle,
@@ -717,7 +724,7 @@ OpenRTM::CORBACdrDataDataReaderView_impl::take_instance (
 {
     ::DDS::ReturnCode_t status;
 
-    status = OpenRTM::CORBACdrDataDataReader_impl::check_preconditions(received_data, info_seq, max_samples);
+    status = OpenRTM_OpenSplice::CORBACdrDataDataReader_impl::check_preconditions(received_data, info_seq, max_samples);
     if ( status == ::DDS::RETCODE_OK ) {
         status = DDS::OpenSplice::FooDataReaderView_impl::take_instance(&received_data, info_seq, max_samples, a_handle, sample_states, view_states, instance_states);
     }
@@ -725,8 +732,8 @@ OpenRTM::CORBACdrDataDataReaderView_impl::take_instance (
 }
 
 ::DDS::ReturnCode_t
-OpenRTM::CORBACdrDataDataReaderView_impl::read_next_instance (
-    OpenRTM::CORBACdrDataSeq & received_data,
+OpenRTM_OpenSplice::CORBACdrDataDataReaderView_impl::read_next_instance (
+    OpenRTM_OpenSplice::CORBACdrDataSeq & received_data,
     ::DDS::SampleInfoSeq & info_seq,
     ::DDS::Long max_samples,
     ::DDS::InstanceHandle_t a_handle,
@@ -736,7 +743,7 @@ OpenRTM::CORBACdrDataDataReaderView_impl::read_next_instance (
 {
     ::DDS::ReturnCode_t status;
 
-    status = OpenRTM::CORBACdrDataDataReader_impl::check_preconditions(received_data, info_seq, max_samples);
+    status = OpenRTM_OpenSplice::CORBACdrDataDataReader_impl::check_preconditions(received_data, info_seq, max_samples);
     if ( status == ::DDS::RETCODE_OK ) {
         status = DDS::OpenSplice::FooDataReaderView_impl::read_next_instance(&received_data, info_seq, max_samples, a_handle, sample_states, view_states, instance_states);
     }
@@ -744,8 +751,8 @@ OpenRTM::CORBACdrDataDataReaderView_impl::read_next_instance (
 }
 
 ::DDS::ReturnCode_t
-OpenRTM::CORBACdrDataDataReaderView_impl::take_next_instance (
-    OpenRTM::CORBACdrDataSeq & received_data,
+OpenRTM_OpenSplice::CORBACdrDataDataReaderView_impl::take_next_instance (
+    OpenRTM_OpenSplice::CORBACdrDataSeq & received_data,
     ::DDS::SampleInfoSeq & info_seq,
     ::DDS::Long max_samples,
     ::DDS::InstanceHandle_t a_handle,
@@ -755,7 +762,7 @@ OpenRTM::CORBACdrDataDataReaderView_impl::take_next_instance (
 {
     ::DDS::ReturnCode_t status;
 
-    status = OpenRTM::CORBACdrDataDataReader_impl::check_preconditions(received_data, info_seq, max_samples);
+    status = OpenRTM_OpenSplice::CORBACdrDataDataReader_impl::check_preconditions(received_data, info_seq, max_samples);
     if ( status == ::DDS::RETCODE_OK ) {
         status = DDS::OpenSplice::FooDataReaderView_impl::take_next_instance(&received_data, info_seq, max_samples, a_handle, sample_states, view_states, instance_states);
     }
@@ -763,8 +770,8 @@ OpenRTM::CORBACdrDataDataReaderView_impl::take_next_instance (
 }
 
 ::DDS::ReturnCode_t
-OpenRTM::CORBACdrDataDataReaderView_impl::read_next_instance_w_condition (
-    OpenRTM::CORBACdrDataSeq & received_data,
+OpenRTM_OpenSplice::CORBACdrDataDataReaderView_impl::read_next_instance_w_condition (
+    OpenRTM_OpenSplice::CORBACdrDataSeq & received_data,
     ::DDS::SampleInfoSeq & info_seq,
     ::DDS::Long max_samples,
     ::DDS::InstanceHandle_t a_handle,
@@ -772,7 +779,7 @@ OpenRTM::CORBACdrDataDataReaderView_impl::read_next_instance_w_condition (
 {
     ::DDS::ReturnCode_t status;
 
-    status = OpenRTM::CORBACdrDataDataReader_impl::check_preconditions(received_data, info_seq, max_samples);
+    status = OpenRTM_OpenSplice::CORBACdrDataDataReader_impl::check_preconditions(received_data, info_seq, max_samples);
     if ( status == ::DDS::RETCODE_OK ) {
         status = DDS::OpenSplice::FooDataReaderView_impl::read_next_instance_w_condition(&received_data, info_seq, max_samples, a_handle, a_condition);
     }
@@ -780,8 +787,8 @@ OpenRTM::CORBACdrDataDataReaderView_impl::read_next_instance_w_condition (
 }
 
 ::DDS::ReturnCode_t
-OpenRTM::CORBACdrDataDataReaderView_impl::take_next_instance_w_condition (
-    OpenRTM::CORBACdrDataSeq & received_data,
+OpenRTM_OpenSplice::CORBACdrDataDataReaderView_impl::take_next_instance_w_condition (
+    OpenRTM_OpenSplice::CORBACdrDataSeq & received_data,
     ::DDS::SampleInfoSeq & info_seq,
     ::DDS::Long max_samples,
     ::DDS::InstanceHandle_t a_handle,
@@ -789,7 +796,7 @@ OpenRTM::CORBACdrDataDataReaderView_impl::take_next_instance_w_condition (
 {
     ::DDS::ReturnCode_t status;
 
-    status = OpenRTM::CORBACdrDataDataReader_impl::check_preconditions(received_data, info_seq, max_samples);
+    status = OpenRTM_OpenSplice::CORBACdrDataDataReader_impl::check_preconditions(received_data, info_seq, max_samples);
     if ( status == ::DDS::RETCODE_OK ) {
         status = DDS::OpenSplice::FooDataReaderView_impl::take_next_instance_w_condition(&received_data, info_seq, max_samples, a_handle, a_condition);
     }
@@ -797,8 +804,8 @@ OpenRTM::CORBACdrDataDataReaderView_impl::take_next_instance_w_condition (
 }
 
 ::DDS::ReturnCode_t
-OpenRTM::CORBACdrDataDataReaderView_impl::return_loan (
-    OpenRTM::CORBACdrDataSeq & received_data,
+OpenRTM_OpenSplice::CORBACdrDataDataReaderView_impl::return_loan (
+    OpenRTM_OpenSplice::CORBACdrDataSeq & received_data,
     ::DDS::SampleInfoSeq & info_seq) THROW_ORB_EXCEPTIONS
 {
     ::DDS::ReturnCode_t result = ::DDS::RETCODE_OK;
@@ -814,7 +821,7 @@ OpenRTM::CORBACdrDataDataReaderView_impl::return_loan (
 
                     if ( result == ::DDS::RETCODE_OK ) {
                         if ( !received_data.release() ) {
-                            OpenRTM::CORBACdrDataSeq::freebuf( received_data.get_buffer(false) );
+                            OpenRTM_OpenSplice::CORBACdrDataSeq::freebuf( received_data.get_buffer(false) );
                             received_data.replace(0, 0, nullptr, false);
                             ::DDS::SampleInfoSeq::freebuf( info_seq.get_buffer(false) );
                             info_seq.replace(0, 0, nullptr, false);
@@ -837,16 +844,16 @@ OpenRTM::CORBACdrDataDataReaderView_impl::return_loan (
 }
 
 ::DDS::ReturnCode_t
-OpenRTM::CORBACdrDataDataReaderView_impl::get_key_value (
-    OpenRTM::CORBACdrData & key_holder,
-    ::DDS::InstanceHandle_t handle) THROW_ORB_EXCEPTIONS
+OpenRTM_OpenSplice::CORBACdrDataDataReaderView_impl::get_key_value (
+    OpenRTM_OpenSplice::CORBACdrData & key_holder,
+    ::DDS::InstanceHandle_t handle_) THROW_ORB_EXCEPTIONS
 {
-    return DDS::OpenSplice::FooDataReaderView_impl::get_key_value(&key_holder, handle);
+    return DDS::OpenSplice::FooDataReaderView_impl::get_key_value(&key_holder, handle_);
 }
 
 ::DDS::InstanceHandle_t
-OpenRTM::CORBACdrDataDataReaderView_impl::lookup_instance (
-    const OpenRTM::CORBACdrData & instance) THROW_ORB_EXCEPTIONS
+OpenRTM_OpenSplice::CORBACdrDataDataReaderView_impl::lookup_instance (
+    const OpenRTM_OpenSplice::CORBACdrData & instance) THROW_ORB_EXCEPTIONS
 {
     return DDS::OpenSplice::FooDataReaderView_impl::lookup_instance(&instance);
 }

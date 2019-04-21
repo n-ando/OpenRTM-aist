@@ -82,10 +82,10 @@ namespace RTC
          */
         ~PubListener();
 
-        virtual void on_offered_deadline_missed(DDS::DataWriter_ptr writer, const DDS::OfferedDeadlineMissedStatus& status);
-        virtual void on_offered_incompatible_qos(DDS::DataWriter_ptr writer, const DDS::OfferedIncompatibleQosStatus& status);
-        virtual void on_liveliness_lost(DDS::DataWriter_ptr writer, const DDS::LivelinessLostStatus& status);
-        virtual void on_publication_matched(DDS::DataWriter_ptr writer, const DDS::PublicationMatchedStatus& status);
+        void on_offered_deadline_missed(DDS::DataWriter_ptr writer, const DDS::OfferedDeadlineMissedStatus& status) override;
+        void on_offered_incompatible_qos(DDS::DataWriter_ptr writer, const DDS::OfferedIncompatibleQosStatus& status) override;
+        void on_liveliness_lost(DDS::DataWriter_ptr writer, const DDS::LivelinessLostStatus& status) override;
+        void on_publication_matched(DDS::DataWriter_ptr writer, const DDS::PublicationMatchedStatus& status) override;
     };
 
     /*!
@@ -296,6 +296,8 @@ namespace RTC
 
         
         OpenSpliceManager& topicmgr = OpenSpliceManager::instance();
+
+        
         if (!topicmgr.registerType(m_dataType, m_idlPath))
         {
             return false;
@@ -320,7 +322,7 @@ namespace RTC
             return false;
         }
 
-        m_writer = OpenRTM::CORBACdrDataDataWriter::_narrow(writer.in());
+        m_writer = OpenRTM_OpenSplice::CORBACdrDataDataWriter::_narrow(writer.in());
 
         if (!OpenSpliceManager::checkHandle(m_writer, "CORBACdrDataDataWriter::_narrow(writer)"))
         {
@@ -401,7 +403,7 @@ namespace RTC
             memcpy(b, data.getBuffer(), data.getDataLength());
         }
 
-        OpenRTM::CORBACdrDataDataWriter_var writer = OpenRTM::CORBACdrDataDataWriter::_narrow(m_writer);
+        OpenRTM_OpenSplice::CORBACdrDataDataWriter_var writer = OpenRTM_OpenSplice::CORBACdrDataDataWriter::_narrow(m_writer);
         if (!OpenSpliceManager::checkHandle(writer, "writer narrow"))
         {
             return false;
@@ -456,16 +458,16 @@ namespace RTC
     {
     }
 
-    void PubListener::on_offered_deadline_missed(DDS::DataWriter_ptr writer, const DDS::OfferedDeadlineMissedStatus& status)
+    void PubListener::on_offered_deadline_missed(DDS::DataWriter_ptr /*writer*/, const DDS::OfferedDeadlineMissedStatus& /*status*/)
     {
     }
-    void PubListener::on_offered_incompatible_qos(DDS::DataWriter_ptr writer, const DDS::OfferedIncompatibleQosStatus& status)
+    void PubListener::on_offered_incompatible_qos(DDS::DataWriter_ptr /*writer*/, const DDS::OfferedIncompatibleQosStatus& /*status*/)
     {
     }
-    void PubListener::on_liveliness_lost(DDS::DataWriter_ptr writer, const DDS::LivelinessLostStatus& status)
+    void PubListener::on_liveliness_lost(DDS::DataWriter_ptr /*writer*/, const DDS::LivelinessLostStatus& /*status*/)
     {
     }
-    void PubListener::on_publication_matched(DDS::DataWriter_ptr writer, const DDS::PublicationMatchedStatus& status)
+    void PubListener::on_publication_matched(DDS::DataWriter_ptr /*writer*/, const DDS::PublicationMatchedStatus& /*status*/)
     {
     }
 

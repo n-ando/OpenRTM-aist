@@ -11,13 +11,13 @@
 #include <string>
 
 
-namespace OpenRTM {
+namespace OpenRTM_OpenSplice {
 
     class  CORBACdrDataTypeSupportMetaHolder : public ::DDS::OpenSplice::TypeSupportMetaHolder
     {
     public:
         CORBACdrDataTypeSupportMetaHolder (::DDS::String datatype, ::DDS::String keys, ::DDS::String descriptor);
-        virtual ~CORBACdrDataTypeSupportMetaHolder ();
+        ~CORBACdrDataTypeSupportMetaHolder () override;
     
     private:
         ::DDS::OpenSplice::TypeSupportMetaHolder * clone();
@@ -39,7 +39,7 @@ namespace OpenRTM {
     public:
         CORBACdrDataTypeSupport (::DDS::String datatype, ::DDS::String keys, ::DDS::String descriptor);
     
-        virtual ~CORBACdrDataTypeSupport ();
+        ~CORBACdrDataTypeSupport () override;
     
     private:
         CORBACdrDataTypeSupport (const CORBACdrDataTypeSupport &);
@@ -57,75 +57,75 @@ namespace OpenRTM {
         friend class CORBACdrDataTypeSupportMetaHolder;
     
     public:
-        virtual ::DDS::InstanceHandle_t register_instance (
-            const CORBACdrData & instance_data) THROW_ORB_EXCEPTIONS;
+        ::DDS::InstanceHandle_t register_instance (
+            const CORBACdrData & instance_data) THROW_ORB_EXCEPTIONS override;
     
-        virtual ::DDS::InstanceHandle_t register_instance_w_timestamp (
+        ::DDS::InstanceHandle_t register_instance_w_timestamp (
             const CORBACdrData & instance_data,
-            const ::DDS::Time_t & source_timestamp) THROW_ORB_EXCEPTIONS;
+            const ::DDS::Time_t & source_timestamp) THROW_ORB_EXCEPTIONS override;
     
-        virtual ::DDS::ReturnCode_t unregister_instance (
+        ::DDS::ReturnCode_t unregister_instance (
             const CORBACdrData & instance_data,
-            ::DDS::InstanceHandle_t handle) THROW_ORB_EXCEPTIONS;
+            ::DDS::InstanceHandle_t handle_) THROW_ORB_EXCEPTIONS override;
     
-        virtual ::DDS::ReturnCode_t unregister_instance_w_timestamp (
+        ::DDS::ReturnCode_t unregister_instance_w_timestamp (
             const CORBACdrData & instance_data,
-            ::DDS::InstanceHandle_t handle,
-            const ::DDS::Time_t & source_timestamp) THROW_ORB_EXCEPTIONS;
+            ::DDS::InstanceHandle_t handle_,
+            const ::DDS::Time_t & source_timestamp) THROW_ORB_EXCEPTIONS override;
     
-        virtual ::DDS::ReturnCode_t write (
+        ::DDS::ReturnCode_t write (
             const CORBACdrData & instance_data,
-            ::DDS::InstanceHandle_t handle) THROW_ORB_EXCEPTIONS;
+            ::DDS::InstanceHandle_t handle_) THROW_ORB_EXCEPTIONS override;
 
-        virtual ::DDS::ReturnCode_t write_cdr(
+        ::DDS::ReturnCode_t write_cdr(
             const ::DDS::CDRSample & data,
-            ::DDS::InstanceHandle_t handle) THROW_ORB_EXCEPTIONS;
+            ::DDS::InstanceHandle_t handle_) THROW_ORB_EXCEPTIONS override;
     
-        virtual ::DDS::ReturnCode_t write_w_timestamp (
+        ::DDS::ReturnCode_t write_w_timestamp (
             const CORBACdrData & instance_data,
-            ::DDS::InstanceHandle_t handle,
-            const ::DDS::Time_t & source_timestamp) THROW_ORB_EXCEPTIONS;
+            ::DDS::InstanceHandle_t handle_,
+            const ::DDS::Time_t & source_timestamp) THROW_ORB_EXCEPTIONS override;
     
-        virtual ::DDS::ReturnCode_t dispose (
+        ::DDS::ReturnCode_t dispose (
             const CORBACdrData & instance_data,
-            ::DDS::InstanceHandle_t handle) THROW_ORB_EXCEPTIONS;
+            ::DDS::InstanceHandle_t handle_) THROW_ORB_EXCEPTIONS override;
     
-        virtual ::DDS::ReturnCode_t dispose_w_timestamp (
+        ::DDS::ReturnCode_t dispose_w_timestamp (
             const CORBACdrData & instance_data,
-            ::DDS::InstanceHandle_t handle,
-            const ::DDS::Time_t & source_timestamp) THROW_ORB_EXCEPTIONS;
+            ::DDS::InstanceHandle_t handle_,
+            const ::DDS::Time_t & source_timestamp) THROW_ORB_EXCEPTIONS override;
     
-        virtual ::DDS::ReturnCode_t writedispose (
+        ::DDS::ReturnCode_t writedispose (
             const CORBACdrData & instance_data,
-            ::DDS::InstanceHandle_t handle) THROW_ORB_EXCEPTIONS;
+            ::DDS::InstanceHandle_t handle_) THROW_ORB_EXCEPTIONS override;
     
-        virtual ::DDS::ReturnCode_t writedispose_w_timestamp (
+        ::DDS::ReturnCode_t writedispose_w_timestamp (
             const CORBACdrData & instance_data,
-            ::DDS::InstanceHandle_t handle,
-            const ::DDS::Time_t & source_timestamp) THROW_ORB_EXCEPTIONS;
+            ::DDS::InstanceHandle_t handle_,
+            const ::DDS::Time_t & source_timestamp) THROW_ORB_EXCEPTIONS override;
     
-        virtual ::DDS::ReturnCode_t get_key_value (
+        ::DDS::ReturnCode_t get_key_value (
             CORBACdrData & key_holder,
-            ::DDS::InstanceHandle_t handle) THROW_ORB_EXCEPTIONS;
+            ::DDS::InstanceHandle_t handle_) THROW_ORB_EXCEPTIONS override;
     
-        virtual ::DDS::InstanceHandle_t lookup_instance (
-            const CORBACdrData & instance_data) THROW_ORB_EXCEPTIONS;
+        ::DDS::InstanceHandle_t lookup_instance (
+            const CORBACdrData & instance_data) THROW_ORB_EXCEPTIONS override;
     
     protected:
         CORBACdrDataDataWriter_impl ();
     
-        virtual ~CORBACdrDataDataWriter_impl ();
+        ~CORBACdrDataDataWriter_impl () override;
     
-        virtual DDS::ReturnCode_t init (
-                        DDS::OpenSplice::Publisher *publisher,
-                        DDS::OpenSplice::DomainParticipant *participant,
+        DDS::ReturnCode_t init (
+                        DDS::OpenSplice::Publisher *publisher_,
+                        DDS::OpenSplice::DomainParticipant *participant_,
                         const DDS::DataWriterQos &qos,
                         DDS::OpenSplice::Topic *a_topic,
                         const char *name,
-                        DDS::OpenSplice::cxxCopyIn copyIn,
-                        DDS::OpenSplice::cxxCopyOut copyOut,
-                        u_writerCopy writerCopy,
-                        void *cdrMarshaler);
+                        DDS::OpenSplice::cxxCopyIn copyIn_,
+                        DDS::OpenSplice::cxxCopyOut copyOut_,
+                        u_writerCopy writerCopy_,
+                        void *cdrMarshaler_) override;
     
     private:
         CORBACdrDataDataWriter_impl (const CORBACdrDataDataWriter_impl &);
@@ -141,115 +141,115 @@ namespace OpenRTM {
         friend class CORBACdrDataDataReaderView_impl;
     
     public:
-        virtual ::DDS::ReturnCode_t read (
+        ::DDS::ReturnCode_t read (
             CORBACdrDataSeq & received_data,
             ::DDS::SampleInfoSeq & info_seq,
             ::DDS::Long max_samples,
             ::DDS::SampleStateMask sample_states,
             ::DDS::ViewStateMask view_states,
-            ::DDS::InstanceStateMask instance_states) THROW_ORB_EXCEPTIONS;
+            ::DDS::InstanceStateMask instance_states) THROW_ORB_EXCEPTIONS override;
 
-        virtual DDS::Long read_cdr(
+        ::DDS::Long read_cdr(
             ::DDS::CDRSample& received_data, 
             ::DDS::SampleInfo& info,
             ::DDS::ULong sample_states,
             ::DDS::ULong view_states,
-            ::DDS::InstanceStateMask instance_states) THROW_ORB_EXCEPTIONS;
+            ::DDS::InstanceStateMask instance_states) THROW_ORB_EXCEPTIONS override;
 
     
-        virtual ::DDS::ReturnCode_t take (
+        ::DDS::ReturnCode_t take (
             CORBACdrDataSeq & received_data,
             ::DDS::SampleInfoSeq & info_seq,
             ::DDS::Long max_samples,
             ::DDS::SampleStateMask sample_states,
             ::DDS::ViewStateMask view_states,
-            ::DDS::InstanceStateMask instance_states) THROW_ORB_EXCEPTIONS;
+            ::DDS::InstanceStateMask instance_states) THROW_ORB_EXCEPTIONS override;
     
-        virtual ::DDS::ReturnCode_t read_w_condition (
+        ::DDS::ReturnCode_t read_w_condition (
             CORBACdrDataSeq & received_data,
             ::DDS::SampleInfoSeq & info_seq,
             ::DDS::Long max_samples,
-            ::DDS::ReadCondition_ptr a_condition) THROW_ORB_EXCEPTIONS;
+            ::DDS::ReadCondition_ptr a_condition) THROW_ORB_EXCEPTIONS override;
     
-        virtual ::DDS::ReturnCode_t take_w_condition (
+        ::DDS::ReturnCode_t take_w_condition (
             CORBACdrDataSeq & received_data,
             ::DDS::SampleInfoSeq & info_seq,
             ::DDS::Long max_samples,
-            ::DDS::ReadCondition_ptr a_condition) THROW_ORB_EXCEPTIONS;
+            ::DDS::ReadCondition_ptr a_condition) THROW_ORB_EXCEPTIONS override;
     
-        virtual ::DDS::ReturnCode_t read_next_sample (
+        ::DDS::ReturnCode_t read_next_sample (
             CORBACdrData & received_data,
-            ::DDS::SampleInfo & sample_info) THROW_ORB_EXCEPTIONS;
+            ::DDS::SampleInfo & sample_info) THROW_ORB_EXCEPTIONS override;
     
-        virtual ::DDS::ReturnCode_t take_next_sample (
+        ::DDS::ReturnCode_t take_next_sample (
             CORBACdrData & received_data,
-            ::DDS::SampleInfo & sample_info) THROW_ORB_EXCEPTIONS;
+            ::DDS::SampleInfo & sample_info) THROW_ORB_EXCEPTIONS override;
     
-        virtual ::DDS::ReturnCode_t read_instance (
+        ::DDS::ReturnCode_t read_instance (
             CORBACdrDataSeq & received_data,
             ::DDS::SampleInfoSeq & info_seq,
             ::DDS::Long max_samples,
             ::DDS::InstanceHandle_t a_handle,
             ::DDS::SampleStateMask sample_states,
             ::DDS::ViewStateMask view_states,
-            ::DDS::InstanceStateMask instance_states) THROW_ORB_EXCEPTIONS;
+            ::DDS::InstanceStateMask instance_states) THROW_ORB_EXCEPTIONS override;
     
-        virtual ::DDS::ReturnCode_t take_instance (
+        ::DDS::ReturnCode_t take_instance (
             CORBACdrDataSeq & received_data,
             ::DDS::SampleInfoSeq & info_seq,
             ::DDS::Long max_samples,
             ::DDS::InstanceHandle_t a_handle,
             ::DDS::SampleStateMask sample_states,
             ::DDS::ViewStateMask view_states,
-            ::DDS::InstanceStateMask instance_states) THROW_ORB_EXCEPTIONS;
+            ::DDS::InstanceStateMask instance_states) THROW_ORB_EXCEPTIONS override;
     
-        virtual ::DDS::ReturnCode_t read_next_instance (
+        ::DDS::ReturnCode_t read_next_instance (
             CORBACdrDataSeq & received_data,
             ::DDS::SampleInfoSeq & info_seq,
             ::DDS::Long max_samples,
             ::DDS::InstanceHandle_t a_handle,
             ::DDS::SampleStateMask sample_states,
             ::DDS::ViewStateMask view_states,
-            ::DDS::InstanceStateMask instance_states) THROW_ORB_EXCEPTIONS;
+            ::DDS::InstanceStateMask instance_states) THROW_ORB_EXCEPTIONS override;
     
-        virtual ::DDS::ReturnCode_t take_next_instance (
+        ::DDS::ReturnCode_t take_next_instance (
             CORBACdrDataSeq & received_data,
             ::DDS::SampleInfoSeq & info_seq,
             ::DDS::Long max_samples,
             ::DDS::InstanceHandle_t a_handle,
             ::DDS::SampleStateMask sample_states,
             ::DDS::ViewStateMask view_states,
-            ::DDS::InstanceStateMask instance_states) THROW_ORB_EXCEPTIONS;
+            ::DDS::InstanceStateMask instance_states) THROW_ORB_EXCEPTIONS override;
     
-        virtual ::DDS::ReturnCode_t read_next_instance_w_condition (
+        ::DDS::ReturnCode_t read_next_instance_w_condition (
             CORBACdrDataSeq & received_data,
             ::DDS::SampleInfoSeq & info_seq,
             ::DDS::Long max_samples,
             ::DDS::InstanceHandle_t a_handle,
-            ::DDS::ReadCondition_ptr a_condition) THROW_ORB_EXCEPTIONS;
+            ::DDS::ReadCondition_ptr a_condition) THROW_ORB_EXCEPTIONS override;
     
-        virtual ::DDS::ReturnCode_t take_next_instance_w_condition (
+        ::DDS::ReturnCode_t take_next_instance_w_condition (
             CORBACdrDataSeq & received_data,
             ::DDS::SampleInfoSeq & info_seq,
             ::DDS::Long max_samples,
             ::DDS::InstanceHandle_t a_handle,
-            ::DDS::ReadCondition_ptr a_condition) THROW_ORB_EXCEPTIONS;
+            ::DDS::ReadCondition_ptr a_condition) THROW_ORB_EXCEPTIONS override;
     
-        virtual ::DDS::ReturnCode_t return_loan (
+        ::DDS::ReturnCode_t return_loan (
             CORBACdrDataSeq & received_data,
-            ::DDS::SampleInfoSeq & info_seq) THROW_ORB_EXCEPTIONS;
+            ::DDS::SampleInfoSeq & info_seq) THROW_ORB_EXCEPTIONS override;
     
-        virtual ::DDS::ReturnCode_t get_key_value (
+        ::DDS::ReturnCode_t get_key_value (
             CORBACdrData & key_holder,
-            ::DDS::InstanceHandle_t handle) THROW_ORB_EXCEPTIONS;
+            ::DDS::InstanceHandle_t handle_) THROW_ORB_EXCEPTIONS override;
     
-        virtual ::DDS::InstanceHandle_t lookup_instance (
-            const CORBACdrData & instance) THROW_ORB_EXCEPTIONS;
+        ::DDS::InstanceHandle_t lookup_instance (
+            const CORBACdrData & instance) THROW_ORB_EXCEPTIONS override;
     
     protected:
         CORBACdrDataDataReader_impl ();
     
-        virtual ~CORBACdrDataDataReader_impl ();
+        ~CORBACdrDataDataReader_impl () override;
     
         DDS::ReturnCode_t init (
                 DDS::OpenSplice::Subscriber *subscriber,
@@ -295,114 +295,114 @@ namespace OpenRTM {
         friend class CORBACdrDataTypeSupportMetaHolder;
     
     public:
-        virtual ::DDS::ReturnCode_t read (
+        ::DDS::ReturnCode_t read (
             CORBACdrDataSeq & received_data,
             ::DDS::SampleInfoSeq & info_seq,
             ::DDS::Long max_samples,
             ::DDS::SampleStateMask sample_states,
             ::DDS::ViewStateMask view_states,
-            ::DDS::InstanceStateMask instance_states) THROW_ORB_EXCEPTIONS;
+            ::DDS::InstanceStateMask instance_states) THROW_ORB_EXCEPTIONS override;
     
-        virtual ::DDS::ReturnCode_t take (
+        ::DDS::ReturnCode_t take (
             CORBACdrDataSeq & received_data,
             ::DDS::SampleInfoSeq & info_seq,
             ::DDS::Long max_samples,
             ::DDS::SampleStateMask sample_states,
             ::DDS::ViewStateMask view_states,
-            ::DDS::InstanceStateMask instance_states) THROW_ORB_EXCEPTIONS;
+            ::DDS::InstanceStateMask instance_states) THROW_ORB_EXCEPTIONS override;
     
-        virtual ::DDS::ReturnCode_t read_w_condition (
+        ::DDS::ReturnCode_t read_w_condition (
             CORBACdrDataSeq & received_data,
             ::DDS::SampleInfoSeq & info_seq,
             ::DDS::Long max_samples,
-            ::DDS::ReadCondition_ptr a_condition) THROW_ORB_EXCEPTIONS;
+            ::DDS::ReadCondition_ptr a_condition) THROW_ORB_EXCEPTIONS override;
     
-        virtual ::DDS::ReturnCode_t take_w_condition (
+        ::DDS::ReturnCode_t take_w_condition (
             CORBACdrDataSeq & received_data,
             ::DDS::SampleInfoSeq & info_seq,
             ::DDS::Long max_samples,
-            ::DDS::ReadCondition_ptr a_condition) THROW_ORB_EXCEPTIONS;
+            ::DDS::ReadCondition_ptr a_condition) THROW_ORB_EXCEPTIONS override;
     
-        virtual ::DDS::ReturnCode_t read_next_sample (
+        ::DDS::ReturnCode_t read_next_sample (
             CORBACdrData & received_data,
-            ::DDS::SampleInfo & sample_info) THROW_ORB_EXCEPTIONS;
+            ::DDS::SampleInfo & sample_info) THROW_ORB_EXCEPTIONS override;
     
-        virtual ::DDS::ReturnCode_t take_next_sample (
+        ::DDS::ReturnCode_t take_next_sample (
             CORBACdrData & received_data,
-            ::DDS::SampleInfo & sample_info) THROW_ORB_EXCEPTIONS;
+            ::DDS::SampleInfo & sample_info) THROW_ORB_EXCEPTIONS override;
     
-        virtual ::DDS::ReturnCode_t read_instance (
+        ::DDS::ReturnCode_t read_instance (
             CORBACdrDataSeq & received_data,
             ::DDS::SampleInfoSeq & info_seq,
             ::DDS::Long max_samples,
             ::DDS::InstanceHandle_t a_handle,
             ::DDS::SampleStateMask sample_states,
             ::DDS::ViewStateMask view_states,
-            ::DDS::InstanceStateMask instance_states) THROW_ORB_EXCEPTIONS;
+            ::DDS::InstanceStateMask instance_states) THROW_ORB_EXCEPTIONS override;
     
-        virtual ::DDS::ReturnCode_t take_instance (
+        ::DDS::ReturnCode_t take_instance (
             CORBACdrDataSeq & received_data,
             ::DDS::SampleInfoSeq & info_seq,
             ::DDS::Long max_samples,
             ::DDS::InstanceHandle_t a_handle,
             ::DDS::SampleStateMask sample_states,
             ::DDS::ViewStateMask view_states,
-            ::DDS::InstanceStateMask instance_states) THROW_ORB_EXCEPTIONS;
+            ::DDS::InstanceStateMask instance_states) THROW_ORB_EXCEPTIONS override;
     
-        virtual ::DDS::ReturnCode_t read_next_instance (
+        ::DDS::ReturnCode_t read_next_instance (
             CORBACdrDataSeq & received_data,
             ::DDS::SampleInfoSeq & info_seq,
             ::DDS::Long max_samples,
             ::DDS::InstanceHandle_t a_handle,
             ::DDS::SampleStateMask sample_states,
             ::DDS::ViewStateMask view_states,
-            ::DDS::InstanceStateMask instance_states) THROW_ORB_EXCEPTIONS;
+            ::DDS::InstanceStateMask instance_states) THROW_ORB_EXCEPTIONS override;
     
-        virtual ::DDS::ReturnCode_t take_next_instance (
+        ::DDS::ReturnCode_t take_next_instance (
             CORBACdrDataSeq & received_data,
             ::DDS::SampleInfoSeq & info_seq,
             ::DDS::Long max_samples,
             ::DDS::InstanceHandle_t a_handle,
             ::DDS::SampleStateMask sample_states,
             ::DDS::ViewStateMask view_states,
-            ::DDS::InstanceStateMask instance_states) THROW_ORB_EXCEPTIONS;
+            ::DDS::InstanceStateMask instance_states) THROW_ORB_EXCEPTIONS override;
     
-        virtual ::DDS::ReturnCode_t read_next_instance_w_condition (
+        ::DDS::ReturnCode_t read_next_instance_w_condition (
             CORBACdrDataSeq & received_data,
             ::DDS::SampleInfoSeq & info_seq,
             ::DDS::Long max_samples,
             ::DDS::InstanceHandle_t a_handle,
-            ::DDS::ReadCondition_ptr a_condition) THROW_ORB_EXCEPTIONS;
+            ::DDS::ReadCondition_ptr a_condition) THROW_ORB_EXCEPTIONS override;
     
-        virtual ::DDS::ReturnCode_t take_next_instance_w_condition (
+        ::DDS::ReturnCode_t take_next_instance_w_condition (
             CORBACdrDataSeq & received_data,
             ::DDS::SampleInfoSeq & info_seq,
             ::DDS::Long max_samples,
             ::DDS::InstanceHandle_t a_handle,
-            ::DDS::ReadCondition_ptr a_condition) THROW_ORB_EXCEPTIONS;
+            ::DDS::ReadCondition_ptr a_condition) THROW_ORB_EXCEPTIONS override;
     
-        virtual ::DDS::ReturnCode_t return_loan (
+        ::DDS::ReturnCode_t return_loan (
             CORBACdrDataSeq & received_data,
-            ::DDS::SampleInfoSeq & info_seq) THROW_ORB_EXCEPTIONS;
+            ::DDS::SampleInfoSeq & info_seq) THROW_ORB_EXCEPTIONS override;
     
-        virtual ::DDS::ReturnCode_t get_key_value (
+        ::DDS::ReturnCode_t get_key_value (
             CORBACdrData & key_holder,
-            ::DDS::InstanceHandle_t handle) THROW_ORB_EXCEPTIONS;
+            ::DDS::InstanceHandle_t handle_) THROW_ORB_EXCEPTIONS override;
     
-        virtual ::DDS::InstanceHandle_t lookup_instance (
-            const CORBACdrData & instance) THROW_ORB_EXCEPTIONS;
+        ::DDS::InstanceHandle_t lookup_instance (
+            const CORBACdrData & instance) THROW_ORB_EXCEPTIONS override;
     
     protected:
         CORBACdrDataDataReaderView_impl ();
     
-        virtual ~CORBACdrDataDataReaderView_impl ();
+        ~CORBACdrDataDataReaderView_impl () override;
     
-        virtual DDS::ReturnCode_t init (
+        DDS::ReturnCode_t init (
             DDS::OpenSplice::DataReader *reader,
             const char *name,
             const DDS::DataReaderViewQos &qos,
             DDS::OpenSplice::cxxCopyIn copyIn,
-            DDS::OpenSplice::cxxCopyOut copyOut);
+            DDS::OpenSplice::cxxCopyOut copyOut) override;
     
     private:
         CORBACdrDataDataReaderView_impl (const CORBACdrDataDataReaderView_impl &);

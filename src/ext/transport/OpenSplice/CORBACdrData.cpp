@@ -9,7 +9,14 @@
 //  
 //******************************************************************
 
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
+#pragma warning(push)
+#pragma warning(disable:4819)
+#endif
 #include "CORBACdrData.h"
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
+#pragma warning(pop)
+#endif
 
 #if DDS_USE_EXPLICIT_TEMPLATES
 template class DDS_DCPSUFLSeq < DDS::Octet, struct _data_seq_uniq_>;

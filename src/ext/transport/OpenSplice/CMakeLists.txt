@@ -28,7 +28,7 @@ endif()
 
 set(target OpenSpliceTransport)
 
-set(srcs OpenSpliceTransport.cpp OpenSpliceTransport.h OpenSpliceInPort.cpp OpenSpliceInPort.h OpenSpliceOutPort.cpp OpenSpliceOutPort.h OpenSpliceManager.cpp OpenSpliceManager.h OpenSpliceMessageInfo.cpp OpenSpliceMessageInfo.h ccpp_CORBACdrData.h CORBACdrData.cpp CORBACdrData.h CORBACdrDataDcps.cpp CORBACdrDataDcps.h CORBACdrDataDcps_impl.cpp CORBACdrDataDcps_impl.h CORBACdrDataSplDcps.cpp CORBACdrDataSplDcps.h OpenSpliceInPort_Impl.cpp OpenSpliceInPort_Impl.h OpenSpliceOutPort_Impl.cpp OpenSpliceOutPort_Impl.h)
+set(srcs OpenSpliceTransport.cpp OpenSpliceTransport.h OpenSpliceInPort.cpp OpenSpliceInPort.h OpenSpliceOutPort.cpp OpenSpliceOutPort.h OpenSpliceManager.cpp OpenSpliceManager.h OpenSpliceMessageInfo.cpp OpenSpliceMessageInfo.h ccpp_CORBACdrData.h CORBACdrData.cpp CORBACdrData.h CORBACdrDataDcps.cpp CORBACdrDataDcps.h CORBACdrDataDcps_impl.cpp CORBACdrDataDcps_impl.h CORBACdrDataSplDcps.cpp CORBACdrDataSplDcps.h OpenSpliceInPort_Impl.cpp OpenSpliceInPort_Impl.h OpenSpliceOutPort_Impl.cpp OpenSpliceOutPort_Impl.h OpenSpliceManagerFunc.cpp OpenSpliceManagerFunc.h)
 
 
 if(VXWORKS AND NOT RTP)

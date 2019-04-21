@@ -146,7 +146,7 @@ namespace RTC
     coil::normalize(endian_type);
     std::vector<std::string> endian_str(coil::split(endian_type, ","));
 
-    bool endian;
+    bool endian = true;
     
     if (endian_str[0] == "little")
     {

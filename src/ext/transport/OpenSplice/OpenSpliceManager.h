@@ -22,10 +22,16 @@
 #include <vector>
 #include <coil/Mutex.h>
 #include <coil/Guard.h>
-#include <ccpp_dds_dcps.h>
 #include <map>
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
+#pragma warning(push)
+#pragma warning(disable:4819)
+#endif
+#include <ccpp_dds_dcps.h>
 #include "ccpp_CORBACdrData.h"
-
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
+#pragma warning(pop)
+#endif
 
 namespace RTC
 {
@@ -253,7 +259,23 @@ namespace RTC
          *
          * @endif
          */
-        bool unregisterType(const char* name);
+        bool unregisterType(std::string& name);
+        /*!
+         * @if jp
+         * @brief 型が登録済みかを確認
+         *
+         * @param name 型名
+         * @return true：登録済み、false：未登録
+         *
+         * @else
+         * @brief
+         *
+         * @param name
+         * @return
+         *
+         * @endif
+         */
+        bool registeredType(std::string& name);
 
         /*!
          * @if jp
@@ -301,6 +323,21 @@ namespace RTC
          * @endif
          */
         static OpenSpliceManager& instance();
+
+        /*!
+         * @if jp
+         * @brief OpenSpliceManagerが初期化されている場合に終了処理を呼び出す
+         *
+         *
+         * @else
+         * @brief
+         *
+         * @return
+         *
+         *
+         * @endif
+         */
+        static void shutdown_global();
         /*!
          * @if jp
          * @brief DDS::ReturnCode_tの値がRETCODE_OK、RETCODE_NO_DATA以外の場合にエラー出力
@@ -349,7 +386,7 @@ namespace RTC
         DDS::Publisher_var m_publisher;
         DDS::Subscriber_var m_subscriber;
         std::map <std::string, DDS::Topic_var> m_topics;
-        std::map <std::string, OpenRTM::CORBACdrDataTypeSupport_var> m_typesupports;
+        std::map <std::string, OpenRTM_OpenSplice::CORBACdrDataTypeSupport_var> m_typesupports;
     protected:
         //mutable Logger rtclog;
     };
