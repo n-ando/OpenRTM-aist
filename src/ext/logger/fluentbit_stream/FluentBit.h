@@ -79,7 +79,6 @@ namespace RTC
     size_t m_pos;
 
     typedef int FlbHandler;
-    FlbHandler m_fibInLib;
 
     std::vector<FlbHandler> m_flbIn;
     std::vector<FlbHandler> m_flbOut;
