@@ -24,7 +24,7 @@
 namespace RTC
 {
   // Static variables initialization
-  flb_ctx_t* FluentBitStream::s_flbContext = NULL;
+  flb_ctx_t* FluentBitStream::s_flbContext = nullptr;
   int FluentBitStream::s_instance = 0;
 
   //============================================================
@@ -32,8 +32,8 @@ namespace RTC
   FluentBitStream::FluentBitStream()
     : m_pos(0)
   {
-    for (size_t i(0); i < BUFFER_LEN; ++i) { m_buf[i] = '\0'; }
-    if (s_flbContext == NULL)
+    for (char & i : m_buf) { i = '\0'; }
+    if (s_flbContext == nullptr)
       {
         s_flbContext = flb_create();
       }
@@ -56,7 +56,7 @@ namespace RTC
 
 
     // Default lib-input setting
-    FlbHandler flbhandler = flb_input(s_flbContext, (char*)"lib", NULL);
+    FlbHandler flbhandler = flb_input(s_flbContext, (char*)"lib", nullptr);
     flb_input_set(s_flbContext, flbhandler, "tag", prop.getName(), NULL);
     m_flbIn.push_back(flbhandler);
 
@@ -98,7 +98,7 @@ namespace RTC
   {
     std::string plugin = prop["plugin"];
     FlbHandler flbout = flb_output(s_flbContext,
-                                   (char*)plugin.c_str(), NULL);
+                                   (char*)plugin.c_str(), nullptr);
 
     m_flbOut.push_back(flbout);
     const std::vector<Properties*>& leaf = prop.getLeaf();
@@ -115,7 +115,7 @@ namespace RTC
     std::string plugin = prop["plugin"];
     
     FlbHandler flbin = flb_input(s_flbContext,
-                                 (char*)plugin.c_str(), NULL);
+                                 (char*)plugin.c_str(), nullptr);
     m_flbIn.push_back(flbin);
     const std::vector<Properties*>& leaf = prop.getLeaf();
     for(auto & lprop : leaf)
@@ -134,7 +134,7 @@ namespace RTC
       {
 
         n = snprintf(tmp, sizeof(tmp) - 1,
-                     "[%ld, {\"message\": \"%s\", \"time\":\"%s\",\"name\":\"%s\",\"level\":\"%s\"}]", time(NULL), mes, date.c_str(), name.c_str(), Logger::getLevelString(level).c_str());
+                     R"([%ld, {"message": "%s", "time":"%s","name":"%s","level":"%s"}])", time(nullptr), mes, date.c_str(), name.c_str(), Logger::getLevelString(level).c_str());
 
         flb_lib_push(s_flbContext, flb, tmp, n);
       }

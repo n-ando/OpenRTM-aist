@@ -243,7 +243,7 @@ namespace RTC
      *
      * @endif
      */
-    ~FluentBit(void) override;
+    ~FluentBit() override;
 
     /*!
      * @if jp
