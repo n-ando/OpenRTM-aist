@@ -58,7 +58,16 @@ namespace RTC
    */
   FsmStructureListener::~FsmStructureListener(){}
 
+  /*!
+   * @if jp
+   * @class FsmActionListeners クラス
+   * @else
+   * @class FsmActionListeners class
+   * @endif
+   */
+  FsmActionListeners::FsmActionListeners(){}
 
+  FsmActionListeners::~FsmActionListeners(){}
 
   //============================================================
   /*!

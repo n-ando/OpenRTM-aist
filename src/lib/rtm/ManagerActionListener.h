@@ -967,6 +967,20 @@ namespace RTM
   class ManagerActionListeners
   {
   public:
+    /*!
+     * @if jp
+     * @brief デストラクタ
+     *
+     * デストラクタ
+     *
+     * @else
+     * @brief Destructor
+     *
+     * Destructor
+     *
+     * @endif
+     */
+    ~ManagerActionListeners();
     ManagerActionListenerHolder manager_;
     ModuleActionListenerHolder module_;
     RtcLifecycleActionListenerHolder rtclifecycle_;

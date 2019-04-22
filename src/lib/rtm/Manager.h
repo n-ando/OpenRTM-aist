@@ -2125,6 +2125,9 @@ namespace RTC
           m_version(factory->profile()["version"])
       {
       }
+      ~FactoryPredicate()
+      {
+      }
       bool operator()(FactoryBase* factory)
       {
         // implementation_id must not be empty
@@ -2521,6 +2524,9 @@ namespace RTC
 
     struct Finalized
     {
+      ~Finalized()
+      {
+      }
       Mutex mutex;
       std::vector<RTObject_impl*> comps;
     };

@@ -1602,6 +1602,9 @@ namespace RTM
         }
   }
 
+  CompParam::~CompParam()
+  {
+  }
 
   std::string CompParam::vendor()
     {

@@ -1331,6 +1331,7 @@ namespace RTC
           m_ior("")
       {
       }
+      ~CorbaConsumerHolder();
       std::string instanceName() { return m_instanceName; }
       std::string typeName() { return m_typeName; }
       std::string descriptor() { return m_typeName + "." + m_instanceName; }

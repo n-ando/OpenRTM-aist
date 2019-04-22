@@ -1281,6 +1281,22 @@ namespace RTC
   public:
     /*!
      * @if jp
+     * @brief コンストラクタ
+     * @else
+     * @brief Constructor
+     * @endif
+     */
+    ConnectorListeners(){}
+    /*!
+     * @if jp
+     * @brief デストラクタ
+     * @else
+     * @brief Destructor
+     * @endif
+     */
+    ~ConnectorListeners(){}
+    /*!
+     * @if jp
      * @brief ConnectorDataListenerTypeリスナ配列
      * ConnectorDataListenerTypeリスナを格納
      * @else

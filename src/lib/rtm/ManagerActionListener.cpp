@@ -46,6 +46,17 @@ namespace RTM
 
   /*!
    * @if jp
+   * @class ManagerActionListeners クラス
+   * @else
+   * @class ManagerActionListeners class
+   * @endif
+   */
+  ManagerActionListeners::~ManagerActionListeners()
+  {
+  }
+
+  /*!
+   * @if jp
    * @brief preShutdown コールバック関数
    * TODO: Documentation
    * @else

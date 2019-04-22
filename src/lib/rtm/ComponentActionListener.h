@@ -1031,6 +1031,22 @@ namespace RTC
   public:
     /*!
      * @if jp
+     * @brief コンストラクタ
+     * @else
+     * @brief Constructor
+     * @endif
+     */
+    ComponentActionListeners();
+    /*!
+     * @if jp
+     * @brief デストラクタ
+     * @else
+     * @brief Destructor
+     * @endif
+     */
+    ~ComponentActionListeners();
+    /*!
+     * @if jp
      * @brief PreComponentActionListenerTypeリスナ配列
      * PreComponentActionListenerTypeリスナを格納
      * @else

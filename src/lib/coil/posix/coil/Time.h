@@ -157,12 +157,7 @@ namespace coil
    *
    * @endif
    */
-  inline TimeValue gettimeofday()
-  {
-    timeval tv;
-    ::gettimeofday(&tv, nullptr);
-    return TimeValue(tv.tv_sec, tv.tv_usec);
-  }
+  TimeValue gettimeofday();
 
   /*!
    * @if jp
