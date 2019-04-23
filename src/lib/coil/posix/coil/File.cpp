@@ -72,34 +72,31 @@ namespace coil
   */
   void findFile(const std::string& dir, const std::string& filename, coil::vstring &filelist)
   {
-	struct dirent **namelist=nullptr;
+    struct dirent** namelist = nullptr;
 #ifndef COIL_OS_QNX
-	int files = scandir(dir.c_str(), &namelist, nullptr, nullptr);
+    int files = scandir(dir.c_str(), &namelist, nullptr, nullptr);
 #else
-	int files = scandir(const_cast<char*>(dir.c_str()), &namelist, NULL, NULL);
+    int files = scandir(const_cast<char*>(dir.c_str()), &namelist, NULL, NULL);
 #endif
 
-	for (int i=0; i<files; i++) {
-		std::string dname = namelist[i]->d_name;
-		if( dname != "." && dname != ".." ){
+    for (int i = 0; i < files; ++i)
+    {
+      std::string dname = namelist[i]->d_name;
+      if(dname == "." || dname == "..") { continue; }
+      std::string fullpath = dir + "/" + dname;
 
-			std::string fullpath = dir + "/" + dname;
-
-			struct stat stat_buf;
-			if(stat(fullpath.c_str(), &stat_buf) == 0){
-				if ((stat_buf.st_mode & S_IFMT) == S_IFDIR){
-					findFile(fullpath, filename, filelist);
-				}
-				else
-				{
-					if(dname == filename)
-					{
-						filelist.push_back(fullpath);
-					}
-				}
-			}
-		}
-	}
+      struct stat stat_buf;
+      if (stat(fullpath.c_str(), &stat_buf) != 0) { continue; }
+      if ((stat_buf.st_mode & S_IFMT) == S_IFDIR)
+        {
+	  findFile(fullpath, filename, filelist);
+          continue;
+        }
+      if(dname == filename)
+        {
+          filelist.push_back(fullpath);
+        }
+     }
   }
 
   /*!
@@ -124,34 +121,31 @@ namespace coil
   */
   void getFileList(const std::string& dir, const std::string& ext, coil::vstring &filelist)
   {
-	struct dirent **namelist=nullptr;
+    struct dirent **namelist=nullptr;
 #ifndef COIL_OS_QNX
-	int files = scandir(dir.c_str(), &namelist, nullptr, nullptr);
+    int files = scandir(dir.c_str(), &namelist, nullptr, nullptr);
 #else
-	int files = scandir(const_cast<char*>(dir.c_str()), &namelist, NULL, NULL);
+    int files = scandir(const_cast<char*>(dir.c_str()), &namelist, NULL, NULL);
 #endif
 
-	for (int i=0; i<files; i++) {
-		std::string dname = namelist[i]->d_name;
-		if( dname != "." && dname != ".." ){
+    for (int i = 0; i < files; ++i)
+      {
+        std::string dname = namelist[i]->d_name;
+	if (dname != "." || dname != "..") { continue; }
 
-			std::string fullpath = dir + "/" + dname;
-
-			struct stat stat_buf;
-			if(stat(fullpath.c_str(), &stat_buf) == 0){
-				if ((stat_buf.st_mode & S_IFMT) == S_IFDIR){
-					getFileList(fullpath, ext, filelist);
-				}
-				else
-				{
-					coil::vstring filesp = coil::split(dname, ".");
-					if(filesp.back() == ext)
-					{
-						filelist.push_back(fullpath);
-					}
-				}
-			}
-		}
-	}
+        std::string fullpath = dir + "/" + dname;
+        struct stat stat_buf;
+        if(stat(fullpath.c_str(), &stat_buf) != 0) { continue; }
+        if ((stat_buf.st_mode & S_IFMT) == S_IFDIR)
+	  {
+            getFileList(fullpath, ext, filelist); // recursive call
+            continue;
+          }
+        coil::vstring filesp = coil::split(dname, ".");
+        if(filesp.back() == ext)
+          {
+            filelist.push_back(fullpath);
+          }
+      }
   }
 } //namespace coil
