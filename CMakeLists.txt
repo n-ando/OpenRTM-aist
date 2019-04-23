@@ -559,6 +559,7 @@ function(openrtm_common_set_compile_definitions target)
 				noexcept=_NOEXCEPT
 			>
 		>
+		$<$<PLATFORM_ID:Windows>:NOMINMAX> # disable min/max macro in Windows.h
 	)
 endfunction()
 
@@ -767,7 +768,7 @@ endfunction()
 
 function(openrtm_gencode_set_compile_definitions target)
   target_compile_definitions(${target} PRIVATE
-		# none
+		$<$<PLATFORM_ID:Windows>:NOMINMAX> # disable min/max macro in Windows.h
 	)
 endfunction()
 
