@@ -188,7 +188,7 @@ namespace RTC
   }
   // end of FluentBit class
   //============================================================
-}
+} // namespace RTC
 
 extern "C"
 {
