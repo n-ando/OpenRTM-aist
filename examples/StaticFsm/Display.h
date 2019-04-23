@@ -41,7 +41,7 @@ class DataListener
   USE_CONNLISTENER_STATUS;
 public:
   DataListener(const char* name) : m_name(name) {}
-  virtual ~DataListener()
+  ~DataListener() override
   {
     std::cout << "dtor of " << m_name << std::endl;
   }
@@ -70,7 +70,7 @@ class ConnListener
   USE_CONNLISTENER_STATUS;
 public:
   ConnListener(const char* name) : m_name(name) {}
-  virtual ~ConnListener()
+  ~ConnListener() override
   {
     std::cout << "dtor of " << m_name << std::endl;
   }
@@ -96,7 +96,7 @@ class Display
 {
  public:
   Display(RTC::Manager* manager);
-  ~Display();
+  ~Display() override;
 
   // The initialize action (on CREATED->ALIVE transition)
   // formaer rtc_init_entry()
