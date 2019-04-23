@@ -687,7 +687,6 @@ function(openrtm_common_set_compile_options target)
 		-Wno-useless-cast
 		-Wno-zero-as-null-pointer-constant)
 	set(WARN_CLANG
-		-pedantic
 		-Weverything
 		# exclude rule
 		-Wno-documentation
@@ -733,7 +732,10 @@ function(openrtm_common_set_compile_options target)
 	target_compile_options(${target} PRIVATE
 		# C++11: target_compile_features can't be used becase it's support after v3.1.0.
 		$<$<CXX_COMPILER_ID:GNU>:-std=c++11>
-		$<$<CXX_COMPILER_ID:Clang>:-std=c++11>
+		$<$<CXX_COMPILER_ID:Clang>:
+			$<$<NOT:$<PLATFORM_ID:Windows>>:-std=c++11>
+			$<$<PLATFORM_ID:Windows>:/std:c++14> # same as msvc.
+		>
 		## MSVC always enable c++11 and c++14 after MSVC 2015 Update 3.
 		$<$<CXX_COMPILER_ID:MSVC>:
 			$<$<VERSION_GREATER:${CMAKE_CXX_COMPILER_VERSION},19.00.23918>:/std:c++14>
@@ -779,7 +781,10 @@ function(openrtm_gencode_set_compile_options target)
 	target_compile_options(${target} PRIVATE
 		# C++11: target_compile_features can't be used becase it's support after v3.1.0.
 		$<$<CXX_COMPILER_ID:GNU>:-std=c++11>
-		$<$<CXX_COMPILER_ID:Clang>:-std=c++11>
+		$<$<CXX_COMPILER_ID:Clang>:
+			$<$<NOT:$<PLATFORM_ID:Windows>>:-std=c++11>
+			$<$<PLATFORM_ID:Windows>:/std:c++14> # same as msvc.
+		>
 		## MSVC always enable c++11 and c++14 after MSVC 2015 Update 3.
 		$<$<CXX_COMPILER_ID:MSVC>:
 			$<$<VERSION_GREATER:${CMAKE_CXX_COMPILER_VERSION},19.00.23918>:/std:c++14>
