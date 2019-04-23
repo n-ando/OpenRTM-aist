@@ -1254,7 +1254,7 @@ namespace CORBA_RTCUtil
    * @return
    * @endif
    */
-  RTC::ReturnCode_t connect_by_name(std::string name, const coil::Properties& prop,
+  RTC::ReturnCode_t connect_by_name(const std::string& name, const coil::Properties& prop,
                                     RTC::RTObject_ptr rtc0,
                                     const std::string& portName0,
                                     RTC::RTObject_ptr rtc1,
