@@ -22,7 +22,7 @@
 
 #include <coil/stringutil.h>
 
-#include <windows.h>
+#include <Windows.h>
 #include <tchar.h>
 #include <string>
 

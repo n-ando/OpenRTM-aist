@@ -16,7 +16,7 @@
  */
 
 
-#include <windows.h>
+#include <Windows.h>
 #include <coil/stringutil.h>
 #include <coil/Affinity.h>
 

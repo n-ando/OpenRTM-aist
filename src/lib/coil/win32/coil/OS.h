@@ -20,12 +20,12 @@
 #define COIL_OS_H
 
 
-#include <windows.h>
+#include <Windows.h>
 #include <string.h>
 #include <stdio.h>
 #include <process.h>
 #include <stdlib.h>
-#include <winbase.h>
+#include <WinBase.h>
 #include <iostream>
 #include <map>
 

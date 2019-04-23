@@ -20,7 +20,7 @@
 #ifndef COIL_MUTEX_H
 #define COIL_MUTEX_H
 
-#include <windows.h>
+#include <Windows.h>
 
 namespace coil
 {

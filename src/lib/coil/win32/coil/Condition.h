@@ -22,7 +22,7 @@
 
 #include <coil/Mutex.h>
 
-#include <windows.h>
+#include <Windows.h>
 #include <algorithm>
 #include <iostream>
 
