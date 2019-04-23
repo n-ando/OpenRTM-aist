@@ -20,7 +20,7 @@
 #define COIL_ATOMIC_H
 
 #ifdef COIL_HAS_ATOMIC_ADD
-#include <windows.h>
+#include <Windows.h>
 #define atomic_add(x, y) ::InterlockedExchangeAdd(x, y)
 #define atomic_incr(x)   ::InterlockedIncrement(x)
 #define atomic_decr(x)   ::InterlockedDecrement(x)

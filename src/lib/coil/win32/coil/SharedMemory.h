@@ -19,7 +19,7 @@
 #ifndef COIL_SHAREDMEMORY_H
 #define COIL_SHAREDMEMORY_H
 
-#include <windows.h>
+#include <Windows.h>
 
 #include <string>
 #include <coil/config_coil.h>

@@ -20,13 +20,13 @@
 #define COIL_TIME_H
 
 
-#include <windows.h>
+#include <Windows.h>
 #ifdef WITH_ACE
 #include <WinSock2.h>
 #else
 #include <winsock.h>
 #endif
-//#include <winsock2.h>
+//#include <WinSock2.h>
 //#pragma comment(lib, "WS2_32.LIB")
 #include <time.h>
 #include <coil/config_coil.h>

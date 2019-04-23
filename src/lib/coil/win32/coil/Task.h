@@ -19,7 +19,7 @@
 #ifndef COIL_TASK_H
 #define COIL_TASK_H
 
-#include <windows.h>
+#include <Windows.h>
 #include <process.h>
 
 

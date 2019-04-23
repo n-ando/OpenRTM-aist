@@ -21,7 +21,7 @@
 
 #include <coil/config_coil.h>
 
-#include <windows.h>
+#include <Windows.h>
 #include <iostream>
 #include <string>
 
