@@ -64,7 +64,7 @@ namespace coil
   {
     FILE* m_fd;
   public:
-    Popen(std::string cmd, std::string mode);
+    Popen(const std::string& cmd, const std::string& mode);
     virtual ~Popen();
     bool isEof();
     std::string getline();
@@ -90,7 +90,7 @@ namespace coil
   *
   * @endif
   */
-  int create_process(std::string command, std::vector<std::string> &out);
+  int create_process(const std::string& command, std::vector<std::string> &out);
 
 } // namespace coil
 

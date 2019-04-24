@@ -20,6 +20,7 @@
 #include <coil/SharedMemory.h>
 //#include "SharedMemory.h"
 #include <cstring>
+#include <utility>
 
 
 namespace coil
@@ -159,7 +160,7 @@ namespace coil
    */
   int SharedMemory::open(std::string shm_address, unsigned long long memory_size)
   {
-    m_shm_address = shm_address;
+    m_shm_address = std::move(shm_address);
 	m_memory_size = memory_size;
     m_handle = OpenFileMapping(FILE_MAP_ALL_ACCESS, FALSE, m_shm_address.c_str());
     m_shm = (char *)MapViewOfFile(m_handle, FILE_MAP_ALL_ACCESS, 0, 0, 0);
