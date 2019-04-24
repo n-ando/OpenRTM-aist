@@ -40,7 +40,7 @@ namespace RTC
     {
       "./rtc.conf",
       "${RTM_ROOT}bin/${RTM_VC_VERSION}/rtc.conf",
-      NULL
+      nullptr
     };
 #else
   const char* ManagerConfig::config_file_path[] = 
