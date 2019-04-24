@@ -490,6 +490,22 @@ namespace RTC
   public:
     /*!
      * @if jp
+     * @brief コンストラクタ
+     * @else
+     * @brief Constructor
+     * @endif
+     */
+    PortConnectListeners();
+    /*!
+     * @if jp
+     * @brief デストラクタ
+     * @else
+     * @brief Destructor
+     * @endif
+     */
+    ~PortConnectListeners();
+    /*!
+     * @if jp
      * @brief PortConnectListenerType リスナ配列
      * PortConnectListenerType リスナを格納
      * @else

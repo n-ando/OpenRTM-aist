@@ -67,12 +67,7 @@ namespace coil
    *
    * @endif
    */
-  inline std::string dirname(const char* path)
-  {
-    std::string path_name(path);
-    std::string dir_name = ::dirname(&path_name[0]);
-    return dir_name;
-  }
+  std::string dirname(const char* path);
 
   /*!
    * @if jp
@@ -209,48 +204,15 @@ namespace coil
   *
   * @else
   *
-  * @brief 
-  * 
-  * @param dir 
-  * @param filename 
-  * @param filelist 
+  * @brief
+  *
+  * @param dir
+  * @param filename
+  * @param filelist
   *
   * @endif
   */
-  inline void findFile(const std::string& dir, const std::string& filename, coil::vstring &filelist)
-  {
-	struct dirent **namelist=nullptr;
-#ifndef COIL_OS_QNX
-	int files = scandir(dir.c_str(), &namelist, nullptr, nullptr);
-#else
-	int files = scandir(const_cast<char*>(dir.c_str()), &namelist, NULL, NULL);
-#endif
-
-	for (int i=0; i<files; i++) {
-		std::string dname = namelist[i]->d_name;
-		if( dname != "." && dname != ".." ){
-
-			std::string fullpath = dir + "/" + dname;
-
-			struct stat stat_buf;
-			if(stat(fullpath.c_str(), &stat_buf) == 0){
-				if ((stat_buf.st_mode & S_IFMT) == S_IFDIR){
-					findFile(fullpath, filename, filelist);
-				}
-				else
-				{
-					if(dname == filename)
-					{
-						filelist.push_back(fullpath);
-					}
-				}
-			}
-		
-			
-		}
-	}
-  }
-
+  void findFile(const std::string& dir, const std::string& filename, coil::vstring &filelist);
 
   /*!
   * @if jp
@@ -272,41 +234,7 @@ namespace coil
   *
   * @endif
   */
-  inline void getFileList(const std::string& dir, const std::string& ext, coil::vstring &filelist)
-  {
-	struct dirent **namelist=nullptr;
-#ifndef COIL_OS_QNX
-	int files = scandir(dir.c_str(), &namelist, nullptr, nullptr);
-#else
-	int files = scandir(const_cast<char*>(dir.c_str()), &namelist, NULL, NULL);
-#endif
-
-	for (int i=0; i<files; i++) {
-		std::string dname = namelist[i]->d_name;
-		if( dname != "." && dname != ".." ){
-
-			std::string fullpath = dir + "/" + dname;
-
-			struct stat stat_buf;
-			if(stat(fullpath.c_str(), &stat_buf) == 0){
-				if ((stat_buf.st_mode & S_IFMT) == S_IFDIR){
-					getFileList(fullpath, ext, filelist);
-				}
-				else
-				{
-					coil::vstring filesp = coil::split(dname, ".");
-					if(filesp.back() == ext)
-					{
-						filelist.push_back(fullpath);
-					}
-				}
-			}
-		
-			
-		}
-	}
-	
-  }
+  void getFileList(const std::string& dir, const std::string& ext, coil::vstring &filelist);
 } // namespace coil
 
 #endif // COIL_FILE_H

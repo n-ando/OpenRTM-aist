@@ -816,6 +816,7 @@ namespace RTM
   {
   public:
 	  CompParam(std::string module_name);
+	  ~CompParam();
 	  static const unsigned int prof_list_size = 6;
 	  static const char* prof_list[prof_list_size];
 	  std::string vendor();

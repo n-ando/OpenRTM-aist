@@ -98,6 +98,41 @@ namespace RTC
     ConnectorInfo()
     {
     }
+
+    /*!
+     * @if jp
+     *
+     * @brief コンストラクタ
+     *
+     * コンストラクタ
+     *
+     * @else
+     *
+     * @brief Constructor
+     *
+     * Constructor
+     *
+     * @endif
+     */
+    ConnectorInfo(const ConnectorInfo&);
+
+    /*!
+     * @if jp
+     *
+     * @brief デストラクタ
+     *
+     * デストラクタ
+     *
+     * @else
+     *
+     * @brief Destructor
+     *
+     * Destructor
+     *
+     * @endif
+     */
+    ~ConnectorInfo();
+
     /*!
      * @if jp
      * @brief  接続名前

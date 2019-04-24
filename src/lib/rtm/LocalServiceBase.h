@@ -45,6 +45,14 @@ namespace RTM
   public:
     /*!
      * @if jp
+     * @brief デストラクタ
+     * @else
+     * @brief destructor
+     * @endif
+     */
+    ~LocalServiceProfile();
+    /*!
+     * @if jp
      * @brief LocalServiceのサービス名
      * @else
      * @brief The name of LocalService

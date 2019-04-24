@@ -1445,6 +1445,22 @@ namespace RTC
   public:
     /*!
      * @if jp
+     * @brief コンストラクタ
+     * @else
+     * @brief Constructor
+     * @endif
+     */
+    FsmActionListeners();
+    /*!
+     * @if jp
+     * @brief デストラクタ
+     * @else
+     * @brief Destructor
+     * @endif
+     */
+    ~FsmActionListeners();
+    /*!
+     * @if jp
      * @brief PreFsmActionListenerTypeリスナ配列
      * PreFsmActionListenerTypeリスナを格納
      * @else

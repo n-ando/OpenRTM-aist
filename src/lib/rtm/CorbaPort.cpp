@@ -455,4 +455,23 @@ namespace RTC
     return false;
   }
 
+  /*!
+   * @if jp
+   * @brief CorbaConsumerHolder class
+   * @else
+   * @brief CorbaConsumerHolder class
+   * @endif
+   */
+
+  /*!
+   * @if jp
+   * @brief デストラクタ
+   * @else
+   * @brief destructor
+   * @endif
+   */
+  CorbaPort::CorbaConsumerHolder::~CorbaConsumerHolder()
+  {
+  }
+
 } // namespace RTC

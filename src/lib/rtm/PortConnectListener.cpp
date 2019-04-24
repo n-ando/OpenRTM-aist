@@ -217,5 +217,20 @@ namespace RTC
       }
   }
 
+  /*!
+   * @if jp
+   * @class PortConnectListeners クラス
+   * @else
+   * @class PortConnectListeners  class
+   * @endif
+   */
+  PortConnectListeners::PortConnectListeners()
+  {
+  }
+
+  PortConnectListeners::~PortConnectListeners()
+  {
+  }
+
 } // namespace RTC
 
