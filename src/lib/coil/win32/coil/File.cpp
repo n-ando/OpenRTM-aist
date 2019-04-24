@@ -195,7 +195,7 @@ namespace coil
     // path has at least one or more path characters
     if (*(path.end() - 1) != '\\' && *(path.end() - 1) != '/')
       {
-        std::string::size_type pos(path.find("/"));
+        std::string::size_type pos(path.find('/'));
         if (pos == std::string::npos)
           {
             path.push_back('\\');  // delim = '\'
