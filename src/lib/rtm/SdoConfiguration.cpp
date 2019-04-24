@@ -651,7 +651,7 @@ namespace SDOPackage
    * @brief Get the DeviceProfile of SDO
    * @endif
    */
-  const DeviceProfile Configuration_impl::getDeviceProfile()
+  DeviceProfile Configuration_impl::getDeviceProfile()
   {
     return m_deviceProfile;
   }
@@ -663,7 +663,7 @@ namespace SDOPackage
    * @brief Get a list of Organization of SDO
    * @endif
    */
-  const OrganizationList Configuration_impl::getOrganizations()
+  OrganizationList Configuration_impl::getOrganizations()
   {
     return m_organizations;
   }
@@ -675,7 +675,7 @@ namespace SDOPackage
    * @brief Generate UUID
    * @endif
    */
-  const std::string Configuration_impl::getUUID() const
+  std::string Configuration_impl::getUUID() const
   {
     coil::UUID_Generator uugen = coil::UUID_Generator();
     uugen.init();

@@ -92,7 +92,7 @@ namespace coil
         addr = (struct sockaddr_in *) res->ai_addr;
         char str_buffer[INET_ADDRSTRLEN] = { 0 };
 
-        if (inet_ntop(AF_INET, &addr->sin_addr, str_buffer, sizeof(str_buffer)))
+        if (inet_ntop(AF_INET, &addr->sin_addr, str_buffer, sizeof(str_buffer)) != nullptr)
         {
             dest_addr = str_buffer;
         }
@@ -152,7 +152,7 @@ namespace coil
             IN_ADDR inipaddr;
             inipaddr.S_un.S_addr = (u_long) ipaddr_table->table[i].dwAddr;
             char str_buffer[INET_ADDRSTRLEN] = { 0 };
-            if (inet_ntop(AF_INET, &inipaddr.S_un, str_buffer, sizeof(str_buffer)))
+            if (inet_ntop(AF_INET, &inipaddr.S_un, str_buffer, sizeof(str_buffer)) != nullptr)
             {
                 endpoint = str_buffer;
             }

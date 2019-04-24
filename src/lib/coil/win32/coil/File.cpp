@@ -64,7 +64,7 @@ namespace coil
     char *p = std::strrchr(return_dirname, delimiter);
 
     std::string dir_name;
-    if (p)
+    if (p != nullptr)
       {
         if (p != return_dirname)
           {
@@ -131,7 +131,7 @@ namespace coil
     char *pdelimiter = std::strrchr(p, delimiter);
 
     std::string base_name(p);
-    if (pdelimiter)
+    if (pdelimiter != nullptr)
       {
         if (pdelimiter != p)
           {
@@ -266,7 +266,7 @@ namespace coil
   {
     if (dir == nullptr) { return nullptr; }
     if (dir->fd == nullptr) { return nullptr;}
-    if (!dir->has_next) { return nullptr; }
+    if (dir->has_next == 0) { return nullptr; }
 
     strcpy_s(dir->entry.d_name, _MAX_PATH, dir->fd->cFileName);
     dir->has_next = FindNextFileA(dir->h, dir->fd);
@@ -304,7 +304,7 @@ namespace coil
       {
         FindClose(dir->h);
       }
-    if (dir->fd != nullptr) { delete dir->fd; }
+    delete dir->fd; 
     delete dir;
 
     return 0;
@@ -436,7 +436,7 @@ namespace coil
               return;
           }
           do {
-              if (win32fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
+              if ((win32fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) != 0U) {
                 std::string name(win32fd.cFileName);
                   if (name != "." && name != "..")
                   {
@@ -495,7 +495,7 @@ namespace coil
               return;
           }
           do {
-              if (win32fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
+              if ((win32fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) != 0U) {
                   std::string filename = win32fd.cFileName;
                   //std::cout << win32fd.cFileName << std::endl;
                   if (filename != "." && filename != "..")
@@ -518,7 +518,7 @@ namespace coil
                 return;
           }
           do {
-              if (win32fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
+              if ((win32fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) != 0U) {
 
               }
               else {

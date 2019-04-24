@@ -440,7 +440,7 @@ namespace RTC_impl
      *
      * @endif
      */
-    const coil::Properties getProperties() const;
+    coil::Properties getProperties() const;
 
     /*!
      * @if jp

@@ -362,7 +362,7 @@ namespace RTC_impl
    * @brief Setting Properties
    * @endif
    */
-  const coil::Properties ExecutionContextProfile::getProperties() const
+  coil::Properties ExecutionContextProfile::getProperties() const
   {
     RTC_TRACE(("getProperties()"));
     Guard guard(m_profileMutex);

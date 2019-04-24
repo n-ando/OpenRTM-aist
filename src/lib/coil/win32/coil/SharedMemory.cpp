@@ -393,14 +393,7 @@ namespace coil
   */
   bool SharedMemory::created()
   {
-	if (m_handle == nullptr)
-	{
-		return false;
-	}
-	else
-	{
-		return true;
-	}
+	return m_handle != nullptr;
   }
 
 

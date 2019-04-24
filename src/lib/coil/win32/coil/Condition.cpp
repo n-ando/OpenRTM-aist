@@ -81,13 +81,13 @@ namespace coil
         cv->waiters_count_--;
 
         // Check to see if we're the last waiter after <pthread_cond_broadcast>.
-        int last_waiter = cv->was_broadcast_ && cv->waiters_count_ == 0;
+        int last_waiter = (cv->was_broadcast_ != 0U) && (cv->waiters_count_ == 0);
 
         cv->waiters_count_lock_.unlock();
 
         // If we're the last waiter thread during this particular broadcast
         // then let all the other threads proceed.
-        if (last_waiter)
+        if (last_waiter != 0)
         {
             // This call atomically signals the <waiters_done_> event and
             // waits until it can acquire the <external_mutex>.  This is
@@ -109,11 +109,11 @@ namespace coil
     int pthread_cond_signal(pthread_cond_t *cv)
     {
         cv->waiters_count_lock_.lock();
-        int have_waiters = cv->waiters_count_ > 0;
+        int have_waiters = static_cast<int>(cv->waiters_count_ > 0);
         cv->waiters_count_lock_.unlock();
 
         // If there aren't any waiters, then this is a no-op.
-        if (have_waiters)
+        if (have_waiters != 0)
             //    std::cout << "Before ReleaseSemaphore(1)" << std::endl << std::flush ;
             ReleaseSemaphore(cv->sema_, 1, nullptr);
         //    std::cout << "After ReleaseSemaphore(1)" << std::endl << std::flush ;
@@ -136,7 +136,7 @@ namespace coil
             have_waiters = 1;
         }
 
-        if (have_waiters)
+        if (have_waiters != 0)
         {
             // Wake up all the waiters atomically.
     //      std::cout << "Before ReleaseSemaphore(" << cv->waiters_count_ << ")"

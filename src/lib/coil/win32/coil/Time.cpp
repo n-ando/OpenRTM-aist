@@ -146,9 +146,9 @@ namespace coil
           tv->tv_sec = (long)(val64 / 1000000);
           tv->tv_usec = (long)(val64 % 1000000);
       }
-      if (tz)
+      if (tz != nullptr)
       {
-          if (!tzflag)
+          if (tzflag == 0)
           {
              ::_tzset();
               ++tzflag;
@@ -214,7 +214,7 @@ namespace coil
   TimeValue clock()
   {
     TimeValue ret;
-    if(coil::clock(ret))
+    if(coil::clock(ret) != 0)
     {
       timeval tv;
       coil::gettimeofday(&tv, nullptr);
