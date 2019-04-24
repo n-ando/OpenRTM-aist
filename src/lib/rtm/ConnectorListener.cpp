@@ -208,6 +208,36 @@ namespace RTC
       }
     return ret;
   }
+
+
+  /*!
+   * @if jp
+   * @class ConnectorListeners クラス
+   * @else
+   * @class ConnectorListeners class
+   * @endif
+   */
+
+  /*!
+   * @if jp
+   * @brief コンストラクタ
+   * @else
+   * @brief Constructor
+   * @endif
+   */
+  ConnectorListeners::ConnectorListeners()
+  {
+  }
+  /*!
+   * @if jp
+   * @brief デストラクタ
+   * @else
+   * @brief Destructor
+   * @endif
+   */
+  ConnectorListeners::~ConnectorListeners()
+  {
+  }
 } // namespace RTC
 
 

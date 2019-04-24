@@ -114,9 +114,7 @@ namespace RTC
      *
      * @endif
      */
-    ConnectorInfo(const ConnectorInfo&)
-    {
-    }
+    ConnectorInfo(const ConnectorInfo&);
 
     /*!
      * @if jp
@@ -133,9 +131,7 @@ namespace RTC
      *
      * @endif
      */
-    ~ConnectorInfo()
-    {
-    }
+    ~ConnectorInfo();
 
     /*!
      * @if jp

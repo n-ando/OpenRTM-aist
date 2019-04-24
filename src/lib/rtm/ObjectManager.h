@@ -276,9 +276,7 @@ protected:
    */
   struct Objects
   {
-    ~Objects()
-    {
-    }
+    ~Objects(){}
     mutable Mutex _mutex;
     ObjectVector _obj;
   };

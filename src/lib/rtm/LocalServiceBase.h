@@ -50,9 +50,7 @@ namespace RTM
      * @brief destructor
      * @endif
      */
-    ~LocalServiceProfile()
-    {
-    }
+    ~LocalServiceProfile();
     /*!
      * @if jp
      * @brief LocalServiceのサービス名

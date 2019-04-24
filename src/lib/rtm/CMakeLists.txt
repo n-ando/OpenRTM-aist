@@ -409,6 +409,8 @@ set(rtm_srcs
 	ByteData.cpp
 	ByteDataStreamBase.cpp
 	CORBA_CdrMemoryStream.cpp
+	ConnectorBase.cpp
+	LocalServiceBase.cpp
 	${rtm_headers}
 )
 

@@ -1286,7 +1286,7 @@ namespace RTC
      * @brief Constructor
      * @endif
      */
-    ConnectorListeners(){}
+    ConnectorListeners();
     /*!
      * @if jp
      * @brief デストラクタ
@@ -1294,7 +1294,7 @@ namespace RTC
      * @brief Destructor
      * @endif
      */
-    ~ConnectorListeners(){}
+    ~ConnectorListeners();
     /*!
      * @if jp
      * @brief ConnectorDataListenerTypeリスナ配列
