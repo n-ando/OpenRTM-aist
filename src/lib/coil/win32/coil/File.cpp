@@ -424,7 +424,7 @@ namespace coil
   *
   * @endif
   */
-  void findFile(std::string dir, std::string filename, coil::vstring &filelist)
+  void findFile(const std::string& dir, const std::string& filename, coil::vstring &filelist)
   {
       {
           HANDLE hFind;
@@ -483,7 +483,7 @@ namespace coil
   *
   * @endif
   */
-  void getFileList(std::string dir, std::string ext, coil::vstring &filelist)
+  void getFileList(const std::string& dir, const std::string& ext, coil::vstring &filelist)
   {
       {
           HANDLE hFind;

@@ -45,7 +45,7 @@ namespace coil
    * @brief string to wstring conversion
    * @endif
    */
-  std::wstring string2wstring(std::string str)
+  std::wstring string2wstring(const std::string& str)
   {
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
     int buff_size = MultiByteToWideChar(CP_UTF7, 0, str.c_str(), -1, (wchar_t*)nullptr, 0);
@@ -67,7 +67,7 @@ namespace coil
    * @brief wstring to string conversion
    * @endif
    */
-  std::string wstring2string(std::wstring wstr)
+  std::string wstring2string(const std::wstring& wstr)
   {
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
       int buff_size = WideCharToMultiByte(CP_ACP, 0, wstr.c_str(), -1, (char*)nullptr, 0, nullptr, nullptr);

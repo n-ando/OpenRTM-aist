@@ -64,7 +64,7 @@ namespace coil
    *
    * @endif
    */
-  std::wstring string2wstring(std::string str);
+  std::wstring string2wstring(const std::string& str);
 
   /*!
    * @if jp
@@ -85,7 +85,7 @@ namespace coil
    *
    * @endif
    */
-  std::string wstring2string(std::wstring wstr);
+  std::string wstring2string(const std::wstring& wstr);
 
   /*!
    * @if jp

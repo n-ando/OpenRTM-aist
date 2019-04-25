@@ -79,7 +79,7 @@ namespace coil
   *
   * @endif
   */
-  int create_process(std::string command, std::vector<std::string> &out)
+  int create_process(const std::string& command, std::vector<std::string> &out)
   {
       HANDLE rPipe, wPipe;
       SECURITY_ATTRIBUTES sa;
@@ -146,7 +146,7 @@ namespace coil
 
   }
 
-  Popen::Popen(std::string cmd, std::string mode)
+  Popen::Popen(const std::string& cmd, const std::string& mode)
     {
       m_fd = _popen(cmd.c_str(), mode.c_str());
     }
