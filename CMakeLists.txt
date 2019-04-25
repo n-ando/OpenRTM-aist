@@ -924,3 +924,9 @@ CONFIGURE_FILE ("${PROJECT_SOURCE_DIR}/build/cmake/uninstall_target.cmake.in"
     "${PROJECT_BINARY_DIR}/uninstall_target.cmake" IMMEDIATE @ONLY)
 ADD_CUSTOM_TARGET (remove "${CMAKE_COMMAND}" -P
     "${PROJECT_BINARY_DIR}/uninstall_target.cmake")
+
+if(UNIX)
+    configure_file(${PROJECT_SOURCE_DIR}/packages/deb/debian/rules.in
+        ${PROJECT_SOURCE_DIR}/packages/deb/debian/rules @ONLY
+    )
+endif(UNIX)
