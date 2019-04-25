@@ -465,7 +465,7 @@ namespace CORBA_RTCUtil
    * @return 
    * @endif
    */
-  const RTC::RTCList get_participants_rtc(RTC::RTObject_ptr rtc);
+  RTC::RTCList get_participants_rtc(RTC::RTObject_ptr rtc);
 
 
 

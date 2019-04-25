@@ -493,7 +493,7 @@ namespace RTC
     return false;
   }
 
-  const std::string SdoServiceAdmin::getUUID() const
+  std::string SdoServiceAdmin::getUUID() const
   {
     coil::UUID_Generator uugen = coil::UUID_Generator();
     uugen.init();

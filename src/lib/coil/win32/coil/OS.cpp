@@ -65,7 +65,7 @@ namespace coil
   {
       HMODULE handle = GetModuleHandle("ntdll.dll");
 
-      if (handle)
+      if (handle != nullptr)
       {
           typedef LONG(WINAPI* RtlGetVersionFunc)(PRTL_OSVERSIONINFOW lpVersionInformation);
 
@@ -171,7 +171,7 @@ namespace coil
             VER_SET_CONDITION(condition, VER_MAJORVERSION, VER_EQUAL);
             VER_SET_CONDITION(condition, VER_MINORVERSION, VER_EQUAL);
 
-            if (::VerifyVersionInfo(&version_info, VER_MAJORVERSION | VER_MINORVERSION, condition))
+            if (::VerifyVersionInfo(&version_info, VER_MAJORVERSION | VER_MINORVERSION, condition) != 0)
             {
                 const char *os;
                 if (version_info.dwPlatformId == VER_PLATFORM_WIN32_NT)
@@ -299,7 +299,7 @@ namespace coil
     DWORD len = COIL_UTSNAME_LENGTH;
     if (GetComputerNameExA(ComputerNameDnsHostname,
                             name->nodename,
-                            &len) == false)
+                            &len) == FALSE)
     ret = -1;
     return ret;
   }
@@ -424,7 +424,7 @@ namespace coil
       const char *oli;            /* option letter list index */
       char *p;
 
-      if (optreset || !*place) {        /* update scanning pointer */
+      if ((optreset != 0) || (*place == 0)) {        /* update scanning pointer */
           optreset = 0;
           /* Check that the scanning reached the last element. */
           if (optind >= nargc)
@@ -454,7 +454,7 @@ namespace coil
                   break;
               }
           }
-          if (place[1] && *++place == '-') {    /* found "--" */
+          if ((place[1] != 0) && *++place == '-') {    /* found "--" */
               ++optind;
               place = EMSG;
               return(-1);
@@ -470,9 +470,9 @@ namespace coil
            */
           if (optopt == static_cast<int>('-'))
               return(-1);
-          if (!*place)
+          if (*place == 0)
               ++optind;
-          if (opterr && *ostr != ':') {
+          if ((opterr != 0) && *ostr != ':') {
               p = strrchr(*nargv, '/');
               if (p == nullptr)
                   p = *nargv;
@@ -486,12 +486,12 @@ namespace coil
       if (*++oli != ':')             /* don't need argument */
       {
           optarg = nullptr;
-          if (!*place)
+          if (*place == 0)
               ++optind;
       }
       else
       {                    /* need an argument */
-          if (*place)            /* no white space */
+          if (*place != 0)            /* no white space */
           {
               optarg = place;
           }
@@ -511,7 +511,7 @@ namespace coil
               {
                   return(BADARG);
               }
-              if (opterr)
+              if (opterr != 0)
               {
                   fprintf(stderr,
                       "%s: option requires an argument -- %c\n",

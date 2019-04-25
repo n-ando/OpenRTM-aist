@@ -149,7 +149,7 @@ namespace CORBA_IORUtil
   {
 #ifndef ORB_IS_RTORB
     cdrMemoryStream buf(CORBA::ULong(0), CORBA::Boolean(1));
-    buf.marshalBoolean(omni::myByteOrder != 0u);
+    buf.marshalBoolean(omni::myByteOrder != 0U);
     buf.marshalRawString(ior.type_id);
     ior.profiles >>= buf;
 

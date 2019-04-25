@@ -1601,7 +1601,7 @@ namespace RTC
      *
      * @endif
      */
-    const std::string getUUID() const;
+    std::string getUUID() const;
 
     /*!
      * @if jp

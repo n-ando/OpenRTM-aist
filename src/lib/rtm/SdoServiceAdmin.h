@@ -365,7 +365,7 @@ protected:
      */
     bool isExistingConsumerType(const SDOPackage::ServiceProfile& sProfile);
 
-    const std::string getUUID() const;
+    std::string getUUID() const;
 
     std::string ifrToKey(std::string& ifr);
 

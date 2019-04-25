@@ -1007,7 +1007,7 @@ namespace RTC
      *
      * @endif
      */
-    const coil::Properties getProperties() const;
+    coil::Properties getProperties() const;
 
     /*!
      * @if jp

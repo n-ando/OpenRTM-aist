@@ -86,7 +86,7 @@ namespace coil
       sa.nLength = sizeof(sa);
       sa.bInheritHandle = TRUE;
       sa.lpSecurityDescriptor = nullptr;
-      if (!CreatePipe(&rPipe, &wPipe, &sa, 65535))
+      if (CreatePipe(&rPipe, &wPipe, &sa, 65535) == 0)
       {
           return -1;
       }
@@ -161,14 +161,13 @@ namespace coil
 
   bool Popen::isEof()
     {
-      if (feof(m_fd)) { return true; }
-      return false;
+      return feof(m_fd) != 0;
     }
 
   std::string Popen::getline()
     {
       if (m_fd == nullptr) { return ""; }
-      if (feof(m_fd)) { return ""; }
+      if (feof(m_fd) != 0) { return ""; }
       char str[512];
       fgets(str, 512, m_fd);
       std::string line(str);

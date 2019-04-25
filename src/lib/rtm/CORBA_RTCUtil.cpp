@@ -520,7 +520,7 @@ namespace CORBA_RTCUtil
    * @return 
    * @endif
    */
-  const RTC::RTCList get_participants_rtc(const RTC::RTObject_ptr rtc)
+  RTC::RTCList get_participants_rtc(const RTC::RTObject_ptr rtc)
   {
     RTC::ExecutionContext_var ec = get_actual_ec(rtc);
     if (CORBA::is_nil(ec))

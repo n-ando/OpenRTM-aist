@@ -763,7 +763,7 @@ namespace RTC
    * @brief Generate the UUID
    * @endif
    */
-  const std::string PortBase::getUUID() const
+  std::string PortBase::getUUID() const
   {
     coil::UUID_Generator uugen;
     uugen.init();

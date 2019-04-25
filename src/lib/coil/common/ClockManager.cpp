@@ -138,10 +138,10 @@ namespace coil
   coil::Mutex ClockManager::clockmgr_mutex;
   ClockManager& ClockManager::instance()
   {
-    if (!clockmgr)
+    if (clockmgr == nullptr)
       {
         coil::Guard<coil::Mutex> guard(clockmgr_mutex);
-        if (!clockmgr)
+        if (clockmgr == nullptr)
           {
             clockmgr = new ClockManager();
           }

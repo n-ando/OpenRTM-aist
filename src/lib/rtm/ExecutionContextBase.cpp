@@ -816,7 +816,7 @@ namespace RTC
    * @brief Setting Properties
    * @endif
    */
-  const coil::Properties ExecutionContextBase::getProperties() const
+  coil::Properties ExecutionContextBase::getProperties() const
   {
     return m_profile.getProperties();
   }

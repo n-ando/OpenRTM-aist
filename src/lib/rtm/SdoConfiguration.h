@@ -927,7 +927,7 @@ namespace SDOPackage
      *
      * @endif
      */
-    const DeviceProfile getDeviceProfile();
+    DeviceProfile getDeviceProfile();
 
     /*!
      * @if jp
@@ -948,7 +948,7 @@ namespace SDOPackage
      *
      * @endif
      */
-    const OrganizationList getOrganizations();
+    OrganizationList getOrganizations();
 
   protected:
     ::RTC::Logger rtclog;
@@ -971,7 +971,7 @@ namespace SDOPackage
      *
      * @endif
      */
-    const std::string getUUID() const;
+    std::string getUUID() const;
 
     /*!
      * @if jp

@@ -81,13 +81,13 @@ namespace coil
         cv->waiters_count_--;
 
         // Check to see if we're the last waiter after <pthread_cond_broadcast>.
-        int last_waiter = cv->was_broadcast_ && cv->waiters_count_ == 0;
+        int last_waiter = (cv->was_broadcast_ != 0U) && (cv->waiters_count_ == 0);
 
         cv->waiters_count_lock_.unlock();
 
         // If we're the last waiter thread during this particular broadcast
         // then let all the other threads proceed.
-        if (last_waiter)
+        if (last_waiter != 0)
         {
             // This call atomically signals the <waiters_done_> event and
             // waits until it can acquire the <external_mutex>.  This is
@@ -109,49 +109,34 @@ namespace coil
     int pthread_cond_signal(pthread_cond_t *cv)
     {
         cv->waiters_count_lock_.lock();
-        int have_waiters = cv->waiters_count_ > 0;
+        bool have_waiters = cv->waiters_count_ > 0;
         cv->waiters_count_lock_.unlock();
 
-        // If there aren't any waiters, then this is a no-op.
         if (have_waiters)
-            //    std::cout << "Before ReleaseSemaphore(1)" << std::endl << std::flush ;
+        {
+            // Release semaphore for the waiters.
             ReleaseSemaphore(cv->sema_, 1, nullptr);
-        //    std::cout << "After ReleaseSemaphore(1)" << std::endl << std::flush ;
+        }
         return 0;
     }
 
     int pthread_cond_broadcast(pthread_cond_t *cv)
     {
-        // This is needed to ensure that <waiters_count_> and <was_broadcast_> are
-        // consistent relative to each other.
         cv->waiters_count_lock_.lock();
-        int have_waiters = 0;
 
         if (cv->waiters_count_ > 0)
         {
-            // We are broadcasting, even if there is just one waiter...
-            // Record that we are broadcasting, which helps optimize
-            // <pthread_cond_wait> for the non-broadcast case.
             cv->was_broadcast_ = 1;
-            have_waiters = 1;
-        }
-
-        if (have_waiters)
-        {
-            // Wake up all the waiters atomically.
-    //      std::cout << "Before ReleaseSemaphore(" << cv->waiters_count_ << ")"
-    //                << std::endl << std::flush ;
+            // Wake up all the waiters threads.
             ReleaseSemaphore(cv->sema_, cv->waiters_count_, nullptr);
-            //      std::cout << "After ReleaseSemaphore(" << cv->waiters_count_ << ")"
-            //                << std::endl << std::flush ;
-
             cv->waiters_count_lock_.unlock();
 
             // Wait for all the awakened threads to acquire the counting
             // semaphore.
             WaitForSingleObject(cv->waiters_done_, INFINITE);
-            // This assignment is okay, even without the <waiters_count_lock_> held
-            // because no other waiter threads can wake up to access it.
+            
+            // Here waiters_count_lock_ is unneccesarry, because other
+            // waiter threads cannot wake up to access it.
             cv->was_broadcast_ = 0;
         }
         else
