@@ -147,4 +147,4 @@ namespace coil
     }
 
 
-}
+} // namespace coil

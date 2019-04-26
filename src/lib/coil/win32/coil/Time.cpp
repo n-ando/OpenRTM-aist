@@ -143,8 +143,8 @@ namespace coil
           val64 = lint.QuadPart;
           val64 = val64 - EPOCHFILETIME;
           val64 = val64 / 10;
-          tv->tv_sec = (long)(val64 / 1000000);
-          tv->tv_usec = (long)(val64 % 1000000);
+          tv->tv_sec = static_cast<long>(val64 / 1000000);
+          tv->tv_usec = static_cast<long>(val64 % 1000000);
       }
       if (tz != nullptr)
       {
@@ -206,7 +206,7 @@ namespace coil
           LARGE_INTEGER current;
           QueryPerformanceCounter(&current);
           LONGLONG current_time = (current.QuadPart * 1000000) / frequency.QuadPart;
-          tv = TimeValue((long)(current_time / 1000000), (long)(current_time % 1000000));
+          tv = TimeValue(static_cast<long>(current_time / 1000000), static_cast<long>(current_time % 1000000));
           return 0;
       }
   }
@@ -225,4 +225,4 @@ namespace coil
       return ret;
     }
   }
-};
+} // namespace coil

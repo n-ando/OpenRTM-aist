@@ -119,7 +119,7 @@ namespace coil
 		(HANDLE)-1,
 		nullptr,
 		PAGE_READWRITE | SEC_COMMIT,
-		0, (DWORD)m_memory_size,
+		0, static_cast<DWORD>(m_memory_size),
 		shm_address.c_str());
     /*
     if(GetLastError() == ERROR_ALREADY_EXISTS)
@@ -131,7 +131,7 @@ namespace coil
     }
     */
 
-    m_shm = (char *)MapViewOfFile(m_handle, FILE_MAP_ALL_ACCESS, 0, 0, 0);
+    m_shm = static_cast<char *>(MapViewOfFile(m_handle, FILE_MAP_ALL_ACCESS, 0, 0, 0));
     m_file_create = true;
     return 0;
   }
@@ -163,7 +163,7 @@ namespace coil
     m_shm_address = std::move(shm_address);
 	m_memory_size = memory_size;
     m_handle = OpenFileMapping(FILE_MAP_ALL_ACCESS, FALSE, m_shm_address.c_str());
-    m_shm = (char *)MapViewOfFile(m_handle, FILE_MAP_ALL_ACCESS, 0, 0, 0);
+    m_shm = static_cast<char *>(MapViewOfFile(m_handle, FILE_MAP_ALL_ACCESS, 0, 0, 0));
     return 0;
   }
 
@@ -400,4 +400,4 @@ namespace coil
 
 
 
-}
+} // namespace coil

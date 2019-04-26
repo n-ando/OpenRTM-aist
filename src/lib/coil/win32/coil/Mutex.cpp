@@ -38,4 +38,4 @@ namespace coil
       ::CloseHandle(mutex_);
     }
 
-}
+} // namespace coil

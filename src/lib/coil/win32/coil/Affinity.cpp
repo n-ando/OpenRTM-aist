@@ -27,7 +27,7 @@ namespace coil
     DWORD_PTR cpu_num = 0;
     for(auto & m : cpu_mask)
     {
-      DWORD_PTR p = (DWORD_PTR)0x01 << m;
+      DWORD_PTR p = static_cast<DWORD_PTR>(0x01) << m;
       cpu_num += p;
     }
     return cpu_num;
@@ -36,12 +36,12 @@ namespace coil
   {
     DWORD_PTR processMask, systemMask = 0;
     HANDLE h = GetCurrentProcess();
-	BOOL success = GetProcessAffinityMask(h, (PDWORD_PTR)&processMask, (PDWORD_PTR)&systemMask);
+	BOOL success = GetProcessAffinityMask(h, static_cast<PDWORD_PTR>(&processMask), static_cast<PDWORD_PTR>(&systemMask));
 	if (success != 0)
     {
 		for (int i = 0; i < 32; i++)
 		{
-			if ((processMask & ((DWORD_PTR)0x00000001 << i)) != 0U)
+			if ((processMask & (static_cast<DWORD_PTR>(0x00000001) << i)) != 0U)
 			{
 				cpu_mask.push_back(i);
 			}
