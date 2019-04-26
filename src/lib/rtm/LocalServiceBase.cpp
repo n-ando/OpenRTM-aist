@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file LocalServiceBase.cpp
  * @brief Local service provider base class and its factory
