@@ -89,7 +89,7 @@ namespace coil
     if (res->ai_family == AF_INET)
     {
         struct sockaddr_in *addr;
-        addr = (struct sockaddr_in *) res->ai_addr;
+        addr = reinterpret_cast<struct sockaddr_in *>(res->ai_addr);
         char str_buffer[INET_ADDRSTRLEN] = { 0 };
 
         if (inet_ntop(AF_INET, &addr->sin_addr, str_buffer, sizeof(str_buffer)) != nullptr)
@@ -150,7 +150,7 @@ namespace coil
         if (bestifindex == ipaddr_table->table[i].dwIndex)
           {
             IN_ADDR inipaddr;
-            inipaddr.S_un.S_addr = (u_long) ipaddr_table->table[i].dwAddr;
+            inipaddr.S_un.S_addr = static_cast<u_long>(ipaddr_table->table[i].dwAddr);
             char str_buffer[INET_ADDRSTRLEN] = { 0 };
             if (inet_ntop(AF_INET, &inipaddr.S_un, str_buffer, sizeof(str_buffer)) != nullptr)
             {

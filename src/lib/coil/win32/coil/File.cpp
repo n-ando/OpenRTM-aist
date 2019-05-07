@@ -532,4 +532,4 @@ namespace coil
   }
 
 
-};
+} // namespace coil

@@ -184,7 +184,7 @@ namespace coil
    */
   unsigned int WINAPI Task::svc_run(void* args)
   {
-    Task* t = (coil::Task*)args;
+    Task* t = static_cast<coil::Task*>(args);
     t->svc();
     t->finalize();
     return 0;
