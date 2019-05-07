@@ -171,5 +171,6 @@
 #cmakedefine WITH_DMALLOC
 
 /* Multi Thread Support */
+#ifndef _REENTRANT
 #cmakedefine _REENTRANT TRUE
-
+#endif // _REENTRANT
