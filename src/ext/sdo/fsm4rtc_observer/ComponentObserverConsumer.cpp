@@ -64,6 +64,7 @@ namespace RTC
     unsetConfigurationListeners();
     unsetRTCHeartbeat();
     unsetECHeartbeat();
+    stopTimer();
   }
 
   /*!
@@ -148,7 +149,6 @@ namespace RTC
     unsetPortProfileListeners();
     unsetExecutionContextListeners();
     unsetConfigurationListeners();
-    unsetRTCHeartbeat();
   }
 
   //============================================================
@@ -290,7 +290,10 @@ namespace RTC
    */
   void ComponentObserverConsumer::rtcHeartbeat()
   {
-    updateStatus(RTC::RTC_HEARTBEAT, "");
+    if (m_rtcHeartbeat)
+      {
+        updateStatus(RTC::RTC_HEARTBEAT, "");
+      }
   }
 
   /*!
@@ -329,6 +332,7 @@ namespace RTC
         m_rtcHblistenerid = m_timer.
           registerListenerObj(this, &ComponentObserverConsumer::rtcHeartbeat,
                               tm);
+        m_rtcHeartbeat = true;
         m_timer.start();
       }
     else
@@ -353,7 +357,6 @@ namespace RTC
     m_timer.unregisterListener(m_rtcHblistenerid);
     m_rtcHeartbeat = false;
     m_rtcHblistenerid = nullptr;
-    m_timer.stop();
   }
 
 
@@ -369,7 +372,27 @@ namespace RTC
    */
   void ComponentObserverConsumer::ecHeartbeat()
   {
-    updateStatus(RTC::EC_HEARTBEAT, "");
+    if (m_ecHeartbeat)
+      {
+        RTC::ExecutionContextList* ecs = m_rtobj->get_owned_contexts();
+        CORBA::ULong len = ecs->length();
+        for (CORBA::ULong i = 0; i < len; i++)
+        {
+            std::string msg("HEARTBEAT:");
+            msg += coil::otos(i);
+            updateStatus(RTC::EC_HEARTBEAT, msg.c_str());
+        }
+
+        ecs = m_rtobj->get_participating_contexts();
+        len = ecs->length();
+        for (CORBA::ULong i = 0; i < len; i++)
+        {
+            std::string msg("HEARTBEAT:");
+            msg += coil::otos(i+ ECOTHER_OFFSET);
+            updateStatus(RTC::EC_HEARTBEAT, msg.c_str());
+        }
+        
+      }
   }
 
   /*!
@@ -400,6 +423,7 @@ namespace RTC
         m_ecHblistenerid = m_timer.
           registerListenerObj(this, &ComponentObserverConsumer::ecHeartbeat,
                               tm);
+        m_ecHeartbeat = true;
         m_timer.start();
       }
     else
@@ -424,9 +448,20 @@ namespace RTC
     m_timer.unregisterListener(m_ecHblistenerid);
     m_ecHeartbeat = false;
     m_ecHblistenerid = nullptr;
-    m_timer.stop();
   }
 
+  /*!
+   * @if jp
+   * @brief タイマースレッドを停止する
+   * @else
+   * @brief stop timer thread
+   * @endif
+   */
+  void ComponentObserverConsumer::stopTimer()
+  {
+      m_timer.stop();
+      m_timer.wait();
+  }
 
   //============================================================
   // Component status

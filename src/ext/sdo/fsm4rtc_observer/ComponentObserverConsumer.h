@@ -302,6 +302,15 @@ namespace RTC
      */
     void unsetECHeartbeat();
 
+    /*!
+     * @if jp
+     * @brief タイマースレッドを停止する
+     * @else
+     * @brief stop timer thread
+     * @endif
+     */
+    void stopTimer();
+
     //============================================================
     // Component status related functions
     /*!
@@ -507,6 +516,9 @@ namespace RTC
       }
       void onFinalize(UniqueId ec_id, ReturnCode_t ret)
       {
+        m_coc.unsetRTCHeartbeat();
+        m_coc.unsetECHeartbeat();
+        m_coc.stopTimer();
         onGeneric("FINALIZE:", ec_id, ret);
       }
 
@@ -698,9 +710,9 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ConfigActionListener
+     * @brief FSMActionListener
      * @else
-     * @brief ConfigActionListener
+     * @brief FSMActionListener
      * @endif
      */
     class FSMAction
