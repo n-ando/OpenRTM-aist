@@ -364,7 +364,6 @@ namespace RTC
 
     for (auto & file : files)
       {
-        std::cout << "#### file: " << file << std::endl;
         if (std::count(s_files.begin(), s_files.end(), file) > 0) { continue; }
         m_fileName = file;
         s_files.push_back(file);
@@ -373,6 +372,7 @@ namespace RTC
         coil::normalize(fname);
         if (fname == "stdout")
           {
+            std::cout << "#### file: " << file << std::endl;
             std::cout << "##### STDOUT!! #####" << std::endl;
             m_stdout = new StdoutStream();
             if (escape_sequence)
@@ -387,6 +387,7 @@ namespace RTC
           }
         else if (fname == "stderr")
           {
+            std::cout << "#### file: " << file << std::endl;
             std::cout << "##### STDOUT!! #####" << std::endl;
             m_stdout = new StderrStream();
             if (escape_sequence)
@@ -401,7 +402,6 @@ namespace RTC
           }
         else
           {
-            std::cout << "##### file #####" << std::endl;
             m_fileout = new FileStream(file);
             if (escape_sequence)
             {
