@@ -153,7 +153,6 @@ namespace RTC
     unsetPortProfileListeners();
     unsetExecutionContextListeners();
     unsetConfigurationListeners();
-    unsetHeartbeat();
   }
 
   //============================================================
@@ -271,7 +270,10 @@ namespace RTC
    */
   void ComponentObserverConsumer::heartbeat()
   {
-    updateStatus(OpenRTM::HEARTBEAT, "");
+    if (m_heartbeat)
+      {
+        updateStatus(OpenRTM::HEARTBEAT, "");
+      }
   }
 
   /*!
@@ -300,6 +302,7 @@ namespace RTC
         tm = m_interval;
         m_hblistenerid = m_timer.
           registerListenerObj(this, &ComponentObserverConsumer::heartbeat, tm);
+        m_heartbeat = true;
         m_timer.start();
       }
     else
@@ -348,6 +351,7 @@ namespace RTC
     m_heartbeat = false;
     m_hblistenerid = nullptr;
     m_timer.stop();
+    m_timer.wait();
   }
 
 
