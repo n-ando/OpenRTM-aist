@@ -260,6 +260,8 @@ namespace RTC
 
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
 EXTERN template class DLL_PLUGIN coil::GlobalFactory<RTC::InPortConsumer>;
+#elif defined(__GNUC__)
+EXTERN template class coil::Singleton<coil::GlobalFactory<RTC::InPortConsumer> >;
 #endif
 
 #endif  // RTC_INPORTCONSUMER_H

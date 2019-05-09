@@ -1207,6 +1207,8 @@ namespace RTC
 #ifdef WIN32
 EXTERN template class DLL_PLUGIN coil::GlobalFactory<RTC::ExecutionContextBase>;
 #pragma warning( default : 4290 )
+#elif defined(__GNUC__)
+EXTERN template class coil::Singleton<coil::GlobalFactory<RTC::ExecutionContextBase> >;
 #endif
 
 #endif  // RTC_EXECUTIONCONTEXTBASE_H
