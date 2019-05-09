@@ -31,6 +31,8 @@ namespace RTC
 
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
 EXTERN template class DLL_PLUGIN coil::GlobalFactory<coil::PeriodicTaskBase>;
+#elif defined(__GNUC__)
+EXTERN template class coil::Singleton<coil::GlobalFactory<coil::PeriodicTaskBase> >;
 #endif
 
 #endif  // RTC_PERIODICTASKFACTORY_H

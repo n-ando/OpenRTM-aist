@@ -262,6 +262,8 @@ namespace RTC
      * @endif
      */
 EXTERN template class DLL_PLUGIN coil::GlobalFactory<RTC::SdoServiceProviderBase >;
+#elif defined(__GNUC__)
+EXTERN template class coil::Singleton<coil::GlobalFactory<RTC::SdoServiceProviderBase> >;
 #endif
 
 #endif  // RTC_SDOSERVICEPROVIDERBASE_H
