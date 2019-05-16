@@ -858,6 +858,10 @@ namespace CORBA_RTCUtil
   bool already_connected(const RTC::PortService_ptr localport,
                          const RTC::PortService_ptr otherport)
   {
+    if (localport->_is_equivalent(otherport))
+      {
+        return false;
+      }
     RTC::ConnectorProfileList_var conprof;
     conprof = localport->get_connector_profiles();
     for (CORBA::ULong i(0); i < conprof->length(); ++i)
