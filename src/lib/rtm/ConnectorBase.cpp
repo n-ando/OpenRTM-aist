@@ -36,7 +36,7 @@ namespace RTC
    *
    * @endif
    */
-  ConnectorInfo::ConnectorInfo(const ConnectorInfo&)
+  ConnectorInfo::ConnectorInfo(const ConnectorInfo& info) : name(info.name), id(info.id), ports(info.ports), properties(info.properties)
   {
   }
 
