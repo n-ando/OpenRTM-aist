@@ -53,14 +53,6 @@
 #endif
 #endif
 
-
-#ifdef RTM_OS_LINUX
-#ifndef _GNU_SOURCE
-#define _GNU_SOURCE
-#endif  // _GNU_SOURCE
-#include <pthread.h>
-#endif  // RTM_OS_LINUX
-
 #include <fstream>
 #include <iostream>
 #include <utility>
@@ -2002,7 +1994,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 
         if (!result)
         {
-            RTC_ERROR(("pthread_getaffinity_np():"
+            RTC_ERROR(("coil::setProcCpuAffinity():"
                 "CPU affinity mask setting failed"));
         }
 
@@ -2018,7 +2010,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
         }
         else
         {
-            RTC_ERROR(("pthread_getaffinity_np(): returned error."));
+            RTC_ERROR(("coil::getProcCpuAffinity(): returned error."));
         }
 
     }

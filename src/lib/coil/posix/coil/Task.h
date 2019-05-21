@@ -19,7 +19,7 @@
 #ifndef COIL_TASK_H
 #define COIL_TASK_H
 
-#include <pthread.h>
+#include <thread>
 
 namespace coil
 {
@@ -234,31 +234,9 @@ namespace coil
      */
     virtual void finalize();
 
-    /*!
-     * @if jp
-     *
-     * @brief スレッド実行を開始する
-     *
-     * スレッド実行を開始する
-     *
-     * @param args スレッド引数
-     *
-     * @else
-     *
-     * @brief Start thread Execution
-     *
-     * Start thread Execution
-     *
-     * @param args Thread arguments
-     *
-     * @endif
-     */
-    static void* svc_run(void* args = nullptr);
-
   private:
     int m_count;
-    pthread_t m_thread;
-    pthread_attr_t m_attr;
+    std::thread m_thread;
   };
 } // namespace coil
 
