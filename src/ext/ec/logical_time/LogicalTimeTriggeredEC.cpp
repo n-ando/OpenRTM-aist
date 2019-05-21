@@ -18,7 +18,7 @@
  */
 
 #include <coil/TimeValue.h>
-#include <coil/Guard.h>
+#include <mutex>
 #include <coil/ClockManager.h>
 
 #include <rtm/ECFactory.h>

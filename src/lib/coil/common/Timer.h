@@ -22,7 +22,7 @@
 #include <coil/TimeValue.h>
 #include <coil/Listener.h>
 #include <coil/Mutex.h>
-#include <coil/Guard.h>
+#include <mutex>
 #include <coil/Task.h>
 #include <vector>
 
@@ -54,7 +54,7 @@ namespace coil
     : public coil::Task
   {
     typedef coil::Mutex Mutex;
-    typedef coil::Guard<Mutex> Guard;
+    typedef std::lock_guard<Mutex> Guard;
   public:
     /*!
      * @if jp

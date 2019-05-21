@@ -21,7 +21,7 @@
 #define LOGGER_H
 
 #include <coil/Mutex.h>
-#include <coil/Guard.h>
+#include <mutex>
 
 #include <climits>
 #include <cstring>
@@ -51,7 +51,7 @@ namespace coil
   class LogStreamBuffer
   {
       typedef coil::Mutex Mutex;
-      typedef coil::Guard<coil::Mutex> Guard;
+      typedef std::lock_guard<coil::Mutex> Guard;
   public:
       /*!
        * @if jp

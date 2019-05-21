@@ -19,7 +19,7 @@
 #include <rtm/NVUtil.h>
 #include <rtm/InPortSHMConsumer.h>
 #include <coil/UUID.h>
-#include <coil/Guard.h>
+#include <mutex>
 #include <memory>
 
 

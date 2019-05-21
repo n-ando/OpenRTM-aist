@@ -23,7 +23,7 @@
 #include <coil/Singleton.h>
 #include <coil/TimeValue.h>
 #include <coil/Mutex.h>
-#include <coil/Guard.h>
+#include <mutex>
 
 
 namespace coil

@@ -22,7 +22,7 @@
 #include <rtm/RTC.h>
 
 #include <coil/Mutex.h>
-#include <coil/Guard.h>
+#include <mutex>
 
 #include <algorithm>
 #include <vector>
@@ -56,7 +56,7 @@ public:
   typedef typename ObjectVector::iterator       ObjectVectorItr;
   typedef typename ObjectVector::const_iterator ObjectVectorConstItr;
   typedef coil::Mutex Mutex;
-  typedef coil::Guard<coil::Mutex> Guard;
+  typedef std::lock_guard<coil::Mutex> Guard;
   /*!
    * @if jp
    *

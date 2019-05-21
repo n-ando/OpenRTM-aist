@@ -21,7 +21,7 @@
 #define RTM_MANAGERSERVANT_H
 
 #include <coil/Mutex.h>
-#include <coil/Guard.h>
+#include <mutex>
 #include <rtm/idl/ManagerSkel.h>
 #include <rtm/Manager.h>
 #include <rtm/SystemLogger.h>
@@ -708,7 +708,7 @@ namespace RTM
 	bool isProcessIDManager(const std::string& mgrname);
 
   private:
-    typedef coil::Guard<coil::Mutex> Guard;
+    typedef std::lock_guard<coil::Mutex> Guard;
     /*!
      * @if jp
      * @brief ロガーオブジェクト

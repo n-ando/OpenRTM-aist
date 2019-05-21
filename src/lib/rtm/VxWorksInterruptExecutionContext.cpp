@@ -15,7 +15,7 @@
  */
 
 #include <coil/TimeValue.h>
-#include <coil/Guard.h>
+#include <mutex>
 
 #include <rtm/VxWorksInterruptExecutionContext.h>
 #include <rtm/ECFactory.h>

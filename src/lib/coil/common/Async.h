@@ -20,7 +20,7 @@
 #define COIL_ASYNC_H
 
 #include <coil/Task.h>
-#include <coil/Guard.h>
+#include <mutex>
 #include <iostream>
 #include <utility>
 
@@ -204,7 +204,7 @@ namespace coil
     {
       m_func(m_obj);
       {
-        coil::Guard<Mutex> guard(m_mutex);
+        std::lock_guard<Mutex> guard(m_mutex);
         m_finished = true;
       }
 
@@ -273,7 +273,7 @@ namespace coil
      */
     bool finished() override
     {
-      coil::Guard<Mutex> guard(m_mutex);
+      std::lock_guard<Mutex> guard(m_mutex);
       return m_finished;
     }
   private:

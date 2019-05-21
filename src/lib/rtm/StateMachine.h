@@ -20,7 +20,7 @@
 #define RTC_STATEMACHINE_H
 
 #include <coil/Mutex.h>
-#include <coil/Guard.h>
+#include <mutex>
 
 #include <cassert>
 #include <utility>
@@ -266,7 +266,7 @@ namespace RTC_Utils
   class StateMachine
   {
     typedef coil::Mutex Mutex;
-    typedef coil::Guard<Mutex> Guard;
+    typedef std::lock_guard<Mutex> Guard;
   public:
     /*!
      * @if jp

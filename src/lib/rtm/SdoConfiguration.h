@@ -23,7 +23,7 @@
 // CORBA header include
 #include <rtm/RTC.h>
 #include <coil/Mutex.h>
-#include <coil/Guard.h>
+#include <mutex>
 
 // local includes
 #include <rtm/idl/SDOPackageSkel.h>
@@ -156,7 +156,7 @@ namespace SDOPackage
       public virtual PortableServer::RefCountServantBase
   {
     typedef coil::Mutex Mutex;
-    typedef coil::Guard<Mutex> Guard;
+    typedef std::lock_guard<Mutex> Guard;
   public:
     /*!
      * @if jp

@@ -24,7 +24,7 @@
 #include <coil/Time.h>
 #include <coil/OS.h>
 #include <coil/Mutex.h>
-#include <coil/Guard.h>
+#include <mutex>
 
 #include <rtm/RTC.h>
 #include <rtm/Typename.h>

@@ -17,7 +17,7 @@
  */
 
 #include <coil/UUID.h>
-#include <coil/Guard.h>
+#include <mutex>
 #include <coil/stringutil.h>
 
 #include <rtm/RTObject.h>
@@ -33,7 +33,7 @@
 
 namespace RTC
 {
-  typedef coil::Guard<coil::Mutex> Guard;
+  typedef std::lock_guard<coil::Mutex> Guard;
 
   /*!
    * @if jp

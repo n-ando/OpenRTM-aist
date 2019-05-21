@@ -20,7 +20,7 @@
 #define RTM_UTIL_LISTENERHOLDER_H
 
 #include <coil/Mutex.h>
-#include <coil/Guard.h>
+#include <mutex>
 #include <coil/NonCopyable.h>
 
 #include <vector>
@@ -146,7 +146,7 @@ namespace util
     : public coil::NonCopyable
   {
   public:
-    typedef coil::Guard<coil::Mutex> Guard;
+    typedef std::lock_guard<coil::Mutex> Guard;
     typedef std::pair<ListenerClass*, bool> Entry;
     typedef std::vector<Entry> EntryList;
     typedef typename EntryList::iterator EntryIterator;

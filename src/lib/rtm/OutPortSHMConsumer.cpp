@@ -18,7 +18,7 @@
 #include <rtm/OutPortSHMConsumer.h>
 #include <rtm/NVUtil.h>
 #include <coil/UUID.h>
-#include <coil/Guard.h>
+#include <mutex>
 
 namespace RTC
 {

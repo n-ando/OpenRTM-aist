@@ -63,7 +63,7 @@ namespace RTC_exp
       public RTC::ExecutionContextBase,
       public coil::Task
   {
-    typedef coil::Guard<coil::Mutex> Guard;
+    typedef std::lock_guard<coil::Mutex> Guard;
   public:
     /*!
      * @if jp

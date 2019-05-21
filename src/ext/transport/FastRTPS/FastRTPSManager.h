@@ -51,7 +51,7 @@ namespace RTC
     class FastRTPSManager
     {
         typedef coil::Mutex Mutex;
-        typedef coil::Guard<Mutex> Guard;
+        typedef std::lock_guard<Mutex> Guard;
     public:
         /*!
          * @if jp

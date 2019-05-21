@@ -42,7 +42,7 @@ namespace RTC
   class ComponentObserverConsumer
     : public SdoServiceConsumerBase
   {
-    typedef coil::Guard<coil::Mutex> Guard;
+    typedef std::lock_guard<coil::Mutex> Guard;
   public:
     /*!
      * @if jp

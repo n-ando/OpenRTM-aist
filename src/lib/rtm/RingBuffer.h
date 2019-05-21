@@ -22,7 +22,7 @@
 
 #include <coil/TimeValue.h>
 #include <coil/Mutex.h>
-#include <coil/Guard.h>
+#include <mutex>
 #include <coil/Condition.h>
 #include <coil/stringutil.h>
 
@@ -92,7 +92,7 @@ namespace RTC
   {
   public:
     BUFFERSTATUS_ENUM
-    typedef coil::Guard<coil::Mutex> Guard;
+    typedef std::lock_guard<coil::Mutex> Guard;
     /*!
      * @if jp
      *

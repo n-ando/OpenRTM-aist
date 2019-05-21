@@ -25,7 +25,7 @@
 #include <coil/ClockManager.h>
 #include <coil/Logger.h>
 #include <coil/Mutex.h>
-#include <coil/Guard.h>
+#include <mutex>
 #include <coil/stringutil.h>
 #include <coil/Properties.h>
 

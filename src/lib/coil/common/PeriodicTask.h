@@ -21,7 +21,7 @@
 #define COIL_PERIODICTASK_H
 
 #include <coil/Mutex.h>
-#include <coil/Guard.h>
+#include <mutex>
 #include <coil/Condition.h>
 #include <coil/TimeValue.h>
 #include <coil/TimeMeasure.h>
@@ -62,7 +62,7 @@ namespace coil
     : public coil::PeriodicTaskBase
   {
   public:
-    typedef coil::Guard<coil::Mutex> Guard;
+    typedef std::lock_guard<coil::Mutex> Guard;
 
     /*!
      * @if jp

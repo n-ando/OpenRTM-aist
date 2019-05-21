@@ -19,7 +19,7 @@
 #define RTC_CONNECTORLISTENER_H
 
 #include <coil/Mutex.h>
-#include <coil/Guard.h>
+#include <mutex>
 #include <rtm/RTC.h>
 #include <rtm/ConnectorBase.h>
 #include <rtm/ByteData.h>
@@ -960,7 +960,7 @@ namespace RTC
     : public ConnectorListenerStatus
   {
     typedef std::pair<ConnectorDataListener*, bool> Entry;
-    typedef coil::Guard<coil::Mutex> Guard;
+    typedef std::lock_guard<coil::Mutex> Guard;
   public:
     USE_CONNLISTENER_STATUS;
     /*!
@@ -1157,7 +1157,7 @@ namespace RTC
       : public ConnectorListenerStatus
   {
     typedef std::pair<ConnectorListener*, bool> Entry;
-    typedef coil::Guard<coil::Mutex> Guard;
+    typedef std::lock_guard<coil::Mutex> Guard;
   public:
     USE_CONNLISTENER_STATUS;
     /*!
