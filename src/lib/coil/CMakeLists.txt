@@ -68,6 +68,7 @@ set(coil_headers
 	common/coil/PeriodicTaskBase.h
 	common/coil/Properties.h
 	common/coil/Singleton.h
+	common/coil/Task.h
 	common/coil/TimeMeasure.h
 	common/coil/TimeValue.h
 	common/coil/Timer.h
@@ -80,7 +81,6 @@ set(coil_headers
 	${COIL_OS_DIR}/coil/Routing.h
 	${COIL_OS_DIR}/coil/Process.h
 	${COIL_OS_DIR}/coil/Signal.h
-	${COIL_OS_DIR}/coil/Task.h
 	${COIL_OS_DIR}/coil/Time.h
 	${COIL_OS_DIR}/coil/UUID.h
 	${COIL_OS_DIR}/coil/atomic.h
@@ -95,6 +95,7 @@ set(coil_srcs
 	common/coil/ClockManager.cpp
 	common/coil/PeriodicTask.cpp
 	common/coil/Properties.cpp
+	common/coil/Task.cpp
 	common/coil/TimeMeasure.cpp
 	common/coil/TimeValue.cpp
 	common/coil/Timer.cpp
@@ -106,7 +107,6 @@ set(coil_srcs
 	${COIL_OS_DIR}/coil/Routing.cpp
 	${COIL_OS_DIR}/coil/Process.cpp
 	${COIL_OS_DIR}/coil/Signal.cpp
-	${COIL_OS_DIR}/coil/Task.cpp
 	${COIL_OS_DIR}/coil/Time.cpp
 	${COIL_OS_DIR}/coil/UUID.cpp
 	${COIL_OS_DIR}/coil/SharedMemory.cpp
