@@ -5,8 +5,3 @@ add_subdirectory(logical_time)
 if(UNIX)
 	add_subdirectory(rtpreempt)
 endif(UNIX)
-
-
-if(ARTLINUX)
-	add_subdirectory(artlinux)
-endif(ARTLINUX)
