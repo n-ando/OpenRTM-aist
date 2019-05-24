@@ -20,7 +20,7 @@
 #define RTC_OPENHRPEXECUTIONCONTEXT_H
 
 #include <coil/Mutex.h>
-#include <coil/Guard.h>
+#include <mutex>
 #include <rtm/RTC.h>
 #include <rtm/ExecutionContextBase.h>
 
@@ -54,7 +54,6 @@ namespace RTC
       public RTC::ExecutionContextBase
   {
     typedef coil::Mutex Mutex;
-    typedef coil::Guard<coil::Mutex> Guard;
   public:
     /*!
      * @if jp

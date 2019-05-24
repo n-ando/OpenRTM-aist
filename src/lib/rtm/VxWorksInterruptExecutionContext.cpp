@@ -15,7 +15,7 @@
  */
 
 #include <coil/TimeValue.h>
-#include <coil/Guard.h>
+#include <mutex>
 
 #include <rtm/VxWorksInterruptExecutionContext.h>
 #include <rtm/ECFactory.h>
@@ -92,11 +92,11 @@ namespace RTC
     RTC_TRACE(("~VxWorksInterruptExecutionContext()"));
     {
       {
-        Guard guard(m_svcmutex);
+        std::lock_guard<coil::Mutex> guard(m_svcmutex);
         m_svc = false;
       }
       {
-        Guard guard(m_worker.mutex_);
+        std::lock_guard<coil::Mutex> guard(m_worker.mutex_);
         m_worker.ticked_ = true;
         m_worker.cond_.signal();
       }
@@ -147,7 +147,7 @@ namespace RTC
     do
       {
         {
-          Guard gurad(m_worker.mutex_);
+          std::lock_guard<coil::Mutex> gurad(m_worker.mutex_);
           RTC_DEBUG(("Start of worker invocation. ticked = %s",
                      m_worker.ticked_ ? "true" : "false"));
           while (!m_worker.ticked_)
@@ -163,7 +163,7 @@ namespace RTC
         ExecutionContextBase::invokeWorkerPostDo();
         coil::TimeValue t1(coil::clock());
         {
-          Guard gurad(m_worker.mutex_);
+          std::lock_guard<coil::Mutex> gurad(m_worker.mutex_);
           m_worker.ticked_ = false;
         }
         coil::TimeValue period(getPeriod());
@@ -221,7 +221,7 @@ namespace RTC
       {
         return;
       }
-    Guard guard(m_worker.mutex_);
+    std::lock_guard<coil::Mutex> guard(m_worker.mutex_);
     m_worker.ticked_ = true;
     m_worker.cond_.signal();
     return;
@@ -415,7 +415,7 @@ namespace RTC
   RTC::ReturnCode_t VxWorksInterruptExecutionContext::onStarted()
   {
     // change EC thread state
-    Guard gurad(m_svcmutex);
+    std::lock_guard<coil::Mutex> gurad(m_svcmutex);
     if (!m_svc)
       { // If start() is called first time, start the worker thread.
         m_svc = true;
@@ -430,7 +430,7 @@ namespace RTC
   RTC::ReturnCode_t VxWorksInterruptExecutionContext::
   onAddedComponent(RTC::LightweightRTObject_ptr rtobj)
   {
-    Guard guard(m_worker.mutex_);
+    std::lock_guard<coil::Mutex> guard(m_worker.mutex_);
     if (m_worker.ticked_ == false)
       {
         ExecutionContextBase::m_worker.updateComponentList();
@@ -443,7 +443,7 @@ namespace RTC
   RTC::ReturnCode_t VxWorksInterruptExecutionContext::
   onRemovedComponent(RTC::LightweightRTObject_ptr rtobj)
   {
-    Guard guard(m_worker.mutex_);
+    std::lock_guard<coil::Mutex> guard(m_worker.mutex_);
     if (m_worker.ticked_ == false)
       {
         ExecutionContextBase::m_worker.updateComponentList();
@@ -463,7 +463,7 @@ namespace RTC
                   getStateString(comp->getStates().next)));
     // Now comp's next state must be ACTIVE state
     // If worker thread is stopped, restart worker thread.
-    Guard guard(m_worker.mutex_);
+    std::lock_guard<coil::Mutex> guard(m_worker.mutex_);
     m_worker.ticked_ = true;
     m_worker.cond_.signal();
     return RTC::RTC_OK;
@@ -480,7 +480,7 @@ namespace RTC
     RTC_PARANOID(("curr: %s, next: %s",
                   getStateString(comp->getStates().curr),
                   getStateString(comp->getStates().next)));
-    Guard guard(m_worker.mutex_);
+    std::lock_guard<coil::Mutex> guard(m_worker.mutex_);
     m_worker.ticked_ = true;
     m_worker.cond_.signal();
     return RTC::RTC_OK;
@@ -496,7 +496,7 @@ namespace RTC
     RTC_PARANOID(("curr: %s, next: %s",
                   getStateString(comp->getStates().curr),
                   getStateString(comp->getStates().next)));
-    Guard guard(m_worker.mutex_);
+    std::lock_guard<coil::Mutex> guard(m_worker.mutex_);
     m_worker.ticked_ = true;
     m_worker.cond_.signal();
     return RTC::RTC_OK;

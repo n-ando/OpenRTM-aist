@@ -80,7 +80,7 @@ namespace RTC
   RTC::ReturnCode_t SimulatorExecutionContext::
 	  activate_component(RTC::LightweightRTObject_ptr comp)
   {
-	Guard guard(m_tickmutex);
+	std::lock_guard<coil::Mutex> guard(m_tickmutex);
 
 	RTC_impl::RTObjectStateMachine* rtobj = m_worker.findComponent(comp);
 
@@ -130,7 +130,7 @@ namespace RTC
   RTC::ReturnCode_t SimulatorExecutionContext::
   deactivate_component(RTC::LightweightRTObject_ptr comp)
   {
-	Guard guard(m_tickmutex);
+	std::lock_guard<coil::Mutex> guard(m_tickmutex);
 
 	RTC_impl::RTObjectStateMachine* rtobj = m_worker.findComponent(comp);
 
@@ -182,7 +182,7 @@ namespace RTC
   RTC::ReturnCode_t SimulatorExecutionContext::
   reset_component(RTC::LightweightRTObject_ptr comp)
   {
-	Guard guard(m_tickmutex);
+	std::lock_guard<coil::Mutex> guard(m_tickmutex);
 
 	RTC_impl::RTObjectStateMachine* rtobj = m_worker.findComponent(comp);
 

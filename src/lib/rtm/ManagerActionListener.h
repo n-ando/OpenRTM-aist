@@ -20,7 +20,7 @@
 #define RTM_MANAGERACTIONLISTENER_H
 
 #include <coil/Mutex.h>
-#include <coil/Guard.h>
+#include <mutex>
 #include <coil/Properties.h>
 #include <coil/stringutil.h>
 #include <rtm/ListenerHolder.h>

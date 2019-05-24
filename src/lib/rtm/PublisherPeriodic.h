@@ -67,7 +67,6 @@ namespace RTC
   public:
     typedef coil::Mutex Mutex;
     typedef coil::Condition<Mutex> Condition;
-    typedef coil::Guard<coil::Mutex> Guard;
     DATAPORTSTATUS_ENUM
 
     /*!

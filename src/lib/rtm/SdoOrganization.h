@@ -25,7 +25,7 @@
 #include <rtm/SystemLogger.h>
 
 #include <coil/Mutex.h>
-#include <coil/Guard.h>
+#include <mutex>
 
 #include <string>
 
@@ -78,7 +78,6 @@ namespace SDOPackage
       public virtual PortableServer::RefCountServantBase
   {
     typedef coil::Mutex Mutex;
-    typedef coil::Guard<Mutex> Guard;
   public:
     /*!
      * @if jp

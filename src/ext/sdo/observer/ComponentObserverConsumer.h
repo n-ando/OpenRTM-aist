@@ -42,7 +42,6 @@ namespace RTC
   class ComponentObserverConsumer
     : public SdoServiceConsumerBase
   {
-    typedef coil::Guard<coil::Mutex> Guard;
   public:
     /*!
      * @if jp
@@ -109,7 +108,7 @@ namespace RTC
      */
     inline void updateStatus(OpenRTM::StatusKind statuskind, const char* msg)
     {
-      Guard guard(mutex);
+      std::lock_guard<coil::Mutex> guard(mutex);
       try
         {
           m_observer->update_status(statuskind, msg);

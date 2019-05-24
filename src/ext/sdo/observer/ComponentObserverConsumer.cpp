@@ -56,7 +56,7 @@ namespace RTC
   ComponentObserverConsumer::~ComponentObserverConsumer()
   {
       {
-        Guard guard(mutex);
+        std::lock_guard<coil::Mutex> guard(mutex);
         unsetComponentProfileListeners();
         unsetComponentStatusListeners();
         unsetPortProfileListeners();
@@ -67,7 +67,7 @@ namespace RTC
 
       {
         coil::sleep(coil::TimeValue(1.0));
-        Guard guard(mutex);
+        std::lock_guard<coil::Mutex> guard(mutex);
       }
   }
 

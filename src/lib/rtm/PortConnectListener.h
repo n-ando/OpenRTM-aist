@@ -20,7 +20,7 @@
 #define RTC_PORTCONNECTLISTENER_H
 
 #include <coil/Mutex.h>
-#include <coil/Guard.h>
+#include <mutex>
 #include <rtm/RTC.h>
 #include <rtm/idl/RTCSkel.h>
 
@@ -277,7 +277,6 @@ namespace RTC
   class PortConnectListenerHolder
   {
     typedef std::pair<PortConnectListener*, bool> Entry;
-    typedef coil::Guard<coil::Mutex> Guard;
   public:
     /*!
      * @if jp
@@ -383,7 +382,6 @@ namespace RTC
   class PortConnectRetListenerHolder
   {
     typedef std::pair<PortConnectRetListener*, bool> Entry;
-    typedef coil::Guard<coil::Mutex> Guard;
   public:
     /*!
      * @if jp

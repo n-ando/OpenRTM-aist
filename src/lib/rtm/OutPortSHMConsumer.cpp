@@ -18,7 +18,7 @@
 #include <rtm/OutPortSHMConsumer.h>
 #include <rtm/NVUtil.h>
 #include <coil/UUID.h>
-#include <coil/Guard.h>
+#include <mutex>
 
 namespace RTC
 {
@@ -124,7 +124,7 @@ namespace RTC
     try
       {
           
-            Guard guard(m_mutex);
+            std::lock_guard<coil::Mutex> guard(m_mutex);
             
 
             ::OpenRTM::PortStatus ret(_ptr()->get());

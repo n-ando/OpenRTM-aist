@@ -21,7 +21,7 @@
 #include <rtm/Manager.h>
 #include <rtm/Factory.h>
 //#include <rtm/RTObject.h>
-#include <coil/Guard.h>
+#include <mutex>
 #include <coil/Mutex.h>
 //#include <hrtm/data_flow_component.h>
 //#include <hrtm/logger.h>
@@ -60,7 +60,6 @@ namespace hrtm
     : public RTC::Manager
   {
     typedef coil::Mutex Mutex;
-    typedef coil::Guard<Mutex> Guard;
 
   public:
     template<typename CompType>

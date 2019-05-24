@@ -21,7 +21,7 @@
 #define COIL_SINGLETON_H
 
 #include <coil/Mutex.h>
-#include <coil/Guard.h>
+#include <mutex>
 
 namespace coil
 {
@@ -134,7 +134,7 @@ namespace coil
       // DLC pattern
       if (!m_instance)
         {
-          coil::Guard<coil::Mutex> guard(m_mutex);
+          std::lock_guard<coil::Mutex> guard(m_mutex);
           if (!m_instance)
             {
               m_instance = new SingletonClass();

@@ -30,30 +30,30 @@
 #else
 
 #include <coil/Mutex.h>
-#include <coil/Guard.h>
+#include <mutex>
 #define COIL_USES_ATOMIC_OP coil::Mutex __mutex;
 
 #define atomic_add(x, y)                        \
   {                                             \
-    coil::Guard<coil::Mutex> guard(__mutex);    \
+    std::lock_guard<coil::Mutex> guard(__mutex);    \
     *x = *x + y;                                \
   }
 
 #define atomic_incr(x)                          \
   {                                             \
-    coil::Guard<coil::Mutex> guard(__mutex);    \
+    std::lock_guard<coil::Mutex> guard(__mutex);    \
     ++(*x);                                     \
   }
 
 #define atomic_decr(x)                          \
   {                                             \
-    coil::Guard<coil::Mutex> guard(__mutex);    \
+    std::lock_guard<coil::Mutex> guard(__mutex);    \
     --(*x);                                     \
   }
 
 int exchange_add(int* x, int y, coil::Mutex* mutex)
 {
-  coil::Guard<coil::Mutex> guard(*mutex);
+  std::lock_guard<coil::Mutex> guard(*mutex);
   int tmp(*x);
   *x = *x + y;
   return tmp;

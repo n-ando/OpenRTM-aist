@@ -23,7 +23,7 @@
 
 #include <coil/Task.h>
 #include <coil/Mutex.h>
-#include <coil/Guard.h>
+#include <mutex>
 #include <rtm/CorbaNaming.h>
 #include <rtm/RTObject.h>
 #include <rtm/SystemLogger.h>
@@ -66,7 +66,6 @@ namespace RTC
   class NamingBase
   {
     typedef coil::Mutex Mutex;
-    typedef coil::Guard<Mutex> Guard;
   public:
     /*!
      * @if jp
@@ -630,7 +629,6 @@ namespace RTC
   class NamingManager
   {
     typedef coil::Mutex Mutex;
-    typedef coil::Guard<Mutex> Guard;
   public:
     /*!
      * @if jp

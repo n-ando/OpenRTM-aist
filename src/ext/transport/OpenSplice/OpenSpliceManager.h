@@ -21,7 +21,7 @@
 
 #include <vector>
 #include <coil/Mutex.h>
-#include <coil/Guard.h>
+#include <mutex>
 #include <map>
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
 #pragma warning(push)
@@ -58,7 +58,6 @@ namespace RTC
     class OpenSpliceManager
     {
         typedef coil::Mutex Mutex;
-        typedef coil::Guard<Mutex> Guard;
     public:
         /*!
          * @if jp

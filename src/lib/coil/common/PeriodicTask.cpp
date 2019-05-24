@@ -64,7 +64,7 @@ namespace coil
    */
   void PeriodicTask::activate()
   {
-    Guard guard(m_alive.mutex);
+    std::lock_guard<coil::Mutex> guard(m_alive.mutex);
     if (m_func == nullptr)   { return; }
     if (m_alive.value) { return; }
 
@@ -81,10 +81,10 @@ namespace coil
    */
   void PeriodicTask::finalize()
   {
-    Guard gaurd(m_alive.mutex);
+    std::lock_guard<coil::Mutex> gaurd(m_alive.mutex);
     m_alive.value = false;
 
-    Guard suspend_gaurd(m_suspend.mutex);
+    std::lock_guard<coil::Mutex> suspend_gaurd(m_suspend.mutex);
     m_suspend.suspend = false;
     m_suspend.cond.signal();
   }
@@ -98,7 +98,7 @@ namespace coil
    */
   int PeriodicTask::suspend()
   {
-    Guard gaurd(m_suspend.mutex);
+    std::lock_guard<coil::Mutex> gaurd(m_suspend.mutex);
     m_suspend.suspend = true;
     return 0;
   }
@@ -115,7 +115,7 @@ namespace coil
     m_periodTime.reset();
     m_execTime.reset();
 
-    Guard gaurd(m_suspend.mutex);
+    std::lock_guard<coil::Mutex> gaurd(m_suspend.mutex);
     m_suspend.suspend = false;
     m_suspend.cond.signal();
     return 0;
@@ -130,7 +130,7 @@ namespace coil
    */
   void PeriodicTask::signal()
   {
-    Guard gaurd(m_suspend.mutex);
+    std::lock_guard<coil::Mutex> gaurd(m_suspend.mutex);
     m_suspend.cond.signal();
   }
 
@@ -246,7 +246,7 @@ namespace coil
    */
   TimeMeasure::Statistics PeriodicTask::getExecStat()
   {
-    Guard guard(m_execStat.mutex);
+    std::lock_guard<coil::Mutex> guard(m_execStat.mutex);
     return m_execStat.stat;
   }
 
@@ -259,7 +259,7 @@ namespace coil
    */
   TimeMeasure::Statistics PeriodicTask::getPeriodStat()
   {
-    Guard guard(m_periodStat.mutex);
+    std::lock_guard<coil::Mutex> guard(m_periodStat.mutex);
     return m_periodStat.stat;
   }
 
@@ -279,7 +279,7 @@ namespace coil
       {
         if (m_periodMeasure) { m_periodTime.tack(); }
         {  // wait if suspended
-          Guard suspend_gaurd(m_suspend.mutex);
+          std::lock_guard<coil::Mutex> suspend_gaurd(m_suspend.mutex);
           if (m_suspend.suspend)
             {
               m_suspend.cond.wait();
@@ -336,7 +336,7 @@ namespace coil
   {
     if (m_execCount > m_execCountMax)
       {
-        Guard guard(m_execStat.mutex);
+        std::lock_guard<coil::Mutex> guard(m_execStat.mutex);
         m_execStat.stat = m_execTime.getStatistics();
         m_execCount = 0;
       }
@@ -354,7 +354,7 @@ namespace coil
   {
     if (m_periodCount > m_periodCountMax)
       {
-        Guard guard(m_periodStat.mutex);
+        std::lock_guard<coil::Mutex> guard(m_periodStat.mutex);
         m_periodStat.stat = m_periodTime.getStatistics();
         m_periodCount = 0;
       }

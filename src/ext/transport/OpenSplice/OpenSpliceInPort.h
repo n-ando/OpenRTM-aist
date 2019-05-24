@@ -50,7 +50,6 @@ namespace RTC
         : public InPortProvider, OpenSpliceInPortListenerBase
     {
         typedef coil::Mutex Mutex;
-        typedef coil::Guard<coil::Mutex> Guard;
     public:
         /*!
          * @if jp

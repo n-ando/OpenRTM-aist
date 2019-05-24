@@ -60,7 +60,6 @@ set(coil_headers
 	common/coil/Async.h
 	common/coil/ClockManager.h
 	common/coil/Factory.h
-	common/coil/Guard.h
 	common/coil/Listener.h
 	common/coil/Logger.h
 	common/coil/NonCopyable.h

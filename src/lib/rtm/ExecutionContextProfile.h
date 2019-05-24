@@ -20,7 +20,7 @@
 #define RTC_EXECUTIONCONTEXTPROFILE_H
 
 #include <coil/Mutex.h>
-#include <coil/Guard.h>
+#include <mutex>
 #include <coil/Properties.h>
 #include <coil/TimeValue.h>
 
@@ -55,7 +55,6 @@ namespace RTC_impl
    */
   class ExecutionContextProfile
   {
-    typedef coil::Guard<coil::Mutex> Guard;
   public:
     /*!
      * @if jp

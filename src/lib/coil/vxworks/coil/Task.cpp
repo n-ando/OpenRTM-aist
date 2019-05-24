@@ -170,13 +170,13 @@ namespace coil
 
 
 //taskDelete(m_tid);
-        Guard guard(m_waitmutex);
+        std::lock_guard<coil::Mutex> guard(m_waitmutex);
 //m_waitmutex.lock();
 //m_waitmutex.unlock();
 
 /*
 #ifdef __RTP__
-        Guard guard(m_waitmutex);
+        std::lock_guard<coil::Mutex> guard(m_waitmutex);
         //taskExit(0);
 #else
         void* retval;
@@ -248,7 +248,7 @@ namespace coil
   {
     Task* t = (coil::Task*)args;
 
-    Guard guard(t->m_waitmutex);
+    std::lock_guard<coil::Mutex> guard(t->m_waitmutex);
 
     //t->m_waitmutex.lock();
     int status;
@@ -266,7 +266,7 @@ namespace coil
   {
     Task* t = (coil::Task*)args;
 #ifdef __RTP__
-    Guard guard(t->m_waitmutex);
+    std::lock_guard<coil::Mutex> guard(t->m_waitmutex);
 #endif
     int status;
     status = t->svc();

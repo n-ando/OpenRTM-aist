@@ -22,7 +22,7 @@
 
 #include <rtm/RTC.h>
 
-#include <coil/Guard.h>
+#include <mutex>
 #include <coil/Mutex.h>
 #include <rtm/idl/RTCSkel.h>
 #include <rtm/CORBA_SeqUtil.h>
@@ -2099,7 +2099,6 @@ namespace RTC
      */
     mutable coil::Mutex m_profile_mutex;
     mutable coil::Mutex m_connectorsMutex;
-    typedef coil::Guard<coil::Mutex> Guard;
 
     /*!
      * @if jp

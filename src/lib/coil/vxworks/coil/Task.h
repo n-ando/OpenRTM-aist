@@ -22,13 +22,13 @@
 #include <vxWorks.h>
 #include <taskLib.h>
 #include <coil/Mutex.h>
-#include <coil/Guard.h>
+#include <mutex>
 /*
 #ifdef __RTP__
 #include <vxWorks.h>
 #include <taskLib.h>
 #include <coil/Mutex.h>
-#include <coil/Guard.h>
+#include <mutex>
 #else
 #include <pthread.h>
 #endif
@@ -53,11 +53,9 @@ namespace coil
   {
 /*
 #ifdef __RTP__
-  typedef coil::Guard<coil::Mutex> Guard;
 #endif
 */
   public:
-  typedef coil::Guard<coil::Mutex> Guard;
     /*!
      * @if jp
      *

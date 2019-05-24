@@ -117,7 +117,6 @@ namespace RTC_impl
    */
   class ExecutionContextWorker
   {
-    typedef coil::Guard<coil::Mutex> Guard;
 
   public:
     /*!

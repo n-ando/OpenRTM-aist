@@ -63,7 +63,6 @@ namespace RTC_exp
       public RTC::ExecutionContextBase,
       public coil::Task
   {
-    typedef coil::Guard<coil::Mutex> Guard;
   public:
     /*!
      * @if jp
@@ -644,7 +643,7 @@ namespace RTC_exp
 
     bool threadRunning()
     {
-      Guard guard(m_svcmutex);
+      std::lock_guard<coil::Mutex> guard(m_svcmutex);
       return m_svc;
     }
   protected:

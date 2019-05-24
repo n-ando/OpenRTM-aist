@@ -64,7 +64,6 @@ namespace RTC
     : public InPortProvider
   {
     typedef coil::Mutex Mutex;
-    typedef coil::Guard<coil::Mutex> Guard;
   public:
     /*!
      * @if jp

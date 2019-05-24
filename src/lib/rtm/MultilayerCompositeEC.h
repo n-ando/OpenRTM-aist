@@ -53,7 +53,6 @@ namespace RTC_exp
   class MultilayerCompositeEC
     : public virtual RTC_exp::PeriodicExecutionContext
   {
-    typedef coil::Guard<coil::Mutex> Guard;
   public:
     /*!
      * @if jp

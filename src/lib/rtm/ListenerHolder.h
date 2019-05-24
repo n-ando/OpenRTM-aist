@@ -20,7 +20,7 @@
 #define RTM_UTIL_LISTENERHOLDER_H
 
 #include <coil/Mutex.h>
-#include <coil/Guard.h>
+#include <mutex>
 #include <coil/NonCopyable.h>
 
 #include <vector>
@@ -116,7 +116,7 @@ namespace util
    * std::pair<ListenerClass, bool> として定義されており、firstが
    * Listenerオブジェクトへのポインタ、secondが自動削除フラグである。し
    * たがって、リスナオブジェクトへアクセスする場合にはfirstを使用する。
-   * マルチスレッド環境で利用することが想定される場合は、Guard
+   * マルチスレッド環境で利用することが想定される場合は、std::lock_guard
    * guard(m_mutex) によるロックを忘れずに行うこと。
    *
    * @section ListenerHolder実装クラスの利用
@@ -146,7 +146,6 @@ namespace util
     : public coil::NonCopyable
   {
   public:
-    typedef coil::Guard<coil::Mutex> Guard;
     typedef std::pair<ListenerClass*, bool> Entry;
     typedef std::vector<Entry> EntryList;
     typedef typename EntryList::iterator EntryIterator;
@@ -171,7 +170,7 @@ namespace util
      */
     virtual ~ListenerHolder()
     {
-      Guard guard(m_mutex);
+      std::lock_guard<coil::Mutex> guard(m_mutex);
 
       for(auto & listener : m_listeners)
         {
@@ -193,7 +192,7 @@ namespace util
     virtual void addListener(ListenerClass* listener,
                      bool autoclean)
     {
-      Guard guard(m_mutex);
+      std::lock_guard<coil::Mutex> guard(m_mutex);
       m_listeners.push_back(Entry(listener, autoclean));
     }
 
@@ -206,7 +205,7 @@ namespace util
      */
     virtual void removeListener(ListenerClass* listener)
     {
-      Guard guard(m_mutex);
+      std::lock_guard<coil::Mutex> guard(m_mutex);
       EntryIterator it(m_listeners.begin());
 
       for (; it != m_listeners.end(); ++it)
@@ -247,7 +246,7 @@ namespace util
 
 #define LISTENERHOLDER_CALLBACK(func, args)               \
   {                                                       \
-    Guard guard(m_mutex);                                 \
+    std::lock_guard<coil::Mutex> guard(m_mutex);                                 \
     for (std::vector<Entry>::iterator listener = m_listeners.begin(); listener != m_listeners.end(); ++listener) \
       {                                                   \
         (*listener).first->func args;                  \

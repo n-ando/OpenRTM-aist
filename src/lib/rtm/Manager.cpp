@@ -141,7 +141,7 @@ namespace RTC
     // DCL for singleton
     if (manager == nullptr)
       {
-        Guard guard(mutex);
+        std::lock_guard<coil::Mutex> guard(mutex);
         if (manager == nullptr)
           {
             manager = new Manager();
@@ -171,7 +171,7 @@ namespace RTC
     // DCL for singleton
     if (manager == nullptr)
       {
-        Guard guard(mutex);
+        std::lock_guard<coil::Mutex> guard(mutex);
         if (manager == nullptr)
           {
             manager = new Manager();
@@ -247,13 +247,13 @@ namespace RTC
   {
     RTC_TRACE(("Manager::wait()"));
     {
-      Guard guard(m_terminate.mutex);
+      std::lock_guard<coil::Mutex> guard(m_terminate.mutex);
       ++m_terminate.waiting;
     }
     while (true)
       {
         {
-          Guard guard(m_terminate.mutex);
+          std::lock_guard<coil::Mutex> guard(m_terminate.mutex);
           if (m_terminate.waiting > 1) break;
         }
         coil::usleep(100000);
@@ -1275,7 +1275,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
       }
     m_terminator = new Terminator(this, waittime);
     {
-      Guard guard(m_terminate.mutex);
+      std::lock_guard<coil::Mutex> guard(m_terminate.mutex);
       m_terminate.waiting = 0;
     }
 
@@ -2208,7 +2208,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   void Manager::cleanupComponents()
   {
     RTC_VERBOSE(("Manager::cleanupComponents()"));
-    Guard guard(m_finalized.mutex);
+    std::lock_guard<coil::Mutex> guard(m_finalized.mutex);
     RTC_VERBOSE(("%d components are marked as finalized.",
                m_finalized.comps.size()));
     for (auto & comp : m_finalized.comps)
@@ -2221,7 +2221,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   void Manager::notifyFinalized(RTObject_impl* comp)
   {
     RTC_TRACE(("Manager::notifyFinalized()"));
-    Guard guard(m_finalized.mutex);
+    std::lock_guard<coil::Mutex> guard(m_finalized.mutex);
     m_finalized.comps.push_back(comp);
   }
 

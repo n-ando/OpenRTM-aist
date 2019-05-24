@@ -47,7 +47,6 @@ namespace RTC
   template <class DataType>
   class DirectOutPortBase : public DirectPortBase
   {
-	  typedef coil::Guard<coil::Mutex> Guard;
   public:
 	/*!
 	* @if jp

@@ -81,7 +81,6 @@ namespace RTC
   class OutPortPullConnector
     : public OutPortConnector
   {
-    typedef coil::Guard<coil::Mutex> Guard;
   public:
     DATAPORTSTATUS_ENUM
 

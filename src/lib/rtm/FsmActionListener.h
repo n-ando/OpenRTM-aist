@@ -22,7 +22,7 @@
 #include <vector>
 #include <utility>
 #include <coil/Mutex.h>
-#include <coil/Guard.h>
+#include <mutex>
 #include <rtm/RTC.h>
 #include <rtm/idl/RTCSkel.h>
 #include <rtm/ConnectorBase.h>
@@ -1019,7 +1019,6 @@ namespace RTC
   class PreFsmActionListenerHolder
   {
     typedef std::pair<PreFsmActionListener*, bool> Entry;
-    typedef coil::Guard<coil::Mutex> Guard;
   public:
     /*!
      * @if jp
@@ -1125,7 +1124,6 @@ namespace RTC
   class PostFsmActionListenerHolder
   {
     typedef std::pair<PostFsmActionListener*, bool> Entry;
-    typedef coil::Guard<coil::Mutex> Guard;
   public:
     /*!
      * @if jp
@@ -1233,7 +1231,6 @@ namespace RTC
   class FsmProfileListenerHolder
   {
     typedef std::pair<FsmProfileListener*, bool> Entry;
-    typedef coil::Guard<coil::Mutex> Guard;
   public:
     /*!
      * @if jp
@@ -1339,7 +1336,6 @@ namespace RTC
   class FsmStructureListenerHolder
   {
     typedef std::pair<FsmStructureListener*, bool> Entry;
-    typedef coil::Guard<coil::Mutex> Guard;
   public:
     /*!
      * @if jp

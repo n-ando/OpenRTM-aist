@@ -39,7 +39,7 @@ namespace RTC
    */
   void PortProfileHelper::setPortProfile(const PortProfile& profile)
   {
-    Guard guard(m_mutex);
+    std::lock_guard<coil::Mutex> guard(m_mutex);
 
     m_name         = profile.name;
     m_ifProfiles   = profile.interfaces;
@@ -61,7 +61,7 @@ namespace RTC
    */
   PortProfile* PortProfileHelper::getPortProfile()
   {
-    Guard guard(m_mutex);
+    std::lock_guard<coil::Mutex> guard(m_mutex);
 
     PortProfile_var profile(new PortProfile());
     profile->name               = CORBA::string_dup(m_name.c_str());
@@ -84,7 +84,7 @@ namespace RTC
    */
   void PortProfileHelper::setName(const char* name)
   {
-    Guard guard(m_mutex);
+    std::lock_guard<coil::Mutex> guard(m_mutex);
 
     m_name = name;
   }
@@ -99,7 +99,7 @@ namespace RTC
    */
   const char* PortProfileHelper::getName() const
   {
-    Guard guard(m_mutex);
+    std::lock_guard<coil::Mutex> guard(m_mutex);
 
     return m_name.c_str();
   }
@@ -115,7 +115,7 @@ namespace RTC
   void
   PortProfileHelper::appendPortInterfaceProfile(PortInterfaceProfile if_prof)
   {
-    Guard guard(m_mutex);
+    std::lock_guard<coil::Mutex> guard(m_mutex);
 
     m_ifProfiles.push_back(if_prof);
     return;
@@ -132,7 +132,7 @@ namespace RTC
   const PortInterfaceProfileList&
   PortProfileHelper::getPortInterfaceProfiles() const
   {
-    Guard guard(m_mutex);
+    std::lock_guard<coil::Mutex> guard(m_mutex);
 
     return m_ifProfiles;
   }
@@ -148,7 +148,7 @@ namespace RTC
   const PortInterfaceProfile
   PortProfileHelper::getPortInterfaceProfile(const char* instance_name) const
   {
-    Guard guard(m_mutex);
+    std::lock_guard<coil::Mutex> guard(m_mutex);
 
     return m_ifProfiles.find(if_name(instance_name));
   }
@@ -163,7 +163,7 @@ namespace RTC
    */
   void PortProfileHelper::erasePortInterfaceProfile(const char* instance_name)
   {
-    Guard guard(m_mutex);
+    std::lock_guard<coil::Mutex> guard(m_mutex);
 
     m_ifProfiles.erase_if(if_name(instance_name));
     return;
@@ -179,7 +179,7 @@ namespace RTC
    */
   void PortProfileHelper::setPortRef(PortService_ptr port)
   {
-    Guard guard(m_mutex);
+    std::lock_guard<coil::Mutex> guard(m_mutex);
 
     m_portRef = RTC::PortService::_duplicate(port);
   }
@@ -194,7 +194,7 @@ namespace RTC
    */
   PortService_ptr PortProfileHelper::getPortRef() const
   {
-    Guard guard(m_mutex);
+    std::lock_guard<coil::Mutex> guard(m_mutex);
 
     return m_portRef;
   }
@@ -209,7 +209,7 @@ namespace RTC
    */
   void PortProfileHelper::appendConnectorProfile(ConnectorProfile conn_profile)
   {
-    Guard guard(m_mutex);
+    std::lock_guard<coil::Mutex> guard(m_mutex);
 
     m_connProfiles.push_back(conn_profile);
   }
@@ -224,7 +224,7 @@ namespace RTC
    */
   const ConnectorProfileList PortProfileHelper::getConnectorProfiles() const
   {
-    Guard guard(m_mutex);
+    std::lock_guard<coil::Mutex> guard(m_mutex);
 
     return m_connProfiles;
   }
@@ -241,7 +241,7 @@ namespace RTC
   const ConnectorProfile
   PortProfileHelper::getConnectorProfile(const char* name) const
   {
-    Guard guard(m_mutex);
+    std::lock_guard<coil::Mutex> guard(m_mutex);
 
     return m_connProfiles.find(conn_name(name));
   }
@@ -257,7 +257,7 @@ namespace RTC
   const ConnectorProfile
   PortProfileHelper::getConnectorProfileById(const char* id) const
   {
-    Guard guard(m_mutex);
+    std::lock_guard<coil::Mutex> guard(m_mutex);
 
     return m_connProfiles.find(conn_id(id));
   }
@@ -273,7 +273,7 @@ namespace RTC
    */
   void PortProfileHelper::eraseConnectorProfile(const char* name)
   {
-    Guard guard(m_mutex);
+    std::lock_guard<coil::Mutex> guard(m_mutex);
 
     m_connProfiles.erase_if(conn_name(name));
     return;
@@ -289,7 +289,7 @@ namespace RTC
    */
   void PortProfileHelper::eraseConnectorProfileById(const char* id)
   {
-    Guard guard(m_mutex);
+    std::lock_guard<coil::Mutex> guard(m_mutex);
 
     m_connProfiles.erase_if(conn_id(id));
     return;
@@ -305,7 +305,7 @@ namespace RTC
    */
   void PortProfileHelper::setOwner(RTObject_ptr owner)
   {
-    Guard guard(m_mutex);
+    std::lock_guard<coil::Mutex> guard(m_mutex);
 
     m_owner = RTC::RTObject::_duplicate(owner);
   }
@@ -319,7 +319,7 @@ namespace RTC
    */
   RTObject_ptr PortProfileHelper::getOwner() const
   {
-    Guard guard(m_mutex);
+    std::lock_guard<coil::Mutex> guard(m_mutex);
 
     return m_owner;
   }
@@ -334,7 +334,7 @@ namespace RTC
    */
   void PortProfileHelper::setProperties(NVList& prop)
   {
-    Guard guard(m_mutex);
+    std::lock_guard<coil::Mutex> guard(m_mutex);
 
     m_properties = prop;
   }
@@ -349,7 +349,7 @@ namespace RTC
    */
   const NVList& PortProfileHelper::getProperties() const
   {
-    Guard guard(m_mutex);
+    std::lock_guard<coil::Mutex> guard(m_mutex);
 
     return m_properties;
   }

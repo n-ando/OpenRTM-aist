@@ -112,7 +112,7 @@ namespace RTC
     RTC_TRACE(("get_port_profile()"));
 
     updateConnectors();
-    Guard gaurd(m_profile_mutex);
+    std::lock_guard<coil::Mutex> gaurd(m_profile_mutex);
     PortProfile_var prof;
     prof = new PortProfile(m_profile);
     return prof._retn();
@@ -145,7 +145,7 @@ namespace RTC
 
     updateConnectors();
 
-    Guard gaurd(m_profile_mutex);
+    std::lock_guard<coil::Mutex> gaurd(m_profile_mutex);
     ConnectorProfileList_var conn_prof;
     conn_prof = new ConnectorProfileList(m_profile.connector_profiles);
     return conn_prof._retn();
@@ -164,7 +164,7 @@ namespace RTC
 
     updateConnectors();
 
-    Guard gaurd(m_profile_mutex);
+    std::lock_guard<coil::Mutex> gaurd(m_profile_mutex);
     CORBA::Long index(findConnProfileIndex(connector_id));
 
     if (index < 0)
@@ -190,7 +190,7 @@ namespace RTC
     RTC_TRACE(("connect()"));
     if (isEmptyId(connector_profile))
       {
-        Guard gurad(m_profile_mutex);
+        std::lock_guard<coil::Mutex> gurad(m_profile_mutex);
         // "connector_id" stores UUID which is generated at the initial Port
         // in connection process.
         setUUID(connector_profile);
@@ -198,7 +198,7 @@ namespace RTC
       }
     else
       {
-        Guard gurad(m_profile_mutex);
+        std::lock_guard<coil::Mutex> gurad(m_profile_mutex);
         if (isExistingConnId(connector_profile.connector_id))
           {
             RTC_ERROR(("Connection already exists."));
@@ -234,7 +234,7 @@ namespace RTC
   ReturnCode_t PortBase::notify_connect(ConnectorProfile& connector_profile)
   {
     RTC_TRACE(("notify_connect()"));
-    Guard guard(m_connectorsMutex);
+    std::lock_guard<coil::Mutex> guard(m_connectorsMutex);
 
 
 
@@ -301,7 +301,7 @@ namespace RTC
     RTC_PARANOID(("%d connectors are existing",
                   m_profile.connector_profiles.length()));
 
-    Guard gurad(m_profile_mutex);
+    std::lock_guard<coil::Mutex> gurad(m_profile_mutex);
     CORBA::Long index(findConnProfileIndex(connector_profile.connector_id));
     if (index < 0)
       {
@@ -378,7 +378,7 @@ namespace RTC
 
     ConnectorProfile prof;
     { // lock and copy profile
-      Guard guard(m_profile_mutex);
+      std::lock_guard<coil::Mutex> guard(m_profile_mutex);
       prof = m_profile.connector_profiles[index];
     }
 
@@ -428,8 +428,8 @@ namespace RTC
   ReturnCode_t PortBase::notify_disconnect(const char* connector_id)
   {
     RTC_TRACE(("notify_disconnect(%s)", connector_id));
-    Guard guard(m_connectorsMutex);
-    Guard gaurd(m_profile_mutex);
+    std::lock_guard<coil::Mutex> guard(m_connectorsMutex);
+    std::lock_guard<coil::Mutex> gaurd(m_profile_mutex);
 
     // find connector_profile
     CORBA::Long index(findConnProfileIndex(connector_id));
@@ -488,7 +488,7 @@ namespace RTC
 
     ::RTC::ConnectorProfileList plist;
     {
-      Guard gaurd(m_profile_mutex);
+      std::lock_guard<coil::Mutex> gaurd(m_profile_mutex);
       plist = m_profile.connector_profiles;
     }
 
@@ -518,7 +518,7 @@ namespace RTC
   void PortBase::setName(const char* name)
   {
     RTC_TRACE(("setName(%s)", name));
-    Guard guard(m_profile_mutex);
+    std::lock_guard<coil::Mutex> guard(m_profile_mutex);
     m_profile.name = CORBA::string_dup(name);
     rtclog.setName(name);
   }
@@ -547,7 +547,7 @@ namespace RTC
   const PortProfile& PortBase::getProfile() const
   {
     RTC_TRACE(("getProfile()"));
-    Guard guard(m_profile_mutex);
+    std::lock_guard<coil::Mutex> guard(m_profile_mutex);
     return m_profile;
   }
 
@@ -561,7 +561,7 @@ namespace RTC
   void PortBase::setPortRef(PortService_ptr port_ref)
   {
     RTC_TRACE(("setPortRef()"));
-    Guard gurad(m_profile_mutex);
+    std::lock_guard<coil::Mutex> gurad(m_profile_mutex);
     m_profile.port_ref = port_ref;
   }
 
@@ -575,7 +575,7 @@ namespace RTC
   PortService_ptr PortBase::getPortRef() const
   {
     RTC_TRACE(("getPortRef()"));
-    Guard gurad(m_profile_mutex);
+    std::lock_guard<coil::Mutex> gurad(m_profile_mutex);
 #ifdef ORB_IS_ORBEXPRESS
     return m_profile.port_ref.in();
 #else
@@ -598,7 +598,7 @@ namespace RTC
     RTC_TRACE(("setOwner(%s)", m_ownerInstanceName.c_str()));
 
     {
-      Guard gurad(m_profile_mutex);
+      std::lock_guard<coil::Mutex> gurad(m_profile_mutex);
       std::string portname((const char*)m_profile.name);
       coil::vstring p(coil::split(portname, "."));
       // Now Port name is <instance_name>.<port_name>. r1648
@@ -927,7 +927,7 @@ namespace RTC
     {
 // Why RtORB copies ConnectorProfile?
 #ifndef ORB_IS_RTORB
-      Guard guard(m_profile_mutex);
+      std::lock_guard<coil::Mutex> guard(m_profile_mutex);
       ConnectorProfileList& clist(m_profile.connector_profiles);
 
       for (CORBA::ULong i(0); i < clist.length(); ++i)

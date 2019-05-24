@@ -23,7 +23,7 @@
 #include <rtm/RTC.h>
 
 #include <coil/Mutex.h>
-#include <coil/Guard.h>
+#include <mutex>
 #include <coil/Task.h>
 
 #ifdef ORB_IS_TAO
@@ -86,7 +86,6 @@ namespace RTC
   class Manager
   {
     typedef coil::Mutex Mutex;
-    typedef coil::Guard<Mutex> Guard;
   protected:
     /*!
      * @if jp

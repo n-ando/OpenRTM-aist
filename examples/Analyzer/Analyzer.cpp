@@ -193,7 +193,7 @@ RTC::ReturnCode_t Analyzer::onExecute(RTC::UniqueId  /*ec_id*/)
 
 	//coil::sleep(coil::TimeValue(m_sleep_time));
 	{
-		coil::Guard<coil::Mutex> guard(m_mu);
+		std::lock_guard<coil::Mutex> guard(m_mu);
 		m_datalist.push_back(m_out);
 		//setTimestamp(m_datalist[m_datalist.size()-1]);
 		//m_out.tm.sec = m_datalist[m_datalist.size()-1].tm.sec;
@@ -260,7 +260,7 @@ RTC::ReturnCode_t Analyzer::onRateChanged(RTC::UniqueId ec_id)
 void Analyzer::writeData(const RTC::TimedOctetSeq &data)
 {
 	//std::cout << "writeData" << std::endl;
-	coil::Guard<coil::Mutex> guard(m_mu);
+	std::lock_guard<coil::Mutex> guard(m_mu);
 	for (std::vector<TimedOctetSeq>::iterator itr = m_datalist.begin(); itr != m_datalist.end(); ) {
 		//std::cout << "writeData: " << data.tm.sec << "\t" << data.tm.nsec << std::endl;
 		//std::cout << "writeData2: " << (*itr).tm.sec << "\t" << (*itr).tm.nsec << std::endl;

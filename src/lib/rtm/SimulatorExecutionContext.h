@@ -22,7 +22,7 @@
 
 
 #include <coil/Mutex.h>
-#include <coil/Guard.h>
+#include <mutex>
 #include <rtm/RTC.h>
 #include <rtm/ExecutionContextBase.h>
 #include <rtm/OpenHRPExecutionContext.h>
@@ -51,7 +51,6 @@ namespace RTC
 	  : public virtual RTC::OpenHRPExecutionContext
   {
 	  typedef coil::Mutex Mutex;
-	  typedef coil::Guard<coil::Mutex> Guard;
   public:
     /*!
      * @if jp

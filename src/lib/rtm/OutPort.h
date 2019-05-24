@@ -110,7 +110,6 @@ namespace RTC
   class OutPort
 	  : public OutPortBase, DirectOutPortBase<DataType>
   {
-	  typedef coil::Guard<coil::Mutex> Guard;
   public:
     /*!
      * @if jp
@@ -230,7 +229,7 @@ namespace RTC
       bool result(true);
       std::vector<const char *> disconnect_ids;
       {
-        Guard con_guard(m_connectorsMutex);
+        std::lock_guard<coil::Mutex> con_guard(m_connectorsMutex);
         // check number of connectors
         size_t conn_size(m_connectors.size());
         if (!(conn_size > 0)) { return false; }
@@ -257,7 +256,7 @@ namespace RTC
               }
             else
               {
-                Guard value_guard(m_valueMutex);
+                std::lock_guard<coil::Mutex> value_guard(m_valueMutex);
                 if (m_onWriteConvert != nullptr)
                   {
                     RTC_DEBUG(("m_connectors.OnWriteConvert called"));
@@ -513,7 +512,7 @@ namespace RTC
 	*/
 	void read(DataType& data) override
 	{
-		Guard guard(m_valueMutex);
+		std::lock_guard<coil::Mutex> guard(m_valueMutex);
 		m_directNewData = false;
 		data = m_directValue;
 	}

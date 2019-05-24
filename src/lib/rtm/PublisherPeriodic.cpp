@@ -249,7 +249,7 @@ namespace RTC
    */
   int PublisherPeriodic::svc()
   {
-    Guard guard(m_retmutex);
+    std::lock_guard<coil::Mutex> guard(m_retmutex);
     switch (m_pushPolicy)
       {
       case PUBLISHER_POLICY_ALL:

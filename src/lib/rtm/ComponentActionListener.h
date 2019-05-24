@@ -20,7 +20,7 @@
 #define RTC_COMPONENTACTIONLISTENER_H
 
 #include <coil/Mutex.h>
-#include <coil/Guard.h>
+#include <mutex>
 
 #include <rtm/RTC.h>
 #include <rtm/idl/RTCSkel.h>
@@ -605,7 +605,6 @@ namespace RTC
   class PreComponentActionListenerHolder
   {
     typedef std::pair<PreComponentActionListener*, bool> Entry;
-    typedef coil::Guard<coil::Mutex> Guard;
   public:
     /*!
      * @if jp
@@ -711,7 +710,6 @@ namespace RTC
   class PostComponentActionListenerHolder
   {
     typedef std::pair<PostComponentActionListener*, bool> Entry;
-    typedef coil::Guard<coil::Mutex> Guard;
   public:
     /*!
      * @if jp
@@ -819,7 +817,6 @@ namespace RTC
   class PortActionListenerHolder
   {
     typedef std::pair<PortActionListener*, bool> Entry;
-    typedef coil::Guard<coil::Mutex> Guard;
   public:
     /*!
      * @if jp
@@ -925,7 +922,6 @@ namespace RTC
   class ExecutionContextActionListenerHolder
   {
     typedef std::pair<ExecutionContextActionListener*, bool> Entry;
-    typedef coil::Guard<coil::Mutex> Guard;
   public:
     /*!
      * @if jp

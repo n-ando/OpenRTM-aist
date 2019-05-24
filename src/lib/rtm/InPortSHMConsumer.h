@@ -56,7 +56,6 @@ namespace RTC
 	  : public InPortConsumer,
 	  public CorbaConsumer< ::OpenRTM::PortSharedMemory >
   {
-	typedef coil::Guard<coil::Mutex> Guard;
   public:
     DATAPORTSTATUS_ENUM
     /*!
