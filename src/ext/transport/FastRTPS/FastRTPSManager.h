@@ -23,7 +23,6 @@
 #include "FastRTPSOutPort.h"
 #include <map>
 #include <vector>
-#include <coil/Mutex.h>
 #include <fastrtps/fastrtps_fwd.h>
 
 namespace RTC
@@ -50,7 +49,6 @@ namespace RTC
      */
     class FastRTPSManager
     {
-        typedef coil::Mutex Mutex;
     public:
         /*!
          * @if jp
@@ -231,7 +229,7 @@ namespace RTC
         static void shutdown_global();
     private:
         static FastRTPSManager* manager;
-        static Mutex mutex;
+        static std::mutex mutex;
 	    eprosima::fastrtps::Participant *m_participant;
     protected:
     };

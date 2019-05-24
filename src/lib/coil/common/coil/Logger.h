@@ -20,7 +20,6 @@
 #ifndef LOGGER_H
 #define LOGGER_H
 
-#include <coil/Mutex.h>
 #include <mutex>
 
 #include <climits>
@@ -50,7 +49,6 @@ namespace coil
    */
   class LogStreamBuffer
   {
-      typedef coil::Mutex Mutex;
   public:
       /*!
        * @if jp
@@ -252,7 +250,7 @@ namespace coil
               this->stream_ = stream;
               this->cleanup_ = cleanup;
           }
-          mutable Mutex mutex_;
+          mutable std::mutex mutex_;
           LogStreamBuffer* stream_;
           bool cleanup_;
       };
@@ -605,14 +603,14 @@ namespace coil
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
 #   ifdef COIL_LIBRARY_EXPORTS
       static __declspec(dllexport) bool m_lockEnable;
-      static __declspec(dllexport) Mutex m_mutex;
+      static __declspec(dllexport) std::mutex m_mutex;
 #   else
       static __declspec(dllimport) bool m_lockEnable;
-      static __declspec(dllimport) Mutex m_mutex;
+      static __declspec(dllimport) std::mutex m_mutex;
 #   endif
 #else
       static bool m_lockEnable;
-      static Mutex m_mutex;
+      static std::mutex m_mutex;
 #endif /* Windows */
 
   };

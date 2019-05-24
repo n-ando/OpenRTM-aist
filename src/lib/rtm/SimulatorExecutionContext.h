@@ -21,7 +21,6 @@
 
 
 
-#include <coil/Mutex.h>
 #include <mutex>
 #include <rtm/RTC.h>
 #include <rtm/ExecutionContextBase.h>
@@ -50,7 +49,6 @@ namespace RTC
   class SimulatorExecutionContext
 	  : public virtual RTC::OpenHRPExecutionContext
   {
-	  typedef coil::Mutex Mutex;
   public:
     /*!
      * @if jp

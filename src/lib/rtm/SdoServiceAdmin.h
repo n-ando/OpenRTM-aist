@@ -19,7 +19,6 @@
 #ifndef RTC_SDOSERVICEADMIN_H
 #define RTC_SDOSERVICEADMIN_H
 
-#include <coil/Mutex.h>
 #include <coil/Factory.h>
 
 #include <rtm/idl/SDOPackageStub.h>
@@ -383,7 +382,7 @@ protected:
      * @endif
      */
     std::vector<SdoServiceProviderBase*> m_providers;
-    coil::Mutex m_provider_mutex;
+    std::mutex m_provider_mutex;
 
     /*!
      * @if jp
@@ -393,7 +392,7 @@ protected:
      * @endif
      */
     std::vector<SdoServiceConsumerBase*> m_consumers;
-    coil::Mutex m_consumer_mutex;
+    std::mutex m_consumer_mutex;
 
     /*!
      * @if jp

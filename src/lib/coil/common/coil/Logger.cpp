@@ -23,7 +23,7 @@
 namespace coil
 {
   bool LogStream::m_lockEnable = true;
-  coil::Mutex LogStream::m_mutex("Mutex for Logger.");
+  std::mutex LogStream::m_mutex;
   /*!
    * @if jp
    * @brief コンストラクタ
@@ -186,7 +186,7 @@ namespace coil
     {
         for(auto & s : m_streams) 
         {
-            std::lock_guard<coil::Mutex> gaurd(s.mutex_);
+            std::lock_guard<std::mutex> gaurd(s.mutex_);
             s.stream_->write(level, name, date, mes);
         }
 

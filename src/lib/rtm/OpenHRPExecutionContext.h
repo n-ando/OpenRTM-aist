@@ -19,7 +19,6 @@
 #ifndef RTC_OPENHRPEXECUTIONCONTEXT_H
 #define RTC_OPENHRPEXECUTIONCONTEXT_H
 
-#include <coil/Mutex.h>
 #include <mutex>
 #include <rtm/RTC.h>
 #include <rtm/ExecutionContextBase.h>
@@ -53,7 +52,6 @@ namespace RTC
       public virtual PortableServer::RefCountServantBase,
       public RTC::ExecutionContextBase
   {
-    typedef coil::Mutex Mutex;
   public:
     /*!
      * @if jp
@@ -487,7 +485,7 @@ namespace RTC
     /*!
      * @brief Mutex to gurad tick() reenter.
      */
-    coil::Mutex m_tickmutex;
+    std::mutex m_tickmutex;
   private:
     /*!
      * @if jp

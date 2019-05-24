@@ -23,7 +23,6 @@
 #include <iostream>
 
 #include <coil/Task.h>
-#include <coil/Mutex.h>
 #include <coil/Condition.h>
 
 #include <rtm/ExecutionContextBase.h>
@@ -692,7 +691,7 @@ namespace RTC_exp
 
     bool threadRunning()
     {
-      std::lock_guard<coil::Mutex> guard(m_svcmutex);
+      std::lock_guard<std::mutex> guard(m_svcmutex);
       return m_svc;
     }
 
@@ -755,7 +754,7 @@ namespace RTC_exp
      * @endif
      */
     bool m_svc;
-    coil::Mutex m_svcmutex;
+    std::mutex m_svcmutex;
     
     /*!
      * @if jp
@@ -767,8 +766,8 @@ namespace RTC_exp
     struct WorkerThreadCtrl
     {
       WorkerThreadCtrl() : cond_(mutex_), running_(false) {}
-      coil::Mutex mutex_;
-      coil::Condition<coil::Mutex> cond_;
+      std::mutex mutex_;
+      coil::Condition<std::mutex> cond_;
       bool running_;
     };
 

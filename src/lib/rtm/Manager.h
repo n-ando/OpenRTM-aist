@@ -22,7 +22,6 @@
 
 #include <rtm/RTC.h>
 
-#include <coil/Mutex.h>
 #include <mutex>
 #include <coil/Task.h>
 
@@ -85,7 +84,6 @@ namespace RTC
    */
   class Manager
   {
-    typedef coil::Mutex Mutex;
   protected:
     /*!
      * @if jp
@@ -1961,7 +1959,7 @@ namespace RTC
      * @brief The mutex of the pointer to the Manager
      * @endif
      */
-    static Mutex mutex;
+    static std::mutex mutex;
 
     //------------------------------------------------------------
     // CORBA var
@@ -2502,7 +2500,7 @@ namespace RTC
     struct Term
     {
       int waiting;
-      Mutex mutex;
+      std::mutex mutex;
     };
     /*!
      * @if jp
@@ -2522,7 +2520,7 @@ namespace RTC
     struct Finalized
     {
       ~Finalized();
-      Mutex mutex;
+      std::mutex mutex;
       std::vector<RTObject_impl*> comps;
     };
     Finalized m_finalized;

@@ -146,7 +146,7 @@ namespace coil
      */
     bool wait()
     {
-      return 0 == ::pthread_cond_wait(&m_cond, &m_mutex.mutex_);
+      return 0 == ::pthread_cond_wait(&m_cond, m_mutex.native_handle());
     }
 
     /*!
@@ -186,7 +186,7 @@ namespace coil
         abstime.tv_nsec -= 1000000000;
         abstime.tv_sec++;
       }
-      return 0 == ::pthread_cond_timedwait(&m_cond, &m_mutex.mutex_, &abstime);
+      return 0 == ::pthread_cond_timedwait(&m_cond, m_mutex.native_handle(), &abstime);
     }
 
   private:

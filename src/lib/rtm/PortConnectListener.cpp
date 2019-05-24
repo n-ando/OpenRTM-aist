@@ -101,7 +101,7 @@ namespace RTC
 
   PortConnectListenerHolder::~PortConnectListenerHolder()
   {
-    std::lock_guard<coil::Mutex> guard(m_mutex);
+    std::lock_guard<std::mutex> guard(m_mutex);
     for (auto & listener : m_listeners)
       {
         if (listener.second)
@@ -115,14 +115,14 @@ namespace RTC
   void PortConnectListenerHolder::addListener(PortConnectListener* listener,
                                               bool autoclean)
   {
-    std::lock_guard<coil::Mutex> guard(m_mutex);
+    std::lock_guard<std::mutex> guard(m_mutex);
     m_listeners.emplace_back(listener, autoclean);
   }
 
 
   void PortConnectListenerHolder::removeListener(PortConnectListener* listener)
   {
-    std::lock_guard<coil::Mutex> guard(m_mutex);
+    std::lock_guard<std::mutex> guard(m_mutex);
     std::vector<Entry>::iterator it(m_listeners.begin());
 
     for (; it != m_listeners.end(); ++it)
@@ -144,7 +144,7 @@ namespace RTC
   void PortConnectListenerHolder::notify(const char* portname,
                                          RTC::ConnectorProfile& profile)
   {
-    std::lock_guard<coil::Mutex> guard(m_mutex);
+    std::lock_guard<std::mutex> guard(m_mutex);
     for (auto & listener : m_listeners)
       {
         listener.first->operator()(portname, profile);
@@ -166,7 +166,7 @@ namespace RTC
 
   PortConnectRetListenerHolder::~PortConnectRetListenerHolder()
   {
-    std::lock_guard<coil::Mutex> guard(m_mutex);
+    std::lock_guard<std::mutex> guard(m_mutex);
     for (auto & listener : m_listeners)
       {
         if (listener.second)
@@ -180,7 +180,7 @@ namespace RTC
   void PortConnectRetListenerHolder::
   addListener(PortConnectRetListener* listener, bool autoclean)
   {
-    std::lock_guard<coil::Mutex> guard(m_mutex);
+    std::lock_guard<std::mutex> guard(m_mutex);
     m_listeners.emplace_back(listener, autoclean);
   }
 
@@ -188,7 +188,7 @@ namespace RTC
   void PortConnectRetListenerHolder::
   removeListener(PortConnectRetListener* listener)
   {
-    std::lock_guard<coil::Mutex> guard(m_mutex);
+    std::lock_guard<std::mutex> guard(m_mutex);
     std::vector<Entry>::iterator it(m_listeners.begin());
     for (; it != m_listeners.end(); ++it)
       {
@@ -210,7 +210,7 @@ namespace RTC
                                             RTC::ConnectorProfile& profile,
                                             ReturnCode_t ret)
   {
-    std::lock_guard<coil::Mutex> guard(m_mutex);
+    std::lock_guard<std::mutex> guard(m_mutex);
     for (auto & listener : m_listeners)
       {
         listener.first->operator()(portname, profile, ret);

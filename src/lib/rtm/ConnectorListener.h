@@ -18,7 +18,6 @@
 #ifndef RTC_CONNECTORLISTENER_H
 #define RTC_CONNECTORLISTENER_H
 
-#include <coil/Mutex.h>
 #include <mutex>
 #include <rtm/RTC.h>
 #include <rtm/ConnectorBase.h>
@@ -1086,7 +1085,7 @@ namespace RTC
     template <class DataType>
     ReturnCode notify(ConnectorInfo& info, DataType& typeddata)
     {
-      std::lock_guard<coil::Mutex> guard(m_mutex);
+      std::lock_guard<std::mutex> guard(m_mutex);
       ReturnCode ret(NO_CHANGE);
 
       std::string endian_type;
@@ -1133,7 +1132,7 @@ namespace RTC
 
   private:
     std::vector<Entry> m_listeners;
-    coil::Mutex m_mutex;
+    std::mutex m_mutex;
   };
 
 
@@ -1258,7 +1257,7 @@ namespace RTC
 
   private:
     std::vector<Entry> m_listeners;
-    coil::Mutex m_mutex;
+    std::mutex m_mutex;
   };
 
   /*!

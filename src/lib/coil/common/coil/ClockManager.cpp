@@ -75,13 +75,13 @@ namespace coil
 
   coil::TimeValue LogicalClock::gettime() const
   {
-    std::lock_guard<coil::Mutex> guard(m_currentTimeMutex);
+    std::lock_guard<std::mutex> guard(m_currentTimeMutex);
     return m_currentTime;
   }
 
   bool LogicalClock::settime(coil::TimeValue clocktime)
   {
-    std::lock_guard<Mutex> guard(m_currentTimeMutex);
+    std::lock_guard<std::mutex> guard(m_currentTimeMutex);
     m_currentTime = clocktime;
     return true;
   }
@@ -102,13 +102,13 @@ namespace coil
 
   coil::TimeValue AdjustedClock::gettime() const
   {
-    std::lock_guard<Mutex> guard(m_offsetMutex);
+    std::lock_guard<std::mutex> guard(m_offsetMutex);
     return TimeValue(coil::gettimeofday() - m_offset);
   }
 
   bool AdjustedClock::settime(coil::TimeValue clocktime)
   {
-    std::lock_guard<Mutex> guard(m_offsetMutex);
+    std::lock_guard<std::mutex> guard(m_offsetMutex);
     m_offset = coil::gettimeofday() - clocktime;
     return true;
   }
@@ -135,12 +135,12 @@ namespace coil
 
 #ifdef WIN32
   ClockManager* ClockManager::clockmgr = nullptr;
-  coil::Mutex ClockManager::clockmgr_mutex;
+  std::mutex ClockManager::clockmgr_mutex;
   ClockManager& ClockManager::instance()
   {
     if (clockmgr == nullptr)
       {
-        std::lock_guard<coil::Mutex> guard(clockmgr_mutex);
+        std::lock_guard<std::mutex> guard(clockmgr_mutex);
         if (clockmgr == nullptr)
           {
             clockmgr = new ClockManager();

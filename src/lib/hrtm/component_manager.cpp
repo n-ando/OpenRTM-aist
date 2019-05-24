@@ -27,7 +27,7 @@ namespace hrtm
   // static members initialization
   ModuleInitProc ComponentManager::initProc;
   ComponentManager* ComponentManager::manager = NULL;
-  coil::Mutex ComponentManager::mutex;
+  std::mutex ComponentManager::mutex;
   
   hrtm::DataFlowComponent*
   ComponentManager::create_component(const char* component_name)
@@ -60,7 +60,7 @@ namespace hrtm
     // DCL for singleton
     if (!manager)
       {
-        std::lock_guard<coil::Mutex> guard(mutex);
+        std::lock_guard<std::mutex> guard(mutex);
         if (!manager)
           {
             manager = new ComponentManager();

@@ -25,7 +25,6 @@
 #include <coil/TimeValue.h>
 #include <coil/Time.h>
 #include <coil/OS.h>
-#include <coil/Mutex.h>
 #include <mutex>
 
 #include <rtm/RTC.h>

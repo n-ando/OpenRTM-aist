@@ -22,7 +22,6 @@
 #include <rtm/Factory.h>
 //#include <rtm/RTObject.h>
 #include <mutex>
-#include <coil/Mutex.h>
 //#include <hrtm/data_flow_component.h>
 //#include <hrtm/logger.h>
 
@@ -59,7 +58,6 @@ namespace hrtm
   class ComponentManager
     : public RTC::Manager
   {
-    typedef coil::Mutex Mutex;
 
   public:
     template<typename CompType>
@@ -86,7 +84,7 @@ namespace hrtm
   protected:
     static ModuleInitProc initProc;
     static ComponentManager* manager;
-    static coil::Mutex mutex;
+    static std::mutex mutex;
   };
 };
 

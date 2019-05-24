@@ -26,7 +26,6 @@
 #include <rtm/Manager.h>
 #include <rtm/ConnectorListener.h>
 #include <rtm/ConnectorBase.h>
-#include <coil/Mutex.h>
 #include <fastrtps/subscriber/Subscriber.h>
 #include <fastrtps/Domain.h>
 #include <fastrtps/fastrtps_fwd.h>
@@ -69,7 +68,6 @@ namespace RTC
   class FastRTPSInPort
     : public InPortProvider
   {
-    typedef coil::Mutex Mutex;
   public:
     /*!
      * @if jp
@@ -392,7 +390,7 @@ namespace RTC
     
     std::string m_topic;
     std::string m_dataType;
-    Mutex m_mutex;
+    std::mutex m_mutex;
     eprosima::fastrtps::Subscriber *m_subscriber;
 
 

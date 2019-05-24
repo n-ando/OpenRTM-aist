@@ -20,11 +20,11 @@
 #ifndef COIL_CONDITION_H
 #define COIL_CONDITION_H
 
-#include <coil/Mutex.h>
 
 #include <Windows.h>
 #include <algorithm>
 #include <iostream>
+#include <mutex>
 
 namespace coil
 {
@@ -34,7 +34,7 @@ namespace coil
     int waiters_count_;
 
     // Serialize access to <waiters_count_>.
-    coil::Mutex waiters_count_lock_;
+    std::mutex waiters_count_lock_;
 
     // Semaphore used to queue up threads waiting for the condition to
     // become signaled.
@@ -75,7 +75,7 @@ namespace coil
    * @endif
    */
   DWORD pthread_cond_wait(coil::pthread_cond_t *cv,
-      coil::Mutex *external_mutex, DWORD aMilliSecond);
+      std::mutex *external_mutex, DWORD aMilliSecond);
 
   /*!
    * @if jp
@@ -272,8 +272,8 @@ namespace coil
     }
 
   private:
-    explicit Condition(const Mutex&);
-    Condition& operator=(const Mutex &);
+    explicit Condition(const std::mutex&);
+    Condition& operator=(const std::mutex &);
     coil::pthread_cond_t m_cond;
     M& m_mutex;
   };  // class Condition

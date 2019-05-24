@@ -20,7 +20,6 @@
 #define RTC_CONFIGURATIONLISTENER_H
 
 #include <coil/Properties.h>
-#include <coil/Mutex.h>
 #include <mutex>
 
 #include <utility>
@@ -473,7 +472,7 @@ namespace RTC
 
   private:
     std::vector<Entry> m_listeners;
-    coil::Mutex m_mutex;
+    std::mutex m_mutex;
   };
 
 
@@ -580,7 +579,7 @@ namespace RTC
 
   private:
     std::vector<Entry> m_listeners;
-    coil::Mutex m_mutex;
+    std::mutex m_mutex;
   };
 
 
@@ -686,7 +685,7 @@ namespace RTC
 
   private:
     std::vector<Entry> m_listeners;
-    coil::Mutex m_mutex;
+    std::mutex m_mutex;
   };
 
   //------------------------------------------------------------

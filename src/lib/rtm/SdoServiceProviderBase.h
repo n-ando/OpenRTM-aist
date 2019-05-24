@@ -20,7 +20,6 @@
 #ifndef RTC_SDOSERVICEPROVIDERBASE_H
 #define RTC_SDOSERVICEPROVIDERBASE_H
 
-#include <coil/Mutex.h>
 #include <coil/Factory.h>
 #include <coil/Timer.h>
 #include <rtm/RTC.h>

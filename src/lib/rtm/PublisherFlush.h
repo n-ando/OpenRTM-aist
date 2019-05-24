@@ -59,8 +59,7 @@ namespace RTC
     : public PublisherBase
   {
   public:
-    typedef coil::Mutex Mutex;
-    typedef coil::Condition<Mutex> Condition;
+    typedef coil::Condition<std::mutex> Condition;
     DATAPORTSTATUS_ENUM
 
     /*!
@@ -432,7 +431,7 @@ namespace RTC
     ConnectorInfo m_profile;
     ConnectorListeners* m_listeners;
     ReturnCode m_retcode;
-    Mutex m_retmutex;
+    std::mutex m_retmutex;
     bool m_active;
   };
 

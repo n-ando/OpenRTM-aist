@@ -37,7 +37,7 @@ namespace coil
     }
 
     DWORD pthread_cond_wait(coil::pthread_cond_t *cv,
-        coil::Mutex *external_mutex, DWORD aMilliSecond)
+        std::mutex *external_mutex, DWORD aMilliSecond)
     {
         DWORD result;
 
@@ -51,7 +51,7 @@ namespace coil
         // are called by another thread.
     //    std::cout << "Before SignalObjectAndWait [wait with time(" << milliSecond
     //              << ")]" << std::endl << std::flush ;
-        result = SignalObjectAndWait(external_mutex->mutex_,
+        result = SignalObjectAndWait(external_mutex->native_handle(),
             cv->sema_, aMilliSecond, FALSE);
 
         //    char * p;
@@ -93,7 +93,7 @@ namespace coil
             // waits until it can acquire the <external_mutex>.  This is
             // required to ensure fairness.
             result = SignalObjectAndWait(cv->waiters_done_,
-                external_mutex->mutex_,
+                external_mutex->native_handle(),
                 INFINITE, FALSE);
             //        std::cout << "result " << result << std::endl;
         }
@@ -101,7 +101,7 @@ namespace coil
         {
             // Always regain the external mutex since that's the guarantee we
             // give to our callers.
-            ::WaitForSingleObject(external_mutex->mutex_, 0);
+            ::WaitForSingleObject(external_mutex->native_handle(), 0);
         }
         return result;
     }

@@ -71,7 +71,7 @@ extern "C" void handler(int /*unused*/)
 namespace RTC
 {
   Manager* Manager::manager = nullptr;
-  coil::Mutex Manager::mutex;
+  std::mutex Manager::mutex;
 
   Manager::InstanceName::InstanceName(RTObject_impl* comp)
     : m_name(comp->getInstanceName())
@@ -133,7 +133,7 @@ namespace RTC
     // DCL for singleton
     if (manager == nullptr)
       {
-        std::lock_guard<coil::Mutex> guard(mutex);
+        std::lock_guard<std::mutex> guard(mutex);
         if (manager == nullptr)
           {
             manager = new Manager();
@@ -163,7 +163,7 @@ namespace RTC
     // DCL for singleton
     if (manager == nullptr)
       {
-        std::lock_guard<coil::Mutex> guard(mutex);
+        std::lock_guard<std::mutex> guard(mutex);
         if (manager == nullptr)
           {
             manager = new Manager();
@@ -239,13 +239,13 @@ namespace RTC
   {
     RTC_TRACE(("Manager::wait()"));
     {
-      std::lock_guard<coil::Mutex> guard(m_terminate.mutex);
+      std::lock_guard<std::mutex> guard(m_terminate.mutex);
       ++m_terminate.waiting;
     }
     while (true)
       {
         {
-          std::lock_guard<coil::Mutex> guard(m_terminate.mutex);
+          std::lock_guard<std::mutex> guard(m_terminate.mutex);
           if (m_terminate.waiting > 1) break;
         }
         coil::usleep(100000);
@@ -1267,7 +1267,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
       }
     m_terminator = new Terminator(this, waittime);
     {
-      std::lock_guard<coil::Mutex> guard(m_terminate.mutex);
+      std::lock_guard<std::mutex> guard(m_terminate.mutex);
       m_terminate.waiting = 0;
     }
 
@@ -2200,7 +2200,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   void Manager::cleanupComponents()
   {
     RTC_VERBOSE(("Manager::cleanupComponents()"));
-    std::lock_guard<coil::Mutex> guard(m_finalized.mutex);
+    std::lock_guard<std::mutex> guard(m_finalized.mutex);
     RTC_VERBOSE(("%d components are marked as finalized.",
                m_finalized.comps.size()));
     for (auto & comp : m_finalized.comps)
@@ -2213,7 +2213,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   void Manager::notifyFinalized(RTObject_impl* comp)
   {
     RTC_TRACE(("Manager::notifyFinalized()"));
-    std::lock_guard<coil::Mutex> guard(m_finalized.mutex);
+    std::lock_guard<std::mutex> guard(m_finalized.mutex);
     m_finalized.comps.push_back(comp);
   }
 

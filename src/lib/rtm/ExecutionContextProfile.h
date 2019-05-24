@@ -19,7 +19,6 @@
 #ifndef RTC_EXECUTIONCONTEXTPROFILE_H
 #define RTC_EXECUTIONCONTEXTPROFILE_H
 
-#include <coil/Mutex.h>
 #include <mutex>
 #include <coil/Properties.h>
 #include <coil/TimeValue.h>
@@ -543,7 +542,7 @@ namespace RTC_impl
      * @brief mutex ExecutionContextProfile
      * @endif
      */
-    mutable coil::Mutex m_profileMutex;
+    mutable std::mutex m_profileMutex;
 
     /*!
      * @if jp

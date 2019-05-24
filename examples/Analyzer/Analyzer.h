@@ -320,7 +320,7 @@ class Analyzer
  private:
 	 std::ofstream m_fs;
 	 std::vector<RTC::TimedOctetSeq> m_datalist;
-	 coil::Mutex m_mu;
+	 std::mutex m_mu;
 	 int data_size;
   // <rtc-template block="private_attribute">
   

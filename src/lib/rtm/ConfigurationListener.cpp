@@ -65,7 +65,7 @@ namespace RTC
 
   ConfigurationParamListenerHolder::~ConfigurationParamListenerHolder()
   {
-    std::lock_guard<coil::Mutex> guard(m_mutex);
+    std::lock_guard<std::mutex> guard(m_mutex);
     for (auto & listener : m_listeners)
       {
         if (listener.second)
@@ -80,7 +80,7 @@ namespace RTC
   addListener(ConfigurationParamListener* listener,
               bool autoclean)
   {
-    std::lock_guard<coil::Mutex> guard(m_mutex);
+    std::lock_guard<std::mutex> guard(m_mutex);
     m_listeners.emplace_back(listener, autoclean);
   }
 
@@ -88,7 +88,7 @@ namespace RTC
   void ConfigurationParamListenerHolder::
   removeListener(ConfigurationParamListener* listener)
   {
-    std::lock_guard<coil::Mutex> guard(m_mutex);
+    std::lock_guard<std::mutex> guard(m_mutex);
     std::vector<Entry>::iterator it(m_listeners.begin());
 
     for (; it != m_listeners.end(); ++it)
@@ -110,7 +110,7 @@ namespace RTC
   void ConfigurationParamListenerHolder::notify(const char* config_set_name,
                                                 const char* config_param_name)
   {
-    std::lock_guard<coil::Mutex> guard(m_mutex);
+    std::lock_guard<std::mutex> guard(m_mutex);
     for (auto & listener : m_listeners)
       {
         listener.first->operator()(config_set_name, config_param_name);
@@ -133,7 +133,7 @@ namespace RTC
 
   ConfigurationSetListenerHolder::~ConfigurationSetListenerHolder()
   {
-    std::lock_guard<coil::Mutex> guard(m_mutex);
+    std::lock_guard<std::mutex> guard(m_mutex);
     for (auto & listener : m_listeners)
       {
         if (listener.second)
@@ -148,7 +148,7 @@ namespace RTC
   addListener(ConfigurationSetListener* listener,
               bool autoclean)
   {
-    std::lock_guard<coil::Mutex> guard(m_mutex);
+    std::lock_guard<std::mutex> guard(m_mutex);
     m_listeners.emplace_back(listener, autoclean);
   }
 
@@ -156,7 +156,7 @@ namespace RTC
   void ConfigurationSetListenerHolder::
   removeListener(ConfigurationSetListener* listener)
   {
-    std::lock_guard<coil::Mutex> guard(m_mutex);
+    std::lock_guard<std::mutex> guard(m_mutex);
     std::vector<Entry>::iterator it(m_listeners.begin());
 
     for (; it != m_listeners.end(); ++it)
@@ -178,7 +178,7 @@ namespace RTC
   void ConfigurationSetListenerHolder::
   notify(const coil::Properties& config_set)
   {
-    std::lock_guard<coil::Mutex> guard(m_mutex);
+    std::lock_guard<std::mutex> guard(m_mutex);
     for (auto & listener : m_listeners)
       {
         listener.first->operator()(config_set);
@@ -200,7 +200,7 @@ namespace RTC
 
   ConfigurationSetNameListenerHolder::~ConfigurationSetNameListenerHolder()
   {
-    std::lock_guard<coil::Mutex> guard(m_mutex);
+    std::lock_guard<std::mutex> guard(m_mutex);
     for (auto & listener : m_listeners)
       {
         if (listener.second)
@@ -214,7 +214,7 @@ namespace RTC
   void ConfigurationSetNameListenerHolder::
   addListener(ConfigurationSetNameListener* listener, bool autoclean)
   {
-    std::lock_guard<coil::Mutex> guard(m_mutex);
+    std::lock_guard<std::mutex> guard(m_mutex);
     m_listeners.emplace_back(listener, autoclean);
   }
 
@@ -222,7 +222,7 @@ namespace RTC
   void ConfigurationSetNameListenerHolder::
   removeListener(ConfigurationSetNameListener* listener)
   {
-    std::lock_guard<coil::Mutex> guard(m_mutex);
+    std::lock_guard<std::mutex> guard(m_mutex);
     std::vector<Entry>::iterator it(m_listeners.begin());
     for (; it != m_listeners.end(); ++it)
       {
@@ -242,7 +242,7 @@ namespace RTC
 
   void ConfigurationSetNameListenerHolder::notify(const char* config_set_name)
   {
-    std::lock_guard<coil::Mutex> guard(m_mutex);
+    std::lock_guard<std::mutex> guard(m_mutex);
     for (auto & listener : m_listeners)
       {
         listener.first->operator()(config_set_name);

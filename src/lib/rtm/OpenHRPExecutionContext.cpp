@@ -56,7 +56,7 @@ namespace RTC
   OpenHRPExecutionContext::~OpenHRPExecutionContext()
   {
     RTC_TRACE(("~OpenHRPExecutionContext()"));
-    std::lock_guard<coil::Mutex> guard(m_tickmutex);
+    std::lock_guard<std::mutex> guard(m_tickmutex);
   }
 
   //============================================================
@@ -73,7 +73,7 @@ namespace RTC
   {
     RTC_TRACE(("tick()"));
     if (!isRunning()) { return; }
-    std::lock_guard<coil::Mutex> guard(m_tickmutex);
+    std::lock_guard<std::mutex> guard(m_tickmutex);
 
     ExecutionContextBase::invokeWorkerPreDo();  // update state
     coil::TimeValue t0(coil::clock());
@@ -285,7 +285,7 @@ namespace RTC
   RTC::ReturnCode_t OpenHRPExecutionContext::
 	  onAddedComponent(RTC::LightweightRTObject_ptr  /*rtobj*/)
   {
-	  std::lock_guard<coil::Mutex> guard(m_tickmutex);
+	  std::lock_guard<std::mutex> guard(m_tickmutex);
 
 	  ExecutionContextBase::m_worker.updateComponentList();
 
@@ -297,7 +297,7 @@ namespace RTC
   RTC::ReturnCode_t OpenHRPExecutionContext::
 	  onRemovedComponent(RTC::LightweightRTObject_ptr  /*rtobj*/)
   {
-	  std::lock_guard<coil::Mutex> guard(m_tickmutex);
+	  std::lock_guard<std::mutex> guard(m_tickmutex);
 
 	  ExecutionContextBase::m_worker.updateComponentList();
 

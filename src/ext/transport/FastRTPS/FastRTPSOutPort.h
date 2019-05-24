@@ -24,7 +24,6 @@
 #include <map>
 #include <rtm/InPortConsumer.h>
 #include <rtm/Manager.h>
-#include <coil/Mutex.h>
 #include <fastrtps/fastrtps_fwd.h>
 #include <fastrtps/publisher/PublisherListener.h>
 #include "CORBACdrDataPubSubTypes.h"
@@ -61,7 +60,6 @@ namespace RTC
     : public InPortConsumer
   {
   public:
-    typedef coil::Mutex Mutex;
     DATAPORTSTATUS_ENUM
     /*!
      * @if jp
@@ -240,7 +238,7 @@ namespace RTC
     
     std::string m_topic;
     std::string m_dataType;
-    Mutex m_mutex;
+    std::mutex m_mutex;
 
     eprosima::fastrtps::Publisher *m_publisher;
 

@@ -19,7 +19,6 @@
 #ifndef RTC_EXECUTIONCONTEXTWORKER_H
 #define RTC_EXECUTIONCONTEXTWORKER_H
 
-#include <coil/Mutex.h>
 #include <coil/Condition.h>
 
 #include <rtm/idl/RTCSkel.h>
@@ -591,11 +590,11 @@ namespace RTC_impl
      * @endif
      */
     std::vector<RTC_impl::RTObjectStateMachine*> m_comps;
-    mutable coil::Mutex m_mutex;
+    mutable std::mutex m_mutex;
     std::vector<RTC_impl::RTObjectStateMachine*> m_addedComps;
-    mutable coil::Mutex m_addedMutex;
+    mutable std::mutex m_addedMutex;
     std::vector<RTC_impl::RTObjectStateMachine*> m_removedComps;
-    mutable coil::Mutex m_removedMutex;
+    mutable std::mutex m_removedMutex;
     typedef std::vector<RTC_impl::RTObjectStateMachine*>::iterator CompItr;
 
   };  // class PeriodicExecutionContext

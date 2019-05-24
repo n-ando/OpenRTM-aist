@@ -28,7 +28,7 @@
 namespace RTC
 {
   FastRTPSManager* FastRTPSManager::manager = NULL;
-  coil::Mutex FastRTPSManager::mutex;
+  std::mutex FastRTPSManager::mutex;
 
 
   /*!
@@ -142,7 +142,7 @@ namespace RTC
    */
   eprosima::fastrtps::Participant* FastRTPSManager::getParticipant()
   {
-      std::lock_guard<coil::Mutex> guard(mutex);
+      std::lock_guard<std::mutex> guard(mutex);
       return m_participant;
   }
 
@@ -163,7 +163,7 @@ namespace RTC
    */
   bool FastRTPSManager::registerType(eprosima::fastrtps::TopicDataType* type)
   {
-      std::lock_guard<coil::Mutex> guard(mutex);
+      std::lock_guard<std::mutex> guard(mutex);
       if (registeredType(type->getName()))
       {
           return true;
@@ -188,7 +188,7 @@ namespace RTC
    */
   bool FastRTPSManager::registeredType(const char* name)
   {
-      std::lock_guard<coil::Mutex> guard(mutex);
+      std::lock_guard<std::mutex> guard(mutex);
       eprosima::fastrtps::TopicDataType* type_;
       return eprosima::fastrtps::Domain::getRegisteredType(m_participant, name, &type_);
   }
@@ -210,7 +210,7 @@ namespace RTC
    */
   bool FastRTPSManager::unregisterType(const char* name)
   {
-      std::lock_guard<coil::Mutex> guard(mutex);
+      std::lock_guard<std::mutex> guard(mutex);
       if (!registeredType(name))
       {
           return false;
@@ -234,7 +234,7 @@ namespace RTC
    */
   FastRTPSManager* FastRTPSManager::init(std::string xml_profile_file)
   {
-    std::lock_guard<coil::Mutex> guard(mutex);
+    std::lock_guard<std::mutex> guard(mutex);
     if (!manager)
     {
       manager = new FastRTPSManager(xml_profile_file);
@@ -259,7 +259,7 @@ namespace RTC
    */
   FastRTPSManager& FastRTPSManager::instance(std::string xml_profile_file)
   {
-    std::lock_guard<coil::Mutex> guard(mutex);
+    std::lock_guard<std::mutex> guard(mutex);
     if (!manager)
     {
       manager = new FastRTPSManager(xml_profile_file);
@@ -283,7 +283,7 @@ namespace RTC
    */
   void FastRTPSManager::shutdown_global()
   {
-      std::lock_guard<coil::Mutex> guard(mutex);
+      std::lock_guard<std::mutex> guard(mutex);
       if (manager)
       {
           manager->shutdown();

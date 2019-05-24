@@ -20,7 +20,6 @@
 
 #include <rtm/RTC.h>
 
-#include <coil/Mutex.h>
 #include <coil/Condition.h>
 #include <coil/Task.h>
 #include <coil/ClockManager.h>
@@ -66,8 +65,7 @@ namespace RTC
       public RTC::ExecutionContextBase,
       public coil::Task
   {
-    typedef coil::Mutex Mutex;
-    typedef coil::Condition<Mutex> Condition;
+    typedef coil::Condition<std::mutex> Condition;
   public:
     /*!
      * @if jp
@@ -619,7 +617,7 @@ namespace RTC
   private:
     bool threadRunning()
     {
-      std::lock_guard<coil::Mutex> guard(m_svcmutex);
+      std::lock_guard<std::mutex> guard(m_svcmutex);
       return m_svc;
     }
     /*!
@@ -662,8 +660,8 @@ namespace RTC
      * @endif
      */
     bool m_svc;
-    Mutex m_svcmutex;
-    Mutex m_tickmutex;
+    std::mutex m_svcmutex;
+    std::mutex m_tickmutex;
 
     /*!
      * @if jp
@@ -675,7 +673,7 @@ namespace RTC
     struct Worker
     {
       Worker() : cond_(mutex_), ticked_(false) {}
-      Mutex mutex_;
+      std::mutex mutex_;
       Condition cond_;
       bool ticked_;
     };

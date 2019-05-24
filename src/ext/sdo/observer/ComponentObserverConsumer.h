@@ -20,7 +20,6 @@
 #ifndef RTC_COMPONENTOBSERVERCONSUMER_H
 #define RTC_COMPONENTOBSERVERCONSUMER_H
 
-#include <coil/Mutex.h>
 #include <coil/Factory.h>
 #include <coil/stringutil.h>
 #include <rtm/SdoServiceConsumerBase.h>
@@ -108,7 +107,7 @@ namespace RTC
      */
     inline void updateStatus(OpenRTM::StatusKind statuskind, const char* msg)
     {
-      std::lock_guard<coil::Mutex> guard(mutex);
+      std::lock_guard<std::mutex> guard(mutex);
       try
         {
           m_observer->update_status(statuskind, msg);
@@ -601,7 +600,7 @@ namespace RTC
 
     // このタイマーはいずれグローバルなタイマにおきかえる
     coil::Timer m_timer;
-    coil::Mutex mutex;
+    std::mutex mutex;
 
     std::vector<DataPortAction*> m_recievedactions;
     std::vector<DataPortAction*> m_sendactions;

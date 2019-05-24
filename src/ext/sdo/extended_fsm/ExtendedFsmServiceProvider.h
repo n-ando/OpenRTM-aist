@@ -20,7 +20,6 @@
 #ifndef RTC_EXTENDEDFSMSERVICEPROVIDER_H
 #define RTC_EXTENDEDFSMSERVICEPROVIDER_H
 
-#include <coil/Mutex.h>
 #include <coil/Factory.h>
 #include <coil/stringutil.h>
 #include <rtm/SdoServiceProviderBase.h>

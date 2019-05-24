@@ -26,7 +26,6 @@
 #include <rtm/ConnectorListener.h>
 #include <rtm/ConnectorBase.h>
 #include <rtm/SystemLogger.h>
-#include <coil/Mutex.h>
 #include <coil/UUID.h>
 #include "OpenSpliceMessageInfo.h"
 

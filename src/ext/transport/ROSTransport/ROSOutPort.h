@@ -26,7 +26,6 @@
 #include <rtm/Manager.h>
 #include <ros/transport/transport_tcp.h>
 #include <ros/connection.h>
-#include <coil/Mutex.h>
 #include "ROSMessageInfo.h"
 
 
@@ -60,7 +59,6 @@ namespace RTC
     : public InPortConsumer
   {
   public:
-    typedef coil::Mutex Mutex;
     DATAPORTSTATUS_ENUM
     /*!
      * @if jp
@@ -351,7 +349,7 @@ namespace RTC
     {
       RTC_VERBOSE(("onHeaderWritten()"));
       (void)conn;
-      std::lock_guard<coil::Mutex> guard(m_mutex);
+      std::lock_guard<std::mutex> guard(m_mutex);
       m_start = true;
     }
 
@@ -391,7 +389,7 @@ namespace RTC
     std::string m_topic;
     std::string m_callerid;
     std::string m_messageType;
-    Mutex m_mutex;
+    std::mutex m_mutex;
 
     std::string m_roscorehost;
     unsigned int m_roscoreport;

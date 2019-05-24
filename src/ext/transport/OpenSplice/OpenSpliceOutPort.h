@@ -52,7 +52,6 @@ namespace RTC
         : public InPortConsumer
     {
     public:
-        typedef coil::Mutex Mutex;
         DATAPORTSTATUS_ENUM
         /*!
          * @if jp
@@ -224,7 +223,7 @@ namespace RTC
     private:
         mutable Logger rtclog;
         coil::Properties m_properties;
-        Mutex m_mutex;
+        std::mutex m_mutex;
         OpenSpliceOutPortBase* m_outport;
 
 

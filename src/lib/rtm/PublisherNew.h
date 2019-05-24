@@ -21,7 +21,6 @@
 #define RTC_PUBLISHERNEW_H
 
 #include <coil/Task.h>
-#include <coil/Mutex.h>
 #include <coil/Condition.h>
 #include <coil/PeriodicTask.h>
 
@@ -71,8 +70,7 @@ namespace RTC
     : public PublisherBase
   {
   public:
-    typedef coil::Mutex Mutex;
-    typedef coil::Condition<Mutex> Condition;
+    typedef coil::Condition<std::mutex> Condition;
     DATAPORTSTATUS_ENUM
 
     /*!
@@ -725,7 +723,7 @@ namespace RTC
     coil::PeriodicTaskBase* m_task;
     ConnectorListeners* m_listeners;
     ReturnCode m_retcode;
-    Mutex m_retmutex;
+    std::mutex m_retmutex;
     Policy m_pushPolicy;
     int m_skipn;
     bool m_active;

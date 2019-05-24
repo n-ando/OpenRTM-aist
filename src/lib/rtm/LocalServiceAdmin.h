@@ -19,7 +19,6 @@
 #ifndef RTC_LOCALSERVICEADMIN_H
 #define RTC_LOCALSERVICEADMIN_H
 
-#include <coil/Mutex.h>
 #include <coil/Factory.h>
 #include <coil/Singleton.h>
 
@@ -262,7 +261,7 @@ namespace RTM
      * @endif
      */
     std::vector<LocalServiceBase*> m_services;
-    coil::Mutex m_services_mutex;
+    std::mutex m_services_mutex;
 
     /*!
      * @if jp

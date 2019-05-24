@@ -98,7 +98,7 @@ namespace RTC
     if (m_sync_readwrite)
     {
         {
-            std::lock_guard<coil::Mutex> guard(m_readready_worker.mutex_);
+            std::lock_guard<std::mutex> guard(m_readready_worker.mutex_);
             while (!m_readready_worker.completed_)
             {
                 m_readready_worker.cond_.wait();
@@ -111,21 +111,21 @@ namespace RTC
     if (m_sync_readwrite)
     {
         {
-            std::lock_guard<coil::Mutex> guard(m_writecompleted_worker.mutex_);
+            std::lock_guard<std::mutex> guard(m_writecompleted_worker.mutex_);
             m_writecompleted_worker.completed_ = true;
             m_writecompleted_worker.cond_.signal();
         }
 
 
           {
-              std::lock_guard<coil::Mutex> guard(m_readcompleted_worker.mutex_);
+              std::lock_guard<std::mutex> guard(m_readcompleted_worker.mutex_);
               while (!m_readcompleted_worker.completed_)
               {
                   m_readcompleted_worker.cond_.wait();
               }
           }
           {
-              std::lock_guard<coil::Mutex> guard(m_writecompleted_worker.mutex_);
+              std::lock_guard<std::mutex> guard(m_writecompleted_worker.mutex_);
               m_writecompleted_worker.completed_ = false;
           }
     }
@@ -145,17 +145,17 @@ namespace RTC
       {
 
         {
-            std::lock_guard<coil::Mutex> guard(m_readcompleted_worker.mutex_);
+            std::lock_guard<std::mutex> guard(m_readcompleted_worker.mutex_);
             m_readcompleted_worker.completed_ = false;
         }
 
         {
-            std::lock_guard<coil::Mutex> guard(m_readready_worker.mutex_);
+            std::lock_guard<std::mutex> guard(m_readready_worker.mutex_);
             m_readready_worker.completed_ = true;
             m_readready_worker.cond_.signal();
         }
         {
-            std::lock_guard<coil::Mutex> guard(m_writecompleted_worker.mutex_);
+            std::lock_guard<std::mutex> guard(m_writecompleted_worker.mutex_);
             while (!m_writecompleted_worker.completed_)
             {
                 m_writecompleted_worker.cond_.wait();
@@ -169,13 +169,13 @@ namespace RTC
       if (m_sync_readwrite)
       {
         {
-            std::lock_guard<coil::Mutex> guard(m_readcompleted_worker.mutex_);
+            std::lock_guard<std::mutex> guard(m_readcompleted_worker.mutex_);
             m_readcompleted_worker.completed_ = true;
             m_readcompleted_worker.cond_.signal();
         }
 
         {
-            std::lock_guard<coil::Mutex> guard(m_readready_worker.mutex_);
+            std::lock_guard<std::mutex> guard(m_readready_worker.mutex_);
             m_readready_worker.completed_ = false;
         }
       }

@@ -93,7 +93,7 @@ namespace RTC_exp
         // Therefore WorkerPreDo(updating state) have to be invoked
         // before stopping thread.
         {
-          std::lock_guard<coil::Mutex> guard(m_workerthread.mutex_);
+          std::lock_guard<std::mutex> guard(m_workerthread.mutex_);
           while (!m_workerthread.running_)
             {
               m_workerthread.cond_.wait();
@@ -315,12 +315,12 @@ namespace RTC_exp
   int MultilayerCompositeEC::ChildTask::svc()
   {
       {
-          std::lock_guard<coil::Mutex> guard(m_worker.mutex_);
+          std::lock_guard<std::mutex> guard(m_worker.mutex_);
           m_worker.running_ = true;
       }
 
       {
-          std::lock_guard<coil::Mutex> guard(m_signal_worker.mutex_);
+          std::lock_guard<std::mutex> guard(m_signal_worker.mutex_);
 
           while (!m_signal_worker.running_)
           {
@@ -342,7 +342,7 @@ namespace RTC_exp
       }
       
       {
-          std::lock_guard<coil::Mutex> guard(m_worker.mutex_);
+          std::lock_guard<std::mutex> guard(m_worker.mutex_);
           m_worker.running_ = false;
           
           m_worker.cond_.signal();
@@ -351,7 +351,7 @@ namespace RTC_exp
       }
 
       {
-          std::lock_guard<coil::Mutex> guard(m_signal_worker.mutex_);
+          std::lock_guard<std::mutex> guard(m_signal_worker.mutex_);
           while (!m_signal_worker.running_){
              m_signal_worker.cond_.wait();
           }
@@ -372,12 +372,12 @@ namespace RTC_exp
           m_task->signal();
          
           {
-              std::lock_guard<coil::Mutex> guard(m_worker.mutex_);
+              std::lock_guard<std::mutex> guard(m_worker.mutex_);
               ret = m_worker.running_;
           }
       }
       {
-          std::lock_guard<coil::Mutex> guard(m_signal_worker.mutex_);
+          std::lock_guard<std::mutex> guard(m_signal_worker.mutex_);
           m_signal_worker.running_ = true;
           m_signal_worker.cond_.signal();
       }
@@ -388,7 +388,7 @@ namespace RTC_exp
   void MultilayerCompositeEC::ChildTask::join()
   {
       {
-          std::lock_guard<coil::Mutex> guard(m_worker.mutex_);
+          std::lock_guard<std::mutex> guard(m_worker.mutex_);
           while (m_worker.running_)
           {
               m_worker.cond_.wait();
@@ -396,7 +396,7 @@ namespace RTC_exp
       }
 
       {
-          std::lock_guard<coil::Mutex> guard(m_signal_worker.mutex_);
+          std::lock_guard<std::mutex> guard(m_signal_worker.mutex_);
           m_signal_worker.running_ = true;
           m_signal_worker.cond_.signal();
       }
