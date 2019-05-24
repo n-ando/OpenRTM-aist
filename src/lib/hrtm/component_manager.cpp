@@ -60,7 +60,7 @@ namespace hrtm
     // DCL for singleton
     if (!manager)
       {
-        Guard guard(mutex);
+        std::lock_guard<coil::Mutex> guard(mutex);
         if (!manager)
           {
             manager = new ComponentManager();

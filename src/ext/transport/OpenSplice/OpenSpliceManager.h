@@ -58,7 +58,6 @@ namespace RTC
     class OpenSpliceManager
     {
         typedef coil::Mutex Mutex;
-        typedef std::lock_guard<Mutex> Guard;
     public:
         /*!
          * @if jp

@@ -92,7 +92,6 @@ namespace RTC
   {
   public:
     BUFFERSTATUS_ENUM
-    typedef std::lock_guard<coil::Mutex> Guard;
     /*!
      * @if jp
      *
@@ -214,7 +213,7 @@ namespace RTC
      */
     size_t length() const override
     {
-      Guard guard(m_posmutex);
+      std::lock_guard<coil::Mutex> guard(m_posmutex);
       return m_length;
     }
 
@@ -272,7 +271,7 @@ namespace RTC
      */
     ReturnCode reset() override
     {
-      Guard guard(m_posmutex);
+      std::lock_guard<coil::Mutex> guard(m_posmutex);
       m_fillcount = 0;
       m_wcount = 0;
       m_wpos = 0;
@@ -305,7 +304,7 @@ namespace RTC
      */
     DataType* wptr(long int n = 0) override
     {
-      Guard guard(m_posmutex);
+      std::lock_guard<coil::Mutex> guard(m_posmutex);
       return &m_buffer[(m_wpos + n + m_length) % m_length];
     }
 
@@ -350,7 +349,7 @@ namespace RTC
       //                 n'<= m_fillcount
       //                 n >= - m_fillcount
       {
-          Guard guard(m_posmutex);
+          std::lock_guard<coil::Mutex> guard(m_posmutex);
           if ((n > 0 && n > static_cast<long int>(m_length) - static_cast<long int>(m_fillcount)) ||
               (n < 0 && n < -static_cast<long int>(m_fillcount)))
             {
@@ -406,7 +405,7 @@ namespace RTC
      */
     ReturnCode put(const DataType& value) override
     {
-      Guard guard(m_posmutex);
+      std::lock_guard<coil::Mutex> guard(m_posmutex);
       m_buffer[m_wpos] = value;
       return ::RTC::BufferStatus::BUFFER_OK;
     }
@@ -456,7 +455,7 @@ namespace RTC
                              long int sec = -1, long int nsec = 0) override
     {
       {
-      Guard guard(m_full.mutex);
+      std::lock_guard<coil::Mutex> guard(m_full.mutex);
 
       if (full())
         {
@@ -529,7 +528,7 @@ namespace RTC
      */
     size_t writable() const override
     {
-      Guard guard(m_posmutex);
+      std::lock_guard<coil::Mutex> guard(m_posmutex);
       return m_length - m_fillcount;
     }
 
@@ -554,7 +553,7 @@ namespace RTC
      */
     bool full() const override
     {
-      Guard guard(m_posmutex);
+      std::lock_guard<coil::Mutex> guard(m_posmutex);
       return m_length == m_fillcount;
     }
 
@@ -581,7 +580,7 @@ namespace RTC
      */
     DataType* rptr(long int n = 0) override
     {
-      Guard guard(m_posmutex);
+      std::lock_guard<coil::Mutex> guard(m_posmutex);
       return &(m_buffer[(m_rpos + n + m_length) % m_length]);
     }
 
@@ -623,7 +622,7 @@ namespace RTC
       //     n satisfies n'<= m_length - m_fillcount
       //                 n >= m_fillcount - m_length
       {
-          Guard guard(m_posmutex);
+          std::lock_guard<coil::Mutex> guard(m_posmutex);
           if ((n > 0 && n > static_cast<long int>(m_fillcount)) ||
               (n < 0 && n < static_cast<long int>(m_fillcount) - static_cast<long int>(m_length)))
             {
@@ -676,7 +675,7 @@ namespace RTC
      */
     ReturnCode get(DataType& value) override
     {
-      Guard gaurd(m_posmutex);
+      std::lock_guard<coil::Mutex> gaurd(m_posmutex);
       value = m_buffer[m_rpos];
       return ::RTC::BufferStatus::BUFFER_OK;
     }
@@ -701,7 +700,7 @@ namespace RTC
      */
     DataType& get() override
     {
-      Guard gaurd(m_posmutex);
+      std::lock_guard<coil::Mutex> gaurd(m_posmutex);
       return m_buffer[m_rpos];
     }
 
@@ -751,7 +750,7 @@ namespace RTC
                             long int sec = -1, long int nsec = 0) override
     {
       {
-      Guard gaurd(m_empty.mutex);
+      std::lock_guard<coil::Mutex> gaurd(m_empty.mutex);
 
       if (empty())
         {
@@ -831,7 +830,7 @@ namespace RTC
      */
     size_t readable() const override
     {
-      Guard guard(m_posmutex);
+      std::lock_guard<coil::Mutex> guard(m_posmutex);
       return m_fillcount;
     }
 
@@ -856,7 +855,7 @@ namespace RTC
      */
     bool empty() const override
     {
-      Guard guard(m_posmutex);
+      std::lock_guard<coil::Mutex> guard(m_posmutex);
       return m_fillcount == 0;
     }
 

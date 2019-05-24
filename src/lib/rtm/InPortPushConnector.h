@@ -80,7 +80,6 @@ namespace RTC
   class InPortPushConnector
     : public InPortConnector
   {
-    typedef std::lock_guard<coil::Mutex> Guard;
   public:
     DATAPORTSTATUS_ENUM
 

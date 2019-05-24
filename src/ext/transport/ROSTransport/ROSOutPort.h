@@ -61,7 +61,6 @@ namespace RTC
   {
   public:
     typedef coil::Mutex Mutex;
-    typedef std::lock_guard<coil::Mutex> Guard;
     DATAPORTSTATUS_ENUM
     /*!
      * @if jp
@@ -352,7 +351,7 @@ namespace RTC
     {
       RTC_VERBOSE(("onHeaderWritten()"));
       (void)conn;
-      Guard guard(m_mutex);
+      std::lock_guard<coil::Mutex> guard(m_mutex);
       m_start = true;
     }
 

@@ -159,7 +159,7 @@ namespace RTC
     
     RTC_PARANOID(("put()"));
     {
-      Guard guard(m_mutex);
+      std::lock_guard<coil::Mutex> guard(m_mutex);
       if(m_start)
       {
         size_t length = (size_t)data.getDataLength();

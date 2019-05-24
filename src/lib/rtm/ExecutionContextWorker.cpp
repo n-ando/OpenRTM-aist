@@ -92,7 +92,7 @@ namespace RTC_impl
   RTC::ReturnCode_t ExecutionContextWorker::start()
   {
     RTC_TRACE(("start()"));
-    Guard m_guard(m_mutex);
+    std::lock_guard<coil::Mutex> m_guard(m_mutex);
     if (m_running)
       {
         RTC_WARN(("ExecutionContext is already running."));
@@ -120,7 +120,7 @@ namespace RTC_impl
   RTC::ReturnCode_t ExecutionContextWorker::stop()
   {
     RTC_TRACE(("stop()"));
-    Guard m_guard(m_mutex);
+    std::lock_guard<coil::Mutex> m_guard(m_mutex);
     if (!m_running)
       {
         RTC_WARN(("ExecutionContext is already stopped."));
@@ -287,7 +287,7 @@ namespace RTC_impl
       }
     try
       {
-        Guard guard(m_addedMutex);
+        std::lock_guard<coil::Mutex> guard(m_addedMutex);
         RTC::ExecutionContextService_var ec = getECRef();
         RTC::ExecutionContextHandle_t id = comp->attach_context(ec);
         m_addedComps.push_back(new RTObjectStateMachine(id, comp));
@@ -301,7 +301,7 @@ namespace RTC_impl
     RTC_DEBUG(("addComponent() succeeded."));
 
     // if EC is stopping, update component list immediately.
-    Guard guard(m_mutex);
+    std::lock_guard<coil::Mutex> guard(m_mutex);
     if (!m_running) { updateComponentList(); }
 
     return RTC::RTC_OK;
@@ -318,7 +318,7 @@ namespace RTC_impl
   bindComponent(RTC::RTObject_impl* rtc)
   {
     RTC_TRACE(("bindComponent()"));
-    Guard m_guard(m_mutex);
+    std::lock_guard<coil::Mutex> m_guard(m_mutex);
     if (rtc == nullptr)
       {
         RTC_ERROR(("NULL pointer is given."));
@@ -369,12 +369,12 @@ namespace RTC_impl
         return  RTC::BAD_PARAMETER;
       }
     {
-      Guard removeGuard(m_removedMutex);
+      std::lock_guard<coil::Mutex> removeGuard(m_removedMutex);
       m_removedComps.push_back(rtobj);
     }
     // if EC is stopping, update component list immediately.
     {
-      Guard guard(m_mutex);
+      std::lock_guard<coil::Mutex> guard(m_mutex);
       if (!m_running) { updateComponentList(); }
     }
 
@@ -384,7 +384,7 @@ namespace RTC_impl
   void ExecutionContextWorker::updateComponentList()
   {
     {    // adding component
-      Guard addedGuard(m_addedMutex);
+      std::lock_guard<coil::Mutex> addedGuard(m_addedMutex);
       for (auto & m_addedComp : m_addedComps)
         {
           m_comps.push_back(m_addedComp);
@@ -393,7 +393,7 @@ namespace RTC_impl
       m_addedComps.clear();
     }
     {    // removing component
-      Guard removedGuard(m_removedMutex);
+      std::lock_guard<coil::Mutex> removedGuard(m_removedMutex);
       for (auto rtobj : m_removedComps)
         {
           RTC::LightweightRTObject_var lwrtobj = rtobj->getRTObject();
@@ -412,7 +412,7 @@ namespace RTC_impl
   RTObjectStateMachine*
   ExecutionContextWorker::findComponent(RTC::LightweightRTObject_ptr comp)
   {
-    Guard guard(m_mutex);
+    std::lock_guard<coil::Mutex> guard(m_mutex);
     for (auto & rtobj : m_comps)
       {
         if (rtobj->isEquivalent(comp))
@@ -426,7 +426,7 @@ namespace RTC_impl
   bool ExecutionContextWorker::
   isAllCurrentState(ExecContextState state)
   {
-    Guard gurad(m_mutex);
+    std::lock_guard<coil::Mutex> gurad(m_mutex);
     for (auto & comp : m_comps)
       {
         if (!comp->isCurrentState(state)) { return false; }
@@ -437,7 +437,7 @@ namespace RTC_impl
   bool ExecutionContextWorker::
   isAllNextState(ExecContextState state)
   {
-    Guard gurad(m_mutex);
+    std::lock_guard<coil::Mutex> gurad(m_mutex);
     for (auto & comp : m_comps)
       {
         if (!comp->isNextState(state)) { return false; }
@@ -448,7 +448,7 @@ namespace RTC_impl
   bool ExecutionContextWorker::
   isOneOfCurrentState(ExecContextState state)
   {
-    Guard gurad(m_mutex);
+    std::lock_guard<coil::Mutex> gurad(m_mutex);
     for (auto & comp : m_comps)
       {
         if (comp->isCurrentState(state)) { return true; }
@@ -459,7 +459,7 @@ namespace RTC_impl
   bool ExecutionContextWorker::
   isOneOfNextState(ExecContextState state)
   {
-    Guard gurad(m_mutex);
+    std::lock_guard<coil::Mutex> gurad(m_mutex);
     for (auto & comp : m_comps)
       {
         if (comp->isNextState(state)) { return true; }
@@ -474,7 +474,7 @@ namespace RTC_impl
     for (auto & comp : m_comps) { comp->workerPreDo();  }
     for (auto & comp : m_comps) { comp->workerDo();     }
     for (auto & comp : m_comps) { comp->workerPostDo(); }
-    Guard guard(m_mutex);
+    std::lock_guard<coil::Mutex> guard(m_mutex);
     updateComponentList();
   }
 
@@ -498,7 +498,7 @@ namespace RTC_impl
     // m_comps never changes its size here
     for (auto & comp : m_comps) { comp->workerPostDo(); }
     // m_comps might be changed here
-    Guard guard(m_mutex);
+    std::lock_guard<coil::Mutex> guard(m_mutex);
     updateComponentList();
   }
 

@@ -57,7 +57,6 @@ namespace RTC
   {
     typedef coil::Mutex Mutex;
     typedef coil::Condition<Mutex> Condition;
-    typedef std::lock_guard<coil::Mutex> Guard;
   public:
     /*!
      * @if jp
@@ -635,7 +634,7 @@ namespace RTC
   private:
     bool threadRunning()
     {
-      Guard guard(m_svcmutex);
+      std::lock_guard<coil::Mutex> guard(m_svcmutex);
       return m_svc;
     }
     /*!

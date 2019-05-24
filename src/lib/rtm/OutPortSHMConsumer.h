@@ -52,7 +52,6 @@ namespace RTC
     : public OutPortConsumer,
       public CorbaConsumer< ::OpenRTM::PortSharedMemory >
   {
-    typedef std::lock_guard<coil::Mutex> Guard;
   public:
     DATAPORTSTATUS_ENUM
 

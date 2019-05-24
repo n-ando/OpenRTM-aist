@@ -708,7 +708,6 @@ namespace RTM
 	bool isProcessIDManager(const std::string& mgrname);
 
   private:
-    typedef std::lock_guard<coil::Mutex> Guard;
     /*!
      * @if jp
      * @brief ロガーオブジェクト

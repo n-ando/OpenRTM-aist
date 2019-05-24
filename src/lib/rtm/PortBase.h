@@ -2099,7 +2099,6 @@ namespace RTC
      */
     mutable coil::Mutex m_profile_mutex;
     mutable coil::Mutex m_connectorsMutex;
-    typedef std::lock_guard<coil::Mutex> Guard;
 
     /*!
      * @if jp

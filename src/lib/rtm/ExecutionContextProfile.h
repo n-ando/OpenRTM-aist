@@ -55,7 +55,6 @@ namespace RTC_impl
    */
   class ExecutionContextProfile
   {
-    typedef std::lock_guard<coil::Mutex> Guard;
   public:
     /*!
      * @if jp

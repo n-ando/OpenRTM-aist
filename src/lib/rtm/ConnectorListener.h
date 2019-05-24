@@ -960,7 +960,6 @@ namespace RTC
     : public ConnectorListenerStatus
   {
     typedef std::pair<ConnectorDataListener*, bool> Entry;
-    typedef std::lock_guard<coil::Mutex> Guard;
   public:
     USE_CONNLISTENER_STATUS;
     /*!
@@ -1087,7 +1086,7 @@ namespace RTC
     template <class DataType>
     ReturnCode notify(ConnectorInfo& info, DataType& typeddata)
     {
-      Guard guard(m_mutex);
+      std::lock_guard<coil::Mutex> guard(m_mutex);
       ReturnCode ret(NO_CHANGE);
 
       std::string endian_type;
@@ -1157,7 +1156,6 @@ namespace RTC
       : public ConnectorListenerStatus
   {
     typedef std::pair<ConnectorListener*, bool> Entry;
-    typedef std::lock_guard<coil::Mutex> Guard;
   public:
     USE_CONNLISTENER_STATUS;
     /*!

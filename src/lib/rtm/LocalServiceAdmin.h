@@ -36,7 +36,6 @@ namespace RTM
   class LocalServiceBase;
   typedef LocalServiceBase* (*ECNewFunc)();
   typedef void (*ECDeleteFunc)(LocalServiceBase* ls);
-  typedef std::lock_guard<coil::Mutex> Guard;
 
   /*!
    * @if jp

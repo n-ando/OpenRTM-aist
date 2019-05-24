@@ -33,7 +33,6 @@
 
 namespace RTC
 {
-  typedef std::lock_guard<coil::Mutex> Guard;
 
   /*!
    * @if jp
@@ -203,7 +202,7 @@ namespace RTC
   {
     SDOPackage::ServiceProfileList_var prof
       = new SDOPackage::ServiceProfileList();
-    Guard guard(m_provider_mutex);
+    std::lock_guard<coil::Mutex> guard(m_provider_mutex);
     prof->length(static_cast<CORBA::Long>(m_providers.size()));
     for (size_t i(0); i < m_providers.size(); ++i)
       {
@@ -223,7 +222,7 @@ namespace RTC
   SdoServiceAdmin::getServiceProviderProfile(const char* id)
   {
     std::string idstr(id);
-    Guard guard(m_provider_mutex);
+    std::lock_guard<coil::Mutex> guard(m_provider_mutex);
     for (auto & provider : m_providers)
       {
         if (idstr == static_cast<const char*>(provider->getProfile().id))
@@ -263,7 +262,7 @@ namespace RTC
   {
     RTC_TRACE(("SdoServiceAdmin::addSdoServiceProvider(if=%s)",
                static_cast<const char*>(prof.interface_type)));
-    Guard guard(m_provider_mutex);
+    std::lock_guard<coil::Mutex> guard(m_provider_mutex);
 
     std::string id(static_cast<const char*>(prof.id));
     for (auto & prov : m_providers)
@@ -290,7 +289,7 @@ namespace RTC
   bool SdoServiceAdmin::removeSdoServiceProvider(const char* id)
   {
     RTC_TRACE(("removeSdoServiceProvider(%s)", id));
-    Guard gurad(m_provider_mutex);
+    std::lock_guard<coil::Mutex> gurad(m_provider_mutex);
 
     std::string strid(id);
     std::vector<SdoServiceProviderBase*>::iterator it = m_providers.begin();
@@ -323,7 +322,7 @@ namespace RTC
   bool SdoServiceAdmin::
   addSdoServiceConsumer(const SDOPackage::ServiceProfile& sProfile)
   {
-    Guard guard(m_consumer_mutex);
+    std::lock_guard<coil::Mutex> guard(m_consumer_mutex);
     RTC_TRACE(("addSdoServiceConsumer(IFR = %s)",
                static_cast<const char*>(sProfile.interface_type)));
 
@@ -400,7 +399,7 @@ namespace RTC
    */
   bool SdoServiceAdmin::removeSdoServiceConsumer(const char* id)
   {
-    Guard guard(m_consumer_mutex);
+    std::lock_guard<coil::Mutex> guard(m_consumer_mutex);
     if (id == nullptr || id[0] == '\0')
       {
         RTC_ERROR(("removeSdoServiceConsumer(): id is invalid."));

@@ -207,7 +207,7 @@ namespace RTC
 
         
         {
-            Guard guard(m_connectorsMutex);
+            std::lock_guard<coil::Mutex> guard(m_connectorsMutex);
             if (m_connectors.empty())
             {
                 RTC_DEBUG(("no connectors"));
@@ -239,7 +239,7 @@ namespace RTC
 
         
         {
-            Guard guard(m_connectorsMutex);
+            std::lock_guard<coil::Mutex> guard(m_connectorsMutex);
             if (m_connectors.empty())
             {
                 RTC_DEBUG(("no connectors"));
@@ -273,7 +273,7 @@ namespace RTC
       // means that we only need to read from the first connector to get data
       // received by any connector.
       {
-        Guard gurad(m_valueMutex);
+        std::lock_guard<coil::Mutex> gurad(m_valueMutex);
         if (m_directNewData == true)
           {
             RTC_DEBUG(("isNew() returns true because of direct write."));
@@ -282,7 +282,7 @@ namespace RTC
       }
       size_t r(0);
       {
-        Guard guard(m_connectorsMutex);
+        std::lock_guard<coil::Mutex> guard(m_connectorsMutex);
         if (m_connectors.empty())
           {
             RTC_DEBUG(("no connectors"));
@@ -330,7 +330,7 @@ namespace RTC
 
 
         {
-            Guard guard(m_connectorsMutex);
+            std::lock_guard<coil::Mutex> guard(m_connectorsMutex);
             if (m_connectors.empty())
             {
                 RTC_DEBUG(("no connectors"));
@@ -362,7 +362,7 @@ namespace RTC
 
 
         {
-            Guard guard(m_connectorsMutex);
+            std::lock_guard<coil::Mutex> guard(m_connectorsMutex);
             if (m_connectors.empty())
             {
                 RTC_DEBUG(("no connectors"));
@@ -396,7 +396,7 @@ namespace RTC
       size_t r(0);
 
       {
-        Guard guard(m_connectorsMutex);
+        std::lock_guard<coil::Mutex> guard(m_connectorsMutex);
         if (m_connectors.empty())
           {
             RTC_DEBUG(("no connectors"));
@@ -420,7 +420,7 @@ namespace RTC
 
     void write(DataType& data) override
     {
-      Guard guard(m_valueMutex);
+      std::lock_guard<coil::Mutex> guard(m_valueMutex);
       m_value = data;
       m_directNewData = true;
     }
@@ -510,7 +510,7 @@ namespace RTC
         }
       // 1) direct connection
       {
-        Guard guard(m_valueMutex);
+        std::lock_guard<coil::Mutex> guard(m_valueMutex);
         if (m_directNewData == true)
           {
             RTC_DEBUG(("Direct data transfer"));
@@ -528,7 +528,7 @@ namespace RTC
       
       ReturnCode ret;
       {
-        Guard guard(m_connectorsMutex);
+        std::lock_guard<coil::Mutex> guard(m_connectorsMutex);
         if (m_connectors.empty())
           {
             RTC_DEBUG(("no connectors"));
@@ -564,7 +564,7 @@ namespace RTC
       if (!connector->getDirectData(m_value))
       {
           {
-              Guard guard(m_connectorsMutex);
+              std::lock_guard<coil::Mutex> guard(m_connectorsMutex);
               // In single-buffer mode, all connectors share the same buffer. This
               // means that we only need to read from the first connector to get data
               // received by any connector.
@@ -573,7 +573,7 @@ namespace RTC
           m_status[0] = ret;
           if (ret == PORT_OK)
           {
-              Guard guard(m_valueMutex);
+              std::lock_guard<coil::Mutex> guard(m_valueMutex);
               RTC_DEBUG(("data read succeeded"));
 
               if (m_OnReadConvert != nullptr)

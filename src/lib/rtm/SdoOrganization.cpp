@@ -96,7 +96,7 @@ namespace SDOPackage
   OrganizationProperty* Organization_impl::get_organization_property()
   {
     RTC_TRACE(("get_organization_property()"));
-    Guard guard(m_org_mutex);
+    std::lock_guard<coil::Mutex> guard(m_org_mutex);
     OrganizationProperty_var prop;
     prop = new OrganizationProperty(m_orgProperty);
     return prop._retn();
@@ -148,7 +148,7 @@ namespace SDOPackage
     RTC_TRACE(("add_organization_property()"));
     try
       {
-        Guard guard(m_org_mutex);
+        std::lock_guard<coil::Mutex> guard(m_org_mutex);
         m_orgProperty = organization_property;
         return true;
       }

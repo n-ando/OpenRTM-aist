@@ -124,7 +124,7 @@ namespace RTC
 		try
 		{
 
-			Guard guard(m_mutex);
+			std::lock_guard<coil::Mutex> guard(m_mutex);
 			m_shmem.setEndian(m_endian);
 
 			m_shmem.create_memory(m_memory_size, m_shm_address.c_str());

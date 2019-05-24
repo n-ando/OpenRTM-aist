@@ -512,7 +512,7 @@ namespace RTC
    */
   RosTopicManager* RosTopicManager::init()
   {
-    Guard guard(mutex);
+    std::lock_guard<coil::Mutex> guard(mutex);
     if (!manager)
     {
       manager = new RosTopicManager();
@@ -537,7 +537,7 @@ namespace RTC
    */
   RosTopicManager& RosTopicManager::instance()
   {
-    Guard guard(mutex);
+    std::lock_guard<coil::Mutex> guard(mutex);
     if (!manager)
     {
       manager = new RosTopicManager();
@@ -561,7 +561,7 @@ namespace RTC
    */
   void RosTopicManager::shutdown_global()
   {
-      Guard guard(mutex);
+      std::lock_guard<coil::Mutex> guard(mutex);
       if (manager)
       {
           manager->shutdown();

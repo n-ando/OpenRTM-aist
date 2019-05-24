@@ -62,7 +62,6 @@ namespace coil
     : public coil::PeriodicTaskBase
   {
   public:
-    typedef std::lock_guard<coil::Mutex> Guard;
 
     /*!
      * @if jp

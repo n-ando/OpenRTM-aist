@@ -53,7 +53,6 @@ namespace RTC_exp
   class MultilayerCompositeEC
     : public virtual RTC_exp::PeriodicExecutionContext
   {
-    typedef std::lock_guard<coil::Mutex> Guard;
   public:
     /*!
      * @if jp

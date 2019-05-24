@@ -681,7 +681,7 @@ namespace RTC
   OpenSpliceManager* OpenSpliceManager::init()
   {
     //RTC_PARANOID(("init()"));
-    Guard guard(mutex);
+    std::lock_guard<coil::Mutex> guard(mutex);
     if (!manager)
     {
       manager = new OpenSpliceManager();
@@ -706,7 +706,7 @@ namespace RTC
    */
   OpenSpliceManager& OpenSpliceManager::instance()
   {
-    Guard guard(mutex);
+    std::lock_guard<coil::Mutex> guard(mutex);
     if (!manager)
     {
       manager = new OpenSpliceManager();
@@ -730,7 +730,7 @@ namespace RTC
    */
     void OpenSpliceManager::shutdown_global()
     {
-        Guard guard(mutex);
+        std::lock_guard<coil::Mutex> guard(mutex);
         if (manager)
         {
             manager->finalize();

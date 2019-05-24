@@ -53,11 +53,9 @@ namespace coil
   {
 /*
 #ifdef __RTP__
-  typedef std::lock_guard<coil::Mutex> Guard;
 #endif
 */
   public:
-  typedef std::lock_guard<coil::Mutex> Guard;
     /*!
      * @if jp
      *

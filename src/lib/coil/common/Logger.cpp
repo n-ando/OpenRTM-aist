@@ -186,7 +186,7 @@ namespace coil
     {
         for(auto & s : m_streams) 
         {
-            Guard gaurd(s.mutex_);
+            std::lock_guard<coil::Mutex> gaurd(s.mutex_);
             s.stream_->write(level, name, date, mes);
         }
 

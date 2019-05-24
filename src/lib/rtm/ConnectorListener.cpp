@@ -80,7 +80,7 @@ namespace RTC
 
   ConnectorDataListenerHolder::~ConnectorDataListenerHolder()
   {
-    Guard guard(m_mutex);
+    std::lock_guard<coil::Mutex> guard(m_mutex);
     for (auto & listener : m_listeners)
       {
         if (listener.second)
@@ -94,7 +94,7 @@ namespace RTC
   void ConnectorDataListenerHolder::
   addListener(ConnectorDataListener* listener, bool autoclean)
   {
-    Guard guard(m_mutex);
+    std::lock_guard<coil::Mutex> guard(m_mutex);
     m_listeners.emplace_back(listener, autoclean);
   }
 
@@ -102,7 +102,7 @@ namespace RTC
   void ConnectorDataListenerHolder::
   removeListener(ConnectorDataListener* listener)
   {
-    Guard guard(m_mutex);
+    std::lock_guard<coil::Mutex> guard(m_mutex);
     std::vector<Entry>::iterator it(m_listeners.begin());
     for (; it != m_listeners.end(); ++it)
       {
@@ -121,7 +121,7 @@ namespace RTC
 
   size_t ConnectorDataListenerHolder::size()
   {
-    Guard guard(m_mutex);
+    std::lock_guard<coil::Mutex> guard(m_mutex);
     return m_listeners.size();
   }
 
@@ -129,7 +129,7 @@ namespace RTC
 	  ConnectorDataListenerHolder::notify(ConnectorInfo& info,
                                                  ByteData& cdrdata)
   {
-    Guard guard(m_mutex);
+    std::lock_guard<coil::Mutex> guard(m_mutex);
     ConnectorListenerHolder::ReturnCode ret(NO_CHANGE);
     for (auto & listener : m_listeners)
       {
@@ -153,7 +153,7 @@ namespace RTC
 
   ConnectorListenerHolder::~ConnectorListenerHolder()
   {
-    Guard guard(m_mutex);
+    std::lock_guard<coil::Mutex> guard(m_mutex);
     for (auto & listener : m_listeners)
       {
         if (listener.second)
@@ -167,14 +167,14 @@ namespace RTC
   void ConnectorListenerHolder::addListener(ConnectorListener* listener,
                                             bool autoclean)
   {
-    Guard guard(m_mutex);
+    std::lock_guard<coil::Mutex> guard(m_mutex);
     m_listeners.emplace_back(listener, autoclean);
   }
 
 
   void ConnectorListenerHolder::removeListener(ConnectorListener* listener)
   {
-    Guard guard(m_mutex);
+    std::lock_guard<coil::Mutex> guard(m_mutex);
     std::vector<Entry>::iterator it(m_listeners.begin());
 
     for (; it != m_listeners.end(); ++it)
@@ -193,14 +193,14 @@ namespace RTC
 
   size_t ConnectorListenerHolder::size()
   {
-    Guard guard(m_mutex);
+    std::lock_guard<coil::Mutex> guard(m_mutex);
     return m_listeners.size();
   }
 
   ConnectorListenerHolder::ReturnCode
 	  ConnectorListenerHolder::notify(ConnectorInfo& info)
   {
-    Guard guard(m_mutex);
+    std::lock_guard<coil::Mutex> guard(m_mutex);
     ConnectorListenerHolder::ReturnCode ret(NO_CHANGE);
     for (auto & listener : m_listeners)
       {

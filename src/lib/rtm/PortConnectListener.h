@@ -277,7 +277,6 @@ namespace RTC
   class PortConnectListenerHolder
   {
     typedef std::pair<PortConnectListener*, bool> Entry;
-    typedef std::lock_guard<coil::Mutex> Guard;
   public:
     /*!
      * @if jp
@@ -383,7 +382,6 @@ namespace RTC
   class PortConnectRetListenerHolder
   {
     typedef std::pair<PortConnectRetListener*, bool> Entry;
-    typedef std::lock_guard<coil::Mutex> Guard;
   public:
     /*!
      * @if jp

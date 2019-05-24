@@ -60,7 +60,6 @@ namespace hrtm
     : public RTC::Manager
   {
     typedef coil::Mutex Mutex;
-    typedef std::lock_guard<Mutex> Guard;
 
   public:
     template<typename CompType>

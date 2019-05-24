@@ -574,7 +574,7 @@ namespace RTC
     NamingBase* name;
     name = createNamingObj(method, name_server);
 
-    Guard guard(m_namesMutex);
+    std::lock_guard<coil::Mutex> guard(m_namesMutex);
     m_names.push_back(new NamingService(method, name_server, name));
   }
 
@@ -590,7 +590,7 @@ namespace RTC
   {
     RTC_TRACE(("NamingManager::bindObject(%s)", name));
 
-    Guard guard(m_namesMutex);
+    std::lock_guard<coil::Mutex> guard(m_namesMutex);
     for (auto & n : m_names)
       {
         if (n->ns != nullptr)
@@ -613,7 +613,7 @@ namespace RTC
   {
     RTC_TRACE(("NamingManager::bindObject(%s)", name));
 
-    Guard guard(m_namesMutex);
+    std::lock_guard<coil::Mutex> guard(m_namesMutex);
     for (auto & n : m_names)
       {
         if (n->ns != nullptr)
@@ -636,7 +636,7 @@ namespace RTC
   {
     RTC_TRACE(("NamingManager::bindObject(%s)", name));
 
-    Guard guard(m_namesMutex);
+    std::lock_guard<coil::Mutex> guard(m_namesMutex);
     for (auto & n : m_names)
       {
         if (n->ns != nullptr)
@@ -666,7 +666,7 @@ namespace RTC
   {
     RTC_TRACE(("NamingManager::update()"));
 
-    Guard guard(m_namesMutex);
+    std::lock_guard<coil::Mutex> guard(m_namesMutex);
     bool rebind(coil::toBool(m_manager->getConfig()["naming.update.rebind"],
                              "YES", "NO", false));
     for (auto & name : m_names)
@@ -715,7 +715,7 @@ namespace RTC
   {
     RTC_TRACE(("NamingManager::unbindObject(%s)", name));
 
-    Guard guard(m_namesMutex);
+    std::lock_guard<coil::Mutex> guard(m_namesMutex);
     for (auto & n : m_names)
       {
         if (n->ns != nullptr)
@@ -738,7 +738,7 @@ namespace RTC
   {
     RTC_TRACE(("NamingManager::unbindAll(): %d names.", m_compNames.size()));
     {
-      Guard guard(m_compNamesMutex);
+      std::lock_guard<coil::Mutex> guard(m_compNamesMutex);
       coil::vstring names;
       // unbindObject modifiy m_compNames
       for (auto & compName : m_compNames)
@@ -752,7 +752,7 @@ namespace RTC
 
     }
     {
-      Guard guard(m_mgrNamesMutex);
+      std::lock_guard<coil::Mutex> guard(m_mgrNamesMutex);
       coil::vstring names;
       // unbindObject modifiy m_mgrNames
       for (auto & mgrName : m_mgrNames)
@@ -776,7 +776,7 @@ namespace RTC
   std::vector<RTObject_impl*> NamingManager::getObjects()
   {
     std::vector<RTObject_impl*> comps;
-    Guard guard(m_compNamesMutex);
+    std::lock_guard<coil::Mutex> guard(m_compNamesMutex);
 
     for (auto & compName : m_compNames)
       {

@@ -83,7 +83,7 @@ namespace RTC
 
   PreFsmActionListenerHolder::~PreFsmActionListenerHolder()
   {
-    Guard guard(m_mutex);
+    std::lock_guard<coil::Mutex> guard(m_mutex);
     for (auto & listener : m_listeners)
       {
         if (listener.second)
@@ -97,14 +97,14 @@ namespace RTC
   addListener(PreFsmActionListener* listener,
               bool autoclean)
   {
-    Guard guard(m_mutex);
+    std::lock_guard<coil::Mutex> guard(m_mutex);
     m_listeners.emplace_back(listener, autoclean);
   }
 
   void PreFsmActionListenerHolder::
   removeListener(PreFsmActionListener* listener)
   {
-    Guard guard(m_mutex);
+    std::lock_guard<coil::Mutex> guard(m_mutex);
     std::vector<Entry>::iterator it(m_listeners.begin());
 
     for (; it != m_listeners.end(); ++it)
@@ -123,7 +123,7 @@ namespace RTC
 
   void PreFsmActionListenerHolder::notify(const char* state)
   {
-    Guard guard(m_mutex);
+    std::lock_guard<coil::Mutex> guard(m_mutex);
     for (auto & listener : m_listeners)
       {
         listener.first->operator()(state);
@@ -144,7 +144,7 @@ namespace RTC
 
   PostFsmActionListenerHolder::~PostFsmActionListenerHolder()
   {
-    Guard guard(m_mutex);
+    std::lock_guard<coil::Mutex> guard(m_mutex);
     for (auto & listener : m_listeners)
       {
         if (listener.second)
@@ -157,14 +157,14 @@ namespace RTC
   void PostFsmActionListenerHolder::
   addListener(PostFsmActionListener* listener, bool autoclean)
   {
-    Guard guard(m_mutex);
+    std::lock_guard<coil::Mutex> guard(m_mutex);
     m_listeners.emplace_back(listener, autoclean);
   }
 
   void PostFsmActionListenerHolder::
   removeListener(PostFsmActionListener* listener)
   {
-    Guard guard(m_mutex);
+    std::lock_guard<coil::Mutex> guard(m_mutex);
     std::vector<Entry>::iterator it(m_listeners.begin());
     for (; it != m_listeners.end(); ++it)
       {
@@ -183,7 +183,7 @@ namespace RTC
   void PostFsmActionListenerHolder::notify(const char* state,
                                            ReturnCode_t ret)
   {
-    Guard guard(m_mutex);
+    std::lock_guard<coil::Mutex> guard(m_mutex);
     for (auto & listener : m_listeners)
       {
         listener.first->operator()(state, ret);
@@ -203,7 +203,7 @@ namespace RTC
 
   FsmProfileListenerHolder::~FsmProfileListenerHolder()
   {
-    Guard guard(m_mutex);
+    std::lock_guard<coil::Mutex> guard(m_mutex);
     for (auto & listener : m_listeners)
       {
         if (listener.second)
@@ -216,14 +216,14 @@ namespace RTC
   void FsmProfileListenerHolder::addListener(FsmProfileListener* listener,
                                              bool autoclean)
   {
-    Guard guard(m_mutex);
+    std::lock_guard<coil::Mutex> guard(m_mutex);
     m_listeners.emplace_back(listener, autoclean);
   }
 
   void
   FsmProfileListenerHolder::removeListener(FsmProfileListener* listener)
   {
-    Guard guard(m_mutex);
+    std::lock_guard<coil::Mutex> guard(m_mutex);
     std::vector<Entry>::iterator it(m_listeners.begin());
 
     for (; it != m_listeners.end(); ++it)
@@ -242,7 +242,7 @@ namespace RTC
 
   void FsmProfileListenerHolder::notify(RTC::FsmProfile& profile)
   {
-    Guard guard(m_mutex);
+    std::lock_guard<coil::Mutex> guard(m_mutex);
     for (auto & listener : m_listeners)
       {
         listener.first->operator()(profile);
@@ -262,7 +262,7 @@ namespace RTC
 
   FsmStructureListenerHolder::~FsmStructureListenerHolder()
   {
-    Guard guard(m_mutex);
+    std::lock_guard<coil::Mutex> guard(m_mutex);
     for (auto & listener : m_listeners)
       {
         if (listener.second)
@@ -275,14 +275,14 @@ namespace RTC
   void FsmStructureListenerHolder::addListener(FsmStructureListener* listener,
                                                bool autoclean)
   {
-    Guard guard(m_mutex);
+    std::lock_guard<coil::Mutex> guard(m_mutex);
     m_listeners.emplace_back(listener, autoclean);
   }
 
   void
   FsmStructureListenerHolder::removeListener(FsmStructureListener* listener)
   {
-    Guard guard(m_mutex);
+    std::lock_guard<coil::Mutex> guard(m_mutex);
     std::vector<Entry>::iterator it(m_listeners.begin());
 
     for (; it != m_listeners.end(); ++it)
@@ -301,7 +301,7 @@ namespace RTC
 
   void FsmStructureListenerHolder::notify(RTC::FsmStructure& structure)
   {
-    Guard guard(m_mutex);
+    std::lock_guard<coil::Mutex> guard(m_mutex);
     for (auto & listener : m_listeners)
       {
         listener.first->operator()(structure);

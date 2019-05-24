@@ -55,7 +55,6 @@ namespace RTC_exp
   class VxWorksRTExecutionContext
       : public RTC_exp::PeriodicExecutionContext
   {
-    typedef std::lock_guard<coil::Mutex> Guard;
   public:
     /*!
      * @if jp

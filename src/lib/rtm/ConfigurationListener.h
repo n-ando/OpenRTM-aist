@@ -390,7 +390,6 @@ namespace RTC
   class ConfigurationParamListenerHolder
   {
     typedef std::pair<ConfigurationParamListener*, bool> Entry;
-    typedef std::lock_guard<coil::Mutex> Guard;
   public:
     /*!
      * @if jp
@@ -498,7 +497,6 @@ namespace RTC
   class ConfigurationSetListenerHolder
   {
     typedef std::pair<ConfigurationSetListener*, bool> Entry;
-    typedef std::lock_guard<coil::Mutex> Guard;
   public:
     /*!
      * @if jp
@@ -606,7 +604,6 @@ namespace RTC
   class ConfigurationSetNameListenerHolder
   {
     typedef std::pair<ConfigurationSetNameListener*, bool> Entry;
-    typedef std::lock_guard<coil::Mutex> Guard;
   public:
     /*!
      * @if jp

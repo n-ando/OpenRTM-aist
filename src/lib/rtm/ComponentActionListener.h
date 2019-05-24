@@ -605,7 +605,6 @@ namespace RTC
   class PreComponentActionListenerHolder
   {
     typedef std::pair<PreComponentActionListener*, bool> Entry;
-    typedef std::lock_guard<coil::Mutex> Guard;
   public:
     /*!
      * @if jp
@@ -711,7 +710,6 @@ namespace RTC
   class PostComponentActionListenerHolder
   {
     typedef std::pair<PostComponentActionListener*, bool> Entry;
-    typedef std::lock_guard<coil::Mutex> Guard;
   public:
     /*!
      * @if jp
@@ -819,7 +817,6 @@ namespace RTC
   class PortActionListenerHolder
   {
     typedef std::pair<PortActionListener*, bool> Entry;
-    typedef std::lock_guard<coil::Mutex> Guard;
   public:
     /*!
      * @if jp
@@ -925,7 +922,6 @@ namespace RTC
   class ExecutionContextActionListenerHolder
   {
     typedef std::pair<ExecutionContextActionListener*, bool> Entry;
-    typedef std::lock_guard<coil::Mutex> Guard;
   public:
     /*!
      * @if jp

@@ -66,7 +66,6 @@ namespace RTC
   class NamingBase
   {
     typedef coil::Mutex Mutex;
-    typedef std::lock_guard<Mutex> Guard;
   public:
     /*!
      * @if jp
@@ -630,7 +629,6 @@ namespace RTC
   class NamingManager
   {
     typedef coil::Mutex Mutex;
-    typedef std::lock_guard<Mutex> Guard;
   public:
     /*!
      * @if jp
