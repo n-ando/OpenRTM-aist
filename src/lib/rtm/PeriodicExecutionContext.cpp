@@ -22,14 +22,6 @@
 #include <rtm/PeriodicExecutionContext.h>
 #include <rtm/RTObjectStateMachine.h>
 
-#ifdef RTM_OS_LINUX
-#ifndef _GNU_SOURCE
-#define _GNU_SOURCE
-#include <pthread.h>
-#endif // _GNU_SOURCE
-#include <algorithm>
-#endif // RTM_OS_LINUX
-
 #include <cstring>
 #include <algorithm>
 #include <iostream>
@@ -154,7 +146,7 @@ namespace RTC_exp
         }
         else
         {
-            RTC_ERROR(("pthread_getaffinity_np(): returned error."));
+            RTC_ERROR(("coil::getThreadCpuAffinity(): returned error."));
         }
 #endif
     }

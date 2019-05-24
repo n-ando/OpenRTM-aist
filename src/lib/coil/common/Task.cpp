@@ -31,7 +31,6 @@ namespace coil
   Task::Task()
     : m_count(0)
   {
-    ::pthread_attr_init(&m_attr);
   }
 
   /*!
@@ -93,10 +92,10 @@ namespace coil
   {
     if (m_count == 0)
       {
-        ::pthread_create(&m_thread,
-                         &m_attr,
-                         static_cast<void* (*)(void*)>(Task::svc_run),
-                         this);
+        m_thread = std::thread([this] {
+                                   svc();
+                                   finalize();
+                               });
         ++m_count;
       };
   }
@@ -112,8 +111,7 @@ namespace coil
   {
     if (m_count > 0)
       {
-        void* retval = nullptr;
-        ::pthread_join(m_thread, &retval);
+         m_thread.join();
       }
     return 0;
   }
@@ -166,20 +164,4 @@ namespace coil
     reset();
   }
 
-  /*!
-   * @if jp
-   * @brief スレッド実行を開始する
-   * @else
-   * @brief Start thread Execution
-   * @endif
-   */
-  void* Task::svc_run(void* args)
-  {
-    Task* t = static_cast<coil::Task*>(args);
-    t->svc();
-    t->finalize();
-    return nullptr;
-  }
 } // namespace coil
-
-
