@@ -57,9 +57,6 @@ before_build:
         Expand-Archive -Path ${Env:TEMP}\a.zip -DestinationPath "C:/omni"
       }
 
-      # workalound
-      New-Item -ItemType SymbolicLink -Path $(PWD) -Name src\lib\coil\common\coil -Target src\lib\coil\common
-      New-Item -ItemType SymbolicLink -Path $(PWD) -Name utils\rtm-skelwrapper\yat.py -Target build\yat.py
   - cmake --version
   - echo cmake %cmake_flgas% -DORB_ROOT=C:/omni/%omni% -G "%cmake_generator%" -A "%cmake_archtecture%" -S . -B../build
   - cmake %cmake_flgas% -DORB_ROOT=C:/omni/%omni% -G "%cmake_generator%" -A "%cmake_archtecture%" -S . -B../build

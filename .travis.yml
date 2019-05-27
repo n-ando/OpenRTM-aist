@@ -32,4 +32,4 @@ script:
   - mv ../OpenRTM-aist .
 
   - export IMAGE_NAME=openrtm:${TARGET_DIST}-${TARGET_VER}
-  - docker build -f OpenRTM-aist/build/${TARGET_DIST}_${TARGET_VER}/Dockerfile . -t ${IMAGE_NAME}
+  - docker build -f OpenRTM-aist/scripts/${TARGET_DIST}_${TARGET_VER}/Dockerfile . -t ${IMAGE_NAME}
