@@ -1,3 +1,6 @@
+#ifndef CONFIG_RTC_H
+#define CONFIG_RTC_H
+
 /* ORB is MICO */
 #cmakedefine ORB_IS_MICO TRUE
 
@@ -103,7 +106,4 @@
 /* RTM version */
 #define RTM_VERSION "@RTM_VERSION@"
 
-/* Multi Thread Support */
-#ifndef _REENTRANT
-#cmakedefine _REENTRANT TRUE
-#endif // _REENTRANT
+#endif // CONFIG_RTC_H

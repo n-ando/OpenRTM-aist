@@ -1,6 +1,9 @@
 /* config_coil.h.  Generated from config_coil.h.in by configure.  */
 /* config_coil.h.in.  Generated from configure.ac by autoheader.  */
 
+#ifndef CONFIG_COIL_H
+#define CONFIG_COIL_H
+
 /* COIL major version */
 #define COIL_MAJOR_VERSIO "@COIL_MAJOR_VERSIO@"
 
@@ -67,7 +70,4 @@
 /* Define to the version of this package. */
 #define PACKAGE_VERSION "@PACKAGE_VERSION@"
 
-/* Multi Thread Support */
-#ifndef _REENTRANT
-#define _REENTRANT TRUE
-#endif // _REENTRANT
+#endif // CONFIG_COIL_H
