@@ -900,7 +900,7 @@ function(openrtm_set_link_props_static target)
 endfunction()
 
 if(WIN32)
-	set(MAKE_DEF_COMMAND ${CMAKE_SOURCE_DIR}/build/makedeffile.py)
+	set(MAKE_DEF_COMMAND ${CMAKE_SOURCE_DIR}/scripts/makedeffile.py)
 endif(WIN32)
 
 add_subdirectory(src)
@@ -928,7 +928,7 @@ if(WIN32)
 endif(WIN32)
 
 
-CONFIGURE_FILE ("${PROJECT_SOURCE_DIR}/build/cmake/uninstall_target.cmake.in"
+CONFIGURE_FILE ("${PROJECT_SOURCE_DIR}/scripts/cmake/uninstall_target.cmake.in"
     "${PROJECT_BINARY_DIR}/uninstall_target.cmake" IMMEDIATE @ONLY)
 ADD_CUSTOM_TARGET (remove "${CMAKE_COMMAND}" -P
     "${PROJECT_BINARY_DIR}/uninstall_target.cmake")
