@@ -93,10 +93,10 @@ namespace RTC_exp
         // Therefore WorkerPreDo(updating state) have to be invoked
         // before stopping thread.
         {
-          std::lock_guard<std::mutex> guard(m_workerthread.mutex_);
+          std::unique_lock<std::mutex> guard(m_workerthread.mutex_);
           while (!m_workerthread.running_)
             {
-              m_workerthread.cond_.wait();
+              m_workerthread.cond_.wait(guard);
             }
         }
         coil::TimeValue t0(coil::clock());
@@ -320,11 +320,11 @@ namespace RTC_exp
       }
 
       {
-          std::lock_guard<std::mutex> guard(m_signal_worker.mutex_);
+          std::unique_lock<std::mutex> guard(m_signal_worker.mutex_);
 
           while (!m_signal_worker.running_)
           {
-              m_signal_worker.cond_.wait();
+              m_signal_worker.cond_.wait(guard);
           }
           m_signal_worker.running_ = false;
           
@@ -345,15 +345,15 @@ namespace RTC_exp
           std::lock_guard<std::mutex> guard(m_worker.mutex_);
           m_worker.running_ = false;
           
-          m_worker.cond_.signal();
+          m_worker.cond_.notify_one();
           
 
       }
 
       {
-          std::lock_guard<std::mutex> guard(m_signal_worker.mutex_);
+          std::unique_lock<std::mutex> guard(m_signal_worker.mutex_);
           while (!m_signal_worker.running_){
-             m_signal_worker.cond_.wait();
+             m_signal_worker.cond_.wait(guard);
           }
           m_signal_worker.running_ = false;
       }
@@ -379,7 +379,7 @@ namespace RTC_exp
       {
           std::lock_guard<std::mutex> guard(m_signal_worker.mutex_);
           m_signal_worker.running_ = true;
-          m_signal_worker.cond_.signal();
+          m_signal_worker.cond_.notify_one();
       }
       
 
@@ -388,17 +388,17 @@ namespace RTC_exp
   void MultilayerCompositeEC::ChildTask::join()
   {
       {
-          std::lock_guard<std::mutex> guard(m_worker.mutex_);
+          std::unique_lock<std::mutex> guard(m_worker.mutex_);
           while (m_worker.running_)
           {
-              m_worker.cond_.wait();
+              m_worker.cond_.wait(guard);
           }
       }
 
       {
           std::lock_guard<std::mutex> guard(m_signal_worker.mutex_);
           m_signal_worker.running_ = true;
-          m_signal_worker.cond_.signal();
+          m_signal_worker.cond_.notify_one();
       }
   }
 

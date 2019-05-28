@@ -23,7 +23,7 @@
 #include <iostream>
 
 #include <coil/Task.h>
-#include <coil/Condition.h>
+#include <condition_variable>
 
 #include <rtm/ExecutionContextBase.h>
 
@@ -765,9 +765,9 @@ namespace RTC_exp
      */
     struct WorkerThreadCtrl
     {
-      WorkerThreadCtrl() : cond_(mutex_), running_(false) {}
+      WorkerThreadCtrl() : cond_(), running_(false) {}
       std::mutex mutex_;
-      coil::Condition<std::mutex> cond_;
+      std::condition_variable cond_;
       bool running_;
     };
 

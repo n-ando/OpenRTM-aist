@@ -73,7 +73,7 @@ namespace RTC_exp
     {
       std::lock_guard<std::mutex> guard(m_workerthread.mutex_);
       m_workerthread.running_ = true;
-      m_workerthread.cond_.signal();
+      m_workerthread.cond_.notify_one();
     }
     wait();
   }
@@ -162,10 +162,10 @@ namespace RTC_exp
         // Therefore WorkerPreDo(updating state) have to be invoked
         // before stopping thread.
         {
-          std::lock_guard<std::mutex> guard(m_workerthread.mutex_);
+          std::unique_lock<std::mutex> guard(m_workerthread.mutex_);
           while (!m_workerthread.running_)
             {
-              m_workerthread.cond_.wait();
+              m_workerthread.cond_.wait(guard);
             }
         }
         coil::TimeValue t0(coil::clock());
@@ -414,7 +414,7 @@ namespace RTC_exp
       {
         std::lock_guard<std::mutex> guard(m_workerthread.mutex_);
         m_workerthread.running_ = true;
-        m_workerthread.cond_.signal();
+        m_workerthread.cond_.notify_one();
       }
     return RTC::RTC_OK;
   }
@@ -476,7 +476,7 @@ namespace RTC_exp
         if (!m_workerthread.running_)
         {
             m_workerthread.running_ = true;
-            m_workerthread.cond_.signal();
+            m_workerthread.cond_.notify_one();
         }
     }
     return RTC::RTC_OK;
@@ -505,7 +505,7 @@ namespace RTC_exp
         if (!m_workerthread.running_)
         {
             m_workerthread.running_ = true;
-            m_workerthread.cond_.signal();
+            m_workerthread.cond_.notify_one();
         }
     }
     return RTC::RTC_OK;

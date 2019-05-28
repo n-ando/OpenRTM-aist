@@ -223,7 +223,7 @@ namespace RTM
   bool LocalServiceAdmin::removeLocalService(const std::string& name)
   {
     RTC_TRACE(("removeLocalService(%s)", name.c_str()));
-    std::lock_guard<std::mutex> gurad(m_services_mutex);
+    std::lock_guard<std::mutex> guard(m_services_mutex);
 
     std::vector<LocalServiceBase*>::iterator it = m_services.begin();
     std::vector<LocalServiceBase*>::iterator it_end = m_services.end();
@@ -273,7 +273,7 @@ namespace RTM
    */
   bool LocalServiceAdmin::notExisting(const std::string& id)
   {
-    std::lock_guard<std::mutex> gurad(m_mutex);
+    std::lock_guard<std::mutex> guard(m_mutex);
     for (auto & service : m_services)
       {
         if (service->getProfile().name == id)

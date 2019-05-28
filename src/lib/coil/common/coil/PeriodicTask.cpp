@@ -81,12 +81,12 @@ namespace coil
    */
   void PeriodicTask::finalize()
   {
-    std::lock_guard<std::mutex> gaurd(m_alive.mutex);
+    std::lock_guard<std::mutex> guard(m_alive.mutex);
     m_alive.value = false;
 
-    std::lock_guard<std::mutex> suspend_gaurd(m_suspend.mutex);
+    std::lock_guard<std::mutex> suspend_guard(m_suspend.mutex);
     m_suspend.suspend = false;
-    m_suspend.cond.signal();
+    m_suspend.cond.notify_one();
   }
 
   /*!
@@ -98,7 +98,7 @@ namespace coil
    */
   int PeriodicTask::suspend()
   {
-    std::lock_guard<std::mutex> gaurd(m_suspend.mutex);
+    std::lock_guard<std::mutex> guard(m_suspend.mutex);
     m_suspend.suspend = true;
     return 0;
   }
@@ -115,9 +115,9 @@ namespace coil
     m_periodTime.reset();
     m_execTime.reset();
 
-    std::lock_guard<std::mutex> gaurd(m_suspend.mutex);
+    std::lock_guard<std::mutex> guard(m_suspend.mutex);
     m_suspend.suspend = false;
-    m_suspend.cond.signal();
+    m_suspend.cond.notify_one();
     return 0;
   }
 
@@ -130,8 +130,8 @@ namespace coil
    */
   void PeriodicTask::signal()
   {
-    std::lock_guard<std::mutex> gaurd(m_suspend.mutex);
-    m_suspend.cond.signal();
+    std::lock_guard<std::mutex> guard(m_suspend.mutex);
+    m_suspend.cond.notify_one();
   }
 
   /*!
@@ -279,10 +279,10 @@ namespace coil
       {
         if (m_periodMeasure) { m_periodTime.tack(); }
         {  // wait if suspended
-          std::lock_guard<std::mutex> suspend_gaurd(m_suspend.mutex);
+          std::unique_lock<std::mutex> suspend_guard(m_suspend.mutex);
           if (m_suspend.suspend)
             {
-              m_suspend.cond.wait();
+              m_suspend.cond.wait(suspend_guard);
               // break if finalized
               if (!m_alive.value)
                 {

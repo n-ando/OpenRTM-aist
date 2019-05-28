@@ -272,7 +272,7 @@ namespace RTC
       // means that we only need to read from the first connector to get data
       // received by any connector.
       {
-        std::lock_guard<std::mutex> gurad(m_valueMutex);
+        std::lock_guard<std::mutex> guard(m_valueMutex);
         if (m_directNewData == true)
           {
             RTC_DEBUG(("isNew() returns true because of direct write."));

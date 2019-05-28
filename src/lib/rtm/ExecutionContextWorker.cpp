@@ -426,7 +426,7 @@ namespace RTC_impl
   bool ExecutionContextWorker::
   isAllCurrentState(ExecContextState state)
   {
-    std::lock_guard<std::mutex> gurad(m_mutex);
+    std::lock_guard<std::mutex> guard(m_mutex);
     for (auto & comp : m_comps)
       {
         if (!comp->isCurrentState(state)) { return false; }
@@ -437,7 +437,7 @@ namespace RTC_impl
   bool ExecutionContextWorker::
   isAllNextState(ExecContextState state)
   {
-    std::lock_guard<std::mutex> gurad(m_mutex);
+    std::lock_guard<std::mutex> guard(m_mutex);
     for (auto & comp : m_comps)
       {
         if (!comp->isNextState(state)) { return false; }
@@ -448,7 +448,7 @@ namespace RTC_impl
   bool ExecutionContextWorker::
   isOneOfCurrentState(ExecContextState state)
   {
-    std::lock_guard<std::mutex> gurad(m_mutex);
+    std::lock_guard<std::mutex> guard(m_mutex);
     for (auto & comp : m_comps)
       {
         if (comp->isCurrentState(state)) { return true; }
@@ -459,7 +459,7 @@ namespace RTC_impl
   bool ExecutionContextWorker::
   isOneOfNextState(ExecContextState state)
   {
-    std::lock_guard<std::mutex> gurad(m_mutex);
+    std::lock_guard<std::mutex> guard(m_mutex);
     for (auto & comp : m_comps)
       {
         if (comp->isNextState(state)) { return true; }

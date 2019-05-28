@@ -211,7 +211,7 @@ namespace RTM
     if (false)
       {
         // copy slaves' module profiles
-        std::lock_guard<std::mutex> gurad(m_slaveMutex);
+        std::lock_guard<std::mutex> guard(m_slaveMutex);
         RTC_DEBUG(("%d slaves exists.", m_slaves.length()));
         for (int i(0), len(m_slaves.length()); i < len; ++i)
           {
@@ -1284,7 +1284,7 @@ namespace RTM
         coil::vstring slaves_names;
         if (mgrstr == "manager_%p")
           {
-            std::lock_guard<std::mutex> gurad(m_slaveMutex);
+            std::lock_guard<std::mutex> guard(m_slaveMutex);
                         
             for (CORBA::ULong i(0); i < m_slaves.length(); ++i)
               {
@@ -1322,7 +1322,7 @@ namespace RTM
             RTC_DEBUG(("Detecting new slave manager (%s).", mgrstr.c_str()));
             if (mgrstr == "manager_%p")
               {
-                std::lock_guard<std::mutex> gurad(m_slaveMutex);
+                std::lock_guard<std::mutex> guard(m_slaveMutex);
                 for (CORBA::ULong j(0); j < m_slaves.length(); ++j)
                   {
                     RTM::NVList_var nvlist = m_slaves[j]->get_configuration();

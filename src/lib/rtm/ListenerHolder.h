@@ -93,7 +93,7 @@ namespace util
    *   // 関数呼び出し演算子のコールバック関数の場合
    *   virtual void operator()(std::string strarg)
    *   {
-   *     Gurad gurad(m_mutex);
+   *     Gurad guard(m_mutex);
    *     for (int i(0), len(m_listeners.size()); i < len; ++i)
    *     {
    *       m_listeners[i].first->operator()(strarg);
@@ -102,7 +102,7 @@ namespace util
    *
    *   virtual void onEvent0(const char* arg0)
    *   {
-   *     Gurad gurad(m_mutex);
+   *     Gurad guard(m_mutex);
    *     for (int i(0), len(m_listeners.size()); i < len; ++i)
    *     {
    *       m_listeners[i].first->onEvent(arg0);

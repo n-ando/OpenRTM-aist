@@ -20,7 +20,7 @@
 #ifndef RTC_PUBLISHERFLUSH_H
 #define RTC_PUBLISHERFLUSH_H
 
-#include <coil/Condition.h>
+#include <condition_variable>
 #include <rtm/PublisherBase.h>
 #include <rtm/SystemLogger.h>
 #include <rtm/ConnectorBase.h>
@@ -59,7 +59,6 @@ namespace RTC
     : public PublisherBase
   {
   public:
-    typedef coil::Condition<std::mutex> Condition;
     DATAPORTSTATUS_ENUM
 
     /*!

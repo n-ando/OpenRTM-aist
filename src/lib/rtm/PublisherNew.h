@@ -21,7 +21,7 @@
 #define RTC_PUBLISHERNEW_H
 
 #include <coil/Task.h>
-#include <coil/Condition.h>
+#include <condition_variable>
 #include <coil/PeriodicTask.h>
 
 #include <rtm/RTC.h>
@@ -70,7 +70,6 @@ namespace RTC
     : public PublisherBase
   {
   public:
-    typedef coil::Condition<std::mutex> Condition;
     DATAPORTSTATUS_ENUM
 
     /*!

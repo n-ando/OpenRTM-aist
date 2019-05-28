@@ -483,7 +483,7 @@ namespace RTC
     RTC::ReturnCode_t
 		onRemovedComponent(RTC::LightweightRTObject_ptr rtobj) override;
     /*!
-     * @brief Mutex to gurad tick() reenter.
+     * @brief Mutex to guard tick() reenter.
      */
     std::mutex m_tickmutex;
   private:

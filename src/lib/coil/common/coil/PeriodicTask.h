@@ -21,7 +21,7 @@
 #define COIL_PERIODICTASK_H
 
 #include <mutex>
-#include <coil/Condition.h>
+#include <condition_variable>
 #include <coil/TimeValue.h>
 #include <coil/TimeMeasure.h>
 #include <coil/PeriodicTaskBase.h>
@@ -411,10 +411,10 @@ namespace coil
      */
     struct suspend_t
     {
-      explicit suspend_t(bool sus) : suspend(sus), mutex(), cond(mutex) {}
+      explicit suspend_t(bool sus) : suspend(sus), mutex(), cond() {}
       bool suspend;
       std::mutex mutex;
-      coil::Condition<std::mutex> cond;
+      std::condition_variable cond;
     };
 
     /*!

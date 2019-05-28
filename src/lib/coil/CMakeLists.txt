@@ -72,7 +72,6 @@ set(coil_headers
 	common/coil/Timer.h
 	common/coil/crc.h
 	common/coil/stringutil.h
-	${COIL_OS_DIR}/coil/Condition.h
 	${COIL_OS_DIR}/coil/DynamicLib.h
 	${COIL_OS_DIR}/coil/OS.h
 	${COIL_OS_DIR}/coil/Routing.h
@@ -109,7 +108,6 @@ set(coil_srcs
 	${COIL_OS_DIR}/coil/Affinity.cpp
 	${COIL_OS_DIR}/coil/OS.cpp
 	${COIL_OS_DIR}/coil/File.cpp
-	${COIL_OS_DIR}/coil/Condition.cpp
 	${coil_headers}
 )
 

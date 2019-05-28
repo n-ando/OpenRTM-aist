@@ -112,13 +112,13 @@ namespace RTC
         {
             std::lock_guard<std::mutex> guard(m_readready_worker.mutex_);
             m_readready_worker.completed_ = true;
-            m_readready_worker.cond_.signal();
+            m_readready_worker.cond_.notify_one();
         }
         {
-            std::lock_guard<std::mutex> guard(m_writecompleted_worker.mutex_);
+            std::unique_lock<std::mutex> guard(m_writecompleted_worker.mutex_);
             while (!m_writecompleted_worker.completed_)
             {
-                m_writecompleted_worker.cond_.wait();
+                m_writecompleted_worker.cond_.wait(guard);
             }
         }
     }
@@ -131,7 +131,7 @@ namespace RTC
         {
             std::lock_guard<std::mutex> guard(m_readcompleted_worker.mutex_);
             m_readcompleted_worker.completed_ = true;
-            m_readcompleted_worker.cond_.signal();
+            m_readcompleted_worker.cond_.notify_one();
         }
 
         {
@@ -235,10 +235,10 @@ namespace RTC
       if (m_sync_readwrite)
       {
           {
-              std::lock_guard<std::mutex> guard(m_readready_worker.mutex_);
+              std::unique_lock<std::mutex> guard(m_readready_worker.mutex_);
               while (!m_readready_worker.completed_)
               {
-                  m_readready_worker.cond_.wait();
+                  m_readready_worker.cond_.wait(guard);
               }
           }
       }
@@ -252,15 +252,15 @@ namespace RTC
           {
               std::lock_guard<std::mutex> guard(m_writecompleted_worker.mutex_);
               m_writecompleted_worker.completed_ = true;
-              m_writecompleted_worker.cond_.signal();
+              m_writecompleted_worker.cond_.notify_one();
           }
 
 
           {
-              std::lock_guard<std::mutex> guard(m_readcompleted_worker.mutex_);
+              std::unique_lock<std::mutex> guard(m_readcompleted_worker.mutex_);
               while (!m_readcompleted_worker.completed_)
               {
-                  m_readcompleted_worker.cond_.wait();
+                  m_readcompleted_worker.cond_.wait(guard);
               }
           }
           {

@@ -136,7 +136,7 @@ namespace SDOPackage
     RTC_TRACE(("set_device_profile()"));
     try
       {
-        std::lock_guard<std::mutex> gurad(m_dprofile_mutex);
+        std::lock_guard<std::mutex> guard(m_dprofile_mutex);
         m_deviceProfile = dProfile;
       }
     catch (...)
@@ -233,7 +233,7 @@ namespace SDOPackage
     RTC_TRACE(("remove_organization(%s)", organization_id));
     try
       {
-        std::lock_guard<std::mutex> gurad(m_org_mutex);
+        std::lock_guard<std::mutex> guard(m_org_mutex);
         CORBA_SeqUtil::erase_if(m_organizations, org_id(organization_id));
       }
     catch (...)
@@ -261,7 +261,7 @@ namespace SDOPackage
     RTC_TRACE(("get_configuration_parameters()"));
     try
       {
-        std::lock_guard<std::mutex> gaurd(m_params_mutex);
+        std::lock_guard<std::mutex> guard(m_params_mutex);
         ParameterList_var param;
         param = new ParameterList(m_parameters);
         return param._retn();
@@ -527,7 +527,7 @@ namespace SDOPackage
 
     try
       {
-        std::lock_guard<std::mutex> gurad(m_config_mutex);
+        std::lock_guard<std::mutex> guard(m_config_mutex);
         // activeなConfigurationSetを返す
         ConfigurationSet_var config;
         config = new ConfigurationSet();
@@ -554,7 +554,7 @@ namespace SDOPackage
     RTC_TRACE(("add_configuration_set()"));
     try
       {
-        std::lock_guard<std::mutex> gurad(m_config_mutex);
+        std::lock_guard<std::mutex> guard(m_config_mutex);
         const char* config_id(configuration_set.id);
         coil::Properties config(config_id);
         toProperties(config, configuration_set);

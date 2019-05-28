@@ -20,7 +20,7 @@
 
 #include <rtm/RTC.h>
 
-#include <coil/Condition.h>
+#include <condition_variable>
 #include <coil/Task.h>
 
 #include <rtm/ExecutionContextBase.h>
@@ -59,7 +59,6 @@ namespace RTC
       public RTC::ExecutionContextBase,
       public coil::Task
   {
-    typedef coil::Condition<std::mutex> Condition;
   public:
     /*!
      * @if jp
@@ -633,9 +632,9 @@ namespace RTC
      */
     struct Worker
     {
-      Worker() : cond_(mutex_), ticked_(false) {}
+      Worker() : cond_(), ticked_(false) {}
       std::mutex mutex_;
-      Condition cond_;
+      std::condition_variable cond_;
       bool ticked_;
     };
     // A condition variable for external triggered worker

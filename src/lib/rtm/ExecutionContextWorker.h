@@ -19,7 +19,7 @@
 #ifndef RTC_EXECUTIONCONTEXTWORKER_H
 #define RTC_EXECUTIONCONTEXTWORKER_H
 
-#include <coil/Condition.h>
+#include <condition_variable>
 
 #include <rtm/idl/RTCSkel.h>
 #include <rtm/SystemLogger.h>

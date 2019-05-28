@@ -289,9 +289,9 @@ namespace RTC
 
       struct WorkerThreadCtrl
       {
-          WorkerThreadCtrl() : cond_(mutex_), completed_(false) {}
+          WorkerThreadCtrl() : cond_(), completed_(false) {}
           std::mutex mutex_;
-          coil::Condition<std::mutex> cond_;
+          std::condition_variable cond_;
           bool completed_;
       };
       WorkerThreadCtrl m_writecompleted_worker;

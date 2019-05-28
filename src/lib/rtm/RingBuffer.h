@@ -22,7 +22,7 @@
 
 #include <coil/TimeValue.h>
 #include <mutex>
-#include <coil/Condition.h>
+#include <condition_variable>
 #include <coil/stringutil.h>
 
 #include <rtm/BufferBase.h>
@@ -368,7 +368,7 @@ namespace RTC
         {
           if(empty_)
             {
-              m_empty.cond.signal();
+              m_empty.cond.notify_one();
             }
           m_empty.mutex.unlock();
         }
@@ -454,7 +454,7 @@ namespace RTC
                              long int sec = -1, long int nsec = 0) override
     {
       {
-      std::lock_guard<std::mutex> guard(m_full.mutex);
+      std::unique_lock<std::mutex> guard(m_full.mutex);
 
       if (full())
         {
@@ -483,8 +483,9 @@ namespace RTC
                   sec = m_wtimeout.sec();
                   nsec = m_wtimeout.usec() * 1000;
                 }
-              //  true: signaled, false: timeout
-              if (!m_full.cond.wait(sec, nsec))
+              auto term_s = std::chrono::seconds(sec);
+              auto term_ns = std::chrono::nanoseconds(nsec);
+              if (std::cv_status::timeout == m_empty.cond.wait_for(guard, term_s + term_ns))
                 {
                   return ::RTC::BufferStatus::TIMEOUT;
                 }
@@ -640,7 +641,7 @@ namespace RTC
         {
           if(full_)
             {
-              m_full.cond.signal();
+              m_full.cond.notify_one();
             }
           m_full.mutex.unlock();
         }
@@ -674,7 +675,7 @@ namespace RTC
      */
     ReturnCode get(DataType& value) override
     {
-      std::lock_guard<std::mutex> gaurd(m_posmutex);
+      std::lock_guard<std::mutex> guard(m_posmutex);
       value = m_buffer[m_rpos];
       return ::RTC::BufferStatus::BUFFER_OK;
     }
@@ -699,7 +700,7 @@ namespace RTC
      */
     DataType& get() override
     {
-      std::lock_guard<std::mutex> gaurd(m_posmutex);
+      std::lock_guard<std::mutex> guard(m_posmutex);
       return m_buffer[m_rpos];
     }
 
@@ -749,7 +750,7 @@ namespace RTC
                             long int sec = -1, long int nsec = 0) override
     {
       {
-      std::lock_guard<std::mutex> gaurd(m_empty.mutex);
+      std::unique_lock<std::mutex> guard(m_empty.mutex);
 
       if (empty())
         {
@@ -783,8 +784,9 @@ namespace RTC
                   sec = m_rtimeout.sec();
                   nsec = m_rtimeout.usec() * 1000;
                 }
-              //  true: signaled, false: timeout
-              if (!m_empty.cond.wait(sec, nsec))
+              auto term_s = std::chrono::seconds(sec);
+              auto term_ns = std::chrono::nanoseconds(nsec);
+              if (std::cv_status::timeout == m_empty.cond.wait_for(guard, term_s + term_ns))
                 {
                   return ::RTC::BufferStatus::TIMEOUT;
                 }
@@ -1046,8 +1048,8 @@ namespace RTC
      */
     struct condition
     {
-      condition() : cond(mutex) {}
-      coil::Condition<std::mutex> cond;
+      condition() : cond() {}
+      std::condition_variable cond;
       std::mutex mutex;
     };
 

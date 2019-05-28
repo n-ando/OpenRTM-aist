@@ -289,7 +289,7 @@ namespace RTC
   bool SdoServiceAdmin::removeSdoServiceProvider(const char* id)
   {
     RTC_TRACE(("removeSdoServiceProvider(%s)", id));
-    std::lock_guard<std::mutex> gurad(m_provider_mutex);
+    std::lock_guard<std::mutex> guard(m_provider_mutex);
 
     std::string strid(id);
     std::vector<SdoServiceProviderBase*>::iterator it = m_providers.begin();
