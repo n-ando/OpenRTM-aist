@@ -49,7 +49,6 @@ namespace RTC
     class OpenSpliceInPort
         : public InPortProvider, OpenSpliceInPortListenerBase
     {
-        typedef coil::Mutex Mutex;
     public:
         /*!
          * @if jp
@@ -369,7 +368,7 @@ namespace RTC
         ConnectorListeners* m_listeners;
         InPortConnector* m_connector;
 
-        Mutex m_mutex;
+        std::mutex m_mutex;
 
         OpenSpliceInPortBase* m_inport;
 

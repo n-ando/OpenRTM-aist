@@ -19,7 +19,6 @@
 #ifndef RTM_UTIL_LISTENERHOLDER_H
 #define RTM_UTIL_LISTENERHOLDER_H
 
-#include <coil/Mutex.h>
 #include <mutex>
 #include <coil/NonCopyable.h>
 
@@ -94,7 +93,7 @@ namespace util
    *   // 関数呼び出し演算子のコールバック関数の場合
    *   virtual void operator()(std::string strarg)
    *   {
-   *     Gurad gurad(m_mutex);
+   *     Gurad guard(m_mutex);
    *     for (int i(0), len(m_listeners.size()); i < len; ++i)
    *     {
    *       m_listeners[i].first->operator()(strarg);
@@ -103,7 +102,7 @@ namespace util
    *
    *   virtual void onEvent0(const char* arg0)
    *   {
-   *     Gurad gurad(m_mutex);
+   *     Gurad guard(m_mutex);
    *     for (int i(0), len(m_listeners.size()); i < len; ++i)
    *     {
    *       m_listeners[i].first->onEvent(arg0);
@@ -170,7 +169,7 @@ namespace util
      */
     virtual ~ListenerHolder()
     {
-      std::lock_guard<coil::Mutex> guard(m_mutex);
+      std::lock_guard<std::mutex> guard(m_mutex);
 
       for(auto & listener : m_listeners)
         {
@@ -192,7 +191,7 @@ namespace util
     virtual void addListener(ListenerClass* listener,
                      bool autoclean)
     {
-      std::lock_guard<coil::Mutex> guard(m_mutex);
+      std::lock_guard<std::mutex> guard(m_mutex);
       m_listeners.push_back(Entry(listener, autoclean));
     }
 
@@ -205,7 +204,7 @@ namespace util
      */
     virtual void removeListener(ListenerClass* listener)
     {
-      std::lock_guard<coil::Mutex> guard(m_mutex);
+      std::lock_guard<std::mutex> guard(m_mutex);
       EntryIterator it(m_listeners.begin());
 
       for (; it != m_listeners.end(); ++it)
@@ -230,7 +229,7 @@ namespace util
      * @brief Mutex
      * @endif
      */
-    coil::Mutex m_mutex;
+    std::mutex m_mutex;
 
     /*!
      * @if jp
@@ -246,7 +245,7 @@ namespace util
 
 #define LISTENERHOLDER_CALLBACK(func, args)               \
   {                                                       \
-    std::lock_guard<coil::Mutex> guard(m_mutex);                                 \
+    std::lock_guard<std::mutex> guard(m_mutex);                                 \
     for (std::vector<Entry>::iterator listener = m_listeners.begin(); listener != m_listeners.end(); ++listener) \
       {                                                   \
         (*listener).first->func args;                  \

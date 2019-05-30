@@ -19,7 +19,6 @@
 #ifndef RTM_LOCALSERVICEBASE_H
 #define RTM_LOCALSERVICEBASE_H
 
-#include <coil/Mutex.h>
 #include <coil/Factory.h>
 #include <coil/Timer.h>
 #include <coil/Properties.h>

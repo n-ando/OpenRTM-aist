@@ -21,7 +21,6 @@
 
 #include <coil/Singleton.h>
 #include <coil/TimeValue.h>
-#include <coil/Mutex.h>
 #include <mutex>
 
 #include <string>
@@ -123,7 +122,7 @@ namespace coil
     bool settime(coil::TimeValue clocktime) override;
   private:
     coil::TimeValue m_currentTime;
-    mutable coil::Mutex m_currentTimeMutex;
+    mutable std::mutex m_currentTimeMutex;
   };
 
   /*!
@@ -151,7 +150,7 @@ namespace coil
     bool settime(coil::TimeValue clocktime) override;
   private:
     coil::TimeValue m_offset;
-    mutable coil::Mutex m_offsetMutex;
+    mutable std::mutex m_offsetMutex;
   };
 
   /*!
@@ -183,7 +182,7 @@ namespace coil
 #ifdef WIN32
     static ClockManager& instance();
     static ClockManager* clockmgr;
-    static coil::Mutex clockmgr_mutex;
+    static std::mutex clockmgr_mutex;
   private:
     ClockManager() {}
 #endif

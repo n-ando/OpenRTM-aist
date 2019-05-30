@@ -66,13 +66,13 @@ namespace RTC
     RTC_TRACE(("~LogicalTimeTriggeredEC()"));
     {
       {
-        std::lock_guard<coil::Mutex> guard(m_svcmutex);
+        std::lock_guard<std::mutex> guard(m_svcmutex);
         m_svc = false;
       }
       {
-        std::lock_guard<coil::Mutex> guard(m_worker.mutex_);
+        std::lock_guard<std::mutex> guard(m_worker.mutex_);
         m_worker.ticked_ = true;
-        m_worker.cond_.signal();
+        m_worker.cond_.notify_one();
       }
     }
     wait();
@@ -124,12 +124,12 @@ namespace RTC
     do
       {
         {
-          std::lock_guard<coil::Mutex> gurad(m_worker.mutex_);
+          std::unique_lock<std::mutex> guard(m_worker.mutex_);
           RTC_DEBUG(("Start of worker invocation. ticked = %s",
                      m_worker.ticked_ ? "true" : "false"));
           while (!m_worker.ticked_)
             {
-              m_worker.cond_.wait(); // wait for tick
+              m_worker.cond_.wait(guard); // wait for tick
               RTC_DEBUG(("Thread was woken up."));
             }
           if (!m_worker.ticked_) { continue; }
@@ -140,7 +140,7 @@ namespace RTC
         ExecutionContextBase::invokeWorkerPostDo();
         coil::TimeValue t1(coil::gettimeofday());
         {
-          std::lock_guard<coil::Mutex> gurad(m_worker.mutex_);
+          std::lock_guard<std::mutex> guard(m_worker.mutex_);
           m_worker.ticked_ = false;
         }
         coil::TimeValue period(getPeriod());
@@ -212,9 +212,9 @@ namespace RTC
       }
     else            // Asynchronous tick mode
       {
-        std::lock_guard<coil::Mutex> guard(m_worker.mutex_);
+        std::lock_guard<std::mutex> guard(m_worker.mutex_);
         m_worker.ticked_ = true;
-        m_worker.cond_.signal();
+        m_worker.cond_.notify_one();
         RTC_PARANOID(("EC was ticked. Signal was sent to worker thread."));
       }
     return;
@@ -410,7 +410,7 @@ namespace RTC
   {
     RTC_TRACE(("invokeWorker()"));
     if (!isRunning()) { return; }
-    std::lock_guard<coil::Mutex> guard(m_tickmutex);
+    std::lock_guard<std::mutex> guard(m_tickmutex);
 
     ExecutionContextBase::invokeWorkerPreDo(); // update state
     coil::TimeValue t0(coil::gettimeofday());
@@ -448,7 +448,7 @@ namespace RTC
   RTC::ReturnCode_t LogicalTimeTriggeredEC::onStarted()
   {
     // change EC thread state
-    std::lock_guard<coil::Mutex> gurad(m_svcmutex);
+    std::lock_guard<std::mutex> guard(m_svcmutex);
     if (m_syncTick) { return RTC::RTC_OK; }
     if (!m_svc)
       { // If start() is called first time, start the worker thread.
@@ -476,9 +476,9 @@ namespace RTC
       }
     else            // Asynchronous tick mode
       {
-        std::lock_guard<coil::Mutex> guard(m_worker.mutex_);
+        std::lock_guard<std::mutex> guard(m_worker.mutex_);
         m_worker.ticked_ = true;
-        m_worker.cond_.signal();
+        m_worker.cond_.notify_one();
       }
     return RTC::RTC_OK;
   }
@@ -499,9 +499,9 @@ namespace RTC
       }
     else            // Asynchronous tick mode
       {
-        std::lock_guard<coil::Mutex> guard(m_worker.mutex_);
+        std::lock_guard<std::mutex> guard(m_worker.mutex_);
         m_worker.ticked_ = true;
-        m_worker.cond_.signal();
+        m_worker.cond_.notify_one();
       }
     return RTC::RTC_OK;
   }
@@ -521,9 +521,9 @@ namespace RTC
       }
     else            // Asynchronous tick mode
       {
-        std::lock_guard<coil::Mutex> guard(m_worker.mutex_);
+        std::lock_guard<std::mutex> guard(m_worker.mutex_);
         m_worker.ticked_ = true;
-        m_worker.cond_.signal();
+        m_worker.cond_.notify_one();
       }
     return RTC::RTC_OK;
   }

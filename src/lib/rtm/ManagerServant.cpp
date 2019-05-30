@@ -88,7 +88,7 @@ namespace RTM
 
   ManagerServant::~ManagerServant()
   {
-    std::lock_guard<coil::Mutex> guardm(m_masterMutex);
+    std::lock_guard<std::mutex> guardm(m_masterMutex);
     for (CORBA::ULong i(0); i < m_masters.length(); ++i)
       {
         try
@@ -104,7 +104,7 @@ namespace RTM
       }
     m_masters.length(0);
 
-    std::lock_guard<coil::Mutex> guards(m_slaveMutex);
+    std::lock_guard<std::mutex> guards(m_slaveMutex);
     for (CORBA::ULong i(0); i < m_slaves.length(); ++i)
       {
         try
@@ -211,7 +211,7 @@ namespace RTM
     if (false)
       {
         // copy slaves' module profiles
-        std::lock_guard<coil::Mutex> gurad(m_slaveMutex);
+        std::lock_guard<std::mutex> guard(m_slaveMutex);
         RTC_DEBUG(("%d slaves exists.", m_slaves.length()));
         for (int i(0), len(m_slaves.length()); i < len; ++i)
           {
@@ -269,7 +269,7 @@ namespace RTM
     if (false)
       {
         // copy slaves' module profile
-        std::lock_guard<coil::Mutex> guard(m_slaveMutex);
+        std::lock_guard<std::mutex> guard(m_slaveMutex);
         RTC_DEBUG(("%d slave managers exists.", m_slaves.length()));
         for (int i(0), len(m_slaves.length()); i < len; ++i)
           {
@@ -327,7 +327,7 @@ namespace RTM
     if (false)
       {
         // copy slaves' factory profile
-        std::lock_guard<coil::Mutex> guard(m_slaveMutex);
+        std::lock_guard<std::mutex> guard(m_slaveMutex);
         RTC_DEBUG(("%d slave managers exists.", m_slaves.length()));
         for (int i(0), len(m_slaves.length()); i < len; ++i)
           {
@@ -468,7 +468,7 @@ namespace RTM
     if (m_isMaster)
       {
           {
-            std::lock_guard<coil::Mutex> guard(m_slaveMutex);
+            std::lock_guard<std::mutex> guard(m_slaveMutex);
             for (CORBA::ULong i(0); i < m_slaves.length(); ++i)
               {
                 try
@@ -574,7 +574,7 @@ namespace RTM
       }
 
     // get slaves' component references
-    std::lock_guard<coil::Mutex> guard(m_slaveMutex);
+    std::lock_guard<std::mutex> guard(m_slaveMutex);
     RTC_DEBUG(("%d slave managers exists.", m_slaves.length()));
     for (int i(0), len(m_slaves.length()); i < len; ++i)
       {
@@ -628,7 +628,7 @@ namespace RTM
       }
 
     // copy slaves' component profiles
-    std::lock_guard<coil::Mutex> guard(m_slaveMutex);
+    std::lock_guard<std::mutex> guard(m_slaveMutex);
     RTC_DEBUG(("%d slave managers exists.", m_slaves.length()));
     for (int i(0), len(m_slaves.length()); i < len; ++i)
       {
@@ -732,7 +732,7 @@ namespace RTM
   RTM::ManagerList* ManagerServant::get_master_managers()
   {
     RTC_TRACE(("get_master_managers()"));
-    std::lock_guard<coil::Mutex> guard(m_masterMutex);
+    std::lock_guard<std::mutex> guard(m_masterMutex);
     return new ManagerList(m_masters);
   }
 
@@ -745,7 +745,7 @@ namespace RTM
    */
   RTC::ReturnCode_t ManagerServant::add_master_manager(RTM::Manager_ptr mgr)
   {
-    std::lock_guard<coil::Mutex> guard(m_masterMutex);
+    std::lock_guard<std::mutex> guard(m_masterMutex);
     CORBA::Long index;
     RTC_TRACE(("add_master_manager(), %d masters", m_masters.length()));
     index = CORBA_SeqUtil::find(m_masters, is_equiv(mgr));
@@ -771,7 +771,7 @@ namespace RTM
   RTC::ReturnCode_t
   ManagerServant::remove_master_manager(RTM::Manager_ptr mgr)
   {
-    std::lock_guard<coil::Mutex> guard(m_masterMutex);
+    std::lock_guard<std::mutex> guard(m_masterMutex);
     RTC_TRACE(("remove_master_manager(), %d masters", m_masters.length()));
 
     CORBA::Long index;
@@ -797,7 +797,7 @@ namespace RTM
    */
   ManagerList* ManagerServant::get_slave_managers()
   {
-    std::lock_guard<coil::Mutex> guard(m_slaveMutex);
+    std::lock_guard<std::mutex> guard(m_slaveMutex);
     RTC_TRACE(("get_slave_managers(), %d slaves", m_slaves.length()));
 
     return new ManagerList(m_slaves);
@@ -812,7 +812,7 @@ namespace RTM
    */
   RTC::ReturnCode_t ManagerServant::add_slave_manager(RTM::Manager_ptr mgr)
   {
-    std::lock_guard<coil::Mutex> guard(m_slaveMutex);
+    std::lock_guard<std::mutex> guard(m_slaveMutex);
     RTC_TRACE(("add_slave_manager(), %d slaves", m_slaves.length()));
 
     CORBA::Long index;
@@ -838,7 +838,7 @@ namespace RTM
    */
   RTC::ReturnCode_t ManagerServant::remove_slave_manager(RTM::Manager_ptr mgr)
   {
-    std::lock_guard<coil::Mutex> guard(m_slaveMutex);
+    std::lock_guard<std::mutex> guard(m_slaveMutex);
     RTC_TRACE(("remove_slave_manager(), %d slaves", m_slaves.length()));
     CORBA::Long index;
     index = CORBA_SeqUtil::find(m_slaves, is_equiv(mgr));
@@ -879,7 +879,7 @@ namespace RTM
   {
     if (!m_isMaster)
       {
-        std::lock_guard<coil::Mutex> guardm(m_masterMutex);
+        std::lock_guard<std::mutex> guardm(m_masterMutex);
         for (CORBA::ULong i(0); i < m_masters.length(); ++i)
           {
             try
@@ -897,7 +897,7 @@ namespace RTM
       }
     else
       {
-        std::lock_guard<coil::Mutex> guards(m_slaveMutex);
+        std::lock_guard<std::mutex> guards(m_slaveMutex);
         for (CORBA::ULong i(0); i < m_slaves.length(); ++i)
           {
             try
@@ -1176,10 +1176,10 @@ namespace RTM
       }
     if (m_isMaster)
       {
-        std::lock_guard<coil::Mutex> guard(m_slaveMutex);
+        std::lock_guard<std::mutex> guard(m_slaveMutex);
         return findManagerFromList(mgr_name, m_slaves);
       }
-    std::lock_guard<coil::Mutex> guard(m_masterMutex);
+    std::lock_guard<std::mutex> guard(m_masterMutex);
     return findManagerFromList(mgr_name, m_masters);
   }
   
@@ -1284,7 +1284,7 @@ namespace RTM
         coil::vstring slaves_names;
         if (mgrstr == "manager_%p")
           {
-            std::lock_guard<coil::Mutex> gurad(m_slaveMutex);
+            std::lock_guard<std::mutex> guard(m_slaveMutex);
                         
             for (CORBA::ULong i(0); i < m_slaves.length(); ++i)
               {
@@ -1322,7 +1322,7 @@ namespace RTM
             RTC_DEBUG(("Detecting new slave manager (%s).", mgrstr.c_str()));
             if (mgrstr == "manager_%p")
               {
-                std::lock_guard<coil::Mutex> gurad(m_slaveMutex);
+                std::lock_guard<std::mutex> guard(m_slaveMutex);
                 for (CORBA::ULong j(0); j < m_slaves.length(); ++j)
                   {
                     RTM::NVList_var nvlist = m_slaves[j]->get_configuration();
@@ -1506,7 +1506,7 @@ namespace RTM
       if (!m_isMaster && !CORBA::is_nil(m_objref))
         {
             {
-              std::lock_guard<coil::Mutex> guardm(m_masterMutex);
+              std::lock_guard<std::mutex> guardm(m_masterMutex);
               if (m_masters.length() > 0)
                 {
                   for (CORBA::ULong i = 0; i < m_masters.length(); i++)

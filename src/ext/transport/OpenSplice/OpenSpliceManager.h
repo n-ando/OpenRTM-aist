@@ -20,7 +20,6 @@
 #define RTC_OPENSPLICEMANAGER_H
 
 #include <vector>
-#include <coil/Mutex.h>
 #include <mutex>
 #include <map>
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
@@ -57,7 +56,6 @@ namespace RTC
      */
     class OpenSpliceManager
     {
-        typedef coil::Mutex Mutex;
     public:
         /*!
          * @if jp
@@ -378,7 +376,7 @@ namespace RTC
         static bool checkHandle(void *handle, const char* info);
     private:
         static OpenSpliceManager* manager;
-        static Mutex mutex;
+        static std::mutex mutex;
         DDS::DomainParticipantFactory_var m_factory;
         DDS::DomainId_t m_domain;
         DDS::DomainParticipant_var m_participant;

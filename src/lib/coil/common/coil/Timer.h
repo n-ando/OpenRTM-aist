@@ -21,7 +21,6 @@
 
 #include <coil/TimeValue.h>
 #include <coil/Listener.h>
-#include <coil/Mutex.h>
 #include <mutex>
 #include <coil/Task.h>
 #include <vector>
@@ -53,7 +52,6 @@ namespace coil
   class Timer
     : public coil::Task
   {
-    typedef coil::Mutex Mutex;
   public:
     /*!
      * @if jp
@@ -315,7 +313,7 @@ namespace coil
   private:
     TimeValue m_interval;
 
-    Mutex m_runningMutex;
+    std::mutex m_runningMutex;
     bool m_running;
 
     struct Task
@@ -330,7 +328,7 @@ namespace coil
     };
 
     std::vector<Task> m_tasks;
-    Mutex  m_taskMutex;
+    std::mutex  m_taskMutex;
   };
 } // namespace coil
 #endif  // Timer_h

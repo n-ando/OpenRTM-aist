@@ -21,7 +21,6 @@
 
 #include <rtm/RTC.h>
 
-#include <coil/Mutex.h>
 #include <mutex>
 
 #include <algorithm>
@@ -55,7 +54,6 @@ public:
   typedef std::vector<Object*>                  ObjectVector;
   typedef typename ObjectVector::iterator       ObjectVectorItr;
   typedef typename ObjectVector::const_iterator ObjectVectorConstItr;
-  typedef coil::Mutex Mutex;
   /*!
    * @if jp
    *
@@ -118,7 +116,7 @@ public:
   bool registerObject(Object* obj)
   {
     ObjectVectorItr it;
-    std::lock_guard<coil::Mutex> guard(m_objects._mutex);
+    std::lock_guard<std::mutex> guard(m_objects._mutex);
 
     it = std::find_if(m_objects._obj.begin(), m_objects._obj.end(),
                       Predicate(obj));
@@ -158,7 +156,7 @@ public:
   Object* unregisterObject(const Identifier& id)
   {
     ObjectVectorItr it;
-    std::lock_guard<coil::Mutex> guard(m_objects._mutex);
+    std::lock_guard<std::mutex> guard(m_objects._mutex);
 
     it = std::find_if(m_objects._obj.begin(), m_objects._obj.end(),
                       Predicate(id));
@@ -202,7 +200,7 @@ public:
   Object* find(const Identifier& id) const
   {
     ObjectVectorConstItr it;
-    std::lock_guard<coil::Mutex> guard(m_objects._mutex);
+    std::lock_guard<std::mutex> guard(m_objects._mutex);
     it = std::find_if(m_objects._obj.begin(), m_objects._obj.end(),
                       Predicate(id));
     if (it != m_objects._obj.end())
@@ -233,7 +231,7 @@ public:
    */
   std::vector<Object*> getObjects() const
   {
-    std::lock_guard<coil::Mutex> guard(m_objects._mutex);
+    std::lock_guard<std::mutex> guard(m_objects._mutex);
     return m_objects._obj;
   }
 
@@ -247,7 +245,7 @@ public:
   template <class Pred>
   Pred for_each(Pred p)
   {
-    std::lock_guard<coil::Mutex> guard(m_objects._mutex);
+    std::lock_guard<std::mutex> guard(m_objects._mutex);
     return std::for_each(m_objects._obj.begin(), m_objects._obj.end(), p);
   }
 
@@ -261,7 +259,7 @@ public:
   template <class Pred>
   Pred for_each(Pred p) const
   {
-    std::lock_guard<coil::Mutex> guard(m_objects._mutex);
+    std::lock_guard<std::mutex> guard(m_objects._mutex);
     return std::for_each(m_objects._obj.begin(), m_objects._obj.end(), p);
   }
 
@@ -276,7 +274,7 @@ protected:
   struct Objects
   {
     ~Objects(){}
-    mutable Mutex _mutex;
+    mutable std::mutex _mutex;
     ObjectVector _obj;
   };
   /*!

@@ -21,9 +21,8 @@
 #define RTC_RINGBUFFER_H
 
 #include <coil/TimeValue.h>
-#include <coil/Mutex.h>
 #include <mutex>
-#include <coil/Condition.h>
+#include <condition_variable>
 #include <coil/stringutil.h>
 
 #include <rtm/BufferBase.h>
@@ -213,7 +212,7 @@ namespace RTC
      */
     size_t length() const override
     {
-      std::lock_guard<coil::Mutex> guard(m_posmutex);
+      std::lock_guard<std::mutex> guard(m_posmutex);
       return m_length;
     }
 
@@ -271,7 +270,7 @@ namespace RTC
      */
     ReturnCode reset() override
     {
-      std::lock_guard<coil::Mutex> guard(m_posmutex);
+      std::lock_guard<std::mutex> guard(m_posmutex);
       m_fillcount = 0;
       m_wcount = 0;
       m_wpos = 0;
@@ -304,7 +303,7 @@ namespace RTC
      */
     DataType* wptr(long int n = 0) override
     {
-      std::lock_guard<coil::Mutex> guard(m_posmutex);
+      std::lock_guard<std::mutex> guard(m_posmutex);
       return &m_buffer[(m_wpos + n + m_length) % m_length];
     }
 
@@ -349,7 +348,7 @@ namespace RTC
       //                 n'<= m_fillcount
       //                 n >= - m_fillcount
       {
-          std::lock_guard<coil::Mutex> guard(m_posmutex);
+          std::lock_guard<std::mutex> guard(m_posmutex);
           if ((n > 0 && n > static_cast<long int>(m_length) - static_cast<long int>(m_fillcount)) ||
               (n < 0 && n < -static_cast<long int>(m_fillcount)))
             {
@@ -369,7 +368,7 @@ namespace RTC
         {
           if(empty_)
             {
-              m_empty.cond.signal();
+              m_empty.cond.notify_one();
             }
           m_empty.mutex.unlock();
         }
@@ -405,7 +404,7 @@ namespace RTC
      */
     ReturnCode put(const DataType& value) override
     {
-      std::lock_guard<coil::Mutex> guard(m_posmutex);
+      std::lock_guard<std::mutex> guard(m_posmutex);
       m_buffer[m_wpos] = value;
       return ::RTC::BufferStatus::BUFFER_OK;
     }
@@ -455,7 +454,7 @@ namespace RTC
                              long int sec = -1, long int nsec = 0) override
     {
       {
-      std::lock_guard<coil::Mutex> guard(m_full.mutex);
+      std::unique_lock<std::mutex> guard(m_full.mutex);
 
       if (full())
         {
@@ -484,8 +483,9 @@ namespace RTC
                   sec = m_wtimeout.sec();
                   nsec = m_wtimeout.usec() * 1000;
                 }
-              //  true: signaled, false: timeout
-              if (!m_full.cond.wait(sec, nsec))
+              auto term_s = std::chrono::seconds(sec);
+              auto term_ns = std::chrono::nanoseconds(nsec);
+              if (std::cv_status::timeout == m_empty.cond.wait_for(guard, term_s + term_ns))
                 {
                   return ::RTC::BufferStatus::TIMEOUT;
                 }
@@ -528,7 +528,7 @@ namespace RTC
      */
     size_t writable() const override
     {
-      std::lock_guard<coil::Mutex> guard(m_posmutex);
+      std::lock_guard<std::mutex> guard(m_posmutex);
       return m_length - m_fillcount;
     }
 
@@ -553,7 +553,7 @@ namespace RTC
      */
     bool full() const override
     {
-      std::lock_guard<coil::Mutex> guard(m_posmutex);
+      std::lock_guard<std::mutex> guard(m_posmutex);
       return m_length == m_fillcount;
     }
 
@@ -580,7 +580,7 @@ namespace RTC
      */
     DataType* rptr(long int n = 0) override
     {
-      std::lock_guard<coil::Mutex> guard(m_posmutex);
+      std::lock_guard<std::mutex> guard(m_posmutex);
       return &(m_buffer[(m_rpos + n + m_length) % m_length]);
     }
 
@@ -622,7 +622,7 @@ namespace RTC
       //     n satisfies n'<= m_length - m_fillcount
       //                 n >= m_fillcount - m_length
       {
-          std::lock_guard<coil::Mutex> guard(m_posmutex);
+          std::lock_guard<std::mutex> guard(m_posmutex);
           if ((n > 0 && n > static_cast<long int>(m_fillcount)) ||
               (n < 0 && n < static_cast<long int>(m_fillcount) - static_cast<long int>(m_length)))
             {
@@ -641,7 +641,7 @@ namespace RTC
         {
           if(full_)
             {
-              m_full.cond.signal();
+              m_full.cond.notify_one();
             }
           m_full.mutex.unlock();
         }
@@ -675,7 +675,7 @@ namespace RTC
      */
     ReturnCode get(DataType& value) override
     {
-      std::lock_guard<coil::Mutex> gaurd(m_posmutex);
+      std::lock_guard<std::mutex> guard(m_posmutex);
       value = m_buffer[m_rpos];
       return ::RTC::BufferStatus::BUFFER_OK;
     }
@@ -700,7 +700,7 @@ namespace RTC
      */
     DataType& get() override
     {
-      std::lock_guard<coil::Mutex> gaurd(m_posmutex);
+      std::lock_guard<std::mutex> guard(m_posmutex);
       return m_buffer[m_rpos];
     }
 
@@ -750,7 +750,7 @@ namespace RTC
                             long int sec = -1, long int nsec = 0) override
     {
       {
-      std::lock_guard<coil::Mutex> gaurd(m_empty.mutex);
+      std::unique_lock<std::mutex> guard(m_empty.mutex);
 
       if (empty())
         {
@@ -784,8 +784,9 @@ namespace RTC
                   sec = m_rtimeout.sec();
                   nsec = m_rtimeout.usec() * 1000;
                 }
-              //  true: signaled, false: timeout
-              if (!m_empty.cond.wait(sec, nsec))
+              auto term_s = std::chrono::seconds(sec);
+              auto term_ns = std::chrono::nanoseconds(nsec);
+              if (std::cv_status::timeout == m_empty.cond.wait_for(guard, term_s + term_ns))
                 {
                   return ::RTC::BufferStatus::TIMEOUT;
                 }
@@ -830,7 +831,7 @@ namespace RTC
      */
     size_t readable() const override
     {
-      std::lock_guard<coil::Mutex> guard(m_posmutex);
+      std::lock_guard<std::mutex> guard(m_posmutex);
       return m_fillcount;
     }
 
@@ -855,7 +856,7 @@ namespace RTC
      */
     bool empty() const override
     {
-      std::lock_guard<coil::Mutex> guard(m_posmutex);
+      std::lock_guard<std::mutex> guard(m_posmutex);
       return m_fillcount == 0;
     }
 
@@ -1047,9 +1048,9 @@ namespace RTC
      */
     struct condition
     {
-      condition() : cond(mutex) {}
-      coil::Condition<coil::Mutex> cond;
-      coil::Mutex mutex;
+      condition() : cond() {}
+      std::condition_variable cond;
+      std::mutex mutex;
     };
 
     /*!
@@ -1059,7 +1060,7 @@ namespace RTC
      * @brief mutex for position variable
      * @endif
      */
-    mutable coil::Mutex m_posmutex;
+    mutable std::mutex m_posmutex;
 
     /*!
      * @if jp

@@ -74,13 +74,13 @@ namespace RTC_exp
   {
     RTC_TRACE(("~RTPreemptEC()"));
     {
-      std::lock_guard<coil::Mutex> guard(m_svcmutex);
+      std::lock_guard<std::mutex> guard(m_svcmutex);
       m_svc = false;
     }
     {
-      std::lock_guard<coil::Mutex> guard(m_workerthread.mutex_);
+      std::lock_guard<std::mutex> guard(m_workerthread.mutex_);
       m_workerthread.running_ = true;
-      m_workerthread.cond_.signal();
+      m_workerthread.cond_.notify_one();
     }
     wait();
   }
@@ -160,10 +160,10 @@ namespace RTC_exp
       {
         ExecutionContextBase::invokeWorkerPreDo();
         {
-          std::lock_guard<coil::Mutex> guard(m_workerthread.mutex_);
+          std::unique_lock<std::mutex> guard(m_workerthread.mutex_);
           while (!m_workerthread.running_)
             {
-              m_workerthread.cond_.wait();
+              m_workerthread.cond_.wait(guard);
             }
         }
         clock_gettime(CLOCK_MONOTONIC ,&ts0);
@@ -401,7 +401,7 @@ namespace RTC_exp
   {
     // change EC thread state
     {
-      std::lock_guard<coil::Mutex> guard(m_svcmutex);
+      std::lock_guard<std::mutex> guard(m_svcmutex);
       if (!m_svc)
         {
           m_svc = true;
@@ -410,14 +410,14 @@ namespace RTC_exp
     }
     if (isAllNextState(RTC::INACTIVE_STATE))
       {
-        std::lock_guard<coil::Mutex> guard(m_workerthread.mutex_);
+        std::lock_guard<std::mutex> guard(m_workerthread.mutex_);
         m_workerthread.running_ = false;
       }
     else
       {
-        std::lock_guard<coil::Mutex> guard(m_workerthread.mutex_);
+        std::lock_guard<std::mutex> guard(m_workerthread.mutex_);
         m_workerthread.running_ = true;
-        m_workerthread.cond_.signal();
+        m_workerthread.cond_.notify_one();
       }
     return RTC::RTC_OK;
   }
@@ -428,7 +428,7 @@ namespace RTC_exp
   RTC::ReturnCode_t RTPreemptEC::onStopping()
   {
     // stop thread
-    std::lock_guard<coil::Mutex> guard(m_workerthread.mutex_);
+    std::lock_guard<std::mutex> guard(m_workerthread.mutex_);
     m_workerthread.running_ = false;
     return RTC::RTC_OK;
   }
@@ -445,11 +445,11 @@ namespace RTC_exp
                   getStateString(comp->getStates().next)));
     // Now comp's next state must be ACTIVE state
     // If worker thread is stopped, restart worker thread.
-    std::lock_guard<coil::Mutex> guard(m_workerthread.mutex_);
+    std::lock_guard<std::mutex> guard(m_workerthread.mutex_);
     if (!m_workerthread.running_)
       {
         m_workerthread.running_ = true;
-        m_workerthread.cond_.signal();
+        m_workerthread.cond_.notify_one();
       }
     return RTC::RTC_OK;
   }
@@ -471,11 +471,11 @@ namespace RTC_exp
 
     // Now comp's next state must be ACTIVE state
     // If worker thread is stopped, restart worker thread.
-    std::lock_guard<coil::Mutex> guard(m_workerthread.mutex_);
+    std::lock_guard<std::mutex> guard(m_workerthread.mutex_);
     if (!m_workerthread.running_)
       {
         m_workerthread.running_ = true;
-        m_workerthread.cond_.signal();
+        m_workerthread.cond_.notify_one();
       }
     return RTC::RTC_OK;
   }
@@ -492,7 +492,7 @@ namespace RTC_exp
                   getStateString(comp->getStates().next)));
     if (isAllNextState(RTC::INACTIVE_STATE))
       {
-        std::lock_guard<coil::Mutex> guard(m_workerthread.mutex_);
+        std::lock_guard<std::mutex> guard(m_workerthread.mutex_);
         if (m_workerthread.running_)
           {
             m_workerthread.running_ = false;
@@ -514,7 +514,7 @@ namespace RTC_exp
                   getStateString(comp->getStates().next)));
     if (isAllNextState(RTC::INACTIVE_STATE))
       {
-        std::lock_guard<coil::Mutex> guard(m_workerthread.mutex_);
+        std::lock_guard<std::mutex> guard(m_workerthread.mutex_);
         if (m_workerthread.running_)
           {
             m_workerthread.running_ = false;
@@ -536,7 +536,7 @@ namespace RTC_exp
                   getStateString(comp->getStates().next)));
     if (isAllNextState(RTC::INACTIVE_STATE))
       {
-        std::lock_guard<coil::Mutex> guard(m_workerthread.mutex_);
+        std::lock_guard<std::mutex> guard(m_workerthread.mutex_);
         if (m_workerthread.running_)
           {
             m_workerthread.running_ = false;
@@ -558,7 +558,7 @@ namespace RTC_exp
                   getStateString(comp->getStates().next)));
     if (isAllNextState(RTC::INACTIVE_STATE))
       {
-        std::lock_guard<coil::Mutex> guard(m_workerthread.mutex_);
+        std::lock_guard<std::mutex> guard(m_workerthread.mutex_);
         if (m_workerthread.running_)
           {
             m_workerthread.running_ = false;

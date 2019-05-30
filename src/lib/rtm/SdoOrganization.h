@@ -24,7 +24,6 @@
 #include <rtm/idl/SDOPackageSkel.h>
 #include <rtm/SystemLogger.h>
 
-#include <coil/Mutex.h>
 #include <mutex>
 
 #include <string>
@@ -77,7 +76,6 @@ namespace SDOPackage
     : public virtual POA_SDOPackage::Organization,
       public virtual PortableServer::RefCountServantBase
   {
-    typedef coil::Mutex Mutex;
   public:
     /*!
      * @if jp
@@ -804,7 +802,7 @@ namespace SDOPackage
      * @endif
      */
     SDOPackage::OrganizationProperty m_orgProperty;
-    Mutex m_org_mutex;
+    std::mutex m_org_mutex;
 
     /*!
      * @if jp

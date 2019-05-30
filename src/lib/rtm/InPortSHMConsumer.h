@@ -161,7 +161,7 @@ protected:
 	InPortConsumer::ReturnCode convertReturnCode(OpenRTM::PortStatus ret);
 
 	coil::Properties m_properties;
-	coil::Mutex m_mutex;
+	std::mutex m_mutex;
 	std::string m_shm_address;
 	SharedMemoryPort m_shmem;
 	int m_memory_size;

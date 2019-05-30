@@ -19,7 +19,6 @@
 #ifndef RTC_PORTCONNECTLISTENER_H
 #define RTC_PORTCONNECTLISTENER_H
 
-#include <coil/Mutex.h>
 #include <mutex>
 #include <rtm/RTC.h>
 #include <rtm/idl/RTCSkel.h>
@@ -359,7 +358,7 @@ namespace RTC
 
   private:
     std::vector<Entry> m_listeners;
-    coil::Mutex m_mutex;
+    std::mutex m_mutex;
   };
 
 
@@ -467,7 +466,7 @@ namespace RTC
 
   private:
     std::vector<Entry> m_listeners;
-    coil::Mutex m_mutex;
+    std::mutex m_mutex;
   };
 
   /*!

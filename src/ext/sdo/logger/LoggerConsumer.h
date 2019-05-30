@@ -20,7 +20,6 @@
 #ifndef RTC_LOGGERCONSUMER_H
 #define RTC_LOGGERCONSUMER_H
 
-#include <coil/Mutex.h>
 #include <coil/Factory.h>
 #include <coil/stringutil.h>
 #include <rtm/SdoServiceConsumerBase.h>

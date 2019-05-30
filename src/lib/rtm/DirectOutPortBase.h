@@ -18,7 +18,6 @@
 #define RTC_DIRECTOUTPORTBASE_H
 
 
-#include <coil/Mutex.h>
 #include <rtm/DirectPortBase.h>
 
 

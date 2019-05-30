@@ -92,7 +92,7 @@ namespace coil
    */
   void Timer::start()
   {
-    std::lock_guard<coil::Mutex> guard(m_runningMutex);
+    std::lock_guard<std::mutex> guard(m_runningMutex);
     if (!m_running)
       {
         m_running = true;
@@ -109,7 +109,7 @@ namespace coil
    */
   void Timer::stop()
   {
-    std::lock_guard<coil::Mutex> guard(m_runningMutex);
+    std::lock_guard<std::mutex> guard(m_runningMutex);
     m_running = false;
   }
 
@@ -122,7 +122,7 @@ namespace coil
    */
   void Timer::invoke()
   {
-    std::lock_guard<coil::Mutex> guard(m_taskMutex);
+    std::lock_guard<std::mutex> guard(m_taskMutex);
     for (auto & task : m_tasks)
       {
         task.remains = task.remains - m_interval;
@@ -143,7 +143,7 @@ namespace coil
    */
   ListenerId Timer::registerListener(ListenerBase* listener, TimeValue tm)
   {
-    std::lock_guard<coil::Mutex> guard(m_taskMutex);
+    std::lock_guard<std::mutex> guard(m_taskMutex);
 
     for (auto & task : m_tasks)
       {
@@ -167,7 +167,7 @@ namespace coil
    */
   bool Timer::unregisterListener(ListenerId id)
   {
-    std::lock_guard<coil::Mutex> guard(m_taskMutex);
+    std::lock_guard<std::mutex> guard(m_taskMutex);
     std::vector<Task>::iterator it;
     it = m_tasks.begin();
 

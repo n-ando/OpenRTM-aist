@@ -23,7 +23,6 @@
 #include <rtm/RTC.h>
 
 #include <mutex>
-#include <coil/Mutex.h>
 #include <rtm/idl/RTCSkel.h>
 #include <rtm/CORBA_SeqUtil.h>
 #include <rtm/NVUtil.h>
@@ -2097,8 +2096,8 @@ namespace RTC
      * @brief Mutex of PortProfile
      * @endif
      */
-    mutable coil::Mutex m_profile_mutex;
-    mutable coil::Mutex m_connectorsMutex;
+    mutable std::mutex m_profile_mutex;
+    mutable std::mutex m_connectorsMutex;
 
     /*!
      * @if jp

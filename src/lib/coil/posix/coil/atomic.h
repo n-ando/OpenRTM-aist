@@ -30,31 +30,30 @@
 #define atomic_exchange_add(x, y) __gnu_cxx::__exchange_and_add(x, y)
 #else
 
-#include <coil/Mutex.h>
 #include <mutex>
-#define COIL_USES_ATOMIC_OP coil::Mutex __mutex;
+#define COIL_USES_ATOMIC_OP std::mutex __mutex;
 
 #define atomic_add(x, y)                        \
   {                                             \
-    std::lock_guard<coil::Mutex> guard(__mutex);    \
+    std::lock_guard<std::mutex> guard(__mutex);    \
     *x = *x + y;                                \
   }
 
 #define atomic_incr(x)                          \
   {                                             \
-    std::lock_guard<coil::Mutex> guard(__mutex);    \
+    std::lock_guard<std::mutex> guard(__mutex);    \
     ++(*x);                                     \
   }
 
 #define atomic_decr(x)                          \
   {                                             \
-    std::lock_guard<coil::Mutex> guard(__mutex);    \
+    std::lock_guard<std::mutex> guard(__mutex);    \
     --(*x);                                     \
   }
 
-int exchange_add(int* x, int y, coil::Mutex* mutex)
+int exchange_add(int* x, int y, std::mutex* mutex)
 {
-  std::lock_guard<coil::Mutex> guard(*mutex);
+  std::lock_guard<std::mutex> guard(*mutex);
   int tmp(*x);
   *x = *x + y;
   return tmp;

@@ -21,7 +21,6 @@
 
 #include <rtm/NVUtil.h>
 #include <rtm/SystemLogger.h>
-#include <coil/Mutex.h>
 #include <coil/UUID.h>
 #include <coil/stringutil.h>
 #include "OpenSpliceOutPort.h"

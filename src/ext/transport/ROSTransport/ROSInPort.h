@@ -26,7 +26,6 @@
 #include <rtm/Manager.h>
 #include <rtm/ConnectorListener.h>
 #include <rtm/ConnectorBase.h>
-#include <coil/Mutex.h>
 #include <ros/connection.h>
 #include <ros/transport/transport_tcp.h>
 #include "ROSMessageInfo.h"
@@ -63,7 +62,6 @@ namespace RTC
   class ROSInPort
     : public InPortProvider
   {
-    typedef coil::Mutex Mutex;
   public:
     /*!
      * @if jp
@@ -575,7 +573,7 @@ namespace RTC
     std::string m_topic;
     std::string m_callerid;
     std::string m_messageType;
-    Mutex m_mutex;
+    std::mutex m_mutex;
     std::map<std::string, ros::ConnectionPtr> m_tcp_connecters;
     std::string m_roscorehost;
     unsigned int m_roscoreport;

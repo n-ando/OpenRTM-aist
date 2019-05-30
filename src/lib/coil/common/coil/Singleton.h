@@ -20,7 +20,6 @@
 #ifndef COIL_SINGLETON_H
 #define COIL_SINGLETON_H
 
-#include <coil/Mutex.h>
 #include <mutex>
 
 namespace coil
@@ -107,7 +106,7 @@ namespace coil
   {
   public:
     typedef SingletonClass* SingletonClassPtr;
-    typedef ::coil::Mutex Mutex;
+    typedef ::std::mutex Mutex;
 
     /*!
      * @if jp
@@ -134,7 +133,7 @@ namespace coil
       // DLC pattern
       if (!m_instance)
         {
-          std::lock_guard<coil::Mutex> guard(m_mutex);
+          std::lock_guard<std::mutex> guard(m_mutex);
           if (!m_instance)
             {
               m_instance = new SingletonClass();
@@ -190,7 +189,7 @@ namespace coil
      * @brief Mutual exclusion object
      * @endif
      */
-    static coil::Mutex m_mutex;
+    static std::mutex m_mutex;
 
     /*!
      * @if jp

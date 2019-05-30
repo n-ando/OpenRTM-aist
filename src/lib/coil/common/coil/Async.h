@@ -204,7 +204,7 @@ namespace coil
     {
       m_func(m_obj);
       {
-        std::lock_guard<Mutex> guard(m_mutex);
+        std::lock_guard<std::mutex> guard(m_mutex);
         m_finished = true;
       }
 
@@ -273,7 +273,7 @@ namespace coil
      */
     bool finished() override
     {
-      std::lock_guard<Mutex> guard(m_mutex);
+      std::lock_guard<std::mutex> guard(m_mutex);
       return m_finished;
     }
   private:
@@ -281,7 +281,7 @@ namespace coil
     Func m_func;
     bool m_finished;
     const bool m_autodelete;
-    Mutex m_mutex;
+    std::mutex m_mutex;
   };
 
   /*!

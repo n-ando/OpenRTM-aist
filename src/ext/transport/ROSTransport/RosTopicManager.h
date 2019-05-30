@@ -23,7 +23,6 @@
 #include "ROSOutPort.h"
 #include <map>
 #include <vector>
-#include <coil/Mutex.h>
 #include <xmlrpcpp/XmlRpc.h>
 #include <ros/poll_manager.h>
 #include <ros/transport/transport_tcp.h>
@@ -52,7 +51,6 @@ namespace RTC
      */
     class RosTopicManager
     {
-        typedef coil::Mutex Mutex;
     public:
         /*!
          * @if jp
@@ -322,7 +320,7 @@ namespace RTC
         static void shutdown_global();
     private:
         static RosTopicManager* manager;
-        static Mutex mutex;
+        static std::mutex mutex;
         std::vector<ROSOutPort*> m_publishers;
         std::vector<ROSInPort*> m_subscribers;
         ros::PollManagerPtr m_poll_manager;

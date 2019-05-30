@@ -160,7 +160,7 @@ namespace RTM
   LocalServiceAdmin::getServiceProfile(const std::string& name,
                                        ::RTM::LocalServiceProfile& prof)
   {
-    std::lock_guard<coil::Mutex> guard(m_services_mutex);
+    std::lock_guard<std::mutex> guard(m_services_mutex);
     for (auto & service : m_services)
       {
         if (name == service->getProfile().name)
@@ -208,7 +208,7 @@ namespace RTM
       }
     RTC_TRACE(("LocalServiceAdmin::addLocalService(%s)",
                service->getProfile().name.c_str()));
-    std::lock_guard<coil::Mutex> guard(m_services_mutex);
+    std::lock_guard<std::mutex> guard(m_services_mutex);
     m_services.push_back(service);
     return true;
   }
@@ -223,7 +223,7 @@ namespace RTM
   bool LocalServiceAdmin::removeLocalService(const std::string& name)
   {
     RTC_TRACE(("removeLocalService(%s)", name.c_str()));
-    std::lock_guard<coil::Mutex> gurad(m_services_mutex);
+    std::lock_guard<std::mutex> guard(m_services_mutex);
 
     std::vector<LocalServiceBase*>::iterator it = m_services.begin();
     std::vector<LocalServiceBase*>::iterator it_end = m_services.end();
@@ -273,7 +273,7 @@ namespace RTM
    */
   bool LocalServiceAdmin::notExisting(const std::string& id)
   {
-    std::lock_guard<coil::Mutex> gurad(m_mutex);
+    std::lock_guard<std::mutex> guard(m_mutex);
     for (auto & service : m_services)
       {
         if (service->getProfile().name == id)

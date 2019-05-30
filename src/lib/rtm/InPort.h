@@ -23,7 +23,6 @@
 #include <coil/TimeValue.h>
 #include <coil/Time.h>
 #include <coil/OS.h>
-#include <coil/Mutex.h>
 #include <mutex>
 
 #include <rtm/RTC.h>
@@ -207,7 +206,7 @@ namespace RTC
 
         
         {
-            std::lock_guard<coil::Mutex> guard(m_connectorsMutex);
+            std::lock_guard<std::mutex> guard(m_connectorsMutex);
             if (m_connectors.empty())
             {
                 RTC_DEBUG(("no connectors"));
@@ -239,7 +238,7 @@ namespace RTC
 
         
         {
-            std::lock_guard<coil::Mutex> guard(m_connectorsMutex);
+            std::lock_guard<std::mutex> guard(m_connectorsMutex);
             if (m_connectors.empty())
             {
                 RTC_DEBUG(("no connectors"));
@@ -273,7 +272,7 @@ namespace RTC
       // means that we only need to read from the first connector to get data
       // received by any connector.
       {
-        std::lock_guard<coil::Mutex> gurad(m_valueMutex);
+        std::lock_guard<std::mutex> guard(m_valueMutex);
         if (m_directNewData == true)
           {
             RTC_DEBUG(("isNew() returns true because of direct write."));
@@ -282,7 +281,7 @@ namespace RTC
       }
       size_t r(0);
       {
-        std::lock_guard<coil::Mutex> guard(m_connectorsMutex);
+        std::lock_guard<std::mutex> guard(m_connectorsMutex);
         if (m_connectors.empty())
           {
             RTC_DEBUG(("no connectors"));
@@ -330,7 +329,7 @@ namespace RTC
 
 
         {
-            std::lock_guard<coil::Mutex> guard(m_connectorsMutex);
+            std::lock_guard<std::mutex> guard(m_connectorsMutex);
             if (m_connectors.empty())
             {
                 RTC_DEBUG(("no connectors"));
@@ -362,7 +361,7 @@ namespace RTC
 
 
         {
-            std::lock_guard<coil::Mutex> guard(m_connectorsMutex);
+            std::lock_guard<std::mutex> guard(m_connectorsMutex);
             if (m_connectors.empty())
             {
                 RTC_DEBUG(("no connectors"));
@@ -396,7 +395,7 @@ namespace RTC
       size_t r(0);
 
       {
-        std::lock_guard<coil::Mutex> guard(m_connectorsMutex);
+        std::lock_guard<std::mutex> guard(m_connectorsMutex);
         if (m_connectors.empty())
           {
             RTC_DEBUG(("no connectors"));
@@ -420,7 +419,7 @@ namespace RTC
 
     void write(DataType& data) override
     {
-      std::lock_guard<coil::Mutex> guard(m_valueMutex);
+      std::lock_guard<std::mutex> guard(m_valueMutex);
       m_value = data;
       m_directNewData = true;
     }
@@ -510,7 +509,7 @@ namespace RTC
         }
       // 1) direct connection
       {
-        std::lock_guard<coil::Mutex> guard(m_valueMutex);
+        std::lock_guard<std::mutex> guard(m_valueMutex);
         if (m_directNewData == true)
           {
             RTC_DEBUG(("Direct data transfer"));
@@ -528,7 +527,7 @@ namespace RTC
       
       ReturnCode ret;
       {
-        std::lock_guard<coil::Mutex> guard(m_connectorsMutex);
+        std::lock_guard<std::mutex> guard(m_connectorsMutex);
         if (m_connectors.empty())
           {
             RTC_DEBUG(("no connectors"));
@@ -564,7 +563,7 @@ namespace RTC
       if (!connector->getDirectData(m_value))
       {
           {
-              std::lock_guard<coil::Mutex> guard(m_connectorsMutex);
+              std::lock_guard<std::mutex> guard(m_connectorsMutex);
               // In single-buffer mode, all connectors share the same buffer. This
               // means that we only need to read from the first connector to get data
               // received by any connector.
@@ -573,7 +572,7 @@ namespace RTC
           m_status[0] = ret;
           if (ret == PORT_OK)
           {
-              std::lock_guard<coil::Mutex> guard(m_valueMutex);
+              std::lock_guard<std::mutex> guard(m_valueMutex);
               RTC_DEBUG(("data read succeeded"));
 
               if (m_OnReadConvert != nullptr)
@@ -802,7 +801,7 @@ namespace RTC
      * @endif
      */
     DataType& m_value;
-    mutable coil::Mutex m_valueMutex;
+    mutable std::mutex m_valueMutex;
 
     /*!
      * @if jp

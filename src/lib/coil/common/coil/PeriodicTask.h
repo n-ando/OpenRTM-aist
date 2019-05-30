@@ -20,9 +20,8 @@
 #ifndef COIL_PERIODICTASK_H
 #define COIL_PERIODICTASK_H
 
-#include <coil/Mutex.h>
 #include <mutex>
-#include <coil/Condition.h>
+#include <condition_variable>
 #include <coil/TimeValue.h>
 #include <coil/TimeMeasure.h>
 #include <coil/PeriodicTaskBase.h>
@@ -391,7 +390,7 @@ namespace coil
     public:
       explicit alive_t(bool val) : value(val) {}
       bool value;
-      coil::Mutex mutex;
+      std::mutex mutex;
     };
 
     /*!
@@ -412,10 +411,10 @@ namespace coil
      */
     struct suspend_t
     {
-      explicit suspend_t(bool sus) : suspend(sus), mutex(), cond(mutex) {}
+      explicit suspend_t(bool sus) : suspend(sus), mutex(), cond() {}
       bool suspend;
-      coil::Mutex mutex;
-      coil::Condition<coil::Mutex> cond;
+      std::mutex mutex;
+      std::condition_variable cond;
     };
 
     /*!
@@ -437,7 +436,7 @@ namespace coil
     struct statistics_t
     {
       coil::TimeMeasure::Statistics stat;
-      coil::Mutex mutex;
+      std::mutex mutex;
     };
 
     /*!

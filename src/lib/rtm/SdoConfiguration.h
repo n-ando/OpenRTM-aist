@@ -22,7 +22,6 @@
 
 // CORBA header include
 #include <rtm/RTC.h>
-#include <coil/Mutex.h>
 #include <mutex>
 
 // local includes
@@ -155,7 +154,6 @@ namespace SDOPackage
     : public virtual POA_SDOPackage::Configuration,
       public virtual PortableServer::RefCountServantBase
   {
-    typedef coil::Mutex Mutex;
   public:
     /*!
      * @if jp
@@ -989,7 +987,7 @@ namespace SDOPackage
      * @endif
      */
     DeviceProfile m_deviceProfile;
-    Mutex m_dprofile_mutex;
+    std::mutex m_dprofile_mutex;
 
     /*!
      * @if jp
@@ -1053,7 +1051,7 @@ namespace SDOPackage
      * @endif
      */
     ParameterList m_parameters;
-    Mutex m_params_mutex;
+    std::mutex m_params_mutex;
 
     /*!
      * @if jp
@@ -1071,7 +1069,7 @@ namespace SDOPackage
       };
     */
     RTC::ConfigAdmin& m_configsets;
-    Mutex m_config_mutex;
+    std::mutex m_config_mutex;
 
     /*!
      * @if jp
@@ -1081,7 +1079,7 @@ namespace SDOPackage
      * @endif
      */
     RTC::SdoServiceAdmin& m_sdoservice;
-    Mutex m_sdoservice_mutex;
+    std::mutex m_sdoservice_mutex;
 
     /*!
      * @if jp
@@ -1091,7 +1089,7 @@ namespace SDOPackage
      * @endif
      */
     OrganizationList m_organizations;
-    Mutex m_org_mutex;
+    std::mutex m_org_mutex;
 
     /*!
      * @if jp

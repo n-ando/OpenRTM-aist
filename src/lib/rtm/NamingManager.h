@@ -22,7 +22,6 @@
 #include <rtm/RTC.h>
 
 #include <coil/Task.h>
-#include <coil/Mutex.h>
 #include <mutex>
 #include <rtm/CorbaNaming.h>
 #include <rtm/RTObject.h>
@@ -65,7 +64,6 @@ namespace RTC
    */
   class NamingBase
   {
-    typedef coil::Mutex Mutex;
   public:
     /*!
      * @if jp
@@ -628,7 +626,6 @@ namespace RTC
    */
   class NamingManager
   {
-    typedef coil::Mutex Mutex;
   public:
     /*!
      * @if jp
@@ -1044,7 +1041,7 @@ namespace RTC
      * @brief Mutex of NameServer list
      * @endif
      */
-    Mutex m_namesMutex;
+    std::mutex m_namesMutex;
 
     // Components' name and object
     /*!
@@ -1107,7 +1104,7 @@ namespace RTC
      * @brief Mutex of Component list
      * @endif
      */
-    Mutex m_compNamesMutex;
+    std::mutex m_compNamesMutex;
     /*!
      * @if jp
      * @brief コンポーネントリスト
@@ -1123,7 +1120,7 @@ namespace RTC
      * @brief Mutex of Port list
      * @endif
      */
-    Mutex m_portNamesMutex;
+    std::mutex m_portNamesMutex;
     /*!
      * @if jp
      * @brief ManagerServantリスト
@@ -1139,7 +1136,7 @@ namespace RTC
      * @brief Mutex of ManagerServant list
      * @endif
      */
-    Mutex m_mgrNamesMutex;
+    std::mutex m_mgrNamesMutex;
 
     /*!
      * @if jp

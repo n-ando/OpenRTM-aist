@@ -20,7 +20,7 @@
 #ifndef RTC_PUBLISHERFLUSH_H
 #define RTC_PUBLISHERFLUSH_H
 
-#include <coil/Condition.h>
+#include <condition_variable>
 #include <rtm/PublisherBase.h>
 #include <rtm/SystemLogger.h>
 #include <rtm/ConnectorBase.h>
@@ -59,8 +59,6 @@ namespace RTC
     : public PublisherBase
   {
   public:
-    typedef coil::Mutex Mutex;
-    typedef coil::Condition<Mutex> Condition;
     DATAPORTSTATUS_ENUM
 
     /*!
@@ -432,7 +430,7 @@ namespace RTC
     ConnectorInfo m_profile;
     ConnectorListeners* m_listeners;
     ReturnCode m_retcode;
-    Mutex m_retmutex;
+    std::mutex m_retmutex;
     bool m_active;
   };
 

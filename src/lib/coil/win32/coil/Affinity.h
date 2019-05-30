@@ -22,7 +22,6 @@
 #include <vector>
 #include <coil/Singleton.h>
 #include <coil/TimeValue.h>
-#include <coil/Mutex.h>
 #include <mutex>
 
 

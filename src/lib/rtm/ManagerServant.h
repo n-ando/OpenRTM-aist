@@ -20,7 +20,6 @@
 #ifndef RTM_MANAGERSERVANT_H
 #define RTM_MANAGERSERVANT_H
 
-#include <coil/Mutex.h>
 #include <mutex>
 #include <rtm/idl/ManagerSkel.h>
 #include <rtm/Manager.h>
@@ -751,7 +750,7 @@ namespace RTM
      * @brief Mutex of m_masters
      * @endif
      */
-    ::coil::Mutex m_masterMutex;
+    ::std::mutex m_masterMutex;
 
     /*!
      * @if jp
@@ -769,7 +768,7 @@ namespace RTM
      * @brief Mutex of m_slaves
      * @endif
      */
-    ::coil::Mutex m_slaveMutex;
+    ::std::mutex m_slaveMutex;
 
     /*!
      * @if jp
