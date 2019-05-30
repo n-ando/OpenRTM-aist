@@ -79,7 +79,6 @@ set(coil_headers
 	${COIL_OS_DIR}/coil/Signal.h
 	${COIL_OS_DIR}/coil/Time.h
 	${COIL_OS_DIR}/coil/UUID.h
-	${COIL_OS_DIR}/coil/atomic.h
 	${COIL_OS_DIR}/coil/SharedMemory.h
 	${COIL_OS_DIR}/coil/Affinity.h
 	${PROJECT_BINARY_DIR}/config_coil.h
