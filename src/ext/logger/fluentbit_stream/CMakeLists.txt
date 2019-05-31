@@ -41,7 +41,7 @@ if(VXWORKS AND NOT RTP)
 				RUNTIME DESTINATION ${INSTALL_RTM_EXT_DIR}/logger
 				COMPONENT ext)
 else()
-	set(libs ${RTM_PROJECT_NAME} ${ORB_LIBRARIES} ${COIL_PROJECT_NAME} ${DATATYPE_FACTORIES})
+	set(libs ${RTM_PROJECT_NAME} ${ORB_LIBRARIES} ${DATATYPE_FACTORIES})
 
 	add_library(${target} SHARED ${srcs})
 	openrtm_common_set_compile_props(${target})

@@ -35,7 +35,7 @@ if(VXWORKS AND NOT RTP)
 
 
 else()
-	set(libs ${RTM_PROJECT_NAME} ${ORB_LIBRARIES} ${COIL_PROJECT_NAME} ${DATATYPE_FACTORIES})
+	set(libs ${RTM_PROJECT_NAME} ${ORB_LIBRARIES} ${DATATYPE_FACTORIES})
 
 
 	add_library(${target} SHARED ${srcs})

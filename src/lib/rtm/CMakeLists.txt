@@ -425,7 +425,7 @@ else(VXWORKS)
 	add_library(${PROJECT_NAME}_objlib OBJECT ${rtm_srcs})
 	openrtm_common_set_compile_props(${PROJECT_NAME}_objlib)
 	openrtm_include_rtm(${PROJECT_NAME}_objlib)
-	target_compile_definitions(${PROJECT_NAME}_objlib PRIVATE LIBRARY_EXPORTS)
+	target_compile_definitions(${PROJECT_NAME}_objlib PRIVATE $<$<PLATFORM_ID:Windows>:LIBRARY_EXPORTS>)
 	if(OBSERVER_ENABLE)
 		target_compile_definitions(${PROJECT_NAME}_objlib PRIVATE ENABLE_OBSERVER)
 		target_include_directories(${PROJECT_NAME}_objlib PRIVATE ${CMAKE_SOURCE_DIR}/src)
@@ -436,15 +436,19 @@ else(VXWORKS)
 	if(WIN32)
 		target_compile_definitions(${PROJECT_NAME}_objlib PRIVATE RTM_SKEL_IMPORT_SYMBOL)
 		add_library(${PROJECT_NAME}-static STATIC
+			$<TARGET_OBJECTS:${COIL_PROJECT_NAME}_objlib>
 			$<TARGET_OBJECTS:${PROJECT_NAME}_objlib>)
 		add_library(${PROJECT_NAME} SHARED
+			$<TARGET_OBJECTS:${COIL_PROJECT_NAME}_objlib>
 			$<TARGET_OBJECTS:${PROJECT_NAME}_objlib>)
 	else()
 		add_library(${PROJECT_NAME}-static STATIC
 			$<TARGET_OBJECTS:${PROJECT_NAME}_objlib>
+			$<TARGET_OBJECTS:${COIL_PROJECT_NAME}_objlib>
 			$<TARGET_OBJECTS:${RTCSKEL_PROJECT_NAME}_objlib>)
 		add_library(${PROJECT_NAME} SHARED
 			$<TARGET_OBJECTS:${PROJECT_NAME}_objlib>
+			$<TARGET_OBJECTS:${COIL_PROJECT_NAME}_objlib>
 			$<TARGET_OBJECTS:${RTCSKEL_PROJECT_NAME}_objlib>)
 	endif()
 
@@ -453,7 +457,7 @@ else(VXWORKS)
 	openrtm_set_link_props_shared(${PROJECT_NAME})
 	set_target_properties(${PROJECT_NAME} PROPERTIES DEBUG_POSTFIX d)
 
-	set(libs ${ORB_LIBRARIES} ${COIL_PROJECT_NAME} ${RTM_LINKER_OPTION})
+	set(libs ${ORB_LIBRARIES} ${UUID_LIBRARIES} ${RTM_LINKER_OPTION})
 
 	if(WIN32)
 		set(libs ${libs} ${RTCSKEL_PROJECT_NAME})
@@ -500,7 +504,7 @@ else(VXWORKS)
 			openrtm_gencode_set_compile_props(${DT_TARGET})
 			openrtm_include_rtm(${DT_TARGET})
 			target_link_libraries(${DT_TARGET} PRIVATE
-				${ORB_LIBRARIES} ${COIL_PROJECT_NAME} ${RTM_LINKER_OPTION} ${PROJECT_NAME} ${RTCSKEL_PROJECT_NAME})
+				${ORB_LIBRARIES} ${RTM_LINKER_OPTION} ${PROJECT_NAME} ${RTCSKEL_PROJECT_NAME})
 			target_compile_definitions(${DT_TARGET} PRIVATE RTM_SKEL_IMPORT_SYMBOL)
 			target_compile_definitions(${DT_TARGET} PRIVATE LIBRARY_EXPORTS)
 			openrtm_set_link_props_shared(${DT_TARGET})

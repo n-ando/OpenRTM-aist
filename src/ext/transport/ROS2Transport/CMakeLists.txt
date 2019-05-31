@@ -58,7 +58,7 @@ if(VXWORKS AND NOT RTP)
 				RUNTIME DESTINATION ${INSTALL_RTM_EXT_DIR}/transport
 				COMPONENT ext)
 else()
-set(libs ${RTM_PROJECT_NAME} ${ORB_LIBRARIES} ${COIL_PROJECT_NAME} ${DATATYPE_FACTORIES} FastRTPSTransport ${rclcpp_LIBRARIES} ${std_msgs_LIBRARIES} ${geometry_msgs_LIBRARIES} ${sensor_msgs_LIBRARIES} fastcdr fastrtps)
+set(libs ${RTM_PROJECT_NAME} ${ORB_LIBRARIES} ${DATATYPE_FACTORIES} FastRTPSTransport ${rclcpp_LIBRARIES} ${std_msgs_LIBRARIES} ${geometry_msgs_LIBRARIES} ${sensor_msgs_LIBRARIES} fastcdr fastrtps)
 
 
 	add_library(${target} SHARED ${srcs})

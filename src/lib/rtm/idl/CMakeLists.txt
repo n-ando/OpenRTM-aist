@@ -55,7 +55,7 @@ if(WIN32)
 		${CMAKE_CURRENT_BINARY_DIR}/${DEF_FILE_NAME}
 		)
 	target_link_libraries(${PROJECT_NAME} PRIVATE
-		${ORB_LIBRARIES} ${COIL_PROJECT_NAME} ${RTM_LINKER_OPTION})
+		${ORB_LIBRARIES} ${RTM_LINKER_OPTION})
 	openrtm_set_link_props_shared(${PROJECT_NAME})
 	set_target_properties(${PROJECT_NAME} PROPERTIES DEBUG_POSTFIX d)
 	add_dependencies(${PROJECT_NAME} ${PROJECT_NAME}-static)

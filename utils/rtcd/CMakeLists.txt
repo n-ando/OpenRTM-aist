@@ -20,7 +20,7 @@ endif(VXWORKS)
 openrtm_common_set_compile_props(${target})
 openrtm_include_rtm(${target})
 
-set(libs ${RTM_PROJECT_NAME} ${ORB_LIBRARIES} ${COIL_PROJECT_NAME} ${DATATYPE_FACTORIES})
+set(libs ${RTM_PROJECT_NAME} ${ORB_LIBRARIES} ${DATATYPE_FACTORIES})
 target_link_libraries(${target} ${libs} ${RTM_LINKER_OPTION})
 
 if(VXWORKS)

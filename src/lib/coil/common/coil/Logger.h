@@ -601,7 +601,7 @@ namespace coil
       
   public:
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
-#   ifdef COIL_LIBRARY_EXPORTS
+#   ifdef LIBRARY_EXPORTS
       static __declspec(dllexport) bool m_lockEnable;
       static __declspec(dllexport) std::mutex m_mutex;
 #   else
