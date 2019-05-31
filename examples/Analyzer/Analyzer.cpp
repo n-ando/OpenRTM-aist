@@ -210,7 +210,7 @@ RTC::ReturnCode_t Analyzer::onExecute(RTC::UniqueId  /*ec_id*/)
 	}
 	
 	//coil::TimeValue start1(coil::gettimeofday());
-	//coil::sleep(coil::TimeValue(0.3));
+	//std::this_thread::sleep_for(std::chrono::milliseconds(300));
 	//coil::TimeValue end1(coil::gettimeofday());
 	//std::cout << "Analyzer: " << (double)(end1 - start1) << std::endl;
 	//std::cout << "Analyzer: " << m_sleep_time - (double)(end - start) << std::endl;

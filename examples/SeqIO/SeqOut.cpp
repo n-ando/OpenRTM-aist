@@ -338,11 +338,11 @@ RTC::ReturnCode_t SeqOut::onExecute(RTC::UniqueId  /*ec_id*/)
   // Connector Listener Dump check
   if(g_Listener_dump_enabled)
     {
-      coil::usleep(1000000);
+      std::this_thread::sleep_for(std::chrono::seconds(1));
     }
   else
     {
-      coil::usleep(200000);
+      std::this_thread::sleep_for(std::chrono::milliseconds(200));
     }
 
   return RTC::RTC_OK;

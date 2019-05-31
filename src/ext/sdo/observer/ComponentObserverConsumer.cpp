@@ -66,7 +66,7 @@ namespace RTC
       }
 
       {
-        coil::sleep(coil::TimeValue(1.0));
+        std::this_thread::sleep_for(std::chrono::seconds(1));
         std::lock_guard<std::mutex> guard(mutex);
       }
   }

@@ -124,7 +124,7 @@ RTC::ReturnCode_t AutoTestOut::onDeactivated(RTC::UniqueId ec_id)
 RTC::ReturnCode_t AutoTestOut::onExecute(RTC::UniqueId ec_id)
 {
 
-  coil::usleep(100000);
+  std::this_thread::sleep_for(std::chrono::milliseconds(100));
 
   //onexecuteでファイルから3行ずつ読み込み送る
   std::vector<std::string> vstr;

@@ -82,7 +82,7 @@ RtmRes StringIn::rtc_active_entry()
 
 RtmRes StringIn::rtc_active_do()
 {
-  while (!m_string_inIn.isNew()) coil::usleep(100000);
+  while (!m_string_inIn.isNew()) std::this_thread::sleep_for(std::chrono::milliseconds(100));
   m_string_inIn.read();
   std::cout << m_string_in.data << std::endl;
   return RTM_OK;
