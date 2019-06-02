@@ -128,7 +128,7 @@ def generate(idl_file, preproc_args, impl_suffix, skel_suffix = "Skel", fd_h=Non
 	# ignore the following operations
 	ignore_operations = ["profile"]
 	
-	tree = _omniidl.compile(file)
+	tree = _omniidl.compile(file, idl_file)
 	ast.__init__(tree)
 
 	cxx_svc_impl.__init__(idl_filename, \
