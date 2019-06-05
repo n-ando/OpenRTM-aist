@@ -3,12 +3,9 @@ project (${COIL_PROJECT_NAME}
 	VERSION ${RTM_VERSION}
 	LANGUAGES CXX)
 
-
 if(WIN32)
 	set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 endif()
-
-
 
 set(COIL_OS_DARWIN OFF)
 set(COIL_OS_FREEBSD OFF)
@@ -20,22 +17,6 @@ set(COIL_OS_QNX OFF)
 set(COIL_OS_SUNOS OFF)
 set(COIL_OS_VXWORKS OFF)
 set(COIL_OS_WIN32 OFF)
-
-set(COIL_MAJOR_VERSION ${${COIL_PROJECT_NAME}_VERSION_MAJOR})
-set(COIL_MINOR_VERSION ${${COIL_PROJECT_NAME}_VERSION_MINOR})
-set(COIL_PLATFORM "POSIX")
-set(COIL_REVISION_NUM ${${COIL_PROJECT_NAME}_VERSION_PATCH})
-set(COIL_SHORT_VERSION ${${COIL_PROJECT_NAME}_VERSION_MAJOR}.${${COIL_PROJECT_NAME}_VERSION_MINOR})
-set(COIL_VERSION ${${COIL_PROJECT_NAME}_VERSION})
-set(PACKAGE "coil")
-set(PACKAGE_BUGREPORT "n-ando@aist.go.jp")
-set(PACKAGE_NAME "coil")
-set(PACKAGE_STRING "coil ${COIL_SHORT_VERSION}")
-set(PACKAGE_TARNAME "coil")
-set(PACKAGE_VERSION ${COIL_SHORT_VERSION})
-
-
-
 
 if(VXWORKS)
 	set (COIL_OS_VXWORKS ON)
@@ -49,10 +30,7 @@ elseif(WIN32)
 	set (COIL_OS_WIN32 ON)
 endif()
 
-
-
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config_coil_cmake.h.in ${PROJECT_BINARY_DIR}/config_coil.h)
-
 
 set(coil_headers
 	common/coil/Allocator.h
@@ -84,7 +62,6 @@ set(coil_headers
 	${PROJECT_BINARY_DIR}/config_coil.h
 )
 
-
 set(coil_srcs
 	common/coil/Allocator.cpp
 	common/coil/ClockManager.cpp
@@ -110,12 +87,6 @@ set(coil_srcs
 	${coil_headers}
 )
 
-add_definitions(${COIL_C_FLAGS_LIST})
-if(WIN32)
-	add_definitions(-DCOIL_LIBRARY_EXPORTS)
-endif()
-
-
 if(UNIX)
 	if(${CMAKE_SYSTEM_NAME}test MATCHES QNXtest)
 		if(QNX7)
@@ -127,68 +98,19 @@ if(UNIX)
 
 	include(FindPkgConfig)
 	pkg_check_modules(UUID REQUIRED uuid)
-
-	link_directories(${UUID_LIBRARY_DIRS})
 	add_definitions(${UUID_CFLAGS})
 endif(UNIX)
 
+add_library(${PROJECT_NAME}_objlib OBJECT ${coil_srcs})
+openrtm_common_set_compile_props(${PROJECT_NAME}_objlib)
+target_compile_definitions(${PROJECT_NAME}_objlib PRIVATE
+	${COIL_C_FLAGS_LIST}
+	$<$<PLATFORM_ID:Windows>:LIBRARY_EXPORTS>)
+target_include_directories(${PROJECT_NAME}_objlib
+	PUBLIC ${PROJECT_SOURCE_DIR}/common
+	PUBLIC ${PROJECT_SOURCE_DIR}/${COIL_OS_DIR})
+target_include_directories(${PROJECT_NAME}_objlib SYSTEM
+	PUBLIC ${CMAKE_BINARY_DIR}/src/lib
+	PRIVATE ${UUID_INCLUDE_DIRS})
 
-if(VXWORKS)
-	add_library(${COIL_PROJECT_NAME} STATIC ${coil_srcs})
-	openrtm_common_set_compile_props(${COIL_PROJECT_NAME})
-	target_include_directories(${COIL_PROJECT_NAME}
-		PUBLIC ${PROJECT_SOURCE_DIR}/common
-		PUBLIC ${PROJECT_SOURCE_DIR}/${COIL_OS_DIR})
-	target_include_directories(${COIL_PROJECT_NAME} SYSTEM
-		PUBLIC ${CMAKE_BINARY_DIR}/src/lib)
-	install(TARGETS ${COIL_PROJECT_NAME} LIBRARY DESTINATION ${INSTALL_RTM_LIB_DIR}
-					ARCHIVE DESTINATION ${INSTALL_RTM_BIN_DIR}
-					RUNTIME DESTINATION ${INSTALL_RTM_BIN_DIR}
-					COMPONENT coil)
-else(VXWORKS)
-	add_library(${COIL_PROJECT_NAME}_objlib OBJECT ${coil_srcs})
-	openrtm_common_set_compile_props(${COIL_PROJECT_NAME}_objlib)
-	target_include_directories(${COIL_PROJECT_NAME}_objlib
-		PUBLIC ${PROJECT_SOURCE_DIR}/common
-		PUBLIC ${PROJECT_SOURCE_DIR}/${COIL_OS_DIR})
-	target_include_directories(${COIL_PROJECT_NAME}_objlib SYSTEM
-		PUBLIC ${CMAKE_BINARY_DIR}/src/lib
-		PRIVATE ${UUID_INCLUDE_DIRS})
-	add_library(${COIL_PROJECT_NAME}-static STATIC $<TARGET_OBJECTS:${COIL_PROJECT_NAME}_objlib>)
-	openrtm_set_link_props_static(${COIL_PROJECT_NAME}-static)
-	set_target_properties(${COIL_PROJECT_NAME}-static PROPERTIES DEBUG_POSTFIX d)
-
-	add_library(${COIL_PROJECT_NAME} SHARED $<TARGET_OBJECTS:${COIL_PROJECT_NAME}_objlib>)
-	openrtm_set_link_props_shared(${COIL_PROJECT_NAME})
-	set_target_properties(${COIL_PROJECT_NAME} PROPERTIES DEBUG_POSTFIX d)
-	target_link_libraries(${COIL_PROJECT_NAME} PRIVATE ${RTM_LINKER_OPTION}  ${UUID_LIBRARIES})
-
-	if(UNIX)
-		set_target_properties(${COIL_PROJECT_NAME} PROPERTIES VERSION ${RTM_VERSION} SOVERSION ${COIL_SO_VERSION})
-		install(TARGETS ${COIL_PROJECT_NAME} LIBRARY DESTINATION ${INSTALL_RTM_LIB_DIR}
-						ARCHIVE DESTINATION ${INSTALL_RTM_LIB_DIR}
-						RUNTIME DESTINATION ${INSTALL_RTM_BIN_DIR}
-						COMPONENT coil)
-
-		set_target_properties(${COIL_PROJECT_NAME}-static PROPERTIES OUTPUT_NAME ${COIL_PROJECT_NAME} CLEAN_DIRECT_OUTPUT 1)
-		install(TARGETS ${COIL_PROJECT_NAME}-static LIBRARY DESTINATION ${INSTALL_RTM_LIB_DIR}
-						ARCHIVE DESTINATION ${INSTALL_RTM_LIB_DIR}
-						RUNTIME DESTINATION ${INSTALL_RTM_BIN_DIR}
-						COMPONENT coil)
-
-	elseif(WIN32)
-		add_dependencies(${COIL_PROJECT_NAME} ${COIL_PROJECT_NAME}-static)
-		install(TARGETS ${COIL_PROJECT_NAME} LIBRARY DESTINATION ${INSTALL_RTM_LIB_DIR}
-						 ARCHIVE DESTINATION ${INSTALL_RTM_LIB_DIR}
-						RUNTIME DESTINATION ${INSTALL_RTM_LIB_DIR}
-						COMPONENT coil)
-
-		install(TARGETS ${COIL_PROJECT_NAME}-static LIBRARY DESTINATION ${INSTALL_RTM_LIB_DIR}
-						 ARCHIVE DESTINATION ${INSTALL_RTM_LIB_DIR}
-						RUNTIME DESTINATION ${INSTALL_RTM_LIB_DIR}
-						COMPONENT coil)
-	endif()
-endif(VXWORKS)
 install(FILES  ${coil_headers} DESTINATION ${INSTALL_COIL_INCLUDE_DIR}/coil COMPONENT headers)
-
-add_subdirectory(utils)

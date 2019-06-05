@@ -40,7 +40,7 @@ function(examples_build target)
 					COMPONENT examples)
 		install(FILES ${standalone_srcs} DESTINATION ${INSTALL_RTM_EXAMPLE_DIR}/src/Analyzer COMPONENT sources)
 	else()
-		set(libs ${RTM_PROJECT_NAME} ${ORB_LIBRARIES} ${COIL_PROJECT_NAME} ${DATATYPE_FACTORIES})
+		set(libs ${RTM_PROJECT_NAME} ${ORB_LIBRARIES} ${DATATYPE_FACTORIES})
 
 		# .cpp -> .o
 		add_library(${target}_objlib OBJECT ${EB_SRCS})

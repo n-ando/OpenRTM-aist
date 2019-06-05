@@ -12,14 +12,14 @@ set(INSTALL_RTM_DIR ${INSTALL_RTM_EXT_DIR}/rtm)
 set(INSTALL_SVC_DIR ${INSTALL_RTM_EXT_DIR}/rtm)
 set(PACKAGE OpenRTM-aist)
 set(RTM_DESCRIPTION An OMG RTC compliant middleware for robots.)
-set(RTM_LIBS ${RTM_PROJECT_NAME} ${COIL_PROJECT_NAME})
+set(RTM_LIBS ${RTM_PROJECT_NAME})
 string(REPLACE ";" " " IDL_FLAGS "${IDLCOMMAND_FLAGS}")
 
 set(TMPLIBS -lpthread ${RTM_LINKER_OPTION})
 foreach(library ${ORB_LIBRARIES})
 	set(TMPLIBS ${TMPLIBS} -l${library})
 endforeach()
-set(TMPLIBS ${TMPLIBS} -l${RTM_PROJECT_NAME} -l${COIL_PROJECT_NAME} -lrtmCamera -lrtmManipulator)
+set(TMPLIBS ${TMPLIBS} -l${RTM_PROJECT_NAME} -lrtmCamera -lrtmManipulator)
 string(REPLACE ";" " " LIBS "${TMPLIBS}")
 
 
