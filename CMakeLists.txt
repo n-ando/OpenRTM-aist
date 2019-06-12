@@ -920,10 +920,6 @@ if(DOCUMENTS_ENABLE)
 	add_subdirectory(docs)
 endif(DOCUMENTS_ENABLE)
 
-if(WIN32)
-	install(FILES ${CMAKE_SOURCE_DIR}/win32/OpenRTM-aist/bin/rtm-naming.bat DESTINATION ${INSTALL_RTM_SCRIPT_DIR} COMPONENT utils)
-endif(WIN32)
-
 
 CONFIGURE_FILE ("${PROJECT_SOURCE_DIR}/scripts/cmake/uninstall_target.cmake.in"
     "${PROJECT_BINARY_DIR}/uninstall_target.cmake" IMMEDIATE @ONLY)
