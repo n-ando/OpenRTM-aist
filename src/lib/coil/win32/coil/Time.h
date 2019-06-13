@@ -31,6 +31,8 @@
 #include <time.h>
 #include <coil/config_coil.h>
 #include <coil/TimeValue.h>
+#include <chrono>
+#include <thread>
 
 namespace coil
 {
@@ -62,7 +64,13 @@ namespace coil
    *
    * @endif
    */
-  int sleep(TimeValue interval);
+  inline int sleep(TimeValue interval)
+  {
+    auto t = std::chrono::seconds(interval.sec())
+             + std::chrono::microseconds(interval.usec());
+    std::this_thread::sleep_for(t);
+    return 0;
+  }
 
   /*!
    * @if jp

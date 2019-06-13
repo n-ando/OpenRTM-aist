@@ -26,7 +26,8 @@
 #include <sys/types.h>
 #include <unistd.h>
 #include <ctime>
-#include <iostream>
+#include <chrono>
+#include <thread>
 
 namespace coil
 {
@@ -53,10 +54,10 @@ namespace coil
    */
   inline int sleep(TimeValue interval)
   {
-    timeval tv;
-    tv.tv_sec = interval.sec();
-    tv.tv_usec = interval.usec();
-    return ::select(0, nullptr, nullptr, nullptr, &tv);
+    auto t = std::chrono::seconds(interval.sec())
+             + std::chrono::microseconds(interval.usec());
+    std::this_thread::sleep_for(t);
+    return 0;
   }
 
   /*!
