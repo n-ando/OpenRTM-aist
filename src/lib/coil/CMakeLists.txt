@@ -33,7 +33,6 @@ endif()
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config_coil_cmake.h.in ${PROJECT_BINARY_DIR}/config_coil.h)
 
 set(coil_headers
-	common/coil/Allocator.h
 	common/coil/Async.h
 	common/coil/ClockManager.h
 	common/coil/Factory.h
@@ -63,7 +62,6 @@ set(coil_headers
 )
 
 set(coil_srcs
-	common/coil/Allocator.cpp
 	common/coil/ClockManager.cpp
 	common/coil/PeriodicTask.cpp
 	common/coil/Properties.cpp
