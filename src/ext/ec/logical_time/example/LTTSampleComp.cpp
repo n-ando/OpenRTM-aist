@@ -152,7 +152,7 @@ int main (int argc, char** argv)
       std::cout << "getting time   (time: " << sec;
       std::cout << " [s], " << usec << " [usec])" << std::endl;
       std::cout << std::endl;
-      coil::usleep(500000);
+      std::this_thread::sleep_for(std::chrono::millisecconds(500));
     }
   manager->shutdown();
   return 0;

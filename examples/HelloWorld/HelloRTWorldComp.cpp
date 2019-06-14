@@ -41,7 +41,7 @@ void MyModuleInit(RtcManager* manager)
   std::string name;
   RtcBase* comp;
   comp = manager->createComponent("HelloRTWorld", "example", name);
-  coil::usleep(10000);
+  std::this_thread::sleep_for(std::chrono::milliseconds(10));
   comp->rtc_start();
 
 }

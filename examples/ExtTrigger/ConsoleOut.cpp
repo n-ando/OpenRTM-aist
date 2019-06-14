@@ -70,7 +70,7 @@ RTC::ReturnCode_t ConsoleOut::onExecute(RTC::UniqueId  /*ec_id*/)
       std::cout << "TimeStamp: " << m_in.tm.sec << "[s] ";
       std::cout << m_in.tm.nsec << "[ns]" << std::endl;
     }
-  coil::usleep(1000);
+  std::this_thread::sleep_for(std::chrono::milliseconds(1));
 
   return RTC::RTC_OK;
 }

@@ -26,37 +26,11 @@
 #include <sys/types.h>
 #include <unistd.h>
 #include <ctime>
-#include <iostream>
+#include <chrono>
+#include <thread>
 
 namespace coil
 {
-
-  /*!
-   * @if jp
-   * @brief 指定された秒間は処理を休止する
-   *
-   * 指定された秒間は処理を休止する。
-   *
-   * @param seconds 秒数
-   *
-   * @return 0: 成功, >0: 失敗
-   *
-   * @else
-   * @brief Stop a processing at specified second time
-   *
-   * Stop a processing at specified second time.
-   *
-   * @param seconds Second time
-   *
-   * @return 0: successful, >0: failed
-   *
-   * @endif
-   */
-  inline unsigned int sleep(unsigned int seconds)
-  {
-    return ::sleep(seconds);
-  }
-
   /*!
    * @if jp
    * @brief 指定された秒間は処理を休止する
@@ -80,36 +54,10 @@ namespace coil
    */
   inline int sleep(TimeValue interval)
   {
-    timeval tv;
-    tv.tv_sec = interval.sec();
-    tv.tv_usec = interval.usec();
-    return ::select(0, nullptr, nullptr, nullptr, &tv);
-  }
-
-  /*!
-   * @if jp
-   * @brief 指定されたマイクロ秒間は処理を休止する
-   *
-   * 指定されたマイクロ秒間は処理を休止する。
-   *
-   * @param usec マイクロ秒数
-   *
-   * @return 0: 成功, -1: 失敗
-   *
-   * @else
-   * @brief Stop a processing at specified micro second time
-   *
-   * Stop a processing at specified micro second time.
-   *
-   * @param usec Micro second time
-   *
-   * @return 0: successful, -1: failed
-   *
-   * @endif
-   */
-  inline int usleep(useconds_t usec)
-  {
-    return ::usleep(usec);
+    auto t = std::chrono::seconds(interval.sec())
+             + std::chrono::microseconds(interval.usec());
+    std::this_thread::sleep_for(t);
+    return 0;
   }
 
   /*!

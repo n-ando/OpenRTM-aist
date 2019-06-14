@@ -48,7 +48,7 @@ char* MyServiceSVC_impl::echo(const char* msg)
   for (int i(0); i < 10; ++i)
     {
       std::cout << "Message: " << msg << std::endl;
-      coil::sleep(1);
+      std::this_thread::sleep_for(std::chrono::seconds(1));
     }
   std::cout << "MyService::echo() was finished" << std::endl;
 
@@ -76,7 +76,7 @@ void MyServiceSVC_impl::set_value(CORBA::Float value)
     {
       std::cout << "Input value: " << value;
       std::cout << ", Current value: " << m_value << std::endl;
-      coil::sleep(1);
+      std::this_thread::sleep_for(std::chrono::seconds(1));
     }
   std::cout << "MyService::set_value() was finished" << std::endl;
 
