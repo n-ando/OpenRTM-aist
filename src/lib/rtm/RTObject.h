@@ -5296,15 +5296,6 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief Alive 状態フラグ
-     * @else
-     * @brief Alive Status Flag
-     * @endif
-     */
-    //    bool m_alive;
-
-    /*!
-     * @if jp
      * @brief RTC のプロパティ
      * @else
      * @brief RTC's Property
@@ -5536,7 +5527,6 @@ namespace RTC
       ExecutionContext_var m_ec;
 
     };  // struct ec_find
-    //    ExecutionContextAdminList m_execContextList;
 
     /*!
      * @if jp

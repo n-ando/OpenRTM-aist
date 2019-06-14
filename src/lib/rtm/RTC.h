@@ -68,8 +68,6 @@
 // for Windows DLL export
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
 #   define DLL_EXPORT __declspec(dllexport)
-// #   define usleep(x) Sleep(x/1000);
-// #   define LINE_MAX 256
 BOOL WINAPI DllMain (HINSTANCE hinstDll, DWORD fdwReason, LPVOID lpvReserved);
 #else
 #   define DLL_EXPORT
@@ -81,7 +79,6 @@ BOOL WINAPI DllMain (HINSTANCE hinstDll, DWORD fdwReason, LPVOID lpvReserved);
 #endif
 
 
-//#if defined(COMPAT_OPENRTM_0_4)
 #include <coil/Properties.h>
 
 namespace RTC
@@ -90,6 +87,5 @@ namespace RTC
 
 } // namespace RTC
 
-//#endif // COMPAT_OPENRTM_0_4
 
 #endif  // RTC_H

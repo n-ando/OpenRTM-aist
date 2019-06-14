@@ -680,7 +680,6 @@ namespace RTC
    */
   OpenSpliceManager* OpenSpliceManager::init()
   {
-    //RTC_PARANOID(("init()"));
     std::lock_guard<std::mutex> guard(mutex);
     if (!manager)
     {

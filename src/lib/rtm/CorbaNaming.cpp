@@ -17,10 +17,6 @@
  *
  */
 
-#ifdef WIN32
-//#define ACE_HAS_WINSOCK2 0
-#endif  // WIN32
-
 #include <cassert>
 #include <rtm/CorbaNaming.h>
 #include <iostream>
@@ -478,7 +474,6 @@ namespace RTC
 #ifndef ORB_IS_RTORB
     context->list(m_blLength, bl.out(), bi.out());
 #else  // ORB_IS_RTORB
-    // context->list(m_blLength, bl, bi);
     context->list(m_blLength, (CosNaming::BindingList_out)bl,
                   (CosNaming::BindingIterator_ptr)bi);
 #endif  // ORB_IS_RTORB

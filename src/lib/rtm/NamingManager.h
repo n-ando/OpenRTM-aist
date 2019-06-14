@@ -411,7 +411,6 @@ namespace RTC
     CorbaNaming m_cosnaming;
     std::string m_endpoint;
     bool m_replaceEndpoint;
-    //    std::map<std::string, RTObject_impl*> m_names;
   };
 
 
@@ -598,7 +597,6 @@ namespace RTC
     Logger rtclog;
 	CORBA::ORB_ptr m_orb;
 	Manager* m_mgr;
-    //    std::map<std::string, RTObject_impl*> m_names;
   };
   
   /*!

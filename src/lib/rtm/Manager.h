@@ -52,7 +52,6 @@ namespace coil
 
 namespace RTC
 {
-//  class Properties;
   class CorbaNaming;
   class ModuleManager;
   class NamingManager;
@@ -118,7 +117,6 @@ namespace RTC
      * @endif
      */
     Manager(const Manager& manager);
-    //      Manager& operator=(const Manager& manager){return manager;};
 
   public:
     /*!
@@ -2329,7 +2327,6 @@ namespace RTC
       int svc() override
       {
         m_pORB->run();
-//        Manager::instance().shutdown();
         return 0;
       }
 

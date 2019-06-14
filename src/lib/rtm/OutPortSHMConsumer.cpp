@@ -100,7 +100,6 @@ namespace RTC
     RTC_PARANOID(("setObject()"));
 	if (CorbaConsumer< ::OpenRTM::PortSharedMemory >::setObject(obj))
 	{
-		//::OpenRTM::PortSharedMemory_var sm = m_shmem.getObjRef();
 		_ptr()->setInterface(m_shmem._this());
 		return true;
 	}

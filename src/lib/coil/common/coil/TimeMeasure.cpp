@@ -21,8 +21,6 @@
 #include <coil/TimeMeasure.h>
 #include <cmath>
 
-//#define RDTSC(X) __asm__ __volatile__ ("rdtsc" : "=A" (X))
-//#define NSEC_PER_SEC 1000000000
 
 #ifndef ULLONG_MAX
 #define ULLONG_MAX 0xffffffffffffffffULL

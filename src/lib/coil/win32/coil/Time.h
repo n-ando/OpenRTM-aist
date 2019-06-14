@@ -26,8 +26,6 @@
 #else
 #include <winsock.h>
 #endif
-//#include <WinSock2.h>
-//#pragma comment(lib, "WS2_32.LIB")
 #include <time.h>
 #include <coil/config_coil.h>
 #include <coil/TimeValue.h>

@@ -160,7 +160,4 @@
   TypeName(const TypeName&);               \
   TypeName& operator=(const TypeName&)
 
-//#ifndef hrtm
-//#define hrtm RTC
-//#endif // hrtmcomp
 #endif  // HRTM_DEFS_H_

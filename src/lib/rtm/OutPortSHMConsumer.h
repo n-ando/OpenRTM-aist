@@ -323,7 +323,6 @@ namespace RTC
         connector_[ON_SENDER_ERROR].notify(m_profile);
     }
 protected:
-    //    RTC::OutPortCdr_var m_outport;
     mutable Logger rtclog;
     coil::Properties m_properties;
     std::mutex m_mutex;

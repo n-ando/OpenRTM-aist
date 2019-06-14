@@ -153,7 +153,6 @@ extern "C"
  
   void MotorInit(RTC::Manager* manager)
   {
-    // RTC::Properties profile(motor_spec);
     coil::Properties profile(motor_spec);
     manager->registerFactory(profile,
                              RTC::Create<Motor>,

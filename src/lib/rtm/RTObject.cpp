@@ -414,7 +414,6 @@ namespace RTC
     // detach myself from other EC
     for (CORBA::ULong ic(0), size(m_ecOther.length()); ic < size; ++ic)
       {
-        //        m_ecOther[ic]->stop();
         try
           {
             RTC::LightweightRTObject_var comp(this->_this());

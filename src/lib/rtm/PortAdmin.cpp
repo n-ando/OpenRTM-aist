@@ -135,9 +135,7 @@ namespace RTC
 
 #ifndef ORB_IS_RTORB
     PortProfileList port_profs(0);
-    //    port_prof_collect p(port_profs);
     port_prof_collect2 p(port_profs);
-    //    m_portServants.for_each(p);
     ::CORBA_SeqUtil::for_each(m_portRefs, p);
 #else  // ORB_IS_RTORB
     CORBA::ULong len = m_portRefs.length();
@@ -278,7 +276,6 @@ namespace RTC
     try
       {
         port.disconnect_all();
-        // port.shutdown();
 
         const char* tmp(port.getProfile().name);
         CORBA_SeqUtil::erase_if(m_portRefs, find_port_name(tmp));

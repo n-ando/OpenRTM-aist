@@ -88,7 +88,6 @@ namespace coil
     if (!rhs.m_name.empty() &&
         open(rhs.m_name.c_str(), rhs.m_mode, rhs.m_closeflag) == 0)
       return;
-//    throw std::bad_alloc();
   }
 
   /*!

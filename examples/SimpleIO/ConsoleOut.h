@@ -49,9 +49,6 @@ public:
     std::cout << "Data Listener: " << m_name << "(OutPort)"  << std::endl;
     std::cout << "Profile::name: " << info.name    << std::endl;
     std::cout << "Profile::id:   " << info.id      << std::endl;
-//    std::cout << "Profile::properties: "            << std::endl;
-//    std::cout << info.properties;
-//    std::cout                                       << std::endl;
     std::cout << "Data:          " << data.data    << std::endl;
     std::cout << "------------------------------"   << std::endl;
     return NO_CHANGE;

@@ -21,7 +21,6 @@
 #define RTC_INPORTCORBACDRCONSUMER_H
 
 
-//#include <rtm/BufferBase.h>
 
 #include <rtm/idl/DataPort_OpenRTMSkel.h>
 #include <rtm/CorbaConsumer.h>

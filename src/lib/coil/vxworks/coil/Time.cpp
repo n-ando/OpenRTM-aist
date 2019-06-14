@@ -20,8 +20,6 @@
 
 #if defined(__powerpc__) && !defined(__RTP__)
 #define CLOCK_RATE_PPC 75000000
-//extern void vxTimeBaseSet(UINT32, UINT32);
-//extern void vxTimeBaseGet(UINT32*, UINT32*);
 #include <vxLib.h>
 #endif
 

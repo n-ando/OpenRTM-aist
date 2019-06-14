@@ -94,8 +94,6 @@ namespace RTC
   {
     m_rtobj = &rtobj;
     m_profile = profile;
-    //    coil::Properties prop;
-    //    NVUtil::copyToProperties(prop, profile.properties);
     return true;
   }
 
@@ -110,8 +108,6 @@ namespace RTC
   ExtendedFsmServiceProvider::reinit(const SDOPackage::ServiceProfile& profile)
   {
     m_profile= profile;
-    //    coil::Properties prop;
-    //    NVUtil::copyToProperties(prop, profile.properties);
     return true;
   }
 

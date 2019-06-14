@@ -208,10 +208,8 @@ namespace coil
       return 0;
 /*
 #ifdef __RTP__
-      //taskLock();
       m_mutex.unlock();
       STATUS status = semTake(m_cond, WAIT_FOREVER);
-      //taskUnlock();
       if(status != OK)
       {
             return -1;
@@ -273,12 +271,10 @@ namespace coil
       }
 /*
 #ifdef __RTP__
-      //taskLock();
       m_mutex.unlock();
       long timeout = (second*1000 + nano_second/1000000l);
       int ticks = (timeout*sysClkRateGet()) / 1000l;
       STATUS status = semTake(m_cond, ticks);
-      //taskUnlock();
 
       m_mutex.lock();
       if(status != OK)

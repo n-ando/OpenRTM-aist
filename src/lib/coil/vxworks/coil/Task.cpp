@@ -18,13 +18,6 @@
 
 #include <coil/Task.h>
 
-
-/*
-#ifdef __RTP__
-#define DEFAULT_PRIORITY 110
-#define DEFAULT_STACKSIZE 60000
-#endif
-*/
 #define DEFAULT_PRIORITY 110
 #define DEFAULT_STACKSIZE 60000
 
@@ -45,18 +38,7 @@ namespace coil
     ,m_tid(-1)
   {
   }
-/*
-#ifdef __RTP__
-    ,m_priority(DEFAULT_PRIORITY)
-    ,m_stacksize(DEFAULT_STACKSIZE)
-#endif
-  {
-#ifdef __RTP__
-#else
-    ::pthread_attr_init(&m_attr);
-#endif
-  }
-*/
+
   /*!
    * @if jp
    * @brief デストラクタ
@@ -116,7 +98,6 @@ namespace coil
   {
     if (m_count == 0)
       {
-//        m_waitmutex.lock();
         m_tid = taskSpawn(
                          0,
                          m_priority,
@@ -126,24 +107,6 @@ namespace coil
                          (int)this,
                          0,0,0,0,0,0,0,0,0
                          );
-/*
-#ifdef __RTP__
-        m_tid = taskSpawn(
-                         0,
-                         m_priority,
-                         VX_FP_TASK | VX_NO_STACK_FILL,
-                         m_stacksize,
-                         (FUNCPTR)Task::svc_run,
-                         (int)this,
-                         0,0,0,0,0,0,0,0,0
-                         );
-#else
-        ::pthread_create(&m_thread,
-                         &m_attr,
-                         (void* (*)(void*))Task::svc_run,
-                         this);
-#endif
-*/
         ++m_count;
       };
   }
@@ -166,23 +129,7 @@ namespace coil
         {
           set_priority(current_priority-1);
         }
-
-
-
-//taskDelete(m_tid);
         std::lock_guard<coil::Mutex> guard(m_waitmutex);
-//m_waitmutex.lock();
-//m_waitmutex.unlock();
-
-/*
-#ifdef __RTP__
-        std::lock_guard<coil::Mutex> guard(m_waitmutex);
-        //taskExit(0);
-#else
-        void* retval;
-        ::pthread_join(m_thread, &retval);
-#endif
-*/
       }
     return 0;
   }
@@ -249,35 +196,12 @@ namespace coil
     Task* t = (coil::Task*)args;
 
     std::lock_guard<coil::Mutex> guard(t->m_waitmutex);
-
-    //t->m_waitmutex.lock();
-    int status;
-    status = t->svc();
-    t->finalize();
-    //t->m_waitmutex.unlock();
-    return 0;
-  }
-/*
-#ifdef __RTP__
-  extern "C" void* Task::svc_run(void* args)
-#else
-  void* Task::svc_run(void* args)
-#endif
-  {
-    Task* t = (coil::Task*)args;
-#ifdef __RTP__
-    std::lock_guard<coil::Mutex> guard(t->m_waitmutex);
-#endif
     int status;
     status = t->svc();
     t->finalize();
     return 0;
   }
-*/
 
-/*
-#ifdef __RTP__
-*/
   /*!
    * @if jp
    *
@@ -363,9 +287,6 @@ namespace coil
   {
     m_stacksize = stacksize;
   }
-/*
-#endif
-*/
 };
 
 

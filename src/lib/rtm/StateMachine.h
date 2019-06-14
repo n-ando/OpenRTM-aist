@@ -872,7 +872,6 @@ namespace RTC_Utils
     void setNullFunc(std::vector<Callback>& s, Callback nullfunc)
     {
       s.clear();
-      //      assert((size_t)m_num == s.size());
       for (size_t i(0); i < m_num; ++i)
         {
           s.push_back(nullfunc);

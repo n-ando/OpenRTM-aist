@@ -20,10 +20,7 @@
 
 #include <rtm/Manager.h>
 #include <rtm/Factory.h>
-//#include <rtm/RTObject.h>
 #include <mutex>
-//#include <hrtm/data_flow_component.h>
-//#include <hrtm/logger.h>
 
 namespace RTC
 {

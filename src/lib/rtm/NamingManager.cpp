@@ -224,8 +224,6 @@ namespace RTC
 			  {
 				  try
 				  {
-					  //RTC::CorbaConsumer<RTC::RTObject> cc;
-					  //cc.setObject(context->resolve(bl[i].binding_name));
 					  RTC::RTObject_ptr obj = RTC::RTObject::_narrow(context->resolve(bl[i].binding_name));
 					  if (!obj->_non_existent())
 					  {
@@ -234,7 +232,6 @@ namespace RTC
 				  }
 				  catch (...)
 				  {
-					  //RTC_ERROR((""));
 				  }
 			  }
 		  }
@@ -280,7 +277,6 @@ namespace RTC
 					  RTC::CorbaNaming cns = m_cosnaming;
 					  if (host == "*")
 					  {
-						  //cns = m_cosnaming;
 					  }
 					  else
 					  {
@@ -439,7 +435,6 @@ namespace RTC
 						  }
 						  catch (...)
 						  {
-							  //RTC_DEBUG((""));
 							  mgr->remove_slave_manager((*slaves)[i]);
 						  }
 					  }

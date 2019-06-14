@@ -200,22 +200,12 @@ if(CORBA STREQUAL "ORBexpress")
 
 	else(RTP)
 		set(OE_TARGET gcc_4.1.2_ExLcRi)
-		#set(OE_TARGET gcc_4.1.2_Lc)
-		#set(OE_TYPE config_rt_fast)
 		set(OE_TYPE config_rt_full)
-		#set(OE_TYPE config_rt_minimum)
-		#set(OE_TYPE config_rt_small)
 		set(ORB_LINK_DIR ${ORB_ROOT}/target/ppc_8xx-vxworks_6.6/${OE_TARGET}/config_rt_full/lib ${ORB_ROOT}/target/ppc_8xx-vxworks_6.6/${OE_TARGET}/${OE_TYPE}/OENames_2.1.6/lib)
 		set(ORB_INCLUDE_DIR ${ORB_ROOT}/target/ppc_8xx-vxworks_6.6/${OE_TARGET}/${OE_TYPE}/include)
 		set(ORB_INCLUDE_DIR ${ORB_INCLUDE_DIR} ${ORB_ROOT}/target/ppc_8xx-vxworks_6.6/${OE_TARGET}/${OE_TYPE}/OENames_2.1.6/include)
 
-
-		
-		
-		#include_directories(${ORB_ROOT}/target/ppc_8xx-vxworks_6.6/gcc_4.1.2_ExLcRi/config_rt_full/OENames_2.1.6/include)
 		set(ORB_LIBRARIES OEnames OEtcp OEmirror OEbridge OEudp OEipmc OEshrmem OEorb)
-		#set(ORB_LIBRARIES OEtcp OEmirror OEbridge OEudp OEipmc OEshrmem OEudp OEorb OEnames)
-		
 	endif()
 	SET (ORB_C_FLAGS_LIST
 		 -DCORBA_ANY_SHARED_PTR_OPERATORS -DINCLUDE_CORBA_CORBALOC
@@ -399,7 +389,6 @@ elseif(CORBA STREQUAL "TAO")
 		foreach(library ${ORB_LIBRARIES_INSTALL})
 			if((NOT (${library} STREQUAL "optimized")) AND (NOT (${library} STREQUAL "debug")))
 				install(PROGRAMS "${ORB_LINK_DIR}/${library}.dll" DESTINATION ${ORB_INSTALL_DIR}/bin/ COMPONENT corbalib)
-				#install(PROGRAMS "${ORB_LINK_DIR}/${library}.pdb" DESTINATION ${ORB_INSTALL_DIR}/bin/ COMPONENT corbalib)
 				install(PROGRAMS "${ORB_LINK_DIR}/${library}.lib" DESTINATION ${ORB_INSTALL_DIR}/lib/ COMPONENT corbalib)
 			endif()
 		endforeach()

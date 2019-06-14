@@ -470,7 +470,6 @@ namespace coil
         return nullptr;
       }
     std::vector<std::string> keys;
-    //    std::string value;
     split(key, '.', keys);
     return _getNode(keys, 0, this);
   }
@@ -724,7 +723,6 @@ namespace coil
         for (auto prop : curr->leaf)
           {
             std::string next_name;
-            //            if (curr_name == "") next_name = curr->leaf[i]->name;
             next_name = curr_name + "." + prop->name;
             _propertiyNames(names, next_name, prop);
           }

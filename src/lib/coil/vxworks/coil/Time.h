@@ -129,12 +129,8 @@ namespace coil
   inline int sleep(TimeValue interval)
   {
     int tps = sysClkRateGet();
-//std::cout << interval.sec() << "\t" << interval.usec() << std::endl;
-//std::cout << interval.sec()*tps + (interval.usec()*tps)/1000000l + 1 << std::endl;
     if(interval.sec() > 0 || interval.usec() > 0)
     {
-//taskDelay(tps);
-//std::cout << interval.usec() << "\t" << (interval.usec()*tps)/1000000l << "\t" << tps << std::endl;
       if(taskDelay(interval.sec()*tps + (interval.usec()*tps)/1000000l + 1) == OK)
       {
           return 0;

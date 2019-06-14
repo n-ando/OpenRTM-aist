@@ -85,7 +85,6 @@ namespace RTC
       }
 
     NVUtil::append(prop, m_properties);
-    //    NVUtil::dump(m_properties);
     return true;
   }
 

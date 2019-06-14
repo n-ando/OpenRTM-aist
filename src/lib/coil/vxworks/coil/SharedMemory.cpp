@@ -18,7 +18,6 @@
 
 
 #include <coil/SharedMemory.h>
-//#include "SharedMemory.h"
 #include <string.h>
 
 

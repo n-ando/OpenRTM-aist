@@ -15,12 +15,8 @@
  *
  */
 
-//#include <rtm/Manager.h>
-//#include <rtm/Factory.h>
-//#include <rtm/RTObject.h>
 #include <hrtm/data_flow_component.h>
 #include <hrtm/component_manager.h>
-//#include <hrtm/logger.h>
 
 namespace hrtm
 {

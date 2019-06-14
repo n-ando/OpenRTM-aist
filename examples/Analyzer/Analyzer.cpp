@@ -171,11 +171,8 @@ RTC::ReturnCode_t Analyzer::onDeactivated(RTC::UniqueId  /*ec_id*/)
 
 RTC::ReturnCode_t Analyzer::onExecute(RTC::UniqueId  /*ec_id*/)
 {
-	//static int ds = 0;
-	//ds += 10000;
 	coil::TimeValue start(coil::gettimeofday());
 	setTimestamp(m_out);
-	//m_out.data.length(m_datalength+ds);
 	if(m_mode == "const")
 	{
 		m_out.data.length(m_datalength);
@@ -191,29 +188,17 @@ RTC::ReturnCode_t Analyzer::onExecute(RTC::UniqueId  /*ec_id*/)
 	}
 	
 
-	//coil::sleep(coil::TimeValue(m_sleep_time));
 	{
 		std::lock_guard<std::mutex> guard(m_mu);
 		m_datalist.push_back(m_out);
-		//setTimestamp(m_datalist[m_datalist.size()-1]);
-		//m_out.tm.sec = m_datalist[m_datalist.size()-1].tm.sec;
-		//m_out.tm.nsec = m_datalist[m_datalist.size()-1].tm.nsec;
 	}
-	//std::cout << "Analyzer: " << &m_out << std::endl;
-	//std::cout << "Analyzer: " << m_out.tm.sec << "\t" << m_out.tm.nsec << std::endl;
 	coil::TimeValue end(coil::gettimeofday());
 	double diff = (double)(end - start);
-	//std::cout << "Analyzer: " << m_sleep_time - diff << std::endl;
 	if(diff < m_sleep_time)
 	{
 		coil::sleep(coil::TimeValue(m_sleep_time - diff));
 	}
 	
-	//coil::TimeValue start1(coil::gettimeofday());
-	//std::this_thread::sleep_for(std::chrono::milliseconds(300));
-	//coil::TimeValue end1(coil::gettimeofday());
-	//std::cout << "Analyzer: " << (double)(end1 - start1) << std::endl;
-	//std::cout << "Analyzer: " << m_sleep_time - (double)(end - start) << std::endl;
 
 	m_outOut.write();
 
@@ -259,11 +244,8 @@ RTC::ReturnCode_t Analyzer::onRateChanged(RTC::UniqueId ec_id)
 
 void Analyzer::writeData(const RTC::TimedOctetSeq &data)
 {
-	//std::cout << "writeData" << std::endl;
 	std::lock_guard<std::mutex> guard(m_mu);
 	for (std::vector<TimedOctetSeq>::iterator itr = m_datalist.begin(); itr != m_datalist.end(); ) {
-		//std::cout << "writeData: " << data.tm.sec << "\t" << data.tm.nsec << std::endl;
-		//std::cout << "writeData2: " << (*itr).tm.sec << "\t" << (*itr).tm.nsec << std::endl;
 		if (data.tm.nsec == (*itr).tm.nsec && data.tm.sec == (*itr).tm.sec)
 		{
 			coil::TimeValue end(coil::gettimeofday());

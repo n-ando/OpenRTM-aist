@@ -57,12 +57,7 @@ namespace coil
   void UUID_Generator::init(){}
   UUID* UUID_Generator::generateUUID(int version, int variant){
     uuid_t uuid;
-    //timeval tv;
-    //::gettimeofday(&tv, 0);
     coil::TimeValue tv = coil::gettimeofday();
-    
-    
-    //uint64_t timestamp = ((long long)tv.tv_sec*10000000LL + (long long)tv.tv_usec/100LL) + 0x01b21dd213814000LL;
     uint64_t timestamp = ((uint64_t)tv.sec()*10000000LL + (uint64_t)tv.usec()/100LL) + 0x01b21dd213814000LL;
     srand(tv.sec() + tv.usec());
     uint64_t clock_seq = rand() * (1E14+ 1.0) / (1.0 + RAND_MAX);
@@ -118,8 +113,6 @@ namespace coil
 	  result += "-";
 	  result += StringToUUID<uint16_t>((uint16_t)_uuid.clock_seq_low,2);
 	  result += StringToUUID<uint16_t>((uint16_t)_uuid.clock_seq_hi_variant,2);
-	  //result += StringToUUID<uint8_t>(_uuid.clock_seq_low,2);
-	  //result += StringToUUID<uint8_t>(_uuid.clock_seq_hi_variant,2);
 	  result += "-";
 	  result += StringToUUID<uint32_t>(_uuid.node_low,8);
 	  result += StringToUUID<uint16_t>(_uuid.node_high,4);
