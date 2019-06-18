@@ -131,26 +131,10 @@ RTC::ReturnCode_t AutoTestIn::onExecute(RTC::UniqueId ec_id)
       fout << std::fixed;
       fout << std::showpoint;
       fout << std::setprecision(6);
-      /*
-      std::cout << std::fixed;
-      std::cout << std::showpoint;
-      std::cout << std::setprecision(1);
-      std::cout << m_in.data << std::endl;
-      std::cout << "flen : " << m_in.data << std::endl;
-      */
       fout << m_in.data << std::endl;
 
-      /*
-      std::cout << "FloatSeqIn//////////////////////////////////////////" << std::endl;
-      std::cout << "Received: " << m_seqin.data[0] << " " << m_seqin.data[1]  << " " << m_seqin.data[2]  << " " << m_seqin.data[3]  << " " << m_seqin.data[4] <<std::endl;
-
-      */
       fout <<  m_seqin.data[0] << " " << m_seqin.data[1]<< " "<<m_seqin.data[2] << " " << m_seqin.data[3] << " " << m_seqin.data[4] <<  std::endl;
 
- 
-      //      std::cout << "echo//////////////////////////////////////////" << std::endl;
-      //std::cout << coil::eraseBothEndsBlank(m_myservice0.get_echo()) << std::endl;
-      //std::cout << strlen(coil::eraseBothEndsBlank(m_myservice0.get_echo())) << std::endl;
       fout << m_msg <<  std::endl;
       m_msg = "";
   }

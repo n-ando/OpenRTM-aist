@@ -34,18 +34,6 @@
 #include <taskLib.h>
 #include <sysLib.h>
 
-
-
-
-/*
-#ifdef __RTP__
-#include <taskLib.h>
-#include <sysLib.h>
-#else
-#include <selectLib.h>
-#endif
-*/
-
 namespace coil
 {
 
@@ -88,21 +76,6 @@ namespace coil
     {
           return 0;
     }
-/*
-#ifdef __RTP__
-    int tps = sysClkRateGet();
-    if(taskDelay(seconds*tps) == OK)
-    {
-        return 0;
-    }
-    else
-    {
-        return -1;
-    }
-#else
-    return ::sleep(seconds);
-#endif
-*/
   }
 
   /*!
@@ -144,24 +117,6 @@ namespace coil
     {
       return 0;
     }
-/*
-#ifdef __RTP__
-    int tps = sysClkRateGet();
-    if(taskDelay((double)interval.sec()*tps + (double)(interval.usec()*tps)/1000000l) == OK)
-    {
-        return 0;
-    }
-    else
-    {
-        return -1;
-    }
-#else
-    timeval tv;
-    tv.tv_sec = interval.sec();
-    tv.tv_usec = interval.usec();
-    return ::select(0, 0, 0, 0, &tv);
-#endif
-*/
   }
 
   /*!
@@ -203,22 +158,6 @@ namespace coil
     {
       return 0;
     }
-/*
-#ifdef __RTP__
-    int tps = sysClkRateGet();
-    if(taskDelay((double)(usec*tps)/1000000000l) == OK)
-    {
-        return 0;
-    }
-    else
-    {
-        return -1;
-    }
-#else
-    struct timespec req = {0,usec * 1000};
-    return ::nanosleep(&req, NULL);
-#endif
-*/
   }
 
   /*!

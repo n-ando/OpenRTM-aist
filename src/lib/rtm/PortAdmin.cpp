@@ -171,7 +171,7 @@ namespace RTC
     CORBA::Long index;
     index = CORBA_SeqUtil::find(m_portRefs, find_port_name(port_name));
     if (index >= 0)
-      {  // throw NotFound(port_name);
+      {
 #ifdef ORB_IS_ORBEXPRESS
 	return m_portRefs[index].in();
 #else

@@ -618,7 +618,7 @@ namespace RTC
     if (string_kind == nullptr) { bl->length(0); return; }
     std::string kind(string_kind);
 
-    CosNaming::BindingList_var tmp_bl;  // = new CosNaming::BindingList();
+    CosNaming::BindingList_var tmp_bl;
     list(string_name, tmp_bl);
 
     CORBA::ULong tmp_len(tmp_bl->length());

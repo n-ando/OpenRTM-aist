@@ -243,7 +243,7 @@ namespace RTC
       m_buffer.resize(n);
       m_length = n;
       this->reset();
-      return ::RTC::BufferStatus::BUFFER_OK;  // BUFFER_OK;
+      return ::RTC::BufferStatus::BUFFER_OK;
     }
 
     /*!

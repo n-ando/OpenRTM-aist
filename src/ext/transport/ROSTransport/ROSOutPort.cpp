@@ -177,10 +177,6 @@ namespace RTC
           }
           else
           {
-            /*
-            RTC_ERROR(("Disconnect:%s", itr->first.c_str()));
-            itr = m_tcp_connecters.erase(itr);
-            */
           }
           
         }
