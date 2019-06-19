@@ -180,6 +180,90 @@ class EXPORT_DLL StateBase {
   StateInfo & state_info_;
 };
 
+
+////////////////////////////////////////////////////////////////////////////////
+// StateInfo describes a state. Keeps history, data and state object for state.
+// StateInfo object is created the first time state is entered.
+// There is at most one StateInfo object per state per machine instance.
+class EXPORT_DLL StateInfo {
+public:
+    StateInfo(MachineBase & machine, StateInfo * parent);
+    virtual ~StateInfo();
+    // Perform entry actions.
+    // 'first' is true on very first call.
+    void on_entry(StateInfo & previous, bool first = true);
+    // Perform exit actions.
+    void on_exit(StateInfo & next);
+    // Perform init action.
+    void on_init(bool history);
+    void save_history(StateInfo & shallow, StateInfo & deep) {
+        // Check state's history strategy.
+        instance_->save_history(*this, shallow, deep);
+    }
+    // Update superstate's history information:
+    void set_history_super(StateInfo & deep) {
+        if (parent_) {
+            // Let it choose between deep or shallow history.
+            parent_->save_history(*this, deep);
+        }
+    }
+    // Data has been created explicitly.
+    void set_data(void * data) {
+        assert(!data_);
+
+        if (data_place) {
+            // Free cached memory of previously used data.
+            ::operator delete(data_place);
+            data_place = 0;
+        }
+        data_ = data;
+    }
+    // Copy state of another StateInfo object.
+    void copy(StateInfo & original);
+    // Create a clone of StateInfo object for another machine.
+    StateInfo * clone(MachineBase & new_machine);
+    virtual void clone_data(void * data) = 0;
+    void shutdown() {
+        instance_->shutdown();
+    }
+    void restore(StateInfo & info) {
+        instance_->restore(info);
+    }
+    virtual Key key() = 0;
+    // 'Virtual constructor' needed for cloning.
+    virtual StateInfo * create(MachineBase & machine, StateInfo * parent) = 0;
+    virtual void create_data() = 0;
+    virtual void delete_data() = 0;
+    virtual const char * name() const = 0;
+    // Is 'state' a superstate?
+    bool is_child(StateInfo & state) const {
+        return this == &state || (parent_ && parent_->is_child(state));
+    }
+    StateBase & instance() {
+        assert(instance_);
+        return *instance_;
+    }
+    void * data() {
+        assert(data_);
+        return data_;
+    }
+    MachineBase & machine() {
+        return machine_;
+    }
+    void set_history(StateInfo * history) {
+        history_ = history;
+    }
+
+protected:
+    MachineBase & machine_;
+    StateBase * instance_;   // Instance of state class
+    StateInfo * history_;
+    StateInfo * parent_;
+    void * data_;
+    void * data_place;      // Reused data memory
+};
+
+
 ////////////////////////////////////////////////////////////////////////////////
 // Base class for user defined top state (and indirectly all other states).
 template<class T>
@@ -380,87 +464,6 @@ class Link : public P {
 
 template<class C, class P> KeyInit<typename P::TOP> Link<C, P>::the_key_;
 
-////////////////////////////////////////////////////////////////////////////////
-// StateInfo describes a state. Keeps history, data and state object for state.
-// StateInfo object is created the first time state is entered.
-// There is at most one StateInfo object per state per machine instance.
-class EXPORT_DLL StateInfo {
- public:
-  StateInfo(MachineBase & machine, StateInfo * parent);
-  virtual ~StateInfo();
-  // Perform entry actions.
-  // 'first' is true on very first call.
-  void on_entry(StateInfo & previous, bool first = true);
-  // Perform exit actions.
-  void on_exit(StateInfo & next);
-  // Perform init action.
-  void on_init(bool history);
-  void save_history(StateInfo & shallow, StateInfo & deep) {
-    // Check state's history strategy.
-    instance_->save_history(*this, shallow, deep);
-  }
-  // Update superstate's history information:
-  void set_history_super(StateInfo & deep) {
-    if (parent_) {
-      // Let it choose between deep or shallow history.
-      parent_->save_history(*this, deep);
-    }
-  }
-  // Data has been created explicitly.
-  void set_data(void * data) {
-    assert(!data_);
-
-    if (data_place) {
-      // Free cached memory of previously used data.
-      ::operator delete(data_place);
-      data_place = 0;
-    }
-    data_ = data;
-  }
-  // Copy state of another StateInfo object.
-  void copy(StateInfo & original);
-  // Create a clone of StateInfo object for another machine.
-  StateInfo * clone(MachineBase & new_machine);
-  virtual void clone_data(void * data) = 0;
-  void shutdown() {
-    instance_->shutdown();
-  }
-  void restore(StateInfo & info) {
-    instance_->restore(info);
-  }
-  virtual Key key() = 0;
-  // 'Virtual constructor' needed for cloning.
-  virtual StateInfo * create(MachineBase & machine, StateInfo * parent) = 0;
-  virtual void create_data() = 0;
-  virtual void delete_data() = 0;
-  virtual const char * name() const = 0;
-  // Is 'state' a superstate?
-  bool is_child(StateInfo & state) const {
-    return this == &state || (parent_ && parent_->is_child(state));
-  }
-  StateBase & instance() {
-    assert(instance_);
-    return *instance_;
-  }
-  void * data() {
-    assert(data_);
-    return data_;
-  }
-  MachineBase & machine() {
-    return machine_;
-  }
-  void set_history(StateInfo * history) {
-    history_ = history;
-  }
-
- protected:
-  MachineBase & machine_;
-  StateBase * instance_;   // Instance of state class
-  StateInfo * history_;
-  StateInfo * parent_;
-  void * data_;
-  void * data_place;      // Reused data memory
-};
 
 ////////////////////////////////////////////////////////////////////////////////
 // StateInfo for Root state.
