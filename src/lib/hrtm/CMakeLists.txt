@@ -41,7 +41,6 @@ set(hrtm_headers
 set(srcs
 	component_manager.cpp
 	data_flow_component.cpp
-	logger.cpp
 	properties.cpp
 	statechart.cpp
 	${hrtm_headers}
