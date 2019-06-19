@@ -50,7 +50,7 @@ namespace hrtm
   {
     runManager(non_block);
   }
-  void ComponentManager::init_proc(RTC::Manager* mgr)
+  void ComponentManager::init_proc(RTC::Manager* /*mgr*/)
   {
     ::hrtm::ComponentManager::initProc(manager);
   }
