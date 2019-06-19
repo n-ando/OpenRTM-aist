@@ -45,6 +45,7 @@ import skel_wrapper
 opt_args_fmt = ["help",
 		"idl-file=",
 		"include-dir=",
+		"output-dir=",
 		"skel-suffix=",
 		"stub-suffix=",
 		"category=",
@@ -80,10 +81,10 @@ Example:
 $ rtm-skelwrapper --idl=file=<IDL path>/<IDL basename>.idl
                   --include-dir=<include dir>
                   --output-dir=<output dir>
-                  -skel-suffix=<skel suffix> 
-                  -stub-suffix=<stub suffix> 
-                  -category=<category name>
-                  -dependencies=<dependent idl list> 
+                  --skel-suffix=<skel suffix>
+                  --stub-suffix=<stub suffix>
+                  --category=<category name>
+                  --dependencies=<dependent idl list>
 
 In this case, the following files are generated under <output dir>.
 
