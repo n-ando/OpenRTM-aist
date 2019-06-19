@@ -13,7 +13,6 @@
 //
 // See Macho.hpp for more information.
 #include <iostream>
-//#include "Macho.hpp"
 #include <rtm/Macho.h>
 using namespace Macho;
 

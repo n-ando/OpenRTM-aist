@@ -890,7 +890,6 @@ module RTM
      * @endig
      */
     Object get_service(in string name);
-    //    ServiceProfileList get_service_profiles();
   };
 }; // end of namespace RTM
 

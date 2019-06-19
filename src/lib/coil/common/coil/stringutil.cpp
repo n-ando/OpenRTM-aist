@@ -206,8 +206,6 @@ namespace coil
       else if (c == '\f')  str += "\\f";
       else if (c == '\r')  str += "\\r";
       else if (c == '\\')  str += "\\\\";
-      //    else if (c == '\"')  str += "\\\"";
-      //    else if (c == '\'')  str += "\\\'";
       else
         {
           str.push_back(c);
@@ -409,9 +407,6 @@ namespace coil
 
     if (input.empty()) { return results; }
 
-    //  if (input.substr(0, delim_size) == delimiter)
-    //    begin_pos = pre_pos = delim_size;
-
     while (true)
       {
         //    REFIND:
@@ -427,14 +422,6 @@ namespace coil
               }
             break;
           }
-        /*
-          if (isEscaped(input, found_pos))
-          {
-          begin_pos = found_pos + delim_size;
-          goto REFIND;
-          }
-        */
-        
         if (found_pos >= pre_pos)
           {
             substr_size = found_pos - pre_pos;
@@ -884,3 +871,4 @@ namespace coil
   }
 
 } // namespace coil
+

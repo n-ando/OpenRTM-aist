@@ -187,10 +187,6 @@ RTC::ReturnCode_t Throughput::onInitialize()
   // </rtc-template>
 
   m_record.reserve(m_maxsample);
-//  for (size_t i(0); i < m_maxsample; ++i)
-//    {
-//      m_record[i] = coil::TimeValue(0, 0);
-//    }
   return RTC::RTC_OK;
 }
 

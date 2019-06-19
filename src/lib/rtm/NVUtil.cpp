@@ -320,7 +320,6 @@ namespace NVUtil
                          const char* value)
 #endif  // ORB_IS_RTORB
   {
-    //    if (!isString(nv, name)) return false;
 
     CORBA::Long index;
     index = find_index(nv, name);

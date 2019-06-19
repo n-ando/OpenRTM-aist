@@ -41,7 +41,6 @@ namespace RTC
       m_consumer(consumer), m_publisher(nullptr),
       m_listeners(listeners), m_buffer(buffer)
   {
-    // publisher/buffer creation. This may throw std::bad_alloc;
     m_publisher = createPublisher(info);
     if (m_buffer == nullptr)
       {

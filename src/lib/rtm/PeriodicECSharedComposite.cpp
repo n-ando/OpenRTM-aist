@@ -159,7 +159,6 @@ namespace SDOPackage
 		{
 			len = strlen(member.profile_->instance_name);
 		}
-		//size_t len = (std::max)(strlen(id), strlen(member.profile_->instance_name));
         if (strncmp(id, member.profile_->instance_name, len) != 0)
           {
             ++it;
@@ -278,7 +277,6 @@ namespace SDOPackage
   void PeriodicECOrganization::addOrganizationToTarget(Member& member)
   {
     // get given RTC's configuration object
-    //    Configuration_var conf(member.config_.in());
     Configuration_var conf(member.config_);
     if (::CORBA::is_nil(conf)) return;
 

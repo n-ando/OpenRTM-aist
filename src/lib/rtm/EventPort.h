@@ -63,8 +63,6 @@ namespace RTC
           info.name == m_eventName)
         {
             m_buffer.write(new Event0(this));
-          //m_fsm.dispatch(Macho::Event(m_handler));
-          //std::cout << "Event dispatched: " << m_eventName << std::endl;
           return NO_CHANGE;
         }
       return NO_CHANGE;
@@ -103,8 +101,6 @@ namespace RTC
           info.name == m_eventName)
         {
             m_buffer.write(new Event1<P0>(this, data));
-          //m_fsm.dispatch(Macho::Event(m_handler, data));
-          //std::cout << "Event dispatched: " << m_eventName << std::endl;
           return NO_CHANGE;
         }
       return NO_CHANGE;

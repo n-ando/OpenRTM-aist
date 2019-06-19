@@ -21,7 +21,6 @@
 #define RTC_INPORTDIRECTCONSUMER_H
 
 
-//#include <rtm/BufferBase.h>
 
 
 #include <rtm/CorbaConsumer.h>

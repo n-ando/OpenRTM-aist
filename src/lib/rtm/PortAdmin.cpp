@@ -135,9 +135,7 @@ namespace RTC
 
 #ifndef ORB_IS_RTORB
     PortProfileList port_profs(0);
-    //    port_prof_collect p(port_profs);
     port_prof_collect2 p(port_profs);
-    //    m_portServants.for_each(p);
     ::CORBA_SeqUtil::for_each(m_portRefs, p);
 #else  // ORB_IS_RTORB
     CORBA::ULong len = m_portRefs.length();
@@ -173,7 +171,7 @@ namespace RTC
     CORBA::Long index;
     index = CORBA_SeqUtil::find(m_portRefs, find_port_name(port_name));
     if (index >= 0)
-      {  // throw NotFound(port_name);
+      {
 #ifdef ORB_IS_ORBEXPRESS
 	return m_portRefs[index].in();
 #else
@@ -278,7 +276,6 @@ namespace RTC
     try
       {
         port.disconnect_all();
-        // port.shutdown();
 
         const char* tmp(port.getProfile().name);
         CORBA_SeqUtil::erase_if(m_portRefs, find_port_name(tmp));

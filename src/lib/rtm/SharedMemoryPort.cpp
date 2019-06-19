@@ -33,8 +33,7 @@ namespace RTC
    */
 	SharedMemoryPort::SharedMemoryPort()
    : m_smInterface(OpenRTM::PortSharedMemory::_nil()),
-     m_endian(true)//,
-     //rtclog("SharedMemoryPort")
+     m_endian(true)
   {
 
   }
@@ -48,7 +47,6 @@ namespace RTC
    */
 	SharedMemoryPort::~SharedMemoryPort()
   {
-	//RTC_PARANOID(("~SharedMemoryPort()"));
 	  try
 	  {
 		  PortableServer::ObjectId_var oid;
@@ -65,7 +63,6 @@ namespace RTC
 #ifdef ORB_IS_ORBEXPRESS
 		  oe_out << e << oe_endl << oe_flush;
 #else
-		  //RTC_ERROR(("%s", e._name()));
 #endif
 	  }
 	  catch (PortableServer::POA::WrongPolicy&)
@@ -73,13 +70,11 @@ namespace RTC
 #ifdef ORB_IS_ORBEXPRESS
 		  oe_out << e << oe_endl << oe_flush;
 #else
-		  //RTC_ERROR(("%s", e._name()));
 #endif
 	  }
 	  catch (...)
 	  {
 		  // never throws exception
-		  //RTC_ERROR(("Unknown exception caught."));
 	  }
   }
 
@@ -293,9 +288,6 @@ namespace RTC
   */
 	void SharedMemoryPort::read(ByteData& data)
   {
-	  //CORBA::Octet data_size_str[sizeof(CORBA::ULongLong)];
-	  //int ret = m_shmem.read((char*)data_size_str, 0, sizeof(CORBA::ULongLong));
-	  //if (ret == 0)
 	  if (m_shmem.created())
 	  {
           CORBA_CdrMemoryStream data_size_cdr;
@@ -304,17 +296,7 @@ namespace RTC
           data_size_cdr.setEndian(m_endian);
           data_size_cdr.writeCdrData(reinterpret_cast<unsigned char*>(&(m_shmem.get_data()[0])), sizeof(CORBA::ULongLong));
           data_size_cdr.deserializeCDR(data_size);
-
-          //CORBA::Octet *shm_data = new CORBA::Octet[data_size];
-          //ret = m_shmem.read((char*)shm_data, sizeof(CORBA::ULongLong), (int)data_size);
-		 
-          /*if (ret == 0)
-          {
-              	 
-              data.put_octet_array(&(shm_data[0]), (int)data_size);
-          }*/
           data.writeData(reinterpret_cast<unsigned char*>(&m_shmem.get_data()[sizeof(CORBA::ULongLong)]), static_cast<unsigned long>(data_size));
-          //delete shm_data;
 	  }
 
   }
@@ -408,8 +390,6 @@ namespace RTC
 
 	::OpenRTM::PortSharedMemory_ptr SharedMemoryPort::getObjRef()
 	{
-		//m_objref = this->_this();
-		//return ::OpenRTM::PortSharedMemory::_duplicate(m_objref);
 		return this->_this();
 	}
 } // namespace RTC

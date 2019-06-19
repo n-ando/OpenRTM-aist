@@ -23,16 +23,6 @@
 #include <taskLib.h>
 #include <coil/Mutex.h>
 #include <mutex>
-/*
-#ifdef __RTP__
-#include <vxWorks.h>
-#include <taskLib.h>
-#include <coil/Mutex.h>
-#include <mutex>
-#else
-#include <pthread.h>
-#endif
-*/
 
 namespace coil
 {
@@ -51,10 +41,6 @@ namespace coil
    */
   class Task
   {
-/*
-#ifdef __RTP__
-#endif
-*/
   public:
     /*!
      * @if jp
@@ -334,26 +320,7 @@ namespace coil
     int m_tid;
     int m_priority;
     int m_stacksize;
-
-/*
-#endif
-
-#ifdef __RTP__
-    coil::Mutex m_waitmutex;
-#endif
-  private:
-    int m_count;
-#ifdef __RTP__
-    int m_tid;
-    int m_priority;
-    int m_stacksize;
-#else
-    pthread_t m_thread;
-    pthread_attr_t m_attr;
-#endif
-*/
     void* m_args;
-
   };
 
 };

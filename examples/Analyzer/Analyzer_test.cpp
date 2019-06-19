@@ -131,28 +131,16 @@ RTC::ReturnCode_t Analyzer_test::onExecute(RTC::UniqueId  /*ec_id*/)
 	if (m_inIn.isNew())
 	{
 		coil::TimeValue start(coil::gettimeofday());
-		//coil::TimeValue start1(coil::gettimeofday());
 		m_inIn.read();
-		//std::cout << "Analyzer_test: " << &m_in << std::endl;
-		//coil::TimeValue start2(coil::gettimeofday());
 		m_out = m_in;
-		//coil::TimeValue start3(coil::gettimeofday());
-		//coil::sleep(coil::TimeValue(m_sleep_time));
-		//coil::TimeValue end(coil::gettimeofday());
-		//std::cout << double(end-start1) << "\t" << double(end-start2) << "\t" << double(end-start3) << std::endl;
 		coil::TimeValue end(coil::gettimeofday());
 		double diff = (double)(end - start);
-		//std::cout << "Analyzer_test: " << m_sleep_time - diff << std::endl;
 		if (diff < m_sleep_time)
 		{
 			coil::sleep(coil::TimeValue(m_sleep_time - diff));
 		}
-		//std::cout << "Analyzer_test: " << m_sleep_time - (double)(end - start) << std::endl;
 		
-		//std::cout << double(start3-start2) << std::endl;
 		m_outOut.write();
-		//std::cout << "Analyzer_test" << std::endl;
-		//std::cout << "Analyzer_test: " << m_out.tm.sec << "\t" << m_out.tm.nsec << std::endl;
 	}
   return RTC::RTC_OK;
 }

@@ -90,55 +90,6 @@ namespace RTC_impl
       }
   }
 
-//  RTObjectStateMachine::
-//  RTObjectStateMachine(const RTObjectStateMachine& other)
-//    : m_id(other.m_id),
-//      m_rtobj(RTC::LightweightRTObject::_duplicate(other.m_rtobj)),
-//      m_sm(other.m_sm),
-//      m_ca(NULL), m_dfc(NULL),
-//      m_fsm(NULL), m_mode(NULL)
-//  {
-//    // Setting Action callback objects
-//    RTC::LightweightRTObject_ptr comp = m_rtobj;
-//    setComponentAction(comp);
-//    setDataFlowComponentAction(comp);
-//    setFsmParticipantAction(comp);
-//    setMultiModeComponentAction(comp);
-//    m_sm.setListener(this);
-//    m_sm.setEntryAction (RTC::ACTIVE_STATE,
-//                         &RTObjectStateMachine::onActivated);
-//    m_sm.setDoAction    (RTC::ACTIVE_STATE,
-//                         &RTObjectStateMachine::onExecute);
-//    m_sm.setPostDoAction(RTC::ACTIVE_STATE,
-//                         &RTObjectStateMachine::onStateUpdate);
-//    m_sm.setExitAction  (RTC::ACTIVE_STATE,
-//                         &RTObjectStateMachine::onDeactivated);
-//    m_sm.setEntryAction (RTC::ERROR_STATE,
-//                         &RTObjectStateMachine::onAborting);
-//    m_sm.setDoAction    (RTC::ERROR_STATE,
-//                         &RTObjectStateMachine::onError);
-//    m_sm.setExitAction  (RTC::ERROR_STATE,
-//                         &RTObjectStateMachine::onReset);
-//  }
-//
-//  RTObjectStateMachine& RTObjectStateMachine::
-//  operator=(const RTObjectStateMachine& other)
-//  {
-//    RTObjectStateMachine temp(other);
-//    swap(temp);
-//    return *this;
-//  }
-//
-//  void RTObjectStateMachine::swap(RTObjectStateMachine& other) throw ()
-//  {
-//    std::swap(m_id, other.m_id);
-//    m_sm.swap(other.m_sm);
-//    std::swap(m_ca, other.m_ca);
-//    std::swap(m_dfc, other.m_dfc);
-//    std::swap(m_fsm, other.m_fsm);
-//    std::swap(m_mode, other.m_mode);
-//  }
-
   RTC::LightweightRTObject_ptr RTObjectStateMachine::getRTObject()
   {
     return RTC::LightweightRTObject::_duplicate(m_rtobj);

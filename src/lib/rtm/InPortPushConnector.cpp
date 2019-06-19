@@ -42,7 +42,6 @@ namespace RTC
       m_deleteBuffer(buffer == nullptr),
       m_sync_readwrite(false)
   {
-    // publisher/buffer creation. This may throw std::bad_alloc;
     if (m_buffer == nullptr)
       {
         m_buffer = createBuffer(info);

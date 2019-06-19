@@ -50,9 +50,6 @@ namespace RTC_impl
     RTObjectStateMachine(RTC::ExecutionContextHandle_t id,
                          RTC::LightweightRTObject_ptr comp);
     virtual ~RTObjectStateMachine();
-//    RTObjectStateMachine(const RTObjectStateMachine& rtobjsm);
-//    RTObjectStateMachine& operator=(const RTObjectStateMachine& rtobjsm);
-//    void swap(RTObjectStateMachine& rtobjsm) throw();
 
     // functions for stored RTObject reference
     RTC::LightweightRTObject_ptr getRTObject();
@@ -117,8 +114,6 @@ namespace RTC_impl
     RTC::MultiModeComponentAction_var m_modeVar;
     RTC::RTObject_impl* m_rtobjPtr;
     bool m_measure;
-
-    //    char dara[1000];
     // Component action invoker
     coil::TimeMeasure m_svtMeasure;
     coil::TimeMeasure m_refMeasure;

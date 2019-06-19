@@ -177,10 +177,6 @@ namespace RTC
           }
           else
           {
-            /*
-            RTC_ERROR(("Disconnect:%s", itr->first.c_str()));
-            itr = m_tcp_connecters.erase(itr);
-            */
           }
           
         }
@@ -219,16 +215,6 @@ namespace RTC
   {
     RTC_PARANOID(("connectTCP()"));
 
-    /*
-    for(std::map<std::string, ros::ConnectionPtr>::iterator itr = m_tcp_connecters.begin(); itr != m_tcp_connecters.end(); ++itr) 
-    {
-      if(itr->second->isDropped())
-      {
-        RTC_ERROR(("Disconnect:%s", itr->first.c_str()));
-        itr = m_tcp_connecters.erase(itr);
-      }
-    }
-    */
     if (m_tcp_connecters.count(transport->getClientURI()) > 0){
       RTC_VERBOSE(("Connector already exists."));
       return false;

@@ -18,7 +18,6 @@
 
 
 #include <coil/SharedMemory.h>
-//#include "SharedMemory.h"
 #include <cstring>
 #include <utility>
 
@@ -276,10 +275,6 @@ namespace coil
     else
     {
 	return -1;
-    }
-    if(m_file_create)
-    {
-	//shm_unlink(m_shm_address);
     }
     return 0;
 

@@ -980,9 +980,6 @@ namespace RTC
     {
       return m_active;
     }
-    //    const std::vector<Properties*>* getConfigurationParameterValues();
-    //    const Properties* getConfigurationParameterValue(const char* name);
-    //    bool setConfigurationParameter(const char* name, const char* value);
 
     /*!
      * @if jp

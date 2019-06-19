@@ -238,7 +238,6 @@ namespace RTC
 
     if (m_publisher != nullptr)
     {
-        //eprosima::fastrtps::Domain::removePublisher(m_publisher);
     }
   }
 

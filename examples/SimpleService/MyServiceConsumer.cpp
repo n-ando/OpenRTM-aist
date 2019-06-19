@@ -147,13 +147,10 @@ RTC::ReturnCode_t MyServiceConsumer::onExecute(RTC::UniqueId  /*ec_id*/)
 	{
           if (async_echo == nullptr)
             {
-              // char* retmsg;
-              // retmsg = m_myservice0->echo(argv[1].c_str());
               async_echo = 
                 coil::AsyncInvoker(&m_myservice0,
                                    echo_functor(argv[1], m_result));
               async_echo->invoke();
-              // std::cout << "echo return: " << retmsg << std::endl;
             }
           else
             {

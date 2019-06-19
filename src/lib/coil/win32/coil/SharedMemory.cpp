@@ -18,7 +18,6 @@
 
 
 #include <coil/SharedMemory.h>
-//#include "SharedMemory.h"
 #include <cstring>
 #include <utility>
 
@@ -121,15 +120,6 @@ namespace coil
 		PAGE_READWRITE | SEC_COMMIT,
 		0, static_cast<DWORD>(m_memory_size),
 		shm_address.c_str());
-    /*
-    if(GetLastError() == ERROR_ALREADY_EXISTS)
-    {
-    }
-    else
-    {
-    	
-    }
-    */
 
     m_shm = static_cast<char *>(MapViewOfFile(m_handle, FILE_MAP_ALL_ACCESS, 0, 0, 0));
     m_file_create = true;

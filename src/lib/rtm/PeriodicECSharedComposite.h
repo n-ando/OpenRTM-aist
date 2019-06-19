@@ -355,7 +355,6 @@ namespace SDOPackage
 
       Member& operator=(const Member& x)
       {
-//        std::cout << "####################op=" << std::endl;
         Member tmp(x);
         tmp.swap(*this);
         return *this;
@@ -661,8 +660,6 @@ namespace RTC
      * @endif
      */
     OpenRTM::DataFlowComponent_var m_ref;
-//    PeriodicExecutionContext* m_pec;
-//    ExecutionContextService_var m_ecref;
     /*!
      * @if jp
      * @brief Organizationのリファレンス

@@ -167,7 +167,6 @@ namespace RTC
    */
   void RosTopicManager::requestTopicCallback(XmlRpc::XmlRpcValue& params, XmlRpc::XmlRpcValue& result)
   {
-      //RTC_PARANOID(("requestTopicCallback()"));
       if (params.getType() != XmlRpc::XmlRpcValue::TypeArray)
       {
           result = ros::xmlrpc::responseInt(0, ros::console::g_last_error_message, 0);
@@ -193,9 +192,6 @@ namespace RTC
       std::string callerid = params[0];
       std::string topic = params[1];
       
-      //RTC_VERBOSE(("Caller ID:%s",callerid.c_str()));
-      //RTC_VERBOSE(("Topic Name:%s",topic.c_str()));
-      
       XmlRpc::XmlRpcValue protocols = params[2];
       if (protocols.getType() != XmlRpc::XmlRpcValue::TypeArray)
       {
@@ -207,7 +203,6 @@ namespace RTC
         if (protocols[i].getType() != XmlRpc::XmlRpcValue::TypeArray)
         {
           result = ros::xmlrpc::responseInt(0, ros::console::g_last_error_message, 0);
-          //RTC_ERROR(("Protocol Name is invalid value"));
           return;
         }
         if (protocols[i][0].getType() != XmlRpc::XmlRpcValue::TypeString)
@@ -216,11 +211,9 @@ namespace RTC
             return;
         }
         std::string protocol = std::string(protocols[i][0]);
-        //RTC_VERBOSE(("Protocol Type:%s",protocol.c_str()));
       
         if (protocol == std::string("TCPROS"))
         {
-          //RTC_VERBOSE(("TCPROS Connection create."));
           XmlRpc::XmlRpcValue tcpros_params;
           
           tcpros_params[0] = std::string("TCPROS");
@@ -256,7 +249,6 @@ namespace RTC
    */
   void RosTopicManager::pubUpdateCallback(XmlRpc::XmlRpcValue& params, XmlRpc::XmlRpcValue& result)
   {
-      //RTC_PARANOID(("pubUpdateCallback()"));
       if (params.getType() != XmlRpc::XmlRpcValue::TypeArray)
       {
           result = ros::xmlrpc::responseInt(0, ros::console::g_last_error_message, 0);
@@ -282,9 +274,6 @@ namespace RTC
       std::string caller_id = params[0];
       std::string topic = params[1];
       
-      //RTC_VERBOSE(("Caller ID:%s",caller_id.c_str()));
-      //RTC_VERBOSE(("Topic Name:%s",topic.c_str()));
-      
       
       if(m_cons.count(topic) == 0)
       {
@@ -293,7 +282,6 @@ namespace RTC
       
       if (params[2].getType() != XmlRpc::XmlRpcValue::TypeArray)
       {
-        //RTC_ERROR(("Protcol is invalid value."));
       
         result = ros::xmlrpc::responseInt(0, ros::console::g_last_error_message, 0);
         return;
@@ -318,10 +306,6 @@ namespace RTC
 
         for(auto & subscriber : m_subscribers)
         {
-          //RTC_VERBOSE(("Connect TCP"));
-          //RTC_VERBOSE(("Caller ID:%s",caller_id.c_str()));
-          //RTC_VERBOSE(("Topic Name:%s",topic.c_str()));
-          //RTC_VERBOSE(("URI:%s",xmlrpc_uri.c_str()));
           subscriber->connectTCP(caller_id, topic, xmlrpc_uri);
         }
         new_.push_back(xmlrpc_uri);
@@ -334,7 +318,6 @@ namespace RTC
       
         if (index == new_.size()) 
         {
-          //RTC_INFO(("Delete Connector:%s %s %s", caller_id.c_str(), topic.c_str(), old_uri->c_str()));
           for(auto & subscriber : m_subscribers)
           {
             subscriber->deleteTCPConnector(caller_id, topic, old_uri);

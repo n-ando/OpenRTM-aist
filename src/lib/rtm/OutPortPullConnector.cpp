@@ -52,7 +52,6 @@ namespace RTC
     m_buffer->init(info.properties.getNode("buffer"));
     m_provider->setBuffer(m_buffer);
     m_provider->setConnector(this);
-    //    m_provider->init(m_profile /* , m_listeners */);
     m_provider->setListener(info, &m_listeners);
 
     if (coil::toBool(info.properties["sync_readwrite"], "YES", "NO", false))

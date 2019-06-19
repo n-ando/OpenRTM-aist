@@ -385,7 +385,6 @@ namespace RTC
         std::map <std::string, DDS::Topic_var> m_topics;
         std::map <std::string, OpenRTM_OpenSplice::CORBACdrDataTypeSupport_var> m_typesupports;
     protected:
-        //mutable Logger rtclog;
     };
 
 }

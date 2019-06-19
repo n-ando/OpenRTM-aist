@@ -74,7 +74,6 @@ RTC::ReturnCode_t Microwave::onInitialize()
 
 RTC::ReturnCode_t Microwave::onExecute(RTC::UniqueId  /*ec_id*/)
 {
-  //std::this_thread::sleep_for(std::chrono::seconds(1));
     m_fsm.run_event();
 
   return RTC::RTC_OK;

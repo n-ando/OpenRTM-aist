@@ -21,7 +21,6 @@
 #define RTC_INPORTSHMCONSUMER_H
 
 
-//#include <rtm/BufferBase.h>
 
 #include <rtm/SharedMemoryPort.h>
 #include <rtm/CorbaConsumer.h>

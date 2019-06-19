@@ -337,7 +337,6 @@ namespace RTC_impl
     // rtc is owner of this EC
     RTC::LightweightRTObject_var comp
       = RTC::LightweightRTObject::_duplicate(rtc->getObjRef());
-    //    RTObjectStateMachine o(id, comp);
     m_comps.push_back(new RTObjectStateMachine(id, comp));
     RTC_DEBUG(("bindComponent() succeeded."));
 

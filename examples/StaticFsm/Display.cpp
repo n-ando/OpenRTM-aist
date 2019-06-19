@@ -93,7 +93,6 @@ RTC::ReturnCode_t Display::onInitialize()
   m_inIn.addConnectorListener(ON_DISCONNECT,
                                     new ConnListener("ON_DISCONNECT"));
 
-  //  m_machine = new Macho::Machine<Example::Top>(Macho::State<Example::Top>(11));
 
  return RTC::RTC_OK;
 }

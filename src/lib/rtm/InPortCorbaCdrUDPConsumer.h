@@ -20,7 +20,6 @@
 #define RTC_INPORTCORBACDRUDPCONSUMER_H
 
 
-//#include <rtm/BufferBase.h>
 
 #include <rtm/idl/DataPortUDPSkel.h>
 #include <rtm/CorbaConsumer.h>

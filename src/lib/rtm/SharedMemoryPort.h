@@ -261,11 +261,9 @@ namespace RTC
 	virtual ::OpenRTM::PortSharedMemory_ptr getObjRef();
 
  protected:
-    //mutable Logger rtclog;
     ::OpenRTM::PortSharedMemory_var m_smInterface;
     bool m_endian;
     coil::SharedMemory m_shmem;
-	//::OpenRTM::PortSharedMemory_var m_objref;
 
     
   };  // class SharedMemoryPort

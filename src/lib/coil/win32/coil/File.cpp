@@ -497,7 +497,6 @@ namespace coil
           do {
               if ((win32fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) != 0U) {
                   std::string filename = win32fd.cFileName;
-                  //std::cout << win32fd.cFileName << std::endl;
                   if (filename != "." && filename != "..")
                   {
                       std::string next_dir = dir + "\\" + win32fd.cFileName;

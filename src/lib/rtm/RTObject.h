@@ -954,30 +954,6 @@ namespace RTC
      */
     PortServiceList* get_ports() override;
 
-    /*!
-     * @if jp
-     *
-     * @brief [RTObject CORBA interface] ExecutionContextAdmin を取得する
-     *
-     * このオペレーションは当該 RTC が所属する ExecutionContextに関連した
-     * ExecutionContextService のリストを返す。
-     *
-     * @return ExecutionContextService リスト
-     *
-     * @else
-     *
-     * @brief [RTObject CORBA interface] Get ExecutionContextAdmin
-     *
-     * This operation returns a list containing an ExecutionContextAdmin for
-     * every ExecutionContext owned by the RTC.
-     *
-     * @return ExecutionContextService List
-     *
-     * @endif
-     */
-    //    virtual ExecutionContextServiceList* get_execution_context_services()
-    //      throw (CORBA::SystemException);
-
     //============================================================
     // RTC::ComponentAction
     //============================================================
@@ -5296,15 +5272,6 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief Alive 状態フラグ
-     * @else
-     * @brief Alive Status Flag
-     * @endif
-     */
-    //    bool m_alive;
-
-    /*!
-     * @if jp
      * @brief RTC のプロパティ
      * @else
      * @brief RTC's Property
@@ -5536,7 +5503,6 @@ namespace RTC
       ExecutionContext_var m_ec;
 
     };  // struct ec_find
-    //    ExecutionContextAdminList m_execContextList;
 
     /*!
      * @if jp

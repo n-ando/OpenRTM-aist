@@ -365,8 +365,6 @@ namespace RTC
       m_listeners->
         connector_[ON_SENDER_ERROR].notify(m_profile);
     }
-
-    //    RTC::OutPortCdr_var m_outport;
     CdrBufferBase* m_buffer;
     ConnectorListeners* m_listeners;
     ConnectorInfo m_profile;

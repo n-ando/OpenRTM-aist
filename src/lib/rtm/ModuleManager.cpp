@@ -481,8 +481,6 @@ namespace RTC
         coil::vstring flist(0);
         for (auto & suffixe : suffixes)
           {
-            //std::string glob("*."); glob += suffixes[s];
-            //coil::vstring tmp = coil::filelist(path.c_str(), glob.c_str());
             coil::vstring tmp;
             coil::getFileList(path, suffixe, tmp);
             RTC_DEBUG(("File list (path:%s, ext:%s): %s", path.c_str(),
@@ -493,9 +491,6 @@ namespace RTC
         // reformat file path and remove cached files
         for (auto & f : flist)
           {
-            //if (*(path.end() - 1) != '/') { path += "/"; }
-            //std::string fpath(path + flist[j]);
-            //addNewFile(fpath, modules);
             coil::replaceString(f, "\\", "/");
             coil::replaceString(f, "//", "/");
             addNewFile(f, modules);

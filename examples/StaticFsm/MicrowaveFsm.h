@@ -67,13 +67,6 @@ namespace MicrowaveFsm
     virtual void open() {}
     virtual void close() {}
     virtual void minute(RTC::TimedLong /* time */) {}
-//    {
-//      std::cout << "Top::minute()" << std::endl;
-//      for (size_t i(0); i < (size_t)time.data; ++i)
-//        {
-//          box().incrementTimer();
-//        }
-//    } // Increment timer by a minute
     virtual void start() {}		// Start cooking
     virtual void stop() {}		// Stop cooking
     virtual void tick() {}		// Minute has passed
@@ -156,6 +149,5 @@ namespace MicrowaveFsm
   };
 } // namespace MicrowaveFsm
 
-//typedef Macho::Machine<MicrowaveFsm::Top> MicrowaveFsmImpl;
 
 #endif // MICROWAVEFSM_H

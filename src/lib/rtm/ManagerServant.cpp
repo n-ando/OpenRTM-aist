@@ -863,7 +863,6 @@ namespace RTM
    */
   RTC::ReturnCode_t ManagerServant::fork()
   {
-    //    m_mgr.fork();
     
     return ::RTC::RTC_OK;
   }
@@ -926,7 +925,6 @@ namespace RTM
    */
   RTC::ReturnCode_t ManagerServant::restart()
   {
-    //    m_mgr.restart();
     return ::RTC::RTC_OK;
   }
 
@@ -1110,7 +1108,6 @@ namespace RTM
       {
         coil::Properties config(m_mgr.getConfig());
         // Why RtORB does not allow corbaloc:iiop: ?
-        //        std::string mgrloc("corbaloc:iiop:");
         std::string mgrloc("corbaloc::");
         mgrloc += host_port;
         mgrloc += "/" + config["manager.name"];

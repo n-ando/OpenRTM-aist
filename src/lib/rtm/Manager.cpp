@@ -61,8 +61,6 @@
 #if defined(minor)
 #undef minor
 #endif
-
-//static sig_atomic_t g_mgrActive = true;
 extern "C" void handler(int /*unused*/)
 {
   ::RTC::Manager::instance().terminate();
@@ -851,7 +849,6 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     m_listeners.rtclifecycle_.preConfigure(prop);
     configureComponent(comp, prop);
     m_listeners.rtclifecycle_.postConfigure(prop);
-    // comp->setProperties(prop);
 
     //------------------------------------------------------------
     // Component initialization
@@ -1331,7 +1328,6 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 			}
 			catch (...)
 			{
-				//RTC_ERROR((""));
 			}
 		}
 
@@ -1527,7 +1523,6 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     for (auto & m_logfile : m_logfiles)
       {
         m_logfile->close();
-        //        m_logStreamBuf.removeStream(m_logfiles[i]->rdbuf());
         delete m_logfile;
       }
     if (!m_logfiles.empty())
@@ -1808,7 +1803,6 @@ std::vector<coil::Properties> Manager::getLoadableModules()
           {
             m_pORB->shutdown(true);
             RTC_DEBUG(("ORB was shutdown."));
-            //m_pORB->destroy();
             RTC_DEBUG(("ORB was destroied."));
             m_pORB = CORBA::ORB::_nil();
           }
@@ -2689,16 +2683,6 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 			  }
 			  configs[param_itr.first] = param_itr.second;
 		  }
-
-
-          /*
-		  if (ports.size() == 0)
-		  {
-			  RTC_ERROR(("Invalid format for pre-connection."));
-			  RTC_ERROR(("Format must be Comp0.port0?port=Comp1.port1"));
-			  continue;
-		  }
-          */
 
 		  if (configs.count("dataflow_type") == 0)
 		  {

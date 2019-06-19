@@ -287,15 +287,6 @@ namespace SDOPackage
     std::lock_guard<std::mutex> guard(m_config_mutex);
     NVList_var nvlist;
     nvlist = new NVList(static_cast<CORBA::ULong>(0));
-
-    /*
-      CORBA::Long index;
-      index = getActiveConfigIndex();
-      if (index >= 0)
-      {
-      nvlist = new NVList(m_configurations[index].configuration_data);
-      }
-    */
     return nvlist._retn();
   }
 
@@ -311,21 +302,8 @@ namespace SDOPackage
   {
     RTC_TRACE(("get_configuration_parameter_value(%s)", name));
     if (std::string(name).empty()) throw InvalidParameter("Name is empty.");
-
-    //    CORBA::Long index;
     CORBA::Any_var value;
     value = new CORBA::Any();
-    /*
-      index = getActiveConfigIndex();
-      if (index < 0) throw InternalError("No active configuration.");
-
-      CORBA::Long item;
-      item = CORBA_SeqUtil::find(m_configurations[index].configuration_data,
-      nv_name(name));
-      if (item < 0) throw InvalidParameter("No such name.");
-
-      value = new CORBA::Any(m_configurations[index].configuration_data[item].value);
-    */
     return value._retn();
   }
 
@@ -341,19 +319,6 @@ namespace SDOPackage
                                                   const CORBA::Any&  /*value*/)
   {
     RTC_TRACE(("set_configuration_parameter(%s, value)", name));
-    /*
-      if (name == "") throw InvalidParameter("Name is empty.");
-
-      CORBA::Long index(getActiveConfigIndex());
-      if (index < 0) throw InternalError("No active config.");
-
-      CORBA::Long item;
-      item = CORBA_SeqUtil::find(m_configurations[index].configuration_data,
-      nv_name(name));
-      if (item < 0) throw InvalidParameter("No such name.");
-
-      m_configurations[index].configuration_data[item].value = value;
-    */
     return true;
   }
 
@@ -615,17 +580,6 @@ namespace SDOPackage
       {
         throw InvalidParameter("Configuration::activate_configuration_set()");
       }
-/*
-    try
-      {
-        return m_configsets.activateConfigurationSet(id);
-      }
-    catch (...)
-      {
-        throw InternalError("Configuration::activate_configuration_set()");
-        return false;
-      }
-*/
   }
 
   //============================================================

@@ -337,11 +337,6 @@ namespace RTC
      * @endif
      */
     virtual void deactivate() = 0;
-
-  private:
-    // non-copyable class
-    //    ConnectorBase(const ConnectorBase& x);
-    //    ConnectorBase& operator=(const ConnectorBase& x);
   };
 } // namespace RTC
 
