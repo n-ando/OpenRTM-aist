@@ -49,7 +49,7 @@ namespace hrtm
 #else
     using Logger = RTC::Logger;
 #endif // CXX11
-  };
-};
+  }
+}
 #endif // HRTM_LOGGER_H
 

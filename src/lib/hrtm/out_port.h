@@ -39,6 +39,6 @@ namespace hrtm
   template<class DataType>
   using OutPort = RTC::OutPort<DataType>;
 #endif
-};
+}
 
 #endif // HRT_OUT_PORT_H
