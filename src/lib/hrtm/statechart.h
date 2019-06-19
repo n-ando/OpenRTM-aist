@@ -470,16 +470,16 @@ class RootStateInfo : public StateInfo {
     : StateInfo(machine, parent) {
     instance_ = new StateBase(*this);
   }
-  virtual Key key() {
+  Key key() override {
     return 0;
   }
 
-  virtual void create_data() {}
-  virtual void delete_data() {}
-  virtual void clone_data(void * /* data */) {}
-  virtual const char * name() const { return "Root"; }
+  void create_data() override {}
+  void delete_data() override {}
+  void clone_data(void * /* data */) override {}
+  const char * name() const override { return "Root"; }
   // 'Virtual constructor' needed for cloning.
-  virtual StateInfo * create(MachineBase & machine, StateInfo * parent) {
+  StateInfo * create(MachineBase & machine, StateInfo * parent) override {
     return new RootStateInfo(machine, parent);
   }
 };
@@ -501,24 +501,24 @@ class SubStateInfo : public StateInfo {
     if (this->data_)
       delete_data();
   }
-  virtual const char * name() const { return S::state_name(); }
+  const char * name() const override { return S::state_name(); }
   virtual Key key() {
     return S::key();
   }
   // 'Virtual constructor' needed for cloning.
-  virtual StateInfo * create(MachineBase & machine, StateInfo * parent) {
+  StateInfo * create(MachineBase & machine, StateInfo * parent) override {
     return new SubStateInfo<S>(machine, parent);
   }
-  virtual void clone_data(void * data) {
+  void clone_data(void * data) override {
     assert(!data_);
     assert(!data_place);
     // Needs copy constructor in ALL data types.
     data_ = new Data(*static_cast<Data *>(data));
   }
-  virtual void create_data() {
+  void create_data() override {
     this->data_ = new Data();
   }
-  virtual void delete_data() {
+  void delete_data() override {
     delete static_cast<Data *>(this->data_);
     data_ = 0;
   }
