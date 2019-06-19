@@ -64,17 +64,8 @@ namespace hrtm
         if (!manager)
           {
             manager = new ComponentManager();
-            RTC::Manager::manager = manager;
-            printf("init ComponentManager: %x\n", manager);
-            manager->initManager(argc, argv);
-            manager->initLogger();
-            manager->initORB();
-            manager->initNaming();
-            manager->initFactories();
-            manager->initExecContext();
-            manager->initComposite();
-            manager->initTimer();
-            manager->initManagerServant();
+
+            RTC::Manager::init(argc, argv);
           }
       }
     return *manager;
