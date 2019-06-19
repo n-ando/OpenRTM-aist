@@ -80,6 +80,7 @@ namespace hrtm
 
   protected:
     ComponentManager();
+    virtual ~ComponentManager();
 
   protected:
     static ModuleInitProc initProc;

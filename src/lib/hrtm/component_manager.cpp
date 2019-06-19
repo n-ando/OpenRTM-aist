@@ -75,4 +75,8 @@ namespace hrtm
     : RTC::Manager()
   {
   }
+
+  ComponentManager::~ComponentManager()
+  {
+  }
 } // namespace hrtm
