@@ -90,6 +90,8 @@ typedef unsigned int Key;
 
 class MachineBase;
 
+class EventBase;
+
 template<class T>
 class Machine;
 
@@ -369,6 +371,90 @@ class StateAlias {
   mutable void * data_;
   // DIY virtual function table.
   StateCharacter * character_;
+};
+
+////////////////////////////////////////////////////////////////////////////////
+// Base class for Machine objects.
+class EXPORT_DLL MachineBase {
+ public:
+  // Transition to new state (with optional preinitialized data).
+  void set_state(StateInfo & info, bool history, void * data);
+  // Transition to new state specified by state alias.
+  void set_state(const StateAlias & state, bool history);
+  // Prepare transition to new state (performed on call to "perform_pending").
+  // There can be only one state transition pending (asserts otherwise)!
+  // "data" is an optional preinitialized state data for the new state.
+  void set_pending_state(StateInfo & info, bool history, void * data) {
+    assert((!pending_state_ || pending_state_ == &info) &&
+        "There is already a state transition pending!");
+
+    pending_state_ = &info;
+    pending_data_ = data;
+    pending_history_ = history;
+  }
+  void set_pending_event(EventBase * event) {
+    assert(event);
+    assert(!pending_event_ && "There is already an event pending!");
+
+    pending_event_ = event;
+  }
+  void add_deferred_event(EventBase * event, const std::string& name);
+  // Performs pending state transition.
+  void perform_pending();
+  // Performs pending state transition.
+  void perform_pending_event();
+  // Performs deferred events.
+  void perform_deferred_events();
+  // Get StateInfo object for key.
+  StateInfo * & get_info(Key name) {
+    return states_[name];
+  }
+  bool is_current(StateInfo & info) {
+    return current_state_->is_child(info);
+  }
+  bool is_current_direct(StateInfo & info) const {
+    return current_state_ == &info;
+  }
+
+ protected:
+  MachineBase();
+  ~MachineBase();
+  // Starts the machine. Will make it go into top state.
+  // Optional parameter "data" is a preinitialized state data for the top
+  // state.
+  void start(StateInfo & info, void * data);
+  // Shuts machine down. Will exit any states and free all allocated
+  // resources.
+  void shutdown();
+  // Allocate space for pointers to StateInfo objects.
+  void allocate(unsigned int count);
+  // Free all StateInfo objects.
+  void free(unsigned int count);
+  // Create a copy of another machines StateInfo objects (includes dataes).
+  void copy(StateInfo ** other, unsigned int count);
+  // Create a copy of another machines StateInfo object.
+  StateInfo * create_clone(Key key, StateInfo * original);
+
+ protected:
+  typedef std::map<std::string, EventBase *> EventQueue;
+  typedef std::vector<std::string> EventNames;
+
+  // C++ needs something like package visibility
+  // for set_pending_state
+  friend class StateInfo;
+  friend class StateBase;
+
+  // Current state of Machine object.
+  StateInfo * current_state_;
+  // Information about pending state transition.
+  StateInfo * pending_state_;
+  void * pending_data_;
+  bool pending_history_;
+  EventBase * pending_event_;
+  EventQueue deferred_events_;
+  EventNames deferred_names_;
+  // Array of StateInfo objects.
+  StateInfo ** states_;
 };
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -684,89 +770,6 @@ inline EventParamBase<TOP> * Event(ROOT (TOP::*handler)()) {
   return new EventWithoutParams<TOP, ROOT>(handler);
 }
 
-////////////////////////////////////////////////////////////////////////////////
-// Base class for Machine objects.
-class EXPORT_DLL MachineBase {
- public:
-  // Transition to new state (with optional preinitialized data).
-  void set_state(StateInfo & info, bool history, void * data);
-  // Transition to new state specified by state alias.
-  void set_state(const StateAlias & state, bool history);
-  // Prepare transition to new state (performed on call to "perform_pending").
-  // There can be only one state transition pending (asserts otherwise)!
-  // "data" is an optional preinitialized state data for the new state.
-  void set_pending_state(StateInfo & info, bool history, void * data) {
-    assert((!pending_state_ || pending_state_ == &info) &&
-        "There is already a state transition pending!");
-
-    pending_state_ = &info;
-    pending_data_ = data;
-    pending_history_ = history;
-  }
-  void set_pending_event(EventBase * event) {
-    assert(event);
-    assert(!pending_event_ && "There is already an event pending!");
-
-    pending_event_ = event;
-  }
-  void add_deferred_event(EventBase * event, const std::string& name);
-  // Performs pending state transition.
-  void perform_pending();
-  // Performs pending state transition.
-  void perform_pending_event();
-  // Performs deferred events.
-  void perform_deferred_events();
-  // Get StateInfo object for key.
-  StateInfo * & get_info(Key name) {
-    return states_[name];
-  }
-  bool is_current(StateInfo & info) {
-    return current_state_->is_child(info);
-  }
-  bool is_current_direct(StateInfo & info) const {
-    return current_state_ == &info;
-  }
-
- protected:
-  MachineBase();
-  ~MachineBase();
-  // Starts the machine. Will make it go into top state.
-  // Optional parameter "data" is a preinitialized state data for the top
-  // state.
-  void start(StateInfo & info, void * data);
-  // Shuts machine down. Will exit any states and free all allocated
-  // resources.
-  void shutdown();
-  // Allocate space for pointers to StateInfo objects.
-  void allocate(unsigned int count);
-  // Free all StateInfo objects.
-  void free(unsigned int count);
-  // Create a copy of another machines StateInfo objects (includes dataes).
-  void copy(StateInfo ** other, unsigned int count);
-  // Create a copy of another machines StateInfo object.
-  StateInfo * create_clone(Key key, StateInfo * original);
-
- protected:
-  typedef std::map<std::string, EventBase *> EventQueue;
-  typedef std::vector<std::string> EventNames;
-
-  // C++ needs something like package visibility
-  // for set_pending_state
-  friend class StateInfo;
-  friend class StateBase;
-
-  // Current state of Machine object.
-  StateInfo * current_state_;
-  // Information about pending state transition.
-  StateInfo * pending_state_;
-  void * pending_data_;
-  bool pending_history_;
-  EventBase * pending_event_;
-  EventQueue deferred_events_;
-  EventNames deferred_names_;
-  // Array of StateInfo objects.
-  StateInfo ** states_;
-};
 
 ////////////////////////////////////////////////////////////////////////////////
 // Implementation for TopState
