@@ -64,9 +64,7 @@ namespace coil
    */
   inline int sleep(TimeValue interval)
   {
-    auto t = std::chrono::seconds(interval.sec())
-             + std::chrono::microseconds(interval.usec());
-    std::this_thread::sleep_for(t);
+    std::this_thread::sleep_for(interval.microseconds());
     return 0;
   }
 

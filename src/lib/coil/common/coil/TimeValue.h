@@ -19,6 +19,8 @@
 #ifndef COIL_TIMEVALUE_H
 #define COIL_TIMEVALUE_H
 
+#include <chrono>
+
 namespace coil
 {
 
@@ -129,6 +131,31 @@ namespace coil
      * @endif
      */
     inline long int usec() const {return m_usec;}
+
+    /*!
+     * @if jp
+     *
+     * @brief std::chrono::microseconds型で値を取得する
+     *
+     * マイクロ秒単位の値を取得する
+     *
+     * @return 値
+     *
+     * @else
+     *
+     * @brief Get std::chrono::microseconds value
+     *
+     * Get value of micro second time scale.
+     *
+     * @return value
+     *
+     * @endif
+     */
+    inline std::chrono::microseconds microseconds() const
+      {
+        return std::chrono::seconds(sec())
+               + std::chrono::microseconds(usec());
+      }
 
     /*!
      * @if jp
