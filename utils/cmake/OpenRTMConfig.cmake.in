@@ -11,36 +11,9 @@ message(STATUS "OpenRTMConfig.cmake found.")
 message(STATUS "CMAKE_GENERATOR check mode.")
 
 
-
-if (${CMAKE_GENERATOR} MATCHES "Visual Studio 9")
-	set(RTM_VC_VER "vc9")
-endif()
-if (${CMAKE_GENERATOR} MATCHES "Visual Studio 10")
-	set(RTM_VC_VER "vc10")
-endif()
-if (${CMAKE_GENERATOR} MATCHES "Visual Studio 11")
-	set(RTM_VC_VER "vc11")
-endif()
-if (${CMAKE_GENERATOR} MATCHES "Visual Studio 12")
-	set(RTM_VC_VER "vc12")
-endif()
-if (${CMAKE_GENERATOR} MATCHES "Visual Studio 14")
-	set(RTM_VC_VER "vc14")
-endif()
-if (${CMAKE_GENERATOR} MATCHES "Visual Studio 15")
-	set(RTM_VC_VER "vc141")
-endif()
-if (${CMAKE_GENERATOR} MATCHES "Visual Studio 16")
-	set(RTM_VC_VER "vc142")
-endif()
-
-
-MESSAGE(STATUS "VC version is : ${CMAKE_GENERATOR}")
-
-
 get_filename_component(OpenRTM_CONFIG_PATH "${CMAKE_CURRENT_LIST_FILE}" PATH CACHE)
 set(OPENRTM_DIR "${OpenRTM_CONFIG_PATH}/../")
 
-include("${OPENRTM_DIR}/bin/${RTM_VC_VER}/OpenRTMConfig.cmake")
+include("${OPENRTM_DIR}/bin/vc${MSVC_TOOLSET_VERSION}/OpenRTMConfig.cmake")
 
 # end of OpenRTMConfig.cmake
