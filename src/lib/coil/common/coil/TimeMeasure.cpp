@@ -37,7 +37,7 @@ namespace coil
    * @endif
    */
   TimeMeasure::TimeMeasure(unsigned long buflen)
-    : m_begin(0.0), m_interval(0.0),
+    : m_interval(0.0),
       m_count(0), m_countMax(buflen + 1),
       m_recurred(false)
   {
@@ -57,7 +57,7 @@ namespace coil
    */
   void TimeMeasure::tick()
   {
-    m_begin = clock();  // [TimeValue]
+    m_begin = std::chrono::high_resolution_clock::now();
   }
 
   /*!
@@ -69,9 +69,10 @@ namespace coil
    */
   void TimeMeasure::tack()
   {
-    if (m_begin.sec() == 0) { return; }
-
-    m_interval = clock() - m_begin;
+    auto interval = std::chrono::high_resolution_clock::now() - m_begin;
+    auto sec = std::chrono::duration_cast<std::chrono::seconds>(interval);
+    auto usec = std::chrono::duration_cast<std::chrono::microseconds>(interval - sec);
+    m_interval = coil::TimeValue(static_cast<long>(sec.count()), static_cast<long>(usec.count()));
     m_record.at(m_count) = m_interval;
     ++m_count;
     if (m_count == m_countMax)
@@ -104,7 +105,7 @@ namespace coil
   {
     m_count = 0;
     m_recurred = false;
-    m_begin = 0.0;
+    m_begin = std::chrono::high_resolution_clock::time_point();
   }
 
   /*!
