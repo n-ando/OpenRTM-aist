@@ -213,8 +213,7 @@ void MachineBase::add_deferred_event(EventBase * event,
     }
     deferred_events_[name] = event;
     deferred_names_.push_back(name);
-  } catch (std::exception& ex) {  // NOLINT
-    HRTM_WARNING(LOGGER, "Can't add defferd event by " << ex.what());
+  } catch (std::exception& /*ex*/) {  // NOLINT
   }
 }
 

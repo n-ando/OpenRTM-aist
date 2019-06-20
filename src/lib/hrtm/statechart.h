@@ -90,6 +90,8 @@ typedef unsigned int Key;
 
 class MachineBase;
 
+class EventBase;
+
 template<class T>
 class Machine;
 
@@ -179,6 +181,90 @@ class EXPORT_DLL StateBase {
  protected:
   StateInfo & state_info_;
 };
+
+
+////////////////////////////////////////////////////////////////////////////////
+// StateInfo describes a state. Keeps history, data and state object for state.
+// StateInfo object is created the first time state is entered.
+// There is at most one StateInfo object per state per machine instance.
+class EXPORT_DLL StateInfo {
+public:
+    StateInfo(MachineBase & machine, StateInfo * parent);
+    virtual ~StateInfo();
+    // Perform entry actions.
+    // 'first' is true on very first call.
+    void on_entry(StateInfo & previous, bool first = true);
+    // Perform exit actions.
+    void on_exit(StateInfo & next);
+    // Perform init action.
+    void on_init(bool history);
+    void save_history(StateInfo & shallow, StateInfo & deep) {
+        // Check state's history strategy.
+        instance_->save_history(*this, shallow, deep);
+    }
+    // Update superstate's history information:
+    void set_history_super(StateInfo & deep) {
+        if (parent_) {
+            // Let it choose between deep or shallow history.
+            parent_->save_history(*this, deep);
+        }
+    }
+    // Data has been created explicitly.
+    void set_data(void * data) {
+        assert(!data_);
+
+        if (data_place) {
+            // Free cached memory of previously used data.
+            ::operator delete(data_place);
+            data_place = 0;
+        }
+        data_ = data;
+    }
+    // Copy state of another StateInfo object.
+    void copy(StateInfo & original);
+    // Create a clone of StateInfo object for another machine.
+    StateInfo * clone(MachineBase & new_machine);
+    virtual void clone_data(void * data) = 0;
+    void shutdown() {
+        instance_->shutdown();
+    }
+    void restore(StateInfo & info) {
+        instance_->restore(info);
+    }
+    virtual Key key() = 0;
+    // 'Virtual constructor' needed for cloning.
+    virtual StateInfo * create(MachineBase & machine, StateInfo * parent) = 0;
+    virtual void create_data() = 0;
+    virtual void delete_data() = 0;
+    virtual const char * name() const = 0;
+    // Is 'state' a superstate?
+    bool is_child(StateInfo & state) const {
+        return this == &state || (parent_ && parent_->is_child(state));
+    }
+    StateBase & instance() {
+        assert(instance_);
+        return *instance_;
+    }
+    void * data() {
+        assert(data_);
+        return data_;
+    }
+    MachineBase & machine() {
+        return machine_;
+    }
+    void set_history(StateInfo * history) {
+        history_ = history;
+    }
+
+protected:
+    MachineBase & machine_;
+    StateBase * instance_;   // Instance of state class
+    StateInfo * history_;
+    StateInfo * parent_;
+    void * data_;
+    void * data_place;      // Reused data memory
+};
+
 
 ////////////////////////////////////////////////////////////////////////////////
 // Base class for user defined top state (and indirectly all other states).
@@ -288,6 +374,90 @@ class StateAlias {
 };
 
 ////////////////////////////////////////////////////////////////////////////////
+// Base class for Machine objects.
+class EXPORT_DLL MachineBase {
+ public:
+  // Transition to new state (with optional preinitialized data).
+  void set_state(StateInfo & info, bool history, void * data);
+  // Transition to new state specified by state alias.
+  void set_state(const StateAlias & state, bool history);
+  // Prepare transition to new state (performed on call to "perform_pending").
+  // There can be only one state transition pending (asserts otherwise)!
+  // "data" is an optional preinitialized state data for the new state.
+  void set_pending_state(StateInfo & info, bool history, void * data) {
+    assert((!pending_state_ || pending_state_ == &info) &&
+        "There is already a state transition pending!");
+
+    pending_state_ = &info;
+    pending_data_ = data;
+    pending_history_ = history;
+  }
+  void set_pending_event(EventBase * event) {
+    assert(event);
+    assert(!pending_event_ && "There is already an event pending!");
+
+    pending_event_ = event;
+  }
+  void add_deferred_event(EventBase * event, const std::string& name);
+  // Performs pending state transition.
+  void perform_pending();
+  // Performs pending state transition.
+  void perform_pending_event();
+  // Performs deferred events.
+  void perform_deferred_events();
+  // Get StateInfo object for key.
+  StateInfo * & get_info(Key name) {
+    return states_[name];
+  }
+  bool is_current(StateInfo & info) {
+    return current_state_->is_child(info);
+  }
+  bool is_current_direct(StateInfo & info) const {
+    return current_state_ == &info;
+  }
+
+ protected:
+  MachineBase();
+  ~MachineBase();
+  // Starts the machine. Will make it go into top state.
+  // Optional parameter "data" is a preinitialized state data for the top
+  // state.
+  void start(StateInfo & info, void * data);
+  // Shuts machine down. Will exit any states and free all allocated
+  // resources.
+  void shutdown();
+  // Allocate space for pointers to StateInfo objects.
+  void allocate(unsigned int count);
+  // Free all StateInfo objects.
+  void free(unsigned int count);
+  // Create a copy of another machines StateInfo objects (includes dataes).
+  void copy(StateInfo ** other, unsigned int count);
+  // Create a copy of another machines StateInfo object.
+  StateInfo * create_clone(Key key, StateInfo * original);
+
+ protected:
+  typedef std::map<std::string, EventBase *> EventQueue;
+  typedef std::vector<std::string> EventNames;
+
+  // C++ needs something like package visibility
+  // for set_pending_state
+  friend class StateInfo;
+  friend class StateBase;
+
+  // Current state of Machine object.
+  StateInfo * current_state_;
+  // Information about pending state transition.
+  StateInfo * pending_state_;
+  void * pending_data_;
+  bool pending_history_;
+  EventBase * pending_event_;
+  EventQueue deferred_events_;
+  EventNames deferred_names_;
+  // Array of StateInfo objects.
+  StateInfo ** states_;
+};
+
+////////////////////////////////////////////////////////////////////////////////
 // This class links substates to superstates by deriving from the superstate
 // and being derived from by the substate.
 // Substates inherit event handlers from superstates for reuse or redefinition
@@ -380,87 +550,6 @@ class Link : public P {
 
 template<class C, class P> KeyInit<typename P::TOP> Link<C, P>::the_key_;
 
-////////////////////////////////////////////////////////////////////////////////
-// StateInfo describes a state. Keeps history, data and state object for state.
-// StateInfo object is created the first time state is entered.
-// There is at most one StateInfo object per state per machine instance.
-class EXPORT_DLL StateInfo {
- public:
-  StateInfo(MachineBase & machine, StateInfo * parent);
-  virtual ~StateInfo();
-  // Perform entry actions.
-  // 'first' is true on very first call.
-  void on_entry(StateInfo & previous, bool first = true);
-  // Perform exit actions.
-  void on_exit(StateInfo & next);
-  // Perform init action.
-  void on_init(bool history);
-  void save_history(StateInfo & shallow, StateInfo & deep) {
-    // Check state's history strategy.
-    instance_->save_history(*this, shallow, deep);
-  }
-  // Update superstate's history information:
-  void set_history_super(StateInfo & deep) {
-    if (parent_) {
-      // Let it choose between deep or shallow history.
-      parent_->save_history(*this, deep);
-    }
-  }
-  // Data has been created explicitly.
-  void set_data(void * data) {
-    assert(!data_);
-
-    if (data_place) {
-      // Free cached memory of previously used data.
-      ::operator delete(data_place);
-      data_place = 0;
-    }
-    data_ = data;
-  }
-  // Copy state of another StateInfo object.
-  void copy(StateInfo & original);
-  // Create a clone of StateInfo object for another machine.
-  StateInfo * clone(MachineBase & new_machine);
-  virtual void clone_data(void * data) = 0;
-  void shutdown() {
-    instance_->shutdown();
-  }
-  void restore(StateInfo & info) {
-    instance_->restore(info);
-  }
-  virtual Key key() = 0;
-  // 'Virtual constructor' needed for cloning.
-  virtual StateInfo * create(MachineBase & machine, StateInfo * parent) = 0;
-  virtual void create_data() = 0;
-  virtual void delete_data() = 0;
-  virtual const char * name() const = 0;
-  // Is 'state' a superstate?
-  bool is_child(StateInfo & state) const {
-    return this == &state || (parent_ && parent_->is_child(state));
-  }
-  StateBase & instance() {
-    assert(instance_);
-    return *instance_;
-  }
-  void * data() {
-    assert(data_);
-    return data_;
-  }
-  MachineBase & machine() {
-    return machine_;
-  }
-  void set_history(StateInfo * history) {
-    history_ = history;
-  }
-
- protected:
-  MachineBase & machine_;
-  StateBase * instance_;   // Instance of state class
-  StateInfo * history_;
-  StateInfo * parent_;
-  void * data_;
-  void * data_place;      // Reused data memory
-};
 
 ////////////////////////////////////////////////////////////////////////////////
 // StateInfo for Root state.
@@ -470,16 +559,16 @@ class RootStateInfo : public StateInfo {
     : StateInfo(machine, parent) {
     instance_ = new StateBase(*this);
   }
-  virtual Key key() {
+  Key key() override {
     return 0;
   }
 
-  virtual void create_data() {}
-  virtual void delete_data() {}
-  virtual void clone_data(void * /* data */) {}
-  virtual const char * name() const { return "Root"; }
+  void create_data() override {}
+  void delete_data() override {}
+  void clone_data(void * /* data */) override {}
+  const char * name() const override { return "Root"; }
   // 'Virtual constructor' needed for cloning.
-  virtual StateInfo * create(MachineBase & machine, StateInfo * parent) {
+  StateInfo * create(MachineBase & machine, StateInfo * parent) override {
     return new RootStateInfo(machine, parent);
   }
 };
@@ -501,24 +590,24 @@ class SubStateInfo : public StateInfo {
     if (this->data_)
       delete_data();
   }
-  virtual const char * name() const { return S::state_name(); }
+  const char * name() const override { return S::state_name(); }
   virtual Key key() {
     return S::key();
   }
   // 'Virtual constructor' needed for cloning.
-  virtual StateInfo * create(MachineBase & machine, StateInfo * parent) {
+  StateInfo * create(MachineBase & machine, StateInfo * parent) override {
     return new SubStateInfo<S>(machine, parent);
   }
-  virtual void clone_data(void * data) {
+  void clone_data(void * data) override {
     assert(!data_);
     assert(!data_place);
     // Needs copy constructor in ALL data types.
     data_ = new Data(*static_cast<Data *>(data));
   }
-  virtual void create_data() {
+  void create_data() override {
     this->data_ = new Data();
   }
-  virtual void delete_data() {
+  void delete_data() override {
     delete static_cast<Data *>(this->data_);
     data_ = 0;
   }
@@ -681,89 +770,6 @@ inline EventParamBase<TOP> * Event(ROOT (TOP::*handler)()) {
   return new EventWithoutParams<TOP, ROOT>(handler);
 }
 
-////////////////////////////////////////////////////////////////////////////////
-// Base class for Machine objects.
-class EXPORT_DLL MachineBase {
- public:
-  // Transition to new state (with optional preinitialized data).
-  void set_state(StateInfo & info, bool history, void * data);
-  // Transition to new state specified by state alias.
-  void set_state(const StateAlias & state, bool history);
-  // Prepare transition to new state (performed on call to "perform_pending").
-  // There can be only one state transition pending (asserts otherwise)!
-  // "data" is an optional preinitialized state data for the new state.
-  void set_pending_state(StateInfo & info, bool history, void * data) {
-    assert((!pending_state_ || pending_state_ == &info) &&
-        "There is already a state transition pending!");
-
-    pending_state_ = &info;
-    pending_data_ = data;
-    pending_history_ = history;
-  }
-  void set_pending_event(EventBase * event) {
-    assert(event);
-    assert(!pending_event_ && "There is already an event pending!");
-
-    pending_event_ = event;
-  }
-  void add_deferred_event(EventBase * event, const std::string& name);
-  // Performs pending state transition.
-  void perform_pending();
-  // Performs pending state transition.
-  void perform_pending_event();
-  // Performs deferred events.
-  void perform_deferred_events();
-  // Get StateInfo object for key.
-  StateInfo * & get_info(Key name) {
-    return states_[name];
-  }
-  bool is_current(StateInfo & info) {
-    return current_state_->is_child(info);
-  }
-  bool is_current_direct(StateInfo & info) const {
-    return current_state_ == &info;
-  }
-
- protected:
-  MachineBase();
-  ~MachineBase();
-  // Starts the machine. Will make it go into top state.
-  // Optional parameter "data" is a preinitialized state data for the top
-  // state.
-  void start(StateInfo & info, void * data);
-  // Shuts machine down. Will exit any states and free all allocated
-  // resources.
-  void shutdown();
-  // Allocate space for pointers to StateInfo objects.
-  void allocate(unsigned int count);
-  // Free all StateInfo objects.
-  void free(unsigned int count);
-  // Create a copy of another machines StateInfo objects (includes dataes).
-  void copy(StateInfo ** other, unsigned int count);
-  // Create a copy of another machines StateInfo object.
-  StateInfo * create_clone(Key key, StateInfo * original);
-
- protected:
-  typedef std::map<std::string, EventBase *> EventQueue;
-  typedef std::vector<std::string> EventNames;
-
-  // C++ needs something like package visibility
-  // for set_pending_state
-  friend class StateInfo;
-  friend class StateBase;
-
-  // Current state of Machine object.
-  StateInfo * current_state_;
-  // Information about pending state transition.
-  StateInfo * pending_state_;
-  void * pending_data_;
-  bool pending_history_;
-  EventBase * pending_event_;
-  EventQueue deferred_events_;
-  EventNames deferred_names_;
-  // Array of StateInfo objects.
-  StateInfo ** states_;
-};
 
 ////////////////////////////////////////////////////////////////////////////////
 // Implementation for TopState

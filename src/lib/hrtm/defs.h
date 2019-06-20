@@ -1,5 +1,4 @@
-// vim:sw=2 ts=2 expandtab fileencoding=utf-8
-/**
+﻿/**
  * \file defs.h
  * \brief システム共用マクロ集
  *

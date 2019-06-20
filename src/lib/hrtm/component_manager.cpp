@@ -46,7 +46,7 @@ namespace hrtm
   {
     runManager(non_block);
   }
-  void ComponentManager::init_proc(RTC::Manager* mgr)
+  void ComponentManager::init_proc(RTC::Manager* /*mgr*/)
   {
     ::hrtm::ComponentManager::initProc(manager);
   }
@@ -60,17 +60,8 @@ namespace hrtm
         if (!manager)
           {
             manager = new ComponentManager();
-            RTC::Manager::manager = manager;
-            printf("init ComponentManager: %x\n", manager);
-            manager->initManager(argc, argv);
-            manager->initLogger();
-            manager->initORB();
-            manager->initNaming();
-            manager->initFactories();
-            manager->initExecContext();
-            manager->initComposite();
-            manager->initTimer();
-            manager->initManagerServant();
+
+            RTC::Manager::init(argc, argv);
           }
       }
     return *manager;
@@ -78,6 +69,10 @@ namespace hrtm
 
   ComponentManager::ComponentManager()
     : RTC::Manager()
+  {
+  }
+
+  ComponentManager::~ComponentManager()
   {
   }
 } // namespace hrtm

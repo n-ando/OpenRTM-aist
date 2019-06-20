@@ -39,6 +39,6 @@ namespace hrtm
   template<class DataType>
   using InPort = RTC::InPort<DataType>;
 #endif
-};
+}
 
 #endif // HRTM_IN_PORT_H
