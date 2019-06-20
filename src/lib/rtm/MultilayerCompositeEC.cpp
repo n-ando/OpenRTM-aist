@@ -99,7 +99,7 @@ namespace RTC_exp
               m_workerthread.cond_.wait(guard);
             }
         }
-        coil::TimeValue t0(coil::clock());
+        auto t0 = std::chrono::high_resolution_clock::now();
         m_ownersm->workerDo();
         m_ownersm->workerPostDo();
         
@@ -115,15 +115,15 @@ namespace RTC_exp
         }
         
         
-        coil::TimeValue t1(coil::clock());
+        auto t1 = std::chrono::high_resolution_clock::now();
 
         coil::TimeValue period(getPeriod());
+        auto rest = period.microseconds() - (t1 - t0);
         if (count > 1000)
           {
             RTC_PARANOID(("Period:    %f [s]", static_cast<double>(period)));
-            RTC_PARANOID(("Execution: %f [s]", static_cast<double>(t1 - t0)));
-            RTC_PARANOID(("Sleep:     %f [s]",
-                                    static_cast<double>(period - (t1 - t0))));
+            RTC_PARANOID(("Execution: %f [s]", std::chrono::duration<double>(t1 - t0).count()));
+            RTC_PARANOID(("Sleep:     %f [s]", std::chrono::duration<double>(rest).count()));
             int task_num = 0;
             for (auto & task : m_tasklist)
             {
@@ -135,16 +135,16 @@ namespace RTC_exp
                 task_num += 1;
             }
           }
-        coil::TimeValue t2(coil::clock());
-        if (!m_nowait && period > (t1 - t0))
+        auto t2 = std::chrono::high_resolution_clock::now();
+        if (!m_nowait && (rest > std::chrono::seconds::zero()))
           {
             if (count > 1000) { RTC_PARANOID(("sleeping...")); }
-            coil::sleep(coil::TimeValue(period - (t1 - t0)));
+            std::this_thread::sleep_until(t0 + period.microseconds());
           }
         if (count > 1000)
           {
-            coil::TimeValue t3(coil::clock());
-            RTC_PARANOID(("Slept:     %f [s]", static_cast<double>(t3 - t2)));
+            auto t3 = std::chrono::high_resolution_clock::now();
+            RTC_PARANOID(("Slept:     %f [s]", std::chrono::duration<double>(t3 - t2).count()));
             count = 0;
           }
         ++count;
