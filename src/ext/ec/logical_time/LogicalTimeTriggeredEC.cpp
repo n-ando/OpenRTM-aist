@@ -134,32 +134,33 @@ namespace RTC
             }
           if (!m_worker.ticked_) { continue; }
         }
-        coil::TimeValue t0(coil::gettimeofday());
+        auto t0 = std::chrono::steady_clock::now();
         ExecutionContextBase::invokeWorkerPreDo();
         ExecutionContextBase::invokeWorkerDo();
         ExecutionContextBase::invokeWorkerPostDo();
-        coil::TimeValue t1(coil::gettimeofday());
+        auto t1 = std::chrono::steady_clock::now();
         {
           std::lock_guard<std::mutex> guard(m_worker.mutex_);
           m_worker.ticked_ = false;
         }
         coil::TimeValue period(getPeriod());
+        auto rest = period.microseconds() - (t1 - t0);
         if (true) //count > 1000)
           {
             RTC_PARANOID(("Period:    %f [s]", (double)period));
-            RTC_PARANOID(("Execution: %f [s]", (double)(t1 - t0)));
-            RTC_PARANOID(("Sleep:     %f [s]", (double)(period - (t1 - t0))));
+            RTC_PARANOID(("Execution: %f [s]", std::chrono::duration<double>(t1 - t0).count()));
+            RTC_PARANOID(("Sleep:     %f [s]", std::chrono::duration<double>(rest).count()));
           }
-        coil::TimeValue t2(coil::gettimeofday());
-        if (period > (t1 - t0))
+        auto t2 = std::chrono::steady_clock::now();
+        if (rest > std::chrono::seconds::zero())
           {
             if (true /*count > 1000*/) { RTC_PARANOID(("sleeping...")); }
-            coil::sleep(coil::TimeValue(period - (t1 - t0)));
+            std::this_thread::sleep_until(t0 + period.microseconds());
           }
         if (true) //count > 1000)
           {
-            coil::TimeValue t3(coil::gettimeofday());
-            RTC_PARANOID(("Slept:       %f [s]", (double)(t3 - t2)));
+            auto t3 = std::chrono::steady_clock::now();
+            RTC_PARANOID(("Slept:       %f [s]", std::chrono::duration<double>(t3 - t0).count()));
             count = 0;
           }
         ++count;
@@ -413,30 +414,31 @@ namespace RTC
     std::lock_guard<std::mutex> guard(m_tickmutex);
 
     ExecutionContextBase::invokeWorkerPreDo(); // update state
-    coil::TimeValue t0(coil::gettimeofday());
+    auto t0 = std::chrono::steady_clock::now();
     ExecutionContextBase::invokeWorkerDo();
-    coil::TimeValue t1(coil::gettimeofday());
+    auto t1 = std::chrono::steady_clock::now();
     ExecutionContextBase::invokeWorkerPostDo();
-    coil::TimeValue t2(coil::gettimeofday());
+    auto t2 = std::chrono::steady_clock::now();
 
     coil::TimeValue period(getPeriod());
+    auto rest = period.microseconds() - (t2 - t0);
     if (m_count > 1000)
       {
         RTC_PARANOID(("Period:      %f [s]", (double)period));
-        RTC_PARANOID(("Exec-Do:     %f [s]", (double)(t1 - t0)));
-        RTC_PARANOID(("Exec-PostDo: %f [s]", (double)(t2 - t1)));
-        RTC_PARANOID(("Sleep:       %f [s]", (double)(period - (t2 - t0))));
+        RTC_PARANOID(("Exec-Do:     %f [s]", std::chrono::duration<double>(t1 - t0).count()));
+        RTC_PARANOID(("Exec-PostDo: %f [s]", std::chrono::duration<double>(t2 - t0).count()));
+        RTC_PARANOID(("Sleep:       %f [s]", std::chrono::duration<double>(rest).count()));
       }
-    coil::TimeValue t3(coil::gettimeofday());
-    if (period > (t2 - t0))
+    auto t3 = std::chrono::steady_clock::now();
+    if (rest > std::chrono::seconds::zero())
       {
         if (m_count > 1000) { RTC_PARANOID(("sleeping...")); }
-        coil::sleep(coil::TimeValue(period - (t2 - t0)));
+        std::this_thread::sleep_until(t0 + period.microseconds());
       }
     if (m_count > 1000)
       {
-        coil::TimeValue t4(coil::gettimeofday());
-        RTC_PARANOID(("Slept:       %f [s]", (double)(t4 - t3)));
+        auto t4 = std::chrono::steady_clock::now();
+        RTC_PARANOID(("Slept:       %f [s]", std::chrono::duration<double>(t4 - t3).count()));
         m_count = 0;
       }
     ++m_count;
