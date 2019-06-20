@@ -171,7 +171,7 @@ RTC::ReturnCode_t Analyzer::onDeactivated(RTC::UniqueId  /*ec_id*/)
 
 RTC::ReturnCode_t Analyzer::onExecute(RTC::UniqueId  /*ec_id*/)
 {
-	coil::TimeValue start(coil::gettimeofday());
+	auto start = std::chrono::system_clock::now();
 	setTimestamp(m_out);
 	if(m_mode == "const")
 	{
@@ -192,8 +192,8 @@ RTC::ReturnCode_t Analyzer::onExecute(RTC::UniqueId  /*ec_id*/)
 		std::lock_guard<std::mutex> guard(m_mu);
 		m_datalist.push_back(m_out);
 	}
-	coil::TimeValue end(coil::gettimeofday());
-	double diff = (double)(end - start);
+	auto end = std::chrono::system_clock::now();
+	double diff = std::chrono::duration<double>(end - start).count();
 	if(diff < m_sleep_time)
 	{
 		coil::sleep(coil::TimeValue(m_sleep_time - diff));
@@ -248,10 +248,10 @@ void Analyzer::writeData(const RTC::TimedOctetSeq &data)
 	for (std::vector<TimedOctetSeq>::iterator itr = m_datalist.begin(); itr != m_datalist.end(); ) {
 		if (data.tm.nsec == (*itr).tm.nsec && data.tm.sec == (*itr).tm.sec)
 		{
-			coil::TimeValue end(coil::gettimeofday());
-			coil::TimeValue start(data.tm.sec, data.tm.nsec/1000);
+			auto end = std::chrono::system_clock::now().time_since_epoch();;
+			auto start = std::chrono::seconds(data.tm.sec) + std::chrono::nanoseconds(data.tm.nsec);
 			
-			double diff = (double)(end - start);
+			double diff = std::chrono::duration<double>(end - start).count();
 			std::cout << diff << std::endl;
 			m_fs << data.data.length() << "\t" << diff << std::endl;
 			itr = m_datalist.erase(itr);
