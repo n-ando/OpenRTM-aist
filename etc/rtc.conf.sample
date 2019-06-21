@@ -47,7 +47,7 @@ manager.instance_name: manager
 # %M: The manager name.
 # %p: PID of the manager.
 #
-naming.formats: %h.host_cxt/%n.mgr
+manager.naming_formats: %h.host_cxt/%n.mgr
 
 
 #------------------------------------------------------------
