@@ -132,7 +132,7 @@ def main():
 		opts, args = getopt.getopt(sys.argv[1:], "f:I:o:c:h",
 					   opt_args_fmt)
 	except getopt.GetoptError:
-		print("Error: Invalid options.", getopt.GetoptError)
+		print("Error: Invalid options.", getopt.GetoptError, file=sys.stderr)
 		usage()
 		sys.exit(-1)
 
@@ -174,7 +174,7 @@ def main():
 			stub_suffix = arg
 
 	if not idl_file:
-		print("Error: IDL file is not given.")
+		print("Error: IDL file is not given.", file=sys.stderr)
 		usage()
 		sys.exit(-1)
 
