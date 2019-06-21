@@ -120,7 +120,7 @@ int main (int argc, char** argv)
 
 
   CORBA::ORB_var orb = CORBA::ORB_init(_argc, _argv);
-  CorbaNaming naming(orb, "localhost:9876");
+  CorbaNaming naming(orb, "localhost");
 
   CorbaConsumer<RTObject> conin, conout;
   CorbaConsumer<OpenRTM::ExtTrigExecutionContextService> ec0, ec1;
