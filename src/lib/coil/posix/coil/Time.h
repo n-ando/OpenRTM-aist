@@ -60,53 +60,6 @@ namespace coil
 
   /*!
    * @if jp
-   * @brief 時刻とタイムゾーンを取得する
-   *
-   * 時刻とタイムゾーンを取得する。
-   *
-   * @param tv 時刻構造体
-   * @param tz タイムゾーン構造体
-   *
-   * @return 0: 成功, -1: 失敗
-   *
-   * @else
-   * @brief Get the time and timezone
-   *
-   * Get the time and timezone
-   *
-   * @param tv Structure of time
-   * @param tz Structure of timezone
-   *
-   * @return 0: successful, -1: failed
-   *
-   * @endif
-   */
-  inline int gettimeofday(struct timeval *tv, struct timezone *tz)
-  {
-    return ::gettimeofday(tv, tz);
-  }
-
-  /*!
-   * @if jp
-   * @brief 時刻を取得する
-   *
-   * 時刻を取得する。
-   *
-   * @return TimeValueオブジェクト
-   *
-   * @else
-   * @brief Get the time
-   *
-   * Get the time
-   *
-   * @return TimeValue object
-   *
-   * @endif
-   */
-  TimeValue gettimeofday();
-
-  /*!
-   * @if jp
    * @brief 時刻とタイムゾーンを設定する
    *
    * 時刻とタイムゾーンを設定する。
