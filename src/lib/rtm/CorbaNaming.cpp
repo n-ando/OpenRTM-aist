@@ -939,7 +939,7 @@ namespace RTC
     for (CORBA::ULong i = 0; i < name.length(); ++i)
       {
         // Count string length of id(s)
-        for (const char* id = name[i].id; *id != 0; ++id)
+        for (const char* id = name[i].id; *id != '\0'; ++id)
           {
             // Escape character '/', '.', '\' will convert to "\/", "\.", "\\".
             if (*id == '/' || *id == '.' || *id == '\\') slen++;
@@ -952,7 +952,7 @@ namespace RTC
             slen++;
           }
         // Count string length of kind(s)
-        for (const char* kind = name[i].kind; *kind != 0; kind++)
+        for (const char* kind = name[i].kind; *kind != '\0'; kind++)
           {
             if (*kind == '/' || *kind == '.' || *kind == '\\') slen++;
             slen++;
