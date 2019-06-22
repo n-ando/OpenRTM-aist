@@ -82,38 +82,4 @@ namespace coil
 
     return 0;
   }
-
-  int clock(TimeValue &tv)
-  {
-      LARGE_INTEGER frequency;
-      BOOL ret = QueryPerformanceFrequency(&frequency);
-
-      if (ret == 0)
-      {
-          return 1;
-      }
-      else
-      {
-          LARGE_INTEGER current;
-          QueryPerformanceCounter(&current);
-          LONGLONG current_time = (current.QuadPart * 1000000) / frequency.QuadPart;
-          tv = TimeValue(static_cast<long>(current_time / 1000000), static_cast<long>(current_time % 1000000));
-          return 0;
-      }
-  }
-
-  TimeValue clock()
-  {
-    TimeValue ret;
-    if(coil::clock(ret) != 0)
-    {
-      timeval tv;
-      coil::gettimeofday(&tv, nullptr);
-      return TimeValue(tv.tv_sec, tv.tv_usec);
-    }
-    else
-    {
-      return ret;
-    }
-  }
 } // namespace coil

@@ -64,9 +64,7 @@ namespace coil
    */
   inline int sleep(TimeValue interval)
   {
-    auto t = std::chrono::seconds(interval.sec())
-             + std::chrono::microseconds(interval.usec());
-    std::this_thread::sleep_for(t);
+    std::this_thread::sleep_for(interval.microseconds());
     return 0;
   }
 
@@ -142,49 +140,6 @@ namespace coil
    * @endif
    */
   int settimeofday(const struct timeval *tv , const struct timezone *tz);
-
-
-  /*!
-  * @if jp
-  * @brief 高分解能パフォーマンスカウンタから時間を取得する
-  * 高分解能パフォーマンスカウンタが利用できない場合はgettimeofday関数から取得する
-  *
-  * @param tv 時間
-  *
-  * @return 0: 成功
-  *
-  * @else
-  * @brief
-  *
-  *
-  * @param tv
-  *
-  * @return 0: successful
-  *
-  * @endif
-  */
-  int clock(TimeValue &tv);
-
-  /*!
-   * @if jp
-   * @brief 高分解能パフォーマンスカウンタから時間を取得する
-   *
-   *
-   * @return TimeValueオブジェクト
-   *
-   * @else
-   * @brief 
-   *
-   *
-   *
-   * @return TimeValue object
-   *
-   * @endif
-   */
-  TimeValue clock();
-
-
-
 } // namespace coil
 
 #endif  // COIL_TIME_H

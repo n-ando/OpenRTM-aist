@@ -235,7 +235,7 @@ namespace coil
 
   private:
     std::vector<coil::TimeValue> m_record;
-    coil::TimeValue m_begin;
+    std::chrono::high_resolution_clock::time_point m_begin;
     coil::TimeValue m_interval;
 
     unsigned long int m_count;

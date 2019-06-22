@@ -117,33 +117,33 @@ namespace RTC
             }
           if (!m_worker.ticked_) { continue; }
         }
-        coil::TimeValue t0(coil::clock());
+        auto t0 = std::chrono::high_resolution_clock::now();
         ExecutionContextBase::invokeWorkerPreDo();
         ExecutionContextBase::invokeWorkerDo();
         ExecutionContextBase::invokeWorkerPostDo();
-        coil::TimeValue t1(coil::clock());
+        auto t1 = std::chrono::high_resolution_clock::now();
         {
           std::lock_guard<std::mutex> guard(m_worker.mutex_);
           m_worker.ticked_ = false;
         }
         coil::TimeValue period(getPeriod());
+        auto rest = period.microseconds() - (t1 - t0);
         if (true)  // count > 1000)
           {
             RTC_PARANOID(("Period:    %f [s]", static_cast<double>(period)));
-            RTC_PARANOID(("Execution: %f [s]", static_cast<double>(t1 - t0)));
-            RTC_PARANOID(("Sleep:     %f [s]",
-                                    static_cast<double>(period - (t1 - t0))));
+            RTC_PARANOID(("Execution: %f [s]", std::chrono::duration<double>(t1 - t0).count()));
+            RTC_PARANOID(("Sleep:     %f [s]", std::chrono::duration<double>(rest).count()));
           }
-        coil::TimeValue t2(coil::clock());
-        if (period > (t1 - t0))
+        auto t2 = std::chrono::high_resolution_clock::now();
+        if (rest > std::chrono::seconds::zero())
           {
             if (true /*count > 1000*/) { RTC_PARANOID(("sleeping...")); }
-            coil::sleep(coil::TimeValue(period - (t1 - t0)));
+            std::this_thread::sleep_until(t0 + period.microseconds());
           }
         if (true)  // count > 1000)
           {
-            coil::TimeValue t3(coil::clock());
-            RTC_PARANOID(("Slept:       %f [s]", static_cast<double>(t3 - t2)));
+            auto t3 = std::chrono::high_resolution_clock::now();
+            RTC_PARANOID(("Slept:       %f [s]", std::chrono::duration<double>(t3 - t2).count()));
             count = 0;
           }
         ++count;
