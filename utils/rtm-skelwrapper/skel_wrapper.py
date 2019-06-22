@@ -233,7 +233,7 @@ config_inc = """
 class skel_wrapper:
 	def __init__(self, idl_fname, skel_suffix = "Skel",
 		     stub_suffix = "Stub", include_dir = "",
-		     config_inc = "", output_dir = "./", category = "OpenRTM", dependencies=""):
+		     config_inc = "", output_dir = "./", category = "OpenRTM", dependencies="", verbose=True):
 		self.data = {}
 		self.data["include_dir"] = include_dir
 		self.data["output_dir"] = output_dir
@@ -244,6 +244,7 @@ class skel_wrapper:
 		else:
 			includes = ["#    include<"+s+"Skel.h>\n" for s in dependencies.split(":")]
 			self.data["dependencies"] = ''.join(includes)
+		self.verbose_print = print if verbose else lambda *a, **k: None
 
 		m = re.search("\.[iI][dD][lL]$", idl_fname)
 		if m:
@@ -304,18 +305,18 @@ class skel_wrapper:
 			newtext = re.sub(" \@date.*?\n", "", text)
 			oldtext2 = re.sub(" \@date.*?\n", "", oldtext)
 			if newtext == oldtext2:
-				print("\"" + fname + \
+				self.verbose_print("\"" + fname + \
 			    "\" exists and contents is same.")
-				print("No need to generate the file.")
+				self.verbose_print("No need to generate the file.")
 				return
 			else:
-				print("\"", fname, \
+				self.verbose_print("\"", fname, \
 			    "\" already exists but contents are not same")
 
 		f = open(fname, "w")
 		f.write(text)
 		f.close()
-		print("\"" + fname + "\"" " was generated.")
+		self.verbose_print("\"" + fname + "\"" " was generated.")
 		return
 
 	def print_skel_h(self):

@@ -166,6 +166,7 @@
 # result:
 # [bracket]
 #
+from __future__ import print_function
 import string
 import re
 #from types import StringType, IntType, FloatType, DictType, ListType, ClassType
@@ -531,19 +532,19 @@ class Template:
     #------------------------------------------------------------
 
     def __print_error(self, e):
-        print("Parse Error: line", e.lineno, "in input data")
-        print("  " + ''.join(nesteditem(e.value)))
+        print("Parse Error: line", e.lineno, "in input data", file=sys.stderr)
+        print("  " + ''.join(nesteditem(e.value)), file=sys.stderr)
         lines = self.template.split("\n")
         length = len(lines)
-        print("------------------------------------------------------------")
+        print("------------------------------------------------------------", file=sys.stderr)
         for i in range(1,10):
             l = e.lineno - 6 + i
             if l > 0 and l < length:
-                print(lines[l])
+                print(lines[l], file=sys.stderr)
                 if i == 5:
                     uline = '~'*len(lines[l])
-                    print(uline)
-        print("------------------------------------------------------------")
+                    print(uline, file=sys.stderr)
+        print("------------------------------------------------------------", file=sys.stderr)
     
     def del_nl_after_cmd(self):
         # next text index after command
@@ -597,8 +598,8 @@ class GeneratorBase:
         self.text = ""
 
     def print_error(self, e):
-        print("\nTemplate Generation Error: line", e.lineno, "in input data")
-        print("  " + ''.join(nesteditem(e.value)))
+        print("\nTemplate Generation Error: line", e.lineno, "in input data", file=sys.stderr)
+        print("  " + ''.join(nesteditem(e.value)), file=sys.stderr)
         temp = ""
         for i, s in enumerate(self.token):
             if s != None:
@@ -608,15 +609,15 @@ class GeneratorBase:
                     temp += s
         lines = temp.split("\n")
         length = len(lines)
-        print("------------------------------------------------------------")
+        print("------------------------------------------------------------", file=sys.stderr)
         for i in range(1,10):
             l = e.lineno - 6 + i
             if l > 0 and l < length:
-                print(lines[l])
+                print(lines[l], file=sys.stderr)
                 if i == 5:
                     uline = '~'*len(lines[l])
-                    print(uline)
-        print("------------------------------------------------------------")
+                    print(uline, file=sys.stderr)
+        print("------------------------------------------------------------", file=sys.stderr)
         
     def set_index(self, index):
         self.index = index
