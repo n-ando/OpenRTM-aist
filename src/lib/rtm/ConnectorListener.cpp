@@ -127,13 +127,13 @@ namespace RTC
 
   ConnectorDataListenerHolder::ReturnCode
 	  ConnectorDataListenerHolder::notify(ConnectorInfo& info,
-                                                 ByteData& cdrdata)
+                                                 ByteData& cdrdata, PortType::Enum porttype)
   {
     std::lock_guard<std::mutex> guard(m_mutex);
     ConnectorListenerHolder::ReturnCode ret(NO_CHANGE);
     for (auto & listener : m_listeners)
       {
-        ret = ret | listener.first->operator()(info, cdrdata);
+        ret = ret | listener.first->operator()(info, cdrdata, porttype);
       }
     return ret;
   }
