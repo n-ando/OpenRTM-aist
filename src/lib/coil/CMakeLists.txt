@@ -76,7 +76,6 @@ set(coil_srcs
 	${COIL_OS_DIR}/coil/Routing.cpp
 	${COIL_OS_DIR}/coil/Process.cpp
 	${COIL_OS_DIR}/coil/Signal.cpp
-	${COIL_OS_DIR}/coil/Time.cpp
 	${COIL_OS_DIR}/coil/UUID.cpp
 	${COIL_OS_DIR}/coil/SharedMemory.cpp
 	${COIL_OS_DIR}/coil/Affinity.cpp

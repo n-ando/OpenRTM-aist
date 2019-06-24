@@ -57,34 +57,6 @@ namespace coil
     std::this_thread::sleep_for(interval.microseconds());
     return 0;
   }
-
-  /*!
-   * @if jp
-   * @brief 時刻とタイムゾーンを設定する
-   *
-   * 時刻とタイムゾーンを設定する。
-   *
-   * @param tv 時刻構造体
-   * @param tz タイムゾーン構造体
-   *
-   * @return 0: 成功, -1: 失敗
-   *
-   * @else
-   * @brief Set the time and timezone
-   *
-   * Set the time and timezone
-   *
-   * @param tv Structure of time
-   * @param tz Structure of timezone
-   *
-   * @return 0: successful, -1: failed
-   *
-   * @endif
-   */
-  inline int settimeofday(const struct timeval *tv , const struct timezone *tz)
-  {
-    return ::settimeofday(tv, tz);
-  }
 } // namespace coil
 
 #endif  // COIL_TIME_H
