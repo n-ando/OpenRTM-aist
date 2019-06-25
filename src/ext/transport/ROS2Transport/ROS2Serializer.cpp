@@ -80,16 +80,16 @@ namespace RTC
   template <class DataType, typename originalType>
   void ROS2SimpleDataInit()
   {
-    ROS2SimpleDataInitBaseFunc<DataType, std_msgs::msg::Float32, originalType, float>("ROS2Float32");
-    ROS2SimpleDataInitBaseFunc<DataType, std_msgs::msg::Float64, originalType, double>("ROS2Float64");
-    ROS2SimpleDataInitBaseFunc<DataType, std_msgs::msg::Int8, originalType, int8_t>("ROS2Int8");
-    ROS2SimpleDataInitBaseFunc<DataType, std_msgs::msg::Int16, originalType, int16_t>("ROS2Int16");
-    ROS2SimpleDataInitBaseFunc<DataType, std_msgs::msg::Int32, originalType, int32_t>("ROS2Int32");
-    ROS2SimpleDataInitBaseFunc<DataType, std_msgs::msg::Int64, originalType, int64_t>("ROS2Int64");
-    ROS2SimpleDataInitBaseFunc<DataType, std_msgs::msg::UInt8, originalType, uint8_t>("ROS2UInt8");
-    ROS2SimpleDataInitBaseFunc<DataType, std_msgs::msg::UInt16, originalType, uint16_t>("ROS2UInt16");
-    ROS2SimpleDataInitBaseFunc<DataType, std_msgs::msg::UInt32, originalType, uint32_t>("ROS2UInt32");
-    ROS2SimpleDataInitBaseFunc<DataType, std_msgs::msg::UInt64, originalType, uint64_t>("ROS2UInt64");
+    ROS2SimpleDataInitBaseFunc<DataType, std_msgs::msg::Float32, originalType, float>("ros2:std_msgs/Float32");
+    ROS2SimpleDataInitBaseFunc<DataType, std_msgs::msg::Float64, originalType, double>("ros2:std_msgs/Float64");
+    ROS2SimpleDataInitBaseFunc<DataType, std_msgs::msg::Int8, originalType, int8_t>("ros2:std_msgs/Int8");
+    ROS2SimpleDataInitBaseFunc<DataType, std_msgs::msg::Int16, originalType, int16_t>("ros2:std_msgs/Int16");
+    ROS2SimpleDataInitBaseFunc<DataType, std_msgs::msg::Int32, originalType, int32_t>("ros2:std_msgs/Int32");
+    ROS2SimpleDataInitBaseFunc<DataType, std_msgs::msg::Int64, originalType, int64_t>("ros2:std_msgs/Int64");
+    ROS2SimpleDataInitBaseFunc<DataType, std_msgs::msg::UInt8, originalType, uint8_t>("ros2:std_msgs/UInt8");
+    ROS2SimpleDataInitBaseFunc<DataType, std_msgs::msg::UInt16, originalType, uint16_t>("ros2:std_msgs/UInt16");
+    ROS2SimpleDataInitBaseFunc<DataType, std_msgs::msg::UInt32, originalType, uint32_t>("ros2:std_msgs/UInt32");
+    ROS2SimpleDataInitBaseFunc<DataType, std_msgs::msg::UInt64, originalType, uint64_t>("ros2:std_msgs/UInt64");
     
   }
 
@@ -142,16 +142,16 @@ namespace RTC
   template <class DataType, typename originalType>
   void ROS2SequenceDataInit()
   {
-    ROS2SequenceDataInitBaseFunc<DataType, std_msgs::msg::Float32MultiArray, originalType, float>("ROSFloat32MultiArray");
-    ROS2SequenceDataInitBaseFunc<DataType, std_msgs::msg::Float64MultiArray, originalType, double>("ROSFloat64MultiArray");
-    ROS2SequenceDataInitBaseFunc<DataType, std_msgs::msg::Int8MultiArray, originalType, int8_t>("ROSInt8MultiArray");
-    ROS2SequenceDataInitBaseFunc<DataType, std_msgs::msg::Int16MultiArray, originalType, int16_t>("ROSInt16MultiArray");
-    ROS2SequenceDataInitBaseFunc<DataType, std_msgs::msg::Int32MultiArray, originalType, int32_t>("ROSInt32MultiArray");
-    ROS2SequenceDataInitBaseFunc<DataType, std_msgs::msg::Int64MultiArray, originalType, int64_t>("ROSInt64MultiArray");
-    ROS2SequenceDataInitBaseFunc<DataType, std_msgs::msg::UInt8MultiArray, originalType, uint8_t>("ROSUInt8MultiArray");
-    ROS2SequenceDataInitBaseFunc<DataType, std_msgs::msg::UInt16MultiArray, originalType, uint16_t>("ROSUInt16MultiArray");
-    ROS2SequenceDataInitBaseFunc<DataType, std_msgs::msg::UInt32MultiArray, originalType, uint32_t>("ROSUInt32MultiArray");
-    ROS2SequenceDataInitBaseFunc<DataType, std_msgs::msg::UInt64MultiArray, originalType, uint64_t>("ROSUInt64MultiArray");
+    ROS2SequenceDataInitBaseFunc<DataType, std_msgs::msg::Float32MultiArray, originalType, float>("ros2:std_msgs/Float32MultiArray");
+    ROS2SequenceDataInitBaseFunc<DataType, std_msgs::msg::Float64MultiArray, originalType, double>("ros2:std_msgs/Float64MultiArray");
+    ROS2SequenceDataInitBaseFunc<DataType, std_msgs::msg::Int8MultiArray, originalType, int8_t>("ros2:std_msgs/Int8MultiArray");
+    ROS2SequenceDataInitBaseFunc<DataType, std_msgs::msg::Int16MultiArray, originalType, int16_t>("ros2:std_msgs/Int16MultiArray");
+    ROS2SequenceDataInitBaseFunc<DataType, std_msgs::msg::Int32MultiArray, originalType, int32_t>("ros2:std_msgs/Int32MultiArray");
+    ROS2SequenceDataInitBaseFunc<DataType, std_msgs::msg::Int64MultiArray, originalType, int64_t>("ros2:std_msgs/Int64MultiArray");
+    ROS2SequenceDataInitBaseFunc<DataType, std_msgs::msg::UInt8MultiArray, originalType, uint8_t>("ros2:std_msgs/UInt8MultiArray");
+    ROS2SequenceDataInitBaseFunc<DataType, std_msgs::msg::UInt16MultiArray, originalType, uint16_t>("ros2:std_msgs/UInt16MultiArray");
+    ROS2SequenceDataInitBaseFunc<DataType, std_msgs::msg::UInt32MultiArray, originalType, uint32_t>("ros2:std_msgs/UInt32MultiArray");
+    ROS2SequenceDataInitBaseFunc<DataType, std_msgs::msg::UInt64MultiArray, originalType, uint64_t>("ros2:std_msgs/UInt64MultiArray");
   }
 
   /*!
@@ -280,14 +280,14 @@ namespace RTC
   void ROS2StringDataInit()
   {
     coil::GlobalFactory < ::RTC::ByteDataStream<RTC::TimedString> >::
-            instance().addFactory("ROS2String",
+            instance().addFactory("ros2:std_msgs/String",
             ::coil::Creator< ::RTC::ByteDataStream<RTC::TimedString>,
             RTC::ROS2StringData>,
             ::coil::Destructor< ::RTC::ByteDataStream<RTC::TimedString>,
             RTC::ROS2StringData>);
 
     RTC::FastRTPSMessageInfoFactory::
-            instance().addFactory("ROS2String",
+            instance().addFactory("ros2:std_msgs/String",
             ::coil::Creator< ::RTC::FastRTPSMessageInfoBase,
             RTC::ROS2MessageInfo<std_msgs::msg::String> >,
             ::coil::Destructor< ::RTC::FastRTPSMessageInfoBase,
@@ -430,14 +430,14 @@ namespace RTC
   void ROS2Pont3DDataInit()
   {
     coil::GlobalFactory < ::RTC::ByteDataStream<RTC::TimedPoint3D> >::
-            instance().addFactory("ROS2PointStamped",
+            instance().addFactory("ros2:geometry_msgs/PointStamped",
             ::coil::Creator< ::RTC::ByteDataStream<RTC::TimedPoint3D>,
             RTC::ROS2Point3DData>,
             ::coil::Destructor< ::RTC::ByteDataStream<RTC::TimedPoint3D>,
             RTC::ROS2Point3DData>);
 
     RTC::FastRTPSMessageInfoFactory::
-            instance().addFactory("ROS2PointStamped",
+            instance().addFactory("ros2:geometry_msgs/PointStamped",
             ::coil::Creator< ::RTC::FastRTPSMessageInfoBase,
             RTC::ROS2MessageInfo<geometry_msgs::msg::PointStamped> >,
             ::coil::Destructor< ::RTC::FastRTPSMessageInfoBase,
@@ -581,14 +581,14 @@ namespace RTC
   void ROS2QuaternionDataInit()
   {
     coil::GlobalFactory < ::RTC::ByteDataStream<RTC::TimedQuaternion> >::
-            instance().addFactory("ROS2QuaternionStamped",
+            instance().addFactory("ros2:geometry_msgs/QuaternionStamped",
             ::coil::Creator< ::RTC::ByteDataStream<RTC::TimedQuaternion>,
             RTC::ROS2QuaternionData>,
             ::coil::Destructor< ::RTC::ByteDataStream<RTC::TimedQuaternion>,
             RTC::ROS2QuaternionData>);
 
     RTC::FastRTPSMessageInfoFactory::
-            instance().addFactory("ROS2QuaternionStamped",
+            instance().addFactory("ros2:geometry_msgs/QuaternionStamped",
             ::coil::Creator< ::RTC::FastRTPSMessageInfoBase,
             RTC::ROS2MessageInfo<geometry_msgs::msg::QuaternionStamped > >,
             ::coil::Destructor< ::RTC::FastRTPSMessageInfoBase,
@@ -731,14 +731,14 @@ namespace RTC
   void ROS2Vector3DDataInit()
   {
     coil::GlobalFactory < ::RTC::ByteDataStream<RTC::TimedVector3D> >::
-            instance().addFactory("ROS2Vector3Stamped",
+            instance().addFactory("ros2:geometry_msgs/Vector3Stamped",
             ::coil::Creator< ::RTC::ByteDataStream<RTC::TimedVector3D>,
             RTC::ROS2Vector3DData>,
             ::coil::Destructor< ::RTC::ByteDataStream<RTC::TimedVector3D>,
             RTC::ROS2Vector3DData>);
 
     RTC::FastRTPSMessageInfoFactory::
-            instance().addFactory("ROS2Vector3Stamped",
+            instance().addFactory("ros2:geometry_msgs/Vector3Stamped",
             ::coil::Creator< ::RTC::FastRTPSMessageInfoBase,
             RTC::ROS2MessageInfo<geometry_msgs::msg::Vector3Stamped > >,
             ::coil::Destructor< ::RTC::FastRTPSMessageInfoBase,
@@ -897,14 +897,14 @@ namespace RTC
   void ROS2CameraImageDataInit()
   {
     coil::GlobalFactory < ::RTC::ByteDataStream<RTC::CameraImage> >::
-            instance().addFactory("ROS2Image",
+            instance().addFactory("ros2:sensor_msgs/Image",
             ::coil::Creator< ::RTC::ByteDataStream<RTC::CameraImage>,
             RTC::ROS2CameraImageData>,
             ::coil::Destructor< ::RTC::ByteDataStream<RTC::CameraImage>,
             RTC::ROS2CameraImageData>);
 
     RTC::FastRTPSMessageInfoFactory::
-            instance().addFactory("ROS2Image",
+            instance().addFactory("ros2:sensor_msgs/Image",
             ::coil::Creator< ::RTC::FastRTPSMessageInfoBase,
             RTC::ROS2MessageInfo<sensor_msgs::msg::Image > >,
             ::coil::Destructor< ::RTC::FastRTPSMessageInfoBase,

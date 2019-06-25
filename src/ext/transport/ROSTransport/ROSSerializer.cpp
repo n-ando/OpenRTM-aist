@@ -105,16 +105,16 @@ namespace RTC
   template <class DataType, typename originalType>
   void ROSSimpleDataInit()
   {
-    ROSSimpleDataInitBaseFunc<DataType, std_msgs::Float32, originalType, float>("ROSFloat32");
-    ROSSimpleDataInitBaseFunc<DataType, std_msgs::Float64, originalType, double>("ROSFloat64");
-    ROSSimpleDataInitBaseFunc<DataType, std_msgs::Int8, originalType, int8_t>("ROSInt8");
-    ROSSimpleDataInitBaseFunc<DataType, std_msgs::Int16, originalType, int16_t>("ROSInt16");
-    ROSSimpleDataInitBaseFunc<DataType, std_msgs::Int32, originalType, int32_t>("ROSInt32");
-    ROSSimpleDataInitBaseFunc<DataType, std_msgs::Int64, originalType, int64_t>("ROSInt64");
-    ROSSimpleDataInitBaseFunc<DataType, std_msgs::UInt8, originalType, uint8_t>("ROSUInt8");
-    ROSSimpleDataInitBaseFunc<DataType, std_msgs::UInt16, originalType, uint16_t>("ROSUInt16");
-    ROSSimpleDataInitBaseFunc<DataType, std_msgs::UInt32, originalType, uint32_t>("ROSUInt32");
-    ROSSimpleDataInitBaseFunc<DataType, std_msgs::UInt64, originalType, uint64_t>("ROSUInt64");
+    ROSSimpleDataInitBaseFunc<DataType, std_msgs::Float32, originalType, float>("ros:std_msgs/Float32");
+    ROSSimpleDataInitBaseFunc<DataType, std_msgs::Float64, originalType, double>("ros:std_msgs/Float64");
+    ROSSimpleDataInitBaseFunc<DataType, std_msgs::Int8, originalType, int8_t>("ros:std_msgs/Int8");
+    ROSSimpleDataInitBaseFunc<DataType, std_msgs::Int16, originalType, int16_t>("ros:std_msgs/Int16");
+    ROSSimpleDataInitBaseFunc<DataType, std_msgs::Int32, originalType, int32_t>("ros:std_msgs/Int32");
+    ROSSimpleDataInitBaseFunc<DataType, std_msgs::Int64, originalType, int64_t>("ros:std_msgs/Int64");
+    ROSSimpleDataInitBaseFunc<DataType, std_msgs::UInt8, originalType, uint8_t>("ros:std_msgs/UInt8");
+    ROSSimpleDataInitBaseFunc<DataType, std_msgs::UInt16, originalType, uint16_t>("ros:std_msgs/UInt16");
+    ROSSimpleDataInitBaseFunc<DataType, std_msgs::UInt32, originalType, uint32_t>("ros:std_msgs/UInt32");
+    ROSSimpleDataInitBaseFunc<DataType, std_msgs::UInt64, originalType, uint64_t>("ros:std_msgs/UInt64");
   }
 
   /*!
@@ -166,16 +166,16 @@ namespace RTC
   template <class DataType, typename originalType>
   void ROSSequenceDataInit()
   {
-    ROSSequenceDataInitBaseFunc<DataType, std_msgs::Float32MultiArray, originalType, float>("ROSFloat32MultiArray");
-    ROSSequenceDataInitBaseFunc<DataType, std_msgs::Float64MultiArray, originalType, double>("ROSFloat64MultiArray");
-    ROSSequenceDataInitBaseFunc<DataType, std_msgs::Int8MultiArray, originalType, int8_t>("ROSInt8MultiArray");
-    ROSSequenceDataInitBaseFunc<DataType, std_msgs::Int16MultiArray, originalType, int16_t>("ROSInt16MultiArray");
-    ROSSequenceDataInitBaseFunc<DataType, std_msgs::Int32MultiArray, originalType, int32_t>("ROSInt32MultiArray");
-    ROSSequenceDataInitBaseFunc<DataType, std_msgs::Int64MultiArray, originalType, int64_t>("ROSInt64MultiArray");
-    ROSSequenceDataInitBaseFunc<DataType, std_msgs::UInt8MultiArray, originalType, uint8_t>("ROSUInt8MultiArray");
-    ROSSequenceDataInitBaseFunc<DataType, std_msgs::UInt16MultiArray, originalType, uint16_t>("ROSUInt16MultiArray");
-    ROSSequenceDataInitBaseFunc<DataType, std_msgs::UInt32MultiArray, originalType, uint32_t>("ROSUInt32MultiArray");
-    ROSSequenceDataInitBaseFunc<DataType, std_msgs::UInt64MultiArray, originalType, uint64_t>("ROSUInt64MultiArray");
+    ROSSequenceDataInitBaseFunc<DataType, std_msgs::Float32MultiArray, originalType, float>("ros:std_msgs/Float32MultiArray");
+    ROSSequenceDataInitBaseFunc<DataType, std_msgs::Float64MultiArray, originalType, double>("ros:std_msgs/Float64MultiArray");
+    ROSSequenceDataInitBaseFunc<DataType, std_msgs::Int8MultiArray, originalType, int8_t>("ros:std_msgs/Int8MultiArray");
+    ROSSequenceDataInitBaseFunc<DataType, std_msgs::Int16MultiArray, originalType, int16_t>("ros:std_msgs/Int16MultiArray");
+    ROSSequenceDataInitBaseFunc<DataType, std_msgs::Int32MultiArray, originalType, int32_t>("ros:std_msgs/Int32MultiArray");
+    ROSSequenceDataInitBaseFunc<DataType, std_msgs::Int64MultiArray, originalType, int64_t>("ros:std_msgs/Int64MultiArray");
+    ROSSequenceDataInitBaseFunc<DataType, std_msgs::UInt8MultiArray, originalType, uint8_t>("ros:std_msgs/UInt8MultiArray");
+    ROSSequenceDataInitBaseFunc<DataType, std_msgs::UInt16MultiArray, originalType, uint16_t>("ros:std_msgs/UInt16MultiArray");
+    ROSSequenceDataInitBaseFunc<DataType, std_msgs::UInt32MultiArray, originalType, uint32_t>("ros:std_msgs/UInt32MultiArray");
+    ROSSequenceDataInitBaseFunc<DataType, std_msgs::UInt64MultiArray, originalType, uint64_t>("ros:std_msgs/UInt64MultiArray");
   }
 
   /*!
@@ -305,14 +305,14 @@ namespace RTC
   void ROSStringDataInit()
   {
     coil::GlobalFactory < ::RTC::ByteDataStream<RTC::TimedString> >::
-            instance().addFactory("ROSString",
+            instance().addFactory("ros:std_msgs/String",
             ::coil::Creator< ::RTC::ByteDataStream<RTC::TimedString>,
             RTC::ROSStringData>,
             ::coil::Destructor< ::RTC::ByteDataStream<RTC::TimedString>,
             RTC::ROSStringData>);
 
     RTC::ROSMessageInfoFactory::
-            instance().addFactory("ROSString",
+            instance().addFactory("ros:std_msgs/String",
             ::coil::Creator< ::RTC::ROSMessageInfoBase,
             RTC::ROSMessageInfo<std_msgs::String> >,
             ::coil::Destructor< ::RTC::ROSMessageInfoBase,
@@ -456,14 +456,14 @@ namespace RTC
   void ROSPont3DDataInit()
   {
     coil::GlobalFactory < ::RTC::ByteDataStream<RTC::TimedPoint3D> >::
-            instance().addFactory("ROSPointStamped",
+            instance().addFactory("ros:geometry_msgs/PointStamped",
             ::coil::Creator< ::RTC::ByteDataStream<RTC::TimedPoint3D>,
             RTC::ROSPoint3DData>,
             ::coil::Destructor< ::RTC::ByteDataStream<RTC::TimedPoint3D>,
             RTC::ROSPoint3DData>);
 
     RTC::ROSMessageInfoFactory::
-            instance().addFactory("ROSPointStamped",
+            instance().addFactory("ros:geometry_msgs/PointStamped",
             ::coil::Creator< ::RTC::ROSMessageInfoBase,
             RTC::ROSMessageInfo<geometry_msgs::PointStamped> >,
             ::coil::Destructor< ::RTC::ROSMessageInfoBase,
@@ -610,14 +610,14 @@ namespace RTC
   void ROSQuaternionDataInit()
   {
     coil::GlobalFactory < ::RTC::ByteDataStream<RTC::TimedQuaternion> >::
-            instance().addFactory("ROSQuaternionStamped",
+            instance().addFactory("ros:geometry_msgs/QuaternionStamped",
             ::coil::Creator< ::RTC::ByteDataStream<RTC::TimedQuaternion>,
             RTC::ROSQuaternionData>,
             ::coil::Destructor< ::RTC::ByteDataStream<RTC::TimedQuaternion>,
             RTC::ROSQuaternionData>);
 
     RTC::ROSMessageInfoFactory::
-            instance().addFactory("ROSQuaternionStamped",
+            instance().addFactory("ros:geometry_msgs/QuaternionStamped",
             ::coil::Creator< ::RTC::ROSMessageInfoBase,
             RTC::ROSMessageInfo<geometry_msgs::QuaternionStamped > >,
             ::coil::Destructor< ::RTC::ROSMessageInfoBase,
@@ -762,14 +762,14 @@ namespace RTC
   void ROSVector3DDataInit()
   {
     coil::GlobalFactory < ::RTC::ByteDataStream<RTC::TimedVector3D> >::
-            instance().addFactory("ROSVector3Stamped",
+            instance().addFactory("ros:geometry_msgs/Vector3Stamped",
             ::coil::Creator< ::RTC::ByteDataStream<RTC::TimedVector3D>,
             RTC::ROSVector3DData>,
             ::coil::Destructor< ::RTC::ByteDataStream<RTC::TimedVector3D>,
             RTC::ROSVector3DData>);
 
     RTC::ROSMessageInfoFactory::
-            instance().addFactory("ROSVector3Stamped",
+            instance().addFactory("ros:geometry_msgs/Vector3Stamped",
             ::coil::Creator< ::RTC::ROSMessageInfoBase,
             RTC::ROSMessageInfo<geometry_msgs::Vector3Stamped > >,
             ::coil::Destructor< ::RTC::ROSMessageInfoBase,
@@ -930,14 +930,14 @@ namespace RTC
   void ROSCameraImageDataInit()
   {
     coil::GlobalFactory < ::RTC::ByteDataStream<RTC::CameraImage> >::
-            instance().addFactory("ROSImage",
+            instance().addFactory("ros:sensor_msgs/Image",
             ::coil::Creator< ::RTC::ByteDataStream<RTC::CameraImage>,
             RTC::ROSCameraImageData>,
             ::coil::Destructor< ::RTC::ByteDataStream<RTC::CameraImage>,
             RTC::ROSCameraImageData>);
 
     RTC::ROSMessageInfoFactory::
-            instance().addFactory("ROSImage",
+            instance().addFactory("ros:sensor_msgs/Image",
             ::coil::Creator< ::RTC::ROSMessageInfoBase,
             RTC::ROSMessageInfo<sensor_msgs::Image > >,
             ::coil::Destructor< ::RTC::ROSMessageInfoBase,
