@@ -425,7 +425,7 @@ namespace RTC
                      std::string  msg,
                      coil::TimeValue interval)
         : m_coc(coc), m_msg(std::move(msg)), m_interval(interval),
-          m_last(coil::gettimeofday())
+          m_last(std::chrono::steady_clock::now())
       {
       }
       ~DataPortAction() override {}
@@ -433,9 +433,9 @@ namespace RTC
       ReturnCode operator()(ConnectorInfo&  /*info*/,
                             ByteData&  /*data*/) override
       {
-        coil::TimeValue curr = coil::gettimeofday();
-        coil::TimeValue intvl = curr - m_last;
-        if (intvl > m_interval)
+        auto curr = std::chrono::steady_clock::now();
+        auto intvl = curr - m_last;
+        if (intvl > m_interval.microseconds())
           {
             m_last = curr;
             m_coc.updateStatus(OpenRTM::PORT_PROFILE, m_msg.c_str());
@@ -447,7 +447,7 @@ namespace RTC
       ComponentObserverConsumer& m_coc;
       std::string m_msg;
       coil::TimeValue m_interval;
-      coil::TimeValue m_last;
+      std::chrono::steady_clock::time_point m_last;
     };
     
     /*!

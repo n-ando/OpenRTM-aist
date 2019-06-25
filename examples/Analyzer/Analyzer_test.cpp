@@ -130,11 +130,11 @@ RTC::ReturnCode_t Analyzer_test::onExecute(RTC::UniqueId  /*ec_id*/)
 {
 	if (m_inIn.isNew())
 	{
-		coil::TimeValue start(coil::gettimeofday());
+		auto start = std::chrono::system_clock::now();
 		m_inIn.read();
 		m_out = m_in;
-		coil::TimeValue end(coil::gettimeofday());
-		double diff = (double)(end - start);
+		auto end = std::chrono::system_clock::now();
+		double diff = std::chrono::duration<double>(end - start).count();
 		if (diff < m_sleep_time)
 		{
 			coil::sleep(coil::TimeValue(m_sleep_time - diff));

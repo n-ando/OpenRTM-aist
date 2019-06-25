@@ -149,7 +149,7 @@ namespace coil
     coil::TimeValue gettime() const override;
     bool settime(coil::TimeValue clocktime) override;
   private:
-    coil::TimeValue m_offset;
+    std::chrono::steady_clock::time_point m_offset;
     mutable std::mutex m_offsetMutex;
   };
 

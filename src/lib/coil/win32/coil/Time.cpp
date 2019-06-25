@@ -20,40 +20,6 @@
 
 namespace coil
 {
-  int gettimeofday(struct timeval *tv, struct timezone *tz)
-  {
-      FILETIME        ftime;
-      LARGE_INTEGER   lint;
-      __int64         val64;
-      static int      tzflag;
-      if (tv != nullptr)
-      {
-          ::GetSystemTimeAsFileTime(&ftime);
-          lint.LowPart = ftime.dwLowDateTime;
-          lint.HighPart = static_cast<LONG>(ftime.dwHighDateTime);
-          val64 = lint.QuadPart;
-          val64 = val64 - EPOCHFILETIME;
-          val64 = val64 / 10;
-          tv->tv_sec = static_cast<long>(val64 / 1000000);
-          tv->tv_usec = static_cast<long>(val64 % 1000000);
-      }
-      if (tz != nullptr)
-      {
-          if (tzflag == 0)
-          {
-             ::_tzset();
-              ++tzflag;
-          }
-          long tzone = 0;
-          ::_get_timezone(&tzone);
-          tz->tz_minuteswest = tzone / 60;
-          int dlight = 0;
-          ::_get_daylight(&dlight);
-          tz->tz_dsttime = dlight;
-      }
-      return 0;
-  }
-
   int settimeofday(const struct timeval *tv , const struct timezone *tz)
   {
 

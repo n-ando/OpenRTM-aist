@@ -411,7 +411,7 @@ class Throughput
   // Time measurement statistics data
   // data size to be send
   unsigned long m_datasize;
-  std::vector<coil::TimeValue> m_record;
+  std::vector<std::chrono::nanoseconds> m_record;
 
   // received data store
   size_t m_sendcount;

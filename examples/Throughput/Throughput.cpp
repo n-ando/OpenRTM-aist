@@ -401,7 +401,7 @@ void Throughput::receiveData(const RTC::Time &tm, const CORBA::ULong seq_length)
   static size_t record_ptr(0);
 
   // data arrived -> getting time
-  coil::TimeValue received_time(coil::gettimeofday());
+  auto received_time = std::chrono::system_clock::now().time_since_epoch();
   if (size == 0) { size = seq_length; }
 
   // calculate latency statistics
@@ -429,7 +429,7 @@ void Throughput::receiveData(const RTC::Time &tm, const CORBA::ULong seq_length)
 
       for (size_t i(0); i < record_len; ++i)
         {
-          double tmp(m_record[i]);
+          double tmp(std::chrono::duration<double>(m_record[i]).count());
           sum += tmp;
           sq_sum += tmp * tmp;
           if      (tmp > max_latency) { max_latency = tmp; }
@@ -465,7 +465,7 @@ void Throughput::receiveData(const RTC::Time &tm, const CORBA::ULong seq_length)
         }
     }
   // measuring latency
-  coil::TimeValue send_time(tm.sec, tm.nsec/1000);
+  auto send_time = std::chrono::seconds(tm.sec) + std::chrono::nanoseconds(tm.nsec);
   m_record[record_ptr] = received_time - send_time;
   size = seq_length;
   record_ptr++; record_num++;

@@ -32,7 +32,11 @@ namespace coil
   }
   coil::TimeValue SystemClock::gettime() const
   {
-    return coil::gettimeofday();
+    auto now = std::chrono::system_clock::now().time_since_epoch();
+    auto sec = std::chrono::duration_cast<std::chrono::seconds>(now);
+    auto usec = std::chrono::duration_cast<std::chrono::microseconds>(now - sec);
+    return coil::TimeValue(static_cast<long>(sec.count()),
+                           static_cast<long>(usec.count()));
   }
   bool SystemClock::settime(coil::TimeValue clocktime)
   {
@@ -92,7 +96,6 @@ namespace coil
   // Adjusted Clock
   //============================================================
   AdjustedClock::AdjustedClock()
-    : m_offset(0.0)
   {
   }
 
@@ -103,13 +106,14 @@ namespace coil
   coil::TimeValue AdjustedClock::gettime() const
   {
     std::lock_guard<std::mutex> guard(m_offsetMutex);
-    return TimeValue(coil::gettimeofday() - m_offset);
+    auto time = std::chrono::steady_clock::now() - m_offset;
+    return TimeValue(std::chrono::duration<double>(time).count());
   }
 
   bool AdjustedClock::settime(coil::TimeValue clocktime)
   {
     std::lock_guard<std::mutex> guard(m_offsetMutex);
-    m_offset = coil::gettimeofday() - clocktime;
+    m_offset = std::chrono::steady_clock::now() - clocktime.microseconds();
     return true;
   }
 
