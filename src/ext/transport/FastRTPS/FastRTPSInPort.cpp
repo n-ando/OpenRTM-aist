@@ -120,7 +120,9 @@ namespace RTC
     m_topic = prop.getProperty("topic", "chatter");
     
 
-    if (marshaling_type != "corba")
+    const std::string str_corba = "corba";
+
+    if (marshaling_type.compare(0, str_corba.size(), str_corba) != 0)
     {
         FastRTPSMessageInfoBase* info = FastRTPSMessageInfoFactory::instance().createObject(marshaling_type);
 

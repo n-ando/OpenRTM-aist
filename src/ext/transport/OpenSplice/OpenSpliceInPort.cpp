@@ -114,7 +114,9 @@ namespace RTC
     std::string dataname;
     bool corbamode;
     
-    if (marshaling_type != "corba")
+    const std::string str_corba = "corba";
+
+    if (marshaling_type.compare(0, str_corba.size(), str_corba) != 0)
     {
         
         dataname = marshaling_type;
