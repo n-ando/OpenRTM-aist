@@ -622,7 +622,7 @@ namespace RTC
         {
             m_cdr.setEndian(little_endian);
         }
-    private:
+    protected:
         CORBA_CdrMemoryStream m_cdr;
         
 

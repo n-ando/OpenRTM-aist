@@ -431,7 +431,7 @@ namespace RTC
       ~DataPortAction() override {}
 
       ReturnCode operator()(ConnectorInfo&  /*info*/,
-                            ByteData&  /*data*/) override
+                            ByteData&  /*data*/, PortType::Enum /*porttype*/) override
       {
         auto curr = std::chrono::steady_clock::now();
         auto intvl = curr - m_last;

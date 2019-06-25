@@ -267,7 +267,7 @@ namespace RTC
     inline void onBufferRead(ByteData& data)
     {
       m_listeners->
-        connectorData_[ON_BUFFER_READ].notify(m_profile, data);
+        connectorData_[ON_BUFFER_READ].notify(m_profile, data, PortType::OutPortType);
     }
 
     /*!
@@ -282,7 +282,7 @@ namespace RTC
     inline void onSend(ByteData& data)
     {
       m_listeners->
-        connectorData_[ON_SEND].notify(m_profile, data);
+        connectorData_[ON_SEND].notify(m_profile, data, PortType::OutPortType);
     }
 
     /*!
