@@ -35,7 +35,7 @@ private:
 extern "C"
 {
     //以下はモジュールロード時に呼び出される関数
-    DLL_EXPORT void ShortToDoubleSerializerInit(RTC::Manager* manager)
+    DLL_EXPORT void ShortToDoubleSerializerInit(RTC::Manager* /*manager*/)
     {
         //以下のファクトリはデータ型ごとに登録する必要がある
         coil::GlobalFactory <::RTC::ByteDataStream<RTC::TimedDouble>>::
@@ -44,5 +44,5 @@ extern "C"
                 ShortToDoubleSerializer>,
                 ::coil::Destructor< ::RTC::ByteDataStream<RTC::TimedDouble>,
                 ShortToDoubleSerializer>);
-    };
+    }
 }
