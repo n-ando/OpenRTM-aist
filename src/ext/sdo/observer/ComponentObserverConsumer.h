@@ -431,7 +431,7 @@ namespace RTC
       ~DataPortAction() override {}
 
       ReturnCode operator()(ConnectorInfo&  /*info*/,
-                            ByteData&  /*data*/) override
+                            ByteData&  /*data*/, PortType::Enum /*porttype*/) override
       {
         coil::TimeValue curr = coil::gettimeofday();
         coil::TimeValue intvl = curr - m_last;
