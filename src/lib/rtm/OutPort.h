@@ -159,7 +159,7 @@ namespace RTC
 
       RTC_DEBUG(("available serializer_types: %s", serializer_types.c_str()));
 
-      addProperty("serializer_type", serializer_types.c_str());
+      addProperty("dataport.serializer_type", serializer_types.c_str());
 
     }
 
