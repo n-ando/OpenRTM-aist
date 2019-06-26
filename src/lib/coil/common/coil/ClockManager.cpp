@@ -38,29 +38,10 @@ namespace coil
     return coil::TimeValue(static_cast<long>(sec.count()),
                            static_cast<long>(usec.count()));
   }
-  bool SystemClock::settime(coil::TimeValue clocktime)
+  bool SystemClock::settime(coil::TimeValue /* clocktime */)
   {
-#if defined(__powerpc__) && !defined(__RTP__)
-    if (coil::settimeofday(clocktime.sec(), clocktime.usec()*1000) == 0)
-      {
-        return true;
-      }
-    return false;
-#elif defined(VXWORKS_66)
-    timespec tv;
-    tv.tv_sec = clocktime.sec();
-    tv.tv_nsec = clocktime.usec()*1000;
-    if (coil::settimeofday(&tv) == 0)
-      {
-        return true;
-      }
-    return false;
-#else
-    timeval tv;
-    tv.tv_sec = clocktime.sec();
-    tv.tv_usec = clocktime.usec();
-    return coil::settimeofday(&tv, nullptr) == 0;
-#endif
+      // OpenRTM-aist do not set the System Clock.
+      return true;
   }
   //
   //============================================================
