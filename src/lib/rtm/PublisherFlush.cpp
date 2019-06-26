@@ -133,8 +133,7 @@ namespace RTC
    * @endif
    */
   PublisherBase::ReturnCode PublisherFlush::write(ByteDataStreamBase* data,
-                                                  unsigned long  /*sec*/,
-                                                  unsigned long  /*usec*/)
+                                                  std::chrono::nanoseconds /* timeout */)
   {
     RTC_PARANOID(("write()"));
 

@@ -164,8 +164,7 @@ namespace RTC
    * @endif
    */
   PublisherBase::ReturnCode PublisherNew::write(ByteDataStreamBase* data,
-                                                unsigned long sec,
-                                                unsigned long usec)
+                                                std::chrono::nanoseconds timeout)
   {
     RTC_PARANOID(("write()"));
 
@@ -184,7 +183,7 @@ namespace RTC
     if (m_retcode == SEND_FULL)
       {
         RTC_DEBUG(("write(): InPort buffer is full."));
-        m_buffer->write(data_, sec, usec);
+        m_buffer->write(data_, timeout);
         m_task->signal();
         return BUFFER_FULL;
       }
@@ -192,7 +191,7 @@ namespace RTC
     assert(m_buffer != nullptr);
 
     onBufferWrite(data_);
-    CdrBufferBase::ReturnCode ret(m_buffer->write(data_, sec, usec));
+    CdrBufferBase::ReturnCode ret(m_buffer->write(data_, timeout));
 
     m_task->signal();
     RTC_DEBUG(("%s = write()", CdrBufferBase::toString(ret)));

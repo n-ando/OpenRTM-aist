@@ -416,23 +416,22 @@ namespace RTC
      *
      * 引数で与えられたデータをバッファに書き込む。
      *
-     * 第2引数(sec)、第3引数(nsec)が指定されていない場合、バッファフル
+     * 第2引数(timeout)が指定されていない場合、バッファフル
      * 時の書込みモード (overwrite, do_nothing, block) は init() で設定
      * されたモードに従う。
      *
-     * 第2引数(sec) に引数が指定された場合は、init() で設定されたモード
+     * 第2引数(timeout)に引数が指定された場合、init() で設定されたモード
      * に関わらず、block モードとなり、バッファがフル状態であれば指定時
-     * 間まち、タイムアウトする。第3引数(nsec)は指定されない場合0として
-     * 扱われる。タイムアウト待ち中に、読み出しスレッド側でバッファから
-     * 読み出せば、ブロッキングは解除されデータが書き込まれる。
+     * 間まち、タイムアウトする。タイムアウト待ち中に、読み出しスレッド
+     * 側でバッファから読み出せば、ブロッキングは解除されデータが書き込
+     * まれる。
      *
      * 書き込み時にバッファが空(empty)状態で、別のスレッドがblockモード
      * で読み出し待ちをしている場合、signalを発行して読み出し側のブロッ
      * キングが解除される。
      *
      * @param value 書き込み対象データ
-     * @param sec   タイムアウト時間 sec  (default -1: 無効)
-     * @param nsec  タイムアウト時間 nsec (default 0)
+     * @param timeout タイムアウト時間 nsec (default -1: 無効)
      * @return BUFFER_OK            正常終了
      *         BUFFER_FULL          バッファがフル状態
      *         TIMEOUT              書込みがタイムアウトした
@@ -451,7 +450,8 @@ namespace RTC
      * @endif
      */
     ReturnCode write(const DataType& value,
-                             long int sec = -1, long int nsec = 0) override
+                     std::chrono::nanoseconds timeout
+                     = std::chrono::nanoseconds(-1)) override
     {
       {
       std::unique_lock<std::mutex> guard(m_full.mutex);
@@ -461,9 +461,8 @@ namespace RTC
 
           bool timedwrite(m_timedwrite);
           bool overwrite(m_overwrite);
-          auto term = std::chrono::seconds(sec) + std::chrono::nanoseconds(nsec);
 
-          if (!(sec < 0))  // if second arg is set -> block mode
+          if (timeout >= std::chrono::seconds::zero())  // block mode
             {
               timedwrite = true;
               overwrite  = false;
@@ -479,11 +478,11 @@ namespace RTC
             }
           else if (!overwrite && timedwrite)  // "block" mode
             {
-              if (sec < 0)
+              if (timeout < std::chrono::seconds::zero())
                 {
-                  term = m_wtimeout;
+                  timeout = m_wtimeout;
                 }
-              if (std::cv_status::timeout == m_empty.cond.wait_for(guard, term))
+              if (std::cv_status::timeout == m_empty.cond.wait_for(guard, timeout))
                 {
                   return ::RTC::BufferStatus::TIMEOUT;
                 }
@@ -710,23 +709,22 @@ namespace RTC
      *
      * バッファに格納されたデータを読み出す。
      *
-     * 第2引数(sec)、第3引数(nsec)が指定されていない場合、バッファ空状
-     * 態での読み出しモード (readback, do_nothing, block) は init() で設
-     * 定されたモードに従う。
+     * 第2引数(timeout)が指定されていない場合、バッファ空状態での読み出
+     * しモード (readback, do_nothing, block) は init() で設定された
+     * モードに従う。
      *
-     * 第2引数(sec) に引数が指定された場合は、init() で設定されたモード
+     * 第2引数(timeout)に引数が指定された場合、init() で設定されたモード
      * に関わらず、block モードとなり、バッファが空状態であれば指定時間
-     * 待ち、タイムアウトする。第3引数(nsec)は指定されない場合0として扱
-     * われる。タイムアウト待ち中に、書込みスレッド側でバッファへ書込み
-     * があれば、ブロッキングは解除されデータが読みだされる。
+     * 待ち、タイムアウトする。タイムアウト待ち中に、書込みスレッド側で
+     * バッファへ書込みがあれば、ブロッキングは解除されデータが読みださ
+     * れる。
      *
      * 読み出し時にバッファが空(empty)状態で、別のスレッドがblockモード
      * で書込み待ちをしている場合、signalを発行して書込み側のブロッキン
      * グが解除される。
      *
      * @param value 読み出し対象データ
-     * @param sec   タイムアウト時間 sec  (default -1: 無効)
-     * @param nsec  タイムアウト時間 nsec (default 0)
+     * @param timeout タイムアウト時間 (default -1: 無効)
      * @return BUFFER_OK            正常終了
      *         BUFFER_EMPTY         バッファが空状態
      *         TIMEOUT              書込みがタイムアウトした
@@ -745,7 +743,8 @@ namespace RTC
      * @endif
      */
     ReturnCode read(DataType& value,
-                            long int sec = -1, long int nsec = 0) override
+                    std::chrono::nanoseconds timeout
+                    = std::chrono::nanoseconds(-1)) override
     {
       {
       std::unique_lock<std::mutex> guard(m_empty.mutex);
@@ -754,13 +753,12 @@ namespace RTC
         {
           bool timedread(m_timedread);
           bool readback(m_readback);
-          auto term = std::chrono::seconds(sec) + std::chrono::nanoseconds(nsec);
 
-          if (!(sec < 0))  // if second arg is set -> block mode
+          if (timeout >= std::chrono::seconds::zero()) // block mode
             {
               timedread = true;
               readback  = false;
-              term = m_rtimeout;
+              timeout = m_rtimeout;
             }
 
           if (readback && !timedread)       // "readback" mode
@@ -777,11 +775,11 @@ namespace RTC
             }
           else if (!readback && timedread)  // "block" mode
             {
-              if (sec < 0)
+              if (timeout < std::chrono::seconds::zero())
                 {
-                  term = m_rtimeout;
+                  timeout = m_rtimeout;
                 }
-              if (std::cv_status::timeout == m_empty.cond.wait_for(guard, term))
+              if (std::cv_status::timeout == m_empty.cond.wait_for(guard, timeout))
                 {
                   return ::RTC::BufferStatus::TIMEOUT;
                 }
