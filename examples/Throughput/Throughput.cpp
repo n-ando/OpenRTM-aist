@@ -265,7 +265,8 @@ RTC::ReturnCode_t Throughput::onExecute(RTC::UniqueId ec_id)
   std::cout << "\tsendcount: " << m_sendcount << std::endl;
 #endif // DEBUG
 
-  coil::sleep(coil::TimeValue(m_sleep_time)); // sleep for calculating measurement statistics
+  // sleep for calculating measurement statistics
+  std::this_thread::sleep_for(m_sleep_time);
 
   // calculation is triggered data size change
   // to finish the last calculation, size 0 array is sent
