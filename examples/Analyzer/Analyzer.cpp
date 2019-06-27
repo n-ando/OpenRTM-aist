@@ -192,13 +192,7 @@ RTC::ReturnCode_t Analyzer::onExecute(RTC::UniqueId  /*ec_id*/)
 		std::lock_guard<std::mutex> guard(m_mu);
 		m_datalist.push_back(m_out);
 	}
-	auto end = std::chrono::system_clock::now();
-	double diff = std::chrono::duration<double>(end - start).count();
-	if(diff < m_sleep_time)
-	{
-		coil::sleep(coil::TimeValue(m_sleep_time - diff));
-	}
-	
+	std::this_thread::sleep_until(start + m_sleep_time);
 
 	m_outOut.write();
 

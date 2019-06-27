@@ -133,12 +133,7 @@ RTC::ReturnCode_t Analyzer_test::onExecute(RTC::UniqueId  /*ec_id*/)
 		auto start = std::chrono::system_clock::now();
 		m_inIn.read();
 		m_out = m_in;
-		auto end = std::chrono::system_clock::now();
-		double diff = std::chrono::duration<double>(end - start).count();
-		if (diff < m_sleep_time)
-		{
-			coil::sleep(coil::TimeValue(m_sleep_time - diff));
-		}
+		std::this_thread::sleep_until(start + m_sleep_time);
 		
 		m_outOut.write();
 	}
