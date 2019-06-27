@@ -721,6 +721,127 @@ namespace coil
     return false;
   }
 
+  /*!
+   * @if jp
+   * @brief 与えられた文字列をstd::chrono::duratoin<double>に変換
+   * @else
+   * @brief Convert the given string to std::chrono::duratoin<double>.
+   * @endif
+   */
+  template<>
+  bool stringTo<std::chrono::duration<double>>(std::chrono::duration<double>& val,
+                                               const char* str)
+  {
+    double num;
+    if (stringTo(num, str)) {
+      val = std::chrono::duration<double>(num);
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  /*!
+   * @if jp
+   * @brief 与えられた文字列 (実数､単位[s]) をstd::chrono::duratoin<>に変換
+   * @else
+   * @brief Convert the given string to std::chrono::duratoin<>.
+   * @endif
+   */
+  template<typename duration>
+  bool stringToDuration(duration& val, const char* str)
+  {
+    std::chrono::duration<double> val_d;
+    if (stringTo(val_d, str)) {
+      val = std::chrono::duration_cast<duration>(val_d);
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  /*!
+   * @if jp
+   * @brief 与えられた文字列 (実数､単位[s]) をstd::chrono::nanosecondsに変換
+   * @else
+   * @brief Convert the given string to std::chrono::nanoseconds.
+   * @endif
+   */
+  template<>
+  bool stringTo<std::chrono::nanoseconds>(std::chrono::nanoseconds& val,
+                                          const char* str)
+  {
+    return stringToDuration(val, str);
+  }
+
+  /*!
+   * @if jp
+   * @brief 与えられた文字列 (実数､単位[s]) をstd::chrono::microsecondsに変換
+   * @else
+   * @brief Convert the given string to std::chrono::microseconds.
+   * @endif
+   */
+  template<>
+  bool stringTo<std::chrono::microseconds>(std::chrono::microseconds& val,
+                                           const char* str)
+  {
+    return stringToDuration(val, str);
+  }
+
+  /*!
+   * @if jp
+   * @brief 与えられた文字列 (実数､単位[s]) をstd::chrono::millisecondsに変換
+   * @else
+   * @brief Convert the given string to std::chrono::milliseconds.
+   * @endif
+   */
+  template<>
+  bool stringTo<std::chrono::milliseconds>(std::chrono::milliseconds& val,
+                                           const char* str)
+  {
+    return stringToDuration(val, str);
+  }
+
+  /*!
+   * @if jp
+   * @brief 与えられた文字列 (実数､単位[s]) をstd::chrono::secondsに変換
+   * @else
+   * @brief Convert the given string to std::chrono::seconds.
+   * @endif
+   */
+  template<>
+  bool stringTo<std::chrono::seconds>(std::chrono::seconds& val,
+                                      const char* str)
+  {
+    return stringToDuration(val, str);
+  }
+
+  /*!
+   * @if jp
+   * @brief 与えられた文字列 (実数､単位[s]) をstd::chrono::minutesに変換
+   * @else
+   * @brief Convert the given string to std::chrono::minutes.
+   * @endif
+   */
+  template<>
+  bool stringTo<std::chrono::minutes>(std::chrono::minutes& val,
+                                      const char* str)
+  {
+    return stringToDuration(val, str);
+  }
+
+  /*!
+   * @if jp
+   * @brief 与えられた文字列 (実数､単位[s]) をstd::chrono::hoursに変換
+   * @else
+   * @brief Convert the given string to std::chrono::hours.
+   * @endif
+   */
+  template<>
+  bool stringTo<std::chrono::hours>(std::chrono::hours& val, const char* str)
+  {
+    return stringToDuration(val, str);
+  }
 
   /*!
    * @if jp

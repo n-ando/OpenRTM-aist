@@ -27,6 +27,7 @@
 #include <cassert>
 #include <cerrno>
 #include <cstdlib>
+#include <chrono>
 
 #if defined (_MSC_VER) && (_MSC_VER <=1500)  // VC2008(VC9.0) or before
 #elif defined(VXWORKS_66) && !defined(__RTP__)
@@ -693,6 +694,194 @@ namespace coil
    */
   template <>
   bool stringTo<bool>(bool& val, const char* str);
+
+  /*!
+   * @if jp
+   * @brief 与えられた文字列をstd:chrono::duration<double>に変換
+   *
+   * 引数で与えられた文字列をstd:chrono::duration<double>に変換する。
+   *
+   * @param val 変換先文字列
+   * @param str 変換元文字列
+   *
+   * @return true: 成功, false: 失敗
+   *
+   * @else
+   * @brief Convert the given string to std:chrono::duration<double>.
+   *
+   * Convert string given by the argument to std:chrono::duration<double>.
+   *
+   * @param val String of conversion destination
+   * @param str String of conversion source
+   *
+   * @return true: successful, false: failed
+   *
+   * @endif
+   */
+  template<>
+  bool stringTo<std::chrono::duration<double>>(std::chrono::duration<double>& val,
+                                               const char* str);
+
+  /*!
+   * @if jp
+   * @brief 与えられた文字列をstd:chrono::nanosecondsに変換
+   *
+   * 引数で与えられた文字列をstd:chrono::nanosecondsに変換する。
+   *
+   * @param val 変換先文字列
+   * @param str 変換元文字列
+   *
+   * @return true: 成功, false: 失敗
+   *
+   * @else
+   * @brief Convert the given string to std:chrono::nanoseconds.
+   *
+   * Convert string given by the argument to std:chrono::nanoseconds.
+   *
+   * @param val String of conversion destination
+   * @param str String of conversion source
+   *
+   * @return true: successful, false: failed
+   *
+   * @endif
+   */
+  template<>
+  bool stringTo<std::chrono::nanoseconds>(std::chrono::nanoseconds& val,
+                                          const char* str);
+
+  /*!
+   * @if jp
+   * @brief 与えられた文字列をstd:chrono::microsecondsに変換
+   *
+   * 引数で与えられた文字列をstd:chrono::microsecondsに変換する。
+   *
+   * @param val 変換先文字列
+   * @param str 変換元文字列
+   *
+   * @return true: 成功, false: 失敗
+   *
+   * @else
+   * @brief Convert the given string to std:chrono::microseconds.
+   *
+   * Convert string given by the argument to std:chrono::microseconds.
+   *
+   * @param val String of conversion destination
+   * @param str String of conversion source
+   *
+   * @return true: successful, false: failed
+   *
+   * @endif
+   */
+  template<>
+  bool stringTo<std::chrono::microseconds>(std::chrono::microseconds& val,
+                                           const char* str);
+
+  /*!
+   * @if jp
+   * @brief 与えられた文字列をstd:chrono::millisecondsに変換
+   *
+   * 引数で与えられた文字列をstd:chrono::millisecondsに変換する。
+   *
+   * @param val 変換先文字列
+   * @param str 変換元文字列
+   *
+   * @return true: 成功, false: 失敗
+   *
+   * @else
+   * @brief Convert the given string to std:chrono::milliseconds.
+   *
+   * Convert string given by the argument to std:chrono::milliseconds.
+   *
+   * @param val String of conversion destination
+   * @param str String of conversion source
+   *
+   * @return true: successful, false: failed
+   *
+   * @endif
+   */
+  template<>
+  bool stringTo<std::chrono::milliseconds>(std::chrono::milliseconds& val,
+                                           const char* str);
+
+  /*!
+   * @if jp
+   * @brief 与えられた文字列をstd:chrono::secondsに変換
+   *
+   * 引数で与えられた文字列をstd:chrono::secondsに変換する。
+   *
+   * @param val 変換先文字列
+   * @param str 変換元文字列
+   *
+   * @return true: 成功, false: 失敗
+   *
+   * @else
+   * @brief Convert the given string to std:chrono::seconds.
+   *
+   * Convert string given by the argument to std:chrono::seconds.
+   *
+   * @param val String of conversion destination
+   * @param str String of conversion source
+   *
+   * @return true: successful, false: failed
+   *
+   * @endif
+   */
+  template<>
+  bool stringTo<std::chrono::seconds>(std::chrono::seconds& val,
+                                      const char* str);
+
+  /*!
+   * @if jp
+   * @brief 与えられた文字列をstd:chrono::minutesに変換
+   *
+   * 引数で与えられた文字列をstd:chrono::minutesに変換する。
+   *
+   * @param val 変換先文字列
+   * @param str 変換元文字列
+   *
+   * @return true: 成功, false: 失敗
+   *
+   * @else
+   * @brief Convert the given string to std:chrono::minutes.
+   *
+   * Convert string given by the argument to std:chrono::minutes.
+   *
+   * @param val String of conversion destination
+   * @param str String of conversion source
+   *
+   * @return true: successful, false: failed
+   *
+   * @endif
+   */
+  template<>
+  bool stringTo<std::chrono::minutes>(std::chrono::minutes& val,
+                                      const char* str);
+
+  /*!
+   * @if jp
+   * @brief 与えられた文字列をstd:chrono::hoursに変換
+   *
+   * 引数で与えられた文字列をstd:chrono::hoursに変換する。
+   *
+   * @param val 変換先文字列
+   * @param str 変換元文字列
+   *
+   * @return true: 成功, false: 失敗
+   *
+   * @else
+   * @brief Convert the given string to std:chrono::hours.
+   *
+   * Convert string given by the argument to std:chrono::hours.
+   *
+   * @param val String of conversion destination
+   * @param str String of conversion source
+   *
+   * @return true: successful, false: failed
+   *
+   * @endif
+   */
+  template<>
+  bool stringTo<std::chrono::hours>(std::chrono::hours& val, const char* str);
 
   /*!
    * @if jp
