@@ -66,11 +66,11 @@ namespace RTC
    * @brief Write data into the buffer
    * @endif
    */
-  InPortConsumer::ReturnCode InPortDirectConsumer::
+  DataPortStatus InPortDirectConsumer::
 	  put(ByteData&  /*data*/)
   {
     RTC_PARANOID(("put(): never called."));
-    return UNKNOWN_ERROR;
+    return DataPortStatus::UNKNOWN_ERROR;
   }
 
   /*!

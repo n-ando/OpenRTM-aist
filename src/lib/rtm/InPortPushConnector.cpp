@@ -86,7 +86,7 @@ namespace RTC
    * @brief Reading data
    * @endif
    */
-  ConnectorBase::ReturnCode
+  DataPortStatus
   InPortPushConnector::read(ByteDataStreamBase* data)
   {
     RTC_TRACE(("read()"));
@@ -99,7 +99,7 @@ namespace RTC
      */
     if (m_buffer == nullptr)
       {
-        return PRECONDITION_NOT_MET;
+        return DataPortStatus::PRECONDITION_NOT_MET;
       }
     if (m_sync_readwrite)
     {
@@ -144,21 +144,21 @@ namespace RTC
       {
       case BufferStatus::OK:
         onBufferRead(tmp);
-        return PORT_OK;
+        return DataPortStatus::PORT_OK;
         break;
       case BufferStatus::EMPTY:
         onBufferEmpty(tmp);
-        return BUFFER_EMPTY;
+        return DataPortStatus::BUFFER_EMPTY;
         break;
       case BufferStatus::TIMEOUT:
         onBufferReadTimeout(tmp);
-        return BUFFER_TIMEOUT;
+        return DataPortStatus::BUFFER_TIMEOUT;
         break;
       case BufferStatus::PRECONDITION_NOT_MET:
-        return PRECONDITION_NOT_MET;
+        return DataPortStatus::PRECONDITION_NOT_MET;
         break;
       default:
-        return PORT_ERROR;
+        return DataPortStatus::PORT_ERROR;
       }
   }
 
@@ -169,7 +169,7 @@ namespace RTC
    * @brief disconnect
    * @endif
    */
-  ConnectorBase::ReturnCode InPortPushConnector::disconnect()
+  DataPortStatus InPortPushConnector::disconnect()
   {
     RTC_TRACE(("disconnect()"));
     // delete provider
@@ -188,7 +188,7 @@ namespace RTC
       }
     m_buffer = nullptr;
 
-    return PORT_OK;
+    return DataPortStatus::PORT_OK;
   }
 
   /*!

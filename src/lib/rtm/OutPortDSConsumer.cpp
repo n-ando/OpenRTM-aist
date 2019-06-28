@@ -91,7 +91,7 @@ namespace RTC
    * @brief Read data
    * @endif
    */
-  OutPortConsumer::ReturnCode
+  DataPortStatus
   OutPortDSConsumer::get(ByteData& data)
   {
     RTC_TRACE(("OutPortDSConsumer::get()"));
@@ -126,14 +126,14 @@ namespace RTC
             m_buffer->advanceWptr();
             m_buffer->advanceRptr();
 
-            return PORT_OK;
+            return DataPortStatus::PORT_OK;
           }
         return convertReturn(ret, data);
       }
     catch (...)
       {
         RTC_WARN(("Exception caought from OutPort::get()."));
-        return CONNECTION_LOST;
+        return DataPortStatus::CONNECTION_LOST;
       }
   }
 
@@ -224,7 +224,7 @@ namespace RTC
    * @brief Return codes conversion
    * @endif
    */
-  OutPortConsumer::ReturnCode
+  DataPortStatus
   OutPortDSConsumer::convertReturn(::RTC::PortStatus status,
                                          ByteData&  /*data*/)
   {
@@ -232,37 +232,37 @@ namespace RTC
       {
       case ::RTC::PORT_OK:
         // never comes here
-        return PORT_OK;
+        return DataPortStatus::PORT_OK;
         break;
 
       case ::RTC::PORT_ERROR:
         onSenderError();
-        return PORT_ERROR;
+        return DataPortStatus::PORT_ERROR;
         break;
 
       case ::RTC::BUFFER_FULL:
         // never comes here
-        return BUFFER_FULL;
+        return DataPortStatus::BUFFER_FULL;
         break;
 
       case ::RTC::BUFFER_EMPTY:
         onSenderEmpty();
-        return BUFFER_EMPTY;
+        return DataPortStatus::BUFFER_EMPTY;
         break;
 
       case ::RTC::BUFFER_TIMEOUT:
         onSenderTimeout();
-        return BUFFER_TIMEOUT;
+        return DataPortStatus::BUFFER_TIMEOUT;
         break;
 
       case ::RTC::UNKNOWN_ERROR:
         onSenderError();
-        return UNKNOWN_ERROR;
+        return DataPortStatus::UNKNOWN_ERROR;
         break;
 
       default:
         onSenderError();
-        return UNKNOWN_ERROR;
+        return DataPortStatus::UNKNOWN_ERROR;
       }
   }
 

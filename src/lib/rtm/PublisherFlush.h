@@ -59,7 +59,6 @@ namespace RTC
     : public PublisherBase
   {
   public:
-    DATAPORTSTATUS_ENUM
 
     /*!
      * @if jp
@@ -100,7 +99,7 @@ namespace RTC
      * ラメータを持たない。
      *
      * @param property 本Publisherの駆動制御情報を設定したPropertyオブジェクト
-     * @return ReturnCode PORT_OK 正常終了
+     * @return DataPortStatus PORT_OK 正常終了
      *                    INVALID_ARGS Properties が不正な値を含む
      *
      * @else
@@ -111,11 +110,11 @@ namespace RTC
      *
      * @param property Property objects that includes the control information
      *                 of this Publisher
-     * @return ReturnCode PORT_OK normal return
+     * @return DataPortStatus PORT_OK normal return
      *                    INVALID_ARGS Properties with invalid values.
      * @endif
      */
-    ReturnCode init(coil::Properties& prop) override;
+    DataPortStatus init(coil::Properties& prop) override;
 
     /*!
      * @if jp
@@ -126,7 +125,7 @@ namespace RTC
      * それ以外の場合は、PORT_OK が返される。
      *
      * @param consumer Consumer へのポインタ
-     * @return ReturnCode PORT_OK 正常終了
+     * @return DataPortStatus PORT_OK 正常終了
      *                    INVALID_ARGS 引数に不正な値が含まれている
      *
      * @else
@@ -137,12 +136,12 @@ namespace RTC
      * returned.
      *
      * @param consumer A pointer to a consumer object.
-     * @return ReturnCode PORT_OK normal return
+     * @return DataPortStatus PORT_OK normal return
      *                    INVALID_ARGS given argument has invalid value
      *
      * @endif
      */
-    ReturnCode setConsumer(InPortConsumer* consumer) override;
+    DataPortStatus setConsumer(InPortConsumer* consumer) override;
 
     /*!
      * @if jp
@@ -165,7 +164,7 @@ namespace RTC
      *
      * @endif
      */
-    ReturnCode setBuffer(CdrBufferBase* buffer) override;
+    DataPortStatus setBuffer(CdrBufferBase* buffer) override;
 
     /*!
      * @if jp
@@ -200,7 +199,7 @@ namespace RTC
      *         INVALID_ARGS Invalid arguments
      * @endif
      */
-    ::RTC::DataPortStatus::Enum
+    ::RTC::DataPortStatus
     setListener(ConnectorInfo& info,
                 RTC::ConnectorListeners* listeners) override;
 
@@ -260,7 +259,7 @@ namespace RTC
      *
      * @endif
      */
-    ReturnCode write(ByteDataStreamBase* data,
+    DataPortStatus write(ByteDataStreamBase* data,
                      std::chrono::nanoseconds timeout
                      = std::chrono::nanoseconds(-1)) override;
     /*!
@@ -317,7 +316,7 @@ namespace RTC
      *
      * @endif
      */
-    ReturnCode activate() override;
+    DataPortStatus activate() override;
 
     /*!
      * @if jp
@@ -344,7 +343,7 @@ namespace RTC
      *
      * @endif
      */
-    ReturnCode deactivate() override;
+    DataPortStatus deactivate() override;
 
   protected:
     /*!
@@ -427,7 +426,7 @@ namespace RTC
     InPortConsumer* m_consumer;
     ConnectorInfo m_profile;
     ConnectorListeners* m_listeners;
-    ReturnCode m_retcode;
+    DataPortStatus m_retcode;
     std::mutex m_retmutex;
     bool m_active;
   };

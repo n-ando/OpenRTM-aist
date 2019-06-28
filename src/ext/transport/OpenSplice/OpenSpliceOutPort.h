@@ -52,7 +52,6 @@ namespace RTC
         : public InPortConsumer
     {
     public:
-        DATAPORTSTATUS_ENUM
         /*!
          * @if jp
          * @brief コンストラクタ
@@ -148,7 +147,7 @@ namespace RTC
          *
          * @endif
          */
-        ReturnCode put(ByteData& data) override;
+        DataPortStatus put(ByteData& data) override;
 
         /*!
          * @if jp

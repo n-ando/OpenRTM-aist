@@ -53,7 +53,6 @@ namespace RTC
     : public ConnectorBase
   {
   public:
-    DATAPORTSTATUS_ENUM
     /*!
      * @if jp
      * @brief コンストラクタ
@@ -156,7 +155,7 @@ namespace RTC
      *
      * @endif
      */
-    ReturnCode disconnect() override = 0;
+    DataPortStatus disconnect() override = 0;
 
     /*!
      * @if jp
@@ -197,7 +196,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode read(ByteDataStreamBase* data) = 0;
+    virtual DataPortStatus read(ByteDataStreamBase* data) = 0;
 
 
     /*!
@@ -219,7 +218,7 @@ namespace RTC
      * @endif
      */
     template<class DataType>
-    ReturnCode read(DataType& data)
+    DataPortStatus read(DataType& data)
     {
         ::RTC::ByteDataStream<DataType> *cdr = coil::GlobalFactory < ::RTC::ByteDataStream<DataType> >::instance().createObject(m_marshaling_type);
 
@@ -227,10 +226,10 @@ namespace RTC
         if (!cdr)
         {
             RTC_ERROR(("Can not find Marshalizer: %s", m_marshaling_type.c_str()));
-            return PORT_ERROR;
+            return DataPortStatus::PORT_ERROR;
         }
-        ReturnCode ret = read((ByteDataStreamBase*)cdr);
-        if (ret == PORT_OK)
+        DataPortStatus ret = read((ByteDataStreamBase*)cdr);
+        if (ret == DataPortStatus::PORT_OK)
         {
             cdr->isLittleEndian(isLittleEndian());
             cdr->deserialize(data);

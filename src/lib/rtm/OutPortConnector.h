@@ -57,7 +57,6 @@ namespace RTC
     : public ConnectorBase
   {
   public:
-    DATAPORTSTATUS_ENUM
 
     /*!
      * @if jp
@@ -134,7 +133,7 @@ namespace RTC
      *
      * @endif
      */
-    ReturnCode disconnect() override = 0;
+    DataPortStatus disconnect() override = 0;
 
     /*!
      * @if jp
@@ -164,7 +163,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode write(ByteDataStreamBase* data) = 0;
+    virtual DataPortStatus write(ByteDataStreamBase* data) = 0;
 
     /*!
      * @if jp
@@ -214,7 +213,7 @@ namespace RTC
      * @endif
      */
     template <class DataType>
-    ReturnCode write(DataType& data)
+    DataPortStatus write(DataType& data)
     {
 
       if (m_directInPort != nullptr)
@@ -253,7 +252,7 @@ namespace RTC
               RTC_PARANOID(("ON_RECEIVED(InPort,OutPort), "
                             "callback called in direct mode."));
               
-              return PORT_OK;
+              return DataPortStatus::PORT_OK;
             }
         }
       // normal case
@@ -261,13 +260,13 @@ namespace RTC
       if (!cdr)
       {
           RTC_ERROR(("Can not find Marshalizer: %s", m_marshaling_type.c_str()));
-          return PORT_ERROR;
+          return DataPortStatus::PORT_ERROR;
       }
       cdr->isLittleEndian(isLittleEndian());
       cdr->serialize(data);
       RTC_TRACE(("connector endian: %s", isLittleEndian() ? "little":"big"));
       
-      ReturnCode ret = write((ByteDataStreamBase*)cdr);
+      DataPortStatus ret = write((ByteDataStreamBase*)cdr);
       coil::GlobalFactory < ::RTC::ByteDataStream<DataType> >::instance().deleteObject(cdr);
       return ret;
     }

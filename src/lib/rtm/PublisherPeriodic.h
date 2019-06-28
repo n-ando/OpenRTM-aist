@@ -64,7 +64,6 @@ namespace RTC
     : public PublisherBase
   {
   public:
-    DATAPORTSTATUS_ENUM
 
     /*!
      * @if jp
@@ -118,8 +117,8 @@ namespace RTC
      * - measurement.period_count: タスク周期時間計測周期 (数値, 回数)
      *
      * @param property 本Publisherの駆動制御情報を設定したPropertyオブジェクト
-     * @return ReturnCode PORT_OK 正常終了
-     *                    INVALID_ARGS Properties が不正な値を含む
+     * @return DataPortStatus PORT_OK 正常終了
+      *                       INVALID_ARGS Properties が不正な値を含む
      *
      * @else
      * @brief Initialization
@@ -149,11 +148,11 @@ namespace RTC
      *
      * @param property Property objects that includes the control information
      *                 of this Publisher
-     * @return ReturnCode PORT_OK normal return
-     *                    INVALID_ARGS Properties with invalid values.
+     * @return DataPortStatus PORT_OK normal return
+     *                        INVALID_ARGS Properties with invalid values.
      * @endif
      */
-    ReturnCode init(coil::Properties& prop) override;
+    DataPortStatus init(coil::Properties& prop) override;
 
     /*!
      * @if jp
@@ -164,8 +163,8 @@ namespace RTC
      * それ以外の場合は、PORT_OK が返される。
      *
      * @param consumer Consumer へのポインタ
-     * @return ReturnCode PORT_OK 正常終了
-     *                    INVALID_ARGS 引数に不正な値が含まれている
+     * @return DataPortStatus PORT_OK 正常終了
+     *                        INVALID_ARGS 引数に不正な値が含まれている
      *
      * @else
      * @brief Store InPort consumer
@@ -175,12 +174,12 @@ namespace RTC
      * returned.
      *
      * @param consumer A pointer to a consumer object.
-     * @return ReturnCode PORT_OK normal return
-     *                    INVALID_ARGS given argument has invalid value
+     * @return DataPortStatus PORT_OK normal return
+     *                        INVALID_ARGS given argument has invalid value
      *
      * @endif
      */
-    ReturnCode setConsumer(InPortConsumer* consumer) override;
+    DataPortStatus setConsumer(InPortConsumer* consumer) override;
 
     /*!
      * @if jp
@@ -191,8 +190,8 @@ namespace RTC
      * それ以外の場合は、PORT_OK が返される。
      *
      * @param buffer CDR buffer へのポインタ
-     * @return ReturnCode PORT_OK 正常終了
-     *                    INVALID_ARGS 引数に不正な値が含まれている
+     * @return DataPortStatus PORT_OK 正常終了
+     *                        INVALID_ARGS 引数に不正な値が含まれている
      *
      * @else
      * @brief Setting buffer pointer
@@ -202,12 +201,12 @@ namespace RTC
      * returned.
      *
      * @param buffer A pointer to a CDR buffer object.
-     * @return ReturnCode PORT_OK normal return
-     *                    INVALID_ARGS given argument has invalid value
+     * @return DataPortStatus PORT_OK normal return
+     *                        INVALID_ARGS given argument has invalid value
      *
      * @endif
      */
-    ReturnCode setBuffer(CdrBufferBase* buffer) override;
+    DataPortStatus setBuffer(CdrBufferBase* buffer) override;
 
     /*!
      * @if jp
@@ -242,7 +241,7 @@ namespace RTC
      *         INVALID_ARGS Invalid arguments
      * @endif
      */
-    ReturnCode setListener(ConnectorInfo& info,
+    DataPortStatus setListener(ConnectorInfo& info,
                                    ConnectorListeners* listeners) override;
     /*!
      * @if jp
@@ -317,7 +316,7 @@ namespace RTC
      *
      * @endif
      */
-    ReturnCode write(ByteDataStreamBase* data,
+    DataPortStatus write(ByteDataStreamBase* data,
                      std::chrono::nanoseconds timeout) override;
     /*!
      * @if jp
@@ -373,7 +372,7 @@ namespace RTC
      *
      * @endif
      */
-    ReturnCode activate() override;
+    DataPortStatus activate() override;
 
     /*!
      * @if jp
@@ -400,7 +399,7 @@ namespace RTC
      *
      * @endif
      */
-    ReturnCode deactivate() override;
+    DataPortStatus deactivate() override;
 
     /*!
      * @if jp
@@ -447,28 +446,28 @@ namespace RTC
     /*!
      * @brief push "all" policy
      */
-    ReturnCode pushAll();
+    DataPortStatus pushAll();
 
     /*!
      * @brief push "fifo" policy
      */
-    ReturnCode pushFifo();
+    DataPortStatus pushFifo();
 
     /*!
      * @brief push "skip" policy
      */
-    ReturnCode pushSkip();
+    DataPortStatus pushSkip();
 
     /*!
      * @brief push "new" policy
      */
-    ReturnCode pushNew();
+    DataPortStatus pushNew();
 
     /*!
      * @if jp
      * @brief BufferStatus から DataPortStatus への変換
      *
-     * バッファからの戻り値を DataPortStatus::Enum 型へ変換する関数。そ
+     * バッファからの戻り値を DataPortStatus 型へ変換する関数。そ
      * れぞれ、以下のように変換される。変換時にコールバックを呼ぶ場合、
      * コールバク関数も付記する。
      *
@@ -495,7 +494,7 @@ namespace RTC
      * @brief Convertion from BufferStatus to DataPortStatus
      *
      * This function converts return value from the buffer to
-     * DataPortStatus::Enum typed return value. The conversion rule is
+     * DataPortStatus typed return value. The conversion rule is
      * as follows. Callback functions are also shown, if it exists.
      *
      * - BUFFER_OK: PORT_OK
@@ -519,8 +518,8 @@ namespace RTC
      *
      * @endif
      */
-    ReturnCode convertReturn(BufferStatus status,
-                             ByteData& data);
+    DataPortStatus convertReturn(BufferStatus status,
+                                 ByteData& data);
 
 
     /*!
@@ -540,7 +539,7 @@ namespace RTC
      *
      * @endif
      */
-    ReturnCode invokeListener(DataPortStatus::Enum status,
+    DataPortStatus invokeListener(DataPortStatus status,
                               ByteData& data);
 
     /*!
@@ -737,7 +736,7 @@ namespace RTC
     ConnectorInfo m_profile;
     coil::PeriodicTaskBase* m_task;
     ConnectorListeners* m_listeners;
-    ReturnCode m_retcode;
+    DataPortStatus m_retcode;
     std::mutex m_retmutex;
     Policy m_pushPolicy;
     int m_skipn;

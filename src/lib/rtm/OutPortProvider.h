@@ -187,10 +187,8 @@ namespace RTC
    * @endif
    */
   class OutPortProvider
-    : public DataPortStatus
   {
   public:
-    DATAPORTSTATUS_ENUM
     /*!
      * @if jp
      * @brief デストラクタ

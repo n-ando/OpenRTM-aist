@@ -86,13 +86,13 @@ namespace RTC
    * @brief Destructor
    * @endif
    */
-  ConnectorBase::ReturnCode
+  DataPortStatus
   OutPortPullConnector::write(ByteDataStreamBase* data)
   {
 
     if (m_buffer == nullptr)
     {
-        return PRECONDITION_NOT_MET;
+        return DataPortStatus::PRECONDITION_NOT_MET;
     }
 
     if (m_sync_readwrite)
@@ -130,7 +130,7 @@ namespace RTC
           }
     }
 
-    return PORT_OK;
+    return DataPortStatus::PORT_OK;
   }
 
   BufferStatus
@@ -165,7 +165,6 @@ namespace RTC
 
       BufferStatus ret = m_buffer->read(data);
 
-
       if (m_sync_readwrite)
       {
         {
@@ -191,7 +190,7 @@ namespace RTC
    * @brief Disconnect connection
    * @endif
    */
-  ConnectorBase::ReturnCode OutPortPullConnector::disconnect()
+  DataPortStatus OutPortPullConnector::disconnect()
   {
     RTC_TRACE(("disconnect()"));
     // delete provider
@@ -210,7 +209,7 @@ namespace RTC
       }
     m_buffer = nullptr;
 
-    return PORT_OK;
+    return DataPortStatus::PORT_OK;
   }
 
   /*!

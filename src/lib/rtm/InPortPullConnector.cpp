@@ -78,16 +78,16 @@ namespace RTC
    * @brief Destructor
    * @endif
    */
-  ConnectorBase::ReturnCode
+  DataPortStatus
   InPortPullConnector::read(ByteDataStreamBase* data)
   {
     RTC_TRACE(("InPortPullConnector::read()"));
     if (m_consumer == nullptr)
       {
-        return PORT_ERROR;
+        return DataPortStatus::PORT_ERROR;
       }
     ByteData tmp;
-    ConnectorBase::ReturnCode ret = m_consumer->get(tmp);
+    DataPortStatus ret = m_consumer->get(tmp);
     data->writeData(tmp.getBuffer(), tmp.getDataLength());
     return ret;
   }
@@ -99,7 +99,7 @@ namespace RTC
    * @brief Disconnect connection
    * @endif
    */
-  ConnectorBase::ReturnCode InPortPullConnector::disconnect()
+  DataPortStatus InPortPullConnector::disconnect()
   {
     RTC_TRACE(("disconnect()"));
     // delete consumer
@@ -110,7 +110,7 @@ namespace RTC
       }
     m_consumer = nullptr;
 
-    return PORT_OK;
+    return DataPortStatus::PORT_OK;
   }
 
   /*!

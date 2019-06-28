@@ -73,7 +73,7 @@ namespace RTC
    * @brief Write data into the buffer
    * @endif
    */
-  InPortConsumer::ReturnCode InPortCorbaCdrUDPConsumer::put(ByteData& data)
+  DataPortStatus InPortCorbaCdrUDPConsumer::put(ByteData& data)
   {
     RTC_PARANOID(("put()"));
 
@@ -95,13 +95,13 @@ namespace RTC
         // return code conversion
         // (IDL)OpenRTM::DataPort::ReturnCode_t -> DataPortStatus
 		_ptr()->put(tmp);
-        return PORT_OK;
+        return DataPortStatus::PORT_OK;
       }
     catch (...)
       {
-        return CONNECTION_LOST;
+        return DataPortStatus::CONNECTION_LOST;
       }
-    return UNKNOWN_ERROR;
+    return DataPortStatus::UNKNOWN_ERROR;
   }
   
   /*!

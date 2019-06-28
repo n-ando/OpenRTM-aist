@@ -151,7 +151,7 @@ namespace RTC
    * @brief Write data into the buffer
    * @endif
    */
-  InPortConsumer::ReturnCode ROSOutPort::put(ByteData& data)
+  DataPortStatus ROSOutPort::put(ByteData& data)
   {
     
     RTC_PARANOID(("put()"));
@@ -185,7 +185,7 @@ namespace RTC
       }
       
     }
-    return PORT_OK;
+    return DataPortStatus::PORT_OK;
   }
 
   /*!

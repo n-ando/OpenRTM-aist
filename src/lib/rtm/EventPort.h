@@ -197,7 +197,6 @@ namespace RTC
     : public InPortBase
   {
   public:
-    DATAPORTSTATUS_ENUM
     /*!
      * @if jp
      *

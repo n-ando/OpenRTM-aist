@@ -58,7 +58,6 @@ namespace RTC
       public CorbaConsumer< ::OpenRTM::InPortCdr >
   {
   public:
-    DATAPORTSTATUS_ENUM
     /*!
      * @if jp
      * @brief コンストラクタ
@@ -154,7 +153,7 @@ namespace RTC
      *
      * @endif
      */
-	ReturnCode put(ByteData& data) override;
+	DataPortStatus put(ByteData& data) override;
 
     /*!
      * @if jp
@@ -293,7 +292,7 @@ namespace RTC
      * @brief Return codes conversion
      * @endif
      */
-    InPortConsumer::ReturnCode convertReturnCode(OpenRTM::PortStatus ret);
+    DataPortStatus convertReturnCode(OpenRTM::PortStatus ret);
 
     mutable Logger rtclog;
     coil::Properties m_properties;
