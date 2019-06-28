@@ -419,7 +419,7 @@ namespace RTC
             m_ecInterval = tmp;
           }
         coil::TimeValue tm;
-        tm = m_rtcInterval;
+        tm = m_ecInterval;
         m_ecHblistenerid = m_timer.
           registerListenerObj(this, &ComponentObserverConsumer::ecHeartbeat,
                               tm);
