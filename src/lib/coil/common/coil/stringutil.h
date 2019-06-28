@@ -670,23 +670,24 @@ namespace coil
 
   /*!
    * @if jp
-   * @brief 与えられた文字列リストから重複を削除
+   * @brief 与えられた文字列をboolに変換
    *
-   * 引数で与えられた文字列リストから重複を削除したリストを作成する。
+   * 引数で与えられた文字列をboolに変換する。
    *
-   * @param sv 確認元文字列リスト
+   * @param val 変換先文字列
+   * @param str 変換元文字列
    *
-   * @return 重複削除処理結果リスト
+   * @return true: 成功, false: 失敗
    *
    * @else
-   * @brief Eliminate duplication from the given string list
+   * @brief Convert the given string to bool.
    *
-   * Create a list of eliminating duplication from the string list
-   * given by the argument.
+   * Convert string given by the argument to bool.
    *
-   * @param sv The string list for confirmation source
+   * @param val String of conversion destination
+   * @param str String of conversion source
    *
-   * @return Eliminating duplication result list
+   * @return true: successful, false: failed
    *
    * @endif
    */
