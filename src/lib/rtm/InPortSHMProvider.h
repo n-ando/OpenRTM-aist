@@ -193,49 +193,49 @@ namespace RTC
     inline void onBufferWrite(ByteData& data)
     {
       m_listeners->
-        connectorData_[ON_BUFFER_WRITE].notify(m_profile, data, PortType::InPortType);
+        connectorData_[ON_BUFFER_WRITE].notify_in(m_profile, data);
     }
 
     inline void onBufferFull(ByteData& data)
     {
       m_listeners->
-        connectorData_[ON_BUFFER_FULL].notify(m_profile, data, PortType::InPortType);
+        connectorData_[ON_BUFFER_FULL].notify_in(m_profile, data);
     }
 
     inline void onBufferWriteTimeout(ByteData& data)
     {
       m_listeners->
-        connectorData_[ON_BUFFER_WRITE_TIMEOUT].notify(m_profile, data, PortType::InPortType);
+        connectorData_[ON_BUFFER_WRITE_TIMEOUT].notify_in(m_profile, data);
     }
 
     inline void onBufferWriteOverwrite(ByteData& data)
     {
       m_listeners->
-        connectorData_[ON_BUFFER_OVERWRITE].notify(m_profile, data, PortType::InPortType);
+        connectorData_[ON_BUFFER_OVERWRITE].notify_in(m_profile, data);
     }
 
     inline void onReceived(ByteData& data)
     {
       m_listeners->
-        connectorData_[ON_RECEIVED].notify(m_profile, data, PortType::InPortType);
+        connectorData_[ON_RECEIVED].notify_in(m_profile, data);
     }
 
     inline void onReceiverFull(ByteData& data)
     {
       m_listeners->
-        connectorData_[ON_RECEIVER_FULL].notify(m_profile, data, PortType::InPortType);
+        connectorData_[ON_RECEIVER_FULL].notify_in(m_profile, data);
     }
 
     inline void onReceiverTimeout(ByteData& data)
     {
       m_listeners->
-        connectorData_[ON_RECEIVER_TIMEOUT].notify(m_profile, data, PortType::InPortType);
+        connectorData_[ON_RECEIVER_TIMEOUT].notify_in(m_profile, data);
     }
 
     inline void onReceiverError(ByteData& data)
     {
       m_listeners->
-        connectorData_[ON_RECEIVER_ERROR].notify(m_profile, data, PortType::InPortType);
+        connectorData_[ON_RECEIVER_ERROR].notify_in(m_profile, data);
     }
 
   private:

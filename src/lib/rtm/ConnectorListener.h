@@ -34,28 +34,6 @@ namespace RTC
 {
   class ConnectorInfo;
 
-  /*!
-   * @if jp
-   * @class PortType class
-   * @brief PortType クラス
-   *
-   * ポートの種類を定義(OutPortType、InPortTypeのみ)
-   *
-   * @else
-   * @class PortType クラス
-   * @brief PortType class
-   *
-   * @endif
-   */
-  class PortType
-  {
-  public:
-      enum Enum
-      {
-          OutPortType = 0,
-          InPortType = 1
-      };
-  };
 
   /*!
    * @if jp
@@ -502,7 +480,7 @@ namespace RTC
      * @endif
      */
     virtual ReturnCode operator()(ConnectorInfo& info,
-                            ByteData& data, PortType::Enum porttype) = 0;
+                            ByteData& data, std::string& marshalingtype) = 0;
   };
 
   /*!
@@ -555,7 +533,7 @@ namespace RTC
      *
      * @param info ConnectorInfo
      * @param cdrdata cdrMemoryStream型のデータ
-     * @param porttype ポートの種類
+     * @param marshalingtype シリアライザの種類
      *
      * @else
      *
@@ -566,32 +544,20 @@ namespace RTC
      *
      * @param info ConnectorInfo
      * @param cdrdata Data of cdrMemoryStream type
-     * @param porttype 
+     * @param marshalingtype 
      *
      * @endif
      */
     ReturnCode operator()(ConnectorInfo& info,
-                                  ByteData& cdrdata, PortType::Enum porttype) override
+                                  ByteData& cdrdata, std::string& marshalingtype) override
     {
       DataType data;
-      std::string marshaling_type = info.properties.getProperty("marshaling_type", "corba");
-      if (porttype == PortType::OutPortType)
-      {
-          marshaling_type = info.properties.getProperty("out.marshaling_type", marshaling_type);
-      }
-      else if (porttype == PortType::InPortType)
-      {
-          marshaling_type = info.properties.getProperty("in.marshaling_type", marshaling_type);
-      }
-
-      coil::eraseBothEndsBlank(marshaling_type);
       
-      ByteDataStream<DataType> *cdr = coil::GlobalFactory < ::RTC::ByteDataStream<DataType> >::instance().createObject(marshaling_type);
+      ByteDataStream<DataType> *cdr = coil::GlobalFactory < ::RTC::ByteDataStream<DataType> >::instance().createObject(marshalingtype);
       
       
       if (!cdr)
       {
-          
           return NO_CHANGE;
       }
       
@@ -1094,8 +1060,69 @@ namespace RTC
      * @endif
      */
     ReturnCode notify(ConnectorInfo& info,
-                ByteData& cdrdata, PortType::Enum porttype);
+                ByteData& cdrdata, std::string& marshalingtype);
 
+    /*!
+     * @if jp
+     *
+     * @brief リスナーへ通知する(データ型指定版、InPort側)
+     * 登録されているリスナのコールバックメソッドを呼び出す。
+     * InPortとOutPortでシリアライザの種類が違う場合があるため、
+     * InPort側ではnotify_in関数を使用する必要がある。
+     *
+     *
+     * @param info ConnectorInfo
+     * @param typeddata データ（データ型指定あり）
+     * @else
+     *
+     * @brief Notify listeners. (Typed data version)
+     *
+     *
+     * @param info ConnectorInfo
+     * @param typeddata Data 
+     * @endif
+     */
+    template <class DataType>
+    ReturnCode notify_in(ConnectorInfo& info, DataType& typeddata)
+    {
+        std::string marshaling_type = info.properties.getProperty("marshaling_type", "corba");
+        marshaling_type = info.properties.getProperty("in.marshaling_type", marshaling_type);
+
+        coil::eraseBothEndsBlank(marshaling_type);
+
+        return notify(info, typeddata, marshaling_type);
+    }
+
+    /*!
+     * @if jp
+     *
+     * @brief リスナーへ通知する(データ型指定版、OutPort側)
+     * 登録されているリスナのコールバックメソッドを呼び出す。
+     * InPortとOutPortでシリアライザの種類が違う場合があるため、
+     * InPort側ではnotify_out関数を使用する必要がある。
+     *
+     *
+     * @param info ConnectorInfo
+     * @param typeddata データ（データ型指定あり）
+     * @else
+     *
+     * @brief Notify listeners. (Typed data version)
+     *
+     *
+     * @param info ConnectorInfo
+     * @param typeddata Data
+     * @endif
+     */
+    template <class DataType>
+    ReturnCode notify_out(ConnectorInfo& info, DataType& typeddata)
+    {
+        std::string marshaling_type = info.properties.getProperty("marshaling_type", "corba");
+        marshaling_type = info.properties.getProperty("out.marshaling_type", marshaling_type);
+
+        coil::eraseBothEndsBlank(marshaling_type);
+
+        return notify(info, typeddata, marshaling_type);
+    }
     /*!
      * @if jp
      *
@@ -1106,7 +1133,7 @@ namespace RTC
      *
      * @param info ConnectorInfo
      * @param typeddata データ（データ型指定あり）
-     * @param porttype ポートの種類
+     * @param marshalingtype シリアライザの種類
      * @else
      *
      * @brief Notify listeners. (Typed data version)
@@ -1116,11 +1143,11 @@ namespace RTC
      *
      * @param info ConnectorInfo
      * @param typeddata Data
-     * @param porttype 
+     * @param marshalingtype 
      * @endif
      */
     template <class DataType>
-    ReturnCode notify(ConnectorInfo& info, DataType& typeddata, PortType::Enum porttype)
+    ReturnCode notify(ConnectorInfo& info, DataType& typeddata, std::string& marshalingtype)
     {
       std::lock_guard<std::mutex> guard(m_mutex);
       ReturnCode ret(NO_CHANGE);
@@ -1144,19 +1171,9 @@ namespace RTC
             }
           else
             {
-              std::string marshaling_type = info.properties.getProperty("marshaling_type", "corba");
-              if (porttype == PortType::OutPortType)
-              {
-                  marshaling_type = info.properties.getProperty("out.marshaling_type", marshaling_type);
-              }
-              else if (porttype == PortType::InPortType)
-              {
-                  marshaling_type = info.properties.getProperty("in.marshaling_type", marshaling_type);
-              }
               
-              coil::normalize(marshaling_type);
 
-              ByteDataStream<DataType> *cdr = coil::GlobalFactory < ::RTC::ByteDataStream<DataType> >::instance().createObject(marshaling_type);
+              ByteDataStream<DataType> *cdr = coil::GlobalFactory < ::RTC::ByteDataStream<DataType> >::instance().createObject(marshalingtype);
 
               
               if (endian[0] == "little")
@@ -1169,7 +1186,7 @@ namespace RTC
               }
               cdr->serialize(typeddata);
               ByteData tmp = *cdr;
-              ret = ret | listener.first->operator()(info, tmp, porttype);
+              ret = ret | listener.first->operator()(info, tmp, marshalingtype);
               coil::GlobalFactory < ::RTC::ByteDataStream<DataType> >::instance().deleteObject(cdr);
             }
         }

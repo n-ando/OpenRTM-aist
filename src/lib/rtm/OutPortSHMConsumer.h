@@ -236,7 +236,7 @@ namespace RTC
     inline void onBufferWrite(ByteData& data)
     {
       m_listeners->
-        connectorData_[ON_BUFFER_WRITE].notify(m_profile, data, PortType::InPortType);
+        connectorData_[ON_BUFFER_WRITE].notify_in(m_profile, data);
     }
 
     /*!
@@ -251,7 +251,7 @@ namespace RTC
     inline void onBufferFull(ByteData& data)
     {
       m_listeners->
-        connectorData_[ON_BUFFER_FULL].notify(m_profile, data, PortType::InPortType);
+        connectorData_[ON_BUFFER_FULL].notify_in(m_profile, data);
     }
 
     /*!
@@ -266,7 +266,7 @@ namespace RTC
     inline void onReceived(ByteData& data)
     {
       m_listeners->
-        connectorData_[ON_RECEIVED].notify(m_profile, data, PortType::InPortType);
+        connectorData_[ON_RECEIVED].notify_in(m_profile, data);
     }
 
     /*!
@@ -281,7 +281,7 @@ namespace RTC
     inline void onReceiverFull(ByteData& data)
     {
       m_listeners->
-        connectorData_[ON_RECEIVER_FULL].notify(m_profile, data, PortType::InPortType);
+        connectorData_[ON_RECEIVER_FULL].notify_in(m_profile, data);
     }
 
     /*!
