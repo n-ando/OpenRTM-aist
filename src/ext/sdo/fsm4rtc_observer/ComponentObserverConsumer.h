@@ -809,10 +809,10 @@ namespace RTC
     ConfigAction m_configMsg;
     FSMAction m_fsmaction;
 
-    coil::TimeValue m_rtcInterval;
+    std::chrono::nanoseconds m_rtcInterval;
     bool m_rtcHeartbeat;
     ListenerId m_rtcHblistenerid;
-    coil::TimeValue m_ecInterval;
+    std::chrono::nanoseconds m_ecInterval;
     bool m_ecHeartbeat;
     ListenerId m_ecHblistenerid;
 

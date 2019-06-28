@@ -19,7 +19,6 @@
 #ifndef Timer_h
 #define Timer_h
 
-#include <coil/TimeValue.h>
 #include <coil/Listener.h>
 #include <mutex>
 #include <coil/Task.h>
@@ -70,7 +69,7 @@ namespace coil
      *
      * @endif
      */
-    explicit Timer(TimeValue& interval);
+    explicit Timer(std::chrono::nanoseconds interval);
 
     /*!
      * @if jp
@@ -219,7 +218,7 @@ namespace coil
      *
      * @endif
      */
-    ListenerId registerListener(ListenerBase* listener, TimeValue tm);
+    ListenerId registerListener(ListenerBase* listener, std::chrono::nanoseconds tm);
 
     /*!
      * @if jp
@@ -251,7 +250,7 @@ namespace coil
     template <class ListenerClass>
     ListenerId registerListenerObj(ListenerClass* obj,
                    void (ListenerClass::*cbf)(),
-                   TimeValue tm)
+                   std::chrono::nanoseconds tm)
     {
       return registerListener(new ListenerObject<ListenerClass>(obj, cbf), tm);
     }
@@ -280,7 +279,7 @@ namespace coil
      *
      * @endif
      */
-    ListenerId registerListenerFunc(void (*cbf)(), TimeValue tm)
+    ListenerId registerListenerFunc(void (*cbf)(), std::chrono::nanoseconds tm)
     {
       return registerListener(new ListenerFunc(cbf), tm);
     }
@@ -311,20 +310,20 @@ namespace coil
     bool unregisterListener(ListenerId id);
 
   private:
-    TimeValue m_interval;
+    std::chrono::nanoseconds m_interval;
 
     std::mutex m_runningMutex;
     bool m_running;
 
     struct Task
     {
-      Task(ListenerBase* l, TimeValue p)
+      Task(ListenerBase* l, std::chrono::nanoseconds p)
         : listener(l), period(p), remains(p)
       {
       }
       ListenerBase* listener;
-      TimeValue period;
-      TimeValue remains;
+      std::chrono::nanoseconds period;
+      std::chrono::nanoseconds remains;
     };
 
     std::vector<Task> m_tasks;
