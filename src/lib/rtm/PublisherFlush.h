@@ -361,7 +361,7 @@ namespace RTC
     inline void onSend(ByteData& data)
     {
       m_listeners->
-        connectorData_[ON_SEND].notify_out(m_profile, data);
+        connectorData_[ON_SEND].notifyOut(m_profile, data);
     }
 
     /*!
@@ -376,7 +376,7 @@ namespace RTC
     inline void onReceived(ByteData& data)
     {
       m_listeners->
-        connectorData_[ON_RECEIVED].notify_out(m_profile, data);
+        connectorData_[ON_RECEIVED].notifyOut(m_profile, data);
     }
 
     /*!
@@ -391,7 +391,7 @@ namespace RTC
     inline void onReceiverFull(ByteData& data)
     {
       m_listeners->
-        connectorData_[ON_RECEIVER_FULL].notify_out(m_profile, data);
+        connectorData_[ON_RECEIVER_FULL].notifyOut(m_profile, data);
     }
 
     /*!
@@ -406,7 +406,7 @@ namespace RTC
     inline void onReceiverTimeout(ByteData& data)
     {
       m_listeners->
-        connectorData_[ON_RECEIVER_TIMEOUT].notify_out(m_profile, data);
+        connectorData_[ON_RECEIVER_TIMEOUT].notifyOut(m_profile, data);
     }
 
     /*!
@@ -421,7 +421,7 @@ namespace RTC
     inline void onReceiverError(ByteData& data)
     {
       m_listeners->
-        connectorData_[ON_RECEIVER_ERROR].notify_out(m_profile, data);
+        connectorData_[ON_RECEIVER_ERROR].notifyOut(m_profile, data);
     }
 
   private:

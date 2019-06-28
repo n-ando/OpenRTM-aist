@@ -1068,7 +1068,7 @@ namespace RTC
      * @brief リスナーへ通知する(データ型指定版、InPort側)
      * 登録されているリスナのコールバックメソッドを呼び出す。
      * InPortとOutPortでシリアライザの種類が違う場合があるため、
-     * InPort側ではnotify_in関数を使用する必要がある。
+     * InPort側ではnotifyIn関数を使用する必要がある。
      *
      *
      * @param info ConnectorInfo
@@ -1083,7 +1083,7 @@ namespace RTC
      * @endif
      */
     template <class DataType>
-    ReturnCode notify_in(ConnectorInfo& info, DataType& typeddata)
+    ReturnCode notifyIn(ConnectorInfo& info, DataType& typeddata)
     {
         std::string marshaling_type = info.properties.getProperty("marshaling_type", "corba");
         marshaling_type = info.properties.getProperty("in.marshaling_type", marshaling_type);
@@ -1099,7 +1099,7 @@ namespace RTC
      * @brief リスナーへ通知する(データ型指定版、OutPort側)
      * 登録されているリスナのコールバックメソッドを呼び出す。
      * InPortとOutPortでシリアライザの種類が違う場合があるため、
-     * InPort側ではnotify_out関数を使用する必要がある。
+     * InPort側ではnotifyOut関数を使用する必要がある。
      *
      *
      * @param info ConnectorInfo
@@ -1114,7 +1114,7 @@ namespace RTC
      * @endif
      */
     template <class DataType>
-    ReturnCode notify_out(ConnectorInfo& info, DataType& typeddata)
+    ReturnCode notifyOut(ConnectorInfo& info, DataType& typeddata)
     {
         std::string marshaling_type = info.properties.getProperty("marshaling_type", "corba");
         marshaling_type = info.properties.getProperty("out.marshaling_type", marshaling_type);
