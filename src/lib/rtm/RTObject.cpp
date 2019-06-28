@@ -2695,7 +2695,7 @@ namespace RTC
   ReturnCode_t RTObject_impl::
   getInheritedECOptions(coil::Properties& default_opts)
   {
-    const char* inherited_opts[] =
+    static const char* inherited_opts[] =
       {
         "sync_transition",
         "sync_activation",
@@ -2968,7 +2968,7 @@ namespace RTC
           }
 
         default_opts << *prop;
-        const char* inherited_opts[] =
+        static const char* inherited_opts[] =
           {
             "sync_transition",
             "sync_activation",

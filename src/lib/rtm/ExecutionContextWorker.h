@@ -421,7 +421,7 @@ namespace RTC_impl
     RTC::LifeCycleState getComponentState(RTC::LightweightRTObject_ptr comp);
     const char* getStateString(RTC::LifeCycleState state)
     {
-      const char* st[] = {
+      static const char* st[] = {
         "CREATED_STATE",
         "INACTIVE_STATE",
         "ACTIVE_STATE",
