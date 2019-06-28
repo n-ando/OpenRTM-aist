@@ -480,7 +480,7 @@ namespace RTC
      * @endif
      */
     virtual ReturnCode operator()(ConnectorInfo& info,
-                            ByteData& data, std::string& marshalingtype) = 0;
+                            ByteData& data, const std::string& marshalingtype) = 0;
   };
 
   /*!
@@ -549,7 +549,7 @@ namespace RTC
      * @endif
      */
     ReturnCode operator()(ConnectorInfo& info,
-                                  ByteData& cdrdata, std::string& marshalingtype) override
+                                  ByteData& cdrdata, const std::string& marshalingtype) override
     {
       DataType data;
       
@@ -1060,7 +1060,7 @@ namespace RTC
      * @endif
      */
     ReturnCode notify(ConnectorInfo& info,
-                ByteData& cdrdata, std::string& marshalingtype);
+                ByteData& cdrdata, const std::string& marshalingtype);
 
     /*!
      * @if jp
@@ -1147,7 +1147,7 @@ namespace RTC
      * @endif
      */
     template <class DataType>
-    ReturnCode notify(ConnectorInfo& info, DataType& typeddata, std::string& marshalingtype)
+    ReturnCode notify(ConnectorInfo& info, DataType& typeddata, const std::string& marshalingtype)
     {
       std::lock_guard<std::mutex> guard(m_mutex);
       ReturnCode ret(NO_CHANGE);

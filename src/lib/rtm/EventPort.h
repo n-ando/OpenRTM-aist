@@ -57,7 +57,7 @@ namespace RTC
     ~EventBinder0() override {}
 
     ReturnCode operator()(ConnectorInfo& info,
-                                  ByteData&  /*data*/, std::string& /*marshalingtype*/) override
+                                  ByteData&  /*data*/, const std::string& /*marshalingtype*/) override
     {
       if (info.properties["fsm_event_name"] == m_eventName ||
           info.name == m_eventName)
