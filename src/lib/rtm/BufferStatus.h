@@ -117,7 +117,7 @@ namespace RTC
      */
     static const char* toString(Enum status)
     {
-      const char* str[] = {
+      static const char* str[] = {
         "BUFFER_OK",
         "BUFFER_ERROR",
         "BUFFER_FULL",

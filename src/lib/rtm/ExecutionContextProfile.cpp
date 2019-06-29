@@ -175,7 +175,7 @@ namespace RTC_impl
   const char*
   ExecutionContextProfile::getKindString(RTC::ExecutionKind kind) const
   {
-    const char* kinds[] = {"PERIODIC", "EVENT_DRIVEN", "OTHER"};
+    static const char* kinds[] = {"PERIODIC", "EVENT_DRIVEN", "OTHER"};
     if (kind < RTC::PERIODIC || kind > RTC::OTHER)
       {
         return "";

@@ -769,7 +769,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     coil::Properties prop;
     prop = factory->profile();
 
-    const char* inherit_prop[] = {
+    static const char* inherit_prop[] = {
       "config.version",
       "openrtm.name",
       "openrtm.version",

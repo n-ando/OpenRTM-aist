@@ -183,7 +183,7 @@ namespace RTC
      */
     static const char* toString(DataPortStatus::Enum status)
     {
-      const char* str[] = {
+      static const char* str[] = {
         "PORT_OK",
         "PORT_ERROR",
         "BUFFER_ERROR",
