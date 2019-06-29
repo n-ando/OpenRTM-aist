@@ -339,16 +339,16 @@ namespace RTC
                     "callback called in direct mode."));
             }
             outport->read(data);
-            m_outPortListeners->connectorData_[ON_BUFFER_READ].notify(m_profile, data, PortType::Enum::InPortType);
+            m_outPortListeners->connectorData_[ON_BUFFER_READ].notifyIn(m_profile, data);
             RTC_TRACE(("ON_BUFFER_READ(OutPort), "));
             RTC_TRACE(("callback called in direct mode."));
-            m_outPortListeners->connectorData_[ON_SEND].notify(m_profile, data, PortType::Enum::InPortType);
+            m_outPortListeners->connectorData_[ON_SEND].notifyIn(m_profile, data);
             RTC_TRACE(("ON_SEND(OutPort), "));
             RTC_TRACE(("callback called in direct mode."));
-            m_listeners.connectorData_[ON_RECEIVED].notify(m_profile, data, PortType::Enum::InPortType);
+            m_listeners.connectorData_[ON_RECEIVED].notifyIn(m_profile, data);
             RTC_TRACE(("ON_RECEIVED(InPort), "));
             RTC_TRACE(("callback called in direct mode."));
-            m_listeners.connectorData_[ON_SEND].notify(m_profile, data, PortType::Enum::InPortType);
+            m_listeners.connectorData_[ON_SEND].notifyIn(m_profile, data);
             RTC_TRACE(("ON_BUFFER_WRITE(InPort), "));
             RTC_TRACE(("callback called in direct mode."));
 

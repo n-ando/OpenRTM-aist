@@ -277,7 +277,7 @@ namespace RTC
     inline void onBufferRead(ByteData& data)
     {
       m_listeners.
-        connectorData_[ON_BUFFER_READ].notify(m_profile, data, PortType::InPortType);
+        connectorData_[ON_BUFFER_READ].notifyIn(m_profile, data);
 
     }
     void onBufferEmpty(ByteData&  /*data*/)
