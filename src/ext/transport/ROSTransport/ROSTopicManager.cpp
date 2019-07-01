@@ -19,7 +19,7 @@
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
 #include <WinSock2.h>
 #endif
-#include "RosTopicManager.h"
+#include "ROSTopicManager.h"
 #include <ros/xmlrpc_manager.h>
 #include <ros/network.h>
 #include <xmlrpcpp/XmlRpcSocket.h>

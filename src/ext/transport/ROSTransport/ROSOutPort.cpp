@@ -23,7 +23,7 @@
 #include <ros/xmlrpc_manager.h>
 #include <coil/UUID.h>
 #include "ROSOutPort.h"
-#include "RosTopicManager.h"
+#include "ROSTopicManager.h"
 
 
 

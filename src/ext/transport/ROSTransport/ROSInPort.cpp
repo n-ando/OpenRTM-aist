@@ -28,7 +28,7 @@
 #include <ros/poll_manager.h>
 #include <ros/connection_manager.h>
 #include <coil/UUID.h>
-#include "RosTopicManager.h"
+#include "ROSTopicManager.h"
 
 
 
