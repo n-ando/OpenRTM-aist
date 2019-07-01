@@ -72,7 +72,7 @@ cache:
 
 only_commits:
   files:
-    - appveyor.yml
+    - .appveyor.yml
     - CMakeLists.txt
     - etc/
     - examples/
