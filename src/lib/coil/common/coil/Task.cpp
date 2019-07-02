@@ -29,7 +29,6 @@ namespace coil
    * @endif
    */
   Task::Task()
-    : m_count(0)
   {
   }
 
@@ -42,7 +41,6 @@ namespace coil
    */
   Task::~Task()
   {
-    m_count = 0;
   }
 
   /*!
@@ -71,18 +69,6 @@ namespace coil
 
   /*!
    * @if jp
-   * @brief スレッドを実行する
-   * @else
-   * @brief Execute thread
-   * @endif
-   */
-  int Task::svc()
-  {
-    return 0;
-  }
-
-  /*!
-   * @if jp
    * @brief スレッドを生成する
    * @else
    * @brief Create a thread
@@ -90,13 +76,12 @@ namespace coil
    */
   void Task::activate()
   {
-    if (m_count == 0)
+    if (!m_thread.joinable())
       {
         m_thread = std::thread([this] {
                                    svc();
                                    finalize();
                                });
-        ++m_count;
       };
   }
 
@@ -109,9 +94,9 @@ namespace coil
    */
   int Task::wait()
   {
-    if (m_count > 0)
+      if (m_thread.joinable())
       {
-         m_thread.join();
+        m_thread.join();
       }
     return 0;
   }
@@ -142,18 +127,6 @@ namespace coil
 
   /*!
    * @if jp
-   * @brief タスク数リセット
-   * @else
-   * @brief Reset of task count
-   * @endif
-   */
-  void Task::reset()
-  {
-    m_count = 0;
-  }
-
-  /*!
-   * @if jp
    * @brief タスク実行を終了する
    * @else
    * @brief Finalizing the task
@@ -161,7 +134,6 @@ namespace coil
    */
   void Task::finalize()
   {
-    reset();
   }
 
 } // namespace coil
