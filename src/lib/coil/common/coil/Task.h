@@ -130,7 +130,7 @@ namespace coil
      *
      * @endif
      */
-    virtual int svc();
+    virtual int svc() = 0;
 
     /*!
      * @if jp
@@ -203,23 +203,6 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief タスク数リセット
-     *
-     * タスク数リセット
-     *
-     * @else
-     *
-     * @brief Reset of task count
-     *
-     * Reset of task count
-     *
-     * @endif
-     */
-    virtual void reset();
-
-    /*!
-     * @if jp
-     *
      * @brief タスク実行を終了する
      *
      * タスク実行を終了する
@@ -235,7 +218,6 @@ namespace coil
     virtual void finalize();
 
   private:
-    int m_count;
     std::thread m_thread;
   };
 } // namespace coil
