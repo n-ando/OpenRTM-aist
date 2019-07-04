@@ -29,17 +29,9 @@
 #include <cstdlib>
 #include <chrono>
 
-#if defined (_MSC_VER) && (_MSC_VER <=1500)  // VC2008(VC9.0) or before
-#elif defined(VXWORKS_66) && !defined(__RTP__)
+#if defined(VXWORKS_66) && !defined(__RTP__)
 #else
 #include <cstdint>
-#endif
-// Cygwin's gcc does not provide wstring type
-#if defined(Cygwin) && ( __GNUC__ < 4 )
-namespace std
-{
-  typedef basic_string<wchar_t> wstring;
-} // namespace std
 #endif
 
 namespace coil
