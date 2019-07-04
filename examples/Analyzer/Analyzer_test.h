@@ -240,7 +240,7 @@ class Analyzer_test
    * - DefaultValue: 0.01
    * - Unit: s
    */
-  double m_sleep_time;
+  std::chrono::microseconds m_sleep_time;
 
   // </rtc-template>
 

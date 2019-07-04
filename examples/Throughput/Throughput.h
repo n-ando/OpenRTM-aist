@@ -319,7 +319,7 @@ class Throughput
   * - Name: sleep_time sleep_time
   * - DefaultValue: 0.01
   */
-  double m_sleep_time;
+  std::chrono::microseconds m_sleep_time;
   /*!
    * 通信データ量を一定値(const)にするか、徐々に増加する値(increase)に
    * するかの設定
