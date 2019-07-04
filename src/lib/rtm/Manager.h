@@ -2410,7 +2410,7 @@ namespace RTC
        *
        * @endif
        */
-      explicit Terminator(Manager* mgr, double waittime = 0)
+      explicit Terminator(Manager* mgr, std::chrono::nanoseconds waittime = std::chrono::seconds::zero())
                 : m_manager(mgr), m_waittime(waittime) {}
 
       /*!
@@ -2477,12 +2477,12 @@ namespace RTC
        */
       int svc() override
       {
-        coil::sleep(m_waittime);
+        std::this_thread::sleep_for(m_waittime);
         Manager::instance().shutdown();
         return 0;
       }
       Manager* m_manager;
-      coil::TimeValue m_waittime;
+      std::chrono::nanoseconds m_waittime;
     };
 
     /*!

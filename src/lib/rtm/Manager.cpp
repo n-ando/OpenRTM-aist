@@ -1253,14 +1253,11 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     m_module = new ModuleManager(m_config);
 
     // initialize Terminator
-    double waittime(0.5);
-    if (m_config.findNode("manager.termination_waittime") != nullptr)
+    std::chrono::milliseconds waittime;
+    if ((m_config.findNode("manager.termination_waittime") == nullptr)
+         || !coil::stringTo(waittime, m_config["manager.termination_waittime"].c_str()))
       {
-	const char* s = m_config["manager.termination_waittime"].c_str();
-	if (!coil::stringTo(waittime, s))
-	  {
-	    waittime = 0.5;
-	  }
+          waittime = std::chrono::milliseconds(500);
       }
     m_terminator = new Terminator(this, waittime);
     {
