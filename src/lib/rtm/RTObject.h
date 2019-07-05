@@ -46,10 +46,6 @@ namespace SDOPackage
   class Configuration_impl;
 } // namespace SDOPackage
 
-#ifdef WIN32
-#pragma warning( disable : 4290 )
-#endif
-
 namespace RTC
 {
   class Manager;
@@ -5538,9 +5534,5 @@ namespace RTC
     };  // struct deactivate_comps
   };  // class RTObject_impl
 } // namespace RTC
-
-#ifdef WIN32
-#pragma warning( default : 4290 )
-#endif
 
 #endif  // RTC_RTOBJECT

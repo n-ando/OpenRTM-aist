@@ -24,10 +24,6 @@
 
 
 
-#ifdef WIN32
-#pragma warning( disable : 4290 )
-#endif
-
 namespace RTC_exp
 {
   /*!
@@ -180,10 +176,6 @@ namespace RTC_exp
 
   };  // class MultilayerCompositeEC
 } // namespace RTC_exp
-
-#ifdef WIN32
-#pragma warning( default : 4290 )
-#endif
 
 
 extern "C"

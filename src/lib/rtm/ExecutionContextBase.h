@@ -26,10 +26,6 @@
 #include <rtm/ExecutionContextProfile.h>
 #include <rtm/ExecutionContextWorker.h>
 
-#ifdef WIN32
-#pragma warning( disable : 4290 )
-#endif
-
 #define DEFAULT_EXECUTION_RATE 1000
 
 namespace coil
@@ -1206,7 +1202,6 @@ namespace RTC
 
 #ifdef WIN32
 EXTERN template class DLL_PLUGIN coil::GlobalFactory<RTC::ExecutionContextBase>;
-#pragma warning( default : 4290 )
 #elif defined(__GNUC__)
 EXTERN template class coil::Singleton<coil::GlobalFactory<RTC::ExecutionContextBase> >;
 #endif

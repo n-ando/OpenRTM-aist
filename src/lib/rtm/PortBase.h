@@ -32,10 +32,6 @@
 #include <iostream>
 #include <rtm/DirectPortBase.h>
 
-#ifdef WIN32
-#pragma warning( disable : 4290 )
-#endif
-
 namespace RTC
 {
   class ConnectionCallback;
@@ -2290,9 +2286,5 @@ namespace RTC
     };  // struct find_interface
   };  // class PortBase
 } // namespace RTC
-
-#ifdef WIN32
-#pragma warning( default : 4290 )
-#endif
 
 #endif  // RTC_PORTBASE_H

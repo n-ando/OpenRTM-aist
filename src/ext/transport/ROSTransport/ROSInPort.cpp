@@ -32,10 +32,6 @@
 
 
 
-#ifdef WIN32
-#pragma warning( disable : 4290 )
-#endif
-
 
 
 namespace RTC

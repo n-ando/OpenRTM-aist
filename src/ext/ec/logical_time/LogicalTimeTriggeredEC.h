@@ -27,10 +27,6 @@
 #include <rtm/ExecutionContextBase.h>
 #include "LogicalTimeTriggeredECSkel.h"
 
-#ifdef WIN32
-#pragma warning( disable : 4290 )
-#endif
-
 namespace coil
 {
   class IClock;
@@ -681,10 +677,6 @@ namespace RTC
 
   };  // class LogicalTimeTriggeredEC
 } // namespace RTC
-
-#ifdef WIN32
-#pragma warning( default : 4290 )
-#endif
 
 
 extern "C"

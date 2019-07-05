@@ -50,10 +50,6 @@
  * @endif
  */
 
-#ifdef WIN32
-#pragma warning( disable : 4290 )
-#endif
-
 namespace SDOPackage
 {
   /*!
@@ -1149,9 +1145,5 @@ namespace SDOPackage
     };
   };  // class Configuration_impl
 } // namespace SDOPackage
-
-#ifdef WIN32
-#pragma warning( default : 4290 )
-#endif
 
 #endif  // RTC_SDOCONFIGURATION_H

@@ -29,10 +29,6 @@
 #include <iostream>
 
 #define NUM_OF_LIFECYCLESTATE 4
-
-#ifdef WIN32
-#pragma warning( disable : 4290 )
-#endif
 namespace RTC
 {
   class RTObject_impl;
@@ -119,9 +115,5 @@ namespace RTC_impl
     coil::TimeMeasure m_refMeasure;
   };
 } // namespace RTC_impl
-
-#ifdef WIN32
-#pragma warning( default : 4290 )
-#endif
 
 #endif  // RTC_RTOBJECTSTATEMACHINE_H

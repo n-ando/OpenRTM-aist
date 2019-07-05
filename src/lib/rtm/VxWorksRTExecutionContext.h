@@ -207,10 +207,6 @@ namespace RTC_exp
   };
 } // namespace RTC
 
-#ifdef WIN32
-#pragma warning( default : 4290 )
-#endif
-
 
 extern "C"
 {

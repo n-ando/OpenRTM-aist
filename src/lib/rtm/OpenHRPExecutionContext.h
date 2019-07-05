@@ -23,10 +23,6 @@
 #include <rtm/RTC.h>
 #include <rtm/ExecutionContextBase.h>
 
-#ifdef WIN32
-#pragma warning( disable : 4290 )
-#endif
-
 namespace RTC
 {
   /*!
@@ -503,10 +499,6 @@ namespace RTC
 
   };  // class OpenHRPExecutionContext
 } // namespace RTC
-
-#ifdef WIN32
-#pragma warning( default : 4290 )
-#endif
 
 
 extern "C"
