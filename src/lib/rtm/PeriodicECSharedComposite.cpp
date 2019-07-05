@@ -563,7 +563,7 @@ bool stringToStrVec(std::vector<std::string>& v, const char* is)
 
 namespace RTC
 {
-  static const char* periodicecsharedcomposite_spec[] =
+  static const char* const periodicecsharedcomposite_spec[] =
   {
     "implementation_id", "PeriodicECSharedComposite",
     "type_name",         "PeriodicECSharedComposite",

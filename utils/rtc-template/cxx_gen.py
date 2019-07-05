@@ -501,7 +501,7 @@ consumer_stub_h = """[for cidl in consumer_idl][if-any cidl.stub_h]
 #include "[cidl.stub_h]"
 [endif][endfor]"""
 
-module_spec = """static const char* [l_name]_spec[] =
+module_spec = """static const char* const [l_name]_spec[] =
   {
     "implementation_id", "[basicInfo.name]",
     "type_name",         "[basicInfo.name]",

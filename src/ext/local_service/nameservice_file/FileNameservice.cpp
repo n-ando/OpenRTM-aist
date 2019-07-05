@@ -30,7 +30,7 @@
  * @brief FileNameService ctor
  * @endif
  */
-static const char* service_name =
+static const char* const service_name =
   "org.openrtm.local_service.nameservice.file_nameservice";
 
 /*!
@@ -40,7 +40,7 @@ static const char* service_name =
  * @brief FileNameService ctor
  * @endif
  */
-static const char* service_uuid = "7288D080-F618-480B-B6D9-A199686F3101";
+static const char* const service_uuid = "7288D080-F618-480B-B6D9-A199686F3101";
 
 /*!
  * @if jp
@@ -49,7 +49,7 @@ static const char* service_uuid = "7288D080-F618-480B-B6D9-A199686F3101";
  * @brief FileNameService ctor
  * @endif
  */
-static const char* default_config[] =
+static const char* const default_config[] =
   {
     "base_path",         "/tmp/.openrtm_ns/",
     "file_structure",    "tree",

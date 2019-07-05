@@ -17,7 +17,7 @@
 
 // Module specification
 // <rtc-template block="module_spec">
-static const char* analyzer_spec[] =
+static const char* const analyzer_spec[] =
   {
     "implementation_id", "Throughput",
     "type_name",         "Throughput",

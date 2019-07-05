@@ -29,7 +29,7 @@
 
 namespace RTC
 {
-  const char* Logger::m_levelString[] =
+  const char* const Logger::m_levelString[] =
     {
       "SILENT",
       "FATAL",
@@ -42,7 +42,7 @@ namespace RTC
       "PARANOID"
     };
 
-  const char* Logger::m_levelOutputString[] =
+  const char* const Logger::m_levelOutputString[] =
     {
       " SILENT: ",
       " FATAL: ",
@@ -55,7 +55,7 @@ namespace RTC
       " PARANOID: "
     };
 
-  const char* Logger::m_levelColor[] =
+  const char* const Logger::m_levelColor[] =
     {
       "\x1b[0m",          // SLILENT  (none)
       "\x1b[0m\x1b[31m",  // FATAL    (red)

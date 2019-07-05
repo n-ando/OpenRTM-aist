@@ -29,7 +29,7 @@ namespace utils
   {
   public:
     explicit Properties();
-    explicit Properties(const char* defaults[], long num = LONG_MAX);
+    explicit Properties(const char* const defaults[], long num = LONG_MAX);
     virtual ~Properties();
   };
 } // namespace utils

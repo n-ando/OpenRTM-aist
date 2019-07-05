@@ -11,7 +11,7 @@
 
 // Module specification
 // <rtc-template block="module_spec">
-static const char* consoleout_spec[] =
+static const char* const consoleout_spec[] =
   {
     "implementation_id", "ConsoleOut",
     "type_name",         "ConsoleOut",
