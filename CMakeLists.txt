@@ -646,8 +646,6 @@ function(openrtm_common_set_compile_options target)
 		$<$<VERSION_GREATER:${CMAKE_CXX_COMPILER_VERSION},7.9.9>: -Wsuggest-attribute=cold>
 		-Wsuggest-attribute=format
 		$<$<VERSION_GREATER:${CMAKE_CXX_COMPILER_VERSION},7.9.9>: -Wsuggest-attribute=malloc>
-		$<$<VERSION_GREATER:${CMAKE_CXX_COMPILER_VERSION},4.9.9>: -Wsuggest-final-methods>
-		$<$<VERSION_GREATER:${CMAKE_CXX_COMPILER_VERSION},4.9.9>: -Wsuggest-final-types>
 		$<$<VERSION_GREATER:${CMAKE_CXX_COMPILER_VERSION},4.9.9>: -Wsuggest-override>
 		-Wswitch-default
 		-Wswitch-enum
@@ -655,7 +653,6 @@ function(openrtm_common_set_compile_options target)
 		-Wtrampolines
 		-Wundef
 		-Wunreachable-code
-		-Wunsafe-loop-optimizations
 		$<$<VERSION_GREATER:${CMAKE_CXX_COMPILER_VERSION},5.9.9>: -Wunused-const-variable=2>
 		-Wunused-macros
 		-Wuseless-cast
@@ -680,10 +677,7 @@ function(openrtm_common_set_compile_options target)
 		-Wno-strict-overflow
 		-Wno-suggest-attribute=format
 		$<$<VERSION_GREATER:${CMAKE_CXX_COMPILER_VERSION},7.9.9>: -Wno-suggest-attribute=malloc>
-		$<$<VERSION_GREATER:${CMAKE_CXX_COMPILER_VERSION},4.9.9>: -Wno-suggest-final-methods>
-		$<$<VERSION_GREATER:${CMAKE_CXX_COMPILER_VERSION},4.9.9>: -Wno-suggest-final-types>
 		-Wno-switch-enum
-		$<$<VERSION_LESS:${CMAKE_CXX_COMPILER_VERSION},8.2.0>: -Wno-unsafe-loop-optimizations>
 		-Wno-unused-but-set-variable
 		-Wno-unused-macros
 		-Wno-unused-result
@@ -695,7 +689,8 @@ function(openrtm_common_set_compile_options target)
 		-Wno-documentation
 		-Wno-documentation-unknown-command
 		-Wno-c++98-compat
-		-Wno-c++98-compat-pedantic)
+		-Wno-c++98-compat-pedantic
+		-Wno-padded)
 	set(WARN_CLANG_RELEASE
 		${WARN_CLANG}
 		-Wno-cast-qual
@@ -712,7 +707,6 @@ function(openrtm_common_set_compile_options target)
 		-Wno-missing-prototypes
 		-Wno-missing-variable-declarations
 		-Wno-old-style-cast
-		-Wno-padded
 		-Wno-reserved-id-macro
 		-Wno-shadow-field-in-constructor
 		-Wno-shadow-field
