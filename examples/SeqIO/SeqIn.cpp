@@ -15,7 +15,7 @@ bool g_Listener_dump_enabled = false;
 
 // Module specification
 // <rtc-template block="module_spec">
-static const char* seqin_spec[] =
+static const char* const seqin_spec[] =
   {
     "implementation_id", "SeqIn",
     "type_name",         "SequenceInComponent",

@@ -208,7 +208,7 @@ namespace RTC
      */
     inline const char* toString(RTC::StatusKind kind)
     {
-      static const char* kinds[] = 
+      static const char* const kinds[] = 
         {
           "COMPONENT_PROFILE",
           "RTC_STATUS",

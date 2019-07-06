@@ -8,7 +8,7 @@
 
 // Module specification
 // <rtc-template block="module_spec">
-static const char* sensor_spec[] =
+static const char* const sensor_spec[] =
   {
     "implementation_id", "Sensor",
     "type_name",         "Sensor",

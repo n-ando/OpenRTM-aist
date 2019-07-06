@@ -104,7 +104,7 @@ namespace RTC
      * @brief The default configuration file path for manager
      * @endif
      */
-    static const char* config_file_path[];
+    static const char* const config_file_path[];
 
     // Environment value to specify configuration file
     /*!

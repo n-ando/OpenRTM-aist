@@ -207,7 +207,7 @@ namespace coil
      *
      * @endif
      */
-    explicit Properties(const char** defaults, long num = LONG_MAX);
+    explicit Properties(const char* const defaults[], long num = LONG_MAX);
 
     /*!
      * @if jp
@@ -595,7 +595,7 @@ namespace coil
      *
      * @endif
      */
-    void setDefaults(const char* defaults[], long num = LONG_MAX);
+    void setDefaults(const char* const defaults[], long num = LONG_MAX);
 
     //============================================================
     // load and save functions

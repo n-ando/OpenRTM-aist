@@ -498,9 +498,9 @@ namespace RTC
     std::string m_name;
     std::string m_dateFormat;
     coil::IClock* m_clock;
-    static const char* m_levelString[];
-    static const char* m_levelOutputString[];
-    static const char* m_levelColor[];
+    static const char* const m_levelString[];
+    static const char* const m_levelOutputString[];
+    static const char* const m_levelColor[];
     int m_msEnable;
     int m_usEnable;
   };

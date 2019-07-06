@@ -148,7 +148,7 @@ namespace RTC
     {
       if (type < PRE_COMPONENT_ACTION_LISTENER_NUM)
         {
-      static const char* typeString[] =
+      static const char* const typeString[] =
         {
           "PRE_ON_INITIALIZE",
           "PRE_ON_FINALIZE",
@@ -314,7 +314,7 @@ namespace RTC
     {
       if (type < POST_COMPONENT_ACTION_LISTENER_NUM)
         {
-      static const char* typeString[] =
+      static const char* const typeString[] =
         {
           "POST_ON_INITIALIZE",
           "POST_ON_FINALIZE",
@@ -434,7 +434,7 @@ namespace RTC
     {
       if (type < PORT_ACTION_LISTENER_NUM)
         {
-      static const char* typeString[] =
+      static const char* const typeString[] =
         {
           "ADD_PORT",
           "REMOVE_PORT",
@@ -544,7 +544,7 @@ namespace RTC
     {
       if (type < EC_ACTION_LISTENER_NUM)
         {
-      static const char* typeString[] =
+      static const char* const typeString[] =
         {
           "ATTACH_EC",
           "DETACH_ECT",

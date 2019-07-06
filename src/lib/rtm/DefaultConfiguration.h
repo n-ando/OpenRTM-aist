@@ -37,7 +37,8 @@
  *
  * @endif
  */
-static const char* default_config[] =
+namespace RTC {
+  const char* const default_config[] =
   {
     "config.version",                        openrtm_version,
     "openrtm.name",                          openrtm_name,
@@ -129,4 +130,5 @@ static const char* default_config[] =
     "sdo.service.consumer.enabled_services",  "ALL",
     ""
   };
+}
 #endif  // RTM_DEFAULTCONFIGURATION_H
