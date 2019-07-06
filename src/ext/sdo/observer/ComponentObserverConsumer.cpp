@@ -34,9 +34,9 @@ namespace RTC
   ComponentObserverConsumer::ComponentObserverConsumer()
     : m_rtobj(nullptr),
       m_compstat(*this), m_portaction(*this),
-      m_inportInterval(1, 0), m_outportInterval(1, 0),
+      m_inportInterval(std::chrono::seconds(1)), m_outportInterval(std::chrono::seconds(1)),
       m_ecaction(*this), m_configMsg(*this),
-      m_interval(0, 100000), m_heartbeat(false),
+      m_interval(std::chrono::milliseconds(100)), m_heartbeat(false),
       m_hblistenerid(nullptr),
       m_timer(m_interval)
   {
@@ -287,21 +287,15 @@ namespace RTC
   {
     if (coil::toBool(prop["heartbeat.enable"], "YES", "NO", false))
       {
-        std::string interval(prop["heartbeat.interval"]);
-        if (interval.empty())
+        std::chrono::nanoseconds interval;
+        if (prop["heartbeat.interval"].empty()
+            || !coil::stringTo(interval, prop["heartbeat.interval"].c_str()))
           {
-            m_interval = 1.0;
+            interval = std::chrono::seconds(1);
           }
-        else
-          {
-            double tmp;
-            coil::stringTo(tmp, interval.c_str());
-            m_interval = tmp;
-          }
-        coil::TimeValue tm;
-        tm = m_interval;
+        m_interval = interval;
         m_hblistenerid = m_timer.
-          registerListenerObj(this, &ComponentObserverConsumer::heartbeat, tm);
+          registerListenerObj(this, &ComponentObserverConsumer::heartbeat, interval);
         m_heartbeat = true;
         m_timer.start();
       }
@@ -324,13 +318,13 @@ namespace RTC
    */
   void ComponentObserverConsumer::setDataPortInterval(coil::Properties& prop)
   {
-    double outportInterval;
+    std::chrono::microseconds outportInterval;
     if (coil::stringTo(outportInterval,
                       prop["port_profile.send_event.min_interval"].c_str()))
       {
         m_outportInterval = outportInterval;
       }
-    double inportInterval;
+    std::chrono::microseconds inportInterval;
     if (coil::stringTo(inportInterval,
                       prop["port_profile.receive_event.min_interval"].c_str()))
       {
