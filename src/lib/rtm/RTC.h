@@ -40,20 +40,8 @@
 
 #ifdef ORB_IS_OMNIORB
 
-#ifdef WIN32
-#pragma warning( disable : 4267 )
-#pragma warning( disable : 4311 )
-#pragma warning( disable : 4312 )
-#endif  // WIN32
-
 #include <omniORB4/CORBA.h>
 #include <omnithread.h>
-
-#ifdef WIN32
-#pragma warning( default : 4267 )
-#pragma warning( default : 4311 )
-#pragma warning( default : 4312 )
-#endif  // WIN32
 
 #endif  // ORB_IS_OMNIORB
 
