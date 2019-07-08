@@ -75,7 +75,7 @@ namespace RTC
       con.second->drop(ros::Connection::Destructing);
     }
 
-    RosTopicManager& topicmgr = RosTopicManager::instance();
+    ROSTopicManager& topicmgr = ROSTopicManager::instance();
     topicmgr.removeSubscriber(this);
 
     if(!m_roscorehost.empty())
@@ -127,13 +127,15 @@ namespace RTC
       return;
     }
 
-    RosTopicManager& topicmgr = RosTopicManager::instance();
+    ROSTopicManager& topicmgr = ROSTopicManager::instance();
     if(topicmgr.existSubscriber(this))
     {
       RTC_VERBOSE(("Subscriber already exists."));
       return;
     }
 
+    m_name = prop.getProperty("marshaling_type", "RTC");
+    std::cout << m_name << std::endl;
     m_messageType = prop.getProperty("marshaling_type", "ros2:std_msgs/Float32");
     m_topic = prop.getProperty("topic", "chatter");
     m_topic = "/" + m_topic;
@@ -184,7 +186,8 @@ namespace RTC
 
     request[0] = m_callerid;
     request[1] = m_topic;
-    request[2] = info->type();
+    m_datatype = info->type();
+    request[2] = m_datatype;
     request[3] = std::string(ros::XMLRPCManager::instance()->getServerURI());
 
     ROSMessageInfoFactory::instance().deleteObject(info);
@@ -455,5 +458,17 @@ namespace RTC
         return;
       }
   }
+
+
+  const std::string& ROSInPort::getName() const
+  {
+    return m_name;
+  }
+
+  const std::string& ROSInPort::datatype() const
+  {
+    return m_datatype;
+  }
+
 
 } // namespace RTC

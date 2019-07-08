@@ -274,6 +274,9 @@ namespace RTC
      */
     void deleteTCPConnector(const std::string &caller_id, const std::string &topic, const std::string &xmlrpc_uri);
     
+    const std::string& getName() const;
+    const std::string& datatype() const;
+
     /*!
      * @if jp
      * @brief ヘッダ情報送信時のコールバック関数
@@ -577,7 +580,8 @@ namespace RTC
     std::map<std::string, ros::ConnectionPtr> m_tcp_connecters;
     std::string m_roscorehost;
     unsigned int m_roscoreport;
-    
+    std::string m_datatype;
+    std::string m_name;
 
 
   };  // class InPortCorCdrbaProvider

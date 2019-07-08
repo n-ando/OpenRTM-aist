@@ -73,7 +73,7 @@ namespace RTC
     }
 
 
-    RosTopicManager& topicmgr = RosTopicManager::instance();
+    ROSTopicManager& topicmgr = ROSTopicManager::instance();
 
     if(topicmgr.existPublisher(this))
     {
@@ -285,7 +285,7 @@ namespace RTC
       {
           con.second->drop(ros::Connection::Destructing);
       }
-      RosTopicManager& topicmgr = RosTopicManager::instance();
+      ROSTopicManager& topicmgr = ROSTopicManager::instance();
       topicmgr.removePublisher(this);
 
       if (!m_roscorehost.empty())

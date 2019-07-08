@@ -40,7 +40,7 @@ void ManagerActionListener::preShutdown()
 }
 void ManagerActionListener::postShutdown()
 {
-    RTC::RosTopicManager::shutdown_global();
+    RTC::ROSTopicManager::shutdown_global();
 }
 void ManagerActionListener::postReinit()
 {
