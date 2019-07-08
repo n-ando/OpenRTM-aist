@@ -386,14 +386,7 @@ namespace SDOPackage
   CORBA::Boolean Organization_impl::set_dependency(DependencyType dependency)
   {
     RTC_TRACE(("set_dependency()"));
-    try
-      {
-        m_dependency = dependency;
-        return true;
-      }
-    catch (...)
-      {
-        throw InternalError("set_dependency(): Unknown.");
-      }
+    m_dependency = dependency;
+    return true;
   }
 } // namespace SDOPackage
