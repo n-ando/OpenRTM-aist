@@ -21,10 +21,6 @@
 #include <sstream>
 #include <iomanip>
 
-#if defined(_MSC_VER)
-#define snprintf _snprintf
-#endif
-
 #define MAXSIZE 256
 
 namespace RTC
@@ -158,11 +154,10 @@ namespace RTC
   std::string Logger::getDate()
   {
     char buf[MAXSIZE];
-    coil::TimeValue tm(m_clock->gettime());
+    auto tm = m_clock->gettime();
+    auto sec = std::chrono::duration_cast<std::chrono::seconds>(tm);
 
-    time_t timer;
-
-    timer = tm.sec();
+    time_t timer = sec.count();
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
     struct tm date;
     errno_t error = gmtime_s(&date, &timer);
@@ -177,21 +172,19 @@ namespace RTC
     strftime(buf, sizeof(buf), m_dateFormat.c_str(), date);
 #endif
 
-    
     std::string fmt(buf);
-
     if (m_msEnable > 0)
       {
+        auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(tm - sec);
         std::stringstream msec("");
-        msec << std::setfill('0') << std::setw(3);
-        msec << static_cast<int>(tm.usec() / 1000);
+        msec << std::setfill('0') << std::setw(3) << ms.count();
         coil::replaceString(fmt, "#m#", msec.str());
       }
     if (m_usEnable > 0)
       {
+        auto us = std::chrono::duration_cast<std::chrono::microseconds>(tm - sec);
         std::stringstream usec("");
-        usec << std::setfill('0') << std::setw(3);
-        usec << static_cast<int>(tm.usec() - ((tm.usec() / 1000) * 1000));
+        usec << std::setfill('0') << std::setw(3) << us.count();
         coil::replaceString(fmt, "#u#", usec.str());
       }
 

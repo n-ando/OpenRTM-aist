@@ -16,7 +16,6 @@
  *
  */
 
-#include <coil/Time.h>
 #include <coil/ClockManager.h>
 #include <mutex>
 
@@ -30,15 +29,11 @@ namespace coil
   SystemClock::~SystemClock()
   {
   }
-  coil::TimeValue SystemClock::gettime() const
+  std::chrono::nanoseconds SystemClock::gettime() const
   {
-    auto now = std::chrono::system_clock::now().time_since_epoch();
-    auto sec = std::chrono::duration_cast<std::chrono::seconds>(now);
-    auto usec = std::chrono::duration_cast<std::chrono::microseconds>(now - sec);
-    return coil::TimeValue(static_cast<long>(sec.count()),
-                           static_cast<long>(usec.count()));
+    return std::chrono::system_clock::now().time_since_epoch();
   }
-  bool SystemClock::settime(coil::TimeValue /* clocktime */)
+  bool SystemClock::settime(std::chrono::nanoseconds /* clocktime */)
   {
       // OpenRTM-aist do not set the System Clock.
       return true;
@@ -50,7 +45,6 @@ namespace coil
   // Logical Time Clock
   //============================================================
   LogicalClock::LogicalClock()
-    : m_currentTime(0.0)
   {
   }
 
@@ -58,13 +52,13 @@ namespace coil
   {
   }
 
-  coil::TimeValue LogicalClock::gettime() const
+  std::chrono::nanoseconds LogicalClock::gettime() const
   {
     std::lock_guard<std::mutex> guard(m_currentTimeMutex);
     return m_currentTime;
   }
 
-  bool LogicalClock::settime(coil::TimeValue clocktime)
+  bool LogicalClock::settime(std::chrono::nanoseconds clocktime)
   {
     std::lock_guard<std::mutex> guard(m_currentTimeMutex);
     m_currentTime = clocktime;
@@ -84,17 +78,20 @@ namespace coil
   {
   }
 
-  coil::TimeValue AdjustedClock::gettime() const
+  std::chrono::nanoseconds AdjustedClock::gettime() const
   {
+    auto now = std::chrono::steady_clock::now();
     std::lock_guard<std::mutex> guard(m_offsetMutex);
-    auto time = std::chrono::steady_clock::now() - m_offset;
-    return TimeValue(std::chrono::duration<double>(time).count());
+    return now - m_offset;
   }
 
-  bool AdjustedClock::settime(coil::TimeValue clocktime)
+  bool AdjustedClock::settime(std::chrono::nanoseconds clocktime)
   {
+    using dur_t = decltype(m_offset)::duration;
+    auto offset = std::chrono::steady_clock::now()
+                  - std::chrono::duration_cast<dur_t>(clocktime);
     std::lock_guard<std::mutex> guard(m_offsetMutex);
-    m_offset = std::chrono::steady_clock::now() - clocktime.microseconds();
+    m_offset = offset;
     return true;
   }
 
