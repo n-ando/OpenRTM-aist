@@ -72,7 +72,7 @@ namespace coil
    * @brief Constructor(Give the default value with char*[])
    * @endif
    */
-  Properties::Properties(const char** defaults, long num)
+  Properties::Properties(const char* const defaults[], long num)
     : name(""), value(""), default_value(""), set_value(false), root(nullptr), m_empty("")
   {
     leaf.clear();
@@ -308,7 +308,7 @@ namespace coil
    * @brief Set a default value together in the property list
    * @endif
    */
-  void Properties::setDefaults(const char* defaults[], long num)
+  void Properties::setDefaults(const char* const defaults[], long num)
   {
     for (long i = 0; i < num && defaults[i][0] != '\0' ; i += 2)
       {

@@ -39,7 +39,7 @@ namespace RTC
    * @brief RT-Component default profile
    * @endif
    */
-  static const char* default_conf[] =
+  static const char* const default_conf[] =
     {
       "implementation_id", "",
       "type_name",         "",
@@ -2695,7 +2695,7 @@ namespace RTC
   ReturnCode_t RTObject_impl::
   getInheritedECOptions(coil::Properties& default_opts)
   {
-    static const char* inherited_opts[] =
+    static const char* const inherited_opts[] =
       {
         "sync_transition",
         "sync_activation",
@@ -2968,7 +2968,7 @@ namespace RTC
           }
 
         default_opts << *prop;
-        static const char* inherited_opts[] =
+        static const char* const inherited_opts[] =
           {
             "sync_transition",
             "sync_activation",

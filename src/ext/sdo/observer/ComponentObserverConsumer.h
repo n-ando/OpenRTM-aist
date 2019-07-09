@@ -127,7 +127,7 @@ namespace RTC
      */
     inline const char* toString(OpenRTM::StatusKind kind)
     {
-      static const char* kinds[] = 
+      static const char* const kinds[] = 
         {
           "COMPONENT_PROFILE",
           "RTC_STATUS",
@@ -136,7 +136,7 @@ namespace RTC
           "CONFIGURATION",
           "HEARTBEAT"
         };
-      return static_cast<size_t>(kind) < sizeof(kind)/sizeof(char*) ? kinds[kind] : "";
+      return static_cast<size_t>(kind) < sizeof(kinds)/sizeof(kinds[0]) ? kinds[kind] : "";
     }
 
     /*!
@@ -423,7 +423,7 @@ namespace RTC
     public:
       DataPortAction(ComponentObserverConsumer& coc,
                      std::string  msg,
-                     coil::TimeValue interval)
+                     std::chrono::nanoseconds interval)
         : m_coc(coc), m_msg(std::move(msg)), m_interval(interval),
           m_last(std::chrono::steady_clock::now())
       {
@@ -435,7 +435,7 @@ namespace RTC
       {
         auto curr = std::chrono::steady_clock::now();
         auto intvl = curr - m_last;
-        if (intvl > m_interval.microseconds())
+        if (intvl > m_interval)
           {
             m_last = curr;
             m_coc.updateStatus(OpenRTM::PORT_PROFILE, m_msg.c_str());
@@ -446,7 +446,7 @@ namespace RTC
     private:
       ComponentObserverConsumer& m_coc;
       std::string m_msg;
-      coil::TimeValue m_interval;
+      std::chrono::nanoseconds m_interval;
       std::chrono::steady_clock::time_point m_last;
     };
     
@@ -586,15 +586,15 @@ namespace RTC
 
     // PortProfile
     PortAction m_portaction;
-    coil::TimeValue m_inportInterval;
-    coil::TimeValue m_outportInterval;
+    std::chrono::nanoseconds m_inportInterval;
+    std::chrono::nanoseconds m_outportInterval;
 
     // Execution Context
     ECAction m_ecaction;
     ConfigAction m_configMsg;
 
     // Heartbeat
-    coil::TimeValue m_interval;
+    std::chrono::nanoseconds m_interval;
     bool m_heartbeat;
     ListenerId m_hblistenerid;
 

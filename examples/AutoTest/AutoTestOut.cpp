@@ -14,7 +14,7 @@
 #include "AutoTestOut.h"
 // Module specification
 // <rtc-template block="module_spec">
-static const char* autotestout_spec[] =
+static const char* const autotestout_spec[] =
   {
     "implementation_id", "AutoTestOut",
     "type_name",         "AutoTestOut",

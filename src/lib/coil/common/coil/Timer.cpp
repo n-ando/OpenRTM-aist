@@ -18,7 +18,6 @@
 
 #include <coil/Listener.h>
 #include <coil/Timer.h>
-#include <coil/Time.h>
 
 #include <vector>
 
@@ -31,7 +30,7 @@ namespace coil
    * @brief Constructor
    * @endif
    */
-  Timer::Timer(TimeValue& interval)
+  Timer::Timer(std::chrono::nanoseconds interval)
     : m_interval(interval), m_running(false)
   {
   }
@@ -71,11 +70,10 @@ namespace coil
    */
   int Timer::svc()
   {
-    TimeValue t_curr, t_pre, tm;
     while (m_running)
       {
         invoke();
-        coil::sleep(m_interval);
+        std::this_thread::sleep_for(m_interval);
       }
     return 0;
   }
@@ -126,7 +124,7 @@ namespace coil
     for (auto & task : m_tasks)
       {
         task.remains = task.remains - m_interval;
-        if (task.remains.sign() <= 0)
+        if (task.remains <= std::chrono::seconds::zero())
           {
             task.listener->invoke();
             task.remains = task.period;
@@ -141,7 +139,7 @@ namespace coil
    * @brief Register listener
    * @endif
    */
-  ListenerId Timer::registerListener(ListenerBase* listener, TimeValue tm)
+  ListenerId Timer::registerListener(ListenerBase* listener, std::chrono::nanoseconds tm)
   {
     std::lock_guard<std::mutex> guard(m_taskMutex);
 

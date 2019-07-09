@@ -255,7 +255,7 @@ namespace RTC
      */
     static const char* toString(PreFsmActionListenerType type)
     {
-      static const char* typeString[] =
+      static const char* const typeString[] =
         {
           "PRE_ON_INIT",
           "PRE_ON_ENTRY",
@@ -495,7 +495,7 @@ namespace RTC
      */
     static const char* toString(PostFsmActionListenerType type)
     {
-      static const char* typeString[] =
+      static const char* const typeString[] =
         {
           "POST_ON_INIT",
           "POST_ON_ENTRY",
@@ -741,7 +741,7 @@ namespace RTC
      */
     static const char* toString(FsmProfileListenerType type)
     {
-      static const char* typeString[] =
+      static const char* const typeString[] =
         {
           "SET_FSM_PROFILE",
           "GET_FSM_PROFILE",
@@ -959,7 +959,7 @@ namespace RTC
      */
     static const char* toString(FsmStructureListenerType type)
     {
-      static const char* typeString[] =
+      static const char* const typeString[] =
         {
           "SET_FSM_STRUCTURE",
           "GET_FSM_STRUCTURE",

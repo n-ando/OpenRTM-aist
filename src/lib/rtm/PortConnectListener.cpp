@@ -32,7 +32,7 @@ namespace RTC
   const char*
   PortConnectListener::toString(PortConnectListenerType type)
   {
-    static const char* typeString[] =
+    static const char* const typeString[] =
       {
         "ON_NOTIFY_CONNECT",
         "ON_NOTIFY_DISCONNECT",
@@ -62,7 +62,7 @@ namespace RTC
   const char*
   PortConnectRetListener::toString(PortConnectRetListenerType type)
   {
-    static const char* typeString[] =
+    static const char* const typeString[] =
       {
         "ON_PUBLISH_INTERFACES",
         "ON_CONNECT_NEXTPORT",

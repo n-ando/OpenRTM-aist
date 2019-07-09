@@ -36,14 +36,14 @@ namespace RTC
 
   // The list of default configuration file path.
 #ifdef RTM_OS_WIN32
-  const char* ManagerConfig::config_file_path[] = 
+  const char* const ManagerConfig::config_file_path[] = 
     {
       "./rtc.conf",
       "${RTM_ROOT}bin/${RTM_VC_VERSION}/rtc.conf",
       nullptr
     };
 #else
-  const char* ManagerConfig::config_file_path[] = 
+  const char* const ManagerConfig::config_file_path[] = 
     {
       "./rtc.conf",
       "/etc/rtc.conf",

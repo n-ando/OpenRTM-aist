@@ -435,7 +435,7 @@ namespace RTC
     {
       if (type < CONNECTOR_DATA_LISTENER_NUM)
         {
-          static const char* typeString[] =
+          static const char* const typeString[] =
           {
             "ON_BUFFER_WRITE",
             "ON_BUFFER_FULL",
@@ -895,7 +895,7 @@ namespace RTC
     {
       if (type < CONNECTOR_LISTENER_NUM)
         {
-          static const char* typeStr[] =
+          static const char* const typeStr[] =
           {
             "ON_BUFFER_EMPTY",
             "ON_BUFFER_READ_TIMEOUT",

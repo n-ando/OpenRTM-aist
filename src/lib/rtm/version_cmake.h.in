@@ -4,9 +4,10 @@
 #ifndef INCLUDE_GUARD_VERSION_H
 #define INCLUDE_GUARD_VERSION_H
 
-static const char* openrtm_name    = "@OPENRTM_NAME@";
-static const char* openrtm_version = "@OPENRTM_VERSION@";
-static const char* corba_name      = "@CORBA_NAME@";
+namespace RTC {
+  const char* const openrtm_name    = "@OPENRTM_NAME@";
+  const char* const openrtm_version = "@OPENRTM_VERSION@";
+  const char* const corba_name      = "@CORBA_NAME@";
+}
 
 #endif // INCLUDE_GUARD_VERSION_H
-

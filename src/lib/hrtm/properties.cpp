@@ -25,7 +25,7 @@ namespace utils
     : coil::Properties("", "")
   {
   }
-  Properties::Properties(const char* defaults[], long num)
+  Properties::Properties(const char* const defaults[], long num)
     : coil::Properties(defaults, num)
   {
   }

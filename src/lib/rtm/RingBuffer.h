@@ -117,7 +117,7 @@ namespace RTC
     explicit RingBuffer(long int length = RINGBUFFER_DEFAULT_LENGTH)
       : m_overwrite(true), m_readback(true),
         m_timedwrite(false), m_timedread(false),
-        m_wtimeout(1, 0), m_rtimeout(1, 0),
+        m_wtimeout(std::chrono::seconds(1)), m_rtimeout(std::chrono::seconds(1)),
         m_length(length),
         m_wpos(0), m_rpos(0), m_fillcount(0), m_wcount(0),
         m_buffer(m_length)
@@ -461,6 +461,7 @@ namespace RTC
 
           bool timedwrite(m_timedwrite);
           bool overwrite(m_overwrite);
+          auto term = std::chrono::seconds(sec) + std::chrono::nanoseconds(nsec);
 
           if (!(sec < 0))  // if second arg is set -> block mode
             {
@@ -480,12 +481,9 @@ namespace RTC
             {
               if (sec < 0)
                 {
-                  sec = m_wtimeout.sec();
-                  nsec = m_wtimeout.usec() * 1000;
+                  term = m_wtimeout;
                 }
-              auto term_s = std::chrono::seconds(sec);
-              auto term_ns = std::chrono::nanoseconds(nsec);
-              if (std::cv_status::timeout == m_empty.cond.wait_for(guard, term_s + term_ns))
+              if (std::cv_status::timeout == m_empty.cond.wait_for(guard, term))
                 {
                   return ::RTC::BufferStatus::TIMEOUT;
                 }
@@ -756,13 +754,13 @@ namespace RTC
         {
           bool timedread(m_timedread);
           bool readback(m_readback);
+          auto term = std::chrono::seconds(sec) + std::chrono::nanoseconds(nsec);
 
           if (!(sec < 0))  // if second arg is set -> block mode
             {
               timedread = true;
               readback  = false;
-              sec = m_rtimeout.sec();
-              nsec = m_rtimeout.usec() * 1000;
+              term = m_rtimeout;
             }
 
           if (readback && !timedread)       // "readback" mode
@@ -781,12 +779,9 @@ namespace RTC
             {
               if (sec < 0)
                 {
-                  sec = m_rtimeout.sec();
-                  nsec = m_rtimeout.usec() * 1000;
+                  term = m_rtimeout;
                 }
-              auto term_s = std::chrono::seconds(sec);
-              auto term_ns = std::chrono::nanoseconds(nsec);
-              if (std::cv_status::timeout == m_empty.cond.wait_for(guard, term_s + term_ns))
+              if (std::cv_status::timeout == m_empty.cond.wait_for(guard, term))
                 {
                   return ::RTC::BufferStatus::TIMEOUT;
                 }
@@ -895,13 +890,11 @@ namespace RTC
           m_overwrite = false;
           m_timedwrite = true;
 
-          double tm;
-          if (coil::stringTo(tm, prop["write.timeout"].c_str()))
+          std::chrono::nanoseconds tm;
+          if (coil::stringTo(tm, prop["write.timeout"].c_str())
+              && !(tm < std::chrono::seconds::zero()))
             {
-              if (!(tm < 0))
-                {
-                  m_wtimeout = tm;
-                }
+              m_wtimeout = tm;
             }
         }
     }
@@ -923,7 +916,7 @@ namespace RTC
         {
           m_readback = false;
           m_timedread = true;
-          double tm;
+          std::chrono::nanoseconds tm;
           if (coil::stringTo(tm, prop["read.timeout"].c_str()))
             {
               m_rtimeout = tm;
@@ -974,7 +967,7 @@ namespace RTC
      * @brief Timeout time for writing
      * @endif
      */
-    coil::TimeValue m_wtimeout;
+    std::chrono::nanoseconds m_wtimeout;
 
     /*!
      * @if jp
@@ -983,7 +976,7 @@ namespace RTC
      * @brief Timeout time of reading
      * @endif
      */
-    coil::TimeValue m_rtimeout;
+    std::chrono::nanoseconds m_rtimeout;
 
     /*!
      * @if jp

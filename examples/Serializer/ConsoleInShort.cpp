@@ -12,7 +12,7 @@
 
 // Module specification
 // <rtc-template block="module_spec">
-static const char* consoleinshort_spec[] =
+static const char* const consoleinshort_spec[] =
   {
     "implementation_id", "ConsoleInShort",
     "type_name",         "ConsoleInShort",

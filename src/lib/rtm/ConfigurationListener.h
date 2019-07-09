@@ -100,7 +100,7 @@ namespace RTC
     {
       if (type < CONFIG_PARAM_LISTENER_NUM)
         {
-          static const char* typeString[] =
+          static const char* const typeString[] =
           {
             "ON_UPDATE_CONFIG_PARAM",
             "CONFIG_PARAM_LISTENER_NUM"
@@ -217,7 +217,7 @@ namespace RTC
     {
       if (type < CONFIG_SET_LISTENER_NUM)
         {
-          static const char* typeString[] =
+          static const char* const typeString[] =
           {
             "ON_SET_CONFIG_SET",
             "ON_ADD_CONFIG_SET",
@@ -330,7 +330,7 @@ namespace RTC
     {
       if (type < CONFIG_SET_NAME_LISTENER_NUM)
         {
-          static const char* typeString[] =
+          static const char* const typeString[] =
           {
             "ON_UPDATE_CONFIG_SET",
             "ON_REMOVE_CONFIG_SET",

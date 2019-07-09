@@ -34,7 +34,6 @@
 #include <coil/Properties.h>
 #include <coil/stringutil.h>
 #include <coil/Signal.h>
-#include <coil/TimeValue.h>
 #include <coil/Timer.h>
 #include <coil/OS.h>
 #include <rtm/FactoryInit.h>
@@ -769,7 +768,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     coil::Properties prop;
     prop = factory->profile();
 
-    static const char* inherit_prop[] = {
+    static const char* const inherit_prop[] = {
       "config.version",
       "openrtm.name",
       "openrtm.version",
@@ -1253,14 +1252,11 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     m_module = new ModuleManager(m_config);
 
     // initialize Terminator
-    double waittime(0.5);
-    if (m_config.findNode("manager.termination_waittime") != nullptr)
+    std::chrono::milliseconds waittime;
+    if ((m_config.findNode("manager.termination_waittime") == nullptr)
+         || !coil::stringTo(waittime, m_config["manager.termination_waittime"].c_str()))
       {
-	const char* s = m_config["manager.termination_waittime"].c_str();
-	if (!coil::stringTo(waittime, s))
-	  {
-	    waittime = 0.5;
-	  }
+        waittime = std::chrono::milliseconds(500);
       }
     m_terminator = new Terminator(this, waittime);
     {
@@ -1271,44 +1267,37 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     // initialize Timer
     if (coil::toBool(m_config["timer.enable"], "YES", "NO", true))
       {
-        coil::TimeValue tm(0, 100000);
-        std::string tick(m_config["timer.tick"]);
-        if (!tick.empty())
-          {
-            tm = atof(tick.c_str());
-            m_timer = new coil::Timer(tm);
-            m_timer->start();
-          }
+          std::chrono::microseconds tm;
+          if (m_config["timer.tick"].empty()
+              || !coil::stringTo(tm, m_config["timer.tick"].c_str()))
+            {
+              tm = std::chrono::milliseconds(100);
+            }
+          m_timer = new coil::Timer(tm);
+          m_timer->start();
       }
 
-    if (coil::toBool(m_config["manager.shutdown_auto"], "YES", "NO", true) &&
-        !coil::toBool(m_config["manager.is_master"], "YES", "NO", false))
+    if (coil::toBool(m_config["manager.shutdown_auto"], "YES", "NO", true)
+        && !coil::toBool(m_config["manager.is_master"], "YES", "NO", false)
+        && (m_timer != nullptr))
       {
-        coil::TimeValue tm(10, 0);
-        if (m_config.findNode("manager.auto_shutdown_duration") != nullptr)
+        std::chrono::milliseconds tm;
+        if ((m_config.findNode("manager.auto_shutdown_duration") == nullptr)
+            || !coil::stringTo(tm,
+                               m_config["manager.auto_shutdown_duration"].c_str()))
           {
-            double duration(10.0);
-            const char* s = m_config["manager.auto_shutdown_duration"].c_str();
-            if (coil::stringTo(duration, s))
-              {
-                tm = duration;
-              }
+            tm = std::chrono::seconds(10);
           }
-        if (m_timer != nullptr)
-          {
-            m_timer->registerListenerObj(this,
-                                         &Manager::shutdownOnNoRtcs, tm);
-          }
+        m_timer->registerListenerObj(this,
+                                     &Manager::shutdownOnNoRtcs, tm);
       }
 
-    {
-      coil::TimeValue tm(1, 0);
-      if (m_timer != nullptr)
-        {
-          m_timer->registerListenerObj(this,
-                                       &Manager::cleanupComponents, tm);
-        }
-    }
+    if (m_timer != nullptr)
+      {
+        m_timer->registerListenerObj(this,
+                                     &Manager::cleanupComponents,
+                                     std::chrono::seconds(1));
+      }
 
 
 	{
@@ -1860,19 +1849,16 @@ std::vector<coil::Properties> Manager::getLoadableModules()
       }
 
     // NamingManager Timer update initialization
-    if (coil::toBool(m_config["naming.update.enable"], "YES", "NO", true))
+    if (coil::toBool(m_config["naming.update.enable"], "YES", "NO", true)
+        && (m_timer != nullptr))
       {
-        coil::TimeValue tm(10, 0);  // default interval = 10sec for safty
-        std::string intr(m_config["naming.update.interval"]);
-        if (!intr.empty())
+        std::chrono::milliseconds tm;
+        if (m_config["naming.update.interval"].empty()
+            || !coil::stringTo(tm, m_config["naming.update.interval"].c_str()))
           {
-            tm = atof(intr.c_str());
+            tm = std::chrono::seconds(10); // default interval for safety
           }
-        if (m_timer != nullptr)
-          {
-            m_timer->registerListenerObj(m_namingManager,
-                                         &NamingManager::update, tm);
-          }
+        m_timer->registerListenerObj(m_namingManager, &NamingManager::update, tm);
       }
     return true;
   }
@@ -2051,28 +2037,21 @@ std::vector<coil::Properties> Manager::getLoadableModules()
           }
       }
 
-	if (coil::toBool(m_config["corba.update_master_manager.enable"], "YES", "NO", true)
-		&& !coil::toBool(m_config["manager.is_master"], "YES", "NO", false))
-	{
-		coil::TimeValue tm(10, 0);
-		if (m_config.findNode("corba.update_master_manager.interval") != nullptr)
-		{
-			float duration = 10;
-			
-			coil::stringTo<float>(duration, m_config["corba.update_master_manager.interval"].c_str());
-			if (duration > 0)
-			{
-				tm = coil::TimeValue(duration);
-			}
-			if (m_timer != nullptr)
-			{
-				m_timer->registerListenerObj(m_mgrservant, &RTM::ManagerServant::updateMasterManager, tm);
-			}
-
-			
-		}
-
-	}
+    if (coil::toBool(m_config["corba.update_master_manager.enable"], "YES", "NO", true)
+        && !coil::toBool(m_config["manager.is_master"], "YES", "NO", false)
+        && (m_timer != nullptr))
+      {
+        std::chrono::milliseconds duration;
+        if ((m_config.findNode("corba.update_master_manager.interval") == nullptr)
+            || !coil::stringTo(duration, m_config["corba.update_master_manager.interval"].c_str())
+            || (duration <= std::chrono::seconds::zero()))
+          {
+            duration = std::chrono::seconds(10);
+          }
+        m_timer->registerListenerObj(m_mgrservant,
+                                     &RTM::ManagerServant::updateMasterManager,
+                                     duration);
+      }
 
     return true;
   }

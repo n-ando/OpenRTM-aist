@@ -36,9 +36,9 @@ namespace RTC
       m_compstat(*this), m_portaction(*this),
       m_ecaction(*this), m_configMsg(*this),
       m_fsmaction(*this),
-      m_rtcInterval(0, 100000), m_rtcHeartbeat(false),
+      m_rtcInterval(std::chrono::milliseconds(100)), m_rtcHeartbeat(false),
       m_rtcHblistenerid(nullptr),
-      m_ecInterval(0, 100000), m_ecHeartbeat(false),
+      m_ecInterval(std::chrono::milliseconds(100)), m_ecHeartbeat(false),
       m_ecHblistenerid(nullptr),
       m_timer(m_rtcInterval)
   {
@@ -316,22 +316,16 @@ namespace RTC
       }
     if (coil::toBool(prop["heartbeat.enable"], "YES", "NO", false))
       {
-        std::string interval(prop["heartbeat.interval"]);
-        if (interval.empty())
+        std::chrono::nanoseconds interval;
+        if (prop["heartbeat.interval"].empty()
+            || !coil::stringTo(interval, prop["heartbeat.interval"].c_str()))
           {
-            m_rtcInterval = 1.0;
+            interval = std::chrono::seconds(1);
           }
-        else
-          {
-            double tmp;
-            coil::stringTo(tmp, interval.c_str());
-            m_rtcInterval = tmp;
-          }
-        coil::TimeValue tm;
-        tm = m_rtcInterval;
+        m_rtcInterval = interval;
         m_rtcHblistenerid = m_timer.
           registerListenerObj(this, &ComponentObserverConsumer::rtcHeartbeat,
-                              tm);
+                              m_rtcInterval);
         m_rtcHeartbeat = true;
         m_timer.start();
       }
@@ -407,22 +401,16 @@ namespace RTC
     // if rtc_heartbeat is set, use it.
     if (coil::toBool(prop["ec_heartbeat.enable"], "YES", "NO", false))
       {
-        std::string interval(prop["ec_heartbeat.interval"]);
-        if (interval.empty())
+        std::chrono::nanoseconds interval;
+        if (prop["ec_heartbeat.interval"].empty()
+            || !coil::stringTo(interval, prop["ec_heartbeat.interval"].c_str()))
           {
-            m_ecInterval = 1.0;
+            interval = std::chrono::seconds(1);
           }
-        else
-          {
-            double tmp;
-            coil::stringTo(tmp, interval.c_str());
-            m_ecInterval = tmp;
-          }
-        coil::TimeValue tm;
-        tm = m_ecInterval;
+        m_ecInterval = interval;
         m_ecHblistenerid = m_timer.
           registerListenerObj(this, &ComponentObserverConsumer::ecHeartbeat,
-                              tm);
+                              m_ecInterval);
         m_ecHeartbeat = true;
         m_timer.start();
       }
