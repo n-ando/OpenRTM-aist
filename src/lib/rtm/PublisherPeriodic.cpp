@@ -478,7 +478,8 @@ namespace RTC
         RTC_ERROR(("invalid period: %f [s]", hz));
         return false;
       }
-    m_task->setPeriod(1.0/hz);
+    auto period = std::chrono::duration<double>(1.0/hz);
+    m_task->setPeriod(std::chrono::duration_cast<std::chrono::nanoseconds>(period));
 
     // Setting task measurement function
     m_task->executionMeasure(coil::toBool(prop["measurement.exec_time"],

@@ -22,7 +22,6 @@
 
 #include <mutex>
 #include <condition_variable>
-#include <coil/TimeValue.h>
 #include <coil/TimeMeasure.h>
 #include <coil/PeriodicTaskBase.h>
 
@@ -222,21 +221,6 @@ namespace coil
      * @if jp
      * @brief タスク実行周期をセットする
      *
-     * @param period 実行周期 [sec]
-     *
-     * @else
-     * @brief Setting task execution period
-     *
-     * @param period Execution period [sec]
-     *
-     * @endif
-     */
-    void setPeriod(double period) override;
-
-    /*!
-     * @if jp
-     * @brief タスク実行周期をセットする
-     *
      * @param period 実行周期
      *
      * @else
@@ -246,7 +230,7 @@ namespace coil
      *
      * @endif
      */
-    void setPeriod(TimeValue& period) override;
+    void setPeriod(std::chrono::nanoseconds period) override;
 
     /*!
      * @if jp
@@ -347,7 +331,7 @@ namespace coil
      * @brief Task execution period
      * @endif
      */
-    coil::TimeValue m_period;
+    std::chrono::nanoseconds m_period;
 
     /*!
      * @if jp
