@@ -23,6 +23,7 @@
 #include <cstddef>
 #include <coil/Properties.h>
 #include <rtm/BufferStatus.h>
+#include <chrono>
 
 /*!
  * @if jp
@@ -309,7 +310,8 @@ namespace RTC
      * @endif
      */
     virtual ReturnCode write(const DataType& value,
-                             long int sec = -1, long int nsec = -1) = 0;
+                             std::chrono::nanoseconds timeout
+                             = std::chrono::nanoseconds(-1)) = 0;
 
     /*!
      * @if jp
@@ -474,7 +476,8 @@ namespace RTC
      * @endif
      */
     virtual ReturnCode read(DataType& value,
-                            long int sec = -1, long int nsec = -1) = 0;
+                            std::chrono::nanoseconds nsec
+                            = std::chrono::nanoseconds(-1)) = 0;
 
     /*!
      * @if jp

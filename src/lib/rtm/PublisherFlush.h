@@ -222,9 +222,8 @@ namespace RTC
      * これら以外のエラーの場合、PORT_ERROR が返される。
      *
      *
-     * @param data 書き込むデータ
-     * @param sec タイムアウト時間
-     * @param nsec タイムアウト時間
+     * @param data    書き込むデータ
+     * @param timeout タイムアウト時間
      *
      * @return PORT_OK             正常終了
      *         PRECONDITION_NO_MET consumer, buffer, listener等が適切に設定
@@ -250,9 +249,8 @@ namespace RTC
      *
      * In other cases, PROT_ERROR will be returned.
      *
-     * @param data Data to be wrote to the buffer
-     * @param sec Timeout time in unit seconds
-     * @param nsec Timeout time in unit nano-seconds
+     * @param data    Data to be wrote to the buffer
+     * @param timeout Timeout time in unit nano-seconds
      * @return PORT_OK             Normal return
      *         PRECONDITION_NO_MET Precondition does not met. A consumer,
      *                             a buffer, listenes are not set properly.
@@ -263,8 +261,8 @@ namespace RTC
      * @endif
      */
     ReturnCode write(ByteDataStreamBase* data,
-                             unsigned long sec,
-                             unsigned long usec) override;
+                     std::chrono::nanoseconds timeout
+                     = std::chrono::nanoseconds(-1)) override;
     /*!
      * @if jp
      *
