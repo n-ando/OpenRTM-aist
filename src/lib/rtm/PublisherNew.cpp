@@ -333,7 +333,7 @@ namespace RTC
 
     // setting task function
     m_task->setTask(this, &PublisherNew::svc);
-    m_task->setPeriod(0.0);
+    m_task->setPeriod(std::chrono::seconds(0));
     m_task->executionMeasure(coil::toBool(prop["measurement.exec_time"],
                                     "enable", "disable", true));
 

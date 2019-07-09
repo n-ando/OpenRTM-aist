@@ -20,7 +20,6 @@
 #ifndef COIL_PERIODICTASKBASE_H
 #define COIL_PERIODICTASKBASE_H
 
-#include <coil/TimeValue.h>
 #include <coil/TimeMeasure.h>
 #include <coil/Task.h>
 
@@ -369,28 +368,7 @@ namespace coil
      *
      * @endif
      */
-    virtual void setPeriod(double period) = 0;
-
-    /*!
-     * @if jp
-     *
-     * @brief タスク実行周期をセットする純粋仮想関数
-     *
-     * タスク実行周期をセットする純粋仮想関数。
-     *
-     * @param period 実行周期
-     *
-     * @else
-     *
-     * @brief Setting task execution period
-     *
-     * Pure virtual function for setting task execution period.
-     *
-     * @param period Execution period.
-     *
-     * @endif
-     */
-    virtual void setPeriod(coil::TimeValue& period) = 0;
+    virtual void setPeriod(std::chrono::nanoseconds period) = 0;
 
     /*!
      * @if jp

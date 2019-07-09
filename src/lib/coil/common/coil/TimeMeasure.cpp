@@ -17,7 +17,6 @@
  *
  */
 
-#include <coil/Time.h>
 #include <coil/TimeMeasure.h>
 #include <cmath>
 
@@ -37,14 +36,14 @@ namespace coil
    * @endif
    */
   TimeMeasure::TimeMeasure(unsigned long buflen)
-    : m_interval(0.0),
+    : m_interval(std::chrono::seconds(0)),
       m_count(0), m_countMax(buflen + 1),
       m_recurred(false)
   {
     m_record.reserve(m_countMax);
     for (unsigned long int i(0); i < m_countMax; ++i)
       {
-        m_record.emplace_back(0, 0);
+        m_record.emplace_back(std::chrono::seconds(0));
       }
   }
 
@@ -69,10 +68,7 @@ namespace coil
    */
   void TimeMeasure::tack()
   {
-    auto interval = std::chrono::high_resolution_clock::now() - m_begin;
-    auto sec = std::chrono::duration_cast<std::chrono::seconds>(interval);
-    auto usec = std::chrono::duration_cast<std::chrono::microseconds>(interval - sec);
-    m_interval = coil::TimeValue(static_cast<long>(sec.count()), static_cast<long>(usec.count()));
+    m_interval = std::chrono::high_resolution_clock::now() - m_begin;
     m_record.at(m_count) = m_interval;
     ++m_count;
     if (m_count == m_countMax)
@@ -89,7 +85,7 @@ namespace coil
    * @brief Get a interval time
    * @endif
    */
-  coil::TimeValue& TimeMeasure::interval()
+  std::chrono::nanoseconds TimeMeasure::interval()
   {
     return m_interval;
   }
@@ -144,7 +140,7 @@ namespace coil
 
     for (unsigned long int i(0); i < len; ++i)
       {
-        double trecord(m_record[i]);
+        double trecord = std::chrono::duration<double>(m_record[i]).count();
         sum += trecord;
         sq_sum += trecord * trecord;
 

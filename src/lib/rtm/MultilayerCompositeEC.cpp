@@ -223,7 +223,7 @@ namespace RTC_exp
       ChildTask *ct = new ChildTask(task, this);
 
       task->setTask(ct, &ChildTask::svc);
-      task->setPeriod(0.0);
+      task->setPeriod(std::chrono::seconds(0));
       task->executionMeasure(coil::toBool(prop["measurement.exec_time"],
           "enable", "disable", true));
 

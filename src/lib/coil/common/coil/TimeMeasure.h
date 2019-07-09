@@ -20,7 +20,7 @@
 #ifndef COIL_TIMEMEASURE_H
 #define COIL_TIMEMEASURE_H
 
-#include <coil/TimeValue.h>
+#include <chrono>
 #include <vector>
 
 namespace coil
@@ -126,7 +126,7 @@ namespace coil
      *
      * 経過時間を取得する
      *
-     * @return TimeValue オブジェクト
+     * @return std::chrono::nanoseconds オブジェクト
      *
      * @else
      *
@@ -134,11 +134,11 @@ namespace coil
      *
      * Get a interval time.
      *
-     * @return TimeValue object
+     * @return std::chrono::nanoseconds object
      *
      * @endif
      */
-    coil::TimeValue& interval();
+    std::chrono::nanoseconds interval();
 
     /*!
      * @if jp
@@ -234,9 +234,9 @@ namespace coil
     Statistics getStatistics();
 
   private:
-    std::vector<coil::TimeValue> m_record;
+    std::vector<std::chrono::nanoseconds> m_record;
     std::chrono::high_resolution_clock::time_point m_begin;
-    coil::TimeValue m_interval;
+    std::chrono::nanoseconds m_interval;
 
     unsigned long int m_count;
     const unsigned long int m_countMax;

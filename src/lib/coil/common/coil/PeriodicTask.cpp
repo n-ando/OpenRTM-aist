@@ -18,7 +18,6 @@
  */
 
 #include <coil/PeriodicTask.h>
-#include <coil/Time.h>
 
 namespace coil
 {
@@ -30,7 +29,7 @@ namespace coil
    * @endif
    */
   PeriodicTask::PeriodicTask()
-    : m_period(0.0), m_nowait(false),
+    : m_period(std::chrono::seconds(0)), m_nowait(false),
       m_func(nullptr), m_deleteInDtor(true),
       m_alive(false), m_suspend(false),
       m_execCount(0), m_execCountMax(1000),
@@ -156,31 +155,11 @@ namespace coil
    * @brief Setting task execution period
    * @endif
    */
-  void PeriodicTask::setPeriod(double period)
+  void PeriodicTask::setPeriod(std::chrono::nanoseconds period)
   {
     m_period = period;
 
-    if (m_period.sec() == 0 && m_period.usec() == 0)
-      {
-        m_nowait = true;
-        return;
-      }
-    m_nowait = false;
-    return;
-  }
-
-  /*!
-   * @if jp
-   * @brief タスク実行周期をセットする
-   * @else
-   * @brief Setting task execution period
-   * @endif
-   */
-  void PeriodicTask::setPeriod(TimeValue& period)
-  {
-    m_period = period;
-
-    if (m_period.sec() == 0 && m_period.usec() == 0)
+    if (m_period == std::chrono::seconds::zero())
       {
         m_nowait = true;
         return;
@@ -322,7 +301,7 @@ namespace coil
       {
         return;
       }
-    coil::sleep(m_period - m_execTime.interval());
+    std::this_thread::sleep_for((m_period - m_execTime.interval()));
   }
 
   /*!
