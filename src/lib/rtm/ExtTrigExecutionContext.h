@@ -25,10 +25,6 @@
 
 #include <rtm/ExecutionContextBase.h>
 
-#ifdef WIN32
-#pragma warning( disable : 4290 )
-#endif
-
 namespace RTC
 {
   /*!
@@ -641,10 +637,6 @@ namespace RTC
     Worker m_worker;
   };  // class ExtTrigExecutionContext
 } // namespace RTC
-
-#ifdef WIN32
-#pragma warning( default : 4290 )
-#endif
 
 
 extern "C"

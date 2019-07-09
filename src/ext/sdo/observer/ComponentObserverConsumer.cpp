@@ -287,7 +287,7 @@ namespace RTC
   {
     if (coil::toBool(prop["heartbeat.enable"], "YES", "NO", false))
       {
-        std::chrono::nanoseconds interval;
+        std::chrono::nanoseconds interval(m_interval);
         if (prop["heartbeat.interval"].empty()
             || !coil::stringTo(interval, prop["heartbeat.interval"].c_str()))
           {

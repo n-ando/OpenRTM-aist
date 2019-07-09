@@ -26,12 +26,6 @@
 #include <rtm/ConnectorListener.h>
 #include <rtm/OutPortBase.h>
 
-#ifdef WIN32
-#pragma warning( push ) 
-#pragma warning( disable : 4290 )
-#endif
-
-
 /*!
  * @if jp
  * @namespace RTC
@@ -894,9 +888,5 @@ namespace RTC
     ConnectorListeners m_listeners;
   };
 } // namespace RTC
-
-#ifdef WIN32
-#pragma warning( pop )
-#endif
 
 #endif // RTC_INPORTBASE_H

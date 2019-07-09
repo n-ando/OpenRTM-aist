@@ -42,10 +42,6 @@
  * @endif
  */
 
-#ifdef WIN32
-#pragma warning( disable : 4290 )
-#endif
-
 namespace RTC
 {
   /*!
@@ -1676,9 +1672,5 @@ namespace RTC
 
   };  // class CorbaNaming
 } // namespace RTC
-
-#ifdef WIN32
-#pragma warning( default : 4290 )
-#endif
 
 #endif  // end of RTC_CORBANAMING_H

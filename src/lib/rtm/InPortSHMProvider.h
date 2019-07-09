@@ -26,10 +26,6 @@
 #include <rtm/ConnectorListener.h>
 #include <rtm/ConnectorBase.h>
 
-#ifdef WIN32
-#pragma warning( disable : 4290 )
-#endif
-
 namespace RTC
 {
   /*!
@@ -265,10 +261,6 @@ extern "C"
    */
   void InPortSHMProviderInit();
 }
-
-#ifdef WIN32
-#pragma warning( default : 4290 )
-#endif
 
 #endif // RTC_INPORTCORBACDRPROVIDER_H
 

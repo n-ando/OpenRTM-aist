@@ -755,9 +755,14 @@ function(openrtm_common_set_compile_options target)
 
 		$<$<CXX_COMPILER_ID:MSVC>:
 			$<$<CONFIG:Debug>:/W4>
-			$<$<CONFIG:Release>:/W3 /WX>
+			$<$<CONFIG:Release>:/W4 /WX>
 			$<$<CONFIG:RelWithDebInfo>:/Wall>
-			$<$<CONFIG:MinSizeRel>:/W3>
+			$<$<CONFIG:MinSizeRel>:/W4 /WX>
+			/wd4589 # for omniORB.
+			$<$<VERSION_LESS:${CMAKE_CXX_COMPILER_VERSION},19.00>:/wd4127> # for omniORB.
+			$<$<VERSION_LESS:${CMAKE_CXX_COMPILER_VERSION},19.00>:/wd4510> # for Macho.
+			$<$<VERSION_LESS:${CMAKE_CXX_COMPILER_VERSION},19.00>:/wd4512> # for omniORB.
+			$<$<VERSION_LESS:${CMAKE_CXX_COMPILER_VERSION},19.00>:/wd4610> # for Macho.
 		>
 	)
 endfunction()

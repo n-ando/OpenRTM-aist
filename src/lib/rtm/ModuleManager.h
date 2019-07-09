@@ -47,10 +47,6 @@
 #define MOD_DELMOD    "manager.modules.download_cleanup"
 #define MOD_PRELOAD   "manager.modules.preload"
 
-#ifdef WIN32
-#pragma warning( disable : 4290 )
-#endif
-
 namespace RTC
 {
   /*!
@@ -779,9 +775,5 @@ namespace RTC
 
   };   // class ModuleManager
 } // namespace RTC
-
-#ifdef WIN32
-#pragma warning( default : 4290 )
-#endif
 
 #endif  // RTC_MODULEMANAGER_H

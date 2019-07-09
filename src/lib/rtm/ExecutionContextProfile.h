@@ -26,10 +26,6 @@
 #include <rtm/idl/RTCStub.h>
 #include <rtm/SystemLogger.h>
 
-#ifdef WIN32
-#pragma warning( disable : 4290 )
-#endif
-
 namespace RTC_impl
 {
   /*!
@@ -582,9 +578,5 @@ namespace RTC_impl
     };
   };  // class ExecutionContextProfile
 } // namespace RTC_impl
-
-#ifdef WIN32
-#pragma warning( default : 4290 )
-#endif
 
 #endif  // RTC_EXECUTIONCONTEXTPROFILE_H
