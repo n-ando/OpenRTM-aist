@@ -184,7 +184,7 @@ namespace RTC
       {
         auto us = std::chrono::duration_cast<std::chrono::microseconds>(tm - sec);
         std::stringstream usec("");
-        usec << std::setfill('0') << std::setw(3) << us.count();
+        usec << std::setfill('0') << std::setw(6) << us.count();
         coil::replaceString(fmt, "#u#", usec.str());
       }
 
