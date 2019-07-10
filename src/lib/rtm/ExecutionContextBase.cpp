@@ -19,14 +19,15 @@
 #include <rtm/RTObjectStateMachine.h>
 #include <rtm/ExecutionContextBase.h>
 #include <rtm/RTObject.h>
+#include <cinttypes>
 
 namespace RTC
 {
   ExecutionContextBase::ExecutionContextBase(const char*  /*name*/)
     : rtclog("ec_base"),
-      m_activationTimeout(0.5),
-      m_deactivationTimeout(0.5),
-      m_resetTimeout(0.5),
+      m_activationTimeout(std::chrono::milliseconds(500)),
+      m_deactivationTimeout(std::chrono::milliseconds(500)),
+      m_resetTimeout(std::chrono::milliseconds(500)),
       m_syncActivation(true), m_syncDeactivation(true), m_syncReset(true)
   {
   }
@@ -69,7 +70,7 @@ namespace RTC
     setTransitionMode(props, "sync_reset", m_syncReset);
 
     // getting transition timeout
-    coil::TimeValue timeout;
+    std::chrono::nanoseconds timeout;
     if (setTimeout(props, "transition_timeout", timeout))
       {
         m_activationTimeout   = timeout;
@@ -84,13 +85,13 @@ namespace RTC
     RTC_DEBUG(("Exec rate   : %f [Hz]", getRate()));
     RTC_DEBUG(("Activation  : Sync = %s, Timeout = %f",
                m_syncActivation ? "YES" : "NO",
-               static_cast<double>(m_activationTimeout)));
+               std::chrono::duration<double>(m_activationTimeout).count()));
     RTC_DEBUG(("Deactivation: Sync = %s, Timeout = %f",
                m_syncDeactivation ? "YES" : "NO",
-               static_cast<double>(m_deactivationTimeout)));
+               std::chrono::duration<double>(m_deactivationTimeout).count()));
     RTC_DEBUG(("Reset       : Sync = %s, Timeout = %f",
                m_syncReset ? "YES" : "NO",
-               static_cast<double>(m_resetTimeout)));
+               std::chrono::duration<double>(m_resetTimeout).count()));
     // Setting given Properties to EC's profile::properties
     setProperties(props);
   }
@@ -212,10 +213,9 @@ namespace RTC
     return onGetRate(rate);  // Template
   }
 
-  coil::TimeValue ExecutionContextBase::getPeriod() const
+  std::chrono::nanoseconds ExecutionContextBase::getPeriod() const
   {
-    coil::TimeValue period = m_profile.getPeriod();
-    return period;
+    return m_profile.getPeriod();
   }
 
   /*!
@@ -384,11 +384,11 @@ namespace RTC
         RTC_ERROR(("onWaitingActivated failed."));
         return ret;
       }
-    long int cycle =
-      static_cast<long int>(static_cast<double>(m_activationTimeout)
-                          / static_cast<double>(getPeriod()));
-    RTC_DEBUG(("Timeout is %f [s] (%f [s] in %d times)",
-               static_cast<double>(m_activationTimeout), getRate(), cycle));
+    int64_t cycle = m_activationTimeout / getPeriod();
+    RTC_DEBUG(("Timeout is %f [s] (%f [s] in %" PRId64 " times)",
+               std::chrono::duration<double>(m_activationTimeout).count(),
+               std::chrono::duration<double>(getRate()).count(),
+               cycle));
     // Wating INACTIVE -> ACTIVE
     auto starttime = std::chrono::steady_clock::now();
     while (rtobj->isCurrentState(RTC::INACTIVE_STATE))
@@ -399,12 +399,12 @@ namespace RTC
             RTC_ERROR(("onWaitingActivated failed."));
             return ret;
           }
-        coil::sleep(getPeriod());
+        std::this_thread::sleep_for(getPeriod());
         auto delta = std::chrono::steady_clock::now() - starttime;
         RTC_DEBUG(("Waiting to be ACTIVE state. %f [s] slept (%d/%d)",
                    std::chrono::duration<double>(delta).count(), count, cycle));
         ++count;
-        if (delta > m_activationTimeout.microseconds() || count > cycle)
+        if (delta > m_activationTimeout || count > cycle)
           {
             RTC_WARN(("The component is not responding."));
             break;
@@ -473,11 +473,11 @@ namespace RTC
         RTC_ERROR(("onWaitingDeactivated failed."));
         return ret;
       }
-    long int cycle =
-      static_cast<long int>(static_cast<double>(m_deactivationTimeout)
-                          / static_cast<double>(getPeriod()));
-    RTC_DEBUG(("Timeout is %f [s] (%f [s] in %d times)",
-               static_cast<double>(m_deactivationTimeout), getRate(), cycle));
+    int64_t cycle = m_deactivationTimeout / getPeriod();
+    RTC_DEBUG(("Timeout is %f [s] (%f [s] in %" PRId64 " times)",
+               std::chrono::duration<double>(m_deactivationTimeout).count(),
+               std::chrono::duration<double>(getRate()).count(),
+               cycle));
     // Wating ACTIVE -> INACTIVE
     auto starttime = std::chrono::steady_clock::now();
     while (rtobj->isCurrentState(RTC::ACTIVE_STATE))
@@ -488,12 +488,12 @@ namespace RTC
             RTC_ERROR(("onWaitingDeactivated failed."));
             return ret;
           }
-        coil::sleep(getPeriod());
+        std::this_thread::sleep_for(getPeriod());
         auto delta = std::chrono::steady_clock::now() - starttime;
         RTC_DEBUG(("Waiting to be INACTIVE state. Sleeping %f [s] (%d/%d)",
                    std::chrono::duration<double>(delta).count(), count, cycle));
         ++count;
-        if (delta > m_deactivationTimeout.microseconds() || count > cycle)
+        if (delta > m_deactivationTimeout || count > cycle)
           {
             RTC_ERROR(("The component is not responding."));
             break;
@@ -561,11 +561,11 @@ namespace RTC
         RTC_ERROR(("onWaitingReset() failed."));
         return ret;
       }
-    long int cycle =
-      static_cast<long int>(static_cast<double>(m_resetTimeout)
-                          / static_cast<double>(getPeriod()));
-    RTC_DEBUG(("Timeout is %f [s] (%f [s] in %d times)",
-               static_cast<double>(m_resetTimeout), getRate(), cycle));
+    int64_t cycle = m_resetTimeout / getPeriod();
+    RTC_DEBUG(("Timeout is %f [s] (%f [s] in %" PRId64 " times)",
+               std::chrono::duration<double>(m_resetTimeout).count(),
+               std::chrono::duration<double>(getRate()).count(),
+               cycle));
     // Wating ERROR -> INACTIVE
     auto starttime = std::chrono::steady_clock::now();
     while (rtobj->isCurrentState(RTC::ERROR_STATE))
@@ -576,12 +576,12 @@ namespace RTC
             RTC_ERROR(("onWaitingReset failed."));
             return ret;
           }
-        coil::sleep(getPeriod());
+        std::this_thread::sleep_for(getPeriod());
         std::chrono::duration<double> delta = std::chrono::steady_clock::now() - starttime;
         RTC_DEBUG(("Waiting to be INACTIVE state. Sleeping %f [s] (%d/%d)",
                    delta.count(), count, cycle));
         ++count;
-        if (delta.count() > m_resetTimeout || count > cycle)
+        if (delta > m_resetTimeout || count > cycle)
           {
             RTC_ERROR(("The component is not responding."));
             break;
@@ -891,16 +891,14 @@ namespace RTC
    */
   bool ExecutionContextBase::
   setTimeout(coil::Properties& props, const char* key,
-             coil::TimeValue& timevalue)
+             std::chrono::nanoseconds& timevalue)
   {
     RTC_TRACE(("setTimeout(%s)", key));
     if (props.findNode(key) != nullptr)
       {
-        double timeout;
-        if (coil::stringTo(timeout, props[key].c_str()))
+        if (coil::stringTo(timevalue, props[key].c_str()))
           {
-            timevalue = timeout;
-            RTC_DEBUG(("Timeout (%s): %f [s]", key, timeout));
+            RTC_DEBUG(("Timeout (%s): %lld [ns]", key, timevalue.count()));
             return true;
           }
       }

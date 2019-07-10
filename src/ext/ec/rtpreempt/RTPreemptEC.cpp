@@ -25,14 +25,11 @@
 #include <algorithm>
 #include <iostream>
 
-#include <coil/Time.h>
-#include <coil/TimeValue.h>
 
 #include <rtm/RTObjectStateMachine.h>
 #include "RTPreemptEC.h"
 
 #define MAX_SAFE_STACK (8*1024)
-#define NSEC_PER_SEC 1000000000
 #define DEEFAULT_PERIOD 0.000001
 
 namespace RTC_exp
@@ -59,8 +56,7 @@ namespace RTC_exp
     setKind(RTC::PERIODIC);
     setRate(1.0 / DEEFAULT_PERIOD);
 
-    RTC_DEBUG(("Actual period: %d [sec], %d [usec]",
-               m_profile.getPeriod().sec(), m_profile.getPeriod().usec()));
+    RTC_DEBUG(("Actual period: %lld [nsec]", m_profile.getPeriod().count()));
   }
 
   /*!
@@ -154,7 +150,6 @@ namespace RTC_exp
     unsigned char dummy[MAX_SAFE_STACK];
     memset(&dummy, 0, MAX_SAFE_STACK);
 
-    struct timespec ts0, ts1, ts2, ts3;
     int count(0);
     do
       {
@@ -166,34 +161,29 @@ namespace RTC_exp
               m_workerthread.cond_.wait(guard);
             }
         }
-        clock_gettime(CLOCK_MONOTONIC ,&ts0);
-        coil::TimeValue t0(ts0.tv_sec, ts0.tv_nsec * 1000);
+        auto t0 = std::chrono::high_resolution_clock::now();
         ExecutionContextBase::invokeWorkerDo();
         ExecutionContextBase::invokeWorkerPostDo();
-        clock_gettime(CLOCK_MONOTONIC ,&ts1);
-        coil::TimeValue t1(ts1.tv_sec, ts1.tv_nsec * 1000);
+        auto t1 = std::chrono::high_resolution_clock::now();
 
-        coil::TimeValue period(getPeriod());
+        auto period = getPeriod();
         if (count > 1000)
           {
-            RTC_PARANOID(("Period:    %f [s]", (double)period));
-            RTC_PARANOID(("Execution: %f [s]", (double)(t1 - t0)));
-            RTC_PARANOID(("Sleep:     %f [s]", (double)(period - (t1 - t0))));
+            RTC_PARANOID(("Period:    %f [s]", std::chrono::duration<double>(period).count()));
+            RTC_PARANOID(("Execution: %f [s]", std::chrono::duration<double>(t1 - t0).count()));
+            RTC_PARANOID(("Sleep:     %f [s]", std::chrono::duration<double>(period - (t1 - t0)).count()));
           }
-        clock_gettime(CLOCK_MONOTONIC ,&ts2);
-        coil::TimeValue t2(ts2.tv_sec, ts2.tv_nsec * 1000);
+        auto t2 = std::chrono::high_resolution_clock::now();
         if (m_nowait) { ++count; continue; }
 
-        struct timespec sleeptime;
-        if (getSleepTime(sleeptime, ts0, ts1))
+        std::chrono::high_resolution_clock::time_point wakeup_point;
+        if (getWakeUpTime(wakeup_point, t0, t1))
           {
-            clock_nanosleep(CLOCK_MONOTONIC, static_cast<int>(!TIMER_ABSTIME),
-                            &sleeptime, nullptr);
+            std::this_thread::sleep_until(wakeup_point);
             if (count > 1000)
               {
-                clock_gettime(CLOCK_MONOTONIC ,&ts3);
-                coil::TimeValue t3(ts3.tv_sec, ts3.tv_nsec * 1000);
-                RTC_PARANOID(("Slept:     %f [s]", (double)(t3 - t2)));
+                auto t3 = std::chrono::high_resolution_clock::now();
+                RTC_PARANOID(("Slept:     %f [s]", std::chrono::duration<double>(t3 - t2).count()));
                 count = 0;
               }
           }
@@ -608,31 +598,19 @@ namespace RTC_exp
     RTC_DEBUG(("setWaitOffset(): offset: %d", m_waitoffset));
   }
 
-  bool RTPreemptEC::getSleepTime(struct timespec& ts,
-                                 const struct timespec& t0,
-                                 const struct timespec& t1)
+  bool RTPreemptEC::getWakeUpTime(std::chrono::high_resolution_clock::time_point& tw,
+                                  const std::chrono::high_resolution_clock::time_point& t0,
+                                  const std::chrono::high_resolution_clock::time_point& t1)
   {
-    coil::TimeValue period(getPeriod());
-    if (t0.tv_nsec > t1.tv_nsec)
-      {
-        ts.tv_nsec = period.usec() * 1000
-          - (NSEC_PER_SEC - t0.tv_nsec + t1.tv_nsec) + m_waitoffset;
-        ts.tv_sec  = period.sec() - (t1.tv_sec - 1 - t0.tv_sec);
-      }
-    else
-      {
-        ts.tv_nsec = period.usec() * 1000
-          - (t1.tv_nsec - t0.tv_nsec) + m_waitoffset;
-        ts.tv_sec  = period.sec() - (t1.tv_sec - t0.tv_sec);
-      }
-    if (ts.tv_nsec < 0 || ts.tv_sec < 0)
+    tw = t0 + getPeriod() + std::chrono::nanoseconds(m_waitoffset);
+    if (tw < t1)
       {
         std::cerr << "faital error: deadline passed. " << std::endl;
         std::cerr << "Wait time: ";
-        std::cerr << ts.tv_sec << "[s], ";
-        std::cerr << ts.tv_nsec << "[ns]" << std::endl;
+        std::cerr << (tw - t1).count() << "[ns]" << std::endl;
         std::cerr << "Next wait time force to: 0.0 [s]"
                   << std::endl;
+        tw = t0;
         return false; // sleeptime < 0
       }
     return true; // sleeptime >= 0
@@ -665,4 +643,3 @@ extern "C"
                             ::RTC_exp::RTPreemptEC>);
   }
 }
-

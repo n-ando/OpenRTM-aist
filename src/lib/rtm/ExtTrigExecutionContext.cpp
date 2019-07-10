@@ -17,7 +17,6 @@
  *
  */
 
-#include <coil/TimeValue.h>
 #include <mutex>
 
 #include <rtm/ExtTrigExecutionContext.h>
@@ -47,8 +46,7 @@ namespace RTC
     setKind(RTC::PERIODIC);
     setRate(DEFAULT_EXECUTION_RATE);
 
-    RTC_DEBUG(("Actual period: %d [sec], %d [usec]",
-               m_profile.getPeriod().sec(), m_profile.getPeriod().usec()));
+    RTC_DEBUG(("Actual period: %lld [nsec]", m_profile.getPeriod().count()));
   }
 
   /*!
@@ -126,11 +124,11 @@ namespace RTC
           std::lock_guard<std::mutex> guard(m_worker.mutex_);
           m_worker.ticked_ = false;
         }
-        coil::TimeValue period(getPeriod());
-        auto rest = period.microseconds() - (t1 - t0);
+        auto period = getPeriod();
+        auto rest = period - (t1 - t0);
         if (true)  // count > 1000)
           {
-            RTC_PARANOID(("Period:    %f [s]", static_cast<double>(period)));
+            RTC_PARANOID(("Period:    %f [s]", std::chrono::duration<double>(period).count()));
             RTC_PARANOID(("Execution: %f [s]", std::chrono::duration<double>(t1 - t0).count()));
             RTC_PARANOID(("Sleep:     %f [s]", std::chrono::duration<double>(rest).count()));
           }
@@ -138,7 +136,7 @@ namespace RTC
         if (rest > std::chrono::seconds::zero())
           {
             if (true /*count > 1000*/) { RTC_PARANOID(("sleeping...")); }
-            std::this_thread::sleep_until(t0 + period.microseconds());
+            std::this_thread::sleep_until(t0 + period);
           }
         if (true)  // count > 1000)
           {

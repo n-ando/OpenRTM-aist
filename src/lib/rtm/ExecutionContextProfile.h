@@ -21,7 +21,6 @@
 
 #include <mutex>
 #include <coil/Properties.h>
-#include <coil/TimeValue.h>
 
 #include <rtm/idl/RTCStub.h>
 #include <rtm/SystemLogger.h>
@@ -167,8 +166,7 @@ namespace RTC_impl
      * @endif
      */
     RTC::ReturnCode_t setRate(double rate);
-    RTC::ReturnCode_t setPeriod(double period);
-    RTC::ReturnCode_t setPeriod(coil::TimeValue period);
+    RTC::ReturnCode_t setPeriod(std::chrono::nanoseconds period);
 
     /*!
      * @if jp
@@ -191,7 +189,7 @@ namespace RTC_impl
      * @endif
      */
     double getRate() const;
-    coil::TimeValue getPeriod() const;
+    std::chrono::nanoseconds getPeriod() const;
 
     /*!
      * @if jp
@@ -547,7 +545,7 @@ namespace RTC_impl
      * @brief Execution cycle of ExecutionContext
      * @endif
      */
-    coil::TimeValue m_period;
+    std::chrono::nanoseconds m_period;
 
     /*!
      * @if jp

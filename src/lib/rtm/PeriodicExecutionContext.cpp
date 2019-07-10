@@ -16,8 +16,6 @@
  *
  */
 
-#include <coil/Time.h>
-#include <coil/TimeValue.h>
 
 #include <rtm/PeriodicExecutionContext.h>
 #include <rtm/RTObjectStateMachine.h>
@@ -52,8 +50,7 @@ namespace RTC_exp
     setKind(RTC::PERIODIC);
     setRate(1.0 / static_cast<double>(DEEFAULT_PERIOD));
 
-    RTC_DEBUG(("Actual period: %d [sec], %d [usec]",
-               m_profile.getPeriod().sec(), m_profile.getPeriod().usec()));
+    RTC_DEBUG(("Actual period: %lld [nsec]", m_profile.getPeriod().count()));
   }
 
   /*!
@@ -173,11 +170,11 @@ namespace RTC_exp
         ExecutionContextBase::invokeWorkerPostDo();
         auto t1 = std::chrono::high_resolution_clock::now();
 
-        coil::TimeValue period(getPeriod());
-        auto rest = period.microseconds() - (t1 - t0);
+        auto period = getPeriod();
+        auto rest = period - (t1 - t0);
         if (count > 1000)
           {
-            RTC_PARANOID(("Period:    %f [s]", static_cast<double>(period)));
+            RTC_PARANOID(("Period:    %f [s]", std::chrono::duration<double>(period).count()));
             RTC_PARANOID(("Execution: %f [s]", std::chrono::duration<double>(t1 - t0).count()));
             RTC_PARANOID(("Sleep:     %f [s]", std::chrono::duration<double>(rest).count()));
           }
@@ -185,7 +182,7 @@ namespace RTC_exp
         if (!m_nowait && (rest > std::chrono::seconds::zero()))
           {
             if (count > 1000) { RTC_PARANOID(("sleeping...")); }
-            std::this_thread::sleep_until(t0 + period.microseconds());
+            std::this_thread::sleep_until(t0 + period);
           }
         if (count > 1000)
           {

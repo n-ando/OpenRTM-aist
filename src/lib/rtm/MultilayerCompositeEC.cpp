@@ -15,8 +15,6 @@
  *
  */
 
-#include <coil/Time.h>
-#include <coil/TimeValue.h>
 
 
 #include <rtm/Manager.h>
@@ -117,11 +115,11 @@ namespace RTC_exp
         
         auto t1 = std::chrono::high_resolution_clock::now();
 
-        coil::TimeValue period(getPeriod());
-        auto rest = period.microseconds() - (t1 - t0);
+        auto period = getPeriod();
+        auto rest = period - (t1 - t0);
         if (count > 1000)
           {
-            RTC_PARANOID(("Period:    %f [s]", static_cast<double>(period)));
+            RTC_PARANOID(("Period:    %f [s]", std::chrono::duration<double>(period).count()));
             RTC_PARANOID(("Execution: %f [s]", std::chrono::duration<double>(t1 - t0).count()));
             RTC_PARANOID(("Sleep:     %f [s]", std::chrono::duration<double>(rest).count()));
             int task_num = 0;
@@ -139,7 +137,7 @@ namespace RTC_exp
         if (!m_nowait && (rest > std::chrono::seconds::zero()))
           {
             if (count > 1000) { RTC_PARANOID(("sleeping...")); }
-            std::this_thread::sleep_until(t0 + period.microseconds());
+            std::this_thread::sleep_until(t0 + period);
           }
         if (count > 1000)
           {
