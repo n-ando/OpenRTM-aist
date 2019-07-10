@@ -11,7 +11,6 @@
 #define LTTSAMPLE_H
 
 #include <coil/ClockManager.h>
-#include <coil/TimeValue.h>
 
 #include <rtm/idl/BasicDataTypeSkel.h>
 #include <rtm/Manager.h>

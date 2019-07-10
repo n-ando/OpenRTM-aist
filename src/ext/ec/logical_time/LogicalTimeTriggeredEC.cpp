@@ -17,7 +17,6 @@
  *
  */
 
-#include <coil/TimeValue.h>
 #include <mutex>
 #include <coil/ClockManager.h>
 
@@ -198,8 +197,8 @@ namespace RTC
   tick(::CORBA::ULong sec, ::CORBA::ULong usec)
   {
     RTC_TRACE(("tick(sec = %d, usec = %d)", sec, usec));
-    coil::TimeValue time(sec, usec);
-    m_clock.settime(time);
+    m_clock.settime(std::chrono::seconds(sec)
+                    + std::chrono::microseconds(usec));
 
     if (!isRunning())
       {
@@ -221,14 +220,14 @@ namespace RTC
     return;
   }
 
-
-  
   void LogicalTimeTriggeredEC::
   get_time(::CORBA::ULong& sec, ::CORBA::ULong& usec)
   {
-    coil::TimeValue time(m_clock.gettime());
-    sec  = time.sec();
-    usec = time.usec();
+    std::chrono::nanoseconds time(m_clock.gettime());
+    auto time_s = std::chrono::duration_cast<std::chrono::seconds>(time);
+    auto time_us = std::chrono::duration_cast<std::chrono::microseconds>(time);
+    sec  = static_cast<::CORBA::ULong>(time_s.count());
+    usec = static_cast<::CORBA::ULong>((time_us - time_s).count());
   }
 
   //============================================================

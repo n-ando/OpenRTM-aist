@@ -20,7 +20,6 @@
 #define COIL_CLOCKMANAGER_H
 
 #include <coil/Singleton.h>
-#include <coil/TimeValue.h>
 #include <mutex>
 
 #include <string>
@@ -62,7 +61,7 @@ namespace coil
      * @return Current time
      * @endif
      */
-    virtual coil::TimeValue gettime() const = 0;
+    virtual std::chrono::nanoseconds gettime() const = 0;
     /*!
      * @if jp
      * @brief 時刻を設定する
@@ -72,7 +71,7 @@ namespace coil
      * @param clocktime Current time
      * @endif
      */
-    virtual bool settime(coil::TimeValue clocktime) = 0;
+    virtual bool settime(std::chrono::nanoseconds clocktime) = 0;
   };
 
   /*!
@@ -93,8 +92,8 @@ namespace coil
   {
   public:
     ~SystemClock() override;
-    coil::TimeValue gettime() const override;
-    bool settime(coil::TimeValue clocktime) override;
+    std::chrono::nanoseconds gettime() const override;
+    bool settime(std::chrono::nanoseconds clocktime) override;
   };
 
   /*!
@@ -118,10 +117,10 @@ namespace coil
   public:
     LogicalClock();
     ~LogicalClock() override;
-    coil::TimeValue gettime() const override;
-    bool settime(coil::TimeValue clocktime) override;
+    std::chrono::nanoseconds gettime() const override;
+    bool settime(std::chrono::nanoseconds clocktime) override;
   private:
-    coil::TimeValue m_currentTime;
+    std::chrono::nanoseconds m_currentTime;
     mutable std::mutex m_currentTimeMutex;
   };
 
@@ -146,8 +145,8 @@ namespace coil
   public:
     AdjustedClock();
     ~AdjustedClock() override;
-    coil::TimeValue gettime() const override;
-    bool settime(coil::TimeValue clocktime) override;
+    std::chrono::nanoseconds gettime() const override;
+    bool settime(std::chrono::nanoseconds clocktime) override;
   private:
     std::chrono::steady_clock::time_point m_offset;
     mutable std::mutex m_offsetMutex;
