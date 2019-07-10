@@ -22,160 +22,10 @@
 
 #include <coil/TimeMeasure.h>
 #include <coil/Task.h>
+#include <functional>
 
 namespace coil
 {
-  /*!
-   * @if jp
-   *
-   * @class TaskFuncBase
-   * @brief TaskFuncBase クラス
-   *
-   * @else
-   *
-   * @class TaskFuncBase
-   * @brief TaskFuncBase class
-   *
-   * @endif
-   */
-  class TaskFuncBase
-  {
-  public:
-    /*!
-     * @if jp
-     *
-     * @brief デストラクタ
-     *
-     * デストラクタ。
-     *
-     * @else
-     *
-     * @brief Destructor
-     *
-     * Destructor
-     *
-     * @endif
-     */
-    virtual ~TaskFuncBase() {}
-
-    /*!
-     * @if jp
-     *
-     * @brief オブジェクトの関数実行用純粋仮想関数
-     *
-     * オブジェクトの関数実行用純粋仮想関数。
-     *
-     * @else
-     *
-     * @brief Functor
-     *
-     * Pure virtual function for Functor.
-     *
-     * @endif
-     */
-    virtual int operator()() = 0;
-  };
-
-  /*!
-   * @if jp
-   *
-   * @class TaskFunc
-   * @brief TaskFunc テンプレートクラス
-   *
-   * @else
-   *
-   * @class TaskFunc
-   * @brief TaskFunc template class
-   *
-   * @endif
-   */
-  template <typename T, typename F = int (*)()>
-  class TaskFunc
-    : public TaskFuncBase
-  {
-  public:
-    /*!
-     * @if jp
-     *
-     * @brief コンストラクタ
-     *
-     * コンストラクタ。
-     *
-     * @param obj オブジェクト
-     * @param func 関数
-     *
-     * @else
-     *
-     * @brief Constructor
-     *
-     * Constructor
-     *
-     * @param obj Object.
-     * @param func Function.
-     *
-     * @endif
-     */
-    TaskFunc(T* obj, F func)
-      : m_obj(obj), m_func(func)
-    {
-    }
-
-    /*!
-     * @if jp
-     *
-     * @brief デストラクタ
-     *
-     * デストラクタ。
-     *
-     * @else
-     *
-     * @brief Destructor
-     *
-     * Destructor
-     *
-     * @endif
-     */
-    ~TaskFunc() override {}
-
-    /*!
-     * @if jp
-     *
-     * @brief オブジェクトの関数実行
-     *
-     * オブジェクトの関数を実行する。
-     *
-     * @else
-     *
-     * @brief Functor
-     *
-     * Execute a function of the object.
-     *
-     * @endif
-     */
-    int operator()() override
-    {
-      return (m_obj->*m_func)();
-    }
-
-    /*!
-     * @if jp
-     * @brief オブジェクト
-     * @else
-     * @brief object
-     * @endif
-     */
-    T* m_obj;
-
-    /*!
-     * @if jp
-     * @brief 関数
-     * @else
-     * @brief function
-     * @endif
-     */
-    F m_func;
-  };
-
   /*!
    * @if jp
    *
@@ -303,7 +153,6 @@ namespace coil
      * タスク実行関数をセットする純粋仮想関数。
      *
      * @param func 関数
-     * @param delete_in_dtor 削除フラグ
      *
      * @else
      *
@@ -312,42 +161,10 @@ namespace coil
      * Pure virtual function for setting task execution function.
      *
      * @param func Function.
-     * @param delete_in_dtor Delete flag.
      *
      * @endif
      */
-    virtual bool setTask(TaskFuncBase* func, bool delete_in_dtor = true) = 0;
-
-    /*!
-     * @if jp
-     *
-     * @brief タスク実行関数をセットする
-     *
-     * タスク実行関数をセットする
-     *
-     * @param obj オブジェクト
-     * @param fun 関数
-     *
-     * @return true: 成功, false: 失敗
-     *
-     * @else
-     *
-     * @brief Setting task execution function
-     *
-     * Pure virtual function for setting task execution function.
-     *
-     * @param obj Object.
-     * @param fun Function.
-     *
-     * @return true: successful, false: failed
-     *
-     * @endif
-     */
-    template <class O, class F>
-    bool setTask(O* obj, F fun)
-    {
-      return this->setTask(new TaskFunc<O, F>(obj, fun));
-    }
+    virtual void setTask(std::function<void(void)> func) = 0;
 
     /*!
      * @if jp

@@ -458,7 +458,7 @@ namespace RTC
                    prop.getProperty("thread_type", "default").c_str()));
         return false;
       }
-    m_task->setTask(this, &PublisherPeriodic::svc);
+    m_task->setTask([this]{ svc(); });
     RTC_PARANOID(("Task creation succeeded."));
 
     // Extracting publisher's period time
