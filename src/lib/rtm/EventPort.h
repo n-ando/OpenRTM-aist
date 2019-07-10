@@ -22,8 +22,6 @@
 #include <vector>
 #include <iostream>
 
-#include <coil/TimeValue.h>
-#include <coil/Time.h>
 #include <coil/OS.h>
 #include <mutex>
 

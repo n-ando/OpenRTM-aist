@@ -41,7 +41,6 @@ set(coil_headers
 	common/coil/Singleton.h
 	common/coil/Task.h
 	common/coil/TimeMeasure.h
-	common/coil/TimeValue.h
 	common/coil/Timer.h
 	common/coil/crc.h
 	common/coil/stringutil.h
@@ -50,7 +49,6 @@ set(coil_headers
 	${COIL_OS_DIR}/coil/Routing.h
 	${COIL_OS_DIR}/coil/Process.h
 	${COIL_OS_DIR}/coil/Signal.h
-	${COIL_OS_DIR}/coil/Time.h
 	${COIL_OS_DIR}/coil/UUID.h
 	${COIL_OS_DIR}/coil/SharedMemory.h
 	${COIL_OS_DIR}/coil/Affinity.h
@@ -63,7 +61,6 @@ set(coil_srcs
 	common/coil/Properties.cpp
 	common/coil/Task.cpp
 	common/coil/TimeMeasure.cpp
-	common/coil/TimeValue.cpp
 	common/coil/Timer.cpp
 	common/coil/crc.cpp
 	common/coil/stringutil.cpp

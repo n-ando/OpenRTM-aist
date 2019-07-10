@@ -16,7 +16,6 @@
  *
  */
 
-
 #include <rtm/PeriodicExecutionContext.h>
 #include <rtm/RTObjectStateMachine.h>
 

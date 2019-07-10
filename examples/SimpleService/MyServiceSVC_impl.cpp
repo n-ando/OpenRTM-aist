@@ -7,7 +7,6 @@
 
 #include "MyServiceSVC_impl.h"
 #include <rtm/CORBA_SeqUtil.h>
-#include <coil/Time.h>
 #include <iostream>
 
 template <class T>

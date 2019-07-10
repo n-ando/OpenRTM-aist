@@ -18,7 +18,6 @@
  */
 #include <rtm/RTC.h>
 #include <coil/Properties.h>
-#include <coil/Time.h>
 #include <coil/stringutil.h>
 #include <rtm/PublisherPeriodic.h>
 #include <rtm/InPortConsumer.h>

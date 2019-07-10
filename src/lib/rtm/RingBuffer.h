@@ -20,7 +20,6 @@
 #ifndef RTC_RINGBUFFER_H
 #define RTC_RINGBUFFER_H
 
-#include <coil/TimeValue.h>
 #include <mutex>
 #include <condition_variable>
 #include <coil/stringutil.h>

@@ -20,8 +20,6 @@
 #ifndef RTC_INPORT_H
 #define RTC_INPORT_H
 
-#include <coil/TimeValue.h>
-#include <coil/Time.h>
 #include <coil/OS.h>
 #include <mutex>
 
