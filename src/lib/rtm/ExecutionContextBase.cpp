@@ -384,7 +384,12 @@ namespace RTC
         RTC_ERROR(("onWaitingActivated failed."));
         return ret;
       }
+#if defined(_MSC_VER) && (_MSC_VER < 1900)
+    // Visual Studio 2013: std::chrono is broken.
+    int64_t cycle = m_activationTimeout.count() / getPeriod().count();
+#else
     int64_t cycle = m_activationTimeout / getPeriod();
+#endif
     RTC_DEBUG(("Timeout is %f [s] (%f [s] in %" PRId64 " times)",
                std::chrono::duration<double>(m_activationTimeout).count(),
                std::chrono::duration<double>(getRate()).count(),
@@ -473,7 +478,12 @@ namespace RTC
         RTC_ERROR(("onWaitingDeactivated failed."));
         return ret;
       }
+#if defined(_MSC_VER) && (_MSC_VER < 1900)
+    // Visual Studio 2013: std::chrono is broken.
+    int64_t cycle = m_deactivationTimeout.count() / getPeriod().count();
+#else
     int64_t cycle = m_deactivationTimeout / getPeriod();
+#endif
     RTC_DEBUG(("Timeout is %f [s] (%f [s] in %" PRId64 " times)",
                std::chrono::duration<double>(m_deactivationTimeout).count(),
                std::chrono::duration<double>(getRate()).count(),
@@ -561,7 +571,12 @@ namespace RTC
         RTC_ERROR(("onWaitingReset() failed."));
         return ret;
       }
+#if defined(_MSC_VER) && (_MSC_VER < 1900)
+    // Visual Studio 2013: std::chrono is broken.
+    int64_t cycle = m_resetTimeout.count() / getPeriod().count();
+#else
     int64_t cycle = m_resetTimeout / getPeriod();
+#endif
     RTC_DEBUG(("Timeout is %f [s] (%f [s] in %" PRId64 " times)",
                std::chrono::duration<double>(m_resetTimeout).count(),
                std::chrono::duration<double>(getRate()).count(),

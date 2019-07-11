@@ -41,7 +41,14 @@ namespace RTC_impl
     RTC_DEBUG(("Actual rate: %lld [nsec]", m_period.count()));
     // profile initialization
     m_profile.kind = RTC::PERIODIC;
+#if defined(_MSC_VER) && (_MSC_VER < 1900)
+    // Visual Studio 2013: std::chrono is broken.
+    m_profile.rate = 1.0
+                     / m_period.count()
+                     * decltype(m_period)::period::den;
+#else
     m_profile.rate = std::chrono::duration<double>(1) / m_period;
+#endif
     m_profile.owner = RTC::RTObject::_nil();
     m_profile.participants.length(0);
     m_profile.properties.length(0);
@@ -125,7 +132,14 @@ namespace RTC_impl
       }
 
     std::lock_guard<std::mutex> guard(m_profileMutex);
+#if defined(_MSC_VER) && (_MSC_VER < 1900)
+    // Visual Studio 2013: std::chrono is broken.
+    m_profile.rate = 1.0
+                     / period.count()
+                     * decltype(period)::period::den;
+#else
     m_profile.rate = std::chrono::duration<double>(1) / period;
+#endif
     m_period = period;
     return RTC::RTC_OK;
   }
