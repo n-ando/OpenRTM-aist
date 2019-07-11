@@ -21,8 +21,6 @@
 #include <rtm/CORBA_SeqUtil.h>
 #include <rtm/NVUtil.h>
 
-#define DEEFAULT_PERIOD 0.000001
-
 namespace RTC_impl
 {
 
@@ -36,15 +34,21 @@ namespace RTC_impl
   ExecutionContextProfile::
   ExecutionContextProfile(RTC::ExecutionKind  /*kind*/)
     : rtclog("periodic_ecprofile"),
-      m_period(static_cast<double>(DEEFAULT_PERIOD)),
+      m_period(std::chrono::microseconds(1)),
       m_ref(RTC::ExecutionContextService::_nil())
   {
     RTC_TRACE(("ExecutionContextProfile()"));
-    RTC_DEBUG(("Actual rate: %d [sec], %d [usec]",
-               m_period.sec(), m_period.usec()));
+    RTC_DEBUG(("Actual rate: %lld [nsec]", m_period.count()));
     // profile initialization
     m_profile.kind = RTC::PERIODIC;
-    m_profile.rate = 1.0 / m_period;
+#if defined(_MSC_VER) && (_MSC_VER < 1900)
+    // Visual Studio 2013: std::chrono is broken.
+    m_profile.rate = 1.0
+                     / m_period.count()
+                     * decltype(m_period)::period::den;
+#else
+    m_profile.rate = std::chrono::duration<double>(1) / m_period;
+#endif
     m_profile.owner = RTC::RTObject::_nil();
     m_profile.participants.length(0);
     m_profile.properties.length(0);
@@ -115,33 +119,27 @@ namespace RTC_impl
     RTC_TRACE(("setRate(%f)", rate));
     if (rate <= 0.0) { return RTC::BAD_PARAMETER; }
 
-    std::lock_guard<std::mutex> guard(m_profileMutex);
-    m_profile.rate = rate;
-    m_period = coil::TimeValue(1.0/rate);
-    return RTC::RTC_OK;
+    std::chrono::duration<double> period(1.0 / rate);
+    return setPeriod(std::chrono::duration_cast<std::chrono::nanoseconds>(period));
   }
 
-  RTC::ReturnCode_t ExecutionContextProfile::setPeriod(double period)
+  RTC::ReturnCode_t ExecutionContextProfile::setPeriod(std::chrono::nanoseconds period)
   {
-    RTC_TRACE(("setPeriod(%f [sec])", period));
-    if (period <= 0.0) { return RTC::BAD_PARAMETER; }
-
-    std::lock_guard<std::mutex> guard(m_profileMutex);
-    m_profile.rate = 1.0 / period;
-    m_period = coil::TimeValue(period);
-    return RTC::RTC_OK;
-  }
-
-  RTC::ReturnCode_t ExecutionContextProfile::setPeriod(coil::TimeValue period)
-  {
-    RTC_TRACE(("setPeriod(%f [sec])", static_cast<double>(period)));
-    if (static_cast<double>(period) <= 0.0)
+    RTC_TRACE(("setPeriod(%lld [nsec])", period.count()));
+    if (period <= std::chrono::seconds::zero())
       {
         return RTC::BAD_PARAMETER;
       }
 
     std::lock_guard<std::mutex> guard(m_profileMutex);
-    m_profile.rate = 1.0 / static_cast<double>(period);
+#if defined(_MSC_VER) && (_MSC_VER < 1900)
+    // Visual Studio 2013: std::chrono is broken.
+    m_profile.rate = 1.0
+                     / period.count()
+                     * decltype(period)::period::den;
+#else
+    m_profile.rate = std::chrono::duration<double>(1) / period;
+#endif
     m_period = period;
     return RTC::RTC_OK;
   }
@@ -159,7 +157,7 @@ namespace RTC_impl
     return m_profile.rate;
   }
 
-  coil::TimeValue ExecutionContextProfile::getPeriod() const
+  std::chrono::nanoseconds ExecutionContextProfile::getPeriod() const
   {
     std::lock_guard<std::mutex> guard(m_profileMutex);
     return m_period;

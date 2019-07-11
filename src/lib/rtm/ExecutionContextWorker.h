@@ -62,17 +62,17 @@ namespace RTC_impl
    *   - RTC::ReturnCode_t activateComponent(RTC::LightweightRTObject_ptr comp,
    *                                         RTObjectStateMachine*& rtobj);
    *   - RTC::ReturnCode_t waitActivateComplete(RTObjectStateMachine*& rtobj,
-   *                                            coil::TimeValue timeout = 1.0,
+   *                                            std::chrono::nanoseconds timeout = 1s,
    *                                            long int cycle = 1000);
    *
    *   - RTC::ReturnCode_t deactivateComponent(RTC::LightweightRTObject_ptr comp,  *                                           RTObjectStateMachine*& rtobj);
    *   - RTC::ReturnCode_t waitDeactivateComplete(RTObjectStateMachine*& rtobj,
-   *                                              coil::TimeValue timeout = 1.0,
+   *                                              std::chrono::nanoseconds timeout = 1s,
    *                                              long int cycle = 1000);
    *   -  RTC::ReturnCode_t resetComponent(RTC::LightweightRTObject_ptr com,
    *                                       RTObjectStateMachine*& rtobj);
    *   -  RTC::ReturnCode_t waitResetComplete(RTObjectStateMachine*& rtobj,
-   *                                          coil::TimeValue timeout = 1.0,
+   *                                          std::chrono::nanoseconds timeout = 1s,
    *                                          long int cycle = 1000);
    *   - RTC::LifeCycleState getComponentState(RTC::LightweightRTObject_ptr comp);
    *   - const char* getStateString(RTC::LifeCycleState state)
@@ -311,7 +311,8 @@ namespace RTC_impl
     RTC::ReturnCode_t activateComponent(RTC::LightweightRTObject_ptr comp,
                                         RTObjectStateMachine*& rtobj);
     RTC::ReturnCode_t waitActivateComplete(RTObjectStateMachine*& rtobj,
-                                           coil::TimeValue timeout = coil::TimeValue(1.0),
+                                           std::chrono::nanoseconds timeout
+                                           = std::chrono::seconds(1),
                                            long int cycle = 1000);
     /*!
      * @if jp
@@ -348,7 +349,8 @@ namespace RTC_impl
     RTC::ReturnCode_t deactivateComponent(RTC::LightweightRTObject_ptr comp,
                                           RTObjectStateMachine*& rtobj);
     RTC::ReturnCode_t waitDeactivateComplete(RTObjectStateMachine*& rtobj,
-                                             coil::TimeValue timeout = coil::TimeValue(1.0),
+                                             std::chrono::nanoseconds timeout
+                                             = std::chrono::seconds(1),
                                              long int cycle = 1000);
 
     /*!
@@ -385,7 +387,8 @@ namespace RTC_impl
     RTC::ReturnCode_t resetComponent(RTC::LightweightRTObject_ptr comp,
                                      RTObjectStateMachine*& rtobj);
     RTC::ReturnCode_t waitResetComplete(RTObjectStateMachine*& rtobj,
-                                        coil::TimeValue timeout = coil::TimeValue(1.0),
+                                        std::chrono::nanoseconds timeout
+                                        = std::chrono::seconds(1),
                                         long int cycle = 1000);
 
     /*!

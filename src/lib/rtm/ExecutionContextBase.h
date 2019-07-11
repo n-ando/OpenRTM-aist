@@ -531,7 +531,7 @@ namespace RTC
      * @endif
      */
     double getRate() const;
-    coil::TimeValue getPeriod() const;
+    std::chrono::nanoseconds getPeriod() const;
 
     /*!
      * @if jp
@@ -1176,7 +1176,7 @@ namespace RTC
      * @endif
      */
     bool setTimeout(coil::Properties& props, const char* key,
-                    coil::TimeValue& timevalue);
+                    std::chrono::nanoseconds& timevalue);
 
     RTC::ReturnCode_t waitForActivated(RTC_impl::RTObjectStateMachine* rtobj);
     RTC::ReturnCode_t waitForDeactivated(RTC_impl::RTObjectStateMachine* rtobj);
@@ -1188,9 +1188,9 @@ namespace RTC
     RTC_impl::ExecutionContextWorker m_worker;
     RTC_impl::ExecutionContextProfile m_profile;
 
-    coil::TimeValue m_activationTimeout;
-    coil::TimeValue m_deactivationTimeout;
-    coil::TimeValue m_resetTimeout;
+    std::chrono::nanoseconds m_activationTimeout;
+    std::chrono::nanoseconds m_deactivationTimeout;
+    std::chrono::nanoseconds m_resetTimeout;
 
     bool m_syncActivation;
     bool m_syncDeactivation;

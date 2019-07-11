@@ -16,8 +16,6 @@
  *
  */
 
-#include <coil/Time.h>
-#include <coil/TimeValue.h>
 #include <rtm/RTObject.h>
 #include <rtm/RTObjectStateMachine.h>
 #include <rtm/ExecutionContextWorker.h>
