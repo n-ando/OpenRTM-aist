@@ -158,7 +158,7 @@ namespace RTC
         if (true) //count > 1000)
           {
             auto t3 = std::chrono::steady_clock::now();
-            RTC_PARANOID(("Slept:       %f [s]", std::chrono::duration<double>(t3 - t0).count()));
+            RTC_PARANOID(("Slept:       %f [s]", std::chrono::duration<double>(t3 - t2).count()));
             count = 0;
           }
         ++count;
