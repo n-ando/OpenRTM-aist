@@ -682,7 +682,7 @@ function(openrtm_common_set_compile_options target)
 		-Wno-unused-macros
 		-Wno-unused-result
 		-Wno-useless-cast
-		-Wno-zero-as-null-pointer-constant)
+		)
 	set(WARN_CLANG
 		-Weverything
 		# exclude rule
@@ -723,7 +723,6 @@ function(openrtm_common_set_compile_options target)
 		-Wno-unused-macros
 		-Wno-unused-variable
 		-Wno-weak-vtables
-		-Wno-zero-as-null-pointer-constant
 		)
 
 	target_compile_options(${target} PRIVATE

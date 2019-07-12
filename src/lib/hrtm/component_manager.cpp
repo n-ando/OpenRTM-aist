@@ -22,7 +22,7 @@ namespace hrtm
 {
   // static members initialization
   ModuleInitProc ComponentManager::initProc;
-  ComponentManager* ComponentManager::manager = NULL;
+  ComponentManager* ComponentManager::manager = nullptr;
   std::mutex ComponentManager::mutex;
   
   hrtm::DataFlowComponent*

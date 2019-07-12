@@ -216,7 +216,7 @@ public:
         if (data_place) {
             // Free cached memory of previously used data.
             ::operator delete(data_place);
-            data_place = 0;
+            data_place = nullptr;
         }
         data_ = data;
     }
@@ -349,7 +349,7 @@ class StateAlias {
   // Clones object.
   // Will call copy constructor of data.
   StateAlias clone() {
-    return StateAlias(character_, data_ ? (character_->clone)(data_) : 0);
+    return StateAlias(character_, data_ ? (character_->clone)(data_) : nullptr);
   }
   StateInfo & get_info(MachineBase & machine) const {
     return (character_->get_info)(machine);
@@ -357,7 +357,7 @@ class StateAlias {
   // Hand over data object (to state instances or other state aliases).
   void * take_data() const {
     void * data = data_;
-    data_ = 0;
+    data_ = nullptr;
     return data;
   }
 
@@ -487,11 +487,11 @@ class Link : public P {
   static void clear_history(Machine<TOP> & m) { get_info(m).set_history(0); }
   static void clear_history_deep(Machine<TOP> & m) {
     m.clear_history_deep(get_info(m)); }
-  static void set_state(Machine<TOP> & machine, void * data = 0) {
+  static void set_state(Machine<TOP> & machine, void * data = nullptr) {
     StateInfo & info = get_info(machine);
     machine.set_pending_state(info, true, data);
   }
-  static void set_state_direct(Machine<TOP> & machine, void * data = 0) {
+  static void set_state_direct(Machine<TOP> & machine, void * data = nullptr) {
     StateInfo & info = get_info(machine);
     machine.set_pending_state(info, false, data);
   }
@@ -507,7 +507,7 @@ class Link : public P {
     P::machine().set_pending_state(info, true, state.take_data());
   }
   // to be used with restore
-  void set_state(StateInfo & current, void * data = 0) {
+  void set_state(StateInfo & current, void * data = nullptr) {
     this->state_info_.machine().set_pending_state(current, true, data);
   }
 
@@ -983,7 +983,7 @@ class Machine : public MachineBase {
     for (unsigned int i = 0; i < the_state_count_; ++i) {
       StateInfo * s = states_[i];
       if (s && s->is_child(state))
-        s->set_history(0);
+        s->set_history(nullptr);
     }
   }
 
