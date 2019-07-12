@@ -21,7 +21,6 @@
 
 #include <rtm/config_rtc.h>
 
-#include <coil/Time.h>
 #include <coil/ClockManager.h>
 #include <coil/Logger.h>
 #include <mutex>

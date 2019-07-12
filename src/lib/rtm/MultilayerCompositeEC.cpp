@@ -15,8 +15,6 @@
  *
  */
 
-
-
 #include <rtm/Manager.h>
 #include <rtm/RTObject.h>
 #include <rtm/MultilayerCompositeEC.h>

@@ -7,7 +7,6 @@
  * $Id$
  */
 
-#include <coil/Time.h>
 #include <iostream>
 #include <iomanip>
 
