@@ -228,7 +228,7 @@ namespace coil
                           Creator creator,
                           Destructor destructor)
     {
-      if (creator == 0 || destructor == 0) { return INVALID_ARG; }
+      if (creator == nullptr || destructor == nullptr) { return INVALID_ARG; }
       if (m_creators.count(id) != 0) { return ALREADY_EXISTS; }
       FactoryEntry f(id, creator, destructor);
       m_creators[id] = f;

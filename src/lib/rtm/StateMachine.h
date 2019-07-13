@@ -285,12 +285,12 @@ namespace RTC_Utils
     explicit StateMachine(int num_of_state)
       : m_num(num_of_state),
         m_listener(nullptr),
-        m_entry(m_num, (Callback)NULL),
-        m_predo(m_num, (Callback)NULL),
-        m_do(m_num, (Callback)NULL),
-        m_postdo(m_num, (Callback)NULL),
-        m_exit(m_num, (Callback)NULL),
-        m_transit(NULL),
+        m_entry(m_num, (Callback)nullptr),
+        m_predo(m_num, (Callback)nullptr),
+        m_do(m_num, (Callback)nullptr),
+        m_postdo(m_num, (Callback)nullptr),
+        m_exit(m_num, (Callback)nullptr),
+        m_transit(nullptr),
         m_selftrans(false)
     {
     }

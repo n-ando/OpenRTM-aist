@@ -15,7 +15,7 @@ StateInfo & StateBase::get_info(MachineBase & machine) {
   // Look first in machine for existing StateInfo.
   StateInfo * & info = machine.get_info(key());
   if (!info) {
-    info = new RootStateInfo(machine, 0);
+    info = new RootStateInfo(machine, nullptr);
   }
   return *info;
 }
@@ -32,11 +32,11 @@ void StateBase::restore(StateInfo & current) {
 // StateInfo implementation
 StateInfo::StateInfo(MachineBase & machine, StateInfo * parent)
   : machine_(machine)
-  , instance_(0)
-  , history_(0)
+  , instance_(nullptr)
+  , history_(nullptr)
   , parent_(parent)
-  , data_(0)
-  , data_place(0) {}
+  , data_(nullptr)
+  , data_place(nullptr) {}
 
 StateInfo::~StateInfo() {
   if (data_place) {
@@ -81,12 +81,12 @@ void StateInfo::on_init(bool history) {
   if (history && history_) {
     HRTM_DEBUG(LOGGER, name() << ": history transition to: " <<
        history_->name());
-    machine_.set_pending_state(*history_, true, 0);
+    machine_.set_pending_state(*history_, true, nullptr);
   } else {
     HRTM_DEBUG(LOGGER, name() << ": init");
     instance_->on_init();
   }
-  history_ = 0;
+  history_ = nullptr;
 }
 
 void StateInfo::copy(StateInfo & original) {
@@ -104,7 +104,7 @@ void StateInfo::copy(StateInfo & original) {
 StateInfo * StateInfo::clone(MachineBase & new_machine) {
   assert(!new_machine.get_info(key()));
 
-  StateInfo * parent = 0;
+  StateInfo * parent = nullptr;
   if (parent_) {
     // Tell other machine to clone parent first.
     parent = new_machine.create_clone(parent_->key(), parent_);
@@ -116,11 +116,11 @@ StateInfo * StateInfo::clone(MachineBase & new_machine) {
 ////////////////////////////////////////////////////////////////////////////////
 // Base class for Machine objects.
 MachineBase::MachineBase()
-  : current_state_(0)
-  , pending_state_(0)
-  , pending_data_(0)
+  : current_state_(nullptr)
+  , pending_state_(nullptr)
+  , pending_data_(nullptr)
   , pending_history_(false)
-  , pending_event_(0) {}
+  , pending_event_(nullptr) {}
 
 MachineBase::~MachineBase() {
   assert(!pending_data_);
@@ -153,14 +153,14 @@ void MachineBase::shutdown() {
 
   HRTM_DEBUG(LOGGER, "Shutting down Machine");
   // Performs exit actions by going to Root (=State) state.
-  set_state(StateBase::get_info(*this), false, 0);
-  current_state_ = 0;
+  set_state(StateBase::get_info(*this), false, nullptr);
+  current_state_ = nullptr;
 }
 
 void MachineBase::allocate(unsigned int count) {
   states_ = new StateInfo *[count];
   for (unsigned int i = 0; i < count; ++i) {
-    states_[i] = 0;
+    states_[i] = nullptr;
   }
 }
 
@@ -170,7 +170,7 @@ void MachineBase::free(unsigned int count) {
   while (i > 0) {
     --i;
     delete states_[i];
-    states_[i] = 0;
+    states_[i] = nullptr;
   }
 }
 
@@ -240,8 +240,8 @@ void MachineBase::perform_pending() {
       // State transition complete.
       // Clear 'pending' information just now so that set_state would assert
       // in exits and entries, but not in init.
-      pending_state_ = 0;
-      pending_data_ = 0;
+      pending_state_ = nullptr;
+      pending_data_ = nullptr;
       bool history = pending_history_;
       pending_history_ = false;
       // "init" may change state again.
@@ -264,7 +264,7 @@ void MachineBase::perform_pending() {
 void MachineBase::perform_pending_event() {
   if (pending_event_) {
     EventBase * event = pending_event_;
-    pending_event_ = 0;
+    pending_event_ = nullptr;
     event->dispatch(*current_state_);
     delete event;
   }
