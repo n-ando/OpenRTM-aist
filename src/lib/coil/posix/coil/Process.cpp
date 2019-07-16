@@ -89,7 +89,8 @@ namespace coil
           }
         out.push_back(line);
       } while (feof(fd) == 0);
-
+    
+    (void) pclose(fd);
     return 0;
   }
 
