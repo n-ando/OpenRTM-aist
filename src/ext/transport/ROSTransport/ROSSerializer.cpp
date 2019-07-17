@@ -776,6 +776,38 @@ namespace RTC
             RTC::ROSMessageInfo<geometry_msgs::Vector3Stamped > >);
   }
 
+  class MemoryCopyThread
+      : public coil::Task
+  {
+  public:
+    MemoryCopyThread(unsigned char* data, const unsigned char* src, unsigned long size) : m_data(data), m_src(src), m_size(size)
+    {
+       
+    };
+    MemoryCopyThread(const MemoryCopyThread& obj)
+    {
+      m_data = obj.m_data;
+      m_src = obj.m_src;
+      m_size = obj.m_size;
+    }
+    int svc() override
+    {
+      /*
+      for(unsigned long i=0;i < m_size;++i)
+      {
+        m_data[i*3] = m_src[i*3+2];
+        m_data[i*3+1] = m_src[i*3+1];
+        m_data[i*3+2] = m_src[i*3];
+      }
+      */
+      return 0;
+    };
+  private:
+    unsigned char* m_data;
+    const unsigned char* m_src;
+    unsigned long m_size;
+  };
+
   /*!
    * @if jp
    *
@@ -866,7 +898,38 @@ namespace RTC
       }
       msg.step = 1920;
       msg.data.resize(data.pixels.length());
-      memcpy(&msg.data[0], &data.pixels[0], data.pixels.length());
+
+      if(data.pixels.length() == data.height*data.width*3 && data.pixels.length() > 0)
+      {
+        unsigned int len = data.height*data.width;
+        
+        if(data.pixels.length() > 100000)
+        {
+          std::vector<MemoryCopyThread*> threads;
+          unsigned long alignment[5] = {0, len/4, len*2/4, len*3/4, len};
+          for(int i=0;i < 4;i++){
+            unsigned long size = alignment[i+1] - alignment[i];
+            threads.push_back(new MemoryCopyThread(&msg.data[0], &data.pixels[0], size));
+            threads[i]->activate();
+          }
+
+          for(auto thread:threads)
+          {
+            thread->wait();
+            //delete thread;
+          }
+        }
+        else
+        {
+          for(unsigned int i=0;i < len;i++)
+          {
+            msg.data[i] = data.pixels[i+2];
+            msg.data[i+1] = data.pixels[i+1];
+            msg.data[i+2] = data.pixels[i];
+          }
+        }
+
+      }
 
       
       ROSSerializerBase<RTC::CameraImage>::m_message = ros::serialization::serializeMessage<sensor_msgs::Image>(msg);
@@ -907,8 +970,57 @@ namespace RTC
 
 
       data.pixels.length(static_cast<CORBA::ULong>(msg.data.size()));
-      
-      memcpy(&data.pixels[0], &msg.data[0], data.pixels.length());
+
+
+      if(msg.data.size() == msg.height*msg.width*3 && msg.data.size() > 0)
+      {
+        unsigned int len = msg.height*msg.width;
+        /*
+        
+        
+        
+        
+        */
+       /*
+        std::vector<unsigned int[3]> tmp(msg.height*msg.width);
+        
+        std::memcpy(&tmp[0][0], &msg.data[0], msg.data.size());
+        for(auto &t: tmp)
+        {
+          auto f = t[2];
+          t[2] = t[0];
+          t[0] = f;
+        }
+        std::memcpy(&data.pixels[0], &tmp[0][0], data.pixels.length());
+        */
+        if(msg.data.size() > 100000)
+        {
+          std::vector<MemoryCopyThread*> threads;
+          unsigned long alignment[5] = {0, len/4, len*2/4, len*3/4, len};
+          for(int i=0;i < 4;i++){
+            unsigned long size = alignment[i+1] - alignment[i];
+            threads.push_back(new MemoryCopyThread(&data.pixels[0], &msg.data[0], size));
+            threads[i]->activate();
+          }
+
+          for(auto thread:threads)
+          {
+            thread->wait();
+            //delete thread;
+          }
+        }
+        else
+        {
+          for(unsigned int i=0;i < len;i++)
+          {
+            data.pixels[i] = msg.data[i+2];
+            data.pixels[i+1] = msg.data[i+1];
+            data.pixels[i+2] = msg.data[i];
+          }
+        }
+        
+        //memcpy(&data.pixels[0], &msg.data[0], data.pixels.length());
+      }
 
       return true;
     }

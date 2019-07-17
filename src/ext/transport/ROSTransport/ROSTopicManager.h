@@ -312,15 +312,96 @@ namespace RTC
          * @else
          * @brief
          *
-         * @return
          *
          *
          * @endif
          */
         static void shutdown_global();
-
+        /*!
+         * @if jp
+         * @brief Subscriber一覧を取得
+         *
+         * @param params 
+         * @param result 
+         *
+         * @else
+         * @brief
+         *
+         *
+         * @param params 
+         * @param result 
+         *
+         * @endif
+         */
         void getSubscriptionsCallback(XmlRpc::XmlRpcValue& params, XmlRpc::XmlRpcValue& result);
+        /*!
+         * @if jp
+         * @brief Publisher一覧を取得
+         *
+         * @param params 
+         * @param result 
+         *
+         * @else
+         * @brief
+         *
+         *
+         * @param params 
+         * @param result 
+         *
+         * @endif
+         */
         void getPublicationsCallback(XmlRpc::XmlRpcValue& params, XmlRpc::XmlRpcValue& result);
+        /*!
+         * @if jp
+         * @brief コネクタの状態取得
+         *
+         * @param params 
+         * @param result 
+         *
+         * @else
+         * @brief
+         *
+         *
+         * @param params 
+         * @param result 
+         *
+         * @endif
+         */
+        void getBusStatsCallback(XmlRpc::XmlRpcValue& params, XmlRpc::XmlRpcValue& result);
+        /*!
+         * @if jp
+         * @brief コネクタの情報取得
+         *
+         * @param params 
+         * @param result 
+         *
+         * @else
+         * @brief
+         *
+         *
+         * @param params 
+         * @param result 
+         *
+         * @endif
+         */
+        void getBusInfoCallback(XmlRpc::XmlRpcValue& params, XmlRpc::XmlRpcValue& result);
+        /*!
+         * @if jp
+         * @brief プロセスID取得
+         *
+         * @param params 
+         * @param result 
+         *
+         * @else
+         * @brief
+         *
+         *
+         * @param params 
+         * @param result 
+         *
+         * @endif
+         */
+        void getPidCallback(XmlRpc::XmlRpcValue& params, XmlRpc::XmlRpcValue& result);
     private:
         static ROSTopicManager* manager;
         static std::mutex mutex;

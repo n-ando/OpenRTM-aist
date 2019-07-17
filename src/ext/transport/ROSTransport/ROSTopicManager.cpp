@@ -118,7 +118,9 @@ namespace RTC
     m_xmlrpc_manager->bind("publisherUpdate", boost::bind(&ROSTopicManager::pubUpdateCallback, this, _1, _2));
     m_xmlrpc_manager->bind("getSubscriptions", boost::bind(&ROSTopicManager::getSubscriptionsCallback, this, _1, _2));
     m_xmlrpc_manager->bind("getPublications", boost::bind(&ROSTopicManager::getPublicationsCallback, this, _1, _2));
-    
+    m_xmlrpc_manager->bind("getBusStats", boost::bind(&ROSTopicManager::getBusStatsCallback, this, _1, _2));
+    m_xmlrpc_manager->bind("getBusInfo", boost::bind(&ROSTopicManager::getBusInfoCallback, this, _1, _2));
+    m_xmlrpc_manager->bind("getPid", boost::bind(&ROSTopicManager::getPidCallback, this, _1, _2));
 
     m_poll_manager = ros::PollManager::instance();
     m_poll_manager->start();
@@ -231,33 +233,139 @@ namespace RTC
       result = ros::xmlrpc::responseInt(0, ros::console::g_last_error_message, 0);
 
   }
-
+  /*!
+   * @if jp
+   * @brief Subscriber一覧を取得
+   *
+   * @param params 
+   * @param result 
+   *
+   * @else
+   * @brief
+   *
+   *
+   * @param params 
+   * @param result 
+   *
+   * @endif
+   */
   void ROSTopicManager::getSubscriptionsCallback(XmlRpc::XmlRpcValue& /*params*/, XmlRpc::XmlRpcValue& result)
   {
     result[0] = 1;
     result[1] = std::string("subscriptions");
     XmlRpc::XmlRpcValue subs;
     subs.setSize(0);
-    uint32_t idx = 0;
     for(auto & subscriber : m_subscribers)
     {
       XmlRpc::XmlRpcValue sub;
       sub[0] = subscriber->getName();
       sub[1] = subscriber->datatype();
-      subs[idx] = sub;
-      idx++;
+      subs[subs.size()] = sub;
     }
     result[2] = subs;
   }
-
-  void ROSTopicManager::getPublicationsCallback(XmlRpc::XmlRpcValue& params, XmlRpc::XmlRpcValue& result)
+  /*!
+   * @if jp
+   * @brief Publisher一覧を取得
+   *
+   * @param params 
+   * @param result 
+   *
+   * @else
+   * @brief
+   *
+   *
+   * @param params 
+   * @param result 
+   *
+   * @endif
+   */
+  void ROSTopicManager::getPublicationsCallback(XmlRpc::XmlRpcValue& /*params*/, XmlRpc::XmlRpcValue& result)
   {
+    result[0] = 1;
+    result[1] = std::string("subscriptions");
     XmlRpc::XmlRpcValue pubs;
     pubs.setSize(0);
-    for(auto & publishers : m_publishers)
+    for(auto & publisher : m_publishers)
     {
-      
+      XmlRpc::XmlRpcValue pub;
+      pub[0] = publisher->getName();
+      pub[1] = publisher->datatype();
+      pubs[pubs.size()] = pub;
     }
+    result[2] = pubs;
+  }
+  /*!
+   * @if jp
+   * @brief コネクタの状態取得
+   *
+   * @param params 
+   * @param result 
+   *
+   * @else
+   * @brief
+   *
+   *
+   * @param params 
+   * @param result 
+   *
+   * @endif
+   */
+  void ROSTopicManager::getBusStatsCallback(XmlRpc::XmlRpcValue& /*params*/, XmlRpc::XmlRpcValue& /*result*/)
+  {
+  }
+
+  /*!
+   * @if jp
+   * @brief コネクタの情報取得
+   *
+   * @param params 
+   * @param result 
+   *
+   * @else
+   * @brief
+   *
+   *
+   * @param params 
+   * @param result 
+   *
+   * @endif
+   */
+  void ROSTopicManager::getBusInfoCallback(XmlRpc::XmlRpcValue& /*params*/, XmlRpc::XmlRpcValue& result)
+  {
+    result[0] = 1;
+    result[1] = std::string("");
+  
+    XmlRpc::XmlRpcValue bus;
+    for(auto & subscriber : m_subscribers)
+    {
+      subscriber->getInfo(result[2]);
+    }
+
+    for(auto & publisher : m_publishers)
+    {
+      publisher->getInfo(result[2]);
+    }
+
+  }
+  /*!
+   * @if jp
+   * @brief プロセスID取得
+   *
+   * @param params 
+   * @param result 
+   *
+   * @else
+   * @brief
+   *
+   *
+   * @param params 
+   * @param result 
+   *
+   * @endif
+   */
+  void ROSTopicManager::getPidCallback(XmlRpc::XmlRpcValue& /*params*/, XmlRpc::XmlRpcValue& /*result*/)
+  {
   }
 
   /*!
