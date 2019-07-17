@@ -108,7 +108,7 @@ namespace RTC
     
 
     std::string marshaling_type = prop.getProperty("marshaling_type", "corba");
-    std::string topic = prop.getProperty("topic", "chatter");
+    std::string topic = prop.getProperty("opensplice.topic", "chatter");
 
 
     std::string dataname;
@@ -124,7 +124,7 @@ namespace RTC
     }
     else
     {
-        dataname = prop.getProperty("data_type", "RTC::CDR_Data");
+        dataname = prop.getProperty("opensplice.data_type", "RTC::CDR_Data");
         corbamode = true;
     }
     
