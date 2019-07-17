@@ -39,6 +39,11 @@ void MyModuleInit(RTC::Manager* manager)
   // Create a component
   comp = manager->createComponent("MyServiceConsumer");
 
+  if (comp == nullptr)
+  {
+    std::cerr << "Component create failed." << std::endl;
+    abort();
+  }
 
   // Example
   // The following procedure is examples how handle RT-Components.

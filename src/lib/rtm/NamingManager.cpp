@@ -920,7 +920,6 @@ namespace RTC
   }
   void NamingManager::unregisterMgrName(const char* name)
   {
-    std::vector<Mgr*>::iterator it(m_mgrNames.begin());
     for (std::vector<Mgr*>::iterator mgr = m_mgrNames.begin(); mgr != m_mgrNames.end(); ++mgr)
       {
         if ((*mgr)->name == name)

@@ -190,6 +190,7 @@ int main (int argc, char** argv)
   ReturnCode_t ret;
   ret = pin[static_cast<CORBA::ULong>(0)]->connect(prof);
   assert(ret == RTC::RTC_OK);
+  (void)ret;
 
   std::cout << "Connector ID: " << prof.connector_id << std::endl;
   NVUtil::dump(prof.properties);

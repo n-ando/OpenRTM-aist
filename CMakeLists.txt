@@ -678,7 +678,6 @@ function(openrtm_common_set_compile_options target)
 		-Wno-suggest-attribute=format
 		$<$<VERSION_GREATER:${CMAKE_CXX_COMPILER_VERSION},7.9.9>: -Wno-suggest-attribute=malloc>
 		-Wno-switch-enum
-		-Wno-unused-but-set-variable
 		-Wno-unused-macros
 		-Wno-unused-result
 		-Wno-useless-cast
@@ -721,7 +720,6 @@ function(openrtm_common_set_compile_options target)
 		-Wno-unreachable-code
 		-Wno-unused-local-typedef
 		-Wno-unused-macros
-		-Wno-unused-variable
 		-Wno-weak-vtables
 		)
 
