@@ -124,7 +124,7 @@ namespace RTC
     }
     else
     {
-        dataname = prop.getProperty("opensplice.data_type", "RTC::CDR_Data");
+        dataname = prop.getProperty("data_type", "RTC::CDR_Data");
         corbamode = true;
     }
     

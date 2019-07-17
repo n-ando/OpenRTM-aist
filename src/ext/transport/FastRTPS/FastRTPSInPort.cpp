@@ -139,7 +139,7 @@ namespace RTC
     }
     else
     {
-        std::string data = prop.getProperty("fastrtps.data_type", "IDL:RTC/CDR_Data:1.0");
+        std::string data = prop.getProperty("data_type", "IDL:RTC/CDR_Data:1.0");
 
         coil::vstring typelist = coil::split(data, ":");
         if (typelist.size() == 3)
