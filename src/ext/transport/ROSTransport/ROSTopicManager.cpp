@@ -283,7 +283,7 @@ namespace RTC
   void ROSTopicManager::getPublicationsCallback(XmlRpc::XmlRpcValue& /*params*/, XmlRpc::XmlRpcValue& result)
   {
     result[0] = 1;
-    result[1] = std::string("subscriptions");
+    result[1] = std::string("publications");
     XmlRpc::XmlRpcValue pubs;
     pubs.setSize(0);
     for(auto & publisher : m_publishers)
