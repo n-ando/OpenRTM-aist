@@ -334,7 +334,7 @@ namespace RTC
   void ROSTopicManager::getBusInfoCallback(XmlRpc::XmlRpcValue& /*params*/, XmlRpc::XmlRpcValue& result)
   {
     result[0] = 1;
-    result[1] = std::string("");
+    result[1] = std::string("bus info");
   
     XmlRpc::XmlRpcValue bus;
     for(auto & subscriber : m_subscribers)
