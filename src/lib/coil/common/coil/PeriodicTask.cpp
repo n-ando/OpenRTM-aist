@@ -29,7 +29,7 @@ namespace coil
    * @endif
    */
   PeriodicTask::PeriodicTask()
-    : m_period(std::chrono::seconds(0)), m_nowait(false),
+    : m_period(std::chrono::seconds(0)),
       m_func(nullptr), m_deleteInDtor(true),
       m_alive(false), m_suspend(false),
       m_execCount(0), m_execCountMax(1000),
@@ -158,14 +158,6 @@ namespace coil
   void PeriodicTask::setPeriod(std::chrono::nanoseconds period)
   {
     m_period = period;
-
-    if (m_period == std::chrono::seconds::zero())
-      {
-        m_nowait = true;
-        return;
-      }
-    m_nowait = false;
-    return;
   }
 
   /*!
@@ -297,11 +289,10 @@ namespace coil
    */
   void PeriodicTask::sleep()
   {
-    if (m_nowait)
+    if (m_period > std::chrono::seconds::zero())
       {
-        return;
+        std::this_thread::sleep_for(m_period - m_execTime.interval());
       }
-    std::this_thread::sleep_for((m_period - m_execTime.interval()));
   }
 
   /*!
