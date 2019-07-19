@@ -2127,9 +2127,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
             comp->exit();
             coil::Properties p(comp->getInstanceName());
             p << comp->getProperties();
-            rtclog.lock();
-            rtclog.write(::RTC::Logger::RTL_PARANOID,  p);
-            rtclog.unlock();
+            RTC_PARANOID_STR((p));
           }
         catch (...)
           {
