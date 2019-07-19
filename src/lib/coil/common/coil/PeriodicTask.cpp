@@ -30,7 +30,7 @@ namespace coil
    */
   PeriodicTask::PeriodicTask()
     : m_period(std::chrono::seconds(0)),
-      m_func(nullptr), m_deleteInDtor(true),
+      m_func(nullptr),
       m_alive(false), m_suspend(false),
       m_execCount(0), m_execCountMax(1000),
       m_periodCount(0), m_periodCountMax(1000)
@@ -48,10 +48,6 @@ namespace coil
   {
     finalize();
     wait();
-    if (m_func != nullptr && m_deleteInDtor)
-      {
-        delete m_func;
-      }
   }
 
   /*!
@@ -140,12 +136,9 @@ namespace coil
    * @brief Setting task execution function
    * @endif
    */
-  bool PeriodicTask::setTask(TaskFuncBase* func, bool delete_in_dtor)
+  void PeriodicTask::setTask(std::function<void(void)> func)
   {
-    if (func == nullptr) { return false; }
-    m_deleteInDtor = delete_in_dtor;
-    m_func = func;
-    return true;
+    m_func = std::move(func);
   }
 
   /*!
@@ -265,7 +258,7 @@ namespace coil
 
         // task execution
         if (m_execMeasure) { m_execTime.tick(); }
-        (*m_func)();
+        m_func();
         if (m_execMeasure) { m_execTime.tack(); }
 
         // wait for next period

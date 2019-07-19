@@ -41,7 +41,7 @@ namespace coil
    * 使用手順は以下の通り。
    *
    * task; // インスタンス生成
-   * task.setTask(TaskFuncBase(obj, mem_func)); // 実行する関数を与える
+   * task.setTask(function); // 実行する関数を与える
    * task.activate(); // スレッドをスタートさせる
    *
    * task.suspend(); // 周期実行を止める
@@ -192,30 +192,7 @@ namespace coil
      *
      * @endif
      */
-    bool setTask(TaskFuncBase* func, bool delete_in_dtor = true) override;
-
-    /*!
-     * @if jp
-     * @brief タスク実行関数をセットする
-     *
-     * @param func int (*)() 型の関数ポインタ
-     *
-     * @return true: 成功, false: 失敗
-     *
-     * @else
-     * @brief Setting task execution function
-     *
-     * @param func Set int (*)() type function pointer
-     *
-     * @return true: successful, false: failed
-     *
-     * @endif
-     */
-    template <class O, class F>
-    bool setTask(O* obj, F fun)
-    {
-      return this->setTask(new TaskFunc<O, F>(obj, fun));
-    }
+    void setTask(std::function<void(void)> func) override;
 
     /*!
      * @if jp
@@ -340,16 +317,7 @@ namespace coil
      * @brief Task execution function
      * @endif
      */
-    TaskFuncBase* m_func;
-
-    /*!
-     * @if jp
-     * @brief タスク実行関数削除フラグ
-     * @else
-     * @brief Task execution function delete flag
-     * @endif
-     */
-    bool m_deleteInDtor;
+    std::function<void(void)> m_func;
 
     /*!
      * @if jp

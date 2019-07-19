@@ -1,7 +1,7 @@
 ﻿// -*- C++ -*-
 /*!
- * @file  RosTopicManager.cpp
- * @brief RosTopicManager class
+ * @file  ROSTopicManager.cpp
+ * @brief ROSTopicManager class
  * @date  $Date: 2019-01-31 03:08:03 $
  * @author Nobuhiko Miyamoto <n-miyamoto@aist.go.jp>
  *
@@ -19,7 +19,7 @@
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
 #include <WinSock2.h>
 #endif
-#include "RosTopicManager.h"
+#include "ROSTopicManager.h"
 #include <ros/xmlrpc_manager.h>
 #include <ros/network.h>
 #include <xmlrpcpp/XmlRpcSocket.h>
@@ -38,8 +38,8 @@ namespace ros
 
 namespace RTC
 {
-  RosTopicManager* RosTopicManager::manager = NULL;
-  std::mutex RosTopicManager::mutex;
+  ROSTopicManager* ROSTopicManager::manager = NULL;
+  std::mutex ROSTopicManager::mutex;
 
 
   /*!
@@ -55,7 +55,7 @@ namespace RTC
    *
    * @endif
    */
-  RosTopicManager::RosTopicManager()
+  ROSTopicManager::ROSTopicManager()
   {
 
   }
@@ -64,16 +64,16 @@ namespace RTC
    * @if jp
    * @brief コピーコンストラクタ
    *  
-   * @param manager RosTopicManager
+   * @param manager ROSTopicManager
    *
    * @else
    * @brief Copy Constructor
    *
-   * @param manager RosTopicManager
+   * @param manager ROSTopicManager
    *
    * @endif
    */
-  RosTopicManager::RosTopicManager(const RosTopicManager &/*mgr*/)
+  ROSTopicManager::ROSTopicManager(const ROSTopicManager &/*mgr*/)
   {
     
   }
@@ -90,7 +90,7 @@ namespace RTC
    *
    * @endif
    */
-  RosTopicManager::~RosTopicManager()
+  ROSTopicManager::~ROSTopicManager()
   {
     
   }
@@ -107,16 +107,20 @@ namespace RTC
    *
    * @endif
    */
-  void RosTopicManager::start()
+  void ROSTopicManager::start()
   {
     ros::M_string remappings;
     ros::network::init(remappings);
 
     m_xmlrpc_manager = ros::XMLRPCManager::instance();
 
-    m_xmlrpc_manager->bind("requestTopic", boost::bind(&RosTopicManager::requestTopicCallback, this, _1, _2));
-    m_xmlrpc_manager->bind("publisherUpdate", boost::bind(&RosTopicManager::pubUpdateCallback, this, _1, _2));
-    
+    m_xmlrpc_manager->bind("requestTopic", boost::bind(&ROSTopicManager::requestTopicCallback, this, _1, _2));
+    m_xmlrpc_manager->bind("publisherUpdate", boost::bind(&ROSTopicManager::pubUpdateCallback, this, _1, _2));
+    m_xmlrpc_manager->bind("getSubscriptions", boost::bind(&ROSTopicManager::getSubscriptionsCallback, this, _1, _2));
+    m_xmlrpc_manager->bind("getPublications", boost::bind(&ROSTopicManager::getPublicationsCallback, this, _1, _2));
+    m_xmlrpc_manager->bind("getBusStats", boost::bind(&ROSTopicManager::getBusStatsCallback, this, _1, _2));
+    m_xmlrpc_manager->bind("getBusInfo", boost::bind(&ROSTopicManager::getBusInfoCallback, this, _1, _2));
+    m_xmlrpc_manager->bind("getPid", boost::bind(&ROSTopicManager::getPidCallback, this, _1, _2));
 
     m_poll_manager = ros::PollManager::instance();
     m_poll_manager->start();
@@ -124,7 +128,7 @@ namespace RTC
     
     m_tcpserver_transport->listen(ros::network::getTCPROSPort(), 
                             100, 
-                            boost::bind(&RosTopicManager::tcprosAcceptConnection, this, _1));
+                            boost::bind(&ROSTopicManager::tcprosAcceptConnection, this, _1));
 
     m_xmlrpc_manager->start();
   }
@@ -141,7 +145,7 @@ namespace RTC
    *
    * @endif
    */
-  void RosTopicManager::shutdown()
+  void ROSTopicManager::shutdown()
   {
       m_xmlrpc_manager->shutdown();
       m_tcpserver_transport->close();
@@ -165,7 +169,7 @@ namespace RTC
    *
    * @endif
    */
-  void RosTopicManager::requestTopicCallback(XmlRpc::XmlRpcValue& params, XmlRpc::XmlRpcValue& result)
+  void ROSTopicManager::requestTopicCallback(XmlRpc::XmlRpcValue& params, XmlRpc::XmlRpcValue& result)
   {
       if (params.getType() != XmlRpc::XmlRpcValue::TypeArray)
       {
@@ -229,6 +233,140 @@ namespace RTC
       result = ros::xmlrpc::responseInt(0, ros::console::g_last_error_message, 0);
 
   }
+  /*!
+   * @if jp
+   * @brief Subscriber一覧を取得
+   *
+   * @param params 
+   * @param result 
+   *
+   * @else
+   * @brief
+   *
+   *
+   * @param params 
+   * @param result 
+   *
+   * @endif
+   */
+  void ROSTopicManager::getSubscriptionsCallback(XmlRpc::XmlRpcValue& /*params*/, XmlRpc::XmlRpcValue& result)
+  {
+    result[0] = 1;
+    result[1] = std::string("subscriptions");
+    XmlRpc::XmlRpcValue subs;
+    subs.setSize(0);
+    for(auto & subscriber : m_subscribers)
+    {
+      XmlRpc::XmlRpcValue sub;
+      sub[0] = subscriber->getName();
+      sub[1] = subscriber->datatype();
+      subs[subs.size()] = sub;
+    }
+    result[2] = subs;
+  }
+  /*!
+   * @if jp
+   * @brief Publisher一覧を取得
+   *
+   * @param params 
+   * @param result 
+   *
+   * @else
+   * @brief
+   *
+   *
+   * @param params 
+   * @param result 
+   *
+   * @endif
+   */
+  void ROSTopicManager::getPublicationsCallback(XmlRpc::XmlRpcValue& /*params*/, XmlRpc::XmlRpcValue& result)
+  {
+    result[0] = 1;
+    result[1] = std::string("publications");
+    XmlRpc::XmlRpcValue pubs;
+    pubs.setSize(0);
+    for(auto & publisher : m_publishers)
+    {
+      XmlRpc::XmlRpcValue pub;
+      pub[0] = publisher->getName();
+      pub[1] = publisher->datatype();
+      pubs[pubs.size()] = pub;
+    }
+    result[2] = pubs;
+  }
+  /*!
+   * @if jp
+   * @brief コネクタの状態取得
+   *
+   * @param params 
+   * @param result 
+   *
+   * @else
+   * @brief
+   *
+   *
+   * @param params 
+   * @param result 
+   *
+   * @endif
+   */
+  void ROSTopicManager::getBusStatsCallback(XmlRpc::XmlRpcValue& /*params*/, XmlRpc::XmlRpcValue& /*result*/)
+  {
+  }
+
+  /*!
+   * @if jp
+   * @brief コネクタの情報取得
+   *
+   * @param params 
+   * @param result 
+   *
+   * @else
+   * @brief
+   *
+   *
+   * @param params 
+   * @param result 
+   *
+   * @endif
+   */
+  void ROSTopicManager::getBusInfoCallback(XmlRpc::XmlRpcValue& /*params*/, XmlRpc::XmlRpcValue& result)
+  {
+    result[0] = 1;
+    result[1] = std::string("bus info");
+  
+    XmlRpc::XmlRpcValue bus;
+    for(auto & subscriber : m_subscribers)
+    {
+      subscriber->getInfo(result[2]);
+    }
+
+    for(auto & publisher : m_publishers)
+    {
+      publisher->getInfo(result[2]);
+    }
+
+  }
+  /*!
+   * @if jp
+   * @brief プロセスID取得
+   *
+   * @param params 
+   * @param result 
+   *
+   * @else
+   * @brief
+   *
+   *
+   * @param params 
+   * @param result 
+   *
+   * @endif
+   */
+  void ROSTopicManager::getPidCallback(XmlRpc::XmlRpcValue& /*params*/, XmlRpc::XmlRpcValue& /*result*/)
+  {
+  }
 
   /*!
    * @if jp
@@ -247,7 +385,7 @@ namespace RTC
    *
    * @endif
    */
-  void RosTopicManager::pubUpdateCallback(XmlRpc::XmlRpcValue& params, XmlRpc::XmlRpcValue& result)
+  void ROSTopicManager::pubUpdateCallback(XmlRpc::XmlRpcValue& params, XmlRpc::XmlRpcValue& result)
   {
       if (params.getType() != XmlRpc::XmlRpcValue::TypeArray)
       {
@@ -349,7 +487,7 @@ namespace RTC
    *
    * @endif
    */
-  void RosTopicManager::addPublisher(ROSOutPort *publisher)
+  void ROSTopicManager::addPublisher(ROSOutPort *publisher)
   {
 
     if(!existPublisher(publisher))
@@ -373,7 +511,7 @@ namespace RTC
    *
    * @endif
    */
-  void RosTopicManager::addSubscriber(ROSInPort *subscriber)
+  void ROSTopicManager::addSubscriber(ROSInPort *subscriber)
   {
     if(!existSubscriber(subscriber))
     {
@@ -396,7 +534,7 @@ namespace RTC
    *
    * @endif
    */
-  bool RosTopicManager::removePublisher(ROSOutPort *publisher)
+  bool ROSTopicManager::removePublisher(ROSOutPort *publisher)
   {
     if(existPublisher(publisher))
     {
@@ -420,7 +558,7 @@ namespace RTC
    *
    * @endif
    */
-  bool RosTopicManager::removeSubscriber(ROSInPort *subscriber)
+  bool ROSTopicManager::removeSubscriber(ROSInPort *subscriber)
   {
     if(existSubscriber(subscriber))
     {
@@ -447,7 +585,7 @@ namespace RTC
    *
    * @endif
    */
-  bool RosTopicManager::existPublisher(ROSOutPort *publisher)
+  bool ROSTopicManager::existPublisher(ROSOutPort *publisher)
   {
     std::vector<ROSOutPort*>::iterator itr = std::find(m_publishers.begin(), m_publishers.end(), publisher);
     size_t index = std::distance( m_publishers.begin(), itr );
@@ -472,7 +610,7 @@ namespace RTC
    *
    * @endif
    */
-  bool RosTopicManager::existSubscriber(ROSInPort *subscriber)
+  bool ROSTopicManager::existSubscriber(ROSInPort *subscriber)
   {
     std::vector<ROSInPort*>::iterator itr = std::find(m_subscribers.begin(), m_subscribers.end(), subscriber);
     size_t index = std::distance( m_subscribers.begin(), itr );
@@ -493,12 +631,12 @@ namespace RTC
    *
    * @endif
    */
-  RosTopicManager* RosTopicManager::init()
+  ROSTopicManager* ROSTopicManager::init()
   {
     std::lock_guard<std::mutex> guard(mutex);
     if (!manager)
     {
-      manager = new RosTopicManager();
+      manager = new ROSTopicManager();
       manager->start();
     }
     return manager;
@@ -518,12 +656,12 @@ namespace RTC
    *
    * @endif
    */
-  RosTopicManager& RosTopicManager::instance()
+  ROSTopicManager& ROSTopicManager::instance()
   {
     std::lock_guard<std::mutex> guard(mutex);
     if (!manager)
     {
-      manager = new RosTopicManager();
+      manager = new ROSTopicManager();
       manager->start();
     }
     return *manager;
@@ -531,7 +669,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief RosTopicManagerが初期化されている場合に終了処理を呼び出す
+   * @brief ROSTopicManagerが初期化されている場合に終了処理を呼び出す
    *
    *
    * @else
@@ -542,7 +680,7 @@ namespace RTC
    *
    * @endif
    */
-  void RosTopicManager::shutdown_global()
+  void ROSTopicManager::shutdown_global()
   {
       std::lock_guard<std::mutex> guard(mutex);
       if (manager)

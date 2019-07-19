@@ -29,6 +29,7 @@
 #include <map>
 #include <utility>
 #include <vector>
+#include <mutex>
 
 // for Windows DLL export
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
@@ -155,6 +156,7 @@ namespace coil
      */
     bool hasFactory(const Identifier& id)
     {
+      std::lock_guard<std::mutex> guard(m_mutex);
       return static_cast<bool>(m_creators.count(id) != 0);
     }
 
@@ -179,6 +181,7 @@ namespace coil
      */
     std::vector<Identifier> getIdentifiers()
     {
+      std::lock_guard<std::mutex> guard(m_mutex);
       std::vector<Identifier> idlist;
       idlist.reserve(m_creators.size());
 
@@ -229,6 +232,7 @@ namespace coil
                           Destructor destructor)
     {
       if (creator == nullptr || destructor == nullptr) { return INVALID_ARG; }
+      std::lock_guard<std::mutex> guard(m_mutex);
       if (m_creators.count(id) != 0) { return ALREADY_EXISTS; }
       FactoryEntry f(id, creator, destructor);
       m_creators[id] = f;
@@ -262,6 +266,7 @@ namespace coil
      */
     ReturnCode removeFactory(const Identifier& id)
     {
+      std::lock_guard<std::mutex> guard(m_mutex);
       if (m_creators.count(id) == 0) { return NOT_FOUND; }
       m_creators.erase(id);
       return FACTORY_OK;
@@ -292,6 +297,7 @@ namespace coil
      */
     AbstractClass* createObject(const Identifier& id)
     {
+      std::lock_guard<std::mutex> guard(m_mutex);
       if (m_creators.count(id) == 0) { return nullptr; }
       AbstractClass* obj = m_creators[id].creator_();
       assert(m_objects.count(obj) == 0);
@@ -322,6 +328,7 @@ namespace coil
      */
     ReturnCode deleteObject(const Identifier& id, AbstractClass*& obj)
     {
+      std::lock_guard<std::mutex> guard(m_mutex);
       if (m_creators.count(id) == 0)
         {
           return deleteObject(obj);
@@ -352,6 +359,7 @@ namespace coil
      */
     ReturnCode deleteObject(AbstractClass*& obj)
     {
+      std::lock_guard<std::mutex> guard(m_mutex);
       if (m_objects.count(obj) == 0) { return NOT_FOUND; }
       AbstractClass* tmp(obj);
       m_objects[obj].destructor_(obj);
@@ -381,6 +389,7 @@ namespace coil
     std::vector<AbstractClass*> createdObjects()
     {
       std::vector<AbstractClass*> objects;
+      std::lock_guard<std::mutex> guard(m_mutex);
       for (ObjectMapIt it(m_objects.begin()); it != m_objects.end(); ++it)
         {
           objects.push_back(it->first);
@@ -411,6 +420,7 @@ namespace coil
      */
     bool isProducerOf(AbstractClass* obj)
     {
+      std::lock_guard<std::mutex> guard(m_mutex);
       return m_objects.count(obj) != 0;
     }
 
@@ -439,6 +449,7 @@ namespace coil
      */
     ReturnCode objectToIdentifier(AbstractClass* obj, Identifier& id)
     {
+      std::lock_guard<std::mutex> guard(m_mutex);
       if (m_objects.count(obj) == 0) { return NOT_FOUND; }
       id = m_objects[obj].id_;
       return FACTORY_OK;
@@ -471,6 +482,7 @@ namespace coil
      */
     Creator objectToCreator(AbstractClass* obj)
     {
+      std::lock_guard<std::mutex> guard(m_mutex);
       return m_objects[obj].creator_;
     }
 
@@ -501,6 +513,7 @@ namespace coil
      */
     Destructor objectToDestructor(AbstractClass* obj)
     {
+      std::lock_guard<std::mutex> guard(m_mutex);
       return m_objects[obj].destructor_;
     }
 
@@ -556,6 +569,7 @@ namespace coil
     };
     FactoryMap m_creators;
     ObjectMap  m_objects;
+    std::mutex m_mutex;
   };
 
 

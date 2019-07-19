@@ -1312,10 +1312,9 @@ namespace RTM
             RTC_DEBUG(("%s: failed", rtcd_cmd.c_str()));
             return RTC::RTObject::_nil();
           }
-        
-        for (size_t i(0); i < 1000; ++i)
+
+        for (size_t i(0); i < 1000; ++i) // Timeout: 1000 x 10ms
           {
-            std::this_thread::sleep_for(std::chrono::milliseconds(10));
             RTC_DEBUG(("Detecting new slave manager (%s).", mgrstr.c_str()));
             if (mgrstr == "manager_%p")
               {
@@ -1443,8 +1442,7 @@ namespace RTM
             return RTC::RTObject::_nil();
           }
 
-        std::this_thread::sleep_for(std::chrono::milliseconds(10));
-        for (size_t i(0); i < 1000; ++i)
+        for (size_t i(0); i < 1000; ++i) // Timeout: 1000 x 10ms
           {
             RTC_DEBUG(("Detecting new slave manager (%s).", mgrstr.c_str()))
             mgrobj = findManagerByName(mgrstr);

@@ -1,7 +1,7 @@
 ﻿// -*- C++ -*-
 /*!
- * @file  RosTopicManager.h
- * @brief RosTopicManager class
+ * @file  ROSTopicManager.h
+ * @brief ROSTopicManager class
  * @date  $Date: 2019-02-04 03:08:03 $
  * @author Nobuhiko Miyamoto <n-miyamoto@aist.go.jp>
  *
@@ -31,8 +31,8 @@ namespace RTC
 {
     /*!
      * @if jp
-     * @class RosTopicManager
-     * @brief RosTopicManager クラス
+     * @class ROSTopicManager
+     * @brief ROSTopicManager クラス
      *
      * ROSのトピックを管理するクラス
      *
@@ -40,8 +40,8 @@ namespace RTC
      * @since 2.0.0
      *
      * @else
-     * @class RosTopicManager
-     * @brief RosTopicManager class
+     * @class ROSTopicManager
+     * @brief ROSTopicManager class
      *
      * 
      *
@@ -49,7 +49,7 @@ namespace RTC
      *
      * @endif
      */
-    class RosTopicManager
+    class ROSTopicManager
     {
     public:
         /*!
@@ -65,21 +65,21 @@ namespace RTC
          *
          * @endif
          */
-        RosTopicManager();
+        ROSTopicManager();
         /*!
          * @if jp
          * @brief コピーコンストラクタ
          *
-         * @param manager RosTopicManager
+         * @param manager ROSTopicManager
          *
          * @else
          * @brief Copy Constructor
          *
-         * @param manager RosTopicManager
+         * @param manager ROSTopicManager
          *
          * @endif
          */
-        RosTopicManager(const RosTopicManager &manager);
+        ROSTopicManager(const ROSTopicManager &manager);
         /*!
          * @if jp
          * @brief デストラクタ
@@ -93,7 +93,7 @@ namespace RTC
          *
          * @endif
          */
-        ~RosTopicManager();
+        ~ROSTopicManager();
         /*!
          * @if jp
          * @brief トピックマネージャ開始
@@ -288,7 +288,7 @@ namespace RTC
          *
          * @endif
          */
-        static RosTopicManager* init();
+        static ROSTopicManager* init();
         /*!
          * @if jp
          * @brief インスタンス取得
@@ -303,7 +303,7 @@ namespace RTC
          *
          * @endif
          */
-        static RosTopicManager& instance();
+        static ROSTopicManager& instance();
         /*!
          * @if jp
          * @brief ROSTopicManagerが初期化されている場合に終了処理を呼び出す
@@ -312,14 +312,98 @@ namespace RTC
          * @else
          * @brief
          *
-         * @return
          *
          *
          * @endif
          */
         static void shutdown_global();
+        /*!
+         * @if jp
+         * @brief Subscriber一覧を取得
+         *
+         * @param params 
+         * @param result 
+         *
+         * @else
+         * @brief
+         *
+         *
+         * @param params 
+         * @param result 
+         *
+         * @endif
+         */
+        void getSubscriptionsCallback(XmlRpc::XmlRpcValue& params, XmlRpc::XmlRpcValue& result);
+        /*!
+         * @if jp
+         * @brief Publisher一覧を取得
+         *
+         * @param params 
+         * @param result 
+         *
+         * @else
+         * @brief
+         *
+         *
+         * @param params 
+         * @param result 
+         *
+         * @endif
+         */
+        void getPublicationsCallback(XmlRpc::XmlRpcValue& params, XmlRpc::XmlRpcValue& result);
+        /*!
+         * @if jp
+         * @brief コネクタの状態取得
+         *
+         * @param params 
+         * @param result 
+         *
+         * @else
+         * @brief
+         *
+         *
+         * @param params 
+         * @param result 
+         *
+         * @endif
+         */
+        void getBusStatsCallback(XmlRpc::XmlRpcValue& params, XmlRpc::XmlRpcValue& result);
+        /*!
+         * @if jp
+         * @brief コネクタの情報取得
+         *
+         * @param params 
+         * @param result 
+         *
+         * @else
+         * @brief
+         *
+         *
+         * @param params 
+         * @param result 
+         *
+         * @endif
+         */
+        void getBusInfoCallback(XmlRpc::XmlRpcValue& params, XmlRpc::XmlRpcValue& result);
+        /*!
+         * @if jp
+         * @brief プロセスID取得
+         *
+         * @param params 
+         * @param result 
+         *
+         * @else
+         * @brief
+         *
+         *
+         * @param params 
+         * @param result 
+         *
+         * @endif
+         */
+        void getPidCallback(XmlRpc::XmlRpcValue& params, XmlRpc::XmlRpcValue& result);
     private:
-        static RosTopicManager* manager;
+        static ROSTopicManager* manager;
         static std::mutex mutex;
         std::vector<ROSOutPort*> m_publishers;
         std::vector<ROSInPort*> m_subscribers;

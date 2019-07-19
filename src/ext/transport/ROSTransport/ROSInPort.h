@@ -28,6 +28,7 @@
 #include <rtm/ConnectorBase.h>
 #include <ros/connection.h>
 #include <ros/transport/transport_tcp.h>
+#include <xmlrpcpp/XmlRpc.h>
 #include "ROSMessageInfo.h"
 
 
@@ -269,7 +270,8 @@ namespace RTC
      * @endif
      */
     void deleteTCPConnector(const std::string &caller_id, const std::string &topic, const std::string &xmlrpc_uri);
-    
+  
+
     /*!
      * @if jp
      * @brief ヘッダ情報送信時のコールバック関数
@@ -429,6 +431,79 @@ namespace RTC
         conn->read(4, boost::bind(&ROSInPort::onMessageLength, this, _1, _2, _3, _4));
       }
     }
+    /*!
+     * @if jp
+     * @brief コネクタの情報を取得
+     *
+     *
+     * @param info 情報を格納する変数
+     * data[0]：コネクタID
+     * data[1]：接続先のXML-RPCサーバーのアドレス
+     * data[2]："i"
+     * data[3]：TCPROS or UDPROS
+     * data[4]：トピック名
+     * data[5]：true
+     * data[6]：接続情報
+     * 
+     * @else
+     * @brief 
+     *
+     *
+     * @param info
+     * 
+     *
+     * @endif
+     */
+    void getInfo(XmlRpc::XmlRpcValue& info);
+    /*!
+     * @if jp
+     * @brief メッセージ型の取得
+     *
+     *
+     * @return メッセージ型
+     * 
+     * @else
+     * @brief 
+     *
+     * 
+     * @return
+     *
+     * @endif
+     */
+    const std::string& datatype() const;
+    /*!
+     * @if jp
+     * @brief トピック名の取得
+     *
+     *
+     * @return トピック名
+     * 
+     * @else
+     * @brief 
+     *
+     * 
+     * @return
+     *
+     * @endif
+     */
+    const std::string& getTopicName() const;
+    /*!
+     * @if jp
+     * @brief ノード名の取得
+     *
+     *
+     * @return ノード名
+     * 
+     * @else
+     * @brief 
+     *
+     * 
+     * @return
+     *
+     * @endif
+     */
+    const std::string& getName() const;
+    
     
   private:
 
@@ -446,7 +521,7 @@ namespace RTC
     inline void onBufferWrite(ByteData& data)
     {
       m_listeners->
-        connectorData_[ON_BUFFER_WRITE].notify(m_profile, data);
+        connectorData_[ON_BUFFER_WRITE].notifyIn(m_profile, data);
     }
 
     /*!
@@ -461,7 +536,7 @@ namespace RTC
     inline void onBufferFull(ByteData& data)
     {
       m_listeners->
-        connectorData_[ON_BUFFER_FULL].notify(m_profile, data);
+        connectorData_[ON_BUFFER_FULL].notifyIn(m_profile, data);
     }
 
     /*!
@@ -476,7 +551,7 @@ namespace RTC
     inline void onBufferWriteTimeout(ByteData& data)
     {
       m_listeners->
-        connectorData_[ON_BUFFER_WRITE_TIMEOUT].notify(m_profile, data);
+        connectorData_[ON_BUFFER_WRITE_TIMEOUT].notifyIn(m_profile, data);
     }
 
     /*!
@@ -491,7 +566,7 @@ namespace RTC
     inline void onBufferWriteOverwrite(ByteData& data)
     {
       m_listeners->
-        connectorData_[ON_BUFFER_OVERWRITE].notify(m_profile, data);
+        connectorData_[ON_BUFFER_OVERWRITE].notifyIn(m_profile, data);
     }
 
     /*!
@@ -506,7 +581,7 @@ namespace RTC
     inline void onReceived(ByteData& data)
     {
       m_listeners->
-        connectorData_[ON_RECEIVED].notify(m_profile, data);
+        connectorData_[ON_RECEIVED].notifyIn(m_profile, data);
     }
 
     /*!
@@ -521,7 +596,7 @@ namespace RTC
     inline void onReceiverFull(ByteData& data)
     {
       m_listeners->
-        connectorData_[ON_RECEIVER_FULL].notify(m_profile, data);
+        connectorData_[ON_RECEIVER_FULL].notifyIn(m_profile, data);
     }
 
     /*!
@@ -534,7 +609,7 @@ namespace RTC
     inline void onReceiverTimeout(ByteData& data)
     {
       m_listeners->
-        connectorData_[ON_RECEIVER_TIMEOUT].notify(m_profile, data);
+        connectorData_[ON_RECEIVER_TIMEOUT].notifyIn(m_profile, data);
     }
 
     /*!
@@ -547,7 +622,7 @@ namespace RTC
     inline void onReceiverError(ByteData& data)
     {
       m_listeners->
-        connectorData_[ON_RECEIVER_ERROR].notify(m_profile, data);
+        connectorData_[ON_RECEIVER_ERROR].notifyIn(m_profile, data);
     }
 
   private:
@@ -570,10 +645,133 @@ namespace RTC
     std::string m_callerid;
     std::string m_messageType;
     std::mutex m_mutex;
-    std::map<std::string, ros::ConnectionPtr> m_tcp_connecters;
+
+    /*!
+     * @if jp
+     * @class PublisherLink
+     * @brief PublisherLink クラス
+     *
+     * ros::Connection、コネクタのIDを格納するクラス
+     *
+     * @since 2.0.0
+     *
+     * @else
+     * @class PublisherLink
+     * @brief PublisherLink class
+     *
+     * 
+     *
+     * @since 2.0.0
+     *
+     * @endif
+     */
+    class PublisherLink
+    {
+    public:
+      /*!
+       * @if jp
+       * @brief コンストラクタ
+       *
+       * @else
+       * @brief Constructor
+       *
+       * @endif
+       */
+      PublisherLink(void);
+      /*!
+       * @if jp
+       * @brief コンストラクタ
+       *
+       * @param conn ros::Connection
+       * @param num コネクタのID
+       *
+       * @else
+       * @brief Constructor
+       *
+       * @param conn 
+       * @param num 
+       *
+       * @endif
+       */
+      PublisherLink(ros::ConnectionPtr conn, int num);
+      /*!
+       * @if jp
+       * @brief コピーコンストラクタ
+       *
+       * @param obj コピー元 
+       *
+       * @else
+       * @brief Copy Constructor
+       *
+       * @param obj
+       *
+       * @endif
+       */
+      PublisherLink(const PublisherLink &obj);
+      /*!
+       * @if jp
+       * @brief デストラクタ
+       *
+       *
+       * @else
+       * @brief Destructor
+       *
+       *
+       * @endif
+       */
+      ~PublisherLink();
+      /*!
+       * @if jp
+       * @brief ros::Connectionを取得
+       *
+       * @return ros::Connection
+       *
+       * @else
+       * @brief 
+       *
+       * @return
+       *
+       * @endif
+       */
+      ros::ConnectionPtr getConnection();
+      /*!
+       * @if jp
+       * @brief ros::Connectionを設定
+       *
+       * @param conn ros::Connection
+       *
+       * @else
+       * @brief 
+       *
+       * @param conn
+       *
+       * @endif
+       */
+      void setConnection(ros::ConnectionPtr conn);
+      /*!
+       * @if jp
+       * @brief コネクタのID取得
+       *
+       * @return コネクタのID
+       *
+       * @else
+       * @brief 
+       *
+       * @return
+       *
+       * @endif
+       */
+      int getNum();
+    private:
+      ros::ConnectionPtr m_conn;
+      int m_num;
+    };
+
+    std::map<std::string, PublisherLink> m_tcp_connecters;
+    int m_pubnum;
     std::string m_roscorehost;
     unsigned int m_roscoreport;
-    
+    std::string m_datatype;
 
 
   };  // class InPortCorCdrbaProvider

@@ -21,7 +21,6 @@
 
 #include <cstdlib>
 #include <rtm/SystemLogger.h>
-#include <coil/NonCopyable.h>
 #include <coil/TimeMeasure.h>
 #include <rtm/idl/RTCSkel.h>
 #include <rtm/StateMachine.h>
@@ -40,12 +39,13 @@ namespace RTC_impl
   typedef RTC_Utils::StateHolder<ExecContextState> ExecContextStates;
 
   class RTObjectStateMachine
-    : private coil::NonCopyable
   {
   public:
     RTObjectStateMachine(RTC::ExecutionContextHandle_t id,
                          RTC::LightweightRTObject_ptr comp);
+    RTObjectStateMachine(RTObjectStateMachine const&) = delete;
     virtual ~RTObjectStateMachine();
+    RTObjectStateMachine& operator=(RTObjectStateMachine const&) = delete;
 
     // functions for stored RTObject reference
     RTC::LightweightRTObject_ptr getRTObject();
