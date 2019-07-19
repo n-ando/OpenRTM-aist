@@ -88,7 +88,7 @@ namespace RTC
     }
 
     std::string marshaling_type = prop.getProperty("marshaling_type", "corba");
-    m_topic = prop.getProperty("topic", "chatter");
+    m_topic = prop.getProperty("fastrtps.topic", "chatter");
 
 
     const std::string str_corba = "corba";

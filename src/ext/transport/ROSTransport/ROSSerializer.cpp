@@ -866,8 +866,10 @@ namespace RTC
       }
       msg.step = 1920;
       msg.data.resize(data.pixels.length());
-      memcpy(&msg.data[0], &data.pixels[0], data.pixels.length());
-
+      if(data.pixels.length() > 0)
+      {
+          memcpy(&msg.data[0], &data.pixels[0], data.pixels.length());
+      }
       
       ROSSerializerBase<RTC::CameraImage>::m_message = ros::serialization::serializeMessage<sensor_msgs::Image>(msg);
 
@@ -908,8 +910,10 @@ namespace RTC
 
       data.pixels.length(static_cast<CORBA::ULong>(msg.data.size()));
       
-      memcpy(&data.pixels[0], &msg.data[0], data.pixels.length());
-
+      if(msg.data.size() > 0)
+      {
+          memcpy(&data.pixels[0], &msg.data[0], data.pixels.length());
+      }
       return true;
     }
   };
