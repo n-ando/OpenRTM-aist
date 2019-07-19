@@ -20,7 +20,6 @@
 #define RTM_UTIL_LISTENERHOLDER_H
 
 #include <mutex>
-#include <coil/NonCopyable.h>
 
 #include <vector>
 #include <utility>
@@ -142,12 +141,13 @@ namespace util
    */
   template <typename ListenerClass>
   class ListenerHolder
-    : public coil::NonCopyable
   {
   public:
     typedef std::pair<ListenerClass*, bool> Entry;
     typedef std::vector<Entry> EntryList;
     typedef typename EntryList::iterator EntryIterator;
+    ListenerHolder(ListenerHolder const&) = delete;
+    ListenerHolder& operator=(ListenerHolder const&) = delete;
 
     /*!
      * @if jp
