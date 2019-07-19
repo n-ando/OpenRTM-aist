@@ -34,7 +34,6 @@ set(coil_headers
 	common/coil/Factory.h
 	common/coil/Listener.h
 	common/coil/Logger.h
-	common/coil/NonCopyable.h
 	common/coil/PeriodicTask.h
 	common/coil/PeriodicTaskBase.h
 	common/coil/Properties.h
