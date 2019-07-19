@@ -242,7 +242,7 @@ void Analyzer::writeData(const RTC::TimedOctetSeq &data)
 	for (std::vector<TimedOctetSeq>::iterator itr = m_datalist.begin(); itr != m_datalist.end(); ) {
 		if (data.tm.nsec == (*itr).tm.nsec && data.tm.sec == (*itr).tm.sec)
 		{
-			auto end = std::chrono::system_clock::now().time_since_epoch();;
+			auto end = std::chrono::system_clock::now().time_since_epoch();
 			auto start = std::chrono::seconds(data.tm.sec) + std::chrono::nanoseconds(data.tm.nsec);
 			
 			double diff = std::chrono::duration<double>(end - start).count();

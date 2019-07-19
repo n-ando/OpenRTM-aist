@@ -126,7 +126,7 @@ namespace RTC_exp
         {
             RTC_ERROR(("setThreadCpuAffinity():"
                 "CPU affinity mask setting failed"));
-        };
+        }
 
         coil::CpuMask ret_cpu;
         result = coil::getThreadCpuAffinity(ret_cpu);

@@ -754,8 +754,8 @@ std::vector<coil::Properties> Manager::getLoadableModules()
             return nullptr;
           }
         // module loading
-        RTC_INFO(("Loading module: %s", (*it)["module_file_name"].c_str()))
-          load((*it)["module_file_name"], "");
+        RTC_INFO(("Loading module: %s", (*it)["module_file_name"].c_str()));
+        load((*it)["module_file_name"], "");
         factory = m_factory.find(comp_id);
         if (factory == nullptr)
           {
@@ -2313,7 +2313,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
             name_prop.load(conff);
             RTC_INFO(("Component instance conf file: %s loaded.",
                       m_config[name_conf].c_str()));
-            RTC_DEBUG_STR((name_prop))
+            RTC_DEBUG_STR((name_prop));
             config_fname.push_back(m_config[name_conf]);
           }
       }

@@ -401,7 +401,7 @@ namespace RTC
 #ifdef ORB_IS_ORBEXPRESS
             oe_out << e << oe_endl << oe_flush;
 #else
-            RTC_WARN(("Exception caught: minor code(%d).", e.minor()));;
+            RTC_WARN(("Exception caught: minor code(%d).", e.minor()));
 #endif
 #else // ORB_IS_RTORB
             RTC_WARN(("Exception caught"));

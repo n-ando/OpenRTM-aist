@@ -82,7 +82,7 @@ namespace coil
                                    svc();
                                    finalize();
                                });
-      };
+      }
   }
 
   /*!

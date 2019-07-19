@@ -201,7 +201,7 @@ namespace RTC
 
     if (!isRunning())
       {
-        RTC_DEBUG(("EC is not running. do nothing."))
+        RTC_DEBUG(("EC is not running. do nothing."));
         return;
       }
 

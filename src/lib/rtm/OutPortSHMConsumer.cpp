@@ -195,7 +195,7 @@ namespace RTC
           }
         else
           {
-            RTC_ERROR(("Invalid object reference."))
+            RTC_ERROR(("Invalid object reference."));
           }
         return ret;
       }

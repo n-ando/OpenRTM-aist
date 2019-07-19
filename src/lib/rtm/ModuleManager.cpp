@@ -224,7 +224,7 @@ namespace RTC
                               const std::string& func_name)
   {
     RTC_TRACE(("symbol(%s, %s)",
-               file_name.c_str(), func_name.c_str()))
+               file_name.c_str(), func_name.c_str()));
     // "file_name" should be in modules map.
     DLLEntity* dll(m_modules.find(file_name.c_str()));
     if (dll == nullptr)

@@ -32,7 +32,7 @@ namespace hrtm
   // Creator and Destructor tempaltes for RTC factory
   //
   template <class _New>
-  RTC::RTObject_impl* Create(RTC::Manager* manager)
+  RTC::RTObject_impl* Create(RTC::Manager* /* manager */)
   {
     return new _New();
   }
