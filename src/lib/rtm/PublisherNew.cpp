@@ -332,7 +332,7 @@ namespace RTC
     RTC_PARANOID(("Task creation succeeded."));
 
     // setting task function
-    m_task->setTask(this, &PublisherNew::svc);
+    m_task->setTask([this]{ svc(); });
     m_task->setPeriod(std::chrono::seconds(0));
     m_task->executionMeasure(coil::toBool(prop["measurement.exec_time"],
                                     "enable", "disable", true));
