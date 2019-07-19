@@ -103,10 +103,8 @@ namespace RTC
    */
   template <class DataType>
   class BufferBase
-    : public BufferStatus
   {
   public:
-    BUFFERSTATUS_ENUM
 
     /*!
      * @if jp
@@ -164,7 +162,7 @@ namespace RTC
      *
      * バッファ長を設定する。設定不可な場合はNOT_SUPPORTEDが返る。
      *
-     * @return BUFFER_OK: 正常終了
+     * @return OK: 正常終了
      *         NOT_SUPPORTED: バッファ長変更不可
      *         BUFFER_ERROR: 異常終了
      *
@@ -174,14 +172,14 @@ namespace RTC
      *
      * Pure virtual function to set the buffer length.
      *
-     * @return BUFFER_OK: Successful
+     * @return OK: Successful
      *         NOT_SUPPORTED: The buffer length cannot be set.
      *         BUFFER_ERROR: Failed
      *
      *
      * @endif
      */
-    virtual ReturnCode length(size_t n) = 0;
+    virtual BufferStatus length(size_t n) = 0;
 
     /*!
      * @if jp
@@ -190,7 +188,7 @@ namespace RTC
      *
      * バッファの読み出しポインタと書き込みポインタの位置をリセットする。
      *
-     * @return BUFFER_OK: 正常終了
+     * @return OK: 正常終了
      *         NOT_SUPPORTED: リセット不可能
      *         BUFFER_ERROR: 異常終了
      *
@@ -200,13 +198,13 @@ namespace RTC
      *
      * Pure virtual function to reset the buffer status.
      *
-     * @return BUFFER_OK: Successful
+     * @return OK: Successful
      *         NOT_SUPPORTED: The buffer status cannot be reset.
      *         BUFFER_ERROR: Failed
      *
      * @endif
      */
-    virtual ReturnCode reset() = 0;
+    virtual BufferStatus reset() = 0;
 
 
     //----------------------------------------------------------------------
@@ -241,7 +239,7 @@ namespace RTC
      * 現在の書き込み位置のポインタを n 個進める。
      *
      * @param  n 書込みポインタ + n の位置のポインタ
-     * @return BUFFER_OK: 正常終了
+     * @return OK: 正常終了
      *         BUFFER_ERROR: 異常終了
      *
      * @else
@@ -250,12 +248,12 @@ namespace RTC
      *
      * Pure virtual function to forward n writing pointers.
      *
-     * @return BUFFER_OK: Successful
+     * @return OK: Successful
      *         BUFFER_ERROR: Failed
      *
      * @endif
      */
-    virtual ReturnCode advanceWptr(long int n = 1, bool unlock_enable = true) = 0;
+    virtual BufferStatus advanceWptr(long int n = 1, bool unlock_enable = true) = 0;
 
     /*!
      * @if jp
@@ -266,7 +264,7 @@ namespace RTC
      *
      * @param value 書き込み対象データ
      *
-     * @return BUFFER_OK: 正常終了
+     * @return OK: 正常終了
      *         BUFFER_ERROR: 異常終了
      *
      * @else
@@ -277,12 +275,12 @@ namespace RTC
      *
      * @param value Target data to write.
      *
-     * @return BUFFER_OK: Successful
+     * @return OK: Successful
      *         BUFFER_ERROR: Failed
      *
      * @endif
      */
-    virtual ReturnCode put(const DataType& value) = 0;
+    virtual BufferStatus put(const DataType& value) = 0;
 
     /*!
      * @if jp
@@ -293,7 +291,7 @@ namespace RTC
      *
      * @param value 書き込み対象データ
      *
-     * @return BUFFER_OK: 正常終了
+     * @return OK: 正常終了
      *         BUFFER_ERROR: 異常終了
      *
      * @else
@@ -304,14 +302,14 @@ namespace RTC
      *
      * @param value Target data to write.
      *
-     * @return BUFFER_OK: Successful
+     * @return OK: Successful
      *         BUFFER_ERROR: Failed
      *
      * @endif
      */
-    virtual ReturnCode write(const DataType& value,
-                             std::chrono::nanoseconds timeout
-                             = std::chrono::nanoseconds(-1)) = 0;
+    virtual BufferStatus write(const DataType& value,
+                               std::chrono::nanoseconds timeout
+                               = std::chrono::nanoseconds(-1)) = 0;
 
     /*!
      * @if jp
@@ -388,7 +386,7 @@ namespace RTC
      * 現在の読み出し位置のポインタを n 個進める。
      *
      * @param  n 読み出しポインタ + n の位置のポインタ
-     * @return BUFFER_OK: 正常終了
+     * @return OK: 正常終了
      *         BUFFER_ERROR: 異常終了
      *
      * @else
@@ -397,12 +395,12 @@ namespace RTC
      *
      * Pure virtual function to forward n reading pointers.
      *
-     * @return BUFFER_OK: Successful
+     * @return OK: Successful
      *         BUFFER_ERROR: Failed
      *
      * @endif
      */
-    virtual ReturnCode advanceRptr(long int n = 1, bool unlock_enable = true) = 0;
+    virtual BufferStatus advanceRptr(long int n = 1, bool unlock_enable = true) = 0;
 
     /*!
      * @if jp
@@ -413,7 +411,7 @@ namespace RTC
      *
      * @param value 読み出しデータ
      *
-     * @return BUFFER_OK: 正常終了
+     * @return OK: 正常終了
      *         BUFFER_ERROR: 異常終了
      *
      * @else
@@ -424,12 +422,12 @@ namespace RTC
      *
      * @param value Data to read.
      *
-     * @return BUFFER_OK: Successful
+     * @return OK: Successful
      *         BUFFER_ERROR: Failed
      *
      * @endif
      */
-    virtual ReturnCode get(DataType& value) = 0;
+    virtual BufferStatus get(DataType& value) = 0;
 
     /*!
      * @if jp
@@ -475,9 +473,9 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode read(DataType& value,
-                            std::chrono::nanoseconds nsec
-                            = std::chrono::nanoseconds(-1)) = 0;
+    virtual BufferStatus read(DataType& value,
+                              std::chrono::nanoseconds nsec
+                              = std::chrono::nanoseconds(-1)) = 0;
 
     /*!
      * @if jp

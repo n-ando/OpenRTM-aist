@@ -182,7 +182,7 @@ namespace RTC
   private:
 
     ::OpenRTM::PortStatus
-    convertReturn(BufferStatus::Enum status,
+    convertReturn(BufferStatus status,
                   ByteData& data);
 
     

@@ -232,7 +232,7 @@ namespace RTC
       {
           
           onReceived(data);
-          BufferStatus::Enum ret = m_connector->write(data);
+          BufferStatus ret = m_connector->write(data);
           convertReturn(ret, data);
       }
 
@@ -245,12 +245,12 @@ namespace RTC
    * @brief Return codes conversion
    * @endif
    */
-  void OpenSpliceInPort::convertReturn(BufferStatus::Enum status,
+  void OpenSpliceInPort::convertReturn(BufferStatus status,
                                         ByteData& data)
   {
     switch (status)
       {
-      case BufferStatus::BUFFER_OK:
+      case BufferStatus::OK:
         onBufferWrite(data);
         return;
 
@@ -258,12 +258,12 @@ namespace RTC
         onReceiverError(data);
         return;
 
-      case BufferStatus::BUFFER_FULL:
+      case BufferStatus::FULL:
         onBufferFull(data);
         onReceiverFull(data);
         return;
 
-      case BufferStatus::BUFFER_EMPTY:
+      case BufferStatus::EMPTY:
         // never come here
         return;
 

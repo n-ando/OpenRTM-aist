@@ -249,7 +249,7 @@ namespace RTC
      * @endif
      */
     ::RTC::PortStatus
-    convertReturn(BufferStatus::Enum status,
+    convertReturn(BufferStatus status,
                   ByteData& data);
 
 

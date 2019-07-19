@@ -370,7 +370,7 @@ namespace RTC
 	  * @brief Return codes conversion
 	  * @endif
 	  */
-	  void convertReturn(BufferStatus::Enum status, ByteData& data);
+	  void convertReturn(BufferStatus status, ByteData& data);
 
     CdrBufferBase* m_buffer;
     ::OpenRTM::InPortCdrUDP_var m_objref;

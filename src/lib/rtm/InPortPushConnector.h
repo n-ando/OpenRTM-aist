@@ -254,7 +254,7 @@ namespace RTC
      */
     virtual CdrBufferBase* createBuffer(ConnectorInfo& info);
 
-    BufferStatus::Enum write(ByteData &cdr) override;
+    BufferStatus write(ByteData &cdr) override;
 
     /*!
      * @if jp

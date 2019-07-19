@@ -191,10 +191,10 @@ namespace RTC
     assert(m_buffer != nullptr);
 
     onBufferWrite(data_);
-    CdrBufferBase::ReturnCode ret(m_buffer->write(data_, timeout));
+    BufferStatus ret(m_buffer->write(data_, timeout));
 
     m_task->signal();
-    RTC_DEBUG(("%s = write()", CdrBufferBase::toString(ret)));
+    RTC_DEBUG(("%s = write()", RTC::toString(ret)));
 
     return convertReturn(ret, data_);
   }
@@ -494,7 +494,7 @@ namespace RTC
    * @endif
    */
   PublisherBase::ReturnCode
-  PublisherNew::convertReturn(BufferStatus::Enum status,
+  PublisherNew::convertReturn(BufferStatus status,
                               ByteData& data)
   {
     /*
@@ -509,13 +509,13 @@ namespace RTC
      */
     switch (status)
       {
-      case BufferStatus::BUFFER_OK:
+      case BufferStatus::OK:
         // no callback
         return DataPortStatus::PORT_OK;
       case BufferStatus::BUFFER_ERROR:
         // no callback
         return DataPortStatus::BUFFER_ERROR;
-      case BufferStatus::BUFFER_FULL:
+      case BufferStatus::FULL:
         onBufferFull(data);
         return DataPortStatus::BUFFER_FULL;
       case BufferStatus::NOT_SUPPORTED:

@@ -178,9 +178,9 @@ namespace RTC
 	  return true;
   }
 
-  CdrBufferBase::ReturnCode OutPortConnector::read(ByteData&  /*data*/)
+  BufferStatus OutPortConnector::read(ByteData&  /*data*/)
   {
-      return CdrBufferBase::BUFFER_OK;
+      return BufferStatus::OK;
   }
 
   void OutPortConnector::unsubscribeInterface(const coil::Properties& /*prop*/)

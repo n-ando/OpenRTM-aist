@@ -169,9 +169,9 @@ namespace RTC
       }
 
     ByteData cdr;
-    CdrBufferBase::ReturnCode ret(m_connector->read(cdr));
+    BufferStatus ret(m_connector->read(cdr));
 
-    if (ret == CdrBufferBase::BUFFER_OK)
+    if (ret == BufferStatus::OK)
       {
         CORBA::ULong len(static_cast<CORBA::ULong>(cdr.getDataLength()));
         RTC_PARANOID(("converted CDR data size: %d", len));
@@ -201,12 +201,12 @@ namespace RTC
    * @endif
    */
   ::RTC::PortStatus
-  OutPortDSProvider::convertReturn(BufferStatus::Enum status,
+  OutPortDSProvider::convertReturn(BufferStatus status,
                                          ByteData& data)
   {
     switch (status)
       {
-      case BufferStatus::BUFFER_OK:
+      case BufferStatus::OK:
         onBufferRead(data);
         onSend(data);
         return ::RTC::PORT_OK;
@@ -217,12 +217,12 @@ namespace RTC
         return ::RTC::PORT_ERROR;
         break;
 
-      case BufferStatus::BUFFER_FULL:
+      case BufferStatus::FULL:
         // never come here
         return ::RTC::BUFFER_FULL;
         break;
 
-      case BufferStatus::BUFFER_EMPTY:
+      case BufferStatus::EMPTY:
         onBufferEmpty();
         onSenderEmpty();
         return ::RTC::BUFFER_EMPTY;

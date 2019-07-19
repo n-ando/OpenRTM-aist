@@ -361,7 +361,7 @@ namespace RTC
          * @brief Return codes conversion
          * @endif
          */
-        void convertReturn(BufferStatus::Enum status, ByteData& data);
+        void convertReturn(BufferStatus status, ByteData& data);
 
         CdrBufferBase* m_buffer;
         ConnectorInfo m_profile;

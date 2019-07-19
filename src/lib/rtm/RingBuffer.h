@@ -89,7 +89,6 @@ namespace RTC
     : public BufferBase<DataType>
   {
   public:
-    BUFFERSTATUS_ENUM
     /*!
      * @if jp
      *
@@ -221,11 +220,9 @@ namespace RTC
      * @brief バッファの長さをセットする
      *
      * バッファ長を設定する。設定不可な場合はNOT_SUPPORTEDが返る。
-     * この実装では BUFFER_OK しか返さない。
+     * この実装では OK しか返さない。
      *
-     * @return BUFFER_OK: 正常終了
-     *         NOT_SUPPORTED: バッファ長変更不可
-     *         BUFFER_ERROR: 異常終了
+     * @return OK: 正常終了
      *
      * @else
      *
@@ -237,12 +234,12 @@ namespace RTC
      *
      * @endif
      */
-    ReturnCode length(size_t n) override
+    BufferStatus length(size_t n) override
     {
       m_buffer.resize(n);
       m_length = n;
       this->reset();
-      return ::RTC::BufferStatus::BUFFER_OK;
+      return BufferStatus::OK;
     }
 
     /*!
@@ -251,9 +248,9 @@ namespace RTC
      * @brief バッファの状態をリセットする
      *
      * バッファの読み出しポインタと書き込みポインタの位置をリセットする。
-     * この実装では BUFFER_OK しか返さない。
+     * この実装では OK しか返さない。
      *
-     * @return BUFFER_OK: 正常終了
+     * @return OK: 正常終了
      *         NOT_SUPPORTED: リセット不可能
      *         BUFFER_ERROR: 異常終了
      *
@@ -267,14 +264,14 @@ namespace RTC
      *
      * @endif
      */
-    ReturnCode reset() override
+    BufferStatus reset() override
     {
       std::lock_guard<std::mutex> guard(m_posmutex);
       m_fillcount = 0;
       m_wcount = 0;
       m_wpos = 0;
       m_rpos = 0;
-      return ::RTC::BufferStatus::BUFFER_OK;
+      return BufferStatus::OK;
     }
 
 
@@ -317,7 +314,7 @@ namespace RTC
      *
      * @param  n 書込みポインタ + n の位置のポインタ
      * @param  unlock_enable trueの場合にバッファエンプティのブロックを解除する
-     * @return BUFFER_OK:            正常終了
+     * @return OK:            正常終了
      *         PRECONDITION_NOT_MET: n > writable()
      *
      * @else
@@ -330,7 +327,7 @@ namespace RTC
      *
      * @endif
      */
-    ReturnCode advanceWptr(long int n = 1, bool unlock_enable = true) override
+    BufferStatus advanceWptr(long int n = 1, bool unlock_enable = true) override
     {
       bool empty_ = false;
       bool lock_ = (unlock_enable && n > 0);
@@ -355,7 +352,7 @@ namespace RTC
               {
                   m_empty.mutex.unlock();
               }
-              return ::RTC::BufferStatus::PRECONDITION_NOT_MET;
+              return BufferStatus::PRECONDITION_NOT_MET;
             }
 
           m_wpos = (m_wpos + n + m_length) % m_length;
@@ -372,7 +369,7 @@ namespace RTC
           m_empty.mutex.unlock();
         }
 
-      return ::RTC::BufferStatus::BUFFER_OK;
+      return BufferStatus::OK;
     }
     /*!
      * @if jp
@@ -380,11 +377,11 @@ namespace RTC
      * @brief バッファにデータを書き込む
      *
      * バッファにデータを書き込む。書き込みポインタの位置は変更されない。
-     * この実装では常に BUFFER_OK を返す。
+     * この実装では常に OK を返す。
      *
      * @param value 書き込み対象データ
      *
-     * @return BUFFER_OK: 正常終了
+     * @return OK: 正常終了
      *         BUFFER_ERROR: 異常終了
      *
      * @else
@@ -392,20 +389,20 @@ namespace RTC
      * @brief Write data into the buffer
      *
      * Pure virtual function to write data into the buffer.
-     * Always BUFFER_OK will be returned in this implementation.
+     * Always OK will be returned in this implementation.
      *
      * @param value Target data to write.
      *
-     * @return BUFFER_OK:    Successful
+     * @return OK:    Successful
      *         BUFFER_ERROR: Failed
      *
      * @endif
      */
-    ReturnCode put(const DataType& value) override
+    BufferStatus put(const DataType& value) override
     {
       std::lock_guard<std::mutex> guard(m_posmutex);
       m_buffer[m_wpos] = value;
-      return ::RTC::BufferStatus::BUFFER_OK;
+      return BufferStatus::OK;
     }
 
     /*!
@@ -431,8 +428,8 @@ namespace RTC
      *
      * @param value 書き込み対象データ
      * @param timeout タイムアウト時間 nsec (default -1: 無効)
-     * @return BUFFER_OK            正常終了
-     *         BUFFER_FULL          バッファがフル状態
+     * @return OK            正常終了
+     *         FULL          バッファがフル状態
      *         TIMEOUT              書込みがタイムアウトした
      *         PRECONDITION_NOT_MET 設定異常
      *
@@ -448,9 +445,9 @@ namespace RTC
      *
      * @endif
      */
-    ReturnCode write(const DataType& value,
-                     std::chrono::nanoseconds timeout
-                     = std::chrono::nanoseconds(-1)) override
+    BufferStatus write(const DataType& value,
+                       std::chrono::nanoseconds timeout
+                       = std::chrono::nanoseconds(-1)) override
     {
       {
       std::unique_lock<std::mutex> guard(m_full.mutex);
@@ -473,7 +470,7 @@ namespace RTC
             }
           else if (!overwrite && !timedwrite)  // "do_nothing" mode
             {
-              return ::RTC::BufferStatus::BUFFER_FULL;
+              return BufferStatus::FULL;
             }
           else if (!overwrite && timedwrite)  // "block" mode
             {
@@ -483,12 +480,12 @@ namespace RTC
                 }
               if (std::cv_status::timeout == m_empty.cond.wait_for(guard, timeout))
                 {
-                  return ::RTC::BufferStatus::TIMEOUT;
+                  return BufferStatus::TIMEOUT;
                 }
             }
           else                                    // unknown condition
             {
-              return ::RTC::BufferStatus::PRECONDITION_NOT_MET;
+              return BufferStatus::PRECONDITION_NOT_MET;
             }
         }
       }
@@ -498,7 +495,7 @@ namespace RTC
       advanceWptr(1);
 
 
-      return ::RTC::BufferStatus::BUFFER_OK;
+      return BufferStatus::OK;
     }
 
     /*!
@@ -589,7 +586,7 @@ namespace RTC
      *
      * @param  n 読み出しポインタ + n の位置のポインタ
      * @param  unlock_enable trueの場合にバッファフルのブロックを解除する
-     * @return BUFFER_OK: 正常終了
+     * @return OK: 正常終了
      *         BUFFER_ERROR: 異常終了
      *
      * @else
@@ -602,7 +599,7 @@ namespace RTC
      *
      * @endif
      */
-    ReturnCode advanceRptr(long int n = 1, bool unlock_enable = true) override
+    BufferStatus advanceRptr(long int n = 1, bool unlock_enable = true) override
     {
       bool full_ = false;
       bool lock_ = (unlock_enable && n > 0);
@@ -626,7 +623,7 @@ namespace RTC
               {
                   m_full.mutex.unlock();
               }
-              return ::RTC::BufferStatus::PRECONDITION_NOT_MET;
+              return BufferStatus::PRECONDITION_NOT_MET;
             }
 
           m_rpos = (m_rpos + n + m_length) % m_length;
@@ -642,7 +639,7 @@ namespace RTC
           m_full.mutex.unlock();
         }
 
-      return ::RTC::BufferStatus::BUFFER_OK;
+      return BufferStatus::OK;
     }
 
     /*!
@@ -654,7 +651,7 @@ namespace RTC
      *
      * @param value 読み出しデータ
      *
-     * @return BUFFER_OK: 正常終了
+     * @return OK: 正常終了
      *         BUFFER_ERROR: 異常終了
      *
      * @else
@@ -669,11 +666,11 @@ namespace RTC
      *
      * @endif
      */
-    ReturnCode get(DataType& value) override
+    BufferStatus get(DataType& value) override
     {
       std::lock_guard<std::mutex> guard(m_posmutex);
       value = m_buffer[m_rpos];
-      return ::RTC::BufferStatus::BUFFER_OK;
+      return BufferStatus::OK;
     }
 
 
@@ -724,8 +721,8 @@ namespace RTC
      *
      * @param value 読み出し対象データ
      * @param timeout タイムアウト時間 (default -1: 無効)
-     * @return BUFFER_OK            正常終了
-     *         BUFFER_EMPTY         バッファが空状態
+     * @return OK            正常終了
+     *         EMPTY         バッファが空状態
      *         TIMEOUT              書込みがタイムアウトした
      *         PRECONDITION_NOT_MET 設定異常
      *
@@ -741,9 +738,9 @@ namespace RTC
      *
      * @endif
      */
-    ReturnCode read(DataType& value,
-                    std::chrono::nanoseconds timeout
-                    = std::chrono::nanoseconds(-1)) override
+    BufferStatus read(DataType& value,
+                      std::chrono::nanoseconds timeout
+                      = std::chrono::nanoseconds(-1)) override
     {
       {
       std::unique_lock<std::mutex> guard(m_empty.mutex);
@@ -764,13 +761,13 @@ namespace RTC
             {
               if (!(m_wcount > 0))
                 {
-                  return ::RTC::BufferStatus::BUFFER_EMPTY;
+                  return BufferStatus::EMPTY;
                 }
               advanceRptr(-1,false);
             }
           else if (!readback && !timedread)  // "do_nothing" mode
             {
-              return ::RTC::BufferStatus::BUFFER_EMPTY;
+              return BufferStatus::EMPTY;
             }
           else if (!readback && timedread)  // "block" mode
             {
@@ -780,12 +777,12 @@ namespace RTC
                 }
               if (std::cv_status::timeout == m_empty.cond.wait_for(guard, timeout))
                 {
-                  return ::RTC::BufferStatus::TIMEOUT;
+                  return BufferStatus::TIMEOUT;
                 }
             }
           else                                    // unknown condition
             {
-              return ::RTC::BufferStatus::PRECONDITION_NOT_MET;
+              return BufferStatus::PRECONDITION_NOT_MET;
             }
         }
       }
@@ -794,7 +791,7 @@ namespace RTC
 
       advanceRptr(1);
 
-      return ::RTC::BufferStatus::BUFFER_OK;
+      return BufferStatus::OK;
     }
 
     /*!
@@ -806,7 +803,7 @@ namespace RTC
      *
      * @return 読み出し可能な要素数
      *
-     * @return BUFFER_OK: 正常終了
+     * @return OK: 正常終了
      *         BUFFER_ERROR: 異常終了
      *
      * @else

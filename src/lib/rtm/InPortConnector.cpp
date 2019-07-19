@@ -168,9 +168,9 @@ namespace RTC
 	  }
   }
 
-  BufferStatus::Enum InPortConnector::write(ByteData & /*cdr*/)
+  BufferStatus InPortConnector::write(ByteData & /*cdr*/)
   {
-      return BufferStatus::BUFFER_OK;
+      return BufferStatus::OK;
   }
 
   void InPortConnector::unsubscribeInterface(const coil::Properties& /*prop*/)

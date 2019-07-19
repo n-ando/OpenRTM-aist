@@ -133,12 +133,12 @@ namespace RTC
     return PORT_OK;
   }
 
-  CdrBufferBase::ReturnCode
+  BufferStatus
   OutPortPullConnector::read(ByteData &data)
   {
       if (m_buffer == nullptr)
       {
-          return CdrBufferBase::PRECONDITION_NOT_MET;
+          return BufferStatus::PRECONDITION_NOT_MET;
       }
 
       if (m_sync_readwrite)
@@ -163,7 +163,7 @@ namespace RTC
         }
       }
 
-      CdrBufferBase::ReturnCode ret = m_buffer->read(data);
+      BufferStatus ret = m_buffer->read(data);
 
 
       if (m_sync_readwrite)

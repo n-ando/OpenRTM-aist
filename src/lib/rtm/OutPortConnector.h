@@ -272,7 +272,7 @@ namespace RTC
       return ret;
     }
 
-    virtual CdrBufferBase::ReturnCode read(ByteData &data);
+    virtual BufferStatus read(ByteData &data);
 
     bool setInPort(InPortBase* directInPort);
     /*!
