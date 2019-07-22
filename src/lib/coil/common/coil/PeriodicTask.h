@@ -312,15 +312,6 @@ namespace coil
 
     /*!
      * @if jp
-     * @brief スレッド休止フラグ
-     * @else
-     * @brief Thread sleep flag
-     * @endif
-     */
-    bool m_nowait;
-
-    /*!
-     * @if jp
      * @brief タスク実行関数
      * @else
      * @brief Task execution function
