@@ -87,7 +87,7 @@ namespace RTC
     setPushPolicy(prop);
     if (!createTask(prop))
       {
-        return INVALID_ARGS;
+        return ReturnCode::INVALID_ARGS;
       }
     return PORT_OK;
   }
@@ -107,7 +107,7 @@ namespace RTC
     if (consumer == nullptr)
       {
         RTC_ERROR(("setConsumer(consumer = 0): invalid argument."));
-        return INVALID_ARGS;
+        return ReturnCode::INVALID_ARGS;
       }
     m_consumer = consumer;
     return PORT_OK;
@@ -127,7 +127,7 @@ namespace RTC
     if (buffer == nullptr)
       {
         RTC_ERROR(("setBuffer(buffer == 0): invalid argument"));
-        return INVALID_ARGS;
+        return ReturnCode::INVALID_ARGS;
       }
     m_buffer = buffer;
     return PORT_OK;
@@ -149,7 +149,7 @@ namespace RTC
     if (listeners == nullptr)
       {
         RTC_ERROR(("setListeners(listeners == 0): invalid argument"));
-        return INVALID_ARGS;
+        return ReturnCode::INVALID_ARGS;
       }
     m_profile = info;
     m_listeners = listeners;

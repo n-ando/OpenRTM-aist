@@ -80,7 +80,7 @@ namespace RTC
 
     if (consumer == nullptr)
       {
-        return INVALID_ARGS;
+        return ReturnCode::INVALID_ARGS;
       }
     m_consumer = consumer;
     return PORT_OK;
@@ -116,7 +116,7 @@ namespace RTC
     if (listeners == nullptr)
       {
         RTC_ERROR(("setListeners(listeners == 0): invalid argument"));
-        return INVALID_ARGS;
+        return ReturnCode::INVALID_ARGS;
       }
 
     m_profile = info;

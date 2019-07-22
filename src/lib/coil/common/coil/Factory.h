@@ -23,6 +23,7 @@
 #include <coil/Singleton.h>
 
 #include <cassert>
+#include <cstdint>
 #include <algorithm>
 #include <functional>
 #include <string>
@@ -54,6 +55,27 @@
 
 namespace coil
 {
+  /*!
+   * @if jp
+   *
+   * @brief reutrn codes of Factory class.
+   *
+   * @else
+   *
+   * @brief reutrn codes of Factory class.
+   *
+   * @endif
+   */
+  enum class FactoryReturn : uint8_t
+    {
+      OK,
+      FACTORY_ERROR,
+      ALREADY_EXISTS,
+      NOT_FOUND,
+      INVALID_ARG,
+      UNKNOWN_ERROR
+    };
+
   /*!
    * @if jp
    *
@@ -120,16 +142,6 @@ namespace coil
     typedef typename FactoryMap::iterator      FactoryMapIt;
     typedef std::map<AbstractClass*, FactoryEntry> ObjectMap;
     typedef typename ObjectMap::iterator           ObjectMapIt;
-
-    enum ReturnCode
-      {
-        FACTORY_OK,
-        FACTORY_ERROR,
-        ALREADY_EXISTS,
-        NOT_FOUND,
-        INVALID_ARG,
-        UNKNOWN_ERROR
-      };
 
     /*!
      * @if jp
@@ -207,7 +219,7 @@ namespace coil
      * @param creator クリエータ用ファンクタ
      * @param destructor デストラクタ用ファンクタ
      *
-     * @return FACTORY_OK: 正常終了
+     * @return OK: 正常終了
      *         ALREADY_EXISTS: 登録済み
      *         INVALID_ARG: creator か destructor が不正な値を含む
      *
@@ -221,22 +233,22 @@ namespace coil
      * @param creator Functor for creator.
      * @param destructor Functor for destructor.
      *
-     * @return FACTORY_OK: Successful
+     * @return OK: Successful
      *         ALREADY_EXISTS: already exists.
      *         INVALID_ARG: creator or destructor with invalid values.
      *
      * @endif
      */
-    ReturnCode addFactory(const Identifier& id,
-                          Creator creator,
-                          Destructor destructor)
+    FactoryReturn addFactory(const Identifier& id,
+                             Creator creator,
+                             Destructor destructor)
     {
-      if (creator == nullptr || destructor == nullptr) { return INVALID_ARG; }
+      if (creator == nullptr || destructor == nullptr) { return FactoryReturn::INVALID_ARG; }
       std::lock_guard<std::mutex> guard(m_mutex);
-      if (m_creators.count(id) != 0) { return ALREADY_EXISTS; }
+      if (m_creators.count(id) != 0) { return FactoryReturn::ALREADY_EXISTS; }
       FactoryEntry f(id, creator, destructor);
       m_creators[id] = f;
-      return FACTORY_OK;
+      return FactoryReturn::OK;
     }
 
     /*!
@@ -248,7 +260,7 @@ namespace coil
      *
      * @param id ファクトリーID
      *
-     * @return FACTORY_OK: 正常終了
+     * @return OK: 正常終了
      *         NOT_FOUND: ID未登録
      *
      * @else
@@ -259,17 +271,17 @@ namespace coil
      *
      * @param id Factory ID.
      *
-     * @return FACTORY_OK: Successful
+     * @return OK: Successful
      *         NOT_FOUND: ID not found
      *
      * @endif
      */
-    ReturnCode removeFactory(const Identifier& id)
+    FactoryReturn removeFactory(const Identifier& id)
     {
       std::lock_guard<std::mutex> guard(m_mutex);
-      if (m_creators.count(id) == 0) { return NOT_FOUND; }
+      if (m_creators.count(id) == 0) { return FactoryReturn::NOT_FOUND; }
       m_creators.erase(id);
-      return FACTORY_OK;
+      return FactoryReturn::OK;
     }
 
     /*!
@@ -326,7 +338,7 @@ namespace coil
      *
      * @endif
      */
-    ReturnCode deleteObject(const Identifier& id, AbstractClass*& obj)
+    FactoryReturn deleteObject(const Identifier& id, AbstractClass*& obj)
     {
       std::lock_guard<std::mutex> guard(m_mutex);
       if (m_creators.count(id) == 0)
@@ -335,7 +347,7 @@ namespace coil
         }
       m_creators[id].destructor_(obj);
       m_objects.erase(obj);
-      return FACTORY_OK;
+      return FactoryReturn::OK;
     }
 
     /*!
@@ -357,14 +369,14 @@ namespace coil
      *
      * @endif
      */
-    ReturnCode deleteObject(AbstractClass*& obj)
+    FactoryReturn deleteObject(AbstractClass*& obj)
     {
       std::lock_guard<std::mutex> guard(m_mutex);
-      if (m_objects.count(obj) == 0) { return NOT_FOUND; }
+      if (m_objects.count(obj) == 0) { return FactoryReturn::NOT_FOUND; }
       AbstractClass* tmp(obj);
       m_objects[obj].destructor_(obj);
       m_objects.erase(tmp);
-      return FACTORY_OK;
+      return FactoryReturn::OK;
     }
 
     /*!
@@ -434,7 +446,7 @@ namespace coil
      * @param obj [in] クラス識別子(ID)を取得したいオブジェクト
      * @param id [out] クラス識別子(ID)
      * @return リターンコード NOT_FOUND: 識別子が存在しない
-     *                        FACTORY_OK: 正常終了
+     *                        OK: 正常終了
      * @else
      *
      * @brief Getting class identifier (ID) from a object
@@ -444,15 +456,15 @@ namespace coil
      * @param obj [in] An object to investigate its class ID.
      * @param id [out] Class identifier (ID)
      * @return Return code NOT_FOUND: ID not found
-     *                        FACTORY_OK: normal return
+     *                     OK: normal return
      * @endif
      */
-    ReturnCode objectToIdentifier(AbstractClass* obj, Identifier& id)
+    FactoryReturn objectToIdentifier(AbstractClass* obj, Identifier& id)
     {
       std::lock_guard<std::mutex> guard(m_mutex);
-      if (m_objects.count(obj) == 0) { return NOT_FOUND; }
+      if (m_objects.count(obj) == 0) { return FactoryReturn::NOT_FOUND; }
       id = m_objects[obj].id_;
-      return FACTORY_OK;
+      return FactoryReturn::OK;
     }
 
     /*!
