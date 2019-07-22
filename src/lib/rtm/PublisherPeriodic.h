@@ -519,7 +519,7 @@ namespace RTC
      *
      * @endif
      */
-    ReturnCode convertReturn(BufferStatus::Enum status,
+    ReturnCode convertReturn(BufferStatus status,
                              ByteData& data);
 
 

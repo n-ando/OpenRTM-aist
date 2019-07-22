@@ -168,8 +168,8 @@ namespace RTC
       }
 
     ByteData cdr;
-    CdrBufferBase::ReturnCode ret(m_connector->read(cdr));
-    if (ret == CdrBufferBase::BUFFER_OK)
+    BufferStatus ret(m_connector->read(cdr));
+    if (ret == BufferStatus::OK)
       {
         CORBA::ULong len(static_cast<CORBA::ULong>(cdr.getDataLength()));
         RTC_PARANOID(("converted CDR data size: %d", len));
@@ -194,12 +194,12 @@ namespace RTC
    * @endif
    */
   ::OpenRTM::PortStatus
-  OutPortSHMProvider::convertReturn(BufferStatus::Enum status,
+  OutPortSHMProvider::convertReturn(BufferStatus status,
                                         ByteData& data)
   {
     switch(status)
       {
-      case BufferStatus::BUFFER_OK:
+      case BufferStatus::OK:
         onBufferRead(data);
         onSend(data);
         return ::OpenRTM::PORT_OK;
@@ -210,12 +210,12 @@ namespace RTC
         return ::OpenRTM::PORT_ERROR;
         break;
 
-      case BufferStatus::BUFFER_FULL:
+      case BufferStatus::FULL:
         // never come here
         return ::OpenRTM::BUFFER_FULL;
         break;
 
-      case BufferStatus::BUFFER_EMPTY:
+      case BufferStatus::EMPTY:
         onBufferEmpty();
         onSenderEmpty();
         return ::OpenRTM::BUFFER_EMPTY;

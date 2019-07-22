@@ -277,7 +277,7 @@ namespace RTC
      */
     virtual bool isLittleEndian();
 
-    virtual BufferStatus::Enum write(ByteData &cdr);
+    virtual BufferStatus write(ByteData &cdr);
 
 
     /*!

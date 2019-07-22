@@ -164,7 +164,7 @@ namespace RTC
      */
     ReturnCode write(ByteDataStreamBase* data) override;
 
-    CdrBufferBase::ReturnCode read(ByteData &data) override;
+    BufferStatus read(ByteData &data) override;
 
     /*!
      * @if jp

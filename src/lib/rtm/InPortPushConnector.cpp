@@ -123,7 +123,7 @@ namespace RTC
         }
     }
     ByteData tmp;
-    BufferStatus::Enum ret = m_buffer->read(tmp);
+    BufferStatus ret = m_buffer->read(tmp);
     data->writeData(tmp.getBuffer(), tmp.getDataLength());
 
     if (m_sync_readwrite)
@@ -142,11 +142,11 @@ namespace RTC
 
     switch (ret)
       {
-      case BufferStatus::BUFFER_OK:
+      case BufferStatus::OK:
         onBufferRead(tmp);
         return PORT_OK;
         break;
-      case BufferStatus::BUFFER_EMPTY:
+      case BufferStatus::EMPTY:
         onBufferEmpty(tmp);
         return BUFFER_EMPTY;
         break;
@@ -230,7 +230,7 @@ namespace RTC
     m_listeners.connector_[ON_DISCONNECT].notify(m_profile);
   }
 
-  BufferStatus::Enum InPortPushConnector::write(ByteData &cdr)
+  BufferStatus InPortPushConnector::write(ByteData &cdr)
   {
       if (m_sync_readwrite)
       {
@@ -245,7 +245,7 @@ namespace RTC
 
       
 
-      BufferStatus::Enum ret = m_buffer->write(cdr);
+      BufferStatus ret = m_buffer->write(cdr);
 
       if (m_sync_readwrite)
       {

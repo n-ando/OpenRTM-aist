@@ -178,7 +178,7 @@ namespace RTC
     
     onReceived(cdr);
     
-    BufferStatus::Enum ret = m_connector->write(cdr);
+    BufferStatus ret = m_connector->write(cdr);
 
     return convertReturn(ret, cdr);
   }
@@ -191,12 +191,12 @@ namespace RTC
    * @endif
    */
   ::OpenRTM::PortStatus
-  InPortCorbaCdrProvider::convertReturn(BufferStatus::Enum status,
+  InPortCorbaCdrProvider::convertReturn(BufferStatus status,
                                         ByteData& data)
   {
     switch (status)
       {
-      case BufferStatus::BUFFER_OK:
+      case BufferStatus::OK:
         onBufferWrite(data);
         return ::OpenRTM::PORT_OK;
 
@@ -204,12 +204,12 @@ namespace RTC
         onReceiverError(data);
         return ::OpenRTM::PORT_ERROR;
 
-      case BufferStatus::BUFFER_FULL:
+      case BufferStatus::FULL:
         onBufferFull(data);
         onReceiverFull(data);
         return ::OpenRTM::BUFFER_FULL;
 
-      case BufferStatus::BUFFER_EMPTY:
+      case BufferStatus::EMPTY:
         // never come here
         return ::OpenRTM::BUFFER_EMPTY;
 

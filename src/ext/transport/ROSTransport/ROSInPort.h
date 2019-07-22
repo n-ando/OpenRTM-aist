@@ -423,7 +423,7 @@ namespace RTC
 
         onReceived(cdr);
       
-        BufferStatus::Enum ret = m_connector->write(cdr);
+        BufferStatus ret = m_connector->write(cdr);
 
         convertReturn(ret, cdr);
 
@@ -633,7 +633,7 @@ namespace RTC
      * @brief Return codes conversion
      * @endif
      */
-    void convertReturn(BufferStatus::Enum status, ByteData& data);
+    void convertReturn(BufferStatus status, ByteData& data);
 
     CdrBufferBase* m_buffer;
     ConnectorInfo m_profile;

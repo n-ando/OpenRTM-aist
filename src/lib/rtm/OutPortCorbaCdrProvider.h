@@ -247,7 +247,7 @@ namespace RTC
      * @brief Return codes conversion
      * @endif
      */
-    ::OpenRTM::PortStatus convertReturn(BufferStatus::Enum status,
+    ::OpenRTM::PortStatus convertReturn(BufferStatus status,
                                         ByteData& data);
 
 

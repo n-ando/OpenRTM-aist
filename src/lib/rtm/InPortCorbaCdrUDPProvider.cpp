@@ -173,7 +173,7 @@ namespace RTC
 
 
     onReceived(cdr);
-	BufferStatus::Enum ret = m_buffer->write(cdr);
+	BufferStatus ret = m_buffer->write(cdr);
 
 	convertReturn(ret, cdr);
   }
@@ -186,12 +186,12 @@ namespace RTC
   * @endif
   */
   void
-	  InPortCorbaCdrUDPProvider::convertReturn(BufferStatus::Enum status,
+	  InPortCorbaCdrUDPProvider::convertReturn(BufferStatus status,
 		  ByteData& data)
   {
 	  switch (status)
 	  {
-	  case BufferStatus::BUFFER_OK:
+	  case BufferStatus::OK:
 		  onBufferWrite(data);
 		  break;
 
@@ -199,12 +199,12 @@ namespace RTC
 		  onReceiverError(data);
 		  break;
 
-	  case BufferStatus::BUFFER_FULL:
+	  case BufferStatus::FULL:
 		  onBufferFull(data);
 		  onReceiverFull(data);
 		  break;
 
-	  case BufferStatus::BUFFER_EMPTY:
+	  case BufferStatus::EMPTY:
 		  // never come here
 		  break;
 

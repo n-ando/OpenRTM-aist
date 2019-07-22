@@ -258,7 +258,7 @@ namespace RTC
       else
       {
           onReceived(cdr);
-          BufferStatus::Enum ret = m_connector->write(cdr);
+          BufferStatus ret = m_connector->write(cdr);
           convertReturn(ret, cdr);
       }
 
@@ -359,12 +359,12 @@ namespace RTC
    * @brief Return codes conversion
    * @endif
    */
-  void FastRTPSInPort::convertReturn(BufferStatus::Enum status,
+  void FastRTPSInPort::convertReturn(BufferStatus status,
                                         ByteData& data)
   {
     switch (status)
       {
-      case BufferStatus::BUFFER_OK:
+      case BufferStatus::OK:
         onBufferWrite(data);
         return;
 
@@ -372,12 +372,12 @@ namespace RTC
         onReceiverError(data);
         return;
 
-      case BufferStatus::BUFFER_FULL:
+      case BufferStatus::FULL:
         onBufferFull(data);
         onReceiverFull(data);
         return;
 
-      case BufferStatus::BUFFER_EMPTY:
+      case BufferStatus::EMPTY:
         // never come here
         return;
 
