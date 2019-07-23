@@ -25,7 +25,7 @@ namespace hrtm
   DataFlowComponent::~DataFlowComponent()
   {
   }
-  RTC::ReturnCode_t DataFlowComponent::initialize(hrtm::ComponentManager* /*mgr*/)
+  RTC::ReturnCode_t DataFlowComponent::initialize()
   {
     return RTC::RTC_OK;
   }

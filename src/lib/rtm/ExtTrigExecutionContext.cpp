@@ -180,7 +180,7 @@ namespace RTC
     RTC_TRACE(("tick()"));
     if (!isRunning())
       {
-        RTC_DEBUG(("EC is not running. do nothing."))
+        RTC_DEBUG(("EC is not running. do nothing."));
         return;
       }
     std::lock_guard<std::mutex> guard(m_worker.mutex_);

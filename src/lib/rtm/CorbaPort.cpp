@@ -274,7 +274,7 @@ namespace RTC
             strict = false;
           }
         RTC_DEBUG(("Connetion strictness is: %s",
-                   strict ? "strict" : "best_effort"))
+                   strict ? "strict" : "best_effort"));
       }
 
     for (auto & consumer : m_consumers)

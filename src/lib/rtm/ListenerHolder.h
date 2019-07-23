@@ -243,13 +243,13 @@ namespace util
 } // namespace util
 } // namespace RTM
 
-#define LISTENERHOLDER_CALLBACK(func, args)               \
-  {                                                       \
-    std::lock_guard<std::mutex> guard(m_mutex);                                 \
-    for (std::vector<Entry>::iterator listener = m_listeners.begin(); listener != m_listeners.end(); ++listener) \
-      {                                                   \
-        (*listener).first->func args;                  \
-      }                                                   \
-  }
+#define LISTENERHOLDER_CALLBACK(func, args)                           \
+  do {                                                                \
+    std::lock_guard<std::mutex> guard(m_mutex);                       \
+    for (auto&& listener : m_listeners)                               \
+      {                                                               \
+        listener.first->func args;                                    \
+      }                                                               \
+  } while(0)
 
 #endif  // RTM_UITL_LISTENERHOLDER_H

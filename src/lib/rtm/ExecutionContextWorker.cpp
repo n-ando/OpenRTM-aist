@@ -262,7 +262,7 @@ namespace RTC_impl
         return RTC::CREATED_STATE;
       }
     RTC::LifeCycleState state = rtobj->getState();
-    RTC_DEBUG(("getComponentState() = %s done", getStateString(state)))
+    RTC_DEBUG(("getComponentState() = %s done", getStateString(state)));
     return state;
   }
 

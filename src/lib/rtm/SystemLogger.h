@@ -522,21 +522,25 @@ namespace RTC
  * @endif
  */
 #define RTC_LOG(LV, fmt)                                    \
-  if (rtclog.isValid(LV))                                   \
-    {                                                       \
-      std::string str = ::coil::sprintf fmt;                \
-      rtclog.lock();                                        \
-      rtclog.write(LV, str);                                \
-      rtclog.unlock();                                      \
-    }
+  do{                                                       \
+    if (rtclog.isValid(LV))                                 \
+      {                                                     \
+        std::string str = ::coil::sprintf fmt;              \
+        rtclog.lock();                                      \
+        rtclog.write(LV, str);                              \
+        rtclog.unlock();                                    \
+      }                                                     \
+  } while(0)
 
 #define RTC_LOG_STR(LV, str)                                \
-  if (rtclog.isValid(LV))                                   \
-    {                                                       \
-      rtclog.lock();                                        \
-      rtclog.write(LV, str);                                \
-      rtclog.unlock();                                      \
-    }
+  do {                                                      \
+    if (rtclog.isValid(LV))                                 \
+      {                                                     \
+        rtclog.lock();                                      \
+        rtclog.write(LV, str);                              \
+        rtclog.unlock();                                    \
+      }                                                     \
+   } while(0)
 
    /*!
    * @if jp

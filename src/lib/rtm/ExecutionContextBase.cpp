@@ -427,7 +427,7 @@ namespace RTC
       {
         RTC_ERROR(("onActivated() failed."));
       }
-    RTC_DEBUG(("onActivated() done."))
+    RTC_DEBUG(("onActivated() done."));
     return ret;
   }
 
@@ -521,7 +521,7 @@ namespace RTC
       {
         RTC_ERROR(("onDeactivated() failed."));
       }
-    RTC_DEBUG(("onDeactivated() done."))
+    RTC_DEBUG(("onDeactivated() done."));
     return ret;
   }
 
@@ -614,7 +614,7 @@ namespace RTC
       {
         RTC_ERROR(("onResetd() failed."));
       }
-    RTC_DEBUG(("onReset() done."))
+    RTC_DEBUG(("onReset() done."));
     return ret;
   }
 

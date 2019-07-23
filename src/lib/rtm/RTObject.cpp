@@ -2783,7 +2783,7 @@ namespace RTC
 
         // EC name specified
         RTC_DEBUG(("size: %d, name: %s", type_and_name.size(),
-                   type_and_name[1].c_str()))
+                   type_and_name[1].c_str()));
         if (type_and_name.size() == 2 &&
             type_and_name[1].at(type_and_name[1].size() - 1) == ')')
           {

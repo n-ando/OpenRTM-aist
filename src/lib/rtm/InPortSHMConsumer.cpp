@@ -157,7 +157,7 @@ namespace RTC
 		// getting InPort's ref from Object reference
 		if (subscribeFromRef(properties)) { return true; }
 
-		return false;;
+		return false;
 	}
 	void InPortSHMConsumer::
 		unsubscribeInterface(const SDOPackage::NVList& properties)

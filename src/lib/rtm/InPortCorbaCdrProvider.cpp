@@ -159,25 +159,17 @@ namespace RTC
         return ::OpenRTM::PORT_ERROR;
       }
 
-    RTC_PARANOID(("received data size: %d", data.length()))
+    RTC_PARANOID(("received data size: %d", data.length()));
     ByteData cdr;
     // set endian type
     bool endian_type = m_connector->isLittleEndian();
     RTC_TRACE(("connector endian: %s", endian_type ? "little":"big"));
-    
-
-
-
-    
 
     cdr.isLittleEndian(endian_type);
     cdr.writeData(const_cast<unsigned char*>(data.get_buffer()), static_cast<CORBA::ULong>(data.length()));
     RTC_PARANOID(("converted CDR data size: %d", cdr.getDataLength()));
 
-    
-    
     onReceived(cdr);
-    
     BufferStatus ret = m_connector->write(cdr);
 
     return convertReturn(ret, cdr);

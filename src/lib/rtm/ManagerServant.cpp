@@ -72,9 +72,9 @@ namespace RTM
               }
             RTC_INFO(("Master manager found: %s",
                       config["corba.master_manager"].c_str()));
-            RTC_INFO(("Adding this manager to this manager."))
+            RTC_INFO(("Adding this manager to this manager."));
             add_master_manager(owner);
-            RTC_INFO(("Register this manager to master manager."))
+            RTC_INFO(("Register this manager to master manager."));
             owner->add_slave_manager(m_objref.in());
             RTC_INFO(("Slave manager servant was successfully created."));
             return;
@@ -498,7 +498,7 @@ namespace RTM
           {
             create_arg = create_arg + "&manager_name=manager_%p";
             rtobj = createComponentByManagerName(create_arg);
-            if (!CORBA::is_nil(rtobj)) { return rtobj._retn(); };
+            if (!CORBA::is_nil(rtobj)) { return rtobj._retn(); }
           }
         return RTC::RTObject::_nil();
       }
@@ -1444,7 +1444,7 @@ namespace RTM
 
         for (size_t i(0); i < 1000; ++i) // Timeout: 1000 x 10ms
           {
-            RTC_DEBUG(("Detecting new slave manager (%s).", mgrstr.c_str()))
+            RTC_DEBUG(("Detecting new slave manager (%s).", mgrstr.c_str()));
             mgrobj = findManagerByName(mgrstr);
             if (!CORBA::is_nil(mgrobj))
               {
@@ -1538,7 +1538,7 @@ namespace RTM
                 }
               catch (...)
                 {
-                  RTC_ERROR(("Unknown exception cought."))
+                  RTC_ERROR(("Unknown exception cought."));
                 }
             }
 

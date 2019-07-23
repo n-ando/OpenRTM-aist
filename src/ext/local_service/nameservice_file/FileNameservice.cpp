@@ -93,8 +93,8 @@ namespace RTM
      */
     FileNameservice::~FileNameservice()
     {
-      RTC_TRACE(("~FileNameservice()"))
-        cleanupFiles();
+      RTC_TRACE(("~FileNameservice()"));
+      cleanupFiles();
     }
     
     /*!

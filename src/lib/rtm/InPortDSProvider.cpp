@@ -158,7 +158,7 @@ namespace RTC
         return ::RTC::PORT_ERROR;
       }
 
-    RTC_PARANOID(("received data size: %d", data.length()))
+    RTC_PARANOID(("received data size: %d", data.length()));
     ByteData cdr;
     // set endian type
     bool endian_type = m_connector->isLittleEndian();

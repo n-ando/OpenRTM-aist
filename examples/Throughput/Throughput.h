@@ -439,7 +439,7 @@ public:
                           DataType& data) override
   {
     m_comp->receiveData(data.tm, data.data.length());
-	return RTC::ConnectorListenerStatus::NO_CHANGE;;
+	return RTC::ConnectorListenerStatus::NO_CHANGE;
   }
   Throughput* m_comp;
 };
@@ -480,7 +480,7 @@ public:
     std::cout                                       << std::endl;
     std::cout << "------------------------------"   << std::endl;
     m_comp->setConnectorProfile(info);
-	return RTC::ConnectorListenerStatus::NO_CHANGE;;
+	return RTC::ConnectorListenerStatus::NO_CHANGE;
   }
   Throughput* m_comp;
 };
