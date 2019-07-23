@@ -64,7 +64,7 @@ namespace RTC
    * @brief Write data into the buffer
    * @endif
    */
-  InPortConsumer::ReturnCode InPortDSConsumer::
+  DataPortStatus InPortDSConsumer::
 	  put(ByteData& data)
   {
     RTC_PARANOID(("put()"));
@@ -90,9 +90,9 @@ namespace RTC
       }
     catch (...)
       {
-        return CONNECTION_LOST;
+        return DataPortStatus::CONNECTION_LOST;
       }
-    return UNKNOWN_ERROR;
+    return DataPortStatus::UNKNOWN_ERROR;
   }
 
   /*!
@@ -318,28 +318,28 @@ namespace RTC
    * @brief Return codes conversion
    * @endif
    */
-  InPortConsumer::ReturnCode
+  DataPortStatus
   InPortDSConsumer::convertReturnCode(RTC::PortStatus ret)
   {
     switch (ret)
       {
       case RTC::PORT_OK:
-        return InPortConsumer::PORT_OK;
+        return DataPortStatus::PORT_OK;
         break;
       case RTC::PORT_ERROR:
-        return InPortConsumer::PORT_ERROR;
+        return DataPortStatus::PORT_ERROR;
         break;
       case RTC::BUFFER_FULL:
-        return InPortConsumer::SEND_FULL;
+        return DataPortStatus::SEND_FULL;
         break;
       case RTC::BUFFER_TIMEOUT:
-        return InPortConsumer::SEND_TIMEOUT;
+        return DataPortStatus::SEND_TIMEOUT;
         break;
       case RTC::UNKNOWN_ERROR:
-        return InPortConsumer::UNKNOWN_ERROR;
+        return DataPortStatus::UNKNOWN_ERROR;
         break;
       default:
-        return InPortConsumer::UNKNOWN_ERROR;
+        return DataPortStatus::UNKNOWN_ERROR;
         break;
       }
   }

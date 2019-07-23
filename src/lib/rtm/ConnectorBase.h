@@ -195,10 +195,8 @@ namespace RTC
    * @endif
    */
   class ConnectorBase
-    : public DataPortStatus
   {
   public:
-    DATAPORTSTATUS_ENUM
 
     /*!
      * @if jp
@@ -289,7 +287,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode disconnect() = 0;
+    virtual DataPortStatus disconnect() = 0;
 
     /*!
      * @if jp

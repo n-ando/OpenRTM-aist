@@ -75,10 +75,8 @@ namespace RTC
    *
    */
   class InPortConsumer
-    : public DataPortStatus
   {
   public:
-    DATAPORTSTATUS_ENUM
 
     /*!
      * @if jp
@@ -145,7 +143,7 @@ namespace RTC
      *
      * @endif
      */
-	virtual ReturnCode put(ByteData& data) = 0;
+	virtual DataPortStatus put(ByteData& data) = 0;
 
     /*!
      * @if jp

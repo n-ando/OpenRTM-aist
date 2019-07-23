@@ -57,7 +57,6 @@ namespace RTC
       public CorbaConsumer< ::OpenRTM::InPortCdrUDP >
   {
   public:
-    DATAPORTSTATUS_ENUM
     /*!
      * @if jp
      * @brief コンストラクタ
@@ -153,7 +152,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode put(ByteData& data);
+    virtual DataPortStatus put(ByteData& data);
 
     /*!
      * @if jp

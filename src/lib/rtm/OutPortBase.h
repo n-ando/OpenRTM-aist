@@ -225,10 +225,9 @@ namespace RTC
    * @endif
    */
   class OutPortBase
-    : public PortBase, public DataPortStatus
+    : public PortBase
   {
   public:
-    DATAPORTSTATUS_ENUM
 
     typedef std::vector<OutPortConnector*> ConnectorList;
 

@@ -88,7 +88,6 @@ namespace RTC
 	  : public InPortBase, DirectInPortBase<DataType>
   {
   public:
-    DATAPORTSTATUS_ENUM
     /*!
      * @if jp
      *
@@ -451,7 +450,7 @@ namespace RTC
      *
      * - 初回読み出し時に不定値を返さないようにバインド変数を事前に初期化する
      *
-     * - ReturnCode read(DataType& data) 関数の利用を検討する。
+     * - DataPortStatus read(DataType& data) 関数の利用を検討する。
      *
      * ことが望ましい。
      *
@@ -526,7 +525,7 @@ namespace RTC
       }
       // 2) network connection
       
-      ReturnCode ret;
+      DataPortStatus ret;
       {
         std::lock_guard<std::mutex> guard(m_connectorsMutex);
         if (m_connectors.empty())
@@ -571,7 +570,7 @@ namespace RTC
               ret = connector->read(m_value);
           }
           m_status[0] = ret;
-          if (ret == PORT_OK)
+          if (ret == DataPortStatus::PORT_OK)
           {
               std::lock_guard<std::mutex> guard(m_valueMutex);
               RTC_DEBUG(("data read succeeded"));
@@ -584,12 +583,12 @@ namespace RTC
               }
               return true;
           }
-          else if (ret == BUFFER_EMPTY)
+          else if (ret == DataPortStatus::BUFFER_EMPTY)
           {
               RTC_WARN(("buffer empty"));
               return false;
           }
-          else if (ret == BUFFER_TIMEOUT)
+          else if (ret == DataPortStatus::BUFFER_TIMEOUT)
           {
               RTC_WARN(("buffer read timeout"));
               return false;
@@ -690,7 +689,7 @@ namespace RTC
      *
      * @endif
      */
-    DataPortStatus::Enum getStatus(int  /*index*/)
+    DataPortStatus getStatus(int  /*index*/)
     {
       return m_status[0];
     }

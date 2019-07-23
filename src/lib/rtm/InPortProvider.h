@@ -188,10 +188,8 @@ namespace RTC
    * @endif
    */
   class InPortProvider
-    : public DataPortStatus
   {
   public:
-    DATAPORTSTATUS_ENUM
     /*!
      * @if jp
      * @brief コンストラクタ

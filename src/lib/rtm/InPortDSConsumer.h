@@ -56,7 +56,6 @@ namespace RTC
       public CorbaConsumer< ::RTC::DataPushService >
   {
   public:
-    DATAPORTSTATUS_ENUM
     /*!
      * @if jp
      * @brief コンストラクタ
@@ -152,7 +151,7 @@ namespace RTC
      *
      * @endif
      */
-	ReturnCode put(ByteData& data) override;
+	DataPortStatus put(ByteData& data) override;
 
     /*!
      * @if jp
@@ -291,7 +290,7 @@ namespace RTC
      * @brief Return codes conversion
      * @endif
      */
-    InPortConsumer::ReturnCode convertReturnCode(RTC::PortStatus ret);
+    DataPortStatus convertReturnCode(RTC::PortStatus ret);
 
     mutable Logger rtclog;
     coil::Properties m_properties;

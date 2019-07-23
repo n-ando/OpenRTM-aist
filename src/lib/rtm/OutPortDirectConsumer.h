@@ -56,7 +56,6 @@ namespace RTC
     : public OutPortConsumer
   {
   public:
-    DATAPORTSTATUS_ENUM
 
     /*!
      * @if jp
@@ -212,7 +211,7 @@ namespace RTC
      *
      * @endif
      */
-    ReturnCode get(ByteData& data) override;
+    DataPortStatus get(ByteData& data) override;
 
     /*!
      * @if jp

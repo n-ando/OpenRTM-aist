@@ -49,7 +49,7 @@ namespace RTC
     if (m_publisher == nullptr || m_buffer == nullptr || m_consumer == nullptr)
       { throw std::bad_alloc(); }
 
-    if (m_publisher->init(info.properties) != PORT_OK)
+    if (m_publisher->init(info.properties) != DataPortStatus::PORT_OK)
       {
         throw std::bad_alloc();
       }
@@ -87,7 +87,7 @@ namespace RTC
    * @brief Writing data
    * @endif
    */
-  ConnectorBase::ReturnCode
+  DataPortStatus
   OutPortPushConnector::write(RTC::ByteDataStreamBase* data)
   {
     RTC_TRACE(("write()"));
@@ -103,7 +103,7 @@ namespace RTC
    * @brief disconnect
    * @endif
    */
-  ConnectorBase::ReturnCode OutPortPushConnector::disconnect()
+  DataPortStatus OutPortPushConnector::disconnect()
   {
     RTC_TRACE(("disconnect()"));
     // delete publisher
@@ -133,7 +133,7 @@ namespace RTC
       }
     m_buffer = nullptr;
     RTC_TRACE(("disconnect() done"));
-    return PORT_OK;
+    return DataPortStatus::PORT_OK;
   }
 
   /*!

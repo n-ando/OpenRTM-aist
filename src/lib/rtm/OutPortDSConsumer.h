@@ -55,7 +55,6 @@ namespace RTC
       public CorbaConsumer< ::RTC::DataPullService >
   {
   public:
-    DATAPORTSTATUS_ENUM
 
     /*!
      * @if jp
@@ -211,7 +210,7 @@ namespace RTC
      *
      * @endif
      */
-    ReturnCode get(ByteData& data) override;
+    DataPortStatus get(ByteData& data) override;
 
     /*!
      * @if jp
@@ -264,7 +263,7 @@ namespace RTC
      * @brief Return codes conversion
      * @endif
      */
-    OutPortConsumer::ReturnCode convertReturn(::RTC::PortStatus status,
+    DataPortStatus convertReturn(::RTC::PortStatus status,
                                               ByteData& data);
 
     /*!

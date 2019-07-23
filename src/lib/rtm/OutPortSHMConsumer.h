@@ -53,7 +53,6 @@ namespace RTC
       public CorbaConsumer< ::OpenRTM::PortSharedMemory >
   {
   public:
-    DATAPORTSTATUS_ENUM
 
     /*!
      * @if jp
@@ -167,7 +166,7 @@ namespace RTC
      *
      * @endif
      */
-    ReturnCode get(ByteData& data) override;
+    DataPortStatus get(ByteData& data) override;
 
     /*!
      * @if jp
@@ -221,7 +220,7 @@ namespace RTC
      * @brief Return codes conversion
      * @endif
      */
-    OutPortConsumer::ReturnCode convertReturn(::OpenRTM::PortStatus status,
+    DataPortStatus convertReturn(::OpenRTM::PortStatus status,
                                               ByteData& data);
 
     /*!

@@ -88,7 +88,6 @@ namespace RTC
     : public InPortConnector
   {
   public:
-    DATAPORTSTATUS_ENUM
 
     /*!
      * @if jp
@@ -183,7 +182,7 @@ namespace RTC
      *
      * @endif
      */
-    ReturnCode read(ByteDataStreamBase* data) override;
+    DataPortStatus read(ByteDataStreamBase* data) override;
 
     /*!
      * @if jp
@@ -198,7 +197,7 @@ namespace RTC
      *
      * @endif
      */
-    ReturnCode disconnect() override;
+    DataPortStatus disconnect() override;
 
     /*!
      * @if jp

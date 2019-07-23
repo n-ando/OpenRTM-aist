@@ -56,7 +56,6 @@ namespace RTC
 	  public CorbaConsumer< ::OpenRTM::PortSharedMemory >
   {
   public:
-    DATAPORTSTATUS_ENUM
     /*!
      * @if jp
      * @brief コンストラクタ
@@ -128,7 +127,7 @@ namespace RTC
      *
      * @endif
      */
-    InPortConsumer::ReturnCode put(ByteData& data) override;
+    DataPortStatus put(ByteData& data) override;
     /*!
      * @if jp
      * @brief 
@@ -157,7 +156,7 @@ private:
 	bool unsubscribeFromRef(const SDOPackage::NVList& properties);
 
 protected:
-	InPortConsumer::ReturnCode convertReturnCode(OpenRTM::PortStatus ret);
+	DataPortStatus convertReturnCode(OpenRTM::PortStatus ret);
 
 	coil::Properties m_properties;
 	std::mutex m_mutex;

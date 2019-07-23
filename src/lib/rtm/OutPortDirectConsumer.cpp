@@ -87,11 +87,11 @@ namespace RTC
    * @brief Read data
    * @endif
    */
-  OutPortConsumer::ReturnCode
+  DataPortStatus
   OutPortDirectConsumer::get(ByteData&  /*data*/)
   {
     RTC_PARANOID(("get(): never called."));
-    return UNKNOWN_ERROR;
+    return DataPortStatus::UNKNOWN_ERROR;
   }
     
   /*!

@@ -141,7 +141,7 @@ namespace RTC
    * @brief Write data into the buffer
    * @endif
    */
-  InPortConsumer::ReturnCode OpenSpliceOutPort::put(ByteData& data)
+  DataPortStatus OpenSpliceOutPort::put(ByteData& data)
   {
     
     RTC_PARANOID(("put()"));
@@ -153,11 +153,11 @@ namespace RTC
     }
     if (m_outport->write(data))
     {
-        return PORT_OK;
+        return DataPortStatus::PORT_OK;
     }
     else
     {
-        return PORT_ERROR;
+        return DataPortStatus::PORT_ERROR;
     }
 
     

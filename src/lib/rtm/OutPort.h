@@ -210,7 +210,7 @@ namespace RTC
         for (size_t i(0), len(conn_size); i < len; ++i)
           {
 
-            ReturnCode ret;
+            DataPortStatus ret;
             if (!m_connectors[i]->pullDirectMode())
               {
                 if (m_onWriteConvert != nullptr)
@@ -238,15 +238,15 @@ namespace RTC
                     m_directValue = value;
                   }
                 m_directNewData = true;
-                ret = PORT_OK;
+                ret = DataPortStatus::PORT_OK;
               }
             m_status[i] = ret;
 
-            if (ret == PORT_OK) { continue; }
+            if (ret == DataPortStatus::PORT_OK) { continue; }
 
             result = false;
 
-            if (ret == CONNECTION_LOST)
+            if (ret == DataPortStatus::CONNECTION_LOST)
               {
                 const char* id(m_connectors[i]->profile().id.c_str());
                 RTC_WARN(("connection_lost id: %s", id));
@@ -352,7 +352,7 @@ namespace RTC
      *
      * @endif
      */
-    DataPortStatus::Enum getStatus(int index)
+    DataPortStatus getStatus(int index)
     {
       return m_status[index];
     }

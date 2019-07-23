@@ -172,7 +172,7 @@ namespace RTC
    * @brief Write data into the buffer
    * @endif
    */
-  InPortConsumer::ReturnCode FastRTPSOutPort::put(ByteData& data)
+  DataPortStatus FastRTPSOutPort::put(ByteData& data)
   {
     
     RTC_PARANOID(("put()"));
@@ -180,17 +180,17 @@ namespace RTC
     if (m_publisher == nullptr)
     {
         RTC_VERBOSE(("Publisher is None"));
-        return PRECONDITION_NOT_MET;
+        return DataPortStatus::PRECONDITION_NOT_MET;
     }
     if (m_publisher->write(&data))
     {
         RTC_PARANOID(("write:OK"));
-        return PORT_OK;
+        return DataPortStatus::PORT_OK;
     }
     else
     {
         RTC_ERROR(("write:ERROR"));
-        return PORT_ERROR;
+        return DataPortStatus::PORT_ERROR;
     }
     
   }
