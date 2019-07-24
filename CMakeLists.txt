@@ -667,7 +667,6 @@ function(openrtm_common_set_compile_options target)
 		-Wno-cast-qual
 		-Wno-conditionally-supported
 		-Wno-conversion
-		-Wno-format-nonliteral
 		-Wno-missing-declarations
 		-Wno-old-style-cast
 		-Wno-overloaded-virtual
