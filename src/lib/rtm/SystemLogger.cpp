@@ -169,7 +169,10 @@ namespace RTC
 #else
     struct tm* date;
     date = gmtime(&timer);
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wformat-nonliteral"
     strftime(buf, sizeof(buf), m_dateFormat.c_str(), date);
+#pragma GCC diagnostic pop
 #endif
 
     std::string fmt(buf);
