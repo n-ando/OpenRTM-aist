@@ -174,6 +174,14 @@ namespace RTC
       case DataPortStatus::UNKNOWN_ERROR:
         onReceiverError(data_);
         return ret;
+      case DataPortStatus::BUFFER_ERROR:         /* FALLTHROUGH */
+      case DataPortStatus::BUFFER_FULL:          /* FALLTHROUGH */
+      case DataPortStatus::BUFFER_EMPTY:         /* FALLTHROUGH */
+      case DataPortStatus::BUFFER_TIMEOUT:       /* FALLTHROUGH */
+      case DataPortStatus::RECV_EMPTY:           /* FALLTHROUGH */
+      case DataPortStatus::RECV_TIMEOUT:         /* FALLTHROUGH */
+      case DataPortStatus::INVALID_ARGS:         /* FALLTHROUGH */
+      case DataPortStatus::PRECONDITION_NOT_MET: /* FALLTHROUGH */
       default:
         onReceiverError(data_);
         return ret;

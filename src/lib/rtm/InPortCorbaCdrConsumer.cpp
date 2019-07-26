@@ -337,9 +337,8 @@ namespace RTC
       case OpenRTM::BUFFER_TIMEOUT:
         return DataPortStatus::SEND_TIMEOUT;
         break;
-      case OpenRTM::UNKNOWN_ERROR:
-        return DataPortStatus::UNKNOWN_ERROR;
-        break;
+      case OpenRTM::UNKNOWN_ERROR: /* FALLTHROUGH */
+      case OpenRTM::BUFFER_EMPTY:  /* FALLTHROUGH */
       default:
         return DataPortStatus::UNKNOWN_ERROR;
         break;

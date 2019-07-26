@@ -214,6 +214,7 @@ namespace RTC
         onReceiverTimeout(data);
         return ::OpenRTM::BUFFER_TIMEOUT;
 
+      case BufferStatus::NOT_SUPPORTED: /* FALLTHROUGH */
       default:
         return ::OpenRTM::UNKNOWN_ERROR;
       }

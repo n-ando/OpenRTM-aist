@@ -527,6 +527,7 @@ namespace RTC
       case BufferStatus::PRECONDITION_NOT_MET:
         // no callback
         return DataPortStatus::PRECONDITION_NOT_MET;
+      case BufferStatus::EMPTY: /* FALLTHROUGH */
       default:
         // no callback
         return DataPortStatus::PORT_ERROR;
@@ -545,8 +546,9 @@ namespace RTC
                                ByteData& data)
   {
     // ret:
-    // PORT_OK, PORT_ERROR, SEND_FULL, SEND_TIMEOUT, CONNECTION_LOST,
-    // UNKNOWN_ERROR
+    // PORT_ERROR, SEND_FULL, SEND_TIMEOUT, CONNECTION_LOST, UNKNOWN_ERROR
+    //
+    // PORT_OK never come here
     switch (status)
       {
       case DataPortStatus::PORT_ERROR:
@@ -569,6 +571,15 @@ namespace RTC
         onReceiverError(data);
         return DataPortStatus::UNKNOWN_ERROR;
 
+      case DataPortStatus::PORT_OK:              /* FALLTHROUGH */
+      case DataPortStatus::BUFFER_ERROR:         /* FALLTHROUGH */
+      case DataPortStatus::BUFFER_FULL:          /* FALLTHROUGH */
+      case DataPortStatus::BUFFER_EMPTY:         /* FALLTHROUGH */
+      case DataPortStatus::BUFFER_TIMEOUT:       /* FALLTHROUGH */
+      case DataPortStatus::RECV_EMPTY:           /* FALLTHROUGH */
+      case DataPortStatus::RECV_TIMEOUT:         /* FALLTHROUGH */
+      case DataPortStatus::INVALID_ARGS:         /* FALLTHROUGH */
+      case DataPortStatus::PRECONDITION_NOT_MET: /* FALLTHROUGH */
       default:
         onReceiverError(data);
         return DataPortStatus::PORT_ERROR;
