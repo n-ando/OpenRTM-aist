@@ -17,6 +17,7 @@
  */
 
 #include <coil/stringutil.h>
+#include <rtm/Manager.h>
 #include <rtm/Typename.h>
 #include "ComponentObserverSkel.h"
 #include "ComponentObserverConsumer.h"
@@ -35,10 +36,7 @@ namespace RTC
     : m_rtobj(nullptr),
       m_compstat(*this), m_portaction(*this),
       m_inportInterval(std::chrono::seconds(1)), m_outportInterval(std::chrono::seconds(1)),
-      m_ecaction(*this), m_configMsg(*this),
-      m_interval(std::chrono::milliseconds(100)), m_heartbeat(false),
-      m_hblistenerid(nullptr),
-      m_timer(m_interval)
+      m_ecaction(*this), m_configMsg(*this), m_heartbeat(false)
   {
     for (bool & observed : m_observed)
       {
@@ -263,21 +261,6 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ハートビートをオブザーバに伝える
-   * @else
-   * @brief Sending a heartbeart signal to observer
-   * @endif
-   */
-  void ComponentObserverConsumer::heartbeat()
-  {
-    if (m_heartbeat)
-      {
-        updateStatus(OpenRTM::HEARTBEAT, "");
-      }
-  }
-
-  /*!
-   * @if jp
    * @brief ハートビートを設定する
    * @else
    * @brief Setting heartbeat
@@ -285,28 +268,20 @@ namespace RTC
    */
   void ComponentObserverConsumer::setHeartbeat(coil::Properties& prop)
   {
+    unsetHeartbeat();
     if (coil::toBool(prop["heartbeat.enable"], "YES", "NO", false))
       {
-        std::chrono::nanoseconds interval(m_interval);
+        std::chrono::nanoseconds interval{std::chrono::seconds(1)};
         if (prop["heartbeat.interval"].empty()
             || !coil::stringTo(interval, prop["heartbeat.interval"].c_str()))
           {
             interval = std::chrono::seconds(1);
           }
-        m_interval = interval;
-        m_hblistenerid = m_timer.
-          registerListenerObj(this, &ComponentObserverConsumer::heartbeat, interval);
         m_heartbeat = true;
-        m_timer.start();
-      }
-    else
-      {
-        if (m_heartbeat && m_hblistenerid != nullptr)
-          {
-            unsetHeartbeat();
-            m_timer.stop();
-          }
-      }
+        m_hbtaskid = Manager::instance().addTask([this]{
+          if (m_heartbeat) { updateStatus(OpenRTM::HEARTBEAT, ""); }
+        }, interval);
+}
   }
 
   /*!
@@ -341,11 +316,11 @@ namespace RTC
    */
   void ComponentObserverConsumer::unsetHeartbeat()
   {
-    m_timer.unregisterListener(m_hblistenerid);
-    m_heartbeat = false;
-    m_hblistenerid = nullptr;
-    m_timer.stop();
-    m_timer.wait();
+    if(m_heartbeat)
+      {
+        Manager::instance().removeTask(m_hbtaskid);
+        m_heartbeat = false;
+      }
   }
 
 

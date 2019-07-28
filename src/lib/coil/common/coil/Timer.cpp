@@ -16,167 +16,55 @@
  *
  */
 
-#include <coil/Listener.h>
 #include <coil/Timer.h>
-
-#include <vector>
 
 namespace coil
 {
   /*!
    * @if jp
-   * @brief コンストラクタ
+   * @brief 1回の時間経過
    * @else
-   * @brief Constructor
+   * @brief Tick
    * @endif
    */
-  Timer::Timer(std::chrono::nanoseconds interval)
-    : m_interval(interval), m_running(false)
+  bool DelayedFunction::tick(std::chrono::nanoseconds interval)
   {
+    m_remains -= interval;
+    bool is_expired = m_remains <= std::chrono::seconds::zero();
+    if (is_expired) { m_fn(); }
+    return is_expired;
   }
 
   /*!
    * @if jp
-   * @brief デストラクタ
+   * @brief 1回の時間経過
    * @else
-   * @brief Destructor
+   * @brief Tick
    * @endif
    */
-  Timer::~Timer()
+  bool PeriodicFunction::tick(std::chrono::nanoseconds interval)
   {
-    stop();
-    wait();
-  }
-
-  /*!
-   * @if jp
-   * @brief Timer 用スレッド生成
-   * @else
-   * @brief Generate thread for Timer
-   * @endif
-   */
-  int Timer::open(void * /*args*/)
-  {
-    activate();
-    return 0;
-  }
-
-  /*!
-   * @if jp
-   * @brief Timer 用スレッド実行関数
-   * @else
-   * @brief Thread execution function for Timer
-   * @endif
-   */
-  int Timer::svc()
-  {
-    while (m_running)
+    std::lock_guard<std::mutex> guard(m_lock);
+    if (m_isRemoved) { return true; }
+    m_remains -= interval;
+    if (m_remains <= std::chrono::seconds::zero())
       {
-        invoke();
-        std::this_thread::sleep_for(m_interval);
-      }
-    return 0;
-  }
-
-  //============================================================
-  // public functions
-  //============================================================
-  /*!
-   * @if jp
-   * @brief Timer タスク開始
-   * @else
-   * @brief Start Timer task
-   * @endif
-   */
-  void Timer::start()
-  {
-    std::lock_guard<std::mutex> guard(m_runningMutex);
-    if (!m_running)
-      {
-        m_running = true;
-        open(nullptr);
-      }
-  }
-
-  /*!
-   * @if jp
-   * @brief Timer タスク停止
-   * @else
-   * @brief Stop Timer tast
-   * @endif
-   */
-  void Timer::stop()
-  {
-    std::lock_guard<std::mutex> guard(m_runningMutex);
-    m_running = false;
-  }
-
-  /*!
-   * @if jp
-   * @brief Timer タスク実行
-   * @else
-   * @brief Invoke Timer task
-   * @endif
-   */
-  void Timer::invoke()
-  {
-    std::lock_guard<std::mutex> guard(m_taskMutex);
-    for (auto & task : m_tasks)
-      {
-        task.remains = task.remains - m_interval;
-        if (task.remains <= std::chrono::seconds::zero())
-          {
-            task.listener->invoke();
-            task.remains = task.period;
-          }
-      }
-  }
-
-  /*!
-   * @if jp
-   * @brief リスナー登録
-   * @else
-   * @brief Register listener
-   * @endif
-   */
-  ListenerId Timer::registerListener(ListenerBase* listener, std::chrono::nanoseconds tm)
-  {
-    std::lock_guard<std::mutex> guard(m_taskMutex);
-
-    for (auto & task : m_tasks)
-      {
-        if (task.listener == listener)
-          {
-            task.period = tm;
-            task.remains = tm;
-            return listener;
-          }
-      }
-    m_tasks.emplace_back(listener, tm);
-    return listener;
-  }
-
-  /*!
-   * @if jp
-   * @brief リスナー登録解除
-   * @else
-   * @brief Unregister listener
-   * @endif
-   */
-  bool Timer::unregisterListener(ListenerId id)
-  {
-    std::lock_guard<std::mutex> guard(m_taskMutex);
-    std::vector<Task>::iterator it;
-    it = m_tasks.begin();
-
-    for (size_t i(0), len(m_tasks.size()); i < len; ++i, ++it)
-      {
-        if (m_tasks[i].listener == id)
-          {
-            m_tasks.erase(it);
-            return true;
-          }
+        m_fn();
+        m_remains = m_period;
       }
     return false;
+  }
+
+  /*!
+   * @if jp
+   * @brief 周期実行を停止する
+   * @else
+   * @brief Stop to execute function
+   * @endif
+   */
+  void PeriodicFunction::stop()
+  {
+    std::lock_guard<std::mutex> guard(m_lock);
+    m_isRemoved = true;
   }
 } // namespace coil

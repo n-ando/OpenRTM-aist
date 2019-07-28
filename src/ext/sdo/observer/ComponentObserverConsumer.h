@@ -163,15 +163,6 @@ namespace RTC
     // Heartbeat related functions
     /*!
      * @if jp
-     * @brief ハートビートをオブザーバに伝える
-     * @else
-     * @brief Sending a heartbeart signal to observer
-     * @endif
-     */
-    void heartbeat();
-
-    /*!
-     * @if jp
      * @brief ハートビートを設定する
      * @else
      * @brief Setting heartbeat
@@ -594,12 +585,9 @@ namespace RTC
     ConfigAction m_configMsg;
 
     // Heartbeat
-    std::chrono::nanoseconds m_interval;
     bool m_heartbeat;
-    ListenerId m_hblistenerid;
+    Manager::TaskId m_hbtaskid;
 
-    // このタイマーはいずれグローバルなタイマにおきかえる
-    coil::Timer m_timer;
     std::mutex mutex;
 
     std::vector<DataPortAction*> m_recievedactions;
@@ -615,5 +603,3 @@ extern "C"
 }
 
 #endif // RTC_COMPONENTOBSERVERCONSUMER_H
-
-

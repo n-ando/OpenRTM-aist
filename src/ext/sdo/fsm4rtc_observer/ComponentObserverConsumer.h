@@ -249,15 +249,6 @@ namespace RTC
     // Heartbeat related functions
     /*!
      * @if jp
-     * @brief ハートビートをオブザーバに伝える
-     * @else
-     * @brief Sending a heartbeart signal to observer
-     * @endif
-     */
-    void rtcHeartbeat();
-
-    /*!
-     * @if jp
      * @brief ハートビートを設定する
      * @else
      * @brief Setting heartbeat
@@ -300,15 +291,6 @@ namespace RTC
      * @endif
      */
     void unsetECHeartbeat();
-
-    /*!
-     * @if jp
-     * @brief タイマースレッドを停止する
-     * @else
-     * @brief stop timer thread
-     * @endif
-     */
-    void stopTimer();
 
     //============================================================
     // Component status related functions
@@ -517,7 +499,6 @@ namespace RTC
       {
         m_coc.unsetRTCHeartbeat();
         m_coc.unsetECHeartbeat();
-        m_coc.stopTimer();
         onGeneric("FINALIZE:", ec_id, ret);
       }
 
@@ -809,16 +790,10 @@ namespace RTC
     ConfigAction m_configMsg;
     FSMAction m_fsmaction;
 
-    std::chrono::nanoseconds m_rtcInterval;
     bool m_rtcHeartbeat;
-    ListenerId m_rtcHblistenerid;
-    std::chrono::nanoseconds m_ecInterval;
+    Manager::TaskId m_rtcHbTaskId;
     bool m_ecHeartbeat;
-    ListenerId m_ecHblistenerid;
-
-    // このタイマーはいずれグローバルなタイマにおきかえる
-    coil::Timer m_timer;
-
+    Manager::TaskId m_ecHbTaskId;
   };
 
 } // namespace RTC
@@ -829,5 +804,3 @@ extern "C"
 }
 
 #endif // RTC_COMPONENTOBSERVERCONSUMER_H
-
-
