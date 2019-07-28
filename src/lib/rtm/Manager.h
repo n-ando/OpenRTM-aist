@@ -1992,6 +1992,30 @@ namespace RTC
      */
     PortableServer::POAManager_var m_pPOAManager;
 
+    /*!
+     * @if jp
+     * @brief ORB_init に指定する引数
+     *
+     * omniORB の実装がひどすぎて、ORB_init後も与えた引数を維持しなければならない。
+     *
+     * @else
+     * @brief The argument of ORB_init
+     * @endif
+     */
+    coil::Argv m_argv;
+
+    /*!
+     * @if jp
+     * @brief ORB_init に指定する引数
+     *
+     * omniORB の実装がひどすぎて、ORB_init後も与えた引数を維持しなければならない。
+     *
+     * @else
+     * @brief The argument of ORB_init
+     * @endif
+     */
+    int m_argvSize;
+
     //------------------------------------------------------------
     // Manager's variable
     //------------------------------------------------------------

@@ -1554,20 +1554,20 @@ std::vector<coil::Properties> Manager::getLoadableModules()
          }
          // TAO's ORB_init needs argv[0] as command name.
          args.insert(args.begin(), "manager");
-
-         char** argv = coil::toArgv(args);
-         int argc(static_cast<int>(args.size()));
-         
+         m_argv = coil::Argv(args);
 #ifdef ORB_IS_ORBEXPRESS
          CORBA::ORB::spawn_flags(VX_SPE_TASK | VX_STDIO);
          CORBA::ORB::stack_size(20000);
-         m_pORB = CORBA::ORB_init(argc, argv, "");
+         m_pORB = CORBA::ORB_init(m_argv.size(), m_argv.get(), "");
          CORBA::Object_var obj =
          m_pORB->resolve_initial_references((char*)"RootPOA");
          m_pPOA = PortableServer::POA::_narrow(obj);
 #else
          // ORB initialization
-         m_pORB = CORBA::ORB_init(argc, argv);
+         // ORB_init() of omniORB is too terrible. We cannot release all
+         // arguments until shutdown and the first argument type is int&
+         m_argvSize = static_cast<int>(m_argv.size());
+         m_pORB = CORBA::ORB_init(m_argvSize, m_argv.get());
          // Get the RootPOA
          CORBA::Object_var obj =
          m_pORB->resolve_initial_references((char*)"RootPOA");

@@ -56,9 +56,9 @@ namespace coil
         setsid();
 
         coil::vstring vstr(::coil::split(command, " "));
-        char* const * argv = ::coil::toArgv(vstr);
+        Argv argv(vstr);
 
-        execvp(vstr.front().c_str(), argv);
+        execvp(vstr.front().c_str(), argv.get());
 
         return -1;
       }
