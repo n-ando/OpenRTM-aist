@@ -171,6 +171,8 @@ namespace RTC
     date = gmtime(&timer);
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wformat-nonliteral"
+    // The format parameter is not literal, as it allows the user to change the format.
+    // Therefore, we have controlled -Wformat-nonliteral with pragma.
     strftime(buf, sizeof(buf), m_dateFormat.c_str(), date);
 #pragma GCC diagnostic pop
 #endif
