@@ -172,7 +172,7 @@ namespace RTC
       return data_port_status[static_cast<std::size_t>(status)];
     }
 
-  typedef std::vector<DataPortStatus> DataPortStatusList;
+  using DataPortStatusList = std::vector<DataPortStatus>;
 
 } // namespace RTC
 

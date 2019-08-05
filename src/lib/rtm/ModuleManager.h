@@ -70,7 +70,7 @@ namespace RTC
    */
   class ModuleManager
   {
-    typedef std::vector<coil::Properties> vProperties;
+    using vProperties = std::vector<coil::Properties>;
   public:
     /*!
      * @if jp
@@ -226,7 +226,7 @@ namespace RTC
       explicit InvalidOperation(const std::string& _reason)
         : Error(_reason) {}
     };
-    typedef void (*ModuleInitFunc)(Manager*);
+    using ModuleInitFunc = void (*)(Manager *);
 
     /*!
      * @if jp
@@ -655,13 +655,13 @@ namespace RTC
       coil::DynamicLib dll;
     };
 
-    typedef std::vector<std::string>     StringVector;
-    typedef StringVector::iterator       StringVectorItr;
-    typedef StringVector::const_iterator StringVectorConstItr;
+    using StringVector = std::vector<std::string>;
+    using StringVectorItr = StringVector::iterator;
+    using StringVectorConstItr = StringVector::const_iterator;
 
-    typedef std::vector<DLLEntity>    DllMap;
-    typedef DllMap::iterator           DllMapItr;
-    typedef DllMap::const_iterator     DllMapConstItr;
+    using DllMap = std::vector<DLLEntity>;
+    using DllMapItr = DllMap::iterator;
+    using DllMapConstItr = DllMap::const_iterator;
 
 
     /*!

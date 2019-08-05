@@ -36,7 +36,7 @@
 
 namespace coil
 {
-  typedef std::vector<std::string> vstring;
+  using vstring = std::vector<std::string>;
   typedef std::map<std::string, std::string> mapstring;
   /*!
    * @if jp

@@ -167,10 +167,10 @@ namespace RTC
     coil::Properties properties;
   };
 
-  typedef std::vector<ConnectorInfo> ConnectorInfoList;
+  using ConnectorInfoList = std::vector<ConnectorInfo>;
 
   class ConnectorBase;
-  typedef std::vector<ConnectorBase*> ConnectorList;
+  using ConnectorList = std::vector<ConnectorBase *>;
 
 
   /*!

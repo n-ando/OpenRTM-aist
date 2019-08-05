@@ -400,7 +400,7 @@ namespace coil
                 const std::string& delimiter,
                 bool ignore_empty)
   {
-    typedef std::string::size_type size;
+    using size = std::string::size_type;
     vstring results(0);
     size delim_size = delimiter.size();
     size found_pos(0), begin_pos(0), pre_pos(0), substr_size(0);
@@ -536,7 +536,7 @@ namespace coil
    */
   bool isURL(const std::string& str)
   {
-    typedef std::string::size_type size;
+    using size = std::string::size_type;
     size pos;
     if (str.empty()) return false;
     pos = str.find(':');

@@ -105,8 +105,8 @@ namespace coil
   class Singleton
   {
   public:
-    typedef SingletonClass* SingletonClassPtr;
-    typedef ::std::mutex Mutex;
+    using SingletonClassPtr = SingletonClass *;
+    using Mutex = ::std::mutex;
 
     /*!
      * @if jp

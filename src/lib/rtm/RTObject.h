@@ -51,7 +51,7 @@ namespace RTC
 {
   class Manager;
   class ExecutionContextBase;
-  typedef ExecutionContextHandle_t UniqueId;
+  using UniqueId = ExecutionContextHandle_t;
 
   /*!
    * @if jp
@@ -3392,8 +3392,8 @@ namespace RTC
      *
      * @endif
      */
-    typedef PreComponentActionListener PreCompActionListener;
-    typedef PreComponentActionListenerType PreCompActionListenerType;
+    using PreCompActionListener = PreComponentActionListener;
+    using PreCompActionListenerType = PreComponentActionListenerType;
     void
     addPreComponentActionListener(PreCompActionListenerType listener_type,
                                   PreCompActionListener* listener,
@@ -3420,7 +3420,7 @@ namespace RTC
         }
       private:
         Listener& m_obj;
-        typedef void (Listener::*Memfunc)(UniqueId ec_id);
+        using Memfunc = void (Listener::*)(UniqueId);
         Memfunc m_memfunc;
       };
       Noname* listener(new Noname(obj, memfunc));
@@ -3525,8 +3525,8 @@ namespace RTC
      *
      * @endif
      */
-    typedef PostComponentActionListener PostCompActionListener;
-    typedef PostComponentActionListenerType PostCompActionListenerType;
+    using PostCompActionListener = PostComponentActionListener;
+    using PostCompActionListenerType = PostComponentActionListenerType;
     void
     addPostComponentActionListener(
                                PostComponentActionListenerType listener_type,
@@ -3554,7 +3554,7 @@ namespace RTC
         }
       private:
         Listener& m_obj;
-        typedef void (Listener::*Memfunc)(UniqueId ec_id, ReturnCode_t ret);
+        using Memfunc = void (Listener::*)(UniqueId, ReturnCode_t);
         Memfunc m_memfunc;
       };
       Noname* listener(new Noname(obj, memfunc));
@@ -3667,7 +3667,7 @@ namespace RTC
         }
       private:
         Listener& m_obj;
-        typedef void (Listener::*Memfunc)(const RTC::PortProfile&);
+        using Memfunc = void (Listener::*)(const RTC::PortProfile &);
         Memfunc m_memfunc;
       };
       Noname* listener(new Noname(obj, memfunc));
@@ -3753,8 +3753,8 @@ namespace RTC
      *
      * @endif
      */
-    typedef ExecutionContextActionListenerType ECActionListenerType;
-    typedef ExecutionContextActionListener ECActionListener;
+    using ECActionListenerType = ExecutionContextActionListenerType;
+    using ECActionListener = ExecutionContextActionListener;
     void addExecutionContextActionListener(ECActionListenerType listener_type,
                                            ECActionListener* listener,
                                            bool autoclean = true);
@@ -3779,7 +3779,7 @@ namespace RTC
         }
       private:
         Listener& m_obj;
-        typedef void (Listener::*Memfunc)(UniqueId);
+        using Memfunc = void (Listener::*)(UniqueId);
         Memfunc m_memfunc;
       };
       Noname* listener(new Noname(obj, memfunc));
@@ -3892,7 +3892,7 @@ namespace RTC
         }
       private:
         Listener& m_obj;
-        typedef void (Listener::*Memfunc)(const char*, ConnectorProfile&);
+        using Memfunc = void (Listener::*)(const char *, ConnectorProfile &);
         Memfunc m_memfunc;
       };
       Noname* listener(new Noname(obj, memfunc));
@@ -4013,9 +4013,7 @@ namespace RTC
         }
       private:
         Listener& m_obj;
-        typedef void (Listener::*Memfunc)(const char* portname,
-                                          ConnectorProfile& cprofile,
-                                          ReturnCode_t ret);
+        using Memfunc = void (Listener::*)(const char *, ConnectorProfile &, ReturnCode_t);
         Memfunc m_memfunc;
       };
       Noname* listener(new Noname(obj, memfunc));
@@ -4107,7 +4105,7 @@ namespace RTC
         }
       private:
         Listener& m_obj;
-        typedef void (Listener::*Memfunc)(const char*, const char*);
+        using Memfunc = void (Listener::*)(const char *, const char *);
         Memfunc m_memfunc;
       };
       Noname* listener(new Noname(obj, memfunc));
@@ -4199,7 +4197,7 @@ namespace RTC
         }
       private:
         Listener& m_obj;
-        typedef void (Listener::*Memfunc)(const coil::Properties& config_set);
+        using Memfunc = void (Listener::*)(const coil::Properties &);
         Memfunc m_memfunc;
       };
       Noname* listener(new Noname(obj, memfunc));
@@ -4291,7 +4289,7 @@ namespace RTC
         }
       private:
         Listener& m_obj;
-        typedef void (Listener::*Memfunc)(const char*);
+        using Memfunc = void (Listener::*)(const char *);
         Memfunc m_memfunc;
       };
       Noname* listener(new Noname(obj, memfunc));
@@ -4429,7 +4427,7 @@ namespace RTC
         }
       private:
         Listener& m_obj;
-        typedef void (Listener::*Memfunc)(const char* state);
+        using Memfunc = void (Listener::*)(const char *);
         Memfunc m_memfunc;
       };
       Noname* listener(new Noname(obj, memfunc));
@@ -4561,7 +4559,7 @@ namespace RTC
         }
       private:
         Listener& m_obj;
-        typedef void (Listener::*Memfunc)(const char* state, ReturnCode_t ret);
+        using Memfunc = void (Listener::*)(const char *, ReturnCode_t);
         Memfunc m_memfunc;
       };
       Noname* listener(new Noname(obj, memfunc));
@@ -4686,7 +4684,7 @@ namespace RTC
         }
       private:
         Listener& m_obj;
-        typedef void (Listener::*Memfunc)(const RTC::FsmProfile&);
+        using Memfunc = void (Listener::*)(const RTC::FsmProfile &);
         Memfunc m_memfunc;
       };
       Noname* listener(new Noname(obj, memfunc));
@@ -4799,7 +4797,7 @@ namespace RTC
         }
       private:
         Listener& m_obj;
-        typedef void (Listener::*Memfunc)(const RTC::FsmStructure&);
+        using Memfunc = void (Listener::*)(const RTC::FsmStructure &);
         Memfunc m_memfunc;
       };
       Noname* listener(new Noname(obj, memfunc));

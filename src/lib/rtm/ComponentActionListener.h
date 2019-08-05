@@ -30,7 +30,7 @@
 
 namespace RTC
 {
-  typedef ExecutionContextHandle_t UniqueId;
+  using UniqueId = ExecutionContextHandle_t;
   //============================================================
   /*!
    * @if jp

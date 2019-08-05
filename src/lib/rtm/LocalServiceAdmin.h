@@ -33,8 +33,8 @@ namespace RTM
 {
   // forward decl
   class LocalServiceBase;
-  typedef LocalServiceBase* (*ECNewFunc)();
-  typedef void (*ECDeleteFunc)(LocalServiceBase* ls);
+  using ECNewFunc = LocalServiceBase *(*)();
+  using ECDeleteFunc = void (*)(LocalServiceBase *);
 
   /*!
    * @if jp

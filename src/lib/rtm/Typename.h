@@ -35,7 +35,7 @@ namespace CORBA_Util
   template <class T, typename T::_ptr_type (*)(void)>
   struct has_nil_helper
   {
-    typedef void type;
+    using type = void;
   };
 
   /*!

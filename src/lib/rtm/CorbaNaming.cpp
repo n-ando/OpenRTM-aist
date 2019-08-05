@@ -974,7 +974,7 @@ namespace RTC
                                   const std::string& delimiter,
                                   std::vector<std::string>& results)
   {
-    typedef std::string::size_type size;
+    using size = std::string::size_type;
     size delim_size = delimiter.size();
     size found_pos(0), begin_pos(0), pre_pos(0), substr_size(0);
 

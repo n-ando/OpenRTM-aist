@@ -63,9 +63,9 @@ namespace RTC
   class NamingManager;
   class Manager;
   class RTObject_impl;
-  typedef RTObject_impl RtcBase;
+  using RtcBase = RTObject_impl;
 
-  typedef void (*ModuleInitProc)(Manager* manager);
+  using ModuleInitProc = void (*)(Manager *);
 
   /*!
    * @if jp

@@ -24,7 +24,7 @@
 
 namespace coil
 {
-  extern "C" typedef void (*SignalHandler)(int);
+  extern "C" using SignalHandler = void (*)(int);
 
   /*!
    * @if jp

@@ -409,7 +409,7 @@ namespace RTC
    * @brief OutPortConsumerFactory type definition
    * @endif
    */
-  typedef ::coil::GlobalFactory<OutPortConsumer> OutPortConsumerFactory;
+  using OutPortConsumerFactory = ::coil::GlobalFactory<OutPortConsumer>;
 } // namespace RTC
 
 

@@ -86,7 +86,7 @@
 namespace hrtm {
 namespace sc {
 
-typedef unsigned int Key;
+using Key = unsigned int;
 
 class MachineBase;
 
@@ -272,7 +272,7 @@ template<class T>
 class TopState : public StateBase {
  public:
   // This typedef is an alias for user defined top state in all (sub)states.
-  typedef T TOP;
+  using TOP = T;
 
  protected:
   TopState(StateInfo & info) : StateBase(info) {}  // NOLINT
@@ -292,9 +292,9 @@ class TopState : public StateBase {
 // (also for starting machines).
 
 // Members of do-it-yourself virtual function table.
-typedef StateInfo & (*GetInfoFn)(MachineBase & machine);
-typedef void (*DestroyFn)(void * data);
-typedef void * (*CloneFn)(void * data);
+using GetInfoFn = StateInfo &(*)(MachineBase &);
+using DestroyFn = void (*)(void *);
+using CloneFn = void *(*)(void *);
 
 // DIY virtual function table.
 struct StateCharacter {
@@ -437,7 +437,7 @@ class EXPORT_DLL MachineBase {
 
  protected:
   typedef std::map<std::string, EventBase *> EventQueue;
-  typedef std::vector<std::string> EventNames;
+  using EventNames = std::vector<std::string>;
 
   // C++ needs something like package visibility
   // for set_pending_state
@@ -466,11 +466,11 @@ template<class C, class P>
 class Link : public P {
  public:
   // Alias for superstate.
-  typedef P SUPER;
+  using SUPER = P;
   // Alias for topstate.
-  typedef typename P::TOP TOP;
+  using TOP = typename P::TOP;
   // Default data type.
-  typedef EmptyData Data;
+  using Data = EmptyData;
 
   // Get unique key of state.
   static Key key() {
@@ -579,7 +579,7 @@ class RootStateInfo : public StateInfo {
 template<class S>
 class SubStateInfo : public StateInfo {
  public:
-  typedef typename S::Data Data;
+  using Data = typename S::Data;
 
   SubStateInfo(MachineBase & machine, StateInfo * parent)
     : StateInfo(machine, parent) {
@@ -633,7 +633,7 @@ class EventParamBase : protected EventBase {
 // Event with four parameters
 template<class TOP, class ROOT, class P1, class P2, class P3, class P4>
 class EventWith4Params : public EventParamBase<TOP> {
-  typedef ROOT (TOP::*Signature)(P1, P2, P3, P4);
+  using Signature = ROOT (TOP::*)(P1, P2, P3, P4);
 
  public:
   EventWith4Params(Signature handler, P1 p1, P2 p2, P3 p3, P4 p4)
@@ -658,7 +658,7 @@ class EventWith4Params : public EventParamBase<TOP> {
 // Event with three parameters
 template<class TOP, class ROOT, class P1, class P2, class P3>
 class EventWith3Params : public EventParamBase<TOP> {
-  typedef ROOT (TOP::*Signature)(P1, P2, P3);
+  using Signature = ROOT (TOP::*)(P1, P2, P3);
 
  public:
   EventWith3Params(Signature handler, P1 p1, P2 p2, P3 p3)
@@ -681,7 +681,7 @@ class EventWith3Params : public EventParamBase<TOP> {
 // Event with two parameters
 template<class TOP, class ROOT, class P1, class P2>
 class EventWith2Params : public EventParamBase<TOP> {
-  typedef ROOT (TOP::*Signature)(P1, P2);
+  using Signature = ROOT (TOP::*)(P1, P2);
 
  public:
   EventWith2Params(ROOT (TOP::*handler)(P1, P2), P1 p1, P2 p2)
@@ -703,7 +703,7 @@ class EventWith2Params : public EventParamBase<TOP> {
 // Event with one parameter
 template<class TOP, class ROOT, class P1>
 class EventWith1Params : public EventParamBase<TOP> {
-  typedef ROOT (TOP::*Signature)(P1);
+  using Signature = ROOT (TOP::*)(P1);
 
  public:
   EventWith1Params(ROOT (TOP::*handler)(P1), P1 p1)
@@ -724,7 +724,7 @@ class EventWith1Params : public EventParamBase<TOP> {
 // Event with no parameters
 template<class TOP, class ROOT>
 class EventWithoutParams : public EventParamBase<TOP> {
-  typedef ROOT (TOP::*Signature)();
+  using Signature = ROOT (TOP::*)();
 
  public:
   EventWithoutParams(ROOT (TOP::*handler)())
@@ -846,7 +846,7 @@ class State : public StateAlias {
     delete static_cast<typename S::Data *>(data);
   }
   static void * clone(void * data) {
-    typedef typename S::Data Data;
+    using Data = typename S::Data;
     return new Data(* static_cast<Data *>(data));
   }
 

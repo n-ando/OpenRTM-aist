@@ -1197,7 +1197,7 @@ namespace RTC
     bool m_syncReset;
   };  // class ExecutionContextBase
 
-  typedef coil::GlobalFactory<ExecutionContextBase> ExecutionContextFactory;
+  using ExecutionContextFactory = coil::GlobalFactory<ExecutionContextBase>;
 } // namespace RTC
 
 #ifdef WIN32

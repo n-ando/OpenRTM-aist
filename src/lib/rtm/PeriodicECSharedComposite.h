@@ -66,7 +66,7 @@ namespace SDOPackage
   class PeriodicECOrganization
     : public Organization_impl
   {
-    typedef std::vector<std::string> PortList;
+    using PortList = std::vector<std::string>;
 
   public:
     /*!
@@ -388,7 +388,7 @@ namespace SDOPackage
      * @endif
      */
     std::vector<Member> m_rtcMembers;
-    typedef std::vector<Member>::iterator MemIt;
+    using MemIt = std::vector<Member>::iterator;
 
     /*!
      * @if jp

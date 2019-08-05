@@ -157,14 +157,14 @@ namespace RTC
 
     bool isAlive();
 
-    typedef CORBA::SystemException SystemException;
-    typedef CosNaming::NamingContext::NotFound      NotFound;
-    typedef CosNaming::NamingContext::CannotProceed CannotProceed;
-    typedef CosNaming::NamingContext::InvalidName   InvalidName;
-    typedef CosNaming::NamingContext::AlreadyBound  AlreadyBound;
-    typedef CosNaming::NamingContext::NotEmpty      NotEmpty;
-    typedef CosNaming::NamingContextExt::InvalidAddress InvalidAddress;
-    typedef std::vector<CORBA::Object_ptr> ObjectList;
+    using SystemException = CORBA::SystemException;
+    using NotFound = CosNaming::NamingContext::NotFound;
+    using CannotProceed = CosNaming::NamingContext::CannotProceed;
+    using InvalidName = CosNaming::NamingContext::InvalidName;
+    using AlreadyBound = CosNaming::NamingContext::AlreadyBound;
+    using NotEmpty = CosNaming::NamingContext::NotEmpty;
+    using InvalidAddress = CosNaming::NamingContextExt::InvalidAddress;
+    using ObjectList = std::vector<CORBA::Object_ptr>;
 
     /*!
      * @if jp

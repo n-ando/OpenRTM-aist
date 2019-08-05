@@ -544,7 +544,7 @@ namespace RTC
    * @brief OutPortProviderFactory type definition
    * @endif
    */
-  typedef ::coil::GlobalFactory<OutPortProvider> OutPortProviderFactory;
+  using OutPortProviderFactory = ::coil::GlobalFactory<OutPortProvider>;
 } // namespace RTC
 
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)

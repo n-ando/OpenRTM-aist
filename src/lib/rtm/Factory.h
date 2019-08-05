@@ -30,8 +30,8 @@ namespace RTC
   class RTObject_impl;
   class Manager;
 
-  typedef RTObject_impl* (*RtcNewFunc)(Manager* manager);
-  typedef void (*RtcDeleteFunc)(RTObject_impl* rtc);
+  using RtcNewFunc = RTObject_impl *(*)(Manager *);
+  using RtcDeleteFunc = void (*)(RTObject_impl *);
 
   /*!
    * @if jp

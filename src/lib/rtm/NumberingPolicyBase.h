@@ -125,7 +125,7 @@ namespace RTM
     virtual void onDelete(void* obj) = 0;
   };
   
-  typedef coil::GlobalFactory<NumberingPolicyBase> NumberingPolicyFactory;
+  using NumberingPolicyFactory = coil::GlobalFactory<NumberingPolicyBase>;
 } // namespace RTM
 
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)

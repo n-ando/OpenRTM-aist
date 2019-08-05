@@ -69,7 +69,7 @@ BOOL WINAPI DllMain (HINSTANCE hinstDll, DWORD fdwReason, LPVOID lpvReserved);
 
 namespace RTC
 {
-  typedef coil::Properties Properties;
+  using Properties = coil::Properties;
 
 } // namespace RTC
 

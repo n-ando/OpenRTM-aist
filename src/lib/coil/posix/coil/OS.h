@@ -55,7 +55,7 @@ namespace coil
    *
    * @endif
    */
-  typedef ::utsname utsname;
+  using utsname = ::utsname;
   inline int uname(utsname* name)
   {
     return ::uname(name);
@@ -80,7 +80,7 @@ namespace coil
    *
    * @endif
    */
-  typedef ::pid_t pid_t;
+  using pid_t = ::pid_t;
   inline pid_t getpid()
   {
     return ::getpid();

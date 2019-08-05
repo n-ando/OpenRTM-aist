@@ -47,7 +47,7 @@ namespace hrtm
   // forward decl
   class DataFlowComponent;
   class ComponentManager;
-  typedef void (*ModuleInitProc)(hrtm::ComponentManager*);
+  using ModuleInitProc = void (*)(hrtm::ComponentManager *);
 
   /*!
    * @class RTC::Manager wrapper for hrtm::ComponentManager

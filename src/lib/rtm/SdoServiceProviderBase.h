@@ -248,8 +248,7 @@ namespace RTC
      * @brief typedef of sdoServiceProviderFactory
      * @endif
      */
-  typedef ::coil::GlobalFactory<
-    ::RTC::SdoServiceProviderBase > SdoServiceProviderFactory;
+  using SdoServiceProviderFactory = ::coil::GlobalFactory< ::RTC::SdoServiceProviderBase>;
 } // namespace RTC
 
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)

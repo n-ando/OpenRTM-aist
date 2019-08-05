@@ -26,7 +26,7 @@ namespace coil
 } // namespace coil
 namespace RTC
 {
-  typedef coil::PeriodicTask DefaultPeriodicTask;
+  using DefaultPeriodicTask = coil::PeriodicTask;
 } // namespace RTC
 extern "C"
 {

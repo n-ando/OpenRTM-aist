@@ -54,7 +54,7 @@ namespace RTC
    *
    * @endif
    */
-  typedef ConfigurationSetNameListener OnUpdateCallback;
+  using OnUpdateCallback = ConfigurationSetNameListener;
 
   /*!
    * @if jp
@@ -67,7 +67,7 @@ namespace RTC
    *
    * @endif
    */
-  typedef ConfigurationParamListener OnUpdateParamCallback;
+  using OnUpdateParamCallback = ConfigurationParamListener;
 
   /*!
    * @if jp
@@ -80,7 +80,7 @@ namespace RTC
    *
    * @endif
    */
-  typedef ConfigurationSetListener OnSetConfigurationSetCallback;
+  using OnSetConfigurationSetCallback = ConfigurationSetListener;
 
   /*!
    * @if jp
@@ -93,7 +93,7 @@ namespace RTC
    *
    * @endif
    */
-  typedef ConfigurationSetListener OnAddConfigurationAddCallback;
+  using OnAddConfigurationAddCallback = ConfigurationSetListener;
 
   /*!
    * @if jp
@@ -106,7 +106,7 @@ namespace RTC
    *
    * @endif
    */
-  typedef ConfigurationSetNameListener OnRemoveConfigurationSetCallback;
+  using OnRemoveConfigurationSetCallback = ConfigurationSetNameListener;
 
   /*!
    * @if jp
@@ -119,7 +119,7 @@ namespace RTC
    *
    * @endif
    */
-  typedef ConfigurationSetNameListener OnActivateSetCallback;
+  using OnActivateSetCallback = ConfigurationSetNameListener;
 
   // forward decl
   class ConfigAdmin;
@@ -203,7 +203,7 @@ namespace RTC
     virtual ~ConfigBase() {}
 
     // typedef of ConfigAdmin's member function
-    typedef void (ConfigAdmin::*CallbackFunc)(const char*, const char*);
+    using CallbackFunc = void (ConfigAdmin::*)(const char *, const char *);
 
     /*!
      * @if jp
