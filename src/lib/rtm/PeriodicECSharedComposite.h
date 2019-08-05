@@ -406,7 +406,7 @@ namespace SDOPackage
      * @brief Output PortList to StandardOutput.
      * @endif
      */
-    void print(PortList p)
+    void print(const PortList& p)
     {
       for (auto & i : p)
         {
