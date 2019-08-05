@@ -586,12 +586,12 @@ class SubStateInfo : public StateInfo {
     assert(parent);
     this->instance_ = new S(*this);
   }
-  ~SubStateInfo() {
+  ~SubStateInfo() override {
     if (this->data_)
       delete_data();
   }
   const char * name() const override { return S::state_name(); }
-  virtual Key key() {
+  Key key() override {
     return S::key();
   }
   // 'Virtual constructor' needed for cloning.

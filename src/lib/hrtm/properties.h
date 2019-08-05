@@ -30,7 +30,7 @@ namespace utils
   public:
     explicit Properties();
     explicit Properties(const char* const defaults[], long num = LONG_MAX);
-    virtual ~Properties();
+    ~Properties() override;
   };
 } // namespace utils
 } // namespace hrtm
