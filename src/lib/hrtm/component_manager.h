@@ -25,7 +25,7 @@
 namespace RTC
 {
   class RTObject_impl;
-}
+} // namespace RTC
 namespace hrtm
 {
   //------------------------------------------------------------
@@ -84,6 +84,6 @@ namespace hrtm
     static ComponentManager* manager;
     static std::mutex mutex;
   };
-}
+} // namespace hrtm
 
 #endif // HRTM_COMPONENT_MANAGER_H
