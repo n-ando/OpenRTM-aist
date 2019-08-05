@@ -1753,8 +1753,8 @@ namespace Macho {
 		friend class Link;
 
 	private:
-		Machine(const Machine<TOP> & other);
-		Machine<TOP> & operator=(const Machine<TOP> & other);
+		Machine(const Machine<TOP> & other) = delete;
+		Machine<TOP> & operator=(const Machine<TOP> & other) = delete;
 
 #ifdef MACHO_SNAPSHOTS
 		friend class Snapshot<TOP>;

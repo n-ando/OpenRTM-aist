@@ -873,8 +873,8 @@ class Snapshot : public MachineBase {
  private:
   friend class Machine<TOP>;
 
-  Snapshot(const Snapshot<TOP> & other);
-  Snapshot & operator=(const Snapshot<TOP> & other);
+  Snapshot(const Snapshot<TOP> & other) = delete;
+  Snapshot & operator=(const Snapshot<TOP> & other) = delete;
 };
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -991,8 +991,8 @@ class Machine : public MachineBase {
   static Key the_state_count_;
 
  private:
-  Machine(const Machine<TOP> & other);
-  Machine<TOP> & operator=(const Machine<TOP> & other);
+  Machine(const Machine<TOP> & other) = delete;
+  Machine<TOP> & operator=(const Machine<TOP> & other) = delete;
 
   friend class Snapshot<TOP>;
 };
