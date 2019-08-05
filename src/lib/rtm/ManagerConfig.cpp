@@ -65,7 +65,6 @@ namespace RTC
    * @endif
    */
   ManagerConfig::ManagerConfig()
-    : m_isMaster(false)
   {
   }
 

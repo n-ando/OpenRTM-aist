@@ -68,7 +68,7 @@ namespace RTM
      *
      * @endif
      */
-    ProcessUniquePolicy() : m_num(0) {}
+    ProcessUniquePolicy()  {}
     
     /*!
      * @if jp
@@ -162,7 +162,7 @@ namespace RTM
     long int find(void* obj);
     
   private:
-    int m_num;
+    int m_num{0};
     std::vector<void*> m_objects;
   };
 } // namespace RTM

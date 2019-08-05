@@ -622,7 +622,7 @@ namespace RTC
      * @brief Logger stream
      * @endif
      */
-    RTC::Logger rtclog;
+    RTC::Logger rtclog{"exttrig_async_ec"};
     /*!
      * @if jp
      * @brief Logical clock
@@ -630,7 +630,7 @@ namespace RTC
      * @brief Logical clock
      * @endif
      */
-    coil::IClock& m_clock;
+    coil::IClock& m_clock{coil::ClockManager::instance().getClock("logical")};
     /*!
      * @if jp
      * @brief Synchronous tick flag
@@ -638,7 +638,7 @@ namespace RTC
      * @brief Synchronous tick flag
      * @endif
      */
-    bool m_syncTick;
+    bool m_syncTick{true};
     /*!
      * @if jp
      * @brief Tick counter
@@ -646,7 +646,7 @@ namespace RTC
      * @brief Tick counter
      * @endif
      */
-    unsigned int m_count;
+    unsigned int m_count{0};
     /*!
      * @if jp
      * @brief ExecutionContext のスレッド実行フラグ
@@ -654,7 +654,7 @@ namespace RTC
      * @brief The thread running flag of ExecutionContext
      * @endif
      */
-    bool m_svc;
+    bool m_svc{false};
     std::mutex m_svcmutex;
     std::mutex m_tickmutex;
 
@@ -667,10 +667,10 @@ namespace RTC
      */
     struct Worker
     {
-      Worker() : cond_(), ticked_(false) {}
+      Worker() {}
       std::mutex mutex_;
       std::condition_variable cond_;
-      bool ticked_;
+      bool ticked_{false};
     };
     // A condition variable for external triggered worker
     Worker m_worker;

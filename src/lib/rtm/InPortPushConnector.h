@@ -316,10 +316,10 @@ namespace RTC
 
     struct WorkerThreadCtrl
     {
-        WorkerThreadCtrl() : cond_(), completed_(false) {}
+        WorkerThreadCtrl() {}
         std::mutex mutex_;
         std::condition_variable cond_;
-        bool completed_;
+        bool completed_{false};
     };
     WorkerThreadCtrl m_writecompleted_worker;
     WorkerThreadCtrl m_readcompleted_worker;

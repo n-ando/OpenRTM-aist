@@ -162,9 +162,9 @@ protected:
 	std::mutex m_mutex;
 	std::string m_shm_address;
 	SharedMemoryPort m_shmem;
-	int m_memory_size;
-	bool m_endian;
-	mutable Logger rtclog;
+	int m_memory_size{0};
+	bool m_endian{true};
+	mutable Logger rtclog{"InPortSHMConsumer"};
   };
 } // namespace RTC
 

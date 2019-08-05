@@ -39,7 +39,7 @@ namespace coil
    * @endif
    */
   Properties::Properties(const char* key, const char* value, bool set_value)
-    : name(key), value(value), default_value(""), set_value((this->value.empty()) ? set_value : true), root(nullptr), m_empty("")
+    : name(key), value(value), set_value((this->value.empty()) ? set_value : true)
   {
     leaf.clear();
   }
@@ -52,7 +52,6 @@ namespace coil
    * @endif
    */
   Properties::Properties(std::map<std::string, std::string>& defaults)
-    : name(""), value(""), default_value(""), set_value(false), root(nullptr), m_empty("")
   {
     leaf.clear();
     std::map<std::string, std::string>::iterator it(defaults.begin());
@@ -73,7 +72,6 @@ namespace coil
    * @endif
    */
   Properties::Properties(const char* const defaults[], long num)
-    : name(""), value(""), default_value(""), set_value(false), root(nullptr), m_empty("")
   {
     leaf.clear();
     setDefaults(defaults, num);

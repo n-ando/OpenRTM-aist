@@ -29,7 +29,6 @@ namespace RTC
    * @endif
    */
   InPortDirectProvider::InPortDirectProvider()
-    : m_buffer(nullptr)
   {
     // PortProfile setting
     setInterfaceType("direct");

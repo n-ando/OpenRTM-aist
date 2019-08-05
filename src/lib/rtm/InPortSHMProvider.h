@@ -235,11 +235,11 @@ namespace RTC
     }
 
   private:
-    CdrBufferBase* m_buffer;
+    CdrBufferBase* m_buffer{nullptr};
 	::OpenRTM::PortSharedMemory_var  m_objref;
     ConnectorListeners* m_listeners;
     ConnectorInfo m_profile;
-    InPortConnector* m_connector;
+    InPortConnector* m_connector{nullptr};
 
   };  // class InPortCorCdrbaProvider
 } // namespace RTC

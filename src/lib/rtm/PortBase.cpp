@@ -37,24 +37,11 @@ namespace RTC
    * @endif
    */
   PortBase::PortBase(const char* name)
-    : rtclog(name),
-      m_ownerInstanceName("unknown"),
-      m_connectionLimit(-1),
-      m_onPublishInterfaces(nullptr),
-      m_onSubscribeInterfaces(nullptr),
-      m_onConnected(nullptr),
-      m_onUnsubscribeInterfaces(nullptr),
-      m_onDisconnected(nullptr),
-      m_onConnectionLost(nullptr),
-      m_portconnListeners(nullptr),
-	  m_directport(nullptr)
+    : rtclog(name)
   {
     m_objref = this->_this();
     // Now Port name is <instance_name>.<port_name>. r1648
-    std::string portname(m_ownerInstanceName);
-    portname += ".";
-    portname += name;
-
+    std::string portname(m_ownerInstanceName + '.' + name);
     m_profile.name = CORBA::string_dup(portname.c_str());
     m_profile.interfaces.length(0);
     m_profile.port_ref = m_objref;

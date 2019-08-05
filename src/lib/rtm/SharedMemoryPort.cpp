@@ -27,9 +27,7 @@ namespace RTC
    * @brief Constructor
    * @endif
    */
-	SharedMemoryPort::SharedMemoryPort()
-   : m_smInterface(OpenRTM::PortSharedMemory::_nil()),
-     m_endian(true)
+  SharedMemoryPort::SharedMemoryPort()
   {
 
   }

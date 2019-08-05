@@ -2060,7 +2060,7 @@ namespace RTC
      * @brief User's initialization function's pointer
      * @endif
      */
-    ModuleInitProc m_initProc;
+    ModuleInitProc m_initProc{nullptr};
 
     /*!
      * @if jp
@@ -2087,7 +2087,7 @@ namespace RTC
      * @brief The pointer to the NamingManager
      * @endif
      */
-    NamingManager* m_namingManager;
+    NamingManager* m_namingManager{nullptr};
 
     /*!
      * @if jp
@@ -2162,7 +2162,7 @@ namespace RTC
      * @brief Logger stream
      * @endif
      */
-    Logger rtclog;
+    Logger rtclog{&m_logStreamBuf};
 
     /*!
      * @if jp

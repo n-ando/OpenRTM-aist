@@ -494,14 +494,14 @@ namespace RTC
 
 
   private:
-    std::string m_name;
-    std::string m_dateFormat;
-    coil::IClock* m_clock;
+    std::string m_name = "unknown";
+    std::string m_dateFormat = "%b %d %H:%M:%S.%Q";
+    coil::IClock* m_clock{&coil::ClockManager::instance().getClock("system")};
     static const char* const m_levelString[];
     static const char* const m_levelOutputString[];
     static const char* const m_levelColor[];
-    int m_msEnable;
-    int m_usEnable;
+    int m_msEnable{0};
+    int m_usEnable{0};
   };
 
 

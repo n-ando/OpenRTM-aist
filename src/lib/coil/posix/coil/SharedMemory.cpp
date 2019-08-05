@@ -32,10 +32,6 @@ namespace coil
    * @endif
    */
   SharedMemory::SharedMemory()
-    : m_memory_size(0),
-      m_shm(nullptr),
-      m_file_create(false),
-      m_fd(-1)
   {
   }
 

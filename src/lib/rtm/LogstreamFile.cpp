@@ -341,7 +341,6 @@ namespace RTC
   
   
   LogstreamFile::LogstreamFile()
-    : m_stdout(nullptr), m_fileout(nullptr)
   {
   }
 

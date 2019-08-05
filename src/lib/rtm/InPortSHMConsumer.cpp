@@ -34,9 +34,6 @@ namespace RTC
    * @endif
    */
 	InPortSHMConsumer::InPortSHMConsumer()
-		: m_memory_size(0),
-		m_endian(true),
-		rtclog("InPortSHMConsumer")
   {
 	  coil::UUID_Generator uugen;
 	  uugen.init();

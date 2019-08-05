@@ -67,10 +67,7 @@ namespace RTC
   Logger::Logger(const char* name)
     : ::coil::LogStream(&(Manager::instance().getLogStreamBuf()),
                         RTL_SILENT, RTL_PARANOID, RTL_SILENT),
-      m_name(name),
-      m_dateFormat("%b %d %H:%M:%S.%Q"),
-      m_clock(&coil::ClockManager::instance().getClock("system")),
-      m_msEnable(0), m_usEnable(0)
+      m_name(name)
   {
     setLevel(Manager::instance().getLogLevel().c_str());
     coil::Properties& prop(Manager::instance().getConfig());
@@ -82,16 +79,11 @@ namespace RTC
       {
         setClockType(prop["logger.clock_type"]);
       }
-	
   }
 
   Logger::Logger(LogStreamBuf* streambuf)
     : ::coil::LogStream(streambuf,
-                        RTL_SILENT, RTL_PARANOID,  RTL_SILENT),
-      m_name("unknown"),
-      m_dateFormat("%b %d %H:%M:%S.%Q"),
-      m_clock(&coil::ClockManager::instance().getClock("system")),
-      m_msEnable(0), m_usEnable(0)
+                        RTL_SILENT, RTL_PARANOID,  RTL_SILENT)
   {
     setDateFormat(m_dateFormat.c_str());
   }

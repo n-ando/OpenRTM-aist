@@ -34,9 +34,6 @@ namespace RTC
    * @endif
    */
   PublisherFlush::PublisherFlush()
-    : rtclog("PublisherFlush"),
-      m_consumer(nullptr), m_listeners(nullptr),
-      m_retcode(DataPortStatus::PORT_OK), m_active(false)
   {
   }
 

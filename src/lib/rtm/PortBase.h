@@ -2102,7 +2102,7 @@ namespace RTC
      * @brief Instance name
      * @endif
      */
-    std::string m_ownerInstanceName;
+    std::string m_ownerInstanceName = "unknown";
 
     /*!
      * @if jp
@@ -2111,7 +2111,7 @@ namespace RTC
      * @brief The maximum number of connections
      * @endif
      */
-    int m_connectionLimit;
+    int m_connectionLimit{-1};
 
     /*!
      * @if jp
@@ -2127,7 +2127,7 @@ namespace RTC
      *
      * @endif
      */
-    ConnectionCallback* m_onPublishInterfaces;
+    ConnectionCallback* m_onPublishInterfaces{nullptr};
     /*!
      * @if jp
      * @brief Callback functor オブジェクト
@@ -2141,7 +2141,7 @@ namespace RTC
      *
      * @endif
      */
-    ConnectionCallback* m_onSubscribeInterfaces;
+    ConnectionCallback* m_onSubscribeInterfaces{nullptr};
     /*!
      * @if jp
      * @brief Callback functor オブジェクト
@@ -2156,7 +2156,7 @@ namespace RTC
      *
      * @endif
      */
-    ConnectionCallback* m_onConnected;
+    ConnectionCallback* m_onConnected{nullptr};
     /*!
      * @if jp
      * @brief Callback functor オブジェクト
@@ -2170,7 +2170,7 @@ namespace RTC
      *
      * @endif
      */
-    ConnectionCallback* m_onUnsubscribeInterfaces;
+    ConnectionCallback* m_onUnsubscribeInterfaces{nullptr};
     /*!
      * @if jp
      * @brief Callback functor オブジェクト
@@ -2184,7 +2184,7 @@ namespace RTC
      *
      * @endif
      */
-    ConnectionCallback* m_onDisconnected;
+    ConnectionCallback* m_onDisconnected{nullptr};
 
     /*!
      * @if jp
@@ -2200,7 +2200,7 @@ namespace RTC
      *
      * @endif
      */
-    ConnectionCallback* m_onConnectionLost;
+    ConnectionCallback* m_onConnectionLost{nullptr};
 
     /*!
      * @if jp
@@ -2215,9 +2215,9 @@ namespace RTC
      *
      * @endif
      */
-    PortConnectListeners* m_portconnListeners;
+    PortConnectListeners* m_portconnListeners{nullptr};
 
-	DirectPortBase *m_directport;
+	DirectPortBase *m_directport{nullptr};
 
     //============================================================
     // Functor

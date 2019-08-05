@@ -576,9 +576,7 @@ namespace RTC
     {
     public:
       ECAction(ComponentObserverConsumer& coc)
-        : ecAttached(nullptr), ecDetached(nullptr), ecRatechanged(nullptr),
-          ecStartup(nullptr), ecShutdown(nullptr),
-          m_coc(coc) {}
+        : m_coc(coc) {}
       void onGeneric(const char* _msg, UniqueId ec_id)
       {
         std::string msg(_msg + coil::otos(ec_id));
@@ -613,11 +611,11 @@ namespace RTC
             onGeneric("SHUTDOWN:", ec_id);
           }
       }
-      ExecutionContextActionListener* ecAttached;
-      ExecutionContextActionListener* ecDetached;
-      PostComponentActionListener* ecRatechanged;
-      PostComponentActionListener* ecStartup;
-      PostComponentActionListener* ecShutdown;
+      ExecutionContextActionListener* ecAttached{nullptr};
+      ExecutionContextActionListener* ecDetached{nullptr};
+      PostComponentActionListener* ecRatechanged{nullptr};
+      PostComponentActionListener* ecStartup{nullptr};
+      PostComponentActionListener* ecShutdown{nullptr};
     private:
       ComponentObserverConsumer& m_coc;
     };
@@ -633,10 +631,7 @@ namespace RTC
     {
     public:
       ConfigAction(ComponentObserverConsumer& coc)
-        : updateConfigParamListener(nullptr), setConfigSetListener(nullptr),
-          addConfigSetListener(nullptr), updateConfigSetListener(nullptr),
-          removeConfigSetListener(nullptr), activateConfigSetListener(nullptr),
-          m_coc(coc) {}
+        : m_coc(coc) {}
       void updateConfigParam(const char* configsetname,
                              const char* configparamname)
       {
@@ -677,12 +672,12 @@ namespace RTC
         m_coc.updateStatus(RTC::CONFIGURATION, msg.c_str());
       }
       // Listener object's pointer holder
-      ConfigurationParamListener*   updateConfigParamListener;
-      ConfigurationSetListener*     setConfigSetListener;
-      ConfigurationSetListener*     addConfigSetListener;
-      ConfigurationSetNameListener* updateConfigSetListener;
-      ConfigurationSetNameListener* removeConfigSetListener;
-      ConfigurationSetNameListener* activateConfigSetListener;
+      ConfigurationParamListener*   updateConfigParamListener{nullptr};
+      ConfigurationSetListener*     setConfigSetListener{nullptr};
+      ConfigurationSetListener*     addConfigSetListener{nullptr};
+      ConfigurationSetNameListener* updateConfigSetListener{nullptr};
+      ConfigurationSetNameListener* removeConfigSetListener{nullptr};
+      ConfigurationSetNameListener* activateConfigSetListener{nullptr};
 
     private:
       ComponentObserverConsumer& m_coc;
@@ -778,21 +773,21 @@ namespace RTC
 
 
 
-    RTC::RTObject_impl* m_rtobj;
+    RTC::RTObject_impl* m_rtobj{nullptr};
     SDOPackage::ServiceProfile m_profile;
     CorbaConsumer<RTC::ComponentObserver> m_observer;
 
     bool m_observed[RTC::STATUS_KIND_NUM];
 
-    CompStatMsg m_compstat;
-    PortAction m_portaction;
-    ECAction m_ecaction;
-    ConfigAction m_configMsg;
-    FSMAction m_fsmaction;
+    CompStatMsg m_compstat{*this};
+    PortAction m_portaction{*this};
+    ECAction m_ecaction{*this};
+    ConfigAction m_configMsg{*this};
+    FSMAction m_fsmaction{*this};
 
-    bool m_rtcHeartbeat;
+    bool m_rtcHeartbeat{false};
     Manager::TaskId m_rtcHbTaskId;
-    bool m_ecHeartbeat;
+    bool m_ecHeartbeat{false};
     Manager::TaskId m_ecHbTaskId;
   };
 

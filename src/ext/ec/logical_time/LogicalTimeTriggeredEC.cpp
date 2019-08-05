@@ -34,11 +34,7 @@ namespace RTC
    * @endif
    */
   LogicalTimeTriggeredEC::LogicalTimeTriggeredEC()
-    : ExecutionContextBase("exttrig_async_ec"),
-      rtclog("exttrig_async_ec"),
-      m_clock(coil::ClockManager::instance().getClock("logical")),
-      m_syncTick(true), m_count(0),
-      m_svc(false)
+    : ExecutionContextBase("exttrig_async_ec")
   {
     RTC_TRACE(("LogicalTimeTriggeredEC()"));
 

@@ -289,7 +289,7 @@ namespace RTC
     void unsetFSMStructureListeners();
 
   private:
-    RTC::RTObject_impl* m_rtobj;
+    RTC::RTObject_impl* m_rtobj{nullptr};
     SDOPackage::ServiceProfile m_profile;
     coil::Properties m_properties;
     FsmStructure m_fsmStructure;

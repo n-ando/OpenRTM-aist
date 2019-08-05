@@ -17,8 +17,7 @@ namespace RTC
      *
      * @endif
      */
-    ByteData::ByteData() :
-        m_buf(nullptr), m_len(0), m_little_endian(true)
+    ByteData::ByteData()
     {
 
     }

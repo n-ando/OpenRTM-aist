@@ -36,9 +36,7 @@ namespace RTC_exp
    */
   PeriodicExecutionContext::
   PeriodicExecutionContext()
-    : ExecutionContextBase("periodic_ec"),
-      rtclog("periodic_ec"),
-      m_svc(false), m_nowait(false)
+    : ExecutionContextBase("periodic_ec")
   {
     RTC_TRACE(("PeriodicExecutionContext()"));
 

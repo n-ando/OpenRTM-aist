@@ -30,7 +30,6 @@ namespace RTC
   //============================================================
   // FluentBitStream class
   FluentBitStream::FluentBitStream()
-    : m_pos(0)
   {
     for (char & i : m_buf) { i = '\0'; }
     if (s_flbContext == nullptr)

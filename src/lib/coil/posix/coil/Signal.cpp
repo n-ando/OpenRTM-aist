@@ -35,7 +35,6 @@ namespace coil
    * @endif
    */
   SignalAction::SignalAction()
-    : m_handle(nullptr), m_signum(0), m_mask(nullptr), m_flags(0)
   {
   }
 

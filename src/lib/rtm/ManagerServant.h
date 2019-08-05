@@ -714,7 +714,7 @@ namespace RTM
      * @brief Logger object
      * @endif
      */
-    ::RTC::Logger rtclog;
+    ::RTC::Logger rtclog{"ManagerServant"};
 
     /*!
      * @if jp
@@ -723,7 +723,7 @@ namespace RTM
      * @brief Reference to the RTC::Manager
      * @endif
      */
-    ::RTC::Manager& m_mgr;
+    ::RTC::Manager& m_mgr{::RTC::Manager::instance()};
 
     /*!
      * @if jp
@@ -732,7 +732,7 @@ namespace RTM
      * @brief An object reference of ManagerServant
      * @endif
      */
-    ::RTM::Manager_var m_objref;
+    ::RTM::Manager_var m_objref{RTM::Manager::_nil()};
 
     /*!
      * @if jp
@@ -777,7 +777,7 @@ namespace RTM
      * @brief Flag if this is master
      * @endif
      */
-    CORBA::Boolean m_isMaster;
+    CORBA::Boolean m_isMaster{false};
 
     /*!
      * @if jp

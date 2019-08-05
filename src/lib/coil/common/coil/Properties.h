@@ -1335,13 +1335,13 @@ namespace coil
     static std::string indent(int index);
 
   private:
-    std::string name;
-    std::string value;
-    std::string default_value;
-    bool set_value;
-    Properties* root;
+    std::string name = "";
+    std::string value = "";
+    std::string default_value = "";
+    bool set_value{false};
+    Properties* root{nullptr};
     std::vector<Properties*> leaf;
-    const std::string m_empty;
+    const std::string m_empty = "";
 
     /*!
      * @if jp
