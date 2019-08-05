@@ -63,10 +63,7 @@ namespace RTC
    * @brief Destructor
    * @endif
    */
-  InPortSHMProvider::~InPortSHMProvider()
-  {
-
-  }
+  InPortSHMProvider::~InPortSHMProvider() = default;
 
   void InPortSHMProvider::init(coil::Properties& /*prop*/)
   {

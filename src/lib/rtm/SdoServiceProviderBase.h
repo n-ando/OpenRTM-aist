@@ -142,7 +142,7 @@ namespace RTC
      * @brief virtual destructor
      * @endif
      */
-    ~SdoServiceProviderBase() override {}
+    ~SdoServiceProviderBase() override = default;
 
     /*!
      * @if jp

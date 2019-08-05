@@ -41,7 +41,7 @@ namespace RTC
    * @class ConnectorDataListener class
    * @endif
    */
-  ConnectorDataListener::~ConnectorDataListener() {}
+  ConnectorDataListener::~ConnectorDataListener() = default;
 
   /*!
    * @if jp
@@ -50,7 +50,7 @@ namespace RTC
    * @class ConnectorListener class
    * @endif
    */
-  ConnectorListener::~ConnectorListener() {}
+  ConnectorListener::~ConnectorListener() = default;
 
   /*!
    * @if jp
@@ -59,9 +59,7 @@ namespace RTC
    * @class ConnectorDataListener holder class
    * @endif
    */
-  ConnectorDataListenerHolder::ConnectorDataListenerHolder()
-  {
-  }
+  ConnectorDataListenerHolder::ConnectorDataListenerHolder() = default;
 
 
   ConnectorDataListenerHolder::~ConnectorDataListenerHolder()
@@ -132,9 +130,7 @@ namespace RTC
    * @class ConnectorListener holder class
    * @endif
    */
-  ConnectorListenerHolder::ConnectorListenerHolder()
-  {
-  }
+  ConnectorListenerHolder::ConnectorListenerHolder() = default;
 
 
   ConnectorListenerHolder::~ConnectorListenerHolder()
@@ -211,9 +207,7 @@ namespace RTC
    * @brief Constructor
    * @endif
    */
-  ConnectorListeners::ConnectorListeners()
-  {
-  }
+  ConnectorListeners::ConnectorListeners() = default;
   /*!
    * @if jp
    * @brief デストラクタ
@@ -221,9 +215,7 @@ namespace RTC
    * @brief Destructor
    * @endif
    */
-  ConnectorListeners::~ConnectorListeners()
-  {
-  }
+  ConnectorListeners::~ConnectorListeners() = default;
 } // namespace RTC
 
 

@@ -50,7 +50,7 @@ namespace RTC
    * @class PortConnectListener class
    * @endif
    */
-  PortConnectListener::~PortConnectListener() {}
+  PortConnectListener::~PortConnectListener() = default;
 
   /*!
    * @if jp
@@ -84,7 +84,7 @@ namespace RTC
    * @class PortConnectRetListener class
    * @endif
    */
-  PortConnectRetListener::~PortConnectRetListener() {}
+  PortConnectRetListener::~PortConnectRetListener() = default;
 
   //============================================================
   /*!
@@ -94,9 +94,7 @@ namespace RTC
    * @class PortConnectListener holder class
    * @endif
    */
-  PortConnectListenerHolder::PortConnectListenerHolder()
-  {
-  }
+  PortConnectListenerHolder::PortConnectListenerHolder() = default;
 
 
   PortConnectListenerHolder::~PortConnectListenerHolder()
@@ -159,9 +157,7 @@ namespace RTC
    * @class PortConnectRetListener holder class
    * @endif
    */
-  PortConnectRetListenerHolder::PortConnectRetListenerHolder()
-  {
-  }
+  PortConnectRetListenerHolder::PortConnectRetListenerHolder() = default;
 
 
   PortConnectRetListenerHolder::~PortConnectRetListenerHolder()
@@ -224,13 +220,9 @@ namespace RTC
    * @class PortConnectListeners  class
    * @endif
    */
-  PortConnectListeners::PortConnectListeners()
-  {
-  }
+  PortConnectListeners::PortConnectListeners() = default;
 
-  PortConnectListeners::~PortConnectListeners()
-  {
-  }
+  PortConnectListeners::~PortConnectListeners() = default;
 
 } // namespace RTC
 

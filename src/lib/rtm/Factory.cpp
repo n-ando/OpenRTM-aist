@@ -65,9 +65,7 @@ namespace RTC
    * @brief Destructor
    * @endif
    */
-  FactoryBase::~FactoryBase()
-  {
-  }
+  FactoryBase::~FactoryBase() = default;
 
   /*!
    * @if jp

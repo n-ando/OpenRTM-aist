@@ -139,8 +139,7 @@ namespace RTC
      * @endif
      */
     ~RingBuffer() override
-    {
-    }
+    = default;
 
     /*!
      * @if jp

@@ -77,9 +77,7 @@ namespace RTC
    * @brief dtor
    * @endif
    */
-  ExtendedFsmServiceProvider::~ExtendedFsmServiceProvider()
-  {
-  }
+  ExtendedFsmServiceProvider::~ExtendedFsmServiceProvider() = default;
 
   /*!
    * @if jp

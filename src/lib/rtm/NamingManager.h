@@ -76,7 +76,7 @@ namespace RTC
      *
      * @endif
      */
-    NamingBase() {}
+    NamingBase() = default;
 
     /*!
      * @if jp
@@ -89,7 +89,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~NamingBase() {}
+    virtual ~NamingBase() = default;
 
     /*!
      * @if jp
@@ -281,7 +281,7 @@ namespace RTC
      *
      * @endif
      */
-    ~NamingOnCorba() override {}
+    ~NamingOnCorba() override = default;
 
     /*!
      * @if jp
@@ -470,7 +470,7 @@ namespace RTC
      *
      * @endif
      */
-	 ~NamingOnManager() override{}
+	 ~NamingOnManager() override = default;
     
     /*!
      * @if jp

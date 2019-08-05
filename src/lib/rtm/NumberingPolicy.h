@@ -81,7 +81,7 @@ namespace RTM
      *
      * @endif
      */
-    ~ProcessUniquePolicy() override{}
+    ~ProcessUniquePolicy() override = default;
     
     /*!
      * @if jp

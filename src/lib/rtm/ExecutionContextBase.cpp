@@ -38,9 +38,7 @@ namespace RTC
    * @brief Virtual Destructor
    * @endif
    */
-  ExecutionContextBase::~ExecutionContextBase()
-  {
-  }
+  ExecutionContextBase::~ExecutionContextBase() = default;
 
   /*!
    * @if jp

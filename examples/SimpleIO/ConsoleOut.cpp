@@ -50,9 +50,7 @@ ConsoleOut::ConsoleOut(RTC::Manager* manager)
 
 }
 
-ConsoleOut::~ConsoleOut()
-{
-}
+ConsoleOut::~ConsoleOut() = default;
 
 
 RTC::ReturnCode_t ConsoleOut::onInitialize()

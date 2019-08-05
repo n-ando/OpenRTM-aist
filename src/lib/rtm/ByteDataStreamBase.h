@@ -216,9 +216,7 @@ namespace RTC
      *
      * @endif
      */
-    ByteDataStream()
-    {
-    }
+    ByteDataStream() = default;
 
     /*!
      * @if jp
@@ -235,9 +233,7 @@ namespace RTC
      *
      * @endif
      */
-    ~ByteDataStream() override
-    {
-    }
+    ~ByteDataStream() override = default;
 
     /*!
      * @if jp

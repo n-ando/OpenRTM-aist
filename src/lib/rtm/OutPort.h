@@ -142,8 +142,7 @@ namespace RTC
      * @endif
      */
     ~OutPort() override
-    {
-    }
+    = default;
 
     /*!
      * @if jp

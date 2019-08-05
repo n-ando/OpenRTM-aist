@@ -521,7 +521,7 @@ namespace RTC
      * @brief Destructor
      * @endif
      */
-    ~ConnectorDataListenerT() override {}
+    ~ConnectorDataListenerT() override = default;
 
     /*!
      * @if jp

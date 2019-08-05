@@ -49,9 +49,7 @@ namespace SDOPackage
    * @brief Destructor
    * @endif
    */
-  PeriodicECOrganization::~PeriodicECOrganization()
-  {
-  }
+  PeriodicECOrganization::~PeriodicECOrganization() = default;
 
   /*!
    * @if jp
@@ -587,7 +585,7 @@ namespace RTC
   public:
     explicit setCallback(::SDOPackage::PeriodicECOrganization* org)
            : m_org(org) {}
-    ~setCallback() override {}
+    ~setCallback() override = default;
     void operator()(const coil::Properties&  /*config_set*/) override
     {
       m_org->updateDelegatedPorts();
@@ -603,7 +601,7 @@ namespace RTC
   public:
     explicit addCallback(::SDOPackage::PeriodicECOrganization* org)
            : m_org(org) {}
-    ~addCallback() override {}
+    ~addCallback() override = default;
     void operator()(const coil::Properties&  /*config_set*/) override
     {
       m_org->updateDelegatedPorts();

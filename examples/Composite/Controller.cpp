@@ -35,9 +35,7 @@ Controller::Controller(RTC::Manager* manager)
 {
 }
 
-Controller::~Controller()
-{
-}
+Controller::~Controller() = default;
 
 
 RTC::ReturnCode_t Controller::onInitialize()

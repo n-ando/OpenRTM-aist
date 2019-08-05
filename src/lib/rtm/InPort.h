@@ -149,7 +149,7 @@ namespace RTC
      *
      * @endif
      */
-    ~InPort() override {}
+    ~InPort() override = default;
 
     /*!
      * @if jp

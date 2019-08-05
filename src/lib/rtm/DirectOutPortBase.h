@@ -58,9 +58,7 @@ namespace RTC
 	*
 	* @endif
 	*/
-	~DirectOutPortBase() override
-	{
-	}
+	~DirectOutPortBase() override = default;
 	/*!
 	* @if jp
 	* @brief データの取得

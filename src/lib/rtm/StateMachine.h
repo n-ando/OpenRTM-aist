@@ -296,8 +296,7 @@ namespace RTC_Utils
     }
 
     virtual ~StateMachine()
-    {
-    }
+    = default;
 
     StateMachine(const StateMachine& other)
       : m_num(other.m_num),

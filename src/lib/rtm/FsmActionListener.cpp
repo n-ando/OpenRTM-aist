@@ -29,7 +29,7 @@ namespace RTC
    * @class PostFsmActionListener class
    * @endif
    */
-  PostFsmActionListener::~PostFsmActionListener(){}
+  PostFsmActionListener::~PostFsmActionListener() = default;
 
   /*!
    * @if jp
@@ -38,7 +38,7 @@ namespace RTC
    * @class PreFsmActionListener class
    * @endif
    */
-  PreFsmActionListener::~PreFsmActionListener(){}
+  PreFsmActionListener::~PreFsmActionListener() = default;
 
   /*!
    * @if jp
@@ -47,7 +47,7 @@ namespace RTC
    * @class PortActionListener class
    * @endif
    */
-  FsmProfileListener::~FsmProfileListener(){}
+  FsmProfileListener::~FsmProfileListener() = default;
 
   /*!
    * @if jp
@@ -56,7 +56,7 @@ namespace RTC
    * @class PortActionListener class
    * @endif
    */
-  FsmStructureListener::~FsmStructureListener(){}
+  FsmStructureListener::~FsmStructureListener() = default;
 
   /*!
    * @if jp
@@ -65,9 +65,9 @@ namespace RTC
    * @class FsmActionListeners class
    * @endif
    */
-  FsmActionListeners::FsmActionListeners(){}
+  FsmActionListeners::FsmActionListeners() = default;
 
-  FsmActionListeners::~FsmActionListeners(){}
+  FsmActionListeners::~FsmActionListeners() = default;
 
   //============================================================
   /*!
@@ -77,9 +77,7 @@ namespace RTC
    * @class PreFsmActionListener holder class
    * @endif
    */
-  PreFsmActionListenerHolder::PreFsmActionListenerHolder()
-  {
-  }
+  PreFsmActionListenerHolder::PreFsmActionListenerHolder() = default;
 
   PreFsmActionListenerHolder::~PreFsmActionListenerHolder()
   {
@@ -138,9 +136,7 @@ namespace RTC
    * @class PostFsmActionListener holder class
    * @endif
    */
-  PostFsmActionListenerHolder::PostFsmActionListenerHolder()
-  {
-  }
+  PostFsmActionListenerHolder::PostFsmActionListenerHolder() = default;
 
   PostFsmActionListenerHolder::~PostFsmActionListenerHolder()
   {
@@ -197,9 +193,7 @@ namespace RTC
    * @class FsmProfileListener holder class
    * @endif
    */
-  FsmProfileListenerHolder::FsmProfileListenerHolder()
-  {
-  }
+  FsmProfileListenerHolder::FsmProfileListenerHolder() = default;
 
   FsmProfileListenerHolder::~FsmProfileListenerHolder()
   {
@@ -256,9 +250,7 @@ namespace RTC
    * @class FsmStructureListener holder class
    * @endif
    */
-  FsmStructureListenerHolder::FsmStructureListenerHolder()
-  {
-  }
+  FsmStructureListenerHolder::FsmStructureListenerHolder() = default;
 
   FsmStructureListenerHolder::~FsmStructureListenerHolder()
   {

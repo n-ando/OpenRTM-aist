@@ -103,7 +103,7 @@ namespace coil
 
 #if defined(COIL_OS_LINUX) || defined(COIL_OS_DARWIN) || defined(COIL_OS_QNX)
 
-  UUID_Generator::UUID_Generator() {}
+  UUID_Generator::UUID_Generator() = default;
 
   void UUID_Generator::init() {}
   UUID* UUID_Generator::generateUUID(int  /*varsion*/, int  /*variant*/)

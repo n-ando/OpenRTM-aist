@@ -50,9 +50,7 @@ ConsoleOutDouble::ConsoleOutDouble(RTC::Manager* manager)
 
 }
 
-ConsoleOutDouble::~ConsoleOutDouble()
-{
-}
+ConsoleOutDouble::~ConsoleOutDouble() = default;
 
 
 RTC::ReturnCode_t ConsoleOutDouble::onInitialize()

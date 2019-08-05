@@ -41,9 +41,7 @@ MyServiceConsumer::MyServiceConsumer(RTC::Manager* manager)
 {
 }
 
-MyServiceConsumer::~MyServiceConsumer()
-{
-}
+MyServiceConsumer::~MyServiceConsumer() = default;
 
 
 RTC::ReturnCode_t MyServiceConsumer::onInitialize()

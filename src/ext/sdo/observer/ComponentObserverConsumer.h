@@ -419,7 +419,7 @@ namespace RTC
           m_last(std::chrono::steady_clock::now())
       {
       }
-      ~DataPortAction() override {}
+      ~DataPortAction() override = default;
 
       ReturnCode operator()(ConnectorInfo&  /*info*/,
                             ByteData&  /*data*/, const std::string& /*marsharingtype*/) override

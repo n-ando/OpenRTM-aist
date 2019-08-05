@@ -53,9 +53,7 @@ Microwave::Microwave(RTC::Manager* manager)
 
 }
 
-Microwave::~Microwave()
-{
-}
+Microwave::~Microwave() = default;
 
 
 RTC::ReturnCode_t Microwave::onInitialize()

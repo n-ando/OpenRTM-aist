@@ -116,7 +116,7 @@ namespace RTC
       : Macho::Machine<TOP>(), rtComponent(comp)
     {
     }
-    ~Machine() override {}
+    ~Machine() override = default;
     virtual RingBuffer<EventBase*>& getBuffer()
     {
         return m_buffer;
@@ -168,9 +168,7 @@ namespace RTC
       : Macho::Link<C, P>(instance), rtComponent(nullptr)
     {
     }
-    ~Link() override
-    {
-    }
+    ~Link() override = default;
 
     void setrtc()
     {

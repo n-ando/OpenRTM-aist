@@ -200,7 +200,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~ConfigBase() {}
+    virtual ~ConfigBase() = default;
 
     // typedef of ConfigAdmin's member function
     typedef void (ConfigAdmin::*CallbackFunc)(const char*, const char*);
@@ -399,7 +399,7 @@ namespace RTC
      *
      * @endif
      */
-    ~Config() override {}
+    ~Config() override = default;
 
     /*!
      * @if jp

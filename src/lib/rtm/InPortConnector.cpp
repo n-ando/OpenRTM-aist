@@ -44,9 +44,7 @@ namespace RTC
    * @brief Destructor
    * @endif
    */
-  InPortConnector::~InPortConnector()
-  {
-  }
+  InPortConnector::~InPortConnector() = default;
 
   /*!
    * @if jp

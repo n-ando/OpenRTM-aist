@@ -186,7 +186,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~OutPortConsumer() {}
+    virtual ~OutPortConsumer() = default;
 
     /*!
      * @if jp

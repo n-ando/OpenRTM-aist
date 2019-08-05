@@ -60,10 +60,7 @@ DataListener::DataListener(Analyzer *comp) : m_comp(comp)
 
 }
 
-DataListener::~DataListener()
-{
-
-}
+DataListener::~DataListener() = default;
 
 
 
@@ -86,9 +83,7 @@ Analyzer::Analyzer(RTC::Manager* manager)
 /*!
  * @brief destructor
  */
-Analyzer::~Analyzer()
-{
-}
+Analyzer::~Analyzer() = default;
 
 
 

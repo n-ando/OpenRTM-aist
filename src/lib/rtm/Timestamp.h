@@ -62,7 +62,7 @@ namespace RTC
     USE_CONNLISTENER_STATUS;
   public:
     Timestamp(const char* ts_type) : m_tstype(ts_type) {}
-    ~Timestamp() override {}
+    ~Timestamp() override = default;
     ReturnCode operator()(ConnectorInfo& info, DataType& data) override
     {
       if (info.properties["timestamp_policy"] != m_tstype)

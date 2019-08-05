@@ -94,7 +94,7 @@ namespace RTC
      *
      * @endif
      */
-    CorbaConsumerBase() {}
+    CorbaConsumerBase() = default;
 
     /*!
      * @if jp
@@ -343,7 +343,7 @@ namespace RTC
      *
      * @endif
      */
-    CorbaConsumer() {}
+    CorbaConsumer() = default;
 
     /*!
      * @if jp

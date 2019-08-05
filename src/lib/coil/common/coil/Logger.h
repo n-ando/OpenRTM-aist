@@ -223,9 +223,7 @@ namespace coil
           {
           }
 
-          virtual ~Stream()
-          {
-          }
+          virtual ~Stream() = default;
 
           Stream(const Stream& x)
               : stream_(x.stream_), cleanup_(false)
@@ -542,7 +540,7 @@ namespace coil
        *
        * @endif
        */
-      virtual ~LogStream() {}
+      virtual ~LogStream() = default;
       LogStreamBuffer* ostream_type;
 
   private:

@@ -89,9 +89,7 @@ namespace RTC
    * @brief Destructor
    * @endif
    */
-  ManagerConfig::~ManagerConfig()
-  {
-  }
+  ManagerConfig::~ManagerConfig() = default;
 
   /*!
    * @if jp

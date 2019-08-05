@@ -50,9 +50,7 @@ ConsoleInShort::ConsoleInShort(RTC::Manager* manager)
 
 }
 
-ConsoleInShort::~ConsoleInShort()
-{
-}
+ConsoleInShort::~ConsoleInShort() = default;
 
 
 RTC::ReturnCode_t ConsoleInShort::onInitialize()

@@ -88,7 +88,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~PortAdmin() {}
+    virtual ~PortAdmin() = default;
 
     /*!
      * @if jp

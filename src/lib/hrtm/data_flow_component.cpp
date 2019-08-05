@@ -22,9 +22,7 @@ namespace hrtm
     : RTC::DataFlowComponentBase(&RTC::Manager::instance())
   {
   }
-  DataFlowComponent::~DataFlowComponent()
-  {
-  }
+  DataFlowComponent::~DataFlowComponent() = default;
   RTC::ReturnCode_t DataFlowComponent::initialize()
   {
     return RTC::RTC_OK;

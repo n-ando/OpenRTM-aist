@@ -110,7 +110,7 @@ class State;
 // Data for states which don't declare own Data class.
 class EmptyData {
  public:
-  EmptyData() {}
+  EmptyData() = default;
 };
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -130,7 +130,7 @@ struct KeyInit {
 // and exit actions of user's top state.
 class EXPORT_DLL StateBase {
  public:
-  virtual ~StateBase() {}
+  virtual ~StateBase() = default;
 
   // Get unique name of state.
   static Key key() {
@@ -619,7 +619,7 @@ class SubStateInfo : public StateInfo {
 // Generic interface for event objects (available only to MachineBase)
 class EventBase {
  public:
-  virtual ~EventBase() {}
+  virtual ~EventBase() = default;
   virtual void dispatch(StateInfo &) = 0;
 };
 

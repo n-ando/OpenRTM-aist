@@ -58,9 +58,7 @@ Analyzer_test::Analyzer_test(RTC::Manager* manager)
 /*!
  * @brief destructor
  */
-Analyzer_test::~Analyzer_test()
-{
-}
+Analyzer_test::~Analyzer_test() = default;
 
 
 

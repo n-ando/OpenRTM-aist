@@ -29,9 +29,7 @@ namespace RTM
    * @class ManagerActionListener class
    * @endif
    */
-  ManagerActionListener::~ManagerActionListener()
-  {
-  }
+  ManagerActionListener::~ManagerActionListener() = default;
 
   /*!
    * @if jp
@@ -40,9 +38,7 @@ namespace RTM
    * @class ManagerActionListenerHolder class
    * @endif
    */
-  ManagerActionListenerHolder::~ManagerActionListenerHolder()
-  {
-  }
+  ManagerActionListenerHolder::~ManagerActionListenerHolder() = default;
 
   /*!
    * @if jp
@@ -51,9 +47,7 @@ namespace RTM
    * @class ManagerActionListeners class
    * @endif
    */
-  ManagerActionListeners::~ManagerActionListeners()
-  {
-  }
+  ManagerActionListeners::~ManagerActionListeners() = default;
 
   /*!
    * @if jp
@@ -120,9 +114,7 @@ namespace RTM
    * @class ModuleActionListener class
    * @endif
    */
-  ModuleActionListener::~ModuleActionListener()
-  {
-  }
+  ModuleActionListener::~ModuleActionListener() = default;
 
   /*!
    * @if jp
@@ -131,9 +123,7 @@ namespace RTM
    * @class ModuleActionListener holder class
    * @endif
    */
-  ModuleActionListenerHolder::~ModuleActionListenerHolder()
-  {
-  }
+  ModuleActionListenerHolder::~ModuleActionListenerHolder() = default;
 
   /*!
    * @if jp
@@ -204,9 +194,7 @@ namespace RTM
    * @brief RtcLifecycleActionListener class
    * @endif
    */
-  RtcLifecycleActionListener::~RtcLifecycleActionListener()
-  {
-  }
+  RtcLifecycleActionListener::~RtcLifecycleActionListener() = default;
 
   /*!
    * @if jp
@@ -215,9 +203,7 @@ namespace RTM
    * @brief Destructor
    * @endif
    */
-  RtcLifecycleActionListenerHolder::~RtcLifecycleActionListenerHolder()
-  {
-  }
+  RtcLifecycleActionListenerHolder::~RtcLifecycleActionListenerHolder() = default;
 
   /*!
    * @if jp
@@ -312,9 +298,7 @@ namespace RTM
    * @brief Destructor
    * @endif
    */
-  NamingActionListener::~NamingActionListener()
-  {
-  }
+  NamingActionListener::~NamingActionListener() = default;
 
   /*!
    * @if jp
@@ -323,9 +307,7 @@ namespace RTM
    * @brief Destructor
    * @endif
    */
-  NamingActionListenerHolder::~NamingActionListenerHolder()
-  {
-  }
+  NamingActionListenerHolder::~NamingActionListenerHolder() = default;
 
   /*!
    * @if jp
@@ -396,9 +378,7 @@ namespace RTM
    * @brief Destructor
    * @endif
    */
-  LocalServiceActionListener::~LocalServiceActionListener()
-  {
-  }
+  LocalServiceActionListener::~LocalServiceActionListener() = default;
 
   /*!
    * @if jp
@@ -407,9 +387,7 @@ namespace RTM
    * @brief Destructor
    * @endif
    */
-  LocalServiceActionListenerHolder::~LocalServiceActionListenerHolder()
-  {
-  }
+  LocalServiceActionListenerHolder::~LocalServiceActionListenerHolder() = default;
 
   /*!
    * @if jp

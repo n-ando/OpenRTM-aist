@@ -3024,9 +3024,7 @@ namespace RTC
       m_insref = obj;
   }
 
-  RTObject_impl::SdoServiceConsumerTerminator::SdoServiceConsumerTerminator()
-    {
-    }
+  RTObject_impl::SdoServiceConsumerTerminator::SdoServiceConsumerTerminator() = default;
   void RTObject_impl::SdoServiceConsumerTerminator::setSdoServiceConsumer(SdoServiceAdmin* sdoservice, const char* id)
     {
       m_sdoservice = sdoservice;

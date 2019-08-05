@@ -158,7 +158,7 @@ namespace coil
      *
      * @endif
      */
-    Singleton() {}
+    Singleton() = default;
 
     /*!
      * @if jp
@@ -175,7 +175,7 @@ namespace coil
      *
      * @endif
      */
-    ~Singleton() {}
+    ~Singleton() = default;
 
   private:
     Singleton(const Singleton& x) = delete;

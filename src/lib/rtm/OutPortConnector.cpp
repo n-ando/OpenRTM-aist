@@ -43,9 +43,7 @@ namespace RTC
    * @brief Destructor
    * @endif
    */
-  OutPortConnector::~OutPortConnector()
-  {
-  }
+  OutPortConnector::~OutPortConnector() = default;
   /*!
    * @if jp
    * @brief ConnectorInfo 取得

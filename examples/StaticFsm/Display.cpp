@@ -50,9 +50,7 @@ Display::Display(RTC::Manager* manager)
 
 }
 
-Display::~Display()
-{
-}
+Display::~Display() = default;
 
 
 RTC::ReturnCode_t Display::onInitialize()

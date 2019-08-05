@@ -116,9 +116,7 @@ namespace SDOPackage
    * @brief Virtual destructor
    * @endif
    */
-  Configuration_impl::~Configuration_impl()
-  {
-  }
+  Configuration_impl::~Configuration_impl() = default;
 
 
   //============================================================

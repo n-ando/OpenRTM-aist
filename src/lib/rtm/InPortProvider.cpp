@@ -41,9 +41,7 @@ namespace RTC
    * @brief Destructor
    * @endif
    */
-  InPortProvider::~InPortProvider()
-  {
-  }
+  InPortProvider::~InPortProvider() = default;
 
   /*!
    * @if jp

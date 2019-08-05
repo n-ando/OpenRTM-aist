@@ -38,9 +38,7 @@ Motor::Motor(RTC::Manager* manager)
 {
 }
 
-Motor::~Motor()
-{
-}
+Motor::~Motor() = default;
 
 
 RTC::ReturnCode_t Motor::onInitialize()

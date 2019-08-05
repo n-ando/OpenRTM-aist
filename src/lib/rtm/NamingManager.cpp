@@ -550,9 +550,7 @@ namespace RTC
    * @brief Destructor
    * @endif
    */
-  NamingManager::~NamingManager()
-  {
-  }
+  NamingManager::~NamingManager() = default;
 
   /*!
    * @if jp

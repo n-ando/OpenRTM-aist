@@ -29,7 +29,7 @@ namespace RTC
    * @class PostComponentActionListener class
    * @endif
    */
-  PostComponentActionListener::~PostComponentActionListener() {}
+  PostComponentActionListener::~PostComponentActionListener() = default;
 
   /*!
    * @if jp
@@ -38,7 +38,7 @@ namespace RTC
    * @class PreComponentActionListener class
    * @endif
    */
-  PreComponentActionListener::~PreComponentActionListener() {}
+  PreComponentActionListener::~PreComponentActionListener() = default;
 
   /*!
    * @if jp
@@ -47,7 +47,7 @@ namespace RTC
    * @class PortActionListener class
    * @endif
    */
-  PortActionListener::~PortActionListener() {}
+  PortActionListener::~PortActionListener() = default;
 
   /*!
    * @if jp
@@ -56,7 +56,7 @@ namespace RTC
    * @class ExecutionContextActionListener class
    * @endif
    */
-  ExecutionContextActionListener::~ExecutionContextActionListener() {}
+  ExecutionContextActionListener::~ExecutionContextActionListener() = default;
 
 
 
@@ -70,9 +70,7 @@ namespace RTC
    * @class PreComponentActionListener holder class
    * @endif
    */
-  PreComponentActionListenerHolder::PreComponentActionListenerHolder()
-  {
-  }
+  PreComponentActionListenerHolder::PreComponentActionListenerHolder() = default;
 
 
   PreComponentActionListenerHolder::~PreComponentActionListenerHolder()
@@ -136,9 +134,7 @@ namespace RTC
    * @class PostComponentActionListener holder class
    * @endif
    */
-  PostComponentActionListenerHolder::PostComponentActionListenerHolder()
-  {
-  }
+  PostComponentActionListenerHolder::PostComponentActionListenerHolder() = default;
 
 
   PostComponentActionListenerHolder::~PostComponentActionListenerHolder()
@@ -201,9 +197,7 @@ namespace RTC
    * @class PortActionListener holder class
    * @endif
    */
-  PortActionListenerHolder::PortActionListenerHolder()
-  {
-  }
+  PortActionListenerHolder::PortActionListenerHolder() = default;
 
 
   PortActionListenerHolder::~PortActionListenerHolder()
@@ -266,9 +260,7 @@ namespace RTC
    * @class ExecutionContextActionListener holder class
    * @endif
    */
-  ExecutionContextActionListenerHolder::ExecutionContextActionListenerHolder()
-  {
-  }
+  ExecutionContextActionListenerHolder::ExecutionContextActionListenerHolder() = default;
 
 
   ExecutionContextActionListenerHolder::~ExecutionContextActionListenerHolder()
@@ -339,9 +331,7 @@ namespace RTC
      * @brief Constructor
      * @endif
      */
-  ComponentActionListeners::ComponentActionListeners()
-    {
-    }
+  ComponentActionListeners::ComponentActionListeners() = default;
     /*!
      * @if jp
      * @brief デストラクタ
@@ -349,8 +339,6 @@ namespace RTC
      * @brief Destructor
      * @endif
      */
-  ComponentActionListeners::~ComponentActionListeners()
-    {
-    }
+  ComponentActionListeners::~ComponentActionListeners() = default;
 } // namespace RTC
 

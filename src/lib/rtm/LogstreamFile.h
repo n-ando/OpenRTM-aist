@@ -59,7 +59,7 @@ namespace RTC
        *
        * @endif
        */
-      FileStreamBase(){}
+      FileStreamBase() = default;
       /*!
        * @if jp
        *
@@ -75,7 +75,7 @@ namespace RTC
        *
        * @endif
        */
-      ~FileStreamBase() override {}
+      ~FileStreamBase() override = default;
       /*!
        * @if jp
        *
