@@ -43,7 +43,7 @@ namespace hrtm
   {
   public:
     DataFlowComponent();
-    virtual ~DataFlowComponent();
+    ~DataFlowComponent() override;
     RTC::ReturnCode_t initialize() override;
     virtual void updateFsmStatus(RTC::StatusKind status_kind,
                                  const char* state);

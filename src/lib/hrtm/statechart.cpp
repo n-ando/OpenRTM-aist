@@ -274,11 +274,10 @@ void MachineBase::perform_deferred_events() {
   if (deferred_events_.empty()) {
     return;
   }
-  for (EventNames::iterator i = deferred_names_.begin();
-    i != deferred_names_.end(); ++i) {
+  for (auto & deferred_name : deferred_names_) {
     if (current_state_) {
-      deferred_events_[(*i)]->dispatch(*current_state_);
-      delete deferred_events_[(*i)];
+      deferred_events_[deferred_name]->dispatch(*current_state_);
+      delete deferred_events_[deferred_name];
     }
   }
   deferred_events_.clear();

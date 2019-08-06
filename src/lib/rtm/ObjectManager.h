@@ -86,7 +86,7 @@ public:
    *
    * @endif
    */
-  ~ObjectManager(void) {}
+  ~ObjectManager() {}
 
   /*!
    * @if jp
