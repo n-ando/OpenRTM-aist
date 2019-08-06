@@ -58,7 +58,7 @@ namespace hrtm
 
   public:
     template<typename CompType>
-    bool regist(coil::Properties* profile, const char*, const char*)
+    bool regist(coil::Properties* profile, const char* /*unused*/, const char* /*unused*/)
     {
       return RTC::Manager::
         registerFactory(*profile,

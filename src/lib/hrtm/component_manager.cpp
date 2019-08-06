@@ -54,10 +54,10 @@ namespace hrtm
   {
    
     // DCL for singleton
-    if (!manager)
+    if (manager == nullptr)
       {
         std::lock_guard<std::mutex> guard(mutex);
-        if (!manager)
+        if (manager == nullptr)
           {
             manager = new ComponentManager();
 
