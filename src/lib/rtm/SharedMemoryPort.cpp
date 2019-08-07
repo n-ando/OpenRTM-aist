@@ -256,17 +256,23 @@ namespace RTC
 	  }
       CORBA_CdrMemoryStream data_size_cdr;
 
+      //データサイズ(ULongLong型)をCDR形式でシリアライズする
       data_size_cdr.setEndian(m_endian);
       if (!data_size_cdr.serializeCDR(data_size))
       {
           return;
       }
-      int ret = m_shmem.write((char*)data_size_cdr.getBuffer(), 0, sizeof(CORBA::ULongLong));
-
-	  if (ret == 0)
-	  {
-          m_shmem.write(reinterpret_cast<char*>(data.getBuffer()), sizeof(CORBA::ULongLong), data.getDataLength());
-	  }
+      //シリアライズしたデータのサイズが8の場合には共有メモリにデータサイズ(CDR形式)を書き込み
+      if (data_size_cdr.getCdrDataLength() == static_cast<unsigned long>(sizeof(CORBA::ULongLong)))
+      {
+          //データサイズ(CDR形式)を共有メモリに書き込み
+          int ret = m_shmem.write(reinterpret_cast<const char*>(data_size_cdr.getBuffer()), 0, sizeof(CORBA::ULongLong));
+          if (ret == 0)
+          {
+              //データサイズの後の領域に送信データを書き込み
+              m_shmem.write(reinterpret_cast<const char*>(data.getBuffer()), sizeof(CORBA::ULongLong), data.getDataLength());
+          }
+      }
 
   }
   /*!

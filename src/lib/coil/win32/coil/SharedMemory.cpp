@@ -111,10 +111,10 @@ namespace coil
   {
     m_shm_address = shm_address;
     m_memory_size = memory_size;
-    LONG highsize = static_cast<LONG>(m_memory_size >> 32) & 0xFFFFFFFF;
+    LONG highsize = static_cast<LONG>((m_memory_size >> 32) & 0xFFFFFFFF);
     LONG lowsize = static_cast<LONG>(m_memory_size & 0xFFFFFFFF);
     m_handle = CreateFileMapping(
-        (HANDLE)INVALID_HANDLE_VALUE,
+        static_cast<HANDLE>(INVALID_HANDLE_VALUE),
 		nullptr,
 		PAGE_READWRITE | SEC_COMMIT,
         static_cast<DWORD>(highsize),
@@ -260,11 +260,8 @@ namespace coil
     	{
     		return -1;
     	}
-	    else
-	    {
-            m_handle = nullptr;
-		    return 0;
-	    }
+        m_handle = nullptr;
+        return 0;
     }
     return 0;
 
