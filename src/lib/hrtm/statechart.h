@@ -204,7 +204,7 @@ public:
     }
     // Update superstate's history information:
     void set_history_super(StateInfo & deep) {
-        if (parent_) {
+        if (parent_ != nullptr) {
             // Let it choose between deep or shallow history.
             parent_->save_history(*this, deep);
         }
@@ -213,7 +213,7 @@ public:
     void set_data(void * data) {
         assert(!data_);
 
-        if (data_place) {
+        if (data_place != nullptr) {
             // Free cached memory of previously used data.
             ::operator delete(data_place);
             data_place = nullptr;
@@ -239,7 +239,7 @@ public:
     virtual const char * name() const = 0;
     // Is 'state' a superstate?
     bool is_child(StateInfo & state) const {
-        return this == &state || (parent_ && parent_->is_child(state));
+        return this == &state || ((parent_ != nullptr) && parent_->is_child(state));
     }
     StateBase & instance() {
         assert(instance_);
@@ -349,7 +349,7 @@ class StateAlias {
   // Clones object.
   // Will call copy constructor of data.
   StateAlias clone() {
-    return StateAlias(character_, data_ ? (character_->clone)(data_) : nullptr);
+    return StateAlias(character_, data_ != nullptr ? (character_->clone)(data_) : nullptr);
   }
   StateInfo & get_info(MachineBase & machine) const {
     return (character_->get_info)(machine);
@@ -800,7 +800,7 @@ template<class C, class P>
 inline StateInfo & Link<C, P>::get_info(MachineBase & machine) {
   // Look first in machine for existing StateInfo.
   StateInfo * & info = machine.get_info(key());
-  if (!info) {
+  if (info == nullptr) {
     // Will create parent StateInfo object if not already created.
     info = new SubStateInfo<C>(machine, &P::get_info(machine));
   }
@@ -982,7 +982,7 @@ class Machine : public MachineBase {
   void clear_history_deep(StateInfo & state) {
     for (unsigned int i = 0; i < the_state_count_; ++i) {
       StateInfo * s = states_[i];
-      if (s && s->is_child(state))
+      if ((s != nullptr) && s->is_child(state))
         s->set_history(nullptr);
     }
   }

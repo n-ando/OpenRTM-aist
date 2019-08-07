@@ -728,7 +728,7 @@ namespace RTC_exp
     void setPriority(coil::Properties& prop);
     void setPolicy(coil::Properties& prop);
     void setWaitOffset(coil::Properties& prop);
-    bool getWakeUpTime(std::chrono::high_resolution_clock::time_point& ts,
+    bool getWakeUpTime(std::chrono::high_resolution_clock::time_point& tw,
                        const std::chrono::high_resolution_clock::time_point& t0,
                        const std::chrono::high_resolution_clock::time_point& t1);
 
