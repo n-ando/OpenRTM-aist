@@ -138,8 +138,7 @@ namespace RTC
      *
      * @endif
      */
-    ~RingBuffer() override
-    = default;
+    ~RingBuffer() override;
 
     /*!
      * @if jp
@@ -1066,6 +1065,8 @@ namespace RTC
      */
     condition m_full;
   };
+
+  template <class T> RingBuffer<T>::~RingBuffer() = default; // no-inline because of its size.
 } // namespace RTC
 
 #endif  // RTC_RINGBUFFER_H

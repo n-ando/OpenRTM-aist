@@ -63,6 +63,8 @@ namespace RTC
       }
   }
 
+  CorbaNaming::~CorbaNaming() = default; // No inline for gcc warning, too big
+
   /*!
    * @if jp
    * @brief ネーミングサービスの初期化

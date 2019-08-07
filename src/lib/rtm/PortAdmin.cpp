@@ -109,6 +109,8 @@ namespace RTC
   {
   }
 
+  PortAdmin::~PortAdmin() = default; // No inline for gcc warning, too big
+
   /*!
    * @if jp
    * @brief PortServiceList の取得

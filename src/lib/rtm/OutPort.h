@@ -141,8 +141,7 @@ namespace RTC
      *
      * @endif
      */
-    ~OutPort() override
-    = default;
+    ~OutPort() override;
 
     /*!
      * @if jp
@@ -534,6 +533,8 @@ namespace RTC
     bool m_directNewData;
     DataType m_directValue;
   };
+
+  template <class T> OutPort<T>::~OutPort() = default; // No inline for gcc warning, too big
 } // namespace RTC
 
 #endif  // RTC_OUTPORT_H
