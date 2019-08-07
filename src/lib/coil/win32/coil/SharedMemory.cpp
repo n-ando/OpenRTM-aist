@@ -111,14 +111,14 @@ namespace coil
   {
     m_shm_address = shm_address;
     m_memory_size = memory_size;
-    LONG highsize = static_cast<LONG>((m_memory_size >> 32) & 0xFFFFFFFF);
-    LONG lowsize = static_cast<LONG>(m_memory_size & 0xFFFFFFFF);
+    DWORD highsize = static_cast<DWORD>((m_memory_size >> 32) & 0xFFFFFFFF);
+    DWORD lowsize = static_cast<DWORD>(m_memory_size & 0xFFFFFFFF);
     m_handle = CreateFileMapping(
         static_cast<HANDLE>(INVALID_HANDLE_VALUE),
 		nullptr,
 		PAGE_READWRITE | SEC_COMMIT,
-        static_cast<DWORD>(highsize),
-        static_cast<DWORD>(lowsize),
+        highsize,
+        lowsize,
 		shm_address.c_str());
 
     m_shm = static_cast<char *>(MapViewOfFile(m_handle, FILE_MAP_ALL_ACCESS, 0, 0, 0));
