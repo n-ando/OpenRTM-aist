@@ -70,7 +70,7 @@ namespace RTC
   {
   public:
 
-    using ConnectorList = std::vector<InPortConnector *>;
+    using ConnectorList = std::vector<InPortConnector*>;
 
     /*!
      * @if jp

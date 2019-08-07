@@ -26,8 +26,8 @@
 namespace RTC
 {
 
-  using ECNewFunc = ExecutionContextBase *(*)();
-  using ECDeleteFunc = void (*)(ExecutionContextBase *);
+  using ECNewFunc = ExecutionContextBase* (*)();
+  using ECDeleteFunc = void (*)(ExecutionContextBase*);
 
   /*!
    * @if jp

@@ -235,12 +235,12 @@ struct __SameType<T, T> {
 // (mandatory). If you have a state box declare it BEFORE macro invocation!
 #define STATE(S) \
 public: \
-	typedef S SELF; \
+	using SELF = S; \
 	/* Constructor and destructor already defined: you can't (and shouldn't) have your own! */ \
 	/* For the user a state class "constructor" and "destructor" are its entry and exit method! */ \
 	S(::Macho::_StateInstance & instance) : ::Macho::Link<S, SUPER>(instance) { \
 		/* Compile time check: S must derive directly from Link<S, SUPER> */ \
-		typedef ::__SameType< ::Macho::Link<S, SUPER>, LINK>::Check MustDeriveFromLink; \
+		using MustDeriveFromLink = ::__SameType< ::Macho::Link<S, SUPER>, LINK>::Check; \
 	} \
 	~S() {} \
 	static const char * _state_name() { return #S; } \
@@ -299,7 +299,7 @@ namespace Macho {
 	class _StateInstance;
 
 	// Unique identifier of states.
-	using Key = void *;
+	using Key = void*;
 
 	// Also an unique identifier of states, build from consecutive integers.
 	// Use Key to get to ID.
@@ -366,7 +366,7 @@ namespace Macho {
 	struct _KeyData {
 		using Generator = _StateInstance &(*)(_MachineBase &);
 		using Predicate = bool (*)(Key);
-		using NameFn = const char *(*)();
+		using NameFn = const char* (*)();
 
 		// Get StateInstance object from key.
 		const Generator instanceGenerator;
@@ -564,7 +564,7 @@ namespace Macho {
 
 	protected:
 		// Needed to perform compile time checks.
-		typedef Link<C, P> LINK;
+		using LINK = Link<C, P>;
 
 		Link(_StateInstance & instance);
 
@@ -1667,7 +1667,7 @@ namespace Macho {
 
 		Machine() {
 			// Compile time check: TOP must directly derive from TopBase<TOP>
-			typedef typename __SameType<TopBase<TOP>, typename TOP::SUPER>::Check MustDeriveFromTopBase;
+			using MustDeriveFromTopBase = typename __SameType<TopBase<TOP>, typename TOP::SUPER>::Check;
 			// suppress unused-typdefs warnig
 			static_assert(static_cast<MustDeriveFromTopBase*>(nullptr)==nullptr, "dummy");
 
@@ -1679,7 +1679,7 @@ namespace Macho {
 		// other than TOP on startup.
 		Machine(const Alias & state) {
 			// Compile time check: TOP must directly derive from TopBase<TOP>
-			typedef typename __SameType<TopBase<TOP>, typename TOP::SUPER>::Check MustDeriveFromTopBase;
+			using MustDeriveFromTopBase = typename __SameType<TopBase<TOP>, typename TOP::SUPER>::Check;
 			// suppress unused-typdefs warnig
 			static_assert(static_cast<MustDeriveFromTopBase*>(nullptr)==nullptr, "dummy");
 

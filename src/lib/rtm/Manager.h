@@ -65,7 +65,7 @@ namespace RTC
   class RTObject_impl;
   using RtcBase = RTObject_impl;
 
-  using ModuleInitProc = void (*)(Manager *);
+  using ModuleInitProc = void (*)(Manager*);
 
   /*!
    * @if jp
@@ -2186,8 +2186,8 @@ namespace RTC
       std::string m_name;
     };
 
-    typedef ObjectManager<std::string, RTObject_impl,
-                          InstanceName> ComponentManager;
+    using ComponentManager = ObjectManager<std::string, RTObject_impl,
+                                           InstanceName>;
 
     /*!
      * @if jp
@@ -2280,8 +2280,8 @@ namespace RTC
      * @brief ComponentFactory
      * @endif
      */
-    typedef ObjectManager<const coil::Properties, FactoryBase,
-                          FactoryPredicate> FactoryManager;
+    using FactoryManager = ObjectManager<const coil::Properties,
+                                         FactoryBase, FactoryPredicate>;
 
     /*!
      * @if jp
@@ -2307,9 +2307,8 @@ namespace RTC
       }
       std::string m_name;
     };
-    typedef ObjectManager<const char*,
-                          ECFactoryBase,
-                          ECFactoryPredicate> ECFactoryManager;
+    using ECFactoryManager = ObjectManager<const char*, ECFactoryBase,
+                                           ECFactoryPredicate>;
 
     /*!
      * @if jp

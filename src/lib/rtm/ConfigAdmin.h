@@ -203,7 +203,7 @@ namespace RTC
     virtual ~ConfigBase() {}
 
     // typedef of ConfigAdmin's member function
-    using CallbackFunc = void (ConfigAdmin::*)(const char *, const char *);
+    using CallbackFunc = void (ConfigAdmin::*)(const char *, const char*);
 
     /*!
      * @if jp

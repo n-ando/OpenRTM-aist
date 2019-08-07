@@ -35,7 +35,7 @@ namespace RTC
      */
     class CORBACdrDataPubSubType : public eprosima::fastrtps::TopicDataType {
     public:
-        typedef CORBACdrData type;
+        using type = CORBACdrData;
 
     	CORBACdrDataPubSubType();
     	~CORBACdrDataPubSubType() override;

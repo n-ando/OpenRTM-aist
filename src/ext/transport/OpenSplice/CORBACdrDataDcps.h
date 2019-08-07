@@ -22,42 +22,42 @@ namespace OpenRTM_OpenSplice
 
    class CORBACdrDataTypeSupportInterface;
 
-   typedef CORBACdrDataTypeSupportInterface * CORBACdrDataTypeSupportInterface_ptr;
-   typedef DDS_DCPSInterface_var < CORBACdrDataTypeSupportInterface> CORBACdrDataTypeSupportInterface_var;
-   typedef DDS_DCPSInterface_out < CORBACdrDataTypeSupportInterface> CORBACdrDataTypeSupportInterface_out;
+   using CORBACdrDataTypeSupportInterface_ptr = CORBACdrDataTypeSupportInterface *;
+   using CORBACdrDataTypeSupportInterface_var = DDS_DCPSInterface_var < CORBACdrDataTypeSupportInterface>;
+   using CORBACdrDataTypeSupportInterface_out = DDS_DCPSInterface_out < CORBACdrDataTypeSupportInterface>;
 
 
    class CORBACdrDataDataWriter;
 
-   typedef CORBACdrDataDataWriter * CORBACdrDataDataWriter_ptr;
-   typedef DDS_DCPSInterface_var < CORBACdrDataDataWriter> CORBACdrDataDataWriter_var;
-   typedef DDS_DCPSInterface_out < CORBACdrDataDataWriter> CORBACdrDataDataWriter_out;
+   using CORBACdrDataDataWriter_ptr = CORBACdrDataDataWriter *;
+   using CORBACdrDataDataWriter_var = DDS_DCPSInterface_var < CORBACdrDataDataWriter>;
+   using CORBACdrDataDataWriter_out = DDS_DCPSInterface_out < CORBACdrDataDataWriter>;
 
 
    class CORBACdrDataDataReader;
 
-   typedef CORBACdrDataDataReader * CORBACdrDataDataReader_ptr;
-   typedef DDS_DCPSInterface_var < CORBACdrDataDataReader> CORBACdrDataDataReader_var;
-   typedef DDS_DCPSInterface_out < CORBACdrDataDataReader> CORBACdrDataDataReader_out;
+   using CORBACdrDataDataReader_ptr = CORBACdrDataDataReader *;
+   using CORBACdrDataDataReader_var = DDS_DCPSInterface_var < CORBACdrDataDataReader>;
+   using CORBACdrDataDataReader_out = DDS_DCPSInterface_out < CORBACdrDataDataReader>;
 
 
    class CORBACdrDataDataReaderView;
 
-   typedef CORBACdrDataDataReaderView * CORBACdrDataDataReaderView_ptr;
-   typedef DDS_DCPSInterface_var < CORBACdrDataDataReaderView> CORBACdrDataDataReaderView_var;
-   typedef DDS_DCPSInterface_out < CORBACdrDataDataReaderView> CORBACdrDataDataReaderView_out;
+   using CORBACdrDataDataReaderView_ptr = CORBACdrDataDataReaderView *;
+   using CORBACdrDataDataReaderView_var = DDS_DCPSInterface_var < CORBACdrDataDataReaderView>;
+   using CORBACdrDataDataReaderView_out = DDS_DCPSInterface_out < CORBACdrDataDataReaderView>;
 
    struct CORBACdrDataSeq_uniq_ {};
-   typedef DDS_DCPSUVLSeq < CORBACdrData, struct CORBACdrDataSeq_uniq_> CORBACdrDataSeq;
-   typedef DDS_DCPSSequence_var < CORBACdrDataSeq> CORBACdrDataSeq_var;
-   typedef DDS_DCPSSequence_out < CORBACdrDataSeq> CORBACdrDataSeq_out;
+   using CORBACdrDataSeq = DDS_DCPSUVLSeq < CORBACdrData, struct CORBACdrDataSeq_uniq_>;
+   using CORBACdrDataSeq_var = DDS_DCPSSequence_var < CORBACdrDataSeq>;
+   using CORBACdrDataSeq_out = DDS_DCPSSequence_out < CORBACdrDataSeq>;
    class CORBACdrDataTypeSupportInterface
    :
       virtual public DDS::TypeSupport
    { 
    public:
-      typedef CORBACdrDataTypeSupportInterface_ptr _ptr_type;
-      typedef CORBACdrDataTypeSupportInterface_var _var_type;
+      using _ptr_type = CORBACdrDataTypeSupportInterface_ptr;
+      using _var_type = CORBACdrDataTypeSupportInterface_var;
 
       static CORBACdrDataTypeSupportInterface_ptr _duplicate (CORBACdrDataTypeSupportInterface_ptr obj);
       DDS::Boolean _local_is_a (const char * id);
@@ -82,8 +82,8 @@ namespace OpenRTM_OpenSplice
       virtual public DDS::DataWriter
    { 
    public:
-      typedef CORBACdrDataDataWriter_ptr _ptr_type;
-      typedef CORBACdrDataDataWriter_var _var_type;
+      using _ptr_type = CORBACdrDataDataWriter_ptr;
+      using _var_type = CORBACdrDataDataWriter_var;
 
       static CORBACdrDataDataWriter_ptr _duplicate (CORBACdrDataDataWriter_ptr obj);
       DDS::Boolean _local_is_a (const char * id);
@@ -121,8 +121,8 @@ namespace OpenRTM_OpenSplice
       virtual public DDS::DataReader
    { 
    public:
-      typedef CORBACdrDataDataReader_ptr _ptr_type;
-      typedef CORBACdrDataDataReader_var _var_type;
+      using _ptr_type = CORBACdrDataDataReader_ptr;
+      using _var_type = CORBACdrDataDataReader_var;
 
       static CORBACdrDataDataReader_ptr _duplicate (CORBACdrDataDataReader_ptr obj);
       DDS::Boolean _local_is_a (const char * id);
@@ -163,8 +163,8 @@ namespace OpenRTM_OpenSplice
       virtual public DDS::DataReaderView
    { 
    public:
-      typedef CORBACdrDataDataReaderView_ptr _ptr_type;
-      typedef CORBACdrDataDataReaderView_var _var_type;
+      using _ptr_type = CORBACdrDataDataReaderView_ptr;
+      using _var_type = CORBACdrDataDataReaderView_var;
 
       static CORBACdrDataDataReaderView_ptr _duplicate (CORBACdrDataDataReaderView_ptr obj);
       DDS::Boolean _local_is_a (const char * id);

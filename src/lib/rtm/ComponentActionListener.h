@@ -603,7 +603,7 @@ namespace RTC
    */
   class PreComponentActionListenerHolder
   {
-    typedef std::pair<PreComponentActionListener*, bool> Entry;
+    using Entry = std::pair<PreComponentActionListener*, bool>;
   public:
     /*!
      * @if jp
@@ -708,7 +708,7 @@ namespace RTC
    */
   class PostComponentActionListenerHolder
   {
-    typedef std::pair<PostComponentActionListener*, bool> Entry;
+    using Entry = std::pair<PostComponentActionListener*, bool>;
   public:
     /*!
      * @if jp
@@ -815,7 +815,7 @@ namespace RTC
    */
   class PortActionListenerHolder
   {
-    typedef std::pair<PortActionListener*, bool> Entry;
+    using Entry = std::pair<PortActionListener*, bool>;
   public:
     /*!
      * @if jp
@@ -920,7 +920,7 @@ namespace RTC
    */
   class ExecutionContextActionListenerHolder
   {
-    typedef std::pair<ExecutionContextActionListener*, bool> Entry;
+    using Entry = std::pair<ExecutionContextActionListener*, bool>;
   public:
     /*!
      * @if jp

@@ -559,18 +559,18 @@ namespace RTC
     std::string m_name;
 
     // PortProfile.interfaces
-    typedef SequenceEx<PortInterfaceProfileList,
-                       PortInterfaceProfile,
-                       std::mutex> IfProfiles;
+    using IfProfiles = SequenceEx<PortInterfaceProfileList,
+                                  PortInterfaceProfile,
+                                  std::mutex>;
     IfProfiles m_ifProfiles;
 
     // PortProfile.port_ref
     PortService_var m_portRef;
 
     // PortProfile.connector_profile
-    typedef SequenceEx<ConnectorProfileList,
-                       ConnectorProfile,
-                       std::mutex> ConnProfiles;
+    using ConnProfiles = SequenceEx<ConnectorProfileList,
+                                    ConnectorProfile,
+                                    std::mutex>;
     ConnProfiles m_connProfiles;
 
     // PortProfile.owner

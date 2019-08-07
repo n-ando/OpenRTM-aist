@@ -226,7 +226,7 @@ namespace RTC
       explicit InvalidOperation(const std::string& _reason)
         : Error(_reason) {}
     };
-    using ModuleInitFunc = void (*)(Manager *);
+    using ModuleInitFunc = void (*)(Manager*);
 
     /*!
      * @if jp

@@ -275,7 +275,7 @@ namespace RTC
    */
   class PortConnectListenerHolder
   {
-    typedef std::pair<PortConnectListener*, bool> Entry;
+    using Entry = std::pair<PortConnectListener*, bool>;
   public:
     /*!
      * @if jp
@@ -380,7 +380,7 @@ namespace RTC
    */
   class PortConnectRetListenerHolder
   {
-    typedef std::pair<PortConnectRetListener*, bool> Entry;
+    using Entry = std::pair<PortConnectRetListener*, bool>;
   public:
     /*!
      * @if jp

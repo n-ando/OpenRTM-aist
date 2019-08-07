@@ -323,7 +323,7 @@ namespace coil
    *
    * @endif
    */
-  typedef int pid_t;
+  using pid_t = int;
   pid_t getpid()
   {
     return ::_getpid();

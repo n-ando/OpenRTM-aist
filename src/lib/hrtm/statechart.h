@@ -293,8 +293,8 @@ class TopState : public StateBase {
 
 // Members of do-it-yourself virtual function table.
 using GetInfoFn = StateInfo &(*)(MachineBase &);
-using DestroyFn = void (*)(void *);
-using CloneFn = void *(*)(void *);
+using DestroyFn = void (*)(void*);
+using CloneFn = void* (*)(void*);
 
 // DIY virtual function table.
 struct StateCharacter {
@@ -436,7 +436,7 @@ class EXPORT_DLL MachineBase {
   StateInfo * create_clone(Key key, StateInfo * original);
 
  protected:
-  typedef std::map<std::string, EventBase *> EventQueue;
+  using EventQueue = std::map<std::string, EventBase*>;
   using EventNames = std::vector<std::string>;
 
   // C++ needs something like package visibility
@@ -513,7 +513,7 @@ class Link : public P {
 
  protected:
   // Needed to perform compile time checks.
-  typedef Link<C, P> LinkType;
+  using LinkType = Link<C, P>;
 
   Link(StateInfo & info);  // NOLINT
   // These definitions seem redundant but they are not!

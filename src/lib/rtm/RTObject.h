@@ -3892,7 +3892,7 @@ namespace RTC
         }
       private:
         Listener& m_obj;
-        using Memfunc = void (Listener::*)(const char *, ConnectorProfile &);
+        using Memfunc = void (Listener::*)(const char*, ConnectorProfile &);
         Memfunc m_memfunc;
       };
       Noname* listener(new Noname(obj, memfunc));
@@ -4013,7 +4013,7 @@ namespace RTC
         }
       private:
         Listener& m_obj;
-        using Memfunc = void (Listener::*)(const char *, ConnectorProfile &, ReturnCode_t);
+        using Memfunc = void (Listener::*)(const char*, ConnectorProfile &, ReturnCode_t);
         Memfunc m_memfunc;
       };
       Noname* listener(new Noname(obj, memfunc));
@@ -4105,7 +4105,7 @@ namespace RTC
         }
       private:
         Listener& m_obj;
-        using Memfunc = void (Listener::*)(const char *, const char *);
+        using Memfunc = void (Listener::*)(const char *, const char*);
         Memfunc m_memfunc;
       };
       Noname* listener(new Noname(obj, memfunc));
@@ -4289,7 +4289,7 @@ namespace RTC
         }
       private:
         Listener& m_obj;
-        using Memfunc = void (Listener::*)(const char *);
+        using Memfunc = void (Listener::*)(const char*);
         Memfunc m_memfunc;
       };
       Noname* listener(new Noname(obj, memfunc));
@@ -4427,7 +4427,7 @@ namespace RTC
         }
       private:
         Listener& m_obj;
-        using Memfunc = void (Listener::*)(const char *);
+        using Memfunc = void (Listener::*)(const char*);
         Memfunc m_memfunc;
       };
       Noname* listener(new Noname(obj, memfunc));
@@ -4559,7 +4559,7 @@ namespace RTC
         }
       private:
         Listener& m_obj;
-        using Memfunc = void (Listener::*)(const char *, ReturnCode_t);
+        using Memfunc = void (Listener::*)(const char*, ReturnCode_t);
         Memfunc m_memfunc;
       };
       Noname* listener(new Noname(obj, memfunc));

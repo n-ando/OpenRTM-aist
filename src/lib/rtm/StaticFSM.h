@@ -83,12 +83,12 @@
  */
 #define FSM_STATE(S) \
   public: \
-    typedef S SELF;                                                     \
+    using SELF = S;                                                     \
     S(::Macho::_StateInstance & instance)                               \
       : ::RTC::Link<S, SUPER>(instance)                                 \
     {                                                                   \
-      typedef ::__SameType< ::RTC::Link<S, SUPER>, LINK>::Check         \
-        MustDeriveFromLink;                                             \
+      using MustDeriveFromLink = ::__SameType<::RTC::Link<S, SUPER>,    \
+                                              LINK>::Check;             \
       static_assert(static_cast<MustDeriveFromLink*>(nullptr)==nullptr, \
                     "dummy assert for suppress warning");               \
     }                                                                   \
@@ -180,7 +180,7 @@ namespace RTC
       if (machine != nullptr) { rtComponent = machine->rtComponent; }
     }
   public:
-    typedef Link<C, P> LINK;
+    using LINK = Link<C, P>;
     
     void entry() override
     {

@@ -229,7 +229,7 @@ namespace RTC
   {
   public:
 
-    using ConnectorList = std::vector<OutPortConnector *>;
+    using ConnectorList = std::vector<OutPortConnector*>;
 
     /*!
      * @if jp

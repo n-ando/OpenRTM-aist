@@ -26,7 +26,7 @@ namespace coil
 {
 #ifdef uuid_t
 #undef uuid_t
-  typedef ::GUID uuid_t;
+  using uuid_t = ::GUID;
 #endif
   //------------------------------------------------------------
   // UUID class

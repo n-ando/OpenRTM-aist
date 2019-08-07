@@ -1017,7 +1017,7 @@ namespace RTC
    */
   class PreFsmActionListenerHolder
   {
-    typedef std::pair<PreFsmActionListener*, bool> Entry;
+     using Entry = std::pair<PreFsmActionListener*, bool>;
   public:
     /*!
      * @if jp
@@ -1122,7 +1122,7 @@ namespace RTC
    */
   class PostFsmActionListenerHolder
   {
-    typedef std::pair<PostFsmActionListener*, bool> Entry;
+    using Entry = std::pair<PostFsmActionListener*, bool>;
   public:
     /*!
      * @if jp
@@ -1229,7 +1229,7 @@ namespace RTC
    */
   class FsmProfileListenerHolder
   {
-    typedef std::pair<FsmProfileListener*, bool> Entry;
+    using Entry = std::pair<FsmProfileListener*, bool>;
   public:
     /*!
      * @if jp
@@ -1334,7 +1334,7 @@ namespace RTC
    */
   class FsmStructureListenerHolder
   {
-    typedef std::pair<FsmStructureListener*, bool> Entry;
+    using Entry = std::pair<FsmStructureListener*, bool>;
   public:
     /*!
      * @if jp

@@ -33,8 +33,8 @@ namespace RTM
 {
   // forward decl
   class LocalServiceBase;
-  using ECNewFunc = LocalServiceBase *(*)();
-  using ECDeleteFunc = void (*)(LocalServiceBase *);
+  using ECNewFunc = LocalServiceBase* (*)();
+  using ECDeleteFunc = void (*)(LocalServiceBase*);
 
   /*!
    * @if jp

@@ -592,7 +592,7 @@ namespace RTC_impl
     mutable std::mutex m_addedMutex;
     std::vector<RTC_impl::RTObjectStateMachine*> m_removedComps;
     mutable std::mutex m_removedMutex;
-    using CompItr = std::vector<RTC_impl::RTObjectStateMachine *>::iterator;
+    using CompItr = std::vector<RTC_impl::RTObjectStateMachine*>::iterator;
 
   };  // class PeriodicExecutionContext
 } // namespace RTC_impl

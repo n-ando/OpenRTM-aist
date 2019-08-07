@@ -143,7 +143,7 @@ namespace util
   class ListenerHolder
   {
   public:
-    typedef std::pair<ListenerClass*, bool> Entry;
+    using Entry = std::pair<ListenerClass*, bool>;
     using EntryList = std::vector<Entry>;
     using EntryIterator = typename EntryList::iterator;
     ListenerHolder(ListenerHolder const&) = delete;

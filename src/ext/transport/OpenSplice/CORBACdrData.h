@@ -21,14 +21,14 @@ namespace OpenRTM_OpenSplice
    struct CORBACdrData
    {
          struct _data_seq_uniq_ {};
-         typedef DDS_DCPSUFLSeq < DDS::Octet, struct _data_seq_uniq_> _data_seq;
-         typedef DDS_DCPSSequence_var < _data_seq> _data_seq_var;
-         typedef DDS_DCPSSequence_out < _data_seq> _data_seq_out;
+         using _data_seq = DDS_DCPSUFLSeq < DDS::Octet, struct _data_seq_uniq_>;
+         using _data_seq_var = DDS_DCPSSequence_var < _data_seq>;
+         using _data_seq_out = DDS_DCPSSequence_out < _data_seq>;
          _data_seq data;
    };
 
-   typedef DDS_DCPSStruct_var < CORBACdrData> CORBACdrData_var;
-   typedef DDS_DCPSStruct_out < CORBACdrData> CORBACdrData_out;
+   using CORBACdrData_var = DDS_DCPSStruct_var < CORBACdrData>;
+   using CORBACdrData_out = DDS_DCPSStruct_out < CORBACdrData>;
 }
 
 

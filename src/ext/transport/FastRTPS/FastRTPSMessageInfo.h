@@ -107,7 +107,7 @@ namespace RTC
   };
 
 
-  typedef coil::GlobalFactory<FastRTPSMessageInfoBase> FastRTPSMessageInfoFactory;
+  using FastRTPSMessageInfoFactory = coil::GlobalFactory<FastRTPSMessageInfoBase>;
 }
 
 

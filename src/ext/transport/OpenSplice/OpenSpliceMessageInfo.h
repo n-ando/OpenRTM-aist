@@ -124,7 +124,7 @@ namespace RTC
   };
 
 
-  typedef coil::GlobalFactory<OpenSpliceMessageInfoBase> OpenSpliceMessageInfoFactory;
+  using OpenSpliceMessageInfoFactory = coil::GlobalFactory<OpenSpliceMessageInfoBase>;
 }
 
 

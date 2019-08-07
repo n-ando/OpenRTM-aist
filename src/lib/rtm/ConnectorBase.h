@@ -170,7 +170,7 @@ namespace RTC
   using ConnectorInfoList = std::vector<ConnectorInfo>;
 
   class ConnectorBase;
-  using ConnectorList = std::vector<ConnectorBase *>;
+  using ConnectorList = std::vector<ConnectorBase*>;
 
 
   /*!

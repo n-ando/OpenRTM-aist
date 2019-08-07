@@ -388,7 +388,7 @@ namespace RTC
    */
   class ConfigurationParamListenerHolder
   {
-    typedef std::pair<ConfigurationParamListener*, bool> Entry;
+    using Entry = std::pair<ConfigurationParamListener*, bool>;
   public:
     /*!
      * @if jp
@@ -495,7 +495,7 @@ namespace RTC
    */
   class ConfigurationSetListenerHolder
   {
-    typedef std::pair<ConfigurationSetListener*, bool> Entry;
+    using Entry = std::pair<ConfigurationSetListener*, bool>;
   public:
     /*!
      * @if jp
@@ -602,7 +602,7 @@ namespace RTC
    */
   class ConfigurationSetNameListenerHolder
   {
-    typedef std::pair<ConfigurationSetNameListener*, bool> Entry;
+    using Entry = std::pair<ConfigurationSetNameListener*, bool>;
   public:
     /*!
      * @if jp
