@@ -48,7 +48,6 @@ if(WIN32)
 		WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
 	)
 	set_source_files_properties(${DEF_FILE_NAME} PROPERTIES GENERATED 1)
-	set_source_files_properties(${DEBUG_DEF_FILE_NAME} PROPERTIES GENERATED 1)
 
 	add_library(${PROJECT_NAME} SHARED
 		$<TARGET_OBJECTS:${PROJECT_NAME}_objlib>
