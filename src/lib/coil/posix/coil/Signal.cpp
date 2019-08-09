@@ -21,10 +21,6 @@
 #include <coil/Signal.h>
 #include <cstring>
 
-#ifdef COIL_OS_FREEBSD
-#define _SIGSET_NWORDS _SIG_WORDS
-#endif
-
 namespace coil
 {
   /*!
@@ -50,7 +46,7 @@ namespace coil
    * @endif
    */
   SignalAction::SignalAction(SignalHandler handle, int signum)
-    : m_handle(handle), m_signum(signum), m_mask(nullptr), m_flags(0)
+    : m_handle(handle), m_signum(signum)
   {
     struct sigaction action;
     memset(&action, 0, sizeof(action));  // clear.
@@ -62,8 +58,6 @@ namespace coil
         signal(m_signum, SIG_DFL);
         m_handle = nullptr;
         m_signum = 0;
-        m_mask   = nullptr;
-        m_flags  = 0;
       }
   }
 
@@ -79,8 +73,6 @@ namespace coil
     signal(m_signum, SIG_DFL);
     m_handle = nullptr;
     m_signum = 0;
-    m_mask   = nullptr;
-    m_flags  = 0;
   }
 
 } // namespace coil
