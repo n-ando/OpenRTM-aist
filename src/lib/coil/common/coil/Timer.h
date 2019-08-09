@@ -19,316 +19,227 @@
 #ifndef Timer_h
 #define Timer_h
 
-#include <coil/Listener.h>
+#include <algorithm>
+#include <chrono>
+#include <functional>
+#include <list>
+#include <memory>
 #include <mutex>
-#include <coil/Task.h>
-#include <vector>
-
-typedef ListenerBase* ListenerId;
+#include <utility>
 
 namespace coil
 {
   /*!
    * @if jp
-   * @class Timer
-   * @brief Timerクラス
-   *
-   * 登録されたリスナーのコールバック関数を、設定された周期で定期的に呼び出す。
-   *
-   * @since 0.4.0
-   *
-   * @else
-   * @class Timer
-   * @brief Timer class
-   *
-   * Invoke the callback function of registered listener periodically
-   * at the set cycle.
-   *
-   * @since 0.4.0
-   *
+   * @class Function
+   * @brief 実行遅延関数呼び出し
+   * @since 2.0.0
+   * @elsep
+   * @class Function
+   * @brief Delayed function call
+   * @since 2.0.0
    * @endif
    */
-  class Timer
-    : public coil::Task
+  class DelayedFunction
   {
   public:
     /*!
      * @if jp
      * @brief コンストラクタ
-     *
-     * コンストラクタ
-     *
-     * @param interval タイマ起動周期
+     * @param fn: 実行する関数または関数オブジェクト
+     * @param delay: 実行までの遅延時間
      *
      * @else
      * @brief Constructor
-     *
-     * Constructor
-     *
-     * @param interval The interval of timer
+     * @param fn: Function or functional object
+     * @return delay: the delay until function call
      *
      * @endif
      */
-    explicit Timer(std::chrono::nanoseconds interval);
+    DelayedFunction(std::function<void(void)> fn,
+                    std::chrono::nanoseconds delay)
+      : m_fn(std::move(fn)), m_remains(delay) {}
 
     /*!
      * @if jp
-     * @brief デストラクタ
+     * @brief 1回の時間経過
+     * @param interval: 経過した時間
+     * @return bool true:  期限が来た
+     *              false: 期限が来ていない
      *
-     * デストラクタ
+     * interval 分だけ期限を減算し、期限切れの場合に関数を実行する。
      *
      * @else
-     * @brief Destructor
+     * @brief Tick
+     * @param interval: Tick interval
+     * @return bool true:  The function is expired and executed.
+     *              false: The function is unexpired.
+     * @endif
+     */
+    bool tick(std::chrono::nanoseconds interval);
+
+  private:
+    std::function<void(void)> const m_fn;
+    std::chrono::nanoseconds m_remains;
+  };
+
+  /*!
+   * @if jp
+   * @class Function
+   * @brief 周期関数呼び出し
+   * @since 2.0.0
+   * @elsep
+   * @class Function
+   * @brief Periodic function call
+   * @since 2.0.0
+   * @endif
+   */
+  class PeriodicFunction
+  {
+  public:
+    /*!
+     * @if jp
+     * @brief コンストラクタ
+     * @param fn: 実行する関数または関数オブジェクト
+     * @param period: 実行間隔
      *
-     * Destructor
+     * @else
+     * @brief Constructor
+     * @param fn: Function or functional object
+     * @return period: the period of function exectuion
      *
      * @endif
      */
-    ~Timer() override;
+    PeriodicFunction(std::function<void(void)> fn,
+                     std::chrono::nanoseconds period)
+      : m_fn(std::move(fn)), m_remains(0), m_period(period) {}
 
-    //============================================================
-    // ACE_Task
-    //============================================================
     /*!
      * @if jp
-     * @brief Timer 用スレッド生成
+     * @brief 1回の時間経過
+     * @param interval: 経過した時間
+     * @return bool true 固定
      *
-     * Timer 用の内部スレッドを生成し起動する。
-     * これは ACE_Task サービスクラスメソッドのオーバーライド。
-     *
-     * @param args 通常は0
-     *
-     * @return 生成処理実行結果
+     * interval 分だけ期限を減算し、期限切れの場合に関数を実行する。
+     * 関数が実行されると周期が再設定される。
      *
      * @else
-     * @brief Create thread for Timer
-     *
-     * Create an internal thread for Timer and launch it.
-     * This is an override of ACE_Task service class method.
-     *
-     * @param args Usually 0
-     *
-     * @return Creation processing result
-     *
+     * @brief Tick
+     * @param interval: Tick interval
+     * @return bool true only
      * @endif
      */
-    int open(void *args) override;
+    bool tick(std::chrono::nanoseconds interval);
 
     /*!
      * @if jp
-     * @brief Timer 用のスレッド実行関数
-     *
-     * Timer 用のスレッド実行関数。
-     * 登録されたリスナーのコールバック関数を呼び出す。
-     *
-     * @return 実行結果
-     *
+     * @brief 周期実行を停止する
      * @else
-     * @brief Thread execution function for Timer
-     *
-     * Thread execution function for Timer.
-     * Invoke the callback function of registered listener.
-     *
-     * @return Execution result
-     *
-     * @endif
-     */
-    int svc() override;
-
-    //============================================================
-    // public functions
-    //============================================================
-    /*!
-     * @if jp
-     * @brief Timer タスク開始
-     *
-     * Timer 用新規スレッドを生成し、処理を開始する。
-     *
-     * @else
-     * @brief Start Timer task
-     *
-     * Create a new theread for Timer and start processing.
-     *
-     * @endif
-     */
-    void start();
-
-    /*!
-     * @if jp
-     * @brief Timer タスク停止
-     *
-     * Timer タスクを停止する。
-     *
-     * @else
-     * @brief Stop Timer task
-     *
-     * Stop Timer task.
-     *
+     * @brief Stop to execute function
      * @endif
      */
     void stop();
 
-    /*!
-     * @if jp
-     * @brief Timer タスク実行
-     *
-     * 登録された各リスナの起動待ち時間からタイマ起動周期を減算する。
-     * 起動待ち時間がゼロとなったリスナが存在する場合は、
-     * コールバック関数を呼び出す。
-     *
-     * @else
-     * @brief Invoke Timer task
-     *
-     * Subtract the interval of timer from the waiting time for invocation
-     * of each registered listener.
-     * If the listener whose waiting time reached 0 exists, invoke the
-     * callback function.
-     *
-     * @endif
-     */
-    void invoke();
-
-    /*!
-     * @if jp
-     * @brief リスナー登録
-     *
-     * 本 Timer から起動するコールバック関数用のリスナーを起動周期を指定して
-     * 登録する。
-     * 同一リスナーが既に登録済みの場合は、リスナーの起動周期を指定した値に
-     * 更新する。
-     *
-     * @param listener 登録対象リスナー
-     * @param tm リスナー起動周期
-     *
-     * @return 登録リスナーID
-     *
-     * @else
-     * @brief Register listener
-     *
-     * Register the listener of callback function invoked from this Timer by
-     * specifying the interval.
-     * If the same listener has already been regiseterd, the value specified
-     * the invocation interval of listener will be updated.
-     *
-     *
-     * @param listener Listener for the registration
-     * @param tm The invocation interval of listener
-     *
-     * @return ID of the registerd listener
-     *
-     * @endif
-     */
-    ListenerId registerListener(ListenerBase* listener, std::chrono::nanoseconds tm);
-
-    /*!
-     * @if jp
-     * @brief リスナー登録
-     *
-     * コールバック対象オブジェクト、コールバック対象メソッドおよび起動周期を
-     * 指定してリスナーを登録する。
-     *
-     * @param obj コールバック対象オブジェクト
-     * @param cbf コールバック対象メソッド
-     * @param tm リスナー起動周期
-     *
-     * @return 登録リスナーID
-     *
-     * @else
-     * @brief Register listener
-     *
-     * Register listener by specifying the object for callback, the method
-     * for callback and the invocation interval.
-     *
-     * @param obj Target object for callback
-     * @param cbf Target method for callback
-     * @param tm The invocation interval of listener
-     *
-     * @return ID of the registerd listener
-     *
-     * @endif
-     */
-    template <class ListenerClass>
-    ListenerId registerListenerObj(ListenerClass* obj,
-                   void (ListenerClass::*cbf)(),
-                   std::chrono::nanoseconds tm)
-    {
-      return registerListener(new ListenerObject<ListenerClass>(obj, cbf), tm);
-    }
-
-    /*!
-     * @if jp
-     * @brief リスナー登録
-     *
-     * コールバック対象メソッドと起動周期を指定してリスナーを登録する。
-     *
-     * @param cbf コールバック対象メソッド
-     * @param tm リスナー起動周期
-     *
-     * @return 登録リスナーID
-     *
-     * @else
-     * @brief Register listener
-     *
-     * Register listener by specifying the method for callback and the
-     * invocation interval.
-     *
-     * @param cbf Target method for callback
-     * @param tm The invocation interval of listener
-     *
-     * @return ID of the registerd listener
-     *
-     * @endif
-     */
-    ListenerId registerListenerFunc(void (*cbf)(), std::chrono::nanoseconds tm)
-    {
-      return registerListener(new ListenerFunc(cbf), tm);
-    }
-
-    /*!
-     * @if jp
-     * @brief リスナー登録解除
-     *
-     * 指定したIDのリスナーの登録を解除する。
-     * 指定したIDのリスナーが未登録の場合、false を返す。
-     *
-     * @param id 登録解除対象リスナーID
-     *
-     * @return 登録解除結果
-     *
-     * @else
-     * @brief Unregister listener
-     *
-     * Unregister the listener specified by ID.
-     * If the listener specified by ID is not registerd, false will be returned.
-     *
-     * @param id ID of the unregisterd listener
-     *
-     * @return Unregistration result
-     *
-     * @endif
-     */
-    bool unregisterListener(ListenerId id);
-
   private:
-    std::chrono::nanoseconds m_interval;
+    std::function<void(void)> const m_fn;
+    std::chrono::nanoseconds m_remains;
+    std::chrono::nanoseconds const m_period;
+    bool m_isRemoved = false;
+    // This lock ensures that tick() is not running when stop() completes.
+    std::mutex m_lock;
+  };
 
-    std::mutex m_runningMutex;
-    bool m_running;
+  /*!
+   * @if jp
+   * @class Async
+   * @brief Manager のスレッド上で遅延実行される関数群の管理
+   *
+   * emplace() にて指定される関数や関数オブジェクトをtick()の中で
+   * テンプレートパラメター Function を通して呼び出す。Function は、
+   * "bool tick(nanoseconds)" をメンバーに持たなければならない。emplace()
+   * された関数を実際に呼び出すべきかは Function が時間管理とともに判断する。
+   * 本クラスは Function をリスト管理する。リストの各要素毎に tick() が
+   * true を返すとき、本クラスはリストから消去する。Function にポインター
+   * を指定する場合は資源開放漏れを避けるために、unique_ptr や shared_ptr
+   * を用いること。(For ex. Timer(std::unique_ptr<F>>)
+   *
+   * @since 2.0.0
+   * @else
+   * @class Async
+   * @brief Management of Delayed functions on the Manager thread.
+   * @since 2.0.0
+   * @endif
+   */
+  template <class Function>
+  class Timer {
+  public:
+    using TaskId = Function*;
+    Timer() = default;
+    Timer(Timer const&) = delete;
+    Timer& operator=(Timer const&) = delete;
+    // If you need to  move, implement it.
+    Timer(Timer&&) = delete;
+    Timer& operator=(Timer&&) = delete;
 
-    struct Task
+    /*!
+     * @if jp
+     * @brief 非同期処理を登録する
+     * @else
+     * @brief Add an async function into list.
+     * @endif
+     */
+    template <class... Args>
+    TaskId emplace(Args&&... args)
     {
-      Task(ListenerBase* l, std::chrono::nanoseconds p)
-        : listener(l), period(p), remains(p)
-      {
-      }
-      ListenerBase* listener;
-      std::chrono::nanoseconds period;
-      std::chrono::nanoseconds remains;
-    };
+      std::lock_guard<std::mutex> guard(m_lock);
+      m_tasks.emplace_back(std::forward<Args>(args)...);
+      return &(m_tasks.back());
+    }
 
-    std::vector<Task> m_tasks;
-    std::mutex  m_taskMutex;
+    /*!
+     * @if jp
+     * @brief 1回の時間経過
+     * @param interval: 経過した時間
+     *
+     * 時間経過により、リスト上の期限切れとなった関数を実行する。
+     * 実行した関数が true を返すとき、リストから削除する。
+     *
+     * @else
+     * @brief One tick passes
+     * @param interval: One tick interval
+     *
+     * This operation execute expired functions and remove it from the list
+     * if tick() returns true.
+     *
+     * @endif
+     */
+    void tick(std::chrono::nanoseconds interval)
+    {
+      // Move m_tasks to tasks.
+      decltype(m_tasks) tasks;
+      {
+        std::lock_guard<std::mutex> guard(m_lock);
+        tasks.swap(m_tasks);
+      }
+
+      // Tick each task and remove from the list what returned true.
+      for (auto&& x = tasks.begin(); x != tasks.end();
+           x = toRef(*x).tick(interval) ? tasks.erase(x) : std::next(x));
+
+      // Feed back remain tasks to m_tasks.
+      if (!tasks.empty())
+      {
+        std::lock_guard<std::mutex> guard(m_lock);
+        m_tasks.splice(m_tasks.end(), std::move(tasks));
+      }
+    }
+  private:
+    std::list<Function> m_tasks;
+    std::mutex m_lock;
+    template <class Fn> Fn& toRef(Fn& x){ return x; }
+    template <class Fn> Fn& toRef(Fn* x){ return *x; }
+    template <class Fn> Fn& toRef(std::unique_ptr<Fn>& x){ return *x; }
+    template <class Fn> Fn& toRef(std::shared_ptr<Fn>& x){ return *x; }
   };
 } // namespace coil
 #endif  // Timer_h
-

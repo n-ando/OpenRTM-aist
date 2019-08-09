@@ -60,13 +60,15 @@
 #if defined(minor)
 #undef minor
 #endif
-extern "C" void handler(int /*unused*/)
+
+extern "C" void openrtm_signal_handler(int /*unused*/)
 {
-  ::RTC::Manager::instance().terminate();
+  RTC::Manager::terminate();
 }
 
 namespace RTC
 {
+  std::atomic_flag Manager::m_isRunning = ATOMIC_FLAG_INIT;
   Manager* Manager::manager = nullptr;
   std::mutex Manager::mutex;
 
@@ -96,26 +98,10 @@ namespace RTC
    * @endif
    */
   Manager::Manager()
-    : m_initProc(nullptr), m_namingManager(nullptr), m_timer(nullptr),
-      m_logStreamBuf(), rtclog(&m_logStreamBuf),
-      m_runner(nullptr), m_terminator(nullptr)
+    : m_initProc(nullptr), m_namingManager(nullptr),
+      m_logStreamBuf(), rtclog(&m_logStreamBuf)
   {
-    new coil::SignalAction(static_cast<coil::SignalHandler>(handler), SIGINT);
-  }
-
-  /*!
-   * @if jp
-   * @brief Protected コピーコンストラクタ
-   * @else
-   * @brief Protected Copy Constructor
-   * @endif
-   */
-  Manager::Manager(const Manager&  /*manager*/)
-    : m_initProc(nullptr), m_namingManager(nullptr), m_timer(nullptr),
-      m_logStreamBuf(), rtclog(&m_logStreamBuf),
-      m_runner(nullptr), m_terminator(nullptr)
-  {
-    new coil::SignalAction(static_cast<coil::SignalHandler>(handler), SIGINT);
+    m_signals.emplace_back(openrtm_signal_handler, SIGINT);
   }
 
   /*!
@@ -141,7 +127,6 @@ namespace RTC
             manager->initNaming();
             manager->initExecContext();
             manager->initComposite();
-            manager->initTimer();
             manager->initManagerServant();
           }
       }
@@ -157,25 +142,7 @@ namespace RTC
    */
   Manager& Manager::instance()
   {
-    // DCL for singleton
-    if (manager == nullptr)
-      {
-        std::lock_guard<std::mutex> guard(mutex);
-        if (manager == nullptr)
-          {
-            manager = new Manager();
-            manager->initManager(0, nullptr);
-            manager->initFactories();
-            manager->initLogger();
-            manager->initORB();
-            manager->initNaming();
-            manager->initExecContext();
-            manager->initComposite();
-            manager->initTimer();
-            manager->initManagerServant();
-          }
-      }
-    return *manager;
+    return *Manager::init(0, nullptr);
   }
 
   /*!
@@ -187,10 +154,8 @@ namespace RTC
    */
   void Manager::terminate()
   {
-    if (m_terminator != nullptr)
-      {
-	m_terminator->terminate();
-      }
+    // Note: Signal handlers may call this. DO NOT use heap and librarys.
+    m_isRunning.clear();
   }
 
   /*!
@@ -204,23 +169,11 @@ namespace RTC
   {
     RTC_TRACE(("Manager::shutdown()"));
     m_listeners.manager_.preShutdown();
-    if (m_timer != nullptr)
-      {
-        m_timer->stop();
-      }
     shutdownComponents();
     shutdownNaming();
     shutdownORB();
-    shutdownManager();
     // 終了待ち合わせ
-    if (m_runner != nullptr)
-      {
-        m_runner->wait();
-      }
-    else
-      {
-        join();
-      }
+    m_threadOrb.join();
     m_listeners.manager_.postShutdown();
     shutdownLogger();
   }
@@ -234,19 +187,10 @@ namespace RTC
    */
   void Manager::join()
   {
-    RTC_TRACE(("Manager::wait()"));
-    {
-      std::lock_guard<std::mutex> guard(m_terminate.mutex);
-      ++m_terminate.waiting;
-    }
-    while (true)
-      {
-        {
-          std::lock_guard<std::mutex> guard(m_terminate.mutex);
-          if (m_terminate.waiting > 1) break;
-        }
-        std::this_thread::sleep_for(std::chrono::milliseconds(100));
-      }
+    m_threadMain.join();
+    delete manager; // This delete is vaild.
+    // Do not access any Manager non-static members after here.
+    manager = nullptr;
   }
 
   /*!
@@ -424,23 +368,42 @@ namespace RTC
    */
   void Manager::runManager(bool no_block)
   {
-    if (no_block)
-      {
-        RTC_TRACE(("Manager::runManager(): non-blocking mode"));
-        m_runner = new OrbRunner(m_pORB);
-        m_runner->open(nullptr);
-      }
-    else
-      {
-        RTC_TRACE(("Manager::runManager(): blocking mode"));
-        m_pORB->run();
-        RTC_TRACE(("Manager::runManager(): ORB was terminated"));
-        join();
-      }
-    return;
+    RTC_TRACE(("Manager::runManager()"));
+
+    m_isRunning.test_and_set();
+    m_threadMain = std::thread([this] { main(); });
+    if (!no_block) { join(); }
   }
 
-  //============================================================
+  /*!
+   * @if jp
+   * @brief 周期実行タスクの登録
+   * @else
+   * @brief Add a task to the Manager timer.
+   * @endif
+   */
+  Manager::TaskId Manager::addTask(std::function<void(void)> fn,
+                                   std::chrono::nanoseconds period)
+  {
+    RTC_TRACE(("Manager::addTask()"));
+    return m_scheduler.emplace(std::move(fn), period);
+  }
+
+  /*!
+   * @if jp
+   * @brief Manger のメインスレッドで処理を実行
+   * @else
+   * @brief Run a function on the Manager main thread.
+   * @endif
+   */
+  void Manager::invoke(std::function<void(void)> fn,
+                       std::chrono::nanoseconds delay)
+  {
+    RTC_TRACE(("Manager::invoke()"));
+    m_invoker.emplace(std::move(fn), delay);
+  }
+
+//============================================================
   // Module management
   //============================================================
   /*!
@@ -1028,7 +991,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
         comps = getComponents();
         if (comps.empty())
           {
-            shutdown();
+            terminate();
           }
       }
   }
@@ -1251,35 +1214,13 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     // initialize ModuleManager
     m_module = new ModuleManager(m_config);
 
-    // initialize Terminator
-    std::chrono::milliseconds waittime;
-    if ((m_config.findNode("manager.termination_waittime") == nullptr)
-         || !coil::stringTo(waittime, m_config["manager.termination_waittime"].c_str()))
-      {
-        waittime = std::chrono::milliseconds(500);
-      }
-    m_terminator = new Terminator(this, waittime);
-    {
-      std::lock_guard<std::mutex> guard(m_terminate.mutex);
-      m_terminate.waiting = 0;
-    }
-
     // initialize Timer
-    if (coil::toBool(m_config["timer.enable"], "YES", "NO", true))
-      {
-          std::chrono::microseconds tm;
-          if (m_config["timer.tick"].empty()
-              || !coil::stringTo(tm, m_config["timer.tick"].c_str()))
-            {
-              tm = std::chrono::milliseconds(100);
-            }
-          m_timer = new coil::Timer(tm);
-          m_timer->start();
-      }
+    m_needsTimer
+      = coil::toBool(m_config["timer.enable"], "YES", "NO", true);
 
     if (coil::toBool(m_config["manager.shutdown_auto"], "YES", "NO", true)
         && !coil::toBool(m_config["manager.is_master"], "YES", "NO", false)
-        && (m_timer != nullptr))
+        && m_needsTimer)
       {
         std::chrono::milliseconds tm;
         if ((m_config.findNode("manager.auto_shutdown_duration") == nullptr)
@@ -1288,15 +1229,12 @@ std::vector<coil::Properties> Manager::getLoadableModules()
           {
             tm = std::chrono::seconds(10);
           }
-        m_timer->registerListenerObj(this,
-                                     &Manager::shutdownOnNoRtcs, tm);
+        addTask([this]{ if (getComponents().empty()) { terminate(); }}, tm);
       }
 
-    if (m_timer != nullptr)
+    if (m_needsTimer)
       {
-        m_timer->registerListenerObj(this,
-                                     &Manager::cleanupComponents,
-                                     std::chrono::seconds(1));
+        addTask([this]{ cleanupComponents(); }, std::chrono::seconds(1));
       }
 
 
@@ -1328,28 +1266,50 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 
   /*!
    * @if jp
-   * @brief Manager の終了処理
+   * @brief Manager メインスレッドのメイン関数
    * @else
-   * @brief Manager internal finalization
+   * @brief The main function of the Manager main thread.
    * @endif
    */
-  void Manager::shutdownManager()
+  void Manager::main()
   {
-    RTC_TRACE(("Manager::shutdownManager()"));
-  }
+    RTC_TRACE(("Manager::main()"));
 
-  void  Manager::shutdownOnNoRtcs()
-  {
-    RTC_TRACE(("Manager::shutdownOnNoRtcs()"));
-    if (coil::toBool(m_config["manager.shutdown_on_nortcs"], "YES", "NO", true))
+    m_threadOrb = std::thread([this]{ m_pORB->run(); });
+
+    std::chrono::microseconds period;
+    if (m_config["timer.tick"].empty()
+        || !coil::stringTo(period, m_config["timer.tick"].c_str()))
+    {
+        period = std::chrono::milliseconds(100);
+    }
+
+    std::chrono::milliseconds delay;
+    if ((m_config.findNode("manager.termination_waittime") == nullptr)
+         || !coil::stringTo(delay, m_config["manager.termination_waittime"].c_str()))
       {
-        std::vector<RTObject_impl*> comps(getComponents());
-        if (comps.empty())
-          {
-            terminate();
-          }
+        delay = std::chrono::milliseconds(500);
       }
 
+    // The main loop.
+    auto now = std::chrono::steady_clock::now();
+    while(m_isRunning.test_and_set())
+      {
+        auto prev = now;
+        now = std::chrono::steady_clock::now();
+
+        // DO NOT call tick() with "period" instead of "now - prev". The
+        // specified time for sleep APIs and the time actually passed
+        // may not be the same.
+        m_scheduler.tick(now - prev); // Execute periodic tasks.
+        m_invoker.tick(now - prev);   // Execute delayed calls.
+
+        std::this_thread::sleep_until(now + period);
+      }
+
+    // Shutdown Manager and join m_threadOrb.
+    std::this_thread::sleep_for(delay);
+    shutdown();
   }
 
   //============================================================
@@ -1850,7 +1810,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 
     // NamingManager Timer update initialization
     if (coil::toBool(m_config["naming.update.enable"], "YES", "NO", true)
-        && (m_timer != nullptr))
+        && m_needsTimer)
       {
         std::chrono::milliseconds tm;
         if (m_config["naming.update.interval"].empty()
@@ -1858,7 +1818,9 @@ std::vector<coil::Properties> Manager::getLoadableModules()
           {
             tm = std::chrono::seconds(10); // default interval for safety
           }
-        m_timer->registerListenerObj(m_namingManager, &NamingManager::update, tm);
+        addTask([this]{
+          m_namingManager->update();
+        }, tm);
       }
     return true;
   }
@@ -2001,18 +1963,6 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 
   }
 
-  /*!
-   * @if jp
-   * @brief Timer の初期化
-   * @else
-   * @brief Timer initialization
-   * @endif
-   */
-  bool Manager::initTimer()
-  {
-    return true;
-  }
-
   bool Manager::initManagerServant()
   {
     RTC_TRACE(("Manager::initManagerServant()"));
@@ -2039,7 +1989,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 
     if (coil::toBool(m_config["corba.update_master_manager.enable"], "YES", "NO", true)
         && !coil::toBool(m_config["manager.is_master"], "YES", "NO", false)
-        && (m_timer != nullptr))
+        && m_needsTimer)
       {
         std::chrono::milliseconds duration;
         if ((m_config.findNode("corba.update_master_manager.interval") == nullptr)
@@ -2048,9 +1998,9 @@ std::vector<coil::Properties> Manager::getLoadableModules()
           {
             duration = std::chrono::seconds(10);
           }
-        m_timer->registerListenerObj(m_mgrservant,
-                                     &RTM::ManagerServant::updateMasterManager,
-                                     duration);
+        addTask([this]{
+          m_mgrservant->updateMasterManager();
+        }, duration);
       }
 
     return true;
@@ -3080,6 +3030,5 @@ std::vector<coil::Properties> Manager::getLoadableModules()
           }
       }
   }
-  
 
 } // namespace RTC

@@ -36,11 +36,7 @@ namespace RTC
       m_compstat(*this), m_portaction(*this),
       m_ecaction(*this), m_configMsg(*this),
       m_fsmaction(*this),
-      m_rtcInterval(std::chrono::milliseconds(100)), m_rtcHeartbeat(false),
-      m_rtcHblistenerid(nullptr),
-      m_ecInterval(std::chrono::milliseconds(100)), m_ecHeartbeat(false),
-      m_ecHblistenerid(nullptr),
-      m_timer(m_rtcInterval)
+      m_rtcHeartbeat(false), m_ecHeartbeat(false)
   {
     for (bool & i : m_observed)
       {
@@ -64,7 +60,6 @@ namespace RTC
     unsetConfigurationListeners();
     unsetRTCHeartbeat();
     unsetECHeartbeat();
-    stopTimer();
   }
 
   /*!
@@ -280,22 +275,6 @@ namespace RTC
 
   //============================================================
   // RTC Heartbeat related functions
-
-  /*!
-   * @if jp
-   * @brief ハートビートをオブザーバに伝える
-   * @else
-   * @brief Sending a heartbeart signal to observer
-   * @endif
-   */
-  void ComponentObserverConsumer::rtcHeartbeat()
-  {
-    if (m_rtcHeartbeat)
-      {
-        updateStatus(RTC::RTC_HEARTBEAT, "");
-      }
-  }
-
   /*!
    * @if jp
    * @brief ハートビートを設定する
@@ -314,28 +293,19 @@ namespace RTC
       {
         prop["heartbeat.interval"] = prop["rtc_heartbeat.interval"];
       }
+    unsetRTCHeartbeat();
     if (coil::toBool(prop["heartbeat.enable"], "YES", "NO", false))
       {
-        std::chrono::nanoseconds interval(m_rtcInterval);
+        std::chrono::nanoseconds interval{std::chrono::seconds{1}};
         if (prop["heartbeat.interval"].empty()
             || !coil::stringTo(interval, prop["heartbeat.interval"].c_str()))
           {
             interval = std::chrono::seconds(1);
           }
-        m_rtcInterval = interval;
-        m_rtcHblistenerid = m_timer.
-          registerListenerObj(this, &ComponentObserverConsumer::rtcHeartbeat,
-                              m_rtcInterval);
         m_rtcHeartbeat = true;
-        m_timer.start();
-      }
-    else
-      {
-        if (m_rtcHeartbeat && m_rtcHblistenerid != nullptr)
-          {
-            unsetRTCHeartbeat();
-            m_timer.stop();
-          }
+        m_rtcHbTaskId = Manager::instance().addTask([this]{
+          if (m_rtcHeartbeat) { updateStatus(RTC::RTC_HEARTBEAT, ""); }
+        }, interval);
       }
   }
 
@@ -348,9 +318,11 @@ namespace RTC
    */
   void ComponentObserverConsumer::unsetRTCHeartbeat()
   {
-    m_timer.unregisterListener(m_rtcHblistenerid);
-    m_rtcHeartbeat = false;
-    m_rtcHblistenerid = nullptr;
+    if(m_rtcHeartbeat)
+      {
+        Manager::instance().removeTask(m_rtcHbTaskId);
+        m_rtcHeartbeat = false;
+      }
   }
 
 
@@ -385,7 +357,6 @@ namespace RTC
             msg += coil::otos(i+ ECOTHER_OFFSET);
             updateStatus(RTC::EC_HEARTBEAT, msg.c_str());
         }
-        
       }
   }
 
@@ -398,29 +369,20 @@ namespace RTC
    */
   void ComponentObserverConsumer::setECHeartbeat(coil::Properties& prop)
   {
+    unsetECHeartbeat();
     // if rtc_heartbeat is set, use it.
     if (coil::toBool(prop["ec_heartbeat.enable"], "YES", "NO", false))
       {
-        std::chrono::nanoseconds interval(m_ecInterval);
+        std::chrono::nanoseconds interval{std::chrono::seconds{1}};
         if (prop["ec_heartbeat.interval"].empty()
             || !coil::stringTo(interval, prop["ec_heartbeat.interval"].c_str()))
           {
             interval = std::chrono::seconds(1);
           }
-        m_ecInterval = interval;
-        m_ecHblistenerid = m_timer.
-          registerListenerObj(this, &ComponentObserverConsumer::ecHeartbeat,
-                              m_ecInterval);
         m_ecHeartbeat = true;
-        m_timer.start();
-      }
-    else
-      {
-        if (m_ecHeartbeat && m_ecHblistenerid != nullptr)
-          {
-            unsetECHeartbeat();
-            m_timer.stop();
-          }
+        m_ecHbTaskId = Manager::instance().addTask([this]{
+          ecHeartbeat();
+        }, interval);
       }
   }
 
@@ -433,22 +395,11 @@ namespace RTC
    */
   void ComponentObserverConsumer::unsetECHeartbeat()
   {
-    m_timer.unregisterListener(m_ecHblistenerid);
-    m_ecHeartbeat = false;
-    m_ecHblistenerid = nullptr;
-  }
-
-  /*!
-   * @if jp
-   * @brief タイマースレッドを停止する
-   * @else
-   * @brief stop timer thread
-   * @endif
-   */
-  void ComponentObserverConsumer::stopTimer()
-  {
-      m_timer.stop();
-      m_timer.wait();
+    if(m_ecHeartbeat)
+      {
+        Manager::instance().removeTask(m_ecHbTaskId);
+        m_ecHeartbeat = false;
+      }
   }
 
   //============================================================

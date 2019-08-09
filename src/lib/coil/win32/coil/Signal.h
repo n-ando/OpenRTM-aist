@@ -29,7 +29,7 @@ namespace coil
 #define _SIG_WORDS      4
 #define _SIG_MAXSIG     NSIG
 
-  typedef void (*SignalHandler)(int);
+  extern "C" typedef void (*SignalHandler)(int);
   typedef struct __sigset {
     unsigned int __bits[_SIG_WORDS];
   } sigset_t;

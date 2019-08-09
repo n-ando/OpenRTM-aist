@@ -20,6 +20,7 @@
 
 // CORBA header include
 #include <coil/Properties.h>
+#include <coil/Task.h>
 
 #include <rtm/RTC.h>
 #include <rtm/idl/RTCSkel.h>

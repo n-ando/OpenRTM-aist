@@ -22,9 +22,6 @@
 
 #include <rtm/RTC.h>
 
-#include <mutex>
-#include <coil/Task.h>
-
 #ifdef ORB_IS_TAO
 #include <tao/Strategies/advanced_resource.h>
 #include <tao/IORTable/IORTable.h>
@@ -40,6 +37,16 @@
 #include <RTPortableServer.h>
 #endif
 
+#include <coil/Timer.h>
+#include <coil/Signal.h>
+
+#include <atomic>
+#include <functional>
+#include <mutex>
+#include <list>
+#include <thread>
+#include <vector>
+
 namespace RTM
 {
   class ManagerServant;
@@ -47,7 +54,6 @@ namespace RTM
 
 namespace coil
 {
-  class Timer;
 } // namespace coil
 
 namespace RTC
@@ -99,24 +105,8 @@ namespace RTC
      */
     Manager();
 
-    /*!
-     * @if jp
-     * @brief Protected コピーコンストラクタ
-     *
-     * Protected コピーコンストラクタ
-     *
-     * @param manager コピー元マネージャオブジェクト
-     *
-     * @else
-     * @brief Protected Copy Constructor
-     *
-     * Protected Copy Constructor
-     *
-     * @param manager Manager object of copy source
-     *
-     * @endif
-     */
-    Manager(const Manager& manager);
+    Manager(const Manager&) = delete;
+    Manager& operator=(const Manager&) = delete;
 
   public:
     /*!
@@ -214,24 +204,7 @@ namespace RTC
      *
      * @endif
      */
-    void terminate();
-
-    /*!
-     * @if jp
-     * @brief マネージャ・シャットダウン
-     *
-     * マネージャの終了処理を実行する。
-     * ORB終了後、同期を取って終了する。
-     *
-     * @else
-     * @brief Shutdown Manager
-     *
-     * Terminate manager's processing.
-     * After terminating ORB, shutdown manager in sync.
-     *
-     * @endif
-     */
-    void shutdown();
+    static void terminate();
 
     /*!
      * @if jp
@@ -370,12 +343,12 @@ namespace RTC
      *
      * @brief Managerの実行
      *
-     * このオペレーションはマネージャのメインループを実行する。
-     * このメインループ内では、CORBA ORBのイベントループ等が
-     * 処理される。デフォルトでは、このオペレーションはブロックし、
-     * Manager::destroy() が呼ばれるまで処理を戻さない。
-     * 引数 no_block が true に設定されている場合は、内部でイベントループ
-     * を処理するスレッドを起動し、ブロックせずに処理を戻す。
+     * このオペレーションはマネージャのメインループを実行する。このメインループ
+     * 内では、タイマー処理が行われる。また CORBA ORB のイベントループ等も開始さ
+     * れる｡デフォルトでは、このオペレーションはブロックし、
+     * Manager::terminate() や シグナルハンドラーが呼ばれるまで処理を戻さない。
+     * 引数 no_block が true に設定されている場合は、内部でイベントループを処理
+     * するスレッドを起動し、ブロックせずに処理を戻す。
      *
      * @param no_block false: ブロッキングモード, true: ノンブロッキングモード
      *
@@ -384,9 +357,10 @@ namespace RTC
      * @brief Run the Manager
      *
      * This operation processes the main event loop of the Manager.
-     * In this main loop, CORBA's ORB event loop or other processes
-     * are performed. As the default behavior, this operation is going to
-     * blocking mode and never returns until Manager::destroy() is called.
+     * In this main loop, periodic task and etc. are performed.
+     * This operation also start CORBA's ORB event loop.
+     * As the default behavior, this operation is going to
+     * blocking mode and never returns until Manager::terminate() is called.
      * When the given argument "no_block" is set to "true", this operation
      * creates a thread to process the event loop internally, and it doesn't
      * block and returns.
@@ -396,6 +370,87 @@ namespace RTC
      * @endif
      */
     void runManager(bool no_block = false);
+
+    using TaskId = coil::Timer<coil::PeriodicFunction>::TaskId;
+
+    /*!
+     * @if jp
+     *
+     * @brief  周期実行タスクの登録
+     *
+     * 周期的に実行する関数や関数オブジェクトを Manager のタイマーに登録する。
+     * removePeriodTask() が実行されるまで処理が継続される｡本関数に登録する処理
+     * の中で sleep などの長時間ブロッキングは推奨されない。また周期タスクの中で
+     * 本関数を呼び出してはならない。
+     *
+     * @param fn: 周期実行する関数または関数オブジェクト
+     * @param period: 周期実行の実行間隔
+     * @return id: removeTask() で実行解除するための ID
+     *
+     * @else
+     *
+     * @brief Add a task to the Manager timer.
+     *
+     * This operation add a function or functional object to Manger's
+     * timer. It run until removeTask(). DO NOT block (Ex. sleep)
+     * in the registerd function.
+     *
+     * @param fn: The Function run periodically.
+     * @param period: Period of fn execution.
+     * @return id: ID for removetask().
+     *
+     * @endif
+     */
+    TaskId addTask(std::function<void(void)> fn,
+                   std::chrono::nanoseconds period);
+
+    /*!
+     * @if jp
+     *
+     * @brief  周期実行タスクの削除
+     *
+     * タイマーに登録されている周期タスクを削除する。
+     *
+     * @param id: 削除対象のタスクを示す ID
+     *
+     * @else
+     *
+     * @brief Remove the task from the Manager timer.
+     *
+     * This operation remove the specify function.
+     *
+     * @param id: Task ID
+     *
+     * @endif
+     */
+    void removeTask(TaskId id) { id->stop(); }
+
+    /*!
+     * @if jp
+     *
+     * @brief Manger のメインスレッドで処理を実行
+     *
+     * Manger のメインスレッドで指定された処理を実行する。長時間のブロッ
+     * キングを行う関数の登録は推奨しない。
+     *
+     * @param fn: 関数または関数オブジェクト
+     * @param delay: 起動するまでの遅延時間
+     *
+     * @else
+     *
+     * @brief Run a function on the Manager main thread.
+     *
+     * The specified function run on the Manager main thread.  DO NOT block
+     * the thread in the function.
+     *
+     * @param fn: The Function run on the Manager main thread.
+     * @param delay: The delay time for the function execution.
+     *
+     * @endif
+     */
+    void invoke(std::function<void(void)> fn,
+                std::chrono::nanoseconds delay
+                = std::chrono::seconds::zero());
 
     //============================================================
     // Module management
@@ -1208,38 +1263,29 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief Manager の終了処理
+     * @brief マネージャ・シャットダウン
      *
-     * Manager を終了する
-     * (ただし，現在は未実装)
+     * マネージャの終了処理を実行する。
+     * ORB終了後、同期を取って終了する。
      *
      * @else
      * @brief Shutdown Manager
      *
-     * Shutdown Manager
-     * (However, not implemented now)
+     * Terminate manager's processing.
+     * After terminating ORB, shutdown manager in sync.
      *
      * @endif
      */
-    void shutdownManager();
+    void shutdown();
 
     /*!
      * @if jp
-     * @brief Manager の終了処理
-     *
-     * configuration の "manager.shutdown_on_nortcs" YES で、
-     * コンポーネントが登録されていない場合 Manager を終了する。
-     *
+     * @brief Manager メインスレッドのメイン関数
      * @else
-     * @brief Shutdown Manager
-     *
-     * This method shutdowns Manager as follows.
-     * - "Manager.shutdown_on_nortcs" of configuration is YES.
-     * - The component is not registered.
-     *
+     * @brief The main function of Manager main thread.
      * @endif
      */
-    void shutdownOnNoRtcs();
+    void main(void);
 
     //============================================================
     // Logger initialize and terminator
@@ -1789,27 +1835,6 @@ namespace RTC
 	* @endif
 	*/
 	void connectServicePorts(PortService_ptr port, PortServiceList_var& target_ports);
-    
-    /*!
-     * @if jp
-     * @brief Timer の初期化
-     *
-     * 使用する各 Timer の初期化処理を実行する。
-     * (現状の実装では何もしない)
-     *
-     * @return Timer 初期化処理実行結果(初期化成功:true、初期化失敗:false)
-     *
-     * @else
-     * @brief Timer initialization
-     *
-     * Initialize each Timer that is used.
-     * (In current implementation, nothing is done.)
-     *
-     * @return Timer Initialization result (Successful:true, Failed:false)
-     *
-     * @endif
-     */
-    bool initTimer();
 
     /*!
      * @if jp
@@ -1959,6 +1984,15 @@ namespace RTC
      */
     static std::mutex mutex;
 
+    /*!
+     * @if jp
+     * @brief メインスレッド停止用フラグ
+     * @else
+     * @brief A flag to stop the main thread.
+     * @endif
+     */
+    static std::atomic_flag m_isRunning;
+
     //------------------------------------------------------------
     // CORBA var
     //------------------------------------------------------------
@@ -2033,12 +2067,57 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief Timer Object
+     * @brief Manager スレッド上での遅延呼び出し用タイマー
      * @else
-     * @brief Timer Object
+     * @brief Timer Object for delay call on the Manager thread
      * @endif
      */
-    coil::Timer* m_timer;
+    coil::Timer<coil::DelayedFunction> m_invoker;
+
+    /*!
+     * @if jp
+     * @brief Manager スレッド上での周期呼び出し用タイマー
+     * @else
+     * @brief Timer Object for delay call on the Manager thread
+     * @endif
+     */
+    coil::Timer<coil::PeriodicFunction> m_scheduler;
+
+    /*!
+     * @if jp
+     * @brief ORB 用のスレッド
+     * @else
+     * @brief ORB thread.
+     * @endif
+     */
+    std::thread m_threadOrb;
+
+    /*!
+     * @if jp
+     * @brief Manager のメインスレッド
+     * @else
+     * @brief Manager main thread.
+     * @endif
+     */
+    std::thread m_threadMain;
+
+    /*!
+     * @if jp
+     * @brief シグナル管理用配列
+     * @else
+     * @brief An array for signals management
+     * @endif
+     */
+    std::list<coil::SignalAction> m_signals;
+
+    /*!
+     * @if jp
+     * @brief マネージャーがタイマーを利用するかどうかのフラグ
+     * @else
+     * @brief A flag that Manager use Timer or not.
+     * @endif
+     */
+    bool m_needsTimer{false};
 
     //------------------------------------------------------------
     // Logger
@@ -2235,284 +2314,6 @@ namespace RTC
       }
       std::vector<std::string> modlist;
     };
-
-    //------------------------------------------------------------
-    // ORB runner
-    //------------------------------------------------------------
-    /*!
-     * @if jp
-     * @class OrbRunner
-     * @brief OrbRunner クラス
-     *
-     * ORB 実行用ヘルパークラス。
-     *
-     * @since 0.4.0
-     *
-     * @else
-     * @class OrbRunner
-     * @brief OrbRunner class
-     *
-     * ORB exrcution helper class
-     *
-     * @since 0.4.0
-     *
-     * @endif
-     */
-    class OrbRunner
-      : public coil::Task
-    {
-    public:
-      /*!
-       * @if jp
-       * @brief コンストラクタ
-       *
-       * コンストラクタ
-       *
-       * @else
-       * @brief Constructor
-       *
-       * Constructor
-       *
-       * @endif
-       */
-      explicit OrbRunner(CORBA::ORB_ptr orb) : m_pORB(orb)
-      {
-        open(nullptr);
-      }
-
-      /*!
-       * @if jp
-       * @brief ORB 活性化処理
-       *
-       * ORB 活性化処理
-       *
-       * @param args 活性化時引数
-       *
-       * @return 活性化結果
-       *
-       * @else
-       * @brief ORB activation processing
-       *
-       * ORB activation processing.
-       *
-       * @param args ORB activation processing
-       *
-       * @return Activation result
-       *
-       * @endif
-       */
-      int open(void * /*args*/) override
-      {
-        activate();
-        return 0;
-      }
-
-      /*!
-       * @if jp
-       * @brief ORB 開始処理
-       *
-       * ORB 開始処理
-       *
-       * @return 開始処理結果
-       *
-       * @else
-       * @brief ORB start processing
-       *
-       * ORB start processing
-       *
-       * @return Starting result
-       *
-       * @endif
-       */
-      int svc() override
-      {
-        m_pORB->run();
-        return 0;
-      }
-
-      /*!
-       * @if jp
-       * @brief ORB 終了処理
-       *
-       * ORB 終了処理
-       *
-       * @param flags 終了処理フラグ
-       *
-       * @return 終了処理結果
-       *
-       * @else
-       * @brief ORB close processing
-       *
-       * ORB close processing.
-       *
-       * @param flags Flag of close processing
-       *
-       * @return Close result
-       *
-       * @endif
-       */
-      int close(unsigned long  /*flags*/) override
-      {
-        return 0;
-      }
-    private:
-      CORBA::ORB_ptr m_pORB;
-    };
-    /*!
-     * @if jp
-     * @brief ORB ヘルパークラスへのポインタ
-     * @else
-     * @brief The pointer to ORB helper class
-     * @endif
-     */
-    OrbRunner* m_runner;
-
-    //------------------------------------------------------------
-    // Manager Terminator
-    //------------------------------------------------------------
-    /*!
-     * @if jp
-     * @class Terminator
-     * @brief Terminator クラス
-     *
-     * ORB 終了用ヘルパークラス。
-     *
-     * @since 0.4.0
-     *
-     * @else
-     * @class Terminator
-     * @brief Terminator class
-     *
-     * ORB termination helper class.
-     *
-     * @since 0.4.0
-     *
-     * @endif
-     */
-    class Terminator
-      : public coil::Task
-    {
-    public:
-      /*!
-       * @if jp
-       * @brief コンストラクタ
-       *
-       * コンストラクタ
-       *
-       * @param manager マネージャ・オブジェクト
-       *
-       * @else
-       * @brief Constructor
-       *
-       * Constructor
-       *
-       * @param manager Manager object
-       *
-       * @endif
-       */
-      explicit Terminator(Manager* mgr, std::chrono::nanoseconds waittime = std::chrono::seconds::zero())
-                : m_manager(mgr), m_waittime(waittime) {}
-
-      /*!
-       * @if jp
-       * @brief 終了処理
-       *
-       * ORB，マネージャ終了処理を開始する。
-       *
-       * @else
-       * @brief Termination processing
-       *
-       * Start ORB and manager's termination processing.
-       *
-       * @endif
-       */
-      void terminate()
-      {
-        open(nullptr);
-      }
-
-      /*!
-       * @if jp
-       * @brief 終了処理活性化処理
-       *
-       * 終了処理活性化処理
-       *
-       * @param args 活性化時引数
-       *
-       * @return 活性化結果
-       *
-       * @else
-       * @brief Termination processing activation
-       *
-       * Termination processing activation.
-       *
-       * @param args Activation argument
-       *
-       * @return Activation result
-       *
-       * @endif
-       */
-      int open(void * /*args*/) override
-      {
-        activate();
-        return 0;
-      }
-
-      /*!
-       * @if jp
-       * @brief ORB，マネージャ終了処理
-       *
-       * ORB，マネージャ終了処理
-       *
-       * @return 終了処理結果
-       *
-       * @else
-       * @brief ORB and manager's termination processing
-       *
-       * ORB and manager's termination processing.
-       *
-       * @return Termination result
-       *
-       * @endif
-       */
-      int svc() override
-      {
-        std::this_thread::sleep_for(m_waittime);
-        Manager::instance().shutdown();
-        return 0;
-      }
-      Manager* m_manager;
-      std::chrono::nanoseconds m_waittime;
-    };
-
-    /*!
-     * @if jp
-     * @brief ORB 終了用ヘルパークラスへのポインタ
-     * @else
-     * @brief The pointer to ORB termination helper class.
-     * @endif
-     */
-    Terminator* m_terminator;
-
-    struct Term
-    {
-      int waiting;
-      std::mutex mutex;
-    };
-    /*!
-     * @if jp
-     * @brief マネージャ終了処理用同期フラグ
-     *
-     * マネージャ終了の待ち合せ処理で同期を取るためのフラグ。
-     *
-     * @else
-     * @brief Synchronous flag for manager termination
-     *
-     * Flag used to take synchronization by join().
-     *
-     * @endif
-     */
-    Term m_terminate;
 
     struct Finalized
     {
