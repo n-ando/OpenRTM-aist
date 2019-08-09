@@ -19,7 +19,6 @@
 #ifndef Timer_h
 #define Timer_h
 
-#include <algorithm>
 #include <chrono>
 #include <functional>
 #include <list>
