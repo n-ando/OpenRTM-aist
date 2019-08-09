@@ -1023,8 +1023,33 @@ namespace coil
    *
    * @endif
    */
-  char** toArgv(const vstring& args);
-
+  class Argv
+  {
+    char** m_argv{nullptr};
+    size_t m_size{0};
+  public:
+    Argv() = default;
+    Argv(const vstring& args);
+    ~Argv();
+    // Non copyable: Implement this when you need.
+    Argv(const Argv&) = delete;
+    Argv& operator=(const Argv&) = delete;
+    // Movable
+    Argv(Argv&& x) noexcept { *this = std::move(x); }
+    Argv& operator=(Argv&& x) noexcept
+    {
+      if(this != &x)
+        {
+          m_argv = x.m_argv;
+          m_size = x.m_size;
+          x.m_argv = nullptr;
+          x.m_size = 0;
+        }
+      return *this;
+    }
+    char** get() { return m_argv;}
+    size_t size() { return m_size; }
+  };
 
   /*!
    * @if jp

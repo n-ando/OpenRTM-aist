@@ -881,26 +881,32 @@ namespace coil
    * @brief Convert the given string list into the argument list
    * @endif
    */
-  char** toArgv(const vstring& args)
+  Argv::Argv(const vstring& args)
   {
-    char** argv;
-    size_t argc(args.size());
+    m_size = args.size();
+    m_argv = new char*[m_size + 1];
 
-    argv = new char*[argc + 1];
-
-    for (size_t i(0); i < argc; ++i)
+    for (size_t i(0); i < m_size; ++i)
       {
         size_t sz(args[i].size());
-        argv[i] = new char[sz + 1];
+        m_argv[i] = new char[sz + 1];
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
-        strncpy_s(argv[i], sz + 1, args[i].c_str(), sz);
+        strncpy_s(m_argv[i], sz + 1, args[i].c_str(), sz);
 #else
-        strncpy(argv[i], args[i].c_str(), sz);
+        strncpy(m_argv[i], args[i].c_str(), sz);
 #endif
-        argv[i][sz] = '\0';
+        m_argv[i][sz] = '\0';
       }
-    argv[argc] = nullptr;
-    return argv;
+    m_argv[m_size] = nullptr;
+  }
+
+  Argv::~Argv()
+  {
+    for(size_t i(0); i < m_size; ++i)
+      {
+        delete[] m_argv[i];
+      }
+    delete[] m_argv;
   }
 
   /*!
