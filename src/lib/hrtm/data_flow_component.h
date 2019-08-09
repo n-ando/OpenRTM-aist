@@ -33,7 +33,7 @@ namespace RTC
     {
       FSM_STATUS
     };
-}
+} // namespace RTC
 
 namespace hrtm
 {

@@ -130,5 +130,5 @@ namespace RTC {
     "sdo.service.consumer.enabled_services",  "ALL",
     ""
   };
-}
+} // namespace RTC
 #endif  // RTM_DEFAULTCONFIGURATION_H
