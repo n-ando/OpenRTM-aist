@@ -133,8 +133,8 @@ namespace RTC
     }
 
   private:
-    Machine(const Machine<TOP> & other);
-    Machine<TOP> & operator=(const Machine<TOP> & other);
+    Machine(const Machine<TOP> & other) = delete;
+    Machine<TOP> & operator=(const Machine<TOP> & other) = delete;
 
     template<class C, class P>
     friend class Link;

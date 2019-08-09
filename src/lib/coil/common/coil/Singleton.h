@@ -178,8 +178,8 @@ namespace coil
     ~Singleton() {}
 
   private:
-    Singleton(const Singleton& x);
-    Singleton& operator=(const Singleton& x);
+    Singleton(const Singleton& x) = delete;
+    Singleton& operator=(const Singleton& x) = delete;
 
   protected:
     /*!

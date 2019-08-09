@@ -1537,8 +1537,8 @@ namespace RTC
     void onActivateSet(const char* config_id);
 
   private:
-    ConfigAdmin(const ConfigAdmin& ca);
-    ConfigAdmin& operator=(const ConfigAdmin& ca);
+    ConfigAdmin(const ConfigAdmin& ca) = delete;
+    ConfigAdmin& operator=(const ConfigAdmin& ca) = delete;
 
     struct find_conf
     {

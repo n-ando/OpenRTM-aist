@@ -100,8 +100,8 @@ namespace coil
     ~SignalAction();
 
   private:
-    SignalAction(const SignalAction&);
-    SignalAction& operator=(const SignalAction &);
+    SignalAction(const SignalAction&) = delete;
+    SignalAction& operator=(const SignalAction &) = delete;
     SignalHandler m_handle;
     int m_signum;
     sigset_t* m_mask;
