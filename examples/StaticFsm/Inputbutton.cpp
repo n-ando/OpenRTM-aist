@@ -55,9 +55,7 @@ Inputbutton::Inputbutton(RTC::Manager* manager)
 
 }
 
-Inputbutton::~Inputbutton()
-{
-}
+Inputbutton::~Inputbutton() = default;
 
 
 RTC::ReturnCode_t Inputbutton::onInitialize()

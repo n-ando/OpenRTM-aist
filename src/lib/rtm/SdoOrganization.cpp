@@ -69,9 +69,7 @@ namespace SDOPackage
    * @brief Virtual destructor
    * @endif
    */
-  Organization_impl::~Organization_impl()
-  {
-  }
+  Organization_impl::~Organization_impl() = default;
 
   /*!
    * @if jp

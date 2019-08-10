@@ -62,9 +62,7 @@ namespace RTC
    */
   struct OutPortBase::connector_cleanup
   {
-    connector_cleanup()
-    {
-    }
+    connector_cleanup() = default;
     void operator()(OutPortConnector* c)
     {
       delete c;

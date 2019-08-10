@@ -50,9 +50,7 @@ ConsoleIn::ConsoleIn(RTC::Manager* manager)
 
 }
 
-ConsoleIn::~ConsoleIn()
-{
-}
+ConsoleIn::~ConsoleIn() = default;
 
 
 RTC::ReturnCode_t ConsoleIn::onInitialize()

@@ -31,9 +31,7 @@ namespace hrtm
       : RTC::OutPort<DataType>(name, data)
     {
     }
-    virtual ~OutPort()
-    {
-    }
+    virtual ~OutPort() = default;
   };
 #else
   template<class DataType>

@@ -26,9 +26,7 @@ namespace coil
   //============================================================
   // System Clock
   //============================================================
-  SystemClock::~SystemClock()
-  {
-  }
+  SystemClock::~SystemClock() = default;
   std::chrono::nanoseconds SystemClock::gettime() const
   {
     return std::chrono::system_clock::now().time_since_epoch();
@@ -44,13 +42,9 @@ namespace coil
   //============================================================
   // Logical Time Clock
   //============================================================
-  LogicalClock::LogicalClock()
-  {
-  }
+  LogicalClock::LogicalClock() = default;
 
-  LogicalClock::~LogicalClock()
-  {
-  }
+  LogicalClock::~LogicalClock() = default;
 
   std::chrono::nanoseconds LogicalClock::gettime() const
   {
@@ -70,13 +64,9 @@ namespace coil
   //============================================================
   // Adjusted Clock
   //============================================================
-  AdjustedClock::AdjustedClock()
-  {
-  }
+  AdjustedClock::AdjustedClock() = default;
 
-  AdjustedClock::~AdjustedClock()
-  {
-  }
+  AdjustedClock::~AdjustedClock() = default;
 
   std::chrono::nanoseconds AdjustedClock::gettime() const
   {

@@ -36,9 +36,7 @@ namespace RTC
    *
    * @endif
    */
-  ConnectorInfo::ConnectorInfo(const ConnectorInfo& info) : name(info.name), id(info.id), ports(info.ports), properties(info.properties)
-  {
-  }
+  ConnectorInfo::ConnectorInfo(const ConnectorInfo&) = default;
 
   /*!
    * @if jp
@@ -55,8 +53,6 @@ namespace RTC
    *
    * @endif
    */
-  ConnectorInfo::~ConnectorInfo()
-  {
-  }
+  ConnectorInfo::~ConnectorInfo() = default;
 } //namespace RTC
 

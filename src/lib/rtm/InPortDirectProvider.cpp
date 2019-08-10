@@ -41,9 +41,7 @@ namespace RTC
    * @brief Destructor
    * @endif
    */
-  InPortDirectProvider::~InPortDirectProvider()
-  {
-  }
+  InPortDirectProvider::~InPortDirectProvider() = default;
 
   void InPortDirectProvider::init(coil::Properties& /*prop*/)
   {

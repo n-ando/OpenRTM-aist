@@ -42,9 +42,7 @@ namespace RTC
    * @brief Destructor
    * @endif
    */
-  OutPortCorbaCdrConsumer::~OutPortCorbaCdrConsumer()
-  {
-  }
+  OutPortCorbaCdrConsumer::~OutPortCorbaCdrConsumer() = default;
 
   /*!
    * @if jp

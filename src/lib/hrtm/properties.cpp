@@ -29,8 +29,6 @@ namespace utils
     : coil::Properties(defaults, num)
   {
   }
-  Properties::~Properties()
-  {
-  }
+  Properties::~Properties() = default;
 } // namespace utils
 } // namespace hrtm

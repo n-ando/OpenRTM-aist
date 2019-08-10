@@ -434,7 +434,7 @@ class DataListener
   USE_CONNLISTENER_STATUS;
 public:
   DataListener(Throughput *comp) : m_comp(comp)  {}
-  ~DataListener() override {}
+  ~DataListener() override = default;
   ReturnCode operator()(ConnectorInfo&  /*info*/,
                           DataType& data) override
   {
@@ -450,7 +450,7 @@ class ConnListener
   USE_CONNLISTENER_STATUS;
 public:
   ConnListener(Throughput *comp) : m_comp(comp) {}
-  ~ConnListener() override {}
+  ~ConnListener() override = default;
   ReturnCode operator()(ConnectorInfo& info) override
   {
 // Connector Listener: ON_CONNECT

@@ -36,9 +36,7 @@ Sensor::Sensor(RTC::Manager* manager)
 {
 }
 
-Sensor::~Sensor()
-{
-}
+Sensor::~Sensor() = default;
 
 
 RTC::ReturnCode_t Sensor::onInitialize()

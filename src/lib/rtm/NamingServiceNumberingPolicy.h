@@ -78,7 +78,7 @@ namespace RTM
      *
      * @endif
      */
-	  ~NamingServiceNumberingPolicy() override{}
+	  ~NamingServiceNumberingPolicy() override = default;
     
     /*!
      * @if jp

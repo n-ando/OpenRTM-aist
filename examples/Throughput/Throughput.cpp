@@ -100,9 +100,7 @@ Throughput::Throughput(RTC::Manager* manager)
 /*!
  * @brief destructor
  */
-Throughput::~Throughput()
-{
-}
+Throughput::~Throughput() = default;
 
 
 

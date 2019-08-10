@@ -49,10 +49,7 @@ namespace RTC
    * @brief Destructor 
    * @endif
    */
-  SimulatorExecutionContext::~SimulatorExecutionContext()
-  {
-
-  }
+  SimulatorExecutionContext::~SimulatorExecutionContext() = default;
 
 
   /*!

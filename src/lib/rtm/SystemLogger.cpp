@@ -88,9 +88,7 @@ namespace RTC
     setDateFormat(m_dateFormat.c_str());
   }
 
-  Logger::~Logger()
-  {
-  }
+  Logger::~Logger() = default;
 
   /*!
    * @if jp

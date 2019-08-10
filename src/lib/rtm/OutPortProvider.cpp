@@ -29,9 +29,7 @@ namespace RTC
    * @brief Destructor
    * @endif
    */
-  OutPortProvider::~OutPortProvider()
-  {
-  }
+  OutPortProvider::~OutPortProvider() = default;
 
   /*!
    * @if jp

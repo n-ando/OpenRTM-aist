@@ -1593,9 +1593,7 @@ namespace RTM
         }
   }
 
-  CompParam::~CompParam()
-  {
-  }
+  CompParam::~CompParam() = default;
 
   std::string CompParam::vendor()
     {

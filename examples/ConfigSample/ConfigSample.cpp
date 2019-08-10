@@ -54,9 +54,7 @@ ConfigSample::ConfigSample(RTC::Manager* manager)
 {
 }
 
-ConfigSample::~ConfigSample()
-{
-}
+ConfigSample::~ConfigSample() = default;
 
 
 RTC::ReturnCode_t ConfigSample::onInitialize()

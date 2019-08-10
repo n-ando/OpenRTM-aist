@@ -52,9 +52,7 @@ SeqOut::SeqOut(RTC::Manager* manager)
 {
 }
 
-SeqOut::~SeqOut()
-{
-}
+SeqOut::~SeqOut() = default;
 
 
 

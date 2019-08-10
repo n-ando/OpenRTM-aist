@@ -35,9 +35,7 @@ MyServiceProvider::MyServiceProvider(RTC::Manager* manager)
 {
 }
 
-MyServiceProvider::~MyServiceProvider()
-{
-}
+MyServiceProvider::~MyServiceProvider() = default;
 
 
 RTC::ReturnCode_t MyServiceProvider::onInitialize()

@@ -42,9 +42,7 @@ namespace RTC
    * @brief dtor
    * @endif
    */
-  LoggerConsumer::~LoggerConsumer()
-  {
-  }
+  LoggerConsumer::~LoggerConsumer() = default;
 
   /*!
    * @if jp

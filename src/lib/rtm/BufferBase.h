@@ -117,9 +117,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~BufferBase()
-    {
-    }
+    virtual ~BufferBase() = default;
 
     /*!
      * @if jp
@@ -595,9 +593,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~NullBuffer()
-    {
-    }
+    virtual ~NullBuffer() = default;
 
     /*!
      * @if jp

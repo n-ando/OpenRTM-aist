@@ -142,7 +142,7 @@ namespace RTC
      * @brief virtual destructor
      * @endif
      */
-    ~SdoServiceProviderBase() override {}
+    ~SdoServiceProviderBase() override;
 
     /*!
      * @if jp
@@ -240,6 +240,9 @@ namespace RTC
      */
     virtual void finalize() = 0;
   };
+
+  // No inline for gcc warning, too big
+  SdoServiceProviderBase::~SdoServiceProviderBase() = default;
 
     /*!
      * @if jp

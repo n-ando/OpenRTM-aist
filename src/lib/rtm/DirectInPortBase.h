@@ -59,7 +59,7 @@ namespace RTC
 	*
 	* @endif
 	*/
-    ~DirectInPortBase() override{}
+    ~DirectInPortBase() override = default;
 
 
 

@@ -416,7 +416,7 @@ namespace RTC
         : m_coc(coc), m_msg(std::move(msg)), m_interval(interval)
       {
       }
-      ~DataPortAction() override {}
+      ~DataPortAction() override = default;
 
       ReturnCode operator()(ConnectorInfo&  /*info*/,
                             ByteData&  /*data*/, const std::string& /*marsharingtype*/) override

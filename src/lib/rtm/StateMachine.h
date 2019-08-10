@@ -257,6 +257,7 @@ namespace RTC_Utils
    *
    * @endif
    */
+
   template <class State,
             class Listener,
             class States = StateHolder<State>,
@@ -295,9 +296,7 @@ namespace RTC_Utils
     {
     }
 
-    virtual ~StateMachine()
-    {
-    }
+    virtual ~StateMachine();
 
     StateMachine(const StateMachine& other)
       : m_num(other.m_num),
@@ -980,6 +979,11 @@ namespace RTC_Utils
       m_states.curr = curr;
     }
   };
+
+  // No inline for gcc warning, too big
+  template <class T, class U, class V, class W>
+  StateMachine<T, U, V, W>::~StateMachine() = default;
+
 } // namespace RTC_Utils
 
 #endif  // RTC_STATEMACHINE_H

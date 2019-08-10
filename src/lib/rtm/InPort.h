@@ -149,7 +149,7 @@ namespace RTC
      *
      * @endif
      */
-    ~InPort() override {}
+    ~InPort() override;
 
     /*!
      * @if jp
@@ -839,6 +839,8 @@ namespace RTC
      */
     bool m_directNewData;
   };
+
+  template <class T> InPort<T>::~InPort() = default; // No inline for gcc warning, too big
 } // namespace RTC
 
 #endif  // RTC_INPORT_H

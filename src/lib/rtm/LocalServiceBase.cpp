@@ -27,8 +27,6 @@ namespace RTM
    * @brief destructor
    * @endif
    */
-  LocalServiceProfile::~LocalServiceProfile()
-  {
-  }
+  LocalServiceProfile::~LocalServiceProfile() = default;
 } //namespace RTM
 

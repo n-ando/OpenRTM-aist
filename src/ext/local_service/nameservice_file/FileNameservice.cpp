@@ -368,9 +368,7 @@ namespace RTM
      * @brief Destructor
      * @endif
      */
-    NamingAction::~NamingAction()
-    {
-    }
+    NamingAction::~NamingAction() = default;
     
     /*!
      * @if jp

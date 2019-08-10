@@ -58,7 +58,7 @@ namespace coil
      *
      * @endif
      */
-    Async() {}
+    Async() = default;
 
     /*!
      * @if jp
@@ -75,7 +75,7 @@ namespace coil
      *
      * @endif
      */
-    ~Async() override {}
+    ~Async() override = default;
 
     /*!
      * @if jp
@@ -177,9 +177,7 @@ namespace coil
      *
      * @endif
      */
-    ~Async_t() override
-    {
-    }
+    ~Async_t() override = default;
 
     /*!
      * @if jp
@@ -345,9 +343,7 @@ namespace coil
      *
      * @endif
      */
-    ~Async_ref_t() override
-    {
-    }
+    ~Async_ref_t() override = default;
 
     /*!
      * @if jp

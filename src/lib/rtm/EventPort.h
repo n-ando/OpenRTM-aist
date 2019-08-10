@@ -52,7 +52,7 @@ namespace RTC
                  RingBuffer<EventBase*> &buffer)
       : m_fsm(fsm), m_eventName(event_name), m_handler(handler), m_buffer(buffer) {}
 
-    ~EventBinder0() override {}
+    ~EventBinder0() override = default;
 
     ReturnCode operator()(ConnectorInfo& info,
                                   ByteData&  /*data*/, const std::string& /*marshalingtype*/) override
@@ -91,7 +91,7 @@ namespace RTC
                  RingBuffer<EventBase*> &buffer)
       : m_fsm(fsm), m_eventName(event_name), m_handler(handler), m_buffer(buffer) {}
 
-    ~EventBinder1() override {}
+    ~EventBinder1() override = default;
 
     ReturnCode operator()(ConnectorInfo& info, P0& data) override
     {
@@ -122,9 +122,7 @@ namespace RTC
   public:
       EventConnListener(RingBuffer<EventBase*>&buffer, CdrBufferBase* m_thebuffer) :
           m_buffer(buffer), m_thebuffer(m_thebuffer) {}
-      ~EventConnListener() override
-      {
-      }
+      ~EventConnListener() override = default;
 
       ReturnCode operator()(ConnectorInfo& info) override
       {
@@ -242,7 +240,7 @@ namespace RTC
      *
      * @endif
      */
-    ~EventInPort() override{}
+    ~EventInPort() override = default;
 
     /*!
      * @if jp

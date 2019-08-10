@@ -94,7 +94,7 @@ namespace RTC
      *
      * @endif
      */
-    CorbaConsumerBase() {}
+    CorbaConsumerBase() = default;
 
     /*!
      * @if jp
@@ -343,7 +343,7 @@ namespace RTC
      *
      * @endif
      */
-    CorbaConsumer() {}
+    CorbaConsumer();
 
     /*!
      * @if jp
@@ -559,5 +559,9 @@ namespace RTC
      */
     ObjectTypeVar m_var;
   };
+
+  // No inline for gcc warning, too big
+  template <class T, class U, class V>
+  CorbaConsumer<T, U, V>::CorbaConsumer() = default;
 } // namespace RTC
 #endif  // RTC_CORBACONSUMER_H

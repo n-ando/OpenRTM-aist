@@ -46,9 +46,7 @@ namespace RTC
    * @brief Virtual destructor
    * @endif
    */
-  CorbaPort::~CorbaPort()
-  {
-  }
+  CorbaPort::~CorbaPort() = default;
 
   /*!
    * @if jp
@@ -470,8 +468,6 @@ namespace RTC
    * @brief destructor
    * @endif
    */
-  CorbaPort::CorbaConsumerHolder::~CorbaConsumerHolder()
-  {
-  }
+  CorbaPort::CorbaConsumerHolder::~CorbaConsumerHolder() = default;
 
 } // namespace RTC

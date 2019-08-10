@@ -18,7 +18,7 @@
 class ShortToDoubleSerializer : public RTC::CORBA_CdrSerializer<RTC::TimedDouble>
 {
 public:
-    ShortToDoubleSerializer(){}
+    ShortToDoubleSerializer() = default;
 
     bool deserialize(RTC::TimedDouble& data) override
     {

@@ -58,7 +58,7 @@ namespace coil
      *
      * @endif
      */
-    ~PeriodicTaskBase() override {}
+    ~PeriodicTaskBase() override = default;
 
     /*!
      * @if jp

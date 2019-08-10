@@ -95,9 +95,7 @@ namespace RTC
      *
      * @endif
      */
-    ConnectorInfo()
-    {
-    }
+    ConnectorInfo() = default;
 
     /*!
      * @if jp
@@ -227,7 +225,7 @@ namespace RTC
      * @brief Destructor
      * @endif
      */
-    virtual ~ConnectorBase() {}
+    virtual ~ConnectorBase() = default;
 
    /*!
      * @if jp

@@ -204,9 +204,7 @@ namespace RTM
      * @brief virtual destructor
      * @endif
      */
-    virtual ~LocalServiceBase()
-    {
-    }
+    virtual ~LocalServiceBase() = default;
 
     /*!
      * @if jp

@@ -29,7 +29,7 @@ namespace RTC
    * @class ConfigurationParamListener class
    * @endif
    */
-  ConfigurationParamListener::~ConfigurationParamListener() {}
+  ConfigurationParamListener::~ConfigurationParamListener() = default;
 
   /*!
    * @if jp
@@ -38,7 +38,7 @@ namespace RTC
    * @class ConfigurationSetNameListener class
    * @endif
    */
-  ConfigurationSetNameListener::~ConfigurationSetNameListener() {}
+  ConfigurationSetNameListener::~ConfigurationSetNameListener() = default;
 
   /*!
    * @if jp
@@ -47,7 +47,7 @@ namespace RTC
    * @class ConfigurationSetListener class
    * @endif
    */
-  ConfigurationSetListener::~ConfigurationSetListener() {}
+  ConfigurationSetListener::~ConfigurationSetListener() = default;
 
 
   //============================================================
@@ -58,9 +58,7 @@ namespace RTC
    * @class ConfigurationParamListener holder class
    * @endif
    */
-  ConfigurationParamListenerHolder::ConfigurationParamListenerHolder()
-  {
-  }
+  ConfigurationParamListenerHolder::ConfigurationParamListenerHolder() = default;
 
 
   ConfigurationParamListenerHolder::~ConfigurationParamListenerHolder()
@@ -126,9 +124,7 @@ namespace RTC
    * @class ConfigurationSetListener holder class
    * @endif
    */
-  ConfigurationSetListenerHolder::ConfigurationSetListenerHolder()
-  {
-  }
+  ConfigurationSetListenerHolder::ConfigurationSetListenerHolder() = default;
 
 
   ConfigurationSetListenerHolder::~ConfigurationSetListenerHolder()
@@ -193,9 +189,7 @@ namespace RTC
    * @class ConfigurationSetNameListener holder class
    * @endif
    */
-  ConfigurationSetNameListenerHolder::ConfigurationSetNameListenerHolder()
-  {
-  }
+  ConfigurationSetNameListenerHolder::ConfigurationSetNameListenerHolder() = default;
 
 
   ConfigurationSetNameListenerHolder::~ConfigurationSetNameListenerHolder()

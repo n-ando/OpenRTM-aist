@@ -41,10 +41,7 @@ namespace RTC
    * @brief Destructor
    * @endif
    */
-  OutPortDirectProvider::~OutPortDirectProvider()
-  {
-
-  }
+  OutPortDirectProvider::~OutPortDirectProvider() = default;
   
   /*!
    * @if jp

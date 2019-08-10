@@ -43,9 +43,7 @@ namespace RTC
    * @brief Destructor
    * @endif
    */
-  DataFlowComponentBase::~DataFlowComponentBase()
-  {
-  }
+  DataFlowComponentBase::~DataFlowComponentBase() = default;
 
 
   /*!

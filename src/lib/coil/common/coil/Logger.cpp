@@ -31,10 +31,7 @@ namespace coil
    * @brief Constructor
    * @endif
    */
-    LogStreamBuffer::LogStreamBuffer()
-    {
-    
-    }
+    LogStreamBuffer::LogStreamBuffer() = default;
     /*!
      * @if jp
      *
@@ -50,10 +47,7 @@ namespace coil
      *
      * @endif
      */
-    LogStreamBuffer::~LogStreamBuffer()
-    {
-
-    }
+    LogStreamBuffer::~LogStreamBuffer() = default;
 
     /*!
      * @if jp
@@ -260,11 +254,7 @@ namespace coil
      *
      * @endif
      */
-    LogStreamBuffer& LogStreamBuffer::operator=(const LogStreamBuffer& x)
-    {
-          this->m_streams = x.m_streams;
-          return *this;
-    }
+    LogStreamBuffer& LogStreamBuffer::operator=(const LogStreamBuffer& x) = default;
 
 
 
@@ -464,13 +454,6 @@ namespace coil
      *
      * @endif
      */
-    LogStream& LogStream::operator=(const LogStream& x)
-    {
-        this->m_minLevel = x.m_minLevel;
-        this->m_maxLevel = x.m_maxLevel;
-        this->m_logLevel = x.m_logLevel;
-        this->ostream_type = x.ostream_type;
-        return *this;
-    }
+    LogStream& LogStream::operator=(const LogStream& x) = default;
 
 } // namespace coil

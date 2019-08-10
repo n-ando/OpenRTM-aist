@@ -156,9 +156,7 @@ namespace util
      * @brief ListenerHolder class ctor
      * @endif
      */
-    ListenerHolder()
-    {
-    }
+    ListenerHolder() = default;
 
     /*!
      * @if jp

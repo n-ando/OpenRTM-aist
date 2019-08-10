@@ -85,10 +85,8 @@ namespace RTC
   {
     return m_name == comp->getInstanceName();
   }
-  Manager::FactoryPredicate::~FactoryPredicate()
-  {}
-  Manager::Finalized::~Finalized()
-  {}
+  Manager::FactoryPredicate::~FactoryPredicate() = default;
+  Manager::Finalized::~Finalized() = default;
 
   /*!
    * @if jp

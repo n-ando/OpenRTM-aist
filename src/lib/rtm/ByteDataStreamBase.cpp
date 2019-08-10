@@ -36,10 +36,7 @@ namespace RTC
      *
      * @endif
      */
-    ByteDataStreamBase::ByteDataStreamBase()
-    {
-
-    }
+    ByteDataStreamBase::ByteDataStreamBase() = default;
 
     /*!
      * @if jp
@@ -56,9 +53,7 @@ namespace RTC
      *
      * @endif
      */
-    ByteDataStreamBase::~ByteDataStreamBase()
-    {
-    }
+    ByteDataStreamBase::~ByteDataStreamBase() = default;
 
     /*!
      * @if jp

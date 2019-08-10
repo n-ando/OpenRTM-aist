@@ -168,13 +168,9 @@ namespace RTC
 
   //============================================================
   // FluentBit class
-  FluentBit::FluentBit()
-  {
-  }
+  FluentBit::FluentBit() = default;
 
-  FluentBit::~FluentBit()
-  {
-  }
+  FluentBit::~FluentBit() = default;
 
   bool FluentBit::init(const coil::Properties& prop)
   {

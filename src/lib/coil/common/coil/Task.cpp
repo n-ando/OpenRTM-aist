@@ -28,9 +28,7 @@ namespace coil
    * @brief Constructor
    * @endif
    */
-  Task::Task()
-  {
-  }
+  Task::Task() = default;
 
   /*!
    * @if jp
@@ -39,9 +37,7 @@ namespace coil
    * @brief Destructor
    * @endif
    */
-  Task::~Task()
-  {
-  }
+  Task::~Task() = default;
 
   /*!
    * @if jp

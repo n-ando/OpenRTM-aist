@@ -762,7 +762,7 @@ namespace RTC
     class UnloadPred
     {
     public:
-      UnloadPred() {}
+      UnloadPred() = default;
       void operator()(DLLEntity* dll)
       {
         dll->dll.close();

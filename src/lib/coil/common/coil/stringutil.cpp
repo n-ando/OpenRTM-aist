@@ -198,7 +198,7 @@ namespace coil
    */
   struct escape_functor
   {
-    escape_functor() {}
+    escape_functor() = default;
     void operator()(const char c)
     {
       if      (c == '\t')  str += "\\t";

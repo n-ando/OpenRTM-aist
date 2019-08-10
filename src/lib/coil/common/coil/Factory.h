@@ -546,9 +546,7 @@ namespace coil
     class FactoryEntry
     {
     public:
-      FactoryEntry()
-      {
-      }
+      FactoryEntry() = default;
 
       /*!
        * @if jp
@@ -631,7 +629,7 @@ namespace coil
      *
      * @endif
      */
-    GlobalFactory() {}
+    GlobalFactory() = default;
 
     /*!
      * @if jp
@@ -648,7 +646,7 @@ namespace coil
      *
      * @endif
      */
-    ~GlobalFactory() {}
+    ~GlobalFactory() = default;
 
     friend class Singleton<GlobalFactory>;
   };

@@ -49,9 +49,7 @@ SeqIn::SeqIn(RTC::Manager* manager)
 {
 }
 
-SeqIn::~SeqIn()
-{
-}
+SeqIn::~SeqIn() = default;
 
 
 

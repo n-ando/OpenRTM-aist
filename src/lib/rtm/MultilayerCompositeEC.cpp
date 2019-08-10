@@ -280,10 +280,7 @@ namespace RTC_exp
 
   }
 
-  MultilayerCompositeEC::ChildTask::~ChildTask()
-  {
-
-  }
+  MultilayerCompositeEC::ChildTask::~ChildTask() = default;
 
   void MultilayerCompositeEC::ChildTask::addComponent(RTC::LightweightRTObject_ptr rtc)
   {

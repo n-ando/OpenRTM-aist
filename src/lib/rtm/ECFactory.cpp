@@ -45,9 +45,7 @@ namespace RTC
    * @brief Virtual destructor
    * @endif
    */
-  ECFactoryCXX::~ECFactoryCXX()
-  {
-  }
+  ECFactoryCXX::~ECFactoryCXX() = default;
 
   /*!
    * @if jp

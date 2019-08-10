@@ -69,7 +69,7 @@ public:
    *
    * @endif
    */
-  ObjectManager() {}
+  ObjectManager() = default;
 
   /*!
    * @if jp
@@ -86,7 +86,7 @@ public:
    *
    * @endif
    */
-  ~ObjectManager() {}
+  ~ObjectManager() = default;
 
   /*!
    * @if jp
@@ -273,7 +273,7 @@ protected:
    */
   struct Objects
   {
-    ~Objects(){}
+    ~Objects() = default;
     mutable std::mutex _mutex;
     ObjectVector _obj;
   };

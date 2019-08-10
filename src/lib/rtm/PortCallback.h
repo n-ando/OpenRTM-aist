@@ -68,7 +68,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~ConnectionCallback() {}
+    virtual ~ConnectionCallback() = default;
 
     /*!
      * @if jp
@@ -137,7 +137,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~DisconnectCallback() {}
+    virtual ~DisconnectCallback() = default;
     /*!
      * @if jp
      *
@@ -205,7 +205,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~OnWrite() {}
+    virtual ~OnWrite() = default;
 
     /*!
      * @if jp
@@ -270,7 +270,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~OnWriteConvert() {}
+    virtual ~OnWriteConvert() = default;
 
     /*!
      * @if jp
@@ -337,7 +337,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~OnRead() {}
+    virtual ~OnRead() = default;
 
     /*!
      * @if jp
@@ -399,7 +399,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~OnReadConvert() {}
+    virtual ~OnReadConvert() = default;
 
     /*!
      * @if jp

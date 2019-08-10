@@ -91,7 +91,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~InPortConsumer() {}
+    virtual ~InPortConsumer() = default;
 
     /*!
      * @if jp

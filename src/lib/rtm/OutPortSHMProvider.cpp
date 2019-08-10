@@ -67,10 +67,7 @@ namespace RTC
    * @brief Destructor
    * @endif
    */
-  OutPortSHMProvider::~OutPortSHMProvider()
-  {
-
-  }
+  OutPortSHMProvider::~OutPortSHMProvider() = default;
   
   /*!
    * @if jp

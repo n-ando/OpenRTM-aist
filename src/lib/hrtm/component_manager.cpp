@@ -72,7 +72,5 @@ namespace hrtm
   {
   }
 
-  ComponentManager::~ComponentManager()
-  {
-  }
+  ComponentManager::~ComponentManager() = default;
 } // namespace hrtm

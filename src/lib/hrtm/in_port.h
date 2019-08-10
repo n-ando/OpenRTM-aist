@@ -31,9 +31,7 @@ namespace hrtm
       : RTC::InPort<DataType>(name, data)
     {
     }
-    virtual ~InPort()
-    {
-    }
+    virtual ~InPort() = default;
   };
 #else
   template<class DataType>

@@ -385,7 +385,7 @@ namespace Macho {
 	// and exit actions of user's top state.
 	class _StateSpecification {
 	public:
-		virtual ~_StateSpecification() {}
+		virtual ~_StateSpecification() = default;
 
 		static bool isChild(Key  /*key*/) {
 			return false;
@@ -842,7 +842,7 @@ namespace Macho {
 	// Generic interface for event objects (available only to MachineBase)
 	class _IEventBase {
 	public:
-		virtual ~_IEventBase() {}
+		virtual ~_IEventBase() = default;
 		virtual void dispatch(_StateInstance &) = 0;
 	};
 
@@ -1133,7 +1133,7 @@ namespace Macho {
 	// the data of the initializer object.
 	class _Initializer {
 	public:
-		virtual ~_Initializer() {}
+		virtual ~_Initializer() = default;
 
 		// Create copy of initializer.
 		virtual _Initializer * clone() = 0;

@@ -429,9 +429,7 @@ namespace RTC
          *
          * @endif
          */
-        CORBA_CdrSerializer()
-        {
-        }
+        CORBA_CdrSerializer() = default;
 
         /*!
          * @if jp
@@ -448,9 +446,7 @@ namespace RTC
          *
          * @endif
          */
-        ~CORBA_CdrSerializer() override
-        {
-        }
+        ~CORBA_CdrSerializer() override = default;
 
         /*!
          * @if jp
