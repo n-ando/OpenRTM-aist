@@ -337,7 +337,7 @@ namespace RTC
     }
 
   private:
-    CdrBufferBase* m_buffer;
+    CdrBufferBase* m_buffer{nullptr};
     ConnectorListeners* m_listeners;
     ConnectorInfo m_profile;
     InPortConnector* m_connector;

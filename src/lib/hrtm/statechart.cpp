@@ -116,11 +116,7 @@ StateInfo * StateInfo::clone(MachineBase & new_machine) {
 ////////////////////////////////////////////////////////////////////////////////
 // Base class for Machine objects.
 MachineBase::MachineBase()
-  : current_state_(nullptr)
-  , pending_state_(nullptr)
-  , pending_data_(nullptr)
-  , pending_history_(false)
-  , pending_event_(nullptr) {}
+   {}
 
 MachineBase::~MachineBase() {
   assert(!pending_data_);

@@ -445,12 +445,12 @@ class EXPORT_DLL MachineBase {
   friend class StateBase;
 
   // Current state of Machine object.
-  StateInfo * current_state_;
+  StateInfo * current_state_{nullptr};
   // Information about pending state transition.
-  StateInfo * pending_state_;
-  void * pending_data_;
-  bool pending_history_;
-  EventBase * pending_event_;
+  StateInfo * pending_state_{nullptr};
+  void * pending_data_{nullptr};
+  bool pending_history_{false};
+  EventBase * pending_event_{nullptr};
   EventQueue deferred_events_;
   EventNames deferred_names_;
   // Array of StateInfo objects.

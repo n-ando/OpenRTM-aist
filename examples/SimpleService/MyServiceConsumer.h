@@ -193,13 +193,13 @@ class MyServiceConsumer
   template <class T>
   struct seq_print
   {
-    seq_print() : m_cnt(0) {}
+    seq_print()  {}
     void operator()(T val)
     {
       std::cout << m_cnt << ": " << val << std::endl;
       ++m_cnt;
     }
-    int m_cnt;
+    int m_cnt{0};
   };
 
 };

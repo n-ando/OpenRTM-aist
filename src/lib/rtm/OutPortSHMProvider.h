@@ -291,13 +291,13 @@ namespace RTC
     }
     
   private:
-    CdrBufferBase* m_buffer;
+    CdrBufferBase* m_buffer{nullptr};
     ::OpenRTM::PortSharedMemory_var m_objref;
     ConnectorListeners* m_listeners;
     ConnectorInfo m_profile;
-    OutPortConnector* m_connector;
+    OutPortConnector* m_connector{nullptr};
     std::string m_shm_address;
-    int m_memory_size;
+    int m_memory_size{0};
   };  // class OutPortCorbaCdrProvider
 } // namespace RTC
 

@@ -98,8 +98,6 @@ namespace RTC
    * @endif
    */
   Manager::Manager()
-    : m_initProc(nullptr), m_namingManager(nullptr),
-      m_logStreamBuf(), rtclog(&m_logStreamBuf)
   {
     m_signals.emplace_back(openrtm_signal_handler, SIGINT);
   }

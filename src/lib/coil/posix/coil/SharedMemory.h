@@ -361,11 +361,11 @@ namespace coil
     virtual bool created();
 
   private:
-    unsigned long long m_memory_size;
+    unsigned long long m_memory_size{0};
     std::string m_shm_address;
-    char *m_shm;
-    bool m_file_create;
-    int m_fd;
+    char *m_shm{nullptr};
+    bool m_file_create{false};
+    int m_fd{-1};
   };  // class SharedMemory
 
 } // namespace coil

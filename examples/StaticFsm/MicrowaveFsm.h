@@ -47,7 +47,7 @@ namespace MicrowaveFsm
     // Top state data (visible to all substates)
     struct Box
     {
-      Box() : myCookingTime(0) {}
+      Box()  {}
       void printTimer()
       {
         std::cout << "  Timer set to ";
@@ -58,7 +58,7 @@ namespace MicrowaveFsm
       void resetTimer() { myCookingTime = 0; }
       int getRemainingTime() { return myCookingTime; }
     private:
-      int myCookingTime;
+      int myCookingTime{0};
     };
 
     FSM_STATE(Top);

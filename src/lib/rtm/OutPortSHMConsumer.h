@@ -331,7 +331,7 @@ protected:
     bool m_endian;
 
 	CdrBufferBase* m_buffer;
-	ConnectorListeners* m_listeners;
+	ConnectorListeners* m_listeners{nullptr};
 	ConnectorInfo m_profile;
   };
 } // namespace RTC

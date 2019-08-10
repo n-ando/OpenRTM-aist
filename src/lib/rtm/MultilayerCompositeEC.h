@@ -171,7 +171,7 @@ namespace RTC_exp
       virtual void addRTCToTask(ChildTask* task, RTC::LightweightRTObject_ptr rtobj);
 
       std::vector<ChildTask*> m_tasklist;
-      RTC_impl::RTObjectStateMachine* m_ownersm;
+      RTC_impl::RTObjectStateMachine* m_ownersm{nullptr};
 
 
   };  // class MultilayerCompositeEC

@@ -39,7 +39,7 @@
   */
 namespace RTC
 {
-    CORBA_CdrMemoryStream::CORBA_CdrMemoryStream(): m_endian(true)
+    CORBA_CdrMemoryStream::CORBA_CdrMemoryStream()
     {
     }
 

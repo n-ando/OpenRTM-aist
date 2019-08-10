@@ -236,12 +236,12 @@ namespace coil
   private:
     std::vector<std::chrono::nanoseconds> m_record;
     std::chrono::high_resolution_clock::time_point m_begin;
-    std::chrono::nanoseconds m_interval;
+    std::chrono::nanoseconds m_interval{0};
 
-    unsigned long int m_count;
+    unsigned long int m_count{0};
     const unsigned long int m_countMax;
 
-    bool m_recurred;
+    bool m_recurred{false};
   };
 } // namespace coil
 #endif  // COIL_TIMEMEASURE_H

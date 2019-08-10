@@ -308,7 +308,7 @@ namespace coil
      * @brief Task execution period
      * @endif
      */
-    std::chrono::nanoseconds m_period;
+    std::chrono::nanoseconds m_period{0};
 
     /*!
      * @if jp
@@ -343,7 +343,7 @@ namespace coil
      * @brief Task alive flag
      * @endif
      */
-    alive_t m_alive;
+    alive_t m_alive{false};
 
     /*!
      * @if jp
@@ -354,7 +354,7 @@ namespace coil
      */
     struct suspend_t
     {
-      explicit suspend_t(bool sus) : suspend(sus), mutex(), cond() {}
+      explicit suspend_t(bool sus) : suspend(sus) {}
       bool suspend;
       std::mutex mutex;
       std::condition_variable cond;
@@ -367,7 +367,7 @@ namespace coil
      * @brief Task suspend infomation
      * @endif
      */
-    suspend_t m_suspend;
+    suspend_t m_suspend{false};
 
     /*!
      * @if jp
@@ -398,7 +398,7 @@ namespace coil
      * @brief Task execution time measurement count
      * @endif
      */
-    unsigned int      m_execCount;
+    unsigned int      m_execCount{0};
 
     /*!
      * @if jp
@@ -407,7 +407,7 @@ namespace coil
      * @brief Task execution time measurement max count
      * @endif
      */
-    unsigned int      m_execCountMax;
+    unsigned int      m_execCountMax{1000};
 
     /*!
      * @if jp
@@ -443,7 +443,7 @@ namespace coil
      * @brief Task periodic time measurement count
      * @endif
      */
-    unsigned int      m_periodCount;
+    unsigned int      m_periodCount{0};
 
     /*!
      * @if jp
@@ -452,7 +452,7 @@ namespace coil
      * @brief Task periodic time measurement max count
      * @endif
      */
-    unsigned int      m_periodCountMax;
+    unsigned int      m_periodCountMax{1000};
 
     /*!
      * @if jp

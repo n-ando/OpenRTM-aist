@@ -30,8 +30,7 @@ namespace RTC
    * @endif
    */
   OpenHRPExecutionContext::OpenHRPExecutionContext()
-    :  ExecutionContextBase("exttrig_sync_ec"),
-       rtclog("exttrig_sync_ec"), m_count(0)
+    :  ExecutionContextBase("exttrig_sync_ec")
   {
     RTC_TRACE(("OpenHRPExecutionContext()"));
 

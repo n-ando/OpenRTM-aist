@@ -97,7 +97,7 @@ namespace RTC
 
   protected:
 
-    RTC::RTObject_impl* m_rtobj;
+    RTC::RTObject_impl* m_rtobj{nullptr};
     SDOPackage::ServiceProfile m_profile;
     CorbaConsumer<OpenRTM::Logger> m_logger;
   };

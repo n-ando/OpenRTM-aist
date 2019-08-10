@@ -102,11 +102,8 @@ namespace coil
   private:
     SignalAction(const SignalAction&) = delete;
     SignalAction& operator=(const SignalAction &) = delete;
-    SignalHandler m_handle;
-    int m_signum;
-    sigset_t* m_mask;
-    int m_flags;
-
+    SignalHandler m_handle{nullptr};
+    int m_signum{0};
   };
 } // namespace coil
 #endif  // COIL_SIGNAL_H

@@ -390,7 +390,7 @@ namespace RTC
 #else
         cdrMemoryStream m_cdr;
 #endif
-        bool m_endian;
+        bool m_endian{true};
     };
     /*!
      * @if jp

@@ -263,9 +263,9 @@ namespace RTC
          */
         bool getEndian();
     private:
-        unsigned char* m_buf;
-        unsigned long m_len;
-        bool m_little_endian;
+        unsigned char* m_buf{nullptr};
+        unsigned long m_len{0};
+        bool m_little_endian{true};
     };
 
 } // namespace RTC

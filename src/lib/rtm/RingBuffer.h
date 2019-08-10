@@ -113,12 +113,7 @@ namespace RTC
      * @endif
      */
     explicit RingBuffer(long int length = RINGBUFFER_DEFAULT_LENGTH)
-      : m_overwrite(true), m_readback(true),
-        m_timedwrite(false), m_timedread(false),
-        m_wtimeout(std::chrono::seconds(1)), m_rtimeout(std::chrono::seconds(1)),
-        m_length(length),
-        m_wpos(0), m_rpos(0), m_fillcount(0), m_wcount(0),
-        m_buffer(m_length)
+      : m_length(length), m_buffer(m_length)
     {
       this->reset();
     }
@@ -926,7 +921,7 @@ namespace RTC
      * @brief Overwrite flag
      * @endif
      */
-    bool m_overwrite;
+    bool m_overwrite{true};
 
     /*!
      * @if jp
@@ -935,7 +930,7 @@ namespace RTC
      * @brief Readback flag
      * @endif
      */
-    bool m_readback;
+    bool m_readback{true};
 
     /*!
      * @if jp
@@ -944,7 +939,7 @@ namespace RTC
      * @brief Timedwrite flag
      * @endif
      */
-    bool m_timedwrite;
+    bool m_timedwrite{false};
     /*!
      * @if jp
      * @brief タイムアウト付き読み出しフラグ
@@ -952,7 +947,7 @@ namespace RTC
      * @brief Timedread flag
      * @endif
      */
-    bool m_timedread;
+    bool m_timedread{false};
 
     /*!
      * @if jp
@@ -961,7 +956,7 @@ namespace RTC
      * @brief Timeout time for writing
      * @endif
      */
-    std::chrono::nanoseconds m_wtimeout;
+    std::chrono::nanoseconds m_wtimeout{std::chrono::seconds(1)};
 
     /*!
      * @if jp
@@ -970,7 +965,7 @@ namespace RTC
      * @brief Timeout time of reading
      * @endif
      */
-    std::chrono::nanoseconds m_rtimeout;
+    std::chrono::nanoseconds m_rtimeout{std::chrono::seconds(1)};
 
     /*!
      * @if jp
@@ -988,7 +983,7 @@ namespace RTC
      * @brief pointer to write
      * @endif
      */
-    size_t m_wpos;
+    size_t m_wpos{0};
 
     /*!
      * @if jp
@@ -997,7 +992,7 @@ namespace RTC
      * @brief poitner to read
      * @endif
      */
-    size_t m_rpos;
+    size_t m_rpos{0};
 
     /*!
      * @if jp
@@ -1006,7 +1001,7 @@ namespace RTC
      * @brief Fill count
      * @endif
      */
-    size_t m_fillcount;
+    size_t m_fillcount{0};
 
     /*!
      * @if jp
@@ -1015,7 +1010,7 @@ namespace RTC
      * @brief Counter for writing
      * @endif
      */
-    size_t m_wcount;
+    size_t m_wcount{0};
 
     /*!
      * @if jp
@@ -1035,7 +1030,7 @@ namespace RTC
      */
     struct condition
     {
-      condition() : cond() {}
+      condition() {}
       std::condition_variable cond;
       std::mutex mutex;
     };

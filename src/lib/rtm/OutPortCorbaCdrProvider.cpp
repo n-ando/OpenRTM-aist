@@ -29,7 +29,6 @@ namespace RTC
    * @endif
    */
   OutPortCorbaCdrProvider::OutPortCorbaCdrProvider()
-    : m_buffer(nullptr), m_connector(nullptr)
   {
     // PortProfile setting
     setInterfaceType("corba_cdr");

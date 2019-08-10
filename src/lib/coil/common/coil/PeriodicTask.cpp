@@ -29,11 +29,6 @@ namespace coil
    * @endif
    */
   PeriodicTask::PeriodicTask()
-    : m_period(std::chrono::seconds(0)),
-      m_func(nullptr),
-      m_alive(false), m_suspend(false),
-      m_execCount(0), m_execCountMax(1000),
-      m_periodCount(0), m_periodCountMax(1000)
   {
   }
 

@@ -235,7 +235,7 @@ namespace coil
    */
   struct unescape_functor
   {
-    unescape_functor() : count(0) {}
+    unescape_functor()  {}
     void operator()(char c)
     {
       if (c == '\\')
@@ -270,7 +270,7 @@ namespace coil
         }
     }
     std::string str;
-    int count;
+    int count{0};
   };
 
   /*!

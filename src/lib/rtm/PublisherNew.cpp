@@ -41,10 +41,6 @@ namespace RTC
    * @endif
    */
   PublisherNew::PublisherNew()
-    : rtclog("PublisherNew"),
-      m_consumer(nullptr), m_buffer(nullptr), m_task(nullptr), m_listeners(nullptr),
-      m_retcode(DataPortStatus::PORT_OK), m_pushPolicy(PUBLISHER_POLICY_NEW),
-      m_skipn(0), m_active(false), m_leftskip(0)
   {
   }
 

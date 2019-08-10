@@ -35,11 +35,7 @@ namespace RTM
   // Example implementational code for IDL interface RTM::Manager
   //
   ManagerServant::ManagerServant()
-    : rtclog("ManagerServant"),
-      m_mgr(::RTC::Manager::instance()),
-      m_objref(RTM::Manager::_nil()),
-      m_masters(0), m_slaves(0),
-      m_isMaster(false)
+    : m_masters(0), m_slaves(0)
   {
     rtclog.setName("ManagerServant");
     coil::Properties config(m_mgr.getConfig());    

@@ -607,7 +607,7 @@ namespace RTC
      * @brief Logger stream
      * @endif
      */
-    RTC::Logger rtclog;
+    RTC::Logger rtclog{"exttrig_async_ec"};
 
     /*!
      * @if jp
@@ -616,7 +616,7 @@ namespace RTC
      * @brief The thread running flag of ExecutionContext
      * @endif
      */
-    bool m_svc;
+    bool m_svc{false};
     std::mutex m_svcmutex;
 
     /*!
@@ -628,10 +628,10 @@ namespace RTC
      */
     struct Worker
     {
-      Worker() : cond_(), ticked_(false) {}
+      Worker() {}
       std::mutex mutex_;
       std::condition_variable cond_;
-      bool ticked_;
+      bool ticked_{false};
     };
     // A condition variable for external triggered worker
     Worker m_worker;

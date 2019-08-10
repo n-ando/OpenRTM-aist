@@ -422,13 +422,13 @@ namespace RTC
     }
 
   private:
-    Logger rtclog;
-    InPortConsumer* m_consumer;
+    Logger rtclog{"PublisherFlush"};
+    InPortConsumer* m_consumer{nullptr};
     ConnectorInfo m_profile;
-    ConnectorListeners* m_listeners;
-    DataPortStatus m_retcode;
+    ConnectorListeners* m_listeners{nullptr};
+    DataPortStatus m_retcode{DataPortStatus::PORT_OK};
     std::mutex m_retmutex;
-    bool m_active;
+    bool m_active{false};
   };
 
 } // namespace RTC

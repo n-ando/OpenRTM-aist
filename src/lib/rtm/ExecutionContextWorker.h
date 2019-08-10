@@ -564,7 +564,7 @@ namespace RTC_impl
      * @brief Logger stream
      * @endif
      */
-    RTC::Logger rtclog;
+    RTC::Logger rtclog{"ec_worker"};
 
     RTC::ExecutionContextService_var m_ref;
 
@@ -577,7 +577,7 @@ namespace RTC_impl
      * true: running, false: stopped
      * @endif
      */
-    bool m_running;
+    bool m_running{false};
 
     /*!
      * @if jp

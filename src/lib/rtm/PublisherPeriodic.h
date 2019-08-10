@@ -730,19 +730,19 @@ namespace RTC
       return false;
     }
 
-    Logger rtclog;
-    InPortConsumer* m_consumer;
-    CdrBufferBase* m_buffer;
+    Logger rtclog{"PublisherPeriodic"};
+    InPortConsumer* m_consumer{nullptr};
+    CdrBufferBase* m_buffer{nullptr};
     ConnectorInfo m_profile;
-    coil::PeriodicTaskBase* m_task;
-    ConnectorListeners* m_listeners;
-    DataPortStatus m_retcode;
+    coil::PeriodicTaskBase* m_task{nullptr};
+    ConnectorListeners* m_listeners{nullptr};
+    DataPortStatus m_retcode{DataPortStatus::PORT_OK};
     std::mutex m_retmutex;
-    Policy m_pushPolicy;
-    int m_skipn;
-    bool m_active;
-    bool m_readback;
-    int m_leftskip;
+    Policy m_pushPolicy{PUBLISHER_POLICY_NEW};
+    int m_skipn{0};
+    bool m_active{false};
+    bool m_readback{false};
+    int m_leftskip{0};
   };
 } // namespace RTC
 

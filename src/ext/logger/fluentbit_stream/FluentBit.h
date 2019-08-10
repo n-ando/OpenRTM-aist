@@ -76,7 +76,7 @@ namespace RTC
 
   private:
     char m_buf[BUFFER_LEN];
-    size_t m_pos;
+    size_t m_pos{0};
 
     typedef int FlbHandler;
 

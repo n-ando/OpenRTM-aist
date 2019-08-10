@@ -490,12 +490,12 @@ namespace RTC
      * @brief Logger stream
      * @endif
      */
-    RTC::Logger rtclog;
+    RTC::Logger rtclog{"exttrig_sync_ec"};
 
     /*!
      * @brief A counter for log message in worker
      */
-    unsigned int m_count;
+    unsigned int m_count{0};
 
   };  // class OpenHRPExecutionContext
 } // namespace RTC

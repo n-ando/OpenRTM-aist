@@ -33,9 +33,7 @@ namespace RTC
    * @endif
    */
   ExtTrigExecutionContext::ExtTrigExecutionContext()
-    : ExecutionContextBase("exttrig_async_ec"),
-      rtclog("exttrig_async_ec"),
-      m_svc(false)
+    : ExecutionContextBase("exttrig_async_ec")
   {
     RTC_TRACE(("ExtTrigExecutionContext()"));
 

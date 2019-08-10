@@ -740,7 +740,7 @@ namespace RTC_exp
      * @brief Logger stream
      * @endif
      */
-    RTC::Logger rtclog;
+    RTC::Logger rtclog{"periodic_ec"};
 
     /*!
      * @if jp
@@ -749,7 +749,7 @@ namespace RTC_exp
      * @brief The thread running flag of ExecutionContext
      * @endif
      */
-    bool m_svc;
+    bool m_svc{false};
     std::mutex m_svcmutex;
     
     /*!
@@ -761,10 +761,10 @@ namespace RTC_exp
      */
     struct WorkerThreadCtrl
     {
-      WorkerThreadCtrl() : cond_(), running_(false) {}
+      WorkerThreadCtrl() {}
       std::mutex mutex_;
       std::condition_variable cond_;
-      bool running_;
+      bool running_{false};
     };
 
     /*!
@@ -784,7 +784,7 @@ namespace RTC_exp
      *        (to run without waiting)
      * @endif
      */
-    bool m_nowait;
+    bool m_nowait{false};
 
   private:
     int m_priority;

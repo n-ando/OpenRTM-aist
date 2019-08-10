@@ -487,8 +487,8 @@ namespace RTC
   protected:
     static coil::vstring s_files;
     std::string m_fileName;
-    FileStreamBase* m_stdout;
-    FileStream* m_fileout;
+    FileStreamBase* m_stdout{nullptr};
+    FileStream* m_fileout{nullptr};
   };
 } // namespace RTC
 

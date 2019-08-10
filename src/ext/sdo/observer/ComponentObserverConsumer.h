@@ -358,9 +358,7 @@ namespace RTC
     {
     public:
       PortAction(ComponentObserverConsumer& coc)
-        : portAddListener(nullptr), portRemoveListener(nullptr),
-          portConnectListener(nullptr), portDisconnectListener(nullptr),
-          m_coc(coc) {}
+        : m_coc(coc) {}
       void onGeneric(const char* _msg, const char* portname)
       {
         std::string msg(_msg);
@@ -392,10 +390,10 @@ namespace RTC
           }
       }
 
-      PortActionListener* portAddListener;
-      PortActionListener* portRemoveListener;
-      PortConnectRetListener* portConnectListener;
-      PortConnectRetListener* portDisconnectListener;
+      PortActionListener* portAddListener{nullptr};
+      PortActionListener* portRemoveListener{nullptr};
+      PortConnectRetListener* portConnectListener{nullptr};
+      PortConnectRetListener* portDisconnectListener{nullptr};
 
     private:
       ComponentObserverConsumer& m_coc;
@@ -415,8 +413,7 @@ namespace RTC
       DataPortAction(ComponentObserverConsumer& coc,
                      std::string  msg,
                      std::chrono::nanoseconds interval)
-        : m_coc(coc), m_msg(std::move(msg)), m_interval(interval),
-          m_last(std::chrono::steady_clock::now())
+        : m_coc(coc), m_msg(std::move(msg)), m_interval(interval)
       {
       }
       ~DataPortAction() override {}
@@ -438,7 +435,7 @@ namespace RTC
       ComponentObserverConsumer& m_coc;
       std::string m_msg;
       std::chrono::nanoseconds m_interval;
-      std::chrono::steady_clock::time_point m_last;
+      std::chrono::steady_clock::time_point m_last{std::chrono::steady_clock::now()};
     };
     
     /*!
@@ -452,9 +449,7 @@ namespace RTC
     {
     public:
       ECAction(ComponentObserverConsumer& coc)
-        : ecAttached(nullptr), ecDetached(nullptr), ecRatechanged(nullptr),
-          ecStartup(nullptr), ecShutdown(nullptr),
-          m_coc(coc) {}
+        : m_coc(coc) {}
       void onGeneric(const char* _msg, UniqueId ec_id)
       {
         std::string msg(_msg + coil::otos(ec_id));
@@ -489,11 +484,11 @@ namespace RTC
             onGeneric("SHUTDOWN:", ec_id);
           }
       }
-      ExecutionContextActionListener* ecAttached;
-      ExecutionContextActionListener* ecDetached;
-      PostComponentActionListener* ecRatechanged;
-      PostComponentActionListener* ecStartup;
-      PostComponentActionListener* ecShutdown;
+      ExecutionContextActionListener* ecAttached{nullptr};
+      ExecutionContextActionListener* ecDetached{nullptr};
+      PostComponentActionListener* ecRatechanged{nullptr};
+      PostComponentActionListener* ecStartup{nullptr};
+      PostComponentActionListener* ecShutdown{nullptr};
     private:
       ComponentObserverConsumer& m_coc;
     };
@@ -509,10 +504,7 @@ namespace RTC
     {
     public:
       ConfigAction(ComponentObserverConsumer& coc)
-        : updateConfigParamListener(nullptr), setConfigSetListener(nullptr),
-          addConfigSetListener(nullptr), updateConfigSetListener(nullptr),
-          removeConfigSetListener(nullptr), activateConfigSetListener(nullptr),
-          m_coc(coc) {}
+        : m_coc(coc) {}
       void updateConfigParam(const char* configsetname,
                              const char* configparamname)
       {
@@ -553,12 +545,12 @@ namespace RTC
         m_coc.updateStatus(OpenRTM::CONFIGURATION, msg.c_str());
       }
       // Listener object's pointer holder
-      ConfigurationParamListener*   updateConfigParamListener;
-      ConfigurationSetListener*     setConfigSetListener;
-      ConfigurationSetListener*     addConfigSetListener;
-      ConfigurationSetNameListener* updateConfigSetListener;
-      ConfigurationSetNameListener* removeConfigSetListener;
-      ConfigurationSetNameListener* activateConfigSetListener;
+      ConfigurationParamListener*   updateConfigParamListener{nullptr};
+      ConfigurationSetListener*     setConfigSetListener{nullptr};
+      ConfigurationSetListener*     addConfigSetListener{nullptr};
+      ConfigurationSetNameListener* updateConfigSetListener{nullptr};
+      ConfigurationSetNameListener* removeConfigSetListener{nullptr};
+      ConfigurationSetNameListener* activateConfigSetListener{nullptr};
 
     private:
       ComponentObserverConsumer& m_coc;
@@ -566,26 +558,26 @@ namespace RTC
 
 
 
-    RTC::RTObject_impl* m_rtobj;
+    RTC::RTObject_impl* m_rtobj{nullptr};
     SDOPackage::ServiceProfile m_profile;
     CorbaConsumer<OpenRTM::ComponentObserver> m_observer;
 
     bool m_observed[OpenRTM::STATUS_KIND_NUM];
 
     // ComponentProfile
-    CompStatMsg m_compstat;
+    CompStatMsg m_compstat{*this};
 
     // PortProfile
-    PortAction m_portaction;
-    std::chrono::nanoseconds m_inportInterval;
-    std::chrono::nanoseconds m_outportInterval;
+    PortAction m_portaction{*this};
+    std::chrono::nanoseconds m_inportInterval{std::chrono::seconds(1)};
+    std::chrono::nanoseconds m_outportInterval{std::chrono::seconds(1)};
 
     // Execution Context
-    ECAction m_ecaction;
-    ConfigAction m_configMsg;
+    ECAction m_ecaction{*this};
+    ConfigAction m_configMsg{*this};
 
     // Heartbeat
-    bool m_heartbeat;
+    bool m_heartbeat{false};
     Manager::TaskId m_hbtaskid;
 
     std::mutex mutex;

@@ -34,8 +34,6 @@ namespace RTC_impl
    * @endif
    */
   ExecutionContextWorker::ExecutionContextWorker()
-    : rtclog("ec_worker"),
-      m_running(false)
   {
     RTC_TRACE(("ExecutionContextWorker()"));
   }

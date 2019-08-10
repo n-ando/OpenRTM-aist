@@ -413,7 +413,7 @@ namespace RTC
      *
      * @endif
      */
-    bool m_isMaster;
+    bool m_isMaster{false};
   };
 } // namespace RTC
 #endif  // RTC_MANAGERCONFIG_H

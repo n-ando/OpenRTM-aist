@@ -30,10 +30,8 @@ namespace RTC
    * @endif
    */
   OutPortSHMConsumer::OutPortSHMConsumer()
-  : m_listeners(nullptr)
   {
     rtclog.setName("OutPortSHMConsumer");
-	
   }
     
   /*!

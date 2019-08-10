@@ -33,10 +33,6 @@ namespace RTC
    * @endif
    */
   ComponentObserverConsumer::ComponentObserverConsumer()
-    : m_rtobj(nullptr),
-      m_compstat(*this), m_portaction(*this),
-      m_inportInterval(std::chrono::seconds(1)), m_outportInterval(std::chrono::seconds(1)),
-      m_ecaction(*this), m_configMsg(*this), m_heartbeat(false)
   {
     for (bool & observed : m_observed)
       {

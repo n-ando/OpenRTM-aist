@@ -188,11 +188,6 @@ _StateInstance * _StateInstance::clone(_MachineBase & newMachine) {
 ////////////////////////////////////////////////////////////////////////////////
 // Base class for Machine objects.
 _MachineBase::_MachineBase()
-	: myCurrentState(nullptr)
-	, myPendingState(nullptr)
-	, myPendingInit(nullptr)
-	, myPendingBox(nullptr)	// Deprecated!
-	, myPendingEvent(nullptr)
 {}
 
 _MachineBase::~_MachineBase() {

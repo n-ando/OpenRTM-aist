@@ -27,7 +27,6 @@ namespace RTC
    * @endif
    */
   OutPortDSProvider::OutPortDSProvider()
-    : m_buffer(nullptr), m_connector(nullptr)
   {
     // PortProfile setting
     setInterfaceType("data_service");
