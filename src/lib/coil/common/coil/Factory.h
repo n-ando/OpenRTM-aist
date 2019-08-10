@@ -138,10 +138,10 @@ namespace coil
   {
     class FactoryEntry;
   public:
-    typedef std::map<Identifier, FactoryEntry> FactoryMap;
-    typedef typename FactoryMap::iterator      FactoryMapIt;
-    typedef std::map<AbstractClass*, FactoryEntry> ObjectMap;
-    typedef typename ObjectMap::iterator           ObjectMapIt;
+    using FactoryMap = std::map<Identifier, FactoryEntry>;
+    using FactoryMapIt = typename FactoryMap::iterator;
+    using ObjectMap = std::map<AbstractClass*, FactoryEntry>;
+    using ObjectMapIt = typename ObjectMap::iterator;
 
     /*!
      * @if jp

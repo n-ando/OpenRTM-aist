@@ -37,7 +37,7 @@ DDS::Boolean OpenRTM_OpenSplice::CORBACdrDataTypeSupportInterface::_local_is_a (
       return true;
    }
 
-   typedef DDS::TypeSupport NestedBase_1;
+   using NestedBase_1 = DDS::TypeSupport;
 
    if (NestedBase_1::_local_is_a (_id))
    {
@@ -81,7 +81,7 @@ DDS::Boolean OpenRTM_OpenSplice::CORBACdrDataDataWriter::_local_is_a (const char
       return true;
    }
 
-   typedef DDS::DataWriter NestedBase_1;
+   using NestedBase_1 = DDS::DataWriter;
 
    if (NestedBase_1::_local_is_a (_id))
    {
@@ -125,7 +125,7 @@ DDS::Boolean OpenRTM_OpenSplice::CORBACdrDataDataReader::_local_is_a (const char
       return true;
    }
 
-   typedef DDS::DataReader NestedBase_1;
+   using NestedBase_1 = DDS::DataReader;
 
    if (NestedBase_1::_local_is_a (_id))
    {
@@ -169,7 +169,7 @@ DDS::Boolean OpenRTM_OpenSplice::CORBACdrDataDataReaderView::_local_is_a (const 
       return true;
    }
 
-   typedef DDS::DataReaderView NestedBase_1;
+   using NestedBase_1 = DDS::DataReaderView;
 
    if (NestedBase_1::_local_is_a (_id))
    {

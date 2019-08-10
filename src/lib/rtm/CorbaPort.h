@@ -1309,7 +1309,7 @@ namespace RTC
      * @brief vector to stored Providers' information
      * @endif
      */
-    typedef std::vector<CorbaProviderHolder> CorbaProviderList;
+    using CorbaProviderList = std::vector<CorbaProviderHolder>;
     CorbaProviderList m_providers;
 
     /*!
@@ -1362,7 +1362,7 @@ namespace RTC
       CorbaConsumerBase* m_consumer;
       std::string m_ior;
     };
-    typedef std::vector<CorbaConsumerHolder> CorbaConsumerList;
+    using CorbaConsumerList = std::vector<CorbaConsumerHolder>;
     CorbaConsumerList m_consumers;
 
     // functors

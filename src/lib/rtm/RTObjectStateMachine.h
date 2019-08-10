@@ -34,9 +34,9 @@ namespace RTC
 } // namespace RTC
 namespace RTC_impl
 {
-  typedef RTC::ExecutionContextHandle_t Ecid;
-  typedef RTC::LifeCycleState ExecContextState;
-  typedef RTC_Utils::StateHolder<ExecContextState> ExecContextStates;
+  using Ecid = RTC::ExecutionContextHandle_t;
+  using ExecContextState = RTC::LifeCycleState;
+  using ExecContextStates = RTC_Utils::StateHolder<ExecContextState>;
 
   class RTObjectStateMachine
   {

@@ -52,7 +52,7 @@ namespace RTC
    *
    * @endif
    */
-  typedef coil::LogStreamBuffer StreambufType;
+  using StreambufType = coil::LogStreamBuffer;
   class LogstreamBase
   {
   public:
@@ -96,7 +96,7 @@ namespace RTC
 
   };
 
-  typedef coil::GlobalFactory<LogstreamBase> LogstreamFactory;
+  using LogstreamFactory = coil::GlobalFactory<LogstreamBase>;
 } // namespace RTC
 
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)

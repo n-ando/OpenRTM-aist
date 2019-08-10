@@ -216,7 +216,7 @@ struct __SameType {
 
 template<class T>
 struct __SameType<T, T> {
-	typedef bool Check;
+	using Check = bool;
 };
 
 
@@ -235,12 +235,12 @@ struct __SameType<T, T> {
 // (mandatory). If you have a state box declare it BEFORE macro invocation!
 #define STATE(S) \
 public: \
-	typedef S SELF; \
+	using SELF = S; \
 	/* Constructor and destructor already defined: you can't (and shouldn't) have your own! */ \
 	/* For the user a state class "constructor" and "destructor" are its entry and exit method! */ \
 	S(::Macho::_StateInstance & instance) : ::Macho::Link<S, SUPER>(instance) { \
 		/* Compile time check: S must derive directly from Link<S, SUPER> */ \
-		typedef ::__SameType< ::Macho::Link<S, SUPER>, LINK>::Check MustDeriveFromLink; \
+		using MustDeriveFromLink = ::__SameType< ::Macho::Link<S, SUPER>, LINK>::Check; \
 	} \
 	~S() {} \
 	static const char * _state_name() { return #S; } \
@@ -299,11 +299,11 @@ namespace Macho {
 	class _StateInstance;
 
 	// Unique identifier of states.
-	typedef void * Key;
+	using Key = void*;
 
 	// Also an unique identifier of states, build from consecutive integers.
 	// Use Key to get to ID.
-	typedef unsigned int ID;
+	using ID = unsigned int;
 
 
 	////////////////////////////////////////////////////////////////////////////////
@@ -364,9 +364,9 @@ namespace Macho {
 	////////////////////////////////////////////////////////////////////////////////
 	// Essential information pointed at by state key.
 	struct _KeyData {
-		typedef _StateInstance & (*Generator)(_MachineBase & machine);
-		typedef bool (*Predicate)(Key);
-		typedef const char * (*NameFn)();
+		using Generator = _StateInstance &(*)(_MachineBase &);
+		using Predicate = bool (*)(Key);
+		using NameFn = const char* (*)();
 
 		// Get StateInstance object from key.
 		const Generator instanceGenerator;
@@ -506,7 +506,7 @@ namespace Macho {
 	class TopBase : public _StateSpecification {
 	public:
 		// This typedef is an alias for user defined top state in all (sub)states.
-		typedef T TOP;
+		using TOP = T;
 
 	protected:
 		TopBase(_StateInstance & instance)
@@ -528,13 +528,13 @@ namespace Macho {
 	class Link : public P {
 	public:
 		// Alias for superstate.
-		typedef P SUPER;
+		using SUPER = P;
 
 		// Alias for topstate.
-		typedef typename P::TOP TOP;
+		using TOP = typename P::TOP;
 
 		// Default box type.
-		typedef _EmptyBox Box;
+		using Box = _EmptyBox;
 
 		// Get unique key of state.
 		static Key key();
@@ -564,7 +564,7 @@ namespace Macho {
 
 	protected:
 		// Needed to perform compile time checks.
-		typedef Link<C, P> LINK;
+		using LINK = Link<C, P>;
 
 		Link(_StateInstance & instance);
 
@@ -792,7 +792,7 @@ namespace Macho {
 		}
 
 	public:
-		typedef typename S::Box Box;
+		using Box = typename S::Box;
 
 		~_SubstateInstance() override {
 			if (this->myBox)
@@ -858,7 +858,7 @@ namespace Macho {
 	// Event with four parameters
 	template<class TOP, class R, class P1, class P2, class P3, class P4, class P5, class P6>
 	class _Event6 : public IEvent<TOP> {
-		typedef R (TOP::*Signature)(P1, P2, P3, P4, P5, P6);
+		using Signature = R (TOP::*)(P1, P2, P3, P4, P5, P6);
 
 	public:
 		_Event6(Signature handler, const P1 & p1, const P2 & p2, const P3 & p3, const P4 & p4, const P5 & p5, const P6 & p6)
@@ -890,7 +890,7 @@ namespace Macho {
 	// Event with four parameters
 	template<class TOP, class R, class P1, class P2, class P3, class P4, class P5>
 	class _Event5 : public IEvent<TOP> {
-		typedef R (TOP::*Signature)(P1, P2, P3, P4, P5);
+		using Signature = R (TOP::*)(P1, P2, P3, P4, P5);
 
 	public:
 		_Event5(Signature handler, const P1 & p1, const P2 & p2, const P3 & p3, const P4 & p4, const P5 & p5)
@@ -920,7 +920,7 @@ namespace Macho {
 	// Event with four parameters
 	template<class TOP, class R, class P1, class P2, class P3, class P4>
 	class _Event4 : public IEvent<TOP> {
-		typedef R (TOP::*Signature)(P1, P2, P3, P4);
+		using Signature = R (TOP::*)(P1, P2, P3, P4);
 
 	public:
 		_Event4(Signature handler, const P1 & p1, const P2 & p2, const P3 & p3, const P4 & p4)
@@ -948,7 +948,7 @@ namespace Macho {
 	// Event with three parameters
 	template<class TOP, class R, class P1, class P2, class P3>
 	class _Event3 : public IEvent<TOP> {
-		typedef R (TOP::*Signature)(P1, P2, P3);
+		using Signature = R (TOP::*)(P1, P2, P3);
 
 	public:
 		_Event3(Signature handler, const P1 & p1, const P2 & p2, const P3 & p3)
@@ -974,7 +974,7 @@ namespace Macho {
 	// Event with two parameters
 	template<class TOP, class R, class P1, class P2>
 	class _Event2 : public IEvent<TOP> {
-		typedef R (TOP::*Signature)(P1, P2);
+		using Signature = R (TOP::*)(P1, P2);
 
 	public:
 		_Event2(Signature handler, const P1 & p1, const P2 & p2)
@@ -998,7 +998,7 @@ namespace Macho {
 	// Event with one parameter
 	template<class TOP, class R, class P1>
 	class _Event1 : public IEvent<TOP> {
-		typedef R (TOP::*Signature)(P1);
+		using Signature = R (TOP::*)(P1);
 
 	public:
 		_Event1(Signature handler, const P1 & p1)
@@ -1020,7 +1020,7 @@ namespace Macho {
 	// Event with no parameters
 	template<class TOP, class R>
 	class _Event0 : public IEvent<TOP> {
-		typedef R (TOP::*Signature)();
+		using Signature = R (TOP::*)();
 
 	public:
 		_Event0(Signature handler)
@@ -1558,7 +1558,7 @@ namespace Macho {
 	};
 
 	// Deprecated!
-	typedef Alias StateAlias;
+	using StateAlias = Alias;
 
 
 	// Create alias with 0 to 6 parameters.
@@ -1667,7 +1667,7 @@ namespace Macho {
 
 		Machine() {
 			// Compile time check: TOP must directly derive from TopBase<TOP>
-			typedef typename __SameType<TopBase<TOP>, typename TOP::SUPER>::Check MustDeriveFromTopBase;
+			using MustDeriveFromTopBase = typename __SameType<TopBase<TOP>, typename TOP::SUPER>::Check;
 			// suppress unused-typdefs warnig
 			static_assert(static_cast<MustDeriveFromTopBase*>(nullptr)==nullptr, "dummy");
 
@@ -1679,7 +1679,7 @@ namespace Macho {
 		// other than TOP on startup.
 		Machine(const Alias & state) {
 			// Compile time check: TOP must directly derive from TopBase<TOP>
-			typedef typename __SameType<TopBase<TOP>, typename TOP::SUPER>::Check MustDeriveFromTopBase;
+			using MustDeriveFromTopBase = typename __SameType<TopBase<TOP>, typename TOP::SUPER>::Check;
 			// suppress unused-typdefs warnig
 			static_assert(static_cast<MustDeriveFromTopBase*>(nullptr)==nullptr, "dummy");
 

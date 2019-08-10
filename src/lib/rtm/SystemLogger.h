@@ -31,8 +31,8 @@
 
 namespace RTC
 {
-  typedef ::coil::LogStreamBuffer LogStreamBuf;
-  typedef ::coil::LogStream LogStream;
+  using LogStreamBuf = ::coil::LogStreamBuffer;
+  using LogStream = ::coil::LogStream;
 
   /*!
    * @if jp

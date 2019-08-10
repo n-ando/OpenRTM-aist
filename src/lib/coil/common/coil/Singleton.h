@@ -34,7 +34,7 @@ namespace coil
    * 以下のようにして使用する。
    *
    * class A { // };
-   * typedef coil::Singleton<A> A_;
+   * using A_ = coil::Singleton<A>;
    *
    * 任意の場所で
    *
@@ -72,7 +72,7 @@ namespace coil
    * Usage is as follows.
    *
    * class A { // };
-   * typedef coil::Singleton<A> A_;
+   * using A_ = coil::Singleton<A>;
    *
    * In the any places,
    * A& a(A_:instance()); // a has singular instance of A
@@ -105,8 +105,8 @@ namespace coil
   class Singleton
   {
   public:
-    typedef SingletonClass* SingletonClassPtr;
-    typedef ::std::mutex Mutex;
+    using SingletonClassPtr = SingletonClass*;
+    using Mutex = ::std::mutex;
 
     /*!
      * @if jp

@@ -29,8 +29,8 @@ namespace CORBA_IORUtil
 {
 
 #ifdef ORB_IS_OMNIORB
-  typedef _CORBA_Unbounded_Sequence_Octet OctetUSequence;
-  typedef _CORBA_Unbounded_Sequence_String StringUSequence;
+  using OctetUSequence = _CORBA_Unbounded_Sequence_Octet;
+  using StringUSequence = _CORBA_Unbounded_Sequence_String;
 #endif
 
 #if !defined(ORB_IS_RTORB) && !defined(ORB_IS_ORBEXPRESS) && !defined(ORB_IS_TAO)

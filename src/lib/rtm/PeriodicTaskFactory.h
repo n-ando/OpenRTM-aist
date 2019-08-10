@@ -26,7 +26,7 @@
 namespace RTC
 {
 
-  typedef ::coil::GlobalFactory<coil::PeriodicTaskBase> PeriodicTaskFactory;
+  using PeriodicTaskFactory = ::coil::GlobalFactory<coil::PeriodicTaskBase>;
 } // namespace RTC
 
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)

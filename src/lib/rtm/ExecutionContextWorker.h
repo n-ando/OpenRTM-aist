@@ -34,8 +34,8 @@ namespace RTC
 namespace RTC_impl
 {
   class RTObjectStateMachine;
-  typedef RTC::LightweightRTObject_ptr LightweightRTObject_ptr;
-  typedef RTC::LightweightRTObject_var LightweightRTObject_var;
+  using LightweightRTObject_ptr = RTC::LightweightRTObject_ptr;
+  using LightweightRTObject_var = RTC::LightweightRTObject_var;
   /*!
    * @if jp
    * @class ExecutionContextWorker
@@ -592,7 +592,7 @@ namespace RTC_impl
     mutable std::mutex m_addedMutex;
     std::vector<RTC_impl::RTObjectStateMachine*> m_removedComps;
     mutable std::mutex m_removedMutex;
-    typedef std::vector<RTC_impl::RTObjectStateMachine*>::iterator CompItr;
+    using CompItr = std::vector<RTC_impl::RTObjectStateMachine*>::iterator;
 
   };  // class PeriodicExecutionContext
 } // namespace RTC_impl

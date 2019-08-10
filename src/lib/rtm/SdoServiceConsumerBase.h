@@ -234,8 +234,7 @@ namespace RTC
      * @brief typedef of sdoServiceConsumerFactory
      * @endif
      */
-  typedef ::coil::GlobalFactory<
-    ::RTC::SdoServiceConsumerBase > SdoServiceConsumerFactory;
+  using SdoServiceConsumerFactory = ::coil::GlobalFactory< ::RTC::SdoServiceConsumerBase>;
 } // namespace RTC
 
 

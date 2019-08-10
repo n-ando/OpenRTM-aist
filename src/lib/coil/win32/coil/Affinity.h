@@ -26,7 +26,7 @@
 
 namespace coil
 {
-  typedef std::vector<unsigned int> CpuMask;
+  using CpuMask = std::vector<unsigned int>;
   /*!
    * @if jp
    * @brief プロセスのCPU affinityを取得する

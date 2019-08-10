@@ -83,7 +83,7 @@ namespace coil
   std::string basename(const char* path);
 
 
-  typedef unsigned int ino_t;
+  using ino_t = unsigned int;
 
   /*!
    * @if jp

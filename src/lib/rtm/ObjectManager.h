@@ -51,9 +51,9 @@ template <typename Identifier, typename Object, typename Predicate>
 class ObjectManager
 {
 public:
-  typedef std::vector<Object*>                  ObjectVector;
-  typedef typename ObjectVector::iterator       ObjectVectorItr;
-  typedef typename ObjectVector::const_iterator ObjectVectorConstItr;
+  using ObjectVector = std::vector<Object*>;
+  using ObjectVectorItr = typename ObjectVector::iterator;
+  using ObjectVectorConstItr = typename ObjectVector::const_iterator;
   /*!
    * @if jp
    *

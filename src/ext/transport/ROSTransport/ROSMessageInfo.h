@@ -96,7 +96,7 @@ namespace RTC
 
   };
 
-  typedef coil::GlobalFactory<ROSMessageInfoBase> ROSMessageInfoFactory;
+  using ROSMessageInfoFactory = coil::GlobalFactory<ROSMessageInfoBase>;
 }
 
 

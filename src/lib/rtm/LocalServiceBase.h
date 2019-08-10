@@ -91,7 +91,7 @@ namespace RTM
    * @brief List of LocalServiceProfile
    * @endif
    */
-  typedef std::vector<LocalServiceProfile> LocalServiceProfileList;
+  using LocalServiceProfileList = std::vector<LocalServiceProfile>;
 
   /*!
    * @if jp
@@ -289,7 +289,7 @@ namespace RTM
    * @brief typedef of sdoServiceProviderFactory
    * @endif
    */
-  typedef ::coil::GlobalFactory< ::RTM::LocalServiceBase > LocalServiceFactory;
+  using LocalServiceFactory = ::coil::GlobalFactory< ::RTM::LocalServiceBase>;
 } // namespace RTM
 
 

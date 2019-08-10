@@ -34,7 +34,7 @@ namespace RTC
 
   template<typename Ch = char>
   class children {
-      typedef rapidxml::node_iterator<Ch> iterator_type;
+      using iterator_type = rapidxml::node_iterator<Ch>;
   public:
       explicit children(rapidxml::xml_node<Ch>* node) : node_(node) {}
       iterator_type begin() const { return iterator_type(node_); }

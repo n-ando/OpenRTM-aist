@@ -103,7 +103,7 @@ namespace RTC
    * @endif
    */
 #define USE_CONNLISTENER_STATUS                             \
-  typedef ::RTC::ConnectorListenerStatus::Enum ReturnCode;  \
+  using ReturnCode = ::RTC::ConnectorListenerStatus::Enum;  \
   using ::RTC::ConnectorListenerStatus::NO_CHANGE;          \
   using ::RTC::ConnectorListenerStatus::INFO_CHANGED;       \
   using ::RTC::ConnectorListenerStatus::DATA_CHANGED;       \
@@ -959,7 +959,7 @@ namespace RTC
   class ConnectorDataListenerHolder
     : public ConnectorListenerStatus
   {
-    typedef std::pair<ConnectorDataListener*, bool> Entry;
+    using Entry = std::pair<ConnectorDataListener*, bool>;
   public:
     USE_CONNLISTENER_STATUS;
     /*!
@@ -1217,7 +1217,7 @@ namespace RTC
   class ConnectorListenerHolder
       : public ConnectorListenerStatus
   {
-    typedef std::pair<ConnectorListener*, bool> Entry;
+    using Entry = std::pair<ConnectorListener*, bool>;
   public:
     USE_CONNLISTENER_STATUS;
     /*!

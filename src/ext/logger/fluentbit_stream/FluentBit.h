@@ -78,7 +78,7 @@ namespace RTC
     char m_buf[BUFFER_LEN];
     size_t m_pos{0};
 
-    typedef int FlbHandler;
+    using FlbHandler = int;
 
     std::vector<FlbHandler> m_flbIn;
     std::vector<FlbHandler> m_flbOut;

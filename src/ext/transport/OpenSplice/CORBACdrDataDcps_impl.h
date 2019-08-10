@@ -47,8 +47,8 @@ namespace OpenRTM_OpenSplice {
         CORBACdrDataTypeSupport & operator= (const CORBACdrDataTypeSupport &);
     };
     
-    typedef CORBACdrDataTypeSupportInterface_var CORBACdrDataTypeSupport_var;
-    typedef CORBACdrDataTypeSupportInterface_ptr CORBACdrDataTypeSupport_ptr;
+    using CORBACdrDataTypeSupport_var = CORBACdrDataTypeSupportInterface_var;
+    using CORBACdrDataTypeSupport_ptr = CORBACdrDataTypeSupportInterface_ptr;
     
     class  CORBACdrDataDataWriter_impl : public virtual CORBACdrDataDataWriter,
                                                            public ::DDS::OpenSplice::FooDataWriter_impl

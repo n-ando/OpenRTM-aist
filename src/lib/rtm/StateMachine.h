@@ -78,7 +78,7 @@ namespace RTC_Utils
    * {
    * public:
    *   enum MyState { INACTIVE, ACTIVE, ERROR };
-   *   typedef States<MyState> MyStates;
+   *   using MyStates = States<MyState>;
    *
    *   ActiveObject()
    *     : m_sm(3)
@@ -173,7 +173,7 @@ namespace RTC_Utils
    * {
    * public:
    *   enum MyState { INACTIVE, ACTIVE, ERROR };
-   *   typedef States<MyState> MyStates;
+   *   using MyStates = States<MyState>;
    *
    *   ActiveObject()
    *     : m_sm(3)
