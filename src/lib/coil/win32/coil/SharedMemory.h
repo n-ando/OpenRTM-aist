@@ -358,7 +358,6 @@ namespace coil
     std::string m_shm_address;
     char *m_shm;
     HANDLE m_handle;
-    bool m_file_create;
   };  // class SharedMemory
 
 } // namespace coil

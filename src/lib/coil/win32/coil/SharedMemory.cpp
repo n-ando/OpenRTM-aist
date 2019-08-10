@@ -34,7 +34,6 @@ namespace coil
   SharedMemory::SharedMemory()
     : m_memory_size(0),
       m_shm(nullptr),
-      m_file_create(false),
       m_handle(nullptr)
   {
   }
@@ -65,7 +64,6 @@ namespace coil
     m_shm_address = rhs.m_shm_address;
     m_shm = rhs.m_shm;
     m_handle = rhs.m_handle;
-    m_file_create = rhs.m_file_create;
   }
 
   /*!
@@ -111,18 +109,19 @@ namespace coil
   int SharedMemory::create(std::string shm_address,
                     unsigned long long memory_size)
   {
-
     m_shm_address = shm_address;
     m_memory_size = memory_size;
+    DWORD highsize = static_cast<DWORD>((m_memory_size >> 32) & 0xFFFFFFFF);
+    DWORD lowsize = static_cast<DWORD>(m_memory_size & 0xFFFFFFFF);
     m_handle = CreateFileMapping(
-		(HANDLE)-1,
+        static_cast<HANDLE>(INVALID_HANDLE_VALUE),
 		nullptr,
 		PAGE_READWRITE | SEC_COMMIT,
-		0, static_cast<DWORD>(m_memory_size),
+        highsize,
+        lowsize,
 		shm_address.c_str());
 
     m_shm = static_cast<char *>(MapViewOfFile(m_handle, FILE_MAP_ALL_ACCESS, 0, 0, 0));
-    m_file_create = true;
     return 0;
   }
 
@@ -185,7 +184,11 @@ namespace coil
 		  return -1;
 	  }
 
-	  memcpy(&m_shm[pos],&data[0], static_cast<size_t>(size));
+      if (m_memory_size < size + pos)
+      {
+          return -1;
+      }
+      memcpy(&m_shm[pos],&data[0], static_cast<size_t>(size));
     
 	  return 0;
   }
@@ -243,7 +246,6 @@ namespace coil
    */
   int SharedMemory::close()
   {
-    
     if (created())
     {
         UnmapViewOfFile(m_shm);
@@ -252,16 +254,14 @@ namespace coil
 	{
 		return -1;
 	}
-    if(m_file_create)
+    if(m_handle != nullptr)
     {
     	if (CloseHandle(m_handle) == 0)
     	{
     		return -1;
     	}
-	else
-	{
-		return 0;
-	}
+        m_handle = nullptr;
+        return 0;
     }
     return 0;
 

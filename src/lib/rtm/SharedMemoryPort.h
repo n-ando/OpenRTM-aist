@@ -264,7 +264,6 @@ namespace RTC
     ::OpenRTM::PortSharedMemory_var m_smInterface{OpenRTM::PortSharedMemory::_nil()};
     bool m_endian{true};
     coil::SharedMemory m_shmem;
-
     
   };  // class SharedMemoryPort
 } // namespace RTC

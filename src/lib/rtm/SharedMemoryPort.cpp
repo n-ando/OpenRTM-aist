@@ -151,7 +151,6 @@ namespace RTC
   {
 	  if (!m_shmem.created())
 	  {
-		  
 		  m_shmem.create(shm_address, memory_size);
 		  try
 		  {
@@ -179,7 +178,7 @@ namespace RTC
   *
   * @endif
   */
-	void SharedMemoryPort::open_memory(::CORBA::ULongLong memory_size, const char * shm_address)
+	void SharedMemoryPort::open_memory(::CORBA::ULongLong memory_size, const char *shm_address)
   {
 	  
 	  m_shmem.open(shm_address, memory_size);
@@ -201,7 +200,7 @@ namespace RTC
   */
 	void SharedMemoryPort::close_memory(::CORBA::Boolean unlink)
   {
-	  if (!m_shmem.created())
+	  if (m_shmem.created())
 	  {
 		  m_shmem.close();
 		  if (unlink)
@@ -239,7 +238,7 @@ namespace RTC
       CORBA::ULongLong data_size = static_cast<CORBA::ULongLong>(data.getDataLength());
 	  if (data_size + sizeof(CORBA::ULongLong) > m_shmem.get_size())
 	  {
-		  int memory_size = static_cast<int>(data_size) + static_cast<int>(sizeof(CORBA::ULongLong));
+          CORBA::ULongLong memory_size = data_size + static_cast<CORBA::ULongLong>(sizeof(CORBA::ULongLong));
 		  if (!CORBA::is_nil(m_smInterface))
 		  {
 			  try
@@ -255,14 +254,23 @@ namespace RTC
 	  }
       CORBA_CdrMemoryStream data_size_cdr;
 
+      //データサイズ(ULongLong型)をCDR形式でシリアライズする
       data_size_cdr.setEndian(m_endian);
-      data_size_cdr.serializeCDR(data_size);
-      int ret = m_shmem.write((char*)data_size_cdr.getBuffer(), 0, sizeof(CORBA::ULongLong));
-
-	  if (ret == 0)
-	  {
-          m_shmem.write(reinterpret_cast<char*>(data.getBuffer()), sizeof(CORBA::ULongLong), data.getDataLength());
-	  }
+      if (!data_size_cdr.serializeCDR(data_size))
+      {
+          return;
+      }
+      //シリアライズしたデータのサイズが8の場合には共有メモリにデータサイズ(CDR形式)を書き込み
+      if (data_size_cdr.getCdrDataLength() == static_cast<unsigned long>(sizeof(CORBA::ULongLong)))
+      {
+          //データサイズ(CDR形式)を共有メモリに書き込み
+          int ret = m_shmem.write(reinterpret_cast<const char*>(data_size_cdr.getBuffer()), 0, sizeof(CORBA::ULongLong));
+          if (ret == 0)
+          {
+              //データサイズの後の領域に送信データを書き込み
+              m_shmem.write(reinterpret_cast<const char*>(data.getBuffer()), sizeof(CORBA::ULongLong), data.getDataLength());
+          }
+      }
 
   }
   /*!
