@@ -7,10 +7,10 @@ rtm_exec_prefix=${prefix}
 rtm_data_prefix=${prefix}/@INSTALL_INCLUDE_DIR@
 
 libdir=${exec_prefix}/@INSTALL_RTM_LIB_DIR@
-includedir=${prefix}/@INSTALL_RTM_INCLUDE_DIR@
+includedir=${prefix}/include
 
 rtm_cxx=@CMAKE_CXX_COMPILER@
-rtm_cflags=-I${includedir} -I${prefix}/@INSTALL_COIL_INCLUDE_DIR@ -I${prefix}/@INSTALL_RTM_IDL_DIR@
+rtm_cflags=-I${includedir} -I${prefix}/@INSTALL_RTM_INCLUDE_DIR@ -I${prefix}/@INSTALL_COIL_INCLUDE_DIR@ -I${prefix}/@INSTALL_RTM_IDL_DIR@
 rtm_libs=@RTM_LINKER_OPTION@ -L${exec_prefix}/@INSTALL_RTM_LIB_DIR@ @LIBS@
 rtm_version=@RTM_VERSION@
 rtm_orb=@CORBA@
