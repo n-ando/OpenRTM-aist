@@ -2517,9 +2517,8 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   {
     ip = false; ip_list.resize(0);
 
-    std::string ep_prop;
-    ep_prop = m_config.getProperty("corba.endpoint_property", "ipv4");
-    coil::toLower(ep_prop);
+    std::string ep_prop{coil::toLower(
+      m_config.getProperty("corba.endpoint_property", "ipv4"))};
 
     std::string::size_type pos = ep_prop.find(ipver);
     if (pos == std::string::npos) { return; }

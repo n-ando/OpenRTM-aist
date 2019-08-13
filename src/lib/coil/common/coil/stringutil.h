@@ -106,6 +106,7 @@ namespace coil
    * 与えられた文字列を小文字に変換
    *
    * @param str 入力文字列
+   * @return 変換後文字列
    *
    * @else
    * @brief Lowercase String Transformation
@@ -113,10 +114,11 @@ namespace coil
    * This function transforms a given string to lowercase letters
    *
    * @param str The input string
+   * @return The converted string
    *
    * @endif
    */
-  void toLower(std::string& str);
+  std::string toLower(std::string str) noexcept;
 
   /*!
    * @if jp

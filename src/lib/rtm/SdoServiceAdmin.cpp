@@ -120,9 +120,7 @@ namespace RTC
     ::coil::vstring activeProviderTypes;
     for (auto & enabledProviderType : enabledProviderTypes)
       {
-        std::string provtype(enabledProviderType);
-        coil::toLower(provtype);
-        if (provtype == "all")
+        if (coil::toLower(enabledProviderType) == "all")
           {
             activeProviderTypes = availableProviderTypes;
             RTC_DEBUG(("sdo.service.provider.enabled_services: ALL"));
@@ -180,10 +178,9 @@ namespace RTC
                prop["sdo.service.consumer.available_services"].c_str()));
 
     // If types include '[Aa][Ll][Ll]', all types enabled in this RTC
-    for (auto consumerType : m_consumerTypes)
+    for (auto const& consumerType : m_consumerTypes)
       {
-        coil::toLower(consumerType);
-        if (consumerType == "all")
+        if (coil::toLower(consumerType) == "all")
           {
             m_allConsumerEnabled = true;
             RTC_DEBUG(("sdo.service.consumer.enabled_services: ALL"));
@@ -503,11 +500,11 @@ namespace RTC
 
   std::string SdoServiceAdmin::ifrToKey(std::string& ifr)
   {
-    ::coil::vstring ifrvstr = ::coil::split(ifr, ":");
-    ::coil::toLower(ifrvstr[1]);
-    ::coil::replaceString(ifrvstr[1], ".", "_");
-    ::coil::replaceString(ifrvstr[1], "/", ".");
-    return ifrvstr[1];
+    coil::vstring ifrvstr = coil::split(ifr, ":");
+    std::string str{coil::toLower(std::move(ifrvstr[1]))};
+    coil::replaceString(str, ".", "_");
+    coil::replaceString(str, "/", ".");
+    return str;
   }
 
 
