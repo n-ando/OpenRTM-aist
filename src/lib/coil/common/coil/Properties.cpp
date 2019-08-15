@@ -343,9 +343,7 @@ namespace coil
 
     while (!inStream.eof())
       {
-        std::string tmp = std::string();
-        coil::getlinePortable(inStream, tmp);
-        tmp = coil::eraseHeadBlank(std::move(tmp));
+        std::string tmp{coil::eraseHeadBlank(coil::getlinePortable(inStream))};
 
         // Skip comments or empty lines
         if (tmp.empty())
