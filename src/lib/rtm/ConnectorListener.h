@@ -564,10 +564,8 @@ namespace RTC
       
       cdr->writeData(cdrdata.getBuffer(), cdrdata.getDataLength());
       // endian type check
-      std::string endian_type;
-      endian_type = info.properties.getProperty("serializer.cdr.endian",
-                                                "little");
-      coil::normalize(endian_type);
+      std::string endian_type{coil::normalize(
+        info.properties.getProperty("serializer.cdr.endian", "little"))};
       std::vector<std::string> endian(coil::split(endian_type, ","));
 
       if (endian[0] == "little")
@@ -1148,13 +1146,9 @@ namespace RTC
       std::lock_guard<std::mutex> guard(m_mutex);
       ReturnCode ret(NO_CHANGE);
 
-      std::string endian_type;
-      endian_type = info.properties.getProperty("serializer.cdr.endian",
-          "little");
-      coil::normalize(endian_type);
+      std::string endian_type{coil::normalize(
+        info.properties.getProperty("serializer.cdr.endian", "little"))};
       std::vector<std::string> endian(coil::split(endian_type, ","));
-
-      
 
       for (auto & listener : m_listeners)
         {

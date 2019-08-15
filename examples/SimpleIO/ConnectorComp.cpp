@@ -101,8 +101,7 @@ int main (int argc, char** argv)
 
   for (int i = 1; i < argc; ++i)
     {
-      std::string arg(argv[i]);
-      coil::normalize(arg);
+      std::string arg(coil::normalize(argv[i]));
       if (arg == "--flush")         subs_type = "flush";
       else if (arg == "--new")      subs_type = "new";
       else if (arg == "--periodic")
@@ -117,15 +116,13 @@ int main (int argc, char** argv)
 	  exit(1);
 	}
       else if (arg == "--policy")
-	{
-	  if (++i < argc)
-	    {
-	      std::string arg2(argv[i]);
-	      coil::normalize(arg2);
-	      push_policy = arg2;
-	    }
-	  else            push_policy = "new";
-	}
+        {
+          if (++i < argc)
+            {
+              push_policy = coil::normalize(argv[i])
+            }
+          else            push_policy = "new";
+        }
       else if (arg == "--skip")
 	{
 	  if (++i < argc) skip_count = argv[i];
@@ -133,15 +130,13 @@ int main (int argc, char** argv)
 	}
 
       if (arg == "--endian")
-	{
-	  if (++i < argc)
-	    {
-	      std::string arg2(argv[i]);
-	      coil::normalize(arg2);
-	      endian = arg2;
-	    }
-	  else            endian = "";
-	}
+        {
+          if (++i < argc)
+            {
+              endian = coil::normalize(argv[i]);
+            }
+          else            endian = "";
+        }
       if (arg == "--port")
 	{
 	  if (++i < argc)
@@ -150,25 +145,21 @@ int main (int argc, char** argv)
 	    }
 	}
       if (arg == "--origin")
-	{
-	  if (++i < argc)
-	    {
-	      std::string arg2(argv[i]);
-	      coil::normalize(arg2);
-	      connect_origin = arg2;
-	    }
-	}
+        {
+          if (++i < argc)
+            {
+              connect_origin = coil::normalize(argv[i]);
+            }
+        }
       if (arg == "--buffer")
-	{
-	  if (++i < argc)
-	    {
-	      std::string key(argv[i]);
-	      key = coil::normalize(key);
-	      std::string val(argv[++i]);
-	      val = coil::normalize(val);
-	      buffer_prop.insert(std::pair< std::string, std::string >(key,val));
-	    }
-	}
+        {
+          if (++i < argc)
+            {
+              buffer_prop.emplace(coil::normalize(argv[i]),
+                                  coil::normalize(argv[i+1]));
+              i += 1;
+            }
+        }
     }
   
   CORBA::ORB_var orb = CORBA::ORB_init(_argc, _argv);

@@ -576,7 +576,7 @@ namespace RTC_exp
     getProperty(prop, "policy", policy);
     if (!policy.empty())
       {
-        coil::normalize(policy);
+        policy = coil::normalize(std::move(policy));
         if (policy == "rr")   { m_policy = SCHED_RR; }
         if (policy == "fifo") { m_policy = SCHED_FIFO; }
         RTC_DEBUG(("Scheduling policy: %s", policy.c_str()));

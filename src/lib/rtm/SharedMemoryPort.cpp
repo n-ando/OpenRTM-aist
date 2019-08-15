@@ -97,25 +97,19 @@ namespace RTC
   int SharedMemoryPort::string_to_MemorySize(std::string size_str)
   {
 	  int memory_size = DEFAULT_MEMORY_SIZE;
-	  std::string size_str_n = coil::normalize(size_str);
 	  if (!size_str.empty())
 	  {
-		  std::string unit_str_M = "M";
-		  unit_str_M = coil::normalize(unit_str_M);
-		  std::string unit_str_k = "k";
-		  unit_str_k = coil::normalize(unit_str_k);
-
+		  std::string size_str_n{coil::normalize(std::move(size_str))};
 		  std::string value_str = size_str_n.substr(0, size_str_n.size() - 1);
 		  int value = 0;
 		  if(coil::stringTo(value, value_str.c_str()))
 		  {
-			  if (size_str_n.substr(size_str_n.size() - 1, 1) == unit_str_M)
+			  if (size_str_n.back() == 'm')
 			  {
 				  memory_size = 1048576 * value;
 			  }
-			  else if (size_str_n.substr(size_str_n.size() - 1, 1) == unit_str_k)
+			  else if (size_str_n.back() == 'k')
 			  {
-				  
 				  memory_size = 1024 * value;
 			  }
 			  else

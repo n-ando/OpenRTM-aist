@@ -65,30 +65,27 @@ namespace RTC
 	void InPortSHMConsumer::init(coil::Properties& prop)
   {
     m_properties = prop;
-	std::string ds = m_properties["shem_default_size"];
-	m_memory_size = m_shmem.string_to_MemorySize(ds);
+    std::string ds = m_properties["shem_default_size"];
+    m_memory_size = m_shmem.string_to_MemorySize(ds);
 
-	if (m_properties.hasKey("serializer") == nullptr)
-	{
-		m_endian = true;
-		return;
-	}
+    if (m_properties.hasKey("serializer") == nullptr)
+      {
+        m_endian = true;
+        return;
+      }
 
-	
-	std::string endian_type(m_properties.getProperty("serializer.cdr.endian", ""));
-	coil::normalize(endian_type);
-	std::vector<std::string> endian(coil::split(endian_type, ","));
-	if (endian.empty()) { return; }
-	if (endian[0] == "little")
-	{
-		m_endian = true;
-	}
-	else if (endian[0] == "big")
-	{
-		m_endian = false;
-		return;
-	}
-
+    std::vector<std::string> endian{coil::split(
+      coil::normalize(m_properties.getProperty("serializer.cdr.endian", "")), ",")};
+    if (endian.empty()) { return; }
+    if (endian[0] == "little")
+      {
+        m_endian = true;
+      }
+    else if (endian[0] == "big")
+      {
+        m_endian = false;
+        return;
+      }
   }
 
 

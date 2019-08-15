@@ -76,8 +76,7 @@ int main (int argc, char** argv)
 
   for (int i = 1; i < argc; ++i)
     {
-      std::string arg(argv[i]);
-      coil::normalize(arg);
+      std::string arg{coil::normalize(argv[i])};
       if (arg == "--flush")         subs_type = "flush";
       else if (arg == "--new")      subs_type = "new";
       else if (arg == "--periodic")

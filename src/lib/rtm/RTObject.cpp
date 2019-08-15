@@ -2752,8 +2752,7 @@ namespace RTC
     getInheritedECOptions(default_opts);
     for(auto & ec_ : ecs_tmp)
       {
-        std::string ec_tmp = ec_;
-        if (coil::normalize(ec_tmp) == "none")
+        if (coil::normalize(ec_) == "none")
           {
             RTC_INFO(("EC none. EC will not be bound to the RTC."));
             ec_args.clear();

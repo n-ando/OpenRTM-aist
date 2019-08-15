@@ -305,12 +305,9 @@ namespace RTM
     FileNameservice::getFname(std::string& ns_path) const
     {
       RTC_TRACE(("getFname(%s)", ns_path.c_str()));
-      
-      std::string pathstring(m_profile.properties["base_path"]);
-      pathstring += "/";
-      
-      std::string fs(m_profile.properties["file_structure"]);
-      coil::normalize(fs);
+
+      std::string pathstring{m_profile.properties["base_path"] + '/'};
+      std::string fs{coil::normalize(m_profile.properties["file_structure"])};
       if (fs == "flat")
         {
           RTC_DEBUG(("file_structure = flat"));

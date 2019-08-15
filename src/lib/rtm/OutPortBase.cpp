@@ -546,8 +546,7 @@ namespace RTC
      * prop["interface_type"]: インターフェースタイプ
      * などがアクセス可能になる。
      */
-    std::string dflow_type(prop["dataflow_type"]);
-    coil::normalize(dflow_type);
+    std::string dflow_type{coil::normalize(prop["dataflow_type"])};
 
     if (dflow_type == "push")
       {
@@ -626,7 +625,7 @@ namespace RTC
      * などがアクセス可能になる。
      */
     std::string& dflow_type(prop["dataflow_type"]);
-    coil::normalize(dflow_type);
+    dflow_type = coil::normalize(std::move(dflow_type));
 
     if (dflow_type == "push")
       {
@@ -828,9 +827,9 @@ namespace RTC
       }
 
     // endian type check
-    std::string endian_type(prop.getProperty("serializer.cdr.endian", ""));
+    std::string endian_type{coil::normalize(
+      prop.getProperty("serializer.cdr.endian", ""))};
     RTC_DEBUG(("endian_type: %s", endian_type.c_str()));
-    coil::normalize(endian_type);
     std::vector<std::string> endian(coil::split(endian_type, ","));
 
     if (endian.empty()) { return false; }

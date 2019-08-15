@@ -321,7 +321,7 @@ namespace coil
    * @brief Erase the head/tail blank and replace upper case to lower case
    * @endif
    */
-  std::string normalize(std::string& str)
+  std::string normalize(std::string str) noexcept
   {
     return toLower(eraseBothEndsBlank(std::move(str)));
   }
@@ -622,8 +622,7 @@ namespace coil
   bool stringTo<bool>(bool& val, const char* str)
   {
     if (str == nullptr) { return false; }
-    std::string boolstr(str);
-    coil::normalize(boolstr);
+    std::string boolstr{coil::normalize(str)};
     if (boolstr == "true" || boolstr == "1" ||
         boolstr == "yes"  || boolstr == "on")
       {

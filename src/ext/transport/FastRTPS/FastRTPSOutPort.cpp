@@ -137,8 +137,8 @@ namespace RTC
             type->init(m_dataType, false);
         }
 
-        std::string endian_type(prop.getProperty("serializer.cdr.endian", ""));
-        coil::normalize(endian_type);
+        std::string endian_type{coil::normalize
+                prop.getProperty("serializer.cdr.endian", "")};
         std::vector<std::string> endian(coil::split(endian_type, ","));
         if (endian[0] == "little")
         {

@@ -109,10 +109,9 @@ RTC::ReturnCode_t Throughput::onInitialize()
   // Registration: InPort/OutPort/Service
   // <rtc-template block="registration">
   // Set InPort buffers
-  m_datatype = getProperties()["conf.default.datatype"];
+  m_datatype = coil::normalize(getProperties()["conf.default.datatype"]);
   m_filesuffix = getProperties()["conf.default.filesuffix"];
-  std::string datatype = coil::normalize(m_datatype);
-  if(datatype == "octet")
+  if(m_datatype == "octet")
     {
       addInPort("in", m_inOctetIn);
       m_inOctetIn.
@@ -123,7 +122,7 @@ RTC::ReturnCode_t Throughput::onInitialize()
       addOutPort("out", m_outOctetOut);
       m_varsize = sizeof(CORBA::Octet);
     }
-  else if (datatype == "short")
+  else if (m_datatype == "short")
     {
       addInPort("in", m_inShortIn);
       m_inShortIn.
@@ -134,7 +133,7 @@ RTC::ReturnCode_t Throughput::onInitialize()
       addOutPort("out", m_outShortOut);
       m_varsize = sizeof(CORBA::Short);
     }
-  else if (datatype == "long")
+  else if (m_datatype == "long")
     {
       addInPort("in", m_inLongIn);
       m_inLongIn.
@@ -145,7 +144,7 @@ RTC::ReturnCode_t Throughput::onInitialize()
       addOutPort("out", m_outLongOut);
       m_varsize = sizeof(CORBA::Long);
     }
-  else if (datatype == "float")
+  else if (m_datatype == "float")
     {
       addInPort("in", m_inFloatIn);
       m_inFloatIn.
@@ -156,7 +155,7 @@ RTC::ReturnCode_t Throughput::onInitialize()
       addOutPort("out", m_outFloatOut);
       m_varsize = sizeof(CORBA::Float);
     }
-  else if (datatype == "double")
+  else if (m_datatype == "double")
     {
       addInPort("inDouble", m_inDoubleIn);
       m_inDoubleIn.
@@ -315,7 +314,7 @@ RTC::ReturnCode_t Throughput::onRateChanged(RTC::UniqueId ec_id)
 
 void Throughput::writeData()
 {
-  std::string datatype = coil::normalize(m_datatype);
+  std::string datatype{coil::normalize(m_datatype)};
   if(datatype == "octet")
     {
       setTimestamp(m_outOctet);
@@ -345,7 +344,7 @@ void Throughput::writeData()
 
 void Throughput::setDataSize(CORBA::ULong size)
 {
-  std::string datatype = coil::normalize(m_datatype);
+  std::string datatype{coil::normalize(m_datatype)};
   if(datatype == "octet")
     {
       m_outOctet.data.length(size);
@@ -369,7 +368,7 @@ void Throughput::setDataSize(CORBA::ULong size)
 }
 CORBA::ULong Throughput::getDataSize()
 {
-  std::string datatype = coil::normalize(m_datatype);
+  std::string datatype{coil::normalize(m_datatype)};
   if(datatype == "octet")
     {
       return m_outOctet.data.length();
@@ -509,7 +508,7 @@ void Throughput::setConnectorProfile(const RTC::ConnectorInfo &info)
 CORBA::ULong Throughput::getInPortConnectorSize()
 {
 	CORBA::ULong count = 0;
-	std::string datatype = coil::normalize(m_datatype);
+	std::string datatype{coil::normalize(m_datatype)};
 	if (datatype == "octet")
 	{
 		count = m_inOctetIn.get_connector_profiles()->length();

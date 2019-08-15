@@ -199,8 +199,8 @@ namespace RTC
         else if (pub_type == "new") { info.properties["io_mode"] = "nonblock"; }
         else                        { info.properties["io_mode"] = pub_type;   }
       }
-    coil::normalize(pub_type);
-    return PublisherFactory::instance().createObject(pub_type);
+    return PublisherFactory::instance().createObject(
+      coil::normalize(std::move(pub_type)));
   }
 
   /*!

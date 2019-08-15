@@ -94,9 +94,7 @@ int main (int argc, char** argv)
     {
       for (int i = 1; i < argc; ++i)
         {
-          std::string arg(argv[i]);
-          coil::normalize(arg);
-          if (arg == "-listener")
+          if (coil::normalize(argv[i]) == "-listener")
             {
               // Connector Listener Dump Flag ON
               g_Listener_dump_enabled = true;
