@@ -251,18 +251,21 @@ namespace coil
    * 空白文字として扱うのは' '(スペース)と'\\t'(タブ)。
    *
    * @param str 空白文字削除処理文字列
+   * @return 空白除去済み文字列
    *
    * @else
    * @brief Erase blank characters of string
+   * @return The erased string
    *
    * Erase blank characters that exist at the head of the given string.
    * Space ' 'and tab '\\t' are supported as the blank character.
    *
    * @param str The target blank characters of string for the erase
+   * @return The string which is erased the whitespaces.
    *
    * @endif
    */
-  void eraseBlank(std::string& str);
+  std::string eraseBlank(std::string str) noexcept;
 
   /*!
    * @if jp

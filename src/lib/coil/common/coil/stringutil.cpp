@@ -292,22 +292,12 @@ namespace coil
    * @brief Erase blank characters of string
    * @endif
    */
-  void eraseBlank(std::string& str)
+  std::string eraseBlank(std::string str) noexcept
   {
-    std::string::iterator it(str.begin());
-
-    while (it != str.end())
-      {
-        if (*it == ' ' || *it == '\t')
-          {
-            it = str.erase(it);
-          }
-        else
-          {
-            ++it;
-          }
-      }
-
+    str.erase(std::remove_if(str.begin(), str.end(),
+                [](unsigned char x){ return std::isblank(x); }),
+              str.end());
+    return str;
   }
 
   /*!
