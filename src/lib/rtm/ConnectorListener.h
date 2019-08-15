@@ -1085,11 +1085,9 @@ namespace RTC
     template <class DataType>
     ReturnCode notifyIn(ConnectorInfo& info, DataType& typeddata)
     {
-        std::string marshaling_type = info.properties.getProperty("marshaling_type", "corba");
-        marshaling_type = info.properties.getProperty("in.marshaling_type", marshaling_type);
-
-        coil::eraseBothEndsBlank(marshaling_type);
-
+        std::string type = info.properties.getProperty("marshaling_type", "corba");
+        std::string marshaling_type{coil::eraseBothEndsBlank(
+          info.properties.getProperty("in.marshaling_type", type))};
         return notify(info, typeddata, marshaling_type);
     }
 
@@ -1116,11 +1114,9 @@ namespace RTC
     template <class DataType>
     ReturnCode notifyOut(ConnectorInfo& info, DataType& typeddata)
     {
-        std::string marshaling_type = info.properties.getProperty("marshaling_type", "corba");
-        marshaling_type = info.properties.getProperty("out.marshaling_type", marshaling_type);
-
-        coil::eraseBothEndsBlank(marshaling_type);
-
+        std::string type = info.properties.getProperty("marshaling_type", "corba");
+        std::string marshaling_type{coil::eraseBothEndsBlank(
+          info.properties.getProperty("out.marshaling_type", type))};
         return notify(info, typeddata, marshaling_type);
     }
     /*!

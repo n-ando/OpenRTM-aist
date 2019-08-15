@@ -279,18 +279,21 @@ namespace coil
    * 空白文字として扱うのは' '(スペース)と'\\t'(タブ)。
    *
    * @param str 先頭空白文字削除処理文字列
+   * @return 空白除去済み文字列
    *
    * @else
    * @brief Erase the head blank characters of string
+   * @return The erased string
    *
    * Erase the blank characters that exist at the head of the given string.
    * Space ' 'and tab '\\t' are supported as the blank character.
    *
    * @param str The target head blank characters of string for the erase
+   * @return The string which is erased the head blnak.
    *
    * @endif
    */
-  void eraseHeadBlank(std::string& str);
+  std::string eraseHeadBlank(std::string str) noexcept;
 
   /*!
    * @if jp
@@ -300,6 +303,7 @@ namespace coil
    * 空白文字として扱うのは' '(スペース)と'\\t'(タブ)。
    *
    * @param str 末尾空白文字削除処理文字列
+   * @return 空白除去済み文字列
    *
    * @else
    * @brief Erase the tail blank characters of string
@@ -309,10 +313,11 @@ namespace coil
    * character.
    *
    * @param str The target tail blank characters of string for the erase
+   * @return The erased string
    *
    * @endif
    */
-  void eraseTailBlank(std::string& str);
+  std::string eraseTailBlank(std::string str) noexcept;
 
   /*!
    * @if jp
@@ -321,7 +326,7 @@ namespace coil
    * 与えられた文字列の先頭および末尾に存在する空白文字を削除する。
    * 空白文字として扱うのは' '(スペース)と'\\t'(タブ)。
    *
-   * @param str 先頭末尾空白文字削除処理文字列
+   * @return 空白除去済み文字列
    *
    * @else
    * @brief Erase the head blank and the tail blank characters of string
@@ -334,7 +339,7 @@ namespace coil
    *
    * @endif
    */
-  void eraseBothEndsBlank(std::string& str);
+  std::string eraseBothEndsBlank(std::string str) noexcept;
 
   /*!
    * @if jp

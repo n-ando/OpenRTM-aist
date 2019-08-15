@@ -60,9 +60,8 @@ namespace RTC
     m_publisher->setBuffer(m_buffer);
     m_publisher->setListener(m_profile, &m_listeners);
 
-    m_marshaling_type = info.properties.getProperty("marshaling_type", "corba");
-    m_marshaling_type = info.properties.getProperty("out.marshaling_type", m_marshaling_type);
-    coil::eraseBothEndsBlank(m_marshaling_type);
+    std::string type{info.properties.getProperty("marshaling_type", "corba")};
+    m_marshaling_type = coil::eraseBothEndsBlank(info.properties.getProperty("out.marshaling_type", type));
 
     onConnect();
   }

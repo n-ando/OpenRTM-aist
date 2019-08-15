@@ -544,12 +544,12 @@ namespace RTC
       
       coil::create_process(comin, comout);
       
-      std::string xmlstr;
-      for (auto& c : comout)
+      std::string tmp;
+      for (auto const& c : comout)
       {
-          xmlstr.append(c);
+          tmp.append(c);
       }
-      coil::eraseBothEndsBlank(xmlstr);
+      std:: string xmlstr{coil::eraseBothEndsBlank(std::move(tmp))};
 
       rapidxml::xml_document<> doc;
       try

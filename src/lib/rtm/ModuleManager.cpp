@@ -46,10 +46,14 @@ namespace RTC
   ModuleManager::ModuleManager(coil::Properties& prop)
     : rtclog("ModuleManager"), m_properties(prop)
   {
-    m_configPath      = coil::split(prop[CONFIG_PATH], ",");
-    for_each(m_configPath.begin(), m_configPath.end(), coil::eraseHeadBlank);
-    m_loadPath        = coil::split(prop[MOD_LOADPTH], ",");
-    for_each(m_loadPath.begin(), m_loadPath.end(), coil::eraseHeadBlank);
+    for (auto path : coil::split(prop[CONFIG_PATH], ","))
+    {
+      m_configPath.emplace_back(coil::eraseHeadBlank(std::move(path)));
+    }
+    for (auto path : coil::split(prop[MOD_LOADPTH], ","))
+    {
+      m_loadPath.emplace_back(coil::eraseHeadBlank(std::move(path)));
+    }
     m_absoluteAllowed = coil::toBool(prop[ALLOW_ABSPATH], "yes", "no", false);
     m_downloadAllowed = coil::toBool(prop[ALLOW_URL], "yes", "no", false);
     m_initFuncSuffix  = prop[INITFUNC_SFX];
@@ -572,10 +576,8 @@ namespace RTC
             std::string::size_type pos(out.find(':'));
             if (pos != std::string::npos)
               {
-                  std::string key(out.substr(0, pos));
-                  coil::eraseBothEndsBlank(key);
-                  p[key] = out.substr(pos + 1);
-                  coil::eraseBothEndsBlank(p[key]);
+                  std::string key{coil::eraseBothEndsBlank(out.substr(0, pos))};
+                  p[key] = coil::eraseBothEndsBlank(out.substr(pos + 1));
               }
             
           }

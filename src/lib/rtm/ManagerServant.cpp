@@ -937,8 +937,7 @@ namespace RTM
     ::RTC::RTCList_var crtcs = new ::RTC::RTCList();
 
     // check argument
-    std::string tmp(name);
-    coil::eraseHeadBlank(tmp);
+    std::string tmp{coil::eraseHeadBlank(name)};
     if (tmp.empty()) { return crtcs._retn(); }
 
     std::vector<RTC::RTObject_impl*> rtcs = m_mgr.getComponents();

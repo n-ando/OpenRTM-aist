@@ -149,15 +149,14 @@ namespace coil
 
     do
       {
-        char str[512];
-        fgets(str, 512, fp);
-        std::string line(str);
+        std::array<char, 512> str;
+        fgets(&str[0], str.size(), fp);
+        std::string line{coil::eraseHeadBlank(&str[0])};
 
         if (std::string::npos == line.find("inet ")) { continue; }
 
         line.erase(line.end() - 1);
-        coil::eraseHeadBlank(line);
-        coil::vstring vs(coil::split(line, " "));
+        coil::vstring vs{coil::split(line, " ")};
         if (vs.size() == 6)
           {
             ipaddr = vs[1];

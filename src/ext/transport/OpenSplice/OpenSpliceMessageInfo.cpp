@@ -120,10 +120,10 @@ const char* InterfaceDataTypesFile::idlpath = "${RTM_IDL_PATH}/InterfaceDataType
 void OpenSpliceMessageInfoInit(const coil::Properties& prop)
 {
     std::string datalist = prop.getProperty("opensplice.datatypes", "ALL");
-    coil::vstring datatypes = coil::split(datalist, ",");
-    for (auto& datatype : datatypes)
+    coil::vstring datatypes;
+    for (auto& datatype : coil::split(datalist, ","))
     {
-        coil::eraseBothEndsBlank(datatype);
+        datatypes.emplace_back(coil::eraseBothEndsBlank(std::move(datatype)));
     }
 
     RTC::appendOpenSpliceMessageInfo<RTC::TimedState, BasicDataTypeFile>(datatypes);

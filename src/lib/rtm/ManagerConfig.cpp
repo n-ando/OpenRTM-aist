@@ -179,17 +179,10 @@ namespace RTC
               std::string::size_type pos(opt_arg.find(':'));
               if (pos != std::string::npos)
                 {
-                  std::string key = opt_arg.substr(0, pos);
-                  std::string value = opt_arg.substr(pos + 1);
-
-                  key = coil::unescape(key);
-                  coil::eraseHeadBlank(key);
-                  coil::eraseTailBlank(key);
-
-                  value = coil::unescape(value);
-                  coil::eraseHeadBlank(value);
-                  coil::eraseTailBlank(value);
-
+                  std::string key{coil::eraseBothEndsBlank(coil::unescape(
+                    opt_arg.substr(0, pos)))};
+                  std::string value{coil::eraseBothEndsBlank(coil::unescape(
+                    opt_arg.substr(pos + 1)))};
                   m_argprop[key] = value;
                 }
             }

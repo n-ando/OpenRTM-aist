@@ -240,10 +240,9 @@ namespace RTC
         if (begin_pos != std::string::npos && end_pos != std::string::npos &&
             begin_pos < end_pos)
           {
-            initfunc = itr.substr(begin_pos + 1, end_pos - (begin_pos + 1));
-            filename = itr.substr(0, begin_pos);
-            coil::eraseBothEndsBlank(initfunc);
-            coil::eraseBothEndsBlank(filename);
+            initfunc = coil::eraseBothEndsBlank(
+              itr.substr(begin_pos + 1, end_pos - (begin_pos + 1)));
+            filename = coil::eraseBothEndsBlank(itr.substr(0, begin_pos));
           }
         else
           {
@@ -292,10 +291,9 @@ namespace RTC
         if (begin_pos != std::string::npos && end_pos != std::string::npos &&
             begin_pos < end_pos)
           {
-            initfunc = mod.substr(begin_pos + 1, end_pos - (begin_pos + 1));
-            filename = mod.substr(0, begin_pos);
-            coil::eraseBothEndsBlank(initfunc);
-            coil::eraseBothEndsBlank(filename);
+            initfunc = coil::eraseBothEndsBlank(
+              mod.substr(begin_pos + 1, end_pos - (begin_pos + 1)));
+            filename = coil::eraseBothEndsBlank(mod.substr(0, begin_pos));
           }
         else
           {
@@ -1235,11 +1233,9 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 
 
 	{
-		coil::vstring lmpm_ = coil::split(m_config["manager.preload.modules"], ",");
-		for (auto & itr : lmpm_)
+		for (auto & itr : coil::split(m_config["manager.preload.modules"], ","))
 		{
-			std::string mpm_ = itr;
-			coil::eraseBothEndsBlank(mpm_);
+			std::string mpm_{coil::eraseBothEndsBlank(std::move(itr))};
 			if (mpm_.empty())
 			{
 				continue;
@@ -1499,8 +1495,8 @@ std::vector<coil::Properties> Manager::getLoadableModules()
         {
             if (i % 2 == 0)
             {
-                coil::eraseBothEndsBlank(opts[i]);
-                coil::vstring olist = coil::split(opts[i], " ");
+                coil::vstring olist{
+                  coil::split(coil::eraseBothEndsBlank(opts[i]), " ")};
                 std::copy(olist.begin(), olist.end(), std::back_inserter(args));
             }
             else
@@ -2570,12 +2566,9 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   {
 	  RTC_TRACE(("Connection pre-connection: %s",
 		  m_config["manager.components.preconnect"].c_str()));
-	  std::vector<std::string> connectors;
-	  connectors = coil::split(m_config["manager.components.preconnect"], ",");
-      for (auto & connector : connectors)
+      for (auto&& connector : coil::split(m_config["manager.components.preconnect"], ","))
 	  {
-		  
-		  coil::eraseBothEndsBlank(connector);
+		  connector = coil::eraseBothEndsBlank(std::move(connector));
 		  if (connector.empty())
 		  {
 			  continue;
@@ -2662,11 +2655,8 @@ std::vector<coil::Properties> Manager::getLoadableModules()
               coil::Properties prop;
 
               for (auto & config : configs) {
-                  std::string key = config.first;
-                  std::string value = config.second;
-                  coil::eraseBothEndsBlank(key);
-                  coil::eraseBothEndsBlank(value);
-
+                  std::string key{coil::eraseBothEndsBlank(config.first)};
+                  std::string value{coil::eraseBothEndsBlank(config.second)};
                   prop["dataport." + key] = value;
               }
 
@@ -2723,11 +2713,8 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 			  coil::Properties prop;
 
 			  for (auto & config : configs) {
-				  std::string key = config.first;
-				  std::string value = config.second;
-				  coil::eraseBothEndsBlank(key);
-				  coil::eraseBothEndsBlank(value);
-
+				  std::string key{coil::eraseBothEndsBlank(std::move(config.first))};
+				  std::string value{coil::eraseBothEndsBlank(std::move(config.second))};
 				  prop["dataport." + key] = value;
 			  }
 
@@ -2759,13 +2746,10 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   {
 	  RTC_TRACE(("Components pre-activation: %s",
 		  m_config["manager.components.preactivation"].c_str()));
-	  std::vector<std::string> comps;
-	  comps = coil::split(m_config["manager.components.preactivation"],
-		  ",");
 
-      for (auto & c : comps)
+      for (auto & c : coil::split(m_config["manager.components.preactivation"], ","))
 	  {
-		  coil::eraseBothEndsBlank(c);
+		  c = coil::eraseBothEndsBlank(std::move(c));
 		  if (!c.empty())
 		  {
 			  RTC::RTObject_ptr comp_ref;
