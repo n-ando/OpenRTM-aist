@@ -1615,7 +1615,9 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     if (m_config.findNode("corba.endpoint") != nullptr)
       {
         coil::vstring tmp(coil::split(m_config["corba.endpoint"], ","));
-        endpoints.insert(endpoints.end(), tmp.begin(), tmp.end());
+        endpoints.insert(endpoints.end(),
+                         std::make_move_iterator(tmp.begin()),
+                         std::make_move_iterator(tmp.end()));
         RTC_DEBUG(("corba.endpoint: %s", m_config["corba.endpoint"].c_str()));
       }
     // If this process has master manager,
@@ -1628,11 +1630,11 @@ std::vector<coil::Properties> Manager::getLoadableModules()
         coil::vstring mmm(coil::split(mm, ":"));
         if (mmm.size() == 2)
           {
-            endpoints.insert(endpoints.begin(), std::string(":") + mmm[1]);
+            endpoints.emplace(endpoints.begin(), std::string(":") + mmm[1]);
           }
         else
           {
-            endpoints.insert(endpoints.begin(), ":2810");
+            endpoints.emplace(endpoints.begin(), ":2810");
           }
       }
     endpoints = coil::unique_sv(std::move(endpoints));

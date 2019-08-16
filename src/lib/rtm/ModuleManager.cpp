@@ -335,7 +335,9 @@ namespace RTC
         getModuleProfiles(lang, modules, tmpprops);
         RTC_DEBUG(("Modile profile size: %d (newly founded modules)",
                    tmpprops.size()));
-        m_modprofs.insert(m_modprofs.end(), tmpprops.begin(), tmpprops.end());
+        m_modprofs.insert(m_modprofs.end(),
+                          std::make_move_iterator(tmpprops.begin()),
+                          std::make_move_iterator(tmpprops.end()));
       }
     RTC_DEBUG(("Modile profile size: %d", m_modprofs.size()));
     // 3. removing module profiles for which module file does not exist
@@ -488,7 +490,9 @@ namespace RTC
             coil::getFileList(path, suffixe, tmp);
             RTC_DEBUG(("File list (path:%s, ext:%s): %s", path.c_str(),
                        suffixe.c_str(), coil::flatten(tmp).c_str()));
-            flist.insert(flist.end(), tmp.begin(), tmp.end());
+            flist.insert(flist.end(),
+                         std::make_move_iterator(tmp.begin()),
+                         std::make_move_iterator(tmp.end()));
           }
 
         // reformat file path and remove cached files
