@@ -33,7 +33,7 @@ namespace RTC
   {
     rtclog.setName("OutPortSHMConsumer");
   }
-    
+
   /*!
    * @if jp
    * @brief デストラクタ

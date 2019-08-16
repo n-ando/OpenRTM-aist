@@ -105,16 +105,16 @@ int main (int argc, char** argv)
       if (arg == "--flush")         subs_type = "flush";
       else if (arg == "--new")      subs_type = "new";
       else if (arg == "--periodic")
-	{
-	  subs_type = "periodic";
-	  if (++i < argc) period = argv[i];
-	  else            period = "1.0";
-	}
+        {
+          subs_type = "periodic";
+          if (++i < argc) period = argv[i];
+          else            period = "1.0";
+        }
       else if (arg == "--help")
-	{
-	  usage();
-	  exit(1);
-	}
+        {
+          usage();
+          exit(1);
+        }
       else if (arg == "--policy")
         {
           if (++i < argc)
@@ -124,10 +124,10 @@ int main (int argc, char** argv)
           else            push_policy = "new";
         }
       else if (arg == "--skip")
-	{
-	  if (++i < argc) skip_count = argv[i];
-	  else            skip_count = "0";
-	}
+        {
+          if (++i < argc) skip_count = argv[i];
+          else            skip_count = "0";
+        }
 
       if (arg == "--endian")
         {
@@ -138,12 +138,12 @@ int main (int argc, char** argv)
           else            endian = "";
         }
       if (arg == "--port")
-	{
-	  if (++i < argc)
-	    {
-	      port_no = argv[i];
-	    }
-	}
+        {
+          if (++i < argc)
+            {
+              port_no = argv[i];
+            }
+        }
       if (arg == "--origin")
         {
           if (++i < argc)
@@ -161,7 +161,7 @@ int main (int argc, char** argv)
             }
         }
     }
-  
+
   CORBA::ORB_var orb = CORBA::ORB_init(_argc, _argv);
   std::string name_server("localhost:");
   name_server.append(port_no);

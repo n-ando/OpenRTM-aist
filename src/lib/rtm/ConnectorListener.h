@@ -552,16 +552,14 @@ namespace RTC
                                   ByteData& cdrdata, const std::string& marshalingtype) override
     {
       DataType data;
-      
+
       ByteDataStream<DataType> *cdr = coil::GlobalFactory < ::RTC::ByteDataStream<DataType> >::instance().createObject(marshalingtype);
-      
-      
+
       if (!cdr)
       {
           return NO_CHANGE;
       }
-      
-      
+
       cdr->writeData(cdrdata.getBuffer(), cdrdata.getDataLength());
       // endian type check
       std::string endian_type{coil::normalize(
@@ -1161,11 +1159,8 @@ namespace RTC
             }
           else
             {
-              
-
               ByteDataStream<DataType> *cdr = coil::GlobalFactory < ::RTC::ByteDataStream<DataType> >::instance().createObject(marshalingtype);
 
-              
               if (endian[0] == "little")
               {
                   cdr->isLittleEndian(true);

@@ -1022,22 +1022,18 @@ namespace RTC
         connector->setEndian(m_littleEndian);
 
 
-		if (coil::normalize(prop["interface_type"]) == "direct")
-		{
-			OutPortBase* outport = getLocalOutPort(profile);
-			if (outport == nullptr)
-			{
-				RTC_DEBUG(("interface_type is direct, "
-					"but a peer InPort servant could not be obtained."));
-				delete connector;
-				return nullptr;
-			}
-			
-
-			connector->setOutPort(outport);
-
-			
-		}
+        if (coil::normalize(prop["interface_type"]) == "direct")
+          {
+            OutPortBase* outport = getLocalOutPort(profile);
+            if (outport == nullptr)
+              {
+                RTC_DEBUG(("interface_type is direct, "
+                    "but a peer InPort servant could not be obtained."));
+                delete connector;
+                return nullptr;
+              }
+            connector->setOutPort(outport);
+          }
 
         m_connectors.emplace_back(connector);
         RTC_PARANOID(("connector push backed: %d", m_connectors.size()));
@@ -1063,63 +1059,57 @@ namespace RTC
   * @endif
   */
   OutPortBase*
-	  InPortBase::getLocalOutPort(const ConnectorInfo& profile)
+      InPortBase::getLocalOutPort(const ConnectorInfo& profile)
   {
-	  RTC_DEBUG(("Trying direct port connection."));
-	  CORBA::ORB_var orb = ::RTC::Manager::instance().getORB();
-	  RTC_DEBUG(("Current connector profile: name=%s, id=%s",
-		  profile.name.c_str(), profile.id.c_str()));
-	  // finding peer port object
+      RTC_DEBUG(("Trying direct port connection."));
+      CORBA::ORB_var orb = ::RTC::Manager::instance().getORB();
+      RTC_DEBUG(("Current connector profile: name=%s, id=%s",
+                 profile.name.c_str(), profile.id.c_str()));
+      // finding peer port object
       for (const auto & port : profile.ports)
       {
-		  CORBA::Object_var obj;
-		  obj = orb->string_to_object(port.c_str());
-		  if (getPortRef()->_is_equivalent(obj)) { continue; }
-		  RTC_DEBUG(("Peer port found: %s.", port.c_str()));
-		  try
-		  {
-			  PortableServer::POA_var poa = ::RTC::Manager::instance().getPOA();
-			  OutPortBase* outport = dynamic_cast<OutPortBase*>
-				  (poa->reference_to_servant(obj));
-			  RTC_DEBUG(("OutPortBase servant pointer is obtained."));
-			  return outport;
-		  }
-		  catch (...)
-		  {
-			  RTC_DEBUG(("Peer port might be a remote port"));
-		  }
-	  }
-	  return nullptr;
+        CORBA::Object_var obj;
+        obj = orb->string_to_object(port.c_str());
+        if (getPortRef()->_is_equivalent(obj)) { continue; }
+        RTC_DEBUG(("Peer port found: %s.", port.c_str()));
+        try
+          {
+            PortableServer::POA_var poa = ::RTC::Manager::instance().getPOA();
+            OutPortBase* outport = dynamic_cast<OutPortBase*>
+                                   (poa->reference_to_servant(obj));
+            RTC_DEBUG(("OutPortBase servant pointer is obtained."));
+            return outport;
+          }
+        catch (...)
+          {
+            RTC_DEBUG(("Peer port might be a remote port"));
+          }
+      }
+      return nullptr;
   }
 
   ReturnCode_t InPortBase::notify_connect(ConnectorProfile& connector_profile)
   {
-	  Properties prop;
-	  NVUtil::copyToProperties(prop, connector_profile.properties);
+      Properties prop;
+      NVUtil::copyToProperties(prop, connector_profile.properties);
 
-	  Properties node = prop.getNode("dataport.inport");
+      Properties node = prop.getNode("dataport.inport");
 
-	  Properties portprop(m_properties);
+      Properties portprop(m_properties);
 
-	  node << portprop;
+      node << portprop;
 
-	  NVUtil::copyFromProperties(connector_profile.properties, prop);
+      NVUtil::copyFromProperties(connector_profile.properties, prop);
 
-	  std::string _str = node["fan_in"];
-	  unsigned int value = 100;
+      std::string _str = node["fan_in"];
+      unsigned int value = 100;
 
-	  coil::stringTo<unsigned int>(value, _str.c_str());
-	  
+      coil::stringTo<unsigned int>(value, _str.c_str());
+      if (value <= m_connectors.size())
+      {
+        return RTC::PRECONDITION_NOT_MET;
+      }
 
-	  if (value <= m_connectors.size())
-	  {
-		  return RTC::PRECONDITION_NOT_MET;
-	  }
-
-
-
-
-
-	  return PortBase::notify_connect(connector_profile);
+      return PortBase::notify_connect(connector_profile);
   }
 } // namespace RTC

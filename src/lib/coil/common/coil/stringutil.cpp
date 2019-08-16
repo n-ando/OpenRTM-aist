@@ -827,6 +827,4 @@ namespace coil
     }
     return str;
   }
-
 } // namespace coil
-

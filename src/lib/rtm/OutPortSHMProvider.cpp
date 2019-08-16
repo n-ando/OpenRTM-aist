@@ -78,14 +78,14 @@ namespace RTC
    */
   void OutPortSHMProvider::init(coil::Properties& prop)
   {
-	std::string ds = prop["shem_default_size"];
-	m_memory_size = string_to_MemorySize(ds);
+    std::string ds = prop["shem_default_size"];
+    m_memory_size = string_to_MemorySize(ds);
 
-	if (prop.hasKey("serializer") == nullptr)
-	{
-		m_endian = true;
-		return;
-	}
+    if (prop.hasKey("serializer") == nullptr)
+      {
+        m_endian = true;
+        return;
+      }
 
     std::vector<std::string> endian{coil::split(
       coil::normalize(prop.getProperty("serializer.cdr.endian", "")), ",")};
