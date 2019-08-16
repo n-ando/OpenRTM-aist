@@ -57,7 +57,7 @@ namespace RTC
     // Default lib-input setting
     FlbHandler flbhandler = flb_input(s_flbContext, (char*)"lib", nullptr);
     flb_input_set(s_flbContext, flbhandler, "tag", prop.getName(), NULL);
-    m_flbIn.push_back(flbhandler);
+    m_flbIn.emplace_back(flbhandler);
 
     const std::vector<coil::Properties*>& leaf(prop.getLeaf());
 
@@ -99,7 +99,7 @@ namespace RTC
     FlbHandler flbout = flb_output(s_flbContext,
                                    (char*)plugin.c_str(), nullptr);
 
-    m_flbOut.push_back(flbout);
+    m_flbOut.emplace_back(flbout);
     const std::vector<Properties*>& leaf = prop.getLeaf();
     for(auto & lprop : leaf)
       {
@@ -115,7 +115,7 @@ namespace RTC
     
     FlbHandler flbin = flb_input(s_flbContext,
                                  (char*)plugin.c_str(), nullptr);
-    m_flbIn.push_back(flbin);
+    m_flbIn.emplace_back(flbin);
     const std::vector<Properties*>& leaf = prop.getLeaf();
     for(auto & lprop : leaf)
       {

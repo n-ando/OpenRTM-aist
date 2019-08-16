@@ -40,7 +40,7 @@ namespace coil
       {
         if (CPU_ISSET(i, &cpu_set))
           {
-            cpu_mask.push_back(static_cast<unsigned int>(i)+1);
+            cpu_mask.emplace_back(static_cast<unsigned int>(i)+1);
           }
       }
 #endif
@@ -75,7 +75,7 @@ namespace coil
         int num;
         if (coil::stringTo(num, maskstr.c_str()))
           {
-            mask.push_back(num);
+            mask.emplace_back(num);
           }
       }
     return setProcCpuAffinity(mask);
@@ -99,7 +99,7 @@ namespace coil
       {
         if (CPU_ISSET(i, &cpu_set))
           {
-            cpu_mask.push_back(static_cast<unsigned int>(i)+1);
+            cpu_mask.emplace_back(static_cast<unsigned int>(i)+1);
           }
       }
 #endif
@@ -134,7 +134,7 @@ namespace coil
         int num;
         if (coil::stringTo(num, maskstr.c_str()))
           {
-            mask.push_back(num);
+            mask.emplace_back(num);
           }
       }
     return setThreadCpuAffinity(mask);

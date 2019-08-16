@@ -446,7 +446,7 @@ namespace RTC
         {
           subscriber->connectTCP(caller_id, topic, xmlrpc_uri);
         }
-        new_.push_back(xmlrpc_uri);
+        new_.emplace_back(xmlrpc_uri);
       }
       
       for(auto & old_uri : old_)
@@ -492,7 +492,7 @@ namespace RTC
 
     if(!existPublisher(publisher))
     {
-      m_publishers.push_back(publisher);
+      m_publishers.emplace_back(publisher);
     }
   }
 
@@ -515,7 +515,7 @@ namespace RTC
   {
     if(!existSubscriber(subscriber))
     {
-      m_subscribers.push_back(subscriber);
+      m_subscribers.emplace_back(subscriber);
     }
     
   }

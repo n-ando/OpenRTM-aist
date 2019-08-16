@@ -286,7 +286,7 @@ namespace RTC_impl
         std::lock_guard<std::mutex> guard(m_addedMutex);
         RTC::ExecutionContextService_var ec = getECRef();
         RTC::ExecutionContextHandle_t id = comp->attach_context(ec);
-        m_addedComps.push_back(new RTObjectStateMachine(id, comp));
+        m_addedComps.emplace_back(new RTObjectStateMachine(id, comp));
       }
     catch (CORBA::Exception& e)
       {
@@ -333,7 +333,7 @@ namespace RTC_impl
     // rtc is owner of this EC
     RTC::LightweightRTObject_var comp
       = RTC::LightweightRTObject::_duplicate(rtc->getObjRef());
-    m_comps.push_back(new RTObjectStateMachine(id, comp));
+    m_comps.emplace_back(new RTObjectStateMachine(id, comp));
     RTC_DEBUG(("bindComponent() succeeded."));
 
     return RTC::RTC_OK;
@@ -365,7 +365,7 @@ namespace RTC_impl
       }
     {
       std::lock_guard<std::mutex> removeGuard(m_removedMutex);
-      m_removedComps.push_back(rtobj);
+      m_removedComps.emplace_back(rtobj);
     }
     // if EC is stopping, update component list immediately.
     {
@@ -382,7 +382,7 @@ namespace RTC_impl
       std::lock_guard<std::mutex> addedGuard(m_addedMutex);
       for (auto & m_addedComp : m_addedComps)
         {
-          m_comps.push_back(m_addedComp);
+          m_comps.emplace_back(std::move(m_addedComp));
           RTC_TRACE(("Component added."));
         }
       m_addedComps.clear();

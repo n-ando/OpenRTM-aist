@@ -193,7 +193,7 @@ namespace RTC
     ConnectorInfoList profs;
     for (auto & connector : m_connectors)
       {
-        profs.push_back(connector->profile());
+        profs.emplace_back(connector->profile());
       }
     return profs;
   }
@@ -210,7 +210,7 @@ namespace RTC
     coil::vstring ids;
     for (auto & connector : m_connectors)
       {
-        ids.push_back(connector->id());
+        ids.emplace_back(connector->id());
       }
     RTC_TRACE(("getConnectorIds(): %s", coil::flatten(ids).c_str()));
     return ids;
@@ -228,7 +228,7 @@ namespace RTC
     coil::vstring names;
     for (auto & connector : m_connectors)
       {
-        names.push_back(connector->name());
+        names.emplace_back(connector->name());
       }
     RTC_TRACE(("getConnectorNames(): %s", coil::flatten(names).c_str()));
     return names;
@@ -999,7 +999,7 @@ namespace RTC
           }
         // end of direct interface_type
 
-        m_connectors.push_back(connector);
+        m_connectors.emplace_back(connector);
         RTC_PARANOID(("connector pushback done: size = %d",
                       m_connectors.size()));
         return connector;
@@ -1055,7 +1055,7 @@ namespace RTC
 			connector->setPullDirectMode();
 		}
 
-        m_connectors.push_back(connector);
+        m_connectors.emplace_back(connector);
         RTC_PARANOID(("connector pushback done: size = %d",
                       m_connectors.size()));
         return connector;

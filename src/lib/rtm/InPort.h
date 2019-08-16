@@ -249,7 +249,7 @@ namespace RTC
                 size_t r = con->getBuffer()->readable();
                 if (r > 0)
                 {
-                    names.push_back(con->name());
+                    names.emplace_back(con->name());
                 }
             }
             
@@ -373,7 +373,7 @@ namespace RTC
                 size_t r = con->getBuffer()->readable();
                 if (r == 0)
                 {
-                    names.push_back(con->name());
+                    names.emplace_back(con->name());
                 }
             }
 

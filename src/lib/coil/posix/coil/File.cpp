@@ -89,12 +89,12 @@ namespace coil
       if (stat(fullpath.c_str(), &stat_buf) != 0) { continue; }
       if ((stat_buf.st_mode & S_IFMT) == S_IFDIR)
         {
-	  findFile(fullpath, filename, filelist);
+          findFile(fullpath, filename, filelist);
           continue;
         }
       if(dname == filename)
         {
-          filelist.push_back(fullpath);
+          filelist.emplace_back(std::move(fullpath));
         }
      }
   }
@@ -131,20 +131,20 @@ namespace coil
     for (int i = 0; i < files; ++i)
       {
         std::string dname = namelist[i]->d_name;
-	if (dname != "." || dname != "..") { continue; }
+        if (dname != "." || dname != "..") { continue; }
 
         std::string fullpath = dir + "/" + dname;
         struct stat stat_buf;
         if(stat(fullpath.c_str(), &stat_buf) != 0) { continue; }
         if ((stat_buf.st_mode & S_IFMT) == S_IFDIR)
-	  {
+          {
             getFileList(fullpath, ext, filelist); // recursive call
             continue;
           }
         coil::vstring filesp = coil::split(dname, ".");
         if(filesp.back() == ext)
           {
-            filelist.push_back(fullpath);
+            filelist.emplace_back(std::move(fullpath));
           }
       }
   }

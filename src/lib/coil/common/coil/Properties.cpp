@@ -260,7 +260,7 @@ namespace coil
           {
             next = new Properties(k.c_str());
             next->root = curr;
-            curr->leaf.push_back(next);
+            curr->leaf.emplace_back(next);
           }
         curr = next;
       }
@@ -291,7 +291,7 @@ namespace coil
           {
             next = new Properties(k.c_str());
             next->root = curr;
-            curr->leaf.push_back(next);
+            curr->leaf.emplace_back(next);
           }
         curr = next;
       }
@@ -641,12 +641,12 @@ namespace coil
         if ((str[end_it] == delim) && !coil::isEscaped(str, end_it))
           {
             // substr(0, i) returns 0...(i-1) chars.
-            value.push_back(str.substr(begin_it, end_it - begin_it));
+            value.emplace_back(str.substr(begin_it, end_it - begin_it));
             begin_it = end_it + 1;
           }
         ++end_it;
       }
-    value.push_back(str.substr(begin_it, end_it));
+    value.emplace_back(str.substr(begin_it, end_it));
     return true;
   }
 
@@ -702,7 +702,7 @@ namespace coil
       }
     else
       {
-        names.push_back(curr_name);
+        names.emplace_back(curr_name);
       }
     return;
   }
@@ -856,16 +856,16 @@ namespace coil
 
   void Properties::_dump(std::vector<std::string>& out, const Properties& curr, int index) const
   {
-      if (index != 0) out.push_back(indent(index) + "- " + curr.name);
+      if (index != 0) out.emplace_back(indent(index) + "- " + curr.name);
       if (curr.leaf.empty())
       {
           if (!curr.set_value)
           {
-              out.push_back(": " + curr.default_value);
+              out.emplace_back(": " + curr.default_value);
           }
           else
           {
-              out.push_back(": " + curr.value);
+              out.emplace_back(": " + curr.value);
           }
           return;
       }

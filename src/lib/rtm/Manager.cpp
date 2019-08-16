@@ -577,7 +577,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     props.reserve(factories.size());
     for(auto & factorie : factories)
       {
-        props.push_back(factorie->profile());
+        props.emplace_back(factorie->profile());
       }
     return props;
   }
@@ -1501,7 +1501,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
             }
             else
             {
-                args.push_back(opts[i]);
+                args.emplace_back(opts[i]);
             }
          }
          // TAO's ORB_init needs argv[0] as command name.
@@ -1918,7 +1918,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
         int num;
         if (coil::stringTo(num, c.c_str()))
         {
-            cpu_list.push_back(num);
+            cpu_list.emplace_back(num);
             RTC_DEBUG(("CPU affinity int value: %d added.", num));
         }
     }
@@ -2128,7 +2128,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   {
     RTC_TRACE(("Manager::notifyFinalized()"));
     std::lock_guard<std::mutex> guard(m_finalized.mutex);
-    m_finalized.comps.push_back(comp);
+    m_finalized.comps.emplace_back(comp);
   }
 
   /*!
@@ -2257,7 +2257,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
             RTC_INFO(("Component instance conf file: %s loaded.",
                       m_config[name_conf].c_str()));
             RTC_DEBUG_STR((name_prop));
-            config_fname.push_back(m_config[name_conf]);
+            config_fname.emplace_back(m_config[name_conf]);
           }
       }
     if (m_config.findNode(category + "." + inst_name) != nullptr)
@@ -2271,7 +2271,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
             RTC_DEBUG_STR((name_prop));
             if (m_config.findNode("config_file") != nullptr)
               {
-                config_fname.push_back(m_config["config_file"]);
+                config_fname.emplace_back(m_config["config_file"]);
               }
           }
       }
@@ -2284,7 +2284,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
             RTC_INFO(("Component type conf file: %s loaded.",
                       m_config[type_conf].c_str()));
             RTC_DEBUG_STR((type_prop));
-            config_fname.push_back(m_config[type_conf]);
+            config_fname.emplace_back(m_config[type_conf]);
           }
       }
     if (m_config.findNode(category + "." + type_name) != nullptr)
@@ -2298,7 +2298,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
             RTC_DEBUG_STR((type_prop));
             if (m_config.findNode("config_file") != nullptr)
               {
-                config_fname.push_back(m_config["config_file"]);
+                config_fname.emplace_back(m_config["config_file"]);
               }
           }
       }
@@ -2377,7 +2377,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
         if (c == '%')
           {
             ++count;
-            if ((count % 2) == 0) str.push_back((*it));
+            if ((count % 2) == 0) str.push_back(*it);
           }
         else if (c == '$')
           {
@@ -2479,8 +2479,8 @@ std::vector<coil::Properties> Manager::getLoadableModules()
                 std::find(ipv4_list.begin(), ipv4_list.end(), ipv4_count)
                 != ipv4_list.end())
               {
-                epstr.push_back(tmp);
-                epstr_ipv4.push_back(tmp);
+                epstr.emplace_back(tmp);
+                epstr_ipv4.emplace_back(std::move(tmp));
               }
             ipv4_count += 1;
           }
@@ -2491,8 +2491,8 @@ std::vector<coil::Properties> Manager::getLoadableModules()
                 std::find(ipv6_list.begin(), ipv6_list.end(), ipv6_count)
                 != ipv6_list.end())
               {
-                epstr.push_back(tmp);
-                epstr_ipv6.push_back(tmp);
+                epstr.emplace_back(tmp);
+                epstr_ipv6.emplace_back(std::move(tmp));
               }
             ipv6_count += 1;
           }
@@ -2541,7 +2541,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
         int n;
         if (coil::stringTo(n, num.c_str()))
           {
-            ip_list.push_back(n);
+            ip_list.emplace_back(n);
           }
       }
     return;
@@ -2577,27 +2577,26 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 		  }
 
 		  std::string port0_str = coil::split(connector, "?")[0];
-		  coil::mapstring param = coil::urlparam2map(connector);
 
 		  coil::vstring ports;
 		  coil::mapstring configs;
 
-		  for (auto & param_itr : param) {
-			  if (param_itr.first == "port")
+		  for (auto & param : coil::urlparam2map(connector)) {
+			  if (param.first == "port")
 			  {
-				  ports.push_back(param_itr.second);
+				  ports.emplace_back(std::move(param.second));
 				  continue;
 			  }
-              std::string tmp{coil::replaceString(param_itr.first, "port", "")};
-              std::string::size_type pos = param_itr.first.find("port");
+              std::string tmp{coil::replaceString(param.first, "port", "")};
+              std::string::size_type pos = param.first.find("port");
 
 			  int val = 0;
               if (coil::stringTo<int>(val, tmp.c_str()) && pos != std::string::npos)
 			  {
-				  ports.push_back(param_itr.second);
+				  ports.emplace_back(std::move(param.second));
 				  continue;
 			  }
-			  configs[param_itr.first] = param_itr.second;
+			  configs[param.first] = std::move(param.second);
 		  }
 
 		  if (configs.count("dataflow_type") == 0)

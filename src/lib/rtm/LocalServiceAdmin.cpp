@@ -143,7 +143,7 @@ namespace RTM
     RTM::LocalServiceProfileList profs(0);
     for (auto & service : m_services)
       {
-        profs.push_back(service->getProfile());
+        profs.emplace_back(service->getProfile());
       }
     return profs;
   }
@@ -208,7 +208,7 @@ namespace RTM
     RTC_TRACE(("LocalServiceAdmin::addLocalService(%s)",
                service->getProfile().name.c_str()));
     std::lock_guard<std::mutex> guard(m_services_mutex);
-    m_services.push_back(service);
+    m_services.emplace_back(service);
     return true;
   }
 

@@ -97,7 +97,7 @@ namespace RTC
     try
       {
         CorbaProviderHolder providerholder(type_name, instance_name, &provider);
-        m_providers.push_back(providerholder);
+        m_providers.emplace_back(std::move(providerholder));
       }
     catch (...)
       {
@@ -133,7 +133,7 @@ namespace RTC
         return false;
       }
 
-    m_consumers.push_back(CorbaConsumerHolder(type_name,
+    m_consumers.emplace_back(CorbaConsumerHolder(type_name,
                                               instance_name,
                                               &consumer));
 

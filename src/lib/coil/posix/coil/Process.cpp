@@ -87,7 +87,7 @@ namespace coil
           {
             line.erase(line.size() - 1);
           }
-        out.push_back(line);
+        out.emplace_back(line);
       } while (feof(fd) == 0);
     
     (void) pclose(fd);

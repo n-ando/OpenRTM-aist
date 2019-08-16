@@ -393,7 +393,7 @@ namespace RTC
       MessageType msg;
       for(size_t i=0;i < data.data.length();i++)
       {
-        msg.data.push_back(static_cast<convertedType>(data.data[static_cast<CORBA::ULong>(i)]));
+        msg.data.emplace_back(static_cast<convertedType>(data.data[static_cast<CORBA::ULong>(i)]));
       }
       
       

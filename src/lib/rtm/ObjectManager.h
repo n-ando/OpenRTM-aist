@@ -122,7 +122,7 @@ public:
                       Predicate(obj));
     if (it == m_objects._obj.end())
       {
-        m_objects._obj.push_back(obj);
+        m_objects._obj.emplace_back(obj);
         return true;
       }
     return false;

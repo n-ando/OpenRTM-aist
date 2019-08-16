@@ -365,7 +365,7 @@ namespace RTC
       {
         if (std::count(s_files.begin(), s_files.end(), file) > 0) { continue; }
         m_fileName = file;
-        s_files.push_back(file);
+        s_files.emplace_back(file);
 
         std::string fname{coil::normalize(file)};
         if (fname == "stdout")

@@ -460,7 +460,7 @@ namespace RTC
                                                     m_inportInterval);
         inport->addConnectorDataListener(ON_RECEIVED,
                                                     action);
-        m_recievedactions.push_back(action);
+        m_recievedactions.emplace_back(action);
 
       }
     const std::vector<OutPortBase*>& outports = m_rtobj->getOutPorts();
@@ -472,7 +472,7 @@ namespace RTC
                                                     m_outportInterval);
         outport->addConnectorDataListener(ON_SEND,
                                               action);
-        m_sendactions.push_back(action);
+        m_sendactions.emplace_back(action);
       }
   }
 

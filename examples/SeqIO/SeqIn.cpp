@@ -189,16 +189,16 @@ RTC::ReturnCode_t SeqIn::onExecute(RTC::UniqueId  /*ec_id*/)
   std::vector<int> in_size;
   std::vector<int>::iterator it;
   in_size.reserve(10);
-  in_size.push_back(d_size);
-  in_size.push_back(f_size);
-  in_size.push_back(l_size);
-  in_size.push_back(s_size);
-  in_size.push_back(o_size);
-  in_size.push_back(ds_size);
-  in_size.push_back(fs_size);
-  in_size.push_back(ls_size);
-  in_size.push_back(ss_size);
-  in_size.push_back(os_size);
+  in_size.emplace_back(d_size);
+  in_size.emplace_back(f_size);
+  in_size.emplace_back(l_size);
+  in_size.emplace_back(s_size);
+  in_size.emplace_back(o_size);
+  in_size.emplace_back(ds_size);
+  in_size.emplace_back(fs_size);
+  in_size.emplace_back(ls_size);
+  in_size.emplace_back(ss_size);
+  in_size.emplace_back(os_size);
   
   it = std::max_element(in_size.begin(), in_size.end());
   

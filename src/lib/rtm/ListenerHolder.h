@@ -190,7 +190,7 @@ namespace util
                      bool autoclean)
     {
       std::lock_guard<std::mutex> guard(m_mutex);
-      m_listeners.push_back(Entry(listener, autoclean));
+      m_listeners.emplace_back(listener, autoclean);
     }
 
     /*!

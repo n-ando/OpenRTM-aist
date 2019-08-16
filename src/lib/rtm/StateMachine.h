@@ -873,7 +873,7 @@ namespace RTC_Utils
       s.clear();
       for (size_t i(0); i < m_num; ++i)
         {
-          s.push_back(nullfunc);
+          s.emplace_back(nullfunc);
         }
     }
 

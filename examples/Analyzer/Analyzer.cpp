@@ -185,7 +185,7 @@ RTC::ReturnCode_t Analyzer::onExecute(RTC::UniqueId  /*ec_id*/)
 
 	{
 		std::lock_guard<std::mutex> guard(m_mu);
-		m_datalist.push_back(m_out);
+		m_datalist.emplace_back(m_out);
 	}
 	std::this_thread::sleep_until(start + m_sleep_time);
 

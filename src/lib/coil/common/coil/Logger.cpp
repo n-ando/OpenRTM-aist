@@ -145,7 +145,7 @@ namespace coil
         std::vector<LogStreamBuffer*> buffs;
         for(auto & s : m_streams)
         {
-            buffs.push_back(s.stream_);
+            buffs.emplace_back(s.stream_);
         }
         return buffs;
     }

@@ -935,7 +935,7 @@ namespace RTC
           if (!checkPorts((*clist)[i].ports))
             {
               const char* id((*clist)[i].connector_id);
-              connector_ids.push_back(id);
+              connector_ids.emplace_back(id);
               RTC_WARN(("Dead connection: %s", id));
             }
         }

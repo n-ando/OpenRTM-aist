@@ -699,7 +699,7 @@ namespace RTC
       if (isExist(param_name)) { return false; }
       if (!trans(var, def_val)) { return false; }
       Config<VarType>* c = new Config<VarType>(param_name, var, def_val, trans);
-      m_params.push_back(c);
+      m_params.emplace_back(c);
       c->setCallback(this, &RTC::ConfigAdmin::onUpdateParam);
       update(getActiveId(), param_name);
       return true;

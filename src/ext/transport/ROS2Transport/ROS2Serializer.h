@@ -632,7 +632,7 @@ namespace RTC
       
       for(CORBA::ULong i=0;i < data.data.length();i++)
       {
-        msg.data.push_back(static_cast<convertedType>(data.data[i]));
+        msg.data.emplace_back(static_cast<convertedType>(data.data[i]));
       }
       
       

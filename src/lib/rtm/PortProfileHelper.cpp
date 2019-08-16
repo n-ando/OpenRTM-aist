@@ -117,7 +117,7 @@ namespace RTC
   {
     std::lock_guard<std::mutex> guard(m_mutex);
 
-    m_ifProfiles.push_back(if_prof);
+    m_ifProfiles.emplace_back(if_prof);
     return;
   }
 
@@ -211,7 +211,7 @@ namespace RTC
   {
     std::lock_guard<std::mutex> guard(m_mutex);
 
-    m_connProfiles.push_back(conn_profile);
+    m_connProfiles.emplace_back(conn_profile);
   }
 
 

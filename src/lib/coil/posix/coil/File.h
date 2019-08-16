@@ -138,11 +138,11 @@ namespace coil
 
     while ((ent = ::readdir(dir_ptr)) != nullptr)
       {
+        std::string fname(ent->d_name);
         bool match(true);
         if (has_glob)
           {
             const char* globc(glob_str);
-            std::string fname(ent->d_name);
             for (size_t i(0); i < fname.size() && *globc != '\0'; ++i, ++globc)
               {
                 if (*globc == '*')
@@ -184,7 +184,7 @@ namespace coil
                     globc[1] != '\0' && globc[1] != '*') { match = false; }
               }
           }
-        if (match) { flist.push_back(ent->d_name); }
+        if (match) { flist.emplace_back(std::move(fname)); }
       }
     ::closedir(dir_ptr);
 

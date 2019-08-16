@@ -43,7 +43,7 @@ namespace coil
 		{
 			if ((processMask & (static_cast<DWORD_PTR>(0x00000001) << i)) != 0U)
 			{
-				cpu_mask.push_back(i);
+				cpu_mask.emplace_back(i);
 			}
 		}
       return true;
@@ -71,7 +71,7 @@ namespace coil
         int num;
         if (coil::stringTo(num, maskstr.c_str()))
           {
-            mask.push_back(num);
+            mask.emplace_back(num);
           }
       }
     return setProcCpuAffinity(mask);
@@ -99,7 +99,7 @@ namespace coil
         int num;
         if (coil::stringTo(num, maskstr.c_str()))
           {
-            mask.push_back(num);
+            mask.emplace_back(num);
           }
       }
     return setThreadCpuAffinity(mask);

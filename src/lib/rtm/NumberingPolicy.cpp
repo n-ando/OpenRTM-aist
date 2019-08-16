@@ -47,7 +47,7 @@ namespace RTM
     catch (ObjectNotFound& e)
       {
         (void)(e);
-        m_objects.push_back(obj);
+        m_objects.emplace_back(obj);
         return coil::otos(static_cast<int>(m_objects.size() - 1));
       }
   }

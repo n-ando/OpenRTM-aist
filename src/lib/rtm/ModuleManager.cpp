@@ -280,7 +280,7 @@ namespace RTC
 
     while (it != it_end)
       {
-        m_loadPath.push_back(*it);
+        m_loadPath.emplace_back(*it);
         ++it;
       }
 
@@ -301,7 +301,7 @@ namespace RTC
     std::vector<coil::Properties> modules(0);
     for (auto & dll : dlls)
       {
-        modules.push_back(dll->properties);
+        modules.emplace_back(dll->properties);
       }
     return modules;
   }
@@ -540,7 +540,7 @@ namespace RTC
     if (!exists)
       {
         RTC_DEBUG(("New module: %s", fpath.c_str()));
-        modules.push_back(fpath);
+        modules.emplace_back(fpath);
       }
   }
 
@@ -561,7 +561,6 @@ namespace RTC
 
     for (const auto & module : modules)
       {
-          
         std::string cmd(lprop["profile_cmd"]);
         cmd += " \"" + module + "\"";
 
@@ -571,32 +570,27 @@ namespace RTC
               std::cerr << "create_process faild" << std::endl;
               continue;
           }
-        coil::Properties p;
-        
+
+        coil::Properties props;
         for (auto & out : outlist)
           {
             std::string::size_type pos(out.find(':'));
             if (pos != std::string::npos)
               {
                   std::string key{coil::eraseBothEndsBlank(out.substr(0, pos))};
-                  p[key] = coil::eraseBothEndsBlank(out.substr(pos + 1));
+                  props[key] = coil::eraseBothEndsBlank(out.substr(pos + 1));
               }
-            
           }
-
-        
-        
 
         RTC_DEBUG(("rtcprof cmd sub process done."));
-        if (p["implementation_id"].empty()) 
-          { 
-            m_loadfailmods.push_back(module);
+        if (props["implementation_id"].empty())
+          {
+            m_loadfailmods.emplace_back(module);
             continue;
           }
-        p["module_file_name"] = coil::basename(module.c_str());
-        p["module_file_path"] = module;
-        modprops.push_back(p);
-        
+        props["module_file_name"] = coil::basename(module.c_str());
+        props["module_file_path"] = module;
+        modprops.emplace_back(std::move(props));
       }
 #endif
   }
