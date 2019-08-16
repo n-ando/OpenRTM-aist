@@ -357,38 +357,21 @@ namespace coil
                 const std::string& delimiter,
                 bool ignore_empty)
   {
-    using size = std::string::size_type;
-    vstring results(0);
-    size delim_size = delimiter.size();
-    size found_pos(0), begin_pos(0), pre_pos(0);
+    if (delimiter.empty()) { return {eraseBothEndsBlank(input)}; }
 
-    if (input.empty()) { return results; }
-
-    while (true)
+    vstring results;
+    std::string::size_type pos{0};
+    for (auto found_pos = input.find(delimiter, pos);
+         found_pos != std::string::npos;
+         found_pos = input.find(delimiter, pos))
       {
-        //    REFIND:
-        found_pos = input.find(delimiter, begin_pos);
-        if (found_pos == std::string::npos)
-          {
-            std::string substr{eraseBothEndsBlank(input.substr(pre_pos))};
-            if (!(substr.empty() && ignore_empty))
-              {
-                results.push_back(substr);
-              }
-            break;
-          }
-        if (found_pos >= pre_pos)
-          {
-            size end = found_pos - pre_pos;
-            std::string substr{eraseBothEndsBlank(input.substr(pre_pos, end))};
-            if (!(substr.empty() && ignore_empty))
-              {
-                results.push_back(substr);
-              }
-          }
-        begin_pos = found_pos + delim_size;
-        pre_pos   = found_pos + delim_size;
+        std::string str{eraseBothEndsBlank(input.substr(pos, found_pos - pos))};
+        if (!(ignore_empty && str.empty())) { results.emplace_back(std::move(str)); }
+        pos = found_pos + delimiter.length();
       }
+
+    std::string str{eraseBothEndsBlank(input.substr(pos))};
+    if (!(ignore_empty && str.empty())) { results.emplace_back(std::move(str)); }
     return results;
   }
 
