@@ -1639,8 +1639,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
             endpoints.insert(endpoints.begin(), ":2810");
           }
       }
-    coil::vstring tmp(endpoints);
-    endpoints = coil::unique_sv(tmp);
+    endpoints = coil::unique_sv(std::move(endpoints));
   }
 
   void Manager::createORBEndpointOption(std::string& opt,
@@ -2308,7 +2307,8 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     // Merge Properties. type_prop is merged properties
     comp->setProperties(prop);
     type_prop << name_prop;
-    type_prop["config_file"] = coil::flatten(coil::unique_sv(config_fname));
+    type_prop["config_file"]
+      = coil::flatten(coil::unique_sv(std::move(config_fname)));
     comp->setProperties(type_prop);
 
     //------------------------------------------------------------
