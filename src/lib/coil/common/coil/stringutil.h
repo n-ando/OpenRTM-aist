@@ -556,6 +556,7 @@ namespace coil
   bool isURL(const std::string& str);
   bool isIPv4(const std::string& str);
   bool isIPv6(const std::string& str);
+  bool isIPPort(const std::string& str);
 
   /*!
    * @if jp
