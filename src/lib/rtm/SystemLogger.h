@@ -500,8 +500,8 @@ namespace RTC
     static const char* const m_levelString[];
     static const char* const m_levelOutputString[];
     static const char* const m_levelColor[];
-    int m_msEnable{0};
-    int m_usEnable{0};
+    bool m_msEnable{false};
+    bool m_usEnable{false};
   };
 
 

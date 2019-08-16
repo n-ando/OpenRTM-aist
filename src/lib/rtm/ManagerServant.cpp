@@ -1545,9 +1545,7 @@ namespace RTM
       size_t pos = mgrname.find("manager_");
       if (pos != std::string::npos)
         {
-          std::string id = mgrname;
-          coil::replaceString(id, "manager_", "");
-          
+          std::string id{coil::replaceString(mgrname, "manager_", "")};
           int val = 0;
           if (coil::stringTo<int>(val, id.c_str()))
             {

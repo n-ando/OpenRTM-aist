@@ -364,8 +364,7 @@ namespace RTC
 
     while (it != it_end)
       {
-        std::string f((*it) + "/" + fname);
-        coil::replaceString(f, "//", "/");
+        std::string f{coil::replaceString((*it) + "/" + fname, "//", "/")};
         if (fileExist(f))
           {
             return f;
@@ -495,9 +494,8 @@ namespace RTC
         // reformat file path and remove cached files
         for (auto & f : flist)
           {
-            coil::replaceString(f, "\\", "/");
-            coil::replaceString(f, "//", "/");
-            addNewFile(f, modules);
+            addNewFile(coil::replaceString(coil::replaceString(
+                         std::move(f), "\\", "/"), "//", "/"), modules);
           }
       }
       std::sort(modules.begin(), modules.end());

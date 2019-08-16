@@ -682,9 +682,7 @@ namespace RTC
     ::SDOPackage::SDOList sdos;
     for (auto & member : m_members)
       {
-          coil::replaceString(member, "|", "");
-          member = coil::eraseBothEndsBlank(std::move(member));
-
+        member = coil::eraseBothEndsBlank(coil::replaceString(std::move(member), "|", ""));
         RTObject_impl* rtc = mgr.getComponent(member.c_str());
         if (rtc == nullptr) {
           continue;

@@ -140,8 +140,7 @@ namespace RTC
         coil::vstring typelist = coil::split(data, ":");
         if (typelist.size() == 3)
         {
-            m_dataType = typelist[1];
-            coil::replaceString(m_dataType, "/", "::");
+            m_dataType = coil::replaceString(std::move(typelist[1]), "/", "::");
         }
         else
         {

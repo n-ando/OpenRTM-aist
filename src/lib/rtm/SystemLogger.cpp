@@ -111,9 +111,12 @@ namespace RTC
    */
   void Logger::setDateFormat(const char* format)
   {
-    m_dateFormat = std::string(format);
-    m_msEnable = coil::replaceString(m_dateFormat, "%Q", "#m#");
-    m_usEnable = coil::replaceString(m_dateFormat, "%q", "#u#");
+    std::string fmt(format);
+    m_msEnable = std::string::npos != fmt.find("%Q");
+    m_usEnable = std::string::npos != fmt.find("%q");
+    if (m_msEnable){ fmt = coil::replaceString(std::move(fmt), "%Q", "#m#"); }
+    if (m_usEnable){ fmt = coil::replaceString(std::move(fmt), "%q", "#u#"); }
+    m_dateFormat = std::move(fmt);
   }
 
   void Logger::setClockType(const std::string& clocktype)
@@ -168,19 +171,19 @@ namespace RTC
 #endif
 
     std::string fmt(buf);
-    if (m_msEnable > 0)
+    if (m_msEnable)
       {
         auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(tm - sec);
         std::stringstream msec("");
         msec << std::setfill('0') << std::setw(3) << ms.count();
-        coil::replaceString(fmt, "#m#", msec.str());
+        fmt = coil::replaceString(std::move(fmt), "#m#", msec.str());
       }
-    if (m_usEnable > 0)
+    if (m_usEnable)
       {
         auto us = std::chrono::duration_cast<std::chrono::microseconds>(tm - sec);
         std::stringstream usec("");
         usec << std::setfill('0') << std::setw(6) << us.count();
-        coil::replaceString(fmt, "#u#", usec.str());
+        fmt = coil::replaceString(std::move(fmt), "#u#", usec.str());
       }
 
     return fmt;

@@ -47,17 +47,14 @@ namespace RTC
             {
                 return "";
             }
-
-            coil::replaceString(strlist[1], "/", "::");
-            return strlist[1];
+            return coil::replaceString(std::move(strlist[1]), "/", "::");
         }
 
         std::string idl_path() override
         {
             std::string path = coil::replaceEnv(IDLPATH::idlpath);
-            coil::replaceString(path, "//", "/");
-            coil::replaceString(path, "\\\\", "\\");
-            return path;
+            path = coil::replaceString(std::move(path), "//", "/");
+            return coil::replaceString(std::move(path), "\\\\", "\\");
         }
     };
 

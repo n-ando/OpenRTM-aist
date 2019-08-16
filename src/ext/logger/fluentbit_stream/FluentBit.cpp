@@ -142,8 +142,7 @@ namespace RTC
   
   void FluentBitStream::write(int level, const std::string &name, const std::string &date, const std::string &mes)
   {
-    std::string message = mes;
-    coil::replaceString(message, "\"", "\'");
+    std::string message{coil::replaceString(mes, "\"", "\'")};
     std::streamsize insize(message.size());
     for (std::streamsize i(0); i < insize; ++i, ++m_pos)
       {
