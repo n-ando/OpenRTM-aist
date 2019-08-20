@@ -51,7 +51,7 @@ namespace coil
   class IClock
   {
   public:
-    virtual ~IClock() = default;
+    virtual ~IClock();
     /*!
      * @if jp
      * @brief 時刻を取得する
