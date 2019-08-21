@@ -156,7 +156,7 @@ namespace RTC
    * @endif
    */
 
-  enum ConfigurationSetListenerType
+  enum class ConfigurationSetListenerType : uint8_t
     {
       ON_SET_CONFIG_SET,
       ON_ADD_CONFIG_SET,
@@ -215,7 +215,7 @@ namespace RTC
      */
     static const char* toString(ConfigurationSetListenerType type)
     {
-      if (type < CONFIG_SET_LISTENER_NUM)
+      if (type < ConfigurationSetListenerType::CONFIG_SET_LISTENER_NUM)
         {
           static const char* const typeString[] =
           {
@@ -223,7 +223,7 @@ namespace RTC
             "ON_ADD_CONFIG_SET",
             "CONFIG_SET_LISTENER_NUM"
           };
-          return typeString[type];
+          return typeString[static_cast<uint8_t>(type)];
         }
       return "";
     }
@@ -726,7 +726,7 @@ namespace RTC
      * @endif
      */
     ConfigurationSetListenerHolder
-    configset_[CONFIG_SET_LISTENER_NUM];
+    configset_[static_cast<uint8_t>(ConfigurationSetListenerType::CONFIG_SET_LISTENER_NUM)];
     /*!
      * @if jp
      * @brief ConfigurationSetNameListenerTypeリスナ配列

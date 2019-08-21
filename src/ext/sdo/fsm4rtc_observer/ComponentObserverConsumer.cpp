@@ -826,11 +826,11 @@ namespace RTC
                                              m_configMsg,
                                              &ConfigAction::updateConfigParam);
     m_configMsg.setConfigSetListener = 
-      m_rtobj->addConfigurationSetListener(ON_SET_CONFIG_SET,
+      m_rtobj->addConfigurationSetListener(ConfigurationSetListenerType::ON_SET_CONFIG_SET,
                                              m_configMsg,
                                              &ConfigAction::setConfigSet);
     m_configMsg.addConfigSetListener = 
-      m_rtobj->addConfigurationSetListener(ON_ADD_CONFIG_SET,
+      m_rtobj->addConfigurationSetListener(ConfigurationSetListenerType::ON_ADD_CONFIG_SET,
                                              m_configMsg,
                                              &ConfigAction::addConfigSet);
     m_configMsg.updateConfigSetListener = 
@@ -866,13 +866,13 @@ namespace RTC
       }
     if (m_configMsg.setConfigSetListener != nullptr)
       {
-        m_rtobj->removeConfigurationSetListener(ON_SET_CONFIG_SET,
+        m_rtobj->removeConfigurationSetListener(ConfigurationSetListenerType::ON_SET_CONFIG_SET,
                                            m_configMsg.setConfigSetListener);
         m_configMsg.setConfigSetListener = nullptr;
       }
     if (m_configMsg.addConfigSetListener != nullptr)
       {
-        m_rtobj->removeConfigurationSetListener(ON_ADD_CONFIG_SET,
+        m_rtobj->removeConfigurationSetListener(ConfigurationSetListenerType::ON_ADD_CONFIG_SET,
                                             m_configMsg.addConfigSetListener);
         m_configMsg.addConfigSetListener = nullptr;
       }

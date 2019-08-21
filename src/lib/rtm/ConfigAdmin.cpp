@@ -357,14 +357,14 @@ namespace RTC
   {
     std::cerr << "setOnSetConfigurationSet function is obsolete." << std::endl;
     std::cerr << "Use addConfigurationSetListener instead." << std::endl;
-    m_listeners.configset_[ON_SET_CONFIG_SET].addListener(cb, false);
+    m_listeners.configset_[static_cast<uint8_t>(ConfigurationSetListenerType::ON_SET_CONFIG_SET)].addListener(cb, false);
   }
 
   void ConfigAdmin::setOnAddConfigurationSet(OnAddConfigurationAddCallback* cb)
   {
     std::cerr << "setOnAddConfigurationSet function is obsolete." << std::endl;
     std::cerr << "Use addConfigurationSetListener instead." << std::endl;
-    m_listeners.configset_[ON_ADD_CONFIG_SET].addListener(cb, false);
+    m_listeners.configset_[static_cast<uint8_t>(ConfigurationSetListenerType::ON_ADD_CONFIG_SET)].addListener(cb, false);
   }
 
   void
@@ -427,7 +427,7 @@ namespace RTC
                               ConfigurationSetListener* listener,
                               bool autoclean)
   {
-    m_listeners.configset_[type].addListener(listener, autoclean);
+    m_listeners.configset_[static_cast<uint8_t>(type)].addListener(listener, autoclean);
   }
 
   /*!
@@ -441,7 +441,7 @@ namespace RTC
   removeConfigurationSetListener(ConfigurationSetListenerType type,
                                  ConfigurationSetListener* listener)
   {
-    m_listeners.configset_[type].removeListener(listener);
+    m_listeners.configset_[static_cast<uint8_t>(type)].removeListener(listener);
   }
 
   /*!
@@ -511,7 +511,7 @@ namespace RTC
    */
   void ConfigAdmin::onSetConfigurationSet(const coil::Properties& config_set)
   {
-    m_listeners.configset_[ON_SET_CONFIG_SET].notify(config_set);
+    m_listeners.configset_[static_cast<uint8_t>(ConfigurationSetListenerType::ON_SET_CONFIG_SET)].notify(config_set);
   }
 
   /*!
@@ -523,7 +523,7 @@ namespace RTC
    */
   void ConfigAdmin::onAddConfigurationSet(const coil::Properties& config_set)
   {
-    m_listeners.configset_[ON_ADD_CONFIG_SET].notify(config_set);
+    m_listeners.configset_[static_cast<uint8_t>(ConfigurationSetListenerType::ON_ADD_CONFIG_SET)].notify(config_set);
   }
 
   /*!
