@@ -343,7 +343,7 @@ namespace RTC
   {
     std::cerr << "setOnUpdate function is obsolete." << std::endl;
     std::cerr << "Use addConfigurationSetNameListener instead." << std::endl;
-    m_listeners.configsetname_[ON_UPDATE_CONFIG_SET].addListener(cb, false);
+    m_listeners.configsetname_[static_cast<uint8_t>(ConfigurationSetNameListenerType::ON_UPDATE_CONFIG_SET)].addListener(cb, false);
   }
 
   void ConfigAdmin::setOnUpdateParam(OnUpdateParamCallback* cb)
@@ -373,14 +373,14 @@ namespace RTC
     std::cerr <<
             "setOnRemoveConfigurationSet function is obsolete." <<std::endl;
     std::cerr << "Use addConfigurationSetNameListener instead." << std::endl;
-    m_listeners.configsetname_[ON_REMOVE_CONFIG_SET].addListener(cb, false);
+    m_listeners.configsetname_[static_cast<uint8_t>(ConfigurationSetNameListenerType::ON_REMOVE_CONFIG_SET)].addListener(cb, false);
   }
 
   void ConfigAdmin::setOnActivateSet(OnActivateSetCallback* cb)
   {
     std::cerr << "setOnActivateSet function is obsolete." << std::endl;
     std::cerr << "Use addConfigurationSetNameListener instead." << std::endl;
-    m_listeners.configsetname_[ON_ACTIVATE_CONFIG_SET].addListener(cb, false);
+    m_listeners.configsetname_[static_cast<uint8_t>(ConfigurationSetNameListenerType::ON_ACTIVATE_CONFIG_SET)].addListener(cb, false);
   }
   //
   // end of obsolete functions
@@ -456,7 +456,7 @@ namespace RTC
                                   ConfigurationSetNameListener* listener,
                                   bool autoclean)
   {
-    m_listeners.configsetname_[type].addListener(listener, autoclean);
+    m_listeners.configsetname_[static_cast<uint8_t>(type)].addListener(listener, autoclean);
   }
 
   /*!
@@ -470,7 +470,7 @@ namespace RTC
   removeConfigurationSetNameListener(ConfigurationSetNameListenerType type,
                                      ConfigurationSetNameListener* listener)
   {
-    m_listeners.configsetname_[type].removeListener(listener);
+    m_listeners.configsetname_[static_cast<uint8_t>(type)].removeListener(listener);
   }
 
   //------------------------------------------------------------
@@ -484,7 +484,7 @@ namespace RTC
    */
   void ConfigAdmin::onUpdate(const char* config_set)
   {
-    m_listeners.configsetname_[ON_UPDATE_CONFIG_SET].notify(config_set);
+    m_listeners.configsetname_[static_cast<uint8_t>(ConfigurationSetNameListenerType::ON_UPDATE_CONFIG_SET)].notify(config_set);
   }
 
   /*!
@@ -535,7 +535,7 @@ namespace RTC
    */
   void ConfigAdmin::onRemoveConfigurationSet(const char* config_id)
   {
-    m_listeners.configsetname_[ON_REMOVE_CONFIG_SET].notify(config_id);
+    m_listeners.configsetname_[static_cast<uint8_t>(ConfigurationSetNameListenerType::ON_REMOVE_CONFIG_SET)].notify(config_id);
   }
 
   /*!
@@ -547,7 +547,7 @@ namespace RTC
    */
   void ConfigAdmin::onActivateSet(const char* config_id)
   {
-    m_listeners.configsetname_[ON_ACTIVATE_CONFIG_SET].notify(config_id);
+    m_listeners.configsetname_[static_cast<uint8_t>(ConfigurationSetNameListenerType::ON_ACTIVATE_CONFIG_SET)].notify(config_id);
   }
 
 
