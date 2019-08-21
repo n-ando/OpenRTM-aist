@@ -350,7 +350,7 @@ namespace RTC
   {
     std::cerr << "setOnUpdateParam function is obsolete." << std::endl;
     std::cerr << "Use addConfigurationParamListener instead." << std::endl;
-    m_listeners.configparam_[ON_UPDATE_CONFIG_PARAM].addListener(cb, false);
+    m_listeners.configparam_[static_cast<uint8_t>(ConfigurationParamListenerType::ON_UPDATE_CONFIG_PARAM)].addListener(cb, false);
   }
 
   void ConfigAdmin::setOnSetConfigurationSet(OnSetConfigurationSetCallback* cb)
@@ -398,7 +398,7 @@ namespace RTC
                                 ConfigurationParamListener* listener,
                                 bool autoclean)
   {
-    m_listeners.configparam_[type].addListener(listener, autoclean);
+    m_listeners.configparam_[static_cast<uint8_t>(type)].addListener(listener, autoclean);
   }
 
   /*!
@@ -412,7 +412,7 @@ namespace RTC
   removeConfigurationParamListener(ConfigurationParamListenerType type,
                                    ConfigurationParamListener* listener)
   {
-    m_listeners.configparam_[type].removeListener(listener);
+    m_listeners.configparam_[static_cast<uint8_t>(type)].removeListener(listener);
   }
 
   /*!
@@ -498,7 +498,7 @@ namespace RTC
   ConfigAdmin::onUpdateParam(const char* config_param, const char* config_value)
   {
     m_changedParam.emplace_back(config_param);
-    m_listeners.configparam_[ON_UPDATE_CONFIG_PARAM].notify(config_param,
+    m_listeners.configparam_[static_cast<uint8_t>(ConfigurationParamListenerType::ON_UPDATE_CONFIG_PARAM)].notify(config_param,
                                                             config_value);
   }
 

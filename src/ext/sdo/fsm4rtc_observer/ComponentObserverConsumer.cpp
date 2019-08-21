@@ -822,7 +822,7 @@ namespace RTC
   void ComponentObserverConsumer::setConfigurationListeners()
   {
     m_configMsg.updateConfigParamListener = 
-      m_rtobj->addConfigurationParamListener(ON_UPDATE_CONFIG_PARAM,
+      m_rtobj->addConfigurationParamListener(ConfigurationParamListenerType::ON_UPDATE_CONFIG_PARAM,
                                              m_configMsg,
                                              &ConfigAction::updateConfigParam);
     m_configMsg.setConfigSetListener = 
@@ -860,7 +860,7 @@ namespace RTC
     if (m_configMsg.updateConfigParamListener != nullptr)
       {
         m_rtobj->
-          removeConfigurationParamListener(ON_UPDATE_CONFIG_PARAM,
+          removeConfigurationParamListener(ConfigurationParamListenerType::ON_UPDATE_CONFIG_PARAM,
                                       m_configMsg.updateConfigParamListener);
         m_configMsg.updateConfigParamListener = nullptr;
       }
