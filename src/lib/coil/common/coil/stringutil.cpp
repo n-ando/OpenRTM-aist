@@ -839,8 +839,14 @@ namespace coil
     std::unordered_set<std::string> set{std::make_move_iterator(sv.begin()),
                                         std::make_move_iterator(sv.end()),
                                         sv.size()};
+#if (defined(__GNUC__) && (__GNUC__ < 5) && !defined(__clang__))    \
+    || (defined(_MSC_VER) && (_MSC_VER < 1900))
+    sv.clear();
+    for (auto&& itr : set) { sv.emplace_back(std::move(itr)); }
+#else
     sv.assign(std::make_move_iterator(set.begin()),
               std::make_move_iterator(set.end()));
+#endif
     return sv;
   }
 
