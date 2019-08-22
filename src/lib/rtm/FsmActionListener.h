@@ -570,7 +570,7 @@ namespace RTC
    *
    * @endif
    */
-  enum FsmProfileListenerType
+  enum class FsmProfileListenerType : uint8_t
     {
       SET_FSM_PROFILE,
       GET_FSM_PROFILE,
@@ -617,7 +617,7 @@ namespace RTC
    * <pre>
    * RTC::ReturnCode_t ConsoleIn::onInitialize()
    * {
-   *     addFsmProfileListener(SET_FSM_PROFILE,
+   *     addFsmProfileListener(FsmProfileListenerType::SET_FSM_PROFILE,
    *                           new MyListener("prof listener"),
    *                           true);
    *    :
@@ -679,7 +679,7 @@ namespace RTC
    * <pre>
    * RTC::ReturnCode_t ConsoleIn::onInitialize()
    * {
-   *     addFsmProfileListener(SET_FSM_PROFILE,
+   *     addFsmProfileListener(FsmProfileListenerType::SET_FSM_PROFILE,
    *                           new MyListener("prof listener"),
    *                           true);
    *    :
@@ -756,7 +756,10 @@ namespace RTC
           "UNBIND_FSM_EVENT",
           "FSM_PROFILE_LISTENER_NUM"
         };
-      if (type < FSM_PROFILE_LISTENER_NUM) { return typeString[type]; }
+      if (type < FsmProfileListenerType::FSM_PROFILE_LISTENER_NUM)
+	{
+	  return typeString[static_cast<uint8_t>(type)];
+	}
       return "";
     }
 
@@ -1489,7 +1492,7 @@ namespace RTC
      * @endif
      */
     FsmProfileListenerHolder
-    profile_[FSM_PROFILE_LISTENER_NUM];
+    profile_[static_cast<uint8_t>(FsmProfileListenerType::FSM_PROFILE_LISTENER_NUM)];
     /*!
      * @if jp
      * @brief FsmStructureTypeリスナ配列
