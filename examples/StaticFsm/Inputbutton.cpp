@@ -86,7 +86,7 @@ RTC::ReturnCode_t Inputbutton::onExecute(RTC::UniqueId  /*ec_id*/)
   std::getline(std::cin, cmd);
 
   coil::vstring cmds = coil::split(cmd, " ");
-  coil::eraseBlank(cmds[0]);
+  cmds[0] = coil::eraseBlank(std::move(cmds[0]));
 
   std::cout << "[command]: " << cmds[0];
   if (cmds.size() > 1)

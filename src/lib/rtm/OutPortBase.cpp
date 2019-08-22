@@ -90,10 +90,8 @@ namespace RTC
 
     // publisher list
     PublisherFactory& factory(PublisherFactory::instance());
-    std::string pubs = coil::flatten(factory.getIdentifiers());
-
     // blank characters are deleted for RTSE's bug
-    coil::eraseBlank(pubs);
+    std::string pubs{coil::eraseBlank(coil::flatten(factory.getIdentifiers()))};
     RTC_DEBUG(("available subscription_type: %s",  pubs.c_str()));
     addProperty("dataport.subscription_type", pubs.c_str());
     // FSM4RTC formal/16-04-01 p.25

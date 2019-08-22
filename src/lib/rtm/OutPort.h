@@ -115,15 +115,13 @@ namespace RTC
 	  m_directport = this;
 
       CdrMemoryStreamInit<DataType>();
-      
-          
-      std::string serializer_types = coil::flatten(coil::GlobalFactory < ByteDataStream<DataType> >::instance().getIdentifiers());
-      coil::eraseBlank(serializer_types);
+
+      std::string serializer_types{coil::eraseBlank(coil::flatten(
+        coil::GlobalFactory<ByteDataStream<DataType>>::instance().getIdentifiers()))};
 
       RTC_DEBUG(("available serializer_types: %s", serializer_types.c_str()));
 
       addProperty("dataport.serializer_type", serializer_types.c_str());
-
     }
 
     /*!
