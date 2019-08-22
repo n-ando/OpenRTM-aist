@@ -754,23 +754,23 @@ namespace RTC
                                        &FSMAction::preStateChange);
 
     m_fsmaction.postOnFsmInitListener =
-      m_rtobj->addPostFsmActionListener(POST_ON_INIT,
+      m_rtobj->addPostFsmActionListener(PostFsmActionListenerType::POST_ON_INIT,
                                        m_fsmaction,
                                        &FSMAction::postInit);
     m_fsmaction.postOnFsmEntryListener =
-      m_rtobj->addPostFsmActionListener(POST_ON_ENTRY,
+      m_rtobj->addPostFsmActionListener(PostFsmActionListenerType::POST_ON_ENTRY,
                                        m_fsmaction,
                                        &FSMAction::postEntry);
     m_fsmaction.postOnFsmDoListener =
-      m_rtobj->addPostFsmActionListener(POST_ON_DO,
+      m_rtobj->addPostFsmActionListener(PostFsmActionListenerType::POST_ON_DO,
                                        m_fsmaction,
                                        &FSMAction::postDo);
     m_fsmaction.postOnFsmExitListener =
-      m_rtobj->addPostFsmActionListener(POST_ON_EXIT,
+      m_rtobj->addPostFsmActionListener(PostFsmActionListenerType::POST_ON_EXIT,
                                         m_fsmaction,
                                         &FSMAction::postExit);
     m_fsmaction.postOnFsmStateChangeListener =
-      m_rtobj->addPostFsmActionListener(POST_ON_STATE_CHANGE,
+      m_rtobj->addPostFsmActionListener(PostFsmActionListenerType::POST_ON_STATE_CHANGE,
                                         m_fsmaction,
                                         &FSMAction::postStateChange);
   }
@@ -800,19 +800,19 @@ namespace RTC
         removePreFsmActionListener(PreFsmActionListenerType::PRE_ON_STATE_CHANGE,
                                    m_fsmaction.preOnFsmStateChangeListener);
       m_rtobj->
-        removePostFsmActionListener(POST_ON_INIT,
+        removePostFsmActionListener(PostFsmActionListenerType::POST_ON_INIT,
                                     m_fsmaction.postOnFsmInitListener);
       m_rtobj->
-        removePostFsmActionListener(POST_ON_ENTRY,
+        removePostFsmActionListener(PostFsmActionListenerType::POST_ON_ENTRY,
                                     m_fsmaction.postOnFsmEntryListener);
       m_rtobj->
-        removePostFsmActionListener(POST_ON_DO,
+        removePostFsmActionListener(PostFsmActionListenerType::POST_ON_DO,
                                     m_fsmaction.postOnFsmDoListener);
       m_rtobj->
-        removePostFsmActionListener(POST_ON_EXIT,
+        removePostFsmActionListener(PostFsmActionListenerType::POST_ON_EXIT,
                                     m_fsmaction.postOnFsmExitListener);
       m_rtobj->
-        removePostFsmActionListener(POST_ON_STATE_CHANGE,
+        removePostFsmActionListener(PostFsmActionListenerType::POST_ON_STATE_CHANGE,
                                     m_fsmaction.postOnFsmStateChangeListener);
   }
 

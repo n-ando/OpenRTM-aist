@@ -302,9 +302,9 @@ namespace RTC
   //============================================================
   /*!
    * @if jp
-   * @brief PreFsmActionListener のタイプ
+   * @brief PostFsmActionListener のタイプ
    *
-   * PreFsmActionListener には以下のフックポイントが定義されている。こ
+   * PostFsmActionListener には以下のフックポイントが定義されている。こ
    * れらが呼び出されるかどうかは、FSMの実装に依存する。
    *
    * - POST_ON_INIT:          init 直後
@@ -314,9 +314,9 @@ namespace RTC
    * - POST_ON_STATE_CHANGE:  状態遷移直後
    *
    * @else
-   * @brief The types of ConnectorDataListener
+   * @brief The types of PostFsmActionListener
    *
-   * PreFsmActionListener has the following hook points. If these
+   * PostFsmActionListener has the following hook points. If these
    * listeners are actually called or not called are depends on FSM
    * implementations.
    *
@@ -328,7 +328,7 @@ namespace RTC
    *
    * @endif
    */
-  enum PostFsmActionListenerType
+  enum class PostFsmActionListenerType : uint8_t
     {
       POST_ON_INIT,
       POST_ON_ENTRY,
@@ -372,7 +372,7 @@ namespace RTC
    * <pre>
    * RTC::ReturnCode_t ConsoleIn::onInitialize()
    * {
-   *     addPostFsmActionListener(POST_ON_STATE_CHANGE,
+   *     addPostFsmActionListener(PostFsmActionListenerType::POST_ON_STATE_CHANGE,
    *                             new MyListener("init listener"),
    *                             true);
    *    :
@@ -433,7 +433,7 @@ namespace RTC
    * <pre>
    * RTC::ReturnCode_t ConsoleIn::onInitialize()
    * {
-   *     addPostFsmActionListener(POST_ON_STATE_CHANGE,
+   *     addPostFsmActionListener(PostFsmActionListenerType::POST_ON_STATE_CHANGE,
    *                             new MyListener("init listener"),
    *                             true);
    *    :
@@ -507,9 +507,9 @@ namespace RTC
           "POST_ON_STATE_CHANGE",
           "POST_FSM_ACTION_LISTENER_NUM"
         };
-      if (type < POST_FSM_ACTION_LISTENER_NUM)
+      if (type < PostFsmActionListenerType::POST_FSM_ACTION_LISTENER_NUM)
         {
-          return typeString[type];
+          return typeString[static_cast<uint8_t>(type)];
         }
       return "";
     }
@@ -1478,7 +1478,7 @@ namespace RTC
      * @endif
      */
     PostFsmActionListenerHolder 
-    postaction_[POST_FSM_ACTION_LISTENER_NUM];
+    postaction_[static_cast<uint8_t>(PostFsmActionListenerType::POST_FSM_ACTION_LISTENER_NUM)];
     /*!
      * @if jp
      * @brief FsmProfileTypeリスナ配列
