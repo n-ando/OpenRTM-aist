@@ -71,7 +71,7 @@ namespace RTC
    * - PRE_ON_STATE_CHANGE:  状態遷移直前
    *
    * @else
-   * @brief The types of ConnectorDataListener
+   * @brief The types of PreFsmActionListener
    *
    * PreFsmActionListener has the following hook points. If these
    * listeners are actually called or not called are depends on FSM
@@ -85,7 +85,7 @@ namespace RTC
    *
    * @endif
    */
-  enum PreFsmActionListenerType
+  enum class PreFsmActionListenerType : uint8_t
     {
       PRE_ON_INIT,
       PRE_ON_ENTRY,
@@ -129,7 +129,7 @@ namespace RTC
    * <pre>
    * RTC::ReturnCode_t ConsoleIn::onInitialize()
    * {
-   *     addPreFsmActionListener(PRE_ON_STATE_CHANGE,
+   *     addPreFsmActionListener(PreFsmActionListenerType::PRE_ON_STATE_CHANGE,
    *                             new MyListener("init listener"),
    *                             true);
    *    :
@@ -190,7 +190,7 @@ namespace RTC
    * <pre>
    * RTC::ReturnCode_t ConsoleIn::onInitialize()
    * {
-   *     addPreFsmActionListener(PRE_ON_STATE_CHANGE,
+   *     addPreFsmActionListener(PreFsmActionListenerType::PRE_ON_STATE_CHANGE,
    *                             new MyListener("init listener"),
    *                             true);
    *    :
@@ -264,7 +264,10 @@ namespace RTC
           "PRE_ON_STATE_CHANGE",
           "PRE_FSM_ACTION_LISTENER_NUM"
         };
-      if (type < PRE_FSM_ACTION_LISTENER_NUM) { return typeString[type]; }
+      if (type < PreFsmActionListenerType::PRE_FSM_ACTION_LISTENER_NUM)
+	{
+	  return typeString[static_cast<uint8_t>(type)];
+	}
       return "";
     }
 
@@ -1464,7 +1467,7 @@ namespace RTC
      * @endif
      */
     PreFsmActionListenerHolder 
-    preaction_[PRE_FSM_ACTION_LISTENER_NUM];
+    preaction_[static_cast<uint8_t>(PreFsmActionListenerType::PRE_FSM_ACTION_LISTENER_NUM)];
     /*!
      * @if jp
      * @brief PostFsmActionTypeリスナ配列

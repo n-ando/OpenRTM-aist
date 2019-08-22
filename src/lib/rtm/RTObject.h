@@ -4997,23 +4997,28 @@ namespace RTC
      */
     inline void preOnFsmInit(const char* state)
     {
-      m_fsmActionListeners.preaction_[PRE_ON_INIT].notify(state);
+      uint8_t i = static_cast<uint8_t>(PreFsmActionListenerType::PRE_ON_INIT);
+      m_fsmActionListeners.preaction_[i].notify(state);
     }
     inline void preOnFsmEntry(const char* state)
     {
-      m_fsmActionListeners.preaction_[PRE_ON_ENTRY].notify(state);
+      uint8_t i = static_cast<uint8_t>(PreFsmActionListenerType::PRE_ON_ENTRY);
+      m_fsmActionListeners.preaction_[i].notify(state);
     }
     inline void preOnFsmDo(const char* state)
     {
-      m_fsmActionListeners.preaction_[PRE_ON_DO].notify(state);
+      uint8_t i = static_cast<uint8_t>(PreFsmActionListenerType::PRE_ON_DO);
+      m_fsmActionListeners.preaction_[i].notify(state);
     }
     inline void preOnFsmExit(const char* state)
     {
-      m_fsmActionListeners.preaction_[PRE_ON_EXIT].notify(state);
+      uint8_t i = static_cast<uint8_t>(PreFsmActionListenerType::PRE_ON_EXIT);
+      m_fsmActionListeners.preaction_[i].notify(state);
     }
     inline void preOnFsmStateChange(const char* state)
     {
-      m_fsmActionListeners.preaction_[PRE_ON_STATE_CHANGE].notify(state);
+      uint8_t i = static_cast<uint8_t>(PreFsmActionListenerType::PRE_ON_STATE_CHANGE);
+      m_fsmActionListeners.preaction_[i].notify(state);
     }
     /*!
      * FSM related listeners

@@ -733,23 +733,23 @@ namespace RTC
   void ComponentObserverConsumer::setFSMStructureListeners()
   {
     m_fsmaction.preOnFsmInitListener =
-      m_rtobj->addPreFsmActionListener(PRE_ON_INIT,
+      m_rtobj->addPreFsmActionListener(PreFsmActionListenerType::PRE_ON_INIT,
                                        m_fsmaction,
                                        &FSMAction::preInit);
     m_fsmaction.preOnFsmEntryListener =
-      m_rtobj->addPreFsmActionListener(PRE_ON_ENTRY,
+      m_rtobj->addPreFsmActionListener(PreFsmActionListenerType::PRE_ON_ENTRY,
                                        m_fsmaction,
                                        &FSMAction::preEntry);
     m_fsmaction.preOnFsmDoListener =
-      m_rtobj->addPreFsmActionListener(PRE_ON_DO,
+      m_rtobj->addPreFsmActionListener(PreFsmActionListenerType::PRE_ON_DO,
                                        m_fsmaction,
                                        &FSMAction::preDo);
     m_fsmaction.preOnFsmExitListener =
-      m_rtobj->addPreFsmActionListener(PRE_ON_EXIT,
+      m_rtobj->addPreFsmActionListener(PreFsmActionListenerType::PRE_ON_EXIT,
                                        m_fsmaction,
                                        &FSMAction::preExit);
     m_fsmaction.preOnFsmStateChangeListener =
-      m_rtobj->addPreFsmActionListener(PRE_ON_STATE_CHANGE,
+      m_rtobj->addPreFsmActionListener(PreFsmActionListenerType::PRE_ON_STATE_CHANGE,
                                        m_fsmaction,
                                        &FSMAction::preStateChange);
 
@@ -785,19 +785,19 @@ namespace RTC
   void ComponentObserverConsumer::unsetFSMStructureListeners()
   {
       m_rtobj->
-        removePreFsmActionListener(PRE_ON_INIT,
+        removePreFsmActionListener(PreFsmActionListenerType::PRE_ON_INIT,
                                    m_fsmaction.preOnFsmInitListener);
       m_rtobj->
-        removePreFsmActionListener(PRE_ON_ENTRY,
+        removePreFsmActionListener(PreFsmActionListenerType::PRE_ON_ENTRY,
                                    m_fsmaction.preOnFsmEntryListener);
       m_rtobj->
-        removePreFsmActionListener(PRE_ON_DO,
+        removePreFsmActionListener(PreFsmActionListenerType::PRE_ON_DO,
                                    m_fsmaction.preOnFsmDoListener);
       m_rtobj->
-        removePreFsmActionListener(PRE_ON_EXIT,
+        removePreFsmActionListener(PreFsmActionListenerType::PRE_ON_EXIT,
                                    m_fsmaction.preOnFsmExitListener);
       m_rtobj->
-        removePreFsmActionListener(PRE_ON_STATE_CHANGE,
+        removePreFsmActionListener(PreFsmActionListenerType::PRE_ON_STATE_CHANGE,
                                    m_fsmaction.preOnFsmStateChangeListener);
       m_rtobj->
         removePostFsmActionListener(POST_ON_INIT,
