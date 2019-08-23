@@ -30,6 +30,7 @@
 #include <cctype>
 #include <utility>
 #include <cstdio>
+#include <unordered_set>
 #include <coil/OS.h>
 
 #ifdef __QNX__
@@ -608,23 +609,6 @@ namespace coil
 
   /*!
    * @if jp
-   * @brief リスト内の文字列を検索する Functor
-   * @else
-   * @brief Functor to find string in a list
-   * @endif
-   */
-  struct unique_strvec
-  {
-    void operator()(const std::string& s)
-    {
-      if (std::find(str.begin(), str.end(), s) == str.end())
-        return str.push_back(s);
-    }
-    vstring str;
-  };
-
-  /*!
-   * @if jp
    * @brief 与えられた文字列をstd::stringに変換
    * @else
    * @brief Convert the given string to std::string.
@@ -800,7 +784,18 @@ namespace coil
    */
   vstring unique_sv(vstring sv)
   {
-    return std::for_each(sv.begin(), sv.end(), unique_strvec()).str;
+    std::unordered_set<std::string> set{std::make_move_iterator(sv.begin()),
+                                        std::make_move_iterator(sv.end()),
+                                        sv.size()};
+#if (defined(__GNUC__) && (__GNUC__ < 5) && !defined(__clang__))    \
+    || (defined(_MSC_VER) && (_MSC_VER < 1900))
+    sv.clear();
+    for (auto&& itr : set) { sv.emplace_back(std::move(itr)); }
+#else
+    sv.assign(std::make_move_iterator(set.begin()),
+              std::make_move_iterator(set.end()));
+#endif
+    return sv;
   }
 
   /*!
