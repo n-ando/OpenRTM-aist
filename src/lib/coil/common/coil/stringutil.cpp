@@ -19,6 +19,7 @@
 
 #include <coil/stringutil.h>
 
+#include <array>
 #include <climits>
 #include <cstdarg>
 #include <cstdio>
@@ -865,20 +866,17 @@ namespace coil
    */
   std::string sprintf(char const * __restrict fmt, ...)
   {
-#ifndef LINE_MAX
-#define LINE_MAX 1024
-#endif
-    char str[LINE_MAX];
+    std::array<char, 1024> str;
     va_list ap;
 
     va_start(ap, fmt);
 #ifdef WIN32
-    _vsnprintf_s(str, LINE_MAX - 1, _TRUNCATE, fmt, ap);
+    _vsnprintf_s(&str[0], str.size() - 1, _TRUNCATE, fmt, ap);
 #else
-    vsnprintf(str, LINE_MAX - 1, fmt, ap);
+    vsnprintf(&str[0], str.size() - 1, fmt, ap);
 #endif
     va_end(ap);
-    return std::string(str);
+    return &str[0];
   }
 
 
