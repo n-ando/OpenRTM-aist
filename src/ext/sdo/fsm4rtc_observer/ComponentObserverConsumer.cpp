@@ -164,9 +164,9 @@ namespace RTC
       {
         flag = false;
       }
-    for(auto & o : observed)
+    for(auto&& o : observed)
       {
-        coil::toUpper(o);
+        o = coil::toUpper(std::move(o));
         if (o == "COMPONENT_PROFILE")
           {
             flags[RTC::COMPONENT_PROFILE] = true;

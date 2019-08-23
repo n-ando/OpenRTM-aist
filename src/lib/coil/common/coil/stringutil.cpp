@@ -82,19 +82,6 @@ namespace coil
     return str;
   }
 
-
-  /*!
-   * @if jp
-   * @brief std::toupperをchar型引数、char型戻り値でラップした関数
-   * @else
-   * @brief
-   * @endif
-   */
-  char toupper_(char c)
-  {
-      return static_cast<char>(std::toupper(static_cast<int>(c)));
-  }
-
   /*!
    * @if jp
    * @brief 大文字への変換
@@ -102,10 +89,11 @@ namespace coil
    * @brief Uppercase String Transformation
    * @endif
    */
-  void toUpper(std::string& str)
+  std::string toUpper(std::string str) noexcept
   {
     std::transform(str.begin(), str.end(), str.begin(),
-                   toupper_);
+                   [](unsigned char x){ return std::toupper(x); });
+    return str;
   }
 
   /*!
@@ -419,21 +407,6 @@ namespace coil
 
   /*!
    * @if jp
-   * @brief 大文字に変換する Functor
-   * @else
-   * @brief Functor to convert to capital letters
-   * @endif
-   */
-  struct Toupper
-  {
-    void operator()(char &c)
-    {
-      c = static_cast<char>(toupper(static_cast<int>(c)));
-    }
-  };
-
-  /*!
-   * @if jp
    * @brief 与えられた文字列をbool値に変換する
    * @else
    * @brief Convert given string into bool value
@@ -442,13 +415,11 @@ namespace coil
   bool toBool(std::string str, std::string yes, std::string no,
               bool default_value)
   {
-    std::for_each(str.begin(), str.end(), Toupper());
-    std::for_each(yes.begin(), yes.end(), Toupper());
-    std::for_each(no.begin(),  no.end(),  Toupper());
+    std::string s = toUpper(std::move(str));
 
-    if (str.find(yes) != std::string::npos)
+    if (s.find(toUpper(std::move(yes))) != std::string::npos)
       return true;
-    else if (str.find(no) != std::string::npos)
+    else if (s.find(toUpper(std::move(no))) != std::string::npos)
       return false;
     else
       return default_value;

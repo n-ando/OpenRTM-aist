@@ -172,9 +172,9 @@ namespace RTC
       {
         flag = false;
       }
-    for (auto & observed : observedlist)
+    for (auto&& observed : observedlist)
       {
-        coil::toUpper(observed);
+        observed = coil::toUpper(std::move(observed));
         if (observed == "COMPONENT_PROFILE")
           {
             flags[OpenRTM::COMPONENT_PROFILE] = true;

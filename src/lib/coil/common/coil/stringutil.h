@@ -87,6 +87,7 @@ namespace coil
    * 与えられた文字列を大文字に変換
    *
    * @param str 入力文字列
+   * @return 変換後文字列
    *
    * @else
    * @brief Uppercase String Transformation
@@ -94,10 +95,11 @@ namespace coil
    * This function transforms a given string to uppercase letters
    *
    * @param str The input string
+   * @return The converted string
    *
    * @endif
    */
-  void toUpper(std::string& str);
+  std::string toUpper(std::string str) noexcept;
 
   /*!
    * @if jp
