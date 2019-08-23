@@ -110,27 +110,16 @@ namespace coil
 
   /*!
    * @if jp
-   * @brief std::tolowerをchar型引数、char型戻り値でラップした関数
-   * @else
-   * @brief 
-   * @endif
-   */
-  char tolower_(char c)
-  {
-      return static_cast<char>(std::tolower(static_cast<int>(c)));
-  }
-
-  /*!
-   * @if jp
    * @brief 小文字への変換
    * @else
    * @brief Lowercase String Transformation
    * @endif
    */
-  void toLower(std::string& str)
+  std::string toLower(std::string str) noexcept
   {
     std::transform(str.begin(), str.end(), str.begin(),
-                   tolower_);
+                   [](unsigned char x){ return std::tolower(x); });
+    return str;
   }
 
   /*!
@@ -351,8 +340,7 @@ namespace coil
   std::string normalize(std::string& str)
   {
     eraseBothEndsBlank(str);
-    toLower(str);
-    return str;
+    return toLower(std::move(str));
   }
 
   /*!
@@ -475,12 +463,11 @@ namespace coil
    */
   bool includes(const vstring& list, std::string value, bool ignore_case)
   {
-    if (ignore_case) { toLower(value); }
-
-    for (auto str : list)
+    std::string const& v{ignore_case ? toLower(std::move(value)) : value};
+    for (auto const& str : list)
       {
-        if (ignore_case) { toLower(str); }
-        if (str == value) return true;
+        std::string const& x{ignore_case ? toLower(str) : str};
+        if (v == x) return true;
       }
     return false;
   }
