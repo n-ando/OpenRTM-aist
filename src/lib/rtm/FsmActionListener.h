@@ -807,7 +807,7 @@ namespace RTC
    *
    * @endif
    */
-  enum FsmStructureListenerType
+  enum class FsmStructureListenerType : uint8_t
     {
       SET_FSM_STRUCTURE,
       GET_FSM_STRUCTURE,
@@ -847,7 +847,7 @@ namespace RTC
    * <pre>
    * RTC::ReturnCode_t ConsoleIn::onInitialize()
    * {
-   *     addFsmStructureListener(SET_FSM_STRUCTURE,
+   *     addFsmStructureListener(FsmStructureListenerType::SET_FSM_STRUCTURE,
    *                             new MyListener("set structure listener"),
    *                             true);
    *    :
@@ -877,7 +877,7 @@ namespace RTC
    * @class FsmStructureListener class
    * @brief FsmStructureListener class
    *
-   * PostFsmActionListener class is a base class for the listener
+   * FsmStructureListener class is a base class for the listener
    * objects which realize callback to hook FSM structure profile
    * related actions. To hook execution just before a FSM action, the
    * callback object should be defined as follows, and set to RTObject
@@ -903,7 +903,7 @@ namespace RTC
    * <pre>
    * RTC::ReturnCode_t ConsoleIn::onInitialize()
    * {
-   *     addFsmStructureListener(SET_FSM_STRUCTURE,
+   *     addFsmStructureListener(FsmStructureListenerType::SET_FSM_STRUCTURE,
    *                             new MyListener("set structure listener"),
    *                             true);
    *    :
@@ -932,7 +932,7 @@ namespace RTC
    * case, listener objects pointers must be stored to member
    * variables, and set/unset of the listener objects shoud be
    * paerformed throguh
-   * RTObject_impl::addPostFsmActionListener()/removePostFsmActionListener()
+   * RTObject_impl::addFsmStructureListener()/removeFsmStructureListener()
    * functions.
    *
    * @endif
@@ -971,7 +971,10 @@ namespace RTC
           "GET_FSM_STRUCTURE",
           "FSM_STRUCTURE_LISTENER_NUM"
         };
-      if (type < FSM_STRUCTURE_LISTENER_NUM) { return typeString[type]; }
+      if (type < FsmStructureListenerType::FSM_STRUCTURE_LISTENER_NUM)
+	{
+	  return typeString[static_cast<uint8_t>(type)];
+	}
       return "";
     }
 
@@ -1503,7 +1506,7 @@ namespace RTC
      * @endif
      */
     FsmStructureListenerHolder
-    structure_[FSM_STRUCTURE_LISTENER_NUM];
+    structure_[static_cast<uint8_t>(FsmStructureListenerType::FSM_STRUCTURE_LISTENER_NUM)];
   };
 
 } // namespace RTC

@@ -2599,7 +2599,7 @@ namespace RTC
                           bool autoclean)
   {
     m_fsmActionListeners.
-      structure_[listener_type].addListener(listener, autoclean);
+      structure_[static_cast<uint8_t>(listener_type)].addListener(listener, autoclean);
   }
 
 
@@ -2617,7 +2617,7 @@ namespace RTC
                              FsmStructureListener* listener)
   {
     m_fsmActionListeners.
-      structure_[listener_type].removeListener(listener);
+      structure_[static_cast<uint8_t>(listener_type)].removeListener(listener);
   }
 
   
