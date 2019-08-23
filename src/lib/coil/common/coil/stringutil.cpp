@@ -494,8 +494,7 @@ namespace coil
    */
   bool includes(const std::string& list, std::string value, bool ignore_case)
   {
-    vstring vlist(split(list, ","));
-    return includes(vlist, std::move(value), ignore_case);
+    return includes(split(list, ","), std::move(value), ignore_case);
   }
 
   /*!
