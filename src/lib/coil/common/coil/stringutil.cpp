@@ -27,6 +27,7 @@
 #include <algorithm>
 #include <iostream>
 #include <cctype>
+#include <regex>
 #include <utility>
 #include <unordered_set>
 #include <coil/OS.h>
@@ -880,8 +881,6 @@ namespace coil
   * @if jp
   * @brief 文字列中の環境変数を置き換える
   *
-  *
-  *
   * 文字列中に${}で囲まれた文字列がある場合に、環境変数と置き換える
   * 例：${RTM_ROOT}\bin -> C:\Program Files (x86)\OpenRTM-aist\1.1.2\
   *
@@ -900,42 +899,15 @@ namespace coil
   */
   std::string replaceEnv(std::string str)
   {
-      vstring str_list = split(str, "${");
-      if (str_list.size() < 2)
-      {
-          return str;
-      }
-      vstring ret;
-      for (auto & s : str_list)
-      {
-          vstring tmp = split(s, "}");
-          if (tmp.size() == 2)
-          {
-              char c[100];
-              std::string env;
-              if (coil::getenv(tmp[0].c_str(), env))
-              {
-#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
-                  strcpy_s(c, sizeof(c), env.c_str());
-#else
-                  strcpy(c, env.c_str());
-#endif
-                  ret.push_back(std::string(c));
-                  ret.push_back(tmp[1]);
-              }
-          }
-          else
-          {
-              ret.push_back(s);
-          }
-      }
-
-      std::string ret_str;
-      for (auto & s : ret)
-      {
-          ret_str.append(s);
-      }
-      return ret_str;
+    static std::regex const e{R"(\$\{(\w+)\})"}; // ${xxx}
+    std::smatch m;
+    while (std::regex_search(str, m, e))
+    {
+      std::string env;
+      if (!coil::getenv(m.str(1).c_str(), env)){ break; }
+      str.replace(m.position(), m.length(), env);
+    }
+    return str;
   }
 
 } // namespace coil
