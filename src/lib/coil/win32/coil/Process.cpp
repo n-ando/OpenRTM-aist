@@ -130,15 +130,13 @@ namespace coil
       Buf[size] = '\0';
       ReadFile(rPipe, Buf.get(), size, &len, nullptr);
 
-      out = coil::split(std::string(Buf.get()), "\n");
-
-      for(auto & o : out)
+      for(auto&& o : coil::split(std::string(Buf.get()), "\n"))
       {
           if (!o.empty() && o.back() == '\r')
           {
               o.erase(o.size() - 1);
           }
-          coil::eraseBothEndsBlank(o);
+          out.emplace_back(coil::eraseBothEndsBlank(std::move(o)));
       }
 
       delete lpcommand;

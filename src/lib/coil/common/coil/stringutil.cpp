@@ -285,10 +285,9 @@ namespace coil
    * @brief Erase the head blank characters of string
    * @endif
    */
-  void eraseHeadBlank(std::string& str)
+  std::string eraseHeadBlank(std::string str) noexcept
   {
-    if (str.empty()) return;
-    while (str[0] == ' ' || str[0] == '\t') str.erase(0, 1);
+    return str.erase(0, str.find_first_not_of(" \t"));
   }
 
   /*!
@@ -298,12 +297,9 @@ namespace coil
    * @brief Erase the tail blank characters of string
    * @endif
    */
-  void eraseTailBlank(std::string& str)
+  std::string eraseTailBlank(std::string str) noexcept
   {
-    if (str.empty()) return;
-    while ((str[str.size() - 1] == ' ' || str[str.size() - 1] == '\t') &&
-           !isEscaped(str, str.size() - 1))
-      str.erase(str.size() - 1, 1);
+    return str.erase(str.find_last_not_of(" \t") + 1); // npos + 1 = 0
   }
 
   /*!
@@ -313,10 +309,9 @@ namespace coil
    * @brief Erase the head blank and the tail blank characters of string
    * @endif
    */
-  void eraseBothEndsBlank(std::string& str)
+  std::string eraseBothEndsBlank(std::string str) noexcept
   {
-    eraseHeadBlank(str);
-    eraseTailBlank(str);
+    return eraseHeadBlank(eraseTailBlank(std::move(str)));
   }
 
   /*!
@@ -328,8 +323,7 @@ namespace coil
    */
   std::string normalize(std::string& str)
   {
-    eraseBothEndsBlank(str);
-    return toLower(std::move(str));
+    return toLower(eraseBothEndsBlank(std::move(str)));
   }
 
   /*!
@@ -370,7 +364,7 @@ namespace coil
     using size = std::string::size_type;
     vstring results(0);
     size delim_size = delimiter.size();
-    size found_pos(0), begin_pos(0), pre_pos(0), substr_size(0);
+    size found_pos(0), begin_pos(0), pre_pos(0);
 
     if (input.empty()) { return results; }
 
@@ -380,9 +374,7 @@ namespace coil
         found_pos = input.find(delimiter, begin_pos);
         if (found_pos == std::string::npos)
           {
-            std::string substr(input.substr(pre_pos));
-            eraseHeadBlank(substr);
-            eraseTailBlank(substr);
+            std::string substr{eraseBothEndsBlank(input.substr(pre_pos))};
             if (!(substr.empty() && ignore_empty))
               {
                 results.push_back(substr);
@@ -391,10 +383,8 @@ namespace coil
           }
         if (found_pos >= pre_pos)
           {
-            substr_size = found_pos - pre_pos;
-            std::string substr(input.substr(pre_pos, substr_size));
-            eraseHeadBlank(substr);
-            eraseTailBlank(substr);
+            size end = found_pos - pre_pos;
+            std::string substr{eraseBothEndsBlank(input.substr(pre_pos, end))};
             if (!(substr.empty() && ignore_empty))
               {
                 results.push_back(substr);

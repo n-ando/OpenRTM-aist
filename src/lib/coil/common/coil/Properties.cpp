@@ -310,16 +310,8 @@ namespace coil
   {
     for (long i = 0; i < num && defaults[i][0] != '\0' ; i += 2)
       {
-        std::string key(defaults[i]);
-        std::string invalue(defaults[i + 1]);
-
-        coil::eraseHeadBlank(key);
-        coil::eraseTailBlank(key);
-
-        coil::eraseHeadBlank(invalue);
-        coil::eraseTailBlank(invalue);
-
-        setDefault(key, invalue);
+        setDefault(eraseBothEndsBlank(defaults[i]),
+                   eraseBothEndsBlank(defaults[i + 1]));
       }
   }
 
@@ -353,7 +345,7 @@ namespace coil
       {
         std::string tmp = std::string();
         coil::getlinePortable(inStream, tmp);
-        coil::eraseHeadBlank(tmp);
+        tmp = coil::eraseHeadBlank(std::move(tmp));
 
         // Skip comments or empty lines
         if (tmp.empty())
@@ -383,15 +375,8 @@ namespace coil
 
         std::string key, invalue;
         splitKeyValue(pline, key, invalue);
-        key = coil::unescape(key);
-        coil::eraseHeadBlank(key);
-        coil::eraseTailBlank(key);
-
-        invalue = coil::unescape(invalue);
-        coil::eraseHeadBlank(invalue);
-        coil::eraseTailBlank(invalue);
-
-        setProperty(key, invalue);
+        setProperty(eraseBothEndsBlank(coil::unescape(key)),
+                    eraseBothEndsBlank(std::move(invalue)));
         pline.clear();
       }
   }
@@ -613,12 +598,8 @@ namespace coil
       {
         if ((str[i] == ':' || str[i] == '=') && !coil::isEscaped(str, i))
           {
-            key   = str.substr(0, i);  // substr(0, i) returns 0...(i-1) chars.
-            coil::eraseHeadBlank(key);
-            coil::eraseTailBlank(key);
-            value = str.substr(i + 1);
-            coil::eraseHeadBlank(value);
-            coil::eraseTailBlank(value);
+            key = eraseBothEndsBlank(str.substr(0, i));
+            value = eraseBothEndsBlank(str.substr(i + 1));
             return;
           }
         ++i;
@@ -630,12 +611,8 @@ namespace coil
       {
         if ((str[i] == ' ') && !coil::isEscaped(str, i))
           {
-            key   = str.substr(0, i);  // substr(0, i) returns 0...(i-1) chars.
-            coil::eraseHeadBlank(key);
-            coil::eraseTailBlank(key);
-            value = str.substr(i + 1);
-            coil::eraseHeadBlank(value);
-            coil::eraseTailBlank(value);
+            key = eraseBothEndsBlank(str.substr(0, i));
+            value = eraseBothEndsBlank(str.substr(i + 1));
             return;
           }
         ++i;

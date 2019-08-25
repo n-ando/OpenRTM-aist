@@ -155,24 +155,18 @@ namespace RTC_exp
       RTC::ReturnCode_t ret = ExecutionContextBase::bindComponent(rtc);
       ::RTC::Manager &mgr = ::RTC::Manager::instance();
       std::string threads_str = rtc->getProperties()["conf.default.members"];
-      coil::vstring threads = coil::split(threads_str, "|");
-
-      for (auto & thread : threads)
+      for (auto const & thread : coil::split(threads_str, "|"))
       {
           std::vector<RTC::LightweightRTObject_ptr> rtcs;
-          coil::vstring members = coil::split(thread, ",");
-
-          for (auto member : members)
+          for (auto&& member : coil::split(thread, ","))
           {
-              coil::eraseBothEndsBlank(member);
-
+              member =  coil::eraseBothEndsBlank(std::move(member));
               if (member.empty())
               {
                   continue;
               }
               else
               {
-                  
                   RTC::RTObject_impl* comp = mgr.getComponent(member.c_str());
                   if (comp == nullptr)
                   {

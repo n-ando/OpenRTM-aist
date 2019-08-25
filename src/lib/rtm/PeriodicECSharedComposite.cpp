@@ -683,7 +683,7 @@ namespace RTC
     for (auto & member : m_members)
       {
           coil::replaceString(member, "|", "");
-          coil::eraseBothEndsBlank(member);
+          member = coil::eraseBothEndsBlank(std::move(member));
 
         RTObject_impl* rtc = mgr.getComponent(member.c_str());
         if (rtc == nullptr) {
