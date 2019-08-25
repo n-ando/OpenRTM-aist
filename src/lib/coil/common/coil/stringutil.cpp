@@ -26,10 +26,8 @@
 #include <cstring>
 #include <algorithm>
 #include <iostream>
-#include <cstring>
 #include <cctype>
 #include <utility>
-#include <cstdio>
 #include <unordered_set>
 #include <coil/OS.h>
 
@@ -826,33 +824,36 @@ namespace coil
    */
   Argv::Argv(const vstring& args)
   {
-    m_size = args.size();
-    m_argv = new char*[m_size + 1];
-
-    for (size_t i(0); i < m_size; ++i)
+    // make m_args.
+    m_args.reserve(args.size());
+    for (auto&& arg : args)
       {
-        size_t sz(args[i].size());
-        m_argv[i] = new char[sz + 1];
-#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
-        strncpy_s(m_argv[i], sz + 1, args[i].c_str(), sz);
-#else
-        strncpy(m_argv[i], args[i].c_str(), sz);
-#endif
-        m_argv[i][sz] = '\0';
+        m_args.emplace_back(arg.c_str(), arg.c_str() + arg.size() + 1);
       }
-    m_argv[m_size] = nullptr;
+    // make m_argv.
+    m_argv.reserve(m_args.size() + 1);
+    for(auto&& arg : m_args)
+      {
+        m_argv.emplace_back(arg.data());
+      }
+    m_argv.emplace_back(nullptr);
   }
 
-  Argv::~Argv()
+#if defined(_MSC_VER) && (_MSC_VER < 1900) // Visual Studio 2013
+  Argv::Argv(Argv&& x) noexcept { *this = std::move(x); }
+
+  Argv& Argv::operator=(Argv&& x) noexcept
   {
-    for(size_t i(0); i < m_size; ++i)
-      {
-        delete[] m_argv[i];
-      }
-    delete[] m_argv;
+    m_argv = std::move(x.m_argv);
+    m_args = std::move(x.m_args);
+    return *this;
   }
+#endif
 
-  /*!
+  Argv::~Argv() = default; // No inline for gcc warning, too big.
+
+
+    /*!
    * @if jp
    * @brief 指定された書式に変換
    * @else
