@@ -1095,9 +1095,8 @@ namespace CORBA_RTCUtil
       {
         return RTC::PortService::_nil();
       }
-    std::string rtc_name = port_name;
-    coil::replaceString(rtc_name, "." + p.back(), "");
-    RTC::RTCList rtcs = nm->string_to_component(rtc_name);
+    RTC::RTCList rtcs = nm->string_to_component(
+      coil::replaceString(port_name, "." + p.back(), ""));
 
     if (rtcs.length() < 1)
       {

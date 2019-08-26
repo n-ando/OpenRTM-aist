@@ -375,6 +375,7 @@ namespace coil
    * @param str 置き換え処理対象文字列
    * @param from 置換元文字
    * @param to 置換先文字
+   * @return 置き換え後文字列
    *
    * @else
    * @brief Replace string
@@ -384,11 +385,12 @@ namespace coil
    * @param str The target characters of string for replacement processing
    * @param from Characters of replacement source
    * @param to Characters of replacement destination
+   * @return The replaced string.
    *
    * @endif
    */
-  unsigned int replaceString(std::string& str, const std::string& from,
-                             const std::string& to);
+  std::string replaceString(std::string str, const std::string& from,
+                            const std::string& to);
 
   /*!
    * @if jp

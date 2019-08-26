@@ -311,8 +311,8 @@ namespace RTM
       if (fs == "flat")
         {
           RTC_DEBUG(("file_structure = flat"));
-          std::string d(m_profile.properties["context_delimiter"]);
-          coil::replaceString(ns_path, "/", d);
+          std::string const& d(m_profile.properties["context_delimiter"]);
+          ns_path = coil::replaceString(std::move(ns_path), "/", d);
           pathstring += ns_path;
         }
       else if (fs == "tree")

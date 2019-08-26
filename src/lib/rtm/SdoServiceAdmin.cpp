@@ -500,11 +500,8 @@ namespace RTC
 
   std::string SdoServiceAdmin::ifrToKey(std::string& ifr)
   {
-    coil::vstring ifrvstr = coil::split(ifr, ":");
-    std::string str{coil::toLower(std::move(ifrvstr[1]))};
-    coil::replaceString(str, ".", "_");
-    coil::replaceString(str, "/", ".");
-    return str;
+    return coil::replaceString(coil::replaceString(coil::toLower(
+             coil::split(ifr, ":")[1]), ".", "_"), "/", ".");
   }
 
 

@@ -2586,8 +2586,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 				  ports.push_back(param_itr.second);
 				  continue;
 			  }
-			  std::string tmp = param_itr.first;
-			  coil::replaceString(tmp, "port", "");
+              std::string tmp{coil::replaceString(param_itr.first, "port", "")};
               std::string::size_type pos = param_itr.first.find("port");
 
 			  int val = 0;
@@ -2945,10 +2944,8 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 		  {
 			  if (bl[j].binding_type != CosNaming::nobject) { continue; }
 			  std::string tmp(cns.toString(bl[j].binding_name));
-			  std::string nspath;
-			  nspath = "/" + nsname + "/" + tmp;
+			  std::string nspath{coil::replaceString('/' + nsname + '/' + tmp, "\\", "")};
 			  // ### TODO: All escape characteres should be removed. ###
-			  coil::replaceString(nspath, "\\", "");
 			  CORBA::Object_var obj = cns.resolveStr(nspath.c_str());
 			  RTC::PortService_var portsvc = RTC::PortService::_narrow(obj);
 			  if (CORBA::is_nil(portsvc)) { continue; }

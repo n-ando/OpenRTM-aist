@@ -333,21 +333,17 @@ namespace coil
    * @brief Replace string
    * @endif
    */
-  unsigned int replaceString(std::string& str, const std::string& from,
-                     const std::string& to)
+  std::string replaceString(std::string str, const std::string& from,
+                            const std::string& to)
   {
-    std::string::size_type pos(0);
-    unsigned int cnt(0);
-
-    while (pos != std::string::npos)
+    if (from.empty()) { return str; }
+    for (std::string::size_type pos{str.find(from, 0)};
+         pos != std::string::npos;
+         pos = str.find(from, pos + to.length()))
       {
-        pos = str.find(from, pos);
-        if (pos == std::string::npos) break;
-        str.replace(pos, from.size(), to);
-        pos += to.size();
-        ++cnt;
+        str.replace(pos, from.length(), to);
       }
-    return cnt;
+    return str;
   }
 
   /*!

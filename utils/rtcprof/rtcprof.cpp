@@ -40,9 +40,8 @@ int main(int argc, char* argv[])
   // notice: coil::dirname brakes original string
   // 
   // file name with full path
-  std::string fullname(argv[1]);
+  std::string fullname{coil::replaceString(argv[1], "\\", "/")};
   // directory name
-  coil::replaceString(fullname, "\\", "/");
   std::string dirname(coil::dirname(const_cast<char*>(fullname.c_str())));
   // basename
   std::string basename(coil::basename(fullname.c_str()));
