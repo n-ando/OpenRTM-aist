@@ -349,6 +349,7 @@ namespace coil
    * 英字をすべて小文字に変換する。
    *
    * @param str 処理対象文字列
+   * @return 処理済み文字列
    *
    * @else
    * @brief Erase the head/tail blank and replace upper case to lower case
@@ -359,10 +360,11 @@ namespace coil
    * And all upper case cahracters are converted into lower case.
    *
    * @param str The target string for the erase
+   * @return The normalized string
    *
    * @endif
    */
-  std::string normalize(std::string& str);
+  std::string normalize(std::string str) noexcept;
 
   /*!
    * @if jp

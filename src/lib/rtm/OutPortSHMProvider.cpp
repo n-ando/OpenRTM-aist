@@ -87,20 +87,18 @@ namespace RTC
 		return;
 	}
 
-	
-	std::string endian_type(prop.getProperty("serializer.cdr.endian", ""));
-	coil::normalize(endian_type);
-	std::vector<std::string> endian(coil::split(endian_type, ","));
-	if (endian.empty()) { return; }
-	if (endian[0] == "little")
-	{
-		m_endian = true;
-	}
-	else if (endian[0] == "big")
-	{
-		m_endian = false;
-		return;
-	}
+    std::vector<std::string> endian{coil::split(
+      coil::normalize(prop.getProperty("serializer.cdr.endian", "")), ",")};
+    if (endian.empty()) { return; }
+    if (endian[0] == "little")
+      {
+        m_endian = true;
+      }
+    else if (endian[0] == "big")
+      {
+        m_endian = false;
+        return;
+      }
   }
 
   /*!

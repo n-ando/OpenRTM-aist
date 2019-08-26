@@ -860,8 +860,7 @@ namespace RTC
 
     inline void initWritePolicy(const coil::Properties& prop)
     {
-      std::string policy(prop["write.full_policy"]);
-      coil::normalize(policy);
+      std::string policy(coil::normalize(prop["write.full_policy"]));
       if (policy == "overwrite")
         {
           m_overwrite = true;

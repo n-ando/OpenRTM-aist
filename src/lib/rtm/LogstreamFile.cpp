@@ -367,8 +367,7 @@ namespace RTC
         m_fileName = file;
         s_files.push_back(file);
 
-        std::string fname(file);
-        coil::normalize(fname);
+        std::string fname{coil::normalize(file)};
         if (fname == "stdout")
           {
             std::cout << "#### file: " << file << std::endl;

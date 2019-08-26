@@ -1596,7 +1596,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 
     coil::vstring endpoints(0);
     createORBEndpoints(endpoints);
-    createORBEndpointOption(opt, endpoints);
+    createORBEndpointOption(opt, std::move(endpoints));
 
     RTC_PARANOID(("ORB options: %s", opt.c_str()));
     return opt;
@@ -1639,20 +1639,20 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   }
 
   void Manager::createORBEndpointOption(std::string& opt,
-                                        coil::vstring& endpoints)
+                                        coil::vstring endpoints)
   {
     std::string corba(m_config["corba.id"]);
     RTC_DEBUG(("corba.id: %s", corba.c_str()));
 
-    for (auto & endpoint : endpoints)
+    for (auto&& endpoint : endpoints)
       {
         RTC_DEBUG(("Endpoint is : %s", endpoint.c_str()));
         if (endpoint.find(':') == std::string::npos) { endpoint += ":"; }
 
         if (corba == "omniORB")
           {
-            coil::normalize(endpoint);
-            if (coil::normalize(endpoint) == "all:")
+            endpoint = coil::normalize(std::move(endpoint));
+            if (endpoint == "all:")
               {
 #ifdef ORB_IS_OMNIORB
 #ifdef RTC_CORBA_CXXMAPPING11

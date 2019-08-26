@@ -402,10 +402,10 @@ namespace RTC
   void PublisherPeriodic::setPushPolicy(const coil::Properties& prop)
   {
     // push_policy default: NEW
-    std::string push_policy = prop.getProperty("publisher.push_policy", "new");
+    std::string push_policy{coil::normalize(
+      prop.getProperty("publisher.push_policy", "new"))};
     RTC_DEBUG(("push_policy: %s", push_policy.c_str()));
 
-    coil::normalize(push_policy);
     if      (push_policy == "all")  { m_pushPolicy = PUBLISHER_POLICY_ALL;  }
     else if (push_policy == "fifo") { m_pushPolicy = PUBLISHER_POLICY_FIFO; }
     else if (push_policy == "skip") { m_pushPolicy = PUBLISHER_POLICY_SKIP; }

@@ -139,8 +139,8 @@ namespace RTC
 
     OpenSpliceMessageInfoFactory::instance().deleteObject(info);
 
-    std::string endian_type(prop.getProperty("serializer.cdr.endian", ""));
-    coil::normalize(endian_type);
+    std::string endian_type{coil::normalize(
+      prop.getProperty("serializer.cdr.endian", ""))};
     std::vector<std::string> endian_str(coil::split(endian_type, ","));
 
     bool endian = true;
