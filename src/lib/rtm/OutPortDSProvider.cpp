@@ -238,6 +238,7 @@ namespace RTC
         return ::RTC::BUFFER_TIMEOUT;
         break;
 
+      case BufferStatus::NOT_SUPPORTED: /* FALLTHROUGH */
       default:
         return ::RTC::UNKNOWN_ERROR;
       }

@@ -240,6 +240,7 @@ namespace RTC
         return ::OpenRTM::BUFFER_TIMEOUT;
         break;
 
+      case BufferStatus::NOT_SUPPORTED: /* FALLTHROUGH */
       default:
         return ::OpenRTM::UNKNOWN_ERROR;
       }

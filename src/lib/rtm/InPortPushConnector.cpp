@@ -156,6 +156,9 @@ namespace RTC
       case BufferStatus::PRECONDITION_NOT_MET:
         return DataPortStatus::PRECONDITION_NOT_MET;
         break;
+      case BufferStatus::BUFFER_ERROR:  /* FALLTHROUGH */
+      case BufferStatus::FULL:          /* FALLTHROUGH */
+      case BufferStatus::NOT_SUPPORTED: /* FALLTHROUGH */
       default:
         return DataPortStatus::PORT_ERROR;
       }

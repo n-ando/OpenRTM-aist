@@ -335,9 +335,8 @@ namespace RTC
       case RTC::BUFFER_TIMEOUT:
         return DataPortStatus::SEND_TIMEOUT;
         break;
-      case RTC::UNKNOWN_ERROR:
-        return DataPortStatus::UNKNOWN_ERROR;
-        break;
+      case RTC::UNKNOWN_ERROR: /* FALLTHROUGH */
+      case RTC::BUFFER_EMPTY:  /* FALLTHROUGH */
       default:
         return DataPortStatus::UNKNOWN_ERROR;
         break;

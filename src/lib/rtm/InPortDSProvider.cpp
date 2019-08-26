@@ -213,6 +213,7 @@ namespace RTC
         onReceiverTimeout(data);
         return ::RTC::BUFFER_TIMEOUT;
 
+      case BufferStatus::NOT_SUPPORTED: /* FALLTHROUGH */
       default:
         return ::RTC::UNKNOWN_ERROR;
       }
