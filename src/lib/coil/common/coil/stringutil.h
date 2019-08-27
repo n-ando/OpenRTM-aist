@@ -184,6 +184,7 @@ namespace coil
    * LF -> "\n" <br>
    * CR -> "\r" <br>
    * FF -> "\f" <br>
+   * \  -> "\\" <br>
    * シングルクオート、ダブルクオートについてはとくに処理はしない。
    *
    * @param str エスケープ処理対象文字列
@@ -199,6 +200,7 @@ namespace coil
    * LF -> "\n" <br>
    * CR -> "\r" <br>
    * FF -> "\f" <br>
+   * \  -> "\\" <br>
    * Single quote and double quote are not processed.
    *
    * @param str The target string for the escape
