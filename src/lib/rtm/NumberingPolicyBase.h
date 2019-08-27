@@ -131,7 +131,7 @@ namespace RTM
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
 EXTERN template class DLL_PLUGIN coil::GlobalFactory<RTM::NumberingPolicyBase>;
 #elif defined(__GNUC__)
-EXTERN template class coil::Singleton<coil::GlobalFactory<RTM::NumberingPolicyBase> >;
+EXTERN template class coil::GlobalFactory<RTM::NumberingPolicyBase>;
 #endif
 
 #endif // RTC_NUMBERINGPOLICYBASE_H

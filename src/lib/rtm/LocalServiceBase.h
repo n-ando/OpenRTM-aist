@@ -301,7 +301,7 @@ namespace RTM
    */
 EXTERN template class DLL_PLUGIN coil::GlobalFactory<RTM::LocalServiceBase >;
 #elif defined(__GNUC__)
-EXTERN template class coil::Singleton<coil::GlobalFactory<RTM::LocalServiceBase> >;
+EXTERN template class coil::GlobalFactory<RTM::LocalServiceBase>;
 #endif
 
 #endif  // RTM_LOCALSERVICEBASE_H
