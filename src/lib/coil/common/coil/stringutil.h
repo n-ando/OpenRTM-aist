@@ -220,7 +220,9 @@ namespace coil
    * "\f" -> FF <br>
    * "\"" -> "  <br>
    * "\'" -> '  <br>
-   * ※エスケープ処理の完全な逆変換にはなっていないため、注意が必要。
+   * "\\" -> \  <br>
+   * - エスケープ処理の完全な逆変換にはなっていないため、注意が必要。
+   * - 文字列の終端が "\\" の場合は単に削除される。
    *
    * @param str アンエスケープ処理対象文字列
    *
@@ -237,7 +239,9 @@ namespace coil
    * "\f" -> FF <br>
    * "\"" -> "  <br>
    * "\'" -> '  <br>
-   * Note: This is not complete inversion of the escape processing.
+   * "\\" -> \  <br>
+   * Note1: This is not complete inversion of the escape processing.
+   * Note2: If the end of the string is "\\", remove it.
    *
    * @param str The target string for the unescape
    *
@@ -245,7 +249,7 @@ namespace coil
    *
    * @endif
    */
-  std::string unescape(const std::string& str);
+  std::string unescape(std::string str) noexcept;
 
   /*!
    * @if jp

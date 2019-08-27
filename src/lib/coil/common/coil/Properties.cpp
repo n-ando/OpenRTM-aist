@@ -375,7 +375,7 @@ namespace coil
 
         std::string key, invalue;
         splitKeyValue(pline, key, invalue);
-        setProperty(eraseBothEndsBlank(coil::unescape(key)),
+        setProperty(eraseBothEndsBlank(coil::unescape(std::move(key))),
                     eraseBothEndsBlank(std::move(invalue)));
         pline.clear();
       }
