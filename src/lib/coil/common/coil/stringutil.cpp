@@ -118,7 +118,7 @@ namespace coil
    * @brief Read a line from input stream
    * @endif
    */
-  int getlinePortable(std::istream& istr, std::string& line)
+  std::string getlinePortable(std::istream& istr)
   {
     char c;
     std::stringstream s;
@@ -142,8 +142,7 @@ namespace coil
             s << c;
           }
       }
-    line = s.str();
-    return static_cast<int>(line.size());
+    return s.str();
   }
 
   /*!
