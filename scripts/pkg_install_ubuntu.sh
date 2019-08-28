@@ -312,7 +312,7 @@ create_srclist () {
 # ソースリスト更新関数の定義
 #---------------------------------------
 update_source_list () {
-  rtmsite=`grep "$openrtm_repo" /etc/apt/sources.list`
+  rtmsite=`apt-cache policy | grep "http://$reposerver"`
   if test "x$rtmsite" = "x" ; then
     echo $msg4
     echo $msg5
@@ -327,7 +327,7 @@ update_source_list () {
     fi
   fi
   # 公開鍵登録
-  apt-key adv --keyserver keys.gnupg.net --recv-keys 4BCE106E087AFAC0
+  wget -O- --no-check-certificate https://openrtm.org/pub/openrtm.key | apt-key add -
 }
 
 #----------------------------------------
