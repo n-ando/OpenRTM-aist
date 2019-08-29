@@ -18,6 +18,8 @@
 # = OPT_UNINST   : uninstallation
 #
 
+VERSION=2.0.0.00
+
 #
 #---------------------------------------
 # usage
@@ -45,7 +47,13 @@ usage()
     -u             uninstall
     --yes          force yes
     --help, -h     print this
+    --version      print version number
 EOF
+}
+
+version()
+{
+  echo ${VERSION}
 }
 
 #---------------------------------------
@@ -162,7 +170,7 @@ get_opt()
   fi
   arg_num=$#
  
-  OPT=`getopt -o l:rcsdhu -l help,yes -- $@` > /dev/null 2>&1
+  OPT=`getopt -o l:rcsdhu -l help,yes,version -- $@` > /dev/null 2>&1
   # return code check
   if [ $? -ne 0 ] ; then
     echo "[ERROR] Invalid option '$1'"
@@ -187,6 +195,7 @@ get_opt()
   do
     case "$1" in
         -h|--help ) usage ; exit ;;
+        --version ) version ; exit ;;
         --yes ) FORCE_YES=true ;;
         -l )  if [ -z "$2" ] ; then
                 echo "$1 option requires an argument." 1>&2
