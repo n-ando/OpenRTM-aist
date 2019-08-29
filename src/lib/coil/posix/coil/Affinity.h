@@ -20,8 +20,6 @@
 
 #include <string>
 #include <vector>
-#include <coil/Singleton.h>
-#include <mutex>
 
 namespace coil
 {
