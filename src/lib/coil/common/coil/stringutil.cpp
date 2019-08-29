@@ -168,31 +168,6 @@ namespace coil
 
   /*!
    * @if jp
-   * @brief 文字列をエスケープするためのFunctor
-   * @else
-   * @brief Functor to escape string
-   * @endif
-   */
-  struct escape_functor
-  {
-    escape_functor() = default;
-    void operator()(const char c)
-    {
-      if      (c == '\t')  str += "\\t";
-      else if (c == '\n')  str += "\\n";
-      else if (c == '\f')  str += "\\f";
-      else if (c == '\r')  str += "\\r";
-      else if (c == '\\')  str += "\\\\";
-      else
-        {
-          str.push_back(c);
-        }
-    }
-    std::string str;
-  };
-
-  /*!
-   * @if jp
    * @brief 文字列をエスケープする
    * @else
    * @brief Escape string
@@ -200,8 +175,21 @@ namespace coil
    */
   std::string escape(const std::string& str)
   {
-    return for_each(str.begin(), str.end(), escape_functor()).str;
-  }
+    std::string ret;
+    ret.reserve(str.length()*2);
+    std::for_each(str.begin(), str.end(), [&ret](char c) {
+      switch (c)
+      {
+        case '\t': ret += "\\t"; break;
+        case '\n': ret += "\\n"; break;
+        case '\f': ret += "\\f"; break;
+        case '\r': ret += "\\r"; break;
+        case '\\': ret += "\\\\"; break;
+        default: ret += c; break;
+      }
+    });
+    return ret;
+   }
 
   /*!
    * @if jp
