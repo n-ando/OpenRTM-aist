@@ -909,7 +909,7 @@ namespace coil
      *
      * @endif
      */
-    int size() const;
+    size_t size() const;
 
     /*!
      * @if jp
@@ -1099,7 +1099,7 @@ namespace coil
      *
      * @endif
      */
-    void _dump(std::string& out, const Properties& curr, int index) const;
+    void _dump(std::string& out, const Properties& curr, size_t index) const;
 
     /*!
      * @if jp
@@ -1118,7 +1118,7 @@ namespace coil
      *
      * @endif
      */
-    void _dump(std::vector<std::string>& out, const Properties& curr, int index) const;
+    void _dump(std::vector<std::string>& out, const Properties& curr, size_t index) const;
 
   protected:
     /*!
@@ -1307,7 +1307,7 @@ namespace coil
      * @endif
      */
     static std::ostream& _dump(std::ostream& out, const Properties& curr,
-                               int index);
+                               size_t index);
 
     /*!
      * @if jp
@@ -1332,7 +1332,7 @@ namespace coil
      *
      * @endif
      */
-    static std::string indent(int index);
+    static std::string indent(size_t index);
 
   private:
     std::string name = "";
@@ -1371,4 +1371,3 @@ namespace coil
   };  // class Properties
 } // namespace coil
 #endif  // COIL_PROPERTIES_H
-
