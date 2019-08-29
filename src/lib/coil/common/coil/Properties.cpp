@@ -420,7 +420,7 @@ namespace coil
     std::vector<std::string> names;
     for (auto prop : leaf)
       {
-        _propertiyNames(names, prop->name, prop);
+        _propertyNames(names, prop->name, prop);
       }
     return names;
   }
@@ -687,9 +687,9 @@ namespace coil
    * @endif
    */
   void
-  Properties::_propertiyNames(std::vector<std::string>& names,
-                              const std::string& curr_name,
-                              const Properties* curr)
+  Properties::_propertyNames(std::vector<std::string>& names,
+                             const std::string& curr_name,
+                             const Properties* curr)
   {
     if (!curr->leaf.empty())
       {
@@ -697,7 +697,7 @@ namespace coil
           {
             std::string next_name;
             next_name = curr_name + "." + prop->name;
-            _propertiyNames(names, next_name, prop);
+            _propertyNames(names, next_name, prop);
           }
       }
     else

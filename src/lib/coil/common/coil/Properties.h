@@ -1251,9 +1251,9 @@ namespace coil
      *
      * @endif
      */
-    static void _propertiyNames(std::vector<std::string>& names,
-                                const std::string& curr_name,
-                                const Properties* curr);
+    static void _propertyNames(std::vector<std::string>& names,
+                               const std::string& curr_name,
+                               const Properties* curr);
 
     /*!
      * @if jp
