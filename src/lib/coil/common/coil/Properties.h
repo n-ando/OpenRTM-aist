@@ -20,12 +20,10 @@
 #ifndef COIL_PROPERTIES_H
 #define COIL_PROPERTIES_H
 
-
+#include <limits>
 #include <string>
 #include <vector>
 #include <map>
-#include <climits>
-
 
 /*!
  * @if jp
@@ -175,7 +173,7 @@ namespace coil
      * </pre>
      *
      * @param defaults デフォルト値を指定する配列
-     * @param num デフォルト値を設定する要素数(デフォルト値:LONG_MAX)
+     * @param num デフォルト値を設定する要素数(デフォルト値:max of size_t)
      *
      * @else
      *
@@ -203,11 +201,12 @@ namespace coil
      *
      * @param defaults Array that specifies the default values
      * @param num Number of elements that specifies the default value
-     *            (The default value:LONG_MAX)
+     *            (The default value:max of size_t)
      *
      * @endif
      */
-    explicit Properties(const char* const defaults[], long num = LONG_MAX);
+    explicit Properties(const char* const defaults[],
+                        size_t num = std::numeric_limits<size_t>::max());
 
     /*!
      * @if jp
@@ -578,7 +577,7 @@ namespace coil
      * なければならない。
      *
      * @param defaults デフォルト値を指定する配列
-     * @param num デフォルト値を設定する要素数(デフォルト値:LONG_MAX)
+     * @param num デフォルト値を設定する要素数(デフォルト値:max of size_t)
      *
      * @else
      * @brief Set a default value together in the property list
@@ -591,11 +590,12 @@ namespace coil
      *
      * @param defaults Array that specifies the default values
      * @param num Number of elements that specifies the default value
-     *            (Default value:LONG_MAX)
+     *            (Default value:max of size_t)
      *
      * @endif
      */
-    void setDefaults(const char* const defaults[], long num = LONG_MAX);
+    void setDefaults(const char* const defaults[],
+                     size_t num = std::numeric_limits<size_t>::max());
 
     //============================================================
     // load and save functions

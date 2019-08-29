@@ -29,10 +29,10 @@ namespace utils
   {
   public:
     explicit Properties();
-    explicit Properties(const char* const defaults[], long num = LONG_MAX);
+    explicit Properties(const char* const defaults[],
+                        long num = std::numeric_limits<size_t>::max());
     ~Properties() override;
   };
 } // namespace utils
 } // namespace hrtm
 #endif // HRTM_PROPERTIES_H
-
