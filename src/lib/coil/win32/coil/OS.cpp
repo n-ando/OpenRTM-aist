@@ -18,8 +18,9 @@
 
 
 #include <coil/OS.h>
+#include <map>
 #include <string>
-
+#include <vector>
 
 namespace coil
 {
@@ -384,9 +385,9 @@ namespace coil
     {
         return false;
     }
-    char *buff = new char[return_size * sizeof(char)];
-    ::getenv_s(&return_size, buff, return_size, name);
-    env = buff;
+    std::vector<char> buff(return_size);
+    ::getenv_s(&return_size, buff.data(), return_size, name);
+    env = buff.data();
     return true;
   }
 

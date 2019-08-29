@@ -19,16 +19,10 @@
 #ifndef COIL_OS_H
 #define COIL_OS_H
 
-
 #include <Windows.h>
-#include <string.h>
-#include <stdio.h>
 #include <process.h>
-#include <stdlib.h>
 #include <WinBase.h>
-#include <iostream>
-#include <map>
-
+#include <string>
 
 extern "C"
 {
