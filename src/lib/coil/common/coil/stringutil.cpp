@@ -821,7 +821,7 @@ namespace coil
     while (std::regex_search(str, m, e))
     {
       std::string env;
-      if (!coil::getenv(m.str(1).c_str(), env)){ break; }
+      coil::getenv(m.str(1).c_str(), env); // env="" if getenv() fail.
       str.replace(m.position(), m.length(), env);
     }
     return str;
