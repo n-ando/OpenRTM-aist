@@ -812,7 +812,7 @@ namespace RTC
         removePostFsmActionListener(POST_ON_EXIT,
                                     m_fsmaction.postOnFsmExitListener);
       m_rtobj->
-        removePostFsmActionListener(POST_ON_EXIT,
+        removePostFsmActionListener(POST_ON_STATE_CHANGE,
                                     m_fsmaction.postOnFsmStateChangeListener);
   }
 
