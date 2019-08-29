@@ -450,14 +450,13 @@ namespace coil
    */
   bool isAbsolutePath(const std::string& str)
   {
-    // UNIX absolute path is begun from '/'
-    if (str[0] == '/') return true;
-    // Windows absolute path is begun from '[a-zA-Z]:\'
-    if ((isalpha(str[0]) != 0) && (str[1] == ':') && str[2] == '\\') return true;
-    // Windows network file path is begun from '\\'
-    if (str[0] == '\\' && str[1] == '\\') return true;
-
-    return false;
+    static std::regex const path{
+      "(?:"
+        "^/" // UNIX absolute path
+        R"(|^[a-zA-Z]{1}:\\)" // Windows absolute path
+        R"(|^\\\\)" // Windows network file path
+      ")"} ;
+    return std::regex_search(str, path);
   }
 
   /*!
@@ -469,75 +468,57 @@ namespace coil
    */
   bool isURL(const std::string& str)
   {
-    using size = std::string::size_type;
-    size pos;
-    if (str.empty()) return false;
-    pos = str.find(':');
-    return (pos != 0) &&
-        (pos != std::string::npos) &&
-        (str[pos + 1] == '/') &&
-        (str[pos + 2] == '/');
+    static std::regex const url{R"(\w://)"};
+    return std::regex_search(str, url);
   }
+
   bool isIPv4(const std::string& str)
   {
-    for (char c : str)
-      {
-        if (!((c >= '0' && c <= '9') ||
-              c == '.' || c == ':'))
-          { return false; }
-      }
-    coil::vstring tmp = coil::split(str, ":");
-    coil::vstring ipv4 = coil::split(str, ".");
-    if (ipv4.size() != 4) { return false; }
-    for (auto & c : ipv4)
-      {
-        unsigned short int dec;
-        if (!coil::stringTo(dec, c.c_str())) { return false; }
-        if (dec > 255) { return false; }
-      }
-    return true;
+    // IPv4 address must be dotted-decimal format.
+    // not support: 0x1.0x1.0x1.0x1, 01.01.01.01, 100.100000
+    static std::regex const ipv4{
+      "(?:(?:"
+        R"(\d)"        // x
+        R"(|[1-9]\d)"  // Xx
+        R"(|1\d\d)"    // 1xx
+        R"(|2[0-4]\d)" // 2Xx
+        R"(|25[0-5])"  // 25x
+      ")\\.){3}" // <num>.<num>.<num>.
+      "(?:"
+        R"(\d)"        // x
+        R"(|[1-9]\d)"  // Xx
+        R"(|1\d\d)"    // 1xx
+        R"(|2[0-4]\d)" // 2Xx
+        R"(|25[0-5])"  // 25X
+      ")"}; // <num>
+    return std::regex_match(str, ipv4);
   }
+
   bool isIPv6(const std::string& str)
   {
     // IPv6 address must be
-    // 1111:1111:1111:1111:1111:1111:1111:1111 (addr)
-    // [1111:1111:1111:1111:1111:1111:1111:1111]:11111 (addr, port)
-    for (char c : str)
-      {
-        if (!((c >= '0' && c <= '9') ||
-             (c >= 'a' && c <= 'f') ||
-             (c >= 'A' && c <= 'F') ||
-              c == ':' || c == '[' || c == ']'))
-          { return false; }
-      }
-    coil::vstring tmp = coil::split(str, "]:");
-    if (tmp.size() > 2) { return false; }
-    if (tmp.size() == 2)
-      {
-        if (tmp[0][0] != '[') { return false; }
-        tmp[0].erase(0, 1);
-      }
-    
-    coil::vstring ipv6 = coil::split(tmp[0], ":");
-    if (ipv6.size() > 8) { return false; }
-    for (auto & v : ipv6)
-      {
-        try
-          {
-            if (v.empty()) { continue; }
-            char* endptr = nullptr;
-            long int hexval = std::strtol(v.c_str(), &endptr, 16);
-            if (errno == ERANGE) { return false; }
-            if (hexval < 0x0 || hexval > 0xFFFF) { return false; }
-          }
-        catch (...)
-          {
-            return false;
-          }
-      }
-    return true;
+    // 1111:1111:1111:1111:1111:1111:1111:1111
+    static std::regex const ipv6{
+      "(?:[0-9a-fA-F]{1,4}:){7}" // xxxx:xxxx: ...
+      "[0-9a-fA-F]{1,4}"}; // xxxx
+    return std::regex_match(str, ipv6);
   }
-  
+
+  bool isIPPort(const std::string& str)
+  {
+    static std::regex const port{
+      "(?:"
+        R"(\d)"            // x
+        R"(|[1-9]\d{1,3})" // Xx, Xxx, Xxxx
+        R"(|[1-5]\d{4})"   // Xxxxx
+        R"(|6[0-4]\d{3})"  // 6Xxxx
+        R"(|65[0-4]\d{2})" // 65Xxx
+        R"(|655[0-2]\d)"   // 655Xx
+        R"(|6553[0-5])"    // 6553X
+      ")"};
+    return std::regex_match(str, port);
+  }
+
   /*!
    * @if jp
    * @brief URLパラメータをmapstringに分解して返す
