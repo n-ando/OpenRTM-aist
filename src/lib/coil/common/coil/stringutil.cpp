@@ -205,61 +205,42 @@ namespace coil
 
   /*!
    * @if jp
-   * @brief 文字列をアンエスケープするためのFunctor
-   * @else
-   * @brief Functor to unescape string
-   * @endif
-   */
-  struct unescape_functor
-  {
-    unescape_functor()  {}
-    void operator()(char c)
-    {
-      if (c == '\\')
-        {
-          ++count;
-          if ((count % 2) == 0)
-            {
-              str.push_back(c);
-            }
-        }
-      else
-        {
-          if (count > 0 && ((count % 2) != 0))
-            {
-              count = 0;
-              if      (c == 't')  str.push_back('\t');
-              else if (c == 'n')  str.push_back('\n');
-              else if (c == 'f')  str.push_back('\f');
-              else if (c == 'r')  str.push_back('\r');
-              else if (c == '\"') str.push_back('\"');
-              else if (c == '\'') str.push_back('\'');
-              else
-                {
-                  str.push_back(c);
-                }
-            }
-          else
-            {
-              count = 0;
-              str.push_back(c);
-            }
-        }
-    }
-    std::string str;
-    int count{0};
-  };
-
-  /*!
-   * @if jp
    * @brief 文字列のエスケープを戻す
    * @else
    * @brief Unescape string
    * @endif
    */
-  std::string unescape(const std::string& str)
+  std::string unescape(std::string str) noexcept
   {
-    return for_each(str.begin(), str.end(), unescape_functor()).str;
+    std::string::size_type wp{0};
+    bool is_escaped{false};
+
+    for(std::string::size_type rp{0}; rp < str.length(); ++rp)
+      {
+        if (!is_escaped)
+          {
+            if (str[rp] != '\\')
+              str[wp++] = str[rp];
+            else
+              is_escaped = true;
+          }
+        else
+          {
+            is_escaped = false;
+            switch (str[rp])
+            {
+              case 't':  str[wp++] = '\t'; break;
+              case 'n':  str[wp++] = '\n'; break;
+              case 'f':  str[wp++] = '\f'; break;
+              case 'r':  str[wp++] = '\r'; break;
+              case '\"': str[wp++] = '\"'; break;
+              case '\'': str[wp++] = '\''; break;
+              default: str[wp++] = str[rp]; break;
+            }
+          }
+      }
+    str.resize(wp);
+    return str;
   }
 
   /*!
