@@ -1616,7 +1616,7 @@ namespace RTC
       }
 
     inport.init(m_properties.getNode(propkey));
-    m_inports.push_back(&inport);
+    m_inports.emplace_back(&inport);
     return ret;
   }
 
@@ -1657,7 +1657,7 @@ namespace RTC
       }
 
     outport.init(m_properties.getNode(propkey));
-    m_outports.push_back(&outport);
+    m_outports.emplace_back(&outport);
     return ret;
   }
 
@@ -2804,9 +2804,9 @@ namespace RTC
           {
             RTC_DEBUG(("p_name is empty"));
           }
-        ec_args.push_back(p);
         RTC_DEBUG(("New EC properties stored:"));
         RTC_DEBUG_STR((p));
+        ec_args.emplace_back(std::move(p));
       }
     return RTC::RTC_OK;
   }
@@ -2854,7 +2854,7 @@ namespace RTC
       }
     if (ret_global == RTC::RTC_OK && ret_private != RTC::RTC_OK)
       {
-        ec_args.push_back(global_props);
+        ec_args.emplace_back(std::move(global_props));
       }
     return RTC::RTC_OK;
   }
@@ -2926,7 +2926,7 @@ namespace RTC
         RTC_DEBUG(("EC (%s) created.", ec_type.c_str()));
 
         ec->init(ec_arg);
-        m_eclist.push_back(ec);
+        m_eclist.emplace_back(ec);
         ec->bindComponent(this);
       }
 
@@ -3000,7 +3000,7 @@ namespace RTC
               }
           }
         ec->init(default_opts);
-        m_eclist.push_back(ec);
+        m_eclist.emplace_back(ec);
         ec->bindComponent(this);
       }
     return ret;

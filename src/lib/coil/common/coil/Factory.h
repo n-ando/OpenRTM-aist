@@ -202,7 +202,7 @@ namespace coil
 
       while (it != it_end)
         {
-          idlist.push_back(it->first);
+          idlist.emplace_back(it->first);
           ++it;
         }
       return idlist;
@@ -404,7 +404,7 @@ namespace coil
       std::lock_guard<std::mutex> guard(m_mutex);
       for (ObjectMapIt it(m_objects.begin()); it != m_objects.end(); ++it)
         {
-          objects.push_back(it->first);
+          objects.emplace_back(it->first);
         }
       return objects;
     }

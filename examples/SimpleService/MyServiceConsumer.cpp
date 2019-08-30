@@ -113,7 +113,7 @@ RTC::ReturnCode_t MyServiceConsumer::onExecute(RTC::UniqueId  /*ec_id*/)
       std::cout << " get_echo_history : get input messsage history." << std::endl;
       std::cout << " get_value_history: get input value history." << std::endl;
       std::cout << "> ";
-      
+
       std::string args;
       std::string::size_type pos;
       std::vector<std::string> argv;
@@ -122,18 +122,18 @@ RTC::ReturnCode_t MyServiceConsumer::onExecute(RTC::UniqueId  /*ec_id*/)
 #else
       std::getline(std::cin, args);
 #endif
-      
+
       pos = args.find_first_of(' ');
       if (pos != std::string::npos)
-	{
-	  argv.push_back(args.substr(0, pos));
-	  argv.push_back(args.substr(++pos));
-	}
+        {
+          argv.emplace_back(args.substr(0, pos));
+          argv.emplace_back(args.substr(++pos));
+        }
       else
-	{
-	  argv.push_back(args);
-	}
-      
+        {
+          argv.emplace_back(std::move(args));
+        }
+
       if (async_echo != nullptr && async_echo->finished())
         {
           std::cout << "echo() finished: " <<  m_result << std::endl;

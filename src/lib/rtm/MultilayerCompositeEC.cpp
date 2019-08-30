@@ -178,7 +178,7 @@ namespace RTC_exp
                   {
                       continue;
                   }
-                  rtcs.push_back(rtobj);
+                  rtcs.emplace_back(rtobj);
               }
           }
           addTask(rtcs);
@@ -238,7 +238,7 @@ namespace RTC_exp
           addRTCToTask(ct, rtc);
       }
 
-      m_tasklist.push_back(ct);
+      m_tasklist.emplace_back(ct);
 
       // Start task in suspended mode
       task->suspend();
@@ -278,7 +278,7 @@ namespace RTC_exp
 
   void MultilayerCompositeEC::ChildTask::addComponent(RTC::LightweightRTObject_ptr rtc)
   {
-      m_rtcs.push_back(rtc);
+      m_rtcs.emplace_back(rtc);
   }
 
   void MultilayerCompositeEC::ChildTask::updateCompList()
@@ -290,7 +290,7 @@ namespace RTC_exp
           if (comp != nullptr)
           {
               rtc = m_rtcs.erase(rtc);
-              m_comps.push_back(comp);
+              m_comps.emplace_back(comp);
           }
           else
           {

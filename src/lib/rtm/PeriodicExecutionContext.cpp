@@ -608,7 +608,7 @@ namespace RTC_exp
         int num;
         if (coil::stringTo(num, cpu.c_str()))
           {
-            m_cpu.push_back(num);
+            m_cpu.emplace_back(num);
             RTC_DEBUG(("CPU affinity int value: %d added.", num));
           }
       }

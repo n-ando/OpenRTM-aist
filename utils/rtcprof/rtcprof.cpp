@@ -49,15 +49,15 @@ int main(int argc, char* argv[])
   // making command line option
   //   dummy -o manager.modules.load_path
   coil::vstring opts;
-  opts.push_back("dummy");
-  opts.push_back("-o");
+  opts.emplace_back("dummy");
+  opts.emplace_back("-o");
   std::string load_path("manager.modules.load_path:");
   load_path += dirname;
-  opts.push_back(load_path);
-  opts.push_back("-o");
-  opts.push_back("logger.enable:NO");
-  opts.push_back("-o");
-  opts.push_back("manager.corba_servant:NO");
+  opts.emplace_back(load_path);
+  opts.emplace_back("-o");
+  opts.emplace_back("logger.enable:NO");
+  opts.emplace_back("-o");
+  opts.emplace_back("manager.corba_servant:NO");
 
   // Manager initialization
   RTC::Manager::init(static_cast<int>(opts.size()), coil::Argv(opts).get());
@@ -83,7 +83,7 @@ int main(int argc, char* argv[])
               exists = true;
             }
         }
-      if (!exists) { profs.push_back(propnew); }
+      if (!exists) { profs.emplace_back(std::move(propnew)); }
     }
 
   // loaded component profile have to be one

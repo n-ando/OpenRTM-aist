@@ -80,7 +80,7 @@ namespace SDOPackage
         addOrganizationToTarget(member);
         addParticipantToEC(member);
         addPort(member, m_expPorts);
-        m_rtcMembers.push_back(member);
+        m_rtcMembers.emplace_back(member);
       }
 
     CORBA::Boolean result;
@@ -129,7 +129,7 @@ namespace SDOPackage
         addOrganizationToTarget(member);
         addParticipantToEC(member);
         addPort(member, m_expPorts);
-        m_rtcMembers.push_back(member);
+        m_rtcMembers.emplace_back(member);
       }
 
     CORBA::Boolean result;

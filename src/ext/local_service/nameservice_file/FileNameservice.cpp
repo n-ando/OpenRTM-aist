@@ -196,7 +196,7 @@ namespace RTM
                 }
               RTC_INFO(("RTC %s's IOR has been successfully registered: %s",
                         filename.string().c_str(), filepath.string().c_str()));
-              m_files.push_back(filepath.string());
+              m_files.emplace_back(filepath.string());
             }
           catch (...)
             {
@@ -390,7 +390,7 @@ namespace RTM
       CORBA::String_var ior =
         RTC::Manager::instance().getORB()->object_to_string(objref);
       coil::vstring ns_info;
-      ns_info.push_back(static_cast<const char*>(ior));
+      ns_info.emplace_back(static_cast<const char*>(ior));
       m_fns.onRegisterNameservice(name, ns_info);
     }
     

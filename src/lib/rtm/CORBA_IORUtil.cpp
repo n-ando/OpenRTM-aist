@@ -331,7 +331,7 @@ namespace CORBA_IORUtil
           {
             IIOP::ProfileBody pBody;
             IIOP::unmarshalProfile(ior.profiles[i], pBody);
-            addr.push_back(pBody.address);
+            addr.emplace_back(pBody.address);
             extractAddrs(pBody.components, addr);
           }
         else if (ior.profiles[i].tag == IOP::TAG_MULTIPLE_COMPONENTS)
@@ -367,7 +367,7 @@ namespace CORBA_IORUtil
             IIOP::Address v;
             v.host = e.unmarshalRawString();
             v.port <<= e;
-            addr.push_back(v);
+            addr.emplace_back(v);
           }
       }
 #else // ORB_IS_RTORB

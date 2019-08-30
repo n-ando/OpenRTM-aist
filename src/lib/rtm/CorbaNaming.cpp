@@ -989,7 +989,7 @@ namespace RTC
         found_pos = input.find(delimiter, begin_pos);
         if (found_pos == std::string::npos)
           {
-            results.push_back(input.substr(pre_pos));
+            results.emplace_back(input.substr(pre_pos));
             break;
           }
         if ('\\' == input.at(found_pos - 1))
@@ -1002,7 +1002,7 @@ namespace RTC
 
         if (substr_size > 0)
           {
-            results.push_back(input.substr(pre_pos, substr_size));
+            results.emplace_back(input.substr(pre_pos, substr_size));
           }
         begin_pos = found_pos + delim_size;
         pre_pos   = found_pos + delim_size;

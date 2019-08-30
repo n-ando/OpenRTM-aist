@@ -102,27 +102,27 @@ namespace RTC
   {
     //------------------------------------------------------------
     // SDO service provider
-    ::coil::vstring enabledProviderTypes
-      = ::coil::split(prop["sdo.service.provider.enabled_services"], ",", true);
+    coil::vstring enabledProviderTypes{
+      coil::split(prop["sdo.service.provider.enabled_services"], ",", true)};
     RTC_DEBUG(("sdo.service.provider.enabled_services: %s",
                prop["sdo.service.provider.enabled_services"].c_str()));
 
-    ::coil::vstring availableProviderTypes
-        = SdoServiceProviderFactory::instance().getIdentifiers();
+    coil::vstring availableProviderTypes{
+      SdoServiceProviderFactory::instance().getIdentifiers()};
     coil::Properties tmp;
     tmp["sdo.service.provider.available_services"]
       = coil::flatten(availableProviderTypes);
-    m_rtobj.setProperties(tmp);
     RTC_DEBUG(("sdo.service.provider.available_services: %s",
                tmp["sdo.service.provider.available_services"].c_str()));
+    m_rtobj.setProperties(std::move(tmp));
 
     // If types include '[Aa][Ll][Ll]', all types enabled in this RTC
-    ::coil::vstring activeProviderTypes;
+    coil::vstring activeProviderTypes;
     for (auto & enabledProviderType : enabledProviderTypes)
       {
         if (coil::toLower(enabledProviderType) == "all")
           {
-            activeProviderTypes = availableProviderTypes;
+            activeProviderTypes = std::move(availableProviderTypes);
             RTC_DEBUG(("sdo.service.provider.enabled_services: ALL"));
             break;
           }
@@ -130,7 +130,7 @@ namespace RTC
           {
             if (availableProviderType == enabledProviderType)
               {
-                activeProviderTypes.push_back(availableProviderType);
+                activeProviderTypes.emplace_back(std::move(availableProviderType));
               }
           }
       }
@@ -156,7 +156,7 @@ namespace RTC
             delete svc;
             continue;
           }
-        m_providers.push_back(svc);
+        m_providers.emplace_back(svc);
       }
   }
 
@@ -167,7 +167,7 @@ namespace RTC
     // getting consumer types from RTC's properties
 
     ::std::string constypes = prop["sdo.service.consumer.enabled_services"];
-    m_consumerTypes = ::coil::split(constypes, ",", true);
+    m_consumerTypes = coil::split(constypes, ",", true);
     RTC_DEBUG(("sdo.service.consumer.enabled_services: %s", constypes.c_str()));
 
     coil::Properties tmp;
@@ -272,7 +272,7 @@ namespace RTC
             return false;
           }
       }
-    m_providers.push_back(provider);
+    m_providers.emplace_back(provider);
     return true;
   }
 
@@ -382,7 +382,7 @@ namespace RTC
                NVUtil::toString(sProfile.properties).c_str()));
 
     // store consumer
-    m_consumers.push_back(consumer);
+    m_consumers.emplace_back(consumer);
 
     return true;
   }

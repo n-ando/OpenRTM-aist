@@ -568,7 +568,7 @@ namespace RTC
     name = createNamingObj(method, name_server);
 
     std::lock_guard<std::mutex> guard(m_namesMutex);
-    m_names.push_back(new NamingService(method, name_server, name));
+    m_names.emplace_back(new NamingService(method, name_server, name));
   }
 
   /*!
@@ -736,7 +736,7 @@ namespace RTC
       // unbindObject modifiy m_compNames
       for (auto & compName : m_compNames)
         {
-          names.push_back(compName->name);
+          names.emplace_back(compName->name);
         }
       for (auto & name : names)
         {
@@ -750,7 +750,7 @@ namespace RTC
       // unbindObject modifiy m_mgrNames
       for (auto & mgrName : m_mgrNames)
         {
-          names.push_back(mgrName->name);
+          names.emplace_back(mgrName->name);
         }
       for (auto & name : names)
         {
@@ -773,7 +773,7 @@ namespace RTC
 
     for (auto & compName : m_compNames)
       {
-        comps.push_back(const_cast<RTObject_impl*>(compName->rtobj));
+        comps.emplace_back(const_cast<RTObject_impl*>(compName->rtobj));
       }
     return comps;
   }
@@ -857,7 +857,7 @@ namespace RTC
             return;
           }
       }
-    m_compNames.push_back(new Comps(name, rtobj));
+    m_compNames.emplace_back(new Comps(name, rtobj));
     return;
   }
   /*!
@@ -878,7 +878,7 @@ namespace RTC
             return;
           }
       }
-    m_portNames.push_back(new Port(name, port));
+    m_portNames.emplace_back(new Port(name, port));
     return;
   }
   void NamingManager::registerMgrName(const char* name,
@@ -892,7 +892,7 @@ namespace RTC
             return;
           }
       }
-    m_mgrNames.push_back(new Mgr(name, mgr));
+    m_mgrNames.emplace_back(new Mgr(name, mgr));
     return;
   }
 

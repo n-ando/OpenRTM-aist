@@ -562,11 +562,11 @@ namespace CORBA_RTCUtil
       {
         RTC::PortProfile* pp = ports[i]->get_port_profile();
 #ifdef ORB_IS_TAO
-		std::string s(pp->name);
+        std::string s(pp->name);
 #else
         std::string s(static_cast<char*>(pp->name));
 #endif
-        names.push_back(s);
+        names.emplace_back(std::move(s));
       }
     return names;
   }
@@ -599,11 +599,11 @@ namespace CORBA_RTCUtil
         if (prop["port.port_type"] == "DataInPort")
           {
 #ifdef ORB_IS_TAO
-			std::string s(pp->name);
+            std::string s(pp->name);
 #else
             std::string s(static_cast<char*>(pp->name));
 #endif
-            names.push_back(s);
+            names.emplace_back(std::move(s));
           }
       }
     return names;
@@ -637,11 +637,11 @@ namespace CORBA_RTCUtil
         if (prop["port.port_type"] == "DataOutPort")
           {
 #ifdef ORB_IS_TAO
-			std::string s(pp->name);
+            std::string s(pp->name);
 #else
             std::string s(static_cast<char*>(pp->name));
 #endif
-            names.push_back(s);
+            names.emplace_back(std::move(s));
           }
       }
     return names;
@@ -677,11 +677,11 @@ namespace CORBA_RTCUtil
         if (prop["port.port_type"] == "CorbaPort")
           {
 #ifdef ORB_IS_TAO
-			std::string s(pp->name);
+            std::string s(pp->name);
 #else
             std::string s(static_cast<char*>(pp->name));
 #endif
-            names.push_back(s);
+            names.emplace_back(std::move(s));
           }
       }
     return names;
@@ -707,7 +707,7 @@ namespace CORBA_RTCUtil
     RTC::ConnectorProfileList conprof = (*port->get_connector_profiles());
     for (unsigned int i = 0; i < conprof.length(); i++)
       {
-        names.push_back(std::string(conprof[i].name));
+        names.emplace_back(conprof[i].name);
       }
     return names;
   }
@@ -735,7 +735,7 @@ namespace CORBA_RTCUtil
     RTC::ConnectorProfileList conprof = (*port->get_connector_profiles());
     for (unsigned int i = 0; i < conprof.length(); i++)
       {
-        names.push_back(std::string(conprof[i].name));
+        names.emplace_back(conprof[i].name);
       }
     return names;
   }
@@ -760,7 +760,7 @@ namespace CORBA_RTCUtil
     RTC::ConnectorProfileList conprof = (*port->get_connector_profiles());
     for (unsigned int i = 0; i < conprof.length(); i++)
       {
-        names.push_back(std::string(conprof[i].connector_id));
+        names.emplace_back(conprof[i].connector_id);
       }
     return names;
   }
@@ -788,7 +788,7 @@ namespace CORBA_RTCUtil
     RTC::ConnectorProfileList conprof = (*port->get_connector_profiles());
     for (unsigned int i = 0; i < conprof.length(); i++)
       {
-        names.push_back(std::string(conprof[i].connector_id));
+        names.emplace_back(conprof[i].connector_id);
       }
     return names;
   }

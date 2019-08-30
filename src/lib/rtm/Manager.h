@@ -2333,7 +2333,7 @@ namespace RTC
     {
       void operator()(FactoryBase* f)
       {
-        modlist.push_back(f->profile().getProperty("implementation_id"));
+        modlist.emplace_back(f->profile().getProperty("implementation_id"));
       }
       std::vector<std::string> modlist;
     };

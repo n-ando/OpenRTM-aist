@@ -208,7 +208,7 @@ void MachineBase::add_deferred_event(EventBase * event,
       return;
     }
     deferred_events_[name] = event;
-    deferred_names_.push_back(name);
+    deferred_names_.emplace_back(name);
   } catch (std::exception& /*ex*/) {  // NOLINT
   }
 }

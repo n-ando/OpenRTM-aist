@@ -1288,7 +1288,7 @@ namespace RTM
                     std::string name = sleave_prop["manager.instance_name"];
                     if (isProcessIDManager(name))
                       {
-                        slaves_names.push_back(name);
+                        slaves_names.emplace_back(std::move(name));
                       }
                   }
                 catch (...)

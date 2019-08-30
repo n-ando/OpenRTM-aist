@@ -280,7 +280,7 @@ namespace RTC
 
     coil::Properties& p(m_configsets.getNode(node));
     p << config_set;
-    m_newConfig.push_back(node);
+    m_newConfig.emplace_back(std::move(node));
 
     m_changed = true;
     m_active = false;
@@ -497,7 +497,7 @@ namespace RTC
   void
   ConfigAdmin::onUpdateParam(const char* config_param, const char* config_value)
   {
-    m_changedParam.push_back(config_param);
+    m_changedParam.emplace_back(config_param);
     m_listeners.configparam_[ON_UPDATE_CONFIG_PARAM].notify(config_param,
                                                             config_value);
   }

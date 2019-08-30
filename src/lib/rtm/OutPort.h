@@ -251,7 +251,7 @@ namespace RTC
                     RTC::ConnectorProfile prof(findConnProfile(id));
                     (*m_onConnectionLost)(prof);
                   }
-                disconnect_ids.push_back(id);
+                disconnect_ids.emplace_back(id);
               }
           }
       }
