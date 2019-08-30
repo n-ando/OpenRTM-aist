@@ -38,8 +38,8 @@ namespace RTC
 #ifdef RTM_OS_WIN32
   const char* const ManagerConfig::config_file_path[] = 
     {
-      "./rtc.conf",
-      "${PROGRAMDATA}/OpenRTM-aist/rtc.conf",
+      ".\\rtc.conf",
+      "${PROGRAMDATA}\\OpenRTM-aist\\rtc.conf",
       nullptr
     };
 #else
