@@ -399,19 +399,25 @@ namespace coil
    * @brief 文字列を分割文字で分割する
    *
    * 設定された文字列を与えられたデリミタで分割する。
+   * 注意: input が空文字列の場合、ignore_empty の指定に関わらず、
+   * 常に空リストを返す。
    *
    * @param input 分割対象文字列
    * @param delimiter 分割文字列(デリミタ)
+   * @param ignore_empty 空文字列を登録可否
    *
    * @return 文字列分割結果リスト
    *
    * @else
    * @brief Split string by delimiter
    *
-   * Split the set string by the given delimiter
+   * Split the set string by the given delimiter.
+   * Note: If this function is called with 'input' == "", it ignore
+   * 'ignore_empty' and return an empty list.
    *
    * @param input The target characters of string for split
    * @param delimiter Split string (delimiter)
+   * @param ignore_empty ignore empty strings or not
    *
    * @return Split string result list
    *
