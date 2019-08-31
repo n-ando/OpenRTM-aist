@@ -325,6 +325,7 @@ namespace coil
                 const std::string& delimiter,
                 bool ignore_empty)
   {
+    if (input.empty()) { return {}; }
     if (delimiter.empty()) { return {eraseBothEndsBlank(input)}; }
 
     vstring results;
