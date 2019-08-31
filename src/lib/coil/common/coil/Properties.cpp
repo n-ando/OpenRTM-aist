@@ -71,7 +71,7 @@ namespace coil
    * @brief Constructor(Give the default value with char*[])
    * @endif
    */
-  Properties::Properties(const char* const defaults[], long num)
+  Properties::Properties(const char* const defaults[], size_t num)
   {
     leaf.clear();
     setDefaults(defaults, num);
@@ -306,9 +306,9 @@ namespace coil
    * @brief Set a default value together in the property list
    * @endif
    */
-  void Properties::setDefaults(const char* const defaults[], long num)
+  void Properties::setDefaults(const char* const defaults[], size_t num)
   {
-    for (long i = 0; i < num && defaults[i][0] != '\0' ; i += 2)
+    for (size_t i = 0; i < num && defaults[i][0] != '\0' ; i += 2)
       {
         setDefault(eraseBothEndsBlank(defaults[i]),
                    eraseBothEndsBlank(defaults[i + 1]));
@@ -420,7 +420,7 @@ namespace coil
     std::vector<std::string> names;
     for (auto prop : leaf)
       {
-        _propertiyNames(names, prop->name, prop);
+        _propertyNames(names, prop->name, prop);
       }
     return names;
   }
@@ -432,9 +432,9 @@ namespace coil
    * @brief Get the number of properties
    * @endif
    */
-  int Properties::size() const
+  size_t Properties::size() const
   {
-    return static_cast<int>(propertyNames().size());
+    return propertyNames().size();
   }
 
   /*!
@@ -687,9 +687,9 @@ namespace coil
    * @endif
    */
   void
-  Properties::_propertiyNames(std::vector<std::string>& names,
-                              const std::string& curr_name,
-                              const Properties* curr)
+  Properties::_propertyNames(std::vector<std::string>& names,
+                             const std::string& curr_name,
+                             const Properties* curr)
   {
     if (!curr->leaf.empty())
       {
@@ -697,7 +697,7 @@ namespace coil
           {
             std::string next_name;
             next_name = curr_name + "." + prop->name;
-            _propertiyNames(names, next_name, prop);
+            _propertyNames(names, next_name, prop);
           }
       }
     else
@@ -753,7 +753,7 @@ namespace coil
    * @endif
    */
   std::ostream&
-  Properties::_dump(std::ostream& out, const Properties& curr, int index)
+  Properties::_dump(std::ostream& out, const Properties& curr, size_t index)
   {
     if (index != 0) out << indent(index) << "- " << curr.name;
     if (curr.leaf.empty())
@@ -783,10 +783,10 @@ namespace coil
    * @brief Create indents
    * @endif
    */
-  std::string Properties::indent(int index)
+  std::string Properties::indent(size_t index)
   {
     std::string space = std::string();
-    for (int i(0); i < index - 1; ++i)
+    for (size_t i(0); i < index - 1; ++i)
       {
         space += "  ";
       }
@@ -800,10 +800,10 @@ namespace coil
    * @brief Create indents
    * @endif
    */
-  std::string indent(int index)
+  std::string indent(size_t index)
   {
     std::string space;
-    for (int i(0); i < index - 1; ++i)
+    for (size_t i(0); i < index - 1; ++i)
       {
         space += "  ";
       }
@@ -832,7 +832,7 @@ namespace coil
       return out;
   }
 
-  void Properties::_dump(std::string& out, const Properties& curr, int index) const
+  void Properties::_dump(std::string& out, const Properties& curr, size_t index) const
   {
       if (index != 0) out += indent(index) + "- " + curr.name;
       if (curr.leaf.empty())
@@ -854,7 +854,7 @@ namespace coil
       }
   }
 
-  void Properties::_dump(std::vector<std::string>& out, const Properties& curr, int index) const
+  void Properties::_dump(std::vector<std::string>& out, const Properties& curr, size_t index) const
   {
       if (index != 0) out.emplace_back(indent(index) + "- " + curr.name);
       if (curr.leaf.empty())

@@ -20,12 +20,10 @@
 #ifndef COIL_PROPERTIES_H
 #define COIL_PROPERTIES_H
 
-
+#include <limits>
 #include <string>
 #include <vector>
 #include <map>
-#include <climits>
-
 
 /*!
  * @if jp
@@ -175,7 +173,7 @@ namespace coil
      * </pre>
      *
      * @param defaults デフォルト値を指定する配列
-     * @param num デフォルト値を設定する要素数(デフォルト値:LONG_MAX)
+     * @param num デフォルト値を設定する要素数(デフォルト値:max of size_t)
      *
      * @else
      *
@@ -203,11 +201,12 @@ namespace coil
      *
      * @param defaults Array that specifies the default values
      * @param num Number of elements that specifies the default value
-     *            (The default value:LONG_MAX)
+     *            (The default value:max of size_t)
      *
      * @endif
      */
-    explicit Properties(const char* const defaults[], long num = LONG_MAX);
+    explicit Properties(const char* const defaults[],
+                        size_t num = std::numeric_limits<size_t>::max());
 
     /*!
      * @if jp
@@ -578,7 +577,7 @@ namespace coil
      * なければならない。
      *
      * @param defaults デフォルト値を指定する配列
-     * @param num デフォルト値を設定する要素数(デフォルト値:LONG_MAX)
+     * @param num デフォルト値を設定する要素数(デフォルト値:max of size_t)
      *
      * @else
      * @brief Set a default value together in the property list
@@ -591,11 +590,12 @@ namespace coil
      *
      * @param defaults Array that specifies the default values
      * @param num Number of elements that specifies the default value
-     *            (Default value:LONG_MAX)
+     *            (Default value:max of size_t)
      *
      * @endif
      */
-    void setDefaults(const char* const defaults[], long num = LONG_MAX);
+    void setDefaults(const char* const defaults[],
+                     size_t num = std::numeric_limits<size_t>::max());
 
     //============================================================
     // load and save functions
@@ -909,7 +909,7 @@ namespace coil
      *
      * @endif
      */
-    int size() const;
+    size_t size() const;
 
     /*!
      * @if jp
@@ -1099,7 +1099,7 @@ namespace coil
      *
      * @endif
      */
-    void _dump(std::string& out, const Properties& curr, int index) const;
+    void _dump(std::string& out, const Properties& curr, size_t index) const;
 
     /*!
      * @if jp
@@ -1118,7 +1118,7 @@ namespace coil
      *
      * @endif
      */
-    void _dump(std::vector<std::string>& out, const Properties& curr, int index) const;
+    void _dump(std::vector<std::string>& out, const Properties& curr, size_t index) const;
 
   protected:
     /*!
@@ -1251,9 +1251,9 @@ namespace coil
      *
      * @endif
      */
-    static void _propertiyNames(std::vector<std::string>& names,
-                                const std::string& curr_name,
-                                const Properties* curr);
+    static void _propertyNames(std::vector<std::string>& names,
+                               const std::string& curr_name,
+                               const Properties* curr);
 
     /*!
      * @if jp
@@ -1307,7 +1307,7 @@ namespace coil
      * @endif
      */
     static std::ostream& _dump(std::ostream& out, const Properties& curr,
-                               int index);
+                               size_t index);
 
     /*!
      * @if jp
@@ -1332,7 +1332,7 @@ namespace coil
      *
      * @endif
      */
-    static std::string indent(int index);
+    static std::string indent(size_t index);
 
   private:
     std::string name = "";
@@ -1371,4 +1371,3 @@ namespace coil
   };  // class Properties
 } // namespace coil
 #endif  // COIL_PROPERTIES_H
-
