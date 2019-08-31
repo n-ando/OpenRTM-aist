@@ -19,11 +19,7 @@
 
 #include <coil/TimeMeasure.h>
 #include <cmath>
-
-
-#ifndef ULLONG_MAX
-#define ULLONG_MAX 0xffffffffffffffffULL
-#endif
+#include <limits>
 
 namespace coil
 {
@@ -127,8 +123,8 @@ namespace coil
                                   double &mean_interval,
                                   double &stddev)
   {
-    max_interval = static_cast<double>(0);
-    min_interval = static_cast<double>(ULLONG_MAX);
+    max_interval = .0;
+    min_interval = static_cast<double>(std::numeric_limits<uint64_t>::max());
 
     double sum = 0;
     double sq_sum = 0;
