@@ -24,6 +24,37 @@
 
 namespace coil
 {
+  static int    opterr = 1,     /* if error message should be printed */
+                optind = 1,     /* index into parent argv vector */
+                optopt,         /* character checked for validity */
+                optreset;       /* reset getopt */
+  static char* optarg;          /* argument associated with option */
+
+  static int const BADCH{static_cast<int>('?')};
+  static int const BADARG{static_cast<int>(':')};
+  static char EMSG[]{""};
+
+  /*!
+   * @if jp
+   *
+   * @brief コマンドライン引数解析関数
+   *
+   * コマンドライン引数を解析する。
+   *
+   * @return 解析結果
+   *
+   * @else
+   *
+   * @brief Function of parses the command line arguments
+   *
+   * Parses the command line arguments.
+   *
+   * @return Result of parses.
+   *
+   * @endif
+   */
+  static int getopt(int nargc, char * const *nargv, const char *ostr);
+
   osversion::osversion() : major(0), minor(0)
     {
 
@@ -187,14 +218,10 @@ namespace coil
                 sprintf_s(name->release, sizeof(name->release), os,
                     static_cast<int>(version_info.dwMajorVersion),
                     static_cast<int>(version_info.dwMinorVersion));
-
                 break;
             }
-
-
         }
     }
-
 
     // name.machine
     SYSTEM_INFO sys_info;
@@ -392,9 +419,9 @@ namespace coil
   }
 
 
-  GetOpt::GetOpt(int argc, char* const argv[], const char* opt, int flag)
+  GetOpt::GetOpt(int argc, char* const argv[], const char* opt, int /*flag*/)
     : optind(1), opterr(1), optopt(0),
-      m_argc(argc), m_argv(argv), m_opt(opt), m_flag(flag)
+      m_argc(argc), m_argv(argv), m_opt(opt)
   {
     this->optarg = coil::optarg;
     coil::optind = 1;
