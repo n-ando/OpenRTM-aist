@@ -592,10 +592,11 @@ namespace RTC
           }
 
           cdr->serialize(data);
+          cdrdata.setDataLength(cdr->getDataLength());
+          cdr->readData(cdrdata.getBuffer(), cdrdata.getDataLength());
       }
 
-      cdrdata.setDataLength(cdr->getDataLength());
-      cdr->readData(cdrdata.getBuffer(), cdrdata.getDataLength());
+      
 
       coil::GlobalFactory < ::RTC::ByteDataStream<DataType> >::instance().deleteObject(cdr);
   
