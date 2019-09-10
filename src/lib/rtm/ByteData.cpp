@@ -108,8 +108,12 @@ namespace RTC
      */
     ByteData& ByteData::operator= (const ByteData &rhs)
     {
-        m_len = rhs.m_len;
-        m_buf = new unsigned char[m_len];
+        if(m_len != rhs.m_len)
+        {
+            m_len = rhs.m_len;
+            delete[] m_buf;
+            m_buf = new unsigned char[m_len];
+        }
         memcpy(m_buf, rhs.m_buf, m_len);
         return *this;
     }
@@ -133,8 +137,12 @@ namespace RTC
      */
     ByteData& ByteData::operator= (const ByteDataStreamBase &rhs)
     {
-        m_len = rhs.getDataLength();
-        m_buf = new unsigned char[m_len];
+        if(m_len != rhs.getDataLength())
+        {
+            m_len = rhs.getDataLength();
+            delete[] m_buf;
+            m_buf = new unsigned char[m_len];
+        }
         rhs.readData(m_buf, m_len);
         return *this;
     }
@@ -237,11 +245,13 @@ namespace RTC
         {
             return;
         }
-        
-        delete[] m_buf;
-        
-        m_len = length;
-        m_buf = new unsigned char[length];
+
+        if(m_len != length)
+        {
+            delete[] m_buf;
+            m_len = length;
+            m_buf = new unsigned char[length];
+        }
         memcpy(m_buf, data, length);
     }
     /*!
@@ -284,7 +294,7 @@ namespace RTC
      */
     void ByteData::setDataLength(unsigned long length)
     {
-        if (length <= 0)
+        if (length <= 0 || m_len == length)
         {
             return;
         }
