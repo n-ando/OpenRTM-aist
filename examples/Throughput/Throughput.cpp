@@ -17,7 +17,7 @@
 
 // Module specification
 // <rtc-template block="module_spec">
-static const char* const analyzer_spec[] =
+static const char* const throughput_spec[] =
   {
     "implementation_id", "Throughput",
     "type_name",         "Throughput",
@@ -538,7 +538,7 @@ extern "C"
  
   void ThroughputInit(RTC::Manager* manager)
   {
-    coil::Properties profile(analyzer_spec);
+    coil::Properties profile(throughput_spec);
     manager->registerFactory(profile,
                              RTC::Create<Throughput>,
                              RTC::Delete<Throughput>);
