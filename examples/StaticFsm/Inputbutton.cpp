@@ -12,7 +12,7 @@
 
 // Module specification
 // <rtc-template block="module_spec">
-static const char* const inputbuttom_spec[] =
+static const char* const inputbutton_spec[] =
   {
     "implementation_id", "Inputbutton",
     "type_name",         "Inputbutton",
