@@ -11,11 +11,11 @@
 
 // Module specification
 // <rtc-template block="module_spec">
-static const char* const consoleout_spec[] =
+static const char* const display_spec[] =
   {
     "implementation_id", "Display",
     "type_name",         "Display",
-    "description",       "Console output component",
+    "description",       "Display component for Microwave example",
     "version",           "1.0",
     "vendor",            "Noriaki Ando, AIST",
     "category",          "example",
@@ -113,7 +113,7 @@ extern "C"
 {
   void DisplayInit(RTC::Manager* manager)
   {
-    coil::Properties profile(consoleout_spec);
+    coil::Properties profile(display_spec);
     manager->registerFactory(profile,
                              RTC::Create<Display>,
                              RTC::Delete<Display>);
