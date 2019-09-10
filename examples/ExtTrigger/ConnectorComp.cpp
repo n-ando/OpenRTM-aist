@@ -80,16 +80,16 @@ int main (int argc, char** argv)
       if (arg == "--flush")         subs_type = "flush";
       else if (arg == "--new")      subs_type = "new";
       else if (arg == "--periodic")
-	{
-	  subs_type = "periodic";
-	  if (++i < argc) period = argv[i];
-	  else            period = "1.0";
-	}
+        {
+          subs_type = "periodic";
+          if (++i < argc) period = argv[i];
+          else            period = "1.0";
+        }
       else if (arg == "--help")
-	{
-	  usage();
-	  exit(1);
-	}
+        {
+          usage();
+          exit(1);
+        }
       else if (arg == "--policy")
 	{
 	  if (++i < argc)
@@ -101,16 +101,16 @@ int main (int argc, char** argv)
 	  else            push_policy = "new";
 	}
       else if (arg == "--skip")
-	{
-	  if (++i < argc) skip_count = argv[i];
-	  else            skip_count = "0";
-	}
+        {
+          if (++i < argc) skip_count = argv[i];
+          else            skip_count = "0";
+        }
       else
-	{
-	  subs_type = "flush";
-	}
+        {
+          subs_type = "flush";
+        }
     }
-  
+
   std::cout << "Subscription Type: " << subs_type << std::endl;
   if (!period.empty())
     std::cout << "Period: " << period << " [Hz]" << std::endl;
@@ -198,33 +198,32 @@ int main (int argc, char** argv)
   while (true)
     {
       try
-	{
-	  std::cout << std::endl;
-	  std::cout << std::endl;
-	  std::cout << "0: tick ConsoleIn component" << std::endl;
-	  std::cout << "1: tick ConsoleOut component" << std::endl;
-	  std::cout << "2: tick both components" << std::endl;
-	  std::cout << "cmd? >";
-	  std::cin >> cmd;
-	  if (cmd == "0")
-	    {
-	      ec0->tick();
-	    }
-	  else if (cmd == "1")
-	    {
-	      ec1->tick();
-	    }
-	  else if (cmd == "2")
-	    {
-	      ec0->tick();
-	      ec1->tick();
-	    }
-	}
+        {
+          std::cout << std::endl;
+          std::cout << std::endl;
+          std::cout << "0: tick ConsoleIn component" << std::endl;
+          std::cout << "1: tick ConsoleOut component" << std::endl;
+          std::cout << "2: tick both components" << std::endl;
+          std::cout << "cmd? >";
+          std::cin >> cmd;
+          if (cmd == "0")
+            {
+              ec0->tick();
+            }
+          else if (cmd == "1")
+            {
+              ec1->tick();
+            }
+          else if (cmd == "2")
+            {
+              ec0->tick();
+              ec1->tick();
+            }
+        }
       catch (...)
-	{
-	}
+        {
+        }
     }
   orb->destroy();
   exit(1);
 }
-

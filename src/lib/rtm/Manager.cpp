@@ -228,11 +228,7 @@ namespace RTC
         return false;
       }
 
-    std::vector<std::string> lsvc;
-    lsvc = coil::split(m_config["manager.local_service.modules"], ",");
-
-
-    for (auto & itr : lsvc)
+    for (auto const& itr : coil::split(m_config["manager.local_service.modules"], ","))
       {
         size_t begin_pos(itr.find_first_of('('));
         size_t end_pos(itr.find_first_of(')'));
@@ -280,10 +276,7 @@ namespace RTC
 
     initLocalService();
 
-    std::vector<std::string> mods;
-    mods = coil::split(m_config["manager.modules.preload"], ",");
-
-    for (auto & mod : mods)
+    for (auto const& mod : coil::split(m_config["manager.modules.preload"], ","))
       {
         size_t begin_pos(mod.find_first_of('('));
         size_t end_pos(mod.find_first_of(')'));
@@ -341,14 +334,10 @@ namespace RTC
     m_config["sdo.service.consumer.available_services"]
       = coil::flatten(SdoServiceConsumerFactory::instance().getIdentifiers());
 
-
-
-
-
-	invokeInitProc();
-	initPreCreation();
-	initPreConnection();
-	initPreActivation();
+    invokeInitProc();
+    initPreCreation();
+    initPreConnection();
+    initPreActivation();
 
     return true;
   }
@@ -575,7 +564,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     std::vector<FactoryBase*> factories(m_factory.getObjects());
     std::vector<coil::Properties> props;
     props.reserve(factories.size());
-    for(auto & factorie : factories)
+    for(auto const& factorie : factories)
       {
         props.emplace_back(factorie->profile());
       }
@@ -846,55 +835,49 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     coil::vstring names(comp->getNamingNames());
 
     m_listeners.naming_.preBind(comp, names);
-    for (auto & name : names)
+    for (auto const& name : names)
       {
         RTC_TRACE(("Bind name: %s", name.c_str()));
         m_namingManager->bindObject(name.c_str(), comp);
       }
     m_listeners.naming_.postBind(comp, names);
 
-	publishPorts(comp);
-	subscribePorts(comp);
+    publishPorts(comp);
+    subscribePorts(comp);
 
 
-	try
-	{
-		std::string id_str = comp->getCategory();
-		id_str = id_str + "." + comp->getInstanceName();
+    try
+      {
+        std::string id_str = comp->getCategory();
+        id_str = id_str + "." + comp->getInstanceName();
 
 #ifndef ORB_IS_TAO
-		CORBA::Object_ptr obj = theORB()->resolve_initial_references("omniINSPOA");
-		PortableServer::POA_ptr poa = PortableServer::POA::_narrow(obj);
-		poa->the_POAManager()->activate();
+        CORBA::Object_ptr obj = theORB()->resolve_initial_references("omniINSPOA");
+        PortableServer::POA_ptr poa = PortableServer::POA::_narrow(obj);
+        poa->the_POAManager()->activate();
 
-		
-
-		PortableServer::ObjectId_var id;
-
+        PortableServer::ObjectId_var id;
 #ifndef ORB_IS_RTORB
-		id = PortableServer::string_to_ObjectId(id_str.c_str());
+        id = PortableServer::string_to_ObjectId(id_str.c_str());
 #else // ORB_IS_RTORB
-		id = PortableServer::
-			string_to_ObjectId((char *)id_str.c_str());
+        id = PortableServer::
+             string_to_ObjectId((char *)id_str.c_str());
 #endif // ORB_IS_RTORB
 
-		poa->activate_object_with_id(id.in(), comp);
-
-		CORBA::Object_var rtcobj = poa->id_to_reference(id);
-		comp->setINSObjRef(::RTC::LightweightRTObject::_narrow(rtcobj));
+        poa->activate_object_with_id(id.in(), comp);
+        CORBA::Object_var rtcobj = poa->id_to_reference(id);
+        comp->setINSObjRef(::RTC::LightweightRTObject::_narrow(rtcobj));
 #else
-		CORBA::Object_var obj = theORB()->resolve_initial_references("IORTable");
-		IORTable::Table_var adapter = IORTable::Table::_narrow(obj.in());
+        CORBA::Object_var obj = theORB()->resolve_initial_references("IORTable");
+        IORTable::Table_var adapter = IORTable::Table::_narrow(obj.in());
 
-		CORBA::String_var ior = theORB()->object_to_string(comp->getObjRef());
-		adapter->bind(id_str.c_str(), ior.in());
+        CORBA::String_var ior = theORB()->object_to_string(comp->getObjRef());
+        adapter->bind(id_str.c_str(), ior.in());
 
-		comp->setINSObjRef(comp->getObjRef());
+        comp->setINSObjRef(comp->getObjRef());
 #endif
-	}
-	catch (...)
-	{
-	}
+      }
+    catch (...) {}
 
     return true;
   }
@@ -915,7 +898,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     coil::vstring names(comp->getNamingNames());
 
     m_listeners.naming_.preUnbind(comp, names);
-    for (auto & name : names)
+    for (auto const& name : names)
       {
         RTC_TRACE(("Unbind name: %s", name.c_str()));
         m_namingManager->unbindObject(name.c_str());
@@ -1209,8 +1192,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     m_module = new ModuleManager(m_config);
 
     // initialize Timer
-    m_needsTimer
-      = coil::toBool(m_config["timer.enable"], "YES", "NO", true);
+    m_needsTimer = coil::toBool(m_config["timer.enable"], "YES", "NO", true);
 
     if (coil::toBool(m_config["manager.shutdown_auto"], "YES", "NO", true)
         && !coil::toBool(m_config["manager.is_master"], "YES", "NO", false)
@@ -1223,37 +1205,36 @@ std::vector<coil::Properties> Manager::getLoadableModules()
           {
             tm = std::chrono::seconds(10);
           }
-        addTask([this]{ if (getComponents().empty()) { terminate(); }}, tm);
+        addTask([this]{
+          if (getComponents().empty()) { terminate();
+        }}, tm);
       }
 
     if (m_needsTimer)
       {
-        addTask([this]{ cleanupComponents(); }, std::chrono::seconds(1));
+        addTask([this]{
+          cleanupComponents();
+        }, std::chrono::seconds(1));
       }
 
+    for (auto const& itr : coil::split(m_config["manager.preload.modules"], ","))
+      {
+        std::string mpm_{coil::eraseBothEndsBlank(std::move(itr))};
+        if (mpm_.empty())
+          {
+              continue;
+          }
+        std::string basename_ = coil::split(mpm_, ".").front() + "Init";
+        try
+        {
+          m_module->load(mpm_, basename_);
+        }
+        catch (...)
+        {
+        }
+      }
 
-	{
-		for (auto & itr : coil::split(m_config["manager.preload.modules"], ","))
-		{
-			std::string mpm_{coil::eraseBothEndsBlank(std::move(itr))};
-			if (mpm_.empty())
-			{
-				continue;
-			}
-			std::string basename_ = coil::split(mpm_, ".").front() + "Init";
-			try
-			{
-				m_module->load(mpm_, basename_);
-			}
-			catch (...)
-			{
-			}
-		}
-
-	}
-	m_config["manager.instance_name"] = formatString(m_config["manager.instance_name"].c_str(), m_config);
-
-
+    m_config["manager.instance_name"] = formatString(m_config["manager.instance_name"].c_str(), m_config);
   }
 
   /*!
@@ -1322,11 +1303,9 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     m_config["logger.file_name"] = 
       formatString(m_config["logger.file_name"].c_str(), m_config);
 
-    std::vector<std::string> logouts =
-      coil::split(m_config["logger.file_name"], ",");
     coil::Properties& logprop = m_config.getNode("logger");
 
-    for (auto & logout : logouts)
+    for (auto const& logout : coil::split(m_config["logger.file_name"], ","))
       {
         if (logout.empty()) { continue; }
 
@@ -1351,8 +1330,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   {
     // loading logstream module
     // create logstream object and attach to the logger
-    coil::vstring mods = coil::split(m_config["logger.plugins"], ",");
-    for (auto & mod : mods)
+    for (auto const& mod : coil::split(m_config["logger.plugins"], ","))
       {
         std::string initfunc;
         if (coil::isAbsolutePath(mod))
@@ -1384,8 +1362,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 
     coil::Properties pp(m_config.getNode("logger.logstream"));
 
-    const std::vector<Properties*>& leaf0 = pp.getLeaf();
-    for (auto i : leaf0)
+    for (auto const i : pp.getLeaf())
       {
         std::string lstype = i->getName();
         LogstreamBase* logstream = factory.createObject(lstype);
@@ -1492,67 +1469,64 @@ std::vector<coil::Properties> Manager::getLoadableModules()
         std::vector<std::string> args;
         coil::vstring opts = coil::split(opt, "\"");
         for(size_t i=0;i < opts.size();i++)
-        {
+          {
             if (i % 2 == 0)
-            {
+              {
                 coil::vstring olist{
                   coil::split(coil::eraseBothEndsBlank(opts[i]), " ")};
-                std::copy(olist.begin(), olist.end(), std::back_inserter(args));
-            }
+                std::move(olist.begin(), olist.end(), std::back_inserter(args));
+              }
             else
-            {
+              {
                 args.emplace_back(opts[i]);
-            }
-         }
-         // TAO's ORB_init needs argv[0] as command name.
-         args.insert(args.begin(), "manager");
-         m_argv = coil::Argv(args);
+              }
+          }
+        // TAO's ORB_init needs argv[0] as command name.
+        args.insert(args.begin(), "manager");
+        m_argv = coil::Argv(args);
 #ifdef ORB_IS_ORBEXPRESS
-         CORBA::ORB::spawn_flags(VX_SPE_TASK | VX_STDIO);
-         CORBA::ORB::stack_size(20000);
-         m_pORB = CORBA::ORB_init(m_argv.size(), m_argv.get(), "");
-         CORBA::Object_var obj =
-         m_pORB->resolve_initial_references((char*)"RootPOA");
-         m_pPOA = PortableServer::POA::_narrow(obj);
+        CORBA::ORB::spawn_flags(VX_SPE_TASK | VX_STDIO);
+        CORBA::ORB::stack_size(20000);
+        m_pORB = CORBA::ORB_init(m_argv.size(), m_argv.get(), "");
+        CORBA::Object_var obj =
+          m_pORB->resolve_initial_references((char*)"RootPOA");
+        m_pPOA = PortableServer::POA::_narrow(obj);
 #else
-         // ORB initialization
-         // ORB_init() of omniORB is too terrible. We cannot release all
-         // arguments until shutdown and the first argument type is int&
-         m_argvSize = static_cast<int>(m_argv.size());
-         m_pORB = CORBA::ORB_init(m_argvSize, m_argv.get());
-         // Get the RootPOA
-         CORBA::Object_var obj =
-         m_pORB->resolve_initial_references((char*)"RootPOA");
-         m_pPOA = PortableServer::POA::_narrow(obj);
+        // ORB initialization
+        // ORB_init() of omniORB is too terrible. We cannot release all
+        // arguments until shutdown and the first argument type is int&
+        m_argvSize = static_cast<int>(m_argv.size());
+        m_pORB = CORBA::ORB_init(m_argvSize, m_argv.get());
+        // Get the RootPOA
+        CORBA::Object_var obj =
+          m_pORB->resolve_initial_references((char*)"RootPOA");
+        m_pPOA = PortableServer::POA::_narrow(obj);
 #endif
-         if (CORBA::is_nil(m_pPOA))
-         {
-             RTC_ERROR(("Could not resolve RootPOA."));
-             return false;
-         }
-         // Get the POAManager
-         m_pPOAManager = m_pPOA->the_POAManager();
+        if (CORBA::is_nil(m_pPOA))
+          {
+            RTC_ERROR(("Could not resolve RootPOA."));
+            return false;
+          }
+        // Get the POAManager
+        m_pPOAManager = m_pPOA->the_POAManager();
 #ifdef ORB_IS_OMNIORB
-         CORBA::PolicyList pl;
-         pl.length(1);
+        CORBA::PolicyList pl;
+        pl.length(1);
 #ifdef RTM_OMNIORB_42
-         pl[0] = omniPolicy::create_local_shortcut_policy(omniPolicy::LOCAL_CALLS_SHORTCUT);
+        pl[0] = omniPolicy::create_local_shortcut_policy(omniPolicy::LOCAL_CALLS_SHORTCUT);
 #else
-         CORBA::Any v;
-         v <<= omniPolicy::LOCAL_CALLS_SHORTCUT;
-         pl[0] = m_pORB->create_policy(omniPolicy::LOCAL_SHORTCUT_POLICY_TYPE, v);
+        CORBA::Any v;
+        v <<= omniPolicy::LOCAL_CALLS_SHORTCUT;
+        pl[0] = m_pORB->create_policy(omniPolicy::LOCAL_SHORTCUT_POLICY_TYPE, v);
 #endif
-         m_pShortCutPOA = m_pPOA->create_POA("shortcut", m_pPOAManager, pl);
+        m_pShortCutPOA = m_pPOA->create_POA("shortcut", m_pPOAManager, pl);
 #endif
 
 #ifdef ORB_IS_OMNIORB
         const char* conf = "corba.alternate_iiop_addresses";
         if (m_config.findNode(conf) != nullptr)
           {
-            coil::vstring addr_list;
-            addr_list = coil::split(m_config[conf], ",", true);
-
-            for (auto & addr : addr_list)
+            for (auto const& addr : coil::split(m_config[conf], ",", true))
               {
                 coil::vstring addr_port = coil::split(addr, ":");
                 if (addr_port.size() == 2)
@@ -1785,14 +1759,9 @@ std::vector<coil::Properties> Manager::getLoadableModules()
       }
 
     // NameServer registration for each method and servers
-    std::vector<std::string> meth(coil::split(m_config["naming.type"], ","));
-
-    for (auto & m : meth)
+    for (auto const& m : coil::split(m_config["naming.type"], ","))
       {
-        std::vector<std::string> names;
-        names = coil::split(m_config[m + ".nameservers"], ",");
-
-        for (auto & name : names)
+        for (auto const& name : coil::split(m_config[m + ".nameservers"], ","))
           {
             RTC_TRACE(("Register Naming Server: %s/%s",                \
                        m.c_str(), name.c_str()));
@@ -1828,9 +1797,8 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   void Manager::shutdownNaming()
   {
     RTC_TRACE(("Manager::shutdownNaming()"));
-    std::vector<RTObject_impl*> comps = getComponents();
 
-    for (auto & comp : comps)
+    for (auto const& comp : getComponents())
       {
         coil::vstring names = comp->getNamingNames();
         m_listeners.naming_.preUnbind(comp, names);
@@ -1910,10 +1878,8 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     std::string& affinity(m_config["manager.cpu_affinity"]);
     RTC_DEBUG(("CPU affinity property: %s", affinity.c_str()));
 
-    coil::vstring tmp = coil::split(affinity, ",", true);
-
     coil::CpuMask cpu_list;
-    for (auto & c : tmp)
+    for (auto const& c : coil::split(affinity, ",", true))
     {
         int num;
         if (coil::stringTo(num, c.c_str()))
@@ -1968,12 +1934,11 @@ std::vector<coil::Properties> Manager::getLoadableModules()
       {
         setEndpointProperty(m_mgrservant->getObjRef());
       }
-    coil::Properties& prop(m_config.getNode("manager"));
-    std::vector<std::string> names(coil::split(prop["naming_formats"], ","));
 
+    coil::Properties& prop(m_config.getNode("manager"));
     if (coil::toBool(prop["is_master"], "YES", "NO", true))
       {
-        for (auto & name : names)
+        for (auto const& name : coil::split(prop["naming_formats"], ","))
           {
             std::string mgr_name(formatString(name.c_str(), prop));
             m_namingManager->bindObject(mgr_name.c_str(), m_mgrservant);
@@ -2008,7 +1973,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
    */
   RTM::ManagerServant& Manager::getManagerServant()
   {
-	  RTC_TRACE(("Manager.getManagerServant()"));
+    RTC_TRACE(("Manager.getManagerServant()"));
     return *m_mgrservant;
   }
 
@@ -2028,8 +1993,8 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   */
   NamingManager* Manager::getNaming()
   {
-	  RTC_TRACE(("Manager.getNaming()"));
-	  return m_namingManager;
+    RTC_TRACE(("Manager.getNaming()"));
+    return m_namingManager;
   }
 
   bool Manager::initLocalService()
@@ -2042,8 +2007,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     RTC_DEBUG(("LocalServiceAdmin's properties:"));
     RTC_DEBUG_STR((prop));
 
-    RTM::LocalServiceProfileList svclist = admin.getServiceProfiles();
-    for (auto & svc : svclist)
+    for (auto const& svc : admin.getServiceProfiles())
       {
         RTC_INFO(("Available local service: %s (%s)",
         svc.name.c_str(), svc.uuid.c_str()));
@@ -2061,9 +2025,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   void Manager::shutdownComponents()
   {
     RTC_TRACE(("Manager::shutdownComponents()"));
-    std::vector<RTObject_impl*> comps;
-    comps = m_namingManager->getObjects();
-    for (auto & comp : comps)
+    for (auto const& comp : m_namingManager->getObjects())
       {
         try
           {
@@ -2076,7 +2038,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
           {
           }
       }
-    for (auto & m_ec : m_ecs)
+    for (auto const& m_ec : m_ecs)
       {
         try {
           PortableServer::RefCountServantBase* servant;
@@ -2117,7 +2079,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     std::lock_guard<std::mutex> guard(m_finalized.mutex);
     RTC_VERBOSE(("%d components are marked as finalized.",
                m_finalized.comps.size()));
-    for (auto & comp : m_finalized.comps)
+    for (auto const& comp : m_finalized.comps)
       {
         deleteComponent(comp);
       }
@@ -2151,41 +2113,38 @@ std::vector<coil::Properties> Manager::getLoadableModules()
         return false;
       }
 
-	//RTM::CompParam::prof_list
-
     if (id_and_conf[0].find(':') == std::string::npos)
       {
-		  std::string id = RTM::CompParam::prof_list[0];
-		  id = id + ":::";
+        std::string id = RTM::CompParam::prof_list[0];
+        id = id + ":::";
 
-		  id_and_conf[0].insert(0, id);
+        id_and_conf[0].insert(0, id);
         id_and_conf[0] += "::";
       }
     std::vector<std::string> id(coil::split(id_and_conf[0], ":"));
 
     // id should be devided into 1 or 5 elements
     // RTC:[vendor]:[category]:impl_id:[version] => 5
-	if (id.size() != RTM::CompParam::prof_list_size)
+    if (id.size() != RTM::CompParam::prof_list_size)
       {
         RTC_ERROR(("Invalid RTC id format.: %s", id_and_conf[0].c_str()));
         return false;
       }
 
-	if (id[0] != RTM::CompParam::prof_list[0])
+    if (id[0] != RTM::CompParam::prof_list[0])
       {
         RTC_ERROR(("Invalid id type: %s", id[0].c_str()));
         return false;
       }
-	for (unsigned int i(1); i < RTM::CompParam::prof_list_size; ++i)
+    for (unsigned int i(1); i < RTM::CompParam::prof_list_size; ++i)
       {
-		  comp_id[RTM::CompParam::prof_list[i]] = id[i];
-		  RTC_TRACE(("RTC basic propfile %s: %s", RTM::CompParam::prof_list[i], id[i].c_str()));
+        comp_id[RTM::CompParam::prof_list[i]] = id[i];
+        RTC_TRACE(("RTC basic propfile %s: %s", RTM::CompParam::prof_list[i], id[i].c_str()));
       }
 
     if (id_and_conf.size() == 2)
       {
-        std::vector<std::string> conf(coil::split(id_and_conf[1], "&"));
-        for (auto & c : conf)
+        for (auto const& c : coil::split(id_and_conf[1], "&"))
           {
             if (c.empty()) { continue; }
             std::vector<std::string> keyval(coil::split(c, "="));
@@ -2217,8 +2176,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 
     if (id_and_conf.size() == 2)
       {
-        std::vector<std::string> conf(coil::split(id_and_conf[1], "&"));
-        for (auto & c : conf)
+        for (auto const& c : coil::split(id_and_conf[1], "&"))
           {
             std::vector<std::string> k(coil::split(c, "="));
             ec_conf[k[0]] = k[1];
@@ -2462,14 +2420,12 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     CORBA::String_var iorstr = theORB()->object_to_string(objref);
     IOP::IOR ior;
     CORBA_IORUtil::toIOR(iorstr, ior);
-    std::vector<IIOP::Address> endpoints;
-    endpoints = CORBA_IORUtil::getEndpoints(ior);
 
     coil::vstring epstr, epstr_ipv4, epstr_ipv6;
     size_t ipv4_count(0), ipv6_count(0);
 
     coil::vstring addrs;
-    for (auto & endpoint : endpoints)
+    for (auto const& endpoint : CORBA_IORUtil::getEndpoints(ior))
       {
         std::string addr(endpoint.host);
         if (ipv4 && coil::isIPv4(addr))
@@ -2535,8 +2491,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     par_end = pos;
 
     std::string list_num(ep_prop.substr(par_begin + 1, par_end - 1));
-    coil::vstring nums = coil::split(list_num, ",");
-    for (auto & num : nums)
+    for (auto const& num : coil::split(list_num, ","))
       {
         int n;
         if (coil::stringTo(n, num.c_str()))
@@ -2566,166 +2521,157 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   */
   void Manager::initPreConnection()
   {
-	  RTC_TRACE(("Connection pre-connection: %s",
-		  m_config["manager.components.preconnect"].c_str()));
-      for (auto&& connector : coil::split(m_config["manager.components.preconnect"], ","))
-	  {
-		  connector = coil::eraseBothEndsBlank(std::move(connector));
-		  if (connector.empty())
-		  {
-			  continue;
-		  }
-
-		  std::string port0_str = coil::split(connector, "?")[0];
-
-		  coil::vstring ports;
-		  coil::mapstring configs;
-
-		  for (auto & param : coil::urlparam2map(connector)) {
-			  if (param.first == "port")
-			  {
-				  ports.emplace_back(std::move(param.second));
-				  continue;
-			  }
-              std::string tmp{coil::replaceString(param.first, "port", "")};
-              std::string::size_type pos = param.first.find("port");
-
-			  int val = 0;
-              if (coil::stringTo<int>(val, tmp.c_str()) && pos != std::string::npos)
-			  {
-				  ports.emplace_back(std::move(param.second));
-				  continue;
-			  }
-			  configs[param.first] = std::move(param.second);
-		  }
-
-		  if (configs.count("dataflow_type") == 0)
-		  {
-			  configs["dataflow_type"] = "push";
-		  }
-		  if (configs.count("interface_type") == 0)
-		  {
-			  configs["interface_type"] = "corba_cdr";
-		  }
-
-
-		  coil::vstring tmp = coil::split(port0_str, ".");
-		  tmp.pop_back();
-		  std::string comp0_name = coil::flatten(tmp, ".");
-		  
-		  std::string port0_name = port0_str;
-		  RTObject_impl* comp0 = nullptr;
-		  RTC::RTObject_ptr comp0_ref = nullptr;
-
-		  if (comp0_name.find("://") == std::string::npos)
-		  {
-			  comp0 = getComponent(comp0_name.c_str());
-			  if (comp0 == nullptr)
-			  {
-				  RTC_ERROR(("%s not found.", comp0_name.c_str()));
-				  continue;
-			  }
-			  comp0_ref = comp0->getObjRef();
-		  }
-		  else
-		  {
-			  RTC::RTCList rtcs = m_namingManager->string_to_component(comp0_name);
-			  if (rtcs.length() == 0)
-			  {
-				  RTC_ERROR(("%s not found.", comp0_name.c_str()));
-				  continue;
-			  }
-			  comp0_ref = rtcs[0];
-			  coil::vstring tmp_port0_name = coil::split(port0_str, "/");
-			  port0_name = tmp_port0_name.back();
-
-
-		  }
-
-		  RTC::PortService_var port0_var = CORBA_RTCUtil::get_port_by_name(comp0_ref, port0_name);
-
-		  if (CORBA::is_nil(port0_var))
-		  {
-			  RTC_DEBUG(("port %s found: ", port0_str.c_str()));
-			  continue;
-		  }
-
-          if (ports.empty())
+    RTC_TRACE(("Connection pre-connection: %s",
+               m_config["manager.components.preconnect"].c_str()));
+    for (auto&& connector : coil::split(m_config["manager.components.preconnect"], ","))
+      {
+        connector = coil::eraseBothEndsBlank(std::move(connector));
+        if (connector.empty())
           {
-              coil::Properties prop;
+            continue;
+          }
 
-              for (auto & config : configs) {
-                  std::string key{coil::eraseBothEndsBlank(config.first)};
-                  std::string value{coil::eraseBothEndsBlank(config.second)};
-                  prop["dataport." + key] = value;
+        std::string port0_str = coil::split(connector, "?")[0];
+        coil::vstring ports;
+        coil::mapstring configs;
+        for (auto & param : coil::urlparam2map(connector))
+          {
+            if (param.first == "port")
+              {
+                ports.emplace_back(std::move(param.second));
+                continue;
+              }
+            std::string tmp{coil::replaceString(param.first, "port", "")};
+            std::string::size_type pos = param.first.find("port");
+            int val = 0;
+            if (coil::stringTo<int>(val, tmp.c_str()) && pos != std::string::npos)
+              {
+                ports.emplace_back(std::move(param.second));
+                continue;
+              }
+            configs[param.first] = std::move(param.second);
+          }
+
+        if (configs.count("dataflow_type") == 0)
+          {
+            configs["dataflow_type"] = "push";
+          }
+        if (configs.count("interface_type") == 0)
+          {
+            configs["interface_type"] = "corba_cdr";
+          }
+
+        coil::vstring tmp = coil::split(port0_str, ".");
+        tmp.pop_back();
+        std::string comp0_name = coil::flatten(tmp, ".");
+
+        std::string port0_name = port0_str;
+        RTObject_impl* comp0 = nullptr;
+        RTC::RTObject_ptr comp0_ref = nullptr;
+
+        if (comp0_name.find("://") == std::string::npos)
+          {
+            comp0 = getComponent(comp0_name.c_str());
+            if (comp0 == nullptr)
+            {
+              RTC_ERROR(("%s not found.", comp0_name.c_str()));
+              continue;
+            }
+            comp0_ref = comp0->getObjRef();
+          }
+        else
+          {
+            RTC::RTCList rtcs = m_namingManager->string_to_component(comp0_name);
+            if (rtcs.length() == 0)
+              {
+                RTC_ERROR(("%s not found.", comp0_name.c_str()));
+                continue;
+              }
+            comp0_ref = rtcs[0];
+            coil::vstring tmp_port0_name = coil::split(port0_str, "/");
+            port0_name = tmp_port0_name.back();
+          }
+
+        RTC::PortService_var port0_var = CORBA_RTCUtil::get_port_by_name(comp0_ref, port0_name);
+        if (CORBA::is_nil(port0_var))
+          {
+            RTC_DEBUG(("port %s found: ", port0_str.c_str()));
+            continue;
+          }
+
+        if (ports.empty())
+          {
+            coil::Properties prop;
+
+            for (auto const& config : configs)
+              {
+                std::string key = config.first;
+                std::string value = config.second;
+                coil::eraseBothEndsBlank(key);
+                coil::eraseBothEndsBlank(value);
+                prop["dataport." + key] = value;
               }
 
-              if (RTC::RTC_OK != CORBA_RTCUtil::connect(connector, prop, port0_var, RTC::PortService::_nil()))
+            if (RTC::RTC_OK != CORBA_RTCUtil::connect(connector, prop, port0_var, RTC::PortService::_nil()))
               {
-                  RTC_ERROR(("Connection error: %s", connector.c_str()));
+                RTC_ERROR(("Connection error: %s", connector.c_str()));
               }
           }
 
-		  for (auto & port : ports)
-		  {
+        for (auto const& port : ports)
+          {
+            tmp = coil::split(port, ".");
+            tmp.pop_back();
+            std::string comp_name = coil::flatten(tmp, ".");
+            std::string port_name = port;
+            RTObject_impl* comp = nullptr;
+            RTC::RTObject_ptr comp_ref = nullptr;
 
-			  tmp = coil::split(port, ".");
-			  tmp.pop_back();
-			  std::string comp_name = coil::flatten(tmp, ".");
-			  std::string port_name = port;
-			  RTObject_impl* comp = nullptr;
-			  RTC::RTObject_ptr comp_ref = nullptr;
+            if (comp_name.find("://") == std::string::npos)
+              {
+                comp = getComponent(comp_name.c_str());
+                if (comp == nullptr)
+                  {
+                      RTC_ERROR(("%s not found.", comp_name.c_str()));
+                      continue;
+                  }
+                comp_ref = comp->getObjRef();
+              }
+            else
+              {
+                RTC::RTCList rtcs = m_namingManager->string_to_component(comp_name);
+                if (rtcs.length() == 0)
+                  {
+                    RTC_ERROR(("%s not found.", comp_name.c_str()));
+                    continue;
+                  }
+                comp_ref = rtcs[0];
+                coil::vstring tmp_port_name = coil::split(port, "/");
+                port_name = tmp_port_name.back();
+              }
 
+            RTC::PortService_var port_var = CORBA_RTCUtil::get_port_by_name(comp_ref, port_name);
 
-			  if (comp_name.find("://") == std::string::npos)
-			  {
-				  comp = getComponent(comp_name.c_str());
-				  if (comp == nullptr)
-				  {
-					  RTC_ERROR(("%s not found.", comp_name.c_str()));
-					  continue;
-				  }
-				  comp_ref = comp->getObjRef();
-			  }
-			  else
-			  {
-				  RTC::RTCList rtcs = m_namingManager->string_to_component(comp_name);
-				  if (rtcs.length() == 0)
-				  {
-					  RTC_ERROR(("%s not found.", comp_name.c_str()));
-					  continue;
-				  }
-				  comp_ref = rtcs[0];
-				  coil::vstring tmp_port_name = coil::split(port, "/");
-				  port_name = tmp_port_name.back();
+            if (CORBA::is_nil(port_var))
+              {
+                RTC_DEBUG(("port %s found: ", port.c_str()));
+                continue;
+              }
 
+            coil::Properties prop;
+            for (auto const& config : configs)
+              {
+                std::string key{coil::eraseBothEndsBlank(std::move(config.first))};
+                std::string value{coil::eraseBothEndsBlank(std::move(config.second))};
+                prop["dataport." + key] = std::move(value);
+              }
 
-			  }
-
-			  RTC::PortService_var port_var = CORBA_RTCUtil::get_port_by_name(comp_ref, port_name);
-
-			  if (CORBA::is_nil(port_var))
-			  {
-				  RTC_DEBUG(("port %s found: ", port.c_str()));
-				  continue;
-			  }
-
-			  coil::Properties prop;
-
-			  for (auto & config : configs) {
-				  std::string key{coil::eraseBothEndsBlank(std::move(config.first))};
-				  std::string value{coil::eraseBothEndsBlank(std::move(config.second))};
-				  prop["dataport." + key] = value;
-			  }
-
-
-
-			  if (RTC::RTC_OK != CORBA_RTCUtil::connect(connector, prop, port0_var, port_var))
-			  {
-				  RTC_ERROR(("Connection error: %s", connector.c_str()));
-			  }
-		  }
-	  }
+            if (RTC::RTC_OK != CORBA_RTCUtil::connect(connector, prop, port0_var, port_var))
+              {
+                RTC_ERROR(("Connection error: %s", connector.c_str()));
+              }
+          }
+      }
   }
 
   /*!
@@ -2744,49 +2690,46 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   */
   void Manager::initPreActivation()
   {
-	  RTC_TRACE(("Components pre-activation: %s",
-		  m_config["manager.components.preactivation"].c_str()));
+    RTC_TRACE(("Components pre-activation: %s",
+               m_config["manager.components.preactivation"].c_str()));
 
-      for (auto & c : coil::split(m_config["manager.components.preactivation"], ","))
-	  {
-		  c = coil::eraseBothEndsBlank(std::move(c));
-		  if (!c.empty())
-		  {
-			  RTC::RTObject_ptr comp_ref;
-			  if (c.find("://") == std::string::npos)
-			  {
-				  RTObject_impl* comp = getComponent(c.c_str());
-				  if (comp == nullptr)
-				  {
-					  RTC_ERROR(("%s not found.", c.c_str())); continue;
-				  }
-				  comp_ref = comp->getObjRef();
-			  }
-			  else
-			  {
-				  RTC::RTCList rtcs = m_namingManager->string_to_component(c);
-				  if (rtcs.length() == 0)
-				  {
-					  RTC_ERROR(("%s not found.", c.c_str()));
-					  continue;
-				  }
-				  comp_ref = rtcs[0];
-				  
-			  }
-			  
-			  RTC::ReturnCode_t ret = CORBA_RTCUtil::activate(comp_ref);
-			  if (ret != RTC::RTC_OK)
-			  {
-				  RTC_ERROR(("%s activation filed.", c.c_str()));
-			  }
-			  else
-			  {
-				  RTC_INFO(("%s activated.", c.c_str()));
-			  }
-		  }
-		  
+    for (auto&& c : coil::split(m_config["manager.components.preactivation"], ","))
+      {
+        c = coil::eraseBothEndsBlank(std::move(c));
+        if (!c.empty())
+          {
+            RTC::RTObject_ptr comp_ref;
+            if (c.find("://") == std::string::npos)
+              {
+                RTObject_impl* comp = getComponent(c.c_str());
+                if (comp == nullptr)
+                  {
+                    RTC_ERROR(("%s not found.", c.c_str())); continue;
+                  }
+                comp_ref = comp->getObjRef();
+              }
+            else
+              {
+                RTC::RTCList rtcs = m_namingManager->string_to_component(c);
+                if (rtcs.length() == 0)
+                  {
+                    RTC_ERROR(("%s not found.", c.c_str()));
+                    continue;
+                  }
+                comp_ref = rtcs[0];
+              }
 
-	  }
+            RTC::ReturnCode_t ret = CORBA_RTCUtil::activate(comp_ref);
+            if (ret != RTC::RTC_OK)
+              {
+                RTC_ERROR(("%s activation filed.", c.c_str()));
+              }
+            else
+            {
+              RTC_INFO(("%s activated.", c.c_str()));
+            }
+          }
+      }
   }
 
   /*!
@@ -2805,19 +2748,13 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   */
   void Manager::initPreCreation()
   {
-	  RTC_TRACE(("Components pre-creation: %s",
-		  m_config["manager.components.precreate"].c_str()));
-	  std::vector<std::string> comps;
-	  comps = coil::split(m_config["manager.components.precreate"], ",");
-      for (auto & comp : comps)
-	  {
-		  this->createComponent(comp.c_str());
-	  }
+    RTC_TRACE(("Components pre-creation: %s",
+               m_config["manager.components.precreate"].c_str()));
+    for (auto const& comp : coil::split(m_config["manager.components.precreate"], ","))
+      {
+        this->createComponent(comp.c_str());
+      }
   }
-
-
-
-
 
   /*!
   * @if jp
@@ -2833,159 +2770,164 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   */
   void Manager::invokeInitProc()
   {
-	  if (m_initProc != nullptr)
-	  {
-		  m_initProc(this);
-	  }
+    if (m_initProc != nullptr)
+      {
+        m_initProc(this);
+      }
   }
 
   void Manager::publishPorts(RTObject_impl* comp)
   {
-	  PortServiceList_var ports = comp->get_ports();
-	  for (CORBA::ULong i(0); i < ports->length(); ++i)
-	  {
-		  PortProfile_var prof = ports[i]->get_port_profile();
-		  coil::Properties prop;
-		  NVUtil::copyToProperties(prop, prof->properties);
-		  if ((prop.hasKey("publish_topic") == nullptr ||
-			  prop["publish_topic"].empty()) &&
-			  (prop.hasKey("subscribe_topic") == nullptr ||
-			  prop["subscribe_topic"].empty()) &&
-			  (prop.hasKey("rendezvous_point") == nullptr ||
-			  prop["rendezvous_point"].empty())) {
-			  continue;
-		  }
+    PortServiceList_var ports = comp->get_ports();
+    for (CORBA::ULong i(0); i < ports->length(); ++i)
+      {
+        PortProfile_var prof = ports[i]->get_port_profile();
+        coil::Properties prop;
+        NVUtil::copyToProperties(prop, prof->properties);
+        if ((prop.hasKey("publish_topic") == nullptr ||
+             prop["publish_topic"].empty()) &&
+            (prop.hasKey("subscribe_topic") == nullptr ||
+             prop["subscribe_topic"].empty()) &&
+            (prop.hasKey("rendezvous_point") == nullptr ||
+             prop["rendezvous_point"].empty()))
+          {
+            continue;
+          }
 
-		  std::string name;
-		  if (prop["port.port_type"] == "DataOutPort")
-		  {
-			  name = "dataports.port_cxt/";
-			  name += prop["publish_topic"] + ".topic_cxt/";
-			  name += prof->name; name += ".outport";
-		  }
-		  else if (prop["port.port_type"] == "DataInPort")
-		  {
-			  name = "dataports.port_cxt/";
-			  name += prop["subscribe_topic"] + ".topic_cxt/";
-			  name += prof->name; name += ".inport";
-		  }
-		  else if (prop["port.port_type"] == "CorbaPort")
-		  {
-			  name = "svcports.port_cxt/";
-			  name += prop["rendezvous_point"] + ".svc_cxt/";
-			  name += prof->name; name += ".svc";
-		  }
-		  else
-		  {
-			  RTC_WARN(("Unknown port type: %s", prop["port.port_type"].c_str()));
-			  continue;
-		  }
-		  PortBase* port;
-		  port = dynamic_cast<PortBase*>(m_pPOA->reference_to_servant(ports[i]));
-		  m_namingManager->bindObject(name.c_str(), port);
-	  }
+        std::string name;
+        if (prop["port.port_type"] == "DataOutPort")
+          {
+            name = "dataports.port_cxt/";
+            name += prop["publish_topic"] + ".topic_cxt/";
+            name += prof->name; name += ".outport";
+          }
+        else if (prop["port.port_type"] == "DataInPort")
+          {
+            name = "dataports.port_cxt/";
+            name += prop["subscribe_topic"] + ".topic_cxt/";
+            name += prof->name; name += ".inport";
+          }
+        else if (prop["port.port_type"] == "CorbaPort")
+          {
+            name = "svcports.port_cxt/";
+            name += prop["rendezvous_point"] + ".svc_cxt/";
+            name += prof->name; name += ".svc";
+          }
+        else
+          {
+              RTC_WARN(("Unknown port type: %s", prop["port.port_type"].c_str()));
+              continue;
+          }
+
+        PortBase* port;
+        port = dynamic_cast<PortBase*>(m_pPOA->reference_to_servant(ports[i]));
+        m_namingManager->bindObject(name.c_str(), port);
+      }
   }
+
   void Manager::subscribePorts(RTObject_impl* comp)
   {
-	  PortServiceList_var ports = comp->get_ports();
-	  for (CORBA::ULong i(0); i < ports->length(); ++i)
-	  {
-		  PortProfile_var prof = ports[i]->get_port_profile();
-		  coil::Properties prop;
-		  NVUtil::copyToProperties(prop, prof->properties);
-		  if ((prop.hasKey("publish_topic") == nullptr ||
-			  prop["publish_topic"].empty()) &&
-			  (prop.hasKey("subscribe_topic") == nullptr ||
-			  prop["subscribe_topic"].empty()) &&
-			  (prop.hasKey("rendezvous_point") == nullptr ||
-			  prop["rendezvous_point"].empty())) {
-			  continue;
-		  }
+    PortServiceList_var ports = comp->get_ports();
+    for (CORBA::ULong i(0); i < ports->length(); ++i)
+      {
+        PortProfile_var prof = ports[i]->get_port_profile();
+        coil::Properties prop;
+        NVUtil::copyToProperties(prop, prof->properties);
+        if ((prop.hasKey("publish_topic") == nullptr ||
+             prop["publish_topic"].empty()) &&
+            (prop.hasKey("subscribe_topic") == nullptr ||
+             prop["subscribe_topic"].empty()) &&
+            (prop.hasKey("rendezvous_point") == nullptr ||
+             prop["rendezvous_point"].empty()))
+        {
+          continue;
+        }
 
-		  std::string name;
-		  PortServiceList_var nsports;
-		  if (prop["port.port_type"] == "DataOutPort")
-		  {
-			  name = "dataports.port_cxt/";
-			  name += prop["publish_topic"] + ".topic_cxt";
-			  nsports = getPortsOnNameServers(name, "inport");
-			  connectDataPorts(ports[i], nsports);
-		  }
-		  else if (prop["port.port_type"] == "DataInPort")
-		  {
-			  name = "dataports.port_cxt/";
-			  name += prop["subscribe_topic"] + ".topic_cxt";
-			  nsports = getPortsOnNameServers(name, "outport");
-			  connectDataPorts(ports[i], nsports);
-		  }
-		  else if (prop["port.port_type"] == "CorbaPort")
-		  {
-			  name = "svcports.port_cxt/";
-			  name += prop["rendezvous_point"] + ".svc_cxt";
-			  nsports = getPortsOnNameServers(name, "svc");
-			  connectServicePorts(ports[i], nsports);
-		  }
-	  }
+        std::string name;
+        PortServiceList_var nsports;
+        if (prop["port.port_type"] == "DataOutPort")
+          {
+            name = "dataports.port_cxt/";
+            name += prop["publish_topic"] + ".topic_cxt";
+            nsports = getPortsOnNameServers(name, "inport");
+            connectDataPorts(ports[i], nsports);
+          }
+        else if (prop["port.port_type"] == "DataInPort")
+          {
+            name = "dataports.port_cxt/";
+            name += prop["subscribe_topic"] + ".topic_cxt";
+            nsports = getPortsOnNameServers(name, "outport");
+            connectDataPorts(ports[i], nsports);
+          }
+        else if (prop["port.port_type"] == "CorbaPort")
+          {
+            name = "svcports.port_cxt/";
+            name += prop["rendezvous_point"] + ".svc_cxt";
+            nsports = getPortsOnNameServers(name, "svc");
+            connectServicePorts(ports[i], nsports);
+          }
+      }
   }
 
   PortServiceList_var Manager::getPortsOnNameServers(const std::string& nsname,
-	  const std::string& kind)
+                                                     const std::string& kind)
   {
-	  PortServiceList_var ports = new PortServiceList();
-	  std::vector<RTC::NamingService*>& ns(m_namingManager->getNameServices());
-      for (auto & n : ns)
-	  {
-		  NamingOnCorba* noc = dynamic_cast<NamingOnCorba*>(n->ns);
-		  if (noc == nullptr) { continue; }
-		  CorbaNaming& cns(noc->getCorbaNaming());
-		  CosNaming::BindingList_var bl = new CosNaming::BindingList();
-		  cns.listByKind(nsname.c_str(), kind.c_str(), bl);
+    PortServiceList_var ports = new PortServiceList();
+    for (auto const& n : m_namingManager->getNameServices())
+      {
+        NamingOnCorba* noc = dynamic_cast<NamingOnCorba*>(n->ns);
+        if (noc == nullptr) { continue; }
+        CorbaNaming& cns(noc->getCorbaNaming());
+        CosNaming::BindingList_var bl = new CosNaming::BindingList();
+        cns.listByKind(nsname.c_str(), kind.c_str(), bl);
 
-		  for (CORBA::ULong j(0); j < bl->length(); ++j)
-		  {
-			  if (bl[j].binding_type != CosNaming::nobject) { continue; }
-			  std::string tmp(cns.toString(bl[j].binding_name));
-			  std::string nspath{coil::replaceString('/' + nsname + '/' + tmp, "\\", "")};
-			  // ### TODO: All escape characteres should be removed. ###
-			  CORBA::Object_var obj = cns.resolveStr(nspath.c_str());
-			  RTC::PortService_var portsvc = RTC::PortService::_narrow(obj);
-			  if (CORBA::is_nil(portsvc)) { continue; }
-			  try { PortProfile_var p = portsvc->get_port_profile(); }
-			  catch (...) { continue; } // the port must be zombie
-			  CORBA::ULong len(ports->length());
-			  ports->length(len + 1);
-			  ports[len] = portsvc;
-		  }
-	  }
-	  return ports._retn();
+        for (CORBA::ULong j(0); j < bl->length(); ++j)
+          {
+            if (bl[j].binding_type != CosNaming::nobject) { continue; }
+            std::string tmp(cns.toString(bl[j].binding_name));
+            std::string nspath;
+            nspath = "/" + nsname + "/" + tmp;
+            // ### TODO: All escape characteres should be removed. ###
+            coil::replaceString(nspath, "\\", "");
+            CORBA::Object_var obj = cns.resolveStr(nspath.c_str());
+            RTC::PortService_var portsvc = RTC::PortService::_narrow(obj);
+            if (CORBA::is_nil(portsvc)) { continue; }
+            try { PortProfile_var p = portsvc->get_port_profile(); }
+            catch (...) { continue; } // the port must be zombie
+            CORBA::ULong len(ports->length());
+            ports->length(len + 1);
+            ports[len] = portsvc;
+          }
+      }
+    return ports._retn();
   }
 
   void Manager::connectDataPorts(PortService_ptr port,
-	  PortServiceList_var& target_ports)
+                                 PortServiceList_var& target_ports)
   {
-	  for (CORBA::ULong i(0); i < target_ports->length(); ++i)
-	  {
-		  if (port->_is_equivalent(target_ports[i])) { continue; }
-		  if (CORBA_RTCUtil::already_connected(port, target_ports[i]))
-		  {
-			  continue;
-		  }
-		  std::string con_name;
-		  PortProfile_var p0 = port->get_port_profile();
-		  PortProfile_var p1 = target_ports[i]->get_port_profile();
-		  con_name += p0->name;
-		  con_name += ":";
-		  con_name += p1->name;
-		  coil::Properties prop;
-		  if (RTC::RTC_OK !=
-			  CORBA_RTCUtil::connect(con_name, prop, port, target_ports[i]))
-		  {
-			  RTC_ERROR(("Connection error in topic connection."));
-		  }
-	  }
+    for (CORBA::ULong i(0); i < target_ports->length(); ++i)
+      {
+        if (port->_is_equivalent(target_ports[i])) { continue; }
+        if (CORBA_RTCUtil::already_connected(port, target_ports[i]))
+          {
+              continue;
+          }
+        std::string con_name;
+        PortProfile_var p0 = port->get_port_profile();
+        PortProfile_var p1 = target_ports[i]->get_port_profile();
+        con_name += p0->name;
+        con_name += ":";
+        con_name += p1->name;
+        coil::Properties prop;
+        if (RTC::RTC_OK !=
+            CORBA_RTCUtil::connect(con_name, prop, port, target_ports[i]))
+          {
+            RTC_ERROR(("Connection error in topic connection."));
+          }
+      }
   }
 
-    void Manager::connectServicePorts(PortService_ptr port,
+  void Manager::connectServicePorts(PortService_ptr port,
                                     PortServiceList_var& target_ports)
   {
     for (CORBA::ULong i(0); i < target_ports->length(); ++i)

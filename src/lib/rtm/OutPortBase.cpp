@@ -1050,10 +1050,10 @@ namespace RTC
         RTC_TRACE(("OutPortPullConnector created"));
 
 
-		if (coil::normalize(prop["interface_type"]) == "direct")
-		{
-			connector->setPullDirectMode();
-		}
+        if (coil::normalize(prop["interface_type"]) == "direct")
+          {
+            connector->setPullDirectMode();
+          }
 
         m_connectors.emplace_back(connector);
         RTC_PARANOID(("connector pushback done: size = %d",
