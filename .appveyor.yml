@@ -6,10 +6,14 @@ environment:
   omniorb: omniORB-4.2.3
   cmake_flgas: -DOMNI_VERSION=42 -DOMNI_MINOR=3 -DOMNITHREAD_VERSION=41 -DCORBA=omniORB -DSSL_ENABLE=ON -DOBSERVER_ENABLE=ON
   matrix:
-    - cmake_generator: Visual Studio 15 2017          # CMake -G
+    - cmake_generator: Visual Studio 16 2019          # CMake -G
       cmake_archtecture: x64                          # CMake -A
-      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017 # Choices: Appveyor depend
+      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019 # Choices: Appveyor depend
       python: 37-x64                                  # Choices: Appveyor depend
+    - cmake_generator: Visual Studio 15 2017
+      cmake_archtecture: x64
+      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+      python: 37-x64
     - cmake_generator: Visual Studio 14 2015
       cmake_archtecture: x64
       APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
