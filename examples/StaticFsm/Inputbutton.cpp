@@ -12,11 +12,11 @@
 
 // Module specification
 // <rtc-template block="module_spec">
-static const char* const consolein_spec[] =
+static const char* const inputbutton_spec[] =
   {
     "implementation_id", "Inputbutton",
     "type_name",         "Inputbutton",
-    "description",       "Console input component",
+    "description",       "InputButton component for Microwave example",
     "version",           "1.0",
     "vendor",            "Noriaki Ando, AIST",
     "category",          "example",
@@ -124,7 +124,7 @@ extern "C"
  
   void InputbuttonInit(RTC::Manager* manager)
   {
-    RTC::Properties profile(consolein_spec);
+    RTC::Properties profile(inputbutton_spec);
     manager->registerFactory(profile,
                              RTC::Create<Inputbutton>,
                              RTC::Delete<Inputbutton>);

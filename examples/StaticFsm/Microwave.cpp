@@ -11,11 +11,11 @@
 
 // Module specification
 // <rtc-template block="module_spec">
-static const char* const consoleout_spec[] =
+static const char* const microwave_spec[] =
   {
     "implementation_id", "Microwave",
     "type_name",         "Microwave",
-    "description",       "Console output component",
+    "description",       "Microwave Static FSM component",
     "version",           "1.0",
     "vendor",            "Noriaki Ando, AIST",
     "category",          "example",
@@ -81,7 +81,7 @@ extern "C"
 {
   void MicrowaveInit(RTC::Manager* manager)
   {
-    coil::Properties profile(consoleout_spec);
+    coil::Properties profile(microwave_spec);
     manager->registerFactory(profile,
                              RTC::Create<Microwave>,
                              RTC::Delete<Microwave>);
