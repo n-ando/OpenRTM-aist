@@ -30,11 +30,11 @@ namespace coil
 {
   /*!
    * @if jp
-   * @class Function
+   * @class DelayedFunction
    * @brief 実行遅延関数呼び出し
    * @since 2.0.0
-   * @elsep
-   * @class Function
+   * @else
+   * @class DelayedFunction
    * @brief Delayed function call
    * @since 2.0.0
    * @endif
@@ -50,8 +50,8 @@ namespace coil
      *
      * @else
      * @brief Constructor
-     * @param fn: Function or functional object
-     * @return delay: the delay until function call
+     * @param fn Function or functional object
+     * @param delay the delay until function call
      *
      * @endif
      */
@@ -62,7 +62,7 @@ namespace coil
     /*!
      * @if jp
      * @brief 1回の時間経過
-     * @param interval: 経過した時間
+     * @param interval 経過した時間
      * @return bool true:  期限が来た
      *              false: 期限が来ていない
      *
@@ -70,7 +70,7 @@ namespace coil
      *
      * @else
      * @brief Tick
-     * @param interval: Tick interval
+     * @param interval Tick interval
      * @return bool true:  The function is expired and executed.
      *              false: The function is unexpired.
      * @endif
@@ -84,11 +84,11 @@ namespace coil
 
   /*!
    * @if jp
-   * @class Function
+   * @class PeriodicFunction
    * @brief 周期関数呼び出し
    * @since 2.0.0
-   * @elsep
-   * @class Function
+   * @else
+   * @class PeriodicFunction
    * @brief Periodic function call
    * @since 2.0.0
    * @endif
@@ -99,13 +99,13 @@ namespace coil
     /*!
      * @if jp
      * @brief コンストラクタ
-     * @param fn: 実行する関数または関数オブジェクト
-     * @param period: 実行間隔
+     * @param fn 実行する関数または関数オブジェクト
+     * @param period 実行間隔
      *
      * @else
      * @brief Constructor
-     * @param fn: Function or functional object
-     * @return period: the period of function exectuion
+     * @param fn Function or functional object
+     * @param period the period of function exectuion
      *
      * @endif
      */
@@ -116,7 +116,7 @@ namespace coil
     /*!
      * @if jp
      * @brief 1回の時間経過
-     * @param interval: 経過した時間
+     * @param interval 経過した時間
      * @return bool true 固定
      *
      * interval 分だけ期限を減算し、期限切れの場合に関数を実行する。
@@ -124,7 +124,7 @@ namespace coil
      *
      * @else
      * @brief Tick
-     * @param interval: Tick interval
+     * @param interval Tick interval
      * @return bool true only
      * @endif
      */
@@ -150,7 +150,7 @@ namespace coil
 
   /*!
    * @if jp
-   * @class Async
+   * @class Timer
    * @brief Manager のスレッド上で遅延実行される関数群の管理
    *
    * emplace() にて指定される関数や関数オブジェクトをtick()の中で
@@ -164,7 +164,7 @@ namespace coil
    *
    * @since 2.0.0
    * @else
-   * @class Async
+   * @class Timer
    * @brief Management of Delayed functions on the Manager thread.
    * @since 2.0.0
    * @endif
@@ -198,14 +198,14 @@ namespace coil
     /*!
      * @if jp
      * @brief 1回の時間経過
-     * @param interval: 経過した時間
+     * @param interval 経過した時間
      *
      * 時間経過により、リスト上の期限切れとなった関数を実行する。
      * 実行した関数が true を返すとき、リストから削除する。
      *
      * @else
      * @brief One tick passes
-     * @param interval: One tick interval
+     * @param interval One tick interval
      *
      * This operation execute expired functions and remove it from the list
      * if tick() returns true.
