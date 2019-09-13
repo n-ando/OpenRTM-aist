@@ -1527,6 +1527,23 @@ namespace RTC
                   ret = ret | listener.first->operator()(info, cdrdata, marshalingtype);
               }
           }
+
+          if (ret == DATA_CHANGED || ret == BOTH_CHANGED)
+          {
+              if (endian[0] == "little")
+              {
+                  cdr->isLittleEndian(true);
+              }
+              else if (endian[0] == "big")
+              {
+                  cdr->isLittleEndian(false);
+              }
+
+              cdr->serialize(data);
+              cdrdata.setDataLength(cdr->getDataLength());
+              cdr->readData(cdrdata.getBuffer(), cdrdata.getDataLength());
+          }
+
           return ret;
       }
 
