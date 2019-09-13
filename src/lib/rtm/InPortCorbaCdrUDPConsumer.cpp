@@ -100,7 +100,6 @@ namespace RTC
       {
         return DataPortStatus::CONNECTION_LOST;
       }
-    return DataPortStatus::UNKNOWN_ERROR;
   }
   
   /*!

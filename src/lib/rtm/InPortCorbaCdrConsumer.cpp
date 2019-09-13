@@ -1,6 +1,6 @@
 ﻿// -*- C++ -*-
 /*!
- * @file  InPortCorbaCdrConsumer.h
+ * @file  InPortCorbaCdrConsumer.cpp
  * @brief InPortCorbaCdrConsumer class
  * @date  $Date: 2007-12-31 03:08:03 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
@@ -93,7 +93,6 @@ namespace RTC
       {
         return DataPortStatus::CONNECTION_LOST;
       }
-    return DataPortStatus::UNKNOWN_ERROR;
   }
 
   /*!

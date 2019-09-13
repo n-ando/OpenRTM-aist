@@ -1,6 +1,6 @@
 ﻿// -*- C++ -*-
 /*!
- * @file  InPortDSConsumer.h
+ * @file  InPortDSConsumer.cpp
  * @brief InPortDSConsumer class
  * @date  $Date: 2018-09-20 07:49:59 $
  * @author Nobuhiko Miyamoto <n-miyamoto@aist.go.jp>
@@ -91,7 +91,6 @@ namespace RTC
       {
         return DataPortStatus::CONNECTION_LOST;
       }
-    return DataPortStatus::UNKNOWN_ERROR;
   }
 
   /*!

@@ -1,6 +1,6 @@
 ﻿// -*- C++ -*-
 /*!
- * @file  OutPortCorbaCdrConsumer.h
+ * @file  OutPortCorbaCdrConsumer.cpp
  * @brief OutPortCorbaCdrConsumer class
  * @date  $Date: 2008-01-13 10:28:27 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
