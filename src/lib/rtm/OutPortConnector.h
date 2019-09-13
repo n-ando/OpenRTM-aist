@@ -65,7 +65,7 @@ namespace RTC
      * @brief Constructor
      * @endif
      */
-    OutPortConnector(ConnectorInfo& info, ConnectorListeners& listeners);
+    OutPortConnector(ConnectorInfo& info, ConnectorListeners* listeners);
 
     /*!
      * @if jp
@@ -224,31 +224,31 @@ namespace RTC
               if (inport->isNew())
                 {
                   // ON_BUFFER_OVERWRITE(In,Out), ON_RECEIVER_FULL(In,Out) callback
-                  m_listeners.
-                    connectorData_[ON_BUFFER_OVERWRITE].notifyOut(m_profile, data);
+                  m_listeners->
+                    connectorData_[ON_BUFFER_OVERWRITE]->notifyOut(m_profile, data);
                   m_inPortListeners->
-                    connectorData_[ON_BUFFER_OVERWRITE].notifyOut(m_profile, data);
-                  m_listeners.
-                    connectorData_[ON_RECEIVER_FULL].notifyOut(m_profile, data);
+                    connectorData_[ON_BUFFER_OVERWRITE]->notifyOut(m_profile, data);
+                  m_listeners->
+                    connectorData_[ON_RECEIVER_FULL]->notifyOut(m_profile, data);
                   m_inPortListeners->
-                    connectorData_[ON_RECEIVER_FULL].notifyOut(m_profile, data);
+                    connectorData_[ON_RECEIVER_FULL]->notifyOut(m_profile, data);
                   RTC_PARANOID(("ON_BUFFER_OVERWRITE(InPort,OutPort), "
                                 "ON_RECEIVER_FULL(InPort,OutPort) "
                                 "callback called in direct mode."));
                 }
               // ON_BUFFER_WRITE(In,Out) callback
-              m_listeners.
-                connectorData_[ON_BUFFER_WRITE].notifyOut(m_profile, data);
+              m_listeners->
+                connectorData_[ON_BUFFER_WRITE]->notifyOut(m_profile, data);
               m_inPortListeners->
-                connectorData_[ON_BUFFER_WRITE].notifyOut(m_profile, data);
+                connectorData_[ON_BUFFER_WRITE]->notifyOut(m_profile, data);
               RTC_PARANOID(("ON_BUFFER_WRITE(InPort,OutPort), "
                                 "callback called in direct mode."));
               inport->write(data);  // write to InPort variable!!
               // ON_RECEIVED(In,Out) callback
-              m_listeners.
-                connectorData_[ON_RECEIVED].notifyOut(m_profile, data);
+              m_listeners->
+                connectorData_[ON_RECEIVED]->notifyOut(m_profile, data);
               m_inPortListeners->
-                connectorData_[ON_RECEIVED].notifyOut(m_profile, data);
+                connectorData_[ON_RECEIVED]->notifyOut(m_profile, data);
               RTC_PARANOID(("ON_RECEIVED(InPort,OutPort), "
                             "callback called in direct mode."));
               
@@ -256,7 +256,11 @@ namespace RTC
             }
         }
       // normal case
-      ::RTC::ByteDataStream<DataType> *cdr = coil::GlobalFactory < ::RTC::ByteDataStream<DataType> >::instance().createObject(m_marshaling_type);
+      if(m_cdr == nullptr)
+      {
+        m_cdr = coil::GlobalFactory < ::RTC::ByteDataStream<DataType> >::instance().createObject(m_marshaling_type);
+      }
+      ::RTC::ByteDataStream<DataType> *cdr = dynamic_cast<::RTC::ByteDataStream<DataType>*>(m_cdr);
       if (!cdr)
       {
           RTC_ERROR(("Can not find Marshalizer: %s", m_marshaling_type.c_str()));
@@ -267,7 +271,7 @@ namespace RTC
       RTC_TRACE(("connector endian: %s", isLittleEndian() ? "little":"big"));
       
       DataPortStatus ret = write((ByteDataStreamBase*)cdr);
-      coil::GlobalFactory < ::RTC::ByteDataStream<DataType> >::instance().deleteObject(cdr);
+      //coil::GlobalFactory < ::RTC::ByteDataStream<DataType> >::instance().deleteObject(cdr);
       return ret;
     }
 
@@ -357,7 +361,7 @@ namespace RTC
      * @brief A reference to a ConnectorListener
      * @endif
      */
-    ConnectorListeners& m_listeners;
+    ConnectorListeners* m_listeners;
 
     /*!
      * @if jp
@@ -386,6 +390,7 @@ namespace RTC
      * @endif
      */
     std::string m_marshaling_type;
+    ByteDataStreamBase* m_cdr;
 
   };
 } // namespace RTC

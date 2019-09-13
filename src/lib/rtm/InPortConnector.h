@@ -69,7 +69,7 @@ namespace RTC
      * @endif
      */
     InPortConnector(ConnectorInfo& info,
-                    ConnectorListeners& listeners,
+                    ConnectorListeners* listeners,
                     CdrBufferBase* buffer);
 
     /*!
@@ -220,21 +220,23 @@ namespace RTC
     template<class DataType>
     DataPortStatus read(DataType& data)
     {
-        ::RTC::ByteDataStream<DataType> *cdr = coil::GlobalFactory < ::RTC::ByteDataStream<DataType> >::instance().createObject(m_marshaling_type);
-
+      if(m_cdr == nullptr)
+      {
+        m_cdr = coil::GlobalFactory < ::RTC::ByteDataStream<DataType> >::instance().createObject(m_marshaling_type);
+      }
+      ::RTC::ByteDataStream<DataType> *cdr = dynamic_cast<::RTC::ByteDataStream<DataType>*>(m_cdr);
         
         if (!cdr)
         {
             RTC_ERROR(("Can not find Marshalizer: %s", m_marshaling_type.c_str()));
             return DataPortStatus::PORT_ERROR;
         }
+        cdr->isLittleEndian(isLittleEndian());
         DataPortStatus ret = read((ByteDataStreamBase*)cdr);
         if (ret == DataPortStatus::PORT_OK)
         {
-            cdr->isLittleEndian(isLittleEndian());
             cdr->deserialize(data);
         }
-        coil::GlobalFactory < ::RTC::ByteDataStream<DataType> >::instance().deleteObject(cdr);
         return ret;
     }
 
@@ -329,7 +331,7 @@ namespace RTC
         {
             if (outport->isEmpty())
             {
-                m_listeners.
+                m_listeners->
                     connector_[ON_BUFFER_EMPTY].notify(m_profile);
                 m_outPortListeners->
                     connector_[ON_SENDER_EMPTY].notify(m_profile);
@@ -338,16 +340,16 @@ namespace RTC
                     "callback called in direct mode."));
             }
             outport->read(data);
-            m_outPortListeners->connectorData_[ON_BUFFER_READ].notifyIn(m_profile, data);
+            m_outPortListeners->connectorData_[ON_BUFFER_READ]->notifyIn(m_profile, data);
             RTC_TRACE(("ON_BUFFER_READ(OutPort), "));
             RTC_TRACE(("callback called in direct mode."));
-            m_outPortListeners->connectorData_[ON_SEND].notifyIn(m_profile, data);
+            m_outPortListeners->connectorData_[ON_SEND]->notifyIn(m_profile, data);
             RTC_TRACE(("ON_SEND(OutPort), "));
             RTC_TRACE(("callback called in direct mode."));
-            m_listeners.connectorData_[ON_RECEIVED].notifyIn(m_profile, data);
+            m_listeners->connectorData_[ON_RECEIVED]->notifyIn(m_profile, data);
             RTC_TRACE(("ON_RECEIVED(InPort), "));
             RTC_TRACE(("callback called in direct mode."));
-            m_listeners.connectorData_[ON_SEND].notifyIn(m_profile, data);
+            m_listeners->connectorData_[ON_SEND]->notifyIn(m_profile, data);
             RTC_TRACE(("ON_BUFFER_WRITE(InPort), "));
             RTC_TRACE(("callback called in direct mode."));
 
@@ -396,7 +398,7 @@ namespace RTC
      * @brief A reference to a ConnectorListener
      * @endif
      */
-    ConnectorListeners& m_listeners;
+    ConnectorListeners* m_listeners;
     /*!
      * @if jp
      * @brief Connector が保持している Buffer
@@ -438,6 +440,15 @@ namespace RTC
      * @endif
      */
     std::string m_marshaling_type;
+
+    /*!
+     * @if jp
+     * @brief シリアライザへの参照
+     * @else
+     * @brief
+     * @endif
+     */
+    ByteDataStreamBase* m_cdr;
 
   };
 } // namespace RTC

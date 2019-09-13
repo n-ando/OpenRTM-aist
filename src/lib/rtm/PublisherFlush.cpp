@@ -143,33 +143,33 @@ namespace RTC
         RTC_DEBUG(("write(): connection lost."));
         return m_retcode;
       }
-    ByteData data_ = *data;
+    m_data = *data;
 
 
-    onSend(data_);
-    DataPortStatus ret(m_consumer->put(data_));
+    onSend(m_data);
+    DataPortStatus ret(m_consumer->put(m_data));
     // consumer::put() returns
     //  {PORT_OK, PORT_ERROR, SEND_FULL, SEND_TIMEOUT, UNKNOWN_ERROR}
 
     switch (ret)
       {
       case DataPortStatus::PORT_OK:
-        onReceived(data_);
+        onReceived(m_data);
         return ret;
       case DataPortStatus::PORT_ERROR:
-        onReceiverError(data_);
+        onReceiverError(m_data);
         return ret;
       case DataPortStatus::SEND_FULL:
-        onReceiverFull(data_);
+        onReceiverFull(m_data);
         return ret;
       case DataPortStatus::SEND_TIMEOUT:
-        onReceiverTimeout(data_);
+        onReceiverTimeout(m_data);
         return ret;
       case DataPortStatus::CONNECTION_LOST:
-        onReceiverTimeout(data_);
+        onReceiverTimeout(m_data);
         return ret;
       case DataPortStatus::UNKNOWN_ERROR:
-        onReceiverError(data_);
+        onReceiverError(m_data);
         return ret;
       case DataPortStatus::BUFFER_ERROR:         /* FALLTHROUGH */
       case DataPortStatus::BUFFER_FULL:          /* FALLTHROUGH */
@@ -180,7 +180,7 @@ namespace RTC
       case DataPortStatus::INVALID_ARGS:         /* FALLTHROUGH */
       case DataPortStatus::PRECONDITION_NOT_MET: /* FALLTHROUGH */
       default:
-        onReceiverError(data_);
+        onReceiverError(m_data);
         return ret;
       }
   }

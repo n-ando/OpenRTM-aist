@@ -207,7 +207,7 @@ namespace RTC
     inline void onBufferRead(ByteData& data)
     {
       m_listeners->
-        connectorData_[ON_BUFFER_READ].notifyOut(m_profile, data);
+        connectorData_[ON_BUFFER_READ]->notifyOut(m_profile, data);
     }
 
     /*!
@@ -222,7 +222,7 @@ namespace RTC
     inline void onSend(ByteData& data)
     {
       m_listeners->
-        connectorData_[ON_SEND].notifyOut(m_profile, data);
+        connectorData_[ON_SEND]->notifyOut(m_profile, data);
     }
 
     /*!
@@ -298,6 +298,7 @@ namespace RTC
     OutPortConnector* m_connector{nullptr};
     std::string m_shm_address;
     int m_memory_size{0};
+    ByteData m_cdr;
   };  // class OutPortCorbaCdrProvider
 } // namespace RTC
 

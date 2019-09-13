@@ -59,7 +59,10 @@ namespace RTC
    * @class ConnectorDataListener holder class
    * @endif
    */
-  ConnectorDataListenerHolder::ConnectorDataListenerHolder() = default;
+  ConnectorDataListenerHolder::ConnectorDataListenerHolder()
+  {
+      delete m_cdr;
+  }
 
 
   ConnectorDataListenerHolder::~ConnectorDataListenerHolder()
@@ -207,7 +210,13 @@ namespace RTC
    * @brief Constructor
    * @endif
    */
-  ConnectorListeners::ConnectorListeners() = default;
+  ConnectorListeners::ConnectorListeners()
+  {
+      for (unsigned int i = 0; i < CONNECTOR_DATA_LISTENER_NUM; i++)
+      {
+          connectorData_[i] = new ConnectorDataListenerHolder();
+      }
+  }
   /*!
    * @if jp
    * @brief デストラクタ

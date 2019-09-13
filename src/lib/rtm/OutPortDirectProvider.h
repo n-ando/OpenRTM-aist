@@ -228,7 +228,7 @@ namespace RTC
     inline void onBufferRead(ByteData& data)
     {
       m_listeners->
-        connectorData_[ON_BUFFER_READ].notifyOut(m_profile, data);
+        connectorData_[ON_BUFFER_READ]->notifyOut(m_profile, data);
     }
 
     /*!
@@ -243,7 +243,7 @@ namespace RTC
     inline void onSend(ByteData& data)
     {
       m_listeners->
-        connectorData_[ON_SEND].notifyOut(m_profile, data);
+        connectorData_[ON_SEND]->notifyOut(m_profile, data);
     }
 
     /*!

@@ -118,15 +118,14 @@ namespace RTC
 		return ::OpenRTM::PORT_ERROR;
 	}
 	
-    ByteData cdr;
 	bool endian_type = m_connector->isLittleEndian();
 
 	try
 	{
 		setEndian(endian_type);
-		read(cdr);
+		read(m_cdr);
 		
-		RTC_PARANOID(("received data size: %d", cdr.getDataLength()));
+		RTC_PARANOID(("received data size: %d", m_cdr.getDataLength()));
 
 		
 	}
@@ -135,11 +134,11 @@ namespace RTC
 
 	}
 	
-	onReceived(cdr);
+	onReceived(m_cdr);
 	
-    BufferStatus ret = m_connector->write(cdr);
+    BufferStatus ret = m_connector->write(m_cdr);
 	
-	return convertReturn(ret, cdr);
+	return convertReturn(ret, m_cdr);
   }
 
   /*!

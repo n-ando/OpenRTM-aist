@@ -175,20 +175,20 @@ namespace RTC
         return m_retcode;
       }
 
-    ByteData data_ = *data;
+    m_data = *data;
 
     if (m_retcode == DataPortStatus::SEND_FULL)
       {
         RTC_DEBUG(("write(): InPort buffer is full."));
-        m_buffer->write(data_, timeout);
+        m_buffer->write(m_data, timeout);
         return DataPortStatus::BUFFER_FULL;
       }
 
-    onBufferWrite(data_);
-    BufferStatus ret(m_buffer->write(data_, timeout));
+    onBufferWrite(m_data);
+    BufferStatus ret(m_buffer->write(m_data, timeout));
     RTC_DEBUG(("%s = write()", toString(ret)));
     m_task->resume();
-    return convertReturn(ret, data_);
+    return convertReturn(ret, m_data);
   }
 
   /*!

@@ -288,6 +288,7 @@ namespace RTC
 
     mutable Logger rtclog;
     coil::Properties m_properties;
+    ::OpenRTM::CdrData m_data;
   };
 } // namespace RTC
 

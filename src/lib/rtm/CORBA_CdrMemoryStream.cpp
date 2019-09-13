@@ -47,10 +47,12 @@ namespace RTC
     {
         m_endian = little_endian;
 #ifdef ORB_IS_ORBEXPRESS
+        _cdr.rewind();
         m_cdr.is_little_endian(little_endian);
 #elif defined(ORB_IS_TAO)
-
+        m_cdr.reset();
 #else
+        m_cdr.rewindPtrs();
         m_cdr.setByteSwapFlag(little_endian);
 #endif
     }

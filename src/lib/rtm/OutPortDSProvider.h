@@ -38,7 +38,7 @@ namespace RTC
    * データ転送に CORBA の RTC::DataPullService インターフェースを利用し
    * た、pull 型データフロー型を実現する OutPort プロバイダクラス。
    *
-   * @since 0.4.0
+   * @since 2.0.0
    *
    * @else
    * @class OutPortDSProvider
@@ -48,7 +48,7 @@ namespace RTC
    * interface in CORBA for data transfer and realizes a pull-type
    * dataflow.
    *
-   * @since 0.4.0
+   * @since 2.0.0
    *
    * @endif
    */
@@ -261,7 +261,7 @@ namespace RTC
     inline void onBufferRead(ByteData& data)
     {
       m_listeners->
-        connectorData_[ON_BUFFER_READ].notifyOut(m_profile, data);
+        connectorData_[ON_BUFFER_READ]->notifyOut(m_profile, data);
     }
 
     /*!
@@ -276,7 +276,7 @@ namespace RTC
     inline void onSend(ByteData& data)
     {
       m_listeners->
-        connectorData_[ON_SEND].notifyOut(m_profile, data);
+        connectorData_[ON_SEND]->notifyOut(m_profile, data);
     }
 
     /*!
@@ -350,6 +350,7 @@ namespace RTC
     ConnectorListeners* m_listeners;
     ConnectorInfo m_profile;
     OutPortConnector* m_connector{nullptr};
+    ByteData m_cdr;
   };  // class OutPortDSProvider
 } // namespace RTC
 

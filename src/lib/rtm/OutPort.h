@@ -106,7 +106,7 @@ namespace RTC
 	  m_value(value), m_onWrite(nullptr), m_onWriteConvert(nullptr),
 	  m_directNewData(false), m_directValue(value)
     {
-
+      this->initConnectorListeners();
       this->addConnectorDataListener(ON_BUFFER_WRITE,
                                      new Timestamp<DataType>("on_write"));
       this->addConnectorDataListener(ON_SEND,
@@ -491,7 +491,27 @@ namespace RTC
 	{
 		return m_directNewData;
 	}
-    
+
+  protected:
+    /*!
+     * @if jp
+     *
+     * @brief コネクタリスナの初期化 
+     *
+     * 
+     *
+     * @else
+     *
+     * @brief 
+     *
+     *
+     * @endif
+     */
+    void initConnectorListeners() override
+    {
+        delete m_listeners;
+        m_listeners = new ConnectorListenersT<DataType>();
+    }
   private:
     std::string m_typename;
     /*!

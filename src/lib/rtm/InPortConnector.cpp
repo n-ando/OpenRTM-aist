@@ -30,10 +30,10 @@ namespace RTC
    * @endif
    */
   InPortConnector::InPortConnector(ConnectorInfo& info,
-                                   ConnectorListeners& listeners,
+                                   ConnectorListeners* listeners,
                                    CdrBufferBase* buffer)
     : rtclog("InPortConnector"), m_profile(info),
-	m_listeners(listeners), m_buffer(buffer), m_littleEndian(true), m_outPortListeners(nullptr), m_directOutPort(nullptr), m_marshaling_type("corba")
+	m_listeners(listeners), m_buffer(buffer), m_littleEndian(true), m_outPortListeners(nullptr), m_directOutPort(nullptr), m_marshaling_type("corba"), m_cdr(nullptr)
   {
   }
 
@@ -44,7 +44,10 @@ namespace RTC
    * @brief Destructor
    * @endif
    */
-  InPortConnector::~InPortConnector() = default;
+  InPortConnector::~InPortConnector()
+  {
+      delete m_cdr;
+  }
 
   /*!
    * @if jp
@@ -161,7 +164,7 @@ namespace RTC
 		  }
 		  m_directOutPort = directOutPort;
 		  
-		  m_outPortListeners = &(directOutPort->getListeners());
+		  m_outPortListeners = directOutPort->getListeners();
 		  return true;
 	  }
   }

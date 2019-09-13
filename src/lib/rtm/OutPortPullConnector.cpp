@@ -33,7 +33,7 @@ namespace RTC
    */
   OutPortPullConnector::OutPortPullConnector(ConnectorInfo info,
                                              OutPortProvider* provider,
-                                             ConnectorListeners& listeners,
+                                             ConnectorListeners* listeners,
                                              CdrBufferBase* buffer)
     : OutPortConnector(info, listeners),
       m_provider(provider),
@@ -52,7 +52,7 @@ namespace RTC
     m_buffer->init(info.properties.getNode("buffer"));
     m_provider->setBuffer(m_buffer);
     m_provider->setConnector(this);
-    m_provider->setListener(info, &m_listeners);
+    m_provider->setListener(info, m_listeners);
 
     if (coil::toBool(info.properties["sync_readwrite"], "YES", "NO", false))
     {
@@ -254,7 +254,7 @@ namespace RTC
    */
   void OutPortPullConnector::onConnect()
   {
-    m_listeners.connector_[ON_CONNECT].notify(m_profile);
+    m_listeners->connector_[ON_CONNECT].notify(m_profile);
   }
 
   /*!
@@ -266,7 +266,7 @@ namespace RTC
    */
   void OutPortPullConnector::onDisconnect()
   {
-    m_listeners.connector_[ON_DISCONNECT].notify(m_profile);
+    m_listeners->connector_[ON_DISCONNECT].notify(m_profile);
   }
 } // namespace RTC
 
