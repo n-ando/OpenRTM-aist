@@ -1078,6 +1078,12 @@ namespace RTC
     virtual ReturnCode notify(ConnectorInfo& info,
                 ByteData& cdrdata, const std::string& marshalingtype);
 
+
+    virtual ReturnCode notifyIn(ConnectorInfo& info, ByteData& data);
+
+    virtual ReturnCode notifyOut(ConnectorInfo& info, ByteData& data);
+
+
     /*!
      * @if jp
      *
@@ -1522,6 +1528,24 @@ namespace RTC
               }
           }
           return ret;
+      }
+
+
+
+      ReturnCode notifyIn(ConnectorInfo& info, ByteData& data) override
+      {
+          std::string type = info.properties.getProperty("marshaling_type", "corba");
+          std::string marshaling_type{ coil::eraseBothEndsBlank(
+            info.properties.getProperty("in.marshaling_type", type)) };
+          return notify(info, data, marshaling_type);
+      }
+
+      ReturnCode notifyOut(ConnectorInfo& info, ByteData& data) override
+      {
+          std::string type = info.properties.getProperty("marshaling_type", "corba");
+          std::string marshaling_type{ coil::eraseBothEndsBlank(
+            info.properties.getProperty("out.marshaling_type", type)) };
+          return notify(info, data, marshaling_type);
       }
 
   };

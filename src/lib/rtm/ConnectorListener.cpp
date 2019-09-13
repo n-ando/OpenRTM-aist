@@ -125,6 +125,21 @@ namespace RTC
     return ret;
   }
 
+  ConnectorListenerHolder::ReturnCode ConnectorDataListenerHolder::notifyIn(ConnectorInfo& info, ByteData& data)
+  {
+      std::string type = info.properties.getProperty("marshaling_type", "corba");
+      std::string marshaling_type{ coil::eraseBothEndsBlank(
+        info.properties.getProperty("in.marshaling_type", type)) };
+      return notify(info, data, marshaling_type);
+  }
+
+  ConnectorListenerHolder::ReturnCode ConnectorDataListenerHolder::notifyOut(ConnectorInfo& info, ByteData& data)
+  {
+      std::string type = info.properties.getProperty("marshaling_type", "corba");
+      std::string marshaling_type{ coil::eraseBothEndsBlank(
+        info.properties.getProperty("out.marshaling_type", type)) };
+      return notify(info, data, marshaling_type);
+  }
 
   /*!
    * @if jp
