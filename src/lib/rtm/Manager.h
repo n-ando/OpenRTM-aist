@@ -1875,7 +1875,7 @@ namespace RTC
      * @brief The pointer to the ManagerServant
      * @endif
      */
-    RTM::ManagerServant* m_mgrservant;
+    RTM::ManagerServant* m_mgrservant{nullptr};
 
     /*!
      * @if jp
@@ -2093,7 +2093,7 @@ namespace RTC
      * @brief The pointer to the ModuleManager
      * @endif
      */
-    ModuleManager* m_module;
+    ModuleManager* m_module{nullptr};
 
     /*!
      * @if jp

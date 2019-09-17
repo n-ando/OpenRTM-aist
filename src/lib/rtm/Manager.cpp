@@ -1468,6 +1468,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
       PortableServer::ObjectId_var oid = m_pPOA->servant_to_id(m_mgrservant);
       m_pPOA->deactivate_object(oid);
       delete m_mgrservant;
+      m_mgrservant = nullptr;
   }
 
   //============================================================
