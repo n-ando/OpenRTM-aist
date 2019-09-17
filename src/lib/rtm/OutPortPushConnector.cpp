@@ -35,7 +35,7 @@ namespace RTC
    */
   OutPortPushConnector::OutPortPushConnector(ConnectorInfo info,
                                              InPortConsumer* consumer,
-                                             ConnectorListeners& listeners,
+                                             ConnectorListeners* listeners,
                                              CdrBufferBase* buffer)
     : OutPortConnector(info, listeners),
       m_consumer(consumer), m_publisher(nullptr),
@@ -58,7 +58,7 @@ namespace RTC
 
     m_publisher->setConsumer(m_consumer);
     m_publisher->setBuffer(m_buffer);
-    m_publisher->setListener(m_profile, &m_listeners);
+    m_publisher->setListener(m_profile, m_listeners);
 
     std::string type{info.properties.getProperty("marshaling_type", "corba")};
     m_marshaling_type = coil::eraseBothEndsBlank(info.properties.getProperty("out.marshaling_type", type));
@@ -227,7 +227,7 @@ namespace RTC
    */
   void OutPortPushConnector::onConnect()
   {
-    m_listeners.connector_[ON_CONNECT].notify(m_profile);
+    m_listeners->connector_[ON_CONNECT].notify(m_profile);
   }
 
   /*!
@@ -239,7 +239,7 @@ namespace RTC
    */
   void OutPortPushConnector::onDisconnect()
   {
-    m_listeners.connector_[ON_DISCONNECT].notify(m_profile);
+    m_listeners->connector_[ON_DISCONNECT].notify(m_profile);
   }
 
   void OutPortPushConnector::unsubscribeInterface(const coil::Properties& prop)

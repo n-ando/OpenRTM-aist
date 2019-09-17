@@ -36,7 +36,7 @@ namespace RTC
    * データ転送に CORBA の RTC::DataPullService インターフェースを利用し
    * た、pull 型データフロー型を実現する OutPort コンシューマクラス。
    *
-   * @since 0.4.0
+   * @since 2.0.0
    *
    * @else
    * @class OutPortDSConsumer
@@ -46,7 +46,7 @@ namespace RTC
    * interface in CORBA for data transfer and realizes a pull-type
    * dataflow.
    *
-   * @since 0.4.0
+   * @since 2.0.0
    *
    * @endif
    */
@@ -278,7 +278,7 @@ namespace RTC
     inline void onBufferWrite(ByteData& data)
     {
       m_listeners->
-        connectorData_[ON_BUFFER_WRITE].notifyIn(m_profile, data);
+        connectorData_[ON_BUFFER_WRITE]->notifyIn(m_profile, data);
     }
 
     /*!
@@ -293,7 +293,7 @@ namespace RTC
     inline void onBufferFull(ByteData& data)
     {
       m_listeners->
-        connectorData_[ON_BUFFER_FULL].notifyIn(m_profile, data);
+        connectorData_[ON_BUFFER_FULL]->notifyIn(m_profile, data);
     }
 
     /*!
@@ -308,7 +308,7 @@ namespace RTC
     inline void onReceived(ByteData& data)
     {
       m_listeners->
-        connectorData_[ON_RECEIVED].notifyIn(m_profile, data);
+        connectorData_[ON_RECEIVED]->notifyIn(m_profile, data);
     }
 
     /*!
@@ -323,7 +323,7 @@ namespace RTC
     inline void onReceiverFull(ByteData& data)
     {
       m_listeners->
-        connectorData_[ON_RECEIVER_FULL].notifyIn(m_profile, data);
+        connectorData_[ON_RECEIVER_FULL]->notifyIn(m_profile, data);
     }
 
     /*!

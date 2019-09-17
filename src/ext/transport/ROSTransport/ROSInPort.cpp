@@ -356,7 +356,7 @@ namespace RTC
       header["md5sum"] = info->md5sum();
       header["callerid"] = m_callerid;
       header["type"] = info->type();
-      header["tcp_nodelay"] = "0";
+      header["tcp_nodelay"] = "1";
 
       RTC_VERBOSE(("writeHeader()"));
       RTC_VERBOSE(("Message Type:%s", info->type().c_str()));

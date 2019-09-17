@@ -59,7 +59,10 @@ namespace RTC
    * @class ConnectorDataListener holder class
    * @endif
    */
-  ConnectorDataListenerHolder::ConnectorDataListenerHolder() = default;
+  ConnectorDataListenerHolder::ConnectorDataListenerHolder()
+  {
+      delete m_cdr;
+  }
 
 
   ConnectorDataListenerHolder::~ConnectorDataListenerHolder()
@@ -122,6 +125,21 @@ namespace RTC
     return ret;
   }
 
+  ConnectorListenerHolder::ReturnCode ConnectorDataListenerHolder::notifyIn(ConnectorInfo& info, ByteData& data)
+  {
+      std::string type = info.properties.getProperty("marshaling_type", "corba");
+      std::string marshaling_type{ coil::eraseBothEndsBlank(
+        info.properties.getProperty("in.marshaling_type", type)) };
+      return notify(info, data, marshaling_type);
+  }
+
+  ConnectorListenerHolder::ReturnCode ConnectorDataListenerHolder::notifyOut(ConnectorInfo& info, ByteData& data)
+  {
+      std::string type = info.properties.getProperty("marshaling_type", "corba");
+      std::string marshaling_type{ coil::eraseBothEndsBlank(
+        info.properties.getProperty("out.marshaling_type", type)) };
+      return notify(info, data, marshaling_type);
+  }
 
   /*!
    * @if jp
@@ -207,7 +225,13 @@ namespace RTC
    * @brief Constructor
    * @endif
    */
-  ConnectorListeners::ConnectorListeners() = default;
+  ConnectorListeners::ConnectorListeners()
+  {
+      for (unsigned int i = 0; i < CONNECTOR_DATA_LISTENER_NUM; i++)
+      {
+          connectorData_[i] = new ConnectorDataListenerHolder();
+      }
+  }
   /*!
    * @if jp
    * @brief デストラクタ

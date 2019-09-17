@@ -1,6 +1,6 @@
 ﻿// -*- C++ -*-
 /*!
- * @file  OutPortDSConsumer.h
+ * @file  OutPortDSConsumer.cpp
  * @brief OutPortDSConsumer class
  * @date  $Date: 2018-09-20 07:49:59 $
  * @author Nobuhiko Miyamoto <n-miyamoto@aist.go.jp>

@@ -614,9 +614,8 @@ namespace RTC
      *
      * @endif
      */
-    virtual ConnectorListeners& getListeners();
+    virtual ConnectorListeners* getListeners();
     ReturnCode_t notify_connect(ConnectorProfile& connector_profile) override;
-
   protected:
     /*!
      * @if jp
@@ -734,7 +733,7 @@ namespace RTC
      * @param prop チェックするプロパティ
      * @param littleEndian エンディアン情報（true:little,false:big）
      * @return true:"serializer"キーが存在しない または 存在していて内容がある。
-,false:"serializer"キーが存在しているが内容が空 または 存在しているが内容が"little","big" 以外。
+     * ,false:"serializer"キーが存在しているが内容が空 または 存在しているが内容が"little","big" 以外。
      *
      * @else
      *
@@ -811,15 +810,30 @@ namespace RTC
     InPortConnector*
     createConnector(const ConnectorProfile& cprof, coil::Properties& prop,
                     OutPortConsumer* consumer);
-  protected:
-	  /*!
+	 /*!
 	  * @if jp
 	  * @brief ローカルのピアOutPortを取得
 	  * @else
 	  * @brief Getting local peer OutPort if available
 	  * @endif
 	  */
-	  OutPortBase* getLocalOutPort(const ConnectorInfo& profile);
+	OutPortBase* getLocalOutPort(const ConnectorInfo& profile);
+
+    /*!
+     * @if jp
+     *
+     * @brief コネクタリスナの初期化 
+     *
+     * 
+     *
+     * @else
+     *
+     * @brief 
+     *
+     *
+     * @endif
+     */
+    virtual void initConnectorListeners();
     /*!
      * @if jp
      * @brief バッファモード
@@ -884,7 +898,7 @@ namespace RTC
      * @brief ConnectorDataListener listener
      * @endif
      */
-    ConnectorListeners m_listeners;
+    ConnectorListeners *m_listeners;
   };
 } // namespace RTC
 

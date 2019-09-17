@@ -358,7 +358,7 @@ namespace RTC
     inline void onSend(ByteData& data)
     {
       m_listeners->
-        connectorData_[ON_SEND].notifyOut(m_profile, data);
+        connectorData_[ON_SEND]->notifyOut(m_profile, data);
     }
 
     /*!
@@ -373,7 +373,7 @@ namespace RTC
     inline void onReceived(ByteData& data)
     {
       m_listeners->
-        connectorData_[ON_RECEIVED].notifyOut(m_profile, data);
+        connectorData_[ON_RECEIVED]->notifyOut(m_profile, data);
     }
 
     /*!
@@ -388,7 +388,7 @@ namespace RTC
     inline void onReceiverFull(ByteData& data)
     {
       m_listeners->
-        connectorData_[ON_RECEIVER_FULL].notifyOut(m_profile, data);
+        connectorData_[ON_RECEIVER_FULL]->notifyOut(m_profile, data);
     }
 
     /*!
@@ -403,7 +403,7 @@ namespace RTC
     inline void onReceiverTimeout(ByteData& data)
     {
       m_listeners->
-        connectorData_[ON_RECEIVER_TIMEOUT].notifyOut(m_profile, data);
+        connectorData_[ON_RECEIVER_TIMEOUT]->notifyOut(m_profile, data);
     }
 
     /*!
@@ -418,7 +418,7 @@ namespace RTC
     inline void onReceiverError(ByteData& data)
     {
       m_listeners->
-        connectorData_[ON_RECEIVER_ERROR].notifyOut(m_profile, data);
+        connectorData_[ON_RECEIVER_ERROR]->notifyOut(m_profile, data);
     }
 
   private:
@@ -429,6 +429,7 @@ namespace RTC
     DataPortStatus m_retcode{DataPortStatus::PORT_OK};
     std::mutex m_retmutex;
     bool m_active{false};
+    ByteData m_data;
   };
 
 } // namespace RTC

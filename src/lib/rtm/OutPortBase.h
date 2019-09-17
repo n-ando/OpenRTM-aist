@@ -788,7 +788,7 @@ namespace RTC
 	*
 	* @endif
 	*/
-	virtual ConnectorListeners& getListeners();
+	virtual ConnectorListeners* getListeners();
 
 
   protected:
@@ -1029,7 +1029,6 @@ namespace RTC
 
     ReturnCode_t notify_connect(ConnectorProfile& connector_profile) override;
 
-
   protected:
     /*!
      * @if jp
@@ -1039,7 +1038,21 @@ namespace RTC
      * @endif
      */
     InPortBase* getLocalInPort(const ConnectorInfo& profile);
-
+    /*!
+     * @if jp
+     *
+     * @brief コネクタリスナの初期化
+     *
+     *
+     *
+     * @else
+     *
+     * @brief
+     *
+     *
+     * @endif
+     */
+    virtual void initConnectorListeners();
 
     
 
@@ -1082,7 +1095,7 @@ namespace RTC
      * @brief ConnectorDataListener listener
      * @endif
      */
-    ConnectorListeners m_listeners;
+    ConnectorListeners *m_listeners;
 
     /*!
      * @if jp

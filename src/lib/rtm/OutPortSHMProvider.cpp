@@ -159,23 +159,22 @@ namespace RTC
         return ::OpenRTM::UNKNOWN_ERROR;
       }
 
-    ByteData cdr;
-    BufferStatus ret(m_connector->read(cdr));
+    BufferStatus ret(m_connector->read(m_cdr));
     if (ret == BufferStatus::OK)
       {
-        CORBA::ULong len(static_cast<CORBA::ULong>(cdr.getDataLength()));
+        CORBA::ULong len(static_cast<CORBA::ULong>(m_cdr.getDataLength()));
         RTC_PARANOID(("converted CDR data size: %d", len));
-	if (len == static_cast<CORBA::ULong>(0)) {
-	  RTC_ERROR(("buffer is empty."));
-	  return ::OpenRTM::BUFFER_EMPTY;
-	}
-	bool endian_type = m_connector->isLittleEndian();
-	setEndian(endian_type);
-	create_memory(m_memory_size, m_shm_address.c_str());
-	write(cdr);
+        if (len == static_cast<CORBA::ULong>(0)) {
+            RTC_ERROR(("buffer is empty."));
+            return ::OpenRTM::BUFFER_EMPTY;
+        }
+        bool endian_type = m_connector->isLittleEndian();
+        setEndian(endian_type);
+        create_memory(m_memory_size, m_shm_address.c_str());
+        write(m_cdr);
       }
 
-    return convertReturn(ret, cdr);
+    return convertReturn(ret, m_cdr);
   }
 
   /*!

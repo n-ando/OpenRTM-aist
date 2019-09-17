@@ -167,12 +167,11 @@ namespace RTC
         return ::RTC::UNKNOWN_ERROR;
       }
 
-    ByteData cdr;
-    BufferStatus ret(m_connector->read(cdr));
+    BufferStatus ret(m_connector->read(m_cdr));
 
     if (ret == BufferStatus::OK)
       {
-        CORBA::ULong len(static_cast<CORBA::ULong>(cdr.getDataLength()));
+        CORBA::ULong len(static_cast<CORBA::ULong>(m_cdr.getDataLength()));
         RTC_PARANOID(("converted CDR data size: %d", len));
 
         if (len == static_cast<CORBA::ULong>(0)) {
@@ -181,15 +180,15 @@ namespace RTC
         }
 #ifndef ORB_IS_RTORB
         data->length(len);
-        cdr.readData(static_cast<unsigned char*>(data->get_buffer()), len);
+        m_cdr.readData(static_cast<unsigned char*>(data->get_buffer()), len);
 #else
         data->length(len);
-        cdr.readData(reinterpret_cast<char *>(&((*data)[0]),
+        m_cdr.readData(reinterpret_cast<char *>(&((*data)[0]),
                                         static_cast<int>(len)));
 #endif  // ORB_IS_RTORB
       }
 
-    return convertReturn(ret, cdr);
+    return convertReturn(ret, m_cdr);
   }
 
   /*!

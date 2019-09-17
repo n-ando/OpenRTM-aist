@@ -124,7 +124,7 @@ namespace RTC
      */
     InPortPushConnector(ConnectorInfo info,
                         InPortProvider* provider,
-                        ConnectorListeners& listeners,
+                        ConnectorListeners* listeners,
                         CdrBufferBase* buffer = nullptr);
 
     /*!
@@ -275,19 +275,19 @@ namespace RTC
     
     inline void onBufferRead(ByteData& data)
     {
-      m_listeners.
-        connectorData_[ON_BUFFER_READ].notifyIn(m_profile, data);
+      m_listeners->
+        connectorData_[ON_BUFFER_READ]->notifyIn(m_profile, data);
 
     }
     void onBufferEmpty(ByteData&  /*data*/)
     {
-      m_listeners.
+      m_listeners->
         connector_[ON_BUFFER_EMPTY].notify(m_profile);
 
     }
     void onBufferReadTimeout(ByteData&  /*data*/)
     {
-      m_listeners.
+      m_listeners->
         connector_[ON_BUFFER_READ_TIMEOUT].notify(m_profile);
     }
 
@@ -308,7 +308,7 @@ namespace RTC
      * @brief A reference to a ConnectorListener
      * @endif
      */
-    ConnectorListeners& m_listeners;
+    ConnectorListeners* m_listeners;
 
     bool m_deleteBuffer;
 
@@ -324,6 +324,8 @@ namespace RTC
     WorkerThreadCtrl m_writecompleted_worker;
     WorkerThreadCtrl m_readcompleted_worker;
     WorkerThreadCtrl m_readready_worker;
+
+    ByteData m_data;
 
   };
 } // namespace RTC

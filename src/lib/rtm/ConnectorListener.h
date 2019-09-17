@@ -516,12 +516,23 @@ namespace RTC
   public:
     /*!
      * @if jp
+     * @brief コンストラクタ
+     * @else
+     * @brief Constructor
+     * @endif
+     */
+    ConnectorDataListenerT() = default;
+    /*!
+     * @if jp
      * @brief デストラクタ
      * @else
      * @brief Destructor
      * @endif
      */
-    ~ConnectorDataListenerT() override = default;
+    ~ConnectorDataListenerT() override
+    {
+        delete m_cdr;
+    }
 
     /*!
      * @if jp
@@ -553,14 +564,20 @@ namespace RTC
     {
       DataType data;
 
-      ByteDataStream<DataType> *cdr = coil::GlobalFactory < ::RTC::ByteDataStream<DataType> >::instance().createObject(marshalingtype);
+      if(m_cdr == nullptr || m_marshalingtype != marshalingtype)
+      {
+        m_cdr = coil::GlobalFactory < ::RTC::ByteDataStream<DataType> >::instance().createObject(marshalingtype);
+        m_marshalingtype = marshalingtype;
+      }
+      ::RTC::ByteDataStream<DataType> *cdr = dynamic_cast<::RTC::ByteDataStream<DataType>*>(m_cdr);
+      
 
       if (!cdr)
       {
           return NO_CHANGE;
       }
 
-      cdr->writeData(cdrdata.getBuffer(), cdrdata.getDataLength());
+      
       // endian type check
       std::string endian_type{coil::normalize(
         info.properties.getProperty("serializer.cdr.endian", "little"))};
@@ -574,6 +591,9 @@ namespace RTC
       {
           cdr->isLittleEndian(false);
       }
+
+
+      cdr->writeData(cdrdata.getBuffer(), cdrdata.getDataLength());
 
       cdr->deserialize(data);
 
@@ -594,10 +614,6 @@ namespace RTC
           cdr->readData(cdrdata.getBuffer(), cdrdata.getDataLength());
       }
 
-      
-
-      coil::GlobalFactory < ::RTC::ByteDataStream<DataType> >::instance().deleteObject(cdr);
-  
       return ret;
     }
 
@@ -620,6 +636,9 @@ namespace RTC
      */
     virtual ReturnCode operator()(ConnectorInfo& info,
                                  DataType& data) = 0;
+  private:
+      ByteDataStreamBase* m_cdr{nullptr};
+      std::string m_marshalingtype;
   };
 
   /*!
@@ -1056,8 +1075,14 @@ namespace RTC
      * @param cdrdata Data
      * @endif
      */
-    ReturnCode notify(ConnectorInfo& info,
+    virtual ReturnCode notify(ConnectorInfo& info,
                 ByteData& cdrdata, const std::string& marshalingtype);
+
+
+    virtual ReturnCode notifyIn(ConnectorInfo& info, ByteData& data);
+
+    virtual ReturnCode notifyOut(ConnectorInfo& info, ByteData& data);
+
 
     /*!
      * @if jp
@@ -1145,6 +1170,11 @@ namespace RTC
       std::lock_guard<std::mutex> guard(m_mutex);
       ReturnCode ret(NO_CHANGE);
 
+      if(m_listeners.empty())
+      {
+        return ret;
+      }
+
       std::string endian_type{coil::normalize(
         info.properties.getProperty("serializer.cdr.endian", "little"))};
       std::vector<std::string> endian(coil::split(endian_type, ","));
@@ -1160,7 +1190,17 @@ namespace RTC
             }
           else
             {
-              ByteDataStream<DataType> *cdr = coil::GlobalFactory < ::RTC::ByteDataStream<DataType> >::instance().createObject(marshalingtype);
+              if (m_cdr == nullptr || m_marshalingtype != marshalingtype)
+              {
+                  m_cdr = coil::GlobalFactory < ::RTC::ByteDataStream<DataType> >::instance().createObject(marshalingtype);
+                  m_marshalingtype = marshalingtype;
+              }
+              ::RTC::ByteDataStream<DataType> *cdr = dynamic_cast<::RTC::ByteDataStream<DataType>*>(m_cdr);
+
+              if (!cdr)
+              {
+                  return NO_CHANGE;
+              }
 
               if (endian[0] == "little")
               {
@@ -1173,17 +1213,18 @@ namespace RTC
               cdr->serialize(typeddata);
               ByteData tmp = *cdr;
               ret = ret | listener.first->operator()(info, tmp, marshalingtype);
-              coil::GlobalFactory < ::RTC::ByteDataStream<DataType> >::instance().deleteObject(cdr);
+
             }
         }
       return ret;
     }
 
-  private:
+  protected:
     std::vector<Entry> m_listeners;
     std::mutex m_mutex;
+    ByteDataStreamBase* m_cdr{ nullptr };
+    std::string m_marshalingtype;
   };
-
 
   /*!
    * @if jp
@@ -1350,7 +1391,7 @@ namespace RTC
      * The ConnectorDataListenerType listener is stored.
      * @endif
      */
-    ConnectorDataListenerHolder connectorData_[CONNECTOR_DATA_LISTENER_NUM];
+    ConnectorDataListenerHolder *connectorData_[CONNECTOR_DATA_LISTENER_NUM];
     /*!
      * @if jp
      * @brief ConnectorListenerTypeリスナ配列
@@ -1361,6 +1402,213 @@ namespace RTC
      * @endif
      */
     ConnectorListenerHolder connector_[CONNECTOR_LISTENER_NUM];
+  };
+
+
+  /*!
+   * @if jp
+   * @class ConnectorDataListenerHolderT
+   * @brief データ型指定のConnectorListener ホルダクラス
+   *
+   * 複数の ConnectorListener を保持し管理するクラス。
+   *
+   * @else
+   * @class ConnectorDataListenerHolderT
+   * @brief ConnectorListener holder class
+   *
+   * This class manages one ore more instances of ConnectorListener class.
+   *
+   * @endif
+   */
+  template <class DataType>
+  class ConnectorDataListenerHolderT
+      : public ConnectorDataListenerHolder
+  {
+  public:
+      /*!
+       * @if jp
+       * @brief コンストラクタ
+       * @else
+       * @brief Constructor
+       * @endif
+       */
+      ConnectorDataListenerHolderT() = default;
+      /*!
+       * @if jp
+       * @brief デストラクタ
+       * @else
+       * @brief Destructor
+       * @endif
+       */
+      ~ConnectorDataListenerHolderT() override
+      {
+
+      }
+
+
+
+      /*!
+       * @if jp
+       *
+       * @brief リスナーへ通知する
+       *
+       * 登録されているリスナのコールバックメソッドを呼び出す。
+       *
+       * @param info ConnectorInfo
+       * @param cdrdata データ
+       * @else
+       *
+       * @brief Notify listeners.
+       *
+       * This calls the Callback method of the registered listener.
+       *
+       * @param info ConnectorInfo
+       * @param cdrdata Data
+       * @endif
+       */
+      ReturnCode notify(ConnectorInfo& info,
+          ByteData& cdrdata, const std::string& marshalingtype) override
+      {
+          std::lock_guard<std::mutex> guard(m_mutex);
+          ConnectorListenerHolder::ReturnCode ret(NO_CHANGE);
+
+          if(m_listeners.empty())
+          {
+            return ret;
+          }
+
+          DataType data;
+
+          if (m_cdr == nullptr || m_marshalingtype != marshalingtype)
+          {
+              m_cdr = coil::GlobalFactory < ::RTC::ByteDataStream<DataType> >::instance().createObject(marshalingtype);
+              m_marshalingtype = marshalingtype;
+          }
+          ::RTC::ByteDataStream<DataType> *cdr = dynamic_cast<::RTC::ByteDataStream<DataType>*>(m_cdr);
+
+
+          if (!cdr)
+          {
+              return NO_CHANGE;
+          }
+
+
+          // endian type check
+          std::string endian_type{ coil::normalize(
+            info.properties.getProperty("serializer.cdr.endian", "little")) };
+          std::vector<std::string> endian(coil::split(endian_type, ","));
+
+          if (endian[0] == "little")
+          {
+              cdr->isLittleEndian(true);
+          }
+          else if (endian[0] == "big")
+          {
+              cdr->isLittleEndian(false);
+          }
+
+
+          cdr->writeData(cdrdata.getBuffer(), cdrdata.getDataLength());
+
+          cdr->deserialize(data);
+
+
+          for (auto & listener : m_listeners)
+          {
+              ConnectorDataListenerT<DataType>* datalistener(nullptr);
+              datalistener =
+                  dynamic_cast<ConnectorDataListenerT<DataType>*>(listener.first);
+              if (datalistener != nullptr)
+              {
+                  ret = ret | datalistener->operator()(info, data);
+              }
+              else
+              {
+                  ret = ret | listener.first->operator()(info, cdrdata, marshalingtype);
+              }
+          }
+
+          if (ret == DATA_CHANGED || ret == BOTH_CHANGED)
+          {
+              if (endian[0] == "little")
+              {
+                  cdr->isLittleEndian(true);
+              }
+              else if (endian[0] == "big")
+              {
+                  cdr->isLittleEndian(false);
+              }
+
+              cdr->serialize(data);
+              cdrdata.setDataLength(cdr->getDataLength());
+              cdr->readData(cdrdata.getBuffer(), cdrdata.getDataLength());
+          }
+
+          return ret;
+      }
+
+
+
+      ReturnCode notifyIn(ConnectorInfo& info, ByteData& data) override
+      {
+          std::string type = info.properties.getProperty("marshaling_type", "corba");
+          std::string marshaling_type{ coil::eraseBothEndsBlank(
+            info.properties.getProperty("in.marshaling_type", type)) };
+          return notify(info, data, marshaling_type);
+      }
+
+      ReturnCode notifyOut(ConnectorInfo& info, ByteData& data) override
+      {
+          std::string type = info.properties.getProperty("marshaling_type", "corba");
+          std::string marshaling_type{ coil::eraseBothEndsBlank(
+            info.properties.getProperty("out.marshaling_type", type)) };
+          return notify(info, data, marshaling_type);
+      }
+
+  };
+
+  /*!
+   * @if jp
+   * @class ConnectorListenersT
+   * @brief ConnectorListenersT クラス
+   *
+   *
+   * @else
+   * @class ConnectorListenersT
+   * @brief ConnectorListenersT class
+   *
+   *
+   * @endif
+   */
+  template <class DataType>
+  class ConnectorListenersT
+      : public ConnectorListeners
+  {
+  public:
+      /*!
+       * @if jp
+       * @brief コンストラクタ
+       * @else
+       * @brief Constructor
+       * @endif
+       */
+      ConnectorListenersT()
+      {
+          for (unsigned int i = 0; i < CONNECTOR_DATA_LISTENER_NUM; i++)
+          {
+              delete connectorData_[i];
+              connectorData_[i] = new ConnectorDataListenerHolderT<DataType>();
+          }
+      };
+      /*!
+       * @if jp
+       * @brief デストラクタ
+       * @else
+       * @brief Destructor
+       * @endif
+       */
+      ~ConnectorListenersT() {};
+
   };
 } // namespace RTC
 

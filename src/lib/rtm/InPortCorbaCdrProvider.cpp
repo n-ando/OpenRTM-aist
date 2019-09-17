@@ -151,27 +151,26 @@ namespace RTC
 
     if (m_connector == nullptr)
       {
-        ByteData cdr;
-        cdr.writeData(const_cast<unsigned char*>(data.get_buffer()), static_cast<CORBA::ULong>(data.length()));
+        m_cdr.writeData(const_cast<unsigned char*>(data.get_buffer()), static_cast<CORBA::ULong>(data.length()));
 
-        onReceiverError(cdr);
+        onReceiverError(m_cdr);
         return ::OpenRTM::PORT_ERROR;
       }
 
     RTC_PARANOID(("received data size: %d", data.length()));
-    ByteData cdr;
+    
     // set endian type
     bool endian_type = m_connector->isLittleEndian();
     RTC_TRACE(("connector endian: %s", endian_type ? "little":"big"));
 
-    cdr.isLittleEndian(endian_type);
-    cdr.writeData(const_cast<unsigned char*>(data.get_buffer()), static_cast<CORBA::ULong>(data.length()));
-    RTC_PARANOID(("converted CDR data size: %d", cdr.getDataLength()));
+    m_cdr.isLittleEndian(endian_type);
+    m_cdr.writeData(const_cast<unsigned char*>(data.get_buffer()), static_cast<CORBA::ULong>(data.length()));
+    RTC_PARANOID(("converted CDR data size: %d", m_cdr.getDataLength()));
 
-    onReceived(cdr);
-    BufferStatus ret = m_connector->write(cdr);
+    onReceived(m_cdr);
+    BufferStatus ret = m_connector->write(m_cdr);
 
-    return convertReturn(ret, cdr);
+    return convertReturn(ret, m_cdr);
   }
 
   /*!

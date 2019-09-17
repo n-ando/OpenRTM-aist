@@ -1,6 +1,6 @@
 ﻿// -*- C++ -*-
 /*!
- * @file  InPortCorbaCdrConsumer.h
+ * @file  InPortCorbaCdrConsumer.cpp
  * @brief InPortCorbaCdrConsumer class
  * @date  $Date: 2007-12-31 03:08:03 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
@@ -72,10 +72,9 @@ namespace RTC
     RTC_PARANOID(("put()"));
 
 #ifndef ORB_IS_RTORB
-    ::OpenRTM::CdrData tmp;
     CORBA::ULong len = static_cast<CORBA::ULong>(data.getDataLength());
-    tmp.length(len);
-    data.readData(static_cast<unsigned char*>(tmp.get_buffer()), len);
+    m_data.length(len);
+    data.readData(static_cast<unsigned char*>(m_data.get_buffer()), len);
 #else // ORB_IS_RTORB
     OpenRTM_CdrData *cdrdata_tmp = new OpenRTM_CdrData();
     cdrdata_tmp->_buffer =
@@ -88,13 +87,12 @@ namespace RTC
       {
         // return code conversion
         // (IDL)OpenRTM::DataPort::ReturnCode_t -> DataPortStatus
-        return convertReturnCode(_ptr()->put(tmp));
+        return convertReturnCode(_ptr()->put(m_data));
       }
     catch (...)
       {
         return DataPortStatus::CONNECTION_LOST;
       }
-    return DataPortStatus::UNKNOWN_ERROR;
   }
 
   /*!

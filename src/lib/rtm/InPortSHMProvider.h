@@ -189,49 +189,49 @@ namespace RTC
     inline void onBufferWrite(ByteData& data)
     {
       m_listeners->
-        connectorData_[ON_BUFFER_WRITE].notifyIn(m_profile, data);
+        connectorData_[ON_BUFFER_WRITE]->notifyIn(m_profile, data);
     }
 
     inline void onBufferFull(ByteData& data)
     {
       m_listeners->
-        connectorData_[ON_BUFFER_FULL].notifyIn(m_profile, data);
+        connectorData_[ON_BUFFER_FULL]->notifyIn(m_profile, data);
     }
 
     inline void onBufferWriteTimeout(ByteData& data)
     {
       m_listeners->
-        connectorData_[ON_BUFFER_WRITE_TIMEOUT].notifyIn(m_profile, data);
+        connectorData_[ON_BUFFER_WRITE_TIMEOUT]->notifyIn(m_profile, data);
     }
 
     inline void onBufferWriteOverwrite(ByteData& data)
     {
       m_listeners->
-        connectorData_[ON_BUFFER_OVERWRITE].notifyIn(m_profile, data);
+        connectorData_[ON_BUFFER_OVERWRITE]->notifyIn(m_profile, data);
     }
 
     inline void onReceived(ByteData& data)
     {
       m_listeners->
-        connectorData_[ON_RECEIVED].notifyIn(m_profile, data);
+        connectorData_[ON_RECEIVED]->notifyIn(m_profile, data);
     }
 
     inline void onReceiverFull(ByteData& data)
     {
       m_listeners->
-        connectorData_[ON_RECEIVER_FULL].notifyIn(m_profile, data);
+        connectorData_[ON_RECEIVER_FULL]->notifyIn(m_profile, data);
     }
 
     inline void onReceiverTimeout(ByteData& data)
     {
       m_listeners->
-        connectorData_[ON_RECEIVER_TIMEOUT].notifyIn(m_profile, data);
+        connectorData_[ON_RECEIVER_TIMEOUT]->notifyIn(m_profile, data);
     }
 
     inline void onReceiverError(ByteData& data)
     {
       m_listeners->
-        connectorData_[ON_RECEIVER_ERROR].notifyIn(m_profile, data);
+        connectorData_[ON_RECEIVER_ERROR]->notifyIn(m_profile, data);
     }
 
   private:
@@ -240,6 +240,7 @@ namespace RTC
     ConnectorListeners* m_listeners;
     ConnectorInfo m_profile;
     InPortConnector* m_connector{nullptr};
+    ByteData m_cdr;
 
   };  // class InPortCorCdrbaProvider
 } // namespace RTC

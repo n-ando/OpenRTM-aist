@@ -153,29 +153,27 @@ namespace RTC
 
     if (m_buffer == 0)
       {
-        ByteData cdr;
 
-        cdr.writeData((unsigned char*)data.get_buffer(), data.length());
+        m_cdr.writeData((unsigned char*)data.get_buffer(), data.length());
 
-        onReceiverError(cdr);
+        onReceiverError(m_cdr);
         return;
       }
 
     RTC_PARANOID(("received data size: %d", data.length()))
-    ByteData cdr;
     // set endian type
     bool endian_type = m_connector->isLittleEndian();
     RTC_TRACE(("connector endian: %s", endian_type ? "little":"big"));
 
-    cdr.isLittleEndian(endian_type);
-    cdr.writeData((unsigned char*)&(data[0]), data.length());
-    RTC_PARANOID(("converted CDR data size: %d", cdr.getDataLength()));
+    m_cdr.isLittleEndian(endian_type);
+    m_cdr.writeData((unsigned char*)&(data[0]), data.length());
+    RTC_PARANOID(("converted CDR data size: %d", m_cdr.getDataLength()));
 
 
-    onReceived(cdr);
-	BufferStatus ret = m_buffer->write(cdr);
+    onReceived(m_cdr);
+    BufferStatus ret = m_buffer->write(m_cdr);
 
-	convertReturn(ret, cdr);
+    convertReturn(ret, m_cdr);
   }
 
   /*!

@@ -78,10 +78,9 @@ namespace RTC
     RTC_PARANOID(("put()"));
 
 #ifndef ORB_IS_RTORB
-    ::OpenRTM::CdrData tmp;
     CORBA::ULong len = (CORBA::ULong)data.getDataLength();
-    tmp.length(len);
-    data.readData((unsigned char*)tmp.get_buffer(), len);
+    m_data.length(len);
+    data.readData((unsigned char*)m_data.get_buffer(), len);
 #else // ORB_IS_RTORB
     OpenRTM_CdrData *cdrdata_tmp = new OpenRTM_CdrData();
     cdrdata_tmp->_buffer =
@@ -94,14 +93,13 @@ namespace RTC
       {
         // return code conversion
         // (IDL)OpenRTM::DataPort::ReturnCode_t -> DataPortStatus
-		_ptr()->put(tmp);
+        _ptr()->put(m_data);
         return DataPortStatus::PORT_OK;
       }
     catch (...)
       {
         return DataPortStatus::CONNECTION_LOST;
       }
-    return DataPortStatus::UNKNOWN_ERROR;
   }
   
   /*!
@@ -194,25 +192,25 @@ namespace RTC
 	
 
 #ifdef ORB_IS_TAO
-	TAO_Stub *stub = obj->_stubobj();
+    TAO_Stub *stub = obj->_stubobj();
 
 
-	TAO_MProfile profiles = stub->base_profiles();
-	
-	while (profiles.profile_count() > 1)
-	{
-		if (profiles.get_profile(0)->tag() != TAO_TAG_DIOP_PROFILE)
-		{
-			profiles.remove_profile(profiles.get_profile(0));
-		}
-		else
-		{
-			break;
-		}
-	}
-	
-	TAO_Profile* profile = stub->profile_in_use();
-	stub->base_profiles(profiles);
+    TAO_MProfile profiles = stub->base_profiles();
+    
+    while (profiles.profile_count() > 1)
+      {
+        if (profiles.get_profile(0)->tag() != TAO_TAG_DIOP_PROFILE)
+          {
+            profiles.remove_profile(profiles.get_profile(0));
+          }
+        else
+          {
+            break;
+          }
+    }
+    
+    TAO_Profile* profile = stub->profile_in_use();
+    stub->base_profiles(profiles);
 #endif
     
     if (CORBA::is_nil(obj))

@@ -118,6 +118,9 @@ namespace RTC
         m_OnRead(nullptr),  m_OnReadConvert(nullptr),
         m_status(1), m_directNewData(false)
     {
+
+      this->initConnectorListeners();
+
       this->addConnectorDataListener(ON_RECEIVED,
                                      new Timestamp<DataType>("on_received"));
       this->addConnectorDataListener(ON_BUFFER_READ,
@@ -781,7 +784,26 @@ namespace RTC
     {
       m_OnReadConvert = on_rconvert;
     }
-
+  protected:
+    /*!
+     * @if jp
+     *
+     * @brief コネクタリスナの初期化 
+     *
+     * 
+     *
+     * @else
+     *
+     * @brief 
+     *
+     *
+     * @endif
+     */
+    void initConnectorListeners() override
+    {
+      delete m_listeners;
+      m_listeners = new ConnectorListenersT<DataType>();
+    }
   private:
     std::string m_typename;
     /*!

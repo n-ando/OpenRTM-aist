@@ -34,7 +34,7 @@ namespace RTC
    */
   InPortPullConnector::InPortPullConnector(ConnectorInfo info,
                                            OutPortConsumer* consumer,
-                                           ConnectorListeners& listeners,
+                                           ConnectorListeners* listeners,
                                            CdrBufferBase* buffer)
     : InPortConnector(info, listeners, buffer), m_consumer(consumer),
       m_listeners(listeners)
@@ -49,7 +49,7 @@ namespace RTC
       }
     m_buffer->init(info.properties.getNode("buffer"));
     m_consumer->setBuffer(m_buffer);
-    m_consumer->setListener(info, &m_listeners);
+    m_consumer->setListener(info, m_listeners);
 
     std::string type{info.properties.getProperty("marshaling_type", "corba")};
     m_marshaling_type = coil::eraseBothEndsBlank(
@@ -86,9 +86,9 @@ namespace RTC
       {
         return DataPortStatus::PORT_ERROR;
       }
-    ByteData tmp;
-    DataPortStatus ret = m_consumer->get(tmp);
-    data->writeData(tmp.getBuffer(), tmp.getDataLength());
+    
+    DataPortStatus ret = m_consumer->get(m_data);
+    data->writeData(m_data.getBuffer(), m_data.getDataLength());
     return ret;
   }
 
@@ -137,7 +137,7 @@ namespace RTC
    */
   void InPortPullConnector::onConnect()
   {
-    m_listeners.connector_[ON_CONNECT].notify(m_profile);
+    m_listeners->connector_[ON_CONNECT].notify(m_profile);
   }
 
   /*!
@@ -149,7 +149,7 @@ namespace RTC
    */
   void InPortPullConnector::onDisconnect()
   {
-    m_listeners.connector_[ON_DISCONNECT].notify(m_profile);
+    m_listeners->connector_[ON_DISCONNECT].notify(m_profile);
   }
 
   void InPortPullConnector::unsubscribeInterface(const coil::Properties& prop)

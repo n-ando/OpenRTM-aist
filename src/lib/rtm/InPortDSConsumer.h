@@ -37,7 +37,7 @@ namespace RTC
    * データ転送に CORBA の RTC::DataPushService インターフェースを利用し
    * た、push 型データフロー型を実現する InPort コンシューマクラス。
    *
-   * @since 0.4.0
+   * @since 2.0.0
    *
    * @else
    * @class InPortDSConsumer
@@ -47,7 +47,7 @@ namespace RTC
    * interface in CORBA for data transfer and realizes a push-type
    * dataflow.
    *
-   * @since 0.4.0
+   * @since 2.0.0
    *
    * @endif
    */
@@ -294,6 +294,7 @@ namespace RTC
 
     mutable Logger rtclog;
     coil::Properties m_properties;
+    ::RTC::OctetSeq m_data;
   };
 } // namespace RTC
 
