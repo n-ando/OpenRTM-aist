@@ -1471,6 +1471,7 @@ namespace RTC
       {
           std::lock_guard<std::mutex> guard(m_mutex);
           ConnectorListenerHolder::ReturnCode ret(NO_CHANGE);
+          bool endian = true;
 
           if(m_listeners.empty())
           {
@@ -1496,20 +1497,19 @@ namespace RTC
           // endian type check
           std::string endian_type{ coil::normalize(
             info.properties.getProperty("serializer.cdr.endian", "little")) };
-          std::vector<std::string> endian(coil::split(endian_type, ","));
+          std::vector<std::string> endian_str(coil::split(endian_type, ","));
 
-          if (endian[0] == "little")
+          if (endian_str[0] == "little")
           {
-              cdr->isLittleEndian(true);
+              endian = true;
           }
-          else if (endian[0] == "big")
+          else if (endian_str[0] == "big")
           {
-              cdr->isLittleEndian(false);
+              endian = false;
           }
 
-
+          cdr->isLittleEndian(endian);
           cdr->writeData(cdrdata.getBuffer(), cdrdata.getDataLength());
-
           cdr->deserialize(data);
 
 
@@ -1520,28 +1520,27 @@ namespace RTC
                   dynamic_cast<ConnectorDataListenerT<DataType>*>(listener.first);
               if (datalistener != nullptr)
               {
-                  ret = ret | datalistener->operator()(info, data);
+                  ConnectorListenerHolder::ReturnCode linstener_ret(datalistener->operator()(info, data));
+                  if (linstener_ret == DATA_CHANGED || linstener_ret == BOTH_CHANGED)
+                  {
+                      cdr->isLittleEndian(endian);
+                      cdr->serialize(data);
+                      cdrdata.setDataLength(cdr->getDataLength());
+                      cdr->readData(cdrdata.getBuffer(), cdrdata.getDataLength());
+                  }
+                  ret = ret | linstener_ret;
               }
               else
               {
-                  ret = ret | listener.first->operator()(info, cdrdata, marshalingtype);
+                  ConnectorListenerHolder::ReturnCode linstener_ret(listener.first->operator()(info, cdrdata, marshalingtype));
+                  if (linstener_ret == DATA_CHANGED || linstener_ret == BOTH_CHANGED)
+                  {
+                      cdr->isLittleEndian(endian);
+                      cdr->writeData(cdrdata.getBuffer(), cdrdata.getDataLength());
+                      cdr->deserialize(data);
+                  }
+                  ret = ret | linstener_ret;
               }
-          }
-
-          if (ret == DATA_CHANGED || ret == BOTH_CHANGED)
-          {
-              if (endian[0] == "little")
-              {
-                  cdr->isLittleEndian(true);
-              }
-              else if (endian[0] == "big")
-              {
-                  cdr->isLittleEndian(false);
-              }
-
-              cdr->serialize(data);
-              cdrdata.setDataLength(cdr->getDataLength());
-              cdr->readData(cdrdata.getBuffer(), cdrdata.getDataLength());
           }
 
           return ret;

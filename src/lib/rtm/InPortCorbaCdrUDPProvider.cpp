@@ -160,7 +160,7 @@ namespace RTC
         return;
       }
 
-    RTC_PARANOID(("received data size: %d", data.length()))
+    RTC_PARANOID(("received data size: %d", data.length()));
     // set endian type
     bool endian_type = m_connector->isLittleEndian();
     RTC_TRACE(("connector endian: %s", endian_type ? "little":"big"));
