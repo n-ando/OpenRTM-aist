@@ -472,11 +472,19 @@ namespace RTC_impl
   void ExecutionContextWorker::invokeWorker()
   {
     RTC_PARANOID(("invokeWorker()"));
-    std::lock_guard<std::mutex> stateguard(m_statemutex);
     // m_comps never changes its size here
-    for (auto & comp : m_comps) { comp->workerPreDo();  }
-    for (auto & comp : m_comps) { comp->workerDo();     }
-    for (auto & comp : m_comps) { comp->workerPostDo(); }
+    for (auto & comp : m_comps) { 
+        std::lock_guard<std::mutex> stateguard(m_statemutex); 
+        comp->workerPreDo();  
+    }
+    for (auto & comp : m_comps) { 
+        std::lock_guard<std::mutex> stateguard(m_statemutex);
+        comp->workerDo();     
+    }
+    for (auto & comp : m_comps) { 
+        std::lock_guard<std::mutex> stateguard(m_statemutex);
+        comp->workerPostDo(); 
+    }
     std::lock_guard<std::mutex> guard(m_mutex);
     updateComponentList();
   }
@@ -484,25 +492,31 @@ namespace RTC_impl
   void ExecutionContextWorker::invokeWorkerPreDo()
   {
     RTC_PARANOID(("invokeWorkerPreDo()"));
-    std::lock_guard<std::mutex> stateguard(m_statemutex);
     // m_comps never changes its size here
-    for (auto & comp : m_comps) { comp->workerPreDo();  }
+    for (auto & comp : m_comps) { 
+        std::lock_guard<std::mutex> stateguard(m_statemutex);
+        comp->workerPreDo();  
+    }
   }
 
   void ExecutionContextWorker::invokeWorkerDo()
   {
     RTC_PARANOID(("invokeWorkerDo()"));
-    std::lock_guard<std::mutex> stateguard(m_statemutex);
     // m_comps never changes its size here
-    for (auto & comp : m_comps) { comp->workerDo();     }
+    for (auto & comp : m_comps) { 
+        std::lock_guard<std::mutex> stateguard(m_statemutex); 
+        comp->workerDo();     
+    }
   }
 
   void ExecutionContextWorker::invokeWorkerPostDo()
   {
     RTC_PARANOID(("invokeWorkerPostDo()"));
-    std::lock_guard<std::mutex> stateguard(m_statemutex);
     // m_comps never changes its size here
-    for (auto & comp : m_comps) { comp->workerPostDo(); }
+    for (auto & comp : m_comps) { 
+        std::lock_guard<std::mutex> stateguard(m_statemutex); 
+        comp->workerPostDo(); 
+    }
     // m_comps might be changed here
     std::lock_guard<std::mutex> guard(m_mutex);
     updateComponentList();
