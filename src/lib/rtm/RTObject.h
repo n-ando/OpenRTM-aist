@@ -4997,46 +4997,56 @@ namespace RTC
      */
     inline void preOnFsmInit(const char* state)
     {
-      m_fsmActionListeners.preaction_[PRE_ON_INIT].notify(state);
+      uint8_t i = static_cast<uint8_t>(PreFsmActionListenerType::PRE_ON_INIT);
+      m_fsmActionListeners.preaction_[i].notify(state);
     }
     inline void preOnFsmEntry(const char* state)
     {
-      m_fsmActionListeners.preaction_[PRE_ON_ENTRY].notify(state);
+      uint8_t i = static_cast<uint8_t>(PreFsmActionListenerType::PRE_ON_ENTRY);
+      m_fsmActionListeners.preaction_[i].notify(state);
     }
     inline void preOnFsmDo(const char* state)
     {
-      m_fsmActionListeners.preaction_[PRE_ON_DO].notify(state);
+      uint8_t i = static_cast<uint8_t>(PreFsmActionListenerType::PRE_ON_DO);
+      m_fsmActionListeners.preaction_[i].notify(state);
     }
     inline void preOnFsmExit(const char* state)
     {
-      m_fsmActionListeners.preaction_[PRE_ON_EXIT].notify(state);
+      uint8_t i = static_cast<uint8_t>(PreFsmActionListenerType::PRE_ON_EXIT);
+      m_fsmActionListeners.preaction_[i].notify(state);
     }
     inline void preOnFsmStateChange(const char* state)
     {
-      m_fsmActionListeners.preaction_[PRE_ON_STATE_CHANGE].notify(state);
+      uint8_t i = static_cast<uint8_t>(PreFsmActionListenerType::PRE_ON_STATE_CHANGE);
+      m_fsmActionListeners.preaction_[i].notify(state);
     }
     /*!
      * FSM related listeners
      */
     inline void postOnFsmInit(const char* state, ReturnCode_t ret)
     {
-      m_fsmActionListeners.postaction_[POST_ON_INIT].notify(state, ret);
+      uint8_t i = static_cast<uint8_t>(PostFsmActionListenerType::POST_ON_INIT);
+      m_fsmActionListeners.postaction_[i].notify(state, ret);
     }
     inline void postOnFsmEntry(const char* state, ReturnCode_t ret)
     {
-      m_fsmActionListeners.postaction_[POST_ON_ENTRY].notify(state, ret);
+      uint8_t i = static_cast<uint8_t>(PostFsmActionListenerType::POST_ON_ENTRY);
+      m_fsmActionListeners.postaction_[i].notify(state, ret);
     }
     inline void postOnFsmDo(const char* state, ReturnCode_t ret)
     {
-      m_fsmActionListeners.postaction_[POST_ON_DO].notify(state, ret);
+      uint8_t i = static_cast<uint8_t>(PostFsmActionListenerType::POST_ON_DO);
+      m_fsmActionListeners.postaction_[i].notify(state, ret);
     }
     inline void postOnFsmExit(const char* state, ReturnCode_t ret)
     {
-      m_fsmActionListeners.postaction_[POST_ON_EXIT].notify(state, ret);
+      uint8_t i = static_cast<uint8_t>(PostFsmActionListenerType::POST_ON_EXIT);
+      m_fsmActionListeners.postaction_[i].notify(state, ret);
     }
     inline void postOnFsmStateChange(const char* state, ReturnCode_t ret)
     {
-      m_fsmActionListeners.postaction_[POST_ON_STATE_CHANGE].notify(state, ret);
+      uint8_t i = static_cast<uint8_t>(PostFsmActionListenerType::POST_ON_STATE_CHANGE);
+      m_fsmActionListeners.postaction_[i].notify(state, ret);
     }
 
     

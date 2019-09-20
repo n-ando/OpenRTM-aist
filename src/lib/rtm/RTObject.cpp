@@ -2490,7 +2490,7 @@ namespace RTC
                           bool autoclean)
   {
     m_fsmActionListeners.
-      preaction_[listener_type].addListener(listener, autoclean);
+      preaction_[static_cast<uint8_t>(listener_type)].addListener(listener, autoclean);
   }
   
   
@@ -2508,7 +2508,7 @@ namespace RTC
                              PreFsmActionListener* listener)
   {
     m_fsmActionListeners.
-      preaction_[listener_type].removeListener(listener);
+      preaction_[static_cast<uint8_t>(listener_type)].removeListener(listener);
   }
 
 
@@ -2527,7 +2527,7 @@ namespace RTC
                            bool autoclean)
   {
     m_fsmActionListeners.
-      postaction_[listener_type].addListener(listener, autoclean);
+      postaction_[static_cast<uint8_t>(listener_type)].addListener(listener, autoclean);
   }
 
 
@@ -2545,7 +2545,7 @@ namespace RTC
                               PostFsmActionListener* listener)
   {
     m_fsmActionListeners.
-      postaction_[listener_type].removeListener(listener);
+      postaction_[static_cast<uint8_t>(listener_type)].removeListener(listener);
   }
 
   /*!
@@ -2563,7 +2563,7 @@ namespace RTC
                           bool autoclean)
   {
     m_fsmActionListeners.
-      profile_[listener_type].addListener(listener, autoclean);
+      profile_[static_cast<uint8_t>(listener_type)].addListener(listener, autoclean);
   }
 
 
@@ -2581,7 +2581,7 @@ namespace RTC
                              FsmProfileListener* listener)
   {
     m_fsmActionListeners.
-      profile_[listener_type].removeListener(listener);
+      profile_[static_cast<uint8_t>(listener_type)].removeListener(listener);
   }
 
   /*!
@@ -2599,7 +2599,7 @@ namespace RTC
                           bool autoclean)
   {
     m_fsmActionListeners.
-      structure_[listener_type].addListener(listener, autoclean);
+      structure_[static_cast<uint8_t>(listener_type)].addListener(listener, autoclean);
   }
 
 
@@ -2617,7 +2617,7 @@ namespace RTC
                              FsmStructureListener* listener)
   {
     m_fsmActionListeners.
-      structure_[listener_type].removeListener(listener);
+      structure_[static_cast<uint8_t>(listener_type)].removeListener(listener);
   }
 
   

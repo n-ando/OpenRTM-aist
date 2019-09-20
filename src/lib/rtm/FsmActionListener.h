@@ -71,7 +71,7 @@ namespace RTC
    * - PRE_ON_STATE_CHANGE:  状態遷移直前
    *
    * @else
-   * @brief The types of ConnectorDataListener
+   * @brief The types of PreFsmActionListener
    *
    * PreFsmActionListener has the following hook points. If these
    * listeners are actually called or not called are depends on FSM
@@ -85,7 +85,7 @@ namespace RTC
    *
    * @endif
    */
-  enum PreFsmActionListenerType
+  enum class PreFsmActionListenerType : uint8_t
     {
       PRE_ON_INIT,
       PRE_ON_ENTRY,
@@ -129,7 +129,7 @@ namespace RTC
    * <pre>
    * RTC::ReturnCode_t ConsoleIn::onInitialize()
    * {
-   *     addPreFsmActionListener(PRE_ON_STATE_CHANGE,
+   *     addPreFsmActionListener(PreFsmActionListenerType::PRE_ON_STATE_CHANGE,
    *                             new MyListener("init listener"),
    *                             true);
    *    :
@@ -190,7 +190,7 @@ namespace RTC
    * <pre>
    * RTC::ReturnCode_t ConsoleIn::onInitialize()
    * {
-   *     addPreFsmActionListener(PRE_ON_STATE_CHANGE,
+   *     addPreFsmActionListener(PreFsmActionListenerType::PRE_ON_STATE_CHANGE,
    *                             new MyListener("init listener"),
    *                             true);
    *    :
@@ -264,7 +264,10 @@ namespace RTC
           "PRE_ON_STATE_CHANGE",
           "PRE_FSM_ACTION_LISTENER_NUM"
         };
-      if (type < PRE_FSM_ACTION_LISTENER_NUM) { return typeString[type]; }
+      if (type < PreFsmActionListenerType::PRE_FSM_ACTION_LISTENER_NUM)
+	{
+	  return typeString[static_cast<uint8_t>(type)];
+	}
       return "";
     }
 
@@ -299,9 +302,9 @@ namespace RTC
   //============================================================
   /*!
    * @if jp
-   * @brief PreFsmActionListener のタイプ
+   * @brief PostFsmActionListener のタイプ
    *
-   * PreFsmActionListener には以下のフックポイントが定義されている。こ
+   * PostFsmActionListener には以下のフックポイントが定義されている。こ
    * れらが呼び出されるかどうかは、FSMの実装に依存する。
    *
    * - POST_ON_INIT:          init 直後
@@ -311,9 +314,9 @@ namespace RTC
    * - POST_ON_STATE_CHANGE:  状態遷移直後
    *
    * @else
-   * @brief The types of ConnectorDataListener
+   * @brief The types of PostFsmActionListener
    *
-   * PreFsmActionListener has the following hook points. If these
+   * PostFsmActionListener has the following hook points. If these
    * listeners are actually called or not called are depends on FSM
    * implementations.
    *
@@ -325,7 +328,7 @@ namespace RTC
    *
    * @endif
    */
-  enum PostFsmActionListenerType
+  enum class PostFsmActionListenerType : uint8_t
     {
       POST_ON_INIT,
       POST_ON_ENTRY,
@@ -369,7 +372,7 @@ namespace RTC
    * <pre>
    * RTC::ReturnCode_t ConsoleIn::onInitialize()
    * {
-   *     addPostFsmActionListener(POST_ON_STATE_CHANGE,
+   *     addPostFsmActionListener(PostFsmActionListenerType::POST_ON_STATE_CHANGE,
    *                             new MyListener("init listener"),
    *                             true);
    *    :
@@ -430,7 +433,7 @@ namespace RTC
    * <pre>
    * RTC::ReturnCode_t ConsoleIn::onInitialize()
    * {
-   *     addPostFsmActionListener(POST_ON_STATE_CHANGE,
+   *     addPostFsmActionListener(PostFsmActionListenerType::POST_ON_STATE_CHANGE,
    *                             new MyListener("init listener"),
    *                             true);
    *    :
@@ -504,9 +507,9 @@ namespace RTC
           "POST_ON_STATE_CHANGE",
           "POST_FSM_ACTION_LISTENER_NUM"
         };
-      if (type < POST_FSM_ACTION_LISTENER_NUM)
+      if (type < PostFsmActionListenerType::POST_FSM_ACTION_LISTENER_NUM)
         {
-          return typeString[type];
+          return typeString[static_cast<uint8_t>(type)];
         }
       return "";
     }
@@ -567,7 +570,7 @@ namespace RTC
    *
    * @endif
    */
-  enum FsmProfileListenerType
+  enum class FsmProfileListenerType : uint8_t
     {
       SET_FSM_PROFILE,
       GET_FSM_PROFILE,
@@ -614,7 +617,7 @@ namespace RTC
    * <pre>
    * RTC::ReturnCode_t ConsoleIn::onInitialize()
    * {
-   *     addFsmProfileListener(SET_FSM_PROFILE,
+   *     addFsmProfileListener(FsmProfileListenerType::SET_FSM_PROFILE,
    *                           new MyListener("prof listener"),
    *                           true);
    *    :
@@ -676,7 +679,7 @@ namespace RTC
    * <pre>
    * RTC::ReturnCode_t ConsoleIn::onInitialize()
    * {
-   *     addFsmProfileListener(SET_FSM_PROFILE,
+   *     addFsmProfileListener(FsmProfileListenerType::SET_FSM_PROFILE,
    *                           new MyListener("prof listener"),
    *                           true);
    *    :
@@ -753,7 +756,10 @@ namespace RTC
           "UNBIND_FSM_EVENT",
           "FSM_PROFILE_LISTENER_NUM"
         };
-      if (type < FSM_PROFILE_LISTENER_NUM) { return typeString[type]; }
+      if (type < FsmProfileListenerType::FSM_PROFILE_LISTENER_NUM)
+	{
+	  return typeString[static_cast<uint8_t>(type)];
+	}
       return "";
     }
 
@@ -801,7 +807,7 @@ namespace RTC
    *
    * @endif
    */
-  enum FsmStructureListenerType
+  enum class FsmStructureListenerType : uint8_t
     {
       SET_FSM_STRUCTURE,
       GET_FSM_STRUCTURE,
@@ -841,7 +847,7 @@ namespace RTC
    * <pre>
    * RTC::ReturnCode_t ConsoleIn::onInitialize()
    * {
-   *     addFsmStructureListener(SET_FSM_STRUCTURE,
+   *     addFsmStructureListener(FsmStructureListenerType::SET_FSM_STRUCTURE,
    *                             new MyListener("set structure listener"),
    *                             true);
    *    :
@@ -871,7 +877,7 @@ namespace RTC
    * @class FsmStructureListener class
    * @brief FsmStructureListener class
    *
-   * PostFsmActionListener class is a base class for the listener
+   * FsmStructureListener class is a base class for the listener
    * objects which realize callback to hook FSM structure profile
    * related actions. To hook execution just before a FSM action, the
    * callback object should be defined as follows, and set to RTObject
@@ -897,7 +903,7 @@ namespace RTC
    * <pre>
    * RTC::ReturnCode_t ConsoleIn::onInitialize()
    * {
-   *     addFsmStructureListener(SET_FSM_STRUCTURE,
+   *     addFsmStructureListener(FsmStructureListenerType::SET_FSM_STRUCTURE,
    *                             new MyListener("set structure listener"),
    *                             true);
    *    :
@@ -926,7 +932,7 @@ namespace RTC
    * case, listener objects pointers must be stored to member
    * variables, and set/unset of the listener objects shoud be
    * paerformed throguh
-   * RTObject_impl::addPostFsmActionListener()/removePostFsmActionListener()
+   * RTObject_impl::addFsmStructureListener()/removeFsmStructureListener()
    * functions.
    *
    * @endif
@@ -965,7 +971,10 @@ namespace RTC
           "GET_FSM_STRUCTURE",
           "FSM_STRUCTURE_LISTENER_NUM"
         };
-      if (type < FSM_STRUCTURE_LISTENER_NUM) { return typeString[type]; }
+      if (type < FsmStructureListenerType::FSM_STRUCTURE_LISTENER_NUM)
+	{
+	  return typeString[static_cast<uint8_t>(type)];
+	}
       return "";
     }
 
@@ -1464,7 +1473,7 @@ namespace RTC
      * @endif
      */
     PreFsmActionListenerHolder 
-    preaction_[PRE_FSM_ACTION_LISTENER_NUM];
+    preaction_[static_cast<uint8_t>(PreFsmActionListenerType::PRE_FSM_ACTION_LISTENER_NUM)];
     /*!
      * @if jp
      * @brief PostFsmActionTypeリスナ配列
@@ -1475,7 +1484,7 @@ namespace RTC
      * @endif
      */
     PostFsmActionListenerHolder 
-    postaction_[POST_FSM_ACTION_LISTENER_NUM];
+    postaction_[static_cast<uint8_t>(PostFsmActionListenerType::POST_FSM_ACTION_LISTENER_NUM)];
     /*!
      * @if jp
      * @brief FsmProfileTypeリスナ配列
@@ -1486,7 +1495,7 @@ namespace RTC
      * @endif
      */
     FsmProfileListenerHolder
-    profile_[FSM_PROFILE_LISTENER_NUM];
+    profile_[static_cast<uint8_t>(FsmProfileListenerType::FSM_PROFILE_LISTENER_NUM)];
     /*!
      * @if jp
      * @brief FsmStructureTypeリスナ配列
@@ -1497,7 +1506,7 @@ namespace RTC
      * @endif
      */
     FsmStructureListenerHolder
-    structure_[FSM_STRUCTURE_LISTENER_NUM];
+    structure_[static_cast<uint8_t>(FsmStructureListenerType::FSM_STRUCTURE_LISTENER_NUM)];
   };
 
 } // namespace RTC
