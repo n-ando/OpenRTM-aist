@@ -41,7 +41,7 @@ namespace RTC
    *
    * @endif
    */
-  enum ConfigurationParamListenerType
+  enum class ConfigurationParamListenerType : uint8_t
     {
       ON_UPDATE_CONFIG_PARAM,
       CONFIG_PARAM_LISTENER_NUM
@@ -98,14 +98,14 @@ namespace RTC
      */
     static const char* toString(ConfigurationParamListenerType type)
     {
-      if (type < CONFIG_PARAM_LISTENER_NUM)
+      if (type < ConfigurationParamListenerType::CONFIG_PARAM_LISTENER_NUM)
         {
           static const char* const typeString[] =
           {
             "ON_UPDATE_CONFIG_PARAM",
             "CONFIG_PARAM_LISTENER_NUM"
           };
-          return typeString[type];
+          return typeString[static_cast<uint8_t>(type)];
         }
       return "";
     }
@@ -156,7 +156,7 @@ namespace RTC
    * @endif
    */
 
-  enum ConfigurationSetListenerType
+  enum class ConfigurationSetListenerType : uint8_t
     {
       ON_SET_CONFIG_SET,
       ON_ADD_CONFIG_SET,
@@ -215,7 +215,7 @@ namespace RTC
      */
     static const char* toString(ConfigurationSetListenerType type)
     {
-      if (type < CONFIG_SET_LISTENER_NUM)
+      if (type < ConfigurationSetListenerType::CONFIG_SET_LISTENER_NUM)
         {
           static const char* const typeString[] =
           {
@@ -223,7 +223,7 @@ namespace RTC
             "ON_ADD_CONFIG_SET",
             "CONFIG_SET_LISTENER_NUM"
           };
-          return typeString[type];
+          return typeString[static_cast<uint8_t>(type)];
         }
       return "";
     }
@@ -267,7 +267,7 @@ namespace RTC
    *
    * @endif
    */
-  enum ConfigurationSetNameListenerType
+  enum class ConfigurationSetNameListenerType : uint8_t
     {
       ON_UPDATE_CONFIG_SET,
       ON_REMOVE_CONFIG_SET,
@@ -328,7 +328,7 @@ namespace RTC
      */
     static const char* toString(ConfigurationSetNameListenerType type)
     {
-      if (type < CONFIG_SET_NAME_LISTENER_NUM)
+      if (type < ConfigurationSetNameListenerType::CONFIG_SET_NAME_LISTENER_NUM)
         {
           static const char* const typeString[] =
           {
@@ -337,7 +337,7 @@ namespace RTC
             "ON_ACTIVATE_CONFIG_SET",
             "CONFIG_SET_NAME_LISTENER_NUM"
           };
-          return typeString[type];
+          return typeString[static_cast<uint8_t>(type)];
         }
       return "";
     }
@@ -715,7 +715,7 @@ namespace RTC
      * @endif
      */
     ConfigurationParamListenerHolder
-    configparam_[CONFIG_PARAM_LISTENER_NUM];
+    configparam_[static_cast<uint8_t>(ConfigurationParamListenerType::CONFIG_PARAM_LISTENER_NUM)];
     /*!
      * @if jp
      * @brief ConfigurationSetTypeリスナ配列
@@ -726,7 +726,7 @@ namespace RTC
      * @endif
      */
     ConfigurationSetListenerHolder
-    configset_[CONFIG_SET_LISTENER_NUM];
+    configset_[static_cast<uint8_t>(ConfigurationSetListenerType::CONFIG_SET_LISTENER_NUM)];
     /*!
      * @if jp
      * @brief ConfigurationSetNameListenerTypeリスナ配列
@@ -737,7 +737,7 @@ namespace RTC
      * @endif
      */
     ConfigurationSetNameListenerHolder
-    configsetname_[CONFIG_SET_NAME_LISTENER_NUM];
+    configsetname_[static_cast<uint8_t>(ConfigurationSetNameListenerType::CONFIG_SET_NAME_LISTENER_NUM)];
   };
 
 

@@ -645,27 +645,27 @@ namespace RTC
   void ComponentObserverConsumer::setConfigurationListeners()
   {
     m_configMsg.updateConfigParamListener = 
-      m_rtobj->addConfigurationParamListener(ON_UPDATE_CONFIG_PARAM,
+      m_rtobj->addConfigurationParamListener(ConfigurationParamListenerType::ON_UPDATE_CONFIG_PARAM,
                                              m_configMsg,
                                              &ConfigAction::updateConfigParam);
     m_configMsg.setConfigSetListener = 
-      m_rtobj->addConfigurationSetListener(ON_SET_CONFIG_SET,
+      m_rtobj->addConfigurationSetListener(ConfigurationSetListenerType::ON_SET_CONFIG_SET,
                                              m_configMsg,
                                              &ConfigAction::setConfigSet);
     m_configMsg.addConfigSetListener = 
-      m_rtobj->addConfigurationSetListener(ON_ADD_CONFIG_SET,
+      m_rtobj->addConfigurationSetListener(ConfigurationSetListenerType::ON_ADD_CONFIG_SET,
                                              m_configMsg,
                                              &ConfigAction::addConfigSet);
     m_configMsg.updateConfigSetListener = 
-      m_rtobj->addConfigurationSetNameListener(ON_UPDATE_CONFIG_SET,
+      m_rtobj->addConfigurationSetNameListener(ConfigurationSetNameListenerType::ON_UPDATE_CONFIG_SET,
                                                m_configMsg,
                                                &ConfigAction::updateConfigSet);
     m_configMsg.removeConfigSetListener = 
-      m_rtobj->addConfigurationSetNameListener(ON_REMOVE_CONFIG_SET,
+      m_rtobj->addConfigurationSetNameListener(ConfigurationSetNameListenerType::ON_REMOVE_CONFIG_SET,
                                                m_configMsg,
                                                &ConfigAction::removeConfigSet);
     m_configMsg.activateConfigSetListener = 
-      m_rtobj->addConfigurationSetNameListener(ON_ACTIVATE_CONFIG_SET,
+      m_rtobj->addConfigurationSetNameListener(ConfigurationSetNameListenerType::ON_ACTIVATE_CONFIG_SET,
                                                m_configMsg,
                                               &ConfigAction::activateConfigSet);
   }
@@ -683,37 +683,37 @@ namespace RTC
     if (m_configMsg.updateConfigParamListener != nullptr)
       {
         m_rtobj->
-          removeConfigurationParamListener(ON_UPDATE_CONFIG_PARAM,
+          removeConfigurationParamListener(ConfigurationParamListenerType::ON_UPDATE_CONFIG_PARAM,
                                       m_configMsg.updateConfigParamListener);
         m_configMsg.updateConfigParamListener = nullptr;
       }
     if (m_configMsg.setConfigSetListener != nullptr)
       {
-        m_rtobj->removeConfigurationSetListener(ON_SET_CONFIG_SET,
+        m_rtobj->removeConfigurationSetListener(ConfigurationSetListenerType::ON_SET_CONFIG_SET,
                                            m_configMsg.setConfigSetListener);
         m_configMsg.setConfigSetListener = nullptr;
       }
     if (m_configMsg.addConfigSetListener != nullptr)
       {
-        m_rtobj->removeConfigurationSetListener(ON_ADD_CONFIG_SET,
+        m_rtobj->removeConfigurationSetListener(ConfigurationSetListenerType::ON_ADD_CONFIG_SET,
                                             m_configMsg.addConfigSetListener);
         m_configMsg.addConfigSetListener = nullptr;
       }
     if (m_configMsg.updateConfigSetListener != nullptr)
       {
-        m_rtobj->removeConfigurationSetNameListener(ON_UPDATE_CONFIG_SET,
+        m_rtobj->removeConfigurationSetNameListener(ConfigurationSetNameListenerType::ON_UPDATE_CONFIG_SET,
                                           m_configMsg.updateConfigSetListener);
         m_configMsg.updateConfigSetListener = nullptr;
       }
     if (m_configMsg.removeConfigSetListener != nullptr)
       {
-        m_rtobj->removeConfigurationSetNameListener(ON_REMOVE_CONFIG_SET,
+        m_rtobj->removeConfigurationSetNameListener(ConfigurationSetNameListenerType::ON_REMOVE_CONFIG_SET,
                                           m_configMsg.removeConfigSetListener);
         m_configMsg.removeConfigSetListener = nullptr;
       }
     if (m_configMsg.activateConfigSetListener != nullptr)
       {
-        m_rtobj->removeConfigurationSetNameListener(ON_ACTIVATE_CONFIG_SET,
+        m_rtobj->removeConfigurationSetNameListener(ConfigurationSetNameListenerType::ON_ACTIVATE_CONFIG_SET,
                                         m_configMsg.activateConfigSetListener);
         m_configMsg.activateConfigSetListener = nullptr;
       }
