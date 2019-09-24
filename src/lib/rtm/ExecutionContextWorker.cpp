@@ -173,6 +173,7 @@ namespace RTC_impl
         return RTC::BAD_PARAMETER;
       }
     RTC_DEBUG(("Component found in the EC."));
+    std::lock_guard<std::mutex> stateguard(m_statemutex);
     if (!(obj->isCurrentState(RTC::INACTIVE_STATE)))
       {
         RTC_ERROR(("State of the RTC is not INACTIVE_STATE."));
@@ -204,6 +205,7 @@ namespace RTC_impl
         RTC_ERROR(("Given RTC is not participant of this EC."));
         return RTC::BAD_PARAMETER;
       }
+    std::lock_guard<std::mutex> stateguard(m_statemutex);
     if (!(rtobj->isCurrentState(RTC::ACTIVE_STATE)))
       {
         RTC_ERROR(("State of the RTC is not ACTIVE_STATE."));
@@ -232,6 +234,7 @@ namespace RTC_impl
         RTC_ERROR(("Given RTC is not participant of this EC."));
         return RTC::BAD_PARAMETER;
       }
+    std::lock_guard<std::mutex> stateguard(m_statemutex);
     if (!(rtobj->isCurrentState(RTC::ERROR_STATE)))
       {
         RTC_ERROR(("State of the RTC is not ERROR_STATE."));
@@ -424,6 +427,7 @@ namespace RTC_impl
     std::lock_guard<std::mutex> guard(m_mutex);
     for (auto & comp : m_comps)
       {
+        std::lock_guard<std::mutex> stateguard(m_statemutex);
         if (!comp->isCurrentState(state)) { return false; }
       }
     return true;
@@ -435,6 +439,7 @@ namespace RTC_impl
     std::lock_guard<std::mutex> guard(m_mutex);
     for (auto & comp : m_comps)
       {
+        std::lock_guard<std::mutex> stateguard(m_statemutex);
         if (!comp->isNextState(state)) { return false; }
       }
     return true;
@@ -446,6 +451,7 @@ namespace RTC_impl
     std::lock_guard<std::mutex> guard(m_mutex);
     for (auto & comp : m_comps)
       {
+        std::lock_guard<std::mutex> stateguard(m_statemutex);
         if (comp->isCurrentState(state)) { return true; }
       }
     return false;
@@ -457,6 +463,7 @@ namespace RTC_impl
     std::lock_guard<std::mutex> guard(m_mutex);
     for (auto & comp : m_comps)
       {
+        std::lock_guard<std::mutex> stateguard(m_statemutex);
         if (comp->isNextState(state)) { return true; }
       }
     return false;
@@ -466,9 +473,18 @@ namespace RTC_impl
   {
     RTC_PARANOID(("invokeWorker()"));
     // m_comps never changes its size here
-    for (auto & comp : m_comps) { comp->workerPreDo();  }
-    for (auto & comp : m_comps) { comp->workerDo();     }
-    for (auto & comp : m_comps) { comp->workerPostDo(); }
+    for (auto & comp : m_comps) { 
+        std::lock_guard<std::mutex> stateguard(m_statemutex); 
+        comp->workerPreDo();  
+    }
+    for (auto & comp : m_comps) { 
+        std::lock_guard<std::mutex> stateguard(m_statemutex);
+        comp->workerDo();     
+    }
+    for (auto & comp : m_comps) { 
+        std::lock_guard<std::mutex> stateguard(m_statemutex);
+        comp->workerPostDo(); 
+    }
     std::lock_guard<std::mutex> guard(m_mutex);
     updateComponentList();
   }
@@ -477,21 +493,30 @@ namespace RTC_impl
   {
     RTC_PARANOID(("invokeWorkerPreDo()"));
     // m_comps never changes its size here
-    for (auto & comp : m_comps) { comp->workerPreDo();  }
+    for (auto & comp : m_comps) { 
+        std::lock_guard<std::mutex> stateguard(m_statemutex);
+        comp->workerPreDo();  
+    }
   }
 
   void ExecutionContextWorker::invokeWorkerDo()
   {
     RTC_PARANOID(("invokeWorkerDo()"));
     // m_comps never changes its size here
-    for (auto & comp : m_comps) { comp->workerDo();     }
+    for (auto & comp : m_comps) { 
+        std::lock_guard<std::mutex> stateguard(m_statemutex); 
+        comp->workerDo();     
+    }
   }
 
   void ExecutionContextWorker::invokeWorkerPostDo()
   {
     RTC_PARANOID(("invokeWorkerPostDo()"));
     // m_comps never changes its size here
-    for (auto & comp : m_comps) { comp->workerPostDo(); }
+    for (auto & comp : m_comps) { 
+        std::lock_guard<std::mutex> stateguard(m_statemutex); 
+        comp->workerPostDo(); 
+    }
     // m_comps might be changed here
     std::lock_guard<std::mutex> guard(m_mutex);
     updateComponentList();
