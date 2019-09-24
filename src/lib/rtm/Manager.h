@@ -1335,6 +1335,21 @@ namespace RTC
      */
     void shutdownLogger();
 
+    /*!
+     * @if jp
+     * @brief Managerサーバント の終了処理
+     *
+     * ManagerサーバントのCORBAオブジェクトの非活性化、
+     * 終了処理を実行する。
+     *
+     * @else
+     * @brief Manager Servant finalization
+     *
+     *
+     * @endif
+     */
+    void shutdownManagerServant();
+
     //============================================================
     // ORB initialization and finalization
     //============================================================
@@ -1860,7 +1875,7 @@ namespace RTC
      * @brief The pointer to the ManagerServant
      * @endif
      */
-    RTM::ManagerServant* m_mgrservant;
+    RTM::ManagerServant* m_mgrservant{nullptr};
 
     /*!
      * @if jp
@@ -2078,7 +2093,7 @@ namespace RTC
      * @brief The pointer to the ModuleManager
      * @endif
      */
-    ModuleManager* m_module;
+    ModuleManager* m_module{nullptr};
 
     /*!
      * @if jp

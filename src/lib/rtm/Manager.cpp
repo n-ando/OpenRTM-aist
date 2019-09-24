@@ -167,6 +167,7 @@ namespace RTC
     m_listeners.manager_.preShutdown();
     shutdownComponents();
     shutdownNaming();
+    shutdownManagerServant();
     shutdownORB();
     // 終了待ち合わせ
     m_threadOrb.join();
@@ -1447,6 +1448,27 @@ std::vector<coil::Properties> Manager::getLoadableModules()
       {
         m_logfiles.clear();
       }
+  }
+
+  /*!
+   * @if jp
+   * @brief Managerサーバント の終了処理
+   *
+   * ManagerサーバントのCORBAオブジェクトの非活性化、
+   * 終了処理を実行する。
+   *
+   * @else
+   * @brief Manager Servant finalization
+   *
+   *
+   * @endif
+   */
+  void Manager::shutdownManagerServant()
+  {
+      PortableServer::ObjectId_var oid = m_pPOA->servant_to_id(m_mgrservant);
+      m_pPOA->deactivate_object(oid);
+      delete m_mgrservant;
+      m_mgrservant = nullptr;
   }
 
   //============================================================
