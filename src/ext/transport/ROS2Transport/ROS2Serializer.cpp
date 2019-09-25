@@ -769,6 +769,8 @@ namespace RTC
    */
   class ROS2CameraImageData : public ROS2SerializerBase<RTC::CameraImage>
   {
+  private:
+    sensor_msgs::msg::Image  m_msg;
   public:
     /*!
      * @if jp
@@ -820,26 +822,27 @@ namespace RTC
      */
     bool serialize(const RTC::CameraImage& data) override
     {
-        
-      sensor_msgs::msg::Image  msg;
-      msg.header.stamp.sec = data.tm.sec;
-      msg.header.stamp.nanosec = data.tm.nsec;
-      msg.height = data.height;
-      msg.width = data.width;
+      m_msg.header.stamp.sec = data.tm.sec;
+      m_msg.header.stamp.nanosec = data.tm.nsec;
+      m_msg.height = data.height;
+      m_msg.width = data.width;
       if(std::string(data.format).empty())
       {
-        msg.encoding = "rgb8";
+        m_msg.encoding = "rgb8";
       }
       else
       {
-        msg.encoding = data.format;
+        m_msg.encoding = data.format;
       }
-      msg.step = 1920;
-      msg.data.resize(data.pixels.length());
-      memcpy(&msg.data[0], &data.pixels[0], data.pixels.length());
+      m_msg.step = 1920;
+      m_msg.data.resize(data.pixels.length());
+      if(m_msg.data.size() > 0)
+      {
+        memcpy(&m_msg.data[0], &data.pixels[0], data.pixels.length());
+      }
 
       
-      return ROS2SerializerBase<RTC::CameraImage>::sensormsg_serialize(msg);
+      return ROS2SerializerBase<RTC::CameraImage>::sensormsg_serialize(m_msg);
     }
     /*!
      * @if jp
@@ -859,23 +862,24 @@ namespace RTC
      * @endif
      */
     bool deserialize(RTC::CameraImage& data) override
-    { 
-
-      sensor_msgs::msg::Image msg;
+    {
       
-      bool ret = ROS2SerializerBase<RTC::CameraImage>::sensormsg_deserialize(msg);
+      bool ret = ROS2SerializerBase<RTC::CameraImage>::sensormsg_deserialize(m_msg);
       
       
-      data.tm.sec = msg.header.stamp.sec;
-      data.tm.nsec = msg.header.stamp.nanosec;
-      data.height = msg.height;
-      data.width = msg.width;
-      data.format = CORBA::string_dup(msg.encoding.c_str());
+      data.tm.sec = m_msg.header.stamp.sec;
+      data.tm.nsec = m_msg.header.stamp.nanosec;
+      data.height = m_msg.height;
+      data.width = m_msg.width;
+      data.format = CORBA::string_dup(m_msg.encoding.c_str());
 
 
-      data.pixels.length((CORBA::ULong)msg.data.size());
+      data.pixels.length((CORBA::ULong)m_msg.data.size());
       
-      memcpy(&data.pixels[0], &msg.data[0], data.pixels.length());
+      if(data.pixels.length() > 0)
+      {
+        memcpy(&data.pixels[0], &m_msg.data[0], data.pixels.length());
+      }
 
       return ret;
     }

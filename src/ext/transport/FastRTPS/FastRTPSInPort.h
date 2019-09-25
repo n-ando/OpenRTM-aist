@@ -481,6 +481,7 @@ namespace RTC
       eprosima::fastrtps::SampleInfo_t m_info;
       mutable Logger rtclog;
       FastRTPSInPort* m_provider;
+      RTC::ByteData m_data;
     } m_listener;
 
 

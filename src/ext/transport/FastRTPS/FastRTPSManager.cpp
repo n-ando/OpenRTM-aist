@@ -103,8 +103,12 @@ namespace RTC
   {
       eprosima::fastrtps::ParticipantAttributes PParam;
       PParam.rtps.builtin.domainId = 0;
-      PParam.rtps.builtin.leaseDuration = eprosima::fastrtps::rtps::c_TimeInfinite;
+
       PParam.rtps.setName("Participant_openrtm");
+      
+      PParam.rtps.builtin.readerHistoryMemoryPolicy = eprosima::fastrtps::rtps::PREALLOCATED_WITH_REALLOC_MEMORY_MODE;
+      PParam.rtps.builtin.writerHistoryMemoryPolicy = eprosima::fastrtps::rtps::PREALLOCATED_WITH_REALLOC_MEMORY_MODE;
+      
       m_participant = eprosima::fastrtps::Domain::createParticipant(PParam);
    
   }
@@ -188,7 +192,6 @@ namespace RTC
    */
   bool FastRTPSManager::registeredType(const char* name)
   {
-      std::lock_guard<std::mutex> guard(mutex);
       eprosima::fastrtps::TopicDataType* type_;
       return eprosima::fastrtps::Domain::getRegisteredType(m_participant, name, &type_);
   }

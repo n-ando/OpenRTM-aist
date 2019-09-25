@@ -93,7 +93,9 @@ namespace RTC
 
     const std::string str_corba = "corba";
 
-    if (marshaling_type.compare(0, str_corba.size(), str_corba) != 0)
+    bool compare = (marshaling_type.compare(0, str_corba.size(), str_corba) != 0);
+
+    if (compare)
     {
         FastRTPSMessageInfoBase* info = FastRTPSMessageInfoFactory::instance().createObject(marshaling_type);
 
@@ -116,8 +118,7 @@ namespace RTC
         coil::vstring typelist = coil::split(data, ":");
         if (typelist.size() == 3)
         {
-            m_dataType = typelist[1];
-            coil::replaceString(m_dataType, "/", "::");
+            m_dataType = coil::replaceString(std::move(typelist[1]), "/", "::");
         }
         else
         {
@@ -128,7 +129,7 @@ namespace RTC
     if (!topicmgr.registeredType(m_dataType.c_str()))
     {
         CORBACdrDataPubSubType* type = new CORBACdrDataPubSubType();
-        if (marshaling_type != "corba")
+        if (compare)
         {
             type->init(m_dataType, true);
         }
@@ -137,8 +138,8 @@ namespace RTC
             type->init(m_dataType, false);
         }
 
-        std::string endian_type{coil::normalize
-                prop.getProperty("serializer.cdr.endian", "")};
+        std::string endian_type{coil::normalize(
+                prop.getProperty("serializer.cdr.endian", ""))};
         std::vector<std::string> endian(coil::split(endian_type, ","));
         if (endian[0] == "little")
         {
@@ -156,6 +157,8 @@ namespace RTC
     Wparam.topic.topicKind = eprosima::fastrtps::rtps::NO_KEY;
     Wparam.topic.topicDataType = m_dataType;
     Wparam.topic.topicName = m_topic;
+    Wparam.historyMemoryPolicy = eprosima::fastrtps::rtps::PREALLOCATED_WITH_REALLOC_MEMORY_MODE;
+    Wparam.qos.m_publishMode.kind = eprosima::fastrtps::ASYNCHRONOUS_PUBLISH_MODE;
     m_publisher = eprosima::fastrtps::Domain::createPublisher(participant, Wparam, (eprosima::fastrtps::PublisherListener*)&m_listener);
     if (m_publisher == nullptr)
     {
@@ -299,10 +302,8 @@ namespace RTC
    *
    * @endif
    */
-  void FastRTPSOutPort::PubListener::onPublicationMatched(eprosima::fastrtps::Publisher* pub, eprosima::fastrtps::rtps::MatchingInfo& info)
+  void FastRTPSOutPort::PubListener::onPublicationMatched(eprosima::fastrtps::Publisher* /*pub*/, eprosima::fastrtps::rtps::MatchingInfo& /*info*/)
   {
-      (void)pub;
-      (void)info;
   }
 
 
