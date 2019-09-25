@@ -404,28 +404,27 @@ namespace RTC
 
       if (m_connector == NULL)
       {
-        ByteData cdr;
-        cdr.setDataLength(size+4);
-        memcpy(cdr.getBuffer()+4, buffer.get(), size);
         
-        onReceiverError(cdr);
+        m_cdr.setDataLength(size+4);
+        memcpy(m_cdr.getBuffer()+4, buffer.get(), size);
+        
+        onReceiverError(m_cdr);
       }
       else
       {
 
         RTC_PARANOID(("received data size: %d", size));
-        ByteData cdr;
 
-        cdr.setDataLength(size+4);
-        memcpy(cdr.getBuffer()+4, buffer.get(), size);
+        m_cdr.setDataLength(size+4);
+        memcpy(m_cdr.getBuffer()+4, buffer.get(), size);
 
-        RTC_PARANOID(("converted CDR data size: %d", cdr.getDataLength()));
+        RTC_PARANOID(("converted CDR data size: %d", m_cdr.getDataLength()));
 
-        onReceived(cdr);
+        onReceived(m_cdr);
       
-        BufferStatus ret = m_connector->write(cdr);
+        BufferStatus ret = m_connector->write(m_cdr);
 
-        convertReturn(ret, cdr);
+        convertReturn(ret, m_cdr);
 
 
         conn->read(4, boost::bind(&ROSInPort::onMessageLength, this, _1, _2, _3, _4));
@@ -506,7 +505,7 @@ namespace RTC
     
     
   private:
-
+    ByteData m_cdr;
 
     
     /*!
