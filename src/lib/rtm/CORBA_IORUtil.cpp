@@ -241,6 +241,8 @@ namespace CORBA_IORUtil
         return false;
       }
 #else
+    (void)iorstr;
+    (void)endpoint;
     return false;
 #endif  // ORB_IS_RTORB
   }
@@ -308,9 +310,10 @@ namespace CORBA_IORUtil
 				<< std::endl;
 		}
       }
-#else // ORB_IS_RTORB
+#else
+    (void)iorstr;
     retstr << "RtORB and ORBexpress does't support formatIORinfo() function." << std::endl;
-#endif // ORB_IS_RTORB
+#endif
     return retstr.str();
   }
 
@@ -498,10 +501,10 @@ namespace CORBA_IORUtil
   }
 #endif
 
+#if defined(RTM_OMNIORB_40) || defined(RTM_OMNIORB_41)
   static void print_tagged_components(std::stringstream& sstr,
                                       IOP::MultipleComponentProfile& components)
   {
-#if defined(RTM_OMNIORB_40) || defined(RTM_OMNIORB_41)
     CORBA::ULong total(components.length());
 
     for (CORBA::ULong index(0); index < total; ++index)
@@ -528,10 +531,8 @@ namespace CORBA_IORUtil
             sstr << "       Broken component" << std::endl;
           }
       }
-#endif  // defined(RTM_OMNIORB_40) || defined(RTM_OMNIORB_41)
-    (void)sstr;
-    (void)components;
   }
+#endif  // defined(RTM_OMNIORB_40) || defined(RTM_OMNIORB_41)
 #endif  // ORB_IS_RTORB
 } // namespace CORBA_IORUtil
 

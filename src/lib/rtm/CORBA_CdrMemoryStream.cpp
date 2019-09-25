@@ -62,7 +62,7 @@ namespace RTC
 #ifdef ORB_IS_ORBEXPRESS
         return m_cdr.size_written();
 #elif defined(ORB_IS_TAO)
-        return m_cdr.total_length();
+        return static_cast<unsigned long>(m_cdr.total_length());
 #else
         return m_cdr.bufSize();
 #endif
@@ -108,6 +108,7 @@ namespace RTC
         length = tmp_data.cdr.size_written();
         m_cdr.read_array_1(buffer, length);
 #elif defined(ORB_IS_TAO)
+        (void)length;
         CORBA::Octet *buf = (CORBA::Octet *)buffer;
         for (const ACE_Message_Block *i = m_cdr.begin(); i != 0; i = i->cont())
         {

@@ -2478,6 +2478,8 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     m_config.setProperty("corba.endpoints", coil::flatten(epstr));
     m_config.setProperty("corba.endpoints_ipv4", coil::flatten(epstr_ipv4));
     m_config.setProperty("corba.endpoints_ipv6", coil::flatten(epstr_ipv6));
+#else
+    (void)objref;
 #endif
   }
 
