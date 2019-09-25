@@ -209,7 +209,6 @@ namespace RTC
           }
     }
     
-    TAO_Profile* profile = stub->profile_in_use();
     stub->base_profiles(profiles);
 #endif
     
