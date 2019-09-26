@@ -41,9 +41,10 @@ namespace CORBA_IORUtil
 
   static int get_poa_info(OctetUSequence& key, StringUSequence& poas_out,
                           int& transient_out, OctetUSequence& id_out);
-
+#if defined(RTM_OMNIORB_40) || defined(RTM_OMNIORB_41)
   static void print_tagged_components(std::stringstream& sstr,
                                       IOP::MultipleComponentProfile& components);
+#endif
 #endif  // ORB_IS_RTORB
 
 
@@ -291,24 +292,24 @@ namespace CORBA_IORUtil
 
             retstr << std::endl;
           }
-		else if (ior.profiles[count].tag == IOP::TAG_MULTIPLE_COMPONENTS)
-		 {
+        else if (ior.profiles[count].tag == IOP::TAG_MULTIPLE_COMPONENTS)
+          {
             retstr << "Multiple Component Profile ";
-			IIOP::ProfileBody pBody;
-			IIOP::unmarshalMultiComponentProfile(ior.profiles[count],
-				pBody.components);
+            IIOP::ProfileBody pBody;
+            IIOP::unmarshalMultiComponentProfile(ior.profiles[count],
+                    pBody.components);
             print_tagged_components(retstr, pBody.components);
 
             retstr << std::endl;
-		  }
-		else
-		 {
-			retstr << "Unrecognised profile tag: 0x"
-				<< std::hex
-				<< static_cast<unsigned>(ior.profiles[count].tag)
-				<< std::dec
-				<< std::endl;
-		}
+          }
+        else
+          {
+            retstr << "Unrecognised profile tag: 0x"
+                   << std::hex
+                   << static_cast<unsigned>(ior.profiles[count].tag)
+                   << std::dec
+                   << std::endl;
+          }
       }
 #else
     (void)iorstr;
