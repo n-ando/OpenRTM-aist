@@ -41,10 +41,8 @@ namespace CORBA_IORUtil
 
   static int get_poa_info(OctetUSequence& key, StringUSequence& poas_out,
                           int& transient_out, OctetUSequence& id_out);
-#if defined(RTM_OMNIORB_40) || defined(RTM_OMNIORB_41)
   static void print_tagged_components(std::stringstream& sstr,
                                       IOP::MultipleComponentProfile& components);
-#endif
 #endif  // ORB_IS_RTORB
 
 
@@ -318,10 +316,10 @@ namespace CORBA_IORUtil
     return retstr.str();
   }
 
-#if !defined(ORB_IS_RTORB) && !defined(ORB_IS_ORBEXPRESS) && !defined(ORB_IS_TAO)
+#if !defined(ORB_IS_ORBEXPRESS) && !defined(ORB_IS_TAO)
   std::vector<IIOP::Address> getEndpoints(IOP::IOR& ior)
   {
-	  std::vector<IIOP::Address> addr;
+	std::vector<IIOP::Address> addr;
 #ifndef ORB_IS_RTORB
     if (ior.profiles.length() == 0 && strlen(ior.type_id) == 0)
       {
@@ -352,9 +350,10 @@ namespace CORBA_IORUtil
                      << std::dec << std::endl;
           }
       }
-#else  // ORB_IS_RTORB
+#else  // !ORB_IS_RTORB
+    (void)ior;
     retstr << "RtORB does't support formatIORinfo() function." << std::endl;
-#endif  // ORB_IS_RTORB
+#endif  // !ORB_IS_RTORB
     return addr;
   }
 
@@ -374,13 +373,12 @@ namespace CORBA_IORUtil
             addr.emplace_back(v);
           }
       }
-#else // ORB_IS_RTORB
-#endif // ORB_IS_RTORB
+#else // !ORB_IS_RTORB
+#endif // !ORB_IS_RTORB
     return;
   }
 #endif // !ORB_IS_RTORB, !ORB_IS_ORBEXPRESS, !ORB_IS_TAO
 
-#ifndef ORB_IS_RTORB
   //------------------------------------------------------------
   // static functions
 #if !defined(ORB_IS_RTORB) && !defined(ORB_IS_ORBEXPRESS) && !defined(ORB_IS_TAO)
@@ -500,11 +498,12 @@ namespace CORBA_IORUtil
 
     return 1;
   }
-#endif
+#endif // !ORB_IS_RTORB, !ORB_IS_ORBEXPRESS, !ORB_IS_TAO
 
-#if defined(RTM_OMNIORB_40) || defined(RTM_OMNIORB_41)
+#if !defined(ORB_IS_RTORB) && !defined(ORB_IS_ORBEXPRESS) && !defined(ORB_IS_TAO)
   static void print_tagged_components(std::stringstream& sstr,
                                       IOP::MultipleComponentProfile& components)
+#if defined(RTM_OMNIORB_40) || defined(RTM_OMNIORB_41)
   {
     CORBA::ULong total(components.length());
 
@@ -532,8 +531,10 @@ namespace CORBA_IORUtil
             sstr << "       Broken component" << std::endl;
           }
       }
-  }
 #endif  // defined(RTM_OMNIORB_40) || defined(RTM_OMNIORB_41)
-#endif  // ORB_IS_RTORB
+    (void)sstr;
+    (void)components;
+  }
+#endif // !ORB_IS_RTORB, !ORB_IS_ORBEXPRESS, !ORB_IS_TAO
 } // namespace CORBA_IORUtil
 
