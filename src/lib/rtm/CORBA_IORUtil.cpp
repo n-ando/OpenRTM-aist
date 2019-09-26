@@ -503,8 +503,8 @@ namespace CORBA_IORUtil
 #if !defined(ORB_IS_RTORB) && !defined(ORB_IS_ORBEXPRESS) && !defined(ORB_IS_TAO)
   static void print_tagged_components(std::stringstream& sstr,
                                       IOP::MultipleComponentProfile& components)
-#if defined(RTM_OMNIORB_40) || defined(RTM_OMNIORB_41)
   {
+#if defined(RTM_OMNIORB_40) || defined(RTM_OMNIORB_41)
     CORBA::ULong total(components.length());
 
     for (CORBA::ULong index(0); index < total; ++index)
