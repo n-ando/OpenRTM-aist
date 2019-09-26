@@ -31,6 +31,8 @@
 #include <xmlrpcpp/XmlRpc.h>
 #include "ROSMessageInfo.h"
 
+#define ROS_DATA_SIZE 4
+
 
 namespace RTC
 {
@@ -322,7 +324,7 @@ namespace RTC
     {
       RTC_VERBOSE(("onHeaderReceived()"));
       (void)header;
-      conn->read(4, boost::bind(&ROSInPort::onMessageLength, this, _1, _2, _3, _4));
+      conn->read(ROS_DATA_SIZE, boost::bind(&ROSInPort::onMessageLength, this, _1, _2, _3, _4));
       return true;
     }
 
@@ -405,8 +407,8 @@ namespace RTC
       if (m_connector == NULL)
       {
         
-        m_cdr.setDataLength(size+4);
-        memcpy(m_cdr.getBuffer()+4, buffer.get(), size);
+        m_cdr.setDataLength(size+ROS_DATA_SIZE);
+        memcpy(m_cdr.getBuffer()+ROS_DATA_SIZE, buffer.get(), size);
         
         onReceiverError(m_cdr);
       }
@@ -415,8 +417,8 @@ namespace RTC
 
         RTC_PARANOID(("received data size: %d", size));
 
-        m_cdr.setDataLength(size+4);
-        memcpy(m_cdr.getBuffer()+4, buffer.get(), size);
+        m_cdr.setDataLength(size+ROS_DATA_SIZE);
+        memcpy(m_cdr.getBuffer()+ROS_DATA_SIZE, buffer.get(), size);
 
         RTC_PARANOID(("converted CDR data size: %d", m_cdr.getDataLength()));
 
@@ -427,7 +429,7 @@ namespace RTC
         convertReturn(ret, m_cdr);
 
 
-        conn->read(4, boost::bind(&ROSInPort::onMessageLength, this, _1, _2, _3, _4));
+        conn->read(ROS_DATA_SIZE, boost::bind(&ROSInPort::onMessageLength, this, _1, _2, _3, _4));
       }
     }
     /*!
