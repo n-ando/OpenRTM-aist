@@ -106,9 +106,6 @@ namespace RTC
 
       PParam.rtps.setName("Participant_openrtm");
       
-      PParam.rtps.builtin.readerHistoryMemoryPolicy = eprosima::fastrtps::rtps::PREALLOCATED_WITH_REALLOC_MEMORY_MODE;
-      PParam.rtps.builtin.writerHistoryMemoryPolicy = eprosima::fastrtps::rtps::PREALLOCATED_WITH_REALLOC_MEMORY_MODE;
-      
       m_participant = eprosima::fastrtps::Domain::createParticipant(PParam);
    
   }
