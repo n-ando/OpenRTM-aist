@@ -118,9 +118,9 @@ namespace RTC
 
     const std::string str_corba = "corba";
 
-    bool is_cdr_serializer = !(marshaling_type.compare(0, str_corba.size(), str_corba) != 0);
+    bool is_serializer_cdr = !(marshaling_type.compare(0, str_corba.size(), str_corba) != 0);
 
-    if (!is_cdr_serializer)
+    if (!is_serializer_cdr)
     {
         FastRTPSMessageInfoBase* info = FastRTPSMessageInfoFactory::instance().createObject(marshaling_type);
 
@@ -153,7 +153,7 @@ namespace RTC
     if (!topicmgr.registeredType(m_dataType.c_str()))
     {
         CORBACdrDataPubSubType* type = new CORBACdrDataPubSubType();
-        if (!is_cdr_serializer)
+        if (!is_serializer_cdr)
         {
             type->init(m_dataType, true);
         }
