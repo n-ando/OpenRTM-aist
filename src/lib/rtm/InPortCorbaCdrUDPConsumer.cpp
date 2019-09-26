@@ -110,7 +110,7 @@ namespace RTC
    * @endif
    */
   void InPortCorbaCdrUDPConsumer::
-  publishInterfaceProfile(SDOPackage::NVList& properties)
+  publishInterfaceProfile(SDOPackage::NVList& /*properties*/)
   {
     return;
   }
@@ -209,7 +209,6 @@ namespace RTC
           }
     }
     
-    TAO_Profile* profile = stub->profile_in_use();
     stub->base_profiles(profiles);
 #endif
     

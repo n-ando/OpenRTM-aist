@@ -41,7 +41,6 @@ namespace CORBA_IORUtil
 
   static int get_poa_info(OctetUSequence& key, StringUSequence& poas_out,
                           int& transient_out, OctetUSequence& id_out);
-
   static void print_tagged_components(std::stringstream& sstr,
                                       IOP::MultipleComponentProfile& components);
 #endif  // ORB_IS_RTORB
@@ -241,6 +240,8 @@ namespace CORBA_IORUtil
         return false;
       }
 #else
+    (void)iorstr;
+    (void)endpoint;
     return false;
 #endif  // ORB_IS_RTORB
   }
@@ -289,35 +290,36 @@ namespace CORBA_IORUtil
 
             retstr << std::endl;
           }
-		else if (ior.profiles[count].tag == IOP::TAG_MULTIPLE_COMPONENTS)
-		 {
+        else if (ior.profiles[count].tag == IOP::TAG_MULTIPLE_COMPONENTS)
+          {
             retstr << "Multiple Component Profile ";
-			IIOP::ProfileBody pBody;
-			IIOP::unmarshalMultiComponentProfile(ior.profiles[count],
-				pBody.components);
+            IIOP::ProfileBody pBody;
+            IIOP::unmarshalMultiComponentProfile(ior.profiles[count],
+                    pBody.components);
             print_tagged_components(retstr, pBody.components);
 
             retstr << std::endl;
-		  }
-		else
-		 {
-			retstr << "Unrecognised profile tag: 0x"
-				<< std::hex
-				<< static_cast<unsigned>(ior.profiles[count].tag)
-				<< std::dec
-				<< std::endl;
-		}
+          }
+        else
+          {
+            retstr << "Unrecognised profile tag: 0x"
+                   << std::hex
+                   << static_cast<unsigned>(ior.profiles[count].tag)
+                   << std::dec
+                   << std::endl;
+          }
       }
-#else // ORB_IS_RTORB
+#else
+    (void)iorstr;
     retstr << "RtORB and ORBexpress does't support formatIORinfo() function." << std::endl;
-#endif // ORB_IS_RTORB
+#endif
     return retstr.str();
   }
 
-#if !defined(ORB_IS_RTORB) && !defined(ORB_IS_ORBEXPRESS) && !defined(ORB_IS_TAO)
+#if !defined(ORB_IS_ORBEXPRESS) && !defined(ORB_IS_TAO)
   std::vector<IIOP::Address> getEndpoints(IOP::IOR& ior)
   {
-	  std::vector<IIOP::Address> addr;
+	std::vector<IIOP::Address> addr;
 #ifndef ORB_IS_RTORB
     if (ior.profiles.length() == 0 && strlen(ior.type_id) == 0)
       {
@@ -348,9 +350,10 @@ namespace CORBA_IORUtil
                      << std::dec << std::endl;
           }
       }
-#else  // ORB_IS_RTORB
+#else  // !ORB_IS_RTORB
+    (void)ior;
     retstr << "RtORB does't support formatIORinfo() function." << std::endl;
-#endif  // ORB_IS_RTORB
+#endif  // !ORB_IS_RTORB
     return addr;
   }
 
@@ -370,13 +373,12 @@ namespace CORBA_IORUtil
             addr.emplace_back(v);
           }
       }
-#else // ORB_IS_RTORB
-#endif // ORB_IS_RTORB
+#else // !ORB_IS_RTORB
+#endif // !ORB_IS_RTORB
     return;
   }
 #endif // !ORB_IS_RTORB, !ORB_IS_ORBEXPRESS, !ORB_IS_TAO
 
-#ifndef ORB_IS_RTORB
   //------------------------------------------------------------
   // static functions
 #if !defined(ORB_IS_RTORB) && !defined(ORB_IS_ORBEXPRESS) && !defined(ORB_IS_TAO)
@@ -496,8 +498,9 @@ namespace CORBA_IORUtil
 
     return 1;
   }
-#endif
+#endif // !ORB_IS_RTORB, !ORB_IS_ORBEXPRESS, !ORB_IS_TAO
 
+#if !defined(ORB_IS_RTORB) && !defined(ORB_IS_ORBEXPRESS) && !defined(ORB_IS_TAO)
   static void print_tagged_components(std::stringstream& sstr,
                                       IOP::MultipleComponentProfile& components)
   {
@@ -532,6 +535,6 @@ namespace CORBA_IORUtil
     (void)sstr;
     (void)components;
   }
-#endif  // ORB_IS_RTORB
+#endif // !ORB_IS_RTORB, !ORB_IS_ORBEXPRESS, !ORB_IS_TAO
 } // namespace CORBA_IORUtil
 

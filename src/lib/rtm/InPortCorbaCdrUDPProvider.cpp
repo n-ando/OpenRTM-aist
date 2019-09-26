@@ -95,7 +95,7 @@ namespace RTC
       }
   }
 
-  void InPortCorbaCdrUDPProvider::init(coil::Properties& prop)
+  void InPortCorbaCdrUDPProvider::init(coil::Properties& /*prop*/)
   {
   }
 
@@ -147,7 +147,6 @@ namespace RTC
    */
   void
   InPortCorbaCdrUDPProvider::put(const ::OpenRTM::CdrData& data)
-    throw (CORBA::SystemException)
   {
     RTC_PARANOID(("InPortCorbaCdrUDPProvider::put()"));
 
