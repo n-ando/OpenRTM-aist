@@ -228,7 +228,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~ROSStringData()
+    ~ROSStringData() override
     {
 
     }
@@ -250,7 +250,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual bool serialize(const RTC::TimedString& data)
+    bool serialize(const RTC::TimedString& data) override
     {
         
       std_msgs::String msg;
@@ -277,7 +277,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual bool deserialize(RTC::TimedString& data)
+    bool deserialize(RTC::TimedString& data) override
     { 
 
       std_msgs::String msg;
@@ -369,7 +369,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~ROSPoint3DData()
+    ~ROSPoint3DData() override
     {
 
     }
@@ -391,7 +391,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual bool serialize(const RTC::TimedPoint3D& data)
+    bool serialize(const RTC::TimedPoint3D& data) override
     {
         
       geometry_msgs::PointStamped msg;
@@ -423,7 +423,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual bool deserialize(RTC::TimedPoint3D& data)
+    bool deserialize(RTC::TimedPoint3D& data) override
     { 
 
       geometry_msgs::PointStamped msg;
@@ -521,7 +521,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~ROSQuaternionData()
+    ~ROSQuaternionData() override
     {
 
     }
@@ -543,7 +543,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual bool serialize(const RTC::TimedQuaternion& data)
+    bool serialize(const RTC::TimedQuaternion& data) override
     {
         
       geometry_msgs::QuaternionStamped  msg;
@@ -576,7 +576,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual bool deserialize(RTC::TimedQuaternion& data)
+    bool deserialize(RTC::TimedQuaternion& data) override
     { 
 
       geometry_msgs::QuaternionStamped msg;
@@ -675,7 +675,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~ROSVector3DData()
+    ~ROSVector3DData() override
     {
 
     }
@@ -697,7 +697,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual bool serialize(const RTC::TimedVector3D& data)
+    bool serialize(const RTC::TimedVector3D& data) override
     {
         
       geometry_msgs::Vector3Stamped  msg;
@@ -729,7 +729,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual bool deserialize(RTC::TimedVector3D& data)
+    bool deserialize(RTC::TimedVector3D& data) override
     {
 
       geometry_msgs::Vector3Stamped msg;
@@ -799,6 +799,8 @@ namespace RTC
    */
   class ROSCameraImageData : public ROSSerializerBase<RTC::CameraImage>
   {
+  private:
+    sensor_msgs::Image  m_msg;
   public:
     /*!
      * @if jp
@@ -826,7 +828,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~ROSCameraImageData()
+    ~ROSCameraImageData() override
     {
 
     }
@@ -848,30 +850,30 @@ namespace RTC
      *
      * @endif
      */
-    virtual bool serialize(const RTC::CameraImage& data)
+    bool serialize(const RTC::CameraImage& data) override
     {
         
-      sensor_msgs::Image  msg;
-      msg.header.stamp.sec = data.tm.sec;
-      msg.header.stamp.nsec = data.tm.nsec;
-      msg.height = data.height;
-      msg.width = data.width;
+      
+      m_msg.header.stamp.sec = data.tm.sec;
+      m_msg.header.stamp.nsec = data.tm.nsec;
+      m_msg.height = data.height;
+      m_msg.width = data.width;
       if(std::string(data.format).empty())
       {
-        msg.encoding = "rgb8";
+        m_msg.encoding = "rgb8";
       }
       else
       {
-        msg.encoding = data.format;
+        m_msg.encoding = data.format;
       }
-      msg.step = 1920;
-      msg.data.resize(data.pixels.length());
+      m_msg.step = 1920;
+      m_msg.data.resize(data.pixels.length());
       if(data.pixels.length() > 0)
       {
-          memcpy(&msg.data[0], &data.pixels[0], data.pixels.length());
+          memcpy(&m_msg.data[0], &data.pixels[0], data.pixels.length());
       }
       
-      ROSSerializerBase<RTC::CameraImage>::m_message = ros::serialization::serializeMessage<sensor_msgs::Image>(msg);
+      ROSSerializerBase<RTC::CameraImage>::m_message = ros::serialization::serializeMessage<sensor_msgs::Image>(m_msg);
 
       return true;
     }
@@ -893,26 +895,24 @@ namespace RTC
      *
      * @endif
      */
-    virtual bool deserialize(RTC::CameraImage& data)
+    bool deserialize(RTC::CameraImage& data) override
     { 
 
-      sensor_msgs::Image msg;
-      
-      ros::serialization::deserializeMessage(ROSSerializerBase<RTC::CameraImage>::m_message, msg);
+      ros::serialization::deserializeMessage(ROSSerializerBase<RTC::CameraImage>::m_message, m_msg);
       
       
-      data.tm.sec = msg.header.stamp.sec;
-      data.tm.nsec = msg.header.stamp.nsec;
-      data.height = msg.height;
-      data.width = msg.width;
-      data.format = CORBA::string_dup(msg.encoding.c_str());
+      data.tm.sec = m_msg.header.stamp.sec;
+      data.tm.nsec = m_msg.header.stamp.nsec;
+      data.height = m_msg.height;
+      data.width = m_msg.width;
+      data.format = CORBA::string_dup(m_msg.encoding.c_str());
 
 
-      data.pixels.length(static_cast<CORBA::ULong>(msg.data.size()));
+      data.pixels.length(static_cast<CORBA::ULong>(m_msg.data.size()));
       
-      if(msg.data.size() > 0)
+      if(m_msg.data.size() > 0)
       {
-          memcpy(&data.pixels[0], &msg.data[0], data.pixels.length());
+          memcpy(&data.pixels[0], &m_msg.data[0], data.pixels.length());
       }
       return true;
     }
@@ -947,6 +947,7 @@ namespace RTC
             ::coil::Destructor< ::RTC::ROSMessageInfoBase,
             RTC::ROSMessageInfo<sensor_msgs::Image > >);
   }
+
 
 }
 

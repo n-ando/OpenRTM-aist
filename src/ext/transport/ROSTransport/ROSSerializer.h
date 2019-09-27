@@ -76,7 +76,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~ROSSerializerBase(){};
+    ~ROSSerializerBase() override{};
 
     /*!
      * @if jp
@@ -97,7 +97,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual void writeData(const unsigned char* buffer, unsigned long length)
+    void writeData(const unsigned char* buffer, unsigned long length) override
     {
       boost::shared_array<uint8_t> buffer_(new uint8_t[length]);
 
@@ -126,7 +126,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual void readData(unsigned char* buffer, unsigned long length) const
+    void readData(unsigned char* buffer, unsigned long length) const override
     {
       memcpy(buffer, m_message.buf.get(), length);
 
@@ -148,7 +148,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual unsigned long getDataLength() const
+    unsigned long getDataLength() const override
     {
       return static_cast<unsigned long>(m_message.num_bytes);
     };
@@ -169,7 +169,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual bool serialize(const DataType& data)
+    bool serialize(const DataType& data) override
     {
       (void)data;
       return false;
@@ -191,7 +191,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual bool deserialize(DataType& data)
+    bool deserialize(DataType& data) override
     {
       (void)data;
       return false;
@@ -253,7 +253,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~ROSSimpleData()
+    ~ROSSimpleData() override
     {
 
     }
@@ -275,7 +275,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual bool serialize(const DataType& data)
+    bool serialize(const DataType& data) override
     {
         
       MessageType msg;
@@ -302,7 +302,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual bool deserialize(DataType& data)
+    bool deserialize(DataType& data) override
     { 
 
       MessageType msg;
@@ -365,7 +365,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~ROSSequenceData()
+    ~ROSSequenceData() override
     {
 
     }
@@ -387,7 +387,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual bool serialize(const DataType& data)
+    bool serialize(const DataType& data) override
     {
         
       MessageType msg;
@@ -418,7 +418,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual bool deserialize(DataType& data)
+    bool deserialize(DataType& data) override
     { 
 
       MessageType msg;

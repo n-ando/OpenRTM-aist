@@ -34,6 +34,8 @@
 
 namespace RTC
 {
+  // ROS message length placeolder size (4 bytes)
+  const uint32_t ROSMsglenSize(4);
   /*!
    * @if jp
    * @class ROSInPort
@@ -322,7 +324,7 @@ namespace RTC
     {
       RTC_VERBOSE(("onHeaderReceived()"));
       (void)header;
-      conn->read(4, boost::bind(&ROSInPort::onMessageLength, this, _1, _2, _3, _4));
+      conn->read(ROSMsglenSize, boost::bind(&ROSInPort::onMessageLength, this, _1, _2, _3, _4));
       return true;
     }
 
@@ -349,7 +351,7 @@ namespace RTC
      *
      * @endif
      */
-    void onMessageLength(const ros::ConnectionPtr& conn, const boost::shared_array<uint8_t>& buffer, uint32_t size, bool success)
+    void onMessageLength(const ros::ConnectionPtr& conn, const boost::shared_array<uint8_t>& buffer, uint32_t /*size*/, bool success)
     {
       RTC_VERBOSE(("onMessageLength()"));
       if(!success)
@@ -357,8 +359,6 @@ namespace RTC
         RTC_ERROR(("Message read error"));
         return;
       }
-
-      (void)size;
 
       uint32_t len = *((uint32_t*)buffer.get());
 
@@ -404,31 +404,30 @@ namespace RTC
 
       if (m_connector == NULL)
       {
-        ByteData cdr;
-        cdr.setDataLength(size+4);
-        memcpy(cdr.getBuffer()+4, buffer.get(), size);
         
-        onReceiverError(cdr);
+        m_cdr.setDataLength(size + ROSMsglenSize);
+        memcpy(m_cdr.getBuffer() + ROSMsglenSize, buffer.get(), size);
+        
+        onReceiverError(m_cdr);
       }
       else
       {
 
         RTC_PARANOID(("received data size: %d", size));
-        ByteData cdr;
 
-        cdr.setDataLength(size+4);
-        memcpy(cdr.getBuffer()+4, buffer.get(), size);
+        m_cdr.setDataLength(size + ROSMsglenSize);
+        memcpy(m_cdr.getBuffer() + ROSMsglenSize, buffer.get(), size);
 
-        RTC_PARANOID(("converted CDR data size: %d", cdr.getDataLength()));
+        RTC_PARANOID(("converted CDR data size: %d", m_cdr.getDataLength()));
 
-        onReceived(cdr);
+        onReceived(m_cdr);
       
-        BufferStatus ret = m_connector->write(cdr);
+        BufferStatus ret = m_connector->write(m_cdr);
 
-        convertReturn(ret, cdr);
+        convertReturn(ret, m_cdr);
 
 
-        conn->read(4, boost::bind(&ROSInPort::onMessageLength, this, _1, _2, _3, _4));
+        conn->read(ROSMsglenSize, boost::bind(&ROSInPort::onMessageLength, this, _1, _2, _3, _4));
       }
     }
     /*!
@@ -506,7 +505,7 @@ namespace RTC
     
     
   private:
-
+    ByteData m_cdr;
 
     
     /*!
