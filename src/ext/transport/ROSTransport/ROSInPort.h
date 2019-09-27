@@ -31,12 +31,11 @@
 #include <xmlrpcpp/XmlRpc.h>
 #include "ROSMessageInfo.h"
 
-// ROS message length placeolder size (4 bytes)
-#define ROS_MSGLEN_SIZE 4
-
 
 namespace RTC
 {
+  // ROS message length placeolder size (4 bytes)
+  const uint32_t ROSMsglenSize(4);
   /*!
    * @if jp
    * @class ROSInPort
@@ -325,7 +324,7 @@ namespace RTC
     {
       RTC_VERBOSE(("onHeaderReceived()"));
       (void)header;
-      conn->read(ROS_MSGLEN_SIZE, boost::bind(&ROSInPort::onMessageLength, this, _1, _2, _3, _4));
+      conn->read(ROSMsglenSize, boost::bind(&ROSInPort::onMessageLength, this, _1, _2, _3, _4));
       return true;
     }
 
@@ -352,7 +351,7 @@ namespace RTC
      *
      * @endif
      */
-    void onMessageLength(const ros::ConnectionPtr& conn, const boost::shared_array<uint8_t>& buffer, uint32_t size, bool success)
+    void onMessageLength(const ros::ConnectionPtr& conn, const boost::shared_array<uint8_t>& buffer, uint32_t /*size*/, bool success)
     {
       RTC_VERBOSE(("onMessageLength()"));
       if(!success)
@@ -360,8 +359,6 @@ namespace RTC
         RTC_ERROR(("Message read error"));
         return;
       }
-
-      (void)size;
 
       uint32_t len = *((uint32_t*)buffer.get());
 
@@ -408,8 +405,8 @@ namespace RTC
       if (m_connector == NULL)
       {
         
-        m_cdr.setDataLength(size + ROS_MSGLEN_SIZE);
-        memcpy(m_cdr.getBuffer() + ROS_MSGLEN_SIZE, buffer.get(), size);
+        m_cdr.setDataLength(size + ROSMsglenSize);
+        memcpy(m_cdr.getBuffer() + ROSMsglenSize, buffer.get(), size);
         
         onReceiverError(m_cdr);
       }
@@ -418,8 +415,8 @@ namespace RTC
 
         RTC_PARANOID(("received data size: %d", size));
 
-        m_cdr.setDataLength(size + ROS_MSGLEN_SIZE);
-        memcpy(m_cdr.getBuffer() + ROS_MSGLEN_SIZE, buffer.get(), size);
+        m_cdr.setDataLength(size + ROSMsglenSize);
+        memcpy(m_cdr.getBuffer() + ROSMsglenSize, buffer.get(), size);
 
         RTC_PARANOID(("converted CDR data size: %d", m_cdr.getDataLength()));
 
@@ -430,7 +427,7 @@ namespace RTC
         convertReturn(ret, m_cdr);
 
 
-        conn->read(ROS_MSGLEN_SIZE, boost::bind(&ROSInPort::onMessageLength, this, _1, _2, _3, _4));
+        conn->read(ROSMsglenSize, boost::bind(&ROSInPort::onMessageLength, this, _1, _2, _3, _4));
       }
     }
     /*!
