@@ -186,9 +186,9 @@ namespace RTC
         delete static_cast<RTC::ByteData*>(data);
     }
 #if (FASTRTPS_VERSION_MAJOR <= 1) && (FASTRTPS_VERSION_MINOR == 6)
-    bool CORBACdrDataPubSubType::getKey(void *data, eprosima::fastrtps::rtps::InstanceHandle_t* handle) {
+    bool CORBACdrDataPubSubType::getKey(void * /*data*/, eprosima::fastrtps::rtps::InstanceHandle_t* handle) {
 #else
-    bool CORBACdrDataPubSubType::getKey(void *data, eprosima::fastrtps::rtps::InstanceHandle_t* handle, bool force_md5) {
+    bool CORBACdrDataPubSubType::getKey(void * /*data*/, eprosima::fastrtps::rtps::InstanceHandle_t* handle, bool force_md5) {
 #endif
         if(!m_isGetKeyDefined)
             return false;

@@ -118,7 +118,9 @@ namespace RTC
 
     const std::string str_corba = "corba";
 
-    if (marshaling_type.compare(0, str_corba.size(), str_corba) != 0)
+    bool is_serializer_cdr = !(marshaling_type.compare(0, str_corba.size(), str_corba) != 0);
+
+    if (!is_serializer_cdr)
     {
         FastRTPSMessageInfoBase* info = FastRTPSMessageInfoFactory::instance().createObject(marshaling_type);
 
@@ -151,7 +153,7 @@ namespace RTC
     if (!topicmgr.registeredType(m_dataType.c_str()))
     {
         CORBACdrDataPubSubType* type = new CORBACdrDataPubSubType();
-        if (marshaling_type != "corba")
+        if (!is_serializer_cdr)
         {
             type->init(m_dataType, true);
         }
@@ -180,6 +182,7 @@ namespace RTC
     Rparam.topic.topicKind = eprosima::fastrtps::rtps::NO_KEY;
     Rparam.topic.topicDataType = m_dataType;
     Rparam.topic.topicName = m_topic;
+    Rparam.historyMemoryPolicy = eprosima::fastrtps::rtps::PREALLOCATED_WITH_REALLOC_MEMORY_MODE;
     m_subscriber = eprosima::fastrtps::Domain::createSubscriber(participant,Rparam,(eprosima::fastrtps::SubscriberListener*)&m_listener);
     if(m_subscriber == nullptr)
     {
@@ -336,16 +339,14 @@ namespace RTC
    */
   void FastRTPSInPort::SubListener::onNewDataMessage(eprosima::fastrtps::Subscriber* sub)
   {
-    RTC_PARANOID(("~onNewDataMessage()"));
-
-    RTC::ByteData st;
+    RTC_PARANOID(("onNewDataMessage()"));
 		
     RTC_PARANOID(("takeNextData"));
-    if(sub->takeNextData(&st, &m_info))
+    if(sub->takeNextData(&m_data, &m_info))
     {
       if(m_info.sampleKind == eprosima::fastrtps::rtps::ALIVE)
       {
-          m_provider->put(st);
+          m_provider->put(m_data);
       }
     }
   }
