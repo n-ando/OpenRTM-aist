@@ -627,7 +627,7 @@ namespace RTC
      * prop["interface_type"]: インターフェースタイプ
      * などがアクセス可能になる。
      */
-    std::string& dflow_type(prop["dataflow_type"]);
+    std::string dflow_type(prop["dataflow_type"]);
     dflow_type = coil::normalize(std::move(dflow_type));
 
     if (dflow_type == "push")
