@@ -397,7 +397,7 @@ extern "C"
    * @endif
    */
   void InPortCorbaCdrUDPProviderInit(void);
-};
+}
 
 #endif // RTC_INPORTCORBACDRUDPPROVIDER_H
 

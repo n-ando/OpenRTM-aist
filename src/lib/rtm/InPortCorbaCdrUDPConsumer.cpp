@@ -178,7 +178,7 @@ namespace RTC
         return false;
       }
     
-    const char* ior(0);
+    const char* ior(nullptr);
     if (!(properties[index].value >>= ior))
       {
         RTC_ERROR(("inport_ior has no string"));
@@ -364,4 +364,4 @@ extern "C"
                        ::coil::Destructor< ::RTC::InPortConsumer,
                                            ::RTC::InPortCorbaCdrUDPConsumer>);
   }
-};
+}

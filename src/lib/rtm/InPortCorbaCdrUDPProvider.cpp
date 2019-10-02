@@ -28,7 +28,7 @@ namespace RTC
    * @endif
    */
   InPortCorbaCdrUDPProvider::InPortCorbaCdrUDPProvider(void)
-   : m_buffer(0) 
+   : m_buffer(nullptr) 
   {
     // PortProfile setting
     setInterfaceType("corba_cdr_udp");
@@ -39,7 +39,7 @@ namespace RTC
     ::RTC::Manager::instance().theShortCutPOA()->activate_object(this);
 #endif
 	
-	m_objref = this->_this();
+    m_objref = this->_this();
     
     // set InPort's reference
     CORBA::ORB_var orb = ::RTC::Manager::instance().getORB();
@@ -150,7 +150,7 @@ namespace RTC
   {
     RTC_PARANOID(("InPortCorbaCdrUDPProvider::put()"));
 
-    if (m_buffer == 0)
+    if (m_buffer == nullptr)
       {
 
         m_cdr.writeData((unsigned char*)data.get_buffer(), data.length());
@@ -213,6 +213,9 @@ namespace RTC
 		  onBufferWriteTimeout(data);
 		  onReceiverTimeout(data);
 		  break;
+    case BufferStatus::NOT_SUPPORTED: /* FALLTHROUGH */
+    default:
+      return;
 
 	  }
 
@@ -241,4 +244,4 @@ extern "C"
                        ::coil::Destructor< ::RTC::InPortProvider,
                                            ::RTC::InPortCorbaCdrUDPProvider>);
   }
-};
+}

@@ -240,7 +240,7 @@ namespace RTC
      *
      * @endif
      */
-    ~EventInPort() override = default;
+    ~EventInPort() override;
 
     /*!
      * @if jp
@@ -303,6 +303,9 @@ namespace RTC
     FsmType& m_fsm;
     RingBuffer<EventBase*> &m_buffer;
   };
+
+  template <class FsmType>
+  EventInPort<FsmType>::~EventInPort() = default;
 } // namespace RTC
 
 #endif // RTC_EVENTINPORT_H

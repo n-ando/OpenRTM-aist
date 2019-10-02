@@ -110,7 +110,7 @@ namespace RTC
 #elif defined(ORB_IS_TAO)
         (void)length;
         CORBA::Octet *buf = (CORBA::Octet *)buffer;
-        for (const ACE_Message_Block *i = m_cdr.begin(); i != 0; i = i->cont())
+        for (const ACE_Message_Block *i = m_cdr.begin(); i != nullptr; i = i->cont())
         {
             const size_t len = i->length();
             ACE_OS::memcpy(buf, i->rd_ptr(), len);
