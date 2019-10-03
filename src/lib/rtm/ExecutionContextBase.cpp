@@ -38,7 +38,14 @@ namespace RTC
    * @brief Virtual Destructor
    * @endif
    */
-  ExecutionContextBase::~ExecutionContextBase() = default;
+  ExecutionContextBase::~ExecutionContextBase()
+  {
+      RTC::ReturnCode_t ret = m_worker.removeComponent(m_profile.getOwner());
+      if (ret != RTC::RTC_OK)
+      {
+          RTC_ERROR(("Error: ECWorker removeComponent() faild."));
+      }
+  }
 
   /*!
    * @if jp
