@@ -272,7 +272,7 @@ namespace RTM
    */
   bool LocalServiceAdmin::notExisting(const std::string& id)
   {
-    std::lock_guard<std::mutex> guard(m_mutex);
+    std::lock_guard<std::mutex> guard(m_services_mutex);
     for (auto & service : m_services)
       {
         if (service->getProfile().name == id)
