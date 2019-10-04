@@ -92,7 +92,7 @@ namespace coil
      *
      * @endif
      */
-    SignalAction(SignalHandler handle, int signum, sigset_t *mask = 0,
+    SignalAction(SignalHandler handle, int signum, sigset_t *mask = nullptr,
                  int flags = 0);
 
     /*!

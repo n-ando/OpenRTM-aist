@@ -187,37 +187,6 @@ namespace coil
    */
   bool getenv(const char* name, std::string &env);
 
-  static int    opterr = 1,     /* if error message should be printed */
-                optind = 1,     /* index into parent argv vector */
-                optopt,         /* character checked for validity */
-                optreset;       /* reset getopt */
-  static char   *optarg;        /* argument associated with option */
-
-#define  BADCH  (int)'?'
-#define  BADARG  (int)':'
-#define  EMSG  ""
-
-  /*!
-   * @if jp
-   *
-   * @brief コマンドライン引数解析関数
-   *
-   * コマンドライン引数を解析する。
-   *
-   * @return 解析結果
-   *
-   * @else
-   *
-   * @brief Function of parses the command line arguments
-   *
-   * Parses the command line arguments.
-   *
-   * @return Result of parses.
-   *
-   * @endif
-   */
-  static int getopt(int nargc, char * const *nargv, const char *ostr);
-
   /*!
    * @if jp
    *
@@ -298,13 +267,10 @@ namespace coil
     int opterr;       //! エラー表示 0:抑止、1:表示
     int optopt;       //! オプション文字が足りない時、多い時にセットされる
 
-
   private:
     int m_argc;
     char* const * m_argv;
     const char* m_opt;
-    int m_flag;
-
   };
 
 } // namespace coil

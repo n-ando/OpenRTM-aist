@@ -262,7 +262,6 @@ namespace coil
     int m_mode;
     int m_closeflag;
     HINSTANCE m_handle;
-    int m_error;
   };  // class DynamicLib
 
 } // namespace coil

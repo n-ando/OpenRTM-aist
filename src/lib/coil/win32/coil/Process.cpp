@@ -55,12 +55,12 @@ namespace coil
     if (!CreateProcess(nullptr, lpcommand, nullptr, nullptr, FALSE, 0,
                       nullptr, nullptr, &si, &pi) )
       {
-        delete lpcommand;
+        delete[] lpcommand;
         return -1;
       }
     CloseHandle(pi.hProcess);
     CloseHandle(pi.hThread);
-    delete lpcommand;
+    delete[] lpcommand;
     return 0;
   }
 
@@ -92,7 +92,7 @@ namespace coil
       }
 
 
-      STARTUPINFO si = { 0 };
+      STARTUPINFO si{};
       si.cb = sizeof(si);
       si.dwFlags = STARTF_USESTDHANDLES;
       si.hStdInput = stdin;
@@ -111,24 +111,26 @@ namespace coil
       _tcscpy_s(lpcommand, command.size() + 1, command.c_str());
 #endif // UNICODE
 
-      PROCESS_INFORMATION pi = { nullptr };
+      PROCESS_INFORMATION pi{};
       if (!CreateProcess(nullptr, lpcommand, nullptr, nullptr, TRUE, CREATE_NO_WINDOW, nullptr, nullptr, &si, &pi))
       {
-          delete lpcommand;
+          delete[] lpcommand;
           return -1;
       }
-
 
       WaitForSingleObject(pi.hProcess, INFINITE);
       CloseHandle(pi.hProcess);
       CloseHandle(pi.hThread);
 
-
       DWORD len;
       DWORD size = GetFileSize(rPipe, nullptr);
-      std::unique_ptr<CHAR[]> Buf(new CHAR[size + 1]);
+      std::unique_ptr<CHAR[]> Buf(new CHAR[static_cast<size_t>(size) + 1]);
       Buf[size] = '\0';
-      ReadFile(rPipe, Buf.get(), size, &len, nullptr);
+      if (!ReadFile(rPipe, Buf.get(), size, &len, nullptr))
+      {
+          delete[] lpcommand;
+          return -1;
+      }
 
       for(auto&& o : coil::split(std::string(Buf.get()), "\n"))
       {
@@ -139,7 +141,7 @@ namespace coil
           out.emplace_back(coil::eraseBothEndsBlank(std::move(o)));
       }
 
-      delete lpcommand;
+      delete[] lpcommand;
       return 0;
 
   }

@@ -146,7 +146,7 @@ namespace coil
   void* DynamicLib::symbol(const char* symbol_name)
   {
     if (m_handle == nullptr) return nullptr;
-    return ::GetProcAddress(m_handle, symbol_name);
+    return reinterpret_cast<void*>(::GetProcAddress(m_handle, symbol_name));
   }
 
   /*!

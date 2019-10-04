@@ -92,8 +92,9 @@ namespace coil
    */
   std::string toUpper(std::string str) noexcept
   {
-    std::transform(str.begin(), str.end(), str.begin(),
-                   [](unsigned char x){ return std::toupper(x); });
+    std::transform(str.begin(), str.end(), str.begin(), [](unsigned char x){
+      return static_cast<char>(std::toupper(x));
+    });
     return str;
   }
 
@@ -106,8 +107,9 @@ namespace coil
    */
   std::string toLower(std::string str) noexcept
   {
-    std::transform(str.begin(), str.end(), str.begin(),
-                   [](unsigned char x){ return std::tolower(x); });
+    std::transform(str.begin(), str.end(), str.begin(), [](unsigned char x){
+      return static_cast<char>(std::tolower(x));
+    });
     return str;
   }
 
