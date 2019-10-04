@@ -355,7 +355,7 @@ namespace RTC
     RTC_TRACE(("Manager::runManager()"));
 
     m_isRunning.test_and_set();
-    m_threadMain = std::thread([this] { main(); });
+    m_threadMain = std::thread([this] { mainThread(); });
     if (!no_block) { join(); }
   }
 
@@ -1245,9 +1245,9 @@ std::vector<coil::Properties> Manager::getLoadableModules()
    * @brief The main function of the Manager main thread.
    * @endif
    */
-  void Manager::main()
+  void Manager::mainThread()
   {
-    RTC_TRACE(("Manager::main()"));
+    RTC_TRACE(("Manager::mainThread()"));
 
     m_threadOrb = std::thread([this]{ m_pORB->run(); });
 
