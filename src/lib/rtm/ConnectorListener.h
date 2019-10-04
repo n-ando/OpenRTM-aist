@@ -1598,7 +1598,7 @@ namespace RTC
               delete connectorData_[i];
               connectorData_[i] = new ConnectorDataListenerHolderT<DataType>();
           }
-      };
+      }
       /*!
        * @if jp
        * @brief デストラクタ
@@ -1606,7 +1606,7 @@ namespace RTC
        * @brief Destructor
        * @endif
        */
-      ~ConnectorListenersT() {};
+      ~ConnectorListenersT() {}
 
   };
 } // namespace RTC
