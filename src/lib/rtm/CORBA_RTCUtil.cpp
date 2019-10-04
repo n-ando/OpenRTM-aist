@@ -1390,7 +1390,7 @@ namespace CORBA_RTCUtil
     SDOPackage::Configuration_var conf = rtc->get_configuration();
     SDOPackage::ConfigurationSet_var confset = conf->get_configuration_set(confset_name.c_str());
 
-    set_configuration_parameter(conf, confset.out(), value_name, value);
+    set_configuration_parameter(conf, confset.inout(), value_name, value);
 
     conf->activate_configuration_set(confset_name.c_str());
 
@@ -1416,7 +1416,7 @@ namespace CORBA_RTCUtil
     SDOPackage::Configuration_var conf = rtc->get_configuration();
     SDOPackage::ConfigurationSet_var confset = conf->get_active_configuration_set();
 
-    set_configuration_parameter(conf, confset.out(), value_name, value);
+    set_configuration_parameter(conf, confset.inout(), value_name, value);
 
     conf->activate_configuration_set(confset->id);
 
@@ -1440,18 +1440,18 @@ namespace CORBA_RTCUtil
    * @return 
    * @endif
    */
-  bool set_configuration_parameter(SDOPackage::Configuration_ptr conf, SDOPackage::ConfigurationSet* confset, const std::string& value_name, const std::string& value)
+  bool set_configuration_parameter(SDOPackage::Configuration_ptr conf, SDOPackage::ConfigurationSet& confset, const std::string& value_name, const std::string& value)
   {
-    SDOPackage::NVList confData = confset->configuration_data;
+    SDOPackage::NVList confData = confset.configuration_data;
     coil::Properties prop;
     NVUtil::copyToProperties(prop, confData);
     prop[value_name] = value;
 
     NVUtil::copyFromProperties(confData, prop);
 
-    confset->configuration_data = confData;
+    confset.configuration_data = confData;
 
-    conf->set_configuration_set_values((*confset));
+    conf->set_configuration_set_values(confset);
 
     return true;
   }

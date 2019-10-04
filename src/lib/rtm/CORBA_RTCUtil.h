@@ -1021,7 +1021,7 @@ namespace CORBA_RTCUtil
    * @endif
    */
   bool set_configuration_parameter(SDOPackage::Configuration_ptr conf,
-                                   SDOPackage::ConfigurationSet* confset,
+                                   SDOPackage::ConfigurationSet& confset,
                                    const std::string& value_name,
                                    const std::string& value);
 
