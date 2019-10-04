@@ -1390,7 +1390,7 @@ namespace CORBA_RTCUtil
     SDOPackage::Configuration_var conf = rtc->get_configuration();
     SDOPackage::ConfigurationSet_var confset = conf->get_configuration_set(confset_name.c_str());
 
-    set_configuration_parameter(conf, confset, value_name, value);
+    set_configuration_parameter(conf, confset.out(), value_name, value);
 
     conf->activate_configuration_set(confset_name.c_str());
 
@@ -1416,7 +1416,7 @@ namespace CORBA_RTCUtil
     SDOPackage::Configuration_var conf = rtc->get_configuration();
     SDOPackage::ConfigurationSet_var confset = conf->get_active_configuration_set();
 
-    set_configuration_parameter(conf, confset, value_name, value);
+    set_configuration_parameter(conf, confset.out(), value_name, value);
 
     conf->activate_configuration_set(confset->id);
 
