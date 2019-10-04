@@ -99,7 +99,7 @@ namespace CORBA_RTCUtil
    * @return 
    * @endif
    */
-  RTC::ExecutionContext_var get_actual_ec(const RTC::RTObject_ptr rtc,
+  RTC::ExecutionContext_ptr get_actual_ec(const RTC::RTObject_ptr rtc,
                                           RTC::UniqueId ec_id)
   {
     if (CORBA::is_nil(rtc)) { return RTC::ExecutionContext::_nil(); }
@@ -112,9 +112,9 @@ namespace CORBA_RTCUtil
         if (CORBA::is_nil(eclist[static_cast<CORBA::ULong>(ec_id)]))
           { return RTC::ExecutionContext::_nil(); }
 #ifdef ORB_IS_TAO
-        return eclist[(CORBA::ULong)ec_id].in();
+        return RTC::ExecutionContext::_duplicate(eclist[(CORBA::ULong)ec_id].in());
 #else
-        return eclist[static_cast<CORBA::ULong>(ec_id)];
+        return RTC::ExecutionContext::_duplicate(eclist[static_cast<CORBA::ULong>(ec_id)]);
 #endif
       }
     if (ec_id >= 1000)
@@ -127,9 +127,9 @@ namespace CORBA_RTCUtil
 		if (CORBA::is_nil(eclist[static_cast<CORBA::ULong>(pec_id)]))
           { return RTC::ExecutionContext::_nil(); }
 #ifdef ORB_IS_TAO
-        return eclist[(CORBA::ULong)pec_id].in();
+        return RTC::ExecutionContext::_duplicate(eclist[(CORBA::ULong)pec_id].in());
 #else
-        return eclist[static_cast<CORBA::ULong>(pec_id)];
+        return RTC::ExecutionContext::_duplicate(eclist[static_cast<CORBA::ULong>(pec_id)]);
 #endif
       }
     return RTC::ExecutionContext::_nil();
@@ -205,7 +205,7 @@ namespace CORBA_RTCUtil
   {
     if (CORBA::is_nil(rtc)) { return RTC::BAD_PARAMETER; }
     RTC::ExecutionContext_var ec = get_actual_ec(rtc, ec_id);
-    if (CORBA::is_nil(ec)) { return RTC::BAD_PARAMETER; }
+    if (CORBA::is_nil(ec.in())) { return RTC::BAD_PARAMETER; }
     return ec->activate_component(rtc);
   }
   /*!
@@ -266,7 +266,7 @@ namespace CORBA_RTCUtil
    * @return 
    * @endif
    */
-  bool get_state(RTC::LifeCycleState  &state, const RTC::RTObject_ptr rtc, RTC::UniqueId ec_id)
+  bool get_state(RTC::LifeCycleState &state, const RTC::RTObject_ptr rtc, RTC::UniqueId ec_id)
   {
     if (CORBA::is_nil(rtc))
       {
@@ -529,8 +529,8 @@ namespace CORBA_RTCUtil
       }
     try
       {
-        RTC::ExecutionContextService_ptr ecservice = RTC::ExecutionContextService::_narrow(ec);
-        RTC::ExecutionContextProfile* profile = ecservice->get_profile();
+        RTC::ExecutionContextService_var ecservice = RTC::ExecutionContextService::_narrow(ec);
+        RTC::ExecutionContextProfile_var profile = ecservice->get_profile();
         return profile->participants;
       }
     catch (...)
@@ -556,11 +556,11 @@ namespace CORBA_RTCUtil
       {
         return names;
       }
-    RTC::PortServiceList ports = (*rtc->get_ports());
+    RTC::PortServiceList_var ports = rtc->get_ports();
 
-    for (unsigned int i = 0; i < ports.length(); i++)
+    for (unsigned int i = 0; i < ports->length(); i++)
       {
-        RTC::PortProfile* pp = ports[i]->get_port_profile();
+        RTC::PortProfile_var pp = ports[i]->get_port_profile();
 #ifdef ORB_IS_TAO
         std::string s(pp->name);
 #else
@@ -588,11 +588,11 @@ namespace CORBA_RTCUtil
       {
         return names;
       }
-    RTC::PortServiceList ports = (*rtc->get_ports());
+    RTC::PortServiceList_var ports = rtc->get_ports();
 
-    for (unsigned int i = 0; i < ports.length(); i++)
+    for (unsigned int i = 0; i < ports->length(); i++)
       {
-        RTC::PortProfile* pp = ports[i]->get_port_profile();
+        RTC::PortProfile_var pp = ports[i]->get_port_profile();
         coil::Properties prop;
         NVUtil::copyToProperties(prop, pp->properties);
 
@@ -626,11 +626,11 @@ namespace CORBA_RTCUtil
       {
         return names;
       }
-    RTC::PortServiceList ports = (*rtc->get_ports());
+    RTC::PortServiceList_var ports = rtc->get_ports();
 
-    for (unsigned int i = 0; i < ports.length(); i++)
+    for (unsigned int i = 0; i < ports->length(); i++)
       {
-        RTC::PortProfile* pp = ports[i]->get_port_profile();
+        RTC::PortProfile_var pp = ports[i]->get_port_profile();
         coil::Properties prop;
         NVUtil::copyToProperties(prop, pp->properties);
 
@@ -666,11 +666,11 @@ namespace CORBA_RTCUtil
       {
         return names;
       }
-    RTC::PortServiceList ports = (*rtc->get_ports());
+    RTC::PortServiceList_var ports = rtc->get_ports();
 
-    for (unsigned int i = 0; i < ports.length(); i++)
+    for (unsigned int i = 0; i < ports->length(); i++)
       {
-        RTC::PortProfile* pp = ports[i]->get_port_profile();
+        RTC::PortProfile_var pp = ports[i]->get_port_profile();
         coil::Properties prop;
         NVUtil::copyToProperties(prop, pp->properties);
 
@@ -704,8 +704,8 @@ namespace CORBA_RTCUtil
       {
         return names;
       }
-    RTC::ConnectorProfileList conprof = (*port->get_connector_profiles());
-    for (unsigned int i = 0; i < conprof.length(); i++)
+    RTC::ConnectorProfileList_var conprof = port->get_connector_profiles();
+    for (unsigned int i = 0; i < conprof->length(); i++)
       {
         names.emplace_back(conprof[i].name);
       }
@@ -732,8 +732,8 @@ namespace CORBA_RTCUtil
       {
         return names;
       }
-    RTC::ConnectorProfileList conprof = (*port->get_connector_profiles());
-    for (unsigned int i = 0; i < conprof.length(); i++)
+    RTC::ConnectorProfileList_var conprof = port->get_connector_profiles();
+    for (unsigned int i = 0; i < conprof->length(); i++)
       {
         names.emplace_back(conprof[i].name);
       }
@@ -809,7 +809,7 @@ namespace CORBA_RTCUtil
    * @return 
    * @endif
    */
-  RTC::ConnectorProfile_var create_connector(const std::string& name,
+  RTC::ConnectorProfile* create_connector(const std::string& name,
                                              const coil::Properties& prop_arg,
                                              const RTC::PortService_ptr port0,
                                              const RTC::PortService_ptr port1)
@@ -946,8 +946,8 @@ namespace CORBA_RTCUtil
       {
         return RTC::BAD_PARAMETER;
       }
-    RTC::ConnectorProfileList conprof = (*port_ref->get_connector_profiles());
-    for (unsigned int i = 0; i < conprof.length(); i++)
+    RTC::ConnectorProfileList_var conprof = port_ref->get_connector_profiles();
+    for (unsigned int i = 0; i < conprof->length(); i++)
       {
         if (std::string(conprof[i].name) == conn_name)
           {
@@ -978,8 +978,8 @@ namespace CORBA_RTCUtil
         return RTC::BAD_PARAMETER;
       }
 
-    RTC::ConnectorProfileList conprof = (*port_ref->get_connector_profiles());
-    for (unsigned int i = 0; i < conprof.length(); i++)
+    RTC::ConnectorProfileList_var conprof = port_ref->get_connector_profiles();
+    for (unsigned int i = 0; i < conprof->length(); i++)
       {
         if (std::string(conprof[i].name) == conn_name)
           {
@@ -1086,7 +1086,7 @@ namespace CORBA_RTCUtil
    * @return
    * @endif
    */
-  RTC::PortService_var get_port_by_url(const std::string& port_name)
+  RTC::PortService_ptr get_port_by_url(const std::string& port_name)
   {
     RTC::Manager& mgr = RTC::Manager::instance();
     RTC::NamingManager* nm = mgr.getNaming();
@@ -1172,10 +1172,10 @@ namespace CORBA_RTCUtil
   RTC::ReturnCode_t connect_multi(const std::string& name,
                                   const coil::Properties& prop,
                                   const RTC::PortService_ptr port,
-                                  RTC::PortServiceList_var& target_ports)
+                                  RTC::PortServiceList& target_ports)
   {
     RTC::ReturnCode_t ret(RTC::RTC_OK);
-    for (CORBA::ULong i(0); i < target_ports->length(); ++i)
+    for (CORBA::ULong i(0); i < target_ports.length(); ++i)
       {
         if (target_ports[i]->_is_equivalent(port)) { continue; }
         if (CORBA_RTCUtil::already_connected(port, target_ports[i]))
@@ -1199,7 +1199,7 @@ namespace CORBA_RTCUtil
    * @return
    * @endif
    */
-  bool find_port::operator()(const RTC::PortService_var& p)
+  bool find_port::operator()(const RTC::PortService_ptr p)
   {
     RTC::PortProfile_var prof = p->get_port_profile();
     std::string c(CORBA::string_dup(prof->name));
@@ -1218,19 +1218,18 @@ namespace CORBA_RTCUtil
    * @return
    * @endif
    */
-  RTC::PortService_var get_port_by_name(const RTC::RTObject_ptr rtc,
+  RTC::PortService_ptr get_port_by_name(const RTC::RTObject_ptr rtc,
                                         const std::string& name)
   {
     RTC::PortServiceList_var ports = rtc->get_ports();
-    RTC::PortService_var port_var;
     for (CORBA::ULong p(0); p < ports->length(); ++p)
       {
         RTC::PortProfile_var pp = ports[p]->get_port_profile();
         std::string s(CORBA::string_dup(pp->name));
 #ifdef ORB_IS_TAO
-        if (name == s) { return ports[p].in(); }
+        if (name == s) { return RTC::PortService::_duplicate(ports[p].in()); }
 #else
-        if (name == s) { return ports[p]; }
+        if (name == s) { return RTC::PortService::_duplicate(ports[p]); }
 #endif
       }
     return RTC::PortService::_nil();
@@ -1293,8 +1292,8 @@ namespace CORBA_RTCUtil
    */
   coil::Properties get_configuration(const RTC::RTObject_ptr rtc, const std::string& conf_name)
   {
-    SDOPackage::Configuration_ptr conf = rtc->get_configuration();
-    SDOPackage::ConfigurationSet* confset = conf->get_configuration_set(conf_name.c_str());
+    SDOPackage::Configuration_var conf = rtc->get_configuration();
+    SDOPackage::ConfigurationSet_var confset = conf->get_configuration_set(conf_name.c_str());
     SDOPackage::NVList confData = confset->configuration_data;
 
     coil::Properties prop;
@@ -1318,8 +1317,8 @@ namespace CORBA_RTCUtil
    */
   std::string get_parameter_by_key(const RTC::RTObject_ptr rtc, const std::string& confset_name, const std::string& value_name)
   {
-    SDOPackage::Configuration_ptr conf = rtc->get_configuration();
-    SDOPackage::ConfigurationSet* confset = conf->get_configuration_set(confset_name.c_str());
+    SDOPackage::Configuration_var conf = rtc->get_configuration();
+    SDOPackage::ConfigurationSet_var confset = conf->get_configuration_set(confset_name.c_str());
     SDOPackage::NVList confData = confset->configuration_data;
 
     coil::Properties prop;
@@ -1340,8 +1339,8 @@ namespace CORBA_RTCUtil
    */
   std::string get_active_configuration_name(const RTC::RTObject_ptr rtc)
   {
-    SDOPackage::Configuration_ptr conf = rtc->get_configuration();
-    SDOPackage::ConfigurationSet* confset = conf->get_active_configuration_set();
+    SDOPackage::Configuration_var conf = rtc->get_configuration();
+    SDOPackage::ConfigurationSet_var confset = conf->get_active_configuration_set();
 #ifdef ORB_IS_TAO
 	return std::string(confset->id);
 #else
@@ -1361,8 +1360,8 @@ namespace CORBA_RTCUtil
    */
   coil::Properties get_active_configuration(const RTC::RTObject_ptr rtc)
   {
-    SDOPackage::Configuration_ptr conf = rtc->get_configuration();
-    SDOPackage::ConfigurationSet* confset = conf->get_active_configuration_set();
+    SDOPackage::Configuration_var conf = rtc->get_configuration();
+    SDOPackage::ConfigurationSet_var confset = conf->get_active_configuration_set();
     SDOPackage::NVList confData = confset->configuration_data;
 
     coil::Properties prop;
@@ -1388,8 +1387,8 @@ namespace CORBA_RTCUtil
    */
   bool set_configuration(const RTC::RTObject_ptr rtc, const std::string& confset_name, const std::string& value_name, const std::string& value)
   {
-    SDOPackage::Configuration_ptr conf = rtc->get_configuration();
-    SDOPackage::ConfigurationSet* confset = conf->get_configuration_set(confset_name.c_str());
+    SDOPackage::Configuration_var conf = rtc->get_configuration();
+    SDOPackage::ConfigurationSet_var confset = conf->get_configuration_set(confset_name.c_str());
 
     set_configuration_parameter(conf, confset, value_name, value);
 
@@ -1414,8 +1413,8 @@ namespace CORBA_RTCUtil
    */
   bool set_active_configuration(const RTC::RTObject_ptr rtc, const std::string& value_name, const std::string& value)
   {
-    SDOPackage::Configuration_ptr conf = rtc->get_configuration();
-    SDOPackage::ConfigurationSet* confset = conf->get_active_configuration_set();
+    SDOPackage::Configuration_var conf = rtc->get_configuration();
+    SDOPackage::ConfigurationSet_var confset = conf->get_active_configuration_set();
 
     set_configuration_parameter(conf, confset, value_name, value);
 

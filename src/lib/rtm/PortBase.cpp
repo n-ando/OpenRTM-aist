@@ -377,7 +377,7 @@ namespace RTC
 
     for (CORBA::ULong i(0), len(prof.ports.length()); i < len; ++i)
       {
-        RTC::PortService_var p(prof.ports[i]);
+        RTC::PortService_var p(RTC::PortService::_duplicate(prof.ports[i]));
         try
           {
             return p->notify_disconnect(connector_id);
@@ -688,7 +688,7 @@ namespace RTC
     for (CORBA::ULong i(static_cast<CORBA::ULong>(index)); i < len; ++i)
       {
         RTC::PortService_var p;
-        p = cprof.ports[i];
+        p = RTC::PortService::_duplicate(cprof.ports[i]);
         try
           {
             return p->notify_disconnect(cprof.connector_id);

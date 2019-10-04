@@ -53,23 +53,24 @@ void MyModuleInit(RTC::Manager* manager)
   NVUtil::dump(prof->properties);
   std::cout << "=================================================" << std::endl;
 
-  PortServiceList* portlist;
+  PortServiceList_var portlist;
   portlist = comp->get_ports();
 
   for (CORBA::ULong i(0), n(portlist->length()); i < n; ++i)
     {
-      PortService_ptr port;
-      port = (*portlist)[i];
+      PortService_var port;
+      port = PortService::_duplicate(portlist[i]);
+      RTC::PortProfile_var portprof = port->get_port_profile();
       std::cout << "================================================="
 		<< std::endl;
       std::cout << "Port" << i << " (name): ";
-      std::cout << port->get_port_profile()->name << std::endl;
+      std::cout << portprof->name << std::endl;
       std::cout << "-------------------------------------------------"
 		<< std::endl;
 
     
       RTC::PortInterfaceProfileList iflist;
-      iflist = port->get_port_profile()->interfaces;
+      iflist = portprof->interfaces;
 
       for (CORBA::ULong j(0), m(iflist.length()); j < m; ++j)
 	    {
@@ -82,7 +83,7 @@ void MyModuleInit(RTC::Manager* manager)
 	      std::cout << "Polarity: " << pol << std::endl;
 	    }
       std::cout << "- properties -" << std::endl;
-      NVUtil::dump(port->get_port_profile()->properties);
+      NVUtil::dump(portprof->properties);
       std::cout << "-------------------------------------------------"
 		<< std::endl;
     }

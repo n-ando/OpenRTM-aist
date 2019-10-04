@@ -2591,7 +2591,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 
         std::string port0_name = port0_str;
         RTObject_impl* comp0 = nullptr;
-        RTC::RTObject_ptr comp0_ref = nullptr;
+        RTC::RTObject_var comp0_ref;
 
         if (comp0_name.find("://") == std::string::npos)
           {
@@ -2601,7 +2601,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
               RTC_ERROR(("%s not found.", comp0_name.c_str()));
               continue;
             }
-            comp0_ref = comp0->getObjRef();
+            comp0_ref = RTObject::_duplicate(comp0->getObjRef());
           }
         else
           {
@@ -2611,12 +2611,12 @@ std::vector<coil::Properties> Manager::getLoadableModules()
                 RTC_ERROR(("%s not found.", comp0_name.c_str()));
                 continue;
               }
-            comp0_ref = rtcs[0];
+            comp0_ref = RTObject::_duplicate(rtcs[0]);
             coil::vstring tmp_port0_name = coil::split(port0_str, "/");
             port0_name = tmp_port0_name.back();
           }
 
-        RTC::PortService_var port0_var = CORBA_RTCUtil::get_port_by_name(comp0_ref, port0_name);
+        RTC::PortService_var port0_var = CORBA_RTCUtil::get_port_by_name(comp0_ref.in(), port0_name);
         if (CORBA::is_nil(port0_var))
           {
             RTC_DEBUG(("port %s found: ", port0_str.c_str()));
@@ -2636,7 +2636,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
                 prop["dataport." + key] = value;
               }
 
-            if (RTC::RTC_OK != CORBA_RTCUtil::connect(connector, prop, port0_var, RTC::PortService::_nil()))
+            if (RTC::RTC_OK != CORBA_RTCUtil::connect(connector, prop, port0_var.in(), RTC::PortService::_nil()))
               {
                 RTC_ERROR(("Connection error: %s", connector.c_str()));
               }
@@ -2649,7 +2649,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
             std::string comp_name = coil::flatten(tmp, ".");
             std::string port_name = port;
             RTObject_impl* comp = nullptr;
-            RTC::RTObject_ptr comp_ref = nullptr;
+            RTC::RTObject_var comp_ref;
 
             if (comp_name.find("://") == std::string::npos)
               {
@@ -2659,7 +2659,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
                       RTC_ERROR(("%s not found.", comp_name.c_str()));
                       continue;
                   }
-                comp_ref = comp->getObjRef();
+                comp_ref = RTObject::_duplicate(comp->getObjRef());
               }
             else
               {
@@ -2669,12 +2669,12 @@ std::vector<coil::Properties> Manager::getLoadableModules()
                     RTC_ERROR(("%s not found.", comp_name.c_str()));
                     continue;
                   }
-                comp_ref = rtcs[0];
+                comp_ref = RTObject::_duplicate(rtcs[0]);
                 coil::vstring tmp_port_name = coil::split(port, "/");
                 port_name = tmp_port_name.back();
               }
 
-            RTC::PortService_var port_var = CORBA_RTCUtil::get_port_by_name(comp_ref, port_name);
+            RTC::PortService_var port_var = CORBA_RTCUtil::get_port_by_name(comp_ref.in(), port_name);
 
             if (CORBA::is_nil(port_var))
               {
@@ -2690,7 +2690,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
                 prop["dataport." + key] = std::move(value);
               }
 
-            if (RTC::RTC_OK != CORBA_RTCUtil::connect(connector, prop, port0_var, port_var))
+            if (RTC::RTC_OK != CORBA_RTCUtil::connect(connector, prop, port0_var.in(), port_var.in()))
               {
                 RTC_ERROR(("Connection error: %s", connector.c_str()));
               }
@@ -2722,7 +2722,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
         c = coil::eraseBothEndsBlank(std::move(c));
         if (!c.empty())
           {
-            RTC::RTObject_ptr comp_ref;
+            RTC::RTObject_var comp_ref;
             if (c.find("://") == std::string::npos)
               {
                 RTObject_impl* comp = getComponent(c.c_str());
@@ -2730,7 +2730,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
                   {
                     RTC_ERROR(("%s not found.", c.c_str())); continue;
                   }
-                comp_ref = comp->getObjRef();
+                comp_ref = RTObject::_duplicate(comp->getObjRef());
               }
             else
               {
@@ -2740,10 +2740,9 @@ std::vector<coil::Properties> Manager::getLoadableModules()
                     RTC_ERROR(("%s not found.", c.c_str()));
                     continue;
                   }
-                comp_ref = rtcs[0];
+                comp_ref = RTObject::_duplicate(rtcs[0]);
               }
-
-            RTC::ReturnCode_t ret = CORBA_RTCUtil::activate(comp_ref);
+            RTC::ReturnCode_t ret = CORBA_RTCUtil::activate(comp_ref.in());
             if (ret != RTC::RTC_OK)
               {
                 RTC_ERROR(("%s activation filed.", c.c_str()));
@@ -2893,7 +2892,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
       }
   }
 
-  PortServiceList_var Manager::getPortsOnNameServers(const std::string& nsname,
+  PortServiceList* Manager::getPortsOnNameServers(const std::string& nsname,
                                                      const std::string& kind)
   {
     PortServiceList_var ports = new PortServiceList();
