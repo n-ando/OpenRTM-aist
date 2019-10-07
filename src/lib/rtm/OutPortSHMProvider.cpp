@@ -34,7 +34,7 @@ namespace RTC
     
     // ConnectorProfile setting
 #ifdef ORB_IS_OMNIORB
-    ::RTC::Manager::instance().theShortCutPOA()->activate_object(this);
+    PortableServer::ObjectId_var oid = ::RTC::Manager::instance().theShortCutPOA()->activate_object(this);
 #endif
     m_objref = this->_this();
     
