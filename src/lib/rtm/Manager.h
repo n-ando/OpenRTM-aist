@@ -1285,7 +1285,8 @@ namespace RTC
      * @brief The main function of Manager main thread.
      * @endif
      */
-    void main(void);
+    // TAO will cause the build to fail, so don't use name "main".
+    void mainThread();
 
     //============================================================
     // Logger initialize and terminator
