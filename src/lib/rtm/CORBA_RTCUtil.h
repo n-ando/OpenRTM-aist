@@ -202,7 +202,7 @@ namespace CORBA_RTCUtil
    * @return 
    * @endif
    */
-  RTC::ExecutionContext_var get_actual_ec(RTC::RTObject_ptr rtc,
+  RTC::ExecutionContext_ptr get_actual_ec(RTC::RTObject_ptr rtc,
                                           RTC::UniqueId ec_id = 0);
 
   /*!
@@ -603,7 +603,7 @@ namespace CORBA_RTCUtil
    * @return 
    * @endif
    */
-  RTC::ConnectorProfile_var create_connector(const std::string& name,
+  RTC::ConnectorProfile* create_connector(const std::string& name,
                                              const coil::Properties& prop_arg,
                                              RTC::PortService_ptr port0,
                                              RTC::PortService_ptr port1);
@@ -777,7 +777,7 @@ namespace CORBA_RTCUtil
   * @return
   * @endif
   */
-  RTC::PortService_var get_port_by_url(const std::string& port_name);
+  RTC::PortService_ptr get_port_by_url(const std::string& port_name);
 
   /*!
    * @if jp
@@ -818,7 +818,7 @@ namespace CORBA_RTCUtil
   RTC::ReturnCode_t connect_multi(const std::string& name,
     const coil::Properties& prop,
     RTC::PortService_ptr port,
-    RTC::PortServiceList_var& target_ports);
+    RTC::PortServiceList* target_ports);
   /*!
    * @if jp
    * @brief ポートを名前から検索
@@ -850,7 +850,7 @@ namespace CORBA_RTCUtil
      * @return 
      * @endif
      */
-  bool operator()(const RTC::PortService_var& p);
+  bool operator()(const RTC::PortService_ptr p);
   };
 
   /*!
@@ -866,7 +866,7 @@ namespace CORBA_RTCUtil
    * @return
    * @endif
    */
-  RTC::PortService_var get_port_by_name(RTC::RTObject_ptr rtc,
+  RTC::PortService_ptr get_port_by_name(RTC::RTObject_ptr rtc,
                                         const std::string& name);
 
   /*!
@@ -1021,7 +1021,7 @@ namespace CORBA_RTCUtil
    * @endif
    */
   bool set_configuration_parameter(SDOPackage::Configuration_ptr conf,
-                                   SDOPackage::ConfigurationSet* confset,
+                                   SDOPackage::ConfigurationSet& confset,
                                    const std::string& value_name,
                                    const std::string& value);
 

@@ -727,21 +727,21 @@ namespace RTC
     for (::CORBA::ULong i(0), len(sdos->length()); i < len; ++i)
       {
         ::RTC::RTObject_var rtc(::RTC::RTObject::_narrow(sdos[i]));
-        activateChildComp(rtc);
+        activateChildComp(rtc.in());
       }
     RTC_DEBUG(("%d member RTC%s activated.", sdos->length(),
                sdos->length() == 1 ? " was" : "s were"));
     return ::RTC::RTC_OK;
   }
 
-  void PeriodicECSharedComposite::activateChildComp(const RTC::RTObject_var& rtobj)
+  void PeriodicECSharedComposite::activateChildComp(const RTC::RTObject_ptr rtobj)
   {
       ::RTC::ExecutionContextList_var ecs(get_owned_contexts());
       SDOPackage::OrganizationList_var orglist = rtobj->get_owned_organizations();
 
       if (orglist->length() == 0)
       {
-          ecs[CORBA::ULong(0)]->activate_component(rtobj.in());
+          ecs[CORBA::ULong(0)]->activate_component(rtobj);
       }
 
       for (CORBA::ULong i(0); i < orglist->length(); ++i)
@@ -750,7 +750,7 @@ namespace RTC
           for (CORBA::ULong j(0); j < child_sdos->length(); ++j)
           {
               ::RTC::RTObject_var child(::RTC::RTObject::_narrow(child_sdos[j]));
-              activateChildComp(child);
+              activateChildComp(child.in());
           }
       }
   }
@@ -772,19 +772,19 @@ namespace RTC
     for (::CORBA::ULong i(0), len(sdos->length()); i < len; ++i)
       {
         ::RTC::RTObject_var rtc(::RTC::RTObject::_narrow(sdos[i]));
-        deactivateChildComp(rtc);
+        deactivateChildComp(rtc.in());
       }
     return ::RTC::RTC_OK;
   }
 
-  void PeriodicECSharedComposite::deactivateChildComp(const RTC::RTObject_var& rtobj)
+  void PeriodicECSharedComposite::deactivateChildComp(const RTC::RTObject_ptr rtobj)
   {
       ::RTC::ExecutionContextList_var ecs(get_owned_contexts());
       SDOPackage::OrganizationList_var orglist = rtobj->get_owned_organizations();
 
       if (orglist->length() == 0)
       {
-          ecs[CORBA::ULong(0)]->deactivate_component(rtobj.in());
+          ecs[CORBA::ULong(0)]->deactivate_component(rtobj);
       }
 
       for (CORBA::ULong i(0); i < orglist->length(); ++i)
@@ -793,7 +793,7 @@ namespace RTC
           for (CORBA::ULong j(0); j < child_sdos->length(); ++j)
           {
               ::RTC::RTObject_var child(::RTC::RTObject::_narrow(child_sdos[j]));
-              deactivateChildComp(child);
+              deactivateChildComp(child.in());
           }
       }
   }
@@ -814,19 +814,19 @@ namespace RTC
     for (::CORBA::ULong i(0), len(sdos->length()); i < len; ++i)
       {
         ::RTC::RTObject_var rtc(::RTC::RTObject::_narrow(sdos[i]));
-        resetChildComp(rtc);
+        resetChildComp(rtc.in());
       }
     return ::RTC::RTC_OK;
   }
 
-  void PeriodicECSharedComposite::resetChildComp(const RTC::RTObject_var& rtobj)
+  void PeriodicECSharedComposite::resetChildComp(const RTC::RTObject_ptr rtobj)
   {
       ::RTC::ExecutionContextList_var ecs(get_owned_contexts());
       SDOPackage::OrganizationList_var orglist = rtobj->get_owned_organizations();
 
       if (orglist->length() == 0)
       {
-          ecs[CORBA::ULong(0)]->reset_component(rtobj.in());
+          ecs[CORBA::ULong(0)]->reset_component(rtobj);
       }
 
       for (CORBA::ULong i(0); i < orglist->length(); ++i)
@@ -835,7 +835,7 @@ namespace RTC
           for (CORBA::ULong j(0); j < child_sdos->length(); ++j)
           {
               ::RTC::RTObject_var child(::RTC::RTObject::_narrow(child_sdos[j]));
-              resetChildComp(child);
+              resetChildComp(child.in());
           }
       }
   }
