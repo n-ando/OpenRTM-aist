@@ -533,7 +533,11 @@ elseif(UNIX)
 		set (RTM_OS_QNX ON)
 	else()
 		set(RTM_OS_LINUX ON)
-		set(RTM_LINKER_OPTION dl rt)
+
+		# for std::thread
+		set(THREADS_PREFER_PTHREAD_FLAG ON)
+		find_package(Threads)
+		set(RTM_LINKER_OPTION dl rt Threads::Threads)
 	endif()
 elseif(WIN32)
 	set(COIL_OS_DIR "win32")
