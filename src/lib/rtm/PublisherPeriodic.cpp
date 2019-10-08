@@ -138,7 +138,7 @@ namespace RTC
    */
   DataPortStatus
   PublisherPeriodic::setListener(ConnectorInfo& info,
-                                 ConnectorListeners* listeners)
+                                 ConnectorListenersBase* listeners)
   {
     RTC_TRACE(("setListeners()"));
 

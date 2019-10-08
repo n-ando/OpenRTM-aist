@@ -34,7 +34,7 @@ namespace RTC
    */
   InPortPushConnector::InPortPushConnector(ConnectorInfo info,
                                            InPortProvider* provider,
-                                           ConnectorListeners* listeners,
+                                           ConnectorListenersBase* listeners,
                                            CdrBufferBase* buffer)
     : InPortConnector(info, listeners, buffer),
       m_provider(provider),
@@ -217,7 +217,7 @@ namespace RTC
    */
   void InPortPushConnector::onConnect()
   {
-    m_listeners->connector_[ON_CONNECT].notify(m_profile);
+    m_listeners->notify(ON_CONNECT, m_profile);
   }
 
   /*!
@@ -229,7 +229,7 @@ namespace RTC
    */
   void InPortPushConnector::onDisconnect()
   {
-    m_listeners->connector_[ON_DISCONNECT].notify(m_profile);
+    m_listeners->notify(ON_DISCONNECT, m_profile);
   }
 
   BufferStatus InPortPushConnector::write(ByteData &cdr)

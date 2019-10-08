@@ -75,7 +75,7 @@ namespace RTC
    * @endif
    */
   void OutPortDSConsumer::setListener(ConnectorInfo& info,
-                                            ConnectorListeners* listeners)
+                                            ConnectorListenersBase* listeners)
   {
     RTC_TRACE(("OutPortDSConsumer::setListener()"));
     m_listeners = listeners;

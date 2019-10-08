@@ -107,7 +107,7 @@ namespace RTC
    */
   ::RTC::DataPortStatus
   PublisherFlush::setListener(ConnectorInfo& info,
-                              RTC::ConnectorListeners* listeners)
+                              RTC::ConnectorListenersBase* listeners)
   {
     RTC_TRACE(("setListeners()"));
 

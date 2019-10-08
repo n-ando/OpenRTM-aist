@@ -129,7 +129,7 @@ namespace RTC
      */
     OutPortPushConnector(ConnectorInfo info,
                          InPortConsumer* consumer,
-                         ConnectorListeners* listeners,
+                         ConnectorListenersBase* listeners,
                          CdrBufferBase* buffer = nullptr);
 
     /*!
@@ -356,7 +356,7 @@ namespace RTC
      * @brief A reference to a ConnectorListener
      * @endif
      */
-    ConnectorListeners* m_listeners;
+    ConnectorListenersBase* m_listeners;
 
     /*!
      * @if jp

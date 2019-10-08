@@ -77,7 +77,7 @@ namespace RTC
    * @endif
    */
   void OutPortCorbaCdrConsumer::setListener(ConnectorInfo& info,
-                                            ConnectorListeners* listeners)
+                                            ConnectorListenersBase* listeners)
   {
     RTC_TRACE(("OutPortCorbaCdrConsumer::setListener()"));
     m_listeners = listeners;

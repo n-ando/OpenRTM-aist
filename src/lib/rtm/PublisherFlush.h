@@ -201,7 +201,7 @@ namespace RTC
      */
     ::RTC::DataPortStatus
     setListener(ConnectorInfo& info,
-                RTC::ConnectorListeners* listeners) override;
+                RTC::ConnectorListenersBase* listeners) override;
 
     /*!
      * @if jp
@@ -357,8 +357,7 @@ namespace RTC
      */
     inline void onSend(ByteData& data)
     {
-      m_listeners->
-        connectorData_[ON_SEND]->notifyOut(m_profile, data);
+      m_listeners->notifyOut(ON_SEND, m_profile, data);
     }
 
     /*!
@@ -372,8 +371,7 @@ namespace RTC
      */
     inline void onReceived(ByteData& data)
     {
-      m_listeners->
-        connectorData_[ON_RECEIVED]->notifyOut(m_profile, data);
+      m_listeners->notifyOut(ON_RECEIVED, m_profile, data);
     }
 
     /*!
@@ -387,8 +385,7 @@ namespace RTC
      */
     inline void onReceiverFull(ByteData& data)
     {
-      m_listeners->
-        connectorData_[ON_RECEIVER_FULL]->notifyOut(m_profile, data);
+      m_listeners->notifyOut(ON_RECEIVER_FULL, m_profile, data);
     }
 
     /*!
@@ -402,8 +399,7 @@ namespace RTC
      */
     inline void onReceiverTimeout(ByteData& data)
     {
-      m_listeners->
-        connectorData_[ON_RECEIVER_TIMEOUT]->notifyOut(m_profile, data);
+      m_listeners->notifyOut(ON_RECEIVER_TIMEOUT, m_profile, data);
     }
 
     /*!
@@ -417,15 +413,14 @@ namespace RTC
      */
     inline void onReceiverError(ByteData& data)
     {
-      m_listeners->
-        connectorData_[ON_RECEIVER_ERROR]->notifyOut(m_profile, data);
+      m_listeners->notifyOut(ON_RECEIVER_ERROR, m_profile, data);
     }
 
   private:
     Logger rtclog{"PublisherFlush"};
     InPortConsumer* m_consumer{nullptr};
     ConnectorInfo m_profile;
-    ConnectorListeners* m_listeners{nullptr};
+    ConnectorListenersBase* m_listeners{nullptr};
     DataPortStatus m_retcode{DataPortStatus::PORT_OK};
     std::mutex m_retmutex;
     bool m_active{false};

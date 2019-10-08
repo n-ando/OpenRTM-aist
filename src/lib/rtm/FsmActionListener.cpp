@@ -299,6 +299,384 @@ namespace RTC
         listener.first->operator()(structure);
       }
   }
+  /*!
+   * @if jp
+   *
+   * @brief リスナーの追加
+   *
+   * 指定の種類のPreFsmActionListenerを追加する。
+   *
+   * @param type リスナの種類
+   * @param listener 追加するリスナ
+   * @param autoclean true:デストラクタで削除する,
+   *                  false:デストラクタで削除しない
+   * @return false：指定の種類のリスナが存在しない
+   * @else
+   *
+   * @brief Add the listener.
+   *
+   *
+   *
+   * @param type
+   * @param listener Added listener
+   * @param autoclean true:The listener is deleted at the destructor.,
+   *                  false:The listener is not deleted at the destructor.
+   * @return
+   * @endif
+   */
+  bool FsmActionListeners::addListener(PreFsmActionListenerType type, PreFsmActionListener* listener, bool autoclean)
+  {
+      if(static_cast<uint8_t>(type) < preaction_.size())
+      {
+          preaction_[static_cast<uint8_t>(type)].addListener(listener, autoclean);
+          return true;
+      }
+      return false;
+  }
+  /*!
+   * @if jp
+   *
+   * @brief リスナーの削除
+   *
+   * 指定の種類のPreFsmActionListenerを削除する。
+   *
+   * @param type リスナの種類
+   * @param listener 削除するリスナ
+   * @return false：指定の種類のリスナが存在しない
+   *
+   * @else
+   *
+   * @brief Remove the listener.
+   *
+   *
+   * @param type
+   * @param listener
+   * @return
+   *
+   * @endif
+   */
+  bool FsmActionListeners::removeListener(PreFsmActionListenerType type, PreFsmActionListener* listener)
+  {
+      if(static_cast<uint8_t>(type) < preaction_.size())
+      {
+          preaction_[static_cast<uint8_t>(type)].removeListener(listener);
+          return true;
+      }
+      return false;
+  }
+  /*!
+   * @if jp
+   *
+   * @brief リスナーの追加
+   *
+   * 指定の種類のPostFsmActionListenerを追加する。
+   *
+   * @param type リスナの種類
+   * @param listener 追加するリスナ
+   * @param autoclean true:デストラクタで削除する,
+   *                  false:デストラクタで削除しない
+   * @return false：指定の種類のリスナが存在しない
+   * @else
+   *
+   * @brief Add the listener.
+   *
+   *
+   *
+   * @param type
+   * @param listener Added listener
+   * @param autoclean true:The listener is deleted at the destructor.,
+   *                  false:The listener is not deleted at the destructor.
+   * @return
+   * @endif
+   */
+  bool FsmActionListeners::addListener(PostFsmActionListenerType type, PostFsmActionListener* listener, bool autoclean)
+  {
+      if(static_cast<uint8_t>(type) < postaction_.size())
+      {
+          postaction_[static_cast<uint8_t>(type)].addListener(listener, autoclean);
+          return true;
+      }
+      return false;
+  }
+  /*!
+   * @if jp
+   *
+   * @brief リスナーの削除
+   *
+   * 指定の種類のPostFsmActionListenerを削除する。
+   *
+   * @param type リスナの種類
+   * @param listener 削除するリスナ
+   * @return false：指定の種類のリスナが存在しない
+   *
+   * @else
+   *
+   * @brief Remove the listener.
+   *
+   *
+   * @param type
+   * @param listener
+   * @return
+   *
+   * @endif
+   */
+  bool FsmActionListeners::removeListener(PostFsmActionListenerType type, PostFsmActionListener* listener)
+  {
+      if(static_cast<uint8_t>(type) < postaction_.size())
+      {
+          postaction_[static_cast<uint8_t>(type)].removeListener(listener);
+          return true;
+      }
+      return false;
+  }
+  /*!
+   * @if jp
+   *
+   * @brief リスナーの追加
+   *
+   * 指定の種類のFsmProfileListenerを追加する。
+   *
+   * @param type リスナの種類
+   * @param listener 追加するリスナ
+   * @param autoclean true:デストラクタで削除する,
+   *                  false:デストラクタで削除しない
+   * @return false：指定の種類のリスナが存在しない
+   * @else
+   *
+   * @brief Add the listener.
+   *
+   *
+   *
+   * @param type
+   * @param listener Added listener
+   * @param autoclean true:The listener is deleted at the destructor.,
+   *                  false:The listener is not deleted at the destructor.
+   * @return
+   * @endif
+   */
+  bool FsmActionListeners::addListener(FsmProfileListenerType type, FsmProfileListener* listener, bool autoclean)
+  {
+      if(static_cast<uint8_t>(type) < profile_.size())
+      {
+          profile_[static_cast<uint8_t>(type)].addListener(listener, autoclean);
+          return true;
+      }
+      return false;
+  }
+  /*!
+   * @if jp
+   *
+   * @brief リスナーの削除
+   *
+   * 指定の種類のFsmProfileListenerを削除する。
+   *
+   * @param type リスナの種類
+   * @param listener 削除するリスナ
+   * @return false：指定の種類のリスナが存在しない
+   *
+   * @else
+   *
+   * @brief Remove the listener.
+   *
+   *
+   * @param type
+   * @param listener
+   * @return
+   *
+   * @endif
+   */
+  bool FsmActionListeners::removeListener(FsmProfileListenerType type, FsmProfileListener* listener)
+  {
+      if(static_cast<uint8_t>(type) < profile_.size())
+      {
+          profile_[static_cast<uint8_t>(type)].removeListener(listener);
+          return true;
+      }
+      return false;
+  }
+  /*!
+   * @if jp
+   *
+   * @brief リスナーの追加
+   *
+   * 指定の種類のFsmStructureListenerを追加する。
+   *
+   * @param type リスナの種類
+   * @param listener 追加するリスナ
+   * @param autoclean true:デストラクタで削除する,
+   *                  false:デストラクタで削除しない
+   * @return false：指定の種類のリスナが存在しない
+   * @else
+   *
+   * @brief Add the listener.
+   *
+   *
+   *
+   * @param type
+   * @param listener Added listener
+   * @param autoclean true:The listener is deleted at the destructor.,
+   *                  false:The listener is not deleted at the destructor.
+   * @return
+   * @endif
+   */
+  bool FsmActionListeners::addListener(FsmStructureListenerType type, FsmStructureListener* listener, bool autoclean)
+  {
+      if(static_cast<uint8_t>(type) < structure_.size())
+      {
+          structure_[static_cast<uint8_t>(type)].addListener(listener, autoclean);
+          return true;
+      }
+      return false;
+  }
+  /*!
+   * @if jp
+   *
+   * @brief リスナーの削除
+   *
+   * 指定の種類のFsmStructureListenerを削除する。
+   *
+   * @param type リスナの種類
+   * @param listener 削除するリスナ
+   * @return false：指定の種類のリスナが存在しない
+   *
+   * @else
+   *
+   * @brief Remove the listener.
+   *
+   *
+   * @param type
+   * @param listener
+   * @return
+   *
+   * @endif
+   */
+  bool FsmActionListeners::removeListener(FsmStructureListenerType type, FsmStructureListener* listener)
+  {
+      if(static_cast<uint8_t>(type) < structure_.size())
+      {
+          structure_[static_cast<uint8_t>(type)].removeListener(listener);
+          return true;
+      }
+      return false;
+  }
+  /*!
+   * @if jp
+   *
+   * @brief リスナーへ通知する
+   *
+   * 指定の種類のPreFsmActionListenerのコールバック関数を呼び出す。
+   *
+   * @param type リスナの種類
+   * @param state ポートプロファイル
+   * @return false：指定の種類のリスナが存在しない
+   * @else
+   *
+   * @brief
+   *
+   *
+   * @param type
+   * @param state
+   * @return
+   * @endif
+   */
+  bool FsmActionListeners::notify(PreFsmActionListenerType type, const char* state)
+  {
+      if(static_cast<uint8_t>(type) < preaction_.size())
+      {
+          preaction_[static_cast<uint8_t>(type)].notify(state);
+          return true;
+      }
+      return false;
+  }
+  /*!
+   * @if jp
+   *
+   * @brief リスナーへ通知する
+   *
+   * 指定の種類のPostFsmActionListenerのコールバック関数を呼び出す。
+   *
+   * @param type リスナの種類
+   * @param state
+   * @param ret
+   * @return false：指定の種類のリスナが存在しない
+   * @else
+   *
+   * @brief
+   *
+   *
+   * @param type
+   * @param state
+   * @param ret
+   * @return
+   * @endif
+   */
+  bool FsmActionListeners::notify(PostFsmActionListenerType type, const char* state, ReturnCode_t ret)
+  {
+      if(static_cast<uint8_t>(type) < postaction_.size())
+      {
+          postaction_[static_cast<uint8_t>(type)].notify(state, ret);
+          return true;
+      }
+      return false;
+  }
+  /*!
+   * @if jp
+   *
+   * @brief リスナーへ通知する
+   *
+   * 指定の種類のFsmProfileListenerのコールバック関数を呼び出す。
+   *
+   * @param type リスナの種類
+   * @param profile FsmProfile
+   * @return false：指定の種類のリスナが存在しない
+   * @else
+   *
+   * @brief
+   *
+   *
+   * @param type
+   * @param profile FsmProfile
+   * @return
+   * @endif
+   */
+  bool FsmActionListeners::notify(FsmProfileListenerType type, RTC::FsmProfile& profile)
+  {
+      if(static_cast<uint8_t>(type) < profile_.size())
+      {
+          profile_[static_cast<uint8_t>(type)].notify(profile);
+          return true;
+      }
+      return false;
+  }
+  /*!
+   * @if jp
+   *
+   * @brief リスナーへ通知する
+   *
+   * 指定の種類のFsmStructureListenerのコールバック関数を呼び出す。
+   *
+   * @param type リスナの種類
+   * @param structure FsmStructure
+   * @return false：指定の種類のリスナが存在しない
+   * @else
+   *
+   * @brief
+   *
+   *
+   * @param type
+   * @param structure
+   * @return
+   * @endif
+   */
+  bool FsmActionListeners::notify(FsmStructureListenerType type, RTC::FsmStructure& structure)
+  {
+      if(static_cast<uint8_t>(type) < structure_.size())
+      {
+          structure_[static_cast<uint8_t>(type)].notify(structure);
+          return true;
+      }
+      return false;
+  }
 
 } // namespace RTC
 

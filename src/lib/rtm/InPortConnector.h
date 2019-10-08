@@ -69,7 +69,7 @@ namespace RTC
      * @endif
      */
     InPortConnector(ConnectorInfo& info,
-                    ConnectorListeners* listeners,
+                    ConnectorListenersBase* listeners,
                     CdrBufferBase* buffer);
 
     /*!
@@ -331,25 +331,23 @@ namespace RTC
         {
             if (outport->isEmpty())
             {
-                m_listeners->
-                    connector_[ON_BUFFER_EMPTY].notify(m_profile);
-                m_outPortListeners->
-                    connector_[ON_SENDER_EMPTY].notify(m_profile);
+                m_listeners->notify(ON_BUFFER_EMPTY, m_profile);
+                m_outPortListeners->notify(ON_SENDER_EMPTY, m_profile);
                 RTC_PARANOID(("ON_BUFFER_EMPTY(InPort,OutPort), "
                     "ON_SENDER_EMPTY(InPort,OutPort) "
                     "callback called in direct mode."));
             }
             outport->read(data);
-            m_outPortListeners->connectorData_[ON_BUFFER_READ]->notifyIn(m_profile, data);
+            m_outPortListeners->notifyOut(ON_BUFFER_READ, m_profile, data);
             RTC_TRACE(("ON_BUFFER_READ(OutPort), "));
             RTC_TRACE(("callback called in direct mode."));
-            m_outPortListeners->connectorData_[ON_SEND]->notifyIn(m_profile, data);
+            m_outPortListeners->notifyOut(ON_SEND, m_profile, data);
             RTC_TRACE(("ON_SEND(OutPort), "));
             RTC_TRACE(("callback called in direct mode."));
-            m_listeners->connectorData_[ON_RECEIVED]->notifyIn(m_profile, data);
+            m_listeners->notifyIn(ON_RECEIVED, m_profile, data);
             RTC_TRACE(("ON_RECEIVED(InPort), "));
             RTC_TRACE(("callback called in direct mode."));
-            m_listeners->connectorData_[ON_SEND]->notifyIn(m_profile, data);
+            m_listeners->notifyIn(ON_SEND, m_profile, data);
             RTC_TRACE(("ON_BUFFER_WRITE(InPort), "));
             RTC_TRACE(("callback called in direct mode."));
 
@@ -398,7 +396,7 @@ namespace RTC
      * @brief A reference to a ConnectorListener
      * @endif
      */
-    ConnectorListeners* m_listeners;
+    ConnectorListenersBase* m_listeners;
     /*!
      * @if jp
      * @brief Connector が保持している Buffer
@@ -422,7 +420,7 @@ namespace RTC
      * @brief A pointer to a OutPort's ConnectorListener
      * @endif
      */
-    ConnectorListeners* m_outPortListeners;
+    ConnectorListenersBase* m_outPortListeners;
     /*!
      * @if jp
      * @brief 同一プロセス上のピアOutPortのポインタ

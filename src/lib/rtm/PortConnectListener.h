@@ -25,6 +25,7 @@
 
 #include <vector>
 #include <utility>
+#include <array>
 
 namespace RTC
 {
@@ -501,6 +502,15 @@ namespace RTC
      * @endif
      */
     ~PortConnectListeners();
+    bool addListener(PortConnectListenerType type, PortConnectListener* listener, bool autoclean=true);
+    bool removeListener(PortConnectListenerType type, PortConnectListener* listener);
+    bool addListener(PortConnectRetListenerType type, PortConnectRetListener* listener, bool autoclean=true);
+    bool removeListener(PortConnectRetListenerType type, PortConnectRetListener* listener);
+    bool notify(PortConnectListenerType type, const char* portname, RTC::ConnectorProfile& profile);
+    bool notify(PortConnectRetListenerType type, const char* portname, RTC::ConnectorProfile& profile,
+                ReturnCode_t ret);
+
+  private:
     /*!
      * @if jp
      * @brief PortConnectListenerType リスナ配列
@@ -510,8 +520,7 @@ namespace RTC
      * The PortConnectListenerType listener is stored.
      * @endif
      */
-    PortConnectListenerHolder
-    portconnect_[PORT_CONNECT_LISTENER_NUM];
+    std::array<PortConnectListenerHolder, PORT_CONNECT_LISTENER_NUM> portconnect_;
     /*!
      * @if jp
      * @brief PortConnectRetTypeリスナ配列
@@ -521,8 +530,7 @@ namespace RTC
      * The PortConnectRetType listener is stored.
      * @endif
      */
-    PortConnectRetListenerHolder
-    portconnret_[PORT_CONNECT_RET_LISTENER_NUM];
+    std::array<PortConnectRetListenerHolder, PORT_CONNECT_RET_LISTENER_NUM> portconnret_;
   };
 
 

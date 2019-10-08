@@ -73,7 +73,7 @@ namespace RTC
    * @endif
    */
   void OutPortDirectConsumer::setListener(ConnectorInfo&  /*info*/,
-                                            ConnectorListeners*  /*listeners*/)
+                                            ConnectorListenersBase*  /*listeners*/)
   {
     RTC_TRACE(("OutPortDirectConsumer::setListener()"));
   }

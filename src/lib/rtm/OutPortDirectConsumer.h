@@ -188,7 +188,7 @@ namespace RTC
      * @endif
      */
     void setListener(ConnectorInfo& info,
-                             ConnectorListeners* listeners) override;
+                             ConnectorListenersBase* listeners) override;
 
     /*!
      * @if jp

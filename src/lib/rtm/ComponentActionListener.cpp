@@ -340,5 +340,395 @@ namespace RTC
      * @endif
      */
   ComponentActionListeners::~ComponentActionListeners() = default;
+
+  /*!
+   * @if jp
+   *
+   * @brief リスナーへ通知する
+   *
+   * 指定の種類のPreComponentActionListenerのコールバック関数を呼び出す。
+   *
+   * @param type リスナの種類
+   * @param ec_id 実行コンテキストのID
+   * @return false：指定の種類のリスナが存在しない
+   * @else
+   *
+   * @brief
+   *
+   *
+   * @param type
+   * @param ec_id
+   * @return
+   * @endif
+   */
+  bool ComponentActionListeners::notify(PreComponentActionListenerType type, UniqueId ec_id)
+  {
+      if(type < preaction_.size())
+      {
+           preaction_[type].notify(ec_id);
+           return true;
+      }
+      return false;
+  }
+
+  /*!
+   * @if jp
+   *
+   * @brief リスナーへ通知する
+   *
+   * 指定の種類のPostComponentActionListenerのコールバック関数を呼び出す。
+   *
+   * @param type リスナの種類
+   * @param ec_id 実行コンテキストのID
+   * @param ret リターンコード
+   * @return false：指定の種類のリスナが存在しない
+   * @else
+   *
+   * @brief
+   *
+   *
+   * @param type
+   * @param ec_id
+   * @param ret
+   * @return
+   * @endif
+   */
+  bool ComponentActionListeners::notify(PostComponentActionListenerType type, UniqueId ec_id, ReturnCode_t ret)
+  {
+      if(type < postaction_.size())
+      {
+           postaction_[type].notify(ec_id, ret);
+           return true;
+      }
+      return false;
+  }
+
+  /*!
+   * @if jp
+   *
+   * @brief リスナーへ通知する
+   *
+   * 指定の種類のPortActionListenerのコールバック関数を呼び出す。
+   *
+   * @param type リスナの種類
+   * @param pprofile ポートプロファイル
+   * @return false：指定の種類のリスナが存在しない
+   * @else
+   *
+   * @brief
+   *
+   *
+   * @param type
+   * @param pprofile
+   * @return
+   * @endif
+   */
+  bool ComponentActionListeners::notify(PortActionListenerType type, const RTC::PortProfile& pprofile)
+  {
+      if(type < portaction_.size())
+      {
+           portaction_[type].notify(pprofile);
+           return true;
+      }
+      return false;
+  }
+
+  /*!
+   * @if jp
+   *
+   * @brief リスナーへ通知する
+   *
+   * 指定の種類のExecutionContextActionListenerのコールバック関数を呼び出す。
+   *
+   * @param type リスナの種類
+   * @param ec_id 実行コンテキストのID
+   * @return false：指定の種類のリスナが存在しない
+   * @else
+   *
+   * @brief
+   *
+   *
+   * @param type
+   * @param pprofile
+   * @return
+   * @endif
+   */
+  bool ComponentActionListeners::notify(ExecutionContextActionListenerType type, UniqueId ec_id)
+  {
+      if(type < ecaction_.size())
+      {
+           ecaction_[type].notify(ec_id);
+           return true;
+      }
+      return false;
+  }
+
+  /*!
+   * @if jp
+   *
+   * @brief リスナーの追加
+   *
+   * 指定の種類のPreComponentActionListenerを追加する。
+   *
+   * @param type リスナの種類
+   * @param listener 追加するリスナ
+   * @param autoclean true:デストラクタで削除する,
+   *                  false:デストラクタで削除しない
+   * @return false：指定の種類のリスナが存在しない
+   * @else
+   *
+   * @brief Add the listener.
+   *
+   *
+   *
+   * @param type
+   * @param listener Added listener
+   * @param autoclean true:The listener is deleted at the destructor.,
+   *                  false:The listener is not deleted at the destructor.
+   * @return
+   * @endif
+   */
+  bool ComponentActionListeners::addListener(PreComponentActionListenerType type, PreComponentActionListener* listener, bool autoclean)
+  {
+      if(type < preaction_.size())
+      {
+           preaction_[type].addListener(listener, autoclean);
+           return true;
+      }
+      return false;
+  }
+
+  /*!
+   * @if jp
+   *
+   * @brief リスナーの追加
+   *
+   * 指定の種類のPostComponentActionListenerを追加する。
+   *
+   * @param type リスナの種類
+   * @param listener 追加するリスナ
+   * @param autoclean true:デストラクタで削除する,
+   *                  false:デストラクタで削除しない
+   * @return false：指定の種類のリスナが存在しない
+   * @else
+   *
+   * @brief Add the listener.
+   *
+   *
+   *
+   * @param type
+   * @param listener Added listener
+   * @param autoclean true:The listener is deleted at the destructor.,
+   *                  false:The listener is not deleted at the destructor.
+   * @return
+   * @endif
+   */
+  bool ComponentActionListeners::addListener(PostComponentActionListenerType type, PostComponentActionListener* listener, bool autoclean)
+  {
+      if(type < postaction_.size())
+      {
+           postaction_[type].addListener(listener, autoclean);
+           return true;
+      }
+      return false;
+  }
+
+  /*!
+   * @if jp
+   *
+   * @brief リスナーの追加
+   *
+   * 指定の種類のPortActionListenerを追加する。
+   *
+   * @param type リスナの種類
+   * @param listener 追加するリスナ
+   * @param autoclean true:デストラクタで削除する,
+   *                  false:デストラクタで削除しない
+   * @return false：指定の種類のリスナが存在しない
+   * @else
+   *
+   * @brief Add the listener.
+   *
+   *
+   *
+   * @param type
+   * @param listener Added listener
+   * @param autoclean true:The listener is deleted at the destructor.,
+   *                  false:The listener is not deleted at the destructor.
+   * @return
+   * @endif
+   */
+  bool ComponentActionListeners::addListener(PortActionListenerType type, PortActionListener* listener, bool autoclean)
+  {
+      if(type < portaction_.size())
+      {
+           portaction_[type].addListener(listener, autoclean);
+           return true;
+      }
+      return false;
+  }
+
+  /*!
+   * @if jp
+   *
+   * @brief リスナーの追加
+   *
+   * 指定の種類のExecutionContextActionListenerを追加する。
+   *
+   * @param type リスナの種類
+   * @param listener 追加するリスナ
+   * @param autoclean true:デストラクタで削除する,
+   *                  false:デストラクタで削除しない
+   * @return false：指定の種類のリスナが存在しない
+   * @else
+   *
+   * @brief Add the listener.
+   *
+   *
+   *
+   * @param type
+   * @param listener Added listener
+   * @param autoclean true:The listener is deleted at the destructor.,
+   *                  false:The listener is not deleted at the destructor.
+   * @return
+   * @endif
+   */
+  bool ComponentActionListeners::addListener(ExecutionContextActionListenerType type, ExecutionContextActionListener* listener, bool autoclean)
+  {
+      if(type < ecaction_.size())
+      {
+           ecaction_[type].addListener(listener, autoclean);
+           return true;
+      }
+      return false;
+  }
+
+  /*!
+   * @if jp
+   *
+   * @brief リスナーの削除
+   *
+   * 指定の種類のPreComponentActionListenerを削除する。
+   *
+   * @param type リスナの種類
+   * @param listener 削除するリスナ
+   * @return false：指定の種類のリスナが存在しない
+   *
+   * @else
+   *
+   * @brief Remove the listener.
+   *
+   *
+   * @param type
+   * @param listener
+   * @return
+   *
+   * @endif
+   */
+  bool ComponentActionListeners::removeListener(PreComponentActionListenerType type, PreComponentActionListener* listener)
+  {
+      if(type < preaction_.size())
+      {
+           preaction_[type].removeListener(listener);
+           return true;
+      }
+      return false;
+  }
+
+  /*!
+   * @if jp
+   *
+   * @brief リスナーの削除
+   *
+   * 指定の種類のPreComponentActionListenerを削除する。
+   *
+   * @param type リスナの種類
+   * @param listener 削除するリスナ
+   * @return false：指定の種類のリスナが存在しない
+   *
+   * @else
+   *
+   * @brief Remove the listener.
+   *
+   *
+   * @param type
+   * @param listener
+   * @return
+   *
+   * @endif
+   */
+  bool ComponentActionListeners::removeListener(PostComponentActionListenerType type, PostComponentActionListener* listener)
+  {
+      if(type < postaction_.size())
+      {
+           postaction_[type].removeListener(listener);
+           return true;
+      }
+      return false;
+  }
+
+  /*!
+   * @if jp
+   *
+   * @brief リスナーの削除
+   *
+   * 指定の種類のPortActionListenerを削除する。
+   *
+   * @param type リスナの種類
+   * @param listener 削除するリスナ
+   * @return false：指定の種類のリスナが存在しない
+   *
+   * @else
+   *
+   * @brief Remove the listener.
+   *
+   *
+   * @param type
+   * @param listener
+   * @return
+   *
+   * @endif
+   */
+  bool ComponentActionListeners::removeListener(PortActionListenerType type, PortActionListener* listener)
+  {
+      if(type < portaction_.size())
+      {
+           portaction_[type].removeListener(listener);
+           return true;
+      }
+      return false;
+  }
+
+  /*!
+   * @if jp
+   *
+   * @brief リスナーの削除
+   *
+   * 指定の種類のExecutionContextActionListenerを削除する。
+   *
+   * @param type リスナの種類
+   * @param listener 削除するリスナ
+   * @return false：指定の種類のリスナが存在しない
+   *
+   * @else
+   *
+   * @brief Remove the listener.
+   *
+   *
+   * @param type
+   * @param listener
+   * @return
+   *
+   * @endif
+   */
+  bool ComponentActionListeners::removeListener(ExecutionContextActionListenerType type, ExecutionContextActionListener* listener)
+  {
+      if(type < ecaction_.size())
+      {
+           ecaction_[type].removeListener(listener);
+           return true;
+      }
+      return false;
+  }
 } // namespace RTC
 

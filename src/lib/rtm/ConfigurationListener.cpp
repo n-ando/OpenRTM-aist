@@ -243,6 +243,298 @@ namespace RTC
       }
   }
 
+  /*!
+   * @if jp
+   * @brief デストラクタ
+   * @else
+   * @brief Destructor
+   * @endif
+   */
+  ConfigurationListeners::~ConfigurationListeners() = default;
+
+  /*!
+   * @if jp
+   *
+   * @brief リスナーの追加
+   *
+   * 指定の種類のConfigurationParamListenerを追加する。
+   *
+   * @param type リスナの種類
+   * @param listener 追加するリスナ
+   * @param autoclean true:デストラクタで削除する,
+   *                  false:デストラクタで削除しない
+   * @return false：指定の種類のリスナが存在しない
+   * @else
+   *
+   * @brief Add the listener.
+   *
+   *
+   *
+   * @param type
+   * @param listener Added listener
+   * @param autoclean true:The listener is deleted at the destructor.,
+   *                  false:The listener is not deleted at the destructor.
+   * @return
+   * @endif
+   */
+  bool ConfigurationListeners::addListener(ConfigurationParamListenerType type, ConfigurationParamListener* listener, bool autoclean)
+  {
+      if(static_cast<uint8_t>(type) < configparam_.size())
+      {
+          configparam_[static_cast<uint8_t>(type)].addListener(listener, autoclean);
+          return true;
+      }
+      return false;
+  }
+  /*!
+   * @if jp
+   *
+   * @brief リスナーの削除
+   *
+   * 指定の種類のConfigurationParamListenerを削除する。
+   *
+   * @param type リスナの種類
+   * @param listener 削除するリスナ
+   * @return false：指定の種類のリスナが存在しない
+   *
+   * @else
+   *
+   * @brief Remove the listener.
+   *
+   *
+   * @param type
+   * @param listener
+   * @return
+   *
+   * @endif
+   */
+  bool ConfigurationListeners::removeListener(ConfigurationParamListenerType type, ConfigurationParamListener* listener)
+  {
+      if(static_cast<uint8_t>(type) < configparam_.size())
+      {
+          configparam_[static_cast<uint8_t>(type)].removeListener(listener);
+          return true;
+      }
+      return false;
+  }
+  /*!
+   * @if jp
+   *
+   * @brief リスナーの追加
+   *
+   * 指定の種類のConfigurationSetListenerを追加する。
+   *
+   * @param type リスナの種類
+   * @param listener 追加するリスナ
+   * @param autoclean true:デストラクタで削除する,
+   *                  false:デストラクタで削除しない
+   * @return false：指定の種類のリスナが存在しない
+   * @else
+   *
+   * @brief Add the listener.
+   *
+   *
+   *
+   * @param type
+   * @param listener Added listener
+   * @param autoclean true:The listener is deleted at the destructor.,
+   *                  false:The listener is not deleted at the destructor.
+   * @return
+   * @endif
+   */
+  bool ConfigurationListeners::addListener(ConfigurationSetListenerType type, ConfigurationSetListener* listener, bool autoclean)
+  {
+      if(static_cast<uint8_t>(type) < configset_.size())
+      {
+          configset_[static_cast<uint8_t>(type)].addListener(listener, autoclean);
+          return true;
+      }
+      return false;
+  }
+  /*!
+   * @if jp
+   *
+   * @brief リスナーの削除
+   *
+   * 指定の種類のConfigurationSetListenerを削除する。
+   *
+   * @param type リスナの種類
+   * @param listener 削除するリスナ
+   * @return false：指定の種類のリスナが存在しない
+   *
+   * @else
+   *
+   * @brief Remove the listener.
+   *
+   *
+   * @param type
+   * @param listener
+   * @return
+   *
+   * @endif
+   */
+  bool ConfigurationListeners::removeListener(ConfigurationSetListenerType type, ConfigurationSetListener* listener)
+  {
+      if(static_cast<uint8_t>(type) < configset_.size())
+      {
+          configset_[static_cast<uint8_t>(type)].removeListener(listener);
+          return true;
+      }
+      return false;
+  }
+  /*!
+   * @if jp
+   *
+   * @brief リスナーの追加
+   *
+   * 指定の種類のConfigurationSetNameListenerを追加する。
+   *
+   * @param type リスナの種類
+   * @param listener 追加するリスナ
+   * @param autoclean true:デストラクタで削除する,
+   *                  false:デストラクタで削除しない
+   * @return false：指定の種類のリスナが存在しない
+   * @else
+   *
+   * @brief Add the listener.
+   *
+   *
+   *
+   * @param type
+   * @param listener Added listener
+   * @param autoclean true:The listener is deleted at the destructor.,
+   *                  false:The listener is not deleted at the destructor.
+   * @return
+   * @endif
+   */
+  bool ConfigurationListeners::addListener(ConfigurationSetNameListenerType type, ConfigurationSetNameListener* listener, bool autoclean)
+  {
+      if(static_cast<uint8_t>(type) < configsetname_.size())
+      {
+          configsetname_[static_cast<uint8_t>(type)].addListener(listener, autoclean);
+          return true;
+      }
+      return false;
+  }
+  /*!
+   * @if jp
+   *
+   * @brief リスナーの削除
+   *
+   * 指定の種類のConfigurationSetNameListenerを削除する。
+   *
+   * @param type リスナの種類
+   * @param listener 削除するリスナ
+   * @return false：指定の種類のリスナが存在しない
+   *
+   * @else
+   *
+   * @brief Remove the listener.
+   *
+   *
+   * @param type
+   * @param listener
+   * @return
+   *
+   * @endif
+   */
+  bool ConfigurationListeners::removeListener(ConfigurationSetNameListenerType type, ConfigurationSetNameListener* listener)
+  {
+      if(static_cast<uint8_t>(type) < configsetname_.size())
+      {
+          configsetname_[static_cast<uint8_t>(type)].removeListener(listener);
+          return true;
+      }
+      return false;
+  }
+  /*!
+   * @if jp
+   *
+   * @brief リスナーへ通知する
+   *
+   * 指定の種類のConfigurationParamListenerのコールバック関数を呼び出す。
+   *
+   * @param type リスナの種類
+   * @param ec_id 実行コンテキストのID
+   * @return false：指定の種類のリスナが存在しない
+   * @else
+   *
+   * @brief
+   *
+   *
+   * @param type
+   * @param pprofile
+   * @return
+   * @endif
+   */
+  bool ConfigurationListeners::notify(ConfigurationParamListenerType type, const char* config_set_name, const char* config_param_name)
+  {
+      if(static_cast<uint8_t>(type) < configparam_.size())
+      {
+          configparam_[static_cast<uint8_t>(type)].notify(config_set_name, config_param_name);
+          return true;
+      }
+      return false;
+  }
+  /*!
+   * @if jp
+   *
+   * @brief リスナーへ通知する
+   *
+   * 指定の種類のConfigurationSetListenerのコールバック関数を呼び出す。
+   *
+   * @param type リスナの種類
+   * @param ec_id 実行コンテキストのID
+   * @return false：指定の種類のリスナが存在しない
+   * @else
+   *
+   * @brief
+   *
+   *
+   * @param type
+   * @param pprofile
+   * @return
+   * @endif
+   */
+  bool ConfigurationListeners::notify(ConfigurationSetListenerType type, const coil::Properties& config_set)
+  {
+      if(static_cast<uint8_t>(type) < configset_.size())
+      {
+          configset_[static_cast<uint8_t>(type)].notify(config_set);
+          return true;
+      }
+      return false;
+  }
+  /*!
+   * @if jp
+   *
+   * @brief リスナーへ通知する
+   *
+   * 指定の種類のConfigurationSetNameListenerのコールバック関数を呼び出す。
+   *
+   * @param type リスナの種類
+   * @param ec_id 実行コンテキストのID
+   * @return false：指定の種類のリスナが存在しない
+   * @else
+   *
+   * @brief
+   *
+   *
+   * @param type
+   * @param pprofile
+   * @return
+   * @endif
+   */
+  bool ConfigurationListeners::notify(ConfigurationSetNameListenerType type, const char* config_set_name)
+  {
+      if(static_cast<uint8_t>(type) < configsetname_.size())
+      {
+          configsetname_[static_cast<uint8_t>(type)].notify(config_set_name);
+          return true;
+      }
+      return false;
+  }
+
 } // namespace RTC
 
 

@@ -374,11 +374,10 @@ namespace RTC
                            ConnectorDataListener* listener,
                            bool autoclean)
   {
-    if (type < CONNECTOR_DATA_LISTENER_NUM)
+    if (m_listeners->addListener(type, listener, autoclean))
       {
         RTC_TRACE(("addConnectorDataListener(%s)",
                    ConnectorDataListener::toString(type)));
-        m_listeners->connectorData_[type]->addListener(listener, autoclean);
         return;
       }
     RTC_ERROR(("addConnectorDataListener(): Unknown Listener Type"));
@@ -398,11 +397,10 @@ namespace RTC
   removeConnectorDataListener(ConnectorDataListenerType type,
                               ConnectorDataListener* listener)
   {
-    if (type < CONNECTOR_DATA_LISTENER_NUM)
+    if (m_listeners->removeListener(type, listener))
       {
         RTC_TRACE(("removeConnectorDataListener(%s)",
                    ConnectorDataListener::toString(type)));
-        m_listeners->connectorData_[type]->removeListener(listener);
         return;
       }
     RTC_ERROR(("removeConnectorDataListener(): Unknown Listener Type"));
@@ -422,11 +420,10 @@ namespace RTC
                                          ConnectorListener* listener,
                                          bool autoclean)
   {
-    if (type < CONNECTOR_LISTENER_NUM)
+    if (m_listeners->addListener(type, listener, autoclean))
       {
         RTC_TRACE(("addConnectorListener(%s)",
                    ConnectorListener::toString(type)));
-        m_listeners->connector_[type].addListener(listener, autoclean);
         return;
       }
     RTC_ERROR(("addConnectorListener(): Unknown Listener Type"));
@@ -445,11 +442,10 @@ namespace RTC
   void OutPortBase::removeConnectorListener(ConnectorListenerType type,
                                             ConnectorListener* listener)
   {
-    if (type < CONNECTOR_LISTENER_NUM)
+    if (m_listeners->removeListener(type, listener))
       {
         RTC_TRACE(("removeConnectorListener(%s)",
                    ConnectorListener::toString(type)));
-        m_listeners->connector_[type].removeListener(listener);
         return;
       }
     RTC_ERROR(("removeConnectorListener(): Unknown Listener Type"));
@@ -1148,7 +1144,7 @@ namespace RTC
    *
    * @endif
    */
-  ConnectorListeners* OutPortBase::getListeners()
+  ConnectorListenersBase* OutPortBase::getListeners()
   {
 	  return m_listeners;
   }

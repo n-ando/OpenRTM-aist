@@ -614,7 +614,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ConnectorListeners* getListeners();
+    virtual ConnectorListenersBase* getListeners();
     ReturnCode_t notify_connect(ConnectorProfile& connector_profile) override;
   protected:
     /*!
@@ -898,7 +898,7 @@ namespace RTC
      * @brief ConnectorDataListener listener
      * @endif
      */
-    ConnectorListeners *m_listeners;
+    ConnectorListenersBase* m_listeners;
   };
 } // namespace RTC
 

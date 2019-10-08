@@ -228,7 +228,7 @@ namespace RTC
    * @endif
    */
   void ROSInPort::setListener(ConnectorInfo& info,
-                                           ConnectorListeners* listeners)
+                                           ConnectorListenersBase* listeners)
   {
     m_profile = info;
     m_listeners = listeners;

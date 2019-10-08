@@ -117,7 +117,7 @@ namespace RTC
    * @endif
    */
   void InPortDSProvider::setListener(ConnectorInfo& info,
-                                           ConnectorListeners* listeners)
+                                           ConnectorListenersBase* listeners)
   {
     m_profile = info;
     m_listeners = listeners;

@@ -224,5 +224,61 @@ namespace RTC
 
   PortConnectListeners::~PortConnectListeners() = default;
 
+  bool PortConnectListeners::addListener(PortConnectListenerType type, PortConnectListener* listener, bool autoclean)
+  {
+      if(type < portconnect_.size())
+      {
+          portconnect_[type].addListener(listener, autoclean);
+          return true;
+      }
+      return false;
+  }
+  bool PortConnectListeners::removeListener(PortConnectListenerType type, PortConnectListener* listener)
+  {
+      if(type < portconnect_.size())
+      {
+          portconnect_[type].removeListener(listener);
+          return true;
+      }
+      return false;
+  }
+  bool PortConnectListeners::addListener(PortConnectRetListenerType type, PortConnectRetListener* listener, bool autoclean)
+  {
+      if(type < portconnret_.size())
+      {
+          portconnret_[type].addListener(listener, autoclean);
+          return true;
+      }
+      return false;
+  }
+  bool PortConnectListeners::removeListener(PortConnectRetListenerType type, PortConnectRetListener* listener)
+  {
+      if(type < portconnret_.size())
+      {
+          portconnret_[type].removeListener(listener);
+          return true;
+      }
+      return false;
+  }
+  bool PortConnectListeners::notify(PortConnectListenerType type, const char* portname, RTC::ConnectorProfile& profile)
+  {
+      if(type < portconnect_.size())
+      {
+          portconnect_[type].notify(portname, profile);
+          return true;
+      }
+      return false;
+  }
+  bool PortConnectListeners::notify(PortConnectRetListenerType type, const char* portname, RTC::ConnectorProfile& profile,
+                ReturnCode_t ret)
+  {
+      if(type < portconnret_.size())
+      {
+          portconnret_[type].notify(portname, profile, ret);
+          return true;
+      }
+      return false;
+  }
+
 } // namespace RTC
 
