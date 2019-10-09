@@ -1676,7 +1676,15 @@ namespace RTC
      * @return
      * @endif
      */
-    bool notify(PreFsmActionListenerType type, const char* state);
+    inline bool notify(PreFsmActionListenerType type, const char* state)
+    {
+        if (static_cast<uint8_t>(type) < preaction_.size())
+        {
+            preaction_[static_cast<uint8_t>(type)].notify(state);
+            return true;
+        }
+        return false;
+    }
     /*!
      * @if jp
      *
@@ -1699,7 +1707,15 @@ namespace RTC
      * @return
      * @endif
      */
-    bool notify(PostFsmActionListenerType type, const char* state, ReturnCode_t ret);
+    inline bool notify(PostFsmActionListenerType type, const char* state, ReturnCode_t ret)
+    {
+        if (static_cast<uint8_t>(type) < postaction_.size())
+        {
+            postaction_[static_cast<uint8_t>(type)].notify(state, ret);
+            return true;
+        }
+        return false;
+    }
     /*!
      * @if jp
      *
@@ -1720,7 +1736,15 @@ namespace RTC
      * @return
      * @endif
      */
-    bool notify(FsmProfileListenerType type, RTC::FsmProfile& profile);
+    inline bool notify(FsmProfileListenerType type, RTC::FsmProfile& profile)
+    {
+        if (static_cast<uint8_t>(type) < profile_.size())
+        {
+            profile_[static_cast<uint8_t>(type)].notify(profile);
+            return true;
+        }
+        return false;
+    }
     /*!
      * @if jp
      *
@@ -1741,7 +1765,15 @@ namespace RTC
      * @return
      * @endif
      */
-    bool notify(FsmStructureListenerType type, RTC::FsmStructure& structure);
+    inline bool notify(FsmStructureListenerType type, RTC::FsmStructure& structure)
+    {
+        if (static_cast<uint8_t>(type) < structure_.size())
+        {
+            structure_[static_cast<uint8_t>(type)].notify(structure);
+            return true;
+        }
+        return false;
+    }
   private:
     /*!
      * @if jp

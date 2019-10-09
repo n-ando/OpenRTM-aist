@@ -221,9 +221,40 @@ namespace RTC
    * @endif
    */
   PortConnectListeners::PortConnectListeners() = default;
-
+  /*!
+   * @if jp
+   * @brief デストラクタ
+   * @else
+   * @brief Destructor
+   * @endif
+   */
   PortConnectListeners::~PortConnectListeners() = default;
 
+  /*!
+   * @if jp
+   *
+   * @brief リスナーの追加
+   *
+   * 指定の種類のPortConnectListenerを追加する。
+   *
+   * @param type リスナの種類
+   * @param listener 追加するリスナ
+   * @param autoclean true:デストラクタで削除する,
+   *                  false:デストラクタで削除しない
+   * @return false：指定の種類のリスナが存在しない
+   * @else
+   *
+   * @brief Add the listener.
+   *
+   *
+   *
+   * @param type
+   * @param listener Added listener
+   * @param autoclean true:The listener is deleted at the destructor.,
+   *                  false:The listener is not deleted at the destructor.
+   * @return
+   * @endif
+   */
   bool PortConnectListeners::addListener(PortConnectListenerType type, PortConnectListener* listener, bool autoclean)
   {
       if(type < portconnect_.size())
@@ -233,6 +264,29 @@ namespace RTC
       }
       return false;
   }
+
+  /*!
+   * @if jp
+   *
+   * @brief リスナーの削除
+   *
+   * 指定の種類のPortConnectListenerを削除する。
+   *
+   * @param type リスナの種類
+   * @param listener 削除するリスナ
+   * @return false：指定の種類のリスナが存在しない
+   *
+   * @else
+   *
+   * @brief Remove the listener.
+   *
+   *
+   * @param type
+   * @param listener
+   * @return
+   *
+   * @endif
+   */
   bool PortConnectListeners::removeListener(PortConnectListenerType type, PortConnectListener* listener)
   {
       if(type < portconnect_.size())
@@ -242,6 +296,31 @@ namespace RTC
       }
       return false;
   }
+  /*!
+   * @if jp
+   *
+   * @brief リスナーの追加
+   *
+   * 指定の種類のPortConnectRetListenerを追加する。
+   *
+   * @param type リスナの種類
+   * @param listener 追加するリスナ
+   * @param autoclean true:デストラクタで削除する,
+   *                  false:デストラクタで削除しない
+   * @return false：指定の種類のリスナが存在しない
+   * @else
+   *
+   * @brief Add the listener.
+   *
+   *
+   *
+   * @param type
+   * @param listener Added listener
+   * @param autoclean true:The listener is deleted at the destructor.,
+   *                  false:The listener is not deleted at the destructor.
+   * @return
+   * @endif
+   */
   bool PortConnectListeners::addListener(PortConnectRetListenerType type, PortConnectRetListener* listener, bool autoclean)
   {
       if(type < portconnret_.size())
@@ -251,30 +330,34 @@ namespace RTC
       }
       return false;
   }
+
+  /*!
+   * @if jp
+   *
+   * @brief リスナーの削除
+   *
+   * 指定の種類のPortConnectRetListenerを削除する。
+   *
+   * @param type リスナの種類
+   * @param listener 削除するリスナ
+   * @return false：指定の種類のリスナが存在しない
+   *
+   * @else
+   *
+   * @brief Remove the listener.
+   *
+   *
+   * @param type
+   * @param listener
+   * @return
+   *
+   * @endif
+   */
   bool PortConnectListeners::removeListener(PortConnectRetListenerType type, PortConnectRetListener* listener)
   {
       if(type < portconnret_.size())
       {
           portconnret_[type].removeListener(listener);
-          return true;
-      }
-      return false;
-  }
-  bool PortConnectListeners::notify(PortConnectListenerType type, const char* portname, RTC::ConnectorProfile& profile)
-  {
-      if(type < portconnect_.size())
-      {
-          portconnect_[type].notify(portname, profile);
-          return true;
-      }
-      return false;
-  }
-  bool PortConnectListeners::notify(PortConnectRetListenerType type, const char* portname, RTC::ConnectorProfile& profile,
-                ReturnCode_t ret)
-  {
-      if(type < portconnret_.size())
-      {
-          portconnret_[type].notify(portname, profile, ret);
           return true;
       }
       return false;

@@ -881,7 +881,15 @@ namespace RTC
      * @return
      * @endif
      */
-    bool notify(ConfigurationParamListenerType type, const char* config_set_name, const char* config_param_name);
+    inline bool notify(ConfigurationParamListenerType type, const char* config_set_name, const char* config_param_name)
+    {
+        if (static_cast<uint8_t>(type) < configparam_.size())
+        {
+            configparam_[static_cast<uint8_t>(type)].notify(config_set_name, config_param_name);
+            return true;
+        }
+        return false;
+    }
     /*!
      * @if jp
      *
@@ -902,7 +910,15 @@ namespace RTC
      * @return
      * @endif
      */
-    bool notify(ConfigurationSetListenerType type, const coil::Properties& config_set);
+    inline bool notify(ConfigurationSetListenerType type, const coil::Properties& config_set)
+    {
+        if (static_cast<uint8_t>(type) < configset_.size())
+        {
+            configset_[static_cast<uint8_t>(type)].notify(config_set);
+            return true;
+        }
+        return false;
+    }
     /*!
      * @if jp
      *
@@ -923,7 +939,15 @@ namespace RTC
      * @return
      * @endif
      */
-    bool notify(ConfigurationSetNameListenerType type, const char* config_set_name);
+    inline bool notify(ConfigurationSetNameListenerType type, const char* config_set_name)
+    {
+        if (static_cast<uint8_t>(type) < configsetname_.size())
+        {
+            configsetname_[static_cast<uint8_t>(type)].notify(config_set_name);
+            return true;
+        }
+        return false;
+    }
   private:
     /*!
      * @if jp

@@ -1042,92 +1042,6 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief リスナーへ通知する
-     *
-     * 指定の種類のPreComponentActionListenerのコールバック関数を呼び出す。
-     *
-     * @param type リスナの種類
-     * @param ec_id 実行コンテキストのID
-     * @return false：指定の種類のリスナが存在しない
-     * @else
-     *
-     * @brief 
-     *
-     *
-     * @param type 
-     * @param ec_id 
-     * @return
-     * @endif
-     */
-    bool notify(PreComponentActionListenerType type, UniqueId ec_id);
-    /*!
-     * @if jp
-     *
-     * @brief リスナーへ通知する
-     *
-     * 指定の種類のPostComponentActionListenerのコールバック関数を呼び出す。
-     *
-     * @param type リスナの種類
-     * @param ec_id 実行コンテキストのID
-     * @param ret リターンコード
-     * @return false：指定の種類のリスナが存在しない
-     * @else
-     *
-     * @brief 
-     *
-     *
-     * @param type 
-     * @param ec_id 
-     * @param ret
-     * @return
-     * @endif
-     */
-    bool notify(PostComponentActionListenerType type, UniqueId ec_id, ReturnCode_t ret);
-    /*!
-     * @if jp
-     *
-     * @brief リスナーへ通知する
-     *
-     * 指定の種類のPortActionListenerのコールバック関数を呼び出す。
-     *
-     * @param type リスナの種類
-     * @param pprofile ポートプロファイル
-     * @return false：指定の種類のリスナが存在しない
-     * @else
-     *
-     * @brief 
-     *
-     *
-     * @param type 
-     * @param pprofile 
-     * @return
-     * @endif
-     */
-    bool notify(PortActionListenerType type, const RTC::PortProfile& pprofile);
-    /*!
-     * @if jp
-     *
-     * @brief リスナーへ通知する
-     *
-     * 指定の種類のExecutionContextActionListenerのコールバック関数を呼び出す。
-     *
-     * @param type リスナの種類
-     * @param ec_id 実行コンテキストのID
-     * @return false：指定の種類のリスナが存在しない
-     * @else
-     *
-     * @brief
-     *
-     *
-     * @param type
-     * @param pprofile
-     * @return
-     * @endif
-     */
-    bool notify(ExecutionContextActionListenerType type, UniqueId ec_id);
-    /*!
-     * @if jp
-     *
      * @brief リスナーの追加
      *
      * 指定の種類のPreComponentActionListenerを追加する。
@@ -1321,6 +1235,124 @@ namespace RTC
      * @endif
      */
     bool removeListener(ExecutionContextActionListenerType type, ExecutionContextActionListener* listener);
+    /*!
+     * @if jp
+     *
+     * @brief リスナーへ通知する
+     *
+     * 指定の種類のPreComponentActionListenerのコールバック関数を呼び出す。
+     *
+     * @param type リスナの種類
+     * @param ec_id 実行コンテキストのID
+     * @return false：指定の種類のリスナが存在しない
+     * @else
+     *
+     * @brief 
+     *
+     *
+     * @param type 
+     * @param ec_id 
+     * @return
+     * @endif
+     */
+    inline bool notify(PreComponentActionListenerType type, UniqueId ec_id)
+    {
+        if (type < preaction_.size())
+        {
+            preaction_[type].notify(ec_id);
+            return true;
+        }
+        return false;
+    }
+    /*!
+     * @if jp
+     *
+     * @brief リスナーへ通知する
+     *
+     * 指定の種類のPostComponentActionListenerのコールバック関数を呼び出す。
+     *
+     * @param type リスナの種類
+     * @param ec_id 実行コンテキストのID
+     * @param ret リターンコード
+     * @return false：指定の種類のリスナが存在しない
+     * @else
+     *
+     * @brief 
+     *
+     *
+     * @param type 
+     * @param ec_id 
+     * @param ret
+     * @return
+     * @endif
+     */
+    inline bool notify(PostComponentActionListenerType type, UniqueId ec_id, ReturnCode_t ret)
+    {
+        if (type < postaction_.size())
+        {
+            postaction_[type].notify(ec_id, ret);
+            return true;
+        }
+        return false;
+    }
+    /*!
+     * @if jp
+     *
+     * @brief リスナーへ通知する
+     *
+     * 指定の種類のPortActionListenerのコールバック関数を呼び出す。
+     *
+     * @param type リスナの種類
+     * @param pprofile ポートプロファイル
+     * @return false：指定の種類のリスナが存在しない
+     * @else
+     *
+     * @brief 
+     *
+     *
+     * @param type 
+     * @param pprofile 
+     * @return
+     * @endif
+     */
+    inline bool notify(PortActionListenerType type, const RTC::PortProfile& pprofile)
+    {
+        if (type < portaction_.size())
+        {
+            portaction_[type].notify(pprofile);
+            return true;
+        }
+        return false;
+    }
+    /*!
+     * @if jp
+     *
+     * @brief リスナーへ通知する
+     *
+     * 指定の種類のExecutionContextActionListenerのコールバック関数を呼び出す。
+     *
+     * @param type リスナの種類
+     * @param ec_id 実行コンテキストのID
+     * @return false：指定の種類のリスナが存在しない
+     * @else
+     *
+     * @brief
+     *
+     *
+     * @param type
+     * @param pprofile
+     * @return
+     * @endif
+     */
+    inline bool notify(ExecutionContextActionListenerType type, UniqueId ec_id)
+    {
+        if (type < ecaction_.size())
+        {
+            ecaction_[type].notify(ec_id);
+            return true;
+        }
+        return false;
+    }
   private:
     /*!
      * @if jp
