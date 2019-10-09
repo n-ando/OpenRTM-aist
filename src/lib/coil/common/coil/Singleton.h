@@ -181,7 +181,6 @@ namespace coil
     Singleton(const Singleton& x) = delete;
     Singleton& operator=(const Singleton& x) = delete;
 
-  protected:
     /*!
      * @if jp
      * @brief 排他制御オブジェクト
