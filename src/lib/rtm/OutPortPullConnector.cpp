@@ -33,7 +33,7 @@ namespace RTC
    */
   OutPortPullConnector::OutPortPullConnector(ConnectorInfo info,
                                              OutPortProvider* provider,
-                                             ConnectorListeners* listeners,
+                                             ConnectorListenersBase* listeners,
                                              CdrBufferBase* buffer)
     : OutPortConnector(info, listeners),
       m_provider(provider),
@@ -254,7 +254,7 @@ namespace RTC
    */
   void OutPortPullConnector::onConnect()
   {
-    m_listeners->connector_[ON_CONNECT].notify(m_profile);
+    m_listeners->notify(ON_CONNECT, m_profile);
   }
 
   /*!
@@ -266,7 +266,7 @@ namespace RTC
    */
   void OutPortPullConnector::onDisconnect()
   {
-    m_listeners->connector_[ON_DISCONNECT].notify(m_profile);
+    m_listeners->notify(ON_DISCONNECT, m_profile);
   }
 } // namespace RTC
 

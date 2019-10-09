@@ -788,7 +788,7 @@ namespace RTC
 	*
 	* @endif
 	*/
-	virtual ConnectorListeners* getListeners();
+	virtual ConnectorListenersBase* getListeners();
 
 
   protected:
@@ -1095,7 +1095,7 @@ namespace RTC
      * @brief ConnectorDataListener listener
      * @endif
      */
-    ConnectorListeners *m_listeners;
+    ConnectorListenersBase* m_listeners;
 
     /*!
      * @if jp

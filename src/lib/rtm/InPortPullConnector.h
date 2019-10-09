@@ -131,7 +131,7 @@ namespace RTC
      */
     InPortPullConnector(ConnectorInfo info,
                         OutPortConsumer* consumer,
-                        ConnectorListeners* listeners,
+                        ConnectorListenersBase* listeners,
                         CdrBufferBase* buffer = nullptr);
 
     /*!
@@ -302,7 +302,7 @@ namespace RTC
      * @brief A reference to a ConnectorListener
      * @endif
      */
-    ConnectorListeners* m_listeners;
+    ConnectorListenersBase* m_listeners;
     ByteData m_data;
   };
 } // namespace RTC

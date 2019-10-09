@@ -119,7 +119,7 @@ namespace RTC
    * @endif
    */
   void InPortCorbaCdrProvider::setListener(ConnectorInfo& info,
-                                           ConnectorListeners* listeners)
+                                           ConnectorListenersBase* listeners)
   {
     m_profile = info;
     m_listeners = listeners;

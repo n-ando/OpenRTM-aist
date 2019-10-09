@@ -86,7 +86,7 @@ namespace RTC
    * @endif
    */
   void OutPortSHMConsumer::setListener(ConnectorInfo& info,
-                                            ConnectorListeners* listeners)
+                                            ConnectorListenersBase* listeners)
   {
     RTC_TRACE(("OutPortSHMConsumer::setListener()"));
     m_listeners = listeners;

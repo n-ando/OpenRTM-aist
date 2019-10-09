@@ -307,7 +307,7 @@ namespace RTC
      * @endif
      */
     virtual void setListener(ConnectorInfo& info,
-                             ConnectorListeners* listeners) = 0;
+                             ConnectorListenersBase* listeners) = 0;
 
     /*!
      * @if jp

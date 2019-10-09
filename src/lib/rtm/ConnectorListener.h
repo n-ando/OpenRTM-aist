@@ -27,7 +27,7 @@
 #include <string>
 #include <vector>
 #include <utility>
-
+#include <array>
 
 
 namespace RTC
@@ -1350,6 +1350,270 @@ namespace RTC
     std::mutex m_mutex;
   };
 
+  class ConnectorListenersBase
+  {
+  public:
+    /*!
+     * @if jp
+     * @brief デストラクタ
+     * @else
+     * @brief Destructor
+     * @endif
+     */
+    virtual ~ConnectorListenersBase();
+    /*!
+     * @if jp
+     *
+     * @brief リスナーへ通知する(InPort側)
+     * 指定の種類のリスナのコールバックメソッドを呼び出す。
+     * InPortとOutPortでシリアライザの種類が違う場合があるため、
+     * InPort側ではnotifyOut関数を使用する必要がある。
+     *
+     * @param type リスナの種類
+     * @param info ConnectorInfo
+     * @param data バイト列のデータ
+     * @return リターンコード
+     * @else
+     *
+     * @brief Notify listeners. (Typed data version)
+     *
+     * @param type
+     * @param info ConnectorInfo
+     * @param data Data
+     * @return
+     * @endif
+     */
+    virtual ::RTC::ConnectorListenerStatus::Enum notifyIn(ConnectorDataListenerType type, ConnectorInfo& info, ByteData& data) = 0;
+    /*!
+     * @if jp
+     *
+     * @brief リスナーへ通知する(OutPort側)
+     * 指定の種類のリスナのコールバックメソッドを呼び出す。
+     * InPortとOutPortでシリアライザの種類が違う場合があるため、
+     * OutPort側ではnotifyOut関数を使用する必要がある。
+     *
+     * @param type リスナの種類
+     * @param info ConnectorInfo
+     * @param data バイト列のデータ
+     * @return リターンコード
+     * @else
+     *
+     * @brief Notify listeners. (Typed data version)
+     *
+     * @param type
+     * @param info ConnectorInfo
+     * @param data Data
+     * @return
+     * @endif
+     */
+    virtual ::RTC::ConnectorListenerStatus::Enum notifyOut(ConnectorDataListenerType type, ConnectorInfo& info, ByteData& data) = 0;
+    /*!
+     * @if jp
+     *
+     * @brief リスナーへ通知する
+     *
+     * データポートの Connector において発生する各種イベントに対するコー
+     * ルバックメソッド
+     *
+     * @param type リスナの種類
+     * @param info ConnectorInfo
+     * @return リターンコード
+     *
+     * @else
+     *
+     * @brief Virtual Callback method
+     *
+     * @param type リスナの種類
+     * @param info ConnectorInfo
+     * @return リターンコード
+     *
+     * @return
+     * @endif
+     */
+    virtual ::RTC::ConnectorListenerStatus::Enum notify(ConnectorListenerType type, ConnectorInfo& info) = 0;
+    /*!
+     * @if jp
+     *
+     * @brief リスナーの追加
+     *
+     * 指定の種類のConnectorDataListenerを追加する。
+     *
+     * @param type リスナの種類
+     * @param listener 追加するリスナ
+     * @param autoclean true:デストラクタで削除する,
+     *                  false:デストラクタで削除しない
+     * @return false：指定の種類のリスナが存在しない
+     * @else
+     *
+     * @brief Add the listener.
+     *
+     *
+     *
+     * @param type
+     * @param listener Added listener
+     * @param autoclean true:The listener is deleted at the destructor.,
+     *                  false:The listener is not deleted at the destructor.
+     * @return
+     * @endif
+     */
+    virtual bool addListener(ConnectorDataListenerType type, ConnectorDataListener* listener, bool autoclean=true) = 0;
+    /*!
+     * @if jp
+     *
+     * @brief リスナーの追加
+     *
+     * 指定の種類のConnectorListenerを追加する。
+     *
+     * @param type リスナの種類
+     * @param listener 追加するリスナ
+     * @param autoclean true:デストラクタで削除する,
+     *                  false:デストラクタで削除しない
+     * @return false：指定の種類のリスナが存在しない
+     * @else
+     *
+     * @brief Add the listener.
+     *
+     *
+     *
+     * @param type
+     * @param listener Added listener
+     * @param autoclean true:The listener is deleted at the destructor.,
+     *                  false:The listener is not deleted at the destructor.
+     * @return
+     * @endif
+     */
+    virtual bool addListener(ConnectorListenerType type, ConnectorListener* listener, bool autoclean=true) = 0;
+    /*!
+     * @if jp
+     *
+     * @brief リスナーの削除
+     *
+     * 指定の種類のConnectorDataListenerを削除する。
+     *
+     * @param type リスナの種類
+     * @param listener 削除するリスナ
+     * @return false：指定の種類のリスナが存在しない
+     *
+     * @else
+     *
+     * @brief Remove the listener.
+     *
+     *
+     * @param type
+     * @param listener
+     * @return
+     *
+     * @endif
+     */
+    virtual bool removeListener(ConnectorDataListenerType type, ConnectorDataListener* listener) = 0;
+    /*!
+     * @if jp
+     *
+     * @brief リスナーの削除
+     *
+     * 指定の種類のConnectorListenerを削除する。
+     *
+     * @param type リスナの種類
+     * @param listener 削除するリスナ
+     * @return false：指定の種類のリスナが存在しない
+     *
+     * @else
+     *
+     * @brief Remove the listener.
+     *
+     *
+     * @param type
+     * @param listener
+     * @return
+     *
+     * @endif
+     */
+    virtual bool removeListener(ConnectorListenerType type, ConnectorListener* listener) = 0;
+    /*!
+     * @if jp
+     *
+     * @brief 指定の種類のConnectorDataListenerHolderを取得する
+     *
+     *
+     * @param type リスナの種類
+     * @return ConnectorDataListenerHolder
+     *
+     * @else
+     *
+     * @brief Remove the listener.
+     *
+     *
+     * @param type
+     * @param listener
+     * @return
+     *
+     * @endif
+     */
+    virtual ConnectorDataListenerHolder* getDataListenerHolder(ConnectorDataListenerType type) = 0;
+    /*!
+     * @if jp
+     *
+     * @brief リスナーへ通知する(データ型指定、InPort側)
+     * 指定の種類のリスナのコールバックメソッドを呼び出す。
+     * InPortとOutPortでシリアライザの種類が違う場合があるため、
+     * InPort側ではnotifyOut関数を使用する必要がある。
+     *
+     * @param type リスナの種類
+     * @param info ConnectorInfo
+     * @param data データ(型指定)
+     * @return リターンコード
+     * @else
+     *
+     * @brief Notify listeners. (Typed data version)
+     *
+     * @param type
+     * @param info ConnectorInfo
+     * @param data Data
+     * @return
+     * @endif
+     */
+    template<class DataType> ::RTC::ConnectorListenerStatus::Enum notifyIn(ConnectorDataListenerType type, ConnectorInfo& info, DataType& data)
+    {
+        ConnectorDataListenerHolder* holder = getDataListenerHolder(type);
+        if (holder != nullptr)
+        {
+            return holder->notifyIn(info, data);
+        }
+        return ConnectorListenerStatus::NO_CHANGE;
+    }
+    /*!
+     * @if jp
+     *
+     * @brief リスナーへ通知する(データ型指定、OutPort側)
+     * 指定の種類のリスナのコールバックメソッドを呼び出す。
+     * InPortとOutPortでシリアライザの種類が違う場合があるため、
+     * OutPort側ではnotifyOut関数を使用する必要がある。
+     *
+     * @param type リスナの種類
+     * @param info ConnectorInfo
+     * @param data データ(型指定)
+     * @return リターンコード
+     * @else
+     *
+     * @brief Notify listeners. (Typed data version)
+     *
+     * @param type
+     * @param info ConnectorInfo
+     * @param data Data
+     * @return
+     * @endif
+     */
+    template<class DataType> ::RTC::ConnectorListenerStatus::Enum notifyOut(ConnectorDataListenerType type, ConnectorInfo& info, DataType& data)
+    {
+        ConnectorDataListenerHolder* holder = getDataListenerHolder(type);
+        if (holder != nullptr)
+        {
+            return holder->notifyOut(info, data);
+        }
+        return ConnectorListenerStatus::NO_CHANGE;
+    }
+  };
+
   /*!
    * @if jp
    * @class ConnectorListeners
@@ -1364,6 +1628,7 @@ namespace RTC
    * @endif
    */
   class ConnectorListeners
+       : public ConnectorListenersBase
   {
   public:
     /*!
@@ -1381,7 +1646,198 @@ namespace RTC
      * @brief Destructor
      * @endif
      */
-    ~ConnectorListeners();
+    ~ConnectorListeners() override;
+    /*!
+     * @if jp
+     *
+     * @brief リスナーへ通知する(InPort側)
+     * 指定の種類のリスナのコールバックメソッドを呼び出す。
+     * InPortとOutPortでシリアライザの種類が違う場合があるため、
+     * InPort側ではnotifyOut関数を使用する必要がある。
+     *
+     * @param type リスナの種類
+     * @param info ConnectorInfo
+     * @param data バイト列のデータ
+     * @return リターンコード
+     * @else
+     *
+     * @brief Notify listeners. (Typed data version)
+     *
+     * @param type
+     * @param info ConnectorInfo
+     * @param data Data
+     * @return
+     * @endif
+     */
+    ::RTC::ConnectorListenerStatus::Enum notifyIn(ConnectorDataListenerType type, ConnectorInfo& info, ByteData& data) override;
+    /*!
+     * @if jp
+     *
+     * @brief リスナーへ通知する(OutPort側)
+     * 指定の種類のリスナのコールバックメソッドを呼び出す。
+     * InPortとOutPortでシリアライザの種類が違う場合があるため、
+     * OutPort側ではnotifyOut関数を使用する必要がある。
+     *
+     * @param type リスナの種類
+     * @param info ConnectorInfo
+     * @param data バイト列のデータ
+     * @return リターンコード
+     * @else
+     *
+     * @brief Notify listeners. (Typed data version)
+     *
+     * @param type
+     * @param info ConnectorInfo
+     * @param data Data
+     * @return
+     * @endif
+     */
+    ::RTC::ConnectorListenerStatus::Enum notifyOut(ConnectorDataListenerType type, ConnectorInfo& info, ByteData& data) override;
+    /*!
+     * @if jp
+     *
+     * @brief リスナーへ通知する
+     *
+     * データポートの Connector において発生する各種イベントに対するコー
+     * ルバックメソッド
+     *
+     * @param type リスナの種類
+     * @param info ConnectorInfo
+     * @return リターンコード
+     *
+     * @else
+     *
+     * @brief Virtual Callback method
+     *
+     * @param type リスナの種類
+     * @param info ConnectorInfo
+     * @return リターンコード
+     *
+     * @return
+     * @endif
+     */
+    ::RTC::ConnectorListenerStatus::Enum notify(ConnectorListenerType type, ConnectorInfo& info) override;
+    /*!
+     * @if jp
+     *
+     * @brief リスナーの追加
+     *
+     * 指定の種類のConnectorDataListenerを追加する。
+     *
+     * @param type リスナの種類
+     * @param listener 追加するリスナ
+     * @param autoclean true:デストラクタで削除する,
+     *                  false:デストラクタで削除しない
+     * @return false：指定の種類のリスナが存在しない
+     * @else
+     *
+     * @brief Add the listener.
+     *
+     *
+     *
+     * @param type
+     * @param listener Added listener
+     * @param autoclean true:The listener is deleted at the destructor.,
+     *                  false:The listener is not deleted at the destructor.
+     * @return
+     * @endif
+     */
+    bool addListener(ConnectorDataListenerType type, ConnectorDataListener* listener, bool autoclean=true) override;
+    /*!
+     * @if jp
+     *
+     * @brief リスナーの追加
+     *
+     * 指定の種類のConnectorListenerを追加する。
+     *
+     * @param type リスナの種類
+     * @param listener 追加するリスナ
+     * @param autoclean true:デストラクタで削除する,
+     *                  false:デストラクタで削除しない
+     * @return false：指定の種類のリスナが存在しない
+     * @else
+     *
+     * @brief Add the listener.
+     *
+     *
+     *
+     * @param type
+     * @param listener Added listener
+     * @param autoclean true:The listener is deleted at the destructor.,
+     *                  false:The listener is not deleted at the destructor.
+     * @return
+     * @endif
+     */
+    bool addListener(ConnectorListenerType type, ConnectorListener* listener, bool autoclean=true) override;
+    /*!
+     * @if jp
+     *
+     * @brief リスナーの削除
+     *
+     * 指定の種類のConnectorDataListenerを削除する。
+     *
+     * @param type リスナの種類
+     * @param listener 削除するリスナ
+     * @return false：指定の種類のリスナが存在しない
+     *
+     * @else
+     *
+     * @brief Remove the listener.
+     *
+     *
+     * @param type
+     * @param listener
+     * @return
+     *
+     * @endif
+     */
+    bool removeListener(ConnectorDataListenerType type, ConnectorDataListener* listener) override;
+    /*!
+     * @if jp
+     *
+     * @brief リスナーの削除
+     *
+     * 指定の種類のConnectorListenerを削除する。
+     *
+     * @param type リスナの種類
+     * @param listener 削除するリスナ
+     * @return false：指定の種類のリスナが存在しない
+     *
+     * @else
+     *
+     * @brief Remove the listener.
+     *
+     *
+     * @param type
+     * @param listener
+     * @return
+     *
+     * @endif
+     */
+    bool removeListener(ConnectorListenerType type, ConnectorListener* listener) override;
+    /*!
+     * @if jp
+     *
+     * @brief 指定の種類のConnectorDataListenerHolderを取得する
+     *
+     *
+     * @param type リスナの種類
+     * @return ConnectorDataListenerHolder
+     *
+     * @else
+     *
+     * @brief Remove the listener.
+     *
+     *
+     * @param type
+     * @param listener
+     * @return
+     *
+     * @endif
+     */
+    ConnectorDataListenerHolder* getDataListenerHolder(ConnectorDataListenerType type) override;
+  
+  private:
     /*!
      * @if jp
      * @brief ConnectorDataListenerTypeリスナ配列
@@ -1391,7 +1847,7 @@ namespace RTC
      * The ConnectorDataListenerType listener is stored.
      * @endif
      */
-    ConnectorDataListenerHolder *connectorData_[CONNECTOR_DATA_LISTENER_NUM];
+    std::array<ConnectorDataListenerHolder, CONNECTOR_DATA_LISTENER_NUM> connectorData_;
     /*!
      * @if jp
      * @brief ConnectorListenerTypeリスナ配列
@@ -1401,7 +1857,7 @@ namespace RTC
      * The ConnectorListenerType listener is stored.
      * @endif
      */
-    ConnectorListenerHolder connector_[CONNECTOR_LISTENER_NUM];
+    std::array<ConnectorListenerHolder, CONNECTOR_LISTENER_NUM> connector_;
   };
 
 
@@ -1547,7 +2003,26 @@ namespace RTC
       }
 
 
-
+      /*!
+       * @if jp
+       *
+       * @brief リスナーへ通知する(OutPort側)
+       * リスナのコールバックメソッドを呼び出す。
+       * InPortとOutPortでシリアライザの種類が違う場合があるため、
+       * OutPort側ではnotifyOut関数を使用する必要がある。
+       *
+       * @param info ConnectorInfo
+       * @param data バイト列のデータ
+       * @return リターンコード
+       * @else
+       *
+       * @brief Notify listeners. (Typed data version)
+       *
+       * @param info ConnectorInfo
+       * @param data Data
+       * @return
+       * @endif
+       */
       ReturnCode notifyIn(ConnectorInfo& info, ByteData& data) override
       {
           std::string type = info.properties.getProperty("marshaling_type", "corba");
@@ -1556,6 +2031,26 @@ namespace RTC
           return notify(info, data, marshaling_type);
       }
 
+      /*!
+       * @if jp
+       *
+       * @brief リスナーへ通知する(OutPort側)
+       * リスナのコールバックメソッドを呼び出す。
+       * InPortとOutPortでシリアライザの種類が違う場合があるため、
+       * OutPort側ではnotifyOut関数を使用する必要がある。
+       *
+       * @param info ConnectorInfo
+       * @param data バイト列のデータ
+       * @return リターンコード
+       * @else
+       *
+       * @brief Notify listeners. (Typed data version)
+       *
+       * @param info ConnectorInfo
+       * @param data Data
+       * @return
+       * @endif
+       */
       ReturnCode notifyOut(ConnectorInfo& info, ByteData& data) override
       {
           std::string type = info.properties.getProperty("marshaling_type", "corba");
@@ -1581,32 +2076,299 @@ namespace RTC
    */
   template <class DataType>
   class ConnectorListenersT
-      : public ConnectorListeners
+       : public ConnectorListenersBase
   {
   public:
-      /*!
-       * @if jp
-       * @brief コンストラクタ
-       * @else
-       * @brief Constructor
-       * @endif
-       */
-      ConnectorListenersT()
+    /*!
+     * @if jp
+     * @brief コンストラクタ
+     * @else
+     * @brief Constructor
+     * @endif
+     */
+    ConnectorListenersT()
+    {
+    }
+    /*!
+     * @if jp
+     * @brief デストラクタ
+     * @else
+     * @brief Destructor
+     * @endif
+     */
+    ~ConnectorListenersT() override {}
+
+    /*!
+     * @if jp
+     *
+     * @brief リスナーへ通知する(InPort側)
+     * 指定の種類のリスナのコールバックメソッドを呼び出す。
+     * InPortとOutPortでシリアライザの種類が違う場合があるため、
+     * InPort側ではnotifyIn関数を使用する必要がある。
+     *
+     * @param type リスナの種類
+     * @param info ConnectorInfo
+     * @param data バイト列のデータ
+     * @return リターンコード
+     * @else
+     *
+     * @brief Notify listeners. (Typed data version)
+     *
+     * @param type
+     * @param info ConnectorInfo
+     * @param data Data
+     * @return
+     * @endif
+     */
+    ::RTC::ConnectorListenerStatus::Enum notifyIn(ConnectorDataListenerType type, ConnectorInfo& info, ByteData& data) override
+    {
+      if(type < connectorData_.size())
       {
-          for (unsigned int i = 0; i < CONNECTOR_DATA_LISTENER_NUM; i++)
-          {
-              delete connectorData_[i];
-              connectorData_[i] = new ConnectorDataListenerHolderT<DataType>();
-          }
+          return connectorData_[type].notifyIn(info, data);
       }
-      /*!
-       * @if jp
-       * @brief デストラクタ
-       * @else
-       * @brief Destructor
-       * @endif
-       */
-      ~ConnectorListenersT() {}
+      return ConnectorListenerStatus::NO_CHANGE;
+    }
+    /*!
+     * @if jp
+     *
+     * @brief リスナーへ通知する(OutPort側)
+     * 指定の種類のリスナのコールバックメソッドを呼び出す。
+     * InPortとOutPortでシリアライザの種類が違う場合があるため、
+     * OutPort側ではnotifyOut関数を使用する必要がある。
+     *
+     * @param type リスナの種類
+     * @param info ConnectorInfo
+     * @param data バイト列のデータ
+     * @return リターンコード
+     * @else
+     *
+     * @brief Notify listeners. (Typed data version)
+     *
+     * @param type
+     * @param info ConnectorInfo
+     * @param data Data
+     * @return
+     * @endif
+     */
+    ::RTC::ConnectorListenerStatus::Enum notifyOut(ConnectorDataListenerType type, ConnectorInfo& info, ByteData& data) override
+    {
+        if(type < connectorData_.size())
+        {
+            return connectorData_[type].notifyOut(info, data);
+        }
+        return ConnectorListenerStatus::NO_CHANGE;
+    }
+    /*!
+     * @if jp
+     *
+     * @brief リスナーへ通知する
+     *
+     * データポートの Connector において発生する各種イベントに対するコー
+     * ルバックメソッド
+     *
+     * @param type リスナの種類
+     * @param info ConnectorInfo
+     * @return リターンコード
+     *
+     * @else
+     *
+     * @brief Virtual Callback method
+     *
+     * @param type リスナの種類
+     * @param info ConnectorInfo
+     * @return リターンコード
+     *
+     * @return
+     * @endif
+     */
+    ::RTC::ConnectorListenerStatus::Enum notify(ConnectorListenerType type, ConnectorInfo& info) override
+    {
+        if(type < connector_.size())
+        {
+            return connector_[type].notify(info);
+        }
+        return ConnectorListenerStatus::NO_CHANGE;
+    }
+    /*!
+     * @if jp
+     *
+     * @brief リスナーの追加
+     *
+     * 指定の種類のConnectorDataListenerを追加する。
+     *
+     * @param type リスナの種類
+     * @param listener 追加するリスナ
+     * @param autoclean true:デストラクタで削除する,
+     *                  false:デストラクタで削除しない
+     * @return false：指定の種類のリスナが存在しない
+     * @else
+     *
+     * @brief Add the listener.
+     *
+     *
+     *
+     * @param type
+     * @param listener Added listener
+     * @param autoclean true:The listener is deleted at the destructor.,
+     *                  false:The listener is not deleted at the destructor.
+     * @return
+     * @endif
+     */
+    bool addListener(ConnectorDataListenerType type, ConnectorDataListener* listener, bool autoclean=true) override
+    {
+        if(type < connectorData_.size())
+        {
+            connectorData_[type].addListener(listener, autoclean);
+            return true;
+        }
+        return false;
+    }
+    /*!
+     * @if jp
+     *
+     * @brief リスナーの追加
+     *
+     * 指定の種類のConnectorListenerを追加する。
+     *
+     * @param type リスナの種類
+     * @param listener 追加するリスナ
+     * @param autoclean true:デストラクタで削除する,
+     *                  false:デストラクタで削除しない
+     * @return false：指定の種類のリスナが存在しない
+     * @else
+     *
+     * @brief Add the listener.
+     *
+     *
+     *
+     * @param type
+     * @param listener Added listener
+     * @param autoclean true:The listener is deleted at the destructor.,
+     *                  false:The listener is not deleted at the destructor.
+     * @return
+     * @endif
+     */
+    bool addListener(ConnectorListenerType type, ConnectorListener* listener, bool autoclean=true) override
+    {
+        if(type < connector_.size())
+        {
+            connector_[type].addListener(listener, autoclean);
+            return true;
+        }
+        return false;
+    }
+    /*!
+     * @if jp
+     *
+     * @brief リスナーの削除
+     *
+     * 指定の種類のConnectorDataListenerを削除する。
+     *
+     * @param type リスナの種類
+     * @param listener 削除するリスナ
+     * @return false：指定の種類のリスナが存在しない
+     *
+     * @else
+     *
+     * @brief Remove the listener.
+     *
+     *
+     * @param type
+     * @param listener
+     * @return
+     *
+     * @endif
+     */
+    bool removeListener(ConnectorDataListenerType type, ConnectorDataListener* listener) override
+    {
+        if(type < connectorData_.size())
+        {
+            connectorData_[type].removeListener(listener);
+            return true;
+        }
+        return false;
+    }
+    /*!
+     * @if jp
+     *
+     * @brief リスナーの削除
+     *
+     * 指定の種類のConnectorListenerを削除する。
+     *
+     * @param type リスナの種類
+     * @param listener 削除するリスナ
+     * @return false：指定の種類のリスナが存在しない
+     *
+     * @else
+     *
+     * @brief Remove the listener.
+     *
+     *
+     * @param type
+     * @param listener
+     * @return
+     *
+     * @endif
+     */
+    bool removeListener(ConnectorListenerType type, ConnectorListener* listener) override
+    {
+        if(type < connector_.size())
+        {
+            connector_[type].removeListener(listener);
+            return true;
+        }
+        return false;
+    }
+    /*!
+     * @if jp
+     *
+     * @brief 指定の種類のConnectorDataListenerHolderを取得する
+     *
+     *
+     * @param type リスナの種類
+     * @return ConnectorDataListenerHolder
+     *
+     * @else
+     *
+     * @brief Remove the listener.
+     *
+     *
+     * @param type
+     * @param listener
+     * @return
+     *
+     * @endif
+     */
+    ConnectorDataListenerHolder* getDataListenerHolder(ConnectorDataListenerType type) override
+    {
+        if (type < connectorData_.size())
+        {
+            return &connectorData_[type];
+        }
+        return nullptr;
+    }
+
+  private:
+    /*!
+     * @if jp
+     * @brief ConnectorDataListenerTypeリスナ配列
+     * ConnectorDataListenerTypeリスナを格納
+     * @else
+     * @brief ConnectorDataListenerType listener array
+     * The ConnectorDataListenerType listener is stored.
+     * @endif
+     */
+    std::array<ConnectorDataListenerHolder, CONNECTOR_DATA_LISTENER_NUM> connectorData_;
+    /*!
+     * @if jp
+     * @brief ConnectorListenerTypeリスナ配列
+     * ConnectorListenerTypeリスナを格納
+     * @else
+     * @brief ConnectorListenerType listener array
+     * The ConnectorListenerType listener is stored.
+     * @endif
+     */
+    std::array<ConnectorListenerHolder, CONNECTOR_LISTENER_NUM> connector_;
 
   };
 } // namespace RTC

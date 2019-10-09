@@ -35,7 +35,7 @@ namespace coil
 namespace RTC
 {
   class InPortConsumer;
-  class ConnectorListeners;
+  class ConnectorListenersBase;
   class ConnectorInfo;
 
   /*!
@@ -195,7 +195,7 @@ namespace RTC
      * @endif
      */
     virtual DataPortStatus setListener(ConnectorInfo& info,
-                                   ConnectorListeners* listeners) = 0;
+                                   ConnectorListenersBase* listeners) = 0;
 
     /*!
      * @if jp

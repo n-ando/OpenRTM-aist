@@ -1966,8 +1966,7 @@ namespace RTC
     {
       if (m_portconnListeners != nullptr)
         {
-          m_portconnListeners->
-            portconnect_[ON_NOTIFY_CONNECT].notify(portname, profile);
+          m_portconnListeners->notify(ON_NOTIFY_CONNECT, portname, profile);
         }
     }
 
@@ -1976,8 +1975,7 @@ namespace RTC
     {
       if (m_portconnListeners != nullptr)
         {
-          m_portconnListeners->
-            portconnect_[ON_NOTIFY_DISCONNECT].notify(portname, profile);
+          m_portconnListeners->notify(ON_NOTIFY_DISCONNECT, portname, profile);
         }
     }
     inline void onUnsubscribeInterfaces(const char* portname,
@@ -1985,8 +1983,7 @@ namespace RTC
     {
       if (m_portconnListeners != nullptr)
         {
-          m_portconnListeners->
-            portconnect_[ON_UNSUBSCRIBE_INTERFACES].notify(portname, profile);
+          m_portconnListeners->notify(ON_UNSUBSCRIBE_INTERFACES, portname, profile);
         }
     }
 
@@ -1996,8 +1993,7 @@ namespace RTC
     {
       if (m_portconnListeners != nullptr)
         {
-          m_portconnListeners->
-            portconnret_[ON_PUBLISH_INTERFACES].notify(portname,
+          m_portconnListeners->notify(ON_PUBLISH_INTERFACES, portname,
                                                        profile, ret);
         }
     }
@@ -2008,8 +2004,7 @@ namespace RTC
     {
       if (m_portconnListeners != nullptr)
         {
-          m_portconnListeners->
-            portconnret_[ON_CONNECT_NEXTPORT].notify(portname,
+          m_portconnListeners->notify(ON_CONNECT_NEXTPORT, portname,
                                                      profile, ret);
         }
     }
@@ -2020,8 +2015,7 @@ namespace RTC
     {
       if (m_portconnListeners != nullptr)
         {
-          m_portconnListeners->
-            portconnret_[ON_SUBSCRIBE_INTERFACES].notify(portname,
+          m_portconnListeners->notify(ON_SUBSCRIBE_INTERFACES, portname,
                                                          profile, ret);
         }
     }
@@ -2032,8 +2026,7 @@ namespace RTC
     {
       if (m_portconnListeners != nullptr)
         {
-          m_portconnListeners->
-            portconnret_[ON_CONNECTED].notify(portname, profile, ret);
+          m_portconnListeners->notify(ON_CONNECTED, portname, profile, ret);
         }
     }
 
@@ -2043,8 +2036,7 @@ namespace RTC
     {
       if (m_portconnListeners != nullptr)
         {
-          m_portconnListeners->
-            portconnret_[ON_DISCONNECT_NEXT].notify(portname, profile, ret);
+          m_portconnListeners->notify(ON_DISCONNECT_NEXT, portname, profile, ret);
         }
     }
 
@@ -2054,8 +2046,7 @@ namespace RTC
     {
       if (m_portconnListeners != nullptr)
         {
-          m_portconnListeners->
-            portconnret_[ON_DISCONNECTED].notify(portname, profile, ret);
+          m_portconnListeners->notify(ON_DISCONNECTED, portname, profile, ret);
         }
     }
 

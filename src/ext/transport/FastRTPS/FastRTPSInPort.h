@@ -200,7 +200,7 @@ namespace RTC
      * @endif
      */
     void setListener(ConnectorInfo& info,
-                             ConnectorListeners* listeners) override;
+                             ConnectorListenersBase* listeners) override;
 
     /*!
      * @if jp
@@ -262,8 +262,7 @@ namespace RTC
      */
     inline void onBufferWrite(ByteData& data)
     {
-      m_listeners->
-        connectorData_[ON_BUFFER_WRITE]->notifyIn(m_profile, data);
+      m_listeners->notifyIn(ON_BUFFER_WRITE, m_profile, data);
     }
 
     /*!
@@ -277,8 +276,7 @@ namespace RTC
      */
     inline void onBufferFull(ByteData& data)
     {
-      m_listeners->
-        connectorData_[ON_BUFFER_FULL]->notifyIn(m_profile, data);
+      m_listeners->notifyIn(ON_BUFFER_FULL, m_profile, data);
     }
 
     /*!
@@ -292,8 +290,7 @@ namespace RTC
      */
     inline void onBufferWriteTimeout(ByteData& data)
     {
-      m_listeners->
-        connectorData_[ON_BUFFER_WRITE_TIMEOUT]->notifyIn(m_profile, data);
+      m_listeners->notifyIn(ON_BUFFER_WRITE_TIMEOUT, m_profile, data);
     }
 
     /*!
@@ -307,8 +304,7 @@ namespace RTC
      */
     inline void onBufferWriteOverwrite(ByteData& data)
     {
-      m_listeners->
-        connectorData_[ON_BUFFER_OVERWRITE]->notifyIn(m_profile, data);
+      m_listeners->notifyIn(ON_BUFFER_OVERWRITE, m_profile, data);
     }
 
     /*!
@@ -322,8 +318,7 @@ namespace RTC
      */
     inline void onReceived(ByteData& data)
     {
-      m_listeners->
-        connectorData_[ON_RECEIVED]->notifyIn(m_profile, data);
+      m_listeners->notifyIn(ON_RECEIVED, m_profile, data);
     }
 
     /*!
@@ -337,8 +332,7 @@ namespace RTC
      */
     inline void onReceiverFull(ByteData& data)
     {
-      m_listeners->
-        connectorData_[ON_RECEIVER_FULL]->notifyIn(m_profile, data);
+      m_listeners->notifyIn(ON_RECEIVER_FULL, m_profile, data);
     }
 
     /*!
@@ -350,8 +344,7 @@ namespace RTC
      */
     inline void onReceiverTimeout(ByteData& data)
     {
-      m_listeners->
-        connectorData_[ON_RECEIVER_TIMEOUT]->notifyIn(m_profile, data);
+      m_listeners->notifyIn(ON_RECEIVER_TIMEOUT, m_profile, data);
     }
 
     /*!
@@ -363,8 +356,7 @@ namespace RTC
      */
     inline void onReceiverError(ByteData& data)
     {
-      m_listeners->
-        connectorData_[ON_RECEIVER_ERROR]->notifyIn(m_profile, data);
+      m_listeners->notifyIn(ON_RECEIVER_ERROR, m_profile, data);
     }
 
   private:
@@ -380,7 +372,7 @@ namespace RTC
 
     CdrBufferBase* m_buffer;
     ConnectorInfo m_profile;
-    ConnectorListeners* m_listeners;
+    ConnectorListenersBase* m_listeners;
     InPortConnector* m_connector;
 
     

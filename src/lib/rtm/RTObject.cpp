@@ -2189,8 +2189,7 @@ namespace RTC
                                 PreComponentActionListener* listener,
                                 bool autoclean)
   {
-    m_actionListeners.
-      preaction_[listener_type].addListener(listener, autoclean);
+    m_actionListeners.addListener(listener_type, listener, autoclean);
   }
 
 
@@ -2208,8 +2207,7 @@ namespace RTC
                                    PreComponentActionListenerType listener_type,
                                    PreComponentActionListener* listener)
   {
-    m_actionListeners.
-      preaction_[listener_type].removeListener(listener);
+    m_actionListeners.removeListener(listener_type, listener);
   }
 
 
@@ -2228,8 +2226,7 @@ namespace RTC
                                  PostComponentActionListener* listener,
                                  bool autoclean)
   {
-    m_actionListeners.
-      postaction_[listener_type].addListener(listener, autoclean);
+    m_actionListeners.addListener(listener_type, listener, autoclean);
   }
 
 
@@ -2247,8 +2244,7 @@ namespace RTC
                                 PostComponentActionListenerType listener_type,
                                 PostComponentActionListener* listener)
   {
-    m_actionListeners.
-      postaction_[listener_type].removeListener(listener);
+    m_actionListeners.removeListener(listener_type, listener);
   }
 
   /*!
@@ -2265,8 +2261,7 @@ namespace RTC
                         PortActionListener* listener,
                         bool autoclean)
   {
-    m_actionListeners.
-      portaction_[listener_type].addListener(listener, autoclean);
+    m_actionListeners.addListener(listener_type, listener, autoclean);
   }
 
 
@@ -2283,8 +2278,7 @@ namespace RTC
   removePortActionListener(PortActionListenerType listener_type,
                            PortActionListener* listener)
   {
-    m_actionListeners.
-      portaction_[listener_type].removeListener(listener);
+    m_actionListeners.removeListener(listener_type, listener);
   }
 
 
@@ -2302,8 +2296,7 @@ namespace RTC
                                     ECActionListener* listener,
                                     bool autoclean)
   {
-    m_actionListeners.
-      ecaction_[listener_type].addListener(listener, autoclean);
+    m_actionListeners.addListener(listener_type, listener, autoclean);
   }
 
 
@@ -2320,8 +2313,7 @@ namespace RTC
   removeExecutionContextActionListener(ECActionListenerType listener_type,
                                        ECActionListener* listener)
   {
-    m_actionListeners.
-      ecaction_[listener_type].removeListener(listener);
+    m_actionListeners.removeListener(listener_type, listener);
   }
 
   /*!
@@ -2336,8 +2328,7 @@ namespace RTC
                          PortConnectListener* listener,
                          bool autoclean)
   {
-    m_portconnListeners.
-      portconnect_[listener_type].addListener(listener, autoclean);
+    m_portconnListeners.addListener(listener_type, listener, autoclean);
   }
 
   /*!
@@ -2351,8 +2342,7 @@ namespace RTC
   removePortConnectListener(PortConnectListenerType listener_type,
                             PortConnectListener* listener)
   {
-    m_portconnListeners.
-      portconnect_[listener_type].removeListener(listener);
+    m_portconnListeners.removeListener(listener_type, listener);
   }
 
   /*!
@@ -2367,8 +2357,7 @@ namespace RTC
                             PortConnectRetListener* listener,
                             bool autoclean)
   {
-    m_portconnListeners.
-      portconnret_[listener_type].addListener(listener, autoclean);
+    m_portconnListeners.addListener(listener_type, listener, autoclean);
   }
 
   /*!
@@ -2382,8 +2371,7 @@ namespace RTC
   removePortConnectRetListener(PortConnectRetListenerType listener_type,
                                PortConnectRetListener* listener)
   {
-    m_portconnListeners.
-      portconnret_[listener_type].removeListener(listener);
+    m_portconnListeners.removeListener(listener_type, listener);
   }
 
   /*!
@@ -2489,8 +2477,7 @@ namespace RTC
                           PreFsmActionListener* listener,
                           bool autoclean)
   {
-    m_fsmActionListeners.
-      preaction_[static_cast<uint8_t>(listener_type)].addListener(listener, autoclean);
+    m_fsmActionListeners.addListener(listener_type, listener, autoclean);
   }
   
   
@@ -2507,8 +2494,7 @@ namespace RTC
   removePreFsmActionListener(PreFsmActionListenerType listener_type,
                              PreFsmActionListener* listener)
   {
-    m_fsmActionListeners.
-      preaction_[static_cast<uint8_t>(listener_type)].removeListener(listener);
+    m_fsmActionListeners.removeListener(listener_type, listener);
   }
 
 
@@ -2526,8 +2512,7 @@ namespace RTC
                            PostFsmActionListener* listener,
                            bool autoclean)
   {
-    m_fsmActionListeners.
-      postaction_[static_cast<uint8_t>(listener_type)].addListener(listener, autoclean);
+    m_fsmActionListeners.addListener(listener_type, listener, autoclean);
   }
 
 
@@ -2544,8 +2529,7 @@ namespace RTC
   removePostFsmActionListener(PostFsmActionListenerType listener_type,
                               PostFsmActionListener* listener)
   {
-    m_fsmActionListeners.
-      postaction_[static_cast<uint8_t>(listener_type)].removeListener(listener);
+    m_fsmActionListeners.removeListener(listener_type, listener);
   }
 
   /*!
@@ -2562,8 +2546,7 @@ namespace RTC
                           FsmProfileListener* listener,
                           bool autoclean)
   {
-    m_fsmActionListeners.
-      profile_[static_cast<uint8_t>(listener_type)].addListener(listener, autoclean);
+    m_fsmActionListeners.addListener(listener_type, listener, autoclean);
   }
 
 
@@ -2580,8 +2563,7 @@ namespace RTC
   removeFsmProfileListener(FsmProfileListenerType listener_type,
                              FsmProfileListener* listener)
   {
-    m_fsmActionListeners.
-      profile_[static_cast<uint8_t>(listener_type)].removeListener(listener);
+    m_fsmActionListeners.removeListener(listener_type, listener);
   }
 
   /*!
@@ -2598,8 +2580,7 @@ namespace RTC
                           FsmStructureListener* listener,
                           bool autoclean)
   {
-    m_fsmActionListeners.
-      structure_[static_cast<uint8_t>(listener_type)].addListener(listener, autoclean);
+    m_fsmActionListeners.addListener(listener_type, listener, autoclean);
   }
 
 
@@ -2616,8 +2597,7 @@ namespace RTC
   removeFsmStructureListener(FsmStructureListenerType listener_type,
                              FsmStructureListener* listener)
   {
-    m_fsmActionListeners.
-      structure_[static_cast<uint8_t>(listener_type)].removeListener(listener);
+    m_fsmActionListeners.removeListener(listener_type, listener);
   }
 
   

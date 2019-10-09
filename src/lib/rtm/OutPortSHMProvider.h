@@ -142,7 +142,7 @@ namespace RTC
      * @endif
      */
     void setListener(ConnectorInfo& info,
-                             ConnectorListeners* listeners) override;
+                             ConnectorListenersBase* listeners) override;
 
     /*!
      * @if jp
@@ -206,8 +206,7 @@ namespace RTC
      */
     inline void onBufferRead(ByteData& data)
     {
-      m_listeners->
-        connectorData_[ON_BUFFER_READ]->notifyOut(m_profile, data);
+      m_listeners->notifyOut(ON_BUFFER_READ, m_profile, data);
     }
 
     /*!
@@ -221,8 +220,7 @@ namespace RTC
      */
     inline void onSend(ByteData& data)
     {
-      m_listeners->
-        connectorData_[ON_SEND]->notifyOut(m_profile, data);
+      m_listeners->notifyOut(ON_SEND, m_profile, data);
     }
 
     /*!
@@ -234,8 +232,7 @@ namespace RTC
      */
     inline void onBufferEmpty()
     {
-      m_listeners->
-        connector_[ON_BUFFER_EMPTY].notify(m_profile);
+      m_listeners->notify(ON_BUFFER_EMPTY, m_profile);
     }
 
     /*!
@@ -247,8 +244,7 @@ namespace RTC
      */
     inline void onBufferReadTimeout()
     {
-      m_listeners->
-        connector_[ON_BUFFER_READ_TIMEOUT].notify(m_profile);
+      m_listeners->notify(ON_BUFFER_READ_TIMEOUT, m_profile);
     }
 
     /*!
@@ -260,8 +256,7 @@ namespace RTC
      */
     inline void onSenderEmpty()
     {
-      m_listeners->
-        connector_[ON_SENDER_EMPTY].notify(m_profile);
+      m_listeners->notify(ON_SENDER_EMPTY, m_profile);
     }
 
     /*!
@@ -273,8 +268,7 @@ namespace RTC
      */
     inline void onSenderTimeout()
     {
-      m_listeners->
-        connector_[ON_SENDER_TIMEOUT].notify(m_profile);
+      m_listeners->notify(ON_SENDER_TIMEOUT, m_profile);
     }
 
     /*!
@@ -286,14 +280,13 @@ namespace RTC
      */
     inline void onSenderError()
     {
-      m_listeners->
-        connector_[ON_SENDER_ERROR].notify(m_profile);
+      m_listeners->notify(ON_SENDER_ERROR, m_profile);
     }
     
   private:
     CdrBufferBase* m_buffer{nullptr};
     ::OpenRTM::PortSharedMemory_var m_objref;
-    ConnectorListeners* m_listeners;
+    ConnectorListenersBase* m_listeners;
     ConnectorInfo m_profile;
     OutPortConnector* m_connector{nullptr};
     std::string m_shm_address;

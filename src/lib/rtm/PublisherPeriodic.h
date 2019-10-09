@@ -242,7 +242,7 @@ namespace RTC
      * @endif
      */
     DataPortStatus setListener(ConnectorInfo& info,
-                                   ConnectorListeners* listeners) override;
+                                   ConnectorListenersBase* listeners) override;
     /*!
      * @if jp
      * @brief データを書き込む
@@ -553,8 +553,7 @@ namespace RTC
      */
     inline void onBufferWrite(ByteData& data)
     {
-      m_listeners->
-        connectorData_[ON_BUFFER_WRITE]->notifyOut(m_profile, data);
+      m_listeners->notifyOut(ON_BUFFER_WRITE, m_profile, data);
     }
 
     /*!
@@ -568,8 +567,7 @@ namespace RTC
      */
     inline void onBufferFull(ByteData& data)
     {
-      m_listeners->
-        connectorData_[ON_BUFFER_FULL]->notifyOut(m_profile, data);
+      m_listeners->notifyOut(ON_BUFFER_FULL, m_profile, data);
     }
 
     /*!
@@ -583,8 +581,7 @@ namespace RTC
      */
     inline void onBufferWriteTimeout(ByteData& data)
     {
-      m_listeners->
-        connectorData_[ON_BUFFER_WRITE_TIMEOUT]->notifyOut(m_profile, data);
+      m_listeners->notifyOut(ON_BUFFER_WRITE_TIMEOUT, m_profile, data);
     }
 
     /*!
@@ -598,8 +595,7 @@ namespace RTC
      */
     inline void onBufferRead(ByteData& data)
     {
-      m_listeners->
-        connectorData_[ON_BUFFER_READ]->notifyOut(m_profile, data);
+      m_listeners->notifyOut(ON_BUFFER_READ, m_profile, data);
     }
 
     /*!
@@ -613,8 +609,7 @@ namespace RTC
      */
     inline void onSend(ByteData& data)
     {
-      m_listeners->
-        connectorData_[ON_SEND]->notifyOut(m_profile, data);
+      m_listeners->notifyOut(ON_SEND, m_profile, data);
     }
 
     /*!
@@ -628,8 +623,7 @@ namespace RTC
      */
     inline void onReceived(ByteData& data)
     {
-      m_listeners->
-        connectorData_[ON_RECEIVED]->notifyOut(m_profile, data);
+      m_listeners->notifyOut(ON_RECEIVED, m_profile, data);
     }
 
     /*!
@@ -643,8 +637,7 @@ namespace RTC
      */
     inline void onReceiverFull(ByteData& data)
     {
-      m_listeners->
-        connectorData_[ON_RECEIVER_FULL]->notifyOut(m_profile, data);
+      m_listeners->notifyOut(ON_RECEIVER_FULL, m_profile, data);
     }
 
     /*!
@@ -658,8 +651,7 @@ namespace RTC
      */
     inline void onReceiverTimeout(ByteData& data)
     {
-      m_listeners->
-        connectorData_[ON_RECEIVER_TIMEOUT]->notifyOut(m_profile, data);
+      m_listeners->notifyOut(ON_RECEIVER_TIMEOUT, m_profile, data);
     }
 
     /*!
@@ -673,8 +665,7 @@ namespace RTC
      */
     inline void onReceiverError(ByteData& data)
     {
-      m_listeners->
-        connectorData_[ON_RECEIVER_ERROR]->notifyOut(m_profile, data);
+      m_listeners->notifyOut(ON_RECEIVER_ERROR, m_profile, data);
     }
 
     /*!
@@ -686,8 +677,7 @@ namespace RTC
      */
     inline void onBufferEmpty()
     {
-      m_listeners->
-        connector_[ON_BUFFER_EMPTY].notify(m_profile);
+      m_listeners->notify(ON_BUFFER_EMPTY, m_profile);
     }
 
     /*!
@@ -699,8 +689,7 @@ namespace RTC
      */
     inline void onSenderEmpty()
     {
-      m_listeners->
-        connector_[ON_SENDER_EMPTY].notify(m_profile);
+      m_listeners->notify(ON_SENDER_EMPTY, m_profile);
     }
 
     /*!
@@ -712,8 +701,7 @@ namespace RTC
      */
     inline void onSenderError()
     {
-      m_listeners->
-        connector_[ON_SENDER_ERROR].notify(m_profile);
+      m_listeners->notify(ON_SENDER_ERROR, m_profile);
     }
 
 
@@ -735,7 +723,7 @@ namespace RTC
     CdrBufferBase* m_buffer{nullptr};
     ConnectorInfo m_profile;
     coil::PeriodicTaskBase* m_task{nullptr};
-    ConnectorListeners* m_listeners{nullptr};
+    ConnectorListenersBase* m_listeners{nullptr};
     DataPortStatus m_retcode{DataPortStatus::PORT_OK};
     std::mutex m_retmutex;
     Policy m_pushPolicy{PUBLISHER_POLICY_NEW};

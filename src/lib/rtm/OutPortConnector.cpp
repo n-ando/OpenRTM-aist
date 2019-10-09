@@ -30,7 +30,7 @@ namespace RTC
    * @endif
    */
   OutPortConnector::OutPortConnector(ConnectorInfo& info,
-                                     ConnectorListeners* listeners)
+                                     ConnectorListenersBase* listeners)
     : rtclog("OutPortConnector"), m_profile(info), m_littleEndian(true),
 	m_directInPort(nullptr), m_listeners(listeners), m_directMode(false), m_marshaling_type("corba"), m_cdr(nullptr)
   {

@@ -25,6 +25,7 @@
 
 #include <vector>
 #include <utility>
+#include <array>
 
 namespace RTC
 {
@@ -503,6 +504,171 @@ namespace RTC
     ~PortConnectListeners();
     /*!
      * @if jp
+     *
+     * @brief リスナーの追加
+     *
+     * 指定の種類のPortConnectListenerを追加する。
+     *
+     * @param type リスナの種類
+     * @param listener 追加するリスナ
+     * @param autoclean true:デストラクタで削除する,
+     *                  false:デストラクタで削除しない
+     * @return false：指定の種類のリスナが存在しない
+     * @else
+     *
+     * @brief Add the listener.
+     *
+     *
+     *
+     * @param type 
+     * @param listener Added listener
+     * @param autoclean true:The listener is deleted at the destructor.,
+     *                  false:The listener is not deleted at the destructor.
+     * @return
+     * @endif
+     */
+    bool addListener(PortConnectListenerType type, PortConnectListener* listener, bool autoclean=true);
+    /*!
+     * @if jp
+     *
+     * @brief リスナーの削除
+     *
+     * 指定の種類のPortConnectListenerを削除する。
+     *
+     * @param type リスナの種類
+     * @param listener 削除するリスナ
+     * @return false：指定の種類のリスナが存在しない
+     *
+     * @else
+     *
+     * @brief Remove the listener.
+     *
+     *
+     * @param type
+     * @param listener
+     * @return
+     *
+     * @endif
+     */
+    bool removeListener(PortConnectListenerType type, PortConnectListener* listener);
+    /*!
+     * @if jp
+     *
+     * @brief リスナーの追加
+     *
+     * 指定の種類のPortConnectRetListenerを追加する。
+     *
+     * @param type リスナの種類
+     * @param listener 追加するリスナ
+     * @param autoclean true:デストラクタで削除する,
+     *                  false:デストラクタで削除しない
+     * @return false：指定の種類のリスナが存在しない
+     * @else
+     *
+     * @brief Add the listener.
+     *
+     *
+     *
+     * @param type 
+     * @param listener Added listener
+     * @param autoclean true:The listener is deleted at the destructor.,
+     *                  false:The listener is not deleted at the destructor.
+     * @return
+     * @endif
+     */
+    bool addListener(PortConnectRetListenerType type, PortConnectRetListener* listener, bool autoclean=true);
+    /*!
+     * @if jp
+     *
+     * @brief リスナーの削除
+     *
+     * 指定の種類のPortConnectRetListenerを削除する。
+     *
+     * @param type リスナの種類
+     * @param listener 削除するリスナ
+     * @return false：指定の種類のリスナが存在しない
+     *
+     * @else
+     *
+     * @brief Remove the listener.
+     *
+     *
+     * @param type
+     * @param listener
+     * @return
+     *
+     * @endif
+     */
+    bool removeListener(PortConnectRetListenerType type, PortConnectRetListener* listener);
+    /*!
+     * @if jp
+     *
+     * @brief リスナーへ通知する
+     *
+     * 指定の種類のPortConnectListenerのコールバック関数を呼び出す。
+     *
+     * @param type リスナの種類
+     * @param portname ポート名
+     * @param profile コネクタプロファイル
+     * @return false：指定の種類のリスナが存在しない
+     * @else
+     *
+     * @brief 
+     *
+     *
+     * @param type 
+     * @param portname 
+     * @param profile
+     * @return
+     * @endif
+     */
+    inline bool notify(PortConnectListenerType type, const char* portname, RTC::ConnectorProfile& profile)
+    {
+        if (type < portconnect_.size())
+        {
+            portconnect_[type].notify(portname, profile);
+            return true;
+        }
+        return false;
+    }
+    /*!
+     * @if jp
+     *
+     * @brief リスナーへ通知する
+     *
+     * 指定の種類のPortConnectRetListenerのコールバック関数を呼び出す。
+     *
+     * @param type リスナの種類
+     * @param portname ポート名
+     * @param profile コネクタプロファイル
+     * @param ret リターンコード
+     * @return false：指定の種類のリスナが存在しない
+     * @else
+     *
+     * @brief
+     *
+     *
+     * @param type
+     * @param portname
+     * @param profile
+     * @param ret
+     * @return
+     * @endif
+     */
+    inline bool notify(PortConnectRetListenerType type, const char* portname, RTC::ConnectorProfile& profile,
+                ReturnCode_t ret)
+    {
+        if (type < portconnret_.size())
+        {
+            portconnret_[type].notify(portname, profile, ret);
+            return true;
+        }
+        return false;
+    }
+
+  private:
+    /*!
+     * @if jp
      * @brief PortConnectListenerType リスナ配列
      * PortConnectListenerType リスナを格納
      * @else
@@ -510,8 +676,7 @@ namespace RTC
      * The PortConnectListenerType listener is stored.
      * @endif
      */
-    PortConnectListenerHolder
-    portconnect_[PORT_CONNECT_LISTENER_NUM];
+    std::array<PortConnectListenerHolder, PORT_CONNECT_LISTENER_NUM> portconnect_;
     /*!
      * @if jp
      * @brief PortConnectRetTypeリスナ配列
@@ -521,8 +686,7 @@ namespace RTC
      * The PortConnectRetType listener is stored.
      * @endif
      */
-    PortConnectRetListenerHolder
-    portconnret_[PORT_CONNECT_RET_LISTENER_NUM];
+    std::array<PortConnectRetListenerHolder, PORT_CONNECT_RET_LISTENER_NUM> portconnret_;
   };
 
 

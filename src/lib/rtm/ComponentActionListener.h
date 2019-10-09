@@ -27,6 +27,7 @@
 
 #include <vector>
 #include <utility>
+#include <array>
 
 namespace RTC
 {
@@ -672,14 +673,14 @@ namespace RTC
      *
      * 登録されているリスナのコールバックメソッドを呼び出す。
      *
-     * @param info ConnectorInfo
+     * @param ec_id 実行コンテキストのID
      * @else
      *
      * @brief Notify listeners.
      *
      * This calls the Callback method of the registered listener.
      *
-     * @param info ConnectorInfo
+     * @param ec_id 
      * @endif
      */
     void notify(UniqueId ec_id);
@@ -776,16 +777,16 @@ namespace RTC
      *
      * 登録されているリスナのコールバックメソッドを呼び出す。
      *
-     * @param info ConnectorInfo
-     * @param cdrdata データ
+     * @param ec_id 実行コンテキストのID
+     * @param ret リターンコード
      * @else
      *
      * @brief Notify listeners.
      *
      * This calls the Callback method of the registered listener.
      *
-     * @param info ConnectorInfo
-     * @param cdrdata Data
+     * @param ec_id 
+     * @param ret 
      * @endif
      */
     void notify(UniqueId ec_id, ReturnCode_t ret);
@@ -988,16 +989,14 @@ namespace RTC
      *
      * 登録されているリスナのコールバックメソッドを呼び出す。
      *
-     * @param info ConnectorInfo
-     * @param cdrdata データ
+     * @param ec_id 実行コンテキストのID
      * @else
      *
      * @brief Notify listeners.
      *
      * This calls the Callback method of the registered listener.
      *
-     * @param info ConnectorInfo
-     * @param cdrdata Data
+     * @param ec_id 
      * @endif
      */
     void notify(UniqueId ec_id);
@@ -1042,6 +1041,321 @@ namespace RTC
     ~ComponentActionListeners();
     /*!
      * @if jp
+     *
+     * @brief リスナーの追加
+     *
+     * 指定の種類のPreComponentActionListenerを追加する。
+     *
+     * @param type リスナの種類
+     * @param listener 追加するリスナ
+     * @param autoclean true:デストラクタで削除する,
+     *                  false:デストラクタで削除しない
+     * @return false：指定の種類のリスナが存在しない
+     * @else
+     *
+     * @brief Add the listener.
+     *
+     *
+     *
+     * @param type 
+     * @param listener Added listener
+     * @param autoclean true:The listener is deleted at the destructor.,
+     *                  false:The listener is not deleted at the destructor.
+     * @return
+     * @endif
+     */
+    bool addListener(PreComponentActionListenerType type, PreComponentActionListener* listener, bool autoclean);
+    /*!
+     * @if jp
+     *
+     * @brief リスナーの追加
+     *
+     * 指定の種類のPostComponentActionListenerを追加する。
+     *
+     * @param type リスナの種類
+     * @param listener 追加するリスナ
+     * @param autoclean true:デストラクタで削除する,
+     *                  false:デストラクタで削除しない
+     * @return false：指定の種類のリスナが存在しない
+     * @else
+     *
+     * @brief Add the listener.
+     *
+     *
+     *
+     * @param type
+     * @param listener Added listener
+     * @param autoclean true:The listener is deleted at the destructor.,
+     *                  false:The listener is not deleted at the destructor.
+     * @return
+     * @endif
+     */
+    bool addListener(PostComponentActionListenerType type, PostComponentActionListener* listener, bool autoclean);
+    /*!
+     * @if jp
+     *
+     * @brief リスナーの追加
+     *
+     * 指定の種類のPortActionListenerを追加する。
+     *
+     * @param type リスナの種類
+     * @param listener 追加するリスナ
+     * @param autoclean true:デストラクタで削除する,
+     *                  false:デストラクタで削除しない
+     * @return false：指定の種類のリスナが存在しない
+     * @else
+     *
+     * @brief Add the listener.
+     *
+     *
+     *
+     * @param type 
+     * @param listener Added listener
+     * @param autoclean true:The listener is deleted at the destructor.,
+     *                  false:The listener is not deleted at the destructor.
+     * @return
+     * @endif
+     */
+    bool addListener(PortActionListenerType type, PortActionListener* listener, bool autoclean);
+    /*!
+     * @if jp
+     *
+     * @brief リスナーの追加
+     *
+     * 指定の種類のExecutionContextActionListenerを追加する。
+     *
+     * @param type リスナの種類
+     * @param listener 追加するリスナ
+     * @param autoclean true:デストラクタで削除する,
+     *                  false:デストラクタで削除しない
+     * @return false：指定の種類のリスナが存在しない
+     * @else
+     *
+     * @brief Add the listener.
+     *
+     *
+     *
+     * @param type
+     * @param listener Added listener
+     * @param autoclean true:The listener is deleted at the destructor.,
+     *                  false:The listener is not deleted at the destructor.
+     * @return
+     * @endif
+     */
+    bool addListener(ExecutionContextActionListenerType type, ExecutionContextActionListener* listener, bool autoclean);
+    /*!
+     * @if jp
+     *
+     * @brief リスナーの削除
+     *
+     * 指定の種類のPreComponentActionListenerを削除する。
+     *
+     * @param type リスナの種類
+     * @param listener 削除するリスナ
+     * @return false：指定の種類のリスナが存在しない
+     *
+     * @else
+     *
+     * @brief Remove the listener.
+     *
+     * 
+     * @param type 
+     * @param listener 
+     * @return 
+     *
+     * @endif
+     */
+    bool removeListener(PreComponentActionListenerType type, PreComponentActionListener* listener);
+    /*!
+     * @if jp
+     *
+     * @brief リスナーの削除
+     *
+     * 指定の種類のPreComponentActionListenerを削除する。
+     *
+     * @param type リスナの種類
+     * @param listener 削除するリスナ
+     * @return false：指定の種類のリスナが存在しない
+     *
+     * @else
+     *
+     * @brief Remove the listener.
+     *
+     *
+     * @param type
+     * @param listener
+     * @return
+     *
+     * @endif
+     */
+    bool removeListener(PostComponentActionListenerType type, PostComponentActionListener* listener);
+    /*!
+     * @if jp
+     *
+     * @brief リスナーの削除
+     *
+     * 指定の種類のPortActionListenerを削除する。
+     *
+     * @param type リスナの種類
+     * @param listener 削除するリスナ
+     * @return false：指定の種類のリスナが存在しない
+     *
+     * @else
+     *
+     * @brief Remove the listener.
+     *
+     *
+     * @param type
+     * @param listener
+     * @return
+     *
+     * @endif
+     */
+    bool removeListener(PortActionListenerType type, PortActionListener* listener);
+    /*!
+     * @if jp
+     *
+     * @brief リスナーの削除
+     *
+     * 指定の種類のExecutionContextActionListenerを削除する。
+     *
+     * @param type リスナの種類
+     * @param listener 削除するリスナ
+     * @return false：指定の種類のリスナが存在しない
+     *
+     * @else
+     *
+     * @brief Remove the listener.
+     *
+     *
+     * @param type
+     * @param listener
+     * @return
+     *
+     * @endif
+     */
+    bool removeListener(ExecutionContextActionListenerType type, ExecutionContextActionListener* listener);
+    /*!
+     * @if jp
+     *
+     * @brief リスナーへ通知する
+     *
+     * 指定の種類のPreComponentActionListenerのコールバック関数を呼び出す。
+     *
+     * @param type リスナの種類
+     * @param ec_id 実行コンテキストのID
+     * @return false：指定の種類のリスナが存在しない
+     * @else
+     *
+     * @brief 
+     *
+     *
+     * @param type 
+     * @param ec_id 
+     * @return
+     * @endif
+     */
+    inline bool notify(PreComponentActionListenerType type, UniqueId ec_id)
+    {
+        if (type < preaction_.size())
+        {
+            preaction_[type].notify(ec_id);
+            return true;
+        }
+        return false;
+    }
+    /*!
+     * @if jp
+     *
+     * @brief リスナーへ通知する
+     *
+     * 指定の種類のPostComponentActionListenerのコールバック関数を呼び出す。
+     *
+     * @param type リスナの種類
+     * @param ec_id 実行コンテキストのID
+     * @param ret リターンコード
+     * @return false：指定の種類のリスナが存在しない
+     * @else
+     *
+     * @brief 
+     *
+     *
+     * @param type 
+     * @param ec_id 
+     * @param ret
+     * @return
+     * @endif
+     */
+    inline bool notify(PostComponentActionListenerType type, UniqueId ec_id, ReturnCode_t ret)
+    {
+        if (type < postaction_.size())
+        {
+            postaction_[type].notify(ec_id, ret);
+            return true;
+        }
+        return false;
+    }
+    /*!
+     * @if jp
+     *
+     * @brief リスナーへ通知する
+     *
+     * 指定の種類のPortActionListenerのコールバック関数を呼び出す。
+     *
+     * @param type リスナの種類
+     * @param pprofile ポートプロファイル
+     * @return false：指定の種類のリスナが存在しない
+     * @else
+     *
+     * @brief 
+     *
+     *
+     * @param type 
+     * @param pprofile 
+     * @return
+     * @endif
+     */
+    inline bool notify(PortActionListenerType type, const RTC::PortProfile& pprofile)
+    {
+        if (type < portaction_.size())
+        {
+            portaction_[type].notify(pprofile);
+            return true;
+        }
+        return false;
+    }
+    /*!
+     * @if jp
+     *
+     * @brief リスナーへ通知する
+     *
+     * 指定の種類のExecutionContextActionListenerのコールバック関数を呼び出す。
+     *
+     * @param type リスナの種類
+     * @param ec_id 実行コンテキストのID
+     * @return false：指定の種類のリスナが存在しない
+     * @else
+     *
+     * @brief
+     *
+     *
+     * @param type
+     * @param pprofile
+     * @return
+     * @endif
+     */
+    inline bool notify(ExecutionContextActionListenerType type, UniqueId ec_id)
+    {
+        if (type < ecaction_.size())
+        {
+            ecaction_[type].notify(ec_id);
+            return true;
+        }
+        return false;
+    }
+  private:
+    /*!
+     * @if jp
      * @brief PreComponentActionListenerTypeリスナ配列
      * PreComponentActionListenerTypeリスナを格納
      * @else
@@ -1049,8 +1363,7 @@ namespace RTC
      * The PreComponentActionListenerType listener is stored.
      * @endif
      */
-    PreComponentActionListenerHolder
-    preaction_[PRE_COMPONENT_ACTION_LISTENER_NUM];
+    std::array<PreComponentActionListenerHolder, PRE_COMPONENT_ACTION_LISTENER_NUM> preaction_;
     /*!
      * @if jp
      * @brief PostComponentActionTypeリスナ配列
@@ -1060,8 +1373,7 @@ namespace RTC
      * The PostComponentActionType listener is stored.
      * @endif
      */
-    PostComponentActionListenerHolder
-    postaction_[POST_COMPONENT_ACTION_LISTENER_NUM];
+    std::array<PostComponentActionListenerHolder, POST_COMPONENT_ACTION_LISTENER_NUM> postaction_;
     /*!
      * @if jp
      * @brief PortActionTypeリスナ配列
@@ -1071,8 +1383,7 @@ namespace RTC
      * The PortActionType listener is stored.
      * @endif
      */
-    PortActionListenerHolder
-    portaction_[PORT_ACTION_LISTENER_NUM];
+    std::array<PortActionListenerHolder, PORT_ACTION_LISTENER_NUM> portaction_;
     /*!
      * @if jp
      * @brief ExecutionContextActionTypeリスナ配列
@@ -1082,8 +1393,7 @@ namespace RTC
      * The ExecutionContextActionType listener is stored.
      * @endif
      */
-    ExecutionContextActionListenerHolder
-    ecaction_[EC_ACTION_LISTENER_NUM];
+    std::array<ExecutionContextActionListenerHolder, EC_ACTION_LISTENER_NUM> ecaction_;
   };
 
 

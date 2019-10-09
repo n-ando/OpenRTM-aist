@@ -34,7 +34,7 @@ namespace RTC
    */
   InPortPullConnector::InPortPullConnector(ConnectorInfo info,
                                            OutPortConsumer* consumer,
-                                           ConnectorListeners* listeners,
+                                           ConnectorListenersBase* listeners,
                                            CdrBufferBase* buffer)
     : InPortConnector(info, listeners, buffer), m_consumer(consumer),
       m_listeners(listeners)
@@ -137,7 +137,7 @@ namespace RTC
    */
   void InPortPullConnector::onConnect()
   {
-    m_listeners->connector_[ON_CONNECT].notify(m_profile);
+    m_listeners->notify(ON_CONNECT, m_profile);
   }
 
   /*!
@@ -149,7 +149,7 @@ namespace RTC
    */
   void InPortPullConnector::onDisconnect()
   {
-    m_listeners->connector_[ON_DISCONNECT].notify(m_profile);
+    m_listeners->notify(ON_DISCONNECT, m_profile);
   }
 
   void InPortPullConnector::unsubscribeInterface(const coil::Properties& prop)
