@@ -395,12 +395,12 @@ namespace RTC
     if (m_exiting) { return RTC::RTC_OK; }
 
 
-    SDOPackage::OrganizationList* organizations = get_organizations();
+    SDOPackage::OrganizationList_var organizations = get_organizations();
     CORBA::ULong len = organizations->length();
 
     for (CORBA::ULong i = 0; i < len; i++)
       {
-        (*organizations)[i]->remove_member(getInstanceName());
+        organizations[i]->remove_member(getInstanceName());
       }
     // deactivate myself on owned EC
     CORBA_SeqUtil::for_each(m_ecMine,
