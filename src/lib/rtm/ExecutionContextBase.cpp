@@ -426,6 +426,11 @@ namespace RTC
         RTC_ERROR(("Unknown error: Invalid state transition."));
         return RTC::RTC_ERROR;
       }
+    else if (rtobj->isCurrentState(RTC::ERROR_STATE))
+      {
+        RTC_ERROR(("State of the RTC transitioned to ERROR_STATE."));
+        return RTC::PRECONDITION_NOT_MET;
+      }
     RTC_DEBUG(("Current state is %s", getStateString(rtobj->getState())));
     ret = onActivated(rtobj, count);  // Template method
     if (ret != RTC::RTC_OK)
@@ -519,6 +524,11 @@ namespace RTC
       {
         RTC_ERROR(("Unknown error: Invalid state transition."));
         return RTC::RTC_ERROR;
+      }
+    else if (rtobj->isCurrentState(RTC::ERROR_STATE))
+      {
+        RTC_ERROR(("State of the RTC transitioned to ERROR_STATE."));
+        return RTC::PRECONDITION_NOT_MET;
       }
     RTC_DEBUG(("Current state is %s", getStateString(rtobj->getState())));
     ret = onDeactivated(rtobj, count);
