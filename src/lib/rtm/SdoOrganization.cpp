@@ -387,4 +387,8 @@ namespace SDOPackage
     m_dependency = dependency;
     return true;
   }
+
+  Organization_ptr Organization_impl::getObjRef() {
+      return SDOPackage::Organization::_duplicate(m_objref);
+  }
 } // namespace SDOPackage

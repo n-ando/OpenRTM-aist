@@ -669,9 +669,7 @@ namespace SDOPackage
 
     // end of CORBA interface definition
     //============================================================
-    Organization_ptr getObjRef() {
-      return SDOPackage::Organization::_duplicate(m_objref);
-    }
+    Organization_ptr getObjRef();
 
   protected:
     ::RTC::Logger rtclog;
