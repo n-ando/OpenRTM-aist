@@ -77,8 +77,7 @@ namespace RTC
     m_objref = this->_this();
     m_pSdoConfigImpl = new SDOPackage::Configuration_impl(m_configsets,
                                                           m_sdoservice);
-    m_pSdoConfig = SDOPackage::Configuration::
-      _duplicate(m_pSdoConfigImpl->getObjRef());
+    m_pSdoConfig = m_pSdoConfigImpl->getObjRef();
   }
 
   /*!
@@ -103,8 +102,7 @@ namespace RTC
     m_objref = this->_this();
     m_pSdoConfigImpl = new SDOPackage::Configuration_impl(m_configsets,
                                                           m_sdoservice);
-    m_pSdoConfig = SDOPackage::Configuration::
-      _duplicate(m_pSdoConfigImpl->getObjRef());
+    m_pSdoConfig = m_pSdoConfigImpl->getObjRef();
   }
 
   /*!
@@ -1468,9 +1466,9 @@ namespace RTC
   {
     RTC_TRACE(("getObjRef()"));
 #ifdef ORB_IS_ORBEXPRESS
-    return m_objref.in();
+    return RTC::RTObject::_duplicate(m_objref.in());
 #else
-    return m_objref;
+    return RTC::RTObject::_duplicate(m_objref);
 #endif
   }
 
@@ -1551,7 +1549,7 @@ namespace RTC
   bool RTObject_impl::addPort(PortBase& port)
   {
     RTC_TRACE(("addPort(PortBase&)"));
-    port.setOwner(this->getObjRef());
+    port.setOwner(m_objref.in());
     port.setPortConnectListenerHolder(&m_portconnListeners);
     onAddPort(port.getPortProfile());
     return m_portAdmin.addPort(port);
@@ -1868,7 +1866,7 @@ namespace RTC
       {
         return RTC::RTC_ERROR;
       }
-    return ec->deactivate_component(::RTC::RTObject::_duplicate(getObjRef()));
+    return ec->deactivate_component(m_objref.in());
   }
 
   /*!
@@ -1885,7 +1883,7 @@ namespace RTC
       {
         return RTC::RTC_ERROR;
       }
-    return ec->activate_component(::RTC::RTObject::_duplicate(getObjRef()));
+    return ec->activate_component(m_objref.in());
   }
 
   /*!
@@ -1902,7 +1900,7 @@ namespace RTC
       {
         return RTC::RTC_ERROR;
       }
-    return ec->reset_component(::RTC::RTObject::_duplicate(getObjRef()));
+    return ec->reset_component(m_objref.in());
   }
 
   /*!
@@ -2115,7 +2113,8 @@ namespace RTC
     RTC_TRACE(("finalizeContexts()"));
     for (auto & ec : m_eclist)
       {
-        ec->getObjRef()->stop();
+        RTC::ExecutionContextService_var ecref = ec->getObjRef();
+        ecref->stop();
         RTC::RTCList rtcs = ec->getComponentList();
         for (CORBA::ULong i = 0; i < rtcs.length(); i++)
           {

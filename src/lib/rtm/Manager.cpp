@@ -770,7 +770,8 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 
     if (m_config.getProperty("corba.endpoints_ipv4").empty())
       {
-        setEndpointProperty(comp->getObjRef());
+        RTC::RTObject_var rtobj = comp->getObjRef();
+        setEndpointProperty(rtobj.in());
       }
 
     for (int i(0); inherit_prop[i][0] != '\0'; ++i)
@@ -2601,7 +2602,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
               RTC_ERROR(("%s not found.", comp0_name.c_str()));
               continue;
             }
-            comp0_ref = RTObject::_duplicate(comp0->getObjRef());
+            comp0_ref = comp0->getObjRef();
           }
         else
           {
@@ -2659,7 +2660,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
                       RTC_ERROR(("%s not found.", comp_name.c_str()));
                       continue;
                   }
-                comp_ref = RTObject::_duplicate(comp->getObjRef());
+                comp_ref = comp->getObjRef();
               }
             else
               {
@@ -2730,7 +2731,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
                   {
                     RTC_ERROR(("%s not found.", c.c_str())); continue;
                   }
-                comp_ref = RTObject::_duplicate(comp->getObjRef());
+                comp_ref = comp->getObjRef();
               }
             else
               {

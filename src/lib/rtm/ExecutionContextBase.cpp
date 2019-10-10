@@ -117,11 +117,12 @@ namespace RTC
   RTC::ReturnCode_t ExecutionContextBase::
   bindComponent(RTC::RTObject_impl* rtc)
   {
-	if (rtc == nullptr)
-	{
-		  return RTC::BAD_PARAMETER;
-	}
-    setOwner(rtc->getObjRef());
+    if (rtc == nullptr)
+      {
+        return RTC::BAD_PARAMETER;
+      }
+    RTC::RTObject_var rtobj = rtc->getObjRef();
+    setOwner(rtobj.in());
     return m_worker.bindComponent(rtc);
   }
 
