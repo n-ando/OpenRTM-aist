@@ -39,18 +39,18 @@ namespace RTC
     PortableServer::ObjectId_var oid = ::RTC::Manager::instance().theShortCutPOA()->activate_object(this);
 #endif
 
-	m_objref = this->_this();
+    m_objref = this->_this();
 
     // set InPort's reference
     CORBA::ORB_var orb = ::RTC::Manager::instance().getORB();
-	CORBA::String_var ior = orb->object_to_string(m_objref.in());
+    CORBA::String_var ior = orb->object_to_string(m_objref.in());
     CORBA_SeqUtil::
       push_back(m_properties,
                 NVUtil::newNV("dataport.corba_cdr.inport_ior", ior.in()));
 
     CORBA_SeqUtil::
       push_back(m_properties,
-	  NVUtil::newNV("dataport.corba_cdr.inport_ref", m_objref));
+        NVUtil::newNV("dataport.corba_cdr.inport_ref", m_objref));
 
   }
   
