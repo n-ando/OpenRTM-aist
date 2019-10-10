@@ -1068,7 +1068,8 @@ namespace RTC
       {
         CORBA::Object_var obj;
         obj = orb->string_to_object(port.c_str());
-        if (getPortRef()->_is_equivalent(obj)) { continue; }
+        PortService_var portref = getPortRef();
+        if (portref->_is_equivalent(obj)) { continue; }
         RTC_DEBUG(("Peer port found: %s.", port.c_str()));
         try
           {

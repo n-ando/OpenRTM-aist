@@ -670,7 +670,7 @@ namespace SDOPackage
     // end of CORBA interface definition
     //============================================================
     Organization_ptr getObjRef() {
-      return m_objref;
+      return SDOPackage::Organization::_duplicate(m_objref);
     }
 
   protected:

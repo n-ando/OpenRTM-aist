@@ -173,12 +173,12 @@ namespace RTC_exp
                       RTC_ERROR(("no RTC found: %s", member.c_str()));
                       continue;
                   }
-                  RTC::RTObject_ptr rtobj = comp->getObjRef();
+                  RTC::RTObject_var rtobj = comp->getObjRef();
                   if (CORBA::is_nil(rtobj))
                   {
                       continue;
                   }
-                  rtcs.emplace_back(rtobj);
+                  rtcs.emplace_back(RTC::RTObject::_duplicate(rtobj));
               }
           }
           addTask(rtcs);

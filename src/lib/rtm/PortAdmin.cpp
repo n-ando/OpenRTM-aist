@@ -175,9 +175,9 @@ namespace RTC
     if (index >= 0)
       {
 #ifdef ORB_IS_ORBEXPRESS
-	return m_portRefs[index].in();
+	return RTC::PortService::_duplicate(m_portRefs[index].in());
 #else
-	return m_portRefs[index];
+	return RTC::PortService::_duplicate(m_portRefs[index]);
 #endif
       }
     return RTC::PortService::_nil();
@@ -211,8 +211,7 @@ namespace RTC
       }
 
     // Store Port's ref to PortServiceList
-    CORBA_SeqUtil::push_back(m_portRefs,
-                             RTC::PortService::_duplicate(port.getPortRef()));
+    CORBA_SeqUtil::push_back(m_portRefs, port.getPortRef());
 
     // Store Port servant
     return m_portServants.registerObject(&port);

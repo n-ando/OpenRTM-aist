@@ -381,11 +381,9 @@ namespace RTM
     {
       coil::vstring name = name_;
 #ifndef ORB_IS_RTORB
-      CORBA::Object_var objref =
-        RTC::RTObject::_duplicate(rtobj->getObjRef());
+      CORBA::Object_var objref = rtobj->getObjRef();
 #else
-      RTC::RTObject_var objref =
-        RTC::RTObject::_duplicate(rtobj->getObjRef());
+      RTC::RTObject_var objref = rtobj->getObjRef();
 #endif // ORB_IS_RTORB
       CORBA::String_var ior =
         RTC::Manager::instance().getORB()->object_to_string(objref);

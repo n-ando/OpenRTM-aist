@@ -593,7 +593,7 @@ namespace SDOPackage
    */
   Configuration_ptr Configuration_impl::getObjRef()
   {
-    return m_objref;
+    return SDOPackage::Configuration::_duplicate(m_objref);
   }
 
   /*!

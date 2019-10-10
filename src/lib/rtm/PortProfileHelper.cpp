@@ -196,7 +196,7 @@ namespace RTC
   {
     std::lock_guard<std::mutex> guard(m_mutex);
 
-    return m_portRef;
+    return RTC::PortService::_duplicate(m_portRef);
   }
 
 

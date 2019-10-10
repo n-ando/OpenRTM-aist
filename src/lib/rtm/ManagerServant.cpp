@@ -91,7 +91,7 @@ namespace RTM
           {
             if (CORBA::is_nil(m_masters[i])) { continue; }
             m_masters[i]
-              ->remove_slave_manager(RTM::Manager::_duplicate(m_objref));
+              ->remove_slave_manager(m_objref.in());
           }
         catch (...)
           {
@@ -107,7 +107,7 @@ namespace RTM
           {
             if (CORBA::is_nil(m_slaves[i])) { continue; }
             m_slaves[i]
-              ->remove_master_manager(RTM::Manager::_duplicate(m_objref));
+              ->remove_master_manager(m_objref.in());
           }
         catch (...)
           {
@@ -507,7 +507,7 @@ namespace RTM
         RTC::RTObject_impl* rtc = m_mgr.createComponent(create_arg.c_str());
         if (rtc != nullptr)
           {
-            return RTC::RTObject::_duplicate(rtc->getObjRef());
+            return rtc->getObjRef();
           }
       }
 
@@ -563,9 +563,9 @@ namespace RTM
     for (size_t i(0), len(rtcs.size()); i < len; ++i)
       {
 #ifndef ORB_IS_TAO
-        crtcs[static_cast<CORBA::Long>(i)] = RTC::RTObject::_duplicate(rtcs[i]->getObjRef());
+        crtcs[static_cast<CORBA::Long>(i)] = rtcs[i]->getObjRef();
 #else
-        crtcs.inout()[(CORBA::Long)i] = RTC::RTObject::_duplicate(rtcs[i]->getObjRef());
+        crtcs.inout()[(CORBA::Long)i] = rtcs[i]->getObjRef();
 #endif
       }
 
@@ -881,7 +881,7 @@ namespace RTM
               {
                 if (CORBA::is_nil(m_masters[i])) { continue; }
                 m_masters[i]
-                  ->remove_slave_manager(RTM::Manager::_duplicate(m_objref));
+                  ->remove_slave_manager(m_objref.in());
               }
             catch (...)
               {
@@ -899,7 +899,7 @@ namespace RTM
               {
                 if (CORBA::is_nil(m_slaves[i])) { continue; }
                 m_slaves[i]
-                 ->remove_master_manager(RTM::Manager::_duplicate(m_objref));
+                 ->remove_master_manager(m_objref.in());
               }
             catch (...)
               {
@@ -948,8 +948,7 @@ namespace RTM
         if (rtc_name.size() == 1 &&
             rtc_name[0] == rtc->getInstanceName())
           {
-            RTC::RTObject_var rtcref =
-              RTC::RTObject::_duplicate(rtc->getObjRef());
+            RTC::RTObject_var rtcref = rtc->getObjRef();
 #ifndef ORB_IS_RTORB
             CORBA_SeqUtil::push_back(crtcs.inout(), rtcref.in());
 #else // ORB_IS_RTORB
@@ -966,8 +965,7 @@ namespace RTM
             (rtc_name[0] == rtc->getCategory() &&
              rtc_name[1] == rtc->getInstanceName()))
           {
-            RTC::RTObject_var rtcref =
-              RTC::RTObject::_duplicate(rtc->getObjRef());
+            RTC::RTObject_var rtcref = rtc->getObjRef();
 #ifndef ORB_IS_RTORB
             CORBA_SeqUtil::push_back(crtcs.inout(), rtcref.in());
 #else // ORB_IS_RTORB
@@ -1002,9 +1000,9 @@ namespace RTM
   RTM::Manager_ptr ManagerServant::getObjRef() const
   {
 #ifdef ORB_IS_ORBEXPRESS
-    return m_objref.in();
+    return RTM::Manager::_duplicate(m_objref.in());
 #else
-    return m_objref;
+    return RTM::Manager::_duplicate(m_objref);
 #endif
   }
 
@@ -1053,7 +1051,7 @@ namespace RTM
 
         CORBA::String_var ior;
         ior = m_mgr.theORB()->
-          object_to_string(RTM::Manager::_duplicate(m_objref));
+          object_to_string(m_objref);
         std::string iorstr((const char*)ior);
         RTC_DEBUG(("Manager's IOR information:\n %s",
                    CORBA_IORUtil::formatIORinfo(iorstr.c_str()).c_str()));
@@ -1070,11 +1068,12 @@ namespace RTM
 
         // Object activation
         RTC_DEBUG(("Activating manager with id(%s)", config["manager.name"].c_str()));
-        CORBA::String_var ior = m_mgr.theORB()->object_to_string(_this());
-        adapter->bind(config["manager.name"].c_str(), ior.in());
 
         // Set m_objref 
         m_objref = _this();
+
+        CORBA::String_var ior = m_mgr.theORB()->object_to_string(m_objref.in());
+        adapter->bind(config["manager.name"].c_str(), ior.in());
 
 
         std::string iorstr((const char*)ior);
@@ -1126,7 +1125,7 @@ namespace RTM
 #endif  // ORB_IS_RTORB
 
         CORBA::String_var ior;
-        ior = m_mgr.theORB()->object_to_string(RTM::Manager::_duplicate(mgr));
+        ior = m_mgr.theORB()->object_to_string(mgr);
         std::string iorstr((const char*)ior);
         RTC_DEBUG(("Manager's IOR information:\n %s",
                    CORBA_IORUtil::formatIORinfo(iorstr.c_str()).c_str()));
@@ -1164,7 +1163,7 @@ namespace RTM
     coil::Properties prop = m_mgr.getConfig();
     if (mgr_name == prop["manager.instance_name"])
       {
-        return RTM::Manager::_duplicate(getObjRef());
+        return getObjRef();
       }
     if (m_isMaster)
       {

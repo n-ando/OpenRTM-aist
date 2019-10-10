@@ -86,7 +86,7 @@ namespace SDOPackage
      *
      * @endif
      */
-    explicit PeriodicECOrganization(::RTC::RTObject_impl* rtobj);
+    explicit PeriodicECOrganization(::RTC::RTObject_impl* rtobj, SDOSystemElement_ptr sdo);
     /*!
      * @if jp
      * @brief デストラクタ

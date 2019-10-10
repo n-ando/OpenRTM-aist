@@ -225,24 +225,25 @@ namespace RTC
 
 
 
-	Properties prop;
-	NVUtil::copyToProperties(prop, connector_profile.properties);
-	bool default_value = coil::toBool(m_properties["allow_dup_connection"], "YES", "NO", false);
+    Properties prop;
+    NVUtil::copyToProperties(prop, connector_profile.properties);
+    bool default_value = coil::toBool(m_properties["allow_dup_connection"], "YES", "NO", false);
 
-	if (!coil::toBool(prop.getProperty("dataport.allow_dup_connection"), "YES", "NO", default_value))
-	{
-		for (unsigned int i = 0; i < connector_profile.ports.length(); i++)
-		{
-			if (!getPortRef()->_is_equivalent(connector_profile.ports[i]))
-			{
-				bool ret = CORBA_RTCUtil::already_connected(connector_profile.ports[i], m_objref);
-				if(ret)
-				{
-					return RTC::PRECONDITION_NOT_MET;
-				}
-			}
-		}
-	}
+    if (!coil::toBool(prop.getProperty("dataport.allow_dup_connection"), "YES", "NO", default_value))
+      {
+        for (unsigned int i = 0; i < connector_profile.ports.length(); i++)
+          {
+            PortService_var portref = getPortRef();
+            if (!portref->_is_equivalent(connector_profile.ports[i]))
+              {
+                bool ret = CORBA_RTCUtil::already_connected(connector_profile.ports[i], m_objref.in());
+                if(ret)
+                  {
+                    return RTC::PRECONDITION_NOT_MET;
+                  }
+              }
+          }
+      }
 
 
 
@@ -564,9 +565,9 @@ namespace RTC
     RTC_TRACE(("getPortRef()"));
     std::lock_guard<std::mutex> guard(m_profile_mutex);
 #ifdef ORB_IS_ORBEXPRESS
-    return m_profile.port_ref.in();
+    return RTC::PortService::_duplicate(m_profile.port_ref.in());
 #else
-    return m_profile.port_ref;
+    return RTC::PortService::_duplicate(m_profile.port_ref);
 #endif
   }
 

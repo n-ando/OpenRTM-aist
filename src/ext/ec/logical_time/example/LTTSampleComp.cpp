@@ -26,11 +26,12 @@ void MyModuleInit(RTC::Manager* manager)
   std::cout << "succeed." << std::endl;
   RTC::ExecutionContextList_var eclist = comp->get_owned_contexts();
   if ( eclist->length() > 0) {
-	eclist[0]->start();
-	eclist[0]->activate_component(RTC::RTObject::_duplicate(comp->getObjRef()));
+      eclist[0]->start();
+      RTC::RTObject_var rtobj = comp->getObjRef();
+      eclist[0]->activate_component(rtobj.in());
   }
   else {
-	std::cerr << "No owned EC." << std::endl;
+      std::cerr << "No owned EC." << std::endl;
   }
   RTC::ComponentProfile_var prof;
   prof = comp->get_component_profile();

@@ -76,7 +76,7 @@ namespace RTC
 #ifdef ORB_IS_OMNIORB
     if (!m_endpoint.empty() && m_replaceEndpoint)
       {
-        CORBA::Object_var obj(RTObject::_duplicate(rtobj->getObjRef()));
+        CORBA::Object_var obj(rtobj->getObjRef());
         CORBA::String_var ior;
         CORBA::ORB_var orb = ::RTC::Manager::instance().getORB();
         ior = orb->object_to_string(obj.in());
@@ -94,7 +94,8 @@ namespace RTC
     else
       {
 #endif  // ORB_IS_OMNIORB
-        m_cosnaming.rebindByString(name, rtobj->getObjRef(), true);
+        RTC::RTObject_var objref = rtobj->getObjRef();
+        m_cosnaming.rebindByString(name, objref.in(), true);
 #ifdef ORB_IS_OMNIORB
       }
 #endif  // ORB_IS_OMNIORB
@@ -107,7 +108,7 @@ namespace RTC
 #ifdef ORB_IS_OMNIORB
     if (!m_endpoint.empty() && m_replaceEndpoint)
       {
-        CORBA::Object_var obj(PortService::_duplicate(port->getPortRef()));
+        CORBA::Object_var obj(port->getPortRef());
         CORBA::String_var ior;
         CORBA::ORB_var orb = ::RTC::Manager::instance().getORB();
         ior = orb->object_to_string(obj.in());
@@ -125,7 +126,8 @@ namespace RTC
     else
       {
 #endif  // ORB_IS_OMNIORB
-        m_cosnaming.rebindByString(name, port->getPortRef(), true);
+        PortService_var portref = port->getPortRef();
+        m_cosnaming.rebindByString(name, portref, true);
 #ifdef ORB_IS_OMNIORB
       }
 #endif  // ORB_IS_OMNIORB
@@ -138,7 +140,7 @@ namespace RTC
 #ifdef ORB_IS_OMNIORB
     if (!m_endpoint.empty() && m_replaceEndpoint)
       {
-        CORBA::Object_var obj(RTM::Manager::_duplicate(mgr->getObjRef()));
+        CORBA::Object_var obj(mgr->getObjRef());
         CORBA::String_var ior;
         CORBA::ORB_var orb = ::RTC::Manager::instance().getORB();
         ior = orb->object_to_string(obj.in());
@@ -156,7 +158,8 @@ namespace RTC
     else
       {
 #endif  // ORB_IS_OMNIORB
-        m_cosnaming.rebindByString(name, mgr->getObjRef(), true);
+        RTM::Manager_var objref = mgr->getObjRef();
+        m_cosnaming.rebindByString(name, objref.in(), true);
 #ifdef ORB_IS_OMNIORB
       }
 #endif  // ORB_IS_OMNIORB
@@ -467,62 +470,54 @@ namespace RTC
    */
   RTM::Manager_ptr NamingOnManager::getManager(const std::string& name)
   {
-	  
-	  if (name == "*")
-	  {
-		  RTM::Manager_ptr mgr;
-		  RTM::ManagerServant& mgr_sev = m_mgr->getManagerServant();
-		  if (mgr_sev.is_master())
-		  {
-			  mgr = mgr_sev.getObjRef();
+    
+    if (name == "*")
+      {
+        RTM::Manager_var mgr;
+        RTM::ManagerServant& mgr_sev = m_mgr->getManagerServant();
+        if (mgr_sev.is_master())
+          {
+            mgr = mgr_sev.getObjRef();
+          }
+        else
+          {
+            RTM::ManagerList_var masters = mgr_sev.get_master_managers();
+            
+            if (masters->length() > 0)
+              {
+                mgr = RTM::Manager::_duplicate(masters[0]);
+              }
+            else
+              {
+                mgr = mgr_sev.getObjRef();
+              }
+          }
+        return mgr;
+      }
 
-		  }
-		  else
-		  {
-			  RTM::ManagerList* masters = mgr_sev.get_master_managers();
-			  
-			  if (masters->length() > 0)
-			  {
-				  mgr = (*masters)[0];
-			  }
-			  else
-			  {
-				  mgr = mgr_sev.getObjRef();
-			  }
-		  }
-		  return mgr;
-	  }
+    try
+      {
+        std::string mgrloc = "corbaloc:iiop:";
+        coil::Properties prop = m_mgr->getConfig();
+        std::string manager_name = prop.getProperty("manager.name");
+        mgrloc += name;
+        mgrloc += "/" + manager_name;
 
+        CORBA::Object_var  mobj = m_orb->string_to_object(mgrloc.c_str());
+        RTM::Manager_var mgr = RTM::Manager::_narrow(mobj);
 
+        RTC_DEBUG(("corbaloc: %s", mgrloc.c_str()));
 
-
-	  try
-	  {
-		  std::string mgrloc = "corbaloc:iiop:";
-		  coil::Properties prop = m_mgr->getConfig();
-		  std::string manager_name = prop.getProperty("manager.name");
-		  mgrloc += name;
-		  mgrloc += "/" + manager_name;
-
-		  CORBA::Object_ptr  mobj = m_orb->string_to_object(mgrloc.c_str());
-		  RTM::Manager_ptr mgr = RTM::Manager::_narrow(mobj);
-
-		  RTC_DEBUG(("corbaloc: %s", mgrloc.c_str()));
-
-		  return mgr;
-	  }
-	  catch (CORBA::SystemException&)
-	  {
-		  
-	  }
-	  catch (...)
-	  {
-		  RTC_ERROR(("Unknown exception cought."));
-
-	  }
-	  return RTM::Manager::_nil();
-
-	
+        return RTM::Manager::_duplicate(mgr);
+      }
+    catch (CORBA::SystemException&)
+      {
+      }
+    catch (...)
+      {
+        RTC_ERROR(("Unknown exception cought."));
+      }
+    return RTM::Manager::_nil();
   }
 
 
