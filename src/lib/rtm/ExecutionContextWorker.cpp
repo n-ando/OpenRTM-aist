@@ -173,14 +173,12 @@ namespace RTC_impl
         return RTC::BAD_PARAMETER;
       }
     RTC_DEBUG(("Component found in the EC."));
-    std::lock_guard<std::mutex> stateguard(m_statemutex);
-    if (!(obj->isCurrentState(RTC::INACTIVE_STATE)))
+    if (!(obj->activate()))
       {
         RTC_ERROR(("State of the RTC is not INACTIVE_STATE."));
         return RTC::PRECONDITION_NOT_MET;
       }
     RTC_DEBUG(("Component is in INACTIVE state. Going to ACTIVE state."));
-    obj->goTo(RTC::ACTIVE_STATE);
     rtobj = obj;
     RTC_DEBUG(("activateComponent() done."));
     return RTC::RTC_OK;
@@ -205,13 +203,11 @@ namespace RTC_impl
         RTC_ERROR(("Given RTC is not participant of this EC."));
         return RTC::BAD_PARAMETER;
       }
-    std::lock_guard<std::mutex> stateguard(m_statemutex);
-    if (!(rtobj->isCurrentState(RTC::ACTIVE_STATE)))
+    if (!(rtobj->deactivate()))
       {
         RTC_ERROR(("State of the RTC is not ACTIVE_STATE."));
         return RTC::PRECONDITION_NOT_MET;
       }
-    rtobj->goTo(RTC::INACTIVE_STATE);
     return RTC::RTC_OK;
   }
 
@@ -234,13 +230,11 @@ namespace RTC_impl
         RTC_ERROR(("Given RTC is not participant of this EC."));
         return RTC::BAD_PARAMETER;
       }
-    std::lock_guard<std::mutex> stateguard(m_statemutex);
-    if (!(rtobj->isCurrentState(RTC::ERROR_STATE)))
+    if (!(rtobj->reset()))
       {
         RTC_ERROR(("State of the RTC is not ERROR_STATE."));
         return RTC::PRECONDITION_NOT_MET;
       }
-    rtobj->goTo(RTC::INACTIVE_STATE);
     return RTC::RTC_OK;
   }
 
@@ -426,7 +420,6 @@ namespace RTC_impl
     std::lock_guard<std::mutex> guard(m_mutex);
     for (auto & comp : m_comps)
       {
-        std::lock_guard<std::mutex> stateguard(m_statemutex);
         if (!comp->isCurrentState(state)) { return false; }
       }
     return true;
@@ -438,7 +431,6 @@ namespace RTC_impl
     std::lock_guard<std::mutex> guard(m_mutex);
     for (auto & comp : m_comps)
       {
-        std::lock_guard<std::mutex> stateguard(m_statemutex);
         if (!comp->isNextState(state)) { return false; }
       }
     return true;
@@ -450,7 +442,6 @@ namespace RTC_impl
     std::lock_guard<std::mutex> guard(m_mutex);
     for (auto & comp : m_comps)
       {
-        std::lock_guard<std::mutex> stateguard(m_statemutex);
         if (comp->isCurrentState(state)) { return true; }
       }
     return false;
@@ -462,7 +453,6 @@ namespace RTC_impl
     std::lock_guard<std::mutex> guard(m_mutex);
     for (auto & comp : m_comps)
       {
-        std::lock_guard<std::mutex> stateguard(m_statemutex);
         if (comp->isNextState(state)) { return true; }
       }
     return false;
@@ -473,15 +463,12 @@ namespace RTC_impl
     RTC_PARANOID(("invokeWorker()"));
     // m_comps never changes its size here
     for (auto & comp : m_comps) { 
-        std::lock_guard<std::mutex> stateguard(m_statemutex); 
         comp->workerPreDo();  
     }
     for (auto & comp : m_comps) { 
-        std::lock_guard<std::mutex> stateguard(m_statemutex);
         comp->workerDo();     
     }
     for (auto & comp : m_comps) { 
-        std::lock_guard<std::mutex> stateguard(m_statemutex);
         comp->workerPostDo(); 
     }
     std::lock_guard<std::mutex> guard(m_mutex);
@@ -493,7 +480,6 @@ namespace RTC_impl
     RTC_PARANOID(("invokeWorkerPreDo()"));
     // m_comps never changes its size here
     for (auto & comp : m_comps) { 
-        std::lock_guard<std::mutex> stateguard(m_statemutex);
         comp->workerPreDo();  
     }
   }
@@ -503,7 +489,6 @@ namespace RTC_impl
     RTC_PARANOID(("invokeWorkerDo()"));
     // m_comps never changes its size here
     for (auto & comp : m_comps) { 
-        std::lock_guard<std::mutex> stateguard(m_statemutex); 
         comp->workerDo();     
     }
   }
@@ -513,7 +498,6 @@ namespace RTC_impl
     RTC_PARANOID(("invokeWorkerPostDo()"));
     // m_comps never changes its size here
     for (auto & comp : m_comps) { 
-        std::lock_guard<std::mutex> stateguard(m_statemutex); 
         comp->workerPostDo(); 
     }
     // m_comps might be changed here

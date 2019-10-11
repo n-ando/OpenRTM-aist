@@ -26,6 +26,7 @@
 #include <rtm/StateMachine.h>
 #include <cassert>
 #include <iostream>
+#include <atomic>
 
 #define NUM_OF_LIFECYCLESTATE 4
 namespace RTC
@@ -85,11 +86,16 @@ namespace RTC_impl
     void workerDo();
     void workerPostDo();
 
+    bool activate();
+    bool deactivate();
+    bool reset();
+
   protected:
     void setComponentAction(RTC::LightweightRTObject_ptr comp);
     void setDataFlowComponentAction(RTC::LightweightRTObject_ptr comp);
     void setFsmParticipantAction(RTC::LightweightRTObject_ptr comp);
     void setMultiModeComponentAction(RTC::LightweightRTObject_ptr comp);
+    void updateState();
 
   private:  // member variables
     RTC::Logger rtclog;
@@ -113,6 +119,9 @@ namespace RTC_impl
     // Component action invoker
     coil::TimeMeasure m_svtMeasure;
     coil::TimeMeasure m_refMeasure;
+    std::atomic<bool> m_activation;
+    std::atomic<bool> m_deactivation;
+    std::atomic<bool> m_reset;
   };
 } // namespace RTC_impl
 

@@ -30,7 +30,8 @@ namespace RTC_impl
       m_rtobj(RTC::LightweightRTObject::_duplicate(comp)),
       m_sm(NUM_OF_LIFECYCLESTATE),
       m_ca(false), m_dfc(false), m_fsm(false), m_mode(false),
-      m_rtobjPtr(nullptr), m_measure(false)
+      m_rtobjPtr(nullptr), m_measure(false), m_activation(false),
+      m_deactivation(false), m_reset(false)
   {
     m_caVar   = RTC::ComponentAction::_nil();
     m_dfcVar  = RTC::DataFlowComponentAction::_nil();
@@ -413,6 +414,7 @@ namespace RTC_impl
   // Workers
   void RTObjectStateMachine::workerPreDo()
   {
+    updateState();
     return m_sm.worker_pre();
   }
 
@@ -424,5 +426,63 @@ namespace RTC_impl
   void RTObjectStateMachine::workerPostDo()
   {
     return m_sm.worker_post();
+  }
+
+  bool RTObjectStateMachine::activate()
+  {
+      if (isCurrentState(RTC::INACTIVE_STATE))
+      {
+          m_activation.store(true);
+          return true;
+      }
+      return false;
+  }
+  bool RTObjectStateMachine::deactivate()
+  {
+      if (isCurrentState(RTC::ACTIVE_STATE))
+      {
+          m_deactivation.store(true);
+          return true;
+      }
+      return false;
+  }
+  bool RTObjectStateMachine::reset()
+  {
+      if (isCurrentState(RTC::ERROR_STATE))
+      {
+          m_reset.store(true);
+          return true;
+      }
+      return false;
+  }
+
+  void RTObjectStateMachine::updateState()
+  {
+      if (m_activation.load())
+      {
+          if (isCurrentState(RTC::INACTIVE_STATE) && !isNextState(RTC::ERROR_STATE))
+          {
+              m_sm.goTo(RTC::ACTIVE_STATE);
+          }
+          m_activation.store(false);
+      }
+
+      if (m_deactivation.load())
+      {
+          if (isCurrentState(RTC::ACTIVE_STATE) && !isNextState(RTC::ERROR_STATE))
+          {
+              m_sm.goTo(RTC::INACTIVE_STATE);
+          }
+          m_deactivation.store(false);
+      }
+
+      if (m_reset.load())
+      {
+          if (isCurrentState(RTC::ERROR_STATE))
+          {
+              m_sm.goTo(RTC::INACTIVE_STATE);
+          }
+          m_reset.store(false);
+      }
   }
 } // namespace RTC_impl
