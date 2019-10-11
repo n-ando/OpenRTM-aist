@@ -432,7 +432,7 @@ namespace RTC_impl
   {
       if (isCurrentState(RTC::INACTIVE_STATE))
       {
-          m_activation = true;
+          m_activation.store(true);
           return true;
       }
       return false;
@@ -441,7 +441,7 @@ namespace RTC_impl
   {
       if (isCurrentState(RTC::ACTIVE_STATE))
       {
-          m_deactivation = true;
+          m_deactivation.store(true);
           return true;
       }
       return false;
@@ -450,7 +450,7 @@ namespace RTC_impl
   {
       if (isCurrentState(RTC::ERROR_STATE))
       {
-          m_reset = true;
+          m_reset.store(true);
           return true;
       }
       return false;
@@ -458,31 +458,31 @@ namespace RTC_impl
 
   void RTObjectStateMachine::updateState()
   {
-      if (m_activation)
+      if (m_activation.load())
       {
           if (isCurrentState(RTC::INACTIVE_STATE) && !isNextState(RTC::ERROR_STATE))
           {
               m_sm.goTo(RTC::ACTIVE_STATE);
           }
-          m_activation = false;
+          m_activation.store(false);
       }
 
-      if (m_deactivation)
+      if (m_deactivation.load())
       {
           if (isCurrentState(RTC::ACTIVE_STATE) && !isNextState(RTC::ERROR_STATE))
           {
               m_sm.goTo(RTC::INACTIVE_STATE);
           }
-          m_deactivation = false;
+          m_deactivation.store(false);
       }
 
-      if (m_reset)
+      if (m_reset.load())
       {
           if (isCurrentState(RTC::ERROR_STATE))
           {
               m_sm.goTo(RTC::INACTIVE_STATE);
           }
-          m_reset = false;
+          m_reset.store(false);
       }
   }
 } // namespace RTC_impl

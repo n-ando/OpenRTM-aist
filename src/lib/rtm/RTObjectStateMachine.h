@@ -26,6 +26,7 @@
 #include <rtm/StateMachine.h>
 #include <cassert>
 #include <iostream>
+#include <atomic>
 
 #define NUM_OF_LIFECYCLESTATE 4
 namespace RTC
@@ -118,9 +119,9 @@ namespace RTC_impl
     // Component action invoker
     coil::TimeMeasure m_svtMeasure;
     coil::TimeMeasure m_refMeasure;
-    bool m_activation;
-    bool m_deactivation;
-    bool m_reset;
+    std::atomic<bool> m_activation;
+    std::atomic<bool> m_deactivation;
+    std::atomic<bool> m_reset;
   };
 } // namespace RTC_impl
 
