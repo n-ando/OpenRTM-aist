@@ -1,4 +1,4 @@
-dist: xenial
+dist: bionic
 language: minimal
 sudo: required
 
@@ -16,7 +16,7 @@ addons:
 env:
   - TARGET_DIST=ubuntu TARGET_VER=1804
   - TARGET_DIST=ubuntu TARGET_VER=1604
-  - TARGET_DIST=debian TARGET_VER=8
+  - TARGET_DIST=debian TARGET_VER=10
 
 script:
   - mkdir ../workdir

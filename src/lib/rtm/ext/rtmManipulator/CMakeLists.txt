@@ -1,4 +1,4 @@
-cmake_minimum_required (VERSION 3.0.2)
+cmake_minimum_required (VERSION 3.5.1)
 
 if(WIN32)
 	set(target rtmManipulator${RTM_SHORT_VERSION}_${RTM_VC_VER}_${CMAKE_VS_PLATFORM_NAME})

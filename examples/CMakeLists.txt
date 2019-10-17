@@ -1,4 +1,4 @@
-﻿cmake_minimum_required (VERSION 3.0.2)
+﻿cmake_minimum_required (VERSION 3.5.1)
 
 function(examples_build target)
 	cmake_parse_arguments(EB
