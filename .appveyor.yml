@@ -60,16 +60,16 @@ before_build:
   - echo cmake %cmake_flgas% -DORB_ROOT=C:/omni/%omni% -G "%cmake_generator%" -A "%cmake_archtecture%" -S . -B../build
   - cmake %cmake_flgas% -DORB_ROOT=C:/omni/%omni% -G "%cmake_generator%" -A "%cmake_archtecture%" -S . -B../build
 
-build_script:
-  - ps: $Env:nproc = (Get-WmiObject -Class Win32_Processor).NumberOfLogicalProcessors + 1
-  - echo cmake --build ../build -j %nproc% --config Release -- -verbosity:minimal
-  - cmake --build ../build -j %nproc% --config Release -- -verbosity:minimal
+# sample: cmake build script for cmake 3.15.
+#build_script:
+# - ps: $Env:nproc = (Get-WmiObject -Class Win32_Processor).NumberOfLogicalProcessors
+# - echo cmake --build ../build -j --config Release -- /p:CL_MPCount=%nproc% -verbosity:minimal
+# - cmake --build ../build -j --config Release -- /p:CL_MPCount=%nproc% -verbosity:minimal
 
-#build (.sln) is slower than build_script (cmake)
-#build:
-#  project: C:\workspace\build\OpenRTM_aist.sln
-#  verbosity: minimal
-#  parallel: true
+build:
+  project: C:\workspace\build\OpenRTM_aist.sln
+  verbosity: minimal
+  parallel: true
 
 cache:
   - C:/omni -> appveyor.yml
