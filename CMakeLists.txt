@@ -727,6 +727,7 @@ function(openrtm_common_set_compile_options target)
 		## MSVC always enable c++11 and c++14 after MSVC 2015 Update 3.
 		$<$<CXX_COMPILER_ID:MSVC>:
 			$<$<VERSION_GREATER:${CMAKE_CXX_COMPILER_VERSION},19.00.23918>:/std:c++14>
+			/MP
 		>
 
 		# warning options
@@ -788,6 +789,7 @@ function(openrtm_gencode_set_compile_options target)
 			$<$<CONFIG:Release>:/W0>
 			$<$<CONFIG:RelWithDebInfo>:/W0>
 			$<$<CONFIG:MinSizeRel>:/W0>
+			/MP
 		>
 		)
 endfunction()
