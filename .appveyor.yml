@@ -2,6 +2,8 @@ version: '{build}'
 clone_folder: c:\workspace\OpenRTM-aist
 platform:
 - x64
+configuration:
+  - Release
 environment:
   omniorb: omniORB-4.2.3
   cmake_flgas: -DOMNI_VERSION=42 -DOMNI_MINOR=3 -DOMNITHREAD_VERSION=41 -DCORBA=omniORB -DSSL_ENABLE=ON -DOBSERVER_ENABLE=ON
