@@ -1,4 +1,4 @@
-cmake_minimum_required (VERSION 3.0.2)
+cmake_minimum_required (VERSION 3.5.1)
 
 file(GLOB IDL_FILES "${CMAKE_CURRENT_SOURCE_DIR}/*.idl")
 foreach(file_path ${IDL_FILES})

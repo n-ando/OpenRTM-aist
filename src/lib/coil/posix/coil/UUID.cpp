@@ -121,8 +121,7 @@ namespace coil
 
   UUID::UUID(uuid_t *uuid)
   {
-    strncpy(reinterpret_cast<char *>(this->_uuid),
-            reinterpret_cast<char *>(*uuid), sizeof(this->_uuid));
+    uuid_copy(this->_uuid, *uuid);
   }
 
   const char* UUID::to_string()
