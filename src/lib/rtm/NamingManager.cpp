@@ -416,7 +416,7 @@ namespace RTC
 				  std::string host = r[0];
 				  std::string rtc_name = url.substr(host.size()+1, url.size() - host.size());
 
-				  RTM::Manager_ptr mgr = getManager(host);
+				  RTM::Manager_var mgr = getManager(host);
 				  
 				  if (!CORBA::is_nil(mgr))
 				  {

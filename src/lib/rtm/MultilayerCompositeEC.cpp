@@ -249,7 +249,7 @@ namespace RTC_exp
 
   void MultilayerCompositeEC::addRTCToTask(ChildTask* task, RTC::LightweightRTObject_ptr rtobj)
   {
-      ::OpenRTM::DataFlowComponent_ptr comp = ::OpenRTM::DataFlowComponent::_narrow(rtobj);
+      ::OpenRTM::DataFlowComponent_var comp = ::OpenRTM::DataFlowComponent::_narrow(rtobj);
       SDOPackage::OrganizationList_var orglist = comp->get_owned_organizations();
 
       if (orglist->length() == 0)

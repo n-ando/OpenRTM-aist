@@ -121,13 +121,13 @@ namespace RTM
       {
 #ifndef ORB_IS_TAO
 #ifndef ORB_IS_RTORB
-        CORBA::Object_ptr obj = m_mgr.theORB()->resolve_initial_references("omniINSPOA");
+        CORBA::Object_var obj = m_mgr.theORB()->resolve_initial_references("omniINSPOA");
 #else // ROB_IS_RTORB
         CORBA::Object_ptr obj = m_mgr.theORB()->resolve_initial_references((char*)"omniINSPOA");
 #endif // ORB_IS_RTORB
 
 
-        PortableServer::POA_ptr poa = PortableServer::POA::_narrow(obj);
+        PortableServer::POA_var poa = PortableServer::POA::_narrow(obj);
         PortableServer::ObjectId_var id;
         id = poa->servant_to_id(this);
 
@@ -1026,7 +1026,7 @@ namespace RTM
         obj = m_mgr.theORB()->resolve_initial_references(
                                       const_cast<char*>("omniINSPOA"));
 #endif  // ORB_IS_RTORB
-        PortableServer::POA_ptr poa = PortableServer::POA::_narrow(obj);
+        PortableServer::POA_var poa = PortableServer::POA::_narrow(obj);
         poa->the_POAManager()->activate();
 
         // Create readable object ID
@@ -1521,7 +1521,7 @@ namespace RTM
               coil::Properties config = m_mgr.getConfig();
               try
                 {
-                  RTM::Manager_ptr owner = findManager(config.getProperty("corba.master_manager"));
+                  RTM::Manager_var owner = findManager(config.getProperty("corba.master_manager"));
                   if (CORBA::is_nil(owner))
                     {
                       RTC_INFO(("Master manager not found"));
