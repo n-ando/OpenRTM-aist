@@ -73,7 +73,7 @@ namespace RTC
      *
      * @endif
      */
-	  SharedMemoryPort();
+    SharedMemoryPort();
     /*!
      * @if jp
      * @brief デストラクタ
@@ -87,13 +87,13 @@ namespace RTC
      *
      * @endif
      */
-	  ~SharedMemoryPort() override;
+    ~SharedMemoryPort() override;
     /*!
      * @if jp
      * @brief 文字列で指定したデータサイズを数値に変換する
-	 * 1M → 1048576
-	 * 1k → 1024
-	 * 100 → 100
+     * 1M → 1048576
+     * 1k → 1024
+     * 100 → 100
      *
      * @param size_str データサイズ(文字列)
      * @return データサイズ(数値)
@@ -112,9 +112,9 @@ namespace RTC
      /*!
      * @if jp
      * @brief 共有メモリの初期化
-	 * windowsではページングファイル上に領域を確保する
-	 * Linuxでは/dev/shm以下にファイルを作成する
-	 * 作成したファイルの内容を仮想アドレスにマッピングする
+     * windowsではページングファイル上に領域を確保する
+     * Linuxでは/dev/shm以下にファイルを作成する
+     * 作成したファイルの内容を仮想アドレスにマッピングする
      *
      *
      *
@@ -126,7 +126,7 @@ namespace RTC
      *
      * @endif
      */
-	void create_memory(::CORBA::ULongLong memory_size, const char *shm_address) override;
+    void create_memory(::CORBA::ULongLong memory_size, const char *shm_address) override;
      /*!
      * @if jp
      * @brief 共有メモリのマッピングを行う
@@ -144,7 +144,7 @@ namespace RTC
      *
      * @endif
      */
-	void open_memory(::CORBA::ULongLong memory_size, const char *shm_address) override;
+    void open_memory(::CORBA::ULongLong memory_size, const char *shm_address) override;
      /*!
      * @if jp
      * @brief マッピングした共有メモリをアンマップする
@@ -158,13 +158,13 @@ namespace RTC
      *
      * @endif
      */
-	void close_memory(::CORBA::Boolean unlink = false) override;
+    void close_memory(::CORBA::Boolean unlink = false) override;
      /*!
      * @if jp
      * @brief データを書き込む
-	 * 先頭8byteにデータサイズを書き込み、その後ろにデータを書き込む
-	 * 設定したデータサイズが共有メモリのサイズを上回った場合、共有メモリの初期化を行う
-	 *
+     * 先頭8byteにデータサイズを書き込み、その後ろにデータを書き込む
+     * 設定したデータサイズが共有メモリのサイズを上回った場合、共有メモリの初期化を行う
+     *
      * @param data 書き込むデータ
      *
      *
@@ -195,8 +195,8 @@ namespace RTC
      /*!
      * @if jp
      * @brief 通信先のCORBAインターフェースを登録する
-	 * 登録する事により共有メモリの初期化したときに、通信先でもマッピングをやり直すことができる
-	 *
+     * 登録する事により共有メモリの初期化したときに、通信先でもマッピングをやり直すことができる
+     *
      * @param sm SharedMemoryのオブジェクトリファレンス
      *
      *
@@ -208,13 +208,13 @@ namespace RTC
      *
      * @endif
      */
-	void setInterface(::OpenRTM::PortSharedMemory_ptr sm) override;
+    void setInterface(::OpenRTM::PortSharedMemory_ptr sm) override;
      /*!
      * @if jp
      * @brief エンディアンを設定する
-	 *
+     *
      * @param endian エンディアン
-	 *
+     *
      *
      *
      * @else
@@ -224,11 +224,11 @@ namespace RTC
      *
      * @endif
      */
-	void setEndian(::CORBA::Boolean endian) override;
+    void setEndian(::CORBA::Boolean endian) override;
      /*!
      * @if jp
      * @brief データの送信を知らせる
-	 *
+     *
      * @return 
      *
      *
@@ -244,7 +244,7 @@ namespace RTC
      /*!
      * @if jp
      * @brief データの送信を要求する
-	 *
+     *
      * @return 
      *
      *
@@ -258,7 +258,7 @@ namespace RTC
      */
     ::OpenRTM::PortStatus get() override;
 
-	virtual ::OpenRTM::PortSharedMemory_ptr getObjRef();
+    virtual ::OpenRTM::PortSharedMemory_ptr getObjRef();
 
  protected:
     ::OpenRTM::PortSharedMemory_var m_smInterface{OpenRTM::PortSharedMemory::_nil()};

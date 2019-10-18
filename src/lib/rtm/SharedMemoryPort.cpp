@@ -39,37 +39,37 @@ namespace RTC
    * @brief Destructor
    * @endif
    */
-	SharedMemoryPort::~SharedMemoryPort()
+  SharedMemoryPort::~SharedMemoryPort()
   {
-	  try
-	  {
-		  PortableServer::ObjectId_var oid;
+      try
+      {
+          PortableServer::ObjectId_var oid;
 #ifdef ORB_IS_OMNIORB
-		  oid = ::RTC::Manager::instance().theShortCutPOA()->servant_to_id(this);
-		  ::RTC::Manager::instance().theShortCutPOA()->deactivate_object(oid);
+          oid = ::RTC::Manager::instance().theShortCutPOA()->servant_to_id(this);
+          ::RTC::Manager::instance().theShortCutPOA()->deactivate_object(oid);
 #else
-		  oid = _default_POA()->servant_to_id(this);
-		  _default_POA()->deactivate_object(oid);
+          oid = _default_POA()->servant_to_id(this);
+          _default_POA()->deactivate_object(oid);
 #endif
-	  }
-	  catch (PortableServer::POA::ServantNotActive&)
-	  {
+      }
+      catch (PortableServer::POA::ServantNotActive&)
+      {
 #ifdef ORB_IS_ORBEXPRESS
-		  oe_out << e << oe_endl << oe_flush;
+      oe_out << e << oe_endl << oe_flush;
 #else
 #endif
-	  }
-	  catch (PortableServer::POA::WrongPolicy&)
-	  {
+      }
+      catch (PortableServer::POA::WrongPolicy&)
+      {
 #ifdef ORB_IS_ORBEXPRESS
-		  oe_out << e << oe_endl << oe_flush;
+          oe_out << e << oe_endl << oe_flush;
 #else
 #endif
-	  }
-	  catch (...)
-	  {
-		  // never throws exception
-	  }
+      }
+      catch (...)
+      {
+          // never throws exception
+      }
   }
 
 
@@ -96,30 +96,29 @@ namespace RTC
    */
   int SharedMemoryPort::string_to_MemorySize(std::string size_str)
   {
-	  int memory_size = DEFAULT_MEMORY_SIZE;
-	  if (!size_str.empty())
-	  {
-		  std::string size_str_n{coil::normalize(std::move(size_str))};
-		  std::string value_str = size_str_n.substr(0, size_str_n.size() - 1);
-		  int value = 0;
-		  if(coil::stringTo(value, value_str.c_str()))
-		  {
-			  if (size_str_n.back() == 'm')
-			  {
-				  memory_size = 1048576 * value;
-			  }
-			  else if (size_str_n.back() == 'k')
-			  {
-				  memory_size = 1024 * value;
-			  }
-			  else
-			  {
-				  memory_size = value;
-			  }
-		  }
-	  }
-
-	  return memory_size;
+      int memory_size = DEFAULT_MEMORY_SIZE;
+      if (!size_str.empty())
+      {
+          std::string size_str_n{coil::normalize(std::move(size_str))};
+          std::string value_str = size_str_n.substr(0, size_str_n.size() - 1);
+          int value = 0;
+          if(coil::stringTo(value, value_str.c_str()))
+          {
+              if (size_str_n.back() == 'm')
+              {
+                  memory_size = 1048576 * value;
+              }
+              else if (size_str_n.back() == 'k')
+              {
+                  memory_size = 1024 * value;
+              }
+              else
+              {
+                  memory_size = value;
+              }
+          }
+      }
+      return memory_size;
   }
   /*!
   * @if jp
@@ -141,19 +140,19 @@ namespace RTC
   *
   * @endif
   */
-	void SharedMemoryPort::create_memory(::CORBA::ULongLong memory_size, const char *shm_address)
+  void SharedMemoryPort::create_memory(::CORBA::ULongLong memory_size, const char *shm_address)
   {
-	  if (!m_shmem.created())
-	  {
-		  m_shmem.create(shm_address, memory_size);
-		  try
-		  {
-			  m_smInterface->open_memory(memory_size, CORBA::string_dup(shm_address));
-		  }
-		  catch (...)
-		  {
-		  }
-	  }
+      if (!m_shmem.created())
+      {
+      m_shmem.create(shm_address, memory_size);
+      try
+      {
+          m_smInterface->open_memory(memory_size, CORBA::string_dup(shm_address));
+          }
+          catch (...)
+          {
+          }
+      }
   }
   /*!
   * @if jp
@@ -172,10 +171,9 @@ namespace RTC
   *
   * @endif
   */
-	void SharedMemoryPort::open_memory(::CORBA::ULongLong memory_size, const char *shm_address)
+  void SharedMemoryPort::open_memory(::CORBA::ULongLong memory_size, const char *shm_address)
   {
-	  
-	  m_shmem.open(shm_address, memory_size);
+      m_shmem.open(shm_address, memory_size);
   }
   /*!
   * @if jp
@@ -192,23 +190,23 @@ namespace RTC
   *
   * @endif
   */
-	void SharedMemoryPort::close_memory(::CORBA::Boolean unlink)
+  void SharedMemoryPort::close_memory(::CORBA::Boolean unlink)
   {
-	  if (m_shmem.created())
-	  {
-		  m_shmem.close();
-		  if (unlink)
-		  {
-			  m_shmem.unlink();
-		  }
-		  try
-		  {
-			  m_smInterface->close_memory(false);
-		  }
-		  catch (...)
-		  {
-		  }
-	  }
+      if (m_shmem.created())
+      {
+          m_shmem.close();
+          if (unlink)
+          {
+              m_shmem.unlink();
+          }
+          try
+          {
+              m_smInterface->close_memory(false);
+          }
+          catch (...)
+          {
+          }
+      }
   }
   /*!
   * @if jp
@@ -230,22 +228,22 @@ namespace RTC
   void SharedMemoryPort::write(ByteData& data)
   {
       CORBA::ULongLong data_size = static_cast<CORBA::ULongLong>(data.getDataLength());
-	  if (data_size + sizeof(CORBA::ULongLong) > m_shmem.get_size())
-	  {
+      if (data_size + sizeof(CORBA::ULongLong) > m_shmem.get_size())
+      {
           CORBA::ULongLong memory_size = data_size + static_cast<CORBA::ULongLong>(sizeof(CORBA::ULongLong));
-		  if (!CORBA::is_nil(m_smInterface))
-		  {
-			  try
-			  {
-				  m_smInterface->close_memory(false);
-			  }
-			  catch (...)
-			  {
-			  }
-		  }
-		  close_memory(true);
-		  create_memory(memory_size, m_shmem.get_addresss().c_str());
-	  }
+          if (!CORBA::is_nil(m_smInterface))
+          {
+              try
+              {
+                  m_smInterface->close_memory(false);
+              }
+              catch (...)
+              {
+              }
+          }
+          close_memory(true);
+          create_memory(memory_size, m_shmem.get_addresss().c_str());
+      }
       CORBA_CdrMemoryStream data_size_cdr;
 
       //データサイズ(ULongLong型)をCDR形式でシリアライズする
@@ -282,10 +280,10 @@ namespace RTC
   *
   * @endif
   */
-	void SharedMemoryPort::read(ByteData& data)
+  void SharedMemoryPort::read(ByteData& data)
   {
-	  if (m_shmem.created())
-	  {
+      if (m_shmem.created())
+      {
           CORBA_CdrMemoryStream data_size_cdr;
           CORBA::ULongLong data_size = 0;
           data.isLittleEndian(m_endian);
@@ -293,7 +291,7 @@ namespace RTC
           data_size_cdr.writeCdrData(reinterpret_cast<unsigned char*>(&(m_shmem.get_data()[0])), sizeof(CORBA::ULongLong));
           data_size_cdr.deserializeCDR(data_size);
           data.writeData(reinterpret_cast<unsigned char*>(&m_shmem.get_data()[sizeof(CORBA::ULongLong)]), static_cast<unsigned long>(data_size));
-	  }
+      }
 
   }
   /*!
@@ -311,9 +309,9 @@ namespace RTC
   *
   * @endif
   */
-	void SharedMemoryPort::setInterface(::OpenRTM::PortSharedMemory_ptr sm)
+  void SharedMemoryPort::setInterface(::OpenRTM::PortSharedMemory_ptr sm)
   {
-	  m_smInterface = ::OpenRTM::PortSharedMemory::_narrow(sm);
+      m_smInterface = ::OpenRTM::PortSharedMemory::_narrow(sm);
   }
   /*!
   * @if jp
@@ -330,20 +328,19 @@ namespace RTC
   *
   * @endif
   */
-	void SharedMemoryPort::setEndian(::CORBA::Boolean endian)
+  void SharedMemoryPort::setEndian(::CORBA::Boolean endian)
   {
-	  m_endian = endian;
-	  if (!CORBA::is_nil(m_smInterface))
-	  {
-		  try
-		  {
-			  m_smInterface->setEndian(endian);
-		  }
-		  catch (...)
-		  {
-
-		  }
-	  }
+      m_endian = endian;
+      if (!CORBA::is_nil(m_smInterface))
+      {
+          try
+          {
+              m_smInterface->setEndian(endian);
+          }
+          catch (...)
+          {
+          }
+      }
   }
   /*!
   * @if jp
@@ -360,9 +357,9 @@ namespace RTC
   *
   * @endif
   */
-	::OpenRTM::PortStatus SharedMemoryPort::put()
+  ::OpenRTM::PortStatus SharedMemoryPort::put()
   {
-	  return ::OpenRTM::PORT_OK;
+      return ::OpenRTM::PORT_OK;
   }
   /*!
   * @if jp
@@ -379,13 +376,13 @@ namespace RTC
   *
   * @endif
   */
-	::OpenRTM::PortStatus SharedMemoryPort::get()
+  ::OpenRTM::PortStatus SharedMemoryPort::get()
   {
-	  return ::OpenRTM::PORT_OK;
+      return ::OpenRTM::PORT_OK;
   }
 
-	::OpenRTM::PortSharedMemory_ptr SharedMemoryPort::getObjRef()
-	{
-		return this->_this();
-	}
+  ::OpenRTM::PortSharedMemory_ptr SharedMemoryPort::getObjRef()
+  {
+      return this->_this();
+  }
 } // namespace RTC

@@ -207,38 +207,38 @@ namespace RTC
   void NamingOnCorba::getComponentByName(CosNaming::NamingContext_ptr context, const std::string& name, RTC::RTCList& rtcs)
   {
 
-	  CORBA::ULong length = 500;
-	  CosNaming::BindingList_var bl;
-	  CosNaming::BindingIterator_var bi;
-	  context->list(length, bl, bi);
+      CORBA::ULong length = 500;
+      CosNaming::BindingList_var bl;
+      CosNaming::BindingIterator_var bi;
+      context->list(length, bl, bi);
 
-	  CORBA::ULong len(bl->length());
-	  for (CORBA::ULong i = 0; i < len; ++i)
-	  {
-		  if (bl[i].binding_type == CosNaming::ncontext)
-		  {
-			  CosNaming::NamingContext_ptr next_context = CosNaming::NamingContext::
-				  _narrow(context->resolve(bl[i].binding_name));
-			  getComponentByName(next_context, name, rtcs);
-		  }
-		  else if (bl[i].binding_type == CosNaming::nobject)
-		  {
-			  if (std::string(bl[i].binding_name[0].id) == name && std::string(bl[i].binding_name[0].kind) == "rtc")
-			  {
-				  try
-				  {
-					  RTC::RTObject_ptr obj = RTC::RTObject::_narrow(context->resolve(bl[i].binding_name));
-					  if (!obj->_non_existent())
-					  {
-						  CORBA_SeqUtil::push_back(rtcs, obj);
-					  }
-				  }
-				  catch (...)
-				  {
-				  }
-			  }
-		  }
-	  }
+      CORBA::ULong len(bl->length());
+      for (CORBA::ULong i = 0; i < len; ++i)
+      {
+          if (bl[i].binding_type == CosNaming::ncontext)
+          {
+              CosNaming::NamingContext_var next_context = CosNaming::NamingContext::
+                                       _narrow(context->resolve(bl[i].binding_name));
+              getComponentByName(next_context, name, rtcs);
+          }
+          else if (bl[i].binding_type == CosNaming::nobject)
+          {
+              if (std::string(bl[i].binding_name[0].id) == name && std::string(bl[i].binding_name[0].kind) == "rtc")
+              {
+                  try
+                  {
+                      RTC::RTObject_var obj = RTC::RTObject::_narrow(context->resolve(bl[i].binding_name));
+                      if (!obj->_non_existent())
+                      {
+                          CORBA_SeqUtil::push_back(rtcs, obj);
+                      }
+                  }
+                  catch (...)
+                  {
+                  }
+              }
+          }
+      }
   }
   /*!
    * @if jp
@@ -262,69 +262,64 @@ namespace RTC
    */
   RTC::RTCList NamingOnCorba::string_to_component(std::string name)
   {
-	  RTC::RTCList rtc_list;
-	  
-	  coil::vstring tmp = coil::split(name, "://");
-	  if (tmp.size() > 1)
-	  {
-		  if (tmp[0] == "rtcname")
-		  {
-			  std::string url = tmp[1];
-			  coil::vstring r = coil::split(url, "/");
-			  if (r.size() > 1)
-			  {
-				  std::string host = r[0];
-				  std::string rtc_name = url.substr(host.size()+1, url.size() - host.size());
-				  try
-				  {
-					  RTC::CorbaNaming cns = m_cosnaming;
-					  if (host == "*")
-					  {
-					  }
-					  else
-					  {
-						  CORBA::ORB_var orb = Manager::instance().getORB();
-						  
-						  cns = RTC::CorbaNaming(orb, host.c_str());
-					  }
-					  coil::vstring names = coil::split(rtc_name, "/");
+      RTC::RTCList rtc_list;
+      
+      coil::vstring tmp = coil::split(name, "://");
+      if (tmp.size() > 1)
+      {
+          if (tmp[0] == "rtcname")
+          {
+              std::string url = tmp[1];
+              coil::vstring r = coil::split(url, "/");
+              if (r.size() > 1)
+              {
+                  std::string host = r[0];
+                  std::string rtc_name = url.substr(host.size()+1, url.size() - host.size());
+                  try
+                  {
+                      RTC::CorbaNaming cns = m_cosnaming;
+                      if (host == "*")
+                      {
+                      }
+                      else
+                      {
+                          CORBA::ORB_var orb = Manager::instance().getORB();
+                          cns = RTC::CorbaNaming(orb, host.c_str());
+                      }
+                      coil::vstring names = coil::split(rtc_name, "/");
 
-					  if (names.size() == 2 && names[0] == "*")
-					  {
-						  CosNaming::NamingContext_ptr root_cxt = cns.getRootContext();
-						  getComponentByName(root_cxt, names[1], rtc_list);
-						  return rtc_list;
-					  }
-					  else
-					  {
+                      if (names.size() == 2 && names[0] == "*")
+                      {
+                          CosNaming::NamingContext_var root_cxt = cns.getRootContext();
+                          getComponentByName(root_cxt, names[1], rtc_list);
+                          return rtc_list;
+                      }
+                      else
+                      {
+                          rtc_name += ".rtc";
+                          CORBA::Object_var obj = cns.resolveStr(rtc_name.c_str());
+                          if (CORBA::is_nil(obj))
+                          {
+                              return rtc_list;
+                          }
+                          if (obj->_non_existent())
+                          {
+                              return rtc_list;
+                          }
+                          CORBA_SeqUtil::push_back(rtc_list, RTC::RTObject::_narrow(obj));
+                          return rtc_list;
 
-						  rtc_name += ".rtc";
+                      }
 
-
-						  CORBA::Object_ptr obj = cns.resolveStr(rtc_name.c_str());
-						  if (CORBA::is_nil(obj))
-						  {
-							  return rtc_list;
-						  }
-						  if (obj->_non_existent())
-						  {
-							  return rtc_list;
-						  }
-						  CORBA_SeqUtil::push_back(rtc_list, RTC::RTObject::_narrow(obj));
-						  return rtc_list;
-						  
-
-					  }
-
-				  }
-				  catch (...)
-				  {
-					  return rtc_list;
-				  }
-			  }
-		  }
-	  }
-	  return rtc_list;
+                  }
+                  catch (...)
+                  {
+                      return rtc_list;
+                  }
+              }
+          }
+      }
+      return rtc_list;
   }
 
 
