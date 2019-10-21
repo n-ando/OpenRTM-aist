@@ -2620,27 +2620,27 @@ namespace RTC
         oid2 = m_pPOA->servant_to_id(this);
         m_pPOA->deactivate_object(oid1);
         m_pPOA->deactivate_object(oid2);
-		if (!CORBA::is_nil(m_insref))
-		  {
+        if (!CORBA::is_nil(m_insref))
+          {
 #ifndef ORB_IS_TAO
 #ifndef ORB_IS_RTORB
-			CORBA::Object_ptr obj = m_pORB->resolve_initial_references("omniINSPOA");
+            CORBA::Object_var obj = m_pORB->resolve_initial_references("omniINSPOA");
 #else // ROB_IS_RTORB
-			CORBA::Object_ptr obj = m_pORB->resolve_initial_references((char*)"omniINSPOA");
+            CORBA::Object_ptr obj = m_pORB->resolve_initial_references((char*)"omniINSPOA");
 #endif // ORB_IS_RTORB
-		    PortableServer::POA_ptr poa = PortableServer::POA::_narrow(obj);
-		    PortableServer::ObjectId_var oid3;
-		    oid3 = poa->servant_to_id(this);
-		    poa->deactivate_object(oid3.in());
+            PortableServer::POA_var poa = PortableServer::POA::_narrow(obj);
+            PortableServer::ObjectId_var oid3;
+            oid3 = poa->servant_to_id(this);
+            poa->deactivate_object(oid3.in());
 #else
-			  CORBA::Object_var obj = m_pORB->resolve_initial_references("IORTable");
-			  IORTable::Table_var adapter = IORTable::Table::_narrow(obj.in());
+            CORBA::Object_var obj = m_pORB->resolve_initial_references("IORTable");
+            IORTable::Table_var adapter = IORTable::Table::_narrow(obj.in());
 
-			  std::string id_str = getCategory();
-			  id_str = id_str + "." + getInstanceName();
-			  adapter->unbind(id_str.c_str());
+            std::string id_str = getCategory();
+            id_str = id_str + "." + getInstanceName();
+            adapter->unbind(id_str.c_str());
 #endif
-		  }
+          }
       }
     catch (PortableServer::POA::ServantNotActive &e)
       {
