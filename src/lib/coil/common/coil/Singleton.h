@@ -105,8 +105,12 @@ namespace coil
   class Singleton
   {
   public:
-    using SingletonClassPtr = SingletonClass*;
-    using Mutex = ::std::mutex;
+    // A helper class to call SingletonClass-destructor.
+    struct Container
+    {
+      SingletonClass* x;
+      ~Container(){ delete x; }
+    };
 
     /*!
      * @if jp
@@ -129,17 +133,10 @@ namespace coil
      */
     static SingletonClass& instance()
     {
-
-      // DLC pattern
-      if (!m_instance)
-        {
-          std::lock_guard<std::mutex> guard(m_mutex);
-          if (!m_instance)
-            {
-              m_instance = new SingletonClass();
-            }
-        }
-      return *m_instance;
+      std::call_once(m_once, []{
+        m_instance.x = new SingletonClass();
+      });
+      return *m_instance.x;
     }
 
   protected:
@@ -188,7 +185,7 @@ namespace coil
      * @brief Mutual exclusion object
      * @endif
      */
-    static std::mutex m_mutex;
+    static std::once_flag m_once;
 
     /*!
      * @if jp
@@ -197,16 +194,15 @@ namespace coil
      * @brief SingletonClass object
      * @endif
      */
-    static SingletonClass* m_instance;
+    static Container m_instance;
   };
 
   template <class SingletonClass>
-  typename Singleton<SingletonClass>::SingletonClassPtr
+  typename Singleton<SingletonClass>::Container
   Singleton<SingletonClass>::m_instance;
 
   template <class SingletonClass>
-  typename Singleton<SingletonClass>::Mutex
-  Singleton<SingletonClass>::m_mutex;
+  std::once_flag Singleton<SingletonClass>::m_once;
 } // namespace coil
 
 #endif  // COIL_SINGLETON_H
