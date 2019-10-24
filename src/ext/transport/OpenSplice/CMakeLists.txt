@@ -9,7 +9,7 @@ set(RAPIDXML_DIR ${RAPIDXML_DIR} CACHE STRING "set RAPIDXML_DIR")
 
 set(OPENSPLICE_DIR $ENV{OSPL_HOME})
 if(NOT OPENSPLICE_DIR)
-	message(FATAL_ERROR "Please set OPENSPLICE_DIR.")
+	message(FATAL_ERROR "Please run release.bat.")
 endif()
 
 if(NOT RAPIDXML_DIR)
