@@ -62,9 +62,9 @@ namespace RTC
      * @endif
      */
     virtual ~ROSMessageInfoBase(void) {}
-    std::string type();
-    std::string md5sum();
-    std::string message_definition();
+    virtual std::string type();
+    virtual std::string md5sum();
+    virtual std::string message_definition();
   protected:
     std::string m_type;
     std::string m_md5sum;
@@ -96,19 +96,277 @@ namespace RTC
 
   };
 
-  using ROSMessageInfoFactory = coil::GlobalFactory<ROSMessageInfoBase>;
-}
+  /*!
+   * @if jp
+   *
+   * @class ROSMessageInfoList
+   *
+   * @brief ROSのメッセージ型に関する情報のリストを名前とセットで保持するクラス
+   *
+   *
+   * @since 2.0.0
+   *
+   * @else
+   *
+   * @class ROSMessageInfoList
+   *
+   * @brief 
+   *
+   *
+   * @endif
+   */
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
+#ifdef TRANSPORT_PLUGIN
+    class __declspec(dllexport) ROSMessageInfoList
+#else
+    class __declspec(dllimport) ROSMessageInfoList
+#endif
+#else
+    class ROSMessageInfoList
+#endif
+  {
+    class ROSMessageInfoEntry;
+  public:
+    /*!
+     * @if jp
+     *
+     * @brief コンストラクタ
+     *
+     * @else
+     *
+     * @brief Constructor
+     *
+     * @endif
+     */
+    ROSMessageInfoList();
+    /*!
+     * @if jp
+     *
+     * @brief デストラクタ
+     *
+     * @else
+     *
+     * @brief Destructor
+     *
+     * @endif
+     */
+    ~ROSMessageInfoList();
+    /*!
+     * @if jp
+     *
+     * @brief ROSMessageInfoを追加
+     * 
+     * @param id 名前
+     * @param info ROSMessageInfo
+     *
+     * @else
+     *
+     * @brief Destructor
+     *
+     * @param id 
+     * @param info 
+     *
+     * @endif
+     */
+    inline void addInfo(const std::string &id, ROSMessageInfoBase* info)
+    {
+        auto data = m_data.find(id);
+        if (data != m_data.end())
+        {
+            data->second.deleteObject();
+        }
+        m_data[id] = ROSMessageInfoEntry(info, [](ROSMessageInfoBase*& obj) { delete obj; });
+    }
+    /*!
+     * @if jp
+     *
+     * @brief ROSMessageInfoを削除
+     *
+     * @param id 名前
+     * @return 削除に成功した場合はtrue
+     *
+     * @else
+     *
+     * @brief 
+     *
+     * @param id 名前
+     * @return
+     *
+     * @endif
+     */
+    bool removeInfo(const std::string& id);
+    /*!
+     * @if jp
+     *
+     * @brief 指定名のROSMessageInfoを取得
+     *
+     * @param id 名前
+     * @return ROSMessageInfo
+     *
+     * @else
+     *
+     * @brief 
+     *
+     * @param id 
+     * @return
+     *
+     * @endif
+     */
+    ROSMessageInfoBase* getInfo(const std::string& id);
+  public:
 
+    std::map<std::string, ROSMessageInfoEntry> m_data;
+
+  private:
+    /*!
+     * @if jp
+     *
+     * @class ROSMessageInfoEntry
+     *
+     * @brief ROSMessageInfoと終了関数を登録するクラス
+     * dllから登録したROSMessageInfoはdllでdeleteする必要があるため、
+     * 必ず終了関数を登録する。
+     *
+     * @since 2.0.0
+     *
+     * @else
+     *
+     * @class ROSMessageInfoEntry
+     *
+     * @brief 
+     *
+     *
+     * @endif
+     */
+    class ROSMessageInfoEntry
+    {
+    public:
+        /*!
+         * @if jp
+         *
+         * @brief コンストラクタ
+         *
+         * @param object ROSMessageInfo
+         * @param destructor 終了関数
+         *
+         * @else
+         *
+         * @brief Constructor
+         *
+         * @param object 
+         * @param destructor 
+         *
+         * @endif
+         */
+        ROSMessageInfoEntry(ROSMessageInfoBase* object, void(*destructor)(ROSMessageInfoBase*&));
+        /*!
+         * @if jp
+         *
+         * @brief コンストラクタ
+         *
+         * @else
+         *
+         * @brief Constructor
+         *
+         * @endif
+         */
+        ROSMessageInfoEntry();
+        /*!
+         * @if jp
+         *
+         * @brief コピーコンストラクタ
+         *
+         * @param obj コピー元のオブジェクト
+         *
+         * @else
+         *
+         * @brief Copy Constructor
+         *
+         * @param obj
+         *
+         * @endif
+         */
+        ROSMessageInfoEntry(const ROSMessageInfoEntry& obj);
+        /*!
+         * @if jp
+         *
+         * @brief 代入演算子
+         *
+         * @param obj コピー元のオブジェクト
+         *
+         * @else
+         *
+         * @brief 
+         *
+         * @param obj
+         *
+         * @endif
+         */
+        ROSMessageInfoEntry& operator = (const ROSMessageInfoEntry& obj);
+        /*!
+         * @if jp
+         *
+         * @brief 比較演算子
+         *
+         * @param obj 比較対象のオブジェクト
+         *
+         * @else
+         *
+         * @brief
+         *
+         * @param obj
+         *
+         * @endif
+         */
+        bool operator==(const ROSMessageInfoEntry& obj);
+        /*!
+         * @if jp
+         *
+         * @brief デストラクタ
+         *
+         * @else
+         *
+         * @brief Destructor
+         *
+         * @endif
+         */
+        ~ROSMessageInfoEntry();
+        /*!
+         * @if jp
+         *
+         * @brief 終了関数呼び出し
+         *
+         * @else
+         *
+         * @brief 
+         *
+         * @endif
+         */
+        void deleteObject();
+        ROSMessageInfoBase* object_;
+        void(*destructor_)(ROSMessageInfoBase*&);
+
+    };
+  };
 
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
 #ifdef TRANSPORT_PLUGIN
-  template class __declspec(dllexport) coil::GlobalFactory<RTC::ROSMessageInfoBase>;
+  class __declspec(dllexport) GlobalROSMessageInfoList
 #else
-  extern template class __declspec(dllimport) coil::GlobalFactory<RTC::ROSMessageInfoBase;
+  class __declspec(dllimport) GlobalROSMessageInfoList
 #endif
+#else
+  class GlobalROSMessageInfoList
 #endif
+      : public ROSMessageInfoList,
+      public coil::Singleton<GlobalROSMessageInfoList >
+  {
+  public:
+  private:
+      friend class coil::Singleton<GlobalROSMessageInfoList>;
+  };
 
-
+}
 
 
 #endif // RTC_ROSMESSAGEINFO_H
