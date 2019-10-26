@@ -56,12 +56,9 @@ namespace RTC
             ::coil::Destructor< ::RTC::ByteDataStream<DataType>,
             RTC::ROS2SimpleData<DataType, MessageType, originalType, convertedType> >);
 
-    RTC::FastRTPSMessageInfoFactory::
-            instance().addFactory(name,
-            ::coil::Creator< ::RTC::FastRTPSMessageInfoBase,
-            RTC::ROS2MessageInfo<MessageType> >,
-            ::coil::Destructor< ::RTC::FastRTPSMessageInfoBase,
-            RTC::ROS2MessageInfo<MessageType> >);
+    RTC::GlobalFastRTPSMessageInfoList::
+            instance().addInfo(name,
+            new RTC::ROS2MessageInfo<MessageType>());
   }
 
   /*!
@@ -118,12 +115,9 @@ namespace RTC
             ::coil::Destructor< ::RTC::ByteDataStream<DataType>,
             RTC::ROS2SequenceData<DataType, MessageType, originalType, convertedType> >);
 
-    RTC::FastRTPSMessageInfoFactory::
-            instance().addFactory(name,
-            ::coil::Creator< ::RTC::FastRTPSMessageInfoBase,
-            RTC::ROS2MessageInfo<MessageType> >,
-            ::coil::Destructor< ::RTC::FastRTPSMessageInfoBase,
-            RTC::ROS2MessageInfo<MessageType> >);
+    RTC::GlobalFastRTPSMessageInfoList::
+            instance().addInfo(name,
+            new RTC::ROS2MessageInfo<MessageType>());
   }
 
   /*!
@@ -286,12 +280,9 @@ namespace RTC
             ::coil::Destructor< ::RTC::ByteDataStream<RTC::TimedString>,
             RTC::ROS2StringData>);
 
-    RTC::FastRTPSMessageInfoFactory::
-            instance().addFactory("ros2:std_msgs/String",
-            ::coil::Creator< ::RTC::FastRTPSMessageInfoBase,
-            RTC::ROS2MessageInfo<std_msgs::msg::String> >,
-            ::coil::Destructor< ::RTC::FastRTPSMessageInfoBase,
-            RTC::ROS2MessageInfo<std_msgs::msg::String> >);
+    RTC::GlobalFastRTPSMessageInfoList::
+            instance().addInfo("ros2:std_msgs/String",
+            new RTC::ROS2MessageInfo<std_msgs::msg::String>());
   }
 
   /*!
@@ -436,12 +427,9 @@ namespace RTC
             ::coil::Destructor< ::RTC::ByteDataStream<RTC::TimedPoint3D>,
             RTC::ROS2Point3DData>);
 
-    RTC::FastRTPSMessageInfoFactory::
-            instance().addFactory("ros2:geometry_msgs/PointStamped",
-            ::coil::Creator< ::RTC::FastRTPSMessageInfoBase,
-            RTC::ROS2MessageInfo<geometry_msgs::msg::PointStamped> >,
-            ::coil::Destructor< ::RTC::FastRTPSMessageInfoBase,
-            RTC::ROS2MessageInfo<geometry_msgs::msg::PointStamped> >);
+    RTC::GlobalFastRTPSMessageInfoList::
+            instance().addInfo("ros2:geometry_msgs/PointStamped",
+            new RTC::ROS2MessageInfo<geometry_msgs::msg::PointStamped>());
   }
 
   /*!
@@ -587,12 +575,9 @@ namespace RTC
             ::coil::Destructor< ::RTC::ByteDataStream<RTC::TimedQuaternion>,
             RTC::ROS2QuaternionData>);
 
-    RTC::FastRTPSMessageInfoFactory::
-            instance().addFactory("ros2:geometry_msgs/QuaternionStamped",
-            ::coil::Creator< ::RTC::FastRTPSMessageInfoBase,
-            RTC::ROS2MessageInfo<geometry_msgs::msg::QuaternionStamped > >,
-            ::coil::Destructor< ::RTC::FastRTPSMessageInfoBase,
-            RTC::ROS2MessageInfo<geometry_msgs::msg::QuaternionStamped > >);
+    RTC::GlobalFastRTPSMessageInfoList::
+            instance().addInfo("ros2:geometry_msgs/QuaternionStamped",
+            new RTC::ROS2MessageInfo<geometry_msgs::msg::QuaternionStamped >());
   }
 
   /*!
@@ -737,12 +722,9 @@ namespace RTC
             ::coil::Destructor< ::RTC::ByteDataStream<RTC::TimedVector3D>,
             RTC::ROS2Vector3DData>);
 
-    RTC::FastRTPSMessageInfoFactory::
-            instance().addFactory("ros2:geometry_msgs/Vector3Stamped",
-            ::coil::Creator< ::RTC::FastRTPSMessageInfoBase,
-            RTC::ROS2MessageInfo<geometry_msgs::msg::Vector3Stamped > >,
-            ::coil::Destructor< ::RTC::FastRTPSMessageInfoBase,
-            RTC::ROS2MessageInfo<geometry_msgs::msg::Vector3Stamped > >);
+    RTC::GlobalFastRTPSMessageInfoList::
+            instance().addInfo("ros2:geometry_msgs/Vector3Stamped",
+            new RTC::ROS2MessageInfo<geometry_msgs::msg::Vector3Stamped >());
   }
 
   
@@ -915,12 +897,9 @@ namespace RTC
             ::coil::Destructor< ::RTC::ByteDataStream<RTC::CameraImage>,
             RTC::ROS2CameraImageData>);
 
-    RTC::FastRTPSMessageInfoFactory::
-            instance().addFactory("ros2:sensor_msgs/Image",
-            ::coil::Creator< ::RTC::FastRTPSMessageInfoBase,
-            RTC::ROS2MessageInfo<sensor_msgs::msg::Image > >,
-            ::coil::Destructor< ::RTC::FastRTPSMessageInfoBase,
-            RTC::ROS2MessageInfo<sensor_msgs::msg::Image > >);
+    RTC::GlobalFastRTPSMessageInfoList::
+            instance().addInfo("ros2:sensor_msgs/Image",
+            new RTC::ROS2MessageInfo<sensor_msgs::msg::Image >());
   }
 
 }

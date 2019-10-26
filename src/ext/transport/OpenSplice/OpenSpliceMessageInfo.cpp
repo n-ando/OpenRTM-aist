@@ -26,10 +26,7 @@
 
 namespace RTC
 {
-    OpenSpliceMessageInfoBase::~OpenSpliceMessageInfoBase(void)
-    {
-        
-    }
+    OpenSpliceMessageInfoBase::~OpenSpliceMessageInfoBase(void) = default;
 
     template <class DATATYPE, class IDLPATH>
     class OpenSpliceMessageInfo : public OpenSpliceMessageInfoBase
@@ -61,19 +58,15 @@ namespace RTC
     template <class DATATYPE, class IDLPATH>
     void appendOpenSpliceMessageInfo(coil::vstring& datatypes)
     {
-        RTC::OpenSpliceMessageInfoFactory& factory(RTC::OpenSpliceMessageInfoFactory::instance());
         std::string data_type = ::CORBA_Util::toRepositoryIdOfStruct<DATATYPE>();
-        factory.addFactory(data_type,
-            ::coil::Creator < OpenSpliceMessageInfoBase,
-            ::RTC::OpenSpliceMessageInfo<DATATYPE, IDLPATH> >,
-            ::coil::Destructor< OpenSpliceMessageInfoBase,
-            ::RTC::OpenSpliceMessageInfo<DATATYPE, IDLPATH> >);
+        GlobalOpenSpliceMessageInfoList::instance().addInfo(data_type,
+            new ::RTC::OpenSpliceMessageInfo<DATATYPE, IDLPATH>);
         
         if (datatypes.empty())
         {
             return;
         }
-        OpenSpliceMessageInfoBase *info = factory.createObject(data_type);
+        OpenSpliceMessageInfoBase *info = GlobalOpenSpliceMessageInfoList::instance().getInfo(data_type);
         if (info != nullptr)
         {
             auto itr = std::find(datatypes.begin(), datatypes.end(), info->data_type());
@@ -86,10 +79,228 @@ namespace RTC
                     RTC_OpenSplice::registerType(info->data_type(), info->idl_path());
                 }
             }
-            factory.deleteObject(info);
         }
         
     }
+
+    /*!
+     * @if jp
+     *
+     * @brief コンストラクタ
+     *
+     * @else
+     *
+     * @brief Constructor
+     *
+     * @endif
+     */
+    OpenSpliceMessageInfoList::OpenSpliceMessageInfoList() = default;
+    /*!
+     * @if jp
+     *
+     * @brief デストラクタ
+     *
+     * @else
+     *
+     * @brief Destructor
+     *
+     * @endif
+     */
+    OpenSpliceMessageInfoList::~OpenSpliceMessageInfoList()
+    {
+        for (auto info : m_data)
+        {
+            info.second.deleteObject();
+        }
+    }
+    
+    /*!
+     * @if jp
+     *
+     * @brief OpenSpliceMessageInfoを削除
+     *
+     * @param id 名前
+     * @return 削除に成功した場合はtrue
+     *
+     * @else
+     *
+     * @brief
+     *
+     * @param id 名前
+     * @return
+     *
+     * @endif
+     */
+    bool OpenSpliceMessageInfoList::removeInfo(const std::string& id)
+    {
+        auto data = m_data.find(id);
+        if (data == m_data.end())
+        {
+            return false;
+        }
+
+        data->second.deleteObject();
+        m_data.erase(data);
+        return true;
+    }
+    /*!
+     * @if jp
+     *
+     * @brief 指定名のOpenSpliceMessageInfoを取得
+     *
+     * @param id 名前
+     * @return OpenSpliceMessageInfo
+     *
+     * @else
+     *
+     * @brief
+     *
+     * @param id
+     * @return
+     *
+     * @endif
+     */
+    OpenSpliceMessageInfoBase* OpenSpliceMessageInfoList::getInfo(const std::string& id)
+    {
+        if (m_data.find(id) == m_data.end())
+        {
+            return nullptr;
+        }
+        return m_data[id].object_;
+    }
+    
+    /*!
+     * @if jp
+     *
+     * @brief コンストラクタ
+     *
+     * @param object OpenSpliceMessageInfo
+     * @param destructor 終了関数
+     *
+     * @else
+     *
+     * @brief Constructor
+     *
+     * @param object 
+     * @param destructor 
+     *
+     * @endif
+     */
+    OpenSpliceMessageInfoList::OpenSpliceMessageInfoEntry::OpenSpliceMessageInfoEntry(OpenSpliceMessageInfoBase* object, void(*destructor)(OpenSpliceMessageInfoBase*&))
+        : object_(object), destructor_(destructor)
+    {
+    }
+    /*!
+     * @if jp
+     *
+     * @brief コンストラクタ
+     *
+     * @else
+     *
+     * @brief Constructor
+     *
+     * @endif
+     */
+    OpenSpliceMessageInfoList::OpenSpliceMessageInfoEntry::OpenSpliceMessageInfoEntry() = default;
+
+    /*!
+     * @if jp
+     *
+     * @brief コピーコンストラクタ
+     *
+     * @param obj コピー元のオブジェクト
+     *
+     * @else
+     *
+     * @brief Copy Constructor
+     *
+     * @param obj
+     *
+     * @endif
+     */
+    OpenSpliceMessageInfoList::OpenSpliceMessageInfoEntry::OpenSpliceMessageInfoEntry(const OpenSpliceMessageInfoList::OpenSpliceMessageInfoEntry& obj)
+    {
+        object_ = obj.object_;
+        destructor_ = obj.destructor_;
+    }
+
+    /*!
+     * @if jp
+     *
+     * @brief 代入演算子
+     *
+     * @param obj コピー元のオブジェクト
+     *
+     * @else
+     *
+     * @brief
+     *
+     * @param obj
+     *
+     * @endif
+     */
+    OpenSpliceMessageInfoList::OpenSpliceMessageInfoEntry& OpenSpliceMessageInfoList::OpenSpliceMessageInfoEntry::operator = (const OpenSpliceMessageInfoList::OpenSpliceMessageInfoEntry& obj)
+    {
+        object_ = obj.object_;
+        destructor_ = obj.destructor_;
+        return *this;
+    }
+
+    /*!
+     * @if jp
+     *
+     * @brief 比較演算子
+     *
+     * @param obj 比較対象のオブジェクト
+     *
+     * @else
+     *
+     * @brief
+     *
+     * @param obj
+     *
+     * @endif
+     */
+    bool OpenSpliceMessageInfoList::OpenSpliceMessageInfoEntry::operator==(const OpenSpliceMessageInfoList::OpenSpliceMessageInfoEntry& obj)
+    {
+        return (object_ == obj.object_);
+    }
+
+    /*!
+     * @if jp
+     *
+     * @brief デストラクタ
+     *
+     * @else
+     *
+     * @brief Destructor
+     *
+     * @endif
+     */
+    OpenSpliceMessageInfoList::OpenSpliceMessageInfoEntry::~OpenSpliceMessageInfoEntry() = default;
+
+    /*!
+     * @if jp
+     *
+     * @brief 終了関数呼び出し
+     *
+     * @else
+     *
+     * @brief
+     *
+     * @endif
+     */
+    void OpenSpliceMessageInfoList::OpenSpliceMessageInfoEntry::deleteObject()
+    {
+        if (object_)
+        {
+            destructor_(object_);
+            object_ = nullptr;
+        }
+    }
+
+
+
 }
 
 class BasicDataTypeFile
