@@ -869,8 +869,16 @@ namespace RTC
       
       data.tm.sec = m_msg.header.stamp.sec;
       data.tm.nsec = m_msg.header.stamp.nanosec;
-      data.height = m_msg.height;
-      data.width = m_msg.width;
+
+      if (m_msg.height > USHRT_MAX || m_msg.width > USHRT_MAX)
+      {
+          return false;
+      }
+
+      data.height = static_cast<CORBA::UShort>(m_msg.height);
+      data.width = static_cast<CORBA::UShort>(m_msg.width);
+
+      
       data.format = CORBA::string_dup(m_msg.encoding.c_str());
 
 
