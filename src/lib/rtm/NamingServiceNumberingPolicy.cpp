@@ -25,10 +25,10 @@ namespace RTM
   //============================================================
   // NamingServiceNumberingPolicy
   //============================================================
-	NamingServiceNumberingPolicy::NamingServiceNumberingPolicy()
-	{
-		m_mgr = &RTC::Manager::instance();
-	}
+  NamingServiceNumberingPolicy::NamingServiceNumberingPolicy()
+    {
+	  m_mgr = &RTC::Manager::instance();
+    }
   /*!
    * @if jp
    * @brief オブジェクト生成時の名称作成
@@ -36,8 +36,8 @@ namespace RTM
    * @brief Create the name when creating objects
    * @endif
    */
-	std::string NamingServiceNumberingPolicy::onCreate(void* obj)
-  {
+  std::string NamingServiceNumberingPolicy::onCreate(void* obj)
+    {
 	  int num = 0;
 	  while (true)
 	  {
@@ -57,7 +57,7 @@ namespace RTM
 		  }
 	  }
 	  return  coil::otos<int>(num);
-  }
+    }
   
   /*!
    * @if jp
@@ -66,9 +66,9 @@ namespace RTM
    * @brief Delete the name when deleting objects
    * @endif
    */
-	void NamingServiceNumberingPolicy::onDelete(void* /*obj*/)
-  {
-  }
+  void NamingServiceNumberingPolicy::onDelete(void* /*obj*/)
+    {
+    }
   
 	/*!
 	* @if jp
@@ -93,8 +93,8 @@ namespace RTM
 	*
 	* @endif
 	*/
-	bool NamingServiceNumberingPolicy::find(std::string name)
-  {
+  bool NamingServiceNumberingPolicy::find(std::string name)
+    {
 	  RTC::RTCList rtcs;
 	  std::string rtc_name = "rtcname://*/*/";
 	  rtc_name += name;
@@ -102,19 +102,19 @@ namespace RTM
 	  rtcs = m_mgr->getNaming()->string_to_component(rtc_name);
 
 	  return rtcs.length() > 0;
-  }
+    }
 } //namespace RTM 
 
 extern "C"
 {
-	void NamingServiceNumberingPolicyInit()
-  {
+  void NamingServiceNumberingPolicyInit()
+    {
     ::RTM::NumberingPolicyFactory::
       instance().addFactory("ns_unique",
                             ::coil::Creator< ::RTM::NumberingPolicyBase,
 							::RTM::NamingServiceNumberingPolicy>,
                             ::coil::Destructor< ::RTM::NumberingPolicyBase,
 							::RTM::NamingServiceNumberingPolicy>);
-  }
+    }
 }
 

@@ -2910,17 +2910,36 @@ std::vector<coil::Properties> Manager::getLoadableModules()
             if (bl[j].binding_type != CosNaming::nobject) { continue; }
             std::string tmp(cns.toString(bl[j].binding_name));
             std::string nspath;
-            nspath = "/" + nsname + "/" + tmp;
             // ### TODO: All escape characteres should be removed. ###
-            coil::replaceString(nspath, "\\", "");
-            CORBA::Object_var obj = cns.resolveStr(nspath.c_str());
+            nspath = coil::replaceString("/" + nsname + "/" + tmp, "\\", "");
+            CORBA::Object_var obj;
+            try
+              {
+                obj = cns.resolveStr(nspath.c_str());
+              }
+            catch (CosNaming::NamingContext::NotFound&e)
+              {
+                
+                RTC_ERROR(("Not found: %s.", cns.toString(e.rest_of_name)));
+                continue;
+              }
+            catch (CosNaming::NamingContext::CannotProceed&e)
+              {
+                RTC_ERROR(("Cannot proceed: %s.", cns.toString(e.rest_of_name)));
+                continue;
+              }
+            catch (CosNaming::NamingContext::InvalidName&/*e*/)
+              {
+                RTC_ERROR(("Invalid name: %s.", nspath.c_str()));
+                continue;
+              }
             RTC::PortService_var portsvc = RTC::PortService::_narrow(obj);
             if (CORBA::is_nil(portsvc)) { continue; }
             try { PortProfile_var p = portsvc->get_port_profile(); }
             catch (...) { continue; } // the port must be zombie
             CORBA::ULong len(ports->length());
             ports->length(len + 1);
-            ports[len] = portsvc;
+            ports[len] = RTC::PortService::_duplicate(portsvc);
           }
       }
     return ports._retn();
