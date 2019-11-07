@@ -814,7 +814,7 @@ namespace RTC
    */
   CosNaming::NamingContext_ptr CorbaNaming::getRootContext()
   {
-    return m_rootContext;
+    return CosNaming::NamingContext::_duplicate(m_rootContext);
   }
 
   /*!

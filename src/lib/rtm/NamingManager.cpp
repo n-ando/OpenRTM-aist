@@ -104,7 +104,7 @@ namespace RTC
   void NamingOnCorba::bindObject(const char* name,
                                  const PortBase* port)
   {
-    RTC_TRACE(("bindObject(name = %s, rtobj)", name));
+    RTC_TRACE(("bindObject(name = %s, port)", name));
 #ifdef ORB_IS_OMNIORB
     if (!m_endpoint.empty() && m_replaceEndpoint)
       {
@@ -352,7 +352,7 @@ namespace RTC
   void NamingOnManager::bindObject(const char* name,
 	  const PortBase*  /*port*/)
   {
-	  RTC_TRACE(("bindObject(name = %s, rtobj)", name));
+	  RTC_TRACE(("bindObject(name = %s, port)", name));
 	  return;
   }
 
@@ -741,6 +741,19 @@ namespace RTC
       for (auto & mgrName : m_mgrNames)
         {
           names.emplace_back(mgrName->name);
+        }
+      for (auto & name : names)
+        {
+          unbindObject(name.c_str());
+        }
+    }
+    {
+      std::lock_guard<std::mutex> guard(m_portNamesMutex);
+      coil::vstring names;
+      // unbindObject modifiy m_mgrNames
+      for (auto & portName : m_portNames)
+        {
+          names.emplace_back(portName->name);
         }
       for (auto & name : names)
         {
