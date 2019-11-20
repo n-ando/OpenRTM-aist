@@ -63,6 +63,14 @@ RTC::ReturnCode_t ConsoleIn::onExecute(RTC::UniqueId  /*ec_id*/)
 {
   std::cout << "Please input number: ";
   std::cin >> m_out.data;
+
+  if(std::cin.fail())
+  {
+      std::cin.clear();
+      std::cin.ignore(1024, '\n');
+      return RTC::RTC_ERROR;
+  }
+  
   std::cout << "Sending to subscriber: " << m_out.data << std::endl;
   m_outOut.write();
 
