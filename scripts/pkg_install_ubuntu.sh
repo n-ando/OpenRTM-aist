@@ -18,7 +18,7 @@
 # = OPT_UNINST   : uninstallation
 #
 
-VERSION=2.0.0.00
+VERSION=2.0.0.01
 
 #
 #---------------------------------------
@@ -82,7 +82,7 @@ deb_pkg="uuid-dev libboost-filesystem-dev"
 pkg_tools="build-essential debhelper devscripts"
 omni_devel="libomniorb4-dev omniidl"
 omni_runtime="omniorb-nameserver"
-openrtm_devel="openrtm-aist-doc openrtm-aist-dev"
+openrtm_devel="openrtm-aist-doc openrtm-aist-idl openrtm-aist-dev"
 openrtm_runtime="openrtm-aist openrtm-aist-example"
 
 runtime_pkgs="$omni_runtime $openrtm_runtime"
