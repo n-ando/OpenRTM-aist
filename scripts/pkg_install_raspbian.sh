@@ -6,7 +6,7 @@
 #         Nobu Kawauchi
 #
 
-VERSION=2.0.0.00
+VERSION=2.0.0.01
 
 #---------------------------------------
 # usage
@@ -18,7 +18,7 @@ usage()
 
     $(basename ${0}) -l {all|c++} [-r|-d|-s|-c] [-u|--yes]
     $(basename ${0}) [-u]
-    $(basename ${0}) -l python [-r|-d|-c] [-u|--yes] 
+    $(basename ${0}) -l {python|java} [-r|-d|-c] [-u|--yes]
     $(basename ${0}) {--help|-h|--version} 
 
   Example:
@@ -28,7 +28,7 @@ usage()
     $(basename ${0}) -l all -u
 
   Options:
-    -l <argument>  language or tool [c++|python|rtshell|all]
+    -l <argument>  language or tool [c++|python|java|rtshell|all]
         all        install packages of all the supported languages and tools
     -r             install robot component runtime
     -d             install robot component developer [default]
@@ -70,7 +70,7 @@ deb_pkg="uuid-dev libboost-filesystem-dev"
 pkg_tools="build-essential debhelper devscripts"
 omni_devel="libomniorb4-dev omniidl"
 omni_runtime="omniorb-nameserver"
-openrtm_devel="openrtm-aist-doc openrtm-aist-dev"
+openrtm_devel="openrtm-aist-doc openrtm-aist-idl openrtm-aist-dev"
 openrtm_runtime="openrtm-aist openrtm-aist-example"
 
 runtime_pkgs="$omni_runtime $openrtm_runtime"
@@ -102,7 +102,7 @@ python_core_pkgs="$omni_runtime $python_runtime $python_devel $build_tools $pkg_
 u_python_core_pkgs="$omni_runtime $omnipy"
 
 #--------------------------------------- Java
-java_devel="default-jdk"
+java_devel="openjdk-8-jdk"
 java_build="ant"
 openrtm_j_devel="openrtm-aist-java-doc"
 openrtm_j_runtime="openrtm-aist-java openrtm-aist-java-example"
@@ -140,7 +140,7 @@ check_arg()
     all ) arg_all=true ;;
     c++ ) arg_cxx=true ;;
     python ) arg_python=true ;;
-#    java ) arg_java=true ;;
+    java ) arg_java=true ;;
     rtshell ) arg_rtshell=true ;;
     *) arg_err=-1 ;;
   esac
@@ -611,7 +611,7 @@ apt-get update
 if test "x$arg_all" = "xtrue" ; then
   arg_cxx=true
   arg_python=true
-  #arg_java=true
+  arg_java=true
   arg_rtshell=true
 
   if test "x$OPT_RT" != "xtrue" && 
