@@ -87,4 +87,3 @@ endforeach()
 
 set(RTM_INCLUDE_IDLS ${DEPENDENCES_IDLS} PARENT_SCOPE)
 
-add_subdirectory(device_interfaces)
