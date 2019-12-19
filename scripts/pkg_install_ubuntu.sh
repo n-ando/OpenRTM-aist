@@ -18,7 +18,7 @@
 # = OPT_UNINST   : uninstallation
 #
 
-VERSION=2.0.0.00
+VERSION=2.0.0.03
 
 #
 #---------------------------------------
@@ -29,22 +29,26 @@ usage()
   cat <<EOF
   Usage: 
 
-    $(basename ${0}) [-l all/c++] [-r/-d/-s/-c] [-u]
-    $(basename ${0}) [-l python/java] [-r/-d/-c] [-u]
-    $(basename ${0}) [-l openrtp/rtshell] [-d] [-u]                           
+    $(basename ${0}) -l {all|c++} [-r|-d|-s|-c] [-u|--yes]
+    $(basename ${0}) [-u]
+    $(basename ${0}) -l {python|java} [-r|-d|-c] [-u|--yes]
+    $(basename ${0}) -l {openrtp|rtshell} [-d] [-u|--yes]
+    $(basename ${0}) {--help|-h|--version}
 
   Example:
-    $(basename ${0})  [= $(basename ${0}) -l c++ -d]
-    $(basename ${0}) -l all -d  [= -l c++ -l python -l java -l openrtp -l rtshell -d]
-    $(basename ${0}) -l c++ -l python -c --yes
+    $(basename ${0}) [= $(basename ${0}) -l all -d]
+    $(basename ${0}) -l all -d
+    $(basename ${0}) -l c++ -c --yes
+    $(basename ${0}) -l all -u
 
   Options:
-    -l <argument>  language or tool [c++/python/java/openrtp/rtshell]
+    -l <argument>  language or tool [c++|python|java|openrtp|rtshell|all]
+	all        install packages of all the supported languages and tools
     -r             install robot component runtime
     -d             install robot component developer [default]
     -s             install tool_packages for build source packages
     -c             install tool_packages for core developer
-    -u             uninstall
+    -u             uninstall packages
     --yes          force yes
     --help, -h     print this
     --version      print version number
@@ -82,7 +86,7 @@ deb_pkg="uuid-dev libboost-filesystem-dev"
 pkg_tools="build-essential debhelper devscripts"
 omni_devel="libomniorb4-dev omniidl"
 omni_runtime="omniorb-nameserver"
-openrtm_devel="openrtm-aist-doc openrtm-aist-dev"
+openrtm_devel="openrtm-aist-doc openrtm-aist-dev openrtm-aist-idl"
 openrtm_runtime="openrtm-aist openrtm-aist-example"
 
 runtime_pkgs="$omni_runtime $openrtm_runtime"
@@ -165,7 +169,7 @@ get_opt()
 { 
   # オプション指定が無い場合のデフォルト設定
   if [ $# -eq 0 ] ; then
-    arg_cxx=true
+    arg_all=true
     OPT_DEVEL=true
   fi
   arg_num=$#
@@ -182,11 +186,14 @@ get_opt()
     # オプション指定が -r/-s/-c のみの場合
     if test "x$1" = "x-r" ||
        test "x$1" = "x-s" ||
-       test "x$1" = "x-c" || 
-       test "x$1" = "x--yes" ; then 
+       test "x$1" = "x-c" ; then
       echo "[ERROR] Invalid option '$1'. '-l' option is required."
       usage
       exit
+    fi
+    if test "x$1" = "x--yes" ; then
+      arg_all=true
+      OPT_DEVEL=true
     fi
   fi
   eval set -- $OPT
@@ -224,7 +231,7 @@ get_opt()
   # オプション指定が -u のみの場合
   if [ $arg_num -eq 1 ] ; then
     if test "x$OPT_UNINST" = "xfalse" ; then 
-      arg_cxx=true
+      arg_all=true
     fi
   fi
 }

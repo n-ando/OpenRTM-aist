@@ -6,6 +6,8 @@
 #         Nobu Kawauchi
 #
 
+VERSION=2.0.0.01
+
 #---------------------------------------
 # usage
 #---------------------------------------
@@ -14,24 +16,34 @@ usage()
   cat <<EOF
   Usage: 
 
-    $(basename ${0}) [-l all/c++] [-r/-d/-s/-c] [-u]
-    $(basename ${0}) [-l python/java] [-r/-d/-c] [-u]
+    $(basename ${0}) -l {all|c++} [-r|-d|-s|-c] [-u|--yes]
+    $(basename ${0}) [-u]
+    $(basename ${0}) -l {python|java} [-r|-d|-c] [-u|--yes]
+    $(basename ${0}) {--help|-h|--version} 
 
   Example:
-    $(basename ${0})  [= $(basename ${0}) -l c++ -d]
-    $(basename ${0}) -l all -d  [= -l c++ -l python -l java -d]
-    $(basename ${0}) -l c++ -l python -c --yes
+    $(basename ${0})  [= $(basename ${0}) -l all -d]
+    $(basename ${0}) -l all -d
+    $(basename ${0}) -l c++ -c --yes
+    $(basename ${0}) -l all -u
 
   Options:
-    -l <argument>  language or tool [c++/python/java]
+    -l <argument>  language or tool [c++|python|java|rtshell|all]
+        all        install packages of all the supported languages and tools
     -r             install robot component runtime
     -d             install robot component developer [default]
     -s             install tool_packages for build source packages
     -c             install tool_packages for core developer
-    -u             uninstall
+    -u             uninstall packages
     --yes          force yes
     --help, -h     print this
+    --version      print version number
 EOF
+}
+
+version()
+{
+  echo ${VERSION}
 }
 
 #---------------------------------------
@@ -58,7 +70,7 @@ deb_pkg="uuid-dev libboost-filesystem-dev"
 pkg_tools="build-essential debhelper devscripts"
 omni_devel="libomniorb4-dev omniidl"
 omni_runtime="omniorb-nameserver"
-openrtm_devel="openrtm-aist-doc openrtm-aist-dev"
+openrtm_devel="openrtm-aist-doc openrtm-aist-idl openrtm-aist-dev"
 openrtm_runtime="openrtm-aist openrtm-aist-example"
 
 runtime_pkgs="$omni_runtime $openrtm_runtime"
@@ -90,7 +102,7 @@ python_core_pkgs="$omni_runtime $python_runtime $python_devel $build_tools $pkg_
 u_python_core_pkgs="$omni_runtime $omnipy"
 
 #--------------------------------------- Java
-java_devel="default-jdk"
+java_devel="openjdk-8-jdk"
 java_build="ant"
 openrtm_j_devel="openrtm-aist-java-doc"
 openrtm_j_runtime="openrtm-aist-java openrtm-aist-java-example"
@@ -129,6 +141,7 @@ check_arg()
     c++ ) arg_cxx=true ;;
     python ) arg_python=true ;;
     java ) arg_java=true ;;
+    rtshell ) arg_rtshell=true ;;
     *) arg_err=-1 ;;
   esac
 }
@@ -137,17 +150,32 @@ get_opt()
 { 
   # オプション指定が無い場合のデフォルト設定
   if [ $# -eq 0 ] ; then
-    arg_cxx=true
+    arg_all=true
     OPT_DEV=true
   fi
   arg_num=$#
  
-  OPT=`getopt -o l:rcsdhu -l help,yes -- $@` > /dev/null 2>&1
+  OPT=`getopt -o l:rcsdhu -l help,yes,version -- $@` > /dev/null 2>&1
   # return code check
   if [ $? -ne 0 ] ; then
     echo "[ERROR] Invalid option '$1'"
     usage
     exit
+  fi
+  # 引数1個の場合
+  if [ $arg_num -eq 1 ] ; then
+    # オプション指定が -r/-s/-c のみの場合
+    if test "x$1" = "x-r" ||
+       test "x$1" = "x-s" ||
+       test "x$1" = "x-c" ; then
+      echo "[ERROR] Invalid option '$1'. '-l' option is required."
+      usage
+      exit
+    fi
+    if test "x$1" = "x--yes" ; then
+      arg_all=true
+      OPT_DEVEL=true
+    fi
   fi
   eval set -- $OPT
 
@@ -155,6 +183,7 @@ get_opt()
   do
     case "$1" in
         -h|--help ) usage ; exit ;;
+	--version ) version ; exit ;;
         --yes ) FORCE_YES=true ;;
         -l )  if [ -z "$2" ] ; then
                 echo "$1 option requires an argument." 1>&2
@@ -183,7 +212,7 @@ get_opt()
   # オプション指定が -u のみの場合
   if [ $arg_num -eq 1 ] ; then
     if test "x$OPT_FLG" = "xfalse" ; then 
-      arg_cxx=true
+      arg_all=true
     fi
   fi
 }
@@ -229,7 +258,7 @@ fi
 # コードネーム取得
 #---------------------------------------
 check_codename () {
-  cnames="wheezy jessie stretch"
+  cnames="jessie stretch buster"
   for c in $cnames; do
     if test -f "/etc/apt/sources.list"; then
       res=`grep $c /etc/apt/sources.list`
@@ -306,7 +335,7 @@ update_source_list () {
     apt-get install dirmngr
   fi
 　# 公開鍵登録
-  apt-key adv --keyserver keys.gnupg.net --recv-keys 4BCE106E087AFAC0
+  wget -O- --no-check-certificate https://openrtm.org/pub/openrtm.key | apt-key add -
 }
 
 #----------------------------------------
@@ -423,6 +452,12 @@ install_branch()
       install_packages $java_dev_pkgs
     fi
   fi
+
+  if test "x$arg_rtshell" = "xtrue" ; then
+    select_opt_shl="[rtshell] install"
+    install_packages python-pip
+    rtshell_ret=`pip install rtshell-aist`
+  fi
 }
 
 #---------------------------------------
@@ -471,6 +506,11 @@ uninstall_branch()
       uninstall_packages `reverse $u_java_dev_pkgs`
     fi
   fi
+
+  if test "x$arg_rtshell" = "xtrue" ; then
+    select_opt_shl="[rtshell] uninstall"
+    rtshell_ret=`pip uninstall -y rtshell-aist rtctree-aist rtsprofile-aist`
+  fi
 }
 
 #---------------------------------------
@@ -494,6 +534,9 @@ EOF
   if test ! "x$select_opt_j" = "x" ; then
     echo $select_opt_j
   fi
+  if test ! "x$select_opt_shl" = "x" ; then
+    echo $select_opt_shl
+  fi
 }
 
 #---------------------------------------
@@ -516,6 +559,11 @@ EOF
   for p in $*; do
     echo $p
   done
+  if test "x$arg_rtshell" = "xtrue" && test "x$OPT_FLG" = "xtrue"; then
+    if test "x$rtshell_ret" != "x"; then
+      echo "rtshell"
+    fi
+  fi
 }
 
 #---------------------------------------
@@ -537,6 +585,11 @@ EOF
   for p in $*; do
     echo $p
   done
+  if test "x$arg_rtshell" = "xtrue" && test "x$OPT_FLG" = "xfalse"; then
+    if test "x$rtshell_ret" != "x"; then
+      echo "rtshell"
+    fi
+  fi
 }
 
 #---------------------------------------
@@ -559,6 +612,7 @@ if test "x$arg_all" = "xtrue" ; then
   arg_cxx=true
   arg_python=true
   arg_java=true
+  arg_rtshell=true
 
   if test "x$OPT_RT" != "xtrue" && 
      test "x$OPT_DEV" != "xtrue" &&

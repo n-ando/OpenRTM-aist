@@ -103,6 +103,12 @@ RTC::ReturnCode_t ConsoleInShort::onExecute(RTC::UniqueId  /*ec_id*/)
   count++;
 #else
   std::cin >> m_out.data;
+  if(std::cin.fail())
+  {
+      std::cin.clear();
+      std::cin.ignore(1024, '\n');
+      return RTC::RTC_ERROR;
+  }
 #endif
   if (m_out.data == 666) return RTC::RTC_ERROR;
   m_outOut.write();
