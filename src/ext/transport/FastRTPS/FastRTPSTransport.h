@@ -23,16 +23,19 @@
 
 #include <rtm/Manager.h>
 
-class ManagerActionListener : public RTM::ManagerActionListener
+namespace FastRTPSRTC
 {
-public:
-    ManagerActionListener();
-    ~ManagerActionListener() override;
-    void preShutdown() override;
-    void postShutdown() override;
-    void postReinit() override;
-    void preReinit() override;
-};
+  class ManagerActionListener : public RTM::ManagerActionListener
+  {
+  public:
+      ManagerActionListener();
+      ~ManagerActionListener() override;
+      void preShutdown() override;
+      void postShutdown() override;
+      void postReinit() override;
+      void preReinit() override;
+  };
+}
 
 
 extern "C"
@@ -51,7 +54,7 @@ extern "C"
    * @endif
    */
   DLL_EXPORT void FastRTPSTransportInit(RTC::Manager* manager);
-};
+}
 
 #endif // RTC_FASTRTPSTRANSPORT_H
 

@@ -23,30 +23,34 @@
 #include "FastRTPSManager.h"
 
 
-ManagerActionListener::ManagerActionListener()
+namespace FastRTPSRTC
 {
 
-}
-ManagerActionListener::~ManagerActionListener()
-{
+  ManagerActionListener::ManagerActionListener()
+  {
 
-}
-void ManagerActionListener::preShutdown()
-{
+  }
+  ManagerActionListener::~ManagerActionListener()
+  {
 
-}
-void ManagerActionListener::postShutdown()
-{
-    RTC::FastRTPSManager::shutdown_global();
-}
-void ManagerActionListener::postReinit()
-{
+  }
+  void ManagerActionListener::preShutdown()
+  {
 
-}
+  }
+  void ManagerActionListener::postShutdown()
+  {
+      RTC::FastRTPSManager::shutdown_global();
+  }
+  void ManagerActionListener::postReinit()
+  {
 
-void ManagerActionListener::preReinit()
-{
+  }
 
+  void ManagerActionListener::preReinit()
+  {
+
+  }
 }
 
 extern "C"
@@ -80,11 +84,11 @@ extern "C"
                                             ::RTC::FastRTPSOutPort>);
     }
 
-    ManagerActionListener *listener = new ManagerActionListener();
+    FastRTPSRTC::ManagerActionListener *listener = new FastRTPSRTC::ManagerActionListener();
     manager->addManagerActionListener(listener);
     
   }
   
-};
+}
 
 

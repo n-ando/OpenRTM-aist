@@ -455,7 +455,7 @@ extern "C"
    * @endif
    */
   DLL_EXPORT void ROSSerializerInit(RTC::Manager* manager);
-};
+}
 
 
 
