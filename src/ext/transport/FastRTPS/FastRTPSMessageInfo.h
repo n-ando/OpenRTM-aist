@@ -370,7 +370,7 @@ namespace RTC
   class __declspec(dllimport) GlobalFastRTPSMessageInfoList
 #endif
 #else
-  class GlobalFastRTPSMessageInfo
+  class GlobalFastRTPSMessageInfoList
 #endif
       : public FastRTPSMessageInfoList,
       public coil::Singleton<GlobalFastRTPSMessageInfoList >
