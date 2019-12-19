@@ -92,7 +92,7 @@ namespace RTC
      * @endif
      */
     ROS2SerializerBase(){
-      m_message.reserve(65000);
+      m_message.reserve(2147483647);
     };
 
     /*!
