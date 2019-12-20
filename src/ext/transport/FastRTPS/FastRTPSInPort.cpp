@@ -101,7 +101,7 @@ namespace RTC
       return;
     }
 
-    std::string profile_xml = prop.getProperty("fastrtps.QOSXML", "");
+    std::string profile_xml = prop.getProperty("fastrtps.QoSXML", "");
     FastRTPSManager& topicmgr = FastRTPSManager::instance(profile_xml);
     eprosima::fastrtps::Participant* participant = topicmgr.getParticipant();
 
