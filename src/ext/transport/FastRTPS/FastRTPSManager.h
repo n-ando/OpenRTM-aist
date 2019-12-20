@@ -231,6 +231,7 @@ namespace RTC
         static FastRTPSManager* manager;
         static std::mutex mutex;
 	    eprosima::fastrtps::Participant *m_participant;
+        std::string m_xml_profile_file;
     protected:
     };
 }
