@@ -44,7 +44,11 @@
 #else
 #   define DLL_PLUGIN
 #ifndef EXTERN
-#   define EXTERN
+#   ifdef LIBRARY_EXPORTS
+#       define EXTERN
+#   else
+#       define EXTERN extern
+#   endif
 #endif // ifndef EXTERN
 #endif /* Windows */
 
@@ -605,14 +609,42 @@ namespace coil
     typename Destructor = void (*)(AbstractClass*&)
     >
   class GlobalFactory
-    : public Factory<AbstractClass, Identifier, Compare, Creator, Destructor>,
-      public coil::Singleton<GlobalFactory<AbstractClass,
-                                           Identifier,
-                                           Compare,
-                                           Creator,
-                                           Destructor> >
+    : public Factory<AbstractClass, Identifier, Compare, Creator, Destructor>
   {
   public:
+    // A helper class to call SingletonClass-destructor.
+    struct Container
+    {
+      GlobalFactory* x;
+      ~Container(){ delete x; }
+    };
+
+    /*!
+     * @if jp
+     *
+     * @brief インスタンス生成
+     *
+     * インスタンスを生成する。
+     *
+     * @return インスタンス
+     *
+     * @else
+     *
+     * @brief Create instance
+     *
+     * Create instance.
+     *
+     * @return Instances
+     *
+     * @endif
+     */
+    static GlobalFactory& instance()
+    {
+      std::call_once(m_once, []{
+        m_instance.x = new GlobalFactory();
+      });
+      return *m_instance.x;
+    }
   private:
     /*!
      * @if jp
@@ -648,8 +680,33 @@ namespace coil
      */
     ~GlobalFactory() = default;
 
-    friend class Singleton<GlobalFactory>;
+    GlobalFactory(const GlobalFactory& x) = delete;
+    GlobalFactory& operator=(const GlobalFactory& x) = delete;
+
+    /*!
+     * @if jp
+     * @brief 排他制御オブジェクト
+     * @else
+     * @brief Mutual exclusion object
+     * @endif
+     */
+    static std::once_flag m_once;
+    /*!
+     * @if jp
+     * @brief SingletonClass オブジェクト
+     * @else
+     * @brief SingletonClass object
+     * @endif
+     */
+    static Container m_instance;
+
   };
+  template <class AbstractClass, typename Identifier, typename Compare, typename Creator, typename Destructor>
+  typename GlobalFactory<AbstractClass, Identifier, Compare, Creator, Destructor>::Container
+  GlobalFactory<AbstractClass, Identifier, Compare, Creator, Destructor>::m_instance;
+
+  template <class AbstractClass, typename Identifier, typename Compare, typename Creator, typename Destructor>
+  std::once_flag GlobalFactory<AbstractClass, Identifier, Compare, Creator, Destructor>::m_once;
 
 } // namespace coil
 
