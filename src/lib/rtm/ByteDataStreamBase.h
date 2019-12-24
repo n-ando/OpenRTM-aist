@@ -278,7 +278,6 @@ namespace RTC
 
 
 #ifndef LIBRARY_EXPORTS
-#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
 #include <rtm/idl/BasicDataTypeSkel.h>
 #include <rtm/idl/ExtendedDataTypesSkel.h>
 #include <rtm/idl/InterfaceDataTypesSkel.h>
@@ -356,7 +355,6 @@ EXTERN template class DLL_PLUGIN coil::GlobalFactory < ::RTC::ByteDataStream<RTC
 EXTERN template class DLL_PLUGIN coil::GlobalFactory < ::RTC::ByteDataStream<RTC::PanTiltState> >;
 EXTERN template class DLL_PLUGIN coil::GlobalFactory < ::RTC::ByteDataStream<RTC::RangeData> >;
 EXTERN template class DLL_PLUGIN coil::GlobalFactory < ::RTC::ByteDataStream<RTC::IntensityData> >;
-#endif
 #endif
 
 

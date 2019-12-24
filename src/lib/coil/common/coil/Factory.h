@@ -44,7 +44,11 @@
 #else
 #   define DLL_PLUGIN
 #ifndef EXTERN
-#   define EXTERN
+#   ifdef LIBRARY_EXPORTS
+#       define EXTERN
+#   else
+#       define EXTERN extern
+#   endif
 #endif // ifndef EXTERN
 #endif /* Windows */
 
