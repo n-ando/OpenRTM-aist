@@ -605,14 +605,22 @@ namespace coil
     typename Destructor = void (*)(AbstractClass*&)
     >
   class GlobalFactory
-    : public Factory<AbstractClass, Identifier, Compare, Creator, Destructor>,
-      public coil::Singleton<GlobalFactory<AbstractClass,
-                                           Identifier,
-                                           Compare,
-                                           Creator,
-                                           Destructor> >
+    : public Factory<AbstractClass, Identifier, Compare, Creator, Destructor>
   {
   public:
+      struct Container
+    {
+      GlobalFactory* x;
+      ~Container(){ delete x; }
+    };
+
+    static GlobalFactory& instance()
+    {
+      std::call_once(m_once, []{
+        m_instance.x = new GlobalFactory();
+      });
+      return *m_instance.x;
+    }
   private:
     /*!
      * @if jp
@@ -648,8 +656,19 @@ namespace coil
      */
     ~GlobalFactory() = default;
 
-    friend class Singleton<GlobalFactory>;
+    GlobalFactory(const GlobalFactory& x) = delete;
+    GlobalFactory& operator=(const GlobalFactory& x) = delete;
+
+    static std::once_flag m_once;
+    static Container m_instance;
+
   };
+  template <class AbstractClass, typename Identifier, typename Compare, typename Creator, typename Destructor>
+  typename GlobalFactory<AbstractClass, Identifier, Compare, Creator, Destructor>::Container
+  GlobalFactory<AbstractClass, Identifier, Compare, Creator, Destructor>::m_instance;
+
+  template <class AbstractClass, typename Identifier, typename Compare, typename Creator, typename Destructor>
+  std::once_flag GlobalFactory<AbstractClass, Identifier, Compare, Creator, Destructor>::m_once;
 
 } // namespace coil
 
