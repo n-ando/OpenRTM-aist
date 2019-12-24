@@ -1,4 +1,4 @@
-name: Docker Image CI
+name: OpenRTM on Linux
 
 on: [push, pull_request]
 
@@ -9,8 +9,8 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        os: [ubuntu_1604, ubuntu_1604, debian_10]
+        os: [ubuntu_1604, ubuntu_1804, debian_10]
     steps:
     - uses: actions/checkout@v1
-    - name: Build the Docker image
+    - name: Build OpenRTM
       run: docker build .. --file scripts/${{matrix.os}}/Dockerfile --tag openrtm:${{matrix.os}}-$(date +%s)
