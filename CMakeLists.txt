@@ -930,6 +930,6 @@ ADD_CUSTOM_TARGET (remove "${CMAKE_COMMAND}" -P
 
 if(UNIX)
     configure_file(${PROJECT_SOURCE_DIR}/packages/deb/debian/rules.in
-        ${PROJECT_SOURCE_DIR}/packages/deb/debian/rules @ONLY
+	 ${PROJECT_BINARY_DIR}/rules @ONLY
     )
 endif(UNIX)
