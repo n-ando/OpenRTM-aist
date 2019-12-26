@@ -649,12 +649,7 @@ namespace RTC
 template <class DataType>
 void CdrMemoryStreamInit()
 {
-    coil::GlobalFactory < ::RTC::ByteDataStream<DataType> > ::
-        instance().addFactory("corba",
-            ::coil::Creator< ::RTC::ByteDataStream<DataType>,
-            ::RTC::CORBA_CdrSerializer<DataType> >,
-            ::coil::Destructor< ::RTC::ByteDataStream<DataType>,
-            ::RTC::CORBA_CdrSerializer<DataType> > );
+    ::RTC::addSerializer<DataType, ::RTC::CORBA_CdrSerializer<DataType>>("corba");
 }
 
 

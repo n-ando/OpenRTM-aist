@@ -125,12 +125,12 @@ namespace RTC
                                      new Timestamp<DataType>("on_received"));
       this->addConnectorDataListener(ON_BUFFER_READ,
                                      new Timestamp<DataType>("on_read"));
-	  m_directport = this;
+      m_directport = this;
 
       CdrMemoryStreamInit<DataType>();
 
       std::string serializer_types{coil::eraseBlank(coil::flatten(
-        coil::GlobalFactory<ByteDataStream<DataType>>::instance().getIdentifiers()))};
+        getSerializerList<DataType>()))};
 
       RTC_DEBUG(("available serializer_types: %s", serializer_types.c_str()));
 
