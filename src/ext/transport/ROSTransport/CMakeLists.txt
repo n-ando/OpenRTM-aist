@@ -95,3 +95,4 @@ if(VXWORKS)
 endif(VXWORKS)
 
 
+file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/devel/include/ros)

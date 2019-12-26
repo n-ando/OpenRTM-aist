@@ -44,7 +44,7 @@ namespace RTC
    * @endif
    */
   FastRTPSInPort::FastRTPSInPort(void)
-   : m_buffer(0), m_listener(this)
+   : m_buffer(nullptr), m_listener(this)
   {
     // PortProfile setting
     setInterfaceType("fast-rtps");
@@ -176,12 +176,14 @@ namespace RTC
         topicmgr.registerType(type);
     }
 
-    eprosima::fastrtps::SubscriberAttributes Rparam;
-    Rparam.topic.topicKind = eprosima::fastrtps::rtps::NO_KEY;
-    Rparam.topic.topicDataType = m_dataType;
-    Rparam.topic.topicName = m_topic;
-    Rparam.historyMemoryPolicy = eprosima::fastrtps::rtps::PREALLOCATED_WITH_REALLOC_MEMORY_MODE;
-    m_subscriber = eprosima::fastrtps::Domain::createSubscriber(participant,Rparam,(eprosima::fastrtps::SubscriberListener*)&m_listener);
+    
+    eprosima::fastrtps::SubscriberAttributes *Rparam = new eprosima::fastrtps::SubscriberAttributes();
+    Rparam->topic.topicKind = eprosima::fastrtps::rtps::NO_KEY;
+    Rparam->topic.topicDataType = m_dataType;
+    Rparam->topic.topicName = m_topic;
+    Rparam->historyMemoryPolicy = eprosima::fastrtps::rtps::PREALLOCATED_WITH_REALLOC_MEMORY_MODE;
+    m_subscriber = eprosima::fastrtps::Domain::createSubscriber(participant,*Rparam,(eprosima::fastrtps::SubscriberListener*)&m_listener);
+    delete Rparam;
     if(m_subscriber == nullptr)
     {
         return;
@@ -387,6 +389,8 @@ namespace RTC
         onBufferWriteTimeout(data);
         onReceiverTimeout(data);
         return;
+
+      case BufferStatus::NOT_SUPPORTED:
 
       default:
         onReceiverError(data);

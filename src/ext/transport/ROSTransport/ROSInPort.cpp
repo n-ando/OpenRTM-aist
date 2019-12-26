@@ -44,7 +44,7 @@ namespace RTC
    * @endif
    */
   ROSInPort::ROSInPort(void)
-   : m_buffer(0),
+   : m_buffer(nullptr),
      m_pubnum(0),
      m_roscoreport(11311)
   {
@@ -446,6 +446,8 @@ namespace RTC
         onBufferWriteTimeout(data);
         onReceiverTimeout(data);
         return;
+
+      case BufferStatus::NOT_SUPPORTED:
 
       default:
         onReceiverError(data);

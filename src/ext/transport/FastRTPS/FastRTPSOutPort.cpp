@@ -151,13 +151,14 @@ namespace RTC
         topicmgr.registerType(type);
     }
 
-    eprosima::fastrtps::PublisherAttributes Wparam;
-    Wparam.topic.topicKind = eprosima::fastrtps::rtps::NO_KEY;
-    Wparam.topic.topicDataType = m_dataType;
-    Wparam.topic.topicName = m_topic;
-    Wparam.historyMemoryPolicy = eprosima::fastrtps::rtps::PREALLOCATED_WITH_REALLOC_MEMORY_MODE;
-    Wparam.qos.m_publishMode.kind = eprosima::fastrtps::ASYNCHRONOUS_PUBLISH_MODE;
-    m_publisher = eprosima::fastrtps::Domain::createPublisher(participant, Wparam, (eprosima::fastrtps::PublisherListener*)&m_listener);
+    eprosima::fastrtps::PublisherAttributes *Wparam = new eprosima::fastrtps::PublisherAttributes();
+    Wparam->topic.topicKind = eprosima::fastrtps::rtps::NO_KEY;
+    Wparam->topic.topicDataType = m_dataType;
+    Wparam->topic.topicName = m_topic;
+    Wparam->historyMemoryPolicy = eprosima::fastrtps::rtps::PREALLOCATED_WITH_REALLOC_MEMORY_MODE;
+    Wparam->qos.m_publishMode.kind = eprosima::fastrtps::ASYNCHRONOUS_PUBLISH_MODE;
+    m_publisher = eprosima::fastrtps::Domain::createPublisher(participant, *Wparam, (eprosima::fastrtps::PublisherListener*)&m_listener);
+    delete Wparam;
     if (m_publisher == nullptr)
     {
         RTC_ERROR(("Publisher initialize failed"));
