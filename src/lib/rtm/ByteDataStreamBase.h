@@ -275,7 +275,7 @@ namespace RTC
   template <class DataType>
   std::string addDataTypeToMarshalingType(const std::string &marshalingtype)
   {
-      std::string mtype{ std::string(::CORBA_Util::toRepositoryId<DataType>()) + "/" + marshalingtype };
+     std::string mtype{ std::string(::CORBA_Util::toRepositoryId<DataType>()) + "/" + marshalingtype };
      return mtype;
   }
 
@@ -292,9 +292,9 @@ namespace RTC
   }
 
   template <class DataType>
-  std::string removeSerializer(const std::string &marshalingtype)
+  void removeSerializer(const std::string &marshalingtype)
   {
-      std::string mtype{ std::string(::CORBA_Util::toRepositoryId<DataType>()) + "/" + marshalingtype };
+     std::string mtype{ std::string(::CORBA_Util::toRepositoryId<DataType>()) + "/" + marshalingtype };
      coil::GlobalFactory < ::RTC::ByteDataStreamBase >::instance().removeFactory(mtype);
   }
 
