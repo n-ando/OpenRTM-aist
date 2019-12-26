@@ -47,7 +47,7 @@ namespace RTC
     {
         m_endian = little_endian;
 #ifdef ORB_IS_ORBEXPRESS
-        _cdr.rewind();
+        m_cdr.rewind();
         m_cdr.is_little_endian(little_endian);
 #elif defined(ORB_IS_TAO)
         m_cdr.reset();
