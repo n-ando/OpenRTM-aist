@@ -566,8 +566,7 @@ namespace RTC
 
       if(m_cdr == nullptr || m_marshalingtype != marshalingtype)
       {
-        std::string mtype = addDataTypeToMarshalingType<DataType>(marshalingtype);
-        m_cdr = coil::GlobalFactory < ::RTC::ByteDataStreamBase >::instance().createObject(mtype);
+        m_cdr = createSerializer<DataType>(marshalingtype);
         m_marshalingtype = marshalingtype;
       }
       ::RTC::ByteDataStream<DataType> *cdr = dynamic_cast<::RTC::ByteDataStream<DataType>*>(m_cdr);
@@ -1193,8 +1192,7 @@ namespace RTC
             {
               if (m_cdr == nullptr || m_marshalingtype != marshalingtype)
               {
-                  std::string mtype = addDataTypeToMarshalingType<DataType>(marshalingtype);
-                  m_cdr = coil::GlobalFactory < ::RTC::ByteDataStreamBase >::instance().createObject(mtype);
+                  m_cdr = createSerializer<DataType>(marshalingtype);
                   m_marshalingtype = marshalingtype;
               }
               ::RTC::ByteDataStream<DataType> *cdr = dynamic_cast<::RTC::ByteDataStream<DataType>*>(m_cdr);
@@ -1940,8 +1938,7 @@ namespace RTC
 
           if (m_cdr == nullptr || m_marshalingtype != marshalingtype)
           {
-              std::string mtype = addDataTypeToMarshalingType<DataType>(marshalingtype);
-              m_cdr = coil::GlobalFactory < ::RTC::ByteDataStream<DataType> >::instance().createObject(mtype);
+              m_cdr = createSerializer<DataType>(marshalingtype);
               m_marshalingtype = marshalingtype;
           }
           ::RTC::ByteDataStream<DataType> *cdr = dynamic_cast<::RTC::ByteDataStream<DataType>*>(m_cdr);

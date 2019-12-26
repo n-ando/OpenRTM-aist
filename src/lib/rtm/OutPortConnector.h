@@ -250,8 +250,7 @@ namespace RTC
       // normal case
       if(m_cdr == nullptr)
       {
-        std::string mtype = addDataTypeToMarshalingType<DataType>(m_marshaling_type);
-        m_cdr = coil::GlobalFactory < ::RTC::ByteDataStreamBase >::instance().createObject(mtype);
+          m_cdr = createSerializer<DataType>(m_marshaling_type);
       }
       ::RTC::ByteDataStream<DataType> *cdr = dynamic_cast<::RTC::ByteDataStream<DataType>*>(m_cdr);
       if (!cdr)

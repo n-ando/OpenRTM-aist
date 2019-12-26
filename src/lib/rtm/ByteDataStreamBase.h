@@ -272,6 +272,26 @@ namespace RTC
 
   };
 
+  /*!
+   * @if jp
+   *
+   * @brief シリアライザの名前にデータ型名を追加する
+   * 例えば、"corba:RTC/TimedShort:RTC/TimedDouble"という名前のシリアライザ、
+   * データ型がTimedDouble型の場合以下のようになる。
+   * IDL:RTC/TimedDouble:1.0:corba:RTC/TimedShort:RTC/TimedDouble
+   * 
+   * @param marshalingtype シリアライザの名称
+   * @return 型名追加後のシリアライザ名
+   *
+   * @else
+   *
+   * @brief 
+   *
+   * @param marshalingtype 
+   * @return 
+   *
+   * @endif
+   */
   template <class DataType>
   std::string addDataTypeToMarshalingType(const std::string &marshalingtype)
   {
@@ -279,6 +299,22 @@ namespace RTC
      return mtype;
   }
 
+
+  /*!
+   * @if jp
+   *
+   * @brief GlobalFactoryにシリアライザを追加する
+   * 
+   * @param marshalingtype シリアライザの名称
+   *
+   * @else
+   *
+   * @brief 
+   *
+   * @param marshalingtype 
+   *
+   * @endif
+   */
   template <class DataType, class SerializerType>
   void addSerializer(const std::string &marshalingtype)
   {
@@ -291,6 +327,21 @@ namespace RTC
             SerializerType>);
   }
 
+  /*!
+   * @if jp
+   *
+   * @brief GlobalFactoryからシリアライザを削除する
+   * 
+   * @param marshalingtype シリアライザの名称
+   *
+   * @else
+   *
+   * @brief 
+   *
+   * @param marshalingtype 
+   *
+   * @endif
+   */
   template <class DataType>
   void removeSerializer(const std::string &marshalingtype)
   {
@@ -298,6 +349,43 @@ namespace RTC
      coil::GlobalFactory < ::RTC::ByteDataStreamBase >::instance().removeFactory(mtype);
   }
 
+  /*!
+   * @if jp
+   *
+   * @brief GlobalFactoryからシリアライザを生成する
+   * 
+   * @param marshalingtype シリアライザの名称
+   *
+   * @else
+   *
+   * @brief 
+   *
+   * @param marshalingtype 
+   *
+   * @endif
+   */
+  template <class DataType>
+  ::RTC::ByteDataStreamBase* createSerializer(const std::string &marshalingtype)
+  {
+      std::string mtype = addDataTypeToMarshalingType<DataType>(marshalingtype);
+      return coil::GlobalFactory < ::RTC::ByteDataStream<DataType> >::instance().createObject(mtype);
+  }
+
+  /*!
+   * @if jp
+   *
+   * @brief 使用可能なシリアライザの一覧を取得する
+   * 
+   * @return 使用可能なシリアライザの一覧
+   *
+   * @else
+   *
+   * @brief 
+   *
+   * @return
+   *
+   * @endif
+   */
   template <class DataType>
   std::vector<std::string> getSerializerList()
   {
