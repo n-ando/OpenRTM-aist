@@ -49,6 +49,7 @@ namespace RTC
       if (!xml_profile_file.empty())
       {
           eprosima::fastrtps::Domain::loadXMLProfilesFile(xml_profile_file);
+          m_xml_profile_file = std::move(xml_profile_file);
       }
   }
 
@@ -101,12 +102,19 @@ namespace RTC
    */
   void FastRTPSManager::start()
   {
-      eprosima::fastrtps::ParticipantAttributes PParam;
-      PParam.rtps.builtin.domainId = 0;
+      if(m_xml_profile_file.empty())
+      {
+        eprosima::fastrtps::ParticipantAttributes PParam;
+        PParam.rtps.builtin.domainId = 0;
 
-      PParam.rtps.setName("Participant_openrtm");
-      
-      m_participant = eprosima::fastrtps::Domain::createParticipant(PParam);
+        PParam.rtps.setName("participant_openrtm");
+        
+        m_participant = eprosima::fastrtps::Domain::createParticipant(PParam);
+      }
+      else
+      {
+          m_participant = eprosima::fastrtps::Domain::createParticipant("participant_openrtm");
+      }
    
   }
 

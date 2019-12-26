@@ -22,6 +22,7 @@
 #include <fastrtps/attributes/ParticipantAttributes.h>
 #include <fastrtps/publisher/Publisher.h>
 #include <fastrtps/attributes/PublisherAttributes.h>
+#include <fastrtps/xmlparser/XMLProfileManager.h>
 #include "FastRTPSOutPort.h"
 #include "FastRTPSManager.h"
 #include "FastRTPSMessageInfo.h"
@@ -44,7 +45,6 @@ namespace RTC
   FastRTPSOutPort::FastRTPSOutPort(void)
     : rtclog("FastRTPSOutPort")
   {
-    m_start = false;
   }
   
   /*!
@@ -77,7 +77,7 @@ namespace RTC
       return;
     }
 
-    std::string profile_xml = prop.getProperty("QOSXML", "");
+    std::string profile_xml = prop.getProperty("fastrtps.QoSXML", "");
     FastRTPSManager& topicmgr = FastRTPSManager::instance(profile_xml);
     eprosima::fastrtps::Participant* participant = topicmgr.getParticipant();
 
@@ -151,14 +151,36 @@ namespace RTC
         topicmgr.registerType(type);
     }
 
-    eprosima::fastrtps::PublisherAttributes *Wparam = new eprosima::fastrtps::PublisherAttributes();
-    Wparam->topic.topicKind = eprosima::fastrtps::rtps::NO_KEY;
-    Wparam->topic.topicDataType = m_dataType;
-    Wparam->topic.topicName = m_topic;
-    Wparam->historyMemoryPolicy = eprosima::fastrtps::rtps::PREALLOCATED_WITH_REALLOC_MEMORY_MODE;
-    Wparam->qos.m_publishMode.kind = eprosima::fastrtps::ASYNCHRONOUS_PUBLISH_MODE;
-    m_publisher = eprosima::fastrtps::Domain::createPublisher(participant, *Wparam, (eprosima::fastrtps::PublisherListener*)&m_listener);
-    delete Wparam;
+    std::string publisher_name = prop.getProperty("fastrtps.publisher.name");
+    if(publisher_name.empty())
+    {
+      eprosima::fastrtps::PublisherAttributes *Wparam = new eprosima::fastrtps::PublisherAttributes();
+      Wparam->topic.topicKind = eprosima::fastrtps::rtps::NO_KEY;
+      Wparam->topic.topicDataType = m_dataType;
+      Wparam->topic.topicName = m_topic;
+      Wparam->historyMemoryPolicy = eprosima::fastrtps::rtps::PREALLOCATED_WITH_REALLOC_MEMORY_MODE;
+      Wparam->qos.m_publishMode.kind = eprosima::fastrtps::ASYNCHRONOUS_PUBLISH_MODE;
+      Wparam->qos.m_reliability.kind = eprosima::fastrtps::BEST_EFFORT_RELIABILITY_QOS;
+      m_publisher = eprosima::fastrtps::Domain::createPublisher(participant, *Wparam, (eprosima::fastrtps::PublisherListener*)&m_listener);
+      delete Wparam;
+    }
+    else
+    {
+      eprosima::fastrtps::PublisherAttributes *Wparam = new eprosima::fastrtps::PublisherAttributes();
+      if(eprosima::fastrtps::xmlparser::XMLP_ret::XML_ERROR == eprosima::fastrtps::xmlparser::XMLProfileManager::fillPublisherAttributes(publisher_name, *Wparam))
+      {
+        RTC_ERROR(("xml file load failed"));
+        delete Wparam;
+        return;
+      }
+      Wparam->topic.topicDataType = m_dataType;
+      Wparam->topic.topicName = m_topic;
+      Wparam->qos.m_reliability.kind = eprosima::fastrtps::RELIABLE_RELIABILITY_QOS;
+      m_publisher = eprosima::fastrtps::Domain::createPublisher(participant, *Wparam, (eprosima::fastrtps::PublisherListener*)&m_listener);
+      delete Wparam;
+    }
+
+    
     if (m_publisher == nullptr)
     {
         RTC_ERROR(("Publisher initialize failed"));

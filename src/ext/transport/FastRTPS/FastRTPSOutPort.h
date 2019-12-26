@@ -232,14 +232,14 @@ namespace RTC
 
 
     mutable Logger rtclog;
-    bool m_start;
+    bool m_start{false};
     coil::Properties m_properties;
     
     std::string m_topic;
     std::string m_dataType;
     std::mutex m_mutex;
 
-    eprosima::fastrtps::Publisher *m_publisher;
+    eprosima::fastrtps::Publisher *m_publisher{nullptr};
 
     /*!
      * @if jp
