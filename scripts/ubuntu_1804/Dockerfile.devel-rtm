@@ -1,0 +1,60 @@
+FROM ubuntu:18.04 as fluent
+
+RUN apt-get update\
+ && apt-get install -y --no-install-recommends\
+ g++\
+ make\
+ cmake\
+ ca-certificates\
+ wget\
+ flex\
+ bison
+
+# downlaod fluent-bit.
+RUN mkdir /root/fluent-bit
+RUN wget -O - https://github.com/fluent/fluent-bit/archive/v1.3.4.tar.gz\
+ | tar xfz - -C /root/fluent-bit --strip-components 1
+
+# build fluent-bit.
+RUN cmake -DFLB_DEBUG=Off\
+ -DFLB_TRACE=Off\
+ -DFLB_JEMALLOC=On\
+ -DFLB_TLS=On\
+ -DFLB_SHARED_LIB=On\
+ -DFLB_EXAMPLES=Off\
+ -DFLB_HTTP_SERVER=On\
+ -DFLB_IN_SYSTEMD=On\
+ -DFLB_OUT_KAFKA=On\
+ -DCMAKE_BUILD_TYPE=Release\
+ -DCMAKE_INSTALL_PREFIX=/tmp/flb/install\
+ -S /root/fluent-bit\
+ -B/tmp/flb/build
+RUN cmake --build /tmp/flb/build --target install/strip -- -j$(nproc)
+
+# install header files.
+RUN mkdir -p /tmp/flb/install/include/lib/flb_libco
+RUN cp /root/fluent-bit/lib/flb_libco/libco.h /tmp/flb/install/include/lib/flb_libco
+RUN cp -r /tmp/flb/build/include/jemalloc\
+ /root/fluent-bit/lib/msgpack-*/include/*\
+ /root/fluent-bit/lib/monkey/include/monkey\
+ /root/fluent-bit/lib/mbedtls-*/include/mbedtls\
+ /tmp/flb/install/include/
+
+############################################################
+FROM ubuntu:18.04 as rtm-build
+
+RUN apt-get update\
+ && apt-get install -y --no-install-recommends\
+ g++\
+ make\
+ cmake\
+ uuid-dev\
+ libboost-filesystem-dev\
+ omniorb-nameserver\
+ libomniorb4-dev\
+ omniidl\
+ python\
+ && apt-get clean\
+ && rm -rf /var/lib/apt/lists/*
+
+COPY --from=fluent /tmp/flb/install /usr/local/
