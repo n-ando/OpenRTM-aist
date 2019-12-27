@@ -6,51 +6,39 @@
 #  @brief CORBA skelton/stub wrapper generator
 #  @date $Date: 2007-01-11 08:58:25 $
 #  @author Noriaki Ando <n-ando@aist.go.jp>
-# 
+#
 #  Copyright (C) 2004-2007
 #      Task-intelligence Research Group,
 #      Intelligent Systems Research Institute,
 #      National Institute of
 #          Advanced Industrial Science and Technology (AIST), Japan
 #      All rights reserved.
-# 
+#
 #  $Id$
-# 
+#
 
 from __future__ import print_function
 
+import skel_wrapper
 import os
 import sys
 import getopt
 import subprocess
 
 if os.name != "nt":
-	cmd = "rtm-config --libdir"
-	try:
-		p = subprocess.Popen(cmd.split(), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-		p.wait()
-		libdir_path = p.stdout.readlines()
-		if sys.version_info[0] == 3:
-			libdir_path[0] = libdir_path[0].decode()
+    pyhelper_path = "@CMAKE_INSTALL_PREFIX@/@INSTALL_RTM_SCRIPT_DIR@py_helper"
+    sys.path.append(pyhelper_path)
 
-		pyhelper_path = libdir_path[0].replace("\n","")
-		if pyhelper_path:
-			pyhelper_path = pyhelper_path + "/py_helper"
-			sys.path.append(pyhelper_path)
-	except:
-		pass
-
-import skel_wrapper
 
 opt_args_fmt = ["help",
-		"idl-file=",
-		"include-dir=",
-		"output-dir=",
-		"skel-suffix=",
-		"stub-suffix=",
-		"category=",
-		"dependencies=",
-		"verbose"]
+                "idl-file=",
+                "include-dir=",
+                "output-dir=",
+                "skel-suffix=",
+                "stub-suffix=",
+                "category=",
+                "dependencies=",
+                "verbose"]
 
 
 config_inc = """
@@ -64,7 +52,7 @@ config_inc = """
 
 
 def usage():
-	print("""
+    print("""
 Usage: rtm-skelwrapper [OPTIONS]
 
 Options:
@@ -131,68 +119,67 @@ following include guard will be defined.
 
 
 def main():
-	try:
-		opts, args = getopt.getopt(sys.argv[1:], "f:I:o:c:hv",
-					   opt_args_fmt)
-	except getopt.GetoptError:
-		print("Error: Invalid options.", getopt.GetoptError, file=sys.stderr)
-		usage()
-		sys.exit(-1)
+    try:
+        opts, args = getopt.getopt(sys.argv[1:], "f:I:o:c:hv",
+                                   opt_args_fmt)
+    except getopt.GetoptError:
+        print("Error: Invalid options.", getopt.GetoptError, file=sys.stderr)
+        usage()
+        sys.exit(-1)
 
-	if not opts:
-		usage()
-		sys.exit(-1)
+    if not opts:
+        usage()
+        sys.exit(-1)
 
-	include_dir = ""
-	output_dir  = ""
-	skel_suffix = "Skel"
-	stub_suffix = "Stub"
-	category = "OpenRTM"
-	dependencies = ""
-	idl_file    = None
-	verbose     = False
+    include_dir = ""
+    output_dir = ""
+    skel_suffix = "Skel"
+    stub_suffix = "Stub"
+    category = "OpenRTM"
+    dependencies = ""
+    idl_file = None
+    verbose = False
 
-	for opt, arg in opts:
-		if opt in ("-h", "--help"):
-			usage()
+    for opt, arg in opts:
+        if opt in ("-h", "--help"):
+            usage()
 
-		if opt in ("-f", "--idl-file"):
-			idl_file = arg
+        if opt in ("-f", "--idl-file"):
+            idl_file = arg
 
-		if opt in ("-I", "--include-dir"):
-			include_dir = arg
+        if opt in ("-I", "--include-dir"):
+            include_dir = arg
 
-		if opt in ("-o", "--output-dir"):
-			output_dir = arg
+        if opt in ("-o", "--output-dir"):
+            output_dir = arg
 
-		if opt in ("-c", "--category"):
-			category = arg
+        if opt in ("-c", "--category"):
+            category = arg
 
-		if opt in ("-d", "--dependencies"):
-			dependencies = arg
+        if opt in ("-d", "--dependencies"):
+            dependencies = arg
 
-		if opt in ("--skel-suffix"):
-			skel_suffix = arg
+        if opt in ("--skel-suffix"):
+            skel_suffix = arg
 
-		if opt in ("--stub-suffix"):
-			stub_suffix = arg
+        if opt in ("--stub-suffix"):
+            stub_suffix = arg
 
-		if opt in ("-v", "--verbose"):
-			verbose=True
+        if opt in ("-v", "--verbose"):
+            verbose = True
 
-	if not idl_file:
-		print("Error: IDL file is not given.", file=sys.stderr)
-		usage()
-		sys.exit(-1)
+    if not idl_file:
+        print("Error: IDL file is not given.", file=sys.stderr)
+        usage()
+        sys.exit(-1)
 
+    import skel_wrapper
 
-	import skel_wrapper
-
-	s = skel_wrapper.skel_wrapper(idl_file, skel_suffix, stub_suffix,
-				      include_dir, config_inc, output_dir,
-				      category, dependencies, verbose)
-	s.generate()
+    s = skel_wrapper.skel_wrapper(idl_file, skel_suffix, stub_suffix,
+                                  include_dir, config_inc, output_dir,
+                                  category, dependencies, verbose)
+    s.generate()
 
 
 if __name__ == "__main__":
-	main()
+    main()
