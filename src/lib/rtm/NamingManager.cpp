@@ -750,7 +750,7 @@ namespace RTC
     {
       std::lock_guard<std::mutex> guard(m_portNamesMutex);
       coil::vstring names;
-      // unbindObject modifiy m_mgrNames
+      // unbindObject modifiy m_portNames
       for (auto & portName : m_portNames)
         {
           names.emplace_back(portName->name);

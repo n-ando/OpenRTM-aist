@@ -23,6 +23,7 @@
 #include <fastrtps/participant/Participant.h>
 #include <fastrtps/attributes/ParticipantAttributes.h>
 #include <fastrtps/attributes/SubscriberAttributes.h>
+#include <fastrtps/xmlparser/XMLProfileManager.h>
 #include <fastrtps/Domain.h>
 #include "FastRTPSManager.h"
 #include "FastRTPSMessageInfo.h"
@@ -44,7 +45,7 @@ namespace RTC
    * @endif
    */
   FastRTPSInPort::FastRTPSInPort(void)
-   : m_buffer(0), m_listener(this)
+   : m_buffer(nullptr), m_listener(this)
   {
     // PortProfile setting
     setInterfaceType("fast-rtps");
@@ -100,7 +101,7 @@ namespace RTC
       return;
     }
 
-    std::string profile_xml = prop.getProperty("QOSXML", "");
+    std::string profile_xml = prop.getProperty("fastrtps.QoSXML", "");
     FastRTPSManager& topicmgr = FastRTPSManager::instance(profile_xml);
     eprosima::fastrtps::Participant* participant = topicmgr.getParticipant();
 
@@ -176,12 +177,33 @@ namespace RTC
         topicmgr.registerType(type);
     }
 
-    eprosima::fastrtps::SubscriberAttributes Rparam;
-    Rparam.topic.topicKind = eprosima::fastrtps::rtps::NO_KEY;
-    Rparam.topic.topicDataType = m_dataType;
-    Rparam.topic.topicName = m_topic;
-    Rparam.historyMemoryPolicy = eprosima::fastrtps::rtps::PREALLOCATED_WITH_REALLOC_MEMORY_MODE;
-    m_subscriber = eprosima::fastrtps::Domain::createSubscriber(participant,Rparam,(eprosima::fastrtps::SubscriberListener*)&m_listener);
+    std::string subscriber_name = prop.getProperty("fastrtps.subscriber.name");
+    if(subscriber_name.empty())
+    {
+      eprosima::fastrtps::SubscriberAttributes *Rparam = new eprosima::fastrtps::SubscriberAttributes();
+      Rparam->topic.topicKind = eprosima::fastrtps::rtps::NO_KEY;
+      Rparam->topic.topicDataType = m_dataType;
+      Rparam->topic.topicName = m_topic;
+      Rparam->historyMemoryPolicy = eprosima::fastrtps::rtps::PREALLOCATED_WITH_REALLOC_MEMORY_MODE;
+      Rparam->qos.m_reliability.kind = eprosima::fastrtps::BEST_EFFORT_RELIABILITY_QOS;
+      m_subscriber = eprosima::fastrtps::Domain::createSubscriber(participant,*Rparam,(eprosima::fastrtps::SubscriberListener*)&m_listener);
+      delete Rparam;
+    }
+    else
+    {
+      eprosima::fastrtps::SubscriberAttributes *Rparam = new eprosima::fastrtps::SubscriberAttributes();
+      if(eprosima::fastrtps::xmlparser::XMLP_ret::XML_ERROR == eprosima::fastrtps::xmlparser::XMLProfileManager::fillSubscriberAttributes(subscriber_name, *Rparam))
+      {
+        RTC_ERROR(("xml file load failed"));
+        delete Rparam;
+        return;
+      }
+      Rparam->topic.topicDataType = m_dataType;
+      Rparam->topic.topicName = m_topic;
+      Rparam->qos.m_reliability.kind = eprosima::fastrtps::RELIABLE_RELIABILITY_QOS;
+      m_subscriber = eprosima::fastrtps::Domain::createSubscriber(participant,*Rparam,(eprosima::fastrtps::SubscriberListener*)&m_listener);
+      delete Rparam;
+    }
     if(m_subscriber == nullptr)
     {
         return;
@@ -387,6 +409,8 @@ namespace RTC
         onBufferWriteTimeout(data);
         onReceiverTimeout(data);
         return;
+
+      case BufferStatus::NOT_SUPPORTED:
 
       default:
         onReceiverError(data);

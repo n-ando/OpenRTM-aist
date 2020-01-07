@@ -33,7 +33,6 @@ extern "C"
    */
   void ROS2TransportInit(RTC::Manager* manager)
   {
-    (void)manager;
     ROS2SerializerInit(manager);
   }
   

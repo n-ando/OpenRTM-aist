@@ -100,6 +100,32 @@ namespace RTC
     /*!
      * @if jp
      *
+     * @brief 指定名のROSMessageInfoを取得
+     *
+     * @param id 名前
+     * @return ROSMessageInfo
+     *
+     * @else
+     *
+     * @brief
+     *
+     * @param id
+     * @return
+     *
+     * @endif
+     */
+    ROSMessageInfoBase* ROSMessageInfoList::getInfo(const std::string& id)
+    {
+        if (m_data.find(id) == m_data.end())
+        {
+            return nullptr;
+        }
+        return m_data[id].object_;
+    }
+
+    /*!
+     * @if jp
+     *
      * @brief コンストラクタ
      *
      * @param object ROSMessageInfo

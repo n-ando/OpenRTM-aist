@@ -934,7 +934,7 @@ extern "C"
     RTC::ROSQuaternionDataInit();
     RTC::ROSVector3DDataInit();
     RTC::ROSCameraImageDataInit();
-  };
+  }
 }
 
 

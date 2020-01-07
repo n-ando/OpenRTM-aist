@@ -26,32 +26,36 @@
 #include "ROSTopicManager.h"
 
 
-ManagerActionListener::ManagerActionListener()
+namespace ROSRTM
 {
 
-}
-ManagerActionListener::~ManagerActionListener()
-{
+  ManagerActionListener::ManagerActionListener()
+  {
+
+  }
+  ManagerActionListener::~ManagerActionListener()
+  {
+
+  }
+  void ManagerActionListener::preShutdown()
+  {
+
+  }
+  void ManagerActionListener::postShutdown()
+  {
+      RTC::ROSTopicManager::shutdown_global();
+  }
+  void ManagerActionListener::postReinit()
+  {
+
+  }
+
+  void ManagerActionListener::preReinit()
+  {
+
+  }
 
 }
-void ManagerActionListener::preShutdown()
-{
-
-}
-void ManagerActionListener::postShutdown()
-{
-    RTC::ROSTopicManager::shutdown_global();
-}
-void ManagerActionListener::postReinit()
-{
-
-}
-
-void ManagerActionListener::preReinit()
-{
-
-}
-
 
 extern "C"
 {
@@ -84,10 +88,10 @@ extern "C"
     }
     ROSSerializerInit(manager);
 
-    ManagerActionListener *listener = new ManagerActionListener();
+    ROSRTM::ManagerActionListener *listener = new ROSRTM::ManagerActionListener();
     manager->addManagerActionListener(listener);
   }
   
-};
+}
 
 

@@ -379,7 +379,7 @@ namespace RTC
     std::string m_topic;
     std::string m_dataType;
     std::mutex m_mutex;
-    eprosima::fastrtps::Subscriber *m_subscriber;
+    eprosima::fastrtps::Subscriber *m_subscriber{nullptr};
 
 
     /*!
