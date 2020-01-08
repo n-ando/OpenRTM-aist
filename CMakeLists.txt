@@ -541,7 +541,7 @@ elseif(UNIX)
 	endif()
 elseif(WIN32)
 	set(COIL_OS_DIR "win32")
-	set(COIL_C_FLAGS_LIST "-D_WIN32_WINNT=0x0602")
+	set(COIL_C_FLAGS_LIST "-D_WIN32_WINNT=0x0603")
 	set(RTM_LINKER_OPTION advapi32.lib;ws2_32.lib;mswsock.lib;rpcrt4.lib;optimized;msvcrt.lib;optimized;msvcmrt.lib;debug;msvcrtd.lib)
 endif()
 
