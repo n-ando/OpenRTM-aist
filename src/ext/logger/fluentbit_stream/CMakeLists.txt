@@ -34,6 +34,7 @@ if(VXWORKS AND NOT RTP)
 
 	add_executable(${target} ${srcs})
 	openrtm_common_set_compile_props(${target})
+	openrtm_set_link_props_shared(${target})
 	target_link_libraries(${target} ${libs} fluent-bit)
 
 	install(TARGETS ${target} LIBRARY DESTINATION ${INSTALL_RTM_EXT_DIR}/logger

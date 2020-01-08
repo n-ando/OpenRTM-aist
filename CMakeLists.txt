@@ -887,8 +887,14 @@ function(openrtm_idl_compile_all name idls inc_path categoty dependencies)
 endfunction()
 
 function(openrtm_set_link_props_shared target)
-	if(WIN32)
-		target_link_options(${target} PRIVATE /WX)
+	if(${CMAKE_VERSION} VERSION_GREATER "3.12.99")
+		target_link_options(${target}
+			PRIVATE $<$<PLATFORM_ID:Windows>:/WX>
+			PRIVATE $<$<PLATFORM_ID:Linux>:
+				LINKER:--warn-common
+				LINKER:--fatal-warnings
+			>
+		)
 	endif()
 endfunction()
 
