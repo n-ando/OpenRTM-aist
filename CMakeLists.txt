@@ -892,12 +892,6 @@ function(openrtm_set_link_props_shared target)
 	endif()
 endfunction()
 
-function(openrtm_set_link_props_static target)
-	if(WIN32)
-		target_link_options(${target} PRIVATE /WX)
-	endif()
-endfunction()
-
 if(WIN32)
 	set(MAKE_DEF_COMMAND ${CMAKE_SOURCE_DIR}/scripts/makedeffile.py)
 endif(WIN32)
