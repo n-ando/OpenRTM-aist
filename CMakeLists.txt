@@ -7,6 +7,12 @@ project (OpenRTM_aist
 set(CORBA omniORB CACHE STRING "set CORBA ")
 set(ORB_ROOT ${ORB_ROOT} CACHE PATH "set ORB_ROOT")
 
+if(${CMAKE_VERSION} VERSION_GREATER 3.11.99)
+	find_package (Python3 REQUIRED COMPONENTS Interpreter)
+else()
+	set(Python3_EXECUTABLE python3)
+endif()
+
 if(NOT ORB_ROOT)
 	if(CORBA STREQUAL "omniORB")
 		if(UNIX)
@@ -825,7 +831,7 @@ function(openrtm_idl_compile idl_name inc_path output category dependencies)
 	add_custom_command(
 		OUTPUT ${output}
 		COMMAND ${IDL_COMPILE_COMMAND} ${idl_flags} ${inc_path} ${CMAKE_CURRENT_SOURCE_DIR}/${idl_name}
-		COMMAND python -B ${skel_wrapper} --include-dir="" --skel-suffix=Skel --stub-suffix=Stub --idl-file=${idl_name} --category=${category} --dependencies=${dependencies}
+		COMMAND ${Python3_EXECUTABLE} -B ${skel_wrapper} --include-dir="" --skel-suffix=Skel --stub-suffix=Stub --idl-file=${idl_name} --category=${category} --dependencies=${dependencies}
 		DEPENDS ${idl_name}
 		WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
 endfunction()
