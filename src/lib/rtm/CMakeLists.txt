@@ -371,7 +371,6 @@ else(VXWORKS)
 			$<TARGET_OBJECTS:${RTCSKEL_PROJECT_NAME}_objlib>)
 	endif()
 
-	openrtm_set_link_props_static(${PROJECT_NAME}-static)
 	set_target_properties(${PROJECT_NAME}-static PROPERTIES DEBUG_POSTFIX d)
 	openrtm_set_link_props_shared(${PROJECT_NAME})
 	set_target_properties(${PROJECT_NAME} PROPERTIES DEBUG_POSTFIX d)

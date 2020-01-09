@@ -18,6 +18,7 @@ else(VXWORKS)
 	add_executable(${target} rtcd.cpp)
 endif(VXWORKS)
 openrtm_common_set_compile_props(${target})
+openrtm_set_link_props_shared(${target})
 openrtm_include_rtm(${target})
 
 set(libs ${RTM_PROJECT_NAME} ${ORB_LIBRARIES} ${DATATYPE_FACTORIES})
