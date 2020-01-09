@@ -22,8 +22,7 @@
 
 #include <coil/Properties.h>
 #include <coil/Factory.h>
-
-
+#include <rtm/Typename.h>
 
 /*!
  * @if jp
@@ -41,7 +40,7 @@
  */
 namespace RTC
 {
-  /*!
+/*!
    * @if jp
    * @class ByteDataStreamBase
    * @brief シリアライザの基底クラス
@@ -60,10 +59,10 @@ namespace RTC
    *
    * @endif
    */
-  class ByteDataStreamBase
-  {
-  public:
-    /*!
+class ByteDataStreamBase
+{
+public:
+   /*!
      * @if jp
      *
      * @brief コンストラクタ
@@ -77,9 +76,9 @@ namespace RTC
      *
      * @endif
      */
-     ByteDataStreamBase();
+   ByteDataStreamBase();
 
-    /*!
+   /*!
      * @if jp
      *
      * @brief 仮想デストラクタ
@@ -94,9 +93,9 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~ByteDataStreamBase();
+   virtual ~ByteDataStreamBase();
 
-    /*!
+   /*!
      * @if jp
      * @brief 初期化関数(未使用)
      *
@@ -109,8 +108,8 @@ namespace RTC
      *
      * @endif
      */
-    virtual void init(const coil::Properties& prop);
-    /*!
+   virtual void init(const coil::Properties &prop);
+   /*!
      * @if jp
      * @brief 保持しているバッファにデータを書き込む
      *
@@ -126,8 +125,8 @@ namespace RTC
      *
      * @endif
      */
-    virtual void writeData(const unsigned char* buffer, unsigned long length) = 0;
-    /*!
+   virtual void writeData(const unsigned char *buffer, unsigned long length) = 0;
+   /*!
      * @if jp
      * @brief 引数のバッファにデータを書き込む
      *
@@ -143,8 +142,8 @@ namespace RTC
      *
      * @endif
      */
-    virtual void readData(unsigned char* buffer, unsigned long length) const = 0;
-    /*!
+   virtual void readData(unsigned char *buffer, unsigned long length) const = 0;
+   /*!
      * @if jp
      * @brief データの長さを取得
      *
@@ -157,8 +156,8 @@ namespace RTC
      *
      * @endif
      */
-    virtual unsigned long getDataLength() const = 0;
-    /*!
+   virtual unsigned long getDataLength() const = 0;
+   /*!
      * @if jp
      * @brief エンディアンの設定
      *
@@ -171,12 +170,10 @@ namespace RTC
      *
      * @endif
      */
-    virtual void isLittleEndian(bool little_endian);
-  };
+   virtual void isLittleEndian(bool little_endian);
+};
 
-
-
-  /*!
+/*!
    * @if jp
    * @class ByteDataStream
    * @brief シリアライザのテンプレートクラス
@@ -198,11 +195,11 @@ namespace RTC
    *
    * @endif
    */
-  template <typename DataType>
-  class ByteDataStream : public ByteDataStreamBase
-  {
-  public:
-    /*!
+template <typename DataType>
+class ByteDataStream : public ByteDataStreamBase
+{
+public:
+   /*!
      * @if jp
      *
      * @brief コンストラクタ
@@ -216,9 +213,9 @@ namespace RTC
      *
      * @endif
      */
-    ByteDataStream() = default;
+   ByteDataStream() = default;
 
-    /*!
+   /*!
      * @if jp
      *
      * @brief 仮想デストラクタ
@@ -233,9 +230,9 @@ namespace RTC
      *
      * @endif
      */
-    ~ByteDataStream() override = default;
+   ~ByteDataStream() override = default;
 
-    /*!
+   /*!
      * @if jp
      * @brief データの符号化
      *
@@ -250,8 +247,8 @@ namespace RTC
      *
      * @endif
      */
-    virtual bool serialize(const DataType& data) = 0;
-    /*!
+   virtual bool serialize(const DataType &data) = 0;
+   /*!
      * @if jp
      * @brief データの復号化
      *
@@ -266,97 +263,142 @@ namespace RTC
      *
      * @endif
      */
-    virtual bool deserialize(DataType& data) = 0;
-    
+   virtual bool deserialize(DataType &data) = 0;
+};
 
-  };
+/*!
+   * @if jp
+   *
+   * @brief シリアライザの名前にデータ型名を追加する
+   * 例えば、"corba:RTC/TimedShort:RTC/TimedDouble"という名前のシリアライザ、
+   * データ型がTimedDouble型の場合以下のようになる。
+   * IDL:RTC/TimedDouble:1.0:corba:RTC/TimedShort:RTC/TimedDouble
+   * 
+   * @param marshalingtype シリアライザの名称
+   * @return 型名追加後のシリアライザ名
+   *
+   * @else
+   *
+   * @brief 
+   *
+   * @param marshalingtype 
+   * @return 
+   *
+   * @endif
+   */
+template <class DataType>
+std::string addDataTypeToMarshalingType(const std::string &marshalingtype)
+{
+   std::string mtype{std::string(::CORBA_Util::toRepositoryId<DataType>()) + ":" + marshalingtype};
+   return mtype;
+}
 
+/*!
+   * @if jp
+   *
+   * @brief GlobalFactoryにシリアライザを追加する
+   * 
+   * @param marshalingtype シリアライザの名称
+   *
+   * @else
+   *
+   * @brief 
+   *
+   * @param marshalingtype 
+   *
+   * @endif
+   */
+template <class DataType, class SerializerType>
+void addSerializer(const std::string &marshalingtype)
+{
+   std::string mtype = addDataTypeToMarshalingType<DataType>(marshalingtype);
+   coil::GlobalFactory<::RTC::ByteDataStreamBase>::
+       instance()
+           .addFactory(mtype,
+                       ::coil::Creator<::RTC::ByteDataStreamBase,
+                                       SerializerType>,
+                       ::coil::Destructor<::RTC::ByteDataStreamBase,
+                                          SerializerType>);
+}
 
+/*!
+   * @if jp
+   *
+   * @brief GlobalFactoryからシリアライザを削除する
+   * 
+   * @param marshalingtype シリアライザの名称
+   *
+   * @else
+   *
+   * @brief 
+   *
+   * @param marshalingtype 
+   *
+   * @endif
+   */
+template <class DataType>
+void removeSerializer(const std::string &marshalingtype)
+{
+   std::string mtype = addDataTypeToMarshalingType<DataType>(marshalingtype);
+   coil::GlobalFactory<::RTC::ByteDataStreamBase>::instance().removeFactory(mtype);
+}
 
+/*!
+   * @if jp
+   *
+   * @brief GlobalFactoryからシリアライザを生成する
+   * 
+   * @param marshalingtype シリアライザの名称
+   *
+   * @else
+   *
+   * @brief 
+   *
+   * @param marshalingtype 
+   *
+   * @endif
+   */
+template <class DataType>
+::RTC::ByteDataStreamBase *createSerializer(const std::string &marshalingtype)
+{
+   std::string mtype = addDataTypeToMarshalingType<DataType>(marshalingtype);
+   return coil::GlobalFactory<::RTC::ByteDataStream<DataType>>::instance().createObject(mtype);
+}
+
+/*!
+   * @if jp
+   *
+   * @brief 使用可能なシリアライザの一覧を取得する
+   * 
+   * @return 使用可能なシリアライザの一覧
+   *
+   * @else
+   *
+   * @brief 
+   *
+   * @return
+   *
+   * @endif
+   */
+template <class DataType>
+std::vector<std::string> getSerializerList()
+{
+   std::vector<std::string> available_types;
+   std::vector<std::string> types = coil::GlobalFactory<ByteDataStreamBase>::instance().getIdentifiers();
+
+   for (auto type : types)
+   {
+      std::string id{::CORBA_Util::toRepositoryId<DataType>()};
+      if (type.size() >= id.size() && std::equal(std::begin(id), std::end(id), std::begin(type)))
+      {
+         type.erase(0, id.size() + 1);
+         available_types.push_back(type);
+      }
+   }
+   return available_types;
+}
 } // namespace RTC
 
+EXTERN template class DLL_PLUGIN coil::GlobalFactory<::RTC::ByteDataStreamBase>;
 
-
-#ifndef LIBRARY_EXPORTS
-#include <rtm/idl/BasicDataTypeSkel.h>
-#include <rtm/idl/ExtendedDataTypesSkel.h>
-#include <rtm/idl/InterfaceDataTypesSkel.h>
-EXTERN template class DLL_PLUGIN coil::GlobalFactory < ::RTC::ByteDataStream<RTC::TimedState> >;
-EXTERN template class DLL_PLUGIN coil::GlobalFactory < ::RTC::ByteDataStream<RTC::TimedShort> >;
-EXTERN template class DLL_PLUGIN coil::GlobalFactory < ::RTC::ByteDataStream<RTC::TimedLong> >;
-EXTERN template class DLL_PLUGIN coil::GlobalFactory < ::RTC::ByteDataStream<RTC::TimedUShort> >;
-EXTERN template class DLL_PLUGIN coil::GlobalFactory < ::RTC::ByteDataStream<RTC::TimedULong> >;
-EXTERN template class DLL_PLUGIN coil::GlobalFactory < ::RTC::ByteDataStream<RTC::TimedFloat> >;
-EXTERN template class DLL_PLUGIN coil::GlobalFactory < ::RTC::ByteDataStream<RTC::TimedDouble> >;
-EXTERN template class DLL_PLUGIN coil::GlobalFactory < ::RTC::ByteDataStream<RTC::TimedChar> >;
-EXTERN template class DLL_PLUGIN coil::GlobalFactory < ::RTC::ByteDataStream<RTC::TimedWChar> >;
-EXTERN template class DLL_PLUGIN coil::GlobalFactory < ::RTC::ByteDataStream<RTC::TimedBoolean> >;
-EXTERN template class DLL_PLUGIN coil::GlobalFactory < ::RTC::ByteDataStream<RTC::TimedOctet> >;
-EXTERN template class DLL_PLUGIN coil::GlobalFactory < ::RTC::ByteDataStream<RTC::TimedString> >;
-EXTERN template class DLL_PLUGIN coil::GlobalFactory < ::RTC::ByteDataStream<RTC::TimedWString> >;
-EXTERN template class DLL_PLUGIN coil::GlobalFactory < ::RTC::ByteDataStream<RTC::TimedShortSeq> >;
-EXTERN template class DLL_PLUGIN coil::GlobalFactory < ::RTC::ByteDataStream<RTC::TimedLongSeq> >;
-EXTERN template class DLL_PLUGIN coil::GlobalFactory < ::RTC::ByteDataStream<RTC::TimedUShortSeq> >;
-EXTERN template class DLL_PLUGIN coil::GlobalFactory < ::RTC::ByteDataStream<RTC::TimedULongSeq> >;
-EXTERN template class DLL_PLUGIN coil::GlobalFactory < ::RTC::ByteDataStream<RTC::TimedFloatSeq> >;
-EXTERN template class DLL_PLUGIN coil::GlobalFactory < ::RTC::ByteDataStream<RTC::TimedDoubleSeq> >;
-EXTERN template class DLL_PLUGIN coil::GlobalFactory < ::RTC::ByteDataStream<RTC::TimedCharSeq> >;
-EXTERN template class DLL_PLUGIN coil::GlobalFactory < ::RTC::ByteDataStream<RTC::TimedWCharSeq> >;
-EXTERN template class DLL_PLUGIN coil::GlobalFactory < ::RTC::ByteDataStream<RTC::TimedBooleanSeq> >;
-EXTERN template class DLL_PLUGIN coil::GlobalFactory < ::RTC::ByteDataStream<RTC::TimedOctetSeq> >;
-EXTERN template class DLL_PLUGIN coil::GlobalFactory < ::RTC::ByteDataStream<RTC::TimedStringSeq> >;
-EXTERN template class DLL_PLUGIN coil::GlobalFactory < ::RTC::ByteDataStream<RTC::TimedWStringSeq> >;
-EXTERN template class DLL_PLUGIN coil::GlobalFactory < ::RTC::ByteDataStream<RTC::TimedRGBColour> >;
-EXTERN template class DLL_PLUGIN coil::GlobalFactory < ::RTC::ByteDataStream<RTC::TimedPoint2D> >;
-EXTERN template class DLL_PLUGIN coil::GlobalFactory < ::RTC::ByteDataStream<RTC::TimedVector2D> >;
-EXTERN template class DLL_PLUGIN coil::GlobalFactory < ::RTC::ByteDataStream<RTC::TimedPose2D> >;
-EXTERN template class DLL_PLUGIN coil::GlobalFactory < ::RTC::ByteDataStream<RTC::TimedVelocity2D> >;
-EXTERN template class DLL_PLUGIN coil::GlobalFactory < ::RTC::ByteDataStream<RTC::TimedAcceleration2D> >;
-EXTERN template class DLL_PLUGIN coil::GlobalFactory < ::RTC::ByteDataStream<RTC::TimedPoseVel2D> >;
-EXTERN template class DLL_PLUGIN coil::GlobalFactory < ::RTC::ByteDataStream<RTC::TimedSize2D> >;
-EXTERN template class DLL_PLUGIN coil::GlobalFactory < ::RTC::ByteDataStream<RTC::TimedGeometry2D> >;
-EXTERN template class DLL_PLUGIN coil::GlobalFactory < ::RTC::ByteDataStream<RTC::TimedCovariance2D> >;
-EXTERN template class DLL_PLUGIN coil::GlobalFactory < ::RTC::ByteDataStream<RTC::TimedPointCovariance2D> >;
-EXTERN template class DLL_PLUGIN coil::GlobalFactory < ::RTC::ByteDataStream<RTC::TimedCarlike> >;
-EXTERN template class DLL_PLUGIN coil::GlobalFactory < ::RTC::ByteDataStream<RTC::TimedSpeedHeading2D> >;
-EXTERN template class DLL_PLUGIN coil::GlobalFactory < ::RTC::ByteDataStream<RTC::TimedPoint3D> >;
-EXTERN template class DLL_PLUGIN coil::GlobalFactory < ::RTC::ByteDataStream<RTC::TimedVector3D> >;
-EXTERN template class DLL_PLUGIN coil::GlobalFactory < ::RTC::ByteDataStream<RTC::TimedOrientation3D> >;
-EXTERN template class DLL_PLUGIN coil::GlobalFactory < ::RTC::ByteDataStream<RTC::TimedPose3D> >;
-EXTERN template class DLL_PLUGIN coil::GlobalFactory < ::RTC::ByteDataStream<RTC::TimedVelocity3D> >;
-EXTERN template class DLL_PLUGIN coil::GlobalFactory < ::RTC::ByteDataStream<RTC::TimedAngularVelocity3D> >;
-EXTERN template class DLL_PLUGIN coil::GlobalFactory < ::RTC::ByteDataStream<RTC::TimedAcceleration3D> >;
-EXTERN template class DLL_PLUGIN coil::GlobalFactory < ::RTC::ByteDataStream<RTC::TimedAngularAcceleration3D> >;
-EXTERN template class DLL_PLUGIN coil::GlobalFactory < ::RTC::ByteDataStream<RTC::TimedPoseVel3D> >;
-EXTERN template class DLL_PLUGIN coil::GlobalFactory < ::RTC::ByteDataStream<RTC::TimedSize3D> >;
-EXTERN template class DLL_PLUGIN coil::GlobalFactory < ::RTC::ByteDataStream<RTC::TimedGeometry3D> >;
-EXTERN template class DLL_PLUGIN coil::GlobalFactory < ::RTC::ByteDataStream<RTC::TimedCovariance3D> >;
-EXTERN template class DLL_PLUGIN coil::GlobalFactory < ::RTC::ByteDataStream<RTC::TimedSpeedHeading3D> >;
-EXTERN template class DLL_PLUGIN coil::GlobalFactory < ::RTC::ByteDataStream<RTC::TimedOAP> >;
-EXTERN template class DLL_PLUGIN coil::GlobalFactory < ::RTC::ByteDataStream<RTC::TimedQuaternion> >;
-EXTERN template class DLL_PLUGIN coil::GlobalFactory < ::RTC::ByteDataStream<RTC::ActArrayActuatorPos> >;
-EXTERN template class DLL_PLUGIN coil::GlobalFactory < ::RTC::ByteDataStream<RTC::ActArrayActuatorSpeed> >;
-EXTERN template class DLL_PLUGIN coil::GlobalFactory < ::RTC::ByteDataStream<RTC::ActArrayActuatorCurrent> >;
-EXTERN template class DLL_PLUGIN coil::GlobalFactory < ::RTC::ByteDataStream<RTC::ActArrayState> >;
-EXTERN template class DLL_PLUGIN coil::GlobalFactory < ::RTC::ByteDataStream<RTC::CameraImage> >;
-EXTERN template class DLL_PLUGIN coil::GlobalFactory < ::RTC::ByteDataStream<RTC::Fiducials> >;
-EXTERN template class DLL_PLUGIN coil::GlobalFactory < ::RTC::ByteDataStream<RTC::GPSData> >;
-EXTERN template class DLL_PLUGIN coil::GlobalFactory < ::RTC::ByteDataStream<RTC::GripperState> >;
-EXTERN template class DLL_PLUGIN coil::GlobalFactory < ::RTC::ByteDataStream<RTC::INSData> >;
-EXTERN template class DLL_PLUGIN coil::GlobalFactory < ::RTC::ByteDataStream<RTC::LimbState> >;
-EXTERN template class DLL_PLUGIN coil::GlobalFactory < ::RTC::ByteDataStream<RTC::Hypotheses2D> >;
-EXTERN template class DLL_PLUGIN coil::GlobalFactory < ::RTC::ByteDataStream<RTC::Hypotheses3D> >;
-EXTERN template class DLL_PLUGIN coil::GlobalFactory < ::RTC::ByteDataStream<RTC::Features> >;
-EXTERN template class DLL_PLUGIN coil::GlobalFactory < ::RTC::ByteDataStream<RTC::MultiCameraImages> >;
-EXTERN template class DLL_PLUGIN coil::GlobalFactory < ::RTC::ByteDataStream<RTC::Path2D> >;
-EXTERN template class DLL_PLUGIN coil::GlobalFactory < ::RTC::ByteDataStream<RTC::Path3D> >;
-EXTERN template class DLL_PLUGIN coil::GlobalFactory < ::RTC::ByteDataStream<RTC::PointCloud> >;
-EXTERN template class DLL_PLUGIN coil::GlobalFactory < ::RTC::ByteDataStream<RTC::PanTiltAngles> >;
-EXTERN template class DLL_PLUGIN coil::GlobalFactory < ::RTC::ByteDataStream<RTC::PanTiltState> >;
-EXTERN template class DLL_PLUGIN coil::GlobalFactory < ::RTC::ByteDataStream<RTC::RangeData> >;
-EXTERN template class DLL_PLUGIN coil::GlobalFactory < ::RTC::ByteDataStream<RTC::IntensityData> >;
-#endif
-
-
-
-#endif  // RTC_BYTEDATASTREAMBASE_H
+#endif // RTC_BYTEDATASTREAMBASE_H

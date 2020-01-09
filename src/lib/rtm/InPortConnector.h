@@ -222,7 +222,7 @@ namespace RTC
     {
       if(m_cdr == nullptr)
       {
-        m_cdr = coil::GlobalFactory < ::RTC::ByteDataStream<DataType> >::instance().createObject(m_marshaling_type);
+        m_cdr = createSerializer<DataType>(m_marshaling_type);
       }
       ::RTC::ByteDataStream<DataType> *cdr = dynamic_cast<::RTC::ByteDataStream<DataType>*>(m_cdr);
         

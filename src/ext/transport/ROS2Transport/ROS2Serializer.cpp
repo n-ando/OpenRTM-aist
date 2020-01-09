@@ -49,16 +49,11 @@ namespace RTC
   template <class DataType, class MessageType, typename originalType, typename convertedType>
   void ROS2SimpleDataInitBaseFunc(const char* name)
   {
-    coil::GlobalFactory < ::RTC::ByteDataStream<DataType> >::
-            instance().addFactory(name,
-            ::coil::Creator< ::RTC::ByteDataStream<DataType>,
-            RTC::ROS2SimpleData<DataType, MessageType, originalType, convertedType> >,
-            ::coil::Destructor< ::RTC::ByteDataStream<DataType>,
-            RTC::ROS2SimpleData<DataType, MessageType, originalType, convertedType> >);
+    addSerializer<DataType, ROS2SimpleData<DataType, MessageType, originalType, convertedType>>(name);
 
-    RTC::GlobalFastRTPSMessageInfoList::
+    GlobalFastRTPSMessageInfoList::
             instance().addInfo(name,
-            new RTC::ROS2MessageInfo<MessageType>());
+            new ROS2MessageInfo<MessageType>());
   }
 
   /*!
@@ -108,16 +103,11 @@ namespace RTC
   template <class DataType, class MessageType, typename originalType, typename convertedType>
   void ROS2SequenceDataInitBaseFunc(const char* name)
   {
-    coil::GlobalFactory < ::RTC::ByteDataStream<DataType> >::
-            instance().addFactory(name,
-            ::coil::Creator< ::RTC::ByteDataStream<DataType>,
-            RTC::ROS2SequenceData<DataType, MessageType, originalType, convertedType> >,
-            ::coil::Destructor< ::RTC::ByteDataStream<DataType>,
-            RTC::ROS2SequenceData<DataType, MessageType, originalType, convertedType> >);
+    addSerializer<DataType, ROS2SequenceData<DataType, MessageType, originalType, convertedType>>(name);
 
-    RTC::GlobalFastRTPSMessageInfoList::
+    GlobalFastRTPSMessageInfoList::
             instance().addInfo(name,
-            new RTC::ROS2MessageInfo<MessageType>());
+            new ROS2MessageInfo<MessageType>());
   }
 
   /*!
@@ -273,16 +263,11 @@ namespace RTC
    */
   void ROS2StringDataInit()
   {
-    coil::GlobalFactory < ::RTC::ByteDataStream<RTC::TimedString> >::
-            instance().addFactory("ros2:std_msgs/String",
-            ::coil::Creator< ::RTC::ByteDataStream<RTC::TimedString>,
-            RTC::ROS2StringData>,
-            ::coil::Destructor< ::RTC::ByteDataStream<RTC::TimedString>,
-            RTC::ROS2StringData>);
+    addSerializer<TimedString, ROS2StringData>("ros2:std_msgs/String");
 
-    RTC::GlobalFastRTPSMessageInfoList::
+    GlobalFastRTPSMessageInfoList::
             instance().addInfo("ros2:std_msgs/String",
-            new RTC::ROS2MessageInfo<std_msgs::msg::String>());
+            new ROS2MessageInfo<std_msgs::msg::String>());
   }
 
   /*!
@@ -420,16 +405,11 @@ namespace RTC
    */
   void ROS2Pont3DDataInit()
   {
-    coil::GlobalFactory < ::RTC::ByteDataStream<RTC::TimedPoint3D> >::
-            instance().addFactory("ros2:geometry_msgs/PointStamped",
-            ::coil::Creator< ::RTC::ByteDataStream<RTC::TimedPoint3D>,
-            RTC::ROS2Point3DData>,
-            ::coil::Destructor< ::RTC::ByteDataStream<RTC::TimedPoint3D>,
-            RTC::ROS2Point3DData>);
+    addSerializer<TimedPoint3D, ROS2Point3DData>("ros2:geometry_msgs/PointStamped");
 
-    RTC::GlobalFastRTPSMessageInfoList::
+    GlobalFastRTPSMessageInfoList::
             instance().addInfo("ros2:geometry_msgs/PointStamped",
-            new RTC::ROS2MessageInfo<geometry_msgs::msg::PointStamped>());
+            new ROS2MessageInfo<geometry_msgs::msg::PointStamped>());
   }
 
   /*!
@@ -568,16 +548,11 @@ namespace RTC
    */
   void ROS2QuaternionDataInit()
   {
-    coil::GlobalFactory < ::RTC::ByteDataStream<RTC::TimedQuaternion> >::
-            instance().addFactory("ros2:geometry_msgs/QuaternionStamped",
-            ::coil::Creator< ::RTC::ByteDataStream<RTC::TimedQuaternion>,
-            RTC::ROS2QuaternionData>,
-            ::coil::Destructor< ::RTC::ByteDataStream<RTC::TimedQuaternion>,
-            RTC::ROS2QuaternionData>);
+    addSerializer<TimedQuaternion, ROS2QuaternionData>("ros2:geometry_msgs/QuaternionStamped");
 
-    RTC::GlobalFastRTPSMessageInfoList::
+    GlobalFastRTPSMessageInfoList::
             instance().addInfo("ros2:geometry_msgs/QuaternionStamped",
-            new RTC::ROS2MessageInfo<geometry_msgs::msg::QuaternionStamped >());
+            new ROS2MessageInfo<geometry_msgs::msg::QuaternionStamped >());
   }
 
   /*!
@@ -715,16 +690,11 @@ namespace RTC
    */
   void ROS2Vector3DDataInit()
   {
-    coil::GlobalFactory < ::RTC::ByteDataStream<RTC::TimedVector3D> >::
-            instance().addFactory("ros2:geometry_msgs/Vector3Stamped",
-            ::coil::Creator< ::RTC::ByteDataStream<RTC::TimedVector3D>,
-            RTC::ROS2Vector3DData>,
-            ::coil::Destructor< ::RTC::ByteDataStream<RTC::TimedVector3D>,
-            RTC::ROS2Vector3DData>);
+    addSerializer<TimedVector3D, ROS2Vector3DData>("ros2:geometry_msgs/Vector3Stamped");
 
-    RTC::GlobalFastRTPSMessageInfoList::
+    GlobalFastRTPSMessageInfoList::
             instance().addInfo("ros2:geometry_msgs/Vector3Stamped",
-            new RTC::ROS2MessageInfo<geometry_msgs::msg::Vector3Stamped >());
+            new ROS2MessageInfo<geometry_msgs::msg::Vector3Stamped >());
   }
 
   
@@ -890,16 +860,11 @@ namespace RTC
    */
   void ROS2CameraImageDataInit()
   {
-    coil::GlobalFactory < ::RTC::ByteDataStream<RTC::CameraImage> >::
-            instance().addFactory("ros2:sensor_msgs/Image",
-            ::coil::Creator< ::RTC::ByteDataStream<RTC::CameraImage>,
-            RTC::ROS2CameraImageData>,
-            ::coil::Destructor< ::RTC::ByteDataStream<RTC::CameraImage>,
-            RTC::ROS2CameraImageData>);
+    addSerializer<CameraImage, ROS2CameraImageData>("ros2:sensor_msgs/Image");
 
-    RTC::GlobalFastRTPSMessageInfoList::
+    GlobalFastRTPSMessageInfoList::
             instance().addInfo("ros2:sensor_msgs/Image",
-            new RTC::ROS2MessageInfo<sensor_msgs::msg::Image >());
+            new ROS2MessageInfo<sensor_msgs::msg::Image >());
   }
 
 }
