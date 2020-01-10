@@ -272,7 +272,7 @@ namespace RTC
             {
                 publisher->connectTCP(transport);
             }
-        };
+        }
 
         /*!
          * @if jp

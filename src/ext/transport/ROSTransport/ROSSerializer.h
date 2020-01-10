@@ -64,7 +64,7 @@ namespace RTC
      *
      * @endif
      */
-    ROSSerializerBase(){};
+    ROSSerializerBase() = default;
     /*!
      * @if jp
      *
@@ -76,7 +76,7 @@ namespace RTC
      *
      * @endif
      */
-    ~ROSSerializerBase() override{};
+    ~ROSSerializerBase() override = default;
 
     /*!
      * @if jp
@@ -151,7 +151,7 @@ namespace RTC
     unsigned long getDataLength() const override
     {
       return static_cast<unsigned long>(m_message.num_bytes);
-    };
+    }
     /*!
      * @if jp
      *
@@ -173,7 +173,7 @@ namespace RTC
     {
       (void)data;
       return false;
-    };
+    }
     /*!
      * @if jp
      *
@@ -195,7 +195,7 @@ namespace RTC
     {
       (void)data;
       return false;
-    };
+    }
 
   protected:
     ros::SerializedMessage m_message;
@@ -238,10 +238,7 @@ namespace RTC
      *
      * @endif
      */
-    ROSSimpleData()
-    {
-
-    }
+    ROSSimpleData() = default;
     /*!
      * @if jp
      *
@@ -253,10 +250,7 @@ namespace RTC
      *
      * @endif
      */
-    ~ROSSimpleData() override
-    {
-
-    }
+    ~ROSSimpleData() override = default;
 
     /*!
      * @if jp
@@ -284,7 +278,7 @@ namespace RTC
       ROSSerializerBase<DataType>::m_message = ros::serialization::serializeMessage<MessageType>(msg);
 
       return true;
-    };
+    }
     /*!
      * @if jp
      *
@@ -311,7 +305,7 @@ namespace RTC
       data.data = static_cast<originalType>(msg.data);
 
       return true;
-    };
+    }
   };
 
   /*!
@@ -350,10 +344,7 @@ namespace RTC
      *
      * @endif
      */
-    ROSSequenceData()
-    {
-
-    }
+    ROSSequenceData() = default;
     /*!
      * @if jp
      *
@@ -365,10 +356,7 @@ namespace RTC
      *
      * @endif
      */
-    ~ROSSequenceData() override
-    {
-
-    }
+    ~ROSSequenceData() override = default;
 
     /*!
      * @if jp
@@ -400,7 +388,7 @@ namespace RTC
       ROSSerializerBase<DataType>::m_message = ros::serialization::serializeMessage<MessageType>(msg);
 
       return true;
-    };
+    }
     /*!
      * @if jp
      *
@@ -434,7 +422,7 @@ namespace RTC
       }
 
       return true;
-    };
+    }
   };
 }
 

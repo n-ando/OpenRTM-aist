@@ -217,7 +217,7 @@ namespace RTC
       msg.data = data.data;
       
       return ROS2SerializerBase<RTC::TimedString>::stdmsg_serialize(msg);
-    };
+    }
     /*!
      * @if jp
      *
@@ -245,7 +245,7 @@ namespace RTC
       data.data = CORBA::string_dup(msg.data.c_str());
 
       return ret;
-    };
+    }
   };
 
   /*!
@@ -497,7 +497,7 @@ namespace RTC
       
       
       return ROS2SerializerBase<RTC::TimedQuaternion>::geometrymsg_serialize(msg);
-    };
+    }
 
     /*!
      * @if jp

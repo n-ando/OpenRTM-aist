@@ -232,7 +232,6 @@ namespace RTC
 
 
     mutable Logger rtclog;
-    bool m_start{false};
     coil::Properties m_properties;
     
     std::string m_topic;

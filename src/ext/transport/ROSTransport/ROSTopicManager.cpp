@@ -38,7 +38,7 @@ namespace ros
 
 namespace RTC
 {
-  ROSTopicManager* ROSTopicManager::manager = NULL;
+  ROSTopicManager* ROSTopicManager::manager = nullptr;
   std::mutex ROSTopicManager::mutex;
 
 
