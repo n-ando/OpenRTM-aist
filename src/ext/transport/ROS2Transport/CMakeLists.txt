@@ -43,6 +43,7 @@ if(VXWORKS AND NOT RTP)
 
 	add_executable(${target} ${srcs})
 	openrtm_common_set_compile_props(${target})
+	openrtm_set_link_props_shared(${target})
 	openrtm_include_rtm(${target})
 	target_include_directories(${target}
 		PRIVATE ${PROJECT_SOURCE_DIR}/..)

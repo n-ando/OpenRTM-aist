@@ -22,8 +22,9 @@ endif()
 if(VXWORKS AND NOT RTP)
 	set(libs ${RTCSKEL_PROJECT_NAME})
 
-	add_executable(${target} ${${PROJECT_NAME}_SRCS} ${${PROJECT_NAME}_IDLSTUB})
+	add_executable(${PROJECT_NAME} ${${PROJECT_NAME}_SRCS} ${${PROJECT_NAME}_IDLSTUB})
 	openrtm_common_set_compile_props(${PROJECT_NAME})
+	openrtm_set_link_props_shared(${PROJECT_NAME})
 	openrtm_include_rtm(${PROJECT_NAME})
 	target_include_directories(${PROJECT_NAME} SYSTEM
 		PUBLIC ${PROJECT_BINARY_DIR})

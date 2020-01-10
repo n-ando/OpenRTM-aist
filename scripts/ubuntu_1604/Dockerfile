@@ -10,6 +10,7 @@ RUN apt-get update\
  omniorb-nameserver\
  libomniorb4-dev\
  omniidl\
+ python3\
  && apt-get clean\
  && rm -rf /var/lib/apt/lists/*
 

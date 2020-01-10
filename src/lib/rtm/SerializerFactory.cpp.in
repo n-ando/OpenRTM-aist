@@ -1,9 +1,0 @@
-#include <rtm/ByteDataStreamBase.h>
-#include <rtm/idl/BasicDataTypeSkel.h>
-#include <rtm/idl/ExtendedDataTypesSkel.h>
-#include <rtm/idl/InterfaceDataTypesSkel.h>
-#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
-template class __declspec(dllexport) coil::GlobalFactory < ::RTC::ByteDataStream<@RTC_DATA_TYPE@> >;
-#else
-template class coil::GlobalFactory < ::RTC::ByteDataStream<@RTC_DATA_TYPE@> >;
-#endif

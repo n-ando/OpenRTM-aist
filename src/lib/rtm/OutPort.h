@@ -117,7 +117,7 @@ namespace RTC
       CdrMemoryStreamInit<DataType>();
 
       std::string serializer_types{coil::eraseBlank(coil::flatten(
-        coil::GlobalFactory<ByteDataStream<DataType>>::instance().getIdentifiers()))};
+        getSerializerList<DataType>()))};
 
       RTC_DEBUG(("available serializer_types: %s", serializer_types.c_str()));
 
