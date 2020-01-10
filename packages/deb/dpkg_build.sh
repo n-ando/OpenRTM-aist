@@ -51,7 +51,11 @@ check_codename ()
   if test -f /etc/os-release ; then
     . /etc/os-release
     if test "x$ID" = "xdebian" ; then
-      DISTRIB_CODENAME=$VERSION_CODENAME
+      if test "x$VERSION_CODENAME" != "x" ; then
+        DISTRIB_CODENAME=$VERSION_CODENAME
+      else
+        DISTRIB_CODENAME=`lsb_release -cs`
+      fi
     else
       echo "This distribution may not be debian."
       exit

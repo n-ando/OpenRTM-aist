@@ -262,7 +262,11 @@ check_codename () {
   if test -f /etc/os-release ; then
     . /etc/os-release
     if test "x$ID" = "xdebian" ; then
-      code_name=$VERSION_CODENAME
+      if test "x$VERSION_CODENAME" != "x" ; then
+        code_name=$VERSION_CODENAME
+      else
+        code_name=`lsb_release -cs`
+      fi
     else
       echo $msg1
       exit
