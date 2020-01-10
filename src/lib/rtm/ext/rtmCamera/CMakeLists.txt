@@ -37,9 +37,6 @@ if(VXWORKS)
 						RUNTIME DESTINATION ${INSTALL_RTM_BIN_DIR}
 						COMPONENT ext)
 else()
-	if(WIN32)
-		set(additional_srcs rtmCameraFactory.cpp)
-	endif()
 	add_library(${PROJECT_NAME}_objlib OBJECT
 		${${PROJECT_NAME}_IDLSKEL}
 		${additional_srcs})
@@ -48,7 +45,6 @@ else()
 	target_include_directories(${PROJECT_NAME}_objlib SYSTEM
 		PUBLIC ${PROJECT_BINARY_DIR})
 	add_library(${PROJECT_NAME}-static STATIC $<TARGET_OBJECTS:${PROJECT_NAME}_objlib>)
-	openrtm_set_link_props_static(${PROJECT_NAME}-static)
 	set_target_properties(${PROJECT_NAME}-static PROPERTIES DEBUG_POSTFIX d)
 
 	add_library(${PROJECT_NAME} SHARED

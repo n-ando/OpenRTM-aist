@@ -7,6 +7,12 @@ project (OpenRTM_aist
 set(CORBA omniORB CACHE STRING "set CORBA ")
 set(ORB_ROOT ${ORB_ROOT} CACHE PATH "set ORB_ROOT")
 
+if(${CMAKE_VERSION} VERSION_GREATER 3.11.99)
+	find_package (Python3 REQUIRED COMPONENTS Interpreter)
+else()
+	set(Python3_EXECUTABLE python3)
+endif()
+
 if(NOT ORB_ROOT)
 	if(CORBA STREQUAL "omniORB")
 		if(UNIX)
@@ -528,7 +534,6 @@ if(VXWORKS)
 	set(RTM_OS_VXWORKS ON)
 elseif(UNIX)
 	set(COIL_OS_DIR "posix")
-	set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 	if(${CMAKE_SYSTEM_NAME}test MATCHES QNXtest)
 		set (RTM_OS_QNX ON)
 	else()
@@ -541,7 +546,7 @@ elseif(UNIX)
 	endif()
 elseif(WIN32)
 	set(COIL_OS_DIR "win32")
-	set(COIL_C_FLAGS_LIST "-D_WIN32_WINNT=0x0602")
+	set(COIL_C_FLAGS_LIST "-D_WIN32_WINNT=0x0603")
 	set(RTM_LINKER_OPTION advapi32.lib;ws2_32.lib;mswsock.lib;rpcrt4.lib;optimized;msvcrt.lib;optimized;msvcmrt.lib;debug;msvcrtd.lib)
 endif()
 
@@ -721,18 +726,9 @@ function(openrtm_common_set_compile_options target)
 		-Wno-weak-vtables
 		)
 
-	target_compile_options(${target} PRIVATE
-		# C++11: target_compile_features can't be used becase it's support after v3.1.0.
-		$<$<CXX_COMPILER_ID:GNU>:-std=c++11>
-		$<$<CXX_COMPILER_ID:Clang>:
-			$<$<NOT:$<PLATFORM_ID:Windows>>:-std=c++11>
-			$<$<PLATFORM_ID:Windows>:/std:c++14> # same as msvc.
-		>
-		## MSVC always enable c++11 and c++14 after MSVC 2015 Update 3.
-		$<$<CXX_COMPILER_ID:MSVC>:
-			$<$<VERSION_GREATER:${CMAKE_CXX_COMPILER_VERSION},19.00.23918>:/std:c++14>
-			/MP
-		>
+	  target_compile_options(${target} PRIVATE
+		# multi-process build
+		$<$<CXX_COMPILER_ID:MSVC>:/MP>
 
 		# warning options
 		$<$<CXX_COMPILER_ID:GNU>:
@@ -766,7 +762,12 @@ endfunction()
 function(openrtm_common_set_compile_props target)
 	openrtm_common_set_compile_definitions(${target})
 	openrtm_common_set_compile_options(${target})
-	set_target_properties(${target} PROPERTIES POSITION_INDEPENDENT_CODE ON)
+	set_target_properties(${target} PROPERTIES
+		POSITION_INDEPENDENT_CODE ON
+		CXX_STANDARD 11
+		CXX_EXTENSIONS OFF
+		CXX_STANDARD_REQUIRED ON
+	)
 endfunction()
 
 function(openrtm_gencode_set_compile_definitions target)
@@ -777,31 +778,22 @@ endfunction()
 
 function(openrtm_gencode_set_compile_options target)
 	target_compile_options(${target} PRIVATE
-		# C++11: target_compile_features can't be used becase it's support after v3.1.0.
-		$<$<CXX_COMPILER_ID:GNU>:-std=c++11>
-		$<$<CXX_COMPILER_ID:Clang>:
-			$<$<NOT:$<PLATFORM_ID:Windows>>:-std=c++11>
-			$<$<PLATFORM_ID:Windows>:/std:c++14> # same as msvc.
-		>
-		## MSVC always enable c++11 and c++14 after MSVC 2015 Update 3.
-		$<$<CXX_COMPILER_ID:MSVC>:
-			$<$<VERSION_GREATER:${CMAKE_CXX_COMPILER_VERSION},19.00.23918>:/std:c++14>
-		>
-
-		$<$<CXX_COMPILER_ID:MSVC>:
-			$<$<CONFIG:Debug>:/W0>
-			$<$<CONFIG:Release>:/W0>
-			$<$<CONFIG:RelWithDebInfo>:/W0>
-			$<$<CONFIG:MinSizeRel>:/W0>
-			/MP
-		>
-		)
+		# multi-process build
+		$<$<CXX_COMPILER_ID:MSVC>:/MP>
+		# warning options
+		$<$<CXX_COMPILER_ID:MSVC>:/W0>
+	)
 endfunction()
 
 function(openrtm_gencode_set_compile_props target)
 	openrtm_gencode_set_compile_definitions(${target})
 	openrtm_gencode_set_compile_options(${target})
-	set_target_properties(${target} PROPERTIES POSITION_INDEPENDENT_CODE ON)
+	set_target_properties(${target} PROPERTIES
+		POSITION_INDEPENDENT_CODE ON
+		CXX_STANDARD 11
+		CXX_EXTENSIONS OFF
+		CXX_STANDARD_REQUIRED ON
+	)
 endfunction()
 
 function(openrtm_idl_compile idl_name inc_path output category dependencies)
@@ -825,7 +817,7 @@ function(openrtm_idl_compile idl_name inc_path output category dependencies)
 	add_custom_command(
 		OUTPUT ${output}
 		COMMAND ${IDL_COMPILE_COMMAND} ${idl_flags} ${inc_path} ${CMAKE_CURRENT_SOURCE_DIR}/${idl_name}
-		COMMAND python -B ${skel_wrapper} --include-dir="" --skel-suffix=Skel --stub-suffix=Stub --idl-file=${idl_name} --category=${category} --dependencies=${dependencies}
+		COMMAND ${Python3_EXECUTABLE} -B ${skel_wrapper} --include-dir="" --skel-suffix=Skel --stub-suffix=Stub --idl-file=${idl_name} --category=${category} --dependencies=${dependencies}
 		DEPENDS ${idl_name}
 		WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
 endfunction()
@@ -887,14 +879,14 @@ function(openrtm_idl_compile_all name idls inc_path categoty dependencies)
 endfunction()
 
 function(openrtm_set_link_props_shared target)
-	if(WIN32)
-		target_link_options(${target} PRIVATE /WX)
-	endif()
-endfunction()
-
-function(openrtm_set_link_props_static target)
-	if(WIN32)
-		target_link_options(${target} PRIVATE /WX)
+	if(${CMAKE_VERSION} VERSION_GREATER "3.12.99")
+		target_link_options(${target}
+			PRIVATE $<$<PLATFORM_ID:Windows>:/WX>
+			PRIVATE $<$<PLATFORM_ID:Linux>:
+				LINKER:--warn-common
+				LINKER:--fatal-warnings
+			>
+		)
 	endif()
 endfunction()
 
