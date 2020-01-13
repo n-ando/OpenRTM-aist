@@ -27,7 +27,7 @@
 
 namespace RTC
 {
-  FastRTPSManager* FastRTPSManager::manager = NULL;
+  FastRTPSManager* FastRTPSManager::manager = nullptr;
   std::mutex FastRTPSManager::mutex;
 
 

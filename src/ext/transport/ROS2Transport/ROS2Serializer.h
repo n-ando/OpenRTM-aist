@@ -93,7 +93,7 @@ namespace RTC
      */
     ROS2SerializerBase(){
       m_message.reserve(2147483647);
-    };
+    }
 
     /*!
      * @if jp
@@ -106,7 +106,7 @@ namespace RTC
      *
      * @endif
      */
-    ~ROS2SerializerBase() override {};
+    ~ROS2SerializerBase() override = default;
 
     /*!
      * @if jp
@@ -476,10 +476,7 @@ namespace RTC
      *
      * @endif
      */
-    ROS2SimpleData()
-    {
-
-    }
+    ROS2SimpleData() = default;
     /*!
      * @if jp
      *
@@ -491,10 +488,7 @@ namespace RTC
      *
      * @endif
      */
-    ~ROS2SimpleData() override
-    {
-
-    }
+    ~ROS2SimpleData() override = default;
 
     /*!
      * @if jp
@@ -588,10 +582,7 @@ namespace RTC
      *
      * @endif
      */
-    ROS2SequenceData()
-    {
-
-    }
+    ROS2SequenceData() = default;
     /*!
      * @if jp
      *
@@ -603,10 +594,7 @@ namespace RTC
      *
      * @endif
      */
-    ~ROS2SequenceData() override
-    {
-
-    }
+    ~ROS2SequenceData() override = default;
 
     /*!
      * @if jp
@@ -637,7 +625,8 @@ namespace RTC
       
       
       return ROS2SerializerBase<DataType>::stdmsg_serialize(msg);
-    };
+    }
+    
     /*!
      * @if jp
      *

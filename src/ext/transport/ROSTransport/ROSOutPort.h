@@ -383,7 +383,7 @@ namespace RTC
     {
       (void)conn;
       RTC_VERBOSE(("onMessageWritten()"));
-    };
+    }
     /*!
      * @if jp
      * @brief コネクタの情報を取得

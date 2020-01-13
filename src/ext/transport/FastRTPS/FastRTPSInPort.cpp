@@ -273,7 +273,7 @@ namespace RTC
   {
       RTC_PARANOID(("FastRTPSInPort::put()"));
       RTC_VERBOSE(("read data length:%d", cdr.getDataLength()));
-      if (m_connector == NULL)
+      if (m_connector == nullptr)
       {
           onReceiverError(cdr);
       }

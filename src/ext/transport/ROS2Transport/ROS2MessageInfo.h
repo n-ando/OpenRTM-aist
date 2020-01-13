@@ -89,7 +89,7 @@ namespace RTC
      *
      * @endif
      */
-    ROS2MessageInfo(){};
+    ROS2MessageInfo() = default;
     /*!
      * @if jp
      *
@@ -101,7 +101,7 @@ namespace RTC
      *
      * @endif
      */
-    ~ROS2MessageInfo(void) override {}
+    ~ROS2MessageInfo(void) override = default;
 
     /*!
      * @if jp
@@ -124,7 +124,7 @@ namespace RTC
     {
         std::string ret = "rt/" + topic;
         return ret;
-    };
+    }
     /*!
      * @if jp
      *
@@ -154,7 +154,7 @@ namespace RTC
         std::string ret = str_list[0]+"::"+type_name+"::dds_"+"::"+data_name+"_";
 
         return ret;
-    };
+    }
 
   };
 }

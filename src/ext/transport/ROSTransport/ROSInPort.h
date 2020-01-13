@@ -296,7 +296,7 @@ namespace RTC
     {
       RTC_VERBOSE(("onHeaderWritten()"));
       (void)conn;
-    };
+    }
 
     /*!
      * @if jp
@@ -360,11 +360,11 @@ namespace RTC
         return;
       }
 
-      uint32_t len = *((uint32_t*)buffer.get());
+      uint32_t len = *(reinterpret_cast<uint32_t*>(buffer.get()));
 
       
       conn->read(len, boost::bind(&ROSInPort::onMessage, this, _1, _2, _3, _4));
-    };
+    }
 
     /*!
      * @if jp
@@ -402,7 +402,7 @@ namespace RTC
 
       RTC_VERBOSE(("read data length:%d", size));
 
-      if (m_connector == NULL)
+      if (m_connector == nullptr)
       {
         
         m_cdr.setDataLength(size + ROSMsglenSize);
