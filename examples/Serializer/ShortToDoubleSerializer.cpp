@@ -7,10 +7,9 @@
  * $Id$
  */
 
-
+#include <rtm/idl/BasicDataTypeSkel.h>
 #include <rtm/ByteDataStreamBase.h>
 #include <rtm/CORBA_CdrMemoryStream.h>
-#include <rtm/idl/BasicDataTypeSkel.h>
 #include <coil/Factory.h>
 #include <rtm/Manager.h>
 
