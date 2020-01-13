@@ -9,6 +9,8 @@
 #         Nobu   Kawauchi
 #
 
+VERSION=2.0.0.00
+
 #---------------------------------------
 # usage
 #---------------------------------------
@@ -17,25 +19,35 @@ usage()
   cat <<EOF
   Usage: 
 
-    $(basename ${0}) [-l all/c++] [-r/-d/-s/-c] [-u]
-    $(basename ${0}) [-l python/java] [-r/-d/-c] [-u]
-    $(basename ${0}) [-l openrtp/rtshell] [-d] [-u]                           
+    $(basename ${0}) -l {all|c++} [-r|-d|-s|-c] [-u|--yes]
+    $(basename ${0}) [-u]
+    $(basename ${0}) -l {python|java} [-r|-d|-c] [-u|--yes]
+    $(basename ${0}) -l {openrtp|rtshell} [-d] [-u|--yes]
+    $(basename ${0}) {--help|-h|--version}
 
   Example:
-    $(basename ${0})  [= $(basename ${0}) -l c++ -d]
-    $(basename ${0}) -l all -d  [= -l c++ -l python -l java -l openrtp -l rtshell -d]
-    $(basename ${0}) -l c++ -l python -c --yes
+    $(basename ${0}) [= $(basename ${0}) -l all -d]
+    $(basename ${0}) -l all -d
+    $(basename ${0}) -l c++ -c --yes
+    $(basename ${0}) -l all -u
 
   Options:
-    -l <argument>  language or tool [c++/python/java/openrtp/rtshell]
+    -l <argument>  language or tool [c++|python|java|openrtp|rtshell|all]
+        all        install packages of all the supported languages and tools
     -r             install robot component runtime
     -d             install robot component developer [default]
     -s             install tool_packages for build source packages
     -c             install tool_packages for core developer
-    -u             uninstall
+    -u             uninstall packages
     --yes          force yes
     --help, -h     print this
+    --version      print version number
 EOF
+}
+
+version()
+{
+  echo ${VERSION}
 }
 
 #---------------------------------------
@@ -80,8 +92,15 @@ core_pkgs="$src_pkgs $autotools $build_tools $pkg_tools"
 u_core_pkgs="$u_src_pkgs"
 
 #--------------------------------------- Python
-omnipy="omniidl-python"
-python_runtime="python python-pyorbit-omg"
+res=`grep buster /etc/os-release`
+if test ! "x$res" = "x" ; then
+  # buster
+  omnipy=""
+  python_runtime="python"
+else
+  omnipy="omniidl-python"
+  python_runtime="python python-pyorbit-omg"
+fi
 python_devel="python-pip $cmake_tools $base_tools $omnipy"
 openrtm_py_devel="openrtm-aist-python-doc"
 openrtm_py_runtime="openrtm-aist-python openrtm-aist-python-example"
@@ -152,7 +171,7 @@ get_opt()
   fi
   arg_num=$#
  
-  OPT=`getopt -o l:rcsdhu -l help,yes -- $@` > /dev/null 2>&1
+  OPT=`getopt -o l:rcsdhu -l help,yes,version -- $@` > /dev/null 2>&1
   # return code check
   if [ $? -ne 0 ] ; then
     echo "[ERROR] Invalid option '$1'"
@@ -165,6 +184,7 @@ get_opt()
   do
     case "$1" in
         -h|--help ) usage ; exit ;;
+        --version ) version ; exit ;;
         --yes ) FORCE_YES=true ;;
         -l )  if [ -z "$2" ] ; then
                 echo "$1 option requires an argument." 1>&2
@@ -208,7 +228,7 @@ lang="en"
 locale | grep ja_JP > /dev/null && lang="jp"
 
 if test "$lang" = "jp" ;then
-    msg1="ディストリビューションを確認してください。\nDebianかUbuntu以外のOSの可能性があります。"
+    msg1="ディストリビューションを確認してください。\nDebian以外のOSの可能性があります。"
     msg2="コードネーム :"
     msg3="このOSはサポートしておりません。"
     msg4="OpenRTM-aist のリポジトリが登録されていません。"
@@ -220,7 +240,7 @@ if test "$lang" = "jp" ;then
     msg10="完了"
     msg11="アンインストール中です."
 else
-    msg1="This distribution may not be debian/ubuntu."
+    msg1="This distribution may not be debian."
     msg2="The code name is : "
     msg3="This OS is not supported."
     msg4="No repository entry for OpenRTM-aist is configured in your system."
@@ -239,18 +259,19 @@ fi
 # コードネーム取得
 #---------------------------------------
 check_codename () {
-  cnames="sarge etch lenny squeeze wheezy jessie stretch"
-  for c in $cnames; do
-    if test -f "/etc/apt/sources.list"; then
-      res=`grep $c /etc/apt/sources.list`
+  if test -f /etc/os-release ; then
+    . /etc/os-release
+    if test "x$ID" = "xdebian" ; then
+      if test "x$VERSION_CODENAME" != "x" ; then
+        code_name=$VERSION_CODENAME
+      else
+        code_name=`lsb_release -cs`
+      fi
     else
       echo $msg1
       exit
     fi
-    if test ! "x$res" = "x" ; then
-      code_name=$c
-    fi
-  done
+  fi 
   if test ! "x$code_name" = "x"; then
     echo $msg2 $code_name
   else
