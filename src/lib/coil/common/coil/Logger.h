@@ -426,7 +426,7 @@ namespace coil
        *
        * @endif
        */
-      void enableLock();
+      static void enableLock();
 
 
       /*!
@@ -444,7 +444,7 @@ namespace coil
        *
        * @endif
        */
-      void disableLock();
+      static void disableLock();
 
       /*!
        * @if jp
@@ -502,7 +502,7 @@ namespace coil
        *
        * @endif
        */
-      inline void lock()
+      static inline void lock()
       {
           if (m_lockEnable) m_mutex.lock();
       }
@@ -520,7 +520,7 @@ namespace coil
        *
        * @endif
        */
-      inline void unlock()
+      static inline void unlock()
       {
           if (m_lockEnable) m_mutex.unlock();
       }

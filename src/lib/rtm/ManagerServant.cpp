@@ -908,7 +908,7 @@ namespace RTM
           }
         m_slaves.length(0);
       }
-    m_mgr.terminate();
+    ::RTC::Manager::terminate();
     return ::RTC::RTC_OK;
   }
 

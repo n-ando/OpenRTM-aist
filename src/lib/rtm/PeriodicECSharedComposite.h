@@ -200,7 +200,7 @@ namespace SDOPackage
      * @brief Conversion from SDO to DFC
      * @endif
      */
-    bool sdoToDFC(SDO_ptr sdo, ::OpenRTM::DataFlowComponent_ptr& dfc);
+    static bool sdoToDFC(SDO_ptr sdo, ::OpenRTM::DataFlowComponent_ptr& dfc);
 
     /*!
      * @if jp
@@ -209,7 +209,7 @@ namespace SDOPackage
      * @brief Stop Owned ExecutionContexts
      * @endif
      */
-    void stopOwnedEC(Member& member);
+    static void stopOwnedEC(Member& member);
 
     /*!
      * @if jp
@@ -218,7 +218,7 @@ namespace SDOPackage
      * @brief Start Owned ExecutionContexts
      * @endif
      */
-    void startOwnedEC(Member& member);
+    static void startOwnedEC(Member& member);
 
     /*!
      * @if jp
@@ -406,7 +406,7 @@ namespace SDOPackage
      * @brief Output PortList to StandardOutput.
      * @endif
      */
-    void print(const PortList& p)
+    static void print(const PortList& p)
     {
       for (auto & i : p)
         {

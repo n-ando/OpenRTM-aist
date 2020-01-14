@@ -67,7 +67,7 @@ namespace RTC
 
     bool createInputStream(const coil::Properties& prop);
 
-    int setServiceOption(const coil::Properties& prop);
+    static int setServiceOption(const coil::Properties& prop);
 
     void write(int level, const std::string &name, const std::string &date, const std::string &mes) override;
 

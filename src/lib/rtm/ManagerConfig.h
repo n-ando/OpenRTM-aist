@@ -357,7 +357,7 @@ namespace RTC
      *
      * @endif
      */
-    void setSystemInformation(coil::Properties& prop);
+    static void setSystemInformation(coil::Properties& prop);
 
     /*!
      * @if jp
@@ -380,7 +380,7 @@ namespace RTC
      *
      * @endif
      */
-    bool fileExist(const std::string& filename);
+    static bool fileExist(const std::string& filename);
 
     /*!
      * @if jp

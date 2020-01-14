@@ -489,7 +489,7 @@ namespace RTC
      *
      * @endif
      */
-    int strToLevel(const char* level);
+    static int strToLevel(const char* level);
 
 
 

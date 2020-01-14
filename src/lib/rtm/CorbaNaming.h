@@ -472,7 +472,7 @@ namespace RTC
      *
      * @endif
      */
-    void rebindRecursive(CosNaming::NamingContext_ptr context,
+    static void rebindRecursive(CosNaming::NamingContext_ptr context,
                          const CosNaming::Name& name,
                          CORBA::Object_ptr obj);
 
@@ -695,7 +695,7 @@ namespace RTC
      *
      * @endif
      */
-    void rebindContextRecursive(CosNaming::NamingContext_ptr context,
+    static void rebindContextRecursive(CosNaming::NamingContext_ptr context,
                                 const CosNaming::Name& name,
                                 CosNaming::NamingContext_ptr name_cxt);
 
@@ -1004,7 +1004,7 @@ namespace RTC
      *
      * @endif
      */
-    void destroy(CosNaming::NamingContext_ptr context);
+    static void destroy(CosNaming::NamingContext_ptr context);
 
     /*!
      * @if jp
@@ -1077,7 +1077,7 @@ namespace RTC
      *
      * @endif
      */
-    void list(CosNaming::NamingContext_ptr name_cxt,
+    static void list(CosNaming::NamingContext_ptr name_cxt,
               CORBA::ULong how_many,
               CosNaming::BindingList_var& bl,
               CosNaming::BindingIterator_var& bi);
@@ -1198,7 +1198,7 @@ namespace RTC
      *
      * @endif
      */
-    char* toString(const CosNaming::Name& name);
+    static char* toString(const CosNaming::Name& name);
 
     /*!
      * @if jp
@@ -1225,7 +1225,7 @@ namespace RTC
      *
      * @endif
      */
-    CosNaming::Name toName(const char* sname);
+    static CosNaming::Name toName(const char* sname);
 
     /*!
      * @if jp
@@ -1331,7 +1331,7 @@ namespace RTC
      *
      * @endif
      */
-    CORBA::Object_ptr bindOrResolve(CosNaming::NamingContext_ptr context,
+    static CORBA::Object_ptr bindOrResolve(CosNaming::NamingContext_ptr context,
                                     const CosNaming::Name& name,
                                     CORBA::Object_ptr obj);
 
@@ -1368,7 +1368,7 @@ namespace RTC
      *
      * @endif
      */
-    CosNaming::NamingContext_ptr
+    static CosNaming::NamingContext_ptr
     bindOrResolveContext(CosNaming::NamingContext_ptr context,
                          const CosNaming::Name& name,
                          CosNaming::NamingContext_ptr new_context);
@@ -1466,7 +1466,7 @@ namespace RTC
      *
      * @endif
      */
-    bool isNamingContext(CORBA::Object_ptr obj);
+    static bool isNamingContext(CORBA::Object_ptr obj);
 
     /*!
      * @if jp
@@ -1543,7 +1543,7 @@ namespace RTC
      *
      * @endif
      */
-    CosNaming::Name subName(const CosNaming::Name& name,
+    static CosNaming::Name subName(const CosNaming::Name& name,
                             CORBA::Long begin,
                             CORBA::Long end = -1);
 
@@ -1580,7 +1580,7 @@ namespace RTC
      *
      * @endif
      */
-    void nameToString(const CosNaming::Name& name, char* string_name,
+    static void nameToString(const CosNaming::Name& name, char* string_name,
                       CORBA::ULong slen);
     /*!
      * @if jp
@@ -1610,7 +1610,7 @@ namespace RTC
      *
      * @endif
      */
-    CORBA::ULong getNameLength(const CosNaming::Name& name);
+    static CORBA::ULong getNameLength(const CosNaming::Name& name);
 
     /*!
      * @if jp
@@ -1637,7 +1637,7 @@ namespace RTC
      *
      * @endif
      */
-    unsigned int split(const std::string& input,
+    static unsigned int split(const std::string& input,
                        const std::string& delimiter,
                        std::vector<std::string>& results);
 

@@ -423,7 +423,7 @@ namespace RTC
      *
      * @endif
      */
-    void removeTask(TaskId id) { id->stop(); }
+    static void removeTask(TaskId id) { id->stop(); }
 
     /*!
      * @if jp

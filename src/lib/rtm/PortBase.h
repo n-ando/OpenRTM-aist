@@ -1575,7 +1575,7 @@ namespace RTC
      *
      * @endif
      */
-    bool isEmptyId(const ConnectorProfile& connector_profile) const;
+    static bool isEmptyId(const ConnectorProfile& connector_profile) ;
 
     /*!
      * @if jp
@@ -1596,7 +1596,7 @@ namespace RTC
      *
      * @endif
      */
-    std::string getUUID() const;
+    static std::string getUUID() ;
 
     /*!
      * @if jp
@@ -1617,7 +1617,7 @@ namespace RTC
      *
      * @endif
      */
-    void setUUID(ConnectorProfile& connector_profile) const;
+    static void setUUID(ConnectorProfile& connector_profile) ;
 
     /*!
      * @if jp

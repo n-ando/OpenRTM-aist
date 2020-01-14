@@ -255,7 +255,7 @@ namespace coil
      *
      * @endif
      */
-    const char* error() const;
+    static const char* error() ;
 
     /*!
      * @if jp

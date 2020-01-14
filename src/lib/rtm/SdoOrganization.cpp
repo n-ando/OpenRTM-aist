@@ -54,7 +54,7 @@ namespace SDOPackage
   {
     coil::UUID_Generator uugen;
     uugen.init();
-    std::unique_ptr<coil::UUID> uuid(uugen.generateUUID(2, 0x01));
+    std::unique_ptr<coil::UUID> uuid(coil::UUID_Generator::generateUUID(2, 0x01));
     m_pId = uuid->to_string();
 #ifdef WIN32
     uuid->~UUID();

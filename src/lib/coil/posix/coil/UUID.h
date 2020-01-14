@@ -69,7 +69,7 @@ namespace coil
     UUID_Generator();
 
     void init();
-    UUID* generateUUID(int n, int h);
+    static UUID* generateUUID(int n, int h);
   };
 } // namespace coil
 #endif
