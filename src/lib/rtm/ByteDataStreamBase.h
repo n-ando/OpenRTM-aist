@@ -178,7 +178,7 @@ public:
    * @class ByteDataStream
    * @brief シリアライザのテンプレートクラス
    * シリアライザを実装する場合は必ずこのクラスを継承する必要がある
-   * coil::GlobalFactory <::RTC::ByteDataStream<DataType>>にシリアライザを登録すると使用可能
+   * coil::GlobalFactory <::RTC::ByteDataStream>にシリアライザを登録すると使用可能
    * 使用するデータ型全てに対してファクトリに登録する必要がある
    *
    *
@@ -362,7 +362,7 @@ template <class DataType>
 ::RTC::ByteDataStreamBase *createSerializer(const std::string &marshalingtype)
 {
    std::string mtype = addDataTypeToMarshalingType<DataType>(marshalingtype);
-   return coil::GlobalFactory<::RTC::ByteDataStream<DataType>>::instance().createObject(mtype);
+   return coil::GlobalFactory<::RTC::ByteDataStreamBase>::instance().createObject(mtype);
 }
 
 /*!
