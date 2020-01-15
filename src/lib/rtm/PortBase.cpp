@@ -753,8 +753,6 @@ namespace RTC
    */
   std::string PortBase::getUUID() 
   {
-    coil::UUID_Generator uugen;
-    uugen.init();
     std::unique_ptr<coil::UUID> uuid(coil::UUID_Generator::generateUUID(2, 0x01));
 
     return std::string(uuid->to_string());

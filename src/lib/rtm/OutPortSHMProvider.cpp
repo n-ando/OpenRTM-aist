@@ -54,8 +54,6 @@ namespace RTC
       push_back(m_properties,
                 NVUtil::newNV("dataport.corba_cdr.outport_ref", m_objref));
 
-    coil::UUID_Generator uugen;
-    uugen.init();
     std::unique_ptr<coil::UUID> uuid(coil::UUID_Generator::generateUUID(2, 0x01));
     m_shm_address = uuid->to_string();
   }

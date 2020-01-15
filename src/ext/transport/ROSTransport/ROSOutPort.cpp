@@ -98,9 +98,7 @@ namespace RTC
     m_callerid = prop.getProperty("ros.node.name");
     if(m_callerid.empty())
     {
-      coil::UUID_Generator uugen;
-	    uugen.init();
-	    std::unique_ptr<coil::UUID> uuid(uugen.generateUUID(2, 0x01));
+      std::unique_ptr<coil::UUID> uuid(coil::UUID_Generator::generateUUID(2, 0x01));
       m_callerid = uuid->to_string();
     }
     m_callerid = std::string("/")+m_callerid;

@@ -629,8 +629,6 @@ namespace SDOPackage
    */
   std::string Configuration_impl::getUUID() 
   {
-    coil::UUID_Generator uugen = coil::UUID_Generator();
-    uugen.init();
     std::unique_ptr<coil::UUID> uuid(coil::UUID_Generator::generateUUID(2, 0x01));
 
     return uuid->to_string();

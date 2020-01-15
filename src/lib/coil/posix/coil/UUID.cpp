@@ -81,18 +81,6 @@ namespace coil
   }
 
 
-  UUID_Generator::UUID_Generator()
-  {
-  }
-
-  UUID_Generator::~UUID_Generator()
-  {
-  }
-
-  void UUID_Generator::init()
-  {
-  }
-
   UUID* UUID_Generator::generateUUID(int n, int h)
   {
     uuid_t uuid;
@@ -103,9 +91,6 @@ namespace coil
 
 #if defined(COIL_OS_LINUX) || defined(COIL_OS_DARWIN) || defined(COIL_OS_QNX)
 
-  UUID_Generator::UUID_Generator() = default;
-
-  void UUID_Generator::init() {}
   UUID* UUID_Generator::generateUUID(int  /*varsion*/, int  /*variant*/)
   {
     uuid_t uuid;

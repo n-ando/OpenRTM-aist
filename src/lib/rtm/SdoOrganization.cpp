@@ -37,9 +37,7 @@ namespace SDOPackage
   {
     m_varOwner = sdo.in();
 
-    coil::UUID_Generator uugen = coil::UUID_Generato();
-    uugen.init();
-    std::auto_ptr<coil::UUID> uuid(uugen.generateUUID(2, 0x01));
+    std::auto_ptr<coil::UUID> uuid(coil::UUID_Generator::generateUUID(2, 0x01));
     m_pId = uuid->to_string();
 #ifdef WIN32
     uuid->~UUID();
@@ -52,8 +50,6 @@ namespace SDOPackage
   Organization_impl::Organization_impl(SDOSystemElement_ptr sdo)
     : rtclog("organization"), m_varOwner(SDOSystemElement::_duplicate(sdo))
   {
-    coil::UUID_Generator uugen;
-    uugen.init();
     std::unique_ptr<coil::UUID> uuid(coil::UUID_Generator::generateUUID(2, 0x01));
     m_pId = uuid->to_string();
 #ifdef WIN32
