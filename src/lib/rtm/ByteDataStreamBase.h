@@ -266,6 +266,8 @@ namespace RTC
      virtual bool deserialize(DataType &data) = 0;
   };
 
+  using SerializerFactory = coil::GlobalFactory<ByteDataStreamBase>;
+
   /*!
    * @if jp
    *
@@ -396,8 +398,6 @@ namespace RTC
      }
      return available_types;
   }
-
-  using SerializerFactory = coil::GlobalFactory<ByteDataStreamBase>;
 
 } // namespace RTC
 
