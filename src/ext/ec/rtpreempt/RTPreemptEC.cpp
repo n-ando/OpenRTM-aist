@@ -148,7 +148,6 @@ namespace RTC_exp
     unsigned char dummy[MAX_SAFE_STACK];
     memset(&dummy, 0, MAX_SAFE_STACK);
 
-    int count(0);
     do
       {
         ExecutionContextBase::invokeWorkerPreDo();
@@ -164,28 +163,14 @@ namespace RTC_exp
         ExecutionContextBase::invokeWorkerPostDo();
         auto t1 = std::chrono::high_resolution_clock::now();
 
-        auto period = getPeriod();
-        if (count > 1000)
+        if (!m_nowait)
           {
-            RTC_PARANOID(("Period:    %f [s]", std::chrono::duration<double>(period).count()));
-            RTC_PARANOID(("Execution: %f [s]", std::chrono::duration<double>(t1 - t0).count()));
-            RTC_PARANOID(("Sleep:     %f [s]", std::chrono::duration<double>(period - (t1 - t0)).count()));
-          }
-        auto t2 = std::chrono::high_resolution_clock::now();
-        if (m_nowait) { ++count; continue; }
-
-        std::chrono::high_resolution_clock::time_point wakeup_point;
-        if (getWakeUpTime(wakeup_point, t0, t1))
-          {
-            std::this_thread::sleep_until(wakeup_point);
-            if (count > 1000)
+            std::chrono::high_resolution_clock::time_point wakeup_point;
+            if (getWakeUpTime(wakeup_point, t0, t1))
               {
-                auto t3 = std::chrono::high_resolution_clock::now();
-                RTC_PARANOID(("Slept:     %f [s]", std::chrono::duration<double>(t3 - t2).count()));
-                count = 0;
+                std::this_thread::sleep_until(wakeup_point);
               }
           }
-        ++count;
       } while (threadRunning());
     RTC_DEBUG(("Thread terminated."));
     return 0;
@@ -603,9 +588,9 @@ namespace RTC_exp
     tw = t0 + getPeriod() + std::chrono::nanoseconds(m_waitoffset);
     if (tw < t1)
       {
-        std::cerr << "faital error: deadline passed. " << std::endl;
+        std::cerr << "faital error: deadline passed.\n";
         std::cerr << "Wait time: ";
-        std::cerr << (tw - t1).count() << "[ns]" << std::endl;
+        std::cerr << (tw - t1).count() << "[ns]\n";
         std::cerr << "Next wait time force to: 0.0 [s]"
                   << std::endl;
         tw = t0;
