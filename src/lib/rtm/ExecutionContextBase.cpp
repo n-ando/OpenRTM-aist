@@ -75,7 +75,7 @@ namespace RTC
     setTransitionMode(props, "sync_reset", m_syncReset);
 
     // getting transition timeout
-    std::chrono::nanoseconds timeout;
+    std::chrono::nanoseconds timeout(0);
     if (setTimeout(props, "transition_timeout", timeout))
       {
         m_activationTimeout   = timeout;
