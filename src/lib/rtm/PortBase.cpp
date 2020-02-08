@@ -738,7 +738,7 @@ namespace RTC
    * @brief Check whether connector_id of ConnectorProfile is empty
    * @endif
    */
-  bool PortBase::isEmptyId(const ConnectorProfile& connector_profile) const
+  bool PortBase::isEmptyId(const ConnectorProfile& connector_profile) 
   {
     return connector_profile.connector_id[static_cast<CORBA::ULong>(0)] == 0;
   }
@@ -751,11 +751,9 @@ namespace RTC
    * @brief Generate the UUID
    * @endif
    */
-  std::string PortBase::getUUID() const
+  std::string PortBase::getUUID() 
   {
-    coil::UUID_Generator uugen;
-    uugen.init();
-    std::unique_ptr<coil::UUID> uuid(uugen.generateUUID(2, 0x01));
+    std::unique_ptr<coil::UUID> uuid(coil::UUID_Generator::generateUUID(2, 0x01));
 
     return std::string(uuid->to_string());
   }
@@ -767,7 +765,7 @@ namespace RTC
    * @brief Generate the UUID and set it to the ConnectorProfile
    * @endif
    */
-  void PortBase::setUUID(ConnectorProfile& connector_profile) const
+  void PortBase::setUUID(ConnectorProfile& connector_profile) 
   {
     connector_profile.connector_id = CORBA::string_dup(getUUID().c_str());
     assert(connector_profile.connector_id[(CORBA::ULong)0] != 0);

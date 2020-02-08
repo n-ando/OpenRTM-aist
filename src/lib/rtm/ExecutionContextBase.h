@@ -770,7 +770,7 @@ namespace RTC
      * @endif
      */
     RTC::LifeCycleState getComponentState(RTC::LightweightRTObject_ptr comp);
-    const char* getStateString(RTC::LifeCycleState state);
+    static const char* getStateString(RTC::LifeCycleState state);
 
     /*!
      * @if jp
@@ -883,7 +883,7 @@ namespace RTC
      *
      * @endif
      */
-    const char* getKindString(RTC::ExecutionKind kind) const;
+    static const char* getKindString(RTC::ExecutionKind kind) ;
 
     /*!
      * @if jp

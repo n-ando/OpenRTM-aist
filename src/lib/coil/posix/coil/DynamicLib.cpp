@@ -160,7 +160,7 @@ namespace coil
    * @brief Return the explanation message about the error
    * @endif
    */
-  const char* DynamicLib::error() const
+  const char* DynamicLib::error() 
   {
     return ::dlerror();
   }

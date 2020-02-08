@@ -93,54 +93,8 @@ namespace coil
   };  // class UUID
 
 
-  //------------------------------------------------------------
-  // UUID_Generator class
-  //------------------------------------------------------------
-  /*!
-   * @if jp
-   * @class UUID 生成クラス
-   * @brief UUID 値を生成するクラス
-   * @else
-   * @class UUID generator class
-   * @brief Generate UUID value
-   * @endif
-   */
-  class UUID_Generator
+  namespace UUID_Generator
   {
-  public:
-    /*!
-     * @if jp
-     * @brief UUIDクラス コンストラクタ
-     *
-     * @else
-     * @brief UUID class constructor
-     *
-     * @endif
-     */
-    UUID_Generator();
-
-    /*!
-     * @if jp
-     * @brief UUIDクラス デストラクタ
-     *
-     * @else
-     * @brief UUID class destructor
-     *
-     * @endif
-     */
-    ~UUID_Generator();
-
-    /*!
-     * @if jp
-     * @brief 初期化
-     *
-     * @else
-     * @brief Initialization
-     *
-     * @endif
-     */
-    void init();
-
     /*!
      * @if jp
      * @brief UUIDを生成する
@@ -159,7 +113,7 @@ namespace coil
      * @endif
      */
     coil::UUID* generateUUID(int n, int h);
-  };  // class UUID_Generator
+  } // namespace UUID_Generator
 } // namespace coil
 
 #endif  // COIL_UUID_H

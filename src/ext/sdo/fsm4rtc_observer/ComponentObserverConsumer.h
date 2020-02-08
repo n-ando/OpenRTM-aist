@@ -206,7 +206,7 @@ namespace RTC
      * @brief Converting kind to string
      * @endif
      */
-    inline const char* toString(RTC::StatusKind kind)
+    static inline const char* toString(RTC::StatusKind kind)
     {
       static const char* const kinds[] = 
         {

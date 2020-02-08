@@ -156,7 +156,7 @@ private:
 	bool unsubscribeFromRef(const SDOPackage::NVList& properties);
 
 protected:
-	DataPortStatus convertReturnCode(OpenRTM::PortStatus ret);
+	static DataPortStatus convertReturnCode(OpenRTM::PortStatus ret);
 
 	coil::Properties m_properties;
 	std::mutex m_mutex;

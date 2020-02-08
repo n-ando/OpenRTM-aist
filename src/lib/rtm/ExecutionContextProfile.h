@@ -213,7 +213,7 @@ namespace RTC_impl
      *
      * @endif
      */
-    const char* getKindString(RTC::ExecutionKind kind) const;
+    static const char* getKindString(RTC::ExecutionKind kind) ;
     const char* getKindString() const
     {
       return getKindString(m_profile.kind);

@@ -292,7 +292,7 @@ namespace RTC
      * @brief Return codes conversion
      * @endif
      */
-    DataPortStatus convertReturnCode(OpenRTM::PortStatus ret);
+    static DataPortStatus convertReturnCode(OpenRTM::PortStatus ret);
 
     mutable Logger rtclog;
     coil::Properties m_properties;

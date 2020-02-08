@@ -2995,7 +2995,7 @@ namespace RTC
      *
      * @endif
      */
-    bool isOwnExecutionContext(RTC::UniqueId ec_id);
+    static bool isOwnExecutionContext(RTC::UniqueId ec_id);
 
     /*!
      * @if jp
@@ -5063,7 +5063,7 @@ namespace RTC
     /*!
      * @brief fiding existing EC from the factory
      */
-    ReturnCode_t findExistingEC(coil::Properties& ec_arg,
+    static ReturnCode_t findExistingEC(coil::Properties& ec_arg,
                                 RTC::ExecutionContextBase*& ec);
     /*!
      * @brief creating, initializing and binding context

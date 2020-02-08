@@ -265,7 +265,7 @@ namespace RTC
      *
      * @endif
      */
-    CdrBufferBase* createBuffer(ConnectorInfo& info);
+    static CdrBufferBase* createBuffer(ConnectorInfo& info);
 
     /*!
      * @if jp

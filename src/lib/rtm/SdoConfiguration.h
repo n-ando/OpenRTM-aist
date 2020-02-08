@@ -964,7 +964,7 @@ namespace SDOPackage
      *
      * @endif
      */
-    std::string getUUID() const;
+    static std::string getUUID() ;
 
     /*!
      * @if jp

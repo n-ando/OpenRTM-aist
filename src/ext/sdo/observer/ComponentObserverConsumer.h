@@ -125,7 +125,7 @@ namespace RTC
      * @brief Converting kind to string
      * @endif
      */
-    inline const char* toString(OpenRTM::StatusKind kind)
+    static inline const char* toString(OpenRTM::StatusKind kind)
     {
       static const char* const kinds[] = 
         {

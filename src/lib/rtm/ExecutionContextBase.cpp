@@ -675,7 +675,7 @@ namespace RTC
 
   const char* ExecutionContextBase::getStateString(RTC::LifeCycleState state)
   {
-    return m_worker.getStateString(state);
+    return RTC_impl::ExecutionContextWorker::getStateString(state);
   }
   /*!
    * @if jp
@@ -774,9 +774,9 @@ namespace RTC
    * @brief Converting ExecutionKind enum to string
    * @endif
    */
-  const char* ExecutionContextBase::getKindString(RTC::ExecutionKind kind) const
+  const char* ExecutionContextBase::getKindString(RTC::ExecutionKind kind) 
   {
-    return m_profile.getKindString(kind);
+    return RTC_impl::ExecutionContextProfile::getKindString(kind);
   }
 
   /*!

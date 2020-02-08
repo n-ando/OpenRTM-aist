@@ -1409,7 +1409,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     rtclog.setLevel(m_config["logger.log_level"].c_str());
     // Log stream mutex locking mode
     coil::toBool(m_config["logger.stream_lock"], "enable", "disable", false) ?
-      rtclog.enableLock() : rtclog.disableLock();
+      RTC::Logger::enableLock() : RTC::Logger::disableLock();
 
     // File Logstream init
     initLogstreamFile();
@@ -2908,7 +2908,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
         for (CORBA::ULong j(0); j < bl->length(); ++j)
           {
             if (bl[j].binding_type != CosNaming::nobject) { continue; }
-            std::string tmp(cns.toString(bl[j].binding_name));
+            std::string tmp(RTC::CorbaNaming::toString(bl[j].binding_name));
             std::string nspath;
             // ### TODO: All escape characteres should be removed. ###
             nspath = coil::replaceString("/" + nsname + "/" + tmp, "\\", "");

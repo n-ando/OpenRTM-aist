@@ -418,7 +418,7 @@ namespace RTC_impl
      * @endif
      */
     RTC::LifeCycleState getComponentState(RTC::LightweightRTObject_ptr comp);
-    const char* getStateString(RTC::LifeCycleState state)
+    static const char* getStateString(RTC::LifeCycleState state)
     {
       static const char* const st[] = {
         "CREATED_STATE",
