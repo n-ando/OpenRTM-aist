@@ -19,7 +19,6 @@
 
 from __future__ import print_function
 
-import skel_wrapper
 import os
 import sys
 import getopt
@@ -40,6 +39,7 @@ opt_args_fmt = ["help",
                 "dependencies=",
                 "verbose"]
 
+import skel_wrapper
 
 config_inc = """
 #include <rtm/config_rtc.h>
