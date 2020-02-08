@@ -538,7 +538,7 @@ elseif(UNIX)
 		# for std::thread
 		set(THREADS_PREFER_PTHREAD_FLAG ON)
 		find_package(Threads)
-		set(RTM_LINKER_OPTION dl rt Threads::Threads)
+		set(RTM_LINKER_OPTION ${CMAKE_DL_LIBS} rt Threads::Threads)
 	endif()
 elseif(WIN32)
 	set(COIL_OS_DIR "win32")
