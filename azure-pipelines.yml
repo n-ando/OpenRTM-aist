@@ -1,0 +1,95 @@
+trigger:
+  branches:
+    include:
+    - '*'
+  paths:
+    include:
+    - azure-pipelines.yml
+    - CMakeLists.txt
+    - etc/
+    - examples/
+    - src/
+    - utils/
+
+pr:
+  branches:
+    include:
+    - '*'
+  paths:
+    include:
+    - azure-pipelines.yml
+    - CMakeLists.txt
+    - etc/
+    - examples/
+    - src/
+    - utils/
+
+strategy:
+  matrix:
+    vs2019:
+      imageVersion: 'windows-2019'
+    vs2017:
+      imageVersion: 'vs2017-win2016'
+
+variables:
+  omniorb: omniORB-4.2.3-x64-vc140-py37
+  omniorbUrl: https://openrtm.org/pub/omniORB/win32/omniORB-4.2.3
+
+pool:
+  vmImage: $(imageVersion)
+
+steps:
+- task: UsePythonVersion@0
+  inputs:
+    versionSpec: '3.7'
+    addToPath: true
+    architecture: 'x64'
+
+- task: Cache@2
+  displayName: Cache omniORB
+  inputs:
+    key: '$(Build.SourcesDirectory)\azure-pipelines.yml'
+    path: '$(Pipeline.Workspace)\$(omniorb)'
+    cacheHitVar: OMNIORB_CACHE
+
+- task: Cache@2
+  displayName: Cache OpenSSL
+  inputs:
+    key: '$(Build.SourcesDirectory)\azure-pipelines.yml'
+    path: 'C:\Program Files\OpenSSL-Win64'
+    cacheHitVar: OPENSSL_CACHE
+
+- task: PowerShell@2
+  displayName: Prepare omniORB
+  condition: ne(variables.OMNIORB_CACHE, 'true')
+  inputs:
+    targetType: 'inline'
+    script: |
+      Invoke-WebRequest -Uri "$(omniorbUrl)/$(omniorb).zip" -OutFile "$(Agent.TempDirectory)\omniORB.zip"
+      Expand-Archive -Path "$(Agent.TempDirectory)\omniORB.zip" -DestinationPath "$(Pipeline.Workspace)"
+
+- script: choco install -y --no-progress openssl
+  displayName: Install OpenSSL
+  condition: and(ne(variables.OPENSSL_CACHE, 'true'), ne(variables['imageVersion'], 'vs2015-win2012r2'))
+
+- task: CMake@1
+  inputs:
+    workingDirectory: 'build'
+    cmakeArgs:
+      -A x64
+      -DOMNI_VERSION=42
+      -DOMNI_MINOR=3
+      -DOMNITHREAD_VERSION=41
+      -DCORBA=omniORB
+      -DORB_ROOT=$(Pipeline.Workspace)\$(omniorb)
+      -DOBSERVER_ENABLE=ON
+      -DSSL_ENABLE=ON
+      $(Build.SourcesDirectory)
+
+- task: VSBuild@1
+  inputs:
+    solution: 'build/OpenRTM_aist.sln'
+    configuration: 'Release'
+    maximumCpuCount: true
+    createLogFile: true
+    logFileVerbosity: 'minimal'
