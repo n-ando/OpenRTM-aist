@@ -76,14 +76,12 @@ namespace RTC_exp
   int MultilayerCompositeEC::svc()
   {
     RTC_TRACE(("svc()"));
-    int count(0);
 
     const RTC::RTObject_ptr owner = getOwner();
     m_ownersm = m_worker.findComponent(owner);
 
     do
       {
-          
         m_ownersm->workerPreDo();
         // Thread will stopped when all RTCs are INACTIVE.
         // Therefore WorkerPreDo(updating state) have to be invoked
@@ -98,52 +96,21 @@ namespace RTC_exp
         auto t0 = std::chrono::high_resolution_clock::now();
         m_ownersm->workerDo();
         m_ownersm->workerPostDo();
-        
-        
+
         for (auto & task : m_tasklist)
         {
             task->signal();
         }
-        
+
         for (auto & task : m_tasklist)
         {
             task->join();
         }
-        
-        
-        auto t1 = std::chrono::high_resolution_clock::now();
 
-        auto period = getPeriod();
-        auto rest = period - (t1 - t0);
-        if (count > 1000)
-          {
-            RTC_PARANOID(("Period:    %f [s]", std::chrono::duration<double>(period).count()));
-            RTC_PARANOID(("Execution: %f [s]", std::chrono::duration<double>(t1 - t0).count()));
-            RTC_PARANOID(("Sleep:     %f [s]", std::chrono::duration<double>(rest).count()));
-            int task_num = 0;
-            for (auto & task : m_tasklist)
-            {
-                coil::TimeMeasure::Statistics st = task->getExecStat();
-                RTC_PARANOID(("MAX(%d):  %f [s]", task_num, st.max_interval));
-                RTC_PARANOID(("MIN(%d):  %f [s]", task_num, st.min_interval));
-                RTC_PARANOID(("MEAN(%d): %f [s]", task_num, st.mean_interval));
-                RTC_PARANOID(("SD(%d):   %f [s]", task_num, st.std_deviation));
-                task_num += 1;
-            }
-          }
-        auto t2 = std::chrono::high_resolution_clock::now();
-        if (!m_nowait && (rest > std::chrono::seconds::zero()))
-          {
-            if (count > 1000) { RTC_PARANOID(("sleeping...")); }
-            std::this_thread::sleep_until(t0 + period);
-          }
-        if (count > 1000)
-          {
-            auto t3 = std::chrono::high_resolution_clock::now();
-            RTC_PARANOID(("Slept:     %f [s]", std::chrono::duration<double>(t3 - t2).count()));
-            count = 0;
-          }
-        ++count;
+        if (!m_nowait)
+        {
+            std::this_thread::sleep_until(t0 + getPeriod());
+        }
       } while (threadRunning());
     RTC_DEBUG(("Thread terminated."));
     return 0;
@@ -314,12 +281,8 @@ namespace RTC_exp
               m_signal_worker.cond_.wait(guard);
           }
           m_signal_worker.running_ = false;
-          
       }
-      
 
-      
-      
       updateCompList();
       for (auto & comp : m_comps)
       {
@@ -327,14 +290,12 @@ namespace RTC_exp
           comp->workerDo();
           comp->workerPostDo();
       }
-      
+
       {
           std::lock_guard<std::mutex> guard(m_worker.mutex_);
           m_worker.running_ = false;
-          
-          m_worker.cond_.notify_one();
-          
 
+          m_worker.cond_.notify_one();
       }
 
       {
@@ -344,20 +305,16 @@ namespace RTC_exp
           }
           m_signal_worker.running_ = false;
       }
-      
-      
 
       return 0;
   }
 
   void MultilayerCompositeEC::ChildTask::signal()
   {
-      
       bool ret = false;
       while (!ret)
       {
           m_task->signal();
-         
           {
               std::lock_guard<std::mutex> guard(m_worker.mutex_);
               ret = m_worker.running_;
@@ -368,8 +325,6 @@ namespace RTC_exp
           m_signal_worker.running_ = true;
           m_signal_worker.cond_.notify_one();
       }
-      
-
   }
 
   void MultilayerCompositeEC::ChildTask::join()

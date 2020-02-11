@@ -114,50 +114,24 @@ namespace RTC
   int LogicalTimeTriggeredEC::svc()
   {
     RTC_TRACE(("svc()"));
-    unsigned int count(0);
     do
       {
         {
           std::unique_lock<std::mutex> guard(m_worker.mutex_);
-          RTC_DEBUG(("Start of worker invocation. ticked = %s",
-                     m_worker.ticked_ ? "true" : "false"));
           while (!m_worker.ticked_)
             {
               m_worker.cond_.wait(guard); // wait for tick
-              RTC_DEBUG(("Thread was woken up."));
             }
-          if (!m_worker.ticked_) { continue; }
         }
         auto t0 = std::chrono::steady_clock::now();
         ExecutionContextBase::invokeWorkerPreDo();
         ExecutionContextBase::invokeWorkerDo();
         ExecutionContextBase::invokeWorkerPostDo();
-        auto t1 = std::chrono::steady_clock::now();
         {
           std::lock_guard<std::mutex> guard(m_worker.mutex_);
           m_worker.ticked_ = false;
         }
-        auto period = getPeriod();
-        auto rest = period - (t1 - t0);
-        if (true) //count > 1000)
-          {
-            RTC_PARANOID(("Period:    %f [s]", std::chrono::duration<double>(period).count()));
-            RTC_PARANOID(("Execution: %f [s]", std::chrono::duration<double>(t1 - t0).count()));
-            RTC_PARANOID(("Sleep:     %f [s]", std::chrono::duration<double>(rest).count()));
-          }
-        auto t2 = std::chrono::steady_clock::now();
-        if (rest > std::chrono::seconds::zero())
-          {
-            if (true /*count > 1000*/) { RTC_PARANOID(("sleeping...")); }
-            std::this_thread::sleep_until(t0 + period);
-          }
-        if (true) //count > 1000)
-          {
-            auto t3 = std::chrono::steady_clock::now();
-            RTC_PARANOID(("Slept:       %f [s]", std::chrono::duration<double>(t3 - t2).count()));
-            count = 0;
-          }
-        ++count;
+        std::this_thread::sleep_until(t0 + getPeriod());
       } while (threadRunning());
 
     return 0;

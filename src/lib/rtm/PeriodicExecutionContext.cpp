@@ -114,7 +114,6 @@ namespace RTC_exp
   int PeriodicExecutionContext::svc()
   {
     RTC_TRACE(("svc()"));
-    int count(0);
 
     if (!m_cpu.empty())
     {
@@ -165,31 +164,12 @@ namespace RTC_exp
         auto t0 = std::chrono::high_resolution_clock::now();
         ExecutionContextBase::invokeWorkerDo();
         ExecutionContextBase::invokeWorkerPostDo();
-        auto t1 = std::chrono::high_resolution_clock::now();
-
-        auto period = getPeriod();
-        auto rest = period - (t1 - t0);
-        if (count > 1000)
+        if (!m_nowait)
           {
-            RTC_PARANOID(("Period:    %f [s]", std::chrono::duration<double>(period).count()));
-            RTC_PARANOID(("Execution: %f [s]", std::chrono::duration<double>(t1 - t0).count()));
-            RTC_PARANOID(("Sleep:     %f [s]", std::chrono::duration<double>(rest).count()));
+            std::this_thread::sleep_until(t0 + getPeriod());
           }
-        auto t2 = std::chrono::high_resolution_clock::now();
-        if (!m_nowait && (rest > std::chrono::seconds::zero()))
-          {
-            if (count > 1000) { RTC_PARANOID(("sleeping...")); }
-            std::this_thread::sleep_until(t0 + period);
-          }
-        if (count > 1000)
-          {
-            auto t3 = std::chrono::high_resolution_clock::now();
-            RTC_PARANOID(("Slept:     %f [s]", std::chrono::duration<double>(t3 - t2).count()));
-            count = 0;
-          }
-        ++count;
       } while (threadRunning());
-      
+
     RTC_DEBUG(("Thread terminated."));
     return 0;
   }
