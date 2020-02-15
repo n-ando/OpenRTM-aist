@@ -34,6 +34,7 @@ strategy:
 variables:
   omniorb: omniORB-4.2.3-x64-vc140-py37
   omniorbUrl: https://openrtm.org/pub/omniORB/win32/omniORB-4.2.3
+  opensslVersion: 1.1.1.400
 
 pool:
   vmImage: $(imageVersion)
@@ -48,14 +49,14 @@ steps:
 - task: Cache@2
   displayName: Cache omniORB
   inputs:
-    key: '$(Build.SourcesDirectory)\azure-pipelines.yml'
+    key: '"$(omniorb)"'
     path: '$(Pipeline.Workspace)\$(omniorb)'
     cacheHitVar: OMNIORB_CACHE
 
 - task: Cache@2
   displayName: Cache OpenSSL
   inputs:
-    key: '$(Build.SourcesDirectory)\azure-pipelines.yml'
+    key: 'OpenSSL | "$(opensslVersion)"'
     path: 'C:\Program Files\OpenSSL-Win64'
     cacheHitVar: OPENSSL_CACHE
 
@@ -68,7 +69,7 @@ steps:
       Invoke-WebRequest -Uri "$(omniorbUrl)/$(omniorb).zip" -OutFile "$(Agent.TempDirectory)\omniORB.zip"
       Expand-Archive -Path "$(Agent.TempDirectory)\omniORB.zip" -DestinationPath "$(Pipeline.Workspace)"
 
-- script: choco install -y --no-progress openssl
+- script: choco install -y --no-progress openssl --version=$(opensslVersion)
   displayName: Install OpenSSL
   condition: and(ne(variables.OPENSSL_CACHE, 'true'), ne(variables['imageVersion'], 'vs2015-win2012r2'))
 
