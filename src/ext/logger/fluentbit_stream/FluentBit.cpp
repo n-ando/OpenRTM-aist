@@ -16,6 +16,7 @@
  */
 #include <algorithm>
 
+#include <rtm/Manager.h>
 #include <rtm/LogstreamBase.h>
 #include <rtm/SystemLogger.h>
 #include <coil/stringutil.h>
@@ -129,11 +130,15 @@ namespace RTC
   {
     char tmp[BUFFER_LEN];
     std::streamsize n(0);
+    coil::Properties& conf = ::RTC::Manager::instance().getConfig();
+    const std::string& pid = conf["manager.pid"];
+    const std::string& host_name = conf["os.hostname"];
+    const std::string& manager_name = conf["manager.instance_name"];
     for(auto & flb : m_flbIn)
       {
 
         n = snprintf(tmp, sizeof(tmp) - 1,
-                     R"([%ld, {"message": "%s", "time":"%s","name":"%s","level":"%s"}])", time(nullptr), mes, date.c_str(), name.c_str(), Logger::getLevelString(level).c_str());
+                     R"([%ld, {"time":"%s","name":"%s","level":"%s","pid":"%s","host":"%s","manager":"%s","message": "%s"}])", time(nullptr), date.c_str(), name.c_str(), Logger::getLevelString(level).c_str(), pid.c_str(), host_name.c_str(), manager_name.c_str(), mes);
 
         flb_lib_push(s_flbContext, flb, tmp, n);
       }
