@@ -670,6 +670,9 @@ logger.logstream.fluentd.output1.match: *
 logger.logstream.fluentd.input0.plugin: cpu
 logger.logstream.fluentd.input0.tag: fluent_cpu
 
+# Option example
+#logger.logstream.fluentd.option.Flush: 5 (default)
+
 
 #============================================================
 # DataPort setting
