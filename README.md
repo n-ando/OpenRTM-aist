@@ -1,5 +1,5 @@
 ![logo](https://user-images.githubusercontent.com/11814060/74723192-84c34200-527d-11ea-835f-1496fb9d0bbb.png)
-<span style="font-size: 400%">OpenRTM-aist</span>
+<span style="font-size:400%"> OpenRTM-aist </span>
 
 This is a release of OpenRTM-aist-2.0, dual-license open source RT-Middleware.
 
@@ -7,7 +7,7 @@ Carefully read the following files before you configure, build, install
 OpenRTM and develop RT-Components.
 
 files:  
-README      - This file  
+README.md   - This file  
 README.jp   - Japanese Version of This file  
 COPYRIGHT   - Copyright Notice and License Information  
 COPYING.LIB - LGPL Terms and Conditions  
