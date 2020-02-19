@@ -18,7 +18,7 @@
 # = OPT_UNINST   : uninstallation
 #
 
-VERSION=2.0.0.03
+VERSION=2.0.0.04
 
 #
 #---------------------------------------
@@ -71,15 +71,9 @@ reposervers="openrtm.org"
 reposerver=""
 
 #--------------------------------------- C++
-res=`grep 14.04 /etc/lsb-release`
-if test ! "x$res" = "x" ; then
-  # 14.04
-  autotools="autoconf libtool"
-else
-  autotools="autoconf libtool libtool-bin"
-fi
+autotools="autoconf libtool libtool-bin"
 base_tools="bc iputils-ping net-tools"
-cxx_devel="gcc g++ make python-yaml"
+cxx_devel="gcc g++ make python3-yaml"
 cmake_tools="cmake doxygen graphviz nkf"
 build_tools="subversion git"
 deb_pkg="uuid-dev libboost-filesystem-dev"
@@ -102,11 +96,11 @@ core_pkgs="$src_pkgs $autotools $build_tools $pkg_tools"
 u_core_pkgs="$u_src_pkgs"
 
 #--------------------------------------- Python
-omnipy="omniidl-python"
-python_runtime="python python-pyorbit-omg"
-python_devel="python-pip $cmake_tools $base_tools $omnipy"
-openrtm_py_devel="openrtm-aist-python-doc"
-openrtm_py_runtime="openrtm-aist-python openrtm-aist-python-example"
+omnipy="omniidl-python3"
+python_runtime="python3 python3-omniorb-omg"
+python_devel="python3-pip $cmake_tools $base_tools $omnipy"
+openrtm_py_devel="openrtm-aist-python3-doc"
+openrtm_py_runtime="openrtm-aist-python3 openrtm-aist-python3-example"
 
 python_runtime_pkgs="$omni_runtime $python_runtime $openrtm_py_runtime"
 u_python_runtime_pkgs="$omni_runtime $openrtm_py_runtime"
@@ -470,8 +464,8 @@ install_branch()
 
   if test "x$arg_rtshell" = "xtrue" ; then
     select_opt_shl="[rtshell] install"
-    install_packages python-pip
-    rtshell_ret=`pip install rtshell-aist`
+    install_packages python3-pip
+    rtshell_ret=`pip3 install rtshell-aist`
   fi
 }
 
@@ -529,7 +523,7 @@ uninstall_branch()
 
   if test "x$arg_rtshell" = "xtrue" ; then
     select_opt_shl="[rtshell] uninstall"
-    rtshell_ret=`pip uninstall -y rtshell-aist rtctree-aist rtsprofile-aist`
+    rtshell_ret=`pip3 uninstall -y rtshell-aist rtctree-aist rtsprofile-aist`
   fi
 }
 
