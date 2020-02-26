@@ -109,7 +109,7 @@ manager.components.naming_policy: process_unique
 #------------------------------------------------------------
 # Supported languages
 #
-manager.supported_languages: C++, Python, Java
+manager.supported_languages: C++, Python, Python3, Java
 
 
 #------------------------------------------------------------
