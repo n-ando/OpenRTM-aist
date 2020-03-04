@@ -112,18 +112,17 @@ python_core_pkgs="$omni_runtime $python_runtime $python_devel $build_tools $pkg_
 u_python_core_pkgs="$omni_runtime $omnipy"
 
 #--------------------------------------- Java
-java_devel="default-jdk"
 java_build="ant"
 openrtm_j_devel="openrtm-aist-java-doc"
 openrtm_j_runtime="openrtm-aist-java openrtm-aist-java-example"
 
-java_runtime_pkgs="$omni_runtime $java_devel $openrtm_j_runtime"
+java_runtime_pkgs="$omni_runtime $openrtm_j_runtime"
 u_java_runtime_pkgs="$omni_runtime $openrtm_j_runtime"
 
 java_dev_pkgs="$java_runtime_pkgs $cmake_tools $base_tools $openrtm_j_devel"
 u_java_dev_pkgs="$omni_runtime $openrtm_j_runtime $openrtm_j_devel"
 
-java_core_pkgs="$omni_runtime $java_devel $cmake_tools $base_tools $build_tools $java_build $pkg_tools"
+java_core_pkgs="$omni_runtime $cmake_tools $base_tools $build_tools $java_build $pkg_tools"
 u_java_core_pkgs="$omni_runtime"
 
 #--------------------------------------- OpenRTP
