@@ -104,7 +104,7 @@ namespace coil
       // std::string -> LPTSTR
       std::wstring wcommand = string2wstring(command);
       LPTSTR lpcommand = new TCHAR[wcommand.size() + 1];
-      _tcscpy(lpcommand, wcommand.c_str());
+      _tcscpy_s(lpcommand, wcommand.size() + 1, wcommand.c_str());
 #else
       // std::string -> LPTSTR
       LPTSTR lpcommand = new TCHAR[command.size() + 1];
@@ -112,10 +112,26 @@ namespace coil
 #endif // UNICODE
 
       PROCESS_INFORMATION pi{};
-      if (!CreateProcess(nullptr, lpcommand, nullptr, nullptr, TRUE, CREATE_NO_WINDOW, nullptr, nullptr, &si, &pi))
+      BOOL retcp = CreateProcess(nullptr, lpcommand, nullptr, nullptr, TRUE, CREATE_NO_WINDOW, nullptr, nullptr, &si, &pi);
+      delete[] lpcommand;
+      if (!retcp)
       {
-          delete[] lpcommand;
-          return -1;
+          std::string commandbatch = std::string("cmd.exe /c ") + command;
+#ifdef UNICODE
+          std::wstring wcommandbatch = string2wstring(commandbatch);
+          LPTSTR lpcommandbatch = new TCHAR[wcommandbatch.size() + 1];
+          _tcscpy_s(lpcommandbatch, wcommandbatch.size() + 1, wcommandbatch.c_str());
+#else
+          // std::string -> LPTSTR
+          LPTSTR lpcommandbatch = new TCHAR[commandbatch.size() + 1];
+          _tcscpy_s(lpcommandbatch, commandbatch.size() + 1, commandbatch.c_str());
+#endif // UNICODE
+          BOOL retcpbatch = CreateProcess(nullptr, lpcommandbatch, nullptr, nullptr, TRUE, CREATE_NO_WINDOW, nullptr, nullptr, &si, &pi);
+          delete[] lpcommandbatch;
+          if (!retcpbatch)
+          {
+              return -1;
+          }
       }
 
       WaitForSingleObject(pi.hProcess, INFINITE);
@@ -124,11 +140,14 @@ namespace coil
 
       DWORD len;
       DWORD size = GetFileSize(rPipe, nullptr);
+      if (size == 0)
+      {
+          return 0;
+      }
       std::unique_ptr<CHAR[]> Buf(new CHAR[static_cast<size_t>(size) + 1]);
       Buf[size] = '\0';
       if (!ReadFile(rPipe, Buf.get(), size, &len, nullptr))
       {
-          delete[] lpcommand;
           return -1;
       }
 
@@ -141,7 +160,6 @@ namespace coil
           out.emplace_back(coil::eraseBothEndsBlank(std::move(o)));
       }
 
-      delete[] lpcommand;
       return 0;
 
   }
