@@ -621,7 +621,7 @@ namespace RTC
      * @brief Adding file path not existing cache
      * @endif
      */
-    void addNewFile(const std::string& fpath, coil::vstring& modules);
+    void addNewFile(const std::string& fpath, coil::vstring& modules, const std::string& lang);
 
     /*!
      * @if jp
@@ -771,7 +771,7 @@ namespace RTC
     };
 
     vProperties m_modprofs;
-	coil::vstring m_loadfailmods;
+	std::map<std::string, coil::vstring> m_loadfailmods;
 
   };   // class ModuleManager
 } // namespace RTC

@@ -58,6 +58,12 @@ namespace RTC
     m_downloadAllowed = coil::toBool(prop[ALLOW_URL], "yes", "no", false);
     m_initFuncSuffix  = prop[INITFUNC_SFX];
     m_initFuncPrefix  = prop[INITFUNC_PFX];
+    coil::vstring langs(coil::split(prop["manager.supported_languages"], ","));
+    
+    for (auto& lang : langs)
+    {
+        m_loadfailmods[lang] = coil::vstring();
+    }
   }
 
   /*!
@@ -499,7 +505,7 @@ namespace RTC
         for (auto & f : flist)
           {
             addNewFile(coil::replaceString(coil::replaceString(
-                         std::move(f), "\\", "/"), "//", "/"), modules);
+                         std::move(f), "\\", "/"), "//", "/"), modules, lang);
           }
       }
       std::sort(modules.begin(), modules.end());
@@ -514,34 +520,28 @@ namespace RTC
    * @endif
    */
   void ModuleManager::addNewFile(const std::string& fpath,
-                                 coil::vstring& modules)
+                                 coil::vstring& modules, const std::string& lang)
   {
-    bool exists(false);
     for (auto & modprof : m_modprofs)
       {
                   
         if (modprof["module_file_path"] == fpath)
           {
 
-            exists = true;
             RTC_DEBUG(("Module %s already exists in cache.",
                        fpath.c_str()));
-            break;
+            return;
           }
       }
-    for (auto & loadfailmod : m_loadfailmods)
+    for (auto & loadfailmod : m_loadfailmods[lang])
       {
         if (loadfailmod == fpath)
           {
-            exists = true;
-            break;
+            return;
           }
       }
-    if (!exists)
-      {
-        RTC_DEBUG(("New module: %s", fpath.c_str()));
-        modules.emplace_back(fpath);
-      }
+      RTC_DEBUG(("New module: %s", fpath.c_str()));
+      modules.emplace_back(fpath);
   }
 
   /*!
@@ -585,7 +585,7 @@ namespace RTC
         RTC_DEBUG(("rtcprof cmd sub process done."));
         if (props["implementation_id"].empty())
           {
-            m_loadfailmods.emplace_back(module);
+            m_loadfailmods[lang].emplace_back(module);
             continue;
           }
         props["module_file_name"] = coil::basename(module.c_str());
