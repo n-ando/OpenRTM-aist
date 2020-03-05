@@ -35,7 +35,7 @@ namespace coil
     std::string cmd = "cmd.exe /c ";
     command = cmd + command;
 #ifdef UNICODE
-    // std::string -> LPTSTR
+    // std::wstring -> LPTSTR
     std::wstring wcommand = string2wstring(command);
     LPTSTR lpcommand = new TCHAR[wcommand.size() + 1];
     _tcscpy(lpcommand, wcommand.c_str());
@@ -101,7 +101,7 @@ namespace coil
 
 
 #ifdef UNICODE
-      // std::string -> LPTSTR
+      // std::wstring -> LPTSTR
       std::wstring wcommand = string2wstring(command);
       LPTSTR lpcommand = new TCHAR[wcommand.size() + 1];
       _tcscpy_s(lpcommand, wcommand.size() + 1, wcommand.c_str());
