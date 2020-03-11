@@ -35,6 +35,14 @@ variables:
   omniorb: omniORB-4.2.3-x64-vc140-py37
   omniorbUrl: https://openrtm.org/pub/omniORB/win32/omniORB-4.2.3
   opensslVersion: 1.1.1.400
+  ros2: ros2-dashing-20191213-windows-amd64
+  asio: asio.1.12.1
+  eigen: eigen.3.3.4
+  tinyxmlusestl: log4cxx.0.10.0
+  tinyxml2: tinyxml-usestl.2.6.2
+  log4cxx: tinyxml2.6.0.0
+  ros2Url: https://github.com/ros2/ros2/releases/download/release-dashing-20191213/
+  chocopackagesUrl: https://github.com/ros2/choco-packages/releases/download/2020-02-24/
 
 pool:
   vmImage: $(imageVersion)
@@ -60,6 +68,13 @@ steps:
     path: 'C:\Program Files\OpenSSL-Win64'
     cacheHitVar: OPENSSL_CACHE
 
+- task: Cache@2
+  displayName: Cache ROS2
+  inputs:
+    key: '"$(ros2)"'
+    path: '$(Pipeline.Workspace)\ros2-windows'
+    cacheHitVar: ROS2_CACHE
+
 - task: PowerShell@2
   displayName: Prepare omniORB
   condition: ne(variables.OMNIORB_CACHE, 'true')
@@ -69,11 +84,35 @@ steps:
       Invoke-WebRequest -Uri "$(omniorbUrl)/$(omniorb).zip" -OutFile "$(Agent.TempDirectory)\omniORB.zip"
       Expand-Archive -Path "$(Agent.TempDirectory)\omniORB.zip" -DestinationPath "$(Pipeline.Workspace)"
 
+- task: PowerShell@2
+  displayName: Prepare ROS2
+  condition: ne(variables.ROS2_CACHE, 'true')
+  inputs:
+    targetType: 'inline'
+    script: |
+      Invoke-WebRequest -Uri "$(chocopackagesUrl)/$(asio).nupkg" -OutFile "$(Agent.TempDirectory)\$(asio).nupkg"
+      Invoke-WebRequest -Uri "$(chocopackagesUrl)/$(eigen).nupkg" -OutFile "$(Agent.TempDirectory)\$(eigen).nupkg"
+      Invoke-WebRequest -Uri "$(chocopackagesUrl)/$(tinyxmlusestl).nupkg" -OutFile "$(Agent.TempDirectory)\$(tinyxmlusestl).nupkg"
+      Invoke-WebRequest -Uri "$(chocopackagesUrl)/$(tinyxml2).nupkg" -OutFile "$(Agent.TempDirectory)\$(tinyxml2).nupkg"
+      Invoke-WebRequest -Uri "$(chocopackagesUrl)/$(log4cxx).nupkg" -OutFile "$(Agent.TempDirectory)\$(log4cxx).nupkg"
+      choco install -y -s $(Agent.TempDirectory) --no-progress asio eigen tinyxml-usestl tinyxml2 log4cxx
+      Invoke-WebRequest -Uri "$(ros2Url)/$(ros2).zip" -OutFile "$(Agent.TempDirectory)\ros2-windows.zip"
+      Expand-Archive -Path "$(Agent.TempDirectory)\ros2-windows.zip" -DestinationPath "$(Pipeline.Workspace)"
+
 - script: choco install -y --no-progress openssl --version=$(opensslVersion)
   displayName: Install OpenSSL
   condition: and(ne(variables.OPENSSL_CACHE, 'true'), ne(variables['imageVersion'], 'vs2015-win2012r2'))
 
 - task: CMake@1
+  env:
+    PYTHONPATH: '$(Pipeline.Workspace)\ros2-windows\Lib\site-packages;$(PYTHONPATH)'
+    ROS_DISTRO: 'dashing'
+    ROS_PYTHON_VERSION: '3'
+    ROS_VERSION: '2'
+    AMENT_PREFIX_PATH: '$(Pipeline.Workspace)\ros2-windows'
+    CMAKE_PREFIX_PATH: '$(Pipeline.Workspace)\ros2-windows'
+    PKG_CONFIG_PATH: '$(Pipeline.Workspace)\ros2-windows\lib\pkgconfig'
+    COLCON_PREFIX_PATH: '$(Pipeline.Workspace)\ros2-windows'
   inputs:
     workingDirectory: 'build'
     cmakeArgs:
@@ -85,6 +124,8 @@ steps:
       -DORB_ROOT=$(Pipeline.Workspace)\$(omniorb)
       -DOBSERVER_ENABLE=ON
       -DSSL_ENABLE=ON
+      -DFASTRTPS_ENABLE=ON
+      -DROS2_ENABLE=ON
       $(Build.SourcesDirectory)
 
 - task: VSBuild@1
