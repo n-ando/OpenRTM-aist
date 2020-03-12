@@ -185,7 +185,7 @@ RTC::ReturnCode_t Analyzer::onExecute(RTC::UniqueId  /*ec_id*/)
 
 	{
 		std::lock_guard<std::mutex> guard(m_mu);
-		m_datalist.emplace_back(m_out);
+		m_datalist.emplace_back(m_out.tm);
 	}
 	std::this_thread::sleep_until(start + m_sleep_time);
 
@@ -234,8 +234,8 @@ RTC::ReturnCode_t Analyzer::onRateChanged(RTC::UniqueId ec_id)
 void Analyzer::writeData(const RTC::TimedOctetSeq &data)
 {
 	std::lock_guard<std::mutex> guard(m_mu);
-	for (std::vector<TimedOctetSeq>::iterator itr = m_datalist.begin(); itr != m_datalist.end(); ) {
-		if (data.tm.nsec == (*itr).tm.nsec && data.tm.sec == (*itr).tm.sec)
+	for (std::vector<RTC::Time>::iterator itr = m_datalist.begin(); itr != m_datalist.end(); ) {
+		if (data.tm.nsec == (*itr).nsec && data.tm.sec == (*itr).sec)
 		{
 			auto end = std::chrono::system_clock::now().time_since_epoch();
 			auto start = std::chrono::seconds(data.tm.sec) + std::chrono::nanoseconds(data.tm.nsec);
