@@ -328,6 +328,9 @@ namespace SDOPackage
 
   void PeriodicECOrganization::addRTCToEC(RTC::RTObject_ptr rtobj)
   {
+#ifdef ORB_IS_RTORB
+      if(rtobj == nullptr)return;
+#endif
       SDOPackage::OrganizationList_var orglist = rtobj->get_owned_organizations();
       if (orglist->length() == 0)
       {
@@ -377,6 +380,9 @@ namespace SDOPackage
       }
     m_ec->remove_component(member.rtobj_.in());
 
+#ifdef ORB_IS_RTORB
+    if(member.rtobj_ == nullptr)return;
+#endif
     OrganizationList_var orglist = member.rtobj_->get_owned_organizations();
     for (CORBA::ULong i(0); i < orglist->length(); ++i)
       {
@@ -622,7 +628,11 @@ namespace RTC
   {
     m_ref = this->_this();
     m_objref = RTC::RTObject::_duplicate(m_ref);
+#ifndef ORB_IS_RTORB
     m_org = new SDOPackage::PeriodicECOrganization(this, m_objref.in());
+#else
+    m_org = new SDOPackage::PeriodicECOrganization(this, static_cast<SDOPackage::SDOSystemElement*>(m_objref.in()));
+#endif
     ::CORBA_SeqUtil::push_back(m_sdoOwnedOrganizations,
                                m_org->getObjRef());
     bindParameter("members", m_members, "", stringToStrVec);
@@ -694,7 +704,7 @@ namespace RTC
 
         ::CORBA_SeqUtil::push_back(sdos, sdo);
 #else  // ORB_IS_RTORB
-        sdo = rtc->getObjRef();
+        sdo = static_cast<SDOPackage::SDO*>(rtc->getObjRef());
         if (::CORBA::is_nil(sdo)) continue;
 
         ::CORBA_SeqUtil::push_back(sdos, ::SDOPackage::SDO_ptr(sdo));

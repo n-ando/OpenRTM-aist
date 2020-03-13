@@ -39,10 +39,12 @@
 #include <rtm/InPortDirectConsumer.h>
 #include <rtm/OutPortDirectProvider.h>
 #include <rtm/OutPortDirectConsumer.h>
+#ifndef ORB_IS_RTORB
 #include <rtm/InPortSHMProvider.h>
 #include <rtm/InPortSHMConsumer.h>
 #include <rtm/OutPortSHMProvider.h>
 #include <rtm/OutPortSHMConsumer.h>
+#endif
 #include <rtm/InPortDSProvider.h>
 #include <rtm/InPortDSConsumer.h>
 #include <rtm/OutPortDSProvider.h>
@@ -88,10 +90,12 @@ namespace RTM
     InPortDirectConsumerInit();
 	OutPortDirectProviderInit();
 	OutPortDirectConsumerInit();
+#ifndef ORB_IS_RTORB
     InPortSHMProviderInit();
     InPortSHMConsumerInit();
     OutPortSHMProviderInit();
     OutPortSHMConsumerInit();
+#endif
     InPortDSProviderInit();
     InPortDSConsumerInit();
     OutPortDSProviderInit();

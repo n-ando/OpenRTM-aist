@@ -116,16 +116,11 @@ namespace RTM
       }
     m_slaves.length(0);
 
-
+#ifndef ORB_IS_RTORB
     if (!CORBA::is_nil(m_objref))
       {
 #ifndef ORB_IS_TAO
-#ifndef ORB_IS_RTORB
         CORBA::Object_var obj = m_mgr.theORB()->resolve_initial_references("omniINSPOA");
-#else // ROB_IS_RTORB
-        CORBA::Object_ptr obj = m_mgr.theORB()->resolve_initial_references((char*)"omniINSPOA");
-#endif // ORB_IS_RTORB
-
 
         PortableServer::POA_var poa = PortableServer::POA::_narrow(obj);
         PortableServer::ObjectId_var id;
@@ -142,6 +137,7 @@ namespace RTM
         adapter->unbind(config["manager.name"].c_str());
 #endif
       }
+#endif
 
   }
 
@@ -952,7 +948,7 @@ namespace RTM
 #ifndef ORB_IS_RTORB
             CORBA_SeqUtil::push_back(crtcs.inout(), rtcref.in());
 #else // ORB_IS_RTORB
-            CORBA_SeqUtil::push_back(crtcs, rtcref);
+            CORBA_SeqUtil::push_back(crtcs, rtcref.in());
 #endif // ORB_IS_RTORB
             continue;
           }
@@ -969,7 +965,7 @@ namespace RTM
 #ifndef ORB_IS_RTORB
             CORBA_SeqUtil::push_back(crtcs.inout(), rtcref.in());
 #else // ORB_IS_RTORB
-            CORBA_SeqUtil::push_back(crtcs, rtcref);
+            CORBA_SeqUtil::push_back(crtcs, rtcref.in());
 #endif // ORB_IS_RTORB
           }
       }
@@ -1015,17 +1011,13 @@ namespace RTM
    */
   bool ManagerServant::createINSManager()
   {
+#ifndef ORB_IS_RTORB
     try
       {
         // Ppreparing INS POA
         CORBA::Object_var obj;
 #ifndef ORB_IS_TAO
-#ifndef ORB_IS_RTORB
         obj = m_mgr.theORB()->resolve_initial_references("omniINSPOA");
-#else  // ROB_IS_RTORB
-        obj = m_mgr.theORB()->resolve_initial_references(
-                                      const_cast<char*>("omniINSPOA"));
-#endif  // ORB_IS_RTORB
         PortableServer::POA_var poa = PortableServer::POA::_narrow(obj);
         poa->the_POAManager()->activate();
 
@@ -1034,12 +1026,7 @@ namespace RTM
         PortableServer::ObjectId_var id;
         RTC_DEBUG(("Creating named manager: %s",
                    config["manager.name"].c_str()));
-#ifndef ORB_IS_RTORB
         id = PortableServer::string_to_ObjectId(config["manager.name"].c_str());
-#else  // ORB_IS_RTORB
-        id = PortableServer::string_to_ObjectId(
-                     reinterpret_cast<char*>(config["manager.name"].c_str()));
-#endif  // ORB_IS_RTORB
 
         // Object activation
         RTC_DEBUG(("Activating manager with id(%s)", config["manager.name"].c_str()));
@@ -1085,6 +1072,7 @@ namespace RTM
       {
         return false;
       }
+#endif
     return true;
   }
 

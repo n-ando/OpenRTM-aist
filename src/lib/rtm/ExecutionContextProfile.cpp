@@ -332,7 +332,11 @@ namespace RTC_impl
    * @brief Get the ExecutionKind
    * @endif
    */
+#ifndef ORB_IS_RTORB
   const RTC::RTCList& ExecutionContextProfile::getComponentList() const
+#else
+  const RTC_RTCList& ExecutionContextProfile::getComponentList() const
+#endif
   {
     RTC_TRACE(("getComponentList(%d)", m_profile.participants.length()));
     return m_profile.participants;

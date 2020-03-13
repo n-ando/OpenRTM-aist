@@ -97,6 +97,8 @@ namespace RTC
         m_cdr.write_array_1(buffer, length);
 #elif defined(ORB_IS_TAO)
         m_cdr.write_octet_array((const unsigned char*)buffer, length);
+#elif defined(ORB_IS_RTORB)
+        m_cdr.put_octet_array(reinterpret_cast<char*>(const_cast<unsigned char*>(buffer)), length);
 #else
         m_cdr.put_octet_array(buffer, length);
 #endif

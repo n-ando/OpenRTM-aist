@@ -230,7 +230,11 @@ namespace RTC
                       RTC::RTObject_var obj = RTC::RTObject::_narrow(context->resolve(bl[i].binding_name));
                       if (!obj->_non_existent())
                       {
+#ifndef ORB_IS_RTORB
                           CORBA_SeqUtil::push_back(rtcs, obj);
+#else
+                          CORBA_SeqUtil::push_back(rtcs, obj.in());
+#endif
                       }
                   }
                   catch (...)

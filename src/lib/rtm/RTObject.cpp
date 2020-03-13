@@ -719,17 +719,17 @@ namespace RTC
         profile->port_profiles = m_portAdmin.getPortProfileList();
 #else  // ORB_IS_RTORB
         profile->instance_name =
-               reinterpret_cast<char *>(m_properties["instance_name"].c_str());
+          CORBA::string_dup(m_properties["instance_name"].c_str());
         profile->type_name     =
-               reinterpret_cast<char *>(m_properties["type_name"].c_str());
+          CORBA::string_dup(m_properties["type_name"].c_str());
         profile->description   =
-               reinterpret_cast<char *>(m_properties["description"].c_str());
+          CORBA::string_dup(m_properties["description"].c_str());
         profile->version       =
-               reinterpret_cast<char *>(m_properties["version"].c_str());
+          CORBA::string_dup(m_properties["version"].c_str());
         profile->vendor        =
-               reinterpret_cast<char *>(m_properties["vendor"].c_str());
+          CORBA::string_dup(m_properties["vendor"].c_str());
         profile->category      =
-               reinterpret_cast<char *>(m_properties["category"].c_str());
+          CORBA::string_dup(m_properties["category"].c_str());
         PortProfileList ppl    = m_portAdmin.getPortProfileList();
         profile->port_profiles = ppl._retn();
 #endif  // ORB_IS_RTORB
@@ -1140,9 +1140,15 @@ namespace RTC
     RTC_TRACE(("get_sdo_id()"));
     try
       {
+#ifdef ORB_IS_RTORB
+        CORBA::String_ptr sdo_id;
+        sdo_id = CORBA::string_dup(m_profile.instance_name);
+        return sdo_id;
+#else
         CORBA::String_var sdo_id;
         sdo_id = CORBA::string_dup(m_profile.instance_name);
         return sdo_id._retn();
+#endif
       }
     catch (...)
       {
@@ -1160,11 +1166,17 @@ namespace RTC
   char* RTObject_impl::get_sdo_type()
   {
     RTC_TRACE(("get_sdo_type()"));
-    CORBA::String_var sdo_type;
     try
       {
+#ifdef ORB_IS_RTORB
+        CORBA::String_ptr sdo_type;
+        sdo_type = CORBA::string_dup(m_profile.description);
+        return sdo_type;
+#else
+        CORBA::String_var sdo_type;
         sdo_type = CORBA::string_dup(m_profile.description);
         return sdo_type._retn();
+#endif
       }
     catch (...)
       {
@@ -1305,7 +1317,7 @@ namespace RTC
       {
 #ifdef ORB_IS_RTORB
         SDOPackage::Configuration_ptr config;
-        config = m_pSdoConfig;
+        config = m_pSdoConfig.in();
         return config;
 #else  // ORB_IS_RTORB
         SDOPackage::Configuration_var config;
@@ -1425,7 +1437,7 @@ namespace RTC
     m_profile.instance_name = m_properties["instance_name"].c_str();
 #else  // ORB_IS_RTORB
     m_profile.instance_name =
-            reinterpret_cast<char *>(m_properties["instance_name"].c_str());
+            CORBA::string_dup(m_properties["instance_name"].c_str());
 #endif  // ORB_IS_RTORB
   }
 
@@ -1492,17 +1504,17 @@ namespace RTC
     m_profile.category      = m_properties["category"].c_str();
 #else  // ORB_IS_RTORB
     m_profile.instance_name =
-            reinterpret_cast<char*>(m_properties["instance_name"].c_str());
+      CORBA::string_dup(m_properties["instance_name"].c_str());
     m_profile.type_name     =
-            reinterpret_cast<char*>(m_properties["type_name"].c_str());
+      CORBA::string_dup(m_properties["type_name"].c_str());
     m_profile.description   =
-            reinterpret_cast<char*>(m_properties["description"].c_str());
+      CORBA::string_dup(m_properties["description"].c_str());
     m_profile.version       =
-            reinterpret_cast<char*>(m_properties["version"].c_str());
+      CORBA::string_dup(m_properties["version"].c_str());
     m_profile.vendor        =
-            reinterpret_cast<char*>(m_properties["vendor"].c_str());
+      CORBA::string_dup(m_properties["vendor"].c_str());
     m_profile.category      =
-            reinterpret_cast<char*>(m_properties["category"].c_str());
+      CORBA::string_dup(m_properties["category"].c_str());
 #endif  // ORB_IS_RTORB
   }
 
@@ -2620,14 +2632,11 @@ namespace RTC
         oid2 = m_pPOA->servant_to_id(this);
         m_pPOA->deactivate_object(oid1);
         m_pPOA->deactivate_object(oid2);
+#ifndef ORB_IS_RTORB
         if (!CORBA::is_nil(m_insref))
           {
 #ifndef ORB_IS_TAO
-#ifndef ORB_IS_RTORB
             CORBA::Object_var obj = m_pORB->resolve_initial_references("omniINSPOA");
-#else // ROB_IS_RTORB
-            CORBA::Object_ptr obj = m_pORB->resolve_initial_references((char*)"omniINSPOA");
-#endif // ORB_IS_RTORB
             PortableServer::POA_var poa = PortableServer::POA::_narrow(obj);
             PortableServer::ObjectId_var oid3;
             oid3 = poa->servant_to_id(this);
@@ -2641,6 +2650,7 @@ namespace RTC
             adapter->unbind(id_str.c_str());
 #endif
           }
+#endif
       }
     catch (PortableServer::POA::ServantNotActive &e)
       {

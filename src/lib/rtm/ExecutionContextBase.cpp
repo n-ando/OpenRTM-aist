@@ -823,7 +823,11 @@ namespace RTC
    * @brief Getting participant RTC list
    * @endif
    */
+#ifndef ORB_IS_RTORB
   const RTC::RTCList& ExecutionContextBase::getComponentList() const
+#else
+  const RTC_RTCList& ExecutionContextBase::getComponentList() const
+#endif
   {
     return m_profile.getComponentList();
   }
