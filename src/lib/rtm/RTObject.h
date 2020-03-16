@@ -5516,36 +5516,16 @@ namespace RTC
       {
         if (!::CORBA::is_nil(ec) && !ec->_non_existent())
           {
-#ifdef ORB_IS_RTORB
-            if(m_comp == nullptr)return;
-            if(!ec == nullptr)return;
-#endif
             RTC::LifeCycleState state = ec->get_component_state(m_comp);
             if (state == RTC::ACTIVE_STATE)
               {
-#ifdef ORB_IS_RTORB
-                LightweightRTObject_var comp = RTC::LightweightRTObject::_duplicate(m_comp);
-                if(comp != nullptr)
-                {
-                  ec->deactivate_component(comp);
-                }
-#else
                 ec->deactivate_component(
                     RTC::LightweightRTObject::_duplicate(m_comp));
-#endif
               }
             else if (state == RTC::ERROR_STATE)
               {
-#ifdef ORB_IS_RTORB
-                LightweightRTObject_var comp = RTC::LightweightRTObject::_duplicate(m_comp);
-                if(comp != nullptr)
-                {
-                  ec->reset_component(comp);
-                }
-#else
                 ec->reset_component(
                     RTC::LightweightRTObject::_duplicate(m_comp));
-#endif
               }
             
           }

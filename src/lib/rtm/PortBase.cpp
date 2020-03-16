@@ -227,7 +227,11 @@ namespace RTC
 
     Properties prop;
     NVUtil::copyToProperties(prop, connector_profile.properties);
+#ifndef ORB_IS_RTORB
     bool default_value = coil::toBool(m_properties["allow_dup_connection"], "YES", "NO", false);
+#else
+    bool default_value = coil::toBool(m_properties["allow_dup_connection"], "YES", "NO", true);
+#endif
 
     if (!coil::toBool(prop.getProperty("dataport.allow_dup_connection"), "YES", "NO", default_value))
       {

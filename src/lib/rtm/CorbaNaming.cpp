@@ -354,15 +354,7 @@ namespace RTC
    */
   CORBA::Object_ptr CorbaNaming::resolve(const CosNaming::Name& name)
   {
-#ifndef ORB_IS_RTORB
     return m_rootContext->resolve(name);
-#else
-    if(m_rootContext != nullptr)
-    {
-      return m_rootContext->resolve(name);
-    }
-    return CosNaming::NamingContextExt::_nil();
-#endif
   }
 
   /*!
@@ -386,14 +378,7 @@ namespace RTC
    */
   void CorbaNaming::unbind(const CosNaming::Name& name)
   {
-#ifndef ORB_IS_RTORB
     m_rootContext->unbind(name);
-#else
-    if(m_rootContext != nullptr)
-    {
-      m_rootContext->unbind(name);
-    }
-#endif
   }
 
   /*!
@@ -417,15 +402,7 @@ namespace RTC
    */
   CosNaming::NamingContext_ptr CorbaNaming::newContext()
   {
-#ifndef ORB_IS_RTORB
     return m_rootContext->new_context();
-#else
-    if(m_rootContext != nullptr)
-    {
-      return m_rootContext->new_context();
-    }
-    return CosNaming::NamingContextExt::_nil();
-#endif
   }
 
   /*!

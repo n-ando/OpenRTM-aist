@@ -84,9 +84,6 @@ namespace CORBA_RTCUtil
       {
         return false;
       }
-#ifdef ORB_IS_RTORB
-    if (ec == nullptr)return false;
-#endif
     return rtc->is_alive(ec);
   }
   /*!
@@ -162,9 +159,6 @@ namespace CORBA_RTCUtil
       {
         return -1;
       }
-#ifdef ORB_IS_RTORB
-    if(rtc == nullptr)return -1;
-#endif
     RTC::ExecutionContextList eclist_own = (*rtc->get_owned_contexts());
 
     for (unsigned int i = 0; i < eclist_own.length(); i++)

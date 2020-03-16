@@ -328,9 +328,6 @@ namespace SDOPackage
 
   void PeriodicECOrganization::addRTCToEC(RTC::RTObject_ptr rtobj)
   {
-#ifdef ORB_IS_RTORB
-      if(rtobj == nullptr)return;
-#endif
       SDOPackage::OrganizationList_var orglist = rtobj->get_owned_organizations();
       if (orglist->length() == 0)
       {
@@ -380,9 +377,6 @@ namespace SDOPackage
       }
     m_ec->remove_component(member.rtobj_.in());
 
-#ifdef ORB_IS_RTORB
-    if(member.rtobj_ == nullptr)return;
-#endif
     OrganizationList_var orglist = member.rtobj_->get_owned_organizations();
     for (CORBA::ULong i(0); i < orglist->length(); ++i)
       {
