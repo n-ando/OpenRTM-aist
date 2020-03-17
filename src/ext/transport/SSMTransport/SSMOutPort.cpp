@@ -88,6 +88,11 @@ namespace RTC
       RTC_ERROR(("cycle_ssm_time is invalid value"));
     }
 
+    if(m_stream_size > 0)
+    {
+      m_sens_sid = createSSM_time(m_stream_name.c_str(), m_stream_id, m_stream_size, m_life_ssm_time, m_cycle_ssm_time);
+    }
+
   }
 
   /*!
