@@ -656,7 +656,7 @@ namespace RTC
     void operator>>(DataType& rhs)
     {
       this->read();
-      rhs = m_value;
+      CORBA_Util::copyData<DataType>(rhs, m_value);
       return;
     }
 

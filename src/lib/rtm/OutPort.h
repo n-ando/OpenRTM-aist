@@ -232,7 +232,7 @@ namespace RTC
                   }
                 else
                   {
-                    m_directValue = value;
+                    CORBA_Util::copyData<DataType>(m_directValue, value);
                   }
                 m_directNewData = true;
                 ret = DataPortStatus::PORT_OK;
