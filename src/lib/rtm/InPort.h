@@ -32,7 +32,7 @@
 #include <rtm/Timestamp.h>
 #include <rtm/DirectInPortBase.h>
 #include <rtm/CORBA_CdrMemoryStream.h>
-
+#include <rtm/DataTypeUtil.h>
 
 
 namespace RTC
@@ -423,7 +423,7 @@ namespace RTC
     void write(DataType& data) override
     {
       std::lock_guard<std::mutex> guard(m_valueMutex);
-      m_value = data;
+      CORBA_Util::copyData<DataType>(m_value, data);
       m_directNewData = true;
     }
 
