@@ -75,8 +75,8 @@ namespace RTC
   void SSMInPort::init(coil::Properties& prop)
   {
     RTC_PARANOID(("SSMInPort::init()"));
-    m_stream_name = prop.getProperty("stream_name", "sensor_test");
-    std::string stream_id_str = prop.getProperty("stream_id", "0");
+    m_stream_name = prop.getProperty("ssm.stream_name", "sensor_test");
+    std::string stream_id_str = prop.getProperty("ssm.stream_id", "0");
     if(!coil::stringTo(m_stream_id, stream_id_str.c_str()))
     {
       RTC_ERROR(("stream_id is invalid value"));
