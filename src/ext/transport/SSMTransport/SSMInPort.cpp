@@ -123,8 +123,8 @@ namespace RTC
   DataPortStatus
   SSMInPort::get(ByteData& data)
   {
-    ssmTimeT measured_time;
-    ssmTimeT time;
+    ssmTimeT measured_time = 0.0;
+    ssmTimeT time = 0.0;
     std::lock_guard<std::mutex> guard(m_mutex);
     if(m_sens_sid == nullptr)
     {
@@ -166,7 +166,7 @@ namespace RTC
    * @endif
    */
   bool SSMInPort::
-  subscribeInterface(const SDOPackage::NVList& properties)
+  subscribeInterface(const SDOPackage::NVList& /*properties*/)
   {
     RTC_TRACE(("SSMInPort::subscribeInterface()"));
     return true;
@@ -180,7 +180,7 @@ namespace RTC
    * @endif
    */
   void SSMInPort::
-  unsubscribeInterface(const SDOPackage::NVList& properties)
+  unsubscribeInterface(const SDOPackage::NVList& /*properties*/)
   {
     RTC_TRACE(("SSMInPort::unsubscribeInterface()"));
     closeSSM(&m_sens_sid);
@@ -215,8 +215,13 @@ namespace RTC
         onSenderTimeout();
         break;
       case DataPortStatus::UNKNOWN_ERROR:
-        onSenderError();
-        break;
+      case DataPortStatus::BUFFER_ERROR:
+      case DataPortStatus::SEND_TIMEOUT:
+      case DataPortStatus::RECV_EMPTY:
+      case DataPortStatus::RECV_TIMEOUT:
+      case DataPortStatus::INVALID_ARGS:
+      case DataPortStatus::PRECONDITION_NOT_MET:
+      case DataPortStatus::CONNECTION_LOST:
       default:
         onSenderError();
         break;

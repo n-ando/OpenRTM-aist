@@ -115,7 +115,7 @@ namespace RTC
         return DataPortStatus::PRECONDITION_NOT_MET;
       }
     }
-    ssmTimeT measured_time;
+    ssmTimeT measured_time = 0;
     writeSSM(m_sens_sid, reinterpret_cast<char*>(data.getBuffer()), measured_time);
     return DataPortStatus::PORT_OK;
     
