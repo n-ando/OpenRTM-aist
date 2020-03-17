@@ -248,9 +248,15 @@ class Analyzer
   /*!
    * 出力ファイル名
    * - Name: outputfile outputfile
-   * - DefaultValue: test.dat
+   * - DefaultValue: test_callback.dat
    */
   std::string m_outputfile;
+  /*!
+   * 出力ファイル名
+   * - Name: outputwritefile outputwritefile
+   * - DefaultValue: test_writefunc.dat
+   */
+  std::string m_outputwritefile;
   /*!
   * データ長さ
   * - Name: datalength datalength
@@ -319,9 +325,10 @@ class Analyzer
 
  private:
 	 std::ofstream m_fs;
+   std::ofstream m_fsw;
 	 std::vector<RTC::Time> m_datalist;
 	 std::mutex m_mu;
-	 int data_size;
+	 int m_data_size;
   // <rtc-template block="private_attribute">
   
   // </rtc-template>

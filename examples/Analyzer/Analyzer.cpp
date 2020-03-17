@@ -29,7 +29,8 @@ static const char* const analyzer_spec[] =
     "language",          "C++",
     "lang_type",         "compile",
     // Configuration variables
-    "conf.default.outputfile", "test.dat",
+    "conf.default.outputfile", "test_callback.dat",
+    "conf.default.outputwritefile", "test_writefunc.dat",
 	"conf.default.datalength", "10",
 	"conf.default.sleep_time", "0.1",
 	"conf.default.mode", "const",
@@ -37,6 +38,7 @@ static const char* const analyzer_spec[] =
 
     // Widget
     "conf.__widget__.outputfile", "text",
+    "conf.__widget__.outputwritefile", "text",
 	"conf.__widget__.datalength", "text",
 	"conf.__widget__.sleep_time", "text",
 	"conf.__widget__.mode", "radio",
@@ -44,11 +46,13 @@ static const char* const analyzer_spec[] =
     // Constraints
 
     "conf.__type__.outputfile", "string",
+    "conf.__type__.outputwritefile", "string",
 	"conf.__type__.datalength", "long",
 	"conf.__type__.sleep_time", "double",
 	"conf.__type__.mode", "string",
 	"conf.__type__.maxsize", "long",
 
+  "conf.__constraints__.mode", "(const,increase)",
     ""
   };
 // </rtc-template>
@@ -74,7 +78,7 @@ Analyzer::Analyzer(RTC::Manager* manager)
   : RTC::DataFlowComponentBase(manager),
     m_inIn("in", m_in),
     m_outOut("out", m_out),
-    data_size(0)
+    m_data_size(0)
 
     // </rtc-template>
 {
@@ -108,7 +112,8 @@ RTC::ReturnCode_t Analyzer::onInitialize()
 
   // <rtc-template block="bind_config">
   // Bind variables and configuration variable
-  bindParameter("outputfile", m_outputfile, "test.dat");
+  bindParameter("outputfile", m_outputfile, "test_callback.dat");
+  bindParameter("outputwritefile", m_outputwritefile, "test_writefunc.dat");
   bindParameter("datalength", m_datalength, "10");
   bindParameter("sleep_time", m_sleep_time, "0.1");
   bindParameter("mode", m_mode, "const");
@@ -142,9 +147,14 @@ RTC::ReturnCode_t Analyzer::onShutdown(RTC::UniqueId ec_id)
 
 RTC::ReturnCode_t Analyzer::onActivated(RTC::UniqueId  /*ec_id*/)
 {
-	data_size = 0;
+	m_data_size = 0;
 	m_fs.open(m_outputfile.c_str(), std::ios::out);
 	if (!m_fs)
+	{
+		return RTC::RTC_ERROR;
+	}
+  m_fsw.open(m_outputwritefile.c_str(), std::ios::out);
+	if (!m_fsw)
 	{
 		return RTC::RTC_ERROR;
 	}
@@ -159,6 +169,11 @@ RTC::ReturnCode_t Analyzer::onDeactivated(RTC::UniqueId  /*ec_id*/)
 	{
 		m_fs.close();
 	}
+
+  if (m_fsw)
+	{
+		m_fsw.close();
+	}
   return RTC::RTC_OK;
 }
 
@@ -167,20 +182,21 @@ RTC::ReturnCode_t Analyzer::onDeactivated(RTC::UniqueId  /*ec_id*/)
 RTC::ReturnCode_t Analyzer::onExecute(RTC::UniqueId  /*ec_id*/)
 {
 	auto start = std::chrono::system_clock::now();
-	setTimestamp(m_out);
 	if(m_mode == "const")
 	{
 		m_out.data.length(m_datalength);
 	}
 	else
 	{
-		data_size += m_datalength;
-		if(data_size > m_maxsize)
+		m_data_size += m_datalength;
+		if(m_data_size > m_maxsize)
 		{
+      std::cout << "finish" << std::endl;
 			return RTC::RTC_ERROR;
 		}
-		m_out.data.length(data_size);
+		m_out.data.length(m_data_size);
 	}
+  setTimestamp(m_out);
 	
 
 	{
@@ -189,7 +205,11 @@ RTC::ReturnCode_t Analyzer::onExecute(RTC::UniqueId  /*ec_id*/)
 	}
 	std::this_thread::sleep_until(start + m_sleep_time);
 
+  auto startw = std::chrono::system_clock::now();
 	m_outOut.write();
+  auto endw = std::chrono::system_clock::now();
+  double diff = std::chrono::duration<double>(endw - startw).count();
+  m_fsw << m_out.data.length() << "\t" << diff << std::endl;
 
 
   return RTC::RTC_OK;
@@ -241,7 +261,7 @@ void Analyzer::writeData(const RTC::TimedOctetSeq &data)
 			auto start = std::chrono::seconds(data.tm.sec) + std::chrono::nanoseconds(data.tm.nsec);
 			
 			double diff = std::chrono::duration<double>(end - start).count();
-			std::cout << diff << std::endl;
+			//std::cout << diff << std::endl;
 			m_fs << data.data.length() << "\t" << diff << std::endl;
 			itr = m_datalist.erase(itr);
 		}
