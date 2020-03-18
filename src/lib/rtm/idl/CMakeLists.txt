@@ -43,6 +43,7 @@ if(CORBA MATCHES "RtORB")
 		target_include_directories(${IDLNAME} SYSTEM
 			PUBLIC ${PROJECT_BINARY_DIR}
 			PRIVATE ${CMAKE_BINARY_DIR}/src/lib
+			${CMAKE_SOURCE_DIR}/src/lib
 			${ORB_INCLUDE_DIR})
 		add_dependencies(${IDLNAME} ${PROJECT_NAME}_IDLTGT)
 		install(TARGETS ${IDLNAME} LIBRARY DESTINATION ${INSTALL_RTM_LIB_DIR}
@@ -58,6 +59,7 @@ else()
 	target_include_directories(${PROJECT_NAME}_objlib SYSTEM
 		PUBLIC ${PROJECT_BINARY_DIR}
 		PRIVATE ${CMAKE_BINARY_DIR}/src/lib
+		${CMAKE_SOURCE_DIR}/src/lib
 		${ORB_INCLUDE_DIR})
 	add_dependencies(${PROJECT_NAME}_objlib ${PROJECT_NAME}_IDLTGT)
 endif()
