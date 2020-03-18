@@ -18,7 +18,7 @@
 # = OPT_UNINST   : uninstallation
 #
 
-VERSION=2.0.0.03
+VERSION=2.0.0.04
 
 #
 #---------------------------------------
@@ -343,7 +343,7 @@ update_source_list () {
     fi
   fi
   # 公開鍵登録
-  wget -O- --no-check-certificate https://openrtm.org/pub/openrtm.key | apt-key add -
+  wget -O- --secure-protocol=TLSv1_2 --no-check-certificate https://openrtm.org/pub/openrtm.key | apt-key add -
 }
 
 #----------------------------------------
