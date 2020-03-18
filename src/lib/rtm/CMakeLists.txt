@@ -210,6 +210,7 @@ set(rtm_headers
 	CORBA_CdrMemoryStream.h
 	ByteData.h
 	ByteDataStreamBase.h
+	DataTypeUtil.h
 	${PROJECT_BINARY_DIR}/config_rtc.h
 	${PROJECT_BINARY_DIR}/version.h
 )

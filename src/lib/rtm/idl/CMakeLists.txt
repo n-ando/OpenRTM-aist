@@ -23,6 +23,11 @@ if(NOT CORBA MATCHES "RtORB")
 	set(${PROJECT_NAME}_IDLS ${${PROJECT_NAME}_IDLS} SharedMemory.idl)
 endif()
 
+configure_file(${PROJECT_SOURCE_DIR}/BasicDataTypeUtil.h ${PROJECT_BINARY_DIR}/BasicDataTypeUtil.h COPYONLY)
+configure_file(${PROJECT_SOURCE_DIR}/BasicDataTypeUtil.cpp ${PROJECT_BINARY_DIR}/BasicDataTypeUtil.cpp COPYONLY)
+configure_file(${PROJECT_SOURCE_DIR}/InterfaceDataTypesUtil.h ${PROJECT_BINARY_DIR}/InterfaceDataTypesUtil.h COPYONLY)
+configure_file(${PROJECT_SOURCE_DIR}/InterfaceDataTypesUtil.cpp ${PROJECT_BINARY_DIR}/InterfaceDataTypesUtil.cpp COPYONLY)
+
 # .idl -> .cpp
 openrtm_idl_compile_all(${PROJECT_NAME} "${${PROJECT_NAME}_IDLS}" "-I${PROJECT_SOURCE_DIR}" RTM_SKEL "")
 
@@ -38,6 +43,7 @@ if(CORBA MATCHES "RtORB")
 		target_include_directories(${IDLNAME} SYSTEM
 			PUBLIC ${PROJECT_BINARY_DIR}
 			PRIVATE ${CMAKE_BINARY_DIR}/src/lib
+			${CMAKE_SOURCE_DIR}/src/lib
 			${ORB_INCLUDE_DIR})
 		add_dependencies(${IDLNAME} ${PROJECT_NAME}_IDLTGT)
 		install(TARGETS ${IDLNAME} LIBRARY DESTINATION ${INSTALL_RTM_LIB_DIR}
@@ -53,6 +59,7 @@ else()
 	target_include_directories(${PROJECT_NAME}_objlib SYSTEM
 		PUBLIC ${PROJECT_BINARY_DIR}
 		PRIVATE ${CMAKE_BINARY_DIR}/src/lib
+		${CMAKE_SOURCE_DIR}/src/lib
 		${ORB_INCLUDE_DIR})
 	add_dependencies(${PROJECT_NAME}_objlib ${PROJECT_NAME}_IDLTGT)
 endif()
@@ -95,7 +102,8 @@ install(FILES ${${PROJECT_NAME}_IDLS} DESTINATION ${INSTALL_RTM_INCLUDE_DIR}/rtm
 foreach(hdr ${${PROJECT_NAME}_IDLHDR})
 	install(FILES "${PROJECT_BINARY_DIR}/${hdr}" DESTINATION ${INSTALL_RTM_INCLUDE_DIR}/rtm/idl COMPONENT headers)
 endforeach()
-
+install(FILES ${PROJECT_SOURCE_DIR}/BasicDataTypeUtil.h DESTINATION ${INSTALL_RTM_INCLUDE_DIR}/rtm/idl COMPONENT headers)
+install(FILES ${PROJECT_SOURCE_DIR}/InterfaceDataTypesUtil.h DESTINATION ${INSTALL_RTM_INCLUDE_DIR}/rtm/idl COMPONENT headers)
 
 foreach(idl ${${PROJECT_NAME}_IDLS})
 	string(REGEX REPLACE ".idl" "" idl ${idl})

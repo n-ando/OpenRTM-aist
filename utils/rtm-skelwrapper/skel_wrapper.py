@@ -61,6 +61,7 @@ skel_h = """// -*- C++ -*-
 #    endif
 #  endif
 #  include "[include_dir][basename].hh"
+[enable_copydatafunc]#  include "[include_dir][basename]Util.h"
 #elif defined ORB_IS_MICO
 #  include "[include_dir][basename].h"
 #elif defined ORB_IS_ORBIT2
@@ -103,6 +104,7 @@ skel_cpp = """// -*- C++ -*-
 #elif defined ORB_IS_OMNIORB
 #  include "[include_dir][basename]SK.cc"
 #  include "[include_dir][basename]DynSK.cc"
+[enable_copydatafunc]#  include "[include_dir][basename]Util.cpp"
 #elif defined ORB_IS_MICO
 #  include "[include_dir][basename].cc"
 #  include "[include_dir][basename]_skel.cc"
@@ -289,6 +291,10 @@ class skel_wrapper:
 			self.data["include_openrtm_idl_decls"] = ""
 		else:
 			self.data["include_openrtm_idl_decls"] = "#  include \"OpenRTM-aist-decls.h\"\n"
+		if os.path.exists(os.path.join(include_dir, basename+"Util.cpp")) and os.path.exists(os.path.join(include_dir, basename+"Util.h")):
+			self.data["enable_copydatafunc"] = ""
+		else:
+			self.data["enable_copydatafunc"] = "//"
 		return
 
 	def gen(self, fname, temp_txt):

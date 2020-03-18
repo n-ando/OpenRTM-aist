@@ -31,6 +31,7 @@
 #include <rtm/OutPortConnector.h>
 #include <rtm/Timestamp.h>
 #include <rtm/DirectOutPortBase.h>
+#include <rtm/DataTypeUtil.h>
 
 #include <functional>
 #include <string>
@@ -231,7 +232,7 @@ namespace RTC
                   }
                 else
                   {
-                    m_directValue = value;
+                    CORBA_Util::copyData<DataType>(m_directValue, value);
                   }
                 m_directNewData = true;
                 ret = DataPortStatus::PORT_OK;
@@ -462,35 +463,35 @@ namespace RTC
       m_onWriteConvert = on_wconvert;
     }
 
-	/*!
-	* @if jp
-	*
-	* @brief データをダイレクトに読み込む
-	*
-	* @param data 読み込むデータ
-	*
-	* @else
-	*
-	* @brief 
-	*
-	* @param data
-	*
-	* @endif
-	*/
-	void read(DataType& data) override
-	{
-		std::lock_guard<std::mutex> guard(m_valueMutex);
-		m_directNewData = false;
-		data = m_directValue;
-	}
-	bool isEmpty() override
-	{
-		return !m_directNewData;
-	}
-	bool isNew() override
-	{
-		return m_directNewData;
-	}
+    /*!
+     * @if jp
+     *
+     * @brief データをダイレクトに読み込む
+     *
+     * @param data 読み込むデータ
+     *
+     * @else
+     *
+     * @brief 
+     *
+     * @param data
+     *
+     * @endif
+     */
+    void read(DataType& data) override
+    {
+        std::lock_guard<std::mutex> guard(m_valueMutex);
+        m_directNewData = false;
+        CORBA_Util::copyData<DataType>(data, m_directValue);
+    }
+    bool isEmpty() override
+    {
+        return !m_directNewData;
+    }
+    bool isNew() override
+    {
+        return m_directNewData;
+    }
 
   protected:
     /*!

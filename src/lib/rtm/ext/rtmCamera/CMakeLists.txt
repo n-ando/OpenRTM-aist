@@ -10,6 +10,9 @@ project (rtmCamera
 
 set(${PROJECT_NAME}_IDLS CameraCommonInterface.idl)
 
+configure_file(${PROJECT_SOURCE_DIR}/CameraCommonInterfaceUtil.h ${PROJECT_BINARY_DIR}/CameraCommonInterfaceUtil.h COPYONLY)
+configure_file(${PROJECT_SOURCE_DIR}/CameraCommonInterfaceUtil.cpp ${PROJECT_BINARY_DIR}/CameraCommonInterfaceUtil.cpp COPYONLY)
+
 openrtm_idl_compile_all(${PROJECT_NAME}
 	"${${PROJECT_NAME}_IDLS}"
 	"-I${PROJECT_SOURCE_DIR}/..;-I${PROJECT_SOURCE_DIR}/../../idl"
@@ -81,3 +84,4 @@ install(FILES ${${PROJECT_NAME}_IDLS} DESTINATION ${INSTALL_RTM_INCLUDE_DIR}/rtm
 foreach(hdr ${${PROJECT_NAME}_IDLHDR})
 	install(FILES "${PROJECT_BINARY_DIR}/${hdr}" DESTINATION ${INSTALL_RTM_INCLUDE_DIR}/rtm/idl COMPONENT ext)
 endforeach()
+install(FILES ${PROJECT_SOURCE_DIR}/CameraCommonInterfaceUtil.h DESTINATION ${INSTALL_RTM_INCLUDE_DIR}/rtm/idl COMPONENT headers)
