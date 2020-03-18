@@ -220,7 +220,11 @@ namespace RTC
    */
   void ExtendedFsmServiceProvider::changeStructure(const std::string& fsm_structure)
   {
+#ifndef ORB_IS_RTORB
     m_fsmStructure.structure = fsm_structure.c_str();
+#else
+    m_fsmStructure.structure = CORBA::string_dup(fsm_structure.c_str());
+#endif
   }
 
   //============================================================

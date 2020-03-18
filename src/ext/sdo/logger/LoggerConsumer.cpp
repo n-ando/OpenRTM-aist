@@ -129,7 +129,11 @@ extern "C"
   {
     RTC::SdoServiceConsumerFactory& factory
       = RTC::SdoServiceConsumerFactory::instance();
+#ifndef ORB_IS_RTORB
     factory.addFactory(CORBA_Util::toRepositoryId<OpenRTM::Logger>(),
+#else
+    factory.addFactory(CORBA_Util::toRepositoryId<OpenRTM::Logger_ptr>(),
+#endif
                        ::coil::Creator< ::RTC::SdoServiceConsumerBase,
                        ::RTC::LoggerConsumer>,
                        ::coil::Destructor< ::RTC::SdoServiceConsumerBase,

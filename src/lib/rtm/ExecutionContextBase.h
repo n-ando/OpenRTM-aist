@@ -960,7 +960,11 @@ namespace RTC
      *
      * @endif
      */
+#ifndef ORB_IS_RTORB
     const RTC::RTCList& getComponentList() const;
+#else
+    const RTC_RTCList& getComponentList() const;
+#endif
 
     /*!
      * @if jp

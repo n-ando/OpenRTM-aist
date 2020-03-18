@@ -847,7 +847,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     publishPorts(comp);
     subscribePorts(comp);
 
-
+#ifndef ORB_IS_RTORB
     try
       {
         std::string id_str = comp->getCategory();
@@ -859,12 +859,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
         poa->the_POAManager()->activate();
 
         PortableServer::ObjectId_var id;
-#ifndef ORB_IS_RTORB
         id = PortableServer::string_to_ObjectId(id_str.c_str());
-#else // ORB_IS_RTORB
-        id = PortableServer::
-             string_to_ObjectId((char *)id_str.c_str());
-#endif // ORB_IS_RTORB
 
         poa->activate_object_with_id(id.in(), comp);
         CORBA::Object_var rtcobj = poa->id_to_reference(id);
@@ -880,7 +875,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 #endif
       }
     catch (...) {}
-
+#endif
     return true;
   }
 
@@ -1115,7 +1110,11 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   PortableServer::POA_ptr Manager::thePOA()
   {
     RTC_TRACE(("Manager::thePOA()"));
+#ifndef ORB_IS_RTORB
     return m_pPOA.in();
+#else
+    return m_pPOA;
+#endif
   }
 #ifdef ORB_IS_OMNIORB
   PortableServer::POA_ptr Manager::theShortCutPOA()
@@ -1154,7 +1153,11 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   PortableServer::POAManager_ptr Manager::thePOAManager()
   {
     RTC_TRACE(("Manager::thePOAManager()"));
+#ifndef ORB_IS_RTORB
     return m_pPOAManager.in();
+#else
+    return m_pPOAManager;
+#endif
   }
 
   /*!
@@ -1167,7 +1170,11 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   PortableServer::POAManager_ptr Manager::getPOAManager()
   {
     RTC_TRACE(("Manager::getPOAManager()"));
+#ifndef ORB_IS_RTORB
     return PortableServer::POAManager::_duplicate(m_pPOAManager);
+#else
+    return m_pPOAManager;
+#endif
   }
 
   //============================================================
@@ -2427,7 +2434,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
    */
   void Manager::setEndpointProperty(CORBA::Object_ptr objref)
   {
-#if !defined(ORB_IS_ORBEXPRESS) && !defined(ORB_IS_TAO)
+#if !defined(ORB_IS_ORBEXPRESS) && !defined(ORB_IS_TAO) && !defined(ORB_IS_RTORB)
     RTC_TRACE(("sedEndpointProperty()"));
     if (CORBA::is_nil(objref))
       {
@@ -2799,7 +2806,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
         m_initProc(this);
       }
   }
-
+#ifndef ORB_IS_RTORB
   void Manager::publishPorts(RTObject_impl* comp)
   {
     PortServiceList_var ports = comp->get_ports();
@@ -2847,6 +2854,10 @@ std::vector<coil::Properties> Manager::getLoadableModules()
         port = dynamic_cast<PortBase*>(m_pPOA->reference_to_servant(ports[i]));
         m_namingManager->bindObject(name.c_str(), port);
       }
+#else
+  void Manager::publishPorts(RTObject_impl* /*comp*/)
+  {
+#endif
   }
 
   void Manager::subscribePorts(RTObject_impl* comp)
@@ -2919,13 +2930,20 @@ std::vector<coil::Properties> Manager::getLoadableModules()
               }
             catch (CosNaming::NamingContext::NotFound&e)
               {
-                
+#ifndef ORB_IS_RTORB
                 RTC_ERROR(("Not found: %s.", cns.toString(e.rest_of_name)));
+#else
+                RTC_ERROR(("Not found: %s.", cns.toString(e.rest_of_name())));
+#endif
                 continue;
               }
             catch (CosNaming::NamingContext::CannotProceed&e)
               {
+#ifndef ORB_IS_RTORB
                 RTC_ERROR(("Cannot proceed: %s.", cns.toString(e.rest_of_name)));
+#else
+                RTC_ERROR(("Cannot proceed: %s.", cns.toString(e.rest_of_name())));
+#endif
                 continue;
               }
             catch (CosNaming::NamingContext::InvalidName&/*e*/)

@@ -70,6 +70,8 @@ elseif(CORBA MATCHES "omniORB")
 	set (ORB_IS_OMNIORB ON)
 elseif(CORBA MATCHES "TAO")
 	set (ORB_IS_TAO ON)
+elseif(CORBA MATCHES "RtORB")
+	set (ORB_IS_RTORB ON)
 endif()
 
 
@@ -188,11 +190,6 @@ set(rtm_headers
 	EventPort.h
 	Macho.h
 	StaticFSM.h
-	InPortSHMConsumer.h
-	InPortSHMProvider.h
-	OutPortSHMConsumer.h
-	OutPortSHMProvider.h
-	SharedMemoryPort.h
 	Timestamp.h
 	SimulatorExecutionContext.h
 	DirectInPortBase.h
@@ -280,11 +277,6 @@ set(rtm_srcs
 	NumberingPolicy.cpp
 	FsmActionListener.cpp
 	Macho.cpp
-	InPortSHMConsumer.cpp
-	InPortSHMProvider.cpp
-	OutPortSHMConsumer.cpp
-	OutPortSHMProvider.cpp
-	SharedMemoryPort.cpp
 	SimulatorExecutionContext.cpp
 	NamingServiceNumberingPolicy.cpp
 	NodeNumberingPolicy.cpp
@@ -312,6 +304,23 @@ if(CORBA MATCHES "TAO")
 	set(rtm_srcs ${rtm_srcs} 
 		InPortCorbaCdrUDPConsumer.cpp
 		InPortCorbaCdrUDPProvider.cpp
+	 )
+endif()
+
+if(NOT CORBA MATCHES "RtORB")
+	set(rtm_headers ${rtm_headers}
+		SharedMemoryPort.h
+		InPortSHMConsumer.h
+		InPortSHMProvider.h
+		OutPortSHMConsumer.h
+		OutPortSHMProvider.h
+	 )
+	set(rtm_srcs ${rtm_srcs}
+		SharedMemoryPort.cpp
+		InPortSHMConsumer.cpp
+		InPortSHMProvider.cpp
+		OutPortSHMConsumer.cpp
+		OutPortSHMProvider.cpp
 	 )
 endif()
 
@@ -361,14 +370,23 @@ else(VXWORKS)
 			$<TARGET_OBJECTS:${COIL_PROJECT_NAME}_objlib>
 			$<TARGET_OBJECTS:${PROJECT_NAME}_objlib>)
 	else()
-		add_library(${PROJECT_NAME}-static STATIC
-			$<TARGET_OBJECTS:${PROJECT_NAME}_objlib>
-			$<TARGET_OBJECTS:${COIL_PROJECT_NAME}_objlib>
-			$<TARGET_OBJECTS:${RTCSKEL_PROJECT_NAME}_objlib>)
-		add_library(${PROJECT_NAME} SHARED
-			$<TARGET_OBJECTS:${PROJECT_NAME}_objlib>
-			$<TARGET_OBJECTS:${COIL_PROJECT_NAME}_objlib>
-			$<TARGET_OBJECTS:${RTCSKEL_PROJECT_NAME}_objlib>)
+		if(CORBA MATCHES "RtORB")
+			add_library(${PROJECT_NAME}-static STATIC
+				$<TARGET_OBJECTS:${PROJECT_NAME}_objlib>
+				$<TARGET_OBJECTS:${COIL_PROJECT_NAME}_objlib>)
+			add_library(${PROJECT_NAME} SHARED
+				$<TARGET_OBJECTS:${PROJECT_NAME}_objlib>
+				$<TARGET_OBJECTS:${COIL_PROJECT_NAME}_objlib>)
+		else()
+			add_library(${PROJECT_NAME}-static STATIC
+				$<TARGET_OBJECTS:${PROJECT_NAME}_objlib>
+				$<TARGET_OBJECTS:${COIL_PROJECT_NAME}_objlib>
+				$<TARGET_OBJECTS:${RTCSKEL_PROJECT_NAME}_objlib>)
+			add_library(${PROJECT_NAME} SHARED
+				$<TARGET_OBJECTS:${PROJECT_NAME}_objlib>
+				$<TARGET_OBJECTS:${COIL_PROJECT_NAME}_objlib>
+				$<TARGET_OBJECTS:${RTCSKEL_PROJECT_NAME}_objlib>)
+		endif()
 	endif()
 
 	openrtm_set_link_props_shared(${PROJECT_NAME})
@@ -382,6 +400,10 @@ else(VXWORKS)
 
 	if(OBSERVER_ENABLE)
 		set(libs ${libs} ComponentObserverConsumer)
+	endif()
+
+	if(CORBA MATCHES "RtORB")
+		set(libs ${libs} ${RTM_IDL_LIBS})
 	endif()
 
 	target_link_libraries(${PROJECT_NAME} PRIVATE ${libs})
@@ -416,6 +438,10 @@ else(VXWORKS)
 
 	if(WIN32)
 		set(DATATYPE_FACTORIES ${RTCSKEL_PROJECT_NAME} PARENT_SCOPE)
+	endif()
+
+	if(CORBA MATCHES "RtORB")
+		set(DATATYPE_FACTORIES ${RTM_IDL_LIBS} PARENT_SCOPE)
 	endif()
 
 endif(VXWORKS)

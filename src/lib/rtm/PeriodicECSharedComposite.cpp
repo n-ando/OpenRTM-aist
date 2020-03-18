@@ -622,7 +622,11 @@ namespace RTC
   {
     m_ref = this->_this();
     m_objref = RTC::RTObject::_duplicate(m_ref);
+#ifndef ORB_IS_RTORB
     m_org = new SDOPackage::PeriodicECOrganization(this, m_objref.in());
+#else
+    m_org = new SDOPackage::PeriodicECOrganization(this, static_cast<SDOPackage::SDOSystemElement*>(m_objref.in()));
+#endif
     ::CORBA_SeqUtil::push_back(m_sdoOwnedOrganizations,
                                m_org->getObjRef());
     bindParameter("members", m_members, "", stringToStrVec);
@@ -694,7 +698,7 @@ namespace RTC
 
         ::CORBA_SeqUtil::push_back(sdos, sdo);
 #else  // ORB_IS_RTORB
-        sdo = rtc->getObjRef();
+        sdo = static_cast<SDOPackage::SDO*>(rtc->getObjRef());
         if (::CORBA::is_nil(sdo)) continue;
 
         ::CORBA_SeqUtil::push_back(sdos, ::SDOPackage::SDO_ptr(sdo));

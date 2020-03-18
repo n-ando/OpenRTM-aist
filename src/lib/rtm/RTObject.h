@@ -5516,12 +5516,13 @@ namespace RTC
       {
         if (!::CORBA::is_nil(ec) && !ec->_non_existent())
           {
-            if (ec->get_component_state(m_comp) == RTC::ACTIVE_STATE)
+            RTC::LifeCycleState state = ec->get_component_state(m_comp);
+            if (state == RTC::ACTIVE_STATE)
               {
                 ec->deactivate_component(
                     RTC::LightweightRTObject::_duplicate(m_comp));
               }
-            else if (ec->get_component_state(m_comp) == RTC::ERROR_STATE)
+            else if (state == RTC::ERROR_STATE)
               {
                 ec->reset_component(
                     RTC::LightweightRTObject::_duplicate(m_comp));

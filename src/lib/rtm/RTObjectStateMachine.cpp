@@ -112,6 +112,7 @@ namespace RTC_impl
   {
     m_caVar = RTC::ComponentAction::_narrow(comp);
     if (CORBA::is_nil(m_caVar)) { return; }
+#ifndef ORB_IS_RTORB
     m_ca = true;
     PortableServer::POA_var poa = ::RTC::Manager::instance().getPOA();
     try
@@ -127,6 +128,7 @@ namespace RTC_impl
       {
         m_rtobjPtr = nullptr;
       }
+  #endif
   }
 
   void RTObjectStateMachine::

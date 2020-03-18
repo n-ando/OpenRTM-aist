@@ -14,11 +14,13 @@ set(${PROJECT_NAME}_IDLS
 	OpenRTM.idl
 	RTC.idl
 	SDOPackage.idl
-	SharedMemory.idl
 	ExtendedFsmService.idl)
 
 if(CORBA MATCHES "TAO")
 	set(${PROJECT_NAME}_IDLS ${${PROJECT_NAME}_IDLS} DataPortUDP.idl)
+endif()
+if(NOT CORBA MATCHES "RtORB")
+	set(${PROJECT_NAME}_IDLS ${${PROJECT_NAME}_IDLS} SharedMemory.idl)
 endif()
 
 # .idl -> .cpp
@@ -27,13 +29,33 @@ openrtm_idl_compile_all(${PROJECT_NAME} "${${PROJECT_NAME}_IDLS}" "-I${PROJECT_S
 # .cpp -> .o .so
 link_directories(${ORB_LINK_DIR})
 
-add_library(${PROJECT_NAME}_objlib OBJECT ${${PROJECT_NAME}_IDLSKEL})
-openrtm_gencode_set_compile_props(${PROJECT_NAME}_objlib)
-target_include_directories(${PROJECT_NAME}_objlib SYSTEM
-	PUBLIC ${PROJECT_BINARY_DIR}
-	PRIVATE ${CMAKE_BINARY_DIR}/src/lib
-	${ORB_INCLUDE_DIR})
-add_dependencies(${PROJECT_NAME}_objlib ${PROJECT_NAME}_IDLTGT)
+
+if(CORBA MATCHES "RtORB")
+	foreach(IDLSOURCE ${${PROJECT_NAME}_IDLSKEL};${${PROJECT_NAME}_IDLSTUB})
+		get_filename_component(IDLNAME ${IDLSOURCE} NAME_WE)
+		add_library(${IDLNAME} SHARED ${IDLSOURCE})
+		openrtm_gencode_set_compile_props(${IDLNAME})
+		target_include_directories(${IDLNAME} SYSTEM
+			PUBLIC ${PROJECT_BINARY_DIR}
+			PRIVATE ${CMAKE_BINARY_DIR}/src/lib
+			${ORB_INCLUDE_DIR})
+		add_dependencies(${IDLNAME} ${PROJECT_NAME}_IDLTGT)
+		install(TARGETS ${IDLNAME} LIBRARY DESTINATION ${INSTALL_RTM_LIB_DIR}
+					ARCHIVE DESTINATION ${INSTALL_RTM_LIB_DIR}
+					RUNTIME DESTINATION ${INSTALL_RTM_BIN_DIR}
+					COMPONENT openrtm)
+		set(RTM_IDL_LIBS ${RTM_IDL_LIBS};${IDLNAME})
+	endforeach()
+	set(RTM_IDL_LIBS ${RTM_IDL_LIBS} PARENT_SCOPE)
+else()
+	add_library(${PROJECT_NAME}_objlib OBJECT ${${PROJECT_NAME}_IDLSKEL})
+	openrtm_gencode_set_compile_props(${PROJECT_NAME}_objlib)
+	target_include_directories(${PROJECT_NAME}_objlib SYSTEM
+		PUBLIC ${PROJECT_BINARY_DIR}
+		PRIVATE ${CMAKE_BINARY_DIR}/src/lib
+		${ORB_INCLUDE_DIR})
+	add_dependencies(${PROJECT_NAME}_objlib ${PROJECT_NAME}_IDLTGT)
+endif()
 
 if(WIN32)
 	set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS OFF)

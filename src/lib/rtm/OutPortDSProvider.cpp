@@ -183,8 +183,8 @@ namespace RTC
         m_cdr.readData(static_cast<unsigned char*>(data->get_buffer()), len);
 #else
         data->length(len);
-        m_cdr.readData(reinterpret_cast<char *>(&((*data)[0]),
-                                        static_cast<int>(len)));
+        m_cdr.readData(reinterpret_cast<unsigned char *>(&(*data[0])),
+                                        static_cast<int>(len));
 #endif  // ORB_IS_RTORB
       }
 
