@@ -622,7 +622,6 @@ function(openrtm_common_set_compile_options target)
 		-Wdouble-promotion
 		$<$<VERSION_GREATER:${CMAKE_CXX_COMPILER_VERSION},6.9.9>: -Wduplicated-branches>
 		$<$<VERSION_GREATER:${CMAKE_CXX_COMPILER_VERSION},5.9.9>: -Wduplicated-cond>
-		-Werror-implicit-function-declaration
 		$<$<VERSION_GREATER:${CMAKE_CXX_COMPILER_VERSION},7.9.9>: -Wextra-semi>
 		-Wfloat-conversion
 		-Wfloat-equal
