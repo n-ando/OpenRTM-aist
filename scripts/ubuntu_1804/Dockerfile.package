@@ -3,6 +3,7 @@ FROM openrtm/devel-rtm:ubuntu18.04
 RUN apt-get update\
  && apt-get install -y --no-install-recommends\
  doxygen\
+ graphviz\
  build-essential\
  debhelper\
  devscripts\
