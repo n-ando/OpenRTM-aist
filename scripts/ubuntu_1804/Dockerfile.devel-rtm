@@ -43,10 +43,24 @@ RUN cp -r /tmp/flb/build/include/jemalloc\
 ############################################################
 FROM ubuntu:18.04 as rtm-build
 
-ENV ROS_DISTRO=melodic
+ENV ROS_DISTRO=dashing
+ENV AMENT_PREFIX_PATH=/opt/ros/${ROS_DISTRO}
+ENV ROS_VERSION=2
+ENV ROS_PYTHON_VERSION=3
+ENV PYTHONPATH=/opt/ros/${ROS_DISTRO}/lib/python3.6/site-packages:${PYTHONPATH}
+ENV PATH=/opt/ros/${ROS_DISTRO}/bin:${PATH}
 RUN apt-get update\
- && apt-get install -y --no-install-recommends gnupg2\
- && sh -c 'echo "deb http://packages.ros.org/ros/ubuntu bionic main" > /etc/apt/sources.list.d/ros-latest.list'\
+ && apt-get install -y --no-install-recommends curl gnupg2\
+ && curl http://repo.ros2.org/repos.key | apt-key add -\
+ && sh -c 'echo "deb [arch=amd64,arm64] http://repo.ros2.org/ubuntu/main bionic main" > /etc/apt/sources.list.d/ros2-latest.list'\
+ && apt-get update\
+ && DEBIAN_FRONTEND=noninteractive apt-get -y install ros-${ROS_DISTRO}-ros-core
+ && apt-get clean\
+ && rm -rf /var/lib/apt/lists/*
+
+
+ENV ROS_DISTRO=melodic
+RUN sh -c 'echo "deb http://packages.ros.org/ros/ubuntu bionic main" > /etc/apt/sources.list.d/ros-latest.list'\
  && apt-key adv --keyserver keyserver.ubuntu.com --recv-keys F42ED6FBAB17C654\
  && apt-get update\
  && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends ros-${ROS_DISTRO}-ros-base\
@@ -57,8 +71,6 @@ RUN apt-get update\
 ENV CMAKE_PREFIX_PATH=/opt/ros/${ROS_DISTRO}:${CMAKE_PREFIX_PATH}
 ENV ROS_ETC_DIR=/opt/ros/${ROS_DISTRO}/etc/ros
 ENV ROS_ROOT=/opt/ros/${ROS_DISTRO}/share/ros
-ENV ROS_VERSION=1
-ENV ROS_PYTHON_VERSION=2
 ENV ROS_PACKAGE_PATH=/opt/ros/${ROS_DISTRO}/share
 ENV PYTHONPATH=/opt/ros/${ROS_DISTRO}/lib/python2.7/dist-packages:${PYTHONPATH}
 ENV PATH=/opt/ros/${ROS_DISTRO}/bin:${PATH}

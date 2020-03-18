@@ -7,6 +7,8 @@ RUN cmake\
  -DFLUENTBIT_ENABLE=ON\
  -DFLUENTBIT_ROOT=/usr/local/include\
  -DROS_ENABLE=ON\
+ -DFASTRTPS_ENABLE=ON\
+ -DROS2_ENABLE=ON\
  -DCMAKE_BUILD_TYPE=Release\
  -S /root/OpenRTM-aist\
  -B/tmp/rtm/build\
