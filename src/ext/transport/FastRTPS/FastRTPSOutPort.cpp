@@ -69,7 +69,7 @@ namespace RTC
    */
   void FastRTPSOutPort::init(coil::Properties& prop)
   { 
-    RTC_PARANOID(("ROSOutPort::init()"));
+    RTC_PARANOID(("FastRTPSOutPort::init()"));
     
     if(prop.propertyNames().size() == 0)
     {

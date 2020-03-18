@@ -3,6 +3,7 @@ FROM openrtm/devel-rtm:ubuntu18.04
 RUN apt-get update\
  && apt-get install -y --no-install-recommends\
  doxygen\
+ graphviz\
  build-essential\
  debhelper\
  devscripts\
@@ -15,6 +16,7 @@ RUN cmake\
  -DOBSERVER_ENABLE=ON\
  -DFLUENTBIT_ENABLE=ON\
  -DFLUENTBIT_ROOT=/usr/local/include\
+ -DROS_ENABLE=ON\
  -DDOCUMENTS_ENABLE=ON\
  -DCMAKE_BUILD_TYPE=Release\
  -DCMAKE_INSTALL_PREFIX=/tmp/rtm/install\

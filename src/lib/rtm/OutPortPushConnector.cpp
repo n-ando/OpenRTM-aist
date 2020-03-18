@@ -246,7 +246,11 @@ namespace RTC
   {
       if (m_consumer != nullptr)
       {
+#ifndef ORB_IS_RTORB
           SDOPackage::NVList nv;
+#else
+          SDOPackage_NVList nv;
+#endif
           NVUtil::copyFromProperties(nv, prop);
           m_consumer->unsubscribeInterface(nv);
       }

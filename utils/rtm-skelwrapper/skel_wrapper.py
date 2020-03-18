@@ -112,9 +112,8 @@ skel_cpp = """// -*- C++ -*-
 #  include "[include_dir][basename]-cpp-stubs.cc"
 #  include "[include_dir][basename]-cpp-skels.cc"
 #elif defined ORB_IS_RTORB
-[include_openrtm_idl_decls]
+// [include_openrtm_idl_decls]
 #  include "[include_dir][basename]-common.c"
-#  include "[include_dir][basename]-stubs.c"
 #  include "[include_dir][basename]-skels.c"
 #  include "[include_dir][basename]-skelimpl.c"
 #elif defined ORB_IS_ORBEXPRESS
@@ -209,7 +208,7 @@ stub_cpp = """// -*- C++ -*-
 #elif defined ORB_IS_ORBIT2
 #  include "[include_dir][basename]-cpp-stubs.cc"
 #elif defined ORB_IS_RTORB
-[include_openrtm_idl_decls]
+// [include_openrtm_idl_decls]
 #  include "[include_dir][basename]-common.c"
 #  include "[include_dir][basename]-stubs.c"
 #elif defined ORB_IS_ORBEXPRESS

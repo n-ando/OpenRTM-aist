@@ -108,7 +108,11 @@ namespace RTC
 
     // merge properties to PortProfile.properties
     m_properties << prop;
+#ifndef ORB_IS_RTORB
     NVList nv;
+#else
+    SDOPackage_NVList nv;
+#endif
     NVUtil::copyFromProperties(nv, m_properties);
     CORBA_SeqUtil::push_back_list(m_profile.properties, nv);
     RTC_PARANOID(("updated properties:"));
@@ -857,7 +861,7 @@ namespace RTC
           {
             RTC_ERROR(("publishing interface information error"));
             InPortProviderFactory::instance().deleteObject(provider);
-            return 0;
+            return nullptr;
           }
 #endif  // ORB_IS_RTORB
         return provider;
@@ -1056,6 +1060,7 @@ namespace RTC
   * @brief Getting local peer OutPort if available
   * @endif
   */
+#ifndef ORB_IS_RTORB
   OutPortBase*
       InPortBase::getLocalOutPort(const ConnectorInfo& profile)
   {
@@ -1084,6 +1089,11 @@ namespace RTC
             RTC_DEBUG(("Peer port might be a remote port"));
           }
       }
+#else
+  OutPortBase*
+      InPortBase::getLocalOutPort(const ConnectorInfo& /*profile*/)
+  {
+#endif
       return nullptr;
   }
 

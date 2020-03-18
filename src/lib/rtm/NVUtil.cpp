@@ -108,11 +108,7 @@ namespace NVUtil
     for (CORBA::ULong i = 0; i < len; ++i)
       {
 // Why RtORB does not copy string to Properties.
-#ifndef ORB_IS_RTORB
         nv[i].name = CORBA::string_dup(keys[i].c_str());
-#else  // ORB_IS_RTORB
-        nv[i].name = reinterpret_cast<char *>(keys[i].c_str());
-#endif  // ORB_IS_RTORB
         nv[i].value <<= prop[keys[i]].c_str();
       }
   }

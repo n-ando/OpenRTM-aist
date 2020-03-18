@@ -1,11 +1,11 @@
 ﻿// -*- C++ -*-
 /*!
- * @file  FastRTPSOutPort.h
- * @brief FastRTPSOutPort class
- * @date  $Date: 2019-01-31 03:08:03 $
+ * @file  SSMOutPort.h
+ * @brief SSMOutPort class
+ * @date  $Date: 2020-03-10 03:08:03 $
  * @author Nobuhiko Miyamoto <n-miyamoto@aist.go.jp>
  *
- * Copyright (C) 2019
+ * Copyright (C) 2020
  *     Nobuhiko Miyamoto
  *     Robot Innovation Research Center,
  *     National Institute of
@@ -16,17 +16,15 @@
  *
  */
 
-#ifndef RTC_FASTRTPSOUTPORT_H
-#define RTC_FASTRTPSOUTPORT_H
+#ifndef RTC_SSMOUTPORT_H
+#define RTC_SSMOUTPORT_H
 
 
 
 #include <map>
 #include <rtm/InPortConsumer.h>
 #include <rtm/Manager.h>
-#include <fastrtps/fastrtps_fwd.h>
-#include <fastrtps/publisher/PublisherListener.h>
-#include "CORBACdrDataPubSubTypes.h"
+#include <ssm.h>
 
 
 
@@ -34,29 +32,29 @@ namespace RTC
 {
   /*!
    * @if jp
-   * @class FastRTPSOutPort
-   * @brief FastRTPSOutPort クラス
+   * @class SSMOutPort
+   * @brief SSMOutPort クラス
    *
    * InPortConsumer 
    *
-   * データ転送に FastRTPsによるDDS通信によるデータ転送を実現する
-   * InPort コンシューマクラス。
+   * データ転送に SSM(Streaming data Sharing Manager) の 共有メモリを利用
+   * した、pull 型データフロー型を実現する InPort コンシューマクラス。
    *
    * @since 2.0.0
    *
    * @else
-   * @class FastRTPSOutPort
-   * @brief FastRTPSOutPort class
+   * @class SSMOutPort
+   * @brief SSMOutPort class
    *
-   * The InPort consumer class which uses the FastRTPs
-   * for data transfer and realizes a push-type
+   * The InPort consumer class which uses the shared memory
+   * in SSM for data transfer and realizes a pull-type
    * dataflow.
    *
    * @since 2.0.0
    *
    * @endif
    */
-  class FastRTPSOutPort
+  class SSMOutPort
     : public InPortConsumer
   {
   public:
@@ -77,7 +75,7 @@ namespace RTC
      *
      * @endif
      */
-    FastRTPSOutPort(void);
+    SSMOutPort(void);
     
     /*!
      * @if jp
@@ -92,7 +90,7 @@ namespace RTC
      *
      * @endif
      */
-    ~FastRTPSOutPort(void) override;
+    ~SSMOutPort(void) override;
 
     /*!
      * @if jp
@@ -229,89 +227,19 @@ namespace RTC
 
   private:
 
-
-
     mutable Logger rtclog;
     coil::Properties m_properties;
     
-    std::string m_topic;
-    std::string m_dataType;
     std::mutex m_mutex;
 
-    eprosima::fastrtps::Publisher *m_publisher{nullptr};
+    SSM_sid m_sens_sid;
+    std::string m_stream_name;
+    int m_stream_id;
+    size_t m_stream_size;
+    ssmTimeT m_life_ssm_time;
+    ssmTimeT m_cycle_ssm_time;
 
-    /*!
-     * @if jp
-     * @class PubListener
-     * @brief PubListener クラス
-     *
-     * パブリッシャーのリスナ
-     *
-     * @since 2.0.0
-     *
-     * @else
-     * @class PubListener
-     * @brief PubListener class
-     *
-     *
-     * @since 2.0.0
-     *
-     * @endif
-     */
-    class PubListener : public eprosima::fastrtps::PublisherListener
-    {
-    public:
-        /*!
-         * @if jp
-         * @brief コンストラクタ
-         *
-         * コンストラクタ
-         *
-         *
-         * @else
-         * @brief Constructor
-         *
-         * Constructor
-         *
-         *
-         * @endif
-         */
-        PubListener();
-        /*!
-         * @if jp
-         * @brief デストラクタ
-         *
-         * デストラクタ
-         *
-         * @else
-         * @brief Destructor
-         *
-         * Destructor
-         *
-         * @endif
-         */
-        ~PubListener() override;
-        /*!
-         * @if jp
-         * @brief
-         *
-         * 同じトピックのPublisherを検出したときのコールバック関数
-         *
-         * @param sub Subscriber
-         * @param info 一致情報
-         *
-         * @else
-         * @brief
-         *
-         * @param sub
-         * @param info
-         *
-         *
-         * @endif
-         */
-        void onPublicationMatched(eprosima::fastrtps::Publisher* pub, eprosima::fastrtps::rtps::MatchingInfo& info) override;
-    } m_listener;
-    
+
   };
 } // namespace RTC
 

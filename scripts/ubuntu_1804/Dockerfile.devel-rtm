@@ -43,6 +43,26 @@ RUN cp -r /tmp/flb/build/include/jemalloc\
 ############################################################
 FROM ubuntu:18.04 as rtm-build
 
+ENV ROS_DISTRO=melodic
+RUN apt-get update\
+ && apt-get install -y --no-install-recommends gnupg2\
+ && sh -c 'echo "deb http://packages.ros.org/ros/ubuntu bionic main" > /etc/apt/sources.list.d/ros-latest.list'\
+ && apt-key adv --keyserver keyserver.ubuntu.com --recv-keys F42ED6FBAB17C654\
+ && apt-get update\
+ && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends ros-${ROS_DISTRO}-ros-base\
+ && apt-get clean\
+ && rm -rf /var/lib/apt/lists/*\
+ && rosdep init\
+ && rosdep update
+ENV CMAKE_PREFIX_PATH=/opt/ros/${ROS_DISTRO}:${CMAKE_PREFIX_PATH}
+ENV ROS_ETC_DIR=/opt/ros/${ROS_DISTRO}/etc/ros
+ENV ROS_ROOT=/opt/ros/${ROS_DISTRO}/share/ros
+ENV ROS_VERSION=1
+ENV ROS_PYTHON_VERSION=2
+ENV ROS_PACKAGE_PATH=/opt/ros/${ROS_DISTRO}/share
+ENV PYTHONPATH=/opt/ros/${ROS_DISTRO}/lib/python2.7/dist-packages:${PYTHONPATH}
+ENV PATH=/opt/ros/${ROS_DISTRO}/bin:${PATH}
+
 RUN apt-get update\
  && apt-get install -y --no-install-recommends\
  g++\

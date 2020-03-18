@@ -159,7 +159,6 @@ namespace CORBA_RTCUtil
       {
         return -1;
       }
-
     RTC::ExecutionContextList eclist_own = (*rtc->get_owned_contexts());
 
     for (unsigned int i = 0; i < eclist_own.length(); i++)
@@ -1442,7 +1441,11 @@ namespace CORBA_RTCUtil
    */
   bool set_configuration_parameter(SDOPackage::Configuration_ptr conf, SDOPackage::ConfigurationSet& confset, const std::string& value_name, const std::string& value)
   {
+#ifndef ORB_IS_RTORB
     SDOPackage::NVList confData = confset.configuration_data;
+#else
+    SDOPackage_NVList confData = confset.configuration_data;
+#endif
     coil::Properties prop;
     NVUtil::copyToProperties(prop, confData);
     prop[value_name] = value;

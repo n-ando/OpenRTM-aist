@@ -106,6 +106,8 @@ namespace RTC
             data.writeData((unsigned char*)cdr_data.get_buffer(), (CORBA::ULong)cdr_data.length());
 #elif defined(ORB_IS_TAO)
             data.writeData((unsigned char*)cdr_data->get_buffer(), (CORBA::ULong)cdr_data->length());
+#elif defined(ORB_IS_RTORB)
+            data.writeData(reinterpret_cast<unsigned char*>(&(cdr_data[0])), static_cast<CORBA::ULong>(cdr_data->length()));
 #else
             data.writeData(static_cast<unsigned char*>(&(cdr_data[0])), static_cast<CORBA::ULong>(cdr_data->length()));
 #endif

@@ -705,7 +705,7 @@ namespace RTC
 #ifndef ORB_IS_RTORB
             name[i].kind = "";
 #else  // ORB_IS_RTORB
-            name[i].kind = <char*>"";
+            name[i].kind = CORBA::string_dup("");
 #endif  // ORB_IS_RTORB
           }
       }

@@ -1,7 +1,7 @@
 ﻿// -*- C++ -*-
 /*!
  * @file  FastRTPSMessageInfo.cpp
- * @brief Fast-RTPS Massage Type Info class
+ * @brief Fast-RTPs Massage Type Info class
  * @date  $Date: 2019-02-05 03:08:03 $
  * @author Nobuhiko Miyamoto <n-miyamoto@aist.go.jp>
  *

@@ -6,6 +6,7 @@ RUN cmake\
  -DOBSERVER_ENABLE=ON\
  -DFLUENTBIT_ENABLE=ON\
  -DFLUENTBIT_ROOT=/usr/local/include\
+ -DROS_ENABLE=ON\
  -DCMAKE_BUILD_TYPE=Release\
  -S /root/OpenRTM-aist\
  -B/tmp/rtm/build\

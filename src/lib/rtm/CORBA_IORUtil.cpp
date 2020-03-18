@@ -53,7 +53,7 @@ namespace CORBA_IORUtil
    * @brief Convert from IOR string to IOR structure
    * @endif
    */
-#if !defined(ORB_IS_ORBEXPRESS) && !defined(ORB_IS_TAO)
+#if !defined(ORB_IS_ORBEXPRESS) && !defined(ORB_IS_TAO) && !defined(ORB_IS_RTORB)
   bool toIOR(const char* iorstr, IOP::IOR& ior)
   {
 #ifndef ORB_IS_RTORB
@@ -143,7 +143,7 @@ namespace CORBA_IORUtil
    * @brief Convert from IOR structure to IOR string
    * @endif
    */
-#if !defined(ORB_IS_ORBEXPRESS) && !defined(ORB_IS_TAO)
+#if !defined(ORB_IS_ORBEXPRESS) && !defined(ORB_IS_TAO) && !defined(ORB_IS_RTORB)
   bool toString(IOP::IOR& ior, std::string& iorstr)
   {
 #ifndef ORB_IS_RTORB
@@ -316,7 +316,7 @@ namespace CORBA_IORUtil
     return retstr.str();
   }
 
-#if !defined(ORB_IS_ORBEXPRESS) && !defined(ORB_IS_TAO)
+#if !defined(ORB_IS_ORBEXPRESS) && !defined(ORB_IS_TAO) && !defined(ORB_IS_RTORB)
   std::vector<IIOP::Address> getEndpoints(IOP::IOR& ior)
   {
 	std::vector<IIOP::Address> addr;
