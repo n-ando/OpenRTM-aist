@@ -39,8 +39,8 @@ namespace RTC
    *
    * InPortConsumer 
    *
-   * データ転送に CORBA の OpenRTM::InPortCdr インターフェースを利用し
-   * た、push 型データフロー型を実現する InPort コンシューマクラス。
+   * データ転送に FastRTPsによるDDS通信によるデータ転送を実現する
+   * InPort コンシューマクラス。
    *
    * @since 2.0.0
    *
@@ -48,8 +48,8 @@ namespace RTC
    * @class FastRTPSOutPort
    * @brief FastRTPSOutPort class
    *
-   * The InPort consumer class which uses the OpenRTM::InPortCdr
-   * interface in CORBA for data transfer and realizes a push-type
+   * The InPort consumer class which uses the FastRTPs
+   * for data transfer and realizes a push-type
    * dataflow.
    *
    * @since 2.0.0
