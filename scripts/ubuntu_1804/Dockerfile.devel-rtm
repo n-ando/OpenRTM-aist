@@ -52,7 +52,7 @@ ENV PATH=/opt/ros/${ROS_DISTRO}/bin:${PATH}
 RUN apt-get update\
  && apt-get install -y --no-install-recommends curl gnupg2\
  && curl http://repo.ros2.org/repos.key | apt-key add -\
- && sh -c 'echo "deb [arch=amd64,arm64] http://repo.ros2.org/ubuntu/main bionic main" > /etc/apt/sources.list.d/ros2-latest.list'\
+ && sh -c 'echo "deb http://repo.ros2.org/ubuntu/main bionic main" > /etc/apt/sources.list.d/ros2-latest.list'\
  && apt-get update\
  && DEBIAN_FRONTEND=noninteractive apt-get -y install ros-${ROS_DISTRO}-ros-core\
  && apt-get clean\
