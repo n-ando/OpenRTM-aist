@@ -58,9 +58,8 @@ namespace RTC
         m_sync_readwrite = true;
     }
 
-    std::string type{info.properties.getProperty("marshaling_type", "cdr")};
     m_marshaling_type = coil::eraseBothEndsBlank(
-      info.properties.getProperty("in.marshaling_type", type));
+      info.properties.getProperty("marshaling_type", "cdr"));
 
     onConnect();
   }
