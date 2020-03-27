@@ -51,7 +51,7 @@ namespace RTC
     m_consumer->setBuffer(m_buffer);
     m_consumer->setListener(info, m_listeners);
 
-    std::string type{info.properties.getProperty("marshaling_type", "corba")};
+    std::string type{info.properties.getProperty("marshaling_type", "cdr")};
     m_marshaling_type = coil::eraseBothEndsBlank(
       info.properties.getProperty("in.marshaling_type", type));
 

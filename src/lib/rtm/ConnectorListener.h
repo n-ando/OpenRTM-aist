@@ -1107,7 +1107,7 @@ namespace RTC
     template <class DataType>
     ReturnCode notifyIn(ConnectorInfo& info, DataType& typeddata)
     {
-        std::string type = info.properties.getProperty("marshaling_type", "corba");
+        std::string type = info.properties.getProperty("marshaling_type", "cdr");
         std::string marshaling_type{coil::eraseBothEndsBlank(
           info.properties.getProperty("in.marshaling_type", type))};
         return notify(info, typeddata, marshaling_type);
@@ -1136,7 +1136,7 @@ namespace RTC
     template <class DataType>
     ReturnCode notifyOut(ConnectorInfo& info, DataType& typeddata)
     {
-        std::string type = info.properties.getProperty("marshaling_type", "corba");
+        std::string type = info.properties.getProperty("marshaling_type", "cdr");
         std::string marshaling_type{coil::eraseBothEndsBlank(
           info.properties.getProperty("out.marshaling_type", type))};
         return notify(info, typeddata, marshaling_type);
@@ -2025,7 +2025,7 @@ namespace RTC
        */
       ReturnCode notifyIn(ConnectorInfo& info, ByteData& data) override
       {
-          std::string type = info.properties.getProperty("marshaling_type", "corba");
+          std::string type = info.properties.getProperty("marshaling_type", "cdr");
           std::string marshaling_type{ coil::eraseBothEndsBlank(
             info.properties.getProperty("in.marshaling_type", type)) };
           return notify(info, data, marshaling_type);
@@ -2053,7 +2053,7 @@ namespace RTC
        */
       ReturnCode notifyOut(ConnectorInfo& info, ByteData& data) override
       {
-          std::string type = info.properties.getProperty("marshaling_type", "corba");
+          std::string type = info.properties.getProperty("marshaling_type", "cdr");
           std::string marshaling_type{ coil::eraseBothEndsBlank(
             info.properties.getProperty("out.marshaling_type", type)) };
           return notify(info, data, marshaling_type);

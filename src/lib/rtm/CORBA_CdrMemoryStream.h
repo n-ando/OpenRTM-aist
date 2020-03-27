@@ -649,7 +649,7 @@ namespace RTC
 template <class DataType>
 void CdrMemoryStreamInit()
 {
-    ::RTC::addSerializer<DataType, ::RTC::CORBA_CdrSerializer<DataType>>("corba");
+    ::RTC::addSerializer<DataType, ::RTC::CORBA_CdrSerializer<DataType>>("cdr");
 }
 
 
