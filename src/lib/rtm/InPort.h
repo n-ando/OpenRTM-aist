@@ -129,12 +129,12 @@ namespace RTC
 
       CdrMemoryStreamInit<DataType>();
 
-      std::string serializer_types{coil::eraseBlank(coil::flatten(
+      std::string marshaling_types{coil::eraseBlank(coil::flatten(
         getSerializerList<DataType>()))};
 
-      RTC_DEBUG(("available serializer_types: %s", serializer_types.c_str()));
+      RTC_DEBUG(("available marshaling_types: %s", marshaling_types.c_str()));
 
-      addProperty("dataport.serializer_type", serializer_types.c_str());
+      addProperty("dataport.marshaling_types", marshaling_types.c_str());
     }
 
     /*!
