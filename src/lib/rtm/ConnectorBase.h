@@ -133,6 +133,23 @@ namespace RTC
 
     /*!
      * @if jp
+     *
+     * @brief 代入演算子
+     *
+     * 代入演算子
+     *
+     * @else
+     *
+     * @brief Operator=
+     *
+     * Operator=
+     *
+     * @endif
+     */
+    ConnectorInfo& operator=(const ConnectorInfo&) = default;
+
+    /*!
+     * @if jp
      * @brief  接続名前
      * @else
      * @brief  Connection name

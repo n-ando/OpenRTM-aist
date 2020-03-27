@@ -218,14 +218,14 @@ namespace coil
        */
       struct Stream
       {
-          explicit Stream(LogStreamBuffer* stream, bool cleanup = false)
+          explicit Stream(LogStreamBuffer* stream, bool cleanup = false) noexcept
               : stream_(stream), cleanup_(cleanup)
           {
           }
 
           virtual ~Stream() = default;
 
-          Stream(const Stream& x)
+          Stream(const Stream& x) noexcept
               : stream_(x.stream_), cleanup_(false)
           {
           }

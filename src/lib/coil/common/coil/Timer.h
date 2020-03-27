@@ -56,7 +56,7 @@ namespace coil
      * @endif
      */
     DelayedFunction(std::function<void(void)> fn,
-                    std::chrono::nanoseconds delay)
+                    std::chrono::nanoseconds delay) noexcept
       : m_fn(std::move(fn)), m_remains(delay) {}
 
     /*!
