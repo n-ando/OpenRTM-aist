@@ -1109,7 +1109,7 @@ namespace RTC
     {
         std::string type = info.properties.getProperty("marshaling_type", "cdr");
         std::string marshaling_type{coil::eraseBothEndsBlank(
-          info.properties.getProperty("in.marshaling_type", type))};
+          info.properties.getProperty("inport.marshaling_type", type))};
         return notify(info, typeddata, marshaling_type);
     }
 
@@ -1138,7 +1138,7 @@ namespace RTC
     {
         std::string type = info.properties.getProperty("marshaling_type", "cdr");
         std::string marshaling_type{coil::eraseBothEndsBlank(
-          info.properties.getProperty("out.marshaling_type", type))};
+          info.properties.getProperty("outport.marshaling_type", type))};
         return notify(info, typeddata, marshaling_type);
     }
     /*!
@@ -2027,7 +2027,7 @@ namespace RTC
       {
           std::string type = info.properties.getProperty("marshaling_type", "cdr");
           std::string marshaling_type{ coil::eraseBothEndsBlank(
-            info.properties.getProperty("in.marshaling_type", type)) };
+            info.properties.getProperty("inport.marshaling_type", type)) };
           return notify(info, data, marshaling_type);
       }
 
@@ -2055,7 +2055,7 @@ namespace RTC
       {
           std::string type = info.properties.getProperty("marshaling_type", "cdr");
           std::string marshaling_type{ coil::eraseBothEndsBlank(
-            info.properties.getProperty("out.marshaling_type", type)) };
+            info.properties.getProperty("outport.marshaling_type", type)) };
           return notify(info, data, marshaling_type);
       }
 
