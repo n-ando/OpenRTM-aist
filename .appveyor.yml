@@ -1,7 +1,7 @@
 version: '{build}'
 clone_folder: c:\workspace\OpenRTM-aist
 platform:
-- x64
+  - x64
 configuration:
   - Release
 environment:
@@ -16,11 +16,6 @@ environment:
       cmake_archtecture: x64
       APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
       python: 37-x64
-    - cmake_generator: Ninja
-      cmake_archtecture: x64
-      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
-      python: 37-x64
-      MSVC_HOME: "C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community"
 
 matrix:
   fast_finish: true
@@ -71,22 +66,6 @@ build:
   project: C:\workspace\build\OpenRTM_aist.sln
   verbosity: minimal
   parallel: true
-
-for:
--
-  matrix:
-    only:
-      - cmake_generator: Ninja
-
-  before_build:
-    - ninja --version
-    - call "%MSVC_HOME%\VC\Auxiliary\Build\vcvarsall.bat" %cmake_archtecture%
-    # clang for code analysis.
-    - echo cmake %cmake_flags% -DORB_ROOT=C:/omni/%omni% -G "%cmake_generator%" -DCMAKE_CXX_COMPILER="clang-cl.exe" -DCMAKE_LINKER="lld-link.exe" -DCMAKE_BUILD_TYPE=Release -S . -B ../build
-    -      cmake %cmake_flags% -DORB_ROOT=C:/omni/%omni% -G "%cmake_generator%" -DCMAKE_CXX_COMPILER="clang-cl.exe" -DCMAKE_LINKER="lld-link.exe" -DCMAKE_BUILD_TYPE=Release -S . -B ../build
-
-  build_script:
-    - cmake --build ../build
 
 cache:
   - C:/omni -> .appveyor.yml
