@@ -2051,6 +2051,25 @@ namespace RTC
     }
 
   protected:
+  /*!
+   * @if jp
+   *
+   * @brief 指定のシリアライザが使用可能かを判定する
+   *
+   *
+   * @param con_prop コネクタプロファイルのプロパティ
+   * @return true：利用可能、false：利用不可
+   *
+   * @else
+   *
+   * @brief 
+   *
+   * @param con_prop 
+   * @return 
+   *
+   * @endif
+   */
+    bool isExistingMarshalingType(coil::Properties& con_prop);
     /*!
      * @if jp
      * @brief ロガーストリーム
