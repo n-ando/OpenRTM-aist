@@ -19,6 +19,15 @@ class LongToDoubleDeserializer : public RTC::CORBA_CdrSerializer<RTC::TimedDoubl
 public:
     LongToDoubleDeserializer() = default;
 
+    bool serialize(const RTC::TimedDouble& data) override
+    {
+        RTC::TimedLong tmp_data;
+        tmp_data.tm.sec = data.tm.sec;
+        tmp_data.tm.nsec = data.tm.nsec;
+        tmp_data.data = static_cast<CORBA::Long>(data.data);
+        return m_cdr.serializeCDR(tmp_data);
+    }
+
     bool deserialize(RTC::TimedDouble& data) override
     {
         RTC::TimedLong tmp_data;

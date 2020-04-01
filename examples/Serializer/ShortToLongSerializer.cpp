@@ -27,6 +27,16 @@ public:
         tmp_data.data = static_cast<CORBA::Long>(data.data);
         return m_cdr.serializeCDR(tmp_data);
     }
+
+    bool deserialize(RTC::TimedShort& data) override
+    {
+        RTC::TimedLong tmp_data;
+        bool ret = m_cdr.deserializeCDR(tmp_data);
+        data.tm.sec = tmp_data.tm.sec;
+        data.tm.nsec = tmp_data.tm.nsec;
+        data.data = static_cast<CORBA::Short>(tmp_data.data);
+        return ret;
+    }
 private:
 };
 
