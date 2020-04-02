@@ -2062,10 +2062,10 @@ namespace RTC
    *
    * @else
    *
-   * @brief 
+   * @brief Whether the specified serializer can be used
    *
-   * @param con_prop 
-   * @return 
+   * @param con_prop Properties of Connectorprofile
+   * @return ture: avialable, false: un-available
    *
    * @endif
    */
