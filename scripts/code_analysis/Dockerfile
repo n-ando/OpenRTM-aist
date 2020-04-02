@@ -3,7 +3,7 @@ FROM ubuntu:20.04
 ARG CLANG_VAR=9
 
 RUN apt-get update\
- && apt-get install -y --no-install-recommends\
+ && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends\
  clang-${CLANG_VAR}\
  ninja-build\
  cmake\
