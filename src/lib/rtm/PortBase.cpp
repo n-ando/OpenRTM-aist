@@ -994,9 +994,9 @@ namespace RTC
   * @return ポートのポインタ
   *
   * @else
-  * @brief
+  * @brief Getting direct communication object
   *
-  * @return
+  * @return a pointer to the port
   *
   * @endif
   */
@@ -1011,16 +1011,15 @@ namespace RTC
    *
    * @brief 指定のシリアライザが使用可能かを判定する
    *
-   *
    * @param con_prop コネクタプロファイルのプロパティ
    * @return true：利用可能、false：利用不可
    *
    * @else
    *
-   * @brief
+   * @brief Whether the specified serializer can be used
    *
-   * @param con_prop
-   * @return
+   * @param con_prop Properties of ConnectorProfile
+   * @return ture: avaiable, false: un-available
    *
    * @endif
    */
