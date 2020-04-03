@@ -994,15 +994,54 @@ namespace RTC
   * @return ポートのポインタ
   *
   * @else
-  * @brief
+  * @brief Getting direct communication object
   *
-  * @return
+  * @return a pointer to the port
   *
   * @endif
   */
   DirectPortBase* PortBase::getDirectPort()
   {
 	  return m_directport;
+  }
+
+
+  /*!
+   * @if jp
+   *
+   * @brief 指定のシリアライザが使用可能かを判定する
+   *
+   * @param con_prop コネクタプロファイルのプロパティ
+   * @return true：利用可能、false：利用不可
+   *
+   * @else
+   *
+   * @brief Whether the specified serializer can be used
+   *
+   * @param con_prop Properties of ConnectorProfile
+   * @return ture: avaiable, false: un-available
+   *
+   * @endif
+   */
+  bool PortBase::isExistingMarshalingType(coil::Properties& con_prop)
+  {
+      std::string marshaling_type{ coil::eraseBothEndsBlank(con_prop.getProperty("marshaling_type", "cdr")) };
+
+      Properties prop;
+      NVUtil::copyToProperties(prop, m_profile.properties);
+      coil::vstring enabledSerializerTypes{coil::split(prop["dataport.marshaling_types"], ",", true) };
+
+
+
+      coil::vstring::iterator it = std::find(enabledSerializerTypes.begin(), enabledSerializerTypes.end(), marshaling_type);
+      size_t index = std::distance(enabledSerializerTypes.begin(), it);
+      if (index == enabledSerializerTypes.size())
+      {
+          RTC_ERROR(("%s is illegal marshaling type.", marshaling_type.c_str()));
+          return false;
+      }
+      return true;
+
   }
 
 } // namespace RTC

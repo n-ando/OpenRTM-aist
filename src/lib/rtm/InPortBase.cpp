@@ -504,6 +504,11 @@ namespace RTC
     RTC_DEBUG(("ConnectorProfile::properties are as follows."));
     RTC_DEBUG_STR((prop));
 
+    if (!isExistingMarshalingType(prop))
+    {
+        return RTC::RTC_ERROR;
+    }
+
     /*
      * ここで, ConnectorProfile からの properties がマージされたため、
      * prop["dataflow_type"]: データフロータイプ
@@ -583,6 +588,11 @@ namespace RTC
         return RTC::UNSUPPORTED;
       }
     RTC_TRACE(("endian: %s", littleEndian ? "little" : "big"));
+
+    if (!isExistingMarshalingType(prop))
+    {
+        return RTC::RTC_ERROR;
+    }
 
     /*
      * ここで, ConnectorProfile からの properties がマージされたため、
