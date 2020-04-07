@@ -17,7 +17,9 @@ set(SerializerList ShortToDoubleSerializer
 		   ShortToDoubleDeserializer
 		   ShortToLongSerializer
 		   LongToDoubleDeserializer
-		   TestSerializer)
+		   TestSerializer
+		   ShortToShortSerializer
+		   DouboleToDoubleDeserializer)
 
 
 foreach(target ${SerializerList})
@@ -59,3 +61,4 @@ install(FILES rtc_in_serializer.conf DESTINATION ${INSTALL_RTM_EXAMPLE_DIR} COMP
 install(FILES rtc_inout_serializer.conf DESTINATION ${INSTALL_RTM_EXAMPLE_DIR} COMPONENT examples)
 install(FILES rtc_out_serializer.conf DESTINATION ${INSTALL_RTM_EXAMPLE_DIR} COMPONENT examples)
 install(FILES rtc_original_serializer.conf DESTINATION ${INSTALL_RTM_EXAMPLE_DIR} COMPONENT examples)
+install(FILES rtc_all_serializer.conf DESTINATION ${INSTALL_RTM_EXAMPLE_DIR} COMPONENT examples)
