@@ -19,7 +19,9 @@ set(SerializerList ShortToDoubleSerializer
 		   LongToDoubleDeserializer
 		   TestSerializer
 		   ShortToShortSerializer
-		   DouboleToDoubleDeserializer)
+		   DouboleToDoubleDeserializer
+		   TestSerializer2
+		   TestSerializer3)
 
 
 foreach(target ${SerializerList})
