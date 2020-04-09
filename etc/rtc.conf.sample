@@ -2,38 +2,99 @@
 #
 # RT-Component manager configuration
 #
-# Copyright (c) 2003-2008 Noriaki Ando <n-ando@aist.go.jp>
-#      Task-intelligence Research Group,
-#      Intelligent Systems Research Institute,
+# Copyright (c) 2003-2020 by Noriaki Ando <n-ando@aist.go.jp>
 #      National Institute of
 #          Advanced Industrial Science and Technology (AIST), Japan
-#      All rights reserved.
+#
+# This configuration and document file is licensed under
+# a Creative Commons Attribution-ShareAlike 4.0 International License.
+#
+# You should have received a copy of the license along with this
+# work. If not, see <http://creativecommons.org/licenses/by-sa/4.0/>.
 #
 # $Id$
-# 
-#----------------------------------------------------------------------
+#
+# See details in the following reference manual on the web page.
+# English reference:  https://openrtm.org/openrtm/en/rtc_conf_reference
+# Japanese reference: https://openrtm.org/openrtm/ja/rtc_conf_reference
+#
+
+#============================================================
+# version related parameters
+#============================================================
 
 #------------------------------------------------------------
-# Configuration version (optional) 
+# Configuration version (read-only) 
 #
-config.version: 1.0
+# This parameter is the configuration version that is set internally.
+# Usually, it is the same as the version of OpenRTM-aist. It is
+# unnecessary to set by rtc.conf. By reading out this parameter, it will
+# tell you the version of rtc.conf that OpenRTM-aist assumes.
+#
+# - Setting: Read-only, no effect if it is set
+# - Default: The version of current OpenRTM-aist configuration
+# - Example:
+config.version: 2.0
 
 #------------------------------------------------------------
-# OpenRTM-aist version (optional)
+# OpenRTM-aist name (read-only)
 #
-openrtm.version: 1.0.0
+# This parameter is the name of OpenRTM-aist with version that is set
+# internally. It is unnecessary to set by rtc.conf. By reading out this
+# parameter, it will tell you the name of OpenRTM-aist with version.
+#
+# - Setting: Read-only, no effect if it is set
+# - Default: The name of current OpenRTM-aist with version
+# - Example:
+openrtm.name: OpenRTM-aist-2.0.0
+
+#------------------------------------------------------------
+# OpenRTM-aist version (read-only)
+#
+# This parameter is the version of OpenRTM-aist that is set internally.
+# It is unnecessary to set by rtc.conf. By reading out this parameter, it will
+# tell you the version of OpenRTM-aist.
+#
+# - Setting: Read-only, no effect if it is set
+# - Default: The version of current OpenRTM-aist
+# - Example:
+openrtm.version: 2.0.0
+
+#============================================================
+# manager related options
+#============================================================
 
 #------------------------------------------------------------
 # The name of manager (default = manager)
 #
+# This "manager.name" is used for grouping master-slave managers with
+# stringfied CORBA object name. If the "manager.name" is set to
+# "manager" and the manager is master, the object reference is located
+# as follows.
+#
+# corbaloc::<hostname>:2810/manager 
+#
+# and other slave manager also has the following stringfied ior.
+#
+# corbaloc::<hostname>:<port_number>/manager
+#
+# - Setting: Read/Write, any string name of the manager
+# - Default: manager
+# - Example:
 manager.name: manager
 
 #------------------------------------------------------------
 # The instance name of manager (default = manager)
 #
+# This "manager.instance_name" is used for the name of manager on the
+# naming service registration. Usually a master manager's reference is
+# registered on name-servers with the name "manager|mgr". If this option
+# is set to "foobar", the registered maaster manager name will be
+# "foobar|mgr".
+#
 manager.instance_name: manager
 
-#
+#------------------------------------------------------------
 # Manager naming format
 #
 # The name format of manager that is bound to naming services.
@@ -47,23 +108,49 @@ manager.instance_name: manager
 # %M: The manager name.
 # %p: PID of the manager.
 #
+# Setting: Read/Write, <name>.<context>/<name>.<context>...
+# Default: %h.host_cxt/%n.mgr
+# Example:
 manager.naming_formats: %h.host_cxt/%n.mgr
 
-
 #------------------------------------------------------------
-# Enable a function to set colors on terminal output
+# Master manager or not
 #
-logger.escape_sequence_enable: NO
-
-
+# This option specifies whether this process will be the master manager?
+# If the command line option '''-d''' is specified, it will become the
+# master manager even if this value is set to NO.
+#
+# - Setting: Read/Write, "YES" or "NO"
+# - Default: NO
+# - Example:
+manager.is_master: NO
 
 #------------------------------------------------------------
-# Master manager
-# - manager.is_master: YES/NO, This process made a master or not.
-# - manager.corba_servant: YES/NO, create manager's corba service or not
-# - corba.master_manager: <host_name>:<port>, master manager's location
-manager.is_master: YES
+# Creating masnter manager servant
+#
+# Setting whether to start the manager's CORBA servant. If set to YES,
+# the manager's CORBA servant will be started, allowing remote manager
+# operations. In the case of NO, the CORBA servant will not be started
+# and the manager cannot operate via CORBA.
+#
+# - Setting: Read/Write, "YES" or "NO"
+# - Default: YES
+# - Example:
 manager.corba_servant: YES
+
+#------------------------------------------------------------
+# Master manager's location
+#
+# This option specifies the address and port number of the master
+# manager used by the slave manager. The slave manager assumes the
+# master manager specified here as its own master manager, accesses the
+# master manager at startup, and performs negotiation. Slave managers
+# and standalone components that are not launched directly by the master
+# manager are managed by the master manager specified by this option.
+#
+# - Setting: Read/Write, <hostname or IP address>:<port_number>
+# - Default: localhost:2810
+# - Example:
 corba.master_manager: localhost:2810
 
 #------------------------------------------------------------
@@ -74,6 +161,7 @@ corba.master_manager: localhost:2810
 #   process will be shutdown in case no rtc exists on periodic check.
 # - manager.auto_shutdown_duration:
 #   manager duration time [s] until shutdown after no RTCs existing
+#
 manager.shutdown_on_nortcs: YES
 manager.shutdown_auto: YES
 manager.auto_shutdown_duration: 10.0
@@ -82,6 +170,7 @@ manager.auto_shutdown_duration: 10.0
 # Manager termination wait time
 # - manager.termination_waittime:
 #   wait time length before manager termination thread started
+#
 manager.termination_waittime: 0.5
 
 #------------------------------------------------------------
@@ -146,26 +235,19 @@ manager.preload.modules:
 corba.args:
 
 #
-# ORB endpoint
+# CORBA endpoints
 #
-# If you have two or more network interfaces, ORB endpoint address and/or
+# Multiple endpoint addresses and ports can be specified using this option.
+#
+# If you have two or more network interfaces, CORBA endpoint address and/or
 # port have to be specified. If hostname or port number is abbreviated,
 # default interface or port number is used. At least one colon ':'
 # is needed when you specify this option.
 #
 # Examples:
-#   corba.endpoint: myhost:      (use myhost and default port)
-#   corba.endpoint: :9876        (use default addr and port 9876)
-#   corba.endpoint: myhost:9876  (use myhost and port 9876)
-#
-corba.endpoint: [obsolete]
-
-#
-# Multiple endpoint options (experimental)
-#
-# Multiple endpoint addresses and ports can be specified using this option.
-#
-# Example:
+#   corba.endpoints: myhost:      (use myhost and default port)
+#   corba.endpoints: :9876        (use default addr and port 9876)
+#   corba.endpoints: myhost:9876  (use myhost and port 9876)
 #   corba.endpoints: 192.168.1.10:1111, 192.168.10.11:2222
 #   corba.endpoints: 192.168.1.10, 192.168.10.11
 #   corba.endpoints: all
@@ -542,6 +624,13 @@ logger.log_level: INFO
 # coil::ClockManager::instance().getClock("logical").settime()
 #
 logger.clock_type: system
+
+
+#------------------------------------------------------------
+# Enable a function to set colors on terminal output
+#
+logger.escape_sequence_enable: NO
+
 
 #============================================================
 # Timer configuration
