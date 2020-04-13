@@ -61,7 +61,7 @@ openrtm.name: OpenRTM-aist-2.0.0
 openrtm.version: 2.0.0
 
 #============================================================
-# manager related options
+# Manager basic options
 #============================================================
 
 #------------------------------------------------------------
@@ -153,57 +153,255 @@ manager.corba_servant: YES
 # - Example:
 corba.master_manager: localhost:2810
 
+#============================================================
+# Manager's lifecycle options
+#============================================================
 #------------------------------------------------------------
 # Manager auto shutdown options
-# - manager.shutdown_on_nortcs: YES/NO, 
-#   process will be shutdown in case no rtc exists when rtc is deleted.
-# - manager.shutdown_auto:
-#   process will be shutdown in case no rtc exists on periodic check.
-# - manager.auto_shutdown_duration:
-#   manager duration time [s] until shutdown after no RTCs existing
 #
+# This option specifies whether to shut-down the manager and
+# terminate the process when there is no RTC on the process, that is
+# when the last one of the RTC on the same process has terminated.
+# If YES, the process terminates when no RTC is left. In the case of
+# NO, both the manager and the process continue to operate even when
+# there is no RTC.
+#
+# - Setting: Read/Write, YES/NO
+# - Default: YES
+# - Example:
 manager.shutdown_on_nortcs: YES
+
+#------------------------------------------------------------
+# Manager auto shutdown options
+#
+# If this option is set to YES, the process checks for the presence
+# of an RTC at regular intervals, and if no RTC exists, shuts down
+# the manager and the process. If NO, the manager and the processes
+# continue to run without any RTC.
+#
+# The difference between "manager.shutdown_on_nortcs" and
+# "manager.shutdown_auto" is the trigger of shutdown. The former
+# trigger is the removal of the last RTC, while the latter trigger
+# is the time specified by the "manager.auto_shutdown_duration"
+# option.
+#
+# - Setting: Read/Write, YES/NO
+# - Default: YES
+# - Example:
 manager.shutdown_auto: YES
+
+#------------------------------------------------------------
+# Manager auto shutdown options
+#
+# This option specifies how often to check for the existence of RTCs
+# in the process. The unit is seconds. If the above
+# "manager.shutdown_auto" is set to YES, the process checks for RTC
+# at the cycle set by this option.
+#
+# - Setting: Read/Write, duration [s]
+# - Default: 10.0
+# - Example:
 manager.auto_shutdown_duration: 10.0
 
 #------------------------------------------------------------
 # Manager termination wait time
-# - manager.termination_waittime:
-#   wait time length before manager termination thread started
 #
+# This option specifies the time between the terminate request to
+# the manager and the actual termination thread starting execution.
+# The unit is seconds. Usually, there is no need to specify or
+# change this option. However, if another termination procedure is
+# executed before the CORBA termination procedure ends normally and
+# an exception occurs, adjusting this time may solve the problem.
+#
+# - Setting: Read/Write, duration [s]
+# - Default: 0.5
+# - Example:
 manager.termination_waittime: 0.5
 
-#------------------------------------------------------------
-# Manager process's CPU affinity setting
-#
-# This option make the process bound to specific CPU(s).  Options must
-# be one or more comma separated numbers to identify CPU ID.  CPU ID
-# is started from 0, and maximum number is number of CPU core -1.  If
-# invalid CPU ID is specified, all the CPU will be used for the
-# process.
-#
-# Example:
-#   manager.cpu_affinity: 0, 1, 2, ...
-#
-manager.cpu_affinity: 0
 
-
-#------------------------------------------------------------
-# Naming policy
-#
-# "process_unique", "node_unique" and "ns_unique" are supported.
-#
-manager.components.naming_policy: process_unique
+#============================================================
+# Manager's language spport
+#============================================================
 
 #------------------------------------------------------------
 # Supported languages
 #
-manager.supported_languages: C++, Python, Python3, Java
+# The master manager launches the slave manager and the RTCs in
+# response to a request from a remote application. The slave manager
+# is not only limited to the C++ language version, but maybe the
+# Java version or Python version. This option sets the languages
+# ​​supported by the master manager. The language name specified
+# here is used for specifying options such as "manager.modules.
+# <Language> .manager_cmd" below. For example, if "Lua" is specified
+# for this option,
+#
+# - manager.modules.Lua.manager_cmd
+# - manager.modules.Lua.profile_cmd
+# - manager.modules.Lua.suffixes
+# - manager.modules.Lua.load_paths
+#
+# If these options are correctly specified, the master manager will
+# be able to start a Lua language's slave manager and Lua version
+# RTCs. (Currently, Lua version does not support these functions.)
+#
+# Python means Python version 2 series, and Python3 means Python
+# version 3 series.
+#
+# - Setting: Read/Write, C++, Python, Pyton3, Java
+# - Default: C++, Python, Python3, Java
+# - Example:
+manager.supported_languages: C++, Python3, Java
 
+#------------------------------------------------------------
+# Language specific module file extension
+#
+# This option specifies the extension of the loadable module RTC.
+#   manager.modules. <lang> .suffixes
+# The <lang> part of must be specified in
+# manager.supported_languages. "."(Dot) is not required. Since the
+# appropriate default extensions are specified for C++,
+# Python/Python3 and Java languages respectively, usually no setting
+# is required.
+#
+# - Setting: Extension of loadable module
+# - Default:
+#  - C ++: Windows: dll, Linux etc .: so, Mac OS X: dylib
+#  - Python / Python3: py
+#  - Java: class
+# -Example
+#  manager.modules.C ++. suffixes: dll
+#  manager.modules.Python.suffixes: so
+#  manager.modules.Java.suffixes: class
+manager.modules.<lang>.suffixes
+
+#------------------------------------------------------------
+# Language specific manager executable
+#
+# This option specifies the name of the manager executable for each
+# language. When the master manager is requested to instantiate an
+# RTC, the slave manager is executed and the RTC is instantiated on
+# the slave manager process. The C++ version RTC uses the C++
+# version manager (rtcd), and the Python version RTC uses the
+# Python version manager (rtcd_python). The command search path
+# must be set for the specified executable. Since the appropriate
+# default executables are specified for C++, Python/Python3 and
+# Java languages respectively, usually no setting is required.
+#
+# - Setting: Manager command name
+# - Default:
+#  - C++: rtcd
+#  - Python: rtcd_python
+#  - Python3: rtcd_python3
+#  - Java: rtc_java
+# -Example
+#  manager.modules.C ++. manager_cmd: rtcd
+#  manager.modules.Python.manager_cmd: rtcd_python
+#  manager.modules.Java.manager_cmd: rtcd_java
+
+#------------------------------------------------------------
+# Language specific profile executable
+#
+# This option specifies the name of the profile executable, which
+# is a command to get RTC profile, for each language. When
+# searching RTCs from the existing loadable modules, master manager
+# execute profile command to get each components' profile from
+# loadable modules. The C++ version RTC uses the C++ version
+# profile command (rtcprof), and the Python version RTC uses the
+# Python version manager (rtcprof_python). The command search path
+# must be set for the specified executable. Since the appropriate
+# default executables are specified for C++, Python/Python3 and
+# Java languages respectively, usually no setting is required.
+#
+#
+# - Setting: Profile command name
+# - Default:
+#  - C++: rtcprof
+#  - Python: rtcprof_python
+#  - Python3: rtcprof_python3
+#  - Java: rtc_java
+# - Example:
+manager.modules.C++.profile_cmd: rtcprof
+manager.modules.Python.profile_cmd: rtcprof_python
+manager.modules.Python3.profile_cmd: rtcprof_python3
+manager.modules.Java.profile_cmd: rtcprof_java
+
+#------------------------------------------------------------
+# Language specific module load path
+#
+# This option specifies the load path of the loadable module RTC for
+# each language. When master manager searching RTCs from somewhere,
+# the specified load path is used.
+#
+# - Setting: RTC's module load path
+# - Default: none
+# - Example:
+manager.modules.C++.profile_cmd: ./, /usr/share/OpenRTM-aist/components/cxx
+
+#============================================================
+# Module management
+#============================================================
+#------------------------------------------------------------
+# Loadable module search path list
+#
+# Manager searches loadable modules from the specified search path list.
+# Path list elements should be separated by comma.
+# Path delimiter is '/' on UNIX, and '\\' on Windows
+# Valid path examples:
+#   manager.modules.load_path: C:/Program Files/OpenRTM-aist,  \
+#   			       C:\\Program Files\\OpenRTM-aist
+#   manager.modules.load_path: /usr/lib, /usr/local/lib,       \
+#   			       /usr/local/lib/OpenRTM-aist/libs
+#
+manager.modules.load_path: ./
+
+#------------------------------------------------------------
+# Preload module list
+#
+# Manager can load loadable modules before starting up.
+# Loadable modules, which is specified only as its file name, is searched
+# in each module load path specified in the "manager.modules.load_path".
+# If the "manager.modules.abs_path_allowed" option is YES, loadable file
+# can be specified as full-path name.
+#
+# Module initialization function name is usually estimated module file
+# name.  If the module file name is ConsoleIn.so, the initialization
+# function name is set to "ConsleInInit." If you want to specify
+# specify the initialization function name, the initialization
+# function name in parenthesis after module file name can be
+# specified, like as "Hoge.so (ConsoleInInit)".  File extensions such
+# as ".so", ".dll", ".dylib" can be drop. If module file name without
+# file extension is specified, an extension specified in property
+# variable "manager.modules.C++.suffixes" is supplied.
+#
+# Valid settings:
+# manager.modules.preload: ConsoleIn.dll, ConsoleOut.dll
+# manager.modules.preload: ConsoleIn.so, ConsoleOut.so
+# manager.modules.preload: Hoge.so (ConsoleInInit), ConsoleOut
+# manager.modules.abs_path_allowed: YES
+# manager.modules.preload: /usr/lib/OpenRTM-aist/ConsoleIn.so
+#
+manager.modules.preload:
+
+#------------------------------------------------------------
+# Permission flag of absolute module path
+#
+# If this option is "YES", absolute path specification for module is allowed.
+#
+manager.modules.abs_path_allowed: YES
 
 #------------------------------------------------------------
 # Enable a module automatic search function
 #
+# This option specifies whether to automatically search for RTC
+# loadable modules. If this option is set to "YES", when RTC
+# instantiation is requested to the manager, the target RTC loadable
+# module (DLL, so, etc.) is automatically searched and loaded from
+# the module search path, and the component is instantiated. If NO,
+# the target RTC's loadable module must be loaded in advance.
+#
+# - Setting: Read/Write, YES / NO
+# - Default: YES
+# - Example:
 manager.modules.search_auto: YES
 
 #------------------------------------------------------------
@@ -217,7 +415,138 @@ manager.modules.search_auto: YES
 #
 manager.preload.modules: 
 
+#------------------------------------------------------------
+# The following options are not implemented yet. 
+#
+# manager.modules.config_ext:
+# manager.modules.config_path:
+# manager.modules.detect_loadable:
+# manager.modules.init_func_suffix:
+# manager.modules.init_func_prefix:
+# manager.modules.download_allowed:
+# manager.modules.download_dir:
+# manager.modules.download_cleanup:
 
+#============================================================
+# Manager's local service functions
+#============================================================
+#------------------------------------------------------------
+# Loading local service modules
+#
+# Local service mechanisms are provided for services provided among
+# components in the same process. Components can obtain and utilize
+# local services from the manager. By using this mechanism components
+# can share resources each other.
+#
+# Local service modules sometimes must be initialized before component
+# module loading and initialization. Loadable modules which is
+# specified in this option are previously loaded and initialized.
+#
+manager.local_service.modules: IEEE1394CameraService.so
+
+#------------------------------------------------------------
+# Specifying enabled local services
+#
+# All the loaded local service modules are activated and enabled in
+# default.  This option specify local serivces to be enabled when
+# manager enables local services.
+#
+manager.local_service.enabled_services: IEEE1394CameraService
+
+#============================================================
+# Other maanager's function options
+#============================================================
+#------------------------------------------------------------
+# Naming policy
+#
+# This option specifies a naming (numbering) policy for the RTCs.
+# When an RTC instance is created, a name with the component type
+# name (type_name) with an incremental number as follows is
+# assigned.
+#
+# <type_name> <number> 
+# ex. ConsoleOut0, ConsoleOut1, ConsoleOut2, ...
+#
+# By default, the same type components in the same process are
+# numbered sequentially from 0, so RTCs created on different
+# processes or on different nodes (computers) may have the same
+# name. When these RTCs are registered on the name server (ns), RTCs
+# with the same path and the same name overwrite each other's object
+# references, and it becomes impossible to access the desired RTC.
+# Therefore, two policies are provided: "node_unique", which assigns
+# a unique number to each node, and "ns_unique", which assigns a
+# unique number on the name server.
+#
+# The following three options can be specified by default.
+#
+# - process_unique: Give a unique name (number) within the process
+# - node_unique: Give a unique name (number) within the node
+# - ns_unique: Give a unique name (number) on the nameserver
+#
+# The policies can be extended by users.
+#
+# - Setting: Read/Write, {process_unique, node_unique, ns_unique}
+# - Default: process_unique
+# - Example:
+manager.components.naming_policy: process_unique
+
+#------------------------------------------------------------
+# Advance component creation
+#
+# This option specifies components' names (module name) creating in advance
+# before starting the manager's event-loop. The components' factories should
+# be registered by manager.module.preload option or statically linked to the
+#  manager.
+#
+# Example:
+# manager.components.precreate: ConsoleIn, ConsoleOut, SeqIn, SeqOut
+#
+manager.components.precreate: 
+
+#------------------------------------------------------------
+# Advance connection creation
+#
+# This option specifies connections to be created in advance before
+# starting the manager's event-loop. The target components and ports
+# must be created previously by manager.components.precreate optinos.
+# A port is specified as XXX format, and a connection is specified by
+# a delimiter XX between ports such as ConsoleIn.out:ConsoleOut.in. A
+# connector profile is specified in the following parentheses "()" by
+# "key=falue" format with "&" delimiter.
+#
+# Example:
+# manager.components.preconnect: ConsoleIn.out?port=ConsoleOut.in&dataflow_type=push&interface_type=corba_cdr, SeqIn.octet?port=SeqOut.octet&dataflow_type=push&interface_type=direct
+# if no parenthis parts are included, dataflow_type=push, interface_type=corba_cdr
+#
+manager.components.preconnect: 
+
+#------------------------------------------------------------
+# Advance component activation
+#
+# This option specifies components' names (module name) to be
+# activated in advance before starting the manager's event-loop. The
+# target components should be created previously by
+# manager.components.precreate optinos.
+#
+# Example:
+# manager.components.preactivation: ConsoleIn0, ConsoleOut0
+#
+manager.components.preactivation:
+
+#------------------------------------------------------------
+# Manager process's CPU affinity setting
+#
+# This option make the process bound to specific CPU(s).  Options must
+# be one or more comma separated numbers to identify CPU ID.  CPU ID
+# is started from 0, and maximum number is number of CPU core -1.  If
+# invalid CPU ID is specified, all the CPU will be used for the
+# process.
+#
+# - Setting: Read/Write, duration [s]
+# - Default: 0.5
+# - Example:
+#   manager.cpu_affinity: 0, 1, 2, ...
+manager.cpu_affinity: 0
 
 #============================================================
 # CORBA configuration
@@ -396,136 +725,7 @@ naming.update.rebind: NO
 # End of Naming configuration section
 #------------------------------------------------------------
 
-#============================================================
-# Module management
-#============================================================
-#
-# Loadable module search path list
-#
-# Manager searches loadable modules from the specified search path list.
-# Path list elements should be separated by comma.
-# Path delimiter is '/' on UNIX, and '\\' on Windows
-# Valid path examples:
-#   manager.modules.load_path: C:/Program Files/OpenRTM-aist,  \
-#   			       C:\\Program Files\\OpenRTM-aist
-#   manager.modules.load_path: /usr/lib, /usr/local/lib,       \
-#   			       /usr/local/lib/OpenRTM-aist/libs
-#
-manager.modules.load_path: ./
 
-#
-# Preload module list
-#
-# Manager can load loadable modules before starting up.
-# Loadable modules, which is specified only as its file name, is searched
-# in each module load path specified in the "manager.modules.load_path".
-# If the "manager.modules.abs_path_allowed" option is YES, loadable file
-# can be specified as full-path name.
-#
-# Module initialization function name is usually estimated module file
-# name.  If the module file name is ConsoleIn.so, the initialization
-# function name is set to "ConsleInInit." If you want to specify
-# specify the initialization function name, the initialization
-# function name in parenthesis after module file name can be
-# specified, like as "Hoge.so (ConsoleInInit)".  File extensions such
-# as ".so", ".dll", ".dylib" can be drop. If module file name without
-# file extension is specified, an extension specified in property
-# variable "manager.modules.C++.suffixes" is supplied.
-#
-# Valid settings:
-# manager.modules.preload: ConsoleIn.dll, ConsoleOut.dll
-# manager.modules.preload: ConsoleIn.so, ConsoleOut.so
-# manager.modules.preload: Hoge.so (ConsoleInInit), ConsoleOut
-# manager.modules.abs_path_allowed: YES
-# manager.modules.preload: /usr/lib/OpenRTM-aist/ConsoleIn.so
-#
-manager.modules.preload:
-
-#
-# Permission flag of absolute module path
-#
-# If this option is "YES", absolute path specification for module is allowed.
-#
-manager.modules.abs_path_allowed: YES
-
-#
-# The following options are not implemented yet. 
-#
-# manager.modules.config_ext:
-# manager.modules.config_path:
-# manager.modules.detect_loadable:
-# manager.modules.init_func_suffix:
-# manager.modules.init_func_prefix:
-# manager.modules.download_allowed:
-# manager.modules.download_dir:
-# manager.modules.download_cleanup:
-#
-
-#
-# Advance component creation
-#
-# This option specifies components' names (module name) creating in advance
-# before starting the manager's event-loop. The components' factories should
-# be registered by manager.module.preload option or statically linked to the
-#  manager.
-#
-# Example:
-# manager.components.precreate: ConsoleIn, ConsoleOut, SeqIn, SeqOut
-#
-manager.components.precreate: 
-
-#
-# Advance connection creation
-#
-# This option specifies connections to be created in advance before
-# starting the manager's event-loop. The target components and ports
-# must be created previously by manager.components.precreate optinos.
-# A port is specified as XXX format, and a connection is specified by
-# a delimiter XX between ports such as ConsoleIn.out:ConsoleOut.in. A
-# connector profile is specified in the following parentheses "()" by
-# "key=falue" format with "&" delimiter.
-#
-# Example:
-# manager.components.preconnect: ConsoleIn.out?port=ConsoleOut.in&dataflow_type=push&interface_type=corba_cdr, SeqIn.octet?port=SeqOut.octet&dataflow_type=push&interface_type=direct
-# if no parenthis parts are included, dataflow_type=push, interface_type=corba_cdr
-#
-manager.components.preconnect: 
-
-#
-# Advance component activation
-#
-# This option specifies components' names (module name) to be
-# activated in advance before starting the manager's event-loop. The
-# target components should be created previously by
-# manager.components.precreate optinos.
-#
-# Example:
-# manager.components.preactivation: ConsoleIn0, ConsoleOut0
-#
-manager.components.preactivation:
-
-#
-# Loading local service modules
-#
-# Local service mechanisms are provided for services provided among
-# components in the same process. Components can obtain and utilize
-# local services from the manager. By using this mechanism components
-# can share resources each other.
-#
-# Local service modules sometimes must be initialized before component
-# module loading and initialization. Loadable modules which is
-# specified in this option are previously loaded and initialized.
-#
-manager.local_service.modules: IEEE1394CameraService.so
-
-#
-# Specifying enabled local services
-#
-# All the loaded local service modules are activated and enabled in
-# default.  This option specify local serivces to be enabled when
-# manager enables local services.
-#
-manager.local_service.enabled_services: IEEE1394CameraService
 
 
 #============================================================
