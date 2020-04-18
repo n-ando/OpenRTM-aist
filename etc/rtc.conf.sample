@@ -346,48 +346,63 @@ manager.modules.C++.profile_cmd: ./, /usr/share/OpenRTM-aist/components/cxx
 # Manager searches loadable modules from the specified search path list.
 # Path list elements should be separated by comma.
 # Path delimiter is '/' on UNIX, and '\\' on Windows
-# Valid path examples:
+#
+# - Setting: Module load path, <path1>, <path2>, ...
+# - Default: ./
+# - Example:
 #   manager.modules.load_path: C:/Program Files/OpenRTM-aist,  \
 #   			       C:\\Program Files\\OpenRTM-aist
 #   manager.modules.load_path: /usr/lib, /usr/local/lib,       \
 #   			       /usr/local/lib/OpenRTM-aist/libs
-#
 manager.modules.load_path: ./
 
 #------------------------------------------------------------
 # Preload module list
 #
-# Manager can load loadable modules before starting up.
-# Loadable modules, which is specified only as its file name, is searched
-# in each module load path specified in the "manager.modules.load_path".
-# If the "manager.modules.abs_path_allowed" option is YES, loadable file
+# Manager can load loadable modules before starting up. Loadable
+# modules, which is specified only as its file name, is searched in
+# each module load path specified in the
+# "manager.modules.load_path". If the
+# "manager.modules.abs_path_allowed" option is YES, loadable file
 # can be specified as full-path name.
 #
-# Module initialization function name is usually estimated module file
-# name.  If the module file name is ConsoleIn.so, the initialization
-# function name is set to "ConsleInInit." If you want to specify
-# specify the initialization function name, the initialization
-# function name in parenthesis after module file name can be
-# specified, like as "Hoge.so (ConsoleInInit)".  File extensions such
-# as ".so", ".dll", ".dylib" can be drop. If module file name without
-# file extension is specified, an extension specified in property
-# variable "manager.modules.C++.suffixes" is supplied.
+# Module initialization function name is usually estimated as
+# <module_base_name>Init from the module file name.  If the module
+# file name is ConsoleIn.so, the initialization function name is set
+# to "ConsleInInit." If you want to specify the initialization
+# function name, the initialization function name in parenthesis
+# after module file name can be specified, like as "Hoge.so
+# (ConsoleInInit)".  File extensions such as ".so", ".dll", ".dylib"
+# can be drop. If module file name without file extension is
+# specified, an extension specified in property variable
+# "manager.modules.C++.suffixes" is supplied.
 #
-# Valid settings:
-# manager.modules.preload: ConsoleIn.dll, ConsoleOut.dll
-# manager.modules.preload: ConsoleIn.so, ConsoleOut.so
-# manager.modules.preload: Hoge.so (ConsoleInInit), ConsoleOut
-# manager.modules.abs_path_allowed: YES
-# manager.modules.preload: /usr/lib/OpenRTM-aist/ConsoleIn.so
-#
+# - Setting: <module_name>(.<extention>) (init_func_name), ...
+# - Default: none
+# - Example: 
+#   manager.modules.preload: ConsoleIn.dll, ConsoleOut.dll // Win
+#   manager.modules.preload: ConsoleIn.so, ConsoleOut.so // Linux
+#   manager.modules.preload: Hoge.so (ConsoleInInit), ConsoleOut
+# - Example: Specifing absolute path
+#   manager.modules.abs_path_allowed: YES
+#   manager.modules.preload: /usr/lib/OpenRTM-aist/ConsoleIn.so
 manager.modules.preload:
 
 #------------------------------------------------------------
 # Permission flag of absolute module path
 #
-# If this option is "YES", absolute path specification for module is allowed.
+# If this option is "YES", absolute path specification for the
+# module is allowed. For the security reason, specifying modules to
+# be loaded by the absolute path is not allowed by default. The
+# modules to be loaded have to be deployed specified directories. If
+# you want to specify loaded modules by absolute path during the
+# development and debugging phase, you can use this option.
 #
-manager.modules.abs_path_allowed: YES
+# - Setting: Read/Write, YES/ON
+# - Default: NO
+# - Example:
+# manager.modules.abs_path_allowed: YES
+manager.modules.abs_path_allowed: NO
 
 #------------------------------------------------------------
 # Enable a module automatic search function
@@ -407,13 +422,21 @@ manager.modules.search_auto: YES
 #------------------------------------------------------------
 # Module List to load before CORBA initialization
 #
-# Valid settings:
-# manager.preload.modules: SSLTransport.dll
-# manager.preload.modules: SSLTransport.py
-# manager.preload.modules: SSLTransport
-# manager.preload.modules: C:\\Python27\\Lib\\site-packages\\OpenRTM_aist\\ext\\SSLTransport
+# This option specifies the module to load before CORBA
+# initialization. A loadable module that implements some
+# functionality must be loaded before CORBA initialization, and such
+# a module is specified with this option. The module specification
+# method is the same as for manager.modules.preload.
 #
-manager.preload.modules: 
+# - Setting: <module_name>(.<extention>) (init_func_name), ...
+# - Default: none
+# - Example: 
+#   manager.preload.modules: SSLTransport.dll
+#   manager.preload.modules: SSLTransport.py
+#   manager.preload.modules: SSLTransport
+#   manager.preload.modules: \
+#   C:\\Python27\\Lib\\site-packages\\OpenRTM_aist\\ext\\SSLTransport
+manager.preload.modules: none
 
 #------------------------------------------------------------
 # The following options are not implemented yet. 
@@ -506,18 +529,22 @@ manager.components.precreate:
 #------------------------------------------------------------
 # Advance connection creation
 #
-# This option specifies connections to be created in advance before
-# starting the manager's event-loop. The target components and ports
-# must be created previously by manager.components.precreate optinos.
-# A port is specified as XXX format, and a connection is specified by
-# a delimiter XX between ports such as ConsoleIn.out:ConsoleOut.in. A
-# connector profile is specified in the following parentheses "()" by
-# "key=falue" format with "&" delimiter.
+# This option specifies the connector to create before starting the
+# manager event loop. The target component and port must have been
+# previously created with the "manager.components.precreate" option.
+# Ports are specified in the format
+# "<comp0>.<Port0>?port=<comp1>.<port1>&<option_key>=<option_value>&...".
+# If no dataflow_type or interface_type is specified,
+# "dataflow_type=push", "interface_type=corba_cdr" will be specified
+# automatically.
 #
-# Example:
-# manager.components.preconnect: ConsoleIn.out?port=ConsoleOut.in&dataflow_type=push&interface_type=corba_cdr, SeqIn.octet?port=SeqOut.octet&dataflow_type=push&interface_type=direct
-# if no parenthis parts are included, dataflow_type=push, interface_type=corba_cdr
-#
+# - Setting: <comp0>.<Port0>?port=<comp1>.<port1>&<option_key>=<option_value>&...
+# - Default: none
+# - Example:
+# manager.components.preconnect: ConsoleIn.out?port=ConsoleOut.in& \
+#                                dataflow_type=push&interface_type=corba_cdr,\
+#                                SeqIn.octet?port=SeqOut.octet& \
+#                                dataflow_type=push&interface_type=direct
 manager.components.preconnect: 
 
 #------------------------------------------------------------
