@@ -120,7 +120,11 @@ namespace RTC
         auto exectime = t1 - t0;
         if (exectime.count() >= 0)
           {
-            std::this_thread::sleep_for(getPeriod() - exectime);
+            auto diff = getPeriod() - exectime;
+            if (diff.count() > 0)
+              {
+                std::this_thread::sleep_for(diff);
+              }
           }
       } while (threadRunning());
 
