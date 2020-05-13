@@ -77,7 +77,22 @@ namespace RTC
     auto t0 = std::chrono::high_resolution_clock::now();
     ExecutionContextBase::invokeWorkerDo();
     ExecutionContextBase::invokeWorkerPostDo();
-    std::this_thread::sleep_until(t0 + getPeriod());
+    auto t1 = std::chrono::high_resolution_clock::now();
+    auto exectime = t1 - t0;
+    if (exectime.count() >= 0)
+      {
+        auto diff = getPeriod() - exectime;
+        if (diff.count() > 0)
+          {
+#ifdef _WIN32
+            std::chrono::milliseconds ms = std::chrono::duration_cast<std::chrono::milliseconds>(diff);
+            Sleep(static_cast<DWORD>(ms.count()));
+#else
+            std::this_thread::sleep_for(diff);
+
+#endif
+          }
+      }
     return;
   }
 
