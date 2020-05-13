@@ -116,7 +116,13 @@ namespace RTC_exp
                 auto diff = getPeriod() - exectime;
                 if (diff.count() > 0)
                   {
+#ifdef _WIN32
+                    std::chrono::milliseconds ms = std::chrono::duration_cast<std::chrono::milliseconds>(diff);
+                    Sleep(static_cast<DWORD>(ms.count()));
+#else
                     std::this_thread::sleep_for(diff);
+
+#endif
                   }
               }
         }

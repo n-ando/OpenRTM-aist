@@ -84,7 +84,10 @@ namespace RTC
         auto diff = getPeriod() - exectime;
         if (diff.count() > 0)
           {
+            Sleep(static_cast<DWORD>(ms.count()));
+#else
             std::this_thread::sleep_for(diff);
+#endif
           }
       }
     return;
