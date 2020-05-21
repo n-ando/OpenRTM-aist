@@ -19,6 +19,7 @@
 
 #include <cstdio>
 #include <utility>
+#include <array>
 #include <netdb.h>       // gethostbyname
 #include <arpa/inet.h>   // inet_ntop
 #include <netinet/in.h>  // sockaddr_in

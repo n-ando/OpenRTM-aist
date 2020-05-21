@@ -252,28 +252,6 @@ elseif(CORBA STREQUAL "omniORB")
 		set(ORB_LIBRARIES omniDynamic4 omniORB4 omnithread)
 		set(ORB_INCLUDE_DIR ${ORB_ROOT}/include)
 	elseif(UNIX)
-		if("${CMAKE_SYSTEM_PROCESSOR}" STREQUAL "ARM")
-			SET (ORB_C_FLAGS_LIST
-				-D__arm__
-				-D__linux__
-			)
-		else()
-			SET (ORB_C_FLAGS_LIST
-				-D__x86__
-				-D__linux__
-			)
-		endif()
-		if(${CMAKE_SYSTEM_NAME}test MATCHES QNXtest)
-			SET (ORB_C_FLAGS_LIST
-				${ORB_C_FLAGS_LIST}
-				-D__QNX__
-			)
-		else()
-			SET (ORB_C_FLAGS_LIST
-				${ORB_C_FLAGS_LIST}
-				-D__linux__
-			)
-		endif()
 		if(ORB_ROOT)
 			set(ORB_LINK_DIR ${ORB_ROOT}/lib)
 			set(ORB_INCLUDE_DIR ${ORB_ROOT}/include)
@@ -558,9 +536,11 @@ if(VXWORKS)
 	set(RTM_OS_VXWORKS ON)
 elseif(UNIX)
 	set(COIL_OS_DIR "posix")
-	if(${CMAKE_SYSTEM_NAME}test MATCHES QNXtest)
+	if (${CMAKE_SYSTEM_NAME}test MATCHES QNXtest)
 		set (RTM_OS_QNX ON)
-	else()
+	elseif (${CMAKE_SYSTEM_NAME}test MATCHES Darwintest)
+		set (RTM_OS_DARWIN ON)
+	else ()
 		set(RTM_OS_LINUX ON)
 
 		# for std::thread

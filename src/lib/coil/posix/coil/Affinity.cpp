@@ -5,7 +5,7 @@
  * @date $Date$
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
- * Copyright (C) 2016
+ * Copyright (C) 2016-2020
  *     Noriaki Ando
  *     National Institute of
  *         Advanced Industrial Science and Technology (AIST), Japan
@@ -28,7 +28,7 @@ namespace coil
 {
   bool getProcCpuAffinity(CpuMask& cpu_mask)
   {
-#ifndef COIL_OS_QNX
+#if defined(COIL_OS_LINUX)
     pid_t pid(getpid());
     cpu_set_t cpu_set;
     CPU_ZERO(&cpu_set);
@@ -49,7 +49,7 @@ namespace coil
 
   bool setProcCpuAffinity(const CpuMask& cpu_mask)
   {
-#ifndef COIL_OS_QNX
+#if defined(COIL_OS_LINUX)
     pid_t pid(getpid());
     cpu_set_t cpu_set;
     CPU_ZERO(&cpu_set);
@@ -67,7 +67,7 @@ namespace coil
 
   bool setProcCpuAffinity(const std::string& cpu_mask)
   {
-#ifndef COIL_OS_QNX
+#if defined(COIL_OS_LINUX)
     coil::vstring masklist = coil::split(cpu_mask, ",", true);
     CpuMask mask;
     for (auto & maskstr : masklist)
@@ -80,14 +80,13 @@ namespace coil
       }
     return setProcCpuAffinity(mask);
 #else
-    return true;
+    return true;    
 #endif
-    
   }
 
   bool getThreadCpuAffinity(CpuMask& cpu_mask)
   {
-#ifndef COIL_OS_QNX
+#if defined(COIL_OS_LINUX)
     pthread_t tid(pthread_self());
     cpu_set_t cpu_set;
     CPU_ZERO(&cpu_set);
@@ -108,7 +107,7 @@ namespace coil
 
   bool setThreadCpuAffinity(const CpuMask& cpu_mask)
   {
-#ifndef COIL_OS_QNX
+#if defined(COIL_OS_LINUX)
     pthread_t tid(pthread_self());
     cpu_set_t cpu_set;
     CPU_ZERO(&cpu_set);
@@ -126,7 +125,7 @@ namespace coil
 
   bool setThreadCpuAffinity(const std::string& cpu_mask)
   {
-#ifndef COIL_OS_QNX
+#if defined(COIL_OS_LINUX)
     coil::vstring masklist = coil::split(cpu_mask, ",", true);
     CpuMask mask;
     for (auto & maskstr : masklist)
