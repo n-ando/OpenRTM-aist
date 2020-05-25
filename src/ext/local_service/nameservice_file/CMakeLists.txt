@@ -36,7 +36,7 @@ if(VXWORKS AND NOT RTP)
 
 
 else()
-	set(libs ${RTM_PROJECT_NAME} ${ORB_LIBRARIES} boost_filesystem ${DATATYPE_FACTORIES})
+	set(libs ${RTM_PROJECT_NAME} ${ORB_LIBRARIES} Boost::filesystem ${DATATYPE_FACTORIES})
 
 	add_library(${target} SHARED ${srcs})
 	openrtm_common_set_compile_props(${target})
