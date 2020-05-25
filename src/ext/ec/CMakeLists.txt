@@ -4,6 +4,7 @@ if(NOT CORBA MATCHES "RtORB")
 	add_subdirectory(logical_time)
 endif()
 
-if(UNIX)
+# RT_PREEMPT EC only supported on Linux
+if (CMKAE_SYSTEM_NAME MATCHES "Linux")
 	add_subdirectory(rtpreempt)
 endif()

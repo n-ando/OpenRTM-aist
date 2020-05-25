@@ -36,8 +36,7 @@ if(VXWORKS AND NOT RTP)
 
 
 else()
-	set(libs ${RTM_PROJECT_NAME} ${ORB_LIBRARIES} ${DATATYPE_FACTORIES})
-
+	set(libs ${RTM_PROJECT_NAME} ${ORB_LIBRARIES} Boost::filesystem ${DATATYPE_FACTORIES})
 
 	add_library(${target} SHARED ${srcs})
 	openrtm_common_set_compile_props(${target})
@@ -47,17 +46,11 @@ else()
 	target_link_libraries(${target} PRIVATE ${libs} ${RTM_LINKER_OPTION})
 	set_target_properties(${target} PROPERTIES PREFIX "")
 
-
 	install(TARGETS ${target} LIBRARY DESTINATION ${INSTALL_RTM_EXT_DIR}/local_service
 				ARCHIVE DESTINATION ${INSTALL_RTM_EXT_DIR}/local_service
 				RUNTIME DESTINATION ${INSTALL_RTM_EXT_DIR}/local_service
 				COMPONENT ext)
 endif()
-
-
-
-
-
 
 if(VXWORKS)
 	if(RTP)

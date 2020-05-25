@@ -252,28 +252,6 @@ elseif(CORBA STREQUAL "omniORB")
 		set(ORB_LIBRARIES omniDynamic4 omniORB4 omnithread)
 		set(ORB_INCLUDE_DIR ${ORB_ROOT}/include)
 	elseif(UNIX)
-		if("${CMAKE_SYSTEM_PROCESSOR}" STREQUAL "ARM")
-			SET (ORB_C_FLAGS_LIST
-				-D__arm__
-				-D__linux__
-			)
-		else()
-			SET (ORB_C_FLAGS_LIST
-				-D__x86__
-				-D__linux__
-			)
-		endif()
-		if(${CMAKE_SYSTEM_NAME}test MATCHES QNXtest)
-			SET (ORB_C_FLAGS_LIST
-				${ORB_C_FLAGS_LIST}
-				-D__QNX__
-			)
-		else()
-			SET (ORB_C_FLAGS_LIST
-				${ORB_C_FLAGS_LIST}
-				-D__linux__
-			)
-		endif()
 		if(ORB_ROOT)
 			set(ORB_LINK_DIR ${ORB_ROOT}/lib)
 			set(ORB_INCLUDE_DIR ${ORB_ROOT}/include)
@@ -552,27 +530,38 @@ else(VXWORKS)
 endif(VXWORKS)
 
 
-
-if(VXWORKS)
-	set(COIL_OS_DIR "vxworks")
-	set(RTM_OS_VXWORKS ON)
-elseif(UNIX)
-	set(COIL_OS_DIR "posix")
-	if(${CMAKE_SYSTEM_NAME}test MATCHES QNXtest)
-		set (RTM_OS_QNX ON)
-	else()
-		set(RTM_OS_LINUX ON)
-
+#============================================================
+# OS type selection
+# - COIL_OS_DIR settings
+# - Compile/linker option settings
+# - RTM_OS_VXWORKS setting <- is it necessary?
+#============================================================
+if (UNIX)
+	set (COIL_OS_DIR "posix")
+	if     (CMAKE_SYSTEM_NAME MATCHES "Darwin")
+		set (RTM_OS_DARWIN ON)
+	elseif (CMAKE_SYSTEM_NAME MATCHES "FreeBSD")
+		set (RTM_OS_FREEBSD ON)
+	elseif (CMAKE_SYSTEM_NAME MATCHES "Linux")
+		set (RTM_OS_LINUX ON)
 		# for std::thread
-		set(THREADS_PREFER_PTHREAD_FLAG ON)
+		set (THREADS_PREFER_PTHREAD_FLAG ON)
 		find_package(Threads)
-		set(RTM_LINKER_OPTION ${CMAKE_DL_LIBS} rt Threads::Threads)
-	endif()
-elseif(WIN32)
-	set(COIL_OS_DIR "win32")
-	set(COIL_C_FLAGS_LIST "-D_WIN32_WINNT=0x0603")
-	set(RTM_LINKER_OPTION advapi32.lib;ws2_32.lib;mswsock.lib;rpcrt4.lib;optimized;msvcrt.lib;optimized;msvcmrt.lib;debug;msvcrtd.lib)
-endif()
+		set (RTM_LINKER_OPTION ${CMAKE_DL_LIBS} rt Threads::Threads)
+	elseif (CMAKE_SYSTEM_NAME MATCHES "QNX") 
+		set(RTM_OS_QNX ON)
+	else ()
+		message(FATAL_ERROR "Unknown Operating System")
+	endif ()
+elseif (WIN32)
+	set (COIL_OS_DIR "win32")
+	set (RTM_OS_WIN32 ON)
+	set (COIL_C_FLAGS_LIST "-D_WIN32_WINNT=0x0603")
+	set (RTM_LINKER_OPTION advapi32.lib;ws2_32.lib;mswsock.lib;rpcrt4.lib;optimized;msvcrt.lib;optimized;msvcmrt.lib;debug;msvcrtd.lib)
+elseif (VXWORKS)
+	set (COIL_OS_DIR "vxworks")
+	set (RTM_OS_VXWORKS ON)
+endif ()
 
 function(openrtm_include_rtm target)
 	target_include_directories(${target}

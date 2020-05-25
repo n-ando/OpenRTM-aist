@@ -9,9 +9,10 @@ if(WIN32)
 	set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 endif()
 
-
-
-
+#==============================
+# Configuration Options
+#==============================
+# CORBA options
 set(ORB_IS_MICO OFF)
 set(ORB_IS_OMNIORB OFF)
 set(ORB_IS_ORBEXPRESS OFF)
@@ -20,6 +21,11 @@ set(ORB_IS_ORBIT2 OFF)
 set(ORB_IS_ORBIX OFF)
 set(ORB_IS_RTORB OFF)
 set(ORB_IS_TAO OFF)
+set(RTC_CORBA_CXXMAPPING11 ON)
+set(RTM_OMNIORB_40 OFF)
+set(RTM_OMNIORB_41 OFF)
+set(RTM_OMNIORB_42 OFF)
+# RTM_PACKAGE options
 set(RTM_PACKAGE OFF)
 set(RTM_PACKAGE_BUGREPORT OFF)
 set(RTM_PACKAGE_NAME OFF)
@@ -27,10 +33,7 @@ set(RTM_PACKAGE_STRING OFF)
 set(RTM_PACKAGE_TARNAME OFF)
 set(RTM_PACKAGE_URL OFF)
 set(RTM_PACKAGE_VERSION OFF)
-set(RTC_CORBA_CXXMAPPING11 ON)
-set(RTM_OMNIORB_40 OFF)
-set(RTM_OMNIORB_41 OFF)
-set(RTM_OMNIORB_42 OFF)
+# OS options
 set(RTM_OS_DARWIN OFF)
 set(RTM_OS_FREEBSD OFF)
 set(RTM_OS_LINUX OFF)
@@ -38,25 +41,30 @@ set(RTM_OS_VXWORKS OFF)
 set(RTM_OS_QNX OFF)
 set(RTM_OS_WIN32 OFF)
 
+#==============================
+# OS type selection
+#==============================
+if (UNIX)
+	if     (CMAKE_SYSTEM_NAME MATCHES "Darwin")
+		set (RTM_OS_DARWIN ON)
+	elseif (CMAKE_SYSTEM_NAME MATCHES "FreeBSD")
+		set (RTM_OS_FREEBSD ON)
+	elseif (CMAKE_SYSTEM_NAME MATCHES "Linux")
+		set (RTM_OS_LINUX ON)
+	elseif (CMAKE_SYSTEM_NAME MATCHES "QNX") 
+		set (RTM_OS_QNX ON)
+	else ()
+		set (RTM_OS_LINUX ON)
+	endif ()
+elseif (WIN32)
+	set (RTM_OS_WIN32 ON)
+elseif (VXWORKS)
+	set (RTM_OS_VXWORKS ON)
+endif ()
 
-if(VXWORKS)
-	set(OSVERSION ON)
-	set(OSVERSION ${VXWORKS_MAJOR}${VXWORKS_MINOR})
-	set(RTM_OS_VXWORKS ON)
-elseif(UNIX)
-	set(OSVERSION OFF)
-	if(${CMAKE_SYSTEM_NAME}test MATCHES QNXtest)
-		set(RTM_OS_QNX ON)
-	else()
-		set(RTM_OS_LINUX ON)
-	endif()
-elseif(WIN32)
-	set(OSVERSION OFF)
-	set(RTM_OS_WIN32 ON)
-endif()
-
-
-
+#==============================
+# CORBA type selection
+#==============================
 if(CORBA MATCHES "ORBexpress")
 	set (ORB_IS_ORBEXPRESS ON)
 elseif(CORBA MATCHES "omniORB")
@@ -74,14 +82,16 @@ elseif(CORBA MATCHES "RtORB")
 	set (ORB_IS_RTORB ON)
 endif()
 
-
-
+#==============================
+# Configuration options output
+#==============================
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config_rtc_cmake.h.in ${PROJECT_BINARY_DIR}/config_rtc.h)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/version_cmake.h.in ${PROJECT_BINARY_DIR}/version.h)
 
 
-
-
+#==============================
+# Compile/link settings
+#==============================
 if(VXWORKS)
 else(VXWORKS)
 	link_directories(${ORB_LINK_DIR})
@@ -95,11 +105,15 @@ if(${CMAKE_SYSTEM_NAME}test MATCHES QNXtest)
 	link_directories(/usr/qnx650/target/qnx6/x86/lib/gcc/4.4.2/ /usr/qnx650/target/qnx6/x86/lib/ /usr/local/lib)
 endif()
 
+#==============================
+# Subdirectories settings
+#==============================
 add_subdirectory(idl)
 add_subdirectory(ext)
 
-
-
+#==============================
+# Header list
+#==============================
 set(rtm_headers
 	ConfigAdmin.h
 	ModuleManager.h
@@ -215,7 +229,9 @@ set(rtm_headers
 	${PROJECT_BINARY_DIR}/version.h
 )
 
-
+#==============================
+# Source list
+#==============================
 set(rtm_srcs
 	ConfigAdmin.cpp
 	ModuleManager.cpp
@@ -297,6 +313,7 @@ set(rtm_srcs
 	${rtm_headers}
 )
 
+# TAO specific sources and headers
 if(CORBA MATCHES "TAO")
 	set(rtm_headers ${rtm_headers}
 		InPortCorbaCdrUDPConsumer.h
@@ -308,6 +325,7 @@ if(CORBA MATCHES "TAO")
 	 )
 endif()
 
+# RtORB　specific sources and headers
 if(NOT CORBA MATCHES "RtORB")
 	set(rtm_headers ${rtm_headers}
 		SharedMemoryPort.h
@@ -325,6 +343,7 @@ if(NOT CORBA MATCHES "RtORB")
 	 )
 endif()
 
+# VxWorks specific sources/headers and settings
 if(VXWORKS)
 	set(rtm_headers ${rtm_headers} VxWorksRTExecutionContext.h)
 	set(rtm_srcs ${rtm_srcs} VxWorksRTExecutionContext.cpp)
@@ -449,4 +468,7 @@ endif(VXWORKS)
 
 set(RTM_INCLUDE_IDLS ${RTM_INCLUDE_IDLS} PARENT_SCOPE)
 
+#============================
+# Installation settings
+#============================
 install(FILES  ${rtm_headers} DESTINATION ${INSTALL_RTM_INCLUDE_DIR}/rtm COMPONENT headers)
