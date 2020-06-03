@@ -1251,13 +1251,17 @@ namespace RTM
             RTC_WARN(("rtcd command name not found. Default rtcd is used"));
             rtcd_cmd = "rtcd";
           }
+
+        std::string lang_path_key("manager.modules.");
+        lang_path_key += lang + ".load_path";
+        rtcd_cmd += " -o manager.modules.load_path:" + prop["manager.modules.load_path"] + "," + prop[rtcd_cmd_key];
+        
         rtcd_cmd += " -o manager.is_master:NO";
         rtcd_cmd += " -o manager.corba_servant:YES";
         rtcd_cmd += " -o corba.master_manager:" + prop["corba.master_manager"];
         rtcd_cmd += " -o manager.name:" + prop["manager.name"];
         rtcd_cmd += " -o manager.instance_name:" + mgrstr;
-        rtcd_cmd += " -o shutdown_auto:NO";
-        rtcd_cmd += " -o manager.auto_shutdown_duration:50";
+        rtcd_cmd += " -o manager.shutdown_auto:NO";
 
 
         coil::vstring slaves_names;
