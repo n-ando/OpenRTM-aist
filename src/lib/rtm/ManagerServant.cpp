@@ -1254,7 +1254,7 @@ namespace RTM
 
         std::string lang_path_key("manager.modules.");
         lang_path_key += lang + ".load_path";
-        rtcd_cmd += " -o \"manager.modules.load_path:" + prop["manager.modules.load_path"] + "," + prop[lang_path_key] + "\"";
+        rtcd_cmd += " -o \"manager.modules.load_path:" + coil::escape(prop["manager.modules.load_path"]) + "," + coil::escape(prop[lang_path_key]) + "\"";
         
         rtcd_cmd += " -o \"manager.is_master:NO\"";
         rtcd_cmd += " -o \"manager.corba_servant:YES\"";
