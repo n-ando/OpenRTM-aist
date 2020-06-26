@@ -590,6 +590,7 @@ namespace RTC
           }
         props["module_file_name"] = coil::basename(module.c_str());
         props["module_file_path"] = module;
+        props["language"] = lang;
         modprops.emplace_back(std::move(props));
       }
 #endif
