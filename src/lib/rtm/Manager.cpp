@@ -1426,9 +1426,11 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     initLogstreamOthers();
 
     RTC_INFO(("%s", m_config["openrtm.version"].c_str()));
-    RTC_INFO(("Copyright (C) 2003-2017"));
-    RTC_INFO(("  Noriaki Ando"));
-    RTC_INFO(("  Intelligent Systems Research Institute, AIST"));
+    RTC_INFO(("Copyright (C) 2003-2020, Noriaki Ando and OpenRTM development team,"));
+    RTC_INFO(("  Intelligent Systems Research Institute, AIST,"));
+    RTC_INFO(("Copyright (C) 2020, Noriaki Ando and OpenRTM development team,"));
+    RTC_INFO(("  Industrial Cyber-Physical Research Center, AIST,"));
+    RTC_INFO(("  All right reserved."));
     RTC_INFO(("Manager starting."));
     RTC_INFO(("Starting local logging."));
 
