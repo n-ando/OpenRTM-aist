@@ -29,6 +29,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <string>
+#include <regex>
 
 
 namespace coil
@@ -55,7 +56,18 @@ namespace coil
       {
         setsid();
 
-        coil::vstring vstr(::coil::split(command, " "));
+        const std::regex base_regex("((?:[^\\s\"\\\\]|\\\\.|\"(?:\\\\.|[^\\\\\"])*(?:\"|$))+)");
+        std::sregex_iterator words_begin = std::sregex_iterator(command.begin(), command.end(), base_regex);
+        std::sregex_iterator words_end = std::sregex_iterator();
+
+        coil::vstring vstr;
+
+        for (std::sregex_iterator i = words_begin; i != words_end; ++i) {
+            std::smatch match = *i;
+            std::string match_str = replaceString(match.str(), "\"", "");
+            vstr.push_back(match_str);
+        }
+        
         Argv argv(vstr);
 
         execvp(vstr.front().c_str(), argv.get());
