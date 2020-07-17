@@ -6,7 +6,7 @@
 #         Nobu Kawauchi
 #
 
-VERSION=2.0.0.01
+VERSION=2.0.0.02
 
 #---------------------------------------
 # usage
@@ -54,15 +54,9 @@ reposervers="openrtm.org"
 reposerver=""
 
 #--------------------------------------- C++
-res=`grep wheezy /etc/os-release`
-if test ! "x$res" = "x" ; then
-  # wheezy
-  autotools="autoconf libtool"
-else
-  autotools="autoconf libtool libtool-bin"
-fi
+autotools="autoconf libtool libtool-bin"
 base_tools="bc iputils-ping net-tools zip"
-cxx_devel="gcc g++ make python-yaml"
+cxx_devel="gcc g++ make python3-yaml"
 #cmake_tools="cmake doxygen graphviz nkf"
 cmake_tools="cmake doxygen"
 build_tools="subversion git"
@@ -86,11 +80,11 @@ core_pkgs="$src_pkgs $build_tools $pkg_tools"
 u_core_pkgs="$u_src_pkgs"
 
 #--------------------------------------- Python
-omnipy="omniidl-python"
-python_runtime="python python-pyorbit-omg"
-python_devel="python-pip $cmake_tools $base_tools $omnipy"
-openrtm_py_devel="openrtm-aist-python-doc"
-openrtm_py_runtime="openrtm-aist-python openrtm-aist-python-example"
+omnipy="omniidl-python3"
+python_runtime="python3 python3-omniorb-omg"
+python_devel="python3-pip $cmake_tools $base_tools $omnipy"
+openrtm_py_devel="openrtm-aist-python3-doc"
+openrtm_py_runtime="openrtm-aist-python3 openrtm-aist-python3-example"
 
 python_runtime_pkgs="$omni_runtime $python_runtime $openrtm_py_runtime"
 u_python_runtime_pkgs="$omni_runtime $openrtm_py_runtime"
@@ -102,18 +96,17 @@ python_core_pkgs="$omni_runtime $python_runtime $python_devel $build_tools $pkg_
 u_python_core_pkgs="$omni_runtime $omnipy"
 
 #--------------------------------------- Java
-java_devel="openjdk-8-jdk"
 java_build="ant"
 openrtm_j_devel="openrtm-aist-java-doc"
 openrtm_j_runtime="openrtm-aist-java openrtm-aist-java-example"
 
-java_runtime_pkgs="$omni_runtime $java_devel $openrtm_j_runtime"
+java_runtime_pkgs="$omni_runtime $openrtm_j_runtime"
 u_java_runtime_pkgs="$omni_runtime $openrtm_j_runtime"
 
 java_dev_pkgs="$java_runtime_pkgs $cmake_tools $base_tools $openrtm_j_devel"
 u_java_dev_pkgs="$omni_runtime $openrtm_j_runtime $openrtm_j_devel"
 
-java_core_pkgs="$omni_runtime $java_devel $cmake_tools $base_tools $build_tools $java_build $pkg_tools"
+java_core_pkgs="$omni_runtime $cmake_tools $base_tools $build_tools $java_build $pkg_tools"
 u_java_core_pkgs="$omni_runtime"
 
 
@@ -455,8 +448,8 @@ install_branch()
 
   if test "x$arg_rtshell" = "xtrue" ; then
     select_opt_shl="[rtshell] install"
-    install_packages python-pip
-    rtshell_ret=`pip install rtshell-aist`
+    install_packages python3-pip
+    rtshell_ret=`pip3 install rtshell-aist`
   fi
 }
 
@@ -509,7 +502,7 @@ uninstall_branch()
 
   if test "x$arg_rtshell" = "xtrue" ; then
     select_opt_shl="[rtshell] uninstall"
-    rtshell_ret=`pip uninstall -y rtshell-aist rtctree-aist rtsprofile-aist`
+    rtshell_ret=`pip3 uninstall -y rtshell-aist rtctree-aist rtsprofile-aist`
   fi
 }
 
