@@ -1,6 +1,43 @@
+#------------------------------------------------------------
+# Typical rtc.conf settings
+#
+# set your nameserver address (localhost is default)
+corba.nameservers: localhost, otherhost, ...
+
+# If you have two or more network interfaces, try this setting
+corba.endpoints: 192.168.0.5
+
+# select logger function: YES is default
+logger.enable: YES
+
+# set log level: INFO is defalut
+logger.log_level: DEBUG
+
+# the following setting names unique RTC name on nameserver 
+manager.components.naming_policy: ns_unique
+
+# component pre-creation and pre-activation
+manager.components.precreate: <comp name>
+manager.components.preactivation: <comp name>
+
+# creating connection periviously
+manager.components.preconnect:   ¥
+  <comp0 name>.<port name>?      ¥
+  port=<comp1 name>.<port name>& ¥
+  dataflow_type=push&            ¥
+  interface_type=corba_cdr
+
+# Execution contexts rate [Hz] setting
+exec_cxt.periodic.rate: 30
+
+# RTC's state transition timeout setting 
+exec_cxt.transition_timeout: 5.0
+
+# See below for more information on other options
+
 #----------------------------------------------------------------------
 #
-# RT-Component manager configuration
+# RT-Component manager configuration reference
 #
 # Copyright (c) 2003-2020 by Noriaki Ando <n-ando@aist.go.jp>
 #      National Institute of
@@ -84,13 +121,25 @@ openrtm.version: 2.0.0
 #------------------------------------------------------------
 # Enable/Disable naming functions
 #
+# This option enables/disables the function related to the naming
+# service. If YES is specified, the RTC reference is registered in the
+# name service. If NO, no RTC reference is registered with the name
+# service.
+#
+# - Setting: YES: registration on NS enable, NO: do nothing
+# - Default: YES
+# - Example:
 naming.enable: YES
 
 #------------------------------------------------------------
 # Naming Types
 #
-# "corba" and "manager" are supported.
+# This option specifies the name service type. Currently only "corba"
+# and "manager" are supported. 
 #
+# - Setting: "corba", "manager"
+# - Default: "corba"
+# - Example:
 naming.type: corba
 
 #------------------------------------------------------------
@@ -114,21 +163,46 @@ naming.type: corba
 # %M: The manager name.
 # %p: PID of the manager.
 #
+# - Setting: <name>.<kind>/<name>.<kind>/...
+# - Default: %h.host/%n.rtc
+# - Example:
 naming.formats: %h.host/%n.rtc
 
 #------------------------------------------------------------
 # Auto update to Naming Server
 #
+# Registration of the RTC to the name server is usually performed when
+# the instance is created. Therefore, the name and its reference of the
+# RTCs are not registered in the name server started after the RTC is
+# instantiated. By specifying this option, the name server will be
+# checked periodically, and if the startup of the name server is
+# confirmed, the names and references of RTCs will be registered again.
+#
+# - Setting: YES or NO
+# - Default: YES
+# - Example:
 naming.update.enable: YES
 
 #------------------------------------------------------------
 # Update interval [s] for auto update
 #
+# This option specifies the name service type. Currently only corba and
+# manager are supported.
+#
+# - Setting: Registration update period in seconds [s]
+# - Default: 10.0 [s]
+# - Example:
 naming.update.interval: 10.0
 
 #------------------------------------------------------------
 # Rebind references in auto update
 #
+# If YES is specified for this option, the names and references will be
+# re-registered even if the name is deleted on the name server.
+#
+# - Setting: YES or NO
+# - Default: NO
+# - Example:
 naming.update.rebind: NO
 
 # End of Naming options section
@@ -139,20 +213,34 @@ naming.update.rebind: NO
 #============================================================
 #------------------------------------------------------------
 # Enable/Disable logger [YES/NO]
+#
+# This option specifies if enables the logger. 
+#
+# - Setting: YES or NO
+# - Default: YES
+# - Example:
 logger.enable: YES
 
 #------------------------------------------------------------
 # Log file name (default = ./rtc%p.log)
 #
+# Specify log file name. You can also output to multiple files separated
+# by commas. A specifier %p to replace the process ID is available. If
+# the file name is stdout, the log will be output to standard output.
+#
+# Replable strings:
 # %p: PID
 #
-logger.file_name: ./rtc%p.log
+# - Setting: file names and/or "stdout"
+# - Default: ./rtc%p.log
+# - Example:
+logger.file_name: ./rtc%p.log, stdout
 
 #------------------------------------------------------------
 # Log date format (default = %b %d %H:%M:%S)
 #
-# The following strftime(3) like format expression is available.
-# If no prefix is needed, use "No" or "Disable".
+# This option specifies the date/time format to be written in the log.
+# The following strftime(3)-like format specifiers are available.
 # 
 # %a abbreviated weekday name 
 # %A full weekday name 
@@ -181,23 +269,28 @@ logger.file_name: ./rtc%p.log
 # %Z time zone name 
 # %% a percent sign 
 #  
-#
-# logger.date_format: No
-# logger.date_format: Disable
+# - Setting: Format with %{aAbBcdHIjmMpQqSUwWxXyYZ%} replace string
+# - Default: %b %d %H:%M:%S.%Q
+# - Example:
+# logger.date_format: No                        // Not implemented
+# logger.date_format: Disable                   // Not implemented
 # logger.date_format: [%Y-%m-%dT%H.%M.%S%Z]     // W3C standard format
 # logger.date_format: [%b %d %H:%M:%S]          // Syslog format
 # logger.date_format: [%a %b %d %Y %H:%M:%S %Z] // RFC2822 format
 # logger.date_format: [%a %b %d %H:%M:%S %Z %Y] // data command format
 # logger.date_format: [%Y-%m-%d %H.%M.%S]
-#
-logger.date_format: %b %d %H:%M:%S
+logger.date_format: %b %d %H:%M:%S.%Q
 
 #------------------------------------------------------------
 # Log level (default = INFO)
 #
-# The following LogLevels are allowed.
+# This option specifes the log level for logging. The following log
+# levels are allowed.
+#
 # SILENT, FATAL, ERROR, WARN, INFO, DEBUG, TRACE, VERBOSE, PARANOID
 #
+# The log message levels that are output when each log level is
+# specified are shown below.
 #
 # SILENT  : completely silent
 # FATAL   : includes (FATAL)
@@ -213,6 +306,9 @@ logger.date_format: %b %d %H:%M:%S
 # "TRACE", "VERBOSE", "PARANOID" logging level will create a huge log file!!
 # "PARANOID" log level will tangle the log file.
 #
+# - Setting: SILENT, FATAL, ERROR, WARN, INFO, DEBUG, TRACE, VERBOSE, PARANOID
+# - Default: INFO
+# - Example:
 logger.log_level: INFO
 
 #------------------------------------------------------------
@@ -229,12 +325,22 @@ logger.log_level: INFO
 # function in somewhere.
 # coil::ClockManager::instance().getClock("logical").settime()
 #
+# - Setting: system, logical, adjusted
+# - Default: system
+# - Example:
 logger.clock_type: system
-
 
 #------------------------------------------------------------
 # Enable a function to set colors on terminal output
 #
+# This option specifies whether the log output will be colored. If
+# logger.file_name: stdout is specified, the log output will be
+# displayed in color if the terminal supports escape sequences. Coloring
+# the output to files is not recommended.
+#
+# - Setting: YES or NO
+# - Default: NO
+# - Example:
 logger.escape_sequence_enable: NO
 
 # End of logger options section
@@ -243,27 +349,66 @@ logger.escape_sequence_enable: NO
 #============================================================
 # CORBA options
 #============================================================
-#------------------------------------------------------------
 # CORBA ORB's arguments
 #
-# ORB specific command line options given to ORB_init().
-# See your ORB documentation.
+# This option specifies the argument given to CORBA. CORBA has different
+# command line options depending on the implementation. Normally command
+# line arguments are given to the CORBA API ORB_init() function, but
+# this option passes the specified string to this ORB_init() function.
 #
-# Example:
-#   corba.args: -ORBInitialHost myhost -ORBInitialPort 8888
+# Case study:
+# When sending image data etc. through the data port, be careful if the
+# size of the data sent at one time exceeds about 2 MB. In omniORB, the
+# size that can be handled by giop (General Inter-ORB Protocol) is
+# "2097152B (2MB)" by default, and if you try to send more data than
+# this size, you cannot send the correct data due to giop's limitation.
+# It is possible to change the maximum size by using the corba.args
+# option. This specification must be specified for both OutPort and
+# InPort.
+# corba.args: -ORBgiopMaxMsgSize 3145728 # add this line to rtc.conf
+#                                        # TMa buffer size is 3MB
 #
+# In addition to specifying in corba.args, you can relax this
+# restriction by specifying environment variables as follows.
 #
+#  export ORBgiopMaxMsgSize=3145728
+#
+# - reference: omniORB configuration and API
+#   http://omniorb.sourceforge.net/omni41/omniORB/omniORB004.html
+#
+# - Setting: CORBA specific command arguments
+# - Default: None
+# - Example:
+# corba.args: -ORBInitialHost myhost -ORBInitialPort 8888
 corba.args:
 
 #------------------------------------------------------------
 # CORBA endpoints
 #
-# Multiple endpoint addresses and ports can be specified using this option.
+# In CORBA, a remote object is accessed by a reference called IOR
+# (interoperable object reference). Usually, only one set of the address
+# and port number of the node on which the object operates is described
+# in the IOR. When the node running OpenRTM has two or more network
+# interfaces, an unintended address may be assigned as the address of
+# the node included in IOR.
 #
-# If you have two or more network interfaces, CORBA endpoint address and/or
-# port have to be specified. If hostname or port number is abbreviated,
-# default interface or port number is used. At least one colon ':'
-# is needed when you specify this option.
+# To solve this, this option allows you to specify the network address
+# used by CORBA. Specify as ''<host address>:<port number>'', but the
+# port number can be omitted including colon ":".
+#
+# Depending on the ORB implementation, the IOR can contain multiple
+# addresses. However, it should be noted that in Java IDL, which is the
+# Java standard CORBA, there is a problem that the operation becomes
+# slow when accessing the object via IOR that specifies multiple
+# addresses.
+#
+# Multiple ''<host address>:<port number>'' pairs can be specified by
+# separating them with'',(comma)''. You can also include all the node's
+# addresses in the IOR by specifying "all'' as a special string.
+#
+# NOTE:
+# The old option "corba.endpoint" will be obsolete near future,
+# unrecommended.
 #
 # Examples:
 #   corba.endpoints: myhost:      (use myhost and default port)
@@ -273,14 +418,46 @@ corba.args:
 #   corba.endpoints: 192.168.1.10, 192.168.10.11
 #   corba.endpoints: all
 #
-corba.endpoints:
+# - Setting: <host_addr>:<port>, <host_addr>:<port>, ... or "all"
+# - Default: None
+# - Example:
+corba.endpoints: 192.168.1.10:1111, 192.168.10.11:2222
+corba.endpoints: 192.168.1.10, 192.168.10.11
+corba.endpoints: all
+
+#------------------------------------------------------------
+# CORBA IPv4 endpoints
+#
+# This parameter is read-only and sets the IPv4 endpoint used by the
+# current process.　Reading this parameter will tell you which endpoint
+# you are currently using.
+#
+# - Setting: Read-only
+# - Default: None
+# - Example:
 corba.endpoints_ipv4: [readonly]
+
+#------------------------------------------------------------
+# CORBA IPv6 endpoints
+#
+# This parameter is read-only and sets the IPv6 endpoint used by the
+# current process.　Reading this parameter will tell you which endpoint
+# you are currently using.
+#
+# - Setting: Read-only
+# - Default: None
+# - Example:
 corba.endpoints_ipv6: [readonly]
 
 #------------------------------------------------------------
 # Specify what kind of IP addresses will be set to corba.endpoints
 #
-# Examples:
+# This option specifies which address of the available endpoints should
+# be used as an IPv4 or IpV6 address.
+#
+# - Setting: {ipv4|ipv6}(<number of endpoint address>, ...), 
+# - Default: None
+# - Example:
 # corba.endpoint_property: ipv4
 # corba.endpoint_property: ipv4, ipv6(0)
 # corba.endpoint_property: ipv6
@@ -291,11 +468,15 @@ corba.endpoint_property:
 #------------------------------------------------------------
 # CORBA name server setting
 #
-# Multiple name servers can be specified separating by comma.
-# If port number is abbreviated, default port number is used.
-# The default port number is depend on ORB implementation.
+# This option specifies the name server that registers RTC etc. You can
+# specify multiple name servers separated by commas. Even if there is no
+# name server at the specified address and port number, no error occurs
+# and the RTC name is registered only in the existing name server. If
+# the port number is omitted, the default port number 2809 will be used.
 #
-# Examples:
+# - Setting: <nameserver address>:<port number>, ...
+# - Default: localhost:2809
+# - Example:
 #   corba.nameservers: openrtm.aist.go.jp:9876
 #   corba.nameservers: rtm0.aist.go.jp, rtm1.aist.go.jp, rtm2.aist.go.jp
 #
@@ -314,6 +495,9 @@ corba.nameservers: localhost
 # is used, corba.endpoints option should also be specified with
 # multiple endpoints.
 #
+# - Setting: YES or NO
+# - Default: NO
+# - Example:
 corba.nameservice.replace_endpoint: NO
 
 #------------------------------------------------------------
@@ -343,17 +527,10 @@ corba.nameservice.replace_endpoint: NO
 #  corba.additional_ior_addresses: w.x.y.z:2810 <- routers global IP addr/port
 # 3) Launch global RTCs and private RTC, and connect them.
 #
+# - Setting: <address>:<port>
+# - Default: None
+# - Example:
 corba.alternate_iiop_addresses: addr:port
-
-#------------------------------------------------------------
-# Auto update to Master Manager
-#
-corba.update_master_manager.enable:YES
-
-#------------------------------------------------------------
-# Update interval [s] for auto update
-#
-corba.update_master_manager.interval: 10.0
 
 # End of CORBA options section
 #============================================================
@@ -375,20 +552,23 @@ corba.update_master_manager.interval: 10.0
 #
 # corbaloc::<hostname>:<port_number>/manager
 #
-# - Setting: Read/Write, any string name of the manager
+# - Setting: any string name of manager
 # - Default: manager
 # - Example:
 manager.name: manager
 
 #------------------------------------------------------------
-# The instance name of manager (default = manager)
+# The instance name of the manager (default = manager)
 #
-# This "manager.instance_name" is used for the name of manager on the
-# naming service registration. Usually a master manager's reference is
-# registered on name-servers with the name "manager|mgr". If this option
-# is set to "foobar", the registered maaster manager name will be
-# "foobar|mgr".
+# This "manager.instance_name" is used for the name of the manager on
+# the naming service registration. Usually, a master manager's reference
+# is registered on name-servers with the name "manager|mgr". If this
+# option is set to "foobar", the registered the maaster manager name
+# will be "foobar|mgr".
 #
+# - Setting: any string name of manager
+# - Default: manager
+# - Example:
 manager.instance_name: manager
 
 #------------------------------------------------------------
@@ -451,6 +631,31 @@ manager.corba_servant: YES
 corba.master_manager: localhost:2810
 
 #------------------------------------------------------------
+# Auto update to Master Manager
+#
+# This option is valid in slave-manager. A Slave-manager must
+# register itself to master managers. If this option is set to
+# "YES", the slave manager make registration it to master manager
+# periodically. If "NO" is set, the slave manager make registration
+# itself to master managers once when it is started.
+#
+# - Setting: YES/NO (Read/Write)
+# - Default: YES
+# - Example:
+manager.update_master_manager.enable:YES
+
+#------------------------------------------------------------
+# Update interval [s] for auto update
+#
+# This option is related to corba.update_master_manager.enable.
+# If "corba.update_master_manager.enable" option is set YES, update interval is set by this option. The default interval is 10 sec.
+#
+# - Setting: seconds (Read/Write)
+# - Default: 10.0
+# - Example:
+manager.update_master_manager.interval: 10.0
+
+#------------------------------------------------------------
 # Naming policy
 #
 # This option specifies a naming (numbering) policy for the RTCs.
@@ -485,20 +690,22 @@ corba.master_manager: localhost:2810
 manager.components.naming_policy: process_unique
 
 #------------------------------------------------------------
-# Advance component creation
+# Prior component creation
 #
 # This option specifies components' names (module name) creating in advance
 # before starting the manager's event-loop. The components' factories should
 # be registered by manager.module.preload option or statically linked to the
 #  manager.
 #
-# Example:
+# - Setting: Read/Write, <component class name>, ...
+# - Default: None
+# - Example:
 # manager.components.precreate: ConsoleIn, ConsoleOut, SeqIn, SeqOut
 #
 manager.components.precreate: 
 
 #------------------------------------------------------------
-# Advance connection creation
+# Prior connection creation
 #
 # This option specifies the connector to create before starting the
 # manager event loop. The target component and port must have been
@@ -519,7 +726,7 @@ manager.components.precreate:
 manager.components.preconnect: 
 
 #------------------------------------------------------------
-# Advance component activation
+# Prior component activation
 #
 # This option specifies components' names (module name) to be
 # activated in advance before starting the manager's event-loop. The
@@ -806,6 +1013,7 @@ manager.modules.<lang>.suffixes
 #  - Python3: rtcd_python3
 #  - Java: rtc_java
 # -Example
+manager.modules.<lang>.manager_cmd: rtcd_<lang_specific_suffix>
 manager.modules.C++.manager_cmd: rtcd
 manager.modules.Python.manager_cmd: rtcd_python
 manager.modules.Java.manager_cmd: rtcd_java
@@ -832,6 +1040,7 @@ manager.modules.Java.manager_cmd: rtcd_java
 #  - Python3: rtcprof_python3
 #  - Java: rtc_java
 # - Example:
+manager.modules.<lang>.profile_cmd: rtcprof_<lang_specific_suffix>
 manager.modules.C++.profile_cmd: rtcprof
 manager.modules.Python.profile_cmd: rtcprof_python
 manager.modules.Python3.profile_cmd: rtcprof_python3
@@ -847,12 +1056,187 @@ manager.modules.Java.profile_cmd: rtcprof_java
 # - Setting: RTC's module load path
 # - Default: none
 # - Example:
-manager.modules.C++.load_path: ./, /usr/share/OpenRTM-aist/components/cxx
-manager.modules.Python.load_path: ./, /usr/share/OpenRTM-aist/components/python
-manager.modules.Python3.load_path: ./, /usr/share/OpenRTM-aist/components/python3
-manager.modules.Java.load_path: ./, /usr/share/OpenRTM-aist/components/java
+manager.modules.<lang>.load_path: <lang_specific_module_load_path>
+manager.modules.C++.load_path: ./, /usr/share/openrtm-1.2/components/cxx
+manager.modules.Python.load_path: ./, /usr/share/openrtm-1.2/components/python
+manager.modules.Python3.load_path: ./, /usr/share/openrtm-1.2/components/python3
+manager.modules.Java.load_path: ./, /usr/share/openrtm-1.2/components/java
 
 # End of Manager's language spport options section
+#============================================================
+
+
+#============================================================
+# Timer options
+#============================================================
+#------------------------------------------------------------
+# Enable/disable timer function
+#
+# This option enables or disables the timer function. If it is set NO
+# the functions that use the timer is disabled, such as periodic
+# confirmation and re-registration of the name server.
+#
+# - Setting: Read/Write, YES or NO
+# - Default: YES
+# - Example:
+timer.enable: YES
+
+#------------------------------------------------------------
+# Timer clock tick setting [s]
+#
+# This option specifies the resolution of the timer. For example, if you
+# specify this option as 1 second, you cannot control the timer
+# execution with a resolution greater than 1 second.
+#
+# - Setting: Read/Write, seconds[s]
+# - Default: 0.1 [s]
+# - Example:
+timer.tick: 0.1
+
+# End of Timer options section
+#============================================================
+
+#============================================================
+# Execution context options
+#============================================================
+#
+#------------------------------------------------------------
+# Periodic type ExecutionContext
+#
+# Other availabilities in OpenRTM-aist
+#
+# - ExtTrigExecutionContext:   External triggered EC. It is embedded in
+#                              OpenRTM library.
+# - OpenHRPExecutionContext:   External triggred paralell execution
+#                              EC. It is embedded in OpenRTM
+#                              library. This is usually used with
+#                              OpenHRP3.
+# - SimulatorExecutionContext: External triggred paralell execution
+#                              EC. It is embedded in OpenRTM
+#                              library. This is usually used with
+#                              Choreonoid.
+# - RTPreemptEC:               Real-time execution context for Linux
+#                              RT-preemptive pathed kernel.
+# - ArtExecutionContext:       Real-time execution context for ARTLinux
+#                              (http://sourceforge.net/projects/art-linux/)
+#
+# - Setting: (Periodic|ExtTrig|OpenHRP~Simulator~RTPreemptExecutionContext)
+# - Default: PeriodicExecutionContext
+# - Example:
+exec_cxt.periodic.type: PeriodicExecutionContext
+# exec_cxt.event_driven_type: to be implemented
+
+#------------------------------------------------------------
+# The execution cycle of ExecutionContext
+#
+# This option specifies the system wide EC's period. If RTC does not
+# specifies EC's periodic rate, this periodic rate will be used.
+#
+# - Setting: Read/Write, period [Hz]
+# - Default: 1000 [Hz]
+# - Example:
+exec_cxt.periodic.rate: 1000
+
+#------------------------------------------------------------
+# State transition mode settings YES/NO
+#
+# Default: YES (Default setting is recommended.)
+#
+# Activating, deactivating and resetting of RTC makes state
+# transition.  Some execution contexts execute main logic in different
+# thread.  If these flags set to YES, activation, deactivation and
+# resetting will be performed synchronously.  In other words, if these
+# flags are YES, activation/deactivation/resetting-operations must be
+# returned after state transition completed.
+#
+# "synchronous_transition" will set synchronous transition flags to
+# all other synchronous transition flags
+# (synchronous_activation/deactivation/resetting.
+#
+exec_cxt.sync_transition: YES
+exec_cxt.sync_activation: YES
+exec_cxt.sync_deactivation: YES
+exec_cxt.sync_reset: YES
+
+#------------------------------------------------------------
+# Timeout of synchronous state transition [s]
+#
+# Default: 1.0 [s]
+#
+# When synchronous transition flags are set to YES, the following
+# timeout settings are valid. If "transition_timeout" is set, the
+# value will be set to all other timeout of activation/deactivation
+# and resetting
+#
+exec_cxt.transition_timeout: 0.5
+exec_cxt.activation_timeout: 0.5
+exec_cxt.deactivation_timeout: 0.5
+exec_cxt.reset_timeout: 0.5
+
+# End of Execution context settings
+#============================================================
+
+#============================================================
+# SDO service options
+#============================================================
+#------------------------------------------------------------
+# SDO service provider settings
+#
+# This parameter contains a list of currently available SDO services
+# (providers).
+#
+# - Setting: Read-only, available SDO services (provider)
+# - Default: None
+# - Example:
+sdo.service.provider.available_services: [read only]
+
+#------------------------------------------------------------
+# SDO service provider settings
+#
+# This option effectively specifies the SDO service (provider). Specify
+# a specific service by service type name, or specify "ALL" to enable
+# all services.
+#
+# - Setting: Read-Write, <sdo service0>, <sdo service1>, ... or ALL
+# - Default: None
+# - Example:
+sdo.service.provider.enabled_services: ALL
+
+#------------------------------------------------------------
+# SDO service provider settings
+#
+# This option contains the currently instantiated and provided SDO
+# service (provider).
+#
+# - Setting: Read-only, providing SDO services (provider)
+# - Default: None
+# - Example:
+sdo.service.provider.providing_services: [read only]
+
+#------------------------------------------------------------
+# SDO service provider settings
+#
+# This parameter contains a list of currently available SDO services
+# (consumers).
+#
+# - Setting: Read-only, available SDO services (consumer)
+# - Default: None
+# - Example:
+sdo.service.consumer.available_services: [read only]
+
+#------------------------------------------------------------
+# SDO service provider settings
+#
+# This option specifies the SDO service (consumer) to use. Specify a
+# specific service by service type name, or specify "ALL" to enable all
+# services.
+#
+# - Setting: Read-Write, <sdo service0>, <sdo service1> , ... or ALL 
+# - Default: ALL
+# - Example:
+sdo.service.consumer.enabled_services: ALL
+
+# End of SDO service options section
 #============================================================
 
 #============================================================
@@ -894,110 +1278,6 @@ manager.local_service.enabled_services: IEEE1394CameraService
 # corba.args:-ORBclientTransportRule "* ssl, tcp"
 
 # End of SSL Transport options section
-#============================================================
-
-#============================================================
-# Timer options
-#============================================================
-#
-# Enable/disable timer function
-#
-timer.enable: YES
-
-#
-# Timer clock tick setting [s]
-#
-timer.tick: 0.1
-
-# End of Timer options section
-#============================================================
-
-#============================================================
-# Execution context options
-#============================================================
-#
-# Periodic type ExecutionContext
-#
-# Other availabilities in OpenRTM-aist
-#
-# - ExtTrigExecutionContext:   External triggered EC. It is embedded in
-#                              OpenRTM library.
-# - OpenHRPExecutionContext:   External triggred paralell execution
-#                              EC. It is embedded in OpenRTM
-#                              library. This is usually used with
-#                              OpenHRP3.
-# - SimulatorExecutionContext: External triggred paralell execution
-#                              EC. It is embedded in OpenRTM
-#                              library. This is usually used with
-#                              Choreonoid.
-# - RTPreemptEC:               Real-time execution context for Linux
-#                              RT-preemptive pathed kernel.
-# - ArtExecutionContext:       Real-time execution context for ARTLinux
-#                              (http://sourceforge.net/projects/art-linux/)
-#
-exec_cxt.periodic.type: PeriodicExecutionContext
-# exec_cxt.event_driven_type: to be implemented
-
-#
-# The execution cycle of ExecutionContext
-#
-exec_cxt.periodic.rate: 1000
-
-#
-# State transition mode settings YES/NO
-#
-# Default: YES (efault setting is recommended.)
-#
-# Activating, deactivating and resetting of RTC makes state
-# transition.  Some execution contexts execute main logic in different
-# thread.  If these flags set to YES, activation, deactivation and
-# resetting will be performed synchronously.  In other words, if these
-# flags are YES, activation/deactivation/resetting-operations must be
-# returned after state transition completed.
-#
-# "synchronous_transition" will set synchronous transition flags to
-# all other synchronous transition flags
-# (synchronous_activation/deactivation/resetting.
-#
-exec_cxt.sync_transition: YES
-exec_cxt.sync_activation: YES
-exec_cxt.sync_deactivation: YES
-exec_cxt.sync_reset: YES
-
-#
-# Timeout of synchronous state transition [s]
-#
-# Default: 1.0 [s]
-#
-# When synchronous transition flags are set to YES, the following
-# timeout settings are valid. If "transition_timeout" is set, the
-# value will be set to all other timeout of activation/deactivation
-# and resetting
-#
-exec_cxt.transition_timeout: 0.5
-exec_cxt.activation_timeout: 0.5
-exec_cxt.deactivation_timeout: 0.5
-exec_cxt.reset_timeout: 0.5
-
-# End of Execution context settings
-#============================================================
-
-#============================================================
-# SDO service options
-#============================================================
-#
-# SDO service provider settings
-#
-sdo.service.provider.available_services: [read only]
-sdo.service.provider.enabled_services: ALL
-sdo.service.provider.providing_services: [read only]
-#
-# SDO service consumer settings
-#
-sdo.service.consumer.available_services: [read only]
-sdo.service.consumer.enabled_services: ALL
-
-# End of SDO service options section
 #============================================================
 
 #============================================================
