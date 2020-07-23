@@ -1,26 +1,37 @@
-#------------------------------------------------------------
-# Typical rtc.conf settings
+#============================================================
+# rtc.conf settings example
 #
-# set your nameserver address (localhost is default)
-corba.nameservers: localhost, otherhost, ...
+# See details in the following reference manual on the web page or the
+# following documents.
+#
+# English reference:  https://openrtm.org/openrtm/en/rtc_conf_reference
+# Japanese reference: https://openrtm.org/openrtm/ja/rtc_conf_reference
+#
+#============================================================
+# Set your nameserver address (localhost:2809 is default)
+corba.nameservers: localhost, 192.168.0.1:2800, otherhost, ...
 
 # If you have two or more network interfaces, try this setting
+#   Interface with address 192.168.0.5 is mainly used. 
 corba.endpoints: 192.168.0.5
 
-# select logger function: YES is default
+# Select logger function: YES is default
 logger.enable: YES
 
-# set log level: INFO is defalut
+# Set log level: INFO is defalut
 logger.log_level: DEBUG
 
-# the following setting names unique RTC name on nameserver 
+# The following setting names unique RTC name on nameserver
+#   RTC numbering is performed globally on nameserver
 manager.components.naming_policy: ns_unique
 
-# component pre-creation and pre-activation
-manager.components.precreate: <comp name>
-manager.components.preactivation: <comp name>
+# Component pre-creation and pre-activation
+#   If you want to create an additional instance of the RTC
+manager.components.precreate: <component name>
+#   If you want to activate #0 instance
+manager.components.preactivation: <component name>0
 
-# creating connection periviously
+# Creating connection periviously
 manager.components.preconnect:   ¥
   <comp0 name>.<port name>?      ¥
   port=<comp1 name>.<port name>& ¥
@@ -33,7 +44,20 @@ exec_cxt.periodic.rate: 30
 # RTC's state transition timeout setting 
 exec_cxt.transition_timeout: 5.0
 
+# Component specific configruation files:
+#   If you want to load component specific configuration file, please
+#   uncomment the following line.
+#
+# <component_category>.<component_name>.config_file: <component_name>.conf
+# or
+# <component_category>.<component_name>.config_file: <component_name>0.conf
+# <component_category>.<component_name>.config_file: <component_name>1.conf
+# <component_category>.<component_name>.config_file: <component_name>2.conf
 # See below for more information on other options
+
+# The end of rtc.conf example
+#------------------------------------------------------------ 
+
 
 #----------------------------------------------------------------------
 #
@@ -48,8 +72,6 @@ exec_cxt.transition_timeout: 5.0
 #
 # You should have received a copy of the license along with this
 # work. If not, see <http://creativecommons.org/licenses/by-sa/4.0/>.
-#
-# $Id$
 #
 # See details in the following reference manual on the web page.
 # English reference:  https://openrtm.org/openrtm/en/rtc_conf_reference
@@ -86,7 +108,7 @@ exec_cxt.transition_timeout: 5.0
 # - Setting: Read-only, no effect if it is set
 # - Default: The version of current OpenRTM-aist configuration
 # - Example:
-config.version: 2.0
+#config.version: 2.0
 
 #------------------------------------------------------------
 # OpenRTM-aist name (read-only)
