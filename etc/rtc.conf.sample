@@ -30,8 +30,7 @@ manager.components.naming_policy: ns_unique
 manager.components.precreate: <component name>
 #   If you want to activate #0 instance
 manager.components.preactivation: <component name>0
-
-# Creating connection periviously
+# Creating connection previously
 manager.components.preconnect:   ¥
   <comp0 name>.<port name>?      ¥
   port=<comp1 name>.<port name>& ¥
@@ -250,7 +249,7 @@ logger.enable: YES
 # by commas. A specifier %p to replace the process ID is available. If
 # the file name is stdout, the log will be output to standard output.
 #
-# Replable strings:
+# Replaceable strings:
 # %p: PID
 #
 # - Setting: file names and/or "stdout"
@@ -306,7 +305,7 @@ logger.date_format: %b %d %H:%M:%S.%Q
 #------------------------------------------------------------
 # Log level (default = INFO)
 #
-# This option specifes the log level for logging. The following log
+# This option specifies the log level for logging. The following log
 # levels are allowed.
 #
 # SILENT, FATAL, ERROR, WARN, INFO, DEBUG, TRACE, VERBOSE, PARANOID
@@ -585,7 +584,7 @@ manager.name: manager
 # This "manager.instance_name" is used for the name of the manager on
 # the naming service registration. Usually, a master manager's reference
 # is registered on name-servers with the name "manager|mgr". If this
-# option is set to "foobar", the registered the maaster manager name
+# option is set to "foobar", the registered the master manager name
 # will be "foobar|mgr".
 #
 # - Setting: any string name of manager
@@ -625,7 +624,7 @@ manager.naming_formats: %h.host_cxt/%n.mgr
 manager.is_master: NO
 
 #------------------------------------------------------------
-# Creating masnter manager servant
+# Creating master manager servant
 #
 # Setting whether to start the manager's CORBA servant. If set to YES,
 # the manager's CORBA servant will be started, allowing remote manager
