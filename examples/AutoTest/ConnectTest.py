@@ -1,9 +1,9 @@
-#!/usr/bin/env python
-# -*- coding: euc-jp -*-
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 #
 ## ConnectTest.py
 ##
-## ¥³¥ó¥İ¡¼¥Í¥ó¥ÈÀÜÂ³¥Æ¥¹¥È
+## ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆæ¥ç¶šãƒ†ã‚¹ãƒˆ
 ##
 
 from rtc_handle import *
@@ -16,7 +16,7 @@ import os
 ##--------------------------------------------------------------------
 g_test_name = "<< component connection test >>"
 
-## ¥Í¡¼¥à¥µ¡¼¥Ğ¡¼ÄêµÁ
+## ãƒãƒ¼ãƒ ã‚µãƒ¼ãƒãƒ¼å®šç¾©
 #env = RtmEnv(sys.argv, ["localhost:2809"])
 #list0 = env.name_space["localhost:2809"].list_obj()
 #env.name_space['localhost:2809'].rtc_handles.keys()
@@ -36,14 +36,14 @@ ec_recv = g_compo_recv.rtc_ref.get_owned_contexts()
 g_out_ports = g_compo_send.rtc_ref.get_ports()
 g_in_ports = g_compo_recv.rtc_ref.get_ports()
 #print "<<< g_out_ports.length=",len(g_out_ports)
-#SeqOut¤Î¾ì¹ç
+#SeqOutã®å ´åˆ
 #length=8 [0]:Short [1]:Long [2]:Float [3]:Double [4]:ShortSeq [5]:LongSeq [6]:FloatSeq [7]:DoubleSeq
 #print "<<<  g_in_ports.length=",len(g_in_ports)
 
 time.sleep(2)
 
 ##--------------------------------------------------------------------
-## ¥³¥Í¥¯¥¿¡¼¥×¥í¥Õ¥¡¥¤¥ë¥Ç¥Õ¥©¥ë¥ÈÄêµÁ
+## ã‚³ãƒã‚¯ã‚¿ãƒ¼ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆå®šç¾©
 g_interface_type1 = "corba_cdr"
 g_dataflow_type = "push"
 g_subscription_type = "flush"
@@ -52,7 +52,7 @@ g_push_rate = "2000"
 g_skip_count = "4"
 #g_skip_count = "0"
 
-## ¥İ¡¼¥ÈÈÖ¹æ»ØÄê ( get_ports()¤è¤ê )
+## ãƒãƒ¼ãƒˆç•ªå·æŒ‡å®š ( get_ports()ã‚ˆã‚Š )
 g_port1 = 0
 g_port2 = 1
 g_port3 = 2
@@ -63,21 +63,21 @@ g_port3 = 2
 ##   RTC.PortService ports[]
 ##   SDOPackage.NameValue properties[]
 
-## ¥Ç¡¼¥¿¥İ¡¼¥È TimedFloat
+## ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ TimedFloat
 g_name1 = "out"
 g_connector_id1 = "001"
 g_data_type1 = "TimedFloat"
 
 g_conprof1 = RTC.ConnectorProfile(g_name1, g_connector_id1, [g_out_ports[g_port1], g_in_ports[g_port1]], [SDOPackage.NameValue("dataport.data_type",any.to_any(g_data_type1)),SDOPackage.NameValue("dataport.interface_type",any.to_any(g_interface_type1)),SDOPackage.NameValue("dataport.dataflow_type",any.to_any(g_dataflow_type)),SDOPackage.NameValue("dataport.subscription_type",any.to_any(g_subscription_type)),SDOPackage.NameValue("dataport.publisher.push_policy",any.to_any(g_push_policy)),SDOPackage.NameValue("dataport.publisher.push_rate",any.to_any(g_push_rate)),SDOPackage.NameValue("dataport.publisher.skip_count",any.to_any(g_skip_count))])
 
-## ¥Ç¡¼¥¿¥İ¡¼¥È TimedFloatSeq
+## ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ TimedFloatSeq
 g_name2 = "seqout"
 g_connector_id2 = "002"
 g_data_type2 = "TimedFloatSeq"
 
 g_conprof2 = RTC.ConnectorProfile(g_name2, g_connector_id2, [g_out_ports[g_port2], g_in_ports[g_port2]], [SDOPackage.NameValue("dataport.data_type",any.to_any(g_data_type2)),SDOPackage.NameValue("dataport.interface_type",any.to_any(g_interface_type1)),SDOPackage.NameValue("dataport.dataflow_type",any.to_any(g_dataflow_type)),SDOPackage.NameValue("dataport.subscription_type",any.to_any(g_subscription_type)),SDOPackage.NameValue("dataport.publisher.push_policy",any.to_any(g_push_policy)),SDOPackage.NameValue("dataport.publisher.push_rate",any.to_any(g_push_rate)),SDOPackage.NameValue("dataport.publisher.skip_count",any.to_any(g_skip_count))])
 
-## ¥µ¡¼¥Ó¥¹¥İ¡¼¥È 
+## ã‚µãƒ¼ãƒ“ã‚¹ãƒãƒ¼ãƒˆ 
 g_name3 = "MyService"
 g_connector_id3 = "003"
 g_interface_type3 = "MyService"
@@ -85,7 +85,7 @@ g_interface_type3 = "MyService"
 g_conprof3 = RTC.ConnectorProfile(g_name3, g_connector_id3, [g_out_ports[g_port3], g_in_ports[g_port3]], [SDOPackage.NameValue("dataport.interface_type",any.to_any(g_interface_type3))])
 
 ##--------------------------------------------------------------------
-## Á÷¼õ¿®·ë²ÌÈ½Äê´ØÏ¢
+## é€å—ä¿¡çµæœåˆ¤å®šé–¢é€£
 g_diff_send_file = "./original-data"
 g_diff_recv_file = "./received-data"
 g_check_message = g_diff_recv_file + " file not found."
@@ -97,14 +97,14 @@ g_test_ng = "NG detected."
 g_test_ng_message = "  < received-data >"
 g_mess_header = "< "
 g_mess_footer = " > "
-# ¥Æ¥¹¥È·ë²ÌÆâÍÆ
-# Îã)¥±¡¼¥¹1¡¢1²óÌÜ -> "<<< case1 count1 >>> OK."
-# Îã)¥±¡¼¥¹1¡¢2²óÌÜ -> "<<< case1 count2 >>> NG detected."
+# ãƒ†ã‚¹ãƒˆçµæœå†…å®¹
+# ä¾‹)ã‚±ãƒ¼ã‚¹1ã€1å›ç›® -> "<<< case1 count1 >>> OK."
+# ä¾‹)ã‚±ãƒ¼ã‚¹1ã€2å›ç›® -> "<<< case1 count2 >>> NG detected."
 
 ##--------------------------------------------------------------------
-## ÆâÉô´Ø¿ô¡§¥³¥Í¥¯¥¿¡¼¥×¥í¥Õ¥¡¥¤¥ëÀßÄê(¥Ç¡¼¥¿¥İ¡¼¥È)
+## å†…éƒ¨é–¢æ•°ï¼šã‚³ãƒã‚¯ã‚¿ãƒ¼ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«è¨­å®š(ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ)
 ##
-## (°ú¿ô)
+## (å¼•æ•°)
 ## subscription_type : "flush", "new", "periodic"
 ## push_policy       : "ALL", "FIFO", "SKIP", "NEW", ""
 ## connect_direction : 0:outport -> inport, 1:inport -> outport
@@ -134,41 +134,41 @@ def make_connecter_profile(subscription_type, push_policy, connect_direction):
 
 
 ##--------------------------------------------------------------------
-## ÆâÉô´Ø¿ô¡§¼õ¿®¥Õ¥¡¥¤¥ëºï½ü
+## å†…éƒ¨é–¢æ•°ï¼šå—ä¿¡ãƒ•ã‚¡ã‚¤ãƒ«å‰Šé™¤
 ##
-## (°ú¿ô)
-## ¤Ê¤·
+## (å¼•æ•°)
+## ãªã—
 ##--------------------------------------------------------------------
 def delete_recv_file():
-    ## ¥Õ¥¡¥¤¥ë¤¬Â¸ºß¤¹¤ë¾ì¹ç
+    ## ãƒ•ã‚¡ã‚¤ãƒ«ãŒå­˜åœ¨ã™ã‚‹å ´åˆ
     if os.path.isfile(g_diff_recv_file) == True:
         os.remove(g_diff_recv_file)
     return
 
 
 ##--------------------------------------------------------------------
-## ÆâÉô´Ø¿ô¡§Á÷¼õ¿®¥Õ¥¡¥¤¥ë¤Î¥Ç¡¼¥¿Èæ³Ó
+## å†…éƒ¨é–¢æ•°ï¼šé€å—ä¿¡ãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒ‡ãƒ¼ã‚¿æ¯”è¼ƒ
 ##
-## (°ú¿ô)
-## ¤Ê¤·
-## (Ìá¤êÃÍ)  True : °ìÃ×¡¢  False : ÉÔ°ìÃ×
+## (å¼•æ•°)
+## ãªã—
+## (æˆ»ã‚Šå€¤)  True : ä¸€è‡´ã€  False : ä¸ä¸€è‡´
 ##--------------------------------------------------------------------
 def diff_file():
     bret = True
 
     ## if connect_direction == 0:
     ## else:
-    ## Á÷¿®¥Õ¥¡¥¤¥ëÍ­ÌµÈ½Äê
+    ## é€ä¿¡ãƒ•ã‚¡ã‚¤ãƒ«æœ‰ç„¡åˆ¤å®š
     if os.path.isfile(g_diff_send_file) == False:
         print "send_file (%s) not found." % send_file
         return False
 
-    ## ¼õ¿®¥Õ¥¡¥¤¥ëÍ­ÌµÈ½Äê
+    ## å—ä¿¡ãƒ•ã‚¡ã‚¤ãƒ«æœ‰ç„¡åˆ¤å®š
     if os.path.isfile(g_diff_recv_file) == False:
         print "recv_file (%s) not found." % recv_file
         return False
 
-    ## Á÷¼õ¿®¥Ç¡¼¥¿º¹Ê¬È½Äê
+    ## é€å—ä¿¡ãƒ‡ãƒ¼ã‚¿å·®åˆ†åˆ¤å®š
     f_send = open(g_diff_send_file, 'r')
     f_recv = open(g_diff_recv_file, 'r')
 
@@ -183,7 +183,7 @@ def diff_file():
         #print "original recv date=(%s)" % str_recv
         #print ''.join(['%x ' % ord(s) for s in str_recv])
 
-        ## ËöÈø¤Î²ş¹Ô¡¢Éüµ¢¥³¡¼¥Éºï½ü
+        ## æœ«å°¾ã®æ”¹è¡Œã€å¾©å¸°ã‚³ãƒ¼ãƒ‰å‰Šé™¤
         str_send2 = str_send.rstrip('\n')
         str_send2 = str_send2.rstrip('\r')
         str_recv2 = str_recv.rstrip('\n')
@@ -192,7 +192,7 @@ def diff_file():
         #print "rstrip after send date=(%s)" % str_send2
         #print "rstrip after recv date=(%s)" % str_recv2
 
-        ## ¥Ç¡¼¥¿Èæ³Ó
+        ## ãƒ‡ãƒ¼ã‚¿æ¯”è¼ƒ
         if str_send2 != str_recv2:
             #print "data difference"
             #print "send date=(%s)" % str_send2
@@ -205,26 +205,26 @@ def diff_file():
     return bret
 
 ##--------------------------------------------------------------------
-## ¥Æ¥¹¥È¥±¡¼¥¹ÈÖ¹æ¤Î½é´üÃÍÀßÄê
-##  ¾å¤«¤éÏ¢ÈÖ¤ò¿¶¤Ã¤Æ¤¤¤ë
+## ãƒ†ã‚¹ãƒˆã‚±ãƒ¼ã‚¹ç•ªå·ã®åˆæœŸå€¤è¨­å®š
+##  ä¸Šã‹ã‚‰é€£ç•ªã‚’æŒ¯ã£ã¦ã„ã‚‹
 case_no = 0
 
-## ¥±¡¼¥¹Ëè¤Î¥Æ¥¹¥È²ó¿ô
+## ã‚±ãƒ¼ã‚¹æ¯ã®ãƒ†ã‚¹ãƒˆå›æ•°
 loop_count = 3
 
-## ¼õ¿®Â¦activate_component¤«¤éÁ÷¿®Â¦activate_component¤Ş¤Ç¤Î¥¹¥ê¡¼¥×»ş´Ö(ÉÃ¿ô)
+## å—ä¿¡å´activate_componentã‹ã‚‰é€ä¿¡å´activate_componentã¾ã§ã®ã‚¹ãƒªãƒ¼ãƒ—æ™‚é–“(ç§’æ•°)
 sleep_recv_act_time = 1
 
-## activate_component¤«¤édeactivate_component¤Ş¤Ç¤Î¥¹¥ê¡¼¥×»ş´Ö(ÉÃ¿ô)
+## activate_componentã‹ã‚‰deactivate_componentã¾ã§ã®ã‚¹ãƒªãƒ¼ãƒ—æ™‚é–“(ç§’æ•°)
 sleep_act_time = 10
 
-## for¥ë¡¼¥×¤Î¥¹¥ê¡¼¥×»ş´Ö(ÉÃ¿ô)
+## forãƒ«ãƒ¼ãƒ—ã®ã‚¹ãƒªãƒ¼ãƒ—æ™‚é–“(ç§’æ•°)
 sleep_for_time = 2
 
-## connect¤«¤édisconnect¤Ş¤Ç¤Î¥¹¥ê¡¼¥×»ş´Ö(ÉÃ¿ô)
+## connectã‹ã‚‰disconnectã¾ã§ã®ã‚¹ãƒªãƒ¼ãƒ—æ™‚é–“(ç§’æ•°)
 sleep_connect_time = 2
 
-# ¥Æ¥¹¥È·ë²Ì¥Õ¥¡¥¤¥ë¤ÎºîÀ®
+# ãƒ†ã‚¹ãƒˆçµæœãƒ•ã‚¡ã‚¤ãƒ«ã®ä½œæˆ
 fout = open(g_test_result_file, 'w')
 fout.write(g_test_name + '\n')
 fout.close()
@@ -233,7 +233,7 @@ fout.close()
 time.sleep(1)
 
 ##--------------------------------------------------------------------
-## ÀÜÂ³¥¿¥¤¥×¡§flush  Êı¸ş¡§out->in  ÀÜÂ³¡¦ÀÚÃÇ¥Æ¥¹¥È2
+## æ¥ç¶šã‚¿ã‚¤ãƒ—ï¼šflush  æ–¹å‘ï¼šout->in  æ¥ç¶šãƒ»åˆ‡æ–­ãƒ†ã‚¹ãƒˆ2
 ##--------------------------------------------------------------------
 case_no = case_no + 1
 fout = open(g_test_result_file, 'a')
@@ -246,27 +246,27 @@ print message
 
 for i in range(loop_count):
 
-    ## 1 ¥³¥Í¥¯¥¿¡¼¥×¥í¥Õ¥¡¥¤¥ëÀßÄê
+    ## 1 ã‚³ãƒã‚¯ã‚¿ãƒ¼ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«è¨­å®š
     make_connecter_profile("flush", "", 0)
 
-    ## 3 ¥İ¡¼¥ÈÀÜÂ³
-    # ¥Ç¡¼¥¿¥İ¡¼¥È1 TimedFloat
+    ## 3 ãƒãƒ¼ãƒˆæ¥ç¶š
+    # ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ1 TimedFloat
     ret0 = g_out_ports[g_port1].connect(g_conprof1)
 
-    # ¥Ç¡¼¥¿¥İ¡¼¥È2 TimedFloatSeq
+    # ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ2 TimedFloatSeq
     ret1 = g_out_ports[g_port2].connect(g_conprof2)
 
-    # ¥µ¡¼¥Ó¥¹¥İ¡¼¥È MyService
+    # ã‚µãƒ¼ãƒ“ã‚¹ãƒãƒ¼ãƒˆ MyService
     ret2 = g_out_ports[g_port3].connect(g_conprof3)
 
     time.sleep(sleep_connect_time)
 
-    ## 6 ¥İ¡¼¥ÈÀÚÃÇ
+    ## 6 ãƒãƒ¼ãƒˆåˆ‡æ–­
     g_in_ports[g_port3].disconnect(g_conprof3.connector_id)
     g_in_ports[g_port2].disconnect(g_conprof2.connector_id)
     g_in_ports[g_port1].disconnect(g_conprof1.connector_id)
 
-    ## ¥Æ¥¹¥È·ë²Ì½ĞÎÏ
+    ## ãƒ†ã‚¹ãƒˆçµæœå‡ºåŠ›
     fout = open(g_test_result_file, 'a')
     message = g_mess_header + g_test_case + str(case_no) + " " + g_test_cnt + str(i+1) + g_mess_footer
     message = message + g_test_ok
@@ -277,7 +277,7 @@ for i in range(loop_count):
     time.sleep(sleep_for_time)
 
 ##--------------------------------------------------------------------
-## ÀÜÂ³¥¿¥¤¥×¡§flush  Êı¸ş¡§in->out  ÀÜÂ³¡¦ÀÚÃÇ¥Æ¥¹¥È1
+## æ¥ç¶šã‚¿ã‚¤ãƒ—ï¼šflush  æ–¹å‘ï¼šin->out  æ¥ç¶šãƒ»åˆ‡æ–­ãƒ†ã‚¹ãƒˆ1
 ##--------------------------------------------------------------------
 case_no = case_no + 1
 fout = open(g_test_result_file, 'a')
@@ -290,27 +290,27 @@ print message
 
 for i in range(loop_count):
 
-    ## 1 ¥³¥Í¥¯¥¿¡¼¥×¥í¥Õ¥¡¥¤¥ëÀßÄê
+    ## 1 ã‚³ãƒã‚¯ã‚¿ãƒ¼ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«è¨­å®š
     make_connecter_profile("flush", "", 1)
 
-    ## 3 ¥İ¡¼¥ÈÀÜÂ³
-    # ¥Ç¡¼¥¿¥İ¡¼¥È1 TimedFloat
+    ## 3 ãƒãƒ¼ãƒˆæ¥ç¶š
+    # ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ1 TimedFloat
     ret0 = g_out_ports[g_port1].connect(g_conprof1)
 
-    # ¥Ç¡¼¥¿¥İ¡¼¥È2 TimedFloatSeq
+    # ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ2 TimedFloatSeq
     ret1 = g_out_ports[g_port2].connect(g_conprof2)
 
-    # ¥µ¡¼¥Ó¥¹¥İ¡¼¥È MyService
+    # ã‚µãƒ¼ãƒ“ã‚¹ãƒãƒ¼ãƒˆ MyService
     ret2 = g_out_ports[g_port3].connect(g_conprof3)
 
     time.sleep(sleep_connect_time)
 
-    ## 6 ¥İ¡¼¥ÈÀÚÃÇ
+    ## 6 ãƒãƒ¼ãƒˆåˆ‡æ–­
     g_in_ports[g_port3].disconnect(g_conprof3.connector_id)
     g_in_ports[g_port2].disconnect(g_conprof2.connector_id)
     g_in_ports[g_port1].disconnect(g_conprof1.connector_id)
 
-    ## ¥Æ¥¹¥È·ë²Ì½ĞÎÏ
+    ## ãƒ†ã‚¹ãƒˆçµæœå‡ºåŠ›
     fout = open(g_test_result_file, 'a')
     message = g_mess_header + g_test_case + str(case_no) + " " + g_test_cnt + str(i+1) + g_mess_footer
     message = message + g_test_ok
@@ -321,7 +321,7 @@ for i in range(loop_count):
     time.sleep(sleep_for_time)
 
 ##--------------------------------------------------------------------
-## ÀÜÂ³¥¿¥¤¥×¡§flush  Êı¸ş¡§out->in  Activate¡¦Deactivate¥Æ¥¹¥È1
+## æ¥ç¶šã‚¿ã‚¤ãƒ—ï¼šflush  æ–¹å‘ï¼šout->in  Activateãƒ»Deactivateãƒ†ã‚¹ãƒˆ1
 ##--------------------------------------------------------------------
 case_no = case_no + 1
 fout = open(g_test_result_file, 'a')
@@ -332,36 +332,36 @@ fout.write(message + '\n')
 fout.close()
 print message
 
-## 1 ¥³¥Í¥¯¥¿¡¼¥×¥í¥Õ¥¡¥¤¥ëÀßÄê
+## 1 ã‚³ãƒã‚¯ã‚¿ãƒ¼ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«è¨­å®š
 make_connecter_profile("flush", "", 0)
 
-## 3 ¥İ¡¼¥ÈÀÜÂ³
-# ¥Ç¡¼¥¿¥İ¡¼¥È1 TimedFloat
+## 3 ãƒãƒ¼ãƒˆæ¥ç¶š
+# ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ1 TimedFloat
 ret0 = g_out_ports[g_port1].connect(g_conprof1)
 
-# ¥Ç¡¼¥¿¥İ¡¼¥È2 TimedFloatSeq
+# ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ2 TimedFloatSeq
 ret1 = g_out_ports[g_port2].connect(g_conprof2)
 
-# ¥µ¡¼¥Ó¥¹¥İ¡¼¥È MyService
+# ã‚µãƒ¼ãƒ“ã‚¹ãƒãƒ¼ãƒˆ MyService
 ret2 = g_out_ports[g_port3].connect(g_conprof3)
 
 for i in range(loop_count):
 
-    ## 2 ¼õ¿®¥Ç¡¼¥¿¥Õ¥¡¥¤¥ëºï½ü
+    ## 2 å—ä¿¡ãƒ‡ãƒ¼ã‚¿ãƒ•ã‚¡ã‚¤ãƒ«å‰Šé™¤
     delete_recv_file()
 
-    ## 4 ¥¢¥¯¥Æ¥£¥Ù¡¼¥È
+    ## 4 ã‚¢ã‚¯ãƒ†ã‚£ãƒ™ãƒ¼ãƒˆ
     ec_recv[0].activate_component(g_compo_recv.rtc_ref)
     time.sleep(sleep_recv_act_time)
     ec_send[0].activate_component(g_compo_send.rtc_ref)
 
     time.sleep(sleep_act_time)
 
-    ## 5 ¥Ç¥£¥¢¥¯¥Æ¥£¥Ù¡¼¥È
+    ## 5 ãƒ‡ã‚£ã‚¢ã‚¯ãƒ†ã‚£ãƒ™ãƒ¼ãƒˆ
     ec_send[0].deactivate_component(g_compo_send.rtc_ref)
     ec_recv[0].deactivate_component(g_compo_recv.rtc_ref)
 
-    ## ¼õ¿®¥Õ¥¡¥¤¥ëÍ­ÌµÈ½Äê
+    ## å—ä¿¡ãƒ•ã‚¡ã‚¤ãƒ«æœ‰ç„¡åˆ¤å®š
     if os.path.isfile(g_diff_recv_file) == False:
         fout = open(g_test_result_file, 'a')
         message = g_mess_header + g_test_case + str(case_no) + " " + g_test_cnt + str(i+1) + g_mess_footer
@@ -372,26 +372,26 @@ for i in range(loop_count):
         time.sleep(sleep_for_time)
         continue
 
-    ## 7 Á÷¼õ¿®¥Ç¡¼¥¿Èæ³Ó
+    ## 7 é€å—ä¿¡ãƒ‡ãƒ¼ã‚¿æ¯”è¼ƒ
     time.sleep(sleep_act_time)
     bret = diff_file()
 
-    ## º¹Ê¬¥Õ¥¡¥¤¥ë¤«¤é¥Æ¥¹¥È·ë²Ì½ĞÎÏ
+    ## å·®åˆ†ãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰ãƒ†ã‚¹ãƒˆçµæœå‡ºåŠ›
     fout = open(g_test_result_file, 'a')
     message = g_mess_header + g_test_case + str(case_no) + " " + g_test_cnt + str(i+1) + g_mess_footer
-    # bret==True ¤Ê¤éÁ÷¼õ¿®¥Ç¡¼¥¿°ìÃ×
+    # bret==True ãªã‚‰é€å—ä¿¡ãƒ‡ãƒ¼ã‚¿ä¸€è‡´
     if bret == True:
-        # ¥Æ¥¹¥È·ë²Ì OK
+        # ãƒ†ã‚¹ãƒˆçµæœ OK
         message = message + g_test_ok
         print message
         fout.write(message + '\n')
     else:
-        # ¥Æ¥¹¥È·ë²Ì NG
+        # ãƒ†ã‚¹ãƒˆçµæœ NG
         message = message + g_test_ng
         print message
         message = message + g_test_ng_message
         fout.write(message + '\n')
-        # ¼õ¿®¥Ç¡¼¥¿¤ò¥Æ¥¹¥È·ë²Ì¥Õ¥¡¥¤¥ë¤Ø¥³¥Ô¡¼
+        # å—ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’ãƒ†ã‚¹ãƒˆçµæœãƒ•ã‚¡ã‚¤ãƒ«ã¸ã‚³ãƒ”ãƒ¼
         fin2 = open(g_diff_recv_file, 'r')
         while(1):
             s2 = fin2.readline()
@@ -403,13 +403,13 @@ for i in range(loop_count):
 
     time.sleep(sleep_for_time)
 
-## 6 ¥İ¡¼¥ÈÀÚÃÇ
+## 6 ãƒãƒ¼ãƒˆåˆ‡æ–­
 g_in_ports[g_port3].disconnect(g_conprof3.connector_id)
 g_in_ports[g_port2].disconnect(g_conprof2.connector_id)
 g_in_ports[g_port1].disconnect(g_conprof1.connector_id)
 
 ##--------------------------------------------------------------------
-## ÀÜÂ³¥¿¥¤¥×¡§flush  Êı¸ş¡§in->out  Activate¡¦Deactivate¥Æ¥¹¥È1
+## æ¥ç¶šã‚¿ã‚¤ãƒ—ï¼šflush  æ–¹å‘ï¼šin->out  Activateãƒ»Deactivateãƒ†ã‚¹ãƒˆ1
 ##--------------------------------------------------------------------
 case_no = case_no + 1
 fout = open(g_test_result_file, 'a')
@@ -420,36 +420,36 @@ fout.write(message + '\n')
 fout.close()
 print message
 
-## 1 ¥³¥Í¥¯¥¿¡¼¥×¥í¥Õ¥¡¥¤¥ëÀßÄê
+## 1 ã‚³ãƒã‚¯ã‚¿ãƒ¼ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«è¨­å®š
 make_connecter_profile("flush", "", 1)
 
-## 3 ¥İ¡¼¥ÈÀÜÂ³
-# ¥Ç¡¼¥¿¥İ¡¼¥È1 TimedFloat
+## 3 ãƒãƒ¼ãƒˆæ¥ç¶š
+# ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ1 TimedFloat
 ret0 = g_out_ports[g_port1].connect(g_conprof1)
 
-# ¥Ç¡¼¥¿¥İ¡¼¥È2 TimedFloatSeq
+# ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ2 TimedFloatSeq
 ret1 = g_out_ports[g_port2].connect(g_conprof2)
 
-# ¥µ¡¼¥Ó¥¹¥İ¡¼¥È MyService
+# ã‚µãƒ¼ãƒ“ã‚¹ãƒãƒ¼ãƒˆ MyService
 ret2 = g_out_ports[g_port3].connect(g_conprof3)
 
 for i in range(loop_count):
 
-    ## 2 ¼õ¿®¥Ç¡¼¥¿¥Õ¥¡¥¤¥ëºï½ü
+    ## 2 å—ä¿¡ãƒ‡ãƒ¼ã‚¿ãƒ•ã‚¡ã‚¤ãƒ«å‰Šé™¤
     delete_recv_file()
 
-    ## 4 ¥¢¥¯¥Æ¥£¥Ù¡¼¥È
+    ## 4 ã‚¢ã‚¯ãƒ†ã‚£ãƒ™ãƒ¼ãƒˆ
     ec_recv[0].activate_component(g_compo_recv.rtc_ref)
     time.sleep(sleep_recv_act_time)
     ec_send[0].activate_component(g_compo_send.rtc_ref)
 
     time.sleep(sleep_act_time)
 
-    ## 5 ¥Ç¥£¥¢¥¯¥Æ¥£¥Ù¡¼¥È
+    ## 5 ãƒ‡ã‚£ã‚¢ã‚¯ãƒ†ã‚£ãƒ™ãƒ¼ãƒˆ
     ec_send[0].deactivate_component(g_compo_send.rtc_ref)
     ec_recv[0].deactivate_component(g_compo_recv.rtc_ref)
 
-    ## ¼õ¿®¥Õ¥¡¥¤¥ëÍ­ÌµÈ½Äê
+    ## å—ä¿¡ãƒ•ã‚¡ã‚¤ãƒ«æœ‰ç„¡åˆ¤å®š
     if os.path.isfile(g_diff_recv_file) == False:
         fout = open(g_test_result_file, 'a')
         message = g_mess_header + g_test_case + str(case_no) + " " + g_test_cnt + str(i+1) + g_mess_footer
@@ -460,26 +460,26 @@ for i in range(loop_count):
         time.sleep(sleep_for_time)
         continue
 
-    ## 7 Á÷¼õ¿®¥Ç¡¼¥¿Èæ³Ó
+    ## 7 é€å—ä¿¡ãƒ‡ãƒ¼ã‚¿æ¯”è¼ƒ
     time.sleep(sleep_act_time)
     bret = diff_file()
 
-    ## º¹Ê¬¥Õ¥¡¥¤¥ë¤«¤é¥Æ¥¹¥È·ë²Ì½ĞÎÏ
+    ## å·®åˆ†ãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰ãƒ†ã‚¹ãƒˆçµæœå‡ºåŠ›
     fout = open(g_test_result_file, 'a')
     message = g_mess_header + g_test_case + str(case_no) + " " + g_test_cnt + str(i+1) + g_mess_footer
-    # bret==True ¤Ê¤éÁ÷¼õ¿®¥Ç¡¼¥¿°ìÃ×
+    # bret==True ãªã‚‰é€å—ä¿¡ãƒ‡ãƒ¼ã‚¿ä¸€è‡´
     if bret == True:
-        # ¥Æ¥¹¥È·ë²Ì OK
+        # ãƒ†ã‚¹ãƒˆçµæœ OK
         message = message + g_test_ok
         print message
         fout.write(message + '\n')
     else:
-        # ¥Æ¥¹¥È·ë²Ì NG
+        # ãƒ†ã‚¹ãƒˆçµæœ NG
         message = message + g_test_ng
         print message
         message = message + g_test_ng_message
         fout.write(message + '\n')
-        # ¼õ¿®¥Ç¡¼¥¿¤ò¥Æ¥¹¥È·ë²Ì¥Õ¥¡¥¤¥ë¤Ø¥³¥Ô¡¼
+        # å—ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’ãƒ†ã‚¹ãƒˆçµæœãƒ•ã‚¡ã‚¤ãƒ«ã¸ã‚³ãƒ”ãƒ¼
         fin2 = open(g_diff_recv_file, 'r')
         while(1):
             s2 = fin2.readline()
@@ -491,13 +491,13 @@ for i in range(loop_count):
 
     time.sleep(sleep_for_time)
 
-## 6 ¥İ¡¼¥ÈÀÚÃÇ
+## 6 ãƒãƒ¼ãƒˆåˆ‡æ–­
 g_in_ports[g_port3].disconnect(g_conprof3.connector_id)
 g_in_ports[g_port2].disconnect(g_conprof2.connector_id)
 g_in_ports[g_port1].disconnect(g_conprof1.connector_id)
 
 ##--------------------------------------------------------------------
-## ÀÜÂ³¥¿¥¤¥×¡§flush  Êı¸ş¡§out->in  Activate¡¦Deactivate¥Æ¥¹¥È10
+## æ¥ç¶šã‚¿ã‚¤ãƒ—ï¼šflush  æ–¹å‘ï¼šout->in  Activateãƒ»Deactivateãƒ†ã‚¹ãƒˆ10
 ##--------------------------------------------------------------------
 case_no = case_no + 1
 fout = open(g_test_result_file, 'a')
@@ -510,21 +510,21 @@ print message
 
 for i in range(loop_count):
 
-    ## 1 ¥³¥Í¥¯¥¿¡¼¥×¥í¥Õ¥¡¥¤¥ëÀßÄê
+    ## 1 ã‚³ãƒã‚¯ã‚¿ãƒ¼ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«è¨­å®š
     make_connecter_profile("flush", "", 0)
 
-    ## 4 ¥¢¥¯¥Æ¥£¥Ù¡¼¥È
+    ## 4 ã‚¢ã‚¯ãƒ†ã‚£ãƒ™ãƒ¼ãƒˆ
     ec_recv[0].activate_component(g_compo_recv.rtc_ref)
     time.sleep(sleep_recv_act_time)
     ec_send[0].activate_component(g_compo_send.rtc_ref)
 
     time.sleep(sleep_act_time)
 
-    ## 5 ¥Ç¥£¥¢¥¯¥Æ¥£¥Ù¡¼¥È
+    ## 5 ãƒ‡ã‚£ã‚¢ã‚¯ãƒ†ã‚£ãƒ™ãƒ¼ãƒˆ
     ec_send[0].deactivate_component(g_compo_send.rtc_ref)
     ec_recv[0].deactivate_component(g_compo_recv.rtc_ref)
 
-    ## ¥Æ¥¹¥È·ë²Ì½ĞÎÏ
+    ## ãƒ†ã‚¹ãƒˆçµæœå‡ºåŠ›
     fout = open(g_test_result_file, 'a')
     message = g_mess_header + g_test_case + str(case_no) + " " + g_test_cnt + str(i+1) + g_mess_footer
     message = message + g_test_ok
@@ -535,7 +535,7 @@ for i in range(loop_count):
     time.sleep(sleep_for_time)
 
 ##--------------------------------------------------------------------
-## ÀÜÂ³¥¿¥¤¥×¡§flush  Êı¸ş¡§out->in  ÀÜÂ³¡¦ÀÚÃÇ¡¦Activate¡¦Deactivate¥Æ¥¹¥È1
+## æ¥ç¶šã‚¿ã‚¤ãƒ—ï¼šflush  æ–¹å‘ï¼šout->in  æ¥ç¶šãƒ»åˆ‡æ–­ãƒ»Activateãƒ»Deactivateãƒ†ã‚¹ãƒˆ1
 ##--------------------------------------------------------------------
 case_no = case_no + 1
 fout = open(g_test_result_file, 'a')
@@ -548,39 +548,39 @@ print message
 
 for i in range(loop_count):
 
-    ## 2 ¼õ¿®¥Ç¡¼¥¿¥Õ¥¡¥¤¥ëºï½ü
+    ## 2 å—ä¿¡ãƒ‡ãƒ¼ã‚¿ãƒ•ã‚¡ã‚¤ãƒ«å‰Šé™¤
     delete_recv_file()
 
-    ## 1 ¥³¥Í¥¯¥¿¡¼¥×¥í¥Õ¥¡¥¤¥ëÀßÄê
+    ## 1 ã‚³ãƒã‚¯ã‚¿ãƒ¼ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«è¨­å®š
     make_connecter_profile("flush", "", 0)
 
-    ## 3 ¥İ¡¼¥ÈÀÜÂ³
-    # ¥Ç¡¼¥¿¥İ¡¼¥È1 TimedFloat
+    ## 3 ãƒãƒ¼ãƒˆæ¥ç¶š
+    # ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ1 TimedFloat
     ret0 = g_out_ports[g_port1].connect(g_conprof1)
 
-    # ¥Ç¡¼¥¿¥İ¡¼¥È2 TimedFloatSeq
+    # ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ2 TimedFloatSeq
     ret1 = g_out_ports[g_port2].connect(g_conprof2)
 
-    # ¥µ¡¼¥Ó¥¹¥İ¡¼¥È MyService
+    # ã‚µãƒ¼ãƒ“ã‚¹ãƒãƒ¼ãƒˆ MyService
     ret2 = g_out_ports[g_port3].connect(g_conprof3)
 
-    ## 4 ¥¢¥¯¥Æ¥£¥Ù¡¼¥È
+    ## 4 ã‚¢ã‚¯ãƒ†ã‚£ãƒ™ãƒ¼ãƒˆ
     ec_recv[0].activate_component(g_compo_recv.rtc_ref)
     time.sleep(sleep_recv_act_time)
     ec_send[0].activate_component(g_compo_send.rtc_ref)
 
     time.sleep(sleep_act_time)
 
-    ## 5 ¥Ç¥£¥¢¥¯¥Æ¥£¥Ù¡¼¥È
+    ## 5 ãƒ‡ã‚£ã‚¢ã‚¯ãƒ†ã‚£ãƒ™ãƒ¼ãƒˆ
     ec_send[0].deactivate_component(g_compo_send.rtc_ref)
     ec_recv[0].deactivate_component(g_compo_recv.rtc_ref)
 
-    ## 6 ¥İ¡¼¥ÈÀÚÃÇ
+    ## 6 ãƒãƒ¼ãƒˆåˆ‡æ–­
     g_in_ports[g_port3].disconnect(g_conprof3.connector_id)
     g_in_ports[g_port2].disconnect(g_conprof2.connector_id)
     g_in_ports[g_port1].disconnect(g_conprof1.connector_id)
 
-    ## ¼õ¿®¥Õ¥¡¥¤¥ëÍ­ÌµÈ½Äê
+    ## å—ä¿¡ãƒ•ã‚¡ã‚¤ãƒ«æœ‰ç„¡åˆ¤å®š
     if os.path.isfile(g_diff_recv_file) == False:
         fout = open(g_test_result_file, 'a')
         message = g_mess_header + g_test_case + str(case_no) + " " + g_test_cnt + str(i+1) + g_mess_footer
@@ -591,26 +591,26 @@ for i in range(loop_count):
         time.sleep(sleep_for_time)
         continue
 
-    ## 7 Á÷¼õ¿®¥Ç¡¼¥¿Èæ³Ó
+    ## 7 é€å—ä¿¡ãƒ‡ãƒ¼ã‚¿æ¯”è¼ƒ
     time.sleep(sleep_act_time)
     bret = diff_file()
 
-    ## º¹Ê¬¥Õ¥¡¥¤¥ë¤«¤é¥Æ¥¹¥È·ë²Ì½ĞÎÏ
+    ## å·®åˆ†ãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰ãƒ†ã‚¹ãƒˆçµæœå‡ºåŠ›
     fout = open(g_test_result_file, 'a')
     message = g_mess_header + g_test_case + str(case_no) + " " + g_test_cnt + str(i+1) + g_mess_footer
-    # bret==True ¤Ê¤éÁ÷¼õ¿®¥Ç¡¼¥¿°ìÃ×
+    # bret==True ãªã‚‰é€å—ä¿¡ãƒ‡ãƒ¼ã‚¿ä¸€è‡´
     if bret == True:
-        # ¥Æ¥¹¥È·ë²Ì OK
+        # ãƒ†ã‚¹ãƒˆçµæœ OK
         message = message + g_test_ok
         print message
         fout.write(message + '\n')
     else:
-        # ¥Æ¥¹¥È·ë²Ì NG
+        # ãƒ†ã‚¹ãƒˆçµæœ NG
         message = message + g_test_ng
         print message
         message = message + g_test_ng_message
         fout.write(message + '\n')
-        # ¼õ¿®¥Ç¡¼¥¿¤ò¥Æ¥¹¥È·ë²Ì¥Õ¥¡¥¤¥ë¤Ø¥³¥Ô¡¼
+        # å—ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’ãƒ†ã‚¹ãƒˆçµæœãƒ•ã‚¡ã‚¤ãƒ«ã¸ã‚³ãƒ”ãƒ¼
         fin2 = open(g_diff_recv_file, 'r')
         while(1):
             s2 = fin2.readline()
@@ -623,7 +623,7 @@ for i in range(loop_count):
     time.sleep(sleep_for_time)
 
 ##--------------------------------------------------------------------
-## ÀÜÂ³¥¿¥¤¥×¡§flush  Êı¸ş¡§in->out  ÀÜÂ³¡¦ÀÚÃÇ¡¦Activate¡¦Deactivate¥Æ¥¹¥È1
+## æ¥ç¶šã‚¿ã‚¤ãƒ—ï¼šflush  æ–¹å‘ï¼šin->out  æ¥ç¶šãƒ»åˆ‡æ–­ãƒ»Activateãƒ»Deactivateãƒ†ã‚¹ãƒˆ1
 ##--------------------------------------------------------------------
 case_no = case_no + 1
 fout = open(g_test_result_file, 'a')
@@ -636,39 +636,39 @@ print message
 
 for i in range(loop_count):
 
-    ## 2 ¼õ¿®¥Ç¡¼¥¿¥Õ¥¡¥¤¥ëºï½ü
+    ## 2 å—ä¿¡ãƒ‡ãƒ¼ã‚¿ãƒ•ã‚¡ã‚¤ãƒ«å‰Šé™¤
     delete_recv_file()
 
-    ## 1 ¥³¥Í¥¯¥¿¡¼¥×¥í¥Õ¥¡¥¤¥ëÀßÄê
+    ## 1 ã‚³ãƒã‚¯ã‚¿ãƒ¼ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«è¨­å®š
     make_connecter_profile("flush", "", 1)
 
-    ## 3 ¥İ¡¼¥ÈÀÜÂ³
-    # ¥Ç¡¼¥¿¥İ¡¼¥È1 TimedFloat
+    ## 3 ãƒãƒ¼ãƒˆæ¥ç¶š
+    # ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ1 TimedFloat
     ret0 = g_out_ports[g_port1].connect(g_conprof1)
 
-    # ¥Ç¡¼¥¿¥İ¡¼¥È2 TimedFloatSeq
+    # ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ2 TimedFloatSeq
     ret1 = g_out_ports[g_port2].connect(g_conprof2)
 
-    # ¥µ¡¼¥Ó¥¹¥İ¡¼¥È MyService
+    # ã‚µãƒ¼ãƒ“ã‚¹ãƒãƒ¼ãƒˆ MyService
     ret2 = g_out_ports[g_port3].connect(g_conprof3)
 
-    ## 4 ¥¢¥¯¥Æ¥£¥Ù¡¼¥È
+    ## 4 ã‚¢ã‚¯ãƒ†ã‚£ãƒ™ãƒ¼ãƒˆ
     ec_recv[0].activate_component(g_compo_recv.rtc_ref)
     time.sleep(sleep_recv_act_time)
     ec_send[0].activate_component(g_compo_send.rtc_ref)
 
     time.sleep(sleep_act_time)
 
-    ## 5 ¥Ç¥£¥¢¥¯¥Æ¥£¥Ù¡¼¥È
+    ## 5 ãƒ‡ã‚£ã‚¢ã‚¯ãƒ†ã‚£ãƒ™ãƒ¼ãƒˆ
     ec_send[0].deactivate_component(g_compo_send.rtc_ref)
     ec_recv[0].deactivate_component(g_compo_recv.rtc_ref)
 
-    ## 6 ¥İ¡¼¥ÈÀÚÃÇ
+    ## 6 ãƒãƒ¼ãƒˆåˆ‡æ–­
     g_in_ports[g_port3].disconnect(g_conprof3.connector_id)
     g_in_ports[g_port2].disconnect(g_conprof2.connector_id)
     g_in_ports[g_port1].disconnect(g_conprof1.connector_id)
 
-    ## ¼õ¿®¥Õ¥¡¥¤¥ëÍ­ÌµÈ½Äê
+    ## å—ä¿¡ãƒ•ã‚¡ã‚¤ãƒ«æœ‰ç„¡åˆ¤å®š
     if os.path.isfile(g_diff_recv_file) == False:
         fout = open(g_test_result_file, 'a')
         message = g_mess_header + g_test_case + str(case_no) + " " + g_test_cnt + str(i+1) + g_mess_footer
@@ -679,26 +679,26 @@ for i in range(loop_count):
         time.sleep(sleep_for_time)
         continue
 
-    ## 7 Á÷¼õ¿®¥Ç¡¼¥¿Èæ³Ó
+    ## 7 é€å—ä¿¡ãƒ‡ãƒ¼ã‚¿æ¯”è¼ƒ
     time.sleep(sleep_act_time)
     bret = diff_file()
 
-    ## º¹Ê¬¥Õ¥¡¥¤¥ë¤«¤é¥Æ¥¹¥È·ë²Ì½ĞÎÏ
+    ## å·®åˆ†ãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰ãƒ†ã‚¹ãƒˆçµæœå‡ºåŠ›
     fout = open(g_test_result_file, 'a')
     message = g_mess_header + g_test_case + str(case_no) + " " + g_test_cnt + str(i+1) + g_mess_footer
-    # bret==True ¤Ê¤éÁ÷¼õ¿®¥Ç¡¼¥¿°ìÃ×
+    # bret==True ãªã‚‰é€å—ä¿¡ãƒ‡ãƒ¼ã‚¿ä¸€è‡´
     if bret == True:
-        # ¥Æ¥¹¥È·ë²Ì OK
+        # ãƒ†ã‚¹ãƒˆçµæœ OK
         message = message + g_test_ok
         print message
         fout.write(message + '\n')
     else:
-        # ¥Æ¥¹¥È·ë²Ì NG
+        # ãƒ†ã‚¹ãƒˆçµæœ NG
         message = message + g_test_ng
         print message
         message = message + g_test_ng_message
         fout.write(message + '\n')
-        # ¼õ¿®¥Ç¡¼¥¿¤ò¥Æ¥¹¥È·ë²Ì¥Õ¥¡¥¤¥ë¤Ø¥³¥Ô¡¼
+        # å—ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’ãƒ†ã‚¹ãƒˆçµæœãƒ•ã‚¡ã‚¤ãƒ«ã¸ã‚³ãƒ”ãƒ¼
         fin2 = open(g_diff_recv_file, 'r')
         while(1):
             s2 = fin2.readline()
@@ -711,7 +711,7 @@ for i in range(loop_count):
     time.sleep(sleep_for_time)
 
 ##--------------------------------------------------------------------
-## ÀÜÂ³¥¿¥¤¥×¡§flush  Êı¸ş¡§out->in  ÀÜÂ³¡¦ÀÚÃÇ¡¦Activate¡¦Deactivate¥Æ¥¹¥È2
+## æ¥ç¶šã‚¿ã‚¤ãƒ—ï¼šflush  æ–¹å‘ï¼šout->in  æ¥ç¶šãƒ»åˆ‡æ–­ãƒ»Activateãƒ»Deactivateãƒ†ã‚¹ãƒˆ2
 ##--------------------------------------------------------------------
 case_no = case_no + 1
 fout = open(g_test_result_file, 'a')
@@ -724,39 +724,39 @@ print message
 
 for i in range(loop_count):
 
-    ## 2 ¼õ¿®¥Ç¡¼¥¿¥Õ¥¡¥¤¥ëºï½ü
+    ## 2 å—ä¿¡ãƒ‡ãƒ¼ã‚¿ãƒ•ã‚¡ã‚¤ãƒ«å‰Šé™¤
     delete_recv_file()
 
-    ## 1 ¥³¥Í¥¯¥¿¡¼¥×¥í¥Õ¥¡¥¤¥ëÀßÄê
+    ## 1 ã‚³ãƒã‚¯ã‚¿ãƒ¼ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«è¨­å®š
     make_connecter_profile("flush", "", 0)
 
-    ## 3 ¥İ¡¼¥ÈÀÜÂ³
-    # ¥Ç¡¼¥¿¥İ¡¼¥È1 TimedFloat
+    ## 3 ãƒãƒ¼ãƒˆæ¥ç¶š
+    # ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ1 TimedFloat
     ret0 = g_out_ports[g_port1].connect(g_conprof1)
 
-    # ¥Ç¡¼¥¿¥İ¡¼¥È2 TimedFloatSeq
+    # ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ2 TimedFloatSeq
     ret1 = g_out_ports[g_port2].connect(g_conprof2)
 
-    # ¥µ¡¼¥Ó¥¹¥İ¡¼¥È MyService
+    # ã‚µãƒ¼ãƒ“ã‚¹ãƒãƒ¼ãƒˆ MyService
     ret2 = g_out_ports[g_port3].connect(g_conprof3)
 
-    ## 4 ¥¢¥¯¥Æ¥£¥Ù¡¼¥È
+    ## 4 ã‚¢ã‚¯ãƒ†ã‚£ãƒ™ãƒ¼ãƒˆ
     ec_recv[0].activate_component(g_compo_recv.rtc_ref)
     time.sleep(sleep_recv_act_time)
     ec_send[0].activate_component(g_compo_send.rtc_ref)
 
     time.sleep(sleep_act_time)
 
-    ## 6 ¥İ¡¼¥ÈÀÚÃÇ
+    ## 6 ãƒãƒ¼ãƒˆåˆ‡æ–­
     g_in_ports[g_port3].disconnect(g_conprof3.connector_id)
     g_in_ports[g_port2].disconnect(g_conprof2.connector_id)
     g_in_ports[g_port1].disconnect(g_conprof1.connector_id)
 
-    ## 5 ¥Ç¥£¥¢¥¯¥Æ¥£¥Ù¡¼¥È
+    ## 5 ãƒ‡ã‚£ã‚¢ã‚¯ãƒ†ã‚£ãƒ™ãƒ¼ãƒˆ
     ec_send[0].deactivate_component(g_compo_send.rtc_ref)
     ec_recv[0].deactivate_component(g_compo_recv.rtc_ref)
 
-    ## ¼õ¿®¥Õ¥¡¥¤¥ëÍ­ÌµÈ½Äê
+    ## å—ä¿¡ãƒ•ã‚¡ã‚¤ãƒ«æœ‰ç„¡åˆ¤å®š
     if os.path.isfile(g_diff_recv_file) == False:
         fout = open(g_test_result_file, 'a')
         message = g_mess_header + g_test_case + str(case_no) + " " + g_test_cnt + str(i+1) + g_mess_footer
@@ -767,26 +767,26 @@ for i in range(loop_count):
         time.sleep(sleep_for_time)
         continue
 
-    ## 7 Á÷¼õ¿®¥Ç¡¼¥¿Èæ³Ó
+    ## 7 é€å—ä¿¡ãƒ‡ãƒ¼ã‚¿æ¯”è¼ƒ
     time.sleep(sleep_act_time)
     bret = diff_file()
 
-    ## º¹Ê¬¥Õ¥¡¥¤¥ë¤«¤é¥Æ¥¹¥È·ë²Ì½ĞÎÏ
+    ## å·®åˆ†ãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰ãƒ†ã‚¹ãƒˆçµæœå‡ºåŠ›
     fout = open(g_test_result_file, 'a')
     message = g_mess_header + g_test_case + str(case_no) + " " + g_test_cnt + str(i+1) + g_mess_footer
-    # bret==True ¤Ê¤éÁ÷¼õ¿®¥Ç¡¼¥¿°ìÃ×
+    # bret==True ãªã‚‰é€å—ä¿¡ãƒ‡ãƒ¼ã‚¿ä¸€è‡´
     if bret == True:
-        # ¥Æ¥¹¥È·ë²Ì OK
+        # ãƒ†ã‚¹ãƒˆçµæœ OK
         message = message + g_test_ok
         print message
         fout.write(message + '\n')
     else:
-        # ¥Æ¥¹¥È·ë²Ì NG
+        # ãƒ†ã‚¹ãƒˆçµæœ NG
         message = message + g_test_ng
         print message
         message = message + g_test_ng_message
         fout.write(message + '\n')
-        # ¼õ¿®¥Ç¡¼¥¿¤ò¥Æ¥¹¥È·ë²Ì¥Õ¥¡¥¤¥ë¤Ø¥³¥Ô¡¼
+        # å—ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’ãƒ†ã‚¹ãƒˆçµæœãƒ•ã‚¡ã‚¤ãƒ«ã¸ã‚³ãƒ”ãƒ¼
         fin2 = open(g_diff_recv_file, 'r')
         while(1):
             s2 = fin2.readline()
@@ -799,7 +799,7 @@ for i in range(loop_count):
     time.sleep(sleep_for_time)
 
 ##--------------------------------------------------------------------
-## ÀÜÂ³¥¿¥¤¥×¡§flush  Êı¸ş¡§in->out  ÀÜÂ³¡¦ÀÚÃÇ¡¦Activate¡¦Deactivate¥Æ¥¹¥È2
+## æ¥ç¶šã‚¿ã‚¤ãƒ—ï¼šflush  æ–¹å‘ï¼šin->out  æ¥ç¶šãƒ»åˆ‡æ–­ãƒ»Activateãƒ»Deactivateãƒ†ã‚¹ãƒˆ2
 ##--------------------------------------------------------------------
 case_no = case_no + 1
 fout = open(g_test_result_file, 'a')
@@ -812,39 +812,39 @@ print message
 
 for i in range(loop_count):
 
-    ## 2 ¼õ¿®¥Ç¡¼¥¿¥Õ¥¡¥¤¥ëºï½ü
+    ## 2 å—ä¿¡ãƒ‡ãƒ¼ã‚¿ãƒ•ã‚¡ã‚¤ãƒ«å‰Šé™¤
     delete_recv_file()
 
-    ## 1 ¥³¥Í¥¯¥¿¡¼¥×¥í¥Õ¥¡¥¤¥ëÀßÄê
+    ## 1 ã‚³ãƒã‚¯ã‚¿ãƒ¼ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«è¨­å®š
     make_connecter_profile("flush", "", 1)
 
-    ## 3 ¥İ¡¼¥ÈÀÜÂ³
-    # ¥Ç¡¼¥¿¥İ¡¼¥È1 TimedFloat
+    ## 3 ãƒãƒ¼ãƒˆæ¥ç¶š
+    # ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ1 TimedFloat
     ret0 = g_out_ports[g_port1].connect(g_conprof1)
 
-    # ¥Ç¡¼¥¿¥İ¡¼¥È2 TimedFloatSeq
+    # ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ2 TimedFloatSeq
     ret1 = g_out_ports[g_port2].connect(g_conprof2)
 
-    # ¥µ¡¼¥Ó¥¹¥İ¡¼¥È MyService
+    # ã‚µãƒ¼ãƒ“ã‚¹ãƒãƒ¼ãƒˆ MyService
     ret2 = g_out_ports[g_port3].connect(g_conprof3)
 
-    ## 4 ¥¢¥¯¥Æ¥£¥Ù¡¼¥È
+    ## 4 ã‚¢ã‚¯ãƒ†ã‚£ãƒ™ãƒ¼ãƒˆ
     ec_recv[0].activate_component(g_compo_recv.rtc_ref)
     time.sleep(sleep_recv_act_time)
     ec_send[0].activate_component(g_compo_send.rtc_ref)
 
     time.sleep(sleep_act_time)
 
-    ## 6 ¥İ¡¼¥ÈÀÚÃÇ
+    ## 6 ãƒãƒ¼ãƒˆåˆ‡æ–­
     g_in_ports[g_port3].disconnect(g_conprof3.connector_id)
     g_in_ports[g_port2].disconnect(g_conprof2.connector_id)
     g_in_ports[g_port1].disconnect(g_conprof1.connector_id)
 
-    ## 5 ¥Ç¥£¥¢¥¯¥Æ¥£¥Ù¡¼¥È
+    ## 5 ãƒ‡ã‚£ã‚¢ã‚¯ãƒ†ã‚£ãƒ™ãƒ¼ãƒˆ
     ec_send[0].deactivate_component(g_compo_send.rtc_ref)
     ec_recv[0].deactivate_component(g_compo_recv.rtc_ref)
 
-    ## ¼õ¿®¥Õ¥¡¥¤¥ëÍ­ÌµÈ½Äê
+    ## å—ä¿¡ãƒ•ã‚¡ã‚¤ãƒ«æœ‰ç„¡åˆ¤å®š
     if os.path.isfile(g_diff_recv_file) == False:
         fout = open(g_test_result_file, 'a')
         message = g_mess_header + g_test_case + str(case_no) + " " + g_test_cnt + str(i+1) + g_mess_footer
@@ -855,26 +855,26 @@ for i in range(loop_count):
         time.sleep(sleep_for_time)
         continue
 
-    ## 7 Á÷¼õ¿®¥Ç¡¼¥¿Èæ³Ó
+    ## 7 é€å—ä¿¡ãƒ‡ãƒ¼ã‚¿æ¯”è¼ƒ
     time.sleep(sleep_act_time)
     bret = diff_file()
 
-    ## º¹Ê¬¥Õ¥¡¥¤¥ë¤«¤é¥Æ¥¹¥È·ë²Ì½ĞÎÏ
+    ## å·®åˆ†ãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰ãƒ†ã‚¹ãƒˆçµæœå‡ºåŠ›
     fout = open(g_test_result_file, 'a')
     message = g_mess_header + g_test_case + str(case_no) + " " + g_test_cnt + str(i+1) + g_mess_footer
-    # bret==True ¤Ê¤éÁ÷¼õ¿®¥Ç¡¼¥¿°ìÃ×
+    # bret==True ãªã‚‰é€å—ä¿¡ãƒ‡ãƒ¼ã‚¿ä¸€è‡´
     if bret == True:
-        # ¥Æ¥¹¥È·ë²Ì OK
+        # ãƒ†ã‚¹ãƒˆçµæœ OK
         message = message + g_test_ok
         print message
         fout.write(message + '\n')
     else:
-        # ¥Æ¥¹¥È·ë²Ì NG
+        # ãƒ†ã‚¹ãƒˆçµæœ NG
         message = message + g_test_ng
         print message
         message = message + g_test_ng_message
         fout.write(message + '\n')
-        # ¼õ¿®¥Ç¡¼¥¿¤ò¥Æ¥¹¥È·ë²Ì¥Õ¥¡¥¤¥ë¤Ø¥³¥Ô¡¼
+        # å—ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’ãƒ†ã‚¹ãƒˆçµæœãƒ•ã‚¡ã‚¤ãƒ«ã¸ã‚³ãƒ”ãƒ¼
         fin2 = open(g_diff_recv_file, 'r')
         while(1):
             s2 = fin2.readline()
@@ -888,9 +888,9 @@ for i in range(loop_count):
 
 
 ##--------------------------------------------------------------------
-## ÀÜÂ³¥¿¥¤¥×¡§flush  Êı¸ş¡§out->in  ÀÜÂ³¡¦ÀÚÃÇ¡¦Activate¡¦Deactivate¥Æ¥¹¥È3
+## æ¥ç¶šã‚¿ã‚¤ãƒ—ï¼šflush  æ–¹å‘ï¼šout->in  æ¥ç¶šãƒ»åˆ‡æ–­ãƒ»Activateãƒ»Deactivateãƒ†ã‚¹ãƒˆ3
 ##--------------------------------------------------------------------
-##  ¡üÃí°Õ¡§Activate¤òÀè¤Ë¹Ô¤Ã¤Æ¤¤¤ë°Ù¡¢¼õ¿®¥Ç¡¼¥¿¤ÏÅÓÃæ¤«¤é¤ÎÆâÍÆ¤Ë¤Ê¤ê¤Ş¤¹¡£
+##  â—æ³¨æ„ï¼šActivateã‚’å…ˆã«è¡Œã£ã¦ã„ã‚‹ç‚ºã€å—ä¿¡ãƒ‡ãƒ¼ã‚¿ã¯é€”ä¸­ã‹ã‚‰ã®å†…å®¹ã«ãªã‚Šã¾ã™ã€‚
 case_no = case_no + 1
 fout = open(g_test_result_file, 'a')
 message = g_mess_header + g_test_case + str(case_no) + " "
@@ -902,39 +902,39 @@ print message
 
 for i in range(loop_count):
 
-    ## 2 ¼õ¿®¥Ç¡¼¥¿¥Õ¥¡¥¤¥ëºï½ü
+    ## 2 å—ä¿¡ãƒ‡ãƒ¼ã‚¿ãƒ•ã‚¡ã‚¤ãƒ«å‰Šé™¤
     delete_recv_file()
 
-    ## 1 ¥³¥Í¥¯¥¿¡¼¥×¥í¥Õ¥¡¥¤¥ëÀßÄê
+    ## 1 ã‚³ãƒã‚¯ã‚¿ãƒ¼ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«è¨­å®š
     make_connecter_profile("flush", "", 0)
 
-    ## 4 ¥¢¥¯¥Æ¥£¥Ù¡¼¥È
+    ## 4 ã‚¢ã‚¯ãƒ†ã‚£ãƒ™ãƒ¼ãƒˆ
     ec_recv[0].activate_component(g_compo_recv.rtc_ref)
     time.sleep(sleep_recv_act_time)
     ec_send[0].activate_component(g_compo_send.rtc_ref)
 
-    ## 3 ¥İ¡¼¥ÈÀÜÂ³
-    # ¥Ç¡¼¥¿¥İ¡¼¥È1 TimedFloat
+    ## 3 ãƒãƒ¼ãƒˆæ¥ç¶š
+    # ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ1 TimedFloat
     ret0 = g_out_ports[g_port1].connect(g_conprof1)
 
-    # ¥Ç¡¼¥¿¥İ¡¼¥È2 TimedFloatSeq
+    # ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ2 TimedFloatSeq
     ret1 = g_out_ports[g_port2].connect(g_conprof2)
 
-    # ¥µ¡¼¥Ó¥¹¥İ¡¼¥È MyService
+    # ã‚µãƒ¼ãƒ“ã‚¹ãƒãƒ¼ãƒˆ MyService
     ret2 = g_out_ports[g_port3].connect(g_conprof3)
 
     time.sleep(sleep_act_time)
 
-    ## 5 ¥Ç¥£¥¢¥¯¥Æ¥£¥Ù¡¼¥È
+    ## 5 ãƒ‡ã‚£ã‚¢ã‚¯ãƒ†ã‚£ãƒ™ãƒ¼ãƒˆ
     ec_send[0].deactivate_component(g_compo_send.rtc_ref)
     ec_recv[0].deactivate_component(g_compo_recv.rtc_ref)
 
-    ## 6 ¥İ¡¼¥ÈÀÚÃÇ
+    ## 6 ãƒãƒ¼ãƒˆåˆ‡æ–­
     g_in_ports[g_port3].disconnect(g_conprof3.connector_id)
     g_in_ports[g_port2].disconnect(g_conprof2.connector_id)
     g_in_ports[g_port1].disconnect(g_conprof1.connector_id)
 
-    ## ¼õ¿®¥Õ¥¡¥¤¥ëÍ­ÌµÈ½Äê
+    ## å—ä¿¡ãƒ•ã‚¡ã‚¤ãƒ«æœ‰ç„¡åˆ¤å®š
     if os.path.isfile(g_diff_recv_file) == False:
         fout = open(g_test_result_file, 'a')
         message = g_mess_header + g_test_case + str(case_no) + " " + g_test_cnt + str(i+1) + g_mess_footer
@@ -945,26 +945,26 @@ for i in range(loop_count):
         time.sleep(sleep_for_time)
         continue
 
-    ## 7 Á÷¼õ¿®¥Ç¡¼¥¿Èæ³Ó
+    ## 7 é€å—ä¿¡ãƒ‡ãƒ¼ã‚¿æ¯”è¼ƒ
     time.sleep(sleep_act_time)
     bret = diff_file()
 
-    ## º¹Ê¬¥Õ¥¡¥¤¥ë¤«¤é¥Æ¥¹¥È·ë²Ì½ĞÎÏ
+    ## å·®åˆ†ãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰ãƒ†ã‚¹ãƒˆçµæœå‡ºåŠ›
     fout = open(g_test_result_file, 'a')
     message = g_mess_header + g_test_case + str(case_no) + " " + g_test_cnt + str(i+1) + g_mess_footer
-    # bret==True ¤Ê¤éÁ÷¼õ¿®¥Ç¡¼¥¿°ìÃ×
+    # bret==True ãªã‚‰é€å—ä¿¡ãƒ‡ãƒ¼ã‚¿ä¸€è‡´
     if bret == True:
-        # ¥Æ¥¹¥È·ë²Ì OK
+        # ãƒ†ã‚¹ãƒˆçµæœ OK
         message = message + g_test_ok
         print message
         fout.write(message + '\n')
     else:
-        # ¥Æ¥¹¥È·ë²Ì NG
+        # ãƒ†ã‚¹ãƒˆçµæœ NG
         message = message + g_test_ng
         print message
         message = message + g_test_ng_message
         fout.write(message + '\n')
-        # ¼õ¿®¥Ç¡¼¥¿¤ò¥Æ¥¹¥È·ë²Ì¥Õ¥¡¥¤¥ë¤Ø¥³¥Ô¡¼
+        # å—ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’ãƒ†ã‚¹ãƒˆçµæœãƒ•ã‚¡ã‚¤ãƒ«ã¸ã‚³ãƒ”ãƒ¼
         fin2 = open(g_diff_recv_file, 'r')
         while(1):
             s2 = fin2.readline()
@@ -977,9 +977,9 @@ for i in range(loop_count):
     time.sleep(sleep_for_time)
 
 ##--------------------------------------------------------------------
-## ÀÜÂ³¥¿¥¤¥×¡§flush  Êı¸ş¡§in->out  ÀÜÂ³¡¦ÀÚÃÇ¡¦Activate¡¦Deactivate¥Æ¥¹¥È3
+## æ¥ç¶šã‚¿ã‚¤ãƒ—ï¼šflush  æ–¹å‘ï¼šin->out  æ¥ç¶šãƒ»åˆ‡æ–­ãƒ»Activateãƒ»Deactivateãƒ†ã‚¹ãƒˆ3
 ##--------------------------------------------------------------------
-##  ¡üÃí°Õ¡§Activate¤òÀè¤Ë¹Ô¤Ã¤Æ¤¤¤ë°Ù¡¢¼õ¿®¥Ç¡¼¥¿¤ÏÅÓÃæ¤«¤é¤ÎÆâÍÆ¤Ë¤Ê¤ê¤Ş¤¹¡£
+##  â—æ³¨æ„ï¼šActivateã‚’å…ˆã«è¡Œã£ã¦ã„ã‚‹ç‚ºã€å—ä¿¡ãƒ‡ãƒ¼ã‚¿ã¯é€”ä¸­ã‹ã‚‰ã®å†…å®¹ã«ãªã‚Šã¾ã™ã€‚
 case_no = case_no + 1
 fout = open(g_test_result_file, 'a')
 message = g_mess_header + g_test_case + str(case_no) + " "
@@ -991,39 +991,39 @@ print message
 
 for i in range(loop_count):
 
-    ## 2 ¼õ¿®¥Ç¡¼¥¿¥Õ¥¡¥¤¥ëºï½ü
+    ## 2 å—ä¿¡ãƒ‡ãƒ¼ã‚¿ãƒ•ã‚¡ã‚¤ãƒ«å‰Šé™¤
     delete_recv_file()
 
-    ## 1 ¥³¥Í¥¯¥¿¡¼¥×¥í¥Õ¥¡¥¤¥ëÀßÄê
+    ## 1 ã‚³ãƒã‚¯ã‚¿ãƒ¼ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«è¨­å®š
     make_connecter_profile("flush", "", 1)
 
-    ## 4 ¥¢¥¯¥Æ¥£¥Ù¡¼¥È
+    ## 4 ã‚¢ã‚¯ãƒ†ã‚£ãƒ™ãƒ¼ãƒˆ
     ec_recv[0].activate_component(g_compo_recv.rtc_ref)
     time.sleep(sleep_recv_act_time)
     ec_send[0].activate_component(g_compo_send.rtc_ref)
 
-    ## 3 ¥İ¡¼¥ÈÀÜÂ³
-    # ¥Ç¡¼¥¿¥İ¡¼¥È1 TimedFloat
+    ## 3 ãƒãƒ¼ãƒˆæ¥ç¶š
+    # ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ1 TimedFloat
     ret0 = g_out_ports[g_port1].connect(g_conprof1)
 
-    # ¥Ç¡¼¥¿¥İ¡¼¥È2 TimedFloatSeq
+    # ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ2 TimedFloatSeq
     ret1 = g_out_ports[g_port2].connect(g_conprof2)
 
-    # ¥µ¡¼¥Ó¥¹¥İ¡¼¥È MyService
+    # ã‚µãƒ¼ãƒ“ã‚¹ãƒãƒ¼ãƒˆ MyService
     ret2 = g_out_ports[g_port3].connect(g_conprof3)
 
     time.sleep(sleep_act_time)
 
-    ## 5 ¥Ç¥£¥¢¥¯¥Æ¥£¥Ù¡¼¥È
+    ## 5 ãƒ‡ã‚£ã‚¢ã‚¯ãƒ†ã‚£ãƒ™ãƒ¼ãƒˆ
     ec_send[0].deactivate_component(g_compo_send.rtc_ref)
     ec_recv[0].deactivate_component(g_compo_recv.rtc_ref)
 
-    ## 6 ¥İ¡¼¥ÈÀÚÃÇ
+    ## 6 ãƒãƒ¼ãƒˆåˆ‡æ–­
     g_in_ports[g_port3].disconnect(g_conprof3.connector_id)
     g_in_ports[g_port2].disconnect(g_conprof2.connector_id)
     g_in_ports[g_port1].disconnect(g_conprof1.connector_id)
 
-    ## ¼õ¿®¥Õ¥¡¥¤¥ëÍ­ÌµÈ½Äê
+    ## å—ä¿¡ãƒ•ã‚¡ã‚¤ãƒ«æœ‰ç„¡åˆ¤å®š
     if os.path.isfile(g_diff_recv_file) == False:
         fout = open(g_test_result_file, 'a')
         message = g_mess_header + g_test_case + str(case_no) + " " + g_test_cnt + str(i+1) + g_mess_footer
@@ -1034,26 +1034,26 @@ for i in range(loop_count):
         time.sleep(sleep_for_time)
         continue
 
-    ## 7 Á÷¼õ¿®¥Ç¡¼¥¿Èæ³Ó
+    ## 7 é€å—ä¿¡ãƒ‡ãƒ¼ã‚¿æ¯”è¼ƒ
     time.sleep(sleep_act_time)
     bret = diff_file()
 
-    ## º¹Ê¬¥Õ¥¡¥¤¥ë¤«¤é¥Æ¥¹¥È·ë²Ì½ĞÎÏ
+    ## å·®åˆ†ãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰ãƒ†ã‚¹ãƒˆçµæœå‡ºåŠ›
     fout = open(g_test_result_file, 'a')
     message = g_mess_header + g_test_case + str(case_no) + " " + g_test_cnt + str(i+1) + g_mess_footer
-    # bret==True ¤Ê¤éÁ÷¼õ¿®¥Ç¡¼¥¿°ìÃ×
+    # bret==True ãªã‚‰é€å—ä¿¡ãƒ‡ãƒ¼ã‚¿ä¸€è‡´
     if bret == True:
-        # ¥Æ¥¹¥È·ë²Ì OK
+        # ãƒ†ã‚¹ãƒˆçµæœ OK
         message = message + g_test_ok
         print message
         fout.write(message + '\n')
     else:
-        # ¥Æ¥¹¥È·ë²Ì NG
+        # ãƒ†ã‚¹ãƒˆçµæœ NG
         message = message + g_test_ng
         print message
         message = message + g_test_ng_message
         fout.write(message + '\n')
-        # ¼õ¿®¥Ç¡¼¥¿¤ò¥Æ¥¹¥È·ë²Ì¥Õ¥¡¥¤¥ë¤Ø¥³¥Ô¡¼
+        # å—ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’ãƒ†ã‚¹ãƒˆçµæœãƒ•ã‚¡ã‚¤ãƒ«ã¸ã‚³ãƒ”ãƒ¼
         fin2 = open(g_diff_recv_file, 'r')
         while(1):
             s2 = fin2.readline()
@@ -1066,9 +1066,9 @@ for i in range(loop_count):
     time.sleep(sleep_for_time)
 
 ##--------------------------------------------------------------------
-## ÀÜÂ³¥¿¥¤¥×¡§flush  Êı¸ş¡§out->in  ÀÜÂ³¡¦ÀÚÃÇ¡¦Activate¡¦Deactivate¥Æ¥¹¥È4
+## æ¥ç¶šã‚¿ã‚¤ãƒ—ï¼šflush  æ–¹å‘ï¼šout->in  æ¥ç¶šãƒ»åˆ‡æ–­ãƒ»Activateãƒ»Deactivateãƒ†ã‚¹ãƒˆ4
 ##--------------------------------------------------------------------
-##  ¡üÃí°Õ¡§Activate¤òÀè¤Ë¹Ô¤Ã¤Æ¤¤¤ë°Ù¡¢¼õ¿®¥Ç¡¼¥¿¤ÏÅÓÃæ¤«¤é¤ÎÆâÍÆ¤Ë¤Ê¤ê¤Ş¤¹¡£
+##  â—æ³¨æ„ï¼šActivateã‚’å…ˆã«è¡Œã£ã¦ã„ã‚‹ç‚ºã€å—ä¿¡ãƒ‡ãƒ¼ã‚¿ã¯é€”ä¸­ã‹ã‚‰ã®å†…å®¹ã«ãªã‚Šã¾ã™ã€‚
 case_no = case_no + 1
 fout = open(g_test_result_file, 'a')
 message = g_mess_header + g_test_case + str(case_no) + " "
@@ -1080,39 +1080,39 @@ print message
 
 for i in range(loop_count):
 
-    ## 2 ¼õ¿®¥Ç¡¼¥¿¥Õ¥¡¥¤¥ëºï½ü
+    ## 2 å—ä¿¡ãƒ‡ãƒ¼ã‚¿ãƒ•ã‚¡ã‚¤ãƒ«å‰Šé™¤
     delete_recv_file()
 
-    ## 1 ¥³¥Í¥¯¥¿¡¼¥×¥í¥Õ¥¡¥¤¥ëÀßÄê
+    ## 1 ã‚³ãƒã‚¯ã‚¿ãƒ¼ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«è¨­å®š
     make_connecter_profile("flush", "", 0)
 
-    ## 4 ¥¢¥¯¥Æ¥£¥Ù¡¼¥È
+    ## 4 ã‚¢ã‚¯ãƒ†ã‚£ãƒ™ãƒ¼ãƒˆ
     ec_recv[0].activate_component(g_compo_recv.rtc_ref)
     time.sleep(sleep_recv_act_time)
     ec_send[0].activate_component(g_compo_send.rtc_ref)
 
-    ## 3 ¥İ¡¼¥ÈÀÜÂ³
-    # ¥Ç¡¼¥¿¥İ¡¼¥È1 TimedFloat
+    ## 3 ãƒãƒ¼ãƒˆæ¥ç¶š
+    # ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ1 TimedFloat
     ret0 = g_out_ports[g_port1].connect(g_conprof1)
 
-    # ¥Ç¡¼¥¿¥İ¡¼¥È2 TimedFloatSeq
+    # ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ2 TimedFloatSeq
     ret1 = g_out_ports[g_port2].connect(g_conprof2)
 
-    # ¥µ¡¼¥Ó¥¹¥İ¡¼¥È MyService
+    # ã‚µãƒ¼ãƒ“ã‚¹ãƒãƒ¼ãƒˆ MyService
     ret2 = g_out_ports[g_port3].connect(g_conprof3)
 
     time.sleep(sleep_act_time)
 
-    ## 6 ¥İ¡¼¥ÈÀÚÃÇ
+    ## 6 ãƒãƒ¼ãƒˆåˆ‡æ–­
     g_in_ports[g_port3].disconnect(g_conprof3.connector_id)
     g_in_ports[g_port2].disconnect(g_conprof2.connector_id)
     g_in_ports[g_port1].disconnect(g_conprof1.connector_id)
 
-    ## 5 ¥Ç¥£¥¢¥¯¥Æ¥£¥Ù¡¼¥È
+    ## 5 ãƒ‡ã‚£ã‚¢ã‚¯ãƒ†ã‚£ãƒ™ãƒ¼ãƒˆ
     ec_send[0].deactivate_component(g_compo_send.rtc_ref)
     ec_recv[0].deactivate_component(g_compo_recv.rtc_ref)
 
-    ## ¼õ¿®¥Õ¥¡¥¤¥ëÍ­ÌµÈ½Äê
+    ## å—ä¿¡ãƒ•ã‚¡ã‚¤ãƒ«æœ‰ç„¡åˆ¤å®š
     if os.path.isfile(g_diff_recv_file) == False:
         fout = open(g_test_result_file, 'a')
         message = g_mess_header + g_test_case + str(case_no) + " " + g_test_cnt + str(i+1) + g_mess_footer
@@ -1123,26 +1123,26 @@ for i in range(loop_count):
         time.sleep(sleep_for_time)
         continue
 
-    ## 7 Á÷¼õ¿®¥Ç¡¼¥¿Èæ³Ó
+    ## 7 é€å—ä¿¡ãƒ‡ãƒ¼ã‚¿æ¯”è¼ƒ
     time.sleep(sleep_act_time)
     bret = diff_file()
 
-    ## º¹Ê¬¥Õ¥¡¥¤¥ë¤«¤é¥Æ¥¹¥È·ë²Ì½ĞÎÏ
+    ## å·®åˆ†ãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰ãƒ†ã‚¹ãƒˆçµæœå‡ºåŠ›
     fout = open(g_test_result_file, 'a')
     message = g_mess_header + g_test_case + str(case_no) + " " + g_test_cnt + str(i+1) + g_mess_footer
-    # bret==True ¤Ê¤éÁ÷¼õ¿®¥Ç¡¼¥¿°ìÃ×
+    # bret==True ãªã‚‰é€å—ä¿¡ãƒ‡ãƒ¼ã‚¿ä¸€è‡´
     if bret == True:
-        # ¥Æ¥¹¥È·ë²Ì OK
+        # ãƒ†ã‚¹ãƒˆçµæœ OK
         message = message + g_test_ok
         print message
         fout.write(message + '\n')
     else:
-        # ¥Æ¥¹¥È·ë²Ì NG
+        # ãƒ†ã‚¹ãƒˆçµæœ NG
         message = message + g_test_ng
         print message
         message = message + g_test_ng_message
         fout.write(message + '\n')
-        # ¼õ¿®¥Ç¡¼¥¿¤ò¥Æ¥¹¥È·ë²Ì¥Õ¥¡¥¤¥ë¤Ø¥³¥Ô¡¼
+        # å—ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’ãƒ†ã‚¹ãƒˆçµæœãƒ•ã‚¡ã‚¤ãƒ«ã¸ã‚³ãƒ”ãƒ¼
         fin2 = open(g_diff_recv_file, 'r')
         while(1):
             s2 = fin2.readline()
@@ -1155,9 +1155,9 @@ for i in range(loop_count):
     time.sleep(sleep_for_time)
 
 ##--------------------------------------------------------------------
-## ÀÜÂ³¥¿¥¤¥×¡§flush  Êı¸ş¡§in->out  ÀÜÂ³¡¦ÀÚÃÇ¡¦Activate¡¦Deactivate¥Æ¥¹¥È4
+## æ¥ç¶šã‚¿ã‚¤ãƒ—ï¼šflush  æ–¹å‘ï¼šin->out  æ¥ç¶šãƒ»åˆ‡æ–­ãƒ»Activateãƒ»Deactivateãƒ†ã‚¹ãƒˆ4
 ##--------------------------------------------------------------------
-##  ¡üÃí°Õ¡§Activate¤òÀè¤Ë¹Ô¤Ã¤Æ¤¤¤ë°Ù¡¢¼õ¿®¥Ç¡¼¥¿¤ÏÅÓÃæ¤«¤é¤ÎÆâÍÆ¤Ë¤Ê¤ê¤Ş¤¹¡£
+##  â—æ³¨æ„ï¼šActivateã‚’å…ˆã«è¡Œã£ã¦ã„ã‚‹ç‚ºã€å—ä¿¡ãƒ‡ãƒ¼ã‚¿ã¯é€”ä¸­ã‹ã‚‰ã®å†…å®¹ã«ãªã‚Šã¾ã™ã€‚
 case_no = case_no + 1
 fout = open(g_test_result_file, 'a')
 message = g_mess_header + g_test_case + str(case_no) + " "
@@ -1169,39 +1169,39 @@ print message
 
 for i in range(loop_count):
 
-    ## 2 ¼õ¿®¥Ç¡¼¥¿¥Õ¥¡¥¤¥ëºï½ü
+    ## 2 å—ä¿¡ãƒ‡ãƒ¼ã‚¿ãƒ•ã‚¡ã‚¤ãƒ«å‰Šé™¤
     delete_recv_file()
 
-    ## 1 ¥³¥Í¥¯¥¿¡¼¥×¥í¥Õ¥¡¥¤¥ëÀßÄê
+    ## 1 ã‚³ãƒã‚¯ã‚¿ãƒ¼ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«è¨­å®š
     make_connecter_profile("flush", "", 1)
 
-    ## 4 ¥¢¥¯¥Æ¥£¥Ù¡¼¥È
+    ## 4 ã‚¢ã‚¯ãƒ†ã‚£ãƒ™ãƒ¼ãƒˆ
     ec_recv[0].activate_component(g_compo_recv.rtc_ref)
     time.sleep(sleep_recv_act_time)
     ec_send[0].activate_component(g_compo_send.rtc_ref)
 
-    ## 3 ¥İ¡¼¥ÈÀÜÂ³
-    # ¥Ç¡¼¥¿¥İ¡¼¥È1 TimedFloat
+    ## 3 ãƒãƒ¼ãƒˆæ¥ç¶š
+    # ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ1 TimedFloat
     ret0 = g_out_ports[g_port1].connect(g_conprof1)
 
-    # ¥Ç¡¼¥¿¥İ¡¼¥È2 TimedFloatSeq
+    # ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ2 TimedFloatSeq
     ret1 = g_out_ports[g_port2].connect(g_conprof2)
 
-    # ¥µ¡¼¥Ó¥¹¥İ¡¼¥È MyService
+    # ã‚µãƒ¼ãƒ“ã‚¹ãƒãƒ¼ãƒˆ MyService
     ret2 = g_out_ports[g_port3].connect(g_conprof3)
 
     time.sleep(sleep_act_time)
 
-    ## 6 ¥İ¡¼¥ÈÀÚÃÇ
+    ## 6 ãƒãƒ¼ãƒˆåˆ‡æ–­
     g_in_ports[g_port3].disconnect(g_conprof3.connector_id)
     g_in_ports[g_port2].disconnect(g_conprof2.connector_id)
     g_in_ports[g_port1].disconnect(g_conprof1.connector_id)
 
-    ## 5 ¥Ç¥£¥¢¥¯¥Æ¥£¥Ù¡¼¥È
+    ## 5 ãƒ‡ã‚£ã‚¢ã‚¯ãƒ†ã‚£ãƒ™ãƒ¼ãƒˆ
     ec_send[0].deactivate_component(g_compo_send.rtc_ref)
     ec_recv[0].deactivate_component(g_compo_recv.rtc_ref)
 
-    ## ¼õ¿®¥Õ¥¡¥¤¥ëÍ­ÌµÈ½Äê
+    ## å—ä¿¡ãƒ•ã‚¡ã‚¤ãƒ«æœ‰ç„¡åˆ¤å®š
     if os.path.isfile(g_diff_recv_file) == False:
         fout = open(g_test_result_file, 'a')
         message = g_mess_header + g_test_case + str(case_no) + " " + g_test_cnt + str(i+1) + g_mess_footer
@@ -1212,26 +1212,26 @@ for i in range(loop_count):
         time.sleep(sleep_for_time)
         continue
 
-    ## 7 Á÷¼õ¿®¥Ç¡¼¥¿Èæ³Ó
+    ## 7 é€å—ä¿¡ãƒ‡ãƒ¼ã‚¿æ¯”è¼ƒ
     time.sleep(sleep_act_time)
     bret = diff_file()
 
-    ## º¹Ê¬¥Õ¥¡¥¤¥ë¤«¤é¥Æ¥¹¥È·ë²Ì½ĞÎÏ
+    ## å·®åˆ†ãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰ãƒ†ã‚¹ãƒˆçµæœå‡ºåŠ›
     fout = open(g_test_result_file, 'a')
     message = g_mess_header + g_test_case + str(case_no) + " " + g_test_cnt + str(i+1) + g_mess_footer
-    # bret==True ¤Ê¤éÁ÷¼õ¿®¥Ç¡¼¥¿°ìÃ×
+    # bret==True ãªã‚‰é€å—ä¿¡ãƒ‡ãƒ¼ã‚¿ä¸€è‡´
     if bret == True:
-        # ¥Æ¥¹¥È·ë²Ì OK
+        # ãƒ†ã‚¹ãƒˆçµæœ OK
         message = message + g_test_ok
         print message
         fout.write(message + '\n')
     else:
-        # ¥Æ¥¹¥È·ë²Ì NG
+        # ãƒ†ã‚¹ãƒˆçµæœ NG
         message = message + g_test_ng
         print message
         message = message + g_test_ng_message
         fout.write(message + '\n')
-        # ¼õ¿®¥Ç¡¼¥¿¤ò¥Æ¥¹¥È·ë²Ì¥Õ¥¡¥¤¥ë¤Ø¥³¥Ô¡¼
+        # å—ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’ãƒ†ã‚¹ãƒˆçµæœãƒ•ã‚¡ã‚¤ãƒ«ã¸ã‚³ãƒ”ãƒ¼
         fin2 = open(g_diff_recv_file, 'r')
         while(1):
             s2 = fin2.readline()
@@ -1245,7 +1245,7 @@ for i in range(loop_count):
 
 ##--------------------------------------------------------------------
 ##--------------------------------------------------------------------
-## ÀÜÂ³¥¿¥¤¥×¡§new  Êı¸ş¡§out->in  ¥İ¥ê¥·¡¼¡§ALL  ÀÜÂ³¡¦ÀÚÃÇ¥Æ¥¹¥È3
+## æ¥ç¶šã‚¿ã‚¤ãƒ—ï¼šnew  æ–¹å‘ï¼šout->in  ãƒãƒªã‚·ãƒ¼ï¼šALL  æ¥ç¶šãƒ»åˆ‡æ–­ãƒ†ã‚¹ãƒˆ3
 ##--------------------------------------------------------------------
 case_no = case_no + 1
 fout = open(g_test_result_file, 'a')
@@ -1258,27 +1258,27 @@ print message
 
 for i in range(loop_count):
 
-    ## 1 ¥³¥Í¥¯¥¿¡¼¥×¥í¥Õ¥¡¥¤¥ëÀßÄê
+    ## 1 ã‚³ãƒã‚¯ã‚¿ãƒ¼ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«è¨­å®š
     make_connecter_profile("new", "ALL", 0)
 
-    ## 3 ¥İ¡¼¥ÈÀÜÂ³
-    # ¥Ç¡¼¥¿¥İ¡¼¥È1 TimedFloat
+    ## 3 ãƒãƒ¼ãƒˆæ¥ç¶š
+    # ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ1 TimedFloat
     ret0 = g_out_ports[g_port1].connect(g_conprof1)
 
-    # ¥Ç¡¼¥¿¥İ¡¼¥È2 TimedFloatSeq
+    # ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ2 TimedFloatSeq
     ret1 = g_out_ports[g_port2].connect(g_conprof2)
 
-    # ¥µ¡¼¥Ó¥¹¥İ¡¼¥È MyService
+    # ã‚µãƒ¼ãƒ“ã‚¹ãƒãƒ¼ãƒˆ MyService
     ret2 = g_out_ports[g_port3].connect(g_conprof3)
 
     time.sleep(sleep_connect_time)
 
-    ## 6 ¥İ¡¼¥ÈÀÚÃÇ
+    ## 6 ãƒãƒ¼ãƒˆåˆ‡æ–­
     g_in_ports[g_port3].disconnect(g_conprof3.connector_id)
     g_in_ports[g_port2].disconnect(g_conprof2.connector_id)
     g_in_ports[g_port1].disconnect(g_conprof1.connector_id)
 
-    ## ¥Æ¥¹¥È·ë²Ì½ĞÎÏ
+    ## ãƒ†ã‚¹ãƒˆçµæœå‡ºåŠ›
     fout = open(g_test_result_file, 'a')
     message = g_mess_header + g_test_case + str(case_no) + " " + g_test_cnt + str(i+1) + g_mess_footer
     message = message + g_test_ok
@@ -1289,7 +1289,7 @@ for i in range(loop_count):
     time.sleep(sleep_for_time)
 
 ##--------------------------------------------------------------------
-## ÀÜÂ³¥¿¥¤¥×¡§new  Êı¸ş¡§out->in  ¥İ¥ê¥·¡¼¡§FIFO  ÀÜÂ³¡¦ÀÚÃÇ¥Æ¥¹¥È4
+## æ¥ç¶šã‚¿ã‚¤ãƒ—ï¼šnew  æ–¹å‘ï¼šout->in  ãƒãƒªã‚·ãƒ¼ï¼šFIFO  æ¥ç¶šãƒ»åˆ‡æ–­ãƒ†ã‚¹ãƒˆ4
 ##--------------------------------------------------------------------
 case_no = case_no + 1
 fout = open(g_test_result_file, 'a')
@@ -1302,27 +1302,27 @@ print message
 
 for i in range(loop_count):
 
-    ## 1 ¥³¥Í¥¯¥¿¡¼¥×¥í¥Õ¥¡¥¤¥ëÀßÄê
+    ## 1 ã‚³ãƒã‚¯ã‚¿ãƒ¼ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«è¨­å®š
     make_connecter_profile("new", "FIFO", 0)
 
-    ## 3 ¥İ¡¼¥ÈÀÜÂ³
-    # ¥Ç¡¼¥¿¥İ¡¼¥È1 TimedFloat
+    ## 3 ãƒãƒ¼ãƒˆæ¥ç¶š
+    # ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ1 TimedFloat
     ret0 = g_out_ports[g_port1].connect(g_conprof1)
 
-    # ¥Ç¡¼¥¿¥İ¡¼¥È2 TimedFloatSeq
+    # ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ2 TimedFloatSeq
     ret1 = g_out_ports[g_port2].connect(g_conprof2)
 
-    # ¥µ¡¼¥Ó¥¹¥İ¡¼¥È MyService
+    # ã‚µãƒ¼ãƒ“ã‚¹ãƒãƒ¼ãƒˆ MyService
     ret2 = g_out_ports[g_port3].connect(g_conprof3)
 
     time.sleep(sleep_connect_time)
 
-    ## 6 ¥İ¡¼¥ÈÀÚÃÇ
+    ## 6 ãƒãƒ¼ãƒˆåˆ‡æ–­
     g_in_ports[g_port3].disconnect(g_conprof3.connector_id)
     g_in_ports[g_port2].disconnect(g_conprof2.connector_id)
     g_in_ports[g_port1].disconnect(g_conprof1.connector_id)
 
-    ## ¥Æ¥¹¥È·ë²Ì½ĞÎÏ
+    ## ãƒ†ã‚¹ãƒˆçµæœå‡ºåŠ›
     fout = open(g_test_result_file, 'a')
     message = g_mess_header + g_test_case + str(case_no) + " " + g_test_cnt + str(i+1) + g_mess_footer
     message = message + g_test_ok
@@ -1333,7 +1333,7 @@ for i in range(loop_count):
     time.sleep(sleep_for_time)
 
 ##--------------------------------------------------------------------
-## ÀÜÂ³¥¿¥¤¥×¡§new  Êı¸ş¡§out->in  ¥İ¥ê¥·¡¼¡§NEW  ÀÜÂ³¡¦ÀÚÃÇ¥Æ¥¹¥È6
+## æ¥ç¶šã‚¿ã‚¤ãƒ—ï¼šnew  æ–¹å‘ï¼šout->in  ãƒãƒªã‚·ãƒ¼ï¼šNEW  æ¥ç¶šãƒ»åˆ‡æ–­ãƒ†ã‚¹ãƒˆ6
 ##--------------------------------------------------------------------
 case_no = case_no + 1
 fout = open(g_test_result_file, 'a')
@@ -1346,27 +1346,27 @@ print message
 
 for i in range(loop_count):
 
-    ## 1 ¥³¥Í¥¯¥¿¡¼¥×¥í¥Õ¥¡¥¤¥ëÀßÄê
+    ## 1 ã‚³ãƒã‚¯ã‚¿ãƒ¼ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«è¨­å®š
     make_connecter_profile("new", "NEW", 0)
 
-    ## 3 ¥İ¡¼¥ÈÀÜÂ³
-    # ¥Ç¡¼¥¿¥İ¡¼¥È1 TimedFloat
+    ## 3 ãƒãƒ¼ãƒˆæ¥ç¶š
+    # ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ1 TimedFloat
     ret0 = g_out_ports[g_port1].connect(g_conprof1)
 
-    # ¥Ç¡¼¥¿¥İ¡¼¥È2 TimedFloatSeq
+    # ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ2 TimedFloatSeq
     ret1 = g_out_ports[g_port2].connect(g_conprof2)
 
-    # ¥µ¡¼¥Ó¥¹¥İ¡¼¥È MyService
+    # ã‚µãƒ¼ãƒ“ã‚¹ãƒãƒ¼ãƒˆ MyService
     ret2 = g_out_ports[g_port3].connect(g_conprof3)
 
     time.sleep(sleep_connect_time)
 
-    ## 6 ¥İ¡¼¥ÈÀÚÃÇ
+    ## 6 ãƒãƒ¼ãƒˆåˆ‡æ–­
     g_in_ports[g_port3].disconnect(g_conprof3.connector_id)
     g_in_ports[g_port2].disconnect(g_conprof2.connector_id)
     g_in_ports[g_port1].disconnect(g_conprof1.connector_id)
 
-    ## ¥Æ¥¹¥È·ë²Ì½ĞÎÏ
+    ## ãƒ†ã‚¹ãƒˆçµæœå‡ºåŠ›
     fout = open(g_test_result_file, 'a')
     message = g_mess_header + g_test_case + str(case_no) + " " + g_test_cnt + str(i+1) + g_mess_footer
     message = message + g_test_ok
@@ -1377,7 +1377,7 @@ for i in range(loop_count):
     time.sleep(sleep_for_time)
 
 ##--------------------------------------------------------------------
-## ÀÜÂ³¥¿¥¤¥×¡§new  Êı¸ş¡§out->in  ¥İ¥ê¥·¡¼¡§SKIP  ÀÜÂ³¡¦ÀÚÃÇ¥Æ¥¹¥È5
+## æ¥ç¶šã‚¿ã‚¤ãƒ—ï¼šnew  æ–¹å‘ï¼šout->in  ãƒãƒªã‚·ãƒ¼ï¼šSKIP  æ¥ç¶šãƒ»åˆ‡æ–­ãƒ†ã‚¹ãƒˆ5
 ##--------------------------------------------------------------------
 case_no = case_no + 1
 fout = open(g_test_result_file, 'a')
@@ -1390,27 +1390,27 @@ print message
 
 for i in range(loop_count):
 
-    ## 1 ¥³¥Í¥¯¥¿¡¼¥×¥í¥Õ¥¡¥¤¥ëÀßÄê
+    ## 1 ã‚³ãƒã‚¯ã‚¿ãƒ¼ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«è¨­å®š
     make_connecter_profile("new", "SKIP", 0)
 
-    ## 3 ¥İ¡¼¥ÈÀÜÂ³
-    # ¥Ç¡¼¥¿¥İ¡¼¥È1 TimedFloat
+    ## 3 ãƒãƒ¼ãƒˆæ¥ç¶š
+    # ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ1 TimedFloat
     ret0 = g_out_ports[g_port1].connect(g_conprof1)
 
-    # ¥Ç¡¼¥¿¥İ¡¼¥È2 TimedFloatSeq
+    # ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ2 TimedFloatSeq
     ret1 = g_out_ports[g_port2].connect(g_conprof2)
 
-    # ¥µ¡¼¥Ó¥¹¥İ¡¼¥È MyService
+    # ã‚µãƒ¼ãƒ“ã‚¹ãƒãƒ¼ãƒˆ MyService
     ret2 = g_out_ports[g_port3].connect(g_conprof3)
 
     time.sleep(sleep_connect_time)
 
-    ## 6 ¥İ¡¼¥ÈÀÚÃÇ
+    ## 6 ãƒãƒ¼ãƒˆåˆ‡æ–­
     g_in_ports[g_port3].disconnect(g_conprof3.connector_id)
     g_in_ports[g_port2].disconnect(g_conprof2.connector_id)
     g_in_ports[g_port1].disconnect(g_conprof1.connector_id)
 
-    ## ¥Æ¥¹¥È·ë²Ì½ĞÎÏ
+    ## ãƒ†ã‚¹ãƒˆçµæœå‡ºåŠ›
     fout = open(g_test_result_file, 'a')
     message = g_mess_header + g_test_case + str(case_no) + " " + g_test_cnt + str(i+1) + g_mess_footer
     message = message + g_test_ok
@@ -1421,7 +1421,7 @@ for i in range(loop_count):
     time.sleep(sleep_for_time)
 
 ##--------------------------------------------------------------------
-## ÀÜÂ³¥¿¥¤¥×¡§new  Êı¸ş¡§in->out  ¥İ¥ê¥·¡¼¡§ALL  ÀÜÂ³¡¦ÀÚÃÇ¥Æ¥¹¥È3
+## æ¥ç¶šã‚¿ã‚¤ãƒ—ï¼šnew  æ–¹å‘ï¼šin->out  ãƒãƒªã‚·ãƒ¼ï¼šALL  æ¥ç¶šãƒ»åˆ‡æ–­ãƒ†ã‚¹ãƒˆ3
 ##--------------------------------------------------------------------
 case_no = case_no + 1
 fout = open(g_test_result_file, 'a')
@@ -1434,27 +1434,27 @@ print message
 
 for i in range(loop_count):
 
-    ## 1 ¥³¥Í¥¯¥¿¡¼¥×¥í¥Õ¥¡¥¤¥ëÀßÄê
+    ## 1 ã‚³ãƒã‚¯ã‚¿ãƒ¼ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«è¨­å®š
     make_connecter_profile("new", "ALL", 1)
 
-    ## 3 ¥İ¡¼¥ÈÀÜÂ³
-    # ¥Ç¡¼¥¿¥İ¡¼¥È1 TimedFloat
+    ## 3 ãƒãƒ¼ãƒˆæ¥ç¶š
+    # ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ1 TimedFloat
     ret0 = g_out_ports[g_port1].connect(g_conprof1)
 
-    # ¥Ç¡¼¥¿¥İ¡¼¥È2 TimedFloatSeq
+    # ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ2 TimedFloatSeq
     ret1 = g_out_ports[g_port2].connect(g_conprof2)
 
-    # ¥µ¡¼¥Ó¥¹¥İ¡¼¥È MyService
+    # ã‚µãƒ¼ãƒ“ã‚¹ãƒãƒ¼ãƒˆ MyService
     ret2 = g_out_ports[g_port3].connect(g_conprof3)
 
     time.sleep(sleep_connect_time)
 
-    ## 6 ¥İ¡¼¥ÈÀÚÃÇ
+    ## 6 ãƒãƒ¼ãƒˆåˆ‡æ–­
     g_in_ports[g_port3].disconnect(g_conprof3.connector_id)
     g_in_ports[g_port2].disconnect(g_conprof2.connector_id)
     g_in_ports[g_port1].disconnect(g_conprof1.connector_id)
 
-    ## ¥Æ¥¹¥È·ë²Ì½ĞÎÏ
+    ## ãƒ†ã‚¹ãƒˆçµæœå‡ºåŠ›
     fout = open(g_test_result_file, 'a')
     message = g_mess_header + g_test_case + str(case_no) + " " + g_test_cnt + str(i+1) + g_mess_footer
     message = message + g_test_ok
@@ -1465,7 +1465,7 @@ for i in range(loop_count):
     time.sleep(sleep_for_time)
 
 ##--------------------------------------------------------------------
-## ÀÜÂ³¥¿¥¤¥×¡§new  Êı¸ş¡§in->out  ¥İ¥ê¥·¡¼¡§FIFO  ÀÜÂ³¡¦ÀÚÃÇ¥Æ¥¹¥È4
+## æ¥ç¶šã‚¿ã‚¤ãƒ—ï¼šnew  æ–¹å‘ï¼šin->out  ãƒãƒªã‚·ãƒ¼ï¼šFIFO  æ¥ç¶šãƒ»åˆ‡æ–­ãƒ†ã‚¹ãƒˆ4
 ##--------------------------------------------------------------------
 case_no = case_no + 1
 fout = open(g_test_result_file, 'a')
@@ -1478,27 +1478,27 @@ print message
 
 for i in range(loop_count):
 
-    ## 1 ¥³¥Í¥¯¥¿¡¼¥×¥í¥Õ¥¡¥¤¥ëÀßÄê
+    ## 1 ã‚³ãƒã‚¯ã‚¿ãƒ¼ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«è¨­å®š
     make_connecter_profile("new", "FIFO", 1)
 
-    ## 3 ¥İ¡¼¥ÈÀÜÂ³
-    # ¥Ç¡¼¥¿¥İ¡¼¥È1 TimedFloat
+    ## 3 ãƒãƒ¼ãƒˆæ¥ç¶š
+    # ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ1 TimedFloat
     ret0 = g_out_ports[g_port1].connect(g_conprof1)
 
-    # ¥Ç¡¼¥¿¥İ¡¼¥È2 TimedFloatSeq
+    # ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ2 TimedFloatSeq
     ret1 = g_out_ports[g_port2].connect(g_conprof2)
 
-    # ¥µ¡¼¥Ó¥¹¥İ¡¼¥È MyService
+    # ã‚µãƒ¼ãƒ“ã‚¹ãƒãƒ¼ãƒˆ MyService
     ret2 = g_out_ports[g_port3].connect(g_conprof3)
 
     time.sleep(sleep_connect_time)
 
-    ## 6 ¥İ¡¼¥ÈÀÚÃÇ
+    ## 6 ãƒãƒ¼ãƒˆåˆ‡æ–­
     g_in_ports[g_port3].disconnect(g_conprof3.connector_id)
     g_in_ports[g_port2].disconnect(g_conprof2.connector_id)
     g_in_ports[g_port1].disconnect(g_conprof1.connector_id)
 
-    ## ¥Æ¥¹¥È·ë²Ì½ĞÎÏ
+    ## ãƒ†ã‚¹ãƒˆçµæœå‡ºåŠ›
     fout = open(g_test_result_file, 'a')
     message = g_mess_header + g_test_case + str(case_no) + " " + g_test_cnt + str(i+1) + g_mess_footer
     message = message + g_test_ok
@@ -1509,7 +1509,7 @@ for i in range(loop_count):
     time.sleep(sleep_for_time)
 
 ##--------------------------------------------------------------------
-## ÀÜÂ³¥¿¥¤¥×¡§new  Êı¸ş¡§in->out  ¥İ¥ê¥·¡¼¡§NEW  ÀÜÂ³¡¦ÀÚÃÇ¥Æ¥¹¥È6
+## æ¥ç¶šã‚¿ã‚¤ãƒ—ï¼šnew  æ–¹å‘ï¼šin->out  ãƒãƒªã‚·ãƒ¼ï¼šNEW  æ¥ç¶šãƒ»åˆ‡æ–­ãƒ†ã‚¹ãƒˆ6
 ##--------------------------------------------------------------------
 case_no = case_no + 1
 fout = open(g_test_result_file, 'a')
@@ -1522,27 +1522,27 @@ print message
 
 for i in range(loop_count):
 
-    ## 1 ¥³¥Í¥¯¥¿¡¼¥×¥í¥Õ¥¡¥¤¥ëÀßÄê
+    ## 1 ã‚³ãƒã‚¯ã‚¿ãƒ¼ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«è¨­å®š
     make_connecter_profile("new", "NEW", 1)
 
-    ## 3 ¥İ¡¼¥ÈÀÜÂ³
-    # ¥Ç¡¼¥¿¥İ¡¼¥È1 TimedFloat
+    ## 3 ãƒãƒ¼ãƒˆæ¥ç¶š
+    # ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ1 TimedFloat
     ret0 = g_out_ports[g_port1].connect(g_conprof1)
 
-    # ¥Ç¡¼¥¿¥İ¡¼¥È2 TimedFloatSeq
+    # ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ2 TimedFloatSeq
     ret1 = g_out_ports[g_port2].connect(g_conprof2)
 
-    # ¥µ¡¼¥Ó¥¹¥İ¡¼¥È MyService
+    # ã‚µãƒ¼ãƒ“ã‚¹ãƒãƒ¼ãƒˆ MyService
     ret2 = g_out_ports[g_port3].connect(g_conprof3)
 
     time.sleep(sleep_connect_time)
 
-    ## 6 ¥İ¡¼¥ÈÀÚÃÇ
+    ## 6 ãƒãƒ¼ãƒˆåˆ‡æ–­
     g_in_ports[g_port3].disconnect(g_conprof3.connector_id)
     g_in_ports[g_port2].disconnect(g_conprof2.connector_id)
     g_in_ports[g_port1].disconnect(g_conprof1.connector_id)
 
-    ## ¥Æ¥¹¥È·ë²Ì½ĞÎÏ
+    ## ãƒ†ã‚¹ãƒˆçµæœå‡ºåŠ›
     fout = open(g_test_result_file, 'a')
     message = g_mess_header + g_test_case + str(case_no) + " " + g_test_cnt + str(i+1) + g_mess_footer
     message = message + g_test_ok
@@ -1553,7 +1553,7 @@ for i in range(loop_count):
     time.sleep(sleep_for_time)
 
 ##--------------------------------------------------------------------
-## ÀÜÂ³¥¿¥¤¥×¡§new  Êı¸ş¡§in->out  ¥İ¥ê¥·¡¼¡§SKIP  ÀÜÂ³¡¦ÀÚÃÇ¥Æ¥¹¥È5
+## æ¥ç¶šã‚¿ã‚¤ãƒ—ï¼šnew  æ–¹å‘ï¼šin->out  ãƒãƒªã‚·ãƒ¼ï¼šSKIP  æ¥ç¶šãƒ»åˆ‡æ–­ãƒ†ã‚¹ãƒˆ5
 ##--------------------------------------------------------------------
 case_no = case_no + 1
 fout = open(g_test_result_file, 'a')
@@ -1566,27 +1566,27 @@ print message
 
 for i in range(loop_count):
 
-    ## 1 ¥³¥Í¥¯¥¿¡¼¥×¥í¥Õ¥¡¥¤¥ëÀßÄê
+    ## 1 ã‚³ãƒã‚¯ã‚¿ãƒ¼ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«è¨­å®š
     make_connecter_profile("new", "SKIP", 1)
 
-    ## 3 ¥İ¡¼¥ÈÀÜÂ³
-    # ¥Ç¡¼¥¿¥İ¡¼¥È1 TimedFloat
+    ## 3 ãƒãƒ¼ãƒˆæ¥ç¶š
+    # ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ1 TimedFloat
     ret0 = g_out_ports[g_port1].connect(g_conprof1)
 
-    # ¥Ç¡¼¥¿¥İ¡¼¥È2 TimedFloatSeq
+    # ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ2 TimedFloatSeq
     ret1 = g_out_ports[g_port2].connect(g_conprof2)
 
-    # ¥µ¡¼¥Ó¥¹¥İ¡¼¥È MyService
+    # ã‚µãƒ¼ãƒ“ã‚¹ãƒãƒ¼ãƒˆ MyService
     ret2 = g_out_ports[g_port3].connect(g_conprof3)
 
     time.sleep(sleep_connect_time)
 
-    ## 6 ¥İ¡¼¥ÈÀÚÃÇ
+    ## 6 ãƒãƒ¼ãƒˆåˆ‡æ–­
     g_in_ports[g_port3].disconnect(g_conprof3.connector_id)
     g_in_ports[g_port2].disconnect(g_conprof2.connector_id)
     g_in_ports[g_port1].disconnect(g_conprof1.connector_id)
 
-    ## ¥Æ¥¹¥È·ë²Ì½ĞÎÏ
+    ## ãƒ†ã‚¹ãƒˆçµæœå‡ºåŠ›
     fout = open(g_test_result_file, 'a')
     message = g_mess_header + g_test_case + str(case_no) + " " + g_test_cnt + str(i+1) + g_mess_footer
     message = message + g_test_ok
@@ -1597,7 +1597,7 @@ for i in range(loop_count):
     time.sleep(sleep_for_time)
 
 ##--------------------------------------------------------------------
-## ÀÜÂ³¥¿¥¤¥×¡§new  Êı¸ş¡§out->in  ¥İ¥ê¥·¡¼¡§ALL  Activate¡¦Deactivate¥Æ¥¹¥È2
+## æ¥ç¶šã‚¿ã‚¤ãƒ—ï¼šnew  æ–¹å‘ï¼šout->in  ãƒãƒªã‚·ãƒ¼ï¼šALL  Activateãƒ»Deactivateãƒ†ã‚¹ãƒˆ2
 ##--------------------------------------------------------------------
 case_no = case_no + 1
 fout = open(g_test_result_file, 'a')
@@ -1608,36 +1608,36 @@ fout.write(message + '\n')
 fout.close()
 print message
 
-## 1 ¥³¥Í¥¯¥¿¡¼¥×¥í¥Õ¥¡¥¤¥ëÀßÄê
+## 1 ã‚³ãƒã‚¯ã‚¿ãƒ¼ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«è¨­å®š
 make_connecter_profile("new", "ALL", 0)
 
-## 3 ¥İ¡¼¥ÈÀÜÂ³
-# ¥Ç¡¼¥¿¥İ¡¼¥È1 TimedFloat
+## 3 ãƒãƒ¼ãƒˆæ¥ç¶š
+# ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ1 TimedFloat
 ret0 = g_out_ports[g_port1].connect(g_conprof1)
 
-# ¥Ç¡¼¥¿¥İ¡¼¥È2 TimedFloatSeq
+# ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ2 TimedFloatSeq
 ret1 = g_out_ports[g_port2].connect(g_conprof2)
 
-# ¥µ¡¼¥Ó¥¹¥İ¡¼¥È MyService
+# ã‚µãƒ¼ãƒ“ã‚¹ãƒãƒ¼ãƒˆ MyService
 ret2 = g_out_ports[g_port3].connect(g_conprof3)
 
 for i in range(loop_count):
 
-    ## 2 ¼õ¿®¥Ç¡¼¥¿¥Õ¥¡¥¤¥ëºï½ü
+    ## 2 å—ä¿¡ãƒ‡ãƒ¼ã‚¿ãƒ•ã‚¡ã‚¤ãƒ«å‰Šé™¤
     delete_recv_file()
 
-    ## 4 ¥¢¥¯¥Æ¥£¥Ù¡¼¥È
+    ## 4 ã‚¢ã‚¯ãƒ†ã‚£ãƒ™ãƒ¼ãƒˆ
     ec_recv[0].activate_component(g_compo_recv.rtc_ref)
     time.sleep(sleep_recv_act_time)
     ec_send[0].activate_component(g_compo_send.rtc_ref)
 
     time.sleep(sleep_act_time)
 
-    ## 5 ¥Ç¥£¥¢¥¯¥Æ¥£¥Ù¡¼¥È
+    ## 5 ãƒ‡ã‚£ã‚¢ã‚¯ãƒ†ã‚£ãƒ™ãƒ¼ãƒˆ
     ec_send[0].deactivate_component(g_compo_send.rtc_ref)
     ec_recv[0].deactivate_component(g_compo_recv.rtc_ref)
 
-    ## ¼õ¿®¥Õ¥¡¥¤¥ëÍ­ÌµÈ½Äê
+    ## å—ä¿¡ãƒ•ã‚¡ã‚¤ãƒ«æœ‰ç„¡åˆ¤å®š
     if os.path.isfile(g_diff_recv_file) == False:
         fout = open(g_test_result_file, 'a')
         message = g_mess_header + g_test_case + str(case_no) + " " + g_test_cnt + str(i+1) + g_mess_footer
@@ -1648,26 +1648,26 @@ for i in range(loop_count):
         time.sleep(sleep_for_time)
         continue
 
-    ## 7 Á÷¼õ¿®¥Ç¡¼¥¿Èæ³Ó
+    ## 7 é€å—ä¿¡ãƒ‡ãƒ¼ã‚¿æ¯”è¼ƒ
     time.sleep(sleep_act_time)
     bret = diff_file()
 
-    ## º¹Ê¬¥Õ¥¡¥¤¥ë¤«¤é¥Æ¥¹¥È·ë²Ì½ĞÎÏ
+    ## å·®åˆ†ãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰ãƒ†ã‚¹ãƒˆçµæœå‡ºåŠ›
     fout = open(g_test_result_file, 'a')
     message = g_mess_header + g_test_case + str(case_no) + " " + g_test_cnt + str(i+1) + g_mess_footer
-    # bret==True ¤Ê¤éÁ÷¼õ¿®¥Ç¡¼¥¿°ìÃ×
+    # bret==True ãªã‚‰é€å—ä¿¡ãƒ‡ãƒ¼ã‚¿ä¸€è‡´
     if bret == True:
-        # ¥Æ¥¹¥È·ë²Ì OK
+        # ãƒ†ã‚¹ãƒˆçµæœ OK
         message = message + g_test_ok
         print message
         fout.write(message + '\n')
     else:
-        # ¥Æ¥¹¥È·ë²Ì NG
+        # ãƒ†ã‚¹ãƒˆçµæœ NG
         message = message + g_test_ng
         print message
         message = message + g_test_ng_message
         fout.write(message + '\n')
-        # ¼õ¿®¥Ç¡¼¥¿¤ò¥Æ¥¹¥È·ë²Ì¥Õ¥¡¥¤¥ë¤Ø¥³¥Ô¡¼
+        # å—ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’ãƒ†ã‚¹ãƒˆçµæœãƒ•ã‚¡ã‚¤ãƒ«ã¸ã‚³ãƒ”ãƒ¼
         fin2 = open(g_diff_recv_file, 'r')
         while(1):
             s2 = fin2.readline()
@@ -1679,13 +1679,13 @@ for i in range(loop_count):
 
     time.sleep(sleep_for_time)
 
-## 6 ¥İ¡¼¥ÈÀÚÃÇ
+## 6 ãƒãƒ¼ãƒˆåˆ‡æ–­
 g_in_ports[g_port3].disconnect(g_conprof3.connector_id)
 g_in_ports[g_port2].disconnect(g_conprof2.connector_id)
 g_in_ports[g_port1].disconnect(g_conprof1.connector_id)
 
 ##--------------------------------------------------------------------
-## ÀÜÂ³¥¿¥¤¥×¡§new  Êı¸ş¡§out->in  ¥İ¥ê¥·¡¼¡§FIFO  Activate¡¦Deactivate¥Æ¥¹¥È3
+## æ¥ç¶šã‚¿ã‚¤ãƒ—ï¼šnew  æ–¹å‘ï¼šout->in  ãƒãƒªã‚·ãƒ¼ï¼šFIFO  Activateãƒ»Deactivateãƒ†ã‚¹ãƒˆ3
 ##--------------------------------------------------------------------
 case_no = case_no + 1
 fout = open(g_test_result_file, 'a')
@@ -1696,36 +1696,36 @@ fout.write(message + '\n')
 fout.close()
 print message
 
-## 1 ¥³¥Í¥¯¥¿¡¼¥×¥í¥Õ¥¡¥¤¥ëÀßÄê
+## 1 ã‚³ãƒã‚¯ã‚¿ãƒ¼ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«è¨­å®š
 make_connecter_profile("new", "FIFO", 0)
 
-## 3 ¥İ¡¼¥ÈÀÜÂ³
-# ¥Ç¡¼¥¿¥İ¡¼¥È1 TimedFloat
+## 3 ãƒãƒ¼ãƒˆæ¥ç¶š
+# ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ1 TimedFloat
 ret0 = g_out_ports[g_port1].connect(g_conprof1)
 
-# ¥Ç¡¼¥¿¥İ¡¼¥È2 TimedFloatSeq
+# ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ2 TimedFloatSeq
 ret1 = g_out_ports[g_port2].connect(g_conprof2)
 
-# ¥µ¡¼¥Ó¥¹¥İ¡¼¥È MyService
+# ã‚µãƒ¼ãƒ“ã‚¹ãƒãƒ¼ãƒˆ MyService
 ret2 = g_out_ports[g_port3].connect(g_conprof3)
 
 for i in range(loop_count):
 
-    ## 2 ¼õ¿®¥Ç¡¼¥¿¥Õ¥¡¥¤¥ëºï½ü
+    ## 2 å—ä¿¡ãƒ‡ãƒ¼ã‚¿ãƒ•ã‚¡ã‚¤ãƒ«å‰Šé™¤
     delete_recv_file()
 
-    ## 4 ¥¢¥¯¥Æ¥£¥Ù¡¼¥È
+    ## 4 ã‚¢ã‚¯ãƒ†ã‚£ãƒ™ãƒ¼ãƒˆ
     ec_recv[0].activate_component(g_compo_recv.rtc_ref)
     time.sleep(sleep_recv_act_time)
     ec_send[0].activate_component(g_compo_send.rtc_ref)
 
     time.sleep(sleep_act_time)
 
-    ## 5 ¥Ç¥£¥¢¥¯¥Æ¥£¥Ù¡¼¥È
+    ## 5 ãƒ‡ã‚£ã‚¢ã‚¯ãƒ†ã‚£ãƒ™ãƒ¼ãƒˆ
     ec_send[0].deactivate_component(g_compo_send.rtc_ref)
     ec_recv[0].deactivate_component(g_compo_recv.rtc_ref)
 
-    ## ¼õ¿®¥Õ¥¡¥¤¥ëÍ­ÌµÈ½Äê
+    ## å—ä¿¡ãƒ•ã‚¡ã‚¤ãƒ«æœ‰ç„¡åˆ¤å®š
     if os.path.isfile(g_diff_recv_file) == False:
         fout = open(g_test_result_file, 'a')
         message = g_mess_header + g_test_case + str(case_no) + " " + g_test_cnt + str(i+1) + g_mess_footer
@@ -1736,26 +1736,26 @@ for i in range(loop_count):
         time.sleep(sleep_for_time)
         continue
 
-    ## 7 Á÷¼õ¿®¥Ç¡¼¥¿Èæ³Ó
+    ## 7 é€å—ä¿¡ãƒ‡ãƒ¼ã‚¿æ¯”è¼ƒ
     time.sleep(sleep_act_time)
     bret = diff_file()
 
-    ## º¹Ê¬¥Õ¥¡¥¤¥ë¤«¤é¥Æ¥¹¥È·ë²Ì½ĞÎÏ
+    ## å·®åˆ†ãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰ãƒ†ã‚¹ãƒˆçµæœå‡ºåŠ›
     fout = open(g_test_result_file, 'a')
     message = g_mess_header + g_test_case + str(case_no) + " " + g_test_cnt + str(i+1) + g_mess_footer
-    # bret==True ¤Ê¤éÁ÷¼õ¿®¥Ç¡¼¥¿°ìÃ×
+    # bret==True ãªã‚‰é€å—ä¿¡ãƒ‡ãƒ¼ã‚¿ä¸€è‡´
     if bret == True:
-        # ¥Æ¥¹¥È·ë²Ì OK
+        # ãƒ†ã‚¹ãƒˆçµæœ OK
         message = message + g_test_ok
         print message
         fout.write(message + '\n')
     else:
-        # ¥Æ¥¹¥È·ë²Ì NG
+        # ãƒ†ã‚¹ãƒˆçµæœ NG
         message = message + g_test_ng
         print message
         message = message + g_test_ng_message
         fout.write(message + '\n')
-        # ¼õ¿®¥Ç¡¼¥¿¤ò¥Æ¥¹¥È·ë²Ì¥Õ¥¡¥¤¥ë¤Ø¥³¥Ô¡¼
+        # å—ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’ãƒ†ã‚¹ãƒˆçµæœãƒ•ã‚¡ã‚¤ãƒ«ã¸ã‚³ãƒ”ãƒ¼
         fin2 = open(g_diff_recv_file, 'r')
         while(1):
             s2 = fin2.readline()
@@ -1767,13 +1767,13 @@ for i in range(loop_count):
 
     time.sleep(sleep_for_time)
 
-## 6 ¥İ¡¼¥ÈÀÚÃÇ
+## 6 ãƒãƒ¼ãƒˆåˆ‡æ–­
 g_in_ports[g_port3].disconnect(g_conprof3.connector_id)
 g_in_ports[g_port2].disconnect(g_conprof2.connector_id)
 g_in_ports[g_port1].disconnect(g_conprof1.connector_id)
 
 ##--------------------------------------------------------------------
-## ÀÜÂ³¥¿¥¤¥×¡§new  Êı¸ş¡§out->in  ¥İ¥ê¥·¡¼¡§NEW  Activate¡¦Deactivate¥Æ¥¹¥È5
+## æ¥ç¶šã‚¿ã‚¤ãƒ—ï¼šnew  æ–¹å‘ï¼šout->in  ãƒãƒªã‚·ãƒ¼ï¼šNEW  Activateãƒ»Deactivateãƒ†ã‚¹ãƒˆ5
 ##--------------------------------------------------------------------
 case_no = case_no + 1
 fout = open(g_test_result_file, 'a')
@@ -1784,36 +1784,36 @@ fout.write(message + '\n')
 fout.close()
 print message
 
-## 1 ¥³¥Í¥¯¥¿¡¼¥×¥í¥Õ¥¡¥¤¥ëÀßÄê
+## 1 ã‚³ãƒã‚¯ã‚¿ãƒ¼ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«è¨­å®š
 make_connecter_profile("new", "NEW", 0)
 
-## 3 ¥İ¡¼¥ÈÀÜÂ³
-# ¥Ç¡¼¥¿¥İ¡¼¥È1 TimedFloat
+## 3 ãƒãƒ¼ãƒˆæ¥ç¶š
+# ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ1 TimedFloat
 ret0 = g_out_ports[g_port1].connect(g_conprof1)
 
-# ¥Ç¡¼¥¿¥İ¡¼¥È2 TimedFloatSeq
+# ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ2 TimedFloatSeq
 ret1 = g_out_ports[g_port2].connect(g_conprof2)
 
-# ¥µ¡¼¥Ó¥¹¥İ¡¼¥È MyService
+# ã‚µãƒ¼ãƒ“ã‚¹ãƒãƒ¼ãƒˆ MyService
 ret2 = g_out_ports[g_port3].connect(g_conprof3)
 
 for i in range(loop_count):
 
-    ## 2 ¼õ¿®¥Ç¡¼¥¿¥Õ¥¡¥¤¥ëºï½ü
+    ## 2 å—ä¿¡ãƒ‡ãƒ¼ã‚¿ãƒ•ã‚¡ã‚¤ãƒ«å‰Šé™¤
     delete_recv_file()
 
-    ## 4 ¥¢¥¯¥Æ¥£¥Ù¡¼¥È
+    ## 4 ã‚¢ã‚¯ãƒ†ã‚£ãƒ™ãƒ¼ãƒˆ
     ec_recv[0].activate_component(g_compo_recv.rtc_ref)
     time.sleep(sleep_recv_act_time)
     ec_send[0].activate_component(g_compo_send.rtc_ref)
 
     time.sleep(sleep_act_time)
 
-    ## 5 ¥Ç¥£¥¢¥¯¥Æ¥£¥Ù¡¼¥È
+    ## 5 ãƒ‡ã‚£ã‚¢ã‚¯ãƒ†ã‚£ãƒ™ãƒ¼ãƒˆ
     ec_send[0].deactivate_component(g_compo_send.rtc_ref)
     ec_recv[0].deactivate_component(g_compo_recv.rtc_ref)
 
-    ## ¼õ¿®¥Õ¥¡¥¤¥ëÍ­ÌµÈ½Äê
+    ## å—ä¿¡ãƒ•ã‚¡ã‚¤ãƒ«æœ‰ç„¡åˆ¤å®š
     if os.path.isfile(g_diff_recv_file) == False:
         fout = open(g_test_result_file, 'a')
         message = g_mess_header + g_test_case + str(case_no) + " " + g_test_cnt + str(i+1) + g_mess_footer
@@ -1824,26 +1824,26 @@ for i in range(loop_count):
         time.sleep(sleep_for_time)
         continue
 
-    ## 7 Á÷¼õ¿®¥Ç¡¼¥¿Èæ³Ó
+    ## 7 é€å—ä¿¡ãƒ‡ãƒ¼ã‚¿æ¯”è¼ƒ
     time.sleep(sleep_act_time)
     bret = diff_file()
 
-    ## º¹Ê¬¥Õ¥¡¥¤¥ë¤«¤é¥Æ¥¹¥È·ë²Ì½ĞÎÏ
+    ## å·®åˆ†ãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰ãƒ†ã‚¹ãƒˆçµæœå‡ºåŠ›
     fout = open(g_test_result_file, 'a')
     message = g_mess_header + g_test_case + str(case_no) + " " + g_test_cnt + str(i+1) + g_mess_footer
-    # bret==True ¤Ê¤éÁ÷¼õ¿®¥Ç¡¼¥¿°ìÃ×
+    # bret==True ãªã‚‰é€å—ä¿¡ãƒ‡ãƒ¼ã‚¿ä¸€è‡´
     if bret == True:
-        # ¥Æ¥¹¥È·ë²Ì OK
+        # ãƒ†ã‚¹ãƒˆçµæœ OK
         message = message + g_test_ok
         print message
         fout.write(message + '\n')
     else:
-        # ¥Æ¥¹¥È·ë²Ì NG
+        # ãƒ†ã‚¹ãƒˆçµæœ NG
         message = message + g_test_ng
         print message
         message = message + g_test_ng_message
         fout.write(message + '\n')
-        # ¼õ¿®¥Ç¡¼¥¿¤ò¥Æ¥¹¥È·ë²Ì¥Õ¥¡¥¤¥ë¤Ø¥³¥Ô¡¼
+        # å—ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’ãƒ†ã‚¹ãƒˆçµæœãƒ•ã‚¡ã‚¤ãƒ«ã¸ã‚³ãƒ”ãƒ¼
         fin2 = open(g_diff_recv_file, 'r')
         while(1):
             s2 = fin2.readline()
@@ -1855,13 +1855,13 @@ for i in range(loop_count):
 
     time.sleep(sleep_for_time)
 
-## 6 ¥İ¡¼¥ÈÀÚÃÇ
+## 6 ãƒãƒ¼ãƒˆåˆ‡æ–­
 g_in_ports[g_port3].disconnect(g_conprof3.connector_id)
 g_in_ports[g_port2].disconnect(g_conprof2.connector_id)
 g_in_ports[g_port1].disconnect(g_conprof1.connector_id)
 
 ##--------------------------------------------------------------------
-## ÀÜÂ³¥¿¥¤¥×¡§new  Êı¸ş¡§out->in  ¥İ¥ê¥·¡¼¡§SKIP  Activate¡¦Deactivate¥Æ¥¹¥È4
+## æ¥ç¶šã‚¿ã‚¤ãƒ—ï¼šnew  æ–¹å‘ï¼šout->in  ãƒãƒªã‚·ãƒ¼ï¼šSKIP  Activateãƒ»Deactivateãƒ†ã‚¹ãƒˆ4
 ##--------------------------------------------------------------------
 case_no = case_no + 1
 fout = open(g_test_result_file, 'a')
@@ -1872,36 +1872,36 @@ fout.write(message + '\n')
 fout.close()
 print message
 
-## 1 ¥³¥Í¥¯¥¿¡¼¥×¥í¥Õ¥¡¥¤¥ëÀßÄê
+## 1 ã‚³ãƒã‚¯ã‚¿ãƒ¼ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«è¨­å®š
 make_connecter_profile("new", "SKIP", 0)
 
-## 3 ¥İ¡¼¥ÈÀÜÂ³
-# ¥Ç¡¼¥¿¥İ¡¼¥È1 TimedFloat
+## 3 ãƒãƒ¼ãƒˆæ¥ç¶š
+# ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ1 TimedFloat
 ret0 = g_out_ports[g_port1].connect(g_conprof1)
 
-# ¥Ç¡¼¥¿¥İ¡¼¥È2 TimedFloatSeq
+# ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ2 TimedFloatSeq
 ret1 = g_out_ports[g_port2].connect(g_conprof2)
 
-# ¥µ¡¼¥Ó¥¹¥İ¡¼¥È MyService
+# ã‚µãƒ¼ãƒ“ã‚¹ãƒãƒ¼ãƒˆ MyService
 ret2 = g_out_ports[g_port3].connect(g_conprof3)
 
 for i in range(loop_count):
 
-    ## 2 ¼õ¿®¥Ç¡¼¥¿¥Õ¥¡¥¤¥ëºï½ü
+    ## 2 å—ä¿¡ãƒ‡ãƒ¼ã‚¿ãƒ•ã‚¡ã‚¤ãƒ«å‰Šé™¤
     delete_recv_file()
 
-    ## 4 ¥¢¥¯¥Æ¥£¥Ù¡¼¥È
+    ## 4 ã‚¢ã‚¯ãƒ†ã‚£ãƒ™ãƒ¼ãƒˆ
     ec_recv[0].activate_component(g_compo_recv.rtc_ref)
     time.sleep(sleep_recv_act_time)
     ec_send[0].activate_component(g_compo_send.rtc_ref)
 
     time.sleep(sleep_act_time)
 
-    ## 5 ¥Ç¥£¥¢¥¯¥Æ¥£¥Ù¡¼¥È
+    ## 5 ãƒ‡ã‚£ã‚¢ã‚¯ãƒ†ã‚£ãƒ™ãƒ¼ãƒˆ
     ec_send[0].deactivate_component(g_compo_send.rtc_ref)
     ec_recv[0].deactivate_component(g_compo_recv.rtc_ref)
 
-    ## ¼õ¿®¥Õ¥¡¥¤¥ëÍ­ÌµÈ½Äê
+    ## å—ä¿¡ãƒ•ã‚¡ã‚¤ãƒ«æœ‰ç„¡åˆ¤å®š
     if os.path.isfile(g_diff_recv_file) == False:
         fout = open(g_test_result_file, 'a')
         message = g_mess_header + g_test_case + str(case_no) + " " + g_test_cnt + str(i+1) + g_mess_footer
@@ -1912,26 +1912,26 @@ for i in range(loop_count):
         time.sleep(sleep_for_time)
         continue
 
-    ## 7 Á÷¼õ¿®¥Ç¡¼¥¿Èæ³Ó
+    ## 7 é€å—ä¿¡ãƒ‡ãƒ¼ã‚¿æ¯”è¼ƒ
     time.sleep(sleep_act_time)
     bret = diff_file()
 
-    ## º¹Ê¬¥Õ¥¡¥¤¥ë¤«¤é¥Æ¥¹¥È·ë²Ì½ĞÎÏ
+    ## å·®åˆ†ãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰ãƒ†ã‚¹ãƒˆçµæœå‡ºåŠ›
     fout = open(g_test_result_file, 'a')
     message = g_mess_header + g_test_case + str(case_no) + " " + g_test_cnt + str(i+1) + g_mess_footer
-    # bret==True ¤Ê¤éÁ÷¼õ¿®¥Ç¡¼¥¿°ìÃ×
+    # bret==True ãªã‚‰é€å—ä¿¡ãƒ‡ãƒ¼ã‚¿ä¸€è‡´
     if bret == True:
-        # ¥Æ¥¹¥È·ë²Ì OK
+        # ãƒ†ã‚¹ãƒˆçµæœ OK
         message = message + g_test_ok
         print message
         fout.write(message + '\n')
     else:
-        # ¥Æ¥¹¥È·ë²Ì NG
+        # ãƒ†ã‚¹ãƒˆçµæœ NG
         message = message + g_test_ng
         print message
         message = message + g_test_ng_message
         fout.write(message + '\n')
-        # ¼õ¿®¥Ç¡¼¥¿¤ò¥Æ¥¹¥È·ë²Ì¥Õ¥¡¥¤¥ë¤Ø¥³¥Ô¡¼
+        # å—ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’ãƒ†ã‚¹ãƒˆçµæœãƒ•ã‚¡ã‚¤ãƒ«ã¸ã‚³ãƒ”ãƒ¼
         fin2 = open(g_diff_recv_file, 'r')
         while(1):
             s2 = fin2.readline()
@@ -1943,13 +1943,13 @@ for i in range(loop_count):
 
     time.sleep(sleep_for_time)
 
-## 6 ¥İ¡¼¥ÈÀÚÃÇ
+## 6 ãƒãƒ¼ãƒˆåˆ‡æ–­
 g_in_ports[g_port3].disconnect(g_conprof3.connector_id)
 g_in_ports[g_port2].disconnect(g_conprof2.connector_id)
 g_in_ports[g_port1].disconnect(g_conprof1.connector_id)
 
 ##--------------------------------------------------------------------
-## ÀÜÂ³¥¿¥¤¥×¡§new  Êı¸ş¡§in->out  ¥İ¥ê¥·¡¼¡§ALL  Activate¡¦Deactivate¥Æ¥¹¥È2
+## æ¥ç¶šã‚¿ã‚¤ãƒ—ï¼šnew  æ–¹å‘ï¼šin->out  ãƒãƒªã‚·ãƒ¼ï¼šALL  Activateãƒ»Deactivateãƒ†ã‚¹ãƒˆ2
 ##--------------------------------------------------------------------
 case_no = case_no + 1
 fout = open(g_test_result_file, 'a')
@@ -1960,36 +1960,36 @@ fout.write(message + '\n')
 fout.close()
 print message
 
-## 1 ¥³¥Í¥¯¥¿¡¼¥×¥í¥Õ¥¡¥¤¥ëÀßÄê
+## 1 ã‚³ãƒã‚¯ã‚¿ãƒ¼ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«è¨­å®š
 make_connecter_profile("new", "ALL", 1)
 
-## 3 ¥İ¡¼¥ÈÀÜÂ³
-# ¥Ç¡¼¥¿¥İ¡¼¥È1 TimedFloat
+## 3 ãƒãƒ¼ãƒˆæ¥ç¶š
+# ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ1 TimedFloat
 ret0 = g_out_ports[g_port1].connect(g_conprof1)
 
-# ¥Ç¡¼¥¿¥İ¡¼¥È2 TimedFloatSeq
+# ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ2 TimedFloatSeq
 ret1 = g_out_ports[g_port2].connect(g_conprof2)
 
-# ¥µ¡¼¥Ó¥¹¥İ¡¼¥È MyService
+# ã‚µãƒ¼ãƒ“ã‚¹ãƒãƒ¼ãƒˆ MyService
 ret2 = g_out_ports[g_port3].connect(g_conprof3)
 
 for i in range(loop_count):
 
-    ## 2 ¼õ¿®¥Ç¡¼¥¿¥Õ¥¡¥¤¥ëºï½ü
+    ## 2 å—ä¿¡ãƒ‡ãƒ¼ã‚¿ãƒ•ã‚¡ã‚¤ãƒ«å‰Šé™¤
     delete_recv_file()
 
-    ## 4 ¥¢¥¯¥Æ¥£¥Ù¡¼¥È
+    ## 4 ã‚¢ã‚¯ãƒ†ã‚£ãƒ™ãƒ¼ãƒˆ
     ec_recv[0].activate_component(g_compo_recv.rtc_ref)
     time.sleep(sleep_recv_act_time)
     ec_send[0].activate_component(g_compo_send.rtc_ref)
 
     time.sleep(sleep_act_time)
 
-    ## 5 ¥Ç¥£¥¢¥¯¥Æ¥£¥Ù¡¼¥È
+    ## 5 ãƒ‡ã‚£ã‚¢ã‚¯ãƒ†ã‚£ãƒ™ãƒ¼ãƒˆ
     ec_send[0].deactivate_component(g_compo_send.rtc_ref)
     ec_recv[0].deactivate_component(g_compo_recv.rtc_ref)
 
-    ## ¼õ¿®¥Õ¥¡¥¤¥ëÍ­ÌµÈ½Äê
+    ## å—ä¿¡ãƒ•ã‚¡ã‚¤ãƒ«æœ‰ç„¡åˆ¤å®š
     if os.path.isfile(g_diff_recv_file) == False:
         fout = open(g_test_result_file, 'a')
         message = g_mess_header + g_test_case + str(case_no) + " " + g_test_cnt + str(i+1) + g_mess_footer
@@ -2000,26 +2000,26 @@ for i in range(loop_count):
         time.sleep(sleep_for_time)
         continue
 
-    ## 7 Á÷¼õ¿®¥Ç¡¼¥¿Èæ³Ó
+    ## 7 é€å—ä¿¡ãƒ‡ãƒ¼ã‚¿æ¯”è¼ƒ
     time.sleep(sleep_act_time)
     bret = diff_file()
 
-    ## º¹Ê¬¥Õ¥¡¥¤¥ë¤«¤é¥Æ¥¹¥È·ë²Ì½ĞÎÏ
+    ## å·®åˆ†ãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰ãƒ†ã‚¹ãƒˆçµæœå‡ºåŠ›
     fout = open(g_test_result_file, 'a')
     message = g_mess_header + g_test_case + str(case_no) + " " + g_test_cnt + str(i+1) + g_mess_footer
-    # bret==True ¤Ê¤éÁ÷¼õ¿®¥Ç¡¼¥¿°ìÃ×
+    # bret==True ãªã‚‰é€å—ä¿¡ãƒ‡ãƒ¼ã‚¿ä¸€è‡´
     if bret == True:
-        # ¥Æ¥¹¥È·ë²Ì OK
+        # ãƒ†ã‚¹ãƒˆçµæœ OK
         message = message + g_test_ok
         print message
         fout.write(message + '\n')
     else:
-        # ¥Æ¥¹¥È·ë²Ì NG
+        # ãƒ†ã‚¹ãƒˆçµæœ NG
         message = message + g_test_ng
         print message
         message = message + g_test_ng_message
         fout.write(message + '\n')
-        # ¼õ¿®¥Ç¡¼¥¿¤ò¥Æ¥¹¥È·ë²Ì¥Õ¥¡¥¤¥ë¤Ø¥³¥Ô¡¼
+        # å—ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’ãƒ†ã‚¹ãƒˆçµæœãƒ•ã‚¡ã‚¤ãƒ«ã¸ã‚³ãƒ”ãƒ¼
         fin2 = open(g_diff_recv_file, 'r')
         while(1):
             s2 = fin2.readline()
@@ -2031,13 +2031,13 @@ for i in range(loop_count):
 
     time.sleep(sleep_for_time)
 
-## 6 ¥İ¡¼¥ÈÀÚÃÇ
+## 6 ãƒãƒ¼ãƒˆåˆ‡æ–­
 g_in_ports[g_port3].disconnect(g_conprof3.connector_id)
 g_in_ports[g_port2].disconnect(g_conprof2.connector_id)
 g_in_ports[g_port1].disconnect(g_conprof1.connector_id)
 
 ##--------------------------------------------------------------------
-## ÀÜÂ³¥¿¥¤¥×¡§new  Êı¸ş¡§in->out  ¥İ¥ê¥·¡¼¡§FIFO  Activate¡¦Deactivate¥Æ¥¹¥È3
+## æ¥ç¶šã‚¿ã‚¤ãƒ—ï¼šnew  æ–¹å‘ï¼šin->out  ãƒãƒªã‚·ãƒ¼ï¼šFIFO  Activateãƒ»Deactivateãƒ†ã‚¹ãƒˆ3
 ##--------------------------------------------------------------------
 case_no = case_no + 1
 fout = open(g_test_result_file, 'a')
@@ -2048,36 +2048,36 @@ fout.write(message + '\n')
 fout.close()
 print message
 
-## 1 ¥³¥Í¥¯¥¿¡¼¥×¥í¥Õ¥¡¥¤¥ëÀßÄê
+## 1 ã‚³ãƒã‚¯ã‚¿ãƒ¼ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«è¨­å®š
 make_connecter_profile("new", "FIFO", 1)
 
-## 3 ¥İ¡¼¥ÈÀÜÂ³
-# ¥Ç¡¼¥¿¥İ¡¼¥È1 TimedFloat
+## 3 ãƒãƒ¼ãƒˆæ¥ç¶š
+# ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ1 TimedFloat
 ret0 = g_out_ports[g_port1].connect(g_conprof1)
 
-# ¥Ç¡¼¥¿¥İ¡¼¥È2 TimedFloatSeq
+# ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ2 TimedFloatSeq
 ret1 = g_out_ports[g_port2].connect(g_conprof2)
 
-# ¥µ¡¼¥Ó¥¹¥İ¡¼¥È MyService
+# ã‚µãƒ¼ãƒ“ã‚¹ãƒãƒ¼ãƒˆ MyService
 ret2 = g_out_ports[g_port3].connect(g_conprof3)
 
 for i in range(loop_count):
 
-    ## 2 ¼õ¿®¥Ç¡¼¥¿¥Õ¥¡¥¤¥ëºï½ü
+    ## 2 å—ä¿¡ãƒ‡ãƒ¼ã‚¿ãƒ•ã‚¡ã‚¤ãƒ«å‰Šé™¤
     delete_recv_file()
 
-    ## 4 ¥¢¥¯¥Æ¥£¥Ù¡¼¥È
+    ## 4 ã‚¢ã‚¯ãƒ†ã‚£ãƒ™ãƒ¼ãƒˆ
     ec_recv[0].activate_component(g_compo_recv.rtc_ref)
     time.sleep(sleep_recv_act_time)
     ec_send[0].activate_component(g_compo_send.rtc_ref)
 
     time.sleep(sleep_act_time)
 
-    ## 5 ¥Ç¥£¥¢¥¯¥Æ¥£¥Ù¡¼¥È
+    ## 5 ãƒ‡ã‚£ã‚¢ã‚¯ãƒ†ã‚£ãƒ™ãƒ¼ãƒˆ
     ec_send[0].deactivate_component(g_compo_send.rtc_ref)
     ec_recv[0].deactivate_component(g_compo_recv.rtc_ref)
 
-    ## ¼õ¿®¥Õ¥¡¥¤¥ëÍ­ÌµÈ½Äê
+    ## å—ä¿¡ãƒ•ã‚¡ã‚¤ãƒ«æœ‰ç„¡åˆ¤å®š
     if os.path.isfile(g_diff_recv_file) == False:
         fout = open(g_test_result_file, 'a')
         message = g_mess_header + g_test_case + str(case_no) + " " + g_test_cnt + str(i+1) + g_mess_footer
@@ -2088,26 +2088,26 @@ for i in range(loop_count):
         time.sleep(sleep_for_time)
         continue
 
-    ## 7 Á÷¼õ¿®¥Ç¡¼¥¿Èæ³Ó
+    ## 7 é€å—ä¿¡ãƒ‡ãƒ¼ã‚¿æ¯”è¼ƒ
     time.sleep(sleep_act_time)
     bret = diff_file()
 
-    ## º¹Ê¬¥Õ¥¡¥¤¥ë¤«¤é¥Æ¥¹¥È·ë²Ì½ĞÎÏ
+    ## å·®åˆ†ãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰ãƒ†ã‚¹ãƒˆçµæœå‡ºåŠ›
     fout = open(g_test_result_file, 'a')
     message = g_mess_header + g_test_case + str(case_no) + " " + g_test_cnt + str(i+1) + g_mess_footer
-    # bret==True ¤Ê¤éÁ÷¼õ¿®¥Ç¡¼¥¿°ìÃ×
+    # bret==True ãªã‚‰é€å—ä¿¡ãƒ‡ãƒ¼ã‚¿ä¸€è‡´
     if bret == True:
-        # ¥Æ¥¹¥È·ë²Ì OK
+        # ãƒ†ã‚¹ãƒˆçµæœ OK
         message = message + g_test_ok
         print message
         fout.write(message + '\n')
     else:
-        # ¥Æ¥¹¥È·ë²Ì NG
+        # ãƒ†ã‚¹ãƒˆçµæœ NG
         message = message + g_test_ng
         print message
         message = message + g_test_ng_message
         fout.write(message + '\n')
-        # ¼õ¿®¥Ç¡¼¥¿¤ò¥Æ¥¹¥È·ë²Ì¥Õ¥¡¥¤¥ë¤Ø¥³¥Ô¡¼
+        # å—ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’ãƒ†ã‚¹ãƒˆçµæœãƒ•ã‚¡ã‚¤ãƒ«ã¸ã‚³ãƒ”ãƒ¼
         fin2 = open(g_diff_recv_file, 'r')
         while(1):
             s2 = fin2.readline()
@@ -2119,13 +2119,13 @@ for i in range(loop_count):
 
     time.sleep(sleep_for_time)
 
-## 6 ¥İ¡¼¥ÈÀÚÃÇ
+## 6 ãƒãƒ¼ãƒˆåˆ‡æ–­
 g_in_ports[g_port3].disconnect(g_conprof3.connector_id)
 g_in_ports[g_port2].disconnect(g_conprof2.connector_id)
 g_in_ports[g_port1].disconnect(g_conprof1.connector_id)
 
 ##--------------------------------------------------------------------
-## ÀÜÂ³¥¿¥¤¥×¡§new  Êı¸ş¡§in->out  ¥İ¥ê¥·¡¼¡§NEW  Activate¡¦Deactivate¥Æ¥¹¥È5
+## æ¥ç¶šã‚¿ã‚¤ãƒ—ï¼šnew  æ–¹å‘ï¼šin->out  ãƒãƒªã‚·ãƒ¼ï¼šNEW  Activateãƒ»Deactivateãƒ†ã‚¹ãƒˆ5
 ##--------------------------------------------------------------------
 case_no = case_no + 1
 fout = open(g_test_result_file, 'a')
@@ -2136,36 +2136,36 @@ fout.write(message + '\n')
 fout.close()
 print message
 
-## 1 ¥³¥Í¥¯¥¿¡¼¥×¥í¥Õ¥¡¥¤¥ëÀßÄê
+## 1 ã‚³ãƒã‚¯ã‚¿ãƒ¼ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«è¨­å®š
 make_connecter_profile("new", "NEW", 1)
 
-## 3 ¥İ¡¼¥ÈÀÜÂ³
-# ¥Ç¡¼¥¿¥İ¡¼¥È1 TimedFloat
+## 3 ãƒãƒ¼ãƒˆæ¥ç¶š
+# ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ1 TimedFloat
 ret0 = g_out_ports[g_port1].connect(g_conprof1)
 
-# ¥Ç¡¼¥¿¥İ¡¼¥È2 TimedFloatSeq
+# ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ2 TimedFloatSeq
 ret1 = g_out_ports[g_port2].connect(g_conprof2)
 
-# ¥µ¡¼¥Ó¥¹¥İ¡¼¥È MyService
+# ã‚µãƒ¼ãƒ“ã‚¹ãƒãƒ¼ãƒˆ MyService
 ret2 = g_out_ports[g_port3].connect(g_conprof3)
 
 for i in range(loop_count):
 
-    ## 2 ¼õ¿®¥Ç¡¼¥¿¥Õ¥¡¥¤¥ëºï½ü
+    ## 2 å—ä¿¡ãƒ‡ãƒ¼ã‚¿ãƒ•ã‚¡ã‚¤ãƒ«å‰Šé™¤
     delete_recv_file()
 
-    ## 4 ¥¢¥¯¥Æ¥£¥Ù¡¼¥È
+    ## 4 ã‚¢ã‚¯ãƒ†ã‚£ãƒ™ãƒ¼ãƒˆ
     ec_recv[0].activate_component(g_compo_recv.rtc_ref)
     time.sleep(sleep_recv_act_time)
     ec_send[0].activate_component(g_compo_send.rtc_ref)
 
     time.sleep(sleep_act_time)
 
-    ## 5 ¥Ç¥£¥¢¥¯¥Æ¥£¥Ù¡¼¥È
+    ## 5 ãƒ‡ã‚£ã‚¢ã‚¯ãƒ†ã‚£ãƒ™ãƒ¼ãƒˆ
     ec_send[0].deactivate_component(g_compo_send.rtc_ref)
     ec_recv[0].deactivate_component(g_compo_recv.rtc_ref)
 
-    ## ¼õ¿®¥Õ¥¡¥¤¥ëÍ­ÌµÈ½Äê
+    ## å—ä¿¡ãƒ•ã‚¡ã‚¤ãƒ«æœ‰ç„¡åˆ¤å®š
     if os.path.isfile(g_diff_recv_file) == False:
         fout = open(g_test_result_file, 'a')
         message = g_mess_header + g_test_case + str(case_no) + " " + g_test_cnt + str(i+1) + g_mess_footer
@@ -2176,26 +2176,26 @@ for i in range(loop_count):
         time.sleep(sleep_for_time)
         continue
 
-    ## 7 Á÷¼õ¿®¥Ç¡¼¥¿Èæ³Ó
+    ## 7 é€å—ä¿¡ãƒ‡ãƒ¼ã‚¿æ¯”è¼ƒ
     time.sleep(sleep_act_time)
     bret = diff_file()
 
-    ## º¹Ê¬¥Õ¥¡¥¤¥ë¤«¤é¥Æ¥¹¥È·ë²Ì½ĞÎÏ
+    ## å·®åˆ†ãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰ãƒ†ã‚¹ãƒˆçµæœå‡ºåŠ›
     fout = open(g_test_result_file, 'a')
     message = g_mess_header + g_test_case + str(case_no) + " " + g_test_cnt + str(i+1) + g_mess_footer
-    # bret==True ¤Ê¤éÁ÷¼õ¿®¥Ç¡¼¥¿°ìÃ×
+    # bret==True ãªã‚‰é€å—ä¿¡ãƒ‡ãƒ¼ã‚¿ä¸€è‡´
     if bret == True:
-        # ¥Æ¥¹¥È·ë²Ì OK
+        # ãƒ†ã‚¹ãƒˆçµæœ OK
         message = message + g_test_ok
         print message
         fout.write(message + '\n')
     else:
-        # ¥Æ¥¹¥È·ë²Ì NG
+        # ãƒ†ã‚¹ãƒˆçµæœ NG
         message = message + g_test_ng
         print message
         message = message + g_test_ng_message
         fout.write(message + '\n')
-        # ¼õ¿®¥Ç¡¼¥¿¤ò¥Æ¥¹¥È·ë²Ì¥Õ¥¡¥¤¥ë¤Ø¥³¥Ô¡¼
+        # å—ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’ãƒ†ã‚¹ãƒˆçµæœãƒ•ã‚¡ã‚¤ãƒ«ã¸ã‚³ãƒ”ãƒ¼
         fin2 = open(g_diff_recv_file, 'r')
         while(1):
             s2 = fin2.readline()
@@ -2207,13 +2207,13 @@ for i in range(loop_count):
 
     time.sleep(sleep_for_time)
 
-## 6 ¥İ¡¼¥ÈÀÚÃÇ
+## 6 ãƒãƒ¼ãƒˆåˆ‡æ–­
 g_in_ports[g_port3].disconnect(g_conprof3.connector_id)
 g_in_ports[g_port2].disconnect(g_conprof2.connector_id)
 g_in_ports[g_port1].disconnect(g_conprof1.connector_id)
 
 ##--------------------------------------------------------------------
-## ÀÜÂ³¥¿¥¤¥×¡§new  Êı¸ş¡§in->out  ¥İ¥ê¥·¡¼¡§SKIP  Activate¡¦Deactivate¥Æ¥¹¥È4
+## æ¥ç¶šã‚¿ã‚¤ãƒ—ï¼šnew  æ–¹å‘ï¼šin->out  ãƒãƒªã‚·ãƒ¼ï¼šSKIP  Activateãƒ»Deactivateãƒ†ã‚¹ãƒˆ4
 ##--------------------------------------------------------------------
 case_no = case_no + 1
 fout = open(g_test_result_file, 'a')
@@ -2224,36 +2224,36 @@ fout.write(message + '\n')
 fout.close()
 print message
 
-## 1 ¥³¥Í¥¯¥¿¡¼¥×¥í¥Õ¥¡¥¤¥ëÀßÄê
+## 1 ã‚³ãƒã‚¯ã‚¿ãƒ¼ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«è¨­å®š
 make_connecter_profile("new", "SKIP", 1)
 
-## 3 ¥İ¡¼¥ÈÀÜÂ³
-# ¥Ç¡¼¥¿¥İ¡¼¥È1 TimedFloat
+## 3 ãƒãƒ¼ãƒˆæ¥ç¶š
+# ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ1 TimedFloat
 ret0 = g_out_ports[g_port1].connect(g_conprof1)
 
-# ¥Ç¡¼¥¿¥İ¡¼¥È2 TimedFloatSeq
+# ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ2 TimedFloatSeq
 ret1 = g_out_ports[g_port2].connect(g_conprof2)
 
-# ¥µ¡¼¥Ó¥¹¥İ¡¼¥È MyService
+# ã‚µãƒ¼ãƒ“ã‚¹ãƒãƒ¼ãƒˆ MyService
 ret2 = g_out_ports[g_port3].connect(g_conprof3)
 
 for i in range(loop_count):
 
-    ## 2 ¼õ¿®¥Ç¡¼¥¿¥Õ¥¡¥¤¥ëºï½ü
+    ## 2 å—ä¿¡ãƒ‡ãƒ¼ã‚¿ãƒ•ã‚¡ã‚¤ãƒ«å‰Šé™¤
     delete_recv_file()
 
-    ## 4 ¥¢¥¯¥Æ¥£¥Ù¡¼¥È
+    ## 4 ã‚¢ã‚¯ãƒ†ã‚£ãƒ™ãƒ¼ãƒˆ
     ec_recv[0].activate_component(g_compo_recv.rtc_ref)
     time.sleep(sleep_recv_act_time)
     ec_send[0].activate_component(g_compo_send.rtc_ref)
 
     time.sleep(sleep_act_time)
 
-    ## 5 ¥Ç¥£¥¢¥¯¥Æ¥£¥Ù¡¼¥È
+    ## 5 ãƒ‡ã‚£ã‚¢ã‚¯ãƒ†ã‚£ãƒ™ãƒ¼ãƒˆ
     ec_send[0].deactivate_component(g_compo_send.rtc_ref)
     ec_recv[0].deactivate_component(g_compo_recv.rtc_ref)
 
-    ## ¼õ¿®¥Õ¥¡¥¤¥ëÍ­ÌµÈ½Äê
+    ## å—ä¿¡ãƒ•ã‚¡ã‚¤ãƒ«æœ‰ç„¡åˆ¤å®š
     if os.path.isfile(g_diff_recv_file) == False:
         fout = open(g_test_result_file, 'a')
         message = g_mess_header + g_test_case + str(case_no) + " " + g_test_cnt + str(i+1) + g_mess_footer
@@ -2264,26 +2264,26 @@ for i in range(loop_count):
         time.sleep(sleep_for_time)
         continue
 
-    ## 7 Á÷¼õ¿®¥Ç¡¼¥¿Èæ³Ó
+    ## 7 é€å—ä¿¡ãƒ‡ãƒ¼ã‚¿æ¯”è¼ƒ
     time.sleep(sleep_act_time)
     bret = diff_file()
 
-    ## º¹Ê¬¥Õ¥¡¥¤¥ë¤«¤é¥Æ¥¹¥È·ë²Ì½ĞÎÏ
+    ## å·®åˆ†ãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰ãƒ†ã‚¹ãƒˆçµæœå‡ºåŠ›
     fout = open(g_test_result_file, 'a')
     message = g_mess_header + g_test_case + str(case_no) + " " + g_test_cnt + str(i+1) + g_mess_footer
-    # bret==True ¤Ê¤éÁ÷¼õ¿®¥Ç¡¼¥¿°ìÃ×
+    # bret==True ãªã‚‰é€å—ä¿¡ãƒ‡ãƒ¼ã‚¿ä¸€è‡´
     if bret == True:
-        # ¥Æ¥¹¥È·ë²Ì OK
+        # ãƒ†ã‚¹ãƒˆçµæœ OK
         message = message + g_test_ok
         print message
         fout.write(message + '\n')
     else:
-        # ¥Æ¥¹¥È·ë²Ì NG
+        # ãƒ†ã‚¹ãƒˆçµæœ NG
         message = message + g_test_ng
         print message
         message = message + g_test_ng_message
         fout.write(message + '\n')
-        # ¼õ¿®¥Ç¡¼¥¿¤ò¥Æ¥¹¥È·ë²Ì¥Õ¥¡¥¤¥ë¤Ø¥³¥Ô¡¼
+        # å—ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’ãƒ†ã‚¹ãƒˆçµæœãƒ•ã‚¡ã‚¤ãƒ«ã¸ã‚³ãƒ”ãƒ¼
         fin2 = open(g_diff_recv_file, 'r')
         while(1):
             s2 = fin2.readline()
@@ -2295,13 +2295,13 @@ for i in range(loop_count):
 
     time.sleep(sleep_for_time)
 
-## 6 ¥İ¡¼¥ÈÀÚÃÇ
+## 6 ãƒãƒ¼ãƒˆåˆ‡æ–­
 g_in_ports[g_port3].disconnect(g_conprof3.connector_id)
 g_in_ports[g_port2].disconnect(g_conprof2.connector_id)
 g_in_ports[g_port1].disconnect(g_conprof1.connector_id)
 
 ##--------------------------------------------------------------------
-## ÀÜÂ³¥¿¥¤¥×¡§new  Êı¸ş¡§out->in  ¥İ¥ê¥·¡¼¡§ALL  ÀÜÂ³¡¦ÀÚÃÇ¡¦Activate¡¦Deactivate¥Æ¥¹¥È1
+## æ¥ç¶šã‚¿ã‚¤ãƒ—ï¼šnew  æ–¹å‘ï¼šout->in  ãƒãƒªã‚·ãƒ¼ï¼šALL  æ¥ç¶šãƒ»åˆ‡æ–­ãƒ»Activateãƒ»Deactivateãƒ†ã‚¹ãƒˆ1
 ##--------------------------------------------------------------------
 case_no = case_no + 1
 fout = open(g_test_result_file, 'a')
@@ -2314,39 +2314,39 @@ print message
 
 for i in range(loop_count):
 
-    ## 2 ¼õ¿®¥Ç¡¼¥¿¥Õ¥¡¥¤¥ëºï½ü
+    ## 2 å—ä¿¡ãƒ‡ãƒ¼ã‚¿ãƒ•ã‚¡ã‚¤ãƒ«å‰Šé™¤
     delete_recv_file()
 
-    ## 1 ¥³¥Í¥¯¥¿¡¼¥×¥í¥Õ¥¡¥¤¥ëÀßÄê
+    ## 1 ã‚³ãƒã‚¯ã‚¿ãƒ¼ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«è¨­å®š
     make_connecter_profile("new", "ALL", 0)
 
-    ## 3 ¥İ¡¼¥ÈÀÜÂ³
-    # ¥Ç¡¼¥¿¥İ¡¼¥È1 TimedFloat
+    ## 3 ãƒãƒ¼ãƒˆæ¥ç¶š
+    # ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ1 TimedFloat
     ret0 = g_out_ports[g_port1].connect(g_conprof1)
 
-    # ¥Ç¡¼¥¿¥İ¡¼¥È2 TimedFloatSeq
+    # ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ2 TimedFloatSeq
     ret1 = g_out_ports[g_port2].connect(g_conprof2)
 
-    # ¥µ¡¼¥Ó¥¹¥İ¡¼¥È MyService
+    # ã‚µãƒ¼ãƒ“ã‚¹ãƒãƒ¼ãƒˆ MyService
     ret2 = g_out_ports[g_port3].connect(g_conprof3)
 
-    ## 4 ¥¢¥¯¥Æ¥£¥Ù¡¼¥È
+    ## 4 ã‚¢ã‚¯ãƒ†ã‚£ãƒ™ãƒ¼ãƒˆ
     ec_recv[0].activate_component(g_compo_recv.rtc_ref)
     time.sleep(sleep_recv_act_time)
     ec_send[0].activate_component(g_compo_send.rtc_ref)
 
     time.sleep(sleep_act_time)
 
-    ## 5 ¥Ç¥£¥¢¥¯¥Æ¥£¥Ù¡¼¥È
+    ## 5 ãƒ‡ã‚£ã‚¢ã‚¯ãƒ†ã‚£ãƒ™ãƒ¼ãƒˆ
     ec_send[0].deactivate_component(g_compo_send.rtc_ref)
     ec_recv[0].deactivate_component(g_compo_recv.rtc_ref)
 
-    ## 6 ¥İ¡¼¥ÈÀÚÃÇ
+    ## 6 ãƒãƒ¼ãƒˆåˆ‡æ–­
     g_in_ports[g_port3].disconnect(g_conprof3.connector_id)
     g_in_ports[g_port2].disconnect(g_conprof2.connector_id)
     g_in_ports[g_port1].disconnect(g_conprof1.connector_id)
 
-    ## ¼õ¿®¥Õ¥¡¥¤¥ëÍ­ÌµÈ½Äê
+    ## å—ä¿¡ãƒ•ã‚¡ã‚¤ãƒ«æœ‰ç„¡åˆ¤å®š
     if os.path.isfile(g_diff_recv_file) == False:
         fout = open(g_test_result_file, 'a')
         message = g_mess_header + g_test_case + str(case_no) + " " + g_test_cnt + str(i+1) + g_mess_footer
@@ -2357,26 +2357,26 @@ for i in range(loop_count):
         time.sleep(sleep_for_time)
         continue
 
-    ## 7 Á÷¼õ¿®¥Ç¡¼¥¿Èæ³Ó
+    ## 7 é€å—ä¿¡ãƒ‡ãƒ¼ã‚¿æ¯”è¼ƒ
     time.sleep(sleep_act_time)
     bret = diff_file()
 
-    ## º¹Ê¬¥Õ¥¡¥¤¥ë¤«¤é¥Æ¥¹¥È·ë²Ì½ĞÎÏ
+    ## å·®åˆ†ãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰ãƒ†ã‚¹ãƒˆçµæœå‡ºåŠ›
     fout = open(g_test_result_file, 'a')
     message = g_mess_header + g_test_case + str(case_no) + " " + g_test_cnt + str(i+1) + g_mess_footer
-    # bret==True ¤Ê¤éÁ÷¼õ¿®¥Ç¡¼¥¿°ìÃ×
+    # bret==True ãªã‚‰é€å—ä¿¡ãƒ‡ãƒ¼ã‚¿ä¸€è‡´
     if bret == True:
-        # ¥Æ¥¹¥È·ë²Ì OK
+        # ãƒ†ã‚¹ãƒˆçµæœ OK
         message = message + g_test_ok
         print message
         fout.write(message + '\n')
     else:
-        # ¥Æ¥¹¥È·ë²Ì NG
+        # ãƒ†ã‚¹ãƒˆçµæœ NG
         message = message + g_test_ng
         print message
         message = message + g_test_ng_message
         fout.write(message + '\n')
-        # ¼õ¿®¥Ç¡¼¥¿¤ò¥Æ¥¹¥È·ë²Ì¥Õ¥¡¥¤¥ë¤Ø¥³¥Ô¡¼
+        # å—ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’ãƒ†ã‚¹ãƒˆçµæœãƒ•ã‚¡ã‚¤ãƒ«ã¸ã‚³ãƒ”ãƒ¼
         fin2 = open(g_diff_recv_file, 'r')
         while(1):
             s2 = fin2.readline()
@@ -2389,7 +2389,7 @@ for i in range(loop_count):
     time.sleep(sleep_for_time)
 
 ##--------------------------------------------------------------------
-## ÀÜÂ³¥¿¥¤¥×¡§new  Êı¸ş¡§out->in  ¥İ¥ê¥·¡¼¡§FIFO  ÀÜÂ³¡¦ÀÚÃÇ¡¦Activate¡¦Deactivate¥Æ¥¹¥È1
+## æ¥ç¶šã‚¿ã‚¤ãƒ—ï¼šnew  æ–¹å‘ï¼šout->in  ãƒãƒªã‚·ãƒ¼ï¼šFIFO  æ¥ç¶šãƒ»åˆ‡æ–­ãƒ»Activateãƒ»Deactivateãƒ†ã‚¹ãƒˆ1
 ##--------------------------------------------------------------------
 case_no = case_no + 1
 fout = open(g_test_result_file, 'a')
@@ -2402,39 +2402,39 @@ print message
 
 for i in range(loop_count):
 
-    ## 2 ¼õ¿®¥Ç¡¼¥¿¥Õ¥¡¥¤¥ëºï½ü
+    ## 2 å—ä¿¡ãƒ‡ãƒ¼ã‚¿ãƒ•ã‚¡ã‚¤ãƒ«å‰Šé™¤
     delete_recv_file()
 
-    ## 1 ¥³¥Í¥¯¥¿¡¼¥×¥í¥Õ¥¡¥¤¥ëÀßÄê
+    ## 1 ã‚³ãƒã‚¯ã‚¿ãƒ¼ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«è¨­å®š
     make_connecter_profile("new", "FIFO", 0)
 
-    ## 3 ¥İ¡¼¥ÈÀÜÂ³
-    # ¥Ç¡¼¥¿¥İ¡¼¥È1 TimedFloat
+    ## 3 ãƒãƒ¼ãƒˆæ¥ç¶š
+    # ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ1 TimedFloat
     ret0 = g_out_ports[g_port1].connect(g_conprof1)
 
-    # ¥Ç¡¼¥¿¥İ¡¼¥È2 TimedFloatSeq
+    # ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ2 TimedFloatSeq
     ret1 = g_out_ports[g_port2].connect(g_conprof2)
 
-    # ¥µ¡¼¥Ó¥¹¥İ¡¼¥È MyService
+    # ã‚µãƒ¼ãƒ“ã‚¹ãƒãƒ¼ãƒˆ MyService
     ret2 = g_out_ports[g_port3].connect(g_conprof3)
 
-    ## 4 ¥¢¥¯¥Æ¥£¥Ù¡¼¥È
+    ## 4 ã‚¢ã‚¯ãƒ†ã‚£ãƒ™ãƒ¼ãƒˆ
     ec_recv[0].activate_component(g_compo_recv.rtc_ref)
     time.sleep(sleep_recv_act_time)
     ec_send[0].activate_component(g_compo_send.rtc_ref)
 
     time.sleep(sleep_act_time)
 
-    ## 5 ¥Ç¥£¥¢¥¯¥Æ¥£¥Ù¡¼¥È
+    ## 5 ãƒ‡ã‚£ã‚¢ã‚¯ãƒ†ã‚£ãƒ™ãƒ¼ãƒˆ
     ec_send[0].deactivate_component(g_compo_send.rtc_ref)
     ec_recv[0].deactivate_component(g_compo_recv.rtc_ref)
 
-    ## 6 ¥İ¡¼¥ÈÀÚÃÇ
+    ## 6 ãƒãƒ¼ãƒˆåˆ‡æ–­
     g_in_ports[g_port3].disconnect(g_conprof3.connector_id)
     g_in_ports[g_port2].disconnect(g_conprof2.connector_id)
     g_in_ports[g_port1].disconnect(g_conprof1.connector_id)
 
-    ## ¼õ¿®¥Õ¥¡¥¤¥ëÍ­ÌµÈ½Äê
+    ## å—ä¿¡ãƒ•ã‚¡ã‚¤ãƒ«æœ‰ç„¡åˆ¤å®š
     if os.path.isfile(g_diff_recv_file) == False:
         fout = open(g_test_result_file, 'a')
         message = g_mess_header + g_test_case + str(case_no) + " " + g_test_cnt + str(i+1) + g_mess_footer
@@ -2445,26 +2445,26 @@ for i in range(loop_count):
         time.sleep(sleep_for_time)
         continue
 
-    ## 7 Á÷¼õ¿®¥Ç¡¼¥¿Èæ³Ó
+    ## 7 é€å—ä¿¡ãƒ‡ãƒ¼ã‚¿æ¯”è¼ƒ
     time.sleep(sleep_act_time)
     bret = diff_file()
 
-    ## º¹Ê¬¥Õ¥¡¥¤¥ë¤«¤é¥Æ¥¹¥È·ë²Ì½ĞÎÏ
+    ## å·®åˆ†ãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰ãƒ†ã‚¹ãƒˆçµæœå‡ºåŠ›
     fout = open(g_test_result_file, 'a')
     message = g_mess_header + g_test_case + str(case_no) + " " + g_test_cnt + str(i+1) + g_mess_footer
-    # bret==True ¤Ê¤éÁ÷¼õ¿®¥Ç¡¼¥¿°ìÃ×
+    # bret==True ãªã‚‰é€å—ä¿¡ãƒ‡ãƒ¼ã‚¿ä¸€è‡´
     if bret == True:
-        # ¥Æ¥¹¥È·ë²Ì OK
+        # ãƒ†ã‚¹ãƒˆçµæœ OK
         message = message + g_test_ok
         print message
         fout.write(message + '\n')
     else:
-        # ¥Æ¥¹¥È·ë²Ì NG
+        # ãƒ†ã‚¹ãƒˆçµæœ NG
         message = message + g_test_ng
         print message
         message = message + g_test_ng_message
         fout.write(message + '\n')
-        # ¼õ¿®¥Ç¡¼¥¿¤ò¥Æ¥¹¥È·ë²Ì¥Õ¥¡¥¤¥ë¤Ø¥³¥Ô¡¼
+        # å—ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’ãƒ†ã‚¹ãƒˆçµæœãƒ•ã‚¡ã‚¤ãƒ«ã¸ã‚³ãƒ”ãƒ¼
         fin2 = open(g_diff_recv_file, 'r')
         while(1):
             s2 = fin2.readline()
@@ -2477,7 +2477,7 @@ for i in range(loop_count):
     time.sleep(sleep_for_time)
 
 ##--------------------------------------------------------------------
-## ÀÜÂ³¥¿¥¤¥×¡§new  Êı¸ş¡§out->in  ¥İ¥ê¥·¡¼¡§NEW  ÀÜÂ³¡¦ÀÚÃÇ¡¦Activate¡¦Deactivate¥Æ¥¹¥È1
+## æ¥ç¶šã‚¿ã‚¤ãƒ—ï¼šnew  æ–¹å‘ï¼šout->in  ãƒãƒªã‚·ãƒ¼ï¼šNEW  æ¥ç¶šãƒ»åˆ‡æ–­ãƒ»Activateãƒ»Deactivateãƒ†ã‚¹ãƒˆ1
 ##--------------------------------------------------------------------
 case_no = case_no + 1
 fout = open(g_test_result_file, 'a')
@@ -2490,39 +2490,39 @@ print message
 
 for i in range(loop_count):
 
-    ## 2 ¼õ¿®¥Ç¡¼¥¿¥Õ¥¡¥¤¥ëºï½ü
+    ## 2 å—ä¿¡ãƒ‡ãƒ¼ã‚¿ãƒ•ã‚¡ã‚¤ãƒ«å‰Šé™¤
     delete_recv_file()
 
-    ## 1 ¥³¥Í¥¯¥¿¡¼¥×¥í¥Õ¥¡¥¤¥ëÀßÄê
+    ## 1 ã‚³ãƒã‚¯ã‚¿ãƒ¼ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«è¨­å®š
     make_connecter_profile("new", "NEW", 0)
 
-    ## 3 ¥İ¡¼¥ÈÀÜÂ³
-    # ¥Ç¡¼¥¿¥İ¡¼¥È1 TimedFloat
+    ## 3 ãƒãƒ¼ãƒˆæ¥ç¶š
+    # ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ1 TimedFloat
     ret0 = g_out_ports[g_port1].connect(g_conprof1)
 
-    # ¥Ç¡¼¥¿¥İ¡¼¥È2 TimedFloatSeq
+    # ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ2 TimedFloatSeq
     ret1 = g_out_ports[g_port2].connect(g_conprof2)
 
-    # ¥µ¡¼¥Ó¥¹¥İ¡¼¥È MyService
+    # ã‚µãƒ¼ãƒ“ã‚¹ãƒãƒ¼ãƒˆ MyService
     ret2 = g_out_ports[g_port3].connect(g_conprof3)
 
-    ## 4 ¥¢¥¯¥Æ¥£¥Ù¡¼¥È
+    ## 4 ã‚¢ã‚¯ãƒ†ã‚£ãƒ™ãƒ¼ãƒˆ
     ec_recv[0].activate_component(g_compo_recv.rtc_ref)
     time.sleep(sleep_recv_act_time)
     ec_send[0].activate_component(g_compo_send.rtc_ref)
 
     time.sleep(sleep_act_time)
 
-    ## 5 ¥Ç¥£¥¢¥¯¥Æ¥£¥Ù¡¼¥È
+    ## 5 ãƒ‡ã‚£ã‚¢ã‚¯ãƒ†ã‚£ãƒ™ãƒ¼ãƒˆ
     ec_send[0].deactivate_component(g_compo_send.rtc_ref)
     ec_recv[0].deactivate_component(g_compo_recv.rtc_ref)
 
-    ## 6 ¥İ¡¼¥ÈÀÚÃÇ
+    ## 6 ãƒãƒ¼ãƒˆåˆ‡æ–­
     g_in_ports[g_port3].disconnect(g_conprof3.connector_id)
     g_in_ports[g_port2].disconnect(g_conprof2.connector_id)
     g_in_ports[g_port1].disconnect(g_conprof1.connector_id)
 
-    ## ¼õ¿®¥Õ¥¡¥¤¥ëÍ­ÌµÈ½Äê
+    ## å—ä¿¡ãƒ•ã‚¡ã‚¤ãƒ«æœ‰ç„¡åˆ¤å®š
     if os.path.isfile(g_diff_recv_file) == False:
         fout = open(g_test_result_file, 'a')
         message = g_mess_header + g_test_case + str(case_no) + " " + g_test_cnt + str(i+1) + g_mess_footer
@@ -2533,26 +2533,26 @@ for i in range(loop_count):
         time.sleep(sleep_for_time)
         continue
 
-    ## 7 Á÷¼õ¿®¥Ç¡¼¥¿Èæ³Ó
+    ## 7 é€å—ä¿¡ãƒ‡ãƒ¼ã‚¿æ¯”è¼ƒ
     time.sleep(sleep_act_time)
     bret = diff_file()
 
-    ## º¹Ê¬¥Õ¥¡¥¤¥ë¤«¤é¥Æ¥¹¥È·ë²Ì½ĞÎÏ
+    ## å·®åˆ†ãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰ãƒ†ã‚¹ãƒˆçµæœå‡ºåŠ›
     fout = open(g_test_result_file, 'a')
     message = g_mess_header + g_test_case + str(case_no) + " " + g_test_cnt + str(i+1) + g_mess_footer
-    # bret==True ¤Ê¤éÁ÷¼õ¿®¥Ç¡¼¥¿°ìÃ×
+    # bret==True ãªã‚‰é€å—ä¿¡ãƒ‡ãƒ¼ã‚¿ä¸€è‡´
     if bret == True:
-        # ¥Æ¥¹¥È·ë²Ì OK
+        # ãƒ†ã‚¹ãƒˆçµæœ OK
         message = message + g_test_ok
         print message
         fout.write(message + '\n')
     else:
-        # ¥Æ¥¹¥È·ë²Ì NG
+        # ãƒ†ã‚¹ãƒˆçµæœ NG
         message = message + g_test_ng
         print message
         message = message + g_test_ng_message
         fout.write(message + '\n')
-        # ¼õ¿®¥Ç¡¼¥¿¤ò¥Æ¥¹¥È·ë²Ì¥Õ¥¡¥¤¥ë¤Ø¥³¥Ô¡¼
+        # å—ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’ãƒ†ã‚¹ãƒˆçµæœãƒ•ã‚¡ã‚¤ãƒ«ã¸ã‚³ãƒ”ãƒ¼
         fin2 = open(g_diff_recv_file, 'r')
         while(1):
             s2 = fin2.readline()
@@ -2565,7 +2565,7 @@ for i in range(loop_count):
     time.sleep(sleep_for_time)
 
 ##--------------------------------------------------------------------
-## ÀÜÂ³¥¿¥¤¥×¡§new  Êı¸ş¡§out->in  ¥İ¥ê¥·¡¼¡§SKIP  ÀÜÂ³¡¦ÀÚÃÇ¡¦Activate¡¦Deactivate¥Æ¥¹¥È1
+## æ¥ç¶šã‚¿ã‚¤ãƒ—ï¼šnew  æ–¹å‘ï¼šout->in  ãƒãƒªã‚·ãƒ¼ï¼šSKIP  æ¥ç¶šãƒ»åˆ‡æ–­ãƒ»Activateãƒ»Deactivateãƒ†ã‚¹ãƒˆ1
 ##--------------------------------------------------------------------
 case_no = case_no + 1
 fout = open(g_test_result_file, 'a')
@@ -2578,39 +2578,39 @@ print message
 
 for i in range(loop_count):
 
-    ## 2 ¼õ¿®¥Ç¡¼¥¿¥Õ¥¡¥¤¥ëºï½ü
+    ## 2 å—ä¿¡ãƒ‡ãƒ¼ã‚¿ãƒ•ã‚¡ã‚¤ãƒ«å‰Šé™¤
     delete_recv_file()
 
-    ## 1 ¥³¥Í¥¯¥¿¡¼¥×¥í¥Õ¥¡¥¤¥ëÀßÄê
+    ## 1 ã‚³ãƒã‚¯ã‚¿ãƒ¼ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«è¨­å®š
     make_connecter_profile("new", "SKIP", 0)
 
-    ## 3 ¥İ¡¼¥ÈÀÜÂ³
-    # ¥Ç¡¼¥¿¥İ¡¼¥È1 TimedFloat
+    ## 3 ãƒãƒ¼ãƒˆæ¥ç¶š
+    # ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ1 TimedFloat
     ret0 = g_out_ports[g_port1].connect(g_conprof1)
 
-    # ¥Ç¡¼¥¿¥İ¡¼¥È2 TimedFloatSeq
+    # ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ2 TimedFloatSeq
     ret1 = g_out_ports[g_port2].connect(g_conprof2)
 
-    # ¥µ¡¼¥Ó¥¹¥İ¡¼¥È MyService
+    # ã‚µãƒ¼ãƒ“ã‚¹ãƒãƒ¼ãƒˆ MyService
     ret2 = g_out_ports[g_port3].connect(g_conprof3)
 
-    ## 4 ¥¢¥¯¥Æ¥£¥Ù¡¼¥È
+    ## 4 ã‚¢ã‚¯ãƒ†ã‚£ãƒ™ãƒ¼ãƒˆ
     ec_recv[0].activate_component(g_compo_recv.rtc_ref)
     time.sleep(sleep_recv_act_time)
     ec_send[0].activate_component(g_compo_send.rtc_ref)
 
     time.sleep(sleep_act_time)
 
-    ## 5 ¥Ç¥£¥¢¥¯¥Æ¥£¥Ù¡¼¥È
+    ## 5 ãƒ‡ã‚£ã‚¢ã‚¯ãƒ†ã‚£ãƒ™ãƒ¼ãƒˆ
     ec_send[0].deactivate_component(g_compo_send.rtc_ref)
     ec_recv[0].deactivate_component(g_compo_recv.rtc_ref)
 
-    ## 6 ¥İ¡¼¥ÈÀÚÃÇ
+    ## 6 ãƒãƒ¼ãƒˆåˆ‡æ–­
     g_in_ports[g_port3].disconnect(g_conprof3.connector_id)
     g_in_ports[g_port2].disconnect(g_conprof2.connector_id)
     g_in_ports[g_port1].disconnect(g_conprof1.connector_id)
 
-    ## ¼õ¿®¥Õ¥¡¥¤¥ëÍ­ÌµÈ½Äê
+    ## å—ä¿¡ãƒ•ã‚¡ã‚¤ãƒ«æœ‰ç„¡åˆ¤å®š
     if os.path.isfile(g_diff_recv_file) == False:
         fout = open(g_test_result_file, 'a')
         message = g_mess_header + g_test_case + str(case_no) + " " + g_test_cnt + str(i+1) + g_mess_footer
@@ -2621,26 +2621,26 @@ for i in range(loop_count):
         time.sleep(sleep_for_time)
         continue
 
-    ## 7 Á÷¼õ¿®¥Ç¡¼¥¿Èæ³Ó
+    ## 7 é€å—ä¿¡ãƒ‡ãƒ¼ã‚¿æ¯”è¼ƒ
     time.sleep(sleep_act_time)
     bret = diff_file()
 
-    ## º¹Ê¬¥Õ¥¡¥¤¥ë¤«¤é¥Æ¥¹¥È·ë²Ì½ĞÎÏ
+    ## å·®åˆ†ãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰ãƒ†ã‚¹ãƒˆçµæœå‡ºåŠ›
     fout = open(g_test_result_file, 'a')
     message = g_mess_header + g_test_case + str(case_no) + " " + g_test_cnt + str(i+1) + g_mess_footer
-    # bret==True ¤Ê¤éÁ÷¼õ¿®¥Ç¡¼¥¿°ìÃ×
+    # bret==True ãªã‚‰é€å—ä¿¡ãƒ‡ãƒ¼ã‚¿ä¸€è‡´
     if bret == True:
-        # ¥Æ¥¹¥È·ë²Ì OK
+        # ãƒ†ã‚¹ãƒˆçµæœ OK
         message = message + g_test_ok
         print message
         fout.write(message + '\n')
     else:
-        # ¥Æ¥¹¥È·ë²Ì NG
+        # ãƒ†ã‚¹ãƒˆçµæœ NG
         message = message + g_test_ng
         print message
         message = message + g_test_ng_message
         fout.write(message + '\n')
-        # ¼õ¿®¥Ç¡¼¥¿¤ò¥Æ¥¹¥È·ë²Ì¥Õ¥¡¥¤¥ë¤Ø¥³¥Ô¡¼
+        # å—ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’ãƒ†ã‚¹ãƒˆçµæœãƒ•ã‚¡ã‚¤ãƒ«ã¸ã‚³ãƒ”ãƒ¼
         fin2 = open(g_diff_recv_file, 'r')
         while(1):
             s2 = fin2.readline()
@@ -2653,7 +2653,7 @@ for i in range(loop_count):
     time.sleep(sleep_for_time)
 
 ##--------------------------------------------------------------------
-## ÀÜÂ³¥¿¥¤¥×¡§new  Êı¸ş¡§in->out  ¥İ¥ê¥·¡¼¡§ALL  ÀÜÂ³¡¦ÀÚÃÇ¡¦Activate¡¦Deactivate¥Æ¥¹¥È1
+## æ¥ç¶šã‚¿ã‚¤ãƒ—ï¼šnew  æ–¹å‘ï¼šin->out  ãƒãƒªã‚·ãƒ¼ï¼šALL  æ¥ç¶šãƒ»åˆ‡æ–­ãƒ»Activateãƒ»Deactivateãƒ†ã‚¹ãƒˆ1
 ##--------------------------------------------------------------------
 case_no = case_no + 1
 fout = open(g_test_result_file, 'a')
@@ -2666,39 +2666,39 @@ print message
 
 for i in range(loop_count):
 
-    ## 2 ¼õ¿®¥Ç¡¼¥¿¥Õ¥¡¥¤¥ëºï½ü
+    ## 2 å—ä¿¡ãƒ‡ãƒ¼ã‚¿ãƒ•ã‚¡ã‚¤ãƒ«å‰Šé™¤
     delete_recv_file()
 
-    ## 1 ¥³¥Í¥¯¥¿¡¼¥×¥í¥Õ¥¡¥¤¥ëÀßÄê
+    ## 1 ã‚³ãƒã‚¯ã‚¿ãƒ¼ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«è¨­å®š
     make_connecter_profile("new", "ALL", 1)
 
-    ## 3 ¥İ¡¼¥ÈÀÜÂ³
-    # ¥Ç¡¼¥¿¥İ¡¼¥È1 TimedFloat
+    ## 3 ãƒãƒ¼ãƒˆæ¥ç¶š
+    # ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ1 TimedFloat
     ret0 = g_out_ports[g_port1].connect(g_conprof1)
 
-    # ¥Ç¡¼¥¿¥İ¡¼¥È2 TimedFloatSeq
+    # ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ2 TimedFloatSeq
     ret1 = g_out_ports[g_port2].connect(g_conprof2)
 
-    # ¥µ¡¼¥Ó¥¹¥İ¡¼¥È MyService
+    # ã‚µãƒ¼ãƒ“ã‚¹ãƒãƒ¼ãƒˆ MyService
     ret2 = g_out_ports[g_port3].connect(g_conprof3)
 
-    ## 4 ¥¢¥¯¥Æ¥£¥Ù¡¼¥È
+    ## 4 ã‚¢ã‚¯ãƒ†ã‚£ãƒ™ãƒ¼ãƒˆ
     ec_recv[0].activate_component(g_compo_recv.rtc_ref)
     time.sleep(sleep_recv_act_time)
     ec_send[0].activate_component(g_compo_send.rtc_ref)
 
     time.sleep(sleep_act_time)
 
-    ## 5 ¥Ç¥£¥¢¥¯¥Æ¥£¥Ù¡¼¥È
+    ## 5 ãƒ‡ã‚£ã‚¢ã‚¯ãƒ†ã‚£ãƒ™ãƒ¼ãƒˆ
     ec_send[0].deactivate_component(g_compo_send.rtc_ref)
     ec_recv[0].deactivate_component(g_compo_recv.rtc_ref)
 
-    ## 6 ¥İ¡¼¥ÈÀÚÃÇ
+    ## 6 ãƒãƒ¼ãƒˆåˆ‡æ–­
     g_in_ports[g_port3].disconnect(g_conprof3.connector_id)
     g_in_ports[g_port2].disconnect(g_conprof2.connector_id)
     g_in_ports[g_port1].disconnect(g_conprof1.connector_id)
 
-    ## ¼õ¿®¥Õ¥¡¥¤¥ëÍ­ÌµÈ½Äê
+    ## å—ä¿¡ãƒ•ã‚¡ã‚¤ãƒ«æœ‰ç„¡åˆ¤å®š
     if os.path.isfile(g_diff_recv_file) == False:
         fout = open(g_test_result_file, 'a')
         message = g_mess_header + g_test_case + str(case_no) + " " + g_test_cnt + str(i+1) + g_mess_footer
@@ -2709,26 +2709,26 @@ for i in range(loop_count):
         time.sleep(sleep_for_time)
         continue
 
-    ## 7 Á÷¼õ¿®¥Ç¡¼¥¿Èæ³Ó
+    ## 7 é€å—ä¿¡ãƒ‡ãƒ¼ã‚¿æ¯”è¼ƒ
     time.sleep(sleep_act_time)
     bret = diff_file()
 
-    ## º¹Ê¬¥Õ¥¡¥¤¥ë¤«¤é¥Æ¥¹¥È·ë²Ì½ĞÎÏ
+    ## å·®åˆ†ãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰ãƒ†ã‚¹ãƒˆçµæœå‡ºåŠ›
     fout = open(g_test_result_file, 'a')
     message = g_mess_header + g_test_case + str(case_no) + " " + g_test_cnt + str(i+1) + g_mess_footer
-    # bret==True ¤Ê¤éÁ÷¼õ¿®¥Ç¡¼¥¿°ìÃ×
+    # bret==True ãªã‚‰é€å—ä¿¡ãƒ‡ãƒ¼ã‚¿ä¸€è‡´
     if bret == True:
-        # ¥Æ¥¹¥È·ë²Ì OK
+        # ãƒ†ã‚¹ãƒˆçµæœ OK
         message = message + g_test_ok
         print message
         fout.write(message + '\n')
     else:
-        # ¥Æ¥¹¥È·ë²Ì NG
+        # ãƒ†ã‚¹ãƒˆçµæœ NG
         message = message + g_test_ng
         print message
         message = message + g_test_ng_message
         fout.write(message + '\n')
-        # ¼õ¿®¥Ç¡¼¥¿¤ò¥Æ¥¹¥È·ë²Ì¥Õ¥¡¥¤¥ë¤Ø¥³¥Ô¡¼
+        # å—ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’ãƒ†ã‚¹ãƒˆçµæœãƒ•ã‚¡ã‚¤ãƒ«ã¸ã‚³ãƒ”ãƒ¼
         fin2 = open(g_diff_recv_file, 'r')
         while(1):
             s2 = fin2.readline()
@@ -2741,7 +2741,7 @@ for i in range(loop_count):
     time.sleep(sleep_for_time)
 
 ##--------------------------------------------------------------------
-## ÀÜÂ³¥¿¥¤¥×¡§new  Êı¸ş¡§in->out  ¥İ¥ê¥·¡¼¡§FIFO  ÀÜÂ³¡¦ÀÚÃÇ¡¦Activate¡¦Deactivate¥Æ¥¹¥È1
+## æ¥ç¶šã‚¿ã‚¤ãƒ—ï¼šnew  æ–¹å‘ï¼šin->out  ãƒãƒªã‚·ãƒ¼ï¼šFIFO  æ¥ç¶šãƒ»åˆ‡æ–­ãƒ»Activateãƒ»Deactivateãƒ†ã‚¹ãƒˆ1
 ##--------------------------------------------------------------------
 case_no = case_no + 1
 fout = open(g_test_result_file, 'a')
@@ -2754,39 +2754,39 @@ print message
 
 for i in range(loop_count):
 
-    ## 2 ¼õ¿®¥Ç¡¼¥¿¥Õ¥¡¥¤¥ëºï½ü
+    ## 2 å—ä¿¡ãƒ‡ãƒ¼ã‚¿ãƒ•ã‚¡ã‚¤ãƒ«å‰Šé™¤
     delete_recv_file()
 
-    ## 1 ¥³¥Í¥¯¥¿¡¼¥×¥í¥Õ¥¡¥¤¥ëÀßÄê
+    ## 1 ã‚³ãƒã‚¯ã‚¿ãƒ¼ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«è¨­å®š
     make_connecter_profile("new", "FIFO", 1)
 
-    ## 3 ¥İ¡¼¥ÈÀÜÂ³
-    # ¥Ç¡¼¥¿¥İ¡¼¥È1 TimedFloat
+    ## 3 ãƒãƒ¼ãƒˆæ¥ç¶š
+    # ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ1 TimedFloat
     ret0 = g_out_ports[g_port1].connect(g_conprof1)
 
-    # ¥Ç¡¼¥¿¥İ¡¼¥È2 TimedFloatSeq
+    # ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ2 TimedFloatSeq
     ret1 = g_out_ports[g_port2].connect(g_conprof2)
 
-    # ¥µ¡¼¥Ó¥¹¥İ¡¼¥È MyService
+    # ã‚µãƒ¼ãƒ“ã‚¹ãƒãƒ¼ãƒˆ MyService
     ret2 = g_out_ports[g_port3].connect(g_conprof3)
 
-    ## 4 ¥¢¥¯¥Æ¥£¥Ù¡¼¥È
+    ## 4 ã‚¢ã‚¯ãƒ†ã‚£ãƒ™ãƒ¼ãƒˆ
     ec_recv[0].activate_component(g_compo_recv.rtc_ref)
     time.sleep(sleep_recv_act_time)
     ec_send[0].activate_component(g_compo_send.rtc_ref)
 
     time.sleep(sleep_act_time)
 
-    ## 5 ¥Ç¥£¥¢¥¯¥Æ¥£¥Ù¡¼¥È
+    ## 5 ãƒ‡ã‚£ã‚¢ã‚¯ãƒ†ã‚£ãƒ™ãƒ¼ãƒˆ
     ec_send[0].deactivate_component(g_compo_send.rtc_ref)
     ec_recv[0].deactivate_component(g_compo_recv.rtc_ref)
 
-    ## 6 ¥İ¡¼¥ÈÀÚÃÇ
+    ## 6 ãƒãƒ¼ãƒˆåˆ‡æ–­
     g_in_ports[g_port3].disconnect(g_conprof3.connector_id)
     g_in_ports[g_port2].disconnect(g_conprof2.connector_id)
     g_in_ports[g_port1].disconnect(g_conprof1.connector_id)
 
-    ## ¼õ¿®¥Õ¥¡¥¤¥ëÍ­ÌµÈ½Äê
+    ## å—ä¿¡ãƒ•ã‚¡ã‚¤ãƒ«æœ‰ç„¡åˆ¤å®š
     if os.path.isfile(g_diff_recv_file) == False:
         fout = open(g_test_result_file, 'a')
         message = g_mess_header + g_test_case + str(case_no) + " " + g_test_cnt + str(i+1) + g_mess_footer
@@ -2797,26 +2797,26 @@ for i in range(loop_count):
         time.sleep(sleep_for_time)
         continue
 
-    ## 7 Á÷¼õ¿®¥Ç¡¼¥¿Èæ³Ó
+    ## 7 é€å—ä¿¡ãƒ‡ãƒ¼ã‚¿æ¯”è¼ƒ
     time.sleep(sleep_act_time)
     bret = diff_file()
 
-    ## º¹Ê¬¥Õ¥¡¥¤¥ë¤«¤é¥Æ¥¹¥È·ë²Ì½ĞÎÏ
+    ## å·®åˆ†ãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰ãƒ†ã‚¹ãƒˆçµæœå‡ºåŠ›
     fout = open(g_test_result_file, 'a')
     message = g_mess_header + g_test_case + str(case_no) + " " + g_test_cnt + str(i+1) + g_mess_footer
-    # bret==True ¤Ê¤éÁ÷¼õ¿®¥Ç¡¼¥¿°ìÃ×
+    # bret==True ãªã‚‰é€å—ä¿¡ãƒ‡ãƒ¼ã‚¿ä¸€è‡´
     if bret == True:
-        # ¥Æ¥¹¥È·ë²Ì OK
+        # ãƒ†ã‚¹ãƒˆçµæœ OK
         message = message + g_test_ok
         print message
         fout.write(message + '\n')
     else:
-        # ¥Æ¥¹¥È·ë²Ì NG
+        # ãƒ†ã‚¹ãƒˆçµæœ NG
         message = message + g_test_ng
         print message
         message = message + g_test_ng_message
         fout.write(message + '\n')
-        # ¼õ¿®¥Ç¡¼¥¿¤ò¥Æ¥¹¥È·ë²Ì¥Õ¥¡¥¤¥ë¤Ø¥³¥Ô¡¼
+        # å—ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’ãƒ†ã‚¹ãƒˆçµæœãƒ•ã‚¡ã‚¤ãƒ«ã¸ã‚³ãƒ”ãƒ¼
         fin2 = open(g_diff_recv_file, 'r')
         while(1):
             s2 = fin2.readline()
@@ -2829,7 +2829,7 @@ for i in range(loop_count):
     time.sleep(sleep_for_time)
 
 ##--------------------------------------------------------------------
-## ÀÜÂ³¥¿¥¤¥×¡§new  Êı¸ş¡§in->out  ¥İ¥ê¥·¡¼¡§NEW  ÀÜÂ³¡¦ÀÚÃÇ¡¦Activate¡¦Deactivate¥Æ¥¹¥È1
+## æ¥ç¶šã‚¿ã‚¤ãƒ—ï¼šnew  æ–¹å‘ï¼šin->out  ãƒãƒªã‚·ãƒ¼ï¼šNEW  æ¥ç¶šãƒ»åˆ‡æ–­ãƒ»Activateãƒ»Deactivateãƒ†ã‚¹ãƒˆ1
 ##--------------------------------------------------------------------
 case_no = case_no + 1
 fout = open(g_test_result_file, 'a')
@@ -2842,39 +2842,39 @@ print message
 
 for i in range(loop_count):
 
-    ## 2 ¼õ¿®¥Ç¡¼¥¿¥Õ¥¡¥¤¥ëºï½ü
+    ## 2 å—ä¿¡ãƒ‡ãƒ¼ã‚¿ãƒ•ã‚¡ã‚¤ãƒ«å‰Šé™¤
     delete_recv_file()
 
-    ## 1 ¥³¥Í¥¯¥¿¡¼¥×¥í¥Õ¥¡¥¤¥ëÀßÄê
+    ## 1 ã‚³ãƒã‚¯ã‚¿ãƒ¼ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«è¨­å®š
     make_connecter_profile("new", "NEW", 1)
 
-    ## 3 ¥İ¡¼¥ÈÀÜÂ³
-    # ¥Ç¡¼¥¿¥İ¡¼¥È1 TimedFloat
+    ## 3 ãƒãƒ¼ãƒˆæ¥ç¶š
+    # ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ1 TimedFloat
     ret0 = g_out_ports[g_port1].connect(g_conprof1)
 
-    # ¥Ç¡¼¥¿¥İ¡¼¥È2 TimedFloatSeq
+    # ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ2 TimedFloatSeq
     ret1 = g_out_ports[g_port2].connect(g_conprof2)
 
-    # ¥µ¡¼¥Ó¥¹¥İ¡¼¥È MyService
+    # ã‚µãƒ¼ãƒ“ã‚¹ãƒãƒ¼ãƒˆ MyService
     ret2 = g_out_ports[g_port3].connect(g_conprof3)
 
-    ## 4 ¥¢¥¯¥Æ¥£¥Ù¡¼¥È
+    ## 4 ã‚¢ã‚¯ãƒ†ã‚£ãƒ™ãƒ¼ãƒˆ
     ec_recv[0].activate_component(g_compo_recv.rtc_ref)
     time.sleep(sleep_recv_act_time)
     ec_send[0].activate_component(g_compo_send.rtc_ref)
 
     time.sleep(sleep_act_time)
 
-    ## 5 ¥Ç¥£¥¢¥¯¥Æ¥£¥Ù¡¼¥È
+    ## 5 ãƒ‡ã‚£ã‚¢ã‚¯ãƒ†ã‚£ãƒ™ãƒ¼ãƒˆ
     ec_send[0].deactivate_component(g_compo_send.rtc_ref)
     ec_recv[0].deactivate_component(g_compo_recv.rtc_ref)
 
-    ## 6 ¥İ¡¼¥ÈÀÚÃÇ
+    ## 6 ãƒãƒ¼ãƒˆåˆ‡æ–­
     g_in_ports[g_port3].disconnect(g_conprof3.connector_id)
     g_in_ports[g_port2].disconnect(g_conprof2.connector_id)
     g_in_ports[g_port1].disconnect(g_conprof1.connector_id)
 
-    ## ¼õ¿®¥Õ¥¡¥¤¥ëÍ­ÌµÈ½Äê
+    ## å—ä¿¡ãƒ•ã‚¡ã‚¤ãƒ«æœ‰ç„¡åˆ¤å®š
     if os.path.isfile(g_diff_recv_file) == False:
         fout = open(g_test_result_file, 'a')
         message = g_mess_header + g_test_case + str(case_no) + " " + g_test_cnt + str(i+1) + g_mess_footer
@@ -2885,26 +2885,26 @@ for i in range(loop_count):
         time.sleep(sleep_for_time)
         continue
 
-    ## 7 Á÷¼õ¿®¥Ç¡¼¥¿Èæ³Ó
+    ## 7 é€å—ä¿¡ãƒ‡ãƒ¼ã‚¿æ¯”è¼ƒ
     time.sleep(sleep_act_time)
     bret = diff_file()
 
-    ## º¹Ê¬¥Õ¥¡¥¤¥ë¤«¤é¥Æ¥¹¥È·ë²Ì½ĞÎÏ
+    ## å·®åˆ†ãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰ãƒ†ã‚¹ãƒˆçµæœå‡ºåŠ›
     fout = open(g_test_result_file, 'a')
     message = g_mess_header + g_test_case + str(case_no) + " " + g_test_cnt + str(i+1) + g_mess_footer
-    # bret==True ¤Ê¤éÁ÷¼õ¿®¥Ç¡¼¥¿°ìÃ×
+    # bret==True ãªã‚‰é€å—ä¿¡ãƒ‡ãƒ¼ã‚¿ä¸€è‡´
     if bret == True:
-        # ¥Æ¥¹¥È·ë²Ì OK
+        # ãƒ†ã‚¹ãƒˆçµæœ OK
         message = message + g_test_ok
         print message
         fout.write(message + '\n')
     else:
-        # ¥Æ¥¹¥È·ë²Ì NG
+        # ãƒ†ã‚¹ãƒˆçµæœ NG
         message = message + g_test_ng
         print message
         message = message + g_test_ng_message
         fout.write(message + '\n')
-        # ¼õ¿®¥Ç¡¼¥¿¤ò¥Æ¥¹¥È·ë²Ì¥Õ¥¡¥¤¥ë¤Ø¥³¥Ô¡¼
+        # å—ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’ãƒ†ã‚¹ãƒˆçµæœãƒ•ã‚¡ã‚¤ãƒ«ã¸ã‚³ãƒ”ãƒ¼
         fin2 = open(g_diff_recv_file, 'r')
         while(1):
             s2 = fin2.readline()
@@ -2917,7 +2917,7 @@ for i in range(loop_count):
     time.sleep(sleep_for_time)
 
 ##--------------------------------------------------------------------
-## ÀÜÂ³¥¿¥¤¥×¡§new  Êı¸ş¡§in->out  ¥İ¥ê¥·¡¼¡§SKIP  ÀÜÂ³¡¦ÀÚÃÇ¡¦Activate¡¦Deactivate¥Æ¥¹¥È1
+## æ¥ç¶šã‚¿ã‚¤ãƒ—ï¼šnew  æ–¹å‘ï¼šin->out  ãƒãƒªã‚·ãƒ¼ï¼šSKIP  æ¥ç¶šãƒ»åˆ‡æ–­ãƒ»Activateãƒ»Deactivateãƒ†ã‚¹ãƒˆ1
 ##--------------------------------------------------------------------
 case_no = case_no + 1
 fout = open(g_test_result_file, 'a')
@@ -2930,39 +2930,39 @@ print message
 
 for i in range(loop_count):
 
-    ## 2 ¼õ¿®¥Ç¡¼¥¿¥Õ¥¡¥¤¥ëºï½ü
+    ## 2 å—ä¿¡ãƒ‡ãƒ¼ã‚¿ãƒ•ã‚¡ã‚¤ãƒ«å‰Šé™¤
     delete_recv_file()
 
-    ## 1 ¥³¥Í¥¯¥¿¡¼¥×¥í¥Õ¥¡¥¤¥ëÀßÄê
+    ## 1 ã‚³ãƒã‚¯ã‚¿ãƒ¼ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«è¨­å®š
     make_connecter_profile("new", "SKIP", 1)
 
-    ## 3 ¥İ¡¼¥ÈÀÜÂ³
-    # ¥Ç¡¼¥¿¥İ¡¼¥È1 TimedFloat
+    ## 3 ãƒãƒ¼ãƒˆæ¥ç¶š
+    # ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ1 TimedFloat
     ret0 = g_out_ports[g_port1].connect(g_conprof1)
 
-    # ¥Ç¡¼¥¿¥İ¡¼¥È2 TimedFloatSeq
+    # ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ2 TimedFloatSeq
     ret1 = g_out_ports[g_port2].connect(g_conprof2)
 
-    # ¥µ¡¼¥Ó¥¹¥İ¡¼¥È MyService
+    # ã‚µãƒ¼ãƒ“ã‚¹ãƒãƒ¼ãƒˆ MyService
     ret2 = g_out_ports[g_port3].connect(g_conprof3)
 
-    ## 4 ¥¢¥¯¥Æ¥£¥Ù¡¼¥È
+    ## 4 ã‚¢ã‚¯ãƒ†ã‚£ãƒ™ãƒ¼ãƒˆ
     ec_recv[0].activate_component(g_compo_recv.rtc_ref)
     time.sleep(sleep_recv_act_time)
     ec_send[0].activate_component(g_compo_send.rtc_ref)
 
     time.sleep(sleep_act_time)
 
-    ## 5 ¥Ç¥£¥¢¥¯¥Æ¥£¥Ù¡¼¥È
+    ## 5 ãƒ‡ã‚£ã‚¢ã‚¯ãƒ†ã‚£ãƒ™ãƒ¼ãƒˆ
     ec_send[0].deactivate_component(g_compo_send.rtc_ref)
     ec_recv[0].deactivate_component(g_compo_recv.rtc_ref)
 
-    ## 6 ¥İ¡¼¥ÈÀÚÃÇ
+    ## 6 ãƒãƒ¼ãƒˆåˆ‡æ–­
     g_in_ports[g_port3].disconnect(g_conprof3.connector_id)
     g_in_ports[g_port2].disconnect(g_conprof2.connector_id)
     g_in_ports[g_port1].disconnect(g_conprof1.connector_id)
 
-    ## ¼õ¿®¥Õ¥¡¥¤¥ëÍ­ÌµÈ½Äê
+    ## å—ä¿¡ãƒ•ã‚¡ã‚¤ãƒ«æœ‰ç„¡åˆ¤å®š
     if os.path.isfile(g_diff_recv_file) == False:
         fout = open(g_test_result_file, 'a')
         message = g_mess_header + g_test_case + str(case_no) + " " + g_test_cnt + str(i+1) + g_mess_footer
@@ -2973,26 +2973,26 @@ for i in range(loop_count):
         time.sleep(sleep_for_time)
         continue
 
-    ## 7 Á÷¼õ¿®¥Ç¡¼¥¿Èæ³Ó
+    ## 7 é€å—ä¿¡ãƒ‡ãƒ¼ã‚¿æ¯”è¼ƒ
     time.sleep(sleep_act_time)
     bret = diff_file()
 
-    ## º¹Ê¬¥Õ¥¡¥¤¥ë¤«¤é¥Æ¥¹¥È·ë²Ì½ĞÎÏ
+    ## å·®åˆ†ãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰ãƒ†ã‚¹ãƒˆçµæœå‡ºåŠ›
     fout = open(g_test_result_file, 'a')
     message = g_mess_header + g_test_case + str(case_no) + " " + g_test_cnt + str(i+1) + g_mess_footer
-    # bret==True ¤Ê¤éÁ÷¼õ¿®¥Ç¡¼¥¿°ìÃ×
+    # bret==True ãªã‚‰é€å—ä¿¡ãƒ‡ãƒ¼ã‚¿ä¸€è‡´
     if bret == True:
-        # ¥Æ¥¹¥È·ë²Ì OK
+        # ãƒ†ã‚¹ãƒˆçµæœ OK
         message = message + g_test_ok
         print message
         fout.write(message + '\n')
     else:
-        # ¥Æ¥¹¥È·ë²Ì NG
+        # ãƒ†ã‚¹ãƒˆçµæœ NG
         message = message + g_test_ng
         print message
         message = message + g_test_ng_message
         fout.write(message + '\n')
-        # ¼õ¿®¥Ç¡¼¥¿¤ò¥Æ¥¹¥È·ë²Ì¥Õ¥¡¥¤¥ë¤Ø¥³¥Ô¡¼
+        # å—ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’ãƒ†ã‚¹ãƒˆçµæœãƒ•ã‚¡ã‚¤ãƒ«ã¸ã‚³ãƒ”ãƒ¼
         fin2 = open(g_diff_recv_file, 'r')
         while(1):
             s2 = fin2.readline()
@@ -3006,7 +3006,7 @@ for i in range(loop_count):
 
 ##--------------------------------------------------------------------
 ##--------------------------------------------------------------------
-## ÀÜÂ³¥¿¥¤¥×¡§periodic  Êı¸ş¡§out->in  ¥İ¥ê¥·¡¼¡§ALL  ÀÜÂ³¡¦ÀÚÃÇ¥Æ¥¹¥È7
+## æ¥ç¶šã‚¿ã‚¤ãƒ—ï¼šperiodic  æ–¹å‘ï¼šout->in  ãƒãƒªã‚·ãƒ¼ï¼šALL  æ¥ç¶šãƒ»åˆ‡æ–­ãƒ†ã‚¹ãƒˆ7
 ##--------------------------------------------------------------------
 case_no = case_no + 1
 fout = open(g_test_result_file, 'a')
@@ -3019,27 +3019,27 @@ print message
 
 for i in range(loop_count):
 
-    ## 1 ¥³¥Í¥¯¥¿¡¼¥×¥í¥Õ¥¡¥¤¥ëÀßÄê
+    ## 1 ã‚³ãƒã‚¯ã‚¿ãƒ¼ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«è¨­å®š
     make_connecter_profile("periodic", "ALL", 0)
 
-    ## 3 ¥İ¡¼¥ÈÀÜÂ³
-    # ¥Ç¡¼¥¿¥İ¡¼¥È1 TimedFloat
+    ## 3 ãƒãƒ¼ãƒˆæ¥ç¶š
+    # ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ1 TimedFloat
     ret0 = g_out_ports[g_port1].connect(g_conprof1)
 
-    # ¥Ç¡¼¥¿¥İ¡¼¥È2 TimedFloatSeq
+    # ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ2 TimedFloatSeq
     ret1 = g_out_ports[g_port2].connect(g_conprof2)
 
-    # ¥µ¡¼¥Ó¥¹¥İ¡¼¥È MyService
+    # ã‚µãƒ¼ãƒ“ã‚¹ãƒãƒ¼ãƒˆ MyService
     ret2 = g_out_ports[g_port3].connect(g_conprof3)
 
     time.sleep(sleep_connect_time)
 
-    ## 6 ¥İ¡¼¥ÈÀÚÃÇ
+    ## 6 ãƒãƒ¼ãƒˆåˆ‡æ–­
     g_in_ports[g_port3].disconnect(g_conprof3.connector_id)
     g_in_ports[g_port2].disconnect(g_conprof2.connector_id)
     g_in_ports[g_port1].disconnect(g_conprof1.connector_id)
 
-    ## ¥Æ¥¹¥È·ë²Ì½ĞÎÏ
+    ## ãƒ†ã‚¹ãƒˆçµæœå‡ºåŠ›
     fout = open(g_test_result_file, 'a')
     message = g_mess_header + g_test_case + str(case_no) + " " + g_test_cnt + str(i+1) + g_mess_footer
     message = message + g_test_ok
@@ -3050,7 +3050,7 @@ for i in range(loop_count):
     time.sleep(sleep_for_time)
 
 ##--------------------------------------------------------------------
-## ÀÜÂ³¥¿¥¤¥×¡§periodic  Êı¸ş¡§out->in  ¥İ¥ê¥·¡¼¡§FIFO  ÀÜÂ³¡¦ÀÚÃÇ¥Æ¥¹¥È8
+## æ¥ç¶šã‚¿ã‚¤ãƒ—ï¼šperiodic  æ–¹å‘ï¼šout->in  ãƒãƒªã‚·ãƒ¼ï¼šFIFO  æ¥ç¶šãƒ»åˆ‡æ–­ãƒ†ã‚¹ãƒˆ8
 ##--------------------------------------------------------------------
 case_no = case_no + 1
 fout = open(g_test_result_file, 'a')
@@ -3063,27 +3063,27 @@ print message
 
 for i in range(loop_count):
 
-    ## 1 ¥³¥Í¥¯¥¿¡¼¥×¥í¥Õ¥¡¥¤¥ëÀßÄê
+    ## 1 ã‚³ãƒã‚¯ã‚¿ãƒ¼ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«è¨­å®š
     make_connecter_profile("periodic", "FIFO", 0)
 
-    ## 3 ¥İ¡¼¥ÈÀÜÂ³
-    # ¥Ç¡¼¥¿¥İ¡¼¥È1 TimedFloat
+    ## 3 ãƒãƒ¼ãƒˆæ¥ç¶š
+    # ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ1 TimedFloat
     ret0 = g_out_ports[g_port1].connect(g_conprof1)
 
-    # ¥Ç¡¼¥¿¥İ¡¼¥È2 TimedFloatSeq
+    # ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ2 TimedFloatSeq
     ret1 = g_out_ports[g_port2].connect(g_conprof2)
 
-    # ¥µ¡¼¥Ó¥¹¥İ¡¼¥È MyService
+    # ã‚µãƒ¼ãƒ“ã‚¹ãƒãƒ¼ãƒˆ MyService
     ret2 = g_out_ports[g_port3].connect(g_conprof3)
 
     time.sleep(sleep_connect_time)
 
-    ## 6 ¥İ¡¼¥ÈÀÚÃÇ
+    ## 6 ãƒãƒ¼ãƒˆåˆ‡æ–­
     g_in_ports[g_port3].disconnect(g_conprof3.connector_id)
     g_in_ports[g_port2].disconnect(g_conprof2.connector_id)
     g_in_ports[g_port1].disconnect(g_conprof1.connector_id)
 
-    ## ¥Æ¥¹¥È·ë²Ì½ĞÎÏ
+    ## ãƒ†ã‚¹ãƒˆçµæœå‡ºåŠ›
     fout = open(g_test_result_file, 'a')
     message = g_mess_header + g_test_case + str(case_no) + " " + g_test_cnt + str(i+1) + g_mess_footer
     message = message + g_test_ok
@@ -3094,7 +3094,7 @@ for i in range(loop_count):
     time.sleep(sleep_for_time)
 
 ##--------------------------------------------------------------------
-## ÀÜÂ³¥¿¥¤¥×¡§periodic  Êı¸ş¡§out->in  ¥İ¥ê¥·¡¼¡§NEW  ÀÜÂ³¡¦ÀÚÃÇ¥Æ¥¹¥È10
+## æ¥ç¶šã‚¿ã‚¤ãƒ—ï¼šperiodic  æ–¹å‘ï¼šout->in  ãƒãƒªã‚·ãƒ¼ï¼šNEW  æ¥ç¶šãƒ»åˆ‡æ–­ãƒ†ã‚¹ãƒˆ10
 ##--------------------------------------------------------------------
 case_no = case_no + 1
 fout = open(g_test_result_file, 'a')
@@ -3107,27 +3107,27 @@ print message
 
 for i in range(loop_count):
 
-    ## 1 ¥³¥Í¥¯¥¿¡¼¥×¥í¥Õ¥¡¥¤¥ëÀßÄê
+    ## 1 ã‚³ãƒã‚¯ã‚¿ãƒ¼ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«è¨­å®š
     make_connecter_profile("periodic", "NEW", 0)
 
-    ## 3 ¥İ¡¼¥ÈÀÜÂ³
-    # ¥Ç¡¼¥¿¥İ¡¼¥È1 TimedFloat
+    ## 3 ãƒãƒ¼ãƒˆæ¥ç¶š
+    # ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ1 TimedFloat
     ret0 = g_out_ports[g_port1].connect(g_conprof1)
 
-    # ¥Ç¡¼¥¿¥İ¡¼¥È2 TimedFloatSeq
+    # ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ2 TimedFloatSeq
     ret1 = g_out_ports[g_port2].connect(g_conprof2)
 
-    # ¥µ¡¼¥Ó¥¹¥İ¡¼¥È MyService
+    # ã‚µãƒ¼ãƒ“ã‚¹ãƒãƒ¼ãƒˆ MyService
     ret2 = g_out_ports[g_port3].connect(g_conprof3)
 
     time.sleep(sleep_connect_time)
 
-    ## 6 ¥İ¡¼¥ÈÀÚÃÇ
+    ## 6 ãƒãƒ¼ãƒˆåˆ‡æ–­
     g_in_ports[g_port3].disconnect(g_conprof3.connector_id)
     g_in_ports[g_port2].disconnect(g_conprof2.connector_id)
     g_in_ports[g_port1].disconnect(g_conprof1.connector_id)
 
-    ## ¥Æ¥¹¥È·ë²Ì½ĞÎÏ
+    ## ãƒ†ã‚¹ãƒˆçµæœå‡ºåŠ›
     fout = open(g_test_result_file, 'a')
     message = g_mess_header + g_test_case + str(case_no) + " " + g_test_cnt + str(i+1) + g_mess_footer
     message = message + g_test_ok
@@ -3138,7 +3138,7 @@ for i in range(loop_count):
     time.sleep(sleep_for_time)
 
 ##--------------------------------------------------------------------
-## ÀÜÂ³¥¿¥¤¥×¡§periodic  Êı¸ş¡§out->in  ¥İ¥ê¥·¡¼¡§SKIP  ÀÜÂ³¡¦ÀÚÃÇ¥Æ¥¹¥È9
+## æ¥ç¶šã‚¿ã‚¤ãƒ—ï¼šperiodic  æ–¹å‘ï¼šout->in  ãƒãƒªã‚·ãƒ¼ï¼šSKIP  æ¥ç¶šãƒ»åˆ‡æ–­ãƒ†ã‚¹ãƒˆ9
 ##--------------------------------------------------------------------
 case_no = case_no + 1
 fout = open(g_test_result_file, 'a')
@@ -3151,27 +3151,27 @@ print message
 
 for i in range(loop_count):
 
-    ## 1 ¥³¥Í¥¯¥¿¡¼¥×¥í¥Õ¥¡¥¤¥ëÀßÄê
+    ## 1 ã‚³ãƒã‚¯ã‚¿ãƒ¼ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«è¨­å®š
     make_connecter_profile("periodic", "SKIP", 0)
 
-    ## 3 ¥İ¡¼¥ÈÀÜÂ³
-    # ¥Ç¡¼¥¿¥İ¡¼¥È1 TimedFloat
+    ## 3 ãƒãƒ¼ãƒˆæ¥ç¶š
+    # ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ1 TimedFloat
     ret0 = g_out_ports[g_port1].connect(g_conprof1)
 
-    # ¥Ç¡¼¥¿¥İ¡¼¥È2 TimedFloatSeq
+    # ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ2 TimedFloatSeq
     ret1 = g_out_ports[g_port2].connect(g_conprof2)
 
-    # ¥µ¡¼¥Ó¥¹¥İ¡¼¥È MyService
+    # ã‚µãƒ¼ãƒ“ã‚¹ãƒãƒ¼ãƒˆ MyService
     ret2 = g_out_ports[g_port3].connect(g_conprof3)
 
     time.sleep(sleep_connect_time)
 
-    ## 6 ¥İ¡¼¥ÈÀÚÃÇ
+    ## 6 ãƒãƒ¼ãƒˆåˆ‡æ–­
     g_in_ports[g_port3].disconnect(g_conprof3.connector_id)
     g_in_ports[g_port2].disconnect(g_conprof2.connector_id)
     g_in_ports[g_port1].disconnect(g_conprof1.connector_id)
 
-    ## ¥Æ¥¹¥È·ë²Ì½ĞÎÏ
+    ## ãƒ†ã‚¹ãƒˆçµæœå‡ºåŠ›
     fout = open(g_test_result_file, 'a')
     message = g_mess_header + g_test_case + str(case_no) + " " + g_test_cnt + str(i+1) + g_mess_footer
     message = message + g_test_ok
@@ -3182,7 +3182,7 @@ for i in range(loop_count):
     time.sleep(sleep_for_time)
 
 ##--------------------------------------------------------------------
-## ÀÜÂ³¥¿¥¤¥×¡§periodic  Êı¸ş¡§in->out  ¥İ¥ê¥·¡¼¡§ALL  ÀÜÂ³¡¦ÀÚÃÇ¥Æ¥¹¥È7
+## æ¥ç¶šã‚¿ã‚¤ãƒ—ï¼šperiodic  æ–¹å‘ï¼šin->out  ãƒãƒªã‚·ãƒ¼ï¼šALL  æ¥ç¶šãƒ»åˆ‡æ–­ãƒ†ã‚¹ãƒˆ7
 ##--------------------------------------------------------------------
 case_no = case_no + 1
 fout = open(g_test_result_file, 'a')
@@ -3195,27 +3195,27 @@ print message
 
 for i in range(loop_count):
 
-    ## 1 ¥³¥Í¥¯¥¿¡¼¥×¥í¥Õ¥¡¥¤¥ëÀßÄê
+    ## 1 ã‚³ãƒã‚¯ã‚¿ãƒ¼ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«è¨­å®š
     make_connecter_profile("periodic", "ALL", 1)
 
-    ## 3 ¥İ¡¼¥ÈÀÜÂ³
-    # ¥Ç¡¼¥¿¥İ¡¼¥È1 TimedFloat
+    ## 3 ãƒãƒ¼ãƒˆæ¥ç¶š
+    # ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ1 TimedFloat
     ret0 = g_out_ports[g_port1].connect(g_conprof1)
 
-    # ¥Ç¡¼¥¿¥İ¡¼¥È2 TimedFloatSeq
+    # ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ2 TimedFloatSeq
     ret1 = g_out_ports[g_port2].connect(g_conprof2)
 
-    # ¥µ¡¼¥Ó¥¹¥İ¡¼¥È MyService
+    # ã‚µãƒ¼ãƒ“ã‚¹ãƒãƒ¼ãƒˆ MyService
     ret2 = g_out_ports[g_port3].connect(g_conprof3)
 
     time.sleep(sleep_connect_time)
 
-    ## 6 ¥İ¡¼¥ÈÀÚÃÇ
+    ## 6 ãƒãƒ¼ãƒˆåˆ‡æ–­
     g_in_ports[g_port3].disconnect(g_conprof3.connector_id)
     g_in_ports[g_port2].disconnect(g_conprof2.connector_id)
     g_in_ports[g_port1].disconnect(g_conprof1.connector_id)
 
-    ## ¥Æ¥¹¥È·ë²Ì½ĞÎÏ
+    ## ãƒ†ã‚¹ãƒˆçµæœå‡ºåŠ›
     fout = open(g_test_result_file, 'a')
     message = g_mess_header + g_test_case + str(case_no) + " " + g_test_cnt + str(i+1) + g_mess_footer
     message = message + g_test_ok
@@ -3226,7 +3226,7 @@ for i in range(loop_count):
     time.sleep(sleep_for_time)
 
 ##--------------------------------------------------------------------
-## ÀÜÂ³¥¿¥¤¥×¡§periodic  Êı¸ş¡§in->out  ¥İ¥ê¥·¡¼¡§FIFO  ÀÜÂ³¡¦ÀÚÃÇ¥Æ¥¹¥È8
+## æ¥ç¶šã‚¿ã‚¤ãƒ—ï¼šperiodic  æ–¹å‘ï¼šin->out  ãƒãƒªã‚·ãƒ¼ï¼šFIFO  æ¥ç¶šãƒ»åˆ‡æ–­ãƒ†ã‚¹ãƒˆ8
 ##--------------------------------------------------------------------
 case_no = case_no + 1
 fout = open(g_test_result_file, 'a')
@@ -3239,27 +3239,27 @@ print message
 
 for i in range(loop_count):
 
-    ## 1 ¥³¥Í¥¯¥¿¡¼¥×¥í¥Õ¥¡¥¤¥ëÀßÄê
+    ## 1 ã‚³ãƒã‚¯ã‚¿ãƒ¼ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«è¨­å®š
     make_connecter_profile("periodic", "FIFO", 1)
 
-    ## 3 ¥İ¡¼¥ÈÀÜÂ³
-    # ¥Ç¡¼¥¿¥İ¡¼¥È1 TimedFloat
+    ## 3 ãƒãƒ¼ãƒˆæ¥ç¶š
+    # ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ1 TimedFloat
     ret0 = g_out_ports[g_port1].connect(g_conprof1)
 
-    # ¥Ç¡¼¥¿¥İ¡¼¥È2 TimedFloatSeq
+    # ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ2 TimedFloatSeq
     ret1 = g_out_ports[g_port2].connect(g_conprof2)
 
-    # ¥µ¡¼¥Ó¥¹¥İ¡¼¥È MyService
+    # ã‚µãƒ¼ãƒ“ã‚¹ãƒãƒ¼ãƒˆ MyService
     ret2 = g_out_ports[g_port3].connect(g_conprof3)
 
     time.sleep(sleep_connect_time)
 
-    ## 6 ¥İ¡¼¥ÈÀÚÃÇ
+    ## 6 ãƒãƒ¼ãƒˆåˆ‡æ–­
     g_in_ports[g_port3].disconnect(g_conprof3.connector_id)
     g_in_ports[g_port2].disconnect(g_conprof2.connector_id)
     g_in_ports[g_port1].disconnect(g_conprof1.connector_id)
 
-    ## ¥Æ¥¹¥È·ë²Ì½ĞÎÏ
+    ## ãƒ†ã‚¹ãƒˆçµæœå‡ºåŠ›
     fout = open(g_test_result_file, 'a')
     message = g_mess_header + g_test_case + str(case_no) + " " + g_test_cnt + str(i+1) + g_mess_footer
     message = message + g_test_ok
@@ -3270,7 +3270,7 @@ for i in range(loop_count):
     time.sleep(sleep_for_time)
 
 ##--------------------------------------------------------------------
-## ÀÜÂ³¥¿¥¤¥×¡§periodic  Êı¸ş¡§in->out  ¥İ¥ê¥·¡¼¡§NEW  ÀÜÂ³¡¦ÀÚÃÇ¥Æ¥¹¥È10
+## æ¥ç¶šã‚¿ã‚¤ãƒ—ï¼šperiodic  æ–¹å‘ï¼šin->out  ãƒãƒªã‚·ãƒ¼ï¼šNEW  æ¥ç¶šãƒ»åˆ‡æ–­ãƒ†ã‚¹ãƒˆ10
 ##--------------------------------------------------------------------
 case_no = case_no + 1
 fout = open(g_test_result_file, 'a')
@@ -3283,27 +3283,27 @@ print message
 
 for i in range(loop_count):
 
-    ## 1 ¥³¥Í¥¯¥¿¡¼¥×¥í¥Õ¥¡¥¤¥ëÀßÄê
+    ## 1 ã‚³ãƒã‚¯ã‚¿ãƒ¼ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«è¨­å®š
     make_connecter_profile("periodic", "NEW", 1)
 
-    ## 3 ¥İ¡¼¥ÈÀÜÂ³
-    # ¥Ç¡¼¥¿¥İ¡¼¥È1 TimedFloat
+    ## 3 ãƒãƒ¼ãƒˆæ¥ç¶š
+    # ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ1 TimedFloat
     ret0 = g_out_ports[g_port1].connect(g_conprof1)
 
-    # ¥Ç¡¼¥¿¥İ¡¼¥È2 TimedFloatSeq
+    # ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ2 TimedFloatSeq
     ret1 = g_out_ports[g_port2].connect(g_conprof2)
 
-    # ¥µ¡¼¥Ó¥¹¥İ¡¼¥È MyService
+    # ã‚µãƒ¼ãƒ“ã‚¹ãƒãƒ¼ãƒˆ MyService
     ret2 = g_out_ports[g_port3].connect(g_conprof3)
 
     time.sleep(sleep_connect_time)
 
-    ## 6 ¥İ¡¼¥ÈÀÚÃÇ
+    ## 6 ãƒãƒ¼ãƒˆåˆ‡æ–­
     g_in_ports[g_port3].disconnect(g_conprof3.connector_id)
     g_in_ports[g_port2].disconnect(g_conprof2.connector_id)
     g_in_ports[g_port1].disconnect(g_conprof1.connector_id)
 
-    ## ¥Æ¥¹¥È·ë²Ì½ĞÎÏ
+    ## ãƒ†ã‚¹ãƒˆçµæœå‡ºåŠ›
     fout = open(g_test_result_file, 'a')
     message = g_mess_header + g_test_case + str(case_no) + " " + g_test_cnt + str(i+1) + g_mess_footer
     message = message + g_test_ok
@@ -3314,7 +3314,7 @@ for i in range(loop_count):
     time.sleep(sleep_for_time)
 
 ##--------------------------------------------------------------------
-## ÀÜÂ³¥¿¥¤¥×¡§periodic  Êı¸ş¡§in->out  ¥İ¥ê¥·¡¼¡§SKIP  ÀÜÂ³¡¦ÀÚÃÇ¥Æ¥¹¥È9
+## æ¥ç¶šã‚¿ã‚¤ãƒ—ï¼šperiodic  æ–¹å‘ï¼šin->out  ãƒãƒªã‚·ãƒ¼ï¼šSKIP  æ¥ç¶šãƒ»åˆ‡æ–­ãƒ†ã‚¹ãƒˆ9
 ##--------------------------------------------------------------------
 case_no = case_no + 1
 fout = open(g_test_result_file, 'a')
@@ -3327,27 +3327,27 @@ print message
 
 for i in range(loop_count):
 
-    ## 1 ¥³¥Í¥¯¥¿¡¼¥×¥í¥Õ¥¡¥¤¥ëÀßÄê
+    ## 1 ã‚³ãƒã‚¯ã‚¿ãƒ¼ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«è¨­å®š
     make_connecter_profile("periodic", "SKIP", 1)
 
-    ## 3 ¥İ¡¼¥ÈÀÜÂ³
-    # ¥Ç¡¼¥¿¥İ¡¼¥È1 TimedFloat
+    ## 3 ãƒãƒ¼ãƒˆæ¥ç¶š
+    # ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ1 TimedFloat
     ret0 = g_out_ports[g_port1].connect(g_conprof1)
 
-    # ¥Ç¡¼¥¿¥İ¡¼¥È2 TimedFloatSeq
+    # ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ2 TimedFloatSeq
     ret1 = g_out_ports[g_port2].connect(g_conprof2)
 
-    # ¥µ¡¼¥Ó¥¹¥İ¡¼¥È MyService
+    # ã‚µãƒ¼ãƒ“ã‚¹ãƒãƒ¼ãƒˆ MyService
     ret2 = g_out_ports[g_port3].connect(g_conprof3)
 
     time.sleep(sleep_connect_time)
 
-    ## 6 ¥İ¡¼¥ÈÀÚÃÇ
+    ## 6 ãƒãƒ¼ãƒˆåˆ‡æ–­
     g_in_ports[g_port3].disconnect(g_conprof3.connector_id)
     g_in_ports[g_port2].disconnect(g_conprof2.connector_id)
     g_in_ports[g_port1].disconnect(g_conprof1.connector_id)
 
-    ## ¥Æ¥¹¥È·ë²Ì½ĞÎÏ
+    ## ãƒ†ã‚¹ãƒˆçµæœå‡ºåŠ›
     fout = open(g_test_result_file, 'a')
     message = g_mess_header + g_test_case + str(case_no) + " " + g_test_cnt + str(i+1) + g_mess_footer
     message = message + g_test_ok
@@ -3358,7 +3358,7 @@ for i in range(loop_count):
     time.sleep(sleep_for_time)
 
 ##--------------------------------------------------------------------
-## ÀÜÂ³¥¿¥¤¥×¡§periodic  Êı¸ş¡§out->in  ¥İ¥ê¥·¡¼¡§ALL    Activate¡¦Deactivate¥Æ¥¹¥È6
+## æ¥ç¶šã‚¿ã‚¤ãƒ—ï¼šperiodic  æ–¹å‘ï¼šout->in  ãƒãƒªã‚·ãƒ¼ï¼šALL    Activateãƒ»Deactivateãƒ†ã‚¹ãƒˆ6
 ##--------------------------------------------------------------------
 case_no = case_no + 1
 fout = open(g_test_result_file, 'a')
@@ -3369,36 +3369,36 @@ fout.write(message + '\n')
 fout.close()
 print message
 
-## 1 ¥³¥Í¥¯¥¿¡¼¥×¥í¥Õ¥¡¥¤¥ëÀßÄê
+## 1 ã‚³ãƒã‚¯ã‚¿ãƒ¼ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«è¨­å®š
 make_connecter_profile("periodic", "ALL", 0)
 
-## 3 ¥İ¡¼¥ÈÀÜÂ³
-# ¥Ç¡¼¥¿¥İ¡¼¥È1 TimedFloat
+## 3 ãƒãƒ¼ãƒˆæ¥ç¶š
+# ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ1 TimedFloat
 ret0 = g_out_ports[g_port1].connect(g_conprof1)
 
-# ¥Ç¡¼¥¿¥İ¡¼¥È2 TimedFloatSeq
+# ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ2 TimedFloatSeq
 ret1 = g_out_ports[g_port2].connect(g_conprof2)
 
-# ¥µ¡¼¥Ó¥¹¥İ¡¼¥È MyService
+# ã‚µãƒ¼ãƒ“ã‚¹ãƒãƒ¼ãƒˆ MyService
 ret2 = g_out_ports[g_port3].connect(g_conprof3)
 
 for i in range(loop_count):
 
-    ## 2 ¼õ¿®¥Ç¡¼¥¿¥Õ¥¡¥¤¥ëºï½ü
+    ## 2 å—ä¿¡ãƒ‡ãƒ¼ã‚¿ãƒ•ã‚¡ã‚¤ãƒ«å‰Šé™¤
     delete_recv_file()
 
-    ## 4 ¥¢¥¯¥Æ¥£¥Ù¡¼¥È
+    ## 4 ã‚¢ã‚¯ãƒ†ã‚£ãƒ™ãƒ¼ãƒˆ
     ec_recv[0].activate_component(g_compo_recv.rtc_ref)
     time.sleep(sleep_recv_act_time)
     ec_send[0].activate_component(g_compo_send.rtc_ref)
 
     time.sleep(sleep_act_time)
 
-    ## 5 ¥Ç¥£¥¢¥¯¥Æ¥£¥Ù¡¼¥È
+    ## 5 ãƒ‡ã‚£ã‚¢ã‚¯ãƒ†ã‚£ãƒ™ãƒ¼ãƒˆ
     ec_send[0].deactivate_component(g_compo_send.rtc_ref)
     ec_recv[0].deactivate_component(g_compo_recv.rtc_ref)
 
-    ## ¼õ¿®¥Õ¥¡¥¤¥ëÍ­ÌµÈ½Äê
+    ## å—ä¿¡ãƒ•ã‚¡ã‚¤ãƒ«æœ‰ç„¡åˆ¤å®š
     if os.path.isfile(g_diff_recv_file) == False:
         fout = open(g_test_result_file, 'a')
         message = g_mess_header + g_test_case + str(case_no) + " " + g_test_cnt + str(i+1) + g_mess_footer
@@ -3409,26 +3409,26 @@ for i in range(loop_count):
         time.sleep(sleep_for_time)
         continue
 
-    ## 7 Á÷¼õ¿®¥Ç¡¼¥¿Èæ³Ó
+    ## 7 é€å—ä¿¡ãƒ‡ãƒ¼ã‚¿æ¯”è¼ƒ
     time.sleep(sleep_act_time)
     bret = diff_file()
 
-    ## º¹Ê¬¥Õ¥¡¥¤¥ë¤«¤é¥Æ¥¹¥È·ë²Ì½ĞÎÏ
+    ## å·®åˆ†ãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰ãƒ†ã‚¹ãƒˆçµæœå‡ºåŠ›
     fout = open(g_test_result_file, 'a')
     message = g_mess_header + g_test_case + str(case_no) + " " + g_test_cnt + str(i+1) + g_mess_footer
-    # bret==True ¤Ê¤éÁ÷¼õ¿®¥Ç¡¼¥¿°ìÃ×
+    # bret==True ãªã‚‰é€å—ä¿¡ãƒ‡ãƒ¼ã‚¿ä¸€è‡´
     if bret == True:
-        # ¥Æ¥¹¥È·ë²Ì OK
+        # ãƒ†ã‚¹ãƒˆçµæœ OK
         message = message + g_test_ok
         print message
         fout.write(message + '\n')
     else:
-        # ¥Æ¥¹¥È·ë²Ì NG
+        # ãƒ†ã‚¹ãƒˆçµæœ NG
         message = message + g_test_ng
         print message
         message = message + g_test_ng_message
         fout.write(message + '\n')
-        # ¼õ¿®¥Ç¡¼¥¿¤ò¥Æ¥¹¥È·ë²Ì¥Õ¥¡¥¤¥ë¤Ø¥³¥Ô¡¼
+        # å—ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’ãƒ†ã‚¹ãƒˆçµæœãƒ•ã‚¡ã‚¤ãƒ«ã¸ã‚³ãƒ”ãƒ¼
         fin2 = open(g_diff_recv_file, 'r')
         while(1):
             s2 = fin2.readline()
@@ -3440,13 +3440,13 @@ for i in range(loop_count):
 
     time.sleep(sleep_for_time)
 
-## 6 ¥İ¡¼¥ÈÀÚÃÇ
+## 6 ãƒãƒ¼ãƒˆåˆ‡æ–­
 g_in_ports[g_port3].disconnect(g_conprof3.connector_id)
 g_in_ports[g_port2].disconnect(g_conprof2.connector_id)
 g_in_ports[g_port1].disconnect(g_conprof1.connector_id)
 
 ##--------------------------------------------------------------------
-## ÀÜÂ³¥¿¥¤¥×¡§periodic  Êı¸ş¡§out->in  ¥İ¥ê¥·¡¼¡§FIFO    Activate¡¦Deactivate¥Æ¥¹¥È7
+## æ¥ç¶šã‚¿ã‚¤ãƒ—ï¼šperiodic  æ–¹å‘ï¼šout->in  ãƒãƒªã‚·ãƒ¼ï¼šFIFO    Activateãƒ»Deactivateãƒ†ã‚¹ãƒˆ7
 ##--------------------------------------------------------------------
 case_no = case_no + 1
 fout = open(g_test_result_file, 'a')
@@ -3457,36 +3457,36 @@ fout.write(message + '\n')
 fout.close()
 print message
 
-## 1 ¥³¥Í¥¯¥¿¡¼¥×¥í¥Õ¥¡¥¤¥ëÀßÄê
+## 1 ã‚³ãƒã‚¯ã‚¿ãƒ¼ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«è¨­å®š
 make_connecter_profile("periodic", "FIFO", 0)
 
-## 3 ¥İ¡¼¥ÈÀÜÂ³
-# ¥Ç¡¼¥¿¥İ¡¼¥È1 TimedFloat
+## 3 ãƒãƒ¼ãƒˆæ¥ç¶š
+# ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ1 TimedFloat
 ret0 = g_out_ports[g_port1].connect(g_conprof1)
 
-# ¥Ç¡¼¥¿¥İ¡¼¥È2 TimedFloatSeq
+# ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ2 TimedFloatSeq
 ret1 = g_out_ports[g_port2].connect(g_conprof2)
 
-# ¥µ¡¼¥Ó¥¹¥İ¡¼¥È MyService
+# ã‚µãƒ¼ãƒ“ã‚¹ãƒãƒ¼ãƒˆ MyService
 ret2 = g_out_ports[g_port3].connect(g_conprof3)
 
 for i in range(loop_count):
 
-    ## 2 ¼õ¿®¥Ç¡¼¥¿¥Õ¥¡¥¤¥ëºï½ü
+    ## 2 å—ä¿¡ãƒ‡ãƒ¼ã‚¿ãƒ•ã‚¡ã‚¤ãƒ«å‰Šé™¤
     delete_recv_file()
 
-    ## 4 ¥¢¥¯¥Æ¥£¥Ù¡¼¥È
+    ## 4 ã‚¢ã‚¯ãƒ†ã‚£ãƒ™ãƒ¼ãƒˆ
     ec_recv[0].activate_component(g_compo_recv.rtc_ref)
     time.sleep(sleep_recv_act_time)
     ec_send[0].activate_component(g_compo_send.rtc_ref)
 
     time.sleep(sleep_act_time)
 
-    ## 5 ¥Ç¥£¥¢¥¯¥Æ¥£¥Ù¡¼¥È
+    ## 5 ãƒ‡ã‚£ã‚¢ã‚¯ãƒ†ã‚£ãƒ™ãƒ¼ãƒˆ
     ec_send[0].deactivate_component(g_compo_send.rtc_ref)
     ec_recv[0].deactivate_component(g_compo_recv.rtc_ref)
 
-    ## ¼õ¿®¥Õ¥¡¥¤¥ëÍ­ÌµÈ½Äê
+    ## å—ä¿¡ãƒ•ã‚¡ã‚¤ãƒ«æœ‰ç„¡åˆ¤å®š
     if os.path.isfile(g_diff_recv_file) == False:
         fout = open(g_test_result_file, 'a')
         message = g_mess_header + g_test_case + str(case_no) + " " + g_test_cnt + str(i+1) + g_mess_footer
@@ -3497,26 +3497,26 @@ for i in range(loop_count):
         time.sleep(sleep_for_time)
         continue
 
-    ## 7 Á÷¼õ¿®¥Ç¡¼¥¿Èæ³Ó
+    ## 7 é€å—ä¿¡ãƒ‡ãƒ¼ã‚¿æ¯”è¼ƒ
     time.sleep(sleep_act_time)
     bret = diff_file()
 
-    ## º¹Ê¬¥Õ¥¡¥¤¥ë¤«¤é¥Æ¥¹¥È·ë²Ì½ĞÎÏ
+    ## å·®åˆ†ãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰ãƒ†ã‚¹ãƒˆçµæœå‡ºåŠ›
     fout = open(g_test_result_file, 'a')
     message = g_mess_header + g_test_case + str(case_no) + " " + g_test_cnt + str(i+1) + g_mess_footer
-    # bret==True ¤Ê¤éÁ÷¼õ¿®¥Ç¡¼¥¿°ìÃ×
+    # bret==True ãªã‚‰é€å—ä¿¡ãƒ‡ãƒ¼ã‚¿ä¸€è‡´
     if bret == True:
-        # ¥Æ¥¹¥È·ë²Ì OK
+        # ãƒ†ã‚¹ãƒˆçµæœ OK
         message = message + g_test_ok
         print message
         fout.write(message + '\n')
     else:
-        # ¥Æ¥¹¥È·ë²Ì NG
+        # ãƒ†ã‚¹ãƒˆçµæœ NG
         message = message + g_test_ng
         print message
         message = message + g_test_ng_message
         fout.write(message + '\n')
-        # ¼õ¿®¥Ç¡¼¥¿¤ò¥Æ¥¹¥È·ë²Ì¥Õ¥¡¥¤¥ë¤Ø¥³¥Ô¡¼
+        # å—ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’ãƒ†ã‚¹ãƒˆçµæœãƒ•ã‚¡ã‚¤ãƒ«ã¸ã‚³ãƒ”ãƒ¼
         fin2 = open(g_diff_recv_file, 'r')
         while(1):
             s2 = fin2.readline()
@@ -3528,13 +3528,13 @@ for i in range(loop_count):
 
     time.sleep(sleep_for_time)
 
-## 6 ¥İ¡¼¥ÈÀÚÃÇ
+## 6 ãƒãƒ¼ãƒˆåˆ‡æ–­
 g_in_ports[g_port3].disconnect(g_conprof3.connector_id)
 g_in_ports[g_port2].disconnect(g_conprof2.connector_id)
 g_in_ports[g_port1].disconnect(g_conprof1.connector_id)
 
 ##--------------------------------------------------------------------
-## ÀÜÂ³¥¿¥¤¥×¡§periodic  Êı¸ş¡§out->in  ¥İ¥ê¥·¡¼¡§NEW    Activate¡¦Deactivate¥Æ¥¹¥È9
+## æ¥ç¶šã‚¿ã‚¤ãƒ—ï¼šperiodic  æ–¹å‘ï¼šout->in  ãƒãƒªã‚·ãƒ¼ï¼šNEW    Activateãƒ»Deactivateãƒ†ã‚¹ãƒˆ9
 ##--------------------------------------------------------------------
 case_no = case_no + 1
 fout = open(g_test_result_file, 'a')
@@ -3545,36 +3545,36 @@ fout.write(message + '\n')
 fout.close()
 print message
 
-## 1 ¥³¥Í¥¯¥¿¡¼¥×¥í¥Õ¥¡¥¤¥ëÀßÄê
+## 1 ã‚³ãƒã‚¯ã‚¿ãƒ¼ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«è¨­å®š
 make_connecter_profile("periodic", "NEW", 0)
 
-## 3 ¥İ¡¼¥ÈÀÜÂ³
-# ¥Ç¡¼¥¿¥İ¡¼¥È1 TimedFloat
+## 3 ãƒãƒ¼ãƒˆæ¥ç¶š
+# ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ1 TimedFloat
 ret0 = g_out_ports[g_port1].connect(g_conprof1)
 
-# ¥Ç¡¼¥¿¥İ¡¼¥È2 TimedFloatSeq
+# ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ2 TimedFloatSeq
 ret1 = g_out_ports[g_port2].connect(g_conprof2)
 
-# ¥µ¡¼¥Ó¥¹¥İ¡¼¥È MyService
+# ã‚µãƒ¼ãƒ“ã‚¹ãƒãƒ¼ãƒˆ MyService
 ret2 = g_out_ports[g_port3].connect(g_conprof3)
 
 for i in range(loop_count):
 
-    ## 2 ¼õ¿®¥Ç¡¼¥¿¥Õ¥¡¥¤¥ëºï½ü
+    ## 2 å—ä¿¡ãƒ‡ãƒ¼ã‚¿ãƒ•ã‚¡ã‚¤ãƒ«å‰Šé™¤
     delete_recv_file()
 
-    ## 4 ¥¢¥¯¥Æ¥£¥Ù¡¼¥È
+    ## 4 ã‚¢ã‚¯ãƒ†ã‚£ãƒ™ãƒ¼ãƒˆ
     ec_recv[0].activate_component(g_compo_recv.rtc_ref)
     time.sleep(sleep_recv_act_time)
     ec_send[0].activate_component(g_compo_send.rtc_ref)
 
     time.sleep(sleep_act_time)
 
-    ## 5 ¥Ç¥£¥¢¥¯¥Æ¥£¥Ù¡¼¥È
+    ## 5 ãƒ‡ã‚£ã‚¢ã‚¯ãƒ†ã‚£ãƒ™ãƒ¼ãƒˆ
     ec_send[0].deactivate_component(g_compo_send.rtc_ref)
     ec_recv[0].deactivate_component(g_compo_recv.rtc_ref)
 
-    ## ¼õ¿®¥Õ¥¡¥¤¥ëÍ­ÌµÈ½Äê
+    ## å—ä¿¡ãƒ•ã‚¡ã‚¤ãƒ«æœ‰ç„¡åˆ¤å®š
     if os.path.isfile(g_diff_recv_file) == False:
         fout = open(g_test_result_file, 'a')
         message = g_mess_header + g_test_case + str(case_no) + " " + g_test_cnt + str(i+1) + g_mess_footer
@@ -3585,26 +3585,26 @@ for i in range(loop_count):
         time.sleep(sleep_for_time)
         continue
 
-    ## 7 Á÷¼õ¿®¥Ç¡¼¥¿Èæ³Ó
+    ## 7 é€å—ä¿¡ãƒ‡ãƒ¼ã‚¿æ¯”è¼ƒ
     time.sleep(sleep_act_time)
     bret = diff_file()
 
-    ## º¹Ê¬¥Õ¥¡¥¤¥ë¤«¤é¥Æ¥¹¥È·ë²Ì½ĞÎÏ
+    ## å·®åˆ†ãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰ãƒ†ã‚¹ãƒˆçµæœå‡ºåŠ›
     fout = open(g_test_result_file, 'a')
     message = g_mess_header + g_test_case + str(case_no) + " " + g_test_cnt + str(i+1) + g_mess_footer
-    # bret==True ¤Ê¤éÁ÷¼õ¿®¥Ç¡¼¥¿°ìÃ×
+    # bret==True ãªã‚‰é€å—ä¿¡ãƒ‡ãƒ¼ã‚¿ä¸€è‡´
     if bret == True:
-        # ¥Æ¥¹¥È·ë²Ì OK
+        # ãƒ†ã‚¹ãƒˆçµæœ OK
         message = message + g_test_ok
         print message
         fout.write(message + '\n')
     else:
-        # ¥Æ¥¹¥È·ë²Ì NG
+        # ãƒ†ã‚¹ãƒˆçµæœ NG
         message = message + g_test_ng
         print message
         message = message + g_test_ng_message
         fout.write(message + '\n')
-        # ¼õ¿®¥Ç¡¼¥¿¤ò¥Æ¥¹¥È·ë²Ì¥Õ¥¡¥¤¥ë¤Ø¥³¥Ô¡¼
+        # å—ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’ãƒ†ã‚¹ãƒˆçµæœãƒ•ã‚¡ã‚¤ãƒ«ã¸ã‚³ãƒ”ãƒ¼
         fin2 = open(g_diff_recv_file, 'r')
         while(1):
             s2 = fin2.readline()
@@ -3616,13 +3616,13 @@ for i in range(loop_count):
 
     time.sleep(sleep_for_time)
 
-## 6 ¥İ¡¼¥ÈÀÚÃÇ
+## 6 ãƒãƒ¼ãƒˆåˆ‡æ–­
 g_in_ports[g_port3].disconnect(g_conprof3.connector_id)
 g_in_ports[g_port2].disconnect(g_conprof2.connector_id)
 g_in_ports[g_port1].disconnect(g_conprof1.connector_id)
 
 ##--------------------------------------------------------------------
-## ÀÜÂ³¥¿¥¤¥×¡§periodic  Êı¸ş¡§out->in  ¥İ¥ê¥·¡¼¡§SKIP    Activate¡¦Deactivate¥Æ¥¹¥È8
+## æ¥ç¶šã‚¿ã‚¤ãƒ—ï¼šperiodic  æ–¹å‘ï¼šout->in  ãƒãƒªã‚·ãƒ¼ï¼šSKIP    Activateãƒ»Deactivateãƒ†ã‚¹ãƒˆ8
 ##--------------------------------------------------------------------
 case_no = case_no + 1
 fout = open(g_test_result_file, 'a')
@@ -3633,36 +3633,36 @@ fout.write(message + '\n')
 fout.close()
 print message
 
-## 1 ¥³¥Í¥¯¥¿¡¼¥×¥í¥Õ¥¡¥¤¥ëÀßÄê
+## 1 ã‚³ãƒã‚¯ã‚¿ãƒ¼ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«è¨­å®š
 make_connecter_profile("periodic", "SKIP", 0)
 
-## 3 ¥İ¡¼¥ÈÀÜÂ³
-# ¥Ç¡¼¥¿¥İ¡¼¥È1 TimedFloat
+## 3 ãƒãƒ¼ãƒˆæ¥ç¶š
+# ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ1 TimedFloat
 ret0 = g_out_ports[g_port1].connect(g_conprof1)
 
-# ¥Ç¡¼¥¿¥İ¡¼¥È2 TimedFloatSeq
+# ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ2 TimedFloatSeq
 ret1 = g_out_ports[g_port2].connect(g_conprof2)
 
-# ¥µ¡¼¥Ó¥¹¥İ¡¼¥È MyService
+# ã‚µãƒ¼ãƒ“ã‚¹ãƒãƒ¼ãƒˆ MyService
 ret2 = g_out_ports[g_port3].connect(g_conprof3)
 
 for i in range(loop_count):
 
-    ## 2 ¼õ¿®¥Ç¡¼¥¿¥Õ¥¡¥¤¥ëºï½ü
+    ## 2 å—ä¿¡ãƒ‡ãƒ¼ã‚¿ãƒ•ã‚¡ã‚¤ãƒ«å‰Šé™¤
     delete_recv_file()
 
-    ## 4 ¥¢¥¯¥Æ¥£¥Ù¡¼¥È
+    ## 4 ã‚¢ã‚¯ãƒ†ã‚£ãƒ™ãƒ¼ãƒˆ
     ec_recv[0].activate_component(g_compo_recv.rtc_ref)
     time.sleep(sleep_recv_act_time)
     ec_send[0].activate_component(g_compo_send.rtc_ref)
 
     time.sleep(sleep_act_time)
 
-    ## 5 ¥Ç¥£¥¢¥¯¥Æ¥£¥Ù¡¼¥È
+    ## 5 ãƒ‡ã‚£ã‚¢ã‚¯ãƒ†ã‚£ãƒ™ãƒ¼ãƒˆ
     ec_send[0].deactivate_component(g_compo_send.rtc_ref)
     ec_recv[0].deactivate_component(g_compo_recv.rtc_ref)
 
-    ## ¼õ¿®¥Õ¥¡¥¤¥ëÍ­ÌµÈ½Äê
+    ## å—ä¿¡ãƒ•ã‚¡ã‚¤ãƒ«æœ‰ç„¡åˆ¤å®š
     if os.path.isfile(g_diff_recv_file) == False:
         fout = open(g_test_result_file, 'a')
         message = g_mess_header + g_test_case + str(case_no) + " " + g_test_cnt + str(i+1) + g_mess_footer
@@ -3673,26 +3673,26 @@ for i in range(loop_count):
         time.sleep(sleep_for_time)
         continue
 
-    ## 7 Á÷¼õ¿®¥Ç¡¼¥¿Èæ³Ó
+    ## 7 é€å—ä¿¡ãƒ‡ãƒ¼ã‚¿æ¯”è¼ƒ
     time.sleep(sleep_act_time)
     bret = diff_file()
 
-    ## º¹Ê¬¥Õ¥¡¥¤¥ë¤«¤é¥Æ¥¹¥È·ë²Ì½ĞÎÏ
+    ## å·®åˆ†ãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰ãƒ†ã‚¹ãƒˆçµæœå‡ºåŠ›
     fout = open(g_test_result_file, 'a')
     message = g_mess_header + g_test_case + str(case_no) + " " + g_test_cnt + str(i+1) + g_mess_footer
-    # bret==True ¤Ê¤éÁ÷¼õ¿®¥Ç¡¼¥¿°ìÃ×
+    # bret==True ãªã‚‰é€å—ä¿¡ãƒ‡ãƒ¼ã‚¿ä¸€è‡´
     if bret == True:
-        # ¥Æ¥¹¥È·ë²Ì OK
+        # ãƒ†ã‚¹ãƒˆçµæœ OK
         message = message + g_test_ok
         print message
         fout.write(message + '\n')
     else:
-        # ¥Æ¥¹¥È·ë²Ì NG
+        # ãƒ†ã‚¹ãƒˆçµæœ NG
         message = message + g_test_ng
         print message
         message = message + g_test_ng_message
         fout.write(message + '\n')
-        # ¼õ¿®¥Ç¡¼¥¿¤ò¥Æ¥¹¥È·ë²Ì¥Õ¥¡¥¤¥ë¤Ø¥³¥Ô¡¼
+        # å—ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’ãƒ†ã‚¹ãƒˆçµæœãƒ•ã‚¡ã‚¤ãƒ«ã¸ã‚³ãƒ”ãƒ¼
         fin2 = open(g_diff_recv_file, 'r')
         while(1):
             s2 = fin2.readline()
@@ -3704,13 +3704,13 @@ for i in range(loop_count):
 
     time.sleep(sleep_for_time)
 
-## 6 ¥İ¡¼¥ÈÀÚÃÇ
+## 6 ãƒãƒ¼ãƒˆåˆ‡æ–­
 g_in_ports[g_port3].disconnect(g_conprof3.connector_id)
 g_in_ports[g_port2].disconnect(g_conprof2.connector_id)
 g_in_ports[g_port1].disconnect(g_conprof1.connector_id)
 
 ##--------------------------------------------------------------------
-## ÀÜÂ³¥¿¥¤¥×¡§periodic  Êı¸ş¡§in->out  ¥İ¥ê¥·¡¼¡§ALL    Activate¡¦Deactivate¥Æ¥¹¥È6
+## æ¥ç¶šã‚¿ã‚¤ãƒ—ï¼šperiodic  æ–¹å‘ï¼šin->out  ãƒãƒªã‚·ãƒ¼ï¼šALL    Activateãƒ»Deactivateãƒ†ã‚¹ãƒˆ6
 ##--------------------------------------------------------------------
 case_no = case_no + 1
 fout = open(g_test_result_file, 'a')
@@ -3721,36 +3721,36 @@ fout.write(message + '\n')
 fout.close()
 print message
 
-## 1 ¥³¥Í¥¯¥¿¡¼¥×¥í¥Õ¥¡¥¤¥ëÀßÄê
+## 1 ã‚³ãƒã‚¯ã‚¿ãƒ¼ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«è¨­å®š
 make_connecter_profile("periodic", "ALL", 1)
 
-## 3 ¥İ¡¼¥ÈÀÜÂ³
-# ¥Ç¡¼¥¿¥İ¡¼¥È1 TimedFloat
+## 3 ãƒãƒ¼ãƒˆæ¥ç¶š
+# ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ1 TimedFloat
 ret0 = g_out_ports[g_port1].connect(g_conprof1)
 
-# ¥Ç¡¼¥¿¥İ¡¼¥È2 TimedFloatSeq
+# ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ2 TimedFloatSeq
 ret1 = g_out_ports[g_port2].connect(g_conprof2)
 
-# ¥µ¡¼¥Ó¥¹¥İ¡¼¥È MyService
+# ã‚µãƒ¼ãƒ“ã‚¹ãƒãƒ¼ãƒˆ MyService
 ret2 = g_out_ports[g_port3].connect(g_conprof3)
 
 for i in range(loop_count):
 
-    ## 2 ¼õ¿®¥Ç¡¼¥¿¥Õ¥¡¥¤¥ëºï½ü
+    ## 2 å—ä¿¡ãƒ‡ãƒ¼ã‚¿ãƒ•ã‚¡ã‚¤ãƒ«å‰Šé™¤
     delete_recv_file()
 
-    ## 4 ¥¢¥¯¥Æ¥£¥Ù¡¼¥È
+    ## 4 ã‚¢ã‚¯ãƒ†ã‚£ãƒ™ãƒ¼ãƒˆ
     ec_recv[0].activate_component(g_compo_recv.rtc_ref)
     time.sleep(sleep_recv_act_time)
     ec_send[0].activate_component(g_compo_send.rtc_ref)
 
     time.sleep(sleep_act_time)
 
-    ## 5 ¥Ç¥£¥¢¥¯¥Æ¥£¥Ù¡¼¥È
+    ## 5 ãƒ‡ã‚£ã‚¢ã‚¯ãƒ†ã‚£ãƒ™ãƒ¼ãƒˆ
     ec_send[0].deactivate_component(g_compo_send.rtc_ref)
     ec_recv[0].deactivate_component(g_compo_recv.rtc_ref)
 
-    ## ¼õ¿®¥Õ¥¡¥¤¥ëÍ­ÌµÈ½Äê
+    ## å—ä¿¡ãƒ•ã‚¡ã‚¤ãƒ«æœ‰ç„¡åˆ¤å®š
     if os.path.isfile(g_diff_recv_file) == False:
         fout = open(g_test_result_file, 'a')
         message = g_mess_header + g_test_case + str(case_no) + " " + g_test_cnt + str(i+1) + g_mess_footer
@@ -3761,26 +3761,26 @@ for i in range(loop_count):
         time.sleep(sleep_for_time)
         continue
 
-    ## 7 Á÷¼õ¿®¥Ç¡¼¥¿Èæ³Ó
+    ## 7 é€å—ä¿¡ãƒ‡ãƒ¼ã‚¿æ¯”è¼ƒ
     time.sleep(sleep_act_time)
     bret = diff_file()
 
-    ## º¹Ê¬¥Õ¥¡¥¤¥ë¤«¤é¥Æ¥¹¥È·ë²Ì½ĞÎÏ
+    ## å·®åˆ†ãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰ãƒ†ã‚¹ãƒˆçµæœå‡ºåŠ›
     fout = open(g_test_result_file, 'a')
     message = g_mess_header + g_test_case + str(case_no) + " " + g_test_cnt + str(i+1) + g_mess_footer
-    # bret==True ¤Ê¤éÁ÷¼õ¿®¥Ç¡¼¥¿°ìÃ×
+    # bret==True ãªã‚‰é€å—ä¿¡ãƒ‡ãƒ¼ã‚¿ä¸€è‡´
     if bret == True:
-        # ¥Æ¥¹¥È·ë²Ì OK
+        # ãƒ†ã‚¹ãƒˆçµæœ OK
         message = message + g_test_ok
         print message
         fout.write(message + '\n')
     else:
-        # ¥Æ¥¹¥È·ë²Ì NG
+        # ãƒ†ã‚¹ãƒˆçµæœ NG
         message = message + g_test_ng
         print message
         message = message + g_test_ng_message
         fout.write(message + '\n')
-        # ¼õ¿®¥Ç¡¼¥¿¤ò¥Æ¥¹¥È·ë²Ì¥Õ¥¡¥¤¥ë¤Ø¥³¥Ô¡¼
+        # å—ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’ãƒ†ã‚¹ãƒˆçµæœãƒ•ã‚¡ã‚¤ãƒ«ã¸ã‚³ãƒ”ãƒ¼
         fin2 = open(g_diff_recv_file, 'r')
         while(1):
             s2 = fin2.readline()
@@ -3792,13 +3792,13 @@ for i in range(loop_count):
 
     time.sleep(sleep_for_time)
 
-## 6 ¥İ¡¼¥ÈÀÚÃÇ
+## 6 ãƒãƒ¼ãƒˆåˆ‡æ–­
 g_in_ports[g_port3].disconnect(g_conprof3.connector_id)
 g_in_ports[g_port2].disconnect(g_conprof2.connector_id)
 g_in_ports[g_port1].disconnect(g_conprof1.connector_id)
 
 ##--------------------------------------------------------------------
-## ÀÜÂ³¥¿¥¤¥×¡§periodic  Êı¸ş¡§in->out  ¥İ¥ê¥·¡¼¡§FIFO    Activate¡¦Deactivate¥Æ¥¹¥È7
+## æ¥ç¶šã‚¿ã‚¤ãƒ—ï¼šperiodic  æ–¹å‘ï¼šin->out  ãƒãƒªã‚·ãƒ¼ï¼šFIFO    Activateãƒ»Deactivateãƒ†ã‚¹ãƒˆ7
 ##--------------------------------------------------------------------
 case_no = case_no + 1
 fout = open(g_test_result_file, 'a')
@@ -3809,36 +3809,36 @@ fout.write(message + '\n')
 fout.close()
 print message
 
-## 1 ¥³¥Í¥¯¥¿¡¼¥×¥í¥Õ¥¡¥¤¥ëÀßÄê
+## 1 ã‚³ãƒã‚¯ã‚¿ãƒ¼ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«è¨­å®š
 make_connecter_profile("periodic", "FIFO", 1)
 
-## 3 ¥İ¡¼¥ÈÀÜÂ³
-# ¥Ç¡¼¥¿¥İ¡¼¥È1 TimedFloat
+## 3 ãƒãƒ¼ãƒˆæ¥ç¶š
+# ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ1 TimedFloat
 ret0 = g_out_ports[g_port1].connect(g_conprof1)
 
-# ¥Ç¡¼¥¿¥İ¡¼¥È2 TimedFloatSeq
+# ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ2 TimedFloatSeq
 ret1 = g_out_ports[g_port2].connect(g_conprof2)
 
-# ¥µ¡¼¥Ó¥¹¥İ¡¼¥È MyService
+# ã‚µãƒ¼ãƒ“ã‚¹ãƒãƒ¼ãƒˆ MyService
 ret2 = g_out_ports[g_port3].connect(g_conprof3)
 
 for i in range(loop_count):
 
-    ## 2 ¼õ¿®¥Ç¡¼¥¿¥Õ¥¡¥¤¥ëºï½ü
+    ## 2 å—ä¿¡ãƒ‡ãƒ¼ã‚¿ãƒ•ã‚¡ã‚¤ãƒ«å‰Šé™¤
     delete_recv_file()
 
-    ## 4 ¥¢¥¯¥Æ¥£¥Ù¡¼¥È
+    ## 4 ã‚¢ã‚¯ãƒ†ã‚£ãƒ™ãƒ¼ãƒˆ
     ec_recv[0].activate_component(g_compo_recv.rtc_ref)
     time.sleep(sleep_recv_act_time)
     ec_send[0].activate_component(g_compo_send.rtc_ref)
 
     time.sleep(sleep_act_time)
 
-    ## 5 ¥Ç¥£¥¢¥¯¥Æ¥£¥Ù¡¼¥È
+    ## 5 ãƒ‡ã‚£ã‚¢ã‚¯ãƒ†ã‚£ãƒ™ãƒ¼ãƒˆ
     ec_send[0].deactivate_component(g_compo_send.rtc_ref)
     ec_recv[0].deactivate_component(g_compo_recv.rtc_ref)
 
-    ## ¼õ¿®¥Õ¥¡¥¤¥ëÍ­ÌµÈ½Äê
+    ## å—ä¿¡ãƒ•ã‚¡ã‚¤ãƒ«æœ‰ç„¡åˆ¤å®š
     if os.path.isfile(g_diff_recv_file) == False:
         fout = open(g_test_result_file, 'a')
         message = g_mess_header + g_test_case + str(case_no) + " " + g_test_cnt + str(i+1) + g_mess_footer
@@ -3849,26 +3849,26 @@ for i in range(loop_count):
         time.sleep(sleep_for_time)
         continue
 
-    ## 7 Á÷¼õ¿®¥Ç¡¼¥¿Èæ³Ó
+    ## 7 é€å—ä¿¡ãƒ‡ãƒ¼ã‚¿æ¯”è¼ƒ
     time.sleep(sleep_act_time)
     bret = diff_file()
 
-    ## º¹Ê¬¥Õ¥¡¥¤¥ë¤«¤é¥Æ¥¹¥È·ë²Ì½ĞÎÏ
+    ## å·®åˆ†ãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰ãƒ†ã‚¹ãƒˆçµæœå‡ºåŠ›
     fout = open(g_test_result_file, 'a')
     message = g_mess_header + g_test_case + str(case_no) + " " + g_test_cnt + str(i+1) + g_mess_footer
-    # bret==True ¤Ê¤éÁ÷¼õ¿®¥Ç¡¼¥¿°ìÃ×
+    # bret==True ãªã‚‰é€å—ä¿¡ãƒ‡ãƒ¼ã‚¿ä¸€è‡´
     if bret == True:
-        # ¥Æ¥¹¥È·ë²Ì OK
+        # ãƒ†ã‚¹ãƒˆçµæœ OK
         message = message + g_test_ok
         print message
         fout.write(message + '\n')
     else:
-        # ¥Æ¥¹¥È·ë²Ì NG
+        # ãƒ†ã‚¹ãƒˆçµæœ NG
         message = message + g_test_ng
         print message
         message = message + g_test_ng_message
         fout.write(message + '\n')
-        # ¼õ¿®¥Ç¡¼¥¿¤ò¥Æ¥¹¥È·ë²Ì¥Õ¥¡¥¤¥ë¤Ø¥³¥Ô¡¼
+        # å—ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’ãƒ†ã‚¹ãƒˆçµæœãƒ•ã‚¡ã‚¤ãƒ«ã¸ã‚³ãƒ”ãƒ¼
         fin2 = open(g_diff_recv_file, 'r')
         while(1):
             s2 = fin2.readline()
@@ -3880,13 +3880,13 @@ for i in range(loop_count):
 
     time.sleep(sleep_for_time)
 
-## 6 ¥İ¡¼¥ÈÀÚÃÇ
+## 6 ãƒãƒ¼ãƒˆåˆ‡æ–­
 g_in_ports[g_port3].disconnect(g_conprof3.connector_id)
 g_in_ports[g_port2].disconnect(g_conprof2.connector_id)
 g_in_ports[g_port1].disconnect(g_conprof1.connector_id)
 
 ##--------------------------------------------------------------------
-## ÀÜÂ³¥¿¥¤¥×¡§periodic  Êı¸ş¡§in->out  ¥İ¥ê¥·¡¼¡§NEW    Activate¡¦Deactivate¥Æ¥¹¥È9
+## æ¥ç¶šã‚¿ã‚¤ãƒ—ï¼šperiodic  æ–¹å‘ï¼šin->out  ãƒãƒªã‚·ãƒ¼ï¼šNEW    Activateãƒ»Deactivateãƒ†ã‚¹ãƒˆ9
 ##--------------------------------------------------------------------
 case_no = case_no + 1
 fout = open(g_test_result_file, 'a')
@@ -3897,36 +3897,36 @@ fout.write(message + '\n')
 fout.close()
 print message
 
-## 1 ¥³¥Í¥¯¥¿¡¼¥×¥í¥Õ¥¡¥¤¥ëÀßÄê
+## 1 ã‚³ãƒã‚¯ã‚¿ãƒ¼ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«è¨­å®š
 make_connecter_profile("periodic", "NEW", 1)
 
-## 3 ¥İ¡¼¥ÈÀÜÂ³
-# ¥Ç¡¼¥¿¥İ¡¼¥È1 TimedFloat
+## 3 ãƒãƒ¼ãƒˆæ¥ç¶š
+# ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ1 TimedFloat
 ret0 = g_out_ports[g_port1].connect(g_conprof1)
 
-# ¥Ç¡¼¥¿¥İ¡¼¥È2 TimedFloatSeq
+# ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ2 TimedFloatSeq
 ret1 = g_out_ports[g_port2].connect(g_conprof2)
 
-# ¥µ¡¼¥Ó¥¹¥İ¡¼¥È MyService
+# ã‚µãƒ¼ãƒ“ã‚¹ãƒãƒ¼ãƒˆ MyService
 ret2 = g_out_ports[g_port3].connect(g_conprof3)
 
 for i in range(loop_count):
 
-    ## 2 ¼õ¿®¥Ç¡¼¥¿¥Õ¥¡¥¤¥ëºï½ü
+    ## 2 å—ä¿¡ãƒ‡ãƒ¼ã‚¿ãƒ•ã‚¡ã‚¤ãƒ«å‰Šé™¤
     delete_recv_file()
 
-    ## 4 ¥¢¥¯¥Æ¥£¥Ù¡¼¥È
+    ## 4 ã‚¢ã‚¯ãƒ†ã‚£ãƒ™ãƒ¼ãƒˆ
     ec_recv[0].activate_component(g_compo_recv.rtc_ref)
     time.sleep(sleep_recv_act_time)
     ec_send[0].activate_component(g_compo_send.rtc_ref)
 
     time.sleep(sleep_act_time)
 
-    ## 5 ¥Ç¥£¥¢¥¯¥Æ¥£¥Ù¡¼¥È
+    ## 5 ãƒ‡ã‚£ã‚¢ã‚¯ãƒ†ã‚£ãƒ™ãƒ¼ãƒˆ
     ec_send[0].deactivate_component(g_compo_send.rtc_ref)
     ec_recv[0].deactivate_component(g_compo_recv.rtc_ref)
 
-    ## ¼õ¿®¥Õ¥¡¥¤¥ëÍ­ÌµÈ½Äê
+    ## å—ä¿¡ãƒ•ã‚¡ã‚¤ãƒ«æœ‰ç„¡åˆ¤å®š
     if os.path.isfile(g_diff_recv_file) == False:
         fout = open(g_test_result_file, 'a')
         message = g_mess_header + g_test_case + str(case_no) + " " + g_test_cnt + str(i+1) + g_mess_footer
@@ -3937,26 +3937,26 @@ for i in range(loop_count):
         time.sleep(sleep_for_time)
         continue
 
-    ## 7 Á÷¼õ¿®¥Ç¡¼¥¿Èæ³Ó
+    ## 7 é€å—ä¿¡ãƒ‡ãƒ¼ã‚¿æ¯”è¼ƒ
     time.sleep(sleep_act_time)
     bret = diff_file()
 
-    ## º¹Ê¬¥Õ¥¡¥¤¥ë¤«¤é¥Æ¥¹¥È·ë²Ì½ĞÎÏ
+    ## å·®åˆ†ãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰ãƒ†ã‚¹ãƒˆçµæœå‡ºåŠ›
     fout = open(g_test_result_file, 'a')
     message = g_mess_header + g_test_case + str(case_no) + " " + g_test_cnt + str(i+1) + g_mess_footer
-    # bret==True ¤Ê¤éÁ÷¼õ¿®¥Ç¡¼¥¿°ìÃ×
+    # bret==True ãªã‚‰é€å—ä¿¡ãƒ‡ãƒ¼ã‚¿ä¸€è‡´
     if bret == True:
-        # ¥Æ¥¹¥È·ë²Ì OK
+        # ãƒ†ã‚¹ãƒˆçµæœ OK
         message = message + g_test_ok
         print message
         fout.write(message + '\n')
     else:
-        # ¥Æ¥¹¥È·ë²Ì NG
+        # ãƒ†ã‚¹ãƒˆçµæœ NG
         message = message + g_test_ng
         print message
         message = message + g_test_ng_message
         fout.write(message + '\n')
-        # ¼õ¿®¥Ç¡¼¥¿¤ò¥Æ¥¹¥È·ë²Ì¥Õ¥¡¥¤¥ë¤Ø¥³¥Ô¡¼
+        # å—ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’ãƒ†ã‚¹ãƒˆçµæœãƒ•ã‚¡ã‚¤ãƒ«ã¸ã‚³ãƒ”ãƒ¼
         fin2 = open(g_diff_recv_file, 'r')
         while(1):
             s2 = fin2.readline()
@@ -3968,13 +3968,13 @@ for i in range(loop_count):
 
     time.sleep(sleep_for_time)
 
-## 6 ¥İ¡¼¥ÈÀÚÃÇ
+## 6 ãƒãƒ¼ãƒˆåˆ‡æ–­
 g_in_ports[g_port3].disconnect(g_conprof3.connector_id)
 g_in_ports[g_port2].disconnect(g_conprof2.connector_id)
 g_in_ports[g_port1].disconnect(g_conprof1.connector_id)
 
 ##--------------------------------------------------------------------
-## ÀÜÂ³¥¿¥¤¥×¡§periodic  Êı¸ş¡§in->out  ¥İ¥ê¥·¡¼¡§SKIP    Activate¡¦Deactivate¥Æ¥¹¥È8
+## æ¥ç¶šã‚¿ã‚¤ãƒ—ï¼šperiodic  æ–¹å‘ï¼šin->out  ãƒãƒªã‚·ãƒ¼ï¼šSKIP    Activateãƒ»Deactivateãƒ†ã‚¹ãƒˆ8
 ##--------------------------------------------------------------------
 case_no = case_no + 1
 fout = open(g_test_result_file, 'a')
@@ -3985,36 +3985,36 @@ fout.write(message + '\n')
 fout.close()
 print message
 
-## 1 ¥³¥Í¥¯¥¿¡¼¥×¥í¥Õ¥¡¥¤¥ëÀßÄê
+## 1 ã‚³ãƒã‚¯ã‚¿ãƒ¼ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«è¨­å®š
 make_connecter_profile("periodic", "SKIP", 1)
 
-## 3 ¥İ¡¼¥ÈÀÜÂ³
-# ¥Ç¡¼¥¿¥İ¡¼¥È1 TimedFloat
+## 3 ãƒãƒ¼ãƒˆæ¥ç¶š
+# ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ1 TimedFloat
 ret0 = g_out_ports[g_port1].connect(g_conprof1)
 
-# ¥Ç¡¼¥¿¥İ¡¼¥È2 TimedFloatSeq
+# ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ2 TimedFloatSeq
 ret1 = g_out_ports[g_port2].connect(g_conprof2)
 
-# ¥µ¡¼¥Ó¥¹¥İ¡¼¥È MyService
+# ã‚µãƒ¼ãƒ“ã‚¹ãƒãƒ¼ãƒˆ MyService
 ret2 = g_out_ports[g_port3].connect(g_conprof3)
 
 for i in range(loop_count):
 
-    ## 2 ¼õ¿®¥Ç¡¼¥¿¥Õ¥¡¥¤¥ëºï½ü
+    ## 2 å—ä¿¡ãƒ‡ãƒ¼ã‚¿ãƒ•ã‚¡ã‚¤ãƒ«å‰Šé™¤
     delete_recv_file()
 
-    ## 4 ¥¢¥¯¥Æ¥£¥Ù¡¼¥È
+    ## 4 ã‚¢ã‚¯ãƒ†ã‚£ãƒ™ãƒ¼ãƒˆ
     ec_recv[0].activate_component(g_compo_recv.rtc_ref)
     time.sleep(sleep_recv_act_time)
     ec_send[0].activate_component(g_compo_send.rtc_ref)
 
     time.sleep(sleep_act_time)
 
-    ## 5 ¥Ç¥£¥¢¥¯¥Æ¥£¥Ù¡¼¥È
+    ## 5 ãƒ‡ã‚£ã‚¢ã‚¯ãƒ†ã‚£ãƒ™ãƒ¼ãƒˆ
     ec_send[0].deactivate_component(g_compo_send.rtc_ref)
     ec_recv[0].deactivate_component(g_compo_recv.rtc_ref)
 
-    ## ¼õ¿®¥Õ¥¡¥¤¥ëÍ­ÌµÈ½Äê
+    ## å—ä¿¡ãƒ•ã‚¡ã‚¤ãƒ«æœ‰ç„¡åˆ¤å®š
     if os.path.isfile(g_diff_recv_file) == False:
         fout = open(g_test_result_file, 'a')
         message = g_mess_header + g_test_case + str(case_no) + " " + g_test_cnt + str(i+1) + g_mess_footer
@@ -4025,26 +4025,26 @@ for i in range(loop_count):
         time.sleep(sleep_for_time)
         continue
 
-    ## 7 Á÷¼õ¿®¥Ç¡¼¥¿Èæ³Ó
+    ## 7 é€å—ä¿¡ãƒ‡ãƒ¼ã‚¿æ¯”è¼ƒ
     time.sleep(sleep_act_time)
     bret = diff_file()
 
-    ## º¹Ê¬¥Õ¥¡¥¤¥ë¤«¤é¥Æ¥¹¥È·ë²Ì½ĞÎÏ
+    ## å·®åˆ†ãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰ãƒ†ã‚¹ãƒˆçµæœå‡ºåŠ›
     fout = open(g_test_result_file, 'a')
     message = g_mess_header + g_test_case + str(case_no) + " " + g_test_cnt + str(i+1) + g_mess_footer
-    # bret==True ¤Ê¤éÁ÷¼õ¿®¥Ç¡¼¥¿°ìÃ×
+    # bret==True ãªã‚‰é€å—ä¿¡ãƒ‡ãƒ¼ã‚¿ä¸€è‡´
     if bret == True:
-        # ¥Æ¥¹¥È·ë²Ì OK
+        # ãƒ†ã‚¹ãƒˆçµæœ OK
         message = message + g_test_ok
         print message
         fout.write(message + '\n')
     else:
-        # ¥Æ¥¹¥È·ë²Ì NG
+        # ãƒ†ã‚¹ãƒˆçµæœ NG
         message = message + g_test_ng
         print message
         message = message + g_test_ng_message
         fout.write(message + '\n')
-        # ¼õ¿®¥Ç¡¼¥¿¤ò¥Æ¥¹¥È·ë²Ì¥Õ¥¡¥¤¥ë¤Ø¥³¥Ô¡¼
+        # å—ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’ãƒ†ã‚¹ãƒˆçµæœãƒ•ã‚¡ã‚¤ãƒ«ã¸ã‚³ãƒ”ãƒ¼
         fin2 = open(g_diff_recv_file, 'r')
         while(1):
             s2 = fin2.readline()
@@ -4056,13 +4056,13 @@ for i in range(loop_count):
 
     time.sleep(sleep_for_time)
 
-## 6 ¥İ¡¼¥ÈÀÚÃÇ
+## 6 ãƒãƒ¼ãƒˆåˆ‡æ–­
 g_in_ports[g_port3].disconnect(g_conprof3.connector_id)
 g_in_ports[g_port2].disconnect(g_conprof2.connector_id)
 g_in_ports[g_port1].disconnect(g_conprof1.connector_id)
 
 ##--------------------------------------------------------------------
-## ÀÜÂ³¥¿¥¤¥×¡§periodic  Êı¸ş¡§out->in  ¥İ¥ê¥·¡¼¡§ALL  ÀÜÂ³¡¦ÀÚÃÇ¡¦Activate¡¦Deactivate¥Æ¥¹¥È1
+## æ¥ç¶šã‚¿ã‚¤ãƒ—ï¼šperiodic  æ–¹å‘ï¼šout->in  ãƒãƒªã‚·ãƒ¼ï¼šALL  æ¥ç¶šãƒ»åˆ‡æ–­ãƒ»Activateãƒ»Deactivateãƒ†ã‚¹ãƒˆ1
 ##--------------------------------------------------------------------
 case_no = case_no + 1
 fout = open(g_test_result_file, 'a')
@@ -4075,39 +4075,39 @@ print message
 
 for i in range(loop_count):
 
-    ## 2 ¼õ¿®¥Ç¡¼¥¿¥Õ¥¡¥¤¥ëºï½ü
+    ## 2 å—ä¿¡ãƒ‡ãƒ¼ã‚¿ãƒ•ã‚¡ã‚¤ãƒ«å‰Šé™¤
     delete_recv_file()
 
-    ## 1 ¥³¥Í¥¯¥¿¡¼¥×¥í¥Õ¥¡¥¤¥ëÀßÄê
+    ## 1 ã‚³ãƒã‚¯ã‚¿ãƒ¼ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«è¨­å®š
     make_connecter_profile("periodic", "ALL", 0)
 
-    ## 3 ¥İ¡¼¥ÈÀÜÂ³
-    # ¥Ç¡¼¥¿¥İ¡¼¥È1 TimedFloat
+    ## 3 ãƒãƒ¼ãƒˆæ¥ç¶š
+    # ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ1 TimedFloat
     ret0 = g_out_ports[g_port1].connect(g_conprof1)
 
-    # ¥Ç¡¼¥¿¥İ¡¼¥È2 TimedFloatSeq
+    # ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ2 TimedFloatSeq
     ret1 = g_out_ports[g_port2].connect(g_conprof2)
 
-    # ¥µ¡¼¥Ó¥¹¥İ¡¼¥È MyService
+    # ã‚µãƒ¼ãƒ“ã‚¹ãƒãƒ¼ãƒˆ MyService
     ret2 = g_out_ports[g_port3].connect(g_conprof3)
 
-    ## 4 ¥¢¥¯¥Æ¥£¥Ù¡¼¥È
+    ## 4 ã‚¢ã‚¯ãƒ†ã‚£ãƒ™ãƒ¼ãƒˆ
     ec_recv[0].activate_component(g_compo_recv.rtc_ref)
     time.sleep(sleep_recv_act_time)
     ec_send[0].activate_component(g_compo_send.rtc_ref)
 
     time.sleep(sleep_act_time)
 
-    ## 5 ¥Ç¥£¥¢¥¯¥Æ¥£¥Ù¡¼¥È
+    ## 5 ãƒ‡ã‚£ã‚¢ã‚¯ãƒ†ã‚£ãƒ™ãƒ¼ãƒˆ
     ec_send[0].deactivate_component(g_compo_send.rtc_ref)
     ec_recv[0].deactivate_component(g_compo_recv.rtc_ref)
 
-    ## 6 ¥İ¡¼¥ÈÀÚÃÇ
+    ## 6 ãƒãƒ¼ãƒˆåˆ‡æ–­
     g_in_ports[g_port3].disconnect(g_conprof3.connector_id)
     g_in_ports[g_port2].disconnect(g_conprof2.connector_id)
     g_in_ports[g_port1].disconnect(g_conprof1.connector_id)
 
-    ## ¼õ¿®¥Õ¥¡¥¤¥ëÍ­ÌµÈ½Äê
+    ## å—ä¿¡ãƒ•ã‚¡ã‚¤ãƒ«æœ‰ç„¡åˆ¤å®š
     if os.path.isfile(g_diff_recv_file) == False:
         fout = open(g_test_result_file, 'a')
         message = g_mess_header + g_test_case + str(case_no) + " " + g_test_cnt + str(i+1) + g_mess_footer
@@ -4118,26 +4118,26 @@ for i in range(loop_count):
         time.sleep(sleep_for_time)
         continue
 
-    ## 7 Á÷¼õ¿®¥Ç¡¼¥¿Èæ³Ó
+    ## 7 é€å—ä¿¡ãƒ‡ãƒ¼ã‚¿æ¯”è¼ƒ
     time.sleep(sleep_act_time)
     bret = diff_file()
 
-    ## º¹Ê¬¥Õ¥¡¥¤¥ë¤«¤é¥Æ¥¹¥È·ë²Ì½ĞÎÏ
+    ## å·®åˆ†ãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰ãƒ†ã‚¹ãƒˆçµæœå‡ºåŠ›
     fout = open(g_test_result_file, 'a')
     message = g_mess_header + g_test_case + str(case_no) + " " + g_test_cnt + str(i+1) + g_mess_footer
-    # bret==True ¤Ê¤éÁ÷¼õ¿®¥Ç¡¼¥¿°ìÃ×
+    # bret==True ãªã‚‰é€å—ä¿¡ãƒ‡ãƒ¼ã‚¿ä¸€è‡´
     if bret == True:
-        # ¥Æ¥¹¥È·ë²Ì OK
+        # ãƒ†ã‚¹ãƒˆçµæœ OK
         message = message + g_test_ok
         print message
         fout.write(message + '\n')
     else:
-        # ¥Æ¥¹¥È·ë²Ì NG
+        # ãƒ†ã‚¹ãƒˆçµæœ NG
         message = message + g_test_ng
         print message
         message = message + g_test_ng_message
         fout.write(message + '\n')
-        # ¼õ¿®¥Ç¡¼¥¿¤ò¥Æ¥¹¥È·ë²Ì¥Õ¥¡¥¤¥ë¤Ø¥³¥Ô¡¼
+        # å—ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’ãƒ†ã‚¹ãƒˆçµæœãƒ•ã‚¡ã‚¤ãƒ«ã¸ã‚³ãƒ”ãƒ¼
         fin2 = open(g_diff_recv_file, 'r')
         while(1):
             s2 = fin2.readline()
@@ -4150,7 +4150,7 @@ for i in range(loop_count):
     time.sleep(sleep_for_time)
 
 ##--------------------------------------------------------------------
-## ÀÜÂ³¥¿¥¤¥×¡§periodic  Êı¸ş¡§out->in  ¥İ¥ê¥·¡¼¡§FIFO  ÀÜÂ³¡¦ÀÚÃÇ¡¦Activate¡¦Deactivate¥Æ¥¹¥È1
+## æ¥ç¶šã‚¿ã‚¤ãƒ—ï¼šperiodic  æ–¹å‘ï¼šout->in  ãƒãƒªã‚·ãƒ¼ï¼šFIFO  æ¥ç¶šãƒ»åˆ‡æ–­ãƒ»Activateãƒ»Deactivateãƒ†ã‚¹ãƒˆ1
 ##--------------------------------------------------------------------
 case_no = case_no + 1
 fout = open(g_test_result_file, 'a')
@@ -4163,39 +4163,39 @@ print message
 
 for i in range(loop_count):
 
-    ## 2 ¼õ¿®¥Ç¡¼¥¿¥Õ¥¡¥¤¥ëºï½ü
+    ## 2 å—ä¿¡ãƒ‡ãƒ¼ã‚¿ãƒ•ã‚¡ã‚¤ãƒ«å‰Šé™¤
     delete_recv_file()
 
-    ## 1 ¥³¥Í¥¯¥¿¡¼¥×¥í¥Õ¥¡¥¤¥ëÀßÄê
+    ## 1 ã‚³ãƒã‚¯ã‚¿ãƒ¼ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«è¨­å®š
     make_connecter_profile("periodic", "FIFO", 0)
 
-    ## 3 ¥İ¡¼¥ÈÀÜÂ³
-    # ¥Ç¡¼¥¿¥İ¡¼¥È1 TimedFloat
+    ## 3 ãƒãƒ¼ãƒˆæ¥ç¶š
+    # ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ1 TimedFloat
     ret0 = g_out_ports[g_port1].connect(g_conprof1)
 
-    # ¥Ç¡¼¥¿¥İ¡¼¥È2 TimedFloatSeq
+    # ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ2 TimedFloatSeq
     ret1 = g_out_ports[g_port2].connect(g_conprof2)
 
-    # ¥µ¡¼¥Ó¥¹¥İ¡¼¥È MyService
+    # ã‚µãƒ¼ãƒ“ã‚¹ãƒãƒ¼ãƒˆ MyService
     ret2 = g_out_ports[g_port3].connect(g_conprof3)
 
-    ## 4 ¥¢¥¯¥Æ¥£¥Ù¡¼¥È
+    ## 4 ã‚¢ã‚¯ãƒ†ã‚£ãƒ™ãƒ¼ãƒˆ
     ec_recv[0].activate_component(g_compo_recv.rtc_ref)
     time.sleep(sleep_recv_act_time)
     ec_send[0].activate_component(g_compo_send.rtc_ref)
 
     time.sleep(sleep_act_time)
 
-    ## 5 ¥Ç¥£¥¢¥¯¥Æ¥£¥Ù¡¼¥È
+    ## 5 ãƒ‡ã‚£ã‚¢ã‚¯ãƒ†ã‚£ãƒ™ãƒ¼ãƒˆ
     ec_send[0].deactivate_component(g_compo_send.rtc_ref)
     ec_recv[0].deactivate_component(g_compo_recv.rtc_ref)
 
-    ## 6 ¥İ¡¼¥ÈÀÚÃÇ
+    ## 6 ãƒãƒ¼ãƒˆåˆ‡æ–­
     g_in_ports[g_port3].disconnect(g_conprof3.connector_id)
     g_in_ports[g_port2].disconnect(g_conprof2.connector_id)
     g_in_ports[g_port1].disconnect(g_conprof1.connector_id)
 
-    ## ¼õ¿®¥Õ¥¡¥¤¥ëÍ­ÌµÈ½Äê
+    ## å—ä¿¡ãƒ•ã‚¡ã‚¤ãƒ«æœ‰ç„¡åˆ¤å®š
     if os.path.isfile(g_diff_recv_file) == False:
         fout = open(g_test_result_file, 'a')
         message = g_mess_header + g_test_case + str(case_no) + " " + g_test_cnt + str(i+1) + g_mess_footer
@@ -4206,26 +4206,26 @@ for i in range(loop_count):
         time.sleep(sleep_for_time)
         continue
 
-    ## 7 Á÷¼õ¿®¥Ç¡¼¥¿Èæ³Ó
+    ## 7 é€å—ä¿¡ãƒ‡ãƒ¼ã‚¿æ¯”è¼ƒ
     time.sleep(sleep_act_time)
     bret = diff_file()
 
-    ## º¹Ê¬¥Õ¥¡¥¤¥ë¤«¤é¥Æ¥¹¥È·ë²Ì½ĞÎÏ
+    ## å·®åˆ†ãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰ãƒ†ã‚¹ãƒˆçµæœå‡ºåŠ›
     fout = open(g_test_result_file, 'a')
     message = g_mess_header + g_test_case + str(case_no) + " " + g_test_cnt + str(i+1) + g_mess_footer
-    # bret==True ¤Ê¤éÁ÷¼õ¿®¥Ç¡¼¥¿°ìÃ×
+    # bret==True ãªã‚‰é€å—ä¿¡ãƒ‡ãƒ¼ã‚¿ä¸€è‡´
     if bret == True:
-        # ¥Æ¥¹¥È·ë²Ì OK
+        # ãƒ†ã‚¹ãƒˆçµæœ OK
         message = message + g_test_ok
         print message
         fout.write(message + '\n')
     else:
-        # ¥Æ¥¹¥È·ë²Ì NG
+        # ãƒ†ã‚¹ãƒˆçµæœ NG
         message = message + g_test_ng
         print message
         message = message + g_test_ng_message
         fout.write(message + '\n')
-        # ¼õ¿®¥Ç¡¼¥¿¤ò¥Æ¥¹¥È·ë²Ì¥Õ¥¡¥¤¥ë¤Ø¥³¥Ô¡¼
+        # å—ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’ãƒ†ã‚¹ãƒˆçµæœãƒ•ã‚¡ã‚¤ãƒ«ã¸ã‚³ãƒ”ãƒ¼
         fin2 = open(g_diff_recv_file, 'r')
         while(1):
             s2 = fin2.readline()
@@ -4238,7 +4238,7 @@ for i in range(loop_count):
     time.sleep(sleep_for_time)
 
 ##--------------------------------------------------------------------
-## ÀÜÂ³¥¿¥¤¥×¡§periodic  Êı¸ş¡§out->in  ¥İ¥ê¥·¡¼¡§NEW  ÀÜÂ³¡¦ÀÚÃÇ¡¦Activate¡¦Deactivate¥Æ¥¹¥È1
+## æ¥ç¶šã‚¿ã‚¤ãƒ—ï¼šperiodic  æ–¹å‘ï¼šout->in  ãƒãƒªã‚·ãƒ¼ï¼šNEW  æ¥ç¶šãƒ»åˆ‡æ–­ãƒ»Activateãƒ»Deactivateãƒ†ã‚¹ãƒˆ1
 ##--------------------------------------------------------------------
 case_no = case_no + 1
 fout = open(g_test_result_file, 'a')
@@ -4251,39 +4251,39 @@ print message
 
 for i in range(loop_count):
 
-    ## 2 ¼õ¿®¥Ç¡¼¥¿¥Õ¥¡¥¤¥ëºï½ü
+    ## 2 å—ä¿¡ãƒ‡ãƒ¼ã‚¿ãƒ•ã‚¡ã‚¤ãƒ«å‰Šé™¤
     delete_recv_file()
 
-    ## 1 ¥³¥Í¥¯¥¿¡¼¥×¥í¥Õ¥¡¥¤¥ëÀßÄê
+    ## 1 ã‚³ãƒã‚¯ã‚¿ãƒ¼ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«è¨­å®š
     make_connecter_profile("periodic", "NEW", 0)
 
-    ## 3 ¥İ¡¼¥ÈÀÜÂ³
-    # ¥Ç¡¼¥¿¥İ¡¼¥È1 TimedFloat
+    ## 3 ãƒãƒ¼ãƒˆæ¥ç¶š
+    # ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ1 TimedFloat
     ret0 = g_out_ports[g_port1].connect(g_conprof1)
 
-    # ¥Ç¡¼¥¿¥İ¡¼¥È2 TimedFloatSeq
+    # ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ2 TimedFloatSeq
     ret1 = g_out_ports[g_port2].connect(g_conprof2)
 
-    # ¥µ¡¼¥Ó¥¹¥İ¡¼¥È MyService
+    # ã‚µãƒ¼ãƒ“ã‚¹ãƒãƒ¼ãƒˆ MyService
     ret2 = g_out_ports[g_port3].connect(g_conprof3)
 
-    ## 4 ¥¢¥¯¥Æ¥£¥Ù¡¼¥È
+    ## 4 ã‚¢ã‚¯ãƒ†ã‚£ãƒ™ãƒ¼ãƒˆ
     ec_recv[0].activate_component(g_compo_recv.rtc_ref)
     time.sleep(sleep_recv_act_time)
     ec_send[0].activate_component(g_compo_send.rtc_ref)
 
     time.sleep(sleep_act_time)
 
-    ## 5 ¥Ç¥£¥¢¥¯¥Æ¥£¥Ù¡¼¥È
+    ## 5 ãƒ‡ã‚£ã‚¢ã‚¯ãƒ†ã‚£ãƒ™ãƒ¼ãƒˆ
     ec_send[0].deactivate_component(g_compo_send.rtc_ref)
     ec_recv[0].deactivate_component(g_compo_recv.rtc_ref)
 
-    ## 6 ¥İ¡¼¥ÈÀÚÃÇ
+    ## 6 ãƒãƒ¼ãƒˆåˆ‡æ–­
     g_in_ports[g_port3].disconnect(g_conprof3.connector_id)
     g_in_ports[g_port2].disconnect(g_conprof2.connector_id)
     g_in_ports[g_port1].disconnect(g_conprof1.connector_id)
 
-    ## ¼õ¿®¥Õ¥¡¥¤¥ëÍ­ÌµÈ½Äê
+    ## å—ä¿¡ãƒ•ã‚¡ã‚¤ãƒ«æœ‰ç„¡åˆ¤å®š
     if os.path.isfile(g_diff_recv_file) == False:
         fout = open(g_test_result_file, 'a')
         message = g_mess_header + g_test_case + str(case_no) + " " + g_test_cnt + str(i+1) + g_mess_footer
@@ -4294,26 +4294,26 @@ for i in range(loop_count):
         time.sleep(sleep_for_time)
         continue
 
-    ## 7 Á÷¼õ¿®¥Ç¡¼¥¿Èæ³Ó
+    ## 7 é€å—ä¿¡ãƒ‡ãƒ¼ã‚¿æ¯”è¼ƒ
     time.sleep(sleep_act_time)
     bret = diff_file()
 
-    ## º¹Ê¬¥Õ¥¡¥¤¥ë¤«¤é¥Æ¥¹¥È·ë²Ì½ĞÎÏ
+    ## å·®åˆ†ãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰ãƒ†ã‚¹ãƒˆçµæœå‡ºåŠ›
     fout = open(g_test_result_file, 'a')
     message = g_mess_header + g_test_case + str(case_no) + " " + g_test_cnt + str(i+1) + g_mess_footer
-    # bret==True ¤Ê¤éÁ÷¼õ¿®¥Ç¡¼¥¿°ìÃ×
+    # bret==True ãªã‚‰é€å—ä¿¡ãƒ‡ãƒ¼ã‚¿ä¸€è‡´
     if bret == True:
-        # ¥Æ¥¹¥È·ë²Ì OK
+        # ãƒ†ã‚¹ãƒˆçµæœ OK
         message = message + g_test_ok
         print message
         fout.write(message + '\n')
     else:
-        # ¥Æ¥¹¥È·ë²Ì NG
+        # ãƒ†ã‚¹ãƒˆçµæœ NG
         message = message + g_test_ng
         print message
         message = message + g_test_ng_message
         fout.write(message + '\n')
-        # ¼õ¿®¥Ç¡¼¥¿¤ò¥Æ¥¹¥È·ë²Ì¥Õ¥¡¥¤¥ë¤Ø¥³¥Ô¡¼
+        # å—ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’ãƒ†ã‚¹ãƒˆçµæœãƒ•ã‚¡ã‚¤ãƒ«ã¸ã‚³ãƒ”ãƒ¼
         fin2 = open(g_diff_recv_file, 'r')
         while(1):
             s2 = fin2.readline()
@@ -4326,7 +4326,7 @@ for i in range(loop_count):
     time.sleep(sleep_for_time)
 
 ##--------------------------------------------------------------------
-## ÀÜÂ³¥¿¥¤¥×¡§periodic  Êı¸ş¡§out->in  ¥İ¥ê¥·¡¼¡§SKIP  ÀÜÂ³¡¦ÀÚÃÇ¡¦Activate¡¦Deactivate¥Æ¥¹¥È1
+## æ¥ç¶šã‚¿ã‚¤ãƒ—ï¼šperiodic  æ–¹å‘ï¼šout->in  ãƒãƒªã‚·ãƒ¼ï¼šSKIP  æ¥ç¶šãƒ»åˆ‡æ–­ãƒ»Activateãƒ»Deactivateãƒ†ã‚¹ãƒˆ1
 ##--------------------------------------------------------------------
 case_no = case_no + 1
 fout = open(g_test_result_file, 'a')
@@ -4339,39 +4339,39 @@ print message
 
 for i in range(loop_count):
 
-    ## 2 ¼õ¿®¥Ç¡¼¥¿¥Õ¥¡¥¤¥ëºï½ü
+    ## 2 å—ä¿¡ãƒ‡ãƒ¼ã‚¿ãƒ•ã‚¡ã‚¤ãƒ«å‰Šé™¤
     delete_recv_file()
 
-    ## 1 ¥³¥Í¥¯¥¿¡¼¥×¥í¥Õ¥¡¥¤¥ëÀßÄê
+    ## 1 ã‚³ãƒã‚¯ã‚¿ãƒ¼ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«è¨­å®š
     make_connecter_profile("periodic", "SKIP", 0)
 
-    ## 3 ¥İ¡¼¥ÈÀÜÂ³
-    # ¥Ç¡¼¥¿¥İ¡¼¥È1 TimedFloat
+    ## 3 ãƒãƒ¼ãƒˆæ¥ç¶š
+    # ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ1 TimedFloat
     ret0 = g_out_ports[g_port1].connect(g_conprof1)
 
-    # ¥Ç¡¼¥¿¥İ¡¼¥È2 TimedFloatSeq
+    # ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ2 TimedFloatSeq
     ret1 = g_out_ports[g_port2].connect(g_conprof2)
 
-    # ¥µ¡¼¥Ó¥¹¥İ¡¼¥È MyService
+    # ã‚µãƒ¼ãƒ“ã‚¹ãƒãƒ¼ãƒˆ MyService
     ret2 = g_out_ports[g_port3].connect(g_conprof3)
 
-    ## 4 ¥¢¥¯¥Æ¥£¥Ù¡¼¥È
+    ## 4 ã‚¢ã‚¯ãƒ†ã‚£ãƒ™ãƒ¼ãƒˆ
     ec_recv[0].activate_component(g_compo_recv.rtc_ref)
     time.sleep(sleep_recv_act_time)
     ec_send[0].activate_component(g_compo_send.rtc_ref)
 
     time.sleep(sleep_act_time)
 
-    ## 5 ¥Ç¥£¥¢¥¯¥Æ¥£¥Ù¡¼¥È
+    ## 5 ãƒ‡ã‚£ã‚¢ã‚¯ãƒ†ã‚£ãƒ™ãƒ¼ãƒˆ
     ec_send[0].deactivate_component(g_compo_send.rtc_ref)
     ec_recv[0].deactivate_component(g_compo_recv.rtc_ref)
 
-    ## 6 ¥İ¡¼¥ÈÀÚÃÇ
+    ## 6 ãƒãƒ¼ãƒˆåˆ‡æ–­
     g_in_ports[g_port3].disconnect(g_conprof3.connector_id)
     g_in_ports[g_port2].disconnect(g_conprof2.connector_id)
     g_in_ports[g_port1].disconnect(g_conprof1.connector_id)
 
-    ## ¼õ¿®¥Õ¥¡¥¤¥ëÍ­ÌµÈ½Äê
+    ## å—ä¿¡ãƒ•ã‚¡ã‚¤ãƒ«æœ‰ç„¡åˆ¤å®š
     if os.path.isfile(g_diff_recv_file) == False:
         fout = open(g_test_result_file, 'a')
         message = g_mess_header + g_test_case + str(case_no) + " " + g_test_cnt + str(i+1) + g_mess_footer
@@ -4382,26 +4382,26 @@ for i in range(loop_count):
         time.sleep(sleep_for_time)
         continue
 
-    ## 7 Á÷¼õ¿®¥Ç¡¼¥¿Èæ³Ó
+    ## 7 é€å—ä¿¡ãƒ‡ãƒ¼ã‚¿æ¯”è¼ƒ
     time.sleep(sleep_act_time)
     bret = diff_file()
 
-    ## º¹Ê¬¥Õ¥¡¥¤¥ë¤«¤é¥Æ¥¹¥È·ë²Ì½ĞÎÏ
+    ## å·®åˆ†ãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰ãƒ†ã‚¹ãƒˆçµæœå‡ºåŠ›
     fout = open(g_test_result_file, 'a')
     message = g_mess_header + g_test_case + str(case_no) + " " + g_test_cnt + str(i+1) + g_mess_footer
-    # bret==True ¤Ê¤éÁ÷¼õ¿®¥Ç¡¼¥¿°ìÃ×
+    # bret==True ãªã‚‰é€å—ä¿¡ãƒ‡ãƒ¼ã‚¿ä¸€è‡´
     if bret == True:
-        # ¥Æ¥¹¥È·ë²Ì OK
+        # ãƒ†ã‚¹ãƒˆçµæœ OK
         message = message + g_test_ok
         print message
         fout.write(message + '\n')
     else:
-        # ¥Æ¥¹¥È·ë²Ì NG
+        # ãƒ†ã‚¹ãƒˆçµæœ NG
         message = message + g_test_ng
         print message
         message = message + g_test_ng_message
         fout.write(message + '\n')
-        # ¼õ¿®¥Ç¡¼¥¿¤ò¥Æ¥¹¥È·ë²Ì¥Õ¥¡¥¤¥ë¤Ø¥³¥Ô¡¼
+        # å—ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’ãƒ†ã‚¹ãƒˆçµæœãƒ•ã‚¡ã‚¤ãƒ«ã¸ã‚³ãƒ”ãƒ¼
         fin2 = open(g_diff_recv_file, 'r')
         while(1):
             s2 = fin2.readline()
@@ -4414,7 +4414,7 @@ for i in range(loop_count):
     time.sleep(sleep_for_time)
 
 ##--------------------------------------------------------------------
-## ÀÜÂ³¥¿¥¤¥×¡§periodic  Êı¸ş¡§in->out  ¥İ¥ê¥·¡¼¡§ALL  ÀÜÂ³¡¦ÀÚÃÇ¡¦Activate¡¦Deactivate¥Æ¥¹¥È1
+## æ¥ç¶šã‚¿ã‚¤ãƒ—ï¼šperiodic  æ–¹å‘ï¼šin->out  ãƒãƒªã‚·ãƒ¼ï¼šALL  æ¥ç¶šãƒ»åˆ‡æ–­ãƒ»Activateãƒ»Deactivateãƒ†ã‚¹ãƒˆ1
 ##--------------------------------------------------------------------
 case_no = case_no + 1
 fout = open(g_test_result_file, 'a')
@@ -4427,39 +4427,39 @@ print message
 
 for i in range(loop_count):
 
-    ## 2 ¼õ¿®¥Ç¡¼¥¿¥Õ¥¡¥¤¥ëºï½ü
+    ## 2 å—ä¿¡ãƒ‡ãƒ¼ã‚¿ãƒ•ã‚¡ã‚¤ãƒ«å‰Šé™¤
     delete_recv_file()
 
-    ## 1 ¥³¥Í¥¯¥¿¡¼¥×¥í¥Õ¥¡¥¤¥ëÀßÄê
+    ## 1 ã‚³ãƒã‚¯ã‚¿ãƒ¼ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«è¨­å®š
     make_connecter_profile("periodic", "ALL", 1)
 
-    ## 3 ¥İ¡¼¥ÈÀÜÂ³
-    # ¥Ç¡¼¥¿¥İ¡¼¥È1 TimedFloat
+    ## 3 ãƒãƒ¼ãƒˆæ¥ç¶š
+    # ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ1 TimedFloat
     ret0 = g_out_ports[g_port1].connect(g_conprof1)
 
-    # ¥Ç¡¼¥¿¥İ¡¼¥È2 TimedFloatSeq
+    # ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ2 TimedFloatSeq
     ret1 = g_out_ports[g_port2].connect(g_conprof2)
 
-    # ¥µ¡¼¥Ó¥¹¥İ¡¼¥È MyService
+    # ã‚µãƒ¼ãƒ“ã‚¹ãƒãƒ¼ãƒˆ MyService
     ret2 = g_out_ports[g_port3].connect(g_conprof3)
 
-    ## 4 ¥¢¥¯¥Æ¥£¥Ù¡¼¥È
+    ## 4 ã‚¢ã‚¯ãƒ†ã‚£ãƒ™ãƒ¼ãƒˆ
     ec_recv[0].activate_component(g_compo_recv.rtc_ref)
     time.sleep(sleep_recv_act_time)
     ec_send[0].activate_component(g_compo_send.rtc_ref)
 
     time.sleep(sleep_act_time)
 
-    ## 5 ¥Ç¥£¥¢¥¯¥Æ¥£¥Ù¡¼¥È
+    ## 5 ãƒ‡ã‚£ã‚¢ã‚¯ãƒ†ã‚£ãƒ™ãƒ¼ãƒˆ
     ec_send[0].deactivate_component(g_compo_send.rtc_ref)
     ec_recv[0].deactivate_component(g_compo_recv.rtc_ref)
 
-    ## 6 ¥İ¡¼¥ÈÀÚÃÇ
+    ## 6 ãƒãƒ¼ãƒˆåˆ‡æ–­
     g_in_ports[g_port3].disconnect(g_conprof3.connector_id)
     g_in_ports[g_port2].disconnect(g_conprof2.connector_id)
     g_in_ports[g_port1].disconnect(g_conprof1.connector_id)
 
-    ## ¼õ¿®¥Õ¥¡¥¤¥ëÍ­ÌµÈ½Äê
+    ## å—ä¿¡ãƒ•ã‚¡ã‚¤ãƒ«æœ‰ç„¡åˆ¤å®š
     if os.path.isfile(g_diff_recv_file) == False:
         fout = open(g_test_result_file, 'a')
         message = g_mess_header + g_test_case + str(case_no) + " " + g_test_cnt + str(i+1) + g_mess_footer
@@ -4470,26 +4470,26 @@ for i in range(loop_count):
         time.sleep(sleep_for_time)
         continue
 
-    ## 7 Á÷¼õ¿®¥Ç¡¼¥¿Èæ³Ó
+    ## 7 é€å—ä¿¡ãƒ‡ãƒ¼ã‚¿æ¯”è¼ƒ
     time.sleep(sleep_act_time)
     bret = diff_file()
 
-    ## º¹Ê¬¥Õ¥¡¥¤¥ë¤«¤é¥Æ¥¹¥È·ë²Ì½ĞÎÏ
+    ## å·®åˆ†ãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰ãƒ†ã‚¹ãƒˆçµæœå‡ºåŠ›
     fout = open(g_test_result_file, 'a')
     message = g_mess_header + g_test_case + str(case_no) + " " + g_test_cnt + str(i+1) + g_mess_footer
-    # bret==True ¤Ê¤éÁ÷¼õ¿®¥Ç¡¼¥¿°ìÃ×
+    # bret==True ãªã‚‰é€å—ä¿¡ãƒ‡ãƒ¼ã‚¿ä¸€è‡´
     if bret == True:
-        # ¥Æ¥¹¥È·ë²Ì OK
+        # ãƒ†ã‚¹ãƒˆçµæœ OK
         message = message + g_test_ok
         print message
         fout.write(message + '\n')
     else:
-        # ¥Æ¥¹¥È·ë²Ì NG
+        # ãƒ†ã‚¹ãƒˆçµæœ NG
         message = message + g_test_ng
         print message
         message = message + g_test_ng_message
         fout.write(message + '\n')
-        # ¼õ¿®¥Ç¡¼¥¿¤ò¥Æ¥¹¥È·ë²Ì¥Õ¥¡¥¤¥ë¤Ø¥³¥Ô¡¼
+        # å—ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’ãƒ†ã‚¹ãƒˆçµæœãƒ•ã‚¡ã‚¤ãƒ«ã¸ã‚³ãƒ”ãƒ¼
         fin2 = open(g_diff_recv_file, 'r')
         while(1):
             s2 = fin2.readline()
@@ -4502,7 +4502,7 @@ for i in range(loop_count):
     time.sleep(sleep_for_time)
 
 ##--------------------------------------------------------------------
-## ÀÜÂ³¥¿¥¤¥×¡§periodic  Êı¸ş¡§in->out  ¥İ¥ê¥·¡¼¡§FIFO  ÀÜÂ³¡¦ÀÚÃÇ¡¦Activate¡¦Deactivate¥Æ¥¹¥È1
+## æ¥ç¶šã‚¿ã‚¤ãƒ—ï¼šperiodic  æ–¹å‘ï¼šin->out  ãƒãƒªã‚·ãƒ¼ï¼šFIFO  æ¥ç¶šãƒ»åˆ‡æ–­ãƒ»Activateãƒ»Deactivateãƒ†ã‚¹ãƒˆ1
 ##--------------------------------------------------------------------
 case_no = case_no + 1
 fout = open(g_test_result_file, 'a')
@@ -4515,39 +4515,39 @@ print message
 
 for i in range(loop_count):
 
-    ## 2 ¼õ¿®¥Ç¡¼¥¿¥Õ¥¡¥¤¥ëºï½ü
+    ## 2 å—ä¿¡ãƒ‡ãƒ¼ã‚¿ãƒ•ã‚¡ã‚¤ãƒ«å‰Šé™¤
     delete_recv_file()
 
-    ## 1 ¥³¥Í¥¯¥¿¡¼¥×¥í¥Õ¥¡¥¤¥ëÀßÄê
+    ## 1 ã‚³ãƒã‚¯ã‚¿ãƒ¼ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«è¨­å®š
     make_connecter_profile("periodic", "FIFO", 1)
 
-    ## 3 ¥İ¡¼¥ÈÀÜÂ³
-    # ¥Ç¡¼¥¿¥İ¡¼¥È1 TimedFloat
+    ## 3 ãƒãƒ¼ãƒˆæ¥ç¶š
+    # ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ1 TimedFloat
     ret0 = g_out_ports[g_port1].connect(g_conprof1)
 
-    # ¥Ç¡¼¥¿¥İ¡¼¥È2 TimedFloatSeq
+    # ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ2 TimedFloatSeq
     ret1 = g_out_ports[g_port2].connect(g_conprof2)
 
-    # ¥µ¡¼¥Ó¥¹¥İ¡¼¥È MyService
+    # ã‚µãƒ¼ãƒ“ã‚¹ãƒãƒ¼ãƒˆ MyService
     ret2 = g_out_ports[g_port3].connect(g_conprof3)
 
-    ## 4 ¥¢¥¯¥Æ¥£¥Ù¡¼¥È
+    ## 4 ã‚¢ã‚¯ãƒ†ã‚£ãƒ™ãƒ¼ãƒˆ
     ec_recv[0].activate_component(g_compo_recv.rtc_ref)
     time.sleep(sleep_recv_act_time)
     ec_send[0].activate_component(g_compo_send.rtc_ref)
 
     time.sleep(sleep_act_time)
 
-    ## 5 ¥Ç¥£¥¢¥¯¥Æ¥£¥Ù¡¼¥È
+    ## 5 ãƒ‡ã‚£ã‚¢ã‚¯ãƒ†ã‚£ãƒ™ãƒ¼ãƒˆ
     ec_send[0].deactivate_component(g_compo_send.rtc_ref)
     ec_recv[0].deactivate_component(g_compo_recv.rtc_ref)
 
-    ## 6 ¥İ¡¼¥ÈÀÚÃÇ
+    ## 6 ãƒãƒ¼ãƒˆåˆ‡æ–­
     g_in_ports[g_port3].disconnect(g_conprof3.connector_id)
     g_in_ports[g_port2].disconnect(g_conprof2.connector_id)
     g_in_ports[g_port1].disconnect(g_conprof1.connector_id)
 
-    ## ¼õ¿®¥Õ¥¡¥¤¥ëÍ­ÌµÈ½Äê
+    ## å—ä¿¡ãƒ•ã‚¡ã‚¤ãƒ«æœ‰ç„¡åˆ¤å®š
     if os.path.isfile(g_diff_recv_file) == False:
         fout = open(g_test_result_file, 'a')
         message = g_mess_header + g_test_case + str(case_no) + " " + g_test_cnt + str(i+1) + g_mess_footer
@@ -4558,26 +4558,26 @@ for i in range(loop_count):
         time.sleep(sleep_for_time)
         continue
 
-    ## 7 Á÷¼õ¿®¥Ç¡¼¥¿Èæ³Ó
+    ## 7 é€å—ä¿¡ãƒ‡ãƒ¼ã‚¿æ¯”è¼ƒ
     time.sleep(sleep_act_time)
     bret = diff_file()
 
-    ## º¹Ê¬¥Õ¥¡¥¤¥ë¤«¤é¥Æ¥¹¥È·ë²Ì½ĞÎÏ
+    ## å·®åˆ†ãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰ãƒ†ã‚¹ãƒˆçµæœå‡ºåŠ›
     fout = open(g_test_result_file, 'a')
     message = g_mess_header + g_test_case + str(case_no) + " " + g_test_cnt + str(i+1) + g_mess_footer
-    # bret==True ¤Ê¤éÁ÷¼õ¿®¥Ç¡¼¥¿°ìÃ×
+    # bret==True ãªã‚‰é€å—ä¿¡ãƒ‡ãƒ¼ã‚¿ä¸€è‡´
     if bret == True:
-        # ¥Æ¥¹¥È·ë²Ì OK
+        # ãƒ†ã‚¹ãƒˆçµæœ OK
         message = message + g_test_ok
         print message
         fout.write(message + '\n')
     else:
-        # ¥Æ¥¹¥È·ë²Ì NG
+        # ãƒ†ã‚¹ãƒˆçµæœ NG
         message = message + g_test_ng
         print message
         message = message + g_test_ng_message
         fout.write(message + '\n')
-        # ¼õ¿®¥Ç¡¼¥¿¤ò¥Æ¥¹¥È·ë²Ì¥Õ¥¡¥¤¥ë¤Ø¥³¥Ô¡¼
+        # å—ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’ãƒ†ã‚¹ãƒˆçµæœãƒ•ã‚¡ã‚¤ãƒ«ã¸ã‚³ãƒ”ãƒ¼
         fin2 = open(g_diff_recv_file, 'r')
         while(1):
             s2 = fin2.readline()
@@ -4590,7 +4590,7 @@ for i in range(loop_count):
     time.sleep(sleep_for_time)
 
 ##--------------------------------------------------------------------
-## ÀÜÂ³¥¿¥¤¥×¡§periodic  Êı¸ş¡§in->out  ¥İ¥ê¥·¡¼¡§NEW  ÀÜÂ³¡¦ÀÚÃÇ¡¦Activate¡¦Deactivate¥Æ¥¹¥È1
+## æ¥ç¶šã‚¿ã‚¤ãƒ—ï¼šperiodic  æ–¹å‘ï¼šin->out  ãƒãƒªã‚·ãƒ¼ï¼šNEW  æ¥ç¶šãƒ»åˆ‡æ–­ãƒ»Activateãƒ»Deactivateãƒ†ã‚¹ãƒˆ1
 ##--------------------------------------------------------------------
 case_no = case_no + 1
 fout = open(g_test_result_file, 'a')
@@ -4603,39 +4603,39 @@ print message
 
 for i in range(loop_count):
 
-    ## 2 ¼õ¿®¥Ç¡¼¥¿¥Õ¥¡¥¤¥ëºï½ü
+    ## 2 å—ä¿¡ãƒ‡ãƒ¼ã‚¿ãƒ•ã‚¡ã‚¤ãƒ«å‰Šé™¤
     delete_recv_file()
 
-    ## 1 ¥³¥Í¥¯¥¿¡¼¥×¥í¥Õ¥¡¥¤¥ëÀßÄê
+    ## 1 ã‚³ãƒã‚¯ã‚¿ãƒ¼ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«è¨­å®š
     make_connecter_profile("periodic", "NEW", 1)
 
-    ## 3 ¥İ¡¼¥ÈÀÜÂ³
-    # ¥Ç¡¼¥¿¥İ¡¼¥È1 TimedFloat
+    ## 3 ãƒãƒ¼ãƒˆæ¥ç¶š
+    # ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ1 TimedFloat
     ret0 = g_out_ports[g_port1].connect(g_conprof1)
 
-    # ¥Ç¡¼¥¿¥İ¡¼¥È2 TimedFloatSeq
+    # ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ2 TimedFloatSeq
     ret1 = g_out_ports[g_port2].connect(g_conprof2)
 
-    # ¥µ¡¼¥Ó¥¹¥İ¡¼¥È MyService
+    # ã‚µãƒ¼ãƒ“ã‚¹ãƒãƒ¼ãƒˆ MyService
     ret2 = g_out_ports[g_port3].connect(g_conprof3)
 
-    ## 4 ¥¢¥¯¥Æ¥£¥Ù¡¼¥È
+    ## 4 ã‚¢ã‚¯ãƒ†ã‚£ãƒ™ãƒ¼ãƒˆ
     ec_recv[0].activate_component(g_compo_recv.rtc_ref)
     time.sleep(sleep_recv_act_time)
     ec_send[0].activate_component(g_compo_send.rtc_ref)
 
     time.sleep(sleep_act_time)
 
-    ## 5 ¥Ç¥£¥¢¥¯¥Æ¥£¥Ù¡¼¥È
+    ## 5 ãƒ‡ã‚£ã‚¢ã‚¯ãƒ†ã‚£ãƒ™ãƒ¼ãƒˆ
     ec_send[0].deactivate_component(g_compo_send.rtc_ref)
     ec_recv[0].deactivate_component(g_compo_recv.rtc_ref)
 
-    ## 6 ¥İ¡¼¥ÈÀÚÃÇ
+    ## 6 ãƒãƒ¼ãƒˆåˆ‡æ–­
     g_in_ports[g_port3].disconnect(g_conprof3.connector_id)
     g_in_ports[g_port2].disconnect(g_conprof2.connector_id)
     g_in_ports[g_port1].disconnect(g_conprof1.connector_id)
 
-    ## ¼õ¿®¥Õ¥¡¥¤¥ëÍ­ÌµÈ½Äê
+    ## å—ä¿¡ãƒ•ã‚¡ã‚¤ãƒ«æœ‰ç„¡åˆ¤å®š
     if os.path.isfile(g_diff_recv_file) == False:
         fout = open(g_test_result_file, 'a')
         message = g_mess_header + g_test_case + str(case_no) + " " + g_test_cnt + str(i+1) + g_mess_footer
@@ -4646,26 +4646,26 @@ for i in range(loop_count):
         time.sleep(sleep_for_time)
         continue
 
-    ## 7 Á÷¼õ¿®¥Ç¡¼¥¿Èæ³Ó
+    ## 7 é€å—ä¿¡ãƒ‡ãƒ¼ã‚¿æ¯”è¼ƒ
     time.sleep(sleep_act_time)
     bret = diff_file()
 
-    ## º¹Ê¬¥Õ¥¡¥¤¥ë¤«¤é¥Æ¥¹¥È·ë²Ì½ĞÎÏ
+    ## å·®åˆ†ãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰ãƒ†ã‚¹ãƒˆçµæœå‡ºåŠ›
     fout = open(g_test_result_file, 'a')
     message = g_mess_header + g_test_case + str(case_no) + " " + g_test_cnt + str(i+1) + g_mess_footer
-    # bret==True ¤Ê¤éÁ÷¼õ¿®¥Ç¡¼¥¿°ìÃ×
+    # bret==True ãªã‚‰é€å—ä¿¡ãƒ‡ãƒ¼ã‚¿ä¸€è‡´
     if bret == True:
-        # ¥Æ¥¹¥È·ë²Ì OK
+        # ãƒ†ã‚¹ãƒˆçµæœ OK
         message = message + g_test_ok
         print message
         fout.write(message + '\n')
     else:
-        # ¥Æ¥¹¥È·ë²Ì NG
+        # ãƒ†ã‚¹ãƒˆçµæœ NG
         message = message + g_test_ng
         print message
         message = message + g_test_ng_message
         fout.write(message + '\n')
-        # ¼õ¿®¥Ç¡¼¥¿¤ò¥Æ¥¹¥È·ë²Ì¥Õ¥¡¥¤¥ë¤Ø¥³¥Ô¡¼
+        # å—ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’ãƒ†ã‚¹ãƒˆçµæœãƒ•ã‚¡ã‚¤ãƒ«ã¸ã‚³ãƒ”ãƒ¼
         fin2 = open(g_diff_recv_file, 'r')
         while(1):
             s2 = fin2.readline()
@@ -4678,7 +4678,7 @@ for i in range(loop_count):
     time.sleep(sleep_for_time)
 
 ##--------------------------------------------------------------------
-## ÀÜÂ³¥¿¥¤¥×¡§periodic  Êı¸ş¡§in->out  ¥İ¥ê¥·¡¼¡§SKIP  ÀÜÂ³¡¦ÀÚÃÇ¡¦Activate¡¦Deactivate¥Æ¥¹¥È1
+## æ¥ç¶šã‚¿ã‚¤ãƒ—ï¼šperiodic  æ–¹å‘ï¼šin->out  ãƒãƒªã‚·ãƒ¼ï¼šSKIP  æ¥ç¶šãƒ»åˆ‡æ–­ãƒ»Activateãƒ»Deactivateãƒ†ã‚¹ãƒˆ1
 ##--------------------------------------------------------------------
 case_no = case_no + 1
 fout = open(g_test_result_file, 'a')
@@ -4691,39 +4691,39 @@ print message
 
 for i in range(loop_count):
 
-    ## 2 ¼õ¿®¥Ç¡¼¥¿¥Õ¥¡¥¤¥ëºï½ü
+    ## 2 å—ä¿¡ãƒ‡ãƒ¼ã‚¿ãƒ•ã‚¡ã‚¤ãƒ«å‰Šé™¤
     delete_recv_file()
 
-    ## 1 ¥³¥Í¥¯¥¿¡¼¥×¥í¥Õ¥¡¥¤¥ëÀßÄê
+    ## 1 ã‚³ãƒã‚¯ã‚¿ãƒ¼ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«è¨­å®š
     make_connecter_profile("periodic", "SKIP", 1)
 
-    ## 3 ¥İ¡¼¥ÈÀÜÂ³
-    # ¥Ç¡¼¥¿¥İ¡¼¥È1 TimedFloat
+    ## 3 ãƒãƒ¼ãƒˆæ¥ç¶š
+    # ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ1 TimedFloat
     ret0 = g_out_ports[g_port1].connect(g_conprof1)
 
-    # ¥Ç¡¼¥¿¥İ¡¼¥È2 TimedFloatSeq
+    # ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ2 TimedFloatSeq
     ret1 = g_out_ports[g_port2].connect(g_conprof2)
 
-    # ¥µ¡¼¥Ó¥¹¥İ¡¼¥È MyService
+    # ã‚µãƒ¼ãƒ“ã‚¹ãƒãƒ¼ãƒˆ MyService
     ret2 = g_out_ports[g_port3].connect(g_conprof3)
 
-    ## 4 ¥¢¥¯¥Æ¥£¥Ù¡¼¥È
+    ## 4 ã‚¢ã‚¯ãƒ†ã‚£ãƒ™ãƒ¼ãƒˆ
     ec_recv[0].activate_component(g_compo_recv.rtc_ref)
     time.sleep(sleep_recv_act_time)
     ec_send[0].activate_component(g_compo_send.rtc_ref)
 
     time.sleep(sleep_act_time)
 
-    ## 5 ¥Ç¥£¥¢¥¯¥Æ¥£¥Ù¡¼¥È
+    ## 5 ãƒ‡ã‚£ã‚¢ã‚¯ãƒ†ã‚£ãƒ™ãƒ¼ãƒˆ
     ec_send[0].deactivate_component(g_compo_send.rtc_ref)
     ec_recv[0].deactivate_component(g_compo_recv.rtc_ref)
 
-    ## 6 ¥İ¡¼¥ÈÀÚÃÇ
+    ## 6 ãƒãƒ¼ãƒˆåˆ‡æ–­
     g_in_ports[g_port3].disconnect(g_conprof3.connector_id)
     g_in_ports[g_port2].disconnect(g_conprof2.connector_id)
     g_in_ports[g_port1].disconnect(g_conprof1.connector_id)
 
-    ## ¼õ¿®¥Õ¥¡¥¤¥ëÍ­ÌµÈ½Äê
+    ## å—ä¿¡ãƒ•ã‚¡ã‚¤ãƒ«æœ‰ç„¡åˆ¤å®š
     if os.path.isfile(g_diff_recv_file) == False:
         fout = open(g_test_result_file, 'a')
         message = g_mess_header + g_test_case + str(case_no) + " " + g_test_cnt + str(i+1) + g_mess_footer
@@ -4734,26 +4734,26 @@ for i in range(loop_count):
         time.sleep(sleep_for_time)
         continue
 
-    ## 7 Á÷¼õ¿®¥Ç¡¼¥¿Èæ³Ó
+    ## 7 é€å—ä¿¡ãƒ‡ãƒ¼ã‚¿æ¯”è¼ƒ
     time.sleep(sleep_act_time)
     bret = diff_file()
 
-    ## º¹Ê¬¥Õ¥¡¥¤¥ë¤«¤é¥Æ¥¹¥È·ë²Ì½ĞÎÏ
+    ## å·®åˆ†ãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰ãƒ†ã‚¹ãƒˆçµæœå‡ºåŠ›
     fout = open(g_test_result_file, 'a')
     message = g_mess_header + g_test_case + str(case_no) + " " + g_test_cnt + str(i+1) + g_mess_footer
-    # bret==True ¤Ê¤éÁ÷¼õ¿®¥Ç¡¼¥¿°ìÃ×
+    # bret==True ãªã‚‰é€å—ä¿¡ãƒ‡ãƒ¼ã‚¿ä¸€è‡´
     if bret == True:
-        # ¥Æ¥¹¥È·ë²Ì OK
+        # ãƒ†ã‚¹ãƒˆçµæœ OK
         message = message + g_test_ok
         print message
         fout.write(message + '\n')
     else:
-        # ¥Æ¥¹¥È·ë²Ì NG
+        # ãƒ†ã‚¹ãƒˆçµæœ NG
         message = message + g_test_ng
         print message
         message = message + g_test_ng_message
         fout.write(message + '\n')
-        # ¼õ¿®¥Ç¡¼¥¿¤ò¥Æ¥¹¥È·ë²Ì¥Õ¥¡¥¤¥ë¤Ø¥³¥Ô¡¼
+        # å—ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’ãƒ†ã‚¹ãƒˆçµæœãƒ•ã‚¡ã‚¤ãƒ«ã¸ã‚³ãƒ”ãƒ¼
         fin2 = open(g_diff_recv_file, 'r')
         while(1):
             s2 = fin2.readline()

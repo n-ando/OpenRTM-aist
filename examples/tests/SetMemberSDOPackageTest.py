@@ -1,11 +1,11 @@
-#!/usr/bin/env python
-# -*- coding: euc-jp -*-
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 #
 ## SetMemberSDOPackageTest.py
 ##
-## ¥á¥â¥ê¡¼¥ê¡¼¥¯¥Á¥§¥Ã¥¯
-## SDOPackage.idl¤ÇÄêµÁ¤µ¤ì¤Æ¤¤¤ë¥ª¥Ú¥ì¡¼¥·¥ç¥ó
-## Organization¤ÎMember¤Î¥»¥Ã¥È¤È¼èÆÀ¤Ë´Ø¤¹¤ë¥ª¥Ú¥ì¡¼¥·¥ç¥ó
+## ãƒ¡ãƒ¢ãƒªãƒ¼ãƒªãƒ¼ã‚¯ãƒã‚§ãƒƒã‚¯
+## SDOPackage.idlã§å®šç¾©ã•ã‚Œã¦ã„ã‚‹ã‚ªãƒšãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³
+## Organizationã®Memberã®ã‚»ãƒƒãƒˆã¨å–å¾—ã«é–¢ã™ã‚‹ã‚ªãƒšãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³
 #
 # $Id$
 #

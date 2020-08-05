@@ -1,9 +1,9 @@
-#!/usr/bin/env python
-# -*- coding: euc-jp -*-
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 #
 ## ConnectTest.py
 ##
-## ¥³¥ó¥İ¡¼¥Í¥ó¥ÈÀÜÂ³¥Æ¥¹¥È
+## ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆæ¥ç¶šãƒ†ã‚¹ãƒˆ
 ##
 
 from rtc_handle import *
@@ -18,7 +18,7 @@ import sys
 g_test_name = "<< component connection test >>"
 
 ##--------------------------------------------------------------------
-## ¥³¥Í¥¯¥¿¡¼¥×¥í¥Õ¥¡¥¤¥ë¥Ç¥Õ¥©¥ë¥ÈÄêµÁ
+## ã‚³ãƒã‚¯ã‚¿ãƒ¼ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆå®šç¾©
 g_interface_type1 = "corba_cdr"
 g_dataflow_type = "push"
 g_subscription_type = "flush"
@@ -27,28 +27,28 @@ g_push_rate = "2000"
 g_skip_count = "4"
 #g_skip_count = "0"
 
-## ¥İ¡¼¥ÈÈÖ¹æ»ØÄê ( get_ports()¤è¤ê )
+## ãƒãƒ¼ãƒˆç•ªå·æŒ‡å®š ( get_ports()ã‚ˆã‚Š )
 g_port1 = 0
 g_port2 = 1
 g_port3 = 2
 
-## ¥Ç¡¼¥¿¥İ¡¼¥È TimedFloat
+## ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ TimedFloat
 g_name1 = "out"
 g_connector_id1 = "001"
 g_data_type1 = "TimedFloat"
 
-## ¥Ç¡¼¥¿¥İ¡¼¥È TimedFloatSeq
+## ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ TimedFloatSeq
 g_name2 = "seqout"
 g_connector_id2 = "002"
 g_data_type2 = "TimedFloatSeq"
 
-## ¥µ¡¼¥Ó¥¹¥İ¡¼¥È 
+## ã‚µãƒ¼ãƒ“ã‚¹ãƒãƒ¼ãƒˆ 
 g_name3 = "MyService"
 g_connector_id3 = "003"
 g_interface_type3 = "MyService"
 
 ##--------------------------------------------------------------------
-## Á÷¼õ¿®·ë²ÌÈ½Äê´ØÏ¢
+## é€å—ä¿¡çµæœåˆ¤å®šé–¢é€£
 g_diff_send_file = "./original-data"
 g_diff_recv_file = "./received-data"
 g_check_message = g_diff_recv_file + " file not found."
@@ -60,32 +60,32 @@ g_test_ng = "F"
 g_test_ng_message = "  < received-data >"
 g_mess_header = "< "
 g_mess_footer = " > "
-# ¥Æ¥¹¥È·ë²ÌÆâÍÆ
-# Îã)¥±¡¼¥¹1¡¢1²óÌÜ -> "<<< case1 count1 >>> OK."
-# Îã)¥±¡¼¥¹1¡¢2²óÌÜ -> "<<< case1 count2 >>> NG detected."
+# ãƒ†ã‚¹ãƒˆçµæœå†…å®¹
+# ä¾‹)ã‚±ãƒ¼ã‚¹1ã€1å›ç›® -> "<<< case1 count1 >>> OK."
+# ä¾‹)ã‚±ãƒ¼ã‚¹1ã€2å›ç›® -> "<<< case1 count2 >>> NG detected."
 
 ##--------------------------------------------------------------------
-## ¥Æ¥¹¥È¥±¡¼¥¹ÈÖ¹æ¤Î½é´üÃÍÀßÄê
-##  ¾å¤«¤éÏ¢ÈÖ¤ò¿¶¤Ã¤Æ¤¤¤ë
+## ãƒ†ã‚¹ãƒˆã‚±ãƒ¼ã‚¹ç•ªå·ã®åˆæœŸå€¤è¨­å®š
+##  ä¸Šã‹ã‚‰é€£ç•ªã‚’æŒ¯ã£ã¦ã„ã‚‹
 case_no = 0
 
-## ¥±¡¼¥¹Ëè¤Î¥Æ¥¹¥È²ó¿ô
+## ã‚±ãƒ¼ã‚¹æ¯ã®ãƒ†ã‚¹ãƒˆå›æ•°
 loop_count = 1
 
-## ¼õ¿®Â¦activate_component¤«¤éÁ÷¿®Â¦activate_component¤Ş¤Ç¤Î¥¹¥ê¡¼¥×»ş´Ö(ÉÃ¿ô)
+## å—ä¿¡å´activate_componentã‹ã‚‰é€ä¿¡å´activate_componentã¾ã§ã®ã‚¹ãƒªãƒ¼ãƒ—æ™‚é–“(ç§’æ•°)
 sleep_recv_act_time = 1
 
-## activate_component¤«¤édeactivate_component¤Ş¤Ç¤Î¥¹¥ê¡¼¥×»ş´Ö(ÉÃ¿ô)
+## activate_componentã‹ã‚‰deactivate_componentã¾ã§ã®ã‚¹ãƒªãƒ¼ãƒ—æ™‚é–“(ç§’æ•°)
 sleep_act_time = 2
 
-## for¥ë¡¼¥×¤Î¥¹¥ê¡¼¥×»ş´Ö(ÉÃ¿ô)
+## forãƒ«ãƒ¼ãƒ—ã®ã‚¹ãƒªãƒ¼ãƒ—æ™‚é–“(ç§’æ•°)
 sleep_for_time = 1
 
-## connect¤«¤édisconnect¤Ş¤Ç¤Î¥¹¥ê¡¼¥×»ş´Ö(ÉÃ¿ô)
+## connectã‹ã‚‰disconnectã¾ã§ã®ã‚¹ãƒªãƒ¼ãƒ—æ™‚é–“(ç§’æ•°)
 sleep_connect_time =1
 
 
-## ¥Í¡¼¥à¥µ¡¼¥Ğ¡¼ÄêµÁ
+## ãƒãƒ¼ãƒ ã‚µãƒ¼ãƒãƒ¼å®šç¾©
 #env = RtmEnv(sys.argv, ["localhost:2809"])
 #list0 = env.name_space["localhost:2809"].list_obj()
 #env.name_space['localhost:2809'].rtc_handles.keys()
@@ -93,7 +93,7 @@ sleep_connect_time =1
 
 ##
 # @if jp
-# @brief ¥İ¡¼¥È¤òÀÜÂ³¤¹¤ë¡£
+# @brief ãƒãƒ¼ãƒˆã‚’æ¥ç¶šã™ã‚‹ã€‚
 # @else
 # @brief Connects ports. 
 # @endif
@@ -101,17 +101,17 @@ def connect_ports():
 
     errorFlag = True
 
-    # ¥Ç¡¼¥¿¥İ¡¼¥È1 TimedFloat
+    # ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ1 TimedFloat
     ret,porf = g_out_ports[g_port1].connect(g_conprof1)
     if ret!=RTC.RTC_OK:
         errorFlag = False
 
-    # ¥Ç¡¼¥¿¥İ¡¼¥È2 TimedFloatSeq
+    # ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ2 TimedFloatSeq
     ret,porf = g_out_ports[g_port2].connect(g_conprof2)
     if ret!=RTC.RTC_OK:
         errorFlag = False
 
-    # ¥µ¡¼¥Ó¥¹¥İ¡¼¥È MyService
+    # ã‚µãƒ¼ãƒ“ã‚¹ãƒãƒ¼ãƒˆ MyService
     ret,porf = g_out_ports[g_port3].connect(g_conprof3)
     if ret!=RTC.RTC_OK:
         errorFlag = False
@@ -120,7 +120,7 @@ def connect_ports():
     return errorFlag
 ##
 # @if jp
-# @brief ¥İ¡¼¥È¤òÀÚÃÇ¤¹¤ë¡£
+# @brief ãƒãƒ¼ãƒˆã‚’åˆ‡æ–­ã™ã‚‹ã€‚
 # @else
 # @brief Disconnects ports. 
 # @endif
@@ -142,7 +142,7 @@ def disconnect_ports():
 
 ##
 # @if jp
-# @brief ¥İ¡¼¥È¤ò³èÀ­²½¤¹¤ë¡£
+# @brief ãƒãƒ¼ãƒˆã‚’æ´»æ€§åŒ–ã™ã‚‹ã€‚
 # @else
 # @brief Activate components. 
 # @endif
@@ -163,7 +163,7 @@ def activate_components(sleep_recv_act_time):
     return errorFlag
 ##
 # @if jp
-# @brief ¥İ¡¼¥È¤òÈó³èÀ­²½¤¹¤ë¡£
+# @brief ãƒãƒ¼ãƒˆã‚’éæ´»æ€§åŒ–ã™ã‚‹ã€‚
 # @else
 # @brief Deactivate components. 
 # @endif
@@ -180,7 +180,7 @@ def deactivate_components():
     return errorFlag
 ##
 # @if jp
-# @brief AutoTestOut ¤È AutoTestIn ¤òµ¯Æ°¤µ¤»¤ë¡£
+# @brief AutoTestOut ã¨ AutoTestIn ã‚’èµ·å‹•ã•ã›ã‚‹ã€‚
 # @else
 # @brief AutoTestOut and AutoTestIn are started. 
 # @endif
@@ -216,7 +216,7 @@ def components_entry():
 
 ##
 # @if jp
-# @brief AutoTestOut ¤È AutoTestIn ¤ò½ªÎ»¤µ¤»¤ë¡£
+# @brief AutoTestOut ã¨ AutoTestIn ã‚’çµ‚äº†ã•ã›ã‚‹ã€‚
 # @else
 # @brief  AutoTestOut and AutoTestIn are ended. 
 # @endif
@@ -229,7 +229,7 @@ def components_exit():
     
 ##
 # @if jp
-# @brief ¥°¥í¡¼¥Ğ¥ëÊÑ¿ô¤Î½é´ü²½
+# @brief ã‚°ãƒ­ãƒ¼ãƒãƒ«å¤‰æ•°ã®åˆæœŸåŒ–
 # @else
 # @brief Initialization of global variable
 # @endif
@@ -241,9 +241,9 @@ def initGlobal():
     return
 
 ##--------------------------------------------------------------------
-## ÆâÉô´Ø¿ô¡§¥³¥Í¥¯¥¿¡¼¥×¥í¥Õ¥¡¥¤¥ëÀßÄê(¥Ç¡¼¥¿¥İ¡¼¥È)
+## å†…éƒ¨é–¢æ•°ï¼šã‚³ãƒã‚¯ã‚¿ãƒ¼ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«è¨­å®š(ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆ)
 ##
-## (°ú¿ô)
+## (å¼•æ•°)
 ## subscription_type : "flush", "new", "periodic"
 ## push_policy       : "ALL", "FIFO", "SKIP", "NEW", ""
 ## connect_direction : 0:outport -> inport, 1:inport -> outport
@@ -273,41 +273,41 @@ def make_connecter_profile(subscription_type, push_policy, connect_direction):
 
 
 ##--------------------------------------------------------------------
-## ÆâÉô´Ø¿ô¡§¼õ¿®¥Õ¥¡¥¤¥ëºï½ü
+## å†…éƒ¨é–¢æ•°ï¼šå—ä¿¡ãƒ•ã‚¡ã‚¤ãƒ«å‰Šé™¤
 ##
-## (°ú¿ô)
-## ¤Ê¤·
+## (å¼•æ•°)
+## ãªã—
 ##--------------------------------------------------------------------
 def delete_recv_file():
-    ## ¥Õ¥¡¥¤¥ë¤¬Â¸ºß¤¹¤ë¾ì¹ç
+    ## ãƒ•ã‚¡ã‚¤ãƒ«ãŒå­˜åœ¨ã™ã‚‹å ´åˆ
     if os.path.isfile(g_diff_recv_file) == True:
         os.remove(g_diff_recv_file)
     return
 
 
 ##--------------------------------------------------------------------
-## ÆâÉô´Ø¿ô¡§Á÷¼õ¿®¥Õ¥¡¥¤¥ë¤Î¥Ç¡¼¥¿Èæ³Ó
+## å†…éƒ¨é–¢æ•°ï¼šé€å—ä¿¡ãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒ‡ãƒ¼ã‚¿æ¯”è¼ƒ
 ##
-## (°ú¿ô)
-## ¤Ê¤·
-## (Ìá¤êÃÍ)  True : °ìÃ×¡¢  False : ÉÔ°ìÃ×
+## (å¼•æ•°)
+## ãªã—
+## (æˆ»ã‚Šå€¤)  True : ä¸€è‡´ã€  False : ä¸ä¸€è‡´
 ##--------------------------------------------------------------------
 def diff_file():
     bret = True
 
     ## if connect_direction == 0:
     ## else:
-    ## Á÷¿®¥Õ¥¡¥¤¥ëÍ­ÌµÈ½Äê
+    ## é€ä¿¡ãƒ•ã‚¡ã‚¤ãƒ«æœ‰ç„¡åˆ¤å®š
     if os.path.isfile(g_diff_send_file) == False:
         print "send_file (%s) not found." % send_file
         return False
 
-    ## ¼õ¿®¥Õ¥¡¥¤¥ëÍ­ÌµÈ½Äê
+    ## å—ä¿¡ãƒ•ã‚¡ã‚¤ãƒ«æœ‰ç„¡åˆ¤å®š
     if os.path.isfile(g_diff_recv_file) == False:
         print "recv_file (%s) not found." % recv_file
         return False
 
-    ## Á÷¼õ¿®¥Ç¡¼¥¿º¹Ê¬È½Äê
+    ## é€å—ä¿¡ãƒ‡ãƒ¼ã‚¿å·®åˆ†åˆ¤å®š
     f_send = open(g_diff_send_file, 'r')
     f_recv = open(g_diff_recv_file, 'r')
 
@@ -322,7 +322,7 @@ def diff_file():
         #print "original recv date=(%s)" % str_recv
         #print ''.join(['%x ' % ord(s) for s in str_recv])
 
-        ## ËöÈø¤Î²ş¹Ô¡¢Éüµ¢¥³¡¼¥Éºï½ü
+        ## æœ«å°¾ã®æ”¹è¡Œã€å¾©å¸°ã‚³ãƒ¼ãƒ‰å‰Šé™¤
         str_send2 = str_send.rstrip('\n')
         str_send2 = str_send2.rstrip('\r')
         str_recv2 = str_recv.rstrip('\n')
@@ -331,7 +331,7 @@ def diff_file():
         #print "rstrip after send date=(%s)" % str_send2
         #print "rstrip after recv date=(%s)" % str_recv2
 
-        ## ¥Ç¡¼¥¿Èæ³Ó
+        ## ãƒ‡ãƒ¼ã‚¿æ¯”è¼ƒ
         list_send = str_send2.split(" ")
         list_recv = str_recv2.split(" ")
         for ic in range(len(list_send)):
@@ -354,7 +354,7 @@ def diff_file():
 
 ##
 # @if jp
-# @brief ÀÜÂ³¤ÈÀÚÃÇ¤À¤±¤ò·«¤êÊÖ¤¹¡£
+# @brief æ¥ç¶šã¨åˆ‡æ–­ã ã‘ã‚’ç¹°ã‚Šè¿”ã™ã€‚
 #
 #
 #
@@ -369,22 +369,22 @@ def test_connect_disconnect(message,arg0,arg1,arg2):
     errorFlag = True
     for i in range(loop_count):
 
-        ## 1 ¥³¥Í¥¯¥¿¡¼¥×¥í¥Õ¥¡¥¤¥ëÀßÄê
+        ## 1 ã‚³ãƒã‚¯ã‚¿ãƒ¼ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«è¨­å®š
         make_connecter_profile(arg0,arg1,arg2)
 
-        ## 3 ¥İ¡¼¥ÈÀÜÂ³
+        ## 3 ãƒãƒ¼ãƒˆæ¥ç¶š
         bool_ret = connect_ports()
         if bool_ret!=True:
             errorFlag = False
 
         time.sleep(sleep_connect_time)
 
-        ## 6 ¥İ¡¼¥ÈÀÚÃÇ
+        ## 6 ãƒãƒ¼ãƒˆåˆ‡æ–­
         bool_ret = disconnect_ports()
         if bool_ret!=True:
             errorFlag = False
 
-        ## ¥Æ¥¹¥È·ë²Ì½ĞÎÏ
+        ## ãƒ†ã‚¹ãƒˆçµæœå‡ºåŠ›
         fout = open(g_test_result_file, 'a')
         if errorFlag:
             message = g_test_ok
@@ -402,10 +402,10 @@ def test_connect_disconnect(message,arg0,arg1,arg2):
     
 ##
 # @if jp
-# @brief Activate¤ÈDeactivate¤À¤±¤ò·«¤êÊÖ¤¹¡£
+# @brief Activateã¨Deactivateã ã‘ã‚’ç¹°ã‚Šè¿”ã™ã€‚
 #
-# ÀÜÂ³¤·¤¿¾õÂÖ¤Ç Activate ¤È Deactivate ¤ò·«¤êÊÖ¤¹¡£
-# ¥Ç¡¼¥¿¤Î¥Á¥§¥Ã¥¯¤Ï¹Ô¤ï¤ì¤Ê¤¤¡£
+# æ¥ç¶šã—ãŸçŠ¶æ…‹ã§ Activate ã¨ Deactivate ã‚’ç¹°ã‚Šè¿”ã™ã€‚
+# ãƒ‡ãƒ¼ã‚¿ã®ãƒã‚§ãƒƒã‚¯ã¯è¡Œã‚ã‚Œãªã„ã€‚
 #
 # @else
 # @brief Only activation and deactivation are repeated. 
@@ -417,32 +417,32 @@ def test_connect_disconnect(message,arg0,arg1,arg2):
 def test_activate_deactivate_2(message,arg0,arg1,arg2):
     
     errorFlag = True
-    ## 1 ¥³¥Í¥¯¥¿¡¼¥×¥í¥Õ¥¡¥¤¥ëÀßÄê
+    ## 1 ã‚³ãƒã‚¯ã‚¿ãƒ¼ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«è¨­å®š
     make_connecter_profile(arg0,arg1,arg2)
     
-    ## 3 ¥İ¡¼¥ÈÀÜÂ³
+    ## 3 ãƒãƒ¼ãƒˆæ¥ç¶š
     bool_ret = connect_ports()
     if bool_ret!=True:
         errorFlag = False
     
     for i in range(loop_count):
     
-        ## 2 ¼õ¿®¥Ç¡¼¥¿¥Õ¥¡¥¤¥ëºï½ü
+        ## 2 å—ä¿¡ãƒ‡ãƒ¼ã‚¿ãƒ•ã‚¡ã‚¤ãƒ«å‰Šé™¤
         delete_recv_file()
     
-        ## 4 ¥¢¥¯¥Æ¥£¥Ù¡¼¥È
+        ## 4 ã‚¢ã‚¯ãƒ†ã‚£ãƒ™ãƒ¼ãƒˆ
         bool_ret = activate_components(sleep_recv_act_time)
         if bool_ret!=True:
             errorFlag = False
     
         time.sleep(sleep_act_time)
     
-        ## 5 ¥Ç¥£¥¢¥¯¥Æ¥£¥Ù¡¼¥È
+        ## 5 ãƒ‡ã‚£ã‚¢ã‚¯ãƒ†ã‚£ãƒ™ãƒ¼ãƒˆ
         bool_ret = deactivate_components()
         if bool_ret!=True:
             errorFlag = False
     
-        ## ¼õ¿®¥Õ¥¡¥¤¥ëÍ­ÌµÈ½Äê
+        ## å—ä¿¡ãƒ•ã‚¡ã‚¤ãƒ«æœ‰ç„¡åˆ¤å®š
         if os.path.isfile(g_diff_recv_file) == False:
             errorFlag = False
             fout = open(g_test_result_file, 'a')
@@ -455,7 +455,7 @@ def test_activate_deactivate_2(message,arg0,arg1,arg2):
             time.sleep(sleep_for_time)
             continue
     
-        ## ¥Õ¥¡¥¤¥ë¥µ¥¤¥º¤ò¥Á¥§¥Ã¥¯¤¹¤ë
+        ## ãƒ•ã‚¡ã‚¤ãƒ«ã‚µã‚¤ã‚ºã‚’ãƒã‚§ãƒƒã‚¯ã™ã‚‹
         time.sleep(sleep_act_time)
         fout = open(g_test_result_file, 'a')
         fsize=os.path.getsize(g_diff_recv_file)
@@ -466,7 +466,7 @@ def test_activate_deactivate_2(message,arg0,arg1,arg2):
             fout.write(message)
         else:
             errorFlag = False
-            # ¥Æ¥¹¥È·ë²Ì NG
+            # ãƒ†ã‚¹ãƒˆçµæœ NG
             message = g_test_ng
             print message ,
             sys.stdout.flush()
@@ -476,15 +476,15 @@ def test_activate_deactivate_2(message,arg0,arg1,arg2):
     
         time.sleep(sleep_for_time)
     
-    ## 6 ¥İ¡¼¥ÈÀÚÃÇ
+    ## 6 ãƒãƒ¼ãƒˆåˆ‡æ–­
     bool_ret = disconnect_ports()
 
     return errorFlag
 ##
 # @if jp
-# @brief Activate¤ÈDeactivate¤À¤±¤ò·«¤êÊÖ¤¹¡£
+# @brief Activateã¨Deactivateã ã‘ã‚’ç¹°ã‚Šè¿”ã™ã€‚
 #
-# ÀÜÂ³¤·¤¿¾õÂÖ¤Ç Activate ¤È Deactivate ¤ò·«¤êÊÖ¤¹¡£
+# æ¥ç¶šã—ãŸçŠ¶æ…‹ã§ Activate ã¨ Deactivate ã‚’ç¹°ã‚Šè¿”ã™ã€‚
 #
 # @else
 # @brief Only activation and deactivation are repeated. 
@@ -495,32 +495,32 @@ def test_activate_deactivate_2(message,arg0,arg1,arg2):
 def test_activate_deactivate(message,arg0,arg1,arg2):
     
     errorFlag = True
-    ## 1 ¥³¥Í¥¯¥¿¡¼¥×¥í¥Õ¥¡¥¤¥ëÀßÄê
+    ## 1 ã‚³ãƒã‚¯ã‚¿ãƒ¼ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«è¨­å®š
     make_connecter_profile(arg0,arg1,arg2)
     
-    ## 3 ¥İ¡¼¥ÈÀÜÂ³
+    ## 3 ãƒãƒ¼ãƒˆæ¥ç¶š
     bool_ret = connect_ports()
     if bool_ret!=True:
         errorFlag = False
     
     for i in range(loop_count):
     
-        ## 2 ¼õ¿®¥Ç¡¼¥¿¥Õ¥¡¥¤¥ëºï½ü
+        ## 2 å—ä¿¡ãƒ‡ãƒ¼ã‚¿ãƒ•ã‚¡ã‚¤ãƒ«å‰Šé™¤
         delete_recv_file()
     
-        ## 4 ¥¢¥¯¥Æ¥£¥Ù¡¼¥È
+        ## 4 ã‚¢ã‚¯ãƒ†ã‚£ãƒ™ãƒ¼ãƒˆ
         bool_ret = activate_components(sleep_recv_act_time)
         if bool_ret!=True:
             errorFlag = False
     
         time.sleep(sleep_act_time)
     
-        ## 5 ¥Ç¥£¥¢¥¯¥Æ¥£¥Ù¡¼¥È
+        ## 5 ãƒ‡ã‚£ã‚¢ã‚¯ãƒ†ã‚£ãƒ™ãƒ¼ãƒˆ
         bool_ret = deactivate_components()
         if bool_ret!=True:
             errorFlag = False
     
-        ## ¼õ¿®¥Õ¥¡¥¤¥ëÍ­ÌµÈ½Äê
+        ## å—ä¿¡ãƒ•ã‚¡ã‚¤ãƒ«æœ‰ç„¡åˆ¤å®š
         if os.path.isfile(g_diff_recv_file) == False:
             errorFlag = False
             fout = open(g_test_result_file, 'a')
@@ -533,27 +533,27 @@ def test_activate_deactivate(message,arg0,arg1,arg2):
             time.sleep(sleep_for_time)
             continue
     
-        ## 7 Á÷¼õ¿®¥Ç¡¼¥¿Èæ³Ó
+        ## 7 é€å—ä¿¡ãƒ‡ãƒ¼ã‚¿æ¯”è¼ƒ
         time.sleep(sleep_act_time)
         bret = diff_file()
     
-        ## º¹Ê¬¥Õ¥¡¥¤¥ë¤«¤é¥Æ¥¹¥È·ë²Ì½ĞÎÏ
+        ## å·®åˆ†ãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰ãƒ†ã‚¹ãƒˆçµæœå‡ºåŠ›
         fout = open(g_test_result_file, 'a')
-        # bret==True ¤Ê¤éÁ÷¼õ¿®¥Ç¡¼¥¿°ìÃ×
+        # bret==True ãªã‚‰é€å—ä¿¡ãƒ‡ãƒ¼ã‚¿ä¸€è‡´
         if bret == True:
-            # ¥Æ¥¹¥È·ë²Ì OK
+            # ãƒ†ã‚¹ãƒˆçµæœ OK
             message = g_test_ok
             print message ,
             sys.stdout.flush()
             fout.write(message + '\n')
         else:
             errorFlag = False
-            # ¥Æ¥¹¥È·ë²Ì NG
+            # ãƒ†ã‚¹ãƒˆçµæœ NG
             message = g_test_ng
             print message ,
             sys.stdout.flush()
             fout.write(message + '\n')
-            # ¼õ¿®¥Ç¡¼¥¿¤ò¥Æ¥¹¥È·ë²Ì¥Õ¥¡¥¤¥ë¤Ø¥³¥Ô¡¼
+            # å—ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’ãƒ†ã‚¹ãƒˆçµæœãƒ•ã‚¡ã‚¤ãƒ«ã¸ã‚³ãƒ”ãƒ¼
             fin2 = open(g_diff_recv_file, 'r')
             while(1):
                 s2 = fin2.readline()
@@ -565,16 +565,16 @@ def test_activate_deactivate(message,arg0,arg1,arg2):
     
         time.sleep(sleep_for_time)
     
-    ## 6 ¥İ¡¼¥ÈÀÚÃÇ
+    ## 6 ãƒãƒ¼ãƒˆåˆ‡æ–­
     bool_ret = disconnect_ports()
 
     return errorFlag
     
 ##
 # @if jp
-# @brief Activate¤ÈDeactivate¤À¤±¤ò·«¤êÊÖ¤¹¡£
+# @brief Activateã¨Deactivateã ã‘ã‚’ç¹°ã‚Šè¿”ã™ã€‚
 #
-# ÀÜÂ³¤»¤º¤Ë Activate ¤È Deactivate ¤ò·«¤êÊÖ¤¹¡£
+# æ¥ç¶šã›ãšã« Activate ã¨ Deactivate ã‚’ç¹°ã‚Šè¿”ã™ã€‚
 #
 # @else
 # @brief Only activation and deactivation are repeated. 
@@ -588,22 +588,22 @@ def test_activate_deactivate_2(message,arg0,arg1,arg2):
     
     for i in range(loop_count):
     
-        ## 1 ¥³¥Í¥¯¥¿¡¼¥×¥í¥Õ¥¡¥¤¥ëÀßÄê
+        ## 1 ã‚³ãƒã‚¯ã‚¿ãƒ¼ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«è¨­å®š
         make_connecter_profile(arg0,arg1,arg2)
     
-        ## 4 ¥¢¥¯¥Æ¥£¥Ù¡¼¥È
+        ## 4 ã‚¢ã‚¯ãƒ†ã‚£ãƒ™ãƒ¼ãƒˆ
         bool_ret = activate_components(sleep_recv_act_time)
         if bool_ret!=True:
             errorFlag = False
     
         time.sleep(sleep_act_time)
     
-        ## 5 ¥Ç¥£¥¢¥¯¥Æ¥£¥Ù¡¼¥È
+        ## 5 ãƒ‡ã‚£ã‚¢ã‚¯ãƒ†ã‚£ãƒ™ãƒ¼ãƒˆ
         bool_ret = deactivate_components()
         if bool_ret!=True:
             errorFlag = False
     
-        ## ¥Æ¥¹¥È·ë²Ì½ĞÎÏ
+        ## ãƒ†ã‚¹ãƒˆçµæœå‡ºåŠ›
         fout = open(g_test_result_file, 'a')
         if errorFlag:
             message = g_test_ok
@@ -620,11 +620,11 @@ def test_activate_deactivate_2(message,arg0,arg1,arg2):
     
 ##
 # @if jp
-# @brief ÀÜÂ³¡¢activate¡¢deactivate¡¢ÀÚÃÇ¤ò·«¤êÊÖ¤¹¡£ 
+# @brief æ¥ç¶šã€activateã€deactivateã€åˆ‡æ–­ã‚’ç¹°ã‚Šè¿”ã™ã€‚ 
 #
-# ¥Ç¡¼¥¿¤Î¥Á¥§¥Ã¥¯¤Ï¹Ô¤ï¤ì¤Ê¤¤¡£
-# periodic,new¤ÎÀÜÂ³¥Æ¥¹¥È¤Ç¤Ï¡¢¥İ¥ê¥·¡¼¤¬SKIP,NEW¤Î¾ì¹ç¡¢
-# ¥Ç¡¼¥¿¤Î³ÎÇ§¤Ï¹Ô¤ï¤Ê¤¤¡£
+# ãƒ‡ãƒ¼ã‚¿ã®ãƒã‚§ãƒƒã‚¯ã¯è¡Œã‚ã‚Œãªã„ã€‚
+# periodic,newã®æ¥ç¶šãƒ†ã‚¹ãƒˆã§ã¯ã€ãƒãƒªã‚·ãƒ¼ãŒSKIP,NEWã®å ´åˆã€
+# ãƒ‡ãƒ¼ã‚¿ã®ç¢ºèªã¯è¡Œã‚ãªã„ã€‚
 #
 #
 # @else
@@ -638,35 +638,35 @@ def test_connection_5(message,arg0,arg1,arg2):
     errorFlag = True
     for i in range(loop_count):
     
-        ## 2 ¼õ¿®¥Ç¡¼¥¿¥Õ¥¡¥¤¥ëºï½ü
+        ## 2 å—ä¿¡ãƒ‡ãƒ¼ã‚¿ãƒ•ã‚¡ã‚¤ãƒ«å‰Šé™¤
         delete_recv_file()
     
-        ## 1 ¥³¥Í¥¯¥¿¡¼¥×¥í¥Õ¥¡¥¤¥ëÀßÄê
+        ## 1 ã‚³ãƒã‚¯ã‚¿ãƒ¼ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«è¨­å®š
         make_connecter_profile(arg0,arg1,arg2)
     
-        ## 3 ¥İ¡¼¥ÈÀÜÂ³
+        ## 3 ãƒãƒ¼ãƒˆæ¥ç¶š
         bool_ret = connect_ports()
         if bool_ret!=True:
             errorFlag = False
 
-        ## 4 ¥¢¥¯¥Æ¥£¥Ù¡¼¥È
+        ## 4 ã‚¢ã‚¯ãƒ†ã‚£ãƒ™ãƒ¼ãƒˆ
         bool_ret = activate_components(sleep_recv_act_time)
         if bool_ret!=True:
             errorFlag = False
     
         time.sleep(sleep_act_time)
     
-        ## 5 ¥Ç¥£¥¢¥¯¥Æ¥£¥Ù¡¼¥È
+        ## 5 ãƒ‡ã‚£ã‚¢ã‚¯ãƒ†ã‚£ãƒ™ãƒ¼ãƒˆ
         bool_ret = deactivate_components()
         if bool_ret!=True:
             errorFlag = False
     
-        ## 6 ¥İ¡¼¥ÈÀÚÃÇ
+        ## 6 ãƒãƒ¼ãƒˆåˆ‡æ–­
         bool_ret = disconnect_ports()
         if bool_ret!=True:
             errorFlag = False
     
-        ## ¼õ¿®¥Õ¥¡¥¤¥ëÍ­ÌµÈ½Äê
+        ## å—ä¿¡ãƒ•ã‚¡ã‚¤ãƒ«æœ‰ç„¡åˆ¤å®š
         if os.path.isfile(g_diff_recv_file) == False:
             errorFlag = False
             fout = open(g_test_result_file, 'a')
@@ -678,7 +678,7 @@ def test_connection_5(message,arg0,arg1,arg2):
             time.sleep(sleep_for_time)
             continue
     
-        ## ¥Õ¥¡¥¤¥ë¥µ¥¤¥º¤ò¥Á¥§¥Ã¥¯¤¹¤ë
+        ## ãƒ•ã‚¡ã‚¤ãƒ«ã‚µã‚¤ã‚ºã‚’ãƒã‚§ãƒƒã‚¯ã™ã‚‹
         time.sleep(sleep_act_time)
         fout = open(g_test_result_file, 'a')
         fsize=os.path.getsize(g_diff_recv_file)
@@ -689,7 +689,7 @@ def test_connection_5(message,arg0,arg1,arg2):
             fout.write(message)
         else:
             errorFlag = False
-            # ¥Æ¥¹¥È·ë²Ì NG
+            # ãƒ†ã‚¹ãƒˆçµæœ NG
             message = g_test_ng
             print message ,
             sys.stdout.flush()
@@ -702,7 +702,7 @@ def test_connection_5(message,arg0,arg1,arg2):
     return errorFlag
 ##
 # @if jp
-# @brief ÀÜÂ³¡¢activate¡¢deactivate¡¢ÀÚÃÇ¤ò·«¤êÊÖ¤¹¡£ 
+# @brief æ¥ç¶šã€activateã€deactivateã€åˆ‡æ–­ã‚’ç¹°ã‚Šè¿”ã™ã€‚ 
 #
 #
 # @else
@@ -715,36 +715,36 @@ def test_connection(message,arg0,arg1,arg2):
     errorFlag = True
     for i in range(loop_count):
     
-        ## 2 ¼õ¿®¥Ç¡¼¥¿¥Õ¥¡¥¤¥ëºï½ü
+        ## 2 å—ä¿¡ãƒ‡ãƒ¼ã‚¿ãƒ•ã‚¡ã‚¤ãƒ«å‰Šé™¤
         delete_recv_file()
     
-        ## 1 ¥³¥Í¥¯¥¿¡¼¥×¥í¥Õ¥¡¥¤¥ëÀßÄê
+        ## 1 ã‚³ãƒã‚¯ã‚¿ãƒ¼ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«è¨­å®š
         make_connecter_profile(arg0,arg1,arg2)
     
-        ## 3 ¥İ¡¼¥ÈÀÜÂ³
+        ## 3 ãƒãƒ¼ãƒˆæ¥ç¶š
         bool_ret = connect_ports()
         if bool_ret!=True:
             errorFlag = False
     
-        ## 4 ¥¢¥¯¥Æ¥£¥Ù¡¼¥È
+        ## 4 ã‚¢ã‚¯ãƒ†ã‚£ãƒ™ãƒ¼ãƒˆ
         bool_ret = activate_components(sleep_recv_act_time)
         if bool_ret!=True:
             errorFlag = False
     
         time.sleep(sleep_act_time)
     
-        ## 5 ¥Ç¥£¥¢¥¯¥Æ¥£¥Ù¡¼¥È
+        ## 5 ãƒ‡ã‚£ã‚¢ã‚¯ãƒ†ã‚£ãƒ™ãƒ¼ãƒˆ
         bool_ret = deactivate_components()
         if bool_ret!=True:
             errorFlag = False
     
-        ## 6 ¥İ¡¼¥ÈÀÚÃÇ
+        ## 6 ãƒãƒ¼ãƒˆåˆ‡æ–­
         bool_ret = disconnect_ports()
         if bool_ret!=True:
             errorFlag = False
 
     
-        ## ¼õ¿®¥Õ¥¡¥¤¥ëÍ­ÌµÈ½Äê
+        ## å—ä¿¡ãƒ•ã‚¡ã‚¤ãƒ«æœ‰ç„¡åˆ¤å®š
         if os.path.isfile(g_diff_recv_file) == False:
             errorFlag = False
             fout = open(g_test_result_file, 'a')
@@ -756,27 +756,27 @@ def test_connection(message,arg0,arg1,arg2):
             time.sleep(sleep_for_time)
             continue
     
-        ## 7 Á÷¼õ¿®¥Ç¡¼¥¿Èæ³Ó
+        ## 7 é€å—ä¿¡ãƒ‡ãƒ¼ã‚¿æ¯”è¼ƒ
         time.sleep(sleep_act_time)
         bret = diff_file()
     
-        ## º¹Ê¬¥Õ¥¡¥¤¥ë¤«¤é¥Æ¥¹¥È·ë²Ì½ĞÎÏ
+        ## å·®åˆ†ãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰ãƒ†ã‚¹ãƒˆçµæœå‡ºåŠ›
         fout = open(g_test_result_file, 'a')
-        # bret==True ¤Ê¤éÁ÷¼õ¿®¥Ç¡¼¥¿°ìÃ×
+        # bret==True ãªã‚‰é€å—ä¿¡ãƒ‡ãƒ¼ã‚¿ä¸€è‡´
         if bret == True:
-            # ¥Æ¥¹¥È·ë²Ì OK
+            # ãƒ†ã‚¹ãƒˆçµæœ OK
             message = g_test_ok
             print message ,
             sys.stdout.flush()
             fout.write(message + '\n')
         else:
             errorFlag = False
-            # ¥Æ¥¹¥È·ë²Ì NG
+            # ãƒ†ã‚¹ãƒˆçµæœ NG
             message = g_test_ng
             print message ,
             sys.stdout.flush()
             fout.write(message + '\n')
-            # ¼õ¿®¥Ç¡¼¥¿¤ò¥Æ¥¹¥È·ë²Ì¥Õ¥¡¥¤¥ë¤Ø¥³¥Ô¡¼
+            # å—ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’ãƒ†ã‚¹ãƒˆçµæœãƒ•ã‚¡ã‚¤ãƒ«ã¸ã‚³ãƒ”ãƒ¼
             fin2 = open(g_diff_recv_file, 'r')
             while(1):
                 s2 = fin2.readline()
@@ -793,7 +793,7 @@ def test_connection(message,arg0,arg1,arg2):
     
 ##
 # @if jp
-# @brief ÀÜÂ³¡¢activate¡¢ÀÚÃÇ¡¢deactivate¤ò·«¤êÊÖ¤¹¡£ 
+# @brief æ¥ç¶šã€activateã€åˆ‡æ–­ã€deactivateã‚’ç¹°ã‚Šè¿”ã™ã€‚ 
 #
 #
 # @else
@@ -807,35 +807,35 @@ def test_connection_2(message,arg0,arg1,arg2):
     
     for i in range(loop_count):
     
-        ## 2 ¼õ¿®¥Ç¡¼¥¿¥Õ¥¡¥¤¥ëºï½ü
+        ## 2 å—ä¿¡ãƒ‡ãƒ¼ã‚¿ãƒ•ã‚¡ã‚¤ãƒ«å‰Šé™¤
         delete_recv_file()
     
-        ## 1 ¥³¥Í¥¯¥¿¡¼¥×¥í¥Õ¥¡¥¤¥ëÀßÄê
+        ## 1 ã‚³ãƒã‚¯ã‚¿ãƒ¼ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«è¨­å®š
         make_connecter_profile("flush", "", 0)
     
-        ## 3 ¥İ¡¼¥ÈÀÜÂ³
+        ## 3 ãƒãƒ¼ãƒˆæ¥ç¶š
         bool_ret = connect_ports()
         if bool_ret!=True:
             errorFlag = False
     
-        ## 4 ¥¢¥¯¥Æ¥£¥Ù¡¼¥È
+        ## 4 ã‚¢ã‚¯ãƒ†ã‚£ãƒ™ãƒ¼ãƒˆ
         bool_ret = activate_components(sleep_recv_act_time)
         if bool_ret!=True:
             errorFlag = False
     
         time.sleep(sleep_act_time)
     
-        ## 6 ¥İ¡¼¥ÈÀÚÃÇ
+        ## 6 ãƒãƒ¼ãƒˆåˆ‡æ–­
         bool_ret = disconnect_ports()
         if bool_ret!=True:
             errorFlag = False
     
-        ## 5 ¥Ç¥£¥¢¥¯¥Æ¥£¥Ù¡¼¥È
+        ## 5 ãƒ‡ã‚£ã‚¢ã‚¯ãƒ†ã‚£ãƒ™ãƒ¼ãƒˆ
         bool_ret = deactivate_components()
         if bool_ret!=True:
             errorFlag = False
     
-        ## ¼õ¿®¥Õ¥¡¥¤¥ëÍ­ÌµÈ½Äê
+        ## å—ä¿¡ãƒ•ã‚¡ã‚¤ãƒ«æœ‰ç„¡åˆ¤å®š
         if os.path.isfile(g_diff_recv_file) == False:
             errorFlag = False
             fout = open(g_test_result_file, 'a')
@@ -847,27 +847,27 @@ def test_connection_2(message,arg0,arg1,arg2):
             time.sleep(sleep_for_time)
             continue
     
-        ## 7 Á÷¼õ¿®¥Ç¡¼¥¿Èæ³Ó
+        ## 7 é€å—ä¿¡ãƒ‡ãƒ¼ã‚¿æ¯”è¼ƒ
         time.sleep(sleep_act_time)
         bret = diff_file()
     
-        ## º¹Ê¬¥Õ¥¡¥¤¥ë¤«¤é¥Æ¥¹¥È·ë²Ì½ĞÎÏ
+        ## å·®åˆ†ãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰ãƒ†ã‚¹ãƒˆçµæœå‡ºåŠ›
         fout = open(g_test_result_file, 'a')
-        # bret==True ¤Ê¤éÁ÷¼õ¿®¥Ç¡¼¥¿°ìÃ×
+        # bret==True ãªã‚‰é€å—ä¿¡ãƒ‡ãƒ¼ã‚¿ä¸€è‡´
         if bret == True:
-            # ¥Æ¥¹¥È·ë²Ì OK
+            # ãƒ†ã‚¹ãƒˆçµæœ OK
             message = g_test_ok
             print message ,
             sys.stdout.flush()
             fout.write(message + '\n')
         else:
             errorFlag = False
-            # ¥Æ¥¹¥È·ë²Ì NG
+            # ãƒ†ã‚¹ãƒˆçµæœ NG
             message = g_test_ng
             print message ,
             sys.stdout.flush()
             fout.write(message + '\n')
-            # ¼õ¿®¥Ç¡¼¥¿¤ò¥Æ¥¹¥È·ë²Ì¥Õ¥¡¥¤¥ë¤Ø¥³¥Ô¡¼
+            # å—ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’ãƒ†ã‚¹ãƒˆçµæœãƒ•ã‚¡ã‚¤ãƒ«ã¸ã‚³ãƒ”ãƒ¼
             fin2 = open(g_diff_recv_file, 'r')
             while(1):
                 s2 = fin2.readline()
@@ -876,7 +876,7 @@ def test_connection_2(message,arg0,arg1,arg2):
                 fout.write(s2)
             fin2.close()
         fout.close()
-        ## º¹Ê¬¥Õ¥¡¥¤¥ë¤«¤é¥Æ¥¹¥È·ë²Ì½ĞÎÏ
+        ## å·®åˆ†ãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰ãƒ†ã‚¹ãƒˆçµæœå‡ºåŠ›
         time.sleep(sleep_for_time)
 
     return errorFlag
@@ -884,12 +884,12 @@ def test_connection_2(message,arg0,arg1,arg2):
     
 ##
 # @if jp
-# @brief activate¡¢ÀÜÂ³¡¢deactivate¡¢ÀÚÃÇ¤ò·«¤êÊÖ¤¹¡£ 
+# @brief activateã€æ¥ç¶šã€deactivateã€åˆ‡æ–­ã‚’ç¹°ã‚Šè¿”ã™ã€‚ 
 #
-#  ¥Ç¡¼¥¿¤Î¥Á¥§¥Ã¥¯¤Ï¹Ô¤ï¤ì¤Ê¤¤¡£ 
-#  Ãí°Õ¡§Activate¤òÀè¤Ë¹Ô¤Ã¤Æ¤¤¤ë°Ù¡¢¼õ¿®¥Ç¡¼¥¿¤ÏÅÓÃæ¤«¤é¤ÎÆâÍÆ¤Ë¤Ê¤ê¤Ş¤¹¡£
-#  periodic,new¤ÎÀÜÂ³¥Æ¥¹¥È¤Ç¤Ï¡¢¥İ¥ê¥·¡¼¤¬SKIP,NEW¤Î¾ì¹ç¡¢
-#  ¥Ç¡¼¥¿¤Î³ÎÇ§¤Ï¹Ô¤ï¤Ê¤¤¡£
+#  ãƒ‡ãƒ¼ã‚¿ã®ãƒã‚§ãƒƒã‚¯ã¯è¡Œã‚ã‚Œãªã„ã€‚ 
+#  æ³¨æ„ï¼šActivateã‚’å…ˆã«è¡Œã£ã¦ã„ã‚‹ç‚ºã€å—ä¿¡ãƒ‡ãƒ¼ã‚¿ã¯é€”ä¸­ã‹ã‚‰ã®å†…å®¹ã«ãªã‚Šã¾ã™ã€‚
+#  periodic,newã®æ¥ç¶šãƒ†ã‚¹ãƒˆã§ã¯ã€ãƒãƒªã‚·ãƒ¼ãŒSKIP,NEWã®å ´åˆã€
+#  ãƒ‡ãƒ¼ã‚¿ã®ç¢ºèªã¯è¡Œã‚ãªã„ã€‚
 #
 # @else
 # @brief 
@@ -902,35 +902,35 @@ def test_connection_3(message,arg0,arg1,arg2):
 
     for i in range(loop_count):
     
-        ## 2 ¼õ¿®¥Ç¡¼¥¿¥Õ¥¡¥¤¥ëºï½ü
+        ## 2 å—ä¿¡ãƒ‡ãƒ¼ã‚¿ãƒ•ã‚¡ã‚¤ãƒ«å‰Šé™¤
         delete_recv_file()
     
-        ## 1 ¥³¥Í¥¯¥¿¡¼¥×¥í¥Õ¥¡¥¤¥ëÀßÄê
+        ## 1 ã‚³ãƒã‚¯ã‚¿ãƒ¼ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«è¨­å®š
         make_connecter_profile(arg0,arg1,arg2)
     
-        ## 4 ¥¢¥¯¥Æ¥£¥Ù¡¼¥È
+        ## 4 ã‚¢ã‚¯ãƒ†ã‚£ãƒ™ãƒ¼ãƒˆ
         bool_ret = activate_components(sleep_recv_act_time)
         if bool_ret!=True:
             errorFlag = False
     
-        ## 3 ¥İ¡¼¥ÈÀÜÂ³
+        ## 3 ãƒãƒ¼ãƒˆæ¥ç¶š
         bool_ret = connect_ports()
         if bool_ret!=True:
             errorFlag = False
     
         time.sleep(sleep_act_time)
     
-        ## 5 ¥Ç¥£¥¢¥¯¥Æ¥£¥Ù¡¼¥È
+        ## 5 ãƒ‡ã‚£ã‚¢ã‚¯ãƒ†ã‚£ãƒ™ãƒ¼ãƒˆ
         bool_ret = deactivate_components()
         if bool_ret!=True:
             errorFlag = False
     
-        ## 6 ¥İ¡¼¥ÈÀÚÃÇ
+        ## 6 ãƒãƒ¼ãƒˆåˆ‡æ–­
         bool_ret = disconnect_ports()
         if bool_ret!=True:
             errorFlag = False
     
-        ## ¼õ¿®¥Õ¥¡¥¤¥ëÍ­ÌµÈ½Äê
+        ## å—ä¿¡ãƒ•ã‚¡ã‚¤ãƒ«æœ‰ç„¡åˆ¤å®š
         if os.path.isfile(g_diff_recv_file) == False:
             errorFlag = False
             fout = open(g_test_result_file, 'a')
@@ -942,7 +942,7 @@ def test_connection_3(message,arg0,arg1,arg2):
             time.sleep(sleep_for_time)
             continue
     
-        ## 7 Á÷¼õ¿®¥Ç¡¼¥¿Èæ³Ó
+        ## 7 é€å—ä¿¡ãƒ‡ãƒ¼ã‚¿æ¯”è¼ƒ
         time.sleep(sleep_act_time)
         fout = open(g_test_result_file, 'a')
         fsize=os.path.getsize(g_diff_recv_file)
@@ -953,7 +953,7 @@ def test_connection_3(message,arg0,arg1,arg2):
             fout.write(message)
         else:
             errorFlag = False
-            # ¥Æ¥¹¥È·ë²Ì NG
+            # ãƒ†ã‚¹ãƒˆçµæœ NG
             message = g_test_ng
             print message ,
             sys.stdout.flush()
@@ -968,12 +968,12 @@ def test_connection_3(message,arg0,arg1,arg2):
     
 ##
 # @if jp
-# @brief activate¡¢ÀÜÂ³¡¢ÀÚÃÇ¡¢deactivate¤ò·«¤êÊÖ¤¹¡£ 
+# @brief activateã€æ¥ç¶šã€åˆ‡æ–­ã€deactivateã‚’ç¹°ã‚Šè¿”ã™ã€‚ 
 #
-#  ¥Ç¡¼¥¿¤Î¥Á¥§¥Ã¥¯¤Ï¹Ô¤ï¤ì¤Ê¤¤¡£ 
-#  Ãí°Õ¡§Activate¤òÀè¤Ë¹Ô¤Ã¤Æ¤¤¤ë°Ù¡¢¼õ¿®¥Ç¡¼¥¿¤ÏÅÓÃæ¤«¤é¤ÎÆâÍÆ¤Ë¤Ê¤ê¤Ş¤¹¡£
-#  periodic,new¤ÎÀÜÂ³¥Æ¥¹¥È¤Ç¤Ï¡¢¥İ¥ê¥·¡¼¤¬SKIP,NEW¤Î¾ì¹ç¡¢
-#  ¥Ç¡¼¥¿¤Î³ÎÇ§¤Ï¹Ô¤ï¤Ê¤¤¡£
+#  ãƒ‡ãƒ¼ã‚¿ã®ãƒã‚§ãƒƒã‚¯ã¯è¡Œã‚ã‚Œãªã„ã€‚ 
+#  æ³¨æ„ï¼šActivateã‚’å…ˆã«è¡Œã£ã¦ã„ã‚‹ç‚ºã€å—ä¿¡ãƒ‡ãƒ¼ã‚¿ã¯é€”ä¸­ã‹ã‚‰ã®å†…å®¹ã«ãªã‚Šã¾ã™ã€‚
+#  periodic,newã®æ¥ç¶šãƒ†ã‚¹ãƒˆã§ã¯ã€ãƒãƒªã‚·ãƒ¼ãŒSKIP,NEWã®å ´åˆã€
+#  ãƒ‡ãƒ¼ã‚¿ã®ç¢ºèªã¯è¡Œã‚ãªã„ã€‚
 #
 # @else
 # @brief 
@@ -985,35 +985,35 @@ def test_connection_4(message,arg0,arg1,arg2):
     errorFlag = True
     for i in range(loop_count):
     
-        ## 2 ¼õ¿®¥Ç¡¼¥¿¥Õ¥¡¥¤¥ëºï½ü
+        ## 2 å—ä¿¡ãƒ‡ãƒ¼ã‚¿ãƒ•ã‚¡ã‚¤ãƒ«å‰Šé™¤
         delete_recv_file()
     
-        ## 1 ¥³¥Í¥¯¥¿¡¼¥×¥í¥Õ¥¡¥¤¥ëÀßÄê
+        ## 1 ã‚³ãƒã‚¯ã‚¿ãƒ¼ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«è¨­å®š
         make_connecter_profile(arg0,arg1,arg2)
     
-        ## 4 ¥¢¥¯¥Æ¥£¥Ù¡¼¥È
+        ## 4 ã‚¢ã‚¯ãƒ†ã‚£ãƒ™ãƒ¼ãƒˆ
         bool_ret = activate_components(sleep_recv_act_time)
         if bool_ret!=True:
             errorFlag = False
     
-        ## 3 ¥İ¡¼¥ÈÀÜÂ³
+        ## 3 ãƒãƒ¼ãƒˆæ¥ç¶š
         bool_ret = connect_ports()
         if bool_ret!=True:
             errorFlag = False
     
         time.sleep(sleep_act_time)
     
-        ## 6 ¥İ¡¼¥ÈÀÚÃÇ
+        ## 6 ãƒãƒ¼ãƒˆåˆ‡æ–­
         bool_ret = disconnect_ports()
         if bool_ret!=True:
             errorFlag = False
     
-        ## 5 ¥Ç¥£¥¢¥¯¥Æ¥£¥Ù¡¼¥È
+        ## 5 ãƒ‡ã‚£ã‚¢ã‚¯ãƒ†ã‚£ãƒ™ãƒ¼ãƒˆ
         bool_ret = deactivate_components()
         if bool_ret!=True:
             errorFlag = False
     
-        ## ¼õ¿®¥Õ¥¡¥¤¥ëÍ­ÌµÈ½Äê
+        ## å—ä¿¡ãƒ•ã‚¡ã‚¤ãƒ«æœ‰ç„¡åˆ¤å®š
         if os.path.isfile(g_diff_recv_file) == False:
             errorFlag = False
             fout = open(g_test_result_file, 'a')
@@ -1025,7 +1025,7 @@ def test_connection_4(message,arg0,arg1,arg2):
             time.sleep(sleep_for_time)
             continue
     
-        ## 7 Á÷¼õ¿®¥Ç¡¼¥¿Èæ³Ó
+        ## 7 é€å—ä¿¡ãƒ‡ãƒ¼ã‚¿æ¯”è¼ƒ
         time.sleep(sleep_act_time)
         fout = open(g_test_result_file, 'a')
         fsize=os.path.getsize(g_diff_recv_file)
@@ -1036,7 +1036,7 @@ def test_connection_4(message,arg0,arg1,arg2):
             fout.write(message)
         else:
             errorFlag = False
-            # ¥Æ¥¹¥È·ë²Ì NG
+            # ãƒ†ã‚¹ãƒˆçµæœ NG
             message = g_test_ng
             print message ,
             sys.stdout.flush()
@@ -1050,7 +1050,7 @@ def test_connection_4(message,arg0,arg1,arg2):
     
 ##
 # @if jp
-# @brief ¥Æ¥¹¥È¥Æ¡¼¥Ö¥ë
+# @brief ãƒ†ã‚¹ãƒˆãƒ†ãƒ¼ãƒ–ãƒ«
 # @else
 # @brief Test table
 # @endif
