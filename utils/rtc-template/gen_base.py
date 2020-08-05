@@ -1,6 +1,6 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- python -*-
-# -*- condig shift_jis -*-
+# -*- coding: utf-8 -*-
 #
 #  @file gen_base.py
 #  @brief rtc-template source code generator base class

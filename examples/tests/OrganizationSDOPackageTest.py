@@ -1,11 +1,11 @@
-#!/usr/bin/env python
-# -*- coding: euc-jp -*-
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 #
 ## OrganizationSDOPackageTest.py
 ##
-## есетеъб╝еъб╝епе┴езе├еп
-## SDOPackage.idlд╟─ъ╡┴д╡дьд╞дддыеке┌еьб╝е╖ечеє
-## Organizationд╦┤╪д╣дыеке┌еьб╝е╖ечеє
+## уГбуГвуГкуГ╝уГкуГ╝уВпуГБуВзуГГуВп
+## SDOPackage.idlуБзхоЪч╛йуБХуВМуБжуБДуВЛуВкуГЪуГмуГ╝уВ╖уГзуГ│
+## OrganizationуБлщЦвуБЩуВЛуВкуГЪуГмуГ╝уВ╖уГзуГ│
 #
 # $Id$
 #

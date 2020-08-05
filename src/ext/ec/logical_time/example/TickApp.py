@@ -1,5 +1,5 @@
-#!/usr/bin/env python
-# -*- coding: euc-jp -*- 
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*- 
 ##
 # @file TickApp.py
 # @brief Example application for LogicalTimeTriggeredEC

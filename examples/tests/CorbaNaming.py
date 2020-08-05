@@ -1,5 +1,5 @@
-#!/usr/bin/env python
-# -*- coding: euc-jp -*-
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 
 
 ##
@@ -22,19 +22,19 @@ import string
 ##
 # @if jp
 # @class CorbaNaming
-# @brief CORBA Naming Service �إ�ѡ����饹
+# @brief CORBA Naming Service ヘルパークラス
 #
-# ���Υ��饹�ϡ�CosNaming::NamingContext ���Ф����åѡ����饹�Ǥ��롣
-# CosNaming::NamingContext �����ĥ��ڥ졼�����Ȥۤ�Ʊ����ǽ��
-# ���ڥ졼�������󶡤���ȤȤ�ˡ��͡��ॳ��ݡ��ͥ�� CosNaming::Name
-# �������ʸ����ˤ��̾��ɽ��������դ��륪�ڥ졼�������󶡤��롣
+# このクラスは、CosNaming::NamingContext に対するラッパークラスである。
+# CosNaming::NamingContext が持つオペレーションとほぼ同じ機能の
+# オペレーションを提供するとともに、ネームコンポーネント CosNaming::Name
+# の代わりに文字列による名前表現を受け付けるオペレーションも提供する。
 #
-# ���֥������Ȥ������������뤤������ľ��� CORBA �͡��ॵ���Ф���³��
-# �ʸ塢���Υ͡��ॵ���ФΥ롼�ȥ���ƥ����Ȥ��Ф��Ƽ�Υ��ڥ졼�����
-# ��������롣
-# �������ؤΥ͡��ߥ󥰥���ƥ����Ȥκ����䥪�֥������ȤΥХ���ɤˤ����ơ�
-# ����Υ���ƥ����Ȥ�¸�ߤ��ʤ����Ǥ⡢����Ū�˥���ƥ����Ȥ�Х����
-# ����Ū�Υ���ƥ����Ȥ䥪�֥������ȤΥХ���ɤ�Ԥ����Ȥ�Ǥ��롣
+# オブジェクトは生成時、あるいは生成直後に CORBA ネームサーバに接続し
+# 以後、このネームサーバのルートコンテキストに対して種々のオペレーション
+# を処理する。
+# 深い階層のネーミングコンテキストの作成やオブジェクトのバインドにおいて、
+# 途中のコンテキストが存在しない場合でも、強制的にコンテキストをバインド
+# し目的のコンテキストやオブジェクトのバインドを行うこともできる。
 #
 # @since 0.4.0
 #
@@ -65,11 +65,11 @@ class CorbaNaming:
   ##
   # @if jp
   #
-  # @brief ���󥹥ȥ饯��
+  # @brief コンストラクタ
   #
   # @param self
   # @param orb ORB
-  # @param name_server �͡��ॵ���Ф�̾��(�ǥե������:None)
+  # @param name_server ネームサーバの名称(デフォルト値:None)
   #
   # @else
   #
@@ -99,7 +99,7 @@ class CorbaNaming:
   ##
   # @if jp
   #
-  # @brief �ǥ��ȥ饯��
+  # @brief デストラクタ
   # 
   # @param self
   # 
@@ -115,12 +115,12 @@ class CorbaNaming:
   ##
   # @if jp
   #
-  # @brief �͡��ߥ󥰥����ӥ��ν����
+  # @brief ネーミングサービスの初期化
   # 
-  # ���ꤵ�줿�͡��ॵ���о�Υ͡��ߥ󥰥����ӥ����������ޤ���
+  # 指定されたネームサーバ上のネーミングサービスを初期化します。
   # 
   # @param self
-  # @param name_server �͡��ॵ���Ф�̾��
+  # @param name_server ネームサーバの名称
   # 
   # @else
   # 
@@ -138,43 +138,43 @@ class CorbaNaming:
   ##
   # @if jp
   #
-  # @brief Object �� bind ����
+  # @brief Object を bind する
   #
-  # CosNaming::bind() �Ȥۤ�Ʊ����Ư���򤹤뤬�����Ϳ����줿�͡��ॵ���Ф�
-  # �롼�ȥ���ƥ����Ȥ��Ф���bind()���ƤӽФ���������ۤʤ롣
+  # CosNaming::bind() とほぼ同等の働きをするが、常に与えられたネームサーバの
+  # ルートコンテキストに対してbind()が呼び出される点が異なる。
   #
-  # Name <name> �� Object <obj> ������ NamingContext ��˥Х���ɤ��롣
-  # c_n �� n ���ܤ� NameComponent �򤢤�魯�Ȥ���ȡ�
-  # name �� n �Ĥ� NameComponent ��������Ȥ����ʲ��Τ褦�˰����롣
+  # Name <name> と Object <obj> を当該 NamingContext 上にバインドする。
+  # c_n が n 番目の NameComponent をあらわすとすると、
+  # name が n 個の NameComponent から成るとき、以下のように扱われる。
   #
-  # cxt->bind(<c_1, c_2, ... c_n>, obj) �ϰʲ�������Ʊ���Ǥ��롣
+  # cxt->bind(<c_1, c_2, ... c_n>, obj) は以下の操作と同等である。
   # cxt->resolve(<c_1, ... c_(n-1)>)->bind(<c_n>, obj)
   #
-  # ���ʤ����1���ܤ���n-1���ܤΥ���ƥ����Ȥ��褷��n-1���ܤΥ���ƥ�����
-  # ��� name <n> �Ȥ��ơ�obj �� bind ���롣
-  # ̾�����˻��ä��� <c_1, ... c_(n-1)> �� NemingContext �ϡ�
-  # bindContext() �� rebindContext() �Ǵ��˥Х���ɺѤߤǤʤ���Фʤ�ʤ���
-  # �⤷ <c_1, ... c_(n-1)> �� NamingContext ��¸�ߤ��ʤ����ˤϡ�
-  # NotFound �㳰��ȯ�����롣
+  # すなわち、1番目からn-1番目のコンテキストを解決し、n-1番目のコンテキスト
+  # 上に name <n> として　obj を bind する。
+  # 名前解決に参加する <c_1, ... c_(n-1)> の NemingContext は、
+  # bindContext() や rebindContext() で既にバインド済みでなければならない。
+  # もし <c_1, ... c_(n-1)> の NamingContext が存在しない場合には、
+  # NotFound 例外が発生する。
   #
-  # �������������Х���ɥե饰 force �� true �λ��ϡ�<c_1, ... c_(n-1)>
-  # ��¸�ߤ��ʤ����ˤ⡢�Ƶ�Ū�˥���ƥ����Ȥ�Х���ɤ��ʤ��顢
-  # �ǽ�Ū�� obj ��̾�� name <c_n> �˥Х���ɤ��롣
+  # ただし、強制バインドフラグ force が true の時は、<c_1, ... c_(n-1)>
+  # が存在しない場合にも、再帰的にコンテキストをバインドしながら、
+  # 最終的に obj を名前 name <c_n> にバインドする。
   #
-  # ������ξ��Ǥ⡢n-1���ܤΥ���ƥ����Ⱦ�� name<n> �Υ��֥�������
-  # (Object ���뤤�� ����ƥ�����) ���Х���ɤ���Ƥ����
-  # AlreadyBound �㳰��ȯ�����롣
+  # いずれの場合でも、n-1番目のコンテキスト上に name<n> のオブジェクト
+  # (Object あるいは コンテキスト) がバインドされていれば
+  # AlreadyBound 例外が発生する。
   #
   # @param self
-  # @param name_list ���֥������Ȥ��դ���̾���� NameComponent
-  # @param obj ��Ϣ�դ����� Object
-  # @param force true�ξ�硢����Υ���ƥ����Ȥ���Ū�˥Х���ɤ���
-  #              (�ǥե������:None)
+  # @param name_list オブジェクトに付ける名前の NameComponent
+  # @param obj 関連付けられる Object
+  # @param force trueの場合、途中のコンテキストを強制的にバインドする
+  #              (デフォルト値:None)
   #
-  # @exception NotFound ����� <c_1, c_2, ..., c_(n-1)> ��¸�ߤ��ʤ���
-  # @exception CannotProceed ���餫����ͳ�ǽ������³�Ǥ��ʤ���
-  # @exception InvalidName ���� name_list ��̾����������
-  # @exception AlreadyBound name <c_n> �� Object �����Ǥ˥Х���ɤ���Ƥ��롣
+  # @exception NotFound 途中の <c_1, c_2, ..., c_(n-1)> が存在しない。
+  # @exception CannotProceed 何らかの理由で処理を継続できない。
+  # @exception InvalidName 引数 name_list の名前が不正。
+  # @exception AlreadyBound name <c_n> の Object がすでにバインドされている。
   #
   # @else
   #
@@ -204,21 +204,21 @@ class CorbaNaming:
   ##
   # @if jp
   #
-  # @brief Object �� bind ����
+  # @brief Object を bind する
   #
-  # Object �� bind ����ݤ�Ϳ����̾����ʸ����ɽ���Ǥ��뤳�Ȱʳ��ϡ�bind()
-  # ��Ʊ���Ǥ��롣bind(toName(string_name), obj) ��������
+  # Object を bind する際に与える名前が文字列表現であること以外は、bind()
+  # と同じである。bind(toName(string_name), obj) と等価。
   #
   # @param self
-  # @param string_name ���֥������Ȥ��դ���̾����ʸ����ɽ��
-  # @param obj ��Ϣ�դ����륪�֥�������
-  # @param force true�ξ�硢����Υ���ƥ����Ȥ���Ū�˥Х���ɤ���
-  #              (�ǥե������:true)
+  # @param string_name オブジェクトに付ける名前の文字列表現
+  # @param obj 関連付けられるオブジェクト
+  # @param force trueの場合、途中のコンテキストを強制的にバインドする
+  #              (デフォルト値:true)
   #
-  # @exception NotFound ����� <c_1, c_2, ..., c_(n-1)> ��¸�ߤ��ʤ���
-  # @exception CannotProceed ���餫����ͳ�ǽ������³�Ǥ��ʤ���
-  # @exception InvalidName ���� string_name ��̾����������
-  # @exception AlreadyBound name <n> �� Object �����Ǥ˥Х���ɤ���Ƥ��롣
+  # @exception NotFound 途中の <c_1, c_2, ..., c_(n-1)> が存在しない。
+  # @exception CannotProceed 何らかの理由で処理を継続できない。
+  # @exception InvalidName 引数 string_name の名前が不正。
+  # @exception AlreadyBound name <n> の Object がすでにバインドされている。
   #
   # @else
   #
@@ -232,33 +232,33 @@ class CorbaNaming:
   ##
   # @if jp
   #
-  # @brief ����Υ���ƥ����Ȥ� bind ���ʤ��� Object �� bind ����
+  # @brief 途中のコンテキストを bind しながら Object を bind する
   #
-  # context ��Ϳ����줿 NamingContext ���Ф��ơ�name �ǻ��ꤵ�줿
-  # �͡��ॳ��ݡ��ͥ�� <c_1, ... c_(n-1)> �� NamingContext �Ȥ���
-  # ��褷�ʤ��顢̾�� <c_n> ���Ф��� obj �� bind ���롣
-  # �⤷��<c_1, ... c_(n-1)> ���б����� NamingContext ���ʤ����ˤ�
-  # ������ NamingContext ��Х���ɤ��롣
+  # context で与えられた NamingContext に対して、name で指定された
+  # ネームコンポーネント <c_1, ... c_(n-1)> を NamingContext として
+  # 解決しながら、名前 <c_n> に対して obj を bind する。
+  # もし、<c_1, ... c_(n-1)> に対応する NamingContext がない場合には
+  # 新たな NamingContext をバインドする。
   #
-  # �ǽ�Ū�� <c_1, c_2, ..., c_(n-1)> ���б����� NamingContext ������
-  # �ޤ��ϲ�褵�줿��ǡ�CosNaming::bind(<c_n>, object) ���ƤӽФ���롣
-  # ���ΤȤ������Ǥ˥Х���ǥ��󥰤�¸�ߤ���� AlreadyBound�㳰��ȯ�����롣
+  # 最終的に <c_1, c_2, ..., c_(n-1)> に対応する NamingContext が生成
+  # または解決された上で、CosNaming::bind(<c_n>, object) が呼び出される。
+  # このとき、すでにバインディングが存在すれば AlreadyBound例外が発生する。
   #
-  # ����Υ���ƥ����Ȥ��褹������ǡ���褷�褦�Ȥ��륳��ƥ����Ȥ�
-  # Ʊ��̾���� NamingContext �ǤϤʤ� Binding ��¸�ߤ����硢
-  # CannotProceed �㳰��ȯ������������ߤ��롣
+  # 途中のコンテキストを解決する過程で、解決しようとするコンテキストと
+  # 同じ名前の NamingContext ではない Binding が存在する場合、
+  # CannotProceed 例外が発生し処理を中止する。
   #
   # @param self
-  # @param context bind �򳫻Ϥ��롡NamingContext
-  # @param name_list ���֥������Ȥ��դ���̾���Υ͡��ॳ��ݡ��ͥ��
-  # @param obj ��Ϣ�դ����륪�֥�������
+  # @param context bind を開始する　NamingContext
+  # @param name_list オブジェクトに付ける名前のネームコンポーネント
+  # @param obj 関連付けられるオブジェクト
   #
-  # @exception CannotProceed <c_1, ..., c_(n-1)> ���б����� NamingContext 
-  #            �Τ����ҤȤĤ������Ǥ� NamingContext �ʳ��� object �˥Х����
-  #            ����Ƥ��ꡢ�������³�Ǥ��ʤ���
-  # @exception InvalidName ̾�� name_list ������
-  # @exception AlreadyBound name <c_n> �ˤ��Ǥ˲��餫�� object ���Х����
-  #            ����Ƥ��롣
+  # @exception CannotProceed <c_1, ..., c_(n-1)> に対応する NamingContext 
+  #            のうちひとつが、すでに NamingContext 以外の object にバインド
+  #            されており、処理を継続できない。
+  # @exception InvalidName 名前 name_list が不正
+  # @exception AlreadyBound name <c_n> にすでに何らかの object がバインド
+  #            されている。
   # @else
   #
   # @brief
@@ -285,21 +285,21 @@ class CorbaNaming:
   ##
   # @if jp
   #
-  # @brief Object �� rebind ����
+  # @brief Object を rebind する
   #
-  # name_list �ǻ��ꤵ�줿 Binding �����Ǥ�¸�ߤ����������� bind() ��Ʊ��
-  # �Ǥ��롣�Х���ǥ��󥰤����Ǥ�¸�ߤ�����ˤϡ��������Х���ǥ��󥰤�
-  # �֤��������롣
+  # name_list で指定された Binding がすでに存在する場合を除いて bind() と同じ
+  # である。バインディングがすでに存在する場合には、新しいバインディングに
+  # 置き換えられる。
   #
   # @param self
-  # @param name_list ���֥������Ȥ��դ���̾���� NameComponent
-  # @param obj ��Ϣ�դ����륪�֥�������
-  # @param force true�ξ�硢����Υ���ƥ����Ȥ���Ū�˥Х���ɤ���
-  #              (�ǥե������:true)
+  # @param name_list オブジェクトに付ける名前の NameComponent
+  # @param obj 関連付けられるオブジェクト
+  # @param force trueの場合、途中のコンテキストを強制的にバインドする
+  #              (デフォルト値:true)
   #
-  # @exception NotFound ����� <c_1, c_2, ..., c_(n-1)> ��¸�ߤ��ʤ���
-  # @exception CannotProceed ���餫����ͳ�ǽ������³�Ǥ��ʤ���
-  # @exception InvalidName ̾�� name_list ������
+  # @exception NotFound 途中の <c_1, c_2, ..., c_(n-1)> が存在しない。
+  # @exception CannotProceed 何らかの理由で処理を継続できない。
+  # @exception InvalidName 名前 name_list が不正
   #
   # @else
   #
@@ -331,20 +331,20 @@ class CorbaNaming:
   ##
   # @if jp
   #
-  # @brief Object �� rebind ����
+  # @brief Object を rebind する
   #
-  # Object �� rebind ����ݤ�Ϳ����̾����ʸ����ɽ���Ǥ��뤳�Ȱʳ��� rebind()
-  # ��Ʊ���Ǥ��롣rebind(toName(string_name), obj) ��������
+  # Object を rebind する際に与える名前が文字列表現であること以外は rebind()
+  # と同じである。rebind(toName(string_name), obj) と等価。
   #
   # @param self
-  # @param string_name ���֥������Ȥ��դ���̾����ʸ����ɽ��
-  # @param obj ��Ϣ�դ����륪�֥�������
-  # @param force true�ξ�硢����Υ���ƥ����Ȥ���Ū�˥Х���ɤ���
-  #              (�ǥե������:true)
+  # @param string_name オブジェクトに付ける名前の文字列表現
+  # @param obj 関連付けられるオブジェクト
+  # @param force trueの場合、途中のコンテキストを強制的にバインドする
+  #              (デフォルト値:true)
   #
-  # @exception NotFound ����� <c_1, c_2, ..., c_(n-1)> ��¸�ߤ��ʤ���
-  # @exception CannotProceed ���餫����ͳ�ǽ������³�Ǥ��ʤ���
-  # @exception InvalidName ���� string_name ��̾����������
+  # @exception NotFound 途中の <c_1, c_2, ..., c_(n-1)> が存在しない。
+  # @exception CannotProceed 何らかの理由で処理を継続できない。
+  # @exception InvalidName 引数 string_name の名前が不正。
   #
   # @else
   #
@@ -360,21 +360,21 @@ class CorbaNaming:
   ##
   # @if jp
   #
-  # @brief ����Υ���ƥ����Ȥ� bind ���ʤ��� Object �� rebind ����
+  # @brief 途中のコンテキストを bind しながら Object を rebind する
   #
-  # name_list <c_n> �ǻ��ꤵ�줿 NamingContext �⤷���� Object �����Ǥ�¸�ߤ���
-  # ��������� bindRecursive() ��Ʊ���Ǥ��롣
+  # name_list <c_n> で指定された NamingContext もしくは Object がすでに存在する
+  # 場合を除いて bindRecursive() と同じである。
   #
-  # name_list <c_n> �ǻ��ꤵ�줿�Х���ǥ��󥰤����Ǥ�¸�ߤ�����ˤϡ�
-  # �������Х���ǥ��󥰤��֤��������롣
+  # name_list <c_n> で指定されたバインディングがすでに存在する場合には、
+  # 新しいバインディングに置き換えられる。
   #
   # @param self
-  # @param context bind �򳫻Ϥ��롡NamingContext
-  # @param name_list ���֥������Ȥ��դ���̾���� NameComponent
-  # @param obj ��Ϣ�դ����륪�֥�������
+  # @param context bind を開始する　NamingContext
+  # @param name_list オブジェクトに付ける名前の NameComponent
+  # @param obj 関連付けられるオブジェクト
   #
-  # @exception CannotProceed ����Υ���ƥ����Ȥ����Ǥ��ʤ���
-  # @exception InvalidName Ϳ����줿 name_list ��������
+  # @exception CannotProceed 途中のコンテキストが解決できない。
+  # @exception InvalidName 与えられた name_list が不正。
   #
   # @else
   #
@@ -402,21 +402,21 @@ class CorbaNaming:
   ##
   # @if jp
   #
-  # @brief NamingContext �� bind ����
+  # @brief NamingContext を bind する
   #
-  # bind �оݤȤ��ƻ��ꤵ�줿���� name ��ʸ����ξ��� bindByString() �ȡ�
-  # ����ʳ��ξ��� bind() ��Ʊ���Ǥ��롣
+  # bind 対象として指定された引数 name が文字列の場合は bindByString() と、
+  # それ以外の場合は bind() と同じである。
   #
   # @param self
-  # @param name ���֥������Ȥ��դ���̾��
-  # @param name_cxt ��Ϣ�դ����� NamingContext
-  # @param force true�ξ�硢����Υ���ƥ����Ȥ���Ū�˥Х���ɤ���
-  #              (�ǥե������:True)
+  # @param name オブジェクトに付ける名前
+  # @param name_cxt 関連付けられる NamingContext
+  # @param force trueの場合、途中のコンテキストを強制的にバインドする
+  #              (デフォルト値:True)
   #
-  # @exception NotFound ����� <c_1, c_2, ..., c_(n-1)> ��¸�ߤ��ʤ���
-  # @exception CannotProceed ���餫����ͳ�ǽ������³�Ǥ��ʤ���
-  # @exception InvalidName ���� name ��̾����������
-  # @exception AlreadyBound name <c_n> �� Object �����Ǥ˥Х���ɤ���Ƥ��롣
+  # @exception NotFound 途中の <c_1, c_2, ..., c_(n-1)> が存在しない。
+  # @exception CannotProceed 何らかの理由で処理を継続できない。
+  # @exception InvalidName 引数 name の名前が不正。
+  # @exception AlreadyBound name <c_n> の Object がすでにバインドされている。
   #
   # @else
   #
@@ -434,15 +434,15 @@ class CorbaNaming:
   ##
   # @if jp
   #
-  # @brief NamingContext �� bind ����
+  # @brief NamingContext を bind する
   #
-  # bind ����륪�֥������Ȥ� NamingContext �Ǥ��뤳�Ȥ������
-  # bindRecursive() ��Ʊ���Ǥ��롣
+  # bind されるオブジェクトが NamingContext であることを除いて
+  # bindRecursive() と同じである。
   #
   # @param self
-  # @param context bind �򳫻Ϥ��롡NamingContext
-  # @param name_list ���֥������Ȥ��դ���̾���Υ͡��ॳ��ݡ��ͥ��
-  # @param name_cxt ��Ϣ�դ����� NamingContext
+  # @param context bind を開始する　NamingContext
+  # @param name_list オブジェクトに付ける名前のネームコンポーネント
+  # @param name_cxt 関連付けられる NamingContext
   #
   # @else
   #
@@ -457,22 +457,22 @@ class CorbaNaming:
   ##
   # @if jp
   #
-  # @brief NamingContext �� rebind ����
+  # @brief NamingContext を rebind する
   #
-  # bind �оݤȤ��ƻ��ꤵ�줿���� name ��ʸ����ξ��� rebindByString() �ȡ�
-  # ����ʳ��ξ��� rebind() ��Ʊ���Ǥ��롣
-  # �ɤ���ξ���Х���ǥ��󥰤����Ǥ�¸�ߤ�����ˤϡ�
-  # �������Х���ǥ��󥰤��֤��������롣
+  # bind 対象として指定された引数 name が文字列の場合は rebindByString() と、
+  # それ以外の場合は rebind() と同じである。
+  # どちらの場合もバインディングがすでに存在する場合には、
+  # 新しいバインディングに置き換えられる。
   #
   # @param self
-  # @param name ���֥������Ȥ��դ���̾���Υ͡��ॳ��ݡ��ͥ��
-  # @param name_cxt ��Ϣ�դ����� NamingContext
-  # @param force true�ξ�硢����Υ���ƥ����Ȥ���Ū�˥Х���ɤ���
-  #              (�ǥե������:true)
+  # @param name オブジェクトに付ける名前のネームコンポーネント
+  # @param name_cxt 関連付けられる NamingContext
+  # @param force trueの場合、途中のコンテキストを強制的にバインドする
+  #              (デフォルト値:true)
   #
-  # @exception NotFound ����� <c_1, c_2, ..., c_(n-1)> ��¸�ߤ��ʤ���
-  # @exception CannotProceed ���餫����ͳ�ǽ������³�Ǥ��ʤ���
-  # @exception InvalidName ���� name ��̾����������
+  # @exception NotFound 途中の <c_1, c_2, ..., c_(n-1)> が存在しない。
+  # @exception CannotProceed 何らかの理由で処理を継続できない。
+  # @exception InvalidName 引数 name の名前が不正。
   #
   # @else
   #
@@ -488,14 +488,14 @@ class CorbaNaming:
   ##
   # @if jp
   #
-  # @brief ����Υ���ƥ����Ȥ�Ƶ�Ū�� rebind �� NamingContext �� rebind ����    #
-  # bind ����륪�֥������Ȥ� NamingContext �Ǥ��뤳�Ȥ������
-  # rebindRecursive() ��Ʊ���Ǥ��롣
+  # @brief 途中のコンテキストを再帰的に rebind し NamingContext を rebind する    #
+  # bind されるオブジェクトが NamingContext であることを除いて
+  # rebindRecursive() と同じである。
   #
   # @param self
-  # @param context bind �򳫻Ϥ��롡NamingContext
-  # @param name_list ���֥������Ȥ��դ���̾���� NameComponent
-  # @param name_cxt ��Ϣ�դ����� NamingContext
+  # @param context bind を開始する　NamingContext
+  # @param name_list オブジェクトに付ける名前の NameComponent
+  # @param name_cxt 関連付けられる NamingContext
   #
   # @else
   #
@@ -510,26 +510,26 @@ class CorbaNaming:
   ##
   # @if jp
   #
-  # @brief Object �� name �����褹��
+  # @brief Object を name から解決する
   #
-  # name �� bind ����Ƥ��륪�֥������Ȼ��Ȥ��֤���
-  # �͡��ॳ��ݡ��ͥ�� <c_1, c_2, ... c_n> �ϺƵ�Ū�˲�褵��롣
+  # name に bind されているオブジェクト参照を返す。
+  # ネームコンポーネント <c_1, c_2, ... c_n> は再帰的に解決される。
   # 
-  # ���� name ��Ϳ����줿�ͤ�ʸ����ξ��ˤϤޤ��ǽ�� toName() �ˤ�ä�
-  # NameComponent ���Ѵ�����롣
+  # 引数 name に与えられた値が文字列の場合にはまず最初に toName() によって
+  # NameComponent に変換される。
   # 
-  # CosNaming::resolve() �Ȥۤ�Ʊ����Ư���򤹤뤬�����Ϳ����줿
-  # �͡��ॵ���ФΥ롼�ȥ���ƥ����Ȥ��Ф��� resolve() ���ƤӽФ��������
-  # �ۤʤ롣
+  # CosNaming::resolve() とほぼ同等の働きをするが、常に与えられた
+  # ネームサーバのルートコンテキストに対して resolve() が呼び出される点が
+  # 異なる。
   #
   # @param self
-  # @param name ��褹�٤����֥������Ȥ�̾���Υ͡��ॳ��ݡ��ͥ��
+  # @param name 解決すべきオブジェクトの名前のネームコンポーネント
   #
-  # @return ��褵�줿���֥������Ȼ���
+  # @return 解決されたオブジェクト参照
   #
-  # @exception NotFound ����� <c_1, c_2, ..., c_(n-1)> ��¸�ߤ��ʤ���
-  # @exception CannotProceed ���餫����ͳ�ǽ������³�Ǥ��ʤ���
-  # @exception InvalidName ���� name ��̾����������
+  # @exception NotFound 途中の <c_1, c_2, ..., c_(n-1)> が存在しない。
+  # @exception CannotProceed 何らかの理由で処理を継続できない。
+  # @exception InvalidName 引数 name の名前が不正。
   #
   # @else
   #
@@ -550,24 +550,24 @@ class CorbaNaming:
   ##
   # @if jp
   #
-  # @brief ���ꤵ�줿̾���Υ��֥������Ȥ� bind ��������
+  # @brief 指定された名前のオブジェクトの bind を解除する
   #
-  # name �� bind ����Ƥ��륪�֥������Ȼ��Ȥ������롣
-  # �͡��ॳ��ݡ��ͥ�� <c_1, c_2, ... c_n> �ϺƵ�Ū�˲�褵��롣
+  # name に bind されているオブジェクト参照を解除する。
+  # ネームコンポーネント <c_1, c_2, ... c_n> は再帰的に解決される。
   # 
-  # ���� name ��Ϳ����줿�ͤ�ʸ����ξ��ˤϤޤ��ǽ�� toName() �ˤ�ä�
-  # NameComponent ���Ѵ�����롣
+  # 引数 name に与えられた値が文字列の場合にはまず最初に toName() によって
+  # NameComponent に変換される。
   # 
-  # CosNaming::unbind() �Ȥۤ�Ʊ����Ư���򤹤뤬�����Ϳ����줿
-  # �͡��ॵ���ФΥ롼�ȥ���ƥ����Ȥ��Ф��� unbind() ���ƤӽФ��������
-  # �ۤʤ롣
+  # CosNaming::unbind() とほぼ同等の働きをするが、常に与えられた
+  # ネームサーバのルートコンテキストに対して unbind() が呼び出される点が
+  # 異なる。
   #
   # @param self
-  # @param name ������륪�֥������ȤΥ͡��ॳ��ݡ��ͥ��
+  # @param name 削除するオブジェクトのネームコンポーネント
   #
-  # @exception NotFound ����� <c_1, c_2, ..., c_(n-1)> ��¸�ߤ��ʤ���
-  # @exception CannotProceed ���餫����ͳ�ǽ������³�Ǥ��ʤ���
-  # @exception InvalidName ���� name ��̾����������
+  # @exception NotFound 途中の <c_1, c_2, ..., c_(n-1)> が存在しない。
+  # @exception CannotProceed 何らかの理由で処理を継続できない。
+  # @exception InvalidName 引数 name の名前が不正。
   #
   # @else
   #
@@ -587,14 +587,14 @@ class CorbaNaming:
   ##
   # @if jp
   #
-  # @brief ����������ƥ����Ȥ���������
+  # @brief 新しいコンテキストを生成する
   #
-  # Ϳ����줿�͡��ॵ���о���������줿 NamingContext ���֤���
-  # �֤��줿 NamingContext �� bind ����Ƥ��ʤ���
+  # 与えられたネームサーバ上で生成された NamingContext を返す。
+  # 返された NamingContext は bind されていない。
   # 
   # @param self
   # 
-  # @return �������줿������ NamingContext
+  # @return 生成された新しい NamingContext
   #
   # @else
   #
@@ -606,25 +606,25 @@ class CorbaNaming:
   ##
   # @if jp
   #
-  # @brief ����������ƥ����Ȥ� bind ����
+  # @brief 新しいコンテキストを bind する
   #
-  # Ϳ����줿 name ���Ф��ƿ���������ƥ����Ȥ�Х���ɤ��롣
-  # �������줿��NamingContext �ϥ͡��ॵ���о���������줿��ΤǤ��롣
+  # 与えられた name に対して新しいコンテキストをバインドする。
+  # 生成された　NamingContext はネームサーバ上で生成されたものである。
   # 
-  # ���� name ��Ϳ����줿�ͤ�ʸ����ξ��ˤϤޤ��ǽ�� toName() �ˤ�ä�
-  # NameComponent ���Ѵ�����롣
+  # 引数 name に与えられた値が文字列の場合にはまず最初に toName() によって
+  # NameComponent に変換される。
   # 
   # @param self
-  # @param name NamingContext���դ���̾���Υ͡��ॳ��ݡ��ͥ��
-  # @param force true�ξ�硢����Υ���ƥ����Ȥ���Ū�˥Х���ɤ���
-  #              (�ǥե������:true)
+  # @param name NamingContextに付ける名前のネームコンポーネント
+  # @param force trueの場合、途中のコンテキストを強制的にバインドする
+  #              (デフォルト値:true)
   #
-  # @return �������줿������ NamingContext
+  # @return 生成された新しい NamingContext
   #
-  # @exception NotFound ����� <c_1, c_2, ..., c_(n-1)> ��¸�ߤ��ʤ���
-  # @exception CannotProceed ���餫����ͳ�ǽ������³�Ǥ��ʤ���
-  # @exception InvalidName ���� name ��̾����������
-  # @exception AlreadyBound name <n> �� Object �����Ǥ˥Х���ɤ���Ƥ��롣
+  # @exception NotFound 途中の <c_1, c_2, ..., c_(n-1)> が存在しない。
+  # @exception CannotProceed 何らかの理由で処理を継続できない。
+  # @exception InvalidName 引数 name の名前が不正。
+  # @exception AlreadyBound name <n> の Object がすでにバインドされている。
   #
   # @else
   #
@@ -656,16 +656,16 @@ class CorbaNaming:
   ##
   # @if jp
   #
-  # @brief NamingContext ���󥢥��ƥ��ֲ�����
+  # @brief NamingContext を非アクティブ化する
   #
-  # context �ǻ��ꤵ�줿 NamingContext ���󥢥��ƥ��ֲ����롣
-  # context ��¾�Υ���ƥ����Ȥ��Х���ɤ���Ƥ������ NotEmpty �㳰��
-  # ȯ�����롣
+  # context で指定された NamingContext を非アクティブ化する。
+  # context に他のコンテキストがバインドされている場合は NotEmpty 例外が
+  # 発生する。
   # 
   # @param self
-  # @param context �󥢥��ƥ��ֲ����� NamingContext
+  # @param context 非アクティブ化する NamingContext
   #
-  # @exception NotEmpty �о�context ��¾�Υ���ƥ����Ȥ��Х���ɤ���Ƥ��롣
+  # @exception NotEmpty 対象context に他のコンテキストがバインドされている。
   #
   # @else
   #
@@ -690,19 +690,19 @@ class CorbaNaming:
 
   ##
   # @if jp
-  # @brief NamingContext ��Ƶ�Ū�˲��ä��󥢥��ƥ��ֲ�����
+  # @brief NamingContext を再帰的に下って非アクティブ化する
   #
-  # context ��Ϳ����줿 NamingContext ���Ф��ơ�name �ǻ��ꤵ�줿
-  # �͡��ॳ��ݡ��ͥ�� <c_1, ... c_(n-1)> �� NamingContext �Ȥ���
-  # ��褷�ʤ��顢̾�� <c_n> ���Ф��� �󥢥��ƥ��ֲ���Ԥ���
+  # context で与えられた NamingContext に対して、name で指定された
+  # ネームコンポーネント <c_1, ... c_(n-1)> を NamingContext として
+  # 解決しながら、名前 <c_n> に対して 非アクティブ化を行う。
   #
   # @param self
-  # @param context �󥢥��ƥ��ֲ����� NamingContext
+  # @param context 非アクティブ化する NamingContext
   #
-  # @exception NotEmpty �о�context ��¾�Υ���ƥ����Ȥ��Х���ɤ���Ƥ��롣
-  # @exception NotFound ����� <c_1, c_2, ..., c_(n-1)> ��¸�ߤ��ʤ���
-  # @exception CannotProceed ���餫����ͳ�ǽ������³�Ǥ��ʤ���
-  # @exception InvalidName ���� name ��̾����������
+  # @exception NotEmpty 対象context に他のコンテキストがバインドされている。
+  # @exception NotFound 途中の <c_1, c_2, ..., c_(n-1)> が存在しない。
+  # @exception CannotProceed 何らかの理由で処理を継続できない。
+  # @exception InvalidName 引数 name の名前が不正。
   #
   # @else
   # @brief Destroy the naming context recursively
@@ -737,9 +737,9 @@ class CorbaNaming:
 
   ##
   # @if jp
-  # @brief ���٤Ƥ� Binding ��������
+  # @brief すべての Binding を削除する
   #
-  # ��Ͽ����Ƥ������Ƥ�Binding �������롣
+  # 登録されている全てのBinding を削除する。
   #
   # @param self
   #
@@ -753,15 +753,15 @@ class CorbaNaming:
 
   ##
   # @if jp
-  # @brief Ϳ����줿 NamingContext �� Binding ���������
+  # @brief 与えられた NamingContext の Binding を取得する
   #
-  # ���ꤵ�줿 NamingContext �� Binding ��������롣
+  # 指定された NamingContext の Binding を取得する。
   #
   # @param self
-  # @param name_cxt Binding �����о� NamingContext
-  # @param how_many Binding ��������볬�ؤο���
-  # @param rbl �������� Binding ���ݻ�����ۥ��
-  # @param rbi �������� Binding �򤿤ɤ뤿��Υ��ƥ졼��
+  # @param name_cxt Binding 取得対象 NamingContext
+  # @param how_many Binding を取得する階層の深さ
+  # @param rbl 取得した Binding を保持するホルダ
+  # @param rbi 取得した Binding をたどるためのイテレータ
   #
   # @else
   # @endif
@@ -780,16 +780,16 @@ class CorbaNaming:
 
   ##
   # @if jp
-  # @brief Ϳ����줿 NameComponent ��ʸ����ɽ�����֤�
+  # @brief 与えられた NameComponent の文字列表現を返す
   #
-  # ���ꤵ�줿 NameComponent ��ʸ�����Ѵ����롣
+  # 指定された NameComponent を文字に変換する。
   #
   # @param self
-  # @param name_list �Ѵ��о� NameComponent
+  # @param name_list 変換対象 NameComponent
   #
-  # @return ʸ�����Ѵ����
+  # @return 文字列変換結果
   #
-  # @exception InvalidName ���� name_list ��̾����������
+  # @exception InvalidName 引数 name_list の名前が不正。
   #
   # @else
   # @brief Get string representation of given NameComponent
@@ -807,16 +807,16 @@ class CorbaNaming:
 
   ##
   # @if jp
-  # @brief Ϳ����줿ʸ����ɽ���� NameComponent ��ʬ�򤹤�
+  # @brief 与えられた文字列表現を NameComponent に分解する
   #
-  # ���ꤵ�줿ʸ����� NameComponent ���Ѵ����롣
+  # 指定された文字列を NameComponent に変換する。
   #
   # @param self
-  # @param sname �Ѵ��о�ʸ����
+  # @param sname 変換対象文字列
   #
-  # @return NameComponent �Ѵ����
+  # @return NameComponent 変換結果
   #
-  # @exception InvalidName ���� sname ��������
+  # @exception InvalidName 引数 sname が不正。
   #
   # @else
   # @brief Get NameComponent from gien string name representation
@@ -849,18 +849,18 @@ class CorbaNaming:
 
   ##
   # @if jp
-  # @brief Ϳ����줿 addr �� string_name ���� URLɽ�����������
+  # @brief 与えられた addr と string_name から URL表現を取得する
   #
-  # ���ꤵ�줿���ɥ쥹��̾�Τ�URL���Ѵ����롣
+  # 指定されたアドレスと名称をURLに変換する。
   #
   # @param self
-  # @param addr �Ѵ��оݥ��ɥ쥹
-  # @param string_name �Ѵ��о�̾��
+  # @param addr 変換対象アドレス
+  # @param string_name 変換対象名称
   #
-  # @return URL �Ѵ����
+  # @return URL 変換結果
   #
-  # @exception InvalidAddress ���� addr ��������
-  # @exception InvalidName ���� string_name ��������
+  # @exception InvalidAddress 引数 addr が不正。
+  # @exception InvalidName 引数 string_name が不正。
   #
   # @else
   # @brief Get URL representation from given addr and string_name
@@ -871,19 +871,19 @@ class CorbaNaming:
 
   ##
   # @if jp
-  # @brief Ϳ����줿ʸ����ɽ���� resolve �����֥������Ȥ��֤�
+  # @brief 与えられた文字列表現を resolve しオブジェクトを返す
   #
-  # ���ꤵ�줿ʸ����ɽ����resolve�������֥������Ȥ�������롣
+  # 指定された文字列表現をresolveし，オブジェクトを取得する。
   #
   # @param self
-  # @param string_name �����оݥ��֥�������ʸ����ɽ��
+  # @param string_name 取得対象オブジェクト文字列表現
   #
-  # @return ��褵�줿���֥�������
+  # @return 解決されたオブジェクト
   #
-  # @exception NotFound ����� <c_1, c_2, ..., c_(n-1)> ��¸�ߤ��ʤ���
-  # @exception CannotProceed ���餫����ͳ�ǽ������³�Ǥ��ʤ���
-  # @exception InvalidName ���� name ��̾����������
-  # @exception AlreadyBound name <n> �� Object �����Ǥ˥Х���ɤ���Ƥ��롣
+  # @exception NotFound 途中の <c_1, c_2, ..., c_(n-1)> が存在しない。
+  # @exception CannotProceed 何らかの理由で処理を継続できない。
+  # @exception InvalidName 引数 name の名前が不正。
+  # @exception AlreadyBound name <n> の Object がすでにバインドされている。
   #
   # @else
   # @brief Resolve from name of string representation and get object 
@@ -899,19 +899,19 @@ class CorbaNaming:
   ##
   # @if jp
   #
-  # @brief ���֥������Ȥ�̾����Х���ɤޤ��ϲ�褹��
+  # @brief オブジェクトの名前をバインドまたは解決する
   #
-  # ���ꤵ�줿����ƥ����Ȥ��Ф��ƥ��֥������Ȥ� NameComponent �ǻ��ꤵ�줿
-  # ���֤˥Х���ɤ��롣
-  # Ʊ��ս�˴���¾�����Ǥ��Х���ɺѤߤξ��ϡ���¸�ΥХ���ɺѤ����Ǥ�
-  # �������롣
+  # 指定されたコンテキストに対してオブジェクトを NameComponent で指定された
+  # 位置にバインドする。
+  # 同一箇所に既に他の要素がバインド済みの場合は、既存のバインド済み要素を
+  # 取得する。
   #
   # @param self
-  # @param context bind �⤷���� resole �оݥ���ƥ�����
-  # @param name_list ���֥������Ȥ��դ���̾���� NameComponent
-  # @param obj ��Ϣ�դ����� Object
+  # @param context bind もしくは resole 対象コンテキスト
+  # @param name_list オブジェクトに付ける名前の NameComponent
+  # @param obj 関連付けられる Object
   #
-  # @return NameComponent �ǻ��ꤵ�줿���֤˥Х���ɤ���Ƥ��륪�֥�������
+  # @return NameComponent で指定された位置にバインドされているオブジェクト
   #
   # @else
   # @brief Bind of resolve the given name component
@@ -929,20 +929,20 @@ class CorbaNaming:
   ##
   # @if jp
   #
-  # @brief ����ƥ����Ȥ�̾����Х���ɤޤ��ϲ�褹��
+  # @brief コンテキストの名前をバインドまたは解決する
   #
-  # ���ꤵ�줿����ƥ����Ȥ��Ф��� Context�� NameComponent �ǻ��ꤵ�줿���֤�
-  # �Х���ɤ��롣
-  # Context �����ξ��Ͽ�������ƥ����Ȥ��������ƥХ���ɤ��롣
-  # Ʊ��ս�˴���¾�����Ǥ��Х���ɺѤߤξ��ϡ���¸�ΥХ���ɺѤ����Ǥ�
-  # �������롣
+  # 指定されたコンテキストに対して Contextを NameComponent で指定された位置に
+  # バインドする。
+  # Context が空の場合は新規コンテキストを生成してバインドする。
+  # 同一箇所に既に他の要素がバインド済みの場合は、既存のバインド済み要素を
+  # 取得する。
   #
   # @param self
-  # @param context bind �⤷���� resole �оݥ���ƥ�����
-  # @param name_list ����ƥ����Ȥ��դ���̾���� NameComponent
-  # @param new_context ��Ϣ�դ����� Context(�ǥե������:None)
+  # @param context bind もしくは resole 対象コンテキスト
+  # @param name_list コンテキストに付ける名前の NameComponent
+  # @param new_context 関連付けられる Context(デフォルト値:None)
   #
-  # @return NameComponent �ǻ��ꤵ�줿���֤˥Х���ɤ���Ƥ���Context
+  # @return NameComponent で指定された位置にバインドされているContext
   #
   # @else
   # @brief Bind of resolve the given name component
@@ -959,13 +959,13 @@ class CorbaNaming:
 
   ##
   # @if jp
-  # @brief �͡��ॵ���Ф�̾�����������
+  # @brief ネームサーバの名前を取得する
   #
-  # ���ꤷ���͡��ॵ���Ф�̾����������롣
+  # 設定したネームサーバの名前を取得する。
   #
   # @param self
   #
-  # @return �͡��ॵ���Ф�̾��
+  # @return ネームサーバの名前
   #
   # @else
   # @brief Get the name of naming server
@@ -976,13 +976,13 @@ class CorbaNaming:
 
   ##
   # @if jp
-  # @brief �롼�ȥ���ƥ����Ȥ��������
+  # @brief ルートコンテキストを取得する
   #
-  # ���ꤷ���͡��ॵ���ФΥ롼�ȥ���ƥ����Ȥ�������롣
+  # 設定したネームサーバのルートコンテキストを取得する。
   #
   # @param self
   #
-  # @return �͡��ॵ���ФΥ롼�ȥ���ƥ�����
+  # @return ネームサーバのルートコンテキスト
   #
   # @else
   # @brief Get the root context
@@ -993,14 +993,14 @@ class CorbaNaming:
 
   ##
   # @if jp
-  # @brief ���֥������Ȥ��͡��ߥ󥰥���ƥ����Ȥ�Ƚ�̤���
+  # @brief オブジェクトがネーミングコンテキストか判別する
   #
-  # ���ꤷ�����Ǥ��͡��ߥ󥰥���ƥ����Ȥ�Ƚ�̤���
+  # 指定した要素がネーミングコンテキストか判別する
   #
   # @param self
-  # @param obj Ƚ���о�����
+  # @param obj 判別対象要素
   #
-  # @return Ƚ�̷��(�͡��ߥ󥰥���ƥ�����:true������ʳ�:false)
+  # @return 判別結果(ネーミングコンテキスト:true、それ以外:false)
   #
   # @else
   # @brief Whether the object is NamingContext
@@ -1015,15 +1015,15 @@ class CorbaNaming:
 
   ##
   # @if jp
-  # @brief Ϳ����줿̾�����͡��ߥ󥰥���ƥ����Ȥ��ɤ���Ƚ�̤���
+  # @brief 与えられた名前がネーミングコンテキストかどうか判別する
   #
-  # NameComponent �⤷����ʸ����ǻ��ꤷ�����Ǥ��͡��ߥ󥰥���ƥ����Ȥ�
-  # Ƚ�̤���
+  # NameComponent もしくは文字列で指定した要素がネーミングコンテキストか
+  # 判別する
   #
   # @param self
-  # @param name_list Ƚ���о�
+  # @param name_list 判別対象
   #
-  # @return Ƚ�̷��(�͡��ߥ󥰥���ƥ�����:true������ʳ�:false)
+  # @return 判別結果(ネーミングコンテキスト:true、それ以外:false)
   #
   # @else
   # @brief Whether the given name component is NamingContext
@@ -1034,18 +1034,18 @@ class CorbaNaming:
 
   ##
   # @if jp
-  # @brief �͡��ॳ��ݡ��ͥ�Ȥ���ʬ���֤�
+  # @brief ネームコンポーネントの部分を返す
   #
-  # ���ꤵ�줿�ϰϤΥ͡��ॳ��ݡ��ͥ�Ȥ�������롣
-  # ��λ���֤����ꤵ��Ƥ��ʤ����ϡ��Ǹ�����Ǥ�������͡��ॳ��ݡ��ͥ��
-  # ���֤���
+  # 指定された範囲のネームコンポーネントを取得する。
+  # 終了位置が指定されていない場合は、最後の要素を除いたネームコンポーネント
+  # を返す。
   #
   # @param self
-  # @param name_list �����о�NameComponent
-  # @param begin �����ϰϳ��ϰ���
-  # @param end �����ϰϽ�λ����(�ǥե������:None)
+  # @param name_list 検索対象NameComponent
+  # @param begin 取得範囲開始位置
+  # @param end 取得範囲終了位置(デフォルト値:None)
   #
-  # @return NameComponent �������
+  # @return NameComponent 取得結果
   #
   # @else
   # @brief Get subset of given name component
@@ -1067,19 +1067,19 @@ class CorbaNaming:
 
   ##
   # @if jp
-  # @brief �͡��ॳ��ݡ��ͥ�Ȥ�ʸ����ɽ�����������
+  # @brief ネームコンポーネントの文字列表現を取得する
   #
-  # ���ꤷ���ϰϤΥ͡��ॳ��ݡ��ͥ�Ȥ�ʸ����ɽ����������롣
-  # ʸ����ɽ���ϡ�NameComponent�ι�����{Nc[0],Nc[1],Nc[2]������}�ξ�硢
-  #   Nc[0]id.Nc[0].kind/Nc[1]id.Nc[1].kind/Nc[2].id/Nc[2].kind������
-  # �Ȥ��������Ǽ����Ǥ��롣
-  # ��������ʸ�����Ĺ�������ꤷ��Ĺ���ʾ�ξ��ϡ�
-  # ���ꤷ��Ĺ�����ڤ�ΤƤ��롣
+  # 指定した範囲のネームコンポーネントの文字列表現を取得する。
+  # 文字列表現は、NameComponentの構成が{Nc[0],Nc[1],Nc[2]･･･}の場合、
+  #   Nc[0]id.Nc[0].kind/Nc[1]id.Nc[1].kind/Nc[2].id/Nc[2].kind･･･
+  # という形式で取得できる。
+  # 取得した文字列の長さが指定した長さ以上の場合は、
+  # 指定した長さで切り捨てられる。
   #
   # @param self
-  # @param name_list �����о�NameComponent
-  # @param string_name �������ʸ����
-  # @param slen �����о�ʸ���������
+  # @param name_list 取得対象NameComponent
+  # @param string_name 取得結果文字列
+  # @param slen 取得対象文字列最大値
   #
   # @else
   # @brief Get string representation of name component
@@ -1104,17 +1104,17 @@ class CorbaNaming:
 
   ##
   # @if jp
-  # @brief �͡��ॳ��ݡ��ͥ�Ȥ�ʸ����ɽ������ʸ��Ĺ���������
+  # @brief ネームコンポーネントの文字列表現時の文字長を取得する
   #
-  # ���ꤷ���͡��ॳ��ݡ��ͥ�Ȥ�ʸ�����ɽ����������Ĺ����������롣
-  # ʸ����ɽ���ϡ�NameComponent�ι�����{Nc[0],Nc[1],Nc[2]������}�ξ�硢
-  #   Nc[0]id.Nc[0].kind/Nc[1]id.Nc[1].kind/Nc[2].id/Nc[2].kind������
-  # �Ȥ��������Ǽ����Ǥ��롣
+  # 指定したネームコンポーネントを文字列で表現した場合の長さを取得する。
+  # 文字列表現は、NameComponentの構成が{Nc[0],Nc[1],Nc[2]・・・}の場合、
+  #   Nc[0]id.Nc[0].kind/Nc[1]id.Nc[1].kind/Nc[2].id/Nc[2].kind・・・
+  # という形式で取得できる。
   #
   # @param self
-  # @param name_list �����о�NameComponent
+  # @param name_list 取得対象NameComponent
   #
-  # @return ���ꤷ���͡��ॳ��ݡ��ͥ�Ȥ�ʸ����Ĺ��
+  # @return 指定したネームコンポーネントの文字列長さ
   #
   # @else
   # @brief Get string length of the name component's string representation
@@ -1142,16 +1142,16 @@ class CorbaNaming:
 
   ##
   # @if jp
-  # @brief ʸ�����ʬ��
+  # @brief 文字列の分割
   #
-  # ʸ�������ꤷ���ǥ�ߥ���ʬ�䤹�롣
+  # 文字列を指定したデリミタで分割する。
   #
   # @param self
-  # @param input ʬ���о�ʸ����
-  # @param delimiter ʬ���ѥǥ�ߥ�
-  # @param results ʬ����
+  # @param input 分割対象文字列
+  # @param delimiter 分割用デリミタ
+  # @param results 分割結果
   #
-  # @return ʬ�䤷��ʸ��������ǿ�
+  # @return 分割した文字列の要素数
   #
   # @else
   # @brief Split of string
