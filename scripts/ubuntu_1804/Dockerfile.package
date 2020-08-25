@@ -30,6 +30,7 @@ WORKDIR /root/OpenRTM-aist/packages/deb/
 RUN mkdir -p /root/cxx-deb-pkgs\
  && cp /tmp/rtm/build/rules debian/\
  && chmod 775 dpkg_build.sh\
+ && export LD_LIBRARY_PATH=/opt/ros/dashing/lib\
  && ./dpkg_build.sh
 
 RUN cp /root/OpenRTM-aist/packages/openrtm-aist* /root/cxx-deb-pkgs/
