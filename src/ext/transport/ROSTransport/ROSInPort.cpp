@@ -131,7 +131,7 @@ namespace RTC
       return;
     }
     
-    m_messageType = prop.getProperty("marshaling_type", "ros2:std_msgs/Float32");
+    m_messageType = prop.getProperty("marshaling_type", "ros:std_msgs/Float32");
     m_topic = prop.getProperty("ros.topic", "chatter");
     m_topic = "/" + m_topic;
 
