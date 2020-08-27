@@ -25,7 +25,7 @@ import getopt
 import subprocess
 
 if os.name != "nt":
-    pyhelper_path = "@CMAKE_INSTALL_PREFIX@/@INSTALL_RTM_SCRIPT_DIR@py_helper"
+    pyhelper_path = "@CMAKE_INSTALL_PREFIX@/@INSTALL_RTM_SCRIPT_DIR@"
     sys.path.append(pyhelper_path)
 
 
