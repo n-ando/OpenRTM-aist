@@ -18,7 +18,7 @@
 # = OPT_UNINST   : uninstallation
 #
 
-VERSION=2.0.0.04
+VERSION=2.0.0.05
 
 #
 #---------------------------------------
@@ -29,9 +29,10 @@ usage()
   cat <<EOF
   Usage: 
 
-    $(basename ${0}) -l {all|c++} [-r|-d|-s|-c] [-u|--yes]
+    $(basename ${0}) -l {all|c++} [-r|-d|-s|-c] [-t OpenRTM-aist old version number] [-u|--yes]
     $(basename ${0}) [-u]
-    $(basename ${0}) -l {python|java} [-r|-d|-c] [-u|--yes]
+    $(basename ${0}) -l {python} [-r|-d|-c] [-t OpenRTM-aist old version number] [-u|--yes]
+    $(basename ${0}) -l {java} [-r|-d|-c] [-u|--yes]
     $(basename ${0}) -l {openrtp|rtshell} [-d] [-u|--yes]
     $(basename ${0}) {--help|-h|--version}
 
@@ -40,12 +41,14 @@ usage()
     $(basename ${0}) -l all -d
     $(basename ${0}) -l c++ -c --yes
     $(basename ${0}) -l all -u
+    $(basename ${0}) -l all -d -t 1.2.1
 
   Options:
     -l <argument>  language or tool [c++|python|java|openrtp|rtshell|all]
 	all        install packages of all the supported languages and tools
     -r             install robot component runtime
     -d             install robot component developer [default]
+    -t <argument>  OpenRTM-aist old version number
     -s             install tool_packages for build source packages
     -c             install tool_packages for core developer
     -u             uninstall packages
@@ -60,6 +63,7 @@ version()
   echo ${VERSION}
 }
 
+
 #---------------------------------------
 # パッケージリスト
 #---------------------------------------
@@ -70,60 +74,37 @@ default_reposerver="openrtm.org"
 reposervers="openrtm.org"
 reposerver=""
 
+RTM_OLD_VER=1.2.1
+old_openrtm_devel="openrtm-aist-doc=$RTM_OLD_VER-0 openrtm-aist-idl=$RTM_OLD_VER-0 openrtm-aist-dev=$RTM_OLD_VER-0"
+old_openrtm_runtime="openrtm-aist=$RTM_OLD_VER-0 openrtm-aist-example=$RTM_OLD_VER-0"
+old_openrtm_py_devel="openrtm-aist-python-doc=$RTM_OLD_VER-0"
+old_openrtm_py_runtime="openrtm-aist-python=$RTM_OLD_VER-0 openrtm-aist-python-example=$RTM_OLD_VER-0"
+
 #--------------------------------------- C++
 autotools="autoconf libtool libtool-bin"
 base_tools="bc iputils-ping net-tools"
-cxx_devel="gcc g++ make python3-yaml"
+common_devel="python3-yaml"
+cxx_devel="gcc g++ make $common_devel"
 cmake_tools="cmake doxygen graphviz nkf"
 build_tools="subversion git"
 deb_pkg="uuid-dev libboost-filesystem-dev"
 pkg_tools="build-essential debhelper devscripts"
 omni_devel="libomniorb4-dev omniidl"
 omni_runtime="omniorb-nameserver"
-openrtm_devel="openrtm-aist-doc openrtm-aist-dev openrtm-aist-idl"
+openrtm_devel="openrtm-aist-doc openrtm-aist-idl openrtm-aist-dev"
 openrtm_runtime="openrtm-aist openrtm-aist-example"
-
-runtime_pkgs="$omni_runtime $openrtm_runtime"
-u_runtime_pkgs=$runtime_pkgs
-
-src_pkgs="$cxx_devel $cmake_tools $deb_pkg $base_tools $omni_runtime $omni_devel"
-u_src_pkgs="$omni_runtime $omni_devel"
-
-dev_pkgs="$runtime_pkgs $src_pkgs $openrtm_devel"
-u_dev_pkgs="$u_runtime_pkgs $omni_devel $openrtm_devel"
-
-core_pkgs="$src_pkgs $autotools $build_tools $pkg_tools"
-u_core_pkgs="$u_src_pkgs"
 
 #--------------------------------------- Python
 omnipy="omniidl-python3"
 python_runtime="python3 python3-omniorb-omg"
-python_devel="python3-pip $cmake_tools $base_tools $omnipy"
+python_devel="python3-pip $cmake_tools $base_tools $omnipy $common_devel"
 openrtm_py_devel="openrtm-aist-python3-doc"
 openrtm_py_runtime="openrtm-aist-python3 openrtm-aist-python3-example"
-
-python_runtime_pkgs="$omni_runtime $python_runtime $openrtm_py_runtime"
-u_python_runtime_pkgs="$omni_runtime $openrtm_py_runtime"
-
-python_dev_pkgs="$python_runtime_pkgs $python_devel $openrtm_py_devel"
-u_python_dev_pkgs="$u_python_runtime_pkgs $omnipy $openrtm_py_devel"
-
-python_core_pkgs="$omni_runtime $python_runtime $python_devel $build_tools $pkg_tools"
-u_python_core_pkgs="$omni_runtime $omnipy"
 
 #--------------------------------------- Java
 java_build="ant"
 openrtm_j_devel="openrtm-aist-java-doc"
 openrtm_j_runtime="openrtm-aist-java openrtm-aist-java-example"
-
-java_runtime_pkgs="$omni_runtime $openrtm_j_runtime"
-u_java_runtime_pkgs="$omni_runtime $openrtm_j_runtime"
-
-java_dev_pkgs="$java_runtime_pkgs $cmake_tools $base_tools $openrtm_j_devel"
-u_java_dev_pkgs="$omni_runtime $openrtm_j_runtime $openrtm_j_devel"
-
-java_core_pkgs="$omni_runtime $cmake_tools $base_tools $build_tools $java_build $pkg_tools"
-u_java_core_pkgs="$omni_runtime"
 
 #--------------------------------------- OpenRTP
 openrtp_pkgs="openrtp"
@@ -138,9 +119,18 @@ OPT_DEVEL=false
 OPT_SRCPKG=false
 OPT_COREDEVEL=false
 OPT_UNINST=true
+OPT_OLD_RTM=false
 install_pkgs=""
 uninstall_pkgs=""
+arg_all=false
+arg_cxx=false
+arg_python=false
+arg_java=false
+arg_openrtp=false
+arg_rtshell=false
+err_message=""
 }
+
 
 check_arg()
 {
@@ -158,6 +148,58 @@ check_arg()
   esac
 }
 
+set_old_rtm_pkgs()
+{
+  local ver=$1 LF='\n'
+  local msg tmp
+  arg_err=""
+
+  if test "x$ver" = "x$RTM_OLD_VER" ; then
+    OPT_OLD_RTM=true
+    if test "x$arg_cxx" = "xtrue" ||
+       test "x$arg_all" = "xtrue" ; then
+      openrtm_devel=$old_openrtm_devel
+      openrtm_runtime=$old_openrtm_runtime
+      arg_cxx=true
+    fi
+    if test "x$arg_python" = "xtrue" ||
+       test "x$arg_all" = "xtrue"    ; then
+      omnipy="omniidl-python"
+      python_runtime="python python-omniorb-omg"
+      python_devel="python-pip $cmake_tools $base_tools $omnipy"
+      openrtm_py_devel=$old_openrtm_py_devel
+      openrtm_py_runtime=$old_openrtm_py_runtime
+      arg_python=true
+    fi
+    if test "x$arg_java" = "xtrue" ||
+       test "x$arg_all" = "xtrue" ; then
+      msg="[ERROR] Installation of older version of OpenRTM-aist-Java is not supported."
+      echo $msg
+      tmp="$err_message$LF$msg"
+      err_message=$tmp
+      arg_java=false
+    fi
+    if test "x$arg_openrtp" = "xtrue" ||
+       test "x$arg_all" = "xtrue" ; then
+      msg="[ERROR] Installation of older version of OpenRTP-aist is not supported."
+      echo $msg
+      tmp="$err_message$LF$msg"
+      err_message=$tmp
+      arg_openrtp=false
+    fi
+    if test "x$arg_rtshell" = "xtrue" ||
+       test "x$arg_all" = "xtrue" ; then
+      msg="[ERROR] Installation of older version of rtshell is not supported."
+      echo $msg
+      tmp="$err_message$LF$msg"
+      err_message=$tmp
+      arg_rtshell=false
+    fi
+  else
+    arg_err=$ver
+  fi
+}
+
 get_opt()
 { 
   # オプション指定が無い場合のデフォルト設定
@@ -167,7 +209,7 @@ get_opt()
   fi
   arg_num=$#
  
-  OPT=`getopt -o l:rcsdhu -l help,yes,version -- $@` > /dev/null 2>&1
+  OPT=`getopt -o l:rcsdt:hu -l help,yes,version -- $@` > /dev/null 2>&1
   # return code check
   if [ $? -ne 0 ] ; then
     echo "[ERROR] Invalid option '$1'"
@@ -205,6 +247,16 @@ get_opt()
               if [ "$arg_err" = "-1" ]; then
                 echo "[ERROR] Invalid argument '$2'"
                 usage
+                exit
+              fi
+              shift ;;
+        -t )  if [ -z "$2" ] ; then
+                echo "$1 option requires an argument." 1>&2
+                exit
+              fi
+              set_old_rtm_pkgs $2
+              if test ! "x$arg_err" = "x" ; then
+                echo "[ERROR] Invalid argument '$2'. Only $RTM_OLD_VER supported. "
                 exit
               fi
               shift ;;
@@ -360,7 +412,7 @@ install_packages () {
 #    exit 0
   for p in $*; do
     echo $msg9 $p
-    echo $install_pkgs | grep $p > /dev/null 2>&1
+    echo $install_pkgs | grep -x $p > /dev/null 2>&1
     if [ $? -ne 0 ]; then
       tmp_pkg="$install_pkgs $p"
       install_pkgs=$tmp_pkg
@@ -395,7 +447,7 @@ reverse () {
 uninstall_packages () {
   for p in $*; do
     echo $msg11 $p
-    echo $uninstall_pkgs | grep $p > /dev/null 2>&1
+    echo $uninstall_pkgs | grep -x $p > /dev/null 2>&1
     if [ $? -ne 0 ]; then
       tmp_pkg="$uninstall_pkgs $p"
       uninstall_pkgs=$tmp_pkg
@@ -410,9 +462,48 @@ uninstall_packages () {
 }
 
 #---------------------------------------
-# install_branch
+# set_package_content
 #---------------------------------------
-install_branch()
+set_package_content()
+{
+#--------------------------------------- C++
+runtime_pkgs="$omni_runtime $openrtm_runtime"
+u_runtime_pkgs=$runtime_pkgs
+
+src_pkgs="$cxx_devel $cmake_tools $deb_pkg $base_tools $omni_runtime $omni_devel"
+u_src_pkgs="$omni_runtime $omni_devel"
+
+dev_pkgs="$runtime_pkgs $src_pkgs $openrtm_devel"
+u_dev_pkgs="$u_runtime_pkgs $omni_devel $openrtm_devel"
+
+core_pkgs="$src_pkgs $autotools $build_tools $pkg_tools"
+u_core_pkgs="$u_src_pkgs"
+
+#--------------------------------------- Python
+python_runtime_pkgs="$omni_runtime $python_runtime $openrtm_py_runtime"
+u_python_runtime_pkgs="$omni_runtime $openrtm_py_runtime"
+
+python_dev_pkgs="$python_runtime_pkgs $python_devel $openrtm_py_devel"
+u_python_dev_pkgs="$u_python_runtime_pkgs $omnipy $openrtm_py_devel"
+
+python_core_pkgs="$omni_runtime $python_runtime $python_devel $build_tools $pkg_tools"
+u_python_core_pkgs="$omni_runtime $omnipy"
+
+#--------------------------------------- Java
+java_runtime_pkgs="$omni_runtime $openrtm_j_runtime"
+u_java_runtime_pkgs="$omni_runtime $openrtm_j_runtime"
+
+java_dev_pkgs="$java_runtime_pkgs $cmake_tools $base_tools $openrtm_j_devel"
+u_java_dev_pkgs="$omni_runtime $openrtm_j_runtime $openrtm_j_devel"
+
+java_core_pkgs="$omni_runtime $cmake_tools $base_tools $build_tools $java_build $pkg_tools"
+u_java_core_pkgs="$omni_runtime"
+}
+
+#---------------------------------------
+# install_proc
+#---------------------------------------
+install_proc()
 {
   if test "x$arg_cxx" = "xtrue" ; then
     if test "x$OPT_COREDEVEL" = "xtrue" ; then
@@ -469,9 +560,9 @@ install_branch()
 }
 
 #---------------------------------------
-# uninstall_branch
+# uninstall_proc
 #---------------------------------------
-uninstall_branch()
+uninstall_proc()
 {
   if test "x$arg_cxx" = "xtrue" ; then
     if test "x$OPT_COREDEVEL" = "xtrue" ; then
@@ -614,6 +705,21 @@ EOF
 init_param
 get_opt $@
 
+# 最終オプション確認
+if test "x$arg_all" = "xfalse" ; then
+  if test "x$arg_cxx" = "xfalse" ; then
+    if test "x$arg_python" = "xfalse" ; then
+      if test "x$arg_java" = "xfalse" ; then
+        if test "x$arg_openrtp" = "xfalse" ; then
+          if test "x$arg_rtshell" = "xfalse" ; then
+            exit
+          fi
+        fi
+      fi
+    fi
+  fi
+fi
+
 check_lang
 check_root
 check_reposerver
@@ -622,7 +728,8 @@ update_source_list
 apt-get autoclean
 apt-get update
 
-if test "x$arg_all" = "xtrue" ; then
+if test "x$arg_all" = "xtrue" &&
+   test "x$OPT_OLD_RTM" = "xfalse" ; then
   arg_cxx=true
   arg_python=true
   arg_java=true
@@ -638,11 +745,16 @@ if test "x$arg_all" = "xtrue" ; then
   fi
 fi
 
+set_package_content
+
 if test "x$OPT_UNINST" = "xtrue" ; then
-  install_branch
+  install_proc
 else
-  uninstall_branch
+  uninstall_proc
 fi
 
 install_result $install_pkgs
 uninstall_result $uninstall_pkgs
+if test ! "x$err_message" = "x" ; then
+  echo $err_message
+fi
