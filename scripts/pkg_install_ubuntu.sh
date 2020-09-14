@@ -18,7 +18,7 @@
 # = OPT_UNINST   : uninstallation
 #
 
-VERSION=2.0.0.05
+VERSION=2.0.0.06
 
 #
 #---------------------------------------
@@ -98,7 +98,13 @@ openrtm_runtime="openrtm-aist openrtm-aist-example"
 omnipy="omniidl-python3"
 python_runtime="python3 python3-omniorb-omg"
 python_devel="python3-pip $cmake_tools $base_tools $omnipy $common_devel"
-openrtm_py_devel="openrtm-aist-python3-doc"
+res=`grep 16.04 /etc/lsb-release`
+if test ! "x$res" = "x" ; then
+  # 16.04
+  openrtm_py_devel=""
+else
+  openrtm_py_devel="openrtm-aist-python3-doc"
+fi
 openrtm_py_runtime="openrtm-aist-python3 openrtm-aist-python3-example"
 
 #--------------------------------------- Java
