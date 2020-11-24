@@ -17,7 +17,7 @@ PNAME=`basename $cosnames`
 HOSTNAME=`hostname`
 OSNAME=`uname -s`
 LOGDIR="/tmp"
-DEBUG="TRUE"
+DEBUG=""
 
 usage()
 {
