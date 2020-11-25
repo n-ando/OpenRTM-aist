@@ -13,9 +13,10 @@
 #  $Id$
 #
 
-pname=`basename $cosnames`
-hostname=`hostname`
-currdir=`pwd`
+PNAME=`basename $cosnames`
+HOSTNAME=`hostname`
+OSNAME=`uname -s`
+LOGDIR="/tmp"
 DEBUG=""
 
 usage()
@@ -41,6 +42,7 @@ EOF
 
 get_opt()
 {
+    debug "get_opt()"
     # Global variables
     FORCEKILL=""
     PASSWORD=""
@@ -65,6 +67,11 @@ get_opt()
                 ;;
         esac
     done
+    debug "Option related variables:"
+    debug "  PORT " $PORT
+    debug "  FORCEKILL " $FORCEKILL
+    debug "  STOP" $STOPNAMESERVICE
+    debug "  PASSWORD" $PASSWORD
 }
 #
 # debug <text>
@@ -76,7 +83,7 @@ get_opt()
 debug()
 {
     if test "x$DEBUG" != "x"; then
-        echo $*
+        echo $* >> /tmp/rtm-naming_debug.log
     fi
 }
 
@@ -89,9 +96,15 @@ debug()
 # @return 0 process that is using the port was found
 #         1 process not found
 #
+# Linux: netstat -tlnp
+#        t: TCP
+#        l: listening
+#        n: numeric IP address
+#        p: print program and PID
 #
 get_pid_of_nsport()
 {
+    debug "get_pid_of_nsport()"
     _port=$1
     debug "netstat -tlnp 2> /dev/null | grep $_port | awk '{print $7;}'"
     netstat_tanp=`netstat -tlnp`
@@ -113,7 +126,43 @@ get_pid_of_nsport()
     debug "$_port port is used by $pname_of_nsport (pid = $_pid)."
     return 0
 }
+#
+# get_pid_of_nsport <port_number> for macOS
+#
+# @param  pid_of_nsport: Process ID of a process which is using the port.
+# @param  pname_of_nsport: Process name which is using the port is set
+# @param  pid_of_nsport: Process ID which is using the port is set
+# @return 0 process that is using the port was found
+#         1 process not found
+#
+# macOS: lsof
+#        -n: numeric IP address (not hostname)
+#        -P: numeric Port number (not service name)
+#        -i: specifying address/port, :<port> specifies port
+#
+get_pid_of_nsport_macos()
+{
+    debug "get_pid_of_nsport_macos()"
+    _port=$1
+    debug "lsof -n -P -i :$_port | grep LISTEN"
+    if test "x$PASSWORD" = "x"; then
+        _netstat=`sudo -S lsof -n -P -i :$_port | grep LISTEN`
+    else
+        _netstat=`echo $PASSWORD | sudo -S lsof -n -P -i :$_port | grep LISTEN`
+    fi
+    debug "A possible process that is using $_port port:" $_netstat
+    if test "x$_netstat" = "x"; then
+        echo "No process using port number ${_port} on the system."
+        debug "No process using port number ${_port} on the system."
+        return 1
+    fi
 
+    _pid=`echo $_netstat | awk '{print $2;}'`
+    pname_of_nsport=`echo $_netstat | awk '{print $1;}'`
+    pid_of_nsport=$_pid
+    debug "$_port port is used by $pname_of_nsport (pid = $_pid)."
+    return 0
+}
 
 #
 # is_launch_from_init <prog_name> (<pid>)
@@ -176,6 +225,7 @@ is_started_from_init()
 #
 check_cosname()
 {
+    debug "check_cosname()"
     if test ! -f $cosnames ; then
 	echo "Name service program ($cosnames) not found."
 	echo "Please install or chech rtm-naming script."
@@ -185,16 +235,17 @@ check_cosname()
 
 delete_omninames_files()
 {
+    debug "delete_omninames_files()"
     if test "x$PASSWORD" = "x" ; then
-        rm -f ./omninames-$hostname.log
-        rm -f ./omninames-$hostname.bak
-        rm -f ./omninames-$hostname.dat
+        rm -f $LOGDIR/omninames-$HOSTNAME.log
+        rm -f $LOGDIR/omninames-$HOSTNAME.bak
+        rm -f $LOGDIR/omninames-$HOSTNAME.dat
     else
-        echo $PASSWORD | sudo -S rm -f ./omninames-$hostname.log
-        echo $PASSWORD | sudo -S rm -f ./omninames-$hostname.bak
-        echo $PASSWORD | sudo -S rm -f ./omninames-$hostname.dat
+        echo $PASSWORD | sudo -S rm -f $LOGDIR/omninames-$HOSTNAME.log
+        echo $PASSWORD | sudo -S rm -f $LOGDIR/omninames-$HOSTNAME.bak
+        echo $PASSWORD | sudo -S rm -f $LOGDIR/omninames-$HOSTNAME.dat
     fi
-    debug "omninames-$hostname files deleted."
+    debug "omninames-$HOSTNAME files deleted."
 }
 
 #
@@ -204,12 +255,17 @@ delete_omninames_files()
 #
 specified_port_used_check()
 {
-    get_pid_of_nsport $PORT
+    debug "pecified_port_used_check()"
+    if test "x$OSNAME" = "xDarwin" ; then
+        get_pid_of_nsport_macos $PORT
+    else
+        get_pid_of_nsport $PORT
+    fi
     if test $? -eq 0; then
         debug "The Process information using the port could be obtained."
         # If "port" is used by other program -> abort
 
-        pids=`pgrep $pname`
+        pids=`pgrep $PNAME`
         matchflag=0
         for p in $pids; do
             if test "x$pid_of_nsport" = "x$p"; then
@@ -217,8 +273,8 @@ specified_port_used_check()
             fi
         done
         if test $matchflag -eq 0; then
-            echo "$pname_of_nsport (not $pname) is using the port."
-            echo "Starting $pname aborted. Please use the other port."
+            echo "$pname_of_nsport (not $PNAME) is using the port."
+            echo "Starting $PNAME aborted. Please use the other port."
             exit 1
         fi
     else
@@ -235,6 +291,7 @@ specified_port_used_check()
 #
 stop_omninames_by_init_script()
 {
+    debug "stop_omninames_by_init_script()"
     echo "omniNames might be started $init_script."
 
     if test "x$FORCEKILL" = "x" && test "x$STOPNAMESERVICE" = "x" ; then
@@ -248,13 +305,13 @@ stop_omninames_by_init_script()
     echo "Stopping omniNames by $init_script."
     if test "x$PASSWORD" = "x" ; then
        sudo $init_script stop
-       sudo rm -f /var/run/$pname.pid
+       sudo rm -f /var/run/$PNAME.pid
     else
         echo $PASSWORD | sudo -S $init_script stop
-        echo $PASSWORD | sudo -S rm -f /var/run/$pname.pid
+        echo $PASSWORD | sudo -S rm -f /var/run/$PNAME.pid
     fi
     debug "$init_script stop"
-    debug "/var/run/$pname.pid  are deleted"
+    debug "/var/run/$PNAME.pid  are deleted"
     delete_omninames_files
     return 0
 
@@ -278,7 +335,8 @@ stop_omninames_by_init_script()
 #
 stop_existing_ns()
 {
-    debug "---stop_existing_ns"
+    debug "stop_existing_ns()"
+    debug "---stop_existing_ns---"
 
     # Find a process which is using specified port.
     specified_port_used_check
@@ -288,14 +346,14 @@ stop_existing_ns()
 
     # omniNames is not started by init script
     if test $? -ne 0; then
-        debug "$pname might not be started from init script."
+        debug "$PNAME might not be started from init script."
         if test "x$pid_of_nsport" != "x" ; then
-            echo "$pname (pid: $pid_of_nsport) is running"
+            echo "$PNAME (pid: $pid_of_nsport) is running"
 
             # Restart naming service
             if test "x$FORCEKILL" = "x" ; then
                 if test "x$STOPNAMESERVICE" = "x" ; then
-		            read -p "Kill anyway and start $pname again? (y/N)" killns
+		            read -p "Kill anyway and start $PNAME again? (y/N)" killns
 	            else
                     read -p "Kill anyway? (y/N)" killns
 		        fi
@@ -309,12 +367,12 @@ stop_existing_ns()
             else
                 echo $PASSWORD | sudo -S kill -9 $pid_of_nsport
             fi
-            echo "$pname (pid: $pid_of_nsport) are killed"
-            debug "$pname (pid: $pid_of_nsport) are killed"
+            echo "$PNAME (pid: $pid_of_nsport) are killed"
+            debug "$PNAME (pid: $pid_of_nsport) are killed"
             delete_omninames_files
             return 0
         fi
-        echo "No running $pname found. The process using the port $PORT "
+        echo "No running $PNAME found. The process using the port $PORT "
         echo "cannot be estimated. Arboting"
         exit 1
     fi
@@ -334,20 +392,40 @@ stop_existing_ns()
 #
 start_omninames()
 {
-    debug "---start_omninames"
-    echo 'Starting omniORB omniNames: '$hostname':'$PORT
+    debug "start_omninames()"
+    debug "---start_omninames---"
+    echo  'Starting omniORB omniNames: '$HOSTNAME':'$PORT
+    debug 'Starting omniORB omniNames: '$HOSTNAME':'$PORT
     delete_omninames_files
     if test "x$PASSWORD" = "x" ; then
-        $cosnames -start $PORT -logdir $currdir &
+        debug "$cosnames -start $PORT -logdir $LOGDIR"
+        $cosnames -start $PORT -logdir $LOGDIR &
     else
-        echo $PASSWORD | sudo -S $cosnames -start $PORT -logdir $currdir &
+        debug "echo $PASSWORD | sudo -S $cosnames -start $PORT -logdir $LOGDIR"
+        echo $PASSWORD | sudo -S $cosnames -start $PORT -logdir $LOGDIR &
     fi
-    ret=$!
+    if test $? != 0; then
+        debug "omniNames start failed."
+        return 1
+    else
+        debug "omniNames started."
+    fi
+
+    pid=$!
+    debug "PID: " $!
+    debug "Return: " $?
+
+    # After omniNames started, if another omniNames already working in
+    # the same port, omniNames fails and terminated after a few seconds.
+    # So one second sleep is necessary.
     sleep 1
-    debug "return code of omniNames:" $ret
-    omnip=`ps $! | wc -l`
-    if test $omnip -gt 1; then
-        echo "omniNames properly started"
+
+    # check if the omniNames strill working
+    omnipid=`ps $pid | grep $pid | grep -v grep | awk '{print $1;}'`
+    debug   "omnipid: "$omnipid
+    if test "x$omnipid" != "x" -a $omnipid -gt 1; then
+        debug "omniNames properly started"
+        echo  "omniNames properly started"
         exit 0
     fi
     return 1 
@@ -355,6 +433,7 @@ start_omninames()
 
 omniname()
 {
+    debug "omniname()"
     # Check cosname variable is properly set
     check_cosname
 
@@ -385,11 +464,12 @@ omniname()
 #
 start_taonames()
 {
+    debug "start_taonames()"
     if test ! -f $cosnames ; then
 	echo "TAO Naming_Service not found. Aborting."
 	exit 1
     fi
-    echo 'Starting TAO Naming_Service: '$hostname':'$PORT
+    echo 'Starting TAO Naming_Service: '$HOSTNAME':'$PORT
     $cosnames -m 0 -ORBListenEndpoints iiop://:$PORT &
     ret=$!
     sleep 1
@@ -405,6 +485,7 @@ start_taonames()
 
 taonames()
 {
+    debug "taonames()"
     # Check cosname variable is properly set
     check_cosname
 
