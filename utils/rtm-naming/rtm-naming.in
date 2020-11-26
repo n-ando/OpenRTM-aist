@@ -12,7 +12,7 @@
 
 COSNAMES="@COSNAMES@"
 ORB="@CORBA@"
-PNAME=`basename $cosnames`
+PNAME=`basename $COSNAMES`
 HOSTNAME=`hostname`
 OSNAME=`uname -s`
 LOGDIR="/tmp"
@@ -196,8 +196,8 @@ is_started_from_init()
 	if test $_pid -eq $_var_run_pid; then
 	    debug "The process $_pname ($_pid) might be started " \
 		"from init script."
-	    debug "searching init script: $cosnames"
-	    init_script=`grep $cosnames /etc/init.d/* | awk 'BEGIN{FS=":";}{if(FNR==1){print $1;}}'`
+	    debug "searching init script: $COSNAMES"
+	    init_script=`grep $COSNAMES /etc/init.d/* | awk 'BEGIN{FS=":";}{if(FNR==1){print $1;}}'`
 
 	    if test "x$init_script" = "x"; then
 
@@ -225,8 +225,8 @@ is_started_from_init()
 check_cosname()
 {
     debug "check_cosname()"
-    if test ! -f $cosnames ; then
-	echo "Name service program ($cosnames) not found."
+    if test ! -f $COSNAMES ; then
+	echo "Name service program ($COSNAMES) not found."
 	echo "Please install or chech rtm-naming script."
 	exit 1
     fi
@@ -413,8 +413,8 @@ start_omninames()
     debug 'Starting omniORB omniNames: '$HOSTNAME':'$PORT
     delete_omninames_files
 
-    debug "$cosnames -start $PORT -logdir $LOGDIR"
-    $cosnames -start $PORT -logdir $LOGDIR &
+    debug "$COSNAMES -start $PORT -logdir $LOGDIR"
+    $COSNAMES -start $PORT -logdir $LOGDIR &
     if test $? != 0; then
         debug "omniNames start failed."
         return 1
@@ -479,12 +479,12 @@ omniname()
 start_taonames()
 {
     debug "start_taonames()"
-    if test ! -f $cosnames ; then
+    if test ! -f $COSNAMES ; then
 	echo "TAO Naming_Service not found. Aborting."
 	exit 1
     fi
     echo 'Starting TAO Naming_Service: '$HOSTNAME':'$PORT
-    $cosnames -m 0 -ORBListenEndpoints iiop://:$PORT &
+    $COSNAMES -m 0 -ORBListenEndpoints iiop://:$PORT &
     ret=$!
     sleep 1
     debug "return code of TAO Naming_Service:" $ret
@@ -522,7 +522,7 @@ taonames()
 #------------------------------------------------------------
 get_opt $@
 
-case $orb in
+case $ORB in
 	omniORB)
 		omniname
 		;;
