@@ -170,13 +170,9 @@ namespace RTC
         throw InvalidOperation("Invalid file name");
       }
 
-    //  if (!init_func)
-
-    ModuleInitFunc init;
-
-    init = reinterpret_cast<ModuleInitFunc>(this->symbol(name, init_func));
-
-    init(&(Manager::instance()));
+    void (*initfptr)(Manager*);
+    *reinterpret_cast<void**>(&initfptr) = this->symbol(name, init_func);
+    (*initfptr)(&(Manager::instance()));
 
     return name;
   }
