@@ -19,6 +19,7 @@
 #include <rtm/RTC.h>
 #include <rtm/PeriodicECSharedComposite.h>
 #include <rtm/Manager.h>
+#include <rtm/ConfigurationListener.h>
 
 #include <algorithm>
 #include <iostream>
@@ -631,8 +632,12 @@ namespace RTC
                                m_org->getObjRef());
     bindParameter("members", m_members, "", stringToStrVec);
 
-    m_configsets.setOnSetConfigurationSet(new setCallback(m_org));
-    m_configsets.setOnAddConfigurationSet(new addCallback(m_org));
+    m_configsets.addConfigurationSetListener(
+        ConfigurationSetListenerType::ON_SET_CONFIG_SET,
+        new setCallback(m_org));
+    m_configsets.addConfigurationSetListener(
+        ConfigurationSetListenerType::ON_ADD_CONFIG_SET,
+        new addCallback(m_org));
 
     m_properties["exec_cxt.periodic.sync_transition"] = "NO";
     m_properties["exec_cxt.periodic.sync_activation"] = "NO";
