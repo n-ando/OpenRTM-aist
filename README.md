@@ -1,5 +1,6 @@
-![logo](https://user-images.githubusercontent.com/11814060/74723192-84c34200-527d-11ea-835f-1496fb9d0bbb.png)
-<span style="font-size:400%"> OpenRTM-aist </span>
+<img src="https://user-images.githubusercontent.com/11814060/74723192-84c34200-527d-11ea-835f-1496fb9d0bbb.png" align="right">
+
+# OpenRTM-aist
 
 This is a release of OpenRTM-aist-2.0, dual-license open source RT-Middleware.
 
