@@ -7,8 +7,8 @@
  * $Id$
  */
 
-#ifndef __STRINGIN_h__
-#define __STRINGIN_h__
+#ifndef STRINGIN_H
+#define STRINGIN_H
 
 
 #include <rtm/RtcBase.h>
@@ -88,5 +88,5 @@ extern "C" {
   void StringInDelete(RtcBase* p);
   void StringInInit(RtcManager* manager);
 };
-#endif // __STRINGIN_h__
+#endif // STRINGIN_H
 

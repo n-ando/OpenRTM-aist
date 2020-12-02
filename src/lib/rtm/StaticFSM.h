@@ -87,7 +87,7 @@
     S(::Macho::_StateInstance & instance)                               \
       : ::RTC::Link<S, SUPER>(instance)                                 \
     {                                                                   \
-      using MustDeriveFromLink = ::__SameType<::RTC::Link<S, SUPER>,    \
+      using MustDeriveFromLink = ::CheckSameType<::RTC::Link<S, SUPER>,    \
                                               LINK>::Check;             \
       static_assert(static_cast<MustDeriveFromLink*>(nullptr)==nullptr, \
                     "dummy assert for suppress warning");               \

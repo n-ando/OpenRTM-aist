@@ -7,8 +7,8 @@
  * $Id$
  */
 
-#ifndef __STRINGOUT_h__
-#define __STRINGOUT_h__
+#ifndef STRINGOUT_H
+#define STRINGOUT_H
 
 
 #include <rtm/RtcBase.h>
@@ -88,5 +88,5 @@ extern "C" {
   void StringOutDelete(RtcBase* p);
   void StringOutInit(RtcManager* manager);
 };
-#endif // __STRINGOUT_h__
+#endif // STRINGOUT_H
 
