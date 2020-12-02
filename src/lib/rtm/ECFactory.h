@@ -48,10 +48,10 @@ namespace RTC
    *
    * @endif
    */
-  template <class _New>
+  template <class T_New>
   ExecutionContextBase* ECCreate()
   {
-    return new _New();
+    return new T_New();
   }
 
   /*!
@@ -73,7 +73,7 @@ namespace RTC
    *
    * @endif
    */
-  template <class _Delete>
+  template <class T_Delete>
   void ECDelete(ExecutionContextBase* ec)
   {
     delete ec;
