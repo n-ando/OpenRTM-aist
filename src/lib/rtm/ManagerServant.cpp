@@ -200,35 +200,6 @@ namespace RTM
 #endif
       }
 
-    if (false)
-      {
-        // copy slaves' module profiles
-        std::lock_guard<std::mutex> guard(m_slaveMutex);
-        RTC_DEBUG(("%d slaves exists.", m_slaves.length()));
-        for (int i(0), len(m_slaves.length()); i < len; ++i)
-          {
-            try
-              {
-                if (!CORBA::is_nil(m_slaves[i]))
-                  {
-                    ::RTM::ModuleProfileList_var sprof;
-                    sprof = m_slaves[i]->get_loadable_modules();
-#ifndef ORB_IS_RTORB
-                    CORBA_SeqUtil::push_back_list(cprof.inout(), sprof.in());
-#else  // ORB_IS_RTORB
-                    CORBA_SeqUtil::push_back_list(cprof, sprof);
-#endif  // ORB_IS_RTORB
-                    continue;
-                  }
-              }
-            catch (...)
-              {
-                RTC_INFO(("slave (%d) has disappeared.", i));
-                m_slaves[i] = RTM::Manager::_nil();
-              }
-            CORBA_SeqUtil::erase(m_slaves, i); --i;
-          }
-      }
     return cprof._retn();
   }
 
