@@ -171,7 +171,7 @@ namespace coil
    */
   int uname(utsname* name)
   {
-    if (name == nullptr) return 0;
+    if (name == nullptr) { return 0; }
     int ret(0);
 
     // name.sysname
@@ -203,9 +203,9 @@ namespace coil
             VER_SET_CONDITION(condition, VER_MAJORVERSION, VER_EQUAL);
             VER_SET_CONDITION(condition, VER_MINORVERSION, VER_EQUAL);
 
-            if (::VerifyVersionInfo(&version_info, VER_MAJORVERSION | VER_MINORVERSION, condition) != 0)
+            if (::VerifyVersionInfo(&version_info, VER_MAJORVERSION | VER_MINORVERSION, condition) != FALSE)
             {
-                const char *os;
+                const char* os;
                 if (version_info.dwPlatformId == VER_PLATFORM_WIN32_NT)
                 {
                     os = "Windows NT %d.%d";
@@ -328,7 +328,9 @@ namespace coil
     if (GetComputerNameExA(ComputerNameDnsHostname,
                             name->nodename,
                             &len) == FALSE)
-    ret = -1;
+    {
+        ret = -1;
+    }
     return ret;
   }
 
