@@ -82,8 +82,8 @@ void usage()
 
 int main (int argc, char** argv)
 {
-  int _argc(0);
-  char** _argv(0);
+  int argc_(0);
+  char** argv_(0);
 
   std::string subs_type("flush");
   std::string period;
@@ -162,7 +162,7 @@ int main (int argc, char** argv)
         }
     }
 
-  CORBA::ORB_var orb = CORBA::ORB_init(_argc, _argv);
+  CORBA::ORB_var orb = CORBA::ORB_init(argc_, argv_);
   std::string name_server("localhost:");
   name_server.append(port_no);
   CorbaNaming naming(orb, name_server.c_str());

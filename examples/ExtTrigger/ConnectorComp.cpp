@@ -61,9 +61,9 @@ void usage()
 
 int main (int argc, char** argv)
 {
-  int _argc(0);
-  char** _argv;
-  _argv = nullptr;
+  int argc_(0);
+  char** argv_;
+  argv_ = nullptr;
 
   std::string subs_type;
   std::string period;
@@ -118,7 +118,7 @@ int main (int argc, char** argv)
   std::cout << "skip count: " << skip_count << std::endl;
 
 
-  CORBA::ORB_var orb = CORBA::ORB_init(_argc, _argv);
+  CORBA::ORB_var orb = CORBA::ORB_init(argc_, argv_);
   CorbaNaming naming(orb, "localhost");
 
   CorbaConsumer<RTObject> conin, conout;
