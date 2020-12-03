@@ -1212,7 +1212,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
             || !coil::stringTo(tm,
                                m_config["manager.auto_shutdown_duration"].c_str()))
           {
-            tm = std::chrono::seconds(10);
+            tm = std::chrono::seconds(20);
           }
         addTask([this]{
           if (getComponents().empty()) { terminate();
