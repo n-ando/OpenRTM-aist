@@ -26,13 +26,14 @@
 
 namespace coil
 {
-#define _SIG_WORDS      4
-#define _SIG_MAXSIG     NSIG
+#define COIL_SIG_WORDS      4
+#define COIL_SIG_MAXSIG     NSIG
 
   extern "C" using SignalHandler = void (*)(int);
-  typedef struct __sigset {
-    unsigned int __bits[_SIG_WORDS];
-  } sigset_t;
+  struct sigset_t
+  {
+    unsigned int _bits[COIL_SIG_WORDS];
+  };
 
   /*!
    * @if jp

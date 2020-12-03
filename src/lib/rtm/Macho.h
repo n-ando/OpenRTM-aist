@@ -1,5 +1,5 @@
-﻿#ifndef __MACHO_HPP__
-#define __MACHO_HPP__
+﻿#ifndef MACHO_HPP
+#define MACHO_HPP
 
 // Macho - C++ Machine Objects
 //
@@ -211,11 +211,11 @@ class TestAccess;
 ////////////////////////////////////////////////////////////////////////////////
 // Check type equality at compile time.
 template<class T, class U>
-struct __SameType {
+struct CheckSameType {
 };
 
 template<class T>
-struct __SameType<T, T> {
+struct CheckSameType<T, T> {
 	using Check = bool;
 };
 
@@ -240,7 +240,7 @@ public: \
 	/* For the user a state class "constructor" and "destructor" are its entry and exit method! */ \
 	S(::Macho::_StateInstance & instance) : ::Macho::Link<S, SUPER>(instance) { \
 		/* Compile time check: S must derive directly from Link<S, SUPER> */ \
-		using MustDeriveFromLink = ::__SameType< ::Macho::Link<S, SUPER>, LINK>::Check; \
+		using MustDeriveFromLink = ::CheckSameType< ::Macho::Link<S, SUPER>, LINK>::Check; \
 	} \
 	~S() {} \
 	static const char * _state_name() { return #S; } \
@@ -1667,7 +1667,7 @@ namespace Macho {
 
 		Machine() {
 			// Compile time check: TOP must directly derive from TopBase<TOP>
-			using MustDeriveFromTopBase = typename __SameType<TopBase<TOP>, typename TOP::SUPER>::Check;
+			using MustDeriveFromTopBase = typename CheckSameType<TopBase<TOP>, typename TOP::SUPER>::Check;
 			// suppress unused-typdefs warnig
 			static_assert(static_cast<MustDeriveFromTopBase*>(nullptr)==nullptr, "dummy");
 
@@ -1679,7 +1679,7 @@ namespace Macho {
 		// other than TOP on startup.
 		Machine(const Alias & state) {
 			// Compile time check: TOP must directly derive from TopBase<TOP>
-			using MustDeriveFromTopBase = typename __SameType<TopBase<TOP>, typename TOP::SUPER>::Check;
+			using MustDeriveFromTopBase = typename CheckSameType<TopBase<TOP>, typename TOP::SUPER>::Check;
 			// suppress unused-typdefs warnig
 			static_assert(static_cast<MustDeriveFromTopBase*>(nullptr)==nullptr, "dummy");
 
@@ -1974,4 +1974,4 @@ namespace Macho {
 } // namespace Macho
 
 
-#endif // __MACHO_HPP__
+#endif // MACHO_HPP
