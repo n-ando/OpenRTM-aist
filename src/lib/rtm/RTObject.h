@@ -4854,142 +4854,144 @@ namespace RTC
 
     inline void preOnInitialize(UniqueId ec_id)
     {
-      m_actionListeners.notify(PRE_ON_INITIALIZE, ec_id);
+      m_actionListeners.notify(PreComponentActionListenerType::PRE_ON_INITIALIZE, ec_id);
     }
 
     inline void preOnFinalize(UniqueId ec_id)
     {
-      m_actionListeners.notify(PRE_ON_FINALIZE, ec_id);
+      m_actionListeners.notify(PreComponentActionListenerType::PRE_ON_FINALIZE, ec_id);
     }
 
     inline void preOnStartup(UniqueId ec_id)
     {
-      m_actionListeners.notify(PRE_ON_STARTUP, ec_id);
+      m_actionListeners.notify(PreComponentActionListenerType::PRE_ON_STARTUP, ec_id);
     }
 
     inline void preOnShutdown(UniqueId ec_id)
     {
-      m_actionListeners.notify(PRE_ON_SHUTDOWN, ec_id);
+      m_actionListeners.notify(PreComponentActionListenerType::PRE_ON_SHUTDOWN, ec_id);
     }
 
     inline void preOnActivated(UniqueId ec_id)
     {
-      m_actionListeners.notify(PRE_ON_ACTIVATED, ec_id);
+      m_actionListeners.notify(PreComponentActionListenerType::PRE_ON_ACTIVATED, ec_id);
     }
 
     inline void preOnDeactivated(UniqueId ec_id)
     {
-      m_actionListeners.notify(PRE_ON_DEACTIVATED, ec_id);
+      m_actionListeners.notify(PreComponentActionListenerType::PRE_ON_DEACTIVATED, ec_id);
     }
 
     inline void preOnAborting(UniqueId ec_id)
     {
-      m_actionListeners.notify(PRE_ON_ABORTING, ec_id);
+      m_actionListeners.notify(PreComponentActionListenerType::PRE_ON_ABORTING, ec_id);
     }
 
     inline void preOnError(UniqueId ec_id)
     {
-      m_actionListeners.notify(PRE_ON_ERROR, ec_id);
+      m_actionListeners.notify(PreComponentActionListenerType::PRE_ON_ERROR, ec_id);
     }
 
     inline void preOnReset(UniqueId ec_id)
     {
-      m_actionListeners.notify(PRE_ON_RESET, ec_id);
+      m_actionListeners.notify(PreComponentActionListenerType::PRE_ON_RESET, ec_id);
     }
 
     inline void preOnExecute(UniqueId ec_id)
     {
-      m_actionListeners.notify(PRE_ON_EXECUTE, ec_id);
+      m_actionListeners.notify(PreComponentActionListenerType::PRE_ON_EXECUTE, ec_id);
     }
 
     inline void preOnStateUpdate(UniqueId ec_id)
     {
-      m_actionListeners.notify(PRE_ON_STATE_UPDATE, ec_id);
+      m_actionListeners.notify(PreComponentActionListenerType::PRE_ON_STATE_UPDATE, ec_id);
     }
 
     inline void preOnRateChanged(UniqueId ec_id)
     {
-      m_actionListeners.notify(PRE_ON_RATE_CHANGED, ec_id);
+      m_actionListeners.notify(PreComponentActionListenerType::PRE_ON_RATE_CHANGED, ec_id);
     }
 
     inline void postOnInitialize(UniqueId ec_id, ReturnCode_t ret)
     {
-      m_actionListeners.notify(POST_ON_INITIALIZE, ec_id, ret);
+      m_actionListeners.notify(PostComponentActionListenerType::POST_ON_INITIALIZE, ec_id, ret);
     }
 
     inline void postOnFinalize(UniqueId ec_id, ReturnCode_t ret)
     {
-      m_actionListeners.notify(POST_ON_FINALIZE, ec_id, ret);
+      m_actionListeners.notify(PostComponentActionListenerType::POST_ON_FINALIZE, ec_id, ret);
     }
 
     inline void postOnStartup(UniqueId ec_id, ReturnCode_t ret)
     {
-      m_actionListeners.notify(POST_ON_STARTUP, ec_id, ret);
+      m_actionListeners.notify(PostComponentActionListenerType::POST_ON_STARTUP, ec_id, ret);
     }
 
     inline void postOnShutdown(UniqueId ec_id, ReturnCode_t ret)
     {
-      m_actionListeners.notify(POST_ON_SHUTDOWN, ec_id, ret);
+      m_actionListeners.notify(PostComponentActionListenerType::POST_ON_SHUTDOWN, ec_id, ret);
     }
 
     inline void postOnActivated(UniqueId ec_id, ReturnCode_t ret)
     {
-      m_actionListeners.notify(POST_ON_ACTIVATED, ec_id, ret);
+      m_actionListeners.notify(PostComponentActionListenerType::POST_ON_ACTIVATED, ec_id, ret);
     }
 
     inline void postOnDeactivated(UniqueId ec_id, ReturnCode_t ret)
     {
-      m_actionListeners.notify(POST_ON_DEACTIVATED, ec_id, ret);
+      m_actionListeners.notify(PostComponentActionListenerType::POST_ON_DEACTIVATED, ec_id, ret);
     }
 
     inline void postOnAborting(UniqueId ec_id, ReturnCode_t ret)
     {
-      m_actionListeners.notify(POST_ON_ABORTING, ec_id, ret);
+      m_actionListeners.notify(PostComponentActionListenerType::POST_ON_ABORTING, ec_id, ret);
     }
 
     inline void postOnError(UniqueId ec_id, ReturnCode_t ret)
     {
-      m_actionListeners.notify(POST_ON_ERROR, ec_id, ret);
+      m_actionListeners.notify(PostComponentActionListenerType::POST_ON_ERROR, ec_id, ret);
     }
 
     inline void postOnReset(UniqueId ec_id, ReturnCode_t ret)
     {
-      m_actionListeners.notify(POST_ON_RESET, ec_id, ret);
+      m_actionListeners.notify(PostComponentActionListenerType::POST_ON_RESET, ec_id, ret);
     }
 
     inline void postOnExecute(UniqueId ec_id, ReturnCode_t ret)
     {
-      m_actionListeners.notify(POST_ON_EXECUTE, ec_id, ret);
+      m_actionListeners.notify(PostComponentActionListenerType::POST_ON_EXECUTE, ec_id, ret);
     }
 
     inline void postOnStateUpdate(UniqueId ec_id, ReturnCode_t ret)
     {
-      m_actionListeners.notify(POST_ON_STATE_UPDATE, ec_id, ret);
+      m_actionListeners.notify(PostComponentActionListenerType::POST_ON_STATE_UPDATE, ec_id, ret);
     }
 
     inline void postOnRateChanged(UniqueId ec_id, ReturnCode_t ret)
     {
-      m_actionListeners.notify(POST_ON_RATE_CHANGED, ec_id, ret);
+      m_actionListeners.notify(PostComponentActionListenerType::POST_ON_RATE_CHANGED, ec_id, ret);
     }
 
     inline void onAddPort(const PortProfile& pprof)
     {
-      m_actionListeners.notify(ADD_PORT, pprof);
+      m_actionListeners.notify(PortActionListenerType::ADD_PORT, pprof);
     }
 
     inline void onRemovePort(const PortProfile& pprof)
     {
-      m_actionListeners.notify(REMOVE_PORT, pprof);
+      m_actionListeners.notify(PortActionListenerType::REMOVE_PORT, pprof);
     }
 
     inline void onAttachExecutionContext(UniqueId ec_id)
     {
-      m_actionListeners.notify(EC_ATTACHED, ec_id);
+      m_actionListeners.
+          notify(ExecutionContextActionListenerType::EC_ATTACHED, ec_id);
     }
 
     inline void onDetachExecutionContext(UniqueId ec_id)
     {
-      m_actionListeners.notify(EC_DETACHED, ec_id);
+      m_actionListeners.
+          notify(ExecutionContextActionListenerType::EC_DETACHED, ec_id);
     }
 
     /*!

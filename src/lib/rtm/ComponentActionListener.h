@@ -56,7 +56,7 @@ namespace RTC
    * @endif
    */
 
-  enum PreComponentActionListenerType
+  enum class PreComponentActionListenerType : uint8_t
     {
       PRE_ON_INITIALIZE,
       PRE_ON_FINALIZE,
@@ -147,7 +147,8 @@ namespace RTC
      */
     static const char* toString(PreComponentActionListenerType type)
     {
-      if (type < PRE_COMPONENT_ACTION_LISTENER_NUM)
+      if (type <
+      PreComponentActionListenerType::PRE_COMPONENT_ACTION_LISTENER_NUM)
         {
       static const char* const typeString[] =
         {
@@ -165,7 +166,7 @@ namespace RTC
           "PRE_ON_RATE_CHANGED",
           "PRE_COMPONENT_ACTION_LISTENER_NUM"
         };
-                return typeString[type];
+                return typeString[static_cast<uint8_t>(type)];
         }
       return "";
     }
@@ -221,7 +222,7 @@ namespace RTC
    *
    * @endif
    */
-  enum PostComponentActionListenerType
+  enum class PostComponentActionListenerType : uint8_t
     {
       POST_ON_INITIALIZE,
       POST_ON_FINALIZE,
@@ -313,7 +314,8 @@ namespace RTC
      */
     static const char* toString(PostComponentActionListenerType type)
     {
-      if (type < POST_COMPONENT_ACTION_LISTENER_NUM)
+      if (type < 
+      PostComponentActionListenerType::POST_COMPONENT_ACTION_LISTENER_NUM)
         {
       static const char* const typeString[] =
         {
@@ -331,7 +333,7 @@ namespace RTC
           "POST_ON_RATE_CHANGED",
           "POST_COMPONENT_ACTION_LISTENER_NUM"
         };
-          return typeString[type];
+          return typeString[static_cast<uint8_t>(type)];
         }
       return "";
     }
@@ -378,7 +380,7 @@ namespace RTC
    * @endif
    */
 
-  enum PortActionListenerType
+  enum class PortActionListenerType : uint8_t
     {
       ADD_PORT,
       REMOVE_PORT,
@@ -433,7 +435,7 @@ namespace RTC
      */
     static const char* toString(PortActionListenerType type)
     {
-      if (type < PORT_ACTION_LISTENER_NUM)
+      if (type < PortActionListenerType::PORT_ACTION_LISTENER_NUM)
         {
       static const char* const typeString[] =
         {
@@ -441,7 +443,7 @@ namespace RTC
           "REMOVE_PORT",
           "PORT_ACTION_LISTENER_NUM"
         };
-          return typeString[type];
+          return typeString[static_cast<uint8_t>(type)];
         }
       return "";
     }
@@ -488,7 +490,7 @@ namespace RTC
    * @endif
    */
 
-  enum ExecutionContextActionListenerType
+  enum class ExecutionContextActionListenerType : uint8_t
     {
       EC_ATTACHED,
       EC_DETACHED,
@@ -543,7 +545,7 @@ namespace RTC
      */
     static const char* toString(ExecutionContextActionListenerType type)
     {
-      if (type < EC_ACTION_LISTENER_NUM)
+      if (type < ExecutionContextActionListenerType::EC_ACTION_LISTENER_NUM)
         {
       static const char* const typeString[] =
         {
@@ -551,7 +553,7 @@ namespace RTC
           "DETACH_ECT",
           "EC_ACTION_LISTENER_NUM"
         };
-          return typeString[type];
+          return typeString[static_cast<uint8_t>(type)];
         }
       return "";
     }
@@ -1257,9 +1259,9 @@ namespace RTC
      */
     inline bool notify(PreComponentActionListenerType type, UniqueId ec_id)
     {
-        if (type < preaction_.size())
+        if (static_cast<uint8_t>(type) < preaction_.size())
         {
-            preaction_[type].notify(ec_id);
+            preaction_[static_cast<uint8_t>(type)].notify(ec_id);
             return true;
         }
         return false;
@@ -1288,9 +1290,9 @@ namespace RTC
      */
     inline bool notify(PostComponentActionListenerType type, UniqueId ec_id, ReturnCode_t ret)
     {
-        if (type < postaction_.size())
+        if (static_cast<uint8_t>(type) < postaction_.size())
         {
-            postaction_[type].notify(ec_id, ret);
+            postaction_[static_cast<uint8_t>(type)].notify(ec_id, ret);
             return true;
         }
         return false;
@@ -1317,9 +1319,9 @@ namespace RTC
      */
     inline bool notify(PortActionListenerType type, const RTC::PortProfile& pprofile)
     {
-        if (type < portaction_.size())
+        if (static_cast<uint8_t>(type) < portaction_.size())
         {
-            portaction_[type].notify(pprofile);
+            portaction_[static_cast<uint8_t>(type)].notify(pprofile);
             return true;
         }
         return false;
@@ -1346,9 +1348,9 @@ namespace RTC
      */
     inline bool notify(ExecutionContextActionListenerType type, UniqueId ec_id)
     {
-        if (type < ecaction_.size())
+        if (static_cast<uint8_t>(type) < ecaction_.size())
         {
-            ecaction_[type].notify(ec_id);
+            ecaction_[static_cast<uint8_t>(type)].notify(ec_id);
             return true;
         }
         return false;
@@ -1363,7 +1365,7 @@ namespace RTC
      * The PreComponentActionListenerType listener is stored.
      * @endif
      */
-    std::array<PreComponentActionListenerHolder, PRE_COMPONENT_ACTION_LISTENER_NUM> preaction_;
+    std::array<PreComponentActionListenerHolder, static_cast<uint8_t>(PreComponentActionListenerType::PRE_COMPONENT_ACTION_LISTENER_NUM)> preaction_;
     /*!
      * @if jp
      * @brief PostComponentActionTypeリスナ配列
@@ -1373,7 +1375,7 @@ namespace RTC
      * The PostComponentActionType listener is stored.
      * @endif
      */
-    std::array<PostComponentActionListenerHolder, POST_COMPONENT_ACTION_LISTENER_NUM> postaction_;
+    std::array<PostComponentActionListenerHolder, static_cast<uint8_t>(PostComponentActionListenerType::POST_COMPONENT_ACTION_LISTENER_NUM)> postaction_;
     /*!
      * @if jp
      * @brief PortActionTypeリスナ配列
@@ -1383,7 +1385,7 @@ namespace RTC
      * The PortActionType listener is stored.
      * @endif
      */
-    std::array<PortActionListenerHolder, PORT_ACTION_LISTENER_NUM> portaction_;
+    std::array<PortActionListenerHolder, static_cast<uint8_t>(PortActionListenerType::PORT_ACTION_LISTENER_NUM)> portaction_;
     /*!
      * @if jp
      * @brief ExecutionContextActionTypeリスナ配列
@@ -1393,7 +1395,7 @@ namespace RTC
      * The ExecutionContextActionType listener is stored.
      * @endif
      */
-    std::array<ExecutionContextActionListenerHolder, EC_ACTION_LISTENER_NUM> ecaction_;
+    std::array<ExecutionContextActionListenerHolder, static_cast<uint8_t>(ExecutionContextActionListenerType::EC_ACTION_LISTENER_NUM)> ecaction_;
   };
 
 
