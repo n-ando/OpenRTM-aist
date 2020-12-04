@@ -70,38 +70,38 @@ RTC::ReturnCode_t SeqIn::onInitialize()
   addInPort("DoubleSeq", m_DoubleSeqIn);
   
   // check m_LongIn port only
-  m_LongIn.addConnectorDataListener(ON_BUFFER_WRITE,
+  m_LongIn.addConnectorDataListener(ConnectorDataListenerType::ON_BUFFER_WRITE,
                                     new DataListener("ON_BUFFER_WRITE"));
-  m_LongIn.addConnectorDataListener(ON_BUFFER_FULL, 
+  m_LongIn.addConnectorDataListener(ConnectorDataListenerType::ON_BUFFER_FULL, 
                                     new DataListener("ON_BUFFER_FULL"));
-  m_LongIn.addConnectorDataListener(ON_BUFFER_WRITE_TIMEOUT, 
+  m_LongIn.addConnectorDataListener(ConnectorDataListenerType::ON_BUFFER_WRITE_TIMEOUT, 
                                     new DataListener("ON_BUFFER_WRITE_TIMEOUT"));
-  m_LongIn.addConnectorDataListener(ON_BUFFER_OVERWRITE, 
+  m_LongIn.addConnectorDataListener(ConnectorDataListenerType::ON_BUFFER_OVERWRITE, 
                                     new DataListener("ON_BUFFER_OVERWRITE"));
-  m_LongIn.addConnectorDataListener(ON_BUFFER_READ, 
+  m_LongIn.addConnectorDataListener(ConnectorDataListenerType::ON_BUFFER_READ, 
                                     new DataListener("ON_BUFFER_READ"));
-  m_LongIn.addConnectorDataListener(ON_SEND, 
+  m_LongIn.addConnectorDataListener(ConnectorDataListenerType::ON_SEND, 
                                     new DataListener("ON_SEND"));
-  m_LongIn.addConnectorDataListener(ON_RECEIVED,
+  m_LongIn.addConnectorDataListener(ConnectorDataListenerType::ON_RECEIVED,
                                     new DataListener("ON_RECEIVED"));
-  m_LongIn.addConnectorDataListener(ON_RECEIVER_FULL, 
+  m_LongIn.addConnectorDataListener(ConnectorDataListenerType::ON_RECEIVER_FULL, 
                                     new DataListener("ON_RECEIVER_FULL"));
-  m_LongIn.addConnectorDataListener(ON_RECEIVER_TIMEOUT, 
+  m_LongIn.addConnectorDataListener(ConnectorDataListenerType::ON_RECEIVER_TIMEOUT, 
                                     new DataListener("ON_RECEIVER_TIMEOUT"));
 
-  m_LongIn.addConnectorListener(ON_BUFFER_EMPTY,
+  m_LongIn.addConnectorListener(ConnectorListenerType::ON_BUFFER_EMPTY,
                                     new ConnListener("ON_BUFFER_EMPTY"));
-  m_LongIn.addConnectorListener(ON_BUFFER_READ_TIMEOUT,
+  m_LongIn.addConnectorListener(ConnectorListenerType::ON_BUFFER_READ_TIMEOUT,
                                     new ConnListener("ON_BUFFER_READ_TIMEOUT"));
-  m_LongIn.addConnectorListener(ON_SENDER_EMPTY,
+  m_LongIn.addConnectorListener(ConnectorListenerType::ON_SENDER_EMPTY,
                                     new ConnListener("ON_SENDER_EMPTY"));
-  m_LongIn.addConnectorListener(ON_SENDER_TIMEOUT,
+  m_LongIn.addConnectorListener(ConnectorListenerType::ON_SENDER_TIMEOUT,
                                     new ConnListener("ON_SENDER_TIMEOUT"));
-  m_LongIn.addConnectorListener(ON_SENDER_ERROR,
+  m_LongIn.addConnectorListener(ConnectorListenerType::ON_SENDER_ERROR,
                                     new ConnListener("ON_SENDER_ERROR"));
-  m_LongIn.addConnectorListener(ON_CONNECT,
+  m_LongIn.addConnectorListener(ConnectorListenerType::ON_CONNECT,
                                     new ConnListener("ON_CONNECT"));
-  m_LongIn.addConnectorListener(ON_DISCONNECT,
+  m_LongIn.addConnectorListener(ConnectorListenerType::ON_DISCONNECT,
                                     new ConnListener("ON_DISCONNECT"));
 
   // Set OutPort buffer

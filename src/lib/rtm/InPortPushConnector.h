@@ -275,17 +275,19 @@ namespace RTC
     
     inline void onBufferRead(ByteData& data)
     {
-      m_listeners->notifyIn(ON_BUFFER_READ, m_profile, data);
+      m_listeners->notifyIn(ConnectorDataListenerType::ON_BUFFER_READ,
+                            m_profile, data);
 
     }
     void onBufferEmpty(ByteData&  /*data*/)
     {
-      m_listeners->notify(ON_BUFFER_EMPTY, m_profile);
+      m_listeners->notify(ConnectorListenerType::ON_BUFFER_EMPTY, m_profile);
 
     }
     void onBufferReadTimeout(ByteData&  /*data*/)
     {
-      m_listeners->notify(ON_BUFFER_READ_TIMEOUT, m_profile);
+      m_listeners->notify(ConnectorListenerType::ON_BUFFER_READ_TIMEOUT,
+                          m_profile);
     }
 
   private:

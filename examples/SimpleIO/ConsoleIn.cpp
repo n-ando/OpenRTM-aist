@@ -57,38 +57,38 @@ RTC::ReturnCode_t ConsoleIn::onInitialize()
 {
   addOutPort("out", m_outOut);
 
-  m_outOut.addConnectorDataListener(ON_BUFFER_WRITE,
+  m_outOut.addConnectorDataListener(ConnectorDataListenerType::ON_BUFFER_WRITE,
                                     new DataListener("ON_BUFFER_WRITE"));
-  m_outOut.addConnectorDataListener(ON_BUFFER_FULL, 
+  m_outOut.addConnectorDataListener(ConnectorDataListenerType::ON_BUFFER_FULL, 
                                     new DataListener("ON_BUFFER_FULL"));
-  m_outOut.addConnectorDataListener(ON_BUFFER_WRITE_TIMEOUT, 
+  m_outOut.addConnectorDataListener(ConnectorDataListenerType::ON_BUFFER_WRITE_TIMEOUT, 
                                     new DataListener("ON_BUFFER_WRITE_TIMEOUT"));
-  m_outOut.addConnectorDataListener(ON_BUFFER_OVERWRITE, 
+  m_outOut.addConnectorDataListener(ConnectorDataListenerType::ON_BUFFER_OVERWRITE, 
                                     new DataListener("ON_BUFFER_OVERWRITE"));
-  m_outOut.addConnectorDataListener(ON_BUFFER_READ, 
+  m_outOut.addConnectorDataListener(ConnectorDataListenerType::ON_BUFFER_READ, 
                                     new DataListener("ON_BUFFER_READ"));
-  m_outOut.addConnectorDataListener(ON_SEND, 
+  m_outOut.addConnectorDataListener(ConnectorDataListenerType::ON_SEND, 
                                     new DataListener("ON_SEND"));
-  m_outOut.addConnectorDataListener(ON_RECEIVED,
+  m_outOut.addConnectorDataListener(ConnectorDataListenerType::ON_RECEIVED,
                                     new DataListener("ON_RECEIVED"));
-  m_outOut.addConnectorDataListener(ON_RECEIVER_FULL, 
+  m_outOut.addConnectorDataListener(ConnectorDataListenerType::ON_RECEIVER_FULL, 
                                     new DataListener("ON_RECEIVER_FULL"));
-  m_outOut.addConnectorDataListener(ON_RECEIVER_TIMEOUT, 
+  m_outOut.addConnectorDataListener(ConnectorDataListenerType::ON_RECEIVER_TIMEOUT, 
                                     new DataListener("ON_RECEIVER_TIMEOUT"));
 
-  m_outOut.addConnectorListener(ON_BUFFER_EMPTY,
+  m_outOut.addConnectorListener(ConnectorListenerType::ON_BUFFER_EMPTY,
                                     new ConnListener("ON_BUFFER_EMPTY"));
-  m_outOut.addConnectorListener(ON_BUFFER_READ_TIMEOUT,
+  m_outOut.addConnectorListener(ConnectorListenerType::ON_BUFFER_READ_TIMEOUT,
                                     new ConnListener("ON_BUFFER_READ_TIMEOUT"));
-  m_outOut.addConnectorListener(ON_SENDER_EMPTY,
+  m_outOut.addConnectorListener(ConnectorListenerType::ON_SENDER_EMPTY,
                                     new ConnListener("ON_SENDER_EMPTY"));
-  m_outOut.addConnectorListener(ON_SENDER_TIMEOUT,
+  m_outOut.addConnectorListener(ConnectorListenerType::ON_SENDER_TIMEOUT,
                                     new ConnListener("ON_SENDER_TIMEOUT"));
-  m_outOut.addConnectorListener(ON_SENDER_ERROR,
+  m_outOut.addConnectorListener(ConnectorListenerType::ON_SENDER_ERROR,
                                     new ConnListener("ON_SENDER_ERROR"));
-  m_outOut.addConnectorListener(ON_CONNECT,
+  m_outOut.addConnectorListener(ConnectorListenerType::ON_CONNECT,
                                     new ConnListener("ON_CONNECT"));
-  m_outOut.addConnectorListener(ON_DISCONNECT,
+  m_outOut.addConnectorListener(ConnectorListenerType::ON_DISCONNECT,
                                     new ConnListener("ON_DISCONNECT"));
 
 

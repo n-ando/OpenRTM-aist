@@ -121,9 +121,9 @@ namespace RTC
 
       this->initConnectorListeners();
 
-      this->addConnectorDataListener(ON_RECEIVED,
+      this->addConnectorDataListener(ConnectorDataListenerType::ON_RECEIVED,
                                      new Timestamp<DataType>("on_received"));
-      this->addConnectorDataListener(ON_BUFFER_READ,
+      this->addConnectorDataListener(ConnectorDataListenerType::ON_BUFFER_READ,
                                      new Timestamp<DataType>("on_read"));
       m_directport = this;
 

@@ -234,7 +234,7 @@ namespace RTC
      */
     inline void onBufferWrite(ByteData& data)
     {
-      m_listeners->notifyIn(ON_BUFFER_WRITE, m_profile, data);
+      m_listeners->notifyIn(ConnectorDataListenerType::ON_BUFFER_WRITE, m_profile, data);
     }
 
     /*!
@@ -248,7 +248,7 @@ namespace RTC
      */
     inline void onBufferFull(ByteData& data)
     {
-      m_listeners->notifyIn(ON_BUFFER_FULL, m_profile, data);
+      m_listeners->notifyIn(ConnectorDataListenerType::ON_BUFFER_FULL, m_profile, data);
     }
 
     /*!
@@ -262,7 +262,7 @@ namespace RTC
      */
     inline void onReceived(ByteData& data)
     {
-      m_listeners->notifyIn(ON_RECEIVED, m_profile, data);
+      m_listeners->notifyIn(ConnectorDataListenerType::ON_RECEIVED, m_profile, data);
     }
 
     /*!
@@ -276,7 +276,7 @@ namespace RTC
      */
     inline void onReceiverFull(ByteData& data)
     {
-      m_listeners->notifyIn(ON_RECEIVER_FULL, m_profile, data);
+      m_listeners->notifyIn(ConnectorDataListenerType::ON_RECEIVER_FULL, m_profile, data);
     }
 
     /*!
@@ -288,7 +288,7 @@ namespace RTC
      */
     inline void onSenderEmpty()
     {
-      m_listeners->notify(ON_SENDER_EMPTY, m_profile);
+      m_listeners->notify(ConnectorListenerType::ON_SENDER_EMPTY, m_profile);
     }
 
     /*!
@@ -300,7 +300,7 @@ namespace RTC
      */
     inline void onSenderTimeout()
     {
-      m_listeners->notify(ON_SENDER_TIMEOUT, m_profile);
+      m_listeners->notify(ConnectorListenerType::ON_SENDER_TIMEOUT, m_profile);
     }
 
     /*!
@@ -312,7 +312,7 @@ namespace RTC
      */
     inline void onSenderError()
     {
-      m_listeners->notify(ON_SENDER_ERROR, m_profile);
+      m_listeners->notify(ConnectorListenerType::ON_SENDER_ERROR, m_profile);
     }
 protected:
     mutable Logger rtclog;

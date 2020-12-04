@@ -47,7 +47,7 @@ namespace RTC
    *
    * @endif
    */
-  enum PortConnectListenerType
+  enum class PortConnectListenerType : uint8_t
     {
       ON_NOTIFY_CONNECT,
       ON_NOTIFY_DISCONNECT,
@@ -159,7 +159,7 @@ namespace RTC
    *
    * @endif
    */
-  enum PortConnectRetListenerType
+  enum class PortConnectRetListenerType : uint8_t
     {
       ON_PUBLISH_INTERFACES,
       ON_CONNECT_NEXTPORT,
@@ -624,9 +624,9 @@ namespace RTC
      */
     inline bool notify(PortConnectListenerType type, const char* portname, RTC::ConnectorProfile& profile)
     {
-        if (type < portconnect_.size())
+        if (static_cast<uint8_t>(type) < portconnect_.size())
         {
-            portconnect_[type].notify(portname, profile);
+            portconnect_[static_cast<uint8_t>(type)].notify(portname, profile);
             return true;
         }
         return false;
@@ -658,9 +658,9 @@ namespace RTC
     inline bool notify(PortConnectRetListenerType type, const char* portname, RTC::ConnectorProfile& profile,
                 ReturnCode_t ret)
     {
-        if (type < portconnret_.size())
+        if (static_cast<uint8_t>(type) < portconnret_.size())
         {
-            portconnret_[type].notify(portname, profile, ret);
+            portconnret_[static_cast<uint8_t>(type)].notify(portname, profile, ret);
             return true;
         }
         return false;
@@ -676,7 +676,10 @@ namespace RTC
      * The PortConnectListenerType listener is stored.
      * @endif
      */
-    std::array<PortConnectListenerHolder, PORT_CONNECT_LISTENER_NUM> portconnect_;
+    std::array<PortConnectListenerHolder, 
+        static_cast<uint8_t>
+        (PortConnectListenerType::PORT_CONNECT_LISTENER_NUM)>
+        portconnect_;
     /*!
      * @if jp
      * @brief PortConnectRetTypeリスナ配列
@@ -686,7 +689,10 @@ namespace RTC
      * The PortConnectRetType listener is stored.
      * @endif
      */
-    std::array<PortConnectRetListenerHolder, PORT_CONNECT_RET_LISTENER_NUM> portconnret_;
+    std::array<PortConnectRetListenerHolder,
+        static_cast<uint8_t>
+        (PortConnectRetListenerType::PORT_CONNECT_RET_LISTENER_NUM)>
+        portconnret_;
   };
 
 

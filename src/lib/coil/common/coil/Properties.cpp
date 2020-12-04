@@ -38,8 +38,10 @@ namespace coil
    * @brief Constructor(Create only root node)
    * @endif
    */
-  Properties::Properties(const char* key, const char* value, bool set_value)
-    : name(key), value(value), set_value((this->value.empty()) ? set_value : true)
+  Properties::Properties(const char* key, const char* in_value,
+                        bool in_set_value)
+    : name(key), value(in_value),
+      set_value((this->value.empty()) ? in_set_value : true)
   {
     leaf.clear();
   }
@@ -569,7 +571,7 @@ namespace coil
   {
     std::vector<std::string> keys;
     keys = prop.propertyNames();
-    for (size_t i(0), len(static_cast<size_t>(prop.size())); i < len; ++i)
+    for (size_t i(0), len(prop.size()); i < len; ++i)
       {
         (*this)[keys[i]] = prop[keys[i]];
       }
@@ -786,23 +788,6 @@ namespace coil
   std::string Properties::indent(size_t index)
   {
     std::string space = std::string();
-    for (size_t i(0); i < index - 1; ++i)
-      {
-        space += "  ";
-      }
-    return space;
-  }
-
-  /*!
-   * @if jp
-   * @brief インデントを生成する
-   * @else
-   * @brief Create indents
-   * @endif
-   */
-  std::string indent(size_t index)
-  {
-    std::string space;
     for (size_t i(0); i < index - 1; ++i)
       {
         space += "  ";

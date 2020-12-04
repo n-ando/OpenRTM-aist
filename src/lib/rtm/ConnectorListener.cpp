@@ -261,9 +261,9 @@ namespace RTC
    */
   ::RTC::ConnectorListenerStatus::Enum ConnectorListeners::notifyIn(ConnectorDataListenerType type, ConnectorInfo& info, ByteData& data)
   {
-      if(type < connectorData_.size())
+      if (static_cast<uint8_t>(type) < connectorData_.size())
       {
-          return connectorData_[type].notifyIn(info, data);
+          return connectorData_[static_cast<uint8_t>(type)].notifyIn(info, data);
       }
       return ConnectorListenerStatus::NO_CHANGE;
   }
@@ -292,9 +292,9 @@ namespace RTC
    */
   ::RTC::ConnectorListenerStatus::Enum ConnectorListeners::notifyOut(ConnectorDataListenerType type, ConnectorInfo& info, ByteData& data)
   {
-      if(type < connectorData_.size())
+      if (static_cast<uint8_t>(type) < connectorData_.size())
       {
-          return connectorData_[type].notifyOut(info, data);
+          return connectorData_[static_cast<uint8_t>(type)].notifyOut(info, data);
       }
       return ConnectorListenerStatus::NO_CHANGE;
   }
@@ -324,9 +324,9 @@ namespace RTC
    */
   ::RTC::ConnectorListenerStatus::Enum ConnectorListeners::notify(ConnectorListenerType type, ConnectorInfo& info)
   {
-      if(type < connector_.size())
+      if (static_cast<uint8_t>(type) < connector_.size())
       {
-          return connector_[type].notify(info);
+          return connector_[static_cast<uint8_t>(type)].notify(info);
       }
       return ConnectorListenerStatus::NO_CHANGE;
   }
@@ -358,9 +358,9 @@ namespace RTC
    */
   bool ConnectorListeners::addListener(ConnectorDataListenerType type, ConnectorDataListener* listener, bool autoclean)
   {
-      if(type < connectorData_.size())
+      if (static_cast<uint8_t>(type) < connectorData_.size())
       {
-          connectorData_[type].addListener(listener, autoclean);
+          connectorData_[static_cast<uint8_t>(type)].addListener(listener, autoclean);
           return true;
       }
       return false;
@@ -393,9 +393,9 @@ namespace RTC
    */
   bool ConnectorListeners::addListener(ConnectorListenerType type, ConnectorListener* listener, bool autoclean)
   {
-      if(type < connector_.size())
+      if (static_cast<uint8_t>(type) < connector_.size())
       {
-          connector_[type].addListener(listener, autoclean);
+          connector_[static_cast<uint8_t>(type)].addListener(listener, autoclean);
           return true;
       }
       return false;
@@ -425,9 +425,9 @@ namespace RTC
    */
   bool ConnectorListeners::removeListener(ConnectorDataListenerType type, ConnectorDataListener* listener)
   {
-      if(type < connectorData_.size())
+      if (static_cast<uint8_t>(type) < connectorData_.size())
       {
-          connectorData_[type].removeListener(listener);
+          connectorData_[static_cast<uint8_t>(type)].removeListener(listener);
           return true;
       }
       return false;
@@ -457,9 +457,9 @@ namespace RTC
    */
   bool ConnectorListeners::removeListener(ConnectorListenerType type, ConnectorListener* listener)
   {
-      if(type < connector_.size())
+      if (static_cast<uint8_t>(type) < connector_.size())
       {
-          connector_[type].removeListener(listener);
+          connector_[static_cast<uint8_t>(type)].removeListener(listener);
           return true;
       }
       return false;
@@ -496,9 +496,9 @@ namespace RTC
    */
   ConnectorDataListenerHolder* ConnectorListeners::getDataListenerHolder(ConnectorDataListenerType type)
   {
-      if (type < connectorData_.size())
+      if (static_cast<uint8_t>(type) < connectorData_.size())
       {
-          return &connectorData_[type];
+          return &connectorData_[static_cast<uint8_t>(type)];
       }
       return nullptr;
   }

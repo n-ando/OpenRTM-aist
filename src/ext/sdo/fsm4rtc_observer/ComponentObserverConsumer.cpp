@@ -552,14 +552,16 @@ namespace RTC
     if (m_portaction.portConnectListener == nullptr)
       {
         m_portaction.portConnectListener =
-          m_rtobj->addPortConnectRetListener(ON_CONNECTED,
+          m_rtobj->addPortConnectRetListener(
+                PortConnectRetListenerType::ON_CONNECTED,
                                              m_portaction,
                                              &PortAction::onConnect);
       }
     if (m_portaction.portDisconnectListener == nullptr)
       {
         m_portaction.portDisconnectListener =
-          m_rtobj->addPortConnectRetListener(ON_DISCONNECTED,
+          m_rtobj->addPortConnectRetListener(
+                PortConnectRetListenerType::ON_DISCONNECTED,
                                              m_portaction,
                                              &PortAction::onDisconnect);
       }
@@ -588,13 +590,15 @@ namespace RTC
       }
     if (m_portaction.portConnectListener != nullptr)
       {
-        m_rtobj->removePortConnectRetListener(ON_CONNECTED,
+        m_rtobj->removePortConnectRetListener(
+                  PortConnectRetListenerType::ON_CONNECTED,
                                               m_portaction.portConnectListener);
         m_portaction.portConnectListener = nullptr;
       }
     if (m_portaction.portDisconnectListener != nullptr)
       {
-        m_rtobj->removePortConnectRetListener(ON_DISCONNECTED,
+        m_rtobj->removePortConnectRetListener(
+                  PortConnectRetListenerType::ON_DISCONNECTED,
                                            m_portaction.portDisconnectListener);
         m_portaction.portDisconnectListener = nullptr;
       }

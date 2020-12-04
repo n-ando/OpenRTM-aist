@@ -331,23 +331,31 @@ namespace RTC
         {
             if (outport->isEmpty())
             {
-                m_listeners->notify(ON_BUFFER_EMPTY, m_profile);
-                m_outPortListeners->notify(ON_SENDER_EMPTY, m_profile);
+                m_listeners->notify(ConnectorListenerType::ON_BUFFER_EMPTY,
+                                     m_profile);
+                m_outPortListeners->notify(
+                                  ConnectorListenerType::ON_SENDER_EMPTY,
+                                  m_profile);
                 RTC_PARANOID(("ON_BUFFER_EMPTY(InPort,OutPort), "
                     "ON_SENDER_EMPTY(InPort,OutPort) "
                     "callback called in direct mode."));
             }
             outport->read(data);
-            m_outPortListeners->notifyOut(ON_BUFFER_READ, m_profile, data);
+            m_outPortListeners->notifyOut(
+                                  ConnectorDataListenerType::ON_BUFFER_READ,
+                                  m_profile, data);
             RTC_TRACE(("ON_BUFFER_READ(OutPort), "));
             RTC_TRACE(("callback called in direct mode."));
-            m_outPortListeners->notifyOut(ON_SEND, m_profile, data);
+            m_outPortListeners->notifyOut(ConnectorDataListenerType::ON_SEND,
+                                          m_profile, data);
             RTC_TRACE(("ON_SEND(OutPort), "));
             RTC_TRACE(("callback called in direct mode."));
-            m_listeners->notifyIn(ON_RECEIVED, m_profile, data);
+            m_listeners->notifyIn(ConnectorDataListenerType::ON_RECEIVED,
+                                  m_profile, data);
             RTC_TRACE(("ON_RECEIVED(InPort), "));
             RTC_TRACE(("callback called in direct mode."));
-            m_listeners->notifyIn(ON_SEND, m_profile, data);
+            m_listeners->notifyIn(ConnectorDataListenerType::ON_SEND,
+                                  m_profile, data);
             RTC_TRACE(("ON_BUFFER_WRITE(InPort), "));
             RTC_TRACE(("callback called in direct mode."));
 

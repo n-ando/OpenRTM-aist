@@ -1966,7 +1966,8 @@ namespace RTC
     {
       if (m_portconnListeners != nullptr)
         {
-          m_portconnListeners->notify(ON_NOTIFY_CONNECT, portname, profile);
+          m_portconnListeners->notify(
+            PortConnectListenerType::ON_NOTIFY_CONNECT, portname, profile);
         }
     }
 
@@ -1975,7 +1976,8 @@ namespace RTC
     {
       if (m_portconnListeners != nullptr)
         {
-          m_portconnListeners->notify(ON_NOTIFY_DISCONNECT, portname, profile);
+          m_portconnListeners->notify(
+            PortConnectListenerType::ON_NOTIFY_DISCONNECT, portname, profile);
         }
     }
     inline void onUnsubscribeInterfaces(const char* portname,
@@ -1983,7 +1985,8 @@ namespace RTC
     {
       if (m_portconnListeners != nullptr)
         {
-          m_portconnListeners->notify(ON_UNSUBSCRIBE_INTERFACES, portname, profile);
+          m_portconnListeners->notify(
+            PortConnectListenerType::ON_UNSUBSCRIBE_INTERFACES, portname, profile);
         }
     }
 
@@ -1993,7 +1996,8 @@ namespace RTC
     {
       if (m_portconnListeners != nullptr)
         {
-          m_portconnListeners->notify(ON_PUBLISH_INTERFACES, portname,
+          m_portconnListeners->notify(
+            PortConnectRetListenerType::ON_PUBLISH_INTERFACES, portname,
                                                        profile, ret);
         }
     }
@@ -2004,7 +2008,8 @@ namespace RTC
     {
       if (m_portconnListeners != nullptr)
         {
-          m_portconnListeners->notify(ON_CONNECT_NEXTPORT, portname,
+          m_portconnListeners->notify(
+            PortConnectRetListenerType::ON_CONNECT_NEXTPORT, portname,
                                                      profile, ret);
         }
     }
@@ -2015,7 +2020,8 @@ namespace RTC
     {
       if (m_portconnListeners != nullptr)
         {
-          m_portconnListeners->notify(ON_SUBSCRIBE_INTERFACES, portname,
+          m_portconnListeners->notify(
+            PortConnectRetListenerType::ON_SUBSCRIBE_INTERFACES, portname,
                                                          profile, ret);
         }
     }
@@ -2026,7 +2032,8 @@ namespace RTC
     {
       if (m_portconnListeners != nullptr)
         {
-          m_portconnListeners->notify(ON_CONNECTED, portname, profile, ret);
+          m_portconnListeners->notify(
+            PortConnectRetListenerType::ON_CONNECTED, portname, profile, ret);
         }
     }
 
@@ -2036,7 +2043,8 @@ namespace RTC
     {
       if (m_portconnListeners != nullptr)
         {
-          m_portconnListeners->notify(ON_DISCONNECT_NEXT, portname, profile, ret);
+          m_portconnListeners->notify(
+            PortConnectRetListenerType::ON_DISCONNECT_NEXT, portname, profile, ret);
         }
     }
 
@@ -2046,7 +2054,8 @@ namespace RTC
     {
       if (m_portconnListeners != nullptr)
         {
-          m_portconnListeners->notify(ON_DISCONNECTED, portname, profile, ret);
+          m_portconnListeners->notify(
+            PortConnectRetListenerType::ON_DISCONNECTED, portname, profile, ret);
         }
     }
 
@@ -2289,7 +2298,8 @@ namespace RTC
       bool operator()(const PortInterfaceProfile& prof)
       {
         CORBA::String_var name(CORBA::string_dup(prof.instance_name));
-        return ((m_name == (const char *)name) && (m_pol == prof.polarity));
+        return   ((m_name == static_cast<const char *>(name)) 
+              && (m_pol == prof.polarity));
       }
       std::string m_name;
       PortInterfacePolarity m_pol;

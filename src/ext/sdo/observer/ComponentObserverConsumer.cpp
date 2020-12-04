@@ -449,14 +449,15 @@ namespace RTC
     if (m_portaction.portConnectListener == nullptr)
       {
         m_portaction.portConnectListener =
-          m_rtobj->addPortConnectRetListener(ON_CONNECTED,
+          m_rtobj->addPortConnectRetListener(
+                  PortConnectRetListenerType::ON_CONNECTED,
                                              m_portaction,
                                              &PortAction::onConnect);
       }
     if (m_portaction.portDisconnectListener == nullptr)
       {
         m_portaction.portDisconnectListener =
-          m_rtobj->addPortConnectRetListener(ON_DISCONNECTED,
+          m_rtobj->addPortConnectRetListener(PortConnectRetListenerType::ON_DISCONNECTED,
                                              m_portaction,
                                              &PortAction::onDisconnect);
       }
@@ -468,8 +469,9 @@ namespace RTC
         msg += inport->getName();
         DataPortAction *action = new DataPortAction(*this, msg,
                                                     m_inportInterval);
-        inport->addConnectorDataListener(ON_RECEIVED,
-                                                    action);
+        inport->addConnectorDataListener(
+                                        ConnectorDataListenerType::ON_RECEIVED,
+                                        action);
         m_recievedactions.emplace_back(action);
 
       }
@@ -480,8 +482,9 @@ namespace RTC
         msg += outport->getName();
         DataPortAction *action = new DataPortAction(*this, msg,
                                                     m_outportInterval);
-        outport->addConnectorDataListener(ON_SEND,
-                                              action);
+        outport->addConnectorDataListener(
+                                          ConnectorDataListenerType::ON_SEND,
+                                          action);
         m_sendactions.emplace_back(action);
       }
   }
@@ -509,13 +512,15 @@ namespace RTC
       }
     if (m_portaction.portConnectListener != nullptr)
       {
-        m_rtobj->removePortConnectRetListener(ON_CONNECTED,
+        m_rtobj->removePortConnectRetListener(
+                  PortConnectRetListenerType::ON_CONNECTED,
                                               m_portaction.portConnectListener);
         m_portaction.portConnectListener = nullptr;
       }
     if (m_portaction.portDisconnectListener != nullptr)
       {
-        m_rtobj->removePortConnectRetListener(ON_DISCONNECTED,
+        m_rtobj->removePortConnectRetListener(
+                  PortConnectRetListenerType::ON_DISCONNECTED,
                                            m_portaction.portDisconnectListener);
         m_portaction.portDisconnectListener = nullptr;
       }
@@ -526,7 +531,8 @@ namespace RTC
       {
         for (auto & m_recievedaction : m_recievedactions)
           {
-            inport->removeConnectorDataListener(ON_RECEIVED, m_recievedaction);
+            inport->removeConnectorDataListener(
+              ConnectorDataListenerType::ON_RECEIVED, m_recievedaction);
           }
       }
     const std::vector<OutPortBase*>& outports = m_rtobj->getOutPorts();
@@ -534,7 +540,8 @@ namespace RTC
       {
         for (auto & m_sendaction : m_sendactions)
           {
-            outport->removeConnectorDataListener(ON_SEND, m_sendaction);
+            outport->removeConnectorDataListener(
+              ConnectorDataListenerType::ON_SEND, m_sendaction);
           }
       }
   }
