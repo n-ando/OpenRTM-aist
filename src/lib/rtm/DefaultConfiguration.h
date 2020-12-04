@@ -92,7 +92,7 @@ namespace RTC {
     "manager.corba_servant",                 "YES",
     "manager.shutdown_on_nortcs",            "YES",
     "manager.shutdown_auto",                 "YES",
-    "manager.auto_shutdown_duration",        "10.0",
+    "manager.auto_shutdown_duration",        "20.0",
     "manager.termination_waittime",          "0.5",
     "manager.name",                          "manager",
     "manager.components.naming_policy",      "process_unique",
