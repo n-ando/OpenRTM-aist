@@ -31,13 +31,13 @@ namespace hrtm
   //------------------------------------------------------------
   // Creator and Destructor tempaltes for RTC factory
   //
-  template <class _New>
+  template <class T_New>
   RTC::RTObject_impl* Create(RTC::Manager* /* manager */)
   {
-    return new _New();
+    return new T_New();
   }
 
-  template <class _Delete>
+  template <class T_Delete>
   void Delete(RTC::RTObject_impl* rtc)
   {
     delete rtc;
