@@ -36,6 +36,27 @@ namespace RTC
    *
    * @endif
    */
+  ConnectorInfo::ConnectorInfo(const char* name_, const char* id_,
+                coil::vstring ports_, const coil::Properties& properties_)
+    : name(name_), id(id_)
+    , ports(std::move(ports_)), properties(properties_)
+  {
+  }
+  /*!
+   * @if jp
+   *
+   * @brief コンストラクタ
+   *
+   * コンストラクタ
+   *
+   * @else
+   *
+   * @brief Constructor
+   *
+   * Constructor
+   *
+   * @endif
+   */
   ConnectorInfo::ConnectorInfo(const ConnectorInfo&) = default;
 
   /*!
