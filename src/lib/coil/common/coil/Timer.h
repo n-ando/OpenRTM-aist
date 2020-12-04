@@ -110,8 +110,8 @@ namespace coil
      * @endif
      */
     PeriodicFunction(std::function<void(void)> fn,
-                     std::chrono::nanoseconds period)
-      : m_fn(std::move(fn)), m_remains(0), m_period(period) {}
+                     std::chrono::nanoseconds period) noexcept
+      : m_fn(std::move(fn)), m_remains(period), m_period(period) {}
 
     /*!
      * @if jp
