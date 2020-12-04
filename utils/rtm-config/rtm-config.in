@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # -*- shell-script -*-
 #
 #  @file rtm-config
@@ -6,51 +6,53 @@
 #  @date $Date: 2005-05-12 09:06:18 $
 #  @author Noriaki Ando <n-ando@aist.go.jp>
 #
-#  Copyright (C) 2003-2005, 2012
+#  Copyright (C) 2003-2005, 2012, 2020
 #      Intelligent Systems Research Institute,
 #      National Institute of
 #          Advanced Industrial Science and Technology (AIST), Japan
 #      All rights reserved.
 #
-#  $Id$
+#  $Id: rtm-config.in 2330 2012-02-21 15:51:53Z n-ando $
 #
 
-rtm_prefix="@prefix@"
-rtm_exec_prefix="@exec_prefix@"
-rtm_data_prefix="@datarootdir@"
-prefix="@prefix@"
-exec_prefix="@exec_prefix@"
-datarootdir="@datarootdir@"
+prefix="@CMAKE_INSTALL_PREFIX@"
+exec_prefix="${prefix}"
+datarootdir="${prefix}/@INSTALL_INCLUDE_DIR@"
+libdir="${prefix}/@INSTALL_RTM_LIB_DIR@"
+idldir="${prefix}/@INSTALL_RTM_IDL_DIR@"
+
+rtm_prefix="@CMAKE_INSTALL_PREFIX@"
+rtm_exec_prefix="${rtm_prefix}"
+rtm_data_prefix="${rtm_prefix}/@INSTALL_RTM_SHARE_DIR@"
+rtm_includedir="${rtm_prefix}/@INSTALL_RTM_INCLUDE_DIR@"
+rtm_idldir="${rtm_prefix}/@INSTALL_RTM_IDL_DIR@"
+rtm_libdir="${exec_prefix}/@INSTALL_RTM_EXT_DIR@"
+rtm_datadir="${datarootdir}/@INSTALL_DATA_DIR@"
+rtm_rtcdir="${rtm_prefix}/@INSTALL_RTC_DIR@"
+rtm_ecdir="${rtm_prefix}/@INSTALL_EC_DIR@"
+rtm_rtmdir="${rtm_prefix}/@INSTALL_RTM_DIR@"
+rtm_svcdir="${rtm_prefix}/@INSTALL_SVC_DIR@"
+rtm_docdir="${rtm_prefix}/@INSTALL_RTM_DOC_DIR@"
+rtm_exampledir="${rtm_prefix}/@INSTALL_RTM_EXAMPLE_DIR@"
+coil_includedir="${rtm_prefix}/@INSTALL_COIL_INCLUDE_DIR@"
 
 init_variables()
 {
-# basic options
-rtm_cxx="@CXX@"
-rtm_cflags=`echo @CXXFLAGS@ -I@prefix@/include -I@coil_includedir@ -I@rtm_includedir@ -I@rtm_idldir@ | sed -e 's/^[ ]*//g' -e 's/ \{2,\}/ /g'`
-rtm_cflags_I=`echo $rtm_cflags | sed -e 's/-[^I][^ ]*//g' -e 's/^[ ]*//g' -e 's/ \{2,\}/ /g'`
-rtm_cflags_o=`echo $rtm_cflags | sed -e 's/-I[^ ]*//g' -e 's/^[ ]*//g' -e 's/ \{2,\}/ /g'`
-rtm_libs=`echo @LDFLAGS@ -L@libdir@ @LIBS@ -lRTC -lcoil | sed -e 's/^[ ]*//g' -e 's/ \{2,\}/ /g'`
-rtm_libs_l=`echo $rtm_libs | sed -e 's/-[^l][^ ]*//g' -e 's/^[ ]*//g' -e 's/ \{2,\}/ /g'`
-rtm_libs_L=`echo $rtm_libs | sed -e 's/-[^L][^ ]*//g' -e 's/^[ ]*//g' -e 's/ \{2,\}/ /g'`
-rtm_libs_o=`echo $rtm_libs | sed -e 's/-[lL][^ ]*//g' -e 's/^[ ]*//g' -e 's/ \{2,\}/ /g'`
-rtm_version="@RTM_VERSION@"
-rtm_orb="@ORB@"
-rtm_idlc="@IDLC@"
-rtm_idlflags=` echo @IDL_FLAGS@ -I@rtm_idldir@ | sed -e 's/^[ ]*//g' -e 's/ \{2,\}/ /g'`
-rtm_idlflags_I=` echo $rtm_idlflags | sed -e 's/-[^I][^ ]*//g' -e 's/^[ ]*//g' -e 's/ \{2,\}/ /g'`
-rtm_idlflags_o=` echo $rtm_idlflags | sed -e 's/-I[^ ]*//g' -e 's/^[ ]*//g' -e 's/ \{2,\}/ /g'`
-# other variables
-rtm_includedir="@rtm_includedir@"
-rtm_idldir="@rtm_idldir@"
-rtm_libdir="@rtm_libdir@"
-rtm_datadir="@rtm_datadir@"
-rtm_rtcdir="@rtm_rtcdir@"
-rtm_ecdir="@rtm_ecdir@"
-rtm_rtmdir="@rtm_rtmdir@"
-rtm_svcdir="@rtm_svcdir@"
-rtm_docdir="@rtm_docdir@"
-rtm_exampledir="@rtm_exampledir@"
-coil_includedir="@coil_includedir@"
+    # basic options
+    rtm_cxx="@CMAKE_CXX_COMPILER@"
+    rtm_cflags=`echo @CXXFLAGS@ -I${rtm_prefix}/include -I${coil_includedir} -I${rtm_includedir} -I${idldir} | sed -e 's/^[ ]*//g' -e 's/ \{2,\}/ /g'`
+    rtm_cflags_I=`echo ${rtm_cflags} | sed -e 's/ -[^I][^ ]*//g' -e 's/^[ ]*//g' -e 's/ \{2,\}/ /g'`
+    rtm_cflags_o=`echo ${rtm_cflags} | sed -e 's/-I[^ ]*//g' -e 's/^[ ]*//g' -e 's/     \{2,\}/ /g'`
+    rtm_libs=`echo @LDFLAGS@ -L${libdir} @LIBS@ | sed -e 's/^[ ]*//g' -e 's/ \{2,\}/     /g'`
+    rtm_libs_l=`echo ${rtm_libs} | sed -e 's/-[^l][^ ]*//g' -e 's/^[ ]*//g' -e 's/ \    {2,\}/ /g'`
+    rtm_libs_L=`echo ${rtm_libs} | sed -e 's/-[^L][^ ]*//g' -e 's/^[ ]*//g' -e 's/ \    {2,\}/ /g'`
+    rtm_libs_o=`echo ${rtm_libs} | sed -e 's/-[lL][^ ]*//g' -e 's/^[ ]*//g' -e 's/ \    {2,\}/ /g'`
+    rtm_version="@RTM_VERSION@"
+    rtm_orb="@CORBA@"
+    rtm_idlc="@IDL_COMPILE_COMMAND@"
+    rtm_idlflags=` echo @IDL_FLAGS@ -I${idldir} | sed -e 's/^[ ]*//g' -e 's/ \{2,\}/     /g'`
+    rtm_idlflags_I=` echo $rtm_idlflags | sed -e 's/-[^I][^ ]*//g' -e 's/^[ ]*//g' -e 's/ \{2,\}/ /g'`
+    rtm_idlflags_o=` echo $rtm_idlflags | sed -e 's/-I[^ ]*//g' -e 's/^[ ]*//g' -e     's/ \{2,\}/ /g'`
 }
 
 usage()
@@ -58,7 +60,7 @@ usage()
         cat <<EOF
 Usage: rtm-config [OPTIONS]
 Options:
-    [--prefix[=DIR]]         ${prefix}
+    [--prefix[=DIR]]         ${rtm_prefix}
     [--exec-prefix[=DIR]]    ${exec_prefix}
     [--data-prefix[=DIR]]    ${datarootdir}
     [--version]              ${rtm_version}
