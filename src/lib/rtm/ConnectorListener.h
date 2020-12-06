@@ -209,7 +209,7 @@ namespace RTC
    * RTC::ReturnCode_t ConsoleIn::onInitialize()
    * {
    *     m_outOut.
-   *         addConnectorDataListener(ON_BUFFER_WRITE,
+   *         addConnectorDataListener(ConnectorDataListenerType::ON_BUFFER_WRITE,
    *                                  new MyDataListener("ON_BUFFER_WRITE"));
    *    :
    * </pre>
@@ -332,7 +332,7 @@ namespace RTC
    * RTC::ReturnCode_t ConsoleIn::onInitialize()
    * {
    *     m_outOut.
-   *         addConnectorDataListener(ON_BUFFER_WRITE,
+   *         addConnectorDataListener(ConnectorDataListenerType::ON_BUFFER_WRITE,
    *                                  new MyDataListener("ON_BUFFER_WRITE"));
    *    :
    * </pre>
@@ -726,7 +726,7 @@ namespace RTC
    * RTC::ReturnCode_t ConsoleIn::onInitialize()
    * {
    *     m_outOut.
-   *         addConnectorListener(ON_BUFFER_EMPTY,
+   *         addConnectorListener(ConnectorListenerType::ON_BUFFER_EMPTY,
    *                              new MyListener("ON_BUFFER_EMPTY"));
    *    :
    * </pre>
@@ -826,7 +826,7 @@ namespace RTC
    * RTC::ReturnCode_t ConsoleIn::onInitialize()
    * {
    *     m_outOut.
-   *         addConnectorListener(ON_BUFFER_EMPTY,
+   *         addConnectorListener(ConnectorListenerType::ON_BUFFER_EMPTY,
    *                              new MyDataListener("ON_BUFFER_EMPTY"));
    *    :
    * </pre>
