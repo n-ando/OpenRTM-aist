@@ -107,7 +107,8 @@ namespace coil
    */
   unsigned long int TimeMeasure::count() const
   {
-    return m_recurred ? m_record.size() : m_count;
+    return m_recurred ? 
+              static_cast<unsigend long int>(m_record.size()) : m_count;
   }
 
   /*!
