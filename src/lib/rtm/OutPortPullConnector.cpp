@@ -253,7 +253,7 @@ namespace RTC
    */
   void OutPortPullConnector::onConnect()
   {
-    m_listeners->notify(ON_CONNECT, m_profile);
+    m_listeners->notify(ConnectorListenerType::ON_CONNECT, m_profile);
   }
 
   /*!
@@ -265,7 +265,7 @@ namespace RTC
    */
   void OutPortPullConnector::onDisconnect()
   {
-    m_listeners->notify(ON_DISCONNECT, m_profile);
+    m_listeners->notify(ConnectorListenerType::ON_DISCONNECT, m_profile);
   }
 } // namespace RTC
 

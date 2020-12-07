@@ -140,7 +140,7 @@ namespace RTC
    *
    * @endif
    */
-  enum ConnectorDataListenerType
+  enum class ConnectorDataListenerType : uint8_t
     {
       ON_BUFFER_WRITE = 0,
       ON_BUFFER_FULL,
@@ -209,7 +209,7 @@ namespace RTC
    * RTC::ReturnCode_t ConsoleIn::onInitialize()
    * {
    *     m_outOut.
-   *         addConnectorDataListener(ON_BUFFER_WRITE,
+   *         addConnectorDataListener(ConnectorDataListenerType::ON_BUFFER_WRITE,
    *                                  new MyDataListener("ON_BUFFER_WRITE"));
    *    :
    * </pre>
@@ -332,7 +332,7 @@ namespace RTC
    * RTC::ReturnCode_t ConsoleIn::onInitialize()
    * {
    *     m_outOut.
-   *         addConnectorDataListener(ON_BUFFER_WRITE,
+   *         addConnectorDataListener(ConnectorDataListenerType::ON_BUFFER_WRITE,
    *                                  new MyDataListener("ON_BUFFER_WRITE"));
    *    :
    * </pre>
@@ -433,7 +433,7 @@ namespace RTC
      */
     static const char* toString(ConnectorDataListenerType type)
     {
-      if (type < CONNECTOR_DATA_LISTENER_NUM)
+      if (type < ConnectorDataListenerType::CONNECTOR_DATA_LISTENER_NUM)
         {
           static const char* const typeString[] =
           {
@@ -449,7 +449,7 @@ namespace RTC
             "ON_RECEIVER_ERROR",
             "CONNECTOR_DATA_LISTENER_NUM"
           };
-          return typeString[type];
+          return typeString[static_cast<uint8_t>(type)];
         }
       return "";
     }
@@ -666,7 +666,7 @@ namespace RTC
    *
    * @endif
    */
-  enum ConnectorListenerType
+  enum class ConnectorListenerType : uint8_t
     {
       ON_BUFFER_EMPTY = 0,
       ON_BUFFER_READ_TIMEOUT,
@@ -726,7 +726,7 @@ namespace RTC
    * RTC::ReturnCode_t ConsoleIn::onInitialize()
    * {
    *     m_outOut.
-   *         addConnectorListener(ON_BUFFER_EMPTY,
+   *         addConnectorListener(ConnectorListenerType::ON_BUFFER_EMPTY,
    *                              new MyListener("ON_BUFFER_EMPTY"));
    *    :
    * </pre>
@@ -826,7 +826,7 @@ namespace RTC
    * RTC::ReturnCode_t ConsoleIn::onInitialize()
    * {
    *     m_outOut.
-   *         addConnectorListener(ON_BUFFER_EMPTY,
+   *         addConnectorListener(ConnectorListenerType::ON_BUFFER_EMPTY,
    *                              new MyDataListener("ON_BUFFER_EMPTY"));
    *    :
    * </pre>
@@ -909,7 +909,7 @@ namespace RTC
      */
     static const char* toString(ConnectorListenerType type)
     {
-      if (type < CONNECTOR_LISTENER_NUM)
+      if (type < ConnectorListenerType::CONNECTOR_LISTENER_NUM)
         {
           static const char* const typeStr[] =
           {
@@ -922,7 +922,7 @@ namespace RTC
             "ON_DISCONNECT",
             "CONNECTOR_LISTENER_NUM"
           };
-          return typeStr[type];
+          return typeStr[static_cast<uint8_t>(type)];
         }
       return "";
     }
@@ -1847,7 +1847,10 @@ namespace RTC
      * The ConnectorDataListenerType listener is stored.
      * @endif
      */
-    std::array<ConnectorDataListenerHolder, CONNECTOR_DATA_LISTENER_NUM> connectorData_;
+    std::array<ConnectorDataListenerHolder,
+               static_cast<uint8_t>
+               (ConnectorDataListenerType::CONNECTOR_DATA_LISTENER_NUM)>
+               connectorData_;
     /*!
      * @if jp
      * @brief ConnectorListenerTypeリスナ配列
@@ -1857,7 +1860,10 @@ namespace RTC
      * The ConnectorListenerType listener is stored.
      * @endif
      */
-    std::array<ConnectorListenerHolder, CONNECTOR_LISTENER_NUM> connector_;
+    std::array<ConnectorListenerHolder,
+               static_cast<uint8_t>
+               (ConnectorListenerType::CONNECTOR_LISTENER_NUM)>
+               connector_;
   };
 
 
@@ -2122,9 +2128,9 @@ namespace RTC
      */
     ::RTC::ConnectorListenerStatus::Enum notifyIn(ConnectorDataListenerType type, ConnectorInfo& info, ByteData& data) override
     {
-      if(type < connectorData_.size())
+      if (static_cast<uint8_t>(type) < connectorData_.size())
       {
-          return connectorData_[type].notifyIn(info, data);
+          return connectorData_[static_cast<uint8_t>(type)].notifyIn(info, data);
       }
       return ConnectorListenerStatus::NO_CHANGE;
     }
@@ -2152,9 +2158,9 @@ namespace RTC
      */
     ::RTC::ConnectorListenerStatus::Enum notifyOut(ConnectorDataListenerType type, ConnectorInfo& info, ByteData& data) override
     {
-        if(type < connectorData_.size())
+        if (static_cast<uint8_t>(type) < connectorData_.size())
         {
-            return connectorData_[type].notifyOut(info, data);
+            return connectorData_[static_cast<uint8_t>(type)].notifyOut(info, data);
         }
         return ConnectorListenerStatus::NO_CHANGE;
     }
@@ -2183,9 +2189,9 @@ namespace RTC
      */
     ::RTC::ConnectorListenerStatus::Enum notify(ConnectorListenerType type, ConnectorInfo& info) override
     {
-        if(type < connector_.size())
+        if (static_cast<uint8_t>(type) < connector_.size())
         {
-            return connector_[type].notify(info);
+            return connector_[static_cast<uint8_t>(type)].notify(info);
         }
         return ConnectorListenerStatus::NO_CHANGE;
     }
@@ -2216,9 +2222,9 @@ namespace RTC
      */
     bool addListener(ConnectorDataListenerType type, ConnectorDataListener* listener, bool autoclean=true) override
     {
-        if(type < connectorData_.size())
+        if (static_cast<uint8_t>(type) < connectorData_.size())
         {
-            connectorData_[type].addListener(listener, autoclean);
+            connectorData_[static_cast<uint8_t>(type)].addListener(listener, autoclean);
             return true;
         }
         return false;
@@ -2250,9 +2256,9 @@ namespace RTC
      */
     bool addListener(ConnectorListenerType type, ConnectorListener* listener, bool autoclean=true) override
     {
-        if(type < connector_.size())
+        if (static_cast<uint8_t>(type) < connector_.size())
         {
-            connector_[type].addListener(listener, autoclean);
+            connector_[static_cast<uint8_t>(type)].addListener(listener, autoclean);
             return true;
         }
         return false;
@@ -2281,9 +2287,9 @@ namespace RTC
      */
     bool removeListener(ConnectorDataListenerType type, ConnectorDataListener* listener) override
     {
-        if(type < connectorData_.size())
+        if (static_cast<uint8_t>(type) < connectorData_.size())
         {
-            connectorData_[type].removeListener(listener);
+            connectorData_[static_cast<uint8_t>(type)].removeListener(listener);
             return true;
         }
         return false;
@@ -2312,9 +2318,9 @@ namespace RTC
      */
     bool removeListener(ConnectorListenerType type, ConnectorListener* listener) override
     {
-        if(type < connector_.size())
+        if (static_cast<uint8_t>(type) < connector_.size())
         {
-            connector_[type].removeListener(listener);
+            connector_[static_cast<uint8_t>(type)].removeListener(listener);
             return true;
         }
         return false;
@@ -2341,9 +2347,9 @@ namespace RTC
      */
     ConnectorDataListenerHolder* getDataListenerHolder(ConnectorDataListenerType type) override
     {
-        if (type < connectorData_.size())
+        if (static_cast<uint8_t>(type) < connectorData_.size())
         {
-            return &connectorData_[type];
+            return &connectorData_[static_cast<uint8_t>(type)];
         }
         return nullptr;
     }
@@ -2358,7 +2364,10 @@ namespace RTC
      * The ConnectorDataListenerType listener is stored.
      * @endif
      */
-    std::array<ConnectorDataListenerHolder, CONNECTOR_DATA_LISTENER_NUM> connectorData_;
+    std::array<ConnectorDataListenerHolder,
+               static_cast<uint8_t>
+               (ConnectorDataListenerType::CONNECTOR_DATA_LISTENER_NUM)>
+               connectorData_;
     /*!
      * @if jp
      * @brief ConnectorListenerTypeリスナ配列
@@ -2368,7 +2377,10 @@ namespace RTC
      * The ConnectorListenerType listener is stored.
      * @endif
      */
-    std::array<ConnectorListenerHolder, CONNECTOR_LISTENER_NUM> connector_;
+    std::array<ConnectorListenerHolder,
+               static_cast<uint8_t>
+               (ConnectorListenerType::CONNECTOR_LISTENER_NUM)>
+               connector_;
 
   };
 } // namespace RTC

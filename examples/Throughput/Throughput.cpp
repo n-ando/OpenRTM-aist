@@ -115,9 +115,9 @@ RTC::ReturnCode_t Throughput::onInitialize()
     {
       addInPort("in", m_inOctetIn);
       m_inOctetIn.
-        addConnectorDataListener(ON_BUFFER_WRITE,
+        addConnectorDataListener(ConnectorDataListenerType::ON_BUFFER_WRITE,
                                  new DataListener<RTC::TimedOctetSeq>(this));
-      m_inOctetIn.addConnectorListener(ON_CONNECT,
+      m_inOctetIn.addConnectorListener(ConnectorListenerType::ON_CONNECT,
                                        new ConnListener(this));
       addOutPort("out", m_outOctetOut);
       m_varsize = sizeof(CORBA::Octet);
@@ -126,9 +126,9 @@ RTC::ReturnCode_t Throughput::onInitialize()
     {
       addInPort("in", m_inShortIn);
       m_inShortIn.
-        addConnectorDataListener(ON_BUFFER_WRITE,
+        addConnectorDataListener(ConnectorDataListenerType::ON_BUFFER_WRITE,
                                  new DataListener<RTC::TimedShortSeq>(this));
-      m_inShortIn.addConnectorListener(ON_CONNECT,
+      m_inShortIn.addConnectorListener(ConnectorListenerType::ON_CONNECT,
                                        new ConnListener(this));
       addOutPort("out", m_outShortOut);
       m_varsize = sizeof(CORBA::Short);
@@ -137,9 +137,9 @@ RTC::ReturnCode_t Throughput::onInitialize()
     {
       addInPort("in", m_inLongIn);
       m_inLongIn.
-        addConnectorDataListener(ON_BUFFER_WRITE,
+        addConnectorDataListener(ConnectorDataListenerType::ON_BUFFER_WRITE,
                                  new DataListener<RTC::TimedLongSeq>(this));
-      m_inLongIn.addConnectorListener(ON_CONNECT,
+      m_inLongIn.addConnectorListener(ConnectorListenerType::ON_CONNECT,
                                       new ConnListener(this));
       addOutPort("out", m_outLongOut);
       m_varsize = sizeof(CORBA::Long);
@@ -148,9 +148,9 @@ RTC::ReturnCode_t Throughput::onInitialize()
     {
       addInPort("in", m_inFloatIn);
       m_inFloatIn.
-        addConnectorDataListener(ON_BUFFER_WRITE,
+        addConnectorDataListener(ConnectorDataListenerType::ON_BUFFER_WRITE,
                                  new DataListener<RTC::TimedFloatSeq>(this));
-      m_inFloatIn.addConnectorListener(ON_CONNECT,
+      m_inFloatIn.addConnectorListener(ConnectorListenerType::ON_CONNECT,
                                        new ConnListener(this));
       addOutPort("out", m_outFloatOut);
       m_varsize = sizeof(CORBA::Float);
@@ -159,9 +159,9 @@ RTC::ReturnCode_t Throughput::onInitialize()
     {
       addInPort("inDouble", m_inDoubleIn);
       m_inDoubleIn.
-        addConnectorDataListener(ON_BUFFER_WRITE,
+        addConnectorDataListener(ConnectorDataListenerType::ON_BUFFER_WRITE,
                                  new DataListener<RTC::TimedDoubleSeq>(this));
-      m_inDoubleIn.addConnectorListener(ON_CONNECT,
+      m_inDoubleIn.addConnectorListener(ConnectorListenerType::ON_CONNECT,
                                         new ConnListener(this));
       addOutPort("out", m_outDoubleOut);
       m_varsize = sizeof(CORBA::Double);

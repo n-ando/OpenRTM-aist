@@ -224,23 +224,23 @@ namespace RTC
               if (inport->isNew())
                 {
                   // ON_BUFFER_OVERWRITE(In,Out), ON_RECEIVER_FULL(In,Out) callback
-                  m_listeners->notifyOut(ON_BUFFER_OVERWRITE, m_profile, data);
-                  m_inPortListeners->notifyIn(ON_BUFFER_OVERWRITE, m_profile, data);
-                  m_listeners->notifyOut(ON_RECEIVER_FULL, m_profile, data);
-                  m_inPortListeners->notifyIn(ON_RECEIVER_FULL, m_profile, data);
+                  m_listeners->notifyOut(ConnectorDataListenerType::ON_BUFFER_OVERWRITE, m_profile, data);
+                  m_inPortListeners->notifyIn(ConnectorDataListenerType::ON_BUFFER_OVERWRITE, m_profile, data);
+                  m_listeners->notifyOut(ConnectorDataListenerType::ON_RECEIVER_FULL, m_profile, data);
+                  m_inPortListeners->notifyIn(ConnectorDataListenerType::ON_RECEIVER_FULL, m_profile, data);
                   RTC_PARANOID(("ON_BUFFER_OVERWRITE(InPort,OutPort), "
                                 "ON_RECEIVER_FULL(InPort,OutPort) "
                                 "callback called in direct mode."));
                 }
               // ON_BUFFER_WRITE(In,Out) callback
-              m_listeners->notifyOut(ON_BUFFER_WRITE, m_profile, data);
-              m_inPortListeners->notifyIn(ON_BUFFER_WRITE, m_profile, data);
+              m_listeners->notifyOut(ConnectorDataListenerType::ON_BUFFER_WRITE, m_profile, data);
+              m_inPortListeners->notifyIn(ConnectorDataListenerType::ON_BUFFER_WRITE, m_profile, data);
               RTC_PARANOID(("ON_BUFFER_WRITE(InPort,OutPort), "
                                 "callback called in direct mode."));
               inport->write(data);  // write to InPort variable!!
               // ON_RECEIVED(In,Out) callback
-              m_listeners->notifyOut(ON_RECEIVED, m_profile, data);
-              m_inPortListeners->notifyIn(ON_RECEIVED, m_profile, data);
+              m_listeners->notifyOut(ConnectorDataListenerType::ON_RECEIVED, m_profile, data);
+              m_inPortListeners->notifyIn(ConnectorDataListenerType::ON_RECEIVED, m_profile, data);
               RTC_PARANOID(("ON_RECEIVED(InPort,OutPort), "
                             "callback called in direct mode."));
               
@@ -262,6 +262,7 @@ namespace RTC
       cdr->serialize(data);
       RTC_TRACE(("connector endian: %s", isLittleEndian() ? "little":"big"));
       
+      // NOTE: need cast to ByteDataStreamBase* to call the another write()
       DataPortStatus ret = write((ByteDataStreamBase*)cdr);
 
       return ret;

@@ -335,35 +335,40 @@ namespace RTC
     if (m_compstat.activatedListener == nullptr)
       {
         m_compstat.activatedListener = 
-          m_rtobj->addPostComponentActionListener(POST_ON_ACTIVATED,
+          m_rtobj->addPostComponentActionListener(
+            PostComponentActionListenerType::POST_ON_ACTIVATED,
                                                   m_compstat,
                                                   &CompStatMsg::onActivated);
       }
     if (m_compstat.deactivatedListener == nullptr)
       {
         m_compstat.deactivatedListener = 
-          m_rtobj->addPostComponentActionListener(POST_ON_DEACTIVATED,
+          m_rtobj->addPostComponentActionListener(
+            PostComponentActionListenerType::POST_ON_DEACTIVATED,
                                                   m_compstat,
                                                   &CompStatMsg::onDeactivated);
       }
     if (m_compstat.resetListener == nullptr)
       {
         m_compstat.resetListener = 
-          m_rtobj->addPostComponentActionListener(POST_ON_RESET,
+          m_rtobj->addPostComponentActionListener(
+            PostComponentActionListenerType::POST_ON_RESET,
                                                   m_compstat,
                                                   &CompStatMsg::onReset);
       }
     if (m_compstat.abortingListener == nullptr)
       {
         m_compstat.abortingListener = 
-          m_rtobj->addPostComponentActionListener(POST_ON_ABORTING,
+          m_rtobj->addPostComponentActionListener(
+            PostComponentActionListenerType::POST_ON_ABORTING,
                                                   m_compstat,
                                                   &CompStatMsg::onAborting);
       }
     if (m_compstat.finalizeListener == nullptr)
       {
         m_compstat.finalizeListener = 
-          m_rtobj->addPostComponentActionListener(POST_ON_FINALIZE,
+          m_rtobj->addPostComponentActionListener(
+            PostComponentActionListenerType::POST_ON_FINALIZE,
                                                   m_compstat,
                                                   &CompStatMsg::onFinalize);
       }
@@ -380,31 +385,36 @@ namespace RTC
   {
     if (m_compstat.activatedListener != nullptr)
       {
-        m_rtobj->removePostComponentActionListener(POST_ON_ACTIVATED,
+        m_rtobj->removePostComponentActionListener(
+          PostComponentActionListenerType::POST_ON_ACTIVATED,
                                                  m_compstat.activatedListener);
         m_compstat.activatedListener = nullptr;
       }
     if (m_compstat.deactivatedListener != nullptr)
       {
-        m_rtobj->removePostComponentActionListener(POST_ON_DEACTIVATED,
+        m_rtobj->removePostComponentActionListener(
+          PostComponentActionListenerType::POST_ON_DEACTIVATED,
                                                m_compstat.deactivatedListener);
         m_compstat.deactivatedListener = nullptr;
       }
     if (m_compstat.resetListener != nullptr)
       {
-        m_rtobj->removePostComponentActionListener(POST_ON_RESET,
+        m_rtobj->removePostComponentActionListener(
+          PostComponentActionListenerType::POST_ON_RESET,
                                                    m_compstat.resetListener);
         m_compstat.resetListener = nullptr;
       }
     if (m_compstat.abortingListener != nullptr)
       {
-        m_rtobj->removePostComponentActionListener(POST_ON_ABORTING,
+        m_rtobj->removePostComponentActionListener(
+          PostComponentActionListenerType::POST_ON_ABORTING,
                                                    m_compstat.abortingListener);
         m_compstat.abortingListener = nullptr;
       }
     if (m_compstat.finalizeListener != nullptr)
       {
-        m_rtobj->removePostComponentActionListener(POST_ON_FINALIZE,
+        m_rtobj->removePostComponentActionListener(
+          PostComponentActionListenerType::POST_ON_FINALIZE,
                                                    m_compstat.finalizeListener);
         m_compstat.finalizeListener = nullptr;
       }
@@ -425,28 +435,29 @@ namespace RTC
     if (m_portaction.portAddListener == nullptr)
       {
         m_portaction.portAddListener =
-          m_rtobj->addPortActionListener(ADD_PORT,
+          m_rtobj->addPortActionListener(PortActionListenerType::ADD_PORT,
                                          m_portaction,
                                          &PortAction::onAddPort);
       }
     if (m_portaction.portRemoveListener == nullptr)
       {
         m_portaction.portRemoveListener =
-          m_rtobj->addPortActionListener(REMOVE_PORT,
+          m_rtobj->addPortActionListener(PortActionListenerType::REMOVE_PORT,
                                          m_portaction,
                                          &PortAction::onRemovePort);
       }
     if (m_portaction.portConnectListener == nullptr)
       {
         m_portaction.portConnectListener =
-          m_rtobj->addPortConnectRetListener(ON_CONNECTED,
+          m_rtobj->addPortConnectRetListener(
+                  PortConnectRetListenerType::ON_CONNECTED,
                                              m_portaction,
                                              &PortAction::onConnect);
       }
     if (m_portaction.portDisconnectListener == nullptr)
       {
         m_portaction.portDisconnectListener =
-          m_rtobj->addPortConnectRetListener(ON_DISCONNECTED,
+          m_rtobj->addPortConnectRetListener(PortConnectRetListenerType::ON_DISCONNECTED,
                                              m_portaction,
                                              &PortAction::onDisconnect);
       }
@@ -458,8 +469,9 @@ namespace RTC
         msg += inport->getName();
         DataPortAction *action = new DataPortAction(*this, msg,
                                                     m_inportInterval);
-        inport->addConnectorDataListener(ON_RECEIVED,
-                                                    action);
+        inport->addConnectorDataListener(
+                                        ConnectorDataListenerType::ON_RECEIVED,
+                                        action);
         m_recievedactions.emplace_back(action);
 
       }
@@ -470,8 +482,9 @@ namespace RTC
         msg += outport->getName();
         DataPortAction *action = new DataPortAction(*this, msg,
                                                     m_outportInterval);
-        outport->addConnectorDataListener(ON_SEND,
-                                              action);
+        outport->addConnectorDataListener(
+                                          ConnectorDataListenerType::ON_SEND,
+                                          action);
         m_sendactions.emplace_back(action);
       }
   }
@@ -487,25 +500,27 @@ namespace RTC
   {
     if (m_portaction.portAddListener != nullptr)
       {
-        m_rtobj->removePortActionListener(ADD_PORT,
+        m_rtobj->removePortActionListener(PortActionListenerType::ADD_PORT,
                                           m_portaction.portAddListener);
         m_portaction.portAddListener = nullptr;
       }
     if (m_portaction.portRemoveListener != nullptr)
       {
-        m_rtobj->removePortActionListener(REMOVE_PORT,
+        m_rtobj->removePortActionListener(PortActionListenerType::REMOVE_PORT,
                                           m_portaction.portRemoveListener);
         m_portaction.portRemoveListener = nullptr;
       }
     if (m_portaction.portConnectListener != nullptr)
       {
-        m_rtobj->removePortConnectRetListener(ON_CONNECTED,
+        m_rtobj->removePortConnectRetListener(
+                  PortConnectRetListenerType::ON_CONNECTED,
                                               m_portaction.portConnectListener);
         m_portaction.portConnectListener = nullptr;
       }
     if (m_portaction.portDisconnectListener != nullptr)
       {
-        m_rtobj->removePortConnectRetListener(ON_DISCONNECTED,
+        m_rtobj->removePortConnectRetListener(
+                  PortConnectRetListenerType::ON_DISCONNECTED,
                                            m_portaction.portDisconnectListener);
         m_portaction.portDisconnectListener = nullptr;
       }
@@ -516,7 +531,8 @@ namespace RTC
       {
         for (auto & m_recievedaction : m_recievedactions)
           {
-            inport->removeConnectorDataListener(ON_RECEIVED, m_recievedaction);
+            inport->removeConnectorDataListener(
+              ConnectorDataListenerType::ON_RECEIVED, m_recievedaction);
           }
       }
     const std::vector<OutPortBase*>& outports = m_rtobj->getOutPorts();
@@ -524,7 +540,8 @@ namespace RTC
       {
         for (auto & m_sendaction : m_sendactions)
           {
-            outport->removeConnectorDataListener(ON_SEND, m_sendaction);
+            outport->removeConnectorDataListener(
+              ConnectorDataListenerType::ON_SEND, m_sendaction);
           }
       }
   }
@@ -544,35 +561,40 @@ namespace RTC
     if (m_ecaction.ecAttached == nullptr)
       {
         m_ecaction.ecAttached =
-          m_rtobj->addExecutionContextActionListener(EC_ATTACHED,
+          m_rtobj->addExecutionContextActionListener(
+            ExecutionContextActionListenerType::EC_ATTACHED,
                                                      m_ecaction,
                                                      &ECAction::onAttached);
       }
     if (m_ecaction.ecDetached == nullptr)
       {
         m_ecaction.ecDetached = 
-          m_rtobj->addExecutionContextActionListener(EC_DETACHED,
+          m_rtobj->addExecutionContextActionListener(
+            ExecutionContextActionListenerType::EC_DETACHED,
                                                      m_ecaction,
                                                      &ECAction::onDetached);
       }
     if (m_ecaction.ecRatechanged == nullptr)
       {
         m_ecaction.ecRatechanged = 
-          m_rtobj->addPostComponentActionListener(POST_ON_RATE_CHANGED,
+          m_rtobj->addPostComponentActionListener(
+            PostComponentActionListenerType::POST_ON_RATE_CHANGED,
                                                   m_ecaction,
                                                   &ECAction::onRateChanged);
       }
     if (m_ecaction.ecStartup == nullptr)
       {
         m_ecaction.ecStartup = 
-          m_rtobj->addPostComponentActionListener(POST_ON_STARTUP,
+          m_rtobj->addPostComponentActionListener(
+            PostComponentActionListenerType::POST_ON_STARTUP,
                                                   m_ecaction,
                                                   &ECAction::onStartup);
       }
     if (m_ecaction.ecShutdown == nullptr)
       {
         m_ecaction.ecShutdown = 
-          m_rtobj->addPostComponentActionListener(POST_ON_SHUTDOWN,
+          m_rtobj->addPostComponentActionListener(
+            PostComponentActionListenerType::POST_ON_SHUTDOWN,
                                                   m_ecaction,
                                                   &ECAction::onShutdown);
       }
@@ -589,27 +611,32 @@ namespace RTC
   {
     if (m_ecaction.ecAttached != nullptr)
       {
-        m_rtobj->removeExecutionContextActionListener(EC_ATTACHED,
+        m_rtobj->removeExecutionContextActionListener(
+          ExecutionContextActionListenerType::EC_ATTACHED,
                                                       m_ecaction.ecAttached);
       }
     if (m_ecaction.ecDetached != nullptr)
       {
-        m_rtobj->removeExecutionContextActionListener(EC_DETACHED,
+        m_rtobj->removeExecutionContextActionListener(
+          ExecutionContextActionListenerType::EC_DETACHED,
                                                       m_ecaction.ecDetached);
       }
     if (m_ecaction.ecRatechanged != nullptr)
       {
-        m_rtobj->removePostComponentActionListener(POST_ON_RATE_CHANGED,
+        m_rtobj->removePostComponentActionListener(
+          PostComponentActionListenerType::POST_ON_RATE_CHANGED,
                                                    m_ecaction.ecRatechanged);
       }
     if (m_ecaction.ecStartup != nullptr)
       {
-        m_rtobj->removePostComponentActionListener(POST_ON_STARTUP,
+        m_rtobj->removePostComponentActionListener(
+          PostComponentActionListenerType::POST_ON_STARTUP,
                                                    m_ecaction.ecStartup);
       }
     if (m_ecaction.ecShutdown != nullptr)
       {
-        m_rtobj->removePostComponentActionListener(POST_ON_SHUTDOWN,
+        m_rtobj->removePostComponentActionListener(
+          PostComponentActionListenerType::POST_ON_SHUTDOWN,
                                                    m_ecaction.ecShutdown);
       }
   }
@@ -645,27 +672,33 @@ namespace RTC
   void ComponentObserverConsumer::setConfigurationListeners()
   {
     m_configMsg.updateConfigParamListener = 
-      m_rtobj->addConfigurationParamListener(ConfigurationParamListenerType::ON_UPDATE_CONFIG_PARAM,
+      m_rtobj->addConfigurationParamListener(
+        ConfigurationParamListenerType::ON_UPDATE_CONFIG_PARAM,
                                              m_configMsg,
                                              &ConfigAction::updateConfigParam);
     m_configMsg.setConfigSetListener = 
-      m_rtobj->addConfigurationSetListener(ConfigurationSetListenerType::ON_SET_CONFIG_SET,
+      m_rtobj->addConfigurationSetListener(
+        ConfigurationSetListenerType::ON_SET_CONFIG_SET,
                                              m_configMsg,
                                              &ConfigAction::setConfigSet);
     m_configMsg.addConfigSetListener = 
-      m_rtobj->addConfigurationSetListener(ConfigurationSetListenerType::ON_ADD_CONFIG_SET,
+      m_rtobj->addConfigurationSetListener(
+        ConfigurationSetListenerType::ON_ADD_CONFIG_SET,
                                              m_configMsg,
                                              &ConfigAction::addConfigSet);
     m_configMsg.updateConfigSetListener = 
-      m_rtobj->addConfigurationSetNameListener(ConfigurationSetNameListenerType::ON_UPDATE_CONFIG_SET,
+      m_rtobj->addConfigurationSetNameListener(
+        ConfigurationSetNameListenerType::ON_UPDATE_CONFIG_SET,
                                                m_configMsg,
                                                &ConfigAction::updateConfigSet);
     m_configMsg.removeConfigSetListener = 
-      m_rtobj->addConfigurationSetNameListener(ConfigurationSetNameListenerType::ON_REMOVE_CONFIG_SET,
+      m_rtobj->addConfigurationSetNameListener(
+        ConfigurationSetNameListenerType::ON_REMOVE_CONFIG_SET,
                                                m_configMsg,
                                                &ConfigAction::removeConfigSet);
     m_configMsg.activateConfigSetListener = 
-      m_rtobj->addConfigurationSetNameListener(ConfigurationSetNameListenerType::ON_ACTIVATE_CONFIG_SET,
+      m_rtobj->addConfigurationSetNameListener(
+        ConfigurationSetNameListenerType::ON_ACTIVATE_CONFIG_SET,
                                                m_configMsg,
                                               &ConfigAction::activateConfigSet);
   }
@@ -683,37 +716,43 @@ namespace RTC
     if (m_configMsg.updateConfigParamListener != nullptr)
       {
         m_rtobj->
-          removeConfigurationParamListener(ConfigurationParamListenerType::ON_UPDATE_CONFIG_PARAM,
+          removeConfigurationParamListener(
+            ConfigurationParamListenerType::ON_UPDATE_CONFIG_PARAM,
                                       m_configMsg.updateConfigParamListener);
         m_configMsg.updateConfigParamListener = nullptr;
       }
     if (m_configMsg.setConfigSetListener != nullptr)
       {
-        m_rtobj->removeConfigurationSetListener(ConfigurationSetListenerType::ON_SET_CONFIG_SET,
+        m_rtobj->removeConfigurationSetListener(
+          ConfigurationSetListenerType::ON_SET_CONFIG_SET,
                                            m_configMsg.setConfigSetListener);
         m_configMsg.setConfigSetListener = nullptr;
       }
     if (m_configMsg.addConfigSetListener != nullptr)
       {
-        m_rtobj->removeConfigurationSetListener(ConfigurationSetListenerType::ON_ADD_CONFIG_SET,
+        m_rtobj->removeConfigurationSetListener(
+          ConfigurationSetListenerType::ON_ADD_CONFIG_SET,
                                             m_configMsg.addConfigSetListener);
         m_configMsg.addConfigSetListener = nullptr;
       }
     if (m_configMsg.updateConfigSetListener != nullptr)
       {
-        m_rtobj->removeConfigurationSetNameListener(ConfigurationSetNameListenerType::ON_UPDATE_CONFIG_SET,
+        m_rtobj->removeConfigurationSetNameListener(
+          ConfigurationSetNameListenerType::ON_UPDATE_CONFIG_SET,
                                           m_configMsg.updateConfigSetListener);
         m_configMsg.updateConfigSetListener = nullptr;
       }
     if (m_configMsg.removeConfigSetListener != nullptr)
       {
-        m_rtobj->removeConfigurationSetNameListener(ConfigurationSetNameListenerType::ON_REMOVE_CONFIG_SET,
+        m_rtobj->removeConfigurationSetNameListener(
+          ConfigurationSetNameListenerType::ON_REMOVE_CONFIG_SET,
                                           m_configMsg.removeConfigSetListener);
         m_configMsg.removeConfigSetListener = nullptr;
       }
     if (m_configMsg.activateConfigSetListener != nullptr)
       {
-        m_rtobj->removeConfigurationSetNameListener(ConfigurationSetNameListenerType::ON_ACTIVATE_CONFIG_SET,
+        m_rtobj->removeConfigurationSetNameListener(
+          ConfigurationSetNameListenerType::ON_ACTIVATE_CONFIG_SET,
                                         m_configMsg.activateConfigSetListener);
         m_configMsg.activateConfigSetListener = nullptr;
       }

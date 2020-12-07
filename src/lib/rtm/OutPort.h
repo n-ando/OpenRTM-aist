@@ -108,9 +108,9 @@ namespace RTC
 	  m_directNewData(false), m_directValue(value)
     {
       this->initConnectorListeners();
-      this->addConnectorDataListener(ON_BUFFER_WRITE,
+      this->addConnectorDataListener(ConnectorDataListenerType::ON_BUFFER_WRITE,
                                      new Timestamp<DataType>("on_write"));
-      this->addConnectorDataListener(ON_SEND,
+      this->addConnectorDataListener(ConnectorDataListenerType::ON_SEND,
                                      new Timestamp<DataType>("on_send"));
 
 	  m_directport = this;

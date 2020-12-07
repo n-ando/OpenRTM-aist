@@ -189,14 +189,14 @@ namespace RTM
     ::RTM::ModuleProfileList_var cprof = new ::RTM::ModuleProfileList();
     std::vector<coil::Properties> prof(m_mgr.getLoadableModules());
 
-    cprof->length(static_cast<CORBA::Long>(prof.size()));
+    cprof->length(static_cast<CORBA::ULong>(prof.size()));
     for (size_t i(0), len(prof.size()); i < len; ++i)
       {
         RTC_VERBOSE_STR((prof[i]));
 #ifndef ORB_IS_TAO
-        NVUtil::copyFromProperties(cprof[static_cast<CORBA::Long>(i)].properties, prof[i]);
+        NVUtil::copyFromProperties(cprof[static_cast<CORBA::ULong>(i)].properties, prof[i]);
 #else
-        NVUtil::copyFromProperties(cprof.inout()[(CORBA::Long)i].properties, prof[i]);
+        NVUtil::copyFromProperties(cprof.inout()[static_cast<CORBA::ULong>(i)].properties, prof[i]);
 #endif
       }
 
@@ -218,14 +218,14 @@ namespace RTM
     ::RTM::ModuleProfileList_var cprof = new RTM::ModuleProfileList();
     std::vector<coil::Properties> prof(m_mgr.getLoadedModules());
 
-    cprof->length(static_cast<CORBA::Long>(prof.size()));
+    cprof->length(static_cast<CORBA::ULong>(prof.size()));
     for (size_t i(0), len(prof.size()); i < len; ++i)
       {
         RTC_VERBOSE_STR((prof[i]));
 #ifndef ORB_IS_TAO
-        NVUtil::copyFromProperties(cprof[static_cast<CORBA::Long>(i)].properties, prof[i]);
+        NVUtil::copyFromProperties(cprof[static_cast<CORBA::ULong>(i)].properties, prof[i]);
 #else
-        NVUtil::copyFromProperties(cprof.inout()[(CORBA::Long)i].properties, prof[i]);
+        NVUtil::copyFromProperties(cprof.inout()[static_cast<CORBA::Long>(i)].properties, prof[i]);
 #endif
       }
 
@@ -281,9 +281,9 @@ namespace RTM
       {
         RTC_VERBOSE_STR((prof[i]));
 #ifndef ORB_IS_TAO
-        NVUtil::copyFromProperties(cprof[static_cast<CORBA::Long>(i)].properties, prof[i]);
+        NVUtil::copyFromProperties(cprof[static_cast<CORBA::ULong>(i)].properties, prof[i]);
 #else
-        NVUtil::copyFromProperties(cprof.inout()[(CORBA::Long)i].properties, prof[i]);
+        NVUtil::copyFromProperties(cprof.inout()[static_cast<CORBA::Long>(i)].properties, prof[i]);
 #endif
       }
 
@@ -526,13 +526,13 @@ namespace RTM
     std::vector<RTC::RTObject_impl*> rtcs = m_mgr.getComponents();
     ::RTC::RTCList_var crtcs = new ::RTC::RTCList();
 
-    crtcs->length(static_cast<CORBA::Long>(rtcs.size()));
+    crtcs->length(static_cast<CORBA::ULong>(rtcs.size()));
     for (size_t i(0), len(rtcs.size()); i < len; ++i)
       {
 #ifndef ORB_IS_TAO
-        crtcs[static_cast<CORBA::Long>(i)] = rtcs[i]->getObjRef();
+        crtcs[static_cast<CORBA::ULong>(i)] = rtcs[i]->getObjRef();
 #else
-        crtcs.inout()[(CORBA::Long)i] = rtcs[i]->getObjRef();
+        crtcs.inout()[static_cast<CORBA::ULong>(i)] = rtcs[i]->getObjRef();
 #endif
       }
 
@@ -584,9 +584,9 @@ namespace RTM
       {
         ::RTC::ComponentProfile_var prof = rtcs[i]->get_component_profile();
 #ifndef ORB_IS_TAO
-        cprofs[static_cast<CORBA::Long>(i)] = prof;
+        cprofs[static_cast<CORBA::ULong>(i)] = prof;
 #else
-        cprofs.inout()[(CORBA::Long)i] = prof;
+        cprofs.inout()[static_cast<CORBA::ULong>(i)] = prof;
 #endif
       }
 

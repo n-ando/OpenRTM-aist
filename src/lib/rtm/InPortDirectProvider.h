@@ -231,7 +231,7 @@ namespace RTC
      */
     inline void onBufferWrite(ByteData& data)
     {
-      m_listeners->notifyIn(ON_BUFFER_WRITE, m_profile, data);
+      m_listeners->notifyIn(ConnectorDataListenerType::ON_BUFFER_WRITE, m_profile, data);
     }
 
     /*!
@@ -245,7 +245,7 @@ namespace RTC
      */
     inline void onBufferFull(ByteData& data)
     {
-      m_listeners->notifyIn(ON_BUFFER_FULL, m_profile, data);
+      m_listeners->notifyIn(ConnectorDataListenerType::ON_BUFFER_FULL, m_profile, data);
     }
 
     /*!
@@ -259,7 +259,7 @@ namespace RTC
      */
     inline void onBufferWriteTimeout(ByteData& data)
     {
-      m_listeners->notifyIn(ON_BUFFER_WRITE_TIMEOUT, m_profile, data);
+      m_listeners->notifyIn(ConnectorDataListenerType::ON_BUFFER_WRITE_TIMEOUT, m_profile, data);
     }
 
     /*!
@@ -273,7 +273,7 @@ namespace RTC
      */
     inline void onBufferWriteOverwrite(ByteData& data)
     {
-      m_listeners->notifyIn(ON_BUFFER_OVERWRITE, m_profile, data);
+      m_listeners->notifyIn(ConnectorDataListenerType::ON_BUFFER_OVERWRITE, m_profile, data);
     }
 
     /*!
@@ -287,7 +287,7 @@ namespace RTC
      */
     inline void onReceived(ByteData& data)
     {
-      m_listeners->notifyIn(ON_RECEIVED, m_profile, data);
+      m_listeners->notifyIn(ConnectorDataListenerType::ON_RECEIVED, m_profile, data);
     }
 
     /*!
@@ -301,7 +301,7 @@ namespace RTC
      */
     inline void onReceiverFull(ByteData& data)
     {
-      m_listeners->notifyIn(ON_RECEIVER_FULL, m_profile, data);
+      m_listeners->notifyIn(ConnectorDataListenerType::ON_RECEIVER_FULL, m_profile, data);
     }
 
     /*!
@@ -313,7 +313,7 @@ namespace RTC
      */
     inline void onReceiverTimeout(ByteData& data)
     {
-      m_listeners->notifyIn(ON_RECEIVER_TIMEOUT, m_profile, data);
+      m_listeners->notifyIn(ConnectorDataListenerType::ON_RECEIVER_TIMEOUT, m_profile, data);
     }
 
     /*!
@@ -325,7 +325,7 @@ namespace RTC
      */
     inline void onReceiverError(ByteData& data)
     {
-      m_listeners->notifyIn(ON_RECEIVER_ERROR, m_profile, data);
+      m_listeners->notifyIn(ConnectorDataListenerType::ON_RECEIVER_ERROR, m_profile, data);
     }
 
   private:

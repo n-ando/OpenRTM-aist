@@ -1384,7 +1384,7 @@ namespace RTC
       {
         for (auto & consumer : m_consumers)
           {
-            if (consumer.descriptor() == (const char*)nv.name)
+            if (consumer.descriptor() == static_cast<const char*>(nv.name))
               {
                 consumer.releaseObject();
               }

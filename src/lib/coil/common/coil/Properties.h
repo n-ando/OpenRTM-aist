@@ -1338,6 +1338,7 @@ namespace coil
     std::string name = "";
     std::string value = "";
     std::string default_value = "";
+    // The flag if a value other than the default value is set.
     bool set_value{false};
     Properties* root{nullptr};
     std::vector<Properties*> leaf;

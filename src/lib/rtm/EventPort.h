@@ -270,7 +270,7 @@ namespace RTC
     {
         InPortBase::init(prop);
         this->addConnectorListener
-            (ON_CONNECT,
+            (ConnectorListenerType::ON_CONNECT,
             new EventConnListener(m_buffer, m_thebuffer));
     }
 
@@ -279,7 +279,7 @@ namespace RTC
                    R (TOP::*handler)(P0))
     {
       this->addConnectorDataListener
-        (ON_RECEIVED,
+        (ConnectorDataListenerType::ON_RECEIVED,
          new EventBinder1<FsmType, TOP, R, P0>(m_fsm, name, handler, m_buffer));
     }
     template <typename TOP, class R>
@@ -287,7 +287,7 @@ namespace RTC
                    R (TOP::*handler)())
     {
       this->addConnectorDataListener
-        (ON_RECEIVED,
+        (ConnectorDataListenerType::ON_RECEIVED,
          new EventBinder0<FsmType, TOP, R>(m_fsm, name, handler, m_buffer));
     }
     bool read(std::string  /*name*/="") override { return true; }

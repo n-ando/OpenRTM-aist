@@ -39,8 +39,10 @@ namespace RTC
         "ON_UNSUBSCRIBE_INTERFACES",
         ""
       };
-    type = type < PORT_CONNECT_LISTENER_NUM ? type : PORT_CONNECT_LISTENER_NUM;
-    return typeString[type];
+    type = type < PortConnectListenerType::PORT_CONNECT_LISTENER_NUM 
+                ? type 
+                : PortConnectListenerType::PORT_CONNECT_LISTENER_NUM;
+    return typeString[static_cast<uint8_t>(type)];
   }
 
   /*!
@@ -72,9 +74,10 @@ namespace RTC
         "ON_DISCONNECTED",
         ""
       };
-    type = type < PORT_CONNECT_RET_LISTENER_NUM ?
-      type : PORT_CONNECT_RET_LISTENER_NUM;
-      return typeString[type];
+    type = type < PortConnectRetListenerType::PORT_CONNECT_RET_LISTENER_NUM 
+                ? type 
+                : PortConnectRetListenerType::PORT_CONNECT_RET_LISTENER_NUM;
+      return typeString[static_cast<uint8_t>(type)];
   }
 
   /*!
@@ -257,9 +260,9 @@ namespace RTC
    */
   bool PortConnectListeners::addListener(PortConnectListenerType type, PortConnectListener* listener, bool autoclean)
   {
-      if(type < portconnect_.size())
+      if (static_cast<uint8_t>(type) < portconnect_.size())
       {
-          portconnect_[type].addListener(listener, autoclean);
+          portconnect_[static_cast<uint8_t>(type)].addListener(listener, autoclean);
           return true;
       }
       return false;
@@ -289,9 +292,9 @@ namespace RTC
    */
   bool PortConnectListeners::removeListener(PortConnectListenerType type, PortConnectListener* listener)
   {
-      if(type < portconnect_.size())
+      if (static_cast<uint8_t>(type) < portconnect_.size())
       {
-          portconnect_[type].removeListener(listener);
+          portconnect_[static_cast<uint8_t>(type)].removeListener(listener);
           return true;
       }
       return false;
@@ -323,9 +326,9 @@ namespace RTC
    */
   bool PortConnectListeners::addListener(PortConnectRetListenerType type, PortConnectRetListener* listener, bool autoclean)
   {
-      if(type < portconnret_.size())
+      if (static_cast<uint8_t>(type) < portconnret_.size())
       {
-          portconnret_[type].addListener(listener, autoclean);
+          portconnret_[static_cast<uint8_t>(type)].addListener(listener, autoclean);
           return true;
       }
       return false;
@@ -355,9 +358,9 @@ namespace RTC
    */
   bool PortConnectListeners::removeListener(PortConnectRetListenerType type, PortConnectRetListener* listener)
   {
-      if(type < portconnret_.size())
+      if (static_cast<uint8_t>(type) < portconnret_.size())
       {
-          portconnret_[type].removeListener(listener);
+          portconnret_[static_cast<uint8_t>(type)].removeListener(listener);
           return true;
       }
       return false;

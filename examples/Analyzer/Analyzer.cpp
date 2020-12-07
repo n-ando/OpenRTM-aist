@@ -97,7 +97,8 @@ RTC::ReturnCode_t Analyzer::onInitialize()
   // <rtc-template block="registration">
   // Set InPort buffers
   addInPort("in", m_inIn);
-  m_inIn.addConnectorDataListener(ON_BUFFER_WRITE,new DataListener(this));
+  m_inIn.addConnectorDataListener(ConnectorDataListenerType::ON_BUFFER_WRITE,
+                                  new DataListener(this));
   
   // Set OutPort buffer
   addOutPort("out", m_outOut);

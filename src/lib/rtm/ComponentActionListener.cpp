@@ -369,9 +369,9 @@ namespace RTC
    */
   bool ComponentActionListeners::addListener(PreComponentActionListenerType type, PreComponentActionListener* listener, bool autoclean)
   {
-      if(type < preaction_.size())
+      if (static_cast<uint8_t>(type) < preaction_.size())
       {
-           preaction_[type].addListener(listener, autoclean);
+           preaction_[static_cast<uint8_t>(type)].addListener(listener, autoclean);
            return true;
       }
       return false;
@@ -404,9 +404,9 @@ namespace RTC
    */
   bool ComponentActionListeners::addListener(PostComponentActionListenerType type, PostComponentActionListener* listener, bool autoclean)
   {
-      if(type < postaction_.size())
+      if (static_cast<uint8_t>(type) < postaction_.size())
       {
-           postaction_[type].addListener(listener, autoclean);
+           postaction_[static_cast<uint8_t>(type)].addListener(listener, autoclean);
            return true;
       }
       return false;
@@ -439,9 +439,9 @@ namespace RTC
    */
   bool ComponentActionListeners::addListener(PortActionListenerType type, PortActionListener* listener, bool autoclean)
   {
-      if(type < portaction_.size())
+      if (static_cast<uint8_t>(type) < portaction_.size())
       {
-           portaction_[type].addListener(listener, autoclean);
+           portaction_[static_cast<uint8_t>(type)].addListener(listener, autoclean);
            return true;
       }
       return false;
@@ -474,9 +474,9 @@ namespace RTC
    */
   bool ComponentActionListeners::addListener(ExecutionContextActionListenerType type, ExecutionContextActionListener* listener, bool autoclean)
   {
-      if(type < ecaction_.size())
+      if (static_cast<uint8_t>(type) < ecaction_.size())
       {
-           ecaction_[type].addListener(listener, autoclean);
+           ecaction_[static_cast<uint8_t>(type)].addListener(listener, autoclean);
            return true;
       }
       return false;
@@ -506,9 +506,9 @@ namespace RTC
    */
   bool ComponentActionListeners::removeListener(PreComponentActionListenerType type, PreComponentActionListener* listener)
   {
-      if(type < preaction_.size())
+      if (static_cast<uint8_t>(type) < preaction_.size())
       {
-           preaction_[type].removeListener(listener);
+           preaction_[static_cast<uint8_t>(type)].removeListener(listener);
            return true;
       }
       return false;
@@ -538,9 +538,9 @@ namespace RTC
    */
   bool ComponentActionListeners::removeListener(PostComponentActionListenerType type, PostComponentActionListener* listener)
   {
-      if(type < postaction_.size())
+      if (static_cast<uint8_t>(type) < postaction_.size())
       {
-           postaction_[type].removeListener(listener);
+           postaction_[static_cast<uint8_t>(type)].removeListener(listener);
            return true;
       }
       return false;
@@ -570,9 +570,9 @@ namespace RTC
    */
   bool ComponentActionListeners::removeListener(PortActionListenerType type, PortActionListener* listener)
   {
-      if(type < portaction_.size())
+      if (static_cast<uint8_t>(type) < portaction_.size())
       {
-           portaction_[type].removeListener(listener);
+           portaction_[static_cast<uint8_t>(type)].removeListener(listener);
            return true;
       }
       return false;
@@ -602,9 +602,9 @@ namespace RTC
    */
   bool ComponentActionListeners::removeListener(ExecutionContextActionListenerType type, ExecutionContextActionListener* listener)
   {
-      if(type < ecaction_.size())
+      if (static_cast<uint8_t>(type) < ecaction_.size())
       {
-           ecaction_[type].removeListener(listener);
+           ecaction_[static_cast<uint8_t>(type)].removeListener(listener);
            return true;
       }
       return false;

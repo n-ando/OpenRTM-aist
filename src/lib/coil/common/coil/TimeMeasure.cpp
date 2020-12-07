@@ -107,8 +107,8 @@ namespace coil
    */
   unsigned long int TimeMeasure::count() const
   {
-    return m_recurred ?
-      static_cast<unsigned long int>(m_record.size()) : m_count;
+    return m_recurred ? 
+              static_cast<unsigned long int>(m_record.size()) : m_count;
   }
 
   /*!
@@ -142,8 +142,8 @@ namespace coil
         if (trecord < min_interval) min_interval = trecord;
       }
 
-    mean_interval = sum / len;
-    stddev = sqrt(sq_sum / len - (mean_interval * mean_interval));
+    mean_interval = sum / static_cast<double>(len);
+    stddev = sqrt(sq_sum / static_cast<double>(len) - (mean_interval * mean_interval));
 
     return true;
   }

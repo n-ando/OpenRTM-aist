@@ -75,38 +75,38 @@ RTC::ReturnCode_t SeqOut::onInitialize()
   addOutPort("DoubleSeq", m_DoubleSeqOut);
   
   // check m_LongOut port only
-  m_LongOut.addConnectorDataListener(ON_BUFFER_WRITE,
+  m_LongOut.addConnectorDataListener(ConnectorDataListenerType::ON_BUFFER_WRITE,
                                     new DataListener("ON_BUFFER_WRITE"));
-  m_LongOut.addConnectorDataListener(ON_BUFFER_FULL, 
+  m_LongOut.addConnectorDataListener(ConnectorDataListenerType::ON_BUFFER_FULL, 
                                     new DataListener("ON_BUFFER_FULL"));
-  m_LongOut.addConnectorDataListener(ON_BUFFER_WRITE_TIMEOUT, 
+  m_LongOut.addConnectorDataListener(ConnectorDataListenerType::ON_BUFFER_WRITE_TIMEOUT, 
                                     new DataListener("ON_BUFFER_WRITE_TIMEOUT"));
-  m_LongOut.addConnectorDataListener(ON_BUFFER_OVERWRITE, 
+  m_LongOut.addConnectorDataListener(ConnectorDataListenerType::ON_BUFFER_OVERWRITE, 
                                     new DataListener("ON_BUFFER_OVERWRITE"));
-  m_LongOut.addConnectorDataListener(ON_BUFFER_READ, 
+  m_LongOut.addConnectorDataListener(ConnectorDataListenerType::ON_BUFFER_READ, 
                                     new DataListener("ON_BUFFER_READ"));
-  m_LongOut.addConnectorDataListener(ON_SEND, 
+  m_LongOut.addConnectorDataListener(ConnectorDataListenerType::ON_SEND, 
                                     new DataListener("ON_SEND"));
-  m_LongOut.addConnectorDataListener(ON_RECEIVED,
+  m_LongOut.addConnectorDataListener(ConnectorDataListenerType::ON_RECEIVED,
                                     new DataListener("ON_RECEIVED"));
-  m_LongOut.addConnectorDataListener(ON_RECEIVER_FULL, 
+  m_LongOut.addConnectorDataListener(ConnectorDataListenerType::ON_RECEIVER_FULL, 
                                     new DataListener("ON_RECEIVER_FULL"));
-  m_LongOut.addConnectorDataListener(ON_RECEIVER_TIMEOUT, 
+  m_LongOut.addConnectorDataListener(ConnectorDataListenerType::ON_RECEIVER_TIMEOUT, 
                                     new DataListener("ON_RECEIVER_TIMEOUT"));
 
-  m_LongOut.addConnectorListener(ON_BUFFER_EMPTY,
+  m_LongOut.addConnectorListener(ConnectorListenerType::ON_BUFFER_EMPTY,
                                     new ConnListener("ON_BUFFER_EMPTY"));
-  m_LongOut.addConnectorListener(ON_BUFFER_READ_TIMEOUT,
+  m_LongOut.addConnectorListener(ConnectorListenerType::ON_BUFFER_READ_TIMEOUT,
                                     new ConnListener("ON_BUFFER_READ_TIMEOUT"));
-  m_LongOut.addConnectorListener(ON_SENDER_EMPTY,
+  m_LongOut.addConnectorListener(ConnectorListenerType::ON_SENDER_EMPTY,
                                     new ConnListener("ON_SENDER_EMPTY"));
-  m_LongOut.addConnectorListener(ON_SENDER_TIMEOUT,
+  m_LongOut.addConnectorListener(ConnectorListenerType::ON_SENDER_TIMEOUT,
                                     new ConnListener("ON_SENDER_TIMEOUT"));
-  m_LongOut.addConnectorListener(ON_SENDER_ERROR,
+  m_LongOut.addConnectorListener(ConnectorListenerType::ON_SENDER_ERROR,
                                     new ConnListener("ON_SENDER_ERROR"));
-  m_LongOut.addConnectorListener(ON_CONNECT,
+  m_LongOut.addConnectorListener(ConnectorListenerType::ON_CONNECT,
                                     new ConnListener("ON_CONNECT"));
-  m_LongOut.addConnectorListener(ON_DISCONNECT,
+  m_LongOut.addConnectorListener(ConnectorListenerType::ON_DISCONNECT,
                                     new ConnListener("ON_DISCONNECT"));
 
   // Set service provider to Ports

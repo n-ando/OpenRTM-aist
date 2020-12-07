@@ -378,9 +378,9 @@ namespace RTC
      *
      * @endif
      */
-    Config(const char* name, VarType& var, const char* def_val,
+    Config(const char* conf_name, VarType& var, const char* def_val,
            TransFunc trans = coil::stringTo)
-      : ConfigBase(name, def_val), m_var(var), m_trans(trans)
+      : ConfigBase(conf_name, def_val), m_var(var), m_trans(trans)
     {
     }
 

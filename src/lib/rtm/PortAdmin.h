@@ -540,12 +540,12 @@ namespace RTC
       {
       }
       explicit comp_op(T* obj)
-        : m_name((const char*)(obj->getProfile().name))
+        : m_name(static_cast<const char*>(obj->getProfile().name))
       {
       }
       bool operator()(T* obj)
       {
-        std::string name((const char*)obj->getProfile().name);
+        std::string name(static_cast<const char*>(obj->getProfile().name));
         return m_name == name;
       }
     private:
