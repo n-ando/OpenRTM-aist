@@ -2501,8 +2501,8 @@ namespace RTC
      * @endif
      */
     bool addInPort(const char* name, InPortBase& inport);
-    const std::vector<InPortBase*>& getInPorts() const {return m_inports;}
-    const std::vector<OutPortBase*>& getOutPorts() const {return m_outports;}
+    const std::vector<InPortBase*>& getInPorts() const { return m_inports; }
+    const std::vector<OutPortBase*>& getOutPorts() const { return m_outports; }
     /*!
      * @if jp
      *
@@ -3273,7 +3273,6 @@ namespace RTC
      */
     void setWriteAll(bool write = true, bool completion = false);
 
-
     /*!
      * @if jp
      *
@@ -3292,7 +3291,6 @@ namespace RTC
      */
     void finalizePorts();
 
-
     /*!
      * @if jp
      *
@@ -3306,19 +3304,18 @@ namespace RTC
      */
     void finalizeContexts();
 
-	/*!
-	* @if jp
-	*
-	* @brief omniINSPOAから取得したオブジェクトを登録
-	*
-	* @else
-	*
-	* @brief 
-	*
-	* @endif
-	*/
-	void setINSObjRef(RTC::LightweightRTObject_ptr obj);
-
+    /*!
+     * @if jp
+     *
+     *  @brief omniINSPOAから取得したオブジェクトを登録
+     *
+     * @else
+     *
+     * @brief
+     *
+     * @endif
+     */
+    void setINSObjRef(RTC::LightweightRTObject_ptr obj);
 
     /*!
      * @if jp
@@ -3399,12 +3396,11 @@ namespace RTC
                                   PreCompActionListener* listener,
                                   bool autoclean = true);
 
-
     template <class Listener>
     PreComponentActionListener*
     addPreComponentActionListener(PreCompActionListenerType listener_type,
-                                   Listener& obj,
-                                   void (Listener::*memfunc)(UniqueId ec_id))
+                                  Listener& obj,
+                                  void (Listener::*memfunc)(UniqueId ec_id))
     {
       class Noname
         : public PreComponentActionListener
@@ -3449,9 +3445,8 @@ namespace RTC
      */
     void
     removePreComponentActionListener(
-                                 PreComponentActionListenerType listener_type,
-                                 PreComponentActionListener* listener);
-
+        PreComponentActionListenerType listener_type,
+        PreComponentActionListener* listener);
 
     /*!
      * @if jp
@@ -3529,9 +3524,9 @@ namespace RTC
     using PostCompActionListenerType = PostComponentActionListenerType;
     void
     addPostComponentActionListener(
-                               PostComponentActionListenerType listener_type,
-                               PostComponentActionListener* listener,
-                               bool autoclean = true);
+        PostComponentActionListenerType listener_type,
+        PostComponentActionListener* listener,
+        bool autoclean = true);
 
     template <class Listener>
     PostComponentActionListener*
@@ -3552,6 +3547,7 @@ namespace RTC
         {
           (m_obj.*m_memfunc)(ec_id, ret);
         }
+
       private:
         Listener& m_obj;
         using Memfunc = void (Listener::*)(UniqueId, ReturnCode_t);
@@ -3583,10 +3579,8 @@ namespace RTC
      */
     void
     removePostComponentActionListener(
-                                  PostComponentActionListenerType listener_type,
-                                  PostComponentActionListener* listener);
-
-
+        PostComponentActionListenerType listener_type,
+        PostComponentActionListener* listener);
 
     /*!
      * @if jp
@@ -3665,9 +3659,10 @@ namespace RTC
         {
           (m_obj.*m_memfunc)(pprofile);
         }
+
       private:
         Listener& m_obj;
-        using Memfunc = void (Listener::*)(const RTC::PortProfile &);
+        using Memfunc = void (Listener::*)(const RTC::PortProfile&);
         Memfunc m_memfunc;
       };
       Noname* listener(new Noname(obj, memfunc));
@@ -3697,8 +3692,6 @@ namespace RTC
     void
     removePortActionListener(PortActionListenerType listener_type,
                              PortActionListener* listener);
-
-
 
     /*!
      * @if jp
@@ -3777,6 +3770,7 @@ namespace RTC
         {
           (m_obj.*m_memfunc)(ec_id);
         }
+
       private:
         Listener& m_obj;
         using Memfunc = void (Listener::*)(UniqueId);
@@ -3786,7 +3780,6 @@ namespace RTC
       addExecutionContextActionListener(listener_type, listener, true);
       return listener;
     }
-
 
     /*!
      * @if jp
@@ -3810,7 +3803,6 @@ namespace RTC
     void
     removeExecutionContextActionListener(ECActionListenerType listener_type,
                                          ECActionListener* listener);
-
 
     /*!
      * @if jp
@@ -3867,8 +3859,8 @@ namespace RTC
      * @endif
      */
     void addPortConnectListener(PortConnectListenerType listener_type,
-                                           PortConnectListener* listener,
-                                           bool autoclean = true);
+                                PortConnectListener* listener,
+                                bool autoclean = true);
 
     template <class Listener>
     PortConnectListener*
@@ -3890,16 +3882,16 @@ namespace RTC
         {
           (m_obj.*m_memfunc)(portname, cprofile);
         }
+
       private:
         Listener& m_obj;
-        using Memfunc = void (Listener::*)(const char*, ConnectorProfile &);
+        using Memfunc = void (Listener::*)(const char*, ConnectorProfile&);
         Memfunc m_memfunc;
       };
       Noname* listener(new Noname(obj, memfunc));
       addPortConnectListener(listener_type, listener, true);
       return listener;
     }
-
 
     /*!
      * @if jp
@@ -3983,8 +3975,8 @@ namespace RTC
      * @endif
      */
     void addPortConnectRetListener(PortConnectRetListenerType listener_type,
-                                           PortConnectRetListener* listener,
-                                           bool autoclean = true);
+                                   PortConnectRetListener* listener,
+                                   bool autoclean = true);
 
     template <class Listener>
     PortConnectRetListener*
@@ -4011,16 +4003,16 @@ namespace RTC
         {
           (m_obj.*m_memfunc)(portname, cprofile, ret);
         }
+
       private:
         Listener& m_obj;
-        using Memfunc = void (Listener::*)(const char*, ConnectorProfile &, ReturnCode_t);
+        using Memfunc = void (Listener::*)(const char*, ConnectorProfile&, ReturnCode_t);
         Memfunc m_memfunc;
       };
       Noname* listener(new Noname(obj, memfunc));
       addPortConnectRetListener(listener_type, listener, true);
       return listener;
     }
-
 
     /*!
      * @if jp
@@ -4044,7 +4036,6 @@ namespace RTC
     void
     removePortConnectRetListener(PortConnectRetListenerType listener_type,
                                  PortConnectRetListener* listener);
-
 
     /*!
      * @if jp
@@ -4103,9 +4094,10 @@ namespace RTC
         {
           (m_obj.*m_memfunc)(config_set_name, config_param_name);
         }
+
       private:
         Listener& m_obj;
-        using Memfunc = void (Listener::*)(const char *, const char*);
+        using Memfunc = void (Listener::*)(const char*, const char*);
         Memfunc m_memfunc;
       };
       Noname* listener(new Noname(obj, memfunc));
@@ -4138,7 +4130,8 @@ namespace RTC
      * @endif
      */
     void removeConfigurationParamListener(ConfigurationParamListenerType type,
-                                          ConfigurationParamListener* listener);
+                                          ConfigurationParamListener*
+                                          listener);
 
     /*!
      * @if jp
@@ -4195,9 +4188,10 @@ namespace RTC
         {
           (m_obj.*m_memfunc)(config_set);
         }
+
       private:
         Listener& m_obj;
-        using Memfunc = void (Listener::*)(const coil::Properties &);
+        using Memfunc = void (Listener::*)(const coil::Properties&);
         Memfunc m_memfunc;
       };
       Noname* listener(new Noname(obj, memfunc));
@@ -4287,6 +4281,7 @@ namespace RTC
         {
           (m_obj.*m_memfunc)(config_set_name);
         }
+
       private:
         Listener& m_obj;
         using Memfunc = void (Listener::*)(const char*);
@@ -4401,17 +4396,16 @@ namespace RTC
      *
      * @endif
      */
-    void 
+    void
     addPreFsmActionListener(PreFsmActionListenerType listener_type,
-                                  PreFsmActionListener* listener,
-                                  bool autoclean = true);
-
+                            PreFsmActionListener* listener,
+                            bool autoclean = true);
 
     template <class Listener>
     PreFsmActionListener*
     addPreFsmActionListener(PreFsmActionListenerType listener_type,
-                                   Listener& obj,
-                                   void (Listener::*memfunc)(const char* state))
+                            Listener& obj,
+                            void (Listener:: *memfunc)(const char* state))
     {
       class Noname
         : public PreFsmActionListener
@@ -4425,6 +4419,7 @@ namespace RTC
         {
           (m_obj.*m_memfunc)(state);
         }
+
       private:
         Listener& m_obj;
         using Memfunc = void (Listener::*)(const char*);
@@ -4440,7 +4435,7 @@ namespace RTC
      * @brief PreFsmActionListener リスナを削除する
      *
      * 設定した各種リスナを削除する。
-     * 
+     *
      * @param listener_type リスナタイプ
      * @param listener リスナオブジェクトへのポインタ
      *
@@ -4448,17 +4443,15 @@ namespace RTC
      * @brief Removing PreFsmAction type listener
      *
      * This operation removes a specified listener.
-     *     
+     *
      * @param listener_type A listener type
      * @param listener A pointer to a listener object
      *
      * @endif
      */
     void
-    removePreFsmActionListener(
-                               PreFsmActionListenerType listener_type,
+    removePreFsmActionListener(PreFsmActionListenerType listener_type,
                                PreFsmActionListener* listener);
-
 
     /*!
      * @if jp
@@ -4535,7 +4528,7 @@ namespace RTC
     void
     addPostFsmActionListener(PostFsmActionListenerType listener_type,
                              PostFsmActionListener* listener,
-                               bool autoclean = true);
+                             bool autoclean = true);
 
     template <class Listener>
     PostFsmActionListener*
@@ -4557,6 +4550,7 @@ namespace RTC
         {
           (m_obj.*m_memfunc)(state, ret);
         }
+
       private:
         Listener& m_obj;
         using Memfunc = void (Listener::*)(const char*, ReturnCode_t);
@@ -4572,7 +4566,6 @@ namespace RTC
      * @brief PostFsmActionListener リスナを削除する
      *
      * 設定した各種リスナを削除する。
-     *
      * @param listener_type リスナタイプ
      * @param listener リスナオブジェクトへのポインタ
      *
@@ -4682,9 +4675,10 @@ namespace RTC
         {
           (m_obj.*m_memfunc)(pprofile);
         }
+
       private:
         Listener& m_obj;
-        using Memfunc = void (Listener::*)(const RTC::FsmProfile &);
+        using Memfunc = void (Listener::*)(const RTC::FsmProfile&);
         Memfunc m_memfunc;
       };
       Noname* listener(new Noname(obj, memfunc));
@@ -4714,7 +4708,6 @@ namespace RTC
     void
     removeFsmProfileListener(FsmProfileListenerType listener_type,
                              FsmProfileListener* listener);
-
 
     /*!
      * @if jp
@@ -4795,9 +4788,10 @@ namespace RTC
         {
           (m_obj.*m_memfunc)(pprofile);
         }
+
       private:
         Listener& m_obj;
-        using Memfunc = void (Listener::*)(const RTC::FsmStructure &);
+        using Memfunc = void (Listener::*)(const RTC::FsmStructure&);
         Memfunc m_memfunc;
       };
       Noname* listener(new Noname(obj, memfunc));
@@ -4827,30 +4821,6 @@ namespace RTC
     void
     removeFsmStructureListener(FsmStructureListenerType listener_type,
                                FsmStructureListener* listener);
-
-
-
-    //  protected:
-    /*!
-     * @if jp
-     *
-     * @brief RTC を終了する
-     *
-     * RTC の終了処理を実行する。
-     * 保持している全 Port の登録を解除するとともに、該当する CORBA オブジェクト
-     * を非活性化し、RTC を終了する。
-     *
-     * @else
-     *
-     * @brief Shutdown RTC
-     *
-     * This operation ececutes RTC's termination.
-     * This unregisters all Ports, deactivates corresponding CORBA objects and
-     * shuts down RTC.
-     *
-     * @endif
-     */
-    void shutdown();
 
     inline void preOnInitialize(UniqueId ec_id)
     {
@@ -5041,7 +5011,57 @@ namespace RTC
       m_fsmActionListeners.notify(PostFsmActionListenerType::POST_ON_STATE_CHANGE, state, ret);
     }
 
-    
+  /*!
+   * Protected inner functions
+   */
+  protected:
+    /*!
+     * @if jp
+     * @brief RTC を終了する
+     * RTC の終了処理を実行する。
+     * 保持している全 Port の登録を解除するとともに、該当する CORBA オブジェクト
+     * を非活性化し、RTC を終了する。finalize() でのみコールされる。
+     *
+     * @else
+     * @brief Shutdown RTC
+     * This operation ececutes RTC's termination.
+     * This unregisters all Ports, deactivates corresponding CORBA objects and
+     * shuts down RTC. This is called from onlu finlize().
+     *
+     * @endif
+     */
+    void shutdown();
+
+    /*!
+     * @brief Initialize my EC
+     * This function initializes mine ECs.
+     * This is called from only initialize().
+     */
+    ReturnCode_t initMineEC();
+    /*!
+     * @brief Starting my EC
+     * This function start mine ECs.
+     * This is called from only initialize().
+     */
+    void startMineEC();
+    /*!
+     * @brief Finalize my EC
+     * This function finalize mine ECs.
+     * This is called from only exit().
+     */
+    void finalizeMineEC();
+    /*!
+     * @brief Finalize my EC
+     * This function detaching the RTC from others' ECs.
+     * This is called from only exit().
+     */
+    void finalizeOtherEC();
+
+    /*!
+     * @brief Get inherited EC options
+     * This function getting inherited EC options.
+     * This is called from only initMineEC().
+     */
     ReturnCode_t getInheritedECOptions(coil::Properties& default_opts);
 
     /*!
@@ -5066,12 +5086,17 @@ namespace RTC
      * @brief fiding existing EC from the factory
      */
     static ReturnCode_t findExistingEC(coil::Properties& ec_arg,
-                                RTC::ExecutionContextBase*& ec);
+                                       RTC::ExecutionContextBase*& ec);
     /*!
      * @brief creating, initializing and binding context
      */
     ReturnCode_t createContexts(std::vector<coil::Properties>& ec_args);
 
+    /*!
+     * @brief initialize SDO service stuff
+     * This function calles SdoService's initialize().
+     */
+    void initSdoService();
 
   protected:
     /*!
@@ -5136,7 +5161,7 @@ namespace RTC
         return m_id == std::string(prof.id);
       }
       std::string m_id;
-    };  // struct svc_name
+    }; // struct svc_name
 
     /*!
      * @if jp
@@ -5154,7 +5179,7 @@ namespace RTC
      * @brief The pointer to the SDO Configuration Interface
      * @endif
      */
-    SDOPackage::Configuration_var  m_pSdoConfig;
+    SDOPackage::Configuration_var m_pSdoConfig;
 
     /*!
      * @if jp
@@ -5395,20 +5420,19 @@ namespace RTC
 
     RTC::LightweightRTObject_var m_insref;
 
-
     class SdoServiceConsumerTerminator
-		: public coil::Task
+      : public coil::Task
     {
     public:
-        SdoServiceConsumerTerminator();
-        void setSdoServiceConsumer(SdoServiceAdmin* sdoservice, const char* id);
-        int svc() override;
+      SdoServiceConsumerTerminator();
+      void setSdoServiceConsumer(SdoServiceAdmin * sdoservice, const char* id);
+      int svc() override;
+
     private:
-        SdoServiceAdmin *m_sdoservice;
-        std::string m_id;
+      SdoServiceAdmin *m_sdoservice;
+      std::string m_id;
     };
     SdoServiceConsumerTerminator *m_sdoconterm;
-
 
     //------------------------------------------------------------
     // Functor
@@ -5428,7 +5452,7 @@ namespace RTC
         return m_name == std::string(nv.name);
       }
       std::string m_name;
-    };  // struct nv_name
+    }; // struct nv_name
 
     /*!
      * @if jp
@@ -5452,7 +5476,7 @@ namespace RTC
           }
       }
       ExecutionContextList& m_eclist;
-    };  // struct ec_copy
+    }; // struct ec_copy
     /*!
      * @if jp
      * @brief ExecutionContext 検索用ファンクタ
@@ -5469,15 +5493,15 @@ namespace RTC
 #ifdef ORB_IS_ORBEXPRESS
       bool operator()(ExecutionContextService_var ecs)
       {
-	try
-	  {
+        try
+          {
             if (!::CORBA::is_nil(ecs.in()))
               {
-  	        ExecutionContext_var ec;
-	        ec = ExecutionContext::_narrow(ecs.in());
-	        return m_ec->_is_equivalent(ec);
+                ExecutionContext_var ec;
+                ec = ExecutionContext::_narrow(ecs.in());
+                return m_ec->_is_equivalent(ec);
               }
-	  }
+          }
 #else
       bool operator()(ExecutionContextService_ptr ecs)
       {
@@ -5489,17 +5513,16 @@ namespace RTC
                 ec = ExecutionContext::_narrow(ecs);
                 return m_ec->_is_equivalent(ec);
               }
-	  }
+            }
 #endif
-	catch (...)
-	  {
-	    return false;
-	  }
-	return false;
+        catch (...)
+          {
+            return false;
+          }
+        return false;
       }
       ExecutionContext_var m_ec;
-
-    };  // struct ec_find
+    }; // struct ec_find
 
     /*!
      * @if jp
@@ -5529,12 +5552,11 @@ namespace RTC
                 ec->reset_component(
                     RTC::LightweightRTObject::_duplicate(m_comp));
               }
-            
           }
       }
       LightweightRTObject_var m_comp;
-    };  // struct deactivate_comps
-  };  // class RTObject_impl
+    }; // struct deactivate_comps
+  };   // class RTObject_impl
 } // namespace RTC
 
-#endif  // RTC_RTOBJECT
+#endif // RTC_RTOBJECT
