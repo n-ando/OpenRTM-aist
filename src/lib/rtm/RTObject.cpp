@@ -315,42 +315,25 @@ namespace RTC
   {
     RTC_TRACE(("initialize()"));
 
-    // SDO service admin initialization
-    m_sdoservice.init(m_properties);
-
-    // EC creation
-    std::vector<coil::Properties> ec_args;
-    if (getContextOptions(ec_args) != RTC::RTC_OK)
-      {
-        RTC_ERROR(("Valid EC options are not available. Aborting"));
-        return RTC::BAD_PARAMETER;
-      }
-    if (createContexts(ec_args) != RTC::RTC_OK)
-      {
-        RTC_ERROR(("EC creation failed. Maybe out of resources. Aborting."));
-        return RTC::OUT_OF_RESOURCES;
-      }
+    initSdoService();
+    ReturnCode_t ret = initMineEC();
+    if (ret != RTC::RTC_OK) { return ret; }
 
     // -- entering alive state --
-    RTC_INFO(("%d execution context%s created.",
-              m_ecMine.length(),
-              (m_ecMine.length() == 1) ? " was" : "s were"));
-    ReturnCode_t ret;
     ret = on_initialize();
-    m_created = false;
     if (ret != RTC::RTC_OK)
-      {
-        RTC_ERROR(("on_initialize() failed."));
-        return ret;
-      }
-    RTC_DEBUG(("on_initialize() was properly done."));
-    for (::CORBA::ULong i(0), len(m_ecMine.length()); i < len; ++i)
-      {
-        RTC_DEBUG(("EC[%d] starting.", i));
-        m_ecMine[i]->start();
-      }
+    {
+      RTC_ERROR(("on_initialize() failed."));
+      return ret;
+    }
+    m_created = false;
+
     // ret must be RTC_OK
+    RTC_DEBUG(("on_initialize() was properly done."));
     assert(ret == RTC::RTC_OK);
+
+    //starting owned ECs
+    startMineEC();
     return ret;
   }
 
@@ -392,42 +375,12 @@ namespace RTC
     if (m_created) { return RTC::PRECONDITION_NOT_MET; }
     if (m_exiting) { return RTC::RTC_OK; }
 
+    // finalize ECs
+    finalizeMineEC();
+    finalizeOtherEC();
 
-    SDOPackage::OrganizationList_var organizations = get_organizations();
-    CORBA::ULong len = organizations->length();
-
-    for (CORBA::ULong i = 0; i < len; i++)
-      {
-        organizations[i]->remove_member(getInstanceName());
-      }
-    // deactivate myself on owned EC
-    CORBA_SeqUtil::for_each(m_ecMine,
-                            deactivate_comps(m_objref));
-    // deactivate myself on other EC
-    CORBA_SeqUtil::for_each(m_ecOther,
-                            deactivate_comps(m_objref));
-
-    // owned EC will be finalised later in finalizeContext().
-
-    // detach myself from other EC
-    for (CORBA::ULong ic(0), size(m_ecOther.length()); ic < size; ++ic)
-      {
-        try
-          {
-            RTC::LightweightRTObject_var comp(this->_this());
-            if (!::CORBA::is_nil(m_ecOther[ic]) && !m_ecOther[ic]->_non_existent())
-            {
-                m_ecOther[ic]->remove_component(comp.in());
-            }
-          }
-        catch (...)
-          {
-            RTC_ERROR(("unknown error"));
-          }
-      }
     m_exiting = true;
     ReturnCode_t ret(finalize());
-
     return ret;
   }
 
