@@ -19,7 +19,7 @@
 #ifndef RTC_ROSINPORT_H
 #define RTC_ROSINPORT_H
 
-#include <map>
+#include <vector>
 #include <rtm/BufferBase.h>
 #include <rtm/InPortProvider.h>
 #include <rtm/CORBA_SeqUtil.h>
@@ -249,29 +249,7 @@ namespace RTC
      */
     void connectTCP(const std::string &caller_id, const std::string &topic, const std::string &xmlrpc_uri);
 
-    /*!
-     * @if jp
-     * @brief TCPコネクタの削除
-     *
-     *
-     * @param caller_id 呼び出しID
-     * @param topic トピック名
-     * @param xmlrpc_uri パブリッシャーのURI
-     *
-     * 
-     * @else
-     * @brief 
-     *
-     *
-     * @param caller_id 
-     * @param topic 
-     * @param xmlrpc_uri 
-     * 
-     * @return
-     *
-     * @endif
-     */
-    void deleteTCPConnector(const std::string &caller_id, const std::string &topic, const std::string &xmlrpc_uri);
+
   
 
     /*!
@@ -645,129 +623,7 @@ namespace RTC
     std::string m_messageType;
     std::mutex m_mutex;
 
-    /*!
-     * @if jp
-     * @class PublisherLink
-     * @brief PublisherLink クラス
-     *
-     * ros::Connection、コネクタのIDを格納するクラス
-     *
-     * @since 2.0.0
-     *
-     * @else
-     * @class PublisherLink
-     * @brief PublisherLink class
-     *
-     * 
-     *
-     * @since 2.0.0
-     *
-     * @endif
-     */
-    class PublisherLink
-    {
-    public:
-      /*!
-       * @if jp
-       * @brief コンストラクタ
-       *
-       * @else
-       * @brief Constructor
-       *
-       * @endif
-       */
-      PublisherLink(void);
-      /*!
-       * @if jp
-       * @brief コンストラクタ
-       *
-       * @param conn ros::Connection
-       * @param num コネクタのID
-       *
-       * @else
-       * @brief Constructor
-       *
-       * @param conn 
-       * @param num 
-       *
-       * @endif
-       */
-      PublisherLink(ros::ConnectionPtr conn, int num);
-      /*!
-       * @if jp
-       * @brief コピーコンストラクタ
-       *
-       * @param obj コピー元 
-       *
-       * @else
-       * @brief Copy Constructor
-       *
-       * @param obj
-       *
-       * @endif
-       */
-      PublisherLink(const PublisherLink &obj);
-      /*!
-       * @if jp
-       * @brief デストラクタ
-       *
-       *
-       * @else
-       * @brief Destructor
-       *
-       *
-       * @endif
-       */
-      ~PublisherLink();
-      /*!
-       * @if jp
-       * @brief ros::Connectionを取得
-       *
-       * @return ros::Connection
-       *
-       * @else
-       * @brief 
-       *
-       * @return
-       *
-       * @endif
-       */
-      ros::ConnectionPtr getConnection();
-      /*!
-       * @if jp
-       * @brief ros::Connectionを設定
-       *
-       * @param conn ros::Connection
-       *
-       * @else
-       * @brief 
-       *
-       * @param conn
-       *
-       * @endif
-       */
-      void setConnection(ros::ConnectionPtr conn);
-      /*!
-       * @if jp
-       * @brief コネクタのID取得
-       *
-       * @return コネクタのID
-       *
-       * @else
-       * @brief 
-       *
-       * @return
-       *
-       * @endif
-       */
-      int getNum();
-    private:
-      ros::ConnectionPtr m_conn;
-      int m_num;
-    };
-
-    std::map<std::string, PublisherLink> m_tcp_connecters;
-    int m_pubnum;
+    std::vector<ros::ConnectionPtr> m_tcp_connecters;
     std::string m_roscorehost;
     unsigned int m_roscoreport;
     std::string m_datatype;
