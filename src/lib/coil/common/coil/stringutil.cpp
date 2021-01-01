@@ -427,6 +427,118 @@ namespace coil
     return std::regex_search(str, url);
   }
 
+  /*!
+   * @if jp
+   * @brief 文字列を引数として解釈する
+   * @else
+   * @brief Parse string as argument list
+   * @endif
+   */
+  vstring parse_args(const std::string &args)
+  {
+    bool inArg(false);    // -> " " or "\t"
+    bool inEscape(false); // -> "\"
+    bool inDquote(false); // -> "\""
+    bool inSquote(false); // -> "\'"
+    vstring ret;
+    std::string anArg;
+
+    for (size_t i(0); i < args.size(); ++i)
+      {
+        if (args[i] == ' ' || args[i] == '\t')
+          {
+            // skip escaped spaces and/or spces in quotation
+            if (inEscape || inDquote || inSquote)
+              {
+                anArg.push_back(args[i]);
+                goto CONTINUE;
+              }
+            // skip spaces between args
+            if (!inArg) { goto CONTINUE; }
+            // end of arg
+            if (inArg)
+              {
+                ret.push_back(anArg);
+                anArg.clear();
+                inArg = false; // exit arg
+                goto CONTINUE;
+              }
+          }
+        inArg = true;
+
+        if (args[i] == '\\')
+          {
+            if (inEscape) { anArg.push_back(args[i]); }
+            inEscape = !inEscape;
+            goto CONTINUE;
+          }
+
+        if (args[i] == '\"')
+          { // escaped (") is stored in arg in any cases
+            if (inEscape)
+              {
+                inEscape = false;
+                if (inSquote) { anArg.push_back('\\'); }
+                anArg.push_back(args[i]);
+                goto CONTINUE;
+              }
+            // (") in S-quote is stored in arg
+            if (inSquote)
+              {
+                anArg.push_back(args[i]);
+                goto CONTINUE;
+              }
+            // inDquote: enter(false->true), exit(true->false)
+            inDquote = !inDquote;
+            goto CONTINUE;
+          }
+
+        if (args[i] == '\'')
+          { // escaped (') is stored in arg in any cases
+            if (inEscape)
+              {
+                inEscape = false;
+                if (inDquote) { anArg.push_back('\\'); }
+                anArg.push_back(args[i]);
+                goto CONTINUE;
+              }
+            // (') in S-quote is stored in arg
+            if (inDquote)
+              {
+                anArg.push_back(args[i]);
+                goto CONTINUE;
+              }
+            // inSquote: enter(false->true), exit(true->false)
+            inSquote = !inSquote;
+            goto CONTINUE;
+          }
+
+        // here arg[i] != (' ') or (\t) or (") or (')
+        if (inEscape)
+          {
+            inEscape = false;
+            if (inDquote || inSquote) { anArg.push_back('\\'); }
+          }
+        anArg.push_back(args[i]);
+        goto CONTINUE;
+
+      CONTINUE:
+        if (false)
+          {
+            std::cout << "args[" << i << "] = " << args[i];
+            std::cout << "\t anArg = " << anArg;
+            std::cout << "\t\t";
+            std::cout << "\tARG:" << inArg ? "T" : "F";
+            std::cout << "\tESC:" << inEscape ? "T" : "F";
+            std::cout << "\t'\"':" << inDquote ? "T" : "F";
+            std::cout << "\t'\'':" << inSquote ? "T" : "F";
+            std::cout << std::endl;
+          }
+      }
+    ret.push_back(anArg);
+    return ret;
+  }
+
   bool isIPv4(const std::string& str)
   {
     // IPv4 address must be dotted-decimal format.
