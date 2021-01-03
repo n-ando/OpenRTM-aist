@@ -451,17 +451,17 @@ namespace coil
             if (inEscape || inDquote || inSquote)
               {
                 anArg.push_back(args[i]);
-                goto CONTINUE;
+                continue;
               }
             // skip spaces between args
-            if (!inArg) { goto CONTINUE; }
+            if (!inArg) { continue; }
             // end of arg
             if (inArg)
               {
                 ret.push_back(anArg);
                 anArg.clear();
                 inArg = false; // exit arg
-                goto CONTINUE;
+                continue;
               }
           }
         inArg = true;
@@ -470,7 +470,7 @@ namespace coil
           {
             if (inEscape) { anArg.push_back(args[i]); }
             inEscape = !inEscape;
-            goto CONTINUE;
+            continue;
           }
 
         if (args[i] == '\"')
@@ -480,17 +480,17 @@ namespace coil
                 inEscape = false;
                 if (inSquote) { anArg.push_back('\\'); }
                 anArg.push_back(args[i]);
-                goto CONTINUE;
+                continue;
               }
             // (") in S-quote is stored in arg
             if (inSquote)
               {
                 anArg.push_back(args[i]);
-                goto CONTINUE;
+                continue;
               }
             // inDquote: enter(false->true), exit(true->false)
             inDquote = !inDquote;
-            goto CONTINUE;
+            continue;
           }
 
         if (args[i] == '\'')
@@ -500,17 +500,17 @@ namespace coil
                 inEscape = false;
                 if (inDquote) { anArg.push_back('\\'); }
                 anArg.push_back(args[i]);
-                goto CONTINUE;
+                continue;
               }
             // (') in S-quote is stored in arg
             if (inDquote)
               {
                 anArg.push_back(args[i]);
-                goto CONTINUE;
+                continue;
               }
             // inSquote: enter(false->true), exit(true->false)
             inSquote = !inSquote;
-            goto CONTINUE;
+            continue;
           }
 
         // here arg[i] != (' ') or (\t) or (") or (')
@@ -520,20 +520,7 @@ namespace coil
             if (inDquote || inSquote) { anArg.push_back('\\'); }
           }
         anArg.push_back(args[i]);
-        goto CONTINUE;
-
-      CONTINUE:
-        if (false)
-          {
-            std::cout << "args[" << i << "] = " << args[i];
-            std::cout << "\t anArg = " << anArg;
-            std::cout << "\t\t";
-            std::cout << "\tARG:" << inArg ? "T" : "F";
-            std::cout << "\tESC:" << inEscape ? "T" : "F";
-            std::cout << "\t'\"':" << inDquote ? "T" : "F";
-            std::cout << "\t'\'':" << inSquote ? "T" : "F";
-            std::cout << std::endl;
-          }
+        continue;
       }
     ret.push_back(anArg);
     return ret;
