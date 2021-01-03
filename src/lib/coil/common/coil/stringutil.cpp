@@ -434,7 +434,7 @@ namespace coil
    * @brief Parse string as argument list
    * @endif
    */
-  vstring parse_args(const std::string &args)
+  vstring parseArgs(const std::string &args)
   {
     bool inArg(false);    // -> " " or "\t"
     bool inEscape(false); // -> "\"
