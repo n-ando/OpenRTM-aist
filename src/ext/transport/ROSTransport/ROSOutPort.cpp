@@ -156,22 +156,18 @@ namespace RTC
       if(m_start)
       {
         size_t length = (size_t)data.getDataLength();
-        boost::shared_array<uint8_t> buffer_(new uint8_t[length]);
-        memcpy(buffer_.get(), data.getBuffer(), length);
+        boost::shared_array<uint8_t> buffer(new uint8_t[length]);
+        memcpy(buffer.get(), data.getBuffer(), length);
 
         RTC_VERBOSE(("Data size:%d", length));
         
-        for (auto & con : m_tcp_connecters)
         {
-          if(!con->isDropped())
+          std::lock_guard<std::mutex> guardc(m_con_mutex);
+          for (auto & con : m_tcp_connecters)
           {
             RTC_VERBOSE(("Data Write"));
-            con->write(buffer_, static_cast<uint32_t>(length), boost::bind(&ROSOutPort::onMessageWritten, this, _1), true);
+            con.write(buffer, static_cast<uint32_t>(length));
           }
-          else
-          {
-          }
-          
         }
         
       }
@@ -225,10 +221,13 @@ namespace RTC
   unsubscribeInterface(const SDOPackage::NVList& properties)
   {
       RTC_DEBUG_STR((NVUtil::toString(properties)));
-      for (auto & con : m_tcp_connecters)
       {
-        ROSTopicManager& topicmgr = ROSTopicManager::instance();
-        topicmgr.removeSubscriberLink(con);
+        std::lock_guard<std::mutex> guardc(m_con_mutex);
+        for (auto & con : m_tcp_connecters)
+        {
+          ROSTopicManager& topicmgr = ROSTopicManager::instance();
+          topicmgr.removeSubscriberLink(con.getConnection());
+        }
       }
       ROSTopicManager& topicmgr = ROSTopicManager::instance();
       topicmgr.removePublisher(this);
@@ -264,7 +263,7 @@ namespace RTC
    * @brief ヘッダ情報受信時のコールバック関数
    *
    *
-   * @param conn ros::ConnectionPtr
+   * @param conn ros::Connectionオブジェクト
    * @param header ヘッダ情報
    *
    * @return true：問題なし、false：ヘッダが不正
@@ -305,6 +304,15 @@ namespace RTC
         return false;
     }
 
+    std::string md5sum;
+    if (!header.getValue("md5sum", md5sum))
+    {
+        RTC_ERROR(("Callse id does not exist in header"));
+        return false;
+    }
+    std::cout << client_callerid << std::endl;
+    std::cout << md5sum << std::endl;
+
     ROSMessageInfoBase* info = GlobalROSMessageInfoList::instance().getInfo(m_messageType);
     
     if(!info)
@@ -315,12 +323,15 @@ namespace RTC
 
 
     ROSTopicManager& topicmgr = ROSTopicManager::instance();
-    ROSTopicManager::SubscriberLink* sub = topicmgr.getSubscriberLink(conn);
+    SubscriberLink* sub = topicmgr.getSubscriberLink(conn);
 
     if (sub != nullptr)
     {
       sub->setNoneName(client_callerid);
-      m_tcp_connecters.push_back(conn);
+      sub->setCallerID(client_callerid);
+      sub->setTopic(topic);
+      std::lock_guard<std::mutex> guardc(m_con_mutex);
+      m_tcp_connecters.push_back(*sub);
     }
 
     ros::M_string m;
@@ -363,6 +374,7 @@ namespace RTC
    */
   const std::string& ROSOutPort::datatype() const
   {
+    RTC_VERBOSE(("datatype()"));
     return m_datatype;
   }
   /*!
@@ -382,6 +394,7 @@ namespace RTC
    */
   const std::string& ROSOutPort::getTopicName() const
   {
+    RTC_VERBOSE(("getTopicName()"));
     return m_topic;
   }
   /*!
@@ -401,53 +414,73 @@ namespace RTC
    */
   const std::string& ROSOutPort::getName() const
   {
+    RTC_VERBOSE(("getName()"));
     return m_callerid;
   }
+
   /*!
    * @if jp
-   * @brief コネクタの情報を取得
+   * @brief 送信データの統計情報取得
    *
    *
-   * @param info 情報を格納する変数
-   * data[0]：コネクタID
-   * data[1]：接続先のノード名
-   * data[2]："o"
-   * data[3]：TCPROS or UDPROS
-   * data[4]：トピック名
-   * data[5]：true
-   * data[6]：接続情報
+   * @param data 送信データの統計情報
    * 
    * @else
    * @brief 
    *
-   *
-   * @param info
    * 
+   * @param data
    *
    * @endif
    */
-  void ROSOutPort::getInfo(XmlRpc::XmlRpcValue& info)
+  void ROSOutPort::getStats(XmlRpc::XmlRpcValue& result)
   {
+    RTC_VERBOSE(("getStats()"));
+    result[0] = m_topic;
     int count = 0;
-    ROSTopicManager& topicmgr = ROSTopicManager::instance();
-
-    for (auto & con : m_tcp_connecters)
+    std::lock_guard<std::mutex> guardc(m_con_mutex);
+    for(auto & con : m_tcp_connecters)
     {
-      ROSTopicManager::SubscriberLink* sub = topicmgr.getSubscriberLink(con);
-      if (sub != nullptr){
-        XmlRpc::XmlRpcValue data;
-        data[0] = sub->getNum();
-        data[1] = sub->getNodeName();
-        data[2] = std::string("o");
-        data[3] = std::string(sub->getConnection()->getTransport()->getType());
-        data[4] = m_topic;
-        data[5] = true;
-        data[6] = sub->getConnection()->getTransport()->getTransportInfo();
-        info[count] = data;
-        count++;
+      con.getStats(result[1][count]);
+      count++;
+    }
+  }
+
+
+  /*!
+   * @if jp
+   * @brief SubscriberLinkの削除
+   *
+   * @param connection ros::Connectionオブジェクト
+   * @return true：削除成功
+   * 
+   * @else
+   * @brief 
+   *
+   * @param connection 
+   * @return 
+   *
+   * @endif
+   */
+  bool ROSOutPort::removeSubscriberLink(const ros::ConnectionPtr& connection)
+  {
+    RTC_PARANOID(("removeSubscriberLink()"));
+
+    auto con = m_tcp_connecters.begin();
+    while(con != m_tcp_connecters.end())
+    {
+      if(con->getConnection() == connection)
+      {
+        m_tcp_connecters.erase(con);
+        return true;
+      }
+      else
+      {
+        ++con;
       }
     }
 
+    return false;
   }
 
 

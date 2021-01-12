@@ -20,6 +20,7 @@
 #define RTC_ROSINPORT_H
 
 #include <vector>
+#include <mutex>
 #include <rtm/BufferBase.h>
 #include <rtm/InPortProvider.h>
 #include <rtm/CORBA_SeqUtil.h>
@@ -30,6 +31,7 @@
 #include <ros/transport/transport_tcp.h>
 #include <xmlrpcpp/XmlRpc.h>
 #include "ROSMessageInfo.h"
+#include "PublisherLink.h"
 
 
 namespace RTC
@@ -233,6 +235,8 @@ namespace RTC
      * @param caller_id 呼び出しID
      * @param topic トピック名
      * @param xmlrpc_uri パブリッシャーのURI
+     * 
+     * @return 
      *
      * 
      * @else
@@ -243,15 +247,248 @@ namespace RTC
      * @param topic 
      * @param xmlrpc_uri 
      * 
+     * @return 
+     * 
      * @return
      *
      * @endif
      */
-    void connectTCP(const std::string &caller_id, const std::string &topic, const std::string &xmlrpc_uri);
+    bool connectTCP(const std::string &caller_id, const std::string &topic, const std::string &xmlrpc_uri);
 
 
   
+    /*!
+     * @if jp
+     * @brief メッセージ型の取得
+     *
+     *
+     * @return メッセージ型
+     * 
+     * @else
+     * @brief 
+     *
+     * 
+     * @return
+     *
+     * @endif
+     */
+    const std::string& datatype() const;
+    /*!
+     * @if jp
+     * @brief トピック名の取得
+     *
+     *
+     * @return トピック名
+     * 
+     * @else
+     * @brief 
+     *
+     * 
+     * @return
+     *
+     * @endif
+     */
+    const std::string& getTopicName() const;
+    /*!
+     * @if jp
+     * @brief ノード名の取得
+     *
+     *
+     * @return ノード名
+     * 
+     * @else
+     * @brief 
+     *
+     * 
+     * @return
+     *
+     * @endif
+     */
+    const std::string& getName() const;
+    /*!
+     * @if jp
+     * @brief 受信データの統計情報取得
+     *
+     *
+     * @param data 受信データの統計情報
+     * 
+     * @else
+     * @brief 
+     *
+     * 
+     * @param data
+     *
+     * @endif
+     */
+    void getStats(XmlRpc::XmlRpcValue& result);
+    /*!
+     * @if jp
+     * @brief PublisherLinkの削除
+     *
+     *
+     * @param connection ros::Connectionオブジェクト
+     * @return true：削除成功
+     * 
+     * @else
+     * @brief 
+     *
+     * 
+     * @param connection 
+     * @return
+     *
+     * @endif
+     */
+    bool removePublisherLink(const ros::ConnectionPtr& connection);
+    
+    
+  private:
+    ByteData m_cdr;
 
+    
+    /*!
+     * @if jp
+     * @brief ON_BUFFER_WRITE のリスナへ通知する。 
+     * @param data ByteData
+     * @else
+     * @brief Notify an ON_BUFFER_WRITE event to listeners
+     * @param data ByteData
+     * @endif
+     */
+    inline void onBufferWrite(ByteData& data)
+    {
+      m_listeners->notifyIn(ConnectorDataListenerType::ON_BUFFER_WRITE,
+                            m_profile, data);
+    }
+
+    /*!
+     * @if jp
+     * @brief ON_BUFFER_FULL のリスナへ通知する。 
+     * @param data ByteData
+     * @else
+     * @brief Notify an ON_BUFFER_FULL event to listeners
+     * @param data ByteData
+     * @endif
+     */
+    inline void onBufferFull(ByteData& data)
+    {
+      m_listeners->notifyIn(ConnectorDataListenerType::ON_BUFFER_FULL,
+                            m_profile, data);
+    }
+
+    /*!
+     * @if jp
+     * @brief ON_BUFFER_WRITE_TIMEOUT のリスナへ通知する。 
+     * @param data ByteData
+     * @else
+     * @brief Notify an ON_BUFFER_WRITE_TIMEOUT event to listeners
+     * @param data ByteData
+     * @endif
+     */
+    inline void onBufferWriteTimeout(ByteData& data)
+    {
+      m_listeners->notifyIn(ConnectorDataListenerType::ON_BUFFER_WRITE_TIMEOUT,
+                            m_profile, data);
+    }
+
+    /*!
+     * @if jp
+     * @brief ON_BUFFER_WRITE_OVERWRITE のリスナへ通知する。 
+     * @param data ByteData
+     * @else
+     * @brief Notify an ON_BUFFER_WRITE_OVERWRITE event to listeners
+     * @param data ByteData
+     * @endif
+     */
+    inline void onBufferWriteOverwrite(ByteData& data)
+    {
+      m_listeners->notifyIn(ConnectorDataListenerType::ON_BUFFER_OVERWRITE,
+                            m_profile, data);
+    }
+
+    /*!
+     * @if jp
+     * @brief ON_RECEIVED のリスナへ通知する。 
+     * @param data ByteData
+     * @else
+     * @brief Notify an ON_RECEIVED event to listeners
+     * @param data ByteData
+     * @endif
+     */
+    inline void onReceived(ByteData& data)
+    {
+      m_listeners->notifyIn(ConnectorDataListenerType::ON_RECEIVED,
+                            m_profile, data);
+    }
+
+    /*!
+     * @if jp
+     * @brief ON_RECEIVER_FULL のリスナへ通知する。 
+     * @param data ByteData
+     * @else
+     * @brief Notify an ON_RECEIVER_FULL event to listeners
+     * @param data ByteData
+     * @endif
+     */
+    inline void onReceiverFull(ByteData& data)
+    {
+      m_listeners->notifyIn(ConnectorDataListenerType::ON_RECEIVER_FULL,
+                            m_profile, data);
+    }
+
+    /*!
+     * @if jp
+     * @brief ON_RECEIVER_TIMEOUT のリスナへ通知する。 
+     * @else
+     * @brief Notify an ON_RECEIVER_TIMEOUT event to listeners
+     * @endif
+     */
+    inline void onReceiverTimeout(ByteData& data)
+    {
+      m_listeners->notifyIn(ConnectorDataListenerType::ON_RECEIVER_TIMEOUT,
+                            m_profile, data);
+    }
+
+    /*!
+     * @if jp
+     * @brief ON_RECEIVER_ERRORのリスナへ通知する。 
+     * @else
+     * @Brief Notify an ON_RECEIVER_ERROR event to listeners
+     * @endif
+     */
+    inline void onReceiverError(ByteData& data)
+    {
+      m_listeners->notifyIn(ConnectorDataListenerType::ON_RECEIVER_ERROR,
+                            m_profile, data);
+    }
+
+  private:
+    /*!
+     * @if jp
+     * @brief リターンコード変換
+     * @else
+     * @brief Return codes conversion
+     * @endif
+     */
+    void convertReturn(BufferStatus status, ByteData& data);
+
+    CdrBufferBase* m_buffer;
+    ConnectorInfo m_profile;
+    ConnectorListenersBase* m_listeners;
+    InPortConnector* m_connector;
+
+    
+    std::string m_topic;
+    std::string m_callerid;
+    std::string m_messageType;
+    std::mutex m_mutex;
+
+    std::vector<PublisherLink> m_tcp_connecters;
+    std::mutex m_con_mutex;
+    std::string m_roscorehost;
+    unsigned int m_roscoreport;
+    std::string m_datatype;
+
+  public:
     /*!
      * @if jp
      * @brief ヘッダ情報送信時のコールバック関数
@@ -404,230 +641,19 @@ namespace RTC
 
         convertReturn(ret, m_cdr);
 
+        std::lock_guard<std::mutex> guardc(m_con_mutex);
+        for(auto & tcp_connecter : m_tcp_connecters)
+        {
+          if(tcp_connecter.getConnection() == conn)
+          {
+            tcp_connecter.notifyRead(size);
+          }
+        }
+
 
         conn->read(ROSMsglenSize, boost::bind(&ROSInPort::onMessageLength, this, _1, _2, _3, _4));
       }
     }
-    /*!
-     * @if jp
-     * @brief コネクタの情報を取得
-     *
-     *
-     * @param info 情報を格納する変数
-     * data[0]：コネクタID
-     * data[1]：接続先のXML-RPCサーバーのアドレス
-     * data[2]："i"
-     * data[3]：TCPROS or UDPROS
-     * data[4]：トピック名
-     * data[5]：true
-     * data[6]：接続情報
-     * 
-     * @else
-     * @brief 
-     *
-     *
-     * @param info
-     * 
-     *
-     * @endif
-     */
-    void getInfo(XmlRpc::XmlRpcValue& info);
-    /*!
-     * @if jp
-     * @brief メッセージ型の取得
-     *
-     *
-     * @return メッセージ型
-     * 
-     * @else
-     * @brief 
-     *
-     * 
-     * @return
-     *
-     * @endif
-     */
-    const std::string& datatype() const;
-    /*!
-     * @if jp
-     * @brief トピック名の取得
-     *
-     *
-     * @return トピック名
-     * 
-     * @else
-     * @brief 
-     *
-     * 
-     * @return
-     *
-     * @endif
-     */
-    const std::string& getTopicName() const;
-    /*!
-     * @if jp
-     * @brief ノード名の取得
-     *
-     *
-     * @return ノード名
-     * 
-     * @else
-     * @brief 
-     *
-     * 
-     * @return
-     *
-     * @endif
-     */
-    const std::string& getName() const;
-    
-    
-  private:
-    ByteData m_cdr;
-
-    
-    /*!
-     * @if jp
-     * @brief ON_BUFFER_WRITE のリスナへ通知する。 
-     * @param data ByteData
-     * @else
-     * @brief Notify an ON_BUFFER_WRITE event to listeners
-     * @param data ByteData
-     * @endif
-     */
-    inline void onBufferWrite(ByteData& data)
-    {
-      m_listeners->notifyIn(ConnectorDataListenerType::ON_BUFFER_WRITE,
-                            m_profile, data);
-    }
-
-    /*!
-     * @if jp
-     * @brief ON_BUFFER_FULL のリスナへ通知する。 
-     * @param data ByteData
-     * @else
-     * @brief Notify an ON_BUFFER_FULL event to listeners
-     * @param data ByteData
-     * @endif
-     */
-    inline void onBufferFull(ByteData& data)
-    {
-      m_listeners->notifyIn(ConnectorDataListenerType::ON_BUFFER_FULL,
-                            m_profile, data);
-    }
-
-    /*!
-     * @if jp
-     * @brief ON_BUFFER_WRITE_TIMEOUT のリスナへ通知する。 
-     * @param data ByteData
-     * @else
-     * @brief Notify an ON_BUFFER_WRITE_TIMEOUT event to listeners
-     * @param data ByteData
-     * @endif
-     */
-    inline void onBufferWriteTimeout(ByteData& data)
-    {
-      m_listeners->notifyIn(ConnectorDataListenerType::ON_BUFFER_WRITE_TIMEOUT,
-                            m_profile, data);
-    }
-
-    /*!
-     * @if jp
-     * @brief ON_BUFFER_WRITE_OVERWRITE のリスナへ通知する。 
-     * @param data ByteData
-     * @else
-     * @brief Notify an ON_BUFFER_WRITE_OVERWRITE event to listeners
-     * @param data ByteData
-     * @endif
-     */
-    inline void onBufferWriteOverwrite(ByteData& data)
-    {
-      m_listeners->notifyIn(ConnectorDataListenerType::ON_BUFFER_OVERWRITE,
-                            m_profile, data);
-    }
-
-    /*!
-     * @if jp
-     * @brief ON_RECEIVED のリスナへ通知する。 
-     * @param data ByteData
-     * @else
-     * @brief Notify an ON_RECEIVED event to listeners
-     * @param data ByteData
-     * @endif
-     */
-    inline void onReceived(ByteData& data)
-    {
-      m_listeners->notifyIn(ConnectorDataListenerType::ON_RECEIVED,
-                            m_profile, data);
-    }
-
-    /*!
-     * @if jp
-     * @brief ON_RECEIVER_FULL のリスナへ通知する。 
-     * @param data ByteData
-     * @else
-     * @brief Notify an ON_RECEIVER_FULL event to listeners
-     * @param data ByteData
-     * @endif
-     */
-    inline void onReceiverFull(ByteData& data)
-    {
-      m_listeners->notifyIn(ConnectorDataListenerType::ON_RECEIVER_FULL,
-                            m_profile, data);
-    }
-
-    /*!
-     * @if jp
-     * @brief ON_RECEIVER_TIMEOUT のリスナへ通知する。 
-     * @else
-     * @brief Notify an ON_RECEIVER_TIMEOUT event to listeners
-     * @endif
-     */
-    inline void onReceiverTimeout(ByteData& data)
-    {
-      m_listeners->notifyIn(ConnectorDataListenerType::ON_RECEIVER_TIMEOUT,
-                            m_profile, data);
-    }
-
-    /*!
-     * @if jp
-     * @brief ON_RECEIVER_ERRORのリスナへ通知する。 
-     * @else
-     * @Brief Notify an ON_RECEIVER_ERROR event to listeners
-     * @endif
-     */
-    inline void onReceiverError(ByteData& data)
-    {
-      m_listeners->notifyIn(ConnectorDataListenerType::ON_RECEIVER_ERROR,
-                            m_profile, data);
-    }
-
-  private:
-    /*!
-     * @if jp
-     * @brief リターンコード変換
-     * @else
-     * @brief Return codes conversion
-     * @endif
-     */
-    void convertReturn(BufferStatus status, ByteData& data);
-
-    CdrBufferBase* m_buffer;
-    ConnectorInfo m_profile;
-    ConnectorListenersBase* m_listeners;
-    InPortConnector* m_connector;
-
-    
-    std::string m_topic;
-    std::string m_callerid;
-    std::string m_messageType;
-    std::mutex m_mutex;
-
-    std::vector<ros::ConnectionPtr> m_tcp_connecters;
-    std::string m_roscorehost;
-    unsigned int m_roscoreport;
-    std::string m_datatype;
-
 
   };  // class InPortCorCdrbaProvider
 } // namespace RTC

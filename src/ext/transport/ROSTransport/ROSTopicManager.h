@@ -23,9 +23,11 @@
 #include "ROSOutPort.h"
 #include <vector>
 #include <map>
+#include <mutex>
 #include <xmlrpcpp/XmlRpc.h>
 #include <ros/poll_manager.h>
 #include <ros/transport/transport_tcp.h>
+
 
 namespace RTC
 {
@@ -389,333 +391,21 @@ namespace RTC
         ros::PollManagerPtr m_poll_manager;
         ros::TransportTCPPtr m_tcpserver_transport;
         ros::XMLRPCManagerPtr m_xmlrpc_manager;
-        std::map<std::string, std::vector<std::string>> m_cons;
         mutable Logger rtclog;
         unsigned int m_subnum;
         unsigned int m_pubnum;
-    public:
-        /*!
-        * @if jp
-        * @class PublisherLink
-        * @brief PublisherLink クラス
-        *
-        * ros::Connection、コネクタのIDを格納するクラス
-        *
-        * @since 2.0.0
-        *
-        * @else
-        * @class PublisherLink
-        * @brief PublisherLink class
-        *
-        * 
-        *
-        * @since 2.0.0
-        *
-        * @endif
-        */
-        class PublisherLink
-        {
-        public:
-            /*!
-            * @if jp
-            * @brief コンストラクタ
-            *
-            * @else
-            * @brief Constructor
-            *
-            * @endif
-            */
-            PublisherLink(void);
-            /*!
-            * @if jp
-            * @brief コンストラクタ
-            *
-            * @param conn ros::Connection
-            * @param num コネクタのID
-            *
-            * @else
-            * @brief Constructor
-            *
-            * @param conn 
-            * @param num 
-            *
-            * @endif
-            */
-            PublisherLink(ros::ConnectionPtr conn, int num, const std::string &caller_id, const std::string &topic, const std::string &xmlrpc_uri);
-            /*!
-            * @if jp
-            * @brief コピーコンストラクタ
-            *
-            * @param obj コピー元 
-            *
-            * @else
-            * @brief Copy Constructor
-            *
-            * @param obj
-            *
-            * @endif
-            */
-            PublisherLink(const PublisherLink &obj);
-            /*!
-            * @if jp
-            * @brief デストラクタ
-            *
-            *
-            * @else
-            * @brief Destructor
-            *
-            *
-            * @endif
-            */
-            ~PublisherLink();
-            /*!
-            * @if jp
-            * @brief ros::Connectionを取得
-            *
-            * @return ros::Connection
-            *
-            * @else
-            * @brief 
-            *
-            * @return
-            *
-            * @endif
-            */
-            ros::ConnectionPtr getConnection();
-            /*!
-            * @if jp
-            * @brief ros::Connectionを設定
-            *
-            * @param conn ros::Connection
-            *
-            * @else
-            * @brief 
-            *
-            * @param conn
-            *
-            * @endif
-            */
-            void setConnection(ros::ConnectionPtr conn);
-            /*!
-            * @if jp
-            * @brief コネクタのID取得
-            *
-            * @return コネクタのID
-            *
-            * @else
-            * @brief 
-            *
-            * @return
-            *
-            * @endif
-            */
-            int getNum();
-            /*!
-            * @if jp
-            * @brief コネクタのID取得
-            *
-            * @return コネクタのID
-            *
-            * @else
-            * @brief 
-            *
-            * @return
-            *
-            * @endif
-            */
-            const std::string getCallerID() const;
-            /*!
-            * @if jp
-            * @brief コネクタのID取得
-            *
-            * @return コネクタのID
-            *
-            * @else
-            * @brief 
-            *
-            * @return
-            *
-            * @endif
-            */
-            const std::string getTopic() const;
-            /*!
-            * @if jp
-            * @brief コネクタのID取得
-            *
-            * @return コネクタのID
-            *
-            * @else
-            * @brief 
-            *
-            * @return
-            *
-            * @endif
-            */
-            const std::string getURI() const;
-        private:
-            ros::ConnectionPtr m_conn;
-            int m_num;
-            std::string m_caller_id;
-            std::string m_topic;
-            std::string m_xmlrpc_uri;
-        };
-
-        /*!
-        * @if jp
-        * @class SubscriberLink
-        * @brief SubscriberLink クラス
-        *
-        * ros::Connection、接続先のノード名、コネクタのIDを格納するクラス
-        *
-        * @since 2.0.0
-        *
-        * @else
-        * @class SubscriberLink
-        * @brief SubscriberLink class
-        *
-        * 
-        *
-        * @since 2.0.0
-        *
-        * @endif
-        */
-        class SubscriberLink
-        {
-        public:
-            /*!
-            * @if jp
-            * @brief コンストラクタ
-            *
-            * @else
-            * @brief Constructor
-            *
-            * @endif
-            */
-            SubscriberLink();
-            /*!
-            * @if jp
-            * @brief コンストラクタ
-            *
-            * @param conn ros::Connection
-            * @param num コネクタのID
-            *
-            * @else
-            * @brief Constructor
-            *
-            * @param conn 
-            * @param num 
-            *
-            * @endif
-            */
-            SubscriberLink(ros::ConnectionPtr conn, int num);
-            /*!
-            * @if jp
-            * @brief コピーコンストラクタ
-            *
-            * @param obj コピー元 
-            *
-            * @else
-            * @brief Copy Constructor
-            *
-            * @param obj
-            *
-            * @endif
-            */
-            SubscriberLink(const SubscriberLink &obj);
-            /*!
-            * @if jp
-            * @brief デストラクタ
-            *
-            *
-            * @else
-            * @brief Destructor
-            *
-            *
-            * @endif
-            */
-            ~SubscriberLink();
-            /*!
-            * @if jp
-            * @brief 接続先のノード名を設定
-            *
-            * @param name ノード名
-            *
-            * @else
-            * @brief 
-            *
-            * @param name
-            *
-            * @endif
-            */
-            void setNoneName(std::string& name);
-            /*!
-            * @if jp
-            * @brief 接続先のノード名を取得
-            *
-            * @return ノード名
-            *
-            * @else
-            * @brief 
-            *
-            * @return
-            *
-            * @endif
-            */
-            const std::string getNodeName() const;
-            /*!
-            * @if jp
-            * @brief ros::Connectionを設定
-            *
-            * @param conn ros::Connection
-            *
-            * @else
-            * @brief 
-            *
-            * @param conn
-            *
-            * @endif
-            */
-            void setConnection(ros::ConnectionPtr conn);
-            /*!
-            * @if jp
-            * @brief ros::Connectionを取得
-            *
-            * @return ros::Connection
-            *
-            * @else
-            * @brief 
-            *
-            * @return
-            *
-            * @endif
-            */
-            ros::ConnectionPtr getConnection();
-            /*!
-            * @if jp
-            * @brief コネクタのID取得
-            *
-            * @return コネクタのID
-            *
-            * @else
-            * @brief 
-            *
-            * @return
-            *
-            * @endif
-            */
-            int getNum();
-        private:
-            std::string m_nodename;
-            ros::ConnectionPtr m_conn;
-            int m_num;
-        };
+        std::mutex m_pub_mutex;
+        std::mutex m_sub_mutex;
         std::vector<PublisherLink> m_tcp_pub_connecters;
         std::vector<SubscriberLink> m_tcp_sub_connecters;
+        std::mutex m_publink_mutex;
+        std::mutex m_sublink_mutex;
+    public:
         /*!
          * @if jp
-         * @brief Publisher
+         * @brief PublisherLinkの一覧を取得する
          *
-         * @return 
+         * @return PublisherLinkの一覧
          *
          * @else
          * @brief
@@ -728,9 +418,9 @@ namespace RTC
         std::vector<PublisherLink> & getPublisherLinkList();
         /*!
          * @if jp
-         * @brief Subscriber
+         * @brief SubscriberLinkの一覧を取得する
          *
-         * @return 
+         * @return SubscriberLinkの一覧
          *
          * @else
          * @brief
@@ -743,20 +433,20 @@ namespace RTC
         std::vector<SubscriberLink> & getSubscriberLinkList();
         /*!
          * @if jp
-         * @brief サブスクライバーの存在確認
+         * @brief PublisherLinkを追加する
          * 
-         * @param connection サブスクライバー
-         * @param caller_id サブスクライバー
-         * @param caller_id サブスクライバー
-         * @param xmlrpc_uri サブスクライバー
-         * @return True：存在する
+         * @param connection ros::Connectionオブジェクト
+         * @param caller_id 呼び出しID
+         * @param topic トピック名
+         * @param xmlrpc_uri 接続先のURI
+         * @return true：追加成功
          *
          * @else
          * @brief 
          *
          * @param connection 
          * @param caller_id 
-         * @param caller_id 
+         * @param topic 
          * @param xmlrpc_uri 
          * @return 
          * 
@@ -766,10 +456,10 @@ namespace RTC
         bool addPublisherLink(ros::ConnectionPtr& connection, const std::string &caller_id, const std::string &topic, const std::string &xmlrpc_uri);
         /*!
          * @if jp
-         * @brief サブスクライバーの存在確認
+         * @brief PublisherLinkを削除する
          * 
-         * @param connection サブスクライバー
-         * @return True：存在する
+         * @param connection ros::Connectionオブジェクト
+         * @return false：指定のPublisherLinkがリストにないため削除失敗
          *
          * @else
          * @brief 
@@ -780,16 +470,54 @@ namespace RTC
          *
          * @endif
          */
-        bool removePublisherLink(ros::ConnectionPtr& connection);
+        bool removePublisherLink(const ros::ConnectionPtr& connection);
         /*!
          * @if jp
-         * @brief サブスクライバーの存在確認
+         * @brief PublisherLinkの存在確認
          * 
-         * @param connection サブスクライバー
-         * @param caller_id サブスクライバー
-         * @param caller_id サブスクライバー
-         * @param xmlrpc_uri サブスクライバー
-         * @return True：存在する
+         * @param caller_id 呼び出しID
+         * @param topic トピック名
+         * @param xmlrpc_uri 接続先のURI
+         * @return true：存在する
+         *
+         * @else
+         * @brief 
+         *
+         * @param caller_id 
+         * @param topic 
+         * @param xmlrpc_uri 
+         * @return true：存在する
+         * 
+         *
+         * @endif
+         */
+        bool existPublisherLink(const std::string &caller_id, const std::string &topic, const std::string &xmlrpc_uri);
+        /*!
+         * @if jp
+         * @brief 指定のros::ConnectionオブジェクトのPublisherLinkを取得する
+         * 
+         * @param connection ros::Connectionオブジェクト
+         * @return PublisherLink
+         *
+         * @else
+         * @brief 
+         *
+         * @param connection 
+         * @return 
+         * 
+         *
+         * @endif
+         */
+        PublisherLink* getPublisherLink(const ros::ConnectionPtr& connection);
+        /*!
+         * @if jp
+         * @brief SubscriberLinkを追加する
+         * 
+         * @param connection ros::Connectionオブジェクト
+         * @param caller_id 呼び出しID
+         * @param topic トピック名
+         * @param xmlrpc_uri 接続先のURI
+         * @return true：存在する
          *
          * @else
          * @brief 
@@ -806,10 +534,10 @@ namespace RTC
         bool addSubscriberLink(ros::ConnectionPtr& connection);
         /*!
          * @if jp
-         * @brief サブスクライバーの存在確認
+         * @brief SubscriberLinkを削除する
          * 
-         * @param connection サブスクライバー
-         * @return True：存在する
+         * @param connection ros::Connectionオブジェクト
+         * @return false：指定のSubscriberLinkがリストにないため削除失敗
          *
          * @else
          * @brief 
@@ -820,30 +548,13 @@ namespace RTC
          *
          * @endif
          */
-        bool removeSubscriberLink(ros::ConnectionPtr& connection);
+        bool removeSubscriberLink(const ros::ConnectionPtr& connection);
         /*!
          * @if jp
-         * @brief サブスクライバーの存在確認
+         * @brief 指定のros::ConnectionオブジェクトのSubscriberLinkを取得する
          * 
-         * @param connection サブスクライバー
-         * @return True：存在する
-         *
-         * @else
-         * @brief 
-         *
-         * @param connection 
-         * @return 
-         * 
-         *
-         * @endif
-         */
-        PublisherLink* getPublisherLink(const ros::ConnectionPtr& connection);
-        /*!
-         * @if jp
-         * @brief サブスクライバーの存在確認
-         * 
-         * @param connection サブスクライバー
-         * @return True：存在する
+         * @param connection ros::Connectionオブジェクト
+         * @return SubscriberLink
          *
          * @else
          * @brief 
@@ -918,6 +629,7 @@ namespace RTC
             RTC_VERBOSE(("onConnectionHeaderReceived()"));
 
             bool ret = false;
+            std::lock_guard<std::mutex> guardp(m_pub_mutex);
             for(auto & publisher : m_publishers) 
             {
                 if(publisher->onConnectionHeaderReceived(conn, header) == true)

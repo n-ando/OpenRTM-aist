@@ -22,12 +22,14 @@
 
 
 #include <vector>
+#include <mutex>
 #include <rtm/InPortConsumer.h>
 #include <rtm/Manager.h>
 #include <ros/transport/transport_tcp.h>
 #include <ros/connection.h>
 #include <xmlrpcpp/XmlRpc.h>
 #include "ROSMessageInfo.h"
+#include "SubscriberLink.h"
 
 
 namespace RTC
@@ -275,54 +277,6 @@ namespace RTC
     }
 
 
-
-    /*!
-     * @if jp
-     * @brief メッセージ送信時のコールバック関数
-     *
-     *
-     * @param conn ros::Connection
-     *
-     * 
-     * @else
-     * @brief 
-     *
-     *
-     * @param conn 
-     * 
-     * @return
-     *
-     * @endif
-     */
-    void onMessageWritten(const ros::ConnectionPtr& conn)
-    {
-      (void)conn;
-      RTC_VERBOSE(("onMessageWritten()"));
-    }
-    /*!
-     * @if jp
-     * @brief コネクタの情報を取得
-     *
-     *
-     * @param info 情報を格納する変数
-     * data[0]：コネクタID
-     * data[1]：接続先のノード名
-     * data[2]："o"
-     * data[3]：TCPROS or UDPROS
-     * data[4]：トピック名
-     * data[5]：true
-     * data[6]：接続情報
-     * 
-     * @else
-     * @brief 
-     *
-     *
-     * @param info
-     * 
-     *
-     * @endif
-     */
-    void getInfo(XmlRpc::XmlRpcValue& info);
     /*!
      * @if jp
      * @brief メッセージ型の取得
@@ -371,13 +325,46 @@ namespace RTC
      * @endif
      */
     const std::string& getName() const;
+    /*!
+     * @if jp
+     * @brief 送信データの統計情報取得
+     *
+     *
+     * @param data 送信データの統計情報
+     * 
+     * @else
+     * @brief 
+     *
+     * 
+     * @param data
+     *
+     * @endif
+     */
+    void getStats(XmlRpc::XmlRpcValue& result);
+    /*!
+     * @if jp
+     * @brief SubscriberLinkの削除
+     *
+     * @param connection ros::Connectionオブジェクト
+     * @return true：削除成功
+     * 
+     * @else
+     * @brief 
+     *
+     * @param connection 
+     * @return 
+     *
+     * @endif
+     */
+    bool removeSubscriberLink(const ros::ConnectionPtr& connection);
 
   private:
 
     mutable Logger rtclog;
     bool m_start;
     coil::Properties m_properties;
-    std::vector<ros::ConnectionPtr> m_tcp_connecters;
+    std::vector<SubscriberLink> m_tcp_connecters;
+    std::mutex m_con_mutex;
     
     std::string m_topic;
     std::string m_callerid;

@@ -259,12 +259,15 @@ namespace RTC
     result[1] = std::string("subscriptions");
     XmlRpc::XmlRpcValue subs;
     subs.setSize(0);
-    for(auto & subscriber : m_subscribers)
     {
-      XmlRpc::XmlRpcValue sub;
-      sub[0] = subscriber->getName();
-      sub[1] = subscriber->datatype();
-      subs[subs.size()] = sub;
+      std::lock_guard<std::mutex> guards(m_sub_mutex);
+      for(auto & subscriber : m_subscribers)
+      {
+        XmlRpc::XmlRpcValue sub;
+        sub[0] = subscriber->getName();
+        sub[1] = subscriber->datatype();
+        subs[subs.size()] = sub;
+      }
     }
     result[2] = subs;
   }
@@ -290,12 +293,15 @@ namespace RTC
     result[1] = std::string("publications");
     XmlRpc::XmlRpcValue pubs;
     pubs.setSize(0);
-    for(auto & publisher : m_publishers)
     {
-      XmlRpc::XmlRpcValue pub;
-      pub[0] = publisher->getName();
-      pub[1] = publisher->datatype();
-      pubs[pubs.size()] = pub;
+      std::lock_guard<std::mutex> guardp(m_pub_mutex);
+      for(auto & publisher : m_publishers)
+      {
+        XmlRpc::XmlRpcValue pub;
+        pub[0] = publisher->getName();
+        pub[1] = publisher->datatype();
+        pubs[pubs.size()] = pub;
+      }
     }
     result[2] = pubs;
   }
@@ -315,8 +321,32 @@ namespace RTC
    *
    * @endif
    */
-  void ROSTopicManager::getBusStatsCallback(XmlRpc::XmlRpcValue& /*params*/, XmlRpc::XmlRpcValue& /*result*/)
+  void ROSTopicManager::getBusStatsCallback(XmlRpc::XmlRpcValue& /*params*/, XmlRpc::XmlRpcValue& result)
   {
+    XmlRpc::XmlRpcValue publishersData;
+    {
+      int count = 0;
+      std::lock_guard<std::mutex> guardp(m_pub_mutex);
+      for(auto & publisher : m_publishers)
+      {
+        publisher->getStats(publishersData[count]);
+        count++;
+      }
+    }
+
+    XmlRpc::XmlRpcValue subscribersData;
+    {
+      int count = 0;
+      std::lock_guard<std::mutex> guards(m_sub_mutex);
+      for(auto & subscribers : m_subscribers)
+      {
+        subscribers->getStats(subscribersData[count]);
+        count++;
+      }
+    }
+
+    result[0] = publishersData;
+    result[1] = subscribersData;
   }
 
   /*!
@@ -338,17 +368,25 @@ namespace RTC
   void ROSTopicManager::getBusInfoCallback(XmlRpc::XmlRpcValue& /*params*/, XmlRpc::XmlRpcValue& result)
   {
     result[0] = 1;
-    result[1] = std::string("bus info");
-  
-    XmlRpc::XmlRpcValue bus;
-    for(auto & subscriber : m_subscribers)
+    result[1] = std::string("");
+
+    int count = 0;
     {
-      subscriber->getInfo(result[2]);
+      std::lock_guard<std::mutex> guardsl(m_sublink_mutex);
+      for(auto & con : m_tcp_sub_connecters)
+      {
+        con.getInfo(result[2][count]);
+        count++;
+      }
     }
 
-    for(auto & publisher : m_publishers)
     {
-      publisher->getInfo(result[2]);
+      std::lock_guard<std::mutex> guardpl(m_publink_mutex);
+      for(auto & con : m_tcp_pub_connecters)
+      {
+        con.getInfo(result[2][count]);
+        count++;
+      }
     }
 
   }
@@ -419,13 +457,23 @@ namespace RTC
     
     if (params[2].getType() != XmlRpc::XmlRpcValue::TypeArray)
     {
-    
       result = ros::xmlrpc::responseInt(0, ros::console::g_last_error_message, 0);
       return;
     }
     
-    std::vector<std::string> new_ = std::vector<std::string>();
-    std::vector<std::string> old_ = m_cons[topic];
+    std::vector<PublisherLink> new_;
+    std::vector<PublisherLink> old_;
+
+    {
+      std::lock_guard<std::mutex> guardpl(m_publink_mutex);
+      for(auto & con : m_tcp_pub_connecters)
+      {
+        if(con.getCallerID() == caller_id && con.getTopic() == topic)
+        {
+          old_.emplace_back(con);
+        }
+      }
+    }
     
     for (int i = 0; i < params[2].size(); i++)
     {
@@ -440,50 +488,82 @@ namespace RTC
           result = ros::xmlrpc::responseInt(0, ros::console::g_last_error_message, 0);
           break;
       }
+      
       bool already_connected = false;
-      for (auto con = m_tcp_pub_connecters.begin(); con != m_tcp_pub_connecters.end(); con++)
       {
-        if(con->getCallerID() == caller_id && con->getTopic() == topic && con->getURI() == xmlrpc_uri)
+        std::lock_guard<std::mutex> guardpl(m_publink_mutex);
+        auto con = m_tcp_pub_connecters.begin();
+        while(con != m_tcp_pub_connecters.end())
         {
-          RTC_WARN(("%s already connected", xmlrpc_uri.c_str()));
-          if(con->getConnection()->isDropped())
+          if(con->getCallerID() == caller_id && con->getTopic() == topic && con->getURI() == xmlrpc_uri)
           {
-            RTC_ERROR(("delete connector: %s", xmlrpc_uri.c_str()));
-            con = m_tcp_pub_connecters.erase(con);
+            RTC_WARN(("Caller ID=%s, Topic=%s, URL=%s already connected", caller_id.c_str(), topic.c_str(), xmlrpc_uri.c_str()));
+            if(con->getConnection()->isDropped())
+            {
+              RTC_ERROR(("delete connector: Caller ID=%s, Topic=%s, URL=%s", caller_id.c_str(), topic.c_str(), xmlrpc_uri.c_str()));
+              {
+                std::lock_guard<std::mutex> guards(m_sub_mutex);
+                for(auto & subscriber : m_subscribers)
+                {
+                  subscriber->removePublisherLink(con->getConnection());
+                }
+              }
+              con = m_tcp_pub_connecters.erase(con);
+            }
+            else
+            {
+              ++con;
+              already_connected = true;
+              break;
+            }
           }
           else
           {
-            already_connected = true;
-            break;
+            ++con;
           }
         }
       }
       
       if(!already_connected)
       {
+        std::lock_guard<std::mutex> guards(m_sub_mutex);
         for(auto & subscriber : m_subscribers)
         {
+          RTC_INFO(("connect ID=%s, Topic=%s, URL=%s", caller_id.c_str(), topic.c_str(), xmlrpc_uri.c_str()));
           subscriber->connectTCP(caller_id, topic, xmlrpc_uri);
         }
       }
-      new_.emplace_back(xmlrpc_uri);
+      PublisherLink pub;
+      pub.setInfo(caller_id, topic, xmlrpc_uri);
+      new_.emplace_back(pub);
     }
 
-    for(auto & old_uri : old_)
+  
+    for(auto & old_con : old_)
     {
-      std::vector<std::string>::iterator itr_uri = std::find(new_.begin(), new_.end(), old_uri);
-      size_t index = std::distance( new_.begin(), itr_uri );
-    
-      if (index == new_.size()) 
+      std::vector<PublisherLink>::iterator itr_new = std::find(new_.begin(), new_.end(), old_con);
+      size_t index_new = std::distance(new_.begin(), itr_new);
+      if (index_new == new_.size())
       {
-        for (auto con = m_tcp_pub_connecters.begin(); con != m_tcp_pub_connecters.end(); con++)
+        std::lock_guard<std::mutex> guardpl(m_publink_mutex);
+        std::vector<PublisherLink>::iterator itr_pub = std::find(m_tcp_pub_connecters.begin(), m_tcp_pub_connecters.end(), old_con);
+        if(itr_pub != m_tcp_pub_connecters.end())
         {
-          if(con->getCallerID() == caller_id && con->getTopic() == topic && con->getURI() == old_uri)
+          RTC_INFO(("delete connector: Caller ID=%s, Topic=%s", caller_id.c_str(), topic.c_str()));
+
+          itr_pub->getConnection()->drop(ros::Connection::Destructing);
+          m_tcp_pub_connecters.erase(itr_pub);
           {
-            con = m_tcp_pub_connecters.erase(con);
+            std::lock_guard<std::mutex> guards(m_sub_mutex);
+            for(auto & subscriber : m_subscribers)
+            {
+              subscriber->removePublisherLink(itr_pub->getConnection());
+            }
           }
         }
+
       }
+      
     }
     
     result = ros::xmlrpc::responseInt(1, "", 0);
@@ -508,8 +588,11 @@ namespace RTC
    */
   void ROSTopicManager::addPublisher(ROSOutPort *publisher)
   {
-
-    if(!existPublisher(publisher))
+    std::lock_guard<std::mutex> guardp(m_pub_mutex);
+    std::vector<ROSOutPort*>::iterator itr = std::find(m_publishers.begin(), m_publishers.end(), publisher);
+    size_t index = std::distance( m_publishers.begin(), itr );
+    
+    if(index == m_publishers.size())
     {
       m_publishers.emplace_back(publisher);
     }
@@ -532,7 +615,10 @@ namespace RTC
    */
   void ROSTopicManager::addSubscriber(ROSInPort *subscriber)
   {
-    if(!existSubscriber(subscriber))
+    std::lock_guard<std::mutex> guards(m_sub_mutex);
+    std::vector<ROSInPort*>::iterator itr = std::find(m_subscribers.begin(), m_subscribers.end(), subscriber);
+    size_t index = std::distance( m_subscribers.begin(), itr );
+    if(index == m_subscribers.size())
     {
       m_subscribers.emplace_back(subscriber);
     }
@@ -555,7 +641,11 @@ namespace RTC
    */
   bool ROSTopicManager::removePublisher(ROSOutPort *publisher)
   {
-    if(existPublisher(publisher))
+    std::lock_guard<std::mutex> guardp(m_pub_mutex);
+    std::vector<ROSOutPort*>::iterator itr = std::find(m_publishers.begin(), m_publishers.end(), publisher);
+    size_t index = std::distance( m_publishers.begin(), itr );
+    
+    if(index != m_publishers.size())
     {
       m_publishers.erase(remove(m_publishers.begin(), m_publishers.end(), publisher), m_publishers.end());
       return true;
@@ -579,7 +669,10 @@ namespace RTC
    */
   bool ROSTopicManager::removeSubscriber(ROSInPort *subscriber)
   {
-    if(existSubscriber(subscriber))
+    std::lock_guard<std::mutex> guards(m_sub_mutex);
+    std::vector<ROSInPort*>::iterator itr = std::find(m_subscribers.begin(), m_subscribers.end(), subscriber);
+    size_t index = std::distance( m_subscribers.begin(), itr );
+    if(index != m_subscribers.size())
     {
       m_subscribers.erase(remove(m_subscribers.begin(), m_subscribers.end(), subscriber), m_subscribers.end());
       return true;
@@ -606,6 +699,7 @@ namespace RTC
    */
   bool ROSTopicManager::existPublisher(ROSOutPort *publisher)
   {
+    std::lock_guard<std::mutex> guardp(m_pub_mutex);
     std::vector<ROSOutPort*>::iterator itr = std::find(m_publishers.begin(), m_publishers.end(), publisher);
     size_t index = std::distance( m_publishers.begin(), itr );
     
@@ -631,6 +725,7 @@ namespace RTC
    */
   bool ROSTopicManager::existSubscriber(ROSInPort *subscriber)
   {
+    std::lock_guard<std::mutex> guards(m_sub_mutex);
     std::vector<ROSInPort*>::iterator itr = std::find(m_subscribers.begin(), m_subscribers.end(), subscriber);
     size_t index = std::distance( m_subscribers.begin(), itr );
     return (index != m_subscribers.size());
@@ -650,8 +745,9 @@ namespace RTC
    *
    * @endif
    */
-  std::vector<ROSTopicManager::PublisherLink> & ROSTopicManager::getPublisherLinkList()
+  std::vector<PublisherLink> & ROSTopicManager::getPublisherLinkList()
   {
+    std::lock_guard<std::mutex> guardpl(m_publink_mutex);
     return m_tcp_pub_connecters;
   }
   /*!
@@ -668,21 +764,22 @@ namespace RTC
    *
    * @endif
    */
-  std::vector<ROSTopicManager::SubscriberLink> & ROSTopicManager::getSubscriberLinkList()
+  std::vector<SubscriberLink> & ROSTopicManager::getSubscriberLinkList()
   {
+    std::lock_guard<std::mutex> guardsl(m_sublink_mutex);
     return m_tcp_sub_connecters;
   }
 
 
   /*!
    * @if jp
-   * @brief サブスクライバーの存在確認
+   * @brief  PublisherLinkを追加する
    * 
-   * @param connection サブスクライバー
-   * @param caller_id サブスクライバー
-   * @param topic サブスクライバー
-   * @param xmlrpc_uri サブスクライバー
-   * @return True：存在する
+   * @param connection ros::Connectionオブジェクト
+   * @param caller_id 呼び出しID
+   * @param topic トピック名
+   * @param xmlrpc_uri 接続先のURI
+   * @return true：追加成功
    *
    * @else
    * @brief 
@@ -698,55 +795,91 @@ namespace RTC
    */
   bool ROSTopicManager::addPublisherLink(ros::ConnectionPtr& connection, const std::string &caller_id, const std::string &topic, const std::string &xmlrpc_uri)
   {
-    m_tcp_pub_connecters.push_back(ROSTopicManager::PublisherLink(connection, m_pubnum, caller_id, topic, xmlrpc_uri));
+    std::lock_guard<std::mutex> guardpl(m_publink_mutex);
+    m_tcp_pub_connecters.push_back(PublisherLink(connection, m_pubnum, caller_id, topic, xmlrpc_uri));
     m_pubnum++;
     return true;
   }
   /*!
    * @if jp
-   * @brief サブスクライバーの存在確認
+   * @brief PublisherLinkを削除する
    * 
-   * @param uri サブスクライバー
-   * @return True：存在する
+   * @param connection ros::Connectionオブジェクト
+   * @return false：指定のPublisherLinkがリストにないため削除失敗
    *
    * @else
    * @brief 
    *
-   * @param uri 
+   * @param connection 
    * @return 
    * 
    *
    * @endif
    */
-  bool ROSTopicManager::removePublisherLink(ros::ConnectionPtr& connection)
+  bool ROSTopicManager::removePublisherLink(const ros::ConnectionPtr& connection)
   {
+    std::lock_guard<std::mutex> guardpl(m_publink_mutex);
     for (auto con = m_tcp_pub_connecters.begin(); con != m_tcp_pub_connecters.end(); con++)
     {
       if(con->getConnection() == connection)
       {
         con->getConnection()->drop(ros::Connection::Destructing);
-        con = m_tcp_pub_connecters.erase(con);
+        m_tcp_pub_connecters.erase(con);
         return true;
       }
     }
     return false;
   }
+
   /*!
    * @if jp
-   * @brief サブスクライバーの存在確認
+   * @brief PublisherLinkの存在確認
    * 
-   * @param connection サブスクライバー
-   * @param caller_id サブスクライバー
-   * @param topic サブスクライバー
-   * @param xmlrpc_uri サブスクライバー
-   * @return True：存在する
+   * @param caller_id 呼び出しID
+   * @param topic トピック名
+   * @param xmlrpc_uri 接続先のURI
+   * @return true：存在する
+   *
+   * @else
+   * @brief 
+   *
+   * @param caller_id 
+   * @param topic 
+   * @param xmlrpc_uri 
+   * @return true：存在する
+   * 
+   *
+   * @endif
+   */
+  bool ROSTopicManager::existPublisherLink(const std::string &caller_id, const std::string &topic, const std::string &xmlrpc_uri)
+  {
+    std::lock_guard<std::mutex> guardpl(m_publink_mutex);
+    for (auto & con : m_tcp_pub_connecters)
+    {
+      if(con.getCallerID() == caller_id && con.getTopic() == topic && con.getURI() == xmlrpc_uri)
+      {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  /*!
+   * @if jp
+   * @brief SubscriberLinkを追加する
+   * 
+   * @param connection ros::Connectionオブジェクト
+   * @param caller_id 呼び出しID
+   * @param topic トピック名
+   * @param xmlrpc_uri 接続先のURI
+   * @return true：存在する
    *
    * @else
    * @brief 
    *
    * @param connection 
    * @param caller_id 
-   * @param topic 
+   * @param caller_id 
    * @param xmlrpc_uri 
    * @return 
    * 
@@ -755,47 +888,17 @@ namespace RTC
    */
   bool ROSTopicManager::addSubscriberLink(ros::ConnectionPtr& connection)
   {
-    m_tcp_sub_connecters.push_back(ROSTopicManager::SubscriberLink(connection, m_subnum));
+    std::lock_guard<std::mutex> guardsl(m_sublink_mutex);
+    m_tcp_sub_connecters.push_back(SubscriberLink(connection, m_subnum));
     m_subnum++;
     return true;
   }
   /*!
    * @if jp
-   * @brief サブスクライバーの存在確認
+   * @brief SubscriberLinkを削除する
    * 
-   * @param uri サブスクライバー
-   * @return True：存在する
-   *
-   * @else
-   * @brief 
-   *
-   * @param uri 
-   * @return 
-   * 
-   *
-   * @endif
-   */
-  bool ROSTopicManager::removeSubscriberLink(ros::ConnectionPtr& connection)
-  {
-    for (auto con = m_tcp_sub_connecters.begin(); con != m_tcp_sub_connecters.end(); con++)
-    {
-      if(con->getConnection() == connection)
-      {
-        con->getConnection()->drop(ros::Connection::Destructing);
-        con = m_tcp_sub_connecters.erase(con);
-        return true;
-      }
-    }
-    return false;
-  }
-
-
-  /*!
-   * @if jp
-   * @brief サブスクライバーの存在確認
-   * 
-   * @param connection サブスクライバー
-   * @return True：存在する
+   * @param connection ros::Connectionオブジェクト
+   * @return false：指定のSubscriberLinkがリストにないため削除失敗
    *
    * @else
    * @brief 
@@ -806,8 +909,41 @@ namespace RTC
    *
    * @endif
    */
-  ROSTopicManager::PublisherLink* ROSTopicManager::getPublisherLink(const ros::ConnectionPtr& connection)
+  bool ROSTopicManager::removeSubscriberLink(const ros::ConnectionPtr& connection)
   {
+    std::lock_guard<std::mutex> guardsl(m_sublink_mutex);
+    for (auto con = m_tcp_sub_connecters.begin(); con != m_tcp_sub_connecters.end(); con++)
+    {
+      if(con->getConnection() == connection)
+      {
+        con->getConnection()->drop(ros::Connection::Destructing);
+        m_tcp_sub_connecters.erase(con);
+        return true;
+      }
+    }
+    return false;
+  }
+
+
+  /*!
+   * @if jp
+   * @brief 指定のros::ConnectionオブジェクトからPublisherLinkを取得する
+   * 
+   * @param connection ros::Connectionオブジェクト
+   * @return PublisherLink
+   *
+   * @else
+   * @brief 
+   *
+   * @param connection 
+   * @return 
+   * 
+   *
+   * @endif
+   */
+  PublisherLink* ROSTopicManager::getPublisherLink(const ros::ConnectionPtr& connection)
+  {
+    std::lock_guard<std::mutex> guardpl(m_publink_mutex);
     for(auto & tcp_connecter : m_tcp_pub_connecters)
     {
       if(tcp_connecter.getConnection() == connection)
@@ -819,10 +955,10 @@ namespace RTC
   }
   /*!
    * @if jp
-   * @brief サブスクライバーの存在確認
+   * @brief 指定のros::ConnectionオブジェクトからSubscriberLinkを取得する
    * 
-   * @param connection サブスクライバー
-   * @return True：存在する
+   * @param connection ros::Connectionオブジェクト
+   * @return PublisherLink
    *
    * @else
    * @brief 
@@ -833,8 +969,9 @@ namespace RTC
    *
    * @endif
    */
-  ROSTopicManager::SubscriberLink* ROSTopicManager::getSubscriberLink(const ros::ConnectionPtr& connection)
+  SubscriberLink* ROSTopicManager::getSubscriberLink(const ros::ConnectionPtr& connection)
   {
+    std::lock_guard<std::mutex> guardsl(m_sublink_mutex);
     for(auto & tcp_connecter : m_tcp_sub_connecters)
     {
       if(tcp_connecter.getConnection() == connection)
@@ -917,334 +1054,5 @@ namespace RTC
       }
   }
 
-    /*!
-   * @if jp
-   * @brief コンストラクタ
-   *
-   * @else
-   * @brief Constructor
-   *
-   * @endif
-   */
-  ROSTopicManager::PublisherLink::PublisherLink() : m_num(0)
-  {
-  }
-  /*!
-   * @if jp
-   * @brief コンストラクタ
-   *
-   * @param conn ros::Connection
-   * @param num コネクタのID
-   *
-   * @else
-   * @brief Constructor
-   *
-   * @param conn 
-   * @param num 
-   *
-   * @endif
-   */
-  ROSTopicManager::PublisherLink::PublisherLink(ros::ConnectionPtr conn, int num, const std::string &caller_id, const std::string &topic, const std::string &xmlrpc_uri)
-  {
-    m_conn = conn;
-    m_num = num;
-    m_caller_id = caller_id;
-    m_topic = topic;
-    m_xmlrpc_uri = xmlrpc_uri;
-  }
-  /*!
-   * @if jp
-   * @brief コピーコンストラクタ
-   *
-   * @param obj コピー元 
-   *
-   * @else
-   * @brief Copy Constructor
-   *
-   * @param obj
-   *
-   * @endif
-   */
-  ROSTopicManager::PublisherLink::PublisherLink(const PublisherLink &obj)
-  {
-    m_conn = obj.m_conn;
-    m_num = obj.m_num;
-    m_caller_id = obj.m_caller_id;
-    m_topic = obj.m_topic;
-    m_xmlrpc_uri = obj.m_xmlrpc_uri;
-  }
-  /*!
-   * @if jp
-   * @brief デストラクタ
-   *
-   *
-   * @else
-   * @brief Destructor
-   *
-   *
-   * @endif
-   */
-  ROSTopicManager::PublisherLink::~PublisherLink()
-  {
-
-  }
-  /*!
-   * @if jp
-   * @brief ros::Connectionを取得
-   *
-   * @return ros::Connection
-   *
-   * @else
-   * @brief 
-   *
-   * @return
-   *
-   * @endif
-   */
-  ros::ConnectionPtr ROSTopicManager::PublisherLink::getConnection()
-  {
-    return m_conn;
-  }
-  /*!
-   * @if jp
-   * @brief ros::Connectionを設定
-   *
-   * @param conn ros::Connection
-   *
-   * @else
-   * @brief 
-   *
-   * @param conn
-   *
-   * @endif
-   */
-  void ROSTopicManager::PublisherLink::setConnection(ros::ConnectionPtr conn)
-  {
-    m_conn = conn;
-  }
-  /*!
-   * @if jp
-   * @brief コネクタのID取得
-   *
-   * @return コネクタのID
-   *
-   * @else
-   * @brief 
-   *
-   * @return
-   *
-   * @endif
-   */
-  int ROSTopicManager::PublisherLink::getNum()
-  {
-    return m_num;
-  }
-
-  /*!
-   * @if jp
-   * @brief コネクタのID取得
-   *
-   * @return コネクタのID
-   *
-   * @else
-   * @brief 
-   *
-   * @return
-   *
-   * @endif
-   */
-  const std::string ROSTopicManager::PublisherLink::getCallerID() const
-  {
-    return m_caller_id;
-  }
-
-  /*!
-   * @if jp
-   * @brief コネクタのID取得
-   *
-   * @return コネクタのID
-   *
-   * @else
-   * @brief 
-   *
-   * @return
-   *
-   * @endif
-   */
-  const std::string ROSTopicManager::PublisherLink::getTopic() const
-  {
-    return m_topic;
-  }
-
-  /*!
-   * @if jp
-   * @brief コネクタのID取得
-   *
-   * @return コネクタのID
-   *
-   * @else
-   * @brief 
-   *
-   * @return
-   *
-   * @endif
-   */
-  const std::string ROSTopicManager::PublisherLink::getURI() const
-  {
-    return m_xmlrpc_uri;
-  }
-
-  /*!
-   * @if jp
-   * @brief コンストラクタ
-   *
-   * @else
-   * @brief Constructor
-   *
-   * @endif
-   */
-  ROSTopicManager::SubscriberLink::SubscriberLink() : m_num(0)
-  {
-  }
-
-  /*!
-   * @if jp
-   * @brief コンストラクタ
-   *
-   * @param conn ros::Connection
-   * @param num コネクタのID
-   *
-   * @else
-   * @brief Constructor
-   *
-   * @param conn 
-   * @param num 
-   *
-   * @endif
-   */
-  ROSTopicManager::SubscriberLink::SubscriberLink(ros::ConnectionPtr conn, int num)
-  {
-    m_conn = conn;
-    m_num = num;
-  }
-  /*!
-   * @if jp
-   * @brief コピーコンストラクタ
-   *
-   * @param obj コピー元 
-   *
-   * @else
-   * @brief Copy Constructor
-   *
-   * @param obj
-   *
-   * @endif
-   */
-  ROSTopicManager::SubscriberLink::SubscriberLink(const SubscriberLink &obj)
-  {
-    m_conn = obj.m_conn;
-    m_nodename = obj.m_nodename;
-    m_num = obj.m_num;
-  }
-  /*!
-   * @if jp
-   * @brief デストラクタ
-   *
-   *
-   * @else
-   * @brief Destructor
-   *
-   *
-   * @endif
-   */
-  ROSTopicManager::SubscriberLink::~SubscriberLink()
-  {
-
-  }
-  /*!
-   * @if jp
-   * @brief 接続先のノード名を設定
-   *
-   * @param name ノード名
-   *
-   * @else
-   * @brief 
-   *
-   * @param name
-   *
-   * @endif
-   */
-  void ROSTopicManager::SubscriberLink::setNoneName(std::string& name)
-  {
-    m_nodename = name;
-  }
-  /*!
-   * @if jp
-   * @brief 接続先のノード名を取得
-   *
-   * @return ノード名
-   *
-   * @else
-   * @brief 
-   *
-   * @return
-   *
-   * @endif
-   */
-  const std::string ROSTopicManager::SubscriberLink::getNodeName() const
-  {
-    return m_nodename;
-  }
-  /*!
-   * @if jp
-   * @brief ros::Connectionを設定
-   *
-   * @param conn ros::Connection
-   *
-   * @else
-   * @brief 
-   *
-   * @param conn
-   *
-   * @endif
-   */
-  void ROSTopicManager::SubscriberLink::setConnection(ros::ConnectionPtr conn)
-  {
-    m_conn = conn;
-  }
-  /*!
-   * @if jp
-   * @brief ros::Connectionを取得
-   *
-   * @return ros::Connection
-   *
-   * @else
-   * @brief 
-   *
-   * @return
-   *
-   * @endif
-   */
-  ros::ConnectionPtr ROSTopicManager::SubscriberLink::getConnection()
-  {
-    return m_conn;
-  }
-  /*!
-   * @if jp
-   * @brief コネクタのID取得
-   *
-   * @return コネクタのID
-   *
-   * @else
-   * @brief 
-   *
-   * @return
-   *
-   * @endif
-   */
-  int ROSTopicManager::SubscriberLink::getNum()
-  {
-    return m_num;
-  }
 }
 
