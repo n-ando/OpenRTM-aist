@@ -312,9 +312,29 @@ namespace RTC
   {
     data[0] = m_num;
     data[1] = (int)m_bytes_sent;
-    data[2] = (int)m_message_data_sent;
-    data[3] = (int)m_messages_sent;
-    data[4] = 0;
+    data[2] = (int)m_messages_sent;
+    data[3] = 0;
+  }
+
+  /*!
+   * @if jp
+   * @brief 過去に送信したデータ量(byte)を設定する
+   *
+   *
+   * @param size データ量(byte)
+   * 
+   * @else
+   * @brief 
+   *
+   * 
+   * @param size
+   *
+   * @endif
+   */
+  void SubscriberLink::setStatBytes(const uint64_t size)
+  {
+    m_bytes_sent = size;
+    m_messages_sent = 1;
   }
 
   /*!

@@ -253,6 +253,24 @@ namespace RTC
          * @endif
          */
         bool existSubscriber(ROSInPort *subscriber);
+        /*!
+         * @if jp
+         * @brief 指定トピック名のPublisherが存在するかの確認
+         * 
+         * @param topic トピック名
+         * @return True：存在する
+         *
+         * @else
+         * @brief 
+         *
+         * @param topic 
+         * @return 
+         * 
+         *
+         * @endif
+         */
+        bool hasPublisher(const std::string& topic);
+
 
 
         /*!

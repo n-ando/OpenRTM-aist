@@ -20,13 +20,15 @@
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
 #include <WinSock2.h>
 #endif
+#include <chrono>
 #include <xmlrpcpp/XmlRpc.h>
 #include <xmlrpcpp/XmlRpcSocket.h>
 #include <ros/xmlrpc_manager.h>
 #include <ros/network.h>
 #include <ros/poll_manager.h>
 #include <ros/connection_manager.h>
-#include <coil/UUID.h>
+#include <coil/OS.h>
+#include <coil/stringutil.h>
 #include "ROSInPort.h"
 #include "ROSTopicManager.h"
 
@@ -146,11 +148,15 @@ namespace RTC
     RTC_VERBOSE(("topic name: %s", m_topic.c_str()));
     RTC_VERBOSE(("roscore address: %s:%d", m_roscorehost.c_str(), m_roscoreport));
     
-    m_callerid = prop.getProperty("ros.node.name");
-    if(m_callerid.empty())
+    m_callerid = prop.getProperty("ros.node.name", "rtcomp");
+    if (coil::toBool(prop["ros.node.anonymous"], "YES", "NO", false))
     {
-      std::unique_ptr<coil::UUID> uuid(coil::UUID_Generator::generateUUID(2, 0x01));
-      m_callerid = uuid->to_string();
+      coil::pid_t pid = coil::getpid();
+      std::string pidc = coil::otos(pid);
+      auto now = std::chrono::system_clock::now().time_since_epoch();
+      auto msec = std::chrono::duration_cast<std::chrono::milliseconds>(now);
+      std::string timec = coil::otos(static_cast<int>(msec.count()));
+      m_callerid = m_callerid + std::string("_") + pidc + std::string("_") + timec;
     }
     m_callerid = std::string("/")+m_callerid;
 
@@ -503,12 +509,15 @@ namespace RTC
     RTC_VERBOSE(("getStats()"));
     result[0] = m_topic;
     int count = 0;
+    XmlRpc::XmlRpcValue stats;
+    stats.setSize(0);
     std::lock_guard<std::mutex> guardc(m_con_mutex);
     for(auto & con : m_tcp_connecters)
     {
-      con.getStats(result[1][count]);
+      con.getStats(stats[count]);
       count++;
     }
+    result[1] = stats;
   }
 
 

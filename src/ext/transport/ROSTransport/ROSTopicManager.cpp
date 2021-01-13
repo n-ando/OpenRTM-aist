@@ -25,6 +25,7 @@
 #include <xmlrpcpp/XmlRpcSocket.h>
 #include <ros/connection.h>
 #include <ros/connection_manager.h>
+#include <coil/OS.h>
 
 
 namespace ros
@@ -197,8 +198,19 @@ namespace RTC
           return;
       }
 
-      std::string callerid = params[0];
       std::string topic = params[1];
+
+      if(!hasPublisher(topic))
+      {
+        XmlRpc::XmlRpcValue tcpros_params;
+
+        result.setSize(3);
+        tcpros_params.setSize(0);
+        result[0] = int(-1);
+        result[1] = std::string("Not a publisher of [") + topic + std::string("]");
+        result[2] = tcpros_params;
+        return;
+      }
       
       XmlRpc::XmlRpcValue protocols = params[2];
       if (protocols.getType() != XmlRpc::XmlRpcValue::TypeArray)
@@ -229,7 +241,8 @@ namespace RTC
           tcpros_params[2] = int(m_tcpserver_transport->getServerPort());
           result.setSize(3);
           result[0] = int(1);
-          result[1] = std::string();
+          result[1] = std::string("ready on ") + ros::network::getHost() + std::string(" ")
+                           + std::string(coil::otos(static_cast<int>(m_tcpserver_transport->getServerPort())));
           result[2] = tcpros_params;
           return;
         }
@@ -264,7 +277,7 @@ namespace RTC
       for(auto & subscriber : m_subscribers)
       {
         XmlRpc::XmlRpcValue sub;
-        sub[0] = subscriber->getName();
+        sub[0] = subscriber->getTopicName();
         sub[1] = subscriber->datatype();
         subs[subs.size()] = sub;
       }
@@ -298,7 +311,7 @@ namespace RTC
       for(auto & publisher : m_publishers)
       {
         XmlRpc::XmlRpcValue pub;
-        pub[0] = publisher->getName();
+        pub[0] = publisher->getTopicName();
         pub[1] = publisher->datatype();
         pubs[pubs.size()] = pub;
       }
@@ -323,7 +336,14 @@ namespace RTC
    */
   void ROSTopicManager::getBusStatsCallback(XmlRpc::XmlRpcValue& /*params*/, XmlRpc::XmlRpcValue& result)
   {
+    result[0] = 1;
+    result[1] = std::string("");
+
+    XmlRpc::XmlRpcValue stats;
+    stats.setSize(3);
+
     XmlRpc::XmlRpcValue publishersData;
+    publishersData.setSize(0);
     {
       int count = 0;
       std::lock_guard<std::mutex> guardp(m_pub_mutex);
@@ -335,6 +355,7 @@ namespace RTC
     }
 
     XmlRpc::XmlRpcValue subscribersData;
+    subscribersData.setSize(0);
     {
       int count = 0;
       std::lock_guard<std::mutex> guards(m_sub_mutex);
@@ -345,8 +366,13 @@ namespace RTC
       }
     }
 
-    result[0] = publishersData;
-    result[1] = subscribersData;
+    XmlRpc::XmlRpcValue serviceData;
+    serviceData.setSize(0);
+
+    stats[0] = publishersData;
+    stats[1] = subscribersData;
+    stats[2] = serviceData;
+    result[2] = stats;
   }
 
   /*!
@@ -368,14 +394,16 @@ namespace RTC
   void ROSTopicManager::getBusInfoCallback(XmlRpc::XmlRpcValue& /*params*/, XmlRpc::XmlRpcValue& result)
   {
     result[0] = 1;
-    result[1] = std::string("");
+    result[1] = std::string("bus info");
+    XmlRpc::XmlRpcValue response;
+    response.setSize(0);
 
     int count = 0;
     {
       std::lock_guard<std::mutex> guardsl(m_sublink_mutex);
       for(auto & con : m_tcp_sub_connecters)
       {
-        con.getInfo(result[2][count]);
+        con.getInfo(response[count]);
         count++;
       }
     }
@@ -384,10 +412,12 @@ namespace RTC
       std::lock_guard<std::mutex> guardpl(m_publink_mutex);
       for(auto & con : m_tcp_pub_connecters)
       {
-        con.getInfo(result[2][count]);
+        con.getInfo(response[count]);
         count++;
       }
     }
+
+    result[2] = response;
 
   }
   /*!
@@ -406,8 +436,11 @@ namespace RTC
    *
    * @endif
    */
-  void ROSTopicManager::getPidCallback(XmlRpc::XmlRpcValue& /*params*/, XmlRpc::XmlRpcValue& /*result*/)
+  void ROSTopicManager::getPidCallback(XmlRpc::XmlRpcValue& /*params*/, XmlRpc::XmlRpcValue& result)
   {
+    result[0] = 1;
+    result[1] = std::string("");
+    result[2] = static_cast<int>(coil::getpid());
   }
 
   /*!
@@ -729,6 +762,35 @@ namespace RTC
     std::vector<ROSInPort*>::iterator itr = std::find(m_subscribers.begin(), m_subscribers.end(), subscriber);
     size_t index = std::distance( m_subscribers.begin(), itr );
     return (index != m_subscribers.size());
+  }
+
+  /*!
+   * @if jp
+   * @brief 指定トピック名のPublisherが存在するかの確認
+   * 
+   * @param topic トピック名
+   * @return True：存在する
+   *
+   * @else
+   * @brief 
+   *
+   * @param topic 
+   * @return 
+   * 
+   *
+   * @endif
+   */
+  bool ROSTopicManager::hasPublisher(const std::string& topic)
+  {
+    std::lock_guard<std::mutex> guardp(m_pub_mutex);
+    for(auto & publisher : m_publishers)
+    {
+      if(publisher->getTopicName() == topic)
+      {
+        return true;
+      }
+    }
+    return false;
   }
 
   /*!

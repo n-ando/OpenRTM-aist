@@ -373,6 +373,7 @@ namespace RTC
     std::string m_datatype;
     std::string m_roscorehost;
     unsigned int m_roscoreport;
+    uint64_t m_message_data_sent;
   };
 } // namespace RTC
 

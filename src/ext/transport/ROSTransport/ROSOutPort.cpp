@@ -19,9 +19,11 @@
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
 #include <WinSock2.h>
 #endif
+#include <chrono>
 #include <rtm/NVUtil.h>
 #include <ros/xmlrpc_manager.h>
-#include <coil/UUID.h>
+#include <coil/OS.h>
+#include <coil/stringutil.h>
 #include "ROSOutPort.h"
 #include "ROSTopicManager.h"
 
@@ -38,7 +40,7 @@ namespace RTC
    * @endif
    */
   ROSOutPort::ROSOutPort(void)
-    : rtclog("ROSOutPort"), m_start(false), m_roscoreport(11311)
+    : rtclog("ROSOutPort"), m_start(false), m_roscoreport(11311), m_message_data_sent(0)
   {
   }
   
@@ -95,11 +97,15 @@ namespace RTC
     RTC_VERBOSE(("roscore address: %s:%d", m_roscorehost.c_str(), m_roscoreport));
     
 
-    m_callerid = prop.getProperty("ros.node.name");
-    if(m_callerid.empty())
+    m_callerid = prop.getProperty("ros.node.name", "rtcomp");
+    if (coil::toBool(prop["ros.node.anonymous"], "YES", "NO", false))
     {
-      std::unique_ptr<coil::UUID> uuid(coil::UUID_Generator::generateUUID(2, 0x01));
-      m_callerid = uuid->to_string();
+      coil::pid_t pid = coil::getpid();
+      std::string pidc = coil::otos(pid);
+      auto now = std::chrono::system_clock::now().time_since_epoch();
+      auto msec = std::chrono::duration_cast<std::chrono::milliseconds>(now);
+      std::string timec = coil::otos(static_cast<int>(msec.count()));
+      m_callerid = m_callerid + std::string("_") + pidc + std::string("_") + timec;
     }
     m_callerid = std::string("/")+m_callerid;
 
@@ -156,6 +162,7 @@ namespace RTC
       if(m_start)
       {
         size_t length = (size_t)data.getDataLength();
+        m_message_data_sent += static_cast<uint64_t>(length);
         boost::shared_array<uint8_t> buffer(new uint8_t[length]);
         memcpy(buffer.get(), data.getBuffer(), length);
 
@@ -310,8 +317,6 @@ namespace RTC
         RTC_ERROR(("Callse id does not exist in header"));
         return false;
     }
-    std::cout << client_callerid << std::endl;
-    std::cout << md5sum << std::endl;
 
     ROSMessageInfoBase* info = GlobalROSMessageInfoList::instance().getInfo(m_messageType);
     
@@ -322,17 +327,7 @@ namespace RTC
     }
 
 
-    ROSTopicManager& topicmgr = ROSTopicManager::instance();
-    SubscriberLink* sub = topicmgr.getSubscriberLink(conn);
 
-    if (sub != nullptr)
-    {
-      sub->setNoneName(client_callerid);
-      sub->setCallerID(client_callerid);
-      sub->setTopic(topic);
-      std::lock_guard<std::mutex> guardc(m_con_mutex);
-      m_tcp_connecters.push_back(*sub);
-    }
 
     ros::M_string m;
     m["type"] = info->type();
@@ -350,6 +345,24 @@ namespace RTC
     RTC_VERBOSE(("Caller ID:%s", m_callerid.c_str()));
     RTC_VERBOSE(("Topic Name:%s", topic.c_str()));
     RTC_VERBOSE(("TCPTransPort created"));
+
+
+    boost::shared_array<uint8_t> buffer;
+    uint32_t len;
+    ros::Header::write(m, buffer, len);
+
+    ROSTopicManager& topicmgr = ROSTopicManager::instance();
+    SubscriberLink* sub = topicmgr.getSubscriberLink(conn);
+
+    if (sub != nullptr)
+    {
+      sub->setNoneName(client_callerid);
+      sub->setCallerID(client_callerid);
+      sub->setTopic(topic);
+      sub->setStatBytes(static_cast<uint64_t>(len+4));
+      std::lock_guard<std::mutex> guardc(m_con_mutex);
+      m_tcp_connecters.push_back(*sub);
+    }
 
 
     conn->writeHeader(m, boost::bind(&ROSOutPort::onHeaderWritten, this, _1));
@@ -437,13 +450,17 @@ namespace RTC
   {
     RTC_VERBOSE(("getStats()"));
     result[0] = m_topic;
+    result[1] = static_cast<int>(m_message_data_sent);
     int count = 0;
+    XmlRpc::XmlRpcValue stats;
+    stats.setSize(0);
     std::lock_guard<std::mutex> guardc(m_con_mutex);
     for(auto & con : m_tcp_connecters)
     {
-      con.getStats(result[1][count]);
+      con.getStats(stats[count]);
       count++;
     }
+    result[2] = stats;
   }
 
 

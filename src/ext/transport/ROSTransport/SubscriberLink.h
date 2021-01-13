@@ -266,6 +266,23 @@ namespace RTC
        * @endif
        */
       void getStats(XmlRpc::XmlRpcValue& data);
+      /*!
+       * @if jp
+       * @brief 過去に送信したデータ量(byte)を設定する
+       *
+       *
+       * @param size データ量(byte)
+       * 
+       * @else
+       * @brief 
+       *
+       * 
+       * @param size
+       *
+       * @endif
+       */
+      void setStatBytes(const uint64_t size);
+
 
       /*!
        * @if jp
