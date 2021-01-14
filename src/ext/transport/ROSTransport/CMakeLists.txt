@@ -42,7 +42,7 @@ endif()
 
 set(target ROSTransport)
 
-set(srcs ROSTransport.cpp ROSTransport.h ROSInPort.cpp ROSInPort.h ROSOutPort.cpp ROSOutPort.h ROSMessageInfo.cpp ROSMessageInfo.h ROSTopicManager.cpp ROSTopicManager.h ROSSerializer.cpp ROSSerializer.h)
+set(srcs ROSTransport.cpp ROSTransport.h ROSInPort.cpp ROSInPort.h ROSOutPort.cpp ROSOutPort.h ROSMessageInfo.cpp ROSMessageInfo.h ROSTopicManager.cpp ROSTopicManager.h ROSSerializer.cpp ROSSerializer.h SubscriberLink.cpp SubscriberLink.h PublisherLink.cpp PublisherLink.h)
 
 
 if(VXWORKS AND NOT RTP)

@@ -20,13 +20,15 @@
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
 #include <WinSock2.h>
 #endif
+#include <chrono>
 #include <xmlrpcpp/XmlRpc.h>
 #include <xmlrpcpp/XmlRpcSocket.h>
 #include <ros/xmlrpc_manager.h>
 #include <ros/network.h>
 #include <ros/poll_manager.h>
 #include <ros/connection_manager.h>
-#include <coil/UUID.h>
+#include <coil/OS.h>
+#include <coil/stringutil.h>
 #include "ROSInPort.h"
 #include "ROSTopicManager.h"
 
@@ -45,7 +47,6 @@ namespace RTC
    */
   ROSInPort::ROSInPort(void)
    : m_buffer(nullptr),
-     m_pubnum(0),
      m_roscoreport(11311)
   {
     // PortProfile setting
@@ -67,19 +68,21 @@ namespace RTC
   {
     RTC_PARANOID(("~ROSInPort()"));
 
-    for(auto & con : m_tcp_connecters)
-    {
-      con.second.getConnection()->drop(ros::Connection::Destructing);
-    }
-
     ROSTopicManager& topicmgr = ROSTopicManager::instance();
+    
+    {
+      std::lock_guard<std::mutex> guardc(m_con_mutex);
+      for(auto & con : m_tcp_connecters)
+      {
+          topicmgr.removePublisherLink(con.getConnection());
+      }
+    }
     topicmgr.removeSubscriber(this);
 
     if(!m_roscorehost.empty())
     {
         XmlRpc::XmlRpcValue request;
         XmlRpc::XmlRpcValue response;
-
 
         XmlRpc::XmlRpcClient *master = ros::XMLRPCManager::instance()->getXMLRPCClient(m_roscorehost, m_roscoreport, "/");
 
@@ -145,11 +148,15 @@ namespace RTC
     RTC_VERBOSE(("topic name: %s", m_topic.c_str()));
     RTC_VERBOSE(("roscore address: %s:%d", m_roscorehost.c_str(), m_roscoreport));
     
-    m_callerid = prop.getProperty("ros.node.name");
-    if(m_callerid.empty())
+    m_callerid = prop.getProperty("ros.node.name", "rtcomp");
+    if (coil::toBool(prop["ros.node.anonymous"], "YES", "NO", false))
     {
-      std::unique_ptr<coil::UUID> uuid(coil::UUID_Generator::generateUUID(2, 0x01));
-      m_callerid = uuid->to_string();
+      coil::pid_t pid = coil::getpid();
+      std::string pidc = coil::otos(pid);
+      auto now = std::chrono::system_clock::now().time_since_epoch();
+      auto msec = std::chrono::duration_cast<std::chrono::milliseconds>(now);
+      std::string timec = coil::otos(static_cast<int>(msec.count()));
+      m_callerid = m_callerid + std::string("_") + pidc + std::string("_") + timec;
     }
     m_callerid = std::string("/")+m_callerid;
 
@@ -251,6 +258,7 @@ namespace RTC
    * @param topic トピック名
    * @param xmlrpc_uri パブリッシャーのURI
    *
+   * @return 
    * 
    * @else
    * @brief 
@@ -264,27 +272,26 @@ namespace RTC
    *
    * @endif
    */
-  void ROSInPort::connectTCP(const std::string &caller_id, const std::string &topic, const std::string &xmlrpc_uri)
+  bool ROSInPort::connectTCP(const std::string &caller_id, const std::string &topic, const std::string &xmlrpc_uri)
   {
     RTC_PARANOID(("connectTCP(%s, %s, %s)",caller_id.c_str(), topic.c_str(), xmlrpc_uri.c_str()));
 
-
     if(topic != m_topic)
     {
-      return;
+      return false;
     }
 
-    if (m_tcp_connecters.count(xmlrpc_uri) > 0)
+    ROSTopicManager& topicmgr = ROSTopicManager::instance();
+
     {
-      RTC_WARN(("%s already connected", xmlrpc_uri.c_str()));
-      if(m_tcp_connecters[xmlrpc_uri].getConnection()->isDropped())
+      std::lock_guard<std::mutex> guardc(m_con_mutex);
+      for(auto & con : m_tcp_connecters)
       {
-        RTC_ERROR(("delete connector: %s", xmlrpc_uri.c_str()));
-        m_tcp_connecters.erase(xmlrpc_uri);
-      }
-      else
-      {
-        return;
+        if(con.getCallerID() == caller_id && con.getTopic() == topic && con.getURI() == xmlrpc_uri)
+        {
+          RTC_WARN(("Already connected (%s, %s, %s)",caller_id.c_str(), topic.c_str(), xmlrpc_uri.c_str()));
+          return true;
+        }
       }
     }
 
@@ -294,7 +301,7 @@ namespace RTC
     if (!ros::network::splitURI(xmlrpc_uri, peer_host, peer_port))
     {
       RTC_ERROR(("Network Error: %s:%d", peer_host.c_str(), peer_port));
-      return;
+      return false;
     }
     
     RTC_VERBOSE(("Connect Publisher: %s:%d", peer_host.c_str(), peer_port));
@@ -316,7 +323,7 @@ namespace RTC
     if(!b)
     {
       RTC_ERROR(("requestTopic Error"));
-      return;
+      return false;
     }
 
     std::string msg = response[1];
@@ -335,16 +342,21 @@ namespace RTC
       connection->initialize(transport, false, ros::HeaderReceivedFunc());
       connection->setHeaderReceivedCallback(boost::bind(&ROSInPort::onHeaderReceived, this, _1, _2));
 
-      
+      topicmgr.addPublisherLink(connection, caller_id, topic, xmlrpc_uri);
+      PublisherLink* sub = topicmgr.getPublisherLink(connection);
 
-      m_tcp_connecters[xmlrpc_uri] = PublisherLink(connection, m_pubnum);
-      m_pubnum++;
+      if (sub != nullptr)
+      {
+        std::lock_guard<std::mutex> guardc(m_con_mutex);
+        m_tcp_connecters.push_back(*sub);
+      }
+
       ROSMessageInfoBase* info = GlobalROSMessageInfoList::instance().getInfo(m_messageType);
 
       if(!info)
       {
         RTC_ERROR(("Can not find message type(%s)", m_messageType.c_str()));
-        return;
+        return false;
       }
 
       ros::M_string header;
@@ -362,50 +374,13 @@ namespace RTC
       RTC_VERBOSE(("Topic Name:%s", topic.c_str()));
       RTC_VERBOSE(("TCPTransPort created"));
 
-
-
       connection->writeHeader(header, boost::bind(&ROSInPort::onHeaderWritten, this, _1));
-
+      return true;
     }
+    return false;
   }
 
-  /*!
-   * @if jp
-   * @brief TCPコネクタの削除
-   *
-   *
-   * @param caller_id 呼び出しID
-   * @param topic トピック名
-   * @param xmlrpc_uri パブリッシャーのURI
-   *
-   * 
-   * @else
-   * @brief 
-   *
-   *
-   * @param caller_id 
-   * @param topic 
-   * @param xmlrpc_uri 
-   * 
-   * @return
-   *
-   * @endif
-   */
-  void ROSInPort::deleteTCPConnector(const std::string &caller_id, const std::string &topic, const std::string &xmlrpc_uri)
-  {
-    RTC_PARANOID(("deleteTCPConnector(%s, %s, %s)", caller_id.c_str(), topic.c_str(), xmlrpc_uri.c_str()));
-    if(topic != m_topic)
-    {
-      RTC_VERBOSE(("Topic names do not match: %s %s", m_topic.c_str(), topic.c_str()));
-      return;
-    }
 
-    if (m_tcp_connecters.count(xmlrpc_uri) > 0){
-      RTC_VERBOSE(("Delete Connection: %s", xmlrpc_uri.c_str()));
-      m_tcp_connecters[xmlrpc_uri].getConnection()->drop(ros::Connection::Destructing);
-      m_tcp_connecters.erase(xmlrpc_uri);
-    }
-  }
 
   /*!
    * @if jp
@@ -470,6 +445,7 @@ namespace RTC
    */
   const std::string& ROSInPort::datatype() const
   {
+    RTC_VERBOSE(("datatype()"));
     return m_datatype;
   }
   /*!
@@ -489,6 +465,7 @@ namespace RTC
    */
   const std::string& ROSInPort::getTopicName() const
   {
+    RTC_VERBOSE(("getTopicName()"));
     return m_topic;
   }
   /*!
@@ -508,163 +485,79 @@ namespace RTC
    */
   const std::string& ROSInPort::getName() const
   {
+    RTC_VERBOSE(("getName()"));
     return m_callerid;
   }
-  /*!
-   * @if jp
-   * @brief コネクタの情報を取得
-   *
-   *
-   * @param info 情報を格納する変数
-   * data[0]：コネクタID
-   * data[1]：接続先のXML-RPCサーバーのアドレス
-   * data[2]："i"
-   * data[3]：TCPROS or UDPROS
-   * data[4]：トピック名
-   * data[5]：true
-   * data[6]：接続情報
-   * 
-   * @else
-   * @brief 
-   *
-   *
-   * @param info
-   * 
-   *
-   * @endif
-   */
-  void ROSInPort::getInfo(XmlRpc::XmlRpcValue& info)
-  {
-    int count = 0;
-    for(auto con : m_tcp_connecters)
-    {
-          XmlRpc::XmlRpcValue data;
-          data[0] = con.second.getNum();
-          data[1] = con.first;
-          data[2] = std::string("i");
-          data[3] = std::string(con.second.getConnection()->getTransport()->getType());
-          data[4] = m_topic;
-          data[5] = true;
-          data[6] = con.second.getConnection()->getTransport()->getTransportInfo();
-          info[count] = data;
-          count++;
-    }
-  }
-  /*!
-   * @if jp
-   * @brief コンストラクタ
-   *
-   * @else
-   * @brief Constructor
-   *
-   * @endif
-   */
-  ROSInPort::PublisherLink::PublisherLink() : m_num(0)
-  {
-  }
-  /*!
-   * @if jp
-   * @brief コンストラクタ
-   *
-   * @param conn ros::Connection
-   * @param num コネクタのID
-   *
-   * @else
-   * @brief Constructor
-   *
-   * @param conn 
-   * @param num 
-   *
-   * @endif
-   */
-  ROSInPort::PublisherLink::PublisherLink(ros::ConnectionPtr conn, int num)
-  {
-    m_conn = conn;
-    m_num = num;
-  }
-  /*!
-   * @if jp
-   * @brief コピーコンストラクタ
-   *
-   * @param obj コピー元 
-   *
-   * @else
-   * @brief Copy Constructor
-   *
-   * @param obj
-   *
-   * @endif
-   */
-  ROSInPort::PublisherLink::PublisherLink(const PublisherLink &obj)
-  {
-    m_conn = obj.m_conn;
-    m_num = obj.m_num;
-  }
-  /*!
-   * @if jp
-   * @brief デストラクタ
-   *
-   *
-   * @else
-   * @brief Destructor
-   *
-   *
-   * @endif
-   */
-  ROSInPort::PublisherLink::~PublisherLink()
-  {
 
-  }
   /*!
    * @if jp
-   * @brief ros::Connectionを取得
+   * @brief 受信データの統計情報取得
    *
-   * @return ros::Connection
    *
+   * @param data 受信データの統計情報
+   * 
    * @else
    * @brief 
    *
+   * 
+   * @param data
+   *
+   * @endif
+   */
+  void ROSInPort::getStats(XmlRpc::XmlRpcValue& result)
+  {
+    RTC_VERBOSE(("getStats()"));
+    result[0] = m_topic;
+    int count = 0;
+    XmlRpc::XmlRpcValue stats;
+    stats.setSize(0);
+    std::lock_guard<std::mutex> guardc(m_con_mutex);
+    for(auto & con : m_tcp_connecters)
+    {
+      con.getStats(stats[count]);
+      count++;
+    }
+    result[1] = stats;
+  }
+
+
+  /*!
+   * @if jp
+   * @brief PublisherLinkの削除
+   *
+   *
+   * @param connection ros::Connectionオブジェクト
+   * @return true：削除成功
+   * 
+   * @else
+   * @brief 
+   *
+   * 
+   * @param connection 
    * @return
    *
    * @endif
    */
-  ros::ConnectionPtr ROSInPort::PublisherLink::getConnection()
+  bool ROSInPort::removePublisherLink(const ros::ConnectionPtr& connection)
   {
-    return m_conn;
-  }
-  /*!
-   * @if jp
-   * @brief ros::Connectionを設定
-   *
-   * @param conn ros::Connection
-   *
-   * @else
-   * @brief 
-   *
-   * @param conn
-   *
-   * @endif
-   */
-  void ROSInPort::PublisherLink::setConnection(ros::ConnectionPtr conn)
-  {
-    m_conn = conn;
-  }
-  /*!
-   * @if jp
-   * @brief コネクタのID取得
-   *
-   * @return コネクタのID
-   *
-   * @else
-   * @brief 
-   *
-   * @return
-   *
-   * @endif
-   */
-  int ROSInPort::PublisherLink::getNum()
-  {
-    return m_num;
+    RTC_PARANOID(("removePublisherLink()"));
+
+    auto con = m_tcp_connecters.begin();
+    while(con != m_tcp_connecters.end())
+    {
+      if(con->getConnection() == connection)
+      {
+        m_tcp_connecters.erase(con);
+        return true;
+      }
+      else
+      {
+        ++con;
+      }
+    }
+
+    return false;
+
   }
 
 } // namespace RTC
