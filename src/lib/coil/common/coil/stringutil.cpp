@@ -427,6 +427,105 @@ namespace coil
     return std::regex_search(str, url);
   }
 
+  /*!
+   * @if jp
+   * @brief 文字列を引数として解釈する
+   * @else
+   * @brief Parse string as argument list
+   * @endif
+   */
+  vstring parseArgs(const std::string &args)
+  {
+    bool inArg(false);    // -> " " or "\t"
+    bool inEscape(false); // -> "\"
+    bool inDquote(false); // -> "\""
+    bool inSquote(false); // -> "\'"
+    vstring ret;
+    std::string anArg;
+
+    for (size_t i(0); i < args.size(); ++i)
+      {
+        if (args[i] == ' ' || args[i] == '\t')
+          {
+            // skip escaped spaces and/or spces in quotation
+            if (inEscape || inDquote || inSquote)
+              {
+                anArg.push_back(args[i]);
+                continue;
+              }
+            // skip spaces between args
+            if (!inArg) { continue; }
+            // end of arg
+            if (inArg)
+              {
+                ret.push_back(anArg);
+                anArg.clear();
+                inArg = false; // exit arg
+                continue;
+              }
+          }
+        inArg = true;
+
+        if (args[i] == '\\')
+          {
+            if (inEscape) { anArg.push_back(args[i]); }
+            inEscape = !inEscape;
+            continue;
+          }
+
+        if (args[i] == '\"')
+          { // escaped (") is stored in arg in any cases
+            if (inEscape)
+              {
+                inEscape = false;
+                if (inSquote) { anArg.push_back('\\'); }
+                anArg.push_back(args[i]);
+                continue;
+              }
+            // (") in S-quote is stored in arg
+            if (inSquote)
+              {
+                anArg.push_back(args[i]);
+                continue;
+              }
+            // inDquote: enter(false->true), exit(true->false)
+            inDquote = !inDquote;
+            continue;
+          }
+
+        if (args[i] == '\'')
+          { // escaped (') is stored in arg in any cases
+            if (inEscape)
+              {
+                inEscape = false;
+                if (inDquote) { anArg.push_back('\\'); }
+                anArg.push_back(args[i]);
+                continue;
+              }
+            // (') in S-quote is stored in arg
+            if (inDquote)
+              {
+                anArg.push_back(args[i]);
+                continue;
+              }
+            // inSquote: enter(false->true), exit(true->false)
+            inSquote = !inSquote;
+            continue;
+          }
+
+        // here arg[i] != (' ') or (\t) or (") or (')
+        if (inEscape)
+          {
+            inEscape = false;
+            if (inDquote || inSquote) { anArg.push_back('\\'); }
+          }
+        anArg.push_back(args[i]);
+        continue;
+      }
+    ret.push_back(anArg);
+    return ret;
+  }
+
   bool isIPv4(const std::string& str)
   {
     // IPv4 address must be dotted-decimal format.

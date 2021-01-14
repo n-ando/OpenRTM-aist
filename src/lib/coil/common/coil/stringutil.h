@@ -599,6 +599,28 @@ namespace coil
 
   /*!
    * @if jp
+   * @brief 文字列を引数として解釈する
+   *
+   * 引数で指定された文字列を引数リストとして返す。
+   *
+   * @param args 引数文字列
+   * @return 分割された引数の文字列リスト
+   *
+   * @else
+   * @brief Parse string as argument list
+   *
+   * Given string is parsed as arguments, and split it and return as a
+   * list of args.
+   *
+   * @param args argument string
+   * @return Splitted argument list
+   *
+   * @endif
+   */
+  vstring parseArgs(const std::string &args);
+
+  /*!
+   * @if jp
    * @brief 与えられたオブジェクトをstd::stringに変換
    *
    * 引数で指定されたオブジェクトを文字列に変換する。

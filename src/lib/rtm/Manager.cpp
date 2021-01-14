@@ -1497,22 +1497,8 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     // Initialize ORB
     try
       {
-        std::string opt = createORBOptions();
-        std::vector<std::string> args;
-        coil::vstring opts = coil::split(opt, "\"");
-        for(size_t i=0;i < opts.size();i++)
-          {
-            if (i % 2 == 0)
-              {
-                coil::vstring olist{
-                  coil::split(coil::eraseBothEndsBlank(opts[i]), " ")};
-                std::move(olist.begin(), olist.end(), std::back_inserter(args));
-              }
-            else
-              {
-                args.emplace_back(opts[i]);
-              }
-          }
+        const std::string opt = createORBOptions();
+        coil::vstring args{ coil::parseArgs(opt) };
         // TAO's ORB_init needs argv[0] as command name.
         args.insert(args.begin(), "manager");
         m_argv = coil::Argv(args);
