@@ -257,7 +257,7 @@ namespace RTC
           }
       }
       std::for_each(disconnect_ids.begin(), disconnect_ids.end(),
-                    std::bind1st(std::mem_fun(&PortBase::disconnect), this));
+                    [this](const char * id){this->disconnect(id);});
       return result;
     }
 
