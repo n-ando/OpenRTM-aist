@@ -361,10 +361,11 @@ namespace RTC
      * @endif
      */
     CorbaConsumer(const CorbaConsumer& x)
+      : CorbaConsumerBase()
 #ifdef ORB_IS_ORBEXPRESS
-      : m_var(ObjectType::_duplicate(x.m_var.in()))
+      , m_var(ObjectType::_duplicate(x.m_var.in()))
 #else
-      : m_var(ObjectType::_duplicate(x.m_var))
+      , m_var(ObjectType::_duplicate(x.m_var))
 #endif
     {
     }
