@@ -18,7 +18,7 @@
 # = OPT_UNINST   : uninstallation
 #
 
-VERSION=2.0.0.06
+VERSION=2.0.0.07
 
 #
 #---------------------------------------
@@ -46,6 +46,7 @@ usage()
   Options:
     -l <argument>  language or tool [c++|python|java|openrtp|rtshell|all]
 	all        install packages of all the supported languages and tools
+                   (openrtp is not supported in aarch64 environment.)
     -r             install robot component runtime
     -d             install robot component developer [default]
     -t <argument>  OpenRTM-aist old version number
@@ -80,6 +81,7 @@ old_openrtm_runtime="openrtm-aist=$RTM_OLD_VER-0 openrtm-aist-example=$RTM_OLD_V
 old_openrtm_py_devel="openrtm-aist-python-doc=$RTM_OLD_VER-0"
 old_openrtm_py_runtime="openrtm-aist-python=$RTM_OLD_VER-0 openrtm-aist-python-example=$RTM_OLD_VER-0"
 
+ARCH=`arch`
 #--------------------------------------- C++
 autotools="autoconf libtool libtool-bin"
 base_tools="bc iputils-ping net-tools"
@@ -99,8 +101,9 @@ omnipy="omniidl-python3"
 python_runtime="python3 python3-omniorb-omg"
 python_devel="python3-pip $cmake_tools $base_tools $omnipy $common_devel"
 res=`grep 16.04 /etc/lsb-release`
-if test ! "x$res" = "x" ; then
-  # 16.04
+if test ! "x$res" = "x" ||
+   test "x${ARCH}" = "xaarch64" ; then
+  # 16.04, aarch64
   openrtm_py_devel=""
 else
   openrtm_py_devel="openrtm-aist-python3-doc"
@@ -152,6 +155,11 @@ check_arg()
     rtshell ) arg_rtshell=true ;;
     *) arg_err=-1 ;;
   esac
+
+  if test "x${ARCH}" = "xaarch64"; then
+    arg_openrtp=false
+    echo "[wARNING] openrtp is not supported in aarch64 environment."
+  fi
 }
 
 set_old_rtm_pkgs()
@@ -739,7 +747,12 @@ if test "x$arg_all" = "xtrue" &&
   arg_cxx=true
   arg_python=true
   arg_java=true
-  arg_openrtp=true
+  if test "x${ARCH}" = "xaarch64"; then
+    arg_openrtp=false
+    echo "[WARNING] openrtp is not supported in aarch64 environment."
+  else
+    arg_openrtp=true
+  fi
   arg_rtshell=true
 
   if test "x$OPT_RUNTIME" != "xtrue" && 
