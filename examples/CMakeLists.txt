@@ -107,6 +107,10 @@ function(examples_build target)
 	endif()
 endfunction()
 
+if(OpenRTM_aist_BINARY_DIR)
+  find_package(OpenRTM REQUIRED PATHS ${OpenRTM_aist_BINARY_DIR}/utils/cmake/cmake/local)
+endif()
+
 add_subdirectory(ConsoleIn)
 add_subdirectory(ConsoleOut)
 add_subdirectory(SeqIO)

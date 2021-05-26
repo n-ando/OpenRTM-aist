@@ -68,7 +68,9 @@ set(RTM_PROJECT_NAME RTC)
 set(RTCSKEL_PROJECT_NAME RTCSkel)
 
 if(MSVC)
-	set(RTM_VC_VER "vc${MSVC_TOOLSET_VERSION}")
+	if(NOT RTM_VC_VER)
+		set(RTM_VC_VER "vc${MSVC_TOOLSET_VERSION}")
+	endif()
 	set(INSTALL_RTM_SCRIPT_DIR ${OPENRTM_VERSION}/bin/)
 	set(INSTALL_RTM_BIN_DIR ${OPENRTM_VERSION}/bin/${RTM_VC_VER}/)
 	set(INSTALL_RTM_INCLUDE_DIR ${OPENRTM_VERSION}/)
@@ -925,15 +927,15 @@ endif(WIN32)
 
 add_subdirectory(src)
 
-set(EXAMPLES_ENABLE TRUE CACHE BOOL "set EXAMPLES_ENABLE ")
-if(EXAMPLES_ENABLE)
-	add_subdirectory(examples)
-endif(EXAMPLES_ENABLE)
-
 set(UTILS_ENABLE TRUE CACHE BOOL "set UTILS_ENABLE ")
 if(UTILS_ENABLE)
 	add_subdirectory(utils)
 endif(UTILS_ENABLE)
+
+set(EXAMPLES_ENABLE TRUE CACHE BOOL "set EXAMPLES_ENABLE ")
+if(EXAMPLES_ENABLE)
+	add_subdirectory(examples)
+endif(EXAMPLES_ENABLE)
 
 add_subdirectory(etc)
 
