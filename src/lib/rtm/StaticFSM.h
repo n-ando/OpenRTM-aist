@@ -223,7 +223,7 @@ namespace RTC
     }
 #if defined(__clang__)
 #pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Winconsistent-missing-override"
+#pragma clang diagnostic ignored "-Wsuggest-override"
 #endif
 #if defined(__GNUC__) && (__GNUC__ >= 5) && !defined(__clang__)
 #pragma GCC diagnostic push
