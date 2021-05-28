@@ -150,11 +150,8 @@ if(BUILD_SOURCES)
 endif(BUILD_SOURCES)
 
 # Package creation
-# By default, do not warn when built on machines using only VS Express:
-IF(NOT DEFINED CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS_NO_WARNINGS)
-SET(CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS_NO_WARNINGS ON)
-ENDIF()
-include(InstallRequiredSystemLibraries)
+# By default, do not include the system runtime library.
+#include(InstallRequiredSystemLibraries)
 set(PROJECT_EXECUTABLES ${PROJECT_NAME}Comp
     "${PROJECT_NAME}Comp.exe")
 
