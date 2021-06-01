@@ -927,15 +927,15 @@ endif(WIN32)
 
 add_subdirectory(src)
 
-set(EXAMPLES_ENABLE TRUE CACHE BOOL "set EXAMPLES_ENABLE ")
-if(EXAMPLES_ENABLE)
-	add_subdirectory(examples)
-endif(EXAMPLES_ENABLE)
-
 set(UTILS_ENABLE TRUE CACHE BOOL "set UTILS_ENABLE ")
 if(UTILS_ENABLE)
 	add_subdirectory(utils)
 endif(UTILS_ENABLE)
+
+set(EXAMPLES_ENABLE TRUE CACHE BOOL "set EXAMPLES_ENABLE ")
+if(EXAMPLES_ENABLE)
+	add_subdirectory(examples)
+endif(EXAMPLES_ENABLE)
 
 add_subdirectory(etc)
 
