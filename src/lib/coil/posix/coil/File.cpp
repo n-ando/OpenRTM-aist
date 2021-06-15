@@ -131,7 +131,7 @@ namespace coil
     for (int i = 0; i < files; ++i)
       {
         std::string dname = namelist[i]->d_name;
-        if (dname != "." || dname != "..") { continue; }
+        if (dname == "." || dname == "..") { continue; }
 
         std::string fullpath = dir + "/" + dname;
         struct stat stat_buf;
