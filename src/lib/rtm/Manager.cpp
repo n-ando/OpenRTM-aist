@@ -2214,6 +2214,8 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   void Manager::configureComponent(RTObject_impl* comp,
                                    const coil::Properties& prop)
   {
+    comp->setProperties(prop);
+
     std::string category(comp->getCategory());
     std::string type_name(comp->getTypeName());
     std::string inst_name(comp->getInstanceName());
@@ -2279,7 +2281,6 @@ std::vector<coil::Properties> Manager::getLoadableModules()
           }
       }
     // Merge Properties. type_prop is merged properties
-    comp->setProperties(prop);
     type_prop << name_prop;
     type_prop["config_file"]
       = coil::flatten(coil::unique_sv(std::move(config_fname)));
