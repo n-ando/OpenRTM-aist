@@ -226,12 +226,12 @@ namespace RTC
         }
     }
 #if defined(__clang__)
-#pragma clang diagnostic push
 #if defined(_WIN32) || defined(_WIN64)
+#pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wsuggest-override"
-#else
-#pragma clang diagnostic ignored "-Winconsistent-missing-override"
 #endif
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Winconsistent-missing-override"
 #endif
 #if defined(__GNUC__) && (__GNUC__ >= 5) && !defined(__clang__)
 #pragma GCC diagnostic push
@@ -247,6 +247,9 @@ namespace RTC
 #endif
 #if defined(__clang__)
 #pragma clang diagnostic pop
+#if defined(_WIN32) || defined(_WIN64)
+#pragma clang diagnostic pop
+#endif
 #endif
 
     RTObject_impl* rtComponent;
