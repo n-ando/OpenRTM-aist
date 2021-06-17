@@ -98,6 +98,7 @@
     friend class ::_VS8_Bug_101615
 
 #define FSM_INIT_VALUE(S) \
+   template<> \
    const ::Macho::ID Macho::StateID<S>::value = ::Macho::Machine<typename S::TOP>::theStateCount++;
 
 namespace RTC
