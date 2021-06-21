@@ -1774,8 +1774,8 @@ namespace Macho {
 	// The identifiers are consecutive integers starting from zero,
 	// which allows use as index into a vector for fast access.
 	// 'Root' always has zero as id.
-	template<class S>
-	const ID StateID<S>::value = Machine<typename S::TOP>::theStateCount++;
+	//template<class S>
+	//const ID StateID<S>::value = Machine<typename S::TOP>::theStateCount++;
 
 
 	////////////////////////////////////////////////////////////////////////////////

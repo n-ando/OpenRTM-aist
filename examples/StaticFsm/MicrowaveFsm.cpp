@@ -8,6 +8,13 @@
 #include <iostream>
 #include "MicrowaveFsm.h"
 
+FSM_INIT_VALUE(MicrowaveFsm::Top)
+FSM_INIT_VALUE(MicrowaveFsm::Disabled)
+FSM_INIT_VALUE(MicrowaveFsm::Operational)
+FSM_INIT_VALUE(MicrowaveFsm::Idle)
+FSM_INIT_VALUE(MicrowaveFsm::Programmed)
+FSM_INIT_VALUE(MicrowaveFsm::Cooking)
+
 namespace MicrowaveFsm
 {
   //============================================================
