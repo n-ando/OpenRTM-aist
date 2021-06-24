@@ -60,6 +60,7 @@ namespace RTC
     : m_configsets(configsets), m_activeId("default"),
       m_active(true), m_changed(false)
   {
+      m_configsets.createNode("default");
   }
 
   /*!
