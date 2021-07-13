@@ -48,12 +48,20 @@ set_source_files_properties(${ALL_IDL_SRCS} PROPERTIES GENERATED 1)
 if(NOT TARGET ALL_IDL_TGT)
  add_custom_target(ALL_IDL_TGT)
 endif(NOT TARGET ALL_IDL_TGT)
-add_dependencies(${PROJECT_NAME} ALL_IDL_TGT)
+if(OpenRTM_aist_BINARY_DIR)
+  add_dependencies(${PROJECT_NAME} ${RTCSKEL_PROJECT_NAME}_IDLTGT)
+else()
+  add_dependencies(${PROJECT_NAME} ALL_IDL_TGT)
+endif()
 target_link_libraries(${PROJECT_NAME} ${OPENRTM_LIBRARIES})
 
 add_executable(${PROJECT_NAME}Comp ${standalone_srcs}
   ${comp_srcs} ${comp_headers} ${ALL_IDL_SRCS})
-add_dependencies(${PROJECT_NAME}Comp ALL_IDL_TGT)
+if(OpenRTM_aist_BINARY_DIR)
+  add_dependencies(${PROJECT_NAME}Comp ${RTCSKEL_PROJECT_NAME}_IDLTGT)
+else()
+  add_dependencies(${PROJECT_NAME}Comp ALL_IDL_TGT)
+endif()
 target_link_libraries(${PROJECT_NAME}Comp ${OPENRTM_LIBRARIES})
 
 install(TARGETS ${PROJECT_NAME} ${PROJECT_NAME}Comp
