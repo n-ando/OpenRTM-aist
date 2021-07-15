@@ -216,6 +216,6 @@ extern "C"
                              RTC::Delete<ConsoleIn>);
   }
   
-};
+}
 
 

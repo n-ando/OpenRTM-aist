@@ -208,6 +208,6 @@ extern "C"
                              RTC::Delete<ConsoleOut>);
   }
   
-};
+}
 
 
