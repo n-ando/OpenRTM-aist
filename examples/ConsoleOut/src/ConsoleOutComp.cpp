@@ -35,18 +35,18 @@ public:
         m_name = opt;
       }
   }
-  virtual ~OverwriteInstanceName() {}
+  virtual ~OverwriteInstanceName() override {}
   virtual void preCreate(std::string& args) override
   {
     if (m_count != 0 || m_name.empty()) { return; }
     args = args + "?instance_name=" + m_name;
     ++m_count;
-  };
-  virtual void postCreate(RTC::RTObject_impl*) override {};
-  virtual void preConfigure(coil::Properties&) override {};
-  virtual void postConfigure(coil::Properties&) override {};
-  virtual void preInitialize() override {};
-  virtual void postInitialize() override {};
+  }
+  virtual void postCreate(RTC::RTObject_impl*) override {}
+  virtual void preConfigure(coil::Properties&) override {}
+  virtual void postConfigure(coil::Properties&) override {}
+  virtual void preInitialize() override {}
+  virtual void postInitialize() override {}
 private:
   std::string m_name;
   int32_t m_count;
@@ -77,7 +77,7 @@ void MyModuleInit(RTC::Manager* manager)
   // Create a component
   comp = manager->createComponent("ConsoleOut");
 
-  if (comp==NULL)
+  if (comp==nullptr)
   {
     std::cerr << "Component create failed." << std::endl;
     abort();
