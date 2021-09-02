@@ -22,13 +22,18 @@ if(UNIX)
 	endif()
 endif()
 
+find_package(PkgConfig REQUIRED)
+pkg_check_modules(roscpp roscpp)
 
-find_package(catkin REQUIRED COMPONENTS
-	roscpp
-)
+if(NOT roscpp_FOUND)
+	message(FATAL_ERROR "can not find roscpp.")
+endif()
 
 
-find_package(Boost REQUIRED COMPONENTS chrono filesystem signals system)
+find_package(Boost 1.69 COMPONENTS chrono filesystem system)
+if(NOT Boost_FOUND)
+	find_package(Boost REQUIRED COMPONENTS chrono filesystem signals system)
+endif()
 
 link_directories(${ORB_LINK_DIR})
 add_definitions(${ORB_C_FLAGS_LIST})
@@ -53,10 +58,9 @@ if(VXWORKS AND NOT RTP)
 	openrtm_set_link_props_shared(${target})
 	openrtm_include_rtm(${target})
 	target_include_directories(${target} SYSTEM
-	  PRIVATE ${CATKIN_DEVEL_PREFIX}/${CATKIN_GLOBAL_INCLUDE_DESTINATION}/ros
-	  PRIVATE${catkin_INCLUDE_DIRS}
+	  PRIVATE${roscpp_INCLUDE_DIRS}
 	  PRIVATE${Boost_INCLUDE_DIRS})
-	target_link_libraries(${target} ${libs} ${catkin_LIBRARIES} ${Boost_LIBRARIES})
+	target_link_libraries(${target} ${libs} ${roscpp_LINK_LIBRARIES} ${Boost_LIBRARIES})
 	
 	install(TARGETS ${target} LIBRARY DESTINATION ${INSTALL_RTM_EXT_DIR}/transport
 				ARCHIVE DESTINATION ${INSTALL_RTM_EXT_DIR}/transport
@@ -70,10 +74,9 @@ else()
 	openrtm_include_rtm(${target})
 	openrtm_set_link_props_shared(${target})
 	target_include_directories(${target} SYSTEM
-		PRIVATE ${CATKIN_DEVEL_PREFIX}/${CATKIN_GLOBAL_INCLUDE_DESTINATION}/ros
-		PRIVATE ${catkin_INCLUDE_DIRS}
+		PRIVATE ${roscpp_INCLUDE_DIRS}
 		PRIVATE ${Boost_INCLUDE_DIRS})
-	target_link_libraries(${target} PRIVATE ${libs} ${RTM_LINKER_OPTION} ${catkin_LIBRARIES} ${Boost_LIBRARIES})
+	target_link_libraries(${target} PRIVATE ${libs} ${RTM_LINKER_OPTION} ${roscpp_LINK_LIBRARIES} ${Boost_LIBRARIES})
 	set_target_properties(${target} PROPERTIES PREFIX "")
 
 
