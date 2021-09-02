@@ -25,6 +25,35 @@
 #include <rmw_fastrtps_cpp/TypeSupport.hpp>
 #include <fastcdr/FastBuffer.h>
 #include <fastcdr/Cdr.h>
+
+#if (STD_MSGS_VERSION_MAJOR >= 2)
+#include <std_msgs/msg/detail/float32__rosidl_typesupport_fastrtps_cpp.hpp>
+#include <std_msgs/msg/detail/float64__rosidl_typesupport_fastrtps_cpp.hpp>
+#include <std_msgs/msg/detail/int16__rosidl_typesupport_fastrtps_cpp.hpp>
+#include <std_msgs/msg/detail/int32__rosidl_typesupport_fastrtps_cpp.hpp>
+#include <std_msgs/msg/detail/int64__rosidl_typesupport_fastrtps_cpp.hpp>
+#include <std_msgs/msg/detail/int8__rosidl_typesupport_fastrtps_cpp.hpp>
+#include <std_msgs/msg/detail/string__rosidl_typesupport_fastrtps_cpp.hpp>
+#include <std_msgs/msg/detail/u_int16__rosidl_typesupport_fastrtps_cpp.hpp>
+#include <std_msgs/msg/detail/u_int32__rosidl_typesupport_fastrtps_cpp.hpp>
+#include <std_msgs/msg/detail/u_int64__rosidl_typesupport_fastrtps_cpp.hpp>
+#include <std_msgs/msg/detail/u_int8__rosidl_typesupport_fastrtps_cpp.hpp>
+#include <std_msgs/msg/detail/float32_multi_array__rosidl_typesupport_fastrtps_cpp.hpp>
+#include <std_msgs/msg/detail/float64_multi_array__rosidl_typesupport_fastrtps_cpp.hpp>
+#include <std_msgs/msg/detail/int16_multi_array__rosidl_typesupport_fastrtps_cpp.hpp>
+#include <std_msgs/msg/detail/int32_multi_array__rosidl_typesupport_fastrtps_cpp.hpp>
+#include <std_msgs/msg/detail/int64_multi_array__rosidl_typesupport_fastrtps_cpp.hpp>
+#include <std_msgs/msg/detail/int8_multi_array__rosidl_typesupport_fastrtps_cpp.hpp>
+#include <std_msgs/msg/detail/u_int16_multi_array__rosidl_typesupport_fastrtps_cpp.hpp>
+#include <std_msgs/msg/detail/u_int32_multi_array__rosidl_typesupport_fastrtps_cpp.hpp>
+#include <std_msgs/msg/detail/u_int64_multi_array__rosidl_typesupport_fastrtps_cpp.hpp>
+#include <std_msgs/msg/detail/u_int8_multi_array__rosidl_typesupport_fastrtps_cpp.hpp>
+#include <std_msgs/msg/detail/string__rosidl_typesupport_fastrtps_cpp.hpp>
+#include <geometry_msgs/msg/detail/point_stamped__rosidl_typesupport_fastrtps_cpp.hpp>
+#include <geometry_msgs/msg/detail/quaternion_stamped__rosidl_typesupport_fastrtps_cpp.hpp>
+#include <geometry_msgs/msg/detail/vector3_stamped__rosidl_typesupport_fastrtps_cpp.hpp>
+#include <sensor_msgs/msg/detail/image__rosidl_typesupport_fastrtps_cpp.hpp>
+#else
 #include <std_msgs/msg/float32__rosidl_typesupport_fastrtps_cpp.hpp>
 #include <std_msgs/msg/float64__rosidl_typesupport_fastrtps_cpp.hpp>
 #include <std_msgs/msg/int16__rosidl_typesupport_fastrtps_cpp.hpp>
@@ -51,6 +80,7 @@
 #include <geometry_msgs/msg/quaternion_stamped__rosidl_typesupport_fastrtps_cpp.hpp>
 #include <geometry_msgs/msg/vector3_stamped__rosidl_typesupport_fastrtps_cpp.hpp>
 #include <sensor_msgs/msg/image__rosidl_typesupport_fastrtps_cpp.hpp>
+#endif
 
 
 namespace RTC

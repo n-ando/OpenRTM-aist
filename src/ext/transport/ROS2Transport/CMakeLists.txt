@@ -5,10 +5,6 @@ project (ROS2Transport
 	LANGUAGES C CXX)
 
 
-if(NOT CMAKE_CXX_STANDARD)
-	set(CMAKE_CXX_STANDARD 14)
-endif()
-
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
 	add_compile_options(-Wall -Wextra -Wpedantic)
 endif()
@@ -21,6 +17,7 @@ find_package(geometry_msgs REQUIRED)
 find_package(sensor_msgs REQUIRED)
 find_package(fastcdr REQUIRED)
 find_package(fastrtps REQUIRED)
+
 
 
 
@@ -54,14 +51,34 @@ if(VXWORKS AND NOT RTP)
 		PUBLIC ${sensor_msgs_INCLUDE_DIRS})
 	target_link_libraries(${target} ${libs})
 
+
+	target_compile_definitions(${target} PRIVATE STD_MSGS_VERSION_MAJOR=${std_msgs_VERSION_MAJOR} 
+								GEOMETORY_MSGS_VERSION_MAJOR=${geometry_msgs_VERSION_MAJOR} 
+								SENSOR_MSGS_VERSION_MAJOR=${sensor_msgs_VERSION_MAJOR} 
+								STD_MSGS_VERSION_MINOR=${std_msgs_VERSION_MINOR} 
+								GEOMETORY_MSGS_VERSION_MINOR=${geometry_msgs_VERSION_MINOR} 
+								SENSOR_MSGS_VERSION_MINOR==${sensor_msgs_VERSION_MINOR})
+	if(${rclcpp_VERSION_MAJOR} GREATER 1)
+		set_target_properties(${target} PROPERTIES
+			POSITION_INDEPENDENT_CODE ON
+			CXX_STANDARD 14
+			CXX_EXTENSIONS OFF
+			CXX_STANDARD_REQUIRED ON
+		)
+	endif()
+
 	install(TARGETS ${target} LIBRARY DESTINATION ${INSTALL_RTM_EXT_DIR}/transport
 				ARCHIVE DESTINATION ${INSTALL_RTM_EXT_DIR}/transport
 				RUNTIME DESTINATION ${INSTALL_RTM_EXT_DIR}/transport
 				COMPONENT ext)
 else()
-set(libs ${RTM_PROJECT_NAME} ${ORB_LIBRARIES} ${DATATYPE_FACTORIES} FastRTPSTransport ${rclcpp_LIBRARIES} ${std_msgs_LIBRARIES} ${geometry_msgs_LIBRARIES} ${sensor_msgs_LIBRARIES} fastcdr fastrtps)
-
-
+	set(libs ${RTM_PROJECT_NAME} ${ORB_LIBRARIES} ${DATATYPE_FACTORIES} FastRTPSTransport 
+		${rclcpp_LIBRARIES} ${std_msgs_LIBRARIES} ${geometry_msgs_LIBRARIES} ${sensor_msgs_LIBRARIES} 
+		${std_msgs_LIBRARIES__rosidl_typesupport_fastrtps_cpp} 
+		${geometry_msgs_LIBRARIES__rosidl_typesupport_fastrtps_cpp} 
+		${sensor_msgs_LIBRARIES__rosidl_typesupport_fastrtps_cpp}
+		${std_msgs_LIBRARIES__rosidl_typesupport_fastrtps_cpp}
+		fastcdr fastrtps)
 	add_library(${target} SHARED ${srcs})
 	openrtm_common_set_compile_props(${target})
 	openrtm_include_rtm(${target})
@@ -69,11 +86,25 @@ set(libs ${RTM_PROJECT_NAME} ${ORB_LIBRARIES} ${DATATYPE_FACTORIES} FastRTPSTran
 	target_include_directories(${target}
 		PRIVATE ${PROJECT_SOURCE_DIR}/..)
 	target_include_directories(${target} SYSTEM
-		PUBLIC ${rclcpp_INCLUDE_DIRS}
-		PUBLIC ${std_msgs_INCLUDE_DIRS}
-		PUBLIC ${geometry_msgs_INCLUDE_DIRS}
-		PUBLIC ${sensor_msgs_INCLUDE_DIRS})
+					PUBLIC ${rclcpp_INCLUDE_DIRS}
+					PUBLIC ${std_msgs_INCLUDE_DIRS}
+					PUBLIC ${geometry_msgs_INCLUDE_DIRS}
+					PUBLIC ${sensor_msgs_INCLUDE_DIRS})
 	target_link_libraries(${target} PRIVATE ${libs} ${RTM_LINKER_OPTION})
+	target_compile_definitions(${target} PRIVATE STD_MSGS_VERSION_MAJOR=${std_msgs_VERSION_MAJOR} 
+								GEOMETORY_MSGS_VERSION_MAJOR=${geometry_msgs_VERSION_MAJOR} 
+								SENSOR_MSGS_VERSION_MAJOR=${sensor_msgs_VERSION_MAJOR} 
+								STD_MSGS_VERSION_MINOR=${std_msgs_VERSION_MINOR} 
+								GEOMETORY_MSGS_VERSION_MINOR=${geometry_msgs_VERSION_MINOR} 
+								SENSOR_MSGS_VERSION_MINOR==${sensor_msgs_VERSION_MINOR})
+	if(${rclcpp_VERSION_MAJOR} GREATER 1)
+		set_target_properties(${target} PROPERTIES
+			POSITION_INDEPENDENT_CODE ON
+			CXX_STANDARD 14
+			CXX_EXTENSIONS OFF
+			CXX_STANDARD_REQUIRED ON
+		)
+	endif()
 	set_target_properties(${target} PROPERTIES PREFIX "")
 
 
