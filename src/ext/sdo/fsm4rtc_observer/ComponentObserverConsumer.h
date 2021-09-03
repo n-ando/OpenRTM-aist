@@ -215,7 +215,7 @@ namespace RTC
           "EC_STATUS",
           "PORT_PROFILE",
           "CONFIGURATION",
-          "RTC_HEARTBEAT"
+          "RTC_HEARTBEAT",
           "EC_HEARTBEAT",
           "FSM_PROFILE",
           "FSM_STATUS",
