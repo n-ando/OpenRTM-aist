@@ -575,7 +575,14 @@ namespace RTC
         return;
       }
 
+#ifdef __GNUC__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wcast-align"
+#endif
       uint32_t len = *(reinterpret_cast<uint32_t*>(buffer.get()));
+#ifdef __GNUC__
+#pragma GCC diagnostic pop
+#endif
 
       
       conn->read(len, boost::bind(&ROSInPort::onMessage, this, _1, _2, _3, _4));
