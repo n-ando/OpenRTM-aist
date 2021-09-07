@@ -44,6 +44,7 @@ RUN cp -r /tmp/flb/build/include/jemalloc\
 FROM ubuntu:20.04 as rtm-build
 
 ENV ROS_DISTRO=foxy
+ENV ROS2_DISTRO=${ROS_DISTRO}
 ENV AMENT_PREFIX_PATH=/opt/ros/${ROS_DISTRO}
 ENV ROS_VERSION=2
 ENV ROS_PYTHON_VERSION=3
@@ -68,12 +69,12 @@ RUN sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main"
  && rm -rf /var/lib/apt/lists/*\
  && rosdep init\
  && rosdep update
-ENV CMAKE_PREFIX_PATH=/opt/ros/${ROS_DISTRO}:${CMAKE_PREFIX_PATH}
+ENV CMAKE_PREFIX_PATH=/opt/ros/${ROS2_DISTRO}:/opt/ros/${ROS_DISTRO}:${CMAKE_PREFIX_PATH}
 ENV ROS_ETC_DIR=/opt/ros/${ROS_DISTRO}/etc/ros
 ENV ROS_ROOT=/opt/ros/${ROS_DISTRO}/share/ros
 ENV ROS_PACKAGE_PATH=/opt/ros/${ROS_DISTRO}/share
-ENV PYTHONPATH=/opt/ros/${ROS_DISTRO}/lib/python3.8/dist-packages:${PYTHONPATH}
-ENV PATH=/opt/ros/${ROS_DISTRO}/bin:${PATH}
+ENV PYTHONPATH=/opt/ros/${ROS_DISTRO}/lib/python3/dist-packages:${PYTHONPATH}
+ENV PATH=/opt/ros/${ROS2_DISTRO}/bin:/opt/ros/${ROS_DISTRO}/bin:${PATH}
 
 RUN apt update\
  && apt install -y --no-install-recommends\
