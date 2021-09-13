@@ -1,0 +1,54 @@
+# SeqOut CMake config file
+#
+# This file sets the following variables:
+# SeqOut_FOUND - Always TRUE.
+# SeqOut_INCLUDE_DIRS - Directories containing the SeqOut include files.
+# SeqOut_IDL_DIRS - Directories containing the SeqOut IDL files.
+# SeqOut_LIBRARIES - Libraries needed to use SeqOut.
+# SeqOut_DEFINITIONS - Compiler flags for SeqOut.
+# SeqOut_VERSION - The version of SeqOut found.
+# SeqOut_VERSION_MAJOR - The major version of SeqOut found.
+# SeqOut_VERSION_MINOR - The minor version of SeqOut found.
+# SeqOut_VERSION_REVISION - The revision version of SeqOut found.
+# SeqOut_VERSION_CANDIDATE - The candidate version of SeqOut found.
+
+message(STATUS "Found SeqOut-@PROJECT_VERSION@")
+set(SeqOut_FOUND TRUE)
+
+find_package(<dependency> REQUIRED)
+
+#set(SeqOut_INCLUDE_DIRS
+#    "@CMAKE_INSTALL_PREFIX@/include/@PROJECT_NAME_LOWER@-@PROJECT_VERSION_MAJOR@"
+#    ${<dependency>_INCLUDE_DIRS}
+#    )
+#
+#set(SeqOut_IDL_DIRS
+#    "@CMAKE_INSTALL_PREFIX@/include/@PROJECT_NAME_LOWER@-@PROJECT_VERSION_MAJOR@/idl")
+set(SeqOut_INCLUDE_DIRS
+    "@CMAKE_INSTALL_PREFIX@/include/@CPACK_PACKAGE_FILE_NAME@"
+    ${<dependency>_INCLUDE_DIRS}
+    )
+set(SeqOut_IDL_DIRS
+    "@CMAKE_INSTALL_PREFIX@/include/@CPACK_PACKAGE_FILE_NAME@/idl")
+
+
+if(WIN32)
+    set(SeqOut_LIBRARIES
+        "@CMAKE_INSTALL_PREFIX@/@LIB_INSTALL_DIR@/@CMAKE_SHARED_LIBRARY_PREFIX@@PROJECT_NAME_LOWER@@CMAKE_STATIC_LIBRARY_SUFFIX@"
+        ${<dependency>_LIBRARIES}
+        )
+else(WIN32)
+    set(SeqOut_LIBRARIES
+        "@CMAKE_INSTALL_PREFIX@/@LIB_INSTALL_DIR@/@CMAKE_SHARED_LIBRARY_PREFIX@@PROJECT_NAME_LOWER@@CMAKE_SHARED_LIBRARY_SUFFIX@"
+        ${<dependency>_LIBRARIES}
+        )
+endif(WIN32)
+
+set(SeqOut_DEFINITIONS ${<dependency>_DEFINITIONS})
+
+set(SeqOut_VERSION @PROJECT_VERSION@)
+set(SeqOut_VERSION_MAJOR @PROJECT_VERSION_MAJOR@)
+set(SeqOut_VERSION_MINOR @PROJECT_VERSION_MINOR@)
+set(SeqOut_VERSION_REVISION @PROJECT_VERSION_REVISION@)
+set(SeqOut_VERSION_CANDIDATE @PROJECT_VERSION_CANDIDATE@)
+
