@@ -39,20 +39,6 @@ if(VXWORKS)
 endif(VXWORKS)
 
 
-
-
-set(srcs Controller.cpp Controller.h)
-examples_build(Controller SRCS "${srcs}" MAIN ControllerComp.cpp)
-
-
-set(srcs Motor.cpp Motor.h)
-examples_build(Motor SRCS "${srcs}" MAIN MotorComp.cpp)
-
-
-set(srcs Sensor.cpp Sensor.h)
-examples_build(Sensor SRCS "${srcs}" MAIN SensorComp.cpp)
-
-
 install(FILES composite.conf DESTINATION ${INSTALL_RTM_EXAMPLE_DIR} COMPONENT examples)
 if(UNIX)
 	install(FILES rtc.composite.linux.conf DESTINATION ${INSTALL_RTM_EXAMPLE_DIR} COMPONENT examples)
