@@ -105,8 +105,10 @@ namespace RTC
       if(m_xml_profile_file.empty())
       {
         eprosima::fastrtps::ParticipantAttributes PParam;
+#if (FASTRTPS_VERSION_MAJOR >= 2)
+#else
         PParam.rtps.builtin.domainId = 0;
-
+#endif
         PParam.rtps.setName("participant_openrtm");
         
         m_participant = eprosima::fastrtps::Domain::createParticipant(PParam);
