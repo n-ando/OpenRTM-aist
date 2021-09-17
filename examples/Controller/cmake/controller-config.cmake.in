@@ -1,0 +1,54 @@
+# Controller CMake config file
+#
+# This file sets the following variables:
+# Controller_FOUND - Always TRUE.
+# Controller_INCLUDE_DIRS - Directories containing the Controller include files.
+# Controller_IDL_DIRS - Directories containing the Controller IDL files.
+# Controller_LIBRARIES - Libraries needed to use Controller.
+# Controller_DEFINITIONS - Compiler flags for Controller.
+# Controller_VERSION - The version of Controller found.
+# Controller_VERSION_MAJOR - The major version of Controller found.
+# Controller_VERSION_MINOR - The minor version of Controller found.
+# Controller_VERSION_REVISION - The revision version of Controller found.
+# Controller_VERSION_CANDIDATE - The candidate version of Controller found.
+
+message(STATUS "Found Controller-@PROJECT_VERSION@")
+set(Controller_FOUND TRUE)
+
+find_package(<dependency> REQUIRED)
+
+#set(Controller_INCLUDE_DIRS
+#    "@CMAKE_INSTALL_PREFIX@/include/@PROJECT_NAME_LOWER@-@PROJECT_VERSION_MAJOR@"
+#    ${<dependency>_INCLUDE_DIRS}
+#    )
+#
+#set(Controller_IDL_DIRS
+#    "@CMAKE_INSTALL_PREFIX@/include/@PROJECT_NAME_LOWER@-@PROJECT_VERSION_MAJOR@/idl")
+set(Controller_INCLUDE_DIRS
+    "@CMAKE_INSTALL_PREFIX@/include/@CPACK_PACKAGE_FILE_NAME@"
+    ${<dependency>_INCLUDE_DIRS}
+    )
+set(Controller_IDL_DIRS
+    "@CMAKE_INSTALL_PREFIX@/include/@CPACK_PACKAGE_FILE_NAME@/idl")
+
+
+if(WIN32)
+    set(Controller_LIBRARIES
+        "@CMAKE_INSTALL_PREFIX@/@LIB_INSTALL_DIR@/@CMAKE_SHARED_LIBRARY_PREFIX@@PROJECT_NAME_LOWER@@CMAKE_STATIC_LIBRARY_SUFFIX@"
+        ${<dependency>_LIBRARIES}
+        )
+else(WIN32)
+    set(Controller_LIBRARIES
+        "@CMAKE_INSTALL_PREFIX@/@LIB_INSTALL_DIR@/@CMAKE_SHARED_LIBRARY_PREFIX@@PROJECT_NAME_LOWER@@CMAKE_SHARED_LIBRARY_SUFFIX@"
+        ${<dependency>_LIBRARIES}
+        )
+endif(WIN32)
+
+set(Controller_DEFINITIONS ${<dependency>_DEFINITIONS})
+
+set(Controller_VERSION @PROJECT_VERSION@)
+set(Controller_VERSION_MAJOR @PROJECT_VERSION_MAJOR@)
+set(Controller_VERSION_MINOR @PROJECT_VERSION_MINOR@)
+set(Controller_VERSION_REVISION @PROJECT_VERSION_REVISION@)
+set(Controller_VERSION_CANDIDATE @PROJECT_VERSION_CANDIDATE@)
+
