@@ -4405,7 +4405,7 @@ namespace RTC
     PreFsmActionListener*
     addPreFsmActionListener(PreFsmActionListenerType listener_type,
                             Listener& obj,
-                            void (Listener:: *memfunc)(const char* state))
+                            void (Listener::*memfunc)(const char* state))
     {
       class Noname
         : public PreFsmActionListener
