@@ -951,8 +951,46 @@ CONFIGURE_FILE ("${PROJECT_SOURCE_DIR}/scripts/cmake/uninstall_target.cmake.in"
 ADD_CUSTOM_TARGET (remove "${CMAKE_COMMAND}" -P
     "${PROJECT_BINARY_DIR}/uninstall_target.cmake")
 
+function(get_dist ARG0)
+  if(NOT ${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+    set(${ARG0} ${CMAKE_SYSTEM_NAME} PARENT_SCOPE)
+    return()
+  endif()
+  foreach(dist Debian Ubuntu RedHat Fedora CentOS Raspbian)
+    execute_process(
+      COMMAND grep ${dist} -s /etc/issue /etc/os-release /etc/redhat-release /etc/system-release
+      OUTPUT_VARIABLE dist_name
+      )
+    if(${dist_name} MATCHES ${dist})
+      set(${ARG0} ${dist} PARENT_SCOPE)
+      return()
+    endif()
+  endforeach()
+endfunction(get_dist)
+
+get_dist(DIST_NAME)
+message(status "Distribution is ${DIST_NAME}")
+
 if(UNIX)
     configure_file(${PROJECT_SOURCE_DIR}/packages/deb/debian/rules.in
 	 ${PROJECT_BINARY_DIR}/rules @ONLY
     )
+
+  if(${DIST_NAME} MATCHES "Ubuntu")
+    file(STRINGS "/etc/os-release" data_list REGEX "^(VERSION_CODENAME)=")
+
+    # Look for lines like VERSION_CODENAME="..."
+    foreach(var ${data_list})
+      if("${var}" MATCHES "^(VERSION_CODENAME)=(.*)$")
+        set(ubuntu_codename "${CMAKE_MATCH_2}")
+        configure_file(${PROJECT_SOURCE_DIR}/packages/deb/debian/control.${ubuntu_codename}
+             ${PROJECT_BINARY_DIR}/control @ONLY
+        )
+      endif()
+    endforeach()
+  else()
+    configure_file(${PROJECT_SOURCE_DIR}/packages/deb/debian/control.not-ros-support
+         ${PROJECT_BINARY_DIR}/control @ONLY
+    )
+  endif()
 endif(UNIX)

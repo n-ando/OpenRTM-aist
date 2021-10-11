@@ -38,6 +38,8 @@ else
 endif
 
 TARGET = $(CURDIR)/debian/openrtm-aist/usr
+TARGET_ros = $(CURDIR)/debian/openrtm-aist-ros/usr
+TARGET_ros2 = $(CURDIR)/debian/openrtm-aist-ros2/usr
 TARGET_dev = $(CURDIR)/debian/openrtm-aist-dev/usr
 TARGET_idl = $(CURDIR)/debian/openrtm-aist-idl/usr
 TARGET_example = $(CURDIR)/debian/openrtm-aist-example/usr
@@ -109,7 +111,17 @@ install-arch:
 	(cp -r $(INSTALL_PREFIX)/lib/openrtm-$(SHORT_VER) $(TARGET)/lib/$(DEB_HOST_MULTIARCH))
 	(rm -r $(TARGET)/lib/$(DEB_HOST_MULTIARCH)/openrtm-$(SHORT_VER)/cmake)
 	(rm -r $(TARGET)/lib/$(DEB_HOST_MULTIARCH)/openrtm-$(SHORT_VER)/py_helper)
+	(rm -r $(TARGET)/lib/$(DEB_HOST_MULTIARCH)/openrtm-$(SHORT_VER)/transport)
 	(cp -r $(INSTALL_PREFIX)/lib/pkgconfig $(TARGET)/lib/$(DEB_HOST_MULTIARCH))
+
+	# for openrtm-aist-ros package
+	(mkdir -p $(TARGET_ros)/lib/$(DEB_HOST_MULTIARCH)/openrtm-$(SHORT_VER)/transport)
+	(cp -r $(INSTALL_PREFIX)/lib/openrtm-$(SHORT_VER)/transport/ROSTransport.so $(TARGET_ros)/lib/$(DEB_HOST_MULTIARCH)/openrtm-$(SHORT_VER)/transport)
+
+	# for openrtm-aist-ros2 package
+	(mkdir -p $(TARGET_ros2)/lib/$(DEB_HOST_MULTIARCH)/openrtm-$(SHORT_VER)/transport)
+	(cp -r $(INSTALL_PREFIX)/lib/openrtm-$(SHORT_VER)/transport/ROS2*.so $(TARGET_ros2)/lib/$(DEB_HOST_MULTIARCH)/openrtm-$(SHORT_VER)/transport)
+	(cp -r $(INSTALL_PREFIX)/lib/openrtm-$(SHORT_VER)/transport/Fast*.so $(TARGET_ros2)/lib/$(DEB_HOST_MULTIARCH)/openrtm-$(SHORT_VER)/transport)
 
 	# for openrtm-dev package
 	(mkdir -p $(TARGET_dev)/bin)
