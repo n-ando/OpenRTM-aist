@@ -35,6 +35,10 @@ string(REPLACE ";" " " LIBS "${TMPLIBS}")
 
 #------------------------------
 # Configure rtm-config
+if(BUILD_RTM_LINUX_PKGS)
+  set(CMAKE_INSTALL_PREFIX "/usr")
+endif()
+
 configure_file(
 	${CMAKE_CURRENT_SOURCE_DIR}/rtm-config.in
 	${PROJECT_BINARY_DIR}/rtm-config @ONLY)
