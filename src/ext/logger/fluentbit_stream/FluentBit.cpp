@@ -104,8 +104,11 @@ namespace RTC
     const std::vector<Properties*>& leaf = prop.getLeaf();
     for(auto & lprop : leaf)
       {
-        flb_output_set(s_flbContext, flbout,
+        if(lprop->getName() != std::string("plugin"))
+        {
+          flb_output_set(s_flbContext, flbout,
                        lprop->getName(), lprop->getValue(), NULL);
+        }
       }
     return true;
   }
@@ -120,8 +123,11 @@ namespace RTC
     const std::vector<Properties*>& leaf = prop.getLeaf();
     for(auto & lprop : leaf)
       {
-        flb_input_set(s_flbContext, flbin,
+        if(lprop->getName() != std::string("plugin"))
+        {
+          flb_input_set(s_flbContext, flbin,
                       lprop->getName(), lprop->getValue(), NULL);
+        }
       }
     return true;
   }
