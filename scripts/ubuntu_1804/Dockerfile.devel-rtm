@@ -12,7 +12,7 @@ RUN apt-get update\
 
 # downlaod fluent-bit.
 RUN mkdir /root/fluent-bit
-RUN wget -O - https://github.com/fluent/fluent-bit/archive/refs/tags/v1.8.9.tar.gz\
+RUN wget -O - https://github.com/fluent/fluent-bit/archive/v1.8.9.tar.gz\
  | tar xfz - -C /root/fluent-bit --strip-components 1
 RUN sed  -i -e 's/jemalloc-5.2.1\/configure/jemalloc-5.2.1\/configure --disable-initial-exec-tls/g' /root/fluent-bit/CMakeLists.txt
 
