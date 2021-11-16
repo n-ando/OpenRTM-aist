@@ -20,6 +20,7 @@
 #define COIL_ASYNC_H
 
 #include <coil/Task.h>
+#include <coil/PeriodicTask.h>
 #include <mutex>
 #include <iostream>
 #include <utility>
@@ -114,6 +115,167 @@ namespace coil
      * @endif
      */
     virtual bool finished() = 0;
+    /*!
+     * @if jp
+     *
+     * @brief インスタンス削除
+     *
+     * 非同期処理の終了待ち、インスタンスの削除等を行うための仮想関数
+     *
+     * @else
+     *
+     * @brief 
+     *
+     * 
+     *
+     * @endif
+     */
+    virtual void exit() = 0;
+  };
+
+  /*!
+   * @if jp
+   *
+   * @class DeleteAsyncThread
+   * @brief DeleteAsyncThread クラス
+   *
+   * @else
+   *
+   * @class DeleteAsyncThread
+   * @brief DeleteAsyncThread class
+   *
+   * @endif
+   */
+  class DeleteAsyncThread
+  {
+  public:
+    /*!
+     * @if jp
+     *
+     * @brief コンストラクタ
+     *
+     * コンストラクタ。
+     *
+     * @else
+     *
+     * @brief Constructor
+     *
+     * Constructor
+     *
+     * @endif
+     */
+    DeleteAsyncThread(){
+      m_task.setTask([this]{ svc(); });
+      m_task.setPeriod(std::chrono::seconds(1));
+    };
+    /*!
+     * @if jp
+     *
+     * @brief デストラクタ
+     *
+     * デストラクタ。
+     *
+     * @else
+     *
+     * @brief Destructor
+     *
+     * Destructor
+     *
+     * @endif
+     */
+    ~DeleteAsyncThread() {};
+    /*!
+     * @if jp
+     * @brief スレッドを生成する
+     *
+     *
+     * @else
+     * @brief Create a thread
+     *
+     *
+     * @endif
+     */
+    void activate()
+    {
+      m_task.suspend();
+      m_task.activate();
+      m_task.suspend();
+    }
+
+    /*!
+     * @if jp
+     * @brief スレッド実行関数
+     *
+     *
+     * @else
+     * @brief Thread execution function
+     *
+     *
+     * @endif
+     */
+    int svc()
+    {
+      std::this_thread::sleep_for(std::chrono::seconds(1));
+      std::lock_guard<std::mutex> guard(m_mutex);
+
+      std::vector<Async*>::iterator thread = m_threads.begin();
+      while (thread != m_threads.end())
+      {
+        (*thread)->exit();
+        thread = m_threads.erase(thread);
+      }
+
+      return 0;
+    }
+    /*!
+     * @if jp
+     * @brief 終了処理を行うAsyncオブジェクトの追加
+     *
+     * @param thread Asyncオブジェクト
+     *
+     * @else
+     * @brief 
+     *
+     * @param thread Async Object
+     *
+     * @endif
+     */
+    void add(Async *thread)
+    {
+      std::lock_guard<std::mutex> guard(m_mutex);
+      m_threads.push_back(thread);
+      m_task.signal();
+    }
+
+    static DeleteAsyncThread* delasync;
+    static std::mutex mutex;
+
+    /*!
+     * @if jp
+     * @brief Async処理スレッドのインスタンスの取得
+     *
+     *
+     * @else
+     * @brief 
+     *
+     *
+     * @endif
+     */
+    static DeleteAsyncThread* instance()
+    {
+      std::lock_guard<std::mutex> guard(mutex);
+      if(delasync == nullptr)
+      {
+        delasync = new DeleteAsyncThread();
+        delasync->activate();
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
+      }
+      return delasync;
+    }    
+  private:
+    std::vector<Async*> m_threads;
+    std::mutex m_mutex;
+    PeriodicTask m_task;
   };
 
   /*!
@@ -214,7 +376,7 @@ namespace coil
      *
      * @brief 非同期処理終了
      *
-     * 非同期処理を終了し、インスタンスを削除する。
+     * 非同期処理を終了し、インスタンスを削除するスレッドにシグナルを送る。
      *
      * @else
      *
@@ -227,7 +389,27 @@ namespace coil
     void finalize() override
     {
       Task::finalize();
-      if (m_autodelete) delete this;
+      if (m_autodelete) DeleteAsyncThread::instance()->add(this);
+    }
+    /*!
+     * @if jp
+     *
+     * @brief インスタンス削除
+     *
+     * 非同期処理の終了待ちを行い、インスタンスを削除する。
+     *
+     * @else
+     *
+     * @brief 
+     *
+     * 
+     *
+     * @endif
+     */
+    void exit() override
+    {
+      Task::wait();
+      delete this;
     }
 
     /*!
@@ -433,7 +615,27 @@ namespace coil
     void finalize() override
     {
       Task::finalize();
-      if (m_autodelete) delete this;
+      if (m_autodelete) DeleteAsyncThread::instance()->add(this);
+    }
+    /*!
+     * @if jp
+     *
+     * @brief インスタンス削除
+     *
+     * 非同期処理の終了待ちを行い、インスタンスを削除する。
+     *
+     * @else
+     *
+     * @brief 
+     *
+     * 
+     *
+     * @endif
+     */
+    void exit() override
+    {
+      Task::wait();
+      delete this;
     }
   private:
     Object* m_obj;
