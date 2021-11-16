@@ -6,6 +6,7 @@
  * @author Nobuhiko Miyamoto <n-miyamoto@aist.go.jp>
  *
  * Copyright (C) 2021
+ *     Software Platform Research Team,
  *     Industrial Cyber-Physical Systems Research Center,
  *     Intelligent Systems Research Institute,
  *     National Institute of
