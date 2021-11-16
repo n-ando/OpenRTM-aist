@@ -3,18 +3,18 @@ cmake_minimum_required (VERSION 3.5.1)
 set(FLUENTBIT_ROOT ${FLUENTBIT_ROOT} CACHE PATH "set FLUENTBIT_ROOT")
 if(NOT FLUENTBIT_ROOT)
 	message(STATUS "FLUENTBIT_ROOT is empty.")
-    message(STATUS "fluent-bit is checked out from original repository.")
+	message(STATUS "fluent-bit is checked out from original repository.")
 
-    include(BuildFluentBit.cmake)
+	include(BuildFluentBit.cmake)
 
-    message(STATUS "FLUENTBIT_ROOT = " ${FLUENTBIT_ROOT})
-    message(STATUS "FLB_BINARY_DIR = " ${FLB_BINARY_DIR})
-    message(STATUS "FLB_SOURCE_DIR = " ${FLB_SOURCE_DIR})
-    message(STATUS "libfluent-bit.so: " ${FLB_BINARY_DIR}/lib/libfluent-bit.so)
+	message(STATUS "FLUENTBIT_ROOT = " ${FLUENTBIT_ROOT})
+	message(STATUS "FLB_BINARY_DIR = " ${FLB_BINARY_DIR})
+	message(STATUS "FLB_SOURCE_DIR = " ${FLB_SOURCE_DIR})
+	message(STATUS "libfluent-bit.so: " ${FLB_LIBRARY_DIR}/libfluent-bit.so)
 
 else()
-    set(FLB_INCLUDR_DIR ${FLUENTBIT_ROOT}/include)
-    set(FLB_LIBRARY_DIR ${FLUENTBIT_ROOT}/lib/fluent-bit)
+	set(FLB_INCLUDR_DIR ${FLUENTBIT_ROOT}/include)
+	set(FLB_LIBRARY_DIR ${FLUENTBIT_ROOT}/lib/fluent-bit)
 endif()
 
 project (FluentBit
@@ -49,18 +49,21 @@ else()
 	set(libs ${RTM_PROJECT_NAME} ${ORB_LIBRARIES} ${DATATYPE_FACTORIES})
 
 	add_library(${target} SHARED ${srcs})
+	if(FLB_PROJECT)
+		add_dependencies(${target} ${FLB_PROJECT})
+	endif()
 	openrtm_common_set_compile_props(${target})
 	openrtm_include_rtm(${target})
 	openrtm_set_link_props_shared(${target})
 
-    target_include_directories(${target}
-        PRIVATE
-        ${FLB_INCLUDR_DIR}
-        )
+	target_include_directories(${target}
+			SYSTEM PRIVATE
+			${FLB_INCLUDR_DIR}
+	)
 	target_link_libraries(${target} PRIVATE 
-                        ${libs}
-                        ${RTM_LINKER_OPTION}
-                        fluent-bit)
+			${libs}
+			${RTM_LINKER_OPTION}
+			fluent-bit)
 	set_target_properties(${target} PROPERTIES PREFIX "")
 
 	install(TARGETS ${target} LIBRARY DESTINATION ${INSTALL_RTM_EXT_DIR}/logger
