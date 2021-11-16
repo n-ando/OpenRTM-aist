@@ -9,6 +9,8 @@ if(NOT FLUENTBIT_ROOT)
 
 	message(STATUS "FLUENTBIT_ROOT = " ${FLUENTBIT_ROOT})
 	message(STATUS "FLB_BINARY_DIR = " ${FLB_BINARY_DIR})
+	message(STATUS "FLB_LIBRARY_DIR = " ${FLB_LIBRARY_DIR})
+	message(STATUS "FLB_INCLUDR_DIR = " ${FLB_INCLUDR_DIR})
 	message(STATUS "FLB_SOURCE_DIR = " ${FLB_SOURCE_DIR})
 	message(STATUS "libfluent-bit.so: " ${FLB_LIBRARY_DIR}/libfluent-bit.so)
 
