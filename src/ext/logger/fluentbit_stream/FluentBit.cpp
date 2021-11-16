@@ -62,8 +62,8 @@ namespace RTC
     if(prop.findNode("input") == nullptr)
     {
       coil::Properties dprop;
-      dprop["input.plugin"] = std::string("lib");
-      dprop["input.conf.tag"] = std::string("rtclog");
+      dprop["plugin"] = std::string("lib");
+      dprop["conf.tag"] = std::string("rtclog");
 
       createInputStream(dprop);
     }
