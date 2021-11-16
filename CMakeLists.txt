@@ -969,7 +969,7 @@ function(get_dist ARG0)
 endfunction(get_dist)
 
 get_dist(DIST_NAME)
-message(status "Distribution is ${DIST_NAME}")
+message(STATUS "Distribution is ${DIST_NAME}")
 
 if(UNIX)
     configure_file(${PROJECT_SOURCE_DIR}/packages/deb/debian/rules.in
