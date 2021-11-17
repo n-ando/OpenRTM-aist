@@ -36,6 +36,11 @@ namespace RTC
     if (s_flbContext == nullptr)
       {
         s_flbContext = flb_create();
+        if (s_flbContext == nullptr)
+          {
+            std::cerr << "flb_create() failed." << std::endl;
+            throw std::bad_alloc();
+          }
       }
   }
 
@@ -53,12 +58,15 @@ namespace RTC
   {
     flb_stop(s_flbContext);
 
-
-
     // Default lib-input setting
-    FlbHandler flbhandler = flb_input(s_flbContext, (char*)"lib", nullptr);
-    flb_input_set(s_flbContext, flbhandler, "tag", prop.getName(), NULL);
-    m_flbIn.emplace_back(flbhandler);
+    if(prop.findNode("input") == nullptr)
+    {
+      coil::Properties dprop;
+      dprop["plugin"] = std::string("lib");
+      dprop["conf.tag"] = std::string("rtclog");
+
+      createInputStream(dprop);
+    }
 
     const std::vector<coil::Properties*>& leaf(prop.getLeaf());
 
@@ -73,13 +81,16 @@ namespace RTC
           {
             createInputStream(*lprop);
           }
-        else if (key.find("option") != std::string::npos)
+        else if (key == "option")
         {
             setServiceOption(*lprop);
         }
       }
     // Start the background worker
-    flb_start(s_flbContext);
+    if (flb_start(s_flbContext) < 0)
+      {
+        std::cerr << "flb_start() failed." << std::endl;
+      }
     return true;
   }
 
@@ -89,7 +100,8 @@ namespace RTC
     int ret = 0;
     for(auto & lprop : leaf)
       {
-        ret = flb_service_set(s_flbContext, lprop->getName(), lprop->getValue(), NULL);
+        std::string key(lprop->getName()), value(lprop->getValue());
+        ret = flb_service_set(s_flbContext, key.c_str(), value.c_str(), NULL);
       }
     return ret;
   }
@@ -99,13 +111,25 @@ namespace RTC
     std::string plugin = prop["plugin"];
     FlbHandler flbout = flb_output(s_flbContext,
                                    (char*)plugin.c_str(), nullptr);
-
     m_flbOut.emplace_back(flbout);
-    const std::vector<Properties*>& leaf = prop.getLeaf();
-    for(auto & lprop : leaf)
+    
+    if(prop.findNode("conf") != nullptr)
       {
-        flb_output_set(s_flbContext, flbout,
-                       lprop->getName(), lprop->getValue(), NULL);
+        Properties confprop = prop;
+        const std::vector<Properties*> &leaf = confprop.getNode("conf").getLeaf();
+        for(auto & lprop : leaf)
+          {
+            std::string key(lprop->getName()), value(lprop->getValue());
+
+            int ret = flb_output_property_check(s_flbContext,
+                                                flbout, &key[0], &value[0]);
+            if (ret == FLB_LIB_ERROR || ret == FLB_LIB_NO_CONFIG_MAP)
+              {
+                std::cerr << "Unknown property for \"" << plugin << "\" plugin: ";
+                std::cerr << key << ": " << value << std::endl;
+              }
+            flb_output_set(s_flbContext, flbout, key.c_str(), value.c_str(), NULL);
+          }
       }
     return true;
   }
@@ -113,15 +137,26 @@ namespace RTC
   bool FluentBitStream::createInputStream(const coil::Properties& prop)
   {
     std::string plugin = prop["plugin"];
-    
     FlbHandler flbin = flb_input(s_flbContext,
                                  (char*)plugin.c_str(), nullptr);
     m_flbIn.emplace_back(flbin);
-    const std::vector<Properties*>& leaf = prop.getLeaf();
-    for(auto & lprop : leaf)
+    if(prop.findNode("conf") != nullptr)
       {
-        flb_input_set(s_flbContext, flbin,
-                      lprop->getName(), lprop->getValue(), NULL);
+        Properties confprop = prop;
+        const std::vector<Properties*> &leaf = confprop.getNode("conf").getLeaf();
+        for(auto & lprop : leaf)
+          {
+            std::string key(lprop->getName()), value(lprop->getValue());
+
+            int ret = flb_input_property_check(s_flbContext,
+                                              flbin, &key[0], &value[0]);
+            if (ret == FLB_LIB_ERROR || ret == FLB_LIB_NO_CONFIG_MAP)
+              {
+                std::cerr << "Unknown property for \"" << plugin << "\" plugin: ";
+                std::cerr << key << ": " << value << std::endl;
+              }
+            flb_input_set(s_flbContext, flbin, key.c_str(), value.c_str(), NULL);
+          }
       }
     return true;
   }
