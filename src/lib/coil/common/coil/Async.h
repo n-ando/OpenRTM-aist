@@ -164,10 +164,7 @@ namespace coil
      *
      * @endif
      */
-    DeleteAsyncThread(){
-      m_task.setTask([this]{ svc(); });
-      m_task.setPeriod(std::chrono::seconds(1));
-    };
+    DeleteAsyncThread();
     /*!
      * @if jp
      *
@@ -183,7 +180,7 @@ namespace coil
      *
      * @endif
      */
-    ~DeleteAsyncThread() {};
+    ~DeleteAsyncThread();
     /*!
      * @if jp
      * @brief スレッドを生成する
@@ -195,12 +192,7 @@ namespace coil
      *
      * @endif
      */
-    void activate()
-    {
-      m_task.suspend();
-      m_task.activate();
-      m_task.suspend();
-    }
+    void activate();
 
     /*!
      * @if jp
@@ -213,20 +205,8 @@ namespace coil
      *
      * @endif
      */
-    int svc()
-    {
-      std::this_thread::sleep_for(std::chrono::seconds(1));
-      std::lock_guard<std::mutex> guard(m_mutex);
+    int svc();
 
-      std::vector<Async*>::iterator thread = m_threads.begin();
-      while (thread != m_threads.end())
-      {
-        (*thread)->exit();
-        thread = m_threads.erase(thread);
-      }
-
-      return 0;
-    }
     /*!
      * @if jp
      * @brief 終了処理を行うAsyncオブジェクトの追加
@@ -240,12 +220,7 @@ namespace coil
      *
      * @endif
      */
-    void add(Async *thread)
-    {
-      std::lock_guard<std::mutex> guard(m_mutex);
-      m_threads.push_back(thread);
-      m_task.signal();
-    }
+    void add(Async* thread);
 
     static DeleteAsyncThread* delasync;
     static std::mutex mutex;
@@ -261,17 +236,7 @@ namespace coil
      *
      * @endif
      */
-    static DeleteAsyncThread* instance()
-    {
-      std::lock_guard<std::mutex> guard(mutex);
-      if(delasync == nullptr)
-      {
-        delasync = new DeleteAsyncThread();
-        delasync->activate();
-        std::this_thread::sleep_for(std::chrono::milliseconds(100));
-      }
-      return delasync;
-    }    
+    static DeleteAsyncThread* instance();
   private:
     std::vector<Async*> m_threads;
     std::mutex m_mutex;
