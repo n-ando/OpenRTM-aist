@@ -31,7 +31,9 @@ else(WIN32)
 	set(OPENRTM_LIBRARIES "${RTM_PROJECT_NAME};${ORB_LIBRARIES};rtmCamera;rtmManipulator")
 endif(WIN32)
 
-
+if(BUILD_RTM_LINUX_PKGS)
+	set(CMAKE_INSTALL_PREFIX "/usr")
+endif()
 
 
 if(VXWORKS)
