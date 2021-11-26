@@ -12,8 +12,9 @@ RUN apt update\
 
 # downlaod fluent-bit.
 RUN mkdir /root/fluent-bit
-RUN wget -O - https://github.com/fluent/fluent-bit/archive/v1.3.4.tar.gz\
+RUN wget -O - https://github.com/fluent/fluent-bit/archive/v1.8.9.tar.gz\
  | tar xfz - -C /root/fluent-bit --strip-components 1
+RUN sed  -i -e 's/jemalloc-5.2.1\/configure/jemalloc-5.2.1\/configure --disable-initial-exec-tls/g' /root/fluent-bit/CMakeLists.txt
 
 # build fluent-bit.
 RUN cmake -DFLB_DEBUG=Off\
@@ -32,12 +33,15 @@ RUN cmake -DFLB_DEBUG=Off\
 RUN cmake --build /tmp/flb/build --target install/strip -- -j$(nproc)
 
 # install header files.
-RUN mkdir -p /tmp/flb/install/include/lib/flb_libco
-RUN cp /root/fluent-bit/lib/flb_libco/libco.h /tmp/flb/install/include/lib/flb_libco
 RUN cp -r /tmp/flb/build/include/jemalloc\
- /root/fluent-bit/lib/msgpack-*/include/*\
- /root/fluent-bit/lib/monkey/include/monkey\
+ /root/fluent-bit/lib/msgpack-*/include/msgpack.h\
+ /root/fluent-bit/lib/msgpack-*/include/msgpack\
  /root/fluent-bit/lib/mbedtls-*/include/mbedtls\
+ /root/fluent-bit/lib/c-ares-*/include/*.h\
+ /tmp/flb/build/lib/c-ares-*/ares_build.h\
+ /tmp/flb/build/lib/c-ares-*/ares_config.h\
+ /root/fluent-bit/lib/cmetrics/include/cmetrics\
+ /root/fluent-bit/lib/cmetrics/include/prometheus_remote_write\
  /tmp/flb/install/include/
 
 ############################################################
