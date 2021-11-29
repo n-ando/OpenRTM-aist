@@ -60,6 +60,7 @@ set(coil_headers
 )
 
 set(coil_srcs
+	common/coil/Async.cpp
 	common/coil/ClockManager.cpp
 	common/coil/PeriodicTask.cpp
 	common/coil/Properties.cpp
