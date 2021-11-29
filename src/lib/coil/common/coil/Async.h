@@ -419,6 +419,10 @@ namespace coil
     bool finished() override
     {
       std::lock_guard<std::mutex> guard(m_mutex);
+      if(m_finished)
+      {
+        Task::wait();
+      }
       return m_finished;
     }
   private:
@@ -559,6 +563,10 @@ namespace coil
      */
     bool finished() override
     {
+      if(m_finished)
+      {
+        Task::wait();
+      }
       return m_finished;
     }
 
