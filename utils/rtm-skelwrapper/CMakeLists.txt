@@ -1,5 +1,9 @@
 cmake_minimum_required (VERSION 3.5.1)
 
+if(BUILD_RTM_LINUX_PKGS)
+  set(CMAKE_INSTALL_PREFIX "/usr")
+endif()
+
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/rtm-skelwrapper.in ${OpenRTM_aist_BINARY_DIR}/rtm-skelwrapper @ONLY)
 configure_file(skel_wrapper.py ${OpenRTM_aist_BINARY_DIR}/skel_wrapper.py COPYONLY)
 configure_file(yat.py ${OpenRTM_aist_BINARY_DIR}/yat.py COPYONLY)
