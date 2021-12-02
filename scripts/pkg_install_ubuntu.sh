@@ -18,7 +18,7 @@
 # = OPT_UNINST   : uninstallation
 #
 
-VERSION=2.0.0.07
+VERSION=2.0.0.08
 
 #
 #---------------------------------------
@@ -777,3 +777,9 @@ uninstall_result $uninstall_pkgs
 if test ! "x$err_message" = "x" ; then
   echo $err_message
 fi
+
+# install openjdk-8-jdk
+apt -y install openjdk-8-jdk
+JAVA8=`update-alternatives --list java | grep java-8`
+update-alternatives --set java ${JAVA8}
+
