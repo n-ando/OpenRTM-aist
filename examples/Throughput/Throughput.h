@@ -38,6 +38,7 @@
 
 #include <vector>
 #include <fstream>
+#include <thread>
 
 using namespace RTC;
 
@@ -417,6 +418,8 @@ class Throughput
   size_t m_sendcount;
   size_t m_logmulcnt;
   size_t m_varsize;
+
+  std::thread* m_exitthread;
   // <rtc-template block="private_attribute">
   
   // </rtc-template>

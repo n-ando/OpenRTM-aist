@@ -40,7 +40,8 @@ namespace coil
    *
    * @endif
    */
-  class Async
+  class [[deprecated("Async class is deprecated and will be removed in a future release.")]]
+      Async
     : public coil::Task
   {
   public:
@@ -146,7 +147,8 @@ namespace coil
    *
    * @endif
    */
-  class DeleteAsyncThread
+  class [[deprecated("DeleteAsyncThread class is deprecated and will be removed in a future release.")]]
+      DeleteAsyncThread
   {
   public:
     /*!
@@ -257,7 +259,8 @@ namespace coil
    * @endif
    */
   template <typename Object, typename Func>
-  class Async_t
+  class [[deprecated("Async_t class is deprecated and will be removed in a future release. Please use std::thread class")]]
+      Async_t
     : public Async
   {
   public:
@@ -447,7 +450,8 @@ namespace coil
    * @endif
    */
   template <typename Object, typename Func>
-  class Async_ref_t
+  class [[deprecated("Async_ref_t class is deprecated and will be removed in a future release. Please use std::thread class")]]
+      Async_ref_t
     : public Async
   {
   public:

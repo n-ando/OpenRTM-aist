@@ -11,7 +11,7 @@
 #include <rtm/CORBA_SeqUtil.h>
 #include <vector>
 #include <cstdlib>
-#include <coil/Async.h>
+#include <thread>
 #include <functional>
 
 // Module specification
@@ -41,7 +41,20 @@ MyServiceConsumer::MyServiceConsumer(RTC::Manager* manager)
 {
 }
 
-MyServiceConsumer::~MyServiceConsumer() = default;
+MyServiceConsumer::~MyServiceConsumer()
+{
+    if (async_echo != nullptr)
+    {
+        async_echo->join();
+        delete async_echo;
+    }
+
+    for (auto async : async_set_value)
+    {
+        async->join();
+        delete async;
+    }
+}
 
 
 RTC::ReturnCode_t MyServiceConsumer::onInitialize()
@@ -134,59 +147,66 @@ RTC::ReturnCode_t MyServiceConsumer::onExecute(RTC::UniqueId  /*ec_id*/)
           argv.emplace_back(std::move(args));
         }
 
-      if (async_echo != nullptr && async_echo->finished())
+      if (async_echo != nullptr && async_finished)
         {
           std::cout << "echo() finished: " <<  m_result << std::endl;
+          async_echo->join();
           delete async_echo;
           async_echo = nullptr;
         }
       
       if (argv[0] == "echo" && argv.size() > 1)
-	{
+	    {
           if (async_echo == nullptr)
             {
-              async_echo = 
-                coil::AsyncInvoker(&m_myservice0,
-                                   echo_functor(argv[1], m_result));
-              async_echo->invoke();
+              async_finished = false;
+              std::string msg(argv[1]);
+              async_echo = new std::thread(
+                  [&, msg] {
+                      echo(msg, m_result, m_myservice0);
+                      async_finished = true;
+                  });
             }
           else
             {
-              std::cout << "set_value() still invoking" << std::endl;
+              std::cout << "echo() still invoking" << std::endl;
             }
-	  return RTC::RTC_OK;
-	}
+	      return RTC::RTC_OK;
+	    }
       
       if (argv[0] == "set_value" && argv.size() > 1)
-	{
+	    {
           CORBA::Float val(static_cast<CORBA::Float>(atof(argv[1].c_str())));
-          coil::AsyncInvoker(&m_myservice0, set_value_functor(val),
-                             true)->invoke();
+
+          async_set_value.push_back(new std::thread(
+              [&, val] {
+                  set_value(val, m_myservice0);
+              }));
           std::cout << "Set remote value: " << val << std::endl;
 
           return RTC::RTC_OK;
-	}
+	    }
       
       if (argv[0] == "get_value")
-	{
+	    {
 	  std::cout << "Current remote value: "
 		    << m_myservice0->get_value() << std::endl;
 	  return RTC::RTC_OK;
-	}
+	    }
       
       if (argv[0] == "get_echo_history")
-	{
+	    {
 	  CORBA_SeqUtil::for_each(*(m_myservice0->get_echo_history()),
 				  seq_print<const char*>());
 	  return RTC::RTC_OK;
-	}
+	    }
       
       if (argv[0] == "get_value_history")
-	{
+	    {
 	  CORBA_SeqUtil::for_each(*(m_myservice0->get_value_history()),
 				  seq_print<CORBA::Float>());
 	  return RTC::RTC_OK;
-	}
+	    }
       
       std::cout << "Invalid command or argument(s)." << std::endl;
     }

@@ -17,6 +17,14 @@
  *
  */
 
+#if defined (WIN32)
+#pragma warning(push)
+#pragma warning(disable:4996)
+#elif defined (__GNUC__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#endif
+
 #include <coil/Async.h>
 
 namespace coil
@@ -77,3 +85,8 @@ namespace coil
   }
 }
 
+#if defined (WIN32)
+#pragma warning(pop)
+#elif defined (__GNUC__)
+#pragma GCC diagnostic pop
+#endif
