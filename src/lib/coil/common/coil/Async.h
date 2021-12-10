@@ -47,7 +47,12 @@ namespace coil
    *
    * @endif
    */
-  class [[deprecated("Async class is deprecated and will be removed in a future release.")]]
+  class 
+  #ifdef _MSC_VER
+  #if _MSC_VER >=1900
+  [[deprecated("Async class is deprecated and will be removed in a future release.")]]
+  #endif
+  #endif
       Async
     : public coil::Task
   {
@@ -154,7 +159,12 @@ namespace coil
    *
    * @endif
    */
-  class [[deprecated("DeleteAsyncThread class is deprecated and will be removed in a future release.")]]
+  class 
+  #ifdef _MSC_VER
+  #if _MSC_VER >=1900
+  [[deprecated("DeleteAsyncThread class is deprecated and will be removed in a future release.")]]
+  #endif
+  #endif
       DeleteAsyncThread
   {
   public:
@@ -266,7 +276,12 @@ namespace coil
    * @endif
    */
   template <typename Object, typename Func>
-  class [[deprecated("Async_t class is deprecated and will be removed in a future release. Please use std::thread class")]]
+  class 
+  #ifdef _MSC_VER
+  #if _MSC_VER >=1900
+  [[deprecated("Async_t class is deprecated and will be removed in a future release. Please use std::thread class")]]
+  #endif
+  #endif
       Async_t
     : public Async
   {
@@ -457,7 +472,12 @@ namespace coil
    * @endif
    */
   template <typename Object, typename Func>
-  class [[deprecated("Async_ref_t class is deprecated and will be removed in a future release. Please use std::thread class")]]
+  class 
+  #ifdef _MSC_VER
+  #if _MSC_VER >=1900
+  [[deprecated("Async_ref_t class is deprecated and will be removed in a future release. Please use std::thread class")]]
+  #endif
+  #endif
       Async_ref_t
     : public Async
   {
