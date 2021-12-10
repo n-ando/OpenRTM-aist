@@ -155,11 +155,10 @@ namespace RTC
           env = coil::replaceString(env, "http://", "");
           env = coil::replaceString(env, "https://", "");
           coil::vstring envsplit = coil::split(env, ":");
-          if(m_roscorehost.empty())
-          {
-            m_roscorehost = envsplit[0];
-          }
-          if(tmp_port.empty() && envsplit.size() >= 2)
+
+          m_roscorehost = envsplit[0];
+
+          if(envsplit.size() >= 2)
           {
             tmp_port = envsplit[1];
           }
