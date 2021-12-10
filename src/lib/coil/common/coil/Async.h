@@ -26,9 +26,9 @@
 #include <utility>
 
 
-#if defined (__GNUC__)
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wc++14-extensions"
+#if defined (__clang__)
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wc++14-extensions"
 #endif
 
 
@@ -770,8 +770,8 @@ namespace coil
 
 } // namespace coil
 
-#if defined (__GNUC__)
-#pragma GCC diagnostic pop
+#if defined (__clang__)
+#pragma clang diagnostic pop
 #endif
 
 #endif  // COIL_ASYNC_H
