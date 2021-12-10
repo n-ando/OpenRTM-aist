@@ -25,6 +25,13 @@
 #include <iostream>
 #include <utility>
 
+
+#if defined (__GNUC__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wc++14-extensions"
+#endif
+
+
 namespace coil
 {
   /*!
@@ -762,5 +769,9 @@ namespace coil
 
 
 } // namespace coil
+
+#if defined (__GNUC__)
+#pragma GCC diagnostic pop
+#endif
 
 #endif  // COIL_ASYNC_H
