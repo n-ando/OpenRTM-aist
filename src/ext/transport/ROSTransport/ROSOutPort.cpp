@@ -27,7 +27,9 @@
 #include "ROSOutPort.h"
 #include "ROSTopicManager.h"
 
-
+#define ROS_MASTER_URI "ROS_MASTER_URI"
+#define ROS_DEFAULT_MASTER_ADDRESS "localhost"
+#define ROS_DEFAULT_MASTER_PORT 11311
 
 namespace RTC
 {
@@ -40,7 +42,7 @@ namespace RTC
    * @endif
    */
   ROSOutPort::ROSOutPort(void)
-    : rtclog("ROSOutPort"), m_start(false), m_roscoreport(11311), m_message_data_sent(0)
+    : rtclog("ROSOutPort"), m_start(false), m_roscoreport(ROS_DEFAULT_MASTER_PORT), m_message_data_sent(0)
   {
   }
   
@@ -89,9 +91,47 @@ namespace RTC
     m_topic = prop.getProperty("ros.topic", "chatter");
     m_topic = "/" + m_topic;
 
-    m_roscorehost = prop.getProperty("ros.roscore.host", "localhost");
-    std::string tmp_port = prop.getProperty("ros.roscore.port", "11311");
-    coil::stringTo<unsigned int>(m_roscoreport, tmp_port.c_str());
+    m_roscorehost = prop.getProperty("ros.roscore.host");
+    std::string tmp_port = prop.getProperty("ros.roscore.port");
+    if(m_roscorehost.empty() && tmp_port.empty())
+    {
+      RTC_VERBOSE(("Get the IP address and port number of ros master from environment variable %d.", ROS_MASTER_URI));
+      std::string env;
+      if (coil::getenv(ROS_MASTER_URI, env))
+      {
+        RTC_VERBOSE(("$%d: %d", ROS_MASTER_URI, env.c_str()));
+        if(!env.empty())
+        {
+          env = coil::replaceString(env, "http://", "");
+          env = coil::replaceString(env, "https://", "");
+          coil::vstring envsplit = coil::split(env, ":");
+          if(m_roscorehost.empty())
+          {
+            m_roscorehost = envsplit[0];
+          }
+          if(tmp_port.empty() && envsplit.size() >= 2)
+          {
+            tmp_port = envsplit[1];
+          }
+        }
+      }
+    }
+    if(m_roscorehost.empty())
+    {
+      m_roscorehost = ROS_DEFAULT_MASTER_ADDRESS;
+    }
+    if(!tmp_port.empty())
+    {
+      if(!coil::stringTo<unsigned int>(m_roscoreport, tmp_port.c_str()))
+      {
+        RTC_ERROR(("%d cannot be converted to an int value", tmp_port.c_str()));
+        m_roscoreport = ROS_DEFAULT_MASTER_PORT;
+      }
+    }
+    else
+    {
+      m_roscoreport = ROS_DEFAULT_MASTER_PORT;
+    }
 
     RTC_VERBOSE(("topic name: %s", m_topic.c_str()));
     RTC_VERBOSE(("roscore address: %s:%d", m_roscorehost.c_str(), m_roscoreport));
