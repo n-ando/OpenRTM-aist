@@ -145,11 +145,11 @@ namespace RTC
     std::string tmp_port = prop.getProperty("ros.roscore.port");
     if(m_roscorehost.empty() && tmp_port.empty())
     {
-      RTC_VERBOSE(("Get the IP address and port number of ros master from environment variable %d.", ROS_MASTER_URI));
+      RTC_VERBOSE(("Get the IP address and port number of ros master from environment variable %s.", ROS_MASTER_URI));
       std::string env;
       if (coil::getenv(ROS_MASTER_URI, env))
       {
-        RTC_VERBOSE(("$%d: %d", ROS_MASTER_URI, env.c_str()));
+        RTC_VERBOSE(("$%s: %s", ROS_MASTER_URI, env.c_str()));
         if(!env.empty())
         {
           env = coil::replaceString(env, "http://", "");
@@ -173,7 +173,7 @@ namespace RTC
     {
       if(!coil::stringTo<unsigned int>(m_roscoreport, tmp_port.c_str()))
       {
-        RTC_ERROR(("%d cannot be converted to an int value", tmp_port.c_str()));
+        RTC_ERROR(("%s cannot be converted to an int value", tmp_port.c_str()));
         m_roscoreport = ROS_DEFAULT_MASTER_PORT;
       }
     }
