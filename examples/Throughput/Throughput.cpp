@@ -11,7 +11,6 @@
 
 #include "Throughput.h"
 #include <cmath>
-#include <coil/Async.h>
 
 #define DEBUG 1
 
@@ -92,7 +91,9 @@ Throughput::Throughput(RTC::Manager* manager)
     m_datasize(1),
     m_record(m_maxsample),
     m_sendcount(0),
-    m_logmulcnt(0)
+    m_logmulcnt(0),
+    m_varsize(0),
+    m_exitthread(nullptr)
     // </rtc-template>
 {
 }
@@ -100,7 +101,14 @@ Throughput::Throughput(RTC::Manager* manager)
 /*!
  * @brief destructor
  */
-Throughput::~Throughput() = default;
+Throughput::~Throughput()
+{
+    if (m_exitthread != nullptr)
+    {
+        m_exitthread->join();
+        delete m_exitthread;
+    }
+}
 
 
 
@@ -213,8 +221,10 @@ RTC::ReturnCode_t Throughput::onDeactivated(RTC::UniqueId  /*ec_id*/)
 
   if (getInPortConnectorSize() == 0)
   {
-	  coil::Async* async(coil::AsyncInvoker(this, std::mem_fun(&Throughput::exit)));
-	  async->invoke();
+      m_exitthread = new std::thread(
+          [&] {
+              Throughput::exit();
+          });
   }
   return RTC::RTC_OK;
 }
@@ -457,9 +467,10 @@ void Throughput::receiveData(const RTC::Time &tm, const CORBA::ULong seq_length)
       record_ptr = 0;
       if (seq_length < size)
         {
-          coil::Async* async;
-          async = coil::AsyncInvoker(this, std::mem_fun(&Throughput::exit));
-          async->invoke();
+          m_exitthread = new std::thread(
+              [&] {
+                  Throughput::exit();
+              });
         }
     }
   // measuring latency

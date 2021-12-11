@@ -18,7 +18,7 @@
 #include <rtm/DataOutPort.h>
 #include <iostream>
 #include <utility>
-#include <coil/Async.h>
+#include <thread>
 
 // Service implementation headers
 // <rtc-template block="service_impl_h">
@@ -118,76 +118,64 @@ class MyServiceConsumer
   
   // </rtc-template>
 
-  class set_value_functor
+  void set_value(CORBA::Float val, RTC::CorbaConsumer<SimpleService::MyService>& obj)
   {
-  public:
-    set_value_functor(CORBA::Float val) : m_val(val) {}
+    try
+      {
+        if( CORBA::is_nil((obj).operator->()) )
+          {
+            std::cout << "No service connected." << std::endl;
+          }
+        else
+          {
+            (obj)->set_value(val);
+          }
+      }
+    catch (const CORBA::INV_OBJREF &)
+      {
+      }
+    catch (const CORBA::OBJECT_NOT_EXIST &)
+      {
+      }
+    catch (const CORBA::OBJ_ADAPTER &)
+      {
+      }
+    catch (...)
+      {
+      }
+  }
 
-    void operator()(RTC::CorbaConsumer<SimpleService::MyService>* obj)
-    {
-      try
-        {
-          if( CORBA::is_nil((*obj).operator->()) )
-            {
-              std::cout << "No service connected." << std::endl;
-            }
-          else
-            {
-              (*obj)->set_value(m_val);
-            }
-        }
-      catch (const CORBA::INV_OBJREF &)
-        {
-        }
-      catch (const CORBA::OBJECT_NOT_EXIST &)
-        {
-        }
-      catch (const CORBA::OBJ_ADAPTER &)
-        {
-        }
-      catch (...)
-        {
-        }
-    }
-    CORBA::Float m_val;
-  };
-
-  class echo_functor
+  void echo(std::string msg, std::string& result, RTC::CorbaConsumer<SimpleService::MyService>& obj)
   {
-  public:
-    echo_functor(std::string msg, std::string& result)
-      : m_msg(std::move(msg)), m_result(result) {}
-    void operator()(RTC::CorbaConsumer<SimpleService::MyService>* obj)
-    {
-      try
-        {
-          if( CORBA::is_nil((*obj).operator->()) )
-            {
-              std::cout << "No service connected." << std::endl;
-            }
-          else
-            {
-              m_result = (*obj)->echo(m_msg.c_str());
-            }
-        }
-      catch (const CORBA::INV_OBJREF &)
-        {
-        }
-      catch (const CORBA::OBJECT_NOT_EXIST &)
-        {
-        }
-      catch (const CORBA::OBJ_ADAPTER &)
-        {
-        }
-      catch (...)
-        {
-        }
-    }
-    std::string m_msg;
-    std::string& m_result;
-  };
+    try
+      {
+        if( CORBA::is_nil((obj).operator->()) )
+          {
+            std::cout << "No service connected." << std::endl;
+          }
+        else
+          {
+            result = (obj)->echo(msg.c_str());
+          }
+      }
+    catch (const CORBA::INV_OBJREF &)
+      {
+      }
+    catch (const CORBA::OBJECT_NOT_EXIST &)
+      {
+      }
+    catch (const CORBA::OBJ_ADAPTER &)
+      {
+      }
+    catch (...)
+      {
+      }
+  }
+
  private:
-  coil::Async* async_echo;
+  std::thread* async_echo;
+  bool async_finished{false};
+  std::vector<std::thread*> async_set_value;
   std::string m_result;
 
   template <class T>

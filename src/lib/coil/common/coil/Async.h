@@ -25,6 +25,13 @@
 #include <iostream>
 #include <utility>
 
+
+#if defined (__clang__)
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wc++14-extensions"
+#endif
+
+
 namespace coil
 {
   /*!
@@ -40,7 +47,13 @@ namespace coil
    *
    * @endif
    */
-  class Async
+  class 
+  #ifdef _MSC_VER
+  #if _MSC_VER >=1900
+  [[deprecated("Async class is deprecated and will be removed in a future release.")]]
+  #endif
+  #endif
+      Async
     : public coil::Task
   {
   public:
@@ -146,7 +159,13 @@ namespace coil
    *
    * @endif
    */
-  class DeleteAsyncThread
+  class 
+  #ifdef _MSC_VER
+  #if _MSC_VER >=1900
+  [[deprecated("DeleteAsyncThread class is deprecated and will be removed in a future release.")]]
+  #endif
+  #endif
+      DeleteAsyncThread
   {
   public:
     /*!
@@ -257,7 +276,13 @@ namespace coil
    * @endif
    */
   template <typename Object, typename Func>
-  class Async_t
+  class 
+  #ifdef _MSC_VER
+  #if _MSC_VER >=1900
+  [[deprecated("Async_t class is deprecated and will be removed in a future release. Please use std::thread class")]]
+  #endif
+  #endif
+      Async_t
     : public Async
   {
   public:
@@ -419,6 +444,10 @@ namespace coil
     bool finished() override
     {
       std::lock_guard<std::mutex> guard(m_mutex);
+      if(m_finished)
+      {
+        Task::wait();
+      }
       return m_finished;
     }
   private:
@@ -443,7 +472,13 @@ namespace coil
    * @endif
    */
   template <typename Object, typename Func>
-  class Async_ref_t
+  class 
+  #ifdef _MSC_VER
+  #if _MSC_VER >=1900
+  [[deprecated("Async_ref_t class is deprecated and will be removed in a future release. Please use std::thread class")]]
+  #endif
+  #endif
+      Async_ref_t
     : public Async
   {
   public:
@@ -559,6 +594,10 @@ namespace coil
      */
     bool finished() override
     {
+      if(m_finished)
+      {
+        Task::wait();
+      }
       return m_finished;
     }
 
@@ -750,5 +789,9 @@ namespace coil
 
 
 } // namespace coil
+
+#if defined (__clang__)
+#pragma clang diagnostic pop
+#endif
 
 #endif  // COIL_ASYNC_H
