@@ -47,7 +47,6 @@ else()
 	set_target_properties(${target} PROPERTIES PREFIX "")
 
 	install(TARGETS ${target} LIBRARY DESTINATION ${INSTALL_RTM_EXT_DIR}/local_service
-				ARCHIVE DESTINATION ${INSTALL_RTM_EXT_DIR}/local_service
 				RUNTIME DESTINATION ${INSTALL_RTM_EXT_DIR}/local_service
 				COMPONENT ext)
 endif()
