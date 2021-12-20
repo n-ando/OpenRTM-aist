@@ -69,7 +69,6 @@ else()
 	set_target_properties(${target} PROPERTIES PREFIX "")
 
 	install(TARGETS ${target} LIBRARY DESTINATION ${INSTALL_RTM_EXT_DIR}/logger
-				ARCHIVE DESTINATION ${INSTALL_RTM_EXT_DIR}/logger
 				RUNTIME DESTINATION ${INSTALL_RTM_EXT_DIR}/logger
 				COMPONENT ext)
 endif()
