@@ -171,10 +171,13 @@ namespace RTC
     const std::string& manager_name = conf["manager.instance_name"];
     for(auto & flb : m_flbIn)
       {
-
+#if defined (WIN32)
+        n = sprintf_s(tmp, sizeof(tmp) - 1,
+                     R"([%lld, {"time":"%s","name":"%s","level":"%s","pid":"%s","host":"%s","manager":"%s","message": "%s"}])", time(nullptr), date.c_str(), name.c_str(), Logger::getLevelString(level).c_str(), pid.c_str(), host_name.c_str(), manager_name.c_str(), mes);
+#else
         n = snprintf(tmp, sizeof(tmp) - 1,
                      R"([%ld, {"time":"%s","name":"%s","level":"%s","pid":"%s","host":"%s","manager":"%s","message": "%s"}])", time(nullptr), date.c_str(), name.c_str(), Logger::getLevelString(level).c_str(), pid.c_str(), host_name.c_str(), manager_name.c_str(), mes);
-
+#endif
         flb_lib_push(s_flbContext, flb, tmp, n);
       }
     return n;
