@@ -28,6 +28,7 @@ add_definitions(${ORB_C_FLAGS_LIST})
 add_definitions(${COIL_C_FLAGS_LIST})
 if(WIN32)
 	add_definitions(-DRTM_SKEL_IMPORT_SYMBOL)
+	add_definitions(-DFLB_SYSTEM_WINDOWS)
 endif()
 add_definitions(-Dtypeof=decltype)
 

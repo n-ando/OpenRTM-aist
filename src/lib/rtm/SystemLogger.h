@@ -497,9 +497,22 @@ namespace RTC
     std::string m_name = "unknown";
     std::string m_dateFormat = "%b %d %H:%M:%S.%Q";
     coil::IClock* m_clock{&coil::ClockManager::instance().getClock("system")};
+
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
+#ifdef LIBRARY_EXPORTS
+    static __declspec(dllexport) const char* const m_levelString[];
+    static __declspec(dllexport) const char* const m_levelOutputString[];
+    static __declspec(dllexport) const char* const m_levelColor[];
+#else
+    static __declspec(dllimport) const char* const m_levelString[];
+    static __declspec(dllimport) const char* const m_levelOutputString[];
+    static __declspec(dllimport) const char* const m_levelColor[];
+#endif
+#else
     static const char* const m_levelString[];
     static const char* const m_levelOutputString[];
     static const char* const m_levelColor[];
+#endif
     bool m_msEnable{false};
     bool m_usEnable{false};
   };

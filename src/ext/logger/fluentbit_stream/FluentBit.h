@@ -21,8 +21,14 @@
 #include <string>
 #include <fstream>
 #include <iostream>
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
+#pragma warning(push)
+#pragma warning( disable : 4100 4245 4189 4805 4200 4505 )
+#endif
 #include <fluent-bit.h>
-
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
+#pragma warning(pop)
+#endif
 #include <coil/stringutil.h>
 #include <rtm/LogstreamBase.h>
 
