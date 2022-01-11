@@ -60,7 +60,7 @@ namespace RTM
      *
      * @endif
      */
-    ~NamingContext();
+    ~NamingContext() override;
 
 
     //PortableServer::ObjectId* PR_id();
@@ -86,7 +86,7 @@ namespace RTM
      *
      * @endif
      */
-    void bind(const CosNaming::Name& n, CORBA::Object_ptr obj);
+    void bind(const CosNaming::Name& n, CORBA::Object_ptr obj) override;
     /*!
      * @if jp
      *
@@ -107,7 +107,7 @@ namespace RTM
      *
      * @endif
      */
-    void rebind(const CosNaming::Name& n, CORBA::Object_ptr obj);
+    void rebind(const CosNaming::Name& n, CORBA::Object_ptr obj) override;
     /*!
      * @if jp
      *
@@ -128,7 +128,7 @@ namespace RTM
      * @endif
      */
     void bind_context(const CosNaming::Name& n,
-          CosNaming::NamingContext_ptr nc);
+          CosNaming::NamingContext_ptr nc) override;
     /*!
      * @if jp
      *
@@ -150,7 +150,7 @@ namespace RTM
      * @endif
      */
     void rebind_context(const CosNaming::Name& n,
-            CosNaming::NamingContext_ptr nc);
+            CosNaming::NamingContext_ptr nc) override;
 
     /*!
      * @if jp
@@ -171,7 +171,7 @@ namespace RTM
      *
      * @endif
      */
-    CORBA::Object_ptr resolve(const CosNaming::Name& n);
+    CORBA::Object_ptr resolve(const CosNaming::Name& n) override;
 
     /*!
      * @if jp
@@ -190,7 +190,7 @@ namespace RTM
      *
      * @endif
      */
-    void unbind(const CosNaming::Name& n);
+    void unbind(const CosNaming::Name& n) override;
     /*!
      * @if jp
      *
@@ -207,7 +207,7 @@ namespace RTM
      *
      * @endif
      */
-    CosNaming::NamingContext_ptr new_context();
+    CosNaming::NamingContext_ptr new_context() override;
     /*!
      * @if jp
      *
@@ -228,7 +228,7 @@ namespace RTM
      *
      * @endif
      */
-    CosNaming::NamingContext_ptr bind_new_context(const CosNaming::Name& n);
+    CosNaming::NamingContext_ptr bind_new_context(const CosNaming::Name& n) override;
     /*!
      * @if jp
      *
@@ -245,7 +245,7 @@ namespace RTM
      *
      * @endif
      */
-    void destroy();
+    void destroy() override;
     /*!
      * @if jp
      *
@@ -270,7 +270,7 @@ namespace RTM
      * @endif
      */
     void list(CORBA::ULong how_many, CosNaming::BindingList_out bl,
-        CosNaming::BindingIterator_out bi);
+        CosNaming::BindingIterator_out bi) override;
 
     /*!
      * @if jp
@@ -292,7 +292,7 @@ namespace RTM
      *
      * @endif
      */
-    char* to_string(const CosNaming::Name& n);
+    char* to_string(const CosNaming::Name& n) override;
 
     /*!
      * @if jp
@@ -314,7 +314,7 @@ namespace RTM
      *
      * @endif
      */
-    CosNaming::Name* to_name(const char* sn);
+    CosNaming::Name* to_name(const char* sn) override;
 
     /*!
      * @if jp
@@ -338,7 +338,7 @@ namespace RTM
      *
      * @endif
      */
-    char* to_url(const char* addr, const char* sn);
+    char* to_url(const char* addr, const char* sn) override;
 
     /*!
      * @if jp
@@ -358,7 +358,7 @@ namespace RTM
      *
      * @endif
      */
-    CORBA::Object_ptr resolve_str(const char* n);
+    CORBA::Object_ptr resolve_str(const char* n) override;
 
     /*!
      * @if jp

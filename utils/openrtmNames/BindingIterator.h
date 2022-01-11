@@ -64,7 +64,7 @@ namespace RTM
      *
      * @endif
      */
-    ~BindingIterator() = default;
+    ~BindingIterator() override = default;
     /*!
      * @if jp
      *
@@ -85,7 +85,7 @@ namespace RTM
      *
      * @endif
      */
-    CORBA::Boolean next_one(CosNaming::Binding_out b);
+    CORBA::Boolean next_one(CosNaming::Binding_out b) override;
     /*!
      * @if jp
      *
@@ -109,7 +109,7 @@ namespace RTM
      *
      * @endif
      */
-    CORBA::Boolean next_n(CORBA::ULong how_many, CosNaming::BindingList_out bl);
+    CORBA::Boolean next_n(CORBA::ULong how_many, CosNaming::BindingList_out bl) override;
 
     /*!
      * @if jp
@@ -125,7 +125,7 @@ namespace RTM
      *
      * @endif
      */
-    void destroy();
+    void destroy() override;
 
 
   private:
