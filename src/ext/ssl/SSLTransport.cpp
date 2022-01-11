@@ -1,21 +1,41 @@
 #include <rtm/Manager.h>
 #include <omniORB4/sslContext.h>
 
-
-
-void SSLTransportSet(RTC::Manager* manager)
+void SSLTransportSet(RTC::Manager *manager)
 {
 	coil::Properties &prop = manager->getConfig();
-	
-	
-	sslContext::certificate_authority_file = CORBA::string_dup(prop["corba.ssl.certificate_authority_file"].c_str());
-	sslContext::key_file = CORBA::string_dup(prop["corba.ssl.key_file"].c_str());
-	sslContext::key_file_password = CORBA::string_dup(prop["corba.ssl.key_file_password"].c_str());
-	
+
+	std::string ssl_certificate_authority_file = prop["corba.ssl.certificate_authority_file"];
+	std::string ssl_key_file = prop["corba.ssl.key_file"];
+	std::string ssl_key_file_password = prop["corba.ssl.key_file_password"];
+	if (!ssl_certificate_authority_file.empty())
+#ifdef RTM_OMNIORB_43
+		omni::sslContext::certificate_authority_file
+#else
+		sslContext::certificate_authority_file
+#endif
+			= CORBA::string_dup(ssl_certificate_authority_file.c_str());
+	if (!ssl_key_file.empty())
+#ifdef RTM_OMNIORB_43
+		omni::sslContext::key_file
+#else
+		sslContext::key_file
+#endif
+			= CORBA::string_dup(ssl_key_file.c_str());
+	if (!ssl_key_file_password.empty())
+#ifdef RTM_OMNIORB_43
+		omni::sslContext::key_file_password
+#else
+		sslContext::key_file_password
+#endif
+			= CORBA::string_dup(ssl_key_file_password.c_str());
 
 	std::string corba_args = prop["corba.args"];
 
-	corba_args += " -ORBendPoint giop:ssl::";
+	if (corba_args.find("giop:ssl") == std::string::npos)
+	{
+		corba_args += " -ORBendPoint giop:ssl::";
+	}
 
 	if (!coil::toBool(prop["manager.is_master"], "YES", "NO", true))
 	{
@@ -23,7 +43,7 @@ void SSLTransportSet(RTC::Manager* manager)
 		{
 			if (prop.getProperty("corba.endpoint").empty())
 			{
-				if (prop["corba.args"].find("-ORBendPoint") == -1)
+				if (prop["corba.args"].find("-ORBendPoint") == std::string::npos)
 				{
 					corba_args += " -ORBendPoint giop:tcp::";
 				}
@@ -31,15 +51,13 @@ void SSLTransportSet(RTC::Manager* manager)
 		}
 	}
 	prop.setProperty("corba.args", corba_args);
-
 }
-
 
 extern "C"
 {
- 	DLL_EXPORT void SSLTransportInit(RTC::Manager* manager)
+	DLL_EXPORT void SSLTransportInit(RTC::Manager *manager)
 	{
-		
+
 		SSLTransportSet(manager);
 	}
 }
