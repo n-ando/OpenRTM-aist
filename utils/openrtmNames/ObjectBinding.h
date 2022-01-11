@@ -203,6 +203,6 @@ namespace RTM
     virtual void update();
 
   };
-}
+} // namespace RTM
 
 #endif

@@ -502,6 +502,6 @@ namespace RTM
     CosNaming::NamingContext_ptr resolve(const CosNaming::Name& name,
               CosNaming::Name& restOfName);
   };
-};
+} // namespace RTM
 
 #endif

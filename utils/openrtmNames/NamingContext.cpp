@@ -870,4 +870,4 @@ namespace RTM
     return CosNaming::NamingContext::_duplicate(context);
   }
 
-}
+} // namespace RTM

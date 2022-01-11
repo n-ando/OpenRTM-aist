@@ -134,6 +134,6 @@ namespace RTM
     PortableServer::POA_var m_poa;
 
   };
-};
+} // namespace RTM
 
 #endif

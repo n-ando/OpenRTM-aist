@@ -101,4 +101,4 @@ namespace RTM
   void ManagerBinding::update()
   {
   }
-};
+} // namespace RTM

@@ -135,6 +135,6 @@ namespace RTM
     void update() override;
 
   };
-}
+} // namespace RTM
 
 #endif

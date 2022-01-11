@@ -134,5 +134,4 @@ namespace RTM
     PortableServer::ObjectId_var id = m_poa->servant_to_id(this);
     m_poa->deactivate_object(id);
   }
-
-};
+} // namespace RTM

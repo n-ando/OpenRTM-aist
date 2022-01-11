@@ -100,5 +100,5 @@ namespace RTM
   {
   }
 
-};
+} // namespace RTM
 

@@ -221,5 +221,5 @@ namespace RTM
   {
   }
 
-};
+} // namespace RTM
 
