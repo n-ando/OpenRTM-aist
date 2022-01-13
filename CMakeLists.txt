@@ -354,7 +354,8 @@ elseif(CORBA STREQUAL "omniORB")
 		file(GLOB OMNIORB_SCRIPTS "${ORB_ROOT}/bin/scripts/*.py")
 		
 		install(FILES ${OMNIORB_SCRIPTS} DESTINATION ${ORB_INSTALL_DIR}/bin/scripts COMPONENT corbalib)
-		
+		install(DIRECTORY ${ORB_ROOT}/lib/python/omniidl DESTINATION ${ORB_INSTALL_DIR}/lib/python/ COMPONENT corbalib FILES_MATCHING PATTERN "*.py" PATTERN "__pycache__" EXCLUDE)
+		install(DIRECTORY ${ORB_ROOT}/lib/python/omniidl_be DESTINATION ${ORB_INSTALL_DIR}/lib/python/ COMPONENT corbalib FILES_MATCHING PATTERN "*.py" PATTERN "__pycache__" EXCLUDE)
 
 		install(PROGRAMS ${ORB_ROOT}/bin/${ARCH_NAME}/omniidl.exe DESTINATION ${ORB_INSTALL_DIR}/bin/${ARCH_NAME} COMPONENT corbalib)
 		install(PROGRAMS ${ORB_ROOT}/bin/${ARCH_NAME}/omniNames.exe DESTINATION ${ORB_INSTALL_DIR}/bin/${ARCH_NAME} COMPONENT corbalib)
