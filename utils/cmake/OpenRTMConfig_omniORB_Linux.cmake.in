@@ -69,7 +69,7 @@ set(OPENRTM_IDL_WRAPPER_FLAGS --include-dir= --skel-suffix=Skel --stub-suffix=St
 set(OPENRTM_IDLC @IDL_COMPILE_COMMAND@)
 set(OPENRTM_IDLFLAGS -bcxx -Wba -nf -Wbuse_quotes -Wbshortcut -I${OPENRTM_INCLUDE_DIR}/rtm/idl)
 
-include(FindPkgConfig)
+find_package(PkgConfig)
 #
 # Getting omniORB settings
 #
