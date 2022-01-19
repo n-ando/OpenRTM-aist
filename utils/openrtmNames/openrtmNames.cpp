@@ -53,7 +53,7 @@ int main(int argc, char **argv)
 #else
   IORTable::Table_var adapter;
 #endif
-  PortableServer::Servant_var<RTM::NamingContext> nameservice;
+  PortableServer::Servant_var<RTM::NamingContext> nameservice = nullptr;
 
   try {
 #ifdef ORB_IS_OMNIORB
