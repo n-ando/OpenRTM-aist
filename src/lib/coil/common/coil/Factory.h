@@ -610,7 +610,7 @@ namespace coil
     class FactoryEntry
     {
     public:
-      FactoryEntry() = default;
+      FactoryEntry();
 
       /*!
        * @if jp
@@ -646,6 +646,14 @@ namespace coil
     ObjectMap m_objects;
     std::mutex m_mutex;
   };
+
+  template <
+    class AbstractClass,
+    typename Identifier,
+    typename Compare,
+    typename Creator,
+    typename Destructor>
+    Factory<AbstractClass, Identifier, Compare, Creator, Destructor>::FactoryEntry::FactoryEntry() = default;
 
   /*!
    * @if jp
