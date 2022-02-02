@@ -610,7 +610,7 @@ namespace coil
     class FactoryEntry
     {
     public:
-      FactoryEntry();
+      FactoryEntry() = default;
 
       /*!
        * @if jp
@@ -633,10 +633,12 @@ namespace coil
        *
        * @endif
        */
-      FactoryEntry(Identifier id, Creator creator, Destructor destructor, Properties prop)
+      FactoryEntry(Identifier id, Creator creator, Destructor destructor, const Properties &prop)
           : id_(std::move(id)), creator_(creator), destructor_(destructor), prop_(prop)
       {
       }
+
+      ~FactoryEntry();
       std::string id_;
       Creator creator_;
       Destructor destructor_;
@@ -647,13 +649,14 @@ namespace coil
     std::mutex m_mutex;
   };
 
+
   template <
-    class AbstractClass,
-    typename Identifier,
-    typename Compare,
-    typename Creator,
-    typename Destructor>
-    Factory<AbstractClass, Identifier, Compare, Creator, Destructor>::FactoryEntry::FactoryEntry() = default;
+      class AbstractClass,
+      typename Identifier = std::string,
+      typename Compare = std::less<Identifier>,
+      typename Creator = AbstractClass *(*)(),
+      typename Destructor = void (*)(AbstractClass *&)>
+  Factory<AbstractClass,>::FactoryEntry::~FactoryEntry() = default;
 
   /*!
    * @if jp
