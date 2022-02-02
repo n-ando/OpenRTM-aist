@@ -633,7 +633,7 @@ namespace coil
        *
        * @endif
        */
-      FactoryEntry(Identifier id, Creator creator, Destructor destructor, Properties prop= Properties())
+      FactoryEntry(Identifier id, Creator creator, Destructor destructor, Properties prop)
           : id_(std::move(id)), creator_(creator), destructor_(destructor), prop_(prop)
       {
       }
