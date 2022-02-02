@@ -242,7 +242,7 @@ namespace coil
     Properties getProperties(const Identifier &id)
     {
       std::lock_guard<std::mutex> guard(m_mutex);
-      FactoryMap::iterator it = m_creators.find(id);
+      FactoryMapIt it = m_creators.find(id);
       if (it != m_creators.end())
       {
         return m_creators[id].prop_;
