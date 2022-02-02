@@ -651,12 +651,12 @@ namespace coil
 
 
   template <
-      class AbstractClass,
-      typename Identifier = std::string,
-      typename Compare = std::less<Identifier>,
-      typename Creator = AbstractClass *(*)(),
-      typename Destructor = void (*)(AbstractClass *&)>
-  Factory<AbstractClass,>::FactoryEntry::~FactoryEntry() = default;
+    class AbstractClass,
+    typename Identifier,
+    typename Compare,
+    typename Creator,
+    typename Destructor>
+    Factory<AbstractClass, Identifier, Compare, Creator, Destructor>::FactoryEntry::~FactoryEntry() = default;
 
   /*!
    * @if jp
