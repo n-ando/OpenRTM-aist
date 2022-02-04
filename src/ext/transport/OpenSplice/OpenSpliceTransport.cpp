@@ -420,13 +420,10 @@ extern "C"
               ::RTC::OpenSpliceInPort>,
               prop);
       }
-
-      coil::Properties& prop(manager->getConfig());
-
       
       
-      RTC_OpenSplice::start(prop.getNode("opensplice"));
-      OpenSpliceMessageInfoInit(prop.getNode("opensplice"));
+      RTC_OpenSplice::start(manager->getConfig().getNode("opensplice"));
+      OpenSpliceMessageInfoInit(manager->getConfig().getNode("opensplice"));
     
       ManagerActionListener *listener = new ManagerActionListener();
       manager->addManagerActionListener(listener);
