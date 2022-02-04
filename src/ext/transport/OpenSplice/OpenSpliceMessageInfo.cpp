@@ -23,6 +23,7 @@
 #include <rtm/idl/ExtendedDataTypesSkel.h>
 #include <rtm/idl/InterfaceDataTypesSkel.h>
 #include <rtm/Typename.h>
+#include <coil/OS.h>
 
 namespace RTC
 {
@@ -49,7 +50,16 @@ namespace RTC
 
         std::string idl_path() override
         {
-            std::string path = coil::replaceEnv(IDLPATH::idlpath);
+            std::string env;
+            std::string path;
+            if (coil::getenv("RTM_IDL_PATH", env))
+            {
+              path = coil::replaceEnv(IDLPATH::idlpath);
+            }
+            else
+            {
+              path = coil::replaceString(IDLPATH::idlpath, "${RTM_IDL_PATH}", RTM_IDL_PATH);
+            }
             path = coil::replaceString(std::move(path), "//", "/");
             return coil::replaceString(std::move(path), "\\\\", "\\");
         }
@@ -327,7 +337,7 @@ const char* InterfaceDataTypesFile::idlpath = "${RTM_IDL_PATH}/InterfaceDataType
 
 void OpenSpliceMessageInfoInit(const coil::Properties& prop)
 {
-    std::string datalist = prop.getProperty("opensplice.datatypes", "ALL");
+    std::string datalist = prop.getProperty("datatypes", "ALL");
     coil::vstring datatypes;
     for (auto& datatype : coil::split(datalist, ","))
     {

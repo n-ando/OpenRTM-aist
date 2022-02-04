@@ -124,7 +124,7 @@ namespace RTC
         endian = false;
     }
 
-    m_outport = createOpenSpliceOutPort(dataType, idlPath, topic, endian, corbamode);
+    m_outport = createOpenSpliceOutPort(dataType, idlPath, topic, prop.getNode("opensplice"), endian, corbamode);
 
     if(m_outport == nullptr)
     {

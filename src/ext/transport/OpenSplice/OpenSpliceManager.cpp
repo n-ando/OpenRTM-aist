@@ -20,6 +20,8 @@
 #include "OpenSpliceManager.h"
 
 #include <coil/process.h>
+#include <coil/stringutil.h>
+#include <rtm/SystemLogger.h>
 #include <rapidxml.hpp>
 #include <rapidxml_utils.hpp>
 #include <rapidxml_iterators.hpp>
@@ -54,6 +56,8 @@ namespace RTC
       "DDS_RETCODE_ILLEGAL_OPERATION"
   };
 
+  std::once_flag OpenSpliceManager::m_once;
+
   /*!
    * @if jp
    * @brief DDS::ReturnCode_tの値がRETCODE_OK、RETCODE_NO_DATA以外の場合にエラー出力
@@ -75,7 +79,8 @@ namespace RTC
   bool OpenSpliceManager::checkStatus(DDS::ReturnCode_t status, const char *info)
   {
       if (status != DDS::RETCODE_OK && status != DDS::RETCODE_NO_DATA) {
-          std::cerr << "Error in " << info << " with return code : " << RetCodeName[status].c_str() << std::endl;
+          Logger rtclog("OpenSpliceManager");
+          RTC_ERROR(("Error in %s  with return code : %s", info, RetCodeName[status].c_str()));
           return false;
       }
       return true;
@@ -102,7 +107,8 @@ namespace RTC
   bool OpenSpliceManager::checkHandle(void *handle, const char* info)
   {
       if (!handle) {
-          std::cerr << "Error in " << info << ": Creation failed: invalid handle" << std::endl;
+          Logger rtclog("OpenSpliceManager");
+          RTC_ERROR(("Error in %s  : Creation failed: invalid handle", info));
           return false;
       }
       return true;
@@ -121,7 +127,10 @@ namespace RTC
    *
    * @endif
    */
-  OpenSpliceManager::OpenSpliceManager()// : rtclog("OpenSpliceManager")
+  OpenSpliceManager::OpenSpliceManager() : m_factory(nullptr), m_domain(0), 
+                                          m_participant(nullptr), m_publisher(nullptr),
+                                          m_subscriber(nullptr), m_qos_provider(nullptr)
+                                          
   {
 
   }
@@ -139,7 +148,9 @@ namespace RTC
    *
    * @endif
    */
-  OpenSpliceManager::OpenSpliceManager(const OpenSpliceManager &/*mgr*/)// : rtclog("OpenSpliceManager")
+  OpenSpliceManager::OpenSpliceManager(const OpenSpliceManager &/*mgr*/) :m_factory(nullptr), m_domain(0),
+                                                                        m_participant(nullptr), m_publisher(nullptr),
+                                                                        m_subscriber(nullptr), m_qos_provider(nullptr)
   {
     
   }
@@ -165,29 +176,140 @@ namespace RTC
    * @if jp
    * @brief マネージャ開始
    *
+   * @param prop 設定プロパティ
    *
    * @else
-   * @brief 
+   * @brief
    *
-   * 
+   * @param prop
    *
    * @endif
    */
-  void OpenSpliceManager::start()
+  void OpenSpliceManager::start(coil::Properties& prop)
   {
-
+      Logger rtclog("OpenSpliceManager");
+      RTC_INFO(("OpenSpliceManager::start()"));
+      RTC_INFO_STR((prop));
       m_factory = DDS::DomainParticipantFactory::get_instance();
       if(!checkHandle(m_factory.in(), "get_instance() failed"))
       {
-          return;
+          throw;
       }
       
       m_domain = DDS::DOMAIN_ID_DEFAULT;
-      m_participant = m_factory->create_participant(m_domain, PARTICIPANT_QOS_DEFAULT, nullptr, DDS::STATUS_MASK_NONE);
+      DDS::DomainParticipantQos qos(PARTICIPANT_QOS_DEFAULT);
+
+      std::string uri(prop["uri"]);
+      std::string profile(prop["profile"]);
+      if (!uri.empty() && !profile.empty())
+      {
+        RTC_DEBUG(("Create QosProvider: uri=%s, profile=%s", uri.c_str(), profile.c_str()));
+        m_qos_provider = new DDS::QosProvider(uri.c_str(), profile.c_str());
+
+        DDS::ReturnCode_t ret = m_qos_provider->get_participant_qos(qos, nullptr);
+
+        if (ret == DDS::RETCODE_OK)
+        {
+          RTC_INFO(("DomainParticipantQos initialisation successful"));
+          m_participant = m_factory->create_participant(m_domain, qos, nullptr, DDS::STATUS_MASK_NONE);
+        }
+        else
+        {
+          RTC_INFO(("DomainParticipantQos initialisation failed"));
+          throw;
+        }
+      }
+      else
+      {
+        RTC_INFO(("DomainParticipantQos has been set to the default value."));
+
+        qos.entity_factory.autoenable_created_entities = coil::toBool(prop["participant.entity_factory.autoenable_created_entities"], "YES", "NO", qos.entity_factory.autoenable_created_entities);
+
+        std::string listener_scheduling_scheduling_class_kind = prop["participant.listener_scheduling.scheduling_class.kind"];
+
+        if (listener_scheduling_scheduling_class_kind == "SCHEDULE_DEFAULT")
+        {
+          qos.listener_scheduling.scheduling_class.kind = DDS::SCHEDULE_DEFAULT;
+        }
+        else if (listener_scheduling_scheduling_class_kind == "SCHEDULE_TIMESHARING")
+        {
+          qos.listener_scheduling.scheduling_class.kind = DDS::SCHEDULE_TIMESHARING;
+        }
+        else if (listener_scheduling_scheduling_class_kind == "SCHEDULE_REALTIME")
+        {
+          qos.listener_scheduling.scheduling_class.kind = DDS::SCHEDULE_REALTIME;
+        }
+
+        
+        coil::stringTo<DDS::Long>(qos.listener_scheduling.scheduling_priority, prop["participant.listener_scheduling.scheduling_priority"].c_str());
+       
+
+        std::string listener_scheduling_scheduling_priority_kind_kind = prop["participant.listener_scheduling.scheduling_priority_kind.kind"];
+
+        if (listener_scheduling_scheduling_priority_kind_kind == "PRIORITY_RELATIVE")
+        {
+          qos.listener_scheduling.scheduling_priority_kind.kind = DDS::PRIORITY_RELATIVE;
+        }
+        else if (listener_scheduling_scheduling_priority_kind_kind == "PRIORITY_ABSOLUTE")
+        {
+          qos.listener_scheduling.scheduling_priority_kind.kind = DDS::PRIORITY_ABSOLUTE;
+        }
+
+        //qos.user_data.value;
+        
+        std::string watchdog_scheduling_scheduling_class_kind = prop["participant.watchdog_scheduling.scheduling_class.kind"];
+
+        if (watchdog_scheduling_scheduling_class_kind == "SCHEDULE_DEFAULT")
+        {
+          qos.watchdog_scheduling.scheduling_class.kind = DDS::SCHEDULE_DEFAULT;
+        }
+        else if (watchdog_scheduling_scheduling_class_kind == "SCHEDULE_TIMESHARING")
+        {
+          qos.watchdog_scheduling.scheduling_class.kind = DDS::SCHEDULE_TIMESHARING;
+        }
+        else if (watchdog_scheduling_scheduling_class_kind == "SCHEDULE_REALTIME")
+        {
+          qos.watchdog_scheduling.scheduling_class.kind = DDS::SCHEDULE_REALTIME;
+        }
+
+        coil::stringTo<DDS::Long>(qos.watchdog_scheduling.scheduling_priority, prop["participant.watchdog_scheduling.scheduling_priority"].c_str());
+
+
+
+        std::string watchdog_scheduling_scheduling_priority_kind_kind = prop["participant.watchdog_scheduling.scheduling_priority_kind.kind"];
+
+        if (watchdog_scheduling_scheduling_priority_kind_kind == "PRIORITY_RELATIVE")
+        {
+          qos.watchdog_scheduling.scheduling_priority_kind.kind = DDS::PRIORITY_RELATIVE;
+        }
+        else if (watchdog_scheduling_scheduling_priority_kind_kind == "PRIORITY_ABSOLUTE")
+        {
+          qos.watchdog_scheduling.scheduling_priority_kind.kind = DDS::PRIORITY_ABSOLUTE;
+        }
+
+        m_participant = m_factory->create_participant(m_domain, PARTICIPANT_QOS_DEFAULT, nullptr, DDS::STATUS_MASK_NONE);
+      }
+
       if(!checkHandle(m_participant.in(), "create_participant() failed"))
       {
-          return;
+        RTC_ERROR(("Domain participant creation failed"));
+        throw;
       }
+
+      RTC_INFO(("Participant created"));
+
+      RTC_DEBUG(("DomainParticipantQos setting: participant.entity_factory.autoenable_created_entities: %s", (qos.entity_factory.autoenable_created_entities ? "true" : "false")));
+      RTC_DEBUG(("DomainParticipantQos setting: participant.listener_scheduling.scheduling_class.kind: %d", qos.listener_scheduling.scheduling_class.kind));
+      RTC_DEBUG(("DomainParticipantQos setting: participant.listener_scheduling.scheduling_priority: %d", qos.listener_scheduling.scheduling_priority));
+      RTC_DEBUG(("DomainParticipantQos setting: participant.listener_scheduling.scheduling_priority_kind.kind: %d", qos.listener_scheduling.scheduling_priority_kind.kind));
+      RTC_DEBUG(("DomainParticipantQos setting: participant.watchdog_scheduling.scheduling_class.kind: %d", qos.watchdog_scheduling.scheduling_class.kind));
+      RTC_DEBUG(("DomainParticipantQos setting: participant.watchdog_scheduling.scheduling_priority: %d", qos.watchdog_scheduling.scheduling_priority));
+      RTC_DEBUG(("DomainParticipantQos setting: participant.watchdog_scheduling.scheduling_priority_kind.kind: %d", qos.watchdog_scheduling.scheduling_priority_kind.kind));
+
+
+      createPublisher(prop);
+      createSubscriber(prop);
+
 
   }
 
@@ -206,6 +328,8 @@ namespace RTC
    */
   void OpenSpliceManager::finalize()
   {
+      Logger rtclog("OpenSpliceManager");
+      RTC_INFO(("OpenSpliceManager::finalize()"));
       DDS::ReturnCode_t result;
 
       if (m_participant.in() != nullptr)
@@ -213,23 +337,29 @@ namespace RTC
           if (m_subscriber.in() != nullptr)
           {
               result = m_participant->delete_subscriber(m_subscriber);
-              checkStatus(result, "delete_subscriber() failed");
+              RTC_INFO(("Deleted subscriber"));
+              if (!checkStatus(result, "delete_subscriber() failed"))
+              {
+              }
           }
           if (m_publisher.in() != nullptr)
           {
               result = m_participant->delete_publisher(m_publisher);
+              RTC_INFO(("Deleted publisher"));
               if (!checkStatus(result, "delete_publisher() failed"))
               {
-                  return;
               }
           }
           for (auto& topic : m_topics)
           {
               result = m_participant->delete_topic(topic.second);
+              RTC_INFO(("Deleted topic: %s", topic.first.c_str()));
               if (!checkStatus(result, "delete_topic() failed"))
               {
               }
           }
+
+          RTC_INFO(("Deleted participan"));
           result = m_factory->delete_participant(m_participant);
 
           if (!checkStatus(result, "delete_participant() failed"))
@@ -242,70 +372,186 @@ namespace RTC
   /*!
  * @if jp
  * @brief Publisher生成
+ * 
+ * @param prop 設定プロパティ
  *
  * @return true：生成成功、false：エラー
  *
  * @else
  * @brief create Publisher
  *
+ * @param prop 
+ * 
  * @return
  *
  * @endif
  */
-  bool OpenSpliceManager::createPublisher()
+  bool OpenSpliceManager::createPublisher(coil::Properties& prop)
   {
+
       if (m_publisher.in() != nullptr)
       {
           return true;
       }
 
+      Logger rtclog("OpenSpliceManager");
+      RTC_INFO(("OpenSpliceManager::createPublisher()"));
+      RTC_INFO_STR((prop));
+
+
       DDS::PublisherQos pQos;
+      
       DDS::ReturnCode_t result = m_participant->get_default_publisher_qos(pQos);
       if (!checkStatus(result, "get_default_publisher_qos() failed"))
       {
           return false;
       }
 
+      if (m_qos_provider.in() == nullptr)
+      {
+        RTC_INFO(("PublisherQos has been set to the default value."));
+        pQos.entity_factory.autoenable_created_entities = coil::toBool(prop["publisher.entity_factory.autoenable_created_entities"], "YES", "NO", pQos.entity_factory.autoenable_created_entities);
+
+        //pQos.group_data.value;
+        //pQos.partition.name;
+
+        std::string presentation_access_scope = prop["publisher.presentation.access_scope"];
+
+        if (presentation_access_scope == "INSTANCE_PRESENTATION_QOS")
+        {
+          pQos.presentation.access_scope = DDS::INSTANCE_PRESENTATION_QOS;
+        }
+        else if (presentation_access_scope == "TOPIC_PRESENTATION_QOS")
+        {
+          pQos.presentation.access_scope = DDS::TOPIC_PRESENTATION_QOS;
+        }
+        else if (presentation_access_scope == "GROUP_PRESENTATION_QOS")
+        {
+          pQos.presentation.access_scope = DDS::GROUP_PRESENTATION_QOS;
+        }
+
+        pQos.presentation.coherent_access = coil::toBool(prop["publisher.presentation.coherent_access"], "YES", "NO", pQos.presentation.coherent_access);
+
+        pQos.presentation.ordered_access = coil::toBool(prop["publisher.presentation.ordered_access"], "YES", "NO", pQos.presentation.ordered_access);
+      }
+      else
+      {
+        RTC_INFO(("QoSProvider set PublisherQos"));
+        DDS::ReturnCode_t ret = m_qos_provider->get_publisher_qos(pQos, nullptr);
+        if (ret != DDS::RETCODE_OK)
+        {
+          RTC_ERROR(("PublisherQos initialisation failed: %s", RetCodeName[ret].c_str()));
+          return false;
+        }
+      }
+
+      RTC_DEBUG(("PublisherQos setting: publisher.entity_factory.autoenable_created_entities: %s", (pQos.entity_factory.autoenable_created_entities ? "true" : "false")));
+      RTC_DEBUG(("PublisherQos setting: publisher.presentation.access_scope: %d", pQos.presentation.access_scope));
+      RTC_DEBUG(("PublisherQos setting: publisher.presentation.coherent_access: %s", (pQos.presentation.coherent_access ? "true" : "false")));
+      RTC_DEBUG(("PublisherQos setting: publisher.presentation.ordered_access: %s", (pQos.presentation.ordered_access ? "true" : "false")));
 
       m_publisher = m_participant->create_publisher(pQos, nullptr, DDS::STATUS_MASK_NONE);
+      
       if (!checkHandle(m_publisher.in(), "create_publisher() failed"))
       {
           return false;
       }
+
+      RTC_INFO(("Publisher created"));
+
       return true;
   }
   /*!
    * @if jp
    * @brief Subscriber生成
    *
+   * @param prop 設定プロパティ
+   * 
    * @return true：生成成功、false：エラー
    *
    * @else
    * @brief create Subscriber
    *
+   * @param prop 
+   * 
    * @return
    *
    * @endif
    */
-  bool OpenSpliceManager::createSubscriber()
+  bool OpenSpliceManager::createSubscriber(coil::Properties& prop)
   {
       if (m_subscriber.in() != nullptr)
       {
           return true;
       }
 
+      Logger rtclog("OpenSpliceManager");
+      RTC_INFO(("OpenSpliceManager::createSubscriber()"));
+      RTC_INFO_STR((prop));
+
       DDS::SubscriberQos sQos;
+
       DDS::ReturnCode_t result = m_participant->get_default_subscriber_qos(sQos);
       if (!checkStatus(result, "get_default_subscriber_qos() failed"))
       {
           return false;
       }
 
+      if (m_qos_provider.in() == nullptr)
+      {
+        RTC_INFO(("SubscriberQos has been set to the default value."));
+        sQos.entity_factory.autoenable_created_entities = coil::toBool(prop["subscriber.entity_factory.autoenable_created_entities"], "YES", "NO", sQos.entity_factory.autoenable_created_entities);
+
+        //sQos.group_data.value;
+        //sQos.partition.name;
+
+        std::string presentation_access_scope = prop["subscriber.presentation.access_scope"];
+
+        if (presentation_access_scope == "INSTANCE_PRESENTATION_QOS")
+        {
+          sQos.presentation.access_scope = DDS::INSTANCE_PRESENTATION_QOS;
+        }
+        else if (presentation_access_scope == "TOPIC_PRESENTATION_QOS")
+        {
+          sQos.presentation.access_scope = DDS::TOPIC_PRESENTATION_QOS;
+        }
+        else if (presentation_access_scope == "GROUP_PRESENTATION_QOS")
+        {
+          sQos.presentation.access_scope = DDS::GROUP_PRESENTATION_QOS;
+        }
+
+        sQos.presentation.coherent_access = coil::toBool(prop["subscriber.presentation.coherent_access"], "YES", "NO", sQos.presentation.coherent_access);
+
+        sQos.presentation.ordered_access = coil::toBool(prop["subscriber.presentation.ordered_access"], "YES", "NO", sQos.presentation.ordered_access);
+
+        sQos.share.enable = coil::toBool(prop["subscriber.share.enable"], "YES", "NO", sQos.share.enable);
+      }
+      else
+      {
+        RTC_INFO(("QoSProvider set SubscriberQos"));
+        DDS::ReturnCode_t ret = m_qos_provider->get_subscriber_qos(sQos, nullptr);
+        if (ret != DDS::RETCODE_OK)
+        {
+          RTC_ERROR(("SubscriberQos initialisation failed: %s", RetCodeName[ret].c_str()));
+          return false;
+        }
+      }
+
+      RTC_DEBUG(("SubscriberQos setting: subscriber.entity_factory.autoenable_created_entities: %s", (sQos.entity_factory.autoenable_created_entities ? "true" : "false")));
+      RTC_DEBUG(("SubscriberQos setting: subscriber.presentation.access_scope: %d", sQos.presentation.access_scope));
+      RTC_DEBUG(("SubscriberQos setting: subscriber.presentation.coherent_access: %s", (sQos.presentation.coherent_access ? "true" : "false")));
+      RTC_DEBUG(("SubscriberQos setting: subscriber.presentation.ordered_access: %s", (sQos.presentation.ordered_access ? "true" : "false")));
+      RTC_DEBUG(("SubscriberQos setting: subscriber.share.enable: %s", (sQos.share.enable ? "true" : "false")));
+
+      //sQos.share.name;
+
       m_subscriber = m_participant->create_subscriber(sQos, nullptr, DDS::STATUS_MASK_NONE);
       if (!checkHandle(m_subscriber.in(), "create_subscriber() failed"))
       {
           return false;
       }
+
+      RTC_INFO(("Subscriber created"));
 
       return true;
   }
@@ -325,6 +571,8 @@ namespace RTC
    */
   DDS::DomainParticipant_ptr OpenSpliceManager::getParticipant()
   {
+      Logger rtclog("OpenSpliceManager");
+      RTC_INFO(("OpenSpliceManager::getParticipant()"));
       return DDS::DomainParticipant::_duplicate(m_participant.in());
   }
 
@@ -332,44 +580,209 @@ namespace RTC
    * @if jp
    * @brief DataWriter生成
    *
+   * @param topic_name トピック名
+   * @param listener 書き込み時リスナ
+   * @param prop 設定プロパティ
+   * 
    * @return DataWriter
    *
    * @else
    * @brief create DataWriter
    *
+   * @param topic_name
+   * @param listener
+   * @param prop
+   * 
    * @return DataWriter
    *
    * @endif
    */
-  DDS::DataWriter_ptr OpenSpliceManager::createWriter(const std::string& topic_name, DDS::DataWriterListener_ptr listener)
+  DDS::DataWriter_ptr OpenSpliceManager::createWriter(const std::string& topic_name, DDS::DataWriterListener_ptr listener, coil::Properties& prop)
   {
-      DDS::Duration_t timeout = DDS::DURATION_INFINITE;
+      Logger rtclog("OpenSpliceManager");
+      RTC_INFO(("OpenSpliceManager::createWriter(topic_name=%s)", topic_name.c_str()));
+      RTC_INFO_STR((prop));
 
       if (m_topics.count(topic_name) == 0)
       {
+          RTC_INFO(("Topic not found: %s", topic_name.c_str()));
           return nullptr;
       }
+
+
       DDS::DataWriterQos wQos;
+
       DDS::ReturnCode_t result = m_publisher->get_default_datawriter_qos(wQos);
       if (!checkStatus(result, "get_default_datawriter_qos() failed"))
       {
-          return nullptr;
+        return nullptr;
       }
 
       DDS::TopicQos tQos;
       result = m_topics[topic_name]->get_qos(tQos);
-      if (!checkStatus(result, "get_default_datawriter_qos() failed"))
+      if (!checkStatus(result, "get_qos() failed"))
       {
-          return nullptr;
+        return nullptr;
       }
 
       result = m_publisher->copy_from_topic_qos(wQos, tQos);
       if (!checkStatus(result, "copy_from_topic_qos() failed"))
       {
-          return nullptr;
+        return nullptr;
       }
 
-      wQos.writer_data_lifecycle.autodispose_unregistered_instances = false;
+      if (m_qos_provider.in() == nullptr)
+      {
+        RTC_INFO(("DataWriterQos has been set to the default value."));
+        std::string durability_kind = prop["writer.durability.kind"];
+
+        if (durability_kind == "VOLATILE_DURABILITY_QOS")
+        {
+          wQos.durability.kind = DDS::VOLATILE_DURABILITY_QOS;
+        }
+        else if (durability_kind == "TRANSIENT_LOCAL_DURABILITY_QOS")
+        {
+          wQos.durability.kind = DDS::TRANSIENT_LOCAL_DURABILITY_QOS;
+        }
+        else if (durability_kind == "TRANSIENT_DURABILITY_QOS")
+        {
+          wQos.durability.kind = DDS::TRANSIENT_DURABILITY_QOS;
+        }
+        else if (durability_kind == "PERSISTENT_DURABILITY_QOS")
+        {
+          wQos.durability.kind = DDS::PERSISTENT_DURABILITY_QOS;
+        }
+
+        setDuration(prop.getNode("writer.deadline.period"), wQos.deadline.period);
+
+        setDuration(prop.getNode("writer.latency_budget.duration"), wQos.latency_budget.duration);
+
+
+        std::string liveliness_kind = prop["writer.liveliness.kind"];
+
+        if (liveliness_kind == "AUTOMATIC_LIVELINESS_QOS")
+        {
+          wQos.liveliness.kind = DDS::AUTOMATIC_LIVELINESS_QOS;
+        }
+        else if (liveliness_kind == "MANUAL_BY_PARTICIPANT_LIVELINESS_QOS")
+        {
+          wQos.liveliness.kind = DDS::MANUAL_BY_PARTICIPANT_LIVELINESS_QOS;
+        }
+        else if (liveliness_kind == "MANUAL_BY_TOPIC_LIVELINESS_QOS")
+        {
+          wQos.liveliness.kind = DDS::MANUAL_BY_TOPIC_LIVELINESS_QOS;
+        }
+
+
+
+        std::string reliability_kind = prop["writer.reliability.kind"];
+
+        if (reliability_kind == "BEST_EFFORT_RELIABILITY_QOS")
+        {
+          wQos.reliability.kind = DDS::BEST_EFFORT_RELIABILITY_QOS;
+        }
+        else if (reliability_kind == "RELIABLE_RELIABILITY_QOS")
+        {
+          wQos.reliability.kind = DDS::RELIABLE_RELIABILITY_QOS;
+        }
+
+
+        wQos.reliability.max_blocking_time = DDS::DURATION_INFINITE;
+        setDuration(prop.getNode("writer.reliability.max_blocking_time"), wQos.reliability.max_blocking_time);
+
+
+        wQos.reliability.synchronous = coil::toBool(prop["writer.reliability.synchronous"], "YES", "NO", wQos.reliability.synchronous);
+
+
+        std::string destination_order_kind = prop["writer.destination_order.kind"];
+
+        if (destination_order_kind == "BY_RECEPTION_TIMESTAMP_DESTINATIONORDER_QOS")
+        {
+          wQos.destination_order.kind = DDS::BY_RECEPTION_TIMESTAMP_DESTINATIONORDER_QOS;
+        }
+        else if (destination_order_kind == "BY_SOURCE_TIMESTAMP_DESTINATIONORDER_QOS")
+        {
+          wQos.destination_order.kind = DDS::BY_SOURCE_TIMESTAMP_DESTINATIONORDER_QOS;
+        }
+
+        std::string history_kind = prop["writer.history.kind"];
+
+        if (history_kind == "KEEP_LAST_HISTORY_QOS")
+        {
+          wQos.history.kind = DDS::KEEP_LAST_HISTORY_QOS;
+        }
+        else if (history_kind == "KEEP_ALL_HISTORY_QOS")
+        {
+          wQos.history.kind = DDS::KEEP_ALL_HISTORY_QOS;
+        }
+
+        
+        coil::stringTo<DDS::Long>(wQos.history.depth, prop["writer.history.depth"].c_str());
+
+        coil::stringTo<DDS::Long>(wQos.resource_limits.max_samples, prop["writer.resource_limits.max_samples"].c_str());
+        coil::stringTo<DDS::Long>(wQos.resource_limits.max_instances, prop["writer.resource_limits.max_instances"].c_str());
+        coil::stringTo<DDS::Long>(wQos.resource_limits.max_samples_per_instance, prop["writer.resource_limits.max_samples_per_instance"].c_str());
+
+        coil::stringTo<DDS::Long>(wQos.transport_priority.value, prop["writer.transport_priority.value"].c_str());
+
+        setDuration(prop.getNode("writer.lifespan.duration"), wQos.lifespan.duration);
+
+
+        std::string ownership_kind = prop["writer.ownership.kind"];
+
+        if (ownership_kind == "SHARED_OWNERSHIP_QOS")
+        {
+          wQos.ownership.kind = DDS::SHARED_OWNERSHIP_QOS;
+        }
+        else if (ownership_kind == "EXCLUSIVE_OWNERSHIP_QOS")
+        {
+          wQos.ownership.kind = DDS::EXCLUSIVE_OWNERSHIP_QOS;
+        }
+
+        coil::stringTo<DDS::Long>(wQos.ownership_strength.value, prop["writer.ownership_strength.value"].c_str());
+
+        wQos.writer_data_lifecycle.autodispose_unregistered_instances = coil::toBool(prop["writer.writer_data_lifecycle.autodispose_unregistered_instances"],
+          "YES", "NO", wQos.writer_data_lifecycle.autodispose_unregistered_instances);
+
+        setDuration(prop.getNode("writer.writer_data_lifecycle.autopurge_suspended_samples_delay"), wQos.writer_data_lifecycle.autopurge_suspended_samples_delay);
+        setDuration(prop.getNode("writer.writer_data_lifecycle.autounregister_instance_delay"), wQos.writer_data_lifecycle.autounregister_instance_delay);
+
+        //wQos.writer_data_lifecycle.autodispose_unregistered_instances = false;
+      }
+      else
+      {
+        DDS::ReturnCode_t ret = m_qos_provider->get_datawriter_qos(wQos, nullptr);
+        if (ret != DDS::RETCODE_OK)
+        {
+          RTC_INFO(("QoSProvider set DataWriterQos"));
+          RTC_ERROR(("DataWriterQos initialisation failed: %s", RetCodeName[ret].c_str()));
+          return false;
+        }
+      }
+
+
+      RTC_DEBUG(("DataWriterQos setting: writer.durability.kind: %d", wQos.durability.kind));
+      RTC_DEBUG(("DataWriterQos setting: writer.deadline.period: sec=%d nanosec=%u", wQos.deadline.period.sec, wQos.deadline.period.nanosec));
+      RTC_DEBUG(("DataWriterQos setting: writer.latency_budget.duration: sec=%d nanosec=%u", wQos.latency_budget.duration.sec, wQos.latency_budget.duration.nanosec));
+      RTC_DEBUG(("DataWriterQos setting: writer.liveliness.kind: %d", wQos.liveliness.kind));
+      RTC_DEBUG(("DataWriterQos setting: writer.reliability.kind: %d", wQos.reliability.kind));
+      RTC_DEBUG(("DataWriterQos setting: writer.reliability.max_blocking_time: sec=%d nanosec=%u", wQos.reliability.max_blocking_time.sec, wQos.reliability.max_blocking_time.nanosec));
+      RTC_DEBUG(("DataWriterQos setting: writer.reliability.synchronous: %s", (wQos.reliability.synchronous ? "true" : "false")));
+      RTC_DEBUG(("DataWriterQos setting: writer.destination_order.kind: %d", wQos.destination_order.kind));
+      RTC_DEBUG(("DataWriterQos setting: writer.history.kind: %d", wQos.history.kind));
+      RTC_DEBUG(("DataWriterQos setting: writer.history.depth: %d", wQos.history.depth));
+      RTC_DEBUG(("DataWriterQos setting: writer.resource_limits.max_samples: %d", wQos.resource_limits.max_samples));
+      RTC_DEBUG(("DataWriterQos setting: writer.resource_limits.max_instances: %d", wQos.resource_limits.max_instances));
+      RTC_DEBUG(("DataWriterQos setting: writer.resource_limits.max_samples_per_instance: %d", wQos.resource_limits.max_samples_per_instance));
+      RTC_DEBUG(("DataWriterQos setting: writer.transport_priority.value: %d", wQos.transport_priority.value));
+      RTC_DEBUG(("DataWriterQos setting: writer.lifespan.duration: sec=%d nanosec=%u", wQos.lifespan.duration.sec, wQos.lifespan.duration.nanosec));
+      RTC_DEBUG(("DataWriterQos setting: writer.ownership.kind: %d", wQos.ownership.kind));
+      RTC_DEBUG(("DataWriterQos setting: writer.ownership_strength.value: %d", wQos.ownership_strength.value));
+      RTC_DEBUG(("DataWriterQos setting: writer.writer_data_lifecycle.autodispose_unregistered_instances: %s", (wQos.writer_data_lifecycle.autodispose_unregistered_instances ? "true" : "false")));
+      RTC_DEBUG(("DataWriterQos setting: writer.writer_data_lifecycle.autopurge_suspended_samples_delay: sec=%d nanosec=%u", wQos.writer_data_lifecycle.autopurge_suspended_samples_delay.sec, wQos.writer_data_lifecycle.autopurge_suspended_samples_delay.nanosec));
+      RTC_DEBUG(("DataWriterQos setting: writer.writer_data_lifecycle.autounregister_instance_delay: sec=%d nanosec=%u", wQos.writer_data_lifecycle.autounregister_instance_delay.sec, wQos.writer_data_lifecycle.autounregister_instance_delay.nanosec));
+
+
 
       DDS::DataWriter_var writer = m_publisher->create_datawriter(m_topics[topic_name].in(), wQos, listener, DDS::STATUS_MASK_NONE);
       if (!checkHandle(writer.in(), "create_datawriter() failed"))
@@ -377,30 +790,43 @@ namespace RTC
           return nullptr;
       }
 
+      RTC_INFO(("Writer created: %s", topic_name.c_str()));
+
       return DDS::DataWriter::_duplicate(writer.in());
   }
 
   /*!
    * @if jp
    * @brief DataReader生成
+   * 
+   * @param topic_name トピック名
+   * @param listener 読み込み時リスナ
+   * @param prop 設定プロパティ
    *
    * @return DataReader
    *
    * @else
    * @brief create DataReader
    *
+   * @param topic_name
+   * @param listener
+   * @param prop
+   * 
    * @return DataReader
    *
    * @endif
    */
-  DDS::DataReader_ptr OpenSpliceManager::createReader(const std::string &topic_name, DDS::DataReaderListener_ptr listener)
+  DDS::DataReader_ptr OpenSpliceManager::createReader(const std::string &topic_name, DDS::DataReaderListener_ptr listener, coil::Properties& prop)
   {
+      Logger rtclog("OpenSpliceManager");
+      RTC_INFO(("OpenSpliceManager::createReader(topic_name=%s)", topic_name.c_str()));
+      RTC_INFO_STR((prop));
       if (m_topics.count(topic_name) == 0)
       {
           return nullptr;
       }
 
-      DDS::Duration_t timeout = DDS::DURATION_INFINITE;
+      
 
       if (!checkHandle(m_topics[topic_name].in(), "find_topic() failed"))
       {
@@ -415,7 +841,7 @@ namespace RTC
 
       DDS::TopicQos tQos;
       result = m_topics[topic_name]->get_qos(tQos);
-      if (!checkStatus(result, "get_default_datawriter_qos() failed"))
+      if (!checkStatus(result, "get_default_datareader_qos() failed"))
       {
           return nullptr;
       }
@@ -425,6 +851,168 @@ namespace RTC
       {
           return nullptr;
       }
+
+      if (m_qos_provider.in() == nullptr)
+      {
+        RTC_INFO(("DataReaderQos has been set to the default value."));
+        std::string durability_kind = prop["reader.durability.kind"];
+
+        if (durability_kind == "VOLATILE_DURABILITY_QOS")
+        {
+          rQos.durability.kind = DDS::VOLATILE_DURABILITY_QOS;
+        }
+        else if (durability_kind == "TRANSIENT_LOCAL_DURABILITY_QOS")
+        {
+          rQos.durability.kind = DDS::TRANSIENT_LOCAL_DURABILITY_QOS;
+        }
+        else if (durability_kind == "TRANSIENT_DURABILITY_QOS")
+        {
+          rQos.durability.kind = DDS::TRANSIENT_DURABILITY_QOS;
+        }
+        else if (durability_kind == "PERSISTENT_DURABILITY_QOS")
+        {
+          rQos.durability.kind = DDS::PERSISTENT_DURABILITY_QOS;
+        }
+
+        setDuration(prop.getNode("reader.deadline.period"), rQos.deadline.period);
+
+        setDuration(prop.getNode("reader.latency_budget.duration"), rQos.latency_budget.duration);
+
+
+        std::string liveliness_kind = prop["reader.liveliness.kind"];
+
+        if (liveliness_kind == "AUTOMATIC_LIVELINESS_QOS")
+        {
+          rQos.liveliness.kind = DDS::AUTOMATIC_LIVELINESS_QOS;
+        }
+        else if (liveliness_kind == "MANUAL_BY_PARTICIPANT_LIVELINESS_QOS")
+        {
+          rQos.liveliness.kind = DDS::MANUAL_BY_PARTICIPANT_LIVELINESS_QOS;
+        }
+        else if (liveliness_kind == "MANUAL_BY_TOPIC_LIVELINESS_QOS")
+        {
+          rQos.liveliness.kind = DDS::MANUAL_BY_TOPIC_LIVELINESS_QOS;
+        }
+
+        std::string reliability_kind = prop["reader.reliability.kind"];
+
+        if (reliability_kind == "BEST_EFFORT_RELIABILITY_QOS")
+        {
+          rQos.reliability.kind = DDS::BEST_EFFORT_RELIABILITY_QOS;
+        }
+        else if (reliability_kind == "RELIABLE_RELIABILITY_QOS")
+        {
+          rQos.reliability.kind = DDS::RELIABLE_RELIABILITY_QOS;
+        }
+
+        rQos.reliability.max_blocking_time = DDS::DURATION_INFINITE;
+        setDuration(prop.getNode("reader.reliability.max_blocking_time"), rQos.reliability.max_blocking_time);
+
+        rQos.reliability.synchronous = coil::toBool(prop["reader.reliability.synchronous"], "YES", "NO", rQos.reliability.synchronous);
+
+        std::string destination_order_kind = prop["reader.destination_order.kind"];
+
+        if (destination_order_kind == "BY_RECEPTION_TIMESTAMP_DESTINATIONORDER_QOS")
+        {
+          rQos.destination_order.kind = DDS::BY_RECEPTION_TIMESTAMP_DESTINATIONORDER_QOS;
+        }
+        else if (destination_order_kind == "BY_SOURCE_TIMESTAMP_DESTINATIONORDER_QOS")
+        {
+          rQos.destination_order.kind = DDS::BY_SOURCE_TIMESTAMP_DESTINATIONORDER_QOS;
+        }
+
+
+        std::string history_kind = prop["reader.history.kind"];
+
+        if (history_kind == "KEEP_LAST_HISTORY_QOS")
+        {
+          rQos.history.kind = DDS::KEEP_LAST_HISTORY_QOS;
+        }
+        else if (history_kind == "KEEP_ALL_HISTORY_QOS")
+        {
+          rQos.history.kind = DDS::KEEP_ALL_HISTORY_QOS;
+        }
+
+        coil::stringTo<DDS::Long>(rQos.history.depth, prop["reader.history.depth"].c_str());
+
+        coil::stringTo<DDS::Long>(rQos.resource_limits.max_samples, prop["reader.resource_limits.max_samples"].c_str());
+        coil::stringTo<DDS::Long>(rQos.resource_limits.max_instances, prop["reader.resource_limits.max_instances"].c_str());
+        coil::stringTo<DDS::Long>(rQos.resource_limits.max_samples_per_instance, prop["reader.resource_limits.max_samples_per_instance"].c_str());
+
+        std::string ownership_kind = prop["reader.ownership.kind"];
+
+        if (ownership_kind == "SHARED_OWNERSHIP_QOS")
+        {
+          rQos.ownership.kind = DDS::SHARED_OWNERSHIP_QOS;
+        }
+        else if (ownership_kind == "EXCLUSIVE_OWNERSHIP_QOS")
+        {
+          rQos.ownership.kind = DDS::EXCLUSIVE_OWNERSHIP_QOS;
+        }
+
+        
+
+
+        setDuration(prop.getNode("reader.time_based_filter.minimum_separation"), rQos.time_based_filter.minimum_separation);
+
+        setDuration(prop.getNode("reader.reader_data_lifecycle.autopurge_disposed_samples_delay"), rQos.reader_data_lifecycle.autopurge_disposed_samples_delay);
+
+        rQos.reader_data_lifecycle.autopurge_dispose_all = coil::toBool(prop["reader.reader_data_lifecycle.autopurge_dispose_all"], "YES", "NO", rQos.reader_data_lifecycle.autopurge_dispose_all);
+
+        setDuration(prop.getNode("reader.reader_data_lifecycle.autopurge_nowriter_samples_delay"), rQos.reader_data_lifecycle.autopurge_nowriter_samples_delay);
+
+        rQos.reader_data_lifecycle.enable_invalid_samples = coil::toBool(prop["reader.reader_data_lifecycle.enable_invalid_samples"], "YES", "NO", rQos.reader_data_lifecycle.enable_invalid_samples);
+
+
+        std::string reader_data_lifecycle_invalid_sample_visibility_kind = prop["reader.reader_data_lifecycle.invalid_sample_visibility.kind"];
+
+        if (ownership_kind == "NO_INVALID_SAMPLES")
+        {
+          rQos.reader_data_lifecycle.invalid_sample_visibility.kind = DDS::NO_INVALID_SAMPLES;
+        }
+        else if (ownership_kind == "MINIMUM_INVALID_SAMPLES")
+        {
+          rQos.reader_data_lifecycle.invalid_sample_visibility.kind = DDS::MINIMUM_INVALID_SAMPLES;
+        }
+        else if (ownership_kind == "ALL_INVALID_SAMPLES")
+        {
+          rQos.reader_data_lifecycle.invalid_sample_visibility.kind = DDS::ALL_INVALID_SAMPLES;
+        }
+      }
+      else
+      {
+        RTC_INFO(("QoSProvider set DataReaderQos"));
+        DDS::ReturnCode_t ret = m_qos_provider->get_datareader_qos(rQos, nullptr);
+        if (ret != DDS::RETCODE_OK)
+        {
+          RTC_ERROR(("DataReaderQos initialisation failed: %s", RetCodeName[ret].c_str()));
+          return false;
+        }
+      }
+      
+
+      RTC_DEBUG(("DataReaderQos setting: reader.durability.kind: %d", rQos.durability.kind));
+      RTC_DEBUG(("DataReaderQos setting: reader.deadline.period: sec=%d nanosec=%u", rQos.deadline.period.sec, rQos.deadline.period.nanosec));
+      RTC_DEBUG(("DataReaderQos setting: reader.latency_budget.duration: sec=%d nanosec=%u", rQos.latency_budget.duration.sec, rQos.latency_budget.duration.nanosec));
+      RTC_DEBUG(("DataReaderQos setting: reader.liveliness.kind: %d", rQos.liveliness.kind));
+      RTC_DEBUG(("DataReaderQos setting: reader.reliability.kind: %d", rQos.reliability.kind));
+      RTC_DEBUG(("DataReaderQos setting: reader.reliability.max_blocking_time: sec=%d nanosec=%u", rQos.reliability.max_blocking_time.sec, rQos.reliability.max_blocking_time.nanosec));
+      RTC_DEBUG(("DataReaderQos setting: reader.reliability.synchronous: %s", (rQos.reliability.synchronous ? "true" : "false")));
+      RTC_DEBUG(("DataReaderQos setting: reader.destination_order.kind: %d", rQos.destination_order.kind));
+      RTC_DEBUG(("DataReaderQos setting: reader.history.kind: %d", rQos.history.kind));
+      RTC_DEBUG(("DataReaderQos setting: reader.history.depth: %d", rQos.history.depth));
+      RTC_DEBUG(("DataReaderQos setting: reader.resource_limits.max_samples: %d", rQos.resource_limits.max_samples));
+      RTC_DEBUG(("DataReaderQos setting: reader.resource_limits.max_instances: %d", rQos.resource_limits.max_instances));
+      RTC_DEBUG(("DataReaderQos setting: reader.resource_limits.max_samples_per_instance: %d", rQos.resource_limits.max_samples_per_instance));
+      RTC_DEBUG(("DataReaderQos setting: reader.ownership.kind: %d", rQos.ownership.kind));
+      RTC_DEBUG(("DataReaderQos setting: reader.time_based_filter.minimum_separation: sec=%d nanosec=%u", rQos.time_based_filter.minimum_separation.sec, rQos.time_based_filter.minimum_separation.nanosec));
+      RTC_DEBUG(("DataReaderQos setting: reader.reader_data_lifecycle.autopurge_disposed_samples_delay: sec=%d nanosec=%u", rQos.reader_data_lifecycle.autopurge_disposed_samples_delay.sec, rQos.reader_data_lifecycle.autopurge_disposed_samples_delay.nanosec));
+      RTC_DEBUG(("DataReaderQos setting: reader.reader_data_lifecycle.autopurge_dispose_all: %s", (rQos.reader_data_lifecycle.autopurge_dispose_all ? "true" : "false")));
+      RTC_DEBUG(("DataReaderQos setting: reader.reader_data_lifecycle.autopurge_nowriter_samples_delay: sec=%d nanosec=%u", rQos.reader_data_lifecycle.autopurge_nowriter_samples_delay.sec, rQos.reader_data_lifecycle.autopurge_nowriter_samples_delay.nanosec));
+      RTC_DEBUG(("DataReaderQos setting: reader.reader_data_lifecycle.enable_invalid_samples: %s", (rQos.reader_data_lifecycle.enable_invalid_samples ? "true" : "false")));
+      RTC_DEBUG(("DataReaderQos setting: reader.reader_data_lifecycle.invalid_sample_visibility.kind: %d", rQos.reader_data_lifecycle.invalid_sample_visibility.kind));
+
+
       DDS::StatusMask mask =
           DDS::DATA_AVAILABLE_STATUS | DDS::REQUESTED_DEADLINE_MISSED_STATUS;
 
@@ -433,6 +1021,8 @@ namespace RTC
       {
           return nullptr;
       }
+
+      RTC_INFO(("Reader created: %s", topic_name.c_str()));
 
       return DDS::DataReader::_duplicate(reader.in());
   }
@@ -451,6 +1041,8 @@ namespace RTC
    */
   DDS::ReturnCode_t OpenSpliceManager::deleteWriter(DDS::DataWriter_ptr writer)
   {
+      Logger rtclog("OpenSpliceManager");
+      RTC_INFO(("OpenSpliceManager::deleteWriter()"));
       return m_publisher->delete_datawriter(writer);
   }
   /*!
@@ -468,23 +1060,33 @@ namespace RTC
    */
   DDS::ReturnCode_t OpenSpliceManager::deleteReader(DDS::DataReader_ptr reader)
   {
+      Logger rtclog("OpenSpliceManager");
+      RTC_INFO(("OpenSpliceManager::deleteReader()"));
       return m_subscriber->delete_datareader(reader);
   }
   /*!
    * @if jp
    * @brief トピック生成
+   * 
+   * @param prop 設定プロパティ
    *
-   * @return DataReader
+   * @return true：生成成功
    *
    * @else
    * @brief create Topic
    *
-   * @return DataReader
+   * @param prop
+   * 
+   * @return 
    *
    * @endif
    */
-  bool OpenSpliceManager::createTopic(const std::string& topic_name, const std::string& typeName)
+  bool OpenSpliceManager::createTopic(const std::string& topic_name, const std::string& typeName, coil::Properties& prop)
   {
+      Logger rtclog("OpenSpliceManager");
+      RTC_INFO(("OpenSpliceManager::createTopic(topic_name=%s, typeName=%s)", topic_name.c_str(), typeName.c_str()));
+      RTC_INFO_STR((prop));
+
       DDS::ReturnCode_t result;
       DDS::TopicQos tQos;
       result = m_participant->get_default_topic_qos(tQos);
@@ -492,8 +1094,167 @@ namespace RTC
       {
           return false;
       }
-      tQos.reliability.kind = DDS::RELIABLE_RELIABILITY_QOS;
-      tQos.durability.kind = DDS::TRANSIENT_DURABILITY_QOS;
+
+      if (m_qos_provider.in() == nullptr)
+      {
+        RTC_INFO(("TopicQos has been set to the default value."));
+        tQos.durability.kind = DDS::TRANSIENT_DURABILITY_QOS;
+        std::string durability_kind = prop["topic.durability.kind"];
+
+        if (durability_kind == "VOLATILE_DURABILITY_QOS")
+        {
+          tQos.durability.kind = DDS::VOLATILE_DURABILITY_QOS;
+        }
+        else if (durability_kind == "TRANSIENT_LOCAL_DURABILITY_QOS")
+        {
+          tQos.durability.kind = DDS::TRANSIENT_LOCAL_DURABILITY_QOS;
+        }
+        else if (durability_kind == "TRANSIENT_DURABILITY_QOS")
+        {
+          tQos.durability.kind = DDS::TRANSIENT_DURABILITY_QOS;
+        }
+        else if (durability_kind == "PERSISTENT_DURABILITY_QOS")
+        {
+          tQos.durability.kind = DDS::PERSISTENT_DURABILITY_QOS;
+        }
+
+        setDuration(prop.getNode("topic.deadline.period"), tQos.deadline.period);
+
+        setDuration(prop.getNode("topic.latency_budget.duration"), tQos.latency_budget.duration);
+
+
+        std::string liveliness_kind = prop["topic.liveliness.kind"];
+
+        if (liveliness_kind == "AUTOMATIC_LIVELINESS_QOS")
+        {
+          tQos.liveliness.kind = DDS::AUTOMATIC_LIVELINESS_QOS;
+        }
+        else if (liveliness_kind == "MANUAL_BY_PARTICIPANT_LIVELINESS_QOS")
+        {
+          tQos.liveliness.kind = DDS::MANUAL_BY_PARTICIPANT_LIVELINESS_QOS;
+        }
+        else if (liveliness_kind == "MANUAL_BY_TOPIC_LIVELINESS_QOS")
+        {
+          tQos.liveliness.kind = DDS::MANUAL_BY_TOPIC_LIVELINESS_QOS;
+        }
+
+        tQos.reliability.kind = DDS::RELIABLE_RELIABILITY_QOS;
+        std::string reliability_kind = prop["topic.reliability.kind"];
+
+        if (reliability_kind == "BEST_EFFORT_RELIABILITY_QOS")
+        {
+          tQos.reliability.kind = DDS::BEST_EFFORT_RELIABILITY_QOS;
+        }
+        else if (reliability_kind == "RELIABLE_RELIABILITY_QOS")
+        {
+          tQos.reliability.kind = DDS::RELIABLE_RELIABILITY_QOS;
+        }
+
+        tQos.reliability.max_blocking_time = DDS::DURATION_INFINITE;
+        setDuration(prop.getNode("topic.reliability.max_blocking_time"), tQos.reliability.max_blocking_time);
+
+        tQos.reliability.synchronous = coil::toBool(prop["topic.reliability.synchronous"], "YES", "NO", tQos.reliability.synchronous);
+
+        std::string destination_order_kind = prop["topic.destination_order.kind"];
+
+        if (destination_order_kind == "BY_RECEPTION_TIMESTAMP_DESTINATIONORDER_QOS")
+        {
+          tQos.destination_order.kind = DDS::BY_RECEPTION_TIMESTAMP_DESTINATIONORDER_QOS;
+        }
+        else if (destination_order_kind == "BY_SOURCE_TIMESTAMP_DESTINATIONORDER_QOS")
+        {
+          tQos.destination_order.kind = DDS::BY_SOURCE_TIMESTAMP_DESTINATIONORDER_QOS;
+        }
+
+        std::string history_kind = prop["topic.history.kind"];
+
+        if (history_kind == "KEEP_LAST_HISTORY_QOS")
+        {
+          tQos.history.kind = DDS::KEEP_LAST_HISTORY_QOS;
+        }
+        else if (history_kind == "KEEP_ALL_HISTORY_QOS")
+        {
+          tQos.history.kind = DDS::KEEP_ALL_HISTORY_QOS;
+        }
+
+        coil::stringTo<DDS::Long>(tQos.history.depth, prop["topic.history.depth"].c_str());
+
+        coil::stringTo<DDS::Long>(tQos.resource_limits.max_samples, prop["topic.resource_limits.max_samples"].c_str());
+        coil::stringTo<DDS::Long>(tQos.resource_limits.max_instances, prop["topic.resource_limits.max_instances"].c_str());
+        coil::stringTo<DDS::Long>(tQos.resource_limits.max_samples_per_instance, prop["topic.resource_limits.max_samples_per_instance"].c_str());
+
+        coil::stringTo<DDS::Long>(tQos.transport_priority.value, prop["topic.transport_priority.value"].c_str());
+
+        setDuration(prop.getNode("topic.lifespan.duration"), tQos.lifespan.duration);
+
+        std::string ownership_kind = prop["topic.ownership.kind"];
+
+        if (ownership_kind == "SHARED_OWNERSHIP_QOS")
+        {
+          tQos.ownership.kind = DDS::SHARED_OWNERSHIP_QOS;
+        }
+        else if (ownership_kind == "EXCLUSIVE_OWNERSHIP_QOS")
+        {
+          tQos.ownership.kind = DDS::EXCLUSIVE_OWNERSHIP_QOS;
+        }
+
+        coil::stringTo<DDS::Long>(tQos.transport_priority.value, prop["topic.transport_priority.value"].c_str());
+
+        //tQos.topic_data.value
+        coil::stringTo<DDS::Long>(tQos.durability_service.history_depth, prop["topic.durability_service.history_depth"].c_str());
+
+        std::string durability_service_history_kind = prop["topic.durability_service.history_kind"];
+
+        if (durability_service_history_kind == "KEEP_LAST_HISTORY_QOS")
+        {
+          tQos.durability_service.history_kind = DDS::KEEP_LAST_HISTORY_QOS;
+        }
+        else if (durability_service_history_kind == "KEEP_ALL_HISTORY_QOS")
+        {
+          tQos.durability_service.history_kind = DDS::KEEP_ALL_HISTORY_QOS;
+        }
+
+        coil::stringTo<DDS::Long>(tQos.durability_service.max_instances, prop["topic.durability_service.max_instances"].c_str());
+        coil::stringTo<DDS::Long>(tQos.durability_service.max_samples, prop["topic.durability_service.max_samples"].c_str());
+        coil::stringTo<DDS::Long>(tQos.durability_service.max_samples_per_instance, prop["topic.durability_service.max_samples_per_instance"].c_str());
+        setDuration(prop.getNode("topic.durability_service.service_cleanup_delay"), tQos.durability_service.service_cleanup_delay);
+
+      }
+      else
+      {
+        RTC_INFO(("QoSProvider set TopicQos"));
+        DDS::ReturnCode_t ret = m_qos_provider->get_topic_qos(tQos, nullptr);
+        if (ret != DDS::RETCODE_OK)
+        {
+          return false;
+        }
+      }
+      
+
+      RTC_DEBUG(("TopicQos setting: topic.durability.kind: %d", tQos.durability.kind));
+      RTC_DEBUG(("TopicQos setting: topic.deadline.period: sec=%d nanosec=%u", tQos.deadline.period.sec, tQos.deadline.period.nanosec));
+      RTC_DEBUG(("TopicQos setting: topic.latency_budget.duration: sec=%d nanosec=%u", tQos.latency_budget.duration.sec, tQos.latency_budget.duration.nanosec));
+      RTC_DEBUG(("TopicQos setting: topic.liveliness.kind: %d", tQos.liveliness.kind));
+      RTC_DEBUG(("TopicQos setting: topic.reliability.kind: %d", tQos.reliability.kind));
+      RTC_DEBUG(("TopicQos setting: topic.reliability.max_blocking_time: sec=%d nanosec=%u", tQos.reliability.max_blocking_time.sec, tQos.reliability.max_blocking_time.nanosec));
+      RTC_DEBUG(("TopicQos setting: topic.reliability.synchronous: %s", (tQos.reliability.synchronous ? "true" : "false")));
+      RTC_DEBUG(("TopicQos setting: topic.destination_order.kind: %d", tQos.destination_order.kind));
+      RTC_DEBUG(("TopicQos setting: topic.history.kind: %d", tQos.history.kind));
+      RTC_DEBUG(("TopicQos setting: topic.history.depth: %d", tQos.history.depth));
+      RTC_DEBUG(("TopicQos setting: topic.resource_limits.max_samples: %d", tQos.resource_limits.max_samples));
+      RTC_DEBUG(("TopicQos setting: topic.resource_limits.max_instances: %d", tQos.resource_limits.max_instances));
+      RTC_DEBUG(("TopicQos setting: topic.resource_limits.max_samples_per_instance: %d", tQos.resource_limits.max_samples_per_instance));
+      RTC_DEBUG(("TopicQos setting: topic.transport_priority.value: %d", tQos.transport_priority.value));
+      RTC_DEBUG(("TopicQos setting: topic.lifespan.duration: sec=%d nanosec=%u", tQos.lifespan.duration.sec, tQos.lifespan.duration.nanosec));
+      RTC_DEBUG(("TopicQos setting: topic.ownership.kind: %d", tQos.ownership.kind));
+      RTC_DEBUG(("TopicQos setting: topic.transport_priority.value: %d", tQos.transport_priority.value));
+      RTC_DEBUG(("TopicQos setting: topic.durability_service.history_depth: %d", tQos.durability_service.history_depth));
+      RTC_DEBUG(("TopicQos setting: topic.durability_service.history_kind: %d", tQos.durability_service.history_kind));
+      RTC_DEBUG(("TopicQos setting: topic.durability_service.max_instances: %d", tQos.durability_service.max_instances));
+      RTC_DEBUG(("TopicQos setting: topic.durability_service.max_samples: %d", tQos.durability_service.max_samples));
+      RTC_DEBUG(("TopicQos setting: topic.durability_service.max_samples_per_instance: %d", tQos.durability_service.max_samples_per_instance));
+      RTC_DEBUG(("TopicQos setting: topic.durability_service.service_cleanup_delay: sec=%d nanosec=%u", tQos.durability_service.service_cleanup_delay.sec, tQos.durability_service.service_cleanup_delay.nanosec));
+
       
       DDS::Topic_var topic = m_participant->create_topic(topic_name.c_str(), typeName.c_str(), tQos, nullptr, DDS::STATUS_MASK_NONE);
       
@@ -503,6 +1264,7 @@ namespace RTC
       }
 
       m_topics[topic_name] = DDS::Topic::_duplicate(topic.in());
+      RTC_INFO(("Topic created: %s", topic_name.c_str()));
       return true;
   }
 
@@ -523,6 +1285,8 @@ namespace RTC
    */
   bool OpenSpliceManager::registerType(const std::string& datatype, const std::string& idlpath)
   {
+      Logger rtclog("OpenSpliceManager");
+      RTC_INFO(("OpenSpliceManager::registerType(datatype=%s, idlpath=%s)", datatype.c_str(), idlpath.c_str()));
       if (m_typesupports.count(datatype))
       {
           return true;
@@ -541,7 +1305,7 @@ namespace RTC
 
       comin.append(idlpath);
       
-      
+      RTC_DEBUG(("create_process(%s)", comin.c_str()));
       coil::create_process(comin, comout);
       
       std::string tmp;
@@ -592,6 +1356,7 @@ namespace RTC
       
       if (id_.in() == nullptr)
       {
+          RTC_ERROR(("Registration failure(%s)", datatype.c_str()));
           return false;
       }
       
@@ -613,6 +1378,7 @@ namespace RTC
           return false;
       }
       m_typesupports[datatype] = OpenRTM_OpenSplice::CORBACdrDataTypeSupport::_duplicate(typesupport.in());
+      RTC_INFO(("%s has been registered.", datatype.c_str()));
       return true;
   }
 
@@ -633,6 +1399,8 @@ namespace RTC
    */
   bool OpenSpliceManager::unregisterType(const std::string& /*name*/)
   {
+      Logger rtclog("OpenSpliceManager");
+      RTC_INFO(("OpenSpliceManager::unregisterType()"));
       return false;
   }
 
@@ -653,6 +1421,8 @@ namespace RTC
    */
   bool OpenSpliceManager::registeredType(const std::string& name)
   {
+      Logger rtclog("OpenSpliceManager");
+      RTC_INFO(("OpenSpliceManager::registeredType(%s)", name.c_str()));
       if (m_typesupports.count(name) == 0)
       {
           return false;
@@ -667,49 +1437,54 @@ namespace RTC
    * @if jp
    * @brief 初期化関数
    * 
+   * @param prop 設定プロパティ
+   * 
    * @return インスタンス
    *
    * @else
    * @brief 
+   * 
+   * @param prop
    *
    * @return 
    * 
    *
    * @endif
    */
-  OpenSpliceManager* OpenSpliceManager::init()
+  OpenSpliceManager* OpenSpliceManager::init(coil::Properties& prop)
   {
-    std::lock_guard<std::mutex> guard(mutex);
-    if (!manager)
-    {
+    std::call_once(m_once, [&] {
       manager = new OpenSpliceManager();
-      manager->start();
-    }
+      manager->start(prop);
+      });
     return manager;
   }
 
   /*!
    * @if jp
    * @brief インスタンス取得
-   * 
+   *
+   * @param prop 設定プロパティ
+   *
    * @return インスタンス
    *
    * @else
-   * @brief 
+   * @brief
    *
-   * @return 
-   * 
+   * @param prop
+   *
+   * @return
+   *
    *
    * @endif
    */
   OpenSpliceManager& OpenSpliceManager::instance()
   {
-    std::lock_guard<std::mutex> guard(mutex);
-    if (!manager)
-    {
+    std::call_once(m_once, [&] {
       manager = new OpenSpliceManager();
-      manager->start();
-    }
+      coil::Properties prop;
+      manager->start(prop);
+    });
     return *manager;
   }
 
@@ -726,13 +1501,39 @@ namespace RTC
    *
    * @endif
    */
-    void OpenSpliceManager::shutdown_global()
-    {
-        std::lock_guard<std::mutex> guard(mutex);
-        if (manager)
-        {
-            manager->finalize();
-        }
-    }
+  void OpenSpliceManager::shutdown_global()
+  {
+      std::lock_guard<std::mutex> guard(mutex);
+      if (manager)
+      {
+          manager->finalize();
+      }
+  }
+
+  /*!
+   * @if jp
+   * @brief プロパティからDDS::Durationを設定する
+   * 
+   * @param prop プロパティ(sec、nanosecの要素に値を格納する)
+   * @param time DDS::Duration
+   *
+   * @else
+   * @brief
+   *
+   * @param prop 
+   * @param time 
+   *
+   *
+   * @endif
+   */
+  void OpenSpliceManager::setDuration(coil::Properties& prop, DDS::Duration_t& time)
+  {
+    std::string sec_str = prop["sec"];
+    std::string nanosec_str = prop["nanosec"];
+
+    coil::stringTo<DDS::Long>(time.sec, sec_str.c_str());
+    coil::stringTo<DDS::ULong>(time.nanosec, nanosec_str.c_str());
+  }
+
 }
 
