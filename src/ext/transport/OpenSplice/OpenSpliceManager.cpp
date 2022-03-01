@@ -204,7 +204,7 @@ namespace RTC
       RTC_DEBUG(("Create QosProvider: uri=%s, profile=%s", uri.c_str(), profile.c_str()));
       m_qos_provider = new DDS::QosProvider(uri.c_str(), profile.c_str());
 
-      std::string participant_name(prop["participant.name"]);
+      std::string participant_name(prop["participant_qos.name"]);
       DDS::ReturnCode_t ret(DDS::RETCODE_OK);
       if (participant_name.empty())
       {
@@ -230,9 +230,9 @@ namespace RTC
     {
       RTC_INFO(("DomainParticipantQos has been set to the default value."));
 
-      qos.entity_factory.autoenable_created_entities = coil::toBool(prop["participant.entity_factory.autoenable_created_entities"], "YES", "NO", qos.entity_factory.autoenable_created_entities);
+      qos.entity_factory.autoenable_created_entities = coil::toBool(prop["participant_qos.entity_factory.autoenable_created_entities"], "YES", "NO", qos.entity_factory.autoenable_created_entities);
 
-      std::string listener_scheduling_scheduling_class_kind = prop["participant.listener_scheduling.scheduling_class.kind"];
+      std::string listener_scheduling_scheduling_class_kind = prop["participant_qos.listener_scheduling.scheduling_class.kind"];
 
       if (listener_scheduling_scheduling_class_kind == "SCHEDULE_DEFAULT")
       {
@@ -247,9 +247,9 @@ namespace RTC
         qos.listener_scheduling.scheduling_class.kind = DDS::SCHEDULE_REALTIME;
       }
 
-      coil::stringTo<DDS::Long>(qos.listener_scheduling.scheduling_priority, prop["participant.listener_scheduling.scheduling_priority"].c_str());
+      coil::stringTo<DDS::Long>(qos.listener_scheduling.scheduling_priority, prop["participant_qos.listener_scheduling.scheduling_priority"].c_str());
 
-      std::string listener_scheduling_scheduling_priority_kind_kind = prop["participant.listener_scheduling.scheduling_priority_kind.kind"];
+      std::string listener_scheduling_scheduling_priority_kind_kind = prop["participant_qos.listener_scheduling.scheduling_priority_kind.kind"];
 
       if (listener_scheduling_scheduling_priority_kind_kind == "PRIORITY_RELATIVE")
       {
@@ -262,7 +262,7 @@ namespace RTC
 
       // qos.user_data.value;
 
-      std::string watchdog_scheduling_scheduling_class_kind = prop["participant.watchdog_scheduling.scheduling_class.kind"];
+      std::string watchdog_scheduling_scheduling_class_kind = prop["participant_qos.watchdog_scheduling.scheduling_class.kind"];
 
       if (watchdog_scheduling_scheduling_class_kind == "SCHEDULE_DEFAULT")
       {
@@ -277,9 +277,9 @@ namespace RTC
         qos.watchdog_scheduling.scheduling_class.kind = DDS::SCHEDULE_REALTIME;
       }
 
-      coil::stringTo<DDS::Long>(qos.watchdog_scheduling.scheduling_priority, prop["participant.watchdog_scheduling.scheduling_priority"].c_str());
+      coil::stringTo<DDS::Long>(qos.watchdog_scheduling.scheduling_priority, prop["participant_qos.watchdog_scheduling.scheduling_priority"].c_str());
 
-      std::string watchdog_scheduling_scheduling_priority_kind_kind = prop["participant.watchdog_scheduling.scheduling_priority_kind.kind"];
+      std::string watchdog_scheduling_scheduling_priority_kind_kind = prop["participant_qos.watchdog_scheduling.scheduling_priority_kind.kind"];
 
       if (watchdog_scheduling_scheduling_priority_kind_kind == "PRIORITY_RELATIVE")
       {
@@ -409,12 +409,12 @@ namespace RTC
     if (m_qos_provider.in() == nullptr)
     {
       RTC_INFO(("PublisherQos has been set to the default value."));
-      pQos.entity_factory.autoenable_created_entities = coil::toBool(prop["publisher.entity_factory.autoenable_created_entities"], "YES", "NO", pQos.entity_factory.autoenable_created_entities);
+      pQos.entity_factory.autoenable_created_entities = coil::toBool(prop["publisher_qos.entity_factory.autoenable_created_entities"], "YES", "NO", pQos.entity_factory.autoenable_created_entities);
 
       // pQos.group_data.value;
       // pQos.partition.name;
 
-      std::string presentation_access_scope = prop["publisher.presentation.access_scope"];
+      std::string presentation_access_scope = prop["publisher_qos.presentation.access_scope"];
 
       if (presentation_access_scope == "INSTANCE_PRESENTATION_QOS")
       {
@@ -429,9 +429,9 @@ namespace RTC
         pQos.presentation.access_scope = DDS::GROUP_PRESENTATION_QOS;
       }
 
-      pQos.presentation.coherent_access = coil::toBool(prop["publisher.presentation.coherent_access"], "YES", "NO", pQos.presentation.coherent_access);
+      pQos.presentation.coherent_access = coil::toBool(prop["publisher_qos.presentation.coherent_access"], "YES", "NO", pQos.presentation.coherent_access);
 
-      pQos.presentation.ordered_access = coil::toBool(prop["publisher.presentation.ordered_access"], "YES", "NO", pQos.presentation.ordered_access);
+      pQos.presentation.ordered_access = coil::toBool(prop["publisher_qos.presentation.ordered_access"], "YES", "NO", pQos.presentation.ordered_access);
     }
     else
     {
@@ -454,10 +454,10 @@ namespace RTC
       }
     }
 
-    RTC_DEBUG(("PublisherQos setting: publisher.entity_factory.autoenable_created_entities: %s", (pQos.entity_factory.autoenable_created_entities ? "true" : "false")));
-    RTC_DEBUG(("PublisherQos setting: publisher.presentation.access_scope: %d", pQos.presentation.access_scope));
-    RTC_DEBUG(("PublisherQos setting: publisher.presentation.coherent_access: %s", (pQos.presentation.coherent_access ? "true" : "false")));
-    RTC_DEBUG(("PublisherQos setting: publisher.presentation.ordered_access: %s", (pQos.presentation.ordered_access ? "true" : "false")));
+    RTC_DEBUG(("PublisherQos setting: publisher_qos.entity_factory.autoenable_created_entities: %s", (pQos.entity_factory.autoenable_created_entities ? "true" : "false")));
+    RTC_DEBUG(("PublisherQos setting: publisher_qos.presentation.access_scope: %d", pQos.presentation.access_scope));
+    RTC_DEBUG(("PublisherQos setting: publisher_qos.presentation.coherent_access: %s", (pQos.presentation.coherent_access ? "true" : "false")));
+    RTC_DEBUG(("PublisherQos setting: publisher_qos.presentation.ordered_access: %s", (pQos.presentation.ordered_access ? "true" : "false")));
 
     m_publisher = m_participant->create_publisher(pQos, nullptr, DDS::STATUS_MASK_NONE);
 
@@ -509,12 +509,12 @@ namespace RTC
     if (m_qos_provider.in() == nullptr)
     {
       RTC_INFO(("SubscriberQos has been set to the default value."));
-      sQos.entity_factory.autoenable_created_entities = coil::toBool(prop["subscriber.entity_factory.autoenable_created_entities"], "YES", "NO", sQos.entity_factory.autoenable_created_entities);
+      sQos.entity_factory.autoenable_created_entities = coil::toBool(prop["subscriber_qos.entity_factory.autoenable_created_entities"], "YES", "NO", sQos.entity_factory.autoenable_created_entities);
 
       // sQos.group_data.value;
       // sQos.partition.name;
 
-      std::string presentation_access_scope = prop["subscriber.presentation.access_scope"];
+      std::string presentation_access_scope = prop["subscriber_qos.presentation.access_scope"];
 
       if (presentation_access_scope == "INSTANCE_PRESENTATION_QOS")
       {
@@ -529,11 +529,11 @@ namespace RTC
         sQos.presentation.access_scope = DDS::GROUP_PRESENTATION_QOS;
       }
 
-      sQos.presentation.coherent_access = coil::toBool(prop["subscriber.presentation.coherent_access"], "YES", "NO", sQos.presentation.coherent_access);
+      sQos.presentation.coherent_access = coil::toBool(prop["subscriber_qos.presentation.coherent_access"], "YES", "NO", sQos.presentation.coherent_access);
 
-      sQos.presentation.ordered_access = coil::toBool(prop["subscriber.presentation.ordered_access"], "YES", "NO", sQos.presentation.ordered_access);
+      sQos.presentation.ordered_access = coil::toBool(prop["subscriber_qos.presentation.ordered_access"], "YES", "NO", sQos.presentation.ordered_access);
 
-      sQos.share.enable = coil::toBool(prop["subscriber.share.enable"], "YES", "NO", sQos.share.enable);
+      sQos.share.enable = coil::toBool(prop["subscriber_qos.share.enable"], "YES", "NO", sQos.share.enable);
     }
     else
     {
@@ -556,11 +556,11 @@ namespace RTC
       }
     }
 
-    RTC_DEBUG(("SubscriberQos setting: subscriber.entity_factory.autoenable_created_entities: %s", (sQos.entity_factory.autoenable_created_entities ? "true" : "false")));
-    RTC_DEBUG(("SubscriberQos setting: subscriber.presentation.access_scope: %d", sQos.presentation.access_scope));
-    RTC_DEBUG(("SubscriberQos setting: subscriber.presentation.coherent_access: %s", (sQos.presentation.coherent_access ? "true" : "false")));
-    RTC_DEBUG(("SubscriberQos setting: subscriber.presentation.ordered_access: %s", (sQos.presentation.ordered_access ? "true" : "false")));
-    RTC_DEBUG(("SubscriberQos setting: subscriber.share.enable: %s", (sQos.share.enable ? "true" : "false")));
+    RTC_DEBUG(("SubscriberQos setting: subscriber_qos.entity_factory.autoenable_created_entities: %s", (sQos.entity_factory.autoenable_created_entities ? "true" : "false")));
+    RTC_DEBUG(("SubscriberQos setting: subscriber_qos.presentation.access_scope: %d", sQos.presentation.access_scope));
+    RTC_DEBUG(("SubscriberQos setting: subscriber_qos.presentation.coherent_access: %s", (sQos.presentation.coherent_access ? "true" : "false")));
+    RTC_DEBUG(("SubscriberQos setting: subscriber_qos.presentation.ordered_access: %s", (sQos.presentation.ordered_access ? "true" : "false")));
+    RTC_DEBUG(("SubscriberQos setting: subscriber_qos.share.enable: %s", (sQos.share.enable ? "true" : "false")));
 
     // sQos.share.name;
 
