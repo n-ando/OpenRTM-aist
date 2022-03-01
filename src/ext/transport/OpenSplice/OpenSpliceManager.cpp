@@ -396,7 +396,6 @@ namespace RTC
 
     Logger rtclog("OpenSpliceManager");
     RTC_INFO(("OpenSpliceManager::createPublisher()"));
-    RTC_INFO_STR((prop));
 
     DDS::PublisherQos pQos;
 
@@ -496,7 +495,6 @@ namespace RTC
 
     Logger rtclog("OpenSpliceManager");
     RTC_INFO(("OpenSpliceManager::createSubscriber()"));
-    RTC_INFO_STR((prop));
 
     DDS::SubscriberQos sQos;
 
@@ -620,7 +618,6 @@ namespace RTC
   {
     Logger rtclog("OpenSpliceManager");
     RTC_INFO(("OpenSpliceManager::createWriter(topic_name=%s)", topic_name.c_str()));
-    RTC_INFO_STR((prop));
 
     if (m_topics.count(topic_name) == 0)
     {
@@ -837,7 +834,6 @@ namespace RTC
   {
     Logger rtclog("OpenSpliceManager");
     RTC_INFO(("OpenSpliceManager::createReader(topic_name=%s)", topic_name.c_str()));
-    RTC_INFO_STR((prop));
     if (m_topics.count(topic_name) == 0)
     {
       return nullptr;
@@ -1102,7 +1098,6 @@ namespace RTC
   {
     Logger rtclog("OpenSpliceManager");
     RTC_INFO(("OpenSpliceManager::createTopic(topic_name=%s, typeName=%s)", topic_name.c_str(), typeName.c_str()));
-    RTC_INFO_STR((prop));
 
     DDS::ReturnCode_t result;
     DDS::TopicQos tQos;
