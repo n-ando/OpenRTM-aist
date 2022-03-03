@@ -687,6 +687,8 @@ namespace RTC
         wQos.liveliness.kind = DDS::MANUAL_BY_TOPIC_LIVELINESS_QOS;
       }
 
+      setDuration(prop.getNode("writer_qos.liveliness.lease_duration"), wQos.liveliness.lease_duration);
+
       std::string reliability_kind = prop["writer_qos.reliability.kind"];
 
       if (reliability_kind == "BEST_EFFORT_RELIABILITY_QOS")
@@ -781,6 +783,7 @@ namespace RTC
     RTC_DEBUG(("DataWriterQos setting: writer_qos.deadline.period: sec=%d nanosec=%u", wQos.deadline.period.sec, wQos.deadline.period.nanosec));
     RTC_DEBUG(("DataWriterQos setting: writer_qos.latency_budget.duration: sec=%d nanosec=%u", wQos.latency_budget.duration.sec, wQos.latency_budget.duration.nanosec));
     RTC_DEBUG(("DataWriterQos setting: writer_qos.liveliness.kind: %d", wQos.liveliness.kind));
+    RTC_DEBUG(("DataWriterQos setting: writer_qos.liveliness.lease_duration: sec=%d nanosec=%u", wQos.liveliness.lease_duration.sec, wQos.liveliness.lease_duration.nanosec));
     RTC_DEBUG(("DataWriterQos setting: writer_qos.reliability.kind: %d", wQos.reliability.kind));
     RTC_DEBUG(("DataWriterQos setting: writer_qos.reliability.max_blocking_time: sec=%d nanosec=%u", wQos.reliability.max_blocking_time.sec, wQos.reliability.max_blocking_time.nanosec));
     RTC_DEBUG(("DataWriterQos setting: writer_qos.reliability.synchronous: %s", (wQos.reliability.synchronous ? "true" : "false")));
@@ -904,6 +907,8 @@ namespace RTC
         rQos.liveliness.kind = DDS::MANUAL_BY_TOPIC_LIVELINESS_QOS;
       }
 
+      setDuration(prop.getNode("reader_qos.liveliness.lease_duration"), rQos.liveliness.lease_duration);
+
       std::string reliability_kind = prop["reader_qos.reliability.kind"];
 
       if (reliability_kind == "BEST_EFFORT_RELIABILITY_QOS")
@@ -1009,6 +1014,7 @@ namespace RTC
     RTC_DEBUG(("DataReaderQos setting: reader_qos.deadline.period: sec=%d nanosec=%u", rQos.deadline.period.sec, rQos.deadline.period.nanosec));
     RTC_DEBUG(("DataReaderQos setting: reader_qos.latency_budget.duration: sec=%d nanosec=%u", rQos.latency_budget.duration.sec, rQos.latency_budget.duration.nanosec));
     RTC_DEBUG(("DataReaderQos setting: reader_qos.liveliness.kind: %d", rQos.liveliness.kind));
+    RTC_DEBUG(("DataReaderQos setting: reader_qos.liveliness.lease_duration: sec=%d nanosec=%u", rQos.liveliness.lease_duration.sec, rQos.liveliness.lease_duration.nanosec));
     RTC_DEBUG(("DataReaderQos setting: reader_qos.reliability.kind: %d", rQos.reliability.kind));
     RTC_DEBUG(("DataReaderQos setting: reader_qos.reliability.max_blocking_time: sec=%d nanosec=%u", rQos.reliability.max_blocking_time.sec, rQos.reliability.max_blocking_time.nanosec));
     RTC_DEBUG(("DataReaderQos setting: reader_qos.reliability.synchronous: %s", (rQos.reliability.synchronous ? "true" : "false")));
