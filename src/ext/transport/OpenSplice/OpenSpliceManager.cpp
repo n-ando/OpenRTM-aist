@@ -1155,6 +1155,8 @@ namespace RTC
         tQos.liveliness.kind = DDS::MANUAL_BY_TOPIC_LIVELINESS_QOS;
       }
 
+      setDuration(prop.getNode("topic_qos.liveliness.lease_duration"), tQos.liveliness.lease_duration);
+
       tQos.reliability.kind = DDS::RELIABLE_RELIABILITY_QOS;
       std::string reliability_kind = prop["topic_qos.reliability.kind"];
 
@@ -1260,6 +1262,7 @@ namespace RTC
     RTC_DEBUG(("TopicQos setting: topic_qos.deadline.period: sec=%d nanosec=%u", tQos.deadline.period.sec, tQos.deadline.period.nanosec));
     RTC_DEBUG(("TopicQos setting: topic_qos.latency_budget.duration: sec=%d nanosec=%u", tQos.latency_budget.duration.sec, tQos.latency_budget.duration.nanosec));
     RTC_DEBUG(("TopicQos setting: topic_qos.liveliness.kind: %d", tQos.liveliness.kind));
+    RTC_DEBUG(("TopicQos setting: topic_qos.liveliness.lease_duration: sec=%d nanosec=%u", tQos.liveliness.lease_duration.sec, tQos.liveliness.lease_duration.nanosec));
     RTC_DEBUG(("TopicQos setting: topic_qos.reliability.kind: %d", tQos.reliability.kind));
     RTC_DEBUG(("TopicQos setting: topic_qos.reliability.max_blocking_time: sec=%d nanosec=%u", tQos.reliability.max_blocking_time.sec, tQos.reliability.max_blocking_time.nanosec));
     RTC_DEBUG(("TopicQos setting: topic_qos.reliability.synchronous: %s", (tQos.reliability.synchronous ? "true" : "false")));
