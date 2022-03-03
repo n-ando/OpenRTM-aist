@@ -1217,8 +1217,6 @@ namespace RTC
         tQos.ownership.kind = DDS::EXCLUSIVE_OWNERSHIP_QOS;
       }
 
-      coil::stringTo<DDS::Long>(tQos.transport_priority.value, prop["topic_qos.transport_priority.value"].c_str());
-
       // tQos.topic_data.value
       coil::stringTo<DDS::Long>(tQos.durability_service.history_depth, prop["topic_qos.durability_service.history_depth"].c_str());
 
@@ -1275,7 +1273,6 @@ namespace RTC
     RTC_DEBUG(("TopicQos setting: topic_qos.transport_priority.value: %d", tQos.transport_priority.value));
     RTC_DEBUG(("TopicQos setting: topic_qos.lifespan.duration: sec=%d nanosec=%u", tQos.lifespan.duration.sec, tQos.lifespan.duration.nanosec));
     RTC_DEBUG(("TopicQos setting: topic_qos.ownership.kind: %d", tQos.ownership.kind));
-    RTC_DEBUG(("TopicQos setting: topic_qos.transport_priority.value: %d", tQos.transport_priority.value));
     RTC_DEBUG(("TopicQos setting: topic_qos.durability_service.history_depth: %d", tQos.durability_service.history_depth));
     RTC_DEBUG(("TopicQos setting: topic_qos.durability_service.history_kind: %d", tQos.durability_service.history_kind));
     RTC_DEBUG(("TopicQos setting: topic_qos.durability_service.max_instances: %d", tQos.durability_service.max_instances));
