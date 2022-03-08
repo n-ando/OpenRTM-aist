@@ -128,7 +128,7 @@ namespace RTC
    *
    * @endif
    */
-  OpenSpliceManager::OpenSpliceManager() : m_factory(nullptr), m_domain(0),
+  OpenSpliceManager::OpenSpliceManager() : m_factory(nullptr), m_domain(DDS::DOMAIN_ID_DEFAULT),
                                            m_participant(nullptr), m_publisher(nullptr),
                                            m_subscriber(nullptr), m_qos_provider(nullptr)
 
@@ -148,7 +148,7 @@ namespace RTC
    *
    * @endif
    */
-  OpenSpliceManager::OpenSpliceManager(const OpenSpliceManager & /*mgr*/) : m_factory(nullptr), m_domain(0),
+  OpenSpliceManager::OpenSpliceManager(const OpenSpliceManager & /*mgr*/) : m_factory(nullptr), m_domain(DDS::DOMAIN_ID_DEFAULT),
                                                                             m_participant(nullptr), m_publisher(nullptr),
                                                                             m_subscriber(nullptr), m_qos_provider(nullptr)
   {
@@ -194,7 +194,10 @@ namespace RTC
       throw;
     }
 
-    m_domain = DDS::DOMAIN_ID_DEFAULT;
+    coil::stringTo<DDS::DomainId_t>(m_domain, prop["domain.id"].c_str());
+
+    RTC_DEBUG(("Domain ID: %d", m_domain));
+
     DDS::DomainParticipantQos qos(PARTICIPANT_QOS_DEFAULT);
 
     std::string uri(prop["uri"]);
@@ -290,7 +293,7 @@ namespace RTC
         qos.watchdog_scheduling.scheduling_priority_kind.kind = DDS::PRIORITY_ABSOLUTE;
       }
 
-      m_participant = m_factory->create_participant(m_domain, PARTICIPANT_QOS_DEFAULT, nullptr, DDS::STATUS_MASK_NONE);
+      m_participant = m_factory->create_participant(m_domain, qos, nullptr, DDS::STATUS_MASK_NONE);
     }
 
     if (!checkHandle(m_participant.in(), "create_participant() failed"))
@@ -1551,6 +1554,17 @@ namespace RTC
   {
     std::string sec_str = prop["sec"];
     std::string nanosec_str = prop["nanosec"];
+
+    if (sec_str == "2147483647" && nanosec_str == "2147483647")
+    {
+      time = DDS::DURATION_INFINITE;
+      return;
+    }
+    if (sec_str == "0" && nanosec_str == "0")
+    {
+      time = DDS::DURATION_ZERO;
+      return;
+    }
 
     coil::stringTo<DDS::Long>(time.sec, sec_str.c_str());
     coil::stringTo<DDS::ULong>(time.nanosec, nanosec_str.c_str());
