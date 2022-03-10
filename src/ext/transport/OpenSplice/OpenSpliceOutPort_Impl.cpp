@@ -18,7 +18,7 @@
 
 
 
-#include "OpenSpliceOutPort_impl.h"
+#include "OpenSpliceOutPort_Impl.h"
 #include "OpenSpliceManager.h"
 #include <iostream>
 
