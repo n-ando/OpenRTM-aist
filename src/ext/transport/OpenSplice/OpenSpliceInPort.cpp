@@ -130,7 +130,7 @@ namespace RTC
     if (!info)
     {
         RTC_ERROR(("Can not find message type(%s)", marshaling_type.c_str()));
-        return;
+        throw std::bad_alloc();
     }
 
     std::string dataType = info->data_type();
@@ -157,6 +157,7 @@ namespace RTC
     if (m_inport == nullptr)
     {
         RTC_ERROR(("Failed initialize inport"));
+        throw std::bad_alloc();
     }
    
   }

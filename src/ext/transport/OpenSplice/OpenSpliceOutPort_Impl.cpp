@@ -501,7 +501,11 @@ namespace RTC
     OpenSpliceOutPortBase* createOpenSpliceOutPort(std::string& datatype, std::string& idlpath, std::string& topic, coil::Properties& prop, bool endian, bool corbamode)
     {
         OpenSpliceOutPort_impl* publisher = new OpenSpliceOutPort_impl();
-        publisher->init(datatype, idlpath, topic, prop, endian, corbamode);
+        if (!publisher->init(datatype, idlpath, topic, prop, endian, corbamode))
+        {
+          delete publisher;
+          return nullptr;
+        }
 
         return publisher;
     }

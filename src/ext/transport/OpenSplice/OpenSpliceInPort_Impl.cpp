@@ -469,7 +469,11 @@ namespace RTC
     OpenSpliceInPortBase* createOpenSpliceInPort(OpenSpliceInPortListenerBase* inportlistener, std::string& datatype, std::string& idlpath, std::string& topic, coil::Properties& prop, bool endian, bool corbamode)
     {
         OpenSpliceInPort_impl* subscriber = new OpenSpliceInPort_impl();
-        subscriber->init(inportlistener, datatype, idlpath, topic, prop, endian, corbamode);
+        if (!subscriber->init(inportlistener, datatype, idlpath, topic, prop, endian, corbamode))
+        {
+          delete subscriber;
+          return nullptr;
+        }
 
         return subscriber;
     }
