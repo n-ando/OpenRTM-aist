@@ -688,6 +688,7 @@ namespace RTM
      * @endif
      */
     RTC::RTObject_ptr
+    createComponentByAddress(std::string& create_arg, std::string& mgrstr);
 
 	/*
 	* @if jp
@@ -704,7 +705,6 @@ namespace RTM
 	void updateMasterManager();
 	std::string getParameterByModulename(const std::string& param_name, std::string &module_name);
 	static bool isProcessIDManager(const std::string& mgrname);
-    createComponentByAddress(std::string& create_arg, std::string& mgrstr);
 
   private:
     /*!
