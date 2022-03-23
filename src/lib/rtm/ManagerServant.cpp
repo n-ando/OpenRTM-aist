@@ -415,14 +415,14 @@ namespace RTM
     // create component by address
     std::string manager_address;
     rtobj = createComponentByAddress(create_arg, manager_address);
-    if (!CORBA::is_nil(rtobj)) { return rtobj._retn(); };
-    else if (!manager_address.empty()) { return RTC::RTObject::_nil(); };
+    if (!CORBA::is_nil(rtobj)) { return rtobj._retn(); }
+    else if (!manager_address.empty()) { return RTC::RTObject::_nil(); }
 
     // create component by manager's name
     std::string manager_name;
     rtobj = createComponentByManagerName(create_arg, manager_name);
-    if (!CORBA::is_nil(rtobj)) { return rtobj._retn(); };
-    else if (!manager_name.empty()) { return RTC::RTObject::_nil(); };
+    if (!CORBA::is_nil(rtobj)) { return rtobj._retn(); }
+    else if (!manager_name.empty()) { return RTC::RTObject::_nil(); }
 
 
 
