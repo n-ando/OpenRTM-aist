@@ -91,7 +91,7 @@ jobs:
       vmImage: 'windows-latest'
 
     variables:
-      vcPath: 'C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC'
+      vcPath: 'C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC'
 
     steps:
       - template: .azure-pipelines/openrtm-build-environment.yml
