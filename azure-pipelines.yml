@@ -36,6 +36,8 @@ jobs:
   - job: Build
     strategy:
       matrix:
+        vs2022:
+          imageVersion: 'windows-2022'
         vs2019:
           imageVersion: 'windows-2019'
         vs2017:
