@@ -493,7 +493,6 @@ namespace RTC
             continue;
           }
         
-        path = coil::replaceEnv(path);
         RTC_DEBUG(("Module load path: %s", path.c_str()));
 
         // get file list for each suffixes
