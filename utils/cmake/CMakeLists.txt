@@ -66,3 +66,7 @@ elseif(MSVC)
 	endif()
 endif()
 
+
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/OpenRTMConfigVersion.cmake.in ${PROJECT_BINARY_DIR}/cmake/OpenRTMConfigVersion.cmake @ONLY)
+install(FILES ${PROJECT_BINARY_DIR}/cmake/OpenRTMConfigVersion.cmake DESTINATION ${INSTALL_RTM_CMAKE_DIR} COMPONENT cmakefiles)
+
