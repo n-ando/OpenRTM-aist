@@ -96,7 +96,11 @@ namespace RTC {
     "manager.termination_waittime",          "0.5",
     "manager.name",                          "manager",
     "manager.components.naming_policy",      "process_unique",
+#ifdef RTM_OS_LINUX
+    "manager.command",                       "rtcd2",
+#else
     "manager.command",                       "rtcd",
+#endif
     "manager.nameservers",                     "default",
     "manager.language",                      "C++",
 #ifdef WIN32
@@ -104,8 +108,13 @@ namespace RTC {
 #else
     "manager.supported_languages",           "C++, Python, Python3, Java",
 #endif
+#ifdef RTM_OS_LINUX
+    "manager.modules.C++.manager_cmd",       "rtcd2",
+    "manager.modules.C++.profile_cmd",       "rtcprof2",
+#else
     "manager.modules.C++.manager_cmd",       "rtcd",
     "manager.modules.C++.profile_cmd",       "rtcprof",
+#endif
 #ifdef WIN32
     "manager.modules.C++.suffixes",           "dll",
 #else
