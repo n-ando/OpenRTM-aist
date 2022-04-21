@@ -28,7 +28,7 @@ if(WIN32)
 		set(OPENRTM_LOCAL_LIBRARIES ${OPENRTM_LOCAL_LIBRARIES};optimized;${DATATYPE};debug;${DATATYPE}d)
 	endforeach()
 else(WIN32)
-	set(OPENRTM_LIBRARIES "${RTM_PROJECT_NAME};${ORB_LIBRARIES};rtmCamera;rtmManipulator")
+	set(OPENRTM_LIBRARIES "${RTM_PROJECT_NAME};${ORB_LIBRARIES};rtmCamera2;rtmManipulator2")
 endif(WIN32)
 
 if(BUILD_RTM_LINUX_PKGS)

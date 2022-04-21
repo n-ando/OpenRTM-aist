@@ -36,13 +36,13 @@ echo "RTM exp dir   : " `$cmd --rtm-exampledir`
 echo "coil inc dir  : " `$cmd --coil-includedir`
 }
 
-cmd="./rtm-config"
+cmd="./rtm-config2"
 rtm_config_test $cmd
-cmd="./rtm-config --prefix=/opt"
+cmd="./rtm-config2 --prefix=/opt"
 rtm_config_test $cmd
-cmd="./rtm-config --prefix=/opt --exec-prefix=/Applications"
+cmd="./rtm-config2 --prefix=/opt --exec-prefix=/Applications"
 rtm_config_test $cmd
-cmd="./rtm-config --prefix=/opt --exec-prefix=/Applications --data-prefix=/var"
+cmd="./rtm-config2 --prefix=/opt --exec-prefix=/Applications --data-prefix=/var"
 rtm_config_test $cmd
 
 echo "------------------------------------------------------------"
