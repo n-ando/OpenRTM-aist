@@ -123,7 +123,7 @@ fi
 # package build process
 #------------------------------------------------------------
 packagedir=`pwd`/../../
-rm -f $packagedir/packages/openrtm-aist*
+rm -f $packagedir/packages/openrtm*
 
 cp -r debian $packagedir
 
@@ -157,7 +157,7 @@ cd $packagedir
 rm -f config.status
 dpkg-buildpackage -W -us -uc -rfakeroot
 
-mv $packagedir/../openrtm-aist* $packagedir/packages/
+mv $packagedir/../openrtm* $packagedir/packages/
 if test "x$multiarch_flg" = "xON" ; then 
     mv /tmp/compat.$$ $packagedir/debian/compat
     mv /tmp/rules.$$ $packagedir/debian/rules

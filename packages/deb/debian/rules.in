@@ -39,13 +39,13 @@ else
 	CFLAGS += -O2
 endif
 
-TARGET = $(CURDIR)/debian/openrtm-aist/usr
-TARGET_ros = $(CURDIR)/debian/openrtm-aist-ros/usr
-TARGET_ros2 = $(CURDIR)/debian/openrtm-aist-ros2/usr
-TARGET_dev = $(CURDIR)/debian/openrtm-aist-dev/usr
-TARGET_idl = $(CURDIR)/debian/openrtm-aist-idl/usr
-TARGET_example = $(CURDIR)/debian/openrtm-aist-example/usr
-TARGET_doc = $(CURDIR)/debian/openrtm-aist-doc/usr
+TARGET = $(CURDIR)/debian/openrtm2/usr
+TARGET_ros = $(CURDIR)/debian/openrtm2-ros-tp/usr
+TARGET_ros2 = $(CURDIR)/debian/openrtm2-ros2-tp/usr
+TARGET_dev = $(CURDIR)/debian/openrtm2-dev/usr
+TARGET_idl = $(CURDIR)/debian/openrtm2-idl/usr
+TARGET_example = $(CURDIR)/debian/openrtm2-example/usr
+TARGET_doc = $(CURDIR)/debian/openrtm2-doc/usr
 
 #Architecture 
 build: build-arch build-indep
@@ -101,12 +101,11 @@ install-arch:
 
 	# for openrtm-aist package
 	(mkdir -p $(TARGET)/bin)
-	(cp $(INSTALL_PREFIX)/bin/rtcd $(TARGET)/bin)
-	(cp $(INSTALL_PREFIX)/bin/rtcprof $(TARGET)/bin)
-	(cp $(INSTALL_PREFIX)/bin/rtm-config $(TARGET)/bin)
-	(cp $(INSTALL_PREFIX)/bin/rtm-naming $(TARGET)/bin)
+	(cp $(INSTALL_PREFIX)/bin/rtcd2 $(TARGET)/bin)
+	(cp $(INSTALL_PREFIX)/bin/rtcprof2 $(TARGET)/bin)
+	(cp $(INSTALL_PREFIX)/bin/rtm-config2 $(TARGET)/bin)
+	(cp $(INSTALL_PREFIX)/bin/rtm-naming2 $(TARGET)/bin)
 	(cp -r $(INSTALL_PREFIX)/etc $(TARGET))
-	#(mkdir -p $(TARGET)/lib/$(DEB_HOST_MULTIARCH))
 	(mkdir -p $(TARGET)/${RTM_EXT_DIR})
 	(cp -R $(INSTALL_PREFIX)/${RTM_LIB_DIR}/*.so* $(TARGET)/${RTM_LIB_DIR})
 	(cp $(INSTALL_PREFIX)/${RTM_LIB_DIR}/*.a $(TARGET)/${RTM_LIB_DIR})
@@ -128,22 +127,20 @@ install-arch:
 
 	# for openrtm-dev package
 	(mkdir -p $(TARGET_dev)/bin)
-	(cp $(INSTALL_PREFIX)/bin/rtm-skelwrapper $(TARGET_dev)/bin)
+	(cp $(INSTALL_PREFIX)/bin/rtm-skelwrapper2 $(TARGET_dev)/bin)
 	(cp -r $(INSTALL_PREFIX)/include $(TARGET_dev))
 	(rm -r $(TARGET_dev)/include/openrtm-$(SHORT_VER)/hrtm)
 	(mkdir -p $(TARGET_dev)/${RTM_EXT_DIR})
 	(cp -r $(INSTALL_PREFIX)/${RTM_EXT_DIR}/cmake $(TARGET_dev)/${RTM_EXT_DIR})
 	(cp -r $(INSTALL_PREFIX)/${RTM_EXT_DIR}/py_helper $(TARGET_dev)/${RTM_EXT_DIR})
-	(cp -r $(INSTALL_PREFIX)/${RTM_LIB_DIR}/pkgconfig $(TARGET_dev)/${RTM_LIB_DIR})
-	(rm $(TARGET_dev)/${RTM_LIB_DIR}/pkgconfig/openrtm-aist.pc)
 
 	# for openrtm-aist-idl package
 	(mkdir -p $(TARGET_idl)/include/openrtm-$(SHORT_VER)/rtm/idl)
-	(mv $(CURDIR)/debian/openrtm-aist-dev/usr/include/openrtm-$(SHORT_VER)/rtm/idl/*.idl $(TARGET_idl)/include/openrtm-$(SHORT_VER)/rtm/idl)
+	(mv $(TARGET_dev)/include/openrtm-$(SHORT_VER)/rtm/idl/*.idl $(TARGET_idl)/include/openrtm-$(SHORT_VER)/rtm/idl)
 	(mkdir -p $(TARGET_idl)/share/openrtm-$(SHORT_VER)/idl)
 	(cp $(TARGET_idl)/include/openrtm-$(SHORT_VER)/rtm/idl/* $(TARGET_idl)/share/openrtm-$(SHORT_VER)/idl)
-	(mkdir -p $(CURDIR)/debian/openrtm-aist-idl/etc/profile.d)
-	(echo "export RTM_IDL_DIR=/usr/share/openrtm-$(SHORT_VER)/idl" > $(CURDIR)/debian/openrtm-aist-idl/etc/profile.d/openrtm-aist-idl.sh)
+	(mkdir -p $(CURDIR)/debian/openrtm2-idl/etc/profile.d)
+	(echo "export RTM_IDL_DIR2=/usr/share/openrtm-$(SHORT_VER)/idl" > $(CURDIR)/debian/openrtm2-idl/etc/profile.d/openrtm2-idl.sh)
 
 	# for openrtm-aist-example package
 	(mkdir -p $(TARGET_example)/share/openrtm-$(SHORT_VER))

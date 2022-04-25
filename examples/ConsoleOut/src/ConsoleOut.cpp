@@ -15,7 +15,11 @@
 
 // Module specification
 // <rtc-template block="module_spec">
+#if RTM_MAJOR_VERSION >= 2
 static const char* const consoleout_spec[] =
+#else
+static const char* consoleout_spec[] =
+#endif
   {
     "implementation_id", "ConsoleOut",
     "type_name",         "ConsoleOut",
@@ -155,7 +159,11 @@ RTC::ReturnCode_t ConsoleOut::onExecute(RTC::UniqueId /*ec_id*/)
       std::cout << "TimeStamp: " << m_in.tm.sec << "[s] ";
       std::cout << m_in.tm.nsec << "[ns]" << std::endl;
     }
+#if RTM_MAJOR_VERSION >= 2
   std::this_thread::sleep_for(std::chrono::milliseconds(1));
+#else
+  coil::usleep(1000);
+#endif
 
   return RTC::RTC_OK;
 }
