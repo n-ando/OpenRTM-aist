@@ -59,5 +59,5 @@ Description: OpenRTM-aist examples
 
 Package: openrtm2-doc
 Architecture: all
-Description: Documentation for openrtm-aist
+Description: Documentation for openrtm2
  Class reference manual of OpenRTM-aist.
