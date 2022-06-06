@@ -1,12 +1,8 @@
 #!/bin/sh
 #
-# @file pkg_install_ubuntu.sh
+# @file openrtm2_install_ubuntu.sh
 # @brief OpenRTM-aist dependent packages install script for Ubuntu
 # @author Noriaki Ando <n-ando@aist.go.jp>
-#         Shinji Kurihara
-#         Tetsuo Ando
-#         Harumi Miyamoto
-#         Seisho Irie
 #         Nobu   Kawauchi
 #
 # Global variables
@@ -18,8 +14,8 @@
 # = OPT_UNINST   : uninstallation
 #
 
-VERSION=2.0.0.09
-FILENAME=pkg_install_ubuntu.sh
+VERSION=2.0.0.00
+FILENAME=openrtm2_install_ubuntu.sh
 
 #
 #---------------------------------------
@@ -30,9 +26,9 @@ usage()
   cat <<EOF
   Usage: 
 
-    ${FILENAME} -l {all|c++} [-r|-d|-s|-c] [-t OpenRTM-aist old version number] [-u|--yes]
+    ${FILENAME} -l {all|c++} [-r|-d|-s|-c] [-e ros|ros2|all] [--ros|--ros2] [-u|--yes]
     ${FILENAME} [-u]
-    ${FILENAME} -l {python} [-r|-d|-c] [-t OpenRTM-aist old version number] [-u|--yes]
+    ${FILENAME} -l {python} [-r|-d|-c] [-u|--yes]
     ${FILENAME} -l {java} [-r|-d|-c] [-u|--yes]
     ${FILENAME} -l {openrtp|rtshell} [-d] [-u|--yes]
     ${FILENAME} {--help|-h|--version}
@@ -42,7 +38,8 @@ usage()
     ${FILENAME} -l all -d
     ${FILENAME} -l c++ -c --yes
     ${FILENAME} -l all -u
-    ${FILENAME} -l all -d -t 1.2.1
+    ${FILENAME} -l c++ -d -e ros
+    ${FILENAME} -l c++ -d --ros2
 
   Options:
     -l <argument>  language or tool [c++|python|java|openrtp|rtshell|all]
@@ -50,7 +47,9 @@ usage()
                    (openrtp is not supported in aarch64 environment.)
     -r             install robot component runtime
     -d             install robot component developer [default]
-    -t <argument>  OpenRTM-aist old version number
+    -e <argument>  install extension packages [ros|ros2|all]
+    --ros          install extension package for ROS
+    --ros2         install extension package for ROS2
     -s             install tool_packages for build source packages
     -c             install tool_packages for core developer
     -u             uninstall packages
@@ -76,14 +75,8 @@ default_reposerver="openrtm.org"
 reposervers="openrtm.org"
 reposerver=""
 
-RTM_OLD_VER=1.2.1
-old_openrtm_devel="openrtm-aist-doc=$RTM_OLD_VER-0 openrtm-aist-idl=$RTM_OLD_VER-0 openrtm-aist-dev=$RTM_OLD_VER-0"
-old_openrtm_runtime="openrtm-aist=$RTM_OLD_VER-0 openrtm-aist-example=$RTM_OLD_VER-0"
-old_openrtm_py_devel="openrtm-aist-python-doc=$RTM_OLD_VER-0"
-old_openrtm_py_runtime="openrtm-aist-python=$RTM_OLD_VER-0 openrtm-aist-python-example=$RTM_OLD_VER-0"
-
-openrtm2_py="openrtm2-python3-doc openrtm2-python3-example openrtm2-python3"
-openrtm2_java="openrtm2-java-doc openrtm2-java-example openrtm2-java"
+openrtm_py="openrtm-aist-python3-doc openrtm-aist-python3-example openrtm-aist-python3"
+openrtm_java="openrtm-aist-java-doc openrtm-aist-java-example openrtm-aist-java"
 
 ARCH=`arch`
 #--------------------------------------- C++
@@ -95,32 +88,28 @@ cmake_tools="cmake doxygen graphviz nkf"
 build_tools="subversion git"
 deb_pkg="uuid-dev libboost-filesystem-dev"
 pkg_tools="build-essential debhelper devscripts"
+fluentbit="td-agent-bit"
 omni_devel="libomniorb4-dev omniidl"
 omni_runtime="omniorb-nameserver"
-openrtm_devel="openrtm-aist-doc openrtm-aist-idl openrtm-aist-dev"
-openrtm_runtime="openrtm-aist openrtm-aist-example"
+openrtm2_devel="openrtm2-doc openrtm2-idl openrtm2-dev"
+openrtm2_runtime="openrtm2 openrtm2-example"
+openrtm2_ros="openrtm2-ros-tp"
+openrtm2_ros2="openrtm2-ros2-tp"
 
 #--------------------------------------- Python
 omnipy="omniidl-python3"
 python_runtime="python3 python3-omniorb-omg"
 python_devel="python3-pip $cmake_tools $base_tools $omnipy $common_devel"
-res=`grep 16.04 /etc/lsb-release`
-if test ! "x$res" = "x" ||
-   test "x${ARCH}" = "xaarch64" ; then
-  # 16.04, aarch64
-  openrtm_py_devel=""
-else
-  openrtm_py_devel="openrtm-aist-python3-doc"
-fi
-openrtm_py_runtime="openrtm-aist-python3 openrtm-aist-python3-example"
+openrtm2_py_devel="openrtm2-python3-doc"
+openrtm2_py_runtime="openrtm2-python3 openrtm2-python3-example"
 
 #--------------------------------------- Java
 java_build="ant"
-openrtm_j_devel="openrtm-aist-java-doc"
-openrtm_j_runtime="openrtm-aist-java openrtm-aist-java-example"
+openrtm2_j_devel="openrtm2-java-doc"
+openrtm2_j_runtime="openrtm2-java openrtm2-java-example"
 
 #--------------------------------------- OpenRTP
-openrtp_pkgs="openrtp"
+openrtp_pkgs="openrtp2"
 
 #---------------------------------------
 # Script options, argument analysis
@@ -133,6 +122,8 @@ OPT_SRCPKG=false
 OPT_COREDEVEL=false
 OPT_UNINST=true
 OPT_OLD_RTM=false
+OPT_ROS=false
+OPT_ROS2=false
 install_pkgs=""
 uninstall_pkgs=""
 arg_all=false
@@ -164,6 +155,19 @@ check_arg()
     arg_openrtp=false
     echo "[wARNING] openrtp is not supported in aarch64 environment."
   fi
+}
+
+check_ros_arg()
+{
+  local arg=$1
+  arg_err=0
+
+  case "$arg" in
+    all ) OPT_ROS=true ; OPT_ROS2=true ;;
+    ros ) OPT_ROS=true ;;
+    ros2 ) OPT_ROS2=true ;;
+    *) arg_err=-1 ;;
+  esac
 }
 
 set_old_rtm_pkgs()
@@ -227,7 +231,7 @@ get_opt()
   fi
   arg_num=$#
  
-  OPT=`getopt -o l:rcsdt:hu -l help,yes,version -- $@` > /dev/null 2>&1
+  OPT=`getopt -o l:rcsdte:hu -l help,yes,version,ros,ros2 -- $@` > /dev/null 2>&1
   # return code check
   if [ $? -ne 0 ] ; then
     echo "[ERROR] Invalid option '$1'"
@@ -257,11 +261,24 @@ get_opt()
         -h|--help ) usage ; exit ;;
         --version ) version ; exit ;;
         --yes ) FORCE_YES=true ;;
+        --ros ) OPT_ROS=true ;;
+        --ros2 ) OPT_ROS2=true ;;
         -l )  if [ -z "$2" ] ; then
                 echo "$1 option requires an argument." 1>&2
                 exit
               fi
               check_arg $2
+              if [ "$arg_err" = "-1" ]; then
+                echo "[ERROR] Invalid argument '$2'"
+                usage
+                exit
+              fi
+              shift ;;
+        -e )  if [ -z "$2" ] ; then
+                echo "$1 option requires an argument." 1>&2
+                exit
+              fi
+              check_ros_arg $2
               if [ "$arg_err" = "-1" ]; then
                 echo "[ERROR] Invalid argument '$2'"
                 usage
@@ -385,6 +402,7 @@ create_srclist () {
     exit
   fi
   openrtm_repo="deb http://$reposerver/pub/Linux/ubuntu/ $code_name main"
+  fluent_repo="deb https://packages.fluentbit.io/ubuntu/$code_name $code_name main"
 }
 
 #---------------------------------------
@@ -405,8 +423,16 @@ update_source_list () {
       echo $openrtm_repo | sudo tee -a /etc/apt/sources.list
     fi
   fi
+  fluentsite=`apt-cache policy | grep "https://packages.fluentbit.io"`
+  if test "x$fluentsite" = "x" &&
+     test "x$OPT_COREDEVEL" = "xtrue" ; then
+    echo $fluent_repo | sudo tee -a /etc/apt/sources.list
+  fi
   # 公開鍵登録
   wget -O- --secure-protocol=TLSv1_2 --no-check-certificate https://openrtm.org/pub/openrtm.key | sudo apt-key add -
+  if test "x$OPT_COREDEVEL" = "xtrue" ; then
+    wget -O - https://packages.fluentbit.io/fluentbit.key | sudo apt-key add -
+  fi
 }
 
 #----------------------------------------
@@ -467,27 +493,27 @@ uninstall_packages () {
 }
 
 #-------------------------------------------------
-# If OpenRTM-aist 2.0 is installed, uninstall its.
-# Target: openrtm2-python3, openrtm2-java
+# If OpenRTM-aist 1.2 is installed, uninstall its.
+# Target: openrtm-aist-python3, openrtm-aist-java
 #         rtshell
 #-------------------------------------------------
-uninstall_openrtm20 ()
+uninstall_openrtm12 ()
 {
   if test "x$arg_python" = "xtrue" ; then
-    res=`dpkg -l | grep openrtm2-python3`
+    res=`dpkg -l | grep openrtm-aist-python3`
     if test ! "x$res" = "x" ; then
-      echo "Uninstall openrtm2-python3."
-      sudo apt --purge remove $openrtm2_py
-      uninstall_pkgs=$openrtm2_py
+      echo "Uninstall openrtm-aist-python3."
+      sudo apt --purge remove $openrtm_py
+      uninstall_pkgs=$openrtm_py
     fi
   fi
 
   if test "x$arg_java" = "xtrue" ; then
-    res=`dpkg -l | grep openrtm2-java`
+    res=`dpkg -l | grep openrtm-aist-java`
     if test ! "x$res" = "x" ; then
-      echo "Uninstall openrtm2-java."
-      sudo apt --purge remove $openrtm2_java
-      tmp_pkg="$uninstall_pkgs $openrtm2_java"
+      echo "Uninstall openrtm-aist-java."
+      sudo apt --purge remove $openrtm_java
+      tmp_pkg="$uninstall_pkgs $openrtm_java"
       uninstall_pkgs=$tmp_pkg
     fi
   fi
@@ -510,34 +536,40 @@ uninstall_openrtm20 ()
 set_package_content()
 {
 #--------------------------------------- C++
-runtime_pkgs="$omni_runtime $openrtm_runtime"
-u_runtime_pkgs=$openrtm_runtime
+runtime_pkgs="$omni_runtime $openrtm2_runtime"
+u_runtime_pkgs=$openrtm2_runtime
 
 src_pkgs="$cxx_devel $cmake_tools $deb_pkg $base_tools $omni_runtime $omni_devel"
 u_src_pkgs="$omni_runtime $omni_devel"
 
-dev_pkgs="$runtime_pkgs $src_pkgs $openrtm_devel"
-u_dev_pkgs="$u_runtime_pkgs $openrtm_devel"
+dev_pkgs="$runtime_pkgs $src_pkgs $openrtm2_devel"
+u_dev_pkgs="$u_runtime_pkgs $openrtm2_devel"
 
-core_pkgs="$src_pkgs $autotools $build_tools $pkg_tools"
+core_pkgs="$src_pkgs $autotools $build_tools $pkg_tools $fluentbit"
 u_core_pkgs="$u_src_pkgs"
 
-#--------------------------------------- Python
-python_runtime_pkgs="$omni_runtime $python_runtime $openrtm_py_runtime"
-u_python_runtime_pkgs="$openrtm_py_runtime"
+ros_pkg="$openrtm2_ros"
+u_ros_pkg=$ros_pkg
 
-python_dev_pkgs="$python_runtime_pkgs $python_devel $openrtm_py_devel"
-u_python_dev_pkgs="$u_python_runtime_pkgs $openrtm_py_devel"
+ros2_pkg="$openrtm2_ros2"
+u_ros2_pkg=$ros2_pkg
+
+#--------------------------------------- Python
+python_runtime_pkgs="$omni_runtime $python_runtime $openrtm2_py_runtime"
+u_python_runtime_pkgs="$openrtm2_py_runtime"
+
+python_dev_pkgs="$python_runtime_pkgs $python_devel $openrtm2_py_devel"
+u_python_dev_pkgs="$u_python_runtime_pkgs $openrtm2_py_devel"
 
 python_core_pkgs="$omni_runtime $python_runtime $python_devel $build_tools $pkg_tools"
 u_python_core_pkgs="$omni_runtime $omnipy"
 
 #--------------------------------------- Java
-java_runtime_pkgs="$omni_runtime $openrtm_j_runtime"
-u_java_runtime_pkgs="$openrtm_j_runtime"
+java_runtime_pkgs="$omni_runtime $openrtm2_j_runtime"
+u_java_runtime_pkgs="$openrtm2_j_runtime"
 
-java_dev_pkgs="$java_runtime_pkgs $cmake_tools $base_tools $openrtm_j_devel"
-u_java_dev_pkgs="$u_java_runtime_pkgs $openrtm_j_devel"
+java_dev_pkgs="$java_runtime_pkgs $cmake_tools $base_tools $openrtm2_j_devel"
+u_java_dev_pkgs="$u_java_runtime_pkgs $openrtm2_j_devel"
 
 java_core_pkgs="$omni_runtime $cmake_tools $base_tools $build_tools $java_build $pkg_tools"
 u_java_core_pkgs="$omni_runtime"
@@ -559,8 +591,21 @@ install_proc()
       select_opt_c="[c++] install robot component runtime"
       install_packages $runtime_pkgs
     else
+      OPT_DEVEL=true
       select_opt_c="[c++] install robot component developer"
       install_packages $dev_pkgs
+    fi
+    if test "x$OPT_ROS" = "xtrue" ; then
+      if test "x$OPT_DEVEL" = "xtrue" || test "x$OPT_RUNTIME" = "xtrue" ; then
+        select_opt_c="$select_opt_c\n[c++] install ROS expansion package"
+        install_packages $ros_pkg
+      fi
+    fi
+    if test "x$OPT_ROS2" = "xtrue" ; then
+      if test "x$OPT_DEVEL" = "xtrue" || test "x$OPT_RUNTIME" = "xtrue" ; then
+        select_opt_c="$select_opt_c\n[c++] install ROS2 expansion packagee"
+        install_packages $ros2_pkg
+      fi
     fi
   fi
 
@@ -568,6 +613,9 @@ install_proc()
     if test "x$OPT_COREDEVEL" = "xtrue" ; then
       select_opt_p="[python] install tool_packages for core developer"
       install_packages $python_core_pkgs
+      pip3 install fluent-logger
+      tmp_pkg="$install_pkgs fluent-logger"
+      install_pkgs=$tmp_pkg
     elif test "x$OPT_RUNTIME" = "xtrue" ; then
       select_opt_p="[python] install robot component runtime"
       install_packages $python_runtime_pkgs
@@ -619,8 +667,21 @@ uninstall_proc()
       select_opt_c="[c++] uninstall robot component runtime"
       uninstall_packages `reverse $u_runtime_pkgs`
     else
+      OPT_DEVEL=true
       select_opt_c="[c++] uninstall robot component developer"
       uninstall_packages `reverse $u_dev_pkgs`
+    fi
+    if test "x$OPT_ROS" = "xtrue" ; then
+      if test "x$OPT_DEVEL" = "xtrue" || test "x$OPT_RUNTIME" = "xtrue" ; then
+        select_opt_c="$select_opt_c\n[c++] uninstall ROS expansion package"
+        uninstall_packages `reverse $ros_pkg`
+      fi
+    fi
+    if test "x$OPT_ROS2" = "xtrue" ; then
+      if test "x$OPT_DEVEL" = "xtrue" || test "x$OPT_RUNTIME" = "xtrue" ; then
+        select_opt_c="$select_opt_c\n[c++] uninstall ROS2 expansion package"
+        uninstall_packages `reverse $ros2_pkg`
+      fi
     fi
   fi
 
@@ -674,7 +735,7 @@ print_option()
 EOF
 
   if test ! "x$select_opt_c" = "x" ; then
-    echo $select_opt_c
+    echo -e $select_opt_c
   fi
   if test ! "x$select_opt_p" = "x" ; then
     echo $select_opt_p
@@ -798,7 +859,7 @@ fi
 set_package_content
 
 if test "x$OPT_UNINST" = "xtrue" ; then
-  uninstall_openrtm20
+  uninstall_openrtm12
   install_proc
 else
   uninstall_proc
@@ -817,8 +878,23 @@ if test "x$OPT_UNINST" = "xtrue" ; then
   sudo update-alternatives --set java ${JAVA8}
 fi
 
+if test "x$OPT_COREDEVEL" = "xtrue" ; then
+  systemctl enable td-agent-bit
+  systemctl start td-agent-bit
+fi
+
+ESC=$(printf '\033')
+if test "x$OPT_UNINST" = "xtrue" &&
+   test "x$arg_cxx" = "xtrue" &&
+   test "x$OPT_COREDEVEL" = "xfalse" ; then
+  msg1='To use the log collection extension using the Fluentd logger,'
+  msg2='please install Fluent Bit by following the steps on the following web page.'
+  msg3='https://docs.fluentbit.io/manual/installation/linux/ubuntu'
+  echo "${ESC}[33m${msg1}${ESC}[m"
+  echo "${ESC}[33m${msg2}${ESC}[m"
+  echo "${ESC}[33m${msg3}${ESC}[m"
+fi
 if test "x$OPT_UNINST" = "xfalse" ; then
-  ESC=$(printf '\033')
   msg1='omniorb or other OpenRTM dependent packages may still exist. '
   msg2='If you want to remove them, please do “apt autoremove” later.'
   echo "${ESC}[33m${msg1}${ESC}[m"
