@@ -759,10 +759,19 @@ namespace RTC
       }
       m_msg.step = 1920;
       m_msg.data.resize(data.pixels.length());
+      CORBA::ULong image_size = data.pixels.length() / 3;
+      for(CORBA::ULong i=0;i < image_size;i++)
+      {
+        m_msg.data[i*3] = data.pixels[i*3+2];
+        m_msg.data[i*3+1] = data.pixels[i*3+1];
+        m_msg.data[i*3+2] = data.pixels[i*3];
+      }
+      /*
       if(m_msg.data.size() > 0)
       {
         memcpy(&m_msg.data[0], &data.pixels[0], data.pixels.length());
       }
+      */
 
       
       return ROS2SerializerBase<RTC::CameraImage>::sensormsg_serialize(m_msg);
@@ -807,10 +816,19 @@ namespace RTC
 
       data.pixels.length((CORBA::ULong)m_msg.data.size());
       
+      CORBA::ULong image_size = data.pixels.length() / 3;
+      for(CORBA::ULong i=0;i < image_size;i++)
+      {
+        data.pixels[i*3+2] = m_msg.data[i*3];
+        data.pixels[i*3+1] = m_msg.data[i*3+1];
+        data.pixels[i*3] = m_msg.data[i*3+2];
+      }
+      /*
       if(data.pixels.length() > 0)
       {
         memcpy(&data.pixels[0], &m_msg.data[0], data.pixels.length());
       }
+      */
 
       return ret;
     }
