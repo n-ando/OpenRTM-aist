@@ -18,7 +18,7 @@
 # = OPT_UNINST   : uninstallation
 #
 
-VERSION=2.0.0.09
+VERSION=2.0.0.10
 FILENAME=pkg_install_ubuntu.sh
 
 #
@@ -147,7 +147,7 @@ err_message=""
 
 check_arg()
 {
-  local arg=$1
+  local arg=$1 tmp
   arg_err=0
   
   case "$arg" in
@@ -155,15 +155,18 @@ check_arg()
     c++ ) arg_cxx=true ;;
     python ) arg_python=true ;;
     java ) arg_java=true ;;
-    openrtp ) arg_openrtp=true ;;
+    openrtp ) arg_openrtp=true
+              if test "x${ARCH}" = "xaarch64"; then
+                arg_openrtp=false
+                msg="[WARNING] openrtp is not supported in aarch64 environment."
+                echo $msg
+                tmp="$err_message$LF$msg"
+                err_message=$tmp
+              fi
+	      shift ;;
     rtshell ) arg_rtshell=true ;;
     *) arg_err=-1 ;;
   esac
-
-  if test "x${ARCH}" = "xaarch64"; then
-    arg_openrtp=false
-    echo "[wARNING] openrtp is not supported in aarch64 environment."
-  fi
 }
 
 set_old_rtm_pkgs()
@@ -548,6 +551,8 @@ u_java_core_pkgs="$omni_runtime"
 #---------------------------------------
 install_proc()
 {
+  local msg tmp
+
   if test "x$arg_cxx" = "xtrue" ; then
     if test "x$OPT_COREDEVEL" = "xtrue" ; then
       select_opt_c="[c++] install tool_packages for core developer"
@@ -598,8 +603,14 @@ install_proc()
   if test "x$arg_rtshell" = "xtrue" ; then
     select_opt_shl="[rtshell] install"
     install_packages python3-pip
-    rtshell_ret=`sudo pip3 install rtshell-aist`
-    sudo rtshell_post_install -n
+    rtshell_ret=`sudo python3 -m pip install rtshell-aist`
+    if test "x$rtshell_ret" != "x"; then
+      sudo rtshell_post_install -n
+    else
+      msg="\n[ERROR] Failed to install rtshell-aist."
+      tmp="$err_message$msg"
+      err_message=$tmp
+    fi
   fi
 }
 
@@ -608,6 +619,8 @@ install_proc()
 #---------------------------------------
 uninstall_proc()
 {
+  local msg tmp
+
   if test "x$arg_cxx" = "xtrue" ; then
     if test "x$OPT_COREDEVEL" = "xtrue" ; then
       select_opt_c="[c++] uninstall tool_packages for core developer"
@@ -657,7 +670,12 @@ uninstall_proc()
 
   if test "x$arg_rtshell" = "xtrue" ; then
     select_opt_shl="[rtshell] uninstall"
-    rtshell_ret=`sudo pip3 uninstall -y rtshell-aist rtctree-aist rtsprofile-aist`
+    rtshell_ret=`sudo python3 -m pip uninstall -y rtshell-aist rtctree-aist rtsprofile-aist`
+    if test "x$rtshell_ret" = "x"; then
+      msg="\n[ERROR] Failed to uninstall rtshell-aist."
+      tmp="$err_message$msg"
+      err_message=$tmp
+    fi
   fi
 }
 
@@ -780,7 +798,9 @@ if test "x$arg_all" = "xtrue" &&
   arg_java=true
   if test "x${ARCH}" = "xaarch64"; then
     arg_openrtp=false
-    echo "[WARNING] openrtp is not supported in aarch64 environment."
+    msg="[WARNING] openrtp is not supported in aarch64 environment."
+    tmp="$err_message$LF$msg"
+    err_message=$tmp
   else
     arg_openrtp=true
   fi
@@ -804,12 +824,6 @@ else
   uninstall_proc
 fi
 
-install_result $install_pkgs
-uninstall_result $uninstall_pkgs
-if test ! "x$err_message" = "x" ; then
-  echo $err_message
-fi
-
 # install openjdk-8-jdk
 if test "x$OPT_UNINST" = "xtrue" ; then
   sudo apt -y install openjdk-8-jdk
@@ -817,10 +831,19 @@ if test "x$OPT_UNINST" = "xtrue" ; then
   sudo update-alternatives --set java ${JAVA8}
 fi
 
+install_result $install_pkgs
+uninstall_result $uninstall_pkgs
+if test ! "x$err_message" = "x" ; then
+  ESC=$(printf '\033')
+  echo $LF
+  echo "${ESC}[33m${err_message}${ESC}[m"
+fi
+
 if test "x$OPT_UNINST" = "xfalse" ; then
   ESC=$(printf '\033')
   msg1='omniorb or other OpenRTM dependent packages may still exist. '
   msg2='If you want to remove them, please do “apt autoremove” later.'
+  echo $LF
   echo "${ESC}[33m${msg1}${ESC}[m"
   echo "${ESC}[33m${msg2}${ESC}[m"
 fi
