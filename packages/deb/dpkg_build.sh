@@ -56,7 +56,7 @@ check_codename ()
       else
         DISTRIB_CODENAME=`lsb_release -cs`
       fi
-    else
+    elif test ! "x$ID" = "xraspbian" ; then 
       echo "This distribution may not be debian."
       exit
     fi
