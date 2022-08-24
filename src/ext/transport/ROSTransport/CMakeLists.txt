@@ -36,6 +36,9 @@ if(NOT Boost_FOUND)
 endif()
 
 link_directories(${ORB_LINK_DIR})
+if(roscpp_LIBRARY_DIRS)
+	link_directories(${roscpp_LIBRARY_DIRS})
+endif()
 add_definitions(${ORB_C_FLAGS_LIST})
 add_definitions(${COIL_C_FLAGS_LIST})
 if(WIN32)
@@ -76,9 +79,8 @@ else()
 	target_include_directories(${target} SYSTEM
 		PRIVATE ${roscpp_INCLUDE_DIRS}
 		PRIVATE ${Boost_INCLUDE_DIRS})
-	target_link_libraries(${target} PRIVATE ${libs} ${RTM_LINKER_OPTION} ${roscpp_LINK_LIBRARIES} ${Boost_LIBRARIES})
+	target_link_libraries(${target} PRIVATE ${libs} ${RTM_LINKER_OPTION} ${roscpp_LIBRARIES} ${roscpp_LINK_LIBRARIES} ${Boost_LIBRARIES})
 	set_target_properties(${target} PROPERTIES PREFIX "")
-
 
 	install(TARGETS ${target} LIBRARY DESTINATION ${INSTALL_RTM_EXT_DIR}/transport
 				ARCHIVE DESTINATION ${INSTALL_RTM_EXT_DIR}/transport
