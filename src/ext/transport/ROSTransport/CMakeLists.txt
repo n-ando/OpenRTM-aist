@@ -79,7 +79,7 @@ else()
 	target_include_directories(${target} SYSTEM
 		PRIVATE ${roscpp_INCLUDE_DIRS}
 		PRIVATE ${Boost_INCLUDE_DIRS})
-	target_link_libraries(${target} PRIVATE ${libs} ${RTM_LINKER_OPTION} ${roscpp_LIBRARIES} ${roscpp_LINK_LIBRARIES} ${Boost_LIBRARIES})
+	target_link_libraries(${target} PRIVATE ${libs} ${RTM_LINKER_OPTION} ${roscpp_LIBRARIES} ${Boost_LIBRARIES})
 	set_target_properties(${target} PROPERTIES PREFIX "")
 
 	install(TARGETS ${target} LIBRARY DESTINATION ${INSTALL_RTM_EXT_DIR}/transport
