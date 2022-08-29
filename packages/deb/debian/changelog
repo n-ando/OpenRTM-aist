@@ -1,3 +1,9 @@
+openrtm2 (2.0.0-1) experimental; urgency=low
+
+  * ROSTransport updated.
+
+ -- Noriaki Ando <n-ando@aist.go.jp>  Thu, 25 Aug 2022 12:20:30 +0900
+
 openrtm2 (2.0.0-0) experimental; urgency=low
 
   * 2.0.0-0 (2.0.0-RELEASE). OpenRTM-aist-2.0.0-RELEASE
