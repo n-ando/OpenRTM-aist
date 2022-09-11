@@ -8,6 +8,7 @@
 
 VERSION=2.0.0.01
 FILENAME=openrtm2_install_raspbian.sh
+BIT=`getconf LONG_BIT`
 
 #---------------------------------------
 # usage
@@ -64,11 +65,11 @@ autotools="autoconf libtool libtool-bin"
 base_tools="bc iputils-ping net-tools zip"
 common_devel="python3-yaml"
 cxx_devel="gcc g++ make $common_devel"
-cmake_tools="cmake doxygen"
+cmake_tools="cmake doxygen graphviz nkf"
 build_tools="subversion git"
 deb_pkg="uuid-dev libboost-filesystem-dev"
 pkg_tools="build-essential debhelper devscripts"
-fluentbit="td-agent-bit"
+#fluentbit="td-agent-bit"
 omni_devel="libomniorb4-dev omniidl"
 omni_runtime="omniorb-nameserver"
 openrtm2_devel="openrtm2-doc openrtm2-idl openrtm2-dev"
@@ -340,7 +341,7 @@ check_reposerver()
 #---------------------------------------
 create_srclist () {
   openrtm_repo="deb http://$reposerver/pub/Linux/raspbian/ $code_name main"
-  fluent_repo="deb https://packages.fluentbit.io/raspbian/$code_name $code_name main"
+  #fluent_repo="deb https://packages.fluentbit.io/raspbian/$code_name $code_name main"
 }
 
 #---------------------------------------
@@ -367,16 +368,16 @@ update_source_list () {
   else
     sudo apt install dirmngr
   fi
-  fluentsite=`apt-cache policy | grep "https://packages.fluentbit.io"`
-  if test "x$fluentsite" = "x" &&
-     test "x$OPT_CORE" = "xtrue" ; then
-    echo $fluent_repo | sudo tee -a /etc/apt/sources.list
-  fi  
+#  fluentsite=`apt-cache policy | grep "https://packages.fluentbit.io"`
+#  if test "x$fluentsite" = "x" &&
+#     test "x$OPT_CORE" = "xtrue" ; then
+#    echo $fluent_repo | sudo tee -a /etc/apt/sources.list
+#  fi
 　# 公開鍵登録
   wget -O- --secure-protocol=TLSv1_2 --no-check-certificate https://openrtm.org/pub/openrtm.key | sudo apt-key add -
-  if test "x$OPT_CORE" = "xtrue" ; then
-    wget -O - https://packages.fluentbit.io/fluentbit.key | sudo apt-key add -
-  fi
+#  if test "x$OPT_CORE" = "xtrue" ; then
+#    wget -O - https://packages.fluentbit.io/fluentbit.key | sudo apt-key add -
+#  fi
 }
 
 #----------------------------------------
@@ -487,7 +488,8 @@ u_src_pkgs="$omni_runtime $omni_devel"
 dev_pkgs="$runtime_pkgs $src_pkgs $openrtm2_devel"
 u_dev_pkgs="$u_runtime_pkgs $openrtm2_devel"
 
-core_pkgs="$src_pkgs $build_tools $pkg_tools $fluentbit"
+#core_pkgs="$src_pkgs $build_tools $pkg_tools $fluentbit"
+core_pkgs="$src_pkgs $build_tools $pkg_tools"
 u_core_pkgs="$u_src_pkgs"
 
 
@@ -540,9 +542,9 @@ install_proc()
     if test "x$OPT_CORE" = "xtrue" ; then
       select_opt_p="[python] install tool_packages for core developer"
       install_packages $python_core_pkgs
-      pip3 install fluent-logger
-      tmp_pkg="$install_pkgs fluent-logger"
-      install_pkgs=$tmp_pkg
+      #pip3 install fluent-logger
+      #tmp_pkg="$install_pkgs fluent-logger"
+      #install_pkgs=$tmp_pkg
     elif test "x$OPT_RT" = "xtrue" ; then
       select_opt_p="[python] install robot component runtime"
       install_packages $python_runtime_pkgs
@@ -774,16 +776,17 @@ else
 fi
 
 # install openjdk-8-jdk
-if test "x$OPT_FLG" = "xtrue" ; then
+if test "x$OPT_FLG" = "xtrue" &&
+   test "x$BIT" = "x32" ; then
   sudo apt -y install openjdk-8-jdk
   JAVA8=`update-alternatives --list java | grep java-8`
   sudo update-alternatives --set java ${JAVA8}
 fi
 
-if test "x$OPT_CORE" = "xtrue" ; then
-  systemctl enable td-agent-bit
-  systemctl start td-agent-bit
-fi
+#if test "x$OPT_CORE" = "xtrue" ; then
+#  systemctl enable td-agent-bit
+#  systemctl start td-agent-bit
+#fi
 
 install_result $install_pkgs
 uninstall_result $uninstall_pkgs
@@ -793,18 +796,18 @@ if test ! "x$err_message" = "x" ; then
   echo "${ESC}[33m${err_message}${ESC}[m"
 fi
 
-ESC=$(printf '\033')
-if test "x$OPT_FLG" = "xtrue" &&
-   test "x$arg_cxx" = "xtrue" &&
-   test "x$OPT_COREDEVEL" = "xfalse" ; then
-  msg1='To use the log collection extension using the Fluentd logger,'
-  msg2='please install Fluent Bit by following the steps on the following web page.'
-  msg3='https://docs.fluentbit.io/manual/installation/linux/raspbian-raspberry-pi'
-  echo $LF
-  echo "${ESC}[33m${msg1}${ESC}[m"
-  echo "${ESC}[33m${msg2}${ESC}[m"
-  echo "${ESC}[33m${msg3}${ESC}[m"
-fi
+#ESC=$(printf '\033')
+#if test "x$OPT_FLG" = "xtrue" &&
+#   test "x$arg_cxx" = "xtrue" &&
+#   test "x$OPT_COREDEVEL" = "xfalse" ; then
+#  msg1='To use the log collection extension using the Fluentd logger,'
+#  msg2='please install Fluent Bit by following the steps on the following web page.'
+#  msg3='https://docs.fluentbit.io/manual/installation/linux/raspbian-raspberry-pi'
+#  echo $LF
+#  echo "${ESC}[33m${msg1}${ESC}[m"
+#  echo "${ESC}[33m${msg2}${ESC}[m"
+#  echo "${ESC}[33m${msg3}${ESC}[m"
+#fi
 if test "x$OPT_FLG" = "xfalse" ; then
   ESC=$(printf '\033')
   msg1='omniorb or other OpenRTM dependent packages may still exist. '
