@@ -986,11 +986,10 @@ get_dist(DIST_NAME)
 message(STATUS "Distribution is ${DIST_NAME}")
 
 if(UNIX)
+  if(${DIST_NAME} MATCHES "Ubuntu")
     configure_file(${PROJECT_SOURCE_DIR}/packages/deb/debian/rules.in
 	 ${PROJECT_BINARY_DIR}/rules @ONLY
     )
-
-  if(${DIST_NAME} MATCHES "Ubuntu")
     file(STRINGS "/etc/os-release" data_list REGEX "^(VERSION_CODENAME)=")
 
     # Look for lines like VERSION_CODENAME="..."
@@ -1003,6 +1002,9 @@ if(UNIX)
       endif()
     endforeach()
   else()
+    configure_file(${PROJECT_SOURCE_DIR}/packages/deb/debian/rules.not-ros-support.in
+	 ${PROJECT_BINARY_DIR}/rules @ONLY
+    )
     configure_file(${PROJECT_SOURCE_DIR}/packages/deb/debian/control.not-ros-support
          ${PROJECT_BINARY_DIR}/control @ONLY
     )
