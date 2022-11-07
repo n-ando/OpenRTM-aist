@@ -28,17 +28,7 @@ message(STATUS "ROSTransport.cmake found.")
 message(STATUS "CMAKE_GENERATOR check mode.")
 
 find_package(OpenRTM @RTM_MAJOR_VERSION@.@RTM_MINOR_VERSION@ REQUIRED)
-find_package(PkgConfig REQUIRED)
-pkg_check_modules(roscpp roscpp)
 
-if(NOT roscpp_FOUND)
-	message(FATAL_ERROR "can not find roscpp.")
-endif()
-
-find_package(Boost COMPONENTS chrono filesystem system)
-if(NOT Boost_FOUND)
-	find_package(Boost REQUIRED COMPONENTS chrono filesystem signals system)
-endif()
 
 # ROSTransport version
 set(ROSTRANSPORT_VERSION @RTM_VERSION@)
@@ -49,11 +39,11 @@ set(ROSTRANSPORT_SHORT_VERSION @RTM_VERSION@)
 
 # Basic compiler/linker options
 set(ROSTRANSPORT_CFLAGS )
-set(ROSTRANSPORT_INCLUDE_DIRS @INSTALL_ROSTRANSPORT_INCLUDE_DIR@)
+set(ROSTRANSPORT_INCLUDE_DIRS ${OPENRTM_DIR}/@INSTALL_ROSTRANSPORT_INCLUDE_DIR@)
 set(ROSTRANSPORT_LDFLAGS )
 
 set(ROSTRANSPORT_LIBRARY_DIRS )
-set(ROSTRANSPORT_LIBRARIES @INSTALL_ROSTRANSPORT_LIB_DIR@/@target@)
+set(ROSTRANSPORT_LIBRARIES ${OPENRTM_DIR}/@INSTALL_ROSTRANSPORT_LIB_DIR@/@target@@CMAKE_SHARED_LIBRARY_SUFFIX@)
 
 
 
