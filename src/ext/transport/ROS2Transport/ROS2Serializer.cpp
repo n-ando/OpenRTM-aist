@@ -25,7 +25,6 @@
 
 
 #include "ROS2Serializer.h"
-#include "ROS2MessageInfo.h"
 
 
 namespace RTC
@@ -49,11 +48,7 @@ namespace RTC
   template <class DataType, class MessageType, typename originalType, typename convertedType>
   void ROS2SimpleDataInitBaseFunc(const char* name)
   {
-    addSerializer<DataType, ROS2SimpleData<DataType, MessageType, originalType, convertedType>>(name);
-
-    GlobalFastRTPSMessageInfoList::
-            instance().addInfo(name,
-            new ROS2MessageInfo<MessageType>());
+    addRos2Serializer<DataType, MessageType, ROS2SimpleData<DataType, MessageType, originalType, convertedType>>(name);
   }
 
   /*!
@@ -103,11 +98,7 @@ namespace RTC
   template <class DataType, class MessageType, typename originalType, typename convertedType>
   void ROS2SequenceDataInitBaseFunc(const char* name)
   {
-    addSerializer<DataType, ROS2SequenceData<DataType, MessageType, originalType, convertedType>>(name);
-
-    GlobalFastRTPSMessageInfoList::
-            instance().addInfo(name,
-            new ROS2MessageInfo<MessageType>());
+    addRos2Serializer<DataType, MessageType, ROS2SequenceData<DataType, MessageType, originalType, convertedType>>(name);
   }
 
   /*!
@@ -257,11 +248,7 @@ namespace RTC
    */
   void ROS2StringDataInit()
   {
-    addSerializer<TimedString, ROS2StringData>("ros2:std_msgs/String");
-
-    GlobalFastRTPSMessageInfoList::
-            instance().addInfo("ros2:std_msgs/String",
-            new ROS2MessageInfo<std_msgs::msg::String>());
+    addRos2Serializer<TimedString, std_msgs::msg::String, ROS2StringData>("ros2:std_msgs/String");
   }
 
   /*!
@@ -393,11 +380,7 @@ namespace RTC
    */
   void ROS2Pont3DDataInit()
   {
-    addSerializer<TimedPoint3D, ROS2Point3DData>("ros2:geometry_msgs/PointStamped");
-
-    GlobalFastRTPSMessageInfoList::
-            instance().addInfo("ros2:geometry_msgs/PointStamped",
-            new ROS2MessageInfo<geometry_msgs::msg::PointStamped>());
+    addRos2Serializer<TimedPoint3D, geometry_msgs::msg::PointStamped, ROS2Point3DData>("ros2:geometry_msgs/PointStamped");
   }
 
   /*!
@@ -530,11 +513,7 @@ namespace RTC
    */
   void ROS2QuaternionDataInit()
   {
-    addSerializer<TimedQuaternion, ROS2QuaternionData>("ros2:geometry_msgs/QuaternionStamped");
-
-    GlobalFastRTPSMessageInfoList::
-            instance().addInfo("ros2:geometry_msgs/QuaternionStamped",
-            new ROS2MessageInfo<geometry_msgs::msg::QuaternionStamped >());
+    addRos2Serializer<TimedQuaternion, geometry_msgs::msg::QuaternionStamped, ROS2QuaternionData>("ros2:geometry_msgs/QuaternionStamped");
   }
 
   /*!
@@ -667,11 +646,7 @@ namespace RTC
    */
   void ROS2Vector3DDataInit()
   {
-    addSerializer<TimedVector3D, ROS2Vector3DData>("ros2:geometry_msgs/Vector3Stamped");
-
-    GlobalFastRTPSMessageInfoList::
-            instance().addInfo("ros2:geometry_msgs/Vector3Stamped",
-            new ROS2MessageInfo<geometry_msgs::msg::Vector3Stamped >());
+    addRos2Serializer<TimedVector3D, geometry_msgs::msg::Vector3Stamped , ROS2Vector3DData>("ros2:geometry_msgs/Vector3Stamped");
   }
 
   

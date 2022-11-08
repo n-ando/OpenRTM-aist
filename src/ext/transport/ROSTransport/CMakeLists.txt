@@ -89,7 +89,7 @@ else()
 endif()
 
 
-install(FILES ROSMessageInfo.h ROSSerializer.h DESTINATION ${INSTALL_ROSTRANSPORT_INCLUDE_DIR} COMPONENT ext)
+install(FILES ROSMessageInfo.h ROSSerializer.h DESTINATION ${INSTALL_ROSTRANSPORT_INCLUDE_DIR}/ROSTransport COMPONENT ext)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/ROSTransportConfig.cmake.in ${PROJECT_BINARY_DIR}/ROSTransportConfig.cmake @ONLY)
 install(FILES ${PROJECT_BINARY_DIR}/ROSTransportConfig.cmake DESTINATION ${INSTALL_RTM_CMAKE_DIR} COMPONENT cmakefiles)
 

@@ -50,7 +50,6 @@
 #include <geometry_msgs/Vector3Stamped.h>
 #include <sensor_msgs/Image.h>
 #include "ROSSerializer.h"
-#include "ROSMessageInfo.h"
 
 
 namespace RTC
@@ -74,11 +73,7 @@ namespace RTC
   template <class DataType, class MessageType, typename originalType, typename convertedType>
   void ROSSimpleDataInitBaseFunc(const char* name)
   {
-    addSerializer<DataType, ROSSimpleData<DataType, MessageType, originalType, convertedType>>(name);
-
-    GlobalROSMessageInfoList::
-            instance().addInfo(name,
-            new ROSMessageInfo<MessageType>());
+    addRosSerializer<DataType, MessageType, ROSSimpleData<DataType, MessageType, originalType, convertedType>>(name);
   }
 
   /*!
@@ -127,11 +122,7 @@ namespace RTC
   template <class DataType, class MessageType, typename originalType, typename convertedType>
   void ROSSequenceDataInitBaseFunc(const char* name)
   {
-    addSerializer<DataType, ROSSequenceData<DataType, MessageType, originalType, convertedType>>(name);
-
-    GlobalROSMessageInfoList::
-            instance().addInfo(name,
-            new ROSMessageInfo<MessageType>());
+    addRosSerializer<DataType, MessageType, ROSSequenceData<DataType, MessageType, originalType, convertedType>>(name);
   }
 
   /*!
@@ -283,11 +274,7 @@ namespace RTC
    */
   void ROSStringDataInit()
   {
-    addSerializer<TimedString, ROSStringData>("ros:std_msgs/String");
-
-    GlobalROSMessageInfoList::
-            instance().addInfo("ros:std_msgs/String",
-            new ROSMessageInfo<std_msgs::String>());
+    addRosSerializer<TimedString, std_msgs::String, ROSStringData>("ros:std_msgs/String");
   }
 
   /*!
@@ -420,11 +407,7 @@ namespace RTC
    */
   void ROSPont3DDataInit()
   {
-    addSerializer<TimedPoint3D, ROSPoint3DData>("ros:geometry_msgs/PointStamped");
-
-    GlobalROSMessageInfoList::
-            instance().addInfo("ros:geometry_msgs/PointStamped",
-            new ROSMessageInfo<geometry_msgs::PointStamped>());
+    addRosSerializer<TimedPoint3D, geometry_msgs::PointStamped, ROSPoint3DData>("ros:geometry_msgs/PointStamped");
   }
 
 
@@ -560,11 +543,7 @@ namespace RTC
    */
   void ROSQuaternionDataInit()
   {
-    addSerializer<TimedQuaternion, ROSQuaternionData>("ros:geometry_msgs/QuaternionStamped");
-
-    GlobalROSMessageInfoList::
-            instance().addInfo("ros:geometry_msgs/QuaternionStamped",
-            new ROSMessageInfo<geometry_msgs::QuaternionStamped >());
+    addRosSerializer<TimedQuaternion, geometry_msgs::QuaternionStamped, ROSQuaternionData>("ros:geometry_msgs/QuaternionStamped");
   }
 
 
@@ -698,11 +677,8 @@ namespace RTC
    */
   void ROSVector3DDataInit()
   {
-    addSerializer<TimedVector3D, ROSVector3DData>("ros:geometry_msgs/Vector3Stamped");
 
-    GlobalROSMessageInfoList::
-            instance().addInfo("ros:geometry_msgs/Vector3Stamped",
-            new ROSMessageInfo<geometry_msgs::Vector3Stamped >());
+    addRosSerializer<TimedVector3D, geometry_msgs::Vector3Stamped, ROSVector3DData>("ros:geometry_msgs/Vector3Stamped");
   }
 
   /*!
@@ -884,11 +860,7 @@ namespace RTC
    */
   void ROSCameraImageDataInit()
   {
-    addSerializer<CameraImage, ROSCameraImageData>("ros:sensor_msgs/Image");
-
-    RTC::GlobalROSMessageInfoList::
-            instance().addInfo("ros:sensor_msgs/Image",
-            new RTC::ROSMessageInfo<sensor_msgs::Image >());
+    addRosSerializer<CameraImage, sensor_msgs::Image, ROSCameraImageData>("ros:sensor_msgs/Image");
   }
 
 

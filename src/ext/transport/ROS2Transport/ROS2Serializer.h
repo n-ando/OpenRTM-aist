@@ -82,6 +82,7 @@
 #include <sensor_msgs/msg/image__rosidl_typesupport_fastrtps_cpp.hpp>
 #endif
 
+#include "ROS2MessageInfo.h"
 
 namespace RTC
 {
@@ -695,7 +696,31 @@ namespace RTC
       return ret;
     }
   };
-  
+
+  /*!
+   * @if jp
+   *
+   * @brief GlobalFactoryにROS2用シリアライザを追加する
+   * 
+   * @param marshalingtype シリアライザの名称
+   *
+   * @else
+   *
+   * @brief 
+   *
+   * @param marshalingtype 
+   *
+   * @endif
+   */
+  template <class DataType, class MessageType, class SerializerType>
+  void addRos2Serializer(const std::string &marshalingtype)
+  {
+    addSerializer<DataType, SerializerType>(marshalingtype);
+
+    GlobalFastRTPSMessageInfoList::
+            instance().addInfo(marshalingtype,
+            new ROS2MessageInfo<MessageType>());
+  }
 }
 
 

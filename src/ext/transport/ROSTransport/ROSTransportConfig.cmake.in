@@ -15,7 +15,7 @@
 # - ROSTRANSPORT_LIB_DIR: OpenRTM's lib directory
 #
 #
-# ROSTRANSPORT version
+# ROSTransport version
 # - ROSTRANSPORT_VERSION: x.y.z version
 # - ROSTRANSPORT_VERSION_MAJOR: major version number
 # - ROSTRANSPORT_VERSION_MINOR: minor version number
