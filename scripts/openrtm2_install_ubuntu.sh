@@ -45,13 +45,13 @@ usage()
     -l <argument>  language or tool [c++|python|java|openrtp|rtshell|all]
 	all        install packages of all the supported languages and tools
                    (openrtp is not supported in aarch64 environment.)
-    -r             install robot component runtime
-    -d             install robot component developer [default]
+    -r             install only runtime libraries and environment for RTC
+    -d             install packages for RTC developer [default]
     -e <argument>  install extension packages [ros|ros2|all]
     --ros          install extension package for ROS
     --ros2         install extension package for ROS2
-    -s             install tool_packages for build source packages
-    -c             install tool_packages for core developer
+    -s             install tool_packages for building OpenRTM from source
+    -c             install tool_packages for OpenRTM core developer
     -u             uninstall packages
     --yes          force yes
     --help, -h     print this
@@ -778,11 +778,11 @@ install_result()
   cat <<EOF
 
 =============================================
- Install package is ...
+ Installed packages are ...
 =============================================
 EOF
   if [ $# -eq 0 ] && test "x$OPT_UNINST" = "xfalse"; then
-    echo "There is no installation package."
+    echo "There is no installed package."
     return
   fi
 
@@ -804,12 +804,12 @@ uninstall_result()
   cat <<EOF
 
 =============================================
- Uninstall package is ...
+ Uninstalled packages are ...
 =============================================
 EOF
   if [ $# -eq 0 ] && test "x$OPT_UNINST" = "xtrue"; then
     if test "x$uninstall_pkgs" = "x"; then
-      echo "There is no uninstall package."
+      echo "There is no uninstalled package."
       return
     fi
   fi
