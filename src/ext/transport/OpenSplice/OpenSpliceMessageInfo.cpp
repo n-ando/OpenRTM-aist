@@ -24,6 +24,7 @@
 #include <rtm/idl/InterfaceDataTypesSkel.h>
 #include <rtm/Typename.h>
 #include <coil/OS.h>
+#include <algorithm>
 
 namespace RTC
 {
@@ -331,7 +332,7 @@ public:
     static const char* idlpath;
 };
 
-const char* BasicDataTypeFile::idlpath = "${RTM_IDL_PATH}/BasicDatatype.idl";
+const char* BasicDataTypeFile::idlpath = "${RTM_IDL_PATH}/BasicDataType.idl";
 const char* ExtendedDataTypesFile::idlpath = "${RTM_IDL_PATH}/ExtendedDataTypes.idl";
 const char* InterfaceDataTypesFile::idlpath = "${RTM_IDL_PATH}/InterfaceDataTypes.idl";
 

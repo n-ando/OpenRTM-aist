@@ -18,12 +18,12 @@
 
 #include "OpenSpliceManager.h"
 
-#include <coil/process.h>
+#include <coil/Process.h>
 #include <coil/stringutil.h>
 #include <rtm/SystemLogger.h>
-#include <rapidxml.hpp>
-#include <rapidxml_utils.hpp>
-#include <rapidxml_iterators.hpp>
+#include <rapidxml/rapidxml.hpp>
+#include <rapidxml/rapidxml_utils.hpp>
+#include <rapidxml/rapidxml_iterators.hpp>
 #include <iostream>
 #include <fstream>
 
@@ -778,7 +778,7 @@ namespace RTC
       {
         RTC_INFO(("QoSProvider set DataWriterQos"));
         RTC_ERROR(("DataWriterQos initialisation failed: %s", RetCodeName[ret].c_str()));
-        return false;
+        return nullptr;
       }
     }
 
@@ -1009,7 +1009,7 @@ namespace RTC
       if (ret != DDS::RETCODE_OK)
       {
         RTC_ERROR(("DataReaderQos initialisation failed: %s", RetCodeName[ret].c_str()));
-        return false;
+        return nullptr;
       }
     }
 

@@ -12,8 +12,10 @@ if(NOT OPENSPLICE_DIR)
 	message(FATAL_ERROR "Please run release.bat.")
 endif()
 
-if(NOT RAPIDXML_DIR)
-	message(FATAL_ERROR "Please set RAPIDXML_DIR.")
+if(WIN32)
+	if(NOT RAPIDXML_DIR)
+		message(FATAL_ERROR "Please set RAPIDXML_DIR.")
+	endif()
 endif()
 
 link_directories(${ORB_LINK_DIR}
@@ -43,8 +45,12 @@ if(VXWORKS AND NOT RTP)
 	target_include_directories(${target} SYSTEM
 				PUBLIC ${OPENSPLICE_DIR}/include/dcps/C++/SACPP
 				PUBLIC ${OPENSPLICE_DIR}/include/sys
-				PUBLIC ${OPENSPLICE_DIR}/examples/include
-				PUBLIC ${RAPIDXML_DIR})
+				PUBLIC ${OPENSPLICE_DIR}/examples/include)
+
+	if(RAPIDXML_DIR)
+		target_include_directories(${target} SYSTEM
+					PUBLIC ${RAPIDXML_DIR})
+	endif()
 
 	install(TARGETS ${target} LIBRARY DESTINATION ${INSTALL_RTM_EXT_DIR}/transport
 				ARCHIVE DESTINATION ${INSTALL_RTM_EXT_DIR}/transport
@@ -61,8 +67,12 @@ else()
 	target_include_directories(${target} SYSTEM
 				PUBLIC ${OPENSPLICE_DIR}/include/dcps/C++/SACPP
 				PUBLIC ${OPENSPLICE_DIR}/include/sys
-				PUBLIC ${OPENSPLICE_DIR}/examples/include
-				PUBLIC ${RAPIDXML_DIR})
+				PUBLIC ${OPENSPLICE_DIR}/examples/include)
+
+	if(RAPIDXML_DIR)
+		target_include_directories(${target} SYSTEM
+					PUBLIC ${RAPIDXML_DIR})
+	endif()
 
 	set(RTM_IDL_PATH \"${CMAKE_INSTALL_PREFIX}/${INSTALL_RTM_INCLUDE_DIR}/rtm/idl\")
 	target_compile_options(${target} PRIVATE -DRTM_IDL_PATH=${RTM_IDL_PATH})
