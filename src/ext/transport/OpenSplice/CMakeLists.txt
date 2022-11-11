@@ -63,6 +63,9 @@ else()
 				PUBLIC ${OPENSPLICE_DIR}/include/sys
 				PUBLIC ${OPENSPLICE_DIR}/examples/include
 				PUBLIC ${RAPIDXML_DIR})
+
+	set(RTM_IDL_PATH \"${CMAKE_INSTALL_PREFIX}/${INSTALL_RTM_INCLUDE_DIR}/rtm/idl\")
+	target_compile_options(${target} PRIVATE -DRTM_IDL_PATH=${RTM_IDL_PATH})
 	set_target_properties(${target} PROPERTIES PREFIX "")
 
 	set_target_properties(${target} PROPERTIES
@@ -89,3 +92,19 @@ if(VXWORKS)
 	endif(RTP)
 endif(VXWORKS)
 
+set(INSTALL_OPENSPLICE_DIR ${INSTALL_RTM_EXT_DIR}/transport)
+
+set(INSTALL_SAMPLEQOSPROFILE_DIR ${INSTALL_RTM_ETC_DIR}/transport)
+
+configure_file(
+	${CMAKE_CURRENT_SOURCE_DIR}/rtc.opensplice.conf.in ${PROJECT_BINARY_DIR}/rtc.opensplice.conf @ONLY)
+install(
+	FILES ${PROJECT_BINARY_DIR}/rtc.opensplice.conf
+	DESTINATION ${INSTALL_RTM_ETC_DIR}/transport
+	COMPONENT ext)
+
+
+install(
+	FILES ${CMAKE_CURRENT_SOURCE_DIR}/OpenSpliceQoSExample.xml
+	DESTINATION ${INSTALL_SAMPLEQOSPROFILE_DIR}
+	COMPONENT ext)
