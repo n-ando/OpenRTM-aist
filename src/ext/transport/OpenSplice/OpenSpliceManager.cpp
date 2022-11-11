@@ -27,6 +27,11 @@
 #include <iostream>
 #include <fstream>
 
+#ifdef __GNUC__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wframe-larger-than="
+#endif
+
 namespace RTC
 {
   OpenSpliceManager *OpenSpliceManager::manager = nullptr;
@@ -1571,3 +1576,7 @@ namespace RTC
   }
 
 }
+
+#ifdef __GNUC__
+#pragma GCC diagnostic pop
+#endif

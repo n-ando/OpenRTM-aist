@@ -48,7 +48,7 @@ namespace RTC
    * @endif
    */
   OpenSpliceInPort::OpenSpliceInPort(void)
-   : m_buffer(0), m_inport(nullptr)
+   : m_buffer(nullptr), m_inport(nullptr)
   {
     // PortProfile setting
     setInterfaceType("opensplice");
@@ -273,6 +273,10 @@ namespace RTC
       case BufferStatus::TIMEOUT:
         onBufferWriteTimeout(data);
         onReceiverTimeout(data);
+        return;
+
+      case BufferStatus::NOT_SUPPORTED:
+        onReceiverError(data);
         return;
 
       default:

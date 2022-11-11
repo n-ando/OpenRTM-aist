@@ -64,7 +64,7 @@ namespace RTC
          *
          * @endif
          */
-        ~OpenSpliceInPortListenerBase();
+        virtual ~OpenSpliceInPortListenerBase();
 
         /*!
          * @if jp
