@@ -23,6 +23,8 @@
 #include <rtm/idl/ExtendedDataTypesSkel.h>
 #include <rtm/idl/InterfaceDataTypesSkel.h>
 #include <rtm/Typename.h>
+#include <coil/OS.h>
+#include <algorithm>
 
 namespace RTC
 {
@@ -49,7 +51,16 @@ namespace RTC
 
         std::string idl_path() override
         {
-            std::string path = coil::replaceEnv(IDLPATH::idlpath);
+            std::string env;
+            std::string path;
+            if (coil::getenv("RTM_IDL_PATH", env))
+            {
+              path = coil::replaceEnv(IDLPATH::idlpath);
+            }
+            else
+            {
+              path = coil::replaceString(IDLPATH::idlpath, "${RTM_IDL_PATH}", RTM_IDL_PATH);
+            }
             path = coil::replaceString(std::move(path), "//", "/");
             return coil::replaceString(std::move(path), "\\\\", "\\");
         }
@@ -321,13 +332,13 @@ public:
     static const char* idlpath;
 };
 
-const char* BasicDataTypeFile::idlpath = "${RTM_IDL_PATH}/BasicDatatype.idl";
+const char* BasicDataTypeFile::idlpath = "${RTM_IDL_PATH}/BasicDataType.idl";
 const char* ExtendedDataTypesFile::idlpath = "${RTM_IDL_PATH}/ExtendedDataTypes.idl";
 const char* InterfaceDataTypesFile::idlpath = "${RTM_IDL_PATH}/InterfaceDataTypes.idl";
 
 void OpenSpliceMessageInfoInit(const coil::Properties& prop)
 {
-    std::string datalist = prop.getProperty("opensplice.datatypes", "ALL");
+    std::string datalist = prop.getProperty("datatypes", "ALL");
     coil::vstring datatypes;
     for (auto& datatype : coil::split(datalist, ","))
     {

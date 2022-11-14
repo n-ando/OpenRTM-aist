@@ -389,7 +389,7 @@ namespace RTC
   class __declspec(dllimport) GlobalOpenSpliceMessageInfoList
 #endif
 #else
-  class GlobalOpenSpliceMessageInfo
+  class GlobalOpenSpliceMessageInfoList
 #endif
       : public OpenSpliceMessageInfoList,
       public coil::Singleton<GlobalOpenSpliceMessageInfoList >
