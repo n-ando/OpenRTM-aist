@@ -103,7 +103,7 @@ install-arch:
 	(mkdir -p $(TARGET)/bin)
 	(cp $(INSTALL_PREFIX)/bin/rtcd2 $(TARGET)/bin)
 	(cp $(INSTALL_PREFIX)/bin/rtcprof2 $(TARGET)/bin)
-	(cp $(INSTALL_PREFIX)/bin/rtm-config2 $(TARGET)/bin)
+	(cp $(INSTALL_PREFIX)/bin/rtm2-config $(TARGET)/bin)
 	(cp $(INSTALL_PREFIX)/bin/rtm2-naming $(TARGET)/bin)
 	(cp -r $(INSTALL_PREFIX)/etc $(TARGET))
 	(mkdir -p $(TARGET)/${RTM_EXT_DIR})
@@ -127,7 +127,7 @@ install-arch:
 
 	# for openrtm-dev package
 	(mkdir -p $(TARGET_dev)/bin)
-	(cp $(INSTALL_PREFIX)/bin/rtm-skelwrapper2 $(TARGET_dev)/bin)
+	(cp $(INSTALL_PREFIX)/bin/rtm2-skelwrapper $(TARGET_dev)/bin)
 	(cp -r $(INSTALL_PREFIX)/include $(TARGET_dev))
 	(rm -r $(TARGET_dev)/include/openrtm-$(SHORT_VER)/hrtm)
 	(mkdir -p $(TARGET_dev)/${RTM_EXT_DIR})

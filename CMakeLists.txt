@@ -1,7 +1,7 @@
 cmake_minimum_required (VERSION 3.5.1)
 
 project (OpenRTM_aist
-	VERSION 2.0.0
+	VERSION 2.0.1
 	LANGUAGES CXX)
 
 set(CORBA omniORB CACHE STRING "set CORBA ")
@@ -825,7 +825,7 @@ function(openrtm_gencode_set_compile_props target)
 endfunction()
 
 function(openrtm_idl_compile idl_name inc_path output category dependencies)
-	set(skel_wrapper ${OpenRTM_aist_BINARY_DIR}/rtm-skelwrapper2)
+	set(skel_wrapper ${OpenRTM_aist_BINARY_DIR}/rtm2-skelwrapper)
 	if(CORBA STREQUAL "ORBexpress")
 		set(idl_flags -m -a -ex -fhh -fxcc -fc_c -fs -q -dOE_IDL -I${ORB_ROOT}/idl)
 	elseif (CORBA STREQUAL "omniORB")
