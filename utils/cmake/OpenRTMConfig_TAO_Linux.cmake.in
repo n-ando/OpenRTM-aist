@@ -62,7 +62,7 @@ set(OPENRTM_SHORT_VERSION @RTM_SHORT_VERSION@)
 
 # OpenRTM-aist's CORBA related settings
 set(OPENRTM_ORB TAO)
-set(OPENRTM_IDL_WRAPPER rtm-skelwrapper2)
+set(OPENRTM_IDL_WRAPPER rtm2-skelwrapper)
 set(OPENRTM_IDL_WRAPPER_FLAGS --include-dir= --skel-suffix=Skel --stub-suffix=Stub)
 set(OPENRTM_IDLC @IDL_COMPILE_COMMAND@)
 

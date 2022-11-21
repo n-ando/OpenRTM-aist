@@ -130,13 +130,18 @@ namespace RTC {
     "manager.modules.Python.suffixes",       "py",
     "manager.modules.Python.load_paths",     "",
 #ifndef WIN32
-    "manager.modules.Python3.manager_cmd",    "rtcd_python3",
-    "manager.modules.Python3.profile_cmd",    "rtcprof_python3",
+    "manager.modules.Python3.manager_cmd",    "rtcd2_python3",
+    "manager.modules.Python3.profile_cmd",    "rtcprof2_python3",
     "manager.modules.Python3.suffixes",       "py",
     "manager.modules.Python3.load_paths",     "",
 #endif
+#ifdef RTM_OS_LINUX
+    "manager.modules.Java.manager_cmd",      "rtcd2_java",
+    "manager.modules.Java.profile_cmd",      "rtcprof2_java",
+#else
     "manager.modules.Java.manager_cmd",      "rtcd_java",
     "manager.modules.Java.profile_cmd",      "rtcprof_java",
+#endif
     "manager.modules.Java.suffixes",         "class",
     "manager.modules.Java.load_paths",       "",
     "manager.modules.search_auto",       "YES",

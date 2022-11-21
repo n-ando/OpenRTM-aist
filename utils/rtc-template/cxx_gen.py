@@ -412,14 +412,14 @@ makefile = """# -*- Makefile -*-
 # [rcs_id]
 
 #
-CXX      = `rtm-config2 --cxx`
-CXXFLAGS = `rtm-config2 --cflags` -I.
-LDFLAGS  = `rtm-config2 --libs`
+CXX      = `rtm2-config --cxx`
+CXXFLAGS = `rtm2-config --cflags` -I.
+LDFLAGS  = `rtm2-config --libs`
 SHFLAGS  = -shared
 
-IDLC     = `rtm-config2 --idlc`
-IDLFLAGS = `rtm-config2 --idlflags` -I`rtm-config2 --prefix`/include/rtm/idl
-WRAPPER  = rtm-skelwrapper2
+IDLC     = `rtm2-config --idlc`
+IDLFLAGS = `rtm2-config --idlflags` -I`rtm2-config --prefix`/include/rtm/idl
+WRAPPER  = rtm2-skelwrapper
 WRAPPER_FLAGS = --include-dir="" --skel-suffix=Skel --stub-suffix=Stub
 
 SKEL_OBJ = [for sidl in service_idl][sidl.skel_basename].o [endfor] 

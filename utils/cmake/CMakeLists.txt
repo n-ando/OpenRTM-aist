@@ -1,7 +1,7 @@
 cmake_minimum_required (VERSION 3.5.1)
 
 project (OpenRTMCMake
-	VERSION 2.0.0
+	VERSION 2.0.1
 	LANGUAGES CXX)
 
 if(CORBA STREQUAL "ORBexpress")
