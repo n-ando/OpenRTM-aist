@@ -6,13 +6,17 @@
 #         Nobu Kawauchi
 #
 
-VERSION=2.0.0.02
+VERSION=2.0.0.03
 FILENAME=openrtm2_install_raspbian.sh
 BIT=`getconf LONG_BIT`
 
 #---------------------------------------
 # usage
 #---------------------------------------
+op_r_msg="install only runtime libraries and environment for RTC"
+op_d_msg="install packages for RTC developer"
+op_s_msg="install tool_packages for building OpenRTM from source"
+op_c_msg="install tool_packages for OpenRTM core developer"
 usage()
 {
   cat <<EOF
@@ -33,10 +37,10 @@ usage()
   Options:
     -l <argument>  language or tool [c++|python|rtshell|all]
         all        install packages of all the supported languages and tools
-    -r             install robot component runtime
-    -d             install robot component developer [default]
-    -s             install tool_packages for build source packages
-    -c             install tool_packages for core developer
+    -r             ${op_r_msg}
+    -d             ${op_d_msg} [default]
+    -s             ${op_s_msg}
+    -c             ${op_c_msg}
     -u             uninstall packages
     --yes          force yes
     --help, -h     print this
@@ -106,6 +110,7 @@ arg_python=false
 arg_java=false
 arg_rtshell=false
 err_message=""
+select_opt_c=""
 }
 
 check_arg()
@@ -522,46 +527,46 @@ install_proc()
 
   if test "x$arg_cxx" = "xtrue" ; then
     if test "x$OPT_CORE" = "xtrue" ; then
-      select_opt_c="[c++] install tool_packages for core developer"
+      select_opt_c="[c++] ${op_c_msg}"
       install_packages $core_pkgs
     elif test "x$OPT_SRC" = "xtrue" ; then
-      select_opt_c="[c++] install tool_packages for source packages"
+      select_opt_c="[c++] ${op_s_msg}"
       install_packages $src_pkgs
     elif test "x$OPT_RT" = "xtrue" ; then
-      select_opt_c="[c++] install robot component runtime"
+      select_opt_c="[c++] ${op_r_msg}"
       install_packages $runtime_pkgs
     else
       OPT_DEV=true
-      select_opt_c="[c++] install robot component developer"
+      select_opt_c="[c++] ${op_d_msg}"
       install_packages $dev_pkgs
     fi
   fi
 
   if test "x$arg_python" = "xtrue" ; then
     if test "x$OPT_CORE" = "xtrue" ; then
-      select_opt_p="[python] install tool_packages for core developer"
+      select_opt_p="[python] ${op_c_msg}"
       install_packages $python_core_pkgs
       #pip3 install fluent-logger
       #tmp_pkg="$install_pkgs fluent-logger"
       #install_pkgs=$tmp_pkg
     elif test "x$OPT_RT" = "xtrue" ; then
-      select_opt_p="[python] install robot component runtime"
+      select_opt_p="[python] ${op_r_msg}"
       install_packages $python_runtime_pkgs
     else
-      select_opt_p="[python] install robot component developer"
+      select_opt_p="[python] ${op_d_msg}"
       install_packages $python_dev_pkgs
     fi
   fi
 
   if test "x$arg_java" = "xtrue" ; then
     if test "x$OPT_CORE" = "xtrue" ; then
-      select_opt_j="[java] install tool_packages for core developer"
+      select_opt_j="[java] ${op_c_msg}"
       install_packages $java_core_pkgs
     elif test "x$OPT_RT" = "xtrue" ; then
-      select_opt_j="[java] install robot component runtime"
+      select_opt_j="[java] ${op_r_msg}"
       install_packages $java_runtime_pkgs
     else
-      select_opt_j="[java] install robot component developer"
+      select_opt_j="[java] ${op_d_msg}"
       install_packages $java_dev_pkgs
     fi
   fi
@@ -589,43 +594,43 @@ uninstall_proc()
 
   if test "x$arg_cxx" = "xtrue" ; then
     if test "x$OPT_CORE" = "xtrue" ; then
-      select_opt_c="[c++] uninstall tool_packages for core developer"
+      select_opt_c="[c++] un${op_c_msg}"
       uninstall_packages `reverse $u_core_pkgs`
     elif test "x$OPT_SRC" = "xtrue" ; then
-      select_opt_c="[c++] uninstall tool_packages for source packages"
+      select_opt_c="[c++] un${op_s_msg}"
       uninstall_packages `reverse $u_src_pkgs`
     elif test "x$OPT_RT" = "xtrue" ; then
-      select_opt_c="[c++] uninstall robot component runtime"
+      select_opt_c="[c++] un${op_r_msg}"
       uninstall_packages `reverse $u_runtime_pkgs`
     else
       OPT_DEV=true
-      select_opt_c="[c++] uninstall robot component developer"
+      select_opt_c="[c++] un${op_d_msg}"
       uninstall_packages `reverse $u_dev_pkgs`
     fi
   fi
 
   if test "x$arg_python" = "xtrue" ; then
     if test "x$OPT_CORE" = "xtrue" ; then
-      select_opt_p="[python] uninstall tool_packages for core developer"
+      select_opt_p="[python] un${op_c_msg}"
       uninstall_packages `reverse $u_python_core_pkgs`
     elif test "x$OPT_RT" = "xtrue" ; then
-      select_opt_p="[python] uninstall robot component runtime"
+      select_opt_p="[python] un${op_r_msg}"
       uninstall_packages `reverse $u_python_runtime_pkgs`
     else
-      select_opt_p="[python] uninstall robot component developer"
+      select_opt_p="[python] un${op_d_msg}"
       uninstall_packages `reverse $u_python_dev_pkgs`
     fi
   fi
 
   if test "x$arg_java" = "xtrue" ; then
     if test "x$OPT_CORE" = "xtrue" ; then
-      select_opt_j="[java] uninstall tool_packages for core developer"
+      select_opt_j="[java] un${op_c_msg}"
       uninstall_packages `reverse $u_java_core_pkgs`
     elif test "x$OPT_RT" = "xtrue" ; then
-      select_opt_j="[java] uninstall robot component runtime"
+      select_opt_j="[java] un${op_r_msg}"
       uninstall_packages `reverse $u_java_runtime_pkgs`
     else
-      select_opt_j="[java] uninstall robot component developer"
+      select_opt_j="[java] un${op_d_msg}"
       uninstall_packages `reverse $u_java_dev_pkgs`
     fi
   fi
@@ -649,7 +654,7 @@ print_option()
   cat <<EOF
 
 =============================================
- Selected options is ...
+ Selected options are ...
 =============================================
 EOF
 
@@ -676,11 +681,11 @@ install_result()
   cat <<EOF
 
 =============================================
- Install package is ...
+ Installed package are ...
 =============================================
 EOF
   if [ $# -eq 0 ] && test "x$OPT_FLG" = "xfalse"; then
-    echo "There is no installation package."
+    echo "There is no installed package."
     return
   fi
 
@@ -702,12 +707,12 @@ uninstall_result()
   cat <<EOF
 
 =============================================
- Uninstall package is ...
+ Uninstalled package are ...
 =============================================
 EOF
   if [ $# -eq 0 ] && test "x$OPT_FLG" = "xtrue"; then
     if test "x$uninstall_pkgs" = "x"; then
-      echo "There is no uninstall package."
+      echo "There is no uninstalled package."
       return
     fi
   fi
