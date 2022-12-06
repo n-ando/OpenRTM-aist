@@ -1,9 +1,5 @@
 cmake_minimum_required (VERSION 3.5.1)
-if(WIN32)
-	set(target rtcprof)
-else(WIN32)
-	set(target rtcprof2)
-endif(WIN32)
+set(target rtcprof2)
 project (${target}
 	VERSION ${RTM_VERSION}
 	LANGUAGES CXX)
