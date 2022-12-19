@@ -39,15 +39,9 @@ if(BUILD_RTM_LINUX_PKGS)
   set(CMAKE_INSTALL_PREFIX "/usr")
 endif()
 
-if(WIN32)
-	configure_file(
-		${CMAKE_CURRENT_SOURCE_DIR}/rtm-config.in
-		${PROJECT_BINARY_DIR}/rtm-config @ONLY)
-else()
-	configure_file(
-		${CMAKE_CURRENT_SOURCE_DIR}/rtm-config.in
-		${PROJECT_BINARY_DIR}/rtm2-config @ONLY)
-endif()
+configure_file(
+	${CMAKE_CURRENT_SOURCE_DIR}/rtm-config.in
+	${PROJECT_BINARY_DIR}/rtm2-config @ONLY)
 
 if(NOT WIN32)
 	install(
@@ -57,7 +51,7 @@ if(NOT WIN32)
 		PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ GROUP_EXECUTE GROUP_READ  WORLD_READ WORLD_EXECUTE)
 else()
 	install(
-		FILES ${PROJECT_BINARY_DIR}/rtm-config
+		FILES ${PROJECT_BINARY_DIR}/rtm2-config
 		DESTINATION ${INSTALL_RTM_BIN_DIR} COMPONENT utils)
 endif()
 
