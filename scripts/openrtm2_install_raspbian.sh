@@ -6,7 +6,7 @@
 #         Nobu Kawauchi
 #
 
-VERSION=2.0.0.03
+VERSION=2.0.0.04
 FILENAME=openrtm2_install_raspbian.sh
 BIT=`getconf LONG_BIT`
 
@@ -25,6 +25,7 @@ usage()
     ${FILENAME} -l {all|c++} [-r|-d|-s|-c] [-u|--yes]
     ${FILENAME} [-u]
     ${FILENAME} -l {python} [-r|-d|-c] [-u|--yes]
+    ${FILENAME} -l {java} [-r|-d|-c] [-u|--yes]
     ${FILENAME} -l {rtshell} [-d] [-u|--yes]
     ${FILENAME} {--help|-h|--version}
 
@@ -35,7 +36,7 @@ usage()
     ${FILENAME} -l all -u
 
   Options:
-    -l <argument>  language or tool [c++|python|rtshell|all]
+    -l <argument>  language or tool [c++|python|java|rtshell|all]
         all        install packages of all the supported languages and tools
     -r             ${op_r_msg}
     -d             ${op_d_msg} [default]
@@ -122,7 +123,7 @@ check_arg()
     all ) arg_all=true ;;
     c++ ) arg_cxx=true ;;
     python ) arg_python=true ;;
-#    java ) arg_java=true ;;
+    java ) arg_java=true ;;
     rtshell ) arg_rtshell=true ;;
     *) arg_err=-1 ;;
   esac
@@ -737,11 +738,11 @@ get_opt $@
 if test "x$arg_all" = "xfalse" ; then
   if test "x$arg_cxx" = "xfalse" ; then
     if test "x$arg_python" = "xfalse" ; then
-#      if test "x$arg_java" = "xfalse" ; then
+      if test "x$arg_java" = "xfalse" ; then
         if test "x$arg_rtshell" = "xfalse" ; then
           exit
         fi
-#      fi
+      fi
     fi
   fi
 fi
@@ -758,7 +759,7 @@ if test "x$arg_all" = "xtrue" &&
    test "x$OPT_OLD_RTM" = "xfalse" ; then
   arg_cxx=true
   arg_python=true
-#  arg_java=true
+  arg_java=true
   arg_rtshell=true
 
   if test "x$OPT_RT" != "xtrue" && 
@@ -780,12 +781,12 @@ else
 fi
 
 # install openjdk-8-jdk
-#if test "x$OPT_FLG" = "xtrue" &&
-#   test "x$BIT" = "x32" ; then
-#  sudo apt -y install openjdk-8-jdk
-#  JAVA8=`update-alternatives --list java | grep java-8`
-#  sudo update-alternatives --set java ${JAVA8}
-#fi
+if test "x$OPT_FLG" = "xtrue" &&
+    test "x$BIT" = "x32" ; then
+  sudo apt -y install openjdk-8-jdk
+  JAVA8=`update-alternatives --list java | grep java-8`
+  sudo update-alternatives --set java ${JAVA8}
+fi
 
 #if test "x$OPT_CORE" = "xtrue" ; then
 #  systemctl enable td-agent-bit
