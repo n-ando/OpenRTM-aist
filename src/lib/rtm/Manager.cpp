@@ -333,7 +333,7 @@ namespace RTC
       }
 
     m_config["sdo.service.consumer.available_services"]
-      = coil::flatten(SdoServiceConsumerFactory::instance().getIdentifiers());
+      = coil::eraseBlank(coil::flatten(SdoServiceConsumerFactory::instance().getIdentifiers()));
 
     invokeInitProc();
     initPreCreation();
@@ -2296,8 +2296,8 @@ std::vector<coil::Properties> Manager::getLoadableModules()
       {
         naming_formats = comp_prop["naming.formats"];
       }
-    naming_formats = coil::flatten(coil::unique_sv(coil::split(naming_formats,
-                                                               ",")));
+    naming_formats = coil::eraseBlank(coil::flatten(coil::unique_sv(coil::split(naming_formats,
+                                                               ","))));
 
     std::string naming_names;
     naming_names = formatString(naming_formats.c_str(), comp->getProperties());
@@ -2584,7 +2584,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 
         coil::vstring tmp = coil::split(port0_str, ".");
         tmp.pop_back();
-        std::string comp0_name = coil::flatten(tmp, ".");
+        std::string comp0_name = coil::eraseBlank(coil::flatten(tmp, "."));
 
         std::string port0_name = port0_str;
         RTObject_impl* comp0 = nullptr;
@@ -2643,7 +2643,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
           {
             tmp = coil::split(port, ".");
             tmp.pop_back();
-            std::string comp_name = coil::flatten(tmp, ".");
+            std::string comp_name = coil::eraseBlank(coil::flatten(tmp, "."));
             std::string port_name = port;
             RTObject_impl* comp = nullptr;
             RTC::RTObject_var comp_ref;
