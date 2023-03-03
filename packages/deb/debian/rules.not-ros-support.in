@@ -91,8 +91,8 @@ install-indep:
 install-arch:
 	dh_testdir
 	dh_testroot
-	dh_clean -k -s 
-	dh_installdirs -s
+	dh_clean -k -a
+	dh_installdirs -a
 
 	# Add here commands to install the arch part of the package into 
 	# debian/tmp.
@@ -134,7 +134,7 @@ install-arch:
 	(mkdir -p $(TARGET_example)/share/openrtm-$(SHORT_VER))
 	(cp -R $(INSTALL_PREFIX)/share/openrtm-$(SHORT_VER)/components $(TARGET_example)/share/openrtm-$(SHORT_VER))
 
-	dh_install -s
+	dh_install -a
 # Must not depend on anything. This is to be called by
 # binary-arch/binary-indep
 # in another 'make' thread.
@@ -172,7 +172,7 @@ binary-indep: build-indep install-indep
 
 # Build architecture dependant packages using the common target.
 binary-arch: build-arch install-arch
-	$(MAKE) -f debian/rules DH_OPTIONS=-s binary-common
+	$(MAKE) -f debian/rules DH_OPTIONS=-a binary-common
 
 binary: binary-arch binary-indep
 .PHONY: build clean binary-indep binary-arch binary install install-indep install-arch 

@@ -986,7 +986,7 @@ get_dist(DIST_NAME)
 message(STATUS "Distribution is ${DIST_NAME}")
 
 if(UNIX)
-  if(${DIST_NAME} MATCHES "Ubuntu")
+  if(ROS_ENABLE)
     configure_file(${PROJECT_SOURCE_DIR}/packages/deb/debian/rules.in
 	 ${PROJECT_BINARY_DIR}/rules @ONLY
     )
