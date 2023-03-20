@@ -49,6 +49,7 @@ if(VXWORKS AND NOT RTP)
 		PRIVATE ${PROJECT_SOURCE_DIR}/..)
 	target_include_directories(${target} SYSTEM
 		PUBLIC ${rclcpp_INCLUDE_DIRS}
+		PUBLIC ${rmw_fastrtps_cpp_INCLUDE_DIRS}
 		PUBLIC ${std_msgs_INCLUDE_DIRS}
 		PUBLIC ${geometry_msgs_INCLUDE_DIRS}
 		PUBLIC ${sensor_msgs_INCLUDE_DIRS})
@@ -89,6 +90,7 @@ else()
 		PRIVATE ${PROJECT_SOURCE_DIR}/..)
 	target_include_directories(${target} SYSTEM
 					PUBLIC ${rclcpp_INCLUDE_DIRS}
+					PUBLIC ${rmw_fastrtps_cpp_INCLUDE_DIRS}
 					PUBLIC ${std_msgs_INCLUDE_DIRS}
 					PUBLIC ${geometry_msgs_INCLUDE_DIRS}
 					PUBLIC ${sensor_msgs_INCLUDE_DIRS})

@@ -128,6 +128,33 @@ namespace RTC
     /*!
      * @if jp
      *
+     * @brief OpenSpliceMessageInfoを追加
+     * 
+     * @param id 名前
+     * @param info OpenSpliceMessageInfo
+     *
+     * @else
+     *
+     * @brief Destructor
+     *
+     * @param id 
+     * @param info 
+     *
+     * @endif
+     */
+    void OpenSpliceMessageInfoList::addInfo(const std::string &id, OpenSpliceMessageInfoBase* info)
+    {
+        auto data = m_data.find(id);
+        if (data != m_data.end())
+        {
+            data->second.deleteObject();
+        }
+        m_data[id] = OpenSpliceMessageInfoEntry(info, [](OpenSpliceMessageInfoBase*& obj) { delete obj; });
+    }
+
+    /*!
+     * @if jp
+     *
      * @brief OpenSpliceMessageInfoを削除
      *
      * @param id 名前
