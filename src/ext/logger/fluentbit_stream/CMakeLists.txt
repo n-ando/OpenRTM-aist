@@ -64,6 +64,18 @@ else()
 			SYSTEM PRIVATE
 			${FLB_INCLUDR_DIR}
 	)
+	if(NOT FLUENTBIT_ADD_INCLUDE)
+		target_include_directories(${target}
+			SYSTEM PRIVATE
+			${FLB_INCLUDR_DIR}
+		)
+	else()
+		target_include_directories(${target}
+			SYSTEM PRIVATE
+			${FLB_INCLUDR_DIR}
+			${FLB_INCLUDR_DIR}/monkey
+		)
+	endif()
 	target_link_libraries(${target} PRIVATE 
 			${libs}
 			${RTM_LINKER_OPTION}
