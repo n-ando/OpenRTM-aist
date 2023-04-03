@@ -986,10 +986,16 @@ get_dist(DIST_NAME)
 message(STATUS "Distribution is ${DIST_NAME}")
 
 if(UNIX)
-  if(ROS_ENABLE)
-    configure_file(${PROJECT_SOURCE_DIR}/packages/deb/debian/rules.in
+  if(ROS_ENABLE OR ROS2_ENABLE)
+    if(ROS_ENABLE)
+      configure_file(${PROJECT_SOURCE_DIR}/packages/deb/debian/rules.in
 	 ${PROJECT_BINARY_DIR}/rules @ONLY
-    )
+      )
+    else()
+      configure_file(${PROJECT_SOURCE_DIR}/packages/deb/debian/rules.ros2-only-support.in
+	 ${PROJECT_BINARY_DIR}/rules @ONLY
+      )
+    endif()
     file(STRINGS "/etc/os-release" data_list REGEX "^(VERSION_CODENAME)=")
 
     # Look for lines like VERSION_CODENAME="..."
