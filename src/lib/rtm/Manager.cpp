@@ -2056,6 +2056,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
           {
           }
       }
+    cleanupComponents();
     for (auto const& m_ec : m_ecs)
       {
         try {
