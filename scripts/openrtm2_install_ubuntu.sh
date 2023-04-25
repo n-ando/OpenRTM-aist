@@ -14,7 +14,7 @@
 # = OPT_UNINST   : uninstallation
 #
 
-VERSION=2.0.1.00
+VERSION=2.0.1.01
 FILENAME=openrtm2_install_ubuntu.sh
 
 #
@@ -431,8 +431,14 @@ update_source_list () {
       exit 0
     else
       echo $openrtm_repo | sudo tee /etc/apt/sources.list.d/openrtm.list > /dev/null
+      if [ ! -d /etc/apt/keyrings ]; then
+        sudo mkdir -p /etc/apt/keyrings
+      fi
       sudo wget --secure-protocol=TLSv1_2 --no-check-certificate https://openrtm.org/pub/openrtm.key -O /etc/apt/keyrings/openrtm.key
     fi
+  elif test "x$rtmsite2" != "x" &&
+       [ ! -e /etc/apt/keyrings/openrtm.key ]; then
+    sudo wget --secure-protocol=TLSv1_2 --no-check-certificate https://openrtm.org/pub/openrtm.key -O /etc/apt/keyrings/openrtm.key
   fi
   fluentsite=`apt-cache policy | grep "https://packages.fluentbit.io"`
   if test "x$fluentsite" = "x" &&
