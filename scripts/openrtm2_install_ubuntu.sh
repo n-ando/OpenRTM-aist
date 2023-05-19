@@ -14,7 +14,7 @@
 # = OPT_UNINST   : uninstallation
 #
 
-VERSION=2.0.1.01
+VERSION=2.0.1.02
 FILENAME=openrtm2_install_ubuntu.sh
 
 #
@@ -102,7 +102,7 @@ openrtm2_ros2="openrtm2-ros2-tp"
 
 #--------------------------------------- Python
 omnipy="omniidl-python3"
-python_runtime="python3 python3-omniorb-omg"
+python_runtime="python3 python3-omniorb-omg python3-tk tix-dev"
 python_devel="python3-pip $cmake_tools $base_tools $omnipy $common_devel"
 openrtm2_py_devel="openrtm2-python3-doc"
 openrtm2_py_runtime="openrtm2-python3 openrtm2-python3-example"
