@@ -6,7 +6,7 @@
 #         Nobu Kawauchi
 #
 
-VERSION=2.0.0.04
+VERSION=2.0.1.00
 FILENAME=openrtm2_install_raspbian.sh
 BIT=`getconf LONG_BIT`
 
@@ -345,16 +345,18 @@ check_reposerver()
 # リポジトリサーバ
 #---------------------------------------
 create_srclist () {
-  openrtm_repo="deb http://$reposerver/pub/Linux/raspbian/ $code_name main"
-  #fluent_repo="deb https://packages.fluentbit.io/raspbian/$code_name $code_name main"
+  openrtm_repo="deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/openrtm.key] http://$reposerver/pub/Linux/raspbian/ $code_name main"
+  #fluent_repo="deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/fluentbit-keyring.gpg] https://packages.fluentbit.io/raspbian/$code_name $code_name main"
 }
 
 #---------------------------------------
 # ソースリスト更新関数の定義
 #---------------------------------------
 update_source_list () {
-  rtmsite=`grep "$openrtm_repo" /etc/apt/sources.list`
-  if test "x$rtmsite" = "x" ; then
+  rtmsite1=`grep $reposerver /etc/apt/sources.list`
+  rtmsite2=`grep -r $reposerver /etc/apt/sources.list.d`
+  if test "x$rtmsite1" = "x" &&
+     test "x$rtmsite2" = "x" ; then
     echo $msg4
     echo $msg5
     echo "  " $openrtm_repo
@@ -364,8 +366,15 @@ update_source_list () {
       echo $msg7
       exit 0
     else
-      echo $openrtm_repo | sudo tee -a /etc/apt/sources.list
+      echo $openrtm_repo | sudo tee /etc/apt/sources.list.d/openrtm.list > /dev/null
+      if [ ! -d /etc/apt/keyrings ]; then
+        sudo mkdir -p /etc/apt/keyrings
+      fi
+      sudo wget --secure-protocol=TLSv1_2 --no-check-certificate https://openrtm.org/pub/openrtm.key -O /etc/apt/keyrings/openrtm.key
     fi
+  elif test "x$rtmsite2" != "x" &&
+       [ ! -e /etc/apt/keyrings/openrtm.key ]; then
+    sudo wget --secure-protocol=TLSv1_2 --no-check-certificate https://openrtm.org/pub/openrtm.key -O /etc/apt/keyrings/openrtm.key
   fi
   
   if test "x$FORCE_YES" = "xtrue" ; then
@@ -376,12 +385,8 @@ update_source_list () {
 #  fluentsite=`apt-cache policy | grep "https://packages.fluentbit.io"`
 #  if test "x$fluentsite" = "x" &&
 #     test "x$OPT_CORE" = "xtrue" ; then
-#    echo $fluent_repo | sudo tee -a /etc/apt/sources.list
-#  fi
-　# 公開鍵登録
-  wget -O- --secure-protocol=TLSv1_2 --no-check-certificate https://openrtm.org/pub/openrtm.key | sudo apt-key add -
-#  if test "x$OPT_CORE" = "xtrue" ; then
-#    wget -O - https://packages.fluentbit.io/fluentbit.key | sudo apt-key add -
+#    echo $fluent_repo | sudo tee /etc/apt/sources.list.d/fluentbit.list > /dev/null
+#    wget -O - https://packages.fluentbit.io/fluentbit.key | gpg --dearmor | sudo tee /usr/share/keyrings/fluentbit-keyring.gpg >/dev/null
 #  fi
 }
 
@@ -789,8 +794,8 @@ if test "x$OPT_FLG" = "xtrue" &&
 fi
 
 #if test "x$OPT_CORE" = "xtrue" ; then
-#  systemctl enable td-agent-bit
-#  systemctl start td-agent-bit
+#  sudo systemctl enable td-agent-bit
+#  sudo systemctl start td-agent-bit
 #fi
 
 install_result $install_pkgs
