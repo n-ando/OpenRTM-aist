@@ -1735,7 +1735,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
       {
         try
           {
-            m_pORB->shutdown(true);
+            m_pORB->destroy();
             RTC_DEBUG(("ORB was shutdown."));
             RTC_DEBUG(("ORB was destroied."));
             m_pORB = CORBA::ORB::_nil();
