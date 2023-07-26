@@ -939,6 +939,40 @@ if(WIN32)
 	set(MAKE_DEF_COMMAND ${CMAKE_SOURCE_DIR}/scripts/makedeffile.py)
 endif(WIN32)
 
+if(UNIX)
+  if(ROS_ENABLE OR ROS2_ENABLE)
+    set(INSTALL_ROS2TRANSPORT_CMAKE_DIR ${CMAKE_INSTALL_LIBDIR}/ros2transport-${RTM_MAJOR_VERSION}.${RTM_MINOR_VERSION}/cmake)
+    if(ROS_ENABLE)
+      set(INSTALL_ROSTRANSPORT_CMAKE_DIR ${CMAKE_INSTALL_LIBDIR}/rostransport-${RTM_MAJOR_VERSION}.${RTM_MINOR_VERSION}/cmake)
+      configure_file(${PROJECT_SOURCE_DIR}/packages/deb/debian/rules.in
+	 ${PROJECT_BINARY_DIR}/rules @ONLY
+      )
+    else()
+      configure_file(${PROJECT_SOURCE_DIR}/packages/deb/debian/rules.ros2-only-support.in
+	 ${PROJECT_BINARY_DIR}/rules @ONLY
+      )
+    endif()
+    file(STRINGS "/etc/os-release" data_list REGEX "^(VERSION_CODENAME)=")
+
+    # Look for lines like VERSION_CODENAME="..."
+    foreach(var ${data_list})
+      if("${var}" MATCHES "^(VERSION_CODENAME)=(.*)$")
+        set(ubuntu_codename "${CMAKE_MATCH_2}")
+        configure_file(${PROJECT_SOURCE_DIR}/packages/deb/debian/control.${ubuntu_codename}
+             ${PROJECT_BINARY_DIR}/control @ONLY
+        )
+      endif()
+    endforeach()
+  else()
+    configure_file(${PROJECT_SOURCE_DIR}/packages/deb/debian/rules.not-ros-support.in
+	 ${PROJECT_BINARY_DIR}/rules @ONLY
+    )
+    configure_file(${PROJECT_SOURCE_DIR}/packages/deb/debian/control.not-ros-support
+         ${PROJECT_BINARY_DIR}/control @ONLY
+    )
+  endif()
+endif(UNIX)
+
 add_subdirectory(src)
 
 set(UTILS_ENABLE TRUE CACHE BOOL "set UTILS_ENABLE ")
@@ -985,34 +1019,3 @@ endfunction(get_dist)
 get_dist(DIST_NAME)
 message(STATUS "Distribution is ${DIST_NAME}")
 
-if(UNIX)
-  if(ROS_ENABLE OR ROS2_ENABLE)
-    if(ROS_ENABLE)
-      configure_file(${PROJECT_SOURCE_DIR}/packages/deb/debian/rules.in
-	 ${PROJECT_BINARY_DIR}/rules @ONLY
-      )
-    else()
-      configure_file(${PROJECT_SOURCE_DIR}/packages/deb/debian/rules.ros2-only-support.in
-	 ${PROJECT_BINARY_DIR}/rules @ONLY
-      )
-    endif()
-    file(STRINGS "/etc/os-release" data_list REGEX "^(VERSION_CODENAME)=")
-
-    # Look for lines like VERSION_CODENAME="..."
-    foreach(var ${data_list})
-      if("${var}" MATCHES "^(VERSION_CODENAME)=(.*)$")
-        set(ubuntu_codename "${CMAKE_MATCH_2}")
-        configure_file(${PROJECT_SOURCE_DIR}/packages/deb/debian/control.${ubuntu_codename}
-             ${PROJECT_BINARY_DIR}/control @ONLY
-        )
-      endif()
-    endforeach()
-  else()
-    configure_file(${PROJECT_SOURCE_DIR}/packages/deb/debian/rules.not-ros-support.in
-	 ${PROJECT_BINARY_DIR}/rules @ONLY
-    )
-    configure_file(${PROJECT_SOURCE_DIR}/packages/deb/debian/control.not-ros-support
-         ${PROJECT_BINARY_DIR}/control @ONLY
-    )
-  endif()
-endif(UNIX)
