@@ -19,6 +19,7 @@ export DH_OPTIONS
 INSTALL_PREFIX = @CMAKE_INSTALL_PREFIX@
 RTM_LIB_DIR=@INSTALL_RTM_LIB_DIR@
 RTM_EXT_DIR=@INSTALL_RTM_EXT_DIR@
+ROS2TRANSPORT_CMAKE_DIR=@INSTALL_ROS2TRANSPORT_CMAKE_DIR@
 
 # These are used for cross-compiling and for saving the configure script
 # from having to guess our platform (since we know it already)
@@ -119,6 +120,8 @@ install-arch:
 	(mkdir -p $(TARGET_ros2)/${RTM_EXT_DIR}/transport)
 	(cp -r $(INSTALL_PREFIX)/${RTM_EXT_DIR}/transport/ROS2*.so $(TARGET_ros2)/${RTM_EXT_DIR}/transport)
 	(cp -r $(INSTALL_PREFIX)/${RTM_EXT_DIR}/transport/Fast*.so $(TARGET_ros2)/${RTM_EXT_DIR}/transport)
+	(mkdir -p $(TARGET_ros2)/${ROS2TRANSPORT_CMAKE_DIR})
+	(cp -r $(INSTALL_PREFIX)/${ROS2TRANSPORT_CMAKE_DIR}/* $(TARGET_ros2)/${ROS2TRANSPORT_CMAKE_DIR})
 
 	# for openrtm-dev package
 	(mkdir -p $(TARGET_dev)/bin)

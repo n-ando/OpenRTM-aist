@@ -1,3 +1,9 @@
+openrtm2 (2.0.1-2) experimental; urgency=low
+
+  * Update ROS2[ROS]TransportConfig.cmake.
+
+ -- Noriaki Ando <n-ando@aist.go.jp>  Tue, 25 Jul 2023 16:38:31 +0900
+
 openrtm2 (2.0.1-1) experimental; urgency=low
 
   * Supports Ubuntu22.04.
