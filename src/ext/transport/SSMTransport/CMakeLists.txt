@@ -106,9 +106,6 @@ else(OpenRTM_aist_BINARY_DIR)
 		set(libs ${RTCSKEL_PROJECT_NAME})
 
 		add_executable(${target} ${srcs})
-		openrtm_common_set_compile_props(${target})
-		openrtm_set_link_props_shared(${target})
-		openrtm_include_rtm(${target})
 		target_link_libraries(${target} ${libs} ssm ${OPENRTM_LIBRARIES})
 
 		install(TARGETS ${target} LIBRARY DESTINATION ${INSTALL_RTM_EXT_DIR}/transport
@@ -120,9 +117,6 @@ else(OpenRTM_aist_BINARY_DIR)
 
 
 		add_library(${target} SHARED ${srcs})
-		openrtm_common_set_compile_props(${target})
-		openrtm_include_rtm(${target})
-		openrtm_set_link_props_shared(${target})
 		target_link_libraries(${target} PRIVATE ${libs} ${RTM_LINKER_OPTION} ssm ${OPENRTM_LIBRARIES})
 		set_target_properties(${target} PROPERTIES PREFIX "")
 
