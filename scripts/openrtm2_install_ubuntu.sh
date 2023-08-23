@@ -14,7 +14,7 @@
 # = OPT_UNINST   : uninstallation
 #
 
-VERSION=2.0.1.02
+VERSION=2.0.1.03
 FILENAME=openrtm2_install_ubuntu.sh
 
 #
@@ -171,7 +171,14 @@ check_ros_arg()
   arg_err=0
 
   case "$arg" in
-    all ) OPT_ROS=true ; OPT_ROS2=true ;;
+    all ) OPT_ROS2=true
+          res=`grep 18.04 /etc/lsb-release`
+          res1=`grep 20.04 /etc/lsb-release`
+          if test ! "x$res" = "x" ||
+             test ! "x$res1" = "x" ; then
+            OPT_ROS=true
+          fi
+          shift ;;
     ros ) OPT_ROS=true ;;
     ros2 ) OPT_ROS2=true ;;
     *) arg_err=-1 ;;
