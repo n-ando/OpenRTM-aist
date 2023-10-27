@@ -398,8 +398,16 @@ namespace RTM
     std::string create_arg(module_name);
     if (create_arg.empty()) // invalid arg
       {
+        RTC_ERROR(("RTC name is empty."));
         return RTC::RTObject::_nil();
       }
+
+    if (coil::eraseHeadBlank(create_arg).find("?") == 0)
+      {
+        RTC_ERROR(("RTC name is empty."));
+        return RTC::RTObject::_nil();
+      }
+
     coil::vstring tmp = coil::split(create_arg, "&");
     if (tmp.back().empty())
       {
@@ -462,7 +470,16 @@ namespace RTM
 
         if (manager_name.empty())
           {
-            create_arg = create_arg + "&manager_name=manager_%p";
+            if (create_arg.find("?") == std::string::npos)
+              {
+                create_arg += "?";
+              }
+            else
+              {
+                create_arg += "&";
+              }
+            create_arg += "manager_name=manager_%p";
+
             rtobj = createComponentByManagerName(create_arg, manager_name);
             if (!CORBA::is_nil(rtobj)) { return rtobj._retn(); }
           }
