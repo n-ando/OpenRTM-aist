@@ -323,65 +323,37 @@ namespace RTM
 
   std::string ManagerServant::getParameterByModulename(const std::string& param_name, std::string &module_name)
   {
-        size_t pos0 = module_name.find("&" + param_name + "=");
-        size_t pos1 = module_name.find("?" + param_name + "=");
+    size_t param_start = module_name.find(param_name + "=");
 
-        if (pos0 == std::string::npos && pos1 == std::string::npos)
-          {
-            return "";
-          }
+    if (param_start == std::string::npos)
+      { // no specified param
+        return "";
+      }
 
-        size_t pos = 0;
-        if (pos0 == std::string::npos)
-          {
-            pos = pos1;
-          }
-        else
-          {
-            pos = pos0;
-        }
+    size_t param_end = module_name.find("&", param_start);
 
-        std::string paramstr;
-        size_t endpos = module_name.find('&', pos + 1);
+    if (param_end == std::string::npos)
+      { // param is end of param list
+        param_end = module_name.length();
+      }
 
-
-        if (endpos == std::string::npos)
-          {
-            endpos = module_name.find('?', pos + 1);
-
-            if (endpos == std::string::npos)
-              {
-                paramstr = module_name.substr((pos + 1));
-                
-              }
-            else
-              {
-                paramstr = module_name.substr((pos + 1), endpos);
-              }
-          }
-        else
-          {
-            paramstr = module_name.substr((pos + 1), endpos);
-          }
-        RTC_VERBOSE(("%s arg: %s", param_name.c_str(), paramstr.c_str()));
-        
-        size_t eqpos = paramstr.find('=');
-
-        paramstr = paramstr.substr(eqpos + 1);
-
-
-        RTC_DEBUG(("%s is %s", param_name.c_str(), paramstr.c_str()));
-
-        if (endpos == std::string::npos)
-          {
-            module_name = module_name.substr(0, pos);
-          }
-        else
-          {
-            module_name = module_name.substr(0, pos) + module_name.substr(endpos);
-          }
-
-        return paramstr;
+    // extract param's value
+    // module_name?....param_name=param_value
+    //   substr(       ^   arg1  ^    arg2  ^ )
+    std::string param_value =
+      module_name.substr(param_start + param_name.length() + 1,
+                         param_end - param_start - param_name.length() - 1);
+    RTC_DEBUG(("%s is %s", param_name.c_str(), param_value.c_str()));
+    // remove specified param
+    if (module_name[param_start - 1] == '?')
+      { // module_name?{param_name=param_value}: remove {}
+        module_name.erase(param_start, param_end - param_start + 1);
+      }
+    if (module_name[param_start - 1] == '&')
+      { // module_name?other_param...{&param_name=param_value}: remove {}
+        module_name.erase(param_start - 1, param_end - param_start + 1);
+      }
+    return param_value;
   }
   
   /*!
