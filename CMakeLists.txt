@@ -1,7 +1,7 @@
 cmake_minimum_required (VERSION 3.5.1)
 
 project (OpenRTM_aist
-	VERSION 2.0.1
+	VERSION 2.0.2
 	LANGUAGES CXX)
 
 set(CORBA omniORB CACHE STRING "set CORBA ")

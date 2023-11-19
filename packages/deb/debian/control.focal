@@ -10,7 +10,7 @@ Package: openrtm2
 Architecture: any
 Multi-Arch: same
 Pre-Depends: ${misc:Pre-Depends}
-Depends: ${misc:Depends}, omniorb-nameserver
+Depends: ${misc:Depends}, omniorb-nameserver, openrtm2-naming
 Description: OpenRTM-aist, RT-Middleware distributed by AIST
  OpenRTM-aist is a reference implementation of RTC (Robotic Technology
  Component Version 1.1, formal/12-09-01) specification which is OMG
@@ -21,6 +21,11 @@ Description: OpenRTM-aist, RT-Middleware distributed by AIST
  development. OpenRTM-aist is being developed and distributed by
  National Institute of Advanced Industrial Science and Technology
  (AIST), Japan. Please see http://www.openrtm.org/ for more detail.
+
+Package: openrtm2-naming
+Architecture: any
+Multi-Arch: same
+Description: OpenRTM-aist name server launcher
 
 Package: openrtm2-ros-tp
 Architecture: any
