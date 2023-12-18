@@ -130,6 +130,7 @@ else()
 endif(MSVC)
 
 set(SSL_ENABLE FALSE CACHE BOOL "set SSL_ENABLE")
+set(HTTP_ENABLE FALSE CACHE BOOL "set HTTP_ENABLE")
 set(OBSERVER_ENABLE FALSE CACHE BOOL "set OBSERVER_ENABLE")
 
 set(LOGGING_ENABLE TRUE CACHE BOOL "set LOGGING_ENABLE")
@@ -170,8 +171,8 @@ elseif(CORBA STREQUAL "omniORB")
 			message(FATAL_ERROR "can not find THIS_IS_OMNIORB_*_*_*.")
 		endif()
 		get_filename_component(OMNIORB_VERSIONFILE "${OMNIORB_VERSIONFILEPATH}" NAME)
-		string(REGEX REPLACE "THIS_IS_OMNIORB_([0-9])_([0-9])_([0-9])$" "\\1\\2" OMNI_VERSION ${OMNIORB_VERSIONFILE})
-		string(REGEX REPLACE "THIS_IS_OMNIORB_([0-9])_([0-9])_([0-9])$" "\\3" OMNI_MINOR ${OMNIORB_VERSIONFILE})
+		string(REGEX REPLACE "THIS_IS_OMNIORB_([0-9])_([0-9])_([0-9]).*$" "\\1\\2" OMNI_VERSION ${OMNIORB_VERSIONFILE})
+		string(REGEX REPLACE "THIS_IS_OMNIORB_([0-9])_([0-9])_([0-9]).*$" "\\3" OMNI_MINOR ${OMNIORB_VERSIONFILE})
 		string(REGEX REPLACE "([0-9])([0-9])$" "\\1" OMNI_VERSION1 ${OMNI_VERSION})
 		string(REGEX REPLACE "([0-9])([0-9])$" "\\2" OMNI_VERSION2 ${OMNI_VERSION})
 	endif()
@@ -277,6 +278,9 @@ elseif(CORBA STREQUAL "omniORB")
 		set(ORB_LIBRARIES omniDynamic4 omniORB4 omnithread)
 		if(SSL_ENABLE)
 			set(ORBSSL_LIBRARIES omnisslTP4)
+			if(HTTP_ENABLE)
+				set(ORBHTTP_LIBRARIES omnihttpCrypto4 omnihttpTP4)
+			endif(HTTP_ENABLE)
 		endif(SSL_ENABLE)
 		
 
@@ -312,13 +316,18 @@ elseif(CORBA STREQUAL "omniORB")
 		set(ORB_LIBRARIES optimized;omniDynamic${OMNI_VERSION}${OMNI_MINOR}_rt;optimized;omniORB${OMNI_VERSION}${OMNI_MINOR}_rt;optimized;omnithread${OMNITHREAD_VERSION}_rt;debug;omniDynamic${OMNI_VERSION}${OMNI_MINOR}_rtd;debug;omniORB${OMNI_VERSION}${OMNI_MINOR}_rtd;debug;omnithread${OMNITHREAD_VERSION}_rtd)
 		if(SSL_ENABLE)
 			set(ORBSSL_LIBRARIES optimized;omnisslTP${OMNI_VERSION}${OMNI_MINOR}_rt;debug;omnisslTP${OMNI_VERSION}${OMNI_MINOR}_rtd)
+			if(HTTP_ENABLE)
+				set(ORBHTTP_LIBRARIES 
+					optimized;omnihttpCrypto${OMNI_VERSION}${OMNI_MINOR}_rt;debug;omnihttpCrypto${OMNI_VERSION}${OMNI_MINOR}_rtd;
+					optimized;omnihttpTP${OMNI_VERSION}${OMNI_MINOR}_rt;debug;omnihttpTP${OMNI_VERSION}${OMNI_MINOR}_rtd)
+			endif(HTTP_ENABLE)
 		endif(SSL_ENABLE)
 
 
 
 		set(ORB_INSTALL_DIR ${OPENRTM_VERSION}/omniORB/${OMNI_VERSION1}.${OMNI_VERSION2}.${OMNI_MINOR}_${RTM_VC_VER}/)
 		
-		foreach(library ${ORB_LIBRARIES};${ORBSSL_LIBRARIES})
+		foreach(library ${ORB_LIBRARIES};${ORBSSL_LIBRARIES};${ORBHTTP_LIBRARIES})
 			if((NOT (${library} STREQUAL "optimized")) AND (NOT (${library} STREQUAL "debug")))
 				string(REPLACE "_rt" "*" dll "${library}")
 				file(GLOB OMNIORB_DLLS "${OMNIORB_BINARY_DIR}/${dll}.dll")

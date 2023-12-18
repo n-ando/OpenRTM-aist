@@ -1530,7 +1530,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 #ifdef ORB_IS_OMNIORB
         CORBA::PolicyList pl;
         pl.length(1);
-#ifdef RTM_OMNIORB_42
+#if defined(RTM_OMNIORB_42) || defined(RTM_OMNIORB_43)
         pl[0] = omniPolicy::create_local_shortcut_policy(omniPolicy::LOCAL_CALLS_SHORTCUT);
 #else
         CORBA::Any v;
