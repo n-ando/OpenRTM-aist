@@ -701,8 +701,8 @@ std::vector<coil::Properties> Manager::getLoadableModules()
             return nullptr;
           }
         // module loading
-        RTC_INFO(("Loading module: %s", (*it)["module_file_name"].c_str()));
-        load((*it)["module_file_name"], "");
+        RTC_INFO(("Loading module: %s", (*it)["module_file_path"].c_str()));
+        load((*it)["module_file_path"], "");
         factory = m_factory.find(comp_id);
         if (factory == nullptr)
           {
