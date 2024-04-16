@@ -695,9 +695,9 @@ std::vector<coil::Properties> Manager::getLoadableModules()
                        comp_id["implementation_id"].c_str()));
             return nullptr;
           }
-        if (it->findNode("module_file_name") == nullptr)
+        if (it->findNode("module_file_path") == nullptr)
           {
-            RTC_ERROR(("Hmm...module_file_name key not found."));
+            RTC_ERROR(("Hmm...module_file_path key not found."));
             return nullptr;
           }
         // module loading
