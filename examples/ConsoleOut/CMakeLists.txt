@@ -4,7 +4,6 @@ if(OpenRTM_aist_BINARY_DIR)
   set(srcs src/ConsoleOut.cpp include/ConsoleOut/ConsoleOut.h)
   examples_build(ConsoleOut SRCS "${srcs}" MAIN src/ConsoleOutComp.cpp
                  EXTERNAL_INCLUDE PRIVATE include/ConsoleOut)
-  install(FILES rtc.conf DESTINATION ${INSTALL_RTM_EXAMPLE_DIR} COMPONENT examples)
   install(FILES consout.conf DESTINATION ${INSTALL_RTM_EXAMPLE_DIR} COMPONENT examples)
 else(OpenRTM_aist_BINARY_DIR)
 

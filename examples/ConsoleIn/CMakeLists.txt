@@ -4,7 +4,6 @@ if(OpenRTM_aist_BINARY_DIR)
   set(srcs src/ConsoleIn.cpp include/ConsoleIn/ConsoleIn.h)
   examples_build(ConsoleIn SRCS "${srcs}" MAIN src/ConsoleInComp.cpp
                  EXTERNAL_INCLUDE PRIVATE include/ConsoleIn)
-  install(FILES rtc.conf DESTINATION ${INSTALL_RTM_EXAMPLE_DIR} COMPONENT examples)
   install(FILES consin.conf DESTINATION ${INSTALL_RTM_EXAMPLE_DIR} COMPONENT examples)
 else(OpenRTM_aist_BINARY_DIR)
 
