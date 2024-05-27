@@ -99,11 +99,7 @@ namespace RTC {
     "manager.command",                       "rtcd2",
     "manager.nameservers",                   "default",
     "manager.language",                      "C++",
-#ifdef WIN32
     "manager.supported_languages",           "C++, Python, Java",
-#else
-    "manager.supported_languages",           "C++, Python, Python3, Java",
-#endif
     "manager.modules.C++.manager_cmd",       "rtcd2",
     "manager.modules.C++.profile_cmd",       "rtcprof2",
 #ifdef WIN32
@@ -120,12 +116,6 @@ namespace RTC {
     "manager.modules.Python.profile_cmd",    "rtcprof2_python",
     "manager.modules.Python.suffixes",       "py",
     "manager.modules.Python.load_paths",     "",
-#ifndef WIN32
-    "manager.modules.Python3.manager_cmd",    "rtcd2_python3",
-    "manager.modules.Python3.profile_cmd",    "rtcprof2_python3",
-    "manager.modules.Python3.suffixes",       "py",
-    "manager.modules.Python3.load_paths",     "",
-#endif
     "manager.modules.Java.manager_cmd",      "rtcd2_java",
     "manager.modules.Java.profile_cmd",      "rtcprof2_java",
     "manager.modules.Java.suffixes",         "class",
