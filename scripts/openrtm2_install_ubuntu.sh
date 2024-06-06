@@ -14,7 +14,7 @@
 # = OPT_UNINST   : uninstallation
 #
 
-VERSION=2.0.1.03
+VERSION=2.0.2.00
 FILENAME=openrtm2_install_ubuntu.sh
 
 #
@@ -96,7 +96,7 @@ fluentbit="td-agent-bit"
 omni_devel="libomniorb4-dev omniidl"
 omni_runtime="omniorb-nameserver"
 openrtm2_devel="openrtm2-doc openrtm2-idl openrtm2-dev"
-openrtm2_runtime="openrtm2 openrtm2-example"
+openrtm2_runtime="openrtm2 openrtm2-naming openrtm2-example"
 openrtm2_ros="openrtm2-ros-tp"
 openrtm2_ros2="openrtm2-ros2-tp"
 
@@ -578,8 +578,8 @@ u_ros2_pkg=$ros2_pkg
 python_runtime_pkgs="$omni_runtime $python_runtime $openrtm2_py_runtime"
 u_python_runtime_pkgs="$openrtm2_py_runtime"
 
-python_dev_pkgs="$python_runtime_pkgs $python_devel $openrtm2_py_devel"
-u_python_dev_pkgs="$u_python_runtime_pkgs $openrtm2_py_devel"
+python_dev_pkgs="$python_runtime_pkgs $python_devel"
+u_python_dev_pkgs="$u_python_runtime_pkgs"
 
 python_core_pkgs="$omni_runtime $python_runtime $python_devel $build_tools $pkg_tools"
 u_python_core_pkgs="$omni_runtime $omnipy"

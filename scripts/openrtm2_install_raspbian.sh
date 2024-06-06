@@ -6,7 +6,7 @@
 #         Nobu Kawauchi
 #
 
-VERSION=2.0.1.00
+VERSION=2.0.2.00
 FILENAME=openrtm2_install_raspbian.sh
 BIT=`getconf LONG_BIT`
 
@@ -77,7 +77,7 @@ pkg_tools="build-essential debhelper devscripts"
 omni_devel="libomniorb4-dev omniidl"
 omni_runtime="omniorb-nameserver"
 openrtm2_devel="openrtm2-doc openrtm2-idl openrtm2-dev"
-openrtm2_runtime="openrtm2 openrtm2-example"
+openrtm2_runtime="openrtm2 openrtm2-naming openrtm2-example"
 
 #--------------------------------------- Python
 omnipy="omniidl-python3"
@@ -507,8 +507,8 @@ u_core_pkgs="$u_src_pkgs"
 python_runtime_pkgs="$omni_runtime $python_runtime $openrtm2_py_runtime"
 u_python_runtime_pkgs="$openrtm2_py_runtime"
 
-python_dev_pkgs="$python_runtime_pkgs $python_devel $openrtm2_py_devel"
-u_python_dev_pkgs="$u_python_runtime_pkgs $openrtm2_py_devel"
+python_dev_pkgs="$python_runtime_pkgs $python_devel"
+u_python_dev_pkgs="$u_python_runtime_pkgs"
 
 python_core_pkgs="$omni_runtime $python_runtime $python_devel $build_tools $pkg_tools"
 u_python_core_pkgs="$omni_runtime $omnipy"
@@ -517,8 +517,8 @@ u_python_core_pkgs="$omni_runtime $omnipy"
 java_runtime_pkgs="$omni_runtime $openrtm2_j_runtime"
 u_java_runtime_pkgs="$openrtm2_j_runtime"
 
-java_dev_pkgs="$java_runtime_pkgs $cmake_tools $base_tools $openrtm2_j_devel"
-u_java_dev_pkgs="$u_java_runtime_pkgs $openrtm2_j_devel"
+java_dev_pkgs="$java_runtime_pkgs $cmake_tools $base_tools"
+u_java_dev_pkgs="$u_java_runtime_pkgs"
 
 java_core_pkgs="$omni_runtime $cmake_tools $base_tools $build_tools $java_build $pkg_tools"
 u_java_core_pkgs="$omni_runtime"
@@ -580,7 +580,11 @@ install_proc()
   if test "x$arg_rtshell" = "xtrue" ; then
     select_opt_shl="[rtshell] install"
     install_packages python3-pip
-    rtshell_ret=`sudo python3 -m pip install rtshell-aist`
+    if test "x$code_name" = "xbullseye"; then
+      rtshell_ret=`sudo python3 -m pip install rtshell-aist`
+    else
+      rtshell_ret=`sudo python3 -m pip install --break-system-packages rtshell-aist`
+    fi
     if test "x$rtshell_ret" != "x"; then
       sudo rtshell_post_install -n
     else
@@ -643,7 +647,11 @@ uninstall_proc()
 
   if test "x$arg_rtshell" = "xtrue" ; then
     select_opt_shl="[rtshell] uninstall"
-    rtshell_ret=`sudo python3 -m pip uninstall -y rtshell-aist rtctree-aist rtsprofile-aist`
+    if test "x$code_name" = "xbullseye"; then
+      rtshell_ret=`sudo python3 -m pip uninstall -y rtshell-aist rtctree-aist rtsprofile-aist`
+    else
+      rtshell_ret=`sudo python3 -m pip uninstall -y --break-system-packages rtshell-aist rtctree-aist rtsprofile-aist`
+    fi
     if test "x$rtshell_ret" = "x"; then
       msg="\n[ERROR] Failed to uninstall rtshell-aist."
       tmp="$err_message$msg"
@@ -786,8 +794,11 @@ else
 fi
 
 # install openjdk-8-jdk
+#codename=`sed -n /VERSION_CODENAME=/p /etc/os-release`
+#CNAME=`echo "$codename" | sed 's/VERSION_CODENAME=//'`
 if test "x$OPT_FLG" = "xtrue" &&
-    test "x$BIT" = "x32" ; then
+    test "x$BIT" = "x32" &&
+    test "x$code_name" = "xbullseye"; then
   sudo apt -y install openjdk-8-jdk
   JAVA8=`update-alternatives --list java | grep java-8`
   sudo update-alternatives --set java ${JAVA8}
