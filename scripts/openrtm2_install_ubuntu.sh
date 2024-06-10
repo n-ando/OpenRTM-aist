@@ -14,7 +14,7 @@
 # = OPT_UNINST   : uninstallation
 #
 
-VERSION=2.0.2.00
+VERSION=2.0.2.01
 FILENAME=openrtm2_install_ubuntu.sh
 
 #
@@ -92,7 +92,7 @@ cmake_tools="cmake doxygen graphviz nkf"
 build_tools="subversion git"
 deb_pkg="uuid-dev libboost-filesystem-dev"
 pkg_tools="build-essential debhelper devscripts"
-fluentbit="td-agent-bit"
+fluentbit="fluent-bit"
 omni_devel="libomniorb4-dev omniidl"
 omni_runtime="omniorb-nameserver"
 openrtm2_devel="openrtm2-doc openrtm2-idl openrtm2-dev"
@@ -402,11 +402,13 @@ create_srclist () {
   for c in $cnames; do
     if test -f "/etc/apt/sources.list"; then
       res=`grep $c /etc/apt/sources.list`
+      res2=`grep -r $c /etc/apt/sources.list.d`
     else
       echo $msg1
       exit
     fi
-    if test ! "x$res" = "x" ; then
+    if test ! "x$res" = "x" ||
+       test ! "x$res2" = "x" ; then
       code_name=$c
     fi
   done
@@ -910,8 +912,8 @@ if test "x$OPT_UNINST" = "xtrue" ; then
 fi
 
 if test "x$OPT_COREDEVEL" = "xtrue" ; then
-  sudo systemctl enable td-agent-bit
-  sudo systemctl start td-agent-bit
+  sudo systemctl enable fluent-bit
+  sudo systemctl start fluent-bit
 fi
 
 install_result $install_pkgs

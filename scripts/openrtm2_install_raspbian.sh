@@ -6,7 +6,7 @@
 #         Nobu Kawauchi
 #
 
-VERSION=2.0.2.00
+VERSION=2.0.2.01
 FILENAME=openrtm2_install_raspbian.sh
 BIT=`getconf LONG_BIT`
 
@@ -73,7 +73,6 @@ cmake_tools="cmake doxygen graphviz nkf"
 build_tools="subversion git"
 deb_pkg="uuid-dev libboost-filesystem-dev"
 pkg_tools="build-essential debhelper devscripts"
-#fluentbit="td-agent-bit"
 omni_devel="libomniorb4-dev omniidl"
 omni_runtime="omniorb-nameserver"
 openrtm2_devel="openrtm2-doc openrtm2-idl openrtm2-dev"
@@ -300,11 +299,13 @@ check_codename () {
   for c in $cnames; do
     if test -f "/etc/apt/sources.list"; then
       res=`grep $c /etc/apt/sources.list`
+      res2=`grep -r $c /etc/apt/sources.list.d`
     else
       echo $msg1
       exit
     fi
-    if test ! "x$res" = "x" ; then
+    if test ! "x$res" = "x" ||
+       test ! "x$res2" = "x" ; then
       code_name=$c
     fi
   done
@@ -346,7 +347,6 @@ check_reposerver()
 #---------------------------------------
 create_srclist () {
   openrtm_repo="deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/openrtm.key] http://$reposerver/pub/Linux/raspbian/ $code_name main"
-  #fluent_repo="deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/fluentbit-keyring.gpg] https://packages.fluentbit.io/raspbian/$code_name $code_name main"
 }
 
 #---------------------------------------
@@ -803,11 +803,6 @@ if test "x$OPT_FLG" = "xtrue" &&
   JAVA8=`update-alternatives --list java | grep java-8`
   sudo update-alternatives --set java ${JAVA8}
 fi
-
-#if test "x$OPT_CORE" = "xtrue" ; then
-#  sudo systemctl enable td-agent-bit
-#  sudo systemctl start td-agent-bit
-#fi
 
 install_result $install_pkgs
 uninstall_result $uninstall_pkgs
