@@ -1228,7 +1228,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 
     for (auto const& itr : coil::split(m_config["manager.preload.modules"], ","))
       {
-        std::string mpm_{coil::eraseBothEndsBlank(std::move(itr))};
+        std::string mpm_{coil::eraseBothEndsBlank(itr)};
         if (mpm_.empty())
           {
               continue;

@@ -688,7 +688,7 @@ function(openrtm_common_set_compile_options target)
 		-Wstrict-null-sentinel
 		-Wstrict-overflow=5
 		$<$<VERSION_GREATER:${CMAKE_CXX_COMPILER_VERSION},6.9.9>: -Wstringop-overflow=4>
-		$<$<VERSION_GREATER:${CMAKE_CXX_COMPILER_VERSION},12.9.9>: -Wsuggest-attribute=cold>
+		$<$<VERSION_GREATER:${CMAKE_CXX_COMPILER_VERSION},13.9.9>: -Wsuggest-attribute=cold>
 		-Wsuggest-attribute=format
 		$<$<VERSION_GREATER:${CMAKE_CXX_COMPILER_VERSION},7.9.9>: -Wsuggest-attribute=malloc>
 		$<$<VERSION_GREATER:${CMAKE_CXX_COMPILER_VERSION},4.9.9>: -Wsuggest-override>
