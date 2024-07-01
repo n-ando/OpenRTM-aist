@@ -966,15 +966,17 @@ if(UNIX)
     endif()
     file(STRINGS "/etc/os-release" data_list REGEX "^(VERSION_CODENAME)=")
 
-    # Look for lines like VERSION_CODENAME="..."
-    foreach(var ${data_list})
-      if("${var}" MATCHES "^(VERSION_CODENAME)=(.*)$")
-        set(ubuntu_codename "${CMAKE_MATCH_2}")
-        configure_file(${PROJECT_SOURCE_DIR}/packages/deb/debian/control.${ubuntu_codename}
+    if(BUILD_RTM_LINUX_PKGS)
+      # Look for lines like VERSION_CODENAME="..."
+      foreach(var ${data_list})
+        if("${var}" MATCHES "^(VERSION_CODENAME)=(.*)$")
+          set(ubuntu_codename "${CMAKE_MATCH_2}")
+          configure_file(${PROJECT_SOURCE_DIR}/packages/deb/debian/control.${ubuntu_codename}
              ${PROJECT_BINARY_DIR}/control @ONLY
-        )
-      endif()
-    endforeach()
+          )
+        endif()
+      endforeach()
+    endif()
   else()
     configure_file(${PROJECT_SOURCE_DIR}/packages/deb/debian/rules.not-ros-support.in
 	 ${PROJECT_BINARY_DIR}/rules @ONLY
