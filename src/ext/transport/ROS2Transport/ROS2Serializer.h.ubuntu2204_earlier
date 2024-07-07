@@ -278,13 +278,13 @@ namespace RTC
       
       eprosima::fastcdr::FastBuffer fastbuffer((char*) m_message.data, m_message.max_size);
       eprosima::fastcdr::Cdr ser(fastbuffer, eprosima::fastcdr::Cdr::DEFAULT_ENDIAN,
-                eprosima::fastcdr::DDS_CDR);
+                eprosima::fastcdr::Cdr::DDS_CDR);
       m_message.encapsulation = ser.endianness() == eprosima::fastcdr::Cdr::BIG_ENDIANNESS ? CDR_BE : CDR_LE;
       ser.serialize_encapsulation();
 
       std_msgs::msg::typesupport_fastrtps_cpp::cdr_serialize(msg, ser);
 
-      m_message.length = (uint32_t)ser.get_serialized_data_length();
+      m_message.length = (uint32_t)ser.getSerializedDataLength();
 
       
       return true;
@@ -313,7 +313,7 @@ namespace RTC
 
       eprosima::fastcdr::FastBuffer fastbuffer((char*)m_message.data, m_message.length);
       eprosima::fastcdr::Cdr deser(fastbuffer, eprosima::fastcdr::Cdr::DEFAULT_ENDIAN,
-                eprosima::fastcdr::DDS_CDR); // Object that deserializes the data.
+                eprosima::fastcdr::Cdr::DDS_CDR); // Object that deserializes the data.
       
       deser.read_encapsulation();
       
@@ -348,13 +348,13 @@ namespace RTC
       
       eprosima::fastcdr::FastBuffer fastbuffer((char*) m_message.data, m_message.max_size);
       eprosima::fastcdr::Cdr ser(fastbuffer, eprosima::fastcdr::Cdr::DEFAULT_ENDIAN,
-                eprosima::fastcdr::DDS_CDR);
+                eprosima::fastcdr::Cdr::DDS_CDR);
       m_message.encapsulation = ser.endianness() == eprosima::fastcdr::Cdr::BIG_ENDIANNESS ? CDR_BE : CDR_LE;
       ser.serialize_encapsulation();
 
       geometry_msgs::msg::typesupport_fastrtps_cpp::cdr_serialize(msg, ser);
 
-      m_message.length = (uint32_t)ser.get_serialized_data_length();
+      m_message.length = (uint32_t)ser.getSerializedDataLength();
 
       
       return true;
@@ -384,7 +384,7 @@ namespace RTC
 
       eprosima::fastcdr::FastBuffer fastbuffer((char*)m_message.data, m_message.length);
       eprosima::fastcdr::Cdr deser(fastbuffer, eprosima::fastcdr::Cdr::DEFAULT_ENDIAN,
-                eprosima::fastcdr::DDS_CDR); // Object that deserializes the data.
+                eprosima::fastcdr::Cdr::DDS_CDR); // Object that deserializes the data.
       
       deser.read_encapsulation();
       
@@ -419,13 +419,13 @@ namespace RTC
       
       eprosima::fastcdr::FastBuffer fastbuffer((char*) m_message.data, m_message.max_size);
       eprosima::fastcdr::Cdr ser(fastbuffer, eprosima::fastcdr::Cdr::DEFAULT_ENDIAN,
-                eprosima::fastcdr::DDS_CDR);
+                eprosima::fastcdr::Cdr::DDS_CDR);
       m_message.encapsulation = ser.endianness() == eprosima::fastcdr::Cdr::BIG_ENDIANNESS ? CDR_BE : CDR_LE;
       ser.serialize_encapsulation();
 
       sensor_msgs::msg::typesupport_fastrtps_cpp::cdr_serialize(msg, ser);
 
-      m_message.length = (uint32_t)ser.get_serialized_data_length();
+      m_message.length = (uint32_t)ser.getSerializedDataLength();
 
       
       return true;
@@ -455,7 +455,7 @@ namespace RTC
 
       eprosima::fastcdr::FastBuffer fastbuffer((char*)m_message.data, m_message.length);
       eprosima::fastcdr::Cdr deser(fastbuffer, eprosima::fastcdr::Cdr::DEFAULT_ENDIAN,
-                eprosima::fastcdr::DDS_CDR); // Object that deserializes the data.
+                eprosima::fastcdr::Cdr::DDS_CDR); // Object that deserializes the data.
       
       deser.read_encapsulation();
       

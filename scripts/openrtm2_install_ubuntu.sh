@@ -14,7 +14,7 @@
 # = OPT_UNINST   : uninstallation
 #
 
-VERSION=2.0.2.01
+VERSION=2.0.2.02
 FILENAME=openrtm2_install_ubuntu.sh
 
 #
@@ -92,6 +92,7 @@ cmake_tools="cmake doxygen graphviz nkf"
 build_tools="subversion git"
 deb_pkg="uuid-dev libboost-filesystem-dev"
 pkg_tools="build-essential debhelper devscripts"
+fluentbit19="td-agent-bit"
 fluentbit="fluent-bit"
 omni_devel="libomniorb4-dev omniidl"
 omni_runtime="omniorb-nameserver"
@@ -567,7 +568,11 @@ u_src_pkgs="$omni_runtime $omni_devel"
 dev_pkgs="$runtime_pkgs $src_pkgs $openrtm2_devel"
 u_dev_pkgs="$u_runtime_pkgs $openrtm2_devel"
 
-core_pkgs="$src_pkgs $autotools $build_tools $pkg_tools $fluentbit"
+if test "x$code_name" = "xfocal" || test "x$code_name" = "xjammy" ; then
+  core_pkgs="$src_pkgs $autotools $build_tools $pkg_tools $fluentbit19"
+else
+  core_pkgs="$src_pkgs $autotools $build_tools $pkg_tools"
+fi
 u_core_pkgs="$u_src_pkgs"
 
 ros_pkg="$openrtm2_ros"
@@ -912,8 +917,10 @@ if test "x$OPT_UNINST" = "xtrue" ; then
 fi
 
 if test "x$OPT_COREDEVEL" = "xtrue" ; then
-  sudo systemctl enable fluent-bit
-  sudo systemctl start fluent-bit
+  if test "x$code_name" = "xfocal" || test "x$code_name" = "xjammy" ; then
+    sudo systemctl enable td-agent-bit
+    sudo systemctl start td-agent-bit
+  fi
 fi
 
 install_result $install_pkgs
