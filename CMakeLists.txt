@@ -965,17 +965,27 @@ if(UNIX)
       )
     endif()
     file(STRINGS "/etc/os-release" data_list REGEX "^(VERSION_CODENAME)=")
+    # Look for lines like VERSION_CODENAME="..."
+    foreach(var ${data_list})
+      if("${var}" MATCHES "^(VERSION_CODENAME)=(.*)$")
+        set(ubuntu_codename "${CMAKE_MATCH_2}")
+      endif()
+    endforeach()
+
+    if(${ubuntu_codename} MATCHES "focal" OR
+       ${ubuntu_codename} MATCHES "jammy")
+      configure_file(${PROJECT_SOURCE_DIR}/src/ext/transport/FastRTPS/CORBACdrDataPubSubTypes.cpp.ubuntu2204_earlier
+	      ${PROJECT_SOURCE_DIR}/src/ext/transport/FastRTPS/CORBACdrDataPubSubTypes.cpp @ONLY
+      )
+      configure_file(${PROJECT_SOURCE_DIR}/src/ext/transport/ROS2Transport/ROS2Serializer.h.ubuntu2204_earlier
+	      ${PROJECT_SOURCE_DIR}/src/ext/transport/ROS2Transport/ROS2Serializer.h @ONLY
+      )
+    endif()
 
     if(BUILD_RTM_LINUX_PKGS)
-      # Look for lines like VERSION_CODENAME="..."
-      foreach(var ${data_list})
-        if("${var}" MATCHES "^(VERSION_CODENAME)=(.*)$")
-          set(ubuntu_codename "${CMAKE_MATCH_2}")
-          configure_file(${PROJECT_SOURCE_DIR}/packages/deb/debian/control.${ubuntu_codename}
+      configure_file(${PROJECT_SOURCE_DIR}/packages/deb/debian/control.${ubuntu_codename}
              ${PROJECT_BINARY_DIR}/control @ONLY
-          )
-        endif()
-      endforeach()
+      )
     endif()
   else()
     configure_file(${PROJECT_SOURCE_DIR}/packages/deb/debian/rules.not-ros-support.in
