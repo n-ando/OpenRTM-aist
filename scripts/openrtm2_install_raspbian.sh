@@ -6,7 +6,7 @@
 #         Nobu Kawauchi
 #
 
-VERSION=2.0.2.01
+VERSION=2.0.2.02
 FILENAME=openrtm2_install_raspbian.sh
 BIT=`getconf LONG_BIT`
 
@@ -580,16 +580,15 @@ install_proc()
   if test "x$arg_rtshell" = "xtrue" ; then
     select_opt_shl="[rtshell] install"
     install_packages python3-pip
-    if test "x$code_name" = "xbullseye"; then
-      rtshell_ret=`sudo python3 -m pip install rtshell-aist`
-    else
-      rtshell_ret=`sudo python3 -m pip install --break-system-packages rtshell-aist`
-    fi
+    rtshell_ret=`sudo python3 -m pip install rtshell-aist`
     if test "x$rtshell_ret" != "x"; then
       sudo rtshell_post_install -n
     else
       msg="\n[ERROR] Failed to install rtshell-aist."
-      tmp="$err_message$msg"
+      msg2="\nPlease add the following two lines to /etc/pip.conf and run the script again."
+      msg3="\n[global]"
+      msg4="\nbreak-system-packages = true"
+      tmp="$err_message$msg$msg2$msg3$msg4"
       err_message=$tmp
     fi
   fi
