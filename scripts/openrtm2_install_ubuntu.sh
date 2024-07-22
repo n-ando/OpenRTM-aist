@@ -14,7 +14,7 @@
 # = OPT_UNINST   : uninstallation
 #
 
-VERSION=2.0.2.02
+VERSION=2.0.2.03
 FILENAME=openrtm2_install_ubuntu.sh
 
 #
@@ -680,7 +680,10 @@ install_proc()
       sudo rtshell_post_install -n
     else
       msg="\n[ERROR] Failed to install rtshell-aist."
-      tmp="$err_message$msg"
+      msg2="\nPlease add the following text to /etc/pip.conf and run the script again."
+      msg3="\n[global]"
+      msg4="\nbreak-system-packages = true"
+      tmp="$err_message$msg$msg2$msg3$msg4"
       err_message=$tmp
     fi
   fi
@@ -934,7 +937,9 @@ fi
 ESC=$(printf '\033')
 if test "x$OPT_UNINST" = "xtrue" &&
    test "x$arg_cxx" = "xtrue" &&
-   test "x$OPT_COREDEVEL" = "xfalse" ; then
+   test "x$OPT_COREDEVEL" = "xfalse" &&
+   test "x$code_name" != "xnoble" ; then
+  echo "code_name = "$code_name
   msg1='To use the log collection extension using the Fluentd logger,'
   msg2='please install Fluent Bit by following the steps on the following web page.'
   msg3='https://docs.fluentbit.io/manual/installation/linux/ubuntu'
