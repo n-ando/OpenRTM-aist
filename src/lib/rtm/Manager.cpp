@@ -403,53 +403,72 @@ namespace RTC
     RTC_TRACE(("Manager::load(fname = %s, initfunc = %s)",
                fname.c_str(), initfunc.c_str()));
 
-    std::string file_name(fname);
+    coil::Properties prop;
+    prop["module_file_name"] = fname;
+
+    return load(prop, initfunc);
+  }
+
+  /*!
+   * @if jp
+   * @brief モジュールのロード
+   * @else
+   * @brief Load module
+   * @endif
+   */
+  ReturnCode_t Manager::load(coil::Properties &prop,
+    const std::string &initfunc)
+  {
+    RTC_TRACE(("Manager::load(filename = %s, filepath = %s, language = %s, initfunc = %s)",
+      prop["module_file_name"].c_str(), prop["module_file_path"].c_str(), prop["language"].c_str(), initfunc.c_str()));
+
+    std::string file_name(prop["module_file_name"]);
     std::string init_func(initfunc);
     m_listeners.module_.preLoad(file_name, init_func);
     try
+    {
+      if (init_func.empty())
       {
-        if (init_func.empty())
-          {
-            if (coil::isAbsolutePath(file_name))
-            {
-                coil::vstring mod(coil::split(file_name, "/"));
-                mod = coil::split(mod.back(), "\\");
-                mod = coil::split(mod.back(), ".");
-                init_func = mod[0] + "Init";
-            }
-            else
-            {
-                coil::vstring mod(coil::split(file_name, "."));
-                init_func = mod[0] + "Init";
-            }
-          }
-        std::string path(m_module->load(file_name, init_func));
-        RTC_DEBUG(("module path: %s", path.c_str()));
-        m_listeners.module_.postLoad(path, init_func);
+        if (coil::isAbsolutePath(file_name))
+        {
+          coil::vstring mod(coil::split(file_name, "/"));
+          mod = coil::split(mod.back(), "\\");
+          mod = coil::split(mod.back(), ".");
+          init_func = mod[0] + "Init";
+        }
+        else
+        {
+          coil::vstring mod(coil::split(file_name, "."));
+          init_func = mod[0] + "Init";
+        }
       }
-    catch(RTC::ModuleManager::NotAllowedOperation& e)
-      {
-        RTC_ERROR(("Operation not allowed: %s",
-                   e.reason.c_str()));
-        return RTC::PRECONDITION_NOT_MET;
-      }
-    catch(RTC::ModuleManager::NotFound& e)
-      {
-        RTC_ERROR(("Not found: %s",
-                   e.name.c_str()));
-        return RTC::RTC_ERROR;
-      }
-    catch(RTC::ModuleManager::InvalidArguments& e)
-      {
-        RTC_ERROR(("Invalid argument: %s",
-                   e.reason.c_str()));
-        return RTC::BAD_PARAMETER;
-      }
-    catch(RTC::ModuleManager::Error& e)
-      {
-        RTC_ERROR(("Error: %s", e.reason.c_str()));
-        return RTC::RTC_ERROR;
-      }
+      std::string path(m_module->load(prop, init_func));
+      RTC_DEBUG(("module path: %s", path.c_str()));
+      m_listeners.module_.postLoad(path, init_func);
+    }
+    catch (RTC::ModuleManager::NotAllowedOperation &e)
+    {
+      RTC_ERROR(("Operation not allowed: %s",
+        e.reason.c_str()));
+      return RTC::PRECONDITION_NOT_MET;
+    }
+    catch (RTC::ModuleManager::NotFound &e)
+    {
+      RTC_ERROR(("Not found: %s",
+        e.name.c_str()));
+      return RTC::RTC_ERROR;
+    }
+    catch (RTC::ModuleManager::InvalidArguments &e)
+    {
+      RTC_ERROR(("Invalid argument: %s",
+        e.reason.c_str()));
+      return RTC::BAD_PARAMETER;
+    }
+    catch (RTC::ModuleManager::Error &e)
+    {
+      RTC_ERROR(("Error: %s", e.reason.c_str()));
+      return RTC::RTC_ERROR;
+    }
     catch (...)
       {
         RTC_ERROR(("Unknown error."));
@@ -687,30 +706,31 @@ std::vector<coil::Properties> Manager::getLoadableModules()
         std::vector<coil::Properties> mp(m_module->getLoadableModules());
         RTC_INFO(("%d loadable modules found", mp.size()));
 
-        std::vector<coil::Properties>::iterator it;
-        it = std::find_if(mp.begin(), mp.end(), ModulePredicate(comp_id));
-        if (it == mp.end())
-          {
-            RTC_ERROR(("No module for %s in loadable modules list",
-                       comp_id["implementation_id"].c_str()));
-            return nullptr;
-          }
-        if (it->findNode("module_file_path") == nullptr)
-          {
-            RTC_ERROR(("Hmm...module_file_path key not found."));
-            return nullptr;
-          }
-        // module loading
-        RTC_INFO(("Loading module: %s", (*it)["module_file_path"].c_str()));
-        load((*it)["module_file_path"], "");
-        factory = m_factory.find(comp_id);
-        if (factory == nullptr)
-          {
-            RTC_ERROR(("Factory not found for loaded module: %s",
-                       comp_id["implementation_id"].c_str()));
-            return nullptr;
-          }
+      std::vector<coil::Properties>::iterator it;
+      it = std::find_if(mp.begin(), mp.end(), ModulePredicate(comp_id));
+      if (it == mp.end())
+      {
+        RTC_ERROR(("No module for %s in loadable modules list",
+                    comp_id["implementation_id"].c_str()));
+        return nullptr;
       }
+      if (it->findNode("module_file_path") == nullptr)
+      {
+        RTC_ERROR(("Hmm...module_file_path key not found."));
+        return nullptr;
+      }
+      // module loading
+      RTC_INFO(("Loading module: %s", (*it)["module_file_path"].c_str()));
+      load((*it), "");
+      factory = m_factory.find(comp_id);
+      if (factory == nullptr)
+      {
+        RTC_ERROR(("Factory not found for loaded module: %s",
+                    comp_id["implementation_id"].c_str()));
+        return nullptr;
+      }
+
+    }
 
     coil::Properties prop;
     prop = factory->profile();
