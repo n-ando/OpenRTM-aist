@@ -56,8 +56,6 @@ namespace RTC
 
   bool FluentBitStream::init(const coil::Properties& prop)
   {
-    flb_stop(s_flbContext);
-
     // Default lib-input setting
     if(prop.findNode("input") == nullptr)
     {
