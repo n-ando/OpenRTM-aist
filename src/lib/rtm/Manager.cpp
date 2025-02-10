@@ -1445,7 +1445,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     // Initialize other logstreams
     initLogstreamOthers();
 
-    RTC_INFO(("%s", m_config["openrtm.version"].c_str()));
+    RTC_INFO(("OpenRTM %s", m_config["openrtm.version"].c_str()));
     RTC_INFO(("Copyright (C) 2003-2024, Noriaki Ando and OpenRTM development team,"));
     RTC_INFO(("  Intelligent Systems Research Institute, AIST,"));
     RTC_INFO(("Copyright (C) 2024, Noriaki Ando and OpenRTM development team,"));
