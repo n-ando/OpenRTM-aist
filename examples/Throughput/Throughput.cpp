@@ -10,14 +10,13 @@
  */
 
 #include "Throughput.h"
-#include <math.h>
-#include <coil/Async.h>
+#include <cmath>
 
 #define DEBUG 1
 
 // Module specification
 // <rtc-template block="module_spec">
-static const char* analyzer_spec[] =
+static const char* const throughput_spec[] =
   {
     "implementation_id", "Throughput",
     "type_name",         "Throughput",
@@ -92,7 +91,9 @@ Throughput::Throughput(RTC::Manager* manager)
     m_datasize(1),
     m_record(m_maxsample),
     m_sendcount(0),
-    m_logmulcnt(0)
+    m_logmulcnt(0),
+    m_varsize(0),
+    m_exitthread(nullptr)
     // </rtc-template>
 {
 }
@@ -102,6 +103,11 @@ Throughput::Throughput(RTC::Manager* manager)
  */
 Throughput::~Throughput()
 {
+    if (m_exitthread != nullptr)
+    {
+        m_exitthread->join();
+        delete m_exitthread;
+    }
 }
 
 
@@ -111,60 +117,59 @@ RTC::ReturnCode_t Throughput::onInitialize()
   // Registration: InPort/OutPort/Service
   // <rtc-template block="registration">
   // Set InPort buffers
-  m_datatype = getProperties()["conf.default.datatype"];
+  m_datatype = coil::normalize(getProperties()["conf.default.datatype"]);
   m_filesuffix = getProperties()["conf.default.filesuffix"];
-  std::string datatype = coil::normalize(m_datatype);
-  if(datatype == "octet")
+  if(m_datatype == "octet")
     {
       addInPort("in", m_inOctetIn);
       m_inOctetIn.
-        addConnectorDataListener(ON_BUFFER_WRITE,
+        addConnectorDataListener(ConnectorDataListenerType::ON_BUFFER_WRITE,
                                  new DataListener<RTC::TimedOctetSeq>(this));
-      m_inOctetIn.addConnectorListener(ON_CONNECT,
+      m_inOctetIn.addConnectorListener(ConnectorListenerType::ON_CONNECT,
                                        new ConnListener(this));
       addOutPort("out", m_outOctetOut);
       m_varsize = sizeof(CORBA::Octet);
     }
-  else if (datatype == "short")
+  else if (m_datatype == "short")
     {
       addInPort("in", m_inShortIn);
       m_inShortIn.
-        addConnectorDataListener(ON_BUFFER_WRITE,
+        addConnectorDataListener(ConnectorDataListenerType::ON_BUFFER_WRITE,
                                  new DataListener<RTC::TimedShortSeq>(this));
-      m_inShortIn.addConnectorListener(ON_CONNECT,
+      m_inShortIn.addConnectorListener(ConnectorListenerType::ON_CONNECT,
                                        new ConnListener(this));
       addOutPort("out", m_outShortOut);
       m_varsize = sizeof(CORBA::Short);
     }
-  else if (datatype == "long")
+  else if (m_datatype == "long")
     {
       addInPort("in", m_inLongIn);
       m_inLongIn.
-        addConnectorDataListener(ON_BUFFER_WRITE,
+        addConnectorDataListener(ConnectorDataListenerType::ON_BUFFER_WRITE,
                                  new DataListener<RTC::TimedLongSeq>(this));
-      m_inLongIn.addConnectorListener(ON_CONNECT,
+      m_inLongIn.addConnectorListener(ConnectorListenerType::ON_CONNECT,
                                       new ConnListener(this));
       addOutPort("out", m_outLongOut);
       m_varsize = sizeof(CORBA::Long);
     }
-  else if (datatype == "float")
+  else if (m_datatype == "float")
     {
       addInPort("in", m_inFloatIn);
       m_inFloatIn.
-        addConnectorDataListener(ON_BUFFER_WRITE,
+        addConnectorDataListener(ConnectorDataListenerType::ON_BUFFER_WRITE,
                                  new DataListener<RTC::TimedFloatSeq>(this));
-      m_inFloatIn.addConnectorListener(ON_CONNECT,
+      m_inFloatIn.addConnectorListener(ConnectorListenerType::ON_CONNECT,
                                        new ConnListener(this));
       addOutPort("out", m_outFloatOut);
       m_varsize = sizeof(CORBA::Float);
     }
-  else if (datatype == "double")
+  else if (m_datatype == "double")
     {
       addInPort("inDouble", m_inDoubleIn);
       m_inDoubleIn.
-        addConnectorDataListener(ON_BUFFER_WRITE,
+        addConnectorDataListener(ConnectorDataListenerType::ON_BUFFER_WRITE,
                                  new DataListener<RTC::TimedDoubleSeq>(this));
-      m_inDoubleIn.addConnectorListener(ON_CONNECT,
+      m_inDoubleIn.addConnectorListener(ConnectorListenerType::ON_CONNECT,
                                         new ConnListener(this));
       addOutPort("out", m_outDoubleOut);
       m_varsize = sizeof(CORBA::Double);
@@ -187,14 +192,10 @@ RTC::ReturnCode_t Throughput::onInitialize()
   // </rtc-template>
 
   m_record.reserve(m_maxsample);
-//  for (size_t i(0); i < m_maxsample; ++i)
-//    {
-//      m_record[i] = coil::TimeValue(0, 0);
-//    }
   return RTC::RTC_OK;
 }
 
-RTC::ReturnCode_t Throughput::onActivated(RTC::UniqueId ec_id)
+RTC::ReturnCode_t Throughput::onActivated(RTC::UniqueId  /*ec_id*/)
 {
   m_datasize = 1;
   setDataSize(m_datasize);
@@ -205,7 +206,7 @@ RTC::ReturnCode_t Throughput::onActivated(RTC::UniqueId ec_id)
   return RTC::RTC_OK;
 }
 
-RTC::ReturnCode_t Throughput::onDeactivated(RTC::UniqueId ec_id)
+RTC::ReturnCode_t Throughput::onDeactivated(RTC::UniqueId  /*ec_id*/)
 {
   if (m_fs.is_open()) { m_fs.close(); }
 
@@ -220,8 +221,10 @@ RTC::ReturnCode_t Throughput::onDeactivated(RTC::UniqueId ec_id)
 
   if (getInPortConnectorSize() == 0)
   {
-	  coil::Async* async(coil::AsyncInvoker(this, std::mem_fun(&Throughput::exit)));
-	  async->invoke();
+      m_exitthread = new std::thread(
+          [&] {
+              Throughput::exit();
+          });
   }
   return RTC::RTC_OK;
 }
@@ -246,16 +249,16 @@ RTC::ReturnCode_t Throughput::onExecute(RTC::UniqueId ec_id)
       std::cout << "\tlogmulcnt%3: " << m_logmulcnt % 3;
       std::cout << "\tlogmul[]: " << logmul[m_logmulcnt % 3] << std::endl;
 #endif // DEBUG
-      m_datasize *= logmul[m_logmulcnt % 3];
+      m_datasize *= static_cast<unsigned long>(logmul[m_logmulcnt % 3]);
       m_logmulcnt++;
     }
   else if (m_mode == "incr")
     {
-      m_datasize += m_increment;
+      m_datasize += static_cast<unsigned long>(m_increment);
     }
   else
     {
-      if((long)m_sendcount > m_maxsend)
+      if(static_cast<unsigned long>(m_sendcount) > m_maxsend)
         {
           exit();
           return RTC::RTC_OK;
@@ -269,7 +272,8 @@ RTC::ReturnCode_t Throughput::onExecute(RTC::UniqueId ec_id)
   std::cout << "\tsendcount: " << m_sendcount << std::endl;
 #endif // DEBUG
 
-  coil::sleep(m_sleep_time); // sleep for calculating measurement statistics
+  // sleep for calculating measurement statistics
+  std::this_thread::sleep_for(m_sleep_time);
 
   // calculation is triggered data size change
   // to finish the last calculation, size 0 array is sent
@@ -320,7 +324,7 @@ RTC::ReturnCode_t Throughput::onRateChanged(RTC::UniqueId ec_id)
 
 void Throughput::writeData()
 {
-  std::string datatype = coil::normalize(m_datatype);
+  std::string datatype{coil::normalize(m_datatype)};
   if(datatype == "octet")
     {
       setTimestamp(m_outOctet);
@@ -350,7 +354,7 @@ void Throughput::writeData()
 
 void Throughput::setDataSize(CORBA::ULong size)
 {
-  std::string datatype = coil::normalize(m_datatype);
+  std::string datatype{coil::normalize(m_datatype)};
   if(datatype == "octet")
     {
       m_outOctet.data.length(size);
@@ -374,7 +378,7 @@ void Throughput::setDataSize(CORBA::ULong size)
 }
 CORBA::ULong Throughput::getDataSize()
 {
-  std::string datatype = coil::normalize(m_datatype);
+  std::string datatype{coil::normalize(m_datatype)};
   if(datatype == "octet")
     {
       return m_outOctet.data.length();
@@ -405,7 +409,7 @@ void Throughput::receiveData(const RTC::Time &tm, const CORBA::ULong seq_length)
   static size_t record_ptr(0);
 
   // data arrived -> getting time
-  coil::TimeValue received_time(coil::gettimeofday());
+  auto received_time = std::chrono::system_clock::now().time_since_epoch();
   if (size == 0) { size = seq_length; }
 
   // calculate latency statistics
@@ -433,7 +437,7 @@ void Throughput::receiveData(const RTC::Time &tm, const CORBA::ULong seq_length)
 
       for (size_t i(0); i < record_len; ++i)
         {
-          double tmp(m_record[i]);
+          double tmp(std::chrono::duration<double>(m_record[i]).count());
           sum += tmp;
           sq_sum += tmp * tmp;
           if      (tmp > max_latency) { max_latency = tmp; }
@@ -463,17 +467,18 @@ void Throughput::receiveData(const RTC::Time &tm, const CORBA::ULong seq_length)
       record_ptr = 0;
       if (seq_length < size)
         {
-          coil::Async* async;
-          async = coil::AsyncInvoker(this, std::mem_fun(&Throughput::exit));
-          async->invoke();
+          m_exitthread = new std::thread(
+              [&] {
+                  Throughput::exit();
+              });
         }
     }
   // measuring latency
-  coil::TimeValue send_time(tm.sec, tm.nsec/1000);
+  auto send_time = std::chrono::seconds(tm.sec) + std::chrono::nanoseconds(tm.nsec);
   m_record[record_ptr] = received_time - send_time;
   size = seq_length;
   record_ptr++; record_num++;
-  if ((long)record_ptr == m_maxsample) { record_ptr = 0; }
+  if (static_cast<unsigned long>(record_ptr) == m_maxsample) { record_ptr = 0; }
   return;
 }
 
@@ -499,9 +504,9 @@ void Throughput::setConnectorProfile(const RTC::ConnectorInfo &info)
   std::stringstream ss;
   ss << info.properties;
   coil::vstring propv = coil::split(ss.str(), "\n");
-  for (size_t i(0); i < propv.size(); ++i)
+  for (const auto & prop : propv)
     {
-      m_fs << "# " << propv[i] << std::endl;
+      m_fs << "# " << prop << std::endl;
     }
 
   // print header
@@ -514,7 +519,7 @@ void Throughput::setConnectorProfile(const RTC::ConnectorInfo &info)
 CORBA::ULong Throughput::getInPortConnectorSize()
 {
 	CORBA::ULong count = 0;
-	std::string datatype = coil::normalize(m_datatype);
+	std::string datatype{coil::normalize(m_datatype)};
 	if (datatype == "octet")
 	{
 		count = m_inOctetIn.get_connector_profiles()->length();
@@ -544,12 +549,12 @@ extern "C"
  
   void ThroughputInit(RTC::Manager* manager)
   {
-    coil::Properties profile(analyzer_spec);
+    coil::Properties profile(throughput_spec);
     manager->registerFactory(profile,
                              RTC::Create<Throughput>,
                              RTC::Delete<Throughput>);
   }
   
-};
+}
 
 

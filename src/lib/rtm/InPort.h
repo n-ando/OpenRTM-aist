@@ -20,11 +20,8 @@
 #ifndef RTC_INPORT_H
 #define RTC_INPORT_H
 
-#include <coil/TimeValue.h>
-#include <coil/Time.h>
 #include <coil/OS.h>
-#include <coil/Mutex.h>
-#include <coil/Guard.h>
+#include <mutex>
 
 #include <rtm/RTC.h>
 #include <rtm/Typename.h>
@@ -34,7 +31,8 @@
 #include <rtm/InPortConnector.h>
 #include <rtm/Timestamp.h>
 #include <rtm/DirectInPortBase.h>
-
+#include <rtm/CORBA_CdrMemoryStream.h>
+#include <rtm/DataTypeUtil.h>
 
 
 namespace RTC
@@ -50,8 +48,7 @@ namespace RTC
    * <T> はBasicDataType.idl にて定義されている型で、メンバとして
    * Time 型の tm , および T型の data を持つ構造体でなくてはならない。
    * InPort は内部にリングバッファを持ち、外部から送信されたデータを順次
-   * このリングバッファに格納する。リングバッファのサイズはデフォルトで64と
-   * なっているが、コンストラクタ引数によりサイズを指定することができる。
+   * このリングバッファに格納する。
    * データはフラグによって未読、既読状態が管理され、isNew(), write(), read(),
    * isFull(), isEmpty() 等のメソッドによりハンドリングすることができる。
    *
@@ -77,9 +74,8 @@ namespace RTC
    * defined in BasicDataType.idl and must be the structure which has
    * both Time type tm and type-T data as a member. InPort has a ring
    * buffer internally, and stores the received data externally in
-   * this buffer one by one. The size of ring buffer can be specified
-   * according to the argument of constructor, though the default size
-   * is 64. Unread data and data which is already read are managed
+   * this buffer one by one.
+   * Unread data and data which is already read are managed
    * with the flag, and the data can be handled by the isNew(),
    * write(), read(), isFull() and isEmpty() method etc.
    *
@@ -89,10 +85,9 @@ namespace RTC
    */
   template <class DataType>
   class InPort
-	  : public InPortBase, DirectInPortBase<DataType>
+       : public InPortBase, DirectInPortBase<DataType>
   {
   public:
-    DATAPORTSTATUS_ENUM
     /*!
      * @if jp
      *
@@ -103,17 +98,6 @@ namespace RTC
      *
      * @param name InPort 名。InPortBase:name() により参照される。
      * @param value この InPort にバインドされる T 型の変数
-     * @param bufsize InPort 内部のリングバッファのバッファ長(デフォルト値:64)
-     * @param read_block 読込ブロックフラグ。
-     *        データ読込時に未読データがない場合、次のデータ受信までブロックする
-     *        かどうかを設定(デフォルト値:false)
-     * @param write_block 書込ブロックフラグ。
-     *        データ書込時にバッファがフルであった場合、バッファに空きができる
-     *        までブロックするかどうかを設定(デフォルト値:false)
-     * @param read_timeout 読込ブロックを指定していない場合の、データ読取タイム
-     *        アウト時間(ミリ秒)(デフォルト値:0)
-     * @param write_timeout 書込ブロックを指定していない場合の、データ書込タイム
-     *        アウト時間(ミリ秒)(デフォルト値:0)
      *
      * @else
      *
@@ -125,44 +109,32 @@ namespace RTC
      * @param name A name of the InPort. This name is referred by
      *             InPortBase::name().
      * @param value type-T variable that is bound to this InPort.
-     * @param bufsize Buffer length of internal ring buffer of InPort
-     *                (The default value:64)
-     * @param read_block Flag of reading block.
-     *                   When there are not unread data at reading data,
-     *                   set whether to block data until receiving the next
-     *                   data. (The default value:false)
-     * @param write_block Flag of writing block.
-     *                    If the buffer was full at writing data, set whether
-     *                    to block data until the buffer has space.
-     *                    (The default value:false)
-     * @param read_timeout Data reading timeout time (millisecond)
-     *                     when not specifying read blocking.
-     *                     (The default value:0)
-     * @param write_timeout Data writing timeout time (millisecond)
-     *                      when not specifying writing block.
-     *                      (The default value:0)
      *
      * @endif
      */
-    InPort(const char* name, DataType& value,
-           int bufsize = 64,
-           bool read_block = false, bool write_block = false,
-           int read_timeout = 0, int write_timeout = 0)
-#if defined(__GNUC__) && (__GNUC__ <= 3 && __GNUC_MINOR__ <= 3)
-      : InPortBase(name, ::CORBA_Util::toRepositoryIdOfStruct<DataType>()),
-#else
+    InPort(const char* name, DataType& value)
       : InPortBase(name, ::CORBA_Util::toRepositoryId<DataType>()),
-#endif
-	  DirectInPortBase<DataType>(value),
         m_name(name), m_value(value),
-        m_OnRead(NULL),  m_OnReadConvert(NULL),
+        m_OnRead(nullptr),  m_OnReadConvert(nullptr),
         m_status(1), m_directNewData(false)
     {
-      this->addConnectorDataListener(ON_RECEIVED,
+
+      this->initConnectorListeners();
+
+      this->addConnectorDataListener(ConnectorDataListenerType::ON_RECEIVED,
                                      new Timestamp<DataType>("on_received"));
-      this->addConnectorDataListener(ON_BUFFER_READ,
+      this->addConnectorDataListener(ConnectorDataListenerType::ON_BUFFER_READ,
                                      new Timestamp<DataType>("on_read"));
-	  m_directport = this;
+      m_directport = this;
+
+      CdrMemoryStreamInit<DataType>();
+
+      std::string marshaling_types{coil::eraseBlank(coil::flatten(
+        getSerializerList<DataType>()))};
+
+      RTC_DEBUG(("available marshaling_types: %s", marshaling_types.c_str()));
+
+      addProperty("dataport.marshaling_types", marshaling_types.c_str());
     }
 
     /*!
@@ -180,7 +152,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~InPort(void) {}
+    ~InPort() override;
 
     /*!
      * @if jp
@@ -237,17 +209,18 @@ namespace RTC
 
         
         {
-            Guard guard(m_connectorsMutex);
-            if (m_connectors.size() == 0)
+            std::lock_guard<std::mutex> guard(m_connectorsMutex);
+            if (m_connectors.empty())
             {
                 RTC_DEBUG(("no connectors"));
                 return false;
             }
-            for (ConnectorList::iterator itr = m_connectors.begin(); itr != m_connectors.end(); ++itr)
+
+            for(auto & con : m_connectors)
             {
-                if (std::string((*itr)->name()) == name)
+                if (std::string(con->name()) == name)
                 {
-                    int r = (*itr)->getBuffer()->readable();
+                    size_t r = con->getBuffer()->readable();
                     if (r > 0)
                     {
                         RTC_DEBUG(("isNew() = true, readable data: %d", r));
@@ -268,18 +241,18 @@ namespace RTC
 
         
         {
-            Guard guard(m_connectorsMutex);
-            if (m_connectors.size() == 0)
+            std::lock_guard<std::mutex> guard(m_connectorsMutex);
+            if (m_connectors.empty())
             {
                 RTC_DEBUG(("no connectors"));
                 return false;
             }
-            for (ConnectorList::iterator itr = m_connectors.begin(); itr != m_connectors.end(); ++itr)
+            for(auto & con : m_connectors)
             {
-                int r = (*itr)->getBuffer()->readable();
+                size_t r = con->getBuffer()->readable();
                 if (r > 0)
                 {
-                    names.push_back((*itr)->name());
+                    names.emplace_back(con->name());
                 }
             }
             
@@ -294,7 +267,7 @@ namespace RTC
         RTC_DEBUG(("isNew() = false, no readable data"));
         return false;
     }
-    virtual bool isNew()
+    bool isNew() override
     {
       RTC_TRACE(("isNew()"));
 
@@ -302,17 +275,17 @@ namespace RTC
       // means that we only need to read from the first connector to get data
       // received by any connector.
       {
-        Guard gurad(m_valueMutex);
+        std::lock_guard<std::mutex> guard(m_valueMutex);
         if (m_directNewData == true)
           {
             RTC_DEBUG(("isNew() returns true because of direct write."));
             return true;
           }
       }
-      int r(0);
+      size_t r(0);
       {
-        Guard guard(m_connectorsMutex);
-        if (m_connectors.size() == 0)
+        std::lock_guard<std::mutex> guard(m_connectorsMutex);
+        if (m_connectors.empty())
           {
             RTC_DEBUG(("no connectors"));
             return false;
@@ -359,17 +332,18 @@ namespace RTC
 
 
         {
-            Guard guard(m_connectorsMutex);
-            if (m_connectors.size() == 0)
+            std::lock_guard<std::mutex> guard(m_connectorsMutex);
+            if (m_connectors.empty())
             {
                 RTC_DEBUG(("no connectors"));
                 return false;
             }
-            for (ConnectorList::iterator itr = m_connectors.begin(); itr != m_connectors.end(); ++itr)
+
+            for(auto & con : m_connectors)
             {
-                if (std::string((*itr)->name()) == name)
+                if (std::string(con->name()) == name)
                 {
-                    int r = (*itr)->getBuffer()->readable();
+                    size_t r = con->getBuffer()->readable();
                     if (r == 0)
                     {
                         RTC_DEBUG(("isEmpty() = true, buffer is empty"));
@@ -390,18 +364,19 @@ namespace RTC
 
 
         {
-            Guard guard(m_connectorsMutex);
-            if (m_connectors.size() == 0)
+            std::lock_guard<std::mutex> guard(m_connectorsMutex);
+            if (m_connectors.empty())
             {
                 RTC_DEBUG(("no connectors"));
                 return false;
             }
-            for (ConnectorList::iterator itr = m_connectors.begin(); itr != m_connectors.end(); ++itr)
+
+            for(auto & con : m_connectors)
             {
-                int r = (*itr)->getBuffer()->readable();
+                size_t r = con->getBuffer()->readable();
                 if (r == 0)
                 {
-                    names.push_back((*itr)->name());
+                    names.emplace_back(con->name());
                 }
             }
 
@@ -416,15 +391,15 @@ namespace RTC
         RTC_DEBUG(("isEmpty() = false, no readable data"));
         return false;
     }
-    virtual bool isEmpty()
+    bool isEmpty() override
     {
       RTC_TRACE(("isEmpty()"));
       if (m_directNewData == true) { return false; }
-      int r(0);
+      size_t r(0);
 
       {
-        Guard guard(m_connectorsMutex);
-        if (m_connectors.size() == 0)
+        std::lock_guard<std::mutex> guard(m_connectorsMutex);
+        if (m_connectors.empty())
           {
             RTC_DEBUG(("no connectors"));
             return true;
@@ -445,10 +420,10 @@ namespace RTC
       return false;
     }
 
-    virtual void write(DataType& data)
+    void write(DataType& data) override
     {
-      Guard guard(m_valueMutex);
-      m_value = data;
+      std::lock_guard<std::mutex> guard(m_valueMutex);
+      CORBA_Util::copyData<DataType>(m_value, data);
       m_directNewData = true;
     }
 
@@ -478,7 +453,7 @@ namespace RTC
      *
      * - 初回読み出し時に不定値を返さないようにバインド変数を事前に初期化する
      *
-     * - ReturnCode read(DataType& data) 関数の利用を検討する。
+     * - DataPortStatus read(DataType& data) 関数の利用を検討する。
      *
      * ことが望ましい。
      *
@@ -526,22 +501,22 @@ namespace RTC
      *
      * @endif
      */
-    bool read(std::string name="")
+    bool read(std::string name="") override
     {
       RTC_TRACE(("DataType read()"));
 
-      if (m_OnRead != NULL)
+      if (m_OnRead != nullptr)
         {
           (*m_OnRead)();
           RTC_TRACE(("OnRead called"));
         }
       // 1) direct connection
       {
-        Guard guard(m_valueMutex);
+        std::lock_guard<std::mutex> guard(m_valueMutex);
         if (m_directNewData == true)
           {
             RTC_DEBUG(("Direct data transfer"));
-            if (m_OnReadConvert != 0)
+            if (m_OnReadConvert != nullptr)
               {
                 m_value = (*m_OnReadConvert)(m_value);
                 RTC_DEBUG(("OnReadConvert for direct data called"));
@@ -552,11 +527,11 @@ namespace RTC
           }
       }
       // 2) network connection
-      cdrMemoryStream cdr;
-      ReturnCode ret;
+      
+      DataPortStatus ret;
       {
-        Guard guard(m_connectorsMutex);
-        if (m_connectors.size() == 0)
+        std::lock_guard<std::mutex> guard(m_connectorsMutex);
+        if (m_connectors.empty())
           {
             RTC_DEBUG(("no connectors"));
             return false;
@@ -565,7 +540,7 @@ namespace RTC
         
       }
 
-      InPortConnector* connector = NULL;
+      InPortConnector* connector = nullptr;
 
       if (name.empty())
       {
@@ -573,66 +548,59 @@ namespace RTC
       }
       else
       {
-          for (ConnectorList::iterator itr = m_connectors.begin(); itr != m_connectors.end(); ++itr)
+          for(auto & con : m_connectors)
           {
-              if (std::string((*itr)->name()) == name)
+              if (std::string(con->name()) == name)
               {
-                  connector = (*itr);
+                  connector = con;
               }
           }
       }
 
-      if (!connector)
+      if (connector == nullptr)
       {
           RTC_ERROR(("can not find %s",name.c_str()));
           return false;
       }
 
       if (!connector->getDirectData(m_value))
-	  {
-		  {
-			  Guard guard(m_connectorsMutex);
-			  // In single-buffer mode, all connectors share the same buffer. This
-			  // means that we only need to read from the first connector to get data
-			  // received by any connector.
-              ret = connector->read(cdr);
-		  }
-		  m_status[0] = ret;
-		  if (ret == PORT_OK)
-		  {
-			  Guard guard(m_valueMutex);
-			  RTC_DEBUG(("data read succeeded"));
-#ifdef ORB_IS_ORBEXPRESS
-			  cdr.cdr >> m_value;
-#elif defined(ORB_IS_TAO)
-			  TAO_InputCDR tao_cdr = TAO_InputCDR(cdr.cdr);
-			  tao_cdr >> m_value;
-#else
-			  m_value <<= cdr;
-#endif
-			  if (m_OnReadConvert != 0)
-			  {
-				  m_value = (*m_OnReadConvert)(m_value);
-				  RTC_DEBUG(("OnReadConvert called"));
-				  return true;
-			  }
-			  return true;
-		  }
-		  else if (ret == BUFFER_EMPTY)
-		  {
-			  RTC_WARN(("buffer empty"));
-			  return false;
-		  }
-		  else if (ret == BUFFER_TIMEOUT)
-		  {
-			  RTC_WARN(("buffer read timeout"));
-			  return false;
-		  }
-	  }
-	  else
-	  {
-		  return true;
-	  }
+      {
+          {
+              std::lock_guard<std::mutex> guard(m_connectorsMutex);
+              // In single-buffer mode, all connectors share the same buffer. This
+              // means that we only need to read from the first connector to get data
+              // received by any connector.
+              ret = connector->read(m_value);
+          }
+          m_status[0] = ret;
+          if (ret == DataPortStatus::PORT_OK)
+          {
+              std::lock_guard<std::mutex> guard(m_valueMutex);
+              RTC_DEBUG(("data read succeeded"));
+
+              if (m_OnReadConvert != nullptr)
+              {
+                  m_value = (*m_OnReadConvert)(m_value);
+                  RTC_DEBUG(("OnReadConvert called"));
+                  return true;
+              }
+              return true;
+          }
+          else if (ret == DataPortStatus::BUFFER_EMPTY)
+          {
+              RTC_WARN(("buffer empty"));
+              return false;
+          }
+          else if (ret == DataPortStatus::BUFFER_TIMEOUT)
+          {
+              RTC_WARN(("buffer read timeout"));
+              return false;
+          }
+      }
+      else
+      {
+          return true;
+      }
       RTC_ERROR(("unknown retern value from buffer.read()"));
       return false;
     }
@@ -663,7 +631,7 @@ namespace RTC
     virtual void update()
     {
       this->read();
-    };
+    }
 
     /*!
      * @if jp
@@ -688,7 +656,7 @@ namespace RTC
     void operator>>(DataType& rhs)
     {
       this->read();
-      rhs = m_value;
+      CORBA_Util::copyData<DataType>(rhs, m_value);
       return;
     }
 
@@ -724,7 +692,7 @@ namespace RTC
      *
      * @endif
      */
-    DataPortStatus::Enum getStatus(int index)
+    DataPortStatus getStatus(int  /*index*/)
     {
       return m_status[0];
     }
@@ -816,7 +784,26 @@ namespace RTC
     {
       m_OnReadConvert = on_rconvert;
     }
-
+  protected:
+    /*!
+     * @if jp
+     *
+     * @brief コネクタリスナの初期化 
+     *
+     * 
+     *
+     * @else
+     *
+     * @brief 
+     *
+     *
+     * @endif
+     */
+    void initConnectorListeners() override
+    {
+      delete m_listeners;
+      m_listeners = new ConnectorListenersT<DataType>();
+    }
   private:
     std::string m_typename;
     /*!
@@ -836,7 +823,7 @@ namespace RTC
      * @endif
      */
     DataType& m_value;
-    mutable coil::Mutex m_valueMutex;
+    mutable std::mutex m_valueMutex;
 
     /*!
      * @if jp
@@ -874,6 +861,8 @@ namespace RTC
      */
     bool m_directNewData;
   };
-};  // namespace RTC
+
+  template <class T> InPort<T>::~InPort() = default; // No inline for gcc warning, too big
+} // namespace RTC
 
 #endif  // RTC_INPORT_H

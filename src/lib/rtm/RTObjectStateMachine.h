@@ -19,40 +19,34 @@
 #ifndef RTC_IMPL_RTOBJECTSTATEMACHINE_H
 #define RTC_IMPL_RTOBJECTSTATEMACHINE_H
 
-#include <stdlib.h>
+#include <cstdlib>
 #include <rtm/SystemLogger.h>
-#include <coil/NonCopyable.h>
 #include <coil/TimeMeasure.h>
 #include <rtm/idl/RTCSkel.h>
 #include <rtm/StateMachine.h>
-#include <assert.h>
+#include <cassert>
 #include <iostream>
+#include <atomic>
 
 #define NUM_OF_LIFECYCLESTATE 4
-
-#ifdef WIN32
-#pragma warning( disable : 4290 )
-#endif
 namespace RTC
 {
   class RTObject_impl;
-}  // namespace RTC
+} // namespace RTC
 namespace RTC_impl
 {
-  typedef RTC::ExecutionContextHandle_t Ecid;
-  typedef RTC::LifeCycleState ExecContextState;
-  typedef RTC_Utils::StateHolder<ExecContextState> ExecContextStates;
+  using Ecid = RTC::ExecutionContextHandle_t;
+  using ExecContextState = RTC::LifeCycleState;
+  using ExecContextStates = RTC_Utils::StateHolder<ExecContextState>;
 
   class RTObjectStateMachine
-    : private coil::NonCopyable
   {
   public:
     RTObjectStateMachine(RTC::ExecutionContextHandle_t id,
                          RTC::LightweightRTObject_ptr comp);
-    virtual ~RTObjectStateMachine(void);
-//    RTObjectStateMachine(const RTObjectStateMachine& rtobjsm);
-//    RTObjectStateMachine& operator=(const RTObjectStateMachine& rtobjsm);
-//    void swap(RTObjectStateMachine& rtobjsm) throw();
+    RTObjectStateMachine(RTObjectStateMachine const&) = delete;
+    virtual ~RTObjectStateMachine();
+    RTObjectStateMachine& operator=(RTObjectStateMachine const&) = delete;
 
     // functions for stored RTObject reference
     RTC::LightweightRTObject_ptr getRTObject();
@@ -61,8 +55,8 @@ namespace RTC_impl
     RTC::ExecutionContextHandle_t getExecutionContextHandle();
 
     // RTC::ComponentAction operations
-    void onStartup(void);
-    void onShutdown(void);
+    void onStartup();
+    void onShutdown();
     void onActivated(const ExecContextStates& st);
     void onDeactivated(const ExecContextStates& st);
     void onAborting(const ExecContextStates& st);
@@ -72,7 +66,7 @@ namespace RTC_impl
     // RTC::DataflowComponentAction
     void onExecute(const ExecContextStates& st);
     void onStateUpdate(const ExecContextStates& st);
-    RTC::ReturnCode_t onRateChanged(void);
+    RTC::ReturnCode_t onRateChanged();
 
     // FsmParticipantAction
     void onAction(const ExecContextStates& st);
@@ -81,22 +75,27 @@ namespace RTC_impl
     void onModeChanged(const ExecContextStates& st);
 
     // Getting state of the context
-    ExecContextState getState(void);
-    ExecContextStates getStates(void);
+    ExecContextState getState();
+    ExecContextStates getStates();
     bool isCurrentState(ExecContextState state);
     bool isNextState(ExecContextState state);
     void goTo(ExecContextState state);
 
     // Workers
-    void workerPreDo(void);
-    void workerDo(void);
-    void workerPostDo(void);
+    void workerPreDo();
+    void workerDo();
+    void workerPostDo();
+
+    bool activate();
+    bool deactivate();
+    bool reset();
 
   protected:
-    void setComponentAction(const RTC::LightweightRTObject_ptr comp);
-    void setDataFlowComponentAction(const RTC::LightweightRTObject_ptr comp);
-    void setFsmParticipantAction(const RTC::LightweightRTObject_ptr comp);
-    void setMultiModeComponentAction(const RTC::LightweightRTObject_ptr comp);
+    void setComponentAction(RTC::LightweightRTObject_ptr comp);
+    void setDataFlowComponentAction(RTC::LightweightRTObject_ptr comp);
+    void setFsmParticipantAction(RTC::LightweightRTObject_ptr comp);
+    void setMultiModeComponentAction(RTC::LightweightRTObject_ptr comp);
+    void updateState();
 
   private:  // member variables
     RTC::Logger rtclog;
@@ -117,16 +116,13 @@ namespace RTC_impl
     RTC::MultiModeComponentAction_var m_modeVar;
     RTC::RTObject_impl* m_rtobjPtr;
     bool m_measure;
-
-    //    char dara[1000];
     // Component action invoker
     coil::TimeMeasure m_svtMeasure;
     coil::TimeMeasure m_refMeasure;
+    std::atomic<bool> m_activation;
+    std::atomic<bool> m_deactivation;
+    std::atomic<bool> m_reset;
   };
-};  // namespace RTC_impl
-
-#ifdef WIN32
-#pragma warning( default : 4290 )
-#endif
+} // namespace RTC_impl
 
 #endif  // RTC_RTOBJECTSTATEMACHINE_H

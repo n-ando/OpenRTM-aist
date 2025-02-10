@@ -33,7 +33,7 @@ namespace RTC
     {
       FSM_STATUS
     };
-};
+} // namespace RTC
 
 namespace hrtm
 {
@@ -43,11 +43,11 @@ namespace hrtm
   {
   public:
     DataFlowComponent();
-    virtual ~DataFlowComponent();
-    virtual RTC::ReturnCode_t initialize(hrtm::ComponentManager* mgr);
+    ~DataFlowComponent() override;
+    RTC::ReturnCode_t initialize() override;
     virtual void updateFsmStatus(RTC::StatusKind status_kind,
                                  const char* state);
   };
-}; // namespace hrtm
+} // namespace hrtm
 
 #endif // HRTM_DATA_FLOW_COMPONENT_H

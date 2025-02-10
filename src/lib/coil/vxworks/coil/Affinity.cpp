@@ -33,12 +33,12 @@ namespace coil
     return false;
   }
 
-  bool setProcCpuAffinity(std::vector<unsigned int> mask)
+  bool setProcCpuAffinity(const CpuMask& cpu_mask)
   {
     return false;
   }
 
-  bool setProcCpuAffinity(std::string cpu_mask)
+  bool setProcCpuAffinity(const std::string& cpu_mask)
   {
     return false;
   }
@@ -58,18 +58,18 @@ namespace coil
     return true;
   }
 
-  bool setThreadCpuAffinity(std::vector<unsigned int> mask)
+  bool setThreadCpuAffinity(const CpuMask& cpu_mask)
   {
     int pid = taskIdSelf();
     cpuset_t cpu_set;
     CPUSET_ZERO (cpu_set);
-    if(mask.size() > 0)
+    if(cpu_mask.size() > 0)
     {
-        CPUSET_SET(cpu_set, mask[0]);
+        CPUSET_SET(cpu_set, cpu_mask[0]);
     }
     else
     {
-	return false;
+        return false;
     }
 
     STATUS result = taskCpuAffinitySet(pid, cpu_set);
@@ -80,18 +80,18 @@ namespace coil
     return true;
   }
 
-  bool setThreadCpuAffinity(std::string cpu_mask)
+  bool setThreadCpuAffinity(const std::string& cpu_mask)
   {
     coil::vstring tmp = coil::split(cpu_mask, ",", true);
     CpuMask mask;
-    for (size_t i(0); i < tmp.size(); ++i)
+    for(auto & m: tmp)
       {
         int num;
-        if (coil::stringTo(num, tmp[i].c_str()))
+        if (coil::stringTo(num, m.c_str()))
           {
             mask.push_back(num);
           }
       }
     return setThreadCpuAffinity(mask);
   }
-}; // namespace coil
+} // namespace coil

@@ -32,15 +32,17 @@ namespace RTC
   const char*
   PortConnectListener::toString(PortConnectListenerType type)
   {
-    static const char* typeString[] =
+    static const char* const typeString[] =
       {
         "ON_NOTIFY_CONNECT",
         "ON_NOTIFY_DISCONNECT",
         "ON_UNSUBSCRIBE_INTERFACES",
         ""
       };
-    type = type < PORT_CONNECT_LISTENER_NUM ? type : PORT_CONNECT_LISTENER_NUM;
-    return typeString[type];
+    type = type < PortConnectListenerType::PORT_CONNECT_LISTENER_NUM 
+                ? type 
+                : PortConnectListenerType::PORT_CONNECT_LISTENER_NUM;
+    return typeString[static_cast<uint8_t>(type)];
   }
 
   /*!
@@ -50,7 +52,7 @@ namespace RTC
    * @class PortConnectListener class
    * @endif
    */
-  PortConnectListener::~PortConnectListener() {}
+  PortConnectListener::~PortConnectListener() = default;
 
   /*!
    * @if jp
@@ -62,7 +64,7 @@ namespace RTC
   const char*
   PortConnectRetListener::toString(PortConnectRetListenerType type)
   {
-    static const char* typeString[] =
+    static const char* const typeString[] =
       {
         "ON_PUBLISH_INTERFACES",
         "ON_CONNECT_NEXTPORT",
@@ -72,9 +74,10 @@ namespace RTC
         "ON_DISCONNECTED",
         ""
       };
-    type = type < PORT_CONNECT_RET_LISTENER_NUM ?
-      type : PORT_CONNECT_RET_LISTENER_NUM;
-      return typeString[type];
+    type = type < PortConnectRetListenerType::PORT_CONNECT_RET_LISTENER_NUM 
+                ? type 
+                : PortConnectRetListenerType::PORT_CONNECT_RET_LISTENER_NUM;
+      return typeString[static_cast<uint8_t>(type)];
   }
 
   /*!
@@ -84,7 +87,7 @@ namespace RTC
    * @class PortConnectRetListener class
    * @endif
    */
-  PortConnectRetListener::~PortConnectRetListener() {}
+  PortConnectRetListener::~PortConnectRetListener() = default;
 
   //============================================================
   /*!
@@ -94,19 +97,17 @@ namespace RTC
    * @class PortConnectListener holder class
    * @endif
    */
-  PortConnectListenerHolder::PortConnectListenerHolder()
-  {
-  }
+  PortConnectListenerHolder::PortConnectListenerHolder() = default;
 
 
   PortConnectListenerHolder::~PortConnectListenerHolder()
   {
-    Guard guard(m_mutex);
-    for (int i(0), len(m_listeners.size()); i < len; ++i)
+    std::lock_guard<std::mutex> guard(m_mutex);
+    for (auto & listener : m_listeners)
       {
-        if (m_listeners[i].second)
+        if (listener.second)
           {
-            delete m_listeners[i].first;
+            delete listener.first;
           }
       }
   }
@@ -115,23 +116,23 @@ namespace RTC
   void PortConnectListenerHolder::addListener(PortConnectListener* listener,
                                               bool autoclean)
   {
-    Guard guard(m_mutex);
-    m_listeners.push_back(Entry(listener, autoclean));
+    std::lock_guard<std::mutex> guard(m_mutex);
+    m_listeners.emplace_back(listener, autoclean);
   }
 
 
   void PortConnectListenerHolder::removeListener(PortConnectListener* listener)
   {
-    Guard guard(m_mutex);
+    std::lock_guard<std::mutex> guard(m_mutex);
     std::vector<Entry>::iterator it(m_listeners.begin());
 
     for (; it != m_listeners.end(); ++it)
       {
-        if ((*it).first == listener)
+        if (it->first == listener)
           {
-            if ((*it).second)
+            if (it->second)
               {
-                delete (*it).first;
+                delete it->first;
               }
             m_listeners.erase(it);
             return;
@@ -144,10 +145,10 @@ namespace RTC
   void PortConnectListenerHolder::notify(const char* portname,
                                          RTC::ConnectorProfile& profile)
   {
-    Guard guard(m_mutex);
-    for (int i(0), len(m_listeners.size()); i < len; ++i)
+    std::lock_guard<std::mutex> guard(m_mutex);
+    for (auto & listener : m_listeners)
       {
-        m_listeners[i].first->operator()(portname, profile);
+        listener.first->operator()(portname, profile);
       }
   }
 
@@ -159,19 +160,17 @@ namespace RTC
    * @class PortConnectRetListener holder class
    * @endif
    */
-  PortConnectRetListenerHolder::PortConnectRetListenerHolder()
-  {
-  }
+  PortConnectRetListenerHolder::PortConnectRetListenerHolder() = default;
 
 
   PortConnectRetListenerHolder::~PortConnectRetListenerHolder()
   {
-    Guard guard(m_mutex);
-    for (int i(0), len(m_listeners.size()); i < len; ++i)
+    std::lock_guard<std::mutex> guard(m_mutex);
+    for (auto & listener : m_listeners)
       {
-        if (m_listeners[i].second)
+        if (listener.second)
           {
-            delete m_listeners[i].first;
+            delete listener.first;
           }
       }
   }
@@ -180,23 +179,23 @@ namespace RTC
   void PortConnectRetListenerHolder::
   addListener(PortConnectRetListener* listener, bool autoclean)
   {
-    Guard guard(m_mutex);
-    m_listeners.push_back(Entry(listener, autoclean));
+    std::lock_guard<std::mutex> guard(m_mutex);
+    m_listeners.emplace_back(listener, autoclean);
   }
 
 
   void PortConnectRetListenerHolder::
   removeListener(PortConnectRetListener* listener)
   {
-    Guard guard(m_mutex);
+    std::lock_guard<std::mutex> guard(m_mutex);
     std::vector<Entry>::iterator it(m_listeners.begin());
     for (; it != m_listeners.end(); ++it)
       {
-        if ((*it).first == listener)
+        if (it->first == listener)
           {
-            if ((*it).second)
+            if (it->second)
               {
-                delete (*it).first;
+                delete it->first;
               }
             m_listeners.erase(it);
             return;
@@ -210,12 +209,162 @@ namespace RTC
                                             RTC::ConnectorProfile& profile,
                                             ReturnCode_t ret)
   {
-    Guard guard(m_mutex);
-    for (int i(0), len(m_listeners.size()); i < len; ++i)
+    std::lock_guard<std::mutex> guard(m_mutex);
+    for (auto & listener : m_listeners)
       {
-        m_listeners[i].first->operator()(portname, profile, ret);
+        listener.first->operator()(portname, profile, ret);
       }
   }
 
-};  // namespace RTC
+  /*!
+   * @if jp
+   * @class PortConnectListeners クラス
+   * @else
+   * @class PortConnectListeners  class
+   * @endif
+   */
+  PortConnectListeners::PortConnectListeners() = default;
+  /*!
+   * @if jp
+   * @brief デストラクタ
+   * @else
+   * @brief Destructor
+   * @endif
+   */
+  PortConnectListeners::~PortConnectListeners() = default;
+
+  /*!
+   * @if jp
+   *
+   * @brief リスナーの追加
+   *
+   * 指定の種類のPortConnectListenerを追加する。
+   *
+   * @param type リスナの種類
+   * @param listener 追加するリスナ
+   * @param autoclean true:デストラクタで削除する,
+   *                  false:デストラクタで削除しない
+   * @return false：指定の種類のリスナが存在しない
+   * @else
+   *
+   * @brief Add the listener.
+   *
+   *
+   *
+   * @param type
+   * @param listener Added listener
+   * @param autoclean true:The listener is deleted at the destructor.,
+   *                  false:The listener is not deleted at the destructor.
+   * @return
+   * @endif
+   */
+  bool PortConnectListeners::addListener(PortConnectListenerType type, PortConnectListener* listener, bool autoclean)
+  {
+      if (static_cast<uint8_t>(type) < portconnect_.size())
+      {
+          portconnect_[static_cast<uint8_t>(type)].addListener(listener, autoclean);
+          return true;
+      }
+      return false;
+  }
+
+  /*!
+   * @if jp
+   *
+   * @brief リスナーの削除
+   *
+   * 指定の種類のPortConnectListenerを削除する。
+   *
+   * @param type リスナの種類
+   * @param listener 削除するリスナ
+   * @return false：指定の種類のリスナが存在しない
+   *
+   * @else
+   *
+   * @brief Remove the listener.
+   *
+   *
+   * @param type
+   * @param listener
+   * @return
+   *
+   * @endif
+   */
+  bool PortConnectListeners::removeListener(PortConnectListenerType type, PortConnectListener* listener)
+  {
+      if (static_cast<uint8_t>(type) < portconnect_.size())
+      {
+          portconnect_[static_cast<uint8_t>(type)].removeListener(listener);
+          return true;
+      }
+      return false;
+  }
+  /*!
+   * @if jp
+   *
+   * @brief リスナーの追加
+   *
+   * 指定の種類のPortConnectRetListenerを追加する。
+   *
+   * @param type リスナの種類
+   * @param listener 追加するリスナ
+   * @param autoclean true:デストラクタで削除する,
+   *                  false:デストラクタで削除しない
+   * @return false：指定の種類のリスナが存在しない
+   * @else
+   *
+   * @brief Add the listener.
+   *
+   *
+   *
+   * @param type
+   * @param listener Added listener
+   * @param autoclean true:The listener is deleted at the destructor.,
+   *                  false:The listener is not deleted at the destructor.
+   * @return
+   * @endif
+   */
+  bool PortConnectListeners::addListener(PortConnectRetListenerType type, PortConnectRetListener* listener, bool autoclean)
+  {
+      if (static_cast<uint8_t>(type) < portconnret_.size())
+      {
+          portconnret_[static_cast<uint8_t>(type)].addListener(listener, autoclean);
+          return true;
+      }
+      return false;
+  }
+
+  /*!
+   * @if jp
+   *
+   * @brief リスナーの削除
+   *
+   * 指定の種類のPortConnectRetListenerを削除する。
+   *
+   * @param type リスナの種類
+   * @param listener 削除するリスナ
+   * @return false：指定の種類のリスナが存在しない
+   *
+   * @else
+   *
+   * @brief Remove the listener.
+   *
+   *
+   * @param type
+   * @param listener
+   * @return
+   *
+   * @endif
+   */
+  bool PortConnectListeners::removeListener(PortConnectRetListenerType type, PortConnectRetListener* listener)
+  {
+      if (static_cast<uint8_t>(type) < portconnret_.size())
+      {
+          portconnret_[static_cast<uint8_t>(type)].removeListener(listener);
+          return true;
+      }
+      return false;
+  }
+
+} // namespace RTC
 

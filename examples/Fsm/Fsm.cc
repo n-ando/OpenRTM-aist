@@ -19,7 +19,7 @@
 #if defined(_MSC_VER)
   __pragma(warning(pop))
 #endif
-static const char* fsm_spec[] = {
+static const char* const fsm_spec[] = {
   "implementation_id", "Fsm",
   "type_name",         "Fsm",
   "description",       "Fsm component",

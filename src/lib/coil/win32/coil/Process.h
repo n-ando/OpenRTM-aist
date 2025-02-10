@@ -22,7 +22,7 @@
 
 #include <coil/stringutil.h>
 
-#include <windows.h>
+#include <Windows.h>
 #include <tchar.h>
 #include <string>
 
@@ -64,31 +64,10 @@ namespace coil
   {
     FILE* m_fd;
   public:
-    Popen(std::string cmd, std::string mode)
-    {
-      m_fd = _popen(cmd.c_str(), mode.c_str());
-    }
-    virtual ~Popen()
-    {
-      if (m_fd != 0)
-        {
-          _pclose(m_fd);
-        }
-    }
-    bool isEof()
-    {
-      if (feof(m_fd)) { return true; }
-      return false;
-    }
-    std::string getline()
-    {
-      if (m_fd == 0) { return ""; }
-      if (feof(m_fd)) { return ""; }
-      char str[512];
-      fgets(str, 512, m_fd);
-      std::string line(str);
-      return line;
-    }
+    Popen(const std::string& cmd, const std::string& mode);
+    virtual ~Popen();
+    bool isEof();
+    std::string getline();
   };
 
   /*!
@@ -111,9 +90,9 @@ namespace coil
   *
   * @endif
   */
-  int create_process(std::string command, std::vector<std::string> &out);
+  int create_process(const std::string& command, std::vector<std::string> &out);
 
-};  // namespace coil
+} // namespace coil
 
 inline FILE* popen(const char* cmd, const char* mode)
 {

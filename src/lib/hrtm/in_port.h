@@ -31,14 +31,12 @@ namespace hrtm
       : RTC::InPort<DataType>(name, data)
     {
     }
-    virtual ~InPort()
-    {
-    }
+    virtual ~InPort() = default;
   };
 #else
   template<class DataType>
   using InPort = RTC::InPort<DataType>;
 #endif
-};
+} // namespace hrtm
 
 #endif // HRTM_IN_PORT_H

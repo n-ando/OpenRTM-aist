@@ -52,7 +52,7 @@ namespace RTC
    *
    * @endif
    */
-  typedef std::basic_streambuf<char> StreambufType;
+  using StreambufType = coil::LogStreamBuffer;
   class LogstreamBase
   {
   public:
@@ -67,7 +67,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~LogstreamBase(void){};
+    virtual ~LogstreamBase() = default;
 
     /*!
      * @if jp
@@ -96,10 +96,13 @@ namespace RTC
 
   };
 
-  typedef coil::GlobalFactory<LogstreamBase> LogstreamFactory;
+  using LogstreamFactory = coil::GlobalFactory<LogstreamBase>;
+} // namespace RTC
 
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
-  EXTERN template class DLL_PLUGIN coil::GlobalFactory<LogstreamBase>;
+EXTERN template class DLL_PLUGIN coil::GlobalFactory<RTC::LogstreamBase>;
+#elif defined(__GNUC__)
+EXTERN template class coil::GlobalFactory<RTC::LogstreamBase>;
 #endif
-};
+
 #endif // RTC_LOGSTREAMBASE_H

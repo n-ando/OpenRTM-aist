@@ -144,7 +144,7 @@ namespace CORBA_SeqUtil
     CORBA::ULong len(seq.length());
     for (CORBA::ULong i = 0; i < len; ++i)
       {
-        if (f(seq[i])) { return (CORBA::Long)i; }
+        if (f(seq[i])) { return static_cast<CORBA::Long>(i); }
       }
     return -1;
   }
@@ -423,9 +423,9 @@ namespace CORBA_SeqUtil
         CORBA_Object obj = (objlist.cobj())->_buffer[i];
         CORBA::String_var str_var = orb->object_to_string2(obj);
 #endif
-        iorlist.push_back(str_var.in());
+        iorlist.emplace_back(str_var.in());
       }
     return iorlist;
   }
-};  // namespace CORBA_SeqUtil
+} // namespace CORBA_SeqUtil
 #endif  // CORBA_SEQUTIL_H

@@ -55,7 +55,6 @@ namespace RTC_exp
   class VxWorksRTExecutionContext
       : public RTC_exp::PeriodicExecutionContext
   {
-    typedef coil::Guard<coil::Mutex> Guard;
   public:
     /*!
      * @if jp
@@ -206,11 +205,7 @@ namespace RTC_exp
     long int m_sec;
     long int m_nsec;
   };
-}; // namespace RTC
-
-#ifdef WIN32
-#pragma warning( default : 4290 )
-#endif
+} // namespace RTC
 
 
 extern "C"

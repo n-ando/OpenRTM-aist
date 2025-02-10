@@ -21,6 +21,7 @@
 #include <rtm/idl/ExtendedFsmServiceStub.h>
 #include "ExtendedFsmServiceProvider.h"
 #include <iostream>
+#include <utility>
 
 namespace RTC
 {
@@ -32,7 +33,6 @@ namespace RTC
    * @endif
    */
   ExtendedFsmServiceProvider::ExtendedFsmServiceProvider()
-    : m_rtobj(NULL)
   {
     std::cout << "ExtendedFsmServiceProvider()" << std::endl;
 
@@ -76,9 +76,7 @@ namespace RTC
    * @brief dtor
    * @endif
    */
-  ExtendedFsmServiceProvider::~ExtendedFsmServiceProvider()
-  {
-  }
+  ExtendedFsmServiceProvider::~ExtendedFsmServiceProvider() = default;
 
   /*!
    * @if jp
@@ -93,8 +91,6 @@ namespace RTC
   {
     m_rtobj = &rtobj;
     m_profile = profile;
-    //    coil::Properties prop;
-    //    NVUtil::copyToProperties(prop, profile.properties);
     return true;
   }
 
@@ -109,8 +105,6 @@ namespace RTC
   ExtendedFsmServiceProvider::reinit(const SDOPackage::ServiceProfile& profile)
   {
     m_profile= profile;
-    //    coil::Properties prop;
-    //    NVUtil::copyToProperties(prop, profile.properties);
     return true;
   }
 
@@ -198,7 +192,7 @@ namespace RTC
    * @brief Connectiong listeners to RTObject
    * @endif
    */
-  void ExtendedFsmServiceProvider::setListeners(coil::Properties& prop)
+  void ExtendedFsmServiceProvider::setListeners(coil::Properties& /*prop*/)
   {
   }
 
@@ -214,7 +208,7 @@ namespace RTC
    */
   void ExtendedFsmServiceProvider::changeStatus(std::string state)
   {
-    m_fsmState = state;
+    m_fsmState = std::move(state);
   }
 
   /*!
@@ -224,9 +218,13 @@ namespace RTC
    * @brief Sending a heartbeart signal to observer
    * @endif
    */
-  void ExtendedFsmServiceProvider::changeStructure(std::string fsm_structure)
+  void ExtendedFsmServiceProvider::changeStructure(const std::string& fsm_structure)
   {
+#ifndef ORB_IS_RTORB
     m_fsmStructure.structure = fsm_structure.c_str();
+#else
+    m_fsmStructure.structure = CORBA::string_dup(fsm_structure.c_str());
+#endif
   }
 
   //============================================================
@@ -303,7 +301,7 @@ namespace RTC
   {
   }
 
-}; // namespace RTC
+} // namespace RTC
 
 extern "C"
 {
@@ -323,4 +321,4 @@ extern "C"
                        ::RTC::ExtendedFsmServiceProvider>);
                        std::cout << "Init()" << std::endl;
   }
-};
+}

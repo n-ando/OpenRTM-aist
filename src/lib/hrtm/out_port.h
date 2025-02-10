@@ -31,14 +31,12 @@ namespace hrtm
       : RTC::OutPort<DataType>(name, data)
     {
     }
-    virtual ~OutPort()
-    {
-    }
+    virtual ~OutPort() = default;
   };
 #else
   template<class DataType>
   using OutPort = RTC::OutPort<DataType>;
 #endif
-};
+} // namespace hrtm
 
 #endif // HRT_OUT_PORT_H

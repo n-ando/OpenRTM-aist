@@ -1,0 +1,87 @@
+# -*- cmake -*-
+#
+# @file OpenRTMConfig.cmake
+# @brief cmake-config file for OpenRTM-aist
+# @author Noriaki Ando
+#
+# This file is used for cmake config-mode.
+# The following variables are defined.
+#
+# Basic compiler/linker options
+# - OPENRTM_CFLAGS: cflags 
+# - OPENRTM_INCLUDE_DIRS: include directories
+# - OPENRTM_LDFLAGS: linker options
+# - OPENRTM_LIBRARY_DIRS: library directories
+# - OPENRTM_LIBRARIES: libraries
+# - OPENRTM_LIB_DIR: OpenRTM's lib directory
+#
+# OpenRTM-aist specific directory
+# - COIL_INCLUDE_DIR: coil include dir
+# - OPENRTM_INCLUDE_DIR: OpenRTM's include directory
+# - OPENRTM_LIB_DIR: OpenRTM's lib directory
+# - OPENRTM_DATA_DIR: OpenRTM's shared directory
+#
+# OpenRTM-aist version
+# - OPENRTM_VERSION: x.y.z version
+# - OPENRTM_VERSION_MAJOR: major version number
+# - OPENRTM_VERSION_MINOR: minor version number
+# - OPENRTM_VERSION_PATCH: revision number
+# - OPENRTM_SHORT_VERSION: short version number 1.1.0->110
+#
+# OpenRTM-aist's CORBA related settings
+# - OPENRTM_ORB: CORBA implementation
+# - OPENRTM_IDL_WRAPPER: rtm-skelwrapper command
+# - OPENRTM_IDL_WRAPPER_FLAGS: rtm-skelwrapper flag
+# - OPENRTM_IDLC: IDL command
+# - OPENRTM_IDLFLAGS: IDL optins
+
+message(STATUS "OpenRTMConfig.cmake(version 2.0) found.")
+message(STATUS "Configrued by configuration mode.")
+
+
+# Basic compiler/linker options
+set(OPENRTM_CFLAGS @COIL_C_FLAGS_LIST@ -Wall -fPIC -O2)
+set(OPENRTM_INCLUDE_DIRS @CMAKE_INSTALL_PREFIX@/include @CMAKE_INSTALL_PREFIX@/@INSTALL_COIL_INCLUDE_DIR@ @CMAKE_INSTALL_PREFIX@/@INSTALL_RTM_INCLUDE_DIR@ @CMAKE_INSTALL_PREFIX@/@INSTALL_RTM_INCLUDE_DIR@/rtm/idl @CMAKE_INSTALL_PREFIX@/@INSTALL_RTM_INCLUDE_DIR@/rtm/ext)
+set(OPENRTM_LDFLAGS -luuid -lrt -ldl -export-dynamic)
+set(OPENRTM_LIBRARY_DIRS @CMAKE_INSTALL_PREFIX@/@INSTALL_RTM_LIB_DIR@)
+set(OPENRTM_LIBRARIES pthread;@OPENRTM_LIBRARIES@)
+set(OPENRTM_LIB_DIR @CMAKE_INSTALL_PREFIX@/@INSTALL_RTM_LIB_DIR@)
+set(OPENRTM_INCLUDE_DIR @CMAKE_INSTALL_PREFIX@/@INSTALL_RTM_INCLUDE_DIR@)
+set(OPENRTM_DIR @CMAKE_INSTALL_PREFIX@)
+
+# OpenRTM-aist specific directory
+set(COIL_INCLUDE_DIR @CMAKE_INSTALL_PREFIX@/@INSTALL_COIL_INCLUDE_DIR@)
+set(OPENRTM_DATA_DIR @CMAKE_INSTALL_PREFIX@/@INSTALL_RTM_SHARE_DIR@)
+
+# OpenRTM-aist version
+set(OPENRTM_VERSION @RTM_VERSION@)
+set(OPENRTM_VERSION_MAJOR @RTM_MAJOR_VERSION@)
+set(OPENRTM_VERSION_MINOR @RTM_MINOR_VERSION@)
+set(OPENRTM_VERSION_PATCH @RTM_REVISION_NUM@)
+set(OPENRTM_SHORT_VERSION @RTM_SHORT_VERSION@)
+
+# OpenRTM-aist's CORBA related settings
+set(OPENRTM_ORB RtORB)
+set(OPENRTM_IDL_WRAPPER rtm-skelwrapper2)
+set(OPENRTM_IDL_WRAPPER_FLAGS --include-dir= --skel-suffix=Skel --stub-suffix=Stub)
+set(OPENRTM_IDLC @IDL_COMPILE_COMMAND@)
+set(OPENRTM_IDLFLAGS --skeleton-impl -I${OPENRTM_INCLUDE_DIR}/rtm/idl)
+
+
+# RtORB version
+set(RtORB_DIR @ORB_ROOT@)
+set(RtORB_CFLAGS @ORB_C_FLAGS_LIST@;)
+set(RtORB_INCLUDE_DIRS @ORB_INCLUDE_DIR@)
+set(RtORB_LDFLAGS )
+set(RtORB_LIBRARY_DIRS @ORB_LINK_DIR@)
+set(RtORB_LIBRARIES @ORB_LIBRARIES@)
+
+set(OPENRTM_CFLAGS ${OPENRTM_CFLAGS} ${RtORB_CFLAGS})
+set(OPENRTM_INCLUDE_DIRS ${OPENRTM_INCLUDE_DIRS} ${RtORB_INCLUDE_DIRS})
+set(OPENRTM_LDFLAGS ${OPENRTM_LDFLAGS} ${RtORB_LDFLAGS})
+set(OPENRTM_LIBRARY_DIRS ${OPENRTM_LIBRARY_DIRS} ${RtORB_LIBRARY_DIRS})
+
+
+
+message(STATUS "OpenRTM-aist configuration done")
+# end of OpenRTMConfig.cmake

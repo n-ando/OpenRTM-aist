@@ -18,21 +18,7 @@
  */
 
 #include <rtm/ConnectorListener.h>
-
-// cstdint
-#if defined (_MSC_VER) && (_MSC_VER <=1500) // VC2008(VC9.0) or before
-typedef __int32 int32_t;
-typedef unsigned __int32 uint32_t;
-typedef __int64 int64_t;
-typedef unsigned __int64 uint64_t;
-#else
-#if __cplusplus <= 199711L
-#include <stdint.h>
-#else
 #include <cstdint>
-#endif
-#endif
-
 
 namespace RTC
 {
@@ -55,7 +41,7 @@ namespace RTC
    * @class ConnectorDataListener class
    * @endif
    */
-  ConnectorDataListener::~ConnectorDataListener() {}
+  ConnectorDataListener::~ConnectorDataListener() = default;
 
   /*!
    * @if jp
@@ -64,7 +50,7 @@ namespace RTC
    * @class ConnectorListener class
    * @endif
    */
-  ConnectorListener::~ConnectorListener() {}
+  ConnectorListener::~ConnectorListener() = default;
 
   /*!
    * @if jp
@@ -75,17 +61,18 @@ namespace RTC
    */
   ConnectorDataListenerHolder::ConnectorDataListenerHolder()
   {
+      SerializerFactory::instance().deleteObject(m_cdr);
   }
 
 
   ConnectorDataListenerHolder::~ConnectorDataListenerHolder()
   {
-    Guard guard(m_mutex);
-    for (int i(0), len(m_listeners.size()); i < len; ++i)
+    std::lock_guard<std::mutex> guard(m_mutex);
+    for (auto & listener : m_listeners)
       {
-        if (m_listeners[i].second)
+        if (listener.second)
           {
-            delete m_listeners[i].first;
+            delete listener.first;
           }
       }
   }
@@ -94,23 +81,23 @@ namespace RTC
   void ConnectorDataListenerHolder::
   addListener(ConnectorDataListener* listener, bool autoclean)
   {
-    Guard guard(m_mutex);
-    m_listeners.push_back(Entry(listener, autoclean));
+    std::lock_guard<std::mutex> guard(m_mutex);
+    m_listeners.emplace_back(listener, autoclean);
   }
 
 
   void ConnectorDataListenerHolder::
   removeListener(ConnectorDataListener* listener)
   {
-    Guard guard(m_mutex);
+    std::lock_guard<std::mutex> guard(m_mutex);
     std::vector<Entry>::iterator it(m_listeners.begin());
     for (; it != m_listeners.end(); ++it)
       {
-        if ((*it).first == listener)
+        if (it->first == listener)
           {
-            if ((*it).second)
+            if (it->second)
               {
-                delete (*it).first;
+                delete it->first;
               }
             m_listeners.erase(it);
             return;
@@ -121,23 +108,38 @@ namespace RTC
 
   size_t ConnectorDataListenerHolder::size()
   {
-    Guard guard(m_mutex);
+    std::lock_guard<std::mutex> guard(m_mutex);
     return m_listeners.size();
   }
 
   ConnectorDataListenerHolder::ReturnCode
-	  ConnectorDataListenerHolder::notify(ConnectorInfo& info,
-                                                 cdrMemoryStream& cdrdata)
+    ConnectorDataListenerHolder::notify(ConnectorInfo& info,
+                                                 ByteData& cdrdata, const std::string& marshalingtype)
   {
-    Guard guard(m_mutex);
+    std::lock_guard<std::mutex> guard(m_mutex);
     ConnectorListenerHolder::ReturnCode ret(NO_CHANGE);
-    for (int i(0), len(m_listeners.size()); i < len; ++i)
+    for (auto & listener : m_listeners)
       {
-        ret = ret | m_listeners[i].first->operator()(info, cdrdata);
+        ret = ret | listener.first->operator()(info, cdrdata, marshalingtype);
       }
     return ret;
   }
 
+  ConnectorListenerHolder::ReturnCode ConnectorDataListenerHolder::notifyIn(ConnectorInfo& info, ByteData& data)
+  {
+      std::string type = info.properties.getProperty("marshaling_type", "cdr");
+      std::string marshaling_type{ coil::eraseBothEndsBlank(
+        info.properties.getProperty("inport.marshaling_type", type)) };
+      return notify(info, data, marshaling_type);
+  }
+
+  ConnectorListenerHolder::ReturnCode ConnectorDataListenerHolder::notifyOut(ConnectorInfo& info, ByteData& data)
+  {
+      std::string type = info.properties.getProperty("marshaling_type", "cdr");
+      std::string marshaling_type{ coil::eraseBothEndsBlank(
+        info.properties.getProperty("outport.marshaling_type", type)) };
+      return notify(info, data, marshaling_type);
+  }
 
   /*!
    * @if jp
@@ -146,19 +148,17 @@ namespace RTC
    * @class ConnectorListener holder class
    * @endif
    */
-  ConnectorListenerHolder::ConnectorListenerHolder()
-  {
-  }
+  ConnectorListenerHolder::ConnectorListenerHolder() = default;
 
 
   ConnectorListenerHolder::~ConnectorListenerHolder()
   {
-    Guard guard(m_mutex);
-    for (int i(0), len(m_listeners.size()); i < len; ++i)
+    std::lock_guard<std::mutex> guard(m_mutex);
+    for (auto & listener : m_listeners)
       {
-        if (m_listeners[i].second)
+        if (listener.second)
           {
-            delete m_listeners[i].first;
+            delete listener.first;
           }
       }
   }
@@ -167,23 +167,23 @@ namespace RTC
   void ConnectorListenerHolder::addListener(ConnectorListener* listener,
                                             bool autoclean)
   {
-    Guard guard(m_mutex);
-    m_listeners.push_back(Entry(listener, autoclean));
+    std::lock_guard<std::mutex> guard(m_mutex);
+    m_listeners.emplace_back(listener, autoclean);
   }
 
 
   void ConnectorListenerHolder::removeListener(ConnectorListener* listener)
   {
-    Guard guard(m_mutex);
+    std::lock_guard<std::mutex> guard(m_mutex);
     std::vector<Entry>::iterator it(m_listeners.begin());
 
     for (; it != m_listeners.end(); ++it)
       {
-        if ((*it).first == listener)
+        if (it->first == listener)
           {
-            if ((*it).second)
+            if (it->second)
               {
-                delete (*it).first;
+                delete it->first;
               }
             m_listeners.erase(it);
             return;
@@ -193,21 +193,315 @@ namespace RTC
 
   size_t ConnectorListenerHolder::size()
   {
-    Guard guard(m_mutex);
+    std::lock_guard<std::mutex> guard(m_mutex);
     return m_listeners.size();
   }
 
   ConnectorListenerHolder::ReturnCode
-	  ConnectorListenerHolder::notify(ConnectorInfo& info)
+    ConnectorListenerHolder::notify(ConnectorInfo& info)
   {
-    Guard guard(m_mutex);
+    std::lock_guard<std::mutex> guard(m_mutex);
     ConnectorListenerHolder::ReturnCode ret(NO_CHANGE);
-    for (int i(0), len(m_listeners.size()); i < len; ++i)
+    for (auto & listener : m_listeners)
       {
-        ret = ret | m_listeners[i].first->operator()(info);
+        ret = ret | listener.first->operator()(info);
       }
     return ret;
   }
-};  // namespace RTC
+
+
+  /*!
+   * @if jp
+   * @class ConnectorListeners クラス
+   * @else
+   * @class ConnectorListeners class
+   * @endif
+   */
+
+  /*!
+   * @if jp
+   * @brief コンストラクタ
+   * @else
+   * @brief Constructor
+   * @endif
+   */
+  ConnectorListeners::ConnectorListeners()
+  {
+  }
+  /*!
+   * @if jp
+   * @brief デストラクタ
+   * @else
+   * @brief Destructor
+   * @endif
+   */
+  ConnectorListeners::~ConnectorListeners() = default;
+
+  /*!
+   * @if jp
+   *
+   * @brief リスナーへ通知する(InPort側)
+   * 指定の種類のリスナのコールバックメソッドを呼び出す。
+   * InPortとOutPortでシリアライザの種類が違う場合があるため、
+   * InPort側ではnotifyOut関数を使用する必要がある。
+   *
+   * @param type リスナの種類
+   * @param info ConnectorInfo
+   * @param data バイト列のデータ
+   * @return リターンコード
+   * @else
+   *
+   * @brief Notify listeners. (Typed data version)
+   *
+   * @param type
+   * @param info ConnectorInfo
+   * @param data Data
+   * @return
+   * @endif
+   */
+  ::RTC::ConnectorListenerStatus::Enum ConnectorListeners::notifyIn(ConnectorDataListenerType type, ConnectorInfo& info, ByteData& data)
+  {
+      if (static_cast<uint8_t>(type) < connectorData_.size())
+      {
+          return connectorData_[static_cast<uint8_t>(type)].notifyIn(info, data);
+      }
+      return ConnectorListenerStatus::NO_CHANGE;
+  }
+
+  /*!
+   * @if jp
+   *
+   * @brief リスナーへ通知する(OutPort側)
+   * 指定の種類のリスナのコールバックメソッドを呼び出す。
+   * InPortとOutPortでシリアライザの種類が違う場合があるため、
+   * OutPort側ではnotifyOut関数を使用する必要がある。
+   *
+   * @param type リスナの種類
+   * @param info ConnectorInfo
+   * @param data バイト列のデータ
+   * @return リターンコード
+   * @else
+   *
+   * @brief Notify listeners. (Typed data version)
+   *
+   * @param type
+   * @param info ConnectorInfo
+   * @param data Data
+   * @return
+   * @endif
+   */
+  ::RTC::ConnectorListenerStatus::Enum ConnectorListeners::notifyOut(ConnectorDataListenerType type, ConnectorInfo& info, ByteData& data)
+  {
+      if (static_cast<uint8_t>(type) < connectorData_.size())
+      {
+          return connectorData_[static_cast<uint8_t>(type)].notifyOut(info, data);
+      }
+      return ConnectorListenerStatus::NO_CHANGE;
+  }
+
+  /*!
+   * @if jp
+   *
+   * @brief リスナーへ通知する
+   *
+   * データポートの Connector において発生する各種イベントに対するコー
+   * ルバックメソッド
+   *
+   * @param type リスナの種類
+   * @param info ConnectorInfo
+   * @return リターンコード
+   *
+   * @else
+   *
+   * @brief Virtual Callback method
+   *
+   * @param type リスナの種類
+   * @param info ConnectorInfo
+   * @return リターンコード
+   *
+   * @return
+   * @endif
+   */
+  ::RTC::ConnectorListenerStatus::Enum ConnectorListeners::notify(ConnectorListenerType type, ConnectorInfo& info)
+  {
+      if (static_cast<uint8_t>(type) < connector_.size())
+      {
+          return connector_[static_cast<uint8_t>(type)].notify(info);
+      }
+      return ConnectorListenerStatus::NO_CHANGE;
+  }
+
+  /*!
+   * @if jp
+   *
+   * @brief リスナーの追加
+   *
+   * 指定の種類のConnectorDataListenerを追加する。
+   *
+   * @param type リスナの種類
+   * @param listener 追加するリスナ
+   * @param autoclean true:デストラクタで削除する,
+   *                  false:デストラクタで削除しない
+   * @return false：指定の種類のリスナが存在しない
+   * @else
+   *
+   * @brief Add the listener.
+   *
+   *
+   *
+   * @param type
+   * @param listener Added listener
+   * @param autoclean true:The listener is deleted at the destructor.,
+   *                  false:The listener is not deleted at the destructor.
+   * @return
+   * @endif
+   */
+  bool ConnectorListeners::addListener(ConnectorDataListenerType type, ConnectorDataListener* listener, bool autoclean)
+  {
+      if (static_cast<uint8_t>(type) < connectorData_.size())
+      {
+          connectorData_[static_cast<uint8_t>(type)].addListener(listener, autoclean);
+          return true;
+      }
+      return false;
+  }
+
+  /*!
+   * @if jp
+   *
+   * @brief リスナーの追加
+   *
+   * 指定の種類のConnectorListenerを追加する。
+   *
+   * @param type リスナの種類
+   * @param listener 追加するリスナ
+   * @param autoclean true:デストラクタで削除する,
+   *                  false:デストラクタで削除しない
+   * @return false：指定の種類のリスナが存在しない
+   * @else
+   *
+   * @brief Add the listener.
+   *
+   *
+   *
+   * @param type
+   * @param listener Added listener
+   * @param autoclean true:The listener is deleted at the destructor.,
+   *                  false:The listener is not deleted at the destructor.
+   * @return
+   * @endif
+   */
+  bool ConnectorListeners::addListener(ConnectorListenerType type, ConnectorListener* listener, bool autoclean)
+  {
+      if (static_cast<uint8_t>(type) < connector_.size())
+      {
+          connector_[static_cast<uint8_t>(type)].addListener(listener, autoclean);
+          return true;
+      }
+      return false;
+  }
+
+  /*!
+   * @if jp
+   *
+   * @brief リスナーの削除
+   *
+   * 指定の種類のConnectorDataListenerを削除する。
+   *
+   * @param type リスナの種類
+   * @param listener 削除するリスナ
+   * @return false：指定の種類のリスナが存在しない
+   *
+   * @else
+   *
+   * @brief Remove the listener.
+   *
+   *
+   * @param type
+   * @param listener
+   * @return
+   *
+   * @endif
+   */
+  bool ConnectorListeners::removeListener(ConnectorDataListenerType type, ConnectorDataListener* listener)
+  {
+      if (static_cast<uint8_t>(type) < connectorData_.size())
+      {
+          connectorData_[static_cast<uint8_t>(type)].removeListener(listener);
+          return true;
+      }
+      return false;
+  }
+
+  /*!
+   * @if jp
+   *
+   * @brief リスナーの削除
+   *
+   * 指定の種類のConnectorListenerを削除する。
+   *
+   * @param type リスナの種類
+   * @param listener 削除するリスナ
+   * @return false：指定の種類のリスナが存在しない
+   *
+   * @else
+   *
+   * @brief Remove the listener.
+   *
+   *
+   * @param type
+   * @param listener
+   * @return
+   *
+   * @endif
+   */
+  bool ConnectorListeners::removeListener(ConnectorListenerType type, ConnectorListener* listener)
+  {
+      if (static_cast<uint8_t>(type) < connector_.size())
+      {
+          connector_[static_cast<uint8_t>(type)].removeListener(listener);
+          return true;
+      }
+      return false;
+  }
+
+  /*!
+  * @if jp
+  * @brief デストラクタ
+  * @else
+  * @brief Destructor
+  * @endif
+  */
+  ConnectorListenersBase::~ConnectorListenersBase() = default;
+
+  /*!
+   * @if jp
+   *
+   * @brief 指定の種類のConnectorDataListenerHolderを取得する
+   *
+   *
+   * @param type リスナの種類
+   * @return ConnectorDataListenerHolder
+   *
+   * @else
+   *
+   * @brief Remove the listener.
+   *
+   *
+   * @param type
+   * @param listener
+   * @return
+   *
+   * @endif
+   */
+  ConnectorDataListenerHolder* ConnectorListeners::getDataListenerHolder(ConnectorDataListenerType type)
+  {
+      if (static_cast<uint8_t>(type) < connectorData_.size())
+      {
+          return &connectorData_[static_cast<uint8_t>(type)];
+      }
+      return nullptr;
+  }
+} // namespace RTC
 
 

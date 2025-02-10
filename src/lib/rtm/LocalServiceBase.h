@@ -19,7 +19,6 @@
 #ifndef RTM_LOCALSERVICEBASE_H
 #define RTM_LOCALSERVICEBASE_H
 
-#include <coil/Mutex.h>
 #include <coil/Factory.h>
 #include <coil/Timer.h>
 #include <coil/Properties.h>
@@ -43,6 +42,14 @@ namespace RTM
   class LocalServiceProfile
   {
   public:
+    /*!
+     * @if jp
+     * @brief デストラクタ
+     * @else
+     * @brief destructor
+     * @endif
+     */
+    ~LocalServiceProfile();
     /*!
      * @if jp
      * @brief LocalServiceのサービス名
@@ -84,7 +91,7 @@ namespace RTM
    * @brief List of LocalServiceProfile
    * @endif
    */
-  typedef std::vector<LocalServiceProfile> LocalServiceProfileList;
+  using LocalServiceProfileList = std::vector<LocalServiceProfile>;
 
   /*!
    * @if jp
@@ -197,9 +204,7 @@ namespace RTM
      * @brief virtual destructor
      * @endif
      */
-    virtual ~LocalServiceBase()
-    {
-    }
+    virtual ~LocalServiceBase() = default;
 
     /*!
      * @if jp
@@ -282,7 +287,9 @@ namespace RTM
    * @brief typedef of sdoServiceProviderFactory
    * @endif
    */
-  typedef ::coil::GlobalFactory< ::RTM::LocalServiceBase > LocalServiceFactory;
+  using LocalServiceFactory = ::coil::GlobalFactory< ::RTM::LocalServiceBase>;
+} // namespace RTM
+
 
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
   /*!
@@ -292,9 +299,9 @@ namespace RTM
    * @brief Explicit instantiation of class template
    * @endif
    */
-  EXTERN template class DLL_PLUGIN
-  ::coil::GlobalFactory< ::RTM::LocalServiceBase >;
+EXTERN template class DLL_PLUGIN coil::GlobalFactory<RTM::LocalServiceBase >;
+#elif defined(__GNUC__)
+EXTERN template class coil::GlobalFactory<RTM::LocalServiceBase>;
 #endif
-};  // namespace RTM
 
 #endif  // RTM_LOCALSERVICEBASE_H

@@ -11,11 +11,11 @@
 
 // Module specification
 // <rtc-template block="module_spec">
-static const char* consoleout_spec[] =
+static const char* const microwave_spec[] =
   {
     "implementation_id", "Microwave",
     "type_name",         "Microwave",
-    "description",       "Console output component",
+    "description",       "Microwave Static FSM component",
     "version",           "1.0",
     "vendor",            "Noriaki Ando, AIST",
     "category",          "example",
@@ -53,9 +53,7 @@ Microwave::Microwave(RTC::Manager* manager)
 
 }
 
-Microwave::~Microwave()
-{
-}
+Microwave::~Microwave() = default;
 
 
 RTC::ReturnCode_t Microwave::onInitialize()
@@ -72,9 +70,8 @@ RTC::ReturnCode_t Microwave::onInitialize()
  return RTC::RTC_OK;
 }
 
-RTC::ReturnCode_t Microwave::onExecute(RTC::UniqueId ec_id)
+RTC::ReturnCode_t Microwave::onExecute(RTC::UniqueId  /*ec_id*/)
 {
-  //coil::usleep(1000000);
     m_fsm.run_event();
 
   return RTC::RTC_OK;
@@ -84,11 +81,11 @@ extern "C"
 {
   void MicrowaveInit(RTC::Manager* manager)
   {
-    coil::Properties profile(consoleout_spec);
+    coil::Properties profile(microwave_spec);
     manager->registerFactory(profile,
                              RTC::Create<Microwave>,
                              RTC::Delete<Microwave>);
   }
-};
+}
 
 

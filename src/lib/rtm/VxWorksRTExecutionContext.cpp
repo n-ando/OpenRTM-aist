@@ -97,7 +97,7 @@ namespace RTC_exp
         // Therefore WorkerPreDo(updating state) have to be invoked
         // before stopping thread.
         {
-          Guard guard(m_workerthread.mutex_);
+          std::lock_guard<coil::Mutex> guard(m_workerthread.mutex_);
           while (!m_workerthread.running_)
             {
               m_workerthread.cond_.wait();
@@ -312,7 +312,7 @@ namespace RTC_exp
       }
   }
 
-}; // namespace RTC  
+} // namespace RTC 
 
 extern "C"
 {

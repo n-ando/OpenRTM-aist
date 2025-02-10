@@ -57,7 +57,6 @@ namespace RTC
   {
     typedef coil::Mutex Mutex;
     typedef coil::Condition<Mutex> Condition;
-    typedef coil::Guard<coil::Mutex> Guard;
   public:
     /*!
      * @if jp
@@ -605,16 +604,16 @@ namespace RTC
      * @brief onStarted() template function
      */
     virtual RTC::ReturnCode_t onStarted();
-    // template virtual functions adding/removing component	
-    /*!	
-     * @brief onAddedComponent() template function	
-     */	
-     virtual RTC::ReturnCode_t	
-     onAddedComponent(RTC::LightweightRTObject_ptr rtobj);	
-    /*!	
-     * @brief onRemovedComponent() template function	
-     */	
-    virtual RTC::ReturnCode_t	
+    // template virtual functions adding/removing component
+    /*!
+     * @brief onAddedComponent() template function
+     */
+     virtual RTC::ReturnCode_t
+     onAddedComponent(RTC::LightweightRTObject_ptr rtobj);
+    /*!
+     * @brief onRemovedComponent() template function
+     */
+    virtual RTC::ReturnCode_t
     onRemovedComponent(RTC::LightweightRTObject_ptr rtobj);
     /*!
      * @brief onWaitingActivated() template function
@@ -635,7 +634,7 @@ namespace RTC
   private:
     bool threadRunning()
     {
-      Guard guard(m_svcmutex);
+      std::lock_guard<coil::Mutex> guard(m_svcmutex);
       return m_svc;
     }
     /*!
@@ -694,7 +693,7 @@ namespace RTC
     Worker m_worker;
     int exception_number;
   };  // class VxWorksInterruptExecutionContext
-};  // namespace RTC
+} // namespace RTC
 
 
 

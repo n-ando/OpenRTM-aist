@@ -35,7 +35,7 @@ namespace CORBA_Util
   template <class T, typename T::_ptr_type (*)(void)>
   struct has_nil_helper
   {
-    typedef void type;
+    using type = void;
   };
 
   /*!
@@ -247,7 +247,7 @@ namespace CORBA_Util
     return typecode<true, T>::id();
   }
 
-};  // namespace CORBA_Util
+} // namespace CORBA_Util
 
 template <class T>
 const char* toTypename()

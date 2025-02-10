@@ -80,9 +80,7 @@ namespace RTC
   class InPortPushConnector
     : public InPortConnector
   {
-    typedef coil::Guard<coil::Mutex> Guard;
   public:
-    DATAPORTSTATUS_ENUM
 
     /*!
      * @if jp
@@ -126,8 +124,8 @@ namespace RTC
      */
     InPortPushConnector(ConnectorInfo info,
                         InPortProvider* provider,
-                        ConnectorListeners& listeners,
-                        CdrBufferBase* buffer = 0);
+                        ConnectorListenersBase* listeners,
+                        CdrBufferBase* buffer = nullptr);
 
     /*!
      * @if jp
@@ -144,7 +142,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~InPortPushConnector();
+    ~InPortPushConnector() override;
 
     /*!
      * @if jp
@@ -178,7 +176,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode read(cdrMemoryStream& data);
+    DataPortStatus read(ByteDataStreamBase* data) override;
 
     /*!
      * @if jp
@@ -199,7 +197,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode disconnect();
+    DataPortStatus disconnect() override;
 
     /*!
      * @if jp
@@ -215,7 +213,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual void activate() {}  // do nothing
+    void activate() override {}  // do nothing
 
     /*!
      * @if jp
@@ -231,7 +229,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual void deactivate() {}  // do nothing
+    void deactivate() override {}  // do nothing
 
   protected:
     /*!
@@ -255,7 +253,7 @@ namespace RTC
      */
     virtual CdrBufferBase* createBuffer(ConnectorInfo& info);
 
-    virtual BufferStatus::Enum write(cdrMemoryStream &cdr);
+    BufferStatus write(ByteData &cdr) override;
 
     /*!
      * @if jp
@@ -275,22 +273,21 @@ namespace RTC
      */
     void onDisconnect();
     
-    inline void onBufferRead(cdrMemoryStream& data)
+    inline void onBufferRead(ByteData& data)
     {
-      m_listeners.
-        connectorData_[ON_BUFFER_READ].notify(m_profile, data);
+      m_listeners->notifyIn(ConnectorDataListenerType::ON_BUFFER_READ,
+                            m_profile, data);
 
     }
-    void onBufferEmpty(cdrMemoryStream& data)
+    void onBufferEmpty(ByteData&  /*data*/)
     {
-      m_listeners.
-        connector_[ON_BUFFER_EMPTY].notify(m_profile);
+      m_listeners->notify(ConnectorListenerType::ON_BUFFER_EMPTY, m_profile);
 
     }
-    void onBufferReadTimeout(cdrMemoryStream& data)
+    void onBufferReadTimeout(ByteData&  /*data*/)
     {
-      m_listeners.
-        connector_[ON_BUFFER_READ_TIMEOUT].notify(m_profile);
+      m_listeners->notify(ConnectorListenerType::ON_BUFFER_READ_TIMEOUT,
+                          m_profile);
     }
 
   private:
@@ -310,7 +307,7 @@ namespace RTC
      * @brief A reference to a ConnectorListener
      * @endif
      */
-    ConnectorListeners& m_listeners;
+    ConnectorListenersBase* m_listeners;
 
     bool m_deleteBuffer;
 
@@ -318,16 +315,18 @@ namespace RTC
 
     struct WorkerThreadCtrl
     {
-        WorkerThreadCtrl() : cond_(mutex_), completed_(false) {}
-        coil::Mutex mutex_;
-        coil::Condition<coil::Mutex> cond_;
-        bool completed_;
+        WorkerThreadCtrl() {}
+        std::mutex mutex_;
+        std::condition_variable cond_;
+        bool completed_{false};
     };
     WorkerThreadCtrl m_writecompleted_worker;
     WorkerThreadCtrl m_readcompleted_worker;
     WorkerThreadCtrl m_readready_worker;
 
+    ByteData m_data;
+
   };
-};  // namespace RTC
+} // namespace RTC
 
 #endif  // RTC_PUSH_CONNECTOR_H

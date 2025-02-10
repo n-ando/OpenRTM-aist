@@ -1,4 +1,6 @@
-cmake_minimum_required (VERSION 2.6)
+cmake_minimum_required (VERSION 3.5.1)
 
-add_subdirectory(rtmCamera)
-add_subdirectory(rtmManipulator)
+if(NOT CORBA MATCHES "RtORB")
+	add_subdirectory(rtmCamera)
+	add_subdirectory(rtmManipulator)
+endif()

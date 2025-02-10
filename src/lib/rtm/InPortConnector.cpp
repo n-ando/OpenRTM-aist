@@ -30,10 +30,10 @@ namespace RTC
    * @endif
    */
   InPortConnector::InPortConnector(ConnectorInfo& info,
-                                   ConnectorListeners& listeners,
+                                   ConnectorListenersBase* listeners,
                                    CdrBufferBase* buffer)
     : rtclog("InPortConnector"), m_profile(info),
-	m_listeners(listeners), m_buffer(buffer), m_littleEndian(true), m_directOutPort(NULL), m_outPortListeners(NULL)
+      m_listeners(listeners), m_buffer(buffer), m_littleEndian(true), m_outPortListeners(nullptr), m_directOutPort(nullptr), m_marshaling_type("cdr"), m_cdr(nullptr)
   {
   }
 
@@ -46,6 +46,7 @@ namespace RTC
    */
   InPortConnector::~InPortConnector()
   {
+      SerializerFactory::instance().deleteObject(m_cdr);
   }
 
   /*!
@@ -156,21 +157,26 @@ namespace RTC
 
   bool InPortConnector::setOutPort(OutPortBase* directOutPort)
   {
-	  {
-		  if (directOutPort == NULL)
-		  {
-			  return false;
-		  }
-		  m_directOutPort = directOutPort;
-		  
-		  m_outPortListeners = &(directOutPort->getListeners());
-		  return true;
-	  }
-  };
+    {
+      if (directOutPort == nullptr)
+      {
+        return false;
+      }
+      m_directOutPort = directOutPort;
+    
+      m_outPortListeners = directOutPort->getListeners();
+     return true;
+    }
+  }
 
-  BufferStatus::Enum InPortConnector::write(cdrMemoryStream &cdr)
+  BufferStatus InPortConnector::write(ByteData & /*cdr*/)
   {
-      return BufferStatus::BUFFER_OK;
-  };
+      return BufferStatus::OK;
+  }
 
-}; // namespace RTC
+  void InPortConnector::unsubscribeInterface(const coil::Properties& /*prop*/)
+  {
+
+  }
+
+} // namespace RTC

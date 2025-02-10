@@ -16,25 +16,31 @@
  */
 #include <algorithm>
 
+#include <rtm/Manager.h>
 #include <rtm/LogstreamBase.h>
+#include <rtm/SystemLogger.h>
 #include <coil/stringutil.h>
 #include "FluentBit.h"
 
 namespace RTC
 {
   // Static variables initialization
-  flb_ctx_t* FluentBitStream::s_flbContext = NULL;
+  flb_ctx_t* FluentBitStream::s_flbContext = nullptr;
   int FluentBitStream::s_instance = 0;
 
   //============================================================
   // FluentBitStream class
   FluentBitStream::FluentBitStream()
-    : m_pos(0)
   {
-    for (size_t i(0); i < BUFFER_LEN; ++i) { m_buf[i] = '\0'; }
-    if (s_flbContext == NULL)
+    for (char & i : m_buf) { i = '\0'; }
+    if (s_flbContext == nullptr)
       {
         s_flbContext = flb_create();
+        if (s_flbContext == nullptr)
+          {
+            std::cerr << "flb_create() failed." << std::endl;
+            throw std::bad_alloc();
+          }
       }
   }
 
@@ -50,43 +56,78 @@ namespace RTC
 
   bool FluentBitStream::init(const coil::Properties& prop)
   {
-    flb_stop(s_flbContext);
-
     // Default lib-input setting
-    FlbHandler flbhandler = flb_input(s_flbContext, (char*)"lib", NULL);
-    flb_input_set(s_flbContext, flbhandler, "tag", prop.getName(), NULL);
-    m_flbIn.push_back(flbhandler);
+    if(prop.findNode("input") == nullptr)
+    {
+      coil::Properties dprop;
+      dprop["plugin"] = std::string("lib");
+      dprop["conf.tag"] = std::string("rtclog");
+
+      createInputStream(dprop);
+    }
 
     const std::vector<coil::Properties*>& leaf(prop.getLeaf());
 
-    for (size_t i(0); i < leaf.size(); ++i)
+    for(auto & lprop : leaf)
       {
-        std::string key(leaf[i]->getName());
+        std::string key(lprop->getName());
         if (key.find("output") != std::string::npos)
           {
-            createOutputStream(*leaf[i]);
+            createOutputStream(*lprop);
           }
         else if (key.find("input") != std::string::npos)
           {
-            createInputStream(*leaf[i]);
+            createInputStream(*lprop);
           }
+        else if (key == "option")
+        {
+            setServiceOption(*lprop);
+        }
       }
     // Start the background worker
-    flb_start(s_flbContext);
+    if (flb_start(s_flbContext) < 0)
+      {
+        std::cerr << "flb_start() failed." << std::endl;
+      }
     return true;
+  }
+
+  int FluentBitStream::setServiceOption(const coil::Properties& prop)
+  {
+    const std::vector<Properties*>& leaf = prop.getLeaf();
+    int ret = 0;
+    for(auto & lprop : leaf)
+      {
+        std::string key(lprop->getName()), value(lprop->getValue());
+        ret = flb_service_set(s_flbContext, key.c_str(), value.c_str(), NULL);
+      }
+    return ret;
   }
 
   bool FluentBitStream::createOutputStream(const coil::Properties& prop)
   {
     std::string plugin = prop["plugin"];
     FlbHandler flbout = flb_output(s_flbContext,
-                                   (char*)plugin.c_str(), NULL);
-    m_flbOut.push_back(flbout);
-    const std::vector<Properties*>& leaf = prop.getLeaf();
-    for (size_t i(0); i < leaf.size(); ++i)
+                                   (char*)plugin.c_str(), nullptr);
+    m_flbOut.emplace_back(flbout);
+    
+    if(prop.findNode("conf") != nullptr)
       {
-        flb_output_set(s_flbContext, flbout,
-                       leaf[i]->getName(), leaf[i]->getValue(), NULL);
+        Properties confprop = prop;
+        const std::vector<Properties*> &leaf = confprop.getNode("conf").getLeaf();
+        for(auto & lprop : leaf)
+          {
+            std::string key(lprop->getName()), value(lprop->getValue());
+
+            int ret = flb_output_property_check(s_flbContext,
+                                                flbout, &key[0], &value[0]);
+            if (ret == FLB_LIB_ERROR || ret == FLB_LIB_NO_CONFIG_MAP)
+              {
+                std::cerr << "Unknown property for \"" << plugin << "\" plugin: ";
+                std::cerr << key << ": " << value << std::endl;
+              }
+            flb_output_set(s_flbContext, flbout, key.c_str(), value.c_str(), NULL);
+          }
       }
     return true;
   }
@@ -95,72 +136,94 @@ namespace RTC
   {
     std::string plugin = prop["plugin"];
     FlbHandler flbin = flb_input(s_flbContext,
-                                 (char*)plugin.c_str(), NULL);
-    m_flbIn.push_back(flbin);
-    const std::vector<Properties*>& leaf = prop.getLeaf();
-    for (size_t i(0); i < leaf.size(); ++i)
+                                 (char*)plugin.c_str(), nullptr);
+    m_flbIn.emplace_back(flbin);
+    if(prop.findNode("conf") != nullptr)
       {
-        flb_input_set(s_flbContext, flbin,
-                      leaf[i]->getName(), leaf[i]->getValue(), NULL);
+        Properties confprop = prop;
+        const std::vector<Properties*> &leaf = confprop.getNode("conf").getLeaf();
+        for(auto & lprop : leaf)
+          {
+            std::string key(lprop->getName()), value(lprop->getValue());
+
+            int ret = flb_input_property_check(s_flbContext,
+                                              flbin, &key[0], &value[0]);
+            if (ret == FLB_LIB_ERROR || ret == FLB_LIB_NO_CONFIG_MAP)
+              {
+                std::cerr << "Unknown property for \"" << plugin << "\" plugin: ";
+                std::cerr << key << ": " << value << std::endl;
+              }
+            flb_input_set(s_flbContext, flbin, key.c_str(), value.c_str(), NULL);
+          }
       }
     return true;
   }
 
-  std::streamsize FluentBitStream::pushLogger()
+  std::streamsize FluentBitStream::pushLogger(int level, const std::string &name, const std::string &date, const char* mes)
   {
     char tmp[BUFFER_LEN];
     std::streamsize n(0);
-    for (size_t i(0); i < m_flbIn.size(); ++i)
+    coil::Properties& conf = ::RTC::Manager::instance().getConfig();
+    const std::string& pid = conf["manager.pid"];
+    const std::string& host_name = conf["os.hostname"];
+    const std::string& manager_name = conf["manager.instance_name"];
+    for(auto & flb : m_flbIn)
       {
+#if defined (WIN32)
+        n = sprintf_s(tmp, sizeof(tmp) - 1,
+                     R"([%lld, {"time":"%s","name":"%s","level":"%s","pid":"%s","host":"%s","manager":"%s","message": "%s"}])", time(nullptr), date.c_str(), name.c_str(), Logger::getLevelString(level).c_str(), pid.c_str(), host_name.c_str(), manager_name.c_str(), mes);
+#else
         n = snprintf(tmp, sizeof(tmp) - 1,
-                     "[%lu, {\"msg\": \"%s\"}]",
-                     time(NULL), m_buf);
-        flb_lib_push(s_flbContext, m_flbIn[i], tmp, n);
+                     R"([%ld, {"time":"%s","name":"%s","level":"%s","pid":"%s","host":"%s","manager":"%s","message": "%s"}])", time(nullptr), date.c_str(), name.c_str(), Logger::getLevelString(level).c_str(), pid.c_str(), host_name.c_str(), manager_name.c_str(), mes);
+#endif
+        flb_lib_push(s_flbContext, flb, tmp, n);
       }
     return n;
   }
   
-  std::streamsize FluentBitStream::xsputn(const char_type* str,
-                                          std::streamsize insize)
+  void FluentBitStream::write(int level, const std::string &name, const std::string &date, const std::string &mes)
   {
-    std::streamsize outsize(insize);
+    std::string message{coil::replaceString(mes, "\"", "\'")};
+    std::streamsize insize(message.size());
     for (std::streamsize i(0); i < insize; ++i, ++m_pos)
       {
-        m_buf[m_pos] = str[i];
-        if (str[i] == '\n' || str[i] == '\r' || m_pos == (BUFFER_LEN - 1))
+        m_buf[m_pos] = message[i];
+        if (message[i] == '\n' || message[i] == '\r' || m_pos == (BUFFER_LEN - 1))
           {
             m_buf[m_pos] = '\0';
-            outsize = pushLogger();
+            pushLogger(level, name, date, m_buf);
             m_pos = 0;
           }
+        else if(i == insize-1)
+          {
+            m_buf[m_pos+1] = '\0';
+            pushLogger(level, name, date, m_buf);
+          }
       }
-    return outsize;
+     m_pos = 0;
+
   }
   // end of FluentBitStream class
   //============================================================
 
   //============================================================
   // FluentBit class
-  FluentBit::FluentBit()
-  {
-  }
+  FluentBit::FluentBit() = default;
 
-  FluentBit::~FluentBit()
-  {
-  }
+  FluentBit::~FluentBit() = default;
 
   bool FluentBit::init(const coil::Properties& prop)
   {
     return m_fbstream.init(prop);
   }
 
-  StreambufType* FluentBit::getStreamBuffer()
+  coil::LogStreamBuffer* FluentBit::getStreamBuffer()
   {
     return &m_fbstream;
   }
   // end of FluentBit class
   //============================================================
-};
+} // namespace RTC
 
 extern "C"
 {
@@ -173,5 +236,4 @@ extern "C"
                             ::coil::Destructor< ::RTC::LogstreamBase,
                                                 ::RTC::FluentBit>);
   }
-};
-
+}

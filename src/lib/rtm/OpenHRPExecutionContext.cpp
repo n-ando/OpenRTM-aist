@@ -18,6 +18,7 @@
 
 #include <rtm/OpenHRPExecutionContext.h>
 #include <rtm/ECFactory.h>
+#include <thread>
 
 namespace RTC
 {
@@ -29,8 +30,7 @@ namespace RTC
    * @endif
    */
   OpenHRPExecutionContext::OpenHRPExecutionContext()
-    :  ExecutionContextBase("exttrig_sync_ec"),
-       rtclog("exttrig_sync_ec"), m_count(0)
+    :  ExecutionContextBase("exttrig_sync_ec")
   {
     RTC_TRACE(("OpenHRPExecutionContext()"));
 
@@ -41,8 +41,7 @@ namespace RTC
     setKind(RTC::PERIODIC);
     setRate(DEFAULT_EXECUTION_RATE);
 
-    RTC_DEBUG(("Actual period: %d [sec], %d [usec]",
-               m_profile.getPeriod().sec(), m_profile.getPeriod().usec()));
+    RTC_DEBUG(("Actual period: %lld [nsec]", m_profile.getPeriod().count()));
 
   }
 
@@ -56,7 +55,7 @@ namespace RTC
   OpenHRPExecutionContext::~OpenHRPExecutionContext()
   {
     RTC_TRACE(("~OpenHRPExecutionContext()"));
-    Guard guard(m_tickmutex);
+    std::lock_guard<std::mutex> guard(m_tickmutex);
   }
 
   //============================================================
@@ -70,41 +69,30 @@ namespace RTC
    * @endif
    */
   void OpenHRPExecutionContext::tick()
-    throw (CORBA::SystemException)
   {
-    RTC_TRACE(("tick()"));
     if (!isRunning()) { return; }
-    Guard guard(m_tickmutex);
+    std::lock_guard<std::mutex> guard(m_tickmutex);
 
     ExecutionContextBase::invokeWorkerPreDo();  // update state
-    coil::TimeValue t0(coil::clock());
+    auto t0 = std::chrono::high_resolution_clock::now();
     ExecutionContextBase::invokeWorkerDo();
-    coil::TimeValue t1(coil::clock());
     ExecutionContextBase::invokeWorkerPostDo();
-    coil::TimeValue t2(coil::clock());
+    auto t1 = std::chrono::high_resolution_clock::now();
+    auto exectime = t1 - t0;
+    if (exectime.count() >= 0)
+      {
+        auto diff = getPeriod() - exectime;
+        if (diff.count() > 0)
+          {
+#ifdef _WIN32
+            std::chrono::milliseconds ms = std::chrono::duration_cast<std::chrono::milliseconds>(diff);
+            Sleep(static_cast<DWORD>(ms.count()));
+#else
+            std::this_thread::sleep_for(diff);
 
-    coil::TimeValue period(getPeriod());
-    if (m_count > 1000)
-      {
-        RTC_PARANOID(("Period:      %f [s]", static_cast<double>(period)));
-        RTC_PARANOID(("Exec-Do:     %f [s]", static_cast<double>(t1 - t0)));
-        RTC_PARANOID(("Exec-PostDo: %f [s]", static_cast<double>(t2 - t1)));
-        RTC_PARANOID(("Sleep:       %f [s]",
-                                static_cast<double>(period - (t2 - t0))));
+#endif
+          }
       }
-    coil::TimeValue t3(coil::clock());
-    if (period > (t2 - t0))
-      {
-        if (m_count > 1000) { RTC_PARANOID(("sleeping...")); }
-        coil::sleep((coil::TimeValue)(period - (t2 - t0)));
-      }
-    if (m_count > 1000)
-      {
-        coil::TimeValue t4(coil::clock());
-        RTC_PARANOID(("Slept:       %f [s]", static_cast<double>(t4 - t3)));
-        m_count = 0;
-      }
-    ++m_count;
     return;
   }
 
@@ -119,7 +107,6 @@ namespace RTC
    * @endif
    */
   CORBA::Boolean OpenHRPExecutionContext::is_running()
-    throw (CORBA::SystemException)
   {
     return ExecutionContextBase::isRunning();
   }
@@ -132,7 +119,6 @@ namespace RTC
    * @endif
    */
   RTC::ReturnCode_t OpenHRPExecutionContext::start()
-    throw (CORBA::SystemException)
   {
     return ExecutionContextBase::start();
   }
@@ -145,7 +131,6 @@ namespace RTC
    * @endif
    */
   RTC::ReturnCode_t OpenHRPExecutionContext::stop()
-    throw (CORBA::SystemException)
   {
     return ExecutionContextBase::stop();
   }
@@ -160,7 +145,6 @@ namespace RTC
    * @endif
    */
   CORBA::Double OpenHRPExecutionContext::get_rate()
-    throw (CORBA::SystemException)
   {
     return ExecutionContextBase::getRate();
   }
@@ -173,7 +157,6 @@ namespace RTC
    * @endif
    */
   RTC::ReturnCode_t OpenHRPExecutionContext::set_rate(CORBA::Double rate)
-    throw (CORBA::SystemException)
   {
     return ExecutionContextBase::setRate(rate);
   }
@@ -187,7 +170,6 @@ namespace RTC
    */
   RTC::ReturnCode_t
   OpenHRPExecutionContext::add_component(RTC::LightweightRTObject_ptr comp)
-    throw (CORBA::SystemException)
   {
     return ExecutionContextBase::addComponent(comp);
   }
@@ -201,7 +183,6 @@ namespace RTC
    */
   RTC::ReturnCode_t OpenHRPExecutionContext::
   remove_component(RTC::LightweightRTObject_ptr comp)
-    throw (CORBA::SystemException)
   {
     return ExecutionContextBase::removeComponent(comp);
   }
@@ -215,7 +196,6 @@ namespace RTC
    */
   RTC::ReturnCode_t OpenHRPExecutionContext::
   activate_component(RTC::LightweightRTObject_ptr comp)
-    throw (CORBA::SystemException)
   {
     return ExecutionContextBase::activateComponent(comp);
   }
@@ -229,7 +209,6 @@ namespace RTC
    */
   RTC::ReturnCode_t OpenHRPExecutionContext::
   deactivate_component(RTC::LightweightRTObject_ptr comp)
-    throw (CORBA::SystemException)
   {
     return ExecutionContextBase::deactivateComponent(comp);
   }
@@ -243,7 +222,6 @@ namespace RTC
    */
   RTC::ReturnCode_t OpenHRPExecutionContext::
   reset_component(RTC::LightweightRTObject_ptr comp)
-    throw (CORBA::SystemException)
   {
     return ExecutionContextBase::resetComponent(comp);
   }
@@ -257,7 +235,6 @@ namespace RTC
    */
   RTC::LifeCycleState OpenHRPExecutionContext::
   get_component_state(RTC::LightweightRTObject_ptr comp)
-    throw (CORBA::SystemException)
   {
     return ExecutionContextBase::getComponentState(comp);
   }
@@ -270,7 +247,6 @@ namespace RTC
    * @endif
    */
   RTC::ExecutionKind OpenHRPExecutionContext::get_kind()
-    throw (CORBA::SystemException)
   {
     return ExecutionContextBase::getKind();
   }
@@ -286,7 +262,6 @@ namespace RTC
    * @endif
    */
   RTC::ExecutionContextProfile* OpenHRPExecutionContext::get_profile()
-    throw (CORBA::SystemException)
   {
     return ExecutionContextBase::getProfile();
   }
@@ -297,27 +272,27 @@ namespace RTC
   * @brief onAddedComponent() template function
   */
   RTC::ReturnCode_t OpenHRPExecutionContext::
-	  onAddedComponent(RTC::LightweightRTObject_ptr rtobj)
+     onAddedComponent(RTC::LightweightRTObject_ptr  /*rtobj*/)
   {
-	  Guard guard(m_tickmutex);
+    std::lock_guard<std::mutex> guard(m_tickmutex);
 
-	  ExecutionContextBase::m_worker.updateComponentList();
+    ExecutionContextBase::m_worker.updateComponentList();
 
-	  return RTC::RTC_OK;
+    return RTC::RTC_OK;
   }
   /*!
   * @brief onRemovedComponent() template function
   */
   RTC::ReturnCode_t OpenHRPExecutionContext::
-	  onRemovedComponent(RTC::LightweightRTObject_ptr rtobj)
+     onRemovedComponent(RTC::LightweightRTObject_ptr  /*rtobj*/)
   {
-	  Guard guard(m_tickmutex);
+    std::lock_guard<std::mutex> guard(m_tickmutex);
 
-	  ExecutionContextBase::m_worker.updateComponentList();
+    ExecutionContextBase::m_worker.updateComponentList();
 
-	  return RTC::RTC_OK;
+    return RTC::RTC_OK;
   }
-};
+} // namespace RTC
 
 
 extern "C"
@@ -329,7 +304,7 @@ extern "C"
    * @brief Initialization function to register to ECFactory
    * @endif
    */
-  void OpenHRPExecutionContextInit(RTC::Manager* manager)
+  void OpenHRPExecutionContextInit(RTC::Manager*  /*manager*/)
   {
     RTC::ExecutionContextFactory::
       instance().addFactory("SynchExtTriggerEC",
@@ -338,4 +313,4 @@ extern "C"
                             ::coil::Destructor< ::RTC::ExecutionContextBase,
                             ::RTC::OpenHRPExecutionContext>);
   }
-};
+}

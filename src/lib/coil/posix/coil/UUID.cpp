@@ -19,7 +19,7 @@
 
 #include <coil/UUID.h>
 
-#include <string.h>
+#include <cstring>
 #include <iostream>
 
 
@@ -81,18 +81,6 @@ namespace coil
   }
 
 
-  UUID_Generator::UUID_Generator()
-  {
-  }
-
-  UUID_Generator::~UUID_Generator()
-  {
-  }
-
-  void UUID_Generator::init()
-  {
-  }
-
   UUID* UUID_Generator::generateUUID(int n, int h)
   {
     uuid_t uuid;
@@ -101,12 +89,9 @@ namespace coil
   }
 #endif
 
-#if defined(COIL_OS_LINUX) || defined(COIL_OS_DARWIN) || defined(COIL_OS_CYGWIN)
+#if defined(COIL_OS_LINUX) || defined(COIL_OS_DARWIN) || defined(COIL_OS_QNX)
 
-  UUID_Generator::UUID_Generator() {}
-
-  void UUID_Generator::init() {}
-  UUID* UUID_Generator::generateUUID(int varsion, int variant)
+  UUID* UUID_Generator::generateUUID(int  /*varsion*/, int  /*variant*/)
   {
     uuid_t uuid;
 
@@ -121,8 +106,7 @@ namespace coil
 
   UUID::UUID(uuid_t *uuid)
   {
-    strncpy(reinterpret_cast<char *>(this->_uuid),
-            reinterpret_cast<char *>(*uuid), sizeof(this->_uuid));
+    uuid_copy(this->_uuid, *uuid);
   }
 
   const char* UUID::to_string()
@@ -132,4 +116,4 @@ namespace coil
   }
 
 #endif
-};  // namespace coil
+} // namespace coil

@@ -24,7 +24,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
-#include <stdio.h>
+#include <cstdio>
 #include <unistd.h>
 
 #include <string>
@@ -163,7 +163,7 @@ namespace coil
      * @endif
      */
     virtual int create(std::string shm_address,
-                     int memory_size = DEFAULT_MEMORY_SIZE);
+                     unsigned long long memory_size = DEFAULT_MEMORY_SIZE);
 
 
     /*!
@@ -188,8 +188,8 @@ namespace coil
      *
      * @endif
      */
-	virtual int open(std::string shm_address,
-		int memory_size = DEFAULT_MEMORY_SIZE);
+    virtual int open(std::string shm_address,
+                     unsigned long long memory_size = DEFAULT_MEMORY_SIZE);
 
 
     /*!
@@ -213,7 +213,7 @@ namespace coil
      *
      * @endif
      */
-    virtual int write(const char *data, const int pos, const int size);
+    virtual int write(const char *data, unsigned long long pos, unsigned long long size);
 
 
     /*!
@@ -237,7 +237,7 @@ namespace coil
      *
      * @endif
      */
-    virtual int read(char* data, const int pos, const int size);
+    virtual int read(char* data, unsigned long long pos, unsigned long long size);
 
     /*!
      * @if jp
@@ -278,7 +278,7 @@ namespace coil
      *
      * @endif
      */
-    virtual unsigned int get_size();
+    virtual unsigned long long get_size();
     /*!
      * @if jp
      *
@@ -298,7 +298,7 @@ namespace coil
      *
      * @endif
      */
-	virtual std::string get_addresss();
+    virtual std::string get_addresss();
     /*!
      * @if jp
      *
@@ -361,13 +361,13 @@ namespace coil
     virtual bool created();
 
   private:
-    int m_memory_size;
+    unsigned long long m_memory_size{0};
     std::string m_shm_address;
-    char *m_shm;
-    bool m_file_create;
-    int m_fd;
+    char *m_shm{nullptr};
+    bool m_file_create{false};
+    int m_fd{-1};
   };  // class SharedMemory
 
-};  // namespace coil
+} // namespace coil
 
 #endif // SharedMemory_h

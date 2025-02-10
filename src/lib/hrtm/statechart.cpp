@@ -14,8 +14,8 @@ using namespace hrtm::sc;  // NOLINT
 StateInfo & StateBase::get_info(MachineBase & machine) {
   // Look first in machine for existing StateInfo.
   StateInfo * & info = machine.get_info(key());
-  if (!info) {
-    info = new RootStateInfo(machine, 0);
+  if (info == nullptr) {
+    info = new RootStateInfo(machine, nullptr);
   }
   return *info;
 }
@@ -32,14 +32,14 @@ void StateBase::restore(StateInfo & current) {
 // StateInfo implementation
 StateInfo::StateInfo(MachineBase & machine, StateInfo * parent)
   : machine_(machine)
-  , instance_(0)
-  , history_(0)
+  , instance_(nullptr)
+  , history_(nullptr)
   , parent_(parent)
-  , data_(0)
-  , data_place(0) {}
+  , data_(nullptr)
+  , data_place(nullptr) {}
 
 StateInfo::~StateInfo() {
-  if (data_place) {
+  if (data_place != nullptr) {
     ::operator delete(data_place);
   }
 
@@ -48,14 +48,14 @@ StateInfo::~StateInfo() {
 
 void StateInfo::on_entry(StateInfo & previous, bool first) {
   // Only Root has no parent
-  if (!parent_) {
+  if (parent_ == nullptr) {
     return;
   }
   // first entry or previous state is not substate -> perform entry
   if (first || !previous.is_child(*this)) {
     parent_->on_entry(previous, false);
     // Could be set from outside or persistent (or EmptyData)
-    if (!data_) {
+    if (data_ == nullptr) {
       create_data();
     }
     HRTM_DEBUG(LOGGER, name() <<  ": entry");
@@ -65,7 +65,7 @@ void StateInfo::on_entry(StateInfo & previous, bool first) {
 
 void StateInfo::on_exit(StateInfo & next) {
   // Only Root has no parent
-  if (!parent_) {
+  if (parent_ == nullptr) {
     return;
   }
   // self transition or next state is not substate -> perform exit
@@ -78,25 +78,25 @@ void StateInfo::on_exit(StateInfo & next) {
 }
 
 void StateInfo::on_init(bool history) {
-  if (history && history_) {
+  if (history && (history_ != nullptr)) {
     HRTM_DEBUG(LOGGER, name() << ": history transition to: " <<
        history_->name());
-    machine_.set_pending_state(*history_, true, 0);
+    machine_.set_pending_state(*history_, true, nullptr);
   } else {
     HRTM_DEBUG(LOGGER, name() << ": init");
     instance_->on_init();
   }
-  history_ = 0;
+  history_ = nullptr;
 }
 
 void StateInfo::copy(StateInfo & original) {
-  if (original.history_) {
+  if (original.history_ != nullptr) {
     StateInfo * history = machine_.get_info(original.history_->key());
     assert(history);
     set_history(history);
   }
 
-  if (original.data_) {
+  if (original.data_ != nullptr) {
     clone_data(original.data_);
   }
 }
@@ -104,8 +104,8 @@ void StateInfo::copy(StateInfo & original) {
 StateInfo * StateInfo::clone(MachineBase & new_machine) {
   assert(!new_machine.get_info(key()));
 
-  StateInfo * parent = 0;
-  if (parent_) {
+  StateInfo * parent = nullptr;
+  if (parent_ != nullptr) {
     // Tell other machine to clone parent first.
     parent = new_machine.create_clone(parent_->key(), parent_);
   }
@@ -116,11 +116,7 @@ StateInfo * StateInfo::clone(MachineBase & new_machine) {
 ////////////////////////////////////////////////////////////////////////////////
 // Base class for Machine objects.
 MachineBase::MachineBase()
-  : current_state_(0)
-  , pending_state_(0)
-  , pending_data_(0)
-  , pending_history_(false)
-  , pending_event_(0) {}
+   {}
 
 MachineBase::~MachineBase() {
   assert(!pending_data_);
@@ -153,14 +149,14 @@ void MachineBase::shutdown() {
 
   HRTM_DEBUG(LOGGER, "Shutting down Machine");
   // Performs exit actions by going to Root (=State) state.
-  set_state(StateBase::get_info(*this), false, 0);
-  current_state_ = 0;
+  set_state(StateBase::get_info(*this), false, nullptr);
+  current_state_ = nullptr;
 }
 
 void MachineBase::allocate(unsigned int count) {
   states_ = new StateInfo *[count];
   for (unsigned int i = 0; i < count; ++i) {
-    states_[i] = 0;
+    states_[i] = nullptr;
   }
 }
 
@@ -170,7 +166,7 @@ void MachineBase::free(unsigned int count) {
   while (i > 0) {
     --i;
     delete states_[i];
-    states_[i] = 0;
+    states_[i] = nullptr;
   }
 }
 
@@ -184,7 +180,7 @@ void MachineBase::copy(StateInfo ** other, unsigned int count) {
   // Copy StateInfo object's state
   for (i = 0; i < count; ++i) {
     StateInfo * state = states_[i];
-    if (state) {
+    if (state != nullptr) {
       assert(other[i]);
       state->copy(*other[i]);
     }
@@ -195,7 +191,7 @@ StateInfo * MachineBase::create_clone(Key key, StateInfo * original) {
   StateInfo * & clone = get_info(key);
 
   // Object already created?
-  if (!clone && original) {
+  if ((clone == nullptr) && (original != nullptr)) {
     clone = original->clone(*this);
   }
   return clone;
@@ -212,18 +208,17 @@ void MachineBase::add_deferred_event(EventBase * event,
       return;
     }
     deferred_events_[name] = event;
-    deferred_names_.push_back(name);
-  } catch (std::exception& ex) {  // NOLINT
-    HRTM_WARNING(LOGGER, "Can't add defferd event by " << ex.what());
+    deferred_names_.emplace_back(name);
+  } catch (std::exception& /*ex*/) {  // NOLINT
   }
 }
 
 void MachineBase::perform_pending() {
   assert(current_state_);
 
-  if (pending_state_) {
+  if (pending_state_ != nullptr) {
     // Loop here because init actions might change state again.
-    while (pending_state_) {
+    while (pending_state_ != nullptr) {
       HRTM_DEBUG(LOGGER, current_state_->name() << ": transition to: " <<
           pending_state_->name());
       // Perform exit actions (which exactly depends on new state).
@@ -233,7 +228,7 @@ void MachineBase::perform_pending() {
       current_state_->set_history_super(*current_state_);
       StateInfo * previous = current_state_;
       current_state_ = pending_state_;
-      if (pending_data_) {
+      if (pending_data_ != nullptr) {
         current_state_->set_data(pending_data_);
       }
       // Perform entry actions (which exactly depends on previous state).
@@ -241,8 +236,8 @@ void MachineBase::perform_pending() {
       // State transition complete.
       // Clear 'pending' information just now so that set_state would assert
       // in exits and entries, but not in init.
-      pending_state_ = 0;
-      pending_data_ = 0;
+      pending_state_ = nullptr;
+      pending_data_ = nullptr;
       bool history = pending_history_;
       pending_history_ = false;
       // "init" may change state again.
@@ -263,9 +258,9 @@ void MachineBase::perform_pending() {
 }
 
 void MachineBase::perform_pending_event() {
-  if (pending_event_) {
+  if (pending_event_ != nullptr) {
     EventBase * event = pending_event_;
-    pending_event_ = 0;
+    pending_event_ = nullptr;
     event->dispatch(*current_state_);
     delete event;
   }
@@ -275,11 +270,10 @@ void MachineBase::perform_deferred_events() {
   if (deferred_events_.empty()) {
     return;
   }
-  for (EventNames::iterator i = deferred_names_.begin();
-    i != deferred_names_.end(); ++i) {
-    if (current_state_) {
-      deferred_events_[(*i)]->dispatch(*current_state_);
-      delete deferred_events_[(*i)];
+  for (auto & deferred_name : deferred_names_) {
+    if (current_state_ != nullptr) {
+      deferred_events_[deferred_name]->dispatch(*current_state_);
+      delete deferred_events_[deferred_name];
     }
   }
   deferred_events_.clear();

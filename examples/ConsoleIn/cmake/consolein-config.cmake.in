@@ -1,0 +1,54 @@
+# ConsoleIn CMake config file
+#
+# This file sets the following variables:
+# ConsoleIn_FOUND - Always TRUE.
+# ConsoleIn_INCLUDE_DIRS - Directories containing the ConsoleIn include files.
+# ConsoleIn_IDL_DIRS - Directories containing the ConsoleIn IDL files.
+# ConsoleIn_LIBRARIES - Libraries needed to use ConsoleIn.
+# ConsoleIn_DEFINITIONS - Compiler flags for ConsoleIn.
+# ConsoleIn_VERSION - The version of ConsoleIn found.
+# ConsoleIn_VERSION_MAJOR - The major version of ConsoleIn found.
+# ConsoleIn_VERSION_MINOR - The minor version of ConsoleIn found.
+# ConsoleIn_VERSION_REVISION - The revision version of ConsoleIn found.
+# ConsoleIn_VERSION_CANDIDATE - The candidate version of ConsoleIn found.
+
+message(STATUS "Found ConsoleIn-@PROJECT_VERSION@")
+set(ConsoleIn_FOUND TRUE)
+
+find_package(<dependency> REQUIRED)
+
+#set(ConsoleIn_INCLUDE_DIRS
+#    "@CMAKE_INSTALL_PREFIX@/include/@PROJECT_NAME_LOWER@-@PROJECT_VERSION_MAJOR@"
+#    ${<dependency>_INCLUDE_DIRS}
+#    )
+#
+#set(ConsoleIn_IDL_DIRS
+#    "@CMAKE_INSTALL_PREFIX@/include/@PROJECT_NAME_LOWER@-@PROJECT_VERSION_MAJOR@/idl")
+set(ConsoleIn_INCLUDE_DIRS
+    "@CMAKE_INSTALL_PREFIX@/include/@CPACK_PACKAGE_FILE_NAME@"
+    ${<dependency>_INCLUDE_DIRS}
+    )
+set(ConsoleIn_IDL_DIRS
+    "@CMAKE_INSTALL_PREFIX@/include/@CPACK_PACKAGE_FILE_NAME@/idl")
+
+
+if(WIN32)
+    set(ConsoleIn_LIBRARIES
+        "@CMAKE_INSTALL_PREFIX@/@LIB_INSTALL_DIR@/@CMAKE_SHARED_LIBRARY_PREFIX@@PROJECT_NAME_LOWER@@CMAKE_STATIC_LIBRARY_SUFFIX@"
+        ${<dependency>_LIBRARIES}
+        )
+else(WIN32)
+    set(ConsoleIn_LIBRARIES
+        "@CMAKE_INSTALL_PREFIX@/@LIB_INSTALL_DIR@/@CMAKE_SHARED_LIBRARY_PREFIX@@PROJECT_NAME_LOWER@@CMAKE_SHARED_LIBRARY_SUFFIX@"
+        ${<dependency>_LIBRARIES}
+        )
+endif(WIN32)
+
+set(ConsoleIn_DEFINITIONS ${<dependency>_DEFINITIONS})
+
+set(ConsoleIn_VERSION @PROJECT_VERSION@)
+set(ConsoleIn_VERSION_MAJOR @PROJECT_VERSION_MAJOR@)
+set(ConsoleIn_VERSION_MINOR @PROJECT_VERSION_MINOR@)
+set(ConsoleIn_VERSION_REVISION @PROJECT_VERSION_REVISION@)
+set(ConsoleIn_VERSION_CANDIDATE @PROJECT_VERSION_CANDIDATE@)
+

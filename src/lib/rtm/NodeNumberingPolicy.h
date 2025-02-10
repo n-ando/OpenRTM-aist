@@ -47,7 +47,7 @@ namespace RTM
    *
    * @endif
    */
-	class NodeNumberingPolicy
+  class NodeNumberingPolicy
     : public NumberingPolicyBase
   {
   public:
@@ -66,7 +66,7 @@ namespace RTM
      *
      * @endif
      */
-	  NodeNumberingPolicy();
+    NodeNumberingPolicy();
     
     /*!
      * @if jp
@@ -79,7 +79,7 @@ namespace RTM
      *
      * @endif
      */
-	  virtual ~NodeNumberingPolicy(void){};
+    ~NodeNumberingPolicy() override = default;
     
     /*!
      * @if jp
@@ -106,7 +106,7 @@ namespace RTM
      *
      * @endif
      */
-    virtual std::string onCreate(void* obj);
+    std::string onCreate(void* obj) override;
     
     /*!
      * @if jp
@@ -129,46 +129,45 @@ namespace RTM
      *
      * @endif
      */
-    virtual void onDelete(void* obj);
+    void onDelete(void* obj) override;
     
   protected:
-	  /*!
-	  * @if jp
-	  *
-	  * @brief オブジェクトの検索
-	  *
-	  * マスターマネージャ、およびスレーブマネージャに登録されたRTCを検索し、
-	  * 　　　　名前が一致するRTCが存在する場合はTrueを返す
-	  * このプロセスで起動したマネージャがマスターマネージャではなく、
-	  *  さらにマスターマネージャが1つも登録されていない場合はこのプロセスのマネージャから検索
-	  *
-	  * @param name 検索対象オブジェクトの名前
-	  *
-	  * @return 判定
-	  *
-	  * @else
-	  *
-	  * @brief
-	  *
-	  *
-	  * @param name
-	  *
-	  * @return
-	  *
-	  * @endif
-	  */
-	  virtual bool find(std::string name);
+    /*!
+     * @if jp
+     *
+     * @brief オブジェクトの検索
+     *
+     * マスターマネージャ、およびスレーブマネージャに登録されたRTCを検索し、
+     * 　　　　名前が一致するRTCが存在する場合はTrueを返す
+     * このプロセスで起動したマネージャがマスターマネージャではなく、
+     *  さらにマスターマネージャが1つも登録されていない場合はこのプロセスのマネージャから検索
+     *
+     * @param name 検索対象オブジェクトの名前
+     *
+     * @return 判定
+     *
+     * @else
+     *
+     * @brief
+     *
+     *
+     * @param name
+     *
+     * @return
+     *
+     * @endif
+     */
+    virtual bool find(std::string name);
     
   private:
-    int m_num;
     std::vector<void*> m_objects;
-	RTC::Manager *m_mgr;
+    RTC::Manager *m_mgr;
   };
-}; // namespace RTM
+} // namespace RTM
 
 extern "C"
 {
-	void DLL_EXPORT NodeNumberingPolicyInit();
-};
+    void NodeNumberingPolicyInit();
+}
 
 #endif // RTC_NODENUMBERINGPOLICY_H

@@ -46,7 +46,7 @@ namespace RTM
    *
    * @endif
    */
-	class NamingServiceNumberingPolicy
+  class NamingServiceNumberingPolicy
     : public NumberingPolicyBase
   {
   public:
@@ -65,7 +65,7 @@ namespace RTM
      *
      * @endif
      */
-	  NamingServiceNumberingPolicy();
+    NamingServiceNumberingPolicy();
     
     /*!
      * @if jp
@@ -78,7 +78,7 @@ namespace RTM
      *
      * @endif
      */
-	  virtual ~NamingServiceNumberingPolicy(void){};
+    ~NamingServiceNumberingPolicy() override = default;
     
     /*!
      * @if jp
@@ -105,7 +105,7 @@ namespace RTM
      *
      * @endif
      */
-    virtual std::string onCreate(void* obj);
+    std::string onCreate(void* obj) override;
     
     /*!
      * @if jp
@@ -128,46 +128,45 @@ namespace RTM
      *
      * @endif
      */
-    virtual void onDelete(void* obj);
+    void onDelete(void* obj) override;
 
 
     
   protected:
-	  /*!
-	  * @if jp
-	  *
-	  * @brief オブジェクトの検索
-	  *
-	  * 指定名のインスタンス名のRTCを検索し、
-	  * 　　　　一致するRTCが存在する場合はTrueを返す
-	  *
-	  * @param name 検索対象オブジェクトの名前
-	  *
-	  * @return 判定
-	  *
-	  * @else
-	  *
-	  * @brief
-	  *
-	  *
-	  * @param name
-	  *
-	  * @return
-	  *
-	  * @endif
-	  */
-	  virtual bool find(std::string name);
+    /*!
+     * @if jp
+     *
+     * @brief オブジェクトの検索
+     *
+     * 指定名のインスタンス名のRTCを検索し、
+     * 　　　　一致するRTCが存在する場合はTrueを返す
+     *
+     * @param name 検索対象オブジェクトの名前
+     *
+     * @return 判定
+     *
+     * @else
+     *
+     * @brief
+     *
+     *
+     * @param name
+     *
+     * @return
+     *
+     * @endif
+     */
+    virtual bool find(std::string name);
     
   private:
-    int m_num;
     std::vector<void*> m_objects;
-	RTC::Manager *m_mgr;
+    RTC::Manager *m_mgr;
   };
-}; // namespace RTM
+} // namespace RTM
 
 extern "C"
 {
-	void DLL_EXPORT NamingServiceNumberingPolicyInit();
-};
+    void NamingServiceNumberingPolicyInit();
+}
 
 #endif // RTC_NAMINGSERVICENUMBERINGPOLICY_H

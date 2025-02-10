@@ -18,10 +18,6 @@
 #include <coil/UUID.h>
 #include <memory>
 
-#ifdef WIN32
-#pragma warning( disable : 4290 )
-#endif
-
 namespace RTC
 {
   /*!
@@ -31,17 +27,14 @@ namespace RTC
    * @brief Constructor
    * @endif
    */
-  OutPortSHMProvider::OutPortSHMProvider(void)
-   : m_buffer(0),
-     m_memory_size(0),
-     m_connector(NULL)
+  OutPortSHMProvider::OutPortSHMProvider()
   {
     // PortProfile setting
     setInterfaceType("shared_memory");
     
     // ConnectorProfile setting
 #ifdef ORB_IS_OMNIORB
-    ::RTC::Manager::instance().theShortCutPOA()->activate_object(this);
+    PortableServer::ObjectId_var oid = ::RTC::Manager::instance().theShortCutPOA()->activate_object(this);
 #endif
     m_objref = this->_this();
     
@@ -61,9 +54,7 @@ namespace RTC
       push_back(m_properties,
                 NVUtil::newNV("dataport.corba_cdr.outport_ref", m_objref));
 
-    coil::UUID_Generator uugen;
-    uugen.init();
-    std::auto_ptr<coil::UUID> uuid(uugen.generateUUID(2, 0x01));
+    std::unique_ptr<coil::UUID> uuid(coil::UUID_Generator::generateUUID(2, 0x01));
     m_shm_address = uuid->to_string();
   }
   
@@ -74,10 +65,7 @@ namespace RTC
    * @brief Destructor
    * @endif
    */
-  OutPortSHMProvider::~OutPortSHMProvider(void)
-  {
-
-  }
+  OutPortSHMProvider::~OutPortSHMProvider() = default;
   
   /*!
    * @if jp
@@ -88,29 +76,27 @@ namespace RTC
    */
   void OutPortSHMProvider::init(coil::Properties& prop)
   {
-	std::string ds = prop["shem_default_size"];
-	m_memory_size = string_to_MemorySize(ds);
+    std::string ds = prop["shem_default_size"];
+    m_memory_size = string_to_MemorySize(ds);
 
-	if (prop.hasKey("serializer") == NULL)
-	{
-		m_endian = true;
-		return;
-	}
+    if (prop.hasKey("serializer") == nullptr)
+      {
+        m_endian = true;
+        return;
+      }
 
-	
-	std::string endian_type(prop.getProperty("serializer.cdr.endian", ""));
-	coil::normalize(endian_type);
-	std::vector<std::string> endian(coil::split(endian_type, ","));
-	if (endian.empty()) { return; }
-	if (endian[0] == "little")
-	{
-		m_endian = true;
-	}
-	else if (endian[0] == "big")
-	{
-		m_endian = false;
-		return;
-	}
+    std::vector<std::string> endian{coil::split(
+      coil::normalize(prop.getProperty("serializer.cdr.endian", "")), ",")};
+    if (endian.empty()) { return; }
+    if (endian[0] == "little")
+      {
+        m_endian = true;
+      }
+    else if (endian[0] == "big")
+      {
+        m_endian = false;
+        return;
+      }
   }
 
   /*!
@@ -133,7 +119,7 @@ namespace RTC
    * @endif
    */
   void OutPortSHMProvider::setListener(ConnectorInfo& info,
-                                            ConnectorListeners* listeners)
+                                            ConnectorListenersBase* listeners)
   {
     m_profile = info;
     m_listeners = listeners;
@@ -160,41 +146,33 @@ namespace RTC
    */
   ::OpenRTM::PortStatus
   OutPortSHMProvider::get()
-    throw (CORBA::SystemException)
   {
     RTC_PARANOID(("OutPortSHMProvider::get()"));
     // at least the output "data" area should be allocated
 
 
-    if (m_buffer == 0)
+    if (m_buffer == nullptr)
       {
         onSenderError();
         return ::OpenRTM::UNKNOWN_ERROR;
       }
 
-    cdrMemoryStream cdr;
-    CdrBufferBase::ReturnCode ret(m_connector->read(cdr));
-    if (ret == CdrBufferBase::BUFFER_OK)
+    BufferStatus ret(m_connector->read(m_cdr));
+    if (ret == BufferStatus::OK)
       {
-#ifdef ORB_IS_ORBEXPRESS
-        CORBA::ULong len((CORBA::ULong)cdr.cdr.size_written());
-#elif defined(ORB_IS_TAO)
-	CORBA::ULong len((CORBA::ULong)cdr.cdr.total_length());
-#else
-        CORBA::ULong len((CORBA::ULong)cdr.bufSize());
-#endif
+        CORBA::ULong len(static_cast<CORBA::ULong>(m_cdr.getDataLength()));
         RTC_PARANOID(("converted CDR data size: %d", len));
-	if (len == (CORBA::ULong)0) {
-	  RTC_ERROR(("buffer is empty."));
-	  return ::OpenRTM::BUFFER_EMPTY;
-	}
-	bool endian_type = m_connector->isLittleEndian();
-	setEndian(endian_type);
-	create_memory(m_memory_size, m_shm_address.c_str());
-	write(cdr);
+        if (len == static_cast<CORBA::ULong>(0)) {
+            RTC_ERROR(("buffer is empty."));
+            return ::OpenRTM::BUFFER_EMPTY;
+        }
+        bool endian_type = m_connector->isLittleEndian();
+        setEndian(endian_type);
+        create_memory(m_memory_size, m_shm_address.c_str());
+        write(m_cdr);
       }
 
-    return convertReturn(ret, cdr);
+    return convertReturn(ret, m_cdr);
   }
 
   /*!
@@ -205,12 +183,12 @@ namespace RTC
    * @endif
    */
   ::OpenRTM::PortStatus
-  OutPortSHMProvider::convertReturn(BufferStatus::Enum status,
-                                        cdrMemoryStream& data)
+  OutPortSHMProvider::convertReturn(BufferStatus status,
+                                        ByteData& data)
   {
     switch(status)
       {
-      case BufferStatus::BUFFER_OK:
+      case BufferStatus::OK:
         onBufferRead(data);
         onSend(data);
         return ::OpenRTM::PORT_OK;
@@ -221,12 +199,12 @@ namespace RTC
         return ::OpenRTM::PORT_ERROR;
         break;
 
-      case BufferStatus::BUFFER_FULL:
+      case BufferStatus::FULL:
         // never come here
         return ::OpenRTM::BUFFER_FULL;
         break;
 
-      case BufferStatus::BUFFER_EMPTY:
+      case BufferStatus::EMPTY:
         onBufferEmpty();
         onSenderEmpty();
         return ::OpenRTM::BUFFER_EMPTY;
@@ -243,13 +221,14 @@ namespace RTC
         return ::OpenRTM::BUFFER_TIMEOUT;
         break;
 
+      case BufferStatus::NOT_SUPPORTED: /* FALLTHROUGH */
       default:
         return ::OpenRTM::UNKNOWN_ERROR;
       }
 
   }
 
-};     // namespace RTC
+} // namespace RTC
 
 extern "C"
 {
@@ -270,4 +249,4 @@ extern "C"
                        ::coil::Destructor< ::RTC::OutPortProvider,
                                            ::RTC::OutPortSHMProvider>);
   }
-};
+}

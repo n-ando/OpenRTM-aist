@@ -24,36 +24,6 @@
 
 namespace RTC
 {
-  /*!
-   * @if jp
-   * @class DataPortStatus mixin class
-   * @brief DataPortStatus mixin クラス
-   *
-   * このクラスは、enum定義されたリターンコードを、データポート関連のサ
-   * ブクラスで共通利用するための mixin クラスである。このリターンコー
-   * ドを使用するクラスでは、DataPortStatus クラスをpublic 継承し、下に
-   * define してあるDATAPORTSTATUS_ENUM をクラス内に記述することで利用
-   * 可能となる。これにより、enum を ReturnCode_t 型として typedef し、
-   * 以後ReturnCode_t を利用できるようにするとともに、名前空間に enum
-   * 定義された各識別子を当該クラス名前空間内に導入する。
-   *
-   * @else
-   * @class DataPortStatus mixin class
-   * @brief DataPortStatus mixin class
-   *
-   * This is a mixin class to provide enumed return codes that are
-   * commonly utilised in data port related sub-classes. To use this
-   * class, sub-class should inherit this class as a public super
-   * class, and declare DATAPORTSTATUS_ENUM defined
-   * below. Consequently, ReturnCode_t type that is typedefed by this
-   * macro can be used in the sub-class, and enumed identifiers are
-   * imported to the class's namespace.
-   *
-   * @endif
-   */
-  class DataPortStatus
-  {
-  public:
     /*!
      * @if jp
      * brief DataPortStatus リターンコード
@@ -140,7 +110,7 @@ namespace RTC
      *
      * @endif
      */
-    enum Enum
+    enum class DataPortStatus : uint8_t
       {
         PORT_OK = 0,
         PORT_ERROR,
@@ -157,7 +127,7 @@ namespace RTC
         CONNECTION_LOST,
         UNKNOWN_ERROR
       };
-
+ 
     /*!
      * @if jp
      *
@@ -181,9 +151,9 @@ namespace RTC
      *
      * @endif
      */
-    static const char* toString(DataPortStatus::Enum status)
+    inline const char* toString(DataPortStatus status)
     {
-      const char* str[] = {
+      static char const* const data_port_status[] = {
         "PORT_OK",
         "PORT_ERROR",
         "BUFFER_ERROR",
@@ -199,51 +169,11 @@ namespace RTC
         "CONNECTION_LOST",
         "UNKNOWN_ERROR"
       };
-      return str[status];
+      return data_port_status[static_cast<std::size_t>(status)];
     }
-  };
 
-  typedef std::vector<DataPortStatus::Enum> DataPortStatusList;
+  using DataPortStatusList = std::vector<DataPortStatus>;
 
-};  // namespace RTC
-
-/*!
- * @if jp
- *
- * @brief ::RTC::DataPortStatus 導入
- *
- * ::RTC::DataPortStatus で宣言されている Enum のすべてのメンバをネーム
- * スペースに導入するためのマクロ。DataPortStatus を利用するクラスにお
- * いて、クラス宣言の先頭において DATAPORTSTATUS_ENUM を記載するだけで、
- * DataPortStatus で宣言されている enum メンバが名前解決演算子なしにア
- * クセス可能になる。
- *
- * @else
- *
- * @brief Importing ::RTC::DataPortStatus macro
- *
- * This macro imports all the member of enum declared in
- * ::RTC::DataPortStatus into the current namespace.  Inserting at the
- * head of class declaration, classes which utilize DataPortStatus can
- * access Enum members of DataPortStatus without using namespace
- * resolve operator.
- *
- * @endif
- */
-#define DATAPORTSTATUS_ENUM                             \
-  typedef ::RTC::DataPortStatus::Enum ReturnCode;       \
-  using ::RTC::DataPortStatus::PORT_OK;                 \
-  using ::RTC::DataPortStatus::PORT_ERROR;              \
-  using ::RTC::DataPortStatus::BUFFER_FULL;             \
-  using ::RTC::DataPortStatus::BUFFER_EMPTY;            \
-  using ::RTC::DataPortStatus::BUFFER_TIMEOUT;          \
-  using ::RTC::DataPortStatus::SEND_FULL;               \
-  using ::RTC::DataPortStatus::SEND_TIMEOUT;            \
-  using ::RTC::DataPortStatus::RECV_EMPTY;              \
-  using ::RTC::DataPortStatus::RECV_TIMEOUT;            \
-  using ::RTC::DataPortStatus::INVALID_ARGS;            \
-  using ::RTC::DataPortStatus::PRECONDITION_NOT_MET;    \
-  using ::RTC::DataPortStatus::CONNECTION_LOST;         \
-  using ::RTC::DataPortStatus::UNKNOWN_ERROR;
+} // namespace RTC
 
 #endif  // RTC_DATAPORTSTATUS_H

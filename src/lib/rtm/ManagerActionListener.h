@@ -19,8 +19,7 @@
 #ifndef RTM_MANAGERACTIONLISTENER_H
 #define RTM_MANAGERACTIONLISTENER_H
 
-#include <coil/Mutex.h>
-#include <coil/Guard.h>
+#include <mutex>
 #include <coil/Properties.h>
 #include <coil/stringutil.h>
 #include <rtm/ListenerHolder.h>
@@ -33,7 +32,7 @@
 namespace RTC
 {
   class RTObject_impl;
-};
+} // namespace RTC
 
 namespace RTM
 {
@@ -130,7 +129,7 @@ namespace RTM
     : public ::RTM::util::ListenerHolder<ManagerActionListener>
   {
   public:
-    virtual ~ManagerActionListenerHolder();
+    ~ManagerActionListenerHolder() override;
 
     /*!
      * @if jp
@@ -272,7 +271,7 @@ namespace RTM
      * @brief Destructor
      * @endif
      */
-    virtual ~ModuleActionListenerHolder();
+    ~ModuleActionListenerHolder() override;
 
     /*!
      * @if jp
@@ -417,7 +416,7 @@ namespace RTM
      * TODO: Documentation
      * @endif
      */
-    virtual void preInitialize(void) = 0;
+    virtual void preInitialize() = 0;
 
     /*!
      * @if jp
@@ -428,7 +427,7 @@ namespace RTM
      * TODO: Documentation
      * @endif
      */
-    virtual void postInitialize(void) = 0;
+    virtual void postInitialize() = 0;
   };
 
 
@@ -457,7 +456,7 @@ namespace RTM
      * @brief Destructor
      * @endif
      */
-    virtual ~RtcLifecycleActionListenerHolder();
+    ~RtcLifecycleActionListenerHolder() override;
 
 
     /*!
@@ -513,7 +512,7 @@ namespace RTM
      * TODO: Documentation
      * @endif
      */
-    virtual void preInitialize(void);
+    virtual void preInitialize();
 
     /*!
      * @if jp
@@ -524,7 +523,7 @@ namespace RTM
      * TODO: Documentation
      * @endif
      */
-    virtual void postInitialize(void);
+    virtual void postInitialize();
   };
 
 
@@ -641,7 +640,7 @@ namespace RTM
      * @brief Destructor
      * @endif
      */
-    virtual ~NamingActionListenerHolder();
+    ~NamingActionListenerHolder() override;
 
     /*!
      * @if jp
@@ -853,7 +852,7 @@ namespace RTM
      * @brief Destructor
      * @endif
      */
-    virtual ~LocalServiceActionListenerHolder();
+    ~LocalServiceActionListenerHolder() override;
 
     // registration instance of service to svc admin
     /*!
@@ -967,12 +966,26 @@ namespace RTM
   class ManagerActionListeners
   {
   public:
+    /*!
+     * @if jp
+     * @brief デストラクタ
+     *
+     * デストラクタ
+     *
+     * @else
+     * @brief Destructor
+     *
+     * Destructor
+     *
+     * @endif
+     */
+    ~ManagerActionListeners();
     ManagerActionListenerHolder manager_;
     ModuleActionListenerHolder module_;
     RtcLifecycleActionListenerHolder rtclifecycle_;
     NamingActionListenerHolder naming_;
     LocalServiceActionListenerHolder localservice_;
   };
-};  // namespace RTM
+} // namespace RTM
 
 #endif  // RTC_MANAGERACTIONLISTENER_H

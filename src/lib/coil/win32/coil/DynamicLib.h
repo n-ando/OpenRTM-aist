@@ -21,25 +21,13 @@
 
 #include <coil/config_coil.h>
 
-#include <windows.h>
+#include <Windows.h>
 #include <iostream>
 #include <string>
 
 #define COIL_DEFAULT_DYNLIB_MODE LOAD_WITH_ALTERED_SEARCH_PATH
 
-/*!
- * Test for DLL export.
- */
-#ifdef TEST_DYNAMIC_LIB
-#  define  DynamicLib_EXPORT __declspec(dllexport)
-#else
-#  define  DynamicLib_EXPORT __declspec(dllimport)
-#endif
 
-extern "C"
-{
-  DynamicLib_EXPORT int ForExternTest(void);
-}
 
 namespace coil
 {
@@ -269,39 +257,13 @@ namespace coil
      */
     const char* error(void) const;
 
-    /*!
-     * @if jp
-     *
-     * @brief ユニットテスト
-     *
-     * ユニットテストを行う。
-     *
-     * @return 0xdeadbeef
-     *
-     * @else
-     *
-     * @brief Unit Test
-     *
-     * Unit Test.
-     *
-     * @return 0xdeadbeef
-     *
-     * @endif
-     */
-    static int ForExternTest(void) {
-        std::cout << "ForExternTest" << std::endl;
-        return 0xdeadbeef;
-
-    }
-
   private:
     std::string m_name;
     int m_mode;
     int m_closeflag;
     HINSTANCE m_handle;
-    int m_error;
   };  // class DynamicLib
 
-};  // namespace coil
+} // namespace coil
 
 #endif  // DynamicLib_h

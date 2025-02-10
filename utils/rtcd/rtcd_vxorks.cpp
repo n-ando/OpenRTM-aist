@@ -18,12 +18,11 @@
 
 #include <iostream>
 #include <rtm/Manager.h>
-//#include "ConsoleIn.h"
 
-#if defined(RTM_OS_VXWORKS) && not defined(__RTP__)
+#if defined(RTM_OS_VXWORKS) && !defined(__RTP__)
 int rtcd_main (char* arg1, char* arg2, char* arg3,
-		     char* arg4, char* arg5, char* arg6,
-		     char* arg7, char* arg8, char* arg9)
+               char* arg4, char* arg5, char* arg6,
+               char* arg7, char* arg8, char* arg9)
 {
   int   argc     = 0;
   char* argv[10] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
@@ -45,21 +44,10 @@ int main (int argc, char** argv)
 #endif
 
   RTC::Manager* manager;
-/*
-  const int argc_ = 9;
-  const char *argv_[argc_] = { "ManagerTest", "-f", "/mnt/apps/openrtm-vxworks/rtc.conf", "-o", "corba.nameservers:172.30.1.1", "-o", "manager.shutdown_on_nortcs:NO", "-o", "manager.shutdown_auto:NO" };
-  manager = RTC::Manager::init(argc_, const_cast<char**>(argv_));
-*/
   manager = RTC::Manager::init(argc, argv);
 
   manager->activateManager();
-//ConsoleInInit(manager);
-//manager->createComponent("ConsoleIn");
-//#if defined(RTM_OS_VXWORKS) && not defined(__RTP__)
-//  manager->runManager(true);
-//#else
   manager->runManager();
-//#endif
 
   return 0;
 }

@@ -16,23 +16,20 @@
  *
  */
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <time.h>
+#include <cstdlib>
+#include <cstdio>
+#include <ctime>
 #include <sched.h>
 #include <sys/mman.h>
 
 #include <algorithm>
 #include <iostream>
 
-#include <coil/Time.h>
-#include <coil/TimeValue.h>
 
 #include <rtm/RTObjectStateMachine.h>
-#include <RTPreemptEC.h>
+#include "RTPreemptEC.h"
 
 #define MAX_SAFE_STACK (8*1024)
-#define NSEC_PER_SEC 1000000000
 #define DEEFAULT_PERIOD 0.000001
 
 namespace RTC_exp
@@ -46,9 +43,7 @@ namespace RTC_exp
    */
   RTPreemptEC::
   RTPreemptEC()
-    : ExecutionContextBase("periodic_ec"),
-      rtclog("periodic_ec"),
-      m_svc(false), m_nowait(false)
+    : ExecutionContextBase("periodic_ec")
   {
     RTC_TRACE(("RTPreemptEC()"));
 
@@ -57,10 +52,9 @@ namespace RTC_exp
 
     // profile initialization
     setKind(RTC::PERIODIC);
-    setRate(1.0 / (double)DEEFAULT_PERIOD);
+    setRate(1.0 / DEEFAULT_PERIOD);
 
-    RTC_DEBUG(("Actual period: %d [sec], %d [usec]",
-               m_profile.getPeriod().sec(), m_profile.getPeriod().usec()));
+    RTC_DEBUG(("Actual period: %lld [nsec]", m_profile.getPeriod().count()));
   }
 
   /*!
@@ -74,13 +68,13 @@ namespace RTC_exp
   {
     RTC_TRACE(("~RTPreemptEC()"));
     {
-      Guard guard(m_svcmutex);
+      std::lock_guard<std::mutex> guard(m_svcmutex);
       m_svc = false;
     }
     {
-      Guard guard(m_workerthread.mutex_);
+      std::lock_guard<std::mutex> guard(m_workerthread.mutex_);
       m_workerthread.running_ = true;
-      m_workerthread.cond_.signal();
+      m_workerthread.cond_.notify_one();
     }
     wait();
   }
@@ -109,7 +103,7 @@ namespace RTC_exp
    * @brief Generate internal activity thread for ExecutionContext
    * @endif
    */
-  int RTPreemptEC::open(void *args)
+  int RTPreemptEC::open(void * /*args*/)
   {
     RTC_TRACE(("open()"));
     activate();
@@ -145,7 +139,7 @@ namespace RTC_exp
       }
     return true;
   }
-  int RTPreemptEC::svc(void)
+  int RTPreemptEC::svc()
   {
     RTC_TRACE(("svc()"));
     if (!prepareThread()) { return -1; }
@@ -154,50 +148,29 @@ namespace RTC_exp
     unsigned char dummy[MAX_SAFE_STACK];
     memset(&dummy, 0, MAX_SAFE_STACK);
 
-    struct timespec ts0, ts1, ts2, ts3;
-    int count(0);
     do
       {
         ExecutionContextBase::invokeWorkerPreDo();
         {
-          Guard guard(m_workerthread.mutex_);
+          std::unique_lock<std::mutex> guard(m_workerthread.mutex_);
           while (!m_workerthread.running_)
             {
-              m_workerthread.cond_.wait();
+              m_workerthread.cond_.wait(guard);
             }
         }
-        clock_gettime(CLOCK_MONOTONIC ,&ts0);
-        coil::TimeValue t0(ts0.tv_sec, ts0.tv_nsec * 1000);
+        auto t0 = std::chrono::high_resolution_clock::now();
         ExecutionContextBase::invokeWorkerDo();
         ExecutionContextBase::invokeWorkerPostDo();
-        clock_gettime(CLOCK_MONOTONIC ,&ts1);
-        coil::TimeValue t1(ts1.tv_sec, ts1.tv_nsec * 1000);
+        auto t1 = std::chrono::high_resolution_clock::now();
 
-        coil::TimeValue period(getPeriod());
-        if (count > 1000)
+        if (!m_nowait)
           {
-            RTC_PARANOID(("Period:    %f [s]", (double)period));
-            RTC_PARANOID(("Execution: %f [s]", (double)(t1 - t0)));
-            RTC_PARANOID(("Sleep:     %f [s]", (double)(period - (t1 - t0))));
-          }
-        clock_gettime(CLOCK_MONOTONIC ,&ts2);
-        coil::TimeValue t2(ts2.tv_sec, ts2.tv_nsec * 1000);
-        if (m_nowait) { ++count; continue; }
-
-        struct timespec sleeptime;
-        if (getSleepTime(sleeptime, ts0, ts1) == true)
-          {
-            clock_nanosleep(CLOCK_MONOTONIC, !TIMER_ABSTIME,
-                            &sleeptime, NULL);
-            if (count > 1000)
+            std::chrono::high_resolution_clock::time_point wakeup_point;
+            if (getWakeUpTime(wakeup_point, t0, t1))
               {
-                clock_gettime(CLOCK_MONOTONIC ,&ts3);
-                coil::TimeValue t3(ts3.tv_sec, ts3.tv_nsec * 1000);
-                RTC_PARANOID(("Slept:     %f [s]", (double)(t3 - t2)));
-                count = 0;
+                std::this_thread::sleep_until(wakeup_point);
               }
           }
-        ++count;
       } while (threadRunning());
     RTC_DEBUG(("Thread terminated."));
     return 0;
@@ -210,7 +183,7 @@ namespace RTC_exp
    * @brief Thread execution function for ExecutionContext
    * @endif
    */
-  int RTPreemptEC::close(unsigned long flags)
+  int RTPreemptEC::close(unsigned long  /*flags*/)
   {
     RTC_TRACE(("close()"));
     // At this point, this component have to be finished.
@@ -230,7 +203,6 @@ namespace RTC_exp
    * @endif
    */
   CORBA::Boolean RTPreemptEC::is_running()
-    throw (CORBA::SystemException)
   {
     return ExecutionContextBase::isRunning();
   }
@@ -243,7 +215,6 @@ namespace RTC_exp
    * @endif
    */
   RTC::ReturnCode_t RTPreemptEC::start()
-    throw (CORBA::SystemException)
   {
     return ExecutionContextBase::start();
   }
@@ -256,7 +227,6 @@ namespace RTC_exp
    * @endif
    */
   RTC::ReturnCode_t RTPreemptEC::stop()
-    throw (CORBA::SystemException)
   {
     return ExecutionContextBase::stop();
   }
@@ -271,7 +241,6 @@ namespace RTC_exp
    * @endif
    */
   CORBA::Double RTPreemptEC::get_rate()
-    throw (CORBA::SystemException)
   {
     return ExecutionContextBase::getRate();
   }
@@ -284,7 +253,6 @@ namespace RTC_exp
    * @endif
    */
   RTC::ReturnCode_t RTPreemptEC::set_rate(CORBA::Double rate)
-    throw (CORBA::SystemException)
   {
     return ExecutionContextBase::setRate(rate);
   }
@@ -298,7 +266,6 @@ namespace RTC_exp
    */
   RTC::ReturnCode_t
   RTPreemptEC::add_component(RTC::LightweightRTObject_ptr comp)
-    throw (CORBA::SystemException)
   {
     return ExecutionContextBase::addComponent(comp);
   }
@@ -312,7 +279,6 @@ namespace RTC_exp
    */
   RTC::ReturnCode_t RTPreemptEC::
   remove_component(RTC::LightweightRTObject_ptr comp)
-    throw (CORBA::SystemException)
   {
     return ExecutionContextBase::removeComponent(comp);
   }
@@ -326,7 +292,6 @@ namespace RTC_exp
    */
   RTC::ReturnCode_t RTPreemptEC::
   activate_component(RTC::LightweightRTObject_ptr comp)
-    throw (CORBA::SystemException)
   {
     return ExecutionContextBase::activateComponent(comp);
   }
@@ -340,7 +305,6 @@ namespace RTC_exp
    */
   RTC::ReturnCode_t RTPreemptEC::
   deactivate_component(RTC::LightweightRTObject_ptr comp)
-    throw (CORBA::SystemException)
   {
     return ExecutionContextBase::deactivateComponent(comp);
   }
@@ -354,7 +318,6 @@ namespace RTC_exp
    */
   RTC::ReturnCode_t RTPreemptEC::
   reset_component(RTC::LightweightRTObject_ptr comp)
-    throw (CORBA::SystemException)
   {
     return ExecutionContextBase::resetComponent(comp);
   }
@@ -368,7 +331,6 @@ namespace RTC_exp
    */
   RTC::LifeCycleState RTPreemptEC::
   get_component_state(RTC::LightweightRTObject_ptr comp)
-    throw (CORBA::SystemException)
   {
     RTC::LifeCycleState ret = ExecutionContextBase::getComponentState(comp);
     return ret;
@@ -382,7 +344,6 @@ namespace RTC_exp
    * @endif
    */
   RTC::ExecutionKind RTPreemptEC::get_kind()
-    throw (CORBA::SystemException)
   {
     return ExecutionContextBase::getKind();
   }
@@ -398,7 +359,6 @@ namespace RTC_exp
    * @endif
    */
   RTC::ExecutionContextProfile* RTPreemptEC::get_profile()
-    throw (CORBA::SystemException)
   {
     return ExecutionContextBase::getProfile();
   }
@@ -414,23 +374,23 @@ namespace RTC_exp
   {
     // change EC thread state
     {
-      Guard guard(m_svcmutex);
+      std::lock_guard<std::mutex> guard(m_svcmutex);
       if (!m_svc)
         {
           m_svc = true;
-          this->open(0);
+          this->open(nullptr);
         }
     }
     if (isAllNextState(RTC::INACTIVE_STATE))
       {
-        Guard guard(m_workerthread.mutex_);
+        std::lock_guard<std::mutex> guard(m_workerthread.mutex_);
         m_workerthread.running_ = false;
       }
     else
       {
-        Guard guard(m_workerthread.mutex_);
+        std::lock_guard<std::mutex> guard(m_workerthread.mutex_);
         m_workerthread.running_ = true;
-        m_workerthread.cond_.signal();
+        m_workerthread.cond_.notify_one();
       }
     return RTC::RTC_OK;
   }
@@ -441,7 +401,7 @@ namespace RTC_exp
   RTC::ReturnCode_t RTPreemptEC::onStopping()
   {
     // stop thread
-    Guard guard(m_workerthread.mutex_);
+    std::lock_guard<std::mutex> guard(m_workerthread.mutex_);
     m_workerthread.running_ = false;
     return RTC::RTC_OK;
   }
@@ -458,11 +418,11 @@ namespace RTC_exp
                   getStateString(comp->getStates().next)));
     // Now comp's next state must be ACTIVE state
     // If worker thread is stopped, restart worker thread.
-    Guard guard(m_workerthread.mutex_);
-    if (m_workerthread.running_ == false)
+    std::lock_guard<std::mutex> guard(m_workerthread.mutex_);
+    if (!m_workerthread.running_)
       {
         m_workerthread.running_ = true;
-        m_workerthread.cond_.signal();
+        m_workerthread.cond_.notify_one();
       }
     return RTC::RTC_OK;
   }
@@ -484,11 +444,11 @@ namespace RTC_exp
 
     // Now comp's next state must be ACTIVE state
     // If worker thread is stopped, restart worker thread.
-    Guard guard(m_workerthread.mutex_);
-    if (m_workerthread.running_ == false)
+    std::lock_guard<std::mutex> guard(m_workerthread.mutex_);
+    if (!m_workerthread.running_)
       {
         m_workerthread.running_ = true;
-        m_workerthread.cond_.signal();
+        m_workerthread.cond_.notify_one();
       }
     return RTC::RTC_OK;
   }
@@ -505,8 +465,8 @@ namespace RTC_exp
                   getStateString(comp->getStates().next)));
     if (isAllNextState(RTC::INACTIVE_STATE))
       {
-        Guard guard(m_workerthread.mutex_);
-        if (m_workerthread.running_ == true)
+        std::lock_guard<std::mutex> guard(m_workerthread.mutex_);
+        if (m_workerthread.running_)
           {
             m_workerthread.running_ = false;
             RTC_TRACE(("All RTCs are INACTIVE. Stopping worker thread."));
@@ -527,8 +487,8 @@ namespace RTC_exp
                   getStateString(comp->getStates().next)));
     if (isAllNextState(RTC::INACTIVE_STATE))
       {
-        Guard guard(m_workerthread.mutex_);
-        if (m_workerthread.running_ == true)
+        std::lock_guard<std::mutex> guard(m_workerthread.mutex_);
+        if (m_workerthread.running_)
           {
             m_workerthread.running_ = false;
             RTC_TRACE(("All RTCs are INACTIVE. Stopping worker thread."));
@@ -549,8 +509,8 @@ namespace RTC_exp
                   getStateString(comp->getStates().next)));
     if (isAllNextState(RTC::INACTIVE_STATE))
       {
-        Guard guard(m_workerthread.mutex_);
-        if (m_workerthread.running_ == true)
+        std::lock_guard<std::mutex> guard(m_workerthread.mutex_);
+        if (m_workerthread.running_)
           {
             m_workerthread.running_ = false;
             RTC_TRACE(("All RTCs are INACTIVE. Stopping worker thread."));
@@ -571,8 +531,8 @@ namespace RTC_exp
                   getStateString(comp->getStates().next)));
     if (isAllNextState(RTC::INACTIVE_STATE))
       {
-        Guard guard(m_workerthread.mutex_);
-        if (m_workerthread.running_ == true)
+        std::lock_guard<std::mutex> guard(m_workerthread.mutex_);
+        if (m_workerthread.running_)
           {
             m_workerthread.running_ = false;
             RTC_TRACE(("All RTCs are INACTIVE. Stopping worker thread."));
@@ -601,7 +561,7 @@ namespace RTC_exp
     getProperty(prop, "policy", policy);
     if (!policy.empty())
       {
-        coil::normalize(policy);
+        policy = coil::normalize(std::move(policy));
         if (policy == "rr")   { m_policy = SCHED_RR; }
         if (policy == "fifo") { m_policy = SCHED_FIFO; }
         RTC_DEBUG(("Scheduling policy: %s", policy.c_str()));
@@ -621,36 +581,24 @@ namespace RTC_exp
     RTC_DEBUG(("setWaitOffset(): offset: %d", m_waitoffset));
   }
 
-  bool RTPreemptEC::getSleepTime(struct timespec& ts,
-                                 const struct timespec& t0,
-                                 const struct timespec& t1)
+  bool RTPreemptEC::getWakeUpTime(std::chrono::high_resolution_clock::time_point& tw,
+                                  const std::chrono::high_resolution_clock::time_point& t0,
+                                  const std::chrono::high_resolution_clock::time_point& t1)
   {
-    coil::TimeValue period(getPeriod());
-    if (t0.tv_nsec > t1.tv_nsec)
+    tw = t0 + getPeriod() + std::chrono::nanoseconds(m_waitoffset);
+    if (tw < t1)
       {
-        ts.tv_nsec = period.usec() * 1000
-          - (NSEC_PER_SEC - t0.tv_nsec + t1.tv_nsec) + m_waitoffset;
-        ts.tv_sec  = period.sec() - (t1.tv_sec - 1 - t0.tv_sec);
-      }
-    else
-      {
-        ts.tv_nsec = period.usec() * 1000
-          - (t1.tv_nsec - t0.tv_nsec) + m_waitoffset;
-        ts.tv_sec  = period.sec() - (t1.tv_sec - t0.tv_sec);
-      }
-    if (ts.tv_nsec < 0 || ts.tv_sec < 0)
-      {
-        std::cerr << "faital error: deadline passed. " << std::endl;
+        std::cerr << "faital error: deadline passed.\n";
         std::cerr << "Wait time: ";
-        std::cerr << ts.tv_sec << "[s], ";
-        std::cerr << ts.tv_nsec << "[ns]" << std::endl;
+        std::cerr << (tw - t1).count() << "[ns]\n";
         std::cerr << "Next wait time force to: 0.0 [s]"
                   << std::endl;
+        tw = t0;
         return false; // sleeptime < 0
       }
     return true; // sleeptime >= 0
   }
-}; // namespace RTC
+} // namespace RTC_exp
 
 extern "C"
 {
@@ -662,7 +610,7 @@ extern "C"
    * @endif
    */
 
- void RTPreemptECInit(RTC::Manager* manager)
+ void RTPreemptECInit(RTC::Manager*  /*manager*/)
   {
     RTC::ExecutionContextFactory::
       instance().addFactory("RTPreemptEC",
@@ -677,5 +625,4 @@ extern "C"
                             ::coil::Destructor< ::RTC::ExecutionContextBase,
                             ::RTC_exp::RTPreemptEC>);
   }
-};
-
+}

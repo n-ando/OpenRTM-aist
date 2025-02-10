@@ -36,7 +36,7 @@
 
 namespace coil
 {
-
+const unsigned int MaxPathLength(256);
   /*!
    * @if jp
    *
@@ -60,17 +60,17 @@ namespace coil
    *
    * @endif
    */
-  inline std::string dirname(char* path)
+  inline std::string dirname(const char* path)
   {
 #ifdef __RTP__
     return "";
 #else
     unsigned int len = strlen(path);
-    char path_name[len+1];
+    char path_name[MaxPathLength+1];
     memset( path_name , '\0' , len+1 );
-    char dir_name[len+1];
+    char dir_name[MaxPathLength+1];
     memset( dir_name , '\0' , len+1 );
-    char file_name[len+1];
+    char file_name[MaxPathLength+1];
     memset( file_name , '\0' , len+1 );
     if(len>1 && strncmp("/", &path[len-1], 1)==0)
     {
@@ -126,11 +126,11 @@ namespace coil
     return "";
 #else
     unsigned int len = strlen(path);
-    char path_name[len+1];
+    char path_name[MaxPathLength+1];
     memset( path_name , '\0' , len+1 );
-    char dir_name[len+1];
+    char dir_name[MaxPathLength+1];
     memset( dir_name , '\0' , len+1 );
-    char file_name[len+1];
+    char file_name[MaxPathLength+1];
     memset( file_name , '\0' , len+1 );
     if(len>1 && strncmp("/", &path[len-1], 1)==0)
     {

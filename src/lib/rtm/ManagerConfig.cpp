@@ -22,7 +22,7 @@
 #include <coil/OS.h>
 #include <coil/stringutil.h>
 #include <rtm/DefaultConfiguration.h>
-#include <stdlib.h>
+#include <cstdlib>
 
 #include <fstream>
 #include <iostream>
@@ -36,21 +36,21 @@ namespace RTC
 
   // The list of default configuration file path.
 #ifdef RTM_OS_WIN32
-  const char* ManagerConfig::config_file_path[] = 
+  const char* const ManagerConfig::config_file_path[] = 
     {
-      "./rtc.conf",
-      "${RTM_ROOT}bin/${RTM_VC_VERSION}/rtc.conf",
-      NULL
+      ".\\rtc.conf",
+      "${PROGRAMDATA}\\OpenRTM-aist\\rtc.conf",
+      nullptr
     };
 #else
-  const char* ManagerConfig::config_file_path[] = 
+  const char* const ManagerConfig::config_file_path[] = 
     {
       "./rtc.conf",
       "/etc/rtc.conf",
       "/etc/rtc/rtc.conf",
       "/usr/local/etc/rtc.conf",
       "/usr/local/etc/rtc/rtc.conf",
-      NULL
+      nullptr
     };
 #endif
   
@@ -65,7 +65,6 @@ namespace RTC
    * @endif
    */
   ManagerConfig::ManagerConfig()
-    : m_isMaster(false)
   {
   }
 
@@ -89,9 +88,7 @@ namespace RTC
    * @brief Destructor
    * @endif
    */
-  ManagerConfig::~ManagerConfig()
-  {
-  }
+  ManagerConfig::~ManagerConfig() = default;
 
   /*!
    * @if jp
@@ -141,7 +138,7 @@ namespace RTC
    */
   void ManagerConfig::parseArgs(int argc, char** argv)
   {
-	bool ignoreNoConf(false);
+    bool ignoreNoConf(false);
     coil::GetOpt get_opts(argc, argv, "af:io:p:d", 0);
     int opt;
 
@@ -160,14 +157,16 @@ namespace RTC
           case 'f':
             if (!fileExist(get_opts.optarg))
               {
-                std::cerr << "Configuration file: " << m_configFile;
+                std::cerr << "Configuration file: " << get_opts.optarg;
                 std::cerr << " not found." << std::endl;
-                for (size_t i(0); i < (size_t)argc; ++i)
+#ifndef __QNX__
+                for (int i(0); i < argc; ++i)
                   {
                     std::string tmp(argv[i]);
                     if (tmp == "-i") { ignoreNoConf = true; }
                   }
                 if (!ignoreNoConf) { exit(-1); }
+#endif
               }
             m_configFile = get_opts.optarg;
             break;
@@ -176,21 +175,14 @@ namespace RTC
               break;
           case 'o':
             {
-              std::string optarg(get_opts.optarg);
-              std::string::size_type pos(optarg.find(":"));
+              std::string opt_arg(get_opts.optarg);
+              std::string::size_type pos(opt_arg.find(':'));
               if (pos != std::string::npos)
                 {
-                  std::string key = optarg.substr(0, pos);
-                  std::string value = optarg.substr(pos + 1);
-
-                  key = coil::unescape(key);
-                  coil::eraseHeadBlank(key);
-                  coil::eraseTailBlank(key);
-
-                  value = coil::unescape(value);
-                  coil::eraseHeadBlank(value);
-                  coil::eraseTailBlank(value);
-
+                  std::string key{coil::eraseBothEndsBlank(coil::unescape(
+                    opt_arg.substr(0, pos)))};
+                  std::string value{coil::eraseBothEndsBlank(coil::unescape(
+                    opt_arg.substr(pos + 1)))};
                   m_argprop[key] = value;
                 }
             }
@@ -225,7 +217,7 @@ namespace RTC
   bool ManagerConfig::findConfigFile()
   {
     // Check existance of configuration file given command arg
-    if (m_configFile != "")
+    if (!m_configFile.empty())
       {
         if (fileExist(m_configFile))
           {
@@ -235,8 +227,8 @@ namespace RTC
         std::cerr << " not found." << std::endl;
       }
     // Search rtc configuration file from environment variable
-    char* env = getenv(config_file_env);
-    if (env != NULL)
+    std::string env;
+    if (coil::getenv(config_file_env, env))
       {
         if (fileExist(env))
           {
@@ -248,7 +240,7 @@ namespace RTC
       }
     // Search rtc configuration file from default search path
     int i = 0;
-    while (config_file_path[i] != NULL)
+    while (config_file_path[i] != nullptr)
       {
         std::string cpath = coil::replaceEnv(config_file_path[i]);
 
@@ -308,7 +300,7 @@ namespace RTC
     std::ifstream infile;
     infile.open(filename.c_str(), std::ios::in);
     // fial() 0: ok, !0: fail
-    if (infile.fail() != 0)
+    if (infile.fail())
       {
         infile.close();
         return false;
@@ -320,4 +312,4 @@ namespace RTC
       }
     return false;
   }
-};  // namespace RTC
+} // namespace RTC

@@ -18,7 +18,6 @@
 #define RTC_DIRECTOUTPORTBASE_H
 
 
-#include <coil/Mutex.h>
 #include <rtm/DirectPortBase.h>
 
 
@@ -47,91 +46,64 @@ namespace RTC
   template <class DataType>
   class DirectOutPortBase : public DirectPortBase
   {
-	  typedef coil::Guard<coil::Mutex> Guard;
   public:
-	/*!
-     * @if jp
-     * @brief コンストラクタ
-     *
-     * @param value
-     *
-     * @else
-     * @brief Constructor
-     *
-     * @param value
-     *
-     * @endif
-     */
-	DirectOutPortBase(DataType& value)
-	{
-	}
-	/*!
-	* @if jp
-	* @brief デストラクタ
-	*
-	*
-	* @else
-	* @brief Destructor
-	*
-	*
-	* @endif
-	*/
-	virtual ~DirectOutPortBase(void)
-	{
-	}
-	/*!
-	* @if jp
-	* @brief データの取得
-	* 
-	* @param data データを格納する変数
-	*
-	* @else
-	* @brief 
-	*
-	* @param data
-	*
-	* @endif
-	*/
-	virtual void read(DataType& data)
-	{
-	}
-	/*!
-	* @if jp
-	* @brief 新規データの存在確認
-	*
-	* @return true：新規データあり
-	*
-	* @else
-	* @brief
-	*
-	* @return
-	*
-	* @endif
-	*/
-	virtual bool isNew()
-	{
-		return false;
-	}
-	/*!
-	* @if jp
-	* @brief 新規データが無いことを確認
-	*
-	* @return true：新規データなし
-	*
-	* @else
-	* @brief
-	*
-	* @return
-	*
-	* @endif
-	*/
-	virtual bool isEmpty()
-	{
-		return true;
-	}
+     /*!
+      * @if jp
+      * @brief デストラクタ
+      *
+      *
+      * @else
+      * @brief Destructor
+      *
+      *
+      * @endif
+      */
+     ~DirectOutPortBase() override = default;
+     /*!
+      * @if jp
+      * @brief データの取得
+      * 
+      * @param data データを格納する変数
+      *
+      * @else
+      * @brief 
+      *
+      * @param data
+      *
+      * @endif
+      */
+     virtual void read(DataType& data) = 0;
+     /*!
+      * @if jp
+      * @brief 新規データの存在確認
+      *
+      * @return true：新規データあり
+      *
+      * @else
+      * @brief
+      *
+      * @return
+      *
+      * @endif
+      */
+     virtual bool isNew() = 0;
+     /*!
+      * @if jp
+      * @brief 新規データが無いことを確認
+      *
+      * @return true：新規データなし
+      *
+      * @else
+      * @brief
+      *
+      * @return
+      *
+      * @endif
+      */
+     virtual bool isEmpty() = 0;
     
   protected:
   };
-}; // namespace RTC
+} // namespace RTC
 
 #endif // RTC_DIRECTOUTPORTBASE_H

@@ -19,6 +19,7 @@
 #include <rtm/RTC.h>
 #include <rtm/PeriodicECSharedComposite.h>
 #include <rtm/Manager.h>
+#include <rtm/ConfigurationListener.h>
 
 #include <algorithm>
 #include <iostream>
@@ -34,8 +35,8 @@ namespace SDOPackage
    * @brief Constructor
    * @endif
    */
-  PeriodicECOrganization::PeriodicECOrganization(::RTC::RTObject_impl* rtobj)
-    : Organization_impl(rtobj->getObjRef()),
+  PeriodicECOrganization::PeriodicECOrganization(::RTC::RTObject_impl* rtobj, SDOSystemElement_ptr sdo)
+    : Organization_impl(sdo),
       rtclog("PeriodicECOrganization"),
       m_rtobj(rtobj),
       m_ec(::RTC::ExecutionContext::_nil())
@@ -49,9 +50,7 @@ namespace SDOPackage
    * @brief Destructor
    * @endif
    */
-  PeriodicECOrganization::~PeriodicECOrganization()
-  {
-  }
+  PeriodicECOrganization::~PeriodicECOrganization() = default;
 
   /*!
    * @if jp
@@ -61,8 +60,6 @@ namespace SDOPackage
    * @endif
    */
   CORBA::Boolean PeriodicECOrganization::add_members(const SDOList& sdo_list)
-    throw (CORBA::SystemException,
-           InvalidParameter, NotAvailable, InternalError)
   {
     RTC_DEBUG(("add_members()"));
 
@@ -84,7 +81,7 @@ namespace SDOPackage
         addOrganizationToTarget(member);
         addParticipantToEC(member);
         addPort(member, m_expPorts);
-        m_rtcMembers.push_back(member);
+        m_rtcMembers.emplace_back(member);
       }
 
     CORBA::Boolean result;
@@ -101,8 +98,6 @@ namespace SDOPackage
    * @endif
    */
   CORBA::Boolean PeriodicECOrganization::set_members(const SDOList& sdo_list)
-    throw (CORBA::SystemException,
-           InvalidParameter, NotAvailable, InternalError)
   {
 
     RTC_DEBUG(("set_members()"));
@@ -135,7 +130,7 @@ namespace SDOPackage
         addOrganizationToTarget(member);
         addParticipantToEC(member);
         addPort(member, m_expPorts);
-        m_rtcMembers.push_back(member);
+        m_rtcMembers.emplace_back(member);
       }
 
     CORBA::Boolean result;
@@ -152,21 +147,18 @@ namespace SDOPackage
    * @endif
    */
   CORBA::Boolean PeriodicECOrganization::remove_member(const char* id)
-    throw (CORBA::SystemException,
-           InvalidParameter, NotAvailable, InternalError)
   {
     RTC_DEBUG(("remove_member(id = %s)", id));
     for (MemIt it(m_rtcMembers.begin()); it != m_rtcMembers.end();)
       {
 
         Member& member(*it);
-		size_t len = strlen(id);
-		if (len < strlen(member.profile_->instance_name))
-		{
-			len = strlen(member.profile_->instance_name);
-		}
-		//size_t len = (std::max)(strlen(id), strlen(member.profile_->instance_name));
-        if (strncmp(id, member.profile_->instance_name, len))
+        size_t len = strlen(id);
+        if (len < strlen(member.profile_->instance_name))
+          {
+            len = strlen(member.profile_->instance_name);
+          }
+        if (strncmp(id, member.profile_->instance_name, len) != 0)
           {
             ++it;
             continue;
@@ -174,19 +166,18 @@ namespace SDOPackage
 
         removePort(member, m_expPorts);
         m_rtobj->getProperties()["conf.default.exported_ports"] =
-          ::coil::flatten(m_expPorts);
+          ::coil::eraseBlank(::coil::flatten(m_expPorts));
 
         removeParticipantFromEC(member);
         removeOrganizationFromTarget(member);
         startOwnedEC(member);
         it = m_rtcMembers.erase(it);
-		break;
+        break;
 
       }
 
     CORBA::Boolean result;
     result = ::SDOPackage::Organization_impl::remove_member(id);
-	
     
     return result;
   }
@@ -204,7 +195,7 @@ namespace SDOPackage
     updateExportedPortsList();
     MemIt it(m_rtcMembers.begin());
     MemIt it_end(m_rtcMembers.end());
-	
+
     while (it != it_end)
       {
         Member& member(*it);
@@ -235,8 +226,7 @@ namespace SDOPackage
 
     // narrowing: SDO -> RTC (DataFlowComponent)
     dfc = ::OpenRTM::DataFlowComponent::_narrow(sdo);
-    if (::CORBA::is_nil(dfc)) return false;
-    return true;
+    return !::CORBA::is_nil(dfc);
   }
 
   /*!
@@ -285,7 +275,6 @@ namespace SDOPackage
   void PeriodicECOrganization::addOrganizationToTarget(Member& member)
   {
     // get given RTC's configuration object
-    //    Configuration_var conf(member.config_.in());
     Configuration_var conf(member.config_);
     if (::CORBA::is_nil(conf)) return;
 
@@ -337,13 +326,13 @@ namespace SDOPackage
 
   }
 
-  void PeriodicECOrganization::addRTCToEC(RTC::RTObject_var rtobj)
+  void PeriodicECOrganization::addRTCToEC(RTC::RTObject_ptr rtobj)
   {
       SDOPackage::OrganizationList_var orglist = rtobj->get_owned_organizations();
       if (orglist->length() == 0)
       {
           // set ec to target RTC
-          m_ec->add_component(rtobj.in());
+          m_ec->add_component(rtobj);
       }
 
       for (CORBA::ULong i(0); i < orglist->length(); ++i)
@@ -388,7 +377,7 @@ namespace SDOPackage
       }
     m_ec->remove_component(member.rtobj_.in());
 
-    OrganizationList_var orglist = member.rtobj_->get_organizations();
+    OrganizationList_var orglist = member.rtobj_->get_owned_organizations();
     for (CORBA::ULong i(0); i < orglist->length(); ++i)
       {
         SDOPackage::SDOList_var sdos = orglist[i]->get_members();
@@ -419,7 +408,7 @@ namespace SDOPackage
                                   PortList& portlist)
   {
     RTC_TRACE(("addPort(%s)", ::coil::flatten(portlist).c_str()));
-    if (portlist.size() == 0) { return; }
+    if (portlist.empty()) { return; }
 
 #ifndef ORB_IS_RTORB
     ::RTC::PortProfileList& plist(member.profile_->port_profiles);
@@ -468,7 +457,7 @@ namespace SDOPackage
                                           PortList& portlist)
   {
     RTC_TRACE(("removePort(%s)", coil::flatten(portlist).c_str()));
-    if (portlist.size() == 0) { return; }
+    if (portlist.empty()) { return; }
 
 #ifndef ORB_IS_RTORB
     ::RTC::PortProfileList& plist(member.profile_->port_profiles);
@@ -550,16 +539,16 @@ namespace SDOPackage
     RTC_VERBOSE(("remove ports: %s", ::coil::flatten(removedPorts).c_str()));
     RTC_VERBOSE(("add    ports: %s", ::coil::flatten(createdPorts).c_str()));
 
-    for (int i(0), len(m_rtcMembers.size()); i < len; ++i)
+    for (auto & rtcMember : m_rtcMembers)
       {
-        removePort(m_rtcMembers[i], removedPorts);
-        addPort(m_rtcMembers[i], createdPorts);
+        removePort(rtcMember, removedPorts);
+        addPort(rtcMember, createdPorts);
       }
 
     m_expPorts = newPorts;
   }
 
-};  // namespace SDOPackage
+} // namespace SDOPackage
 
 
 
@@ -572,7 +561,7 @@ bool stringToStrVec(std::vector<std::string>& v, const char* is)
 
 namespace RTC
 {
-  static const char* periodicecsharedcomposite_spec[] =
+  static const char* const periodicecsharedcomposite_spec[] =
   {
     "implementation_id", "PeriodicECSharedComposite",
     "type_name",         "PeriodicECSharedComposite",
@@ -596,8 +585,8 @@ namespace RTC
   public:
     explicit setCallback(::SDOPackage::PeriodicECOrganization* org)
            : m_org(org) {}
-    virtual ~setCallback() {}
-    virtual void operator()(const coil::Properties& config_set)
+    ~setCallback() override = default;
+    void operator()(const coil::Properties&  /*config_set*/) override
     {
       m_org->updateDelegatedPorts();
     }
@@ -612,8 +601,8 @@ namespace RTC
   public:
     explicit addCallback(::SDOPackage::PeriodicECOrganization* org)
            : m_org(org) {}
-    virtual ~addCallback() {}
-    virtual void operator()(const coil::Properties& config_set)
+    ~addCallback() override = default;
+    void operator()(const coil::Properties&  /*config_set*/) override
     {
       m_org->updateDelegatedPorts();
     }
@@ -633,14 +622,21 @@ namespace RTC
   {
     m_ref = this->_this();
     m_objref = RTC::RTObject::_duplicate(m_ref);
-    m_org = new SDOPackage::PeriodicECOrganization(this);
+#ifndef ORB_IS_RTORB
+    m_org = new SDOPackage::PeriodicECOrganization(this, m_objref.in());
+#else
+    m_org = new SDOPackage::PeriodicECOrganization(this, static_cast<SDOPackage::SDOSystemElement*>(m_objref.in()));
+#endif
     ::CORBA_SeqUtil::push_back(m_sdoOwnedOrganizations,
-                               ::SDOPackage::Organization::
-                               _duplicate(m_org->getObjRef()));
+                               m_org->getObjRef());
     bindParameter("members", m_members, "", stringToStrVec);
 
-    m_configsets.setOnSetConfigurationSet(new setCallback(m_org));
-    m_configsets.setOnAddConfigurationSet(new addCallback(m_org));
+    m_configsets.addConfigurationSetListener(
+        ConfigurationSetListenerType::ON_SET_CONFIG_SET,
+        new setCallback(m_org));
+    m_configsets.addConfigurationSetListener(
+        ConfigurationSetListenerType::ON_ADD_CONFIG_SET,
+        new addCallback(m_org));
 
     m_properties["exec_cxt.periodic.sync_transition"] = "NO";
     m_properties["exec_cxt.periodic.sync_activation"] = "NO";
@@ -691,24 +687,22 @@ namespace RTC
     mgr.getComponents();
 
     ::SDOPackage::SDOList sdos;
-    for (int i(0), len(m_members.size()); i < len; ++i)
+    for (auto & member : m_members)
       {
-          coil::replaceString(m_members[i], "|", "");
-          coil::eraseBothEndsBlank(m_members[i]);
-
-        RTObject_impl* rtc = mgr.getComponent(m_members[i].c_str());
-        if (rtc == NULL) {
+        member = coil::eraseBothEndsBlank(coil::replaceString(std::move(member), "|", ""));
+        RTObject_impl* rtc = mgr.getComponent(member.c_str());
+        if (rtc == nullptr) {
           continue;
         }
 
         ::SDOPackage::SDO_var sdo;
 #ifndef ORB_IS_RTORB
-        sdo = ::SDOPackage::SDO::_duplicate(rtc->getObjRef());
+        sdo = rtc->getObjRef();
         if (::CORBA::is_nil(sdo)) continue;
 
         ::CORBA_SeqUtil::push_back(sdos, sdo);
 #else  // ORB_IS_RTORB
-        sdo = ::SDOPackage::SDO::_duplicate((rtc->getObjRef()).in());
+        sdo = static_cast<SDOPackage::SDO*>(rtc->getObjRef());
         if (::CORBA::is_nil(sdo)) continue;
 
         ::CORBA_SeqUtil::push_back(sdos, ::SDOPackage::SDO_ptr(sdo));
@@ -747,14 +741,14 @@ namespace RTC
     return ::RTC::RTC_OK;
   }
 
-  void PeriodicECSharedComposite::activateChildComp(RTC::RTObject_var rtobj)
+  void PeriodicECSharedComposite::activateChildComp(const RTC::RTObject_ptr rtobj)
   {
       ::RTC::ExecutionContextList_var ecs(get_owned_contexts());
       SDOPackage::OrganizationList_var orglist = rtobj->get_owned_organizations();
 
       if (orglist->length() == 0)
       {
-          ecs[CORBA::ULong(0)]->activate_component(rtobj.in());
+          ecs[CORBA::ULong(0)]->activate_component(rtobj);
       }
 
       for (CORBA::ULong i(0); i < orglist->length(); ++i)
@@ -762,7 +756,7 @@ namespace RTC
           SDOPackage::SDOList_var child_sdos = orglist[i]->get_members();
           for (CORBA::ULong j(0); j < child_sdos->length(); ++j)
           {
-              ::RTC::RTObject_var child(::RTC::RTObject::_narrow(child_sdos[i]));
+              ::RTC::RTObject_var child(::RTC::RTObject::_narrow(child_sdos[j]));
               activateChildComp(child.in());
           }
       }
@@ -785,9 +779,30 @@ namespace RTC
     for (::CORBA::ULong i(0), len(sdos->length()); i < len; ++i)
       {
         ::RTC::RTObject_var rtc(::RTC::RTObject::_narrow(sdos[i]));
-        ecs[CORBA::ULong(0)]->deactivate_component(rtc.in());
+        deactivateChildComp(rtc.in());
       }
     return ::RTC::RTC_OK;
+  }
+
+  void PeriodicECSharedComposite::deactivateChildComp(const RTC::RTObject_ptr rtobj)
+  {
+      ::RTC::ExecutionContextList_var ecs(get_owned_contexts());
+      SDOPackage::OrganizationList_var orglist = rtobj->get_owned_organizations();
+
+      if (orglist->length() == 0)
+      {
+          ecs[CORBA::ULong(0)]->deactivate_component(rtobj);
+      }
+
+      for (CORBA::ULong i(0); i < orglist->length(); ++i)
+      {
+          SDOPackage::SDOList_var child_sdos = orglist[i]->get_members();
+          for (CORBA::ULong j(0); j < child_sdos->length(); ++j)
+          {
+              ::RTC::RTObject_var child(::RTC::RTObject::_narrow(child_sdos[j]));
+              deactivateChildComp(child.in());
+          }
+      }
   }
 
   /*!
@@ -806,9 +821,30 @@ namespace RTC
     for (::CORBA::ULong i(0), len(sdos->length()); i < len; ++i)
       {
         ::RTC::RTObject_var rtc(::RTC::RTObject::_narrow(sdos[i]));
-        ecs[CORBA::ULong(0)]->reset_component(rtc.in());
+        resetChildComp(rtc.in());
       }
     return ::RTC::RTC_OK;
+  }
+
+  void PeriodicECSharedComposite::resetChildComp(const RTC::RTObject_ptr rtobj)
+  {
+      ::RTC::ExecutionContextList_var ecs(get_owned_contexts());
+      SDOPackage::OrganizationList_var orglist = rtobj->get_owned_organizations();
+
+      if (orglist->length() == 0)
+      {
+          ecs[CORBA::ULong(0)]->reset_component(rtobj);
+      }
+
+      for (CORBA::ULong i(0); i < orglist->length(); ++i)
+      {
+          SDOPackage::SDOList_var child_sdos = orglist[i]->get_members();
+          for (CORBA::ULong j(0); j < child_sdos->length(); ++j)
+          {
+              ::RTC::RTObject_var child(::RTC::RTObject::_narrow(child_sdos[j]));
+              resetChildComp(child.in());
+          }
+      }
   }
 
   /*!
@@ -828,7 +864,6 @@ namespace RTC
 
 
   ReturnCode_t PeriodicECSharedComposite::exit()
-    throw (CORBA::SystemException)
   {
     ReturnCode_t ret = RTObject_impl::exit();
     try
@@ -860,7 +895,7 @@ namespace RTC
     return ret;
   }
 
-};  // namespace RTC
+} // namespace RTC
 
 extern "C"
 {
@@ -871,4 +906,4 @@ extern "C"
                              RTC::Create<RTC::PeriodicECSharedComposite>,
                              RTC::Delete<RTC::PeriodicECSharedComposite>);
   }
-};
+}

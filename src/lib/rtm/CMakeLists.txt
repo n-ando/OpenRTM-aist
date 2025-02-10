@@ -1,177 +1,122 @@
-cmake_minimum_required (VERSION 2.6)
+cmake_minimum_required (VERSION 3.5.1)
 
-project (${RTM_PROJECT_NAME})
-
-
-
-
+project (${RTM_PROJECT_NAME}
+	VERSION ${RTM_VERSION}
+	LANGUAGES CXX)
 
 
-
-option (ARTLINUX "ARTLinux is avaiable" OFF)
-option (HAVE_DLFCN_H "Define to 1 if you have the <dlfcn.h> header file." ON)
-option (HAVE_INTTYPES_H "Define to 1 if you have the <inttypes.h> header file." ON)
-option (HAVE_MEMORY_H "Define to 1 if you have the <memory.h> header file." ON)
-option (HAVE_NLIST_H "Define to 1 if you have the <nlist.h> header file." ON)
-option (HAVE_STDINT_H "Define to 1 if you have the <stdlib.h> header file." ON)
-option (HAVE_STRINGS_H "Define to 1 if you have the <strings.h> header file." ON)
-option (HAVE_STRING_H "Define to 1 if you have the <string.h> header file." ON)
-option (HAVE_SYS_STAT_H "Define to 1 if you have the <sys/stat.h> header file." ON)
-option (HAVE_SYS_TYPES_H "Define to 1 if you have the <sys/types.h> header file." ON)
-option (HAVE_UNAME "Define to 1 if you have the `uname' function." ON)
-option (HAVE_UNISTD_H "Define to 1 if you have the <unistd.h> header file." ON)
-option (ORB_IS_MICO "ORB is MICO" OFF)
-option (ORB_IS_OMNIORB "ORB is omniORB" OFF)
-option (ORB_IS_ORBEXPRESS "ORB is ORBexpresds" OFF)
-option (ORB_IS_ORBACUS "ORB is ORBacus" OFF)
-option (ORB_IS_ORBIT2 "ORB is ORBit2" OFF)
-option (ORB_IS_ORBIX "ORB is Orbix" OFF)
-option (ORB_IS_RTORB "ORB is RtORB" OFF)
-option (ORB_IS_TAO "ORB is TAO" OFF)
-option (RTM_PACKAGE "Name of package" OFF)
-option (RTM_PACKAGE_BUGREPORT "Define to the address where bug reports for this package should be sent." OFF)
-option (RTM_PACKAGE_NAME "Define to the full name of this package." OFF)
-option (RTM_PACKAGE_STRING "Define to the full name and version of this package." OFF)
-option (RTM_PACKAGE_TARNAME "Define to the one symbol short name of this package." OFF)
-option (RTM_PACKAGE_URL "Define to the home page for this package." OFF)
-option (RTM_PACKAGE_VERSION "Define to the version of this package." OFF)
-option (PYTHON_WRAPPER " Python wrapper is enable" OFF)
-option (RTC_CORBA_CXXMAPPING11 "CORBA C++ mapping is ver1.1" OFF)
-option (RTC_SOCK_DATAPORT "Socket DataPort is enable" OFF)
-option (RTM_GCC2 "RTM is compiled with gcc2" OFF)
-option (RTM_OMNIORB_40 "omniORB version is 4.0" OFF)
-option (RTM_OMNIORB_41 "omniORB version is 4.1" OFF)
-option (RTM_OMNIORB_42 "omniORB version is 4.2" OFF)
-option (RTM_OS_CYGWIN "OS is Cygwin" OFF)
-option (RTM_OS_DARWIN "OS is Max OS X" OFF)
-option (RTM_OS_FREEBSD "OS is FreeBSD" OFF)
-option (RTM_OS_HPUX "OS is HP-UX" OFF)
-option (RTM_OS_IRIX "OS is IRIX" OFF)
-option (RTM_OS_LINUX "OS is Linux" OFF)
-option (RTM_OS_VXWORKS "OS is VxWorks" OFF)
-option (RTM_OS_OSF1 "OS is OSF1" OFF)
-option (RTM_OS_QNX "OS is QNX" OFF)
-option (RTM_OS_SUNOS "OS is SunOS" OFF)
-option (RTM_OS_WIN32 "OS is Windows" OFF)
-option (RTM_RTDSC "RDTSC is enable" OFF)
-option (WITH_DMALLOC "Define if using the dmalloc debugging malloc package" OFF)
-option (_REENTRANT "Multi Thread Support" ON)
-
-
-set(LT_OBJDIR .libs/ CACHE STRING "Define to the sub-directory in which libtool stores uninstalled libraries.")
-
-if(VXWORKS)
-	set (OSVERSION ON)
-	set(OSVERSION ${VXWORKS_MAJOR}${VXWORKS_MINOR} CACHE STRING "OS version.")
-	set (RTM_OS_VXWORKS ON)
-	set (STDC_HEADERS ON)
-#	set　(STDC_HEADERS_VALUE 1 CACHE STRING "Define to 1 if you have the ANSI C header files.")
-elseif(UNIX)
-	set (STDC_HEADERS OFF)
-	set (OSVERSION OFF)
-	set (RTM_OS_LINUX ON)
-elseif(WIN32)
-	set (STDC_HEADERS OFF)
-	set (OSVERSION OFF)
-	set (RTM_OS_WIN32 ON)
+if(WIN32)
+	set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 endif()
 
+#==============================
+# Configuration Options
+#==============================
+# CORBA options
+set(ORB_IS_MICO OFF)
+set(ORB_IS_OMNIORB OFF)
+set(ORB_IS_ORBEXPRESS OFF)
+set(ORB_IS_ORBACUS OFF)
+set(ORB_IS_ORBIT2 OFF)
+set(ORB_IS_ORBIX OFF)
+set(ORB_IS_RTORB OFF)
+set(ORB_IS_TAO OFF)
+set(RTC_CORBA_CXXMAPPING11 ON)
+set(RTM_OMNIORB_40 OFF)
+set(RTM_OMNIORB_41 OFF)
+set(RTM_OMNIORB_42 OFF)
+set(RTM_OMNIORB_43 OFF)
+# RTM_PACKAGE options
+set(RTM_PACKAGE OFF)
+set(RTM_PACKAGE_BUGREPORT OFF)
+set(RTM_PACKAGE_NAME OFF)
+set(RTM_PACKAGE_STRING OFF)
+set(RTM_PACKAGE_TARNAME OFF)
+set(RTM_PACKAGE_URL OFF)
+set(RTM_PACKAGE_VERSION OFF)
+# OS options
+set(RTM_OS_DARWIN OFF)
+set(RTM_OS_FREEBSD OFF)
+set(RTM_OS_LINUX OFF)
+set(RTM_OS_VXWORKS OFF)
+set(RTM_OS_QNX OFF)
+set(RTM_OS_WIN32 OFF)
 
+#==============================
+# OS type selection
+#==============================
+if (UNIX)
+	if     (CMAKE_SYSTEM_NAME MATCHES "Darwin")
+		set (RTM_OS_DARWIN ON)
+	elseif (CMAKE_SYSTEM_NAME MATCHES "FreeBSD")
+		set (RTM_OS_FREEBSD ON)
+	elseif (CMAKE_SYSTEM_NAME MATCHES "Linux")
+		set (RTM_OS_LINUX ON)
+	elseif (CMAKE_SYSTEM_NAME MATCHES "QNX") 
+		set (RTM_OS_QNX ON)
+	else ()
+		set (RTM_OS_LINUX ON)
+	endif ()
+elseif (WIN32)
+	set (RTM_OS_WIN32 ON)
+elseif (VXWORKS)
+	set (RTM_OS_VXWORKS ON)
+endif ()
 
+#==============================
+# CORBA type selection
+#==============================
 if(CORBA MATCHES "ORBexpress")
 	set (ORB_IS_ORBEXPRESS ON)
 elseif(CORBA MATCHES "omniORB")
 	if(OMNI_VERSION MATCHES "40")
-		set (RTM_OMNIORB_40 ON)
+		set(RTM_OMNIORB_40 ON)
 	elseif(OMNI_VERSION MATCHES "41")
-		set (RTM_OMNIORB_41 ON)
+		set(RTM_OMNIORB_41 ON)
+	elseif(OMNI_VERSION MATCHES "42")
+		set(RTM_OMNIORB_42 ON)
 	else()
-		set (RTM_OMNIORB_42 ON)
+		set(RTM_OMNIORB_43 ON)
 	endif()
 	set (ORB_IS_OMNIORB ON)
 elseif(CORBA MATCHES "TAO")
 	set (ORB_IS_TAO ON)
+elseif(CORBA MATCHES "RtORB")
+	set (ORB_IS_RTORB ON)
 endif()
 
-
-
-
-
-
-
-set (RTC_CORBA_CXXMAPPING11 ON)
-
-
-
-
-#ADD_DEFINITIONS(-DRTC_CORBA_CXXMAPPING11)
-
-
-
-
-
-
-#ADD_DEFINITIONS(-DCORBA_ANY_SHARED_PTR_OPERATORS -DINCLUDE_CORBA_CORBALOC)
-
-
-
-
-
-
-
-
-
-
-
-
+#==============================
+# Configuration options output
+#==============================
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config_rtc_cmake.h.in ${PROJECT_BINARY_DIR}/config_rtc.h)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/version_cmake.h.in ${PROJECT_BINARY_DIR}/version.h)
 
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config_rtc_cmake.h.in ${CMAKE_CURRENT_SOURCE_DIR}/config_rtc.h)
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/version_cmake.h.in ${CMAKE_CURRENT_SOURCE_DIR}/version.h)
 
-
-
-
+#==============================
+# Compile/link settings
+#==============================
 if(VXWORKS)
 else(VXWORKS)
 	link_directories(${ORB_LINK_DIR})
 endif(VXWORKS)
 
-include_directories(${ORB_INCLUDE_DIR})
+add_definitions(${ORB_C_FLAGS_LIST})
+add_definitions(${COIL_C_FLAGS_LIST})
 
+if(${CMAKE_SYSTEM_NAME}test MATCHES QNXtest)
+	include_directories(SYSTEM /usr/local/include)
+	link_directories(/usr/qnx650/target/qnx6/x86/lib/gcc/4.4.2/ /usr/qnx650/target/qnx6/x86/lib/ /usr/local/lib)
+endif()
 
-set(RTM_INCLUDE_DIR ${CMAKE_SOURCE_DIR}
-		${CMAKE_SOURCE_DIR}/src/lib/coil/common
-		${PROJECT_BINARY_DIR}/idl
-		${CMAKE_SOURCE_DIR}/src/lib/coil/${COIL_OS_DIR}
-		${PROJECT_BINARY_DIR}/..
-		${CMAKE_CURRENT_SOURCE_DIR}/..
-		)
-
-
-
-
-
-
-
-include_directories(
-		${RTM_INCLUDE_DIR}
-		)
-
-
-
-
-set(RTM_INCLUDE_DIR ${RTM_INCLUDE_DIR}  PARENT_SCOPE)
-
-
-
+#==============================
+# Subdirectories settings
+#==============================
 add_subdirectory(idl)
-
 add_subdirectory(ext)
 
-
-
+#==============================
+# Header list
+#==============================
 set(rtm_headers
 	ConfigAdmin.h
 	ModuleManager.h
@@ -216,6 +161,7 @@ set(rtm_headers
 	ConfigurationListener.h
 	OutPortPullConnector.h
 	LogstreamFile.h
+	LogstreamBase.h
 	RTCUtil.h
 	CdrRingBuffer.h
 	InPortCorbaCdrProvider.h
@@ -262,11 +208,6 @@ set(rtm_headers
 	EventPort.h
 	Macho.h
 	StaticFSM.h
-	InPortSHMConsumer.h
-	InPortSHMProvider.h
-	OutPortSHMConsumer.h
-	OutPortSHMProvider.h
-	SharedMemoryPort.h
 	Timestamp.h
 	SimulatorExecutionContext.h
 	DirectInPortBase.h
@@ -284,11 +225,17 @@ set(rtm_headers
 	InPortDSConsumer.h
 	MultilayerCompositeEC.h
 	EventBase.h
+	CORBA_CdrMemoryStream.h
+	ByteData.h
+	ByteDataStreamBase.h
+	DataTypeUtil.h
 	${PROJECT_BINARY_DIR}/config_rtc.h
 	${PROJECT_BINARY_DIR}/version.h
 )
 
-
+#==============================
+# Source list
+#==============================
 set(rtm_srcs
 	ConfigAdmin.cpp
 	ModuleManager.cpp
@@ -351,13 +298,7 @@ set(rtm_srcs
 	NumberingPolicy.cpp
 	FsmActionListener.cpp
 	Macho.cpp
-	InPortSHMConsumer.cpp
-	InPortSHMProvider.cpp
-	OutPortSHMConsumer.cpp
-	OutPortSHMProvider.cpp
-	SharedMemoryPort.cpp
 	SimulatorExecutionContext.cpp
-	NumberingPolicyBase.cpp
 	NamingServiceNumberingPolicy.cpp
 	NodeNumberingPolicy.cpp
 	OutPortDirectConsumer.cpp
@@ -368,9 +309,15 @@ set(rtm_srcs
 	InPortDSProvider.cpp
 	InPortDSConsumer.cpp
 	MultilayerCompositeEC.cpp
+	ByteData.cpp
+	ByteDataStreamBase.cpp
+	CORBA_CdrMemoryStream.cpp
+	ConnectorBase.cpp
+	LocalServiceBase.cpp
 	${rtm_headers}
 )
 
+# TAO specific sources and headers
 if(CORBA MATCHES "TAO")
 	set(rtm_headers ${rtm_headers}
 		InPortCorbaCdrUDPConsumer.h
@@ -382,6 +329,25 @@ if(CORBA MATCHES "TAO")
 	 )
 endif()
 
+# RtORB　specific sources and headers
+if(NOT CORBA MATCHES "RtORB")
+	set(rtm_headers ${rtm_headers}
+		SharedMemoryPort.h
+		InPortSHMConsumer.h
+		InPortSHMProvider.h
+		OutPortSHMConsumer.h
+		OutPortSHMProvider.h
+	 )
+	set(rtm_srcs ${rtm_srcs}
+		SharedMemoryPort.cpp
+		InPortSHMConsumer.cpp
+		InPortSHMProvider.cpp
+		OutPortSHMConsumer.cpp
+		OutPortSHMProvider.cpp
+	 )
+endif()
+
+# VxWorks specific sources/headers and settings
 if(VXWORKS)
 	set(rtm_headers ${rtm_headers} VxWorksRTExecutionContext.h)
 	set(rtm_srcs ${rtm_srcs} VxWorksRTExecutionContext.cpp)
@@ -392,129 +358,121 @@ if(VXWORKS)
 	endif(RTP)
 endif(VXWORKS)
 
-
-if(OBSERVER_ENABLE)
-	add_definitions(-DENABLE_OBSERVER)
-	include_directories(${CMAKE_SOURCE_DIR}/src)
-	#set(rtm_headers ${rtm_headers} ${CMAKE_SOURCE_DIR}/src/ext/sdo/observer/ComponentObserverConsumer.h)
-	set(rtm_srcs ${rtm_srcs} ${CMAKE_SOURCE_DIR}/src/ext/sdo/observer/ComponentObserverConsumer.cpp	)
-	install(FILES ${CMAKE_SOURCE_DIR}/src/ext/sdo/observer/ComponentObserverConsumer.h DESTINATION ${INSTALL_RTM_EXT_DIR}/sdo/observer COMPONENT headers)
-endif(OBSERVER_ENABLE)
-
-
-
-
-
-
-#message(STATUS ${ALL_IDL_SRCS})
-
-#message(STATUS ${ORB_LIBRARIES})
-
-#add_executable(rtm rtcd.cpp TestRTC.cpp ${rtm_srcs} ${ALL_IDL_SRCS})
-#add_library(rtm STATIC ${rtm_srcs} ${ALL_IDL_SRCS} )
-
-
-
-
-
-if(WIN32)
-	#FOREACH(filename ${SKEL_IDL_SRCS})
-	#	set(skel_files ${skel_files} ${SKEL_IDL_DIR}/${filename})
-	#ENDFOREACH()
-
-	set(DEF_FILE_NAME  ${RTM_PROJECT_NAME}.def)
-	#ADD_DEFINITIONS(-DLIBRARY_EXPORTS)
-	#add_library(${RTM_PROJECT_NAME}_static STATIC ${rtm_srcs} ${ALL_IDL_SRCS_RTM})
-
-	set(rtm_srcs ${rtm_srcs} ${SKEL_IDL_SRCS})
-	set_source_files_properties(${SKEL_IDL_SRCS} PROPERTIES GENERATED 1)
-	add_library(${RTM_PROJECT_NAME}_static STATIC ${rtm_srcs} )
-	
-	add_dependencies(${RTM_PROJECT_NAME}_static ALL_IDL_TGT)
-	#add_dependencies(${RTM_PROJECT_NAME}_static ${RTCSKEL_PROJECT_NAME})
-	get_property(rtm_static_location TARGET ${RTM_PROJECT_NAME}_static PROPERTY LOCATION)
-	#message(STATUS ${rtm_static_location})
-	add_custom_command(OUTPUT ${DEF_FILE_NAME}
-		COMMAND python ${MAKE_DEF_COMMAND} ${rtm_static_location} ${RTM_PROJECT_NAME} ${RTM_SHORT_VERSION} ${DEF_FILE_NAME}
-		
-		WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-	)
-	add_custom_target(${RTM_PROJECT_NAME}_TGT DEPENDS ${DEF_FILE_NAME})
-	add_dependencies(${RTM_PROJECT_NAME}_TGT ${RTM_PROJECT_NAME}_static)
-	set(rtm_srcs ${rtm_srcs} ${CMAKE_CURRENT_BINARY_DIR}/${DEF_FILE_NAME})
-
-	#get_property(rtcskel_location TARGET ${RTCSKEL_PROJECT_NAME} PROPERTY LOCATION)
-	#add_custom_command(OUTPUT ${RTCSKEL_PROJECT_NAME}.def
-	#	COMMAND python ${MAKE_DEF_COMMAND} ${rtcskel_location} ${RTCSKEL_PROJECT_NAME} ${RTM_SHORT_VERSION} ${RTCSKEL_PROJECT_NAME}.def
-	#	WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-	#)
-
-#	add_custom_command(OUTPUT ${RTM_PROJECT_NAME}.def
-#		COMMAND lib -out:"rtm_static.lib"  "$(IntDir)*.obj" "idl\\RTCSkel.dir\\Release\\*.obj"
-#		COMMAND python ${MAKE_DEF_COMMAND} rtm_static.lib ${RTM_PROJECT_NAME} ${RTM_SHORT_VERSION} ${RTM_PROJECT_NAME}.def
-#		PRE_LINK
-#		WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-#		DEPENDS ${RTM_PROJECT_NAME}
-#	)
-#	set(rtm_srcs ${rtm_srcs} ${CMAKE_CURRENT_BINARY_DIR}/${RTM_PROJECT_NAME}.def)
-endif(WIN32)
-
-
 if(VXWORKS)
-	add_library(${RTM_PROJECT_NAME} STATIC ${rtm_srcs})
-	install(TARGETS ${RTM_PROJECT_NAME} LIBRARY DESTINATION ${INSTALL_RTM_LIB_DIR}
+	add_library(${PROJECT_NAME} STATIC ${rtm_srcs})
+	openrtm_common_set_compile_props(${PROJECT_NAME})
+	openrtm_include_rtm(${PROJECT_NAME})
+	if(OBSERVER_ENABLE)
+		target_compile_definitions(${PROJECT_NAME} PRIVATE ENABLE_OBSERVER)
+		target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_SOURCE_DIR}/src)
+		target_include_directories(${PROJECT_NAME} SYSTEM PRIVATE ${CMAKE_BINARY_DIR}/src/ext/sdo/observer)
+		add_dependencies(${PROJECT_NAME} ComponentObserverConsumer_IDLTGT)
+	endif(OBSERVER_ENABLE)
+	install(TARGETS ${PROJECT_NAME} LIBRARY DESTINATION ${INSTALL_RTM_LIB_DIR}
 					ARCHIVE DESTINATION ${INSTALL_RTM_BIN_DIR}
 					RUNTIME DESTINATION ${INSTALL_RTM_BIN_DIR}
 					COMPONENT openrtm)
 
 else(VXWORKS)
-	
-	add_library(${RTM_PROJECT_NAME} SHARED ${rtm_srcs})
-	set_target_properties(${RTM_PROJECT_NAME} PROPERTIES DEBUG_POSTFIX d)
+	add_library(${PROJECT_NAME}_objlib OBJECT ${rtm_srcs})
+	openrtm_common_set_compile_props(${PROJECT_NAME}_objlib)
+	openrtm_include_rtm(${PROJECT_NAME}_objlib)
+	target_compile_definitions(${PROJECT_NAME}_objlib PRIVATE LIBRARY_EXPORTS)
+	if(OBSERVER_ENABLE)
+		target_compile_definitions(${PROJECT_NAME}_objlib PRIVATE ENABLE_OBSERVER)
+		target_include_directories(${PROJECT_NAME}_objlib PRIVATE ${CMAKE_SOURCE_DIR}/src)
+		target_include_directories(${PROJECT_NAME}_objlib SYSTEM PRIVATE ${CMAKE_BINARY_DIR}/src/ext/sdo/observer)
+		add_dependencies(${PROJECT_NAME}_objlib ComponentObserverConsumer_IDLTGT)
+	endif(OBSERVER_ENABLE)
 
+	if(WIN32)
+		target_compile_definitions(${PROJECT_NAME}_objlib PRIVATE RTM_SKEL_IMPORT_SYMBOL)
+		add_library(${PROJECT_NAME}-static STATIC
+			$<TARGET_OBJECTS:${COIL_PROJECT_NAME}_objlib>
+			$<TARGET_OBJECTS:${PROJECT_NAME}_objlib>)
+		add_library(${PROJECT_NAME} SHARED
+			$<TARGET_OBJECTS:${COIL_PROJECT_NAME}_objlib>
+			$<TARGET_OBJECTS:${PROJECT_NAME}_objlib>)
+	else()
+		if(CORBA MATCHES "RtORB")
+			add_library(${PROJECT_NAME}-static STATIC
+				$<TARGET_OBJECTS:${PROJECT_NAME}_objlib>
+				$<TARGET_OBJECTS:${COIL_PROJECT_NAME}_objlib>)
+			add_library(${PROJECT_NAME} SHARED
+				$<TARGET_OBJECTS:${PROJECT_NAME}_objlib>
+				$<TARGET_OBJECTS:${COIL_PROJECT_NAME}_objlib>)
+		else()
+			add_library(${PROJECT_NAME}-static STATIC
+				$<TARGET_OBJECTS:${PROJECT_NAME}_objlib>
+				$<TARGET_OBJECTS:${COIL_PROJECT_NAME}_objlib>
+				$<TARGET_OBJECTS:${RTCSKEL_PROJECT_NAME}_objlib>)
+			add_library(${PROJECT_NAME} SHARED
+				$<TARGET_OBJECTS:${PROJECT_NAME}_objlib>
+				$<TARGET_OBJECTS:${COIL_PROJECT_NAME}_objlib>
+				$<TARGET_OBJECTS:${RTCSKEL_PROJECT_NAME}_objlib>)
+		endif()
+	endif()
 
-	
+	openrtm_set_link_props_shared(${PROJECT_NAME})
+	openrtm_set_postfix(${PROJECT_NAME})
 
+	set(libs ${ORB_LIBRARIES} ${UUID_LIBRARIES} ${RTM_LINKER_OPTION})
 
+	if(WIN32)
+		set(libs ${libs} ${RTCSKEL_PROJECT_NAME})
+	endif()
+
+	if(OBSERVER_ENABLE)
+		set(libs ${libs} ComponentObserverConsumer)
+	endif()
+
+	if(CORBA MATCHES "RtORB")
+		set(libs ${libs} ${RTM_IDL_LIBS})
+	endif()
+
+	target_link_libraries(${PROJECT_NAME} PRIVATE ${libs})
 
 	if(UNIX)
-		target_link_libraries(${RTM_PROJECT_NAME} ${ORB_LIBRARIES} ${COIL_PROJECT_NAME} ${RTCSKEL_PROJECT_NAME} ${RTM_LINKER_OPTION})
-		install(TARGETS ${RTM_PROJECT_NAME} LIBRARY DESTINATION ${INSTALL_RTM_LIB_DIR}
+		install(TARGETS ${PROJECT_NAME} LIBRARY DESTINATION ${INSTALL_RTM_LIB_DIR}
 						ARCHIVE DESTINATION ${INSTALL_RTM_LIB_DIR}
 						RUNTIME DESTINATION ${INSTALL_RTM_BIN_DIR}
 						COMPONENT openrtm)
+
+		set_target_properties(${PROJECT_NAME} PROPERTIES VERSION ${RTM_VERSION} SOVERSION ${RTM_SO_VERSION})
+		set_target_properties(${PROJECT_NAME}-static PROPERTIES OUTPUT_NAME ${PROJECT_NAME} CLEAN_DIRECT_OUTPUT 1)
+		install(TARGETS ${PROJECT_NAME}-static LIBRARY DESTINATION ${INSTALL_RTM_LIB_DIR}
+						ARCHIVE DESTINATION ${INSTALL_RTM_LIB_DIR}
+						RUNTIME DESTINATION ${INSTALL_RTM_BIN_DIR}
+						COMPONENT openrtm)
+
 	elseif(WIN32)
-		target_link_libraries(${RTM_PROJECT_NAME} ${ORB_LIBRARIES} ${COIL_PROJECT_NAME} ${RTM_LINKER_OPTION})
-		add_dependencies(${RTM_PROJECT_NAME} ALL_IDL_TGT)
-		set_source_files_properties(${DEF_FILE_NAME} PROPERTIES GENERATED 1)
-		add_dependencies(${RTM_PROJECT_NAME} ${RTM_PROJECT_NAME}_TGT)
-		add_dependencies(${RTM_PROJECT_NAME} ${RTM_PROJECT_NAME}_static)
-		install(TARGETS ${RTM_PROJECT_NAME} LIBRARY DESTINATION ${INSTALL_RTM_LIB_DIR}
+		add_dependencies(${PROJECT_NAME} ${RTCSKEL_PROJECT_NAME}_IDLTGT)
+		add_dependencies(${PROJECT_NAME} ${PROJECT_NAME}-static)
+		install(TARGETS ${PROJECT_NAME} LIBRARY DESTINATION ${INSTALL_RTM_LIB_DIR}
 						ARCHIVE DESTINATION ${INSTALL_RTM_LIB_DIR}
 						RUNTIME DESTINATION ${INSTALL_RTM_LIB_DIR}
 						COMPONENT openrtm)
 
+		install(TARGETS ${PROJECT_NAME}-static LIBRARY DESTINATION ${INSTALL_RTM_LIB_DIR}
+						ARCHIVE DESTINATION ${INSTALL_RTM_LIB_DIR}
+						RUNTIME DESTINATION ${INSTALL_RTM_LIB_DIR}
+						COMPONENT openrtm)
+		set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS OFF)
 	endif()
+
+	if(WIN32)
+		set(DATATYPE_FACTORIES ${RTCSKEL_PROJECT_NAME} PARENT_SCOPE)
+	endif()
+
+	if(CORBA MATCHES "RtORB")
+		set(DATATYPE_FACTORIES ${RTM_IDL_LIBS} PARENT_SCOPE)
+	endif()
+
 endif(VXWORKS)
 
+set(RTM_INCLUDE_IDLS ${RTM_INCLUDE_IDLS} PARENT_SCOPE)
+
+#============================
+# Installation settings
+#============================
 install(FILES  ${rtm_headers} DESTINATION ${INSTALL_RTM_INCLUDE_DIR}/rtm COMPONENT headers)
-
-
-
-add_dependencies(${RTM_PROJECT_NAME} ${COIL_PROJECT_NAME})
-#add_dependencies(rtm ALL_IDL_TGT)
-
-
-
-
-add_dependencies(${RTM_PROJECT_NAME} ${RTCSKEL_PROJECT_NAME})
-
-
-
-
-
-#target_link_libraries(rtm ${ORB_LIBRARIES} coil)
-
-
-
-

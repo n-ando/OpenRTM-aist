@@ -88,7 +88,6 @@ namespace coil
     if (!rhs.m_name.empty() &&
         open(rhs.m_name.c_str(), rhs.m_mode, rhs.m_closeflag) == 0)
       return;
-//    throw std::bad_alloc();
   }
 
   /*!
@@ -136,16 +135,17 @@ namespace coil
     m_fd = ::open(const_cast<char*>(dll_name), O_RDONLY, 0);
     if (!m_fd)
     {
-    	return -1;
+      return -1;
     }
     m_id = loadModule(m_fd, open_mode);
     if (!m_id)
     {
-    	::close(m_fd);
-    	return -1;
+      ::close(m_fd);
+      return -1;
     }
 #endif
     m_name = dll_name;
+    m_closeflag = close_handle_on_destruction;
     return 0;
   }
 
@@ -226,13 +226,13 @@ namespace coil
 #ifndef __RTP__
   extern "C" bool SymbolIterator(char* name, int val, SYM_TYPE type, int arg, UINT16 group)
    {
-	  SymbolObj* symbolObj = reinterpret_cast<SymbolObj*>(arg);
-   	if (group == symbolObj->group && std::strcmp(name, symbolObj->name) == 0)
-   	{
-   		symbolObj->addr = reinterpret_cast<void*>(val);
-   		return false;
-   	}
-   	else return true;
+     SymbolObj* symbolObj = reinterpret_cast<SymbolObj*>(arg);
+     if (group == symbolObj->group && std::strcmp(name, symbolObj->name) == 0)
+     {
+       symbolObj->addr = reinterpret_cast<void*>(val);
+       return false;
+     }
+     else return true;
    };
 #endif
 };

@@ -20,7 +20,7 @@
 #ifndef RTC_PUBLISHERFLUSH_H
 #define RTC_PUBLISHERFLUSH_H
 
-#include <coil/Condition.h>
+#include <condition_variable>
 #include <rtm/PublisherBase.h>
 #include <rtm/SystemLogger.h>
 #include <rtm/ConnectorBase.h>
@@ -29,7 +29,7 @@
 namespace coil
 {
   class Properties;
-};
+} // namespace coil
 
 namespace RTC
 {
@@ -59,10 +59,6 @@ namespace RTC
     : public PublisherBase
   {
   public:
-    typedef coil::Mutex Mutex;
-    typedef coil::Condition<Mutex> Condition;
-    typedef coil::Guard<coil::Mutex> Guard;
-    DATAPORTSTATUS_ENUM
 
     /*!
      * @if jp
@@ -92,7 +88,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~PublisherFlush(void);
+    ~PublisherFlush() override;
 
     /*!
      * @if jp
@@ -103,7 +99,7 @@ namespace RTC
      * ラメータを持たない。
      *
      * @param property 本Publisherの駆動制御情報を設定したPropertyオブジェクト
-     * @return ReturnCode PORT_OK 正常終了
+     * @return DataPortStatus PORT_OK 正常終了
      *                    INVALID_ARGS Properties が不正な値を含む
      *
      * @else
@@ -114,11 +110,11 @@ namespace RTC
      *
      * @param property Property objects that includes the control information
      *                 of this Publisher
-     * @return ReturnCode PORT_OK normal return
+     * @return DataPortStatus PORT_OK normal return
      *                    INVALID_ARGS Properties with invalid values.
      * @endif
      */
-    virtual ReturnCode init(coil::Properties& prop);
+    DataPortStatus init(coil::Properties& prop) override;
 
     /*!
      * @if jp
@@ -129,7 +125,7 @@ namespace RTC
      * それ以外の場合は、PORT_OK が返される。
      *
      * @param consumer Consumer へのポインタ
-     * @return ReturnCode PORT_OK 正常終了
+     * @return DataPortStatus PORT_OK 正常終了
      *                    INVALID_ARGS 引数に不正な値が含まれている
      *
      * @else
@@ -140,12 +136,12 @@ namespace RTC
      * returned.
      *
      * @param consumer A pointer to a consumer object.
-     * @return ReturnCode PORT_OK normal return
+     * @return DataPortStatus PORT_OK normal return
      *                    INVALID_ARGS given argument has invalid value
      *
      * @endif
      */
-    virtual ReturnCode setConsumer(InPortConsumer* consumer);
+    DataPortStatus setConsumer(InPortConsumer* consumer) override;
 
     /*!
      * @if jp
@@ -168,7 +164,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode setBuffer(CdrBufferBase* buffer);
+    DataPortStatus setBuffer(CdrBufferBase* buffer) override;
 
     /*!
      * @if jp
@@ -203,9 +199,9 @@ namespace RTC
      *         INVALID_ARGS Invalid arguments
      * @endif
      */
-    virtual ::RTC::DataPortStatus::Enum
-    setListener(ConnectorInfo& profile,
-                RTC::ConnectorListeners* listeners);
+    ::RTC::DataPortStatus
+    setListener(ConnectorInfo& info,
+                RTC::ConnectorListenersBase* listeners) override;
 
     /*!
      * @if jp
@@ -225,9 +221,8 @@ namespace RTC
      * これら以外のエラーの場合、PORT_ERROR が返される。
      *
      *
-     * @param data 書き込むデータ
-     * @param sec タイムアウト時間
-     * @param nsec タイムアウト時間
+     * @param data    書き込むデータ
+     * @param timeout タイムアウト時間
      *
      * @return PORT_OK             正常終了
      *         PRECONDITION_NO_MET consumer, buffer, listener等が適切に設定
@@ -253,9 +248,8 @@ namespace RTC
      *
      * In other cases, PROT_ERROR will be returned.
      *
-     * @param data Data to be wrote to the buffer
-     * @param sec Timeout time in unit seconds
-     * @param nsec Timeout time in unit nano-seconds
+     * @param data    Data to be wrote to the buffer
+     * @param timeout Timeout time in unit nano-seconds
      * @return PORT_OK             Normal return
      *         PRECONDITION_NO_MET Precondition does not met. A consumer,
      *                             a buffer, listenes are not set properly.
@@ -265,9 +259,9 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode write(cdrMemoryStream& data,
-                             unsigned long sec,
-                             unsigned long usec);
+    DataPortStatus write(ByteDataStreamBase* data,
+                     std::chrono::nanoseconds timeout
+                     = std::chrono::nanoseconds(-1)) override;
     /*!
      * @if jp
      *
@@ -295,7 +289,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual bool isActive();
+    bool isActive() override;
 
     /*!
      * @if jp
@@ -322,7 +316,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode activate();
+    DataPortStatus activate() override;
 
     /*!
      * @if jp
@@ -349,7 +343,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode deactivate();
+    DataPortStatus deactivate() override;
 
   protected:
     /*!
@@ -361,10 +355,9 @@ namespace RTC
      * @param data cdrMemoryStream
      * @endif
      */
-    inline void onSend(cdrMemoryStream& data)
+    inline void onSend(ByteData& data)
     {
-      m_listeners->
-        connectorData_[ON_SEND].notify(m_profile, data);
+      m_listeners->notifyOut(ConnectorDataListenerType::ON_SEND, m_profile, data);
     }
 
     /*!
@@ -376,10 +369,9 @@ namespace RTC
      * @param data cdrMemoryStream
      * @endif
      */
-    inline void onReceived(cdrMemoryStream& data)
+    inline void onReceived(ByteData& data)
     {
-      m_listeners->
-        connectorData_[ON_RECEIVED].notify(m_profile, data);
+      m_listeners->notifyOut(ConnectorDataListenerType::ON_RECEIVED, m_profile, data);
     }
 
     /*!
@@ -391,10 +383,9 @@ namespace RTC
      * @param data cdrMemoryStream
      * @endif
      */
-    inline void onReceiverFull(cdrMemoryStream& data)
+    inline void onReceiverFull(ByteData& data)
     {
-      m_listeners->
-        connectorData_[ON_RECEIVER_FULL].notify(m_profile, data);
+      m_listeners->notifyOut(ConnectorDataListenerType::ON_RECEIVER_FULL, m_profile, data);
     }
 
     /*!
@@ -406,10 +397,9 @@ namespace RTC
      * @param data cdrMemoryStream
      * @endif
      */
-    inline void onReceiverTimeout(cdrMemoryStream& data)
+    inline void onReceiverTimeout(ByteData& data)
     {
-      m_listeners->
-        connectorData_[ON_RECEIVER_TIMEOUT].notify(m_profile, data);
+      m_listeners->notifyOut(ConnectorDataListenerType::ON_RECEIVER_TIMEOUT, m_profile, data);
     }
 
     /*!
@@ -421,28 +411,28 @@ namespace RTC
      * @param data cdrMemoryStream
      * @endif
      */
-    inline void onReceiverError(cdrMemoryStream& data)
+    inline void onReceiverError(ByteData& data)
     {
-      m_listeners->
-        connectorData_[ON_RECEIVER_ERROR].notify(m_profile, data);
+      m_listeners->notifyOut(ConnectorDataListenerType::ON_RECEIVER_ERROR, m_profile, data);
     }
 
   private:
-    Logger rtclog;
-    InPortConsumer* m_consumer;
+    Logger rtclog{"PublisherFlush"};
+    InPortConsumer* m_consumer{nullptr};
     ConnectorInfo m_profile;
-    ConnectorListeners* m_listeners;
-    ReturnCode m_retcode;
-    Mutex m_retmutex;
-    bool m_active;
+    ConnectorListenersBase* m_listeners{nullptr};
+    DataPortStatus m_retcode{DataPortStatus::PORT_OK};
+    std::mutex m_retmutex;
+    bool m_active{false};
+    ByteData m_data;
   };
 
-};  // namespace RTC
+} // namespace RTC
 
 extern "C"
 {
-  void DLL_EXPORT PublisherFlushInit();
-};
+  void PublisherFlushInit();
+}
 
 #endif  // RTC_PUBLISHERFLUSH_H
 

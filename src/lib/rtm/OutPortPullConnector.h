@@ -81,9 +81,7 @@ namespace RTC
   class OutPortPullConnector
     : public OutPortConnector
   {
-    typedef coil::Guard<coil::Mutex> Guard;
   public:
-    DATAPORTSTATUS_ENUM
 
     /*!
      * @if jp
@@ -127,8 +125,8 @@ namespace RTC
      */
     OutPortPullConnector(ConnectorInfo info,
                          OutPortProvider* provider,
-                         ConnectorListeners& listeners,
-                         CdrBufferBase* buffer = 0);
+                         ConnectorListenersBase* listeners,
+                         CdrBufferBase* buffer = nullptr);
 
     /*!
      * @if jp
@@ -145,7 +143,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~OutPortPullConnector();
+    ~OutPortPullConnector() override;
 
     /*!
      * @if jp
@@ -163,9 +161,9 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode write(cdrMemoryStream& data);
+    DataPortStatus write(ByteDataStreamBase* data) override;
 
-    virtual CdrBufferBase::ReturnCode read(cdrMemoryStream &data);
+    BufferStatus read(ByteData &data) override;
 
     /*!
      * @if jp
@@ -182,7 +180,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode disconnect();
+    DataPortStatus disconnect() override;
 
     /*!
      * @if jp
@@ -197,7 +195,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual CdrBufferBase* getBuffer();
+    CdrBufferBase* getBuffer() override;
 
     /*!
      * @if jp
@@ -213,7 +211,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual void activate() {}  // do nothing
+    void activate() override {}  // do nothing
 
     /*!
      * @if jp
@@ -229,7 +227,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual void deactivate() {}  // do nothing
+    void deactivate() override {}  // do nothing
 
     /*!
      * @if jp
@@ -238,7 +236,7 @@ namespace RTC
      * @brief create buffer
      * @endif
      */
-    CdrBufferBase* createBuffer(ConnectorInfo& info);
+    static CdrBufferBase* createBuffer(ConnectorInfo& info);
 
     /*!
      * @if jp
@@ -275,7 +273,7 @@ namespace RTC
      * @brief A reference to a ConnectorListener
      * @endif
      */
-    ConnectorListeners& m_listeners;
+    ConnectorListenersBase* m_listeners;
 
     /*!
      * @if jp
@@ -290,16 +288,16 @@ namespace RTC
 
       struct WorkerThreadCtrl
       {
-          WorkerThreadCtrl() : cond_(mutex_), completed_(false) {}
-          coil::Mutex mutex_;
-          coil::Condition<coil::Mutex> cond_;
-          bool completed_;
+          WorkerThreadCtrl() {}
+          std::mutex mutex_;
+          std::condition_variable cond_;
+          bool completed_{false};
       };
       WorkerThreadCtrl m_writecompleted_worker;
       WorkerThreadCtrl m_readcompleted_worker;
       WorkerThreadCtrl m_readready_worker;
 
   };
-};  // namespace RTC
+} // namespace RTC
 
 #endif  // RTC_PULL_CONNECTOR_H

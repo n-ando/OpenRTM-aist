@@ -38,18 +38,12 @@ namespace coil
     char* m_uuidstr;
   };
 
-
-  class UUID_Generator
+  namespace UUID_Generator
   {
-  public:
-    UUID_Generator();
-    ~UUID_Generator();
-    void init();
-    coil::UUID* generateUUID(int n, int h);
-  };
-};  // namespace coil
-#endif
-#if defined(COIL_OS_LINUX) || defined(COIL_OS_DARWIN) || defined(COIL_OS_CYGWIN)
+    UUID* generateUUID(int n, int h);
+  } // namespace UUID_Generator
+} // namespace coil
+#elif defined(COIL_OS_LINUX) || defined(COIL_OS_DARWIN) || defined(COIL_OS_QNX)
 #include <uuid/uuid.h>
 namespace coil
 {
@@ -59,19 +53,14 @@ namespace coil
     char buf[37];
   public:
     UUID();
-    explicit UUID(uuid_t*);
+    explicit UUID(uuid_t* /*uuid*/);
     const char* to_string();
   };
 
-  class UUID_Generator
+  namespace UUID_Generator
   {
-  public:
-    UUID_Generator();
-
-    void init();
     UUID* generateUUID(int n, int h);
-  };
-};  // namespace coil
+  } // namespace UUID_Generator
+} // namespace coil
 #endif
-
 #endif  // COIL_UUID_H

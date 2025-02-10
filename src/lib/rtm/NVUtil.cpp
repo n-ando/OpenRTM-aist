@@ -17,14 +17,6 @@
  *
  */
 
-#ifdef WIN32
-#pragma warning( push )
-#pragma warning( disable : 4267 )
-#pragma warning( disable : 4290 )
-#pragma warning( disable : 4311 )
-#pragma warning( disable : 4312 )
-#endif  // WIN32
-
 #include <coil/stringutil.h>
 #include <rtm/NVUtil.h>
 #include <rtm/CORBA_SeqUtil.h>
@@ -32,10 +24,6 @@
 #include <algorithm>
 #include <map>
 #include <vector>
-
-#ifdef WIN32
-#pragma warning( pop )
-#endif  // WIN32
 
 namespace NVUtil
 {
@@ -114,19 +102,65 @@ namespace NVUtil
   {
     std::vector<std::string> keys;
     keys = prop.propertyNames();
-    CORBA::ULong len((CORBA::ULong)keys.size());
+    CORBA::ULong len(static_cast<CORBA::ULong>(keys.size()));
     nv.length(len);
 
     for (CORBA::ULong i = 0; i < len; ++i)
       {
 // Why RtORB does not copy string to Properties.
-#ifndef ORB_IS_RTORB
         nv[i].name = CORBA::string_dup(keys[i].c_str());
-#else  // ORB_IS_RTORB
-        nv[i].name = reinterpret_cast<char *>(keys[i].c_str());
-#endif  // ORB_IS_RTORB
         nv[i].value <<= prop[keys[i]].c_str();
       }
+  }
+
+
+  /*!
+   * @if jp
+   * @brief Properties を NVList へマージする
+   * @else
+   * @brief Merge the properties to NVList
+   * @endif
+   */
+#ifndef ORB_IS_RTORB
+  void mergeFromProperties(SDOPackage::NVList& nv, const coil::Properties& prop)
+#else  // ORB_IS_RTORB
+  void mergeFromProperties(SDOPackage_NVList& nv, const coil::Properties& prop)
+#endif  // ORB_IS_RTORB
+  {
+    std::vector<std::string> keys;
+    keys = prop.propertyNames();
+#ifndef ORB_IS_RTORB
+    SDOPackage::NVList nve;
+#else  // ORB_IS_RTORB
+    SDOPackage_NVList nve;
+#endif  // ORB_IS_RTORB
+    nve.length(static_cast<CORBA::ULong>(keys.size()));
+
+    CORBA::ULong nsize(0);
+    for (CORBA::ULong i = 0; i < nv.length(); ++i)
+      {
+        if (prop.findNode(static_cast<const char*>(nv[i].name)) == nullptr)
+          {
+            nve[nsize] = nv[i];
+            nsize++;
+          }
+      }
+
+    CORBA::ULong ksize(static_cast<CORBA::ULong>(keys.size()));
+    CORBA::ULong len(ksize + nsize);
+    nv.length(len);
+
+    for (CORBA::ULong i = 0; i < ksize; ++i)
+      {
+        nv[i].name = CORBA::string_dup(keys[i].c_str());
+        nv[i].value <<= prop[keys[i]].c_str();
+      }
+
+    for (CORBA::ULong i = 0; i < nsize; ++i)
+      {
+        nv[i+ ksize] = nve[i];
+      }
+
   }
 
   /*!
@@ -140,7 +174,7 @@ namespace NVUtil
   {
     for (CORBA::ULong i(0), len(nv.length()); i < len; ++i)
       {
-        const char* value(NULL);
+        const char* value(nullptr);
         if (nv[i].value >>= value)
           {
             const char* name(nv[i].name);
@@ -161,10 +195,10 @@ namespace NVUtil
     to_prop()
       : m_prop(coil::Properties())
     {
-    };
+    }
     void operator()(const SDOPackage::NameValue& nv)
     {
-      const char* value(NULL);
+      const char* value(nullptr);
       if (nv.value >>= value)
         {
           m_prop.setProperty(CORBA::string_dup(nv.name), value);
@@ -227,7 +261,7 @@ namespace NVUtil
    * @brief Return the index of element specified by name from NVList
    * @endif
    */
-  const CORBA::Long find_index(const SDOPackage::NVList& nv, const char* name)
+  CORBA::Long find_index(const SDOPackage::NVList& nv, const char* name)
   {
     return  CORBA_SeqUtil::find(nv, NVUtil::nv_find(name));
   }
@@ -245,7 +279,7 @@ namespace NVUtil
       {
         CORBA::Any value;
         value = find(nv, name);
-        const char* str_value(NULL);
+        const char* str_value(nullptr);
         return value >>= str_value;
       }
     catch (...)
@@ -284,7 +318,7 @@ namespace NVUtil
    */
   std::string toString(const SDOPackage::NVList& nv, const char* name)
   {
-    const char* str_value(NULL);
+    const char* str_value(nullptr);
     try
       {
         if (!(find(nv, name) >>= str_value))
@@ -297,7 +331,7 @@ namespace NVUtil
         str_value = "";
       }
 
-    if (str_value == NULL)
+    if (str_value == nullptr)
       {
         str_value = "";
       }
@@ -320,7 +354,6 @@ namespace NVUtil
                          const char* value)
 #endif  // ORB_IS_RTORB
   {
-    //    if (!isString(nv, name)) return false;
 
     CORBA::Long index;
     index = find_index(nv, name);
@@ -331,7 +364,7 @@ namespace NVUtil
       }
     else
       {
-        const char* tmp_char(NULL);
+        const char* tmp_char(nullptr);
         nv[index].value >>= tmp_char;
         std::string tmp_str(tmp_char);
 
@@ -435,4 +468,4 @@ namespace NVUtil
     dump_to_stream(s, nv);
     return s.str();
   }
-};  // namespace NVUtil
+} // namespace NVUtil

@@ -19,7 +19,7 @@
 
 #include <coil/config_coil.h>
 #include <coil/Signal.h>
-#include <signal.h>
+#include <csignal>
 
 namespace coil
 {
@@ -31,7 +31,7 @@ namespace coil
    * @endif
    */
   SignalAction::SignalAction()
-    : m_handle(0), m_signum(0), m_mask(0), m_flags(0)
+    : m_handle(nullptr), m_signum(0), m_mask(nullptr), m_flags(0)
   {
   }
 
@@ -59,6 +59,22 @@ namespace coil
 
   /*!
    * @if jp
+   * @brief 代入演算子
+   * @else
+   * @brief 
+   * @endif
+   */
+  SignalAction& SignalAction::operator=(const SignalAction &signal)
+  {
+      m_handle = signal.m_handle;
+      m_signum = signal.m_signum;
+      m_mask = signal.m_mask;
+      m_flags = signal.m_flags;
+      return *this;
+  }
+
+  /*!
+   * @if jp
    * @brief デストラクタ
    * @else
    * @brief Destructor
@@ -68,4 +84,4 @@ namespace coil
   {
   }
 
-};  // namespace coil
+} // namespace coil

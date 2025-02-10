@@ -82,8 +82,8 @@ void usage()
 
 int main (int argc, char** argv)
 {
-  int _argc(0);
-  char** _argv(0);
+  int argc_(0);
+  char** argv_(0);
 
   std::string subs_type("flush");
   std::string period;
@@ -101,77 +101,68 @@ int main (int argc, char** argv)
 
   for (int i = 1; i < argc; ++i)
     {
-      std::string arg(argv[i]);
-      coil::normalize(arg);
+      std::string arg{coill::normalize(argv[i])};
       if (arg == "--flush")         subs_type = "flush";
       else if (arg == "--new")      subs_type = "new";
       else if (arg == "--periodic")
-	{
-	  subs_type = "periodic";
-	  if (++i < argc) period = argv[i];
-	  else            period = "1.0";
-	}
+        {
+          subs_type = "periodic";
+          if (++i < argc) period = argv[i];
+          else            period = "1.0";
+        }
       else if (arg == "--help")
-	{
-	  usage();
-	  exit(1);
-	}
+        {
+          usage();
+          exit(1);
+        }
       else if (arg == "--policy")
-	{
-	  if (++i < argc)
-	    {
-	      std::string arg2(argv[i]);
-	      coil::normalize(arg2);
-	      push_policy = arg2;
-	    }
-	  else            push_policy = "new";
-	}
+        {
+          if (++i < argc)
+            {
+              push_policy = coill::normalize(argv[i]);
+            }
+          else            push_policy = "new";
+        }
       else if (arg == "--skip")
-	{
-	  if (++i < argc) skip_count = argv[i];
-	  else            skip_count = "0";
-	}
+        {
+          if (++i < argc) skip_count = argv[i];
+          else            skip_count = "0";
+        }
 
       if (arg == "--endian")
-	{
-	  if (++i < argc)
-	    {
-	      std::string arg2(argv[i]);
-	      coil::normalize(arg2);
-	      endian = arg2;
-	    }
-	  else            endian = "";
-	}
+        {
+          if (++i < argc)
+            {
+              endian = coill::normalize(argv[i]);
+            }
+          else            endian = "";
+        }
       if (arg == "--port")
-	{
-	  if (++i < argc)
-	    {
-	      port_no = argv[i];
-	    }
-	}
+        {
+          if (++i < argc)
+            {
+              port_no = argv[i];
+            }
+        }
       if (arg == "--origin")
-	{
-	  if (++i < argc)
-	    {
-	      std::string arg2(argv[i]);
-	      coil::normalize(arg2);
-	      connect_origin = arg2;
-	    }
-	}
+        {
+          if (++i < argc)
+            {
+              connect_origin = coill::normalize(argv[i]);
+            }
+        }
       if (arg == "--buffer")
-	{
-	  if (++i < argc)
-	    {
-	      std::string key(argv[i]);
-	      key = coil::normalize(key);
-	      std::string val(argv[++i]);
-	      val = coil::normalize(val);
-	      buffer_prop.insert(std::pair< std::string, std::string >(key,val));
-	    }
-	}
+        {
+          if (++i < argc)
+            {
+              buffer_prop.emplace(coil::normalize(argv[i]),
+                                  coil::normalize(argv[i+1]));
+              i += 1;
+            }
+        }
     }
-  
-  CORBA::ORB_var orb = CORBA::ORB_init(_argc, _argv);
+
+  CORBA::ORB_var orb = CORBA::ORB_init(argc_, argv_);
   std::string name_server("localhost:");
   name_server.append(port_no);
   CorbaNaming naming(orb, name_server.c_str());

@@ -20,7 +20,6 @@
 #ifndef RTC_SDOSERVICEPROVIDERBASE_H
 #define RTC_SDOSERVICEPROVIDERBASE_H
 
-#include <coil/Mutex.h>
 #include <coil/Factory.h>
 #include <coil/Timer.h>
 #include <rtm/RTC.h>
@@ -143,7 +142,7 @@ namespace RTC
      * @brief virtual destructor
      * @endif
      */
-    virtual ~SdoServiceProviderBase() {}
+    ~SdoServiceProviderBase() override;
 
     /*!
      * @if jp
@@ -242,6 +241,9 @@ namespace RTC
     virtual void finalize() = 0;
   };
 
+  // No inline for gcc warning, too big
+  SdoServiceProviderBase::~SdoServiceProviderBase() = default;
+
     /*!
      * @if jp
      * @brief SdoServiceProviderFactory の typedef
@@ -249,8 +251,8 @@ namespace RTC
      * @brief typedef of sdoServiceProviderFactory
      * @endif
      */
-  typedef ::coil::GlobalFactory<
-    ::RTC::SdoServiceProviderBase > SdoServiceProviderFactory;
+  using SdoServiceProviderFactory = ::coil::GlobalFactory< ::RTC::SdoServiceProviderBase>;
+} // namespace RTC
 
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
     /*!
@@ -260,9 +262,9 @@ namespace RTC
      * @brief Explicit instantiation of class template
      * @endif
      */
-  EXTERN template class DLL_PLUGIN
-                     ::coil::GlobalFactory< ::RTC::SdoServiceProviderBase >;
+EXTERN template class DLL_PLUGIN coil::GlobalFactory<RTC::SdoServiceProviderBase >;
+#elif defined(__GNUC__)
+EXTERN template class coil::GlobalFactory<RTC::SdoServiceProviderBase>;
 #endif
-};  // namespace RTC
 
 #endif  // RTC_SDOSERVICEPROVIDERBASE_H

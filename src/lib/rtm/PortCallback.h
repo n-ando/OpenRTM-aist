@@ -68,7 +68,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~ConnectionCallback(void) {}
+    virtual ~ConnectionCallback() = default;
 
     /*!
      * @if jp
@@ -137,7 +137,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~DisconnectCallback(void) {}
+    virtual ~DisconnectCallback() = default;
     /*!
      * @if jp
      *
@@ -205,7 +205,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~OnWrite(void) {}
+    virtual ~OnWrite() = default;
 
     /*!
      * @if jp
@@ -270,7 +270,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~OnWriteConvert(void) {}
+    virtual ~OnWriteConvert() = default;
 
     /*!
      * @if jp
@@ -337,7 +337,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~OnRead(void) {}
+    virtual ~OnRead() = default;
 
     /*!
      * @if jp
@@ -399,7 +399,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~OnReadConvert(void) {}
+    virtual ~OnReadConvert() = default;
 
     /*!
      * @if jp
@@ -431,5 +431,5 @@ namespace RTC
   };
 
 
-};  // namespace RTC
+} // namespace RTC
 #endif  // RTC_PORTCALLBACK_H

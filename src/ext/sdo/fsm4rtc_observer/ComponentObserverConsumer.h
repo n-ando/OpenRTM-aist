@@ -20,7 +20,6 @@
 #ifndef RTC_COMPONENTOBSERVERCONSUMER_H
 #define RTC_COMPONENTOBSERVERCONSUMER_H
 
-#include <coil/Mutex.h>
 #include <coil/Factory.h>
 #include <coil/stringutil.h>
 #include <rtm/SdoServiceConsumerBase.h>
@@ -141,7 +140,7 @@ namespace RTC
      * @brief dtor
      * @endif
      */
-    virtual ~ComponentObserverConsumer();
+    ~ComponentObserverConsumer() override;
 
     /*!
      * @if jp
@@ -150,8 +149,8 @@ namespace RTC
      * @brief Initialization
      * @endif
      */
-    virtual bool init(RTObject_impl& rtobj,
-                      const SDOPackage::ServiceProfile& profile);
+    bool init(RTObject_impl& rtobj,
+              const SDOPackage::ServiceProfile& profile) override;
 
     /*!
      * @if jp
@@ -160,7 +159,7 @@ namespace RTC
      * @brief Re-initialization
      * @endif
      */
-    virtual bool reinit(const SDOPackage::ServiceProfile& profile);
+    bool reinit(const SDOPackage::ServiceProfile& profile) override;
 
     /*!
      * @if jp
@@ -169,7 +168,7 @@ namespace RTC
      * @brief getting ServiceProfile
      * @endif
      */
-    virtual const SDOPackage::ServiceProfile& getProfile() const;
+    const SDOPackage::ServiceProfile& getProfile() const override;
     
     /*!
      * @if jp
@@ -178,7 +177,7 @@ namespace RTC
      * @brief Finalization
      * @endif
      */
-    virtual void finalize();
+    void finalize() override;
 
   protected:
     /*!
@@ -196,7 +195,7 @@ namespace RTC
         }
       catch (...)
         {
-          m_rtobj->removeSdoServiceConsumer(m_profile.id);
+          m_rtobj->removeSdoServiceConsumerStartThread(m_profile.id);
         }
     }
 
@@ -207,23 +206,23 @@ namespace RTC
      * @brief Converting kind to string
      * @endif
      */
-    inline const char* toString(RTC::StatusKind kind)
+    static inline const char* toString(RTC::StatusKind kind)
     {
-      static const char* kinds[] = 
+      static const char* const kinds[] = 
         {
           "COMPONENT_PROFILE",
           "RTC_STATUS",
           "EC_STATUS",
           "PORT_PROFILE",
           "CONFIGURATION",
-          "RTC_HEARTBEAT"
+          "RTC_HEARTBEAT",
           "EC_HEARTBEAT",
           "FSM_PROFILE",
           "FSM_STATUS",
           "FSM_STRUCTURE",
           "USER_DEFINED"
         };
-      return (size_t)kind < sizeof(kind)/sizeof(char*) ? kinds[kind] : "";
+      return static_cast<size_t>(kind) < sizeof(kinds)/sizeof(kinds[0]) ? kinds[kind] : "";
     }
 
     /*!
@@ -248,15 +247,6 @@ namespace RTC
 
     //============================================================
     // Heartbeat related functions
-    /*!
-     * @if jp
-     * @brief ハートビートをオブザーバに伝える
-     * @else
-     * @brief Sending a heartbeart signal to observer
-     * @endif
-     */
-    void rtcHeartbeat();
-
     /*!
      * @if jp
      * @brief ハートビートを設定する
@@ -477,9 +467,9 @@ namespace RTC
     {
     public:
       CompStatMsg(ComponentObserverConsumer& coc)
-        : activatedListener(NULL), deactivatedListener(NULL),
-          resetListener(NULL), abortingListener(NULL),
-          finalizeListener(NULL), m_coc(coc) {}
+        : activatedListener(nullptr), deactivatedListener(nullptr),
+          resetListener(nullptr), abortingListener(nullptr),
+          finalizeListener(nullptr), m_coc(coc) {}
       void onGeneric(const char* msgprefix, UniqueId ec_id, ReturnCode_t ret)
       {
         if (ret == RTC::RTC_OK)
@@ -507,6 +497,8 @@ namespace RTC
       }
       void onFinalize(UniqueId ec_id, ReturnCode_t ret)
       {
+        m_coc.unsetRTCHeartbeat();
+        m_coc.unsetECHeartbeat();
         onGeneric("FINALIZE:", ec_id, ret);
       }
 
@@ -530,8 +522,8 @@ namespace RTC
     {
     public:
       PortAction(ComponentObserverConsumer& coc)
-        : portAddListener(NULL), portRemoveListener(NULL),
-          portConnectListener(NULL), portDisconnectListener(NULL),
+        : portAddListener(nullptr), portRemoveListener(nullptr),
+          portConnectListener(nullptr), portDisconnectListener(nullptr),
           m_coc(coc) {}
       void onGeneric(const char* _msg, const char* portname)
       {
@@ -548,7 +540,7 @@ namespace RTC
         onGeneric("REMOVE:", static_cast<const char*>(pprof.name));
       }
       void onConnect(const char* portname,
-                     ::RTC::ConnectorProfile& pprof, ReturnCode_t ret)
+                     ::RTC::ConnectorProfile&  /*pprof*/, ReturnCode_t ret)
       {
         if (ret == RTC::RTC_OK)
           {
@@ -556,7 +548,7 @@ namespace RTC
           }
       }
       void onDisconnect(const char* portname,
-                        ::RTC::ConnectorProfile& pprof, ReturnCode_t ret)
+                        ::RTC::ConnectorProfile&  /*pprof*/, ReturnCode_t ret)
       {
         if (ret == RTC::RTC_OK)
           {
@@ -584,9 +576,7 @@ namespace RTC
     {
     public:
       ECAction(ComponentObserverConsumer& coc)
-        : ecAttached(NULL), ecDetached(NULL), ecRatechanged(NULL),
-          ecStartup(NULL), ecShutdown(NULL),
-          m_coc(coc) {}
+        : m_coc(coc) {}
       void onGeneric(const char* _msg, UniqueId ec_id)
       {
         std::string msg(_msg + coil::otos(ec_id));
@@ -621,11 +611,11 @@ namespace RTC
             onGeneric("SHUTDOWN:", ec_id);
           }
       }
-      ExecutionContextActionListener* ecAttached;
-      ExecutionContextActionListener* ecDetached;
-      PostComponentActionListener* ecRatechanged;
-      PostComponentActionListener* ecStartup;
-      PostComponentActionListener* ecShutdown;
+      ExecutionContextActionListener* ecAttached{nullptr};
+      ExecutionContextActionListener* ecDetached{nullptr};
+      PostComponentActionListener* ecRatechanged{nullptr};
+      PostComponentActionListener* ecStartup{nullptr};
+      PostComponentActionListener* ecShutdown{nullptr};
     private:
       ComponentObserverConsumer& m_coc;
     };
@@ -641,10 +631,7 @@ namespace RTC
     {
     public:
       ConfigAction(ComponentObserverConsumer& coc)
-        : updateConfigParamListener(NULL), setConfigSetListener(NULL),
-          addConfigSetListener(NULL), updateConfigSetListener(NULL),
-          removeConfigSetListener(NULL), activateConfigSetListener(NULL),
-          m_coc(coc) {}
+        : m_coc(coc) {}
       void updateConfigParam(const char* configsetname,
                              const char* configparamname)
       {
@@ -685,12 +672,12 @@ namespace RTC
         m_coc.updateStatus(RTC::CONFIGURATION, msg.c_str());
       }
       // Listener object's pointer holder
-      ConfigurationParamListener*   updateConfigParamListener;
-      ConfigurationSetListener*     setConfigSetListener;
-      ConfigurationSetListener*     addConfigSetListener;
-      ConfigurationSetNameListener* updateConfigSetListener;
-      ConfigurationSetNameListener* removeConfigSetListener;
-      ConfigurationSetNameListener* activateConfigSetListener;
+      ConfigurationParamListener*   updateConfigParamListener{nullptr};
+      ConfigurationSetListener*     setConfigSetListener{nullptr};
+      ConfigurationSetListener*     addConfigSetListener{nullptr};
+      ConfigurationSetNameListener* updateConfigSetListener{nullptr};
+      ConfigurationSetNameListener* removeConfigSetListener{nullptr};
+      ConfigurationSetNameListener* activateConfigSetListener{nullptr};
 
     private:
       ComponentObserverConsumer& m_coc;
@@ -698,9 +685,9 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ConfigActionListener
+     * @brief FSMActionListener
      * @else
-     * @brief ConfigActionListener
+     * @brief FSMActionListener
      * @endif
      */
     class FSMAction
@@ -741,27 +728,27 @@ namespace RTC
         m_coc.updateStatus(RTC::FSM_STATUS, msg.c_str());
       }
 
-      void postInit(const char* state, ReturnCode_t ret)
+      void postInit(const char* state, ReturnCode_t  /*ret*/)
       {
         std::string msg(state); msg += " POST_ON_INIT";
         m_coc.updateStatus(RTC::FSM_STATUS, msg.c_str());
       }
-      void postEntry(const char* state, ReturnCode_t ret)
+      void postEntry(const char* state, ReturnCode_t  /*ret*/)
       {
         std::string msg(state); msg += " POST_ONENTRY";
         m_coc.updateStatus(RTC::FSM_STATUS, msg.c_str());
       }
-      void postDo(const char* state, ReturnCode_t ret)
+      void postDo(const char* state, ReturnCode_t  /*ret*/)
       {
         std::string msg(state); msg += " POST_ON_DO";
         m_coc.updateStatus(RTC::FSM_STATUS, msg.c_str());
       }
-      void postExit(const char* state, ReturnCode_t ret)
+      void postExit(const char* state, ReturnCode_t  /*ret*/)
       {
         std::string msg(state); msg += " POST_ON_EXIT";
         m_coc.updateStatus(RTC::FSM_STATUS, msg.c_str());
       }
-      void postStateChange(const char* state, ReturnCode_t ret)
+      void postStateChange(const char* state, ReturnCode_t  /*ret*/)
       {
         std::string msg(state); msg += " POST_ON_STATE_CHNAGE";
         m_coc.updateStatus(RTC::FSM_STATUS, msg.c_str());
@@ -786,37 +773,29 @@ namespace RTC
 
 
 
-    RTC::RTObject_impl* m_rtobj;
+    RTC::RTObject_impl* m_rtobj{nullptr};
     SDOPackage::ServiceProfile m_profile;
     CorbaConsumer<RTC::ComponentObserver> m_observer;
 
     bool m_observed[RTC::STATUS_KIND_NUM];
 
-    CompStatMsg m_compstat;
-    PortAction m_portaction;
-    ECAction m_ecaction;
-    ConfigAction m_configMsg;
-    FSMAction m_fsmaction;
+    CompStatMsg m_compstat{*this};
+    PortAction m_portaction{*this};
+    ECAction m_ecaction{*this};
+    ConfigAction m_configMsg{*this};
+    FSMAction m_fsmaction{*this};
 
-    coil::TimeValue m_rtcInterval;
-    bool m_rtcHeartbeat;
-    ListenerId m_rtcHblistenerid;
-    coil::TimeValue m_ecInterval;
-    bool m_ecHeartbeat;
-    ListenerId m_ecHblistenerid;
-
-    // このタイマーはいずれグローバルなタイマにおきかえる
-    coil::Timer m_timer;
-
+    bool m_rtcHeartbeat{false};
+    Manager::TaskId m_rtcHbTaskId;
+    bool m_ecHeartbeat{false};
+    Manager::TaskId m_ecHbTaskId;
   };
 
-}; // namespace RTC
+} // namespace RTC
 
 extern "C"
 {
   DLL_EXPORT void ComponentObserverConsumerInit();
-};
+}
 
 #endif // RTC_COMPONENTOBSERVERCONSUMER_H
-
-

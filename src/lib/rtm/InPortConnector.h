@@ -24,6 +24,7 @@
 #include <rtm/ConnectorBase.h>
 #include <rtm/DirectOutPortBase.h>
 #include <rtm/PortBase.h>
+#include <rtm/ByteData.h>
 
 
 namespace RTC
@@ -52,7 +53,6 @@ namespace RTC
     : public ConnectorBase
   {
   public:
-    DATAPORTSTATUS_ENUM
     /*!
      * @if jp
      * @brief コンストラクタ
@@ -69,7 +69,7 @@ namespace RTC
      * @endif
      */
     InPortConnector(ConnectorInfo& info,
-                    ConnectorListeners& listeners,
+                    ConnectorListenersBase* listeners,
                     CdrBufferBase* buffer);
 
     /*!
@@ -79,7 +79,7 @@ namespace RTC
      * @brief Destructor
      * @endif
      */
-    virtual ~InPortConnector();
+    ~InPortConnector() override;
 
    /*!
      * @if jp
@@ -98,7 +98,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual const ConnectorInfo& profile();
+    const ConnectorInfo& profile() override;
 
     /*!
      * @if jp
@@ -117,7 +117,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual const char* id();
+    const char* id() override;
 
     /*!
      * @if jp
@@ -136,7 +136,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual const char* name();
+    const char* name() override;
 
     /*!
      * @if jp
@@ -155,7 +155,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode disconnect() = 0;
+    DataPortStatus disconnect() override = 0;
 
     /*!
      * @if jp
@@ -174,7 +174,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual CdrBufferBase* getBuffer();
+    CdrBufferBase* getBuffer() override;
 
     /*!
      * @if jp
@@ -196,7 +196,49 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode read(cdrMemoryStream& data) = 0;
+    virtual DataPortStatus read(ByteDataStreamBase* data) = 0;
+
+
+    /*!
+     * @if jp
+     * @brief データ型の変換テンプレート
+     *
+     *
+     * @param data データを格納する変数
+     *
+     * @return ReturnCode
+     *
+     * @else
+     * @brief 
+     *
+     *
+     * @param data
+     * @return 
+     *
+     * @endif
+     */
+    template<class DataType>
+    DataPortStatus read(DataType& data)
+    {
+      if(m_cdr == nullptr)
+      {
+        m_cdr = createSerializer<DataType>(m_marshaling_type);
+      }
+      ::RTC::ByteDataStream<DataType> *cdr = dynamic_cast<::RTC::ByteDataStream<DataType>*>(m_cdr);
+        
+        if (!cdr)
+        {
+            RTC_ERROR(("Can not find Marshalizer: %s", m_marshaling_type.c_str()));
+            return DataPortStatus::PORT_ERROR;
+        }
+        cdr->isLittleEndian(isLittleEndian());
+        DataPortStatus ret = read((ByteDataStreamBase*)cdr);
+        if (ret == DataPortStatus::PORT_OK)
+        {
+            cdr->deserialize(data);
+        }
+        return ret;
+    }
 
     /*!
      * @if jp
@@ -215,7 +257,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual void setEndian(const bool endian_type);
+    virtual void setEndian(bool endian_type);
 
     /*!
      * @if jp
@@ -236,69 +278,107 @@ namespace RTC
      */
     virtual bool isLittleEndian();
 
-    virtual BufferStatus::Enum write(cdrMemoryStream &cdr);
+    virtual BufferStatus write(ByteData &cdr);
 
 
-	/*!
-	* @if jp
-	* @brief データをダイレクトに書き込むためのOutPortのサーバントを設定する
-	*
-	* @param directOutPort OutPortのサーバント
-	*
-	* @return True: 設定に成功 False: 既に設定済みのため失敗
-	*
-	* @else
-	* @brief 
-	*
-	* @param directOutPort
-	*
-	* @return true: little endian, false: big endian
-	*
-	* @endif
-	*/
-	bool setOutPort(OutPortBase* directOutPort);
+    /*!
+    * @if jp
+    * @brief データをダイレクトに書き込むためのOutPortのサーバントを設定する
+    *
+    * @param directOutPort OutPortのサーバント
+    *
+    * @return True: 設定に成功 False: 既に設定済みのため失敗
+    *
+    * @else
+    * @brief
+    *
+    * @param directOutPort
+    *
+    * @return true: little endian, false: big endian
+    *
+    * @endif
+    */
+    bool setOutPort(OutPortBase* directOutPort);
 
-	template <typename DataType>
-	bool getDirectData(DataType &data)
-	{
-		if (m_directOutPort == NULL)
-		{
-			return false;
-		}
-		DirectOutPortBase<DataType>* outport;
-		outport = dynamic_cast<DirectOutPortBase<DataType>*>(m_directOutPort->getDirectPort());
-		
-		if(outport)
-		{
-			if (outport->isEmpty())
-			{
-				m_listeners.
-					connector_[ON_BUFFER_EMPTY].notify(m_profile);
-				m_outPortListeners->
-					connector_[ON_SENDER_EMPTY].notify(m_profile);
-				RTC_PARANOID(("ON_BUFFER_EMPTY(InPort,OutPort), "
-					"ON_SENDER_EMPTY(InPort,OutPort) "
-					"callback called in direct mode."));
-			}
-			outport->read(data);
-			m_outPortListeners->connectorData_[ON_BUFFER_READ].notify(m_profile, data);
-			RTC_TRACE(("ON_BUFFER_READ(OutPort), "));
-			RTC_TRACE(("callback called in direct mode."));
-			m_outPortListeners->connectorData_[ON_SEND].notify(m_profile, data);
-			RTC_TRACE(("ON_SEND(OutPort), "));
-			RTC_TRACE(("callback called in direct mode."));
-			m_listeners.connectorData_[ON_RECEIVED].notify(m_profile, data);
-			RTC_TRACE(("ON_RECEIVED(InPort), "));
-			RTC_TRACE(("callback called in direct mode."));
-			m_listeners.connectorData_[ON_SEND].notify(m_profile, data);
-			RTC_TRACE(("ON_BUFFER_WRITE(InPort), "));
-			RTC_TRACE(("callback called in direct mode."));
-			
+    /*!
+    * @if jp
+    * @brief ダイレクト接続時に変数渡しでデータを取得する
+    *
+    * @param data 格納先のデータ
+    *
+    * @return True: 取得成功 False: 取得失敗
+    *
+    * @else
+    * @brief
+    *
+    * @param data
+    *
+    * @return 
+    *
+    * @endif
+    */
+    template <typename DataType>
+    bool getDirectData(DataType &data)
+    {
+        if (m_directOutPort == nullptr)
+        {
+            return false;
+        }
+        DirectOutPortBase<DataType>* outport;
+        outport = dynamic_cast<DirectOutPortBase<DataType>*>(m_directOutPort->getDirectPort());
 
-			return true;
-		}
-		return false;
-	};
+        if(outport)
+        {
+            if (outport->isEmpty())
+            {
+                m_listeners->notify(ConnectorListenerType::ON_BUFFER_EMPTY,
+                                     m_profile);
+                m_outPortListeners->notify(
+                                  ConnectorListenerType::ON_SENDER_EMPTY,
+                                  m_profile);
+                RTC_PARANOID(("ON_BUFFER_EMPTY(InPort,OutPort), "
+                    "ON_SENDER_EMPTY(InPort,OutPort) "
+                    "callback called in direct mode."));
+            }
+            outport->read(data);
+            m_outPortListeners->notifyOut(
+                                  ConnectorDataListenerType::ON_BUFFER_READ,
+                                  m_profile, data);
+            RTC_TRACE(("ON_BUFFER_READ(OutPort), "));
+            RTC_TRACE(("callback called in direct mode."));
+            m_outPortListeners->notifyOut(ConnectorDataListenerType::ON_SEND,
+                                          m_profile, data);
+            RTC_TRACE(("ON_SEND(OutPort), "));
+            RTC_TRACE(("callback called in direct mode."));
+            m_listeners->notifyIn(ConnectorDataListenerType::ON_RECEIVED,
+                                  m_profile, data);
+            RTC_TRACE(("ON_RECEIVED(InPort), "));
+            RTC_TRACE(("callback called in direct mode."));
+            m_listeners->notifyIn(ConnectorDataListenerType::ON_SEND,
+                                  m_profile, data);
+            RTC_TRACE(("ON_BUFFER_WRITE(InPort), "));
+            RTC_TRACE(("callback called in direct mode."));
+
+
+            return true;
+        }
+        return false;
+    }
+
+    /*!
+     * @if jp
+     * @brief コンシューマのインターフェースの登録を取り消す
+     *
+     * @param prop コネクタプロファイルのプロパティ
+     *
+     * @else
+     * @brief
+     *
+     * @param prop
+     *
+     * @endif
+     */
+    virtual void unsubscribeInterface(const coil::Properties& prop);
 
   protected:
     /*!
@@ -324,7 +404,7 @@ namespace RTC
      * @brief A reference to a ConnectorListener
      * @endif
      */
-    ConnectorListeners& m_listeners;
+    ConnectorListenersBase* m_listeners;
     /*!
      * @if jp
      * @brief Connector が保持している Buffer
@@ -348,17 +428,35 @@ namespace RTC
      * @brief A pointer to a OutPort's ConnectorListener
      * @endif
      */
-    ConnectorListeners* m_outPortListeners;
-	/*!
-	* @if jp
-	* @brief 同一プロセス上のピアOutPortのポインタ
-	* @else
-	* @brief OutProt pointer to the peer in the same process
-	* @endif
-	*/
-	PortBase* m_directOutPort;
+    ConnectorListenersBase* m_outPortListeners;
+    /*!
+     * @if jp
+     * @brief 同一プロセス上のピアOutPortのポインタ
+     * @else
+     * @brief OutProt pointer to the peer in the same process
+     * @endif
+     */
+    PortBase* m_directOutPort;
+
+    /*!
+     * @if jp
+     * @brief シリアライザの名前
+     * @else
+     * @brief
+     * @endif
+     */
+    std::string m_marshaling_type;
+
+    /*!
+     * @if jp
+     * @brief シリアライザへの参照
+     * @else
+     * @brief
+     * @endif
+     */
+    ByteDataStreamBase* m_cdr;
 
   };
-};  // namespace RTC
+} // namespace RTC
 
 #endif  // RTC_INPORTCONNECTOR_H

@@ -5,7 +5,7 @@
  * @date $Date$
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
- * Copyright (C) 2016
+ * Copyright (C) 2016-2020
  *     Noriaki Ando
  *     National Institute of
  *         Advanced Industrial Science and Technology (AIST), Japan
@@ -20,6 +20,7 @@
 #define _GNU_SOURCE
 #include <pthread.h>
 #endif // _GNU_SOURCE
+#include <coil/config_coil.h>
 #include <coil/stringutil.h>
 #include <coil/Affinity.h>
 
@@ -27,6 +28,7 @@ namespace coil
 {
   bool getProcCpuAffinity(CpuMask& cpu_mask)
   {
+#if defined(COIL_OS_LINUX)
     pid_t pid(getpid());
     cpu_set_t cpu_set;
     CPU_ZERO(&cpu_set);
@@ -38,45 +40,53 @@ namespace coil
       {
         if (CPU_ISSET(i, &cpu_set))
           {
-            cpu_mask.push_back((unsigned int)i+1);
+            cpu_mask.emplace_back(static_cast<unsigned int>(i)+1);
           }
       }
+#endif
     return true;
   }
 
-  bool setProcCpuAffinity(std::vector<unsigned int> mask)
+  bool setProcCpuAffinity(const CpuMask& cpu_mask)
   {
+#if defined(COIL_OS_LINUX)
     pid_t pid(getpid());
     cpu_set_t cpu_set;
     CPU_ZERO(&cpu_set);
 
-    for (size_t i(0); i < mask.size(); ++i)
+    for (size_t i(0); i < cpu_mask.size(); ++i)
       {
         CPU_SET(i, &cpu_set);
       }
 
     int result = sched_setaffinity(pid, sizeof(cpu_set_t), &cpu_set);
     if (result != 0) { return false; }
+#endif
     return true;
   }
 
-  bool setProcCpuAffinity(std::string cpu_mask)
+  bool setProcCpuAffinity(const std::string& cpu_mask)
   {
-    coil::vstring tmp = coil::split(cpu_mask, ",", true);
+#if defined(COIL_OS_LINUX)
+    coil::vstring masklist = coil::split(cpu_mask, ",", true);
     CpuMask mask;
-    for (size_t i(0); i < tmp.size(); ++i)
+    for (auto & maskstr : masklist)
       {
         int num;
-        if (coil::stringTo(num, tmp[i].c_str()))
+        if (coil::stringTo(num, maskstr.c_str()))
           {
-            mask.push_back(num);
+            mask.emplace_back(num);
           }
       }
     return setProcCpuAffinity(mask);
+#else
+    return true;    
+#endif
   }
 
   bool getThreadCpuAffinity(CpuMask& cpu_mask)
   {
+#if defined(COIL_OS_LINUX)
     pthread_t tid(pthread_self());
     cpu_set_t cpu_set;
     CPU_ZERO(&cpu_set);
@@ -88,40 +98,47 @@ namespace coil
       {
         if (CPU_ISSET(i, &cpu_set))
           {
-            cpu_mask.push_back((unsigned int)i+1);
+            cpu_mask.emplace_back(static_cast<unsigned int>(i)+1);
           }
       }
+#endif
     return true;
   }
 
-  bool setThreadCpuAffinity(std::vector<unsigned int> mask)
+  bool setThreadCpuAffinity(const CpuMask& cpu_mask)
   {
+#if defined(COIL_OS_LINUX)
     pthread_t tid(pthread_self());
     cpu_set_t cpu_set;
     CPU_ZERO(&cpu_set);
 
-    for (size_t i(0); i < mask.size(); ++i)
+    for (size_t i(0); i < cpu_mask.size(); ++i)
       {
         CPU_SET(i, &cpu_set);
       }
 
     int result = pthread_setaffinity_np(tid, sizeof(cpu_set_t), &cpu_set);
     if (result != 0) { return false; }
+#endif
     return true;
   }
 
-  bool setThreadCpuAffinity(std::string cpu_mask)
+  bool setThreadCpuAffinity(const std::string& cpu_mask)
   {
-    coil::vstring tmp = coil::split(cpu_mask, ",", true);
+#if defined(COIL_OS_LINUX)
+    coil::vstring masklist = coil::split(cpu_mask, ",", true);
     CpuMask mask;
-    for (size_t i(0); i < tmp.size(); ++i)
+    for (auto & maskstr : masklist)
       {
         int num;
-        if (coil::stringTo(num, tmp[i].c_str()))
+        if (coil::stringTo(num, maskstr.c_str()))
           {
-            mask.push_back(num);
+            mask.emplace_back(num);
           }
       }
     return setThreadCpuAffinity(mask);
+#else
+    return true;
+#endif
   }
-}; // namespace coil
+} // namespace coil

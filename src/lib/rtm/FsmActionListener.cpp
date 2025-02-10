@@ -29,7 +29,7 @@ namespace RTC
    * @class PostFsmActionListener class
    * @endif
    */
-  PostFsmActionListener::~PostFsmActionListener(){}
+  PostFsmActionListener::~PostFsmActionListener() = default;
 
   /*!
    * @if jp
@@ -38,7 +38,7 @@ namespace RTC
    * @class PreFsmActionListener class
    * @endif
    */
-  PreFsmActionListener::~PreFsmActionListener(){}
+  PreFsmActionListener::~PreFsmActionListener() = default;
 
   /*!
    * @if jp
@@ -47,7 +47,7 @@ namespace RTC
    * @class PortActionListener class
    * @endif
    */
-  FsmProfileListener::~FsmProfileListener(){}
+  FsmProfileListener::~FsmProfileListener() = default;
 
   /*!
    * @if jp
@@ -56,9 +56,18 @@ namespace RTC
    * @class PortActionListener class
    * @endif
    */
-  FsmStructureListener::~FsmStructureListener(){}
+  FsmStructureListener::~FsmStructureListener() = default;
 
+  /*!
+   * @if jp
+   * @class FsmActionListeners クラス
+   * @else
+   * @class FsmActionListeners class
+   * @endif
+   */
+  FsmActionListeners::FsmActionListeners() = default;
 
+  FsmActionListeners::~FsmActionListeners() = default;
 
   //============================================================
   /*!
@@ -68,18 +77,16 @@ namespace RTC
    * @class PreFsmActionListener holder class
    * @endif
    */
-  PreFsmActionListenerHolder::PreFsmActionListenerHolder()
-  {
-  }
+  PreFsmActionListenerHolder::PreFsmActionListenerHolder() = default;
 
   PreFsmActionListenerHolder::~PreFsmActionListenerHolder()
   {
-    Guard guard(m_mutex);
-    for (int i(0), len(m_listeners.size()); i < len; ++i)
+    std::lock_guard<std::mutex> guard(m_mutex);
+    for (auto & listener : m_listeners)
       {
-        if (m_listeners[i].second)
+        if (listener.second)
           {
-            delete m_listeners[i].first;
+            delete listener.first;
           }
       }
   }
@@ -88,14 +95,14 @@ namespace RTC
   addListener(PreFsmActionListener* listener,
               bool autoclean)
   {
-    Guard guard(m_mutex);
-    m_listeners.push_back(Entry(listener, autoclean));
+    std::lock_guard<std::mutex> guard(m_mutex);
+    m_listeners.emplace_back(listener, autoclean);
   }
 
   void PreFsmActionListenerHolder::
   removeListener(PreFsmActionListener* listener)
   {
-    Guard guard(m_mutex);
+    std::lock_guard<std::mutex> guard(m_mutex);
     std::vector<Entry>::iterator it(m_listeners.begin());
 
     for (; it != m_listeners.end(); ++it)
@@ -114,10 +121,10 @@ namespace RTC
 
   void PreFsmActionListenerHolder::notify(const char* state)
   {
-    Guard guard(m_mutex);
-    for (int i(0), len(m_listeners.size()); i < len; ++i)
+    std::lock_guard<std::mutex> guard(m_mutex);
+    for (auto & listener : m_listeners)
       {
-        m_listeners[i].first->operator()(state);
+        listener.first->operator()(state);
       }
   }
 
@@ -129,18 +136,16 @@ namespace RTC
    * @class PostFsmActionListener holder class
    * @endif
    */
-  PostFsmActionListenerHolder::PostFsmActionListenerHolder()
-  {
-  }
+  PostFsmActionListenerHolder::PostFsmActionListenerHolder() = default;
 
   PostFsmActionListenerHolder::~PostFsmActionListenerHolder()
   {
-    Guard guard(m_mutex);
-    for (int i(0), len(m_listeners.size()); i < len; ++i)
+    std::lock_guard<std::mutex> guard(m_mutex);
+    for (auto & listener : m_listeners)
       {
-        if (m_listeners[i].second)
+        if (listener.second)
           {
-            delete m_listeners[i].first;
+            delete listener.first;
           }
       }
   }
@@ -148,14 +153,14 @@ namespace RTC
   void PostFsmActionListenerHolder::
   addListener(PostFsmActionListener* listener, bool autoclean)
   {
-    Guard guard(m_mutex);
-    m_listeners.push_back(Entry(listener, autoclean));
+    std::lock_guard<std::mutex> guard(m_mutex);
+    m_listeners.emplace_back(listener, autoclean);
   }
 
   void PostFsmActionListenerHolder::
   removeListener(PostFsmActionListener* listener)
   {
-    Guard guard(m_mutex);
+    std::lock_guard<std::mutex> guard(m_mutex);
     std::vector<Entry>::iterator it(m_listeners.begin());
     for (; it != m_listeners.end(); ++it)
       {
@@ -174,10 +179,10 @@ namespace RTC
   void PostFsmActionListenerHolder::notify(const char* state,
                                            ReturnCode_t ret)
   {
-    Guard guard(m_mutex);
-    for (int i(0), len(m_listeners.size()); i < len; ++i)
+    std::lock_guard<std::mutex> guard(m_mutex);
+    for (auto & listener : m_listeners)
       {
-        m_listeners[i].first->operator()(state, ret);
+        listener.first->operator()(state, ret);
       }
   }
 
@@ -188,18 +193,16 @@ namespace RTC
    * @class FsmProfileListener holder class
    * @endif
    */
-  FsmProfileListenerHolder::FsmProfileListenerHolder()
-  {
-  }
+  FsmProfileListenerHolder::FsmProfileListenerHolder() = default;
 
   FsmProfileListenerHolder::~FsmProfileListenerHolder()
   {
-    Guard guard(m_mutex);
-    for (int i(0), len(m_listeners.size()); i < len; ++i)
+    std::lock_guard<std::mutex> guard(m_mutex);
+    for (auto & listener : m_listeners)
       {
-        if (m_listeners[i].second)
+        if (listener.second)
           {
-            delete m_listeners[i].first;
+            delete listener.first;
           }
       }
   }
@@ -207,14 +210,14 @@ namespace RTC
   void FsmProfileListenerHolder::addListener(FsmProfileListener* listener,
                                              bool autoclean)
   {
-    Guard guard(m_mutex);
-    m_listeners.push_back(Entry(listener, autoclean));
+    std::lock_guard<std::mutex> guard(m_mutex);
+    m_listeners.emplace_back(listener, autoclean);
   }
 
   void
   FsmProfileListenerHolder::removeListener(FsmProfileListener* listener)
   {
-    Guard guard(m_mutex);
+    std::lock_guard<std::mutex> guard(m_mutex);
     std::vector<Entry>::iterator it(m_listeners.begin());
 
     for (; it != m_listeners.end(); ++it)
@@ -233,10 +236,10 @@ namespace RTC
 
   void FsmProfileListenerHolder::notify(RTC::FsmProfile& profile)
   {
-    Guard guard(m_mutex);
-    for (int i(0), len(m_listeners.size()); i < len; ++i)
+    std::lock_guard<std::mutex> guard(m_mutex);
+    for (auto & listener : m_listeners)
       {
-        m_listeners[i].first->operator()(profile);
+        listener.first->operator()(profile);
       }
   }
 
@@ -247,18 +250,16 @@ namespace RTC
    * @class FsmStructureListener holder class
    * @endif
    */
-  FsmStructureListenerHolder::FsmStructureListenerHolder()
-  {
-  }
+  FsmStructureListenerHolder::FsmStructureListenerHolder() = default;
 
   FsmStructureListenerHolder::~FsmStructureListenerHolder()
   {
-    Guard guard(m_mutex);
-    for (int i(0), len(m_listeners.size()); i < len; ++i)
+    std::lock_guard<std::mutex> guard(m_mutex);
+    for (auto & listener : m_listeners)
       {
-        if (m_listeners[i].second)
+        if (listener.second)
           {
-            delete m_listeners[i].first;
+            delete listener.first;
           }
       }
   }
@@ -266,14 +267,14 @@ namespace RTC
   void FsmStructureListenerHolder::addListener(FsmStructureListener* listener,
                                                bool autoclean)
   {
-    Guard guard(m_mutex);
-    m_listeners.push_back(Entry(listener, autoclean));
+    std::lock_guard<std::mutex> guard(m_mutex);
+    m_listeners.emplace_back(listener, autoclean);
   }
 
   void
   FsmStructureListenerHolder::removeListener(FsmStructureListener* listener)
   {
-    Guard guard(m_mutex);
+    std::lock_guard<std::mutex> guard(m_mutex);
     std::vector<Entry>::iterator it(m_listeners.begin());
 
     for (; it != m_listeners.end(); ++it)
@@ -292,13 +293,273 @@ namespace RTC
 
   void FsmStructureListenerHolder::notify(RTC::FsmStructure& structure)
   {
-    Guard guard(m_mutex);
-    for (int i(0), len(m_listeners.size()); i < len; ++i)
+    std::lock_guard<std::mutex> guard(m_mutex);
+    for (auto & listener : m_listeners)
       {
-        m_listeners[i].first->operator()(structure);
+        listener.first->operator()(structure);
       }
   }
+  /*!
+   * @if jp
+   *
+   * @brief リスナーの追加
+   *
+   * 指定の種類のPreFsmActionListenerを追加する。
+   *
+   * @param type リスナの種類
+   * @param listener 追加するリスナ
+   * @param autoclean true:デストラクタで削除する,
+   *                  false:デストラクタで削除しない
+   * @return false：指定の種類のリスナが存在しない
+   * @else
+   *
+   * @brief Add the listener.
+   *
+   *
+   *
+   * @param type
+   * @param listener Added listener
+   * @param autoclean true:The listener is deleted at the destructor.,
+   *                  false:The listener is not deleted at the destructor.
+   * @return
+   * @endif
+   */
+  bool FsmActionListeners::addListener(PreFsmActionListenerType type, PreFsmActionListener* listener, bool autoclean)
+  {
+      if(static_cast<uint8_t>(type) < preaction_.size())
+      {
+          preaction_[static_cast<uint8_t>(type)].addListener(listener, autoclean);
+          return true;
+      }
+      return false;
+  }
+  /*!
+   * @if jp
+   *
+   * @brief リスナーの削除
+   *
+   * 指定の種類のPreFsmActionListenerを削除する。
+   *
+   * @param type リスナの種類
+   * @param listener 削除するリスナ
+   * @return false：指定の種類のリスナが存在しない
+   *
+   * @else
+   *
+   * @brief Remove the listener.
+   *
+   *
+   * @param type
+   * @param listener
+   * @return
+   *
+   * @endif
+   */
+  bool FsmActionListeners::removeListener(PreFsmActionListenerType type, PreFsmActionListener* listener)
+  {
+      if(static_cast<uint8_t>(type) < preaction_.size())
+      {
+          preaction_[static_cast<uint8_t>(type)].removeListener(listener);
+          return true;
+      }
+      return false;
+  }
+  /*!
+   * @if jp
+   *
+   * @brief リスナーの追加
+   *
+   * 指定の種類のPostFsmActionListenerを追加する。
+   *
+   * @param type リスナの種類
+   * @param listener 追加するリスナ
+   * @param autoclean true:デストラクタで削除する,
+   *                  false:デストラクタで削除しない
+   * @return false：指定の種類のリスナが存在しない
+   * @else
+   *
+   * @brief Add the listener.
+   *
+   *
+   *
+   * @param type
+   * @param listener Added listener
+   * @param autoclean true:The listener is deleted at the destructor.,
+   *                  false:The listener is not deleted at the destructor.
+   * @return
+   * @endif
+   */
+  bool FsmActionListeners::addListener(PostFsmActionListenerType type, PostFsmActionListener* listener, bool autoclean)
+  {
+      if(static_cast<uint8_t>(type) < postaction_.size())
+      {
+          postaction_[static_cast<uint8_t>(type)].addListener(listener, autoclean);
+          return true;
+      }
+      return false;
+  }
+  /*!
+   * @if jp
+   *
+   * @brief リスナーの削除
+   *
+   * 指定の種類のPostFsmActionListenerを削除する。
+   *
+   * @param type リスナの種類
+   * @param listener 削除するリスナ
+   * @return false：指定の種類のリスナが存在しない
+   *
+   * @else
+   *
+   * @brief Remove the listener.
+   *
+   *
+   * @param type
+   * @param listener
+   * @return
+   *
+   * @endif
+   */
+  bool FsmActionListeners::removeListener(PostFsmActionListenerType type, PostFsmActionListener* listener)
+  {
+      if(static_cast<uint8_t>(type) < postaction_.size())
+      {
+          postaction_[static_cast<uint8_t>(type)].removeListener(listener);
+          return true;
+      }
+      return false;
+  }
+  /*!
+   * @if jp
+   *
+   * @brief リスナーの追加
+   *
+   * 指定の種類のFsmProfileListenerを追加する。
+   *
+   * @param type リスナの種類
+   * @param listener 追加するリスナ
+   * @param autoclean true:デストラクタで削除する,
+   *                  false:デストラクタで削除しない
+   * @return false：指定の種類のリスナが存在しない
+   * @else
+   *
+   * @brief Add the listener.
+   *
+   *
+   *
+   * @param type
+   * @param listener Added listener
+   * @param autoclean true:The listener is deleted at the destructor.,
+   *                  false:The listener is not deleted at the destructor.
+   * @return
+   * @endif
+   */
+  bool FsmActionListeners::addListener(FsmProfileListenerType type, FsmProfileListener* listener, bool autoclean)
+  {
+      if(static_cast<uint8_t>(type) < profile_.size())
+      {
+          profile_[static_cast<uint8_t>(type)].addListener(listener, autoclean);
+          return true;
+      }
+      return false;
+  }
+  /*!
+   * @if jp
+   *
+   * @brief リスナーの削除
+   *
+   * 指定の種類のFsmProfileListenerを削除する。
+   *
+   * @param type リスナの種類
+   * @param listener 削除するリスナ
+   * @return false：指定の種類のリスナが存在しない
+   *
+   * @else
+   *
+   * @brief Remove the listener.
+   *
+   *
+   * @param type
+   * @param listener
+   * @return
+   *
+   * @endif
+   */
+  bool FsmActionListeners::removeListener(FsmProfileListenerType type, FsmProfileListener* listener)
+  {
+      if(static_cast<uint8_t>(type) < profile_.size())
+      {
+          profile_[static_cast<uint8_t>(type)].removeListener(listener);
+          return true;
+      }
+      return false;
+  }
+  /*!
+   * @if jp
+   *
+   * @brief リスナーの追加
+   *
+   * 指定の種類のFsmStructureListenerを追加する。
+   *
+   * @param type リスナの種類
+   * @param listener 追加するリスナ
+   * @param autoclean true:デストラクタで削除する,
+   *                  false:デストラクタで削除しない
+   * @return false：指定の種類のリスナが存在しない
+   * @else
+   *
+   * @brief Add the listener.
+   *
+   *
+   *
+   * @param type
+   * @param listener Added listener
+   * @param autoclean true:The listener is deleted at the destructor.,
+   *                  false:The listener is not deleted at the destructor.
+   * @return
+   * @endif
+   */
+  bool FsmActionListeners::addListener(FsmStructureListenerType type, FsmStructureListener* listener, bool autoclean)
+  {
+      if(static_cast<uint8_t>(type) < structure_.size())
+      {
+          structure_[static_cast<uint8_t>(type)].addListener(listener, autoclean);
+          return true;
+      }
+      return false;
+  }
+  /*!
+   * @if jp
+   *
+   * @brief リスナーの削除
+   *
+   * 指定の種類のFsmStructureListenerを削除する。
+   *
+   * @param type リスナの種類
+   * @param listener 削除するリスナ
+   * @return false：指定の種類のリスナが存在しない
+   *
+   * @else
+   *
+   * @brief Remove the listener.
+   *
+   *
+   * @param type
+   * @param listener
+   * @return
+   *
+   * @endif
+   */
+  bool FsmActionListeners::removeListener(FsmStructureListenerType type, FsmStructureListener* listener)
+  {
+      if(static_cast<uint8_t>(type) < structure_.size())
+      {
+          structure_[static_cast<uint8_t>(type)].removeListener(listener);
+          return true;
+      }
+      return false;
+  }
 
-};
+} // namespace RTC
 
 

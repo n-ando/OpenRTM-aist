@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file Analyzer_testComp.cpp
  * @brief Standalone component
@@ -14,11 +14,11 @@
 #include <rtm/Manager.h>
 #include <iostream>
 #include <string>
-#include <stdlib.h>
+#include <cstdlib>
 #include "Analyzer_test.h"
 
 
-#if defined(RTM_OS_VXWORKS) && not defined(__RTP__)
+#if defined(RTM_OS_VXWORKS) && !defined(__RTP__)
 int analyzer_test_main()
 {
   RTC::Manager* manager = &RTC::Manager::instance();
@@ -43,7 +43,7 @@ void MyModuleInit(RTC::Manager* manager)
   // Create a component
   comp = manager->createComponent("Analyzer_test");
 
-  if (comp==NULL)
+  if (comp==nullptr)
   {
     std::cerr << "Component create failed." << std::endl;
     abort();
@@ -96,9 +96,6 @@ int main (int argc, char** argv)
 {
   RTC::Manager* manager;
   manager = RTC::Manager::init(argc, argv);
-
-  // Initialize manager
-  manager->init(argc, argv);
 
   // Set module initialization proceduer
   // This procedure will be invoked in activateManager() function.

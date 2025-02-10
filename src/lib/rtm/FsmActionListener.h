@@ -21,8 +21,8 @@
 
 #include <vector>
 #include <utility>
-#include <coil/Mutex.h>
-#include <coil/Guard.h>
+#include <mutex>
+#include <array>
 #include <rtm/RTC.h>
 #include <rtm/idl/RTCSkel.h>
 #include <rtm/ConnectorBase.h>
@@ -72,7 +72,7 @@ namespace RTC
    * - PRE_ON_STATE_CHANGE:  状態遷移直前
    *
    * @else
-   * @brief The types of ConnectorDataListener
+   * @brief The types of PreFsmActionListener
    *
    * PreFsmActionListener has the following hook points. If these
    * listeners are actually called or not called are depends on FSM
@@ -86,7 +86,7 @@ namespace RTC
    *
    * @endif
    */
-  enum PreFsmActionListenerType
+  enum class PreFsmActionListenerType : uint8_t
     {
       PRE_ON_INIT,
       PRE_ON_ENTRY,
@@ -130,7 +130,7 @@ namespace RTC
    * <pre>
    * RTC::ReturnCode_t ConsoleIn::onInitialize()
    * {
-   *     addPreFsmActionListener(PRE_ON_STATE_CHANGE,
+   *     addPreFsmActionListener(PreFsmActionListenerType::PRE_ON_STATE_CHANGE,
    *                             new MyListener("init listener"),
    *                             true);
    *    :
@@ -191,7 +191,7 @@ namespace RTC
    * <pre>
    * RTC::ReturnCode_t ConsoleIn::onInitialize()
    * {
-   *     addPreFsmActionListener(PRE_ON_STATE_CHANGE,
+   *     addPreFsmActionListener(PreFsmActionListenerType::PRE_ON_STATE_CHANGE,
    *                             new MyListener("init listener"),
    *                             true);
    *    :
@@ -256,7 +256,7 @@ namespace RTC
      */
     static const char* toString(PreFsmActionListenerType type)
     {
-      static const char* typeString[] =
+      static const char* const typeString[] =
         {
           "PRE_ON_INIT",
           "PRE_ON_ENTRY",
@@ -265,7 +265,10 @@ namespace RTC
           "PRE_ON_STATE_CHANGE",
           "PRE_FSM_ACTION_LISTENER_NUM"
         };
-      if (type < PRE_FSM_ACTION_LISTENER_NUM) { return typeString[type]; }
+      if (type < PreFsmActionListenerType::PRE_FSM_ACTION_LISTENER_NUM)
+        {
+          return typeString[static_cast<uint8_t>(type)];
+        }
       return "";
     }
 
@@ -300,9 +303,9 @@ namespace RTC
   //============================================================
   /*!
    * @if jp
-   * @brief PreFsmActionListener のタイプ
+   * @brief PostFsmActionListener のタイプ
    *
-   * PreFsmActionListener には以下のフックポイントが定義されている。こ
+   * PostFsmActionListener には以下のフックポイントが定義されている。こ
    * れらが呼び出されるかどうかは、FSMの実装に依存する。
    *
    * - POST_ON_INIT:          init 直後
@@ -312,9 +315,9 @@ namespace RTC
    * - POST_ON_STATE_CHANGE:  状態遷移直後
    *
    * @else
-   * @brief The types of ConnectorDataListener
+   * @brief The types of PostFsmActionListener
    *
-   * PreFsmActionListener has the following hook points. If these
+   * PostFsmActionListener has the following hook points. If these
    * listeners are actually called or not called are depends on FSM
    * implementations.
    *
@@ -326,7 +329,7 @@ namespace RTC
    *
    * @endif
    */
-  enum PostFsmActionListenerType
+  enum class PostFsmActionListenerType : uint8_t
     {
       POST_ON_INIT,
       POST_ON_ENTRY,
@@ -370,7 +373,7 @@ namespace RTC
    * <pre>
    * RTC::ReturnCode_t ConsoleIn::onInitialize()
    * {
-   *     addPostFsmActionListener(POST_ON_STATE_CHANGE,
+   *     addPostFsmActionListener(PostFsmActionListenerType::POST_ON_STATE_CHANGE,
    *                             new MyListener("init listener"),
    *                             true);
    *    :
@@ -431,7 +434,7 @@ namespace RTC
    * <pre>
    * RTC::ReturnCode_t ConsoleIn::onInitialize()
    * {
-   *     addPostFsmActionListener(POST_ON_STATE_CHANGE,
+   *     addPostFsmActionListener(PostFsmActionListenerType::POST_ON_STATE_CHANGE,
    *                             new MyListener("init listener"),
    *                             true);
    *    :
@@ -496,7 +499,7 @@ namespace RTC
      */
     static const char* toString(PostFsmActionListenerType type)
     {
-      static const char* typeString[] =
+      static const char* const typeString[] =
         {
           "POST_ON_INIT",
           "POST_ON_ENTRY",
@@ -505,9 +508,9 @@ namespace RTC
           "POST_ON_STATE_CHANGE",
           "POST_FSM_ACTION_LISTENER_NUM"
         };
-      if (type < POST_FSM_ACTION_LISTENER_NUM)
+      if (type < PostFsmActionListenerType::POST_FSM_ACTION_LISTENER_NUM)
         {
-          return typeString[type];
+          return typeString[static_cast<uint8_t>(type)];
         }
       return "";
     }
@@ -568,7 +571,7 @@ namespace RTC
    *
    * @endif
    */
-  enum FsmProfileListenerType
+  enum class FsmProfileListenerType : uint8_t
     {
       SET_FSM_PROFILE,
       GET_FSM_PROFILE,
@@ -615,7 +618,7 @@ namespace RTC
    * <pre>
    * RTC::ReturnCode_t ConsoleIn::onInitialize()
    * {
-   *     addFsmProfileListener(SET_FSM_PROFILE,
+   *     addFsmProfileListener(FsmProfileListenerType::SET_FSM_PROFILE,
    *                           new MyListener("prof listener"),
    *                           true);
    *    :
@@ -677,7 +680,7 @@ namespace RTC
    * <pre>
    * RTC::ReturnCode_t ConsoleIn::onInitialize()
    * {
-   *     addFsmProfileListener(SET_FSM_PROFILE,
+   *     addFsmProfileListener(FsmProfileListenerType::SET_FSM_PROFILE,
    *                           new MyListener("prof listener"),
    *                           true);
    *    :
@@ -742,7 +745,7 @@ namespace RTC
      */
     static const char* toString(FsmProfileListenerType type)
     {
-      static const char* typeString[] =
+      static const char* const typeString[] =
         {
           "SET_FSM_PROFILE",
           "GET_FSM_PROFILE",
@@ -754,7 +757,10 @@ namespace RTC
           "UNBIND_FSM_EVENT",
           "FSM_PROFILE_LISTENER_NUM"
         };
-      if (type < FSM_PROFILE_LISTENER_NUM) { return typeString[type]; }
+      if (type < FsmProfileListenerType::FSM_PROFILE_LISTENER_NUM)
+        {
+          return typeString[static_cast<uint8_t>(type)];
+        }
       return "";
     }
 
@@ -802,7 +808,7 @@ namespace RTC
    *
    * @endif
    */
-  enum FsmStructureListenerType
+  enum class FsmStructureListenerType : uint8_t
     {
       SET_FSM_STRUCTURE,
       GET_FSM_STRUCTURE,
@@ -842,7 +848,7 @@ namespace RTC
    * <pre>
    * RTC::ReturnCode_t ConsoleIn::onInitialize()
    * {
-   *     addFsmStructureListener(SET_FSM_STRUCTURE,
+   *     addFsmStructureListener(FsmStructureListenerType::SET_FSM_STRUCTURE,
    *                             new MyListener("set structure listener"),
    *                             true);
    *    :
@@ -872,7 +878,7 @@ namespace RTC
    * @class FsmStructureListener class
    * @brief FsmStructureListener class
    *
-   * PostFsmActionListener class is a base class for the listener
+   * FsmStructureListener class is a base class for the listener
    * objects which realize callback to hook FSM structure profile
    * related actions. To hook execution just before a FSM action, the
    * callback object should be defined as follows, and set to RTObject
@@ -898,7 +904,7 @@ namespace RTC
    * <pre>
    * RTC::ReturnCode_t ConsoleIn::onInitialize()
    * {
-   *     addFsmStructureListener(SET_FSM_STRUCTURE,
+   *     addFsmStructureListener(FsmStructureListenerType::SET_FSM_STRUCTURE,
    *                             new MyListener("set structure listener"),
    *                             true);
    *    :
@@ -927,7 +933,7 @@ namespace RTC
    * case, listener objects pointers must be stored to member
    * variables, and set/unset of the listener objects shoud be
    * paerformed throguh
-   * RTObject_impl::addPostFsmActionListener()/removePostFsmActionListener()
+   * RTObject_impl::addFsmStructureListener()/removeFsmStructureListener()
    * functions.
    *
    * @endif
@@ -960,13 +966,16 @@ namespace RTC
      */
     static const char* toString(FsmStructureListenerType type)
     {
-      static const char* typeString[] =
+      static const char* const typeString[] =
         {
           "SET_FSM_STRUCTURE",
           "GET_FSM_STRUCTURE",
           "FSM_STRUCTURE_LISTENER_NUM"
         };
-      if (type < FSM_STRUCTURE_LISTENER_NUM) { return typeString[type]; }
+      if (type < FsmStructureListenerType::FSM_STRUCTURE_LISTENER_NUM)
+       {
+         return typeString[static_cast<uint8_t>(type)];
+       }
       return "";
     }
 
@@ -1018,8 +1027,7 @@ namespace RTC
    */
   class PreFsmActionListenerHolder
   {
-    typedef std::pair<PreFsmActionListener*, bool> Entry;
-    typedef coil::Guard<coil::Mutex> Guard;
+     using Entry = std::pair<PreFsmActionListener*, bool>;
   public:
     /*!
      * @if jp
@@ -1088,21 +1096,21 @@ namespace RTC
      *
      * 登録されているリスナのコールバックメソッドを呼び出す。
      *
-     * @param info ConnectorInfo
+     * @param state 
      * @else
      *
      * @brief Notify listeners. 
      *
      * This calls the Callback method of the registered listener. 
      *
-     * @param info ConnectorInfo
+     * @param state
      * @endif
      */
     void notify(const char* state);
       
   private:
     std::vector<Entry> m_listeners;
-    coil::Mutex m_mutex;
+    std::mutex m_mutex;
   };
 
 
@@ -1124,8 +1132,7 @@ namespace RTC
    */
   class PostFsmActionListenerHolder
   {
-    typedef std::pair<PostFsmActionListener*, bool> Entry;
-    typedef coil::Guard<coil::Mutex> Guard;
+    using Entry = std::pair<PostFsmActionListener*, bool>;
   public:
     /*!
      * @if jp
@@ -1193,23 +1200,23 @@ namespace RTC
      *
      * 登録されているリスナのコールバックメソッドを呼び出す。
      *
-     * @param info ConnectorInfo
-     * @param cdrdata データ
+     * @param state 
+     * @param ret 
      * @else
      *
      * @brief Notify listeners. 
      *
      * This calls the Callback method of the registered listener. 
      *
-     * @param info ConnectorInfo
-     * @param cdrdata Data
+     * @param state
+     * @param ret
      * @endif
      */
     void notify(const char* state, ReturnCode_t ret);
     
   private:
     std::vector<Entry> m_listeners;
-    coil::Mutex m_mutex;
+    std::mutex m_mutex;
   };
 
 
@@ -1232,8 +1239,7 @@ namespace RTC
    */
   class FsmProfileListenerHolder
   {
-    typedef std::pair<FsmProfileListener*, bool> Entry;
-    typedef coil::Guard<coil::Mutex> Guard;
+    using Entry = std::pair<FsmProfileListener*, bool>;
   public:
     /*!
      * @if jp
@@ -1301,23 +1307,21 @@ namespace RTC
      *
      * 登録されているリスナのコールバックメソッドを呼び出す。
      *
-     * @param info ConnectorInfo
-     * @param cdrdata データ
+     * @param profile FsmProfile
      * @else
      *
      * @brief Notify listeners. 
      *
      * This calls the Callback method of the registered listener. 
      *
-     * @param info ConnectorInfo
-     * @param cdrdata Data
+     * @param profile
      * @endif
      */
     void notify(RTC::FsmProfile& profile);
 
   private:
     std::vector<Entry> m_listeners;
-    coil::Mutex m_mutex;
+    std::mutex m_mutex;
   };
 
   /*!
@@ -1338,8 +1342,7 @@ namespace RTC
    */
   class FsmStructureListenerHolder
   {
-    typedef std::pair<FsmStructureListener*, bool> Entry;
-    typedef coil::Guard<coil::Mutex> Guard;
+    using Entry = std::pair<FsmStructureListener*, bool>;
   public:
     /*!
      * @if jp
@@ -1407,23 +1410,21 @@ namespace RTC
      *
      * 登録されているリスナのコールバックメソッドを呼び出す。
      *
-     * @param info ConnectorInfo
-     * @param cdrdata データ
+     * @param structure FsmStructure
      * @else
      *
      * @brief Notify listeners. 
      *
      * This calls the Callback method of the registered listener. 
      *
-     * @param info ConnectorInfo
-     * @param cdrdata Data
+     * @param structure
      * @endif
      */
     void notify(RTC::FsmStructure& structure);
 
   private:
     std::vector<Entry> m_listeners;
-    coil::Mutex m_mutex;
+    std::mutex m_mutex;
   };
 
   //============================================================
@@ -1445,6 +1446,337 @@ namespace RTC
   public:
     /*!
      * @if jp
+     * @brief コンストラクタ
+     * @else
+     * @brief Constructor
+     * @endif
+     */
+    FsmActionListeners();
+    /*!
+     * @if jp
+     * @brief デストラクタ
+     * @else
+     * @brief Destructor
+     * @endif
+     */
+    ~FsmActionListeners();
+    /*!
+     * @if jp
+     *
+     * @brief リスナーの追加
+     *
+     * 指定の種類のPreFsmActionListenerを追加する。
+     *
+     * @param type リスナの種類
+     * @param listener 追加するリスナ
+     * @param autoclean true:デストラクタで削除する,
+     *                  false:デストラクタで削除しない
+     * @return false：指定の種類のリスナが存在しない
+     * @else
+     *
+     * @brief Add the listener.
+     *
+     *
+     *
+     * @param type
+     * @param listener Added listener
+     * @param autoclean true:The listener is deleted at the destructor.,
+     *                  false:The listener is not deleted at the destructor.
+     * @return
+     * @endif
+     */
+    bool addListener(PreFsmActionListenerType type, PreFsmActionListener* listener, bool autoclean=true);
+    /*!
+     * @if jp
+     *
+     * @brief リスナーの削除
+     *
+     * 指定の種類のPreFsmActionListenerを削除する。
+     *
+     * @param type リスナの種類
+     * @param listener 削除するリスナ
+     * @return false：指定の種類のリスナが存在しない
+     *
+     * @else
+     *
+     * @brief Remove the listener.
+     *
+     *
+     * @param type
+     * @param listener
+     * @return
+     *
+     * @endif
+     */
+    bool removeListener(PreFsmActionListenerType type, PreFsmActionListener* listener);
+    /*!
+     * @if jp
+     *
+     * @brief リスナーの追加
+     *
+     * 指定の種類のPostFsmActionListenerを追加する。
+     *
+     * @param type リスナの種類
+     * @param listener 追加するリスナ
+     * @param autoclean true:デストラクタで削除する,
+     *                  false:デストラクタで削除しない
+     * @return false：指定の種類のリスナが存在しない
+     * @else
+     *
+     * @brief Add the listener.
+     *
+     *
+     *
+     * @param type
+     * @param listener Added listener
+     * @param autoclean true:The listener is deleted at the destructor.,
+     *                  false:The listener is not deleted at the destructor.
+     * @return
+     * @endif
+     */
+    bool addListener(PostFsmActionListenerType type, PostFsmActionListener* listener, bool autoclean=true);
+    /*!
+     * @if jp
+     *
+     * @brief リスナーの削除
+     *
+     * 指定の種類のPostFsmActionListenerを削除する。
+     *
+     * @param type リスナの種類
+     * @param listener 削除するリスナ
+     * @return false：指定の種類のリスナが存在しない
+     *
+     * @else
+     *
+     * @brief Remove the listener.
+     *
+     *
+     * @param type
+     * @param listener
+     * @return
+     *
+     * @endif
+     */
+    bool removeListener(PostFsmActionListenerType type, PostFsmActionListener* listener);
+    /*!
+     * @if jp
+     *
+     * @brief リスナーの追加
+     *
+     * 指定の種類のFsmProfileListenerを追加する。
+     *
+     * @param type リスナの種類
+     * @param listener 追加するリスナ
+     * @param autoclean true:デストラクタで削除する,
+     *                  false:デストラクタで削除しない
+     * @return false：指定の種類のリスナが存在しない
+     * @else
+     *
+     * @brief Add the listener.
+     *
+     *
+     *
+     * @param type
+     * @param listener Added listener
+     * @param autoclean true:The listener is deleted at the destructor.,
+     *                  false:The listener is not deleted at the destructor.
+     * @return
+     * @endif
+     */
+    bool addListener(FsmProfileListenerType type, FsmProfileListener* listener, bool autoclean=true);
+    /*!
+     * @if jp
+     *
+     * @brief リスナーの削除
+     *
+     * 指定の種類のFsmProfileListenerを削除する。
+     *
+     * @param type リスナの種類
+     * @param listener 削除するリスナ
+     * @return false：指定の種類のリスナが存在しない
+     *
+     * @else
+     *
+     * @brief Remove the listener.
+     *
+     *
+     * @param type
+     * @param listener
+     * @return
+     *
+     * @endif
+     */
+    bool removeListener(FsmProfileListenerType type, FsmProfileListener* listener);
+    /*!
+     * @if jp
+     *
+     * @brief リスナーの追加
+     *
+     * 指定の種類のFsmStructureListenerを追加する。
+     *
+     * @param type リスナの種類
+     * @param listener 追加するリスナ
+     * @param autoclean true:デストラクタで削除する,
+     *                  false:デストラクタで削除しない
+     * @return false：指定の種類のリスナが存在しない
+     * @else
+     *
+     * @brief Add the listener.
+     *
+     *
+     *
+     * @param type
+     * @param listener Added listener
+     * @param autoclean true:The listener is deleted at the destructor.,
+     *                  false:The listener is not deleted at the destructor.
+     * @return
+     * @endif
+     */
+    bool addListener(FsmStructureListenerType type, FsmStructureListener* listener, bool autoclean=true);
+    /*!
+     * @if jp
+     *
+     * @brief リスナーの削除
+     *
+     * 指定の種類のFsmStructureListenerを削除する。
+     *
+     * @param type リスナの種類
+     * @param listener 削除するリスナ
+     * @return false：指定の種類のリスナが存在しない
+     *
+     * @else
+     *
+     * @brief Remove the listener.
+     *
+     *
+     * @param type
+     * @param listener
+     * @return
+     *
+     * @endif
+     */
+    bool removeListener(FsmStructureListenerType type, FsmStructureListener* listener);
+    /*!
+     * @if jp
+     *
+     * @brief リスナーへ通知する
+     *
+     * 指定の種類のPreFsmActionListenerのコールバック関数を呼び出す。
+     *
+     * @param type リスナの種類
+     * @param state ポートプロファイル
+     * @return false：指定の種類のリスナが存在しない
+     * @else
+     *
+     * @brief
+     *
+     *
+     * @param type
+     * @param state
+     * @return
+     * @endif
+     */
+    inline bool notify(PreFsmActionListenerType type, const char* state)
+    {
+        if (static_cast<uint8_t>(type) < preaction_.size())
+        {
+            preaction_[static_cast<uint8_t>(type)].notify(state);
+            return true;
+        }
+        return false;
+    }
+    /*!
+     * @if jp
+     *
+     * @brief リスナーへ通知する
+     *
+     * 指定の種類のPostFsmActionListenerのコールバック関数を呼び出す。
+     *
+     * @param type リスナの種類
+     * @param state 
+     * @param ret 
+     * @return false：指定の種類のリスナが存在しない
+     * @else
+     *
+     * @brief
+     *
+     *
+     * @param type
+     * @param state
+     * @param ret
+     * @return
+     * @endif
+     */
+    inline bool notify(PostFsmActionListenerType type, const char* state, ReturnCode_t ret)
+    {
+        if (static_cast<uint8_t>(type) < postaction_.size())
+        {
+            postaction_[static_cast<uint8_t>(type)].notify(state, ret);
+            return true;
+        }
+        return false;
+    }
+    /*!
+     * @if jp
+     *
+     * @brief リスナーへ通知する
+     *
+     * 指定の種類のFsmProfileListenerのコールバック関数を呼び出す。
+     *
+     * @param type リスナの種類
+     * @param profile FsmProfile
+     * @return false：指定の種類のリスナが存在しない
+     * @else
+     *
+     * @brief
+     *
+     *
+     * @param type
+     * @param profile FsmProfile
+     * @return
+     * @endif
+     */
+    inline bool notify(FsmProfileListenerType type, RTC::FsmProfile& profile)
+    {
+        if (static_cast<uint8_t>(type) < profile_.size())
+        {
+            profile_[static_cast<uint8_t>(type)].notify(profile);
+            return true;
+        }
+        return false;
+    }
+    /*!
+     * @if jp
+     *
+     * @brief リスナーへ通知する
+     *
+     * 指定の種類のFsmStructureListenerのコールバック関数を呼び出す。
+     *
+     * @param type リスナの種類
+     * @param structure FsmStructure
+     * @return false：指定の種類のリスナが存在しない
+     * @else
+     *
+     * @brief
+     *
+     *
+     * @param type
+     * @param structure
+     * @return
+     * @endif
+     */
+    inline bool notify(FsmStructureListenerType type, RTC::FsmStructure& structure)
+    {
+        if (static_cast<uint8_t>(type) < structure_.size())
+        {
+            structure_[static_cast<uint8_t>(type)].notify(structure);
+            return true;
+        }
+        return false;
+    }
+  private:
+    /*!
+     * @if jp
      * @brief PreFsmActionListenerTypeリスナ配列
      * PreFsmActionListenerTypeリスナを格納
      * @else
@@ -1452,8 +1784,7 @@ namespace RTC
      * The PreFsmActionListenerType listener is stored. 
      * @endif
      */
-    PreFsmActionListenerHolder 
-    preaction_[PRE_FSM_ACTION_LISTENER_NUM];
+    std::array<PreFsmActionListenerHolder, static_cast<uint8_t>(PreFsmActionListenerType::PRE_FSM_ACTION_LISTENER_NUM)> preaction_;
     /*!
      * @if jp
      * @brief PostFsmActionTypeリスナ配列
@@ -1463,8 +1794,7 @@ namespace RTC
      * The PostFsmActionType listener is stored.
      * @endif
      */
-    PostFsmActionListenerHolder 
-    postaction_[POST_FSM_ACTION_LISTENER_NUM];
+    std::array<PostFsmActionListenerHolder, static_cast<uint8_t>(PostFsmActionListenerType::POST_FSM_ACTION_LISTENER_NUM)> postaction_;
     /*!
      * @if jp
      * @brief FsmProfileTypeリスナ配列
@@ -1474,8 +1804,7 @@ namespace RTC
      * The FsmProfileType listener is stored.
      * @endif
      */
-    FsmProfileListenerHolder
-    profile_[FSM_PROFILE_LISTENER_NUM];
+    std::array<FsmProfileListenerHolder, static_cast<uint8_t>(FsmProfileListenerType::FSM_PROFILE_LISTENER_NUM)> profile_;
     /*!
      * @if jp
      * @brief FsmStructureTypeリスナ配列
@@ -1485,10 +1814,9 @@ namespace RTC
      * The FsmStructureType listener is stored.
      * @endif
      */
-    FsmStructureListenerHolder
-    structure_[FSM_STRUCTURE_LISTENER_NUM];
+    std::array<FsmStructureListenerHolder, static_cast<uint8_t>(FsmStructureListenerType::FSM_STRUCTURE_LISTENER_NUM)> structure_;
   };
 
-}; // namespace RTC
+} // namespace RTC
 
 #endif // RTC_FSMACTIONLISTENER_H

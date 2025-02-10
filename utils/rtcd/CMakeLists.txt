@@ -1,39 +1,28 @@
-cmake_minimum_required (VERSION 2.6)
-set(target rtcd)
-project (${target})
+cmake_minimum_required (VERSION 3.5.1)
+set(target rtcd2)
+project (${target}
+	VERSION ${RTM_VERSION}
+	LANGUAGES CXX)
 
 
 link_directories(${ORB_LINK_DIR})
-include_directories(
-		${RTM_INCLUDE_DIR}
-		${ORB_INCLUDE_DIR}
-		)
-
-ADD_DEFINITIONS(${ORB_C_FLAGS_LIST})
+add_definitions(${ORB_C_FLAGS_LIST})
+add_definitions(${COIL_C_FLAGS_LIST})
+if(WIN32)
+	add_definitions(-DRTM_SKEL_IMPORT_SYMBOL)
+endif()
 
 if(VXWORKS)
 	add_executable(${target} rtcd_vxorks.cpp)
-#	add_executable(${target} rtcd_vxorks.cpp ConsoleIn.cpp ConsoleIn.h)
-#	add_executable(${target} hello_s.cxx hello_s.h server.cpp hello.cxx hello.h)
 else(VXWORKS)
 	add_executable(${target} rtcd.cpp)
 endif(VXWORKS)
+openrtm_common_set_compile_props(${target})
+openrtm_set_link_props_shared(${target})
+openrtm_include_rtm(${target})
 
-
-add_dependencies(${target} ${RTM_PROJECT_NAME})
-
-
-if(VXWORKS)
-	set(libs ${RTM_PROJECT_NAME} ${ORB_LIBRARIES} ${COIL_PROJECT_NAME} ${RTCSKEL_PROJECT_NAME})
-else(VXWORKS)
-	set(libs ${RTM_PROJECT_NAME} ${ORB_LIBRARIES} ${COIL_PROJECT_NAME})
-endif(VXWORKS)
-
+set(libs ${RTM_PROJECT_NAME} ${ORB_LIBRARIES} ${DATATYPE_FACTORIES})
 target_link_libraries(${target} ${libs} ${RTM_LINKER_OPTION})
-
-#target_link_libraries(${target} ${ORB_LIBRARIES})
-
-
 
 if(VXWORKS)
 	if(RTP)
@@ -45,12 +34,10 @@ endif(VXWORKS)
 
 if(WIN32)
 install(TARGETS ${target} LIBRARY DESTINATION ${INSTALL_RTM_LIB_DIR}
-			ARCHIVE DESTINATION ${INSTALL_RTM_LIB_DIR}
 			RUNTIME DESTINATION ${INSTALL_RTM_LIB_DIR}
 			COMPONENT utils)
 else(WIN32)
 install(TARGETS ${target} LIBRARY DESTINATION ${INSTALL_RTM_LIB_DIR}
-			ARCHIVE DESTINATION ${INSTALL_RTM_LIB_DIR}
 			RUNTIME DESTINATION ${INSTALL_RTM_BIN_DIR}
 			COMPONENT utils)
 endif(WIN32)

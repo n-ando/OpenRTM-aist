@@ -32,5 +32,5 @@ extern "C"
                             ::coil::Destructor< ::coil::PeriodicTaskBase,
                                                 ::RTC::DefaultPeriodicTask >);
   }
-};
+}
 

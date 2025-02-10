@@ -62,9 +62,7 @@ namespace RTC
    */
   struct OutPortBase::connector_cleanup
   {
-    connector_cleanup()
-    {
-    }
+    connector_cleanup() = default;
     void operator()(OutPortConnector* c)
     {
       delete c;
@@ -80,7 +78,7 @@ namespace RTC
    * @endif
    */
   OutPortBase::OutPortBase(const char* name, const char* data_type)
-    : PortBase(name), m_littleEndian(true)
+    : PortBase(name), m_littleEndian(true), m_listeners(nullptr)
   {
     RTC_DEBUG(("Port name: %s", name));
 
@@ -92,17 +90,19 @@ namespace RTC
 
     // publisher list
     PublisherFactory& factory(PublisherFactory::instance());
-    std::string pubs = coil::flatten(factory.getIdentifiers());
-
     // blank characters are deleted for RTSE's bug
-    coil::eraseBlank(pubs);
+    std::string pubs{coil::eraseBlank(coil::flatten(factory.getIdentifiers()))};
     RTC_DEBUG(("available subscription_type: %s",  pubs.c_str()));
     addProperty("dataport.subscription_type", pubs.c_str());
     // FSM4RTC formal/16-04-01 p.25
     // In the FSM4RTC specification, publisher type is defined as "io_mode"
     addProperty("dataport.io_mode", pubs.c_str());
 
-  };
+    m_properties["data_type"] = data_type;
+
+    initConnectorListeners();
+
+  }
 
   /*!
    * @if jp
@@ -111,13 +111,14 @@ namespace RTC
    * @brief Destructor
    * @endif
    */
-  OutPortBase::~OutPortBase(void)
+  OutPortBase::~OutPortBase()
   {
     RTC_TRACE(("~OutPortBase()"));
     // connector のクリーンナップ
     std::for_each(m_connectors.begin(),
                   m_connectors.end(),
                   connector_cleanup());
+    delete m_listeners;
   }
 
   /*!
@@ -135,7 +136,11 @@ namespace RTC
 
     // merge properties to PortProfile.properties
     m_properties << prop;
+#ifndef ORB_IS_RTORB
     NVList nv;
+#else
+    SDOPackage_NVList nv;
+#endif
     NVUtil::copyFromProperties(nv, m_properties);
     CORBA_SeqUtil::push_back_list(m_profile.properties, nv);
     RTC_PARANOID(("updated properties:"));
@@ -193,9 +198,9 @@ namespace RTC
   {
     RTC_TRACE(("getConnectorProfiles(): size = %d", m_connectors.size()));
     ConnectorInfoList profs;
-    for (int i(0), len(m_connectors.size()); i < len; ++i)
+    for (auto & connector : m_connectors)
       {
-        profs.push_back(m_connectors[i]->profile());
+        profs.emplace_back(connector->profile());
       }
     return profs;
   }
@@ -210,9 +215,9 @@ namespace RTC
   coil::vstring OutPortBase::getConnectorIds()
   {
     coil::vstring ids;
-    for (int i(0), len(m_connectors.size()); i < len; ++i)
+    for (auto & connector : m_connectors)
       {
-        ids.push_back(m_connectors[i]->id());
+        ids.emplace_back(connector->id());
       }
     RTC_TRACE(("getConnectorIds(): %s", coil::flatten(ids).c_str()));
     return ids;
@@ -228,9 +233,9 @@ namespace RTC
   coil::vstring OutPortBase::getConnectorNames()
   {
     coil::vstring names;
-    for (int i(0), len(m_connectors.size()); i < len; ++i)
+    for (auto & connector : m_connectors)
       {
-        names.push_back(m_connectors[i]->name());
+        names.emplace_back(connector->name());
       }
     RTC_TRACE(("getConnectorNames(): %s", coil::flatten(names).c_str()));
     return names;
@@ -248,15 +253,15 @@ namespace RTC
     RTC_TRACE(("getConnectorById(id = %s)", id));
 
     std::string sid(id);
-    for (int i(0), len(m_connectors.size()); i < len; ++i)
+    for (auto & connector : m_connectors)
       {
-        if (sid  == m_connectors[i]->id())
+        if (sid  == connector->id())
           {
-            return m_connectors[i];
+            return connector;
           }
       }
     RTC_WARN(("ConnectorProfile with the id(%s) not found.", id));
-    return 0;
+    return nullptr;
   }
 
   /*!
@@ -271,15 +276,15 @@ namespace RTC
     RTC_TRACE(("getConnectorByName(name = %s)", name));
 
     std::string sname(name);
-    for (int i(0), len(m_connectors.size()); i < len; ++i)
+    for (auto & connector : m_connectors)
       {
-        if (sname  == m_connectors[i]->name())
+        if (sname  == connector->name())
           {
-            return m_connectors[i];
+            return connector;
           }
       }
     RTC_WARN(("ConnectorProfile with the name(%s) not found.", name));
-    return 0;
+    return nullptr;
   }
 
   /*!
@@ -294,7 +299,7 @@ namespace RTC
   {
     RTC_TRACE(("getConnectorProfileById(id = %s)", id));
     OutPortConnector* conn(getConnectorById(id));
-    if (conn == 0)
+    if (conn == nullptr)
       {
         return false;
       }
@@ -314,7 +319,7 @@ namespace RTC
   {
     RTC_TRACE(("getConnectorProfileByName(name = %s)", name));
     OutPortConnector* conn(getConnectorByName(name));
-    if (conn == 0)
+    if (conn == nullptr)
       {
         return false;
       }
@@ -333,9 +338,9 @@ namespace RTC
   {
     RTC_TRACE(("activateInterfaces()"));
 
-    for (int i(0), len(m_connectors.size()); i < len; ++i)
+    for (auto & connector : m_connectors)
       {
-        m_connectors[i]->activate();
+        connector->activate();
       }
   }
 
@@ -350,9 +355,9 @@ namespace RTC
   {
     RTC_TRACE(("deactivateInterfaces()"));
 
-    for (int i(0), len(m_connectors.size()); i < len; ++i)
+    for (auto & connector : m_connectors)
       {
-        m_connectors[i]->deactivate();
+        connector->deactivate();
       }
   }
 
@@ -373,11 +378,10 @@ namespace RTC
                            ConnectorDataListener* listener,
                            bool autoclean)
   {
-    if (type < CONNECTOR_DATA_LISTENER_NUM)
+    if (m_listeners->addListener(type, listener, autoclean))
       {
         RTC_TRACE(("addConnectorDataListener(%s)",
                    ConnectorDataListener::toString(type)));
-        m_listeners.connectorData_[type].addListener(listener, autoclean);
         return;
       }
     RTC_ERROR(("addConnectorDataListener(): Unknown Listener Type"));
@@ -397,11 +401,10 @@ namespace RTC
   removeConnectorDataListener(ConnectorDataListenerType type,
                               ConnectorDataListener* listener)
   {
-    if (type < CONNECTOR_DATA_LISTENER_NUM)
+    if (m_listeners->removeListener(type, listener))
       {
         RTC_TRACE(("removeConnectorDataListener(%s)",
                    ConnectorDataListener::toString(type)));
-        m_listeners.connectorData_[type].removeListener(listener);
         return;
       }
     RTC_ERROR(("removeConnectorDataListener(): Unknown Listener Type"));
@@ -421,11 +424,10 @@ namespace RTC
                                          ConnectorListener* listener,
                                          bool autoclean)
   {
-    if (type < CONNECTOR_LISTENER_NUM)
+    if (m_listeners->addListener(type, listener, autoclean))
       {
         RTC_TRACE(("addConnectorListener(%s)",
                    ConnectorListener::toString(type)));
-        m_listeners.connector_[type].addListener(listener, autoclean);
         return;
       }
     RTC_ERROR(("addConnectorListener(): Unknown Listener Type"));
@@ -444,11 +446,10 @@ namespace RTC
   void OutPortBase::removeConnectorListener(ConnectorListenerType type,
                                             ConnectorListener* listener)
   {
-    if (type < CONNECTOR_LISTENER_NUM)
+    if (m_listeners->removeListener(type, listener))
       {
         RTC_TRACE(("removeConnectorListener(%s)",
                    ConnectorListener::toString(type)));
-        m_listeners.connector_[type].removeListener(listener);
         return;
       }
     RTC_ERROR(("removeConnectorListener(): Unknown Listener Type"));
@@ -475,7 +476,6 @@ namespace RTC
    * @endif
    */
   ReturnCode_t OutPortBase::connect(ConnectorProfile& connector_profile)
-    throw (CORBA::SystemException)
   {
     RTC_TRACE(("OutPortBase::connect()"));
 
@@ -543,14 +543,18 @@ namespace RTC
     RTC_DEBUG(("ConnectorProfile::properties are as follows."));
     RTC_PARANOID_STR((prop));
 
+    if (!isExistingMarshalingType(prop))
+    {
+        return RTC::RTC_ERROR;
+    }
+
     /*
      * ここで, ConnectorProfile からの properties がマージされたため、
      * prop["dataflow_type"]: データフロータイプ
      * prop["interface_type"]: インターフェースタイプ
      * などがアクセス可能になる。
      */
-    std::string dflow_type(prop["dataflow_type"]);
-    coil::normalize(dflow_type);
+    std::string dflow_type{coil::normalize(prop["dataflow_type"])};
 
     if (dflow_type == "push")
       {
@@ -562,14 +566,14 @@ namespace RTC
         RTC_PARANOID(("dataflow_type = pull .... create PullConnector"));
 
         OutPortProvider* provider(createProvider(cprof, prop));
-        if (provider == 0)
+        if (provider == nullptr)
           {
             return RTC::BAD_PARAMETER;
           }
 
         // create OutPortPullConnector
         OutPortConnector* connector(createConnector(cprof, prop, provider));
-        if (connector == 0)
+        if (connector == nullptr)
           {
             return RTC::RTC_ERROR;
           }
@@ -622,14 +626,19 @@ namespace RTC
       }
     RTC_TRACE(("endian: %s", m_littleEndian ? "little":"big"));
 
+    if (!isExistingMarshalingType(prop))
+    {
+        return RTC::RTC_ERROR;
+    }
+
     /*
      * ここで, ConnectorProfile からの properties がマージされたため、
      * prop["dataflow_type"]: データフロータイプ
      * prop["interface_type"]: インターフェースタイプ
      * などがアクセス可能になる。
      */
-    std::string& dflow_type(prop["dataflow_type"]);
-    coil::normalize(dflow_type);
+    std::string dflow_type(prop["dataflow_type"]);
+    dflow_type = coil::normalize(std::move(dflow_type));
 
     if (dflow_type == "push")
       {
@@ -637,14 +646,14 @@ namespace RTC
 
         // interface
         InPortConsumer* consumer(createConsumer(cprof, prop));
-        if (consumer == 0)
+        if (consumer == nullptr)
           {
             return RTC::BAD_PARAMETER;
           }
 
         // create OutPortPushConnector
         OutPortConnector* connector(createConnector(cprof, prop, consumer));
-        if (connector == 0)
+        if (connector == nullptr)
           {
             return RTC::RTC_ERROR;
           }
@@ -658,7 +667,7 @@ namespace RTC
 
         // set endian type
         OutPortConnector* conn(getConnectorById(cprof.connector_id));
-        if (conn == 0)
+        if (conn == nullptr)
           {
             RTC_ERROR(("specified connector not found: %s",
                        (const char*)cprof.connector_id));
@@ -695,6 +704,9 @@ namespace RTC
         if (id == (*it)->id())
           {
             // Connector's dtor must call disconnect()
+            coil::Properties prop;
+            NVUtil::copyToProperties(prop, connector_profile.properties);
+            (*it)->unsubscribeInterface(prop);
             delete *it;
             m_connectors.erase(it);
             RTC_TRACE(("delete connector: %s", id.c_str()));
@@ -724,7 +736,7 @@ namespace RTC
                   coil::flatten(provider_types).c_str()));
 
 #ifndef RTC_NO_DATAPORTIF_ACTIVATION_OPTION
-    if (m_properties.hasKey("provider_types") &&
+    if ((m_properties.hasKey("provider_types") != nullptr) &&
         coil::normalize(m_properties["provider_types"]) != "all")
       {
         RTC_DEBUG(("allowed providers: %s",
@@ -744,15 +756,24 @@ namespace RTC
 #endif
 
     // OutPortProvider supports "pull" dataflow type
-    if (provider_types.size() > 0)
+    if (!provider_types.empty())
       {
         RTC_DEBUG(("dataflow_type pull is supported"));
         appendProperty("dataport.dataflow_type", "pull");
-        for (coil::vstring::iterator itr = provider_types.begin(); itr != provider_types.end(); ++itr)
+        coil::Properties prop_options;
+        for (auto & provider_type : provider_types)
         {
             appendProperty("dataport.interface_type",
-                        (*itr).c_str());
+                        provider_type.c_str());
+            coil::Properties prop_if(factory.getProperties(provider_type));
+            coil::Properties& prop_node(prop_options.getNode(provider_type));
+            prop_node << prop_if;
         }
+        coil::Properties prop;
+        NVUtil::copyToProperties(prop, m_profile.properties);
+        coil::Properties& prop_dataport(prop.getNode("dataport.interface_option"));
+        prop_dataport << prop_options;
+        NVUtil::copyFromProperties(m_profile.properties, prop);
       }
 
     m_providerTypes = provider_types;
@@ -776,7 +797,7 @@ namespace RTC
                   coil::flatten(consumer_types).c_str()));
 
 #ifndef RTC_NO_DATAPORTIF_ACTIVATION_OPTION
-    if (m_properties.hasKey("consumer_types") &&
+    if ((m_properties.hasKey("consumer_types") != nullptr) &&
         coil::normalize(m_properties["consumer_types"]) != "all")
       {
         RTC_DEBUG(("allowed consumers: %s",
@@ -796,15 +817,24 @@ namespace RTC
 #endif
 
     // InPortConsumer supports "push" dataflow type
-    if (consumer_types.size() > 0)
+    if (!consumer_types.empty())
       {
         RTC_PARANOID(("dataflow_type push is supported"));
         appendProperty("dataport.dataflow_type", "push");
-        for (coil::vstring::iterator itr = consumer_types.begin(); itr != consumer_types.end(); ++itr)
+        coil::Properties prop_options;
+        for (auto & consumer_type : consumer_types)
         {
             appendProperty("dataport.interface_type",
-                        (*itr).c_str());
+                        consumer_type.c_str());
+            coil::Properties prop_if(factory.getProperties(consumer_type));
+            coil::Properties& prop_node(prop_options.getNode(consumer_type));
+            prop_node << prop_if;
         }
+        coil::Properties prop;
+        NVUtil::copyToProperties(prop, m_profile.properties);
+        coil::Properties& prop_dataport(prop.getNode("dataport.interface_option"));
+        prop_dataport << prop_options;
+        NVUtil::copyFromProperties(m_profile.properties, prop);
       }
 
     m_consumerTypes = consumer_types;
@@ -821,16 +851,16 @@ namespace RTC
                                 bool& littleEndian)
   {
     // old version check
-    if (prop.hasKey("serializer") == NULL)
+    if (prop.hasKey("serializer") == nullptr)
       {
         littleEndian = true;
         return true;
       }
 
     // endian type check
-    std::string endian_type(prop.getProperty("serializer.cdr.endian", ""));
+    std::string endian_type{coil::normalize(
+      prop.getProperty("serializer.cdr.endian", ""))};
     RTC_DEBUG(("endian_type: %s", endian_type.c_str()));
-    coil::normalize(endian_type);
     std::vector<std::string> endian(coil::split(endian_type, ","));
 
     if (endian.empty()) { return false; }
@@ -858,21 +888,21 @@ namespace RTC
   OutPortBase::createProvider(ConnectorProfile& cprof, coil::Properties& prop)
   {
     if (!prop["interface_type"].empty() &&
-        !coil::includes((coil::vstring)m_providerTypes, prop["interface_type"]))
+        !coil::includes(coil::vstring(m_providerTypes), prop["interface_type"]))
       {
         RTC_ERROR(("no provider found"));
         RTC_DEBUG(("interface_type:  %s", prop["interface_type"].c_str()));
         RTC_DEBUG(("interface_types: %s",
                    coil::flatten(m_providerTypes).c_str()));
-        return 0;
+        return nullptr;
       }
 
     RTC_DEBUG(("interface_type: %s", prop["interface_type"].c_str()));
     OutPortProvider* provider;
     provider = OutPortProviderFactory::
-      instance().createObject(prop["interface_type"].c_str());
+      instance().createObject(prop["interface_type"]);
 
-    if (provider != 0)
+    if (provider != nullptr)
       {
         RTC_TRACE(("provider created"));
         provider->init(prop.getNode("provider"));
@@ -882,7 +912,7 @@ namespace RTC
           {
             RTC_ERROR(("publishing interface information error"));
             OutPortProviderFactory::instance().deleteObject(provider);
-            return 0;
+            return nullptr;
           }
 #else  // ORB_IS_RTORB
         ::SDOPackage::NVList_ptr prop_ref(cprof.properties);
@@ -890,14 +920,14 @@ namespace RTC
           {
             RTC_ERROR(("publishing interface information error"));
             OutPortProviderFactory::instance().deleteObject(provider);
-            return 0;
+            return nullptr;
           }
 #endif  // ORB_IS_RTORB
         return provider;
       }
 
     RTC_ERROR(("provider creation failed"));
-    return 0;
+    return nullptr;
   }
 
 
@@ -912,21 +942,21 @@ namespace RTC
                                               coil::Properties& prop)
   {
     if (!prop["interface_type"].empty() &&
-        !coil::includes((coil::vstring)m_consumerTypes, prop["interface_type"]))
+        !coil::includes(coil::vstring(m_consumerTypes), prop["interface_type"]))
       {
         RTC_ERROR(("no consumer found"));
         RTC_DEBUG(("interface_type:  %s", prop["interface_type"].c_str()));
         RTC_DEBUG(("interface_types: %s",
                    coil::flatten(m_consumerTypes).c_str()));
-        return 0;
+        return nullptr;
       }
 
     RTC_DEBUG(("interface_type: %s", prop["interface_type"].c_str()));
     InPortConsumer* consumer;
     consumer = InPortConsumerFactory::
-      instance().createObject(prop["interface_type"].c_str());
+      instance().createObject(prop["interface_type"]);
 
-    if (consumer != 0)
+    if (consumer != nullptr)
       {
         RTC_TRACE(("consumer created"));
         consumer->init(prop.getNode("consumer"));
@@ -935,14 +965,14 @@ namespace RTC
           {
             RTC_ERROR(("interface subscription failed."));
             InPortConsumerFactory::instance().deleteObject(consumer);
-            return 0;
+            return nullptr;
           }
 
         return consumer;
       }
 
     RTC_ERROR(("consumer creation failed"));
-    return 0;
+    return nullptr;
   }
 
   /*!
@@ -972,13 +1002,13 @@ namespace RTC
 
     try
       {
-        OutPortConnector* connector(0);
+        OutPortConnector* connector(nullptr);
         connector = new OutPortPushConnector(profile, consumer, m_listeners);
 
-        if (connector == 0)
+        if (connector == nullptr)
           {
             RTC_ERROR(("old compiler? new returned 0;"));
-            return 0;
+            return nullptr;
           }
         RTC_TRACE(("OutPortPushConnector created"));
 
@@ -989,29 +1019,27 @@ namespace RTC
         if (coil::normalize(prop["interface_type"]) == "direct")
           {
             InPortBase* inport = getLocalInPort(profile);
-            if (inport == NULL)
+            if (inport == nullptr)
               {
                 RTC_DEBUG(("interface_type is direct, "
                            "but a peer InPort servant could not be obtained."));
                 delete connector;
-                return 0;
+                return nullptr;
               }
             connector->setInPort(inport);
           }
         // end of direct interface_type
 
-        m_connectors.push_back(connector);
+        m_connectors.emplace_back(connector);
         RTC_PARANOID(("connector pushback done: size = %d",
                       m_connectors.size()));
         return connector;
       }
-    catch (std::bad_alloc& e)
+    catch (std::bad_alloc&)
       {
         RTC_ERROR(("OutPortPushConnector creation failed"));
-        return 0;
+        return nullptr;
       }
-    RTC_FATAL(("never comes here: createConnector()"));
-    return 0;
   }
 
   /*!
@@ -1042,34 +1070,32 @@ namespace RTC
 
     try
       {
-        OutPortConnector* connector(0);
+        OutPortConnector* connector(nullptr);
         connector = new OutPortPullConnector(profile, provider, m_listeners);
 
-        if (connector == 0)
+        if (connector == nullptr)
           {
             RTC_ERROR(("old compiler? new returned 0;"));
-            return 0;
+            return nullptr;
           }
         RTC_TRACE(("OutPortPullConnector created"));
 
 
-		if (coil::normalize(prop["interface_type"]) == "direct")
-		{
-			connector->setPullDirectMode();
-		}
+        if (coil::normalize(prop["interface_type"]) == "direct")
+          {
+            connector->setPullDirectMode();
+          }
 
-        m_connectors.push_back(connector);
+        m_connectors.emplace_back(connector);
         RTC_PARANOID(("connector pushback done: size = %d",
                       m_connectors.size()));
         return connector;
       }
-    catch (std::bad_alloc& e)
+    catch (std::bad_alloc&)
       {
         RTC_ERROR(("OutPortPullConnector creation failed"));
-        return 0;
+        return nullptr;
       }
-    RTC_FATAL(("never comes here: createConnector()"));
-    return 0;
   }
 
   /*!
@@ -1079,6 +1105,7 @@ namespace RTC
    * @brief Getting local peer InPort if available
    * @endif
    */
+#ifndef ORB_IS_RTORB
   InPortBase*
   OutPortBase::getLocalInPort(const ConnectorInfo& profile)
   {
@@ -1087,12 +1114,13 @@ namespace RTC
     RTC_DEBUG(("Current connector profile: name=%s, id=%s",
                profile.name.c_str(), profile.id.c_str()));
     // finding peer port object
-    for (size_t i = 0;  i < profile.ports.size() ; ++i)
+    for (const auto & port : profile.ports)
       {
         CORBA::Object_var obj;
-        obj = orb->string_to_object(profile.ports[i].c_str());
-        if (getPortRef()->_is_equivalent(obj)) { continue; }
-        RTC_DEBUG(("Peer port found: %s.", profile.ports[i].c_str()));
+        obj = orb->string_to_object(port.c_str());
+        PortService_var portref = getPortRef();
+        if (portref->_is_equivalent(obj)) { continue; }
+        RTC_DEBUG(("Peer port found: %s.", port.c_str()));
         try
           {
             PortableServer::POA_var poa = ::RTC::Manager::instance().getPOA();
@@ -1106,45 +1134,76 @@ namespace RTC
             RTC_DEBUG(("Peer port might be a remote port"));
           }
       }
-    return NULL;
+#else
+  InPortBase*
+  OutPortBase::getLocalInPort(const ConnectorInfo& /*profile*/)
+  {
+#endif
+    return nullptr;
   }
 
   ReturnCode_t OutPortBase::notify_connect(ConnectorProfile& connector_profile)
-	  throw (CORBA::SystemException)
   {
-	  Properties prop;
-	  NVUtil::copyToProperties(prop, connector_profile.properties);
+    Properties prop;
+    NVUtil::copyToProperties(prop, connector_profile.properties);
 
-	  Properties node = prop.getNode("dataport.outport");
+    Properties node = prop.getNode("dataport.outport");
 
-	  Properties portprop(m_properties);
+    Properties portprop(m_properties);
 
-	  node << portprop;
-
-	  
-
-	  NVUtil::copyFromProperties(connector_profile.properties, prop);
-
-	  std::string _str = node["fan_out"];
-	  unsigned int value = 100;
-
-	  coil::stringTo<unsigned int>(value, _str.c_str());
-
-	  if (value <= m_connectors.size())
-	  {
-		  return RTC::PRECONDITION_NOT_MET;
-	  }
-	  
-	  
+    node << portprop;
 
 
+    NVUtil::mergeFromProperties(connector_profile.properties, prop);
 
-	  return PortBase::notify_connect(connector_profile);
+    std::string _str = node["fan_out"];
+    unsigned int value = 100;
+
+    coil::stringTo<unsigned int>(value, _str.c_str());
+
+    if (value <= m_connectors.size())
+    {
+      return RTC::PRECONDITION_NOT_MET;
+    }
+
+    return PortBase::notify_connect(connector_profile);
+  }
+  /*!
+   * @if jp
+   *
+   * @brief コネクタリスナの取得
+   *
+   *
+   *
+   * @else
+   *
+   * @brief
+   *
+   *
+   * @endif
+   */
+  ConnectorListenersBase* OutPortBase::getListeners()
+  {
+    return m_listeners;
+  }
+  /*!
+   * @if jp
+   *
+   * @brief コネクタリスナの初期化
+   *
+   *
+   *
+   * @else
+   *
+   * @brief
+   *
+   *
+   * @endif
+   */
+  void OutPortBase::initConnectorListeners()
+  {
+      delete m_listeners;
+      m_listeners = new ConnectorListeners();
   }
 
-  ConnectorListeners& OutPortBase::getListeners()
-  {
-	  return m_listeners;
-  }
-
-}; // end of namespace RTM
+} // namespace RTC

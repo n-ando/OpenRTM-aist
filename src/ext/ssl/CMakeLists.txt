@@ -1,67 +1,68 @@
-cmake_minimum_required (VERSION 2.6)
+cmake_minimum_required (VERSION 3.5.1)
 
-project (SSLTransport)
+project (SSLTransport
+	VERSION ${RTM_VERSION}
+	LANGUAGES CXX)
 
 
 set(OPENSSL_ROOT ${OPENSSL_ROOT} CACHE PATH "set OPENSSL_ROOT")
 
+if(OPENSSL_ROOT)
+	set(OPENSSL_ROOT_DIR ${OPENSSL_ROOT})
+endif(OPENSSL_ROOT)
 
-if(NOT OPENSSL_ROOT)
-	if(UNIX)
-		set(ORB_ROOT "/usr")
-	else(UNIX)
-		message(FATAL_ERROR "Please set OPENSSL_ROOT.")
-	endif(UNIX)
-endif()
-
-set(SSL_INCLUDE_DIR ${OPENSSL_ROOT}/include)
-set(SSL_LINK_DIR ${OPENSSL_ROOT}/lib)
-
-if(WIN32)
-	set(SSL_LIBRARIES libssl libcrypto)
-else(WIN32)
-	set(SSL_LIBRARIES ssl crypto)
-endif(WIN32)
-
+find_package(OpenSSL REQUIRED)
 
 link_directories(${ORB_LINK_DIR} ${SSL_LINK_DIR})
-include_directories(
-		${RTM_INCLUDE_DIR}
-		${ORB_INCLUDE_DIR}
-		${${idl_name}_DIR}
-		${SSL_INCLUDE_DIR}
-		)
-
-ADD_DEFINITIONS(${ORB_C_FLAGS_LIST})
+add_definitions(${ORB_C_FLAGS_LIST})
+add_definitions(${COIL_C_FLAGS_LIST})
+if(WIN32)
+	add_definitions(-DRTM_SKEL_IMPORT_SYMBOL)
+endif()
 
 
 set(target SSLTransport)
 
-set(srcs SSLTransport.cpp )
+set(srcs SSLTransport.cpp)
 
 
-set(libs ${RTM_PROJECT_NAME} ${ORB_LIBRARIES} ${COIL_PROJECT_NAME} ${SSL_LIBRARIES} ${ORBSSL_LIBRARIES})
-
+set(libs ${RTM_PROJECT_NAME} ${ORB_LIBRARIES} ${OPENSSL_LIBRARIES} ${ORBSSL_LIBRARIES} ${DATATYPE_FACTORIES})
 
 add_library(${target} SHARED ${srcs})
-target_link_libraries(${target} ${libs} ${RTM_LINKER_OPTION})
-add_dependencies(${target} ${RTM_PROJECT_NAME})
+openrtm_set_link_props_shared(${target})
+openrtm_common_set_compile_props(${target})
+openrtm_include_rtm(${target})
+target_include_directories(${target} SYSTEM
+	PRIVATE ${OPENSSL_INCLUDE_DIR})
+target_link_libraries(${target} PRIVATE ${libs} ${RTM_LINKER_OPTION})
 set_target_properties(${target} PROPERTIES PREFIX "")
 
 
 install(TARGETS ${target} LIBRARY DESTINATION ${INSTALL_RTM_EXT_DIR}/ssl
-			ARCHIVE DESTINATION ${INSTALL_RTM_EXT_DIR}/ssl
 			RUNTIME DESTINATION ${INSTALL_RTM_EXT_DIR}/ssl
 			COMPONENT ext)
 
 if(WIN32)
-	file(GLOB OPENSSL_DLLS1 "${OPENSSL_ROOT}/bin/libcrypto*.dll")
-	file(GLOB OPENSSL_DLLS2 "${OPENSSL_ROOT}/bin/libssl*.dll")
-
+	if(OPENSSL_ROOT_DIR)
+		file(GLOB OPENSSL_DLLS1 "${OPENSSL_ROOT_DIR}/bin/libcrypto*.dll")
+		file(GLOB OPENSSL_DLLS2 "${OPENSSL_ROOT_DIR}/bin/libssl*.dll")
+		install(PROGRAMS ${OPENSSL_ROOT_DIR}/bin/openssl.exe DESTINATION ${INSTALL_RTM_EXT_DIR}/ssl COMPONENT ssllibs)
+	endif(OPENSSL_ROOT_DIR)
 	foreach(library ${OPENSSL_DLLS1};${OPENSSL_DLLS2})
-		install(PROGRAMS ${library} DESTINATION ${INSTALL_RTM_EXT_DIR}/ssl COMPONENT ssllibs)
+		install(PROGRAMS ${library} DESTINATION ${INSTALL_RTM_BIN_DIR} COMPONENT ssllibs)
 	endforeach()
-	install(PROGRAMS ${OPENSSL_ROOT}/bin/openssl.exe DESTINATION ${INSTALL_RTM_EXT_DIR}/ssl COMPONENT ssllibs)
 	
 else(WIN32)
 endif(WIN32)
+
+set(SSL_FILES ${CMAKE_CURRENT_SOURCE_DIR}/root.crt ${CMAKE_CURRENT_SOURCE_DIR}/server.pem)
+install(FILES ${SSL_FILES} DESTINATION ${INSTALL_RTM_ETC_DIR}/ssl COMPONENT ext)
+
+
+set(INSTALL_SSLTRANSPORT_DIR ${INSTALL_RTM_EXT_DIR}/ssl)
+configure_file(
+	${CMAKE_CURRENT_SOURCE_DIR}/rtc.ssl.conf.in ${PROJECT_BINARY_DIR}/rtc.ssl.conf @ONLY)
+install(
+	FILES ${PROJECT_BINARY_DIR}/rtc.ssl.conf
+	DESTINATION ${INSTALL_RTM_ETC_DIR}/ssl
+	COMPONENT ext)

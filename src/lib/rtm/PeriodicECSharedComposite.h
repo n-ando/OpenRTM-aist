@@ -46,10 +46,6 @@
  * @endif
  */
 
-#ifdef WIN32
-#pragma warning( disable : 4290 )
-#endif
-
 namespace SDOPackage
 {
   /*!
@@ -70,7 +66,7 @@ namespace SDOPackage
   class PeriodicECOrganization
     : public Organization_impl
   {
-    typedef std::vector<std::string> PortList;
+    using PortList = std::vector<std::string>;
 
   public:
     /*!
@@ -90,7 +86,7 @@ namespace SDOPackage
      *
      * @endif
      */
-    explicit PeriodicECOrganization(::RTC::RTObject_impl* rtobj);
+    explicit PeriodicECOrganization(::RTC::RTObject_impl* rtobj, SDOSystemElement_ptr sdo);
     /*!
      * @if jp
      * @brief デストラクタ
@@ -104,7 +100,7 @@ namespace SDOPackage
      *
      * @endif
      */
-    virtual ~PeriodicECOrganization(void);
+    ~PeriodicECOrganization() override;
 
     /*!
      * @if jp
@@ -128,9 +124,7 @@ namespace SDOPackage
      *
      * @endif
      */
-    virtual ::CORBA::Boolean add_members(const SDOList& sdo_list)
-      throw (::CORBA::SystemException,
-             InvalidParameter, NotAvailable, InternalError);
+    ::CORBA::Boolean add_members(const SDOList& sdo_list) override;
 
     /*!
      * @if jp
@@ -155,9 +149,7 @@ namespace SDOPackage
      *
      * @endif
      */
-    virtual ::CORBA::Boolean set_members(const SDOList& sdos)
-      throw (::CORBA::SystemException,
-             InvalidParameter, NotAvailable, InternalError);
+    ::CORBA::Boolean set_members(const SDOList& sdo_list) override;
 
     /*!
      * @if jp
@@ -180,9 +172,7 @@ namespace SDOPackage
      *
      * @endif
      */
-    virtual ::CORBA::Boolean remove_member(const char* id)
-      throw (::CORBA::SystemException,
-             InvalidParameter, NotAvailable, InternalError);
+    ::CORBA::Boolean remove_member(const char* id) override;
 
     /*!
      * @if jp
@@ -191,7 +181,7 @@ namespace SDOPackage
      * @brief Remove a member of Organization
      * @endif
      */
-    void removeAllMembers(void);
+    void removeAllMembers();
     /*!
      * @if jp
      * @brief Organizationメンバーを更新/削除する
@@ -199,7 +189,7 @@ namespace SDOPackage
      * @brief Update/Remove a member of Organization
      * @endif
      */
-    void updateDelegatedPorts(void);
+    void updateDelegatedPorts();
 
   protected:
     class Member;
@@ -210,7 +200,7 @@ namespace SDOPackage
      * @brief Conversion from SDO to DFC
      * @endif
      */
-    bool sdoToDFC(const SDO_ptr sdo, ::OpenRTM::DataFlowComponent_ptr& dfc);
+    static bool sdoToDFC(SDO_ptr sdo, ::OpenRTM::DataFlowComponent_ptr& dfc);
 
     /*!
      * @if jp
@@ -219,7 +209,7 @@ namespace SDOPackage
      * @brief Stop Owned ExecutionContexts
      * @endif
      */
-    void stopOwnedEC(Member& member);
+    static void stopOwnedEC(Member& member);
 
     /*!
      * @if jp
@@ -228,7 +218,7 @@ namespace SDOPackage
      * @brief Start Owned ExecutionContexts
      * @endif
      */
-    void startOwnedEC(Member& member);
+    static void startOwnedEC(Member& member);
 
     /*!
      * @if jp
@@ -247,7 +237,7 @@ namespace SDOPackage
      * @endif
      */
     void removeOrganizationFromTarget(Member& member);
-    void addRTCToEC(RTC::RTObject_var rtobj);
+    void addRTCToEC(RTC::RTObject_ptr rtobj);
 
     /*!
      * @if jp
@@ -292,7 +282,7 @@ namespace SDOPackage
      * @brief PortsList is updated.
      * @endif
      */
-    void updateExportedPortsList(void);
+    void updateExportedPortsList();
 
   protected:
     /*!
@@ -337,7 +327,7 @@ namespace SDOPackage
         config_  = rtobj->get_configuration();
       }
 
-      virtual ~Member(void)
+      virtual ~Member()
       {
         /*
         rtobj_.out();
@@ -361,7 +351,6 @@ namespace SDOPackage
 
       Member& operator=(const Member& x)
       {
-//        std::cout << "####################op=" << std::endl;
         Member tmp(x);
         tmp.swap(*this);
         return *this;
@@ -399,7 +388,7 @@ namespace SDOPackage
      * @endif
      */
     std::vector<Member> m_rtcMembers;
-    typedef std::vector<Member>::iterator MemIt;
+    using MemIt = std::vector<Member>::iterator;
 
     /*!
      * @if jp
@@ -417,15 +406,15 @@ namespace SDOPackage
      * @brief Output PortList to StandardOutput.
      * @endif
      */
-    void print(PortList p)
+    static void print(const PortList& p)
     {
-      for (int i(0), len(p.size()); i < len; ++i)
+      for (auto & i : p)
         {
-          std::cout << p[i] << std::endl;
+          std::cout << i << std::endl;
         }
     }
   };
-};  // namespace SDOPackage
+} // namespace SDOPackage
 
 
 /*!
@@ -504,7 +493,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~PeriodicECSharedComposite(void);
+    ~PeriodicECSharedComposite() override;
 
     /*!
      * @if jp
@@ -521,7 +510,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode_t onInitialize(void);
+    ReturnCode_t onInitialize() override;
     /*!
      * @if jp
      *
@@ -553,8 +542,8 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode_t onActivated(RTC::UniqueId exec_handle);
-    void activateChildComp(RTC::RTObject_var rtobj);
+    ReturnCode_t onActivated(RTC::UniqueId exec_handle) override;
+    void activateChildComp(const RTC::RTObject_ptr rtobj);
     /*!
      * @if jp
      *
@@ -586,7 +575,8 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode_t onDeactivated(RTC::UniqueId exec_handle);
+    ReturnCode_t onDeactivated(RTC::UniqueId exec_handle) override;
+    void deactivateChildComp(const RTC::RTObject_ptr rtobj);
 
     /*!
      * @if jp
@@ -618,7 +608,8 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode_t onReset(RTC::UniqueId exec_handle);
+    ReturnCode_t onReset(RTC::UniqueId exec_handle) override;
+    void resetChildComp(const RTC::RTObject_ptr rtobj);
     /*!
      * @if jp
      *
@@ -643,10 +634,9 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode_t onFinalize(void);
+    ReturnCode_t onFinalize() override;
 
-    virtual ReturnCode_t exit()
-      throw (CORBA::SystemException);
+    ReturnCode_t exit() override;
 
   protected:
     /*!
@@ -666,8 +656,6 @@ namespace RTC
      * @endif
      */
     OpenRTM::DataFlowComponent_var m_ref;
-//    PeriodicExecutionContext* m_pec;
-//    ExecutionContextService_var m_ecref;
     /*!
      * @if jp
      * @brief Organizationのリファレンス
@@ -677,16 +665,12 @@ namespace RTC
      */
     SDOPackage::PeriodicECOrganization* m_org;
   };  // class PeriodicECOrganization
-};  // namespace RTC
-
-#ifdef WIN32
-#pragma warning( default : 4290 )
-#endif
+} // namespace RTC
 
 
 extern "C"
 {
-  DLL_EXPORT void PeriodicECSharedCompositeInit(RTC::Manager* manager);
-};
+  void PeriodicECSharedCompositeInit(RTC::Manager* manager);
+}
 
 #endif  // RTC_PERIODICECSHAREDCOMPOSITE_H

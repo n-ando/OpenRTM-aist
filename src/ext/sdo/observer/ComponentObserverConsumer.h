@@ -20,14 +20,15 @@
 #ifndef RTC_COMPONENTOBSERVERCONSUMER_H
 #define RTC_COMPONENTOBSERVERCONSUMER_H
 
-#include <coil/Mutex.h>
 #include <coil/Factory.h>
 #include <coil/stringutil.h>
 #include <rtm/SdoServiceConsumerBase.h>
 #include <rtm/CorbaConsumer.h>
 #include <rtm/ComponentActionListener.h>
 #include <rtm/idl/SDOPackageStub.h>
-#include "ComponentObserverStub.h"
+#include <ComponentObserverStub.h>
+
+#include <utility>
 
 namespace RTC
 {
@@ -40,7 +41,6 @@ namespace RTC
   class ComponentObserverConsumer
     : public SdoServiceConsumerBase
   {
-    typedef coil::Guard<coil::Mutex> Guard;
   public:
     /*!
      * @if jp
@@ -58,7 +58,7 @@ namespace RTC
      * @brief dtor
      * @endif
      */
-    virtual ~ComponentObserverConsumer();
+    ~ComponentObserverConsumer() override;
 
     /*!
      * @if jp
@@ -67,8 +67,8 @@ namespace RTC
      * @brief Initialization
      * @endif
      */
-    virtual bool init(RTObject_impl& rtobj,
-                      const SDOPackage::ServiceProfile& profile);
+    bool init(RTObject_impl& rtobj,
+              const SDOPackage::ServiceProfile& profile) override;
 
     /*!
      * @if jp
@@ -77,7 +77,7 @@ namespace RTC
      * @brief Re-initialization
      * @endif
      */
-    virtual bool reinit(const SDOPackage::ServiceProfile& profile);
+    bool reinit(const SDOPackage::ServiceProfile& profile) override;
 
     /*!
      * @if jp
@@ -86,7 +86,7 @@ namespace RTC
      * @brief getting ServiceProfile
      * @endif
      */
-    virtual const SDOPackage::ServiceProfile& getProfile() const;
+    const SDOPackage::ServiceProfile& getProfile() const override;
     
     /*!
      * @if jp
@@ -95,7 +95,7 @@ namespace RTC
      * @brief Finalization
      * @endif
      */
-    virtual void finalize();
+    void finalize() override;
 
   protected:
     /*!
@@ -107,7 +107,7 @@ namespace RTC
      */
     inline void updateStatus(OpenRTM::StatusKind statuskind, const char* msg)
     {
-      Guard guard(mutex);
+      std::lock_guard<std::mutex> guard(mutex);
       try
         {
           m_observer->update_status(statuskind, msg);
@@ -125,9 +125,9 @@ namespace RTC
      * @brief Converting kind to string
      * @endif
      */
-    inline const char* toString(OpenRTM::StatusKind kind)
+    static inline const char* toString(OpenRTM::StatusKind kind)
     {
-      static const char* kinds[] = 
+      static const char* const kinds[] = 
         {
           "COMPONENT_PROFILE",
           "RTC_STATUS",
@@ -136,7 +136,7 @@ namespace RTC
           "CONFIGURATION",
           "HEARTBEAT"
         };
-      return (size_t)kind < sizeof(kind)/sizeof(char*) ? kinds[kind] : "";
+      return static_cast<size_t>(kind) < sizeof(kinds)/sizeof(kinds[0]) ? kinds[kind] : "";
     }
 
     /*!
@@ -161,15 +161,6 @@ namespace RTC
 
     //============================================================
     // Heartbeat related functions
-    /*!
-     * @if jp
-     * @brief ハートビートをオブザーバに伝える
-     * @else
-     * @brief Sending a heartbeart signal to observer
-     * @endif
-     */
-    void heartbeat();
-
     /*!
      * @if jp
      * @brief ハートビートを設定する
@@ -313,9 +304,9 @@ namespace RTC
     {
     public:
       CompStatMsg(ComponentObserverConsumer& coc)
-        : activatedListener(NULL), deactivatedListener(NULL),
-          resetListener(NULL), abortingListener(NULL),
-          finalizeListener(NULL), m_coc(coc) {}
+        : activatedListener(nullptr), deactivatedListener(nullptr),
+          resetListener(nullptr), abortingListener(nullptr),
+          finalizeListener(nullptr), m_coc(coc) {}
       void onGeneric(const char* msgprefix, UniqueId ec_id, ReturnCode_t ret)
       {
         if (ret == RTC::RTC_OK)
@@ -343,6 +334,7 @@ namespace RTC
       }
       void onFinalize(UniqueId ec_id, ReturnCode_t ret)
       {
+        m_coc.unsetHeartbeat();
         onGeneric("FINALIZE:", ec_id, ret);
       }
 
@@ -366,9 +358,7 @@ namespace RTC
     {
     public:
       PortAction(ComponentObserverConsumer& coc)
-        : portAddListener(NULL), portRemoveListener(NULL),
-          portConnectListener(NULL), portDisconnectListener(NULL),
-          m_coc(coc) {}
+        : m_coc(coc) {}
       void onGeneric(const char* _msg, const char* portname)
       {
         std::string msg(_msg);
@@ -384,7 +374,7 @@ namespace RTC
         onGeneric("REMOVE:", static_cast<const char*>(pprof.name));
       }
       void onConnect(const char* portname,
-                     ::RTC::ConnectorProfile& pprof, ReturnCode_t ret)
+                     ::RTC::ConnectorProfile&  /*pprof*/, ReturnCode_t ret)
       {
         if (ret == RTC::RTC_OK)
           {
@@ -392,7 +382,7 @@ namespace RTC
           }
       }
       void onDisconnect(const char* portname,
-                        ::RTC::ConnectorProfile& pprof, ReturnCode_t ret)
+                        ::RTC::ConnectorProfile&  /*pprof*/, ReturnCode_t ret)
       {
         if (ret == RTC::RTC_OK)
           {
@@ -400,10 +390,10 @@ namespace RTC
           }
       }
 
-      PortActionListener* portAddListener;
-      PortActionListener* portRemoveListener;
-      PortConnectRetListener* portConnectListener;
-      PortConnectRetListener* portDisconnectListener;
+      PortActionListener* portAddListener{nullptr};
+      PortActionListener* portRemoveListener{nullptr};
+      PortConnectRetListener* portConnectListener{nullptr};
+      PortConnectRetListener* portDisconnectListener{nullptr};
 
     private:
       ComponentObserverConsumer& m_coc;
@@ -421,19 +411,18 @@ namespace RTC
     {
     public:
       DataPortAction(ComponentObserverConsumer& coc,
-                     const std::string msg,
-                     coil::TimeValue interval)
-        : m_coc(coc), m_msg(msg), m_interval(interval),
-          m_last(coil::gettimeofday())
+                     std::string  msg,
+                     std::chrono::nanoseconds interval)
+        : m_coc(coc), m_msg(std::move(msg)), m_interval(interval)
       {
       }
-      virtual ~DataPortAction() {}
+      ~DataPortAction() override = default;
 
-      virtual ReturnCode operator()(ConnectorInfo& info,
-                                    cdrMemoryStream& data)
+      ReturnCode operator()(ConnectorInfo&  /*info*/,
+                            ByteData&  /*data*/, const std::string& /*marsharingtype*/) override
       {
-        coil::TimeValue curr = coil::gettimeofday();
-        coil::TimeValue intvl = curr - m_last;
+        auto curr = std::chrono::steady_clock::now();
+        auto intvl = curr - m_last;
         if (intvl > m_interval)
           {
             m_last = curr;
@@ -445,8 +434,8 @@ namespace RTC
     private:
       ComponentObserverConsumer& m_coc;
       std::string m_msg;
-      coil::TimeValue m_interval;
-      coil::TimeValue m_last;
+      std::chrono::nanoseconds m_interval;
+      std::chrono::steady_clock::time_point m_last{std::chrono::steady_clock::now()};
     };
     
     /*!
@@ -460,9 +449,7 @@ namespace RTC
     {
     public:
       ECAction(ComponentObserverConsumer& coc)
-        : ecAttached(NULL), ecDetached(NULL), ecRatechanged(NULL),
-          ecStartup(NULL), ecShutdown(NULL),
-          m_coc(coc) {}
+        : m_coc(coc) {}
       void onGeneric(const char* _msg, UniqueId ec_id)
       {
         std::string msg(_msg + coil::otos(ec_id));
@@ -497,11 +484,11 @@ namespace RTC
             onGeneric("SHUTDOWN:", ec_id);
           }
       }
-      ExecutionContextActionListener* ecAttached;
-      ExecutionContextActionListener* ecDetached;
-      PostComponentActionListener* ecRatechanged;
-      PostComponentActionListener* ecStartup;
-      PostComponentActionListener* ecShutdown;
+      ExecutionContextActionListener* ecAttached{nullptr};
+      ExecutionContextActionListener* ecDetached{nullptr};
+      PostComponentActionListener* ecRatechanged{nullptr};
+      PostComponentActionListener* ecStartup{nullptr};
+      PostComponentActionListener* ecShutdown{nullptr};
     private:
       ComponentObserverConsumer& m_coc;
     };
@@ -517,10 +504,7 @@ namespace RTC
     {
     public:
       ConfigAction(ComponentObserverConsumer& coc)
-        : updateConfigParamListener(NULL), setConfigSetListener(NULL),
-          addConfigSetListener(NULL), updateConfigSetListener(NULL),
-          removeConfigSetListener(NULL), activateConfigSetListener(NULL),
-          m_coc(coc) {}
+        : m_coc(coc) {}
       void updateConfigParam(const char* configsetname,
                              const char* configparamname)
       {
@@ -561,12 +545,12 @@ namespace RTC
         m_coc.updateStatus(OpenRTM::CONFIGURATION, msg.c_str());
       }
       // Listener object's pointer holder
-      ConfigurationParamListener*   updateConfigParamListener;
-      ConfigurationSetListener*     setConfigSetListener;
-      ConfigurationSetListener*     addConfigSetListener;
-      ConfigurationSetNameListener* updateConfigSetListener;
-      ConfigurationSetNameListener* removeConfigSetListener;
-      ConfigurationSetNameListener* activateConfigSetListener;
+      ConfigurationParamListener*   updateConfigParamListener{nullptr};
+      ConfigurationSetListener*     setConfigSetListener{nullptr};
+      ConfigurationSetListener*     addConfigSetListener{nullptr};
+      ConfigurationSetNameListener* updateConfigSetListener{nullptr};
+      ConfigurationSetNameListener* removeConfigSetListener{nullptr};
+      ConfigurationSetNameListener* activateConfigSetListener{nullptr};
 
     private:
       ComponentObserverConsumer& m_coc;
@@ -574,45 +558,40 @@ namespace RTC
 
 
 
-    RTC::RTObject_impl* m_rtobj;
+    RTC::RTObject_impl* m_rtobj{nullptr};
     SDOPackage::ServiceProfile m_profile;
     CorbaConsumer<OpenRTM::ComponentObserver> m_observer;
 
     bool m_observed[OpenRTM::STATUS_KIND_NUM];
 
     // ComponentProfile
-    CompStatMsg m_compstat;
+    CompStatMsg m_compstat{*this};
 
     // PortProfile
-    PortAction m_portaction;
-    coil::TimeValue m_inportInterval;
-    coil::TimeValue m_outportInterval;
+    PortAction m_portaction{*this};
+    std::chrono::nanoseconds m_inportInterval{std::chrono::seconds(1)};
+    std::chrono::nanoseconds m_outportInterval{std::chrono::seconds(1)};
 
     // Execution Context
-    ECAction m_ecaction;
-    ConfigAction m_configMsg;
+    ECAction m_ecaction{*this};
+    ConfigAction m_configMsg{*this};
 
     // Heartbeat
-    coil::TimeValue m_interval;
-    bool m_heartbeat;
-    ListenerId m_hblistenerid;
+    bool m_heartbeat{false};
+    Manager::TaskId m_hbtaskid;
 
-    // このタイマーはいずれグローバルなタイマにおきかえる
-    coil::Timer m_timer;
-    coil::Mutex mutex;
+    std::mutex mutex;
 
     std::vector<DataPortAction*> m_recievedactions;
     std::vector<DataPortAction*> m_sendactions;
 
   };
 
-}; // namespace RTC
+} // namespace RTC
 
 extern "C"
 {
   DLL_EXPORT void ComponentObserverConsumerInit();
-};
+}
 
 #endif // RTC_COMPONENTOBSERVERCONSUMER_H
-
-

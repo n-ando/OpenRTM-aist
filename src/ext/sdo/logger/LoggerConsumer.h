@@ -20,7 +20,6 @@
 #ifndef RTC_LOGGERCONSUMER_H
 #define RTC_LOGGERCONSUMER_H
 
-#include <coil/Mutex.h>
 #include <coil/Factory.h>
 #include <coil/stringutil.h>
 #include <rtm/SdoServiceConsumerBase.h>
@@ -57,7 +56,7 @@ namespace RTC
      * @brief dtor
      * @endif
      */
-    virtual ~LoggerConsumer();
+    ~LoggerConsumer() override;
 
     /*!
      * @if jp
@@ -66,8 +65,8 @@ namespace RTC
      * @brief Initialization
      * @endif
      */
-    virtual bool init(RTObject_impl& rtobj,
-                      const SDOPackage::ServiceProfile& profile);
+    bool init(RTObject_impl& rtobj,
+                      const SDOPackage::ServiceProfile& profile) override;
 
     /*!
      * @if jp
@@ -76,7 +75,7 @@ namespace RTC
      * @brief Re-initialization
      * @endif
      */
-    virtual bool reinit(const SDOPackage::ServiceProfile& profile);
+    bool reinit(const SDOPackage::ServiceProfile& profile) override;
 
     /*!
      * @if jp
@@ -85,7 +84,7 @@ namespace RTC
      * @brief getting ServiceProfile
      * @endif
      */
-    virtual const SDOPackage::ServiceProfile& getProfile() const;
+    const SDOPackage::ServiceProfile& getProfile() const override;
     
     /*!
      * @if jp
@@ -94,21 +93,21 @@ namespace RTC
      * @brief Finalization
      * @endif
      */
-    virtual void finalize();
+    void finalize() override;
 
   protected:
 
-    RTC::RTObject_impl* m_rtobj;
+    RTC::RTObject_impl* m_rtobj{nullptr};
     SDOPackage::ServiceProfile m_profile;
     CorbaConsumer<OpenRTM::Logger> m_logger;
   };
 
-}; // namespace RTC
+} // namespace RTC
 
 extern "C"
 {
   DLL_EXPORT void LoggerConsumerInit();
-};
+}
 
 #endif // RTC_LOGGERCONSUMER_H
 

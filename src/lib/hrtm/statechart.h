@@ -86,9 +86,11 @@
 namespace hrtm {
 namespace sc {
 
-typedef unsigned int Key;
+using Key = unsigned int;
 
 class MachineBase;
+
+class EventBase;
 
 template<class T>
 class Machine;
@@ -108,7 +110,7 @@ class State;
 // Data for states which don't declare own Data class.
 class EmptyData {
  public:
-  EmptyData() {}
+  EmptyData() = default;
 };
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -128,7 +130,7 @@ struct KeyInit {
 // and exit actions of user's top state.
 class EXPORT_DLL StateBase {
  public:
-  virtual ~StateBase() {}
+  virtual ~StateBase() = default;
 
   // Get unique name of state.
   static Key key() {
@@ -180,13 +182,97 @@ class EXPORT_DLL StateBase {
   StateInfo & state_info_;
 };
 
+
+////////////////////////////////////////////////////////////////////////////////
+// StateInfo describes a state. Keeps history, data and state object for state.
+// StateInfo object is created the first time state is entered.
+// There is at most one StateInfo object per state per machine instance.
+class EXPORT_DLL StateInfo {
+public:
+    StateInfo(MachineBase & machine, StateInfo * parent);
+    virtual ~StateInfo();
+    // Perform entry actions.
+    // 'first' is true on very first call.
+    void on_entry(StateInfo & previous, bool first = true);
+    // Perform exit actions.
+    void on_exit(StateInfo & next);
+    // Perform init action.
+    void on_init(bool history);
+    void save_history(StateInfo & shallow, StateInfo & deep) {
+        // Check state's history strategy.
+        instance_->save_history(*this, shallow, deep);
+    }
+    // Update superstate's history information:
+    void set_history_super(StateInfo & deep) {
+        if (parent_ != nullptr) {
+            // Let it choose between deep or shallow history.
+            parent_->save_history(*this, deep);
+        }
+    }
+    // Data has been created explicitly.
+    void set_data(void * data) {
+        assert(!data_);
+
+        if (data_place != nullptr) {
+            // Free cached memory of previously used data.
+            ::operator delete(data_place);
+            data_place = nullptr;
+        }
+        data_ = data;
+    }
+    // Copy state of another StateInfo object.
+    void copy(StateInfo & original);
+    // Create a clone of StateInfo object for another machine.
+    StateInfo * clone(MachineBase & new_machine);
+    virtual void clone_data(void * data) = 0;
+    void shutdown() {
+        instance_->shutdown();
+    }
+    void restore(StateInfo & info) {
+        instance_->restore(info);
+    }
+    virtual Key key() = 0;
+    // 'Virtual constructor' needed for cloning.
+    virtual StateInfo * create(MachineBase & machine, StateInfo * parent) = 0;
+    virtual void create_data() = 0;
+    virtual void delete_data() = 0;
+    virtual const char * name() const = 0;
+    // Is 'state' a superstate?
+    bool is_child(StateInfo & state) const {
+        return this == &state || ((parent_ != nullptr) && parent_->is_child(state));
+    }
+    StateBase & instance() {
+        assert(instance_);
+        return *instance_;
+    }
+    void * data() {
+        assert(data_);
+        return data_;
+    }
+    MachineBase & machine() {
+        return machine_;
+    }
+    void set_history(StateInfo * history) {
+        history_ = history;
+    }
+
+protected:
+    MachineBase & machine_;
+    StateBase * instance_;   // Instance of state class
+    StateInfo * history_;
+    StateInfo * parent_;
+    void * data_;
+    void * data_place;      // Reused data memory
+};
+
+
 ////////////////////////////////////////////////////////////////////////////////
 // Base class for user defined top state (and indirectly all other states).
 template<class T>
 class TopState : public StateBase {
  public:
   // This typedef is an alias for user defined top state in all (sub)states.
-  typedef T TOP;
+  using TOP = T;
 
  protected:
   TopState(StateInfo & info) : StateBase(info) {}  // NOLINT
@@ -206,9 +292,9 @@ class TopState : public StateBase {
 // (also for starting machines).
 
 // Members of do-it-yourself virtual function table.
-typedef StateInfo & (*GetInfoFn)(MachineBase & machine);
-typedef void (*DestroyFn)(void * data);
-typedef void * (*CloneFn)(void * data);
+using GetInfoFn = StateInfo &(*)(MachineBase &);
+using DestroyFn = void (*)(void*);
+using CloneFn = void* (*)(void*);
 
 // DIY virtual function table.
 struct StateCharacter {
@@ -263,7 +349,7 @@ class StateAlias {
   // Clones object.
   // Will call copy constructor of data.
   StateAlias clone() {
-    return StateAlias(character_, data_ ? (character_->clone)(data_) : 0);
+    return StateAlias(character_, data_ != nullptr ? (character_->clone)(data_) : nullptr);
   }
   StateInfo & get_info(MachineBase & machine) const {
     return (character_->get_info)(machine);
@@ -271,7 +357,7 @@ class StateAlias {
   // Hand over data object (to state instances or other state aliases).
   void * take_data() const {
     void * data = data_;
-    data_ = 0;
+    data_ = nullptr;
     return data;
   }
 
@@ -286,400 +372,6 @@ class StateAlias {
   // DIY virtual function table.
   StateCharacter * character_;
 };
-
-////////////////////////////////////////////////////////////////////////////////
-// This class links substates to superstates by deriving from the superstate
-// and being derived from by the substate.
-// Substates inherit event handlers from superstates for reuse or redefinition
-// this way.
-template<class C, class P>
-class Link : public P {
- public:
-  // Alias for superstate.
-  typedef P SUPER;
-  // Alias for topstate.
-  typedef typename P::TOP TOP;
-  // Default data type.
-  typedef EmptyData Data;
-
-  // Get unique key of state.
-  static Key key() {
-    return the_key_.key;
-  }
-  // Is machine m in this state?
-  static bool is_current(Machine<TOP> & m) {
-    return m.is_current(get_info(m));
-  }
-  // Is machine m in exactly this state?
-  static bool is_current_direct(Machine<TOP> & m) {
-    return m.is_current_direct(get_info(m));
-  }
-  static void clear_history(Machine<TOP> & m) { get_info(m).set_history(0); }
-  static void clear_history_deep(Machine<TOP> & m) {
-    m.clear_history_deep(get_info(m)); }
-  static void set_state(Machine<TOP> & machine, void * data = 0) {
-    StateInfo & info = get_info(machine);
-    machine.set_pending_state(info, true, data);
-  }
-  static void set_state_direct(Machine<TOP> & machine, void * data = 0) {
-    StateInfo & info = get_info(machine);
-    machine.set_pending_state(info, false, data);
-  }
-  // Initiate transition to a new state.
-  // Parameter state is the new state to enter.
-  // See above and class State for more information.
-  void set_state(const StateAlias & state) {
-    StateInfo & info = state.get_info(P::machine());
-    P::machine().set_pending_state(info, true, state.take_data());
-  }
-  void set_state_direct(const StateAlias & state) {
-    StateInfo & info = state.get_info(P::machine());
-    P::machine().set_pending_state(info, true, state.take_data());
-  }
-  // to be used with restore
-  void set_state(StateInfo & current, void * data = 0) {
-    this->state_info_.machine().set_pending_state(current, true, data);
-  }
-
- protected:
-  // Needed to perform compile time checks.
-  typedef Link<C, P> LinkType;
-
-  Link(StateInfo & info);  // NOLINT
-  // These definitions seem redundant but they are not!
-  // They override parent definitions so each substate gets either
-  // this default or their own, but never its parents definitions.
-  virtual void on_entry() {}
-  virtual void on_init() {}
-  virtual void on_exit() {}
-  // Create StateInfo object of state.
-  static StateInfo & get_info(MachineBase & machine);
-  // Data is by default not persistent. Not redundant!
-  void delete_data(StateInfo & info);
-  // Default history strategy (no history). Not redundant!
-  void save_history(
-      StateInfo & self, StateInfo & /* shallow */, StateInfo & deep) {
-    // Bubble up history. If no superstate has history,
-    // set_history_super will do nothing.
-    this->set_history_super(self, deep);
-  }
-  // This method keeps 'state_info_' attribute private.
-  void * local_data();
-
- protected:
-  // for get_info
-  friend class StateBase;
-  // for get_info
-  friend class Machine<TOP>;
-  friend class State<C>;
-
- protected:
-  StateInfo & state_info_;
-  static KeyInit<TOP> the_key_;
-};
-
-template<class C, class P> KeyInit<typename P::TOP> Link<C, P>::the_key_;
-
-////////////////////////////////////////////////////////////////////////////////
-// StateInfo describes a state. Keeps history, data and state object for state.
-// StateInfo object is created the first time state is entered.
-// There is at most one StateInfo object per state per machine instance.
-class EXPORT_DLL StateInfo {
- public:
-  StateInfo(MachineBase & machine, StateInfo * parent);
-  virtual ~StateInfo();
-  // Perform entry actions.
-  // 'first' is true on very first call.
-  void on_entry(StateInfo & previous, bool first = true);
-  // Perform exit actions.
-  void on_exit(StateInfo & next);
-  // Perform init action.
-  void on_init(bool history);
-  void save_history(StateInfo & shallow, StateInfo & deep) {
-    // Check state's history strategy.
-    instance_->save_history(*this, shallow, deep);
-  }
-  // Update superstate's history information:
-  void set_history_super(StateInfo & deep) {
-    if (parent_) {
-      // Let it choose between deep or shallow history.
-      parent_->save_history(*this, deep);
-    }
-  }
-  // Data has been created explicitly.
-  void set_data(void * data) {
-    assert(!data_);
-
-    if (data_place) {
-      // Free cached memory of previously used data.
-      ::operator delete(data_place);
-      data_place = 0;
-    }
-    data_ = data;
-  }
-  // Copy state of another StateInfo object.
-  void copy(StateInfo & original);
-  // Create a clone of StateInfo object for another machine.
-  StateInfo * clone(MachineBase & new_machine);
-  virtual void clone_data(void * data) = 0;
-  void shutdown() {
-    instance_->shutdown();
-  }
-  void restore(StateInfo & info) {
-    instance_->restore(info);
-  }
-  virtual Key key() = 0;
-  // 'Virtual constructor' needed for cloning.
-  virtual StateInfo * create(MachineBase & machine, StateInfo * parent) = 0;
-  virtual void create_data() = 0;
-  virtual void delete_data() = 0;
-  virtual const char * name() const = 0;
-  // Is 'state' a superstate?
-  bool is_child(StateInfo & state) const {
-    return this == &state || (parent_ && parent_->is_child(state));
-  }
-  StateBase & instance() {
-    assert(instance_);
-    return *instance_;
-  }
-  void * data() {
-    assert(data_);
-    return data_;
-  }
-  MachineBase & machine() {
-    return machine_;
-  }
-  void set_history(StateInfo * history) {
-    history_ = history;
-  }
-
- protected:
-  MachineBase & machine_;
-  StateBase * instance_;   // Instance of state class
-  StateInfo * history_;
-  StateInfo * parent_;
-  void * data_;
-  void * data_place;      // Reused data memory
-};
-
-////////////////////////////////////////////////////////////////////////////////
-// StateInfo for Root state.
-class RootStateInfo : public StateInfo {
- public:
-  RootStateInfo(MachineBase & machine, StateInfo * parent)
-    : StateInfo(machine, parent) {
-    instance_ = new StateBase(*this);
-  }
-  virtual Key key() {
-    return 0;
-  }
-
-  virtual void create_data() {}
-  virtual void delete_data() {}
-  virtual void clone_data(void * /* data */) {}
-  virtual const char * name() const { return "Root"; }
-  // 'Virtual constructor' needed for cloning.
-  virtual StateInfo * create(MachineBase & machine, StateInfo * parent) {
-    return new RootStateInfo(machine, parent);
-  }
-};
-
-////////////////////////////////////////////////////////////////////////////////
-// StateInfo for substates (including Top ;-)
-// Has methods to create state specific objects.
-template<class S>
-class SubStateInfo : public StateInfo {
- public:
-  typedef typename S::Data Data;
-
-  SubStateInfo(MachineBase & machine, StateInfo * parent)
-    : StateInfo(machine, parent) {
-    assert(parent);
-    this->instance_ = new S(*this);
-  }
-  ~SubStateInfo() {
-    if (this->data_)
-      delete_data();
-  }
-  virtual const char * name() const { return S::state_name(); }
-  virtual Key key() {
-    return S::key();
-  }
-  // 'Virtual constructor' needed for cloning.
-  virtual StateInfo * create(MachineBase & machine, StateInfo * parent) {
-    return new SubStateInfo<S>(machine, parent);
-  }
-  virtual void clone_data(void * data) {
-    assert(!data_);
-    assert(!data_place);
-    // Needs copy constructor in ALL data types.
-    data_ = new Data(*static_cast<Data *>(data));
-  }
-  virtual void create_data() {
-    this->data_ = new Data();
-  }
-  virtual void delete_data() {
-    delete static_cast<Data *>(this->data_);
-    data_ = 0;
-  }
-};
-
-////////////////////////////////////////////////////////////////////////////////
-// Definitions for queuable event types
-
-// Generic interface for event objects (available only to MachineBase)
-class EventBase {
- public:
-  virtual ~EventBase() {}
-  virtual void dispatch(StateInfo &) = 0;
-};
-
-// Interface for event objects (bound to a top state)
-template<class TOP>
-class EventParamBase : protected EventBase {
-  friend class Machine<TOP>;
-  friend class TopState<TOP>;
-};
-
-// Event with four parameters
-template<class TOP, class ROOT, class P1, class P2, class P3, class P4>
-class EventWith4Params : public EventParamBase<TOP> {
-  typedef ROOT (TOP::*Signature)(P1, P2, P3, P4);
-
- public:
-  EventWith4Params(Signature handler, P1 p1, P2 p2, P3 p3, P4 p4)
-    : handler_(handler), param1_(p1), param2_(p2),
-    param3_(p3) , param4_(p4) {
-    assert(handler);
-  }
-
- protected:
-  void dispatch(StateInfo & info) {
-    TOP & state = static_cast<TOP &>(info.instance());
-    (state.*handler_)(param1_, param2_, param3_, param4_);
-  }
-
-  Signature handler_;
-  P1 param1_;
-  P2 param2_;
-  P3 param3_;
-  P4 param4_;
-};
-
-// Event with three parameters
-template<class TOP, class ROOT, class P1, class P2, class P3>
-class EventWith3Params : public EventParamBase<TOP> {
-  typedef ROOT (TOP::*Signature)(P1, P2, P3);
-
- public:
-  EventWith3Params(Signature handler, P1 p1, P2 p2, P3 p3)
-    : handler_(handler), param1_(p1), param2_(p2), param3_(p3) {
-    assert(handler);
-  }
-
- protected:
-  void dispatch(StateInfo & info) {
-    TOP & state = static_cast<TOP &>(info.instance());
-    (state.*handler_)(param1_, param2_, param3_);
-  }
-
-  Signature handler_;
-  P1 param1_;
-  P2 param2_;
-  P3 param3_;
-};
-
-// Event with two parameters
-template<class TOP, class ROOT, class P1, class P2>
-class EventWith2Params : public EventParamBase<TOP> {
-  typedef ROOT (TOP::*Signature)(P1, P2);
-
- public:
-  EventWith2Params(ROOT (TOP::*handler)(P1, P2), P1 p1, P2 p2)
-    : handler_(handler), param1_(p1), param2_(p2) {
-    assert(handler);
-  }
-
- protected:
-  void dispatch(StateInfo & info) {
-    TOP & state = static_cast<TOP &>(info.instance());
-    (state.*handler_)(param1_, param2_);
-  }
-
-  Signature handler_;
-  P1 param1_;
-  P2 param2_;
-};
-
-// Event with one parameter
-template<class TOP, class ROOT, class P1>
-class EventWith1Params : public EventParamBase<TOP> {
-  typedef ROOT (TOP::*Signature)(P1);
-
- public:
-  EventWith1Params(ROOT (TOP::*handler)(P1), P1 p1)
-    : handler_(handler), param1_(p1) {
-    assert(handler);
-  }
-
- protected:
-  void dispatch(StateInfo & info) {
-    TOP & state = static_cast<TOP &>(info.instance());
-    (state.*handler_)(param1_);
-  }
-
-  Signature handler_;
-  P1 param1_;
-};
-
-// Event with no parameters
-template<class TOP, class ROOT>
-class EventWithoutParams : public EventParamBase<TOP> {
-  typedef ROOT (TOP::*Signature)();
-
- public:
-  EventWithoutParams(ROOT (TOP::*handler)())
-    : handler_(handler) {
-    assert(handler);
-  }
-
- protected:
-  void dispatch(StateInfo & info) {
-    TOP & state = static_cast<TOP &>(info.instance());
-    (state.*handler_)();
-  }
-
-  Signature handler_;
-};
-
-// Event creating functions using type inference
-template<class TOP, class ROOT, class P1, class P2, class P3, class P4>
-inline EventParamBase<TOP> * Event(
-    ROOT (TOP::*handler)(P1, P2, P3, P4), P1 p1, P2 p2, P3 p3, P4 p4) {
-  return new EventWith4Params<TOP, ROOT, P1, P2, P3, P4>(
-      handler, p1, p2, p3, p4);
-}
-
-template<class TOP, class ROOT, class P1, class P2, class P3>
-inline EventParamBase<TOP> * Event(ROOT(TOP::*handler)(
-      P1, P2, P3), P1 p1, P2 p2, P3 p3) {
-  return new EventWith3Params<TOP, ROOT, P1, P2, P3>(handler, p1, p2, p3);
-}
-
-template<class TOP, class ROOT, class P1, class P2>
-inline EventParamBase<TOP> * Event(ROOT (TOP::*handler)(P1, P2), P1 p1, P2 p2) {
-  return new EventWith2Params<TOP, ROOT, P1, P2>(handler, p1, p2);
-}
-
-template<class TOP, class ROOT, class P1>
-inline EventParamBase<TOP> * Event(ROOT (TOP::*handler)(P1), P1 p1) {
-  return new EventWith1Params<TOP, ROOT, P1>(handler, p1);
-}
-
-template<class TOP, class ROOT>
-inline EventParamBase<TOP> * Event(ROOT (TOP::*handler)()) {
-  return new EventWithoutParams<TOP, ROOT>(handler);
-}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Base class for Machine objects.
@@ -744,8 +436,8 @@ class EXPORT_DLL MachineBase {
   StateInfo * create_clone(Key key, StateInfo * original);
 
  protected:
-  typedef std::map<std::string, EventBase *> EventQueue;
-  typedef std::vector<std::string> EventNames;
+  using EventQueue = std::map<std::string, EventBase*>;
+  using EventNames = std::vector<std::string>;
 
   // C++ needs something like package visibility
   // for set_pending_state
@@ -753,17 +445,331 @@ class EXPORT_DLL MachineBase {
   friend class StateBase;
 
   // Current state of Machine object.
-  StateInfo * current_state_;
+  StateInfo * current_state_{nullptr};
   // Information about pending state transition.
-  StateInfo * pending_state_;
-  void * pending_data_;
-  bool pending_history_;
-  EventBase * pending_event_;
+  StateInfo * pending_state_{nullptr};
+  void * pending_data_{nullptr};
+  bool pending_history_{false};
+  EventBase * pending_event_{nullptr};
   EventQueue deferred_events_;
   EventNames deferred_names_;
   // Array of StateInfo objects.
   StateInfo ** states_;
 };
+
+////////////////////////////////////////////////////////////////////////////////
+// This class links substates to superstates by deriving from the superstate
+// and being derived from by the substate.
+// Substates inherit event handlers from superstates for reuse or redefinition
+// this way.
+template<class C, class P>
+class Link : public P {
+ public:
+  // Alias for superstate.
+  using SUPER = P;
+  // Alias for topstate.
+  using TOP = typename P::TOP;
+  // Default data type.
+  using Data = EmptyData;
+
+  // Get unique key of state.
+  static Key key() {
+    return the_key_.key;
+  }
+  // Is machine m in this state?
+  static bool is_current(Machine<TOP> & m) {
+    return m.is_current(get_info(m));
+  }
+  // Is machine m in exactly this state?
+  static bool is_current_direct(Machine<TOP> & m) {
+    return m.is_current_direct(get_info(m));
+  }
+  static void clear_history(Machine<TOP> & m) { get_info(m).set_history(0); }
+  static void clear_history_deep(Machine<TOP> & m) {
+    m.clear_history_deep(get_info(m)); }
+  static void set_state(Machine<TOP> & machine, void * data = nullptr) {
+    StateInfo & info = get_info(machine);
+    machine.set_pending_state(info, true, data);
+  }
+  static void set_state_direct(Machine<TOP> & machine, void * data = nullptr) {
+    StateInfo & info = get_info(machine);
+    machine.set_pending_state(info, false, data);
+  }
+  // Initiate transition to a new state.
+  // Parameter state is the new state to enter.
+  // See above and class State for more information.
+  void set_state(const StateAlias & state) {
+    StateInfo & info = state.get_info(P::machine());
+    P::machine().set_pending_state(info, true, state.take_data());
+  }
+  void set_state_direct(const StateAlias & state) {
+    StateInfo & info = state.get_info(P::machine());
+    P::machine().set_pending_state(info, true, state.take_data());
+  }
+  // to be used with restore
+  void set_state(StateInfo & current, void * data = nullptr) {
+    this->state_info_.machine().set_pending_state(current, true, data);
+  }
+
+ protected:
+  // Needed to perform compile time checks.
+  using LinkType = Link<C, P>;
+
+  Link(StateInfo & info);  // NOLINT
+  // These definitions seem redundant but they are not!
+  // They override parent definitions so each substate gets either
+  // this default or their own, but never its parents definitions.
+  virtual void on_entry() {}
+  virtual void on_init() {}
+  virtual void on_exit() {}
+  // Create StateInfo object of state.
+  static StateInfo & get_info(MachineBase & machine);
+  // Data is by default not persistent. Not redundant!
+  void delete_data(StateInfo & info);
+  // Default history strategy (no history). Not redundant!
+  void save_history(
+      StateInfo & self, StateInfo & /* shallow */, StateInfo & deep) {
+    // Bubble up history. If no superstate has history,
+    // set_history_super will do nothing.
+    this->set_history_super(self, deep);
+  }
+  // This method keeps 'state_info_' attribute private.
+  void * local_data();
+
+ protected:
+  // for get_info
+  friend class StateBase;
+  // for get_info
+  friend class Machine<TOP>;
+  friend class State<C>;
+
+ protected:
+  StateInfo & state_info_;
+  static KeyInit<TOP> the_key_;
+};
+
+template<class C, class P> KeyInit<typename P::TOP> Link<C, P>::the_key_;
+
+
+////////////////////////////////////////////////////////////////////////////////
+// StateInfo for Root state.
+class RootStateInfo : public StateInfo {
+ public:
+  RootStateInfo(MachineBase & machine, StateInfo * parent)
+    : StateInfo(machine, parent) {
+    instance_ = new StateBase(*this);
+  }
+  Key key() override {
+    return 0;
+  }
+
+  void create_data() override {}
+  void delete_data() override {}
+  void clone_data(void * /* data */) override {}
+  const char * name() const override { return "Root"; }
+  // 'Virtual constructor' needed for cloning.
+  StateInfo * create(MachineBase & machine, StateInfo * parent) override {
+    return new RootStateInfo(machine, parent);
+  }
+};
+
+////////////////////////////////////////////////////////////////////////////////
+// StateInfo for substates (including Top ;-)
+// Has methods to create state specific objects.
+template<class S>
+class SubStateInfo : public StateInfo {
+ public:
+  using Data = typename S::Data;
+
+  SubStateInfo(MachineBase & machine, StateInfo * parent)
+    : StateInfo(machine, parent) {
+    assert(parent);
+    this->instance_ = new S(*this);
+  }
+  ~SubStateInfo() override {
+    if (this->data_)
+      delete_data();
+  }
+  const char * name() const override { return S::state_name(); }
+  Key key() override {
+    return S::key();
+  }
+  // 'Virtual constructor' needed for cloning.
+  StateInfo * create(MachineBase & machine, StateInfo * parent) override {
+    return new SubStateInfo<S>(machine, parent);
+  }
+  void clone_data(void * data) override {
+    assert(!data_);
+    assert(!data_place);
+    // Needs copy constructor in ALL data types.
+    data_ = new Data(*static_cast<Data *>(data));
+  }
+  void create_data() override {
+    this->data_ = new Data();
+  }
+  void delete_data() override {
+    delete static_cast<Data *>(this->data_);
+    data_ = 0;
+  }
+};
+
+////////////////////////////////////////////////////////////////////////////////
+// Definitions for queuable event types
+
+// Generic interface for event objects (available only to MachineBase)
+class EventBase {
+ public:
+  virtual ~EventBase() = default;
+  virtual void dispatch(StateInfo &) = 0;
+};
+
+// Interface for event objects (bound to a top state)
+template<class TOP>
+class EventParamBase : protected EventBase {
+  friend class Machine<TOP>;
+  friend class TopState<TOP>;
+};
+
+// Event with four parameters
+template<class TOP, class ROOT, class P1, class P2, class P3, class P4>
+class EventWith4Params : public EventParamBase<TOP> {
+  using Signature = ROOT (TOP::*)(P1, P2, P3, P4);
+
+ public:
+  EventWith4Params(Signature handler, P1 p1, P2 p2, P3 p3, P4 p4)
+    : handler_(handler), param1_(p1), param2_(p2),
+    param3_(p3) , param4_(p4) {
+    assert(handler);
+  }
+
+ protected:
+  void dispatch(StateInfo & info) {
+    TOP & state = static_cast<TOP &>(info.instance());
+    (state.*handler_)(param1_, param2_, param3_, param4_);
+  }
+
+  Signature handler_;
+  P1 param1_;
+  P2 param2_;
+  P3 param3_;
+  P4 param4_;
+};
+
+// Event with three parameters
+template<class TOP, class ROOT, class P1, class P2, class P3>
+class EventWith3Params : public EventParamBase<TOP> {
+  using Signature = ROOT (TOP::*)(P1, P2, P3);
+
+ public:
+  EventWith3Params(Signature handler, P1 p1, P2 p2, P3 p3)
+    : handler_(handler), param1_(p1), param2_(p2), param3_(p3) {
+    assert(handler);
+  }
+
+ protected:
+  void dispatch(StateInfo & info) {
+    TOP & state = static_cast<TOP &>(info.instance());
+    (state.*handler_)(param1_, param2_, param3_);
+  }
+
+  Signature handler_;
+  P1 param1_;
+  P2 param2_;
+  P3 param3_;
+};
+
+// Event with two parameters
+template<class TOP, class ROOT, class P1, class P2>
+class EventWith2Params : public EventParamBase<TOP> {
+  using Signature = ROOT (TOP::*)(P1, P2);
+
+ public:
+  EventWith2Params(ROOT (TOP::*handler)(P1, P2), P1 p1, P2 p2)
+    : handler_(handler), param1_(p1), param2_(p2) {
+    assert(handler);
+  }
+
+ protected:
+  void dispatch(StateInfo & info) {
+    TOP & state = static_cast<TOP &>(info.instance());
+    (state.*handler_)(param1_, param2_);
+  }
+
+  Signature handler_;
+  P1 param1_;
+  P2 param2_;
+};
+
+// Event with one parameter
+template<class TOP, class ROOT, class P1>
+class EventWith1Params : public EventParamBase<TOP> {
+  using Signature = ROOT (TOP::*)(P1);
+
+ public:
+  EventWith1Params(ROOT (TOP::*handler)(P1), P1 p1)
+    : handler_(handler), param1_(p1) {
+    assert(handler);
+  }
+
+ protected:
+  void dispatch(StateInfo & info) {
+    TOP & state = static_cast<TOP &>(info.instance());
+    (state.*handler_)(param1_);
+  }
+
+  Signature handler_;
+  P1 param1_;
+};
+
+// Event with no parameters
+template<class TOP, class ROOT>
+class EventWithoutParams : public EventParamBase<TOP> {
+  using Signature = ROOT (TOP::*)();
+
+ public:
+  EventWithoutParams(ROOT (TOP::*handler)())
+    : handler_(handler) {
+    assert(handler);
+  }
+
+ protected:
+  void dispatch(StateInfo & info) {
+    TOP & state = static_cast<TOP &>(info.instance());
+    (state.*handler_)();
+  }
+
+  Signature handler_;
+};
+
+// Event creating functions using type inference
+template<class TOP, class ROOT, class P1, class P2, class P3, class P4>
+inline EventParamBase<TOP> * Event(
+    ROOT (TOP::*handler)(P1, P2, P3, P4), P1 p1, P2 p2, P3 p3, P4 p4) {
+  return new EventWith4Params<TOP, ROOT, P1, P2, P3, P4>(
+      handler, p1, p2, p3, p4);
+}
+
+template<class TOP, class ROOT, class P1, class P2, class P3>
+inline EventParamBase<TOP> * Event(ROOT(TOP::*handler)(
+      P1, P2, P3), P1 p1, P2 p2, P3 p3) {
+  return new EventWith3Params<TOP, ROOT, P1, P2, P3>(handler, p1, p2, p3);
+}
+
+template<class TOP, class ROOT, class P1, class P2>
+inline EventParamBase<TOP> * Event(ROOT (TOP::*handler)(P1, P2), P1 p1, P2 p2) {
+  return new EventWith2Params<TOP, ROOT, P1, P2>(handler, p1, p2);
+}
+
+template<class TOP, class ROOT, class P1>
+inline EventParamBase<TOP> * Event(ROOT (TOP::*handler)(P1), P1 p1) {
+  return new EventWith1Params<TOP, ROOT, P1>(handler, p1);
+}
+
+template<class TOP, class ROOT>
+inline EventParamBase<TOP> * Event(ROOT (TOP::*handler)()) {
+  return new EventWithoutParams<TOP, ROOT>(handler);
+}
+
 
 ////////////////////////////////////////////////////////////////////////////////
 // Implementation for TopState
@@ -794,7 +800,7 @@ template<class C, class P>
 inline StateInfo & Link<C, P>::get_info(MachineBase & machine) {
   // Look first in machine for existing StateInfo.
   StateInfo * & info = machine.get_info(key());
-  if (!info) {
+  if (info == nullptr) {
     // Will create parent StateInfo object if not already created.
     info = new SubStateInfo<C>(machine, &P::get_info(machine));
   }
@@ -840,7 +846,7 @@ class State : public StateAlias {
     delete static_cast<typename S::Data *>(data);
   }
   static void * clone(void * data) {
-    typedef typename S::Data Data;
+    using Data = typename S::Data;
     return new Data(* static_cast<Data *>(data));
   }
 
@@ -867,8 +873,8 @@ class Snapshot : public MachineBase {
  private:
   friend class Machine<TOP>;
 
-  Snapshot(const Snapshot<TOP> & other);
-  Snapshot & operator=(const Snapshot<TOP> & other);
+  Snapshot(const Snapshot<TOP> & other) = delete;
+  Snapshot & operator=(const Snapshot<TOP> & other) = delete;
 };
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -976,8 +982,8 @@ class Machine : public MachineBase {
   void clear_history_deep(StateInfo & state) {
     for (unsigned int i = 0; i < the_state_count_; ++i) {
       StateInfo * s = states_[i];
-      if (s && s->is_child(state))
-        s->set_history(0);
+      if ((s != nullptr) && s->is_child(state))
+        s->set_history(nullptr);
     }
   }
 
@@ -985,8 +991,8 @@ class Machine : public MachineBase {
   static Key the_state_count_;
 
  private:
-  Machine(const Machine<TOP> & other);
-  Machine<TOP> & operator=(const Machine<TOP> & other);
+  Machine(const Machine<TOP> & other) = delete;
+  Machine<TOP> & operator=(const Machine<TOP> & other) = delete;
 
   friend class Snapshot<TOP>;
 };
@@ -1014,8 +1020,8 @@ template<class S> StateCharacter State<S>::the_character_ = {
   State<S>::clone
 };
 
-}  // namespace sc
-}  // namespace hrtm
+} // namespace sc
+} // namespace hrtm
 #if defined(_MSC_VER)
 #pragma warning(pop)
 #endif

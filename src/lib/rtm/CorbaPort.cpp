@@ -46,9 +46,7 @@ namespace RTC
    * @brief Virtual destructor
    * @endif
    */
-  CorbaPort::~CorbaPort()
-  {
-  }
+  CorbaPort::~CorbaPort() = default;
 
   /*!
    * @if jp
@@ -64,7 +62,11 @@ namespace RTC
     RTC_DEBUG_STR((prop));
 
     m_properties << prop;
+#ifndef ORB_IS_RTORB
     NVList nv(0);
+#else
+    SDOPackage_NVList nv;
+#endif
     NVUtil::copyFromProperties(nv, m_properties);
     CORBA_SeqUtil::push_back_list(m_profile.properties, nv);
     RTC_PARANOID(("updated properties:"));
@@ -99,7 +101,7 @@ namespace RTC
     try
       {
         CorbaProviderHolder providerholder(type_name, instance_name, &provider);
-        m_providers.push_back(providerholder);
+        m_providers.emplace_back(std::move(providerholder));
       }
     catch (...)
       {
@@ -114,7 +116,7 @@ namespace RTC
       }
 
     return true;
-  };
+  }
 
   /*!
    * @if jp
@@ -135,7 +137,7 @@ namespace RTC
         return false;
       }
 
-    m_consumers.push_back(CorbaConsumerHolder(type_name,
+    m_consumers.emplace_back(CorbaConsumerHolder(type_name,
                                               instance_name,
                                               &consumer));
 
@@ -155,11 +157,9 @@ namespace RTC
    */
   void CorbaPort::activateInterfaces()
   {
-    CorbaProviderList::iterator it(m_providers.begin());
-    while (it != m_providers.end())
+    for(auto & provider : m_providers)
       {
-        it->activate();
-        ++it;
+        provider.activate();
       }
   }
 
@@ -172,11 +172,9 @@ namespace RTC
    */
   void CorbaPort::deactivateInterfaces()
   {
-    CorbaProviderList::iterator it(m_providers.begin());
-    while (it != m_providers.end())
+    for(auto & provider : m_providers)
       {
-        it->deactivate();
-        ++it;
+        provider.deactivate();
       }
   }
 
@@ -202,27 +200,25 @@ namespace RTC
       }
 
     NVList properties;
-    CorbaProviderList::iterator it(m_providers.begin());
-    while (it != m_providers.end())
+    for(auto & provider : m_providers)
       {
         //------------------------------------------------------------
         // new version descriptor
         // <comp_iname>.port.<port_name>.provided.<type_name>.<instance_name>
         std::string newdesc((const char*)m_profile.name);
         newdesc.insert(m_ownerInstanceName.size(), ".port");
-        newdesc += ".provided." + it->descriptor();
+        newdesc += ".provided." + provider.descriptor();
         CORBA_SeqUtil::
           push_back(properties,
-                    NVUtil::newNV(newdesc.c_str(), it->ior().c_str()));
+                    NVUtil::newNV(newdesc.c_str(), provider.ior().c_str()));
 
         //------------------------------------------------------------
         // old version descriptor
         // port.<type_name>.<instance_name>
-        std::string olddesc = "port." + it->descriptor();
+        std::string olddesc = "port." + provider.descriptor();
         CORBA_SeqUtil::
           push_back(properties,
-                    NVUtil::newNV(olddesc.c_str(), it->ior().c_str()));
-        ++it;
+                    NVUtil::newNV(olddesc.c_str(), provider.ior().c_str()));
       }
 
 #ifdef ORB_IS_RTORB
@@ -265,7 +261,7 @@ namespace RTC
     CORBA::Long index(NVUtil::find_index(nv, "port.connection.strictness"));
     if (index >=  0)
       {
-        const char* strictness = NULL;
+        const char* strictness = nullptr;
         nv[index].value >>= strictness;
         if (std::string("best_effort") == strictness)
           {
@@ -280,21 +276,20 @@ namespace RTC
             strict = false;
           }
         RTC_DEBUG(("Connetion strictness is: %s",
-                   strict ? "strict" : "best_effort"))
+                   strict ? "strict" : "best_effort"));
       }
 
-    for (CorbaConsumerList::iterator it(m_consumers.begin());
-         it != m_consumers.end(); ++it)
+    for (auto & consumer : m_consumers)
       {
         std::string ior = std::string();
-        if (findProvider(nv, *it, ior))
+        if (findProvider(nv, consumer, ior))
           {
-            setObject(ior, *it);
+            setObject(ior, consumer);
             continue;
           }
-        if (findProviderOld(nv, *it, ior))
+        if (findProviderOld(nv, consumer, ior))
           {
-            setObject(ior, *it);
+            setObject(ior, consumer);
             continue;
           }
 
@@ -327,20 +322,19 @@ namespace RTC
     const NVList& nv(connector_profile.properties);
     RTC_DEBUG_STR((NVUtil::toString(nv)));
 
-    for (CorbaConsumerList::iterator it(m_consumers.begin());
-         it != m_consumers.end(); ++it)
+    for (auto & consumer : m_consumers)
       {
         std::string ior;
-        if (findProvider(nv, *it, ior))
+        if (findProvider(nv, consumer, ior))
           {
             RTC_DEBUG(("Correspoinding consumer found."));
-            releaseObject(ior, *it);
+            releaseObject(ior, consumer);
             continue;
           }
-        if (findProviderOld(nv, *it, ior))
+        if (findProviderOld(nv, consumer, ior))
           {
             RTC_DEBUG(("Correspoinding consumer found."));
-            releaseObject(ior, *it);
+            releaseObject(ior, consumer);
             continue;
           }
       }
@@ -365,7 +359,7 @@ namespace RTC
     CORBA::Long cons_index(NVUtil::find_index(nv, newdesc.c_str()));
     if (cons_index < 0) { return false; }
 
-    const char* provider(NULL);
+    const char* provider(nullptr);
     if (!(nv[cons_index].value >>= provider))
       {
         RTC_WARN(("Cannot extract Provider interface descriptor"));
@@ -376,7 +370,7 @@ namespace RTC
     CORBA::Long prov_index(NVUtil::find_index(nv, provider));
     if (prov_index < 0) { return false; }
 
-    const char* ior(NULL);
+    const char* ior(nullptr);
     if (!(nv[prov_index].value >>= ior))
       {
         RTC_WARN(("Cannot extract Provider IOR string"));
@@ -404,7 +398,7 @@ namespace RTC
     CORBA::Long index(NVUtil::find_index(nv, olddesc.c_str()));
     if (index < 0) { return false; }
 
-    const char* ior(NULL);
+    const char* ior(nullptr);
     if (!(nv[index].value >>= ior))
       {
         RTC_WARN(("Cannot extract Provider IOR string"));
@@ -463,4 +457,21 @@ namespace RTC
     return false;
   }
 
-};  // namespace RTC
+  /*!
+   * @if jp
+   * @brief CorbaConsumerHolder class
+   * @else
+   * @brief CorbaConsumerHolder class
+   * @endif
+   */
+
+  /*!
+   * @if jp
+   * @brief デストラクタ
+   * @else
+   * @brief destructor
+   * @endif
+   */
+  CorbaPort::CorbaConsumerHolder::~CorbaConsumerHolder() = default;
+
+} // namespace RTC

@@ -19,7 +19,6 @@
 #define RTC_INPORTDSCONSUMER_H
 
 
-//#include <rtm/BufferBase.h>
 
 #include <rtm/idl/DataPortSkel.h>
 #include <rtm/CorbaConsumer.h>
@@ -38,7 +37,7 @@ namespace RTC
    * データ転送に CORBA の RTC::DataPushService インターフェースを利用し
    * た、push 型データフロー型を実現する InPort コンシューマクラス。
    *
-   * @since 0.4.0
+   * @since 2.0.0
    *
    * @else
    * @class InPortDSConsumer
@@ -48,7 +47,7 @@ namespace RTC
    * interface in CORBA for data transfer and realizes a push-type
    * dataflow.
    *
-   * @since 0.4.0
+   * @since 2.0.0
    *
    * @endif
    */
@@ -57,7 +56,6 @@ namespace RTC
       public CorbaConsumer< ::RTC::DataPushService >
   {
   public:
-    DATAPORTSTATUS_ENUM
     /*!
      * @if jp
      * @brief コンストラクタ
@@ -75,7 +73,7 @@ namespace RTC
      *
      * @endif
      */
-    InPortDSConsumer(void);
+    InPortDSConsumer();
 
     /*!
      * @if jp
@@ -90,7 +88,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~InPortDSConsumer(void);
+    ~InPortDSConsumer() override;
 
     /*!
      * @if jp
@@ -119,7 +117,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual void init(coil::Properties& prop);
+    void init(coil::Properties& prop) override;
 
     /*!
      * @if jp
@@ -153,7 +151,7 @@ namespace RTC
      *
      * @endif
      */
-	virtual ReturnCode put(cdrMemoryStream& data);
+    DataPortStatus put(ByteData& data) override;
 
     /*!
      * @if jp
@@ -178,7 +176,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual void publishInterfaceProfile(SDOPackage::NVList& properties);
+    void publishInterfaceProfile(SDOPackage::NVList& properties) override;
 
     /*!
      * @if jp
@@ -202,7 +200,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual bool subscribeInterface(const SDOPackage::NVList& properties);
+    bool subscribeInterface(const SDOPackage::NVList& properties) override;
 
     /*!
      * @if jp
@@ -221,7 +219,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual void unsubscribeInterface(const SDOPackage::NVList& properties);
+    void unsubscribeInterface(const SDOPackage::NVList& properties) override;
 
   private:
     /*!
@@ -292,12 +290,13 @@ namespace RTC
      * @brief Return codes conversion
      * @endif
      */
-    InPortConsumer::ReturnCode convertReturnCode(RTC::PortStatus ret);
+    static DataPortStatus convertReturnCode(RTC::PortStatus ret);
 
     mutable Logger rtclog;
     coil::Properties m_properties;
+    ::RTC::OctetSeq m_data;
   };
-};  // namespace RTC
+} // namespace RTC
 
 extern "C"
 {
@@ -315,7 +314,7 @@ extern "C"
    * @endif
    */
   void InPortDSConsumerInit(void);
-};
+}
 
 #endif  // RTC_INPORTDSCONSUMER_H
 

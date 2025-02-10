@@ -40,15 +40,15 @@ namespace RTM
     
     try
       {
-        pos = find(NULL);
+        pos = find(nullptr);
         m_objects[pos] = obj;
         return coil::otos(pos);
       }
     catch (ObjectNotFound& e)
       {
         (void)(e);
-        m_objects.push_back(obj);
-        return coil::otos((int)(m_objects.size() - 1));
+        m_objects.emplace_back(obj);
+        return coil::otos(static_cast<int>(m_objects.size() - 1));
       }
   }
 
@@ -65,7 +65,7 @@ namespace RTM
     pos = find(obj);
     if (pos < m_objects.size())
       {
-        m_objects[pos] = NULL;
+        m_objects[pos] = nullptr;
       }
     --m_num;
   }
@@ -83,12 +83,11 @@ namespace RTM
     std::vector<void*>::size_type i(0);
     for (i = 0; i < len; ++i)
       {
-        if (m_objects[i] == obj) return i;
+        if (m_objects[i] == obj) return static_cast<int>(i);
       }
     throw ObjectNotFound();
-    return i;
   }
-}; //namespace RTM  
+} //namespace RTM 
 
 extern "C"
 {
@@ -107,5 +106,5 @@ extern "C"
                             ::coil::Destructor< ::RTM::NumberingPolicyBase,
                                                 ::RTM::ProcessUniquePolicy>);
   }
-};
+}
 

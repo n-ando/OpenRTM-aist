@@ -22,17 +22,15 @@ namespace hrtm
     : RTC::DataFlowComponentBase(&RTC::Manager::instance())
   {
   }
-  DataFlowComponent::~DataFlowComponent()
-  {
-  }
-  RTC::ReturnCode_t DataFlowComponent::initialize(hrtm::ComponentManager* mgr)
+  DataFlowComponent::~DataFlowComponent() = default;
+  RTC::ReturnCode_t DataFlowComponent::initialize()
   {
     return RTC::RTC_OK;
   }
 
-  void DataFlowComponent::updateFsmStatus(RTC::StatusKind status_kind,
+  void DataFlowComponent::updateFsmStatus(RTC::StatusKind /*status_kind*/,
                                           const char* state)
   {
     postOnFsmStateChange(state, RTC::RTC_OK);
   }
-}; // namespace hrtm
+} // namespace hrtm

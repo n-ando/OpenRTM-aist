@@ -29,6 +29,7 @@
 #include <rtm/SystemLogger.h>
 
 #include <string>
+#include <utility>
 #include <vector>
 
 namespace RTC
@@ -74,11 +75,7 @@ namespace RTC
      * @endif
      */
     ConnectorInfo(const char* name_, const char* id_,
-                  coil::vstring ports_, coil::Properties properties_)
-      : name(name_), id(id_)
-      , ports(ports_), properties(properties_)
-    {
-    }
+                  coil::vstring ports_, const coil::Properties& properties_);
     /*!
      * @if jp
      *
@@ -94,9 +91,59 @@ namespace RTC
      *
      * @endif
      */
-    ConnectorInfo()
-    {
-    }
+    ConnectorInfo() = default;
+
+    /*!
+     * @if jp
+     *
+     * @brief コンストラクタ
+     *
+     * コンストラクタ
+     *
+     * @else
+     *
+     * @brief Constructor
+     *
+     * Constructor
+     *
+     * @endif
+     */
+    ConnectorInfo(const ConnectorInfo& /*info*/);
+
+    /*!
+     * @if jp
+     *
+     * @brief デストラクタ
+     *
+     * デストラクタ
+     *
+     * @else
+     *
+     * @brief Destructor
+     *
+     * Destructor
+     *
+     * @endif
+     */
+    ~ConnectorInfo();
+
+    /*!
+     * @if jp
+     *
+     * @brief 代入演算子
+     *
+     * 代入演算子
+     *
+     * @else
+     *
+     * @brief Operator=
+     *
+     * Operator=
+     *
+     * @endif
+     */
+    ConnectorInfo& operator=(const ConnectorInfo&) = default;
+
     /*!
      * @if jp
      * @brief  接続名前
@@ -131,10 +178,10 @@ namespace RTC
     coil::Properties properties;
   };
 
-  typedef std::vector<ConnectorInfo> ConnectorInfoList;
+  using ConnectorInfoList = std::vector<ConnectorInfo>;
 
   class ConnectorBase;
-  typedef std::vector<ConnectorBase*> ConnectorList;
+  using ConnectorList = std::vector<ConnectorBase*>;
 
 
   /*!
@@ -159,10 +206,8 @@ namespace RTC
    * @endif
    */
   class ConnectorBase
-    : public DataPortStatus
   {
   public:
-    DATAPORTSTATUS_ENUM
 
     /*!
      * @if jp
@@ -193,7 +238,7 @@ namespace RTC
      * @brief Destructor
      * @endif
      */
-    virtual ~ConnectorBase() {}
+    virtual ~ConnectorBase() = default;
 
    /*!
      * @if jp
@@ -253,7 +298,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode disconnect() = 0;
+    virtual DataPortStatus disconnect() = 0;
 
     /*!
      * @if jp
@@ -301,12 +346,7 @@ namespace RTC
      * @endif
      */
     virtual void deactivate() = 0;
-
-  private:
-    // non-copyable class
-    //    ConnectorBase(const ConnectorBase& x);
-    //    ConnectorBase& operator=(const ConnectorBase& x);
   };
-};  // namespace RTC
+} // namespace RTC
 
 #endif  // RTC_CONNECTORBASE_H

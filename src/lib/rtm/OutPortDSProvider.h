@@ -26,10 +26,6 @@
 #include <rtm/ConnectorListener.h>
 #include <rtm/ConnectorBase.h>
 
-#ifdef WIN32
-#pragma warning( disable : 4290 )
-#endif
-
 namespace RTC
 {
   /*!
@@ -42,7 +38,7 @@ namespace RTC
    * データ転送に CORBA の RTC::DataPullService インターフェースを利用し
    * た、pull 型データフロー型を実現する OutPort プロバイダクラス。
    *
-   * @since 0.4.0
+   * @since 2.0.0
    *
    * @else
    * @class OutPortDSProvider
@@ -52,7 +48,7 @@ namespace RTC
    * interface in CORBA for data transfer and realizes a pull-type
    * dataflow.
    *
-   * @since 0.4.0
+   * @since 2.0.0
    *
    * @endif
    */
@@ -75,7 +71,7 @@ namespace RTC
      *
      * @endif
      */
-    OutPortDSProvider(void);
+    OutPortDSProvider();
 
     /*!
      * @if jp
@@ -90,7 +86,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~OutPortDSProvider(void);
+    ~OutPortDSProvider() override;
 
     /*!
      * @if jp
@@ -119,7 +115,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual void init(coil::Properties& prop);
+    void init(coil::Properties& prop) override;
 
     /*!
      * @if jp
@@ -146,7 +142,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual void setBuffer(CdrBufferBase* buffer);
+    void setBuffer(CdrBufferBase* buffer) override;
 
     /*!
      * @if jp
@@ -192,8 +188,8 @@ namespace RTC
      *
      * @endif
      */
-    virtual void setListener(ConnectorInfo& info,
-                             ConnectorListeners* listeners);
+    void setListener(ConnectorInfo& info,
+                             ConnectorListenersBase* listeners) override;
 
     /*!
      * @if jp
@@ -219,7 +215,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual void setConnector(OutPortConnector* connector);
+    void setConnector(OutPortConnector* connector) override;
 
     /*!
      * @if jp
@@ -238,8 +234,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ::RTC::PortStatus pull(::RTC::OctetSeq_out data)
-      throw (CORBA::SystemException);
+    ::RTC::PortStatus pull(::RTC::OctetSeq_out data) override;
 
 
   private:
@@ -250,8 +245,8 @@ namespace RTC
      * @brief Return codes conversion
      * @endif
      */
-    ::RTC::PortStatus convertReturn(BufferStatus::Enum status,
-                                        cdrMemoryStream& data);
+    ::RTC::PortStatus convertReturn(BufferStatus status,
+                                        ByteData& data);
 
 
     /*!
@@ -263,10 +258,9 @@ namespace RTC
      * @param data cdrMemoryStream
      * @endif
      */
-    inline void onBufferRead(cdrMemoryStream& data)
+    inline void onBufferRead(ByteData& data)
     {
-      m_listeners->
-        connectorData_[ON_BUFFER_READ].notify(m_profile, data);
+      m_listeners->notifyOut(ConnectorDataListenerType::ON_BUFFER_READ, m_profile, data);
     }
 
     /*!
@@ -278,10 +272,9 @@ namespace RTC
      * @param data cdrMemoryStream
      * @endif
      */
-    inline void onSend(cdrMemoryStream& data)
+    inline void onSend(ByteData& data)
     {
-      m_listeners->
-        connectorData_[ON_SEND].notify(m_profile, data);
+      m_listeners->notifyOut(ConnectorDataListenerType::ON_SEND, m_profile, data);
     }
 
     /*!
@@ -293,8 +286,7 @@ namespace RTC
      */
     inline void onBufferEmpty()
     {
-      m_listeners->
-        connector_[ON_BUFFER_EMPTY].notify(m_profile);
+      m_listeners->notify(ConnectorListenerType::ON_BUFFER_EMPTY, m_profile);
     }
 
     /*!
@@ -306,8 +298,7 @@ namespace RTC
      */
     inline void onBufferReadTimeout()
     {
-      m_listeners->
-        connector_[ON_BUFFER_READ_TIMEOUT].notify(m_profile);
+      m_listeners->notify(ConnectorListenerType::ON_BUFFER_READ_TIMEOUT, m_profile);
     }
 
     /*!
@@ -319,8 +310,7 @@ namespace RTC
      */
     inline void onSenderEmpty()
     {
-      m_listeners->
-        connector_[ON_SENDER_EMPTY].notify(m_profile);
+      m_listeners->notify(ConnectorListenerType::ON_SENDER_EMPTY, m_profile);
     }
 
     /*!
@@ -332,8 +322,7 @@ namespace RTC
      */
     inline void onSenderTimeout()
     {
-      m_listeners->
-        connector_[ON_SENDER_TIMEOUT].notify(m_profile);
+      m_listeners->notify(ConnectorListenerType::ON_SENDER_TIMEOUT, m_profile);
     }
 
     /*!
@@ -345,18 +334,18 @@ namespace RTC
      */
     inline void onSenderError()
     {
-      m_listeners->
-        connector_[ON_SENDER_ERROR].notify(m_profile);
+      m_listeners->notify(ConnectorListenerType::ON_SENDER_ERROR, m_profile);
     }
 
   private:
-    CdrBufferBase* m_buffer;
+    CdrBufferBase* m_buffer{nullptr};
     ::RTC::DataPullService_var m_objref;
-    ConnectorListeners* m_listeners;
+    ConnectorListenersBase* m_listeners;
     ConnectorInfo m_profile;
-    OutPortConnector* m_connector;
+    OutPortConnector* m_connector{nullptr};
+    ByteData m_cdr;
   };  // class OutPortDSProvider
-};     // namespace RTC
+} // namespace RTC
 
 extern "C"
 {
@@ -374,10 +363,6 @@ extern "C"
    * @endif
    */
   void OutPortDSProviderInit(void);
-};
-
-#ifdef WIN32
-#pragma warning( default : 4290 )
-#endif
+}
 
 #endif  // RTC_OUTPORTDSPROVIDER_H

@@ -18,6 +18,7 @@
  */
 
 #include <coil/Process.h>
+#include <memory>
 
 namespace coil
 {
@@ -34,14 +35,14 @@ namespace coil
     std::string cmd = "cmd.exe /c ";
     command = cmd + command;
 #ifdef UNICODE
-    // std::string -> LPTSTR
+    // std::wstring -> LPTSTR
     std::wstring wcommand = string2wstring(command);
     LPTSTR lpcommand = new TCHAR[wcommand.size() + 1];
     _tcscpy(lpcommand, wcommand.c_str());
 #else
     // std::string -> LPTSTR
     LPTSTR lpcommand = new TCHAR[command.size() + 1];
-    _tcscpy(lpcommand, command.c_str());
+    _tcscpy_s(lpcommand, command.size() + 1, command.c_str());
 #endif  // UNICODE
 
     STARTUPINFO si;
@@ -51,19 +52,19 @@ namespace coil
     PROCESS_INFORMATION pi;
     ZeroMemory( &pi, sizeof(pi) );
 
-    if (!CreateProcess(NULL, lpcommand, NULL, NULL, FALSE, 0,
-                      NULL, NULL, &si, &pi) )
+    if (!CreateProcess(nullptr, lpcommand, nullptr, nullptr, FALSE, 0,
+                      nullptr, nullptr, &si, &pi) )
       {
-        delete lpcommand;
+        delete[] lpcommand;
         return -1;
       }
     CloseHandle(pi.hProcess);
     CloseHandle(pi.hThread);
-    delete lpcommand;
+    delete[] lpcommand;
     return 0;
   }
 
-  int daemon(int nochdir, int noclose)
+  int daemon(int /*nochdir*/, int /*noclose*/)
   {
     // not implemented
     return 0;
@@ -78,20 +79,20 @@ namespace coil
   *
   * @endif
   */
-  int create_process(std::string command, std::vector<std::string> &out)
+  int create_process(const std::string& command, std::vector<std::string> &out)
   {
       HANDLE rPipe, wPipe;
       SECURITY_ATTRIBUTES sa;
       sa.nLength = sizeof(sa);
       sa.bInheritHandle = TRUE;
-      sa.lpSecurityDescriptor = NULL;
-      if (!CreatePipe(&rPipe, &wPipe, &sa, 0))
+      sa.lpSecurityDescriptor = nullptr;
+      if (CreatePipe(&rPipe, &wPipe, &sa, 65535) == 0)
       {
           return -1;
       }
 
 
-      STARTUPINFO si = { 0 };
+      STARTUPINFO si{};
       si.cb = sizeof(si);
       si.dwFlags = STARTF_USESTDHANDLES;
       si.hStdInput = stdin;
@@ -100,49 +101,95 @@ namespace coil
 
 
 #ifdef UNICODE
-      // std::string -> LPTSTR
+      // std::wstring -> LPTSTR
       std::wstring wcommand = string2wstring(command);
       LPTSTR lpcommand = new TCHAR[wcommand.size() + 1];
-      _tcscpy(lpcommand, wcommand.c_str());
+      _tcscpy_s(lpcommand, wcommand.size() + 1, wcommand.c_str());
 #else
       // std::string -> LPTSTR
       LPTSTR lpcommand = new TCHAR[command.size() + 1];
-      _tcscpy(lpcommand, command.c_str());
+      _tcscpy_s(lpcommand, command.size() + 1, command.c_str());
 #endif // UNICODE
 
-      PROCESS_INFORMATION pi = { 0 };
-      if (!CreateProcess(NULL, lpcommand, NULL, NULL, TRUE, CREATE_NO_WINDOW, NULL, NULL, &si, &pi))
+      PROCESS_INFORMATION pi{};
+      BOOL retcp = CreateProcess(nullptr, lpcommand, nullptr, nullptr, TRUE, CREATE_NO_WINDOW, nullptr, nullptr, &si, &pi);
+      delete[] lpcommand;
+      if (!retcp)
       {
-          delete lpcommand;
-          return -1;
+          std::string commandbatch = std::string("cmd.exe /c ") + command;
+#ifdef UNICODE
+          std::wstring wcommandbatch = string2wstring(commandbatch);
+          LPTSTR lpcommandbatch = new TCHAR[wcommandbatch.size() + 1];
+          _tcscpy_s(lpcommandbatch, wcommandbatch.size() + 1, wcommandbatch.c_str());
+#else
+          // std::string -> LPTSTR
+          LPTSTR lpcommandbatch = new TCHAR[commandbatch.size() + 1];
+          _tcscpy_s(lpcommandbatch, commandbatch.size() + 1, commandbatch.c_str());
+#endif // UNICODE
+          BOOL retcpbatch = CreateProcess(nullptr, lpcommandbatch, nullptr, nullptr, TRUE, CREATE_NO_WINDOW, nullptr, nullptr, &si, &pi);
+          delete[] lpcommandbatch;
+          if (!retcpbatch)
+          {
+              return -1;
+          }
       }
-
 
       WaitForSingleObject(pi.hProcess, INFINITE);
       CloseHandle(pi.hProcess);
       CloseHandle(pi.hThread);
 
-
-      char Buf[1025] = { 0 };
       DWORD len;
-      ReadFile(rPipe, Buf, sizeof(Buf) - 1, &len, NULL);
-
-
-      out = coil::split(std::string(Buf), "\n");
-
-      for (coil::vstring::iterator itr = out.begin(); itr != out.end(); ++itr)
+      DWORD size = GetFileSize(rPipe, nullptr);
+      if (size == 0)
       {
-          std::string &tmp = (*itr);
-          if (0 < tmp.size())
-          {
-              tmp.erase(tmp.size() - 1);
-          }
-          coil::eraseBothEndsBlank(tmp);
+          return 0;
+      }
+      std::unique_ptr<CHAR[]> Buf(new CHAR[static_cast<size_t>(size) + 1]);
+      Buf[size] = '\0';
+      if (!ReadFile(rPipe, Buf.get(), size, &len, nullptr))
+      {
+          return -1;
       }
 
-      delete lpcommand;
+      for(auto&& o : coil::split(std::string(Buf.get()), "\n"))
+      {
+          if (!o.empty() && o.back() == '\r')
+          {
+              o.erase(o.size() - 1);
+          }
+          out.emplace_back(coil::eraseBothEndsBlank(std::move(o)));
+      }
+
       return 0;
 
   }
-};  // namespace coil
+
+  Popen::Popen(const std::string& cmd, const std::string& mode)
+    {
+      m_fd = _popen(cmd.c_str(), mode.c_str());
+    }
+
+  Popen::~Popen()
+    {
+      if (m_fd != nullptr)
+        {
+          _pclose(m_fd);
+        }
+    }
+
+  bool Popen::isEof()
+    {
+      return feof(m_fd) != 0;
+    }
+
+  std::string Popen::getline()
+    {
+      if (m_fd == nullptr) { return ""; }
+      if (feof(m_fd) != 0) { return ""; }
+      char str[512];
+      fgets(str, 512, m_fd);
+      std::string line(str);
+      return line;
+    }
+} // namespace coil
 

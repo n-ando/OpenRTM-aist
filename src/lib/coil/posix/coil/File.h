@@ -24,17 +24,14 @@
 
 #include <dirent.h>
 #include <libgen.h>
-#include <stdio.h>
+#include <cstdio>
 #include <sys/types.h>
 #include <string>
 #include <cstring>
 
-#include <string.h>
+#include <cstring>
 #include <sys/stat.h>
 
-
-#include <coil/config_coil.h>
-#include <coil/stringutil.h>
 
 #ifdef __QNX__
 using std::strlen;
@@ -67,13 +64,7 @@ namespace coil
    *
    * @endif
    */
-  inline std::string dirname(char* path)
-  {
-    char path_name[strlen(path)+1];
-    snprintf(path_name, sizeof(path_name), "%s", path);
-    std::string dir_name = ::dirname(path_name);
-    return dir_name;
-  }
+  std::string dirname(const char* path);
 
   /*!
    * @if jp
@@ -100,9 +91,8 @@ namespace coil
    */
   inline std::string basename(const char* path)
   {
-    char path_name[strlen(path)+1];
-    snprintf(path_name, sizeof(path_name), "%s", path);
-    std::string base_name = ::basename(path_name);
+    std::string path_name(path);
+    std::string base_name = ::basename(&path_name[0]);
     return base_name;
   }
 
@@ -137,19 +127,19 @@ namespace coil
     coil::vstring flist;
     bool has_glob(false);
 
-    if (path == 0) { return flist; }
+    if (path == nullptr) { return flist; }
     if (glob_str[0] != '\0') { has_glob = true; }
 
     DIR* dir_ptr(::opendir(path));
-    if (dir_ptr == 0) { return flist; }
+    if (dir_ptr == nullptr) { return flist; }
 
-    while ((ent = ::readdir(dir_ptr)) != 0)
+    while ((ent = ::readdir(dir_ptr)) != nullptr)
       {
+        std::string fname(ent->d_name);
         bool match(true);
         if (has_glob)
           {
             const char* globc(glob_str);
-            std::string fname(ent->d_name);
             for (size_t i(0); i < fname.size() && *globc != '\0'; ++i, ++globc)
               {
                 if (*globc == '*')
@@ -191,7 +181,7 @@ namespace coil
                     globc[1] != '\0' && globc[1] != '*') { match = false; }
               }
           }
-        if (match) { flist.push_back(ent->d_name); }
+        if (match) { flist.emplace_back(std::move(fname)); }
       }
     ::closedir(dir_ptr);
 
@@ -211,44 +201,15 @@ namespace coil
   *
   * @else
   *
-  * @brief 
-  * 
-  * @param dir 
-  * @param filename 
-  * @param filelist 
+  * @brief
+  *
+  * @param dir
+  * @param filename
+  * @param filelist
   *
   * @endif
   */
-  inline void findFile(std::string dir, std::string filename, coil::vstring &filelist)
-  {
-	struct dirent **namelist=NULL;
-	int files = scandir(dir.c_str(), &namelist, NULL, NULL);
-
-	for (int i=0; i<files; i++) {
-		std::string dname = namelist[i]->d_name;
-		if( dname != "." && dname != ".." ){
-
-			std::string fullpath = dir + "/" + dname;
-
-			struct stat stat_buf;
-			if(stat(fullpath.c_str(), &stat_buf) == 0){
-				if ((stat_buf.st_mode & S_IFMT) == S_IFDIR){
-					findFile(fullpath, filename, filelist);
-				}
-				else
-				{
-					if(dname == filename)
-					{
-						filelist.push_back(fullpath);
-					}
-				}
-			}
-		
-			
-		}
-	}
-  }
-
+  void findFile(const std::string& dir, const std::string& filename, coil::vstring &filelist);
 
   /*!
   * @if jp
@@ -270,37 +231,7 @@ namespace coil
   *
   * @endif
   */
-  inline void getFileList(std::string dir, std::string ext, coil::vstring &filelist)
-  {
-	struct dirent **namelist=NULL;
-	int files = scandir(dir.c_str(), &namelist, NULL, NULL);
-
-	for (int i=0; i<files; i++) {
-		std::string dname = namelist[i]->d_name;
-		if( dname != "." && dname != ".." ){
-
-			std::string fullpath = dir + "/" + dname;
-
-			struct stat stat_buf;
-			if(stat(fullpath.c_str(), &stat_buf) == 0){
-				if ((stat_buf.st_mode & S_IFMT) == S_IFDIR){
-					getFileList(fullpath, ext, filelist);
-				}
-				else
-				{
-					coil::vstring filesp = coil::split(dname, ".");
-					if(filesp.back() == ext)
-					{
-						filelist.push_back(fullpath);
-					}
-				}
-			}
-		
-			
-		}
-	}
-	
-  }
-};
+  void getFileList(const std::string& dir, const std::string& ext, coil::vstring &filelist);
+} // namespace coil
 
 #endif // COIL_FILE_H

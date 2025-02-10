@@ -41,9 +41,7 @@ namespace RTC
    * @brief Destructor
    * @endif
    */
-  InPortProvider::~InPortProvider()
-  {
-  }
+  InPortProvider::~InPortProvider() = default;
 
   /*!
    * @if jp
@@ -85,7 +83,6 @@ namespace RTC
       }
 
     NVUtil::append(prop, m_properties);
-    //    NVUtil::dump(m_properties);
     return true;
   }
 
@@ -130,4 +127,4 @@ namespace RTC
     RTC_TRACE(("setSubscriptionType(%s)", subs_type));
     m_subscriptionType = subs_type;
   }
-};  // namespace RTC
+} // namespace RTC

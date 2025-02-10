@@ -22,13 +22,13 @@
 #include <sys/utsname.h>
 #include <sys/types.h>
 #include <unistd.h>
-#include <stdlib.h>
+#include <cstdlib>
 #include <string>
 
 extern "C"
 {
   extern char *optarg;
-};
+}
 
 namespace coil
 {
@@ -55,7 +55,7 @@ namespace coil
    *
    * @endif
    */
-  typedef ::utsname utsname;
+  using utsname = ::utsname;
   inline int uname(utsname* name)
   {
     return ::uname(name);
@@ -80,7 +80,7 @@ namespace coil
    *
    * @endif
    */
-  typedef ::pid_t pid_t;
+  using pid_t = ::pid_t;
   inline pid_t getpid()
   {
     return ::getpid();
@@ -133,9 +133,15 @@ namespace coil
    *
    * @endif
    */
-  inline char* getenv(const char *name)
+  inline bool getenv(const char *name, std::string &env)
   {
-    return ::getenv(name);
+    char* c = ::getenv(name);
+    if(c == nullptr)
+    {
+        return false;
+    }
+    env = c;
+    return true;
   }
 
 
@@ -176,9 +182,9 @@ namespace coil
      *
      * @endif
      */
-    GetOpt(int argc, char* const argv[], const char* opt, int flag)
+    GetOpt(int argc, char* const argv[], const char* opt, int  /*flag*/)
       : optarg(::optarg), optind(1), opterr(1), optopt(0),
-        m_argc(argc), m_argv(argv), m_opt(opt), m_flag(flag)
+        m_argc(argc), m_argv(argv), m_opt(opt)
     {
       ::optind = 1;
 #ifdef __QNX__
@@ -249,7 +255,7 @@ namespace coil
       optarg = ::optarg;
       optind = ::optind;
       optopt = ::optopt;
-#if __QNX__
+#ifdef __QNX__
       if (optind_last < m_argc)
         {
           ++optind_last;
@@ -270,9 +276,8 @@ namespace coil
     int m_argc;
     char* const * m_argv;
     const char* m_opt;
-    int m_flag;
   };
 
-};  // namespace coil
+} // namespace coil
 
 #endif  // COIL_OS_H

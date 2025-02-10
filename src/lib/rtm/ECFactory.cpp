@@ -45,9 +45,7 @@ namespace RTC
    * @brief Virtual destructor
    * @endif
    */
-  ECFactoryCXX::~ECFactoryCXX()
-  {
-  }
+  ECFactoryCXX::~ECFactoryCXX() = default;
 
   /*!
    * @if jp
@@ -85,4 +83,4 @@ namespace RTC
     m_Delete(ec);
   }
 
-};  // namespace RTC
+} // namespace RTC

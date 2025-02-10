@@ -1,13 +1,5 @@
-﻿#ifndef __MACHO_HPP__
-#define __MACHO_HPP__
-
-//#if defined(_MSC_VER)
-//#pragma warning(push)
-//#pragma warning(disable:4512 4251)
-//#elif defined(__GNUC__) && (__GNUC_MINOR__ >= 6)
-#pragma GCC diagnostic ignored "-Wunused-but-set-variable"
-#pragma GCC diagnostic ignored "-Wunused-local-typedefs"
-//#endif
+﻿#ifndef MACHO_HPP
+#define MACHO_HPP
 
 // Macho - C++ Machine Objects
 //
@@ -213,18 +205,26 @@
 #include <new>
 #include <cassert>
 
+#if defined(__clang__)
+#if defined(_WIN32) || defined(_WIN64)
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wreserved-identifier"
+#endif
+#endif
+
+
 class TestAccess;
 
 
 ////////////////////////////////////////////////////////////////////////////////
 // Check type equality at compile time.
 template<class T, class U>
-struct __SameType {
+struct CheckSameType {
 };
 
 template<class T>
-struct __SameType<T, T> {
-	typedef bool Check;
+struct CheckSameType<T, T> {
+	using Check = bool;
 };
 
 
@@ -243,12 +243,12 @@ struct __SameType<T, T> {
 // (mandatory). If you have a state box declare it BEFORE macro invocation!
 #define STATE(S) \
 public: \
-	typedef S SELF; \
+	using SELF = S; \
 	/* Constructor and destructor already defined: you can't (and shouldn't) have your own! */ \
 	/* For the user a state class "constructor" and "destructor" are its entry and exit method! */ \
 	S(::Macho::_StateInstance & instance) : ::Macho::Link<S, SUPER>(instance) { \
 		/* Compile time check: S must derive directly from Link<S, SUPER> */ \
-		typedef ::__SameType< ::Macho::Link<S, SUPER>, LINK>::Check MustDeriveFromLink; \
+		using MustDeriveFromLink = ::CheckSameType< ::Macho::Link<S, SUPER>, LINK>::Check; \
 	} \
 	~S() {} \
 	static const char * _state_name() { return #S; } \
@@ -260,13 +260,14 @@ public: \
 #define DEEPHISTORY() \
 private: \
 	/* If no superstate has history, SUPER::_setHistorySuper is a NOOP */ \
-	virtual void _saveHistory(::Macho::_StateInstance & self, ::Macho::_StateInstance & shallow, ::Macho::_StateInstance & deep) \
+	void _saveHistory(::Macho::_StateInstance & self, ::Macho::_StateInstance & /* shallow */, ::Macho::_StateInstance & deep) override\
 	{ self.setHistory(&deep); SELF::SUPER::_setHistorySuper(self, deep); } \
 protected: \
 	/* Substates may use _setHistorySuper to bubble up history */ \
-	virtual void _setHistorySuper(::Macho::_StateInstance & self, ::Macho::_StateInstance & deep) \
+	void _setHistorySuper(::Macho::_StateInstance & self, ::Macho::_StateInstance & deep) override\
 	{ self.setHistorySuper(deep); } \
-public:
+public:\
+	static_assert(true, "dummy for extra semicolon warning")
 
 // Use this macro to select shallow history strategy.
 #define HISTORY() \
@@ -278,7 +279,8 @@ protected: \
 	/* Substates may use _setHistorySuper to bubble up history */ \
 	virtual void _setHistorySuper(::Macho::_StateInstance & self, ::Macho::_StateInstance & deep) \
 	{ self.setHistorySuper(deep); } \
-public:
+public:\
+	static_assert(true, "dummy for extra semicolon warning")
 
 // Use this macro to have boxes survive state transitions
 #define PERSISTENT() \
@@ -305,17 +307,16 @@ namespace Macho {
 	class _StateInstance;
 
 	// Unique identifier of states.
-	typedef void * Key;
+	using Key = void*;
 
 	// Also an unique identifier of states, build from consecutive integers.
 	// Use Key to get to ID.
-	typedef unsigned int ID;
+	using ID = unsigned int;
 
 
 	////////////////////////////////////////////////////////////////////////////////
 	// Box for states which don't declare own Box class.
 	class _EmptyBox {
-		_EmptyBox() {}
 	public:
 		static _EmptyBox theEmptyBox;
 	};
@@ -331,7 +332,7 @@ namespace Macho {
 		new (place) B;
 
 		void * box = place;
-		place = 0;
+		place = nullptr;
 
 		return box;
 	}
@@ -343,7 +344,7 @@ namespace Macho {
 
 		static_cast<B *>(box)->~B();
 		place = box;
-		box = 0;
+		box = nullptr;
 	}
 
 #ifdef MACHO_SNAPSHOTS
@@ -371,9 +372,9 @@ namespace Macho {
 	////////////////////////////////////////////////////////////////////////////////
 	// Essential information pointed at by state key.
 	struct _KeyData {
-		typedef _StateInstance & (*Generator)(_MachineBase & machine);
-		typedef bool (*Predicate)(Key);
-		typedef const char * (*NameFn)();
+		using Generator = _StateInstance &(*)(_MachineBase &);
+		using Predicate = bool (*)(Key);
+		using NameFn = const char* (*)();
 
 		// Get StateInstance object from key.
 		const Generator instanceGenerator;
@@ -392,9 +393,9 @@ namespace Macho {
 	// and exit actions of user's top state.
 	class _StateSpecification {
 	public:
-		virtual ~_StateSpecification() {}
+		virtual ~_StateSpecification() = default;
 
-		static bool isChild(Key key) {
+		static bool isChild(Key  /*key*/) {
 			return false;
 		}
 
@@ -462,7 +463,7 @@ namespace Macho {
 
 		// This is the method to bubble up history information
 		// for states whose superstates have no history (so does nothing).
-		virtual void _setHistorySuper(_StateInstance & self, _StateInstance & deep) {}
+		virtual void _setHistorySuper(_StateInstance & /* self */, _StateInstance & /* deep*/ ) {}
 
 	private:
 		// State exit. Not allowed to initiate state change.
@@ -497,10 +498,10 @@ namespace Macho {
 		// Create StateInstance object of state.
 		static _StateInstance & _getInstance(_MachineBase & machine);
 
-		virtual void _deleteBox(_StateInstance & instance) {}
+		virtual void _deleteBox(_StateInstance & /* instance */) {}
 
 		// Default history strategy (no history).
-		virtual void _saveHistory(_StateInstance & self, _StateInstance & shallow, _StateInstance & deep) {}
+		virtual void _saveHistory(_StateInstance & /* self */, _StateInstance & /* shallow */, _StateInstance & /* deep */) {}
 
 	private:
 		_StateInstance & _myStateInstance;
@@ -513,7 +514,7 @@ namespace Macho {
 	class TopBase : public _StateSpecification {
 	public:
 		// This typedef is an alias for user defined top state in all (sub)states.
-		typedef T TOP;
+		using TOP = T;
 
 	protected:
 		TopBase(_StateInstance & instance)
@@ -535,13 +536,13 @@ namespace Macho {
 	class Link : public P {
 	public:
 		// Alias for superstate.
-		typedef P SUPER;
+		using SUPER = P;
 
 		// Alias for topstate.
-		typedef typename P::TOP TOP;
+		using TOP = typename P::TOP;
 
 		// Default box type.
-		typedef _EmptyBox Box;
+		using Box = _EmptyBox;
 
 		// Get unique key of state.
 		static Key key();
@@ -557,30 +558,30 @@ namespace Macho {
 		}
 
 		// Is machine m in this state?
-		static bool isCurrent(const _MachineBase & m);
+		static bool isCurrent(const _MachineBase & machine);
 
 		// Deprecated!
 		// Is machine m in exactly this state?
-		static bool isCurrentDirect(const _MachineBase & m);
+		static bool isCurrentDirect(const _MachineBase & machine);
 
-		static void clearHistory(const _MachineBase & m);
+		static void clearHistory(const _MachineBase & machine);
 
-		static void clearHistoryDeep(const _MachineBase & m);
+		static void clearHistoryDeep(const _MachineBase & machine);
 
-		static Alias history(const _MachineBase & m);
+		static Alias history(const _MachineBase & machine);
 
 	protected:
 		// Needed to perform compile time checks.
-		typedef Link<C, P> LINK;
+		using LINK = Link<C, P>;
 
 		Link(_StateInstance & instance);
 
 		// These definitions seem redundant but they are not!
 		// They override parent definitions so each substate gets either
 		// this default or their own, but never its parents definitions.
-		virtual void entry() {}
-		virtual void init() {}
-		virtual void exit() {}
+		void entry() override {}
+		void init() override {}
+		void exit() override {}
 
 		// This method keeps '_myStateInstance' attribute private.
 		void * _box();
@@ -606,10 +607,10 @@ namespace Macho {
 		static _StateInstance & _getInstance(_MachineBase & machine);
 
 		// Box is by default not persistent. Not redundant!
-		virtual void _deleteBox(_StateInstance & instance);
+		void _deleteBox(_StateInstance & instance) override;
 
 		// Default history strategy (no history). Not redundant!
-		virtual void _saveHistory(_StateInstance & self, _StateInstance & shallow, _StateInstance & deep) {
+		void _saveHistory(_StateInstance & self, _StateInstance &  /*shallow*/, _StateInstance & deep) override {
 			// Bubble up history. If no superstate has history, _setHistorySuper will do nothing.
 			this->_setHistorySuper(self, deep);
 		}
@@ -657,7 +658,7 @@ namespace Macho {
 
 		// Update superstate's history information:
 		void setHistorySuper(_StateInstance & deep) {
-			if (myParent)
+			if (myParent != nullptr)
 				// Let it choose between deep or shallow history.
 				myParent->saveHistory(*this, deep);
 		}
@@ -697,10 +698,10 @@ namespace Macho {
 		void setBox(void * box) {
 			assert(!myBox);
 
-			if (myBoxPlace) {
+			if (myBoxPlace != nullptr) {
 				// Free cached memory of previously used box.
 				::operator delete(myBoxPlace);
-				myBoxPlace = 0;
+				myBoxPlace = nullptr;
 			}
 
 			myBox = box;
@@ -708,7 +709,7 @@ namespace Macho {
 
 		// Is 'instance' a superstate?
 		bool isChild(const _StateInstance & instance) {
-			return this == &instance || (myParent && myParent->isChild(instance));
+			return this == &instance || ((myParent != nullptr) && myParent->isChild(instance));
 		}
 
 		_StateSpecification & specification() {
@@ -757,25 +758,25 @@ namespace Macho {
 		}
 
 	public:
-		virtual ID id() {
+		ID id() override {
 			return 0;
 		}
 
-		virtual Key key() {
+		Key key() override {
 			// Can't happen: key is only called by users, and they don't know about Root.
-			assert(false); return 0;
+			assert(false); return nullptr;
 		}
 
-		virtual void createBox() {}
-		virtual void deleteBox() {}
+		void createBox() override {}
+		void deleteBox() override {}
 #ifdef MACHO_SNAPSHOTS
 		virtual void cloneBox(void * box) {}
 #endif
 
-		virtual const char * name() { return "Root"; }
+		const char * name() override { return "Root"; }
 
 		// 'Virtual constructor' needed for cloning.
-		virtual _StateInstance * create(_MachineBase & machine, _StateInstance * parent) {
+		_StateInstance * create(_MachineBase & machine, _StateInstance * parent) override {
 			return new _RootInstance(machine, parent);
 		}
 
@@ -799,34 +800,34 @@ namespace Macho {
 		}
 
 	public:
-		typedef typename S::Box Box;
+		using Box = typename S::Box;
 
-		virtual ~_SubstateInstance() {
+		~_SubstateInstance() override {
 			if (this->myBox)
 				Macho::_deleteBox<Box>(myBox, myBoxPlace);
 		}
 
-		virtual const char * name() { return S::_state_name(); }
+		const char * name() override { return S::_state_name(); }
 
-		virtual ID id() {
+		ID id() override {
 			return StateID<S>::value;
 		}
 
-		virtual Key key() {
+		Key key() override {
 			return S::key();
 		}
 
 		// 'Virtual constructor' needed for cloning.
-		virtual _StateInstance * create(_MachineBase & machine, _StateInstance * parent) {
+		_StateInstance * create(_MachineBase & machine, _StateInstance * parent) override {
 			return new _SubstateInstance<S>(machine, parent);
 		}
 
-		virtual void createBox() {
+		void createBox() override {
 			if (!this->myBox)
 				this->myBox = Macho::_createBox<Box>(myBoxPlace);
 		}
 
-		virtual void deleteBox() {
+		void deleteBox() override {
 			assert(myBox);
 			Macho::_deleteBox<Box>(myBox, myBoxPlace);
 		}
@@ -849,7 +850,7 @@ namespace Macho {
 	// Generic interface for event objects (available only to MachineBase)
 	class _IEventBase {
 	public:
-		virtual ~_IEventBase() {}
+		virtual ~_IEventBase() = default;
 		virtual void dispatch(_StateInstance &) = 0;
 	};
 
@@ -865,7 +866,7 @@ namespace Macho {
 	// Event with four parameters
 	template<class TOP, class R, class P1, class P2, class P3, class P4, class P5, class P6>
 	class _Event6 : public IEvent<TOP> {
-		typedef R (TOP::*Signature)(P1, P2, P3, P4, P5, P6);
+		using Signature = R (TOP::*)(P1, P2, P3, P4, P5, P6);
 
 	public:
 		_Event6(Signature handler, const P1 & p1, const P2 & p2, const P3 & p3, const P4 & p4, const P5 & p5, const P6 & p6)
@@ -897,7 +898,7 @@ namespace Macho {
 	// Event with four parameters
 	template<class TOP, class R, class P1, class P2, class P3, class P4, class P5>
 	class _Event5 : public IEvent<TOP> {
-		typedef R (TOP::*Signature)(P1, P2, P3, P4, P5);
+		using Signature = R (TOP::*)(P1, P2, P3, P4, P5);
 
 	public:
 		_Event5(Signature handler, const P1 & p1, const P2 & p2, const P3 & p3, const P4 & p4, const P5 & p5)
@@ -927,7 +928,7 @@ namespace Macho {
 	// Event with four parameters
 	template<class TOP, class R, class P1, class P2, class P3, class P4>
 	class _Event4 : public IEvent<TOP> {
-		typedef R (TOP::*Signature)(P1, P2, P3, P4);
+		using Signature = R (TOP::*)(P1, P2, P3, P4);
 
 	public:
 		_Event4(Signature handler, const P1 & p1, const P2 & p2, const P3 & p3, const P4 & p4)
@@ -955,7 +956,7 @@ namespace Macho {
 	// Event with three parameters
 	template<class TOP, class R, class P1, class P2, class P3>
 	class _Event3 : public IEvent<TOP> {
-		typedef R (TOP::*Signature)(P1, P2, P3);
+		using Signature = R (TOP::*)(P1, P2, P3);
 
 	public:
 		_Event3(Signature handler, const P1 & p1, const P2 & p2, const P3 & p3)
@@ -981,7 +982,7 @@ namespace Macho {
 	// Event with two parameters
 	template<class TOP, class R, class P1, class P2>
 	class _Event2 : public IEvent<TOP> {
-		typedef R (TOP::*Signature)(P1, P2);
+		using Signature = R (TOP::*)(P1, P2);
 
 	public:
 		_Event2(Signature handler, const P1 & p1, const P2 & p2)
@@ -1005,7 +1006,7 @@ namespace Macho {
 	// Event with one parameter
 	template<class TOP, class R, class P1>
 	class _Event1 : public IEvent<TOP> {
-		typedef R (TOP::*Signature)(P1);
+		using Signature = R (TOP::*)(P1);
 
 	public:
 		_Event1(Signature handler, const P1 & p1)
@@ -1014,7 +1015,7 @@ namespace Macho {
 		{}
 
 	protected:
-		void dispatch(_StateInstance & instance) {
+		void dispatch(_StateInstance & instance) override {
 			TOP & behaviour = static_cast<TOP &>(instance.specification());
 			(behaviour.*myHandler)(myParam1);
 		}
@@ -1027,7 +1028,7 @@ namespace Macho {
 	// Event with no parameters
 	template<class TOP, class R>
 	class _Event0 : public IEvent<TOP> {
-		typedef R (TOP::*Signature)();
+		using Signature = R (TOP::*)();
 
 	public:
 		_Event0(Signature handler)
@@ -1035,7 +1036,7 @@ namespace Macho {
 		{}
 
 	protected:
-		void dispatch(_StateInstance & instance) {
+		void dispatch(_StateInstance & instance) override {
 			TOP & behaviour = static_cast<TOP &>(instance.specification());
 			(behaviour.*myHandler)();
 		}
@@ -1140,7 +1141,7 @@ namespace Macho {
 	// the data of the initializer object.
 	class _Initializer {
 	public:
-		virtual ~_Initializer() {}
+		virtual ~_Initializer() = default;
 
 		// Create copy of initializer.
 		virtual _Initializer * clone() = 0;
@@ -1158,10 +1159,10 @@ namespace Macho {
 	// Base class for Singleton initializers.
 	class _StaticInitializer : public _Initializer {
 		// Copy of Singleton is Singleton.
-		virtual _Initializer * clone() { return this; }
+		_Initializer * clone() override { return this; }
 
 		// Singletons are never destroyed.
-		virtual void destroy() {}
+		void destroy() override {}
 	};
 
 
@@ -1169,7 +1170,7 @@ namespace Macho {
 	// only.
 	class _DefaultInitializer : public _StaticInitializer {
 	public:
-		virtual void execute(_StateInstance & instance) {
+		void execute(_StateInstance & instance) override {
 			instance.init(false);
 		}
 	};
@@ -1179,7 +1180,7 @@ namespace Macho {
 	// history of state if available.
 	class _HistoryInitializer : public _StaticInitializer {
 	public:
-		virtual void execute(_StateInstance & instance) {
+		void execute(_StateInstance & instance) override {
 			instance.init(true);
 		}
 	};
@@ -1190,15 +1191,15 @@ namespace Macho {
 	public:
 		_AdaptingInitializer(const _MachineBase & machine) : myMachine(machine) {}
 
-		virtual void execute(_StateInstance & instance) {
+		void execute(_StateInstance & instance) override {
 			instance.init(true);
 		}
 
-		virtual _Initializer * clone() {
+		_Initializer * clone() override {
 			return new _AdaptingInitializer(myMachine);
 		}
 
-		virtual Key adapt(Key key);
+		Key adapt(Key key) override;
 
 	protected:
 		const _MachineBase & myMachine;
@@ -1213,11 +1214,11 @@ namespace Macho {
 			: myParam1(p1)
 		{}
 
-		virtual _Initializer * clone() {
+		_Initializer * clone() override {
 			return new _Initializer1<S, P1>(myParam1);
 		}
 
-		virtual void execute(_StateInstance & instance) {
+		void execute(_StateInstance & instance) override {
 			::_VS8_Bug_101615::execute<S, P1>(instance, myParam1);
 			delete this;
 		}
@@ -1234,11 +1235,11 @@ namespace Macho {
 			, myParam2(p2)
 		{}
 
-		virtual _Initializer * clone() {
+		_Initializer * clone() override {
 			return new _Initializer2<S, P1, P2>(myParam1, myParam2);
 		}
 
-		void execute(_StateInstance & instance) {
+		void execute(_StateInstance & instance) override {
 			::_VS8_Bug_101615::execute<S, P1, P2>(instance, myParam1, myParam2);
 			delete this;
 		}
@@ -1257,11 +1258,11 @@ namespace Macho {
 			, myParam3(p3)
 		{}
 
-		virtual _Initializer * clone() {
+		_Initializer * clone() override {
 			return new _Initializer3<S, P1, P2, P3>(myParam1, myParam2, myParam3);
 		}
 
-		void execute(_StateInstance & instance) {
+		void execute(_StateInstance & instance) override {
 			::_VS8_Bug_101615::execute<S, P1, P2, P3>(instance, myParam1, myParam2, myParam3);
 			delete this;
 		}
@@ -1282,11 +1283,11 @@ namespace Macho {
 			, myParam4(p4)
 		{}
 
-		virtual _Initializer * clone() {
+		_Initializer * clone() override {
 			return new _Initializer4<S, P1, P2, P3, P4>(myParam1, myParam2, myParam3, myParam4);
 		}
 
-		void execute(_StateInstance & instance) {
+		void execute(_StateInstance & instance) override {
 			::_VS8_Bug_101615::execute<S, P1, P2, P3, P4>(instance, myParam1, myParam2, myParam3, myParam4);
 			delete this;
 		}
@@ -1309,11 +1310,11 @@ namespace Macho {
 			, myParam5(p5)
 		{}
 
-		virtual _Initializer * clone() {
+		_Initializer * clone() override {
 			return new _Initializer5<S, P1, P2, P3, P4, P5>(myParam1, myParam2, myParam3, myParam4, myParam5);
 		}
 
-		void execute(_StateInstance & instance) {
+		void execute(_StateInstance & instance) override {
 			::_VS8_Bug_101615::execute<S, P1, P2, P3, P4, P5>(instance, myParam1, myParam2, myParam3, myParam4, myParam5);
 			delete this;
 		}
@@ -1338,11 +1339,11 @@ namespace Macho {
 			, myParam6(p6)
 		{}
 
-		virtual _Initializer * clone() {
+		_Initializer * clone() override {
 			return new _Initializer6<S, P1, P2, P3, P4, P5, P6>(myParam1, myParam2, myParam3, myParam4, myParam5, myParam6);
 		}
 
-		void execute(_StateInstance & instance) {
+		void execute(_StateInstance & instance) override {
 			_VS8_Bug_101615::execute<S, P1, P2, P3, P4, P5, P6>(instance, myParam1, myParam2, myParam3, myParam4, myParam5, myParam6);
 			delete this;
 		}
@@ -1462,16 +1463,16 @@ namespace Macho {
 		friend class ::TestAccess;
 
 		// Current state of Machine object.
-		_StateInstance * myCurrentState;
+		_StateInstance * myCurrentState{nullptr};
 
 		// Information about pending state transition.
-		_StateInstance * myPendingState;
-		_Initializer * myPendingInit;
+		_StateInstance * myPendingState{nullptr};
+		_Initializer * myPendingInit{nullptr};
 
 		// Deprecated!
-		void * myPendingBox;
+		void * myPendingBox{nullptr};
 
-		_IEventBase * myPendingEvent;
+		_IEventBase * myPendingEvent{nullptr};
 
 		// Array of StateInstance objects.
 		_StateInstance ** myInstances;
@@ -1565,7 +1566,7 @@ namespace Macho {
 	};
 
 	// Deprecated!
-	typedef Alias StateAlias;
+	using StateAlias = Alias;
 
 
 	// Create alias with 0 to 6 parameters.
@@ -1674,7 +1675,9 @@ namespace Macho {
 
 		Machine() {
 			// Compile time check: TOP must directly derive from TopBase<TOP>
-			typedef typename __SameType<TopBase<TOP>, typename TOP::SUPER>::Check MustDeriveFromTopBase;
+			using MustDeriveFromTopBase = typename CheckSameType<TopBase<TOP>, typename TOP::SUPER>::Check;
+			// suppress unused-typdefs warnig
+			static_assert(static_cast<MustDeriveFromTopBase*>(nullptr)==nullptr, "dummy");
 
 			allocate(theStateCount);
 			start(TOP::_getInstance(*this));
@@ -1684,7 +1687,9 @@ namespace Macho {
 		// other than TOP on startup.
 		Machine(const Alias & state) {
 			// Compile time check: TOP must directly derive from TopBase<TOP>
-			typedef typename __SameType<TopBase<TOP>, typename TOP::SUPER>::Check MustDeriveFromTopBase;
+			using MustDeriveFromTopBase = typename CheckSameType<TopBase<TOP>, typename TOP::SUPER>::Check;
+			// suppress unused-typdefs warnig
+			static_assert(static_cast<MustDeriveFromTopBase*>(nullptr)==nullptr, "dummy");
 
 			allocate(theStateCount);
 			start(state);
@@ -1719,7 +1724,7 @@ namespace Macho {
 		}
 #endif
 
-		~Machine() {
+		~Machine() override {
 			myCurrentState->shutdown();
 			free(theStateCount);
 		}
@@ -1756,8 +1761,8 @@ namespace Macho {
 		friend class Link;
 
 	private:
-		Machine(const Machine<TOP> & other);
-		Machine<TOP> & operator=(const Machine<TOP> & other);
+		Machine(const Machine<TOP> & other) = delete;
+		Machine<TOP> & operator=(const Machine<TOP> & other) = delete;
 
 #ifdef MACHO_SNAPSHOTS
 		friend class Snapshot<TOP>;
@@ -1777,8 +1782,8 @@ namespace Macho {
 	// The identifiers are consecutive integers starting from zero,
 	// which allows use as index into a vector for fast access.
 	// 'Root' always has zero as id.
-	template<class S>
-	const ID StateID<S>::value = Machine<typename S::TOP>::theStateCount++;
+	//template<class S>
+	//const ID StateID<S>::value = Machine<typename S::TOP>::theStateCount++;
 
 
 	////////////////////////////////////////////////////////////////////////////////
@@ -1903,7 +1908,7 @@ namespace Macho {
 	/* static */ inline _StateInstance & Link<C, P>::_getInstance(_MachineBase & machine) {
 		// Look first in machine for existing StateInstance.
 		_StateInstance * & instance = machine.getInstance(StateID<C>::value);
-		if (!instance)
+		if (instance == nullptr)
 			// Will create parent StateInstance object if not already created.
 			instance = new _SubstateInstance<C>(machine, &P::_getInstance(machine));
 
@@ -1924,26 +1929,26 @@ namespace Macho {
 	template<class C, class P>
 	/* static */ void Link<C, P>::clearHistory(const _MachineBase & machine) {
 		const _StateInstance * instance = machine.getInstance(StateID<C>::value);
-		if (instance)
-			instance->setHistory(0);
+		if (instance != nullptr)
+			instance->setHistory(nullptr);
 	}
 
 	template<class C, class P>
 	/* static */ void Link<C, P>::clearHistoryDeep(const _MachineBase & machine) {
 		const _StateInstance * instance = machine.getInstance(StateID<C>::value);
-		if (instance)
+		if (instance != nullptr)
 			machine.clearHistoryDeep(Machine<TOP>::theStateCount, *instance);
 	}
 
 	template<class C, class P>
 	/* static */ Alias Link<C, P>::history(const _MachineBase & machine) {
 		const _StateInstance * instance = machine.getInstance(StateID<C>::value);
-		_StateInstance * history = 0;
+		_StateInstance * history = nullptr;
 
-		if (instance)
+		if (instance != nullptr)
 			history = instance->history();
 
-		return history ? history->key() : key();
+		return history != nullptr ? history->key() : key();
 	}
 
 	template<class C, class P>
@@ -1976,5 +1981,11 @@ namespace Macho {
 
 } // namespace Macho
 
+#if defined(__clang__)
+#if defined(_WIN32) || defined(_WIN64)
+#pragma clang diagnostic pop
+#endif
+#endif
 
-#endif // __MACHO_HPP__
+
+#endif // MACHO_HPP

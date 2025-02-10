@@ -21,8 +21,7 @@
 
 #include <rtm/RTC.h>
 
-#include <coil/Mutex.h>
-#include <coil/Guard.h>
+#include <mutex>
 
 #include <algorithm>
 #include <vector>
@@ -52,11 +51,9 @@ template <typename Identifier, typename Object, typename Predicate>
 class ObjectManager
 {
 public:
-  typedef std::vector<Object*>                  ObjectVector;
-  typedef typename ObjectVector::iterator       ObjectVectorItr;
-  typedef typename ObjectVector::const_iterator ObjectVectorConstItr;
-  typedef coil::Mutex Mutex;
-  typedef coil::Guard<coil::Mutex> Guard;
+  using ObjectVector = std::vector<Object*>;
+  using ObjectVectorItr = typename ObjectVector::iterator;
+  using ObjectVectorConstItr = typename ObjectVector::const_iterator;
   /*!
    * @if jp
    *
@@ -72,7 +69,7 @@ public:
    *
    * @endif
    */
-  ObjectManager() {}
+  ObjectManager() = default;
 
   /*!
    * @if jp
@@ -89,7 +86,7 @@ public:
    *
    * @endif
    */
-  ~ObjectManager(void) {}
+  ~ObjectManager() = default;
 
   /*!
    * @if jp
@@ -119,13 +116,13 @@ public:
   bool registerObject(Object* obj)
   {
     ObjectVectorItr it;
-    Guard guard(m_objects._mutex);
+    std::lock_guard<std::mutex> guard(m_objects._mutex);
 
     it = std::find_if(m_objects._obj.begin(), m_objects._obj.end(),
                       Predicate(obj));
     if (it == m_objects._obj.end())
       {
-        m_objects._obj.push_back(obj);
+        m_objects._obj.emplace_back(obj);
         return true;
       }
     return false;
@@ -159,7 +156,7 @@ public:
   Object* unregisterObject(const Identifier& id)
   {
     ObjectVectorItr it;
-    Guard guard(m_objects._mutex);
+    std::lock_guard<std::mutex> guard(m_objects._mutex);
 
     it = std::find_if(m_objects._obj.begin(), m_objects._obj.end(),
                       Predicate(id));
@@ -169,7 +166,7 @@ public:
         m_objects._obj.erase(it);
         return obj;
       }
-    return NULL;
+    return nullptr;
   }
 
   /*!
@@ -203,14 +200,14 @@ public:
   Object* find(const Identifier& id) const
   {
     ObjectVectorConstItr it;
-    Guard guard(m_objects._mutex);
+    std::lock_guard<std::mutex> guard(m_objects._mutex);
     it = std::find_if(m_objects._obj.begin(), m_objects._obj.end(),
                       Predicate(id));
     if (it != m_objects._obj.end())
       {
         return *it;
       }
-    return NULL;
+    return nullptr;
   }
 
   /*!
@@ -234,7 +231,7 @@ public:
    */
   std::vector<Object*> getObjects() const
   {
-    Guard guard(m_objects._mutex);
+    std::lock_guard<std::mutex> guard(m_objects._mutex);
     return m_objects._obj;
   }
 
@@ -248,7 +245,7 @@ public:
   template <class Pred>
   Pred for_each(Pred p)
   {
-    Guard guard(m_objects._mutex);
+    std::lock_guard<std::mutex> guard(m_objects._mutex);
     return std::for_each(m_objects._obj.begin(), m_objects._obj.end(), p);
   }
 
@@ -262,7 +259,7 @@ public:
   template <class Pred>
   Pred for_each(Pred p) const
   {
-    Guard guard(m_objects._mutex);
+    std::lock_guard<std::mutex> guard(m_objects._mutex);
     return std::for_each(m_objects._obj.begin(), m_objects._obj.end(), p);
   }
 
@@ -276,7 +273,8 @@ protected:
    */
   struct Objects
   {
-    mutable Mutex _mutex;
+    ~Objects() = default;
+    mutable std::mutex _mutex;
     ObjectVector _obj;
   };
   /*!

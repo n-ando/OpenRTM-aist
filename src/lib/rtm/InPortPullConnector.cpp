@@ -34,22 +34,26 @@ namespace RTC
    */
   InPortPullConnector::InPortPullConnector(ConnectorInfo info,
                                            OutPortConsumer* consumer,
-                                           ConnectorListeners& listeners,
+                                           ConnectorListenersBase* listeners,
                                            CdrBufferBase* buffer)
     : InPortConnector(info, listeners, buffer), m_consumer(consumer),
       m_listeners(listeners)
   {
-    if (buffer == 0)
+    if (buffer == nullptr)
       {
         m_buffer = createBuffer(m_profile);
       }
-    if (m_buffer == 0 || m_consumer == 0)
+    if (m_buffer == nullptr || m_consumer == nullptr)
       {
         throw std::bad_alloc();
       }
     m_buffer->init(info.properties.getNode("buffer"));
+    m_consumer->init(info.properties);
     m_consumer->setBuffer(m_buffer);
-    m_consumer->setListener(info, &m_listeners);
+    m_consumer->setListener(info, m_listeners);
+
+    m_marshaling_type = coil::eraseBothEndsBlank(
+      info.properties.getProperty("marshaling_type", "cdr"));
 
     onConnect();
   }
@@ -74,15 +78,18 @@ namespace RTC
    * @brief Destructor
    * @endif
    */
-  ConnectorBase::ReturnCode
-  InPortPullConnector::read(cdrMemoryStream& data)
+  DataPortStatus
+  InPortPullConnector::read(ByteDataStreamBase* data)
   {
     RTC_TRACE(("InPortPullConnector::read()"));
-    if (m_consumer == 0)
+    if (m_consumer == nullptr)
       {
-        return PORT_ERROR;
+        return DataPortStatus::PORT_ERROR;
       }
-    return m_consumer->get(data);
+    
+    DataPortStatus ret = m_consumer->get(m_data);
+    data->writeData(m_data.getBuffer(), m_data.getDataLength());
+    return ret;
   }
 
   /*!
@@ -92,18 +99,18 @@ namespace RTC
    * @brief Disconnect connection
    * @endif
    */
-  ConnectorBase::ReturnCode InPortPullConnector::disconnect()
+  DataPortStatus InPortPullConnector::disconnect()
   {
     RTC_TRACE(("disconnect()"));
     // delete consumer
-    if (m_consumer != 0)
+    if (m_consumer != nullptr)
       {
         OutPortConsumerFactory& cfactory(OutPortConsumerFactory::instance());
         cfactory.deleteObject(m_consumer);
       }
-    m_consumer = 0;
+    m_consumer = nullptr;
 
-    return PORT_OK;
+    return DataPortStatus::PORT_OK;
   }
 
   /*!
@@ -130,7 +137,7 @@ namespace RTC
    */
   void InPortPullConnector::onConnect()
   {
-    m_listeners.connector_[ON_CONNECT].notify(m_profile);
+    m_listeners->notify(ConnectorListenerType::ON_CONNECT, m_profile);
   }
 
   /*!
@@ -142,7 +149,21 @@ namespace RTC
    */
   void InPortPullConnector::onDisconnect()
   {
-    m_listeners.connector_[ON_DISCONNECT].notify(m_profile);
+    m_listeners->notify(ConnectorListenerType::ON_DISCONNECT, m_profile);
   }
-};  // namespace RTC
+
+  void InPortPullConnector::unsubscribeInterface(const coil::Properties& prop)
+  {
+      if (m_consumer != nullptr)
+      {
+#ifndef ORB_IS_RTORB
+          SDOPackage::NVList nv;
+#else
+          SDOPackage_NVList nv;
+#endif
+          NVUtil::copyFromProperties(nv, prop);
+          m_consumer->unsubscribeInterface(nv);
+      }
+  }
+} // namespace RTC
 

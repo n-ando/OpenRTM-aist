@@ -17,10 +17,6 @@
 
 #include <rtm/OutPortDSProvider.h>
 
-#ifdef WIN32
-#pragma warning( disable : 4290 )
-#endif
-
 namespace RTC
 {
   /*!
@@ -30,15 +26,14 @@ namespace RTC
    * @brief Constructor
    * @endif
    */
-  OutPortDSProvider::OutPortDSProvider(void)
-    : m_buffer(0), m_connector(NULL)
+  OutPortDSProvider::OutPortDSProvider()
   {
     // PortProfile setting
     setInterfaceType("data_service");
 
     // ConnectorProfile setting
 #ifdef ORB_IS_OMNIORB
-    ::RTC::Manager::instance().theShortCutPOA()->activate_object(this);
+    PortableServer::ObjectId_var oid = ::RTC::Manager::instance().theShortCutPOA()->activate_object(this);
 #endif
     m_objref = this->_this();
 
@@ -66,7 +61,7 @@ namespace RTC
    * @brief Destructor
    * @endif
    */
-  OutPortDSProvider::~OutPortDSProvider(void)
+  OutPortDSProvider::~OutPortDSProvider()
   {
     try
       {
@@ -110,7 +105,7 @@ namespace RTC
    * @brief Initializing configuration
    * @endif
    */
-  void OutPortDSProvider::init(coil::Properties& prop)
+  void OutPortDSProvider::init(coil::Properties& /*prop*/)
   {
   }
 
@@ -134,7 +129,7 @@ namespace RTC
    * @endif
    */
   void OutPortDSProvider::setListener(ConnectorInfo& info,
-                                            ConnectorListeners* listeners)
+                                            ConnectorListenersBase* listeners)
   {
     m_profile = info;
     m_listeners = listeners;
@@ -161,53 +156,39 @@ namespace RTC
    */
   ::RTC::PortStatus
       OutPortDSProvider::pull(::RTC::OctetSeq_out data)
-    throw (CORBA::SystemException)
   {
     RTC_PARANOID(("OutPortDSProvider::get()"));
     // at least the output "data" area should be allocated
     data = new ::RTC::OctetSeq();
 
-    if (m_connector == NULL)
+    if (m_connector == nullptr)
       {
         onSenderError();
         return ::RTC::UNKNOWN_ERROR;
       }
 
-    cdrMemoryStream cdr = cdrMemoryStream();
-    CdrBufferBase::ReturnCode ret(m_connector->read(cdr));
+    BufferStatus ret(m_connector->read(m_cdr));
 
-    if (ret == CdrBufferBase::BUFFER_OK)
+    if (ret == BufferStatus::OK)
       {
-#ifdef ORB_IS_ORBEXPRESS
-        CORBA::ULong len((CORBA::ULong)cdr.cdr.size_written());
-#elif defined(ORB_IS_TAO)
-	CORBA::ULong len((CORBA::ULong)cdr.cdr.total_length());
-#else
-        CORBA::ULong len((CORBA::ULong)cdr.bufSize());
-#endif
+        CORBA::ULong len(static_cast<CORBA::ULong>(m_cdr.getDataLength()));
         RTC_PARANOID(("converted CDR data size: %d", len));
 
-        if (len == (CORBA::ULong)0) {
+        if (len == static_cast<CORBA::ULong>(0)) {
           RTC_ERROR(("buffer is empty."));
           return ::RTC::BUFFER_EMPTY;
         }
 #ifndef ORB_IS_RTORB
         data->length(len);
-#ifdef ORB_IS_ORBEXPRESS
-        cdr.cdr.read_array_1(data->get_buffer(), len);
-#elif defined(ORB_IS_TAO)
-	TAO_InputCDR(cdr.cdr).read_octet_array(&((*data)[0]), len);
-#else
-        cdr.get_octet_array(&((*data)[0]), len);
-#endif
+        m_cdr.readData(static_cast<unsigned char*>(data->get_buffer()), len);
 #else
         data->length(len);
-        cdr.get_octet_array(reinterpret_cast<char *>(&((*data)[0]),
-                                        static_cast<int>(len)));
+        m_cdr.readData(reinterpret_cast<unsigned char *>(&(*data[0])),
+                                        static_cast<int>(len));
 #endif  // ORB_IS_RTORB
       }
 
-    return convertReturn(ret, cdr);
+    return convertReturn(ret, m_cdr);
   }
 
   /*!
@@ -218,12 +199,12 @@ namespace RTC
    * @endif
    */
   ::RTC::PortStatus
-  OutPortDSProvider::convertReturn(BufferStatus::Enum status,
-                                         cdrMemoryStream& data)
+  OutPortDSProvider::convertReturn(BufferStatus status,
+                                         ByteData& data)
   {
     switch (status)
       {
-      case BufferStatus::BUFFER_OK:
+      case BufferStatus::OK:
         onBufferRead(data);
         onSend(data);
         return ::RTC::PORT_OK;
@@ -234,12 +215,12 @@ namespace RTC
         return ::RTC::PORT_ERROR;
         break;
 
-      case BufferStatus::BUFFER_FULL:
+      case BufferStatus::FULL:
         // never come here
         return ::RTC::BUFFER_FULL;
         break;
 
-      case BufferStatus::BUFFER_EMPTY:
+      case BufferStatus::EMPTY:
         onBufferEmpty();
         onSenderEmpty();
         return ::RTC::BUFFER_EMPTY;
@@ -256,15 +237,13 @@ namespace RTC
         return ::RTC::BUFFER_TIMEOUT;
         break;
 
+      case BufferStatus::NOT_SUPPORTED: /* FALLTHROUGH */
       default:
         return ::RTC::UNKNOWN_ERROR;
       }
-
-    onSenderError();
-    return ::RTC::UNKNOWN_ERROR;
   }
 
-};  // namespace RTC
+} // namespace RTC
 
 extern "C"
 {
@@ -285,4 +264,4 @@ extern "C"
                        ::coil::Destructor< ::RTC::OutPortProvider,
                                            ::RTC::OutPortDSProvider>);
   }
-};
+}

@@ -31,30 +31,11 @@ namespace SDOPackage
    * @brief Constructor
    * @endif
    */
-#ifdef ORB_IS_RTORB
-  Organization_impl::Organization_impl(RTC::RTObject_ptr sdo)
-    : rtclog("organization")
-  {
-    m_varOwner = sdo.in();
-
-    coil::UUID_Generator uugen = coil::UUID_Generato();
-    uugen.init();
-    std::auto_ptr<coil::UUID> uuid(uugen.generateUUID(2, 0x01));
-    m_pId = uuid->to_string();
-#ifdef WIN32
-    uuid->~UUID();
-#endif  // WIN32
-    m_dependency = OWN;
-    m_objref = this->_this();
-  }
-#endif  // ORB_IS_RTORB
 
   Organization_impl::Organization_impl(SDOSystemElement_ptr sdo)
     : rtclog("organization"), m_varOwner(SDOSystemElement::_duplicate(sdo))
   {
-    coil::UUID_Generator uugen;
-    uugen.init();
-    std::auto_ptr<coil::UUID> uuid(uugen.generateUUID(2, 0x01));
+    std::unique_ptr<coil::UUID> uuid(coil::UUID_Generator::generateUUID(2, 0x01));
     m_pId = uuid->to_string();
 #ifdef WIN32
     uuid->~UUID();
@@ -69,9 +50,7 @@ namespace SDOPackage
    * @brief Virtual destructor
    * @endif
    */
-  Organization_impl::~Organization_impl()
-  {
-  }
+  Organization_impl::~Organization_impl() = default;
 
   /*!
    * @if jp
@@ -81,8 +60,6 @@ namespace SDOPackage
    * @endif
    */
   char* Organization_impl::get_organization_id()
-    throw (CORBA::SystemException,
-           InvalidParameter, NotAvailable, InternalError)
   {
     RTC_TRACE(("get_organization_id() = %s", m_pId.c_str()));
     return CORBA::string_dup(m_pId.c_str());
@@ -96,11 +73,9 @@ namespace SDOPackage
    * @endif
    */
   OrganizationProperty* Organization_impl::get_organization_property()
-    throw (CORBA::SystemException,
-           NotAvailable, InternalError)
   {
     RTC_TRACE(("get_organization_property()"));
-    Guard guard(m_org_mutex);
+    std::lock_guard<std::mutex> guard(m_org_mutex);
     OrganizationProperty_var prop;
     prop = new OrganizationProperty(m_orgProperty);
     return prop._retn();
@@ -115,8 +90,6 @@ namespace SDOPackage
    */
   CORBA::Any*
   Organization_impl::get_organization_property_value(const char* name)
-    throw (CORBA::SystemException,
-           InvalidParameter, NotAvailable, InternalError)
   {
     RTC_TRACE(("get_organization_property_value(%s)", name));
     if (std::string(name).empty())
@@ -138,8 +111,6 @@ namespace SDOPackage
       {
         throw InternalError("get_organization_property_value()");
       }
-    // never reach here
-    return new CORBA::Any();
   }
 
   /*!
@@ -152,13 +123,11 @@ namespace SDOPackage
   CORBA::Boolean
   Organization_impl::
   add_organization_property(const OrganizationProperty& organization_property)
-    throw (CORBA::SystemException,
-           InvalidParameter, NotAvailable, InternalError)
   {
     RTC_TRACE(("add_organization_property()"));
     try
       {
-        Guard guard(m_org_mutex);
+        std::lock_guard<std::mutex> guard(m_org_mutex);
         m_orgProperty = organization_property;
         return true;
       }
@@ -166,7 +135,6 @@ namespace SDOPackage
       {
         throw InternalError("set_organization_property()");
       }
-    return false;
   }
 
   /*!
@@ -179,8 +147,6 @@ namespace SDOPackage
   CORBA::Boolean
   Organization_impl::set_organization_property_value(const char* name,
                                                      const CORBA::Any& value)
-    throw (CORBA::SystemException,
-           InvalidParameter, NotAvailable, InternalError)
   {
     RTC_TRACE(("set_organization_property_value(name=%s)", name));
     if (std::string(name).empty())
@@ -214,8 +180,6 @@ namespace SDOPackage
    */
   CORBA::Boolean
   Organization_impl::remove_organization_property(const char* name)
-    throw (CORBA::SystemException,
-           InvalidParameter, NotAvailable, InternalError)
   {
     RTC_TRACE(("remove_organization_property(%s)", name));
     if (std::string(name).empty())
@@ -235,7 +199,6 @@ namespace SDOPackage
       {
         throw InternalError("remove_organization_property()");
       }
-    return false;
   }
 
   /*!
@@ -246,8 +209,6 @@ namespace SDOPackage
    * @endif
    */
   SDOSystemElement_ptr Organization_impl::get_owner()
-    throw (CORBA::SystemException,
-           NotAvailable, InternalError)
   {
     RTC_TRACE(("get_owner()"));
     return m_varOwner._retn();
@@ -261,8 +222,6 @@ namespace SDOPackage
    * @endif
    */
   CORBA::Boolean Organization_impl::set_owner(SDOSystemElement_ptr sdo)
-    throw (CORBA::SystemException,
-           InvalidParameter, NotAvailable, InternalError)
   {
     RTC_TRACE(("set_owner()"));
     if (CORBA::is_nil(sdo))
@@ -276,7 +235,6 @@ namespace SDOPackage
       {
         throw InternalError("set_owner()");
       }
-    return true;
   }
 
   /*!
@@ -287,8 +245,6 @@ namespace SDOPackage
    * @endif
    */
   SDOList* Organization_impl::get_members()
-    throw (CORBA::SystemException,
-           NotAvailable, InternalError)
   {
     RTC_TRACE(("get_members()"));
     try
@@ -311,12 +267,8 @@ namespace SDOPackage
    * @endif
    */
   CORBA::Boolean Organization_impl::set_members(const SDOList& sdos)
-    throw (CORBA::SystemException,
-           InvalidParameter, NotAvailable, InternalError)
   {
     RTC_TRACE(("set_members()"));
-    if (sdos.length() < 0)
-      throw InvalidParameter("set_members(): number of SDOList is invalid.");
     try
       {
         m_memberList = sdos;
@@ -326,7 +278,6 @@ namespace SDOPackage
       {
         throw InternalError("set_members()");
       }
-    return true;
   }
 
   /*!
@@ -337,11 +288,9 @@ namespace SDOPackage
    * @endif
    */
   CORBA::Boolean Organization_impl::add_members(const SDOList& sdo_list)
-    throw (CORBA::SystemException,
-           InvalidParameter, NotAvailable, InternalError)
   {
     RTC_TRACE(("add_members()"));
-    if (sdo_list.length() < 0)
+    if (sdo_list.length() == 0)
       throw InvalidParameter("set_members(): number of SDOList is invalid.");
     try
       {
@@ -353,7 +302,6 @@ namespace SDOPackage
       {
         throw InternalError("add_members()");
       }
-    return false;
   }
 
   /*!
@@ -364,8 +312,6 @@ namespace SDOPackage
    * @endif
    */
   CORBA::Boolean Organization_impl::remove_member(const char* id)
-    throw (CORBA::SystemException,
-           InvalidParameter, NotAvailable, InternalError)
   {
     RTC_TRACE(("remove_member(%s)", id));
 
@@ -394,7 +340,6 @@ namespace SDOPackage
         RTC_ERROR(("unknown exception"));
         throw InternalError("remove_member(): Not found.");
       }
-    return false;
   }
 
   /*!
@@ -405,8 +350,6 @@ namespace SDOPackage
    * @endif
    */
   DependencyType Organization_impl::get_dependency()
-    throw (CORBA::SystemException,
-           NotAvailable, InternalError)
   {
     RTC_TRACE(("get_dependency()"));
     return m_dependency;
@@ -420,19 +363,13 @@ namespace SDOPackage
    * @endif
    */
   CORBA::Boolean Organization_impl::set_dependency(DependencyType dependency)
-    throw (CORBA::SystemException,
-           NotAvailable, InternalError)
   {
     RTC_TRACE(("set_dependency()"));
-    try
-      {
-        m_dependency = dependency;
-        return true;
-      }
-    catch (...)
-      {
-        throw InternalError("set_dependency(): Unknown.");
-      }
-    return false;
+    m_dependency = dependency;
+    return true;
   }
-};  // namespace SDOPackage
+
+  Organization_ptr Organization_impl::getObjRef() {
+      return SDOPackage::Organization::_duplicate(m_objref);
+  }
+} // namespace SDOPackage

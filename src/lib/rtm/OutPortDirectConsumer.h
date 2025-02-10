@@ -52,11 +52,10 @@ namespace RTC
    *
    * @endif
    */
-	class OutPortDirectConsumer
+  class OutPortDirectConsumer
     : public OutPortConsumer
   {
   public:
-    DATAPORTSTATUS_ENUM
 
     /*!
      * @if jp
@@ -71,7 +70,7 @@ namespace RTC
      *
      * @endif
      */
-	 OutPortDirectConsumer();
+    OutPortDirectConsumer();
 
     /*!
      * @if jp
@@ -86,7 +85,7 @@ namespace RTC
      *
      * @endif
      */
-	virtual ~OutPortDirectConsumer(void);
+    ~OutPortDirectConsumer() override;
 
     /*!
      * @if jp
@@ -115,7 +114,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual void init(coil::Properties& prop);
+    void init(coil::Properties& prop) override;
 
     /*!
      * @if jp
@@ -142,7 +141,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual void setBuffer(CdrBufferBase* buffer);
+    void setBuffer(CdrBufferBase* buffer) override;
 
     /*!
      * @if jp
@@ -188,8 +187,8 @@ namespace RTC
      *
      * @endif
      */
-    virtual void setListener(ConnectorInfo& info,
-                             ConnectorListeners* listeners);
+    void setListener(ConnectorInfo& info,
+                             ConnectorListenersBase* listeners) override;
 
     /*!
      * @if jp
@@ -212,7 +211,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode get(cdrMemoryStream& data);
+    DataPortStatus get(ByteData& data) override;
 
     /*!
      * @if jp
@@ -236,7 +235,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual bool subscribeInterface(const SDOPackage::NVList& properties);
+    bool subscribeInterface(const SDOPackage::NVList& properties) override;
     
     /*!
      * @if jp
@@ -255,13 +254,13 @@ namespace RTC
      *
      * @endif
      */
-    virtual void unsubscribeInterface(const SDOPackage::NVList& properties);
+    void unsubscribeInterface(const SDOPackage::NVList& properties) override;
     
 private:
-	mutable Logger rtclog;
-	coil::Properties m_properties;
+    mutable Logger rtclog;
+    coil::Properties m_properties;
   };
-};     // namespace RTC
+} // namespace RTC
 
 extern "C"
 {
@@ -278,7 +277,7 @@ extern "C"
    *
    * @endif
    */
-	void OutPortDirectConsumerInit(void);
-};
+  void OutPortDirectConsumerInit(void);
+}
 
 #endif // RTC_OUTPORTDIRECTCONSUMER_H

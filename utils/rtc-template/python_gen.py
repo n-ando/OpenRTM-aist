@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 #
 #  @file Py_src.py
@@ -119,7 +119,7 @@ bind_config = """
 #------------------------------------------------------------
 # Python component source code template
 #------------------------------------------------------------
-py_source = """#!/usr/bin/env python
+py_source = """#!/usr/bin/env python3
 # -*- Python -*-
 
 import sys

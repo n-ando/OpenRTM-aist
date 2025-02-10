@@ -33,8 +33,6 @@ namespace RTC
   DataFlowComponentBase::DataFlowComponentBase(Manager* manager)
     : RTObject_impl(manager)
   {
-    //    m_ref = OpenRTM::DataFlowComponent::_duplicate(this->_this());
-    //    m_objref = RTC::RTObject::_duplicate(m_ref);
   }
 
 
@@ -45,9 +43,7 @@ namespace RTC
    * @brief Destructor
    * @endif
    */
-  DataFlowComponentBase::~DataFlowComponentBase()
-  {
-  }
+  DataFlowComponentBase::~DataFlowComponentBase() = default;
 
 
   /*!
@@ -62,4 +58,4 @@ namespace RTC
   }
 
 
-};  // namespace RTC
+} // namespace RTC

@@ -187,10 +187,8 @@ namespace RTC
    * @endif
    */
   class OutPortProvider
-    : public DataPortStatus
   {
   public:
-    DATAPORTSTATUS_ENUM
     /*!
      * @if jp
      * @brief デストラクタ
@@ -204,7 +202,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~OutPortProvider(void);
+    virtual ~OutPortProvider();
 
     /*!
      * @if jp
@@ -293,7 +291,7 @@ namespace RTC
      * @endif
      */
     virtual void setListener(ConnectorInfo& info,
-                             ConnectorListeners* listeners) = 0;
+                             ConnectorListenersBase* listeners) = 0;
 
     /*!
      * @if jp
@@ -344,7 +342,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual void publishInterfaceProfile(SDOPackage::NVList& properties);
+    virtual void publishInterfaceProfile(SDOPackage::NVList& prop);
 
     /*!
      * @if jp
@@ -373,7 +371,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual bool publishInterface(SDOPackage::NVList& properties);
+    virtual bool publishInterface(SDOPackage::NVList& prop);
 
   protected:
     /*!
@@ -526,7 +524,7 @@ namespace RTC
     struct publishInterfaceFunc
     {
       explicit publishInterfaceFunc(SDOPackage::NVList& prop)
-        : m_prop(prop), provider_(0) {}
+        : m_prop(prop), provider_(nullptr) {}
       void operator()(OutPortProvider* provider)
       {
         if (provider->publishInterface(m_prop))
@@ -546,10 +544,13 @@ namespace RTC
    * @brief OutPortProviderFactory type definition
    * @endif
    */
-  typedef ::coil::GlobalFactory<OutPortProvider> OutPortProviderFactory;
+  using OutPortProviderFactory = ::coil::GlobalFactory<OutPortProvider>;
+} // namespace RTC
 
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
-  EXTERN template class DLL_PLUGIN ::coil::GlobalFactory<OutPortProvider>;
+EXTERN template class DLL_PLUGIN coil::GlobalFactory<RTC::OutPortProvider>;
+#elif defined(__GNUC__)
+EXTERN template class coil::GlobalFactory<RTC::OutPortProvider>;
 #endif
-};  // namespace RTC
+
 #endif  // RTC_OUTPORTPROVIDER_H

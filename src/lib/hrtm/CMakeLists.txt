@@ -1,0 +1,93 @@
+cmake_minimum_required (VERSION 3.5.1)
+
+if(WIN32)
+	set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
+endif()
+
+project (hrtm
+	VERSION ${RTM_VERSION}
+	LANGUAGES CXX)
+
+
+link_directories(${ORB_LINK_DIR})
+add_definitions(${ORB_C_FLAGS_LIST})
+add_definitions(${COIL_C_FLAGS_LIST})
+add_definitions(-DHRTM_NO_AUTOMATIC_LINK)
+if(WIN32)
+	add_definitions(-DRTM_SKEL_IMPORT_SYMBOL)
+endif()
+
+
+set(hrtm_headers
+	component_manager.h
+	data_flow_component.h
+	defs.h
+	in_port.h
+	logger.h
+	out_port.h
+	properties.h
+	statechart.h
+	utils.h
+	version.h
+)
+set(srcs
+	component_manager.cpp
+	data_flow_component.cpp
+	properties.cpp
+	statechart.cpp
+	${hrtm_headers}
+)
+
+if(VXWORKS)
+	add_library(${PROJECT_NAME} SHARED ${srcs})
+	openrtm_common_set_compile_props(${PROJECT_NAME})
+	openrtm_include_rtm(${PROJECT_NAME})
+	install(TARGETS ${PROJECT_NAME} LIBRARY DESTINATION ${INSTALL_RTM_BIN_DIR}
+						ARCHIVE DESTINATION ${INSTALL_RTM_BIN_DIR}
+						RUNTIME DESTINATION ${INSTALL_RTM_BIN_DIR}
+						COMPONENT ext)
+else()
+	add_library(${PROJECT_NAME}_objlib OBJECT ${srcs})
+	openrtm_common_set_compile_props(${PROJECT_NAME}_objlib)
+	openrtm_include_rtm(${PROJECT_NAME}_objlib)
+	target_include_directories(${PROJECT_NAME}_objlib SYSTEM
+		PUBLIC ${PROJECT_BINARY_DIR})
+
+	add_library(${PROJECT_NAME}-static STATIC $<TARGET_OBJECTS:${PROJECT_NAME}_objlib>)
+
+	add_library(${PROJECT_NAME} SHARED
+		$<TARGET_OBJECTS:${PROJECT_NAME}_objlib>)
+	openrtm_set_link_props_shared(${PROJECT_NAME})
+	openrtm_set_postfix(${PROJECT_NAME})
+	if(WIN32)
+		target_link_libraries(${PROJECT_NAME} PRIVATE ${ORB_LIBRARIES} ${RTM_PROJECT_NAME} ${RTCSKEL_PROJECT_NAME})
+	else()
+		target_link_libraries(${PROJECT_NAME} PRIVATE ${ORB_LIBRARIES} ${RTM_PROJECT_NAME})
+	endif()
+
+	if(UNIX)
+		install(TARGETS ${PROJECT_NAME} LIBRARY DESTINATION ${INSTALL_RTM_LIB_DIR}
+						ARCHIVE DESTINATION ${INSTALL_RTM_LIB_DIR}
+						RUNTIME DESTINATION ${INSTALL_RTM_BIN_DIR}
+						COMPONENT ext)
+
+		set_target_properties(${PROJECT_NAME}-static PROPERTIES OUTPUT_NAME ${PROJECT_NAME} CLEAN_DIRECT_OUTPUT 1)
+		install(TARGETS ${PROJECT_NAME}-static LIBRARY DESTINATION ${INSTALL_RTM_LIB_DIR}
+						ARCHIVE DESTINATION ${INSTALL_RTM_LIB_DIR}
+						RUNTIME DESTINATION ${INSTALL_RTM_BIN_DIR}
+						COMPONENT ext)
+	elseif(WIN32)
+		add_dependencies(${PROJECT_NAME} ${PROJECT_NAME}-static)
+		install(TARGETS ${PROJECT_NAME} LIBRARY DESTINATION ${INSTALL_RTM_LIB_DIR}
+						ARCHIVE DESTINATION ${INSTALL_RTM_LIB_DIR}
+						RUNTIME DESTINATION ${INSTALL_RTM_LIB_DIR}
+						COMPONENT ext)
+
+		install(TARGETS ${PROJECT_NAME}-static LIBRARY DESTINATION ${INSTALL_RTM_LIB_DIR}
+						ARCHIVE DESTINATION ${INSTALL_RTM_LIB_DIR}
+						RUNTIME DESTINATION ${INSTALL_RTM_LIB_DIR}
+						COMPONENT ext)
+	endif()
+  endif()
+
+install(FILES  ${hrtm_headers} DESTINATION ${INSTALL_RTM_INCLUDE_DIR}/hrtm COMPONENT headers)

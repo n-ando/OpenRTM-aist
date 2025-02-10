@@ -20,8 +20,7 @@
 #ifndef RTM_MANAGERSERVANT_H
 #define RTM_MANAGERSERVANT_H
 
-#include <coil/Mutex.h>
-#include <coil/Guard.h>
+#include <mutex>
 #include <rtm/idl/ManagerSkel.h>
 #include <rtm/Manager.h>
 #include <rtm/SystemLogger.h>
@@ -93,7 +92,7 @@ namespace RTM
      *
      * @endif
      */
-    virtual ~ManagerServant(void);
+    ~ManagerServant() override;
 
     /*!
      * @if jp
@@ -119,7 +118,7 @@ namespace RTM
      *
      * @endif
      */
-    RTC::ReturnCode_t load_module(const char* pathname, const char* initfunc);
+    RTC::ReturnCode_t load_module(const char* pathname, const char* initfunc) override;
 
     /*!
      * @if jp
@@ -140,7 +139,7 @@ namespace RTM
      *
      * @endif
      */
-    RTC::ReturnCode_t unload_module(const char* pathname);
+    RTC::ReturnCode_t unload_module(const char* pathname) override;
 
     /*!
      * @if jp
@@ -159,7 +158,7 @@ namespace RTM
      *
      * @endif
      */
-    RTM::ModuleProfileList* get_loadable_modules();
+    RTM::ModuleProfileList* get_loadable_modules() override;
 
     /*!
      * @if jp
@@ -178,7 +177,7 @@ namespace RTM
      *
      * @endif
      */
-    RTM::ModuleProfileList* get_loaded_modules();
+    RTM::ModuleProfileList* get_loaded_modules() override;
 
     // component 関連
     /*!
@@ -200,7 +199,7 @@ namespace RTM
      *
      * @endif
      */
-    RTM::ModuleProfileList* get_factory_profiles();
+    RTM::ModuleProfileList* get_factory_profiles() override;
 
     /*!
      * @if jp
@@ -220,7 +219,7 @@ namespace RTM
      *
      * @endif
      */
-    RTC::RTObject_ptr create_component(const char* module_name);
+    RTC::RTObject_ptr create_component(const char* module_name) override;
 
     /*!
      * @if jp
@@ -240,7 +239,7 @@ namespace RTM
      *
      * @endif
      */
-    RTC::ReturnCode_t delete_component(const char* instance_name);
+    RTC::ReturnCode_t delete_component(const char* instance_name) override;
 
     /*!
      * @if jp
@@ -259,7 +258,7 @@ namespace RTM
      *
      * @endif
      */
-    RTC::RTCList* get_components();
+    RTC::RTCList* get_components() override;
 
     /*!
      * @if jp
@@ -280,7 +279,7 @@ namespace RTM
      *
      * @endif
      */
-    RTC::ComponentProfileList* get_component_profiles();
+    RTC::ComponentProfileList* get_component_profiles() override;
 
     // manager 基本
     /*!
@@ -300,7 +299,7 @@ namespace RTM
      *
      * @endif
      */
-    RTM::ManagerProfile* get_profile();
+    RTM::ManagerProfile* get_profile() override;
 
     /*!
      * @if jp
@@ -319,7 +318,7 @@ namespace RTM
      *
      * @endif
      */
-    RTM::NVList* get_configuration();
+    RTM::NVList* get_configuration() override;
 
     /*!
      * @if jp
@@ -342,7 +341,7 @@ namespace RTM
      *
      * @endif
      */
-    RTC::ReturnCode_t set_configuration(const char* name, const char* value);
+    RTC::ReturnCode_t set_configuration(const char* name, const char* value) override;
 
     /*!
      * @if jp
@@ -363,7 +362,7 @@ namespace RTM
      *
      * @endif
      */
-    ::CORBA::Boolean is_master();
+    ::CORBA::Boolean is_master() override;
 
     /*!
      * @if jp
@@ -386,7 +385,7 @@ namespace RTM
      *
      * @endif
      */
-    RTM::ManagerList* get_master_managers();
+    RTM::ManagerList* get_master_managers() override;
 
     /*!
      * @if jp
@@ -411,7 +410,7 @@ namespace RTM
      *
      * @endif
      */
-    RTC::ReturnCode_t add_master_manager(RTM::Manager_ptr mgr);
+    RTC::ReturnCode_t add_master_manager(RTM::Manager_ptr mgr) override;
 
     /*!
      * @if jp
@@ -432,7 +431,7 @@ namespace RTM
      *
      * @endif
      */
-    RTC::ReturnCode_t remove_master_manager(RTM::Manager_ptr mgr);
+    RTC::ReturnCode_t remove_master_manager(RTM::Manager_ptr mgr) override;
 
     /*!
      * @if jp
@@ -455,7 +454,7 @@ namespace RTM
      *
      * @endif
      */
-    RTM::ManagerList* get_slave_managers();
+    RTM::ManagerList* get_slave_managers() override;
 
     /*!
      * @if jp
@@ -476,7 +475,7 @@ namespace RTM
      *
      * @endif
      */
-    RTC::ReturnCode_t add_slave_manager(RTM::Manager_ptr mgr);
+    RTC::ReturnCode_t add_slave_manager(RTM::Manager_ptr mgr) override;
 
     /*!
      * @if jp
@@ -497,7 +496,7 @@ namespace RTM
      *
      * @endif
      */
-    RTC::ReturnCode_t remove_slave_manager(RTM::Manager_ptr mgr);
+    RTC::ReturnCode_t remove_slave_manager(RTM::Manager_ptr mgr) override;
 
     /*!
      * @if jp
@@ -508,7 +507,7 @@ namespace RTM
      * @return ReturnCode_t
      * @endif
      */
-    RTC::ReturnCode_t fork();
+    RTC::ReturnCode_t fork() override;
     /*!
      * @if jp
      * @brief shutdownする
@@ -518,7 +517,7 @@ namespace RTM
      * @return ReturnCode_t
      * @endif
      */
-    RTC::ReturnCode_t shutdown();
+    RTC::ReturnCode_t shutdown() override;
     /*!
      * @if jp
      * @brief 再起動する。
@@ -528,7 +527,7 @@ namespace RTM
      * @return ReturnCode_t
      * @endif
      */
-    RTC::ReturnCode_t restart();
+    RTC::ReturnCode_t restart() override;
 
      /*!
      * @if jp
@@ -545,7 +544,7 @@ namespace RTM
      *
      * @endig
      */
-    RTC::RTCList* get_components_by_name(const char* name);
+    RTC::RTCList* get_components_by_name(const char* name) override;
 
     /*!
      * @if jp
@@ -556,7 +555,7 @@ namespace RTM
      * @return RTC reference
      * @endif
      */
-    CORBA::Object_ptr get_service(const char* name);
+    CORBA::Object_ptr get_service(const char* name) override;
 
     /*!
      * @if jp
@@ -612,7 +611,7 @@ namespace RTM
       * @return Manager's object reference 
       * @endif
       */
-    RTM::Manager_ptr findManagerByName(const std::string mgr_name);
+    RTM::Manager_ptr findManagerByName(const std::string& mgr_name);
 
     /*!
       * @if jp
@@ -642,7 +641,7 @@ namespace RTM
       * @return Manager's object reference 
       * @endif
       */
-    RTM::Manager_ptr findManagerFromList(const std::string name,
+    RTM::Manager_ptr findManagerFromList(const std::string& name,
                                          RTM::ManagerList& mlist);
 
     /*!
@@ -668,7 +667,7 @@ namespace RTM
      * @endif
      */
     RTC::RTObject_ptr
-    createComponentByManagerName(const std::string module_name);
+    createComponentByManagerName(std::string& create_arg, std::string& mgrstr);
 
     /*
      * @if jp
@@ -689,25 +688,51 @@ namespace RTM
      * @endif
      */
     RTC::RTObject_ptr
-    createComponentByAddress(const std::string module_name);
-	/*
-	* @if jp
-	* @brief マスターマネージャの有無を確認してリストを更新する
-	*
-	*
-	*
-	* @else
-	* @brief 
-	*
-	*
-	* @endif
-	*/
-	void updateMasterManager();
-	std::string getParameterByModulename(const std::string param_name, std::string &module_name);
-	bool isProcessIDManager(std::string mgrname);
+    createComponentByAddress(std::string& create_arg, std::string& mgrstr);
+
+    /*
+     * @if jp
+     * @brief マスターマネージャの有無を確認してリストを更新する
+     *
+     *
+     *
+     * @else
+     * @brief 
+     *
+     *
+     * @endif
+     */
+    void updateMasterManager();
+    /*
+     * @if jp
+     * @brief create引数から指定されたキーの値を返す
+     *
+     * create引数から指定されたキーを値を返すとともに、そのキーと値を削除した引
+     * 数を返す。
+     * module_name: module_name?param1=value1&param2=value2&param3...
+     * param_name:  param2
+     * の場合
+     * 返り値: value2
+     * module_name: module_name?param1=value1&param3...
+     * となる。
+     *
+     * @else @brief returns value of specified param_name from create arg
+     *
+     * This function returns the value of specified param_name from
+     * create argument, and delete param_name=value from the create
+     * arg string. If the arguments are
+     * module_name: module_name?param1=value1&param2=value2&param3...
+     * param_name:  param2
+     * this function returns
+     * ret value: value2
+     * module_name: module_name?param1=value1&param3...
+     *
+     * @endif
+     */
+    std::string getParameterByModulename(const std::string& param_name, std::string &module_name);
+    static bool isProcessIDManager(const std::string& mgrname);
 
   private:
-    typedef coil::Guard<coil::Mutex> Guard;
     /*!
      * @if jp
      * @brief ロガーオブジェクト
@@ -715,7 +740,7 @@ namespace RTM
      * @brief Logger object
      * @endif
      */
-    ::RTC::Logger rtclog;
+    ::RTC::Logger rtclog{"ManagerServant"};
 
     /*!
      * @if jp
@@ -724,7 +749,7 @@ namespace RTM
      * @brief Reference to the RTC::Manager
      * @endif
      */
-    ::RTC::Manager& m_mgr;
+    ::RTC::Manager& m_mgr{::RTC::Manager::instance()};
 
     /*!
      * @if jp
@@ -733,7 +758,7 @@ namespace RTM
      * @brief An object reference of ManagerServant
      * @endif
      */
-    ::RTM::Manager_var m_objref;
+    ::RTM::Manager_var m_objref{RTM::Manager::_nil()};
 
     /*!
      * @if jp
@@ -751,7 +776,7 @@ namespace RTM
      * @brief Mutex of m_masters
      * @endif
      */
-    ::coil::Mutex m_masterMutex;
+    ::std::mutex m_masterMutex;
 
     /*!
      * @if jp
@@ -769,7 +794,7 @@ namespace RTM
      * @brief Mutex of m_slaves
      * @endif
      */
-    ::coil::Mutex m_slaveMutex;
+    ::std::mutex m_slaveMutex;
 
     /*!
      * @if jp
@@ -778,7 +803,7 @@ namespace RTM
      * @brief Flag if this is master
      * @endif
      */
-    CORBA::Boolean m_isMaster;
+    CORBA::Boolean m_isMaster{false};
 
     /*!
      * @if jp
@@ -814,24 +839,24 @@ namespace RTM
   class CompParam
   {
   public:
-	  CompParam(std::string module_name);
-	  static const unsigned int prof_list_size = 6;
-	  static const char* prof_list[prof_list_size];
-	  std::string vendor();
-	  std::string category();
-	  std::string impl_id();
-	  std::string language();
-	  std::string version();
+    CompParam(std::string module_name);
+    ~CompParam();
+    static const unsigned int prof_list_size = 6;
+    static const char* prof_list[prof_list_size];
+    std::string vendor();
+    std::string category();
+    std::string impl_id();
+    std::string language();
+    std::string version();
   private:
-	  std::string m_type;
-	  std::string m_vendor;
-	  std::string m_category;
-	  std::string m_impl_id;
-	  std::string m_language;
-	  std::string m_version;
-
-	  
+    std::string m_type;
+    std::string m_vendor;
+    std::string m_category;
+    std::string m_impl_id;
+    std::string m_language;
+    std::string m_version;
+  
   };
 
-}; // namespace RTM
+} // namespace RTM
 #endif // RTM_MANAGERSERVANT_H

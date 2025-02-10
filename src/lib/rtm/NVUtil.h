@@ -146,7 +146,7 @@ namespace NVUtil
    *
    * @endif
    */
-  SDOPackage::NameValue newNVChar(const char* name, const CORBA::Char value);
+  SDOPackage::NameValue newNVChar(const char* name, CORBA::Char value);
 
   /*!
    * @if jp
@@ -174,7 +174,7 @@ namespace NVUtil
    * @endif
    */
   SDOPackage::NameValue newNVBool(const char* name,
-                                  const CORBA::Boolean value);
+                                  CORBA::Boolean value);
 
   /*!
    * @if jp
@@ -201,7 +201,7 @@ namespace NVUtil
    *
    * @endif
    */
-  SDOPackage::NameValue newNVOctet(const char* name, const CORBA::Octet value);
+  SDOPackage::NameValue newNVOctet(const char* name, CORBA::Octet value);
 
   /*!
    * @if jp
@@ -257,6 +257,35 @@ namespace NVUtil
   void copyFromProperties(SDOPackage::NVList& nv, const coil::Properties& prop);
 #else  // ORB_IS_RTORB
   void copyFromProperties(SDOPackage_NVList& nv, const coil::Properties& prop);
+#endif  // ORB_IS_RTORB
+
+  /*!
+   * @if jp
+   *
+   * @brief Properties を NVList にマージする
+   *
+   * このオペレーションは Properties を NVList へマージする。
+   * NVList の value は全て CORBA::string 型としてマージする。
+   *
+   * @param nv Properties の値を格納する NVList
+   * @param prop コピー元の Properties
+   *
+   * @else
+   *
+   * @brief Merge the properties to NVList
+   *
+   * This operation merges the properties into NVList.
+   * All NVList's values are copied as CORBA::string.
+   *
+   * @param nv NVList to store properties values
+   * @param prop Properties that is merged from
+   *
+   * @endif
+   */
+#ifndef ORB_IS_RTORB
+  void mergeFromProperties(SDOPackage::NVList& nv, const coil::Properties& prop);
+#else  // ORB_IS_RTORB
+  void mergeFromProperties(SDOPackage_NVList& nv, const coil::Properties& prop);
 #endif  // ORB_IS_RTORB
 
   /*!
@@ -363,7 +392,7 @@ namespace NVUtil
    *
    * @endif
    */
-  const CORBA::Long find_index(const SDOPackage::NVList& nv, const char* name);
+  CORBA::Long find_index(const SDOPackage::NVList& nv, const char* name);
 
   /*!
    * @if jp
@@ -643,5 +672,5 @@ namespace NVUtil
   std::string toString(const SDOPackage::NVList& nv);
 
 
-};  // namespace NVUtil
+} // namespace NVUtil
 #endif  // NVUTIL_NVUTIL_H

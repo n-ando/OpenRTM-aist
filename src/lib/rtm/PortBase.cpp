@@ -17,7 +17,7 @@
  *
  */
 
-#include <assert.h>
+#include <cassert>
 #include <memory>
 #include <coil/UUID.h>
 #include <rtm/PortBase.h>
@@ -37,24 +37,11 @@ namespace RTC
    * @endif
    */
   PortBase::PortBase(const char* name)
-    : rtclog(name),
-      m_ownerInstanceName("unknown"),
-      m_connectionLimit(-1),
-      m_onPublishInterfaces(0),
-      m_onSubscribeInterfaces(0),
-      m_onConnected(0),
-      m_onUnsubscribeInterfaces(0),
-      m_onDisconnected(0),
-      m_onConnectionLost(0),
-      m_portconnListeners(NULL),
-	  m_directport(NULL)
+    : rtclog(name)
   {
     m_objref = this->_this();
     // Now Port name is <instance_name>.<port_name>. r1648
-    std::string portname(m_ownerInstanceName);
-    portname += ".";
-    portname += name;
-
+    std::string portname(m_ownerInstanceName + '.' + name);
     m_profile.name = CORBA::string_dup(portname.c_str());
     m_profile.interfaces.length(0);
     m_profile.port_ref = m_objref;
@@ -108,12 +95,11 @@ namespace RTC
    * @endif
    */
   PortProfile* PortBase::get_port_profile()
-    throw (CORBA::SystemException)
   {
     RTC_TRACE(("get_port_profile()"));
 
     updateConnectors();
-    Guard gaurd(m_profile_mutex);
+    std::lock_guard<std::mutex> guard(m_profile_mutex);
     PortProfile_var prof;
     prof = new PortProfile(m_profile);
     return prof._retn();
@@ -141,13 +127,12 @@ namespace RTC
    * @endif
    */
   ConnectorProfileList* PortBase::get_connector_profiles()
-    throw (CORBA::SystemException)
   {
     RTC_TRACE(("get_connector_profiles()"));
 
     updateConnectors();
 
-    Guard gaurd(m_profile_mutex);
+    std::lock_guard<std::mutex> guard(m_profile_mutex);
     ConnectorProfileList_var conn_prof;
     conn_prof = new ConnectorProfileList(m_profile.connector_profiles);
     return conn_prof._retn();
@@ -161,13 +146,12 @@ namespace RTC
    * @endif
    */
   ConnectorProfile* PortBase::get_connector_profile(const char* connector_id)
-    throw (CORBA::SystemException)
   {
     RTC_TRACE(("get_connector_profile(%s)", connector_id));
 
     updateConnectors();
 
-    Guard gaurd(m_profile_mutex);
+    std::lock_guard<std::mutex> guard(m_profile_mutex);
     CORBA::Long index(findConnProfileIndex(connector_id));
 
     if (index < 0)
@@ -189,12 +173,11 @@ namespace RTC
    * @endif
    */
   ReturnCode_t PortBase::connect(ConnectorProfile& connector_profile)
-    throw (CORBA::SystemException)
   {
     RTC_TRACE(("connect()"));
     if (isEmptyId(connector_profile))
       {
-        Guard gurad(m_profile_mutex);
+        std::lock_guard<std::mutex> guard(m_profile_mutex);
         // "connector_id" stores UUID which is generated at the initial Port
         // in connection process.
         setUUID(connector_profile);
@@ -202,7 +185,7 @@ namespace RTC
       }
     else
       {
-        Guard gurad(m_profile_mutex);
+        std::lock_guard<std::mutex> guard(m_profile_mutex);
         if (isExistingConnId(connector_profile.connector_id))
           {
             RTC_ERROR(("Connection already exists."));
@@ -213,7 +196,7 @@ namespace RTC
     try
       {
         RTC::PortService_ptr p;
-        p = connector_profile.ports[(CORBA::ULong)0];
+        p = connector_profile.ports[static_cast<CORBA::ULong>(0)];
         ReturnCode_t ret = p->notify_connect(connector_profile);
         if (ret != RTC::RTC_OK)
           {
@@ -226,7 +209,6 @@ namespace RTC
       {
         return RTC::BAD_PARAMETER;
       }
-    return RTC::RTC_ERROR;
   }
 
   /*!
@@ -237,31 +219,35 @@ namespace RTC
    * @endif
    */
   ReturnCode_t PortBase::notify_connect(ConnectorProfile& connector_profile)
-    throw (CORBA::SystemException)
   {
     RTC_TRACE(("notify_connect()"));
-    Guard guard(m_connectorsMutex);
+    std::lock_guard<std::mutex> connectors_guard(m_connectorsMutex);
 
 
 
-	Properties prop;
-	NVUtil::copyToProperties(prop, connector_profile.properties);
-	bool default_value = coil::toBool(m_properties["allow_dup_connection"], "YES", "NO", false);
+    Properties prop;
+    NVUtil::copyToProperties(prop, connector_profile.properties);
+#ifndef ORB_IS_RTORB
+    bool default_value = coil::toBool(m_properties["allow_dup_connection"], "YES", "NO", false);
+#else
+    bool default_value = coil::toBool(m_properties["allow_dup_connection"], "YES", "NO", true);
+#endif
 
-	if (!coil::toBool(prop.getProperty("dataport.allow_dup_connection"), "YES", "NO", default_value))
-	{
-		for (unsigned int i = 0; i < connector_profile.ports.length(); i++)
-		{
-			if (!getPortRef()->_is_equivalent(connector_profile.ports[i]))
-			{
-				bool ret = CORBA_RTCUtil::already_connected(connector_profile.ports[i], m_objref);
-				if(ret)
-				{
-					return RTC::PRECONDITION_NOT_MET;
-				}
-			}
-		}
-	}
+    if (!coil::toBool(prop.getProperty("dataport.allow_dup_connection"), "YES", "NO", default_value))
+      {
+        for (unsigned int i = 0; i < connector_profile.ports.length(); i++)
+          {
+            PortService_var portref = getPortRef();
+            if (!portref->_is_equivalent(connector_profile.ports[i]))
+              {
+                bool ret = CORBA_RTCUtil::already_connected(m_objref.in(), connector_profile.ports[i]);
+                if(ret)
+                  {
+                    return RTC::PRECONDITION_NOT_MET;
+                  }
+              }
+          }
+      }
 
 
 
@@ -276,7 +262,7 @@ namespace RTC
         RTC_ERROR(("publishInterfaces() in notify_connect() failed."));
       }
     onPublishInterfaces(getName(), connector_profile, retval[0]);
-    if (m_onPublishInterfaces != 0)
+    if (m_onPublishInterfaces != nullptr)
       {
         (*m_onPublishInterfaces)(connector_profile);
       }
@@ -292,7 +278,7 @@ namespace RTC
 
     // subscribe interface from the ConnectorProfile's information
 
-    if (m_onSubscribeInterfaces != 0)
+    if (m_onSubscribeInterfaces != nullptr)
       {
         (*m_onSubscribeInterfaces)(connector_profile);
       }
@@ -307,7 +293,7 @@ namespace RTC
     RTC_PARANOID(("%d connectors are existing",
                   m_profile.connector_profiles.length()));
 
-    Guard gurad(m_profile_mutex);
+    std::lock_guard<std::mutex> profile_guard(m_profile_mutex);
     CORBA::Long index(findConnProfileIndex(connector_profile.connector_id));
     if (index < 0)
       {
@@ -331,7 +317,7 @@ namespace RTC
       }
 
     // connection established without errors
-    if (m_onConnected != 0)
+    if (m_onConnected != nullptr)
       {
         (*m_onConnected)(connector_profile);
       }
@@ -346,11 +332,11 @@ namespace RTC
    * @brief Publish interface information
    * @endif
    */
-  ReturnCode_t PortBase::_publishInterfaces(void)
+  ReturnCode_t PortBase::_publishInterfaces()
   {
     if (!(m_connectionLimit < 0))
       {
-        if ((::CORBA::ULong)m_connectionLimit <=
+        if (static_cast<::CORBA::ULong>(m_connectionLimit) <=
             m_profile.connector_profiles.length())
           {
             RTC_PARANOID(("Connected number has reached the limitation."));
@@ -372,7 +358,6 @@ namespace RTC
    * @endif
    */
   ReturnCode_t PortBase::disconnect(const char* connector_id)
-    throw (CORBA::SystemException)
   {
     RTC_TRACE(("disconnect(%s)", connector_id));
 
@@ -385,7 +370,7 @@ namespace RTC
 
     ConnectorProfile prof;
     { // lock and copy profile
-      Guard guard(m_profile_mutex);
+      std::lock_guard<std::mutex> guard(m_profile_mutex);
       prof = m_profile.connector_profiles[index];
     }
 
@@ -397,7 +382,7 @@ namespace RTC
 
     for (CORBA::ULong i(0), len(prof.ports.length()); i < len; ++i)
       {
-        RTC::PortService_var p(prof.ports[i]);
+        RTC::PortService_var p(RTC::PortService::_duplicate(prof.ports[i]));
         try
           {
             return p->notify_disconnect(connector_id);
@@ -408,7 +393,7 @@ namespace RTC
 #ifdef ORB_IS_ORBEXPRESS
             oe_out << e << oe_endl << oe_flush;
 #else
-            RTC_WARN(("Exception caught: minor code(%d).", e.minor()));;
+            RTC_WARN(("Exception caught: minor code(%d).", e.minor()));
 #endif
 #else // ORB_IS_RTORB
             RTC_WARN(("Exception caught"));
@@ -433,11 +418,10 @@ namespace RTC
    * @endif
    */
   ReturnCode_t PortBase::notify_disconnect(const char* connector_id)
-    throw (CORBA::SystemException)
   {
     RTC_TRACE(("notify_disconnect(%s)", connector_id));
-    Guard guard(m_connectorsMutex);
-    Guard gaurd(m_profile_mutex);
+    std::lock_guard<std::mutex> connectors_guard(m_connectorsMutex);
+    std::lock_guard<std::mutex> profile_guard(m_profile_mutex);
 
     // find connector_profile
     CORBA::Long index(findConnProfileIndex(connector_id));
@@ -447,20 +431,20 @@ namespace RTC
         return RTC::BAD_PARAMETER;
       }
 
-    ConnectorProfile& prof(m_profile.connector_profiles[(CORBA::ULong)index]);
+    ConnectorProfile& prof(m_profile.connector_profiles[static_cast<CORBA::ULong>(index)]);
     onNotifyDisconnect(getName(), prof);
 
     ReturnCode_t retval(disconnectNext(prof));
     onDisconnectNextport(getName(), prof, retval);
 
-    if (m_onUnsubscribeInterfaces != 0)
+    if (m_onUnsubscribeInterfaces != nullptr)
       {
         (*m_onUnsubscribeInterfaces)(prof);
       }
     onUnsubscribeInterfaces(getName(), prof);
     unsubscribeInterfaces(prof);
 
-    if (m_onDisconnected != 0)
+    if (m_onDisconnected != nullptr)
       {
         (*m_onDisconnected)(prof);
       }
@@ -491,13 +475,12 @@ namespace RTC
    * @endif
    */
   ReturnCode_t PortBase::disconnect_all()
-    throw (CORBA::SystemException)
   {
     RTC_TRACE(("disconnect_all()"));
 
     ::RTC::ConnectorProfileList plist;
     {
-      Guard gaurd(m_profile_mutex);
+      std::lock_guard<std::mutex> guard(m_profile_mutex);
       plist = m_profile.connector_profiles;
     }
 
@@ -527,7 +510,7 @@ namespace RTC
   void PortBase::setName(const char* name)
   {
     RTC_TRACE(("setName(%s)", name));
-    Guard guard(m_profile_mutex);
+    std::lock_guard<std::mutex> guard(m_profile_mutex);
     m_profile.name = CORBA::string_dup(name);
     rtclog.setName(name);
   }
@@ -556,7 +539,7 @@ namespace RTC
   const PortProfile& PortBase::getProfile() const
   {
     RTC_TRACE(("getProfile()"));
-    Guard guard(m_profile_mutex);
+    std::lock_guard<std::mutex> guard(m_profile_mutex);
     return m_profile;
   }
 
@@ -570,7 +553,7 @@ namespace RTC
   void PortBase::setPortRef(PortService_ptr port_ref)
   {
     RTC_TRACE(("setPortRef()"));
-    Guard gurad(m_profile_mutex);
+    std::lock_guard<std::mutex> guard(m_profile_mutex);
     m_profile.port_ref = port_ref;
   }
 
@@ -584,11 +567,11 @@ namespace RTC
   PortService_ptr PortBase::getPortRef() const
   {
     RTC_TRACE(("getPortRef()"));
-    Guard gurad(m_profile_mutex);
+    std::lock_guard<std::mutex> guard(m_profile_mutex);
 #ifdef ORB_IS_ORBEXPRESS
-    return m_profile.port_ref.in();
+    return RTC::PortService::_duplicate(m_profile.port_ref.in());
 #else
-    return m_profile.port_ref;
+    return RTC::PortService::_duplicate(m_profile.port_ref);
 #endif
   }
 
@@ -607,7 +590,7 @@ namespace RTC
     RTC_TRACE(("setOwner(%s)", m_ownerInstanceName.c_str()));
 
     {
-      Guard gurad(m_profile_mutex);
+      std::lock_guard<std::mutex> guard(m_profile_mutex);
       std::string portname((const char*)m_profile.name);
       coil::vstring p(coil::split(portname, "."));
       // Now Port name is <instance_name>.<port_name>. r1648
@@ -692,14 +675,14 @@ namespace RTC
    */
   ReturnCode_t PortBase::disconnectNext(ConnectorProfile& cprof)
   {
-    CORBA::ULong index;
+    CORBA::Long index;
     index = CORBA_SeqUtil::find(cprof.ports,
                                 find_port_ref(m_profile.port_ref));
     if (index < 0)
       {
         return RTC::BAD_PARAMETER;
       }
-    if (index == cprof.ports.length() - 1)
+    if (static_cast<CORBA::ULong>(index) == cprof.ports.length() - 1)
       {
         return RTC::RTC_OK;
       }
@@ -707,10 +690,10 @@ namespace RTC
     CORBA::ULong len = cprof.ports.length();
 
     ++index;
-    for (CORBA::ULong i(index); i < len; ++i)
+    for (CORBA::ULong i(static_cast<CORBA::ULong>(index)); i < len; ++i)
       {
         RTC::PortService_var p;
-        p = cprof.ports[i];
+        p = RTC::PortService::_duplicate(cprof.ports[i]);
         try
           {
             return p->notify_disconnect(cprof.connector_id);
@@ -759,9 +742,9 @@ namespace RTC
    * @brief Check whether connector_id of ConnectorProfile is empty
    * @endif
    */
-  bool PortBase::isEmptyId(const ConnectorProfile& connector_profile) const
+  bool PortBase::isEmptyId(const ConnectorProfile& connector_profile) 
   {
-    return connector_profile.connector_id[(CORBA::ULong)0] == 0;
+    return connector_profile.connector_id[static_cast<CORBA::ULong>(0)] == 0;
   }
 
 
@@ -772,13 +755,11 @@ namespace RTC
    * @brief Generate the UUID
    * @endif
    */
-  const std::string PortBase::getUUID() const
+  std::string PortBase::getUUID() 
   {
-    coil::UUID_Generator uugen;
-    uugen.init();
-    std::auto_ptr<coil::UUID> uuid(uugen.generateUUID(2, 0x01));
+    std::unique_ptr<coil::UUID> uuid(coil::UUID_Generator::generateUUID(2, 0x01));
 
-    return std::string((const char*)uuid->to_string());
+    return std::string(uuid->to_string());
   }
 
   /*!
@@ -788,7 +769,7 @@ namespace RTC
    * @brief Generate the UUID and set it to the ConnectorProfile
    * @endif
    */
-  void PortBase::setUUID(ConnectorProfile& connector_profile) const
+  void PortBase::setUUID(ConnectorProfile& connector_profile) 
   {
     connector_profile.connector_id = CORBA::string_dup(getUUID().c_str());
     assert(connector_profile.connector_id[(CORBA::ULong)0] != 0);
@@ -936,7 +917,7 @@ namespace RTC
     {
 // Why RtORB copies ConnectorProfile?
 #ifndef ORB_IS_RTORB
-      Guard guard(m_profile_mutex);
+      std::lock_guard<std::mutex> guard(m_profile_mutex);
       ConnectorProfileList& clist(m_profile.connector_profiles);
 
       for (CORBA::ULong i(0); i < clist.length(); ++i)
@@ -944,7 +925,7 @@ namespace RTC
           if (!checkPorts(clist[i].ports))
             {
               const char* id(clist[i].connector_id);
-              connector_ids.push_back(id);
+              connector_ids.emplace_back(id);
               RTC_WARN(("Dead connection: %s", id));
             }
         }
@@ -957,7 +938,7 @@ namespace RTC
           if (!checkPorts((*clist)[i].ports))
             {
               const char* id((*clist)[i].connector_id);
-              connector_ids.push_back(id);
+              connector_ids.emplace_back(id);
               RTC_WARN(("Dead connection: %s", id));
             }
         }
@@ -965,10 +946,9 @@ namespace RTC
 #endif  // ORB_IS_RTORB
     }
 
-    for (std::vector<std::string>::iterator it(connector_ids.begin());
-         it != connector_ids.end(); ++it)
+    for (auto & connector_id : connector_ids)
       {
-        this->disconnect((*it).c_str());
+        this->disconnect(connector_id.c_str());
       }
   }
 
@@ -1014,15 +994,54 @@ namespace RTC
   * @return ポートのポインタ
   *
   * @else
-  * @brief
+  * @brief Getting direct communication object
   *
-  * @return
+  * @return a pointer to the port
   *
   * @endif
   */
   DirectPortBase* PortBase::getDirectPort()
   {
-	  return m_directport;
+      return m_directport;
   }
 
-}; // namespace RTC
+
+  /*!
+   * @if jp
+   *
+   * @brief 指定のシリアライザが使用可能かを判定する
+   *
+   * @param con_prop コネクタプロファイルのプロパティ
+   * @return true：利用可能、false：利用不可
+   *
+   * @else
+   *
+   * @brief Whether the specified serializer can be used
+   *
+   * @param con_prop Properties of ConnectorProfile
+   * @return ture: avaiable, false: un-available
+   *
+   * @endif
+   */
+  bool PortBase::isExistingMarshalingType(coil::Properties& con_prop)
+  {
+      std::string marshaling_type{ coil::eraseBothEndsBlank(con_prop.getProperty("marshaling_type", "cdr")) };
+
+      Properties prop;
+      NVUtil::copyToProperties(prop, m_profile.properties);
+      coil::vstring enabledSerializerTypes{coil::split(prop["dataport.marshaling_types"], ",", true) };
+
+
+
+      coil::vstring::iterator it = std::find(enabledSerializerTypes.begin(), enabledSerializerTypes.end(), marshaling_type);
+      size_t index = std::distance(enabledSerializerTypes.begin(), it);
+      if (index == enabledSerializerTypes.size())
+      {
+          RTC_ERROR(("%s is illegal marshaling type.", marshaling_type.c_str()));
+          return false;
+      }
+      return true;
+
+  }
+
+} // namespace RTC

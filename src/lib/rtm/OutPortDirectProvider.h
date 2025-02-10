@@ -25,10 +25,6 @@
 #include <rtm/ConnectorListener.h>
 #include <rtm/ConnectorBase.h>
 
-#ifdef WIN32
-#pragma warning( disable : 4290 )
-#endif
-
 namespace RTC
 {
   /*!
@@ -69,7 +65,7 @@ namespace RTC
      *
      * @endif
      */
-    OutPortDirectProvider(void);
+    OutPortDirectProvider();
 
     /*!
      * @if jp
@@ -84,7 +80,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~OutPortDirectProvider(void);
+    ~OutPortDirectProvider() override;
 
     /*!
      * @if jp
@@ -113,7 +109,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual void init(coil::Properties& prop);
+    void init(coil::Properties& prop) override;
 
     /*!
      * @if jp
@@ -140,7 +136,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual void setBuffer(CdrBufferBase* buffer);
+    void setBuffer(CdrBufferBase* buffer) override;
 
     /*!
      * @if jp
@@ -186,8 +182,8 @@ namespace RTC
      *
      * @endif
      */
-    virtual void setListener(ConnectorInfo& info,
-                             ConnectorListeners* listeners);
+    void setListener(ConnectorInfo& info,
+                             ConnectorListenersBase* listeners) override;
 
     /*!
      * @if jp
@@ -213,7 +209,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual void setConnector(OutPortConnector* connector);
+    void setConnector(OutPortConnector* connector) override;
 
     
   private:
@@ -229,10 +225,9 @@ namespace RTC
      * @param data cdrMemoryStream
      * @endif
      */
-    inline void onBufferRead(cdrMemoryStream& data)
+    inline void onBufferRead(ByteData& data)
     {
-      m_listeners->
-        connectorData_[ON_BUFFER_READ].notify(m_profile, data);
+      m_listeners->notifyOut(ConnectorDataListenerType::ON_BUFFER_READ, m_profile, data);
     }
 
     /*!
@@ -244,10 +239,9 @@ namespace RTC
      * @param data cdrMemoryStream
      * @endif
      */
-    inline void onSend(cdrMemoryStream& data)
+    inline void onSend(ByteData& data)
     {
-      m_listeners->
-        connectorData_[ON_SEND].notify(m_profile, data);
+      m_listeners->notifyOut(ConnectorDataListenerType::ON_SEND, m_profile, data);
     }
 
     /*!
@@ -259,8 +253,7 @@ namespace RTC
      */
     inline void onBufferEmpty()
     {
-      m_listeners->
-        connector_[ON_BUFFER_EMPTY].notify(m_profile);
+      m_listeners->notify(ConnectorListenerType::ON_BUFFER_EMPTY, m_profile);
     }
 
     /*!
@@ -272,8 +265,7 @@ namespace RTC
      */
     inline void onBufferReadTimeout()
     {
-      m_listeners->
-        connector_[ON_BUFFER_READ_TIMEOUT].notify(m_profile);
+      m_listeners->notify(ConnectorListenerType::ON_BUFFER_READ_TIMEOUT, m_profile);
     }
 
     /*!
@@ -285,8 +277,7 @@ namespace RTC
      */
     inline void onSenderEmpty()
     {
-      m_listeners->
-        connector_[ON_SENDER_EMPTY].notify(m_profile);
+      m_listeners->notify(ConnectorListenerType::ON_SENDER_EMPTY, m_profile);
     }
 
     /*!
@@ -298,8 +289,7 @@ namespace RTC
      */
     inline void onSenderTimeout()
     {
-      m_listeners->
-        connector_[ON_SENDER_TIMEOUT].notify(m_profile);
+      m_listeners->notify(ConnectorListenerType::ON_SENDER_TIMEOUT, m_profile);
     }
 
     /*!
@@ -311,17 +301,16 @@ namespace RTC
      */
     inline void onSenderError()
     {
-      m_listeners->
-        connector_[ON_SENDER_ERROR].notify(m_profile);
+      m_listeners->notify(ConnectorListenerType::ON_SENDER_ERROR, m_profile);
     }
     
   private:
-    CdrBufferBase* m_buffer;
-    ConnectorListeners* m_listeners;
+    CdrBufferBase* m_buffer{nullptr};
+    ConnectorListenersBase* m_listeners;
     ConnectorInfo m_profile;
     OutPortConnector* m_connector;
   };  // class OutPortDirectProvider
-};     // namespace RTC
+} // namespace RTC
 
 extern "C"
 {
@@ -339,10 +328,6 @@ extern "C"
    * @endif
    */
   void OutPortDirectProviderInit(void);
-};
-
-#ifdef WIN32
-#pragma warning( default : 4290 )
-#endif
+}
 
 #endif // RTC_OUTPORTDIRECTPROVIDER_H

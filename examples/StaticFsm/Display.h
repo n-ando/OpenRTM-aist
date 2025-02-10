@@ -18,7 +18,6 @@
 #include <rtm/DataOutPort.h>
 #include <rtm/ConnectorListener.h>
 #include <rtm/Macho.h>
-#pragma GCC diagnostic ignored "-Wunused-but-set-variable"
 
 #include <iostream>
 
@@ -42,25 +41,22 @@ class DataListener
   USE_CONNLISTENER_STATUS;
 public:
   DataListener(const char* name) : m_name(name) {}
-  virtual ~DataListener()
+  ~DataListener() override
   {
     std::cout << "dtor of " << m_name << std::endl;
   }
 
-  virtual ReturnCode operator()(ConnectorInfo& info,
-                                TimedLong& data)
+  ReturnCode operator()(ConnectorInfo& info,
+                        TimedLong& data) override
   {
     std::cout << "------------------------------"   << std::endl;
     std::cout << "Data Listener: " << m_name       << std::endl;
     std::cout << "Profile::name: " << info.name    << std::endl;
     std::cout << "Profile::id:   " << info.id      << std::endl;
-//    std::cout << "Profile::properties: "            << std::endl;
-//    std::cout << info.properties;
-//    std::cout                                       << std::endl;
     std::cout << "Data:          " << data.data    << std::endl;
     std::cout << "------------------------------"   << std::endl;
     return NO_CHANGE;
-  };
+  }
   std::string m_name;
 };
 
@@ -71,12 +67,12 @@ class ConnListener
   USE_CONNLISTENER_STATUS;
 public:
   ConnListener(const char* name) : m_name(name) {}
-  virtual ~ConnListener()
+  ~ConnListener() override
   {
     std::cout << "dtor of " << m_name << std::endl;
   }
 
-  virtual ReturnCode operator()(ConnectorInfo& info)
+  ReturnCode operator()(ConnectorInfo& info) override
   {
     std::cout << "------------------------------"   << std::endl;
     std::cout << "Connector Listener: " << m_name       << std::endl;
@@ -87,7 +83,7 @@ public:
     std::cout                                       << std::endl;
     std::cout << "------------------------------"   << std::endl;
     return NO_CHANGE;
-  };
+  }
   std::string m_name;
 };
 
@@ -97,11 +93,11 @@ class Display
 {
  public:
   Display(RTC::Manager* manager);
-  ~Display();
+  ~Display() override;
 
   // The initialize action (on CREATED->ALIVE transition)
-  // formaer rtc_init_entry() 
-  virtual RTC::ReturnCode_t onInitialize();
+  // formaer rtc_init_entry()
+  RTC::ReturnCode_t onInitialize() override;
 
   // The finalize action (on ALIVE->END transition)
   // formaer rtc_exiting_entry()
@@ -125,7 +121,7 @@ class Display
 
   // The execution action that is invoked periodically
   // former rtc_active_do()
-  virtual RTC::ReturnCode_t onExecute(RTC::UniqueId ec_id);
+  RTC::ReturnCode_t onExecute(RTC::UniqueId ec_id) override;
 
   // The aborting action when main logic error occurred.
   // former rtc_aborting_entry()
@@ -184,6 +180,6 @@ class Display
 extern "C"
 {
   DLL_EXPORT void DisplayInit(RTC::Manager* manager);
-};
+}
 
 #endif // DISPLAY_H

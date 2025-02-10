@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file  Analyzer_test.cpp
  * @brief Clock Analyzer test
@@ -15,7 +15,7 @@
 
 // Module specification
 // <rtc-template block="module_spec">
-static const char* analyzer_test_spec[] =
+static const char* const analyzer_test_spec[] =
   {
     "implementation_id", "Analyzer_test",
     "type_name",         "Analyzer_test",
@@ -58,9 +58,7 @@ Analyzer_test::Analyzer_test(RTC::Manager* manager)
 /*!
  * @brief destructor
  */
-Analyzer_test::~Analyzer_test()
-{
-}
+Analyzer_test::~Analyzer_test() = default;
 
 
 
@@ -126,33 +124,16 @@ RTC::ReturnCode_t Analyzer_test::onDeactivated(RTC::UniqueId ec_id)
 */
 
 
-RTC::ReturnCode_t Analyzer_test::onExecute(RTC::UniqueId ec_id)
+RTC::ReturnCode_t Analyzer_test::onExecute(RTC::UniqueId  /*ec_id*/)
 {
 	if (m_inIn.isNew())
 	{
-		coil::TimeValue start(coil::gettimeofday());
-		//coil::TimeValue start1(coil::gettimeofday());
+		auto start = std::chrono::system_clock::now();
 		m_inIn.read();
-		//std::cout << "Analyzer_test: " << &m_in << std::endl;
-		//coil::TimeValue start2(coil::gettimeofday());
 		m_out = m_in;
-		//coil::TimeValue start3(coil::gettimeofday());
-		//coil::sleep(coil::TimeValue(m_sleep_time));
-		//coil::TimeValue end(coil::gettimeofday());
-		//std::cout << double(end-start1) << "\t" << double(end-start2) << "\t" << double(end-start3) << std::endl;
-		coil::TimeValue end(coil::gettimeofday());
-		double diff = (double)(end - start);
-		//std::cout << "Analyzer_test: " << m_sleep_time - diff << std::endl;
-		if (diff < m_sleep_time)
-		{
-			coil::sleep(coil::TimeValue(m_sleep_time - diff));
-		}
-		//std::cout << "Analyzer_test: " << m_sleep_time - (double)(end - start) << std::endl;
+		std::this_thread::sleep_until(start + m_sleep_time);
 		
-		//std::cout << double(start3-start2) << std::endl;
 		m_outOut.write();
-		//std::cout << "Analyzer_test" << std::endl;
-		//std::cout << "Analyzer_test: " << m_out.tm.sec << "\t" << m_out.tm.nsec << std::endl;
 	}
   return RTC::RTC_OK;
 }
@@ -205,6 +186,5 @@ extern "C"
                              RTC::Delete<Analyzer_test>);
   }
   
-};
-
+}
 

@@ -37,7 +37,8 @@
  *
  * @endif
  */
-static const char* default_config[] =
+namespace RTC {
+  const char* const default_config[] =
   {
     "config.version",                        openrtm_version,
     "openrtm.name",                          openrtm_name,
@@ -57,7 +58,7 @@ static const char* default_config[] =
     "logger.log_level",                      "INFO",
     "logger.stream_lock",                    "NO",
     "logger.master_logger",                  "",
-	"logger.escape_sequence_enable",         "NO",
+    "logger.escape_sequence_enable",         "NO",
     "module.conf_path",                      "",
     "module.load_path",                      "",
     "naming.enable",                         "YES",
@@ -91,16 +92,16 @@ static const char* default_config[] =
     "manager.corba_servant",                 "YES",
     "manager.shutdown_on_nortcs",            "YES",
     "manager.shutdown_auto",                 "YES",
-    "manager.auto_shutdown_duration",        "10.0",
+    "manager.auto_shutdown_duration",        "20.0",
     "manager.termination_waittime",          "0.5",
     "manager.name",                          "manager",
     "manager.components.naming_policy",      "process_unique",
-    "manager.command",                       "rtcd",
-    "manager.nameservers",                     "default",
+    "manager.command",                       "rtcd2",
+    "manager.nameservers",                   "default",
     "manager.language",                      "C++",
     "manager.supported_languages",           "C++, Python, Java",
-    "manager.modules.C++.manager_cmd",       "rtcd",
-    "manager.modules.C++.profile_cmd",       "rtcprof",
+    "manager.modules.C++.manager_cmd",       "rtcd2",
+    "manager.modules.C++.profile_cmd",       "rtcprof2",
 #ifdef WIN32
     "manager.modules.C++.suffixes",           "dll",
 #else
@@ -111,12 +112,12 @@ static const char* default_config[] =
 #endif
 #endif
     "manager.modules.C++.load_paths",        "",
-    "manager.modules.Python.manager_cmd",    "rtcd_python",
-    "manager.modules.Python.profile_cmd",    "rtcprof_python",
+    "manager.modules.Python.manager_cmd",    "rtcd2_python",
+    "manager.modules.Python.profile_cmd",    "rtcprof2_python",
     "manager.modules.Python.suffixes",       "py",
     "manager.modules.Python.load_paths",     "",
-    "manager.modules.Java.manager_cmd",      "rtcd_java",
-    "manager.modules.Java.profile_cmd",      "rtcprof_java",
+    "manager.modules.Java.manager_cmd",      "rtcd2_java",
+    "manager.modules.Java.profile_cmd",      "rtcprof2_java",
     "manager.modules.Java.suffixes",         "class",
     "manager.modules.Java.load_paths",       "",
     "manager.modules.search_auto",       "YES",
@@ -129,4 +130,5 @@ static const char* default_config[] =
     "sdo.service.consumer.enabled_services",  "ALL",
     ""
   };
+} // namespace RTC
 #endif  // RTM_DEFAULTCONFIGURATION_H

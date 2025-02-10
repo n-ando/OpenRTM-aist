@@ -1,0 +1,96 @@
+FROM ubuntu:18.04 as fluent
+
+RUN apt-get update\
+ && apt-get install -y --no-install-recommends\
+ g++\
+ make\
+ cmake\
+ ca-certificates\
+ wget\
+ flex\
+ bison
+
+# downlaod fluent-bit.
+RUN mkdir /root/fluent-bit
+RUN wget -O - https://github.com/fluent/fluent-bit/archive/v1.8.9.tar.gz\
+ | tar xfz - -C /root/fluent-bit --strip-components 1
+RUN sed  -i -e 's/jemalloc-5.2.1\/configure/jemalloc-5.2.1\/configure --disable-initial-exec-tls/g' /root/fluent-bit/CMakeLists.txt
+
+# build fluent-bit.
+RUN cmake -DFLB_RELEASE=On\
+ -DFLB_TRACE=Off\
+ -DFLB_JEMALLOC=On\
+ -DFLB_TLS=On\
+ -DFLB_SHARED_LIB=On\
+ -DFLB_EXAMPLES=Off\
+ -DFLB_HTTP_SERVER=On\
+ -DFLB_IN_SYSTEMD=On\
+ -DFLB_OUT_KAFKA=On\
+ -DCMAKE_BUILD_TYPE=Release\
+ -DCMAKE_INSTALL_PREFIX=/tmp/flb/install\
+ -S /root/fluent-bit\
+ -B/tmp/flb/build
+RUN cmake --build /tmp/flb/build --target install/strip -- -j$(nproc)
+
+# install header files.
+RUN cp -r /tmp/flb/build/include/jemalloc\
+ /root/fluent-bit/lib/msgpack-*/include/msgpack.h\
+ /root/fluent-bit/lib/msgpack-*/include/msgpack\
+ /root/fluent-bit/lib/mbedtls-*/include/mbedtls\
+ /root/fluent-bit/lib/c-ares-*/include/*.h\
+ /tmp/flb/build/lib/c-ares-*/ares_build.h\
+ /tmp/flb/build/lib/c-ares-*/ares_config.h\
+ /root/fluent-bit/lib/cmetrics/include/cmetrics\
+ /root/fluent-bit/lib/cmetrics/include/prometheus_remote_write\
+ /tmp/flb/install/include/
+
+############################################################
+FROM ubuntu:18.04 as rtm-build
+
+ENV ROS_DISTRO=dashing
+ENV AMENT_PREFIX_PATH=/opt/ros/${ROS_DISTRO}
+ENV ROS_VERSION=2
+ENV ROS_PYTHON_VERSION=3
+ENV PYTHONPATH=/opt/ros/${ROS_DISTRO}/lib/python3.6/site-packages:${PYTHONPATH}
+ENV PATH=/opt/ros/${ROS_DISTRO}/bin:${PATH}
+RUN apt-get update\
+ && apt-get install -y --no-install-recommends curl gnupg2\
+ && curl http://repo.ros2.org/repos.key | apt-key add -\
+ && sh -c 'echo "deb http://repo.ros2.org/ubuntu/main bionic main" > /etc/apt/sources.list.d/ros2-latest.list'\
+ && apt-get update\
+ && DEBIAN_FRONTEND=noninteractive apt-get -y install ros-${ROS_DISTRO}-ros-core\
+ && apt-get clean\
+ && rm -rf /var/lib/apt/lists/*
+
+
+ENV ROS_DISTRO=melodic
+RUN sh -c 'echo "deb http://packages.ros.org/ros/ubuntu bionic main" > /etc/apt/sources.list.d/ros-latest.list'\
+ && apt-key adv --keyserver keyserver.ubuntu.com --recv-keys F42ED6FBAB17C654\
+ && apt-get update\
+ && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends ros-${ROS_DISTRO}-ros-base python-rosdep\
+ && apt-get clean\
+ && rm -rf /var/lib/apt/lists/*\
+ && rosdep init\
+ && rosdep update
+ENV CMAKE_PREFIX_PATH=/opt/ros/${ROS_DISTRO}:${CMAKE_PREFIX_PATH}
+ENV ROS_ETC_DIR=/opt/ros/${ROS_DISTRO}/etc/ros
+ENV ROS_ROOT=/opt/ros/${ROS_DISTRO}/share/ros
+ENV ROS_PACKAGE_PATH=/opt/ros/${ROS_DISTRO}/share
+ENV PYTHONPATH=/opt/ros/${ROS_DISTRO}/lib/python2.7/dist-packages:${PYTHONPATH}
+ENV PATH=/opt/ros/${ROS_DISTRO}/bin:${PATH}
+
+RUN apt-get update\
+ && apt-get install -y --no-install-recommends\
+ g++\
+ make\
+ cmake\
+ uuid-dev\
+ libboost-filesystem-dev\
+ omniorb-nameserver\
+ libomniorb4-dev\
+ omniidl\
+ && apt-get clean\
+ && rm -rf /var/lib/apt/lists/*
+
+COPY --from=fluent /tmp/flb/install /usr/local/
+

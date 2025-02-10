@@ -34,18 +34,6 @@
 #include <taskLib.h>
 #include <sysLib.h>
 
-
-
-
-/*
-#ifdef __RTP__
-#include <taskLib.h>
-#include <sysLib.h>
-#else
-#include <selectLib.h>
-#endif
-*/
-
 namespace coil
 {
 
@@ -88,21 +76,6 @@ namespace coil
     {
           return 0;
     }
-/*
-#ifdef __RTP__
-    int tps = sysClkRateGet();
-    if(taskDelay(seconds*tps) == OK)
-    {
-        return 0;
-    }
-    else
-    {
-        return -1;
-    }
-#else
-    return ::sleep(seconds);
-#endif
-*/
   }
 
   /*!
@@ -129,12 +102,8 @@ namespace coil
   inline int sleep(TimeValue interval)
   {
     int tps = sysClkRateGet();
-//std::cout << interval.sec() << "\t" << interval.usec() << std::endl;
-//std::cout << interval.sec()*tps + (interval.usec()*tps)/1000000l + 1 << std::endl;
     if(interval.sec() > 0 || interval.usec() > 0)
     {
-//taskDelay(tps);
-//std::cout << interval.usec() << "\t" << (interval.usec()*tps)/1000000l << "\t" << tps << std::endl;
       if(taskDelay(interval.sec()*tps + (interval.usec()*tps)/1000000l + 1) == OK)
       {
           return 0;
@@ -148,24 +117,6 @@ namespace coil
     {
       return 0;
     }
-/*
-#ifdef __RTP__
-    int tps = sysClkRateGet();
-    if(taskDelay((double)interval.sec()*tps + (double)(interval.usec()*tps)/1000000l) == OK)
-    {
-        return 0;
-    }
-    else
-    {
-        return -1;
-    }
-#else
-    timeval tv;
-    tv.tv_sec = interval.sec();
-    tv.tv_usec = interval.usec();
-    return ::select(0, 0, 0, 0, &tv);
-#endif
-*/
   }
 
   /*!
@@ -207,22 +158,6 @@ namespace coil
     {
       return 0;
     }
-/*
-#ifdef __RTP__
-    int tps = sysClkRateGet();
-    if(taskDelay((double)(usec*tps)/1000000000l) == OK)
-    {
-        return 0;
-    }
-    else
-    {
-        return -1;
-    }
-#else
-    struct timespec req = {0,usec * 1000};
-    return ::nanosleep(&req, NULL);
-#endif
-*/
   }
 
   /*!

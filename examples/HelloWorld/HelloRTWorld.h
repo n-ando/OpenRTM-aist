@@ -7,8 +7,8 @@
  * $Id$
  */
 
-#ifndef __HELLORTWORLD_h__
-#define __HELLORTWORLD_h__
+#ifndef HELLORTWORLD_H
+#define HELLORTWORLD_H
 
 
 #include <rtm/RtcBase.h>
@@ -50,5 +50,5 @@ extern "C" {
   void HelloRTWorldDelete(RtcBase* p);
   void HelloRTWorldInit(RtcManager* manager);
 };
-#endif // __HELLORTWORLD_h__
+#endif // HELLORTWORLD_H
 

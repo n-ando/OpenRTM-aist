@@ -54,7 +54,7 @@ namespace RTC
    *
    * @endif
    */
-  typedef ConfigurationSetNameListener OnUpdateCallback;
+  using OnUpdateCallback = ConfigurationSetNameListener;
 
   /*!
    * @if jp
@@ -67,7 +67,7 @@ namespace RTC
    *
    * @endif
    */
-  typedef ConfigurationParamListener OnUpdateParamCallback;
+  using OnUpdateParamCallback = ConfigurationParamListener;
 
   /*!
    * @if jp
@@ -80,7 +80,7 @@ namespace RTC
    *
    * @endif
    */
-  typedef ConfigurationSetListener OnSetConfigurationSetCallback;
+  using OnSetConfigurationSetCallback = ConfigurationSetListener;
 
   /*!
    * @if jp
@@ -93,7 +93,7 @@ namespace RTC
    *
    * @endif
    */
-  typedef ConfigurationSetListener OnAddConfigurationAddCallback;
+  using OnAddConfigurationAddCallback = ConfigurationSetListener;
 
   /*!
    * @if jp
@@ -106,7 +106,7 @@ namespace RTC
    *
    * @endif
    */
-  typedef ConfigurationSetNameListener OnRemoveConfigurationSetCallback;
+  using OnRemoveConfigurationSetCallback = ConfigurationSetNameListener;
 
   /*!
    * @if jp
@@ -119,7 +119,7 @@ namespace RTC
    *
    * @endif
    */
-  typedef ConfigurationSetNameListener OnActivateSetCallback;
+  using OnActivateSetCallback = ConfigurationSetNameListener;
 
   // forward decl
   class ConfigAdmin;
@@ -182,7 +182,7 @@ namespace RTC
      */
     ConfigBase(const char* name_, const char* def_val)
       : name(name_), default_value(def_val),
-        string_value(""), m_admin(NULL), m_callback(NULL)
+        string_value(""), m_admin(nullptr), m_callback(nullptr)
     {}
 
     /*!
@@ -200,10 +200,10 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~ConfigBase(void) {}
+    virtual ~ConfigBase() = default;
 
     // typedef of ConfigAdmin's member function
-    typedef void (ConfigAdmin::*CallbackFunc)(const char*, const char*);
+    using CallbackFunc = void (ConfigAdmin::*)(const char *, const char*);
 
     /*!
      * @if jp
@@ -378,9 +378,9 @@ namespace RTC
      *
      * @endif
      */
-    Config(const char* name, VarType& var, const char* def_val,
+    Config(const char* conf_name, VarType& var, const char* def_val,
            TransFunc trans = coil::stringTo)
-      : ConfigBase(name, def_val), m_var(var), m_trans(trans)
+      : ConfigBase(conf_name, def_val), m_var(var), m_trans(trans)
     {
     }
 
@@ -399,7 +399,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~Config(void) {}
+    ~Config() override = default;
 
     /*!
      * @if jp
@@ -424,7 +424,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual bool update(const char* val)
+    bool update(const char* val) override
     {
       if (string_value == val) { return true; }
       string_value = val;
@@ -630,7 +630,7 @@ namespace RTC
      *
      * @endif
      */
-    explicit ConfigAdmin(coil::Properties& prop);
+    explicit ConfigAdmin(coil::Properties& configsets);
 
     /*!
      * @if jp
@@ -647,7 +647,7 @@ namespace RTC
      *
      * @endif
      */
-    ~ConfigAdmin(void);
+    ~ConfigAdmin();
 
     /*!
      * @if jp
@@ -694,12 +694,12 @@ namespace RTC
                        const char* def_val,
                        bool (*trans)(VarType&, const char*) = coil::stringTo)
     {
-      if (param_name == 0) { return false; }
-      if (def_val == 0) { return false; }
+      if (param_name == nullptr) { return false; }
+      if (def_val == nullptr) { return false; }
       if (isExist(param_name)) { return false; }
       if (!trans(var, def_val)) { return false; }
       Config<VarType>* c = new Config<VarType>(param_name, var, def_val, trans);
-      m_params.push_back(c);
+      m_params.emplace_back(c);
       c->setCallback(this, &RTC::ConfigAdmin::onUpdateParam);
       update(getActiveId(), param_name);
       return true;
@@ -758,7 +758,7 @@ namespace RTC
      *
      * @endif
      */
-    void update(void);
+    void update();
 
     /*!
      * @if jp
@@ -861,7 +861,7 @@ namespace RTC
      *
      * @endif
      */
-    bool isExist(const char* name);
+    bool isExist(const char* param_name);
 
     /*!
      * @if jp
@@ -883,7 +883,7 @@ namespace RTC
      *
      * @endif
      */
-    bool isChanged(void) {return m_changed;}
+    bool isChanged() {return m_changed;}
 
     /*!
      * @if jp
@@ -925,7 +925,7 @@ namespace RTC
      *
      * @endif
      */
-    const char* getActiveId(void) {return m_activeId.c_str();}
+    const char* getActiveId() {return m_activeId.c_str();}
 
     /*!
      * @if jp
@@ -953,7 +953,7 @@ namespace RTC
      */
     bool haveConfig(const char* config_id)
     {
-      return (m_configsets.hasKey(config_id) == NULL) ? false : true;
+      return (m_configsets.hasKey(config_id) == nullptr) ? false : true;
     }
 
     /*!
@@ -976,13 +976,10 @@ namespace RTC
      *
      * @endif
      */
-    bool isActive(void)
+    bool isActive()
     {
       return m_active;
     }
-    //    const std::vector<Properties*>* getConfigurationParameterValues();
-    //    const Properties* getConfigurationParameterValue(const char* name);
-    //    bool setConfigurationParameter(const char* name, const char* value);
 
     /*!
      * @if jp
@@ -1003,7 +1000,7 @@ namespace RTC
      *
      * @endif
      */
-    const std::vector<coil::Properties*>& getConfigurationSets(void);
+    const std::vector<coil::Properties*>& getConfigurationSets();
 
     /*!
      * @if jp
@@ -1063,7 +1060,7 @@ namespace RTC
      *
      * @endif
      */
-    bool setConfigurationSetValues(const coil::Properties& configuration_set);
+    bool setConfigurationSetValues(const coil::Properties& config_set);
 
     /*!
      * @if jp
@@ -1088,7 +1085,7 @@ namespace RTC
      *
      * @endif
      */
-    const coil::Properties& getActiveConfigurationSet(void);
+    const coil::Properties& getActiveConfigurationSet();
 
     /*!
      * @if jp
@@ -1113,7 +1110,7 @@ namespace RTC
      *
      * @endif
      */
-    bool addConfigurationSet(const coil::Properties& configuration_set);
+    bool addConfigurationSet(const coil::Properties& config_set);
 
     /*!
      * @if jp
@@ -1453,7 +1450,7 @@ namespace RTC
      *
      * @endif
      */
-    void onUpdateParam(const char* config_set, const char* config_param);
+    void onUpdateParam(const char* config_param, const char* config_value);
 
     /*!
      * @if jp
@@ -1540,8 +1537,8 @@ namespace RTC
     void onActivateSet(const char* config_id);
 
   private:
-    ConfigAdmin(const ConfigAdmin& ca);
-    ConfigAdmin& operator=(const ConfigAdmin& ca);
+    ConfigAdmin(const ConfigAdmin& ca) = delete;
+    ConfigAdmin& operator=(const ConfigAdmin& ca) = delete;
 
     struct find_conf
     {
@@ -1549,7 +1546,7 @@ namespace RTC
       explicit find_conf(const char* name) : m_name(name) {}
       bool operator()(ConfigBase* conf)
       {
-        if (conf == 0) { return false; }
+        if (conf == nullptr) { return false; }
         return (m_name == conf->name);
       }
     };
@@ -1565,5 +1562,5 @@ namespace RTC
     ConfigurationListeners m_listeners;
 
   };
-};  // namespace RTC
+} // namespace RTC
 #endif  // RTC_CONFIGADMIN_H

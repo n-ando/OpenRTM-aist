@@ -35,22 +35,21 @@ namespace RTC
    */
   OutPortPushConnector::OutPortPushConnector(ConnectorInfo info,
                                              InPortConsumer* consumer,
-                                             ConnectorListeners& listeners,
+                                             ConnectorListenersBase* listeners,
                                              CdrBufferBase* buffer)
     : OutPortConnector(info, listeners),
-      m_consumer(consumer), m_publisher(0),
+      m_consumer(consumer), m_publisher(nullptr),
       m_listeners(listeners), m_buffer(buffer)
   {
-    // publisher/buffer creation. This may throw std::bad_alloc;
     m_publisher = createPublisher(info);
-    if (m_buffer == 0)
+    if (m_buffer == nullptr)
       {
         m_buffer = createBuffer(info);
       }
-    if (m_publisher == 0 || m_buffer == 0 || m_consumer == 0)
+    if (m_publisher == nullptr || m_buffer == nullptr || m_consumer == nullptr)
       { throw std::bad_alloc(); }
 
-    if (m_publisher->init(info.properties) != PORT_OK)
+    if (m_publisher->init(info.properties) != DataPortStatus::PORT_OK)
       {
         throw std::bad_alloc();
       }
@@ -59,7 +58,9 @@ namespace RTC
 
     m_publisher->setConsumer(m_consumer);
     m_publisher->setBuffer(m_buffer);
-    m_publisher->setListener(m_profile, &m_listeners);
+    m_publisher->setListener(m_profile, m_listeners);
+
+    m_marshaling_type = coil::eraseBothEndsBlank(info.properties.getProperty("marshaling_type", "cdr"));
 
     onConnect();
   }
@@ -84,19 +85,13 @@ namespace RTC
    * @brief Writing data
    * @endif
    */
-  ConnectorBase::ReturnCode
-  OutPortPushConnector::write(cdrMemoryStream& data)
+  DataPortStatus
+  OutPortPushConnector::write(RTC::ByteDataStreamBase* data)
   {
     RTC_TRACE(("write()"));
-#ifdef ORB_IS_ORBEXPRESS
-    RTC_PARANOID(("data size = %d bytes", data.cdr.size_written()));
-#elif defined(ORB_IS_TAO)
-    RTC_PARANOID(("data size = %d bytes", data.cdr.total_length()));
-#else
-    RTC_PARANOID(("data size = %d bytes", data.bufSize()));
-#endif
+    RTC_PARANOID(("data size = %d bytes", data->getDataLength()));
     
-    return m_publisher->write(data, -1, 0);
+    return m_publisher->write(data, std::chrono::seconds::zero());
   }
 
   /*!
@@ -106,37 +101,37 @@ namespace RTC
    * @brief disconnect
    * @endif
    */
-  ConnectorBase::ReturnCode OutPortPushConnector::disconnect()
+  DataPortStatus OutPortPushConnector::disconnect()
   {
     RTC_TRACE(("disconnect()"));
     // delete publisher
-    if (m_publisher != 0)
+    if (m_publisher != nullptr)
       {
         RTC_DEBUG(("delete publisher"));
         PublisherFactory& pfactory(PublisherFactory::instance());
         pfactory.deleteObject(m_publisher);
       }
-    m_publisher = 0;
+    m_publisher = nullptr;
 
     // delete consumer
-    if (m_consumer != 0)
+    if (m_consumer != nullptr)
       {
         RTC_DEBUG(("delete consumer"));
         InPortConsumerFactory& cfactory(InPortConsumerFactory::instance());
         cfactory.deleteObject(m_consumer);
       }
-    m_consumer = 0;
+    m_consumer = nullptr;
 
     // delete buffer
-    if (m_buffer != 0)
+    if (m_buffer != nullptr)
       {
         RTC_DEBUG(("delete buffer"));
         CdrBufferFactory& bfactory(CdrBufferFactory::instance());
         bfactory.deleteObject(m_buffer);
       }
-    m_buffer = 0;
+    m_buffer = nullptr;
     RTC_TRACE(("disconnect() done"));
-    return PORT_OK;
+    return DataPortStatus::PORT_OK;
   }
 
   /*!
@@ -203,8 +198,8 @@ namespace RTC
         else if (pub_type == "new") { info.properties["io_mode"] = "nonblock"; }
         else                        { info.properties["io_mode"] = pub_type;   }
       }
-    coil::normalize(pub_type);
-    return PublisherFactory::instance().createObject(pub_type);
+    return PublisherFactory::instance().createObject(
+      coil::normalize(std::move(pub_type)));
   }
 
   /*!
@@ -231,7 +226,7 @@ namespace RTC
    */
   void OutPortPushConnector::onConnect()
   {
-    m_listeners.connector_[ON_CONNECT].notify(m_profile);
+    m_listeners->notify(ConnectorListenerType::ON_CONNECT, m_profile);
   }
 
   /*!
@@ -243,7 +238,21 @@ namespace RTC
    */
   void OutPortPushConnector::onDisconnect()
   {
-    m_listeners.connector_[ON_DISCONNECT].notify(m_profile);
+    m_listeners->notify(ConnectorListenerType::ON_DISCONNECT, m_profile);
   }
-};  // namespace RTC
+
+  void OutPortPushConnector::unsubscribeInterface(const coil::Properties& prop)
+  {
+      if (m_consumer != nullptr)
+      {
+#ifndef ORB_IS_RTORB
+          SDOPackage::NVList nv;
+#else
+          SDOPackage_NVList nv;
+#endif
+          NVUtil::copyFromProperties(nv, prop);
+          m_consumer->unsubscribeInterface(nv);
+      }
+  }
+} // namespace RTC
 

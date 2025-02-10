@@ -18,7 +18,7 @@
 #include <rtm/OutPortSHMConsumer.h>
 #include <rtm/NVUtil.h>
 #include <coil/UUID.h>
-#include <coil/Guard.h>
+#include <mutex>
 
 namespace RTC
 {
@@ -30,12 +30,10 @@ namespace RTC
    * @endif
    */
   OutPortSHMConsumer::OutPortSHMConsumer()
-  : m_listeners(NULL)
   {
     rtclog.setName("OutPortSHMConsumer");
-	
   }
-    
+
   /*!
    * @if jp
    * @brief デストラクタ
@@ -61,10 +59,9 @@ namespace RTC
    * @brief Initializing configuration
    * @endif
    */
-  void OutPortSHMConsumer::init(coil::Properties& prop)
+  void OutPortSHMConsumer::init(coil::Properties&  /*prop*/)
   {
-	RTC_TRACE(("OutPortSHMConsumer::init()"));
-	
+    RTC_TRACE(("OutPortSHMConsumer::init()"));
   }
 
   /*!
@@ -88,7 +85,7 @@ namespace RTC
    * @endif
    */
   void OutPortSHMConsumer::setListener(ConnectorInfo& info,
-                                            ConnectorListeners* listeners)
+                                            ConnectorListenersBase* listeners)
   {
     RTC_TRACE(("OutPortSHMConsumer::setListener()"));
     m_listeners = listeners;
@@ -98,12 +95,11 @@ namespace RTC
   bool OutPortSHMConsumer::setObject(CORBA::Object_ptr obj)
   {
     RTC_PARANOID(("setObject()"));
-	if (CorbaConsumer< ::OpenRTM::PortSharedMemory >::setObject(obj))
-	{
-		//::OpenRTM::PortSharedMemory_var sm = m_shmem.getObjRef();
-		_ptr()->setInterface(m_shmem._this());
-		return true;
-	}
+    if (CorbaConsumer< ::OpenRTM::PortSharedMemory >::setObject(obj))
+    {
+      _ptr()->setInterface(m_shmem._this());
+      return true;
+    }
 
 
     return false;
@@ -116,56 +112,48 @@ namespace RTC
    * @brief Read data
    * @endif
    */
-  OutPortConsumer::ReturnCode
-  OutPortSHMConsumer::get(cdrMemoryStream& data)
+  DataPortStatus
+  OutPortSHMConsumer::get(ByteData& data)
   {
     RTC_TRACE(("OutPortSHMConsumer::get()"));
 
     try
       {
           
-            Guard guard(m_mutex);
+        std::lock_guard<std::mutex> guard(m_mutex);
             
 
-            ::OpenRTM::PortStatus ret(_ptr()->get());
-			if (ret == ::OpenRTM::PORT_OK)
-			{
-				m_shmem.read(data);
+        ::OpenRTM::PortStatus ret(_ptr()->get());
+        if (ret == ::OpenRTM::PORT_OK)
+          {
+            m_shmem.read(data);
 
-				RTC_DEBUG(("get() successful"));
-#ifdef ORB_IS_ORBEXPRESS
-				RTC_PARANOID(("CDR data length: %d", data.cdr.size_written()));
-#elif defined(ORB_IS_TAO)
-				RTC_PARANOID(("CDR data length: %d", data.cdr.total_length()));
-#else
-				RTC_PARANOID(("CDR data length: %d", data.bufSize()));
-#endif
+            RTC_DEBUG(("get() successful"));
+            RTC_PARANOID(("CDR data length: %d", data.getDataLength()));
 
-				onReceived(data);
-				onBufferWrite(data);
+            onReceived(data);
+            onBufferWrite(data);
 
-				if (m_buffer->full())
-				{
-					RTC_INFO(("InPort buffer is full."));
-					onBufferFull(data);
-					onReceiverFull(data);
-				}
-				m_buffer->put(data);
-				m_buffer->advanceWptr();
-				m_buffer->advanceRptr();
+            if (m_buffer->full())
+              {
+                RTC_INFO(("InPort buffer is full."));
+                onBufferFull(data);
+                onReceiverFull(data);
+              }
+            m_buffer->put(data);
+            m_buffer->advanceWptr();
+            m_buffer->advanceRptr();
 
-				return PORT_OK;
-			}
+            return DataPortStatus::PORT_OK;
+          }
           
         return convertReturn(ret, data);
       }
     catch (...)
       {
         RTC_WARN(("Exception caought from OutPort::get()."));
-        return CONNECTION_LOST;
+        return DataPortStatus::CONNECTION_LOST;
       }
-    RTC_ERROR(("OutPortSHMConsumer::get(): Never comes here."));
-    return UNKNOWN_ERROR;
   }
     
   /*!
@@ -204,7 +192,7 @@ namespace RTC
           }
         else
           {
-            RTC_ERROR(("Invalid object reference."))
+            RTC_ERROR(("Invalid object reference."));
           }
         return ret;
       }
@@ -255,51 +243,51 @@ namespace RTC
    * @brief Return codes conversion
    * @endif
    */
-  OutPortConsumer::ReturnCode
+  DataPortStatus
   OutPortSHMConsumer::convertReturn(::OpenRTM::PortStatus status,
-                                         cdrMemoryStream& data)
+                                         ByteData&  /*data*/)
   {
     switch(status)
       {
       case ::OpenRTM::PORT_OK:
         // never comes here
-        return PORT_OK;
+        return DataPortStatus::PORT_OK;
         break;
         
       case ::OpenRTM::PORT_ERROR:
         onSenderError();
-        return PORT_ERROR;
+        return DataPortStatus::PORT_ERROR;
         break;
 
       case ::OpenRTM::BUFFER_FULL:
         // never comes here
-        return BUFFER_FULL;
+        return DataPortStatus::BUFFER_FULL;
         break;
 
       case ::OpenRTM::BUFFER_EMPTY:
         onSenderEmpty();
-        return BUFFER_EMPTY;
+        return DataPortStatus::BUFFER_EMPTY;
         break;
 
       case ::OpenRTM::BUFFER_TIMEOUT:
         onSenderTimeout();
-        return BUFFER_TIMEOUT;
+        return DataPortStatus::BUFFER_TIMEOUT;
         break;
 
       case ::OpenRTM::UNKNOWN_ERROR:
         onSenderError();
-        return UNKNOWN_ERROR;
+        return DataPortStatus::UNKNOWN_ERROR;
         break;
 
       default:
         onSenderError();
-        return UNKNOWN_ERROR;
+        return DataPortStatus::UNKNOWN_ERROR;
       }
 
   }
 
 
-};     // namespace RTC
+} // namespace RTC
 
 extern "C"
 {
@@ -320,4 +308,4 @@ extern "C"
                        ::coil::Destructor< ::RTC::OutPortConsumer,
                                            ::RTC::OutPortSHMConsumer>);
   }
-};
+}

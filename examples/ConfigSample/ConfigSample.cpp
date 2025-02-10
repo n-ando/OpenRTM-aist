@@ -12,7 +12,7 @@
 
 // Module specification
 // <rtc-template block="module_spec">
-static const char* configsample_spec[] =
+static const char* const configsample_spec[] =
   {
     "implementation_id", "ConfigSample",
     "type_name",         "ConfigSample",
@@ -54,9 +54,7 @@ ConfigSample::ConfigSample(RTC::Manager* manager)
 {
 }
 
-ConfigSample::~ConfigSample()
-{
-}
+ConfigSample::~ConfigSample() = default;
 
 
 RTC::ReturnCode_t ConfigSample::onInitialize()
@@ -132,13 +130,12 @@ RTC::ReturnCode_t ConfigSample::onDeactivated(RTC::UniqueId ec_id)
 */
 
 
-RTC::ReturnCode_t ConfigSample::onExecute(RTC::UniqueId ec_id)
+RTC::ReturnCode_t ConfigSample::onExecute(RTC::UniqueId  /*ec_id*/)
 {
-  static int  maxlen(0);
-  int curlen(0);
+  static size_t maxlen(0);
+  size_t curlen(0);
   const char* c = "                    ";
-  if (true)
-    {
+  {
       std::cout << "---------------------------------------" << std::endl;
       std::cout << " Active Configuration Set: ";
       std::cout << m_configsets.getActiveId() << c << std::endl;
@@ -150,34 +147,34 @@ RTC::ReturnCode_t ConfigSample::onExecute(RTC::UniqueId ec_id)
       std::cout << "double_param1:    " << m_double_param1 << c << std::endl;
       std::cout << "str_param0:       " << m_str_param0 << c << std::endl;
       std::cout << "str_param1:       " << m_str_param1 << c << std::endl;
-      for (int i(0), len(m_vector_param0.size()); i < len; ++i)
-	{
-	  std::cout << "vector_param0[" << i << "]: ";
-	  std::cout << m_vector_param0[i] << c << std::endl;
-	}
+      for (size_t i(0), len(m_vector_param0.size()); i < len; ++i)
+	  {
+	      std::cout << "vector_param0[" << i << "]: ";
+	      std::cout << m_vector_param0[i] << c << std::endl;
+	  }
       std::cout << "---------------------------------------" << std::endl;
 
       curlen = m_vector_param0.size();
       maxlen = maxlen > curlen ? maxlen : curlen;
-      for (int i(0), len(maxlen - curlen); i < len; ++i)
-	{
-	  std::cout << c << c << std::endl;
-	}
+      for (size_t i(0), len(maxlen - curlen); i < len; ++i)
+	  {
+	      std::cout << c << c << std::endl;
+	  }
 
       std::cout << "Updating.... " << ticktack() << c << std::endl;
 
-      for (int i(0), len(11 + maxlen); i < len; ++i)
-	{
-	  std::cout << "[A\r";
-	}
+      for (size_t i(0), len(11 + maxlen); i < len; ++i)
+	  {
+	    std::cout << "[A\r";
+	  }
     }
   if (m_int_param0 > 1000 && m_int_param0 < 1000000)
     {
-      coil::usleep(m_int_param0);
+      std::this_thread::sleep_for(std::chrono::microseconds(m_int_param0));
     }
   else
     {
-      coil::usleep(100000);
+      std::this_thread::sleep_for(std::chrono::milliseconds(100));
     }
   return RTC::RTC_OK;
 }
@@ -231,6 +228,6 @@ extern "C"
                              RTC::Delete<ConfigSample>);
   }
   
-};
+}
 
 

@@ -20,11 +20,11 @@
 #ifndef COIL_SIGNAL_H
 #define COIL_SIGNAL_H
 
-#include <signal.h>
+#include <csignal>
 
 namespace coil
 {
-  typedef void (*SignalHandler)(int);
+  extern "C" using SignalHandler = void (*)(int);
 
   /*!
    * @if jp
@@ -100,13 +100,10 @@ namespace coil
     ~SignalAction();
 
   private:
-    SignalAction(const SignalAction&);
-    SignalAction& operator=(const SignalAction &);
-    SignalHandler m_handle;
-    int m_signum;
-    sigset_t* m_mask;
-    int m_flags;
-
+    SignalAction(const SignalAction&) = delete;
+    SignalAction& operator=(const SignalAction &) = delete;
+    SignalHandler m_handle{nullptr};
+    int m_signum{0};
   };
-};  // namespace coil
+} // namespace coil
 #endif  // COIL_SIGNAL_H

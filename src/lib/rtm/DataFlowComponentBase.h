@@ -102,7 +102,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~DataFlowComponentBase(void);
+    ~DataFlowComponentBase() override;
 
     /*!
      * @if jp
@@ -122,9 +122,6 @@ namespace RTC
     void init();
 
   private:
-    //    OpenRTM::DataFlowComponent_var m_ref;
-    //    PeriodicExecutionContext* m_pec;
-    //    ExecutionContextService_var m_ecref;
   };
-};  // namespace RTC
+} // namespace RTC
 #endif  // RTC_DATAFLOWCOMPONENTBASE_H

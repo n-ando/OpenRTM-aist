@@ -1,139 +1,118 @@
-cmake_minimum_required (VERSION 2.6)
+cmake_minimum_required (VERSION 3.5.1)
 
+project (${RTCSKEL_PROJECT_NAME}
+	VERSION ${RTM_VERSION}
+	LANGUAGES CXX)
 
-project (${RTCSKEL_PROJECT_NAME})
-
-
-
-
-
-
-
-macro(idl_compile idl_name)
-
-	set(ALL_IDL_FILES ${ALL_IDL_FILES} ${idl_name}.idl)
-	add_custom_command(
-		OUTPUT ${idl_name}Skel.cpp
-		#COMMAND mkdir -p include/rtm/idl
-		#COMMAND cd include/rtm/idl
-		#COMMAND ${IDL_COMPILE_COMMAND} ${IDLCOMMAND_FLAGS} -I${PROJECT_SOURCE_DIR}/idl ${PROJECT_SOURCE_DIR}/idl/${idl_name}.idl
-		COMMAND ${IDL_COMPILE_COMMAND} ${IDLCOMMAND_FLAGS} -I${PROJECT_SOURCE_DIR} ${PROJECT_SOURCE_DIR}/${idl_name}.idl
-		COMMAND python ${SKELWRAPPER_COMMAND} --include-dir="" --skel-suffix=Skel --stub-suffix=Stub --idl-file=${idl_name}.idl
-		#WORKING_DIRECTORY ${CURRENT_BINARY_DIR}/include/rtm/idl
-		WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-	)
-	
-
-	add_custom_target(${idl_name}_TGT DEPENDS ${idl_name}Skel.cpp)
-	#set(ALL_IDL_SRCS ${ALL_IDL_SRCS} idl/${idl_name}Skel.cpp)
-	#set(ALL_IDL_SRCS ${ALL_IDL_SRCS} idl/${idl_name}SKel.h)
-	set(ALL_IDL_SRCS ${ALL_IDL_SRCS} ${idl_name}Skel.cpp)
-	set(ALL_IDL_SRCS ${ALL_IDL_SRCS} ${idl_name}Skel.h)
-	#set(ALL_IDL_SRCS ${ALL_IDL_SRCS} ${idl_name}Stub.cpp)
-	#set(ALL_IDL_SRCS ${ALL_IDL_SRCS} ${idl_name}Stub.h)
-
-	set(ALL_IDL_HEADERS ${ALL_IDL_HEADERS} ${PROJECT_BINARY_DIR}/${idl_name}Skel.h)
-	set(ALL_IDL_HEADERS ${ALL_IDL_HEADERS} ${PROJECT_BINARY_DIR}/${idl_name}Stub.h)
-	#set(ALL_IDL_SRCS ${ALL_IDL_SRCS} ${idl_name}_c.cc)
-	#set(ALL_IDL_SRCS ${ALL_IDL_SRCS} ${idl_name}_c.h)
-	#set(ALL_IDL_SRCS ${ALL_IDL_SRCS} ${idl_name}.cc)
-	#set(ALL_IDL_SRCS ${ALL_IDL_SRCS} ${idl_name}.h)
-
-	if(NOT TARGET ALL_IDL_TGT)
-		add_custom_target(ALL_IDL_TGT)
-	endif(NOT TARGET ALL_IDL_TGT)
-	add_dependencies(ALL_IDL_TGT ${idl_name}_TGT)
-	#include_directories(${PROJECT_BINARY_DIR}/idl)
-endmacro()
-
-
-
-set(idls
-	BasicDataType
-	DataPort
-	DataPort_OpenRTM
-	ExtendedDataTypes
-	InterfaceDataTypes
-	Manager
-	OpenRTM
-	RTC
-	SDOPackage
-	SharedMemory
-	ExtendedFsmService
-	)
-
-
-if(OBSERVER_ENABLE)
-configure_file(${CMAKE_SOURCE_DIR}/src/ext/sdo/observer/ComponentObserver.idl ${CMAKE_CURRENT_SOURCE_DIR}/ComponentObserver.idl COPYONLY)
-set(idls ${idls} ComponentObserver)
-endif(OBSERVER_ENABLE)
-
+set(${PROJECT_NAME}_IDLS
+	BasicDataType.idl
+	DataPort.idl
+	DataPort_OpenRTM.idl
+	ExtendedDataTypes.idl
+	InterfaceDataTypes.idl
+	Manager.idl
+	OpenRTM.idl
+	RTC.idl
+	SDOPackage.idl
+	ExtendedFsmService.idl)
 
 if(CORBA MATCHES "TAO")
-	set(idls ${idls} DataPortUDP)
+	set(${PROJECT_NAME}_IDLS ${${PROJECT_NAME}_IDLS} DataPortUDP.idl)
+endif()
+if(NOT CORBA MATCHES "RtORB")
+	set(${PROJECT_NAME}_IDLS ${${PROJECT_NAME}_IDLS} SharedMemory.idl)
 endif()
 
-foreach(idl ${idls})
-	idl_compile(${idl})
-endforeach(idl)
+configure_file(${PROJECT_SOURCE_DIR}/BasicDataTypeUtil.h ${PROJECT_BINARY_DIR}/BasicDataTypeUtil.h COPYONLY)
+configure_file(${PROJECT_SOURCE_DIR}/BasicDataTypeUtil.cpp ${PROJECT_BINARY_DIR}/BasicDataTypeUtil.cpp COPYONLY)
+configure_file(${PROJECT_SOURCE_DIR}/InterfaceDataTypesUtil.h ${PROJECT_BINARY_DIR}/InterfaceDataTypesUtil.h COPYONLY)
+configure_file(${PROJECT_SOURCE_DIR}/InterfaceDataTypesUtil.cpp ${PROJECT_BINARY_DIR}/InterfaceDataTypesUtil.cpp COPYONLY)
 
+# .idl -> .cpp
+openrtm_idl_compile_all(${PROJECT_NAME} "${${PROJECT_NAME}_IDLS}" "-I${PROJECT_SOURCE_DIR}" RTM_SKEL "")
 
+# .cpp -> .o .so
 link_directories(${ORB_LINK_DIR})
-include_directories(
-		${RTM_INCLUDE_DIR}
-		${ORB_INCLUDE_DIR}
-		)
-ADD_DEFINITIONS(${ORB_C_FLAGS_LIST})
 
 
-
-
-
-#set(ALL_IDL_SRCS ${ALL_IDL_SRCS} PARENT_SCOPE)
-
-
-
-
-
-
-set_source_files_properties(${ALL_IDL_SRCS} PROPERTIES GENERATED 1)
-add_library(${RTCSKEL_PROJECT_NAME} STATIC ${ALL_IDL_SRCS} )
-
-if(NOT TARGET ALL_IDL_TGT)
-	add_custom_target(ALL_IDL_TGT)
-endif(NOT TARGET ALL_IDL_TGT)
-
-add_dependencies(${RTCSKEL_PROJECT_NAME} ALL_IDL_TGT)
-
-
-install(FILES ${ALL_IDL_FILES} DESTINATION ${INSTALL_RTM_INCLUDE_DIR}/rtm/idl COMPONENT idl)
-install(FILES ${ALL_IDL_HEADERS} DESTINATION ${INSTALL_RTM_INCLUDE_DIR}/rtm/idl COMPONENT headers)
- 
-
-
-foreach(idl ${idls})
-	if(CORBA STREQUAL "ORBexpress")
-		set(SKEL_STUB_HEADER_FILES ${SKEL_STUB_HEADER_FILES} ${PROJECT_BINARY_DIR}/${idl}.h ${PROJECT_BINARY_DIR}/${idl}_c.h)
-		set(SKEL_STUB_SOURCE_FILES ${SKEL_STUB_SOURCE_FILES} ${PROJECT_BINARY_DIR}/${idl}.cc ${PROJECT_BINARY_DIR}/${idl}_c.cc)
-	elseif(CORBA STREQUAL "omniORB")
-		set(SKEL_STUB_HEADER_FILES ${SKEL_STUB_HEADER_FILES} ${PROJECT_BINARY_DIR}/${idl}.hh)
-		set(SKEL_STUB_SOURCE_FILES ${SKEL_STUB_SOURCE_FILES} ${PROJECT_BINARY_DIR}/${idl}SK.cc ${PROJECT_BINARY_DIR}/${idl}DynSK.cc)
-	elseif(CORBA STREQUAL "TAO")
-		set(SKEL_STUB_HEADER_FILES ${SKEL_STUB_HEADER_FILES} ${PROJECT_BINARY_DIR}/${idl}S.h ${PROJECT_BINARY_DIR}/${idl}C.h ${PROJECT_BINARY_DIR}/${idl}C.inl)
-		set(SKEL_STUB_SOURCE_FILES ${SKEL_STUB_SOURCE_FILES} ${PROJECT_BINARY_DIR}/${idl}S.cpp ${PROJECT_BINARY_DIR}/${idl}C.cpp)
-	endif()
-endforeach(idl)
-
-
-install(FILES ${SKEL_STUB_HEADER_FILES} DESTINATION ${INSTALL_RTM_INCLUDE_DIR}/rtm/idl COMPONENT headers)
-
-
+if(CORBA MATCHES "RtORB")
+	foreach(IDLSOURCE ${${PROJECT_NAME}_IDLSKEL};${${PROJECT_NAME}_IDLSTUB})
+		get_filename_component(IDLNAME ${IDLSOURCE} NAME_WE)
+		add_library(${IDLNAME} SHARED ${IDLSOURCE})
+		openrtm_gencode_set_compile_props(${IDLNAME})
+		target_include_directories(${IDLNAME} SYSTEM
+			PUBLIC ${PROJECT_BINARY_DIR}
+			PRIVATE ${CMAKE_BINARY_DIR}/src/lib
+			${CMAKE_SOURCE_DIR}/src/lib
+			${ORB_INCLUDE_DIR})
+		add_dependencies(${IDLNAME} ${PROJECT_NAME}_IDLTGT)
+		install(TARGETS ${IDLNAME} LIBRARY DESTINATION ${INSTALL_RTM_LIB_DIR}
+					ARCHIVE DESTINATION ${INSTALL_RTM_LIB_DIR}
+					RUNTIME DESTINATION ${INSTALL_RTM_BIN_DIR}
+					COMPONENT openrtm)
+		set(RTM_IDL_LIBS ${RTM_IDL_LIBS};${IDLNAME})
+	endforeach()
+	set(RTM_IDL_LIBS ${RTM_IDL_LIBS} PARENT_SCOPE)
+else()
+	add_library(${PROJECT_NAME}_objlib OBJECT ${${PROJECT_NAME}_IDLSKEL})
+	openrtm_gencode_set_compile_props(${PROJECT_NAME}_objlib)
+	target_include_directories(${PROJECT_NAME}_objlib SYSTEM
+		PUBLIC ${PROJECT_BINARY_DIR}
+		PRIVATE ${CMAKE_BINARY_DIR}/src/lib
+		${CMAKE_SOURCE_DIR}/src/lib
+		${ORB_INCLUDE_DIR})
+	add_dependencies(${PROJECT_NAME}_objlib ${PROJECT_NAME}_IDLTGT)
+endif()
 
 if(WIN32)
-	set(SKEL_IDL_SRCS ${SKEL_STUB_SOURCE_FILES} PARENT_SCOPE)
-	#set(SKEL_IDL_DIR ${PROJECT_BINARY_DIR} PARENT_SCOPE)
-else(WIN32)
+	set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS OFF)
+	add_library(${PROJECT_NAME}-static STATIC $<TARGET_OBJECTS:${PROJECT_NAME}_objlib>)
+
+	set(DEF_FILE_NAME ${PROJECT_NAME}.def)
+	add_custom_command(TARGET ${PROJECT_NAME}-static
+		POST_BUILD
+		COMMAND ${Python3_EXECUTABLE} -B ${MAKE_DEF_COMMAND} $<TARGET_FILE:${PROJECT_NAME}-static> $<TARGET_FILE_BASE_NAME:${PROJECT_NAME}> ${RTM_SHORT_VERSION} ${DEF_FILE_NAME}
+		BYPRODUCTS ${DEF_FILE_NAME}
+		WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+	)
+	set_source_files_properties(${DEF_FILE_NAME} PROPERTIES GENERATED 1)
+
+	add_library(${PROJECT_NAME} SHARED
+		$<TARGET_OBJECTS:${PROJECT_NAME}_objlib>
+		${CMAKE_CURRENT_BINARY_DIR}/${DEF_FILE_NAME}
+		)
+	target_link_libraries(${PROJECT_NAME} PRIVATE
+		${ORB_LIBRARIES} ${RTM_LINKER_OPTION})
+	openrtm_set_link_props_shared(${PROJECT_NAME})
+	openrtm_set_postfix(${PROJECT_NAME})
+	add_dependencies(${PROJECT_NAME} ${PROJECT_NAME}-static)
+
+	install(TARGETS ${PROJECT_NAME} LIBRARY DESTINATION ${INSTALL_RTM_LIB_DIR}
+					ARCHIVE DESTINATION ${INSTALL_RTM_LIB_DIR}
+					RUNTIME DESTINATION ${INSTALL_RTM_LIB_DIR}
+					COMPONENT openrtm)
+	install(TARGETS ${PROJECT_NAME}-static LIBRARY DESTINATION ${INSTALL_RTM_LIB_DIR}
+					ARCHIVE DESTINATION ${INSTALL_RTM_LIB_DIR}
+					RUNTIME DESTINATION ${INSTALL_RTM_LIB_DIR}
+					COMPONENT openrtm)
 endif(WIN32)
 
+# install .idl .h
+install(FILES ${${PROJECT_NAME}_IDLS} DESTINATION ${INSTALL_RTM_INCLUDE_DIR}/rtm/idl COMPONENT idl)
+foreach(hdr ${${PROJECT_NAME}_IDLHDR})
+	install(FILES "${PROJECT_BINARY_DIR}/${hdr}" DESTINATION ${INSTALL_RTM_INCLUDE_DIR}/rtm/idl COMPONENT headers)
+endforeach()
+install(FILES ${PROJECT_SOURCE_DIR}/BasicDataTypeUtil.h DESTINATION ${INSTALL_RTM_INCLUDE_DIR}/rtm/idl COMPONENT headers)
+install(FILES ${PROJECT_SOURCE_DIR}/InterfaceDataTypesUtil.h DESTINATION ${INSTALL_RTM_INCLUDE_DIR}/rtm/idl COMPONENT headers)
 
-add_subdirectory(device_interfaces)
+foreach(idl ${${PROJECT_NAME}_IDLS})
+	string(REGEX REPLACE ".idl" "" idl ${idl})
+	if(DEPENDENCES_IDLS)
+		set(DEPENDENCES_IDLS ${DEPENDENCES_IDLS}:rtm/idl/${idl})
+	else()
+		set(DEPENDENCES_IDLS rtm/idl/${idl})
+	endif()
+endforeach()
+
+set(RTM_INCLUDE_IDLS ${DEPENDENCES_IDLS} PARENT_SCOPE)
+

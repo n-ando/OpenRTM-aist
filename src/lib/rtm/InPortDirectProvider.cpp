@@ -19,10 +19,6 @@
 
 #include <rtm/InPortDirectProvider.h>
 
-#ifdef WIN32
-#pragma warning( disable : 4290 )
-#endif
-
 namespace RTC
 {
   /*!
@@ -32,8 +28,7 @@ namespace RTC
    * @brief Constructor
    * @endif
    */
-  InPortDirectProvider::InPortDirectProvider(void)
-    : m_buffer(0)
+  InPortDirectProvider::InPortDirectProvider()
   {
     // PortProfile setting
     setInterfaceType("direct");
@@ -46,11 +41,9 @@ namespace RTC
    * @brief Destructor
    * @endif
    */
-  InPortDirectProvider::~InPortDirectProvider(void)
-  {
-  }
+  InPortDirectProvider::~InPortDirectProvider() = default;
 
-  void InPortDirectProvider::init(coil::Properties& prop)
+  void InPortDirectProvider::init(coil::Properties& /*prop*/)
   {
   }
 
@@ -62,7 +55,7 @@ namespace RTC
    * @endif
    */
   void InPortDirectProvider::
-  setBuffer(BufferBase<cdrMemoryStream>* buffer)
+  setBuffer(BufferBase<ByteData>* buffer)
   {
     m_buffer = buffer;
   }
@@ -75,7 +68,7 @@ namespace RTC
    * @endif
    */
   void InPortDirectProvider::setListener(ConnectorInfo& info,
-                                         ConnectorListeners* listeners)
+                                         ConnectorListenersBase* listeners)
   {
     m_profile = info;
     m_listeners = listeners;
@@ -93,7 +86,7 @@ namespace RTC
     m_connector = connector;
   }
 
-};     // namespace RTC
+} // namespace RTC
 
 
 extern "C"
@@ -114,4 +107,4 @@ extern "C"
                        ::coil::Destructor< ::RTC::InPortProvider,
                                            ::RTC::InPortDirectProvider>);
   }
-};
+}

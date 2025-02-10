@@ -663,7 +663,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~CorbaPort(void);
+    ~CorbaPort() override;
 
     /*!
      * @if jp
@@ -861,8 +861,8 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode_t
-    publishInterfaces(ConnectorProfile& connector_profile);
+    ReturnCode_t
+    publishInterfaces(ConnectorProfile& connector_profile) override;
 
     /*!
      * @if jp
@@ -996,8 +996,8 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode_t
-    subscribeInterfaces(const ConnectorProfile& connector_profile);
+    ReturnCode_t
+    subscribeInterfaces(const ConnectorProfile& connector_profile) override;
 
     /*!
      * @if jp
@@ -1020,8 +1020,8 @@ namespace RTC
      *
      * @endif
      */
-    virtual void
-    unsubscribeInterfaces(const ConnectorProfile& connector_profile);
+    void
+    unsubscribeInterfaces(const ConnectorProfile& connector_profile) override;
 
     //============================================================
     // Local operations
@@ -1042,7 +1042,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual void activateInterfaces();
+    void activateInterfaces() override;
 
     /*!
      * @if jp
@@ -1060,7 +1060,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual void deactivateInterfaces();
+    void deactivateInterfaces() override;
 
   protected:
     /*!
@@ -1309,7 +1309,7 @@ namespace RTC
      * @brief vector to stored Providers' information
      * @endif
      */
-    typedef std::vector<CorbaProviderHolder> CorbaProviderList;
+    using CorbaProviderList = std::vector<CorbaProviderHolder>;
     CorbaProviderList m_providers;
 
     /*!
@@ -1331,6 +1331,7 @@ namespace RTC
           m_ior("")
       {
       }
+      ~CorbaConsumerHolder();
       std::string instanceName() { return m_instanceName; }
       std::string typeName() { return m_typeName; }
       std::string descriptor() { return m_typeName + "." + m_instanceName; }
@@ -1361,7 +1362,7 @@ namespace RTC
       CorbaConsumerBase* m_consumer;
       std::string m_ior;
     };
-    typedef std::vector<CorbaConsumerHolder> CorbaConsumerList;
+    using CorbaConsumerList = std::vector<CorbaConsumerHolder>;
     CorbaConsumerList m_consumers;
 
     // functors
@@ -1381,17 +1382,16 @@ namespace RTC
 
       void operator()(const SDOPackage::NameValue& nv)
       {
-        for (CorbaConsumerList::iterator it(m_consumers.begin());
-             it != m_consumers.end(); ++it)
+        for (auto & consumer : m_consumers)
           {
-            if (it->descriptor() == (const char*)nv.name)
+            if (consumer.descriptor() == static_cast<const char*>(nv.name))
               {
-                it->releaseObject();
+                consumer.releaseObject();
               }
           }
       }
       CorbaConsumerList& m_consumers;
     };
   };
-};  // namespace RTC
+} // namespace RTC
 #endif  // RTC_CORBAPORT_H

@@ -23,14 +23,14 @@
 namespace coil
 {
   class PeriodicTask;
-};
+} // namespace coil
 namespace RTC
 {
-  typedef coil::PeriodicTask DefaultPeriodicTask;
-};
+  using DefaultPeriodicTask = coil::PeriodicTask;
+} // namespace RTC
 extern "C"
 {
   void DefaultPeriodicTaskInit();
-};
+}
 
 #endif  // RTC_DEFAULTPERIODICTASK_H

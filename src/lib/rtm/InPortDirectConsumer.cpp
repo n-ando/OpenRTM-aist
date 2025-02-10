@@ -30,7 +30,7 @@ namespace RTC
    * @param buffer The buffer object that is attached to this Consumer
    * @endif
    */
-  InPortDirectConsumer::InPortDirectConsumer(void)
+  InPortDirectConsumer::InPortDirectConsumer()
     : rtclog("InPortDirectConsumer")
   {
   }
@@ -42,7 +42,7 @@ namespace RTC
    * @brief Destructor
    * @endif
    */
-  InPortDirectConsumer::~InPortDirectConsumer(void)
+  InPortDirectConsumer::~InPortDirectConsumer()
   {
     RTC_PARANOID(("~InPortDirectConsumer()"));
   }
@@ -66,11 +66,11 @@ namespace RTC
    * @brief Write data into the buffer
    * @endif
    */
-  InPortConsumer::ReturnCode InPortDirectConsumer::
-	  put(cdrMemoryStream& data)
+  DataPortStatus InPortDirectConsumer::
+     put(ByteData&  /*data*/)
   {
     RTC_PARANOID(("put(): never called."));
-    return UNKNOWN_ERROR;
+    return DataPortStatus::UNKNOWN_ERROR;
   }
 
   /*!
@@ -81,7 +81,7 @@ namespace RTC
    * @endif
    */
   void InPortDirectConsumer::
-  publishInterfaceProfile(SDOPackage::NVList& properties)
+  publishInterfaceProfile(SDOPackage::NVList&  /*properties*/)
   {
     return;
   }
@@ -94,7 +94,7 @@ namespace RTC
    * @endif
    */
   bool InPortDirectConsumer::
-  subscribeInterface(const SDOPackage::NVList& properties)
+  subscribeInterface(const SDOPackage::NVList&  /*properties*/)
   {
     RTC_TRACE(("subscribeInterface(): do nothing"));
     return true;
@@ -108,11 +108,11 @@ namespace RTC
    * @endif
    */
   void InPortDirectConsumer::
-  unsubscribeInterface(const SDOPackage::NVList& properties)
+  unsubscribeInterface(const SDOPackage::NVList&  /*properties*/)
   {
     RTC_TRACE(("unsubscribeInterface(): do nothing"));
   }
-};     // namespace RTC
+} // namespace RTC
 
 extern "C"
 {
@@ -132,4 +132,4 @@ extern "C"
                        ::coil::Destructor< ::RTC::InPortConsumer,
                                            ::RTC::InPortDirectConsumer>);
   }
-};
+}

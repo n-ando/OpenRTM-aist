@@ -34,11 +34,11 @@ class ConsoleIn
 {
  public:
   ConsoleIn(RTC::Manager* manager);
-  ~ConsoleIn();
+  ~ConsoleIn() override;
 
   // The initialize action (on CREATED->ALIVE transition)
   // formaer rtc_init_entry() 
-  virtual RTC::ReturnCode_t onInitialize();
+  RTC::ReturnCode_t onInitialize() override;
 
   // The finalize action (on ALIVE->END transition)
   // formaer rtc_exiting_entry()
@@ -62,7 +62,7 @@ class ConsoleIn
 
   // The execution action that is invoked periodically
   // former rtc_active_do()
-  virtual RTC::ReturnCode_t onExecute(RTC::UniqueId ec_id);
+  RTC::ReturnCode_t onExecute(RTC::UniqueId ec_id) override;
 
   // The aborting action when main logic error occurred.
   // former rtc_aborting_entry()
@@ -122,6 +122,6 @@ class ConsoleIn
 extern "C"
 {
   DLL_EXPORT void ConsoleInInit(RTC::Manager* manager);
-};
+}
 
 #endif // CONSOLEIN_H

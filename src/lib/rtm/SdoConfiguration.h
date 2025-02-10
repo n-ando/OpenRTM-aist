@@ -22,8 +22,7 @@
 
 // CORBA header include
 #include <rtm/RTC.h>
-#include <coil/Mutex.h>
-#include <coil/Guard.h>
+#include <mutex>
 
 // local includes
 #include <rtm/idl/SDOPackageSkel.h>
@@ -50,10 +49,6 @@
  *
  * @endif
  */
-
-#ifdef WIN32
-#pragma warning( disable : 4290 )
-#endif
 
 namespace SDOPackage
 {
@@ -155,8 +150,6 @@ namespace SDOPackage
     : public virtual POA_SDOPackage::Configuration,
       public virtual PortableServer::RefCountServantBase
   {
-    typedef coil::Mutex Mutex;
-    typedef coil::Guard<Mutex> Guard;
   public:
     /*!
      * @if jp
@@ -177,7 +170,7 @@ namespace SDOPackage
      *
      * @endif
      */
-    Configuration_impl(RTC::ConfigAdmin& configAdmin,
+    Configuration_impl(RTC::ConfigAdmin& configsets,
                        RTC::SdoServiceAdmin& sdoServiceAdmin);
 
     /*!
@@ -195,7 +188,7 @@ namespace SDOPackage
 
      * @endif
      */
-    virtual ~Configuration_impl(void);
+    ~Configuration_impl() override;
 
     //============================================================
     //
@@ -242,9 +235,7 @@ namespace SDOPackage
      *                          completely due to some internal error.
      * @endif
      */
-    virtual CORBA::Boolean set_device_profile(const DeviceProfile& dProfile)
-      throw (CORBA::SystemException,
-             InvalidParameter, NotAvailable, InternalError);
+    CORBA::Boolean set_device_profile(const DeviceProfile& dProfile) override;
 
     /*!
      * @if jp
@@ -291,9 +282,7 @@ namespace SDOPackage
      *                          completely due to some internal error.
      * @endif
      */
-    virtual CORBA::Boolean add_service_profile(const ServiceProfile& sProfile)
-      throw (CORBA::SystemException,
-             InvalidParameter, NotAvailable, InternalError);
+    CORBA::Boolean add_service_profile(const ServiceProfile& sProfile) override;
 
     /*!
      * @if jp
@@ -330,9 +319,7 @@ namespace SDOPackage
      *                          completely due to some internal error.
      * @endif
      */
-    virtual CORBA::Boolean add_organization(Organization_ptr org)
-      throw (CORBA::SystemException,
-             InvalidParameter, NotAvailable, InternalError);
+    CORBA::Boolean add_organization(Organization_ptr org) override;
 
     /*!
      * @if jp
@@ -376,9 +363,7 @@ namespace SDOPackage
      *                          completely due to some internal error.
      * @endif
      */
-    virtual CORBA::Boolean remove_service_profile(const char* id)
-      throw (CORBA::SystemException,
-             InvalidParameter, NotAvailable, InternalError);
+    CORBA::Boolean remove_service_profile(const char* id) override;
 
     /*!
      * @if jp
@@ -419,9 +404,7 @@ namespace SDOPackage
      *                          completely due to some internal error.
      * @endif
      */
-    virtual CORBA::Boolean remove_organization(const char* organization_id)
-      throw (CORBA::SystemException,
-             InvalidParameter, NotAvailable, InternalError);
+    CORBA::Boolean remove_organization(const char* organization_id) override;
 
     /*!
      * @if jp
@@ -455,9 +438,7 @@ namespace SDOPackage
      *                          completely due to some internal error.
      * @endif
      */
-    virtual ParameterList* get_configuration_parameters()
-      throw (CORBA::SystemException,
-             NotAvailable, InternalError);
+    ParameterList* get_configuration_parameters() override;
 
     /*!
      * @if jp
@@ -489,9 +470,7 @@ namespace SDOPackage
      *                          completely due to some internal error.
      * @endif
      */
-    virtual NVList* get_configuration_parameter_values()
-      throw (CORBA::SystemException,
-             NotAvailable, InternalError);
+    NVList* get_configuration_parameter_values() override;
 
     /*!
      * @if jp
@@ -533,9 +512,7 @@ namespace SDOPackage
      *                          completely due to some internal error.
      * @endif
      */
-    virtual CORBA::Any* get_configuration_parameter_value(const char* name)
-      throw (CORBA::SystemException,
-             InvalidParameter, NotAvailable, InternalError);
+    CORBA::Any* get_configuration_parameter_value(const char* name) override;
 
     /*!
      * @if jp
@@ -579,10 +556,8 @@ namespace SDOPackage
      *                          completely due to some internal error.
      * @endif
      */
-    virtual CORBA::Boolean set_configuration_parameter(const char* name,
-                                                       const CORBA::Any& value)
-      throw (CORBA::SystemException,
-             InvalidParameter, NotAvailable, InternalError);
+    CORBA::Boolean set_configuration_parameter(const char* name,
+                                                       const CORBA::Any& value) override;
 
     /*!
      * @if jp
@@ -618,9 +593,7 @@ namespace SDOPackage
      *                          completely due to some internal error.
      * @endif
      */
-    virtual ConfigurationSetList* get_configuration_sets()
-      throw (CORBA::SystemException,
-             NotAvailable, InternalError);
+    ConfigurationSetList* get_configuration_sets() override;
 
     /*!
      * @if jp
@@ -662,9 +635,7 @@ namespace SDOPackage
      *                          completely due to some internal error.
      * @endif
      */
-    virtual ConfigurationSet* get_configuration_set(const char* config_id)
-      throw (CORBA::SystemException,
-             NotAvailable, InternalError);
+    ConfigurationSet* get_configuration_set(const char* id) override;
 
     /*!
      * @if jp
@@ -714,9 +685,7 @@ namespace SDOPackage
      *                          completely due to some internal error.
      * @endif
      */
-    virtual ConfigurationSet* get_active_configuration_set()
-      throw (CORBA::SystemException,
-             NotAvailable, InternalError);
+    ConfigurationSet* get_active_configuration_set() override;
 
     /*!
      * @if jp
@@ -759,10 +728,8 @@ namespace SDOPackage
      *                          completely due to some internal error.
      * @endif
      */
-    virtual CORBA::Boolean
-    add_configuration_set(const ConfigurationSet& configuration_set)
-      throw (CORBA::SystemException,
-             InvalidParameter, NotAvailable, InternalError);
+    CORBA::Boolean
+    add_configuration_set(const ConfigurationSet& configuration_set) override;
 
     /*!
      * @if jp
@@ -815,10 +782,8 @@ namespace SDOPackage
      *                          completely due to some internal error.
      * @endif
      */
-    virtual CORBA::Boolean
-    set_configuration_set_values(const ConfigurationSet& configuration_set)
-      throw (CORBA::SystemException,
-             InvalidParameter, NotAvailable, InternalError);
+    CORBA::Boolean
+    set_configuration_set_values(const ConfigurationSet& configuration_set) override;
 
     /*!
      * @if jp
@@ -858,9 +823,7 @@ namespace SDOPackage
      *                          completely due to some internal error.
      * @endif
      */
-    virtual CORBA::Boolean remove_configuration_set(const char* config_id)
-      throw (CORBA::SystemException,
-             InvalidParameter, NotAvailable, InternalError);
+    CORBA::Boolean remove_configuration_set(const char* id) override;
 
     /*!
      * @if jp
@@ -912,9 +875,7 @@ namespace SDOPackage
      *                          completely due to some internal error.
      * @endif
      */
-    virtual CORBA::Boolean activate_configuration_set(const char* config_id)
-      throw (CORBA::SystemException,
-             InvalidParameter, NotAvailable, InternalError);
+    CORBA::Boolean activate_configuration_set(const char* id) override;
 
     // end of CORBA interface definition
     //============================================================
@@ -959,7 +920,7 @@ namespace SDOPackage
      *
      * @endif
      */
-    const DeviceProfile getDeviceProfile();
+    DeviceProfile getDeviceProfile();
 
     /*!
      * @if jp
@@ -980,7 +941,7 @@ namespace SDOPackage
      *
      * @endif
      */
-    const OrganizationList getOrganizations();
+    OrganizationList getOrganizations();
 
   protected:
     ::RTC::Logger rtclog;
@@ -1003,7 +964,7 @@ namespace SDOPackage
      *
      * @endif
      */
-    const std::string getUUID() const;
+    static std::string getUUID() ;
 
     /*!
      * @if jp
@@ -1022,7 +983,7 @@ namespace SDOPackage
      * @endif
      */
     DeviceProfile m_deviceProfile;
-    Mutex m_dprofile_mutex;
+    std::mutex m_dprofile_mutex;
 
     /*!
      * @if jp
@@ -1086,7 +1047,7 @@ namespace SDOPackage
      * @endif
      */
     ParameterList m_parameters;
-    Mutex m_params_mutex;
+    std::mutex m_params_mutex;
 
     /*!
      * @if jp
@@ -1104,7 +1065,7 @@ namespace SDOPackage
       };
     */
     RTC::ConfigAdmin& m_configsets;
-    Mutex m_config_mutex;
+    std::mutex m_config_mutex;
 
     /*!
      * @if jp
@@ -1114,7 +1075,7 @@ namespace SDOPackage
      * @endif
      */
     RTC::SdoServiceAdmin& m_sdoservice;
-    Mutex m_sdoservice_mutex;
+    std::mutex m_sdoservice_mutex;
 
     /*!
      * @if jp
@@ -1124,7 +1085,7 @@ namespace SDOPackage
      * @endif
      */
     OrganizationList m_organizations;
-    Mutex m_org_mutex;
+    std::mutex m_org_mutex;
 
     /*!
      * @if jp
@@ -1183,10 +1144,6 @@ namespace SDOPackage
       const std::string m_id;
     };
   };  // class Configuration_impl
-};  // namespace SDOPackage
-
-#ifdef WIN32
-#pragma warning( default : 4290 )
-#endif
+} // namespace SDOPackage
 
 #endif  // RTC_SDOCONFIGURATION_H

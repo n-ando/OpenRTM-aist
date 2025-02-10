@@ -19,7 +19,7 @@
 #include <rtm/RTC.h>
 #include <rtm/PortAdmin.h>
 #include <rtm/CORBA_SeqUtil.h>
-#include <string.h>
+#include <cstring>
 #include <functional>
 #include <vector>
 
@@ -58,7 +58,6 @@ namespace RTC
         {
           return false;
         }
-      return false;
     }
     const std::string m_name;
   };
@@ -110,6 +109,8 @@ namespace RTC
   {
   }
 
+  PortAdmin::~PortAdmin() = default; // No inline for gcc warning, too big
+
   /*!
    * @if jp
    * @brief PortServiceList の取得
@@ -136,9 +137,7 @@ namespace RTC
 
 #ifndef ORB_IS_RTORB
     PortProfileList port_profs(0);
-    //    port_prof_collect p(port_profs);
     port_prof_collect2 p(port_profs);
-    //    m_portServants.for_each(p);
     ::CORBA_SeqUtil::for_each(m_portRefs, p);
 #else  // ORB_IS_RTORB
     CORBA::ULong len = m_portRefs.length();
@@ -174,11 +173,11 @@ namespace RTC
     CORBA::Long index;
     index = CORBA_SeqUtil::find(m_portRefs, find_port_name(port_name));
     if (index >= 0)
-      {  // throw NotFound(port_name);
+      {
 #ifdef ORB_IS_ORBEXPRESS
-	return m_portRefs[index].in();
+        return RTC::PortService::_duplicate(m_portRefs[index].in());
 #else
-	return m_portRefs[index];
+        return RTC::PortService::_duplicate(m_portRefs[index]);
 #endif
       }
     return RTC::PortService::_nil();
@@ -212,8 +211,7 @@ namespace RTC
       }
 
     // Store Port's ref to PortServiceList
-    CORBA_SeqUtil::push_back(m_portRefs,
-                             RTC::PortService::_duplicate(port.getPortRef()));
+    CORBA_SeqUtil::push_back(m_portRefs, port.getPortRef());
 
     // Store Port servant
     return m_portServants.registerObject(&port);
@@ -279,7 +277,6 @@ namespace RTC
     try
       {
         port.disconnect_all();
-        // port.shutdown();
 
         const char* tmp(port.getProfile().name);
         CORBA_SeqUtil::erase_if(m_portRefs, find_port_name(tmp));
@@ -288,7 +285,7 @@ namespace RTC
         m_pPOA->deactivate_object(oid);
         port.setPortRef(RTC::PortService::_nil());
 
-        return m_portServants.unregisterObject(tmp) == NULL ? false : true;
+        return m_portServants.unregisterObject(tmp) != nullptr;
       }
     catch (...)
       {
@@ -334,7 +331,7 @@ namespace RTC
    */
   void PortAdmin::deletePortByName(const char* port_name)
   {
-    if (!port_name) return;
+    if (port_name == nullptr) return;
     PortBase& p(*m_portServants.find(port_name));
     removePort(p);
   }
@@ -350,9 +347,9 @@ namespace RTC
   {
     std::vector<PortBase*> ports;
     ports = m_portServants.getObjects();
-    for (int i(0), len(ports.size()); i < len; ++i)
+    for (auto & port : ports)
       {
-        ports[i]->activateInterfaces();
+        port->activateInterfaces();
       }
   }
 
@@ -367,9 +364,9 @@ namespace RTC
   {
     std::vector<PortBase*> ports;
     ports = m_portServants.getObjects();
-    for (int i(0), len(ports.size()); i < len; ++i)
+    for (auto & port : ports)
       {
-        ports[i]->deactivateInterfaces();
+        port->deactivateInterfaces();
       }
   }
 
@@ -387,4 +384,4 @@ namespace RTC
     ports = m_portServants.getObjects();
     for_each(ports.begin(), ports.end(), del_port(this));
   }
-};  // namespace RTC
+} // namespace RTC

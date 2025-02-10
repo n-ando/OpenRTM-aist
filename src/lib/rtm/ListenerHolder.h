@@ -19,9 +19,7 @@
 #ifndef RTM_UTIL_LISTENERHOLDER_H
 #define RTM_UTIL_LISTENERHOLDER_H
 
-#include <coil/Mutex.h>
-#include <coil/Guard.h>
-#include <coil/NonCopyable.h>
+#include <mutex>
 
 #include <vector>
 #include <utility>
@@ -94,7 +92,7 @@ namespace util
    *   // 関数呼び出し演算子のコールバック関数の場合
    *   virtual void operator()(std::string strarg)
    *   {
-   *     Gurad gurad(m_mutex);
+   *     Gurad guard(m_mutex);
    *     for (int i(0), len(m_listeners.size()); i < len; ++i)
    *     {
    *       m_listeners[i].first->operator()(strarg);
@@ -103,7 +101,7 @@ namespace util
    *
    *   virtual void onEvent0(const char* arg0)
    *   {
-   *     Gurad gurad(m_mutex);
+   *     Gurad guard(m_mutex);
    *     for (int i(0), len(m_listeners.size()); i < len; ++i)
    *     {
    *       m_listeners[i].first->onEvent(arg0);
@@ -116,7 +114,7 @@ namespace util
    * std::pair<ListenerClass, bool> として定義されており、firstが
    * Listenerオブジェクトへのポインタ、secondが自動削除フラグである。し
    * たがって、リスナオブジェクトへアクセスする場合にはfirstを使用する。
-   * マルチスレッド環境で利用することが想定される場合は、Guard
+   * マルチスレッド環境で利用することが想定される場合は、std::lock_guard
    * guard(m_mutex) によるロックを忘れずに行うこと。
    *
    * @section ListenerHolder実装クラスの利用
@@ -143,13 +141,13 @@ namespace util
    */
   template <typename ListenerClass>
   class ListenerHolder
-    : public coil::NonCopyable
   {
   public:
-    typedef coil::Guard<coil::Mutex> Guard;
-    typedef std::pair<ListenerClass*, bool> Entry;
-    typedef std::vector<Entry> EntryList;
-    typedef typename EntryList::iterator EntryIterator;
+    using Entry = std::pair<ListenerClass*, bool>;
+    using EntryList = std::vector<Entry>;
+    using EntryIterator = typename EntryList::iterator;
+    ListenerHolder(ListenerHolder const&) = delete;
+    ListenerHolder& operator=(ListenerHolder const&) = delete;
 
     /*!
      * @if jp
@@ -158,9 +156,7 @@ namespace util
      * @brief ListenerHolder class ctor
      * @endif
      */
-    ListenerHolder()
-    {
-    }
+    ListenerHolder() = default;
 
     /*!
      * @if jp
@@ -171,14 +167,13 @@ namespace util
      */
     virtual ~ListenerHolder()
     {
-      Guard guard(m_mutex);
-      EntryIterator it(m_listeners.begin());
+      std::lock_guard<std::mutex> guard(m_mutex);
 
-      for (; it != m_listeners.end(); ++it)
+      for(auto & listener : m_listeners)
         {
-          if ((*it).second)
+          if (listener.second)
             {
-              delete (*it).first;
+              delete listener.first;
             }
         }
       m_listeners.clear();
@@ -194,8 +189,8 @@ namespace util
     virtual void addListener(ListenerClass* listener,
                      bool autoclean)
     {
-      Guard guard(m_mutex);
-      m_listeners.push_back(Entry(listener, autoclean));
+      std::lock_guard<std::mutex> guard(m_mutex);
+      m_listeners.emplace_back(listener, autoclean);
     }
 
     /*!
@@ -207,7 +202,7 @@ namespace util
      */
     virtual void removeListener(ListenerClass* listener)
     {
-      Guard guard(m_mutex);
+      std::lock_guard<std::mutex> guard(m_mutex);
       EntryIterator it(m_listeners.begin());
 
       for (; it != m_listeners.end(); ++it)
@@ -232,7 +227,7 @@ namespace util
      * @brief Mutex
      * @endif
      */
-    coil::Mutex m_mutex;
+    std::mutex m_mutex;
 
     /*!
      * @if jp
@@ -243,16 +238,16 @@ namespace util
      */
     EntryList m_listeners;
   };
-};  // namespace util
-};  // namespace RTM
+} // namespace util
+} // namespace RTM
 
-#define LISTENERHOLDER_CALLBACK(func, args)               \
-  {                                                       \
-    Guard guard(m_mutex);                                 \
-    for (int i(0), len(m_listeners.size()); i < len; ++i) \
-      {                                                   \
-        m_listeners[i].first->func args;                  \
-      }                                                   \
-  }
+#define LISTENERHOLDER_CALLBACK(func, args)                           \
+  do {                                                                \
+    std::lock_guard<std::mutex> guard(m_mutex);                       \
+    for (auto&& listener : m_listeners)                               \
+      {                                                               \
+        listener.first->func args;                                    \
+      }                                                               \
+  } while(0)
 
 #endif  // RTM_UITL_LISTENERHOLDER_H

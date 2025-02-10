@@ -25,15 +25,17 @@
 #include <rtm/RTC.h>
 #include <rtm/CdrBufferBase.h>
 #include <rtm/DataPortStatus.h>
+#include <rtm/ByteDataStreamBase.h>
+
 
 namespace coil
 {
   class Properties;
-}  // namespace coil
+} // namespace coil
 namespace RTC
 {
   class InPortConsumer;
-  class ConnectorListeners;
+  class ConnectorListenersBase;
   class ConnectorInfo;
 
   /*!
@@ -61,10 +63,8 @@ namespace RTC
    * @endif
    */
   class PublisherBase
-    : public DataPortStatus
   {
   public:
-    DATAPORTSTATUS_ENUM
     /*!
      * @if jp
      *
@@ -76,7 +76,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~PublisherBase(void) {}
+    virtual ~PublisherBase() = default;
 
     /*!
      * @if jp
@@ -105,7 +105,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode init(coil::Properties& prop) = 0;
+    virtual DataPortStatus init(coil::Properties& prop) = 0;
 
     /*!
      * @if jp
@@ -116,7 +116,7 @@ namespace RTC
      * それ以外の場合は、PORT_OK が返される。
      *
      * @param consumer Consumer へのポインタ
-     * @return ReturnCode PORT_OK 正常終了
+     * @return DataPortStatus PORT_OK 正常終了
      *                    INVALID_ARGS 引数に不正な値が含まれている
      *
      * @else
@@ -127,12 +127,12 @@ namespace RTC
      * returned.
      *
      * @param consumer A pointer to a consumer object.
-     * @return ReturnCode PORT_OK normal return
+     * @return DataPortStatus PORT_OK normal return
      *                    INVALID_ARGS given argument has invalid value
      *
      * @endif
      */
-    virtual ReturnCode setConsumer(InPortConsumer* consumer) = 0;
+    virtual DataPortStatus setConsumer(InPortConsumer* consumer) = 0;
 
     /*!
      * @if jp
@@ -143,7 +143,7 @@ namespace RTC
      * それ以外の場合は、PORT_OK が返される。
      *
      * @param buffer CDR buffer へのポインタ
-     * @return ReturnCode PORT_OK 正常終了
+     * @return DataPortStatus PORT_OK 正常終了
      *                    INVALID_ARGS 引数に不正な値が含まれている
      *
      * @else
@@ -154,12 +154,12 @@ namespace RTC
      * returned.
      *
      * @param buffer A pointer to a CDR buffer object.
-     * @return ReturnCode PORT_OK normal return
+     * @return DataPortStatus PORT_OK normal return
      *                    INVALID_ARGS given argument has invalid value
      *
      * @endif
      */
-    virtual ReturnCode setBuffer(BufferBase<cdrMemoryStream>* buffer) = 0;
+    virtual DataPortStatus setBuffer(BufferBase<ByteData>* buffer) = 0;
 
     /*!
      * @if jp
@@ -194,8 +194,8 @@ namespace RTC
      *         INVALID_ARGS Invalid arguments
      * @endif
      */
-    virtual ReturnCode setListener(ConnectorInfo& info,
-                                   ConnectorListeners* listeners) = 0;
+    virtual DataPortStatus setListener(ConnectorInfo& info,
+                                   ConnectorListenersBase* listeners) = 0;
 
     /*!
      * @if jp
@@ -214,8 +214,7 @@ namespace RTC
      *
      *
      * @param data 書き込むデータ
-     * @param sec タイムアウト時間
-     * @param nsec タイムアウト時間
+     * @param timeout タイムアウト時間
      *
      * @return PORT_OK             正常終了
      *         PRECONDITION_NO_MET consumer, buffer, listener等が適切に設定
@@ -242,8 +241,7 @@ namespace RTC
      * In other cases, PROT_ERROR will be returned.
      *
      * @param data Data to be wrote to the buffer
-     * @param sec Timeout time in unit seconds
-     * @param nsec Timeout time in unit nano-seconds
+     * @param timeout Timeout time in unit nano-seconds
      * @return PORT_OK             Normal return
      *         PRECONDITION_NO_MET Precondition does not met. A consumer,
      *                             a buffer, listenes are not set properly.
@@ -253,9 +251,8 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode write(cdrMemoryStream& data,
-                             unsigned long sec,
-                             unsigned long usec) = 0;
+    virtual DataPortStatus write(ByteDataStreamBase* data,
+                             std::chrono::nanoseconds timeout) = 0;
 
     /*!
      * @if jp
@@ -311,7 +308,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode activate() = 0;
+    virtual DataPortStatus activate() = 0;
 
     /*!
      * @if jp
@@ -338,7 +335,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode deactivate() = 0;
+    virtual DataPortStatus deactivate() = 0;
 
     /*!
      * @if jp
@@ -361,10 +358,13 @@ namespace RTC
     virtual void release(){}
   };
 
-  typedef coil::GlobalFactory<PublisherBase> PublisherFactory;
+  using PublisherFactory = coil::GlobalFactory<PublisherBase>;
+} // namespace RTC
 
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
-  EXTERN template class DLL_PLUGIN coil::GlobalFactory<PublisherBase>;
+EXTERN template class DLL_PLUGIN coil::GlobalFactory<RTC::PublisherBase>;
+#elif defined(__GNUC__)
+EXTERN template class coil::GlobalFactory<RTC::PublisherBase>;
 #endif
-};  // namespace RTC
+
 #endif  // RTC_PUBLISHERBASE_H

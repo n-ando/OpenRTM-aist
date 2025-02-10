@@ -26,10 +26,6 @@
 #include <rtm/ConnectorListener.h>
 #include <rtm/ConnectorBase.h>
 
-#ifdef WIN32
-#pragma warning( disable : 4290 )
-#endif
-
 namespace RTC
 {
   /*!
@@ -86,7 +82,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~InPortSHMProvider();
+    ~InPortSHMProvider() override;
 
     /*!
      * @if jp
@@ -104,7 +100,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual void init(coil::Properties& prop);
+    void init(coil::Properties& prop) override;
 
     /*!
      * @if jp
@@ -121,7 +117,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual void setBuffer(BufferBase<cdrMemoryStream>* buffer);
+    void setBuffer(BufferBase<ByteData>* buffer) override;
 
     /*!
      * @if jp
@@ -143,26 +139,26 @@ namespace RTC
      *
      * @endif
      */
-    virtual void setListener(ConnectorInfo& info,
-                             ConnectorListeners* listeners);
-	/*!
-	* @if jp
-	* @brief Connectorを設定する。
-	*
-	*
-	*
-	* @param connector OutPortConnector
-	*
-	* @else
-	* @brief set Connector
-	*
-	* 
-	*
-	* @param connector OutPortConnector
-	*
-	* @endif
-	*/
-	virtual void setConnector(InPortConnector* connector);
+    void setListener(ConnectorInfo& info,
+                             ConnectorListenersBase* listeners) override;
+    /*!
+     * @if jp
+     * @brief Connectorを設定する。
+     *
+     *
+     *
+     * @param connector OutPortConnector
+     *
+     * @else
+     * @brief set Connector
+     *
+     * 
+     *
+     * @param connector OutPortConnector
+     *
+     * @endif
+     */
+    void setConnector(InPortConnector* connector) override;
 
     /*!
      * @if jp
@@ -181,73 +177,65 @@ namespace RTC
      *
      * @endif
      */
-    virtual ::OpenRTM::PortStatus put()
-      throw (CORBA::SystemException);
+    ::OpenRTM::PortStatus put() override;
     
   private:
 
     ::OpenRTM::PortStatus
-    convertReturn(BufferStatus::Enum status,
-                  cdrMemoryStream& data);
+    convertReturn(BufferStatus status,
+                  ByteData& data);
 
     
-    inline void onBufferWrite(cdrMemoryStream& data)
+    inline void onBufferWrite(ByteData& data)
     {
-      m_listeners->
-        connectorData_[ON_BUFFER_WRITE].notify(m_profile, data);
+      m_listeners->notifyIn(ConnectorDataListenerType::ON_BUFFER_WRITE, m_profile, data);
     }
 
-    inline void onBufferFull(cdrMemoryStream& data)
+    inline void onBufferFull(ByteData& data)
     {
-      m_listeners->
-        connectorData_[ON_BUFFER_FULL].notify(m_profile, data);
+      m_listeners->notifyIn(ConnectorDataListenerType::ON_BUFFER_FULL, m_profile, data);
     }
 
-    inline void onBufferWriteTimeout(cdrMemoryStream& data)
+    inline void onBufferWriteTimeout(ByteData& data)
     {
-      m_listeners->
-        connectorData_[ON_BUFFER_WRITE_TIMEOUT].notify(m_profile, data);
+      m_listeners->notifyIn(ConnectorDataListenerType::ON_BUFFER_WRITE_TIMEOUT, m_profile, data);
     }
 
-    inline void onBufferWriteOverwrite(cdrMemoryStream& data)
+    inline void onBufferWriteOverwrite(ByteData& data)
     {
-      m_listeners->
-        connectorData_[ON_BUFFER_OVERWRITE].notify(m_profile, data);
+      m_listeners->notifyIn(ConnectorDataListenerType::ON_BUFFER_OVERWRITE, m_profile, data);
     }
 
-    inline void onReceived(cdrMemoryStream& data)
+    inline void onReceived(ByteData& data)
     {
-      m_listeners->
-        connectorData_[ON_RECEIVED].notify(m_profile, data);
+      m_listeners->notifyIn(ConnectorDataListenerType::ON_RECEIVED, m_profile, data);
     }
 
-    inline void onReceiverFull(cdrMemoryStream& data)
+    inline void onReceiverFull(ByteData& data)
     {
-      m_listeners->
-        connectorData_[ON_RECEIVER_FULL].notify(m_profile, data);
+      m_listeners->notifyIn(ConnectorDataListenerType::ON_RECEIVER_FULL, m_profile, data);
     }
 
-    inline void onReceiverTimeout(cdrMemoryStream& data)
+    inline void onReceiverTimeout(ByteData& data)
     {
-      m_listeners->
-        connectorData_[ON_RECEIVER_TIMEOUT].notify(m_profile, data);
+      m_listeners->notifyIn(ConnectorDataListenerType::ON_RECEIVER_TIMEOUT, m_profile, data);
     }
 
-    inline void onReceiverError(cdrMemoryStream& data)
+    inline void onReceiverError(ByteData& data)
     {
-      m_listeners->
-        connectorData_[ON_RECEIVER_ERROR].notify(m_profile, data);
+      m_listeners->notifyIn(ConnectorDataListenerType::ON_RECEIVER_ERROR, m_profile, data);
     }
 
   private:
-    CdrBufferBase* m_buffer;
-	::OpenRTM::PortSharedMemory_var  m_objref;
-    ConnectorListeners* m_listeners;
+    CdrBufferBase* m_buffer{nullptr};
+    ::OpenRTM::PortSharedMemory_var  m_objref;
+    ConnectorListenersBase* m_listeners;
     ConnectorInfo m_profile;
-    InPortConnector* m_connector;
+    InPortConnector* m_connector{nullptr};
+    ByteData m_cdr;
 
   };  // class InPortCorCdrbaProvider
-};    // namespace RTC
+} // namespace RTC
 
 extern "C"
 {
@@ -265,11 +253,7 @@ extern "C"
    * @endif
    */
   void InPortSHMProviderInit();
-};
-
-#ifdef WIN32
-#pragma warning( default : 4290 )
-#endif
+}
 
 #endif // RTC_INPORTCORBACDRPROVIDER_H
 

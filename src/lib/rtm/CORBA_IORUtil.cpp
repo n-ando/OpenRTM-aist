@@ -29,21 +29,20 @@ namespace CORBA_IORUtil
 {
 
 #ifdef ORB_IS_OMNIORB
-  typedef _CORBA_Unbounded_Sequence_Octet OctetUSequence;
-  typedef _CORBA_Unbounded_Sequence_String StringUSequence;
+  using OctetUSequence = _CORBA_Unbounded_Sequence_Octet;
+  using StringUSequence = _CORBA_Unbounded_Sequence_String;
 #endif
 
 #if !defined(ORB_IS_RTORB) && !defined(ORB_IS_ORBEXPRESS) && !defined(ORB_IS_TAO)
   // prototype of static functions
-  static void print_key(std::stringstream& s, OctetUSequence& key);
+  static void print_key(std::stringstream& sstr, OctetUSequence& key);
 
   static void print_omni_key(std::stringstream& sstr, OctetUSequence& key);
 
   static int get_poa_info(OctetUSequence& key, StringUSequence& poas_out,
                           int& transient_out, OctetUSequence& id_out);
-
   static void print_tagged_components(std::stringstream& sstr,
-                                      IOP::MultipleComponentProfile& comps);
+                                      IOP::MultipleComponentProfile& components);
 #endif  // ORB_IS_RTORB
 
 
@@ -54,11 +53,11 @@ namespace CORBA_IORUtil
    * @brief Convert from IOR string to IOR structure
    * @endif
    */
-#if !defined(ORB_IS_ORBEXPRESS) && !defined(ORB_IS_TAO)
+#if !defined(ORB_IS_ORBEXPRESS) && !defined(ORB_IS_TAO) && !defined(ORB_IS_RTORB)
   bool toIOR(const char* iorstr, IOP::IOR& ior)
   {
 #ifndef ORB_IS_RTORB
-    if (iorstr == 0) { return false; }
+    if (iorstr == nullptr) { return false; }
     size_t size = strlen(iorstr);
 
     if (size < 4)
@@ -79,7 +78,7 @@ namespace CORBA_IORUtil
     size = (size - 4) / 2;  // how many octets are there in the string
     p += 4;
 
-    cdrMemoryStream buf((CORBA::ULong)size, 0);
+    cdrMemoryStream buf(static_cast<CORBA::ULong>(size), false);
     for (int i(0); i < static_cast<int>(size); ++i)
       {
         CORBA::Octet v;
@@ -144,19 +143,19 @@ namespace CORBA_IORUtil
    * @brief Convert from IOR structure to IOR string
    * @endif
    */
-#if !defined(ORB_IS_ORBEXPRESS) && !defined(ORB_IS_TAO)
+#if !defined(ORB_IS_ORBEXPRESS) && !defined(ORB_IS_TAO) && !defined(ORB_IS_RTORB)
   bool toString(IOP::IOR& ior, std::string& iorstr)
   {
 #ifndef ORB_IS_RTORB
     cdrMemoryStream buf(CORBA::ULong(0), CORBA::Boolean(1));
-    buf.marshalBoolean(omni::myByteOrder);
+    buf.marshalBoolean(omni::myByteOrder != 0U);
     buf.marshalRawString(ior.type_id);
     ior.profiles >>= buf;
 
     // turn the encapsulation into a hex string with "IOR:" prepended
     buf.rewindInputPtr();
     size_t s = buf.bufSize();
-    CORBA::Char* data = (CORBA::Char *)buf.bufPtr();
+    CORBA::Char* data = static_cast<CORBA::Char *>(buf.bufPtr());
 
     char *result = new char[4 + s * 2 + 1];
     result[4 + s * 2] = '\0';
@@ -173,20 +172,20 @@ namespace CORBA_IORUtil
         v = v >> 4;
         if (v < 10)
           {
-            result[j] = '0' + v;
+            result[j] = '0' + static_cast<char>(v);
           }
         else
           {
-            result[j] = 'a' + (v - 10);
+            result[j] = 'a' + (static_cast<char>(v) - 10);
           }
         v = ((data[i] & 0xf));
         if (v < 10)
           {
-            result[j+1] = '0' + v;
+            result[j+1] = '0' + static_cast<char>(v);
           }
         else
           {
-            result[j+1] = 'a' + (v - 10);
+            result[j+1] = 'a' + (static_cast<char>(v) - 10);
           }
       }
     iorstr = std::string(result);
@@ -228,9 +227,9 @@ namespace CORBA_IORUtil
                 IIOP::encodeProfile(pBody, profile);
                 CORBA::ULong max = profile.profile_data.maximum();
                 CORBA::ULong len = profile.profile_data.length();
-                CORBA::Octet* buf = profile.profile_data.get_buffer(1);
+                CORBA::Octet* buf = profile.profile_data.get_buffer(true);
                 // replace is not standard function
-                ior.profiles[count].profile_data.replace(max, len, buf, 1);
+                ior.profiles[count].profile_data.replace(max, len, buf, true);
               }
           }
         return toString(ior, iorstr);
@@ -240,8 +239,11 @@ namespace CORBA_IORUtil
       {
         return false;
       }
-#endif  // ORB_IS_RTORB
+#else
+    (void)iorstr;
+    (void)endpoint;
     return false;
+#endif  // ORB_IS_RTORB
   }
 
   /*!
@@ -261,7 +263,7 @@ namespace CORBA_IORUtil
     if (ior.profiles.length() == 0 && strlen(ior.type_id) == 0)
       {
         retstr << "IOR is a nil object reference." << std::endl;
-        if (iorstr) { retstr << iorstr << std::endl; }
+        if (iorstr != nullptr) { retstr << iorstr << std::endl; }
         return retstr.str();
       }
 
@@ -288,35 +290,36 @@ namespace CORBA_IORUtil
 
             retstr << std::endl;
           }
-		else if (ior.profiles[count].tag == IOP::TAG_MULTIPLE_COMPONENTS)
-		 {
+        else if (ior.profiles[count].tag == IOP::TAG_MULTIPLE_COMPONENTS)
+          {
             retstr << "Multiple Component Profile ";
-			IIOP::ProfileBody pBody;
-			IIOP::unmarshalMultiComponentProfile(ior.profiles[count],
-				pBody.components);
+            IIOP::ProfileBody pBody;
+            IIOP::unmarshalMultiComponentProfile(ior.profiles[count],
+                    pBody.components);
             print_tagged_components(retstr, pBody.components);
 
             retstr << std::endl;
-		  }
-		else
-		 {
-			retstr << "Unrecognised profile tag: 0x"
-				<< std::hex
-				<< (unsigned)(ior.profiles[count].tag)
-				<< std::dec
-				<< std::endl;
-		}
+          }
+        else
+          {
+            retstr << "Unrecognised profile tag: 0x"
+                   << std::hex
+                   << static_cast<unsigned>(ior.profiles[count].tag)
+                   << std::dec
+                   << std::endl;
+          }
       }
-#else // ORB_IS_RTORB
+#else
+    (void)iorstr;
     retstr << "RtORB and ORBexpress does't support formatIORinfo() function." << std::endl;
-#endif // ORB_IS_RTORB
+#endif
     return retstr.str();
   }
 
-#if !defined(ORB_IS_RTORB) && !defined(ORB_IS_ORBEXPRESS) && !defined(ORB_IS_TAO)
+#if !defined(ORB_IS_ORBEXPRESS) && !defined(ORB_IS_TAO) && !defined(ORB_IS_RTORB)
   std::vector<IIOP::Address> getEndpoints(IOP::IOR& ior)
   {
-	  std::vector<IIOP::Address> addr;
+    std::vector<IIOP::Address> addr;
 #ifndef ORB_IS_RTORB
     if (ior.profiles.length() == 0 && strlen(ior.type_id) == 0)
       {
@@ -330,7 +333,7 @@ namespace CORBA_IORUtil
           {
             IIOP::ProfileBody pBody;
             IIOP::unmarshalProfile(ior.profiles[i], pBody);
-            addr.push_back(pBody.address);
+            addr.emplace_back(pBody.address);
             extractAddrs(pBody.components, addr);
           }
         else if (ior.profiles[i].tag == IOP::TAG_MULTIPLE_COMPONENTS)
@@ -343,13 +346,14 @@ namespace CORBA_IORUtil
         else
           {
             std::cerr << "Unrecognised profile tag: 0x"
-                     << std::hex << (unsigned)(ior.profiles[i].tag)
+                     << std::hex << static_cast<unsigned>(ior.profiles[i].tag)
                      << std::dec << std::endl;
           }
       }
-#else  // ORB_IS_RTORB
+#else  // !ORB_IS_RTORB
+    (void)ior;
     retstr << "RtORB does't support formatIORinfo() function." << std::endl;
-#endif  // ORB_IS_RTORB
+#endif  // !ORB_IS_RTORB
     return addr;
   }
 
@@ -362,20 +366,19 @@ namespace CORBA_IORUtil
         if (comp[i].tag == IOP::TAG_ALTERNATE_IIOP_ADDRESS)
           {
             cdrEncapsulationStream e(comp[i].component_data.get_buffer(),
-                                     comp[i].component_data.length(), 1);
+                                     comp[i].component_data.length(), true);
             IIOP::Address v;
             v.host = e.unmarshalRawString();
             v.port <<= e;
-            addr.push_back(v);
+            addr.emplace_back(v);
           }
       }
-#else // ORB_IS_RTORB
-#endif // ORB_IS_RTORB
+#else // !ORB_IS_RTORB
+#endif // !ORB_IS_RTORB
     return;
   }
 #endif // !ORB_IS_RTORB, !ORB_IS_ORBEXPRESS, !ORB_IS_TAO
 
-#ifndef ORB_IS_RTORB
   //------------------------------------------------------------
   // static functions
 #if !defined(ORB_IS_RTORB) && !defined(ORB_IS_ORBEXPRESS) && !defined(ORB_IS_TAO)
@@ -429,7 +432,7 @@ namespace CORBA_IORUtil
     int is_transient;
     OctetUSequence id;
 
-    if (get_poa_info(key, poas, is_transient, id))
+    if (get_poa_info(key, poas, is_transient, id) != 0)
       {
         sstr << "       POA(" << (char*)poas[0];
         for (unsigned i(1); i < poas.length(); ++i)
@@ -452,7 +455,7 @@ namespace CORBA_IORUtil
   static int get_poa_info(OctetUSequence& key, StringUSequence& poas_out,
                           int& transient_out, OctetUSequence& id_out)
   {
-    const char* k = (const char*) key.NP_data();
+    const char* k = reinterpret_cast<const char*>(key.NP_data());
     size_t len = static_cast<size_t>(key.length());
     const char* kend = k + len;
 
@@ -466,7 +469,7 @@ namespace CORBA_IORUtil
         ++k;
         const char* name = k;
 
-        while (k < kend && *k && *k != POA_NAME_SEP
+        while (k < kend && (*k != 0) && *k != POA_NAME_SEP
               && *k != TRANSIENT_SUFFIX_SEP)
           {
             ++k;
@@ -487,16 +490,17 @@ namespace CORBA_IORUtil
         transient_out = 1;
         k += TRANSIENT_SUFFIX_SIZE + 1;
       }
-    if (k >= kend || *k)  { return 0; }
+    if (k >= kend || (*k != 0))  { return 0; }
     k++;
 
-    id_out.length(kend - k);
+    id_out.length(static_cast<CORBA::ULong>(kend - k));
     memcpy(id_out.NP_data(), k, kend - k);
 
     return 1;
   }
-#endif
+#endif // !ORB_IS_RTORB, !ORB_IS_ORBEXPRESS, !ORB_IS_TAO
 
+#if !defined(ORB_IS_RTORB) && !defined(ORB_IS_ORBEXPRESS) && !defined(ORB_IS_TAO)
   static void print_tagged_components(std::stringstream& sstr,
                                       IOP::MultipleComponentProfile& components)
   {
@@ -522,13 +526,15 @@ namespace CORBA_IORUtil
                 p = q;
               } while (q);
           }
-        catch (CORBA::MARSHAL& ex)
+        catch (CORBA::MARSHAL&)
           {
             sstr << "       Broken component" << std::endl;
           }
       }
 #endif  // defined(RTM_OMNIORB_40) || defined(RTM_OMNIORB_41)
+    (void)sstr;
+    (void)components;
   }
-#endif  // ORB_IS_RTORB
-};
+#endif // !ORB_IS_RTORB, !ORB_IS_ORBEXPRESS, !ORB_IS_TAO
+} // namespace CORBA_IORUtil
 

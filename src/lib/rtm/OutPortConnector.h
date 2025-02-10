@@ -25,6 +25,8 @@
 #include <rtm/ConnectorListener.h>
 #include <rtm/DirectInPortBase.h>
 #include <rtm/PortBase.h>
+#include <rtm/CORBA_CdrMemoryStream.h>
+#include <rtm/ByteData.h>
 
 
 
@@ -55,7 +57,6 @@ namespace RTC
     : public ConnectorBase
   {
   public:
-    DATAPORTSTATUS_ENUM
 
     /*!
      * @if jp
@@ -64,7 +65,7 @@ namespace RTC
      * @brief Constructor
      * @endif
      */
-    OutPortConnector(ConnectorInfo& info, ConnectorListeners& listeners);
+    OutPortConnector(ConnectorInfo& info, ConnectorListenersBase* listeners);
 
     /*!
      * @if jp
@@ -73,7 +74,7 @@ namespace RTC
      * @brief Destructor
      * @endif
      */
-    virtual ~OutPortConnector();
+    ~OutPortConnector() override;
    /*!
      * @if jp
      * @brief Profile 取得
@@ -87,7 +88,7 @@ namespace RTC
      *
      * @endif
      */
-    const ConnectorInfo& profile();
+    const ConnectorInfo& profile() override;
 
     /*!
      * @if jp
@@ -102,7 +103,7 @@ namespace RTC
      *
      * @endif
      */
-    const char* id();
+    const char* id() override;
 
     /*!
      * @if jp
@@ -117,7 +118,7 @@ namespace RTC
      *
      * @endif
      */
-    const char* name();
+    const char* name() override;
 
     /*!
      * @if jp
@@ -132,7 +133,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode disconnect() = 0;
+    DataPortStatus disconnect() override = 0;
 
     /*!
      * @if jp
@@ -147,7 +148,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual CdrBufferBase* getBuffer() = 0;
+    CdrBufferBase* getBuffer() override = 0;
 
     /*!
      * @if jp
@@ -162,7 +163,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode write(cdrMemoryStream& data) = 0;
+    virtual DataPortStatus write(ByteDataStreamBase* data) = 0;
 
     /*!
      * @if jp
@@ -177,7 +178,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual void setEndian(const bool endian_type);
+    virtual void setEndian(bool endian_type);
 
     /*!
      * @if jp
@@ -212,95 +213,103 @@ namespace RTC
      * @endif
      */
     template <class DataType>
-    ReturnCode write(DataType& data)
+    DataPortStatus write(DataType& data)
     {
-      if (m_directInPort != NULL)
+
+      if (m_directInPort != nullptr)
         {
           DirectInPortBase<DataType>* inport = dynamic_cast<DirectInPortBase<DataType>*>(m_directInPort->getDirectPort());
           if(inport)
-            {		
+            {
               if (inport->isNew())
                 {
                   // ON_BUFFER_OVERWRITE(In,Out), ON_RECEIVER_FULL(In,Out) callback
-                  m_listeners.
-                    connectorData_[ON_BUFFER_OVERWRITE].notify(m_profile, data);
-                  m_inPortListeners->
-                    connectorData_[ON_BUFFER_OVERWRITE].notify(m_profile, data);
-                  m_listeners.
-                    connectorData_[ON_RECEIVER_FULL].notify(m_profile, data);
-                  m_inPortListeners->
-                    connectorData_[ON_RECEIVER_FULL].notify(m_profile, data);
+                  m_listeners->notifyOut(ConnectorDataListenerType::ON_BUFFER_OVERWRITE, m_profile, data);
+                  m_inPortListeners->notifyIn(ConnectorDataListenerType::ON_BUFFER_OVERWRITE, m_profile, data);
+                  m_listeners->notifyOut(ConnectorDataListenerType::ON_RECEIVER_FULL, m_profile, data);
+                  m_inPortListeners->notifyIn(ConnectorDataListenerType::ON_RECEIVER_FULL, m_profile, data);
                   RTC_PARANOID(("ON_BUFFER_OVERWRITE(InPort,OutPort), "
                                 "ON_RECEIVER_FULL(InPort,OutPort) "
                                 "callback called in direct mode."));
                 }
               // ON_BUFFER_WRITE(In,Out) callback
-              m_listeners.
-                connectorData_[ON_BUFFER_WRITE].notify(m_profile, data);
-              m_inPortListeners->
-                connectorData_[ON_BUFFER_WRITE].notify(m_profile, data);
+              m_listeners->notifyOut(ConnectorDataListenerType::ON_BUFFER_WRITE, m_profile, data);
+              m_inPortListeners->notifyIn(ConnectorDataListenerType::ON_BUFFER_WRITE, m_profile, data);
               RTC_PARANOID(("ON_BUFFER_WRITE(InPort,OutPort), "
                                 "callback called in direct mode."));
               inport->write(data);  // write to InPort variable!!
               // ON_RECEIVED(In,Out) callback
-              m_listeners.
-                connectorData_[ON_RECEIVED].notify(m_profile, data);
-              m_inPortListeners->
-                connectorData_[ON_RECEIVED].notify(m_profile, data);
+              m_listeners->notifyOut(ConnectorDataListenerType::ON_RECEIVED, m_profile, data);
+              m_inPortListeners->notifyIn(ConnectorDataListenerType::ON_RECEIVED, m_profile, data);
               RTC_PARANOID(("ON_RECEIVED(InPort,OutPort), "
                             "callback called in direct mode."));
-              return PORT_OK;
+              
+              return DataPortStatus::PORT_OK;
             }
         }
       // normal case
-#ifdef ORB_IS_ORBEXPRESS
-      m_cdr.cdr.rewind();
-
+      if(m_cdr == nullptr)
+      {
+          m_cdr = createSerializer<DataType>(m_marshaling_type);
+      }
+      ::RTC::ByteDataStream<DataType> *cdr = dynamic_cast<::RTC::ByteDataStream<DataType>*>(m_cdr);
+      if (!cdr)
+      {
+          RTC_ERROR(("Can not find Marshalizer: %s", m_marshaling_type.c_str()));
+          return DataPortStatus::PORT_ERROR;
+      }
+      cdr->isLittleEndian(isLittleEndian());
+      cdr->serialize(data);
       RTC_TRACE(("connector endian: %s", isLittleEndian() ? "little":"big"));
-      m_cdr.cdr.is_little_endian(isLittleEndian());
-      m_cdr.cdr << data;
-#elif defined(ORB_IS_TAO)
-      m_cdr.cdr.reset();
-      RTC_TRACE(("connector endian: %s", isLittleEndian() ? "little" : "big"));
-      m_cdr.cdr << data;
-#else
-      m_cdr.rewindPtrs();
+      
+      // NOTE: need cast to ByteDataStreamBase* to call the another write()
+      DataPortStatus ret = write((ByteDataStreamBase*)cdr);
 
-      RTC_TRACE(("connector endian: %s", isLittleEndian() ? "little":"big"));
-      m_cdr.setByteSwapFlag(isLittleEndian());
-      data >>= m_cdr;
-#endif
-      return write(m_cdr);
+      return ret;
     }
 
-    virtual CdrBufferBase::ReturnCode read(cdrMemoryStream &data);
+    virtual BufferStatus read(ByteData &data);
 
-	bool setInPort(InPortBase* directInPort);
-	/*!
-	* @if jp
-	* @brief ダイレクト接続モードに設定
-	*
-	*
-	* @else
-	* @brief
-	*
-	*
-	* @endif
-	*/
-	virtual void setPullDirectMode();
-	/*!
-	* @if jp
-	* @brief ダイレクト接続モードかの判定
-	*
-	* @return True：ダイレクト接続モード,false：それ以外
-	*
-	* @else
-	* @brief
-	*
-	*
-	* @endif
-	*/
-	virtual bool pullDirectMode();
+    bool setInPort(InPortBase* directInPort);
+    /*!
+     * @if jp
+     * @brief ダイレクト接続モードに設定
+     *
+     *
+     * @else
+     * @brief
+     *
+     *
+     * @endif
+     */
+    virtual void setPullDirectMode();
+    /*!
+     * @if jp
+     * @brief ダイレクト接続モードかの判定
+     *
+     * @return True：ダイレクト接続モード,false：それ以外
+     *
+     * @else
+     * @brief
+     *
+     *
+     * @endif
+     */
+    virtual bool pullDirectMode();
+    /*!
+     * @if jp
+     * @brief コンシューマのインターフェースの登録を取り消す
+     *
+     * @param prop コネクタプロファイルのプロパティ
+     *
+     * @else
+     * @brief
+     *
+     * @param prop
+     *
+     * @endif
+     */
+    virtual void unsubscribeInterface(const coil::Properties& prop);
   protected:
     /*!
      * @if jp
@@ -326,14 +335,7 @@ namespace RTC
      * @endif
      */
     bool m_littleEndian;
-    /*!
-     * @if jp
-     * @brief cdrストリーム
-     * @else
-     * @brief CDR stream
-     * @endif
-     */
-    cdrMemoryStream m_cdr;
+    
 
 
     /*!
@@ -352,7 +354,7 @@ namespace RTC
      * @brief A reference to a ConnectorListener
      * @endif
      */
-    ConnectorListeners& m_listeners;
+    ConnectorListenersBase* m_listeners;
 
     /*!
      * @if jp
@@ -361,11 +363,29 @@ namespace RTC
      * @brief A pointer to a InPort's ConnectorListener
      * @endif
      */
-    ConnectorListeners* m_inPortListeners;
+    ConnectorListenersBase* m_inPortListeners;
 
-	bool m_directMode;
+    /*!
+     * @if jp
+     * @brief ダイレクト接続のフラグ
+     * Trueでダイレクト接続モード
+     * @else
+     * @brief 
+     * @endif
+     */
+    bool m_directMode;
+
+    /*!
+     * @if jp
+     * @brief シリアライザの名前
+     * @else
+     * @brief
+     * @endif
+     */
+    std::string m_marshaling_type;
+    ByteDataStreamBase* m_cdr;
 
   };
-};  // namespace RTC
+} // namespace RTC
 
 #endif  // RTC_CONNECTORBASE_H

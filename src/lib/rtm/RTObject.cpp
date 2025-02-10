@@ -16,7 +16,7 @@
  *
  */
 
-#include <assert.h>
+#include <cassert>
 #include <rtm/RTObject.h>
 #include <rtm/SdoConfiguration.h>
 #include <rtm/CORBA_SeqUtil.h>
@@ -39,7 +39,7 @@ namespace RTC
    * @brief RT-Component default profile
    * @endif
    */
-  static const char* default_conf[] =
+  static const char* const default_conf[] =
     {
       "implementation_id", "",
       "type_name",         "",
@@ -72,13 +72,12 @@ namespace RTC
       m_sdoservice(*this),
       m_readAll(false), m_writeAll(false),
       m_readAllCompletion(false), m_writeAllCompletion(false),
-	  m_insref(RTC::LightweightRTObject::_nil())
+      m_insref(RTC::LightweightRTObject::_nil()), m_sdoconterm(nullptr)
   {
     m_objref = this->_this();
     m_pSdoConfigImpl = new SDOPackage::Configuration_impl(m_configsets,
                                                           m_sdoservice);
-    m_pSdoConfig = SDOPackage::Configuration::
-      _duplicate(m_pSdoConfigImpl->getObjRef());
+    m_pSdoConfig = m_pSdoConfigImpl->getObjRef();
   }
 
   /*!
@@ -90,7 +89,7 @@ namespace RTC
    */
   RTObject_impl::RTObject_impl(CORBA::ORB_ptr orb,
                                PortableServer::POA_ptr poa)
-    : m_pManager(NULL),
+    : m_pManager(nullptr),
       m_pORB(CORBA::ORB::_duplicate(orb)),
       m_pPOA(PortableServer::POA::_duplicate(poa)),
       m_portAdmin(orb, poa),
@@ -98,13 +97,12 @@ namespace RTC
       m_properties(default_conf), m_configsets(m_properties.getNode("conf")),
       m_sdoservice(*this),
       m_readAll(false), m_writeAll(false),
-      m_readAllCompletion(false), m_writeAllCompletion(false)
+      m_readAllCompletion(false), m_writeAllCompletion(false), m_sdoconterm(nullptr)
   {
     m_objref = this->_this();
     m_pSdoConfigImpl = new SDOPackage::Configuration_impl(m_configsets,
                                                           m_sdoservice);
-    m_pSdoConfig = SDOPackage::Configuration::
-      _duplicate(m_pSdoConfigImpl->getObjRef());
+    m_pSdoConfig = m_pSdoConfigImpl->getObjRef();
   }
 
   /*!
@@ -314,46 +312,28 @@ namespace RTC
    * @endif
    */
   ReturnCode_t RTObject_impl::initialize()
-    throw (CORBA::SystemException)
   {
     RTC_TRACE(("initialize()"));
 
-    // SDO service admin initialization
-    m_sdoservice.init(m_properties);
-
-    // EC creation
-    std::vector<coil::Properties> ec_args;
-    if (getContextOptions(ec_args) != RTC::RTC_OK)
-      {
-        RTC_ERROR(("Valid EC options are not available. Aborting"));
-        return RTC::BAD_PARAMETER;
-      }
-    if (createContexts(ec_args) != RTC::RTC_OK)
-      {
-        RTC_ERROR(("EC creation failed. Maybe out of resources. Aborting."));
-        return RTC::OUT_OF_RESOURCES;
-      }
+    initSdoService();
+    ReturnCode_t ret = initMineEC();
+    if (ret != RTC::RTC_OK) { return ret; }
 
     // -- entering alive state --
-    RTC_INFO(("%d execution context%s created.",
-              m_ecMine.length(),
-              (m_ecMine.length() == 1) ? " was" : "s were"));
-    ReturnCode_t ret;
     ret = on_initialize();
-    m_created = false;
     if (ret != RTC::RTC_OK)
-      {
-        RTC_ERROR(("on_initialize() failed."));
-        return ret;
-      }
-    RTC_DEBUG(("on_initialize() was properly done."));
-    for (::CORBA::ULong i(0), len(m_ecMine.length()); i < len; ++i)
-      {
-        RTC_DEBUG(("EC[%d] starting.", i));
-        m_ecMine[i]->start();
-      }
+    {
+      RTC_ERROR(("on_initialize() failed."));
+      return ret;
+    }
+    m_created = false;
+
     // ret must be RTC_OK
+    RTC_DEBUG(("on_initialize() was properly done."));
     assert(ret == RTC::RTC_OK);
+
+    //starting owned ECs
+    startMineEC();
     return ret;
   }
 
@@ -365,7 +345,6 @@ namespace RTC
    * @endif
    */
   ReturnCode_t RTObject_impl::finalize()
-    throw (CORBA::SystemException)
   {
     RTC_TRACE(("finalize()"));
     if (m_created)  { return RTC::PRECONDITION_NOT_MET; }
@@ -373,19 +352,8 @@ namespace RTC
     // Return RTC::PRECONDITION_NOT_MET,
     // When the component is registered in ExecutionContext.
     // m_ecMine.length() != 0 ||
-    if (m_ecOther.length() != 0)
-      {
 
-        for (CORBA::ULong ic(0), len(m_ecOther.length()); ic < len; ++ic)
-          {
-            if (!CORBA::is_nil(m_ecOther[ic]))
-              {
-                return RTC::PRECONDITION_NOT_MET;
-              }
-          }
-        CORBA_SeqUtil::clear(m_ecOther);
-      }
-
+    CORBA_SeqUtil::clear(m_ecOther);
     ReturnCode_t ret(on_finalize());
 
     shutdown();
@@ -402,42 +370,17 @@ namespace RTC
    * @endif
    */
   ReturnCode_t RTObject_impl::exit()
-    throw (CORBA::SystemException)
   {
     RTC_TRACE(("exit()"));
     if (m_created) { return RTC::PRECONDITION_NOT_MET; }
     if (m_exiting) { return RTC::RTC_OK; }
 
+    // finalize ECs
+    finalizeMineEC();
+    finalizeOtherEC();
 
-    SDOPackage::OrganizationList* organizations = get_organizations();
-    CORBA::ULong len = organizations->length();
-
-    for (CORBA::ULong i = 0; i < len; i++)
-      {
-        (*organizations)[i]->remove_member(getInstanceName());
-      }
-    // deactivate myself on owned EC
-    CORBA_SeqUtil::for_each(m_ecMine,
-                            deactivate_comps(m_objref));
-    // deactivate myself on other EC
-    CORBA_SeqUtil::for_each(m_ecOther,
-                            deactivate_comps(m_objref));
-
-    // owned EC will be finalised later in finalizeContext().
-
-    // detach myself from other EC
-    for (CORBA::ULong ic(0), len(m_ecOther.length()); ic < len; ++ic)
-      {
-        //        m_ecOther[ic]->stop();
-        RTC::LightweightRTObject_var comp(this->_this());
-        if (!::CORBA::is_nil(m_ecOther[ic]))
-          {
-            m_ecOther[ic]->remove_component(comp.in());
-          }
-      }
     m_exiting = true;
     ReturnCode_t ret(finalize());
-
     return ret;
   }
 
@@ -449,7 +392,6 @@ namespace RTC
    * @endif
    */
   CORBA::Boolean RTObject_impl::is_alive(ExecutionContext_ptr exec_context)
-    throw (CORBA::SystemException)
   {
     RTC_TRACE(("is_alive()"));
     for (::CORBA::ULong i(0), len(m_ecMine.length()); i < len; ++i)
@@ -477,13 +419,12 @@ namespace RTC
    * @endif
    */
   ExecutionContext_ptr RTObject_impl::get_context(UniqueId ec_id)
-    throw (CORBA::SystemException)
   {
     RTC_TRACE(("get_context(%d)", ec_id));
     // owned EC
     if (ec_id < ECOTHER_OFFSET)
       {
-        if ((::CORBA::ULong)ec_id < m_ecMine.length())
+        if (static_cast<::CORBA::ULong>(ec_id) < m_ecMine.length())
           {
             return ExecutionContext::_duplicate(m_ecMine[ec_id]);
           }
@@ -515,7 +456,6 @@ namespace RTC
    * @endif
    */
   ExecutionContextList* RTObject_impl::get_owned_contexts()
-    throw (CORBA::SystemException)
   {
     RTC_TRACE(("get_owned_context()"));
 
@@ -552,7 +492,6 @@ namespace RTC
    * @endif
    */
   ExecutionContextList* RTObject_impl::get_participating_contexts()
-    throw (CORBA::SystemException)
   {
     RTC_TRACE(("get_participating_contexts()"));
     ExecutionContextList_var execlist;
@@ -573,21 +512,20 @@ namespace RTC
    */
   ExecutionContextHandle_t
   RTObject_impl::get_context_handle(ExecutionContext_ptr cxt)
-    throw (CORBA::SystemException)
   {
     RTC_TRACE(("get_context_handle()"));
     CORBA::Long num;
     num = CORBA_SeqUtil::find(m_ecMine, ec_find(cxt));
     if (num != -1)
       {
-        return (ExecutionContextHandle_t)num;
+        return static_cast<ExecutionContextHandle_t>(num);
       }
     num = CORBA_SeqUtil::find(m_ecOther, ec_find(cxt));
     if (num != -1)
       {
-        return (ExecutionContextHandle_t)(ECOTHER_OFFSET + num);
+        return static_cast<ExecutionContextHandle_t>(ECOTHER_OFFSET + num);
       }
-    return (ExecutionContextHandle_t)(-1);
+    return static_cast<ExecutionContextHandle_t>(-1);
   }
 
 
@@ -599,7 +537,6 @@ namespace RTC
    * @endif
    */
   UniqueId RTObject_impl::attach_context(ExecutionContext_ptr exec_context)
-    throw (CORBA::SystemException)
   {
     RTC_TRACE(("attach_context()"));
     // ID: 0 - (offset-1) : owned ec
@@ -676,7 +613,6 @@ namespace RTC
    * @endif
    */
   ReturnCode_t RTObject_impl::detach_context(UniqueId ec_id)
-    throw (CORBA::SystemException)
   {
     RTC_TRACE(("detach_context(%d)", ec_id));
     ::CORBA::ULong len(m_ecOther.length());
@@ -685,8 +621,8 @@ namespace RTC
     // ID: offset -       : participating ec
     // owned       ec index = ID
     // participate ec index = ID - offset
-    if ((CORBA::ULong)ec_id < ECOTHER_OFFSET ||
-        (CORBA::ULong)(ec_id - ECOTHER_OFFSET) > len)
+    if (static_cast<CORBA::ULong>(ec_id) < ECOTHER_OFFSET ||
+        static_cast<CORBA::ULong>(ec_id - ECOTHER_OFFSET) > len)
       {
         return RTC::BAD_PARAMETER;
       }
@@ -714,7 +650,6 @@ namespace RTC
    * @endif
    */
   ComponentProfile* RTObject_impl::get_component_profile()
-    throw (CORBA::SystemException)
   {
     RTC_TRACE(("get_component_profile()"));
     try
@@ -737,17 +672,17 @@ namespace RTC
         profile->port_profiles = m_portAdmin.getPortProfileList();
 #else  // ORB_IS_RTORB
         profile->instance_name =
-               reinterpret_cast<char *>(m_properties["instance_name"].c_str());
+          CORBA::string_dup(m_properties["instance_name"].c_str());
         profile->type_name     =
-               reinterpret_cast<char *>(m_properties["type_name"].c_str());
+          CORBA::string_dup(m_properties["type_name"].c_str());
         profile->description   =
-               reinterpret_cast<char *>(m_properties["description"].c_str());
+          CORBA::string_dup(m_properties["description"].c_str());
         profile->version       =
-               reinterpret_cast<char *>(m_properties["version"].c_str());
+          CORBA::string_dup(m_properties["version"].c_str());
         profile->vendor        =
-               reinterpret_cast<char *>(m_properties["vendor"].c_str());
+          CORBA::string_dup(m_properties["vendor"].c_str());
         profile->category      =
-               reinterpret_cast<char *>(m_properties["category"].c_str());
+          CORBA::string_dup(m_properties["category"].c_str());
         PortProfileList ppl    = m_portAdmin.getPortProfileList();
         profile->port_profiles = ppl._retn();
 #endif  // ORB_IS_RTORB
@@ -758,7 +693,7 @@ namespace RTC
       {
       }
     assert(false);
-    return 0;
+    return nullptr;
   }
 
   /*!
@@ -769,7 +704,6 @@ namespace RTC
    * @endif
    */
   PortServiceList* RTObject_impl::get_ports()
-    throw (CORBA::SystemException)
   {
     RTC_TRACE(("get_ports()"));
     try
@@ -780,7 +714,7 @@ namespace RTC
       {
       }
     assert(false);
-    return 0;
+    return nullptr;
   }
 
 
@@ -795,7 +729,6 @@ namespace RTC
    * @endif
    */
   ReturnCode_t RTObject_impl::on_initialize()
-    throw (CORBA::SystemException)
   {
     RTC_TRACE(("on_initialize()"));
     ReturnCode_t ret(RTC::RTC_ERROR);
@@ -850,7 +783,6 @@ namespace RTC
    * @endif
    */
   ReturnCode_t RTObject_impl::on_finalize()
-    throw (CORBA::SystemException)
   {
     RTC_TRACE(("on_finalize()"));
     ReturnCode_t ret(RTC::RTC_ERROR);
@@ -864,6 +796,13 @@ namespace RTC
         ret = RTC::RTC_ERROR;
       }
     postOnFinalize(0, ret);
+
+    if (m_sdoconterm != nullptr)
+      {
+        m_sdoconterm->wait();
+        delete m_sdoconterm;
+        m_sdoconterm = nullptr;
+      }
     return ret;
   }
 
@@ -875,7 +814,6 @@ namespace RTC
    * @endif
    */
   ReturnCode_t RTObject_impl::on_startup(UniqueId ec_id)
-    throw (CORBA::SystemException)
   {
     RTC_TRACE(("on_startup(%d)", ec_id));
     ReturnCode_t ret(RTC::RTC_ERROR);
@@ -900,7 +838,6 @@ namespace RTC
    * @endif
    */
   ReturnCode_t RTObject_impl::on_shutdown(UniqueId ec_id)
-    throw (CORBA::SystemException)
   {
     RTC_TRACE(("on_shutdown(%d)", ec_id));
     ReturnCode_t ret(RTC::RTC_ERROR);
@@ -925,7 +862,6 @@ namespace RTC
    * @endif
    */
   ReturnCode_t RTObject_impl::on_activated(UniqueId ec_id)
-    throw (CORBA::SystemException)
   {
     RTC_TRACE(("on_activated(%d)", ec_id));
     ReturnCode_t ret(RTC::RTC_ERROR);
@@ -952,7 +888,6 @@ namespace RTC
    * @endif
    */
   ReturnCode_t RTObject_impl::on_deactivated(UniqueId ec_id)
-    throw (CORBA::SystemException)
   {
     RTC_TRACE(("on_deactivated(%d)", ec_id));
     ReturnCode_t ret(RTC::RTC_ERROR);
@@ -978,7 +913,6 @@ namespace RTC
    * @endif
    */
   ReturnCode_t RTObject_impl::on_aborting(UniqueId ec_id)
-    throw (CORBA::SystemException)
   {
     RTC_TRACE(("on_aborting(%d)", ec_id));
     ReturnCode_t ret(RTC::RTC_ERROR);
@@ -1003,7 +937,6 @@ namespace RTC
    * @endif
    */
   ReturnCode_t RTObject_impl::on_error(UniqueId ec_id)
-    throw (CORBA::SystemException)
   {
     RTC_TRACE(("on_error(%d)", ec_id));
     ReturnCode_t ret(RTC::RTC_ERROR);
@@ -1029,7 +962,6 @@ namespace RTC
    * @endif
    */
   ReturnCode_t RTObject_impl::on_reset(UniqueId ec_id)
-    throw (CORBA::SystemException)
   {
     RTC_TRACE(("on_reset(%d)", ec_id));
     ReturnCode_t ret(RTC::RTC_ERROR);
@@ -1055,7 +987,6 @@ namespace RTC
    * @endif
    */
   ReturnCode_t RTObject_impl::on_execute(UniqueId ec_id)
-    throw (CORBA::SystemException)
   {
     RTC_PARANOID(("on_execute(%d)", ec_id));
     ReturnCode_t ret(RTC::RTC_ERROR);
@@ -1083,7 +1014,6 @@ namespace RTC
    * @endif
    */
   ReturnCode_t RTObject_impl::on_state_update(UniqueId ec_id)
-    throw (CORBA::SystemException)
   {
     RTC_PARANOID(("on_state_update(%d)", ec_id));
     ReturnCode_t ret(RTC::RTC_ERROR);
@@ -1109,7 +1039,6 @@ namespace RTC
    * @endif
    */
   ReturnCode_t RTObject_impl::on_rate_changed(UniqueId ec_id)
-    throw (CORBA::SystemException)
   {
     RTC_TRACE(("on_rate_changed(%d)", ec_id));
     ReturnCode_t ret(RTC::RTC_ERROR);
@@ -1137,8 +1066,6 @@ namespace RTC
    * @endif
    */
   SDOPackage::OrganizationList* RTObject_impl::get_owned_organizations()
-    throw (CORBA::SystemException,
-           SDOPackage::NotAvailable, SDOPackage::InternalError)
   {
     RTC_TRACE(("get_owned_organizations()"));
     try
@@ -1151,7 +1078,6 @@ namespace RTC
       {
         throw SDOPackage::NotAvailable();
       }
-    return new SDOPackage::OrganizationList();
   }
 
   // SDOPackage::SDO
@@ -1163,15 +1089,19 @@ namespace RTC
    * @endif
    */
   char* RTObject_impl::get_sdo_id()
-    throw (CORBA::SystemException,
-           SDOPackage::NotAvailable, SDOPackage::InternalError)
   {
     RTC_TRACE(("get_sdo_id()"));
     try
       {
+#ifdef ORB_IS_RTORB
+        CORBA::String_ptr sdo_id;
+        sdo_id = CORBA::string_dup(m_profile.instance_name);
+        return sdo_id;
+#else
         CORBA::String_var sdo_id;
         sdo_id = CORBA::string_dup(m_profile.instance_name);
         return sdo_id._retn();
+#endif
       }
     catch (...)
       {
@@ -1187,22 +1117,24 @@ namespace RTC
    * @endif
    */
   char* RTObject_impl::get_sdo_type()
-    throw (CORBA::SystemException,
-           SDOPackage::NotAvailable, SDOPackage::InternalError)
   {
     RTC_TRACE(("get_sdo_type()"));
-    CORBA::String_var sdo_type;
     try
       {
+#ifdef ORB_IS_RTORB
+        CORBA::String_ptr sdo_type;
+        sdo_type = CORBA::string_dup(m_profile.description);
+        return sdo_type;
+#else
+        CORBA::String_var sdo_type;
         sdo_type = CORBA::string_dup(m_profile.description);
         return sdo_type._retn();
+#endif
       }
     catch (...)
       {
         throw SDOPackage::InternalError("get_sdo_type()");
       }
-    sdo_type = "";
-    return sdo_type._retn();
   }
 
   /*!
@@ -1213,8 +1145,6 @@ namespace RTC
    * @endif
    */
   SDOPackage::DeviceProfile* RTObject_impl::get_device_profile()
-    throw (CORBA::SystemException,
-           SDOPackage::NotAvailable, SDOPackage::InternalError)
   {
     RTC_TRACE(("get_device_profile()"));
     try
@@ -1228,7 +1158,6 @@ namespace RTC
       {
         throw SDOPackage::InternalError("get_device_profile()");
       }
-    return new SDOPackage::DeviceProfile();
   }
 
   //------------------------------------------------------------
@@ -1242,8 +1171,6 @@ namespace RTC
    * @endif
    */
   SDOPackage::ServiceProfileList* RTObject_impl::get_service_profiles()
-    throw (CORBA::SystemException,
-           SDOPackage::NotAvailable, SDOPackage::InternalError)
   {
     RTC_TRACE(("get_service_profiles()"));
 
@@ -1270,11 +1197,8 @@ namespace RTC
    */
   SDOPackage::ServiceProfile*
   RTObject_impl::get_service_profile(const char* id)
-    throw (CORBA::SystemException,
-           SDOPackage::InvalidParameter, SDOPackage::NotAvailable,
-           SDOPackage::InternalError)
   {
-    if (!id)
+    if (id == nullptr)
       {
         throw SDOPackage::
           InvalidParameter("get_service_profile(): Empty name.");
@@ -1286,7 +1210,7 @@ namespace RTC
       {
         prof = m_sdoservice.getServiceProviderProfile(id);
       }
-    catch (SDOPackage::InvalidParameter &e)
+    catch (SDOPackage::InvalidParameter&)
       {
         RTC_ERROR(("InvalidParameter exception: name (%s) is not found", id));
         throw;
@@ -1307,12 +1231,9 @@ namespace RTC
    * @endif
    */
   SDOPackage::SDOService_ptr RTObject_impl::get_sdo_service(const char* id)
-    throw (CORBA::SystemException,
-           SDOPackage::InvalidParameter, SDOPackage::NotAvailable,
-           SDOPackage::InternalError)
   {
     RTC_TRACE(("get_sdo_service(%s))", id));
-    if (!id)
+    if (id == nullptr)
       {
         throw SDOPackage::InvalidParameter("get_service(): Empty name.");
       }
@@ -1322,7 +1243,7 @@ namespace RTC
       {
         sdo = m_sdoservice.getServiceProvider(id);
       }
-    catch (SDOPackage::InvalidParameter &e)
+    catch (SDOPackage::InvalidParameter&)
       {
         throw;
       }
@@ -1341,18 +1262,15 @@ namespace RTC
    * @endif
    */
   SDOPackage::Configuration_ptr RTObject_impl::get_configuration()
-    throw (CORBA::SystemException,
-           SDOPackage::InterfaceNotImplemented, SDOPackage::NotAvailable,
-           SDOPackage::InternalError)
   {
     RTC_TRACE(("get_configuration()"));
-    if (m_pSdoConfig == NULL)
+    if (m_pSdoConfig == nullptr)
       throw SDOPackage::InterfaceNotImplemented();
     try
       {
 #ifdef ORB_IS_RTORB
         SDOPackage::Configuration_ptr config;
-        config = m_pSdoConfig;
+        config = m_pSdoConfig.in();
         return config;
 #else  // ORB_IS_RTORB
         SDOPackage::Configuration_var config;
@@ -1375,13 +1293,9 @@ namespace RTC
    * @endif
    */
   SDOPackage::Monitoring_ptr RTObject_impl::get_monitoring()
-    throw (CORBA::SystemException,
-           SDOPackage::InterfaceNotImplemented, SDOPackage::NotAvailable,
-           SDOPackage::InternalError)
   {
     RTC_TRACE(("get_monitoring()"));
     throw SDOPackage::InterfaceNotImplemented();
-    return SDOPackage::Monitoring::_nil();
   }
 
   /*!
@@ -1392,8 +1306,6 @@ namespace RTC
    * @endif
    */
   SDOPackage::OrganizationList* RTObject_impl::get_organizations()
-    throw (CORBA::SystemException,
-           SDOPackage::NotAvailable, SDOPackage::InternalError)
   {
     RTC_TRACE(("get_organizations()"));
     m_sdoOrganizations = m_pSdoConfigImpl->getOrganizations();
@@ -1407,7 +1319,6 @@ namespace RTC
       {
         throw SDOPackage::InternalError("get_organizations()");
       }
-    return new SDOPackage::OrganizationList(0);
   }
 
   /*!
@@ -1418,8 +1329,6 @@ namespace RTC
    * @endif
    */
   SDOPackage::NVList* RTObject_impl::get_status_list()
-    throw (CORBA::SystemException,
-           SDOPackage::NotAvailable, SDOPackage::InternalError)
   {
     RTC_TRACE(("get_status_list()"));
     try
@@ -1443,9 +1352,6 @@ namespace RTC
    * @endif
    */
   CORBA::Any* RTObject_impl::get_status(const char* name)
-    throw (CORBA::SystemException,
-           SDOPackage::InvalidParameter, SDOPackage::NotAvailable,
-           SDOPackage::InternalError)
   {
     RTC_TRACE(("get_status(%s)", name));
     CORBA::Long index;
@@ -1462,7 +1368,6 @@ namespace RTC
       {
         throw SDOPackage::InternalError("get_status()");
       }
-    return new CORBA::Any();
   }
 
   //============================================================
@@ -1485,7 +1390,7 @@ namespace RTC
     m_profile.instance_name = m_properties["instance_name"].c_str();
 #else  // ORB_IS_RTORB
     m_profile.instance_name =
-            reinterpret_cast<char *>(m_properties["instance_name"].c_str());
+            CORBA::string_dup(m_properties["instance_name"].c_str());
 #endif  // ORB_IS_RTORB
   }
 
@@ -1526,9 +1431,9 @@ namespace RTC
   {
     RTC_TRACE(("getObjRef()"));
 #ifdef ORB_IS_ORBEXPRESS
-    return m_objref.in();
+    return RTC::RTObject::_duplicate(m_objref.in());
 #else
-    return m_objref;
+    return RTC::RTObject::_duplicate(m_objref);
 #endif
   }
 
@@ -1552,17 +1457,17 @@ namespace RTC
     m_profile.category      = m_properties["category"].c_str();
 #else  // ORB_IS_RTORB
     m_profile.instance_name =
-            reinterpret_cast<char*>(m_properties["instance_name"].c_str());
+      CORBA::string_dup(m_properties["instance_name"].c_str());
     m_profile.type_name     =
-            reinterpret_cast<char*>(m_properties["type_name"].c_str());
+      CORBA::string_dup(m_properties["type_name"].c_str());
     m_profile.description   =
-            reinterpret_cast<char*>(m_properties["description"].c_str());
+      CORBA::string_dup(m_properties["description"].c_str());
     m_profile.version       =
-            reinterpret_cast<char*>(m_properties["version"].c_str());
+      CORBA::string_dup(m_properties["version"].c_str());
     m_profile.vendor        =
-            reinterpret_cast<char*>(m_properties["vendor"].c_str());
+      CORBA::string_dup(m_properties["vendor"].c_str());
     m_profile.category      =
-            reinterpret_cast<char*>(m_properties["category"].c_str());
+      CORBA::string_dup(m_properties["category"].c_str());
 #endif  // ORB_IS_RTORB
   }
 
@@ -1609,7 +1514,7 @@ namespace RTC
   bool RTObject_impl::addPort(PortBase& port)
   {
     RTC_TRACE(("addPort(PortBase&)"));
-    port.setOwner(this->getObjRef());
+    port.setOwner(m_objref.in());
     port.setPortConnectListenerHolder(&m_portconnListeners);
     onAddPort(port.getPortProfile());
     return m_portAdmin.addPort(port);
@@ -1674,7 +1579,7 @@ namespace RTC
       }
 
     inport.init(m_properties.getNode(propkey));
-    m_inports.push_back(&inport);
+    m_inports.emplace_back(&inport);
     return ret;
   }
 
@@ -1715,7 +1620,7 @@ namespace RTC
       }
 
     outport.init(m_properties.getNode(propkey));
-    m_outports.push_back(&outport);
+    m_outports.emplace_back(&outport);
     return ret;
   }
 
@@ -1909,11 +1814,7 @@ namespace RTC
    */
   bool RTObject_impl::isOwnExecutionContext(RTC::UniqueId ec_id)
   {
-    if (ec_id < ECOTHER_OFFSET)
-      {
-        return true;
-      }
-    return false;
+    return ec_id < ECOTHER_OFFSET;
   }
 
   /*!
@@ -1930,7 +1831,7 @@ namespace RTC
       {
         return RTC::RTC_ERROR;
       }
-    return ec->deactivate_component(::RTC::RTObject::_duplicate(getObjRef()));
+    return ec->deactivate_component(m_objref.in());
   }
 
   /*!
@@ -1947,7 +1848,7 @@ namespace RTC
       {
         return RTC::RTC_ERROR;
       }
-    return ec->activate_component(::RTC::RTObject::_duplicate(getObjRef()));
+    return ec->activate_component(m_objref.in());
   }
 
   /*!
@@ -1964,7 +1865,7 @@ namespace RTC
       {
         return RTC::RTC_ERROR;
       }
-    return ec->reset_component(::RTC::RTObject::_duplicate(getObjRef()));
+    return ec->reset_component(m_objref.in());
   }
 
   /*!
@@ -2029,15 +1930,15 @@ namespace RTC
   */
   void RTObject_impl::removeSdoServiceConsumerStartThread(const char* id)
   {
-    if (m_sdoconterm)
+    if (m_sdoconterm != nullptr)
       {
         m_sdoconterm->wait();
         delete m_sdoconterm;
+        m_sdoconterm = nullptr;
       }
     m_sdoconterm = new SdoServiceConsumerTerminator();
     m_sdoconterm->setSdoServiceConsumer(&m_sdoservice, id);
-    m_sdoconterm->activate();
-	  
+    m_sdoconterm->activate();  
   }
 
   /*!
@@ -2052,21 +1953,18 @@ namespace RTC
   bool RTObject_impl::readAll()
   {
     RTC_TRACE(("readAll()"));
-    std::vector<InPortBase*>::iterator it     = m_inports.begin();
-    std::vector<InPortBase*>::iterator it_end = m_inports.end();
     bool ret(true);
 
-    while ( it != it_end )
+    for(auto & inport : m_inports)
       {
 
-        if (!((*it)->read()))
+        if (!(inport->read()))
           {
             RTC_DEBUG(("The error occurred in readAll()."));
             ret = false;
             if (!m_readAllCompletion)
               return false;
           }
-        ++it;
       }
 
     return ret;
@@ -2084,21 +1982,17 @@ namespace RTC
   bool RTObject_impl::writeAll()
   {
     RTC_TRACE(("writeAll()"));
-    std::vector<OutPortBase*>::iterator it     = m_outports.begin();
-    std::vector<OutPortBase*>::iterator it_end = m_outports.end();
-
     bool ret(true);
 
-    while ( it != it_end )
+    for(auto & outport : m_outports)
       {
-        if (!((*it)->write()))
+        if (!(outport->write()))
           {
             RTC_DEBUG(("The error occurred in writeAll()."));
             ret = false;
             if (!m_writeAllCompletion)
               return false;
           }
-        ++it;
       }
     return ret;
   }
@@ -2181,16 +2075,30 @@ namespace RTC
   void RTObject_impl::finalizeContexts()
   {
     RTC_TRACE(("finalizeContexts()"));
-    for (int i(0), len(m_eclist.size()); i < len; ++i)
+    for (auto & ec : m_eclist)
       {
-        m_eclist[i]->getObjRef()->stop();
+        RTC::ExecutionContextService_var ecref = ec->getObjRef();
+        ecref->stop();
+        RTC::RTCList rtcs = ec->getComponentList();
+        for (CORBA::ULong i = 0; i < rtcs.length(); i++)
+          {
+            try
+              {
+                ec->removeComponent(rtcs[i]);
+              }
+            catch (...)
+              {
+                RTC_ERROR(("Unknown exception caught."));
+              }
+          }
+
         try
           {
-            PortableServer::RefCountServantBase* servant(NULL);
+            PortableServer::RefCountServantBase* servant(nullptr);
             servant =
-              dynamic_cast<PortableServer::RefCountServantBase*>(m_eclist[i]);
+              dynamic_cast<PortableServer::RefCountServantBase*>(ec);
 
-            if (servant == NULL)
+            if (servant == nullptr)
               {
                 RTC_ERROR(("Dynamic cast error: ECBase -> Servant."));
                 continue;
@@ -2222,7 +2130,7 @@ namespace RTC
             // never throws exception
             RTC_ERROR(("Unknown exception caught."));
           }
-        RTC::ExecutionContextFactory::instance().deleteObject(m_eclist[i]);
+        RTC::ExecutionContextFactory::instance().deleteObject(ec);
       }
     if (!m_eclist.empty())
       {
@@ -2244,8 +2152,7 @@ namespace RTC
                                 PreComponentActionListener* listener,
                                 bool autoclean)
   {
-    m_actionListeners.
-      preaction_[listener_type].addListener(listener, autoclean);
+    m_actionListeners.addListener(listener_type, listener, autoclean);
   }
 
 
@@ -2263,8 +2170,7 @@ namespace RTC
                                    PreComponentActionListenerType listener_type,
                                    PreComponentActionListener* listener)
   {
-    m_actionListeners.
-      preaction_[listener_type].removeListener(listener);
+    m_actionListeners.removeListener(listener_type, listener);
   }
 
 
@@ -2283,8 +2189,7 @@ namespace RTC
                                  PostComponentActionListener* listener,
                                  bool autoclean)
   {
-    m_actionListeners.
-      postaction_[listener_type].addListener(listener, autoclean);
+    m_actionListeners.addListener(listener_type, listener, autoclean);
   }
 
 
@@ -2302,8 +2207,7 @@ namespace RTC
                                 PostComponentActionListenerType listener_type,
                                 PostComponentActionListener* listener)
   {
-    m_actionListeners.
-      postaction_[listener_type].removeListener(listener);
+    m_actionListeners.removeListener(listener_type, listener);
   }
 
   /*!
@@ -2320,8 +2224,7 @@ namespace RTC
                         PortActionListener* listener,
                         bool autoclean)
   {
-    m_actionListeners.
-      portaction_[listener_type].addListener(listener, autoclean);
+    m_actionListeners.addListener(listener_type, listener, autoclean);
   }
 
 
@@ -2338,8 +2241,7 @@ namespace RTC
   removePortActionListener(PortActionListenerType listener_type,
                            PortActionListener* listener)
   {
-    m_actionListeners.
-      portaction_[listener_type].removeListener(listener);
+    m_actionListeners.removeListener(listener_type, listener);
   }
 
 
@@ -2357,8 +2259,7 @@ namespace RTC
                                     ECActionListener* listener,
                                     bool autoclean)
   {
-    m_actionListeners.
-      ecaction_[listener_type].addListener(listener, autoclean);
+    m_actionListeners.addListener(listener_type, listener, autoclean);
   }
 
 
@@ -2375,8 +2276,7 @@ namespace RTC
   removeExecutionContextActionListener(ECActionListenerType listener_type,
                                        ECActionListener* listener)
   {
-    m_actionListeners.
-      ecaction_[listener_type].removeListener(listener);
+    m_actionListeners.removeListener(listener_type, listener);
   }
 
   /*!
@@ -2391,8 +2291,7 @@ namespace RTC
                          PortConnectListener* listener,
                          bool autoclean)
   {
-    m_portconnListeners.
-      portconnect_[listener_type].addListener(listener, autoclean);
+    m_portconnListeners.addListener(listener_type, listener, autoclean);
   }
 
   /*!
@@ -2406,8 +2305,7 @@ namespace RTC
   removePortConnectListener(PortConnectListenerType listener_type,
                             PortConnectListener* listener)
   {
-    m_portconnListeners.
-      portconnect_[listener_type].removeListener(listener);
+    m_portconnListeners.removeListener(listener_type, listener);
   }
 
   /*!
@@ -2422,8 +2320,7 @@ namespace RTC
                             PortConnectRetListener* listener,
                             bool autoclean)
   {
-    m_portconnListeners.
-      portconnret_[listener_type].addListener(listener, autoclean);
+    m_portconnListeners.addListener(listener_type, listener, autoclean);
   }
 
   /*!
@@ -2437,8 +2334,7 @@ namespace RTC
   removePortConnectRetListener(PortConnectRetListenerType listener_type,
                                PortConnectRetListener* listener)
   {
-    m_portconnListeners.
-      portconnret_[listener_type].removeListener(listener);
+    m_portconnListeners.removeListener(listener_type, listener);
   }
 
   /*!
@@ -2544,8 +2440,7 @@ namespace RTC
                           PreFsmActionListener* listener,
                           bool autoclean)
   {
-    m_fsmActionListeners.
-      preaction_[listener_type].addListener(listener, autoclean);
+    m_fsmActionListeners.addListener(listener_type, listener, autoclean);
   }
   
   
@@ -2562,8 +2457,7 @@ namespace RTC
   removePreFsmActionListener(PreFsmActionListenerType listener_type,
                              PreFsmActionListener* listener)
   {
-    m_fsmActionListeners.
-      preaction_[listener_type].removeListener(listener);
+    m_fsmActionListeners.removeListener(listener_type, listener);
   }
 
 
@@ -2581,8 +2475,7 @@ namespace RTC
                            PostFsmActionListener* listener,
                            bool autoclean)
   {
-    m_fsmActionListeners.
-      postaction_[listener_type].addListener(listener, autoclean);
+    m_fsmActionListeners.addListener(listener_type, listener, autoclean);
   }
 
 
@@ -2599,8 +2492,7 @@ namespace RTC
   removePostFsmActionListener(PostFsmActionListenerType listener_type,
                               PostFsmActionListener* listener)
   {
-    m_fsmActionListeners.
-      postaction_[listener_type].removeListener(listener);
+    m_fsmActionListeners.removeListener(listener_type, listener);
   }
 
   /*!
@@ -2617,8 +2509,7 @@ namespace RTC
                           FsmProfileListener* listener,
                           bool autoclean)
   {
-    m_fsmActionListeners.
-      profile_[listener_type].addListener(listener, autoclean);
+    m_fsmActionListeners.addListener(listener_type, listener, autoclean);
   }
 
 
@@ -2635,8 +2526,7 @@ namespace RTC
   removeFsmProfileListener(FsmProfileListenerType listener_type,
                              FsmProfileListener* listener)
   {
-    m_fsmActionListeners.
-      profile_[listener_type].removeListener(listener);
+    m_fsmActionListeners.removeListener(listener_type, listener);
   }
 
   /*!
@@ -2653,8 +2543,7 @@ namespace RTC
                           FsmStructureListener* listener,
                           bool autoclean)
   {
-    m_fsmActionListeners.
-      structure_[listener_type].addListener(listener, autoclean);
+    m_fsmActionListeners.addListener(listener_type, listener, autoclean);
   }
 
 
@@ -2671,8 +2560,7 @@ namespace RTC
   removeFsmStructureListener(FsmStructureListenerType listener_type,
                              FsmStructureListener* listener)
   {
-    m_fsmActionListeners.
-      structure_[listener_type].removeListener(listener);
+    m_fsmActionListeners.removeListener(listener_type, listener);
   }
 
   
@@ -2696,27 +2584,25 @@ namespace RTC
         oid2 = m_pPOA->servant_to_id(this);
         m_pPOA->deactivate_object(oid1);
         m_pPOA->deactivate_object(oid2);
-		if (!CORBA::is_nil(m_insref))
-		  {
-#ifndef ORB_IS_TAO
 #ifndef ORB_IS_RTORB
-			CORBA::Object_ptr obj = m_pORB->resolve_initial_references("omniINSPOA");
-#else // ROB_IS_RTORB
-			CORBA::Object_ptr obj = m_pORB->resolve_initial_references((char*)"omniINSPOA");
-#endif // ORB_IS_RTORB
-		    PortableServer::POA_ptr poa = PortableServer::POA::_narrow(obj);
-		    PortableServer::ObjectId_var oid3;
-		    oid3 = poa->servant_to_id(this);
-		    poa->deactivate_object(oid3.in());
+        if (!CORBA::is_nil(m_insref))
+          {
+#ifndef ORB_IS_TAO
+            CORBA::Object_var obj = m_pORB->resolve_initial_references("omniINSPOA");
+            PortableServer::POA_var poa = PortableServer::POA::_narrow(obj);
+            PortableServer::ObjectId_var oid3;
+            oid3 = poa->servant_to_id(this);
+            poa->deactivate_object(oid3.in());
 #else
-			  CORBA::Object_var obj = m_pORB->resolve_initial_references("IORTable");
-			  IORTable::Table_var adapter = IORTable::Table::_narrow(obj.in());
+            CORBA::Object_var obj = m_pORB->resolve_initial_references("IORTable");
+            IORTable::Table_var adapter = IORTable::Table::_narrow(obj.in());
 
-			  std::string id_str = getCategory();
-			  id_str = id_str + "." + getInstanceName();
-			  adapter->unbind(id_str.c_str());
+            std::string id_str = getCategory();
+            id_str = id_str + "." + getInstanceName();
+            adapter->unbind(id_str.c_str());
 #endif
-		  }
+          }
+#endif
       }
     catch (PortableServer::POA::ServantNotActive &e)
       {
@@ -2740,17 +2626,103 @@ namespace RTC
         RTC_ERROR(("Unknown exception caught."));
       }
 
-    if (m_pManager != NULL)
+    if (m_pManager != nullptr)
       {
         RTC_DEBUG(("Cleanup on Manager"));
         m_pManager->notifyFinalized(this);
       }
   }
 
+  /*!
+   * @brief Initialize my EC
+   * This function initializes mine ECs.
+   * This is called from only initialize().
+   */
+  ReturnCode_t RTObject_impl::initMineEC()
+  {
+    // EC creation
+    std::vector<coil::Properties> ec_args;
+    if (getContextOptions(ec_args) != RTC::RTC_OK)
+    {
+      RTC_ERROR(("Valid EC options are not available. Aborting"));
+      return RTC::BAD_PARAMETER;
+    }
+    if (createContexts(ec_args) != RTC::RTC_OK)
+    {
+      RTC_ERROR(("EC creation failed. Maybe out of resources. Aborting."));
+      return RTC::OUT_OF_RESOURCES;
+    }
+    RTC_INFO(("%d execution context%s created.",
+              m_ecMine.length(),
+              (m_ecMine.length() == 1) ? " was" : "s were"));
+    return RTC::RTC_OK;
+  }
+  /*!
+   * @brief Starting my EC
+   * This function start mine ECs.
+   * This is called from only initialize().
+   */
+  void RTObject_impl::startMineEC()
+  {
+    for (::CORBA::ULong i(0), len(m_ecMine.length()); i < len; ++i)
+    {
+      RTC_DEBUG(("EC[%d] starting.", i));
+      m_ecMine[i]->start();
+    }
+  }
+  /*!
+   * @brief Finalize my EC
+   * This function finalize mine ECs.
+   * This is called from only exit().
+   */
+  void RTObject_impl::finalizeMineEC()
+  {
+    SDOPackage::OrganizationList_var organizations = get_organizations();
+    CORBA::ULong len = organizations->length();
+
+    for (CORBA::ULong i = 0; i < len; i++)
+    {
+      organizations[i]->remove_member(getInstanceName());
+    }
+    // deactivate myself on owned EC
+    CORBA_SeqUtil::for_each(m_ecMine,
+                            deactivate_comps(m_objref));
+    // deactivate myself on other EC
+    CORBA_SeqUtil::for_each(m_ecOther,
+                            deactivate_comps(m_objref));
+
+    // owned EC will be finalised later in finalizeContext().
+  }
+  /*!
+   * @brief Finalize others EC
+   * This function detaching the RTC from others' ECs.
+   * This is called from only exit().
+   */
+  void RTObject_impl::finalizeOtherEC()
+  {
+    // detach myself from other EC
+    for (CORBA::ULong ic(0), size(m_ecOther.length()); ic < size; ++ic)
+    {
+      try
+      {
+        RTC::LightweightRTObject_var comp(this->_this());
+        if (!::CORBA::is_nil(m_ecOther[ic]) && !m_ecOther[ic]->_non_existent())
+        {
+          m_ecOther[ic]->remove_component(comp.in());
+        }
+      }
+      catch (...)
+      {
+        RTC_ERROR(("unknown error"));
+      }
+    }
+  }
+
+
   ReturnCode_t RTObject_impl::
   getInheritedECOptions(coil::Properties& default_opts)
   {
-    const char* inherited_opts[] =
+    static const char* const inherited_opts[] =
       {
         "sync_transition",
         "sync_activation",
@@ -2767,7 +2739,7 @@ namespace RTC
         ""
       };
     coil::Properties* p = m_properties.findNode("exec_cxt");
-    if (p == NULL)
+    if (p == nullptr)
       {
         RTC_WARN(("No exec_cxt option found."));
         return RTC::RTC_ERROR;
@@ -2775,7 +2747,7 @@ namespace RTC
     RTC_DEBUG(("Copying inherited EC options."));
     for (size_t i(0); inherited_opts[i][0] != '\0'; ++i)
       {
-        if ((*p).findNode(inherited_opts[i]) != NULL)
+        if ((*p).findNode(inherited_opts[i]) != nullptr)
           {
             RTC_PARANOID(("Option %s exists.", inherited_opts[i]));
             default_opts[inherited_opts[i]] = (*p)[inherited_opts[i]];
@@ -2792,7 +2764,7 @@ namespace RTC
   {
     RTC_TRACE(("getPrivateContextOptions()"));
     // Component specific multiple EC option available
-    if (m_properties.findNode("execution_contexts") == NULL)
+    if (m_properties.findNode("execution_contexts") == nullptr)
       {
         RTC_DEBUG(("No component specific EC specified."));
         return RTC::RTC_ERROR;
@@ -2805,19 +2777,18 @@ namespace RTC
 
     coil::Properties default_opts;
     getInheritedECOptions(default_opts);
-    for (size_t i(0); i < ecs_tmp.size(); ++i)
+    for(auto & ec_ : ecs_tmp)
       {
-        std::string ec_tmp = ecs_tmp[i];
-        if (coil::normalize(ec_tmp) == "none")
+        if (coil::normalize(ec_) == "none")
           {
             RTC_INFO(("EC none. EC will not be bound to the RTC."));
             ec_args.clear();
             return RTC::RTC_OK;
           }
-        coil::vstring type_and_name = coil::split(ecs_tmp[i], "(", true);
+        coil::vstring type_and_name = coil::split(ec_, "(", true);
         if (type_and_name.size() > 2)
           {
-            RTC_DEBUG(("Invalid EC type specified: %s", ecs_tmp[i].c_str()));
+            RTC_DEBUG(("Invalid EC type specified: %s", ec_.c_str()));
             continue;
           }
         coil::Properties p = default_opts;
@@ -2825,7 +2796,7 @@ namespace RTC
         p["type"] = type_and_name[0];
         RTC_DEBUG(("p_type: %s", p["type"].c_str()));
         coil::Properties* p_type = m_properties.findNode("ec." + p["type"]);
-        if (p_type != NULL)
+        if (p_type != nullptr)
           {
             RTC_DEBUG(("p_type props:"));
             RTC_DEBUG_STR((*p_type));
@@ -2838,14 +2809,14 @@ namespace RTC
 
         // EC name specified
         RTC_DEBUG(("size: %d, name: %s", type_and_name.size(),
-                   type_and_name[1].c_str()))
+                   type_and_name[1].c_str()));
         if (type_and_name.size() == 2 &&
             type_and_name[1].at(type_and_name[1].size() - 1) == ')')
           {
             type_and_name[1].erase(type_and_name[1].size() - 1);
             p["name"] = type_and_name[1];
             coil::Properties* p_name = m_properties.findNode("ec." + p["name"]);
-            if (p_name != NULL)
+            if (p_name != nullptr)
               {
                 RTC_DEBUG(("p_name props:"));
                 RTC_DEBUG_STR((*p_name));
@@ -2856,9 +2827,13 @@ namespace RTC
                 RTC_DEBUG(("p_name none"));
               }
           }
-        ec_args.push_back(p);
+        else
+          {
+            RTC_DEBUG(("p_name is empty"));
+          }
         RTC_DEBUG(("New EC properties stored:"));
         RTC_DEBUG_STR((p));
+        ec_args.emplace_back(std::move(p));
       }
     return RTC::RTC_OK;
   }
@@ -2873,7 +2848,7 @@ namespace RTC
     RTC_TRACE(("getGlobalContextOptions()"));
 
     coil::Properties* prop = m_properties.findNode("exec_cxt.periodic");
-    if (prop == NULL)
+    if (prop == nullptr)
       {
         RTC_WARN(("No global EC options found."));
         return RTC::RTC_ERROR;
@@ -2906,7 +2881,7 @@ namespace RTC
       }
     if (ret_global == RTC::RTC_OK && ret_private != RTC::RTC_OK)
       {
-        ec_args.push_back(global_props);
+        ec_args.emplace_back(std::move(global_props));
       }
     return RTC::RTC_OK;
   }
@@ -2920,12 +2895,12 @@ namespace RTC
   {
     std::vector<RTC::ExecutionContextBase*> eclist;
     eclist = RTC::ExecutionContextFactory::instance().createdObjects();
-    for (size_t i(0); i < eclist.size(); ++i)
+    for (auto & ec_ref : eclist)
       {
-        if (eclist[i]->getProperties()["type"] == ec_arg["type"] &&
-            eclist[i]->getProperties()["name"] == ec_arg["name"])
+        if (ec_ref->getProperties()["type"] == ec_arg["type"] &&
+            ec_ref->getProperties()["name"] == ec_arg["name"])
           {
-            ec = eclist[i];
+            ec = ec_ref;
             return RTC::RTC_OK;
           }
       }
@@ -2942,13 +2917,13 @@ namespace RTC
     coil::vstring avail_ec
       = RTC::ExecutionContextFactory::instance().getIdentifiers();
 
-    for (size_t i(0); i < ec_args.size(); ++i)
+    for (auto & ec_arg : ec_args)
       {
-        std::string& ec_type(ec_args[i]["type"]);
-        std::string& ec_name(ec_args[i]["name"]);
+        std::string& ec_type(ec_arg["type"]);
+        std::string& ec_name(ec_arg["name"]);
         RTC::ExecutionContextBase* ec;
         if (!ec_name.empty() &&
-            findExistingEC(ec_args[i], ec) == RTC::RTC_OK)
+            findExistingEC(ec_arg, ec) == RTC::RTC_OK)
           { // if EC's name exists, find existing EC in the factory.
             RTC_DEBUG(("EC: type=%s, name=%s already exists.",
                        ec_type.c_str(), ec_name.c_str()));
@@ -2964,10 +2939,10 @@ namespace RTC
                 continue;
               }
             ec = RTC::ExecutionContextFactory::
-              instance().createObject(ec_type.c_str());
+              instance().createObject(ec_type);
           }
 
-        if (ec == NULL)
+        if (ec == nullptr)
           { // EC factory available but creation failed. Resource full?
             RTC_ERROR(("EC (%s) creation failed.", ec_type.c_str()));
             RTC_DEBUG(("Available EC list: %s",
@@ -2977,8 +2952,8 @@ namespace RTC
           }
         RTC_DEBUG(("EC (%s) created.", ec_type.c_str()));
 
-        ec->init(ec_args[i]);
-        m_eclist.push_back(ec);
+        ec->init(ec_arg);
+        m_eclist.emplace_back(ec);
         ec->bindComponent(this);
       }
 
@@ -2987,7 +2962,7 @@ namespace RTC
       {
         coil::Properties default_prop;
         default_prop.setDefaults(default_config);
-        RTC::ExecutionContextBase* ec = NULL;
+        RTC::ExecutionContextBase* ec = nullptr;
 
         std::string& ec_type(default_prop["exec_cxt.periodic.type"]);
         if (std::find(avail_ec.begin(), avail_ec.end(), ec_type)
@@ -2999,8 +2974,8 @@ namespace RTC
             return RTC::RTC_ERROR;
         }
         ec = RTC::ExecutionContextFactory::instance().
-          createObject(ec_type.c_str());
-        if (ec == NULL)
+          createObject(ec_type);
+        if (ec == nullptr)
           {
             RTC_ERROR(("EC (%s) creation failed.",
                        ec_type.c_str()));
@@ -3012,14 +2987,14 @@ namespace RTC
         coil::Properties default_opts;
         coil::Properties* prop = default_prop.findNode("exec_cxt.periodic");
 
-        if (prop == NULL)
+        if (prop == nullptr)
           {
             RTC_WARN(("No default EC options found."));
             return RTC::RTC_ERROR;
           }
 
         default_opts << *prop;
-        const char* inherited_opts[] =
+        static const char* const inherited_opts[] =
           {
             "sync_transition",
             "sync_activation",
@@ -3037,7 +3012,7 @@ namespace RTC
           };
 
         coil::Properties* p = default_prop.findNode("exec_cxt");
-        if (p == NULL)
+        if (p == nullptr)
           {
             RTC_WARN(("No exec_cxt option found."));
             return RTC::RTC_ERROR;
@@ -3045,17 +3020,27 @@ namespace RTC
         RTC_DEBUG(("Copying inherited EC options."));
         for (size_t i(0); inherited_opts[i][0] != '\0'; ++i)
           {
-            if ((*p).findNode(inherited_opts[i]) != NULL)
+            if ((*p).findNode(inherited_opts[i]) != nullptr)
               {
                 RTC_PARANOID(("Option %s exists.", inherited_opts[i]));
                 default_opts[inherited_opts[i]] = (*p)[inherited_opts[i]];
               }
           }
         ec->init(default_opts);
-        m_eclist.push_back(ec);
+        m_eclist.emplace_back(ec);
         ec->bindComponent(this);
       }
     return ret;
+  }
+
+  /*!
+   * @brief initialize SDO service stuff
+   * This function calles SdoService's initialize().
+   */
+  void RTObject_impl::initSdoService()
+  {
+    // SDO service admin initialization
+    m_sdoservice.init(m_properties);
   }
 
 
@@ -3072,8 +3057,20 @@ namespace RTC
   */
   void RTObject_impl::setINSObjRef(RTC::LightweightRTObject_ptr obj)
   {
-	  m_insref = obj;
+      m_insref = obj;
   }
 
+  RTObject_impl::SdoServiceConsumerTerminator::SdoServiceConsumerTerminator() = default;
+  void RTObject_impl::SdoServiceConsumerTerminator::setSdoServiceConsumer(SdoServiceAdmin* sdoservice, const char* id)
+    {
+      m_sdoservice = sdoservice;
+      m_id = id;
+    }
+  int RTObject_impl::SdoServiceConsumerTerminator::svc()
+    {
+      m_sdoservice->removeSdoServiceConsumer(m_id.c_str());
+      return 0;
+    }
 
-};  // namespace RTC
+
+} // namespace RTC

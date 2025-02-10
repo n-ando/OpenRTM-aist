@@ -22,21 +22,22 @@
 
 #include <coil/Factory.h>
 #include <rtm/DataPortStatus.h>
+#include <rtm/ByteData.h>
 
 namespace coil
 {
   class Properties;
-};
+} // namespace coil
 
 // Why RtORB does not allow forward declaration?
 #if !defined ORB_IS_RTORB && !defined ORB_IS_ORBEXPRESS
 namespace SDOPackage
 {
   class NVList;
-};
+} // namespace SDOPackage
 #endif  // ORB_IS_RTORB
 
-class cdrMemoryStream;
+
 
 namespace RTC
 {
@@ -74,10 +75,8 @@ namespace RTC
    *
    */
   class InPortConsumer
-    : public DataPortStatus
   {
   public:
-    DATAPORTSTATUS_ENUM
 
     /*!
      * @if jp
@@ -92,7 +91,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~InPortConsumer(void) {}
+    virtual ~InPortConsumer() = default;
 
     /*!
      * @if jp
@@ -144,7 +143,7 @@ namespace RTC
      *
      * @endif
      */
-	virtual ReturnCode put(cdrMemoryStream& data) = 0;
+    virtual DataPortStatus put(ByteData& data) = 0;
 
     /*!
      * @if jp
@@ -254,11 +253,13 @@ namespace RTC
 
   };
 
-  typedef ::coil::GlobalFactory<InPortConsumer> InPortConsumerFactory;
+  using InPortConsumerFactory = ::coil::GlobalFactory<InPortConsumer>;
+} // namespace RTC
 
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
-  EXTERN template class DLL_PLUGIN ::coil::GlobalFactory<InPortConsumer>;
+EXTERN template class DLL_PLUGIN coil::GlobalFactory<RTC::InPortConsumer>;
+#elif defined(__GNUC__)
+EXTERN template class coil::GlobalFactory<RTC::InPortConsumer>;
 #endif
-};  // namespace RTC
 
 #endif  // RTC_INPORTCONSUMER_H

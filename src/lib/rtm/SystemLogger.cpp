@@ -21,15 +21,24 @@
 #include <sstream>
 #include <iomanip>
 
-#if defined(_MSC_VER)
-#define snprintf _snprintf
-#endif
-
 #define MAXSIZE 256
 
 namespace RTC
 {
-  const char* Logger::m_levelString[] =
+  const char* const Logger::m_levelString[] =
+    {
+      "SILENT",
+      "FATAL",
+      "ERROR",
+      "WARNING",
+      "INFO",
+      "DEBUG",
+      "TRACE",
+      "VERBOSE",
+      "PARANOID"
+    };
+
+  const char* const Logger::m_levelOutputString[] =
     {
       " SILENT: ",
       " FATAL: ",
@@ -42,42 +51,44 @@ namespace RTC
       " PARANOID: "
     };
 
+  const char* const Logger::m_levelColor[] =
+    {
+      "\x1b[0m",          // SLILENT  (none)
+      "\x1b[0m\x1b[31m",  // FATAL    (red)
+      "\x1b[0m\x1b[35m",  // ERROR    (magenta)
+      "\x1b[0m\x1b[33m",  // WARN     (yellow)
+      "\x1b[0m\x1b[34m",  // INFO     (blue)
+      "\x1b[0m\x1b[32m",  // DEBUG    (green)
+      "\x1b[0m\x1b[36m",  // TRACE    (cyan)
+      "\x1b[0m\x1b[39m",  // VERBOSE  (default)
+      "\x1b[0m\x1b[37m"   // PARANOID (white)
+    };
+
   Logger::Logger(const char* name)
     : ::coil::LogStream(&(Manager::instance().getLogStreamBuf()),
                         RTL_SILENT, RTL_PARANOID, RTL_SILENT),
-      m_name(name),
-      m_dateFormat("%b %d %H:%M:%S.%Q"),
-      m_clock(&coil::ClockManager::instance().getClock("system")),
-      m_msEnable(0), m_usEnable(0), m_esEnable(0)
+      m_name(name)
   {
     setLevel(Manager::instance().getLogLevel().c_str());
     coil::Properties& prop(Manager::instance().getConfig());
-    if (prop.findNode("logger.date_format") != NULL)
+    if (prop.findNode("logger.date_format") != nullptr)
       {
         setDateFormat(prop["logger.date_format"].c_str());
       }
-    if (prop.findNode("logger.clock_type") != NULL)
+    if (prop.findNode("logger.clock_type") != nullptr)
       {
         setClockType(prop["logger.clock_type"]);
       }
-	coil::toBool(prop["logger.escape_sequence_enable"], "YES", "NO", false) ?
-		enableEscapeSequence() : disableEscapeSequence();
   }
 
   Logger::Logger(LogStreamBuf* streambuf)
     : ::coil::LogStream(streambuf,
-                        RTL_SILENT, RTL_PARANOID,  RTL_SILENT),
-      m_name("unknown"),
-      m_dateFormat("%b %d %H:%M:%S.%Q"),
-      m_clock(&coil::ClockManager::instance().getClock("system")),
-      m_msEnable(0), m_usEnable(0), m_esEnable(0)
+                        RTL_SILENT, RTL_PARANOID,  RTL_SILENT)
   {
     setDateFormat(m_dateFormat.c_str());
   }
 
-  Logger::~Logger(void)
-  {
-  }
+  Logger::~Logger() = default;
 
   /*!
    * @if jp
@@ -100,12 +111,15 @@ namespace RTC
    */
   void Logger::setDateFormat(const char* format)
   {
-    m_dateFormat = std::string(format);
-    m_msEnable = coil::replaceString(m_dateFormat, "%Q", "#m#");
-    m_usEnable = coil::replaceString(m_dateFormat, "%q", "#u#");
+    std::string fmt(format);
+    m_msEnable = std::string::npos != fmt.find("%Q");
+    m_usEnable = std::string::npos != fmt.find("%q");
+    if (m_msEnable){ fmt = coil::replaceString(std::move(fmt), "%Q", "#m#"); }
+    if (m_usEnable){ fmt = coil::replaceString(std::move(fmt), "%q", "#u#"); }
+    m_dateFormat = std::move(fmt);
   }
 
-  void Logger::setClockType(std::string clocktype)
+  void Logger::setClockType(const std::string& clocktype)
   {
     m_clock = &coil::ClockManager::instance().getClock(clocktype);
   }
@@ -121,37 +135,7 @@ namespace RTC
     m_name = name;
   }
 
-  /*!
-   * @if jp
-   * @brief メッセージのプリフィックス追加関数
-   * @else
-   * @brief Message prefix appender function
-   * @endif
-   */
-  void Logger::header(int level)
-    {
-	  if (m_esEnable)
-	    {
-		  const char* color[] =
-		  {
-			"\x1b[0m",          // SLILENT  (none)
-			"\x1b[0m\x1b[31m",  // FATAL    (red)
-			"\x1b[0m\x1b[35m",  // ERROR    (magenta)
-			"\x1b[0m\x1b[33m",  // WARN     (yellow)
-			"\x1b[0m\x1b[34m",  // INFO     (blue)
-			"\x1b[0m\x1b[32m",  // DEBUG    (green)
-			"\x1b[0m\x1b[36m",  // TRACE    (cyan)
-			"\x1b[0m\x1b[39m",  // VERBOSE  (default)
-			"\x1b[0m\x1b[37m"   // PARANOID (white)
-		  };
-		  *this << color[level];
-	    }
-      *this << getDate() + m_levelString[level] + m_name + ": ";
-	  if (m_esEnable)
-	    {
-		  *this << "\x1b[0m";
-	    }
-    }
+
 
   /*!
    * @if jp
@@ -160,33 +144,46 @@ namespace RTC
    * @brief Get the current formatted date/time string
    * @endif
    */
-  std::string Logger::getDate(void)
+  std::string Logger::getDate()
   {
     char buf[MAXSIZE];
-    coil::TimeValue tm(m_clock->gettime());
+    auto tm = m_clock->gettime();
+    auto sec = std::chrono::duration_cast<std::chrono::seconds>(tm);
 
-    time_t timer;
+    time_t timer = sec.count();
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
+    struct tm date;
+    errno_t error = gmtime_s(&date, &timer);
+    if (error == EOVERFLOW)
+    {
+        return std::string();
+    }
+    strftime(buf, sizeof(buf), m_dateFormat.c_str(), &date);
+#else
     struct tm* date;
-
-    timer = tm.sec();
     date = gmtime(&timer);
-
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wformat-nonliteral"
+    // The format parameter is not literal, as it allows the user to change the format.
+    // Therefore, we have controlled -Wformat-nonliteral with pragma.
     strftime(buf, sizeof(buf), m_dateFormat.c_str(), date);
-    std::string fmt(buf);
+#pragma GCC diagnostic pop
+#endif
 
-    if (m_msEnable > 0)
+    std::string fmt(buf);
+    if (m_msEnable)
       {
+        auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(tm - sec);
         std::stringstream msec("");
-        msec << std::setfill('0') << std::setw(3);
-        msec << static_cast<int>(tm.usec() / 1000);
-        coil::replaceString(fmt, "#m#", msec.str());
+        msec << std::setfill('0') << std::setw(3) << ms.count();
+        fmt = coil::replaceString(std::move(fmt), "#m#", msec.str());
       }
-    if (m_usEnable > 0)
+    if (m_usEnable)
       {
+        auto us = std::chrono::duration_cast<std::chrono::microseconds>(tm - sec);
         std::stringstream usec("");
-        usec << std::setfill('0') << std::setw(3);
-        usec << static_cast<int>(tm.usec() - ((tm.usec() / 1000) * 1000));
-        coil::replaceString(fmt, "#u#", usec.str());
+        usec << std::setfill('0') << std::setw(6) << us.count();
+        fmt = coil::replaceString(std::move(fmt), "#u#", usec.str());
       }
 
     return fmt;
@@ -224,44 +221,70 @@ namespace RTC
       return RTL_SILENT;
   }
 
-  /*!
-  * @if jp
-  *
-  * @brief エスケープシーケンスの有効にする
-  *
-  *
-  * @else
-  *
-  * @brief
-  *
-  * </pre>
-  *
-  *
-  * @endif
-  */
-  void Logger::enableEscapeSequence()
-  {
-	  m_esEnable = true;
-  }
+
 
   /*!
-  * @if jp
-  *
-  * @brief エスケープシーケンスの無効にする
-  *
-  *
-  * @else
-  *
-  * @brief
-  *
-  * </pre>
-  *
-  *
-  * @endif
-  */
-  void Logger::disableEscapeSequence()
+   * @if jp
+   *
+   * @brief ログの出力
+   *
+   * 指定したメッセージのログを出力する
+   *
+   * @param level ログレベル
+   * @param mes メッセージ
+   *
+   *
+   * @else
+   *
+   * @brief log output
+   *
+   * 
+   *
+   * @param level log level
+   * @param mes message
+   *
+   * @endif
+   */
+  void Logger::write(int level, const std::string &mes)
   {
-	  m_esEnable = false;
+      if (ostream_type != nullptr)
+      {
+          std::string date = getDate();
+          ostream_type->write(level, m_name, date, mes);
+      }
+  }
+  /*!
+   * @if jp
+   *
+   * @brief ログの出力
+   *
+   * 指定したプロパティを文字列に変換してログに出力する
+   *
+   * @param level ログレベル
+   * @param prop プロパティ
+   *
+   *
+   * @else
+   *
+   * @brief log output
+   *
+   * 
+   *
+   * @param level log level
+   * @param prop properties
+   *
+   * @endif
+   */
+  void Logger::write(int level, const coil::Properties &prop)
+  {
+      if (ostream_type != nullptr)
+      {
+          std::vector<std::string> vec(prop);
+          for (auto & str : vec)
+          {
+              ostream_type->write(level, m_name, getDate(), str);
+          }
+      }
   }
 
-};  // namespace RTC
+} // namespace RTC

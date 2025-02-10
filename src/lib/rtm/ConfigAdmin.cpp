@@ -18,8 +18,8 @@
 
 #include <rtm/ConfigAdmin.h>
 
-#include <assert.h>
-#include <string.h>
+#include <cassert>
+#include <cstring>
 #include <algorithm>
 
 namespace RTC
@@ -46,7 +46,7 @@ namespace RTC
    */
   void ConfigBase::notifyUpdate(const char* key, const char* val)
   {
-    if (m_admin == 0 || m_callback == 0) return;
+    if (m_admin == nullptr || m_callback == nullptr) return;
     (m_admin->*m_callback)(key, val);
   }
 
@@ -60,6 +60,7 @@ namespace RTC
     : m_configsets(configsets), m_activeId("default"),
       m_active(true), m_changed(false)
   {
+      m_configsets.createNode("default");
   }
 
   /*!
@@ -69,11 +70,11 @@ namespace RTC
    * @brief Virtual destructor
    * @endif
    */
-  ConfigAdmin::~ConfigAdmin(void)
+  ConfigAdmin::~ConfigAdmin()
   {
-    for (int i(0), len(m_params.size()); i < len; ++i)
+    for (auto & param : m_params)
       {
-        if (m_params[i] != NULL) { delete m_params[i]; }
+        delete param; 
       }
     m_params.clear();
   }
@@ -99,11 +100,12 @@ namespace RTC
     // configsets
     const std::vector<coil::Properties*>& leaf(m_configsets.getLeaf());
 
-    for (size_t i(0); i < leaf.size(); ++i)
+
+    for (auto prop : leaf)
       {
-        if (leaf[i]->hasKey(param_name))
+        if (prop->hasKey(param_name) != nullptr)
           {
-            coil::Properties* p(leaf[i]->removeNode(param_name));
+            coil::Properties* p(prop->removeNode(param_name));
             delete p;
           }
       }
@@ -121,7 +123,7 @@ namespace RTC
    *        (Active configuration set)
    * @endif
    */
-  void ConfigAdmin::update(void)
+  void ConfigAdmin::update()
   {
     m_changedParam.clear();
     if (m_changed && m_active)
@@ -142,17 +144,17 @@ namespace RTC
    */
   void ConfigAdmin::update(const char* config_set)
   {
-    if (m_configsets.hasKey(config_set) == NULL) { return; }
+    if (m_configsets.hasKey(config_set) == nullptr) { return; }
     // clear changed parameter list
     m_changedParam.clear();
     coil::Properties& prop(m_configsets.getNode(config_set));
 
-    for (int i(0), len(m_params.size()); i < len; ++i)
+    for (auto & param : m_params)
       {
-        if (prop.hasKey(m_params[i]->name) != NULL)
+        if (prop.hasKey(param->name) != nullptr)
           {
             // m_changedParam is updated here
-            m_params[i]->update(prop[m_params[i]->name].c_str());
+            param->update(prop[param->name].c_str());
           }
       }
     onUpdate(config_set);
@@ -169,7 +171,7 @@ namespace RTC
   void ConfigAdmin::update(const char* config_set, const char* config_param)
   {
     m_changedParam.clear();
-    if ((config_set == 0) || (config_param == 0)) { return; }
+    if ((config_set == nullptr) || (config_param == nullptr)) { return; }
 
     std::string key(config_set);
     key += "."; key += config_param;
@@ -197,11 +199,7 @@ namespace RTC
     std::vector<ConfigBase*>::iterator it;
     it = std::find_if(m_params.begin(), m_params.end(),
                       find_conf(param_name));
-    if (it != m_params.end())
-      {
-        return true;
-      }
-    return false;
+    return it != m_params.end();
   }
 
 
@@ -212,7 +210,7 @@ namespace RTC
    * @brief Get all configuration sets
    * @endif
    */
-  const std::vector<coil::Properties*>& ConfigAdmin::getConfigurationSets(void)
+  const std::vector<coil::Properties*>& ConfigAdmin::getConfigurationSets()
   {
     return m_configsets.getLeaf();
   }
@@ -228,7 +226,7 @@ namespace RTC
   ConfigAdmin::getConfigurationSet(const char* config_id)
   {
     coil::Properties* p(m_configsets.findNode(config_id));
-    if (p == 0) { return m_emptyconf; }
+    if (p == nullptr) { return m_emptyconf; }
     return *p;
   }
 
@@ -261,7 +259,7 @@ namespace RTC
    * @brief Get the active configuration set
    * @endif
    */
-  const coil::Properties& ConfigAdmin::getActiveConfigurationSet(void)
+  const coil::Properties& ConfigAdmin::getActiveConfigurationSet()
   {
     coil::Properties& p(m_configsets.getNode(m_activeId));
 
@@ -279,11 +277,11 @@ namespace RTC
   {
     std::string node(config_set.getName());
     if (node.empty()) { return false; }
-    if (m_configsets.hasKey(node.c_str()) != 0) { return false; }
+    if (m_configsets.hasKey(node.c_str()) != nullptr) { return false; }
 
     coil::Properties& p(m_configsets.getNode(node));
     p << config_set;
-    m_newConfig.push_back(node);
+    m_newConfig.emplace_back(std::move(node));
 
     m_changed = true;
     m_active = false;
@@ -309,7 +307,7 @@ namespace RTC
     if (it == m_newConfig.end()) { return false; }
 
     coil::Properties* p(m_configsets.removeNode(config_id));
-    if (p != NULL) { delete p; }
+    delete p; 
     m_newConfig.erase(it);
 
     m_changed = true;
@@ -327,11 +325,11 @@ namespace RTC
    */
   bool ConfigAdmin::activateConfigurationSet(const char* config_id)
   {
-    if (config_id == NULL) { return false; }
+    if (config_id == nullptr) { return false; }
     // '_<conf_name>' is special configuration set name
     if (config_id[0] == '_') { return false; }
 
-    if (m_configsets.hasKey(config_id) == 0) { return false; }
+    if (m_configsets.hasKey(config_id) == nullptr) { return false; }
     m_activeId = config_id;
     m_active = true;
     m_changed = true;
@@ -346,28 +344,28 @@ namespace RTC
   {
     std::cerr << "setOnUpdate function is obsolete." << std::endl;
     std::cerr << "Use addConfigurationSetNameListener instead." << std::endl;
-    m_listeners.configsetname_[ON_UPDATE_CONFIG_SET].addListener(cb, false);
+    m_listeners.addListener(ConfigurationSetNameListenerType::ON_UPDATE_CONFIG_SET, cb, false);
   }
 
   void ConfigAdmin::setOnUpdateParam(OnUpdateParamCallback* cb)
   {
     std::cerr << "setOnUpdateParam function is obsolete." << std::endl;
     std::cerr << "Use addConfigurationParamListener instead." << std::endl;
-    m_listeners.configparam_[ON_UPDATE_CONFIG_PARAM].addListener(cb, false);
+    m_listeners.addListener(ConfigurationParamListenerType::ON_UPDATE_CONFIG_PARAM, cb, false);
   }
 
   void ConfigAdmin::setOnSetConfigurationSet(OnSetConfigurationSetCallback* cb)
   {
     std::cerr << "setOnSetConfigurationSet function is obsolete." << std::endl;
     std::cerr << "Use addConfigurationSetListener instead." << std::endl;
-    m_listeners.configset_[ON_SET_CONFIG_SET].addListener(cb, false);
+    m_listeners.addListener(ConfigurationSetListenerType::ON_SET_CONFIG_SET, cb, false);
   }
 
   void ConfigAdmin::setOnAddConfigurationSet(OnAddConfigurationAddCallback* cb)
   {
     std::cerr << "setOnAddConfigurationSet function is obsolete." << std::endl;
     std::cerr << "Use addConfigurationSetListener instead." << std::endl;
-    m_listeners.configset_[ON_ADD_CONFIG_SET].addListener(cb, false);
+    m_listeners.addListener(ConfigurationSetListenerType::ON_ADD_CONFIG_SET, cb, false);
   }
 
   void
@@ -376,14 +374,14 @@ namespace RTC
     std::cerr <<
             "setOnRemoveConfigurationSet function is obsolete." <<std::endl;
     std::cerr << "Use addConfigurationSetNameListener instead." << std::endl;
-    m_listeners.configsetname_[ON_REMOVE_CONFIG_SET].addListener(cb, false);
+    m_listeners.addListener(ConfigurationSetNameListenerType::ON_REMOVE_CONFIG_SET, cb, false);
   }
 
   void ConfigAdmin::setOnActivateSet(OnActivateSetCallback* cb)
   {
     std::cerr << "setOnActivateSet function is obsolete." << std::endl;
     std::cerr << "Use addConfigurationSetNameListener instead." << std::endl;
-    m_listeners.configsetname_[ON_ACTIVATE_CONFIG_SET].addListener(cb, false);
+    m_listeners.addListener(ConfigurationSetNameListenerType::ON_ACTIVATE_CONFIG_SET, cb, false);
   }
   //
   // end of obsolete functions
@@ -401,7 +399,7 @@ namespace RTC
                                 ConfigurationParamListener* listener,
                                 bool autoclean)
   {
-    m_listeners.configparam_[type].addListener(listener, autoclean);
+    m_listeners.addListener(type, listener, autoclean);
   }
 
   /*!
@@ -415,7 +413,7 @@ namespace RTC
   removeConfigurationParamListener(ConfigurationParamListenerType type,
                                    ConfigurationParamListener* listener)
   {
-    m_listeners.configparam_[type].removeListener(listener);
+    m_listeners.removeListener(type, listener);
   }
 
   /*!
@@ -430,7 +428,7 @@ namespace RTC
                               ConfigurationSetListener* listener,
                               bool autoclean)
   {
-    m_listeners.configset_[type].addListener(listener, autoclean);
+    m_listeners.addListener(type, listener, autoclean);
   }
 
   /*!
@@ -444,7 +442,7 @@ namespace RTC
   removeConfigurationSetListener(ConfigurationSetListenerType type,
                                  ConfigurationSetListener* listener)
   {
-    m_listeners.configset_[type].removeListener(listener);
+    m_listeners.removeListener(type, listener);
   }
 
   /*!
@@ -459,7 +457,7 @@ namespace RTC
                                   ConfigurationSetNameListener* listener,
                                   bool autoclean)
   {
-    m_listeners.configsetname_[type].addListener(listener, autoclean);
+    m_listeners.addListener(type, listener, autoclean);
   }
 
   /*!
@@ -473,7 +471,7 @@ namespace RTC
   removeConfigurationSetNameListener(ConfigurationSetNameListenerType type,
                                      ConfigurationSetNameListener* listener)
   {
-    m_listeners.configsetname_[type].removeListener(listener);
+    m_listeners.removeListener(type, listener);
   }
 
   //------------------------------------------------------------
@@ -487,7 +485,7 @@ namespace RTC
    */
   void ConfigAdmin::onUpdate(const char* config_set)
   {
-    m_listeners.configsetname_[ON_UPDATE_CONFIG_SET].notify(config_set);
+    m_listeners.notify(ConfigurationSetNameListenerType::ON_UPDATE_CONFIG_SET, config_set);
   }
 
   /*!
@@ -500,8 +498,8 @@ namespace RTC
   void
   ConfigAdmin::onUpdateParam(const char* config_param, const char* config_value)
   {
-    m_changedParam.push_back(config_param);
-    m_listeners.configparam_[ON_UPDATE_CONFIG_PARAM].notify(config_param,
+    m_changedParam.emplace_back(config_param);
+    m_listeners.notify(ConfigurationParamListenerType::ON_UPDATE_CONFIG_PARAM, config_param,
                                                             config_value);
   }
 
@@ -514,7 +512,7 @@ namespace RTC
    */
   void ConfigAdmin::onSetConfigurationSet(const coil::Properties& config_set)
   {
-    m_listeners.configset_[ON_SET_CONFIG_SET].notify(config_set);
+    m_listeners.notify(ConfigurationSetListenerType::ON_SET_CONFIG_SET, config_set);
   }
 
   /*!
@@ -526,7 +524,7 @@ namespace RTC
    */
   void ConfigAdmin::onAddConfigurationSet(const coil::Properties& config_set)
   {
-    m_listeners.configset_[ON_ADD_CONFIG_SET].notify(config_set);
+    m_listeners.notify(ConfigurationSetListenerType::ON_ADD_CONFIG_SET, config_set);
   }
 
   /*!
@@ -538,7 +536,7 @@ namespace RTC
    */
   void ConfigAdmin::onRemoveConfigurationSet(const char* config_id)
   {
-    m_listeners.configsetname_[ON_REMOVE_CONFIG_SET].notify(config_id);
+    m_listeners.notify(ConfigurationSetNameListenerType::ON_REMOVE_CONFIG_SET, config_id);
   }
 
   /*!
@@ -550,8 +548,8 @@ namespace RTC
    */
   void ConfigAdmin::onActivateSet(const char* config_id)
   {
-    m_listeners.configsetname_[ON_ACTIVATE_CONFIG_SET].notify(config_id);
+    m_listeners.notify(ConfigurationSetNameListenerType::ON_ACTIVATE_CONFIG_SET, config_id);
   }
 
 
-};  // namespace RTC
+} // namespace RTC

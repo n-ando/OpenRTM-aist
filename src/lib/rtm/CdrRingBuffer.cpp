@@ -17,14 +17,11 @@
  *
  */
 
-#ifndef CdrRingBuffer_h
-#define CdrRingBuffer_h
-
 #include <rtm/CdrRingBuffer.h>
 
 namespace RTC
 {
-};  // namespace RTC
+} // namespace RTC
 
 extern "C"
 {
@@ -35,5 +32,4 @@ extern "C"
                  coil::Creator<RTC::CdrBufferBase, RTC::CdrRingBuffer>,
                  coil::Destructor<RTC::CdrBufferBase, RTC::CdrRingBuffer>);
   }
-};
-#endif  // InPortConsumer_h
+}

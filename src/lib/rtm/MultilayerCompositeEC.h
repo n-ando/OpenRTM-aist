@@ -24,10 +24,6 @@
 
 
 
-#ifdef WIN32
-#pragma warning( disable : 4290 )
-#endif
-
 namespace RTC_exp
 {
   /*!
@@ -53,7 +49,6 @@ namespace RTC_exp
   class MultilayerCompositeEC
     : public virtual RTC_exp::PeriodicExecutionContext
   {
-    typedef coil::Guard<coil::Mutex> Guard;
   public:
     /*!
      * @if jp
@@ -89,7 +84,7 @@ namespace RTC_exp
      *
      * @endif
      */
-    virtual ~MultilayerCompositeEC(void);
+    ~MultilayerCompositeEC() override;
 
     /*!
      * @if jp
@@ -104,7 +99,7 @@ namespace RTC_exp
      *
      * @endif
      */
-    virtual  void init(coil::Properties& props);
+     void init(coil::Properties& props) override;
 
 
     /*!
@@ -126,7 +121,7 @@ namespace RTC_exp
      *
      * @endif
      */
-    virtual int svc(void);
+    int svc() override;
 
     /*!
      * @if jp
@@ -141,7 +136,7 @@ namespace RTC_exp
      *
      * @endif
      */
-    virtual RTC::ReturnCode_t bindComponent(RTC::RTObject_impl* rtc);
+    RTC::ReturnCode_t bindComponent(RTC::RTObject_impl* rtc) override;
 
 
     virtual RTC_impl::RTObjectStateMachine* findComponent(RTC::LightweightRTObject_ptr comp);
@@ -154,6 +149,7 @@ namespace RTC_exp
       {
       public:
           ChildTask(coil::PeriodicTaskBase* task, MultilayerCompositeEC* ec);
+          virtual ~ChildTask();
           void addComponent(RTC::LightweightRTObject_ptr rtc);
           void updateCompList();
           virtual int svc();
@@ -175,15 +171,11 @@ namespace RTC_exp
       virtual void addRTCToTask(ChildTask* task, RTC::LightweightRTObject_ptr rtobj);
 
       std::vector<ChildTask*> m_tasklist;
-      RTC_impl::RTObjectStateMachine* m_ownersm;
+      RTC_impl::RTObjectStateMachine* m_ownersm{nullptr};
 
 
   };  // class MultilayerCompositeEC
-};  // namespace RTC_exp
-
-#ifdef WIN32
-#pragma warning( default : 4290 )
-#endif
+} // namespace RTC_exp
 
 
 extern "C"
@@ -196,6 +188,6 @@ extern "C"
    * @endif
    */
   void MultilayerCompositeECInit(RTC::Manager* manager);
-};
+}
 
 #endif  // RTC_MULTILAYERCOMPOSITEEC_H

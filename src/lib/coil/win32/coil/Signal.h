@@ -26,13 +26,14 @@
 
 namespace coil
 {
-#define _SIG_WORDS      4
-#define _SIG_MAXSIG     NSIG
+#define COIL_SIG_WORDS      4
+#define COIL_SIG_MAXSIG     NSIG
 
-  typedef void (*SignalHandler)(int);
-  typedef struct __sigset {
-    unsigned int __bits[_SIG_WORDS];
-  } sigset_t;
+  extern "C" using SignalHandler = void (*)(int);
+  struct sigset_t
+  {
+    unsigned int _bits[COIL_SIG_WORDS];
+  };
 
   /*!
    * @if jp
@@ -92,7 +93,7 @@ namespace coil
      *
      * @endif
      */
-    SignalAction(SignalHandler handle, int signum, sigset_t *mask = 0,
+    SignalAction(SignalHandler handle, int signum, sigset_t *mask = nullptr,
                  int flags = 0);
 
     /*!
@@ -121,5 +122,5 @@ namespace coil
     int m_flags;
 
   };
-};  // namespace coil
+} // namespace coil
 #endif  // COIL_SIGNAL_H

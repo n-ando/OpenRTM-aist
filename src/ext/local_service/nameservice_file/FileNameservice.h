@@ -24,6 +24,7 @@
 #include <rtm/RTC.h>
 #include <rtm/SystemLogger.h>
 #include <rtm/LocalServiceBase.h>
+#include <boost/filesystem.hpp>
 
 namespace fs = boost::filesystem;
 
@@ -60,7 +61,7 @@ namespace RTM
        * @brief FileNameService dtor
        * @endif
        */
-      virtual ~FileNameservice();
+      ~FileNameservice() override;
       
       /*!
        * @if jp
@@ -78,8 +79,8 @@ namespace RTM
        *
        * @endif
        */
-      virtual bool
-      init(const ::coil::Properties& profile);
+      bool
+      init(const ::coil::Properties& props) override;
       
       /*!
        * @if jp
@@ -97,8 +98,8 @@ namespace RTM
        *
        * @endif
        */
-      virtual bool
-      reinit(const ::coil::Properties& profile);
+      bool
+      reinit(const ::coil::Properties& props) override;
       
       /*!
        * @if jp
@@ -117,7 +118,7 @@ namespace RTM
        *
        * @endif
        */
-      virtual const LocalServiceProfile& getProfile() const;
+      const LocalServiceProfile& getProfile() const override;
       
       /*!
        * @if jp
@@ -132,7 +133,7 @@ namespace RTM
        *
        * @endif
        */
-      virtual void finalize();
+      void finalize() override;
       
       /*!
        * @if jp
@@ -148,7 +149,7 @@ namespace RTM
        * @endif
        */
       void
-      onRegisterNameservice(coil::vstring& path, coil::vstring& ns_info);
+      onRegisterNameservice(coil::vstring& ns_path, coil::vstring& ns_info);
       
       /*!
        * @if jp
@@ -164,7 +165,7 @@ namespace RTM
        * @endif
        */
       void
-      onUnregisterNameservice(coil::vstring& path);
+      onUnregisterNameservice(coil::vstring& ns_path);
       
     protected:
       /*!
@@ -187,7 +188,7 @@ namespace RTM
        * TODO: Documentation
        * @endif
        */
-      std::string getFname(std::string& path) const;
+      std::string getFname(std::string& ns_path) const;
       
       /*!
        * @if jp
@@ -199,17 +200,6 @@ namespace RTM
        * @endif
        */
       void cleanupFiles();
-      
-      /*!
-       * @if jp
-       * @brief プロパティの処理
-       * TODO: Documentation
-       * @else
-       * @brief Processing properties
-       * TODO: Documentation
-       * @endif
-       */
-      bool processServiceProfile(const ::coil::Properties& props);
       
     private:
       RTM::LocalServiceProfile m_profile;
@@ -246,7 +236,7 @@ namespace RTM
        * @brief Destructor
        * @endif
        */
-      virtual ~NamingAction();
+      ~NamingAction() override;
 
       /*!
        * @if jp
@@ -257,8 +247,8 @@ namespace RTM
        * TODO: Documentation
        * @endif
        */
-      virtual void preBind(RTC::RTObject_impl* rtobj,
-                           coil::vstring& name);
+      void preBind(RTC::RTObject_impl* rtobj,
+                           coil::vstring& name_) override;
       /*!
        * @if jp
        * @brief postBind コールバック関数
@@ -268,8 +258,8 @@ namespace RTM
        * TODO: Documentation
        * @endif
        */
-      virtual void postBind(RTC::RTObject_impl* rtobj,
-                            coil::vstring& name);
+      void postBind(RTC::RTObject_impl* rtobj,
+                            coil::vstring& name) override;
       
       /*!
        * @if jp
@@ -280,8 +270,8 @@ namespace RTM
        * TODO: Documentation
        * @endif
        */
-      virtual void preUnbind(RTC::RTObject_impl* rtobj,
-                             coil::vstring& name);
+      void preUnbind(RTC::RTObject_impl* rtobj,
+                             coil::vstring& name) override;
       
       /*!
        * @if jp
@@ -292,14 +282,14 @@ namespace RTM
        * TODO: Documentation
        * @endif
        */
-      virtual void postUnbind(RTC::RTObject_impl* rtobj,
-                              coil::vstring& name);
+      void postUnbind(RTC::RTObject_impl* rtobj,
+                              coil::vstring& name) override;
     private:
       RTM::LocalService::FileNameservice& m_fns;
     };
     
-  }; // LocalService
-}; // RTM
+  } // namespace LocalService
+} // namespace RTM
 
 extern "C"
 {
@@ -317,6 +307,6 @@ extern "C"
    * @endif
    */
   DLL_EXPORT void FileNameserviceInit();
-};
+}
 
 #endif /* FILENAMESERVICE_H_ */

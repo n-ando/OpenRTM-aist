@@ -16,12 +16,10 @@
  *
  */
 
-#include <assert.h>
+#include <cassert>
 #include <rtm/ExecutionContextProfile.h>
 #include <rtm/CORBA_SeqUtil.h>
 #include <rtm/NVUtil.h>
-
-#define DEEFAULT_PERIOD 0.000001
 
 namespace RTC_impl
 {
@@ -34,17 +32,23 @@ namespace RTC_impl
    * @endif
    */
   ExecutionContextProfile::
-  ExecutionContextProfile(RTC::ExecutionKind kind)
+  ExecutionContextProfile(RTC::ExecutionKind  /*kind*/)
     : rtclog("periodic_ecprofile"),
-      m_period(static_cast<double>(DEEFAULT_PERIOD)),
+      m_period(std::chrono::microseconds(1)),
       m_ref(RTC::ExecutionContextService::_nil())
   {
     RTC_TRACE(("ExecutionContextProfile()"));
-    RTC_DEBUG(("Actual rate: %d [sec], %d [usec]",
-               m_period.sec(), m_period.usec()));
+    RTC_DEBUG(("Actual rate: %lld [nsec]", m_period.count()));
     // profile initialization
     m_profile.kind = RTC::PERIODIC;
-    m_profile.rate = 1.0 / m_period;
+#if defined(_MSC_VER) && (_MSC_VER < 1900)
+    // Visual Studio 2013: std::chrono is broken.
+    m_profile.rate = 1.0
+                     / m_period.count()
+                     * decltype(m_period)::period::den;
+#else
+    m_profile.rate = std::chrono::duration<double>(1) / m_period;
+#endif
     m_profile.owner = RTC::RTObject::_nil();
     m_profile.participants.length(0);
     m_profile.properties.length(0);
@@ -80,7 +84,7 @@ namespace RTC_impl
   {
     RTC_TRACE(("setObjRef()"));
     assert(!CORBA::is_nil(ec_ptr));
-    Guard guard(m_profileMutex);
+    std::lock_guard<std::mutex> guard(m_profileMutex);
     m_ref = RTC::ExecutionContextService::_duplicate(ec_ptr);
   }
 
@@ -92,10 +96,10 @@ namespace RTC_impl
    * @endif
    */
   RTC::ExecutionContextService_ptr
-  ExecutionContextProfile::getObjRef(void) const
+  ExecutionContextProfile::getObjRef() const
   {
     RTC_TRACE(("getObjRef()"));
-    Guard guard(m_profileMutex);
+    std::lock_guard<std::mutex> guard(m_profileMutex);
 #ifdef ORB_IS_ORBEXPRESS
     return RTC::ExecutionContextService::_duplicate(m_ref.in());
 #else
@@ -115,33 +119,27 @@ namespace RTC_impl
     RTC_TRACE(("setRate(%f)", rate));
     if (rate <= 0.0) { return RTC::BAD_PARAMETER; }
 
-    Guard guard(m_profileMutex);
-    m_profile.rate = rate;
-    m_period = coil::TimeValue(1.0/rate);
-    return RTC::RTC_OK;
+    std::chrono::duration<double> period(1.0 / rate);
+    return setPeriod(std::chrono::duration_cast<std::chrono::nanoseconds>(period));
   }
 
-  RTC::ReturnCode_t ExecutionContextProfile::setPeriod(double period)
+  RTC::ReturnCode_t ExecutionContextProfile::setPeriod(std::chrono::nanoseconds period)
   {
-    RTC_TRACE(("setPeriod(%f [sec])", period));
-    if (period <= 0.0) { return RTC::BAD_PARAMETER; }
-
-    Guard guard(m_profileMutex);
-    m_profile.rate = 1.0 / period;
-    m_period = coil::TimeValue(period);
-    return RTC::RTC_OK;
-  }
-
-  RTC::ReturnCode_t ExecutionContextProfile::setPeriod(coil::TimeValue period)
-  {
-    RTC_TRACE(("setPeriod(%f [sec])", static_cast<double>(period)));
-    if (static_cast<double>(period) <= 0.0)
+    RTC_TRACE(("setPeriod(%lld [nsec])", period.count()));
+    if (period <= std::chrono::seconds::zero())
       {
         return RTC::BAD_PARAMETER;
       }
 
-    Guard guard(m_profileMutex);
-    m_profile.rate = 1.0 / static_cast<double>(period);
+    std::lock_guard<std::mutex> guard(m_profileMutex);
+#if defined(_MSC_VER) && (_MSC_VER < 1900)
+    // Visual Studio 2013: std::chrono is broken.
+    m_profile.rate = 1.0
+                     / period.count()
+                     * decltype(period)::period::den;
+#else
+    m_profile.rate = std::chrono::duration<double>(1) / period;
+#endif
     m_period = period;
     return RTC::RTC_OK;
   }
@@ -155,13 +153,13 @@ namespace RTC_impl
    */
   CORBA::Double ExecutionContextProfile::getRate() const
   {
-    Guard guard(m_profileMutex);
+    std::lock_guard<std::mutex> guard(m_profileMutex);
     return m_profile.rate;
   }
 
-  coil::TimeValue ExecutionContextProfile::getPeriod() const
+  std::chrono::nanoseconds ExecutionContextProfile::getPeriod() const
   {
-    Guard guard(m_profileMutex);
+    std::lock_guard<std::mutex> guard(m_profileMutex);
     return m_period;
   }
 
@@ -173,9 +171,9 @@ namespace RTC_impl
    * @endif
    */
   const char*
-  ExecutionContextProfile::getKindString(RTC::ExecutionKind kind) const
+  ExecutionContextProfile::getKindString(RTC::ExecutionKind kind) 
   {
-    const char* kinds[] = {"PERIODIC", "EVENT_DRIVEN", "OTHER"};
+    static const char* const kinds[] = {"PERIODIC", "EVENT_DRIVEN", "OTHER"};
     if (kind < RTC::PERIODIC || kind > RTC::OTHER)
       {
         return "";
@@ -198,7 +196,7 @@ namespace RTC_impl
         return RTC::BAD_PARAMETER;
       }
     RTC_TRACE(("setKind(%s)", getKindString(kind)));
-    Guard guard(m_profileMutex);
+    std::lock_guard<std::mutex> guard(m_profileMutex);
     m_profile.kind = kind;
     return RTC::RTC_OK;
   }
@@ -210,9 +208,9 @@ namespace RTC_impl
    * @brief Get the ExecutionKind
    * @endif
    */
-  RTC::ExecutionKind ExecutionContextProfile::getKind(void) const
+  RTC::ExecutionKind ExecutionContextProfile::getKind() const
   {
-    Guard guard(m_profileMutex);
+    std::lock_guard<std::mutex> guard(m_profileMutex);
     RTC_TRACE(("%s = getKind()", getKindString(m_profile.kind)));
     return m_profile.kind;
   }
@@ -235,7 +233,7 @@ namespace RTC_impl
         RTC_ERROR(("Narrowing failed."));
         return RTC::BAD_PARAMETER;
       }
-    Guard guard(m_profileMutex);
+    std::lock_guard<std::mutex> guard(m_profileMutex);
     m_profile.owner = RTC::RTObject::_duplicate(rtobj);
     return RTC::RTC_OK;
   }
@@ -247,10 +245,10 @@ namespace RTC_impl
    * @brief Getting a reference of the owner component
    * @endif
    */
-  const RTC::RTObject_ptr ExecutionContextProfile::getOwner() const
+  RTC::RTObject_ptr ExecutionContextProfile::getOwner() const
   {
     RTC_TRACE(("getOwner()"));
-    Guard guard(m_profileMutex);
+    std::lock_guard<std::mutex> guard(m_profileMutex);
 #ifdef ORB_IS_ORBEXPRESS
     return RTC::RTObject::_duplicate(m_profile.owner.in());
 #else
@@ -280,7 +278,7 @@ namespace RTC_impl
         RTC_ERROR(("Narrowing was failed."));
         return RTC::RTC_ERROR;
       }
-    Guard guard(m_profileMutex);
+    std::lock_guard<std::mutex> guard(m_profileMutex);
 #ifndef ORB_IS_RTORB
     CORBA_SeqUtil::push_back(m_profile.participants, rtobj._retn());
 #else
@@ -313,7 +311,7 @@ namespace RTC_impl
         return RTC::RTC_ERROR;
       }
     {
-      Guard guard(m_profileMutex);
+      std::lock_guard<std::mutex> guard(m_profileMutex);
       CORBA::Long index;
       index = CORBA_SeqUtil::find(m_profile.participants,
                                   find_participant(rtobj));
@@ -334,7 +332,11 @@ namespace RTC_impl
    * @brief Get the ExecutionKind
    * @endif
    */
+#ifndef ORB_IS_RTORB
   const RTC::RTCList& ExecutionContextProfile::getComponentList() const
+#else
+  const RTC_RTCList& ExecutionContextProfile::getComponentList() const
+#endif
   {
     RTC_TRACE(("getComponentList(%d)", m_profile.participants.length()));
     return m_profile.participants;
@@ -351,7 +353,7 @@ namespace RTC_impl
   {
     RTC_TRACE(("setProperties()"));
     RTC_DEBUG_STR((props));
-    Guard guard(m_profileMutex);
+    std::lock_guard<std::mutex> guard(m_profileMutex);
     NVUtil::copyFromProperties(m_profile.properties, props);
   }
 
@@ -362,10 +364,10 @@ namespace RTC_impl
    * @brief Setting Properties
    * @endif
    */
-  const coil::Properties ExecutionContextProfile::getProperties() const
+  coil::Properties ExecutionContextProfile::getProperties() const
   {
     RTC_TRACE(("getProperties()"));
-    Guard guard(m_profileMutex);
+    std::lock_guard<std::mutex> guard(m_profileMutex);
     coil::Properties props = coil::Properties();
     NVUtil::copyToProperties(props, m_profile.properties);
     RTC_DEBUG_STR((props));
@@ -384,7 +386,7 @@ namespace RTC_impl
     RTC_TRACE(("getProfile()"));
     RTC::ExecutionContextProfile_var p;
     {
-      Guard guard(m_profileMutex);
+      std::lock_guard<std::mutex> guard(m_profileMutex);
       p = new RTC::ExecutionContextProfile(m_profile);
     }
     return p._retn();
@@ -401,7 +403,7 @@ namespace RTC_impl
   ExecutionContextProfile::getProfile() const
   {
     RTC_TRACE(("getProfile()"));
-    Guard guard(m_profileMutex);
+    std::lock_guard<std::mutex> guard(m_profileMutex);
     return m_profile;
   }
 
@@ -429,4 +431,4 @@ namespace RTC_impl
     m_profileMutex.unlock();
   }
 
-};  // namespace RTC_impl
+} // namespace RTC_impl

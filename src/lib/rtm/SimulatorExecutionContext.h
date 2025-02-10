@@ -21,8 +21,7 @@
 
 
 
-#include <coil/Mutex.h>
-#include <coil/Guard.h>
+#include <mutex>
 #include <rtm/RTC.h>
 #include <rtm/ExecutionContextBase.h>
 #include <rtm/OpenHRPExecutionContext.h>
@@ -50,8 +49,6 @@ namespace RTC
   class SimulatorExecutionContext
 	  : public virtual RTC::OpenHRPExecutionContext
   {
-	  typedef coil::Mutex Mutex;
-	  typedef coil::Guard<coil::Mutex> Guard;
   public:
     /*!
      * @if jp
@@ -68,7 +65,7 @@ namespace RTC
      * @brief Destructor 
      * @endif
      */
-    virtual ~SimulatorExecutionContext(void);
+    ~SimulatorExecutionContext() override;
 
     /*!
      * @if jp
@@ -92,9 +89,8 @@ namespace RTC
      *
      * @endif
      */
-    virtual RTC::ReturnCode_t
-    activate_component(RTC::LightweightRTObject_ptr comp)
-      throw (CORBA::SystemException);
+    RTC::ReturnCode_t
+    activate_component(RTC::LightweightRTObject_ptr comp) override;
     /*!
      * @if jp
      * @brief RTコンポーネントを非アクティブ化する
@@ -117,9 +113,8 @@ namespace RTC
      *
      * @endif
      */
-    virtual RTC::ReturnCode_t
-    deactivate_component(RTC::LightweightRTObject_ptr comp)
-      throw (CORBA::SystemException);
+    RTC::ReturnCode_t
+    deactivate_component(RTC::LightweightRTObject_ptr comp) override;
     /*!
      * @if jp
      * @brief RTコンポーネントをリセットする
@@ -142,20 +137,15 @@ namespace RTC
      *
      * @endif
      */
-    virtual RTC::ReturnCode_t
-    reset_component(RTC::LightweightRTObject_ptr comp)
-      throw (CORBA::SystemException);
+    RTC::ReturnCode_t
+    reset_component(RTC::LightweightRTObject_ptr comp) override;
 
   private:
 
   };
-};
+} // namespace RTC
 
 
-
-#ifdef WIN32
-#pragma warning( default : 4290 )
-#endif
 
 extern "C"
 {
@@ -166,7 +156,7 @@ extern "C"
    * @brief Initialization function to register to ECFactory
    * @endif
    */
-  DLL_EXPORT void SimulatorExecutionContextInit(RTC::Manager* manager);
-};
+  void SimulatorExecutionContextInit(RTC::Manager* manager);
+}
 
 #endif

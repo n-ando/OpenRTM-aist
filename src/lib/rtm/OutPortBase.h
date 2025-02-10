@@ -31,11 +31,6 @@
 #include <rtm/SystemLogger.h>
 #include <rtm/ConnectorListener.h>
 
-#ifdef WIN32
-#pragma warning( push ) 
-#pragma warning( disable : 4290 )
-#endif
-
 namespace RTC
 {
   class PublisherBase;
@@ -230,12 +225,11 @@ namespace RTC
    * @endif
    */
   class OutPortBase
-    : public PortBase, public DataPortStatus
+    : public PortBase
   {
   public:
-    DATAPORTSTATUS_ENUM
 
-    typedef std::vector<OutPortConnector*> ConnectorList;
+    using ConnectorList = std::vector<OutPortConnector*>;
 
     /*!
      * @if jp
@@ -274,7 +268,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~OutPortBase(void);
+    ~OutPortBase() override;
 
     /*!
      * @if jp
@@ -528,7 +522,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual void activateInterfaces();
+    void activateInterfaces() override;
 
     /*!
      * @if jp
@@ -546,7 +540,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual void deactivateInterfaces();
+    void deactivateInterfaces() override;
 
 
     /*!
@@ -624,7 +618,7 @@ namespace RTC
      *
      * @endif
      */
-    void addConnectorDataListener(ConnectorDataListenerType listener_type,
+    void addConnectorDataListener(ConnectorDataListenerType type,
                                   ConnectorDataListener* listener,
                                   bool autoclean = true);
 
@@ -648,7 +642,7 @@ namespace RTC
      *
      * @endif
      */
-    void removeConnectorDataListener(ConnectorDataListenerType listener_type,
+    void removeConnectorDataListener(ConnectorDataListenerType type,
                                      ConnectorDataListener* listener);
 
 
@@ -704,7 +698,7 @@ namespace RTC
      *
      * @endif
      */
-    void addConnectorListener(ConnectorListenerType callback_type,
+    void addConnectorListener(ConnectorListenerType type,
                               ConnectorListener* listener,
                               bool autoclean = true);
 
@@ -727,7 +721,7 @@ namespace RTC
      *
      * @endif
      */
-    void removeConnectorListener(ConnectorListenerType callback_type,
+    void removeConnectorListener(ConnectorListenerType type,
                                  ConnectorListener* listener);
 
     /*!
@@ -774,28 +768,27 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode_t
-    connect(ConnectorProfile& connector_profile)
-      throw (CORBA::SystemException);
+    ReturnCode_t
+    connect(ConnectorProfile& connector_profile) override;
 
-	/*!
-	* @if jp
-	* @brief リスナホルダを取得する
-	*
-	* InPortBaseが保持するリスナホルダを返す。
-	*
-	* @return ConnectorListeners
-	*
-	* @else
-	* @brief Getting listeners holder
-	*
-	* This operation returns listeners holder.
-	*
-	* @return ConnectorListeners
-	*
-	* @endif
-	*/
-	virtual ConnectorListeners& getListeners();
+    /*!
+     * @if jp
+     * @brief リスナホルダを取得する
+     *
+     * InPortBaseが保持するリスナホルダを返す。
+     *
+     * @return ConnectorListeners
+     *
+     * @else
+     * @brief Getting listeners holder
+     *
+     * This operation returns listeners holder.
+     *
+     * @return ConnectorListeners
+     *
+     * @endif
+     */
+    virtual ConnectorListenersBase* getListeners();
 
 
   protected:
@@ -861,8 +854,8 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode_t
-    publishInterfaces(ConnectorProfile& connector_profile);
+    ReturnCode_t
+    publishInterfaces(ConnectorProfile& cprof) override;
 
     /*! @if jp
      *
@@ -902,8 +895,8 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode_t
-    subscribeInterfaces(const ConnectorProfile& connector_profile);
+    ReturnCode_t
+    subscribeInterfaces(const ConnectorProfile& cprof) override;
 
     /*!
      * @if jp
@@ -936,8 +929,8 @@ namespace RTC
      *
      * @endif
      */
-    virtual void
-    unsubscribeInterfaces(const ConnectorProfile& connector_profile);
+    void
+    unsubscribeInterfaces(const ConnectorProfile& connector_profile) override;
 
     /*!
      * @if jp
@@ -1034,9 +1027,7 @@ namespace RTC
                                       coil::Properties& prop,
                                       OutPortProvider* provider);
 
-    virtual ReturnCode_t notify_connect(ConnectorProfile& connector_profile)
-		throw (CORBA::SystemException);
-
+    ReturnCode_t notify_connect(ConnectorProfile& connector_profile) override;
 
   protected:
     /*!
@@ -1047,7 +1038,21 @@ namespace RTC
      * @endif
      */
     InPortBase* getLocalInPort(const ConnectorInfo& profile);
-
+    /*!
+     * @if jp
+     *
+     * @brief コネクタリスナの初期化
+     *
+     *
+     *
+     * @else
+     *
+     * @brief
+     *
+     *
+     * @endif
+     */
+    virtual void initConnectorListeners();
 
     
 
@@ -1090,7 +1095,7 @@ namespace RTC
      * @brief ConnectorDataListener listener
      * @endif
      */
-    ConnectorListeners m_listeners;
+    ConnectorListenersBase* m_listeners;
 
     /*!
      * @if jp
@@ -1110,10 +1115,7 @@ namespace RTC
      */
     struct connector_cleanup;
   };
-}; // End of namespace RTC
-
-#ifdef WIN32
-#pragma warning( pop )
-#endif
+} // End of namespace RTC
 
 #endif // RTC_RTCOUTPORTBASE_H
+

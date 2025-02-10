@@ -22,8 +22,7 @@
 
 #include <rtm/RTC.h>
 
-#include <coil/Guard.h>
-#include <coil/Mutex.h>
+#include <mutex>
 #include <rtm/idl/RTCSkel.h>
 #include <rtm/CORBA_SeqUtil.h>
 #include <rtm/NVUtil.h>
@@ -32,10 +31,6 @@
 
 #include <iostream>
 #include <rtm/DirectPortBase.h>
-
-#ifdef WIN32
-#pragma warning( disable : 4290 )
-#endif
 
 namespace RTC
 {
@@ -180,7 +175,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~PortBase(void);
+    ~PortBase() override;
 
     /*!
      * @if jp
@@ -233,8 +228,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual PortProfile* get_port_profile()
-      throw (CORBA::SystemException);
+    PortProfile* get_port_profile() override;
 
     /*!
      * @if jp
@@ -315,8 +309,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ConnectorProfileList* get_connector_profiles()
-      throw (CORBA::SystemException);
+    ConnectorProfileList* get_connector_profiles() override;
 
     /*!
      * @if jp
@@ -357,8 +350,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ConnectorProfile* get_connector_profile(const char* connector_id)
-      throw (CORBA::SystemException);
+    ConnectorProfile* get_connector_profile(const char* connector_id) override;
 
     /*!
      * @if jp
@@ -517,8 +509,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode_t connect(ConnectorProfile& connector_profile)
-      throw (CORBA::SystemException);
+    ReturnCode_t connect(ConnectorProfile& connector_profile) override;
 
     /*!
      * @if jp
@@ -635,8 +626,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode_t notify_connect(ConnectorProfile& connector_profile)
-      throw (CORBA::SystemException);
+    ReturnCode_t notify_connect(ConnectorProfile& connector_profile) override;
 
     /*!
      * @if jp
@@ -703,8 +693,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode_t disconnect(const char* connector_id)
-      throw (CORBA::SystemException);
+    ReturnCode_t disconnect(const char* connector_id) override;
 
     /*!
      * @if jp
@@ -794,8 +783,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode_t notify_disconnect(const char* connector_id)
-      throw (CORBA::SystemException);
+    ReturnCode_t notify_disconnect(const char* connector_id) override;
 
     /*!
      * @if jp
@@ -816,8 +804,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode_t disconnect_all()
-      throw (CORBA::SystemException);
+    ReturnCode_t disconnect_all() override;
 
     //============================================================
     // Local operations
@@ -1177,7 +1164,7 @@ namespace RTC
      *
      * @endif
      */
-    void setOnUnsubscribeInterfaces(ConnectionCallback* on_subscribe);
+    void setOnUnsubscribeInterfaces(ConnectionCallback* on_unsubscribe);
 
     /*!
      * @if jp
@@ -1272,20 +1259,20 @@ namespace RTC
      */
     void setPortConnectListenerHolder(PortConnectListeners* portconnListeners);
 
-	/*!
-	* @if jp
-	* @brief direct通信用ポートオブジェクト取得
-	*
-	* @return ポートのポインタ
-	*
-	* @else
-	* @brief 
-	*
-	* @return
-	*
-	* @endif
-	*/
-	virtual DirectPortBase* getDirectPort();
+    /*!
+     * @if jp
+     * @brief direct通信用ポートオブジェクト取得
+     *
+     * @return ポートのポインタ
+     *
+     * @else
+     * @brief 
+     *
+     * @return
+     *
+     * @endif
+     */
+    virtual DirectPortBase* getDirectPort();
     //============================================================
     // protected operations
     //============================================================
@@ -1413,7 +1400,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode_t disconnectNext(ConnectorProfile& connector_profile);
+    virtual ReturnCode_t disconnectNext(ConnectorProfile& cprof);
 
     /*! @if jp
      *
@@ -1558,7 +1545,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode_t _publishInterfaces(void);
+    virtual ReturnCode_t _publishInterfaces();
     //============================================================
     // protected utility functions
     //============================================================
@@ -1588,7 +1575,7 @@ namespace RTC
      *
      * @endif
      */
-    bool isEmptyId(const ConnectorProfile& connector_profile) const;
+    static bool isEmptyId(const ConnectorProfile& connector_profile) ;
 
     /*!
      * @if jp
@@ -1609,7 +1596,7 @@ namespace RTC
      *
      * @endif
      */
-    const std::string getUUID() const;
+    static std::string getUUID() ;
 
     /*!
      * @if jp
@@ -1630,7 +1617,7 @@ namespace RTC
      *
      * @endif
      */
-    void setUUID(ConnectorProfile& connector_profile) const;
+    static void setUUID(ConnectorProfile& connector_profile) ;
 
     /*!
      * @if jp
@@ -1829,7 +1816,7 @@ namespace RTC
      *
      * @endif
      */
-    bool appendInterface(const char* name, const char* type_name,
+    bool appendInterface(const char* instance_name, const char* type_name,
                          PortInterfacePolarity pol);
 
     /*!
@@ -1977,29 +1964,29 @@ namespace RTC
     inline void onNotifyConnect(const char* portname,
                                 RTC::ConnectorProfile& profile)
     {
-      if (m_portconnListeners != NULL)
+      if (m_portconnListeners != nullptr)
         {
-          m_portconnListeners->
-            portconnect_[ON_NOTIFY_CONNECT].notify(portname, profile);
+          m_portconnListeners->notify(
+            PortConnectListenerType::ON_NOTIFY_CONNECT, portname, profile);
         }
     }
 
     inline void onNotifyDisconnect(const char* portname,
                                    RTC::ConnectorProfile& profile)
     {
-      if (m_portconnListeners != NULL)
+      if (m_portconnListeners != nullptr)
         {
-          m_portconnListeners->
-            portconnect_[ON_NOTIFY_DISCONNECT].notify(portname, profile);
+          m_portconnListeners->notify(
+            PortConnectListenerType::ON_NOTIFY_DISCONNECT, portname, profile);
         }
     }
     inline void onUnsubscribeInterfaces(const char* portname,
                                         RTC::ConnectorProfile& profile)
     {
-      if (m_portconnListeners != NULL)
+      if (m_portconnListeners != nullptr)
         {
-          m_portconnListeners->
-            portconnect_[ON_UNSUBSCRIBE_INTERFACES].notify(portname, profile);
+          m_portconnListeners->notify(
+            PortConnectListenerType::ON_UNSUBSCRIBE_INTERFACES, portname, profile);
         }
     }
 
@@ -2007,10 +1994,10 @@ namespace RTC
                                     RTC::ConnectorProfile& profile,
                                     ReturnCode_t ret)
     {
-      if (m_portconnListeners != NULL)
+      if (m_portconnListeners != nullptr)
         {
-          m_portconnListeners->
-            portconnret_[ON_PUBLISH_INTERFACES].notify(portname,
+          m_portconnListeners->notify(
+            PortConnectRetListenerType::ON_PUBLISH_INTERFACES, portname,
                                                        profile, ret);
         }
     }
@@ -2019,10 +2006,10 @@ namespace RTC
                                   RTC::ConnectorProfile& profile,
                                   ReturnCode_t ret)
     {
-      if (m_portconnListeners != NULL)
+      if (m_portconnListeners != nullptr)
         {
-          m_portconnListeners->
-            portconnret_[ON_CONNECT_NEXTPORT].notify(portname,
+          m_portconnListeners->notify(
+            PortConnectRetListenerType::ON_CONNECT_NEXTPORT, portname,
                                                      profile, ret);
         }
     }
@@ -2031,10 +2018,10 @@ namespace RTC
                                       RTC::ConnectorProfile& profile,
                                       ReturnCode_t ret)
     {
-      if (m_portconnListeners != NULL)
+      if (m_portconnListeners != nullptr)
         {
-          m_portconnListeners->
-            portconnret_[ON_SUBSCRIBE_INTERFACES].notify(portname,
+          m_portconnListeners->notify(
+            PortConnectRetListenerType::ON_SUBSCRIBE_INTERFACES, portname,
                                                          profile, ret);
         }
     }
@@ -2043,10 +2030,10 @@ namespace RTC
                             RTC::ConnectorProfile& profile,
                             ReturnCode_t ret)
     {
-      if (m_portconnListeners != NULL)
+      if (m_portconnListeners != nullptr)
         {
-          m_portconnListeners->
-            portconnret_[ON_CONNECTED].notify(portname, profile, ret);
+          m_portconnListeners->notify(
+            PortConnectRetListenerType::ON_CONNECTED, portname, profile, ret);
         }
     }
 
@@ -2054,10 +2041,10 @@ namespace RTC
                                  RTC::ConnectorProfile& profile,
                                  ReturnCode_t ret)
     {
-      if (m_portconnListeners != NULL)
+      if (m_portconnListeners != nullptr)
         {
-          m_portconnListeners->
-            portconnret_[ON_DISCONNECT_NEXT].notify(portname, profile, ret);
+          m_portconnListeners->notify(
+            PortConnectRetListenerType::ON_DISCONNECT_NEXT, portname, profile, ret);
         }
     }
 
@@ -2065,14 +2052,33 @@ namespace RTC
                                RTC::ConnectorProfile& profile,
                                ReturnCode_t ret)
     {
-      if (m_portconnListeners != NULL)
+      if (m_portconnListeners != nullptr)
         {
-          m_portconnListeners->
-            portconnret_[ON_DISCONNECTED].notify(portname, profile, ret);
+          m_portconnListeners->notify(
+            PortConnectRetListenerType::ON_DISCONNECTED, portname, profile, ret);
         }
     }
 
   protected:
+  /*!
+   * @if jp
+   *
+   * @brief 指定のシリアライザが使用可能かを判定する
+   *
+   *
+   * @param con_prop コネクタプロファイルのプロパティ
+   * @return true：利用可能、false：利用不可
+   *
+   * @else
+   *
+   * @brief Whether the specified serializer can be used
+   *
+   * @param con_prop Properties of Connectorprofile
+   * @return ture: avialable, false: un-available
+   *
+   * @endif
+   */
+    bool isExistingMarshalingType(coil::Properties& con_prop);
     /*!
      * @if jp
      * @brief ロガーストリーム
@@ -2105,9 +2111,8 @@ namespace RTC
      * @brief Mutex of PortProfile
      * @endif
      */
-    mutable coil::Mutex m_profile_mutex;
-    mutable coil::Mutex m_connectorsMutex;
-    typedef coil::Guard<coil::Mutex> Guard;
+    mutable std::mutex m_profile_mutex;
+    mutable std::mutex m_connectorsMutex;
 
     /*!
      * @if jp
@@ -2116,7 +2121,7 @@ namespace RTC
      * @brief Instance name
      * @endif
      */
-    std::string m_ownerInstanceName;
+    std::string m_ownerInstanceName = "unknown";
 
     /*!
      * @if jp
@@ -2125,7 +2130,7 @@ namespace RTC
      * @brief The maximum number of connections
      * @endif
      */
-    int m_connectionLimit;
+    int m_connectionLimit{-1};
 
     /*!
      * @if jp
@@ -2141,7 +2146,7 @@ namespace RTC
      *
      * @endif
      */
-    ConnectionCallback* m_onPublishInterfaces;
+    ConnectionCallback* m_onPublishInterfaces{nullptr};
     /*!
      * @if jp
      * @brief Callback functor オブジェクト
@@ -2155,7 +2160,7 @@ namespace RTC
      *
      * @endif
      */
-    ConnectionCallback* m_onSubscribeInterfaces;
+    ConnectionCallback* m_onSubscribeInterfaces{nullptr};
     /*!
      * @if jp
      * @brief Callback functor オブジェクト
@@ -2170,7 +2175,7 @@ namespace RTC
      *
      * @endif
      */
-    ConnectionCallback* m_onConnected;
+    ConnectionCallback* m_onConnected{nullptr};
     /*!
      * @if jp
      * @brief Callback functor オブジェクト
@@ -2184,7 +2189,7 @@ namespace RTC
      *
      * @endif
      */
-    ConnectionCallback* m_onUnsubscribeInterfaces;
+    ConnectionCallback* m_onUnsubscribeInterfaces{nullptr};
     /*!
      * @if jp
      * @brief Callback functor オブジェクト
@@ -2198,7 +2203,7 @@ namespace RTC
      *
      * @endif
      */
-    ConnectionCallback* m_onDisconnected;
+    ConnectionCallback* m_onDisconnected{nullptr};
 
     /*!
      * @if jp
@@ -2214,7 +2219,7 @@ namespace RTC
      *
      * @endif
      */
-    ConnectionCallback* m_onConnectionLost;
+    ConnectionCallback* m_onConnectionLost{nullptr};
 
     /*!
      * @if jp
@@ -2229,9 +2234,9 @@ namespace RTC
      *
      * @endif
      */
-    PortConnectListeners* m_portconnListeners;
+    PortConnectListeners* m_portconnListeners{nullptr};
 
-	DirectPortBase *m_directport;
+    DirectPortBase *m_directport{nullptr};
 
     //============================================================
     // Functor
@@ -2266,7 +2271,7 @@ namespace RTC
 #ifdef ORB_IS_ORBEXPRESS
       bool operator()(PortService_var port_ref)
       {
-	return m_port->_is_equivalent(port_ref.in());
+        return m_port->_is_equivalent(port_ref.in());
       }
 #else
       bool operator()(PortService_ptr port_ref)
@@ -2293,16 +2298,13 @@ namespace RTC
       bool operator()(const PortInterfaceProfile& prof)
       {
         CORBA::String_var name(CORBA::string_dup(prof.instance_name));
-        return ((m_name == (const char *)name) && (m_pol == prof.polarity));
+        return   ((m_name == static_cast<const char *>(name)) 
+              && (m_pol == prof.polarity));
       }
       std::string m_name;
       PortInterfacePolarity m_pol;
     };  // struct find_interface
   };  // class PortBase
-};  // namespace RTC
-
-#ifdef WIN32
-#pragma warning( default : 4290 )
-#endif
+} // namespace RTC
 
 #endif  // RTC_PORTBASE_H

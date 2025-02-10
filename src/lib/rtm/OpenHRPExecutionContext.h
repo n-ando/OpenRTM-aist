@@ -19,14 +19,9 @@
 #ifndef RTC_OPENHRPEXECUTIONCONTEXT_H
 #define RTC_OPENHRPEXECUTIONCONTEXT_H
 
-#include <coil/Mutex.h>
-#include <coil/Guard.h>
+#include <mutex>
 #include <rtm/RTC.h>
 #include <rtm/ExecutionContextBase.h>
-
-#ifdef WIN32
-#pragma warning( disable : 4290 )
-#endif
 
 namespace RTC
 {
@@ -53,8 +48,6 @@ namespace RTC
       public virtual PortableServer::RefCountServantBase,
       public RTC::ExecutionContextBase
   {
-    typedef coil::Mutex Mutex;
-    typedef coil::Guard<coil::Mutex> Guard;
   public:
     /*!
      * @if jp
@@ -72,7 +65,7 @@ namespace RTC
      * @brief Destructor
      * @endif
      */
-    virtual ~OpenHRPExecutionContext(void);
+    ~OpenHRPExecutionContext() override;
 
 
     //============================================================
@@ -91,8 +84,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual void tick()
-      throw (CORBA::SystemException);
+    void tick() override;
 
     //============================================================
     // ExecutionContextService
@@ -121,8 +113,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual CORBA::Boolean is_running(void)
-      throw (CORBA::SystemException);
+    CORBA::Boolean is_running() override;
 
     /*!
      * @if jp
@@ -151,8 +142,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual RTC::ReturnCode_t start(void)
-      throw (CORBA::SystemException);
+    RTC::ReturnCode_t start() override;
 
     /*!
      * @if jp
@@ -180,8 +170,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual RTC::ReturnCode_t stop(void)
-      throw (CORBA::SystemException);
+    RTC::ReturnCode_t stop() override;
 
     /*!
      * @if jp
@@ -203,8 +192,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual CORBA::Double get_rate(void)
-      throw (CORBA::SystemException);
+    CORBA::Double get_rate() override;
 
     /*!
      * @if jp
@@ -235,8 +223,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual RTC::ReturnCode_t  set_rate(CORBA::Double rate)
-      throw (CORBA::SystemException);
+    RTC::ReturnCode_t  set_rate(CORBA::Double rate) override;
 
     /*!
      * @if jp
@@ -271,9 +258,8 @@ namespace RTC
      *
      * @endif
      */
-    virtual RTC::ReturnCode_t
-    activate_component(RTC::LightweightRTObject_ptr comp)
-      throw (CORBA::SystemException);
+    RTC::ReturnCode_t
+    activate_component(RTC::LightweightRTObject_ptr comp) override;
 
     /*!
      * @if jp
@@ -307,9 +293,8 @@ namespace RTC
      *
      * @endif
      */
-    virtual RTC::ReturnCode_t
-    deactivate_component(RTC::LightweightRTObject_ptr comp)
-      throw (CORBA::SystemException);
+    RTC::ReturnCode_t
+    deactivate_component(RTC::LightweightRTObject_ptr comp) override;
 
     /*!
      * @if jp
@@ -342,9 +327,8 @@ namespace RTC
      *
      * @endif
      */
-    virtual RTC::ReturnCode_t
-    reset_component(RTC::LightweightRTObject_ptr comp)
-      throw (CORBA::SystemException);
+    RTC::ReturnCode_t
+    reset_component(RTC::LightweightRTObject_ptr comp) override;
 
     /*!
      * @if jp
@@ -372,9 +356,8 @@ namespace RTC
      *
      * @endif
      */
-    virtual RTC::LifeCycleState
-    get_component_state(RTC::LightweightRTObject_ptr comp)
-      throw (CORBA::SystemException);
+    RTC::LifeCycleState
+    get_component_state(RTC::LightweightRTObject_ptr comp) override;
 
     /*!
      * @if jp
@@ -395,8 +378,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual RTC::ExecutionKind get_kind(void)
-      throw (CORBA::SystemException);
+    RTC::ExecutionKind get_kind() override;
 
     /*!
      * @if jp
@@ -429,8 +411,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual RTC::ReturnCode_t add_component(RTC::LightweightRTObject_ptr comp)
-      throw (CORBA::SystemException);
+    RTC::ReturnCode_t add_component(RTC::LightweightRTObject_ptr comp) override;
 
     /*!
      * @if jp
@@ -462,9 +443,8 @@ namespace RTC
      *
      * @endif
      */
-    virtual RTC::ReturnCode_t
-    remove_component(RTC::LightweightRTObject_ptr comp)
-      throw (CORBA::SystemException);
+    RTC::ReturnCode_t
+    remove_component(RTC::LightweightRTObject_ptr comp) override;
 
     /*!
      * @if jp
@@ -485,24 +465,23 @@ namespace RTC
      *
      * @endif
      */
-    virtual RTC::ExecutionContextProfile* get_profile(void)
-      throw (CORBA::SystemException);
+    RTC::ExecutionContextProfile* get_profile() override;
   protected:
-    // template virtual functions adding/removing component	
+    // template virtual functions adding/removing component
     /*!
-    * @brief onAddedComponent() template function
-    */
-    virtual RTC::ReturnCode_t
-		onAddedComponent(RTC::LightweightRTObject_ptr rtobj);
-    /*!
-    * @brief onRemovedComponent() template function
-    */
-    virtual RTC::ReturnCode_t
-		onRemovedComponent(RTC::LightweightRTObject_ptr rtobj);
-    /*!
-     * @brief Mutex to gurad tick() reenter.
+     * @brief onAddedComponent() template function
      */
-    coil::Mutex m_tickmutex;
+    RTC::ReturnCode_t
+        onAddedComponent(RTC::LightweightRTObject_ptr rtobj) override;
+    /*!
+     * @brief onRemovedComponent() template function
+     */
+    RTC::ReturnCode_t
+        onRemovedComponent(RTC::LightweightRTObject_ptr rtobj) override;
+    /*!
+     * @brief Mutex to guard tick() reenter.
+     */
+    std::mutex m_tickmutex;
   private:
     /*!
      * @if jp
@@ -511,19 +490,9 @@ namespace RTC
      * @brief Logger stream
      * @endif
      */
-    RTC::Logger rtclog;
-
-    /*!
-     * @brief A counter for log message in worker
-     */
-    unsigned int m_count;
-
+    RTC::Logger rtclog{"exttrig_sync_ec"};
   };  // class OpenHRPExecutionContext
-};  // namespace RTC
-
-#ifdef WIN32
-#pragma warning( default : 4290 )
-#endif
+} // namespace RTC
 
 
 extern "C"
@@ -535,8 +504,8 @@ extern "C"
    * @brief Initialization function to register to ECFactory
    * @endif
    */
-  DLL_EXPORT void OpenHRPExecutionContextInit(RTC::Manager* manager);
-};
+  void OpenHRPExecutionContextInit(RTC::Manager* manager);
+}
 
 #endif  // RTC_OPENHRPEXECUTIONCONTEXT_H
 

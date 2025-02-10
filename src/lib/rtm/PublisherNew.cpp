@@ -27,7 +27,7 @@
 #include <rtm/idl/DataPortSkel.h>
 #include <rtm/ConnectorListener.h>
 
-#include <assert.h>
+#include <cassert>
 #include <iostream>
 #include <string>
 
@@ -41,10 +41,6 @@ namespace RTC
    * @endif
    */
   PublisherNew::PublisherNew()
-    : rtclog("PublisherNew"),
-      m_consumer(0), m_buffer(0), m_task(0), m_listeners(0),
-      m_retcode(PORT_OK), m_pushPolicy(PUBLISHER_POLICY_NEW),
-      m_skipn(0), m_active(false), m_leftskip(0)
   {
   }
 
@@ -58,7 +54,7 @@ namespace RTC
   PublisherNew::~PublisherNew()
   {
     RTC_TRACE(("~PublisherNew()"));
-    if (m_task != 0)
+    if (m_task != nullptr)
       {
         m_task->resume();
         m_task->finalize();
@@ -68,9 +64,9 @@ namespace RTC
       }
 
     // "consumer" should be deleted in the Connector
-    m_consumer = 0;
+    m_consumer = nullptr;
     // "buffer"   should be deleted in the Connector
-    m_buffer = 0;
+    m_buffer = nullptr;
   }
 
   /*!
@@ -80,7 +76,7 @@ namespace RTC
    * @brief initialization
    * @endif
    */
-  PublisherBase::ReturnCode PublisherNew::init(coil::Properties& prop)
+  DataPortStatus PublisherNew::init(coil::Properties& prop)
   {
     RTC_TRACE(("init()"));
     RTC_DEBUG_STR((prop));
@@ -88,9 +84,9 @@ namespace RTC
     setPushPolicy(prop);
     if (!createTask(prop))
       {
-        return INVALID_ARGS;
+        return DataPortStatus::INVALID_ARGS;
       }
-    return PORT_OK;
+    return DataPortStatus::PORT_OK;
   }
 
   /*!
@@ -100,17 +96,17 @@ namespace RTC
    * @brief Store InPort consumer
    * @endif
    */
-  PublisherBase::ReturnCode PublisherNew::setConsumer(InPortConsumer* consumer)
+  DataPortStatus PublisherNew::setConsumer(InPortConsumer* consumer)
   {
     RTC_TRACE(("setConsumer()"));
 
-    if (consumer == 0)
+    if (consumer == nullptr)
       {
         RTC_ERROR(("setConsumer(consumer = 0): invalid argument."));
-        return INVALID_ARGS;
+        return DataPortStatus::INVALID_ARGS;
       }
     m_consumer = consumer;
-    return PORT_OK;
+    return DataPortStatus::PORT_OK;
   }
 
   /*!
@@ -120,17 +116,17 @@ namespace RTC
    * @brief Setting buffer pointer
    * @endif
    */
-  PublisherBase::ReturnCode PublisherNew::setBuffer(CdrBufferBase* buffer)
+  DataPortStatus PublisherNew::setBuffer(CdrBufferBase* buffer)
   {
     RTC_TRACE(("setBuffer()"));
 
-    if (buffer == 0)
+    if (buffer == nullptr)
       {
         RTC_ERROR(("setBuffer(buffer == 0): invalid argument"));
-        return INVALID_ARGS;
+        return DataPortStatus::INVALID_ARGS;
       }
     m_buffer = buffer;
-    return PORT_OK;
+    return DataPortStatus::PORT_OK;
   }
 
   /*!
@@ -140,20 +136,20 @@ namespace RTC
    * @brief Setting buffer pointer
    * @endif
    */
-  PublisherBase::ReturnCode
+  DataPortStatus
   PublisherNew::setListener(ConnectorInfo& info,
-                            ConnectorListeners* listeners)
+                            ConnectorListenersBase* listeners)
   {
     RTC_TRACE(("setListeners()"));
 
-    if (listeners == 0)
+    if (listeners == nullptr)
       {
         RTC_ERROR(("setListeners(listeners == 0): invalid argument"));
-        return INVALID_ARGS;
+        return DataPortStatus::INVALID_ARGS;
       }
     m_profile = info;
     m_listeners = listeners;
-    return PORT_OK;
+    return DataPortStatus::PORT_OK;
   }
 
   /*!
@@ -163,39 +159,40 @@ namespace RTC
    * @brief Write data
    * @endif
    */
-  PublisherBase::ReturnCode PublisherNew::write(cdrMemoryStream& data,
-                                                unsigned long sec,
-                                                unsigned long usec)
+  DataPortStatus PublisherNew::write(ByteDataStreamBase* data,
+                                                std::chrono::nanoseconds timeout)
   {
     RTC_PARANOID(("write()"));
 
-    if (m_consumer == 0) { return PRECONDITION_NOT_MET; }
-    if (m_buffer == 0) { return PRECONDITION_NOT_MET; }
-    if (m_listeners == 0) { return PRECONDITION_NOT_MET; }
+    if (m_consumer == nullptr) { return DataPortStatus::PRECONDITION_NOT_MET; }
+    if (m_buffer == nullptr) { return DataPortStatus::PRECONDITION_NOT_MET; }
+    if (m_listeners == nullptr) { return DataPortStatus::PRECONDITION_NOT_MET; }
 
-    if (m_retcode == CONNECTION_LOST)
+    if (m_retcode == DataPortStatus::CONNECTION_LOST)
       {
         RTC_DEBUG(("write(): connection lost."));
         return m_retcode;
       }
 
-    if (m_retcode == SEND_FULL)
+    m_data = *data;
+
+    if (m_retcode == DataPortStatus::SEND_FULL)
       {
         RTC_DEBUG(("write(): InPort buffer is full."));
-        m_buffer->write(data, sec, usec);
+        m_buffer->write(m_data, timeout);
         m_task->signal();
-        return BUFFER_FULL;
+        return DataPortStatus::BUFFER_FULL;
       }
 
-    assert(m_buffer != 0);
+    assert(m_buffer != nullptr);
 
-    onBufferWrite(data);
-    CdrBufferBase::ReturnCode ret(m_buffer->write(data, sec, usec));
+    onBufferWrite(m_data);
+    BufferStatus ret(m_buffer->write(m_data, timeout));
 
     m_task->signal();
-    RTC_DEBUG(("%s = write()", CdrBufferBase::toString(ret)));
+    RTC_DEBUG(("%s = write()", toString(ret)));
 
-    return convertReturn(ret, data);
+    return convertReturn(ret, m_data);
   }
 
   /*!
@@ -217,10 +214,10 @@ namespace RTC
    * @brief activation
    * @endif
    */
-  PublisherBase::ReturnCode PublisherNew::activate()
+  DataPortStatus PublisherNew::activate()
   {
     m_active = true;
-    return PORT_OK;
+    return DataPortStatus::PORT_OK;
   }
 
   /*!
@@ -230,10 +227,10 @@ namespace RTC
    * @brief deactivation
    * @endif
    */
-  PublisherBase::ReturnCode PublisherNew::deactivate()
+  DataPortStatus PublisherNew::deactivate()
   {
     m_active = false;
-    return PORT_OK;
+    return DataPortStatus::PORT_OK;
   }
 
   /*!
@@ -243,10 +240,10 @@ namespace RTC
    * @brief Thread execution function
    * @endif
    */
-  int PublisherNew::svc(void)
+  int PublisherNew::svc()
   {
 
-    Guard guard(m_retmutex);
+    std::lock_guard<std::mutex> guard(m_retmutex);
     switch (m_pushPolicy)
       {
       case PUBLISHER_POLICY_ALL:
@@ -278,10 +275,10 @@ namespace RTC
   void PublisherNew::setPushPolicy(const coil::Properties& prop)
   {
     // push_policy default: NEW
-    std::string push_policy = prop.getProperty("publisher.push_policy", "new");
+    std::string push_policy{coil::normalize(
+      prop.getProperty("publisher.push_policy", "new"))};
     RTC_DEBUG(("push_policy: %s", push_policy.c_str()));
 
-    coil::normalize(push_policy);
     if      (push_policy == "all")  { m_pushPolicy = PUBLISHER_POLICY_ALL;  }
     else if (push_policy == "fifo") { m_pushPolicy = PUBLISHER_POLICY_FIFO; }
     else if (push_policy == "skip") { m_pushPolicy = PUBLISHER_POLICY_SKIP; }
@@ -322,7 +319,7 @@ namespace RTC
     RTC_DEBUG(("available task types: %s", coil::flatten(th).c_str()));
 
     m_task = factory.createObject(prop.getProperty("thread_type", "default"));
-    if (m_task == 0)
+    if (m_task == nullptr)
       {
         RTC_ERROR(("Task creation failed: %s",
                    prop.getProperty("thread_type", "default").c_str()));
@@ -331,8 +328,8 @@ namespace RTC
     RTC_PARANOID(("Task creation succeeded."));
 
     // setting task function
-    m_task->setTask(this, &PublisherNew::svc);
-    m_task->setPeriod(0.0);
+    m_task->setTask([this]{ svc(); });
+    m_task->setPeriod(std::chrono::seconds(0));
     m_task->executionMeasure(coil::toBool(prop["measurement.exec_time"],
                                     "enable", "disable", true));
 
@@ -362,92 +359,92 @@ namespace RTC
   /*!
    * @brief push all policy
    */
-  PublisherNew::ReturnCode PublisherNew::pushAll()
+  DataPortStatus PublisherNew::pushAll()
   {
     RTC_TRACE(("pushAll()"));
 
     while (m_buffer->readable() > 0)
       {
-        cdrMemoryStream& cdr(m_buffer->get());
+        ByteData& cdr(m_buffer->get());
         onBufferRead(cdr);
 
         onSend(cdr);
-        ReturnCode ret(m_consumer->put(cdr));
-        if (ret != PORT_OK)
+        DataPortStatus ret(m_consumer->put(cdr));
+        if (ret != DataPortStatus::PORT_OK)
           {
-            RTC_DEBUG(("%s = consumer.put()", DataPortStatus::toString(ret)));
+            RTC_DEBUG(("%s = consumer.put()", toString(ret)));
             return invokeListener(ret, cdr);
           }
         onReceived(cdr);
 
         m_buffer->advanceRptr();
       }
-    return PORT_OK;
+    return DataPortStatus::PORT_OK;
   }
 
   /*!
    * @brief push "fifo" policy
    */
-  PublisherNew::ReturnCode PublisherNew::pushFifo()
+  DataPortStatus PublisherNew::pushFifo()
   {
     RTC_TRACE(("pushFifo()"));
 
-    cdrMemoryStream& cdr(m_buffer->get());
+    ByteData& cdr(m_buffer->get());
 
     onBufferRead(cdr);
 
     onSend(cdr);
-    ReturnCode ret(m_consumer->put(cdr));
-    if (ret != PORT_OK)
+    DataPortStatus ret(m_consumer->put(cdr));
+    if (ret != DataPortStatus::PORT_OK)
       {
-        RTC_DEBUG(("%s = consumer.put()", DataPortStatus::toString(ret)));
+        RTC_DEBUG(("%s = consumer.put()", toString(ret)));
         return invokeListener(ret, cdr);
       }
     onReceived(cdr);
 
     m_buffer->advanceRptr();
 
-    return PORT_OK;
+    return DataPortStatus::PORT_OK;
   }
 
   /*!
    * @brief push "skip" policy
    */
-  PublisherNew::ReturnCode PublisherNew::pushSkip()
+  DataPortStatus PublisherNew::pushSkip()
   {
     RTC_TRACE(("pushSkip()"));
 
-    ReturnCode ret(PORT_OK);
-    int preskip(m_buffer->readable() + m_leftskip);
+    DataPortStatus ret(DataPortStatus::PORT_OK);
+    int preskip(static_cast<int>(m_buffer->readable()) + m_leftskip);
     int loopcnt(preskip/(m_skipn +1));
     int postskip(m_skipn - m_leftskip);
     for (int i(0); i < loopcnt; ++i)
       {
         m_buffer->advanceRptr(postskip);
 
-        cdrMemoryStream& cdr(m_buffer->get());
+        ByteData& cdr(m_buffer->get());
 
         onBufferRead(cdr);
 
         onSend(cdr);
         ret = m_consumer->put(cdr);
-        if (ret != PORT_OK)
+        if (ret != DataPortStatus::PORT_OK)
           {
             m_buffer->advanceRptr(-postskip);
-            RTC_DEBUG(("%s = consumer.put()", DataPortStatus::toString(ret)));
+            RTC_DEBUG(("%s = consumer.put()", toString(ret)));
             return invokeListener(ret, cdr);
           }
         onReceived(cdr);
         postskip = m_skipn + 1;
       }
-    m_buffer->advanceRptr(m_buffer->readable());
+    m_buffer->advanceRptr(static_cast<long>(m_buffer->readable()));
     if (loopcnt == 0)
       {  // Not put
         m_leftskip = preskip % (m_skipn +1);
       }
     else
       {
-        if ( m_retcode != PORT_OK )
+        if ( m_retcode != DataPortStatus::PORT_OK )
           {  // put Error after
             m_leftskip = 0;
           }
@@ -462,27 +459,27 @@ namespace RTC
    /*!
     * @brief push "new" policy
     */
-  PublisherNew::ReturnCode PublisherNew::pushNew()
+  DataPortStatus PublisherNew::pushNew()
   {
     RTC_TRACE(("pushNew()"));
 
-    m_buffer->advanceRptr(m_buffer->readable() - 1);
+    m_buffer->advanceRptr(static_cast<long>(m_buffer->readable()) - 1);
 
-    cdrMemoryStream& cdr(m_buffer->get());
+    ByteData& cdr(m_buffer->get());
     onBufferRead(cdr);
 
     onSend(cdr);
-    ReturnCode ret(m_consumer->put(cdr));
-    if (ret != PORT_OK)
+    DataPortStatus ret(m_consumer->put(cdr));
+    if (ret != DataPortStatus::PORT_OK)
       {
-        RTC_DEBUG(("%s = consumer.put()", DataPortStatus::toString(ret)));
+        RTC_DEBUG(("%s = consumer.put()", toString(ret)));
         return invokeListener(ret, cdr);
       }
     onReceived(cdr);
 
     m_buffer->advanceRptr();
 
-    return PORT_OK;
+    return DataPortStatus::PORT_OK;
   }
 
   /*!
@@ -492,9 +489,9 @@ namespace RTC
    * @brief Convertion from BufferStatus to DataPortStatus
    * @endif
    */
-  PublisherBase::ReturnCode
-  PublisherNew::convertReturn(BufferStatus::Enum status,
-                              cdrMemoryStream& data)
+  DataPortStatus
+  PublisherNew::convertReturn(BufferStatus status,
+                              ByteData& data)
   {
     /*
      * BufferStatus -> DataPortStatus
@@ -508,13 +505,13 @@ namespace RTC
      */
     switch (status)
       {
-      case BufferStatus::BUFFER_OK:
+      case BufferStatus::OK:
         // no callback
         return DataPortStatus::PORT_OK;
       case BufferStatus::BUFFER_ERROR:
         // no callback
         return DataPortStatus::BUFFER_ERROR;
-      case BufferStatus::BUFFER_FULL:
+      case BufferStatus::FULL:
         onBufferFull(data);
         return DataPortStatus::BUFFER_FULL;
       case BufferStatus::NOT_SUPPORTED:
@@ -526,11 +523,11 @@ namespace RTC
       case BufferStatus::PRECONDITION_NOT_MET:
         // no callback
         return DataPortStatus::PRECONDITION_NOT_MET;
+      case BufferStatus::EMPTY: /* FALLTHROUGH */
       default:
         // no callback
         return DataPortStatus::PORT_ERROR;
       }
-    return DataPortStatus::PORT_ERROR;
   }
 
   /*!
@@ -540,42 +537,52 @@ namespace RTC
    * @brief Call listeners according to the DataPortStatus
    * @endif
    */
-  PublisherNew::ReturnCode
-  PublisherNew::invokeListener(DataPortStatus::Enum status,
-                               cdrMemoryStream& data)
+  DataPortStatus
+  PublisherNew::invokeListener(DataPortStatus status,
+                               ByteData& data)
   {
     // ret:
-    // PORT_OK, PORT_ERROR, SEND_FULL, SEND_TIMEOUT, CONNECTION_LOST,
-    // UNKNOWN_ERROR
+    // PORT_ERROR, SEND_FULL, SEND_TIMEOUT, CONNECTION_LOST, UNKNOWN_ERROR
+    //
+    // PORT_OK never come here
     switch (status)
       {
-      case PORT_ERROR:
+      case DataPortStatus::PORT_ERROR:
         onReceiverError(data);
-        return PORT_ERROR;
+        return DataPortStatus::PORT_ERROR;
 
-      case SEND_FULL:
+      case DataPortStatus::SEND_FULL:
         onReceiverFull(data);
-        return SEND_FULL;
+        return DataPortStatus::SEND_FULL;
 
-      case SEND_TIMEOUT:
+      case DataPortStatus::SEND_TIMEOUT:
         onReceiverTimeout(data);
-        return SEND_TIMEOUT;
+        return DataPortStatus::SEND_TIMEOUT;
 
-      case CONNECTION_LOST:
+      case DataPortStatus::CONNECTION_LOST:
         onReceiverError(data);
-        return CONNECTION_LOST;
+        return DataPortStatus::CONNECTION_LOST;
 
-      case UNKNOWN_ERROR:
+      case DataPortStatus::UNKNOWN_ERROR:
         onReceiverError(data);
-        return UNKNOWN_ERROR;
+        return DataPortStatus::UNKNOWN_ERROR;
 
+      case DataPortStatus::PORT_OK:              /* FALLTHROUGH */
+      case DataPortStatus::BUFFER_ERROR:         /* FALLTHROUGH */
+      case DataPortStatus::BUFFER_FULL:          /* FALLTHROUGH */
+      case DataPortStatus::BUFFER_EMPTY:         /* FALLTHROUGH */
+      case DataPortStatus::BUFFER_TIMEOUT:       /* FALLTHROUGH */
+      case DataPortStatus::RECV_EMPTY:           /* FALLTHROUGH */
+      case DataPortStatus::RECV_TIMEOUT:         /* FALLTHROUGH */
+      case DataPortStatus::INVALID_ARGS:         /* FALLTHROUGH */
+      case DataPortStatus::PRECONDITION_NOT_MET: /* FALLTHROUGH */
       default:
         onReceiverError(data);
-        return PORT_ERROR;
+        return DataPortStatus::PORT_ERROR;
       }
   }
 
-};  // namespace RTC
+} // namespace RTC
 
 extern "C"
 {
@@ -597,4 +604,4 @@ extern "C"
                             ::coil::Destructor< ::RTC::PublisherBase,
                                                 ::RTC::PublisherNew>);
   }
-};
+}

@@ -59,5 +59,5 @@ namespace coil
 
   int create_process(std::string command, std::vector<std::string> &out);
 
-}; // namespace coil
+} // namespace coil
 #endif // COIL_PROCESS_H

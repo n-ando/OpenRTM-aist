@@ -15,23 +15,13 @@
  *
  */
 
-#include <coil/Time.h>
-#include <coil/TimeValue.h>
-
-
 #include <rtm/Manager.h>
 #include <rtm/RTObject.h>
 #include <rtm/MultilayerCompositeEC.h>
 #include <rtm/RTObjectStateMachine.h>
 #include <rtm/PeriodicTaskFactory.h>
 
-#ifdef RTM_OS_LINUX
-#define _GNU_SOURCE
-#include <pthread.h>
-#include <algorithm>
-#endif // RTM_OS_LINUX
-
-#include <string.h>
+#include <cstring>
 #include <algorithm>
 #include <iostream>
 #include <string>
@@ -48,7 +38,7 @@ namespace RTC_exp
    */
   MultilayerCompositeEC::
   MultilayerCompositeEC()
-  : PeriodicExecutionContext(), m_ownersm(NULL)
+  : PeriodicExecutionContext()
   {
     RTC_TRACE(("MultilayerCompositeEC()"));
   }
@@ -83,77 +73,59 @@ namespace RTC_exp
    * @brief Thread execution function for ExecutionContext
    * @endif
    */
-  int MultilayerCompositeEC::svc(void)
+  int MultilayerCompositeEC::svc()
   {
     RTC_TRACE(("svc()"));
-    int count(0);
 
     const RTC::RTObject_ptr owner = getOwner();
     m_ownersm = m_worker.findComponent(owner);
 
     do
       {
-          
         m_ownersm->workerPreDo();
         // Thread will stopped when all RTCs are INACTIVE.
         // Therefore WorkerPreDo(updating state) have to be invoked
         // before stopping thread.
         {
-          Guard guard(m_workerthread.mutex_);
+          std::unique_lock<std::mutex> guard(m_workerthread.mutex_);
           while (!m_workerthread.running_)
             {
-              m_workerthread.cond_.wait();
+              m_workerthread.cond_.wait(guard);
             }
         }
-        coil::TimeValue t0(coil::clock());
+        auto t0 = std::chrono::high_resolution_clock::now();
         m_ownersm->workerDo();
         m_ownersm->workerPostDo();
-        
-        
-        for (std::vector<ChildTask*>::iterator task = m_tasklist.begin(); task != m_tasklist.end(); ++task)
-        {
-            (*task)->signal();
-        }
-        
-        for (std::vector<ChildTask*>::iterator task = m_tasklist.begin(); task != m_tasklist.end(); ++task)
-        {
-            (*task)->join();
-        }
-        
-        
-        coil::TimeValue t1(coil::clock());
 
-        coil::TimeValue period(getPeriod());
-        if (count > 1000)
-          {
-            RTC_PARANOID(("Period:    %f [s]", static_cast<double>(period)));
-            RTC_PARANOID(("Execution: %f [s]", static_cast<double>(t1 - t0)));
-            RTC_PARANOID(("Sleep:     %f [s]",
-                                    static_cast<double>(period - (t1 - t0))));
-            int task_num = 0;
-            for (std::vector<ChildTask*>::iterator task = m_tasklist.begin(); task != m_tasklist.end(); ++task)
-            {
-                coil::TimeMeasure::Statistics st = (*task)->getExecStat();
-                RTC_PARANOID(("MAX(%d):  %f [s]", task_num, st.max_interval));
-                RTC_PARANOID(("MIN(%d):  %f [s]", task_num, st.min_interval));
-                RTC_PARANOID(("MEAN(%d): %f [s]", task_num, st.mean_interval));
-                RTC_PARANOID(("SD(%d):   %f [s]", task_num, st.std_deviation));
-                task_num += 1;
-            }
-          }
-        coil::TimeValue t2(coil::clock());
-        if (!m_nowait && period > (t1 - t0))
-          {
-            if (count > 1000) { RTC_PARANOID(("sleeping...")); }
-            coil::sleep((coil::TimeValue)(period - (t1 - t0)));
-          }
-        if (count > 1000)
-          {
-            coil::TimeValue t3(coil::clock());
-            RTC_PARANOID(("Slept:     %f [s]", static_cast<double>(t3 - t2)));
-            count = 0;
-          }
-        ++count;
+        for (auto & task : m_tasklist)
+        {
+            task->signal();
+        }
+
+        for (auto & task : m_tasklist)
+        {
+            task->join();
+        }
+
+        if (!m_nowait)
+        {
+            auto t1 = std::chrono::high_resolution_clock::now();
+            auto exectime = t1 - t0;
+            if (exectime.count() >= 0)
+              {
+                auto diff = getPeriod() - exectime;
+                if (diff.count() > 0)
+                  {
+#ifdef _WIN32
+                    std::chrono::milliseconds ms = std::chrono::duration_cast<std::chrono::milliseconds>(diff);
+                    Sleep(static_cast<DWORD>(ms.count()));
+#else
+                    std::this_thread::sleep_for(diff);
+
+#endif
+                  }
+              }
+        }
       } while (threadRunning());
     RTC_DEBUG(("Thread terminated."));
     return 0;
@@ -165,37 +137,30 @@ namespace RTC_exp
       RTC::ReturnCode_t ret = ExecutionContextBase::bindComponent(rtc);
       ::RTC::Manager &mgr = ::RTC::Manager::instance();
       std::string threads_str = rtc->getProperties()["conf.default.members"];
-      coil::vstring threads = coil::split(threads_str, "|");
-
-      for (coil::vstring::iterator thread = threads.begin(); thread != threads.end(); ++thread)
+      for (auto const & thread : coil::split(threads_str, "|"))
       {
           std::vector<RTC::LightweightRTObject_ptr> rtcs;
-          coil::vstring members = coil::split(*thread, ",");
-
-          for (coil::vstring::iterator member = members.begin(); member != members.end(); ++member)
+          for (auto&& member : coil::split(thread, ","))
           {
-              std::string m = *member;
-              coil::eraseBothEndsBlank(m);
-
-              if (m.empty())
+              member =  coil::eraseBothEndsBlank(std::move(member));
+              if (member.empty())
               {
                   continue;
               }
               else
               {
-                  
-                  RTC::RTObject_impl* comp = mgr.getComponent(m.c_str());
-                  if (comp == NULL)
+                  RTC::RTObject_impl* comp = mgr.getComponent(member.c_str());
+                  if (comp == nullptr)
                   {
-                      RTC_ERROR(("no RTC found: %s", member));
+                      RTC_ERROR(("no RTC found: %s", member.c_str()));
                       continue;
                   }
-                  RTC::RTObject_ptr rtobj = comp->getObjRef();
+                  RTC::RTObject_var rtobj = comp->getObjRef();
                   if (CORBA::is_nil(rtobj))
                   {
                       continue;
                   }
-                  rtcs.push_back(rtobj);
+                  rtcs.emplace_back(RTC::RTObject::_duplicate(rtobj));
               }
           }
           addTask(rtcs);
@@ -220,7 +185,7 @@ namespace RTC_exp
       RTC::PeriodicTaskFactory& factory(RTC::PeriodicTaskFactory::instance());
 
       coil::PeriodicTaskBase* task = factory.createObject(prop.getProperty("thread_type", "default"));
-      if (task == NULL)
+      if (task == nullptr)
       {
           RTC_ERROR(("Task creation failed: %s",
               prop.getProperty("thread_type", "default").c_str()));
@@ -229,8 +194,8 @@ namespace RTC_exp
 
       ChildTask *ct = new ChildTask(task, this);
 
-      task->setTask(ct, &ChildTask::svc);
-      task->setPeriod(0.0);
+      task->setTask([ct]{ ct->svc(); });
+      task->setPeriod(std::chrono::seconds(0));
       task->executionMeasure(coil::toBool(prop["measurement.exec_time"],
           "enable", "disable", true));
 
@@ -250,12 +215,12 @@ namespace RTC_exp
       }
 
 
-      for (std::vector<RTC::LightweightRTObject_ptr>::iterator rtc = rtcs.begin(); rtc != rtcs.end(); ++rtc)
+      for (auto & rtc : rtcs)
       {
-          addRTCToTask(ct, (*rtc));
+          addRTCToTask(ct, rtc);
       }
 
-      m_tasklist.push_back(ct);
+      m_tasklist.emplace_back(ct);
 
       // Start task in suspended mode
       task->suspend();
@@ -266,7 +231,7 @@ namespace RTC_exp
 
   void MultilayerCompositeEC::addRTCToTask(ChildTask* task, RTC::LightweightRTObject_ptr rtobj)
   {
-      ::OpenRTM::DataFlowComponent_ptr comp = ::OpenRTM::DataFlowComponent::_narrow(rtobj);
+      ::OpenRTM::DataFlowComponent_var comp = ::OpenRTM::DataFlowComponent::_narrow(rtobj);
       SDOPackage::OrganizationList_var orglist = comp->get_owned_organizations();
 
       if (orglist->length() == 0)
@@ -291,9 +256,11 @@ namespace RTC_exp
 
   }
 
+  MultilayerCompositeEC::ChildTask::~ChildTask() = default;
+
   void MultilayerCompositeEC::ChildTask::addComponent(RTC::LightweightRTObject_ptr rtc)
   {
-      m_rtcs.push_back(rtc);
+      m_rtcs.emplace_back(rtc);
   }
 
   void MultilayerCompositeEC::ChildTask::updateCompList()
@@ -302,10 +269,10 @@ namespace RTC_exp
       while (rtc != m_rtcs.end())
       {
           RTC_impl::RTObjectStateMachine* comp = m_ec->findComponent(*rtc);
-          if (comp != NULL)
+          if (comp != nullptr)
           {
               rtc = m_rtcs.erase(rtc);
-              m_comps.push_back(comp);
+              m_comps.emplace_back(comp);
           }
           else
           {
@@ -317,90 +284,78 @@ namespace RTC_exp
   int MultilayerCompositeEC::ChildTask::svc()
   {
       {
-          Guard guard(m_worker.mutex_);
+          std::lock_guard<std::mutex> guard(m_worker.mutex_);
           m_worker.running_ = true;
       }
 
       {
-          Guard guard(m_signal_worker.mutex_);
+          std::unique_lock<std::mutex> guard(m_signal_worker.mutex_);
 
           while (!m_signal_worker.running_)
           {
-              m_signal_worker.cond_.wait();
+              m_signal_worker.cond_.wait(guard);
           }
           m_signal_worker.running_ = false;
-          
       }
-      
 
-      
-      
       updateCompList();
-      for (std::vector<RTC_impl::RTObjectStateMachine*>::iterator comp = m_comps.begin(); comp != m_comps.end(); ++comp)
+      for (auto & comp : m_comps)
       {
-          (*comp)->workerPreDo();
-          (*comp)->workerDo();
-          (*comp)->workerPostDo();
+          comp->workerPreDo();
+          comp->workerDo();
+          comp->workerPostDo();
       }
-      
+
       {
-          Guard guard(m_worker.mutex_);
+          std::lock_guard<std::mutex> guard(m_worker.mutex_);
           m_worker.running_ = false;
-          
-          m_worker.cond_.signal();
-          
 
+          m_worker.cond_.notify_one();
       }
 
       {
-          Guard guard(m_signal_worker.mutex_);
+          std::unique_lock<std::mutex> guard(m_signal_worker.mutex_);
           while (!m_signal_worker.running_){
-             m_signal_worker.cond_.wait();
+             m_signal_worker.cond_.wait(guard);
           }
           m_signal_worker.running_ = false;
       }
-      
-      
 
       return 0;
   }
 
   void MultilayerCompositeEC::ChildTask::signal()
   {
-      
       bool ret = false;
       while (!ret)
       {
           m_task->signal();
-         
           {
-              Guard guard(m_worker.mutex_);
+              std::lock_guard<std::mutex> guard(m_worker.mutex_);
               ret = m_worker.running_;
           }
       }
       {
-          Guard guard(m_signal_worker.mutex_);
+          std::lock_guard<std::mutex> guard(m_signal_worker.mutex_);
           m_signal_worker.running_ = true;
-          m_signal_worker.cond_.signal();
+          m_signal_worker.cond_.notify_one();
       }
-      
-
   }
 
   void MultilayerCompositeEC::ChildTask::join()
   {
       {
-          Guard guard(m_worker.mutex_);
+          std::unique_lock<std::mutex> guard(m_worker.mutex_);
           while (m_worker.running_)
           {
-              m_worker.cond_.wait();
+              m_worker.cond_.wait(guard);
           }
       }
 
       {
-          Guard guard(m_signal_worker.mutex_);
+          std::lock_guard<std::mutex> guard(m_signal_worker.mutex_);
           m_signal_worker.running_ = true;
-          m_signal_worker.cond_.signal();
+          m_signal_worker.cond_.notify_one();
       }
   }
 
@@ -422,7 +377,7 @@ namespace RTC_exp
       RTC::PeriodicTaskFactory::instance().deleteObject(m_task);
   }
 
-};  // namespace RTC_exp
+} // namespace RTC_exp
 
 extern "C"
 {
@@ -434,7 +389,7 @@ extern "C"
    * @endif
    */
 
-  void MultilayerCompositeECInit(RTC::Manager* manager)
+  void MultilayerCompositeECInit(RTC::Manager*  /*manager*/)
   {
     RTC::ExecutionContextFactory::
       instance().addFactory("MultilayerCompositeEC",
@@ -446,5 +401,5 @@ extern "C"
     coil::vstring ecs;
     ecs = RTC::ExecutionContextFactory::instance().getIdentifiers();
   }
-};
+}
 

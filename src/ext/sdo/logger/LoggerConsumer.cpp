@@ -32,7 +32,6 @@ namespace RTC
    * @endif
    */
   LoggerConsumer::LoggerConsumer()
-    : m_rtobj(NULL)
   {
   }
 
@@ -43,9 +42,7 @@ namespace RTC
    * @brief dtor
    * @endif
    */
-  LoggerConsumer::~LoggerConsumer()
-  {
-  }
+  LoggerConsumer::~LoggerConsumer() = default;
 
   /*!
    * @if jp
@@ -124,7 +121,7 @@ namespace RTC
   //============================================================
   // protected functions
  
-}; // namespace RTC
+} // namespace RTC
 
 extern "C"
 {
@@ -132,10 +129,14 @@ extern "C"
   {
     RTC::SdoServiceConsumerFactory& factory
       = RTC::SdoServiceConsumerFactory::instance();
+#ifndef ORB_IS_RTORB
     factory.addFactory(CORBA_Util::toRepositoryId<OpenRTM::Logger>(),
+#else
+    factory.addFactory(CORBA_Util::toRepositoryId<OpenRTM::Logger_ptr>(),
+#endif
                        ::coil::Creator< ::RTC::SdoServiceConsumerBase,
                        ::RTC::LoggerConsumer>,
                        ::coil::Destructor< ::RTC::SdoServiceConsumerBase,
                        ::RTC::LoggerConsumer>);
   }
-};
+}

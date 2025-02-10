@@ -73,50 +73,33 @@ namespace RTC
    * @brief Write data into the buffer
    * @endif
    */
-  InPortConsumer::ReturnCode InPortCorbaCdrUDPConsumer::put(cdrMemoryStream& data)
+  DataPortStatus InPortCorbaCdrUDPConsumer::put(ByteData& data)
   {
     RTC_PARANOID(("put()"));
 
 #ifndef ORB_IS_RTORB
-#ifdef ORB_IS_ORBEXPRESS
-    cdrMemoryStream tmp_data;
-    tmp_data = data;
-    ::OpenRTM::CdrData tmp;
-    CORBA::ULong len = tmp_data.cdr.size_written();
-    tmp.length(len);
-    tmp_data.cdr.read_array_1((void*)tmp.get_buffer(), len);
-    //CORBA::Octet* to;
-    //cdrMemoryStream data_tmp = data;
-    //*static_cast<CORBA::Octet*>(to) = data_tmp.read_octet();
-    //::OpenRTM::CdrData tmp(data_tmp.size_written(), data_tmp.size_written(),
-    //                       to, 0);
-#elif defined(ORB_IS_TAO)
-	::OpenRTM::CdrData tmp;
-	data.encodeCDRData(tmp);
-#else
-    ::OpenRTM::CdrData tmp(data.bufSize(), data.bufSize(),
-                           static_cast<CORBA::Octet*>(data.bufPtr()), 0);
-#endif
+    CORBA::ULong len = (CORBA::ULong)data.getDataLength();
+    m_data.length(len);
+    data.readData((unsigned char*)m_data.get_buffer(), len);
 #else // ORB_IS_RTORB
     OpenRTM_CdrData *cdrdata_tmp = new OpenRTM_CdrData();
-    cdrdata_tmp->_buffer = 
-      (CORBA_octet *)RtORB_alloc(data.bufSize(), "InPortCorbaCdrComsumer::put");
+    cdrdata_tmp->_buffer =
+        (CORBA_octet *)RtORB_alloc(data.bufSize(), "InPortCorbaCdrComsumer::put");
     memcpy(cdrdata_tmp->_buffer, data.bufPtr(), data.bufSize());
-    cdrdata_tmp->_length = cdrdata_tmp->_maximum= data.bufSize();
+    cdrdata_tmp->_length = cdrdata_tmp->_maximum = data.bufSize();
     ::OpenRTM::CdrData tmp(cdrdata_tmp);
-#endif // ORB_IS_RTORB
+#endif  // ORB_IS_RTORB
     try
       {
         // return code conversion
         // (IDL)OpenRTM::DataPort::ReturnCode_t -> DataPortStatus
-		_ptr()->put(tmp);
-        return PORT_OK;
+        _ptr()->put(m_data);
+        return DataPortStatus::PORT_OK;
       }
     catch (...)
       {
-        return CONNECTION_LOST;
+        return DataPortStatus::CONNECTION_LOST;
       }
-    return UNKNOWN_ERROR;
   }
   
   /*!
@@ -127,7 +110,7 @@ namespace RTC
    * @endif
    */
   void InPortCorbaCdrUDPConsumer::
-  publishInterfaceProfile(SDOPackage::NVList& properties)
+  publishInterfaceProfile(SDOPackage::NVList& /*properties*/)
   {
     return;
   }
@@ -195,7 +178,7 @@ namespace RTC
         return false;
       }
     
-    const char* ior(0);
+    const char* ior(nullptr);
     if (!(properties[index].value >>= ior))
       {
         RTC_ERROR(("inport_ior has no string"));
@@ -206,28 +189,26 @@ namespace RTC
 
 
     CORBA::Object_var obj = orb->string_to_object(ior);
-	
 
 #ifdef ORB_IS_TAO
-	TAO_Stub *stub = obj->_stubobj();
+    TAO_Stub *stub = obj->_stubobj();
 
 
-	TAO_MProfile profiles = stub->base_profiles();
-	
-	while (profiles.profile_count() > 1)
-	{
-		if (profiles.get_profile(0)->tag() != TAO_TAG_DIOP_PROFILE)
-		{
-			profiles.remove_profile(profiles.get_profile(0));
-		}
-		else
-		{
-			break;
-		}
-	}
-	
-	TAO_Profile* profile = stub->profile_in_use();
-	stub->base_profiles(profiles);
+    TAO_MProfile profiles = stub->base_profiles();
+    
+    while (profiles.profile_count() > 1)
+      {
+        if (profiles.get_profile(0)->tag() != TAO_TAG_DIOP_PROFILE)
+          {
+            profiles.remove_profile(profiles.get_profile(0));
+          }
+        else
+          {
+            break;
+          }
+    }
+    
+    stub->base_profiles(profiles);
 #endif
     
     if (CORBA::is_nil(obj))
@@ -362,7 +343,7 @@ namespace RTC
 
 
   
-};     // namespace RTC
+} // namespace RTC
 
 extern "C"
 { 
@@ -382,4 +363,4 @@ extern "C"
                        ::coil::Destructor< ::RTC::InPortConsumer,
                                            ::RTC::InPortCorbaCdrUDPConsumer>);
   }
-};
+}

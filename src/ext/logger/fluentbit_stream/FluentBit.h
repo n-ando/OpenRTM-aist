@@ -21,8 +21,14 @@
 #include <string>
 #include <fstream>
 #include <iostream>
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
+#pragma warning(push)
+#pragma warning( disable : 4100 4245 4189 4805 4200 4505 )
+#endif
 #include <fluent-bit.h>
-
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
+#pragma warning(pop)
+#endif
 #include <coil/stringutil.h>
 #include <rtm/LogstreamBase.h>
 
@@ -54,12 +60,12 @@ namespace RTC
    * @endif
    */
   class FluentBitStream
-    : public StreambufType
+    : public coil::LogStreamBuffer
   {
   public:
     FluentBitStream();
 
-    virtual ~FluentBitStream();
+    ~FluentBitStream() override;
 
     bool init(const coil::Properties& prop);
 
@@ -67,18 +73,18 @@ namespace RTC
 
     bool createInputStream(const coil::Properties& prop);
 
-  protected:
-    std::streamsize pushLogger();
+    static int setServiceOption(const coil::Properties& prop);
 
-    virtual std::streamsize xsputn(const char_type* str,
-                                   std::streamsize insize);
+    void write(int level, const std::string &name, const std::string &date, const std::string &mes) override;
+
+  protected:
+    std::streamsize pushLogger(int level, const std::string &name, const std::string &date, const char* mes);
 
   private:
     char m_buf[BUFFER_LEN];
-    size_t m_pos;
+    size_t m_pos{0};
 
-    typedef int FlbHandler;
-    FlbHandler m_fibInLib;
+    using FlbHandler = int;
 
     std::vector<FlbHandler> m_flbIn;
     std::vector<FlbHandler> m_flbOut;
@@ -243,7 +249,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~FluentBit(void);
+    ~FluentBit() override;
 
     /*!
      * @if jp
@@ -266,7 +272,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual bool init(const coil::Properties& prop);
+    bool init(const coil::Properties& prop) override;
 
     /*!
      * @if jp
@@ -287,16 +293,16 @@ namespace RTC
      *
      * @endif
      */
-    virtual StreambufType* getStreamBuffer();
+    coil::LogStreamBuffer* getStreamBuffer() override;
 
   protected:
     FluentBitStream m_fbstream;
   };
-}; // namespace RTC
+} // namespace RTC
 
 extern "C"
 {
   void DLL_EXPORT FluentBitInit();
-};
+}
 
 #endif // RTC_LOGGER_FLUENTBIT_H

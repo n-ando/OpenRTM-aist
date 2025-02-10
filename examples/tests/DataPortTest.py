@@ -1,11 +1,11 @@
-#!/usr/bin/env python
-# -*- coding: euc-jp -*-
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 #
 ## DataPortTest.py
 ##
-## ¥á¥â¥ê¡¼¥ê¡¼¥¯¥Á¥§¥Ã¥¯
-## DataPort.idl¤ÇÄêµÁ¤µ¤ì¤Æ¤¤¤ë¥ª¥Ú¥ì¡¼¥·¥ç¥ó
-## ¥Ç¡¼¥¿¥İ¡¼¥È¤Ë´Ø¤¹¤ë¥ª¥Ú¥ì¡¼¥·¥ç¥ó
+## ãƒ¡ãƒ¢ãƒªãƒ¼ãƒªãƒ¼ã‚¯ãƒã‚§ãƒƒã‚¯
+## DataPort.idlã§å®šç¾©ã•ã‚Œã¦ã„ã‚‹ã‚ªãƒšãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³
+## ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆã«é–¢ã™ã‚‹ã‚ªãƒšãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³
 #
 # $Id$
 #
@@ -119,7 +119,7 @@ fodat = "put()"
 print_file_and_cons(fodat)
 
 for i in range(loop_cnt):
-    # DataflowType:pushÀÜÂ³
+    # DataflowType:pushæ¥ç¶š
     # InportCdr::put(in CdrData data)
     ret0,conprof0 = consin_ports[0].connect(conprof)
     # print "   connect() ret=",ret0
@@ -142,7 +142,7 @@ for i in range(loop_cnt):
     ret1 = inportcdr.put(data0)
     # print "   put() ret=" + str(ret1)
     #if ret1 != OpenRTM.PORT_OK:
-    #  if ret1 == OpenRTM.BUFFER_FULL:		#9·ïÌÜ¤«¤éBUFFER_FULL¤Ë¤Ê¤ë
+    #  if ret1 == OpenRTM.BUFFER_FULL:		#9ä»¶ç›®ã‹ã‚‰BUFFER_FULLã«ãªã‚‹
     #    fodat = "     put() ret=BUFFER_FULL  count=%d" % (i+1)
     #    print_file_and_cons(fodat)
     #  else:
@@ -173,7 +173,7 @@ fodat = "get()"
 print_file_and_cons(fodat)
 
 for i in range(loop_cnt):
-    # DataflowType:pullÀÜÂ³
+    # DataflowType:pullæ¥ç¶š
     # OutportCdr::get(out CdrData data)  
     ret10,conprof10 = consout_ports[0].connect(conprof2)
     # print "   connect() ret=",ret10

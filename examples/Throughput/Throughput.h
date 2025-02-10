@@ -38,6 +38,7 @@
 
 #include <vector>
 #include <fstream>
+#include <thread>
 
 using namespace RTC;
 
@@ -116,7 +117,7 @@ class Throughput
   /*!
    * @brief destructor
    */
-  ~Throughput();
+  ~Throughput() override;
 
   // <rtc-template block="public_attribute">
   
@@ -135,7 +136,7 @@ class Throughput
    * 
    * 
    */
-   virtual RTC::ReturnCode_t onInitialize();
+   RTC::ReturnCode_t onInitialize() override;
 
   /***
    *
@@ -185,7 +186,7 @@ class Throughput
    * 
    * 
    */
-   virtual RTC::ReturnCode_t onActivated(RTC::UniqueId ec_id);
+   RTC::ReturnCode_t onActivated(RTC::UniqueId ec_id) override;
 
   /***
    *
@@ -198,7 +199,7 @@ class Throughput
    * 
    * 
    */
-   virtual RTC::ReturnCode_t onDeactivated(RTC::UniqueId ec_id);
+   RTC::ReturnCode_t onDeactivated(RTC::UniqueId ec_id) override;
 
   /***
    *
@@ -211,7 +212,7 @@ class Throughput
    * 
    * 
    */
-   virtual RTC::ReturnCode_t onExecute(RTC::UniqueId ec_id);
+   RTC::ReturnCode_t onExecute(RTC::UniqueId ec_id) override;
 
   /***
    *
@@ -281,7 +282,7 @@ class Throughput
   void setDataSize(CORBA::ULong size);
   CORBA::ULong getDataSize();
   CORBA::ULong getInPortConnectorSize();
-  void receiveData(const RTC::Time &tm, const CORBA::ULong seq_length);
+  void receiveData(const RTC::Time &tm, CORBA::ULong seq_length);
   void setConnectorProfile(const RTC::ConnectorInfo& info);
 
  protected:
@@ -319,7 +320,7 @@ class Throughput
   * - Name: sleep_time sleep_time
   * - DefaultValue: 0.01
   */
-  double m_sleep_time;
+  std::chrono::microseconds m_sleep_time;
   /*!
    * 通信データ量を一定値(const)にするか、徐々に増加する値(increase)に
    * するかの設定
@@ -334,7 +335,7 @@ class Throughput
    * - Name: maxsize maxsize
    * - DefaultValue: 10000000
    */
-  long m_maxsize;
+  unsigned long m_maxsize;
 
   /*!
    * mode=constの時のデータ送信回数の最大値
@@ -342,7 +343,7 @@ class Throughput
    * - Name: maxsend maxsend
    * - DefaultValue: 1000
    */
-  long m_maxsend;
+  unsigned long m_maxsend;
 
   /*!
    * 1データセットごとの最大サンプル数
@@ -350,7 +351,7 @@ class Throughput
    * - Name: maxsize maxsample
    * - DefaultValue: 100
    */
-  long m_maxsample;
+  unsigned long m_maxsample;
 
   // </rtc-template>
 
@@ -410,13 +411,15 @@ class Throughput
   //============================================================
   // Time measurement statistics data
   // data size to be send
-  long m_datasize;
-  std::vector<coil::TimeValue> m_record;
+  unsigned long m_datasize;
+  std::vector<std::chrono::nanoseconds> m_record;
 
   // received data store
   size_t m_sendcount;
   size_t m_logmulcnt;
   size_t m_varsize;
+
+  std::thread* m_exitthread;
   // <rtc-template block="private_attribute">
   
   // </rtc-template>
@@ -433,13 +436,13 @@ class DataListener
 {
   USE_CONNLISTENER_STATUS;
 public:
-  DataListener(Throughput *comp) : m_comp(comp)  {};
-  virtual ~DataListener() {};
-  virtual ReturnCode operator()(ConnectorInfo& info,
-                          DataType& data)
+  DataListener(Throughput *comp) : m_comp(comp)  {}
+  ~DataListener() override = default;
+  ReturnCode operator()(ConnectorInfo&  /*info*/,
+                          DataType& data) override
   {
     m_comp->receiveData(data.tm, data.data.length());
-	return RTC::ConnectorListenerStatus::NO_CHANGE;;
+	return RTC::ConnectorListenerStatus::NO_CHANGE;
   }
   Throughput* m_comp;
 };
@@ -450,8 +453,8 @@ class ConnListener
   USE_CONNLISTENER_STATUS;
 public:
   ConnListener(Throughput *comp) : m_comp(comp) {}
-  virtual ~ConnListener() {}
-  virtual ReturnCode operator()(ConnectorInfo& info)
+  ~ConnListener() override = default;
+  ReturnCode operator()(ConnectorInfo& info) override
   {
 // Connector Listener: ON_CONNECT
 // Profile::name:      ConsoleIn0.out_ConsoleOut0.in
@@ -480,8 +483,8 @@ public:
     std::cout                                       << std::endl;
     std::cout << "------------------------------"   << std::endl;
     m_comp->setConnectorProfile(info);
-	return RTC::ConnectorListenerStatus::NO_CHANGE;;
-  };
+	return RTC::ConnectorListenerStatus::NO_CHANGE;
+  }
   Throughput* m_comp;
 };
 
@@ -489,6 +492,6 @@ public:
 extern "C"
 {
   DLL_EXPORT void ThroughputInit(RTC::Manager* manager);
-};
+}
 
 #endif // THROUGHPUT_H

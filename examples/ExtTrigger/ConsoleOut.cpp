@@ -11,7 +11,7 @@
 
 // Module specification
 // <rtc-template block="module_spec">
-static const char* consoleout_spec[] =
+static const char* const consoleout_spec[] =
   {
     "implementation_id", "ConsoleOut",
     "type_name",         "ConsoleOut",
@@ -36,9 +36,7 @@ ConsoleOut::ConsoleOut(RTC::Manager* manager)
 {
 }
 
-ConsoleOut::~ConsoleOut()
-{
-}
+ConsoleOut::~ConsoleOut() = default;
 
 
 RTC::ReturnCode_t ConsoleOut::onInitialize()
@@ -61,7 +59,7 @@ RTC::ReturnCode_t ConsoleOut::onInitialize()
   return RTC::RTC_OK;
 }
 
-RTC::ReturnCode_t ConsoleOut::onExecute(RTC::UniqueId ec_id)
+RTC::ReturnCode_t ConsoleOut::onExecute(RTC::UniqueId  /*ec_id*/)
 {
   if (m_inIn.isNew())
     {
@@ -70,7 +68,7 @@ RTC::ReturnCode_t ConsoleOut::onExecute(RTC::UniqueId ec_id)
       std::cout << "TimeStamp: " << m_in.tm.sec << "[s] ";
       std::cout << m_in.tm.nsec << "[ns]" << std::endl;
     }
-  coil::usleep(1000);
+  std::this_thread::sleep_for(std::chrono::milliseconds(1));
 
   return RTC::RTC_OK;
 }
@@ -87,6 +85,6 @@ extern "C"
                              RTC::Delete<ConsoleOut>);
   }
   
-};
+}
 
 

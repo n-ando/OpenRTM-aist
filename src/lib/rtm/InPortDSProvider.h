@@ -26,10 +26,6 @@
 #include <rtm/ConnectorListener.h>
 #include <rtm/ConnectorBase.h>
 
-#ifdef WIN32
-#pragma warning( disable : 4290 )
-#endif
-
 namespace RTC
 {
   /*!
@@ -42,7 +38,7 @@ namespace RTC
    * データ転送に CORBA の RTC::DataPushService インターフェースを利用し
    * た、push 型データフロー型を実現する InPort プロバイダクラス。
    *
-   * @since 0.4.0
+   * @since 2.0.0
    *
    * @else
    * @class InPortDSProvider
@@ -52,7 +48,7 @@ namespace RTC
    * interface in CORBA for data transfer and realizes a push-type
    * dataflow.
    *
-   * @since 0.4.0
+   * @since 2.0.0
    *
    * @endif
    */
@@ -75,7 +71,7 @@ namespace RTC
      *
      * @endif
      */
-    InPortDSProvider(void);
+    InPortDSProvider();
 
     /*!
      * @if jp
@@ -90,7 +86,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~InPortDSProvider(void);
+    ~InPortDSProvider() override;
 
     /*!
      * @if jp
@@ -119,7 +115,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual void init(coil::Properties& prop);
+    void init(coil::Properties& prop) override;
 
     /*!
      * @if jp
@@ -146,7 +142,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual void setBuffer(BufferBase<cdrMemoryStream>* buffer);
+    void setBuffer(BufferBase<ByteData>* buffer) override;
 
     /*!
      * @if jp
@@ -196,8 +192,8 @@ namespace RTC
      *
      * @endif
      */
-    virtual void setListener(ConnectorInfo& info,
-                             ConnectorListeners* listeners);
+    void setListener(ConnectorInfo& info,
+                             ConnectorListenersBase* listeners) override;
 
     /*!
      * @if jp
@@ -223,7 +219,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual void setConnector(InPortConnector* connector);
+    void setConnector(InPortConnector* connector) override;
 
     /*!
      * @if jp
@@ -242,8 +238,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ::RTC::PortStatus push(const ::RTC::OctetSeq& data)
-      throw (CORBA::SystemException);
+    ::RTC::PortStatus push(const ::RTC::OctetSeq& data) override;
 
   private:
     /*!
@@ -254,8 +249,8 @@ namespace RTC
      * @endif
      */
     ::RTC::PortStatus
-    convertReturn(BufferStatus::Enum status,
-                  cdrMemoryStream& data);
+    convertReturn(BufferStatus status,
+                  ByteData& data);
 
 
     /*!
@@ -267,10 +262,9 @@ namespace RTC
      * @param data cdrMemoryStream
      * @endif
      */
-    inline void onBufferWrite(cdrMemoryStream& data)
+    inline void onBufferWrite(ByteData& data)
     {
-      m_listeners->
-        connectorData_[ON_BUFFER_WRITE].notify(m_profile, data);
+      m_listeners->notifyIn(ConnectorDataListenerType::ON_BUFFER_WRITE, m_profile, data);
     }
 
     /*!
@@ -282,10 +276,9 @@ namespace RTC
      * @param data cdrMemoryStream
      * @endif
      */
-    inline void onBufferFull(cdrMemoryStream& data)
+    inline void onBufferFull(ByteData& data)
     {
-      m_listeners->
-        connectorData_[ON_BUFFER_FULL].notify(m_profile, data);
+      m_listeners->notifyIn(ConnectorDataListenerType::ON_BUFFER_FULL, m_profile, data);
     }
 
     /*!
@@ -297,10 +290,9 @@ namespace RTC
      * @param data cdrMemoryStream
      * @endif
      */
-    inline void onBufferWriteTimeout(cdrMemoryStream& data)
+    inline void onBufferWriteTimeout(ByteData& data)
     {
-      m_listeners->
-        connectorData_[ON_BUFFER_WRITE_TIMEOUT].notify(m_profile, data);
+      m_listeners->notifyIn(ConnectorDataListenerType::ON_BUFFER_WRITE_TIMEOUT, m_profile, data);
     }
 
     /*!
@@ -312,10 +304,9 @@ namespace RTC
      * @param data cdrMemoryStream
      * @endif
      */
-    inline void onBufferWriteOverwrite(cdrMemoryStream& data)
+    inline void onBufferWriteOverwrite(ByteData& data)
     {
-      m_listeners->
-        connectorData_[ON_BUFFER_OVERWRITE].notify(m_profile, data);
+      m_listeners->notifyIn(ConnectorDataListenerType::ON_BUFFER_OVERWRITE, m_profile, data);
     }
 
     /*!
@@ -327,10 +318,9 @@ namespace RTC
      * @param data cdrMemoryStream
      * @endif
      */
-    inline void onReceived(cdrMemoryStream& data)
+    inline void onReceived(ByteData& data)
     {
-      m_listeners->
-        connectorData_[ON_RECEIVED].notify(m_profile, data);
+      m_listeners->notifyIn(ConnectorDataListenerType::ON_RECEIVED, m_profile, data);
     }
 
     /*!
@@ -342,10 +332,9 @@ namespace RTC
      * @param data cdrMemoryStream
      * @endif
      */
-    inline void onReceiverFull(cdrMemoryStream& data)
+    inline void onReceiverFull(ByteData& data)
     {
-      m_listeners->
-        connectorData_[ON_RECEIVER_FULL].notify(m_profile, data);
+      m_listeners->notifyIn(ConnectorDataListenerType::ON_RECEIVER_FULL, m_profile, data);
     }
 
     /*!
@@ -355,10 +344,9 @@ namespace RTC
      * @brief Notify an ON_RECEIVER_TIMEOUT event to listeners
      * @endif
      */
-    inline void onReceiverTimeout(cdrMemoryStream& data)
+    inline void onReceiverTimeout(ByteData& data)
     {
-      m_listeners->
-        connectorData_[ON_RECEIVER_TIMEOUT].notify(m_profile, data);
+      m_listeners->notifyIn(ConnectorDataListenerType::ON_RECEIVER_TIMEOUT, m_profile, data);
     }
 
     /*!
@@ -368,21 +356,21 @@ namespace RTC
      * @Brief Notify an ON_RECEIVER_ERROR event to listeners
      * @endif
      */
-    inline void onReceiverError(cdrMemoryStream& data)
+    inline void onReceiverError(ByteData& data)
     {
-      m_listeners->
-        connectorData_[ON_RECEIVER_ERROR].notify(m_profile, data);
+      m_listeners->notifyIn(ConnectorDataListenerType::ON_RECEIVER_ERROR, m_profile, data);
     }
 
   private:
-    CdrBufferBase* m_buffer;
+    CdrBufferBase* m_buffer{nullptr};
     ::RTC::DataPushService_var m_objref;
-    ConnectorListeners* m_listeners;
+    ConnectorListenersBase* m_listeners;
     ConnectorInfo m_profile;
-    InPortConnector* m_connector;
+    InPortConnector* m_connector{nullptr};
+    ByteData m_cdr;
 
   };  // class InPortDSProvider
-};  // namespace RTC
+} // namespace RTC
 
 extern "C"
 {
@@ -400,11 +388,7 @@ extern "C"
    * @endif
    */
   void InPortDSProviderInit(void);
-};
-
-#ifdef WIN32
-#pragma warning( default : 4290 )
-#endif
+}
 
 #endif  // RTC_INPORTDSPROVIDER_H
 

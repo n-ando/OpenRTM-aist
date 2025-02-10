@@ -26,19 +26,7 @@
 #include <CORBA.h>
 #endif
 #ifdef ORB_IS_OMNIORB
-#ifdef WIN32
-#pragma warning( disable : 4267 )
-#pragma warning( disable : 4290 )
-#pragma warning( disable : 4311 )
-#pragma warning( disable : 4312 )
-#endif  // WIN32
 #include <omniORB4/CORBA.h>
-#ifdef WIN32
-#pragma warning( default : 4267 )
-#pragma warning( default : 4290 )
-#pragma warning( default : 4311 )
-#pragma warning( default : 4312 )
-#endif  // WIN32
 #endif
 #ifdef ORB_IS_ORBACUS
 #include <OB/CORBA.h>
@@ -106,7 +94,7 @@ namespace RTC
      *
      * @endif
      */
-    CorbaConsumerBase() {}
+    CorbaConsumerBase() = default;
 
     /*!
      * @if jp
@@ -191,10 +179,10 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~CorbaConsumerBase(void)
+    virtual ~CorbaConsumerBase()
     {
       releaseObject();
-    };
+    }
 
     /*!
      * @if jp
@@ -355,7 +343,7 @@ namespace RTC
      *
      * @endif
      */
-    CorbaConsumer() {}
+    CorbaConsumer();
 
     /*!
      * @if jp
@@ -373,10 +361,11 @@ namespace RTC
      * @endif
      */
     CorbaConsumer(const CorbaConsumer& x)
+      : CorbaConsumerBase()
 #ifdef ORB_IS_ORBEXPRESS
-      : m_var(ObjectType::_duplicate(x.m_var.in()))
+      , m_var(ObjectType::_duplicate(x.m_var.in()))
 #else
-      : m_var(ObjectType::_duplicate(x.m_var))
+      , m_var(ObjectType::_duplicate(x.m_var))
 #endif
     {
     }
@@ -427,10 +416,10 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~CorbaConsumer(void)
+    ~CorbaConsumer() override
     {
       releaseObject();
-    };
+    }
 
     /*!
      * @if jp
@@ -460,7 +449,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual bool setObject(CORBA::Object_ptr obj)
+    bool setObject(CORBA::Object_ptr obj) override
     {
       if (!CorbaConsumerBase::setObject(obj))
         {
@@ -555,7 +544,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual void releaseObject()
+    void releaseObject() override
     {
       CorbaConsumerBase::releaseObject();
       m_var = ObjectType::_nil();
@@ -571,5 +560,9 @@ namespace RTC
      */
     ObjectTypeVar m_var;
   };
-};  // namespace RTC
+
+  // No inline for gcc warning, too big
+  template <class T, class U, class V>
+  CorbaConsumer<T, U, V>::CorbaConsumer() = default;
+} // namespace RTC
 #endif  // RTC_CORBACONSUMER_H

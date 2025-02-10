@@ -23,6 +23,29 @@
 
 namespace RTC
 {
+
+
+  /*!
+   * @if jp
+   *
+   * @brief RTコンポーネント破棄用関数
+   *
+   *
+   * @param rtc 破棄対象RTコンポーネントのインスタンス
+   *
+   * @else
+   *
+   * @brief 
+   *
+   * @param rtc The target RT-Component's instances for destruction
+   *
+   * @endif
+   */
+  void deleteRTObject(RTObject_impl* rtc)
+  {
+    delete rtc;
+  }
+
   /*!
    * @if jp
    * @brief コンストラクタ
@@ -42,9 +65,7 @@ namespace RTC
    * @brief Destructor
    * @endif
    */
-  FactoryBase::~FactoryBase()
-  {
-  }
+  FactoryBase::~FactoryBase() = default;
 
   /*!
    * @if jp
@@ -78,15 +99,15 @@ namespace RTC
    * @endif
    */
   FactoryCXX::FactoryCXX(const coil::Properties& profile,
-			 RtcNewFunc new_func,
-			 RtcDeleteFunc delete_func,
+                         RtcNewFunc new_func,
+                         RtcDeleteFunc delete_func,
                          RTM::NumberingPolicyBase* policy)
     : FactoryBase(profile),
       m_New(new_func),
       m_Delete(delete_func),
       m_policy(policy)
   {
-    if (m_policy == NULL)
+    if (m_policy == nullptr)
       throw std::bad_alloc();
   }
 
@@ -102,7 +123,7 @@ namespace RTC
     try
       {
         RTObject_impl* rtobj(m_New(mgr));
-        if (rtobj == 0) { return NULL; }
+        if (rtobj == nullptr) { return nullptr; }
 
         ++m_Number;
         rtobj->setProperties(this->profile());
@@ -116,7 +137,7 @@ namespace RTC
       }
     catch (...)
       {
-        return NULL;
+        return nullptr;
       }
   }
 
@@ -140,4 +161,4 @@ namespace RTC
 
       }
   }
-};  // namespace RTC
+} // namespace RTC

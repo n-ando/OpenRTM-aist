@@ -19,7 +19,6 @@
 #ifndef RTC_LOCALSERVICEADMIN_H
 #define RTC_LOCALSERVICEADMIN_H
 
-#include <coil/Mutex.h>
 #include <coil/Factory.h>
 #include <coil/Singleton.h>
 
@@ -34,9 +33,8 @@ namespace RTM
 {
   // forward decl
   class LocalServiceBase;
-  typedef LocalServiceBase* (*ECNewFunc)();
-  typedef void (*ECDeleteFunc)(LocalServiceBase* ls);
-  typedef coil::Guard<coil::Mutex> Guard;
+  using ECNewFunc = LocalServiceBase* (*)();
+  using ECDeleteFunc = void (*)(LocalServiceBase*);
 
   /*!
    * @if jp
@@ -175,7 +173,7 @@ namespace RTM
      *
      * @endif
      */
-    bool getServiceProfile(std::string name,
+    bool getServiceProfile(const std::string& name,
                            ::RTM::LocalServiceProfile& prof);
 
     /*!
@@ -263,7 +261,7 @@ namespace RTM
      * @endif
      */
     std::vector<LocalServiceBase*> m_services;
-    coil::Mutex m_services_mutex;
+    std::mutex m_services_mutex;
 
     /*!
      * @if jp
@@ -274,6 +272,6 @@ namespace RTM
      */
     ::RTC::Logger rtclog;
   };
-};  // namespace RTM
+} // namespace RTM
 
 #endif  // RTC_LOCALSERVICEADMIN_H

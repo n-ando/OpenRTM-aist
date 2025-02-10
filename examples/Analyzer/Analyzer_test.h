@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file  Analyzer_test.h
  * @brief Clock Analyzer test
@@ -60,7 +60,7 @@ class Analyzer_test
   /*!
    * @brief destructor
    */
-  ~Analyzer_test();
+  ~Analyzer_test() override;
 
   // <rtc-template block="public_attribute">
   
@@ -79,7 +79,7 @@ class Analyzer_test
    * 
    * 
    */
-   virtual RTC::ReturnCode_t onInitialize();
+   RTC::ReturnCode_t onInitialize() override;
 
   /***
    *
@@ -155,7 +155,7 @@ class Analyzer_test
    * 
    * 
    */
-   virtual RTC::ReturnCode_t onExecute(RTC::UniqueId ec_id);
+   RTC::ReturnCode_t onExecute(RTC::UniqueId ec_id) override;
 
   /***
    *
@@ -240,7 +240,7 @@ class Analyzer_test
    * - DefaultValue: 0.01
    * - Unit: s
    */
-  double m_sleep_time;
+  std::chrono::microseconds m_sleep_time;
 
   // </rtc-template>
 
@@ -297,6 +297,6 @@ class Analyzer_test
 extern "C"
 {
   DLL_EXPORT void Analyzer_testInit(RTC::Manager* manager);
-};
+}
 
 #endif // ANALYZER_TEST_H

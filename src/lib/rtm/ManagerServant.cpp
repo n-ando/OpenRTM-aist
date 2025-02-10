@@ -35,11 +35,7 @@ namespace RTM
   // Example implementational code for IDL interface RTM::Manager
   //
   ManagerServant::ManagerServant()
-    : rtclog("ManagerServant"),
-      m_mgr(::RTC::Manager::instance()),
-      m_objref(RTM::Manager::_nil()),
-      m_masters(0), m_slaves(0),
-      m_isMaster(false)
+    : m_masters(0), m_slaves(0)
   {
     rtclog.setName("ManagerServant");
     coil::Properties config(m_mgr.getConfig());    
@@ -64,7 +60,7 @@ namespace RTM
         try
           {
             RTM::Manager_var owner;
-            owner = findManager(config["corba.master_manager"].c_str());
+            owner = findManager(config["corba.master_manager"]);
             if (CORBA::is_nil(owner))
               {
                 RTC_WARN(("Master manager not found"));
@@ -72,9 +68,9 @@ namespace RTM
               }
             RTC_INFO(("Master manager found: %s",
                       config["corba.master_manager"].c_str()));
-            RTC_INFO(("Adding this manager to this manager."))
+            RTC_INFO(("Adding this manager to this manager."));
             add_master_manager(owner);
-            RTC_INFO(("Register this manager to master manager."))
+            RTC_INFO(("Register this manager to master manager."));
             owner->add_slave_manager(m_objref.in());
             RTC_INFO(("Slave manager servant was successfully created."));
             return;
@@ -88,14 +84,14 @@ namespace RTM
 
   ManagerServant::~ManagerServant()
   {
-    Guard guardm(m_masterMutex);
+    std::lock_guard<std::mutex> guardm(m_masterMutex);
     for (CORBA::ULong i(0); i < m_masters.length(); ++i)
       {
         try
           {
             if (CORBA::is_nil(m_masters[i])) { continue; }
             m_masters[i]
-              ->remove_slave_manager(RTM::Manager::_duplicate(m_objref));
+              ->remove_slave_manager(m_objref.in());
           }
         catch (...)
           {
@@ -104,14 +100,14 @@ namespace RTM
       }
     m_masters.length(0);
 
-    Guard guards(m_slaveMutex);
+    std::lock_guard<std::mutex> guards(m_slaveMutex);
     for (CORBA::ULong i(0); i < m_slaves.length(); ++i)
       {
         try
           {
             if (CORBA::is_nil(m_slaves[i])) { continue; }
             m_slaves[i]
-              ->remove_master_manager(RTM::Manager::_duplicate(m_objref));
+              ->remove_master_manager(m_objref.in());
           }
         catch (...)
           {
@@ -120,32 +116,28 @@ namespace RTM
       }
     m_slaves.length(0);
 
-
-	if (!CORBA::is_nil(m_objref))
-	{
-#ifndef ORB_IS_TAO
 #ifndef ORB_IS_RTORB
-		CORBA::Object_ptr obj = m_mgr.theORB()->resolve_initial_references("omniINSPOA");
-#else // ROB_IS_RTORB
-		CORBA::Object_ptr obj = m_mgr.theORB()->resolve_initial_references((char*)"omniINSPOA");
-#endif // ORB_IS_RTORB
+    if (!CORBA::is_nil(m_objref))
+      {
+#ifndef ORB_IS_TAO
+        CORBA::Object_var obj = m_mgr.theORB()->resolve_initial_references("omniINSPOA");
 
+        PortableServer::POA_var poa = PortableServer::POA::_narrow(obj);
+        PortableServer::ObjectId_var id;
+        id = poa->servant_to_id(this);
 
-		PortableServer::POA_ptr poa = PortableServer::POA::_narrow(obj);
-		PortableServer::ObjectId_var id;
-		id = poa->servant_to_id(this);
-
-		poa->deactivate_object(id.in());
+        poa->deactivate_object(id.in());
 #else
-		CORBA::Object_var obj = m_mgr.theORB()->resolve_initial_references("IORTable");
-		IORTable::Table_var adapter = IORTable::Table::_narrow(obj.in());
+        CORBA::Object_var obj = m_mgr.theORB()->resolve_initial_references("IORTable");
+        IORTable::Table_var adapter = IORTable::Table::_narrow(obj.in());
 
 
-		coil::Properties config(m_mgr.getConfig());
+        coil::Properties config(m_mgr.getConfig());
 
-		adapter->unbind(config["manager.name"].c_str());
+        adapter->unbind(config["manager.name"].c_str());
 #endif
-	}
+      }
+#endif
 
   }
 
@@ -197,46 +189,17 @@ namespace RTM
     ::RTM::ModuleProfileList_var cprof = new ::RTM::ModuleProfileList();
     std::vector<coil::Properties> prof(m_mgr.getLoadableModules());
 
-    cprof->length((CORBA::Long)prof.size());
-    for (int i(0), len(prof.size()); i < len; ++i)
+    cprof->length(static_cast<CORBA::ULong>(prof.size()));
+    for (size_t i(0), len(prof.size()); i < len; ++i)
       {
         RTC_VERBOSE_STR((prof[i]));
 #ifndef ORB_IS_TAO
-        NVUtil::copyFromProperties(cprof[(CORBA::Long)i].properties, prof[i]);
+        NVUtil::copyFromProperties(cprof[static_cast<CORBA::ULong>(i)].properties, prof[i]);
 #else
-        NVUtil::copyFromProperties(cprof.inout()[(CORBA::Long)i].properties, prof[i]);
+        NVUtil::copyFromProperties(cprof.inout()[static_cast<CORBA::ULong>(i)].properties, prof[i]);
 #endif
       }
 
-    if (0)
-      {
-        // copy slaves' module profiles
-        Guard gurad(m_slaveMutex);
-        RTC_DEBUG(("%d slaves exists.", m_slaves.length()));
-        for (int i(0), len(m_slaves.length()); i < len; ++i)
-          {
-            try
-              {
-                if (!CORBA::is_nil(m_slaves[i]))
-                  {
-                    ::RTM::ModuleProfileList_var sprof;
-                    sprof = m_slaves[i]->get_loadable_modules();
-#ifndef ORB_IS_RTORB
-                    CORBA_SeqUtil::push_back_list(cprof.inout(), sprof.in());
-#else  // ORB_IS_RTORB
-                    CORBA_SeqUtil::push_back_list(cprof, sprof);
-#endif  // ORB_IS_RTORB
-                    continue;
-                  }
-              }
-            catch (...)
-              {
-                RTC_INFO(("slave (%d) has disappeared.", i));
-                m_slaves[i] = RTM::Manager::_nil();
-              }
-            CORBA_SeqUtil::erase(m_slaves, i); --i;
-          }
-      }
     return cprof._retn();
   }
 
@@ -255,21 +218,21 @@ namespace RTM
     ::RTM::ModuleProfileList_var cprof = new RTM::ModuleProfileList();
     std::vector<coil::Properties> prof(m_mgr.getLoadedModules());
 
-    cprof->length(prof.size());
-    for (int i(0), len(prof.size()); i < len; ++i)
+    cprof->length(static_cast<CORBA::ULong>(prof.size()));
+    for (size_t i(0), len(prof.size()); i < len; ++i)
       {
         RTC_VERBOSE_STR((prof[i]));
 #ifndef ORB_IS_TAO
-        NVUtil::copyFromProperties(cprof[(CORBA::Long)i].properties, prof[i]);
+        NVUtil::copyFromProperties(cprof[static_cast<CORBA::ULong>(i)].properties, prof[i]);
 #else
-        NVUtil::copyFromProperties(cprof.inout()[(CORBA::Long)i].properties, prof[i]);
+        NVUtil::copyFromProperties(cprof.inout()[static_cast<CORBA::Long>(i)].properties, prof[i]);
 #endif
       }
 
-    if (0)
+    if (false)
       {
         // copy slaves' module profile
-        Guard guard(m_slaveMutex);
+        std::lock_guard<std::mutex> guard(m_slaveMutex);
         RTC_DEBUG(("%d slave managers exists.", m_slaves.length()));
         for (int i(0), len(m_slaves.length()); i < len; ++i)
           {
@@ -293,6 +256,7 @@ namespace RTM
                 m_slaves[i] = RTM::Manager::_nil();
               }
             CORBA_SeqUtil::erase(m_slaves, i); --i;
+            len = m_slaves.length();
           }
       }
     return cprof._retn();
@@ -313,21 +277,21 @@ namespace RTM
     ::RTM::ModuleProfileList_var cprof = new RTM::ModuleProfileList();
     std::vector<coil::Properties> prof(m_mgr.getFactoryProfiles());
 
-    cprof->length(prof.size());
-    for (int i(0), len(prof.size()); i < len; ++i)
+    cprof->length(static_cast<CORBA::Long>(prof.size()));
+    for (size_t i(0), len(prof.size()); i < len; ++i)
       {
         RTC_VERBOSE_STR((prof[i]));
 #ifndef ORB_IS_TAO
-        NVUtil::copyFromProperties(cprof[(CORBA::Long)i].properties, prof[i]);
+        NVUtil::copyFromProperties(cprof[static_cast<CORBA::ULong>(i)].properties, prof[i]);
 #else
-        NVUtil::copyFromProperties(cprof.inout()[(CORBA::Long)i].properties, prof[i]);
+        NVUtil::copyFromProperties(cprof.inout()[static_cast<CORBA::Long>(i)].properties, prof[i]);
 #endif
       }
 
-    if (0)
+    if (false)
       {
         // copy slaves' factory profile
-        Guard guard(m_slaveMutex);
+        std::lock_guard<std::mutex> guard(m_slaveMutex);
         RTC_DEBUG(("%d slave managers exists.", m_slaves.length()));
         for (int i(0), len(m_slaves.length()); i < len; ++i)
           {
@@ -351,81 +315,45 @@ namespace RTM
                 m_slaves[i] = RTM::Manager::_nil();
               }
             CORBA_SeqUtil::erase(m_slaves, i); --i;
+            len = m_slaves.length();
           }
       }
     return cprof._retn();
   }
 
-  std::string ManagerServant::getParameterByModulename(const std::string param_name, std::string &module_name)
+  std::string ManagerServant::getParameterByModulename(const std::string& param_name, std::string &module_name)
   {
-	  int pos0 = module_name.find("&" + param_name + "=");
-	  int pos1 = module_name.find("?" + param_name + "=");
+    size_t param_start = module_name.find(param_name + "=");
 
-	  if (pos0 == -1 && pos1 == -1)
-	  {
-		  return "";
-	  }
+    if (param_start == std::string::npos)
+      { // no specified param
+        return "";
+      }
 
-	  int pos = 0;
-	  if (pos0 == -1)
-	  {
-		  pos = pos1;
-	  }
-	  else{
-		  pos = pos0;
-	  }
+    size_t param_end = module_name.find("&", param_start);
 
-	  
-	  
-	  std::string paramstr;
-	  int endpos = module_name.find('&', pos + 1);
+    if (param_end == std::string::npos)
+      { // param is end of param list
+        param_end = module_name.length();
+      }
 
-	  
-	  if (endpos == -1)
-	  {
-		  endpos = module_name.find('?', pos + 1);
-		  
-
-		  if (endpos == -1)
-		  {
-			  paramstr = module_name.substr((pos + 1));
-			  
-		  }
-		  else
-		  {
-			  paramstr = module_name.substr((pos + 1), endpos);
-		  }
-	  }
-	  else
-	  {
-		  paramstr = module_name.substr((pos + 1), endpos);
-	  }
-	  RTC_VERBOSE(("%s arg: %s", param_name.c_str(), paramstr.c_str()));
-	  
-
-
-
-	  int eqpos = paramstr.find("=");
-
-	  
-
-	  paramstr = paramstr.substr(eqpos + 1);
-
-	  
-	  RTC_DEBUG(("%s is %s", param_name.c_str(), paramstr.c_str()));
-	  
-
-	  if (endpos == -1)
-	  {
-		  module_name = module_name.substr(0, pos);
-	  }
-	  else
-	  {
-		  module_name = module_name.substr(0, pos) + module_name.substr(endpos);
-	  }
-	  
-
-	  return paramstr;
+    // extract param's value
+    // module_name?....param_name=param_value
+    //   substr(       ^   arg1  ^    arg2  ^ )
+    std::string param_value =
+      module_name.substr(param_start + param_name.length() + 1,
+                         param_end - param_start - param_name.length() - 1);
+    RTC_DEBUG(("%s is %s", param_name.c_str(), param_value.c_str()));
+    // remove specified param
+    if (module_name[param_start - 1] == '?')
+      { // module_name?{param_name=param_value}: remove {}
+        module_name.erase(param_start, param_end - param_start + 1);
+      }
+    if (module_name[param_start - 1] == '&')
+      { // module_name?other_param...{&param_name=param_value}: remove {}
+        module_name.erase(param_start - 1, param_end - param_start + 1);
+      }
+    return param_value;
   }
   
   /*!
@@ -442,90 +370,105 @@ namespace RTM
     std::string create_arg(module_name);
     if (create_arg.empty()) // invalid arg
       {
+        RTC_ERROR(("RTC name is empty."));
         return RTC::RTObject::_nil();
       }
-	coil::vstring tmp = coil::split(create_arg, "&");
-	if (tmp.back().empty())
-	{
-		create_arg = create_arg.substr(0, create_arg.size() - 1);
-	}
-	tmp = coil::split(create_arg, "?");
-	if (tmp.back().empty())
-	{
-		create_arg = create_arg.substr(0,create_arg.size() - 1);
-	}
+
+    if (coil::eraseHeadBlank(create_arg).find("?") == 0)
+      {
+        RTC_ERROR(("RTC name is empty."));
+        return RTC::RTObject::_nil();
+      }
+
+    coil::vstring tmp = coil::split(create_arg, "&");
+    if (tmp.back().empty())
+      {
+        create_arg = create_arg.substr(0, create_arg.size() - 1);
+      }
+    tmp = coil::split(create_arg, "?");
+    if (tmp.back().empty())
+      {
+        create_arg = create_arg.substr(0,create_arg.size() - 1);
+      }
 
     RTC::RTObject_var rtobj;
     // create component by address
-    rtobj = createComponentByAddress(create_arg);
+    std::string manager_address;
+    rtobj = createComponentByAddress(create_arg, manager_address);
     if (!CORBA::is_nil(rtobj)) { return rtobj._retn(); }
+    else if (!manager_address.empty()) { return RTC::RTObject::_nil(); }
 
     // create component by manager's name
-    rtobj = createComponentByManagerName(create_arg);
+    std::string manager_name;
+    rtobj = createComponentByManagerName(create_arg, manager_name);
     if (!CORBA::is_nil(rtobj)) { return rtobj._retn(); }
+    else if (!manager_name.empty()) { return RTC::RTObject::_nil(); }
 
 
-	getParameterByModulename("manager_address", create_arg);
-	std::string manager_name = getParameterByModulename("manager_name", create_arg);
-	
-	
 
-	CompParam comp_param(create_arg);
+    CompParam comp_param(create_arg);
 
     // === Master ===
     // The aster manager never hosts RT-Components and it request to
     // create to slave components.
     if (m_isMaster)
       {
-		  {
-			  Guard guard(m_slaveMutex);
-			  for (size_t i(0); i < m_slaves.length(); ++i)
-			  {
-				  try
-				  {
-					  RTM::NVList* prof = m_slaves[i]->get_configuration();
-					  coil::Properties prop;
-					  RTC::RTObject_var rtobj;
-					  NVUtil::copyToProperties(prop, (*prof));
-					  std::string slave_lang = prop["manager.language"];
+          {
+            std::lock_guard<std::mutex> guard(m_slaveMutex);
+            for (CORBA::ULong i(0); i < m_slaves.length(); ++i)
+              {
+                try
+                  {
+                    RTM::NVList* prof = m_slaves[i]->get_configuration();
+                    coil::Properties prop;
+                    NVUtil::copyToProperties(prop, (*prof));
+                    std::string slave_lang = prop["manager.language"];
 
-					  if (slave_lang == comp_param.language())
-					  {
-						  rtobj = m_slaves[i]->create_component(create_arg.c_str());
-						  RTC_DEBUG(("Component created %s", create_arg.c_str()));
-						  if (!CORBA::is_nil(rtobj)) { return rtobj._retn(); }
-					  }
+                    if (slave_lang == comp_param.language())
+                      {
+                        RTC::RTObject_var comp = m_slaves[i]->create_component(create_arg.c_str());
+                        RTC_DEBUG(("Component created %s", create_arg.c_str()));
+                        if (!CORBA::is_nil(comp)) { return comp._retn(); }
+                      }
 
 
-				  }
-				  catch (CORBA::SystemException& e)
-				  {
-					  RTC_DEBUG(("Exception was caught while creating component."));
-				  }
-			  }
-		  }
+                  }
+                catch (CORBA::SystemException&)
+                  {
+                    RTC_DEBUG(("Exception was caught while creating component."));
+                  }
+              }
+          }
 
-		if (manager_name.empty())
-		{
-			create_arg = create_arg + "&manager_name=manager_%p";
-			
-			rtobj = createComponentByManagerName(create_arg);
-			if (!CORBA::is_nil(rtobj)) { return rtobj._retn(); };
-		}
+        if (manager_name.empty())
+          {
+            if (create_arg.find("?") == std::string::npos)
+              {
+                create_arg += "?";
+              }
+            else
+              {
+                create_arg += "&";
+              }
+            create_arg += "manager_name=manager_%p";
+
+            rtobj = createComponentByManagerName(create_arg, manager_name);
+            if (!CORBA::is_nil(rtobj)) { return rtobj._retn(); }
+          }
         return RTC::RTObject::_nil();
       }
-	else
-	{
-		// === Slave ===
-		// create component on the manager    
-		RTC_DEBUG(("Creating component on this manager"));
-		RTC_DEBUG(("arg: %s", create_arg.c_str()));
-		RTC::RTObject_impl* rtc = m_mgr.createComponent(create_arg.c_str());
-		if (rtc != NULL)
-		{
-			return RTC::RTObject::_duplicate(rtc->getObjRef());
-		}
-	}
+    else
+      {
+        // === Slave ===
+        // create component on the manager    
+        RTC_DEBUG(("Creating component on this manager"));
+        RTC_DEBUG(("arg: %s", create_arg.c_str()));
+        RTC::RTObject_impl* rtc = m_mgr.createComponent(create_arg.c_str());
+        if (rtc != nullptr)
+          {
+            return rtc->getObjRef();
+          }
+      }
 
     // no RTObject created.
     return RTC::RTObject::_nil();
@@ -543,7 +486,7 @@ namespace RTM
     RTC_TRACE(("delete_component(%s)", instance_name));
 
     RTC::RTObject_impl* comp = m_mgr.getComponent(instance_name);
-    if (comp == NULL)
+    if (comp == nullptr)
       {
         RTC_WARN(("No such component exists: %s", instance_name));
         return RTC::BAD_PARAMETER;
@@ -575,18 +518,18 @@ namespace RTM
     std::vector<RTC::RTObject_impl*> rtcs = m_mgr.getComponents();
     ::RTC::RTCList_var crtcs = new ::RTC::RTCList();
 
-    crtcs->length((CORBA::Long)rtcs.size());
-    for (int i(0), len(rtcs.size()); i < len; ++i)
+    crtcs->length(static_cast<CORBA::ULong>(rtcs.size()));
+    for (size_t i(0), len(rtcs.size()); i < len; ++i)
       {
 #ifndef ORB_IS_TAO
-        crtcs[(CORBA::Long)i] = RTC::RTObject::_duplicate(rtcs[i]->getObjRef());
+        crtcs[static_cast<CORBA::ULong>(i)] = rtcs[i]->getObjRef();
 #else
-        crtcs.inout()[(CORBA::Long)i] = RTC::RTObject::_duplicate(rtcs[i]->getObjRef());
+        crtcs.inout()[static_cast<CORBA::ULong>(i)] = rtcs[i]->getObjRef();
 #endif
       }
 
     // get slaves' component references
-    Guard guard(m_slaveMutex);
+    std::lock_guard<std::mutex> guard(m_slaveMutex);
     RTC_DEBUG(("%d slave managers exists.", m_slaves.length()));
     for (int i(0), len(m_slaves.length()); i < len; ++i)
       {
@@ -610,6 +553,7 @@ namespace RTM
             m_slaves[i] = RTM::Manager::_nil();
           }
         CORBA_SeqUtil::erase(m_slaves, i); --i;
+        len = m_slaves.length();
       }
     return crtcs._retn();
   }
@@ -628,19 +572,19 @@ namespace RTM
     // copy local component profiles
     ::RTC::ComponentProfileList_var cprofs = new ::RTC::ComponentProfileList();
     std::vector<RTC::RTObject_impl*> rtcs = m_mgr.getComponents();
-    cprofs->length(rtcs.size());
-    for (int i(0), len(rtcs.size()); i < len; ++i)
+    cprofs->length(static_cast<CORBA::Long>(rtcs.size()));
+    for (size_t i(0), len(rtcs.size()); i < len; ++i)
       {
         ::RTC::ComponentProfile_var prof = rtcs[i]->get_component_profile();
 #ifndef ORB_IS_TAO
-        cprofs[(CORBA::Long)i] = prof;
+        cprofs[static_cast<CORBA::ULong>(i)] = prof;
 #else
-        cprofs.inout()[(CORBA::Long)i] = prof;
+        cprofs.inout()[static_cast<CORBA::ULong>(i)] = prof;
 #endif
       }
 
     // copy slaves' component profiles
-    Guard guard(m_slaveMutex);
+    std::lock_guard<std::mutex> guard(m_slaveMutex);
     RTC_DEBUG(("%d slave managers exists.", m_slaves.length()));
     for (int i(0), len(m_slaves.length()); i < len; ++i)
       {
@@ -664,6 +608,7 @@ namespace RTM
             m_slaves[i] = RTM::Manager::_nil();
           }
         CORBA_SeqUtil::erase(m_slaves, i); --i;
+        len = m_slaves.length();
       }
     return cprofs._retn();
   }
@@ -744,7 +689,7 @@ namespace RTM
   RTM::ManagerList* ManagerServant::get_master_managers()
   {
     RTC_TRACE(("get_master_managers()"));
-    Guard guard(m_masterMutex);
+    std::lock_guard<std::mutex> guard(m_masterMutex);
     return new ManagerList(m_masters);
   }
 
@@ -757,7 +702,7 @@ namespace RTM
    */
   RTC::ReturnCode_t ManagerServant::add_master_manager(RTM::Manager_ptr mgr)
   {
-    Guard guard(m_masterMutex);
+    std::lock_guard<std::mutex> guard(m_masterMutex);
     CORBA::Long index;
     RTC_TRACE(("add_master_manager(), %d masters", m_masters.length()));
     index = CORBA_SeqUtil::find(m_masters, is_equiv(mgr));
@@ -783,7 +728,7 @@ namespace RTM
   RTC::ReturnCode_t
   ManagerServant::remove_master_manager(RTM::Manager_ptr mgr)
   {
-    Guard guard(m_masterMutex);
+    std::lock_guard<std::mutex> guard(m_masterMutex);
     RTC_TRACE(("remove_master_manager(), %d masters", m_masters.length()));
 
     CORBA::Long index;
@@ -809,7 +754,7 @@ namespace RTM
    */
   ManagerList* ManagerServant::get_slave_managers()
   {
-    Guard guard(m_slaveMutex);
+    std::lock_guard<std::mutex> guard(m_slaveMutex);
     RTC_TRACE(("get_slave_managers(), %d slaves", m_slaves.length()));
 
     return new ManagerList(m_slaves);
@@ -824,7 +769,7 @@ namespace RTM
    */
   RTC::ReturnCode_t ManagerServant::add_slave_manager(RTM::Manager_ptr mgr)
   {
-    Guard guard(m_slaveMutex);
+    std::lock_guard<std::mutex> guard(m_slaveMutex);
     RTC_TRACE(("add_slave_manager(), %d slaves", m_slaves.length()));
 
     CORBA::Long index;
@@ -850,7 +795,7 @@ namespace RTM
    */
   RTC::ReturnCode_t ManagerServant::remove_slave_manager(RTM::Manager_ptr mgr)
   {
-    Guard guard(m_slaveMutex);
+    std::lock_guard<std::mutex> guard(m_slaveMutex);
     RTC_TRACE(("remove_slave_manager(), %d slaves", m_slaves.length()));
     CORBA::Long index;
     index = CORBA_SeqUtil::find(m_slaves, is_equiv(mgr));
@@ -875,7 +820,6 @@ namespace RTM
    */
   RTC::ReturnCode_t ManagerServant::fork()
   {
-    //    m_mgr.fork();
     
     return ::RTC::RTC_OK;
   }
@@ -891,41 +835,41 @@ namespace RTM
   {
     if (!m_isMaster)
       {
-	Guard guardm(m_masterMutex);
-	for (CORBA::ULong i(0); i < m_masters.length(); ++i)
-	  {
-	    try
-	      {
-		if (CORBA::is_nil(m_masters[i])) { continue; }
-		m_masters[i]
-		  ->remove_slave_manager(RTM::Manager::_duplicate(m_objref));
-	      }
-	    catch (...)
-	      {
-		m_masters[i] = RTM::Manager::_nil();
-	      }
-	  }
-	m_masters.length(0);
+        std::lock_guard<std::mutex> guardm(m_masterMutex);
+        for (CORBA::ULong i(0); i < m_masters.length(); ++i)
+          {
+            try
+              {
+                if (CORBA::is_nil(m_masters[i])) { continue; }
+                m_masters[i]
+                  ->remove_slave_manager(m_objref.in());
+              }
+            catch (...)
+              {
+                m_masters[i] = RTM::Manager::_nil();
+              }
+          }
+        m_masters.length(0);
       }
     else
       {
-	Guard guards(m_slaveMutex);
-	for (CORBA::ULong i(0); i < m_slaves.length(); ++i)
-	  {
-	    try
-	      {
-		if (CORBA::is_nil(m_slaves[i])) { continue; }
-		m_slaves[i]
-		  ->remove_master_manager(RTM::Manager::_duplicate(m_objref));
-	      }
-	    catch (...)
-	      {
-		m_slaves[i] = RTM::Manager::_nil();
-	      }
-	  }
-	m_slaves.length(0);
+        std::lock_guard<std::mutex> guards(m_slaveMutex);
+        for (CORBA::ULong i(0); i < m_slaves.length(); ++i)
+          {
+            try
+              {
+                if (CORBA::is_nil(m_slaves[i])) { continue; }
+                m_slaves[i]
+                 ->remove_master_manager(m_objref.in());
+              }
+            catch (...)
+              {
+                m_slaves[i] = RTM::Manager::_nil();
+              }
+          }
+        m_slaves.length(0);
       }
-    m_mgr.terminate();
+    ::RTC::Manager::terminate();
     return ::RTC::RTC_OK;
   }
 
@@ -938,7 +882,6 @@ namespace RTM
    */
   RTC::ReturnCode_t ManagerServant::restart()
   {
-    //    m_mgr.restart();
     return ::RTC::RTC_OK;
   }
 
@@ -955,24 +898,22 @@ namespace RTM
     ::RTC::RTCList_var crtcs = new ::RTC::RTCList();
 
     // check argument
-    std::string tmp(name);
-    coil::eraseHeadBlank(tmp);
+    std::string tmp{coil::eraseHeadBlank(name)};
     if (tmp.empty()) { return crtcs._retn(); }
 
     std::vector<RTC::RTObject_impl*> rtcs = m_mgr.getComponents();
     coil::vstring rtc_name = coil::split(tmp, "/");
-    for (size_t i(0); i < rtcs.size(); ++i)
+    for (auto & rtc : rtcs)
       {
         // name = ConsoleIn0, instancename = ConsoleIn0
         if (rtc_name.size() == 1 &&
-            rtc_name[0] == rtcs[i]->getInstanceName())
+            rtc_name[0] == rtc->getInstanceName())
           {
-            RTC::RTObject_var rtcref =
-              RTC::RTObject::_duplicate(rtcs[i]->getObjRef());
+            RTC::RTObject_var rtcref = rtc->getObjRef();
 #ifndef ORB_IS_RTORB
             CORBA_SeqUtil::push_back(crtcs.inout(), rtcref.in());
 #else // ORB_IS_RTORB
-            CORBA_SeqUtil::push_back(crtcs, rtcref);
+            CORBA_SeqUtil::push_back(crtcs, rtcref.in());
 #endif // ORB_IS_RTORB
             continue;
           }
@@ -981,16 +922,15 @@ namespace RTM
         // name = */ConsoleIn0 instancename = ConsoleIn0   OR
         // naem = sample/ConsoleIn0 category = sample && instance == ConsoleIn0
         if ((rtc_name[0] == "*" &&
-             rtc_name[1] == rtcs[i]->getInstanceName()) ||
-            (rtc_name[0] == rtcs[i]->getCategory() &&
-             rtc_name[1] == rtcs[i]->getInstanceName()))
+             rtc_name[1] == rtc->getInstanceName()) ||
+            (rtc_name[0] == rtc->getCategory() &&
+             rtc_name[1] == rtc->getInstanceName()))
           {
-            RTC::RTObject_var rtcref =
-              RTC::RTObject::_duplicate(rtcs[i]->getObjRef());
+            RTC::RTObject_var rtcref = rtc->getObjRef();
 #ifndef ORB_IS_RTORB
             CORBA_SeqUtil::push_back(crtcs.inout(), rtcref.in());
 #else // ORB_IS_RTORB
-            CORBA_SeqUtil::push_back(crtcs, rtcref);
+            CORBA_SeqUtil::push_back(crtcs, rtcref.in());
 #endif // ORB_IS_RTORB
           }
       }
@@ -1004,7 +944,7 @@ namespace RTM
    * @brief Get the reference of RTC.
    * @endif
    */
-  CORBA::Object_ptr ManagerServant::get_service(const char* name)
+  CORBA::Object_ptr ManagerServant::get_service(const char*  /*name*/)
   {
     return ::CORBA::Object::_nil();
   }
@@ -1021,9 +961,9 @@ namespace RTM
   RTM::Manager_ptr ManagerServant::getObjRef() const
   {
 #ifdef ORB_IS_ORBEXPRESS
-    return m_objref.in();
+    return RTM::Manager::_duplicate(m_objref.in());
 #else
-    return m_objref;
+    return RTM::Manager::_duplicate(m_objref);
 #endif
   }
 
@@ -1036,18 +976,14 @@ namespace RTM
    */
   bool ManagerServant::createINSManager()
   {
+#ifndef ORB_IS_RTORB
     try
       {
         // Ppreparing INS POA
         CORBA::Object_var obj;
 #ifndef ORB_IS_TAO
-#ifndef ORB_IS_RTORB
-		obj = m_mgr.theORB()->resolve_initial_references("omniINSPOA");
-#else  // ROB_IS_RTORB
-        obj = m_mgr.theORB()->resolve_initial_references(
-                                      const_cast<char*>("omniINSPOA"));
-#endif  // ORB_IS_RTORB
-        PortableServer::POA_ptr poa = PortableServer::POA::_narrow(obj);
+        obj = m_mgr.theORB()->resolve_initial_references("omniINSPOA");
+        PortableServer::POA_var poa = PortableServer::POA::_narrow(obj);
         poa->the_POAManager()->activate();
 
         // Create readable object ID
@@ -1055,12 +991,7 @@ namespace RTM
         PortableServer::ObjectId_var id;
         RTC_DEBUG(("Creating named manager: %s",
                    config["manager.name"].c_str()));
-#ifndef ORB_IS_RTORB
         id = PortableServer::string_to_ObjectId(config["manager.name"].c_str());
-#else  // ORB_IS_RTORB
-        id = PortableServer::string_to_ObjectId(
-                     reinterpret_cast<char*>(config["manager.name"].c_str()));
-#endif  // ORB_IS_RTORB
 
         // Object activation
         RTC_DEBUG(("Activating manager with id(%s)", config["manager.name"].c_str()));
@@ -1072,39 +1003,41 @@ namespace RTM
 
         CORBA::String_var ior;
         ior = m_mgr.theORB()->
-          object_to_string(RTM::Manager::_duplicate(m_objref));
+          object_to_string(m_objref);
         std::string iorstr((const char*)ior);
         RTC_DEBUG(("Manager's IOR information:\n %s",
                    CORBA_IORUtil::formatIORinfo(iorstr.c_str()).c_str()));
 #else
-		obj = m_mgr.theORB()->resolve_initial_references("IORTable");
-		IORTable::Table_var adapter = IORTable::Table::_narrow(obj.in());
+        obj = m_mgr.theORB()->resolve_initial_references("IORTable");
+        IORTable::Table_var adapter = IORTable::Table::_narrow(obj.in());
 
-		// Create readable object ID
-		coil::Properties config(m_mgr.getConfig());
+        // Create readable object ID
+        coil::Properties config(m_mgr.getConfig());
 
-		RTC_DEBUG(("Creating named manager: %s",
-			config["manager.name"].c_str()));
-
-
-		// Object activation
-		RTC_DEBUG(("Activating manager with id(%s)", config["manager.name"].c_str()));
-		CORBA::String_var ior = m_mgr.theORB()->object_to_string(_this());
-		adapter->bind(config["manager.name"].c_str(), ior.in());
-
-		// Set m_objref 
-		m_objref = _this();
+        RTC_DEBUG(("Creating named manager: %s",
+                    config["manager.name"].c_str()));
 
 
-		std::string iorstr((const char*)ior);
-		RTC_DEBUG(("Manager's IOR information:\n %s",
-			CORBA_IORUtil::formatIORinfo(iorstr.c_str()).c_str()));
+        // Object activation
+        RTC_DEBUG(("Activating manager with id(%s)", config["manager.name"].c_str()));
+
+        // Set m_objref 
+        m_objref = _this();
+
+        CORBA::String_var ior = m_mgr.theORB()->object_to_string(m_objref.in());
+        adapter->bind(config["manager.name"].c_str(), ior.in());
+
+
+        std::string iorstr((const char*)ior);
+        RTC_DEBUG(("Manager's IOR information:\n %s",
+                    CORBA_IORUtil::formatIORinfo(iorstr.c_str()).c_str()));
 #endif
       }
     catch (...)
       {
         return false;
       }
+#endif
     return true;
   }
 
@@ -1122,7 +1055,6 @@ namespace RTM
       {
         coil::Properties config(m_mgr.getConfig());
         // Why RtORB does not allow corbaloc:iiop: ?
-        //        std::string mgrloc("corbaloc:iiop:");
         std::string mgrloc("corbaloc::");
         mgrloc += host_port;
         mgrloc += "/" + config["manager.name"];
@@ -1146,7 +1078,7 @@ namespace RTM
 #endif  // ORB_IS_RTORB
 
         CORBA::String_var ior;
-        ior = m_mgr.theORB()->object_to_string(RTM::Manager::_duplicate(mgr));
+        ior = m_mgr.theORB()->object_to_string(mgr);
         std::string iorstr((const char*)ior);
         RTC_DEBUG(("Manager's IOR information:\n %s",
                    CORBA_IORUtil::formatIORinfo(iorstr.c_str()).c_str()));
@@ -1177,21 +1109,21 @@ namespace RTM
    * @brief Obtain Manager's reference by name
    * @endif
    */
-  RTM::Manager_ptr ManagerServant::findManagerByName(const std::string mgr_name)
+  RTM::Manager_ptr ManagerServant::findManagerByName(const std::string& mgr_name)
   {
     RTC_TRACE(("findManagerByName(%s)", mgr_name.c_str()));
 
     coil::Properties prop = m_mgr.getConfig();
     if (mgr_name == prop["manager.instance_name"])
       {
-        return RTM::Manager::_duplicate(getObjRef());
+        return getObjRef();
       }
     if (m_isMaster)
       {
-        Guard guard(m_slaveMutex);
+        std::lock_guard<std::mutex> guard(m_slaveMutex);
         return findManagerFromList(mgr_name, m_slaves);
       }
-    Guard guard(m_masterMutex);
+    std::lock_guard<std::mutex> guard(m_masterMutex);
     return findManagerFromList(mgr_name, m_masters);
   }
   
@@ -1202,7 +1134,7 @@ namespace RTM
    * @brief Obtain Manager's reference by name
    * @endif
    */
-  RTM::Manager_ptr ManagerServant::findManagerFromList(const std::string name,
+  RTM::Manager_ptr ManagerServant::findManagerFromList(const std::string& name,
                                                        RTM::ManagerList& mlist)
   {
     for (CORBA::ULong i(0); i < mlist.length(); ++i)
@@ -1243,17 +1175,17 @@ namespace RTM
    * @endif
    */
   RTC::RTObject_ptr
-  ManagerServant::createComponentByManagerName(const std::string create_arg)
+  ManagerServant::createComponentByManagerName(std::string& create_arg, std::string& mgrstr)
   {
     RTC_TRACE(("createComponentByManagerName(%s)",create_arg.c_str()));
     coil::mapstring param = coil::urlparam2map(create_arg);
-    for (coil::mapstring::iterator it(param.begin()); it != param.end(); ++it)
+    for(auto & p : param)
       {
         RTC_DEBUG(("create_arg[%s] = %s",
-                   it->first.c_str(), it->second.c_str()));
+                   p.first.c_str(), p.second.c_str()));
       }
 
-    std::string mgrstr = param["manager_name"];
+    mgrstr = param["manager_name"];
     if (mgrstr.empty())
       {
         RTC_WARN(("No manager_name found: %s", mgrstr.c_str()));
@@ -1284,63 +1216,76 @@ namespace RTM
             RTC_WARN(("rtcd command name not found. Default rtcd is used"));
             rtcd_cmd = "rtcd";
           }
-        rtcd_cmd += " -o manager.is_master:NO";
-        rtcd_cmd += " -o manager.corba_servant:YES";
-        rtcd_cmd += " -o corba.master_manager:" + prop["corba.master_manager"];
-        rtcd_cmd += " -o manager.name:" + prop["manger.name"];
-        rtcd_cmd += " -o manager.instance_name:" + mgrstr;
-        rtcd_cmd += " -o shutdown_auto:NO";
-        rtcd_cmd += " -o manager.auto_shutdown_duration:50";
+
+        std::string lang_path_key("manager.modules.");
+        lang_path_key += lang + ".load_paths";
+        if (param.find("config_file") != param.end())
+          {
+            rtcd_cmd += " -f \"" + coil::escape(param["config_file"]) + "\"";
+          }
+        else if (prop.findNode("config_file"))
+          {
+            rtcd_cmd += " -f \"" + coil::escape(prop["config_file"]) + "\"";
+          }
+
+        rtcd_cmd += " -o \"manager.modules.load_path:" + coil::escape(prop["manager.modules.load_path"]) + "\"";
+        rtcd_cmd += " -o \"" + lang_path_key + ":" + coil::escape(prop[lang_path_key]) + "\"";
+        
+        rtcd_cmd += " -o \"manager.is_master:NO\"";
+        rtcd_cmd += " -o \"manager.corba_servant:YES\"";
+        rtcd_cmd += " -o \"corba.master_manager:" + prop["corba.master_manager"] + "\"";
+        rtcd_cmd += " -o \"manager.name:" + prop["manager.name"] + "\"";
+        rtcd_cmd += " -o \"manager.instance_name:" + mgrstr + "\"";
+        rtcd_cmd += " -o \"manager.shutdown_auto:NO\"";
 
 
         coil::vstring slaves_names;
         if (mgrstr == "manager_%p")
           {
-            Guard gurad(m_slaveMutex);
+            std::lock_guard<std::mutex> guard(m_slaveMutex);
                         
             for (CORBA::ULong i(0); i < m_slaves.length(); ++i)
               {
                 try
                   {
                     RTM::NVList_var nvlist = m_slaves[i]->get_configuration();
-                    coil::Properties prop;
-                    NVUtil::copyToProperties(prop, nvlist);
-                    std::string name = prop["manager.instance_name"];
+                    coil::Properties sleave_prop;
+                    NVUtil::copyToProperties(sleave_prop, nvlist);
+                    std::string name = sleave_prop["manager.instance_name"];
                     if (isProcessIDManager(name))
                       {
-                        slaves_names.push_back(name);
+                        slaves_names.emplace_back(std::move(name));
                       }
                   }
                 catch (...)
                   {
                      RTC_ERROR(("A slave manager thrown exception."));
-                     CORBA_SeqUtil::erase(m_slaves, i);
+                     CORBA_SeqUtil::erase(m_slaves, i); --i;
                      RTC_ERROR(("This slave manager is removed from slave list."));
                    }
                }
           }
 
         RTC_DEBUG(("Invoking command: %s.", rtcd_cmd.c_str()));
-        int ret(coil::launch_shell(rtcd_cmd.c_str()));
+        int ret(coil::launch_shell(rtcd_cmd));
         if (ret == -1)
           {
             RTC_DEBUG(("%s: failed", rtcd_cmd.c_str()));
             return RTC::RTObject::_nil();
           }
-        
-        for (size_t i(0); i < 1000; ++i)
+
+        for (size_t i(0); i < 1000; ++i) // Timeout: 1000 x 10ms
           {
-            coil::sleep(coil::TimeValue(0.01));
             RTC_DEBUG(("Detecting new slave manager (%s).", mgrstr.c_str()));
             if (mgrstr == "manager_%p")
               {
-                Guard gurad(m_slaveMutex);
+                std::lock_guard<std::mutex> guard(m_slaveMutex);
                 for (CORBA::ULong j(0); j < m_slaves.length(); ++j)
                   {
                     RTM::NVList_var nvlist = m_slaves[j]->get_configuration();
-                    coil::Properties prop; 
-                    NVUtil::copyToProperties(prop, nvlist);
-                    std::string name = prop["manager.instance_name"];
+                    coil::Properties sleave_prop;
+                    NVUtil::copyToProperties(sleave_prop, nvlist);
+                    std::string name = sleave_prop["manager.instance_name"];
 
                     if (isProcessIDManager(name))
                       {
@@ -1361,7 +1306,7 @@ namespace RTM
                 break;
               }
             RTC_DEBUG(("Waiting for slave manager started."));
-            coil::sleep(0.01);
+            std::this_thread::sleep_for(std::chrono::milliseconds(10));
           }
       }
 
@@ -1374,11 +1319,12 @@ namespace RTM
     getParameterByModulename("manager_name", create_arg_str);
     RTC_DEBUG(("Creating component on %s",  mgrstr.c_str()));
     RTC_DEBUG(("arg: %s", create_arg_str.c_str()));
+    create_arg = create_arg_str;
     try
       {
         return mgrobj->create_component(create_arg_str.c_str());
       }
-    catch (CORBA::SystemException& e)
+    catch (CORBA::SystemException&)
       {
         RTC_ERROR(("Exception was caught while creating component."));
         return RTC::RTObject::_nil();
@@ -1388,8 +1334,6 @@ namespace RTM
         RTC_ERROR(("Unknown non-CORBA exception cought."));
         return RTC::RTObject::_nil();
       }
-      
-    return RTC::RTObject::_nil();
   }
   
   /*
@@ -1400,17 +1344,17 @@ namespace RTM
    * @endif
    */
   RTC::RTObject_ptr
-  ManagerServant::createComponentByAddress(const std::string create_arg)
+  ManagerServant::createComponentByAddress(std::string& create_arg, std::string& mgrstr)
   {
     RTC_TRACE(("createComponentByAddress(%s)",create_arg.c_str()));
     coil::mapstring param = coil::urlparam2map(create_arg);
-    for (coil::mapstring::iterator it(param.begin()); it != param.end(); ++it)
+    for(auto & p : param)
       {
         RTC_DEBUG(("create_arg[%s] = %s",
-                   it->first.c_str(), it->second.c_str()));
+                   p.first.c_str(), p.second.c_str()));
       }
 
-    std::string mgrstr = param["manager_address"];
+    mgrstr = param["manager_address"];
     if (mgrstr.empty())
       {
         RTC_WARN(("No manager_address found: %s", mgrstr.c_str()));
@@ -1449,21 +1393,29 @@ namespace RTM
             RTC_WARN(("rtcd command name not found. Default rtcd is used."));
             rtcd_cmd = "rtcd";
           }
-        rtcd_cmd += " -o corba.master_manager:" + mgrstr;
+
+        if (param.find("config_file") != param.end())
+          {
+            rtcd_cmd += " -f \"" + coil::escape(param["config_file"]) + "\"";
+          }
+        else if (prop.findNode("config_file"))
+          {
+            rtcd_cmd += " -f \"" + coil::escape(prop["config_file"]) + "\"";
+          }
+        rtcd_cmd += " -o \"corba.master_manager:" + mgrstr + "\"";
         rtcd_cmd += " -d ";
 
         RTC_DEBUG(("Invoking command: %s.", rtcd_cmd.c_str()));
-        int ret(coil::launch_shell(rtcd_cmd.c_str()));
+        int ret(coil::launch_shell(rtcd_cmd));
         if (ret == -1)
           {
             RTC_DEBUG(("%s: failed", rtcd_cmd.c_str()));
             return RTC::RTObject::_nil();
           }
 
-        coil::sleep(0.01);
-        for (size_t i(0); i < 1000; ++i)
+        for (size_t i(0); i < 1000; ++i) // Timeout: 1000 x 10ms
           {
-            RTC_DEBUG(("Detecting new slave manager (%s).", mgrstr.c_str()))
+            RTC_DEBUG(("Detecting new slave manager (%s).", mgrstr.c_str()));
             mgrobj = findManagerByName(mgrstr);
             if (!CORBA::is_nil(mgrobj))
               {
@@ -1471,7 +1423,7 @@ namespace RTM
                 break;
               }
             RTC_DEBUG(("Waiting for slave manager started."));
-            coil::sleep(0.01);
+            std::this_thread::sleep_for(std::chrono::milliseconds(10));
           }
 
         if (CORBA::is_nil(mgrobj))
@@ -1480,15 +1432,16 @@ namespace RTM
             return RTC::RTObject::_nil();
           }
 
-		std::string create_arg_str(create_arg);
-		getParameterByModulename("manager_address", create_arg_str);
+        std::string create_arg_str(create_arg);
+        getParameterByModulename("manager_address", create_arg_str);
         RTC_DEBUG(("Creating component on %s",  mgrstr.c_str()));
         RTC_DEBUG(("arg: %s", create_arg.c_str()));
+        create_arg = create_arg_str;
         try
           {
             return mgrobj->create_component(create_arg_str.c_str());
           }
-        catch (CORBA::SystemException& e)
+        catch (CORBA::SystemException&)
           {
             RTC_ERROR(("Exception was caught while creating component."));
             return RTC::RTObject::_nil();
@@ -1516,128 +1469,124 @@ namespace RTM
   * @endif
   */
   void ManagerServant::updateMasterManager()
-  {
-	  if (!m_isMaster && !CORBA::is_nil(m_objref))
-	  {
-		  {
-			  Guard guardm(m_masterMutex);
-			  if (m_masters.length() > 0)
-			  {
-				  for (CORBA::ULong i = 0; i < m_masters.length(); i++)
-				  {
-					  try
-					  {
-						  if (m_masters[i]->_non_existent())
-						  {
-							  CORBA_SeqUtil::erase(m_masters, i);
-						  }
-					  }
-					  catch (...)
-					  {
-						  RTC_ERROR(("Unknown exception cought."));
-						  CORBA_SeqUtil::erase(m_masters, i);
-					  }
-				  }
-			  }
-		  }
-		 
-		  if (m_masters.length() == 0)
-		  {
-			  coil::Properties config = m_mgr.getConfig();
-			  try
-			  {
-				  RTM::Manager_ptr owner = findManager(config.getProperty("corba.master_manager"));
-				  if (CORBA::is_nil(owner))
-				  {
-					  RTC_INFO(("Master manager not found"));
-					  return;
-				  }
-				  add_master_manager(owner);
-				  owner->add_slave_manager(m_objref);
-			  }
-			  catch (...)
-			  {
-				  RTC_ERROR(("Unknown exception cought."))
-			  }
-		  }
+    {
+      if (!m_isMaster && !CORBA::is_nil(m_objref))
+        {
+            {
+              std::lock_guard<std::mutex> guardm(m_masterMutex);
+              if (m_masters.length() > 0)
+                {
+                  for (CORBA::ULong i = 0; i < m_masters.length(); ++i)
+                    {
+                      try
+                        {
+                          if (m_masters[i]->_non_existent())
+                            {
+                              CORBA_SeqUtil::erase(m_masters, i); --i;
+                            }
+                        }
+                      catch (...)
+                        {
+                          RTC_ERROR(("Unknown exception cought."));
+                          CORBA_SeqUtil::erase(m_masters, i); --i;
+                        }
+                    }
+                }
+            }
+            
+          if (m_masters.length() == 0)
+            {
+              coil::Properties config = m_mgr.getConfig();
+              try
+                {
+                  RTM::Manager_var owner = findManager(config.getProperty("corba.master_manager"));
+                  if (CORBA::is_nil(owner))
+                    {
+                      RTC_INFO(("Master manager not found"));
+                      return;
+                    }
+                  add_master_manager(owner);
+                  owner->add_slave_manager(m_objref);
+                }
+              catch (...)
+                {
+                  RTC_ERROR(("Unknown exception cought."));
+                }
+            }
 
-	  }
-  }
+        }
+    }
 
-  bool ManagerServant::isProcessIDManager(std::string mgrname)
-  {
-	  int pos = mgrname.find("manager_");
-	  if (pos != -1)
-	  {
-		  std::string id = mgrname;
-		  coil::replaceString(id, "manager_", "");
-		 
-		  bool ret = true;
-
-		  int val = 0;
-		  if (coil::stringTo<int>(val, id.c_str()))
-		  {
-			  
-			  return true;
-		  }
-	  }
-	  return false;
-  }
+  bool ManagerServant::isProcessIDManager(const std::string& mgrname)
+    {
+      size_t pos = mgrname.find("manager_");
+      if (pos != std::string::npos)
+        {
+          std::string id{coil::replaceString(mgrname, "manager_", "")};
+          int val = 0;
+          if (coil::stringTo<int>(val, id.c_str()))
+            {
+              return true;
+            }
+        }
+      return false;
+    }
 
   const char* CompParam::prof_list[prof_list_size] = { "RTC", "vendor", "category", "implementation_id", "language", "version" };
 
   CompParam::CompParam(std::string module_name)
-  {
-	  module_name = coil::split(module_name, "?")[0];
-	  coil::vstring param_list = coil::split(module_name,":");
+    {
+      module_name = coil::split(module_name, "?")[0];
+      coil::vstring param_list = coil::split(module_name,":");
 
-	  if (param_list.size() < prof_list_size)
-	  {
-		  m_type = "RTC";
-		  m_vendor = "";
-		  m_category = "";
-		  m_impl_id = module_name;
-		  m_language = "C++";
-		  m_version = "";
-	  }
-	  else
-	  {
-		  m_type = param_list[0];
-		  m_vendor = param_list[1];
-		  m_category = param_list[2];
-		  m_impl_id = param_list[3];
+      if (param_list.size() < prof_list_size)
+        {
+          m_type = "RTC";
+          m_vendor = "";
+          m_category = "";
+          m_impl_id = module_name;
+          m_language = "C++";
+          m_version = "";
+        }
+      else
+        {
+          m_type = param_list[0];
+          m_vendor = param_list[1];
+          m_category = param_list[2];
+          m_impl_id = param_list[3];
 
-		  if (!param_list[4].empty())
-		  {
-			  m_language = param_list[4];
-		  }
-		  else
-		  {
-			  m_language = "C++";
-		  }
-		  m_version = param_list[5];
-	  }
+          if (!param_list[4].empty())
+            {
+              m_language = param_list[4];
+            }
+          else
+            {
+              m_language = "C++";
+            }
+          m_version = param_list[5];
+        }
   }
 
+  CompParam::~CompParam() = default;
 
   std::string CompParam::vendor()
-  {
-	  return m_vendor;
-  }
+    {
+      return m_vendor;
+    }
   std::string CompParam::category()
-  {
-	  return m_category;
-  }
+    {
+      return m_category;
+    }
   std::string CompParam::impl_id()
-  {
-	  return m_impl_id;
-  }
+    {
+      return m_impl_id;
+    }
   std::string CompParam::language()
-  {
-	  return m_language;
-  }
+    {
+      return m_language;
+    }
   std::string CompParam::version()
-  {
-	  return m_version;
-  }
-};
+    {
+      return m_version;
+    }
+} // namespace RTM

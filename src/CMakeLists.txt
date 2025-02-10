@@ -1,6 +1,12 @@
-cmake_minimum_required (VERSION 2.6)
+cmake_minimum_required (VERSION 3.5.1)
 
 add_subdirectory(lib)
-add_subdirectory(ext)
+set(EXTLIB_ENABLE TRUE CACHE BOOL "set EXTLIB_ENABLE ")
+if(EXTLIB_ENABLE)
+	add_subdirectory(ext)
+endif(EXTLIB_ENABLE)
+
 
 set(RTM_INCLUDE_DIR ${RTM_INCLUDE_DIR}  PARENT_SCOPE)
+set(DATATYPE_FACTORIES ${DATATYPE_FACTORIES} PARENT_SCOPE)
+set(RTM_INCLUDE_IDLS ${RTM_INCLUDE_IDLS} PARENT_SCOPE)

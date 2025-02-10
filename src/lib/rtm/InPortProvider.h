@@ -188,10 +188,8 @@ namespace RTC
    * @endif
    */
   class InPortProvider
-    : public DataPortStatus
   {
   public:
-    DATAPORTSTATUS_ENUM
     /*!
      * @if jp
      * @brief コンストラクタ
@@ -220,7 +218,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~InPortProvider(void);
+    virtual ~InPortProvider();
 
     /*!
      * @if jp
@@ -276,7 +274,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual void setBuffer(BufferBase<cdrMemoryStream>* buffer) = 0;
+    virtual void setBuffer(BufferBase<ByteData>* buffer) = 0;
 
     /*!
      * @if jp
@@ -309,7 +307,7 @@ namespace RTC
      * @endif
      */
     virtual void setListener(ConnectorInfo& info,
-                             ConnectorListeners* listeners) = 0;
+                             ConnectorListenersBase* listeners) = 0;
 
     /*!
      * @if jp
@@ -360,7 +358,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual void publishInterfaceProfile(SDOPackage::NVList& properties);
+    virtual void publishInterfaceProfile(SDOPackage::NVList& prop);
 
     /*!
      * @if jp
@@ -389,7 +387,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual bool publishInterface(SDOPackage::NVList& properties);
+    virtual bool publishInterface(SDOPackage::NVList& prop);
 
   protected:
     /*!
@@ -504,7 +502,7 @@ namespace RTC
     struct publishInterfaceFunc
     {
       explicit publishInterfaceFunc(SDOPackage::NVList& prop)
-        : m_prop(prop), provider_(0) {}
+        : m_prop(prop), provider_(nullptr) {}
       void operator()(InPortProvider* provider)
       {
         if (provider->publishInterface(m_prop))
@@ -526,10 +524,13 @@ namespace RTC
    * @brief InPortProviderFactory type definition
    * @endif
    */
-  typedef ::coil::GlobalFactory<InPortProvider> InPortProviderFactory;
+  using InPortProviderFactory = ::coil::GlobalFactory<InPortProvider>;
+} // namespace RTC
 
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
-  EXTERN template class DLL_PLUGIN ::coil::GlobalFactory<InPortProvider>;
+EXTERN template class DLL_PLUGIN coil::GlobalFactory<RTC::InPortProvider>;
+#elif defined(__GNUC__)
+EXTERN template class coil::GlobalFactory<RTC::InPortProvider>;
 #endif
-};  // namespace RTC
+
 #endif  // RTC_INPORTPROVIDER_H

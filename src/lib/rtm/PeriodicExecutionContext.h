@@ -20,8 +20,7 @@
 #define RTC_PERIODICEXECUTIONCONTEXT2_H
 
 #include <coil/Task.h>
-#include <coil/Mutex.h>
-#include <coil/Condition.h>
+#include <condition_variable>
 #include <coil/Affinity.h>
 
 #include <rtm/ExecutionContextBase.h>
@@ -30,10 +29,6 @@
 #include <iostream>
 
 #define NUM_OF_LIFECYCLESTATE 4
-
-#ifdef WIN32
-#pragma warning( disable : 4290 )
-#endif
 
 namespace RTC_exp
 {
@@ -63,7 +58,6 @@ namespace RTC_exp
       public RTC::ExecutionContextBase,
       public coil::Task
   {
-    typedef coil::Guard<coil::Mutex> Guard;
   public:
     /*!
      * @if jp
@@ -99,7 +93,7 @@ namespace RTC_exp
      *
      * @endif
      */
-    virtual ~PeriodicExecutionContext(void);
+    ~PeriodicExecutionContext() override;
 
     /*!
      * @if jp
@@ -114,7 +108,7 @@ namespace RTC_exp
      *
      * @endif
      */
-    virtual  void init(coil::Properties& props);
+     void init(coil::Properties& props) override;
 
     /*!
      * @if jp
@@ -140,7 +134,7 @@ namespace RTC_exp
      *
      * @endif
      */
-    virtual int open(void *args);
+    int open(void *args) override;
 
     /*!
      * @if jp
@@ -161,7 +155,7 @@ namespace RTC_exp
      *
      * @endif
      */
-    virtual int svc(void);
+    int svc() override;
 
     /*!
      * @if jp
@@ -190,7 +184,7 @@ namespace RTC_exp
      *
      * @endif
      */
-    virtual int close(unsigned long flags);
+    int close(unsigned long flags) override;
 
     //============================================================
     // ExecutionContext
@@ -219,8 +213,7 @@ namespace RTC_exp
      *
      * @endif
      */
-    virtual CORBA::Boolean is_running(void)
-      throw (CORBA::SystemException);
+    CORBA::Boolean is_running() override;
 
     /*!
      * @if jp
@@ -249,8 +242,7 @@ namespace RTC_exp
      *
      * @endif
      */
-    virtual RTC::ReturnCode_t start(void)
-      throw (CORBA::SystemException);
+    RTC::ReturnCode_t start() override;
 
     /*!
      * @if jp
@@ -278,8 +270,7 @@ namespace RTC_exp
      *
      * @endif
      */
-    virtual RTC::ReturnCode_t stop(void)
-      throw (CORBA::SystemException);
+    RTC::ReturnCode_t stop() override;
 
     /*!
      * @if jp
@@ -301,8 +292,7 @@ namespace RTC_exp
      *
      * @endif
      */
-    virtual CORBA::Double get_rate(void)
-      throw (CORBA::SystemException);
+    CORBA::Double get_rate() override;
 
     /*!
      * @if jp
@@ -333,8 +323,7 @@ namespace RTC_exp
      *
      * @endif
      */
-    virtual RTC::ReturnCode_t  set_rate(CORBA::Double rate)
-      throw (CORBA::SystemException);
+    RTC::ReturnCode_t  set_rate(CORBA::Double rate) override;
 
     /*!
      * @if jp
@@ -369,9 +358,8 @@ namespace RTC_exp
      *
      * @endif
      */
-    virtual RTC::ReturnCode_t
-    activate_component(RTC::LightweightRTObject_ptr comp)
-      throw (CORBA::SystemException);
+    RTC::ReturnCode_t
+    activate_component(RTC::LightweightRTObject_ptr comp) override;
 
     /*!
      * @if jp
@@ -405,9 +393,8 @@ namespace RTC_exp
      *
      * @endif
      */
-    virtual RTC::ReturnCode_t
-    deactivate_component(RTC::LightweightRTObject_ptr comp)
-      throw (CORBA::SystemException);
+    RTC::ReturnCode_t
+    deactivate_component(RTC::LightweightRTObject_ptr comp) override;
 
     /*!
      * @if jp
@@ -440,9 +427,8 @@ namespace RTC_exp
      *
      * @endif
      */
-    virtual RTC::ReturnCode_t
-    reset_component(RTC::LightweightRTObject_ptr comp)
-      throw (CORBA::SystemException);
+    RTC::ReturnCode_t
+    reset_component(RTC::LightweightRTObject_ptr comp) override;
 
     /*!
      * @if jp
@@ -470,9 +456,8 @@ namespace RTC_exp
      *
      * @endif
      */
-    virtual RTC::LifeCycleState
-    get_component_state(RTC::LightweightRTObject_ptr comp)
-      throw (CORBA::SystemException);
+    RTC::LifeCycleState
+    get_component_state(RTC::LightweightRTObject_ptr comp) override;
 
     /*!
      * @if jp
@@ -493,8 +478,7 @@ namespace RTC_exp
      *
      * @endif
      */
-    virtual RTC::ExecutionKind get_kind(void)
-      throw (CORBA::SystemException);
+    RTC::ExecutionKind get_kind() override;
 
     /*!
      * @if jp
@@ -527,8 +511,7 @@ namespace RTC_exp
      *
      * @endif
      */
-    virtual RTC::ReturnCode_t add_component(RTC::LightweightRTObject_ptr comp)
-      throw (CORBA::SystemException);
+    RTC::ReturnCode_t add_component(RTC::LightweightRTObject_ptr comp) override;
 
     /*!
      * @if jp
@@ -560,9 +543,8 @@ namespace RTC_exp
      *
      * @endif
      */
-    virtual RTC::ReturnCode_t
-    remove_component(RTC::LightweightRTObject_ptr comp)
-      throw (CORBA::SystemException);
+    RTC::ReturnCode_t
+    remove_component(RTC::LightweightRTObject_ptr comp) override;
 
     /*!
      * @if jp
@@ -583,14 +565,13 @@ namespace RTC_exp
      *
      * @endif
      */
-    virtual RTC::ExecutionContextProfile* get_profile(void)
-      throw (CORBA::SystemException);
+    RTC::ExecutionContextProfile* get_profile() override;
 
   protected:
     template <class T>
     void getProperty(coil::Properties& prop, const char* key, T& value)
     {
-      if (prop.findNode(key) != 0)
+      if (prop.findNode(key) != nullptr)
         {
           T tmp;
           if (coil::stringTo(tmp, prop[key].c_str()))
@@ -602,53 +583,53 @@ namespace RTC_exp
     /*!
      * @brief onStarted() template function
      */
-    virtual RTC::ReturnCode_t onStarted();
+    RTC::ReturnCode_t onStarted() override;
     /*!
      * @brief onStopping() template function
      */
-    virtual RTC::ReturnCode_t onStopping();
+    RTC::ReturnCode_t onStopping() override;
     // template virtual functions adding/removing component
     /*!
      * @brief onAddedComponent() template function
      */
-     virtual RTC::ReturnCode_t
-     onAddedComponent(RTC::LightweightRTObject_ptr rtobj);
+     RTC::ReturnCode_t
+     onAddedComponent(RTC::LightweightRTObject_ptr rtobj) override;
     /*!
      * @brief onRemovedComponent() template function
      */
-    virtual RTC::ReturnCode_t
-    onRemovedComponent(RTC::LightweightRTObject_ptr rtobj);
+    RTC::ReturnCode_t
+    onRemovedComponent(RTC::LightweightRTObject_ptr rtobj) override;
 
     /*!
      * @brief onWaitingActivated() template function
      */
-    virtual RTC::ReturnCode_t
-    onWaitingActivated(RTC_impl::RTObjectStateMachine* comp, long int count);
+    RTC::ReturnCode_t
+    onWaitingActivated(RTC_impl::RTObjectStateMachine* comp, long int count) override;
     /*!
      * @brief onActivated() template function
      */
-    virtual RTC::ReturnCode_t
-    onActivated(RTC_impl::RTObjectStateMachine* comp, long int count);
+    RTC::ReturnCode_t
+    onActivated(RTC_impl::RTObjectStateMachine* comp, long int count) override;
     /*!
      * @brief onWaitingDeactivated() template function
      */
-    virtual RTC::ReturnCode_t
-    onWaitingDeactivated(RTC_impl::RTObjectStateMachine* comp, long int count);
+    RTC::ReturnCode_t
+    onWaitingDeactivated(RTC_impl::RTObjectStateMachine* comp, long int count) override;
     /*!
      * @brief onDeactivated() template function
      */
-    virtual RTC::ReturnCode_t
-    onDeactivated(RTC_impl::RTObjectStateMachine* comp, long int count);
+    RTC::ReturnCode_t
+    onDeactivated(RTC_impl::RTObjectStateMachine* comp, long int count) override;
     /*!
      * @brief onWaitingReset() template function
      */
-    virtual RTC::ReturnCode_t
-    onWaitingReset(RTC_impl::RTObjectStateMachine* comp, long int count);
+    RTC::ReturnCode_t
+    onWaitingReset(RTC_impl::RTObjectStateMachine* comp, long int count) override;
     /*!
      * @brief onReset() template function
      */
-    virtual RTC::ReturnCode_t
-    onReset(RTC_impl::RTObjectStateMachine* comp, long int count);
+    RTC::ReturnCode_t
+    onReset(RTC_impl::RTObjectStateMachine* comp, long int count) override;
 
     /*!
      * @brief setting CPU affinity from given properties
@@ -657,7 +638,7 @@ namespace RTC_exp
 
     bool threadRunning()
     {
-      Guard guard(m_svcmutex);
+      std::lock_guard<std::mutex> guard(m_svcmutex);
       return m_svc;
     }
   protected:
@@ -668,7 +649,7 @@ namespace RTC_exp
      * @brief Logger stream
      * @endif
      */
-    RTC::Logger rtclog;
+    RTC::Logger rtclog{"periodic_ec"};
 
     /*!
      * @if jp
@@ -677,8 +658,8 @@ namespace RTC_exp
      * @brief The thread running flag of ExecutionContext
      * @endif
      */
-    bool m_svc;
-    coil::Mutex m_svcmutex;
+    bool m_svc{false};
+    std::mutex m_svcmutex;
 
     /*!
      * @if jp
@@ -689,10 +670,10 @@ namespace RTC_exp
      */
     struct WorkerThreadCtrl
     {
-      WorkerThreadCtrl() : cond_(mutex_), running_(false) {}
-      coil::Mutex mutex_;
-      coil::Condition<coil::Mutex> cond_;
-      bool running_;
+      WorkerThreadCtrl() {}
+      std::mutex mutex_;
+      std::condition_variable cond_;
+      bool running_{false};
     };
 
     /*!
@@ -712,7 +693,7 @@ namespace RTC_exp
      *        (to run without waiting)
      * @endif
      */
-    bool m_nowait;
+    bool m_nowait{false};
 
     /*!
      * @brief CPU affinity mask list
@@ -720,11 +701,7 @@ namespace RTC_exp
     coil::CpuMask m_cpu;
 
   };  // class PeriodicExecutionContext
-};  // namespace RTC_exp
-
-#ifdef WIN32
-#pragma warning( default : 4290 )
-#endif
+} // namespace RTC_exp
 
 
 extern "C"
@@ -737,6 +714,6 @@ extern "C"
    * @endif
    */
   void PeriodicExecutionContextInit(RTC::Manager* manager);
-};
+}
 
 #endif  // RTC_PERIODICEXECUTIONCONTEXT_H

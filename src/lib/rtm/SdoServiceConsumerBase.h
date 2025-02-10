@@ -20,7 +20,6 @@
 #ifndef RTC_SDOSERVICECONSUMERBASE_H
 #define RTC_SDOSERVICECONSUMERBASE_H
 
-#include <coil/Mutex.h>
 #include <coil/Factory.h>
 #include <coil/Timer.h>
 #include <rtm/RTObject.h>
@@ -144,7 +143,7 @@ namespace RTC
      * @brief virtual destructor
      * @endif
      */
-    virtual ~SdoServiceConsumerBase() {}
+    virtual ~SdoServiceConsumerBase() = default;
 
     /*!
      * @if jp
@@ -235,8 +234,9 @@ namespace RTC
      * @brief typedef of sdoServiceConsumerFactory
      * @endif
      */
-  typedef ::coil::GlobalFactory<
-    ::RTC::SdoServiceConsumerBase > SdoServiceConsumerFactory;
+  using SdoServiceConsumerFactory = ::coil::GlobalFactory< ::RTC::SdoServiceConsumerBase>;
+} // namespace RTC
+
 
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
     /*!
@@ -246,9 +246,9 @@ namespace RTC
      * @brief Explicit instantiation of class template
      * @endif
      */
-  EXTERN template class DLL_PLUGIN
-                     ::coil::GlobalFactory< ::RTC::SdoServiceConsumerBase >;
+EXTERN template class DLL_PLUGIN coil::GlobalFactory<RTC::SdoServiceConsumerBase >;
+#elif defined(__GNUC__)
+EXTERN template class coil::GlobalFactory<RTC::SdoServiceConsumerBase>;
 #endif
-};  // namespace RTC
 
 #endif  // RTC_SDOSERVICECONSUMERBASE_H

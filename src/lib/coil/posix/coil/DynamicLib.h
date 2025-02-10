@@ -209,7 +209,7 @@ namespace coil
      *
      * @endif
      */
-    virtual int close(void);
+    virtual int close();
 
     /*!
      * @if jp
@@ -255,7 +255,7 @@ namespace coil
      *
      * @endif
      */
-    const char* error(void) const;
+    static const char* error() ;
 
     /*!
      * @if jp
@@ -276,16 +276,15 @@ namespace coil
      *
      * @endif
      */
-    static int ForExternTest(void) { return 0xdeadbeef; }
+    static int ForExternTest() { return 0xdeadbeef; }
 
   private:
     std::string m_name;
     int m_mode;
     int m_closeflag;
     void* m_handle;
-    int m_error;
   };
 
-};  // namespace coil
+} // namespace coil
 
 #endif  // DynamicLib_h

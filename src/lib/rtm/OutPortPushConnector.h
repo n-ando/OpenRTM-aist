@@ -86,7 +86,6 @@ namespace RTC
     : public OutPortConnector
   {
   public:
-    DATAPORTSTATUS_ENUM
 
     /*!
      * @if jp
@@ -130,8 +129,8 @@ namespace RTC
      */
     OutPortPushConnector(ConnectorInfo info,
                          InPortConsumer* consumer,
-                         ConnectorListeners& listeners,
-                         CdrBufferBase* buffer = 0);
+                         ConnectorListenersBase* listeners,
+                         CdrBufferBase* buffer = nullptr);
 
     /*!
      * @if jp
@@ -148,7 +147,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~OutPortPushConnector();
+    ~OutPortPushConnector() override;
 
     /*!
      * @if jp
@@ -189,7 +188,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode write(cdrMemoryStream& data);
+    DataPortStatus write(RTC::ByteDataStreamBase* data) override;
 
     /*!
      * @if jp
@@ -206,7 +205,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode disconnect();
+    DataPortStatus disconnect() override;
 
     /*!
      * @if jp
@@ -222,7 +221,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual void activate();
+    void activate() override;
 
     /*!
      * @if jp
@@ -238,7 +237,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual void deactivate();
+    void deactivate() override;
 
     /*!
      * @if jp
@@ -253,7 +252,22 @@ namespace RTC
      *
      * @endif
      */
-    virtual CdrBufferBase* getBuffer();
+    CdrBufferBase* getBuffer() override;
+
+    /*!
+     * @if jp
+     * @brief コンシューマのインターフェースの登録を取り消す
+     *
+     * @param prop コネクタプロファイルのプロパティ
+     *
+     * @else
+     * @brief
+     *
+     * @param prop
+     *
+     * @endif
+     */
+    void unsubscribeInterface(const coil::Properties& prop) override;
 
   protected:
     /*!
@@ -342,7 +356,7 @@ namespace RTC
      * @brief A reference to a ConnectorListener
      * @endif
      */
-    ConnectorListeners& m_listeners;
+    ConnectorListenersBase* m_listeners;
 
     /*!
      * @if jp
@@ -354,6 +368,6 @@ namespace RTC
     CdrBufferBase* m_buffer;
 
   };
-};  // namespace RTC
+} // namespace RTC
 
 #endif  // RTC_PUSH_CONNECTOR_H

@@ -29,7 +29,7 @@ namespace RTC
    * @class PostComponentActionListener class
    * @endif
    */
-  PostComponentActionListener::~PostComponentActionListener() {}
+  PostComponentActionListener::~PostComponentActionListener() = default;
 
   /*!
    * @if jp
@@ -38,7 +38,7 @@ namespace RTC
    * @class PreComponentActionListener class
    * @endif
    */
-  PreComponentActionListener::~PreComponentActionListener() {}
+  PreComponentActionListener::~PreComponentActionListener() = default;
 
   /*!
    * @if jp
@@ -47,7 +47,7 @@ namespace RTC
    * @class PortActionListener class
    * @endif
    */
-  PortActionListener::~PortActionListener() {}
+  PortActionListener::~PortActionListener() = default;
 
   /*!
    * @if jp
@@ -56,7 +56,7 @@ namespace RTC
    * @class ExecutionContextActionListener class
    * @endif
    */
-  ExecutionContextActionListener::~ExecutionContextActionListener() {}
+  ExecutionContextActionListener::~ExecutionContextActionListener() = default;
 
 
 
@@ -70,19 +70,17 @@ namespace RTC
    * @class PreComponentActionListener holder class
    * @endif
    */
-  PreComponentActionListenerHolder::PreComponentActionListenerHolder()
-  {
-  }
+  PreComponentActionListenerHolder::PreComponentActionListenerHolder() = default;
 
 
   PreComponentActionListenerHolder::~PreComponentActionListenerHolder()
   {
-    Guard guard(m_mutex);
-    for (int i(0), len(m_listeners.size()); i < len; ++i)
+    std::lock_guard<std::mutex> guard(m_mutex);
+    for (auto & listener : m_listeners)
       {
-        if (m_listeners[i].second)
+        if (listener.second)
           {
-            delete m_listeners[i].first;
+            delete listener.first;
           }
       }
   }
@@ -92,24 +90,24 @@ namespace RTC
   addListener(PreComponentActionListener* listener,
               bool autoclean)
   {
-    Guard guard(m_mutex);
-    m_listeners.push_back(Entry(listener, autoclean));
+    std::lock_guard<std::mutex> guard(m_mutex);
+    m_listeners.emplace_back(listener, autoclean);
   }
 
 
   void PreComponentActionListenerHolder::
   removeListener(PreComponentActionListener* listener)
   {
-    Guard guard(m_mutex);
+    std::lock_guard<std::mutex> guard(m_mutex);
     std::vector<Entry>::iterator it(m_listeners.begin());
 
     for (; it != m_listeners.end(); ++it)
       {
-        if ((*it).first == listener)
+        if (it->first == listener)
           {
-            if ((*it).second)
+            if (it->second)
               {
-                delete (*it).first;
+                delete it->first;
               }
             m_listeners.erase(it);
             return;
@@ -121,10 +119,10 @@ namespace RTC
 
   void PreComponentActionListenerHolder::notify(UniqueId ec_id)
   {
-    Guard guard(m_mutex);
-    for (int i(0), len(m_listeners.size()); i < len; ++i)
+    std::lock_guard<std::mutex> guard(m_mutex);
+    for (auto & listener : m_listeners)
       {
-        m_listeners[i].first->operator()(ec_id);
+        listener.first->operator()(ec_id);
       }
   }
 
@@ -136,19 +134,17 @@ namespace RTC
    * @class PostComponentActionListener holder class
    * @endif
    */
-  PostComponentActionListenerHolder::PostComponentActionListenerHolder()
-  {
-  }
+  PostComponentActionListenerHolder::PostComponentActionListenerHolder() = default;
 
 
   PostComponentActionListenerHolder::~PostComponentActionListenerHolder()
   {
-    Guard guard(m_mutex);
-    for (int i(0), len(m_listeners.size()); i < len; ++i)
+    std::lock_guard<std::mutex> guard(m_mutex);
+    for (auto & listener : m_listeners)
       {
-        if (m_listeners[i].second)
+        if (listener.second)
           {
-            delete m_listeners[i].first;
+            delete listener.first;
           }
       }
   }
@@ -157,15 +153,15 @@ namespace RTC
   void PostComponentActionListenerHolder::
   addListener(PostComponentActionListener* listener, bool autoclean)
   {
-    Guard guard(m_mutex);
-    m_listeners.push_back(Entry(listener, autoclean));
+    std::lock_guard<std::mutex> guard(m_mutex);
+    m_listeners.emplace_back(listener, autoclean);
   }
 
 
   void PostComponentActionListenerHolder::
   removeListener(PostComponentActionListener* listener)
   {
-    Guard guard(m_mutex);
+    std::lock_guard<std::mutex> guard(m_mutex);
     std::vector<Entry>::iterator it(m_listeners.begin());
     for (; it != m_listeners.end(); ++it)
       {
@@ -186,10 +182,10 @@ namespace RTC
   void PostComponentActionListenerHolder::notify(UniqueId ec_id,
                                                  ReturnCode_t ret)
   {
-    Guard guard(m_mutex);
-    for (int i(0), len(m_listeners.size()); i < len; ++i)
+    std::lock_guard<std::mutex> guard(m_mutex);
+    for (auto & listener : m_listeners)
       {
-        m_listeners[i].first->operator()(ec_id, ret);
+        listener.first->operator()(ec_id, ret);
       }
   }
 
@@ -201,19 +197,17 @@ namespace RTC
    * @class PortActionListener holder class
    * @endif
    */
-  PortActionListenerHolder::PortActionListenerHolder()
-  {
-  }
+  PortActionListenerHolder::PortActionListenerHolder() = default;
 
 
   PortActionListenerHolder::~PortActionListenerHolder()
   {
-    Guard guard(m_mutex);
-    for (int i(0), len(m_listeners.size()); i < len; ++i)
+    std::lock_guard<std::mutex> guard(m_mutex);
+    for (auto & listener : m_listeners)
       {
-        if (m_listeners[i].second)
+        if (listener.second)
           {
-            delete m_listeners[i].first;
+            delete listener.first;
           }
       }
   }
@@ -222,14 +216,14 @@ namespace RTC
   void PortActionListenerHolder::addListener(PortActionListener* listener,
                                              bool autoclean)
   {
-    Guard guard(m_mutex);
-    m_listeners.push_back(Entry(listener, autoclean));
+    std::lock_guard<std::mutex> guard(m_mutex);
+    m_listeners.emplace_back(listener, autoclean);
   }
 
 
   void PortActionListenerHolder::removeListener(PortActionListener* listener)
   {
-    Guard guard(m_mutex);
+    std::lock_guard<std::mutex> guard(m_mutex);
     std::vector<Entry>::iterator it(m_listeners.begin());
 
     for (; it != m_listeners.end(); ++it)
@@ -250,10 +244,10 @@ namespace RTC
 
   void PortActionListenerHolder::notify(const RTC::PortProfile& pprofile)
   {
-    Guard guard(m_mutex);
-    for (int i(0), len(m_listeners.size()); i < len; ++i)
+    std::lock_guard<std::mutex> guard(m_mutex);
+    for (auto & listener : m_listeners)
       {
-        m_listeners[i].first->operator()(pprofile);
+        listener.first->operator()(pprofile);
       }
   }
 
@@ -266,19 +260,17 @@ namespace RTC
    * @class ExecutionContextActionListener holder class
    * @endif
    */
-  ExecutionContextActionListenerHolder::ExecutionContextActionListenerHolder()
-  {
-  }
+  ExecutionContextActionListenerHolder::ExecutionContextActionListenerHolder() = default;
 
 
   ExecutionContextActionListenerHolder::~ExecutionContextActionListenerHolder()
   {
-    Guard guard(m_mutex);
-    for (int i(0), len(m_listeners.size()); i < len; ++i)
+    std::lock_guard<std::mutex> guard(m_mutex);
+    for (auto & listener : m_listeners)
       {
-        if (m_listeners[i].second)
+        if (listener.second)
           {
-            delete m_listeners[i].first;
+            delete listener.first;
           }
       }
   }
@@ -288,15 +280,15 @@ namespace RTC
   addListener(ExecutionContextActionListener* listener,
               bool autoclean)
   {
-    Guard guard(m_mutex);
-    m_listeners.push_back(Entry(listener, autoclean));
+    std::lock_guard<std::mutex> guard(m_mutex);
+    m_listeners.emplace_back(listener, autoclean);
   }
 
 
   void ExecutionContextActionListenerHolder::
   removeListener(ExecutionContextActionListener* listener)
   {
-    Guard guard(m_mutex);
+    std::lock_guard<std::mutex> guard(m_mutex);
     std::vector<Entry>::iterator it(m_listeners.begin());
 
     for (; it != m_listeners.end(); ++it)
@@ -317,13 +309,305 @@ namespace RTC
 
   void ExecutionContextActionListenerHolder::notify(UniqueId ec_id)
   {
-    Guard guard(m_mutex);
-    for (int i(0), len(m_listeners.size()); i < len; ++i)
+    std::lock_guard<std::mutex> guard(m_mutex);
+    for (auto & listener : m_listeners)
       {
-        m_listeners[i].first->operator()(ec_id);
+        listener.first->operator()(ec_id);
       }
   }
 
-};  // namespace RTC
+  /*!
+   * @if jp
+   * @class ComponentActionListeners
+   * @else
+   * @class ComponentActionListeners class
+   * @endif
+   */
 
+    /*!
+     * @if jp
+     * @brief コンストラクタ
+     * @else
+     * @brief Constructor
+     * @endif
+     */
+  ComponentActionListeners::ComponentActionListeners() = default;
+    /*!
+     * @if jp
+     * @brief デストラクタ
+     * @else
+     * @brief Destructor
+     * @endif
+     */
+  ComponentActionListeners::~ComponentActionListeners() = default;
+
+
+  /*!
+   * @if jp
+   *
+   * @brief リスナーの追加
+   *
+   * 指定の種類のPreComponentActionListenerを追加する。
+   *
+   * @param type リスナの種類
+   * @param listener 追加するリスナ
+   * @param autoclean true:デストラクタで削除する,
+   *                  false:デストラクタで削除しない
+   * @return false：指定の種類のリスナが存在しない
+   * @else
+   *
+   * @brief Add the listener.
+   *
+   *
+   *
+   * @param type
+   * @param listener Added listener
+   * @param autoclean true:The listener is deleted at the destructor.,
+   *                  false:The listener is not deleted at the destructor.
+   * @return
+   * @endif
+   */
+  bool ComponentActionListeners::addListener(PreComponentActionListenerType type, PreComponentActionListener* listener, bool autoclean)
+  {
+      if (static_cast<uint8_t>(type) < preaction_.size())
+      {
+           preaction_[static_cast<uint8_t>(type)].addListener(listener, autoclean);
+           return true;
+      }
+      return false;
+  }
+
+  /*!
+   * @if jp
+   *
+   * @brief リスナーの追加
+   *
+   * 指定の種類のPostComponentActionListenerを追加する。
+   *
+   * @param type リスナの種類
+   * @param listener 追加するリスナ
+   * @param autoclean true:デストラクタで削除する,
+   *                  false:デストラクタで削除しない
+   * @return false：指定の種類のリスナが存在しない
+   * @else
+   *
+   * @brief Add the listener.
+   *
+   *
+   *
+   * @param type
+   * @param listener Added listener
+   * @param autoclean true:The listener is deleted at the destructor.,
+   *                  false:The listener is not deleted at the destructor.
+   * @return
+   * @endif
+   */
+  bool ComponentActionListeners::addListener(PostComponentActionListenerType type, PostComponentActionListener* listener, bool autoclean)
+  {
+      if (static_cast<uint8_t>(type) < postaction_.size())
+      {
+           postaction_[static_cast<uint8_t>(type)].addListener(listener, autoclean);
+           return true;
+      }
+      return false;
+  }
+
+  /*!
+   * @if jp
+   *
+   * @brief リスナーの追加
+   *
+   * 指定の種類のPortActionListenerを追加する。
+   *
+   * @param type リスナの種類
+   * @param listener 追加するリスナ
+   * @param autoclean true:デストラクタで削除する,
+   *                  false:デストラクタで削除しない
+   * @return false：指定の種類のリスナが存在しない
+   * @else
+   *
+   * @brief Add the listener.
+   *
+   *
+   *
+   * @param type
+   * @param listener Added listener
+   * @param autoclean true:The listener is deleted at the destructor.,
+   *                  false:The listener is not deleted at the destructor.
+   * @return
+   * @endif
+   */
+  bool ComponentActionListeners::addListener(PortActionListenerType type, PortActionListener* listener, bool autoclean)
+  {
+      if (static_cast<uint8_t>(type) < portaction_.size())
+      {
+           portaction_[static_cast<uint8_t>(type)].addListener(listener, autoclean);
+           return true;
+      }
+      return false;
+  }
+
+  /*!
+   * @if jp
+   *
+   * @brief リスナーの追加
+   *
+   * 指定の種類のExecutionContextActionListenerを追加する。
+   *
+   * @param type リスナの種類
+   * @param listener 追加するリスナ
+   * @param autoclean true:デストラクタで削除する,
+   *                  false:デストラクタで削除しない
+   * @return false：指定の種類のリスナが存在しない
+   * @else
+   *
+   * @brief Add the listener.
+   *
+   *
+   *
+   * @param type
+   * @param listener Added listener
+   * @param autoclean true:The listener is deleted at the destructor.,
+   *                  false:The listener is not deleted at the destructor.
+   * @return
+   * @endif
+   */
+  bool ComponentActionListeners::addListener(ExecutionContextActionListenerType type, ExecutionContextActionListener* listener, bool autoclean)
+  {
+      if (static_cast<uint8_t>(type) < ecaction_.size())
+      {
+           ecaction_[static_cast<uint8_t>(type)].addListener(listener, autoclean);
+           return true;
+      }
+      return false;
+  }
+
+  /*!
+   * @if jp
+   *
+   * @brief リスナーの削除
+   *
+   * 指定の種類のPreComponentActionListenerを削除する。
+   *
+   * @param type リスナの種類
+   * @param listener 削除するリスナ
+   * @return false：指定の種類のリスナが存在しない
+   *
+   * @else
+   *
+   * @brief Remove the listener.
+   *
+   *
+   * @param type
+   * @param listener
+   * @return
+   *
+   * @endif
+   */
+  bool ComponentActionListeners::removeListener(PreComponentActionListenerType type, PreComponentActionListener* listener)
+  {
+      if (static_cast<uint8_t>(type) < preaction_.size())
+      {
+           preaction_[static_cast<uint8_t>(type)].removeListener(listener);
+           return true;
+      }
+      return false;
+  }
+
+  /*!
+   * @if jp
+   *
+   * @brief リスナーの削除
+   *
+   * 指定の種類のPreComponentActionListenerを削除する。
+   *
+   * @param type リスナの種類
+   * @param listener 削除するリスナ
+   * @return false：指定の種類のリスナが存在しない
+   *
+   * @else
+   *
+   * @brief Remove the listener.
+   *
+   *
+   * @param type
+   * @param listener
+   * @return
+   *
+   * @endif
+   */
+  bool ComponentActionListeners::removeListener(PostComponentActionListenerType type, PostComponentActionListener* listener)
+  {
+      if (static_cast<uint8_t>(type) < postaction_.size())
+      {
+           postaction_[static_cast<uint8_t>(type)].removeListener(listener);
+           return true;
+      }
+      return false;
+  }
+
+  /*!
+   * @if jp
+   *
+   * @brief リスナーの削除
+   *
+   * 指定の種類のPortActionListenerを削除する。
+   *
+   * @param type リスナの種類
+   * @param listener 削除するリスナ
+   * @return false：指定の種類のリスナが存在しない
+   *
+   * @else
+   *
+   * @brief Remove the listener.
+   *
+   *
+   * @param type
+   * @param listener
+   * @return
+   *
+   * @endif
+   */
+  bool ComponentActionListeners::removeListener(PortActionListenerType type, PortActionListener* listener)
+  {
+      if (static_cast<uint8_t>(type) < portaction_.size())
+      {
+           portaction_[static_cast<uint8_t>(type)].removeListener(listener);
+           return true;
+      }
+      return false;
+  }
+
+  /*!
+   * @if jp
+   *
+   * @brief リスナーの削除
+   *
+   * 指定の種類のExecutionContextActionListenerを削除する。
+   *
+   * @param type リスナの種類
+   * @param listener 削除するリスナ
+   * @return false：指定の種類のリスナが存在しない
+   *
+   * @else
+   *
+   * @brief Remove the listener.
+   *
+   *
+   * @param type
+   * @param listener
+   * @return
+   *
+   * @endif
+   */
+  bool ComponentActionListeners::removeListener(ExecutionContextActionListenerType type, ExecutionContextActionListener* listener)
+  {
+      if (static_cast<uint8_t>(type) < ecaction_.size())
+      {
+           ecaction_[static_cast<uint8_t>(type)].removeListener(listener);
+           return true;
+      }
+      return false;
+  }
+} // namespace RTC
 

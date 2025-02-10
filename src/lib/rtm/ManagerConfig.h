@@ -104,7 +104,7 @@ namespace RTC
      * @brief The default configuration file path for manager
      * @endif
      */
-    static const char* config_file_path[];
+    static const char* const config_file_path[];
 
     // Environment value to specify configuration file
     /*!
@@ -169,7 +169,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~ManagerConfig(void);
+    virtual ~ManagerConfig();
 
     /*!
      * @if jp
@@ -357,7 +357,7 @@ namespace RTC
      *
      * @endif
      */
-    void setSystemInformation(coil::Properties& prop);
+    static void setSystemInformation(coil::Properties& prop);
 
     /*!
      * @if jp
@@ -380,7 +380,7 @@ namespace RTC
      *
      * @endif
      */
-    bool fileExist(const std::string& filename);
+    static bool fileExist(const std::string& filename);
 
     /*!
      * @if jp
@@ -413,7 +413,7 @@ namespace RTC
      *
      * @endif
      */
-    bool m_isMaster;
+    bool m_isMaster{false};
   };
-};  // namespace RTC
+} // namespace RTC
 #endif  // RTC_MANAGERCONFIG_H

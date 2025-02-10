@@ -22,11 +22,8 @@
 #include <vector>
 #include <iostream>
 
-#include <coil/TimeValue.h>
-#include <coil/Time.h>
 #include <coil/OS.h>
-#include <coil/Mutex.h>
-#include <coil/Guard.h>
+#include <mutex>
 
 #include <rtm/RTC.h>
 #include <rtm/Typename.h>
@@ -55,23 +52,21 @@ namespace RTC
                  RingBuffer<EventBase*> &buffer)
       : m_fsm(fsm), m_eventName(event_name), m_handler(handler), m_buffer(buffer) {}
 
-    virtual ~EventBinder0() {}
+    ~EventBinder0() override = default;
 
-    virtual ReturnCode operator()(ConnectorInfo& info,
-                                  cdrMemoryStream& data)
+    ReturnCode operator()(ConnectorInfo& info,
+                                  ByteData&  /*data*/, const std::string& /*marshalingtype*/) override
     {
       if (info.properties["fsm_event_name"] == m_eventName ||
           info.name == m_eventName)
         {
             m_buffer.write(new Event0(this));
-          //m_fsm.dispatch(Macho::Event(m_handler));
-          //std::cout << "Event dispatched: " << m_eventName << std::endl;
           return NO_CHANGE;
         }
       return NO_CHANGE;
     }
 
-    virtual void run()
+    void run() override
     {
         
         m_fsm.dispatch(Macho::Event(m_handler));
@@ -96,22 +91,20 @@ namespace RTC
                  RingBuffer<EventBase*> &buffer)
       : m_fsm(fsm), m_eventName(event_name), m_handler(handler), m_buffer(buffer) {}
 
-    virtual ~EventBinder1() {}
+    ~EventBinder1() override = default;
 
-    virtual ReturnCode operator()(ConnectorInfo& info, P0& data)
+    ReturnCode operator()(ConnectorInfo& info, P0& data) override
     {
       if (info.properties["fsm_event_name"] == m_eventName ||
           info.name == m_eventName)
         {
             m_buffer.write(new Event1<P0>(this, data));
-          //m_fsm.dispatch(Macho::Event(m_handler, data));
-          //std::cout << "Event dispatched: " << m_eventName << std::endl;
           return NO_CHANGE;
         }
       return NO_CHANGE;
     }
 
-    virtual void run(P0& data)
+    void run(P0& data) override
     {
         m_fsm.dispatch(Macho::Event(m_handler, data));
     }
@@ -129,11 +122,9 @@ namespace RTC
   public:
       EventConnListener(RingBuffer<EventBase*>&buffer, CdrBufferBase* m_thebuffer) :
           m_buffer(buffer), m_thebuffer(m_thebuffer) {}
-      virtual ~EventConnListener()
-      {
-      }
+      ~EventConnListener() override = default;
 
-      virtual ReturnCode operator()(ConnectorInfo& info)
+      ReturnCode operator()(ConnectorInfo& info) override
       {
           coil::Properties prop;
           prop["write.full_policy"] = "do_nothing";
@@ -147,7 +138,7 @@ namespace RTC
 
 
           return NO_CHANGE;
-      };
+      }
       RingBuffer<EventBase*>&m_buffer;
       CdrBufferBase *m_thebuffer;
   };
@@ -164,8 +155,7 @@ namespace RTC
    * <T> はBasicDataType.idl にて定義されている型で、メンバとして
    * Time 型の tm , および T型の data を持つ構造体でなくてはならない。
    * EventInPort は内部にリングバッファを持ち、外部から送信されたデータを順次
-   * このリングバッファに格納する。リングバッファのサイズはデフォルトで64と
-   * なっているが、コンストラクタ引数によりサイズを指定することができる。
+   * このリングバッファに格納する。
    * データはフラグによって未読、既読状態が管理され、isNew(), write(), read(),
    * isFull(), isEmpty() 等のメソッドによりハンドリングすることができる。
    *   
@@ -191,9 +181,8 @@ namespace RTC
    * defined in BasicDataType.idl and must be the structure which has
    * both Time type tm and type-T data as a member. EventInPort has a ring
    * buffer internally, and stores the received data externally in
-   * this buffer one by one. The size of ring buffer can be specified
-   * according to the argument of constructor, though the default size
-   * is 64. Unread data and data which is already read are managed
+   * this buffer one by one.
+   * Unread data and data which is already read are managed
    * with the flag, and the data can be handled by the isNew(),
    * write(), read(), isFull() and isEmpty() method etc.
    *
@@ -206,7 +195,6 @@ namespace RTC
     : public InPortBase
   {
   public:
-    DATAPORTSTATUS_ENUM
     /*!
      * @if jp
      *
@@ -216,18 +204,7 @@ namespace RTC
      * パラメータとして与えられる T 型の変数にバインドされる。
      *
      * @param name EventInPort 名。EventInPortBase:name() により参照される。
-     * @param value この EventInPort にバインドされる T 型の変数
-     * @param bufsize EventInPort 内部のリングバッファのバッファ長(デフォルト値:64)
-     * @param read_block 読込ブロックフラグ。
-     *        データ読込時に未読データがない場合、次のデータ受信までブロックする
-     *        かどうかを設定(デフォルト値:false)
-     * @param write_block 書込ブロックフラグ。
-     *        データ書込時にバッファがフルであった場合、バッファに空きができる
-     *        までブロックするかどうかを設定(デフォルト値:false)
-     * @param read_timeout 読込ブロックを指定していない場合の、データ読取タイム
-     *        アウト時間(ミリ秒)(デフォルト値:0)
-     * @param write_timeout 書込ブロックを指定していない場合の、データ書込タイム
-     *        アウト時間(ミリ秒)(デフォルト値:0)
+     * @param fsm この EventInPort にバインドされる T 型の変数
      *
      * @else
      *
@@ -238,30 +215,11 @@ namespace RTC
      *
      * @param name A name of the EventInPort. This name is referred by
      *             EventInPortBase::name().
-     * @param value type-T variable that is bound to this EventInPort.
-     * @param bufsize Buffer length of internal ring buffer of EventInPort
-     *                (The default value:64)
-     * @param read_block Flag of reading block.
-     *                   When there are not unread data at reading data,
-     *                   set whether to block data until receiving the next 
-     *                   data. (The default value:false)
-     * @param write_block Flag of writing block.
-     *                    If the buffer was full at writing data, set whether 
-     *                    to block data until the buffer has space. 
-     *                    (The default value:false)
-     * @param read_timeout Data reading timeout time (millisecond) 
-     *                     when not specifying read blocking.
-     *                     (The default value:0)
-     * @param write_timeout Data writing timeout time (millisecond)
-     *                      when not specifying writing block.
-     *                      (The default value:0)
+     * @param fsm type-T variable that is bound to this EventInPort.
      *
      * @endif
      */
-    EventInPort(const char* name, FsmType& fsm,
-                int bufsize=64,
-                bool read_block = false, bool write_block = false,
-                int read_timeout = 0, int write_timeout = 0)
+    EventInPort(const char* name, FsmType& fsm)
       : InPortBase(name, "any"),
       m_name(name), m_fsm(fsm), m_buffer(fsm.getBuffer())
     {
@@ -282,7 +240,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~EventInPort(void){};
+    ~EventInPort() override;
 
     /*!
      * @if jp
@@ -308,11 +266,11 @@ namespace RTC
       return m_name.c_str();
     }
 
-    virtual void init(coil::Properties& prop)
+    void init(coil::Properties& prop) override
     {
         InPortBase::init(prop);
         this->addConnectorListener
-            (ON_CONNECT,
+            (ConnectorListenerType::ON_CONNECT,
             new EventConnListener(m_buffer, m_thebuffer));
     }
 
@@ -321,7 +279,7 @@ namespace RTC
                    R (TOP::*handler)(P0))
     {
       this->addConnectorDataListener
-        (ON_RECEIVED,
+        (ConnectorDataListenerType::ON_RECEIVED,
          new EventBinder1<FsmType, TOP, R, P0>(m_fsm, name, handler, m_buffer));
     }
     template <typename TOP, class R>
@@ -329,10 +287,10 @@ namespace RTC
                    R (TOP::*handler)())
     {
       this->addConnectorDataListener
-        (ON_RECEIVED,
+        (ConnectorDataListenerType::ON_RECEIVED,
          new EventBinder0<FsmType, TOP, R>(m_fsm, name, handler, m_buffer));
     }
-    virtual bool read(std::string name="") { return true; }
+    bool read(std::string  /*name*/="") override { return true; }
   private:
     /*!
      * @if jp
@@ -345,6 +303,9 @@ namespace RTC
     FsmType& m_fsm;
     RingBuffer<EventBase*> &m_buffer;
   };
-}; // End of namesepace RTM
+
+  template <class FsmType>
+  EventInPort<FsmType>::~EventInPort() = default;
+} // namespace RTC
 
 #endif // RTC_EVENTINPORT_H

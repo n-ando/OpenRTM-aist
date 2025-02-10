@@ -18,8 +18,8 @@
 
 
 #include <coil/SharedMemory.h>
-//#include "SharedMemory.h"
-#include <string.h>
+#include <cstring>
+#include <utility>
 
 
 namespace coil
@@ -33,9 +33,8 @@ namespace coil
    */
   SharedMemory::SharedMemory()
     : m_memory_size(0),
-      m_shm(NULL),
-      m_file_create(false),
-      m_handle(NULL)
+      m_shm(nullptr),
+      m_handle(nullptr)
   {
   }
 
@@ -65,7 +64,6 @@ namespace coil
     m_shm_address = rhs.m_shm_address;
     m_shm = rhs.m_shm;
     m_handle = rhs.m_handle;
-    m_file_create = rhs.m_file_create;
   }
 
   /*!
@@ -109,29 +107,21 @@ namespace coil
    * @endif
    */
   int SharedMemory::create(std::string shm_address,
-                     int memory_size)
+                    unsigned long long memory_size)
   {
-
     m_shm_address = shm_address;
     m_memory_size = memory_size;
+    DWORD highsize = static_cast<DWORD>((m_memory_size >> 32) & 0xFFFFFFFF);
+    DWORD lowsize = static_cast<DWORD>(m_memory_size & 0xFFFFFFFF);
     m_handle = CreateFileMapping(
-		(HANDLE)-1,
-		NULL,
-		PAGE_READWRITE | SEC_COMMIT,
-		0, m_memory_size, 
-		shm_address.c_str());
-    /*
-    if(GetLastError() == ERROR_ALREADY_EXISTS)
-    {
-    }
-    else
-    {
-    	
-    }
-    */
+        static_cast<HANDLE>(INVALID_HANDLE_VALUE),
+        nullptr,
+        PAGE_READWRITE | SEC_COMMIT,
+        highsize,
+        lowsize,
+        shm_address.c_str());
 
-    m_shm = (char *)MapViewOfFile(m_handle, FILE_MAP_ALL_ACCESS, 0, 0, 0);
-    m_file_create = true;
+    m_shm = static_cast<char *>(MapViewOfFile(m_handle, FILE_MAP_ALL_ACCESS, 0, 0, 0));
     return 0;
   }
 
@@ -157,12 +147,12 @@ namespace coil
    *
    * @endif
    */
-  int SharedMemory::open(std::string shm_address, int memory_size)
+  int SharedMemory::open(std::string shm_address, unsigned long long memory_size)
   {
-    m_shm_address = shm_address;
-	m_memory_size = memory_size;
+    m_shm_address = std::move(shm_address);
+    m_memory_size = memory_size;
     m_handle = OpenFileMapping(FILE_MAP_ALL_ACCESS, FALSE, m_shm_address.c_str());
-    m_shm = (char *)MapViewOfFile(m_handle, FILE_MAP_ALL_ACCESS, 0, 0, 0);
+    m_shm = static_cast<char *>(MapViewOfFile(m_handle, FILE_MAP_ALL_ACCESS, 0, 0, 0));
     return 0;
   }
 
@@ -187,16 +177,20 @@ namespace coil
    *
    * @endif
    */
-  int SharedMemory::write(const char *data, const int pos, const int size)
+  int SharedMemory::write(const char *data, const unsigned long long pos, const unsigned long long size)
   {
-	  if (!created())
-	  {
-		  return -1;
-	  }
+    if (!created())
+    {
+      return -1;
+    }
 
-	  memcpy(&m_shm[pos],&data[0],size);
+    if (m_memory_size < size + pos)
+    {
+      return -1;
+    }
+    memcpy(&m_shm[pos],&data[0], static_cast<size_t>(size));
     
-	  return 0;
+   return 0;
   }
 
   /*!
@@ -220,15 +214,15 @@ namespace coil
    *
    * @endif
    */
-  int SharedMemory::read(char* data, const int pos, const int size)
+  int SharedMemory::read(char* data, const unsigned long long pos, const unsigned long long size)
   {
-	  if (!created())
-	  {
-		  return -1;
-	  }
+    if (!created())
+    {
+     return -1;
+    }
 
-	  memcpy(&data[0],&m_shm[pos],size);
-	  return 0;
+    memcpy(&data[0],&m_shm[pos], static_cast<size_t>(size));
+    return 0;
   }
 
   /*!
@@ -252,25 +246,22 @@ namespace coil
    */
   int SharedMemory::close()
   {
-    
     if (created())
     {
-        UnmapViewOfFile(m_shm);
+      UnmapViewOfFile(m_shm);
     }
-	else
-	{
-		return -1;
-	}
-    if(m_file_create)
+    else
     {
-    	if (CloseHandle(m_handle) == 0)
-    	{
-    		return -1;
-    	}
-	else
-	{
-		return 0;
-	}
+      return -1;
+    }
+    if(m_handle != nullptr)
+    {
+      if (CloseHandle(m_handle) == 0)
+      {
+        return -1;
+      }
+      m_handle = nullptr;
+      return 0;
     }
     return 0;
 
@@ -294,9 +285,9 @@ namespace coil
    *
    * @endif
    */
-  unsigned int SharedMemory::get_size()
+  unsigned long long SharedMemory::get_size()
   {
-	return m_memory_size;
+    return m_memory_size;
   }
   /*!
    * @if jp
@@ -319,7 +310,7 @@ namespace coil
    */
   std::string SharedMemory::get_addresss()
   {
-	return m_shm_address;
+    return m_shm_address;
   };
   /*!
    * @if jp
@@ -342,7 +333,7 @@ namespace coil
    */
   char *SharedMemory::get_data()
   {
-	return m_shm;
+    return m_shm;
   }
 
 
@@ -368,7 +359,7 @@ namespace coil
    */
   int SharedMemory::unlink()
   {
-	return -1;
+    return -1;
   }
 
 
@@ -393,17 +384,7 @@ namespace coil
   */
   bool SharedMemory::created()
   {
-	if (m_handle == NULL)
-	{
-		return false;
-	}
-	else
-	{
-		return true;
-	}
+    return m_handle != nullptr;
   }
 
-
-
-
-}
+} // namespace coil

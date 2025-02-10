@@ -88,7 +88,6 @@ namespace RTC
     : public InPortConnector
   {
   public:
-    DATAPORTSTATUS_ENUM
 
     /*!
      * @if jp
@@ -132,8 +131,8 @@ namespace RTC
      */
     InPortPullConnector(ConnectorInfo info,
                         OutPortConsumer* consumer,
-                        ConnectorListeners& listeners,
-                        CdrBufferBase* buffer = 0);
+                        ConnectorListenersBase* listeners,
+                        CdrBufferBase* buffer = nullptr);
 
     /*!
      * @if jp
@@ -150,7 +149,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~InPortPullConnector();
+    ~InPortPullConnector() override;
 
     /*!
      * @if jp
@@ -183,7 +182,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode read(cdrMemoryStream& data);
+    DataPortStatus read(ByteDataStreamBase* data) override;
 
     /*!
      * @if jp
@@ -198,7 +197,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode disconnect();
+    DataPortStatus disconnect() override;
 
     /*!
      * @if jp
@@ -214,7 +213,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual void activate() {}  // do nothing
+    void activate() override {}  // do nothing
 
     /*!
      * @if jp
@@ -230,7 +229,21 @@ namespace RTC
      *
      * @endif
      */
-    virtual void deactivate() {}  // do nothing
+    void deactivate() override {}  // do nothing
+    /*!
+     * @if jp
+     * @brief コンシューマのインターフェースの登録を取り消す
+     *
+     * @param prop コネクタプロファイルのプロパティ
+     *
+     * @else
+     * @brief
+     *
+     * @param prop
+     *
+     * @endif
+     */
+    void unsubscribeInterface(const coil::Properties& prop) override;
 
   protected:
     /*!
@@ -252,7 +265,7 @@ namespace RTC
      *
      * @endif
      */
-    CdrBufferBase* createBuffer(ConnectorInfo& info);
+    static CdrBufferBase* createBuffer(ConnectorInfo& info);
 
     /*!
      * @if jp
@@ -289,8 +302,9 @@ namespace RTC
      * @brief A reference to a ConnectorListener
      * @endif
      */
-    ConnectorListeners& m_listeners;
+    ConnectorListenersBase* m_listeners;
+    ByteData m_data;
   };
-};  // namespace RTC
+} // namespace RTC
 
 #endif  // RTC_PULL_CONNECTOR_H

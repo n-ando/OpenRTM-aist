@@ -1,20 +1,15 @@
-cmake_minimum_required (VERSION 2.6)
+cmake_minimum_required (VERSION 3.5.1)
 
-project (ExtendedFsmServiceProvider)
-
-
-
-
-
-
+project (ExtendedFsmServiceProvider
+	VERSION ${RTM_VERSION}
+	LANGUAGES CXX)
 
 link_directories(${ORB_LINK_DIR})
-include_directories(
-		${RTM_INCLUDE_DIR}
-		${ORB_INCLUDE_DIR}
-		)
-
-ADD_DEFINITIONS(${ORB_C_FLAGS_LIST})
+add_definitions(${ORB_C_FLAGS_LIST})
+add_definitions(${COIL_C_FLAGS_LIST})
+if(WIN32)
+	add_definitions(-DRTM_SKEL_IMPORT_SYMBOL)
+endif()
 
 
 set(target ExtendedFsmServiceProvider)
@@ -26,29 +21,28 @@ if(VXWORKS AND NOT RTP)
 	set(libs ${RTCSKEL_PROJECT_NAME})
 
 	add_executable(${target} ${srcs})
+	openrtm_common_set_compile_props(${target})
+	openrtm_set_link_props_shared(${target})
+	openrtm_include_rtm(${target})
 	target_link_libraries(${target} ${libs})
-	add_dependencies(${target} ${RTM_PROJECT_NAME})
 
 	install(TARGETS ${target} LIBRARY DESTINATION ${INSTALL_RTM_EXT_DIR}/sdo
 				ARCHIVE DESTINATION ${INSTALL_RTM_EXT_DIR}/sdo
 				RUNTIME DESTINATION ${INSTALL_RTM_EXT_DIR}/sdo
 				COMPONENT ext)
 else()
-	if(VXWORKS)
-		set(libs ${RTM_PROJECT_NAME} ${ORB_LIBRARIES} ${COIL_PROJECT_NAME} ${RTCSKEL_PROJECT_NAME})
-	else(VXWORKS)
-		set(libs ${RTM_PROJECT_NAME} ${ORB_LIBRARIES} ${COIL_PROJECT_NAME})
-	endif(VXWORKS)
+	set(libs ${RTM_PROJECT_NAME} ${ORB_LIBRARIES} ${DATATYPE_FACTORIES})
 
 
 	add_library(${target} SHARED ${srcs})
-	target_link_libraries(${target} ${libs} ${RTM_LINKER_OPTION})
-	add_dependencies(${target} ${RTM_PROJECT_NAME})
+	openrtm_set_link_props_shared(${target})
+	openrtm_common_set_compile_props(${target})
+	openrtm_include_rtm(${target})
+	target_link_libraries(${target} PRIVATE ${libs} ${RTM_LINKER_OPTION})
 	set_target_properties(${target} PROPERTIES PREFIX "")
 
 
 	install(TARGETS ${target} LIBRARY DESTINATION ${INSTALL_RTM_EXT_DIR}/sdo
-				ARCHIVE DESTINATION ${INSTALL_RTM_EXT_DIR}/sdo
 				RUNTIME DESTINATION ${INSTALL_RTM_EXT_DIR}/sdo
 				COMPONENT ext)
 endif()

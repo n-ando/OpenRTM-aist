@@ -18,10 +18,6 @@
 #include <rtm/SharedMemoryPort.h>
 #include <rtm/Manager.h>
 
-#ifdef WIN32
-#pragma warning( disable : 4290 )
-#endif
-
 namespace RTC
 {
   /*!
@@ -31,10 +27,7 @@ namespace RTC
    * @brief Constructor
    * @endif
    */
-	SharedMemoryPort::SharedMemoryPort()
-   : m_smInterface(OpenRTM::PortSharedMemory::_nil()),
-     m_endian(true)//,
-     //rtclog("SharedMemoryPort")
+  SharedMemoryPort::SharedMemoryPort()
   {
 
   }
@@ -46,41 +39,37 @@ namespace RTC
    * @brief Destructor
    * @endif
    */
-	SharedMemoryPort::~SharedMemoryPort()
+  SharedMemoryPort::~SharedMemoryPort()
   {
-	//RTC_PARANOID(("~SharedMemoryPort()"));
-	  try
-	  {
-		  PortableServer::ObjectId_var oid;
+      try
+      {
+          PortableServer::ObjectId_var oid;
 #ifdef ORB_IS_OMNIORB
-		  oid = ::RTC::Manager::instance().theShortCutPOA()->servant_to_id(this);
-		  ::RTC::Manager::instance().theShortCutPOA()->deactivate_object(oid);
+          oid = ::RTC::Manager::instance().theShortCutPOA()->servant_to_id(this);
+          ::RTC::Manager::instance().theShortCutPOA()->deactivate_object(oid);
 #else
-		  oid = _default_POA()->servant_to_id(this);
-		  _default_POA()->deactivate_object(oid);
+          oid = _default_POA()->servant_to_id(this);
+          _default_POA()->deactivate_object(oid);
 #endif
-	  }
-	  catch (PortableServer::POA::ServantNotActive &e)
-	  {
+      }
+      catch (PortableServer::POA::ServantNotActive&)
+      {
 #ifdef ORB_IS_ORBEXPRESS
-		  oe_out << e << oe_endl << oe_flush;
+      oe_out << e << oe_endl << oe_flush;
 #else
-		  //RTC_ERROR(("%s", e._name()));
 #endif
-	  }
-	  catch (PortableServer::POA::WrongPolicy &e)
-	  {
+      }
+      catch (PortableServer::POA::WrongPolicy&)
+      {
 #ifdef ORB_IS_ORBEXPRESS
-		  oe_out << e << oe_endl << oe_flush;
+          oe_out << e << oe_endl << oe_flush;
 #else
-		  //RTC_ERROR(("%s", e._name()));
 #endif
-	  }
-	  catch (...)
-	  {
-		  // never throws exception
-		  //RTC_ERROR(("Unknown exception caught."));
-	  }
+      }
+      catch (...)
+      {
+          // never throws exception
+      }
   }
 
 
@@ -107,36 +96,29 @@ namespace RTC
    */
   int SharedMemoryPort::string_to_MemorySize(std::string size_str)
   {
-	  int memory_size = DEFAULT_MEMORY_SIZE;
-	  std::string size_str_n = coil::normalize(size_str);
-	  if (size_str.size() > 0)
-	  {
-		  std::string unit_str_M = "M";
-		  unit_str_M = coil::normalize(unit_str_M);
-		  std::string unit_str_k = "k";
-		  unit_str_k = coil::normalize(unit_str_k);
-
-		  std::string value_str = size_str_n.substr(0, size_str_n.size() - 1);
-		  int value = 0;
-		  if(coil::stringTo(value, value_str.c_str()))
-		  {
-			  if (size_str_n.substr(size_str_n.size() - 1, 1) == unit_str_M)
-			  {
-				  memory_size = 1048576 * value;
-			  }
-			  else if (size_str_n.substr(size_str_n.size() - 1, 1) == unit_str_k)
-			  {
-				  
-				  memory_size = 1024 * value;
-			  }
-			  else
-			  {
-				  memory_size = value;
-			  }
-		  }
-	  }
-
-	  return memory_size;
+      int memory_size = DEFAULT_MEMORY_SIZE;
+      if (!size_str.empty())
+      {
+          std::string size_str_n{coil::normalize(std::move(size_str))};
+          std::string value_str = size_str_n.substr(0, size_str_n.size() - 1);
+          int value = 0;
+          if(coil::stringTo(value, value_str.c_str()))
+          {
+              if (size_str_n.back() == 'm')
+              {
+                  memory_size = 1048576 * value;
+              }
+              else if (size_str_n.back() == 'k')
+              {
+                  memory_size = 1024 * value;
+              }
+              else
+              {
+                  memory_size = value;
+              }
+          }
+      }
+      return memory_size;
   }
   /*!
   * @if jp
@@ -158,21 +140,19 @@ namespace RTC
   *
   * @endif
   */
-	void SharedMemoryPort::create_memory(::CORBA::ULongLong memory_size, const char *shm_address)
-    throw (CORBA::SystemException)
+  void SharedMemoryPort::create_memory(::CORBA::ULongLong memory_size, const char *shm_address)
   {
-	  if (!m_shmem.created())
-	  {
-		  
-		  m_shmem.create(shm_address, memory_size);
-		  try
-		  {
-			  m_smInterface->open_memory(memory_size, CORBA::string_dup(shm_address));
-		  }
-		  catch (...)
-		  {
-		  }
-	  }
+      if (!m_shmem.created())
+      {
+      m_shmem.create(shm_address, memory_size);
+      try
+      {
+          m_smInterface->open_memory(memory_size, CORBA::string_dup(shm_address));
+          }
+          catch (...)
+          {
+          }
+      }
   }
   /*!
   * @if jp
@@ -191,11 +171,9 @@ namespace RTC
   *
   * @endif
   */
-	void SharedMemoryPort::open_memory(::CORBA::ULongLong memory_size, const char * shm_address)
-    throw (CORBA::SystemException)
+  void SharedMemoryPort::open_memory(::CORBA::ULongLong memory_size, const char *shm_address)
   {
-	  
-	  m_shmem.open(shm_address, memory_size);
+      m_shmem.open(shm_address, memory_size);
   }
   /*!
   * @if jp
@@ -212,24 +190,23 @@ namespace RTC
   *
   * @endif
   */
-	void SharedMemoryPort::close_memory(::CORBA::Boolean unlink)
-    throw (CORBA::SystemException)
+  void SharedMemoryPort::close_memory(::CORBA::Boolean unlink)
   {
-	  if (!m_shmem.created())
-	  {
-		  m_shmem.close();
-		  if (unlink)
-		  {
-			  m_shmem.unlink();
-		  }
-		  try
-		  {
-			  m_smInterface->close_memory(false);
-		  }
-		  catch (...)
-		  {
-		  }
-	  }
+      if (m_shmem.created())
+      {
+          m_shmem.close();
+          if (unlink)
+          {
+              m_shmem.unlink();
+          }
+          try
+          {
+              m_smInterface->close_memory(false);
+          }
+          catch (...)
+          {
+          }
+      }
   }
   /*!
   * @if jp
@@ -248,56 +225,44 @@ namespace RTC
   *
   * @endif
   */
-  void SharedMemoryPort::write(cdrMemoryStream& data)
+  void SharedMemoryPort::write(ByteData& data)
   {
-#ifdef ORB_IS_ORBEXPRESS
-	  CORBA::ULongLong data_size = (CORBA::ULongLong)data.cdr.size_written();
-#elif defined(ORB_IS_TAO)
-	  CORBA::ULongLong data_size = (CORBA::ULongLong)data.cdr.total_length();
-#else
-	  CORBA::ULongLong data_size = (CORBA::ULongLong)data.bufSize();
-#endif
-	  if (data_size + sizeof(CORBA::ULongLong) > m_shmem.get_size())
-	  {
-		  int memory_size = (int)data_size + (int)sizeof(CORBA::ULongLong);
-		  if (!CORBA::is_nil(m_smInterface))
-		  {
-			  try
-			  {
-				  m_smInterface->close_memory(false);
-			  }
-			  catch (...)
-			  {
-			  }
-		  }
-		  close_memory(true);
-		  create_memory(memory_size, m_shmem.get_addresss().c_str());
-	  }
-	  cdrMemoryStream data_size_cdr;
+      CORBA::ULongLong data_size = static_cast<CORBA::ULongLong>(data.getDataLength());
+      if (data_size + sizeof(CORBA::ULongLong) > m_shmem.get_size())
+      {
+          CORBA::ULongLong memory_size = data_size + static_cast<CORBA::ULongLong>(sizeof(CORBA::ULongLong));
+          if (!CORBA::is_nil(m_smInterface))
+          {
+              try
+              {
+                  m_smInterface->close_memory(false);
+              }
+              catch (...)
+              {
+              }
+          }
+          close_memory(true);
+          create_memory(memory_size, m_shmem.get_addresss().c_str());
+      }
+      CORBA_CdrMemoryStream data_size_cdr;
 
-#ifdef ORB_IS_ORBEXPRESS
-	  data_size_cdr.is_little_endian(m_endian);
-	  data_size_cdr.cdr << data_size;
-	  int ret = m_shmem.write(const_cast<char*>(data_size_cdr.cdr.get_buffer()), 0, sizeof(CORBA::ULongLong));
-#elif defined(ORB_IS_TAO)
-	  data_size_cdr.cdr << data_size;
-	  int ret = m_shmem.write((char*)data_size_cdr.cdr.buffer(), 0, sizeof(CORBA::ULongLong));
-#else
-	  data_size_cdr.setByteSwapFlag(m_endian);
-	  data_size >>= data_size_cdr;
-	  int ret = m_shmem.write((char*)data_size_cdr.bufPtr(), 0, sizeof(CORBA::ULongLong));
-#endif
-	  if (ret == 0)
-	  {
-#ifdef ORB_IS_ORBEXPRESS
-		  m_shmem.write(const_cast<char*>(data.get_buffer()), sizeof(CORBA::ULongLong), data.cdr.size_written());
-#elif defined(ORB_IS_TAO)
-		  m_shmem.write((char*)data.cdr.buffer(), sizeof(CORBA::ULongLong), data.cdr.total_length());
-#else
-		 
-		  m_shmem.write((char*)data.bufPtr(), sizeof(CORBA::ULongLong), data.bufSize());
-#endif
-	  }
+      //データサイズ(ULongLong型)をCDR形式でシリアライズする
+      data_size_cdr.setEndian(m_endian);
+      if (!data_size_cdr.serializeCDR(data_size))
+      {
+          return;
+      }
+      //シリアライズしたデータのサイズが8の場合には共有メモリにデータサイズ(CDR形式)を書き込み
+      if (data_size_cdr.getCdrDataLength() == static_cast<unsigned long>(sizeof(CORBA::ULongLong)))
+      {
+          //データサイズ(CDR形式)を共有メモリに書き込み
+          int ret = m_shmem.write(reinterpret_cast<const char*>(data_size_cdr.getBuffer()), 0, sizeof(CORBA::ULongLong));
+          if (ret == 0)
+          {
+              //データサイズの後の領域に送信データを書き込み
+              m_shmem.write(reinterpret_cast<const char*>(data.getBuffer()), sizeof(CORBA::ULongLong), data.getDataLength());
+          }
+      }
 
   }
   /*!
@@ -315,50 +280,18 @@ namespace RTC
   *
   * @endif
   */
-	void SharedMemoryPort::read(cdrMemoryStream& data)
+  void SharedMemoryPort::read(ByteData& data)
   {
-	  //CORBA::Octet data_size_str[sizeof(CORBA::ULongLong)];
-	  //int ret = m_shmem.read((char*)data_size_str, 0, sizeof(CORBA::ULongLong));
-	  //if (ret == 0)
-	  if (m_shmem.created())
-	  {
-		  cdrMemoryStream data_size_cdr;
-		  CORBA::ULongLong data_size;
-#ifdef ORB_IS_ORBEXPRESS
-		  data.is_little_endian(m_endian);
-		  data_size_cdr.is_little_endian(m_endian);
-		  data_size_cdr.write_array_1((CORBA::Octet *)&(m_shmem.get_data()[0]), sizeof(CORBA::ULongLong));
-		  data_size_cdr.cdr >> data_size;
-#elif defined(ORB_IS_TAO)
-		  data_size_cdr.cdr.write_octet_array((CORBA::Octet *)&(m_shmem.get_data()[0]), sizeof(CORBA::ULongLong));
-		  TAO_InputCDR tao_cdr = TAO_InputCDR(data_size_cdr.cdr);
-		  tao_cdr >> data_size;
-#else
-		  data.setByteSwapFlag(m_endian);
-		  data_size_cdr.setByteSwapFlag(m_endian);
-		  //data_size_cdr.put_octet_array(&(data_size_str[0]), sizeof(CORBA::ULongLong));
-		  data_size_cdr.put_octet_array((CORBA::Octet *)&(m_shmem.get_data()[0]), sizeof(CORBA::ULongLong));
-		  data_size <<= data_size_cdr;
-
-
-#endif
-		  //CORBA::Octet *shm_data = new CORBA::Octet[data_size];
-		  //ret = m_shmem.read((char*)shm_data, sizeof(CORBA::ULongLong), (int)data_size);
-		 
-		  /*if (ret == 0)
-		  {
-			 
-			  data.put_octet_array(&(shm_data[0]), (int)data_size);
-		  }*/
-#ifdef ORB_IS_ORBEXPRESS
-		  data.cdr.write_array_1((CORBA::Octet *)&(m_shmem.get_data()[sizeof(CORBA::ULongLong)]), (int)data_size);
-#elif defined(ORB_IS_TAO)
-		  data.cdr.write_octet_array((CORBA::Octet *)&(m_shmem.get_data()[sizeof(CORBA::ULongLong)]), (int)data_size);
-#else
-		  data.put_octet_array((CORBA::Octet *)&(m_shmem.get_data()[sizeof(CORBA::ULongLong)]), (int)data_size);
-#endif
-		  //delete shm_data;
-	  }
+      if (m_shmem.created())
+      {
+          CORBA_CdrMemoryStream data_size_cdr;
+          CORBA::ULongLong data_size = 0;
+          data.isLittleEndian(m_endian);
+          data_size_cdr.setEndian(m_endian);
+          data_size_cdr.writeCdrData(reinterpret_cast<unsigned char*>(&(m_shmem.get_data()[0])), sizeof(CORBA::ULongLong));
+          data_size_cdr.deserializeCDR(data_size);
+          data.writeData(reinterpret_cast<unsigned char*>(&m_shmem.get_data()[sizeof(CORBA::ULongLong)]), static_cast<unsigned long>(data_size));
+      }
 
   }
   /*!
@@ -376,10 +309,9 @@ namespace RTC
   *
   * @endif
   */
-	void SharedMemoryPort::setInterface(::OpenRTM::PortSharedMemory_ptr sm)
-    throw (CORBA::SystemException)
+  void SharedMemoryPort::setInterface(::OpenRTM::PortSharedMemory_ptr sm)
   {
-	  m_smInterface = ::OpenRTM::PortSharedMemory::_narrow(sm);
+      m_smInterface = ::OpenRTM::PortSharedMemory::_narrow(sm);
   }
   /*!
   * @if jp
@@ -396,21 +328,19 @@ namespace RTC
   *
   * @endif
   */
-	void SharedMemoryPort::setEndian(::CORBA::Boolean endian)
-    throw (CORBA::SystemException)
+  void SharedMemoryPort::setEndian(::CORBA::Boolean endian)
   {
-	  m_endian = endian;
-	  if (!CORBA::is_nil(m_smInterface))
-	  {
-		  try
-		  {
-			  m_smInterface->setEndian(endian);
-		  }
-		  catch (...)
-		  {
-
-		  }
-	  }
+      m_endian = endian;
+      if (!CORBA::is_nil(m_smInterface))
+      {
+          try
+          {
+              m_smInterface->setEndian(endian);
+          }
+          catch (...)
+          {
+          }
+      }
   }
   /*!
   * @if jp
@@ -427,10 +357,9 @@ namespace RTC
   *
   * @endif
   */
-	::OpenRTM::PortStatus SharedMemoryPort::put()
-    throw (CORBA::SystemException)
+  ::OpenRTM::PortStatus SharedMemoryPort::put()
   {
-	  return ::OpenRTM::PORT_OK;
+      return ::OpenRTM::PORT_OK;
   }
   /*!
   * @if jp
@@ -447,16 +376,13 @@ namespace RTC
   *
   * @endif
   */
-	::OpenRTM::PortStatus SharedMemoryPort::get()
-    throw (CORBA::SystemException)
+  ::OpenRTM::PortStatus SharedMemoryPort::get()
   {
-	  return ::OpenRTM::PORT_OK;
+      return ::OpenRTM::PORT_OK;
   }
 
-	::OpenRTM::PortSharedMemory_ptr SharedMemoryPort::getObjRef()
-	{
-		//m_objref = this->_this();
-		//return ::OpenRTM::PortSharedMemory::_duplicate(m_objref);
-		return this->_this();
-	}
-};
+  ::OpenRTM::PortSharedMemory_ptr SharedMemoryPort::getObjRef()
+  {
+      return this->_this();
+  }
+} // namespace RTC

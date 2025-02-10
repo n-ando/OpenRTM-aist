@@ -52,7 +52,7 @@ namespace CORBA_IORUtil
    *
    * @endif
    */
-#if !defined(ORB_IS_ORBEXPRESS) && !defined(ORB_IS_TAO)
+#if !defined(ORB_IS_ORBEXPRESS) && !defined(ORB_IS_TAO) && !defined(ORB_IS_RTORB)
   bool toIOR(const char* iorstr, IOP::IOR& ior);
 #endif
 
@@ -65,7 +65,7 @@ namespace CORBA_IORUtil
    *
    * @endif
    */
-#if !defined(ORB_IS_ORBEXPRESS) && !defined(ORB_IS_TAO)
+#if !defined(ORB_IS_ORBEXPRESS) && !defined(ORB_IS_TAO) && !defined(ORB_IS_RTORB)
   bool toString(IOP::IOR& ior, std::string& iorstr);
 #endif
   
@@ -86,13 +86,13 @@ namespace CORBA_IORUtil
    * @endif
    */
   std::string formatIORinfo(const char* iorstr);
-#if !defined(ORB_IS_ORBEXPRESS) && !defined(ORB_IS_TAO)
+#if !defined(ORB_IS_ORBEXPRESS) && !defined(ORB_IS_TAO) && !defined(ORB_IS_RTORB)
   std::vector<IIOP::Address> getEndpoints(IOP::IOR& ior);
 
 
-  void extractAddrs(IOP::MultipleComponentProfile& components,
+  void extractAddrs(IOP::MultipleComponentProfile& comp,
                     std::vector<IIOP::Address>& addr);
 #endif
 
-}; // namespace CORBA_IORUtil
+} // namespace CORBA_IORUtil
 #endif // CORBA_IORUTIL_H

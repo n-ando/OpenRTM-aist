@@ -13,7 +13,6 @@
 //
 // See Macho.hpp for more information.
 #include <iostream>
-//#include "Macho.hpp"
 #include <rtm/Macho.h>
 using namespace Macho;
 
@@ -43,12 +42,12 @@ _EmptyBox _EmptyBox::theEmptyBox;
 ////////////////////////////////////////////////////////////////////////////////
 // Helper functions for box creation
 template<>
-void * Macho::_createBox<_EmptyBox>(void * & place) {
+void * Macho::_createBox<_EmptyBox>(void * &  /*place*/) {
 	return &_EmptyBox::theEmptyBox;
 }
 
 template<>
-void Macho::_deleteBox<_EmptyBox>(void * & box, void * & place) {
+void Macho::_deleteBox<_EmptyBox>(void * & /* box */, void * & /* place */) {
 }
 
 #ifdef MACHO_SNAPSHOTS
@@ -71,8 +70,8 @@ void Alias::setState(_MachineBase & machine) const {
 _StateInstance & _StateSpecification::_getInstance(_MachineBase & machine) {
 	// Look first in machine for existing StateInstance.
 	_StateInstance * & instance = machine.getInstance(0);
-	if (!instance)
-		instance = new _RootInstance(machine, 0);
+	if (instance == nullptr)
+		instance = new _RootInstance(machine, nullptr);
 
 	return *instance;
 }
@@ -100,15 +99,15 @@ void _StateSpecification::setState(_StateInstance & current) {
 // StateInstance implementation
 _StateInstance::_StateInstance(_MachineBase & machine, _StateInstance * parent)
 	: myMachine(machine)
-	, mySpecification(0)
-	, myHistory(0)
+	, mySpecification(nullptr)
+	, myHistory(nullptr)
 	, myParent(parent)
-	, myBox(0)
-	, myBoxPlace(0)
+	, myBox(nullptr)
+	, myBoxPlace(nullptr)
 {}
 
 _StateInstance::~_StateInstance() {
-	if (myBoxPlace)
+	if (myBoxPlace != nullptr)
 		::operator delete(myBoxPlace);
 
 	delete mySpecification;
@@ -116,7 +115,7 @@ _StateInstance::~_StateInstance() {
 
 void _StateInstance::entry(_StateInstance & previous, bool first) {
 	// Only Root has no parent
-	if (!myParent)
+	if (myParent == nullptr)
 		return;
 
 	// first entry or previous state is not substate -> perform entry
@@ -132,7 +131,7 @@ void _StateInstance::entry(_StateInstance & previous, bool first) {
 
 void _StateInstance::exit(_StateInstance & next) {
 	// Only Root has no parent
-	if (!myParent)
+	if (myParent == nullptr)
 		return;
 
 	// self transition or next state is not substate -> perform exit
@@ -149,7 +148,7 @@ void _StateInstance::exit(_StateInstance & next) {
 }
 
 void _StateInstance::init(bool history) {
-	if (history && myHistory) {
+	if (history && (myHistory != nullptr)) {
 		MACHO_TRC3(name(), "History transition to", myHistory->name());
 		myMachine.setPendingState(*myHistory, &_theDefaultInitializer);
 	} else {
@@ -157,7 +156,7 @@ void _StateInstance::init(bool history) {
 		mySpecification->init();
 	}
 
-	myHistory = 0;
+	myHistory = nullptr;
 }
 
 #ifdef MACHO_SNAPSHOTS
@@ -189,11 +188,6 @@ _StateInstance * _StateInstance::clone(_MachineBase & newMachine) {
 ////////////////////////////////////////////////////////////////////////////////
 // Base class for Machine objects.
 _MachineBase::_MachineBase()
-	: myCurrentState(0)
-	, myPendingState(0)
-	, myPendingInit(0)
-	, myPendingBox(0)	// Deprecated!
-	, myPendingEvent(0)
 {}
 
 _MachineBase::~_MachineBase() {
@@ -243,13 +237,13 @@ void _MachineBase::shutdown() {
 	// Performs exit actions by going to Root (=StateSpecification) state.
 	setState(_StateSpecification::_getInstance(*this), &_theDefaultInitializer);
 
-	myCurrentState = 0;
+	myCurrentState = nullptr;
 }
 
 void _MachineBase::allocate(unsigned int count) {
 	myInstances = new _StateInstance *[count];
 	for (unsigned int i = 0; i < count; ++i)
-		myInstances[i] = 0;
+		myInstances[i] = nullptr;
 }
 
 void _MachineBase::free(unsigned int count) {
@@ -258,7 +252,7 @@ void _MachineBase::free(unsigned int count) {
 	while (i > 0) {
 		--i;
 		delete myInstances[i];
-		myInstances[i] = 0;
+		myInstances[i] = nullptr;
 	}
 }
 
@@ -266,8 +260,8 @@ void _MachineBase::free(unsigned int count) {
 void _MachineBase::clearHistoryDeep(unsigned int count, const _StateInstance & instance) const {
 	for (unsigned int i = 0; i < count; ++i) {
 		_StateInstance * s = myInstances[i];
-		if (s && s->isChild(instance))
-			s->setHistory(0);
+		if ((s != nullptr) && s->isChild(instance))
+			s->setHistory(nullptr);
 	}
 }
 
@@ -301,16 +295,16 @@ _StateInstance * _MachineBase::createClone(ID id, _StateInstance * original) {
 void _MachineBase::rattleOn() {
 	assert(myCurrentState);
 
-	while (myPendingState || myPendingEvent) {
+	while ((myPendingState != nullptr) || (myPendingEvent != nullptr)) {
 
 		// Loop here because init actions might change state again.
-		while (myPendingState) {
+		while (myPendingState != nullptr) {
 			MACHO_TRC3(myCurrentState->name(), "Transition to", myPendingState->name());
 
 #ifndef NDEBUG
 			// Entry/Exit actions may not dispatch events: set dummy event.
-			if (!myPendingEvent)
-				myPendingEvent = (_IEventBase *) &myPendingEvent;
+			if (myPendingEvent == nullptr)
+				myPendingEvent = reinterpret_cast<_IEventBase *>(&myPendingEvent);
 #endif
 
 			// Perform exit actions (which exactly depends on new state).
@@ -324,16 +318,16 @@ void _MachineBase::rattleOn() {
 			myCurrentState = myPendingState;
 
 			// Deprecated!
-			if (myPendingBox) {
+			if (myPendingBox != nullptr) {
 				myCurrentState->setBox(myPendingBox);
-				myPendingBox = 0;
+				myPendingBox = nullptr;
 			}
 
 			// Perform entry actions on next state's parents (which exactly depends on previous state).
 			myCurrentState->entry(*previous);
 			// State transition complete.
 			// Clear 'pending' information just now so that setState would assert in exits and entries, but not in init.
-			myPendingState = 0;
+			myPendingState = nullptr;
 
 			// Use initializer to call proper "init" action.
 			myPendingInit->execute(*myCurrentState);
@@ -345,21 +339,21 @@ void _MachineBase::rattleOn() {
 
 #ifndef NDEBUG
 			// Clear dummy event if need be
-			if (myPendingEvent == (_IEventBase *) &myPendingEvent)
-				myPendingEvent = 0;
+			if (myPendingEvent == reinterpret_cast<_IEventBase *>(&myPendingEvent))
+				myPendingEvent = nullptr;
 #endif
 		} // while (myPendingState)
 
-		if (myPendingEvent) {
+		if (myPendingEvent != nullptr) {
 			_IEventBase * event = myPendingEvent;
-			myPendingEvent = 0;
+			myPendingEvent = nullptr;
 			event->dispatch(*myCurrentState);
 			delete event;
 		}
 
 	} // while (myPendingState || myPendingEvent)
 
-	myPendingInit = 0;
+	myPendingInit = nullptr;
 
 } // rattleOn
 
@@ -370,17 +364,29 @@ void _MachineBase::rattleOn() {
 Key _AdaptingInitializer::adapt(Key key) {
 	ID id = static_cast<_KeyData *>(key)->id;
 	const _StateInstance * instance = myMachine.getInstance(id);
-	_StateInstance * history = 0;
+	_StateInstance * history = nullptr;
 
-	if (instance)
+	if (instance != nullptr)
 		history = instance->history();
 
-	return history ? history->key() : key;
+	return history != nullptr ? history->key() : key;
 }
 
 
+#if defined(__clang__)
+#if defined(_WIN32) || defined(_WIN64)
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wreserved-identifier"
+#endif
+#endif
 ////////////////////////////////////////////////////////////////////////////////
 // Singleton initializers.
 _DefaultInitializer _theDefaultInitializer;
 _HistoryInitializer _theHistoryInitializer;
+
+#if defined(__clang__)
+#if defined(_WIN32) || defined(_WIN64)
+#pragma clang diagnostic pop
+#endif
+#endif
 

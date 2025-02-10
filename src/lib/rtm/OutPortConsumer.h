@@ -23,23 +23,24 @@
 #include <coil/Factory.h>
 #include <rtm/DataPortStatus.h>
 #include <rtm/CdrBufferBase.h>
+#include <rtm/SystemLogger.h>
 
 // Why RtORB does not allow the following foward declaration?
 #if !defined(ORB_IS_RTORB) && !defined(ORB_IS_ORBEXPRESS)
 namespace SDOPackage
 {
   class NVList;
-};
+} // namespace SDOPackage
 #endif  // ORB_IS_RTORB
 
 namespace coil
 {
   class Properties;
-};
+} // namespace coil
 
 namespace RTC
 {
-  class ConnectorListeners;
+  class ConnectorListenersBase;
   class ConnectorInfo;
 
   /*!
@@ -169,10 +170,8 @@ namespace RTC
    * @endif
    */
   class OutPortConsumer
-    : public DataPortStatus
   {
   public:
-    DATAPORTSTATUS_ENUM
 
     /*!
      * @if jp
@@ -188,7 +187,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~OutPortConsumer(void) {}
+    virtual ~OutPortConsumer() = default;
 
     /*!
      * @if jp
@@ -277,7 +276,7 @@ namespace RTC
      * @endif
      */
     virtual void setListener(ConnectorInfo& info,
-                             ConnectorListeners* listeners) = 0;
+                             ConnectorListenersBase* listeners) = 0;
 
     /*!
      * @if jp
@@ -305,7 +304,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode get(cdrMemoryStream& data) = 0;
+    virtual DataPortStatus get(ByteData& data) = 0;
 
     /*!
      * @if jp
@@ -360,14 +359,6 @@ namespace RTC
     virtual void unsubscribeInterface(const SDOPackage::NVList& properties) = 0;
 
   protected:
-    /*!
-     * @if jp
-     * @brief ロガーストリーム
-     * @else
-     * @brief Logger stream
-     * @endif
-     */
-    mutable Logger rtclog;
 
     /*!
      * @if jp
@@ -411,11 +402,15 @@ namespace RTC
    * @brief OutPortConsumerFactory type definition
    * @endif
    */
-  typedef ::coil::GlobalFactory<OutPortConsumer> OutPortConsumerFactory;
+  using OutPortConsumerFactory = ::coil::GlobalFactory<OutPortConsumer>;
+} // namespace RTC
+
 
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
-  EXTERN template class DLL_PLUGIN ::coil::GlobalFactory<OutPortConsumer>;
+EXTERN template class DLL_PLUGIN coil::GlobalFactory<RTC::OutPortConsumer>;
+#elif defined(__GNUC__)
+EXTERN template class coil::GlobalFactory<RTC::OutPortConsumer>;
 #endif
-};  // namespace RTC
+
 #endif  // RTC_OUTPORTCONSUMER_H
 

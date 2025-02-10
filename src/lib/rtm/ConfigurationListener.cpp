@@ -29,7 +29,7 @@ namespace RTC
    * @class ConfigurationParamListener class
    * @endif
    */
-  ConfigurationParamListener::~ConfigurationParamListener() {}
+  ConfigurationParamListener::~ConfigurationParamListener() = default;
 
   /*!
    * @if jp
@@ -38,7 +38,7 @@ namespace RTC
    * @class ConfigurationSetNameListener class
    * @endif
    */
-  ConfigurationSetNameListener::~ConfigurationSetNameListener() {}
+  ConfigurationSetNameListener::~ConfigurationSetNameListener() = default;
 
   /*!
    * @if jp
@@ -47,7 +47,7 @@ namespace RTC
    * @class ConfigurationSetListener class
    * @endif
    */
-  ConfigurationSetListener::~ConfigurationSetListener() {}
+  ConfigurationSetListener::~ConfigurationSetListener() = default;
 
 
   //============================================================
@@ -58,19 +58,17 @@ namespace RTC
    * @class ConfigurationParamListener holder class
    * @endif
    */
-  ConfigurationParamListenerHolder::ConfigurationParamListenerHolder()
-  {
-  }
+  ConfigurationParamListenerHolder::ConfigurationParamListenerHolder() = default;
 
 
   ConfigurationParamListenerHolder::~ConfigurationParamListenerHolder()
   {
-    Guard guard(m_mutex);
-    for (int i(0), len(m_listeners.size()); i < len; ++i)
+    std::lock_guard<std::mutex> guard(m_mutex);
+    for (auto & listener : m_listeners)
       {
-        if (m_listeners[i].second)
+        if (listener.second)
           {
-            delete m_listeners[i].first;
+            delete listener.first;
           }
       }
   }
@@ -80,24 +78,24 @@ namespace RTC
   addListener(ConfigurationParamListener* listener,
               bool autoclean)
   {
-    Guard guard(m_mutex);
-    m_listeners.push_back(Entry(listener, autoclean));
+    std::lock_guard<std::mutex> guard(m_mutex);
+    m_listeners.emplace_back(listener, autoclean);
   }
 
 
   void ConfigurationParamListenerHolder::
   removeListener(ConfigurationParamListener* listener)
   {
-    Guard guard(m_mutex);
+    std::lock_guard<std::mutex> guard(m_mutex);
     std::vector<Entry>::iterator it(m_listeners.begin());
 
     for (; it != m_listeners.end(); ++it)
       {
-        if ((*it).first == listener)
+        if (it->first == listener)
           {
-            if ((*it).second)
+            if (it->second)
               {
-                delete (*it).first;
+                delete it->first;
               }
             m_listeners.erase(it);
             return;
@@ -110,10 +108,10 @@ namespace RTC
   void ConfigurationParamListenerHolder::notify(const char* config_set_name,
                                                 const char* config_param_name)
   {
-    Guard guard(m_mutex);
-    for (int i(0), len(m_listeners.size()); i < len; ++i)
+    std::lock_guard<std::mutex> guard(m_mutex);
+    for (auto & listener : m_listeners)
       {
-        m_listeners[i].first->operator()(config_set_name, config_param_name);
+        listener.first->operator()(config_set_name, config_param_name);
       }
   }
 
@@ -126,19 +124,17 @@ namespace RTC
    * @class ConfigurationSetListener holder class
    * @endif
    */
-  ConfigurationSetListenerHolder::ConfigurationSetListenerHolder()
-  {
-  }
+  ConfigurationSetListenerHolder::ConfigurationSetListenerHolder() = default;
 
 
   ConfigurationSetListenerHolder::~ConfigurationSetListenerHolder()
   {
-    Guard guard(m_mutex);
-    for (int i(0), len(m_listeners.size()); i < len; ++i)
+    std::lock_guard<std::mutex> guard(m_mutex);
+    for (auto & listener : m_listeners)
       {
-        if (m_listeners[i].second)
+        if (listener.second)
           {
-            delete m_listeners[i].first;
+            delete listener.first;
           }
       }
   }
@@ -148,24 +144,24 @@ namespace RTC
   addListener(ConfigurationSetListener* listener,
               bool autoclean)
   {
-    Guard guard(m_mutex);
-    m_listeners.push_back(Entry(listener, autoclean));
+    std::lock_guard<std::mutex> guard(m_mutex);
+    m_listeners.emplace_back(listener, autoclean);
   }
 
 
   void ConfigurationSetListenerHolder::
   removeListener(ConfigurationSetListener* listener)
   {
-    Guard guard(m_mutex);
+    std::lock_guard<std::mutex> guard(m_mutex);
     std::vector<Entry>::iterator it(m_listeners.begin());
 
     for (; it != m_listeners.end(); ++it)
       {
-        if ((*it).first == listener)
+        if (it->first == listener)
           {
-            if ((*it).second)
+            if (it->second)
               {
-                delete (*it).first;
+                delete it->first;
               }
             m_listeners.erase(it);
             return;
@@ -178,10 +174,10 @@ namespace RTC
   void ConfigurationSetListenerHolder::
   notify(const coil::Properties& config_set)
   {
-    Guard guard(m_mutex);
-    for (int i(0), len(m_listeners.size()); i < len; ++i)
+    std::lock_guard<std::mutex> guard(m_mutex);
+    for (auto & listener : m_listeners)
       {
-        m_listeners[i].first->operator()(config_set);
+        listener.first->operator()(config_set);
       }
   }
 
@@ -193,19 +189,17 @@ namespace RTC
    * @class ConfigurationSetNameListener holder class
    * @endif
    */
-  ConfigurationSetNameListenerHolder::ConfigurationSetNameListenerHolder()
-  {
-  }
+  ConfigurationSetNameListenerHolder::ConfigurationSetNameListenerHolder() = default;
 
 
   ConfigurationSetNameListenerHolder::~ConfigurationSetNameListenerHolder()
   {
-    Guard guard(m_mutex);
-    for (int i(0), len(m_listeners.size()); i < len; ++i)
+    std::lock_guard<std::mutex> guard(m_mutex);
+    for (auto & listener : m_listeners)
       {
-        if (m_listeners[i].second)
+        if (listener.second)
           {
-            delete m_listeners[i].first;
+            delete listener.first;
           }
       }
   }
@@ -214,23 +208,23 @@ namespace RTC
   void ConfigurationSetNameListenerHolder::
   addListener(ConfigurationSetNameListener* listener, bool autoclean)
   {
-    Guard guard(m_mutex);
-    m_listeners.push_back(Entry(listener, autoclean));
+    std::lock_guard<std::mutex> guard(m_mutex);
+    m_listeners.emplace_back(listener, autoclean);
   }
 
 
   void ConfigurationSetNameListenerHolder::
   removeListener(ConfigurationSetNameListener* listener)
   {
-    Guard guard(m_mutex);
+    std::lock_guard<std::mutex> guard(m_mutex);
     std::vector<Entry>::iterator it(m_listeners.begin());
     for (; it != m_listeners.end(); ++it)
       {
-        if ((*it).first == listener)
+        if (it->first == listener)
           {
-            if ((*it).second)
+            if (it->second)
               {
-                delete (*it).first;
+                delete it->first;
               }
             m_listeners.erase(it);
             return;
@@ -242,13 +236,219 @@ namespace RTC
 
   void ConfigurationSetNameListenerHolder::notify(const char* config_set_name)
   {
-    Guard guard(m_mutex);
-    for (int i(0), len(m_listeners.size()); i < len; ++i)
+    std::lock_guard<std::mutex> guard(m_mutex);
+    for (auto & listener : m_listeners)
       {
-        m_listeners[i].first->operator()(config_set_name);
+        listener.first->operator()(config_set_name);
       }
   }
 
-};  // namespace RTC
+  /*!
+   * @if jp
+   * @brief デストラクタ
+   * @else
+   * @brief Destructor
+   * @endif
+   */
+  ConfigurationListeners::~ConfigurationListeners() = default;
+
+  /*!
+   * @if jp
+   *
+   * @brief リスナーの追加
+   *
+   * 指定の種類のConfigurationParamListenerを追加する。
+   *
+   * @param type リスナの種類
+   * @param listener 追加するリスナ
+   * @param autoclean true:デストラクタで削除する,
+   *                  false:デストラクタで削除しない
+   * @return false：指定の種類のリスナが存在しない
+   * @else
+   *
+   * @brief Add the listener.
+   *
+   *
+   *
+   * @param type
+   * @param listener Added listener
+   * @param autoclean true:The listener is deleted at the destructor.,
+   *                  false:The listener is not deleted at the destructor.
+   * @return
+   * @endif
+   */
+  bool ConfigurationListeners::addListener(ConfigurationParamListenerType type, ConfigurationParamListener* listener, bool autoclean)
+  {
+      if(static_cast<uint8_t>(type) < configparam_.size())
+      {
+          configparam_[static_cast<uint8_t>(type)].addListener(listener, autoclean);
+          return true;
+      }
+      return false;
+  }
+  /*!
+   * @if jp
+   *
+   * @brief リスナーの削除
+   *
+   * 指定の種類のConfigurationParamListenerを削除する。
+   *
+   * @param type リスナの種類
+   * @param listener 削除するリスナ
+   * @return false：指定の種類のリスナが存在しない
+   *
+   * @else
+   *
+   * @brief Remove the listener.
+   *
+   *
+   * @param type
+   * @param listener
+   * @return
+   *
+   * @endif
+   */
+  bool ConfigurationListeners::removeListener(ConfigurationParamListenerType type, ConfigurationParamListener* listener)
+  {
+      if(static_cast<uint8_t>(type) < configparam_.size())
+      {
+          configparam_[static_cast<uint8_t>(type)].removeListener(listener);
+          return true;
+      }
+      return false;
+  }
+  /*!
+   * @if jp
+   *
+   * @brief リスナーの追加
+   *
+   * 指定の種類のConfigurationSetListenerを追加する。
+   *
+   * @param type リスナの種類
+   * @param listener 追加するリスナ
+   * @param autoclean true:デストラクタで削除する,
+   *                  false:デストラクタで削除しない
+   * @return false：指定の種類のリスナが存在しない
+   * @else
+   *
+   * @brief Add the listener.
+   *
+   *
+   *
+   * @param type
+   * @param listener Added listener
+   * @param autoclean true:The listener is deleted at the destructor.,
+   *                  false:The listener is not deleted at the destructor.
+   * @return
+   * @endif
+   */
+  bool ConfigurationListeners::addListener(ConfigurationSetListenerType type, ConfigurationSetListener* listener, bool autoclean)
+  {
+      if(static_cast<uint8_t>(type) < configset_.size())
+      {
+          configset_[static_cast<uint8_t>(type)].addListener(listener, autoclean);
+          return true;
+      }
+      return false;
+  }
+  /*!
+   * @if jp
+   *
+   * @brief リスナーの削除
+   *
+   * 指定の種類のConfigurationSetListenerを削除する。
+   *
+   * @param type リスナの種類
+   * @param listener 削除するリスナ
+   * @return false：指定の種類のリスナが存在しない
+   *
+   * @else
+   *
+   * @brief Remove the listener.
+   *
+   *
+   * @param type
+   * @param listener
+   * @return
+   *
+   * @endif
+   */
+  bool ConfigurationListeners::removeListener(ConfigurationSetListenerType type, ConfigurationSetListener* listener)
+  {
+      if(static_cast<uint8_t>(type) < configset_.size())
+      {
+          configset_[static_cast<uint8_t>(type)].removeListener(listener);
+          return true;
+      }
+      return false;
+  }
+  /*!
+   * @if jp
+   *
+   * @brief リスナーの追加
+   *
+   * 指定の種類のConfigurationSetNameListenerを追加する。
+   *
+   * @param type リスナの種類
+   * @param listener 追加するリスナ
+   * @param autoclean true:デストラクタで削除する,
+   *                  false:デストラクタで削除しない
+   * @return false：指定の種類のリスナが存在しない
+   * @else
+   *
+   * @brief Add the listener.
+   *
+   *
+   *
+   * @param type
+   * @param listener Added listener
+   * @param autoclean true:The listener is deleted at the destructor.,
+   *                  false:The listener is not deleted at the destructor.
+   * @return
+   * @endif
+   */
+  bool ConfigurationListeners::addListener(ConfigurationSetNameListenerType type, ConfigurationSetNameListener* listener, bool autoclean)
+  {
+      if(static_cast<uint8_t>(type) < configsetname_.size())
+      {
+          configsetname_[static_cast<uint8_t>(type)].addListener(listener, autoclean);
+          return true;
+      }
+      return false;
+  }
+  /*!
+   * @if jp
+   *
+   * @brief リスナーの削除
+   *
+   * 指定の種類のConfigurationSetNameListenerを削除する。
+   *
+   * @param type リスナの種類
+   * @param listener 削除するリスナ
+   * @return false：指定の種類のリスナが存在しない
+   *
+   * @else
+   *
+   * @brief Remove the listener.
+   *
+   *
+   * @param type
+   * @param listener
+   * @return
+   *
+   * @endif
+   */
+  bool ConfigurationListeners::removeListener(ConfigurationSetNameListenerType type, ConfigurationSetNameListener* listener)
+  {
+      if(static_cast<uint8_t>(type) < configsetname_.size())
+      {
+          configsetname_[static_cast<uint8_t>(type)].removeListener(listener);
+          return true;
+      }
+      return false;
+  }
+
+
+} // namespace RTC
 
 

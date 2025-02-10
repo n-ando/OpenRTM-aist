@@ -26,16 +26,12 @@
 #include <rtm/ExecutionContextProfile.h>
 #include <rtm/ExecutionContextWorker.h>
 
-#ifdef WIN32
-#pragma warning( disable : 4290 )
-#endif
-
 #define DEFAULT_EXECUTION_RATE 1000
 
 namespace coil
 {
   class Properties;
-}
+} // namespace coil
 
 namespace RTC
 {
@@ -371,14 +367,14 @@ namespace RTC
   public:
     /*!
      * @if jp
-     * @brief 仮想デストラクタ
+     * @brief コンストラクタ
      *
-     * 仮想デストラクタ
+     * コンストラクタ
      *
      * @else
-     * @brief Virtual Destructor
+     * @brief Constructor
      *
-     * Virtual Destructor
+     * Constructor
      *
      * @endif
      */
@@ -397,7 +393,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~ExecutionContextBase(void);
+    virtual ~ExecutionContextBase();
 
     /*!
      * @if jp
@@ -484,7 +480,7 @@ namespace RTC
      *
      * @endif
      */
-    RTC::ReturnCode_t start(void);
+    RTC::ReturnCode_t start();
 
     /*!
      * @if jp
@@ -512,7 +508,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual RTC::ReturnCode_t stop(void);
+    virtual RTC::ReturnCode_t stop();
 
     /*!
      * @if jp
@@ -534,8 +530,8 @@ namespace RTC
      *
      * @endif
      */
-    double getRate(void) const;
-    coil::TimeValue getPeriod(void) const;
+    double getRate() const;
+    std::chrono::nanoseconds getPeriod() const;
 
     /*!
      * @if jp
@@ -774,7 +770,7 @@ namespace RTC
      * @endif
      */
     RTC::LifeCycleState getComponentState(RTC::LightweightRTObject_ptr comp);
-    const char* getStateString(RTC::LifeCycleState state);
+    static const char* getStateString(RTC::LifeCycleState state);
 
     /*!
      * @if jp
@@ -795,7 +791,7 @@ namespace RTC
      *
      * @endif
      */
-    RTC::ExecutionKind getKind(void) const;
+    RTC::ExecutionKind getKind() const;
 
     /*!
      * @if jp
@@ -819,7 +815,7 @@ namespace RTC
      *
      * @endif
      */
-    RTC::ExecutionContextProfile* getProfile(void);
+    RTC::ExecutionContextProfile* getProfile();
 
     //============================================================
     // Delegated functions to ExecutionContextProfile
@@ -863,7 +859,7 @@ namespace RTC
      *
      * @endif
      */
-    RTC::ExecutionContextService_ptr getObjRef(void) const;
+    RTC::ExecutionContextService_ptr getObjRef() const;
 
     /*!
      * @if jp
@@ -887,7 +883,7 @@ namespace RTC
      *
      * @endif
      */
-    const char* getKindString(RTC::ExecutionKind kind) const;
+    static const char* getKindString(RTC::ExecutionKind kind) ;
 
     /*!
      * @if jp
@@ -944,7 +940,7 @@ namespace RTC
      * @return a reference of the owner RT-Component
      * @endif
      */
-    const RTC::RTObject_ptr getOwner() const;
+    RTC::RTObject_ptr getOwner() const;
 
     /*!
      * @if jp
@@ -964,7 +960,11 @@ namespace RTC
      *
      * @endif
      */
+#ifndef ORB_IS_RTORB
     const RTC::RTCList& getComponentList() const;
+#else
+    const RTC_RTCList& getComponentList() const;
+#endif
 
     /*!
      * @if jp
@@ -1007,7 +1007,7 @@ namespace RTC
      *
      * @endif
      */
-    const coil::Properties getProperties() const;
+    coil::Properties getProperties() const;
 
     /*!
      * @if jp
@@ -1026,7 +1026,7 @@ namespace RTC
      *
      * @endif
      */
-    const RTC::ExecutionContextProfile& getProfile(void) const;
+    const RTC::ExecutionContextProfile& getProfile() const;
     // end of delegated functions to ExecutionContextProfile
     //============================================================
 
@@ -1036,19 +1036,19 @@ namespace RTC
     bool isAllCurrentState(RTC::LifeCycleState state)
     {
       return m_worker.isAllCurrentState(state);
-    };
+    }
     bool isAllNextState(RTC::LifeCycleState state)
     {
       return m_worker.isAllNextState(state);
-    };
+    }
     bool isOneOfCurrentState(RTC::LifeCycleState state)
     {
       return m_worker.isOneOfCurrentState(state);
-    };
+    }
     bool isOneOfNextState(RTC::LifeCycleState state)
     {
       return m_worker.isOneOfNextState(state);
-    };
+    }
 
     void invokeWorker()       { m_worker.invokeWorker(); }
     void invokeWorkerPreDo()  { m_worker.invokeWorkerPreDo(); }
@@ -1067,73 +1067,73 @@ namespace RTC
     // template virtual functions getting/setting execution rate
     virtual double onGetRate(double rate) const { return rate; }
     virtual double onSettingRate(double rate) { return rate; }
-    virtual RTC::ReturnCode_t onSetRate(double rate) { return RTC::RTC_OK; }
+    virtual RTC::ReturnCode_t onSetRate(double  /*rate*/) { return RTC::RTC_OK; }
 
     // template virtual functions adding/removing component
     virtual RTC::ReturnCode_t
-    onAddingComponent(RTC::LightweightRTObject_ptr rtobj)
+    onAddingComponent(RTC::LightweightRTObject_ptr  /*rtobj*/)
     {
       return RTC::RTC_OK;
     }
     virtual RTC::ReturnCode_t
-    onAddedComponent(RTC::LightweightRTObject_ptr rtobj)
+    onAddedComponent(RTC::LightweightRTObject_ptr  /*rtobj*/)
     {
       return RTC::RTC_OK;
     }
     virtual RTC::ReturnCode_t
-    onRemovingComponent(RTC::LightweightRTObject_ptr rtobj)
+    onRemovingComponent(RTC::LightweightRTObject_ptr  /*rtobj*/)
     {
       return RTC::RTC_OK;
     }
     virtual RTC::ReturnCode_t
-    onRemovedComponent(RTC::LightweightRTObject_ptr rtobj)
+    onRemovedComponent(RTC::LightweightRTObject_ptr  /*rtobj*/)
     {
       return RTC::RTC_OK;
     }
 
     // template virtual functions related to activation/deactivation/reset
     virtual RTC::ReturnCode_t
-    onActivating(RTC::LightweightRTObject_ptr comp)
+    onActivating(RTC::LightweightRTObject_ptr  /*comp*/)
     {
       return RTC::RTC_OK;
     }
     virtual RTC::ReturnCode_t
-    onWaitingActivated(RTC_impl::RTObjectStateMachine* comp, long int count)
+    onWaitingActivated(RTC_impl::RTObjectStateMachine*  /*comp*/, long int  /*count*/)
     {
       return RTC::RTC_OK;
     }
     virtual RTC::ReturnCode_t
-    onActivated(RTC_impl::RTObjectStateMachine* comp,
-                                     long int count)
+    onActivated(RTC_impl::RTObjectStateMachine*  /*comp*/,
+                                     long int  /*count*/)
     {
       return RTC::RTC_OK;
     }
     virtual RTC::ReturnCode_t
-    onDeactivating(RTC::LightweightRTObject_ptr comp)
+    onDeactivating(RTC::LightweightRTObject_ptr  /*comp*/)
     {
       return RTC::RTC_OK;
     }
     virtual RTC::ReturnCode_t
-    onWaitingDeactivated(RTC_impl::RTObjectStateMachine* comp, long int count)
+    onWaitingDeactivated(RTC_impl::RTObjectStateMachine*  /*comp*/, long int  /*count*/)
     {
       return RTC::RTC_OK;
     }
     virtual RTC::ReturnCode_t
-    onDeactivated(RTC_impl::RTObjectStateMachine* comp, long int count)
+    onDeactivated(RTC_impl::RTObjectStateMachine*  /*comp*/, long int  /*count*/)
     {
       return RTC::RTC_OK;
     }
-    virtual RTC::ReturnCode_t onResetting(RTC::LightweightRTObject_ptr comp)
-    {
-      return RTC::RTC_OK;
-    }
-    virtual RTC::ReturnCode_t
-    onWaitingReset(RTC_impl::RTObjectStateMachine* comp, long int count)
+    virtual RTC::ReturnCode_t onResetting(RTC::LightweightRTObject_ptr  /*comp*/)
     {
       return RTC::RTC_OK;
     }
     virtual RTC::ReturnCode_t
-    onReset(RTC_impl::RTObjectStateMachine* comp, long int count)
+    onWaitingReset(RTC_impl::RTObjectStateMachine*  /*comp*/, long int  /*count*/)
+    {
+      return RTC::RTC_OK;
+    }
+    virtual RTC::ReturnCode_t
+    onReset(RTC_impl::RTObjectStateMachine*  /*comp*/, long int  /*count*/)
     {
       return RTC::RTC_OK;
     }
@@ -1180,7 +1180,7 @@ namespace RTC
      * @endif
      */
     bool setTimeout(coil::Properties& props, const char* key,
-                    coil::TimeValue& timevalue);
+                    std::chrono::nanoseconds& timevalue);
 
     RTC::ReturnCode_t waitForActivated(RTC_impl::RTObjectStateMachine* rtobj);
     RTC::ReturnCode_t waitForDeactivated(RTC_impl::RTObjectStateMachine* rtobj);
@@ -1192,24 +1192,22 @@ namespace RTC
     RTC_impl::ExecutionContextWorker m_worker;
     RTC_impl::ExecutionContextProfile m_profile;
 
-    coil::TimeValue m_activationTimeout;
-    coil::TimeValue m_deactivationTimeout;
-    coil::TimeValue m_resetTimeout;
+    std::chrono::nanoseconds m_activationTimeout;
+    std::chrono::nanoseconds m_deactivationTimeout;
+    std::chrono::nanoseconds m_resetTimeout;
 
     bool m_syncActivation;
     bool m_syncDeactivation;
     bool m_syncReset;
   };  // class ExecutionContextBase
 
-  typedef coil::GlobalFactory<ExecutionContextBase> ExecutionContextFactory;
-
-#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
-  EXTERN template class DLL_PLUGIN coil::GlobalFactory<ExecutionContextBase>;
-#endif
-};  // namespace RTC
+  using ExecutionContextFactory = coil::GlobalFactory<ExecutionContextBase>;
+} // namespace RTC
 
 #ifdef WIN32
-#pragma warning( default : 4290 )
+EXTERN template class DLL_PLUGIN coil::GlobalFactory<RTC::ExecutionContextBase>;
+#elif defined(__GNUC__)
+EXTERN template class coil::GlobalFactory<RTC::ExecutionContextBase>;
 #endif
 
 #endif  // RTC_EXECUTIONCONTEXTBASE_H

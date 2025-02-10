@@ -26,8 +26,8 @@
 namespace RTC
 {
 
-  typedef ExecutionContextBase* (*ECNewFunc)();
-  typedef void (*ECDeleteFunc)(ExecutionContextBase* ec);
+  using ECNewFunc = ExecutionContextBase* (*)();
+  using ECDeleteFunc = void (*)(ExecutionContextBase*);
 
   /*!
    * @if jp
@@ -48,10 +48,10 @@ namespace RTC
    *
    * @endif
    */
-  template <class _New>
+  template <class T_New>
   ExecutionContextBase* ECCreate()
   {
-    return new _New();
+    return new T_New();
   }
 
   /*!
@@ -73,7 +73,7 @@ namespace RTC
    *
    * @endif
    */
-  template <class _Delete>
+  template <class T_Delete>
   void ECDelete(ExecutionContextBase* ec)
   {
     delete ec;
@@ -130,7 +130,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~ECFactoryBase(void) {}
+    virtual ~ECFactoryBase() = default;
 
     /*!
      * @if jp
@@ -264,7 +264,7 @@ namespace RTC
      *
      * @endif
      */
-    ~ECFactoryCXX(void);
+    ~ECFactoryCXX() override;
 
     /*!
      * @if jp
@@ -285,7 +285,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual const char* name();
+    const char* name() override;
 
     /*!
      * @if jp
@@ -306,7 +306,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ExecutionContextBase* create();
+    ExecutionContextBase* create() override;
 
     /*!
      * @if jp
@@ -327,7 +327,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual void destroy(ExecutionContextBase* comp);
+    void destroy(ExecutionContextBase* ec) override;
 
   protected:
     /*!
@@ -357,5 +357,5 @@ namespace RTC
      */
     ECDeleteFunc m_Delete;
   };
-};  // namespace RTC
+} // namespace RTC
 #endif  // RTC_ECFACTORY_H

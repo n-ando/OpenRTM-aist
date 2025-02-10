@@ -25,11 +25,10 @@ namespace RTM
   //============================================================
   // NamingServiceNumberingPolicy
   //============================================================
-	NamingServiceNumberingPolicy::NamingServiceNumberingPolicy()
-		: m_num(0)
-	{
-		m_mgr = &RTC::Manager::instance();
-	}
+  NamingServiceNumberingPolicy::NamingServiceNumberingPolicy()
+    {
+      m_mgr = &RTC::Manager::instance();
+    }
   /*!
    * @if jp
    * @brief オブジェクト生成時の名称作成
@@ -37,28 +36,27 @@ namespace RTM
    * @brief Create the name when creating objects
    * @endif
    */
-	std::string NamingServiceNumberingPolicy::onCreate(void* obj)
-  {
-	  int num = 0;
-	  while (true)
-	  {
-		  std::string num_str = coil::otos<int>(num);
-		  RTC::RTObject_impl *rtobj = (RTC::RTObject_impl *)obj;
+  std::string NamingServiceNumberingPolicy::onCreate(void* obj)
+    {
+      int num = 0;
+      while (true)
+        {
+          std::string num_str = coil::otos<int>(num);
+          RTC::RTObject_impl *rtobj = static_cast<RTC::RTObject_impl *>(obj);
 
+          std::string name = rtobj->getTypeName() + num_str;
 
-		  std::string name = rtobj->getTypeName() + num_str;
-
-		  if (!find(name))
-		  {
-			  return num_str;
-		  }
-		  else
-		  {
-			  num++;
-		  }
-	  }
-	  return  coil::otos<int>(num);
-  }
+          if (!find(name))
+            {
+              return num_str;
+            }
+          else
+            {
+                  num++;
+            }
+        }
+      return  coil::otos<int>(num);
+    }
   
   /*!
    * @if jp
@@ -67,62 +65,55 @@ namespace RTM
    * @brief Delete the name when deleting objects
    * @endif
    */
-	void NamingServiceNumberingPolicy::onDelete(void* obj)
-  {
-  }
+  void NamingServiceNumberingPolicy::onDelete(void* /*obj*/)
+    {
+    }
   
-	/*!
-	* @if jp
-	*
-	* @brief オブジェクトの検索
-	*
-	* 指定名のインスタンス名のRTCを検索し、
-	* 　　　　一致するRTCが存在する場合はTrueを返す
-	*
-	* @param name 検索対象オブジェクトの名前
-	*
-	* @return 判定
-	*
-	* @else
-	*
-	* @brief
-	*
-	*
-	* @param name
-	*
-	* @return
-	*
-	* @endif
-	*/
-	bool NamingServiceNumberingPolicy::find(std::string name)
-  {
-	  RTC::RTCList rtcs;
-	  std::string rtc_name = "rtcname://*/*/";
-	  rtc_name += name;
+  /*!
+   * @if jp
+   *
+   * @brief オブジェクトの検索
+   *
+   * 指定名のインスタンス名のRTCを検索し、
+   * 　　　　一致するRTCが存在する場合はTrueを返す
+   *
+   * @param name 検索対象オブジェクトの名前
+   *
+   * @return 判定
+   *
+   * @else
+   *
+   * @brief
+   *
+   *
+   * @param name
+   *
+   * @return
+   *
+   * @endif
+   */
+  bool NamingServiceNumberingPolicy::find(std::string name)
+    {
+      RTC::RTCList rtcs;
+      std::string rtc_name = "rtcname://*/*/";
+      rtc_name += name;
 
-	  rtcs = m_mgr->getNaming()->string_to_component(rtc_name);
+      rtcs = m_mgr->getNaming()->string_to_component(rtc_name);
 
-	  if (rtcs.length() > 0)
-	  {
-		  return true;
-	  }
-	  else
-	  {
-		  return false;
-	  }
-  }
-}; //namespace RTM  
+      return rtcs.length() > 0;
+    }
+} //namespace RTM 
 
 extern "C"
 {
-	void NamingServiceNumberingPolicyInit()
-  {
+  void NamingServiceNumberingPolicyInit()
+    {
     ::RTM::NumberingPolicyFactory::
       instance().addFactory("ns_unique",
                             ::coil::Creator< ::RTM::NumberingPolicyBase,
-							::RTM::NamingServiceNumberingPolicy>,
+                                                      ::RTM::NamingServiceNumberingPolicy>,
                             ::coil::Destructor< ::RTM::NumberingPolicyBase,
-							::RTM::NamingServiceNumberingPolicy>);
-  }
-};
+                                                      ::RTM::NamingServiceNumberingPolicy>);
+    }
+}
 

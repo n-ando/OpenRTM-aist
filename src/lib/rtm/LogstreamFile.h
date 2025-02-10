@@ -29,6 +29,366 @@ namespace RTC
   /*!
    * @if jp
    *
+   * @class FileStreamBase
+   * @brief ファイル出力のストリーミングバッファ基底クラス
+   *
+   * @else
+   *
+   * @class FileStreamBase
+   * @brief 
+   *
+   * @endif
+   */
+  class FileStreamBase : public coil::LogStreamBuffer
+  {
+  public:
+      /*!
+       * @if jp
+       *
+       * @brief コンストラクタ
+       *
+       * コンストラクタ
+       *
+       *
+       * @else
+       *
+       * @brief Constructor
+       *
+       * Constructor
+       *
+       *
+       * @endif
+       */
+      FileStreamBase() = default;
+      /*!
+       * @if jp
+       *
+       * @brief デストラクタ
+       *
+       * デストラクタ。
+       *
+       * @else
+       *
+       * @brief Destructor
+       *
+       * Destructor
+       *
+       * @endif
+       */
+      ~FileStreamBase() override = default;
+      /*!
+       * @if jp
+       *
+       * @brief ログメッセージのヘッダーの設定
+       *
+       * ログにログレベル、名前、時間、エスケープシケーンスを設定する。
+       *
+       * @param level レベル
+       * @param name 名前
+       * @param date 時間
+       * @param es_enable エスケープシケーンスの有無
+       *
+       *
+       * @else
+       *
+       * @brief 
+       *
+       * @param level log level
+       * @param name log name
+       * @param date time
+       * @param es_enable enable escape sequence
+       *
+       *
+       * @endif
+       */
+      void header(int level, const std::string &name, const std::string &date, bool es_enable = false);
+
+      /*!
+       * @if jp
+       *
+       * @brief 標準出力のバッファのフラッシュ
+       *
+       * @else
+       *
+       * @brief cout buffer flush
+       *
+       *
+       * @endif
+       */
+      void flush() override;
+      /*!
+       * @if jp
+       *
+       * @brief エスケープシーケンスを有効にする
+       *
+       *
+       *
+       * @else
+       *
+       * @brief
+       *
+       *
+       *
+       *
+       *
+       * @endif
+       */
+      void enableEscapeSequence();
+      /*!
+       * @if jp
+       *
+       * @brief エスケープシーケンスを無効にする
+       *
+       *
+       *
+       * @else
+       *
+       * @brief
+       *
+       *
+       *
+       *
+       *
+       * @endif
+       */
+      void disableEscapeSequence();
+
+      /*!
+       * @if jp
+       *
+       * @brief ログの出力
+       *
+       * 指定したメッセージのログを出力する
+       *
+       * @param level ログレベル
+       * @param name 名前
+       * @param date 時間
+       * @param mes メッセージ
+       *
+       *
+       * @else
+       *
+       * @brief log output
+       *
+       *
+       *
+       * @param level log level
+       * @param name log name
+       * @param date time
+       * @param mes message
+       *
+       * @endif
+       */
+      void write(int level, const std::string &name, const std::string &date, const std::string &mes) override;
+      
+  protected:
+      std::basic_ostream<char> *m_stream;
+      bool m_esEnable;
+  };
+
+  /*!
+   * @if jp
+   *
+   * @class StdoutStream
+   * @brief 標準出力のストリーミングラッパークラス
+   *
+   * @else
+   *
+   * @class StdoutStream
+   * @brief 
+   *
+   * @endif
+   */
+  class StdoutStream : public FileStreamBase
+  {
+  public:
+      /*!
+       * @if jp
+       *
+       * @brief コンストラクタ
+       *
+       * コンストラクタ
+       *
+       *
+       * @else
+       *
+       * @brief Constructor
+       *
+       * Constructor
+       *
+       *
+       * @endif
+       */
+      StdoutStream();
+      /*!
+       * @if jp
+       *
+       * @brief デストラクタ
+       *
+       * デストラクタ。
+       *
+       * @else
+       *
+       * @brief Destructor
+       *
+       * Destructor
+       *
+       * @endif
+       */
+      ~StdoutStream() override;
+
+      
+      
+  };
+
+  /*!
+   * @if jp
+   *
+   * @class StderrStream
+   * @brief 標準エラー出力のストリーミングラッパークラス
+   *
+   * @else
+   *
+   * @class StderrStream
+   * @brief 
+   *
+   * @endif
+   */
+  class StderrStream : public FileStreamBase
+  {
+  public:
+      /*!
+       * @if jp
+       *
+       * @brief コンストラクタ
+       *
+       * コンストラクタ
+       *
+       *
+       * @else
+       *
+       * @brief Constructor
+       *
+       * Constructor
+       *
+       *
+       * @endif
+       */
+      StderrStream();
+      /*!
+       * @if jp
+       *
+       * @brief デストラクタ
+       *
+       * デストラクタ。
+       *
+       * @else
+       *
+       * @brief Destructor
+       *
+       * Destructor
+       *
+       * @endif
+       */
+      ~StderrStream() override;
+      
+      
+
+  };
+
+  /*!
+   * @if jp
+   *
+   * @class FileStream
+   * @brief ファイル出力のストリーミングラッパークラス
+   *
+   * @else
+   *
+   * @class FileStream
+   * @brief
+   *
+   * @endif
+   */
+  class FileStream : public FileStreamBase
+  {
+  public:
+      /*!
+       * @if jp
+       *
+       * @brief コンストラクタ
+       *
+       * コンストラクタ
+       *
+       * @param filename ファイル名
+       *
+       *
+       * @else
+       *
+       * @brief Constructor
+       *
+       * Constructor
+       *
+       * @param filename
+       *
+       *
+       * @endif
+       */
+      FileStream(const std::string& filename);
+      /*!
+       * @if jp
+       *
+       * @brief デストラクタ
+       *
+       * デストラクタ。
+       *
+       * @else
+       *
+       * @brief Destructor
+       *
+       * Destructor
+       *
+       * @endif
+       */
+      ~FileStream() override;
+      /*!
+       * @if jp
+       *
+       * @brief ファイルを開くことに成功したかの確認
+       *
+       * @return 成功(True)
+       *
+       * @else
+       *
+       * @brief 
+       *
+       * 
+       *
+       * @endif
+       */
+      bool is_open();
+      /*!
+       * @if jp
+       *
+       * @brief ファイルを閉じる
+       *
+       *
+       * @else
+       *
+       * @brief close file
+       *
+       *
+       *
+       * @endif
+       */
+      void close();
+      
+      
+  private:
+      std::filebuf m_fileout;
+  };
+  /*!
+   * @if jp
+   *
    * @class PublisherBase
    *
    * @brief Publisher 基底クラス
@@ -78,7 +438,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~LogstreamFile(void);
+    ~LogstreamFile() override;
 
     /*!
      * @if jp
@@ -101,7 +461,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual bool init(const coil::Properties& prop);
+    bool init(const coil::Properties& prop) override;
 
     /*!
      * @if jp
@@ -122,19 +482,19 @@ namespace RTC
      *
      * @endif
      */
-    virtual StreambufType* getStreamBuffer();
+    coil::LogStreamBuffer* getStreamBuffer() override;
 
   protected:
     static coil::vstring s_files;
     std::string m_fileName;
-    StreambufType* m_stdout;
-    std::filebuf* m_fileout;
+    FileStreamBase* m_stdout{nullptr};
+    FileStream* m_fileout{nullptr};
   };
-}; // namespace RTC
+} // namespace RTC
 
 extern "C"
 {
-  void DLL_EXPORT LogstreamFileInit();
-};
+  void LogstreamFileInit();
+}
 
 #endif // RTC_LOGSTREAMFILE_H

@@ -19,10 +19,6 @@
 
 #include <rtm/InPortSHMProvider.h>
 
-#ifdef WIN32
-#pragma warning( disable : 4290 )
-#endif
-
 namespace RTC
 {
   /*!
@@ -32,9 +28,7 @@ namespace RTC
    * @brief Constructor
    * @endif
    */
-  InPortSHMProvider::InPortSHMProvider(void)
-   : m_buffer(0),
-     m_connector(NULL)
+  InPortSHMProvider::InPortSHMProvider()
   {
     // PortProfile setting
     setInterfaceType("shared_memory");
@@ -42,21 +36,21 @@ namespace RTC
     // ConnectorProfile setting
 
 #ifdef ORB_IS_OMNIORB
-    ::RTC::Manager::instance().theShortCutPOA()->activate_object(this);
+    PortableServer::ObjectId_var oid = ::RTC::Manager::instance().theShortCutPOA()->activate_object(this);
 #endif
 
-	m_objref = this->_this();
+    m_objref = this->_this();
 
     // set InPort's reference
     CORBA::ORB_var orb = ::RTC::Manager::instance().getORB();
-	CORBA::String_var ior = orb->object_to_string(m_objref.in());
+    CORBA::String_var ior = orb->object_to_string(m_objref.in());
     CORBA_SeqUtil::
       push_back(m_properties,
                 NVUtil::newNV("dataport.corba_cdr.inport_ior", ior.in()));
 
     CORBA_SeqUtil::
       push_back(m_properties,
-	  NVUtil::newNV("dataport.corba_cdr.inport_ref", m_objref));
+        NVUtil::newNV("dataport.corba_cdr.inport_ref", m_objref));
 
   }
   
@@ -67,12 +61,9 @@ namespace RTC
    * @brief Destructor
    * @endif
    */
-  InPortSHMProvider::~InPortSHMProvider(void)
-  {
+  InPortSHMProvider::~InPortSHMProvider() = default;
 
-  }
-
-  void InPortSHMProvider::init(coil::Properties& prop)
+  void InPortSHMProvider::init(coil::Properties& /*prop*/)
   {
   }
 
@@ -84,7 +75,7 @@ namespace RTC
    * @endif
    */
   void InPortSHMProvider::
-  setBuffer(BufferBase<cdrMemoryStream>* buffer)
+  setBuffer(BufferBase<ByteData>* buffer)
   {
     m_buffer = buffer;
   }
@@ -97,7 +88,7 @@ namespace RTC
    * @endif
    */
   void InPortSHMProvider::setListener(ConnectorInfo& info,
-                                           ConnectorListeners* listeners)
+                                           ConnectorListenersBase* listeners)
   {
     m_profile = info;
     m_listeners = listeners;
@@ -106,7 +97,7 @@ namespace RTC
 
   void InPortSHMProvider::setConnector(InPortConnector* connector)
   {
-	  m_connector = connector;
+    m_connector = connector;
   }
 
 
@@ -120,41 +111,34 @@ namespace RTC
    */
   ::OpenRTM::PortStatus
   InPortSHMProvider::put()
-    throw (CORBA::SystemException)
   {
     RTC_PARANOID(("InPortSHMProvider::put()"));
-    if (m_connector == NULL)
-	{
-		return ::OpenRTM::PORT_ERROR;
-	}
-	
-	cdrMemoryStream cdr;
-	bool endian_type = m_connector->isLittleEndian();
+    if (m_connector == nullptr)
+    {
+      return ::OpenRTM::PORT_ERROR;
+    }
 
-	try
-	{
-		setEndian(endian_type);
-		read(cdr);
-		
-#ifdef ORB_IS_ORBEXPRESS
-		RTC_PARANOID(("received data size: %d", cdr.cdr.size_written()));
-#elif defined(ORB_IS_TAO)
-		RTC_PARANOID(("received data size: %d", cdr.cdr.total_length()));
-#else
-		RTC_PARANOID(("received data size: %d", cdr.bufSize()));
-#endif
-		
-	}
-	catch (...)
-	{
+    bool endian_type = m_connector->isLittleEndian();
 
-	}
-	
-	onReceived(cdr);
-	
-    BufferStatus::Enum ret = m_connector->write(cdr);
-	
-	return convertReturn(ret, cdr);
+    try
+    {
+      setEndian(endian_type);
+      read(m_cdr);
+
+      RTC_PARANOID(("received data size: %d", m_cdr.getDataLength()));
+
+
+    }
+    catch (...)
+    {
+
+    }
+
+    onReceived(m_cdr);
+
+    BufferStatus ret = m_connector->write(m_cdr);
+
+    return convertReturn(ret, m_cdr);
   }
 
   /*!
@@ -165,43 +149,38 @@ namespace RTC
    * @endif
    */
   ::OpenRTM::PortStatus
-  InPortSHMProvider::convertReturn(BufferStatus::Enum status,
-                                        cdrMemoryStream& data)
+  InPortSHMProvider::convertReturn(BufferStatus status,
+                                        ByteData& data)
   {
     switch(status)
       {
-      case BufferStatus::BUFFER_OK:
+      case BufferStatus::OK:
         onBufferWrite(data);
         return ::OpenRTM::PORT_OK;
-        break;
 
       case BufferStatus::BUFFER_ERROR:
         onReceiverError(data);
         return ::OpenRTM::PORT_ERROR;
-        break;
 
-      case BufferStatus::BUFFER_FULL:
+      case BufferStatus::FULL:
         onBufferFull(data);
         onReceiverFull(data);
         return ::OpenRTM::BUFFER_FULL;
-        break;
 
-      case BufferStatus::BUFFER_EMPTY:
+      case BufferStatus::EMPTY:
         // never come here
         return ::OpenRTM::BUFFER_EMPTY;
-        break;
 
       case BufferStatus::PRECONDITION_NOT_MET:
         onReceiverError(data);
         return ::OpenRTM::PORT_ERROR;
-        break;
 
       case BufferStatus::TIMEOUT:
         onBufferWriteTimeout(data);
         onReceiverTimeout(data);
         return ::OpenRTM::BUFFER_TIMEOUT;
-        break;
 
+      case BufferStatus::NOT_SUPPORTED: /* FALLTHROUGH */
       default:
         return ::OpenRTM::UNKNOWN_ERROR;
       }
@@ -209,7 +188,7 @@ namespace RTC
 
   }
 
-};     // namespace RTC
+} // namespace RTC
 
 
 extern "C"
@@ -230,4 +209,4 @@ extern "C"
                        ::coil::Destructor< ::RTC::InPortProvider,
                                            ::RTC::InPortSHMProvider>);
   }
-};
+}

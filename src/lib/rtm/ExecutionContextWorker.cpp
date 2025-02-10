@@ -16,8 +16,6 @@
  *
  */
 
-#include <coil/Time.h>
-#include <coil/TimeValue.h>
 #include <rtm/RTObject.h>
 #include <rtm/RTObjectStateMachine.h>
 #include <rtm/ExecutionContextWorker.h>
@@ -36,8 +34,6 @@ namespace RTC_impl
    * @endif
    */
   ExecutionContextWorker::ExecutionContextWorker()
-    : rtclog("ec_worker"),
-      m_running(false)
   {
     RTC_TRACE(("ExecutionContextWorker()"));
   }
@@ -92,16 +88,16 @@ namespace RTC_impl
   RTC::ReturnCode_t ExecutionContextWorker::start()
   {
     RTC_TRACE(("start()"));
-    Guard m_guard(m_mutex);
+    std::lock_guard<std::mutex> m_guard(m_mutex);
     if (m_running)
       {
         RTC_WARN(("ExecutionContext is already running."));
         return RTC::PRECONDITION_NOT_MET;
       }
     // invoke ComponentAction::on_startup for each comps.
-    for (size_t i(0); i < m_comps.size(); ++i)
+    for (auto & comp : m_comps)
       {
-        m_comps[i]->onStartup();
+        comp->onStartup();
       }
     RTC_DEBUG(("%d components started.", m_comps.size()));
     // change EC thread state
@@ -120,7 +116,7 @@ namespace RTC_impl
   RTC::ReturnCode_t ExecutionContextWorker::stop()
   {
     RTC_TRACE(("stop()"));
-    Guard m_guard(m_mutex);
+    std::lock_guard<std::mutex> m_guard(m_mutex);
     if (!m_running)
       {
         RTC_WARN(("ExecutionContext is already stopped."));
@@ -130,9 +126,9 @@ namespace RTC_impl
     m_running = false;
 
     // invoke on_shutdown for each comps.
-    for (size_t i(0); i < m_comps.size(); ++i)
+    for (auto & comp : m_comps)
       {
-        m_comps[i]->onShutdown();
+        comp->onShutdown();
       }
     return RTC::RTC_OK;
   }
@@ -149,9 +145,9 @@ namespace RTC_impl
     RTC_TRACE(("rateChanged()"));
     // invoke on_shutdown for each comps.
     RTC::ReturnCode_t ret(RTC::RTC_OK);
-    for (size_t i(0); i < m_comps.size(); ++i)
+    for (auto & comp : m_comps)
       {
-        RTC::ReturnCode_t tmp = m_comps[i]->onRateChanged();
+        RTC::ReturnCode_t tmp = comp->onRateChanged();
         if (tmp != RTC::RTC_OK) { ret = tmp; }
       }
     return ret;
@@ -171,19 +167,18 @@ namespace RTC_impl
   {
     RTC_TRACE(("activateComponent()"));
     RTObjectStateMachine* obj = findComponent(comp);
-    if (obj == NULL)
+    if (obj == nullptr)
       {
         RTC_ERROR(("Given RTC is not participant of this EC."));
         return RTC::BAD_PARAMETER;
       }
     RTC_DEBUG(("Component found in the EC."));
-    if (!(obj->isCurrentState(RTC::INACTIVE_STATE)))
+    if (!(obj->activate()))
       {
         RTC_ERROR(("State of the RTC is not INACTIVE_STATE."));
         return RTC::PRECONDITION_NOT_MET;
       }
     RTC_DEBUG(("Component is in INACTIVE state. Going to ACTIVE state."));
-    obj->goTo(RTC::ACTIVE_STATE);
     rtobj = obj;
     RTC_DEBUG(("activateComponent() done."));
     return RTC::RTC_OK;
@@ -203,17 +198,16 @@ namespace RTC_impl
     RTC_TRACE(("deactivateComponent()"));
 
     rtobj = findComponent(comp);
-    if (rtobj == NULL)
+    if (rtobj == nullptr)
       {
         RTC_ERROR(("Given RTC is not participant of this EC."));
         return RTC::BAD_PARAMETER;
       }
-    if (!(rtobj->isCurrentState(RTC::ACTIVE_STATE)))
+    if (!(rtobj->deactivate()))
       {
         RTC_ERROR(("State of the RTC is not ACTIVE_STATE."));
         return RTC::PRECONDITION_NOT_MET;
       }
-    rtobj->goTo(RTC::INACTIVE_STATE);
     return RTC::RTC_OK;
   }
 
@@ -231,17 +225,16 @@ namespace RTC_impl
     RTC_TRACE(("resetComponent()"));
 
     rtobj = findComponent(comp);
-    if (rtobj == NULL)
+    if (rtobj == nullptr)
       {
         RTC_ERROR(("Given RTC is not participant of this EC."));
         return RTC::BAD_PARAMETER;
       }
-    if (!(rtobj->isCurrentState(RTC::ERROR_STATE)))
+    if (!(rtobj->reset()))
       {
         RTC_ERROR(("State of the RTC is not ERROR_STATE."));
         return RTC::PRECONDITION_NOT_MET;
       }
-    rtobj->goTo(RTC::INACTIVE_STATE);
     return RTC::RTC_OK;
   }
 
@@ -258,13 +251,13 @@ namespace RTC_impl
     RTC_TRACE(("getComponentState()"));
 
     RTObjectStateMachine* rtobj = findComponent(comp);
-    if (rtobj == NULL)
+    if (rtobj == nullptr)
       {
         RTC_WARN(("Given RTC is not participant of this EC."));
         return RTC::CREATED_STATE;
       }
     RTC::LifeCycleState state = rtobj->getState();
-    RTC_DEBUG(("getComponentState() = %s done", getStateString(state)))
+    RTC_DEBUG(("getComponentState() = %s done", getStateString(state)));
     return state;
   }
 
@@ -287,10 +280,10 @@ namespace RTC_impl
       }
     try
       {
-        Guard guard(m_addedMutex);
+        std::lock_guard<std::mutex> guard(m_addedMutex);
         RTC::ExecutionContextService_var ec = getECRef();
         RTC::ExecutionContextHandle_t id = comp->attach_context(ec);
-        m_addedComps.push_back(new RTObjectStateMachine(id, comp));
+        m_addedComps.emplace_back(new RTObjectStateMachine(id, comp));
       }
     catch (CORBA::Exception& e)
       {
@@ -301,7 +294,7 @@ namespace RTC_impl
     RTC_DEBUG(("addComponent() succeeded."));
 
     // if EC is stopping, update component list immediately.
-    Guard guard(m_mutex);
+    std::lock_guard<std::mutex> guard(m_mutex);
     if (!m_running) { updateComponentList(); }
 
     return RTC::RTC_OK;
@@ -318,8 +311,8 @@ namespace RTC_impl
   bindComponent(RTC::RTObject_impl* rtc)
   {
     RTC_TRACE(("bindComponent()"));
-    Guard m_guard(m_mutex);
-    if (rtc == NULL)
+    std::lock_guard<std::mutex> m_guard(m_mutex);
+    if (rtc == nullptr)
       {
         RTC_ERROR(("NULL pointer is given."));
         return RTC::BAD_PARAMETER;
@@ -335,10 +328,8 @@ namespace RTC_impl
     RTC_DEBUG(("bindContext returns id = %d", id));
 
     // rtc is owner of this EC
-    RTC::LightweightRTObject_var comp
-      = RTC::LightweightRTObject::_duplicate(rtc->getObjRef());
-    //    RTObjectStateMachine o(id, comp);
-    m_comps.push_back(new RTObjectStateMachine(id, comp));
+    RTC::LightweightRTObject_var comp = rtc->getObjRef();
+    m_comps.emplace_back(new RTObjectStateMachine(id, comp));
     RTC_DEBUG(("bindComponent() succeeded."));
 
     return RTC::RTC_OK;
@@ -363,18 +354,18 @@ namespace RTC_impl
 
     RTObjectStateMachine* rtobj = findComponent(comp);
 
-    if (rtobj == NULL)
+    if (rtobj == nullptr)
       {
         RTC_ERROR(("no RTC found in this context."));
         return  RTC::BAD_PARAMETER;
       }
     {
-      Guard removeGuard(m_removedMutex);
-      m_removedComps.push_back(rtobj);
+      std::lock_guard<std::mutex> removeGuard(m_removedMutex);
+      m_removedComps.emplace_back(rtobj);
     }
     // if EC is stopping, update component list immediately.
     {
-      Guard guard(m_mutex);
+      std::lock_guard<std::mutex> guard(m_mutex);
       if (!m_running) { updateComponentList(); }
     }
 
@@ -384,19 +375,18 @@ namespace RTC_impl
   void ExecutionContextWorker::updateComponentList()
   {
     {    // adding component
-      Guard addedGuard(m_addedMutex);
-      for (size_t i(0); i < m_addedComps.size(); ++i)
+      std::lock_guard<std::mutex> addedGuard(m_addedMutex);
+      for (auto & m_addedComp : m_addedComps)
         {
-          m_comps.push_back(m_addedComps[i]);
+          m_comps.emplace_back(std::move(m_addedComp));
           RTC_TRACE(("Component added."));
         }
       m_addedComps.clear();
     }
     {    // removing component
-      Guard removedGuard(m_removedMutex);
-      for (size_t i(0); i < m_removedComps.size(); ++i)
+      std::lock_guard<std::mutex> removedGuard(m_removedMutex);
+      for (auto rtobj : m_removedComps)
         {
-          RTObjectStateMachine* rtobj = m_removedComps[i];
           RTC::LightweightRTObject_var lwrtobj = rtobj->getRTObject();
           lwrtobj->detach_context(rtobj->getExecutionContextHandle());
           CompItr it;
@@ -413,24 +403,24 @@ namespace RTC_impl
   RTObjectStateMachine*
   ExecutionContextWorker::findComponent(RTC::LightweightRTObject_ptr comp)
   {
-    Guard guard(m_mutex);
-    for (size_t i(0); i < m_comps.size() ; ++i)
+    std::lock_guard<std::mutex> guard(m_mutex);
+    for (auto & rtobj : m_comps)
       {
-        if (m_comps.at(i)->isEquivalent(comp))
+        if (rtobj->isEquivalent(comp))
           {
-            return m_comps.at(i);
+            return rtobj;
           }
       }
-    return NULL;
+    return nullptr;
   }
 
   bool ExecutionContextWorker::
   isAllCurrentState(ExecContextState state)
   {
-    Guard gurad(m_mutex);
-    for (size_t i(0); i < m_comps.size(); ++i)
+    std::lock_guard<std::mutex> guard(m_mutex);
+    for (auto & comp : m_comps)
       {
-        if (!m_comps[i]->isCurrentState(state)) { return false; }
+        if (!comp->isCurrentState(state)) { return false; }
       }
     return true;
   }
@@ -438,10 +428,10 @@ namespace RTC_impl
   bool ExecutionContextWorker::
   isAllNextState(ExecContextState state)
   {
-    Guard gurad(m_mutex);
-    for (size_t i(0); i < m_comps.size(); ++i)
+    std::lock_guard<std::mutex> guard(m_mutex);
+    for (auto & comp : m_comps)
       {
-        if (!m_comps[i]->isNextState(state)) { return false; }
+        if (!comp->isNextState(state)) { return false; }
       }
     return true;
   }
@@ -449,10 +439,10 @@ namespace RTC_impl
   bool ExecutionContextWorker::
   isOneOfCurrentState(ExecContextState state)
   {
-    Guard gurad(m_mutex);
-    for (size_t i(0); i < m_comps.size(); ++i)
+    std::lock_guard<std::mutex> guard(m_mutex);
+    for (auto & comp : m_comps)
       {
-        if (m_comps[i]->isCurrentState(state)) { return true; }
+        if (comp->isCurrentState(state)) { return true; }
       }
     return false;
   }
@@ -460,10 +450,10 @@ namespace RTC_impl
   bool ExecutionContextWorker::
   isOneOfNextState(ExecContextState state)
   {
-    Guard gurad(m_mutex);
-    for (size_t i(0); i < m_comps.size(); ++i)
+    std::lock_guard<std::mutex> guard(m_mutex);
+    for (auto & comp : m_comps)
       {
-        if (m_comps[i]->isNextState(state)) { return true; }
+        if (comp->isNextState(state)) { return true; }
       }
     return false;
   }
@@ -472,11 +462,16 @@ namespace RTC_impl
   {
     RTC_PARANOID(("invokeWorker()"));
     // m_comps never changes its size here
-    size_t len(m_comps.size());
-    for (size_t i(0); i < len; ++i) { m_comps[i]->workerPreDo();  }
-    for (size_t i(0); i < len; ++i) { m_comps[i]->workerDo();     }
-    for (size_t i(0); i < len; ++i) { m_comps[i]->workerPostDo(); }
-    Guard guard(m_mutex);
+    for (auto & comp : m_comps) { 
+        comp->workerPreDo();  
+    }
+    for (auto & comp : m_comps) { 
+        comp->workerDo();     
+    }
+    for (auto & comp : m_comps) { 
+        comp->workerPostDo(); 
+    }
+    std::lock_guard<std::mutex> guard(m_mutex);
     updateComponentList();
   }
 
@@ -484,28 +479,31 @@ namespace RTC_impl
   {
     RTC_PARANOID(("invokeWorkerPreDo()"));
     // m_comps never changes its size here
-    size_t len(m_comps.size());
-    for (size_t i(0); i < len; ++i) { m_comps[i]->workerPreDo();  }
+    for (auto & comp : m_comps) { 
+        comp->workerPreDo();  
+    }
   }
 
   void ExecutionContextWorker::invokeWorkerDo()
   {
     RTC_PARANOID(("invokeWorkerDo()"));
     // m_comps never changes its size here
-    size_t len(m_comps.size());
-    for (size_t i(0); i < len; ++i) { m_comps[i]->workerDo();     }
+    for (auto & comp : m_comps) { 
+        comp->workerDo();     
+    }
   }
 
   void ExecutionContextWorker::invokeWorkerPostDo()
   {
     RTC_PARANOID(("invokeWorkerPostDo()"));
     // m_comps never changes its size here
-    size_t len(m_comps.size());
-    for (size_t i(0); i < len; ++i) { m_comps[i]->workerPostDo(); }
+    for (auto & comp : m_comps) { 
+        comp->workerPostDo(); 
+    }
     // m_comps might be changed here
-    Guard guard(m_mutex);
+    std::lock_guard<std::mutex> guard(m_mutex);
     updateComponentList();
   }
 
-};  // namespace RTC_impl
+} // namespace RTC_impl
 

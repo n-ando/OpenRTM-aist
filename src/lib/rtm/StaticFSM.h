@@ -83,21 +83,23 @@
  */
 #define FSM_STATE(S) \
   public: \
-    typedef S SELF;                                                     \
+    using SELF = S;                                                     \
     S(::Macho::_StateInstance & instance)                               \
       : ::RTC::Link<S, SUPER>(instance)                                 \
     {                                                                   \
-      typedef ::__SameType< ::RTC::Link<S, SUPER>, LINK>::Check         \
-        MustDeriveFromLink;                                             \
+      using MustDeriveFromLink = ::CheckSameType<::RTC::Link<S, SUPER>,    \
+                                              LINK>::Check;             \
+      static_assert(static_cast<MustDeriveFromLink*>(nullptr)==nullptr, \
+                    "dummy assert for suppress warning");               \
     }                                                                   \
-    ~S() {}                                                             \
+    ~S() override {}                                                    \
     static const char * _state_name() { return #S; }                    \
     Box & box() { return *static_cast<Box *>(_box()); }                 \
-    friend class ::_VS8_Bug_101615;
+    friend class ::_VS8_Bug_101615
 
-
-using namespace Macho;
-
+#define FSM_INIT_VALUE(S) \
+   template<> \
+   const ::Macho::ID Macho::StateID<S>::value = ::Macho::Machine<typename S::TOP>::theStateCount++;
 
 namespace RTC
 {
@@ -118,7 +120,7 @@ namespace RTC
       : Macho::Machine<TOP>(), rtComponent(comp)
     {
     }
-    virtual ~Machine() {}
+    ~Machine() override = default;
     virtual RingBuffer<EventBase*>& getBuffer()
     {
         return m_buffer;
@@ -135,8 +137,8 @@ namespace RTC
     }
 
   private:
-    Machine(const Machine<TOP> & other);
-    Machine<TOP> & operator=(const Machine<TOP> & other);
+    Machine(const Machine<TOP> & other) = delete;
+    Machine<TOP> & operator=(const Machine<TOP> & other) = delete;
 
     template<class C, class P>
     friend class Link;
@@ -166,28 +168,26 @@ namespace RTC
     : public Macho::Link<C, P>
   {
   protected:
-    Link(_StateInstance & instance)
-      : Macho::Link<C, P>(instance), rtComponent(NULL)
+    Link(Macho::_StateInstance & instance)
+      : Macho::Link<C, P>(instance), rtComponent(nullptr)
     {
     }
-    virtual ~Link()
-    {
-    }
+    ~Link() override = default;
 
     void setrtc()
     {
-      if (rtComponent != NULL) { return; }
+      if (rtComponent != nullptr) { return; }
       const RTC::Machine<typename P::TOP>* machine =
         dynamic_cast<const RTC::Machine<typename P::TOP>*>(&P::machine());
-      if (machine != NULL) { rtComponent = machine->rtComponent; }
+      if (machine != nullptr) { rtComponent = machine->rtComponent; }
     }
   public:
-    typedef Link<C, P> LINK;
+    using LINK = Link<C, P>;
     
-    virtual void entry()
+    void entry() override
     {
       setrtc();
-      if (rtComponent == NULL)
+      if (rtComponent == nullptr)
         {
           onEntry();
         }
@@ -198,10 +198,10 @@ namespace RTC
           rtComponent->postOnFsmEntry(C::_state_name(), onEntry());
         }
     }
-    virtual void init()
+    void init() override
     {
       setrtc();
-      if (rtComponent == NULL)
+      if (rtComponent == nullptr)
         {
           onInit();
         }
@@ -211,10 +211,10 @@ namespace RTC
           rtComponent->postOnFsmInit(C::_state_name(), onInit());
         }
     }
-    virtual void exit()
+    void exit() override
     {
       setrtc();
-      if (rtComponent == NULL)
+      if (rtComponent == nullptr)
         {
           onExit();
         }
@@ -225,12 +225,34 @@ namespace RTC
           rtComponent->preOnFsmStateChange(C::_state_name());
         }
     }
-
-    virtual ReturnCode_t onEntry() { return RTC::RTC_OK; }
-    virtual ReturnCode_t onInit()  { return RTC::RTC_OK; }
-    virtual ReturnCode_t onExit()  { return RTC::RTC_OK; }
+#if defined(__clang__)
+#if defined(_WIN32) || defined(_WIN64)
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wsuggest-override"
+#endif
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Winconsistent-missing-override"
+#endif
+#if defined(__GNUC__) && (__GNUC__ >= 5) && !defined(__clang__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wsuggest-override"
+#endif
+    // We can't use 'override' insetd of 'virtual', becase these
+    // methods are used as TOP LEVEL SUPPER CLASS and SUB CLASS.
+    virtual RTC::ReturnCode_t onEntry() { return RTC::RTC_OK; }
+    virtual RTC::ReturnCode_t onInit()  { return RTC::RTC_OK; }
+    virtual RTC::ReturnCode_t onExit()  { return RTC::RTC_OK; }
+#if defined(__GNUC__) && (__GNUC__ >= 5) && !defined(__clang__)
+#pragma GCC diagnostic pop
+#endif
+#if defined(__clang__)
+#pragma clang diagnostic pop
+#if defined(_WIN32) || defined(_WIN64)
+#pragma clang diagnostic pop
+#endif
+#endif
 
     RTObject_impl* rtComponent;
   };
-};
+} // namespace RTC
 #endif // RTC_STATICFSM_H

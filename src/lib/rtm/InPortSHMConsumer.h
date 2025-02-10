@@ -21,7 +21,6 @@
 #define RTC_INPORTSHMCONSUMER_H
 
 
-//#include <rtm/BufferBase.h>
 
 #include <rtm/SharedMemoryPort.h>
 #include <rtm/CorbaConsumer.h>
@@ -53,12 +52,10 @@ namespace RTC
    * @endif
    */
   class InPortSHMConsumer
-	  : public InPortConsumer,
-	  public CorbaConsumer< ::OpenRTM::PortSharedMemory >
+       : public InPortConsumer,
+         public CorbaConsumer< ::OpenRTM::PortSharedMemory >
   {
-	typedef coil::Guard<coil::Mutex> Guard;
   public:
-    DATAPORTSTATUS_ENUM
     /*!
      * @if jp
      * @brief コンストラクタ
@@ -91,7 +88,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~InPortSHMConsumer();
+    ~InPortSHMConsumer() override;
 
     /*!
      * @if jp
@@ -111,7 +108,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual void init(coil::Properties& prop);
+    void init(coil::Properties& prop) override;
     /*!
      * @if jp
      * @brief 接続先へのデータ送信
@@ -130,7 +127,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual InPortConsumer::ReturnCode put(cdrMemoryStream& data);
+    DataPortStatus put(ByteData& data) override;
     /*!
      * @if jp
      * @brief 
@@ -147,29 +144,29 @@ namespace RTC
      *
      * @endif
      */
-    virtual bool setObject(CORBA::Object_ptr obj);
-	virtual void publishInterfaceProfile(SDOPackage::NVList& properties);
-	virtual bool subscribeInterface(const SDOPackage::NVList& properties);
-	virtual void unsubscribeInterface(const SDOPackage::NVList& properties);
+    bool setObject(CORBA::Object_ptr obj) override;
+    void publishInterfaceProfile(SDOPackage::NVList& properties) override;
+    bool subscribeInterface(const SDOPackage::NVList& properties) override;
+    void unsubscribeInterface(const SDOPackage::NVList& properties) override;
   
 private:
-	bool subscribeFromIor(const SDOPackage::NVList& properties);
-	bool subscribeFromRef(const SDOPackage::NVList& properties);
-	bool unsubscribeFromIor(const SDOPackage::NVList& properties);
-	bool unsubscribeFromRef(const SDOPackage::NVList& properties);
+    bool subscribeFromIor(const SDOPackage::NVList& properties);
+    bool subscribeFromRef(const SDOPackage::NVList& properties);
+    bool unsubscribeFromIor(const SDOPackage::NVList& properties);
+    bool unsubscribeFromRef(const SDOPackage::NVList& properties);
 
 protected:
-	InPortConsumer::ReturnCode convertReturnCode(OpenRTM::PortStatus ret);
+    static DataPortStatus convertReturnCode(OpenRTM::PortStatus ret);
 
-	mutable Logger rtclog;
-	coil::Properties m_properties;
-	coil::Mutex m_mutex;
-	std::string m_shm_address;
-	SharedMemoryPort m_shmem;
-	int m_memory_size;
-	bool m_endian;
+   coil::Properties m_properties;
+   std::mutex m_mutex;
+   std::string m_shm_address;
+   SharedMemoryPort m_shmem;
+   int m_memory_size{0};
+   bool m_endian{true};
+   mutable Logger rtclog{"InPortSHMConsumer"};
   };
-};     // namespace RTC
+} // namespace RTC
 
 extern "C"
 {
@@ -187,7 +184,7 @@ extern "C"
    * @endif
    */
   void InPortSHMConsumerInit(void);
-};
+}
 
 #endif // RTC_INPORTCORBACDRCONSUMER_H
 

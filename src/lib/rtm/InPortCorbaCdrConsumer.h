@@ -21,7 +21,6 @@
 #define RTC_INPORTCORBACDRCONSUMER_H
 
 
-//#include <rtm/BufferBase.h>
 
 #include <rtm/idl/DataPort_OpenRTMSkel.h>
 #include <rtm/CorbaConsumer.h>
@@ -59,7 +58,6 @@ namespace RTC
       public CorbaConsumer< ::OpenRTM::InPortCdr >
   {
   public:
-    DATAPORTSTATUS_ENUM
     /*!
      * @if jp
      * @brief コンストラクタ
@@ -77,7 +75,7 @@ namespace RTC
      *
      * @endif
      */
-    InPortCorbaCdrConsumer(void);
+    InPortCorbaCdrConsumer();
 
     /*!
      * @if jp
@@ -92,7 +90,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~InPortCorbaCdrConsumer(void);
+    ~InPortCorbaCdrConsumer() override;
 
     /*!
      * @if jp
@@ -121,7 +119,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual void init(coil::Properties& prop);
+    void init(coil::Properties& prop) override;
 
     /*!
      * @if jp
@@ -155,7 +153,7 @@ namespace RTC
      *
      * @endif
      */
-	virtual ReturnCode put(cdrMemoryStream& data);
+    DataPortStatus put(ByteData& data) override;
 
     /*!
      * @if jp
@@ -180,7 +178,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual void publishInterfaceProfile(SDOPackage::NVList& properties);
+    void publishInterfaceProfile(SDOPackage::NVList& properties) override;
 
     /*!
      * @if jp
@@ -204,7 +202,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual bool subscribeInterface(const SDOPackage::NVList& properties);
+    bool subscribeInterface(const SDOPackage::NVList& properties) override;
 
     /*!
      * @if jp
@@ -223,7 +221,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual void unsubscribeInterface(const SDOPackage::NVList& properties);
+    void unsubscribeInterface(const SDOPackage::NVList& properties) override;
 
   private:
     /*!
@@ -294,12 +292,13 @@ namespace RTC
      * @brief Return codes conversion
      * @endif
      */
-    InPortConsumer::ReturnCode convertReturnCode(OpenRTM::PortStatus ret);
+    static DataPortStatus convertReturnCode(OpenRTM::PortStatus ret);
 
     mutable Logger rtclog;
     coil::Properties m_properties;
+    ::OpenRTM::CdrData m_data;
   };
-};  // namespace RTC
+} // namespace RTC
 
 extern "C"
 {
@@ -317,7 +316,7 @@ extern "C"
    * @endif
    */
   void InPortCorbaCdrConsumerInit(void);
-};
+}
 
 #endif  // RTC_INPORTCORBACDRCONSUMER_H
 

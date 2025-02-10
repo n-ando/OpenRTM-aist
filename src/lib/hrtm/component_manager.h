@@ -20,28 +20,24 @@
 
 #include <rtm/Manager.h>
 #include <rtm/Factory.h>
-//#include <rtm/RTObject.h>
-#include <coil/Guard.h>
-#include <coil/Mutex.h>
-//#include <hrtm/data_flow_component.h>
-//#include <hrtm/logger.h>
+#include <mutex>
 
 namespace RTC
 {
   class RTObject_impl;
-};
+} // namespace RTC
 namespace hrtm
 {
   //------------------------------------------------------------
   // Creator and Destructor tempaltes for RTC factory
   //
-  template <class _New>
-  RTC::RTObject_impl* Create(RTC::Manager* manager)
+  template <class T_New>
+  RTC::RTObject_impl* Create(RTC::Manager* /* manager */)
   {
-    return new _New();
+    return new T_New();
   }
 
-  template <class _Delete>
+  template <class T_Delete>
   void Delete(RTC::RTObject_impl* rtc)
   {
     delete rtc;
@@ -51,7 +47,7 @@ namespace hrtm
   // forward decl
   class DataFlowComponent;
   class ComponentManager;
-  typedef void (*ModuleInitProc)(hrtm::ComponentManager*);
+  using ModuleInitProc = void (*)(hrtm::ComponentManager*);
 
   /*!
    * @class RTC::Manager wrapper for hrtm::ComponentManager
@@ -59,12 +55,10 @@ namespace hrtm
   class ComponentManager
     : public RTC::Manager
   {
-    typedef coil::Mutex Mutex;
-    typedef coil::Guard<Mutex> Guard;
 
   public:
     template<typename CompType>
-    bool regist(coil::Properties* profile, const char*, const char*)
+    bool regist(coil::Properties* profile, const char* /*unused*/, const char* /*unused*/)
     {
       return RTC::Manager::
         registerFactory(*profile,
@@ -83,12 +77,13 @@ namespace hrtm
 
   protected:
     ComponentManager();
+    virtual ~ComponentManager();
 
   protected:
     static ModuleInitProc initProc;
     static ComponentManager* manager;
-    static coil::Mutex mutex;
+    static std::mutex mutex;
   };
-};
+} // namespace hrtm
 
 #endif // HRTM_COMPONENT_MANAGER_H

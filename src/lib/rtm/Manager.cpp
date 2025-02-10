@@ -34,7 +34,6 @@
 #include <coil/Properties.h>
 #include <coil/stringutil.h>
 #include <coil/Signal.h>
-#include <coil/TimeValue.h>
 #include <coil/Timer.h>
 #include <coil/OS.h>
 #include <rtm/FactoryInit.h>
@@ -53,31 +52,25 @@
 #endif
 #endif
 
-
-#ifdef RTM_OS_LINUX
-#ifndef _GNU_SOURCE
-#define _GNU_SOURCE
-#endif  // _GNU_SOURCE
-#include <pthread.h>
-#endif  // RTM_OS_LINUX
-
 #include <fstream>
 #include <iostream>
+#include <utility>
+#include <iterator>
 
 #if defined(minor)
 #undef minor
 #endif
 
-//static sig_atomic_t g_mgrActive = true;
-extern "C" void handler(int)
+extern "C" void openrtm_signal_handler(int /*unused*/)
 {
-  ::RTC::Manager::instance().terminate();
+  RTC::Manager::terminate();
 }
 
 namespace RTC
 {
-  Manager* Manager::manager = NULL;
-  coil::Mutex Manager::mutex;
+  std::atomic_flag Manager::m_isRunning = ATOMIC_FLAG_INIT;
+  Manager* Manager::manager = nullptr;
+  std::mutex Manager::mutex;
 
   Manager::InstanceName::InstanceName(RTObject_impl* comp)
     : m_name(comp->getInstanceName())
@@ -85,14 +78,15 @@ namespace RTC
   Manager::InstanceName::InstanceName(const char* name)
     : m_name(name)
   {}
-  Manager::InstanceName::InstanceName(const std::string& name)
-    : m_name(name)
+  Manager::InstanceName::InstanceName(std::string  name)
+    : m_name(std::move(name))
   {}
   bool Manager::InstanceName::operator()(RTObject_impl* comp)
   {
     return m_name == comp->getInstanceName();
   }
-
+  Manager::FactoryPredicate::~FactoryPredicate() = default;
+  Manager::Finalized::~Finalized() = default;
 
   /*!
    * @if jp
@@ -102,26 +96,8 @@ namespace RTC
    * @endif
    */
   Manager::Manager()
-    : m_initProc(0), m_namingManager(0), m_timer(0),
-      m_logStreamBuf(), rtclog(&m_logStreamBuf),
-      m_runner(0), m_terminator(0)
   {
-    new coil::SignalAction((coil::SignalHandler) handler, SIGINT);
-  }
-
-  /*!
-   * @if jp
-   * @brief Protected コピーコンストラクタ
-   * @else
-   * @brief Protected Copy Constructor
-   * @endif
-   */
-  Manager::Manager(const Manager& manager)
-    : m_initProc(0), m_namingManager(0), m_timer(0),
-      m_logStreamBuf(), rtclog(&m_logStreamBuf),
-      m_runner(0), m_terminator(0)
-  {
-    new coil::SignalAction((coil::SignalHandler) handler, SIGINT);
+    m_signals.emplace_back(openrtm_signal_handler, SIGINT);
   }
 
   /*!
@@ -134,10 +110,10 @@ namespace RTC
   Manager* Manager::init(int argc, char** argv)
   {
     // DCL for singleton
-    if (!manager)
+    if (manager == nullptr)
       {
-        Guard guard(mutex);
-        if (!manager)
+        std::lock_guard<std::mutex> guard(mutex);
+        if (manager == nullptr)
           {
             manager = new Manager();
             manager->initManager(argc, argv);
@@ -147,7 +123,6 @@ namespace RTC
             manager->initNaming();
             manager->initExecContext();
             manager->initComposite();
-            manager->initTimer();
             manager->initManagerServant();
           }
       }
@@ -163,25 +138,7 @@ namespace RTC
    */
   Manager& Manager::instance()
   {
-    // DCL for singleton
-    if (!manager)
-      {
-        Guard guard(mutex);
-        if (!manager)
-          {
-            manager = new Manager();
-            manager->initManager(0, NULL);
-            manager->initFactories();
-            manager->initLogger();
-            manager->initORB();
-            manager->initNaming();
-            manager->initExecContext();
-            manager->initComposite();
-            manager->initTimer();
-            manager->initManagerServant();
-          }
-      }
-    return *manager;
+    return *Manager::init(0, nullptr);
   }
 
   /*!
@@ -193,10 +150,8 @@ namespace RTC
    */
   void Manager::terminate()
   {
-    if (m_terminator != NULL)
-      {
-	m_terminator->terminate();
-      }
+    // Note: Signal handlers may call this. DO NOT use heap and librarys.
+    m_isRunning.clear();
   }
 
   /*!
@@ -210,23 +165,12 @@ namespace RTC
   {
     RTC_TRACE(("Manager::shutdown()"));
     m_listeners.manager_.preShutdown();
-    if (m_timer != NULL)
-      {
-        m_timer->stop();
-      }
     shutdownComponents();
     shutdownNaming();
+    shutdownManagerServant();
     shutdownORB();
-    shutdownManager();
     // 終了待ち合わせ
-    if (m_runner != NULL)
-      {
-        m_runner->wait();
-      }
-    else
-      {
-        join();
-      }
+    m_threadOrb.join();
     m_listeners.manager_.postShutdown();
     shutdownLogger();
   }
@@ -240,19 +184,10 @@ namespace RTC
    */
   void Manager::join()
   {
-    RTC_TRACE(("Manager::wait()"));
-    {
-      Guard guard(m_terminate.mutex);
-      ++m_terminate.waiting;
-    }
-    while (1)
-      {
-        {
-          Guard guard(m_terminate.mutex);
-          if (m_terminate.waiting > 1) break;
-        }
-        coil::usleep(100000);
-      }
+    m_threadMain.join();
+    delete manager; // This delete is vaild.
+    // Do not access any Manager non-static members after here.
+    manager = nullptr;
   }
 
   /*!
@@ -294,30 +229,26 @@ namespace RTC
         return false;
       }
 
-    std::vector<std::string> lsvc;
-    lsvc = coil::split(m_config["manager.local_service.modules"], ",");
-
-    for (int i(0), len(lsvc.size()); i < len; ++i)
+    for (auto const& itr : coil::split(m_config["manager.local_service.modules"], ","))
       {
-        size_t begin_pos(lsvc[i].find_first_of('('));
-        size_t end_pos(lsvc[i].find_first_of(')'));
+        size_t begin_pos(itr.find_first_of('('));
+        size_t end_pos(itr.find_first_of(')'));
         std::string filename, initfunc;
         if (begin_pos != std::string::npos && end_pos != std::string::npos &&
             begin_pos < end_pos)
           {
-            initfunc = lsvc[i].substr(begin_pos + 1, end_pos - (begin_pos + 1));
-            filename = lsvc[i].substr(0, begin_pos);
-            coil::eraseBothEndsBlank(initfunc);
-            coil::eraseBothEndsBlank(filename);
+            initfunc = coil::eraseBothEndsBlank(
+              itr.substr(begin_pos + 1, end_pos - (begin_pos + 1)));
+            filename = coil::eraseBothEndsBlank(itr.substr(0, begin_pos));
           }
         else
           {
-            initfunc = coil::split(lsvc[i], ".").operator[](0) + "Init";
-            filename = lsvc[i];
+            initfunc = coil::split(itr, ".").operator[](0) + "Init";
+            filename = itr;
           }
         if (filename.find_first_of('.') == std::string::npos)
           {
-            if (m_config.findNode("manager.modules.C++.suffixes") != 0)
+            if (m_config.findNode("manager.modules.C++.suffixes") != nullptr)
               {
                 filename += "." + m_config["manager.modules.C++.suffixes"];
               }
@@ -346,30 +277,35 @@ namespace RTC
 
     initLocalService();
 
-    std::vector<std::string> mods;
-    mods = coil::split(m_config["manager.modules.preload"], ",");
-
-    for (int i(0), len(mods.size()); i < len; ++i)
+    for (auto const& mod : coil::split(m_config["manager.modules.preload"], ","))
       {
-        size_t begin_pos(mods[i].find_first_of('('));
-        size_t end_pos(mods[i].find_first_of(')'));
+        size_t begin_pos(mod.find_first_of('('));
+        size_t end_pos(mod.find_first_of(')'));
         std::string filename, initfunc;
         if (begin_pos != std::string::npos && end_pos != std::string::npos &&
             begin_pos < end_pos)
           {
-            initfunc = mods[i].substr(begin_pos + 1, end_pos - (begin_pos + 1));
-            filename = mods[i].substr(0, begin_pos);
-            coil::eraseBothEndsBlank(initfunc);
-            coil::eraseBothEndsBlank(filename);
+            initfunc = coil::eraseBothEndsBlank(
+              mod.substr(begin_pos + 1, end_pos - (begin_pos + 1)));
+            filename = coil::eraseBothEndsBlank(mod.substr(0, begin_pos));
           }
         else
           {
-            initfunc = coil::split(mods[i], ".").operator[](0) + "Init";
-            filename = mods[i];
+            if (coil::isAbsolutePath(mod))
+            {
+                coil::vstring namelist(coil::split((mod), "/"));
+                namelist = coil::split(namelist.back(), "\\");
+                initfunc = coil::split(namelist.back(), ".").operator[](0) + "Init";
+            }
+            else
+            {
+                initfunc = coil::split(mod, ".").operator[](0) + "Init";
+            }
+            filename = mod;
           }
         if (filename.find_first_of('.') == std::string::npos)
           {
-            if (m_config.findNode("manager.modules.C++.suffixes") != 0)
+            if (m_config.findNode("manager.modules.C++.suffixes") != nullptr)
               {
                 filename += "." + m_config["manager.modules.C++.suffixes"];
               }
@@ -397,16 +333,12 @@ namespace RTC
       }
 
     m_config["sdo.service.consumer.available_services"]
-      = coil::flatten(SdoServiceConsumerFactory::instance().getIdentifiers());
+      = coil::eraseBlank(coil::flatten(SdoServiceConsumerFactory::instance().getIdentifiers()));
 
-
-
-
-
-	invokeInitProc();
-	initPreCreation();
-	initPreConnection();
-	initPreActivation();
+    invokeInitProc();
+    initPreCreation();
+    initPreConnection();
+    initPreActivation();
 
     return true;
   }
@@ -420,23 +352,42 @@ namespace RTC
    */
   void Manager::runManager(bool no_block)
   {
-    if (no_block)
-      {
-        RTC_TRACE(("Manager::runManager(): non-blocking mode"));
-        m_runner = new OrbRunner(m_pORB);
-        m_runner->open(0);
-      }
-    else
-      {
-        RTC_TRACE(("Manager::runManager(): blocking mode"));
-        m_pORB->run();
-        RTC_TRACE(("Manager::runManager(): ORB was terminated"));
-        join();
-      }
-    return;
+    RTC_TRACE(("Manager::runManager()"));
+
+    m_isRunning.test_and_set();
+    m_threadMain = std::thread([this] { mainThread(); });
+    if (!no_block) { join(); }
   }
 
-  //============================================================
+  /*!
+   * @if jp
+   * @brief 周期実行タスクの登録
+   * @else
+   * @brief Add a task to the Manager timer.
+   * @endif
+   */
+  Manager::TaskId Manager::addTask(std::function<void(void)> fn,
+                                   std::chrono::nanoseconds period)
+  {
+    RTC_TRACE(("Manager::addTask()"));
+    return m_scheduler.emplace(std::move(fn), period);
+  }
+
+  /*!
+   * @if jp
+   * @brief Manger のメインスレッドで処理を実行
+   * @else
+   * @brief Run a function on the Manager main thread.
+   * @endif
+   */
+  void Manager::invoke(std::function<void(void)> fn,
+                       std::chrono::nanoseconds delay)
+  {
+    RTC_TRACE(("Manager::invoke()"));
+    m_invoker.emplace(std::move(fn), delay);
+  }
+
+//============================================================
   // Module management
   //============================================================
   /*!
@@ -452,43 +403,72 @@ namespace RTC
     RTC_TRACE(("Manager::load(fname = %s, initfunc = %s)",
                fname.c_str(), initfunc.c_str()));
 
-    std::string file_name(fname);
+    coil::Properties prop;
+    prop["module_file_name"] = fname;
+
+    return load(prop, initfunc);
+  }
+
+  /*!
+   * @if jp
+   * @brief モジュールのロード
+   * @else
+   * @brief Load module
+   * @endif
+   */
+  ReturnCode_t Manager::load(coil::Properties &prop,
+    const std::string &initfunc)
+  {
+    RTC_TRACE(("Manager::load(filename = %s, filepath = %s, language = %s, initfunc = %s)",
+      prop["module_file_name"].c_str(), prop["module_file_path"].c_str(), prop["language"].c_str(), initfunc.c_str()));
+
+    std::string file_name(prop["module_file_name"]);
     std::string init_func(initfunc);
     m_listeners.module_.preLoad(file_name, init_func);
     try
+    {
+      if (init_func.empty())
       {
-        if (init_func.empty())
-          {
-            coil::vstring mod(coil::split(file_name, "."));
-            init_func = mod[0] + "Init";
-          }
-        std::string path(m_module->load(file_name, init_func));
-        RTC_DEBUG(("module path: %s", path.c_str()));
-        m_listeners.module_.postLoad(path, init_func);
+        if (coil::isAbsolutePath(file_name))
+        {
+          coil::vstring mod(coil::split(file_name, "/"));
+          mod = coil::split(mod.back(), "\\");
+          mod = coil::split(mod.back(), ".");
+          init_func = mod[0] + "Init";
+        }
+        else
+        {
+          coil::vstring mod(coil::split(file_name, "."));
+          init_func = mod[0] + "Init";
+        }
       }
-    catch(RTC::ModuleManager::NotAllowedOperation& e)
-      {
-        RTC_ERROR(("Operation not allowed: %s",
-                   e.reason.c_str()));
-        return RTC::PRECONDITION_NOT_MET;
-      }
-    catch(RTC::ModuleManager::NotFound& e)
-      {
-        RTC_ERROR(("Not found: %s",
-                   e.name.c_str()));
-        return RTC::RTC_ERROR;
-      }
-    catch(RTC::ModuleManager::InvalidArguments& e)
-      {
-        RTC_ERROR(("Invalid argument: %s",
-                   e.reason.c_str()));
-        return RTC::BAD_PARAMETER;
-      }
-    catch(RTC::ModuleManager::Error& e)
-      {
-        RTC_ERROR(("Error: %s", e.reason.c_str()));
-        return RTC::RTC_ERROR;
-      }
+      std::string path(m_module->load(prop, init_func));
+      RTC_DEBUG(("module path: %s", path.c_str()));
+      m_listeners.module_.postLoad(path, init_func);
+    }
+    catch (RTC::ModuleManager::NotAllowedOperation &e)
+    {
+      RTC_ERROR(("Operation not allowed: %s",
+        e.reason.c_str()));
+      return RTC::PRECONDITION_NOT_MET;
+    }
+    catch (RTC::ModuleManager::NotFound &e)
+    {
+      RTC_ERROR(("Not found: %s",
+        e.name.c_str()));
+      return RTC::RTC_ERROR;
+    }
+    catch (RTC::ModuleManager::InvalidArguments &e)
+    {
+      RTC_ERROR(("Invalid argument: %s",
+        e.reason.c_str()));
+      return RTC::BAD_PARAMETER;
+    }
+    catch (RTC::ModuleManager::Error &e)
+    {
+      RTC_ERROR(("Error: %s", e.reason.c_str()));
+      return RTC::RTC_ERROR;
+    }
     catch (...)
       {
         RTC_ERROR(("Unknown error."));
@@ -575,7 +555,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     RTM::NumberingPolicyBase* policy =
       RTM::NumberingPolicyFactory::instance().createObject(policy_name);
     FactoryBase* factory;
-    if (policy == NULL)
+    if (policy == nullptr)
       {
         factory = new FactoryCXX(profile, new_func, delete_func);
       }
@@ -603,9 +583,10 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   {
     std::vector<FactoryBase*> factories(m_factory.getObjects());
     std::vector<coil::Properties> props;
-    for (int i(0), len(factories.size()); i < len; ++i)
+    props.reserve(factories.size());
+    for(auto const& factorie : factories)
       {
-        props.push_back(factories[i]->profile());
+        props.emplace_back(factorie->profile());
       }
     return props;
   }
@@ -672,19 +653,19 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     // extract "comp_type" and "comp_prop" from comp_arg
     coil::Properties comp_prop = coil::Properties();
     coil::Properties comp_id   = coil::Properties();
-    if (!procComponentArgs(argstr.c_str(), comp_id, comp_prop)) return NULL;
+    if (!procComponentArgs(argstr.c_str(), comp_id, comp_prop)) return nullptr;
 
     //------------------------------------------------------------
     // Because the format of port-name had been changed from <port_name>
     // to <instance_name>.<port_name>, the following processing was added.
     // (since r1648)
 
-    if (comp_prop.findNode("exported_ports") != 0)
+    if (comp_prop.findNode("exported_ports") != nullptr)
       {
         coil::vstring exported_ports;
         exported_ports = coil::split(comp_prop["exported_ports"], ",");
 
-        std::string exported_ports_str("");
+        std::string exported_ports_str;
         for (size_t i(0), len(exported_ports.size()); i < len; ++i)
           {
             coil::vstring keyval(coil::split(exported_ports[i], "."));
@@ -712,48 +693,49 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     //------------------------------------------------------------
     // Create Component
     FactoryBase* factory(m_factory.find(comp_id));
-    if (factory == 0)
+    if (factory == nullptr)
       {
         RTC_ERROR(("Factory not found: %s",
                    comp_id["implementation_id"].c_str()));
 
         if (!coil::toBool(m_config["manager.modules.search_auto"], "YES", "NO", true))
           {
-            return 0;
+            return nullptr;
           }
         // automatic module loading
         std::vector<coil::Properties> mp(m_module->getLoadableModules());
         RTC_INFO(("%d loadable modules found", mp.size()));
 
-        std::vector<coil::Properties>::iterator it;
-        it = std::find_if(mp.begin(), mp.end(), ModulePredicate(comp_id));
-        if (it == mp.end())
-          {
-            RTC_ERROR(("No module for %s in loadable modules list",
-                       comp_id["implementation_id"].c_str()));
-            return 0;
-          }
-        if (it->findNode("module_file_name") == 0)
-          {
-            RTC_ERROR(("Hmm...module_file_name key not found."));
-            return 0;
-          }
-        // module loading
-        RTC_INFO(("Loading module: %s", (*it)["module_file_name"].c_str()))
-          load((*it)["module_file_name"].c_str(), "");
-        factory = m_factory.find(comp_id);
-        if (factory == 0)
-          {
-            RTC_ERROR(("Factory not found for loaded module: %s",
-                       comp_id["implementation_id"].c_str()));
-            return 0;
-          }
+      std::vector<coil::Properties>::iterator it;
+      it = std::find_if(mp.begin(), mp.end(), ModulePredicate(comp_id));
+      if (it == mp.end())
+      {
+        RTC_ERROR(("No module for %s in loadable modules list",
+                    comp_id["implementation_id"].c_str()));
+        return nullptr;
       }
+      if (it->findNode("module_file_path") == nullptr)
+      {
+        RTC_ERROR(("Hmm...module_file_path key not found."));
+        return nullptr;
+      }
+      // module loading
+      RTC_INFO(("Loading module: %s", (*it)["module_file_path"].c_str()));
+      load((*it), "");
+      factory = m_factory.find(comp_id);
+      if (factory == nullptr)
+      {
+        RTC_ERROR(("Factory not found for loaded module: %s",
+                    comp_id["implementation_id"].c_str()));
+        return nullptr;
+      }
+
+    }
 
     coil::Properties prop;
     prop = factory->profile();
 
-    const char* inherit_prop[] = {
+    static const char* const inherit_prop[] = {
       "config.version",
       "openrtm.name",
       "openrtm.version",
@@ -799,22 +781,23 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 
     RTObject_impl* comp;
     comp = factory->create(this);
-    if (comp == NULL)
+    if (comp == nullptr)
       {
         RTC_ERROR(("RTC creation failed: %s",
                    comp_id["implementation_id"].c_str()));
-        return NULL;
+        return nullptr;
       }
 
-    if (m_config.getProperty("corba.endpoints_ipv4") == "")
+    if (m_config.getProperty("corba.endpoints_ipv4").empty())
       {
-        setEndpointProperty(comp->getObjRef());
+        RTC::RTObject_var rtobj = comp->getObjRef();
+        setEndpointProperty(rtobj.in());
       }
 
     for (int i(0); inherit_prop[i][0] != '\0'; ++i)
       {
         const char* key(inherit_prop[i]);
-        if (m_config.findNode(key) != NULL)
+        if (m_config.findNode(key) != nullptr)
           {
             prop[key] = m_config[key];
           }
@@ -833,7 +816,6 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     m_listeners.rtclifecycle_.preConfigure(prop);
     configureComponent(comp, prop);
     m_listeners.rtclifecycle_.postConfigure(prop);
-    // comp->setProperties(prop);
 
     //------------------------------------------------------------
     // Component initialization
@@ -848,7 +830,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
             RTC_DEBUG(("%s finalization was failed.",
                        comp_id["implementation_id"].c_str()));
           }
-        return NULL;
+        return nullptr;
       }
     RTC_TRACE(("RTC initialization succeeded: %s",
                comp_id["implementation_id"].c_str()));
@@ -875,56 +857,45 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     coil::vstring names(comp->getNamingNames());
 
     m_listeners.naming_.preBind(comp, names);
-    for (int i(0), len(names.size()); i < len; ++i)
+    for (auto const& name : names)
       {
-        RTC_TRACE(("Bind name: %s", names[i].c_str()));
-        m_namingManager->bindObject(names[i].c_str(), comp);
+        RTC_TRACE(("Bind name: %s", name.c_str()));
+        m_namingManager->bindObject(name.c_str(), comp);
       }
     m_listeners.naming_.postBind(comp, names);
 
-	publishPorts(comp);
-	subscribePorts(comp);
-
-
-	try
-	{
-		std::string id_str = comp->getCategory();
-		id_str = id_str + "." + comp->getInstanceName();
-
-#ifndef ORB_IS_TAO
-		CORBA::Object_ptr obj = theORB()->resolve_initial_references("omniINSPOA");
-		PortableServer::POA_ptr poa = PortableServer::POA::_narrow(obj);
-		poa->the_POAManager()->activate();
-
-		
-
-		PortableServer::ObjectId_var id;
+    publishPorts(comp);
+    subscribePorts(comp);
 
 #ifndef ORB_IS_RTORB
-		id = PortableServer::string_to_ObjectId(id_str.c_str());
-#else // ORB_IS_RTORB
-		id = PortableServer::
-			string_to_ObjectId((char *)id_str.c_str());
-#endif // ORB_IS_RTORB
+    try
+      {
+        std::string id_str = comp->getCategory();
+        id_str = id_str + "." + comp->getInstanceName();
 
-		poa->activate_object_with_id(id.in(), comp);
+#ifndef ORB_IS_TAO
+        CORBA::Object_var obj = theORB()->resolve_initial_references("omniINSPOA");
+        PortableServer::POA_var poa = PortableServer::POA::_narrow(obj);
+        poa->the_POAManager()->activate();
 
-		CORBA::Object_var rtcobj = poa->id_to_reference(id);
-		comp->setINSObjRef(::RTC::LightweightRTObject::_narrow(rtcobj));
+        PortableServer::ObjectId_var id;
+        id = PortableServer::string_to_ObjectId(id_str.c_str());
+
+        poa->activate_object_with_id(id.in(), comp);
+        CORBA::Object_var rtcobj = poa->id_to_reference(id);
+        comp->setINSObjRef(::RTC::LightweightRTObject::_narrow(rtcobj));
 #else
-		CORBA::Object_var obj = theORB()->resolve_initial_references("IORTable");
-		IORTable::Table_var adapter = IORTable::Table::_narrow(obj.in());
+        CORBA::Object_var obj = theORB()->resolve_initial_references("IORTable");
+        IORTable::Table_var adapter = IORTable::Table::_narrow(obj.in());
 
-		CORBA::String_var ior = theORB()->object_to_string(comp->getObjRef());
-		adapter->bind(id_str.c_str(), ior.in());
+        CORBA::String_var ior = theORB()->object_to_string(comp->getObjRef());
+        adapter->bind(id_str.c_str(), ior.in());
 
-		comp->setINSObjRef(comp->getObjRef());
+        comp->setINSObjRef(comp->getObjRef());
 #endif
-	}
-	catch (...)
-	{
-	}
-
+      }
+    catch (...) {}
+#endif
     return true;
   }
 
@@ -944,10 +915,10 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     coil::vstring names(comp->getNamingNames());
 
     m_listeners.naming_.preUnbind(comp, names);
-    for (int i(0), len(names.size()); i < len; ++i)
+    for (auto const& name : names)
       {
-        RTC_TRACE(("Unbind name: %s", names[i].c_str()));
-        m_namingManager->unbindObject(names[i].c_str());
+        RTC_TRACE(("Unbind name: %s", name.c_str()));
+        m_namingManager->unbindObject(name.c_str());
       }
     m_listeners.naming_.postUnbind(comp, names);
 
@@ -963,13 +934,13 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 
     std::string ec_id = std::string();
     coil::Properties ec_prop = coil::Properties();
-    if (!procContextArgs(ec_args, ec_id, ec_prop)) { return NULL; }
+    if (!procContextArgs(ec_args, ec_id, ec_prop)) { return nullptr; }
 
     ECFactoryBase* factory(m_ecfactory.find(ec_id.c_str()));
-    if (factory == NULL)
+    if (factory == nullptr)
       {
         RTC_ERROR(("Factory not found: %s", ec_id.c_str()));
-        return NULL;
+        return nullptr;
       }
 
     ExecutionContextBase* ec;
@@ -993,7 +964,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     // find factory
     coil::Properties& comp_id(comp->getProperties());
     FactoryBase* factory(m_factory.find(comp_id));
-    if (factory == NULL)
+    if (factory == nullptr)
       {
         RTC_DEBUG(("Factory not found: %s",
                    comp_id["implementation_id"].c_str()));
@@ -1012,9 +983,9 @@ std::vector<coil::Properties> Manager::getLoadableModules()
       {
         std::vector<RTObject_impl*> comps;
         comps = getComponents();
-        if (comps.size() == 0)
+        if (comps.empty())
           {
-            shutdown();
+            terminate();
           }
       }
   }
@@ -1024,7 +995,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     RTC_TRACE(("deleteComponent(%s)", instance_name));
     RTObject_impl* comp;
     comp = m_compManager.find(instance_name);
-    if (comp == 0)
+    if (comp == nullptr)
       {
         RTC_WARN(("RTC %s was not found in manager.", instance_name));
         return;
@@ -1159,7 +1130,11 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   PortableServer::POA_ptr Manager::thePOA()
   {
     RTC_TRACE(("Manager::thePOA()"));
+#ifndef ORB_IS_RTORB
     return m_pPOA.in();
+#else
+    return m_pPOA;
+#endif
   }
 #ifdef ORB_IS_OMNIORB
   PortableServer::POA_ptr Manager::theShortCutPOA()
@@ -1198,7 +1173,11 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   PortableServer::POAManager_ptr Manager::thePOAManager()
   {
     RTC_TRACE(("Manager::thePOAManager()"));
+#ifndef ORB_IS_RTORB
     return m_pPOAManager.in();
+#else
+    return m_pPOAManager;
+#endif
   }
 
   /*!
@@ -1211,7 +1190,11 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   PortableServer::POAManager_ptr Manager::getPOAManager()
   {
     RTC_TRACE(("Manager::getPOAManager()"));
+#ifndef ORB_IS_RTORB
     return PortableServer::POAManager::_duplicate(m_pPOAManager);
+#else
+    return m_pPOAManager;
+#endif
   }
 
   //============================================================
@@ -1237,116 +1220,98 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     // initialize ModuleManager
     m_module = new ModuleManager(m_config);
 
-    // initialize Terminator
-    double waittime(0.5);
-    if (m_config.findNode("manager.termination_waittime") != 0)
-      {
-	const char* s = m_config["manager.termination_waittime"].c_str();
-	if (!coil::stringTo(waittime, s))
-	  {
-	    waittime = 0.5;
-	  }
-      }
-    m_terminator = new Terminator(this, waittime);
-    {
-      Guard guard(m_terminate.mutex);
-      m_terminate.waiting = 0;
-    }
-
     // initialize Timer
-    if (coil::toBool(m_config["timer.enable"], "YES", "NO", true))
+    m_needsTimer = coil::toBool(m_config["timer.enable"], "YES", "NO", true);
+
+    if (coil::toBool(m_config["manager.shutdown_auto"], "YES", "NO", true)
+        && !coil::toBool(m_config["manager.is_master"], "YES", "NO", false)
+        && m_needsTimer)
       {
-        coil::TimeValue tm(0, 100000);
-        std::string tick(m_config["timer.tick"]);
-        if (!tick.empty())
+        std::chrono::milliseconds tm;
+        if ((m_config.findNode("manager.auto_shutdown_duration") == nullptr)
+            || !coil::stringTo(tm,
+                               m_config["manager.auto_shutdown_duration"].c_str()))
           {
-            tm = atof(tick.c_str());
-            m_timer = new coil::Timer(tm);
-            m_timer->start();
+            tm = std::chrono::seconds(20);
           }
+        addTask([this]{
+          if (getComponents().empty()) { terminate();
+        }}, tm);
       }
 
-    if (coil::toBool(m_config["manager.shutdown_auto"], "YES", "NO", true) &&
-        !coil::toBool(m_config["manager.is_master"], "YES", "NO", false))
+    if (m_needsTimer)
       {
-        coil::TimeValue tm(10, 0);
-        if (m_config.findNode("manager.auto_shutdown_duration") != NULL)
-          {
-            double duration(10.0);
-            const char* s = m_config["manager.auto_shutdown_duration"].c_str();
-            if (coil::stringTo(duration, s))
-              {
-                tm = duration;
-              }
-          }
-        if (m_timer != NULL)
-          {
-            m_timer->registerListenerObj(this,
-                                         &Manager::shutdownOnNoRtcs, tm);
-          }
+        addTask([this]{
+          cleanupComponents();
+        }, std::chrono::seconds(1));
       }
 
-    {
-      coil::TimeValue tm(1, 0);
-      if (m_timer != NULL)
+    for (auto const& itr : coil::split(m_config["manager.preload.modules"], ","))
+      {
+        std::string mpm_{coil::eraseBothEndsBlank(itr)};
+        if (mpm_.empty())
+          {
+              continue;
+          }
+        std::string basename_ = coil::split(mpm_, ".").front() + "Init";
+        try
         {
-          m_timer->registerListenerObj(this,
-                                       &Manager::cleanupComponents, tm);
+          m_module->load(mpm_, basename_);
         }
-    }
+        catch (...)
+        {
+        }
+      }
 
-
-	{
-		coil::vstring lmpm_ = coil::split(m_config["manager.preload.modules"], ",");
-		for (coil::vstring::iterator itr = lmpm_.begin(); itr != lmpm_.end(); ++itr)
-		{
-			std::string mpm_ = (*itr);
-			coil::eraseBothEndsBlank(mpm_);
-			if (mpm_.empty())
-			{
-				continue;
-			}
-			std::string basename_ = coil::split(mpm_, ".").front() + "Init";
-			try
-			{
-				m_module->load(mpm_, basename_);
-			}
-			catch (...)
-			{
-				//RTC_ERROR((""));
-			}
-		}
-
-	}
-	m_config["manager.instance_name"] = formatString(m_config["manager.instance_name"].c_str(), m_config);
-
-
+    m_config["manager.instance_name"] = formatString(m_config["manager.instance_name"].c_str(), m_config);
   }
 
   /*!
    * @if jp
-   * @brief Manager の終了処理
+   * @brief Manager メインスレッドのメイン関数
    * @else
-   * @brief Manager internal finalization
+   * @brief The main function of the Manager main thread.
    * @endif
    */
-  void Manager::shutdownManager()
+  void Manager::mainThread()
   {
-    RTC_TRACE(("Manager::shutdownManager()"));
-  }
+    RTC_TRACE(("Manager::mainThread()"));
 
-  void  Manager::shutdownOnNoRtcs()
-  {
-    RTC_TRACE(("Manager::shutdownOnNoRtcs()"));
-    if (coil::toBool(m_config["manager.shutdown_on_nortcs"], "YES", "NO", true))
+    m_threadOrb = std::thread([this]{ m_pORB->run(); });
+
+    std::chrono::microseconds period;
+    if (m_config["timer.tick"].empty()
+        || !coil::stringTo(period, m_config["timer.tick"].c_str()))
+    {
+        period = std::chrono::milliseconds(100);
+    }
+
+    std::chrono::milliseconds delay;
+    if ((m_config.findNode("manager.termination_waittime") == nullptr)
+         || !coil::stringTo(delay, m_config["manager.termination_waittime"].c_str()))
       {
-        std::vector<RTObject_impl*> comps(getComponents());
-        if (comps.size() == 0)
-          {
-            terminate();
-          }
+        delay = std::chrono::milliseconds(500);
       }
 
+    // The main loop.
+    auto now = std::chrono::steady_clock::now();
+    while(m_isRunning.test_and_set())
+      {
+        auto prev = now;
+        now = std::chrono::steady_clock::now();
+
+        // DO NOT call tick() with "period" instead of "now - prev". The
+        // specified time for sleep APIs and the time actually passed
+        // may not be the same.
+        m_scheduler.tick(now - prev); // Execute periodic tasks.
+        m_invoker.tick(now - prev);   // Execute delayed calls.
+
+        std::this_thread::sleep_until(now + period);
+      }
+
+    // Shutdown Manager and join m_threadOrb.
+    std::this_thread::sleep_for(delay);
+    shutdown();
   }
 
   //============================================================
@@ -1367,17 +1332,15 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     m_config["logger.file_name"] = 
       formatString(m_config["logger.file_name"].c_str(), m_config);
 
-    std::vector<std::string> logouts =
-      coil::split(m_config["logger.file_name"], ",");
     coil::Properties& logprop = m_config.getNode("logger");
 
-    for (int i(0), len(logouts.size()); i < len; ++i)
+    for (auto const& logout : coil::split(m_config["logger.file_name"], ","))
       {
-        if (logouts[i].empty()) { continue; }
+        if (logout.empty()) { continue; }
 
         LogstreamBase* logstream =
           LogstreamFactory::instance().createObject("file");
-        if (logstream == NULL)
+        if (logstream == nullptr)
           {
             std::cerr << "\"file\" logger creation failed" << std::endl;
             continue;
@@ -1396,19 +1359,27 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   {
     // loading logstream module
     // create logstream object and attach to the logger
-    coil::vstring mods = coil::split(m_config["logger.plugins"], ",");
-    for (size_t i(0); i < mods.size(); ++i)
+    for (auto const& mod : coil::split(m_config["logger.plugins"], ","))
       {
-        std::string basename = mods[i].substr(0, mods[i].find('.'));
-        basename += "Init";
+        std::string initfunc;
+        if (coil::isAbsolutePath(mod))
+        {
+            coil::vstring namelist(coil::split((mod), "/"));
+            namelist = coil::split(namelist.back(), "\\");
+            initfunc = coil::split(namelist.back(), ".").operator[](0) + "Init";
+        }
+        else
+        {
+            initfunc = coil::split(mod, ".").operator[](0) + "Init";
+        }
         try
           {
-            m_module->load(mods[i], basename);
+            m_module->load(mod, initfunc);
           }
         catch (...)
           {
             RTC_WARN(("Logstream plugin module load failed: %s",
-                      mods[i].c_str()));
+                      mod.c_str()));
             continue;
           }
       }
@@ -1420,21 +1391,20 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 
     coil::Properties pp(m_config.getNode("logger.logstream"));
 
-    const std::vector<Properties*>& leaf0 = pp.getLeaf();
-    for (size_t i(0); i < leaf0.size(); ++i)
+    for (auto const i : pp.getLeaf())
       {
-        std::string lstype = leaf0[i]->getName();
+        std::string lstype = i->getName();
         LogstreamBase* logstream = factory.createObject(lstype);
-        if (logstream == NULL)
+        if (logstream == nullptr)
           {
             RTC_WARN(("Logstream %s creation failed.", lstype.c_str()));
             continue;
           }
         RTC_INFO(("Logstream %s created.", lstype.c_str()));
-        if (!logstream->init(*leaf0[i]))
+        if (!logstream->init(*i))
           {
             RTC_WARN(("Logstream %s init failed.", lstype.c_str()));
-            factory.deleteObject(lstype.c_str(), logstream);
+            factory.deleteObject(lstype, logstream);
             RTC_WARN(("Logstream %s deleted.", lstype.c_str()));
           }
         RTC_INFO(("Logstream %s added.", lstype.c_str()));
@@ -1466,9 +1436,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     rtclog.setLevel(m_config["logger.log_level"].c_str());
     // Log stream mutex locking mode
     coil::toBool(m_config["logger.stream_lock"], "enable", "disable", false) ?
-      rtclog.enableLock() : rtclog.disableLock();
-    coil::toBool(m_config["logger.escape_sequence_enable"], "YES", "NO", false) ?
-      rtclog.enableEscapeSequence() : rtclog.disableEscapeSequence();
+      RTC::Logger::enableLock() : RTC::Logger::disableLock();
 
     // File Logstream init
     initLogstreamFile();
@@ -1477,10 +1445,12 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     // Initialize other logstreams
     initLogstreamOthers();
 
-    RTC_INFO(("%s", m_config["openrtm.version"].c_str()));
-    RTC_INFO(("Copyright (C) 2003-2017"));
-    RTC_INFO(("  Noriaki Ando"));
-    RTC_INFO(("  Intelligent Systems Research Institute, AIST"));
+    RTC_INFO(("OpenRTM %s", m_config["openrtm.version"].c_str()));
+    RTC_INFO(("Copyright (C) 2003-2024, Noriaki Ando and OpenRTM development team,"));
+    RTC_INFO(("  Intelligent Systems Research Institute, AIST,"));
+    RTC_INFO(("Copyright (C) 2024, Noriaki Ando and OpenRTM development team,"));
+    RTC_INFO(("  Industrial Cyber-Physical Research Center, AIST,"));
+    RTC_INFO(("  All right reserved."));
     RTC_INFO(("Manager starting."));
     RTC_INFO(("Starting local logging."));
 
@@ -1499,16 +1469,36 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     RTC_TRACE(("Manager::shutdownLogger()"));
     rtclog.flush();
 
-    for (int i(0), len(m_logfiles.size()); i < len; ++i)
+    for (auto & m_logfile : m_logfiles)
       {
-        m_logfiles[i]->close();
-        //        m_logStreamBuf.removeStream(m_logfiles[i]->rdbuf());
-        delete m_logfiles[i];
+        m_logfile->close();
+        delete m_logfile;
       }
     if (!m_logfiles.empty())
       {
         m_logfiles.clear();
       }
+  }
+
+  /*!
+   * @if jp
+   * @brief Managerサーバント の終了処理
+   *
+   * ManagerサーバントのCORBAオブジェクトの非活性化、
+   * 終了処理を実行する。
+   *
+   * @else
+   * @brief Manager Servant finalization
+   *
+   *
+   * @endif
+   */
+  void Manager::shutdownManagerServant()
+  {
+      PortableServer::ObjectId_var oid = m_pPOA->servant_to_id(m_mgrservant);
+      m_pPOA->deactivate_object(oid);
+      delete m_mgrservant;
+      m_mgrservant = nullptr;
   }
 
   //============================================================
@@ -1527,57 +1517,56 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     // Initialize ORB
     try
       {
-	std::vector<std::string> args(coil::split(createORBOptions(), " "));
-	// TAO's ORB_init needs argv[0] as command name.
-	args.insert(args.begin(), "manager");
-	char** argv = coil::toArgv(args);
-	int argc(args.size());
-	
+        const std::string opt = createORBOptions();
+        coil::vstring args{ coil::parseArgs(opt) };
+        // TAO's ORB_init needs argv[0] as command name.
+        args.insert(args.begin(), "manager");
+        m_argv = coil::Argv(args);
 #ifdef ORB_IS_ORBEXPRESS
-	CORBA::ORB::spawn_flags(VX_SPE_TASK | VX_STDIO);
-	CORBA::ORB::stack_size(20000);
-	m_pORB = CORBA::ORB_init(argc, argv, "");
-	CORBA::Object_var obj =
+        CORBA::ORB::spawn_flags(VX_SPE_TASK | VX_STDIO);
+        CORBA::ORB::stack_size(20000);
+        m_pORB = CORBA::ORB_init(m_argv.size(), m_argv.get(), "");
+        CORBA::Object_var obj =
           m_pORB->resolve_initial_references((char*)"RootPOA");
-	m_pPOA = PortableServer::POA::_narrow(obj);
+        m_pPOA = PortableServer::POA::_narrow(obj);
 #else
-	// ORB initialization
-	m_pORB = CORBA::ORB_init(argc, argv);
-	// Get the RootPOA
-	CORBA::Object_var obj =
+        // ORB initialization
+        // ORB_init() of omniORB is too terrible. We cannot release all
+        // arguments until shutdown and the first argument type is int&
+        m_argvSize = static_cast<int>(m_argv.size());
+        m_pORB = CORBA::ORB_init(m_argvSize, m_argv.get());
+        // Get the RootPOA
+        CORBA::Object_var obj =
           m_pORB->resolve_initial_references((char*)"RootPOA");
-	m_pPOA = PortableServer::POA::_narrow(obj);
+        m_pPOA = PortableServer::POA::_narrow(obj);
 #endif
-	if (CORBA::is_nil(m_pPOA))
-	  {
-	    RTC_ERROR(("Could not resolve RootPOA."));
-	    return false;
-	  }
-	// Get the POAManager
-	m_pPOAManager = m_pPOA->the_POAManager();
+        if (CORBA::is_nil(m_pPOA))
+          {
+            RTC_ERROR(("Could not resolve RootPOA."));
+            return false;
+          }
+        // Get the POAManager
+        m_pPOAManager = m_pPOA->the_POAManager();
 #ifdef ORB_IS_OMNIORB
-	CORBA::PolicyList pl;
-	pl.length(1);
-#ifdef RTM_OMNIORB_42
-	pl[0] = omniPolicy::create_local_shortcut_policy(omniPolicy::LOCAL_CALLS_SHORTCUT);
+        CORBA::PolicyList pl;
+        pl.length(1);
+#if defined(RTM_OMNIORB_42) || defined(RTM_OMNIORB_43)
+        pl[0] = omniPolicy::create_local_shortcut_policy(omniPolicy::LOCAL_CALLS_SHORTCUT);
 #else
-	CORBA::Any v;
-	v <<= omniPolicy::LOCAL_CALLS_SHORTCUT;
-	pl[0] = m_pORB->create_policy(omniPolicy::LOCAL_SHORTCUT_POLICY_TYPE, v);
+        CORBA::Any v;
+        v <<= omniPolicy::LOCAL_CALLS_SHORTCUT;
+        pl[0] = m_pORB->create_policy(omniPolicy::LOCAL_SHORTCUT_POLICY_TYPE, v);
 #endif
-	m_pShortCutPOA = m_pPOA->create_POA("shortcut", m_pPOAManager, pl);
+        m_pShortCutPOA = m_pPOA->create_POA("shortcut", m_pPOAManager, pl);
 #endif
 
 #ifdef ORB_IS_OMNIORB
         const char* conf = "corba.alternate_iiop_addresses";
-        if (m_config.findNode(conf) != NULL)
+        if (m_config.findNode(conf) != nullptr)
           {
-            coil::vstring addr_list;
-            addr_list = coil::split(m_config[conf], ",", true);
-
-            for (size_t i(0); i < addr_list.size(); ++i)
+            for (auto const& addr : coil::split(m_config[conf], ",", true))
               {
-                coil::vstring addr_port = coil::split(addr_list[i], ":");
+                coil::vstring addr_port = coil::split(addr, ":");
                 if (addr_port.size() == 2)
                   {
                     IIOP::Address iiop_addr;
@@ -1588,7 +1577,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 #if defined(RTM_OMNIORB_40) || defined(RTM_OMNIORB_41)
                     omniIOR::add_IIOP_ADDRESS(iiop_addr);
 #else
-                    omniIOR::add_IIOP_ADDRESS(iiop_addr, 0);
+                    omniIOR::add_IIOP_ADDRESS(iiop_addr, nullptr);
 #endif  // defined(RTC_OMNIORB_40) and defined(RTC_OMNIORB_41)
                   }
               }
@@ -1619,7 +1608,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 
     coil::vstring endpoints(0);
     createORBEndpoints(endpoints);
-    createORBEndpointOption(opt, endpoints);
+    createORBEndpointOption(opt, std::move(endpoints));
 
     RTC_PARANOID(("ORB options: %s", opt.c_str()));
     return opt;
@@ -1629,16 +1618,18 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   {
     // corba.endpoint is obsolete
     // corba.endpoints with comma separated values are acceptable
-    if (m_config.findNode("corba.endpoints") != 0)
+    if (m_config.findNode("corba.endpoints") != nullptr)
       {
         endpoints = coil::split(m_config["corba.endpoints"], ",");
         RTC_DEBUG(("corba.endpoints: %s", m_config["corba.endpoints"].c_str()));
       }
 
-    if (m_config.findNode("corba.endpoint") != 0)
+    if (m_config.findNode("corba.endpoint") != nullptr)
       {
         coil::vstring tmp(coil::split(m_config["corba.endpoint"], ","));
-        endpoints.insert(endpoints.end(), tmp.begin(), tmp.end());
+        endpoints.insert(endpoints.end(),
+                         std::make_move_iterator(tmp.begin()),
+                         std::make_move_iterator(tmp.end()));
         RTC_DEBUG(("corba.endpoint: %s", m_config["corba.endpoint"].c_str()));
       }
     // If this process has master manager,
@@ -1651,33 +1642,31 @@ std::vector<coil::Properties> Manager::getLoadableModules()
         coil::vstring mmm(coil::split(mm, ":"));
         if (mmm.size() == 2)
           {
-            endpoints.insert(endpoints.begin(), std::string(":") + mmm[1]);
+            endpoints.emplace(endpoints.begin(), std::string(":") + mmm[1]);
           }
         else
           {
-            endpoints.insert(endpoints.begin(), ":2810");
+            endpoints.emplace(endpoints.begin(), ":2810");
           }
       }
-    coil::vstring tmp(endpoints);
-    endpoints = coil::unique_sv(tmp);
+    endpoints = coil::unique_sv(std::move(endpoints));
   }
 
   void Manager::createORBEndpointOption(std::string& opt,
-                                        coil::vstring& endpoints)
+                                        coil::vstring endpoints)
   {
     std::string corba(m_config["corba.id"]);
     RTC_DEBUG(("corba.id: %s", corba.c_str()));
 
-    for (size_t i(0); i < endpoints.size(); ++i)
+    for (auto&& endpoint : endpoints)
       {
-        std::string& endpoint(endpoints[i]);
         RTC_DEBUG(("Endpoint is : %s", endpoint.c_str()));
-        if (endpoint.find(":") == std::string::npos) { endpoint += ":"; }
+        if (endpoint.find(':') == std::string::npos) { endpoint += ":"; }
 
         if (corba == "omniORB")
           {
-            coil::normalize(endpoint);
-            if (coil::normalize(endpoint) == "all:")
+            endpoint = coil::normalize(std::move(endpoint));
+            if (endpoint == "all:")
               {
 #ifdef ORB_IS_OMNIORB
 #ifdef RTC_CORBA_CXXMAPPING11
@@ -1766,9 +1755,8 @@ std::vector<coil::Properties> Manager::getLoadableModules()
       {
         try
           {
-            m_pORB->shutdown(true);
+            m_pORB->destroy();
             RTC_DEBUG(("ORB was shutdown."));
-            //m_pORB->destroy();
             RTC_DEBUG(("ORB was destroied."));
             m_pORB = CORBA::ORB::_nil();
           }
@@ -1809,37 +1797,30 @@ std::vector<coil::Properties> Manager::getLoadableModules()
       }
 
     // NameServer registration for each method and servers
-    std::vector<std::string> meth(coil::split(m_config["naming.type"], ","));
-
-    for (int i(0), len_i(meth.size()); i < len_i; ++i)
+    for (auto const& m : coil::split(m_config["naming.type"], ","))
       {
-        std::vector<std::string> names;
-        names = coil::split(m_config[meth[i] + ".nameservers"], ",");
-
-
-        for (int j(0), len_j(names.size()); j < len_j; ++j)
+        for (auto const& name : coil::split(m_config[m + ".nameservers"], ","))
           {
             RTC_TRACE(("Register Naming Server: %s/%s",                \
-                       meth[i].c_str(), names[j].c_str()));
-            m_namingManager->registerNameServer(meth[i].c_str(),
-                                                names[j].c_str());
+                       m.c_str(), name.c_str()));
+            m_namingManager->registerNameServer(m.c_str(),
+                                                name.c_str());
           }
       }
 
     // NamingManager Timer update initialization
-    if (coil::toBool(m_config["naming.update.enable"], "YES", "NO", true))
+    if (coil::toBool(m_config["naming.update.enable"], "YES", "NO", true)
+        && m_needsTimer)
       {
-        coil::TimeValue tm(10, 0);  // default interval = 10sec for safty
-        std::string intr(m_config["naming.update.interval"]);
-        if (!intr.empty())
+        std::chrono::milliseconds tm;
+        if (m_config["naming.update.interval"].empty()
+            || !coil::stringTo(tm, m_config["naming.update.interval"].c_str()))
           {
-            tm = atof(intr.c_str());
+            tm = std::chrono::seconds(10); // default interval for safety
           }
-        if (m_timer != NULL)
-          {
-            m_timer->registerListenerObj(m_namingManager,
-                                         &NamingManager::update, tm);
-          }
+        addTask([this]{
+          m_namingManager->update();
+        }, tm);
       }
     return true;
   }
@@ -1854,17 +1835,16 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   void Manager::shutdownNaming()
   {
     RTC_TRACE(("Manager::shutdownNaming()"));
-    std::vector<RTObject_impl*> comps = getComponents();
 
-    for (size_t i(0); i < comps.size(); ++i)
+    for (auto const& comp : getComponents())
       {
-        coil::vstring names = comps[i]->getNamingNames();
-        m_listeners.naming_.preUnbind(comps[i], names);
-        for (size_t j(0); j < names.size(); ++j)
+        coil::vstring names = comp->getNamingNames();
+        m_listeners.naming_.preUnbind(comp, names);
+        for (auto & name : names)
           {
-            m_namingManager->unbindObject(names[j].c_str());
+            m_namingManager->unbindObject(name.c_str());
           }
-        m_listeners.naming_.postUnbind(comps[i], names);
+        m_listeners.naming_.postUnbind(comp, names);
       }
 
     m_namingManager->unbindAll();
@@ -1908,9 +1888,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 #endif
 #endif
     // initialize CPU affinity
-#ifdef RTM_OS_LINUX
     initCpuAffinity();
-#endif  // RTM_OS_LINUX
 
     return true;
   }
@@ -1933,59 +1911,53 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   void Manager::initCpuAffinity()
   {
     RTC_TRACE(("initCpuAffinity()"));
-#ifdef RTM_OS_LINUX
-    if (m_config.findNode("manager.cpu_affinity") == 0) { return; }
+    if (m_config.findNode("manager.cpu_affinity") == nullptr) { return; }
 
     std::string& affinity(m_config["manager.cpu_affinity"]);
     RTC_DEBUG(("CPU affinity property: %s", affinity.c_str()));
 
-    coil::vstring tmp = coil::split(affinity, ",", true);
-
-    pid_t pid = getpid();
-    cpu_set_t cpu_set; CPU_ZERO(&cpu_set);
-
-    for (size_t i(0); i < tmp.size(); ++i)
-      {
+    coil::CpuMask cpu_list;
+    for (auto const& c : coil::split(affinity, ",", true))
+    {
         int num;
-        if (coil::stringTo(num, tmp[i].c_str()))
-          {
-            CPU_SET(num, &cpu_set);
-            RTC_DEBUG(("CPU affinity mask set to %d", num));
-          }
-      }
+        if (coil::stringTo(num, c.c_str()))
+        {
+            cpu_list.emplace_back(num);
+            RTC_DEBUG(("CPU affinity int value: %d added.", num));
+        }
+    }
 
-    int result = sched_setaffinity(pid, sizeof(cpu_set_t), &cpu_set);
-    if (result != 0)
-      {
-        RTC_ERROR(("pthread_getaffinity_np():"
-                   "CPU affinity mask setting failed"));
-      }
-    CPU_ZERO(&cpu_set);
-    result = sched_getaffinity(pid, sizeof(cpu_set_t), &cpu_set);
-    if (result != 0)
-      {
-        RTC_ERROR(("pthread_getaffinity_np(): returned error."));
-      }
-    for (size_t j(0); j < CPU_SETSIZE; ++j)
-      {
-        if (CPU_ISSET(j, &cpu_set))
-          {
-            RTC_DEBUG(("Current CPU affinity mask is %d.", j));
-          }
-      }
-#endif  // RTM_OS_LINUX
-  }
+    if (!cpu_list.empty())
+    {
+        bool result = coil::setProcCpuAffinity(cpu_list);
 
-  /*!
-   * @if jp
-   * @brief Timer の初期化
-   * @else
-   * @brief Timer initialization
-   * @endif
-   */
-  bool Manager::initTimer()
-  {
-    return true;
+        if (!result)
+        {
+            RTC_ERROR(("coil::setProcCpuAffinity():"
+                "CPU affinity mask setting failed"));
+        }
+
+        coil::CpuMask ret_cpu;
+        result = coil::getProcCpuAffinity(ret_cpu);
+
+        std::sort(ret_cpu.begin(), ret_cpu.end());
+        std::sort(cpu_list.begin(), cpu_list.end());
+        if (result && !ret_cpu.empty() && !cpu_list.empty() && ret_cpu.size() == cpu_list.size()
+            && std::equal(ret_cpu.begin(), ret_cpu.end(), cpu_list.begin()))
+        {
+
+        }
+        else
+        {
+            RTC_ERROR(("coil::getProcCpuAffinity(): returned error."));
+        }
+
+    }
+    else
+    {
+        RTC_DEBUG(("cpu affinity is not set"));
+    }
+
   }
 
   bool Manager::initManagerServant()
@@ -1996,44 +1968,36 @@ std::vector<coil::Properties> Manager::getLoadableModules()
         return true;
       }
     m_mgrservant = new ::RTM::ManagerServant();
-    if (m_config.getProperty("corba.endpoints_ipv4") == "")
+    if (m_config.getProperty("corba.endpoints_ipv4").empty())
       {
         setEndpointProperty(m_mgrservant->getObjRef());
       }
-    coil::Properties& prop(m_config.getNode("manager"));
-    std::vector<std::string> names(coil::split(prop["naming_formats"], ","));
 
+    coil::Properties& prop(m_config.getNode("manager"));
     if (coil::toBool(prop["is_master"], "YES", "NO", true))
       {
-        for (int i(0), len(names.size()); i < len; ++i)
+        for (auto const& name : coil::split(prop["naming_formats"], ","))
           {
-            std::string mgr_name(formatString(names[i].c_str(), prop));
+            std::string mgr_name(formatString(name.c_str(), prop));
             m_namingManager->bindObject(mgr_name.c_str(), m_mgrservant);
           }
       }
 
-	if (coil::toBool(m_config["corba.update_master_manager.enable"], "YES", "NO", true)
-		&& !coil::toBool(m_config["manager.is_master"], "YES", "NO", false))
-	{
-		coil::TimeValue tm(10, 0);
-		if (m_config.findNode("corba.update_master_manager.interval") != NULL)
-		{
-			float duration = 10;
-			
-			coil::stringTo<float>(duration, m_config["corba.update_master_manager.interval"].c_str());
-			if (duration > 0)
-			{
-				tm = coil::TimeValue(duration);
-			}
-			if (m_timer)
-			{
-				m_timer->registerListenerObj(m_mgrservant, &RTM::ManagerServant::updateMasterManager, tm);
-			}
-
-			
-		}
-
-	}
+    if (coil::toBool(m_config["corba.update_master_manager.enable"], "YES", "NO", true)
+        && !coil::toBool(m_config["manager.is_master"], "YES", "NO", false)
+        && m_needsTimer)
+      {
+        std::chrono::milliseconds duration;
+        if ((m_config.findNode("corba.update_master_manager.interval") == nullptr)
+            || !coil::stringTo(duration, m_config["corba.update_master_manager.interval"].c_str())
+            || (duration <= std::chrono::seconds::zero()))
+          {
+            duration = std::chrono::seconds(10);
+          }
+        addTask([this]{
+          m_mgrservant->updateMasterManager();
+        }, duration);
+      }
 
     return true;
   }
@@ -2047,7 +2011,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
    */
   RTM::ManagerServant& Manager::getManagerServant()
   {
-	  RTC_TRACE(("Manager.getManagerServant()"));
+    RTC_TRACE(("Manager.getManagerServant()"));
     return *m_mgrservant;
   }
 
@@ -2067,8 +2031,8 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   */
   NamingManager* Manager::getNaming()
   {
-	  RTC_TRACE(("Manager.getNaming()"));
-	  return m_namingManager;
+    RTC_TRACE(("Manager.getNaming()"));
+    return m_namingManager;
   }
 
   bool Manager::initLocalService()
@@ -2081,11 +2045,10 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     RTC_DEBUG(("LocalServiceAdmin's properties:"));
     RTC_DEBUG_STR((prop));
 
-    RTM::LocalServiceProfileList svclist = admin.getServiceProfiles();
-    for (size_t i(0); i < svclist.size(); ++i)
+    for (auto const& svc : admin.getServiceProfiles())
       {
         RTC_INFO(("Available local service: %s (%s)",
-        svclist[i].name.c_str(), svclist[i].uuid.c_str()));
+        svc.name.c_str(), svc.uuid.c_str()));
       }
     return true;
   }
@@ -2100,30 +2063,27 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   void Manager::shutdownComponents()
   {
     RTC_TRACE(("Manager::shutdownComponents()"));
-    std::vector<RTObject_impl*> comps;
-    comps = m_namingManager->getObjects();
-    for (int i(0), len(comps.size()); i < len; ++i)
+    for (auto const& comp : m_namingManager->getObjects())
       {
         try
           {
-            comps[i]->exit();
-            coil::Properties p(comps[i]->getInstanceName());
-            p << comps[i]->getProperties();
-            rtclog.lock();
-            rtclog.level(::RTC::Logger::RTL_PARANOID) << p;
-            rtclog.unlock();
+            comp->exit();
+            coil::Properties p(comp->getInstanceName());
+            p << comp->getProperties();
+            RTC_PARANOID_STR((p));
           }
         catch (...)
           {
           }
       }
-    for (CORBA::ULong i(0), len(m_ecs.size()); i < len; ++i)
+    cleanupComponents();
+    for (auto const& m_ec : m_ecs)
       {
         try {
           PortableServer::RefCountServantBase* servant;
           servant =
-                  dynamic_cast<PortableServer::RefCountServantBase*>(m_ecs[i]);
-          if (servant == NULL)
+                  dynamic_cast<PortableServer::RefCountServantBase*>(m_ec);
+          if (servant == nullptr)
             {
               RTC_ERROR(
                   ("Invalid dynamic cast. EC->RefCountServantBase failed."));
@@ -2155,12 +2115,12 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   void Manager::cleanupComponents()
   {
     RTC_VERBOSE(("Manager::cleanupComponents()"));
-    Guard guard(m_finalized.mutex);
+    std::lock_guard<std::mutex> guard(m_finalized.mutex);
     RTC_VERBOSE(("%d components are marked as finalized.",
                m_finalized.comps.size()));
-    for (size_t i(0); i < m_finalized.comps.size(); ++i)
+    for (auto const& comp : m_finalized.comps)
       {
-        deleteComponent(m_finalized.comps[i]);
+        deleteComponent(comp);
       }
     m_finalized.comps.clear();
   }
@@ -2168,8 +2128,8 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   void Manager::notifyFinalized(RTObject_impl* comp)
   {
     RTC_TRACE(("Manager::notifyFinalized()"));
-    Guard guard(m_finalized.mutex);
-    m_finalized.comps.push_back(comp);
+    std::lock_guard<std::mutex> guard(m_finalized.mutex);
+    m_finalized.comps.emplace_back(comp);
   }
 
   /*!
@@ -2192,44 +2152,41 @@ std::vector<coil::Properties> Manager::getLoadableModules()
         return false;
       }
 
-	//RTM::CompParam::prof_list
-
-    if (id_and_conf[0].find(":") == std::string::npos)
+    if (id_and_conf[0].find(':') == std::string::npos)
       {
-		  std::string id = RTM::CompParam::prof_list[0];
-		  id = id + ":::";
+        std::string id = RTM::CompParam::prof_list[0];
+        id = id + ":::";
 
-		  id_and_conf[0].insert(0, id);
+        id_and_conf[0].insert(0, id);
         id_and_conf[0] += "::";
       }
     std::vector<std::string> id(coil::split(id_and_conf[0], ":"));
 
     // id should be devided into 1 or 5 elements
     // RTC:[vendor]:[category]:impl_id:[version] => 5
-	if (id.size() != RTM::CompParam::prof_list_size)
+    if (id.size() != RTM::CompParam::prof_list_size)
       {
         RTC_ERROR(("Invalid RTC id format.: %s", id_and_conf[0].c_str()));
         return false;
       }
 
-	if (id[0] != RTM::CompParam::prof_list[0])
+    if (id[0] != RTM::CompParam::prof_list[0])
       {
         RTC_ERROR(("Invalid id type: %s", id[0].c_str()));
         return false;
       }
-	for (size_t i(1); i < RTM::CompParam::prof_list_size; ++i)
+    for (unsigned int i(1); i < RTM::CompParam::prof_list_size; ++i)
       {
-		  comp_id[RTM::CompParam::prof_list[i]] = id[i];
-		  RTC_TRACE(("RTC basic propfile %s: %s", RTM::CompParam::prof_list[i], id[i].c_str()));
+        comp_id[RTM::CompParam::prof_list[i]] = id[i];
+        RTC_TRACE(("RTC basic propfile %s: %s", RTM::CompParam::prof_list[i], id[i].c_str()));
       }
 
     if (id_and_conf.size() == 2)
       {
-        std::vector<std::string> conf(coil::split(id_and_conf[1], "&"));
-        for (int i(0), len(conf.size()); i < len; ++i)
+        for (auto const& c : coil::split(id_and_conf[1], "&"))
           {
-            if (conf[i].empty()) { continue; }
-            std::vector<std::string> keyval(coil::split(conf[i], "="));
+            if (c.empty()) { continue; }
+            std::vector<std::string> keyval(coil::split(c, "="));
             if (keyval.size() != 2) { continue; }
             comp_conf[keyval[0]] = keyval[1];
             RTC_TRACE(("RTC property %s: %s",
@@ -2258,10 +2215,9 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 
     if (id_and_conf.size() == 2)
       {
-        std::vector<std::string> conf(coil::split(id_and_conf[1], "&"));
-        for (int i(0), len(conf.size()); i < len; ++i)
+        for (auto const& c : coil::split(id_and_conf[1], "&"))
           {
-            std::vector<std::string> k(coil::split(conf[i], "="));
+            std::vector<std::string> k(coil::split(c, "="));
             ec_conf[k[0]] = k[1];
             RTC_TRACE(("EC property %s: %s", k[0].c_str(), k[1].c_str()));
           }
@@ -2279,6 +2235,8 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   void Manager::configureComponent(RTObject_impl* comp,
                                    const coil::Properties& prop)
   {
+    comp->setProperties(prop);
+
     std::string category(comp->getCategory());
     std::string type_name(comp->getTypeName());
     std::string inst_name(comp->getInstanceName());
@@ -2297,11 +2255,11 @@ std::vector<coil::Properties> Manager::getLoadableModules()
             name_prop.load(conff);
             RTC_INFO(("Component instance conf file: %s loaded.",
                       m_config[name_conf].c_str()));
-            RTC_DEBUG_STR((name_prop))
-            config_fname.push_back(m_config[name_conf].c_str());
+            RTC_DEBUG_STR((name_prop));
+            config_fname.emplace_back(m_config[name_conf]);
           }
       }
-    if (m_config.findNode(category + "." + inst_name) != NULL)
+    if (m_config.findNode(category + "." + inst_name) != nullptr)
       {
         coil::Properties& temp(m_config.getNode(category + "." + inst_name));
         coil::vstring keys(temp.propertyNames());
@@ -2310,9 +2268,9 @@ std::vector<coil::Properties> Manager::getLoadableModules()
             name_prop << m_config.getNode(category + "." + inst_name);
             RTC_INFO(("Component type conf exists in rtc.conf. Merged."));
             RTC_DEBUG_STR((name_prop));
-            if (m_config.findNode("config_file") != NULL)
+            if (m_config.findNode("config_file") != nullptr)
               {
-                config_fname.push_back(m_config["config_file"]);
+                config_fname.emplace_back(m_config["config_file"]);
               }
           }
       }
@@ -2325,10 +2283,10 @@ std::vector<coil::Properties> Manager::getLoadableModules()
             RTC_INFO(("Component type conf file: %s loaded.",
                       m_config[type_conf].c_str()));
             RTC_DEBUG_STR((type_prop));
-            config_fname.push_back(m_config[type_conf].c_str());
+            config_fname.emplace_back(m_config[type_conf]);
           }
       }
-    if (m_config.findNode(category + "." + type_name) != NULL)
+    if (m_config.findNode(category + "." + type_name) != nullptr)
       {
         coil::Properties& temp(m_config.getNode(category + "." + type_name));
         coil::vstring keys(temp.propertyNames());
@@ -2337,16 +2295,16 @@ std::vector<coil::Properties> Manager::getLoadableModules()
             type_prop << m_config.getNode(category + "." + type_name);
             RTC_INFO(("Component type conf exists in rtc.conf. Merged."));
             RTC_DEBUG_STR((type_prop));
-            if (m_config.findNode("config_file") != NULL)
+            if (m_config.findNode("config_file") != nullptr)
               {
-                config_fname.push_back(m_config["config_file"]);
+                config_fname.emplace_back(m_config["config_file"]);
               }
           }
       }
     // Merge Properties. type_prop is merged properties
-    comp->setProperties(prop);
     type_prop << name_prop;
-    type_prop["config_file"] = coil::flatten(coil::unique_sv(config_fname));
+    type_prop["config_file"]
+      = coil::flatten(coil::unique_sv(std::move(config_fname)));
     comp->setProperties(type_prop);
 
     //------------------------------------------------------------
@@ -2355,12 +2313,12 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     coil::Properties& comp_prop(comp->getProperties());
 
     naming_formats += m_config["naming.formats"];
-    if (comp_prop.findNode("naming.formats") != 0)
+    if (comp_prop.findNode("naming.formats") != nullptr)
       {
         naming_formats = comp_prop["naming.formats"];
       }
-    naming_formats = coil::flatten(coil::unique_sv(coil::split(naming_formats,
-                                                               ",")));
+    naming_formats = coil::eraseBlank(coil::flatten(coil::unique_sv(coil::split(naming_formats,
+                                                               ","))));
 
     std::string naming_names;
     naming_names = formatString(naming_formats.c_str(), comp->getProperties());
@@ -2377,7 +2335,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
    */
   bool Manager::mergeProperty(coil::Properties& prop, const char* file_name)
   {
-    if (file_name == NULL)
+    if (file_name == nullptr)
       {
         RTC_ERROR(("Invalid configuration file name."));
         return false;
@@ -2405,7 +2363,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   std::string Manager::formatString(const char* naming_format,
                                     coil::Properties& prop)
   {
-    std::string name(naming_format), str("");
+    std::string name(naming_format), str;
     std::string::iterator it, it_end;
     int count(0);
 
@@ -2417,7 +2375,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
         if (c == '%')
           {
             ++count;
-            if (!(count % 2)) str.push_back((*it));
+            if ((count % 2) == 0) str.push_back(*it);
           }
         else if (c == '$')
           {
@@ -2431,8 +2389,11 @@ std::vector<coil::Properties> Manager::getLoadableModules()
                   {
                     env += *it;
                   }
-                char* envval = coil::getenv(env.c_str());
-                if (envval != NULL) str += envval;
+                std::string value;
+                if (coil::getenv(env.c_str(), value))
+                {
+                    str += value;
+                }
               }
             else
               {
@@ -2441,7 +2402,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
           }
         else
           {
-            if (count > 0 && (count % 2))
+            if (count > 0 && ((count % 2) != 0))
               {
                 count = 0;
                 if      (c == 'n')  str += prop["instance_name"];
@@ -2483,7 +2444,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
    */
   void Manager::setEndpointProperty(CORBA::Object_ptr objref)
   {
-#if !defined(ORB_IS_ORBEXPRESS) && !defined(ORB_IS_TAO)
+#if !defined(ORB_IS_ORBEXPRESS) && !defined(ORB_IS_TAO) && !defined(ORB_IS_RTORB)
     RTC_TRACE(("sedEndpointProperty()"));
     if (CORBA::is_nil(objref))
       {
@@ -2499,37 +2460,35 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     CORBA::String_var iorstr = theORB()->object_to_string(objref);
     IOP::IOR ior;
     CORBA_IORUtil::toIOR(iorstr, ior);
-    std::vector<IIOP::Address> endpoints;
-    endpoints = CORBA_IORUtil::getEndpoints(ior);
 
     coil::vstring epstr, epstr_ipv4, epstr_ipv6;
     size_t ipv4_count(0), ipv6_count(0);
 
     coil::vstring addrs;
-    for (size_t i(0); i < endpoints.size(); ++i)
+    for (auto const& endpoint : CORBA_IORUtil::getEndpoints(ior))
       {
-        std::string addr(endpoints[i].host);
+        std::string addr(endpoint.host);
         if (ipv4 && coil::isIPv4(addr))
           {
-            std::string tmp(addr + ":" + coil::otos(endpoints[i].port));
-            if (ipv4_list.size() == 0 ||
+            std::string tmp(addr + ":" + coil::otos(endpoint.port));
+            if (ipv4_list.empty() ||
                 std::find(ipv4_list.begin(), ipv4_list.end(), ipv4_count)
                 != ipv4_list.end())
               {
-                epstr.push_back(tmp);
-                epstr_ipv4.push_back(tmp);
+                epstr.emplace_back(tmp);
+                epstr_ipv4.emplace_back(std::move(tmp));
               }
             ipv4_count += 1;
           }
         if (ipv6 && coil::isIPv6(addr))
           {
-            std::string tmp("[" + addr + "]:" + coil::otos(endpoints[i].port));
-            if (ipv6_list.size() == 0 ||
+            std::string tmp("[" + addr + "]:" + coil::otos(endpoint.port));
+            if (ipv6_list.empty() ||
                 std::find(ipv6_list.begin(), ipv6_list.end(), ipv6_count)
                 != ipv6_list.end())
               {
-                epstr.push_back(tmp);
-                epstr_ipv6.push_back(tmp);
+                epstr.emplace_back(tmp);
+                epstr_ipv6.emplace_back(std::move(tmp));
               }
             ipv6_count += 1;
           }
@@ -2537,6 +2496,8 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     m_config.setProperty("corba.endpoints", coil::flatten(epstr));
     m_config.setProperty("corba.endpoints_ipv4", coil::flatten(epstr_ipv4));
     m_config.setProperty("corba.endpoints_ipv6", coil::flatten(epstr_ipv6));
+#else
+    (void)objref;
 #endif
   }
 
@@ -2552,9 +2513,8 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   {
     ip = false; ip_list.resize(0);
 
-    std::string ep_prop;
-    ep_prop = m_config.getProperty("corba.endpoint_property", "ipv4");
-    coil::toLower(ep_prop);
+    std::string ep_prop{coil::toLower(
+      m_config.getProperty("corba.endpoint_property", "ipv4"))};
 
     std::string::size_type pos = ep_prop.find(ipver);
     if (pos == std::string::npos) { return; }
@@ -2573,13 +2533,12 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     par_end = pos;
 
     std::string list_num(ep_prop.substr(par_begin + 1, par_end - 1));
-    coil::vstring nums = coil::split(list_num, ",");
-    for (size_t i(0); i < nums.size(); ++i)
+    for (auto const& num : coil::split(list_num, ","))
       {
         int n;
-        if (coil::stringTo(n, nums[i].c_str()))
+        if (coil::stringTo(n, num.c_str()))
           {
-            ip_list.push_back(n);
+            ip_list.emplace_back(n);
           }
       }
     return;
@@ -2593,7 +2552,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   * @brief 起動時にrtc.confで指定したポートを接続する
   *
   * 例:
-  * manager.components.preconnect: RTC0.port0?RTC0.port1&interface_type=corba_cdr&dataflow_type=pull&~,~
+  * manager.components.preconnect: RTC0.port0?port=RTC0.port1&interface_type=corba_cdr&dataflow_type=pull&~,~
   *
   *
   * @else
@@ -2604,189 +2563,157 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   */
   void Manager::initPreConnection()
   {
-	  RTC_TRACE(("Connection pre-connection: %s",
-		  m_config["manager.components.preconnect"].c_str()));
-	  std::vector<std::string> connectors;
-	  connectors = coil::split(m_config["manager.components.preconnect"], ",");
-	  for (int i(0), len(connectors.size()); i < len; ++i)
-	  {
-		  
-		  coil::eraseBothEndsBlank(connectors[i]);
-		  if (connectors[i].empty())
-		  {
-			  continue;
-		  }
-
-		  std::string port0_str = coil::split(connectors[i], "?")[0];
-		  coil::mapstring param = coil::urlparam2map(connectors[i]);
-
-		  coil::vstring ports;
-		  coil::mapstring configs;
-
-		  for (coil::mapstring::iterator param_itr = param.begin(); param_itr != param.end(); ++param_itr) {
-			  if (param_itr->first == "port")
-			  {
-				  ports.push_back(param_itr->second);
-				  continue;
-			  }
-			  std::string tmp = param_itr->first;
-			  coil::replaceString(tmp, "port", "");
-              std::string::size_type pos = param_itr->first.find("port");
-
-			  int val = 0;
-              if (coil::stringTo<int>(val, tmp.c_str()) && pos != std::string::npos)
-			  {
-				  ports.push_back(param_itr->second);
-				  continue;
-			  }
-			  configs[param_itr->first] = param_itr->second;
-		  }
-
-
-          /*
-		  if (ports.size() == 0)
-		  {
-			  RTC_ERROR(("Invalid format for pre-connection."));
-			  RTC_ERROR(("Format must be Comp0.port0?port=Comp1.port1"));
-			  continue;
-		  }
-          */
-
-		  if (configs.count("dataflow_type") == 0)
-		  {
-			  configs["dataflow_type"] = "push";
-		  }
-		  if (configs.count("interface_type") == 0)
-		  {
-			  configs["interface_type"] = "corba_cdr";
-		  }
-
-
-		  coil::vstring tmp = coil::split(port0_str, ".");
-		  tmp.pop_back();
-		  std::string comp0_name = coil::flatten(tmp, ".");
-		  
-		  std::string port0_name = port0_str;
-		  RTObject_impl* comp0 = NULL;
-		  RTC::RTObject_ptr comp0_ref = NULL;
-
-		  if (comp0_name.find("://") == std::string::npos)
-		  {
-			  comp0 = getComponent(comp0_name.c_str());
-			  if (comp0 == NULL)
-			  {
-				  RTC_ERROR(("%s not found.", comp0_name.c_str()));
-				  continue;
-			  }
-			  comp0_ref = comp0->getObjRef();
-		  }
-		  else
-		  {
-			  RTC::RTCList rtcs = m_namingManager->string_to_component(comp0_name);
-			  if (rtcs.length() == 0)
-			  {
-				  RTC_ERROR(("%s not found.", comp0_name.c_str()));
-				  continue;
-			  }
-			  comp0_ref = rtcs[0];
-			  coil::vstring tmp_port0_name = coil::split(port0_str, "/");
-			  port0_name = tmp_port0_name.back();
-
-
-		  }
-
-		  RTC::PortService_var port0_var = CORBA_RTCUtil::get_port_by_name(comp0_ref, port0_name);
-
-		  if (CORBA::is_nil(port0_var))
-		  {
-			  RTC_DEBUG(("port %s found: ", port0_str.c_str()));
-			  continue;
-		  }
-
-          if (ports.size() == 0)
+    RTC_TRACE(("Connection pre-connection: %s",
+               m_config["manager.components.preconnect"].c_str()));
+    for (auto&& connector : coil::split(m_config["manager.components.preconnect"], ","))
+      {
+        connector = coil::eraseBothEndsBlank(std::move(connector));
+        if (connector.empty())
           {
-              coil::Properties prop;
+            continue;
+          }
 
-              for (coil::mapstring::iterator config_itr = configs.begin(); config_itr != configs.end(); ++config_itr) {
-                  std::string key = config_itr->first;
-                  std::string value = config_itr->second;
-                  coil::eraseBothEndsBlank(key);
-                  coil::eraseBothEndsBlank(value);
+        std::string port0_str = coil::split(connector, "?")[0];
+        coil::vstring ports;
+        coil::mapstring configs;
+        for (auto & param : coil::urlparam2map(connector))
+          {
+            if (param.first == "port")
+              {
+                ports.emplace_back(std::move(param.second));
+                continue;
+              }
+            std::string tmp{coil::replaceString(param.first, "port", "")};
+            std::string::size_type pos = param.first.find("port");
+            int val = 0;
+            if (coil::stringTo<int>(val, tmp.c_str()) && pos != std::string::npos)
+              {
+                ports.emplace_back(std::move(param.second));
+                continue;
+              }
+            configs[param.first] = std::move(param.second);
+          }
 
-                  prop["dataport." + key] = value;
+        if (configs.count("dataflow_type") == 0)
+          {
+            configs["dataflow_type"] = "push";
+          }
+        if (configs.count("interface_type") == 0)
+          {
+            configs["interface_type"] = "corba_cdr";
+          }
+
+        coil::vstring tmp = coil::split(port0_str, ".");
+        tmp.pop_back();
+        std::string comp0_name = coil::eraseBlank(coil::flatten(tmp, "."));
+
+        std::string port0_name = port0_str;
+        RTObject_impl* comp0 = nullptr;
+        RTC::RTObject_var comp0_ref;
+
+        if (comp0_name.find("://") == std::string::npos)
+          {
+            comp0 = getComponent(comp0_name.c_str());
+            if (comp0 == nullptr)
+            {
+              RTC_ERROR(("%s not found.", comp0_name.c_str()));
+              continue;
+            }
+            comp0_ref = comp0->getObjRef();
+          }
+        else
+          {
+            RTC::RTCList rtcs = m_namingManager->string_to_component(comp0_name);
+            if (rtcs.length() == 0)
+              {
+                RTC_ERROR(("%s not found.", comp0_name.c_str()));
+                continue;
+              }
+            comp0_ref = RTObject::_duplicate(rtcs[0]);
+            coil::vstring tmp_port0_name = coil::split(port0_str, "/");
+            port0_name = tmp_port0_name.back();
+          }
+
+        RTC::PortService_var port0_var = CORBA_RTCUtil::get_port_by_name(comp0_ref.in(), port0_name);
+        if (CORBA::is_nil(port0_var))
+          {
+            RTC_DEBUG(("port %s found: ", port0_str.c_str()));
+            continue;
+          }
+
+        if (ports.empty())
+          {
+            coil::Properties prop;
+
+            for (auto const& config : configs)
+              {
+                std::string key = config.first;
+                std::string value = config.second;
+                coil::eraseBothEndsBlank(key);
+                coil::eraseBothEndsBlank(value);
+                prop["dataport." + key] = value;
               }
 
-              if (RTC::RTC_OK != CORBA_RTCUtil::connect(connectors[i], prop, port0_var, RTC::PortService::_nil()))
+            if (RTC::RTC_OK != CORBA_RTCUtil::connect(connector, prop, port0_var.in(), RTC::PortService::_nil()))
               {
-                  RTC_ERROR(("Connection error: %s", connectors[i].c_str()));
+                RTC_ERROR(("Connection error: %s", connector.c_str()));
               }
           }
 
-		  for (coil::vstring::iterator port_itr = ports.begin(); port_itr != ports.end(); ++port_itr)
-		  {
+        for (auto const& port : ports)
+          {
+            tmp = coil::split(port, ".");
+            tmp.pop_back();
+            std::string comp_name = coil::eraseBlank(coil::flatten(tmp, "."));
+            std::string port_name = port;
+            RTObject_impl* comp = nullptr;
+            RTC::RTObject_var comp_ref;
 
-			  std::string port_str = (*port_itr);
+            if (comp_name.find("://") == std::string::npos)
+              {
+                comp = getComponent(comp_name.c_str());
+                if (comp == nullptr)
+                  {
+                      RTC_ERROR(("%s not found.", comp_name.c_str()));
+                      continue;
+                  }
+                comp_ref = comp->getObjRef();
+              }
+            else
+              {
+                RTC::RTCList rtcs = m_namingManager->string_to_component(comp_name);
+                if (rtcs.length() == 0)
+                  {
+                    RTC_ERROR(("%s not found.", comp_name.c_str()));
+                    continue;
+                  }
+                comp_ref = RTObject::_duplicate(rtcs[0]);
+                coil::vstring tmp_port_name = coil::split(port, "/");
+                port_name = tmp_port_name.back();
+              }
 
-			  tmp = coil::split(port_str, ".");
-			  tmp.pop_back();
-			  std::string comp_name = coil::flatten(tmp, ".");
-			  std::string port_name = port_str;
-			  RTObject_impl* comp = NULL;
-			  RTC::RTObject_ptr comp_ref = NULL;
+            RTC::PortService_var port_var = CORBA_RTCUtil::get_port_by_name(comp_ref.in(), port_name);
 
+            if (CORBA::is_nil(port_var))
+              {
+                RTC_DEBUG(("port %s found: ", port.c_str()));
+                continue;
+              }
 
-			  if (comp_name.find("://") == std::string::npos)
-			  {
-				  comp = getComponent(comp_name.c_str());
-				  if (comp == NULL)
-				  {
-					  RTC_ERROR(("%s not found.", comp_name.c_str()));
-					  continue;
-				  }
-				  comp_ref = comp->getObjRef();
-			  }
-			  else
-			  {
-				  RTC::RTCList rtcs = m_namingManager->string_to_component(comp_name);
-				  if (rtcs.length() == 0)
-				  {
-					  RTC_ERROR(("%s not found.", comp_name.c_str()));
-					  continue;
-				  }
-				  comp_ref = rtcs[0];
-				  coil::vstring tmp_port_name = coil::split(port_str, "/");
-				  port_name = tmp_port_name.back();
+            coil::Properties prop;
+            for (auto const& config : configs)
+              {
+                std::string key{coil::eraseBothEndsBlank(std::move(config.first))};
+                std::string value{coil::eraseBothEndsBlank(std::move(config.second))};
+                prop["dataport." + key] = std::move(value);
+              }
 
-
-			  }
-
-			  RTC::PortService_var port_var = CORBA_RTCUtil::get_port_by_name(comp_ref, port_name);
-
-			  if (CORBA::is_nil(port_var))
-			  {
-				  RTC_DEBUG(("port %s found: ", port_str.c_str()));
-				  continue;
-			  }
-
-			  coil::Properties prop;
-
-			  for (coil::mapstring::iterator config_itr = configs.begin(); config_itr != configs.end(); ++config_itr) {
-				  std::string key = config_itr->first;
-				  std::string value = config_itr->second;
-				  coil::eraseBothEndsBlank(key);
-				  coil::eraseBothEndsBlank(value);
-
-				  prop["dataport." + key] = value;
-			  }
-
-
-
-			  if (RTC::RTC_OK != CORBA_RTCUtil::connect(connectors[i], prop, port0_var, port_var))
-			  {
-				  RTC_ERROR(("Connection error: %s", connectors[i].c_str()));
-			  }
-		  }
-	  }
+            if (RTC::RTC_OK != CORBA_RTCUtil::connect(connector, prop, port0_var.in(), port_var.in()))
+              {
+                RTC_ERROR(("Connection error: %s", connector.c_str()));
+              }
+          }
+      }
   }
 
   /*!
@@ -2805,51 +2732,45 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   */
   void Manager::initPreActivation()
   {
-	  RTC_TRACE(("Components pre-activation: %s",
-		  m_config["manager.components.preactivation"].c_str()));
-	  std::vector<std::string> comps;
-	  comps = coil::split(m_config["manager.components.preactivation"],
-		  ",");
-	  for (int i(0), len(comps.size()); i < len; ++i)
-	  {
-		  coil::eraseBothEndsBlank(comps[i]);
-		  if (!comps[i].empty())
-		  {
-			  RTC::RTObject_ptr comp_ref;
-			  if (comps[i].find("://") == std::string::npos)
-			  {
-				  RTObject_impl* comp = getComponent(comps[i].c_str());
-				  if (comp == NULL)
-				  {
-					  RTC_ERROR(("%s not found.", comps[i].c_str())); continue;
-				  }
-				  comp_ref = comp->getObjRef();
-			  }
-			  else
-			  {
-				  RTC::RTCList rtcs = m_namingManager->string_to_component(comps[i]);
-				  if (rtcs.length() == 0)
-				  {
-					  RTC_ERROR(("%s not found.", comps[i].c_str()));
-					  continue;
-				  }
-				  comp_ref = rtcs[0];
-				  
-			  }
-			  
-			  RTC::ReturnCode_t ret = CORBA_RTCUtil::activate(comp_ref);
-			  if (ret != RTC::RTC_OK)
-			  {
-				  RTC_ERROR(("%s activation filed.", comps[i].c_str()));
-			  }
-			  else
-			  {
-				  RTC_INFO(("%s activated.", comps[i].c_str()));
-			  }
-		  }
-		  
+    RTC_TRACE(("Components pre-activation: %s",
+               m_config["manager.components.preactivation"].c_str()));
 
-	  }
+    for (auto&& c : coil::split(m_config["manager.components.preactivation"], ","))
+      {
+        c = coil::eraseBothEndsBlank(std::move(c));
+        if (!c.empty())
+          {
+            RTC::RTObject_var comp_ref;
+            if (c.find("://") == std::string::npos)
+              {
+                RTObject_impl* comp = getComponent(c.c_str());
+                if (comp == nullptr)
+                  {
+                    RTC_ERROR(("%s not found.", c.c_str())); continue;
+                  }
+                comp_ref = comp->getObjRef();
+              }
+            else
+              {
+                RTC::RTCList rtcs = m_namingManager->string_to_component(c);
+                if (rtcs.length() == 0)
+                  {
+                    RTC_ERROR(("%s not found.", c.c_str()));
+                    continue;
+                  }
+                comp_ref = RTObject::_duplicate(rtcs[0]);
+              }
+            RTC::ReturnCode_t ret = CORBA_RTCUtil::activate(comp_ref.in());
+            if (ret != RTC::RTC_OK)
+              {
+                RTC_ERROR(("%s activation filed.", c.c_str()));
+              }
+            else
+            {
+              RTC_INFO(("%s activated.", c.c_str()));
+            }
+          }
+      }
   }
 
   /*!
@@ -2868,19 +2789,13 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   */
   void Manager::initPreCreation()
   {
-	  RTC_TRACE(("Components pre-creation: %s",
-		  m_config["manager.components.precreate"].c_str()));
-	  std::vector<std::string> comp;
-	  comp = coil::split(m_config["manager.components.precreate"], ",");
-	  for (int i(0), len(comp.size()); i < len; ++i)
-	  {
-		  this->createComponent(comp[i].c_str());
-	  }
+    RTC_TRACE(("Components pre-creation: %s",
+               m_config["manager.components.precreate"].c_str()));
+    for (auto const& comp : coil::split(m_config["manager.components.precreate"], ","))
+      {
+        this->createComponent(comp.c_str());
+      }
   }
-
-
-
-
 
   /*!
   * @if jp
@@ -2896,161 +2811,194 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   */
   void Manager::invokeInitProc()
   {
-	  if (m_initProc != NULL)
-	  {
-		  m_initProc(this);
-	  }
+    if (m_initProc != nullptr)
+      {
+        m_initProc(this);
+      }
   }
-
+#ifndef ORB_IS_RTORB
   void Manager::publishPorts(RTObject_impl* comp)
   {
-	  PortServiceList_var ports = comp->get_ports();
-	  for (size_t i(0); i < ports->length(); ++i)
-	  {
-		  PortProfile_var prof = ports[i]->get_port_profile();
-		  coil::Properties prop;
-		  NVUtil::copyToProperties(prop, prof->properties);
-		  if ((prop.hasKey("publish_topic") == 0 ||
-			  prop["publish_topic"] == "") &&
-			  (prop.hasKey("subscribe_topic") == 0 ||
-			  prop["subscribe_topic"] == "") &&
-			  (prop.hasKey("rendezvous_point") == 0 ||
-			  prop["rendezvous_point"] == "")) {
-			  continue;
-		  }
+    PortServiceList_var ports = comp->get_ports();
+    for (CORBA::ULong i(0); i < ports->length(); ++i)
+      {
+        PortProfile_var prof = ports[i]->get_port_profile();
+        coil::Properties prop;
+        NVUtil::copyToProperties(prop, prof->properties);
+        if ((prop.hasKey("publish_topic") == nullptr ||
+             prop["publish_topic"].empty()) &&
+            (prop.hasKey("subscribe_topic") == nullptr ||
+             prop["subscribe_topic"].empty()) &&
+            (prop.hasKey("rendezvous_point") == nullptr ||
+             prop["rendezvous_point"].empty()))
+          {
+            continue;
+          }
 
-		  std::string name;
-		  if (prop["port.port_type"] == "DataOutPort")
-		  {
-			  name = "dataports.port_cxt/";
-			  name += prop["publish_topic"] + ".topic_cxt/";
-			  name += prof->name; name += ".outport";
-		  }
-		  else if (prop["port.port_type"] == "DataInPort")
-		  {
-			  name = "dataports.port_cxt/";
-			  name += prop["subscribe_topic"] + ".topic_cxt/";
-			  name += prof->name; name += ".inport";
-		  }
-		  else if (prop["port.port_type"] == "CorbaPort")
-		  {
-			  name = "svcports.port_cxt/";
-			  name += prop["rendezvous_point"] + ".svc_cxt/";
-			  name += prof->name; name += ".svc";
-		  }
-		  else
-		  {
-			  RTC_WARN(("Unknown port type: %s", prop["port.port_type"].c_str()));
-			  continue;
-		  }
-		  PortBase* port;
-		  port = dynamic_cast<PortBase*>(m_pPOA->reference_to_servant(ports[i]));
-		  m_namingManager->bindObject(name.c_str(), port);
-	  }
+        std::string name;
+        if (prop["port.port_type"] == "DataOutPort")
+          {
+            name = "dataports.port_cxt/";
+            name += prop["publish_topic"] + ".topic_cxt/";
+            name += prof->name; name += ".outport";
+          }
+        else if (prop["port.port_type"] == "DataInPort")
+          {
+            name = "dataports.port_cxt/";
+            name += prop["subscribe_topic"] + ".topic_cxt/";
+            name += prof->name; name += ".inport";
+          }
+        else if (prop["port.port_type"] == "CorbaPort")
+          {
+            name = "svcports.port_cxt/";
+            name += prop["rendezvous_point"] + ".svc_cxt/";
+            name += prof->name; name += ".svc";
+          }
+        else
+          {
+              RTC_WARN(("Unknown port type: %s", prop["port.port_type"].c_str()));
+              continue;
+          }
+
+        PortBase* port;
+        port = dynamic_cast<PortBase*>(m_pPOA->reference_to_servant(ports[i]));
+        m_namingManager->bindObject(name.c_str(), port);
+      }
+#else
+  void Manager::publishPorts(RTObject_impl* /*comp*/)
+  {
+#endif
   }
+
   void Manager::subscribePorts(RTObject_impl* comp)
   {
-	  PortServiceList_var ports = comp->get_ports();
-	  for (size_t i(0); i < ports->length(); ++i)
-	  {
-		  PortProfile_var prof = ports[i]->get_port_profile();
-		  coil::Properties prop;
-		  NVUtil::copyToProperties(prop, prof->properties);
-		  if ((prop.hasKey("publish_topic") == 0 ||
-			  prop["publish_topic"] == "") &&
-			  (prop.hasKey("subscribe_topic") == 0 ||
-			  prop["subscribe_topic"] == "") &&
-			  (prop.hasKey("rendezvous_point") == 0 ||
-			  prop["rendezvous_point"] == "")) {
-			  continue;
-		  }
+    PortServiceList_var ports = comp->get_ports();
+    for (CORBA::ULong i(0); i < ports->length(); ++i)
+      {
+        PortProfile_var prof = ports[i]->get_port_profile();
+        coil::Properties prop;
+        NVUtil::copyToProperties(prop, prof->properties);
+        if ((prop.hasKey("publish_topic") == nullptr ||
+             prop["publish_topic"].empty()) &&
+            (prop.hasKey("subscribe_topic") == nullptr ||
+             prop["subscribe_topic"].empty()) &&
+            (prop.hasKey("rendezvous_point") == nullptr ||
+             prop["rendezvous_point"].empty()))
+        {
+          continue;
+        }
 
-		  std::string name;
-		  PortServiceList_var nsports;
-		  if (prop["port.port_type"] == "DataOutPort")
-		  {
-			  name = "dataports.port_cxt/";
-			  name += prop["publish_topic"] + ".topic_cxt";
-			  nsports = getPortsOnNameServers(name, "inport");
-			  connectDataPorts(ports[i], nsports);
-		  }
-		  else if (prop["port.port_type"] == "DataInPort")
-		  {
-			  name = "dataports.port_cxt/";
-			  name += prop["subscribe_topic"] + ".topic_cxt";
-			  nsports = getPortsOnNameServers(name, "outport");
-			  connectDataPorts(ports[i], nsports);
-		  }
-		  else if (prop["port.port_type"] == "CorbaPort")
-		  {
-			  name = "svcports.port_cxt/";
-			  name += prop["rendezvous_point"] + ".svc_cxt";
-			  nsports = getPortsOnNameServers(name, "svc");
-			  connectServicePorts(ports[i], nsports);
-		  }
-	  }
+        std::string name;
+        PortServiceList_var nsports;
+        if (prop["port.port_type"] == "DataOutPort")
+          {
+            name = "dataports.port_cxt/";
+            name += prop["publish_topic"] + ".topic_cxt";
+            nsports = getPortsOnNameServers(name, "inport");
+            connectDataPorts(ports[i], nsports);
+          }
+        else if (prop["port.port_type"] == "DataInPort")
+          {
+            name = "dataports.port_cxt/";
+            name += prop["subscribe_topic"] + ".topic_cxt";
+            nsports = getPortsOnNameServers(name, "outport");
+            connectDataPorts(ports[i], nsports);
+          }
+        else if (prop["port.port_type"] == "CorbaPort")
+          {
+            name = "svcports.port_cxt/";
+            name += prop["rendezvous_point"] + ".svc_cxt";
+            nsports = getPortsOnNameServers(name, "svc");
+            connectServicePorts(ports[i], nsports);
+          }
+      }
   }
 
-  PortServiceList_var Manager::getPortsOnNameServers(std::string nsname,
-	  std::string kind)
+  PortServiceList* Manager::getPortsOnNameServers(const std::string& nsname,
+                                                     const std::string& kind)
   {
-	  PortServiceList_var ports = new PortServiceList();
-	  std::vector<RTC::NamingService*>& ns(m_namingManager->getNameServices());
-	  for (size_t i(0); i < ns.size(); ++i)
-	  {
-		  NamingOnCorba* noc = dynamic_cast<NamingOnCorba*>(ns[i]->ns);
-		  if (noc == 0) { continue; }
-		  CorbaNaming& cns(noc->getCorbaNaming());
-		  CosNaming::BindingList_var bl = new CosNaming::BindingList();
-		  cns.listByKind(nsname.c_str(), kind.c_str(), bl);
+    PortServiceList_var ports = new PortServiceList();
+    for (auto const& n : m_namingManager->getNameServices())
+      {
+        NamingOnCorba* noc = dynamic_cast<NamingOnCorba*>(n->ns);
+        if (noc == nullptr) { continue; }
+        CorbaNaming& cns(noc->getCorbaNaming());
+        CosNaming::BindingList_var bl = new CosNaming::BindingList();
+        cns.listByKind(nsname.c_str(), kind.c_str(), bl);
 
-		  for (CORBA::ULong j(0); j < bl->length(); ++j)
-		  {
-			  if (bl[j].binding_type != CosNaming::nobject) { continue; }
-			  std::string tmp(cns.toString(bl[j].binding_name));
-			  std::string nspath;
-			  nspath = "/" + nsname + "/" + tmp;
-			  // ### TODO: All escape characteres should be removed. ###
-			  coil::replaceString(nspath, "\\", "");
-			  CORBA::Object_var obj = cns.resolveStr(nspath.c_str());
-			  RTC::PortService_var portsvc = RTC::PortService::_narrow(obj);
-			  if (CORBA::is_nil(portsvc)) { continue; }
-			  try { PortProfile_var p = portsvc->get_port_profile(); }
-			  catch (...) { continue; } // the port must be zombie
-			  CORBA::ULong len(ports->length());
-			  ports->length(len + 1);
-			  ports[len] = portsvc;
-		  }
-	  }
-	  return ports._retn();
+        for (CORBA::ULong j(0); j < bl->length(); ++j)
+          {
+            if (bl[j].binding_type != CosNaming::nobject) { continue; }
+            std::string tmp(RTC::CorbaNaming::toString(bl[j].binding_name));
+            std::string nspath;
+            // ### TODO: All escape characteres should be removed. ###
+            nspath = coil::replaceString("/" + nsname + "/" + tmp, "\\", "");
+            CORBA::Object_var obj;
+            try
+              {
+                obj = cns.resolveStr(nspath.c_str());
+              }
+            catch (CosNaming::NamingContext::NotFound&e)
+              {
+#ifndef ORB_IS_RTORB
+                RTC_ERROR(("Not found: %s.", cns.toString(e.rest_of_name)));
+#else
+                RTC_ERROR(("Not found: %s.", cns.toString(e.rest_of_name())));
+#endif
+                continue;
+              }
+            catch (CosNaming::NamingContext::CannotProceed&e)
+              {
+#ifndef ORB_IS_RTORB
+                RTC_ERROR(("Cannot proceed: %s.", cns.toString(e.rest_of_name)));
+#else
+                RTC_ERROR(("Cannot proceed: %s.", cns.toString(e.rest_of_name())));
+#endif
+                continue;
+              }
+            catch (CosNaming::NamingContext::InvalidName&/*e*/)
+              {
+                RTC_ERROR(("Invalid name: %s.", nspath.c_str()));
+                continue;
+              }
+            RTC::PortService_var portsvc = RTC::PortService::_narrow(obj);
+            if (CORBA::is_nil(portsvc)) { continue; }
+            try { PortProfile_var p = portsvc->get_port_profile(); }
+            catch (...) { continue; } // the port must be zombie
+            CORBA::ULong len(ports->length());
+            ports->length(len + 1);
+            ports[len] = RTC::PortService::_duplicate(portsvc);
+          }
+      }
+    return ports._retn();
   }
 
   void Manager::connectDataPorts(PortService_ptr port,
-	  PortServiceList_var& target_ports)
+                                 PortServiceList_var& target_ports)
   {
-	  for (CORBA::ULong i(0); i < target_ports->length(); ++i)
-	  {
-		  if (port->_is_equivalent(target_ports[i])) { continue; }
-		  if (CORBA_RTCUtil::already_connected(port, target_ports[i]))
-		  {
-			  continue;
-		  }
-		  std::string con_name;
-		  PortProfile_var p0 = port->get_port_profile();
-		  PortProfile_var p1 = target_ports[i]->get_port_profile();
-		  con_name += p0->name;
-		  con_name += ":";
-		  con_name += p1->name;
-		  coil::Properties prop;
-		  if (RTC::RTC_OK !=
-			  CORBA_RTCUtil::connect(con_name, prop, port, target_ports[i]))
-		  {
-			  RTC_ERROR(("Connection error in topic connection."));
-		  }
-	  }
+    for (CORBA::ULong i(0); i < target_ports->length(); ++i)
+      {
+        if (port->_is_equivalent(target_ports[i])) { continue; }
+        if (CORBA_RTCUtil::already_connected(port, target_ports[i]))
+          {
+              continue;
+          }
+        std::string con_name;
+        PortProfile_var p0 = port->get_port_profile();
+        PortProfile_var p1 = target_ports[i]->get_port_profile();
+        con_name += p0->name;
+        con_name += ":";
+        con_name += p1->name;
+        coil::Properties prop;
+        if (RTC::RTC_OK !=
+            CORBA_RTCUtil::connect(con_name, prop, port, target_ports[i]))
+          {
+            RTC_ERROR(("Connection error in topic connection."));
+          }
+      }
   }
 
-    void Manager::connectServicePorts(PortService_ptr port,
+  void Manager::connectServicePorts(PortService_ptr port,
                                     PortServiceList_var& target_ports)
   {
     for (CORBA::ULong i(0); i < target_ports->length(); ++i)
@@ -3072,6 +3020,5 @@ std::vector<coil::Properties> Manager::getLoadableModules()
           }
       }
   }
-  
 
-};
+} // namespace RTC

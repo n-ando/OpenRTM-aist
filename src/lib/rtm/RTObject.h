@@ -20,6 +20,7 @@
 
 // CORBA header include
 #include <coil/Properties.h>
+#include <coil/Task.h>
 
 #include <rtm/RTC.h>
 #include <rtm/idl/RTCSkel.h>
@@ -44,17 +45,13 @@
 namespace SDOPackage
 {
   class Configuration_impl;
-};
-
-#ifdef WIN32
-#pragma warning( disable : 4290 )
-#endif
+} // namespace SDOPackage
 
 namespace RTC
 {
   class Manager;
   class ExecutionContextBase;
-  typedef ExecutionContextHandle_t UniqueId;
+  using UniqueId = ExecutionContextHandle_t;
 
   /*!
    * @if jp
@@ -148,7 +145,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~RTObject_impl(void);
+    ~RTObject_impl() override;
 
   protected:
     //============================================================
@@ -249,7 +246,7 @@ namespace RTC
      */
     // The startup action when ExecutionContext startup
     // former rtc_starting_entry()
-    virtual ReturnCode_t onStartup(RTC::UniqueId exec_handle);
+    virtual ReturnCode_t onStartup(RTC::UniqueId ec_id);
 
     /*!
      * @if jp
@@ -284,7 +281,7 @@ namespace RTC
      */
     // The shutdown action when ExecutionContext stop
     // former rtc_stopping_entry()
-    virtual ReturnCode_t onShutdown(RTC::UniqueId exec_handle);
+    virtual ReturnCode_t onShutdown(RTC::UniqueId ec_id);
 
     /*!
      * @if jp
@@ -319,7 +316,7 @@ namespace RTC
      */
     // The activated action (Active state entry action)
     // former rtc_active_entry()
-    virtual ReturnCode_t onActivated(RTC::UniqueId exec_handle);
+    virtual ReturnCode_t onActivated(RTC::UniqueId ec_id);
 
     /*!
      * @if jp
@@ -354,7 +351,7 @@ namespace RTC
      */
     // The deactivated action (Active state exit action)
     // former rtc_active_exit()
-    virtual ReturnCode_t onDeactivated(RTC::UniqueId exec_handle);
+    virtual ReturnCode_t onDeactivated(RTC::UniqueId ec_id);
 
     /*!
      * @if jp
@@ -394,7 +391,7 @@ namespace RTC
      */
     // The execution action that is invoked periodically
     // former rtc_active_do()
-    virtual ReturnCode_t onExecute(RTC::UniqueId exec_handle);
+    virtual ReturnCode_t onExecute(RTC::UniqueId ec_id);
 
     /*!
      * @if jp
@@ -429,7 +426,7 @@ namespace RTC
      */
     // The aborting action when main logic error occurred.
     // former rtc_aborting_entry()
-    virtual ReturnCode_t onAborting(RTC::UniqueId exec_handle);
+    virtual ReturnCode_t onAborting(RTC::UniqueId ec_id);
 
     /*!
      * @if jp
@@ -463,7 +460,7 @@ namespace RTC
      */
     // The error action in ERROR state
     // former rtc_error_do()
-    virtual ReturnCode_t onError(RTC::UniqueId exec_handle);
+    virtual ReturnCode_t onError(RTC::UniqueId ec_id);
 
     /*!
      * @if jp
@@ -497,7 +494,7 @@ namespace RTC
      */
     // The reset action that is invoked resetting
     // This is same but different the former rtc_init_entry()
-    virtual ReturnCode_t onReset(RTC::UniqueId exec_handle);
+    virtual ReturnCode_t onReset(RTC::UniqueId ec_id);
 
     /*!
      * @if jp
@@ -537,7 +534,7 @@ namespace RTC
      */
     // The state update action that is invoked after onExecute() action
     // no corresponding operation exists in OpenRTm-aist-0.2.0
-    virtual ReturnCode_t onStateUpdate(RTC::UniqueId exec_handle);
+    virtual ReturnCode_t onStateUpdate(RTC::UniqueId ec_id);
 
     /*!
      * @if jp
@@ -576,7 +573,7 @@ namespace RTC
      */
     // The action that is invoked when execution context's rate is changed
     // no corresponding operation exists in OpenRTm-aist-0.2.0
-    virtual ReturnCode_t onRateChanged(RTC::UniqueId exec_handle);
+    virtual ReturnCode_t onRateChanged(RTC::UniqueId ec_id);
 
   public:
     //============================================================
@@ -617,8 +614,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode_t initialize()
-      throw (CORBA::SystemException);
+    ReturnCode_t initialize() override;
 
     /*!
      * @if jp
@@ -665,8 +661,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode_t finalize()
-      throw (CORBA::SystemException);
+    ReturnCode_t finalize() override;
 
     /*!
      * @if jp
@@ -711,8 +706,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode_t exit()
-      throw (CORBA::SystemException);
+    ReturnCode_t exit() override;
 
     /*!
      * @if jp
@@ -747,8 +741,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual CORBA::Boolean is_alive(ExecutionContext_ptr exec_context)
-      throw (CORBA::SystemException);
+    CORBA::Boolean is_alive(ExecutionContext_ptr exec_context) override;
 
     /*!
      * @if jp
@@ -777,8 +770,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ExecutionContext_ptr get_context(UniqueId exec_handle)
-      throw (CORBA::SystemException);
+    ExecutionContext_ptr get_context(UniqueId ec_id) override;
 
     /*!
      * @if jp
@@ -798,8 +790,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ExecutionContextList* get_owned_contexts()
-      throw (CORBA::SystemException);
+    ExecutionContextList* get_owned_contexts() override;
 
     /*!
      * @if jp
@@ -819,8 +810,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ExecutionContextList* get_participating_contexts()
-      throw (CORBA::SystemException);
+    ExecutionContextList* get_participating_contexts() override;
 
     /*!
      * @if jp
@@ -836,9 +826,8 @@ namespace RTC
      *
      * @endif
      */
-    virtual ExecutionContextHandle_t
-    get_context_handle(ExecutionContext_ptr cxt)
-      throw (CORBA::SystemException);
+    ExecutionContextHandle_t
+    get_context_handle(ExecutionContext_ptr cxt) override;
 
     /*!
      * @if jp
@@ -870,8 +859,7 @@ namespace RTC
      *
      * @endif
      */
-    UniqueId attach_context(ExecutionContext_ptr exec_context)
-      throw (CORBA::SystemException);
+    UniqueId attach_context(ExecutionContext_ptr exec_context) override;
 
     UniqueId bindContext(ExecutionContext_ptr exec_context);
 
@@ -916,8 +904,7 @@ namespace RTC
      *
      * @endif
      */
-    ReturnCode_t detach_context(UniqueId exec_handle)
-      throw (CORBA::SystemException);
+    ReturnCode_t detach_context(UniqueId ec_id) override;
 
     //============================================================
     // RTC::RTObject
@@ -941,8 +928,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ComponentProfile* get_component_profile()
-      throw (CORBA::SystemException);
+    ComponentProfile* get_component_profile() override;
 
     /*!
      * @if jp
@@ -963,32 +949,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual PortServiceList* get_ports()
-      throw (CORBA::SystemException);
-
-    /*!
-     * @if jp
-     *
-     * @brief [RTObject CORBA interface] ExecutionContextAdmin を取得する
-     *
-     * このオペレーションは当該 RTC が所属する ExecutionContextに関連した
-     * ExecutionContextService のリストを返す。
-     *
-     * @return ExecutionContextService リスト
-     *
-     * @else
-     *
-     * @brief [RTObject CORBA interface] Get ExecutionContextAdmin
-     *
-     * This operation returns a list containing an ExecutionContextAdmin for
-     * every ExecutionContext owned by the RTC.
-     *
-     * @return ExecutionContextService List
-     *
-     * @endif
-     */
-    //    virtual ExecutionContextServiceList* get_execution_context_services()
-    //      throw (CORBA::SystemException);
+    PortServiceList* get_ports() override;
 
     //============================================================
     // RTC::ComponentAction
@@ -1018,8 +979,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode_t on_initialize()
-      throw (CORBA::SystemException);
+    ReturnCode_t on_initialize() override;
 
     /*!
      * @if jp
@@ -1045,8 +1005,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode_t on_finalize()
-      throw (CORBA::SystemException);
+    ReturnCode_t on_finalize() override;
 
     /*!
      * @if jp
@@ -1076,8 +1035,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode_t on_startup(UniqueId exec_handle)
-      throw (CORBA::SystemException);
+    ReturnCode_t on_startup(UniqueId ec_id) override;
 
     /*!
      * @if jp
@@ -1107,8 +1065,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode_t on_shutdown(UniqueId exec_handle)
-      throw (CORBA::SystemException);
+    ReturnCode_t on_shutdown(UniqueId ec_id) override;
 
     /*!
      * @if jp
@@ -1136,8 +1093,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode_t on_activated(UniqueId exec_handle)
-      throw (CORBA::SystemException);
+    ReturnCode_t on_activated(UniqueId ec_id) override;
 
     /*!
      * @if jp
@@ -1166,8 +1122,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode_t on_deactivated(UniqueId exec_handle)
-      throw (CORBA::SystemException);
+    ReturnCode_t on_deactivated(UniqueId ec_id) override;
 
     /*!
      * @if jp
@@ -1201,8 +1156,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode_t on_aborting(UniqueId exec_handle)
-      throw (CORBA::SystemException);
+    ReturnCode_t on_aborting(UniqueId ec_id) override;
 
     /*!
      * @if jp
@@ -1247,8 +1201,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode_t on_error(UniqueId exec_handle)
-      throw (CORBA::SystemException);
+    ReturnCode_t on_error(UniqueId ec_id) override;
 
     /*!
      * @if jp
@@ -1284,8 +1237,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode_t on_reset(UniqueId exec_handle)
-      throw (CORBA::SystemException);
+    ReturnCode_t on_reset(UniqueId ec_id) override;
 
     //============================================================
     // RTC::DataFlowComponentAction
@@ -1332,8 +1284,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode_t on_execute(UniqueId exec_handle)
-      throw (CORBA::SystemException);
+    ReturnCode_t on_execute(UniqueId ec_id) override;
 
     /*!
      * @if jp
@@ -1378,8 +1329,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode_t on_state_update(UniqueId exec_handle)
-      throw (CORBA::SystemException);
+    ReturnCode_t on_state_update(UniqueId ec_id) override;
 
     /*!
      * @if jp
@@ -1417,8 +1367,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode_t on_rate_changed(UniqueId exec_handle)
-      throw (CORBA::SystemException);
+    ReturnCode_t on_rate_changed(UniqueId ec_id) override;
 
     //============================================================
     // SDOPackage::SdoSystemElement
@@ -1460,9 +1409,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual SDOPackage::OrganizationList* get_owned_organizations()
-      throw (CORBA::SystemException,
-             SDOPackage::NotAvailable, SDOPackage::InternalError);
+    SDOPackage::OrganizationList* get_owned_organizations() override;
 
     //============================================================
     // SDOPackage::SDO
@@ -1500,9 +1447,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual char* get_sdo_id()
-      throw (CORBA::SystemException,
-             SDOPackage::NotAvailable, SDOPackage::InternalError);
+    char* get_sdo_id() override;
 
     /*!
      * @if jp
@@ -1537,9 +1482,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual char* get_sdo_type()
-      throw (CORBA::SystemException,
-             SDOPackage::NotAvailable, SDOPackage::InternalError);
+    char* get_sdo_type() override;
 
     /*!
      * @if jp
@@ -1577,9 +1520,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual SDOPackage::DeviceProfile* get_device_profile()
-      throw (CORBA::SystemException,
-             SDOPackage::NotAvailable, SDOPackage::InternalError);
+    SDOPackage::DeviceProfile* get_device_profile() override;
 
     /*!
      * @if jp
@@ -1617,9 +1558,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual SDOPackage::ServiceProfileList* get_service_profiles()
-      throw (CORBA::SystemException,
-             SDOPackage::NotAvailable, SDOPackage::InternalError);
+    SDOPackage::ServiceProfileList* get_service_profiles() override;
 
     /*!
      * @if jp
@@ -1662,10 +1601,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual SDOPackage::ServiceProfile* get_service_profile(const char* id)
-      throw (CORBA::SystemException,
-             SDOPackage::InvalidParameter, SDOPackage::NotAvailable,
-             SDOPackage::InternalError);
+    SDOPackage::ServiceProfile* get_service_profile(const char* id) override;
 
     /*!
      * @if jp
@@ -1714,10 +1650,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual SDOPackage::SDOService_ptr get_sdo_service(const char* id)
-      throw (CORBA::SystemException,
-             SDOPackage::InvalidParameter, SDOPackage::NotAvailable,
-             SDOPackage::InternalError);
+    SDOPackage::SDOService_ptr get_sdo_service(const char* id) override;
 
     /*!
      * @if jp
@@ -1763,10 +1696,7 @@ namespace RTC
      *                          completely due to some internal error.
      * @endif
      */
-    virtual SDOPackage::Configuration_ptr get_configuration()
-      throw (CORBA::SystemException,
-             SDOPackage::InterfaceNotImplemented, SDOPackage::NotAvailable,
-             SDOPackage::InternalError);
+    SDOPackage::Configuration_ptr get_configuration() override;
 
     /*!
      * @if jp
@@ -1811,10 +1741,7 @@ namespace RTC
      *                          completely due to some internal error.
      * @endif
      */
-    virtual SDOPackage::Monitoring_ptr get_monitoring()
-      throw (CORBA::SystemException,
-             SDOPackage::InterfaceNotImplemented, SDOPackage::NotAvailable,
-             SDOPackage::InternalError);
+    SDOPackage::Monitoring_ptr get_monitoring() override;
 
     /*!
      * @if jp
@@ -1851,9 +1778,7 @@ namespace RTC
      *                          completely due to some internal error.
      * @endif
      */
-    virtual SDOPackage::OrganizationList* get_organizations()
-      throw (CORBA::SystemException,
-             SDOPackage::NotAvailable, SDOPackage::InternalError);
+    SDOPackage::OrganizationList* get_organizations() override;
 
     /*!
      * @if jp
@@ -1886,9 +1811,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual SDOPackage::NVList* get_status_list()
-      throw (CORBA::SystemException,
-             SDOPackage::NotAvailable, SDOPackage::InternalError);
+    SDOPackage::NVList* get_status_list() override;
 
     /*!
      * @if jp
@@ -1926,10 +1849,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual CORBA::Any* get_status(const char* name)
-      throw (CORBA::SystemException,
-             SDOPackage::InvalidParameter, SDOPackage::NotAvailable,
-             SDOPackage::InternalError);
+    CORBA::Any* get_status(const char* name) override;
 
     //============================================================
     // Local interfaces
@@ -2146,7 +2066,7 @@ namespace RTC
      *
      * @endif
      */
-    void setObjRef(const RTObject_ptr rtobj);
+    void setObjRef(RTObject_ptr rtobj);
 
     /*!
      * @if jp
@@ -2581,8 +2501,8 @@ namespace RTC
      * @endif
      */
     bool addInPort(const char* name, InPortBase& inport);
-    const std::vector<InPortBase*>& getInPorts() const {return m_inports;}
-    const std::vector<OutPortBase*>& getOutPorts() const {return m_outports;}
+    const std::vector<InPortBase*>& getInPorts() const { return m_inports; }
+    const std::vector<OutPortBase*>& getOutPorts() const { return m_outports; }
     /*!
      * @if jp
      *
@@ -2689,7 +2609,7 @@ namespace RTC
      *
      * @endif
      */
-    bool removeInPort(InPortBase& port);
+    bool removeInPort(InPortBase& inport);
 
     /*!
      * @if jp
@@ -2712,7 +2632,7 @@ namespace RTC
      *
      * @endif
      */
-    bool removeOutPort(OutPortBase& port);
+    bool removeOutPort(OutPortBase& outport);
 
     /*!
      * @if jp
@@ -3075,7 +2995,7 @@ namespace RTC
      *
      * @endif
      */
-    bool isOwnExecutionContext(RTC::UniqueId ec_id);
+    static bool isOwnExecutionContext(RTC::UniqueId ec_id);
 
     /*!
      * @if jp
@@ -3353,7 +3273,6 @@ namespace RTC
      */
     void setWriteAll(bool write = true, bool completion = false);
 
-
     /*!
      * @if jp
      *
@@ -3372,7 +3291,6 @@ namespace RTC
      */
     void finalizePorts();
 
-
     /*!
      * @if jp
      *
@@ -3386,19 +3304,18 @@ namespace RTC
      */
     void finalizeContexts();
 
-	/*!
-	* @if jp
-	*
-	* @brief omniINSPOAから取得したオブジェクトを登録
-	*
-	* @else
-	*
-	* @brief 
-	*
-	* @endif
-	*/
-	void setINSObjRef(RTC::LightweightRTObject_ptr obj);
-
+    /*!
+     * @if jp
+     *
+     *  @brief omniINSPOAから取得したオブジェクトを登録
+     *
+     * @else
+     *
+     * @brief
+     *
+     * @endif
+     */
+    void setINSObjRef(RTC::LightweightRTObject_ptr obj);
 
     /*!
      * @if jp
@@ -3472,19 +3389,18 @@ namespace RTC
      *
      * @endif
      */
-    typedef PreComponentActionListener PreCompActionListener;
-    typedef PreComponentActionListenerType PreCompActionListenerType;
+    using PreCompActionListener = PreComponentActionListener;
+    using PreCompActionListenerType = PreComponentActionListenerType;
     void
     addPreComponentActionListener(PreCompActionListenerType listener_type,
                                   PreCompActionListener* listener,
                                   bool autoclean = true);
 
-
     template <class Listener>
     PreComponentActionListener*
     addPreComponentActionListener(PreCompActionListenerType listener_type,
-                                   Listener& obj,
-                                   void (Listener::*memfunc)(UniqueId ec_id))
+                                  Listener& obj,
+                                  void (Listener::*memfunc)(UniqueId ec_id))
     {
       class Noname
         : public PreComponentActionListener
@@ -3494,13 +3410,13 @@ namespace RTC
           : m_obj(obj), m_memfunc(memfunc)
         {
         }
-        void operator()(UniqueId ec_id)
+        void operator()(UniqueId ec_id) override
         {
           (m_obj.*m_memfunc)(ec_id);
         }
       private:
         Listener& m_obj;
-        typedef void (Listener::*Memfunc)(UniqueId ec_id);
+        using Memfunc = void (Listener::*)(UniqueId);
         Memfunc m_memfunc;
       };
       Noname* listener(new Noname(obj, memfunc));
@@ -3529,9 +3445,8 @@ namespace RTC
      */
     void
     removePreComponentActionListener(
-                                 PreComponentActionListenerType listener_type,
-                                 PreComponentActionListener* listener);
-
+        PreComponentActionListenerType listener_type,
+        PreComponentActionListener* listener);
 
     /*!
      * @if jp
@@ -3605,13 +3520,13 @@ namespace RTC
      *
      * @endif
      */
-    typedef PostComponentActionListener PostCompActionListener;
-    typedef PostComponentActionListenerType PostCompActionListenerType;
+    using PostCompActionListener = PostComponentActionListener;
+    using PostCompActionListenerType = PostComponentActionListenerType;
     void
     addPostComponentActionListener(
-                               PostComponentActionListenerType listener_type,
-                               PostComponentActionListener* listener,
-                               bool autoclean = true);
+        PostComponentActionListenerType listener_type,
+        PostComponentActionListener* listener,
+        bool autoclean = true);
 
     template <class Listener>
     PostComponentActionListener*
@@ -3628,13 +3543,14 @@ namespace RTC
           : m_obj(obj), m_memfunc(memfunc)
         {
         }
-        void operator()(UniqueId ec_id, ReturnCode_t ret)
+        void operator()(UniqueId ec_id, ReturnCode_t ret) override
         {
           (m_obj.*m_memfunc)(ec_id, ret);
         }
+
       private:
         Listener& m_obj;
-        typedef void (Listener::*Memfunc)(UniqueId ec_id, ReturnCode_t ret);
+        using Memfunc = void (Listener::*)(UniqueId, ReturnCode_t);
         Memfunc m_memfunc;
       };
       Noname* listener(new Noname(obj, memfunc));
@@ -3663,10 +3579,8 @@ namespace RTC
      */
     void
     removePostComponentActionListener(
-                                  PostComponentActionListenerType listener_type,
-                                  PostComponentActionListener* listener);
-
-
+        PostComponentActionListenerType listener_type,
+        PostComponentActionListener* listener);
 
     /*!
      * @if jp
@@ -3741,13 +3655,14 @@ namespace RTC
           : m_obj(obj), m_memfunc(memfunc)
         {
         }
-        void operator()(const RTC::PortProfile& pprofile)
+        void operator()(const RTC::PortProfile& pprofile) override
         {
           (m_obj.*m_memfunc)(pprofile);
         }
+
       private:
         Listener& m_obj;
-        typedef void (Listener::*Memfunc)(const RTC::PortProfile&);
+        using Memfunc = void (Listener::*)(const RTC::PortProfile&);
         Memfunc m_memfunc;
       };
       Noname* listener(new Noname(obj, memfunc));
@@ -3777,8 +3692,6 @@ namespace RTC
     void
     removePortActionListener(PortActionListenerType listener_type,
                              PortActionListener* listener);
-
-
 
     /*!
      * @if jp
@@ -3833,8 +3746,8 @@ namespace RTC
      *
      * @endif
      */
-    typedef ExecutionContextActionListenerType ECActionListenerType;
-    typedef ExecutionContextActionListener ECActionListener;
+    using ECActionListenerType = ExecutionContextActionListenerType;
+    using ECActionListener = ExecutionContextActionListener;
     void addExecutionContextActionListener(ECActionListenerType listener_type,
                                            ECActionListener* listener,
                                            bool autoclean = true);
@@ -3853,20 +3766,20 @@ namespace RTC
           : m_obj(obj), m_memfunc(memfunc)
         {
         }
-        void operator()(UniqueId ec_id)
+        void operator()(UniqueId ec_id) override
         {
           (m_obj.*m_memfunc)(ec_id);
         }
+
       private:
         Listener& m_obj;
-        typedef void (Listener::*Memfunc)(UniqueId);
+        using Memfunc = void (Listener::*)(UniqueId);
         Memfunc m_memfunc;
       };
       Noname* listener(new Noname(obj, memfunc));
       addExecutionContextActionListener(listener_type, listener, true);
       return listener;
     }
-
 
     /*!
      * @if jp
@@ -3890,7 +3803,6 @@ namespace RTC
     void
     removeExecutionContextActionListener(ECActionListenerType listener_type,
                                          ECActionListener* listener);
-
 
     /*!
      * @if jp
@@ -3947,8 +3859,8 @@ namespace RTC
      * @endif
      */
     void addPortConnectListener(PortConnectListenerType listener_type,
-                                           PortConnectListener* listener,
-                                           bool autoclean = true);
+                                PortConnectListener* listener,
+                                bool autoclean = true);
 
     template <class Listener>
     PortConnectListener*
@@ -3966,20 +3878,20 @@ namespace RTC
           : m_obj(obj), m_memfunc(memfunc)
         {
         }
-        void operator()(const char* portname, ConnectorProfile& cprofile)
+        void operator()(const char* portname, ConnectorProfile& cprofile) override
         {
           (m_obj.*m_memfunc)(portname, cprofile);
         }
+
       private:
         Listener& m_obj;
-        typedef void (Listener::*Memfunc)(const char*, ConnectorProfile&);
+        using Memfunc = void (Listener::*)(const char*, ConnectorProfile&);
         Memfunc m_memfunc;
       };
       Noname* listener(new Noname(obj, memfunc));
       addPortConnectListener(listener_type, listener, true);
       return listener;
     }
-
 
     /*!
      * @if jp
@@ -4063,8 +3975,8 @@ namespace RTC
      * @endif
      */
     void addPortConnectRetListener(PortConnectRetListenerType listener_type,
-                                           PortConnectRetListener* listener,
-                                           bool autoclean = true);
+                                   PortConnectRetListener* listener,
+                                   bool autoclean = true);
 
     template <class Listener>
     PortConnectRetListener*
@@ -4087,22 +3999,20 @@ namespace RTC
         }
         void operator()(const char* portname,
                         ConnectorProfile& cprofile,
-                        ReturnCode_t ret)
+                        ReturnCode_t ret) override
         {
           (m_obj.*m_memfunc)(portname, cprofile, ret);
         }
+
       private:
         Listener& m_obj;
-        typedef void (Listener::*Memfunc)(const char* portname,
-                                          ConnectorProfile& cprofile,
-                                          ReturnCode_t ret);
+        using Memfunc = void (Listener::*)(const char*, ConnectorProfile&, ReturnCode_t);
         Memfunc m_memfunc;
       };
       Noname* listener(new Noname(obj, memfunc));
       addPortConnectRetListener(listener_type, listener, true);
       return listener;
     }
-
 
     /*!
      * @if jp
@@ -4126,7 +4036,6 @@ namespace RTC
     void
     removePortConnectRetListener(PortConnectRetListenerType listener_type,
                                  PortConnectRetListener* listener);
-
 
     /*!
      * @if jp
@@ -4181,13 +4090,14 @@ namespace RTC
         {
         }
         void operator()(const char* config_set_name,
-                        const char* config_param_name)
+                        const char* config_param_name) override
         {
           (m_obj.*m_memfunc)(config_set_name, config_param_name);
         }
+
       private:
         Listener& m_obj;
-        typedef void (Listener::*Memfunc)(const char*, const char*);
+        using Memfunc = void (Listener::*)(const char*, const char*);
         Memfunc m_memfunc;
       };
       Noname* listener(new Noname(obj, memfunc));
@@ -4220,7 +4130,8 @@ namespace RTC
      * @endif
      */
     void removeConfigurationParamListener(ConfigurationParamListenerType type,
-                                          ConfigurationParamListener* listener);
+                                          ConfigurationParamListener*
+                                          listener);
 
     /*!
      * @if jp
@@ -4273,13 +4184,14 @@ namespace RTC
           : m_obj(obj), m_memfunc(memfunc)
         {
         }
-        virtual void operator()(const coil::Properties& config_set)
+        void operator()(const coil::Properties& config_set) override
         {
           (m_obj.*m_memfunc)(config_set);
         }
+
       private:
         Listener& m_obj;
-        typedef void (Listener::*Memfunc)(const coil::Properties& config_set);
+        using Memfunc = void (Listener::*)(const coil::Properties&);
         Memfunc m_memfunc;
       };
       Noname* listener(new Noname(obj, memfunc));
@@ -4365,13 +4277,14 @@ namespace RTC
           : m_obj(obj), m_memfunc(memfunc)
         {
         }
-        virtual void operator()(const char* config_set_name)
+        void operator()(const char* config_set_name) override
         {
           (m_obj.*m_memfunc)(config_set_name);
         }
+
       private:
         Listener& m_obj;
-        typedef void (Listener::*Memfunc)(const char*);
+        using Memfunc = void (Listener::*)(const char*);
         Memfunc m_memfunc;
       };
       Noname* listener(new Noname(obj, memfunc));
@@ -4483,17 +4396,16 @@ namespace RTC
      *
      * @endif
      */
-    void 
+    void
     addPreFsmActionListener(PreFsmActionListenerType listener_type,
-                                  PreFsmActionListener* listener,
-                                  bool autoclean = true);
-
+                            PreFsmActionListener* listener,
+                            bool autoclean = true);
 
     template <class Listener>
     PreFsmActionListener*
     addPreFsmActionListener(PreFsmActionListenerType listener_type,
-                                   Listener& obj,
-                                   void (Listener::*memfunc)(const char* state))
+                            Listener& obj,
+                            void (Listener::*memfunc)(const char* state))
     {
       class Noname
         : public PreFsmActionListener
@@ -4503,13 +4415,14 @@ namespace RTC
           : m_obj(obj), m_memfunc(memfunc)
         {
         }
-        void operator()(const char* state)
+        void operator()(const char* state) override
         {
           (m_obj.*m_memfunc)(state);
         }
+
       private:
         Listener& m_obj;
-        typedef void (Listener::*Memfunc)(const char* state);
+        using Memfunc = void (Listener::*)(const char*);
         Memfunc m_memfunc;
       };
       Noname* listener(new Noname(obj, memfunc));
@@ -4522,7 +4435,7 @@ namespace RTC
      * @brief PreFsmActionListener リスナを削除する
      *
      * 設定した各種リスナを削除する。
-     * 
+     *
      * @param listener_type リスナタイプ
      * @param listener リスナオブジェクトへのポインタ
      *
@@ -4530,17 +4443,15 @@ namespace RTC
      * @brief Removing PreFsmAction type listener
      *
      * This operation removes a specified listener.
-     *     
+     *
      * @param listener_type A listener type
      * @param listener A pointer to a listener object
      *
      * @endif
      */
     void
-    removePreFsmActionListener(
-                               PreFsmActionListenerType listener_type,
+    removePreFsmActionListener(PreFsmActionListenerType listener_type,
                                PreFsmActionListener* listener);
-
 
     /*!
      * @if jp
@@ -4617,7 +4528,7 @@ namespace RTC
     void
     addPostFsmActionListener(PostFsmActionListenerType listener_type,
                              PostFsmActionListener* listener,
-                               bool autoclean = true);
+                             bool autoclean = true);
 
     template <class Listener>
     PostFsmActionListener*
@@ -4635,13 +4546,14 @@ namespace RTC
           : m_obj(obj), m_memfunc(memfunc)
         {
         }
-        void operator()(const char* state, ReturnCode_t ret)
+        void operator()(const char* state, ReturnCode_t ret) override
         {
           (m_obj.*m_memfunc)(state, ret);
         }
+
       private:
         Listener& m_obj;
-        typedef void (Listener::*Memfunc)(const char* state, ReturnCode_t ret);
+        using Memfunc = void (Listener::*)(const char*, ReturnCode_t);
         Memfunc m_memfunc;
       };
       Noname* listener(new Noname(obj, memfunc));
@@ -4654,7 +4566,6 @@ namespace RTC
      * @brief PostFsmActionListener リスナを削除する
      *
      * 設定した各種リスナを削除する。
-     *
      * @param listener_type リスナタイプ
      * @param listener リスナオブジェクトへのポインタ
      *
@@ -4764,9 +4675,10 @@ namespace RTC
         {
           (m_obj.*m_memfunc)(pprofile);
         }
+
       private:
         Listener& m_obj;
-        typedef void (Listener::*Memfunc)(const RTC::FsmProfile&);
+        using Memfunc = void (Listener::*)(const RTC::FsmProfile&);
         Memfunc m_memfunc;
       };
       Noname* listener(new Noname(obj, memfunc));
@@ -4796,7 +4708,6 @@ namespace RTC
     void
     removeFsmProfileListener(FsmProfileListenerType listener_type,
                              FsmProfileListener* listener);
-
 
     /*!
      * @if jp
@@ -4877,9 +4788,10 @@ namespace RTC
         {
           (m_obj.*m_memfunc)(pprofile);
         }
+
       private:
         Listener& m_obj;
-        typedef void (Listener::*Memfunc)(const RTC::FsmStructure&);
+        using Memfunc = void (Listener::*)(const RTC::FsmStructure&);
         Memfunc m_memfunc;
       };
       Noname* listener(new Noname(obj, memfunc));
@@ -4910,168 +4822,146 @@ namespace RTC
     removeFsmStructureListener(FsmStructureListenerType listener_type,
                                FsmStructureListener* listener);
 
-
-
-    //  protected:
-    /*!
-     * @if jp
-     *
-     * @brief RTC を終了する
-     *
-     * RTC の終了処理を実行する。
-     * 保持している全 Port の登録を解除するとともに、該当する CORBA オブジェクト
-     * を非活性化し、RTC を終了する。
-     *
-     * @else
-     *
-     * @brief Shutdown RTC
-     *
-     * This operation ececutes RTC's termination.
-     * This unregisters all Ports, deactivates corresponding CORBA objects and
-     * shuts down RTC.
-     *
-     * @endif
-     */
-    void shutdown();
-
     inline void preOnInitialize(UniqueId ec_id)
     {
-      m_actionListeners.preaction_[PRE_ON_INITIALIZE].notify(ec_id);
+      m_actionListeners.notify(PreComponentActionListenerType::PRE_ON_INITIALIZE, ec_id);
     }
 
     inline void preOnFinalize(UniqueId ec_id)
     {
-      m_actionListeners.preaction_[PRE_ON_FINALIZE].notify(ec_id);
+      m_actionListeners.notify(PreComponentActionListenerType::PRE_ON_FINALIZE, ec_id);
     }
 
     inline void preOnStartup(UniqueId ec_id)
     {
-      m_actionListeners.preaction_[PRE_ON_STARTUP].notify(ec_id);
+      m_actionListeners.notify(PreComponentActionListenerType::PRE_ON_STARTUP, ec_id);
     }
 
     inline void preOnShutdown(UniqueId ec_id)
     {
-      m_actionListeners.preaction_[PRE_ON_SHUTDOWN].notify(ec_id);
+      m_actionListeners.notify(PreComponentActionListenerType::PRE_ON_SHUTDOWN, ec_id);
     }
 
     inline void preOnActivated(UniqueId ec_id)
     {
-      m_actionListeners.preaction_[PRE_ON_ACTIVATED].notify(ec_id);
+      m_actionListeners.notify(PreComponentActionListenerType::PRE_ON_ACTIVATED, ec_id);
     }
 
     inline void preOnDeactivated(UniqueId ec_id)
     {
-      m_actionListeners.preaction_[PRE_ON_DEACTIVATED].notify(ec_id);
+      m_actionListeners.notify(PreComponentActionListenerType::PRE_ON_DEACTIVATED, ec_id);
     }
 
     inline void preOnAborting(UniqueId ec_id)
     {
-      m_actionListeners.preaction_[PRE_ON_ABORTING].notify(ec_id);
+      m_actionListeners.notify(PreComponentActionListenerType::PRE_ON_ABORTING, ec_id);
     }
 
     inline void preOnError(UniqueId ec_id)
     {
-      m_actionListeners.preaction_[PRE_ON_ERROR].notify(ec_id);
+      m_actionListeners.notify(PreComponentActionListenerType::PRE_ON_ERROR, ec_id);
     }
 
     inline void preOnReset(UniqueId ec_id)
     {
-      m_actionListeners.preaction_[PRE_ON_RESET].notify(ec_id);
+      m_actionListeners.notify(PreComponentActionListenerType::PRE_ON_RESET, ec_id);
     }
 
     inline void preOnExecute(UniqueId ec_id)
     {
-      m_actionListeners.preaction_[PRE_ON_EXECUTE].notify(ec_id);
+      m_actionListeners.notify(PreComponentActionListenerType::PRE_ON_EXECUTE, ec_id);
     }
 
     inline void preOnStateUpdate(UniqueId ec_id)
     {
-      m_actionListeners.preaction_[PRE_ON_STATE_UPDATE].notify(ec_id);
+      m_actionListeners.notify(PreComponentActionListenerType::PRE_ON_STATE_UPDATE, ec_id);
     }
 
     inline void preOnRateChanged(UniqueId ec_id)
     {
-      m_actionListeners.preaction_[PRE_ON_RATE_CHANGED].notify(ec_id);
+      m_actionListeners.notify(PreComponentActionListenerType::PRE_ON_RATE_CHANGED, ec_id);
     }
 
     inline void postOnInitialize(UniqueId ec_id, ReturnCode_t ret)
     {
-      m_actionListeners.postaction_[POST_ON_INITIALIZE].notify(ec_id, ret);
+      m_actionListeners.notify(PostComponentActionListenerType::POST_ON_INITIALIZE, ec_id, ret);
     }
 
     inline void postOnFinalize(UniqueId ec_id, ReturnCode_t ret)
     {
-      m_actionListeners.postaction_[POST_ON_FINALIZE].notify(ec_id, ret);
+      m_actionListeners.notify(PostComponentActionListenerType::POST_ON_FINALIZE, ec_id, ret);
     }
 
     inline void postOnStartup(UniqueId ec_id, ReturnCode_t ret)
     {
-      m_actionListeners.postaction_[POST_ON_STARTUP].notify(ec_id, ret);
+      m_actionListeners.notify(PostComponentActionListenerType::POST_ON_STARTUP, ec_id, ret);
     }
 
     inline void postOnShutdown(UniqueId ec_id, ReturnCode_t ret)
     {
-      m_actionListeners.postaction_[POST_ON_SHUTDOWN].notify(ec_id, ret);
+      m_actionListeners.notify(PostComponentActionListenerType::POST_ON_SHUTDOWN, ec_id, ret);
     }
 
     inline void postOnActivated(UniqueId ec_id, ReturnCode_t ret)
     {
-      m_actionListeners.postaction_[POST_ON_ACTIVATED].notify(ec_id, ret);
+      m_actionListeners.notify(PostComponentActionListenerType::POST_ON_ACTIVATED, ec_id, ret);
     }
 
     inline void postOnDeactivated(UniqueId ec_id, ReturnCode_t ret)
     {
-      m_actionListeners.postaction_[POST_ON_DEACTIVATED].notify(ec_id, ret);
+      m_actionListeners.notify(PostComponentActionListenerType::POST_ON_DEACTIVATED, ec_id, ret);
     }
 
     inline void postOnAborting(UniqueId ec_id, ReturnCode_t ret)
     {
-      m_actionListeners.postaction_[POST_ON_ABORTING].notify(ec_id, ret);
+      m_actionListeners.notify(PostComponentActionListenerType::POST_ON_ABORTING, ec_id, ret);
     }
 
     inline void postOnError(UniqueId ec_id, ReturnCode_t ret)
     {
-      m_actionListeners.postaction_[POST_ON_ERROR].notify(ec_id, ret);
+      m_actionListeners.notify(PostComponentActionListenerType::POST_ON_ERROR, ec_id, ret);
     }
 
     inline void postOnReset(UniqueId ec_id, ReturnCode_t ret)
     {
-      m_actionListeners.postaction_[POST_ON_RESET].notify(ec_id, ret);
+      m_actionListeners.notify(PostComponentActionListenerType::POST_ON_RESET, ec_id, ret);
     }
 
     inline void postOnExecute(UniqueId ec_id, ReturnCode_t ret)
     {
-      m_actionListeners.postaction_[POST_ON_EXECUTE].notify(ec_id, ret);
+      m_actionListeners.notify(PostComponentActionListenerType::POST_ON_EXECUTE, ec_id, ret);
     }
 
     inline void postOnStateUpdate(UniqueId ec_id, ReturnCode_t ret)
     {
-      m_actionListeners.postaction_[POST_ON_STATE_UPDATE].notify(ec_id, ret);
+      m_actionListeners.notify(PostComponentActionListenerType::POST_ON_STATE_UPDATE, ec_id, ret);
     }
 
     inline void postOnRateChanged(UniqueId ec_id, ReturnCode_t ret)
     {
-      m_actionListeners.postaction_[POST_ON_RATE_CHANGED].notify(ec_id, ret);
+      m_actionListeners.notify(PostComponentActionListenerType::POST_ON_RATE_CHANGED, ec_id, ret);
     }
 
     inline void onAddPort(const PortProfile& pprof)
     {
-      m_actionListeners.portaction_[ADD_PORT].notify(pprof);
+      m_actionListeners.notify(PortActionListenerType::ADD_PORT, pprof);
     }
 
     inline void onRemovePort(const PortProfile& pprof)
     {
-      m_actionListeners.portaction_[REMOVE_PORT].notify(pprof);
+      m_actionListeners.notify(PortActionListenerType::REMOVE_PORT, pprof);
     }
 
     inline void onAttachExecutionContext(UniqueId ec_id)
     {
-      m_actionListeners.ecaction_[EC_ATTACHED].notify(ec_id);
+      m_actionListeners.
+          notify(ExecutionContextActionListenerType::EC_ATTACHED, ec_id);
     }
 
     inline void onDetachExecutionContext(UniqueId ec_id)
     {
-      m_actionListeners.ecaction_[EC_DETACHED].notify(ec_id);
+      m_actionListeners.
+          notify(ExecutionContextActionListenerType::EC_DETACHED, ec_id);
     }
 
     /*!
@@ -5079,49 +4969,99 @@ namespace RTC
      */
     inline void preOnFsmInit(const char* state)
     {
-      m_fsmActionListeners.preaction_[PRE_ON_INIT].notify(state);
+      m_fsmActionListeners.notify(PreFsmActionListenerType::PRE_ON_INIT, state);
     }
     inline void preOnFsmEntry(const char* state)
     {
-      m_fsmActionListeners.preaction_[PRE_ON_ENTRY].notify(state);
+      m_fsmActionListeners.notify(PreFsmActionListenerType::PRE_ON_ENTRY, state);
     }
     inline void preOnFsmDo(const char* state)
     {
-      m_fsmActionListeners.preaction_[PRE_ON_DO].notify(state);
+      m_fsmActionListeners.notify(PreFsmActionListenerType::PRE_ON_DO, state);
     }
     inline void preOnFsmExit(const char* state)
     {
-      m_fsmActionListeners.preaction_[PRE_ON_EXIT].notify(state);
+      m_fsmActionListeners.notify(PreFsmActionListenerType::PRE_ON_EXIT, state);
     }
     inline void preOnFsmStateChange(const char* state)
     {
-      m_fsmActionListeners.preaction_[PRE_ON_STATE_CHANGE].notify(state);
+      m_fsmActionListeners.notify(PreFsmActionListenerType::PRE_ON_STATE_CHANGE, state);
     }
     /*!
      * FSM related listeners
      */
     inline void postOnFsmInit(const char* state, ReturnCode_t ret)
     {
-      m_fsmActionListeners.postaction_[POST_ON_INIT].notify(state, ret);
+      m_fsmActionListeners.notify(PostFsmActionListenerType::POST_ON_INIT, state, ret);
     }
     inline void postOnFsmEntry(const char* state, ReturnCode_t ret)
     {
-      m_fsmActionListeners.postaction_[POST_ON_ENTRY].notify(state, ret);
+      m_fsmActionListeners.notify(PostFsmActionListenerType::POST_ON_ENTRY, state, ret);
     }
     inline void postOnFsmDo(const char* state, ReturnCode_t ret)
     {
-      m_fsmActionListeners.postaction_[POST_ON_DO].notify(state, ret);
+      m_fsmActionListeners.notify(PostFsmActionListenerType::POST_ON_DO, state, ret);
     }
     inline void postOnFsmExit(const char* state, ReturnCode_t ret)
     {
-      m_fsmActionListeners.postaction_[POST_ON_EXIT].notify(state, ret);
+      m_fsmActionListeners.notify(PostFsmActionListenerType::POST_ON_EXIT, state, ret);
     }
     inline void postOnFsmStateChange(const char* state, ReturnCode_t ret)
     {
-      m_fsmActionListeners.postaction_[POST_ON_STATE_CHANGE].notify(state, ret);
+      m_fsmActionListeners.notify(PostFsmActionListenerType::POST_ON_STATE_CHANGE, state, ret);
     }
 
-    
+  /*!
+   * Protected inner functions
+   */
+  protected:
+    /*!
+     * @if jp
+     * @brief RTC を終了する
+     * RTC の終了処理を実行する。
+     * 保持している全 Port の登録を解除するとともに、該当する CORBA オブジェクト
+     * を非活性化し、RTC を終了する。finalize() でのみコールされる。
+     *
+     * @else
+     * @brief Shutdown RTC
+     * This operation ececutes RTC's termination.
+     * This unregisters all Ports, deactivates corresponding CORBA objects and
+     * shuts down RTC. This is called from onlu finlize().
+     *
+     * @endif
+     */
+    void shutdown();
+
+    /*!
+     * @brief Initialize my EC
+     * This function initializes mine ECs.
+     * This is called from only initialize().
+     */
+    ReturnCode_t initMineEC();
+    /*!
+     * @brief Starting my EC
+     * This function start mine ECs.
+     * This is called from only initialize().
+     */
+    void startMineEC();
+    /*!
+     * @brief Finalize my EC
+     * This function finalize mine ECs.
+     * This is called from only exit().
+     */
+    void finalizeMineEC();
+    /*!
+     * @brief Finalize my EC
+     * This function detaching the RTC from others' ECs.
+     * This is called from only exit().
+     */
+    void finalizeOtherEC();
+
+    /*!
+     * @brief Get inherited EC options
+     * This function getting inherited EC options.
+     * This is called from only initMineEC().
+     */
     ReturnCode_t getInheritedECOptions(coil::Properties& default_opts);
 
     /*!
@@ -5145,13 +5085,18 @@ namespace RTC
     /*!
      * @brief fiding existing EC from the factory
      */
-    ReturnCode_t findExistingEC(coil::Properties& ec_arg,
-                                RTC::ExecutionContextBase*& ec);
+    static ReturnCode_t findExistingEC(coil::Properties& ec_arg,
+                                       RTC::ExecutionContextBase*& ec);
     /*!
      * @brief creating, initializing and binding context
      */
     ReturnCode_t createContexts(std::vector<coil::Properties>& ec_args);
 
+    /*!
+     * @brief initialize SDO service stuff
+     * This function calles SdoService's initialize().
+     */
+    void initSdoService();
 
   protected:
     /*!
@@ -5216,7 +5161,7 @@ namespace RTC
         return m_id == std::string(prof.id);
       }
       std::string m_id;
-    };  // struct svc_name
+    }; // struct svc_name
 
     /*!
      * @if jp
@@ -5234,7 +5179,7 @@ namespace RTC
      * @brief The pointer to the SDO Configuration Interface
      * @endif
      */
-    SDOPackage::Configuration_var  m_pSdoConfig;
+    SDOPackage::Configuration_var m_pSdoConfig;
 
     /*!
      * @if jp
@@ -5346,15 +5291,6 @@ namespace RTC
      * @endif
      */
     bool m_exiting;
-
-    /*!
-     * @if jp
-     * @brief Alive 状態フラグ
-     * @else
-     * @brief Alive Status Flag
-     * @endif
-     */
-    //    bool m_alive;
 
     /*!
      * @if jp
@@ -5484,31 +5420,19 @@ namespace RTC
 
     RTC::LightweightRTObject_var m_insref;
 
-
     class SdoServiceConsumerTerminator
-		: public coil::Task
+      : public coil::Task
     {
     public:
-        SdoServiceConsumerTerminator()
-          {
+      SdoServiceConsumerTerminator();
+      void setSdoServiceConsumer(SdoServiceAdmin * sdoservice, const char* id);
+      int svc() override;
 
-          };
-        void setSdoServiceConsumer(SdoServiceAdmin* sdoservice, const char* id)
-          {
-            m_sdoservice = sdoservice;
-            m_id = id;
-          }
-        virtual int svc(void)
-          {
-            m_sdoservice->removeSdoServiceConsumer(m_id.c_str());
-            return 0;
-          }
     private:
-        SdoServiceAdmin *m_sdoservice;
-        std::string m_id;
+      SdoServiceAdmin *m_sdoservice;
+      std::string m_id;
     };
     SdoServiceConsumerTerminator *m_sdoconterm;
-
 
     //------------------------------------------------------------
     // Functor
@@ -5528,7 +5452,7 @@ namespace RTC
         return m_name == std::string(nv.name);
       }
       std::string m_name;
-    };  // struct nv_name
+    }; // struct nv_name
 
     /*!
      * @if jp
@@ -5552,7 +5476,7 @@ namespace RTC
           }
       }
       ExecutionContextList& m_eclist;
-    };  // struct ec_copy
+    }; // struct ec_copy
     /*!
      * @if jp
      * @brief ExecutionContext 検索用ファンクタ
@@ -5569,15 +5493,15 @@ namespace RTC
 #ifdef ORB_IS_ORBEXPRESS
       bool operator()(ExecutionContextService_var ecs)
       {
-	try
-	  {
+        try
+          {
             if (!::CORBA::is_nil(ecs.in()))
               {
-  	        ExecutionContext_var ec;
-	        ec = ExecutionContext::_narrow(ecs.in());
-	        return m_ec->_is_equivalent(ec);
+                ExecutionContext_var ec;
+                ec = ExecutionContext::_narrow(ecs.in());
+                return m_ec->_is_equivalent(ec);
               }
-	  }
+          }
 #else
       bool operator()(ExecutionContextService_ptr ecs)
       {
@@ -5589,18 +5513,16 @@ namespace RTC
                 ec = ExecutionContext::_narrow(ecs);
                 return m_ec->_is_equivalent(ec);
               }
-	  }
+            }
 #endif
-	catch (...)
-	  {
-	    return false;
-	  }
-	return false;
+        catch (...)
+          {
+            return false;
+          }
+        return false;
       }
       ExecutionContext_var m_ec;
-
-    };  // struct ec_find
-    //    ExecutionContextAdminList m_execContextList;
+    }; // struct ec_find
 
     /*!
      * @if jp
@@ -5619,19 +5541,22 @@ namespace RTC
       {
         if (!::CORBA::is_nil(ec) && !ec->_non_existent())
           {
-
-            ec->deactivate_component(
-                            RTC::LightweightRTObject::_duplicate(m_comp));
-            ec->stop();
+            RTC::LifeCycleState state = ec->get_component_state(m_comp);
+            if (state == RTC::ACTIVE_STATE)
+              {
+                ec->deactivate_component(
+                    RTC::LightweightRTObject::_duplicate(m_comp));
+              }
+            else if (state == RTC::ERROR_STATE)
+              {
+                ec->reset_component(
+                    RTC::LightweightRTObject::_duplicate(m_comp));
+              }
           }
       }
       LightweightRTObject_var m_comp;
-    };  // struct deactivate_comps
-  };  // class RTObject_impl
-};  // namespace RTC
+    }; // struct deactivate_comps
+  };   // class RTObject_impl
+} // namespace RTC
 
-#ifdef WIN32
-#pragma warning( default : 4290 )
-#endif
-
-#endif  // RTC_RTOBJECT
+#endif // RTC_RTOBJECT

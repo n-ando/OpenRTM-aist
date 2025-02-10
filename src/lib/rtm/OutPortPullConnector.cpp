@@ -33,7 +33,7 @@ namespace RTC
    */
   OutPortPullConnector::OutPortPullConnector(ConnectorInfo info,
                                              OutPortProvider* provider,
-                                             ConnectorListeners& listeners,
+                                             ConnectorListenersBase* listeners,
                                              CdrBufferBase* buffer)
     : OutPortConnector(info, listeners),
       m_provider(provider),
@@ -42,23 +42,26 @@ namespace RTC
       m_sync_readwrite(false)
   {
     // create buffer
-    if (m_buffer == 0)
+    if (m_buffer == nullptr)
       {
         m_buffer = createBuffer(info);
       }
 
-    if (m_provider == 0 || m_buffer == 0) { throw std::bad_alloc(); }
+    if (m_provider == nullptr || m_buffer == nullptr) { throw std::bad_alloc(); }
 
     m_buffer->init(info.properties.getNode("buffer"));
+    m_provider->init(info.properties);
     m_provider->setBuffer(m_buffer);
     m_provider->setConnector(this);
-    //    m_provider->init(m_profile /* , m_listeners */);
-    m_provider->setListener(info, &m_listeners);
+    m_provider->setListener(info, m_listeners);
 
     if (coil::toBool(info.properties["sync_readwrite"], "YES", "NO", false))
     {
         m_sync_readwrite = true;
     }
+
+    m_marshaling_type = coil::eraseBothEndsBlank(
+      info.properties.getProperty("marshaling_type", "cdr"));
 
     onConnect();
   }
@@ -83,96 +86,95 @@ namespace RTC
    * @brief Destructor
    * @endif
    */
-  ConnectorBase::ReturnCode
-  OutPortPullConnector::write(cdrMemoryStream& data)
+  DataPortStatus
+  OutPortPullConnector::write(ByteDataStreamBase* data)
   {
 
-    if (m_buffer == 0)
+    if (m_buffer == nullptr)
     {
-        return PRECONDITION_NOT_MET;
+        return DataPortStatus::PRECONDITION_NOT_MET;
     }
 
     if (m_sync_readwrite)
     {
         {
-            Guard guard(m_readready_worker.mutex_);
+            std::unique_lock<std::mutex> guard(m_readready_worker.mutex_);
             while (!m_readready_worker.completed_)
             {
-                m_readready_worker.cond_.wait();
+                m_readready_worker.cond_.wait(guard);
             }
         }
     }
 
-    m_buffer->write(data);
+    m_buffer->write(*data);
 
     if (m_sync_readwrite)
     {
         {
-            Guard guard(m_writecompleted_worker.mutex_);
+            std::lock_guard<std::mutex> guard(m_writecompleted_worker.mutex_);
             m_writecompleted_worker.completed_ = true;
-            m_writecompleted_worker.cond_.signal();
+            m_writecompleted_worker.cond_.notify_one();
         }
 
 
           {
-              Guard guard(m_readcompleted_worker.mutex_);
+              std::unique_lock<std::mutex> guard(m_readcompleted_worker.mutex_);
               while (!m_readcompleted_worker.completed_)
               {
-                  m_readcompleted_worker.cond_.wait();
+                  m_readcompleted_worker.cond_.wait(guard);
               }
           }
           {
-              Guard guard(m_writecompleted_worker.mutex_);
+              std::lock_guard<std::mutex> guard(m_writecompleted_worker.mutex_);
               m_writecompleted_worker.completed_ = false;
           }
     }
 
-    return PORT_OK;
+    return DataPortStatus::PORT_OK;
   }
 
-  CdrBufferBase::ReturnCode
-  OutPortPullConnector::read(cdrMemoryStream &data)
+  BufferStatus
+  OutPortPullConnector::read(ByteData &data)
   {
-      if (m_buffer == 0)
+      if (m_buffer == nullptr)
       {
-          return CdrBufferBase::PRECONDITION_NOT_MET;
+          return BufferStatus::PRECONDITION_NOT_MET;
       }
 
       if (m_sync_readwrite)
       {
 
         {
-            Guard guard(m_readcompleted_worker.mutex_);
+            std::lock_guard<std::mutex> guard(m_readcompleted_worker.mutex_);
             m_readcompleted_worker.completed_ = false;
         }
 
         {
-            Guard guard(m_readready_worker.mutex_);
+            std::lock_guard<std::mutex> guard(m_readready_worker.mutex_);
             m_readready_worker.completed_ = true;
-            m_readready_worker.cond_.signal();
+            m_readready_worker.cond_.notify_one();
         }
         {
-            Guard guard(m_writecompleted_worker.mutex_);
+            std::unique_lock<std::mutex> guard(m_writecompleted_worker.mutex_);
             while (!m_writecompleted_worker.completed_)
             {
-                m_writecompleted_worker.cond_.wait();
+                m_writecompleted_worker.cond_.wait(guard);
             }
         }
       }
 
-      CdrBufferBase::ReturnCode ret = m_buffer->read(data);
-
+      BufferStatus ret = m_buffer->read(data);
 
       if (m_sync_readwrite)
       {
         {
-            Guard guard(m_readcompleted_worker.mutex_);
+            std::lock_guard<std::mutex> guard(m_readcompleted_worker.mutex_);
             m_readcompleted_worker.completed_ = true;
-            m_readcompleted_worker.cond_.signal();
+            m_readcompleted_worker.cond_.notify_one();
         }
 
         {
-            Guard guard(m_readready_worker.mutex_);
+            std::lock_guard<std::mutex> guard(m_readready_worker.mutex_);
             m_readready_worker.completed_ = false;
         }
       }
@@ -188,26 +190,26 @@ namespace RTC
    * @brief Disconnect connection
    * @endif
    */
-  ConnectorBase::ReturnCode OutPortPullConnector::disconnect()
+  DataPortStatus OutPortPullConnector::disconnect()
   {
     RTC_TRACE(("disconnect()"));
     // delete provider
-    if (m_provider != 0)
+    if (m_provider != nullptr)
       {
         OutPortProviderFactory& cfactory(OutPortProviderFactory::instance());
         cfactory.deleteObject(m_provider);
       }
-    m_provider = 0;
+    m_provider = nullptr;
 
     // delete buffer
-    if (m_buffer != 0)
+    if (m_buffer != nullptr)
       {
         CdrBufferFactory& bfactory(CdrBufferFactory::instance());
         bfactory.deleteObject(m_buffer);
       }
-    m_buffer = 0;
+    m_buffer = nullptr;
 
-    return PORT_OK;
+    return DataPortStatus::PORT_OK;
   }
 
   /*!
@@ -252,7 +254,7 @@ namespace RTC
    */
   void OutPortPullConnector::onConnect()
   {
-    m_listeners.connector_[ON_CONNECT].notify(m_profile);
+    m_listeners->notify(ConnectorListenerType::ON_CONNECT, m_profile);
   }
 
   /*!
@@ -264,7 +266,7 @@ namespace RTC
    */
   void OutPortPullConnector::onDisconnect()
   {
-    m_listeners.connector_[ON_DISCONNECT].notify(m_profile);
+    m_listeners->notify(ConnectorListenerType::ON_DISCONNECT, m_profile);
   }
-};  // namespace RTC
+} // namespace RTC
 

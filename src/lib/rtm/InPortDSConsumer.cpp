@@ -1,6 +1,6 @@
 ﻿// -*- C++ -*-
 /*!
- * @file  InPortDSConsumer.h
+ * @file  InPortDSConsumer.cpp
  * @brief InPortDSConsumer class
  * @date  $Date: 2018-09-20 07:49:59 $
  * @author Nobuhiko Miyamoto <n-miyamoto@aist.go.jp>
@@ -28,7 +28,7 @@ namespace RTC
    * @param buffer The buffer object that is attached to this Consumer
    * @endif
    */
-  InPortDSConsumer::InPortDSConsumer(void)
+  InPortDSConsumer::InPortDSConsumer()
     : rtclog("InPortDSConsumer")
   {
   }
@@ -40,7 +40,7 @@ namespace RTC
    * @brief Destructor
    * @endif
    */
-  InPortDSConsumer::~InPortDSConsumer(void)
+  InPortDSConsumer::~InPortDSConsumer()
   {
     RTC_PARANOID(("~InPortDSConsumer()"));
   }
@@ -64,50 +64,28 @@ namespace RTC
    * @brief Write data into the buffer
    * @endif
    */
-  InPortConsumer::ReturnCode InPortDSConsumer::
-	  put(cdrMemoryStream& data)
+  DataPortStatus InPortDSConsumer::
+     put(ByteData& data)
   {
     RTC_PARANOID(("put()"));
 
+    CORBA::ULong len = static_cast<CORBA::ULong>(data.getDataLength());
+    m_data.length(len);
 #ifndef ORB_IS_RTORB
-#ifdef ORB_IS_ORBEXPRESS
-    cdrMemoryStream tmp_data;
-    tmp_data = data;
-    ::RTC::OctetSeq tmp;
-    CORBA::ULong len = tmp_data.cdr.size_written();
-    tmp.length(len);
-    tmp_data.cdr.read_array_1((void*)tmp.get_buffer(), len);
-    //CORBA::Octet* to;
-    //cdrMemoryStream data_tmp = data;
-    //*static_cast<CORBA::Octet*>(to) = data_tmp.read_octet();
-    //::RTC::OctetSeq tmp(data_tmp.size_written(), data_tmp.size_written(),
-    //                       to, 0);
-#elif defined(ORB_IS_TAO)
-	::RTC::OctetSeq tmp;
-	data.encodeCDRData(tmp);
-#else
-    ::RTC::OctetSeq tmp(data.bufSize(), data.bufSize(),
-                           static_cast<CORBA::Octet*>(data.bufPtr()), 0);
-#endif
+    data.readData(static_cast<unsigned char*>(m_data.get_buffer()), len);
 #else // ORB_IS_RTORB
-    OpenRTM_CdrData *cdrdata_tmp = new OpenRTM_CdrData();
-    cdrdata_tmp->_buffer =
-      <CORBA_octet *>RtORB_alloc(data.bufSize(), "InPortDSComsumer::push");
-    memcpy(cdrdata_tmp->_buffer, data.bufPtr(), data.bufSize());
-    cdrdata_tmp->_length = cdrdata_tmp->_maximum = data.bufSize();
-    ::RTC::OctetSeq tmp(cdrdata_tmp);
+    data.readData(reinterpret_cast<unsigned char*>(&m_data[0]), len);
 #endif  // ORB_IS_RTORB
     try
       {
         // return code conversion
         // (IDL)OpenRTM::DataPort::ReturnCode_t -> DataPortStatus
-        return convertReturnCode(_ptr()->push(tmp));
+        return convertReturnCode(_ptr()->push(m_data));
       }
     catch (...)
       {
-        return CONNECTION_LOST;
+        return DataPortStatus::CONNECTION_LOST;
       }
-    return UNKNOWN_ERROR;
   }
 
   /*!
@@ -118,7 +96,7 @@ namespace RTC
    * @endif
    */
   void InPortDSConsumer::
-  publishInterfaceProfile(SDOPackage::NVList& properties)
+  publishInterfaceProfile(SDOPackage::NVList&  /*properties*/)
   {
     return;
   }
@@ -186,7 +164,7 @@ namespace RTC
         return false;
       }
 
-    const char* ior(0);
+    const char* ior(nullptr);
     if (!(properties[index].value >>= ior))
       {
         RTC_ERROR(("inport_ior has no string"));
@@ -275,7 +253,7 @@ namespace RTC
         return false;
       }
 
-    const char* ior = NULL;
+    const char* ior = nullptr;
     if (!(properties[index].value >>= ior))
       {
         RTC_ERROR(("prop[inport_ior] is not string"));
@@ -333,34 +311,32 @@ namespace RTC
    * @brief Return codes conversion
    * @endif
    */
-  InPortConsumer::ReturnCode
+  DataPortStatus
   InPortDSConsumer::convertReturnCode(RTC::PortStatus ret)
   {
     switch (ret)
       {
       case RTC::PORT_OK:
-        return InPortConsumer::PORT_OK;
+        return DataPortStatus::PORT_OK;
         break;
       case RTC::PORT_ERROR:
-        return InPortConsumer::PORT_ERROR;
+        return DataPortStatus::PORT_ERROR;
         break;
       case RTC::BUFFER_FULL:
-        return InPortConsumer::SEND_FULL;
+        return DataPortStatus::SEND_FULL;
         break;
       case RTC::BUFFER_TIMEOUT:
-        return InPortConsumer::SEND_TIMEOUT;
+        return DataPortStatus::SEND_TIMEOUT;
         break;
-      case RTC::UNKNOWN_ERROR:
-        return InPortConsumer::UNKNOWN_ERROR;
-        break;
+      case RTC::UNKNOWN_ERROR: /* FALLTHROUGH */
+      case RTC::BUFFER_EMPTY:  /* FALLTHROUGH */
       default:
-        return InPortConsumer::UNKNOWN_ERROR;
+        return DataPortStatus::UNKNOWN_ERROR;
         break;
       }
-    return InPortConsumer::UNKNOWN_ERROR;
   }
 
-};     // namespace RTC
+} // namespace RTC
 
 extern "C"
 {
@@ -380,4 +356,4 @@ extern "C"
                        ::coil::Destructor< ::RTC::InPortConsumer,
                                            ::RTC::InPortDSConsumer>);
   }
-};
+}

@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file  Analyzer.h
  * @brief Clock Analyzer Component
@@ -71,7 +71,7 @@ class Analyzer
   /*!
    * @brief destructor
    */
-  ~Analyzer();
+  ~Analyzer() override;
 
   // <rtc-template block="public_attribute">
   
@@ -90,7 +90,7 @@ class Analyzer
    * 
    * 
    */
-   virtual RTC::ReturnCode_t onInitialize();
+   RTC::ReturnCode_t onInitialize() override;
 
   /***
    *
@@ -140,7 +140,7 @@ class Analyzer
    * 
    * 
    */
-   virtual RTC::ReturnCode_t onActivated(RTC::UniqueId ec_id);
+   RTC::ReturnCode_t onActivated(RTC::UniqueId ec_id) override;
 
   /***
    *
@@ -153,7 +153,7 @@ class Analyzer
    * 
    * 
    */
-   virtual RTC::ReturnCode_t onDeactivated(RTC::UniqueId ec_id);
+   RTC::ReturnCode_t onDeactivated(RTC::UniqueId ec_id) override;
 
   /***
    *
@@ -166,7 +166,7 @@ class Analyzer
    * 
    * 
    */
-   virtual RTC::ReturnCode_t onExecute(RTC::UniqueId ec_id);
+   RTC::ReturnCode_t onExecute(RTC::UniqueId ec_id) override;
 
   /***
    *
@@ -248,9 +248,15 @@ class Analyzer
   /*!
    * 出力ファイル名
    * - Name: outputfile outputfile
-   * - DefaultValue: test.dat
+   * - DefaultValue: test_callback.dat
    */
   std::string m_outputfile;
+  /*!
+   * 出力ファイル名
+   * - Name: outputwritefile outputwritefile
+   * - DefaultValue: test_writefunc.dat
+   */
+  std::string m_outputwritefile;
   /*!
   * データ長さ
   * - Name: datalength datalength
@@ -262,7 +268,7 @@ class Analyzer
   * - Name: sleep_time sleep_time
   * - DefaultValue: 0.01
   */
-  double m_sleep_time;
+  std::chrono::microseconds m_sleep_time;
   /*!
   * 通信データ量を一定値(const)にするか、徐々に増加する値(increase)にするかの設定
   * - Name: mode mode
@@ -319,9 +325,10 @@ class Analyzer
 
  private:
 	 std::ofstream m_fs;
-	 std::vector<RTC::TimedOctetSeq> m_datalist;
-	 coil::Mutex m_mu;
-	 int data_size;
+   std::ofstream m_fsw;
+	 std::vector<RTC::Time> m_datalist;
+	 std::mutex m_mu;
+	 int m_data_size;
   // <rtc-template block="private_attribute">
   
   // </rtc-template>
@@ -338,10 +345,10 @@ class DataListener
 	USE_CONNLISTENER_STATUS;
 public:
 	DataListener(Analyzer *comp);
-	virtual ~DataListener();
+	~DataListener() override;
 
-	virtual ReturnCode operator()(ConnectorInfo& info,
-		TimedOctetSeq& data)
+	ReturnCode operator()(ConnectorInfo&  /*info*/,
+		TimedOctetSeq& data) override
 	{
 		m_comp->writeData(data);
 		return NO_CHANGE;
@@ -354,6 +361,6 @@ public:
 extern "C"
 {
   DLL_EXPORT void AnalyzerInit(RTC::Manager* manager);
-};
+}
 
 #endif // ANALYZER_H

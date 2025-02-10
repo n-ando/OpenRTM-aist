@@ -20,7 +20,6 @@
 #define RTC_INPORTCORBACDRUDPCONSUMER_H
 
 
-//#include <rtm/BufferBase.h>
 
 #include <rtm/idl/DataPortUDPSkel.h>
 #include <rtm/CorbaConsumer.h>
@@ -58,7 +57,6 @@ namespace RTC
       public CorbaConsumer< ::OpenRTM::InPortCdrUDP >
   {
   public:
-    DATAPORTSTATUS_ENUM
     /*!
      * @if jp
      * @brief コンストラクタ
@@ -91,7 +89,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~InPortCorbaCdrUDPConsumer(void);
+    ~InPortCorbaCdrUDPConsumer(void) override;
 
     /*!
      * @if jp
@@ -120,7 +118,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual void init(coil::Properties& prop);
+    void init(coil::Properties& prop) override;
 
     /*!
      * @if jp
@@ -154,7 +152,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode put(cdrMemoryStream& data);
+    DataPortStatus put(ByteData& data) override;
 
     /*!
      * @if jp
@@ -179,7 +177,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual void publishInterfaceProfile(SDOPackage::NVList& properties);
+    void publishInterfaceProfile(SDOPackage::NVList& properties) override;
 
     /*!
      * @if jp
@@ -203,7 +201,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual bool subscribeInterface(const SDOPackage::NVList& properties);
+    bool subscribeInterface(const SDOPackage::NVList& properties) override;
     
     /*!
      * @if jp
@@ -222,7 +220,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual void unsubscribeInterface(const SDOPackage::NVList& properties);
+    void unsubscribeInterface(const SDOPackage::NVList& properties) override;
 
   private:
     /*!
@@ -290,8 +288,9 @@ namespace RTC
 
     mutable Logger rtclog;
     coil::Properties m_properties;
+    ::OpenRTM::CdrData m_data;
   };
-};     // namespace RTC
+} // namespace RTC
 
 extern "C"
 {
@@ -309,7 +308,7 @@ extern "C"
    * @endif
    */
   void InPortCorbaCdrUDPConsumerInit(void);
-};
+}
 
 #endif // RTC_INPORTCORBACDRUDPCONSUMER_H
 

@@ -39,9 +39,7 @@ namespace RTC
    * @brief Destructor
    * @endif
    */
-  OutPortDirectConsumer::~OutPortDirectConsumer(void)
-  {
-  } 
+  OutPortDirectConsumer::~OutPortDirectConsumer() = default;
 
   /*!
    * @if jp
@@ -50,7 +48,7 @@ namespace RTC
    * @brief Initializing configuration
    * @endif
    */
-  void OutPortDirectConsumer::init(coil::Properties& prop)
+  void OutPortDirectConsumer::init(coil::Properties&  /*prop*/)
   {
     RTC_TRACE(("OutPortDirectConsumer::init()"));
   }
@@ -62,7 +60,7 @@ namespace RTC
    * @brief Setting outside buffer's pointer
    * @endif
    */
-  void OutPortDirectConsumer::setBuffer(CdrBufferBase* buffer)
+  void OutPortDirectConsumer::setBuffer(CdrBufferBase*  /*buffer*/)
   {
     RTC_TRACE(("OutPortDirectConsumer::setBuffer()"));
   }
@@ -74,8 +72,8 @@ namespace RTC
    * @brief Set the listener. 
    * @endif
    */
-  void OutPortDirectConsumer::setListener(ConnectorInfo& info,
-                                            ConnectorListeners* listeners)
+  void OutPortDirectConsumer::setListener(ConnectorInfo&  /*info*/,
+                                            ConnectorListenersBase*  /*listeners*/)
   {
     RTC_TRACE(("OutPortDirectConsumer::setListener()"));
   }
@@ -87,11 +85,11 @@ namespace RTC
    * @brief Read data
    * @endif
    */
-  OutPortConsumer::ReturnCode
-  OutPortDirectConsumer::get(cdrMemoryStream& data)
+  DataPortStatus
+  OutPortDirectConsumer::get(ByteData&  /*data*/)
   {
     RTC_PARANOID(("get(): never called."));
-    return UNKNOWN_ERROR;
+    return DataPortStatus::UNKNOWN_ERROR;
   }
     
   /*!
@@ -102,7 +100,7 @@ namespace RTC
    * @endif
    */
   bool OutPortDirectConsumer::
-  subscribeInterface(const SDOPackage::NVList& properties)
+  subscribeInterface(const SDOPackage::NVList&  /*properties*/)
   {
     RTC_TRACE(("subscribeInterface(): do nothing"));
     return true;
@@ -116,12 +114,12 @@ namespace RTC
    * @endif
    */
   void OutPortDirectConsumer::
-  unsubscribeInterface(const SDOPackage::NVList& properties)
+  unsubscribeInterface(const SDOPackage::NVList& /*properties*/)
   {
   }
 
 
-};     // namespace RTC
+} // namespace RTC
 
 extern "C"
 {
@@ -142,4 +140,4 @@ extern "C"
                        ::coil::Destructor< ::RTC::OutPortConsumer,
                                            ::RTC::OutPortDirectConsumer>);
   }
-};
+}

@@ -17,10 +17,6 @@
 
 #include <rtm/OutPortDirectProvider.h>
 
-#ifdef WIN32
-#pragma warning( disable : 4290 )
-#endif
-
 namespace RTC
 {
   /*!
@@ -30,8 +26,8 @@ namespace RTC
    * @brief Constructor
    * @endif
    */
-  OutPortDirectProvider::OutPortDirectProvider(void)
-   : m_buffer(0) 
+  OutPortDirectProvider::OutPortDirectProvider()
+    
   {
     // PortProfile setting
     setInterfaceType("direct");
@@ -45,10 +41,7 @@ namespace RTC
    * @brief Destructor
    * @endif
    */
-  OutPortDirectProvider::~OutPortDirectProvider(void)
-  {
-
-  }
+  OutPortDirectProvider::~OutPortDirectProvider() = default;
   
   /*!
    * @if jp
@@ -57,7 +50,7 @@ namespace RTC
    * @brief Initializing configuration
    * @endif
    */
-  void OutPortDirectProvider::init(coil::Properties& prop)
+  void OutPortDirectProvider::init(coil::Properties& /*prop*/)
   {
   }
 
@@ -81,7 +74,7 @@ namespace RTC
    * @endif
    */
   void OutPortDirectProvider::setListener(ConnectorInfo& info,
-                                            ConnectorListeners* listeners)
+                                            ConnectorListenersBase* listeners)
   {
     m_profile = info;
     m_listeners = listeners;
@@ -99,7 +92,7 @@ namespace RTC
     m_connector = connector;
   }
 
-};     // namespace RTC
+} // namespace RTC
 
 extern "C"
 {
@@ -120,4 +113,4 @@ extern "C"
                        ::coil::Destructor< ::RTC::OutPortProvider,
                                            ::RTC::OutPortDirectProvider>);
   }
-};
+}

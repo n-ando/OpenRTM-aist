@@ -20,7 +20,6 @@
 #ifndef RTC_EXTENDEDFSMSERVICEPROVIDER_H
 #define RTC_EXTENDEDFSMSERVICEPROVIDER_H
 
-#include <coil/Mutex.h>
 #include <coil/Factory.h>
 #include <coil/stringutil.h>
 #include <rtm/SdoServiceProviderBase.h>
@@ -57,7 +56,7 @@ namespace RTC
      * @brief dtor
      * @endif
      */
-    virtual ~ExtendedFsmServiceProvider();
+    ~ExtendedFsmServiceProvider() override;
 
     /*!
      * @if jp
@@ -66,8 +65,8 @@ namespace RTC
      * @brief Initialization
      * @endif
      */
-    virtual bool init(RTObject_impl& rtobj,
-                      const SDOPackage::ServiceProfile& profile);
+    bool init(RTObject_impl& rtobj,
+                      const SDOPackage::ServiceProfile& profile) override;
 
     /*!
      * @if jp
@@ -76,7 +75,7 @@ namespace RTC
      * @brief Re-initialization
      * @endif
      */
-    virtual bool reinit(const SDOPackage::ServiceProfile& profile);
+    bool reinit(const SDOPackage::ServiceProfile& profile) override;
 
     /*!
      * @if jp
@@ -85,7 +84,7 @@ namespace RTC
      * @brief getting ServiceProfile
      * @endif
      */
-    virtual const SDOPackage::ServiceProfile& getProfile() const;
+    const SDOPackage::ServiceProfile& getProfile() const override;
     
     /*!
      * @if jp
@@ -94,7 +93,7 @@ namespace RTC
      * @brief Finalization
      * @endif
      */
-    virtual void finalize();
+    void finalize() override;
 
     //============================================================
     // CORBA operations
@@ -123,7 +122,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual char* get_current_state();
+    char* get_current_state() override;
     /*!
      * @if jp
      * @brief FSMの構造を設定する
@@ -157,8 +156,8 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode_t
-    set_fsm_structure(const ::RTC::FsmStructure& fsm_structure);
+    ReturnCode_t
+    set_fsm_structure(const ::RTC::FsmStructure& fsm_structure) override;
     /*!
      * @if jp
      * @brief FSMの構造を取得する
@@ -196,8 +195,8 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode_t
-    get_fsm_structure(::RTC::FsmStructure_out fsm_structure);
+    ReturnCode_t
+    get_fsm_structure(::RTC::FsmStructure_out fsm_structure) override;
 
     
 
@@ -227,7 +226,7 @@ namespace RTC
      * @brief Unsetting heartbeat
      * @endif
      */
-    void changeStructure(std::string fsm_structure);
+    void changeStructure(const std::string& fsm_structure);
 
     //============================================================
     // FSM status related functions
@@ -290,7 +289,7 @@ namespace RTC
     void unsetFSMStructureListeners();
 
   private:
-    RTC::RTObject_impl* m_rtobj;
+    RTC::RTObject_impl* m_rtobj{nullptr};
     SDOPackage::ServiceProfile m_profile;
     coil::Properties m_properties;
     FsmStructure m_fsmStructure;
@@ -298,12 +297,12 @@ namespace RTC
 
   };
 
-}; // namespace RTC
+} // namespace RTC
 
 extern "C"
 {
   DLL_EXPORT void ExtendedFsmServiceProviderInit();
-};
+}
 
 #endif // RTC_EXTENDEDFSMSERVICEPROVIDER_H
 

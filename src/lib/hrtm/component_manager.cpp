@@ -15,19 +15,15 @@
  *
  */
 
-//#include <rtm/Manager.h>
-//#include <rtm/Factory.h>
-//#include <rtm/RTObject.h>
 #include <hrtm/data_flow_component.h>
 #include <hrtm/component_manager.h>
-//#include <hrtm/logger.h>
 
 namespace hrtm
 {
   // static members initialization
   ModuleInitProc ComponentManager::initProc;
-  ComponentManager* ComponentManager::manager = NULL;
-  coil::Mutex ComponentManager::mutex;
+  ComponentManager* ComponentManager::manager = nullptr;
+  std::mutex ComponentManager::mutex;
   
   hrtm::DataFlowComponent*
   ComponentManager::create_component(const char* component_name)
@@ -50,7 +46,7 @@ namespace hrtm
   {
     runManager(non_block);
   }
-  void ComponentManager::init_proc(RTC::Manager* mgr)
+  void ComponentManager::init_proc(RTC::Manager* /*mgr*/)
   {
     ::hrtm::ComponentManager::initProc(manager);
   }
@@ -58,23 +54,14 @@ namespace hrtm
   {
    
     // DCL for singleton
-    if (!manager)
+    if (manager == nullptr)
       {
-        Guard guard(mutex);
-        if (!manager)
+        std::lock_guard<std::mutex> guard(mutex);
+        if (manager == nullptr)
           {
             manager = new ComponentManager();
-            RTC::Manager::manager = manager;
-            printf("init ComponentManager: %x\n", manager);
-            manager->initManager(argc, argv);
-            manager->initLogger();
-            manager->initORB();
-            manager->initNaming();
-            manager->initFactories();
-            manager->initExecContext();
-            manager->initComposite();
-            manager->initTimer();
-            manager->initManagerServant();
+
+            RTC::Manager::init(argc, argv);
           }
       }
     return *manager;
@@ -84,4 +71,6 @@ namespace hrtm
     : RTC::Manager()
   {
   }
-}; // namespace hrtm
+
+  ComponentManager::~ComponentManager() = default;
+} // namespace hrtm

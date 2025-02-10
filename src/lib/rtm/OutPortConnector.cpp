@@ -30,9 +30,9 @@ namespace RTC
    * @endif
    */
   OutPortConnector::OutPortConnector(ConnectorInfo& info,
-                                     ConnectorListeners& listeners)
+                                     ConnectorListenersBase* listeners)
     : rtclog("OutPortConnector"), m_profile(info), m_littleEndian(true),
-	m_directInPort(NULL), m_listeners(listeners), m_directMode(false)
+      m_directInPort(nullptr), m_listeners(listeners), m_directMode(false), m_marshaling_type("cdr"), m_cdr(nullptr)
   {
   }
 
@@ -45,6 +45,7 @@ namespace RTC
    */
   OutPortConnector::~OutPortConnector()
   {
+    SerializerFactory::instance().deleteObject(m_cdr);
   }
   /*!
    * @if jp
@@ -147,7 +148,7 @@ namespace RTC
   */
   void OutPortConnector::setPullDirectMode()
   {
-	  m_directMode = true;
+    m_directMode = true;
   }
 
   /*!
@@ -164,22 +165,27 @@ namespace RTC
   */
   bool OutPortConnector::pullDirectMode()
   {
-	  return m_directMode;
+    return m_directMode;
   }
 
   bool OutPortConnector::setInPort(InPortBase* directInPort)
   {
-	  if (directInPort == NULL)
-	  {
-		  return false;
-	  }
-	  m_directInPort = directInPort;
-	  m_inPortListeners = &(directInPort->getListeners());
-	  return true;
+    if (directInPort == nullptr)
+    {
+      return false;
+    }
+    m_directInPort = directInPort;
+    m_inPortListeners = directInPort->getListeners();
+    return true;
   }
 
-  CdrBufferBase::ReturnCode OutPortConnector::read(cdrMemoryStream &data)
+  BufferStatus OutPortConnector::read(ByteData&  /*data*/)
   {
-      return CdrBufferBase::BUFFER_OK;
+    return BufferStatus::OK;
   }
-}; // namespace RTC
+
+  void OutPortConnector::unsubscribeInterface(const coil::Properties& /*prop*/)
+  {
+
+  }
+} // namespace RTC

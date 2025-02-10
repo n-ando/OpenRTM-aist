@@ -17,20 +17,19 @@
  *
  */
 
-#ifndef COIL_PROCESS_H
-#define COIL_PROCESS_H
-
+#include <coil/Process.h>
 #include <coil/File.h>
 #include <coil/stringutil.h>
 
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstdlib>
 #include <unistd.h>
 #include <libgen.h>
-#include <signal.h>
+#include <csignal>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <string>
+#include <regex>
 
 
 namespace coil
@@ -38,12 +37,12 @@ namespace coil
 
   /*!
    * @if jp
-   * @brief ¥×¥í¥»¥¹¤òµ¯Æ°¤¹¤ë
+   * @brief Â¥Ã—Â¥Ã­Â¥Â»Â¥Â¹Â¤Ã²ÂµÂ¯Ã†Â°Â¤Â¹Â¤Ã«
    * @else
    * @brief Launching a process
    * @endif
    */
-  int launch_shell(std::string command)
+  int launch_shell(const std::string& command)
   {
     signal(SIGCHLD, SIG_IGN);
 
@@ -55,24 +54,23 @@ namespace coil
 
     if (pid == 0)  // I'm child process
       {
-        //        signal(SIGCHLD, SIG_IGN);
-        //        signal(SIGALRM, SIG_IGN);
-        //        signal(SIGHUP , SIG_IGN);
-        //        signal(SIGPIPE, SIG_IGN);
-        //        signal(SIGTERM, SIG_IGN);
         setsid();
-        //        close(0);
-        //        close(1);
-        //        close(2);
-        //        open("/dev/null", O_RDWR);
-        //        dup2(0, 1);
-        //        dup2(0, 2);
-        //        umask(0);
 
-        coil::vstring vstr(::coil::split(command, " "));
-        char* const * argv = ::coil::toArgv(vstr);
+        const std::regex base_regex("((?:[^\\s\"\\\\]|\\\\.|\"(?:\\\\.|[^\\\\\"])*(?:\"|$))+)");
+        std::sregex_iterator words_begin = std::sregex_iterator(command.begin(), command.end(), base_regex);
+        std::sregex_iterator words_end = std::sregex_iterator();
 
-        execvp(vstr.front().c_str(), argv);
+        coil::vstring vstr;
+
+        for (std::sregex_iterator i = words_begin; i != words_end; ++i) {
+            std::smatch match = *i;
+            std::string match_str = replaceString(match.str(), "\"", "");
+            vstr.push_back(match_str);
+        }
+        
+        Argv argv(vstr);
+
+        execvp(vstr.front().c_str(), argv.get());
 
         return -1;
       }
@@ -81,30 +79,33 @@ namespace coil
 
   int daemon(int nochdir, int noclose)
   {
-    return daemon(nochdir, noclose);
+    return ::daemon(nochdir, noclose);
   }
 
-  int create_process(std::string command, std::vector<std::string> &out)
+  int create_process(const std::string& command, std::vector<std::string> &out)
   {
     FILE* fd;
     out.clear();
-    if ((fd = popen(command.c_str(), "r")) == NULL)
+    if ((fd = popen(command.c_str(), "r")) == nullptr)
       {
-        //std::cerr << "popen faild" << std::endl;
         return -1;
       }
     do
       {
         char str[512];
-        fgets(str, 512, fd);
-        std::string line(str);
-        if (0 < line.size())
-          line.erase(line.size() - 1);
-        out.push_back(line);
-      } while (!feof(fd));
-
+        if(fgets(str, 512, fd) != nullptr)
+          {
+            std::string line(str);
+            if (!line.empty())
+              {
+                line.erase(line.size() - 1);
+              }
+            out.emplace_back(line);
+          }
+      } while (feof(fd) == 0);
+    
+    (void) pclose(fd);
     return 0;
   }
 
-};  // namespace coil
-#endif  // COIL_PROCESS_H
+} // namespace coil

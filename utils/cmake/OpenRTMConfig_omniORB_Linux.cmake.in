@@ -35,23 +35,22 @@
 # - OPENRTM_IDLC: IDL command
 # - OPENRTM_IDLFLAGS: IDL optins
 
-message(STATUS "OpenRTMConfig.cmake found.")
+message(STATUS "OpenRTMConfig.cmake ${OpenRTM_VERSION} found.")
 message(STATUS "Configrued by configuration mode.")
 
 
 # Basic compiler/linker options
-set(OPENRTM_CFLAGS -Wall -fPIC -O2)
+set(OPENRTM_CFLAGS @COIL_C_FLAGS_LIST@ -Wall -fPIC -O2)
 set(OPENRTM_INCLUDE_DIRS @CMAKE_INSTALL_PREFIX@/include @CMAKE_INSTALL_PREFIX@/@INSTALL_COIL_INCLUDE_DIR@ @CMAKE_INSTALL_PREFIX@/@INSTALL_RTM_INCLUDE_DIR@ @CMAKE_INSTALL_PREFIX@/@INSTALL_RTM_INCLUDE_DIR@/rtm/idl @CMAKE_INSTALL_PREFIX@/@INSTALL_RTM_INCLUDE_DIR@/rtm/ext)
 set(OPENRTM_LDFLAGS -luuid -lrt -ldl -export-dynamic)
 set(OPENRTM_LIBRARY_DIRS @CMAKE_INSTALL_PREFIX@/@INSTALL_RTM_LIB_DIR@)
 set(OPENRTM_LIBRARIES pthread;@OPENRTM_LIBRARIES@)
 set(OPENRTM_LIB_DIR @CMAKE_INSTALL_PREFIX@/@INSTALL_RTM_LIB_DIR@)
+set(OPENRTM_INCLUDE_DIR @CMAKE_INSTALL_PREFIX@/@INSTALL_RTM_INCLUDE_DIR@)
 set(OPENRTM_DIR @CMAKE_INSTALL_PREFIX@)
 
 # OpenRTM-aist specific directory
 set(COIL_INCLUDE_DIR @CMAKE_INSTALL_PREFIX@/@INSTALL_COIL_INCLUDE_DIR@)
-set(OPENRTM_INCLUDE_DIR @CMAKE_INSTALL_PREFIX@/@INSTALL_RTM_INCLUDE_DIR@)
-set(OPENRTM_LIB_DIR @CMAKE_INSTALL_PREFIX@/@INSTALL_RTM_LIB_DIR@)
 set(OPENRTM_DATA_DIR @CMAKE_INSTALL_PREFIX@/@INSTALL_RTM_SHARE_DIR@)
 
 # OpenRTM-aist version
@@ -63,12 +62,15 @@ set(OPENRTM_SHORT_VERSION @RTM_SHORT_VERSION@)
 
 # OpenRTM-aist's CORBA related settings
 set(OPENRTM_ORB omniORB)
-set(OPENRTM_IDL_WRAPPER rtm-skelwrapper)
+set(OPENRTM_IDL_WRAPPER rtm2-skelwrapper)
 set(OPENRTM_IDL_WRAPPER_FLAGS --include-dir= --skel-suffix=Skel --stub-suffix=Stub)
 set(OPENRTM_IDLC @IDL_COMPILE_COMMAND@)
-set(OPENRTM_IDLFLAGS -bcxx -Wba -nf -Wbuse_quotes -Wbshortcut)
+set(OPENRTM_IDLFLAGS -bcxx -Wba -nf -Wbuse_quotes -Wbshortcut -I${OPENRTM_INCLUDE_DIR}/rtm/idl)
 
-include(FindPkgConfig)
+if(NOT PKG_CONFIG_FOUND)
+  include(CMakeFindDependencyMacro)
+  find_dependency(PkgConfig)
+endif()
 #
 # Getting omniORB settings
 #
@@ -79,6 +81,13 @@ if(NOT OMNIORB_DIR)
   endif()
   set(OMNIORB_DIR CACHE PATH omniORB root directory)
 endif()
+
+
+set(OPENRTM_CFLAGS ${OPENRTM_CFLAGS} ${OMNIORB_CFLAGS})
+set(OPENRTM_INCLUDE_DIRS ${OPENRTM_INCLUDE_DIRS} ${OMNIORB_INCLUDE_DIRS})
+set(OPENRTM_LDFLAGS ${OPENRTM_LDFLAGS} ${OMNIORB_LDFLAGS})
+set(OPENRTM_LIBRARY_DIRS ${OPENRTM_LIBRARY_DIRS} ${OMNIORB_LIBRARY_DIRS})
+
 
 message(STATUS "OpenRTM-aist configuration done")
 # end of OpenRTMConfig.cmake

@@ -19,17 +19,11 @@
 #ifndef RTC_EXECUTIONCONTEXTPROFILE_H
 #define RTC_EXECUTIONCONTEXTPROFILE_H
 
-#include <coil/Mutex.h>
-#include <coil/Guard.h>
+#include <mutex>
 #include <coil/Properties.h>
-#include <coil/TimeValue.h>
 
 #include <rtm/idl/RTCStub.h>
 #include <rtm/SystemLogger.h>
-
-#ifdef WIN32
-#pragma warning( disable : 4290 )
-#endif
 
 namespace RTC_impl
 {
@@ -55,7 +49,6 @@ namespace RTC_impl
    */
   class ExecutionContextProfile
   {
-    typedef coil::Guard<coil::Mutex> Guard;
   public:
     /*!
      * @if jp
@@ -91,7 +84,7 @@ namespace RTC_impl
      *
      * @endif
      */
-    virtual ~ExecutionContextProfile(void);
+    virtual ~ExecutionContextProfile();
 
     /*!
      * @if jp
@@ -137,7 +130,7 @@ namespace RTC_impl
      *
      * @endif
      */
-    RTC::ExecutionContextService_ptr getObjRef(void) const;
+    RTC::ExecutionContextService_ptr getObjRef() const;
 
     /*!
      * @if jp
@@ -173,8 +166,7 @@ namespace RTC_impl
      * @endif
      */
     RTC::ReturnCode_t setRate(double rate);
-    RTC::ReturnCode_t setPeriod(double period);
-    RTC::ReturnCode_t setPeriod(coil::TimeValue period);
+    RTC::ReturnCode_t setPeriod(std::chrono::nanoseconds period);
 
     /*!
      * @if jp
@@ -196,8 +188,8 @@ namespace RTC_impl
      *
      * @endif
      */
-    double getRate(void) const;
-    coil::TimeValue getPeriod(void) const;
+    double getRate() const;
+    std::chrono::nanoseconds getPeriod() const;
 
     /*!
      * @if jp
@@ -221,7 +213,7 @@ namespace RTC_impl
      *
      * @endif
      */
-    const char* getKindString(RTC::ExecutionKind kind) const;
+    static const char* getKindString(RTC::ExecutionKind kind) ;
     const char* getKindString() const
     {
       return getKindString(m_profile.kind);
@@ -266,7 +258,7 @@ namespace RTC_impl
      *
      * @endif
      */
-    RTC::ExecutionKind getKind(void) const;
+    RTC::ExecutionKind getKind() const;
 
     /*!
      * @if jp
@@ -303,7 +295,7 @@ namespace RTC_impl
      * @return a reference of the owner RT-Component
      * @endif
      */
-    const RTC::RTObject_ptr getOwner() const;
+    RTC::RTObject_ptr getOwner() const;
 
     /*!
      * @if jp
@@ -397,7 +389,11 @@ namespace RTC_impl
      *
      * @endif
      */
+#ifndef ORB_IS_RTORB
     const RTC::RTCList& getComponentList() const;
+#else
+    const RTC_RTCList& getComponentList() const;
+#endif
 
     /*!
      * @if jp
@@ -440,7 +436,7 @@ namespace RTC_impl
      *
      * @endif
      */
-    const coil::Properties getProperties() const;
+    coil::Properties getProperties() const;
 
     /*!
      * @if jp
@@ -464,7 +460,7 @@ namespace RTC_impl
      *
      * @endif
      */
-    RTC::ExecutionContextProfile* getProfile(void);
+    RTC::ExecutionContextProfile* getProfile();
 
     /*!
      * @if jp
@@ -483,7 +479,7 @@ namespace RTC_impl
      *
      * @endif
      */
-    const RTC::ExecutionContextProfile& getProfile(void) const;
+    const RTC::ExecutionContextProfile& getProfile() const;
 
     /*!
      * @if jp
@@ -544,7 +540,7 @@ namespace RTC_impl
      * @brief mutex ExecutionContextProfile
      * @endif
      */
-    mutable coil::Mutex m_profileMutex;
+    mutable std::mutex m_profileMutex;
 
     /*!
      * @if jp
@@ -553,7 +549,7 @@ namespace RTC_impl
      * @brief Execution cycle of ExecutionContext
      * @endif
      */
-    coil::TimeValue m_period;
+    std::chrono::nanoseconds m_period;
 
     /*!
      * @if jp
@@ -583,10 +579,6 @@ namespace RTC_impl
 #endif
     };
   };  // class ExecutionContextProfile
-};  // namespace RTC_impl
-
-#ifdef WIN32
-#pragma warning( default : 4290 )
-#endif
+} // namespace RTC_impl
 
 #endif  // RTC_EXECUTIONCONTEXTPROFILE_H

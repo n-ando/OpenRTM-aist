@@ -12,7 +12,7 @@
 
 // Module specification
 // <rtc-template block="module_spec">
-static const char* consolein_spec[] =
+static const char* const consolein_spec[] =
   {
     "implementation_id", "ConsoleIn",
     "type_name",         "ConsoleIn",
@@ -36,9 +36,7 @@ ConsoleIn::ConsoleIn(RTC::Manager* manager)
 {
 }
 
-ConsoleIn::~ConsoleIn()
-{
-}
+ConsoleIn::~ConsoleIn() = default;
 
 
 RTC::ReturnCode_t ConsoleIn::onInitialize()
@@ -61,10 +59,18 @@ RTC::ReturnCode_t ConsoleIn::onInitialize()
   return RTC::RTC_OK;
 }
 
-RTC::ReturnCode_t ConsoleIn::onExecute(RTC::UniqueId ec_id)
+RTC::ReturnCode_t ConsoleIn::onExecute(RTC::UniqueId  /*ec_id*/)
 {
   std::cout << "Please input number: ";
   std::cin >> m_out.data;
+
+  if(std::cin.fail())
+  {
+      std::cin.clear();
+      std::cin.ignore(1024, '\n');
+      return RTC::RTC_ERROR;
+  }
+  
   std::cout << "Sending to subscriber: " << m_out.data << std::endl;
   m_outOut.write();
 
@@ -83,6 +89,6 @@ extern "C"
                              RTC::Delete<ConsoleIn>);
   }
   
-};
+}
 
 

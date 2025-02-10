@@ -22,8 +22,7 @@
 #include <rtm/RTC.h>
 
 #include <coil/Task.h>
-#include <coil/Mutex.h>
-#include <coil/Guard.h>
+#include <mutex>
 #include <rtm/CorbaNaming.h>
 #include <rtm/RTObject.h>
 #include <rtm/SystemLogger.h>
@@ -65,8 +64,6 @@ namespace RTC
    */
   class NamingBase
   {
-    typedef coil::Mutex Mutex;
-    typedef coil::Guard<Mutex> Guard;
   public:
     /*!
      * @if jp
@@ -79,7 +76,7 @@ namespace RTC
      *
      * @endif
      */
-    NamingBase() {}
+    NamingBase() = default;
 
     /*!
      * @if jp
@@ -92,7 +89,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~NamingBase(void) {}
+    virtual ~NamingBase() = default;
 
     /*!
      * @if jp
@@ -173,24 +170,24 @@ namespace RTC
      * @endif
      */
     virtual bool isAlive() = 0;
-	/*!
-	* @if jp
-	*
-	* @brief rtcloc形式でRTCのオブジェクトリファレンスを取得する
-	*
-	* @param name RTC名
-	* @return RTCのオブジェクトリファレンスのリスト
-	*
-	* @else
-	*
-	* @brief
-	*
-	* @param name
-	* @return
-	*
-	* @endif
-	*/
-	virtual RTC::RTCList string_to_component(std::string name) = 0;
+    /*!
+     * @if jp
+     *
+     * @brief rtcloc形式でRTCのオブジェクトリファレンスを取得する
+     *
+     * @param name RTC名
+     * @return RTCのオブジェクトリファレンスのリスト
+     *
+     * @else
+     *
+     * @brief
+     *
+     * @param name
+     * @return
+     *
+     * @endif
+     */
+    virtual RTC::RTCList string_to_component(std::string name) = 0;
   };
 
   /*!
@@ -284,7 +281,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~NamingOnCorba(void) {}
+    ~NamingOnCorba() override = default;
 
     /*!
      * @if jp
@@ -309,8 +306,8 @@ namespace RTC
      *
      * @endif
      */
-    virtual void bindObject(const char* name, const RTObject_impl* rtobj);
-    virtual void bindObject(const char* name, const PortBase* port);
+    void bindObject(const char* name, const RTObject_impl* rtobj) override;
+    void bindObject(const char* name, const PortBase* port) override;
 
     /*!
      * @if jp
@@ -329,7 +326,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual void bindObject(const char* name, const RTM::ManagerServant* mgr);
+    void bindObject(const char* name, const RTM::ManagerServant* mgr) override;
 
     /*!
      * @if jp
@@ -350,7 +347,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual void unbindObject(const char* name);
+    void unbindObject(const char* name) override;
 
     /*!
      * @if jp
@@ -367,46 +364,46 @@ namespace RTC
      *
      * @endif
      */
-    virtual bool isAlive();
-	/*!
-	 * @if jp
-	 *
-	 * @brief ネーミングサービスからRTCをインスタンス名から検索し、
-	 *        一致するRTCのリストを取得する
-	 *
-	 * @param context 現在検索中のコンテキスト
-	 * @param name RTCのインスタンス名
-	 * @param rtcs RTCのリスト
-	 *
-	 * @else
-	 *
-	 * @brief 
-	 *
-	 * @param context
-	 * @param name 
-	 * @param rtcs 
-	 *
-	 * @endif
-	 */
-	void getComponentByName(CosNaming::NamingContext_ptr context, std::string name, RTC::RTCList& rtcs);
-	/*!
-	* @if jp
-	*
-	* @brief rtcname形式でRTCのオブジェクトリファレンスを取得する
-	*
-	* @param name RTC名
-	* @return RTCのオブジェクトリファレンスのリスト
-	*
-	* @else
-	*
-	* @brief 
-	*
-	* @param name 
-	* @return 
-	*
-	* @endif
-	*/
-	virtual RTC::RTCList string_to_component(std::string name);
+    bool isAlive() override;
+    /*!
+     * @if jp
+     *
+     * @brief ネーミングサービスからRTCをインスタンス名から検索し、
+     *        一致するRTCのリストを取得する
+     *
+     * @param context 現在検索中のコンテキスト
+     * @param name RTCのインスタンス名
+     * @param rtcs RTCのリスト
+     *
+     * @else
+     *
+     * @brief 
+     *
+     * @param context
+     * @param name 
+     * @param rtcs 
+     *
+     * @endif
+     */
+    void getComponentByName(CosNaming::NamingContext_ptr context, const std::string& name, RTC::RTCList& rtcs);
+    /*!
+     * @if jp
+     *
+     * @brief rtcname形式でRTCのオブジェクトリファレンスを取得する
+     *
+     * @param name RTC名
+     * @return RTCのオブジェクトリファレンスのリスト
+     *
+     * @else
+     *
+     * @brief 
+     *
+     * @param name 
+     * @return 
+     *
+     * @endif
+     */
+    RTC::RTCList string_to_component(std::string name) override;
     CorbaNaming& getCorbaNaming() { return m_cosnaming; }
 
   private:
@@ -414,7 +411,6 @@ namespace RTC
     CorbaNaming m_cosnaming;
     std::string m_endpoint;
     bool m_replaceEndpoint;
-    //    std::map<std::string, RTObject_impl*> m_names;
   };
 
 
@@ -461,7 +457,7 @@ namespace RTC
      *
      * @endif
      */
-	 NamingOnManager(CORBA::ORB_ptr orb, Manager* mgr);
+    NamingOnManager(CORBA::ORB_ptr orb, Manager* mgr);
     
     /*!
      * @if jp
@@ -474,7 +470,7 @@ namespace RTC
      *
      * @endif
      */
-	 virtual ~NamingOnManager(void){};
+    ~NamingOnManager() override = default;
     
     /*!
      * @if jp
@@ -499,8 +495,8 @@ namespace RTC
      *
      * @endif
      */
-    virtual void bindObject(const char* name, const RTObject_impl* rtobj);
-    virtual void bindObject(const char* name, const PortBase* port);
+    void bindObject(const char* name, const RTObject_impl* rtobj) override;
+    void bindObject(const char* name, const PortBase* port) override;
 
     /*!
      * @if jp
@@ -519,7 +515,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual void bindObject(const char* name, const RTM::ManagerServant* mgr);
+    void bindObject(const char* name, const RTM::ManagerServant* mgr) override;
 
     /*!
      * @if jp
@@ -540,7 +536,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual void unbindObject(const char* name);
+    void unbindObject(const char* name) override;
 
     /*!
      * @if jp
@@ -557,51 +553,50 @@ namespace RTC
      *
      * @endif
      */
-    virtual bool isAlive();
-	/*!
-	* @if jp
-	*
-	* @brief rtcname形式でRTCのオブジェクトリファレンスを取得する
-	*
-	* @param name rtcloc形式でのRTC名
-	* rtcloc://localhost:2809/example/ConsoleIn
-	* @return RTCのオブジェクトリファレンスのリスト
-	*
-	* @else
-	*
-	* @brief 
-	*
-	* @param name 
-	* @return 
-	*
-	* @endif
-	*/
-	RTC::RTCList string_to_component(std::string name);
-	/*!
-	* @if jp
-	*
-	* @brief 指定ホスト名、ポート名でManagerのオブジェクトリファレンスを取得
-	*
-	* @param name ホスト名、ポート名
-	* 
-	* @return Managerのオブジェクトリファレンス
-	*
-	* @else
-	*
-	* @brief
-	*
-	* @param name
-	* @return
-	*
-	* @endif
-	*/
-	RTM::Manager_ptr getManager(std::string name);
+    bool isAlive() override;
+    /*!
+     * @if jp
+     *
+     * @brief rtcname形式でRTCのオブジェクトリファレンスを取得する
+     *
+     * @param name rtcloc形式でのRTC名
+     * rtcloc://localhost:2809/example/ConsoleIn
+     * @return RTCのオブジェクトリファレンスのリスト
+     *
+     * @else
+     *
+     * @brief 
+     *
+     * @param name 
+     * @return 
+     *
+     * @endif
+     */
+    RTC::RTCList string_to_component(std::string name) override;
+    /*!
+     * @if jp
+     *
+     * @brief 指定ホスト名、ポート名でManagerのオブジェクトリファレンスを取得
+     *
+     * @param name ホスト名、ポート名
+     * 
+     * @return Managerのオブジェクトリファレンス
+     *
+     * @else
+     *
+     * @brief
+     *
+     * @param name
+     * @return
+     *
+     * @endif
+     */
+    RTM::Manager_ptr getManager(const std::string& name);
 
   private:
     Logger rtclog;
-	CORBA::ORB_ptr m_orb;
-	Manager* m_mgr;
-    //    std::map<std::string, RTObject_impl*> m_names;
+    CORBA::ORB_ptr m_orb;
+    Manager* m_mgr;
   };
   
   /*!
@@ -629,8 +624,6 @@ namespace RTC
    */
   class NamingManager
   {
-    typedef coil::Mutex Mutex;
-    typedef coil::Guard<Mutex> Guard;
   public:
     /*!
      * @if jp
@@ -664,7 +657,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~NamingManager(void);
+    virtual ~NamingManager();
 
     /*!
      * @if jp
@@ -819,29 +812,29 @@ namespace RTC
     std::vector<RTObject_impl*> getObjects();
     std::vector<NamingService*>& getNameServices() { return m_names; }
 
-	/*!
-	* @if jp
-	*
-	* @brief rtcloc形式でRTCのオブジェクトリファレンスを取得
-	*
-	*
-	*
-	* @param name rtcloc形式でのRTC名
-	* rtcloc://localhost:2809/example/ConsoleIn
-	* @return RTCのオブジェクトリファレンスのリスト
-	*
-	* @else
-	*
-	* @brief
-	* registerMgrName
-	* @param name
-	*
-	* @return
-	*
-	*
-	* @endif
-	*/
-	RTCList string_to_component(std::string name);
+    /*!
+     * @if jp
+     *
+     * @brief rtcloc形式でRTCのオブジェクトリファレンスを取得
+     *
+     *
+     *
+     * @param name rtcloc形式でのRTC名
+     * rtcloc://localhost:2809/example/ConsoleIn
+     * @return RTCのオブジェクトリファレンスのリスト
+     *
+     * @else
+     *
+     * @brief
+     * registerMgrName
+     * @param name
+     *
+     * @return
+     *
+     *
+     * @endif
+     */
+    RTCList string_to_component(const std::string& name);
     
   protected:
     /*!
@@ -1046,7 +1039,7 @@ namespace RTC
      * @brief Mutex of NameServer list
      * @endif
      */
-    Mutex m_namesMutex;
+    std::mutex m_namesMutex;
 
     // Components' name and object
     /*!
@@ -1109,7 +1102,7 @@ namespace RTC
      * @brief Mutex of Component list
      * @endif
      */
-    Mutex m_compNamesMutex;
+    std::mutex m_compNamesMutex;
     /*!
      * @if jp
      * @brief コンポーネントリスト
@@ -1125,7 +1118,7 @@ namespace RTC
      * @brief Mutex of Port list
      * @endif
      */
-    Mutex m_portNamesMutex;
+    std::mutex m_portNamesMutex;
     /*!
      * @if jp
      * @brief ManagerServantリスト
@@ -1141,7 +1134,7 @@ namespace RTC
      * @brief Mutex of ManagerServant list
      * @endif
      */
-    Mutex m_mgrNamesMutex;
+    std::mutex m_mgrNamesMutex;
 
     /*!
      * @if jp
@@ -1161,6 +1154,6 @@ namespace RTC
      */
     Logger rtclog;
   };  // class NamingManager
-};  // namespace RTC
+} // namespace RTC
 
 #endif  // RTC_NAMINGMANAGER_H

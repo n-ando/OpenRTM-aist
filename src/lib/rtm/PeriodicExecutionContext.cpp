@@ -16,19 +16,10 @@
  *
  */
 
-#include <coil/Time.h>
-#include <coil/TimeValue.h>
-
 #include <rtm/PeriodicExecutionContext.h>
 #include <rtm/RTObjectStateMachine.h>
 
-#ifdef RTM_OS_LINUX
-#define _GNU_SOURCE
-#include <pthread.h>
-#include <algorithm>
-#endif // RTM_OS_LINUX
-
-#include <string.h>
+#include <cstring>
 #include <algorithm>
 #include <iostream>
 #include <string>
@@ -45,9 +36,7 @@ namespace RTC_exp
    */
   PeriodicExecutionContext::
   PeriodicExecutionContext()
-    : ExecutionContextBase("periodic_ec"),
-      rtclog("periodic_ec"),
-      m_svc(false), m_nowait(false)
+    : ExecutionContextBase("periodic_ec")
   {
     RTC_TRACE(("PeriodicExecutionContext()"));
 
@@ -58,8 +47,7 @@ namespace RTC_exp
     setKind(RTC::PERIODIC);
     setRate(1.0 / static_cast<double>(DEEFAULT_PERIOD));
 
-    RTC_DEBUG(("Actual period: %d [sec], %d [usec]",
-               m_profile.getPeriod().sec(), m_profile.getPeriod().usec()));
+    RTC_DEBUG(("Actual period: %lld [nsec]", m_profile.getPeriod().count()));
   }
 
   /*!
@@ -73,13 +61,13 @@ namespace RTC_exp
   {
     RTC_TRACE(("~PeriodicExecutionContext()"));
     {
-      Guard guard(m_svcmutex);
+      std::lock_guard<std::mutex> guard(m_svcmutex);
       m_svc = false;
     }
     {
-      Guard guard(m_workerthread.mutex_);
+      std::lock_guard<std::mutex> guard(m_workerthread.mutex_);
       m_workerthread.running_ = true;
-      m_workerthread.cond_.signal();
+      m_workerthread.cond_.notify_one();
     }
     wait();
   }
@@ -105,7 +93,7 @@ namespace RTC_exp
    * @brief Generate internal activity thread for ExecutionContext
    * @endif
    */
-  int PeriodicExecutionContext::open(void *args)
+  int PeriodicExecutionContext::open(void * /*args*/)
   {
     RTC_TRACE(("open()"));
     activate();
@@ -123,36 +111,42 @@ namespace RTC_exp
    * @brief Thread execution function for ExecutionContext
    * @endif
    */
-  int PeriodicExecutionContext::svc(void)
+  int PeriodicExecutionContext::svc()
   {
     RTC_TRACE(("svc()"));
-    int count(0);
 
-    bool result = coil::setThreadCpuAffinity(m_cpu);
+    if (!m_cpu.empty())
+    {
+        bool result = coil::setThreadCpuAffinity(m_cpu);
 
-    if (!result)
-      {
-        RTC_ERROR(("setThreadCpuAffinity():"
-                   "CPU affinity mask setting failed"));
-      };
-	
-	coil::CpuMask ret_cpu;
-	result = coil::getThreadCpuAffinity(ret_cpu);
-	
+        if (!result)
+        {
+            RTC_ERROR(("setThreadCpuAffinity():"
+                "CPU affinity mask setting failed"));
+        }
+
+        coil::CpuMask ret_cpu;
+        result = coil::getThreadCpuAffinity(ret_cpu);
+
 
 #ifdef RTM_OS_LINUX
-	std::sort(ret_cpu.begin(), ret_cpu.end());
-	std::sort(m_cpu.begin(), m_cpu.end());
-	if (result && ret_cpu.size() > 0 && m_cpu.size() > 0 && ret_cpu.size() == m_cpu.size()
-        && std::equal(ret_cpu.begin(), ret_cpu.end(), m_cpu.begin()))
-	{
+        std::sort(ret_cpu.begin(), ret_cpu.end());
+        std::sort(m_cpu.begin(), m_cpu.end());
+        if (result && !ret_cpu.empty() && !m_cpu.empty() && ret_cpu.size() == m_cpu.size()
+            && std::equal(ret_cpu.begin(), ret_cpu.end(), m_cpu.begin()))
+        {
 
-	}
-	else
-	{
-		RTC_ERROR(("pthread_getaffinity_np(): returned error."));
-	}
+        }
+        else
+        {
+            RTC_ERROR(("coil::getThreadCpuAffinity(): returned error."));
+        }
 #endif
+    }
+    else
+    {
+        RTC_DEBUG(("cpu affinity is not set"));
+    }
 
     do
       {
@@ -161,40 +155,36 @@ namespace RTC_exp
         // Therefore WorkerPreDo(updating state) have to be invoked
         // before stopping thread.
         {
-          Guard guard(m_workerthread.mutex_);
+          std::unique_lock<std::mutex> guard(m_workerthread.mutex_);
           while (!m_workerthread.running_)
             {
-              m_workerthread.cond_.wait();
+              m_workerthread.cond_.wait(guard);
             }
         }
-        coil::TimeValue t0(coil::clock());
+        auto t0 = std::chrono::high_resolution_clock::now();
         ExecutionContextBase::invokeWorkerDo();
         ExecutionContextBase::invokeWorkerPostDo();
-        coil::TimeValue t1(coil::clock());
+        if (!m_nowait)
+          {
+            auto t1 = std::chrono::high_resolution_clock::now();
+            auto exectime = t1 - t0;
+            if (exectime.count() >= 0)
+              {
+                auto diff = getPeriod() - exectime;
+                if (diff.count() > 0)
+                  {
+#ifdef _WIN32
+                    std::chrono::milliseconds ms = std::chrono::duration_cast<std::chrono::milliseconds>(diff);
+                    Sleep(static_cast<DWORD>(ms.count()));
+#else
+                    std::this_thread::sleep_for(diff);
 
-        coil::TimeValue period(getPeriod());
-        if (count > 1000)
-          {
-            RTC_PARANOID(("Period:    %f [s]", static_cast<double>(period)));
-            RTC_PARANOID(("Execution: %f [s]", static_cast<double>(t1 - t0)));
-            RTC_PARANOID(("Sleep:     %f [s]",
-                                    static_cast<double>(period - (t1 - t0))));
+#endif
+                  }
+              }
           }
-        coil::TimeValue t2(coil::clock());
-        if (!m_nowait && period > (t1 - t0))
-          {
-            if (count > 1000) { RTC_PARANOID(("sleeping...")); }
-            coil::sleep((coil::TimeValue)(period - (t1 - t0)));
-          }
-        if (count > 1000)
-          {
-            coil::TimeValue t3(coil::clock());
-            RTC_PARANOID(("Slept:     %f [s]", static_cast<double>(t3 - t2)));
-            count = 0;
-          }
-        ++count;
       } while (threadRunning());
-      
+
     RTC_DEBUG(("Thread terminated."));
     return 0;
   }
@@ -206,7 +196,7 @@ namespace RTC_exp
    * @brief Thread execution function for ExecutionContext
    * @endif
    */
-  int PeriodicExecutionContext::close(unsigned long flags)
+  int PeriodicExecutionContext::close(unsigned long  /*flags*/)
   {
     RTC_TRACE(("close()"));
     // At this point, this component have to be finished.
@@ -226,7 +216,6 @@ namespace RTC_exp
    * @endif
    */
   CORBA::Boolean PeriodicExecutionContext::is_running()
-    throw (CORBA::SystemException)
   {
     return ExecutionContextBase::isRunning();
   }
@@ -239,7 +228,6 @@ namespace RTC_exp
    * @endif
    */
   RTC::ReturnCode_t PeriodicExecutionContext::start()
-    throw (CORBA::SystemException)
   {
     return ExecutionContextBase::start();
   }
@@ -252,7 +240,6 @@ namespace RTC_exp
    * @endif
    */
   RTC::ReturnCode_t PeriodicExecutionContext::stop()
-    throw (CORBA::SystemException)
   {
     return ExecutionContextBase::stop();
   }
@@ -267,7 +254,6 @@ namespace RTC_exp
    * @endif
    */
   CORBA::Double PeriodicExecutionContext::get_rate()
-    throw (CORBA::SystemException)
   {
     return ExecutionContextBase::getRate();
   }
@@ -280,7 +266,6 @@ namespace RTC_exp
    * @endif
    */
   RTC::ReturnCode_t PeriodicExecutionContext::set_rate(CORBA::Double rate)
-    throw (CORBA::SystemException)
   {
     return ExecutionContextBase::setRate(rate);
   }
@@ -294,7 +279,6 @@ namespace RTC_exp
    */
   RTC::ReturnCode_t
   PeriodicExecutionContext::add_component(RTC::LightweightRTObject_ptr comp)
-    throw (CORBA::SystemException)
   {
     return ExecutionContextBase::addComponent(comp);
   }
@@ -308,7 +292,6 @@ namespace RTC_exp
    */
   RTC::ReturnCode_t PeriodicExecutionContext::
   remove_component(RTC::LightweightRTObject_ptr comp)
-    throw (CORBA::SystemException)
   {
     return ExecutionContextBase::removeComponent(comp);
   }
@@ -322,7 +305,6 @@ namespace RTC_exp
    */
   RTC::ReturnCode_t PeriodicExecutionContext::
   activate_component(RTC::LightweightRTObject_ptr comp)
-    throw (CORBA::SystemException)
   {
     return ExecutionContextBase::activateComponent(comp);
   }
@@ -336,7 +318,6 @@ namespace RTC_exp
    */
   RTC::ReturnCode_t PeriodicExecutionContext::
   deactivate_component(RTC::LightweightRTObject_ptr comp)
-    throw (CORBA::SystemException)
   {
     return ExecutionContextBase::deactivateComponent(comp);
   }
@@ -350,7 +331,6 @@ namespace RTC_exp
    */
   RTC::ReturnCode_t PeriodicExecutionContext::
   reset_component(RTC::LightweightRTObject_ptr comp)
-    throw (CORBA::SystemException)
   {
     return ExecutionContextBase::resetComponent(comp);
   }
@@ -364,7 +344,6 @@ namespace RTC_exp
    */
   RTC::LifeCycleState PeriodicExecutionContext::
   get_component_state(RTC::LightweightRTObject_ptr comp)
-    throw (CORBA::SystemException)
   {
     RTC::LifeCycleState ret = ExecutionContextBase::getComponentState(comp);
     return ret;
@@ -378,7 +357,6 @@ namespace RTC_exp
    * @endif
    */
   RTC::ExecutionKind PeriodicExecutionContext::get_kind()
-    throw (CORBA::SystemException)
   {
     return ExecutionContextBase::getKind();
   }
@@ -394,7 +372,6 @@ namespace RTC_exp
    * @endif
    */
   RTC::ExecutionContextProfile* PeriodicExecutionContext::get_profile()
-    throw (CORBA::SystemException)
   {
     return ExecutionContextBase::getProfile();
   }
@@ -410,23 +387,23 @@ namespace RTC_exp
   {
     // change EC thread state
     {
-      Guard guard(m_svcmutex);
+      std::lock_guard<std::mutex> guard(m_svcmutex);
       if (!m_svc)
         {
           m_svc = true;
-          this->open(0);
+          this->open(nullptr);
         }
     }
     if (isAllNextState(RTC::INACTIVE_STATE))
       {
-        Guard guard(m_workerthread.mutex_);
+        std::lock_guard<std::mutex> guard(m_workerthread.mutex_);
         m_workerthread.running_ = false;
       }
     else
       {
-        Guard guard(m_workerthread.mutex_);
+        std::lock_guard<std::mutex> guard(m_workerthread.mutex_);
         m_workerthread.running_ = true;
-        m_workerthread.cond_.signal();
+        m_workerthread.cond_.notify_one();
       }
     return RTC::RTC_OK;
   }
@@ -437,7 +414,7 @@ namespace RTC_exp
   RTC::ReturnCode_t PeriodicExecutionContext::onStopping()
   {
     // stop thread
-    Guard guard(m_workerthread.mutex_);
+    std::lock_guard<std::mutex> guard(m_workerthread.mutex_);
     m_workerthread.running_ = false;
     return RTC::RTC_OK;
   }
@@ -447,10 +424,10 @@ namespace RTC_exp
    * @brief onAddedComponent() template function
    */
   RTC::ReturnCode_t PeriodicExecutionContext::
-  onAddedComponent(RTC::LightweightRTObject_ptr rtobj)
+  onAddedComponent(RTC::LightweightRTObject_ptr  /*rtobj*/)
   {
-    Guard guard(m_workerthread.mutex_);
-    if (m_workerthread.running_ == false)
+    std::lock_guard<std::mutex> guard(m_workerthread.mutex_);
+    if (!m_workerthread.running_)
       {
         m_worker.updateComponentList();
       }
@@ -460,10 +437,10 @@ namespace RTC_exp
    * @brief onRemovedComponent() template function
    */
   RTC::ReturnCode_t PeriodicExecutionContext::
-  onRemovedComponent(RTC::LightweightRTObject_ptr rtobj)
+  onRemovedComponent(RTC::LightweightRTObject_ptr  /*rtobj*/)
   {
-    Guard guard(m_workerthread.mutex_);
-    if (m_workerthread.running_ == false)
+    std::lock_guard<std::mutex> guard(m_workerthread.mutex_);
+    if (!m_workerthread.running_)
       {
         m_worker.updateComponentList();
       }
@@ -484,11 +461,11 @@ namespace RTC_exp
     // If worker thread is stopped, restart worker thread.
     if (isRunning())
     {
-        Guard guard(m_workerthread.mutex_);
-        if (m_workerthread.running_ == false)
+        std::lock_guard<std::mutex> guard(m_workerthread.mutex_);
+        if (!m_workerthread.running_)
         {
             m_workerthread.running_ = true;
-            m_workerthread.cond_.signal();
+            m_workerthread.cond_.notify_one();
         }
     }
     return RTC::RTC_OK;
@@ -513,11 +490,11 @@ namespace RTC_exp
     // If worker thread is stopped, restart worker thread.
     if (isRunning())
     {
-        Guard guard(m_workerthread.mutex_);
-        if (m_workerthread.running_ == false)
+        std::lock_guard<std::mutex> guard(m_workerthread.mutex_);
+        if (!m_workerthread.running_)
         {
             m_workerthread.running_ = true;
-            m_workerthread.cond_.signal();
+            m_workerthread.cond_.notify_one();
         }
     }
     return RTC::RTC_OK;
@@ -535,8 +512,8 @@ namespace RTC_exp
                   getStateString(comp->getStates().next)));
     if (isAllNextState(RTC::INACTIVE_STATE))
       {
-        Guard guard(m_workerthread.mutex_);
-        if (m_workerthread.running_ == true)
+        std::lock_guard<std::mutex> guard(m_workerthread.mutex_);
+        if (m_workerthread.running_)
           {
             m_workerthread.running_ = false;
             RTC_TRACE(("All RTCs are INACTIVE. Stopping worker thread."));
@@ -557,8 +534,8 @@ namespace RTC_exp
                   getStateString(comp->getStates().next)));
     if (isAllNextState(RTC::INACTIVE_STATE))
       {
-        Guard guard(m_workerthread.mutex_);
-        if (m_workerthread.running_ == true)
+        std::lock_guard<std::mutex> guard(m_workerthread.mutex_);
+        if (m_workerthread.running_)
           {
             m_workerthread.running_ = false;
             RTC_TRACE(("All RTCs are INACTIVE. Stopping worker thread."));
@@ -579,8 +556,8 @@ namespace RTC_exp
                   getStateString(comp->getStates().next)));
     if (isAllNextState(RTC::INACTIVE_STATE))
       {
-        Guard guard(m_workerthread.mutex_);
-        if (m_workerthread.running_ == true)
+        std::lock_guard<std::mutex> guard(m_workerthread.mutex_);
+        if (m_workerthread.running_)
           {
             m_workerthread.running_ = false;
             RTC_TRACE(("All RTCs are INACTIVE. Stopping worker thread."));
@@ -601,8 +578,8 @@ namespace RTC_exp
                   getStateString(comp->getStates().next)));
     if (isAllNextState(RTC::INACTIVE_STATE))
       {
-        Guard guard(m_workerthread.mutex_);
-        if (m_workerthread.running_ == true)
+        std::lock_guard<std::mutex> guard(m_workerthread.mutex_);
+        if (m_workerthread.running_)
           {
             m_workerthread.running_ = false;
             RTC_TRACE(("All RTCs are INACTIVE. Stopping worker thread."));
@@ -618,21 +595,21 @@ namespace RTC_exp
     getProperty(props, "cpu_affinity", affinity);
     RTC_DEBUG(("CPU affinity property: %s", affinity.c_str()));
 
-    coil::vstring tmp = coil::split(affinity, ",", true);
+    coil::vstring cpulist = coil::split(affinity, ",", true);
     m_cpu.clear();
 
-    for (size_t i(0); i < tmp.size(); ++i)
+    for (auto & cpu : cpulist)
       {
         int num;
-        if (coil::stringTo(num, tmp[i].c_str()))
+        if (coil::stringTo(num, cpu.c_str()))
           {
-            m_cpu.push_back(num);
+            m_cpu.emplace_back(num);
             RTC_DEBUG(("CPU affinity int value: %d added.", num));
           }
       }
   }
 
-};  // namespace RTC_exp
+} // namespace RTC_exp
 
 extern "C"
 {
@@ -644,7 +621,7 @@ extern "C"
    * @endif
    */
 
-  void PeriodicExecutionContextInit(RTC::Manager* manager)
+  void PeriodicExecutionContextInit(RTC::Manager*  /*manager*/)
   {
     RTC::ExecutionContextFactory::
       instance().addFactory("PeriodicExecutionContext",
@@ -656,5 +633,5 @@ extern "C"
     coil::vstring ecs;
     ecs = RTC::ExecutionContextFactory::instance().getIdentifiers();
   }
-};
+}
 

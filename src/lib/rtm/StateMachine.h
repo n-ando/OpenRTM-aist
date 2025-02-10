@@ -19,8 +19,7 @@
 #ifndef RTC_STATEMACHINE_H
 #define RTC_STATEMACHINE_H
 
-#include <coil/Mutex.h>
-#include <coil/Guard.h>
+#include <mutex>
 
 #include <cassert>
 #include <utility>
@@ -79,7 +78,7 @@ namespace RTC_Utils
    * {
    * public:
    *   enum MyState { INACTIVE, ACTIVE, ERROR };
-   *   typedef States<MyState> MyStates;
+   *   using MyStates = States<MyState>;
    *
    *   ActiveObject()
    *     : m_sm(3)
@@ -174,7 +173,7 @@ namespace RTC_Utils
    * {
    * public:
    *   enum MyState { INACTIVE, ACTIVE, ERROR };
-   *   typedef States<MyState> MyStates;
+   *   using MyStates = States<MyState>;
    *
    *   ActiveObject()
    *     : m_sm(3)
@@ -258,6 +257,7 @@ namespace RTC_Utils
    *
    * @endif
    */
+
   template <class State,
             class Listener,
             class States = StateHolder<State>,
@@ -265,8 +265,6 @@ namespace RTC_Utils
             >
   class StateMachine
   {
-    typedef coil::Mutex Mutex;
-    typedef coil::Guard<Mutex> Guard;
   public:
     /*!
      * @if jp
@@ -287,20 +285,18 @@ namespace RTC_Utils
      */
     explicit StateMachine(int num_of_state)
       : m_num(num_of_state),
-        m_listener(NULL),
-        m_entry(m_num, (Callback)NULL),
-        m_predo(m_num, (Callback)NULL),
-        m_do(m_num, (Callback)NULL),
-        m_postdo(m_num, (Callback)NULL),
-        m_exit(m_num, (Callback)NULL),
-        m_transit(NULL),
+        m_listener(nullptr),
+        m_entry(m_num, (Callback)nullptr),
+        m_predo(m_num, (Callback)nullptr),
+        m_do(m_num, (Callback)nullptr),
+        m_postdo(m_num, (Callback)nullptr),
+        m_exit(m_num, (Callback)nullptr),
+        m_transit(nullptr),
         m_selftrans(false)
     {
-    };
+    }
 
-    virtual ~StateMachine()
-    {
-    };
+    virtual ~StateMachine();
 
     StateMachine(const StateMachine& other)
       : m_num(other.m_num),
@@ -382,7 +378,7 @@ namespace RTC_Utils
      */
     void setListener(Listener* listener)
     {
-      assert(listener != NULL);
+      assert(listener != nullptr);
       m_listener = listener;
     }
 
@@ -647,7 +643,7 @@ namespace RTC_Utils
      */
     States getStates()
     {
-      Guard guard(m_mutex);
+      std::lock_guard<std::mutex> guard(m_mutex);
       return m_states;
     }
 
@@ -670,7 +666,7 @@ namespace RTC_Utils
      */
     State getState()
     {
-      Guard guard(m_mutex);
+      std::lock_guard<std::mutex> guard(m_mutex);
       return m_states.curr;
     }
 
@@ -697,7 +693,7 @@ namespace RTC_Utils
      */
     bool isIn(State state)
     {
-      Guard guard(m_mutex);
+      std::lock_guard<std::mutex> guard(m_mutex);
       return m_states.curr == state ? true : false;
     }
 
@@ -729,7 +725,7 @@ namespace RTC_Utils
      */
     void goTo(State state)
     {
-      Guard guard(m_mutex);
+      std::lock_guard<std::mutex> guard(m_mutex);
       m_states.next = state;
       if (m_states.curr == state)
         {
@@ -808,7 +804,7 @@ namespace RTC_Utils
       sync(state);
       if (state.curr == state.next)
         {
-          if (m_predo[state.curr] != NULL)
+          if (m_predo[state.curr] != nullptr)
             {
               (m_listener->*m_predo[state.curr])(state);
             }
@@ -816,7 +812,7 @@ namespace RTC_Utils
         }
 
       // State changed
-      if (m_exit[state.curr] != NULL)
+      if (m_exit[state.curr] != nullptr)
         {
           (m_listener->*m_exit[state.curr])(state);
         }
@@ -824,7 +820,7 @@ namespace RTC_Utils
       if (state.curr != state.next)
         {
           state.curr = state.next;
-          if (m_entry[state.curr] != NULL)
+          if (m_entry[state.curr] != nullptr)
             {
               (m_listener->*m_entry[state.curr])(state);
             }
@@ -836,7 +832,7 @@ namespace RTC_Utils
     {
       States state;
       sync(state);
-      if (m_do[state.curr] != NULL)
+      if (m_do[state.curr] != nullptr)
         {
           (m_listener->*m_do[state.curr])(state);
         }
@@ -846,7 +842,7 @@ namespace RTC_Utils
     {
       States state;
       sync(state);
-      if (m_postdo[state.curr] != NULL)
+      if (m_postdo[state.curr] != nullptr)
         {
           (m_listener->*m_postdo[state.curr])(state);
         }
@@ -875,10 +871,9 @@ namespace RTC_Utils
     void setNullFunc(std::vector<Callback>& s, Callback nullfunc)
     {
       s.clear();
-      //      assert((size_t)m_num == s.size());
       for (size_t i(0); i < m_num; ++i)
         {
-          s.push_back(nullfunc);
+          s.emplace_back(nullfunc);
         }
     }
 
@@ -963,27 +958,32 @@ namespace RTC_Utils
      */
     States m_states;
     bool m_selftrans;
-    Mutex m_mutex;
+    std::mutex m_mutex;
 
   private:
     inline void sync(States& st)
     {
-      Guard guard(m_mutex);
+      std::lock_guard<std::mutex> guard(m_mutex);
       st = m_states;
     }
 
     inline bool need_trans()
     {
-      Guard guard(m_mutex);
+      std::lock_guard<std::mutex> guard(m_mutex);
       return (m_states.curr != m_states.next);
     }
 
     inline void update_curr(const State curr)
     {
-      Guard guard(m_mutex);
+      std::lock_guard<std::mutex> guard(m_mutex);
       m_states.curr = curr;
     }
   };
-};  // namespace RTC_Utils
+
+  // No inline for gcc warning, too big
+  template <class T, class U, class V, class W>
+  StateMachine<T, U, V, W>::~StateMachine() = default;
+
+} // namespace RTC_Utils
 
 #endif  // RTC_STATEMACHINE_H

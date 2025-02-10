@@ -24,8 +24,7 @@
 #include <rtm/idl/SDOPackageSkel.h>
 #include <rtm/SystemLogger.h>
 
-#include <coil/Mutex.h>
-#include <coil/Guard.h>
+#include <mutex>
 
 #include <string>
 
@@ -43,10 +42,6 @@
  *
  * @endif
  */
-
-#ifdef WIN32
-#pragma warning( disable : 4290 )
-#endif
 
 namespace SDOPackage
 {
@@ -77,8 +72,6 @@ namespace SDOPackage
     : public virtual POA_SDOPackage::Organization,
       public virtual PortableServer::RefCountServantBase
   {
-    typedef coil::Mutex Mutex;
-    typedef coil::Guard<Mutex> Guard;
   public:
     /*!
      * @if jp
@@ -115,7 +108,7 @@ namespace SDOPackage
      *
      * @endif
      */
-    virtual ~Organization_impl(void);
+    ~Organization_impl() override;
 
     //============================================================
     //
@@ -151,9 +144,7 @@ namespace SDOPackage
      *                          completely due to some internal error.
      * @endif
      */
-    virtual char* get_organization_id()
-      throw (CORBA::SystemException,
-             InvalidParameter, NotAvailable, InternalError);
+    char* get_organization_id() override;
 
     /*!
      * @if jp
@@ -197,10 +188,8 @@ namespace SDOPackage
      *                          completely due to some internal error.
      * @endif
      */
-    virtual CORBA::Boolean
-    add_organization_property(const OrganizationProperty& org_property)
-      throw (CORBA::SystemException,
-             InvalidParameter, NotAvailable, InternalError);
+    CORBA::Boolean
+    add_organization_property(const OrganizationProperty& organization_property) override;
 
     /*!
      * @if jp
@@ -234,9 +223,7 @@ namespace SDOPackage
      *                          completely due to some internal error.
      * @endif
      */
-    virtual OrganizationProperty* get_organization_property()
-      throw (CORBA::SystemException,
-             NotAvailable, InternalError);
+    OrganizationProperty* get_organization_property() override;
 
     /*!
      * @if jp
@@ -277,9 +264,7 @@ namespace SDOPackage
      *                          completely due to some internal error.
      * @endif
      */
-    virtual CORBA::Any* get_organization_property_value(const char* name)
-      throw (CORBA::SystemException,
-             InvalidParameter, NotAvailable, InternalError);
+    CORBA::Any* get_organization_property_value(const char* name) override;
 
     /*!
      * @if jp
@@ -325,10 +310,8 @@ namespace SDOPackage
      *                          completely due to some internal error.
      * @endif
      */
-    virtual CORBA::Boolean
-    set_organization_property_value(const char* name, const CORBA::Any& value)
-      throw (CORBA::SystemException,
-             InvalidParameter, NotAvailable, InternalError);
+    CORBA::Boolean
+    set_organization_property_value(const char* name, const CORBA::Any& value) override;
 
     /*!
      * @if jp
@@ -370,9 +353,7 @@ namespace SDOPackage
      *                          completely due to some internal error.
      * @endif
      */
-    virtual CORBA::Boolean remove_organization_property(const char* name)
-      throw (CORBA::SystemException,
-             InvalidParameter, NotAvailable, InternalError);
+    CORBA::Boolean remove_organization_property(const char* name) override;
 
     /*!
      * @if jp
@@ -411,9 +392,7 @@ namespace SDOPackage
      *                          completely due to some internal error.
      * @endif
      */
-    virtual CORBA::Boolean add_members(const SDOList& sdo_list)
-      throw (CORBA::SystemException,
-             InvalidParameter, NotAvailable, InternalError);
+    CORBA::Boolean add_members(const SDOList& sdo_list) override;
 
     /*!
      * @if jp
@@ -447,9 +426,7 @@ namespace SDOPackage
      *                          completely due to some internal error.
      * @endif
      */
-    virtual SDOList* get_members()
-      throw (CORBA::SystemException,
-             NotAvailable, InternalError);
+    SDOList* get_members() override;
 
     /*!
      * @if jp
@@ -494,9 +471,7 @@ namespace SDOPackage
      *                          completely due to some internal error.
      * @endif
      */
-    virtual CORBA::Boolean set_members(const SDOList& sdos)
-      throw (CORBA::SystemException,
-             InvalidParameter, NotAvailable, InternalError);
+    CORBA::Boolean set_members(const SDOList& sdos) override;
 
     /*!
      * @if jp
@@ -534,9 +509,7 @@ namespace SDOPackage
      *                          completely due to some internal error.
      * @endif
      */
-    virtual CORBA::Boolean remove_member(const char* id)
-      throw (CORBA::SystemException,
-             InvalidParameter, NotAvailable, InternalError);
+    CORBA::Boolean remove_member(const char* id) override;
 
     /*!
      * @if jp
@@ -568,9 +541,7 @@ namespace SDOPackage
      *                          completely due to some internal error.
      * @endif
      */
-    virtual SDOSystemElement_ptr get_owner()
-      throw (CORBA::SystemException,
-             NotAvailable, InternalError);
+    SDOSystemElement_ptr get_owner() override;
 
     /*!
      * @if jp
@@ -613,9 +584,7 @@ namespace SDOPackage
      *                          completely due to some internal error.
      * @endif
      */
-    virtual CORBA::Boolean set_owner(SDOSystemElement_ptr sdo)
-      throw (CORBA::SystemException,
-             InvalidParameter, NotAvailable, InternalError);
+    CORBA::Boolean set_owner(SDOSystemElement_ptr sdo) override;
 
     /*!
      * @if jp
@@ -652,9 +621,7 @@ namespace SDOPackage
      *                          completely due to some internal error.
      * @endif
      */
-    virtual DependencyType get_dependency()
-      throw (CORBA::SystemException,
-             NotAvailable, InternalError);
+    DependencyType get_dependency() override;
 
     /*!
      * @if jp
@@ -698,15 +665,11 @@ namespace SDOPackage
      *                          completely due to some internal error.
      * @endif
      */
-    virtual CORBA::Boolean set_dependency(DependencyType dependency)
-      throw (CORBA::SystemException,
-             NotAvailable, InternalError);
+    CORBA::Boolean set_dependency(DependencyType dependency) override;
 
     // end of CORBA interface definition
     //============================================================
-    Organization_ptr getObjRef() {
-      return m_objref;
-    }
+    Organization_ptr getObjRef();
 
   protected:
     ::RTC::Logger rtclog;
@@ -833,7 +796,7 @@ namespace SDOPackage
      * @endif
      */
     SDOPackage::OrganizationProperty m_orgProperty;
-    Mutex m_org_mutex;
+    std::mutex m_org_mutex;
 
     /*!
      * @if jp
@@ -870,15 +833,11 @@ namespace SDOPackage
       {
         CORBA::String_var id(sdo->get_sdo_id());
 
-	return m_id == (const char*)id;
+        return m_id == (const char*)id;
       }
       std::string m_id;
     };  // struct sdo_id
   };  // class Organization_impl
-};  // namespace SDOPackage
-
-#ifdef WIN32
-#pragma warning( default : 4290 )
-#endif
+} // namespace SDOPackage
 
 #endif  // RTC_NAMESPACE SDOPACKAGE

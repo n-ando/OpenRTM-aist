@@ -11,11 +11,11 @@
 
 // Module specification
 // <rtc-template block="module_spec">
-static const char* consoleout_spec[] =
+static const char* const display_spec[] =
   {
     "implementation_id", "Display",
     "type_name",         "Display",
-    "description",       "Console output component",
+    "description",       "Display component for Microwave example",
     "version",           "1.0",
     "vendor",            "Noriaki Ando, AIST",
     "category",          "example",
@@ -50,55 +50,52 @@ Display::Display(RTC::Manager* manager)
 
 }
 
-Display::~Display()
-{
-}
+Display::~Display() = default;
 
 
 RTC::ReturnCode_t Display::onInitialize()
 {
   addInPort("in", m_inIn);
  
-  m_inIn.addConnectorDataListener(ON_BUFFER_WRITE,
+  m_inIn.addConnectorDataListener(ConnectorDataListenerType::ON_BUFFER_WRITE,
                                     new DataListener("ON_BUFFER_WRITE"));
-  m_inIn.addConnectorDataListener(ON_BUFFER_FULL, 
+  m_inIn.addConnectorDataListener(ConnectorDataListenerType::ON_BUFFER_FULL, 
                                     new DataListener("ON_BUFFER_FULL"));
-  m_inIn.addConnectorDataListener(ON_BUFFER_WRITE_TIMEOUT, 
+  m_inIn.addConnectorDataListener(ConnectorDataListenerType::ON_BUFFER_WRITE_TIMEOUT, 
                                     new DataListener("ON_BUFFER_WRITE_TIMEOUT"));
-  m_inIn.addConnectorDataListener(ON_BUFFER_OVERWRITE, 
+  m_inIn.addConnectorDataListener(ConnectorDataListenerType::ON_BUFFER_OVERWRITE, 
                                     new DataListener("ON_BUFFER_OVERWRITE"));
-  m_inIn.addConnectorDataListener(ON_BUFFER_READ, 
+  m_inIn.addConnectorDataListener(ConnectorDataListenerType::ON_BUFFER_READ, 
                                     new DataListener("ON_BUFFER_READ"));
-  m_inIn.addConnectorDataListener(ON_SEND, 
+  m_inIn.addConnectorDataListener(ConnectorDataListenerType::ON_SEND, 
                                     new DataListener("ON_SEND"));
-  m_inIn.addConnectorDataListener(ON_RECEIVED,
+  m_inIn.addConnectorDataListener(ConnectorDataListenerType::ON_RECEIVED,
                                     new DataListener("ON_RECEIVED"));
-  m_inIn.addConnectorDataListener(ON_RECEIVER_FULL, 
+  m_inIn.addConnectorDataListener(ConnectorDataListenerType::ON_RECEIVER_FULL, 
                                     new DataListener("ON_RECEIVER_FULL"));
-  m_inIn.addConnectorDataListener(ON_RECEIVER_TIMEOUT, 
+  m_inIn.addConnectorDataListener(ConnectorDataListenerType::ON_RECEIVER_TIMEOUT, 
                                     new DataListener("ON_RECEIVER_TIMEOUT"));
 
-  m_inIn.addConnectorListener(ON_BUFFER_EMPTY,
+  m_inIn.addConnectorListener(ConnectorListenerType::ON_BUFFER_EMPTY,
                                     new ConnListener("ON_BUFFER_EMPTY"));
-  m_inIn.addConnectorListener(ON_BUFFER_READ_TIMEOUT,
+  m_inIn.addConnectorListener(ConnectorListenerType::ON_BUFFER_READ_TIMEOUT,
                                     new ConnListener("ON_BUFFER_READ_TIMEOUT"));
-  m_inIn.addConnectorListener(ON_SENDER_EMPTY,
+  m_inIn.addConnectorListener(ConnectorListenerType::ON_SENDER_EMPTY,
                                     new ConnListener("ON_SENDER_EMPTY"));
-  m_inIn.addConnectorListener(ON_SENDER_TIMEOUT,
+  m_inIn.addConnectorListener(ConnectorListenerType::ON_SENDER_TIMEOUT,
                                     new ConnListener("ON_SENDER_TIMEOUT"));
-  m_inIn.addConnectorListener(ON_SENDER_ERROR,
+  m_inIn.addConnectorListener(ConnectorListenerType::ON_SENDER_ERROR,
                                     new ConnListener("ON_SENDER_ERROR"));
-  m_inIn.addConnectorListener(ON_CONNECT,
+  m_inIn.addConnectorListener(ConnectorListenerType::ON_CONNECT,
                                     new ConnListener("ON_CONNECT"));
-  m_inIn.addConnectorListener(ON_DISCONNECT,
+  m_inIn.addConnectorListener(ConnectorListenerType::ON_DISCONNECT,
                                     new ConnListener("ON_DISCONNECT"));
 
-  //  m_machine = new Macho::Machine<Example::Top>(Macho::State<Example::Top>(11));
 
  return RTC::RTC_OK;
 }
 
-RTC::ReturnCode_t Display::onExecute(RTC::UniqueId ec_id)
+RTC::ReturnCode_t Display::onExecute(RTC::UniqueId  /*ec_id*/)
 {
   if (m_inIn.isNew())
     {
@@ -107,7 +104,7 @@ RTC::ReturnCode_t Display::onExecute(RTC::UniqueId ec_id)
       std::cout << "TimeStamp: " << m_in.tm.sec << "[s] ";
       std::cout << m_in.tm.nsec << "[ns]" << std::endl;
     }
-  coil::usleep(1000);
+  std::this_thread::sleep_for(std::chrono::milliseconds(1));
 
   return RTC::RTC_OK;
 }
@@ -116,11 +113,11 @@ extern "C"
 {
   void DisplayInit(RTC::Manager* manager)
   {
-    coil::Properties profile(consoleout_spec);
+    coil::Properties profile(display_spec);
     manager->registerFactory(profile,
                              RTC::Create<Display>,
                              RTC::Delete<Display>);
   }
-};
+}
 
 

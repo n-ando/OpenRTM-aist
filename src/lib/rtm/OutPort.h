@@ -20,8 +20,6 @@
 #ifndef RTC_OUTPORT_H
 #define RTC_OUTPORT_H
 
-#include <coil/TimeValue.h>
-#include <coil/Time.h>
 #include <coil/TimeMeasure.h>
 #include <coil/OS.h>
 
@@ -33,41 +31,11 @@
 #include <rtm/OutPortConnector.h>
 #include <rtm/Timestamp.h>
 #include <rtm/DirectOutPortBase.h>
+#include <rtm/DataTypeUtil.h>
 
 #include <functional>
 #include <string>
 #include <vector>
-
-
-/*!
- * @if jp
- * @brief データにタイムスタンプをセットする
- *
- * データポートのデータに対してタイムスタンプをセットする。データポート
- * のデータは構造体のメンバーとして tm.sec, tm.nsec を持つ必要がある。
- *
- * @param data タイムスタンプをセットするデータ。実行後実行時のタイムス
- *             タンプがセットされる
- *
- * @else
- * @brief Setting timestamp to data
- *
- * This function sets timestamp to data of data port. This data should
- * have tm.sec, tm.nsec as members of the structure.
- *
- * @param data Data to be set timestamp. After executing this
- *             function, current timestamp is set to the data.
- *
- * @endif
- */
-template <class DataType>
-void setTimestamp(DataType& data)
-{
-      // set timestamp
-      coil::TimeValue tm(coil::gettimeofday());
-      data.tm.sec  = tm.sec();
-      data.tm.nsec = tm.usec() * 1000;
-}
 
 namespace RTC
 {
@@ -108,9 +76,8 @@ namespace RTC
    */
   template <class DataType>
   class OutPort
-	  : public OutPortBase, DirectOutPortBase<DataType>
+      : public OutPortBase, DirectOutPortBase<DataType>
   {
-	  typedef coil::Guard<coil::Mutex> Guard;
   public:
     /*!
      * @if jp
@@ -136,23 +103,26 @@ namespace RTC
      * @endif
      */
     OutPort(const char* name, DataType& value)
-#if defined(__GNUC__) && (__GNUC__ <= 3 && __GNUC_MINOR__ <= 3)
-      : OutPortBase(name, ::CORBA_Util::toRepositoryIdOfStruct<DataType>()),
-#else
       : OutPortBase(name, ::CORBA_Util::toRepositoryId<DataType>()),
-#endif
-	  DirectOutPortBase<DataType>(value),
-	  m_value(value), m_onWrite(0), m_onWriteConvert(0),
-	  m_directNewData(false), m_directValue(value)
+        m_value(value), m_onWrite(nullptr), m_onWriteConvert(nullptr),
+        m_directNewData(false), m_directValue(value)
     {
-
-      this->addConnectorDataListener(ON_BUFFER_WRITE,
+      this->initConnectorListeners();
+      this->addConnectorDataListener(ConnectorDataListenerType::ON_BUFFER_WRITE,
                                      new Timestamp<DataType>("on_write"));
-      this->addConnectorDataListener(ON_SEND,
+      this->addConnectorDataListener(ConnectorDataListenerType::ON_SEND,
                                      new Timestamp<DataType>("on_send"));
 
-	  m_directport = this;
+      m_directport = this;
 
+      CdrMemoryStreamInit<DataType>();
+
+      std::string marshaling_types{coil::eraseBlank(coil::flatten(
+        getSerializerList<DataType>()))};
+
+      RTC_DEBUG(("available marshaling_types: %s", marshaling_types.c_str()));
+
+      addProperty("dataport.marshaling_types", marshaling_types.c_str());
     }
 
     /*!
@@ -170,9 +140,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~OutPort(void)
-    {
-    }
+    ~OutPort() override;
 
     /*!
      * @if jp
@@ -219,7 +187,7 @@ namespace RTC
     {
       RTC_TRACE(("DataType write()"));
 
-      if (m_onWrite != NULL)
+      if (m_onWrite != nullptr)
         {
           (*m_onWrite)(value);
           RTC_TRACE(("OnWrite called"));
@@ -229,7 +197,7 @@ namespace RTC
       bool result(true);
       std::vector<const char *> disconnect_ids;
       {
-        Guard guard(m_connectorsMutex);
+        std::lock_guard<std::mutex> con_guard(m_connectorsMutex);
         // check number of connectors
         size_t conn_size(m_connectors.size());
         if (!(conn_size > 0)) { return false; }
@@ -239,57 +207,57 @@ namespace RTC
         for (size_t i(0), len(conn_size); i < len; ++i)
           {
 
-            ReturnCode ret;
-			if (!m_connectors[i]->pullDirectMode())
-			{
-				if (m_onWriteConvert != NULL)
-				{
-					RTC_DEBUG(("m_connectors.OnWriteConvert called"));
-					DataType tmp = (*m_onWriteConvert)(value);
-					ret = m_connectors[i]->write(tmp);
-				}
-				else
-				{
-					RTC_DEBUG(("m_connectors.write called"));
-					ret = m_connectors[i]->write(value);
-				}
-			}
-			else
-			{
-				Guard guard(m_valueMutex);
-				if (m_onWriteConvert != NULL)
-				{
-					RTC_DEBUG(("m_connectors.OnWriteConvert called"));
-					m_directValue = ((*m_onWriteConvert)(value));
-				}
-				else
-				{
-					m_directValue = value;
-				}
-				m_directNewData = true;
-				ret = PORT_OK;
-			}
+            DataPortStatus ret;
+            if (!m_connectors[i]->pullDirectMode())
+              {
+                if (m_onWriteConvert != nullptr)
+                  {
+                    RTC_DEBUG(("m_connectors.OnWriteConvert called"));
+                    DataType tmp = (*m_onWriteConvert)(value);
+                    ret = m_connectors[i]->write(tmp);
+                  }
+                else
+                  {
+                    RTC_DEBUG(("m_connectors.write called"));
+                    ret = m_connectors[i]->write(value);
+                  }
+              }
+            else
+              {
+                std::lock_guard<std::mutex> value_guard(m_valueMutex);
+                if (m_onWriteConvert != nullptr)
+                  {
+                    RTC_DEBUG(("m_connectors.OnWriteConvert called"));
+                    m_directValue = ((*m_onWriteConvert)(value));
+                  }
+                else
+                  {
+                    CORBA_Util::copyData<DataType>(m_directValue, value);
+                  }
+                m_directNewData = true;
+                ret = DataPortStatus::PORT_OK;
+              }
             m_status[i] = ret;
 
-            if (ret == PORT_OK) { continue; }
+            if (ret == DataPortStatus::PORT_OK) { continue; }
 
             result = false;
 
-            if (ret == CONNECTION_LOST)
+            if (ret == DataPortStatus::CONNECTION_LOST)
               {
                 const char* id(m_connectors[i]->profile().id.c_str());
                 RTC_WARN(("connection_lost id: %s", id));
-                if (m_onConnectionLost != 0)
+                if (m_onConnectionLost != nullptr)
                   {
                     RTC::ConnectorProfile prof(findConnProfile(id));
                     (*m_onConnectionLost)(prof);
                   }
-                disconnect_ids.push_back(id);
+                disconnect_ids.emplace_back(id);
               }
           }
       }
       std::for_each(disconnect_ids.begin(), disconnect_ids.end(),
-                    std::bind1st(std::mem_fun(&PortBase::disconnect), this));
+                    [this](const char * id){this->disconnect(id);});
       return result;
     }
 
@@ -314,7 +282,7 @@ namespace RTC
      *
      * @endif
      */
-    bool write()
+    bool write() override
     {
       return write(m_value);
     }
@@ -381,7 +349,7 @@ namespace RTC
      *
      * @endif
      */
-    DataPortStatus::Enum getStatus(int index)
+    DataPortStatus getStatus(int index)
     {
       return m_status[index];
     }
@@ -495,36 +463,56 @@ namespace RTC
       m_onWriteConvert = on_wconvert;
     }
 
-	/*!
-	* @if jp
-	*
-	* @brief データをダイレクトに読み込む
-	*
-	* @param data 読み込むデータ
-	*
-	* @else
-	*
-	* @brief 
-	*
-	* @param data
-	*
-	* @endif
-	*/
-	virtual void read(DataType& data)
-	{
-		Guard guard(m_valueMutex);
-		m_directNewData = false;
-		data = m_directValue;
-	}
-	virtual bool isEmpty()
-	{
-		return !m_directNewData;
-	}
-	virtual bool isNew()
-	{
-		return m_directNewData;
-	}
-    
+    /*!
+     * @if jp
+     *
+     * @brief データをダイレクトに読み込む
+     *
+     * @param data 読み込むデータ
+     *
+     * @else
+     *
+     * @brief 
+     *
+     * @param data
+     *
+     * @endif
+     */
+    void read(DataType& data) override
+    {
+        std::lock_guard<std::mutex> guard(m_valueMutex);
+        m_directNewData = false;
+        CORBA_Util::copyData<DataType>(data, m_directValue);
+    }
+    bool isEmpty() override
+    {
+        return !m_directNewData;
+    }
+    bool isNew() override
+    {
+        return m_directNewData;
+    }
+
+  protected:
+    /*!
+     * @if jp
+     *
+     * @brief コネクタリスナの初期化 
+     *
+     * 
+     *
+     * @else
+     *
+     * @brief 
+     *
+     *
+     * @endif
+     */
+    void initConnectorListeners() override
+    {
+        delete m_listeners;
+        m_listeners = new ConnectorListenersT<DataType>();
+    }
   private:
     std::string m_typename;
     /*!
@@ -560,10 +548,12 @@ namespace RTC
 
     CORBA::Long m_propValueIndex;
 
-    coil::Mutex m_valueMutex;
+    std::mutex m_valueMutex;
     bool m_directNewData;
     DataType m_directValue;
   };
-};  // namespace RTC
+
+  template <class T> OutPort<T>::~OutPort() = default; // No inline for gcc warning, too big
+} // namespace RTC
 
 #endif  // RTC_OUTPORT_H

@@ -1,5 +1,4 @@
-// vim:sw=2 ts=2 expandtab fileencoding=utf-8
-/**
+﻿/**
  * \file defs.h
  * \brief システム共用マクロ集
  *
@@ -44,6 +43,20 @@
 #endif
 #endif
 
+#ifdef ORB_IS_ORBEXPRESS
+#  ifndef ORBEXPRESS
+#    define ORBEXPRESS
+#  endif
+#elif defined ORB_IS_TAO
+#  ifndef TAO
+#    define TAO
+#  endif
+#elif defined ORB_IS_OMNIORB
+#  ifndef OMNIORB
+#    define OMNIORB
+#  endif
+#endif
+
 #ifdef WIN32
 
 #  ifdef ORBEXPRESS
@@ -56,7 +69,8 @@
 #    pragma comment(lib, "OEtcp")
 #    pragma comment(lib, "OEtcpv6")
 #    pragma comment(lib, "OEudp")
-#  else
+#  elif defined TAO
+#  elif defined OMNIORB
 #    ifdef _WINSTATIC
 #      ifdef NDEBUG
 #        pragma comment(lib, "omniORB4")
@@ -160,7 +174,4 @@
   TypeName(const TypeName&);               \
   TypeName& operator=(const TypeName&)
 
-//#ifndef hrtm
-//#define hrtm RTC
-//#endif // hrtmcomp
 #endif  // HRTM_DEFS_H_

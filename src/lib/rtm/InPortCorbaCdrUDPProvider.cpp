@@ -18,10 +18,6 @@
 
 #include <rtm/InPortCorbaCdrUDPProvider.h>
 
-#ifdef WIN32
-#pragma warning( disable : 4290 )
-#endif
-
 namespace RTC
 {
   /*!
@@ -32,7 +28,7 @@ namespace RTC
    * @endif
    */
   InPortCorbaCdrUDPProvider::InPortCorbaCdrUDPProvider(void)
-   : m_buffer(0) 
+   : m_buffer(nullptr) 
   {
     // PortProfile setting
     setInterfaceType("corba_cdr_udp");
@@ -40,10 +36,9 @@ namespace RTC
     // ConnectorProfile setting
 
 #ifdef ORB_IS_OMNIORB
-    ::RTC::Manager::instance().theShortCutPOA()->activate_object(this);
+    PortableServer::ObjectId_var oid = ::RTC::Manager::instance().theShortCutPOA()->activate_object(this);
 #endif
-	
-	m_objref = this->_this();
+    m_objref = this->_this();
     
     // set InPort's reference
     CORBA::ORB_var orb = ::RTC::Manager::instance().getORB();
@@ -99,7 +94,7 @@ namespace RTC
       }
   }
 
-  void InPortCorbaCdrUDPProvider::init(coil::Properties& prop)
+  void InPortCorbaCdrUDPProvider::init(coil::Properties& /*prop*/)
   {
   }
 
@@ -111,7 +106,7 @@ namespace RTC
    * @endif
    */
   void InPortCorbaCdrUDPProvider::
-  setBuffer(BufferBase<cdrMemoryStream>* buffer)
+  setBuffer(BufferBase<ByteData>* buffer)
   {
     m_buffer = buffer;
   }
@@ -124,7 +119,7 @@ namespace RTC
    * @endif
    */
   void InPortCorbaCdrUDPProvider::setListener(ConnectorInfo& info,
-                                           ConnectorListeners* listeners)
+                                           ConnectorListenersBase* listeners)
   {
     m_profile = info;
     m_listeners = listeners;
@@ -151,50 +146,32 @@ namespace RTC
    */
   void
   InPortCorbaCdrUDPProvider::put(const ::OpenRTM::CdrData& data)
-    throw (CORBA::SystemException)
   {
     RTC_PARANOID(("InPortCorbaCdrUDPProvider::put()"));
 
-    if (m_buffer == 0)
+    if (m_buffer == nullptr)
       {
-        cdrMemoryStream cdr;
-#ifdef ORB_IS_ORBEXPRESS
-        cdr.cdr.write_array_1(data.get_buffer(), data.length());
-#elif defined(ORB_IS_TAO)
-        cdr.decodeCDRData(data);
-#else
-        cdr.put_octet_array(&(data[0]), data.length());
-#endif
 
-        onReceiverError(cdr);
+        m_cdr.writeData((unsigned char*)data.get_buffer(), data.length());
+
+        onReceiverError(m_cdr);
         return;
       }
 
-    RTC_PARANOID(("received data size: %d", data.length()))
-    cdrMemoryStream cdr;
+    RTC_PARANOID(("received data size: %d", data.length()));
     // set endian type
     bool endian_type = m_connector->isLittleEndian();
     RTC_TRACE(("connector endian: %s", endian_type ? "little":"big"));
 
-#ifdef ORB_IS_ORBEXPRESS
-    cdr.is_little_endian(endian_type);
-    cdr.write_array_1(data.get_buffer(), data.length());
-    RTC_PARANOID(("converted CDR data size: %d", cdr.size_written()));
-#elif defined(ORB_IS_TAO)
-    //cdr.setByteSwapFlag(endian_type);
-    cdr.decodeCDRData(data);
-    RTC_PARANOID(("converted CDR data size: %d", cdr.cdr.total_length()));
-#else
-    cdr.setByteSwapFlag(endian_type);
-    cdr.put_octet_array(&(data[0]), data.length());
-    RTC_PARANOID(("converted CDR data size: %d", cdr.bufSize()));
-#endif
+    m_cdr.isLittleEndian(endian_type);
+    m_cdr.writeData((unsigned char*)&(data[0]), data.length());
+    RTC_PARANOID(("converted CDR data size: %d", m_cdr.getDataLength()));
 
 
-    onReceived(cdr);
-	BufferStatus::Enum ret = m_buffer->write(cdr);
+    onReceived(m_cdr);
+    BufferStatus ret = m_buffer->write(m_cdr);
 
-	convertReturn(ret, cdr);
+    convertReturn(ret, m_cdr);
   }
 
   /*!
@@ -205,44 +182,47 @@ namespace RTC
   * @endif
   */
   void
-	  InPortCorbaCdrUDPProvider::convertReturn(BufferStatus::Enum status,
-		  cdrMemoryStream& data)
+  InPortCorbaCdrUDPProvider::convertReturn(BufferStatus status,
+                                           ByteData& data)
   {
-	  switch (status)
-	  {
-	  case BufferStatus::BUFFER_OK:
-		  onBufferWrite(data);
-		  break;
+    switch (status)
+    {
+      case BufferStatus::OK:
+        onBufferWrite(data);
+         break;
 
-	  case BufferStatus::BUFFER_ERROR:
-		  onReceiverError(data);
-		  break;
+      case BufferStatus::BUFFER_ERROR:
+        onReceiverError(data);
+        break;
 
-	  case BufferStatus::BUFFER_FULL:
-		  onBufferFull(data);
-		  onReceiverFull(data);
-		  break;
+      case BufferStatus::FULL:
+        onBufferFull(data);
+        onReceiverFull(data);
+        break;
 
-	  case BufferStatus::BUFFER_EMPTY:
-		  // never come here
-		  break;
+      case BufferStatus::EMPTY:
+        // never come here
+        break;
 
-	  case BufferStatus::PRECONDITION_NOT_MET:
-		  onReceiverError(data);
-		  break;
+      case BufferStatus::PRECONDITION_NOT_MET:
+        onReceiverError(data);
+        break;
 
-	  case BufferStatus::TIMEOUT:
-		  onBufferWriteTimeout(data);
-		  onReceiverTimeout(data);
-		  break;
+      case BufferStatus::TIMEOUT:
+        onBufferWriteTimeout(data);
+        onReceiverTimeout(data);
+        break;
+    case BufferStatus::NOT_SUPPORTED: /* FALLTHROUGH */
+    default:
+      return;
 
-	  }
+    }
 
-	  onReceiverError(data);
+    onReceiverError(data);
   }
 
 
-};     // namespace RTC
+} // namespace RTC
 
 
 extern "C"
@@ -263,4 +243,4 @@ extern "C"
                        ::coil::Destructor< ::RTC::InPortProvider,
                                            ::RTC::InPortCorbaCdrUDPProvider>);
   }
-};
+}

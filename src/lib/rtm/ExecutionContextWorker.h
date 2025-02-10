@@ -19,30 +19,23 @@
 #ifndef RTC_EXECUTIONCONTEXTWORKER_H
 #define RTC_EXECUTIONCONTEXTWORKER_H
 
-#include <coil/Mutex.h>
-#include <coil/Condition.h>
+#include <condition_variable>
 
 #include <rtm/idl/RTCSkel.h>
 #include <rtm/SystemLogger.h>
-//#include <rtm/StateMachine.h>
-//#include <rtm/RTObjectStateMachine.h>
 #include <vector>
 
 #define NUM_OF_LIFECYCLESTATE 4
 
-#ifdef WIN32
-#pragma warning( disable : 4290 )
-#endif
-
 namespace RTC
 {
   class RTObject_impl;
-};  // namespace RTC
+} // namespace RTC
 namespace RTC_impl
 {
   class RTObjectStateMachine;
-  typedef RTC::LightweightRTObject_ptr LightweightRTObject_ptr;
-  typedef RTC::LightweightRTObject_var LightweightRTObject_var;
+  using LightweightRTObject_ptr = RTC::LightweightRTObject_ptr;
+  using LightweightRTObject_var = RTC::LightweightRTObject_var;
   /*!
    * @if jp
    * @class ExecutionContextWorker
@@ -69,17 +62,17 @@ namespace RTC_impl
    *   - RTC::ReturnCode_t activateComponent(RTC::LightweightRTObject_ptr comp,
    *                                         RTObjectStateMachine*& rtobj);
    *   - RTC::ReturnCode_t waitActivateComplete(RTObjectStateMachine*& rtobj,
-   *                                            coil::TimeValue timeout = 1.0,
+   *                                            std::chrono::nanoseconds timeout = 1s,
    *                                            long int cycle = 1000);
    *
    *   - RTC::ReturnCode_t deactivateComponent(RTC::LightweightRTObject_ptr comp,  *                                           RTObjectStateMachine*& rtobj);
    *   - RTC::ReturnCode_t waitDeactivateComplete(RTObjectStateMachine*& rtobj,
-   *                                              coil::TimeValue timeout = 1.0,
+   *                                              std::chrono::nanoseconds timeout = 1s,
    *                                              long int cycle = 1000);
    *   -  RTC::ReturnCode_t resetComponent(RTC::LightweightRTObject_ptr com,
    *                                       RTObjectStateMachine*& rtobj);
    *   -  RTC::ReturnCode_t waitResetComplete(RTObjectStateMachine*& rtobj,
-   *                                          coil::TimeValue timeout = 1.0,
+   *                                          std::chrono::nanoseconds timeout = 1s,
    *                                          long int cycle = 1000);
    *   - RTC::LifeCycleState getComponentState(RTC::LightweightRTObject_ptr comp);
    *   - const char* getStateString(RTC::LifeCycleState state)
@@ -117,7 +110,6 @@ namespace RTC_impl
    */
   class ExecutionContextWorker
   {
-    typedef coil::Guard<coil::Mutex> Guard;
 
   public:
     /*!
@@ -155,7 +147,7 @@ namespace RTC_impl
      *
      * @endif
      */
-    virtual ~ExecutionContextWorker(void);
+    virtual ~ExecutionContextWorker();
 
     //============================================================
     // Object reference to EC
@@ -190,7 +182,7 @@ namespace RTC_impl
      *
      * @endif
      */
-    CORBA::Boolean isRunning(void);
+    CORBA::Boolean isRunning();
 
     /*!
      * @if jp
@@ -219,7 +211,7 @@ namespace RTC_impl
      *
      * @endif
      */
-    RTC::ReturnCode_t start(void);
+    RTC::ReturnCode_t start();
 
     /*!
      * @if jp
@@ -247,11 +239,11 @@ namespace RTC_impl
      *
      * @endif
      */
-    RTC::ReturnCode_t stop(void);
+    RTC::ReturnCode_t stop();
 
-    RTC::ReturnCode_t startThread(void);
+    RTC::ReturnCode_t startThread();
 
-    RTC::ReturnCode_t stopThread(void);
+    RTC::ReturnCode_t stopThread();
 
 
     /*!
@@ -319,7 +311,8 @@ namespace RTC_impl
     RTC::ReturnCode_t activateComponent(RTC::LightweightRTObject_ptr comp,
                                         RTObjectStateMachine*& rtobj);
     RTC::ReturnCode_t waitActivateComplete(RTObjectStateMachine*& rtobj,
-                                           coil::TimeValue timeout = 1.0,
+                                           std::chrono::nanoseconds timeout
+                                           = std::chrono::seconds(1),
                                            long int cycle = 1000);
     /*!
      * @if jp
@@ -356,7 +349,8 @@ namespace RTC_impl
     RTC::ReturnCode_t deactivateComponent(RTC::LightweightRTObject_ptr comp,
                                           RTObjectStateMachine*& rtobj);
     RTC::ReturnCode_t waitDeactivateComplete(RTObjectStateMachine*& rtobj,
-                                             coil::TimeValue timeout = 1.0,
+                                             std::chrono::nanoseconds timeout
+                                             = std::chrono::seconds(1),
                                              long int cycle = 1000);
 
     /*!
@@ -390,10 +384,11 @@ namespace RTC_impl
      *
      * @endif
      */
-    RTC::ReturnCode_t resetComponent(RTC::LightweightRTObject_ptr com,
+    RTC::ReturnCode_t resetComponent(RTC::LightweightRTObject_ptr comp,
                                      RTObjectStateMachine*& rtobj);
     RTC::ReturnCode_t waitResetComplete(RTObjectStateMachine*& rtobj,
-                                        coil::TimeValue timeout = 1.0,
+                                        std::chrono::nanoseconds timeout
+                                        = std::chrono::seconds(1),
                                         long int cycle = 1000);
 
     /*!
@@ -423,9 +418,9 @@ namespace RTC_impl
      * @endif
      */
     RTC::LifeCycleState getComponentState(RTC::LightweightRTObject_ptr comp);
-    const char* getStateString(RTC::LifeCycleState state)
+    static const char* getStateString(RTC::LifeCycleState state)
     {
-      const char* st[] = {
+      static const char* const st[] = {
         "CREATED_STATE",
         "INACTIVE_STATE",
         "ACTIVE_STATE",
@@ -569,7 +564,7 @@ namespace RTC_impl
      * @brief Logger stream
      * @endif
      */
-    RTC::Logger rtclog;
+    RTC::Logger rtclog{"ec_worker"};
 
     RTC::ExecutionContextService_var m_ref;
 
@@ -582,7 +577,7 @@ namespace RTC_impl
      * true: running, false: stopped
      * @endif
      */
-    bool m_running;
+    bool m_running{false};
 
     /*!
      * @if jp
@@ -592,18 +587,14 @@ namespace RTC_impl
      * @endif
      */
     std::vector<RTC_impl::RTObjectStateMachine*> m_comps;
-    mutable coil::Mutex m_mutex;
+    mutable std::mutex m_mutex;
     std::vector<RTC_impl::RTObjectStateMachine*> m_addedComps;
-    mutable coil::Mutex m_addedMutex;
+    mutable std::mutex m_addedMutex;
     std::vector<RTC_impl::RTObjectStateMachine*> m_removedComps;
-    mutable coil::Mutex m_removedMutex;
-    typedef std::vector<RTC_impl::RTObjectStateMachine*>::iterator CompItr;
+    mutable std::mutex m_removedMutex;
+    using CompItr = std::vector<RTC_impl::RTObjectStateMachine*>::iterator;
 
   };  // class PeriodicExecutionContext
-};  // namespace RTC_impl
-
-#ifdef WIN32
-#pragma warning( default : 4290 )
-#endif
+} // namespace RTC_impl
 
 #endif  // RTC_PERIODICEXECUTIONCONTEXT_H

@@ -68,7 +68,7 @@ namespace RTM
      *
      * @endif
      */
-    ProcessUniquePolicy() : m_num(0) {};
+    ProcessUniquePolicy()  {}
     
     /*!
      * @if jp
@@ -81,7 +81,7 @@ namespace RTM
      *
      * @endif
      */
-    virtual ~ProcessUniquePolicy(void){};
+    ~ProcessUniquePolicy() override = default;
     
     /*!
      * @if jp
@@ -108,7 +108,7 @@ namespace RTM
      *
      * @endif
      */
-    virtual std::string onCreate(void* obj);
+    std::string onCreate(void* obj) override;
     
     /*!
      * @if jp
@@ -131,7 +131,7 @@ namespace RTM
      *
      * @endif
      */
-    virtual void onDelete(void* obj);
+    void onDelete(void* obj) override;
     
   protected:
     /*!
@@ -162,15 +162,15 @@ namespace RTM
     long int find(void* obj);
     
   private:
-    int m_num;
+    int m_num{0};
     std::vector<void*> m_objects;
   };
-}; // namespace RTM
+} // namespace RTM
 
 extern "C"
 {
-  void DLL_EXPORT ProcessUniquePolicyInit();
-};
+  void ProcessUniquePolicyInit();
+}
 
 
 #endif  // RTC_NUMBERINGPOLICY_H

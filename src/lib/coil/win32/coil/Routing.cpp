@@ -29,19 +29,8 @@ namespace coil
 };
 #else
 
-#ifndef NTDDI_VERSION
-#define NTDDI_VERSION 0x05000000
-#define WINVER _WIN32_WINNT
-#ifdef _WIN32_WINNT
-#undef _WIN32_WINNT
-#endif  // _WIN32_WINNT
-#define _WIN32_WINNT 0x0500
-#define _WIN32_WINDOWS _WIN32_WINNT
-#define _WIN32_IE 0x0501
-#endif  // NTDDI_VERSION
-
-#include <winsock2.h>
-#include <ws2tcpip.h>
+#include <WinSock2.h>
+#include <WS2tcpip.h>
 #include <iphlpapi.h>
 
 
@@ -83,30 +72,59 @@ namespace coil
    */
   bool dest_to_endpoint(std::string dest_addr, std::string& endpoint)
   {
-    Winsock winsock;
-    {
-      struct hostent* hp;
-      hp = ::gethostbyname(dest_addr.c_str());
-      if (hp == 0) { return false; }
+    PADDRINFOA res;
+    ADDRINFOA hints;
 
-      int i(0);
-      while (hp->h_addr_list[i] != 0)
-        {
-          if (hp->h_addrtype == AF_INET)
-            {
-              struct sockaddr_in addr;
-              memset(reinterpret_cast<char*>(&addr), 0, sizeof(addr));
-              memcpy(reinterpret_cast<char*>(&addr.sin_addr),
-                              hp->h_addr_list[i], hp->h_length);
-              dest_addr = inet_ntoa(addr.sin_addr);
-              break;
-            }
-          ++i;
-        }
+    WSADATA data;
+    WSAStartup(MAKEWORD(2, 0), &data);
+
+    memset(&hints, 0, sizeof(hints));
+    hints.ai_socktype = SOCK_STREAM;
+    hints.ai_family = AF_INET;
+
+    if (getaddrinfo(dest_addr.c_str(), nullptr, &hints, &res) != 0) {
+        return false;
     }
 
-    UINT ipaddress(inet_addr(dest_addr.c_str()));
-    if (ipaddress == INADDR_NONE) { return false; }
+    if (res->ai_family == AF_INET)
+    {
+        struct sockaddr_in *addr;
+        addr = reinterpret_cast<struct sockaddr_in *>(res->ai_addr);
+        char str_buffer[INET_ADDRSTRLEN] = { 0 };
+
+        if (inet_ntop(AF_INET, &addr->sin_addr, str_buffer, sizeof(str_buffer)) != nullptr)
+        {
+            dest_addr = str_buffer;
+        }
+        else
+        {
+            freeaddrinfo(res);
+            WSACleanup();
+            return false;
+        }
+    }
+    else
+    {
+        freeaddrinfo(res);
+        WSACleanup();
+        return false;
+    }
+    
+    freeaddrinfo(res);
+    WSACleanup();
+
+    ULONG ipaddress;
+
+    struct sockaddr_in ip_addr;
+    ip_addr.sin_family = AF_INET;
+    if (inet_pton(AF_INET, dest_addr.c_str(), &ip_addr.sin_addr.S_un.S_addr) == 1)
+    {
+        ipaddress = ip_addr.sin_addr.S_un.S_addr;
+    }
+    else
+    {
+        return false;
+    }
 
     DWORD bestifindex;
     if (NO_ERROR != GetBestInterface(ipaddress, &bestifindex)) { return false; }
@@ -114,7 +132,7 @@ namespace coil
     PMIB_IPADDRTABLE ipaddr_table;
     ipaddr_table =
           reinterpret_cast<MIB_IPADDRTABLE *>(MALLOC(sizeof (MIB_IPADDRTABLE)));
-    if (ipaddr_table == 0) { return false; }
+    if (ipaddr_table == nullptr) { return false; }
 
     // Make an initial call to GetIpAddrTable to get the
     // necessary size into the size variable
@@ -124,7 +142,7 @@ namespace coil
         FREE(ipaddr_table);
         ipaddr_table = reinterpret_cast<MIB_IPADDRTABLE *>(MALLOC(size));
       }
-    if (ipaddr_table == 0) { return false; }
+    if (ipaddr_table == nullptr) { return false; }
     if (GetIpAddrTable(ipaddr_table, &size, 0) != NO_ERROR) { return false; }
 
     for (int i(0); i < static_cast<int>(ipaddr_table->dwNumEntries); ++i)
@@ -132,8 +150,16 @@ namespace coil
         if (bestifindex == ipaddr_table->table[i].dwIndex)
           {
             IN_ADDR inipaddr;
-            inipaddr.S_un.S_addr = (u_long) ipaddr_table->table[i].dwAddr;
-            endpoint = inet_ntoa(inipaddr);
+            inipaddr.S_un.S_addr = static_cast<u_long>(ipaddr_table->table[i].dwAddr);
+            char str_buffer[INET_ADDRSTRLEN] = { 0 };
+            if (inet_ntop(AF_INET, &inipaddr.S_un, str_buffer, sizeof(str_buffer)) != nullptr)
+            {
+                endpoint = str_buffer;
+            }
+            else
+            {
+                return false;
+            }
             return true;
           }
       }
@@ -141,6 +167,6 @@ namespace coil
   }
   
   
-}; // namespace coil
+} // namespace coil
 
 #endif

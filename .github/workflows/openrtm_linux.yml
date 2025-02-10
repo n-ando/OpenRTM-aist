@@ -1,0 +1,16 @@
+name: OpenRTM on Linux
+
+on: [push, pull_request]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [ubuntu_2004, ubuntu_2204, code_analysis]
+    steps:
+    - uses: actions/checkout@v1
+    - name: Build OpenRTM
+      run: docker build .. --file scripts/${{matrix.os}}/Dockerfile --tag openrtm:${{matrix.os}}-$(date +%s)

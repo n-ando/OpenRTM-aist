@@ -29,9 +29,7 @@ namespace RTC
    * @brief Destructor
    * @endif
    */
-  OutPortProvider::~OutPortProvider(void)
-  {
-  }
+  OutPortProvider::~OutPortProvider() = default;
 
   /*!
    * @if jp
@@ -40,7 +38,7 @@ namespace RTC
    * @brief Initializing configuration
    * @endif
    */
-  void OutPortProvider::init(coil::Properties& prop)
+  void OutPortProvider::init(coil::Properties& /*prop*/)
   {
   }
 
@@ -143,4 +141,4 @@ namespace RTC
   {
     m_subscriptionType = subs_type;
   }
-};  // namespace RTC
+} // namespace RTC

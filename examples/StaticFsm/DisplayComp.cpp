@@ -12,7 +12,7 @@
 #include <string>
 #include "Display.h"
 
-#if defined(RTM_OS_VXWORKS) && not defined(__RTP__)
+#if defined(RTM_OS_VXWORKS) && !defined(__RTP__)
 int display_main()
 {
   RTC::Manager* manager = &RTC::Manager::instance();
@@ -71,16 +71,16 @@ void MyModuleInit(RTC::Manager* manager)
       RTC::PortInterfaceProfileList iflist;
       iflist = port->get_port_profile()->interfaces;
 
-      for (CORBA::ULong i(0), n(iflist.length()); i < n; ++i)
-	{
-	  std::cout << "I/F name: ";
-	  std::cout << iflist[i].instance_name << std::endl;
-	  std::cout << "I/F type: ";
-	  std::cout << iflist[i].type_name << std::endl;
-	  const char* pol;
-	  pol = iflist[i].polarity == 0 ? "PROVIDED" : "REQUIRED";
-	  std::cout << "Polarity: " << pol << std::endl;
-	}
+      for (CORBA::ULong j(0), m(iflist.length()); j < m; ++j)
+	    {
+	      std::cout << "I/F name: ";
+	      std::cout << iflist[j].instance_name << std::endl;
+	      std::cout << "I/F type: ";
+	      std::cout << iflist[j].type_name << std::endl;
+	      const char* pol;
+	      pol = iflist[j].polarity == 0 ? "PROVIDED" : "REQUIRED";
+	      std::cout << "Polarity: " << pol << std::endl;
+	    }
       std::cout << "- properties -" << std::endl;
       NVUtil::dump(port->get_port_profile()->properties);
       std::cout << "-------------------------------------------------"

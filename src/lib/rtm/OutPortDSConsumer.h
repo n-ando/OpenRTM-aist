@@ -36,7 +36,7 @@ namespace RTC
    * データ転送に CORBA の RTC::DataPullService インターフェースを利用し
    * た、pull 型データフロー型を実現する OutPort コンシューマクラス。
    *
-   * @since 0.4.0
+   * @since 2.0.0
    *
    * @else
    * @class OutPortDSConsumer
@@ -46,7 +46,7 @@ namespace RTC
    * interface in CORBA for data transfer and realizes a pull-type
    * dataflow.
    *
-   * @since 0.4.0
+   * @since 2.0.0
    *
    * @endif
    */
@@ -55,7 +55,6 @@ namespace RTC
       public CorbaConsumer< ::RTC::DataPullService >
   {
   public:
-    DATAPORTSTATUS_ENUM
 
     /*!
      * @if jp
@@ -85,7 +84,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~OutPortDSConsumer(void);
+    ~OutPortDSConsumer() override;
 
     /*!
      * @if jp
@@ -114,7 +113,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual void init(coil::Properties& prop);
+    void init(coil::Properties& prop) override;
 
     /*!
      * @if jp
@@ -141,7 +140,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual void setBuffer(CdrBufferBase* buffer);
+    void setBuffer(CdrBufferBase* buffer) override;
 
     /*!
      * @if jp
@@ -187,8 +186,8 @@ namespace RTC
      *
      * @endif
      */
-    virtual void setListener(ConnectorInfo& info,
-                             ConnectorListeners* listeners);
+    void setListener(ConnectorInfo& info,
+                             ConnectorListenersBase* listeners) override;
 
     /*!
      * @if jp
@@ -211,7 +210,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode get(cdrMemoryStream& data);
+    DataPortStatus get(ByteData& data) override;
 
     /*!
      * @if jp
@@ -235,7 +234,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual bool subscribeInterface(const SDOPackage::NVList& properties);
+    bool subscribeInterface(const SDOPackage::NVList& properties) override;
 
     /*!
      * @if jp
@@ -254,7 +253,17 @@ namespace RTC
      *
      * @endif
      */
-    virtual void unsubscribeInterface(const SDOPackage::NVList& properties);
+    void unsubscribeInterface(const SDOPackage::NVList& properties) override;
+
+  protected:
+    /*!
+     * @if jp
+     * @brief ロガーストリーム
+     * @else
+     * @brief Logger stream
+     * @endif
+     */
+    mutable Logger rtclog;
 
   private:
     /*!
@@ -264,8 +273,8 @@ namespace RTC
      * @brief Return codes conversion
      * @endif
      */
-    OutPortConsumer::ReturnCode convertReturn(::RTC::PortStatus status,
-                                              cdrMemoryStream& data);
+    DataPortStatus convertReturn(::RTC::PortStatus status,
+                                              ByteData& data);
 
     /*!
      * @if jp
@@ -276,10 +285,9 @@ namespace RTC
      * @param data cdrMemoryStream
      * @endif
      */
-    inline void onBufferWrite(cdrMemoryStream& data)
+    inline void onBufferWrite(ByteData& data)
     {
-      m_listeners->
-        connectorData_[ON_BUFFER_WRITE].notify(m_profile, data);
+      m_listeners->notifyIn(ConnectorDataListenerType::ON_BUFFER_WRITE, m_profile, data);
     }
 
     /*!
@@ -291,10 +299,9 @@ namespace RTC
      * @param data cdrMemoryStream
      * @endif
      */
-    inline void onBufferFull(cdrMemoryStream& data)
+    inline void onBufferFull(ByteData& data)
     {
-      m_listeners->
-        connectorData_[ON_BUFFER_FULL].notify(m_profile, data);
+      m_listeners->notifyIn(ConnectorDataListenerType::ON_BUFFER_FULL, m_profile, data);
     }
 
     /*!
@@ -306,10 +313,9 @@ namespace RTC
      * @param data cdrMemoryStream
      * @endif
      */
-    inline void onReceived(cdrMemoryStream& data)
+    inline void onReceived(ByteData& data)
     {
-      m_listeners->
-        connectorData_[ON_RECEIVED].notify(m_profile, data);
+      m_listeners->notifyIn(ConnectorDataListenerType::ON_RECEIVED, m_profile, data);
     }
 
     /*!
@@ -321,10 +327,9 @@ namespace RTC
      * @param data cdrMemoryStream
      * @endif
      */
-    inline void onReceiverFull(cdrMemoryStream& data)
+    inline void onReceiverFull(ByteData& data)
     {
-      m_listeners->
-        connectorData_[ON_RECEIVER_FULL].notify(m_profile, data);
+      m_listeners->notifyIn(ConnectorDataListenerType::ON_RECEIVER_FULL, m_profile, data);
     }
 
     /*!
@@ -336,8 +341,7 @@ namespace RTC
      */
     inline void onSenderEmpty()
     {
-      m_listeners->
-        connector_[ON_SENDER_EMPTY].notify(m_profile);
+      m_listeners->notify(ConnectorListenerType::ON_SENDER_EMPTY, m_profile);
     }
 
     /*!
@@ -349,8 +353,7 @@ namespace RTC
      */
     inline void onSenderTimeout()
     {
-      m_listeners->
-        connector_[ON_SENDER_TIMEOUT].notify(m_profile);
+      m_listeners->notify(ConnectorListenerType::ON_SENDER_TIMEOUT, m_profile);
     }
 
     /*!
@@ -362,16 +365,13 @@ namespace RTC
      */
     inline void onSenderError()
     {
-      m_listeners->
-        connector_[ON_SENDER_ERROR].notify(m_profile);
+      m_listeners->notify(ConnectorListenerType::ON_SENDER_ERROR, m_profile);
     }
-
-    //    RTC::OutPortCdr_var m_outport;
     CdrBufferBase* m_buffer;
-    ConnectorListeners* m_listeners;
+    ConnectorListenersBase* m_listeners;
     ConnectorInfo m_profile;
   };
-};     // namespace RTC
+} // namespace RTC
 
 extern "C"
 {
@@ -389,6 +389,6 @@ extern "C"
    * @endif
    */
   void OutPortDSConsumerInit(void);
-};
+}
 
 #endif  // RTC_OUTPORTDSCONSUMER_H

@@ -56,8 +56,8 @@ class EXTERN_LIBFSM Fsm : public hrtm::DataFlowComponent {
   virtual RTC::ReturnCode_t onExecute(RTC::ExecutionContextHandle_t id);
   virtual RTC::ReturnCode_t notify_fsm_state_changed(const char* state);
  protected:
-  typedef std::multimap<Poco::Timespan, hrtm::sc::EventParamBase<Top> *> EventQueue;
-  typedef std::pair<Poco::Timespan, hrtm::sc::EventParamBase<Top> *> EventPair;
+  using EventQueue = std::multimap<Poco::Timespan, hrtm::sc::EventParamBase<Top>*>;
+  using EventPair = std::pair<Poco::Timespan, hrtm::sc::EventParamBase<Top>*>;
 
   friend void OutputData(double val);
   friend void DisplayFocused(RTC::TimedLong param);

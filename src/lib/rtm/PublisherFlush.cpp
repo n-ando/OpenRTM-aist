@@ -34,8 +34,6 @@ namespace RTC
    * @endif
    */
   PublisherFlush::PublisherFlush()
-    : rtclog("PublisherFlush"),
-      m_consumer(0), m_listeners(0), m_retcode(PORT_OK), m_active(false)
   {
   }
 
@@ -50,7 +48,7 @@ namespace RTC
   {
     RTC_TRACE(("~PublisherFlush()"));
     // "consumer" should be deleted in the Connector
-    m_consumer = 0;
+    m_consumer = nullptr;
   }
 
   /*!
@@ -60,10 +58,10 @@ namespace RTC
    * @brief initialization
    * @endif
    */
-  PublisherBase::ReturnCode PublisherFlush::init(coil::Properties& prop)
+  DataPortStatus PublisherFlush::init(coil::Properties&  /*prop*/)
   {
     RTC_TRACE(("init()"));
-    return PORT_OK;
+    return DataPortStatus::PORT_OK;
   }
 
   /*!
@@ -73,17 +71,17 @@ namespace RTC
    * @brief Store InPort consumer
    * @endif
    */
-  PublisherBase::ReturnCode
+  DataPortStatus
   PublisherFlush::setConsumer(InPortConsumer* consumer)
   {
     RTC_TRACE(("setConsumer()"));
 
-    if (consumer == 0)
+    if (consumer == nullptr)
       {
-        return INVALID_ARGS;
+        return DataPortStatus::INVALID_ARGS;
       }
     m_consumer = consumer;
-    return PORT_OK;
+    return DataPortStatus::PORT_OK;
   }
 
   /*!
@@ -93,11 +91,11 @@ namespace RTC
    * @brief Setting buffer pointer
    * @endif
    */
-  PublisherBase::ReturnCode PublisherFlush::setBuffer(CdrBufferBase* buffer)
+  DataPortStatus PublisherFlush::setBuffer(CdrBufferBase*  /*buffer*/)
   {
     RTC_TRACE(("setBuffer()"));
 
-    return PORT_OK;
+    return DataPortStatus::PORT_OK;
   }
 
   /*!
@@ -107,22 +105,22 @@ namespace RTC
    * @brief Setting buffer pointer
    * @endif
    */
-  ::RTC::DataPortStatus::Enum
+  ::RTC::DataPortStatus
   PublisherFlush::setListener(ConnectorInfo& info,
-                              RTC::ConnectorListeners* listeners)
+                              RTC::ConnectorListenersBase* listeners)
   {
     RTC_TRACE(("setListeners()"));
 
-    if (listeners == 0)
+    if (listeners == nullptr)
       {
         RTC_ERROR(("setListeners(listeners == 0): invalid argument"));
-        return INVALID_ARGS;
+        return DataPortStatus::INVALID_ARGS;
       }
 
     m_profile = info;
     m_listeners = listeners;
 
-    return PORT_OK;
+    return DataPortStatus::PORT_OK;
   }
 
   /*!
@@ -132,51 +130,59 @@ namespace RTC
    * @brief Write data
    * @endif
    */
-  PublisherBase::ReturnCode PublisherFlush::write(cdrMemoryStream& data,
-                                                  unsigned long sec,
-                                                  unsigned long usec)
+  DataPortStatus PublisherFlush::write(ByteDataStreamBase* data,
+                                                  std::chrono::nanoseconds /* timeout */)
   {
     RTC_PARANOID(("write()"));
 
-    if (m_consumer == 0) { return PRECONDITION_NOT_MET; }
-    if (m_listeners == 0) { return PRECONDITION_NOT_MET; }
+    if (m_consumer == nullptr) { return DataPortStatus::PRECONDITION_NOT_MET; }
+    if (m_listeners == nullptr) { return DataPortStatus::PRECONDITION_NOT_MET; }
 
-    if (m_retcode == CONNECTION_LOST)
+    if (m_retcode == DataPortStatus::CONNECTION_LOST)
       {
         RTC_DEBUG(("write(): connection lost."));
         return m_retcode;
       }
+    m_data = *data;
 
-    onSend(data);
-    ReturnCode ret(m_consumer->put(data));
+
+    onSend(m_data);
+    DataPortStatus ret(m_consumer->put(m_data));
     // consumer::put() returns
     //  {PORT_OK, PORT_ERROR, SEND_FULL, SEND_TIMEOUT, UNKNOWN_ERROR}
 
     switch (ret)
       {
-      case PORT_OK:
-        onReceived(data);
+      case DataPortStatus::PORT_OK:
+        onReceived(m_data);
         return ret;
-      case PORT_ERROR:
-        onReceiverError(data);
+      case DataPortStatus::PORT_ERROR:
+        onReceiverError(m_data);
         return ret;
-      case SEND_FULL:
-        onReceiverFull(data);
+      case DataPortStatus::SEND_FULL:
+        onReceiverFull(m_data);
         return ret;
-      case SEND_TIMEOUT:
-        onReceiverTimeout(data);
+      case DataPortStatus::SEND_TIMEOUT:
+        onReceiverTimeout(m_data);
         return ret;
-      case CONNECTION_LOST:
-        onReceiverTimeout(data);
+      case DataPortStatus::CONNECTION_LOST:
+        onReceiverTimeout(m_data);
         return ret;
-      case UNKNOWN_ERROR:
-        onReceiverError(data);
+      case DataPortStatus::UNKNOWN_ERROR:
+        onReceiverError(m_data);
         return ret;
+      case DataPortStatus::BUFFER_ERROR:         /* FALLTHROUGH */
+      case DataPortStatus::BUFFER_FULL:          /* FALLTHROUGH */
+      case DataPortStatus::BUFFER_EMPTY:         /* FALLTHROUGH */
+      case DataPortStatus::BUFFER_TIMEOUT:       /* FALLTHROUGH */
+      case DataPortStatus::RECV_EMPTY:           /* FALLTHROUGH */
+      case DataPortStatus::RECV_TIMEOUT:         /* FALLTHROUGH */
+      case DataPortStatus::INVALID_ARGS:         /* FALLTHROUGH */
+      case DataPortStatus::PRECONDITION_NOT_MET: /* FALLTHROUGH */
       default:
-        onReceiverError(data);
+        onReceiverError(m_data);
         return ret;
       }
-    return ret;
   }
 
   /*!
@@ -198,10 +204,10 @@ namespace RTC
    * @brief activation
    * @endif
    */
-  PublisherBase::ReturnCode PublisherFlush::activate()
+  DataPortStatus PublisherFlush::activate()
   {
     m_active = true;
-    return PORT_OK;
+    return DataPortStatus::PORT_OK;
   }
 
   /*!
@@ -211,13 +217,13 @@ namespace RTC
    * @brief deactivation
    * @endif
    */
-  PublisherBase::ReturnCode PublisherFlush::deactivate()
+  DataPortStatus PublisherFlush::deactivate()
   {
     m_active = false;
-    return PORT_OK;
+    return DataPortStatus::PORT_OK;
   }
 
-};  // namespace RTC
+} // namespace RTC
 
 
 extern "C"
@@ -240,5 +246,4 @@ extern "C"
                             ::coil::Destructor< ::RTC::PublisherBase,
                                                 ::RTC::PublisherFlush>);
   }
-};
-
+}

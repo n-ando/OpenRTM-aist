@@ -17,7 +17,6 @@
  */
 
 #include <fstream>
-#include <boost/filesystem.hpp>
 #include <coil/stringutil.h>
 #include <rtm/Manager.h>
 #include <rtm/RTObject.h>
@@ -31,7 +30,7 @@
  * @brief FileNameService ctor
  * @endif
  */
-static const char* service_name =
+static const char* const service_name =
   "org.openrtm.local_service.nameservice.file_nameservice";
 
 /*!
@@ -41,7 +40,7 @@ static const char* service_name =
  * @brief FileNameService ctor
  * @endif
  */
-static const char* service_uuid = "7288D080-F618-480B-B6D9-A199686F3101";
+static const char* const service_uuid = "7288D080-F618-480B-B6D9-A199686F3101";
 
 /*!
  * @if jp
@@ -50,7 +49,7 @@ static const char* service_uuid = "7288D080-F618-480B-B6D9-A199686F3101";
  * @brief FileNameService ctor
  * @endif
  */
-static const char* default_config[] =
+static const char* const default_config[] =
   {
     "base_path",         "/tmp/.openrtm_ns/",
     "file_structure",    "tree",
@@ -94,8 +93,8 @@ namespace RTM
      */
     FileNameservice::~FileNameservice()
     {
-      RTC_TRACE(("~FileNameservice()"))
-        cleanupFiles();
+      RTC_TRACE(("~FileNameservice()"));
+      cleanupFiles();
     }
     
     /*!
@@ -129,9 +128,8 @@ namespace RTM
     {
       RTC_TRACE(("reinit()"));
       RTC_DEBUG_STR((props));
-      bool ret(processServiceProfile(props));
       m_profile.properties << props;
-      return ret;
+      return true;
     }
     
     /*!
@@ -176,9 +174,9 @@ namespace RTM
                  coil::flatten(ns_path).c_str()));
       RTC_TRACE((" nsinfo = %s", coil::flatten(ns_info).c_str()));
       
-      for (size_t i(0); i < ns_path.size(); ++i)
+      for (auto & ns_name : ns_path)
         {
-          fs::path filepath(getFname(ns_path[i]).c_str());
+          fs::path filepath(getFname(ns_name).c_str());
           fs::path directory = filepath.parent_path();
           RTC_DEBUG(("file path: %s", filepath.string().c_str()));
           RTC_DEBUG(("directory: %s", directory.string().c_str()));
@@ -192,13 +190,13 @@ namespace RTM
               RTC_DEBUG(("file name: %s", filename.string().c_str()));
               std::ofstream ofs(filepath.string().c_str(),
                                 std::ios::out | std::ios::trunc);
-              for (size_t i(0); i < ns_info.size(); ++i)
+              for (const auto & ior : ns_info)
                 {
-                  ofs << ns_info[i] << std::endl;
+                  ofs << ior << std::endl;
                 }
               RTC_INFO(("RTC %s's IOR has been successfully registered: %s",
                         filename.string().c_str(), filepath.string().c_str()));
-              m_files.push_back(filepath.string());
+              m_files.emplace_back(filepath.string());
             }
           catch (...)
             {
@@ -225,9 +223,9 @@ namespace RTM
     {
       RTC_TRACE(("onUnregisterNameservice(%s)",
                  coil::flatten(ns_path).c_str()));
-      for (size_t i(0); i < ns_path.size(); ++i)
+      for (auto & ns_name : ns_path)
         {
-          fs::path filepath(getFname(ns_path[i]));
+          fs::path filepath(getFname(ns_name));
           if (!fs::exists(filepath))
             {
               RTC_ERROR(("No such file: %s", filepath.string().c_str()));
@@ -242,10 +240,9 @@ namespace RTM
               continue;
             }
           m_files.erase(it);
-          boost::system::error_code error;
-          const bool result = fs::remove(filepath); // , error);
+          const bool result = fs::remove(filepath);
           RTC_DEBUG(("Removing file: %s", filepath.string().c_str()));
-          if (!result || error)
+          if (!result)
             {
               RTC_ERROR(("Removing a file has been failed. %s",
                          filepath.string().c_str()));
@@ -271,10 +268,9 @@ namespace RTM
       if (!fs::exists(directory))
         {
           RTC_DEBUG(("Directory %s not found", directory.string().c_str()));
-          boost::system::error_code error;
-          const bool result = fs::create_directories(directory); //, error);
+          const bool result = fs::create_directories(directory);
           RTC_DEBUG(("Creating directory: %s", directory.string().c_str()));
-          if (!result || error)
+          if (!result)
             {
               RTC_ERROR(("Creating directory has been failed. %s",
                          directory.string().c_str()));
@@ -309,17 +305,14 @@ namespace RTM
     FileNameservice::getFname(std::string& ns_path) const
     {
       RTC_TRACE(("getFname(%s)", ns_path.c_str()));
-      
-      std::string pathstring(m_profile.properties["base_path"]);
-      pathstring += "/";
-      
-      std::string fs(m_profile.properties["file_structure"]);
-      coil::normalize(fs);
+
+      std::string pathstring{m_profile.properties["base_path"] + '/'};
+      std::string fs{coil::normalize(m_profile.properties["file_structure"])};
       if (fs == "flat")
         {
           RTC_DEBUG(("file_structure = flat"));
-          std::string d(m_profile.properties["context_delimiter"]);
-          coil::replaceString(ns_path, "/", d);
+          std::string const& d(m_profile.properties["context_delimiter"]);
+          ns_path = coil::replaceString(std::move(ns_path), "/", d);
           pathstring += ns_path;
         }
       else if (fs == "tree")
@@ -345,27 +338,12 @@ namespace RTM
     FileNameservice::cleanupFiles()
     {
       RTC_TRACE(("cleanupFiles()"));
-      for (size_t i(0); i < m_files.size(); ++i)
+      for (auto & m_file : m_files)
         {
-          fs::path p(m_files[i]);
+          fs::path p(m_file);
           fs::remove(p);
         }
       m_files.clear();
-    }
-    
-    /*!
-     * @if jp
-     * @brief プロパティの処理
-     * TODO: Documentation
-     * @else
-     * @brief Processing properties
-     * TODO: Documentation
-     * @endif
-     */
-    bool
-    FileNameservice::processServiceProfile(const ::coil::Properties& prof)
-    {
-      return true;
     }
     
     /*!
@@ -387,9 +365,7 @@ namespace RTM
      * @brief Destructor
      * @endif
      */
-    NamingAction::~NamingAction()
-    {
-    }
+    NamingAction::~NamingAction() = default;
     
     /*!
      * @if jp
@@ -405,16 +381,14 @@ namespace RTM
     {
       coil::vstring name = name_;
 #ifndef ORB_IS_RTORB
-      CORBA::Object_var objref =
-        RTC::RTObject::_duplicate(rtobj->getObjRef());
+      CORBA::Object_var objref = rtobj->getObjRef();
 #else
-      RTC::RTObject_var objref =
-        RTC::RTObject::_duplicate(rtobj->getObjRef());
+      RTC::RTObject_var objref = rtobj->getObjRef();
 #endif // ORB_IS_RTORB
       CORBA::String_var ior =
         RTC::Manager::instance().getORB()->object_to_string(objref);
       coil::vstring ns_info;
-      ns_info.push_back(static_cast<const char*>(ior));
+      ns_info.emplace_back(static_cast<const char*>(ior));
       m_fns.onRegisterNameservice(name, ns_info);
     }
     
@@ -428,7 +402,7 @@ namespace RTM
      * @endif
      */
     void
-    NamingAction::postBind(RTC::RTObject_impl* rtobj, coil::vstring& name)
+    NamingAction::postBind(RTC::RTObject_impl* /*rtobj*/, coil::vstring& /*name*/)
     {
     }
     
@@ -442,7 +416,7 @@ namespace RTM
      * @endif
      */
     void
-    NamingAction::preUnbind(RTC::RTObject_impl* rtobj, coil::vstring& name)
+    NamingAction::preUnbind(RTC::RTObject_impl* /*rtobj*/, coil::vstring& /*name*/)
     {
     }
     
@@ -456,13 +430,13 @@ namespace RTM
      * @endif
      */
     void
-    NamingAction::postUnbind(RTC::RTObject_impl* rtobj, coil::vstring& name)
+    NamingAction::postUnbind(RTC::RTObject_impl*  /*rtobj*/, coil::vstring& name)
     {
       m_fns.onUnregisterNameservice(name);
     }
     
-  }; // LocalService
-}; // RTM
+  } // namespace LocalService
+} // namespace RTM
 
 extern "C"
 {
@@ -483,4 +457,4 @@ extern "C"
                        ::coil::Destructor< ::RTM::LocalServiceBase,
                        ::RTM::LocalService::FileNameservice>);
   }
-};
+}

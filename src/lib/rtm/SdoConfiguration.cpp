@@ -86,8 +86,8 @@ namespace SDOPackage
     conf.description = CORBA::string_dup(prop["description"].c_str());
     conf.id = CORBA::string_dup(prop.getName());
 #else  // ORB_IS_RTORB
-    conf.description = reinterpret_cast<char *>(prop["description"].c_str());
-    conf.id = reinterpret_cast<char *>(prop.getName());
+    conf.description = CORBA::string_dup(prop["description"].c_str());
+    conf.id = CORBA::string_dup(prop.getName());
 #endif  // ORB_IS_RTORB
     NVUtil::copyFromProperties(conf.configuration_data, prop);
   }
@@ -116,9 +116,7 @@ namespace SDOPackage
    * @brief Virtual destructor
    * @endif
    */
-  Configuration_impl::~Configuration_impl()
-  {
-  }
+  Configuration_impl::~Configuration_impl() = default;
 
 
   //============================================================
@@ -132,13 +130,11 @@ namespace SDOPackage
    */
   CORBA::Boolean
   Configuration_impl::set_device_profile(const DeviceProfile& dProfile)
-    throw (CORBA::SystemException,
-           InvalidParameter, NotAvailable, InternalError)
   {
     RTC_TRACE(("set_device_profile()"));
     try
       {
-        Guard gurad(m_dprofile_mutex);
+        std::lock_guard<std::mutex> guard(m_dprofile_mutex);
         m_deviceProfile = dProfile;
       }
     catch (...)
@@ -159,8 +155,6 @@ namespace SDOPackage
    */
   CORBA::Boolean
   Configuration_impl::add_service_profile(const ServiceProfile& sProfile)
-    throw (CORBA::SystemException,
-           InvalidParameter, NotAvailable, InternalError)
   {
     RTC_TRACE(("add_service_profile()"));
     // SDO specification defines that InvalidParameter() exception
@@ -176,7 +170,6 @@ namespace SDOPackage
       {
         throw InternalError("Configuration::set_service_profile");
       }
-    return false;
   }
 
   /*!
@@ -188,8 +181,6 @@ namespace SDOPackage
    */
   CORBA::Boolean
   Configuration_impl::add_organization(Organization_ptr org)
-    throw (CORBA::SystemException,
-           InvalidParameter, NotAvailable, InternalError)
   {
     RTC_TRACE(("add_organization()"));
     try
@@ -215,8 +206,6 @@ namespace SDOPackage
    */
   CORBA::Boolean
   Configuration_impl::remove_service_profile(const char* id)
-    throw (CORBA::SystemException,
-           InvalidParameter, NotAvailable, InternalError)
   {
     RTC_TRACE(("remove_service_profile(%s)", id));
     try
@@ -227,7 +216,6 @@ namespace SDOPackage
       {
         throw InternalError("Configuration::remove_service_profile");
       }
-    return false;
   }
 
   /*!
@@ -239,13 +227,11 @@ namespace SDOPackage
    */
   CORBA::Boolean
   Configuration_impl::remove_organization(const char* organization_id)
-    throw (CORBA::SystemException,
-           InvalidParameter, NotAvailable, InternalError)
   {
     RTC_TRACE(("remove_organization(%s)", organization_id));
     try
       {
-        Guard gurad(m_org_mutex);
+        std::lock_guard<std::mutex> guard(m_org_mutex);
         CORBA_SeqUtil::erase_if(m_organizations, org_id(organization_id));
       }
     catch (...)
@@ -269,13 +255,11 @@ namespace SDOPackage
    */
   ParameterList*
   Configuration_impl::get_configuration_parameters()
-    throw (CORBA::SystemException,
-           NotAvailable, InternalError)
   {
     RTC_TRACE(("get_configuration_parameters()"));
     try
       {
-        Guard gaurd(m_params_mutex);
+        std::lock_guard<std::mutex> guard(m_params_mutex);
         ParameterList_var param;
         param = new ParameterList(m_parameters);
         return param._retn();
@@ -285,8 +269,6 @@ namespace SDOPackage
         throw InternalError("Configuration::get_configuration_parameters()");
         // never reach here
       }
-    // never reach here
-    return new ParameterList(0);
   }
 
   /*!
@@ -298,22 +280,11 @@ namespace SDOPackage
    */
   NVList*
   Configuration_impl::get_configuration_parameter_values()
-    throw (CORBA::SystemException,
-           NotAvailable, InternalError)
   {
     RTC_TRACE(("get_configuration_parameter_values()"));
-    Guard guard(m_config_mutex);
+    std::lock_guard<std::mutex> guard(m_config_mutex);
     NVList_var nvlist;
-    nvlist = new NVList((CORBA::ULong)0);
-
-    /*
-      CORBA::Long index;
-      index = getActiveConfigIndex();
-      if (index >= 0)
-      {
-      nvlist = new NVList(m_configurations[index].configuration_data);
-      }
-    */
+    nvlist = new NVList(static_cast<CORBA::ULong>(0));
     return nvlist._retn();
   }
 
@@ -326,26 +297,11 @@ namespace SDOPackage
    */
   CORBA::Any*
   Configuration_impl::get_configuration_parameter_value(const char* name)
-    throw (CORBA::SystemException,
-           InvalidParameter, NotAvailable, InternalError)
   {
     RTC_TRACE(("get_configuration_parameter_value(%s)", name));
     if (std::string(name).empty()) throw InvalidParameter("Name is empty.");
-
-    //    CORBA::Long index;
     CORBA::Any_var value;
     value = new CORBA::Any();
-    /*
-      index = getActiveConfigIndex();
-      if (index < 0) throw InternalError("No active configuration.");
-
-      CORBA::Long item;
-      item = CORBA_SeqUtil::find(m_configurations[index].configuration_data,
-      nv_name(name));
-      if (item < 0) throw InvalidParameter("No such name.");
-
-      value = new CORBA::Any(m_configurations[index].configuration_data[item].value);
-    */
     return value._retn();
   }
 
@@ -358,24 +314,9 @@ namespace SDOPackage
    */
   CORBA::Boolean
   Configuration_impl::set_configuration_parameter(const char* name,
-                                                  const CORBA::Any& value)
-    throw (CORBA::SystemException,
-           InvalidParameter, NotAvailable, InternalError)
+                                                  const CORBA::Any&  /*value*/)
   {
     RTC_TRACE(("set_configuration_parameter(%s, value)", name));
-    /*
-      if (name == "") throw InvalidParameter("Name is empty.");
-
-      CORBA::Long index(getActiveConfigIndex());
-      if (index < 0) throw InternalError("No active config.");
-
-      CORBA::Long item;
-      item = CORBA_SeqUtil::find(m_configurations[index].configuration_data,
-      nv_name(name));
-      if (item < 0) throw InvalidParameter("No such name.");
-
-      m_configurations[index].configuration_data[item].value = value;
-    */
     return true;
   }
 
@@ -388,21 +329,19 @@ namespace SDOPackage
    */
   ConfigurationSetList*
   Configuration_impl::get_configuration_sets()
-    throw (CORBA::SystemException,
-           NotAvailable, InternalError)
   {
     RTC_TRACE(("get_configuration_sets()"));
     try
       {
-        Guard guard(m_config_mutex);
+        std::lock_guard<std::mutex> guard(m_config_mutex);
 
         std::vector<coil::Properties*> cf(m_configsets.getConfigurationSets());
         ConfigurationSetList_var config_sets =
-          new ConfigurationSetList((CORBA::ULong)cf.size());
+          new ConfigurationSetList(static_cast<CORBA::ULong>(cf.size()));
         // Ctor's first arg is max length. Actual length has to be set.
-        config_sets->length((CORBA::ULong)cf.size());
+        config_sets->length(static_cast<CORBA::ULong>(cf.size()));
 
-        for (CORBA::ULong i(0), len(cf.size()); i < len; ++i)
+        for (CORBA::ULong i(0), len(static_cast<CORBA::ULong>(cf.size())); i < len; ++i)
           {
             toConfigurationSet(config_sets[i], *(cf[i]));
           }
@@ -413,7 +352,7 @@ namespace SDOPackage
       {
 #ifndef ORB_IS_RTORB
 #ifdef ORB_IS_ORBEXPRESS
-	oe_out << e << oe_endl << oe_flush;
+        oe_out << e << oe_endl << oe_flush;
 #else
         RTC_ERROR(("CORBA::SystemException cought: %s", e._name()));
 #endif
@@ -428,8 +367,6 @@ namespace SDOPackage
         RTC_ERROR(("Unknown exception cought."));
         throw InternalError("Configuration::get_configuration_sets()");
       }
-    // never reach here
-    return new ConfigurationSetList(0);
   }
 
   /*!
@@ -441,15 +378,13 @@ namespace SDOPackage
    */
   ConfigurationSet*
   Configuration_impl::get_configuration_set(const char* id)
-    throw (CORBA::SystemException,
-           NotAvailable, InternalError)
   {
     RTC_TRACE(("get_configuration_set(%s)", id));
     if (std::string(id).empty()) throw InternalError("ID is empty");
     // Originally getConfigurationSet raises InvalidParameter according to the
     // SDO specification. However, SDO's IDL lacks InvalidParameter.
 
-    Guard guard(m_config_mutex);
+    std::lock_guard<std::mutex> guard(m_config_mutex);
 
     try
       {
@@ -479,10 +414,6 @@ namespace SDOPackage
       {
         throw InternalError("Configuration::get_configuration_set()");
       }
-
-    // never reach here
-    RTC_FATAL(("never reach here"));
-    return new ConfigurationSet();
   }
 
   /*!
@@ -495,8 +426,6 @@ namespace SDOPackage
   CORBA::Boolean
   Configuration_impl::
   set_configuration_set_values(const ConfigurationSet& configuration_set)
-    throw (CORBA::SystemException,
-           InvalidParameter, NotAvailable, InternalError)
   {
     RTC_TRACE(("set_configuration_set_values()"));
     std::string id(configuration_set.id);
@@ -511,11 +440,11 @@ namespace SDOPackage
         // Because the format of port-name had been changed from
         // <port_name> to <instance_name>.<port_name>, the following
         // processing was added.  (since r1648)
-        if (conf.findNode("exported_ports") != 0)
+        if (conf.findNode("exported_ports") != nullptr)
           {
             coil::vstring
               exported_ports(coil::split(conf["exported_ports"], ","));
-            std::string exported_ports_str("");
+            std::string exported_ports_str;
             for (size_t i(0), len(exported_ports.size()); i < len; ++i)
               {
                 coil::vstring keyval(coil::split(exported_ports[i], "."));
@@ -554,8 +483,6 @@ namespace SDOPackage
    */
   ConfigurationSet*
   Configuration_impl::get_active_configuration_set()
-    throw (CORBA::SystemException,
-           NotAvailable, InternalError)
   {
     RTC_TRACE(("get_active_configuration_set()"));
     // activeなConfigurationSetは無い
@@ -563,7 +490,7 @@ namespace SDOPackage
 
     try
       {
-        Guard gurad(m_config_mutex);
+        std::lock_guard<std::mutex> guard(m_config_mutex);
         // activeなConfigurationSetを返す
         ConfigurationSet_var config;
         config = new ConfigurationSet();
@@ -574,8 +501,6 @@ namespace SDOPackage
       {
         throw InternalError("Configuration::get_active_configuration_set()");
       }
-    // never reach here
-    return new ConfigurationSet();
   }
 
   /*!
@@ -588,13 +513,11 @@ namespace SDOPackage
   CORBA::Boolean
   Configuration_impl::
   add_configuration_set(const ConfigurationSet& configuration_set)
-    throw (CORBA::SystemException,
-           InvalidParameter, NotAvailable, InternalError)
   {
     RTC_TRACE(("add_configuration_set()"));
     try
       {
-        Guard gurad(m_config_mutex);
+        std::lock_guard<std::mutex> guard(m_config_mutex);
         const char* config_id(configuration_set.id);
         coil::Properties config(config_id);
         toProperties(config, configuration_set);
@@ -605,7 +528,6 @@ namespace SDOPackage
         throw InternalError("Configuration::add_configuration_set()");
         return false;
       }
-    return true;
   }
 
   /*!
@@ -617,8 +539,6 @@ namespace SDOPackage
    */
   CORBA::Boolean
   Configuration_impl::remove_configuration_set(const char* id)
-    throw (CORBA::SystemException,
-           InvalidParameter, NotAvailable, InternalError)
   {
     RTC_TRACE(("remove_configuration_set(%s)", id));
     if (std::string(id).empty())
@@ -626,7 +546,7 @@ namespace SDOPackage
 
     try
       {
-        Guard guard(m_config_mutex);
+        std::lock_guard<std::mutex> guard(m_config_mutex);
         return m_configsets.removeConfigurationSet(id);
       }
     catch (...)
@@ -634,7 +554,6 @@ namespace SDOPackage
         throw InternalError("Configuration::remove_configuration_set()");
         return false;
       }
-    return false;
   }
 
   /*!
@@ -646,8 +565,6 @@ namespace SDOPackage
    */
   CORBA::Boolean
   Configuration_impl::activate_configuration_set(const char* id)
-    throw (CORBA::SystemException,
-           InvalidParameter, NotAvailable, InternalError)
   {
     RTC_TRACE(("activate_configuration_set(%s)", id));
     if (std::string(id).empty())
@@ -661,18 +578,6 @@ namespace SDOPackage
       {
         throw InvalidParameter("Configuration::activate_configuration_set()");
       }
-/*
-    try
-      {
-        return m_configsets.activateConfigurationSet(id);
-      }
-    catch (...)
-      {
-        throw InternalError("Configuration::activate_configuration_set()");
-        return false;
-      }
-*/
-    return false;
   }
 
   //============================================================
@@ -688,7 +593,7 @@ namespace SDOPackage
    */
   Configuration_ptr Configuration_impl::getObjRef()
   {
-    return m_objref;
+    return SDOPackage::Configuration::_duplicate(m_objref);
   }
 
   /*!
@@ -698,7 +603,7 @@ namespace SDOPackage
    * @brief Get the DeviceProfile of SDO
    * @endif
    */
-  const DeviceProfile Configuration_impl::getDeviceProfile()
+  DeviceProfile Configuration_impl::getDeviceProfile()
   {
     return m_deviceProfile;
   }
@@ -710,7 +615,7 @@ namespace SDOPackage
    * @brief Get a list of Organization of SDO
    * @endif
    */
-  const OrganizationList Configuration_impl::getOrganizations()
+  OrganizationList Configuration_impl::getOrganizations()
   {
     return m_organizations;
   }
@@ -722,12 +627,10 @@ namespace SDOPackage
    * @brief Generate UUID
    * @endif
    */
-  const std::string Configuration_impl::getUUID() const
+  std::string Configuration_impl::getUUID() 
   {
-    coil::UUID_Generator uugen = coil::UUID_Generator();
-    uugen.init();
-    std::auto_ptr<coil::UUID> uuid(uugen.generateUUID(2, 0x01));
+    std::unique_ptr<coil::UUID> uuid(coil::UUID_Generator::generateUUID(2, 0x01));
 
-    return (const char*) uuid->to_string();
+    return uuid->to_string();
   }
-};  // namespace SDOPackage
+} // namespace SDOPackage

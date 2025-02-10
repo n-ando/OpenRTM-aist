@@ -12,11 +12,11 @@
 
 // Module specification
 // <rtc-template block="module_spec">
-static const char* consolein_spec[] =
+static const char* const inputbutton_spec[] =
   {
     "implementation_id", "Inputbutton",
     "type_name",         "Inputbutton",
-    "description",       "Console input component",
+    "description",       "InputButton component for Microwave example",
     "version",           "1.0",
     "vendor",            "Noriaki Ando, AIST",
     "category",          "example",
@@ -55,9 +55,7 @@ Inputbutton::Inputbutton(RTC::Manager* manager)
 
 }
 
-Inputbutton::~Inputbutton()
-{
-}
+Inputbutton::~Inputbutton() = default;
 
 
 RTC::ReturnCode_t Inputbutton::onInitialize()
@@ -71,7 +69,7 @@ RTC::ReturnCode_t Inputbutton::onInitialize()
 
   return RTC::RTC_OK;
 }
-RTC::ReturnCode_t Inputbutton::onExecute(RTC::UniqueId ec_id)
+RTC::ReturnCode_t Inputbutton::onExecute(RTC::UniqueId  /*ec_id*/)
 {
   std::string cmd;
   std::cout << std::endl;
@@ -88,15 +86,15 @@ RTC::ReturnCode_t Inputbutton::onExecute(RTC::UniqueId ec_id)
   std::getline(std::cin, cmd);
 
   coil::vstring cmds = coil::split(cmd, " ");
-  coil::eraseBlank(cmds[0]);
+  cmds[0] = coil::eraseBlank(std::move(cmds[0]));
 
   std::cout << "[command]: " << cmds[0];
   if (cmds.size() > 1)
     {
       std::cout << "  [args]: ";
-      for (size_t i(1); i < cmds.size(); ++i)
+      for(auto & c : cmds)
         {
-          std::cout << cmds[i] << " ";
+          std::cout << c << " ";
         }
    }
   std::cout << std::endl;
@@ -126,12 +124,12 @@ extern "C"
  
   void InputbuttonInit(RTC::Manager* manager)
   {
-    RTC::Properties profile(consolein_spec);
+    RTC::Properties profile(inputbutton_spec);
     manager->registerFactory(profile,
                              RTC::Create<Inputbutton>,
                              RTC::Delete<Inputbutton>);
   }
   
-};
+}
 
 
